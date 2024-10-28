@@ -1,204 +1,200 @@
-Return-Path: <linux-usb+bounces-16782-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16783-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DAC19B3165
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 14:11:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE56F9B3443
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 16:03:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5058F1C21AD6
-	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 13:11:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB7B8281EA7
+	for <lists+linux-usb@lfdr.de>; Mon, 28 Oct 2024 15:03:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 732161DB929;
-	Mon, 28 Oct 2024 13:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E26771DE2DB;
+	Mon, 28 Oct 2024 15:02:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f8XOGtz6"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="YhTB2+85"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2052.outbound.protection.outlook.com [40.107.243.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D44DF1E48A
-	for <linux-usb@vger.kernel.org>; Mon, 28 Oct 2024 13:11:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730121107; cv=none; b=L8QHV459qjNK4kYZ4JRYFpysLd2p9Fx43NhoCoZ1S+06ON9kvcNO+NS3tkfxNCC/fPiIi/ntEIaZI5z3GvzP0LfQt5PUkLCEr69qqTauJQIdAtGN78HGxYwWcnYe06qhiR7a56Voj+YeSDgyJAPKRdv6xz8F/6GmZWccGYd1Ls4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730121107; c=relaxed/simple;
-	bh=VMrDKo3PVZsFVo1Cj6tmsmlfoGu0zpmYVej/6kjFUSc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rq7b+8sTtYKqRfjpRaua4dF/AgY4IQlU/PL+9vMKpi1byf7mu/n1/zVjiWSmPdV7tMHUJm+9Jz4svwd8+5REDYVpt5dMnL+p+y/dZI+w/aAmRGgpbr7MqhM0UUO0qzkkdSNSgsp/Dcn4DmlcosvGFLucOumZke8QfFYiIpKYLyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f8XOGtz6; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730121105; x=1761657105;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VMrDKo3PVZsFVo1Cj6tmsmlfoGu0zpmYVej/6kjFUSc=;
-  b=f8XOGtz6M+kS21pkA6rB2BNmdEeS0p3h8khz04S1MU4J0tZTIO4DTIeH
-   Jyjbv/avqAm6PGHYCKDTkp4uq1LVE4vJG8daMDhYSjIP7cUdyfWX+FTxK
-   5U9GedEbqBA+nl+t1HWlFBKOUe40t6/+uViB8EJOt2u/idm07ua713TWs
-   91cceG3VqbzyRHWs+OJknGqh8buCS/UnNQgJ940cDpS7owY4fIswkVIsd
-   7RQoTv3TnKeBGHyJoxmr4w15xBr2I+62P821/sr4Uld71Rx1lx/O0msts
-   T9QA9HZVFO3wcxZlcSNP7qv7CHbLngQR2pl2p3lV3gy9y5WoiMMNyBJ6F
-   w==;
-X-CSE-ConnectionGUID: NPn55KFUQLGi0RPNAkkR8g==
-X-CSE-MsgGUID: eQakj+qRTD2eh1m/c0AbWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="52268773"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="52268773"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Oct 2024 06:11:32 -0700
-X-CSE-ConnectionGUID: +GheWt2bQ4uD+Hui9FeK5A==
-X-CSE-MsgGUID: e4w/VxgtRxi+Do9cTp6IyA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,239,1725346800"; 
-   d="scan'208";a="112427686"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa002.jf.intel.com with ESMTP; 28 Oct 2024 06:11:31 -0700
-Message-ID: <99e5b9e3-a1be-45fe-b9e9-e75a888bef38@linux.intel.com>
-Date: Mon, 28 Oct 2024 15:13:43 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05ED515E5B8;
+	Mon, 28 Oct 2024 15:02:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730127770; cv=fail; b=mPl8ciraIVqf4+Alj+8TuQK2oegMnNa8XtkWVMzgzgT/4aMqnT0UdMsOYUB2YtK35W/ZjwtnVvHGHVrEF0Q+MJMIkSh6vWrFQ1DGSjWw4TW1MTNqa8kMC8no19VAZbipdjzrsudZKhoRmRX5Ksude9K6e0Q67YicAMm7gLSMlXE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730127770; c=relaxed/simple;
+	bh=xWGcP24+JavjYYhWTP4w3CLbMBg0XsdbT2nLJ9a57BU=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=BTfrI2Z1Dfj5yPOEPeKtn4pYx1Y6bJjLCeqKBNSC3yce/229HiCLD/JGbpP31rg9SZp/trZ1+j/5SgwGNWWIcpyaKWOQxCfn3yjRb8XuKB6qUuwTJRVsN5/llvj9nKrXJNRU4kKQL+3jrkNRWOMsMzVn73jyPkOVJc2TxpjKBd8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=YhTB2+85; arc=fail smtp.client-ip=40.107.243.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EkJ3rjw5S/y8lujZMRh7lQRWp3ei5mWRH+IWJ9FzUTBwOwOar3fOJTVPkO9nYx0SEZ1+jU5O52gHivHg07xDSbL+OOtCkkFlrY0ZimoSRQ7IG2odVR8QiqD03wQ+4GkW/Lbzf83HERU21lTUce7wtb+DBmJ0yGaaiUPZqGcPTkYjd5osBg87/t1/XVLwkaZ1v0Gqa49WlBbnx1e06PBsGxvaDzmoifB+WkC+svRfibe87yVlXKdsi28DaZe4qNrPiuley6FHfA4ZMwgcxzjyBMsixY8B3AhRLspcyxM/iEwBqUKEcQUn0NiGEx4S7CJiBQQuwb1J4Eg7svIZ19eYsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c9FfRB/BQC40ZK1DpO6exywd6GUaL9P3JhOsVAig8No=;
+ b=ZNC4VSVgazBngz2h2+oKm26ZrfrBWjyES9otgLw4tM+wJrFv2q1WjlKWesytcxae42WeCqwU793RxBEqbB2shUQDwe21PNYbeYH6SyFavm4tR3kt5u/UnX640ko4d3K555JzKkS9OnqxwSiXaMNVoCfVUwHhqBpzqLIBgk9OUPHHuJ+JG16G7frIDqZuX650yz0jOvinpeZimsPMCXZvidRAedsd6XT7PR6+cfIwsDDFo5aWvUBorw+l3FhqEJAhzut2/kTz+qq5QZH1NIyYdLo71E2Jp2wn7CIy0le+BcGkS7JlnFPJdwUCSz/bG+QqdarU33jeZ19O8t8+6h5ldA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microchip.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c9FfRB/BQC40ZK1DpO6exywd6GUaL9P3JhOsVAig8No=;
+ b=YhTB2+85YdjGuoy05WzJYjbLgU1k+dchHotTg3Q/7YCrY+UOKtM41wsNHRSklklQIAsH6B4yzvZVvHKrEafqKbQ3ttpYl/bxLHErkIo1jv9k6pUOdadL7sQuBfjBRIJBQP6I0xitmOgnwcJad8gNVyjRnzW6orNS1uakTdDncP4/msYPhW93MLb87eRiiBqaUvqOaHrHV8GAKfkwAZJ/9J96DKjwUm96FkngqrQluyXOnv26TeHVDb+PT+XIoTMd5o5lE/SY28/RV+tg0Au7fCgeREvri3BDUWUjBmNsD0h3GODBLn94yJxBRf5b1O1rQwrF87kDe6ujwABZdzMNrQ==
+Received: from PH8PR11MB7965.namprd11.prod.outlook.com (2603:10b6:510:25c::13)
+ by DM4PR11MB6552.namprd11.prod.outlook.com (2603:10b6:8:8f::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8093.25; Mon, 28 Oct 2024 15:02:44 +0000
+Received: from PH8PR11MB7965.namprd11.prod.outlook.com
+ ([fe80::ad6c:cf56:3c3d:4739]) by PH8PR11MB7965.namprd11.prod.outlook.com
+ ([fe80::ad6c:cf56:3c3d:4739%6]) with mapi id 15.20.8093.024; Mon, 28 Oct 2024
+ 15:02:44 +0000
+From: <Ronnie.Kunin@microchip.com>
+To: <andrew@lunn.ch>, <Fabi.Benschuh@fau.de>
+CC: <Woojung.Huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
+	<andrew+netdev@lunn.ch>, <davem@davemloft.net>, <edumazet@google.com>,
+	<kuba@kernel.org>, <pabeni@redhat.com>, <netdev@vger.kernel.org>,
+	<linux-usb@vger.kernel.org>
+Subject: RE: [PATCH] Add LAN78XX OTP_ACCESS flag support
+Thread-Topic: [PATCH] Add LAN78XX OTP_ACCESS flag support
+Thread-Index: AQHbJzJ+R5s7yeWnsEOPGdRw8jsjK7KcHiGAgAAlo8A=
+Disposition-Notification-To: <Ronnie.Kunin@microchip.com>
+Date: Mon, 28 Oct 2024 15:02:44 +0000
+Message-ID:
+ <PH8PR11MB796575D608575FAA5233DBD4954A2@PH8PR11MB7965.namprd11.prod.outlook.com>
+References: <20241025230550.25536-1-Fabi.Benschuh@fau.de>
+ <c4503364-78c7-4bd5-9a77-0d98ae1786bf@lunn.ch>
+In-Reply-To: <c4503364-78c7-4bd5-9a77-0d98ae1786bf@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH8PR11MB7965:EE_|DM4PR11MB6552:EE_
+x-ms-office365-filtering-correlation-id: c5734949-e940-46a2-2cf4-08dcf76193de
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR11MB7965.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?6DWQFnOGCK7MJIlTPOz3V+ZDNkSYO+8tN5XzBVzcbeN/we5jFyAfnvAXZTs9?=
+ =?us-ascii?Q?MnMF4ZSNXqvBcdMfNhPplyO+sX1EWjbQH3FgIIj3osOflevTFieYDfLa+5XK?=
+ =?us-ascii?Q?sGsep1mw3i05r8JE4ft/lwKNHvjNEkqruoLgbi0GEsJCqipr/hhodckptqSN?=
+ =?us-ascii?Q?Yjf27f6sebldwkBslbWtVeJcx7jd6V5QIht+3W5yHDbMboPSNiJdBrEvO8MM?=
+ =?us-ascii?Q?vN5dnXRjSXszx7JPtwgcAyaIiIZFeaZmKAzLaDsVDNRtSJn8QcrdFB5lS+2f?=
+ =?us-ascii?Q?2rTnL3SG+2t2ZXkNoMWT9VtINDAOtSpF4W4+rz+v9WpWsfmLnu3TvPFSjUfF?=
+ =?us-ascii?Q?CaBf+krJf1VY2IEKlNGwpbzZCT0J7WxuKRYkjKB6znI9VAwFBr42AGAk/Qo2?=
+ =?us-ascii?Q?RXyrDsKAptJEDhdiOLWHiIaKOcBtrSnVz0LMFt3k+HyFrrql9ooTOShPuj4f?=
+ =?us-ascii?Q?C7c0j4BxRIpAvCIoY+gylWI2BsqpJp1XQKAmyxv1H6PPDwWk9bLCtWVU0Olv?=
+ =?us-ascii?Q?t3ZRh8xNewxkhDJe7gSyApRyTGMXvHXi6k4bqdwleCyKf1+9t1bfmRlKgIdn?=
+ =?us-ascii?Q?FM89LwdBLj3GXSz405fVFbbeqTH/7c2qNtOjmdXvjBPS0Cni1CqI+cCs1Pyx?=
+ =?us-ascii?Q?r9eJ9v59YVU+U1jw1+/g5/awBAIKwZyYLeC/4TAUo+u8QBLey2KWkS/ODhNX?=
+ =?us-ascii?Q?Zt9yF1VWvMX7oHwktfa1lFbwU0ZCvuyrNFYyc1Z+tfynztamVNgUo2gMBHoq?=
+ =?us-ascii?Q?QvBmksRUD3IMQiJ4kKNhhZR9jdvuNePG00R789P2x/Yhw29zFfhMr5t4hhg8?=
+ =?us-ascii?Q?l+M9LR8fhjkncMKlJs7YzVWDy/ejxaQtdS6myIcXMq2/s+l+KqcSjTR5kSGI?=
+ =?us-ascii?Q?B7jbaP4AIax4ghLsU8lffs9LixMHj5PNRooUbgLKq9Z1ocK/5Am5Io6/HXzs?=
+ =?us-ascii?Q?7rwmoQW3wg3GsPZa1a0YoWJrHWJiWHYFYPFfS9IAbTXXsxtyGKtwJYrUi/9u?=
+ =?us-ascii?Q?OB+qqg9mJ5Uv7BfUUqx27d20x2OfpoJq8GMnR4Z8Uv7erd6270bnT0qchPVa?=
+ =?us-ascii?Q?DKkEE7wJVtRH6HE7GoNagmFu+a1lPx/KTJHH72s4HClVjCnzpOk/LrhDHIoH?=
+ =?us-ascii?Q?3CuBviFZzWstxWghUFsXhjFvgGVLp2Rr+SNA4wBc3lR1mZ+qgSyRG2HN7M1B?=
+ =?us-ascii?Q?AgUn/efH89UBKJUP3L6BZ4IsNcidOhvhKVwEYdsOB3SXr5DKxEzk46MC4IUK?=
+ =?us-ascii?Q?1aD5F76e4tq0JLS7uFQljmklWp1GNylJKEnPve4ZBYvsCWJVra3qaXoFmgC9?=
+ =?us-ascii?Q?P77kRZJoJYMDW8/V18Cqikf2akYa4ZP+H446E+Akl0TEYLFTpY1jSv9nBkiQ?=
+ =?us-ascii?Q?UcgXjfE7a0LDYyucpOZR0wxtEqif?=
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?CrP6xclDGKix2MrmRNKLtX7kIg7L6qm4EzFvt1avNO84mGNkUacedt839h8G?=
+ =?us-ascii?Q?04cpGraqUrrIRjvh6Ilj7dpSMYMhD4X6FIndw3JBKdNN/klwr4Ic7AdSv13U?=
+ =?us-ascii?Q?mGvh40qg3q0NFiv5rgbUqi4ZqGTy+go43ck7dXvifowqz1LFz6xpNwwZJLHT?=
+ =?us-ascii?Q?WCnfbr3OE+jOdvpsYB/XlZZBXMNVgxB0jvurRy2Z9Skc0peOFNU+kdC3O24a?=
+ =?us-ascii?Q?LHo1DiwfFAYfkmL89fO+0Ti0oy+vj6xA/6dDaFRt+vcoVWFFrWP/ftmcsb1F?=
+ =?us-ascii?Q?zDe0Hae2ekCTJf/vRuf+pRM+dHHw5niVa05y5VtdCZj6DpdNtb4XHAylv17u?=
+ =?us-ascii?Q?4YR/gvsziQrzzRSTsxhuiFxZyocw9SeVdE2tJkgjlVXN2VZN0nJufVVA5s+g?=
+ =?us-ascii?Q?bn+fD70VNhpQI6Ctmn0BCiZXeSghPzWz1zbkBVsq5szUWNkwyHb+HracuVAm?=
+ =?us-ascii?Q?PY5arXAoknEXQujG329IFjvCxXrQux/x7aPAgpmk0o2hvlcWriPz+2d5u5fU?=
+ =?us-ascii?Q?Vk1B1xvXDvQs1/e5n0PZh8RRXNtsm91xMbPaVrvhiYduZgm1gMs2GTZ8d7mL?=
+ =?us-ascii?Q?GLTVDplTKzQcNGKMRkZYPMF/9YMIC6v7Np3MBRpVnebsguXSRYDF4ckVHtgo?=
+ =?us-ascii?Q?XUtl9htAWTsZ/WfJ0nL7EZF9yexidw6QRG9c/Nrgwuqrmfa849P/ctFattbX?=
+ =?us-ascii?Q?tRjbtpMHHw2lh3R7BD6Yo9K6epB9l+RXnB6EApASDnQyMozjSmWTPvo/Ns++?=
+ =?us-ascii?Q?ycbSjKGG+eRUp4z03JBjZvtnr1Sr5T2SKVWBD/ydQMRUuL1Qr0a3EvoLGLcK?=
+ =?us-ascii?Q?aLqIZ5LYzYJ65BAVVtBJRmARGQ94qEdhro5s3xZfbB1cl6uhvShBNcvqGlh/?=
+ =?us-ascii?Q?zZugXMTZC3qUgjOZi4SQRAYcwBXf4krH3c9WDYz1fxu1UHKQaQiq5zpVfhY5?=
+ =?us-ascii?Q?KdpgIazMkVamgR4jlhwxBqqP39qo76LZcsi/xE17emt6+pQ+g+UAoKuzBlYK?=
+ =?us-ascii?Q?/KlO1USqAfrkJJ/wdSvJg/fp/e6W1T6H5B6U5VkS0W74UVkQy2kO0k8J///s?=
+ =?us-ascii?Q?WwHyUvQvz1b5kiCa3LzNeYFIsdcHwZ7SOObb1Gn1u1jaVId55q/mF9Lg656t?=
+ =?us-ascii?Q?dulHAY1ocJOPid/u5VWQKzdJMboOOoBgjAZ754aFX7IreenVdNm3rvArgz/h?=
+ =?us-ascii?Q?DK+UlehrrSCWwzn2GMIHK++0baneDZXfH/wq2BQpwOJzBIDnT/HNgn9NQKFd?=
+ =?us-ascii?Q?jh4L+Ao9JC450w92gdpBA5UqPmJlck0aFKnBLlNCi/nNoETFWs4ULgvm8Ym3?=
+ =?us-ascii?Q?vWk7lihW5p1lRZ2cQBypYwTOZ5UDRirw5zha3rVA7pIDaDfgEcObQINr77Pd?=
+ =?us-ascii?Q?pYhMnq7Vd2hnrbeTL1rTcJcxYJwvq7AIOk8WaRJBYQOhqLKZB+wwSSTdPtof?=
+ =?us-ascii?Q?xYWm/zPCcTWq9iK1vHt59XZS1CwArJwQNn1PtkQU/H/Ts+hXkpH44t4YjYiz?=
+ =?us-ascii?Q?4VstSOJ6Vc3Re04H1SFf4MmDtWimfRUa/aVP6ntnfBkom+fCoQJ0NERm/81d?=
+ =?us-ascii?Q?gUn0hRP7TD1oNhfXMCe02JBLnn/Zq5VFcFf45Z5o?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] usb: xhci: improve HCD page size validation and
- setting
-To: Niklas Neronin <niklas.neronin@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-References: <20241025112701.303035-1-niklas.neronin@linux.intel.com>
- <20241025112701.303035-2-niklas.neronin@linux.intel.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20241025112701.303035-2-niklas.neronin@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-OriginatorOrg: microchip.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR11MB7965.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5734949-e940-46a2-2cf4-08dcf76193de
+X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Oct 2024 15:02:44.4266
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: s77GhSU1Olx/R4DsAhWKetvYR7SmPbL0WaUD2HODOriv/RsfPvDOut+ThNMKpNDNT1PkAB9tRxovItWhEc7bKHddLI4X1v8AgRPhxCkObdw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6552
 
-On 25.10.2024 14.27, Niklas Neronin wrote:
-> xHC supports a page size of (2^(n+12)), where 'n' is the Page Size Bit.
-> The page size of 4096 bytes is common and always supported. Consequently,
-> the xHCI driver always sets the 'page_size' to 4096 (i.e., (1 << 12)).
-> 
-> At present, the xHCI driver reads the Page Size register but does not use
-> the value, except for printing a two useless debug traces. This introduces
-> unnecessary code into xhci_mem_init(), which is already quite large.
-> Although the page size is not currently modified, it may be in the future.
-> 
-> To balance both current and future needs, the page size setting code is
-> moved to a separate function. This rework ensures that the Page Size
-> register is not read for the minimum value (4096). However, if a different
-> value is provided, it will not be ignored, rather clamped between the
-> valid min and max page size.
-> 
-> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
-> ---
->   drivers/usb/host/xhci-mem.c | 40 ++++++++++++++++++++++---------------
->   drivers/usb/host/xhci.h     |  9 ++++++---
->   2 files changed, 30 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index d2900197a49e..8a6b91862cae 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -1959,7 +1959,6 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
->   	xhci->interrupters = NULL;
->   
->   	xhci->page_size = 0;
-> -	xhci->page_shift = 0;
->   	xhci->usb2_rhub.bus_state.bus_suspended = 0;
->   	xhci->usb3_rhub.bus_state.bus_suspended = 0;
->   }
-> @@ -2378,6 +2377,27 @@ xhci_create_secondary_interrupter(struct usb_hcd *hcd, unsigned int segs,
->   }
->   EXPORT_SYMBOL_GPL(xhci_create_secondary_interrupter);
->   
-> +static void xhci_hcd_page_size(struct xhci_hcd *xhci)
-> +{
-> +	u32 page_size;
-> +
-> +	if (xhci->page_size <= HCD_PAGE_MIN) {
-> +		xhci->page_size = HCD_PAGE_MIN;
-> +	} else {
-> +		/* Max page size is 2^(n+12), where 'n' is the first 15:0 bit set */
-> +		page_size = readl(&xhci->op_regs->page_size) & HCD_PAGE_SIZE_MASK;
-> +		page_size = 1 << (ffs(page_size) + 12);
-> +
-> +		if (page_size < xhci->page_size)
-> +			xhci->page_size = page_size;
-> +		else
-> +			xhci->page_size = (1 << ffs(xhci->page_size));
-> +	}
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Monday, October 28, 2024 8:38 AM
+>=20
+> On Sat, Oct 26, 2024 at 01:05:46AM +0200, Fabian Benschuh wrote:
+> > With this flag we can now use ethtool to access the OTP:
+> > ethtool --set-priv-flags eth0 OTP_ACCESS on ethtool -e eth0  # this
+> > will read OTP if OTP_ACCESS is on, else EEPROM
+> >
+> > When writing to OTP we need to set OTP_ACCESS on and write with the
+> > correct magic 0x7873 for OTP
+>=20
+> Please can you tell us more about OTP vs EEPROM? Is the OTP internal whil=
+e the EEPROM is external?
+> What is contained in each? How does the device decide which to use when i=
+t finds it has both?
+>=20
+>         Andrew
 
-probably fls() instead of ffs()
+This is pretty much the same implementation that is already in place for th=
+e Linux driver of the LAN743x PCIe device.
 
-The xhci specification is a bit unclear about pagesize register (xhci 5.4.7)
-I assume it shows currently used pagesize, and only has one bit set.
-But I guess it's possible that it could list all supported page sizes, or
-maybe just maximum page size?
+OTP (one time programmable) is a configuration memory internal to the devic=
+e. EEPROM is external.
+The internal OTP memory always exists but it may not be programmed. The EEP=
+ROM is optional, and if present can also be programmed or not.
+A signature byte at offset 0 indicates whether the OTP or EEPROM device is =
+programmed.=20
+If present, EEPROM has higher priority.
+More info @ Chapter 10 here;
+https://ww1.microchip.com/downloads/aemDocuments/documents/UNG/ProductDocum=
+ents/DataSheets/LAN7800-Data-Sheet-DS00001992H.pdf
 
-> +
-> +	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "HCD page size set to %iK",
-> +		       xhci->page_size / 1024);
-> +}
-> +
->   int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
->   {
->   	struct xhci_interrupter *ir;
-> @@ -2385,7 +2405,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
->   	dma_addr_t	dma;
->   	unsigned int	val, val2;
->   	u64		val_64;
-> -	u32		page_size, temp;
-> +	u32		temp;
->   	int		i;
->   
->   	INIT_LIST_HEAD(&xhci->cmd_list);
-> @@ -2394,20 +2414,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
->   	INIT_DELAYED_WORK(&xhci->cmd_timer, xhci_handle_command_timeout);
->   	init_completion(&xhci->cmd_ring_stop_completion);
->   
-> -	page_size = readl(&xhci->op_regs->page_size);
-> -	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-> -			"Supported page size register = 0x%x", page_size);
-> -	i = ffs(page_size);
-> -	if (i < 16)
-> -		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-> -			"Supported page size of %iK", (1 << (i+12)) / 1024);
-> -	else
-> -		xhci_warn(xhci, "WARN: no supported page size\n");
-> -	/* Use 4K pages, since that's common and the minimum the HC supports */
-> -	xhci->page_shift = 12;
-> -	xhci->page_size = 1 << xhci->page_shift;
-> -	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
-> -			"HCD page size set to %iK", xhci->page_size / 1024);
-> +	/* If 'page_size' is not set, use 4K pages, since that's common and always supported */
-> +	xhci_hcd_page_size(xhci);
->   
->   	/*
->   	 * Program the Number of Device Slots Enabled field in the CONFIG
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index f0fb696d5619..f998df70f80f 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -211,6 +211,11 @@ struct xhci_op_regs {
->   #define CONFIG_CIE		(1 << 9)
->   /* bits 10:31 - reserved and should be preserved */
->   
-> +/* bits 15:0 - HCD page shift bit */
-> +#define HCD_PAGE_SIZE_MASK      0xffff
-> +/* HCD page size 4KB up to 128MB, Rev 1.2 Section 5.4.3. */
-> +#define HCD_PAGE_MIN            (1 << 12)
-> +
+> I'm just wondering if we even need a private flag, if the hardware will u=
+se one or the other exclusively?
+>
+Yes, both can be present/used, so we need the flag so we can tell the desti=
+nation of a write or source of a read.
 
-Probably better to use XHCI_ prefix instead of HCD_ as these are xhci specific.
-We don't want to confuse these with usb core hcd defines (include/linux/usb/hcd.h)
-
-Thanks
-Mathias
-
+Ronnie
 
