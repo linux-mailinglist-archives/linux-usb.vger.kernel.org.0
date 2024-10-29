@@ -1,110 +1,105 @@
-Return-Path: <linux-usb+bounces-16816-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16819-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3813F9B430A
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 08:25:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D6EA9B431A
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 08:28:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A0A9B21642
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 07:25:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44C191F2347F
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 07:28:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 156C620262B;
-	Tue, 29 Oct 2024 07:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD19920262D;
+	Tue, 29 Oct 2024 07:28:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="PxiYcBfN"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="mMdmV75C"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4751D2022DF;
-	Tue, 29 Oct 2024 07:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A03E1D7994;
+	Tue, 29 Oct 2024 07:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730186695; cv=none; b=Yhus12AoHIlPPf55yKvZsRy8lXK8fma2e7uC7lk0QkuUHBXfHKpmLDHa3UHWTWfCQ+1Po4SIOTVJf15rp6spExfEdp+j1AO4+Hwqsj7g573OYnbxSx5O4nKX2U9nejG/0oIu+AEhYQNMgKh0a4lQKpZLI+qWkhXG8lTFzZv/olI=
+	t=1730186891; cv=none; b=VcHg5j+vGPK8atE1qHVHsDuz5Gtq/NNJpcdptS/XrEn0JHNjlVlwwx/GKC4jHhl7uRF9N2nIW/kpxc9z9FpaH5KdtLwPF365Tl40XSmDaNFSekp6TrcLYIEcPjbkH+eezNcXFf+UoSu4GSiDa9cJ2sAOQ2hBfsDCxnbYYIHbYtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730186695; c=relaxed/simple;
-	bh=bujN33g16oHNeeyO3ZGbViJYxBOYuYTm+DxN3be+hS4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=YGmZ7Z36nrLF2CmVpNBaS8QfnXFNTWLrkVfhQRAN4It/iTkZfhDEQLR5s2JGKOt7e8IRHIbSbdXnlBSfGjXDUeMXPoBthazFCNooEcFZBXHKPgiSpHdc9yng+c6wOoxELHeGLKpu6kiliu/tV7dOGmePMZ4btLr080kBIfDin0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=PxiYcBfN; arc=none smtp.client-ip=217.194.8.81
+	s=arc-20240116; t=1730186891; c=relaxed/simple;
+	bh=Yzxop2L77+KWklUFpNEehjWzOsFs0+Hmq86r7axLw+I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V2YYVd3mgDbHaM+TwxeJiLXeDeW2K2RmOxCGwp68q8i6wKmOHcLYwU8alT1+LD77ZACEy8NhEB+NgGN/9opiBasz8nimuJaiwBcuqq7aKobF31VAS5GO+aSYkpMHfI+W0UxgNIHcWOUYjILKVrh9hlevEDENyzs6iM6zwSdGuOY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=mMdmV75C; arc=none smtp.client-ip=217.194.8.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id EDDC91FA13;
-	Tue, 29 Oct 2024 08:24:49 +0100 (CET)
+Received: from gaggiata.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 103DF1F994;
+	Tue, 29 Oct 2024 08:28:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1730186690;
-	bh=y6XwsU0U/5vhJTZLKZbpSfkUbG50QcLapUoV17QlMjw=; h=From:To:Subject;
-	b=PxiYcBfN5S2vXfEE5CaOZ3S/wt/jww6iSYozhth0QP0jxRRQxJFgek6C7my4O14wf
-	 jcn5FgjCe7cik5V4cb7b0SPhsKoY9bz254AzsqndPLwC98EQxdwnTKGMII7v24YTbz
-	 ixPGNpoIUmDWmwhuIqIU6nca1Ss+FgqhjLWYsuM/B+Orz0z6X8SMMsFke5Pt+hlOWR
-	 GuUAMIe+YEhQ2472j3BAejkXMDkrsEbrIurp3ar9Gstk96A+aPY/WKvChjAwCuEFer
-	 I+omolGMhgoDD+i57vYLTaKy2o94hIqKiePsOMoPfhHvQdie4j90c3JmgGuezcR40x
-	 WV4bknbTrVCIw==
+	s=default; t=1730186887;
+	bh=mA5XxeKvU7TmfDLIa3NriSYNjVYlBgpHYfJmSINY+qI=;
+	h=Received:From:To:Subject;
+	b=mMdmV75C8XCAC+MpB5S34JYy2/oky1g5p9DE0svE3FKLHq32iqQR+qGgD8+5SQPCh
+	 LWFmryUxxx1C95sfIzEMu8EKosPvhuJCiEMKwrT1Dz6yGN5sI6M2TI3EieyEPHUJbf
+	 DXWKRINsGcjJuVWrDoBQHk/GELYqFkimUVAb6/S3Pgx+mLVwe8YMke96esC0VplxGB
+	 kw9TjhcZwCC0MmIbf7rYu2rqyFU69seEhzgCxGpVB6FjuXXt8t4XP5HfGFRY1sJWAv
+	 L8QbhqJG2c9sLxLyOl6RtIDifWgYq1GMp30ejkLd4g3zrXwxXSMg9vfgrerzUoUgeK
+	 maUGQo3PXWwmA==
+Received: by gaggiata.pivistrello.it (Postfix, from userid 1000)
+	id 697597F95F; Tue, 29 Oct 2024 08:28:06 +0100 (CET)
+Date: Tue, 29 Oct 2024 08:28:06 +0100
 From: Francesco Dolcini <francesco@dolcini.it>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Francesco Dolcini <francesco@dolcini.it>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Mathias Nyman <mathias.nyman@intel.com>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>
-Cc: Parth Pancholi <parth.pancholi@toradex.com>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	Parth Pancholi <parth.pancholi@toradex.com>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v5 2/2] USB: xhci: add support for PWRON active high
-Date: Tue, 29 Oct 2024 08:24:44 +0100
-Message-Id: <20241029072444.8827-3-francesco@dolcini.it>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20241029072444.8827-1-francesco@dolcini.it>
-References: <20241029072444.8827-1-francesco@dolcini.it>
+Subject: Re: [PATCH v4 1/2] dt-bindings: usb: add TUSB73x0 PCIe
+Message-ID: <ZyCOhkM4PXTLiFRm@gaggiata.pivistrello.it>
+References: <20241028105413.146510-1-francesco@dolcini.it>
+ <20241028105413.146510-2-francesco@dolcini.it>
+ <j3a76pyolo66bcqemeo4o3gwzfnftcfjc6grg3v33u7ipztwiq@donxxbveypjk>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <j3a76pyolo66bcqemeo4o3gwzfnftcfjc6grg3v33u7ipztwiq@donxxbveypjk>
 
-From: Parth Pancholi <parth.pancholi@toradex.com>
+Hello Krzysztof,
 
-Some PCIe-to-USB controllers such as TI's TUSB73x0 3.0 xHCI host
-controller supports controlling the PWRONx polarity via the USB control
-register (E0h). Add support for device tree property
-ti,pwron-active-high which indicates PWRONx to be active high and
-configure the E0h register accordingly.  This enables the software
-control for the TUSB73x0's PWRONx outputs with an inverted polarity from
-the default configuration which could be used as USB EN signals for the
-other hubs or devices.
+On Tue, Oct 29, 2024 at 08:08:09AM +0100, Krzysztof Kozlowski wrote:
+> On Mon, Oct 28, 2024 at 11:54:12AM +0100, Francesco Dolcini wrote:
+> > From: Parth Pancholi <parth.pancholi@toradex.com>
+> > 
+> > Add device tree bindings for TI's TUSB73x0 PCIe-to-USB 3.0 xHCI
+> > host controller. The controller supports software configuration
+> > through PCIe registers, such as controlling the PWRONx polarity
+> > via the USB control register (E0h).
+> > 
+> > Datasheet: https://www.ti.com/lit/ds/symlink/tusb7320.pdf
+> > Signed-off-by: Parth Pancholi <parth.pancholi@toradex.com>
+> > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 
-Signed-off-by: Parth Pancholi <parth.pancholi@toradex.com>
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
----
-v5:s/ti,tusb7320-pwron-active-high/ti,pwron-active-high/
-v4: no changes
-v3: no changes
-v2: s/polarity-invert/active-high
----
- drivers/usb/host/xhci-pci.c | 3 +++
- 1 file changed, 3 insertions(+)
+...
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 91dccd25a551..39456ec268f5 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -641,6 +641,9 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
- 
- 	dma_set_max_seg_size(&dev->dev, UINT_MAX);
- 
-+	if (device_property_read_bool(&dev->dev, "ti,pwron-active-high"))
-+		pci_clear_and_set_config_dword(dev, 0xE0, 0, 1 << 22);
-+
- 	return 0;
- 
- put_usb3_hcd:
--- 
-2.39.5
+> > +  ti,tusb7320-pwron-active-high:
+> 
+> Drop tusb7320. There is never device name in property name, because it
+> is redundant and makes it completely not-reusable.
+
+Whoops :/
+
+Rob already wrote this in the previous version and I forgot about it.
+
+Thanks!
 
 
