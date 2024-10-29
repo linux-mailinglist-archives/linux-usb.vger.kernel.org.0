@@ -1,108 +1,57 @@
-Return-Path: <linux-usb+bounces-16823-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16824-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD5DD9B45D6
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 10:37:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FE6D9B489F
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 12:49:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2878AB22308
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 09:37:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 44887283C15
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 11:49:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61685204034;
-	Tue, 29 Oct 2024 09:37:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EEF9205AAF;
+	Tue, 29 Oct 2024 11:49:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MFpph/jB";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Aq9To5J4";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MFpph/jB";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="Aq9To5J4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhNcenc1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFC652036F4;
-	Tue, 29 Oct 2024 09:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174D1205155
+	for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 11:49:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730194667; cv=none; b=FVPzxgv6yWbm0W3SVNS25NOhoST3O+WgClRxP/rkMVPHBXPPPto8cd5mQjlBduXZ4mr8Huw/V9QYSNtgMVBnUP1CRbqmM+EqRnlydFkf1cZZl2p88td02hzNAONGBgL+ni1rxuPL1ytitn5h8YdxBBlbSyWAvfiW5V1lxkLuA1M=
+	t=1730202588; cv=none; b=qh/JU24FfOCUtjRkXiN9BfFl19MLeAbr8C56wazQyNTevPfkKcSLhwe4DCMTd4r9b1H6XYAS7J75eZsvGxffpBnuSeosBLLyAKlKi1+A34Cb6NB0LX+xU7TIyNioUliZHRFhZLESsmh3lPbcH4exnLOgw4gvMvJOvdBoUM8QAB0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730194667; c=relaxed/simple;
-	bh=hhTbhQy5WqBCVGKga+NQ+/BK9Sfjhrxqz0X4EmpeUrg=;
+	s=arc-20240116; t=1730202588; c=relaxed/simple;
+	bh=Wmu4PVZ7sqzhbNwuHgl+lr3TvR1GURWQqA/wymGkI68=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fr5fikzOucsicRJDGUh/U4XFYe9BBjkJgtnXDv8fpYN+GXi0Om9FuvcRQz1SVnR1PiAzy4Kw8tp2KrcXqhbDQTZJFn0qftFN0qopBWZoFcQ8WF3AcsemjycPgr6CbsQ7QX1cCYnT9SauZAsI42IhV6uRKUGxlhEkeoueq91nCXE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MFpph/jB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Aq9To5J4; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MFpph/jB; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=Aq9To5J4; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 04DC821CB5;
-	Tue, 29 Oct 2024 09:37:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1730194664; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0axVOqoMls//Wk+pvC5XHfu4g+8K4S/uESA90ZpiSro=;
-	b=MFpph/jBB1J/ISr6NeT9WLZmTaOCpka/EFPFi79RpcQDXvUb6gXFq2uiaw9Znyk9eyFz3H
-	ReVfuHyJDoUtN4FNxVwYSXTY9xburM0eD3Qxpfz59mKLKgamQMVHy7RqBu1hs5/SFFJPLw
-	DRRSdlBNDz7zfFGhJ+J9+C59ZyUJtp0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1730194664;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0axVOqoMls//Wk+pvC5XHfu4g+8K4S/uESA90ZpiSro=;
-	b=Aq9To5J4OyWv9MZ1wXaqA99S23W+n2hHs6LsWZOc48A04RFALqgDjs6OHKARjcxMxsOhZx
-	5NEMh2sW95cAg9CQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1730194664; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0axVOqoMls//Wk+pvC5XHfu4g+8K4S/uESA90ZpiSro=;
-	b=MFpph/jBB1J/ISr6NeT9WLZmTaOCpka/EFPFi79RpcQDXvUb6gXFq2uiaw9Znyk9eyFz3H
-	ReVfuHyJDoUtN4FNxVwYSXTY9xburM0eD3Qxpfz59mKLKgamQMVHy7RqBu1hs5/SFFJPLw
-	DRRSdlBNDz7zfFGhJ+J9+C59ZyUJtp0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1730194664;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0axVOqoMls//Wk+pvC5XHfu4g+8K4S/uESA90ZpiSro=;
-	b=Aq9To5J4OyWv9MZ1wXaqA99S23W+n2hHs6LsWZOc48A04RFALqgDjs6OHKARjcxMxsOhZx
-	5NEMh2sW95cAg9CQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id D170C136A5;
-	Tue, 29 Oct 2024 09:37:43 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id JKDMMuesIGc+HwAAD6G6ig
-	(envelope-from <iivanov@suse.de>); Tue, 29 Oct 2024 09:37:43 +0000
-Date: Tue, 29 Oct 2024 11:44:45 +0200
-From: "Ivan T . Ivanov" <iivanov@suse.de>
-To: Stefan Wahren <wahrenst@gmx.net>
-Cc: Russell King <linux@armlinux.org.uk>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Vinod Koul <vkoul@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Minas Harutyunyan <hminas@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Lukas Wunner <lukas@wunner.de>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	linux-arm-kernel@lists.infradead.org, kernel-list@raspberrypi.com,
-	bcm-kernel-feedback-list@broadcom.com, dmaengine@vger.kernel.org,
-	linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH V5 1/9] Revert "usb: dwc2: Skip clock gating on Broadcom
- SoCs"
-Message-ID: <20241029094445.hsporitxkv2q45c5@localhost.localdomain>
-References: <20241025103621.4780-1-wahrenst@gmx.net>
- <20241025103621.4780-2-wahrenst@gmx.net>
+	 Content-Type:Content-Disposition:In-Reply-To; b=M0a7/1oS0eTJtMCvx9Oj+Q4dVZrS7PMj9zH4/3W6Rmw7glV10i/X/cyGEBOuDVyBr8UhIVF8V1ANUiVQpjBUQIF9JNmQ004RPoxsu1ah+zb+wj/Nv7M/yeUAy/AOPh0XqHyhhYWxg8uwfAJzaGxFYqIjsHTv1J//siWmvcbx+CU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhNcenc1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CF2C4CEE6;
+	Tue, 29 Oct 2024 11:49:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730202587;
+	bh=Wmu4PVZ7sqzhbNwuHgl+lr3TvR1GURWQqA/wymGkI68=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GhNcenc1PI/m4y/rO5P9p6S9yTLyzcvmbhOZwuH+rYp1SZpZ3W0AaXIjfqPSxpUWW
+	 6M5dpRzY2SYn3dliL+8UrLjANnOTSUCBfsSIvhDextQW8Q38Zt8BUIr87JhdKb0ZZd
+	 Jx3Jz4gpvJCFRXvTprW2GmjTfm1XZPA6E10Z64GxSk1mIlpbCuPdEb6GrWpuS41z+x
+	 K+vasYT8ynef4AkJH0LlSxMLTMhdY3CD4CAxVnqxlvZIb6DQswKA/hRHH0LSGtK1Ga
+	 MuOIA/Afq9E1NtIMMkS+lLawLrbQN0XDRHffn9Qq4PLHcpXyckF82FTC2TNX9df2pZ
+	 0qzlVIdwE8YdQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t5kjf-000000000Dz-0as5;
+	Tue, 29 Oct 2024 12:50:07 +0100
+Date: Tue, 29 Oct 2024 12:50:07 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Reinhard Speyerer <rspmn@arcor.de>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Fibocom FG132 0x0112 composition
+Message-ID: <ZyDL79-5rnPu1A9S@hovoldconsulting.com>
+References: <ZxLN-sb0ujuap36t@arcor.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -111,64 +60,14 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241025103621.4780-2-wahrenst@gmx.net>
-X-Spam-Score: -4.30
-X-Spamd-Result: default: False [-4.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	ARC_NA(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
-	MISSING_XM_UA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_TO(0.00)[gmx.net];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com,gmx.net];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[armlinux.org.uk,broadcom.com,kernel.org,linaro.org,synopsys.com,linuxfoundation.org,wunner.de,gmail.com,lists.infradead.org,raspberrypi.com,vger.kernel.org];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email]
-X-Spam-Flag: NO
-X-Spam-Level: 
+In-Reply-To: <ZxLN-sb0ujuap36t@arcor.de>
 
-Hi Stefan,
+On Fri, Oct 18, 2024 at 11:07:06PM +0200, Reinhard Speyerer wrote:
+> Add Fibocom FG132 0x0112 composition:
 
-On 10-25 12:36, Stefan Wahren wrote:
-> 
-> The commit d483f034f032 ("usb: dwc2: Skip clock gating on Broadcom SoCs")
-> introduced a regression on Raspberry Pi 3 B Plus, which prevents
-> enumeration of the onboard Microchip LAN7800 in case no external USB device
-> is connected during boot.
-> 
-> Fixes: d483f034f032 ("usb: dwc2: Skip clock gating on Broadcom SoCs")
-> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-> ---
->  drivers/usb/dwc2/params.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-> index 68226defdc60..4d73fae80b12 100644
-> --- a/drivers/usb/dwc2/params.c
-> +++ b/drivers/usb/dwc2/params.c
-> @@ -23,7 +23,6 @@ static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg)
->  	p->max_transfer_size = 65535;
->  	p->max_packet_count = 511;
->  	p->ahbcfg = 0x10;
-> -	p->no_clock_gating = true;
->  }
-> 
+> Signed-off-by: Reinhard Speyerer <rspmn@arcor.de>
 
-Thanks, this makes RPi3 Ethernet operational again.
+Now applied, thanks.
 
-Tested-by: Ivan T. Ivanov <iivanov@suse.de>
-
-Regards.
-
+Johan
 
