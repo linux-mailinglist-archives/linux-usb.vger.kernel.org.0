@@ -1,173 +1,89 @@
-Return-Path: <linux-usb+bounces-16839-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16840-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94E949B5432
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 21:43:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E14039B54C9
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 22:14:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BD581F24507
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 20:43:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 76C0DB21EF6
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 21:14:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91BA208208;
-	Tue, 29 Oct 2024 20:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E98BF207A3A;
+	Tue, 29 Oct 2024 21:14:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JDj6xhvL"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="q35c2Tff"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B64A207A26
-	for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 20:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFC81991CD;
+	Tue, 29 Oct 2024 21:14:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730234315; cv=none; b=dE2ztZsC8F3fO8XXVVL3xt0EKWSlfB3NrPCQQHz4yIqiU6qQuhSzC/d+rWs8lRVzHRw3Ibv3o1yCpEkTJLM4lqkcAQMiChEduS8FVGAQ1qYpksgG2j4I1C0t5xA8b2/0GOpaBV3K3avU4Rz4sWQLVl1V5yfJILdaJGpY/8tSs/g=
+	t=1730236469; cv=none; b=Q2vnWIp4TC7axDWUwAw96ttrfGHouVLjP/BsY28rYZcDKwTPwK01U+fYfZ9To4+g8Y8svItwNGdu1I8AUCGpCLqG5Ge1zYxYtwpZaynvDoLC1ai1FS6lRBKYdJhef1q8+O+lmmDbDV6dC1ci+6cHyPHCzEUtXWjKNjxStMMp0RI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730234315; c=relaxed/simple;
-	bh=+o9NbaPyGogJ3ZSEbnIsWXzDLnJ3MUKdmQZg9gnG4wY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Elu8Fg5teAuO3O7U7404ZLE3U7MH06wDPyFFp063DVbgLRJIfTNhgL6lN630IkO8KvLZRPcVeqOBvwrs/+E5ZdhCIte4WL3GpgE52ztGAqCgpaTfL/M7hpe7Qt/uHYt2HWgliAPKisMezCx+nUsIaORkiOE93A0WtPOhkcT/sCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JDj6xhvL; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730234314; x=1761770314;
-  h=date:from:to:cc:subject:message-id;
-  bh=+o9NbaPyGogJ3ZSEbnIsWXzDLnJ3MUKdmQZg9gnG4wY=;
-  b=JDj6xhvL75/vxIBgHBxMBpgxiouPnopA2HEHbSJQ61A+OGtUP3cj3MZs
-   aPsO1deBr3O5YipPP/YV/g6dSP/620sh/gBMBYyETfUNLtuI+xpKmbEio
-   HD3rQ72yK/a2Zpx4OOZPch+mKLM5Gv0Q1nbMN6uXWZ7YXIVr0DYaAvp/r
-   Bd7BxcRWiLSmNJ0NVJZkh/jUILayza9uHmIQxtLpiA9vMp6c/OhUtmDyb
-   kCvPXIl2+QMtLTN5Afmt1xRb6UXlMcWkHssddJnrRNZ8Q2gX1ngbWdLFN
-   QO+XveIYSpUEulONishiVJgCvvZ86Y5UbtOzdGk2u/NefRzUFRHTzbtz2
-   g==;
-X-CSE-ConnectionGUID: aPtGTaq5QOiC0bxPRaqfLg==
-X-CSE-MsgGUID: na/3/iF3T4yhqbmHBx1Unw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="47386746"
-X-IronPort-AV: E=Sophos;i="6.11,243,1725346800"; 
-   d="scan'208";a="47386746"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 13:38:33 -0700
-X-CSE-ConnectionGUID: 12HeqPTMQ1OBnV6X0xYLIQ==
-X-CSE-MsgGUID: 8CcT62UUSmasKDrLbWlw+g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,243,1725346800"; 
-   d="scan'208";a="86643526"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 29 Oct 2024 13:38:28 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t5syw-000e7k-1a;
-	Tue, 29 Oct 2024 20:38:26 +0000
-Date: Wed, 30 Oct 2024 04:38:21 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- afb92ad8733ef0a2843cc229e4d96aead80bc429
-Message-ID: <202410300407.Cz0waFsa-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1730236469; c=relaxed/simple;
+	bh=NKg6PorLv+WO9NJ4+ZZWyzkwrKPt3rtHmRknFRQmC5Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zir53SA9yUbUwNWIaa+/YU1ZIJ0L/9FmbGPypccQhJLTxEaTX+8ALvYS3FguqsftM1ZiNVvb1iLVxhbnojuofFE1K5RSXVsvp6NkDxA0XF+e1GVB06ZiUxER8NZdeSKcJFTADaI6JLgtAyr7bS25owoO5Qg0IG+g+ntpS2LKGvg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=q35c2Tff; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=6u7F8TreOI0FGCD/HZibohizO/SbnUPvos91dHB797A=; b=q35c2TffZBt6+QRqybI4Tz7zci
+	0O2JJYeWDqh3WSuD7PXO24JSsakfs9ak5fQ2Xw7rlba/I6qoUPKJNlup9MS3YKi0F7J2+/7U/g+eo
+	Vc8nsg4h/O0QG/GGIhbV6dkPbnQb4EG75urGdNU9pTrD0J4QpErvSgkzkvH6S+UKJvN0=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1t5tXY-00Bd3V-Ff; Tue, 29 Oct 2024 22:14:12 +0100
+Date: Tue, 29 Oct 2024 22:14:12 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Ronnie.Kunin@microchip.com, Fabi.Benschuh@fau.de,
+	Woojung.Huh@microchip.com, UNGLinuxDriver@microchip.com,
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] Add LAN78XX OTP_ACCESS flag support
+Message-ID: <75302a2c-f13e-4a5c-ac46-2a8da98a7b7c@lunn.ch>
+References: <20241025230550.25536-1-Fabi.Benschuh@fau.de>
+ <c4503364-78c7-4bd5-9a77-0d98ae1786bf@lunn.ch>
+ <PH8PR11MB796575D608575FAA5233DBD4954A2@PH8PR11MB7965.namprd11.prod.outlook.com>
+ <a0d6ef0c-5615-40fd-964d-11844389dc29@lunn.ch>
+ <20241029104313.6d15fd08@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241029104313.6d15fd08@kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: afb92ad8733ef0a2843cc229e4d96aead80bc429  usb: typec: tcpm: restrict SNK_WAIT_CAPABILITIES_TIMEOUT transitions to non self-powered devices
+On Tue, Oct 29, 2024 at 10:43:13AM -0700, Jakub Kicinski wrote:
+> On Mon, 28 Oct 2024 20:19:04 +0100 Andrew Lunn wrote:
+> > > This is pretty much the same implementation that is already in place
+> > > for the Linux driver of the LAN743x PCIe device.  
+> > 
+> > That is good, it gives some degree of consistency. But i wounder if we
+> > should go further. I doubt these are the only two devices which
+> > support both EEPROM and OTP. It would be nicer to extend ethtool:
+> > 
+> >        ethtool -e|--eeprom-dump devname [raw on|off] [offset N] [length N] [otp] [eeprom]
+> 
+> After a cursory look at the conversation I wonder if it wouldn't 
+> be easier to register devlink regions for eeprom and otp?
 
-elapsed time: 981m
+Hi Jakub
 
-configs tested: 80
-configs skipped: 2
+devlink regions don't allow write. ethtool does.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha          allnoconfig    gcc-14.1.0
-alpha         allyesconfig    clang-20
-alpha            defconfig    gcc-14.1.0
-arc           allmodconfig    clang-20
-arc           allmodconfig    gcc-13.2.0
-arc            allnoconfig    gcc-14.1.0
-arc           allyesconfig    clang-20
-arc           allyesconfig    gcc-13.2.0
-arc              defconfig    gcc-14.1.0
-arm           allmodconfig    clang-20
-arm           allmodconfig    gcc-14.1.0
-arm            allnoconfig    gcc-14.1.0
-arm           allyesconfig    clang-20
-arm           allyesconfig    gcc-14.1.0
-arm              defconfig    gcc-14.1.0
-arm64         allmodconfig    clang-20
-arm64          allnoconfig    gcc-14.1.0
-arm64            defconfig    gcc-14.1.0
-csky           allnoconfig    gcc-14.1.0
-csky             defconfig    gcc-14.1.0
-hexagon       allmodconfig    clang-20
-hexagon        allnoconfig    gcc-14.1.0
-hexagon       allyesconfig    clang-20
-hexagon          defconfig    gcc-14.1.0
-i386          allmodconfig    clang-19
-i386          allmodconfig    gcc-12
-i386           allnoconfig    clang-19
-i386           allnoconfig    gcc-12
-i386          allyesconfig    clang-19
-i386          allyesconfig    gcc-12
-i386             defconfig    clang-19
-loongarch     allmodconfig    gcc-14.1.0
-loongarch      allnoconfig    gcc-14.1.0
-loongarch        defconfig    gcc-14.1.0
-m68k          allmodconfig    gcc-14.1.0
-m68k           allnoconfig    gcc-14.1.0
-m68k          allyesconfig    gcc-14.1.0
-m68k             defconfig    gcc-14.1.0
-microblaze    allmodconfig    gcc-14.1.0
-microblaze     allnoconfig    gcc-14.1.0
-microblaze    allyesconfig    gcc-14.1.0
-microblaze       defconfig    gcc-14.1.0
-mips           allnoconfig    gcc-14.1.0
-nios2          allnoconfig    gcc-14.1.0
-nios2            defconfig    gcc-14.1.0
-openrisc       allnoconfig    clang-20
-openrisc      allyesconfig    gcc-14.1.0
-parisc        allmodconfig    gcc-14.1.0
-parisc         allnoconfig    clang-20
-parisc        allyesconfig    gcc-14.1.0
-parisc64         defconfig    gcc-14.1.0
-powerpc       allmodconfig    gcc-14.1.0
-powerpc        allnoconfig    clang-20
-powerpc       allyesconfig    gcc-14.1.0
-riscv         allmodconfig    gcc-14.1.0
-riscv          allnoconfig    clang-20
-riscv         allyesconfig    gcc-14.1.0
-s390          allmodconfig    clang-20
-s390          allmodconfig    gcc-14.1.0
-s390           allnoconfig    clang-20
-s390          allyesconfig    gcc-14.1.0
-sh            allmodconfig    gcc-14.1.0
-sh             allnoconfig    gcc-14.1.0
-sh            allyesconfig    gcc-14.1.0
-sparc         allmodconfig    gcc-14.1.0
-um            allmodconfig    clang-20
-um             allnoconfig    clang-20
-um            allyesconfig    clang-20
-x86_64         allnoconfig    clang-19
-x86_64        allyesconfig    clang-19
-x86_64           defconfig    clang-19
-x86_64           defconfig    gcc-11
-x86_64               kexec    clang-19
-x86_64               kexec    gcc-12
-x86_64            rhel-8.3    gcc-12
-x86_64        rhel-8.3-bpf    clang-19
-x86_64      rhel-8.3-kunit    clang-19
-x86_64        rhel-8.3-ltp    clang-19
-x86_64       rhel-8.3-rust    clang-19
-xtensa         allnoconfig    gcc-14.1.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+	Andrew
 
