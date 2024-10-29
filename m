@@ -1,471 +1,173 @@
-Return-Path: <linux-usb+bounces-16838-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16839-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D150D9B532D
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 21:16:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94E949B5432
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 21:43:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3987C28464E
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 20:16:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BD581F24507
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 20:43:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77098194C85;
-	Tue, 29 Oct 2024 20:15:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91BA208208;
+	Tue, 29 Oct 2024 20:38:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ea3MUQAz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JDj6xhvL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FE60192B74
-	for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 20:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B64A207A26
+	for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 20:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730232956; cv=none; b=lZOwXDKt5sl83Uh1mbSnXjBtsvxm4qTVkBN4FHGI/d61jqhLLZJMCI+EzMOLBE4ESzCD2asP4Y4HE+iuAX4F1etb5FRMXYBjpf4VEzs/ltQggnaFeIBwydec9CfR+uIyWbF4J0V1jA9et8Y7lgEgRnyZgsXpQ/VfWBvex6v6FTc=
+	t=1730234315; cv=none; b=dE2ztZsC8F3fO8XXVVL3xt0EKWSlfB3NrPCQQHz4yIqiU6qQuhSzC/d+rWs8lRVzHRw3Ibv3o1yCpEkTJLM4lqkcAQMiChEduS8FVGAQ1qYpksgG2j4I1C0t5xA8b2/0GOpaBV3K3avU4Rz4sWQLVl1V5yfJILdaJGpY/8tSs/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730232956; c=relaxed/simple;
-	bh=p2q3CmSHX9eWKUp6uO+aazZAtxPSV3aT24xCH7eTJuE=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=T/gbL6sbDba5o7QsBs5XgMDV4GTzSZL7+zz9xRxjw8W+uxSbZcHmp6L+bAhe8951qCICZQj4rlzrbkck02ZXuO2C14jxbjFHlWuQHl6AdgukoXSnKqiGxE+J6tJSMmjKmB1mjEsseKHkUMg2qHf4u1yBoMOKyFL/MhDQ89hl7yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ea3MUQAz; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6e9f69cc576so20293557b3.0
-        for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 13:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1730232952; x=1730837752; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=17J8IGvHqY3jfkh+HrxHOL56E85HwWRmn8ZfYdfPDaI=;
-        b=Ea3MUQAzLl0M82MYgJfQ8pf5SX0lRiBYsWX4lgW5MAW+j2PBHGdinMkmlMNKT62pT1
-         AlsYthw7Xf6WvZQ9Z/IZgBYTpilmX+HOAMPhXApLvBe3jOjtl8693GIRt68442goO/2i
-         U6jOplM82i8LyfE8k7nP66FPYwhIUfY3Tnrww=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730232952; x=1730837752;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=17J8IGvHqY3jfkh+HrxHOL56E85HwWRmn8ZfYdfPDaI=;
-        b=M1pqGhEMYL+DryCRdejhqQXy6UvqSsqKwZEkU3AqIQfXkCzikwRfd9yOzBDX8EbHUf
-         y0GVeUFUjmINe/tBLaywk+NzGpTxgn4cMAhamyPQ7k/mgsldP8KnjnR6HlunZfvVu+zp
-         OUrzOiE7UFxWmtcr1Pc7sAIfvWdJUyAB8opJyKZlf/UUCV8Nz7ime2QCxmuo/r5fFtX7
-         8domArI1Vwg88k8S7+QffO+iCEgqL/pTxSjxFbCQU7qhXXEDpGQyLVzrIx3cj0l5HoDM
-         Xn/oizdOH8Se4Xsx4I0yr3KKD88EejjGWlcBilp9YhKZWVDWbfvee7O8kmA5c2DN52wE
-         rVBg==
-X-Forwarded-Encrypted: i=1; AJvYcCW9wkjsi9rWiS+zBrqWLm+ja9ITfPCxeeZARagg5X2xquXpXDYEDg+ORLQBLqGECW0lx/RT89s9BzA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCFcKg4sOFHMyErd8AEro9Uk6mmUmIXsGO2Y2srjYdBwZ4PGsN
-	mn9eHXqbntLz2fLDN4nIPWH+27whvfUE/WnCklta6XnaYx0l52ZHjoxETtF0DX5ENg6mU+mAsJw
-	0v1fWWnYO+gKEvOFCAql6Hx7/JKhStoftLX4R
-X-Google-Smtp-Source: AGHT+IEMjC38XOmCugV3WBwPmaFFgGQnEcKkb/ILj+IwdYe2pYXJXvIJHeT/gECFay1Ki726FJyLKH4jgjuzCxzyYI8=
-X-Received: by 2002:a05:690c:5:b0:6e3:29ae:a3a5 with SMTP id
- 00721157ae682-6e9d8b001eamr136117397b3.34.1730232952121; Tue, 29 Oct 2024
- 13:15:52 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 29 Oct 2024 13:15:51 -0700
+	s=arc-20240116; t=1730234315; c=relaxed/simple;
+	bh=+o9NbaPyGogJ3ZSEbnIsWXzDLnJ3MUKdmQZg9gnG4wY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Elu8Fg5teAuO3O7U7404ZLE3U7MH06wDPyFFp063DVbgLRJIfTNhgL6lN630IkO8KvLZRPcVeqOBvwrs/+E5ZdhCIte4WL3GpgE52ztGAqCgpaTfL/M7hpe7Qt/uHYt2HWgliAPKisMezCx+nUsIaORkiOE93A0WtPOhkcT/sCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JDj6xhvL; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730234314; x=1761770314;
+  h=date:from:to:cc:subject:message-id;
+  bh=+o9NbaPyGogJ3ZSEbnIsWXzDLnJ3MUKdmQZg9gnG4wY=;
+  b=JDj6xhvL75/vxIBgHBxMBpgxiouPnopA2HEHbSJQ61A+OGtUP3cj3MZs
+   aPsO1deBr3O5YipPP/YV/g6dSP/620sh/gBMBYyETfUNLtuI+xpKmbEio
+   HD3rQ72yK/a2Zpx4OOZPch+mKLM5Gv0Q1nbMN6uXWZ7YXIVr0DYaAvp/r
+   Bd7BxcRWiLSmNJ0NVJZkh/jUILayza9uHmIQxtLpiA9vMp6c/OhUtmDyb
+   kCvPXIl2+QMtLTN5Afmt1xRb6UXlMcWkHssddJnrRNZ8Q2gX1ngbWdLFN
+   QO+XveIYSpUEulONishiVJgCvvZ86Y5UbtOzdGk2u/NefRzUFRHTzbtz2
+   g==;
+X-CSE-ConnectionGUID: aPtGTaq5QOiC0bxPRaqfLg==
+X-CSE-MsgGUID: na/3/iF3T4yhqbmHBx1Unw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="47386746"
+X-IronPort-AV: E=Sophos;i="6.11,243,1725346800"; 
+   d="scan'208";a="47386746"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Oct 2024 13:38:33 -0700
+X-CSE-ConnectionGUID: 12HeqPTMQ1OBnV6X0xYLIQ==
+X-CSE-MsgGUID: 8CcT62UUSmasKDrLbWlw+g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,243,1725346800"; 
+   d="scan'208";a="86643526"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 29 Oct 2024 13:38:28 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t5syw-000e7k-1a;
+	Tue, 29 Oct 2024 20:38:26 +0000
+Date: Wed, 30 Oct 2024 04:38:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ afb92ad8733ef0a2843cc229e4d96aead80bc429
+Message-ID: <202410300407.Cz0waFsa-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-In-Reply-To: <lf7y7wpuca6kzqcglgs5d443iusf7xjocum4adi7t3npfavccx@zgsp37oyztme>
-References: <20240901040658.157425-1-swboyd@chromium.org> <20240901040658.157425-16-swboyd@chromium.org>
- <phdcjgqqpjpruxp7v2mw446q73xr3eg4wfgfbjw5tasgr2pgg2@77swbk47b2tg>
- <CAE-0n514QMaQC2yjKP8bZqyfbv6B3AQm=+NJ87vxo6NdYiL03A@mail.gmail.com> <lf7y7wpuca6kzqcglgs5d443iusf7xjocum4adi7t3npfavccx@zgsp37oyztme>
-From: Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date: Tue, 29 Oct 2024 13:15:51 -0700
-Message-ID: <CAE-0n53-KmOS3zXmJPvOOZ7xxkek9-S=oBExgaY0PDnt_HjdNw@mail.gmail.com>
-Subject: Re: [PATCH v4 15/18] dt-bindings: usb: Add ports to
- google,cros-ec-typec for DP altmode
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, devicetree@vger.kernel.org, 
-	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>, 
-	dri-devel@lists.freedesktop.org, Guenter Roeck <groeck@chromium.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
-	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
-	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 
-Quoting Dmitry Baryshkov (2024-10-25 03:49:36)
-> On Tue, Oct 22, 2024 at 06:15:47PM -0700, Stephen Boyd wrote:
-> > Quoting Dmitry Baryshkov (2024-09-20 02:38:53)
-> > > On Sat, Aug 31, 2024 at 09:06:53PM GMT, Stephen Boyd wrote:
->
-> >
-> > Either way the problem seems to be that I need to associate one
-> > drm_bridge with two displayport altmode drivers and pass some fwnode
-> > handle to drm_connector_oob_hotplug_event() in a way that we can map
-> > that back to the right output endpoint in the DP bridge graph. That
-> > seems to imply that we need to pass the fwnode for the usb-c-connector
-> > in addition to the fwnode for the drm_bridge, so that the drm_bridge
-> > code can look at its DT graph and find the remote node connected.
-> > Basically something like this:
-> >
-> >   void drm_connector_oob_hotplug_event(struct fwnode_handle *connector_fwnode,
-> >                                        struct fwnode_handle
-> > *usb_connector_fwnode,
-> >                                        enum drm_connector_status status)
-> >
-> > (We might as well also pass the number of lanes here)
->
-> I think this is a bit of an overkill.
->
-> The drm_connector_oob_hotplug_event() is fine as it is, it gets
-> "fwnode_handle to report the event on".
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: afb92ad8733ef0a2843cc229e4d96aead80bc429  usb: typec: tcpm: restrict SNK_WAIT_CAPABILITIES_TIMEOUT transitions to non self-powered devices
 
-Ok. I understand that drm_*() shouldn't know about USB or type-c in
-general.
+elapsed time: 981m
 
->
-> What needs to be changed (in my humble opinion) is the
-> drm_connector_find_by_fwnode() function (or likely a new function is to
-> be added): if it can not find drm_connector for the passed fwnode, it
-> should look it up on the parent, then on parent's parent, etc, until we
-> actually find the drm_connector (good) or we reach the root (sad).
->
-> And finally after getting the drm_connector, the oob_hotplug_event()
-> callback should also receive the fwnode argument. This way the connector
-> (or the bridge) can identify the fwnode (aka usb-c-connector in our
-> case) that caused the event.
->
-> WDYT?
+configs tested: 80
+configs skipped: 2
 
-Ok I think I'm following along. The dp->connector_fwnode in
-displayport.c will always be the usb-c-connector node in your example?
-And that will search for the connector or bridge associated with that
-usb-c-connector node. Then when it comes time to call
-drm_connector_oob_hotplug_event() it will take the usb-c-connector
-fwnode as 'connector_fwnode' and in that function we'll make
-drm_connector_find_by_fwnode() implement the parent walk? The
-cros-ec-typec compatible node will register a drm_bridge in all cases,
-and that is the parent of the usb-c-connector node, so the walk will end
-there.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Then you want to pass the usb-c-connector fwnode to
-connector->funcs->oob_hotplug_event()? So
-drm_bridge_connector_oob_hotplug_event() changes to also get the
-usb-c-connector fwnode. This plan should work.
+tested configs:
+alpha          allnoconfig    gcc-14.1.0
+alpha         allyesconfig    clang-20
+alpha            defconfig    gcc-14.1.0
+arc           allmodconfig    clang-20
+arc           allmodconfig    gcc-13.2.0
+arc            allnoconfig    gcc-14.1.0
+arc           allyesconfig    clang-20
+arc           allyesconfig    gcc-13.2.0
+arc              defconfig    gcc-14.1.0
+arm           allmodconfig    clang-20
+arm           allmodconfig    gcc-14.1.0
+arm            allnoconfig    gcc-14.1.0
+arm           allyesconfig    clang-20
+arm           allyesconfig    gcc-14.1.0
+arm              defconfig    gcc-14.1.0
+arm64         allmodconfig    clang-20
+arm64          allnoconfig    gcc-14.1.0
+arm64            defconfig    gcc-14.1.0
+csky           allnoconfig    gcc-14.1.0
+csky             defconfig    gcc-14.1.0
+hexagon       allmodconfig    clang-20
+hexagon        allnoconfig    gcc-14.1.0
+hexagon       allyesconfig    clang-20
+hexagon          defconfig    gcc-14.1.0
+i386          allmodconfig    clang-19
+i386          allmodconfig    gcc-12
+i386           allnoconfig    clang-19
+i386           allnoconfig    gcc-12
+i386          allyesconfig    clang-19
+i386          allyesconfig    gcc-12
+i386             defconfig    clang-19
+loongarch     allmodconfig    gcc-14.1.0
+loongarch      allnoconfig    gcc-14.1.0
+loongarch        defconfig    gcc-14.1.0
+m68k          allmodconfig    gcc-14.1.0
+m68k           allnoconfig    gcc-14.1.0
+m68k          allyesconfig    gcc-14.1.0
+m68k             defconfig    gcc-14.1.0
+microblaze    allmodconfig    gcc-14.1.0
+microblaze     allnoconfig    gcc-14.1.0
+microblaze    allyesconfig    gcc-14.1.0
+microblaze       defconfig    gcc-14.1.0
+mips           allnoconfig    gcc-14.1.0
+nios2          allnoconfig    gcc-14.1.0
+nios2            defconfig    gcc-14.1.0
+openrisc       allnoconfig    clang-20
+openrisc      allyesconfig    gcc-14.1.0
+parisc        allmodconfig    gcc-14.1.0
+parisc         allnoconfig    clang-20
+parisc        allyesconfig    gcc-14.1.0
+parisc64         defconfig    gcc-14.1.0
+powerpc       allmodconfig    gcc-14.1.0
+powerpc        allnoconfig    clang-20
+powerpc       allyesconfig    gcc-14.1.0
+riscv         allmodconfig    gcc-14.1.0
+riscv          allnoconfig    clang-20
+riscv         allyesconfig    gcc-14.1.0
+s390          allmodconfig    clang-20
+s390          allmodconfig    gcc-14.1.0
+s390           allnoconfig    clang-20
+s390          allyesconfig    gcc-14.1.0
+sh            allmodconfig    gcc-14.1.0
+sh             allnoconfig    gcc-14.1.0
+sh            allyesconfig    gcc-14.1.0
+sparc         allmodconfig    gcc-14.1.0
+um            allmodconfig    clang-20
+um             allnoconfig    clang-20
+um            allyesconfig    clang-20
+x86_64         allnoconfig    clang-19
+x86_64        allyesconfig    clang-19
+x86_64           defconfig    clang-19
+x86_64           defconfig    gcc-11
+x86_64               kexec    clang-19
+x86_64               kexec    gcc-12
+x86_64            rhel-8.3    gcc-12
+x86_64        rhel-8.3-bpf    clang-19
+x86_64      rhel-8.3-kunit    clang-19
+x86_64        rhel-8.3-ltp    clang-19
+x86_64       rhel-8.3-rust    clang-19
+xtensa         allnoconfig    gcc-14.1.0
 
-At this point we need to tell the DP bridge, like IT6505, that it's one
-or the other output endpoints that it should use, but we haven't
-directly connected the usb-c-connector to the output ports of IT6505
-because drm_of_find_panel_or_bridge() can't find the parent of the
-usb-c-connector if we connect the DP bridge to the usb-c-connector
-graphs. We'll need a way for the bridge to know which output port is
-connected to a usb-c-connector fwnode. Some sort of API like
-
- fwnode_graph_get_endpoint_connected_to_fwnode(bridge_fwnode, usb_c_fwnode)
-
-that takes the bridge fwnode and traverses the graph to find the
-endpoint in that's connected to 'usb_c_fwnode'. That traversal API will
-need help from the intermediate node, cros-ec-typec, so maybe it is
-better as a drm_bridge API that uses some new drm_bridge_funcs callback.
-This way IT6505 can ask the bridge chain which output DP endpoint is
-actually associated with the connector fwnode it gets from the
-oob_hotplug_event() callback.
-
-Here's the two DT snippets that I've ended up with:
-
-typec {
-        compatible = "google,cros-ec-typec";
-
-        ports {
-                port@0 {
-                        reg = <0>;
-                        typec_dp_in: endpoint {
-                                 remote-endpoint = <&usb_1_qmp_phy_out_dp>;
-                        };
-                };
-
-                port@1 {
-                        reg = <1>;
-                        typec_usb0_in: endpoint@0 {
-                                 reg = <0>;
-                                 remote-endpoint = <&usb_hub_dfp1_ss>;
-                        };
-                        typec_usb1_in: endpoint@1 {
-                                 reg = <1>;
-                                 remote-endpoint = <&usb_hub_dfp2_ss>;
-                        };
-                }
-
-                // This port is not really needed because we know the
-		// mapping from input ports to usb-c-connectors
-                port@2 {
-                        reg = <2>;
-                        typec0_out: endpoint@0 {
-                                 reg = <0>;
-                                 remote-endpoint = <&usb_c0_ss_in>;
-                        };
-                        typec1_out: endpoint@1 {
-                                 reg = <1>;
-                                 remote-endpoint = <&usb_c1_ss_in>;
-                        };
-                }
-        };
-
-        usb_c0: connector@0 {
-                compatible = "usb-c-connector";
-                reg = <0>;
-
-                ports {
-                        port@0 {
-                                reg = <0>;
-                                usb_c0_hs_in: endpoint {
-                                        remote-endpoint = <&usb_hub_dfp1_hs>;
-                                };
-                        };
-
-                        port@1 {
-                                reg = <1>;
-                                usb_c0_ss_in: endpoint {
-                                        remote-endpoint = <&typec0_out>;
-                                };
-                        };
-                };
-        };
-
-        usb_c1: connector@1 {
-                compatible = "usb-c-connector";
-                reg = <1>;
-
-                ports {
-                        port@0 {
-                                reg = <0>;
-                                usb_c1_hs_in: endpoint {
-                                        remote-endpoint = <&usb_hub_dfp2_hs>;
-                                };
-                        };
-
-                        port@1 {
-                                reg = <1>;
-                                usb_c1_ss_in: endpoint {
-                                        remote-endpoint = <&typec1_out>;
-                                };
-                        };
-                };
-        };
-};
-
-&usb_1_qmpphy {
-        ports {
-                port@0 {
-                        endpoint@0 {
-                                data-lanes = <0 1>;
-                                // this might go to USB-3 hub
-                        };
-
-                        usb_1_qmp_phy_out_dp: endpoint@1 {
-                                remote-endpoint = <&typec_dp_in>;
-                                data-lanes = <2 3>;
-                        };
-                }
-        };
-};
-
--------
-
-typec {
-        ports {
-                port@0 {
-                        reg = <0>;
-                        typec_dp0_in: endpoint@0 {
-                                 reg = <0>;
-                                 remote-endpoint = <&dp_bridge_out_0>;
-                        };
-                        typec_dp1_in: endpoint@1 {
-                                 reg = <1>;
-                                 remote-endpoint = <&dp_bridge_out_1>;
-                        };
-                };
-
-                port@1 {
-                        reg = <1>;
-                        typec_usb0_in: endpoint@0 {
-                                 reg = <0>;
-                                 remote-endpoint = <&usb_hub_0_ss>;
-                        };
-                        typec_usb1_in: endpoint@1 {
-                                 reg = <1>;
-                                 remote-endpoint = <&usb_hub_1_ss>;
-                        };
-                }
-        };
-
-        connector@0 {
-                port@1 {
-                        endpoint@0 {
-                                remote-endpoint = <&usb_hub_0_hs>;
-                        };
-                };
-        };
-
-        connector@1 {
-                port@1 {
-                        endpoint@0 {
-                                remote-endpoint = <&usb_hub_1_hs>;
-                        };
-                };
-        };
-};
-
-dp_bridge {
-        ports {
-                port@1 {
-                        dp_bridge_out_0: endpoint@0 {
-                                remote-endpoint = <&typec_dp0_in>;
-                                data-lanes = <0 1>;
-                        };
-
-                        dp_bridge_out_1: endpoint@1 {
-                                remote-endpoint = <&typec_dp1_in>;
-                                data-lanes = <2 3>;
-                        };
-                };
-        };
-};
-
--------
-
-I wonder about a case where we may take two lanes and connect them to a
-usb-c-connector and then take the other two lanes and send them through
-a mux to two more usb-c-connectors. I think we'll need another property
-in that case that indicates which input DP endpoints correspond to the
-usb-c-connector nodes.
-
-typec {
-        ports {
-                port@0 {
-                        reg = <0>;
-                        typec_dp0_in: endpoint@0 {
-                                 reg = <0>;
-                                 remote-endpoint = <&dp_bridge_out_0>;
-                        };
-                        typec_dp1_in: endpoint@1 {
-                                 reg = <1>;
-                                 remote-endpoint = <&dp_bridge_out_1>;
-                        };
-                };
-
-                port@1 {
-                        reg = <1>;
-                        typec_usb0_in: endpoint@0 {
-                                 reg = <0>;
-                                 remote-endpoint = <&usb_hub_0_ss>;
-                        };
-                        typec_usb1_in: endpoint@1 {
-                                 reg = <1>;
-                                 remote-endpoint = <&usb_hub_1_ss>;
-                        };
-                        typec_usb2_in: endpoint@2 {
-                                 reg = <2>;
-                                 remote-endpoint = <&usb_hub_2_ss>;
-                        };
-                }
-        };
-
-	dp-2-usb-mapping = <0 0>, <1 1>, <1 2>;
-};
-
-This property would indicate dp endpoint 0 goes to usb-c-connector 0
-while dp endpoint 1 goes to usb-c-connector 1 and 2. I don't have this
-hardware but I could see how someone might do this by adding another mux
-that the EC controls. I don't want to design a binding and have to
-rework it in the future to handle this new case. I hope adding a new
-property, or getting more information from the EC firmware, will be
-sufficient to describe the linkage between the DP endpoint and the
-connectors managed by the cros-ec-typec device.
-
->
-> > Corsola could work with this design, but we'll need to teach
-> > dp_altmode_probe() to look for the drm_bridge elsewhere besides as the
-> > parent of the usb-c-connector node. That implies using the 'displayport'
-> > property in the cros-ec-typec node or teaching dp_altmode_probe() to
-> > look for the port@1/endpoint@1 remote-endpoint handle in the
-> > usb-c-connector graph.
-> >
-> > Assuming the bindings you've presented here are fine and good and I got
-> > over the differences between Trogdor and Corsola, then I can make mostly
-> > everything work with the drm_connector_oob_hotplug_event() signature
-> > change from above and some tweaks to dp_altmode_probe() to look for
-> > port@1/endpoint@1 first because that's the "logical" DP input endpoint
-> > in the usb-c-connector binding's graph. Great! The final roadblock I'm
-> > at is that HPD doesn't work on Trogdor, so I can't signal HPD through
-> > the typec framework.
->
-> Hmm, I thought that a normal DP's HPD GPIO works on the trogdor. Was I
-> misunderstanding it? But then we don't know, which USB-C connector
-> triggered the HPD...
-
-By HPD not working on Trogdor I mean that the EC doesn't tell the kernel
-about the state of HPD for a usb-c-connector in software. Instead, HPD
-is signaled directly to the DP controller in hardware via a GPIO. It is
-as you suspect, we don't know which USB-C connector has HPD unless we
-read the mux controlled by the EC and combine that with what the DP
-driver knows about the state of the HPD pin.
-
->
-> > This series fixes that problem by "capturing" HPD state from the
-> > upstream drm_bridge, e.g. msm_dp, by hooking the struct
-> > drm_bridge_funcs::hpd_notify() path and injecting HPD into the typec
-> > messages received from the EC. That's a workaround to make the typec
-> > framework see HPD state changes that are otherwise invisible to the
-> > kernel. Newer firmwares actually tell us the state of HPD properly, but
-> > even then we have to read a gpio mux controlled by the EC to figure out
-> > which usb-c-connector is actually muxing DP when HPD changes on either
-> > typec_port. Having a drm_bridge in cros-ec-typec helped here because we
-> > could hook this path and signal HPD if we knew the firmware was fixed.
-> > If we don't have the drm_bridge anymore, I'm lost how to do this.
->
-> It's probably okay to add one, but let me think if we can work without
-> it. Can we make EC driver listen for that single HPD GPIO (by making it
-> an actual GPIO rather than "dp_hot") and then react to it?
-
-I don't know how we handle the attention message, HPD_IRQ, because
-that's a short pulse that the kernel may miss when this is a GPIO that
-has to be triggered when both falling and rising. When the pin goes
-directly to the DP controller this is fine because the hardware can
-detect that. Similarly, when the EC sends the message about an HPD_IRQ
-we can replay that into the type-c framework and signal attention
-through drm_connector_oob_hotplug_event()/hpd_notify() paths.
-
->
-> >
-> > Maybe the right answer here is to introduce a drm_connector_dp_typec
-> > structure that is created by the TCPM (cros-ec-typec) that sets a new
-> > DRM_BRIDGE_OP_DP_TYPEC bridge op flag? And then teach
-> > drm_bridge_connector about this new flag, similar to the HDMI one. The
-> > drm_bridge could implement some function that maps the typec_port
-> > (usb-c-connector) to the upstream drm_bridge (ANX7625) graph port,
-> > possibly all in drm_bridge_connector_oob_hotplug_event() so that nothing
-> > else really changes. It could also let us keep hooking the hpd_notify()
-> > path for the workaround needed on Trogdor. And finally it may let us
-> > harmonize the two DT bindings so that we only have one port@1/endpoint
-> > node in the usb-c-connector.
->
-> I think we have lightly discussed adding drm_connector_displayport, so
-> that part is okay. But my gut feeling is that there should be no _typec
-> part in thart picture. The DRM framework shouldn't need to know all the
-> Type-C details.
->
-
-Alright, got it.
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
