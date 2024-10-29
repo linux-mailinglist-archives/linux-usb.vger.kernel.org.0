@@ -1,105 +1,207 @@
-Return-Path: <linux-usb+bounces-16819-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16820-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D6EA9B431A
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 08:28:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F0329B43A4
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 09:02:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44C191F2347F
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 07:28:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3829B222A4
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 08:02:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD19920262D;
-	Tue, 29 Oct 2024 07:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="mMdmV75C"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0956C2038A9;
+	Tue, 29 Oct 2024 08:01:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A03E1D7994;
-	Tue, 29 Oct 2024 07:28:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709671DF99F;
+	Tue, 29 Oct 2024 08:01:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730186891; cv=none; b=VcHg5j+vGPK8atE1qHVHsDuz5Gtq/NNJpcdptS/XrEn0JHNjlVlwwx/GKC4jHhl7uRF9N2nIW/kpxc9z9FpaH5KdtLwPF365Tl40XSmDaNFSekp6TrcLYIEcPjbkH+eezNcXFf+UoSu4GSiDa9cJ2sAOQ2hBfsDCxnbYYIHbYtQ=
+	t=1730188896; cv=none; b=WZpZstAgSPEggbhDkTCZyqbl5kXiOI3nvrCDs7G0z9M3DunVV9oH9Je9098J9MP5tsPnCdVuzv71Cm/WkazE26Brcd2vu98BEdq4aOPms7oTMK0Zh6mKB37eKlW7rkXpkIY4n2t7oiizhy5zoC531oToXyF/I6nF9/ZTkg7c7uk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730186891; c=relaxed/simple;
-	bh=Yzxop2L77+KWklUFpNEehjWzOsFs0+Hmq86r7axLw+I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V2YYVd3mgDbHaM+TwxeJiLXeDeW2K2RmOxCGwp68q8i6wKmOHcLYwU8alT1+LD77ZACEy8NhEB+NgGN/9opiBasz8nimuJaiwBcuqq7aKobF31VAS5GO+aSYkpMHfI+W0UxgNIHcWOUYjILKVrh9hlevEDENyzs6iM6zwSdGuOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=mMdmV75C; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from gaggiata.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 103DF1F994;
-	Tue, 29 Oct 2024 08:28:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1730186887;
-	bh=mA5XxeKvU7TmfDLIa3NriSYNjVYlBgpHYfJmSINY+qI=;
-	h=Received:From:To:Subject;
-	b=mMdmV75C8XCAC+MpB5S34JYy2/oky1g5p9DE0svE3FKLHq32iqQR+qGgD8+5SQPCh
-	 LWFmryUxxx1C95sfIzEMu8EKosPvhuJCiEMKwrT1Dz6yGN5sI6M2TI3EieyEPHUJbf
-	 DXWKRINsGcjJuVWrDoBQHk/GELYqFkimUVAb6/S3Pgx+mLVwe8YMke96esC0VplxGB
-	 kw9TjhcZwCC0MmIbf7rYu2rqyFU69seEhzgCxGpVB6FjuXXt8t4XP5HfGFRY1sJWAv
-	 L8QbhqJG2c9sLxLyOl6RtIDifWgYq1GMp30ejkLd4g3zrXwxXSMg9vfgrerzUoUgeK
-	 maUGQo3PXWwmA==
-Received: by gaggiata.pivistrello.it (Postfix, from userid 1000)
-	id 697597F95F; Tue, 29 Oct 2024 08:28:06 +0100 (CET)
-Date: Tue, 29 Oct 2024 08:28:06 +0100
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>,
-	Parth Pancholi <parth.pancholi@toradex.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: usb: add TUSB73x0 PCIe
-Message-ID: <ZyCOhkM4PXTLiFRm@gaggiata.pivistrello.it>
-References: <20241028105413.146510-1-francesco@dolcini.it>
- <20241028105413.146510-2-francesco@dolcini.it>
- <j3a76pyolo66bcqemeo4o3gwzfnftcfjc6grg3v33u7ipztwiq@donxxbveypjk>
+	s=arc-20240116; t=1730188896; c=relaxed/simple;
+	bh=DWyuuNyI5EivBbhvHm3xZId6MbdsDyCE0SGv5o5janU=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=W6e2QL9axG0o3lg7u97YQWCI/867HviVodWfyWrYonl2rwHlF6tgPw8xToVnd9uLhcygUN/gLmblFgmumyRoiFaW7CK0ejwL24ri2Pc7C2S2dxRTlhZhLo01L02ljrYwTzPVfxZzXnTF03rGuMClDHWPotgQ9qvVH56h7whw57A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f7eb435495cb11efa216b1d71e6e1362-20241029
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_QP
+	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
+	HR_TO_DOMAIN_COUNT, HR_TO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
+	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
+	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI
+	GTI_FG_IT, GTI_RG_INFO, GTI_FG_SER, GTI_C_BU, AMN_T1
+	AMN_GOOD, AMN_C_TI, AMN_C_BU, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.38,REQID:1712e57f-e99b-43d8-8d36-38876f304438,IP:25,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:10
+X-CID-INFO: VERSION:1.1.38,REQID:1712e57f-e99b-43d8-8d36-38876f304438,IP:25,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-META: VersionHash:82c5f88,CLOUDID:8d7803ee997f5958779c7ebadad8ebc0,BulkI
+	D:241024105327XGBM1VDO,BulkQuantity:8,Recheck:0,SF:44|64|66|841|24|17|19|1
+	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:
+	nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,
+	TF_CID_SPAM_ULS
+X-UUID: f7eb435495cb11efa216b1d71e6e1362-20241029
+X-User: duanchenghao@kylinos.cn
+Received: from [172.30.80.21] [(39.156.73.13)] by mailgw.kylinos.cn
+	(envelope-from <duanchenghao@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 645352901; Tue, 29 Oct 2024 16:01:14 +0800
+Message-ID: <31be22e3ee6633e0753a717c7c0994802662a39d.camel@kylinos.cn>
+Subject: Re: [PATCH v4] USB: Fix the issue of task recovery failure caused
+ by USB status when S4 wakes up
+From: duanchenghao <duanchenghao@kylinos.cn>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: stern@rowland.harvard.edu, saranya.gopal@intel.com, 
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-usb@vger.kernel.org, niko.mauno@vaisala.com, pavel@ucw.cz,
+ rafael@kernel.org,  stanley_chang@realtek.com, tj@kernel.org,
+ xiehongyu1@kylinos.cn,  xy521521@gmail.com, kernel test robot
+ <lkp@intel.com>
+Date: Tue, 29 Oct 2024 16:01:04 +0800
+In-Reply-To: <2024102911-mooned-precise-f526@gregkh>
+References: <e795d88afb2b485fab97e2be7759664e823fbfad.camel@kylinos.cn>
+	 <20241024024038.26157-1-duanchenghao@kylinos.cn>
+	 <2024102432-conjoined-skylight-33f1@gregkh>
+	 <8aff9a5acbd21d7bd08b80e02ef2b34f2028cedf.camel@kylinos.cn>
+	 <2024102911-mooned-precise-f526@gregkh>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <j3a76pyolo66bcqemeo4o3gwzfnftcfjc6grg3v33u7ipztwiq@donxxbveypjk>
 
-Hello Krzysztof,
+hi greg k-h,
 
-On Tue, Oct 29, 2024 at 08:08:09AM +0100, Krzysztof Kozlowski wrote:
-> On Mon, Oct 28, 2024 at 11:54:12AM +0100, Francesco Dolcini wrote:
-> > From: Parth Pancholi <parth.pancholi@toradex.com>
-> > 
-> > Add device tree bindings for TI's TUSB73x0 PCIe-to-USB 3.0 xHCI
-> > host controller. The controller supports software configuration
-> > through PCIe registers, such as controlling the PWRONx polarity
-> > via the USB control register (E0h).
-> > 
-> > Datasheet: https://www.ti.com/lit/ds/symlink/tusb7320.pdf
-> > Signed-off-by: Parth Pancholi <parth.pancholi@toradex.com>
-> > Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
+=E5=9C=A8 2024-10-29=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 04:27 +0100=EF=BC=
+=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
+> On Thu, Oct 24, 2024 at 04:46:48PM +0800, duanchenghao wrote:
+> > hi greg k-h,
+> >=20
+> > =E5=9C=A8 2024-10-24=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 09:05 +0200=EF=
+=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
+> > > On Thu, Oct 24, 2024 at 10:40:38AM +0800, Duan Chenghao wrote:
+> > > > When a device is inserted into the USB port and an S4 wakeup is
+> > > > initiated,
+> > > > after the USB-hub initialization is completed, it will
+> > > > automatically enter
+> > > > suspend mode. Upon detecting a device on the USB port, it will
+> > > > proceed with
+> > > > resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
+> > > > During
+> > > > the S4
+> > > > wakeup process, peripherals are put into suspend mode, followed
+> > > > by
+> > > > task
+> > > > recovery. However, upon detecting that the hcd is in the
+> > > > HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY status,
+> > > > causing the
+> > > > S4 suspend to fail and subsequent task recovery to not proceed.
+> > > > -
+> > > > [=C2=A0=C2=A0 27.594598][ 1]=C2=A0 PM: pci_pm_freeze():
+> > > > hcd_pci_suspend+0x0/0x28
+> > > > returns -16
+> > > > [=C2=A0=C2=A0 27.594601][ 1]=C2=A0 PM: dpm_run_callback():
+> > > > pci_pm_freeze+0x0/0x100
+> > > > returns -16
+> > > > [=C2=A0=C2=A0 27.603420][ 1]=C2=A0 ehci-pci 0000:00:04.1:
+> > > > pci_pm_freeze+0x0/0x100
+> > > > returned 0 after 3 usecs
+> > > > [=C2=A0=C2=A0 27.612233][ 1]=C2=A0 ehci-pci 0000:00:05.1:
+> > > > pci_pm_freeze+0x0/0x100
+> > > > returned -16 after 17223 usecs
+> > > > [=C2=A0=C2=A0 27.810067][ 1]=C2=A0 PM: Device 0000:00:05.1 failed t=
+o quiesce
+> > > > async: error -16
+> > > > [=C2=A0=C2=A0 27.816988][ 1]=C2=A0 PM: quiesce of devices aborted a=
+fter
+> > > > 1833.282
+> > > > msecs
+> > > > [=C2=A0=C2=A0 27.823302][ 1]=C2=A0 PM: start quiesce of devices abo=
+rted after
+> > > > 1839.975 msecs
+> > > > ......
+> > > > [=C2=A0=C2=A0 31.303172][ 1]=C2=A0 PM: recover of devices complete =
+after
+> > > > 3473.039
+> > > > msecs
+> > > > [=C2=A0=C2=A0 31.309818][ 1]=C2=A0 PM: Failed to load hibernation i=
+mage,
+> > > > recovering.
+> > > > [=C2=A0=C2=A0 31.348188][ 1]=C2=A0 PM: Basic memory bitmaps freed
+> > > > [=C2=A0=C2=A0 31.352686][ 1]=C2=A0 OOM killer enabled.
+> > > > [=C2=A0=C2=A0 31.356232][ 1]=C2=A0 Restarting tasks ... done.
+> > > > [=C2=A0=C2=A0 31.360609][ 1]=C2=A0 PM: resume from hibernation fail=
+ed (0)
+> > > > [=C2=A0=C2=A0 31.365800][ 1]=C2=A0 PM: Hibernation image not presen=
+t or could
+> > > > not
+> > > > be loaded.
+> > > >=20
+> > > > The "do_wakeup" is determined based on whether the controller's
+> > > > power/wakeup attribute is set. The current issue necessitates
+> > > > considering
+> > > > the type of suspend that is occurring. If the suspend type is
+> > > > either
+> > > > PM_EVENT_FREEZE or PM_EVENT_QUIESCE, then "do_wakeup" should be
+> > > > set
+> > > > to
+> > > > false.
+> > > >=20
+> > > > Reported-by: kernel test robot <lkp@intel.com>
+> > > > Closes:
+> > > > https://lore.kernel.org/oe-kbuild-all/202410151722.rfjtknRz-lkp@int=
+el.com/
+> > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
+> > > > Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
+> > >=20
+> > > What commit id does this fix?
+> >=20
+> > The current patch is not intended to fix an issue with a specific
+> > commit, but rather to address a long-standing problem in the USB
+> > core.
+>=20
+> So should it be backported to older stable kernels?=C2=A0 If so, how far
+> back?
 
-...
+yes, It needs to be backported. The stable branches such as 6.6.y,
+6.10.y, and 6.11.y can be considered for the backport.
 
-> > +  ti,tusb7320-pwron-active-high:
-> 
-> Drop tusb7320. There is never device name in property name, because it
-> is redundant and makes it completely not-reusable.
+Should we backport to these versions?
 
-Whoops :/
+Thanks=20
 
-Rob already wrote this in the previous version and I forgot about it.
-
-Thanks!
+Duan Chenghao
+>=20
+> > > And I missed where Alan provided a signed-off-by, where was that?
+> >=20
+> > In the following email, Alan proposed using "Signed-off-by" for
+> > signing.
+> > https://lore.kernel.org/all/489805e7-c19c-4b57-9cd7-713e075261cd@rowlan=
+d.harvard.edu/
+>=20
+> Ah, missed that, sorry.
+>=20
+> thanks,
+>=20
+> greg k-h
 
 
