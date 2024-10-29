@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-16809-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16810-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8EBD79B4112
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 04:36:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 844FC9B4114
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 04:36:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 24EEFB21E5F
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 03:36:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B58831C21900
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 03:36:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 438001F9EBD;
-	Tue, 29 Oct 2024 03:36:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C2031FB3C7;
+	Tue, 29 Oct 2024 03:36:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vIalFU81"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QXK+pODi"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A339F16F84F
-	for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 03:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E584A16F84F
+	for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 03:36:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730172959; cv=none; b=VhKULI+D0LxBjjjO/OY9jk5BbPxsDjJY6HrjEb7KDO/1ooXSiGh4UhjX+jm0lfHTx7kucUbRz9jq2T9EzMtLrVrlacqS8YSiHGvAXrtP7L8VvqbyvnGXbHza6KhWC4VqUfnp6qeY0rqNNPS08MpQjnLeFLP8FCzMXdU9AYlQM+0=
+	t=1730173014; cv=none; b=hGlgD5MlayyNnhRg6v3VVoUi3mnbf0TtX0qpuH26q/kOtAxrILAgURAKUTD4ikB+j9AefrC9PzHLN9Fkv98NSxhvmdRH+dU+4wrZsFew6wz701zSfmMYldYRgwq/+oE98HPSgD16Ws/qxcZ/TAxrxa8v280FFnrygn9XD7hDZbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730172959; c=relaxed/simple;
-	bh=OT2Ud4HFs9UnlSfVUySBuiRhF2pGkaG/K14Lbc2+mNA=;
+	s=arc-20240116; t=1730173014; c=relaxed/simple;
+	bh=yK51zFimLwsJhhtjNbuQjyRV5dRn0PvbfI0ErUIyxQQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L3COUiPm+UnquaC9tqQmx2H3v0JhNL4GuBrF6gpPtjtnmyedcB7UoP5US6i5f6X/KMBmxyv84TBibvxW/QdHUccfqbwxTNsDvYWRnS1b5qLgfWJ6yBBTEkpqUOpdGkKXecUB5X9rm+l+gCGB/+2fpDoDuVmpble3gj4GZszLgaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vIalFU81; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C98C4CECD;
-	Tue, 29 Oct 2024 03:35:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=HrzcyglPXfDGjDX5su6jy4joYoTnxMGmmqaw2FZzLnI+kdkLykC2umbfa88TmfiEV0olRrrNPj+yxqv/Rb5wzqoi19Uvf5y9WvyRZNkadHWEQdOTLAf9+t5lAJ4kGxANgPT9nghUMGANSPxueV05P+0/MgdB2CsCUb1iHWAWdHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QXK+pODi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43E48C4CECD;
+	Tue, 29 Oct 2024 03:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1730172959;
-	bh=OT2Ud4HFs9UnlSfVUySBuiRhF2pGkaG/K14Lbc2+mNA=;
+	s=korg; t=1730173013;
+	bh=yK51zFimLwsJhhtjNbuQjyRV5dRn0PvbfI0ErUIyxQQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vIalFU81ddvrAfVZ3ua1XUYcgxcjhatyaKlsfXgdrSyxg/FNtLoqQYENoznll7Ja4
-	 ZnwupZ13WyuIeUQKiYzWblsmY8BZUxWwHBs/0cNudr3Q+otrqdA2s9yQ6eWjwyUV1C
-	 rk/DJ6zW+8MzdyJlvXmHXcsRJqlvSDHQIjmD3iwg=
-Date: Tue, 29 Oct 2024 04:35:46 +0100
+	b=QXK+pODiXk2/m+dt8UFQ7+ucDMY1VjNmBXgITpI+orcjqehjJA7fBba/yHRsrq7aP
+	 QlS7hma7wGTcVqShMLAPY4S+UwdVXYi0SKSR8bXh5Nt20p5oh1TGNDtsxBjP2j1mw4
+	 JOW/XBfbSWWSKXjjW5iEdxFUV0ivud9m2J9ZKx2E=
+Date: Tue, 29 Oct 2024 04:36:40 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Chen Ridong <chenridong@huaweicloud.com>
-Cc: peter.chen@kernel.org, pawell@cadence.com, rogerq@kernel.org,
-	linux-usb@vger.kernel.org, chenridong@huawei.com,
+To: Yi Yang <yiyang13@huawei.com>
+Cc: kees@kernel.org, justinstitt@google.com, u.kleine-koenig@baylibre.com,
+	yuxu@marvell.com, balbi@ti.com, linux-usb@vger.kernel.org,
 	wangweiyang2@huawei.com
-Subject: Re: [PATCH] usb: cdns3: avoid possible null_ptr_deref in
- cdns3_gadget_ep_queue
-Message-ID: <2024102917-wand-shanty-bbbc@gregkh>
-References: <20241025064331.1049538-1-chenridong@huaweicloud.com>
+Subject: Re: [PATCH] usb: gadget: udc: fix possible null-ptr-deref in
+ mv_u3d_req_to_trb()
+Message-ID: <2024102928-chemicals-compost-d995@gregkh>
+References: <20241026102740.2653458-1-yiyang13@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,36 +56,39 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241025064331.1049538-1-chenridong@huaweicloud.com>
+In-Reply-To: <20241026102740.2653458-1-yiyang13@huawei.com>
 
-On Fri, Oct 25, 2024 at 06:43:31AM +0000, Chen Ridong wrote:
-> From: Chen Ridong <chenridong@huawei.com>
+On Sat, Oct 26, 2024 at 10:27:40AM +0000, Yi Yang wrote:
+> The mv_u3d_build_trb_one() will return NULL when kzalloc() fails, fix
+> possible null-ptr-deref by add check for mv_u3d_build_trb_one().
 > 
-> The cdns3_gadget_ep_alloc_request functions may return NULL
-> when memory is out of use. To void possible null_ptr_deref,
-> return ENOMEM when cdns3_gadget_ep_alloc_request returns NULL.
-> 
-> Signed-off-by: Chen Ridong <chenridong@huawei.com>
+> Fixes: 3d4eb9dfa3e8 ("usb: gadget: mv: Add USB 3.0 device driver for Marvell PXA2128 chip.")
+> Signed-off-by: Yi Yang <yiyang13@huawei.com>
 > ---
->  drivers/usb/cdns3/cdns3-gadget.c | 4 ++++
->  1 file changed, 4 insertions(+)
+>  drivers/usb/gadget/udc/mv_u3d_core.c | 2 ++
+>  1 file changed, 2 insertions(+)
 > 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index fd1beb10bba7..982e8e0759e8 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -2657,6 +2657,10 @@ static int cdns3_gadget_ep_queue(struct usb_ep *ep, struct usb_request *request,
->  		struct cdns3_request *priv_req;
->  
->  		zlp_request = cdns3_gadget_ep_alloc_request(ep, GFP_ATOMIC);
-> +		if (!zlp_request) {
-> +			spin_unlock_irqrestore(&priv_dev->lock, flags);
+> diff --git a/drivers/usb/gadget/udc/mv_u3d_core.c b/drivers/usb/gadget/udc/mv_u3d_core.c
+> index 062f43e146aa..c882c377c4f4 100644
+> --- a/drivers/usb/gadget/udc/mv_u3d_core.c
+> +++ b/drivers/usb/gadget/udc/mv_u3d_core.c
+> @@ -417,6 +417,8 @@ static int mv_u3d_req_to_trb(struct mv_u3d_req *req)
+>  	 */
+>  	if (length <= (unsigned)MV_U3D_EP_MAX_LENGTH_TRANSFER) {
+>  		trb = mv_u3d_build_trb_one(req, &count, &dma);
+> +		if (!trb)
 > +			return -ENOMEM;
+>  		list_add_tail(&trb->trb_list, &req->trb_list);
+>  		req->trb_head = trb;
+>  		req->trb_count = 1;
+> -- 
+> 2.25.1
+> 
+> 
 
-Are you sure this is ok?  What about the resources that have been
-allocated before this return would interrupt them?  How was this tested?
+How was this tested to verify it works properly?
 
-thanks,
+thanks,.
 
 greg k-h
 
