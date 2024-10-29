@@ -1,207 +1,142 @@
-Return-Path: <linux-usb+bounces-16820-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16821-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F0329B43A4
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 09:02:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D86E9B4439
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 09:28:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3829B222A4
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 08:02:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7EC061C21AF1
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 08:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0956C2038A9;
-	Tue, 29 Oct 2024 08:01:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D31BE203719;
+	Tue, 29 Oct 2024 08:28:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JImNaVVG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 709671DF99F;
-	Tue, 29 Oct 2024 08:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A4F202F67
+	for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 08:28:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730188896; cv=none; b=WZpZstAgSPEggbhDkTCZyqbl5kXiOI3nvrCDs7G0z9M3DunVV9oH9Je9098J9MP5tsPnCdVuzv71Cm/WkazE26Brcd2vu98BEdq4aOPms7oTMK0Zh6mKB37eKlW7rkXpkIY4n2t7oiizhy5zoC531oToXyF/I6nF9/ZTkg7c7uk=
+	t=1730190492; cv=none; b=WFrOZKLFfZnxWc3ph05LVUF4qteJy5Fkac1ZK20JfxmLdd+obfV1aihtKX39dGOkcIyc4J3XT736QV011+sRE2EvaeUJa8Yv3F7XDThZiC/4bDzTHALVQ0ZgZLRUFgcuJ6fTXC1o/TZ/Qja8+qi1UriQCTWJMcpWfgk1gW4P1Co=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730188896; c=relaxed/simple;
-	bh=DWyuuNyI5EivBbhvHm3xZId6MbdsDyCE0SGv5o5janU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=W6e2QL9axG0o3lg7u97YQWCI/867HviVodWfyWrYonl2rwHlF6tgPw8xToVnd9uLhcygUN/gLmblFgmumyRoiFaW7CK0ejwL24ri2Pc7C2S2dxRTlhZhLo01L02ljrYwTzPVfxZzXnTF03rGuMClDHWPotgQ9qvVH56h7whw57A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: f7eb435495cb11efa216b1d71e6e1362-20241029
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_QP
-	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
-	SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-	CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI
-	GTI_FG_IT, GTI_RG_INFO, GTI_FG_SER, GTI_C_BU, AMN_T1
-	AMN_GOOD, AMN_C_TI, AMN_C_BU, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:1712e57f-e99b-43d8-8d36-38876f304438,IP:25,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:10
-X-CID-INFO: VERSION:1.1.38,REQID:1712e57f-e99b-43d8-8d36-38876f304438,IP:25,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-META: VersionHash:82c5f88,CLOUDID:8d7803ee997f5958779c7ebadad8ebc0,BulkI
-	D:241024105327XGBM1VDO,BulkQuantity:8,Recheck:0,SF:44|64|66|841|24|17|19|1
-	02,TC:nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,RT:nil,Bulk:40,QS:nil,BEC:
-	nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,
-	TF_CID_SPAM_ULS
-X-UUID: f7eb435495cb11efa216b1d71e6e1362-20241029
-X-User: duanchenghao@kylinos.cn
-Received: from [172.30.80.21] [(39.156.73.13)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 645352901; Tue, 29 Oct 2024 16:01:14 +0800
-Message-ID: <31be22e3ee6633e0753a717c7c0994802662a39d.camel@kylinos.cn>
-Subject: Re: [PATCH v4] USB: Fix the issue of task recovery failure caused
- by USB status when S4 wakes up
-From: duanchenghao <duanchenghao@kylinos.cn>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: stern@rowland.harvard.edu, saranya.gopal@intel.com, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-usb@vger.kernel.org, niko.mauno@vaisala.com, pavel@ucw.cz,
- rafael@kernel.org,  stanley_chang@realtek.com, tj@kernel.org,
- xiehongyu1@kylinos.cn,  xy521521@gmail.com, kernel test robot
- <lkp@intel.com>
-Date: Tue, 29 Oct 2024 16:01:04 +0800
-In-Reply-To: <2024102911-mooned-precise-f526@gregkh>
-References: <e795d88afb2b485fab97e2be7759664e823fbfad.camel@kylinos.cn>
-	 <20241024024038.26157-1-duanchenghao@kylinos.cn>
-	 <2024102432-conjoined-skylight-33f1@gregkh>
-	 <8aff9a5acbd21d7bd08b80e02ef2b34f2028cedf.camel@kylinos.cn>
-	 <2024102911-mooned-precise-f526@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	s=arc-20240116; t=1730190492; c=relaxed/simple;
+	bh=bq9KV96/CdGhq9cACwcJmrW3nGLRBLszyaInHfBNLoM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Z3DUiqz0UshzksjHblF6QnGTwlhOvA0Oh3kJw4J3B3M7ju1J5bTL9+3GQqnbyXDdevb/OyoSK0oxuKRQbu5uxLJoO7S82dw1d64rY1HcL/TedUimZsDLmlHzYnwdva+euGJz4I0FsK4DkB8ISXb66fmq50VtRmIXmdsuFBUE/Jc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JImNaVVG; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53b34ed38easo2454989e87.0
+        for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 01:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730190488; x=1730795288; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bq9KV96/CdGhq9cACwcJmrW3nGLRBLszyaInHfBNLoM=;
+        b=JImNaVVG3EXOlp0ZAkJrlXAZ3roftsBdawExaC79FfrJ545nQEcjHZCebpHpugfbeb
+         Y4+dNuk6xUJaOuL0vUbcgjsc6B6ngPTYvxt6FMR1kiKXG9vHFMG0rXEI2LMyAoIfiX1f
+         aEv8lYBZCrcKphbna9GOd1+MvIGQBfNivySOmPPodDZf+qdiamlo0vWzM6aQsQHs09wn
+         JrDFw5Al/CDT+BljW3IlZbsbCGjGg6yUJXayerNiJG70gPa/1cGC7YytPlRyD6bGq25k
+         pvt3uH72+5za5P2/sCR08aWibfDPjKvR34OXKzrlakJY3n4ij6V+uBfZ5BZRjTZDFLry
+         gaVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730190488; x=1730795288;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bq9KV96/CdGhq9cACwcJmrW3nGLRBLszyaInHfBNLoM=;
+        b=oEvPAjp5mMJp9M+h1dRLk94jeXBNi28cGi+yCWadSplFwOXBNVe97COYVwQpzE4yAY
+         TZVoffu+WTUUPqPinoZ0to/3Z+nLxx7p9/XLQMhS+b4p6LG8IZWAyB/7+jqyWVnar5oc
+         o60DVouLBpexV3bcioXwV8z6OaLjCxge/334POD1R/GpuqatxjS5Hypdd0lU9w1yHM//
+         I/sU0wo6Zbi2NYPJj53FJX48jp/T+Eampxc2i1g5VYMqWgNLsUNzZCl+s56H+F/UF/2w
+         5DuFOVpza2VP6aMVtQ8PWsDUDLF0Cs5hxiPZQcP0K0hRyZLQwqwUDjYYAV+dmA7+jvDn
+         e77w==
+X-Gm-Message-State: AOJu0YyCc/1I93TlonVhfezHY4apSej0oloJbP3w3bkZLzz23zUIgVio
+	Qjs4zHUipHz1fRyfTkR5yD8zpKa55uUrJkM7KSo7zn6IyTfmoO9Q
+X-Google-Smtp-Source: AGHT+IFaamYLb+ELAiNHs7En4PPCi2/CivZFyK7RmUuAWddDrdejwXJ4JTcB7agJzkN9TIycguEtPA==
+X-Received: by 2002:a05:6512:baa:b0:539:f1ad:b7a6 with SMTP id 2adb3069b0e04-53b3491c819mr4901561e87.37.1730190487931;
+        Tue, 29 Oct 2024 01:28:07 -0700 (PDT)
+Received: from foxbook (bhd254.neoplus.adsl.tpnet.pl. [83.28.93.254])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53b2e10a555sm1295879e87.34.2024.10.29.01.28.03
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 29 Oct 2024 01:28:06 -0700 (PDT)
+Date: Tue, 29 Oct 2024 09:28:00 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [PATCH 0/2] xhci: Fix the NEC stop bug workaround
+Message-ID: <20241029092800.32eccf3b@foxbook>
+In-Reply-To: <f6dcf205-e8eb-4ba8-91d9-24fa0f769739@intel.com>
+References: <20241025121806.628e32c0@foxbook>
+	<20241028083351.655d54cf@foxbook>
+	<f6dcf205-e8eb-4ba8-91d9-24fa0f769739@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-hi greg k-h,
+On Mon, 28 Oct 2024 11:54:39 +0200, Mathias Nyman wrote:
+> The SET_DEQ_PENDING case is trickier. We would read the dequeue
+> pointer from hardware while we know hardware is processing a command
+> to move the dequeue pointer. Result may be old dequeue, or new
+> dequeue, possible unknown.
 
-=E5=9C=A8 2024-10-29=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 04:27 +0100=EF=BC=
-=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
-> On Thu, Oct 24, 2024 at 04:46:48PM +0800, duanchenghao wrote:
-> > hi greg k-h,
-> >=20
-> > =E5=9C=A8 2024-10-24=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 09:05 +0200=EF=
-=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
-> > > On Thu, Oct 24, 2024 at 10:40:38AM +0800, Duan Chenghao wrote:
-> > > > When a device is inserted into the USB port and an S4 wakeup is
-> > > > initiated,
-> > > > after the USB-hub initialization is completed, it will
-> > > > automatically enter
-> > > > suspend mode. Upon detecting a device on the USB port, it will
-> > > > proceed with
-> > > > resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
-> > > > During
-> > > > the S4
-> > > > wakeup process, peripherals are put into suspend mode, followed
-> > > > by
-> > > > task
-> > > > recovery. However, upon detecting that the hcd is in the
-> > > > HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY status,
-> > > > causing the
-> > > > S4 suspend to fail and subsequent task recovery to not proceed.
-> > > > -
-> > > > [=C2=A0=C2=A0 27.594598][ 1]=C2=A0 PM: pci_pm_freeze():
-> > > > hcd_pci_suspend+0x0/0x28
-> > > > returns -16
-> > > > [=C2=A0=C2=A0 27.594601][ 1]=C2=A0 PM: dpm_run_callback():
-> > > > pci_pm_freeze+0x0/0x100
-> > > > returns -16
-> > > > [=C2=A0=C2=A0 27.603420][ 1]=C2=A0 ehci-pci 0000:00:04.1:
-> > > > pci_pm_freeze+0x0/0x100
-> > > > returned 0 after 3 usecs
-> > > > [=C2=A0=C2=A0 27.612233][ 1]=C2=A0 ehci-pci 0000:00:05.1:
-> > > > pci_pm_freeze+0x0/0x100
-> > > > returned -16 after 17223 usecs
-> > > > [=C2=A0=C2=A0 27.810067][ 1]=C2=A0 PM: Device 0000:00:05.1 failed t=
-o quiesce
-> > > > async: error -16
-> > > > [=C2=A0=C2=A0 27.816988][ 1]=C2=A0 PM: quiesce of devices aborted a=
-fter
-> > > > 1833.282
-> > > > msecs
-> > > > [=C2=A0=C2=A0 27.823302][ 1]=C2=A0 PM: start quiesce of devices abo=
-rted after
-> > > > 1839.975 msecs
-> > > > ......
-> > > > [=C2=A0=C2=A0 31.303172][ 1]=C2=A0 PM: recover of devices complete =
-after
-> > > > 3473.039
-> > > > msecs
-> > > > [=C2=A0=C2=A0 31.309818][ 1]=C2=A0 PM: Failed to load hibernation i=
-mage,
-> > > > recovering.
-> > > > [=C2=A0=C2=A0 31.348188][ 1]=C2=A0 PM: Basic memory bitmaps freed
-> > > > [=C2=A0=C2=A0 31.352686][ 1]=C2=A0 OOM killer enabled.
-> > > > [=C2=A0=C2=A0 31.356232][ 1]=C2=A0 Restarting tasks ... done.
-> > > > [=C2=A0=C2=A0 31.360609][ 1]=C2=A0 PM: resume from hibernation fail=
-ed (0)
-> > > > [=C2=A0=C2=A0 31.365800][ 1]=C2=A0 PM: Hibernation image not presen=
-t or could
-> > > > not
-> > > > be loaded.
-> > > >=20
-> > > > The "do_wakeup" is determined based on whether the controller's
-> > > > power/wakeup attribute is set. The current issue necessitates
-> > > > considering
-> > > > the type of suspend that is occurring. If the suspend type is
-> > > > either
-> > > > PM_EVENT_FREEZE or PM_EVENT_QUIESCE, then "do_wakeup" should be
-> > > > set
-> > > > to
-> > > > false.
-> > > >=20
-> > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > Closes:
-> > > > https://lore.kernel.org/oe-kbuild-all/202410151722.rfjtknRz-lkp@int=
-el.com/
-> > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > > > Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
-> > >=20
-> > > What commit id does this fix?
-> >=20
-> > The current patch is not intended to fix an issue with a specific
-> > commit, but rather to address a long-standing problem in the USB
-> > core.
->=20
-> So should it be backported to older stable kernels?=C2=A0 If so, how far
-> back?
+Damn, I looked at various things but I haven't thought about it. Yes,
+it's dodgy and not really a great idea. Although I suspect it wouldn't
+be *very* harmful, because the truly bad case (failing to queue a Set
+TR Deq when it's necessary) is triggered by Set TR Deq already pending
+on the same stream, so the stream's cache will be cleared anyway.
 
-yes, It needs to be backported. The stable branches such as 6.6.y,
-6.10.y, and 6.11.y can be considered for the backport.
+But it could easily queue a bunch of pointless commands, for example.
 
-Should we backport to these versions?
+By the way, I think this race is already possible today, without my
+patches. There is no testing for SET_DEQ_PENDING in xhci_urb_dequeue()
+and no testing in handle_cmd_stop_ep(). If this happens in the middle
+of a Set TR Deq chain on a streams endpoint, nothing seems to stop the
+Stop EP handler from attempting invalidation under SET_DEQ_PENDING.
 
-Thanks=20
+Maybe invalidate_cancelled_tds() should bail out if SET_DEQ_PENDING
+and later Set Deq completion handler should unconditionally call the
+invalidate/giveback combo before it exits.
 
-Duan Chenghao
->=20
-> > > And I missed where Alan provided a signed-off-by, where was that?
-> >=20
-> > In the following email, Alan proposed using "Signed-off-by" for
-> > signing.
-> > https://lore.kernel.org/all/489805e7-c19c-4b57-9cd7-713e075261cd@rowlan=
-d.harvard.edu/
->=20
-> Ah, missed that, sorry.
->=20
-> thanks,
->=20
-> greg k-h
+> We could ring the doorbell before giving back the invalidated tds in
+> xhci_handle_cmd_stop_ep(), and possibly xhci_handle_cmd_set_deq().
+> This gives hardware a bit more time to start the endpoint.
 
+This unfortunately doesn't buy much time, because giveback is a very
+cheap operation - it just adds the URBs to a queue and wakes a worker
+which runs all those callbacks. It finishes under 1us on my system.
+
+> We could also track pending ring starts.
+> Set a "EP_START_PENDING flag when doorbell is rung on a stopped
+> endpoint. clear the flag when firt transfer event is received on that
+> endpoint.
+
+Yes, that was the second thing I tried. But I abandoned it:
+
+Problem 1: URBs on "idle" devices are cancelled before generating
+any event, so we need to clear the flag on Stop EP and Reset EP.
+Not all of them use the default completion handler. Maybe it could
+be handled reliably by tapping into handle_cmd_completion(). But...
+
+Problem 2: hardware bugs. On ASMedia 3142, I can trigger (from
+userspace) a condition when EP 0 doorbell is rung (even twice)
+and its state is still Stopped a few seconds later, and remains
+so after repeated Stop EP / doorbell rings.
+
+It looks like a timeout is the only way to be really sure.
+
+
+Regards,
+Michal
 
