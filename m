@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-16806-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16807-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45A219B40D9
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 04:14:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ACB19B40FB
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 04:22:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B5A2283801
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 03:14:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1EC98283750
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 03:22:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06261FCF77;
-	Tue, 29 Oct 2024 03:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3ACC1F9AA6;
+	Tue, 29 Oct 2024 03:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="X4juaSdP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RY/y2lLM"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625491FCF63
-	for <linux-usb@vger.kernel.org>; Tue, 29 Oct 2024 03:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582651D5AC7;
+	Tue, 29 Oct 2024 03:22:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730171584; cv=none; b=ka1Ev9XjS7WuBFB+VCZEZyM8qAXb/yqvq7DDItrqdVjbPkXVuVQ0v6NHQWAyENwmLaTJRJQ6UGhsf6is0MyAZihruydqQuirFOaHFWkbB4VQORoNdQjy8H0+/8sRdUtxWe8LsCbaQvkErYLQEVSJp+oAQp03TB6sHMsuVuWbdek=
+	t=1730172158; cv=none; b=iqHf0cm3cj8s/DYr5IrvU+2q5Mg2nWjXfJdiWbEnfyhM1GetrBsMzaxLoeGy5vjxcbXbmU9hxGFXKRdlirOEpXOM7lvo5znPpK7buK5prsZP4gvOZWlzVjRi3A4Ip7zfcRRBhQH7NrEYNzZsn3Ql1oUNlZmLlcEq/L+MPy7mxfg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730171584; c=relaxed/simple;
-	bh=U6x/pgDLbkgenpJfxPXCfBJcTyrfqm35yimz/j6r+1w=;
+	s=arc-20240116; t=1730172158; c=relaxed/simple;
+	bh=/k/tpgMgvcJK0qeXQprTVVufODiHHKeph0BM3eC9Tfs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bF/OSRuzhh/neQLQCgqx0K4sQVAuObpg83iiMxTLXcRk6tu9x/N8RCl/jwEQ8B6eJZ1oU6DkQc7SWsHcKS4zLPCyZpgkELngDA1dtm0YJn9uuT+dV7+j7zZ4LhMFgq02GQaGUaWWUBtO6Z1n3AY6CE92LAzLdCEdFiBvkP9CbqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=X4juaSdP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0AC3C4CECD;
-	Tue, 29 Oct 2024 03:13:03 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=QN1LowXk8TPI96gwEXdI7ScNv/ChgZnMERSXafT9uK9J0sk66l+MILn7w1gqSTBpBAJzImoNSQWmRQFjHNWAjt+JdZ/NH1E+7oijuH48Olv8ZvZze2z+9LDuWd5b+dBTmXhjh88Pz6xXd16sBkZS7kPID0M52I43baAXdPmvpv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RY/y2lLM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F48C4CECD;
+	Tue, 29 Oct 2024 03:22:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1730171584;
-	bh=U6x/pgDLbkgenpJfxPXCfBJcTyrfqm35yimz/j6r+1w=;
+	s=korg; t=1730172158;
+	bh=/k/tpgMgvcJK0qeXQprTVVufODiHHKeph0BM3eC9Tfs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X4juaSdPt4CTrDUBQ03Juc4auqb4U3d3cin02hdlSr1gEWnTV6CzAEempMzzwrz88
-	 TxvZyvyAQnedpyJDTSHlhhwPtzCweROA5W7p/Aqhs0FhDOVEQqpqx+/NlhQsdSH0Hs
-	 dj0bxxDLxNlRP/OwVGPTtatnepSHsHNlFGvz2D9M=
-Date: Tue, 29 Oct 2024 04:12:50 +0100
+	b=RY/y2lLMIv5dOcsiGpbxRVCNeVJM4e6Qm3kTuCcrHdViD1efMSTylLiYbkogSscak
+	 s/g++Ffyg6Y/aFpTO1V3H/C800mQOtJ5bzjmEtxl/7pZFpxfEe/k8dUzk1uV62zDwc
+	 P4UkTMYjKhlxHRD6USSa/02tW8p9mWOl6iP6CAcU=
+Date: Tue, 29 Oct 2024 04:22:25 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	linux-usb@vger.kernel.org
-Subject: Re: [GIT PULL] USB4/Thunderbolt fixes for v6.12-rc5
-Message-ID: <2024102942-rickety-causing-e766@gregkh>
-References: <20241025061542.GL275077@black.fi.intel.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Faisal Hassan <quic_faisalh@quicinc.com>,
+	Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v3] xhci: Fix Link TRB DMA in command ring stopped
+ completion event
+Message-ID: <2024102918-visiting-oboe-dc64@gregkh>
+References: <20241022155631.1185-1-quic_faisalh@quicinc.com>
+ <f9a2eb47-512e-4718-a83a-4742e09be85b@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,20 +57,33 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241025061542.GL275077@black.fi.intel.com>
+In-Reply-To: <f9a2eb47-512e-4718-a83a-4742e09be85b@linux.intel.com>
 
-On Fri, Oct 25, 2024 at 09:15:42AM +0300, Mika Westerberg wrote:
-> Hi Greg,
+On Thu, Oct 24, 2024 at 05:06:44PM +0300, Mathias Nyman wrote:
+> On 22.10.2024 18.56, Faisal Hassan wrote:
+> > During the aborting of a command, the software receives a command
+> > completion event for the command ring stopped, with the TRB pointing
+> > to the next TRB after the aborted command.
+> > 
+> > If the command we abort is located just before the Link TRB in the
+> > command ring, then during the 'command ring stopped' completion event,
+> > the xHC gives the Link TRB in the event's cmd DMA, which causes a
+> > mismatch in handling command completion event.
+> > 
+> > To address this situation, move the 'command ring stopped' completion
+> > event check slightly earlier, since the specific command it stopped
+> > on isn't of significant concern.
+> > 
+> > Fixes: 7f84eef0dafb ("USB: xhci: No-op command queueing and irq handler.")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Faisal Hassan <quic_faisalh@quicinc.com>
 > 
-> The following changes since commit 8cf0b93919e13d1e8d4466eb4080a4c4d9d66d7b:
+> Acked-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 > 
->   Linux 6.12-rc2 (2024-10-06 15:32:27 -0700)
-> 
-> are available in the Git repository at:
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git tags/thunderbolt-for-v6.12-rc5
+> Greg, would you like to take this directly to usb-linus (6.12)?
+> If not I'll send it as part of series to usb-next later
 
-Pulled and pushed out, thanks.
+Sure, I'll take it now, thanks.
 
 greg k-h
 
