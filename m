@@ -1,103 +1,105 @@
-Return-Path: <linux-usb+bounces-16826-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16827-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DB829B48CE
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 12:59:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9341E9B4948
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 13:12:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 23966B22B66
-	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 11:58:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57D1728360D
+	for <lists+linux-usb@lfdr.de>; Tue, 29 Oct 2024 12:12:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3195D205AA9;
-	Tue, 29 Oct 2024 11:58:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 370E4205ADA;
+	Tue, 29 Oct 2024 12:11:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="it6q1G9W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NJRMkc+h"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C707464;
-	Tue, 29 Oct 2024 11:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE8E71DF960;
+	Tue, 29 Oct 2024 12:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730203132; cv=none; b=pGBjuGbZug+qgj/84qfMW5mA3HEilE97yZuf9SvNQfHiptw1Ue3piS27lUa5ALZh4DIiepOVclfCRFdb1bDwTKCmBe8gHSvAWdZsYWm+Bh3Ye8t8MLM+VLoUomiEuBci5h82H9kcmjjbxlpTn3Cy1W/5kdOVHa+IJjaZ1n9hWGI=
+	t=1730203918; cv=none; b=pTAthhL7Yyq/ywuWfCUSa6oneNnVflUxLBYHhCYnL4K+VKQJ88PHdoj8SpKwVk/WEXQ4cwcMfYED8Ck2pmLCZyW12LAbQzSStRJn8IG0/pKEkWsxG/c7omB4gneP+ETyq29SoevGmWM4PYYd1hZ6rPg8Rc/tn4Sf4zJMnSF/hOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730203132; c=relaxed/simple;
-	bh=SzhROuVj8b2Bw6HW3TeWKNJXntWzXA8ZH9yg8zdzvxA=;
+	s=arc-20240116; t=1730203918; c=relaxed/simple;
+	bh=DvOA428vZdpj4FY6SOQjmd/eWCaW9YAhTenfjs/0W+U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BVbFi8H0lAgnPVcpZad0mQF58F3nj4eWpfBc1e6TNKPvpPGcOpyRKBSiBKbSiGGKNNrmb/7EXkVMeDa/2I9r2RD/srzEqukXiaxVBEO2MH7q92QMSuGfqX2LNI1c8dFuKp/Bs/ck09UxIVa2XckqNsuUD0087D+2n5dKjSfyZRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=it6q1G9W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DC06C4CECD;
-	Tue, 29 Oct 2024 11:58:52 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vna8Jdgil0pa2Li8AETqAsT6uO/ntgdqdzFn1zZHHBByn4YtfjFecNd+W7k3e6AO1IbFtgJ8M+KWp+I9Gy8mA+oseM3lZLuohgW1ke0Dfr7+3jtd1MDhmu5pS984FwIoZJDI8JRpQuuK0y39oix0py9q8hD1oY1qjHz0GXohBxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NJRMkc+h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39EBBC4CEE6;
+	Tue, 29 Oct 2024 12:11:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730203132;
-	bh=SzhROuVj8b2Bw6HW3TeWKNJXntWzXA8ZH9yg8zdzvxA=;
+	s=k20201202; t=1730203918;
+	bh=DvOA428vZdpj4FY6SOQjmd/eWCaW9YAhTenfjs/0W+U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=it6q1G9WfgDOaBHu8ulzoYpgaX2OjuAmWBVBedB1caaIfVgpJtoeZQOiarq1wRhBY
-	 3opyDtKFW0ZFw17JM5/iH+zaqym/+D3ZgaRXtH3rx8oTgV3wDBHdutTwexkakJcdC0
-	 gWMld7EYJWJHsea01fDZ4kGbN6darGpmMSCgaY0fOoCnAIomN8+sLs13YyzlIcBUXC
-	 CwoPBw3Io0ohdT6mh0MBtRQbuLRp1ivPcYM7R4sAoFyKyPF0chBOFBfl7/oCYqWGu6
-	 NF9GrKMXB0x9rUH7ag88rc/mc/PFcrcU+iLBopnC7cvdpzpaqJEoOFrzZ6C3Rs5ja4
-	 9DpZNECtax+wA==
+	b=NJRMkc+heMepmtDI/F6bUP1EfECyQ6mwg6/UR1N2Msy1FZ/fLS/dFeoohHbkkDc8d
+	 EiNeyJUGhQx+zfj5bZUnlsvwLROnSt9zhK21sHtjrCP7GiQBKlN7U3ktsqWLdeasef
+	 0lYs2cNmKmZH/BN308f+yWVmZGavtavo0LNDrVuNqIdi069ZDBVie2A6Oj82oYNwpw
+	 4EpdNGT5fQDKQG0z2i1yafONGQxLeZVvFgmJF8ULQUgBWaidsqyCWQmEnZa7vcUyRV
+	 7KyVRmTPVXHS7mboG2a2bU5yCE11lNtTLtB/NJrdHU/DKtFaPkkAl8XWFNtcXOOuFR
+	 6Y0lzy4g3Mc8g==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1t5ksR-000000002MX-2DLu;
-	Tue, 29 Oct 2024 12:59:11 +0100
-Date: Tue, 29 Oct 2024 12:59:11 +0100
+	id 1t5l57-000000002zu-29c3;
+	Tue, 29 Oct 2024 13:12:17 +0100
+Date: Tue, 29 Oct 2024 13:12:17 +0100
 From: Johan Hovold <johan@kernel.org>
-To: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@gmx.fr>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add Quectel RG650V
-Message-ID: <ZyDOD38s_n7SyupZ@hovoldconsulting.com>
-References: <20241024150919.53046-1-benoit.monin@gmx.fr>
+To: wojackbb@gmail.com
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add MediaTek T7XX compositions
+Message-ID: <ZyDRIW0DIGn_FIsD@hovoldconsulting.com>
+References: <20241028080415.697793-1-wojackbb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241024150919.53046-1-benoit.monin@gmx.fr>
+In-Reply-To: <20241028080415.697793-1-wojackbb@gmail.com>
 
-On Thu, Oct 24, 2024 at 05:09:19PM +0200, Benoît Monin wrote:
-> Add support for Quectel RG650V which is based on Qualcomm SDX65 chip.
-> The composition is DIAG / NMEA / AT / AT / QMI.
+On Mon, Oct 28, 2024 at 04:04:15PM +0800, wojackbb@gmail.com wrote:
+> From: Jack Wu <wojackbb@gmail.com>
 > 
-> T:  Bus=02 Lev=01 Prnt=01 Port=03 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-> D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-> P:  Vendor=2c7c ProdID=0122 Rev=05.15
-> S:  Manufacturer=Quectel
-> S:  Product=RG650V-EU
-> S:  SerialNumber=xxxxxxx
-> C:  #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
-> I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=9ms
-> I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=9ms
-> I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-> E:  Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-> E:  Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=9ms
-> Signed-off-by: Benoît Monin <benoit.monin@gmx.fr>
+> Add the MediaTek T7XX compositions:
 
-Next time make sure to add an empty line before your SoB.
+Can you say something about what the various interfaces are used for
+here?
 
-Applied, thanks.
+> T:  Bus=03 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 74 Spd=480  MxCh= 0
+> D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=0e8d ProdID=7129 Rev= 0.01
+> S:  Manufacturer=MediaTek Inc.
+> S:  Product=USB DATA CARD
+> S:  SerialNumber=004402459035402
+> C:* #Ifs=10 Cfg#= 1 Atr=a0 MxPwr=500mA
+
+> Signed-off-by: Jack Wu <wojackbb@gmail.com>
+> ---
+>  drivers/usb/serial/option.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 4f18f189f309..b6118f545386 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -2244,6 +2244,7 @@ static const struct usb_device_id option_ids[] = {
+>  	  .driver_info = NCTRL(2) },
+>  	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, 0x7127, 0xff, 0x00, 0x00),
+>  	  .driver_info = NCTRL(2) | NCTRL(3) | NCTRL(4) },
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(MEDIATEK_VENDOR_ID, 0x7129, 0xff, 0x00, 0x00) },	/* MediaTek T7XX */
+
+Should you mark some of the interfaces are not accepting modem control
+requests similar to 0x7126 and 0x7127?
+
+>  	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MEN200) },
+>  	{ USB_DEVICE(CELLIENT_VENDOR_ID, CELLIENT_PRODUCT_MPL200),
+>  	  .driver_info = RSVD(1) | RSVD(4) },
 
 Johan
 
