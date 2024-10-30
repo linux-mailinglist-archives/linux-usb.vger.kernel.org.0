@@ -1,179 +1,212 @@
-Return-Path: <linux-usb+bounces-16854-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16855-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF5579B5E70
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 10:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F393E9B603F
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 11:34:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 352FC1F239ED
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 09:06:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 76C831F23881
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 10:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3FA1E1C17;
-	Wed, 30 Oct 2024 09:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29E6D1E3DF0;
+	Wed, 30 Oct 2024 10:34:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ELrbBiJw"
+	dkim=pass (2048-bit key) header.d=jaguarmicro.com header.i=@jaguarmicro.com header.b="Tc1gUa/D"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2092.outbound.protection.outlook.com [40.107.255.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2AD01E1C14;
-	Wed, 30 Oct 2024 09:06:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730279191; cv=none; b=L1atPmcMcymWlpLoPlEyZRYobY3MY+spQHSdlkUq7f3iqIY4iONB4En0hCM4dw1zuzUCniQ4UsYoy/DBsOsn+9XQghzwSo5yTQ4zvPuKudyZiv/Bi0G8tGh7izSiYekcCv6AC8Xw8zofjben+X4OUU+9V0Kbb7uJIt+b3N4WjLQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730279191; c=relaxed/simple;
-	bh=UHAvCgWVJbo/IoGy4cfK+JVAwccuRu6Xu7KbTRA9d2I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sV3NnXFZX71BOwTjPddOqqouzJnTo4aZlgGno3jfzOzg2gE4mHJEgpoAChsB/U+4wIjA/N14ejD10GTRM64BJ5/qCniUdOqSLgtEjlrU6gV2fwx4jspbfm04tKmaSyjCR5+kF+1w+4Yln9qXeWsT0j5/A8Pmoj8DRf3IpKo26gA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ELrbBiJw; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730279190; x=1761815190;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=UHAvCgWVJbo/IoGy4cfK+JVAwccuRu6Xu7KbTRA9d2I=;
-  b=ELrbBiJwOgKriQ+KgjaLtJc+h7uC8qZOlbWr0bMG8FntFOmoVOuQtm2v
-   57GbJ4Hd+eGcW+jXbhCOHMdinB+lsWcL8AufnAW2lm7Fv2Jdlva+scziK
-   dr1LVvfwXe4OAokwPlQnAh8mB4gW+dedHybODAipNqG6pY9q+cUUzITAB
-   NQAdolyfbw/bjVwC4fYicmLKZw+qoZqpBLVPbm/rXKrRK5jE5aRBN+nah
-   C6r3o+KVl57ww0dnd/ct0LMF05iJy7p3J8yFTia3ePIB1xCBmHWKaBOuM
-   gRTHcP2rtI5Piq1Wmt1PVH0hFxfSxXXaQ30TWPMny6zUJj4PwPrJ0+V6J
-   Q==;
-X-CSE-ConnectionGUID: O9sxnTjASROMvqKfih1mPA==
-X-CSE-MsgGUID: zD45V6riRTOHmPvj9GJHcw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30115594"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30115594"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 02:06:29 -0700
-X-CSE-ConnectionGUID: aL85xrH/RWGgAivk+/lliA==
-X-CSE-MsgGUID: jFHHloDnTvmvKXlW9ep40g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,244,1725346800"; 
-   d="scan'208";a="86192087"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP; 30 Oct 2024 02:06:26 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 46F682C1; Wed, 30 Oct 2024 11:06:25 +0200 (EET)
-Date: Wed, 30 Oct 2024 11:06:25 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Rick <rick@581238.xyz>
-Cc: Mario Limonciello <mario.limonciello@amd.com>, Sanath.S@amd.com,
-	christian@heusel.eu, fabian@fstab.de, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, regressions@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: Dell WD19TB Thunderbolt Dock not working with kernel > 6.6.28-1
-Message-ID: <20241030090625.GS275077@black.fi.intel.com>
-References: <000f01db247b$d10e1520$732a3f60$@581238.xyz>
- <96560f8e-ab9f-4036-9b4d-6ff327de5382@amd.com>
- <22415e85-9397-42db-9030-43fc5f1c7b35@581238.xyz>
- <20241022161055.GE275077@black.fi.intel.com>
- <7f14476b-8084-4c43-81ec-e31ae3f7a3c6@581238.xyz>
- <20241023061001.GF275077@black.fi.intel.com>
- <4848c9fe-877f-4d73-84d6-e2249bb49840@581238.xyz>
- <20241028081813.GN275077@black.fi.intel.com>
- <2c27683e-aca8-48d0-9c63-f0771c6a7107@581238.xyz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907E71D278D;
+	Wed, 30 Oct 2024 10:34:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.92
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730284448; cv=fail; b=XI2tbtPEl8+5pzSgn8oZ8zwLMtzYMOEKYC/xDPvQGPh/B/k1W1tn/7q94OnbJtCKVAZSaKLF92MaKO5ZXQdhrR838b2KwZ27nJ73F7T5vaCNMaRh+z2KcyDjmHlQmuW3WTDjesZeyUYqjcj1kWiU8b1CNBzIAR/Gti9HX0JJInY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730284448; c=relaxed/simple;
+	bh=0Po7QMYZYii/vKP3tRMs3aKER6xQGHnOOw+1S6zEJbc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JUm4MoTph6altQYQKMOXw/gZt6PZc2vfuFDTYXuDHyh3Fk0c4n9Tj/FB6h2pjtfHi9VMd3CHb4lwWbf5dId7pIzrLeYpiEF+PrBIkWPkiCctJp0ZJuYlr2Zd/wPCV5G4pZ3jtpSWug+aSdqbhxLAxlO0k+NYZksEKFROTJrZ6kY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jaguarmicro.com; spf=pass smtp.mailfrom=jaguarmicro.com; dkim=pass (2048-bit key) header.d=jaguarmicro.com header.i=@jaguarmicro.com header.b=Tc1gUa/D; arc=fail smtp.client-ip=40.107.255.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=jaguarmicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jaguarmicro.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Aqv4tZIIT0oy9Cypm7ihe8B67/N+kuSn5O5kxK3FLTFxNthz1jHZ4OR8R277d0f2VzwKDofskzSVSmN74PWq8yY96mE+thSIASWhtiCSCHwErKOHColaznkSw8JJwRmuCJObmAsO664Wm2jK17YtSl4Bi9VFXlvnQxsvJuYz3gSeryJxOtpOpbRv1kYyueWFC+OjSPEexbKgBEiArtZfOpgUIugli7VB+kjR49vsCc7L/GGvOwPldixOTSMHBLcypt81J18DikFnkPRec4dj8MXOXWkhiC+AblJCFh0bwiqIagduVqL+NvB4D0UwXjDbyEGOumTaLj1krfVuYZA4qg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w9grCCSowA5tzavXYtsNrT9RwWErhGKVPF+rKhipqrk=;
+ b=jgvXJ/TWsIleY83NeFKL1qWTZsX4lJxINXiw41LTIE7jqke7xjT4u1M/f2+DvRLwe83TzekgOAFJxrbR9mnTWteyhg3FuElIaPnItc5F5DDWS+dtE4XmJepTj4+ptXzae1KvJT7qKyBdlYNl1DqyROiGipoZBH7iTLSiLiSaFi4gOBWtL2hpSBGlgXXlId7/RPAbw9AsIab2kJGkcKvlg1SMxPL8P5/+oq5htLlwfYqUGXKlfNCCLksompJNBjv1qKiIeLPlPLYK3PjDIMGJ//xk3fv3wGhHS9/0UJGBugLRh944TreiCAzDNGszLFHB63Oy96TcwRUqrOvUBYpj3w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=jaguarmicro.com; dmarc=pass action=none
+ header.from=jaguarmicro.com; dkim=pass header.d=jaguarmicro.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jaguarmicro.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w9grCCSowA5tzavXYtsNrT9RwWErhGKVPF+rKhipqrk=;
+ b=Tc1gUa/DWyqv30t0H/+hV7VXLrpyX8tu/yPZ3D/xlqTRQg6+DID4SA/s9fEzIvMUQhMXoVzCDgugxLzyhFjhjlP0h9LOJaywYF9jY8bpb9ikCagswtMjR20sILNFfi9maZyHZnI7l18OvmXtgg1TxbPAnpjCaFuV5PYqpyj0OZeZgnN7x27SS9M7E+l9JbDMuYQcnPCNzJRH4iEtYh/4kOewHPbXyvOm4YhkYvBKJE61eKhyKsF3SGTF7U2AVRbQ5vQfrSWWYPe5cKlzqrzXfC0sD7lPaNVBvEpkUURmmf5yG7MSSuCEX6WJGxSo67RqSmoDuJVPLtr8VE4jdNj/xQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=jaguarmicro.com;
+Received: from KL1PR0601MB5773.apcprd06.prod.outlook.com
+ (2603:1096:820:b1::13) by SEYPR06MB7041.apcprd06.prod.outlook.com
+ (2603:1096:101:1d6::5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8114.12; Wed, 30 Oct
+ 2024 10:33:56 +0000
+Received: from KL1PR0601MB5773.apcprd06.prod.outlook.com
+ ([fe80::b56a:3ef:aa9d:c82]) by KL1PR0601MB5773.apcprd06.prod.outlook.com
+ ([fe80::b56a:3ef:aa9d:c82%4]) with mapi id 15.20.8114.015; Wed, 30 Oct 2024
+ 10:33:55 +0000
+From: Rex Nie <rex.nie@jaguarmicro.com>
+To: bryan.odonoghue@linaro.org,
+	heikki.krogerus@linux.intel.com
+Cc: gregkh@linuxfoundation.org,
+	linux@roeck-us.net,
+	caleb.connolly@linaro.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	angus.chen@jaguarmicro.com,
+	stable@vger.kernel.org,
+	Rex Nie <rex.nie@jaguarmicro.com>
+Subject: [PATCH v3] usb: typec: qcom-pmic: init value of hdr_len/txbuf_len earlier
+Date: Wed, 30 Oct 2024 18:32:57 +0800
+Message-Id: <20241030103256.2087-1-rex.nie@jaguarmicro.com>
+X-Mailer: git-send-email 2.39.0.windows.2
+In-Reply-To: <20241030022753.2045-1-rex.nie@jaguarmicro.com>
+References: <20241030022753.2045-1-rex.nie@jaguarmicro.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2P153CA0002.APCP153.PROD.OUTLOOK.COM
+ (2603:1096:4:140::16) To KL1PR0601MB5773.apcprd06.prod.outlook.com
+ (2603:1096:820:b1::13)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2c27683e-aca8-48d0-9c63-f0771c6a7107@581238.xyz>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR0601MB5773:EE_|SEYPR06MB7041:EE_
+X-MS-Office365-Filtering-Correlation-Id: 86da23bd-5928-4023-247a-08dcf8ce5b0e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|52116014|366016|1800799024|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?VxqKTO0KD9vyKthHJEygyiPeol3OwQAUVXEv/5hvh1pXFDzGL/zwYf5dODSx?=
+ =?us-ascii?Q?xUORxiD/SlUOtpcDe3UAAzRluopYy3Dazk5+YBZTAyK6EmqFDT6a0hBn9FT0?=
+ =?us-ascii?Q?qLpPWkKBcN7bpSp/03R/aZaraV8t+9JgLnu1d5gVx15kKGUIZS6EZ5rUO+Bk?=
+ =?us-ascii?Q?LQuXDUP351PM6nlEqG4GpAXQSo8pd6QLfrnsQ/2Q5s2Yutqu78JQ9+sSz3BK?=
+ =?us-ascii?Q?43pgVIFlqLuFaRamLypGpQG7hv+kB2NYxYY5i5I4eVeMNfqShvyOwJFjRMeg?=
+ =?us-ascii?Q?lAyv7ZkevCT6HEtGjtqHt4f6g6FMx/E7UDFgoT4tP11qbZwJpVkuVUkH+W83?=
+ =?us-ascii?Q?S4eGYshitaN47L33AGx2WhRl+qmvqECTKYzU+Akf6kcmQ65PjSeOGw1HMa1f?=
+ =?us-ascii?Q?Egb/t37/XlRX4c4RkWyGUdMQENP7Yx/n195AdTOP/9pyhInR2obqx4O8yd8P?=
+ =?us-ascii?Q?0v/PoNtWruRjjSDTBSMcgob0DA5cas/xyB8gqvIuaWmWcrMVdzplA53Ryybl?=
+ =?us-ascii?Q?TYuYe3lNCOxtQ8nb0psYpbsh+cczR60h/HtHBJ50AQezO6JGHAz+5Nsz6GWj?=
+ =?us-ascii?Q?onKJWzgSbSUke9b61hhAIzZgdtt8Jo9BXfpkBWOTm9/QOsYxqjTy52+Bw65l?=
+ =?us-ascii?Q?7BwH4ocN2Ci1smT6DCxEMnKQUSK+g55yQnGogfZuBIx+9Qpo4s1pRP3M8QKB?=
+ =?us-ascii?Q?sfo5acA90F2co3PY3QAek57cd2wk8A1OB9wP9mA0NlF5EMxyX7OaYpHEiE5J?=
+ =?us-ascii?Q?E2310ytaPmw0EAetksuv9dOkncCqKHG/yv+oURG1RhAEk8UjNK0OinT9eGMN?=
+ =?us-ascii?Q?lbcJR9wiWFF2zyM256QURBX0EaBZubXM14eXEGTLNJMrL5ZLhin0KmSIJ4tP?=
+ =?us-ascii?Q?Fz3IhqM6MSGKSKqYQhyIYYe96AXK4JidfxAx3FbMXLiNs2tX7PHmYVd7K2UY?=
+ =?us-ascii?Q?wSATe+CV7TSoMeVLNEE8M05phuTBvkV0j5WefjssZJJ6NiccOzNYpuJrPp8/?=
+ =?us-ascii?Q?QKqzgB2H/BjdrTg7pIJOKX6rS8z6Bs6JA9harjonLBCz8f6p7/SOaKk3RxEg?=
+ =?us-ascii?Q?5mgRByQ5C1zr61T34hyIKCfErTMWRgkLUhE2lQLjpw8zfvZ72vqBCvaJ2m4w?=
+ =?us-ascii?Q?1F8x0vZegtg8Gc7WTXpM9Y42yrhkdeSay/s8ph571XxJ43+QscnTyf592KvI?=
+ =?us-ascii?Q?iQiMGyeWVsbiIqIUUmKKcsVAFfpPVo8+TaZv2AOsMotbwt8mh6MIIiPho0wZ?=
+ =?us-ascii?Q?1UzuxCuFF2jfHG0QPp92aVnlXQAUjpkXl2NIH6E6xDA/N808p+jNXyeUdfDG?=
+ =?us-ascii?Q?SBW3OBLa1ex8L7Cxz7BSpEe+w6QA44E/6VrYTNrJh3RWuBXX+/cF7d2zAqOe?=
+ =?us-ascii?Q?VtfGGc9yuYx/y9hmkvb9iJLpqg7+?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:KL1PR0601MB5773.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(366016)(1800799024)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?RJNWUW9k/zLI7XE0iSdf0VPSAqgV0LabklgGLsUnW2J00S3G4bHLHYbiGfGY?=
+ =?us-ascii?Q?sOUP0s7qtjjXJuKuO3qQvcx+Q2VRYEBwnYIMXrKIq6sMNgaKmL4G+2mzmSBp?=
+ =?us-ascii?Q?Za8CU9XZtjbeFfoQ9Q4gs5+bmQQ+udMLj3nEVuGobv30hZU+xxvTYw5yC7BE?=
+ =?us-ascii?Q?y4TsU3o2stZ9OPlMCRjBQ17N9aulCjUsiJiz1IJ/4YaMDmRq5WZpL+w3XsCd?=
+ =?us-ascii?Q?AmU/ip2UR4+VZPhSYXfAlpzEV9072t4pulVTZ5y8Vg0aMb3bBOC0QSUiFkKK?=
+ =?us-ascii?Q?Zv1lH0u0kdW476MBIETuG15VrjzhcsHpX/ftXusoNe2NOomJRGyR1sTfXRyd?=
+ =?us-ascii?Q?PKGq8qClcLplm1HcNotKvPX0hELb3f4oY5VFCuOELA8MK6cXancjZ2plJDRj?=
+ =?us-ascii?Q?7sk+oo1xiWG30kE1N4CeWhpju0VEZzIDf3XeqvdA9NH57td43sFz8JsLLmN2?=
+ =?us-ascii?Q?+OgMijvwZG/Sq0/fnxnnno0fzqgzEik+dWt6As29ZDPdGBsuZPjwvizDOwis?=
+ =?us-ascii?Q?k00y1sahkpOReyxdubAm2XG9j73aIwjV4VhHHoPvXCLfviYNgkTzGV1DW+T4?=
+ =?us-ascii?Q?5XxGLQrGT2GpVgpUI/HXO29YoJZosasPQitMP3fe+Sxrn9ocx/KyVzmG0Vvj?=
+ =?us-ascii?Q?peFGGRBz+sHCzvgKfMiqa6911dYez8HxWdwWyIUunPwmfldDFAeg4uiSS8RP?=
+ =?us-ascii?Q?v6Dc1Vrp3iTPCJW6xPN4RUk3KbDxkE7bZyLv+JT2omhw7uhh3U178T6gsqve?=
+ =?us-ascii?Q?mSWzUVaFs50iOtqW95LdnuurdO3cE5rNDMsz7BrOkHHuEJ8FmX+aVFpTZnKS?=
+ =?us-ascii?Q?RZLUUQnoRhz04YBkvP2GI+eF1d0dCbi9qztaH7/RIfZ5z8V5FnVyYHgq88DS?=
+ =?us-ascii?Q?ouKvG09QDp52ZwHR7mYxToxlBpCMfBR1Vzvh2sju5RV4ai3oPWaJiDek/ncn?=
+ =?us-ascii?Q?dhjl1epRLp9YZYb6KGvngwCZ5OSJsEfcVzwUE2cdA2CzUxENsm0LUgJgjMIj?=
+ =?us-ascii?Q?vgfUVwlL6DE32k/Az1jBR8Xv7DPMZrL3gZUb1FasSrs0i5zK3RwDoMVM3hYF?=
+ =?us-ascii?Q?qf1YeWsbUAGwc/igpNridci8tcQYH7tPgfe2Au5nTEixJy7vDHq5aUbQgb+z?=
+ =?us-ascii?Q?10jQ5rwer1nZKSXmWVEKQqen3MxQw72IQt7vbb1muMYua9UIm7kaoDarWM2N?=
+ =?us-ascii?Q?tcuY7/nz7IlM2RB/v7vwimjzuCjiWLDMp/fuOThuLcbsX/NyN5iUXlqx+YKg?=
+ =?us-ascii?Q?6ez88uNOOUn5zhsyUj6m2f0Y6mU2v5IEdC4QJmXrfo+2T9Uzi+TN0GWv1VVQ?=
+ =?us-ascii?Q?Kjg2FwvfO6RwFRhQckYFVvb9n5SIuNTu/Ft+BjwazMOmnQyo19Ds2TOjXCyg?=
+ =?us-ascii?Q?uen1TgUMZSXDYdKJDFLrClh/Z6jGLY1qyzIX9vkM1k1t5fwuA9kTjwrCSfJW?=
+ =?us-ascii?Q?O4fYzg+KriLhoU+RZCbd+y1lYtP4RhJeXU64M1hV9r8U9o0q1s2PR5O5dI6/?=
+ =?us-ascii?Q?+JeWh1a7QWSmewK9X4ENxSvoflAGAR5gS01fBxrIiL5LyPqA0zTCbozrD7Gt?=
+ =?us-ascii?Q?bytdMxza8uvZ9fy7Gs8xdlM/kG3x4Ffex4HdZ2cx?=
+X-OriginatorOrg: jaguarmicro.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 86da23bd-5928-4023-247a-08dcf8ce5b0e
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR0601MB5773.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Oct 2024 10:33:55.8310
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 1e45a5c2-d3e1-46b3-a0e6-c5ebf6d8ba7b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ISK+GTpIlYXBMSyWtItwDS+a8BWvB4rrHCiqcjwlJBcwbsgfFCSkjub1WK8JI2tUc3hraSgNtu/UnHueMeQgag==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB7041
 
-Hi Rick,
+If the read of USB_PDPHY_RX_ACKNOWLEDGE_REG failed, then hdr_len and
+txbuf_len are uninitialized. This commit stops to print uninitialized
+value and misleading/false data.
 
-On Wed, Oct 30, 2024 at 08:11:30AM +0100, Rick wrote:
-> Hi Mika,
-> 
-> Thank you for your email.
-> 
-> On 28-10-2024 09:18, Mika Westerberg wrote:
-> > 
-> > I still see similar issue even with the v6.9 kernel. The link goes up an
-> > down unexpectly.
-> > 
-> > I wonder if you could try to take traces of the control channel traffic?
-> > I suggest to use v6.11 kernel because it should have all the tracing
-> > bits added then install tbtools [1] and follow the steps here:
-> > 
-> >    https://github.com/intel/tbtools?tab=readme-ov-file#tracing
-> > 
-> > Then provide both full dmesg and the trace output. That hopefully shows
-> > if some of the access we are doing in the Linux side is causing the link
-> > to to drop. Let me know if you need more detailed instructions.
-> > 
-> > Also please drop the "thunderbolt.host_reset=0" from the command line as
-> > that did not help, so it is not needed.
-> 
-> Dropped thank you.
-> 
-> > 
-> > [1] https://github.com/intel/tbtools
-> 
-> tbtrace on 6.11.5:
-> https://gist.github.com/ricklahaye/69776e9c39fd30a80e2adb6156bdb42d
-> dmesg on 6.11.5:
-> https://gist.github.com/ricklahaye/8588450725695a0bd45799d3d66c7aff
+---
+V2 -> V3:
+- add changelog, add Fixes tag, add Cc stable ml. Thanks heikki
+- Link to v2: https://lore.kernel.org/all/20241030022753.2045-1-rex.nie@jaguarmicro.com/
+V1 -> V2:
+- keep printout when data didn't transmit, thanks Bjorn, bod, greg k-h
+- Links: https://lore.kernel.org/all/b177e736-e640-47ed-9f1e-ee65971dfc9c@linaro.org/
 
-Thanks! I suspect there is something we do when we read the sideband
-that makes the device router to "timeout" and retry the link
-establishment. There is also the failure when USB 3.x tunnel is created
-but we can look that after we figure out the connection issue.
+Cc: stable@vger.kernel.org
+Fixes: a4422ff22142 (" usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
+Signed-off-by: Rex Nie <rex.nie@jaguarmicro.com>
+---
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-Looking at the trace we are still polling for retimers when we see the
-unplug:
+diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+index 5b7f52b74a40..726423684bae 100644
+--- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
++++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
+@@ -227,6 +227,10 @@ qcom_pmic_typec_pdphy_pd_transmit_payload(struct pmic_typec_pdphy *pmic_typec_pd
+ 
+ 	spin_lock_irqsave(&pmic_typec_pdphy->lock, flags);
+ 
++	hdr_len = sizeof(msg->header);
++	txbuf_len = pd_header_cnt_le(msg->header) * 4;
++	txsize_len = hdr_len + txbuf_len - 1;
++
+ 	ret = regmap_read(pmic_typec_pdphy->regmap,
+ 			  pmic_typec_pdphy->base + USB_PDPHY_RX_ACKNOWLEDGE_REG,
+ 			  &val);
+@@ -244,10 +248,6 @@ qcom_pmic_typec_pdphy_pd_transmit_payload(struct pmic_typec_pdphy *pmic_typec_pd
+ 	if (ret)
+ 		goto done;
+ 
+-	hdr_len = sizeof(msg->header);
+-	txbuf_len = pd_header_cnt_le(msg->header) * 4;
+-	txsize_len = hdr_len + txbuf_len - 1;
+-
+ 	/* Write message header sizeof(u16) to USB_PDPHY_TX_BUFFER_HDR_REG */
+ 	ret = regmap_bulk_write(pmic_typec_pdphy->regmap,
+ 				pmic_typec_pdphy->base + USB_PDPHY_TX_BUFFER_HDR_REG,
+-- 
+2.17.1
 
-[   48.684078] tb_tx Read Request Domain 0 Route 0 Adapter 3 / Lane
-               0x00/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String High
-               0x01/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String Low
-               0x02/---- 0x02182091 0b00000010 00011000 00100000 10010001 .... 
-                 [00:12]       0x91 Address
-                 [13:18]        0x1 Read Size
-                 [19:24]        0x3 Adapter Num
-                 [25:26]        0x1 Configuration Space (CS) → Adapter Configuration Space
-                 [27:28]        0x0 Sequence Number (SN)
-[   48.684339] tb_rx Read Response Domain 0 Route 0 Adapter 3 / Lane
-               0x00/---- 0x80000000 0b10000000 00000000 00000000 00000000 .... Route String High
-               0x01/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String Low
-               0x02/---- 0x02182091 0b00000010 00011000 00100000 10010001 .... 
-                 [00:12]       0x91 Address
-                 [13:18]        0x1 Read Size
-                 [19:24]        0x3 Adapter Num
-                 [25:26]        0x1 Configuration Space (CS) → Adapter Configuration Space
-                 [27:28]        0x0 Sequence Number (SN)
-               0x03/0091 0x81320408 0b10000001 00110010 00000100 00001000 .2.. PORT_CS_1
-                 [00:07]        0x8 Address
-                 [08:15]        0x4 Length
-                 [16:18]        0x2 Target
-                 [20:23]        0x3 Re-timer Index
-                 [24:24]        0x1 WnR
-                 [25:25]        0x0 No Response (NR)
-                 [26:26]        0x0 Result Code (RC)
-                 [31:31]        0x1 Pending (PND)
-[   48.691410] tb_event Hot Plug Event Packet Domain 0 Route 0 Adapter 3 / Lane
-               0x00/---- 0x80000000 0b10000000 00000000 00000000 00000000 .... Route String High
-               0x01/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String Low
-               0x02/---- 0x80000003 0b10000000 00000000 00000000 00000011 .... 
-                 [00:05]        0x3 Adapter Num
-                 [31:31]        0x1 UPG
-[   48.691414] thunderbolt 0000:00:0d.2: acking hot unplug event on 0:3
-
-Taking this into account and also the fact that your previous email you
-say that v6.9 works and v6.10 does not, I wonder if you could first try
-just to revert:
-
-  c6ca1ac9f472 ("thunderbolt: Increase sideband access polling delay")
-
-and see if that helps with the connection issue? If it does then can you
-take full dmesg and the trace again and with me so I can look at the USB
-tunnel issue too?
 
