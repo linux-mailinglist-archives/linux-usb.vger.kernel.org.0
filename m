@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-16865-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16866-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CE829B6498
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 14:48:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C86B29B661C
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 15:37:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4EAFA1C210CD
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 13:48:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 066141C216B6
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 14:37:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F46F1EB9E3;
-	Wed, 30 Oct 2024 13:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C741F6698;
+	Wed, 30 Oct 2024 14:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bZlgUckK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lYBrp+JN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF0ED13FEE;
-	Wed, 30 Oct 2024 13:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7161B1F4274
+	for <linux-usb@vger.kernel.org>; Wed, 30 Oct 2024 14:33:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730296126; cv=none; b=tHCs4lAU+b6abEKbYZ17zqKDdv3L58jaQlFwtKVe0dEh/qmoTHTg8yx8W0gMNXxZN1QqR3etGQW+bKBC4X9irNyiOesMhAanMe6aVCjIOYg+EsB24MqjjhUoQDOx5yy+BZf67MMLy3mWBPr89kFLoTj6/GhuRrsgBEnc7t58DHA=
+	t=1730298826; cv=none; b=CvoKfNsmF9D2JCVTYJR8ovU1PzkHPuYd2t4Q+o8q5hI3KrFycUK8vv3TtJmlui5/OXYodavwuRLMDGX9YBXCqhfYaFqNSQKctjDscQpUvnLVqlOUM+DOJErU0l25KPsCMzoUy1YmNSuYa5YEKuRLr0koM6yS1IvGS4UHasgt3A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730296126; c=relaxed/simple;
-	bh=ARFH4TEnTzr4lsz54biGO4elI4//XnrLvYOYre8ONDI=;
+	s=arc-20240116; t=1730298826; c=relaxed/simple;
+	bh=iPl6/drvSWq2LSrAlQ18OHApKYTDCqwk+AiNBX6cnQU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZUSlk7tsEH+D8pKcTJPniXFHYjOjSJIkEgwMNpBtncDQ+ShaTmrV+80ope2B5S9hWKTja/0/45s+zesx0J7ribUvCJCtbq24DfDVSDWGLcgWZsX9YmSsCSGnBPlua1kWozZVab7oDxImICAHj+3z7rK3huI/zm0vohoVVLOGZxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bZlgUckK; arc=none smtp.client-ip=198.175.65.18
+	 In-Reply-To:Content-Type; b=OtF/6zxePKKmrlBFW9/y/EUXLDMOf0yFaJQNL8EiZVMr0r64+NV0LudrYV9xnpe/qSmgVcINJJ0uatyoPaEPZM2iY9ATe6+kKz6bKIeUSxg2GkdE1L3U3DACRoYkBdsTdDNoE1cb3M417eL43s2zkuqTGzMl5Sfu9LksHTs2hBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lYBrp+JN; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730296124; x=1761832124;
+  t=1730298825; x=1761834825;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=ARFH4TEnTzr4lsz54biGO4elI4//XnrLvYOYre8ONDI=;
-  b=bZlgUckKsrwe4kx6WtDCEWrbOqzS99qfGTUSegMSUo50Zk0t9piqYTDN
-   6qjBWzaIxICcL23H4NA6Nf/AFew6tMn8B8fmNJBx4l2jujSNvf2tdcqmp
-   kXrUuENK/FIIxGXpKld6MQPw7bCZT8QmjmhVQT6mLQO7x49cwtrydyVWi
-   WN91F8Gz9MQg7/yVhy2OxBuw/ADNIR2HOj/NOAPqzpI8Oeaf63eiKFjPz
-   eU0/x2/4Dh/fMIk2WzM72sM0yncCoKBh28pSBj/uVGnVQIsCtXpm9tCrl
-   VekkLhmlyJLgqI826UKT3qKrDfm+k/r7UG9m8kmRi5BmADQ3M7rHUvqWv
-   A==;
-X-CSE-ConnectionGUID: hMjRfrN7RFKhFnjuIaddbg==
-X-CSE-MsgGUID: 6mn19nCjSAOWJGoM0Mfmnw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30191875"
+  bh=iPl6/drvSWq2LSrAlQ18OHApKYTDCqwk+AiNBX6cnQU=;
+  b=lYBrp+JNoRskMt7MGur1N6u3BdYAeoggCuIMRs9lABCg0t4iYQwQ1bN4
+   GAtvS1RR//+idx9aS4OzD489wVO/TzAd374FWVRNRFrCZJgGbBzWF1c41
+   VSOzqEXn8dg66io82yh8pLM0XvFGrHDtGpAp3eps7MZy1d9P/6cw046A0
+   HZxPd1wZpH2ZQ4jtaN0SL/LN2eZv/rVl+5W7p1WZ2g7dO8cDm3dWDAt2s
+   NrGoFwe7jtFje9HWIIfkiIQNZEBMO0nKBkloUqfMkFfML7/96DmZiTPxS
+   zVCgxLV33dk2nuJzuYY5ARU2DUUSNeCrtbB0YjmlQpMmyC9Gj62ocPE7v
+   w==;
+X-CSE-ConnectionGUID: i31oQFHSRXaDVY7dIWyjKQ==
+X-CSE-MsgGUID: ZkE1667lS+SLUrBedxmeFw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41104372"
 X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30191875"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 06:48:43 -0700
-X-CSE-ConnectionGUID: 9MHn8nLBSoyphBM5QO7Nog==
-X-CSE-MsgGUID: c1jJA/NuTuanG2toNRmX8A==
+   d="scan'208";a="41104372"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 07:33:44 -0700
+X-CSE-ConnectionGUID: EOuLAwM0SqOKR0qSeGyFiA==
+X-CSE-MsgGUID: KF6iB9ahQ4+fhdQZsDNBgg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,245,1725346800"; 
-   d="scan'208";a="86871085"
+   d="scan'208";a="87476888"
 Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa005.fm.intel.com with ESMTP; 30 Oct 2024 06:48:41 -0700
-Message-ID: <dbda76e5-23f1-47a9-af77-b539d07d9ba9@linux.intel.com>
-Date: Wed, 30 Oct 2024 15:50:55 +0200
+  by orviesa004.jf.intel.com with ESMTP; 30 Oct 2024 07:33:42 -0700
+Message-ID: <6b3b47ef-bd14-4dfb-bff4-fbfd190902ef@linux.intel.com>
+Date: Wed, 30 Oct 2024 16:35:56 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,63 +67,45 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 5/5] xhci: Correct handling of one-TRB isoc TD on Etron
- xHCI host
-To: Kuangyi Chiang <ki.chiang65@gmail.com>, mathias.nyman@intel.com,
- gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241028025337.6372-1-ki.chiang65@gmail.com>
- <20241028025337.6372-6-ki.chiang65@gmail.com>
+Subject: Re: [PATCH 0/8] usb: xhci: various xhci cleanups and improvements
+To: Niklas Neronin <niklas.neronin@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, =?UTF-8?Q?Micha=C5=82_Pecio?=
+ <michal.pecio@gmail.com>
+References: <20241017130508.1293021-1-niklas.neronin@linux.intel.com>
 Content-Language: en-US
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20241028025337.6372-6-ki.chiang65@gmail.com>
+In-Reply-To: <20241017130508.1293021-1-niklas.neronin@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 28.10.2024 4.53, Kuangyi Chiang wrote:
-> Unplugging a USB3.0 webcam while streaming results in errors
-> like this:
+On 17.10.2024 16.05, Niklas Neronin wrote:
+> Here's a handful cleanups and improvements for the xHCI driver.
 > 
-> [ 132.646387] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 18 comp_code 13
-> [ 132.646446] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8630 trb-start 000000002fdf8640 trb-end 000000002fdf8650 seg-start 000000002fdf8000 seg-end 000000002fdf8ff0
-> [ 132.646560] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 18 comp_code 13
-> [ 132.646568] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8660 trb-start 000000002fdf8670 trb-end 000000002fdf8670 seg-start 000000002fdf8000 seg-end 000000002fdf8ff0
-> 
-> If an error is detected while processing an one-TRB isoc TD,
-> the Etron xHC generates two transfer events for the TRB that
-> the error was detected on. The first event is "USB Transcation
-> Error", and the second event is "Success".
-> 
-> The xHCI driver will handle the TD after the first event and
-> remove it from its internal list, and then print an "Transfer
-> event TRB DMA ptr not part of current TD" error message after
-> the second event.
-> 
-> As a solution, we can set the flag after the first error event
-> and don't print the error message after the second event if
-> the flag is set.
-> 
-> Commit ad808333d820 ("Intel xhci: Ignore spurious successful
-> event.") implements a similar mechanism that we can reuse to
-> solve this problem since short transfer and transfer error
-> doesn't occur concurrently. Also, rename the flag to make it
-> more meaningful.
-> 
-> Check if the XHCI_ETRON_HOST quirk flag is set before invoking
-> the workaround in process_isoc_td().
-> 
-> This patch doesn't affect other host controllers that have the
-> XHCI_SPURIOUS_SUCCESS quirk flag applied.
-> 
-> Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+> Niklas Neronin (8):
+>    usb: xhci: simplify TDs start and end naming scheme in struct
+>      'xhci_td'
 
-I'm leaving this out of the series due to both ongoing discussion about
-this patch, and because it conflicts with another series touching
-handle_tx_event()
+Fixed commit message issue tha Michal pointed out
 
-All other patches in series are added
+>    usb: xhci: move link TRB quirk to xhci_gen_setup()
+>    usb: xhci: request MSI/-X according to requested amount
+>    usb: xhci: improve xhci_clear_command_ring()
+>    usb: xhci: remove unused arguments from td_to_noop()
+>    usb: xhci: refactor xhci_td_cleanup() to return void
+>    usb: xhci: add help function xhci_dequeue_td()
+>    usb: xhci: remove irrelevant comment
+> 
+>   drivers/usb/host/xhci-mem.c  |   5 --
+>   drivers/usb/host/xhci-pci.c  |  11 +--
+>   drivers/usb/host/xhci-ring.c | 153 +++++++++++++++++------------------
+>   drivers/usb/host/xhci.c      |  20 ++---
+>   drivers/usb/host/xhci.h      |   6 +-
+>   5 files changed, 88 insertions(+), 107 deletions(-)
+> 
+
+Series added,
+Fixed Patch [1/8] commit message issue that Michal pointed out
 
 Thanks
 Mathias
-
 
