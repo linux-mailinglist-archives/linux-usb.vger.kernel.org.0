@@ -1,138 +1,179 @@
-Return-Path: <linux-usb+bounces-16852-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16854-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CBD09B5E08
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 09:39:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF5579B5E70
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 10:06:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E8BC1C2109E
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 08:39:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 352FC1F239ED
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 09:06:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A73AD1E131A;
-	Wed, 30 Oct 2024 08:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C3FA1E1C17;
+	Wed, 30 Oct 2024 09:06:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jS4srn9g"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ELrbBiJw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174EB14F90;
-	Wed, 30 Oct 2024 08:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2AD01E1C14;
+	Wed, 30 Oct 2024 09:06:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730277560; cv=none; b=s1kXYnJCbwhekvS+C6nNYluNw4SB8cTCpndklaUitPDcF1pBcpk1Vg1c5X3qvhXJ5tylwb5MLuC+g6Wikb6EhNjCj1onAnzShTYfLYvnqXxZr2D0zIQ6dCy63IxR++qwqc8mg1skL4qU+wPQnwpOeWvGPN41qOYKSwAtKxv8AwE=
+	t=1730279191; cv=none; b=L1atPmcMcymWlpLoPlEyZRYobY3MY+spQHSdlkUq7f3iqIY4iONB4En0hCM4dw1zuzUCniQ4UsYoy/DBsOsn+9XQghzwSo5yTQ4zvPuKudyZiv/Bi0G8tGh7izSiYekcCv6AC8Xw8zofjben+X4OUU+9V0Kbb7uJIt+b3N4WjLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730277560; c=relaxed/simple;
-	bh=iDjNKUS8pWojbxvVdBXeM9KYPv39A21uCXdrEPFlX20=;
+	s=arc-20240116; t=1730279191; c=relaxed/simple;
+	bh=UHAvCgWVJbo/IoGy4cfK+JVAwccuRu6Xu7KbTRA9d2I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eLYv9+QTJuN6l9K0Vgej0EdFxqwF+FDoGCchzFmUfl3igXeIeUhiagIuVFX61CefVm5jpQk8vjfUgcek6OjjpTpeYmZ6VS2p2bxtAbkqzPuT2++2HPV6zLtmG2Ntk5VGXJQxXKyvRLy7+XHMGnIKQoFVwolFUYEMa6PS3JKjE4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jS4srn9g; arc=none smtp.client-ip=192.198.163.15
+	 Content-Type:Content-Disposition:In-Reply-To; b=sV3NnXFZX71BOwTjPddOqqouzJnTo4aZlgGno3jfzOzg2gE4mHJEgpoAChsB/U+4wIjA/N14ejD10GTRM64BJ5/qCniUdOqSLgtEjlrU6gV2fwx4jspbfm04tKmaSyjCR5+kF+1w+4Yln9qXeWsT0j5/A8Pmoj8DRf3IpKo26gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ELrbBiJw; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730277558; x=1761813558;
+  t=1730279190; x=1761815190;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iDjNKUS8pWojbxvVdBXeM9KYPv39A21uCXdrEPFlX20=;
-  b=jS4srn9gbOXWVw9tqIj1y4mzyfcp++dCrRnMR64VN8pQQ6G+MD09Snm3
-   CNdmaRW5AiSPcHk2dW7NJTJfwNrpZqVzx+d9Whd8S2yGGM0xF4sD8/QkI
-   uT3VUMoy0oEaApbAaCi0bZBRySw8EmKvMdTHkQuogiQboD+0MWjkmbCC/
-   o/UJaWZ6s06E2g6iKIrE03hcUp2wrs1PMVd/XhScUliUyBol8N8gvHX4y
-   YWT2hWz35ZjAmhrv2NWLXpoYkGjIaWz6O8WgBwSk4a6MK77xcR4FObZYM
-   tPLgY2h/tEQ3TmuuX0oH47MZ9EvNVb7KHwPKqTrKeS5+uEC/bfeOzsjkc
-   g==;
-X-CSE-ConnectionGUID: Kfnx4bITScKMCk3KOv5tSg==
-X-CSE-MsgGUID: ntCu6FjUT8adsQVuUe2tbw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="30070189"
-X-IronPort-AV: E=Sophos;i="6.11,244,1725346800"; 
-   d="scan'208";a="30070189"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 01:39:17 -0700
-X-CSE-ConnectionGUID: oJ8qcQaoTvicu0jsUpGCnQ==
-X-CSE-MsgGUID: ++0oQ/M6RyeCO3qZzGGQxA==
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=UHAvCgWVJbo/IoGy4cfK+JVAwccuRu6Xu7KbTRA9d2I=;
+  b=ELrbBiJwOgKriQ+KgjaLtJc+h7uC8qZOlbWr0bMG8FntFOmoVOuQtm2v
+   57GbJ4Hd+eGcW+jXbhCOHMdinB+lsWcL8AufnAW2lm7Fv2Jdlva+scziK
+   dr1LVvfwXe4OAokwPlQnAh8mB4gW+dedHybODAipNqG6pY9q+cUUzITAB
+   NQAdolyfbw/bjVwC4fYicmLKZw+qoZqpBLVPbm/rXKrRK5jE5aRBN+nah
+   C6r3o+KVl57ww0dnd/ct0LMF05iJy7p3J8yFTia3ePIB1xCBmHWKaBOuM
+   gRTHcP2rtI5Piq1Wmt1PVH0hFxfSxXXaQ30TWPMny6zUJj4PwPrJ0+V6J
+   Q==;
+X-CSE-ConnectionGUID: O9sxnTjASROMvqKfih1mPA==
+X-CSE-MsgGUID: zD45V6riRTOHmPvj9GJHcw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30115594"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="30115594"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 02:06:29 -0700
+X-CSE-ConnectionGUID: aL85xrH/RWGgAivk+/lliA==
+X-CSE-MsgGUID: jFHHloDnTvmvKXlW9ep40g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,244,1725346800"; 
-   d="scan'208";a="113091613"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa001.fm.intel.com with SMTP; 30 Oct 2024 01:39:15 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 30 Oct 2024 10:39:14 +0200
-Date: Wed, 30 Oct 2024 10:39:13 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Rex Nie <rex.nie@jaguarmicro.com>
-Cc: bryan.odonoghue@linaro.org, gregkh@linuxfoundation.org,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, angus.chen@jaguarmicro.com
-Subject: Re: [PATCH v2] usb: typec: qcom-pmic: init value of
- hdr_len/txbuf_len earlier
-Message-ID: <ZyHwscXdDl-ui7CK@kuha.fi.intel.com>
-References: <20241029021823.1978-1-rex.nie@jaguarmicro.com>
- <20241030022753.2045-1-rex.nie@jaguarmicro.com>
+   d="scan'208";a="86192087"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa003.fm.intel.com with ESMTP; 30 Oct 2024 02:06:26 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 46F682C1; Wed, 30 Oct 2024 11:06:25 +0200 (EET)
+Date: Wed, 30 Oct 2024 11:06:25 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Rick <rick@581238.xyz>
+Cc: Mario Limonciello <mario.limonciello@amd.com>, Sanath.S@amd.com,
+	christian@heusel.eu, fabian@fstab.de, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: Dell WD19TB Thunderbolt Dock not working with kernel > 6.6.28-1
+Message-ID: <20241030090625.GS275077@black.fi.intel.com>
+References: <000f01db247b$d10e1520$732a3f60$@581238.xyz>
+ <96560f8e-ab9f-4036-9b4d-6ff327de5382@amd.com>
+ <22415e85-9397-42db-9030-43fc5f1c7b35@581238.xyz>
+ <20241022161055.GE275077@black.fi.intel.com>
+ <7f14476b-8084-4c43-81ec-e31ae3f7a3c6@581238.xyz>
+ <20241023061001.GF275077@black.fi.intel.com>
+ <4848c9fe-877f-4d73-84d6-e2249bb49840@581238.xyz>
+ <20241028081813.GN275077@black.fi.intel.com>
+ <2c27683e-aca8-48d0-9c63-f0771c6a7107@581238.xyz>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241030022753.2045-1-rex.nie@jaguarmicro.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2c27683e-aca8-48d0-9c63-f0771c6a7107@581238.xyz>
 
-Hi,
+Hi Rick,
 
-On Wed, Oct 30, 2024 at 10:27:54AM +0800, Rex Nie wrote:
-> If the read of USB_PDPHY_RX_ACKNOWLEDGE_REG failed, then hdr_len and
-> txbuf_len are uninitialized. This commit stops to print uninitialized
-> value and misleading/false data.
+On Wed, Oct 30, 2024 at 08:11:30AM +0100, Rick wrote:
+> Hi Mika,
 > 
-> Signed-off-by: Rex Nie <rex.nie@jaguarmicro.com>
-> ---
-
-You need to include a changelog also for the patch itself here, after
-that "---" separator. This patch is also still missing the Fixes tag.
-
-You can read more about how to send the patches from the documentation:
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html
-
-So please send v3 with those fixed. Don't forget to Cc the stable ml.:
-https://www.kernel.org/doc/html/latest/process/submitting-patches.html#select-the-recipients-for-your-patch
-
-thanks,
-
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
+> Thank you for your email.
 > 
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> index 5b7f52b74a40..726423684bae 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> @@ -227,6 +227,10 @@ qcom_pmic_typec_pdphy_pd_transmit_payload(struct pmic_typec_pdphy *pmic_typec_pd
->  
->  	spin_lock_irqsave(&pmic_typec_pdphy->lock, flags);
->  
-> +	hdr_len = sizeof(msg->header);
-> +	txbuf_len = pd_header_cnt_le(msg->header) * 4;
-> +	txsize_len = hdr_len + txbuf_len - 1;
-> +
->  	ret = regmap_read(pmic_typec_pdphy->regmap,
->  			  pmic_typec_pdphy->base + USB_PDPHY_RX_ACKNOWLEDGE_REG,
->  			  &val);
-> @@ -244,10 +248,6 @@ qcom_pmic_typec_pdphy_pd_transmit_payload(struct pmic_typec_pdphy *pmic_typec_pd
->  	if (ret)
->  		goto done;
->  
-> -	hdr_len = sizeof(msg->header);
-> -	txbuf_len = pd_header_cnt_le(msg->header) * 4;
-> -	txsize_len = hdr_len + txbuf_len - 1;
-> -
->  	/* Write message header sizeof(u16) to USB_PDPHY_TX_BUFFER_HDR_REG */
->  	ret = regmap_bulk_write(pmic_typec_pdphy->regmap,
->  				pmic_typec_pdphy->base + USB_PDPHY_TX_BUFFER_HDR_REG,
-> -- 
-> 2.17.1
+> On 28-10-2024 09:18, Mika Westerberg wrote:
+> > 
+> > I still see similar issue even with the v6.9 kernel. The link goes up an
+> > down unexpectly.
+> > 
+> > I wonder if you could try to take traces of the control channel traffic?
+> > I suggest to use v6.11 kernel because it should have all the tracing
+> > bits added then install tbtools [1] and follow the steps here:
+> > 
+> >    https://github.com/intel/tbtools?tab=readme-ov-file#tracing
+> > 
+> > Then provide both full dmesg and the trace output. That hopefully shows
+> > if some of the access we are doing in the Linux side is causing the link
+> > to to drop. Let me know if you need more detailed instructions.
+> > 
+> > Also please drop the "thunderbolt.host_reset=0" from the command line as
+> > that did not help, so it is not needed.
+> 
+> Dropped thank you.
+> 
+> > 
+> > [1] https://github.com/intel/tbtools
+> 
+> tbtrace on 6.11.5:
+> https://gist.github.com/ricklahaye/69776e9c39fd30a80e2adb6156bdb42d
+> dmesg on 6.11.5:
+> https://gist.github.com/ricklahaye/8588450725695a0bd45799d3d66c7aff
 
--- 
-heikki
+Thanks! I suspect there is something we do when we read the sideband
+that makes the device router to "timeout" and retry the link
+establishment. There is also the failure when USB 3.x tunnel is created
+but we can look that after we figure out the connection issue.
+
+Looking at the trace we are still polling for retimers when we see the
+unplug:
+
+[   48.684078] tb_tx Read Request Domain 0 Route 0 Adapter 3 / Lane
+               0x00/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String High
+               0x01/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String Low
+               0x02/---- 0x02182091 0b00000010 00011000 00100000 10010001 .... 
+                 [00:12]       0x91 Address
+                 [13:18]        0x1 Read Size
+                 [19:24]        0x3 Adapter Num
+                 [25:26]        0x1 Configuration Space (CS) → Adapter Configuration Space
+                 [27:28]        0x0 Sequence Number (SN)
+[   48.684339] tb_rx Read Response Domain 0 Route 0 Adapter 3 / Lane
+               0x00/---- 0x80000000 0b10000000 00000000 00000000 00000000 .... Route String High
+               0x01/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String Low
+               0x02/---- 0x02182091 0b00000010 00011000 00100000 10010001 .... 
+                 [00:12]       0x91 Address
+                 [13:18]        0x1 Read Size
+                 [19:24]        0x3 Adapter Num
+                 [25:26]        0x1 Configuration Space (CS) → Adapter Configuration Space
+                 [27:28]        0x0 Sequence Number (SN)
+               0x03/0091 0x81320408 0b10000001 00110010 00000100 00001000 .2.. PORT_CS_1
+                 [00:07]        0x8 Address
+                 [08:15]        0x4 Length
+                 [16:18]        0x2 Target
+                 [20:23]        0x3 Re-timer Index
+                 [24:24]        0x1 WnR
+                 [25:25]        0x0 No Response (NR)
+                 [26:26]        0x0 Result Code (RC)
+                 [31:31]        0x1 Pending (PND)
+[   48.691410] tb_event Hot Plug Event Packet Domain 0 Route 0 Adapter 3 / Lane
+               0x00/---- 0x80000000 0b10000000 00000000 00000000 00000000 .... Route String High
+               0x01/---- 0x00000000 0b00000000 00000000 00000000 00000000 .... Route String Low
+               0x02/---- 0x80000003 0b10000000 00000000 00000000 00000011 .... 
+                 [00:05]        0x3 Adapter Num
+                 [31:31]        0x1 UPG
+[   48.691414] thunderbolt 0000:00:0d.2: acking hot unplug event on 0:3
+
+Taking this into account and also the fact that your previous email you
+say that v6.9 works and v6.10 does not, I wonder if you could first try
+just to revert:
+
+  c6ca1ac9f472 ("thunderbolt: Increase sideband access polling delay")
+
+and see if that helps with the connection issue? If it does then can you
+take full dmesg and the trace again and with me so I can look at the USB
+tunnel issue too?
 
