@@ -1,47 +1,65 @@
-Return-Path: <linux-usb+bounces-16850-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16851-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A47679B5CA2
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 08:15:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D93FD9B5DCB
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 09:28:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B9001F21AC8
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 07:15:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1721C1C20B09
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 08:28:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E271E1C14;
-	Wed, 30 Oct 2024 07:11:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA5C1E0E1C;
+	Wed, 30 Oct 2024 08:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=581238.xyz header.i=@581238.xyz header.b="F7X0cPhO"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X1pwSpyk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.581238.xyz (86-95-37-93.fixed.kpn.net [86.95.37.93])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9B8F1E0E12;
-	Wed, 30 Oct 2024 07:11:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=86.95.37.93
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E7AE1E0E05
+	for <linux-usb@vger.kernel.org>; Wed, 30 Oct 2024 08:27:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730272299; cv=none; b=l9Ix4Z/nUnT6w1M/giluX2fM+BT8KanXUNZ2fV8PoQT5H305kDVoOONYWckuoL91pcziABYEN7KVBRZPHZWP47iSu2IHVZpMqURXNDzPhalB4HLM2ymSEV8W9g3Qlrq6/g3vI4T2NYBIYL1foTXlP/1DeQT1yFxG3kW4nTR18QA=
+	t=1730276822; cv=none; b=dkoKKU+6OmM+UgzPMEkjkPztvDDvztdlzV+BGA8PNRAWSq/ae90Z0G+VGzBbfbWClw5qn2Uu4YSIoo1vMDmjW9KkZtZvU7LV3gcUfkof0cMvUu7/EX1c6I47/Qkw7NxCXRU4u/7Fc9Kmdmka1yhaiPA9yIb10XzWhzekzqPHiAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730272299; c=relaxed/simple;
-	bh=0/ZQSm4pOX/FeH3rMGUhDWei/PzX8qt0l+CRHbzaIZw=;
+	s=arc-20240116; t=1730276822; c=relaxed/simple;
+	bh=K19VYOm/H1DT4B0evQ+cwtwmEk6yVi/bHIa1epBQk6c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PHEr8LI4zrp80gxmZBMnEtO435lvc2L5MHiSOQX76QhOrDXLAdyPWB04v7kMbZ4D2kKww8D6rgUtSN7EaE8UACdy+82uFWhPqHa/lznlQx0GT03W4Hw8Hilp6xDO6ULUvA30VCzSyE3jpgQrPddpcV4D5lerGVXJHDCXpVi0gzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=581238.xyz; spf=pass smtp.mailfrom=581238.xyz; dkim=pass (1024-bit key) header.d=581238.xyz header.i=@581238.xyz header.b=F7X0cPhO; arc=none smtp.client-ip=86.95.37.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=581238.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=581238.xyz
-Received: from [192.168.1.14] (Laptop.internal [192.168.1.14])
-	by mail.581238.xyz (Postfix) with ESMTPSA id 6C1F843088F3;
-	Wed, 30 Oct 2024 08:11:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=581238.xyz; s=dkim;
-	t=1730272290; bh=0/ZQSm4pOX/FeH3rMGUhDWei/PzX8qt0l+CRHbzaIZw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=F7X0cPhOnHx/LkiWUlg5xGKCt0OeXBjWDnIyp0mMRS+G6cF1N3QRYXl8xEuAq4Ey3
-	 s9gUyhwfXozVp/yJKsmrDIatJnB7BjFAuH4tzf3Kim6Wb/SgW9tYilYBD8mz+TJlTT
-	 rtcYtFeTvbd7/YDXkegD4TblEWDCDVvwBBRebJu4=
-Message-ID: <2c27683e-aca8-48d0-9c63-f0771c6a7107@581238.xyz>
-Date: Wed, 30 Oct 2024 08:11:30 +0100
+	 In-Reply-To:Content-Type; b=DpqMGFkr2Tk0Ir2BoxeONUXfXUkdVW9IkwTnmtURN137K+w0KacAHAAQTPPr0roPJvX6y4ZmyMR93AiSNczhtQk+FDEUNNrOKinD2GGrcgJSKoR5ZQWqJPAwH30tlQUkbPOickCdjsu0OUhjyiYHgTE48S0ex4CzchF/wiA91ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X1pwSpyk; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730276820; x=1761812820;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=K19VYOm/H1DT4B0evQ+cwtwmEk6yVi/bHIa1epBQk6c=;
+  b=X1pwSpyk4NTHuA+Sy2jFD3FDKN0QWqLI1kxLmZ/JIAEkFmIRd9Y6pNtl
+   EBs5BV2p26GYSbs6Wtugc4d4OHVtxLB6t1mWiqrAhQJQvDny416pWOwq+
+   +R73rkeJpLCctbVr/X17bWqHDcIWvcCloI65c1TLA4icmDrW3BwKP07Rf
+   xJIvNVPqC1kgNimaZRfQcHIcOIKSrPwW376Vp80bOZj4B0Y0z+9UB0V0E
+   rIyZ2vEgHNL7PLQKWhwMwLbQbOVBLSj+OFrjnrczbG7ZlgCFt9ZMBAfBG
+   ne982Y6i0qPVJMvmg8QFnSkbR3D2z34xm1+dhb9lTM2s8/u8zpRbSXy2J
+   Q==;
+X-CSE-ConnectionGUID: Yb3wc9ylS/GLr/fUWQlh0g==
+X-CSE-MsgGUID: MLZ1SiXDSZyni4BuWIISFw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11240"; a="30177536"
+X-IronPort-AV: E=Sophos;i="6.11,244,1725346800"; 
+   d="scan'208";a="30177536"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 01:26:59 -0700
+X-CSE-ConnectionGUID: a2uHkfkqRC2DXldnvl+Gzw==
+X-CSE-MsgGUID: DW9twJFFTNKosEOBCWJ8mQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,244,1725346800"; 
+   d="scan'208";a="86843061"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa004.fm.intel.com with ESMTP; 30 Oct 2024 01:26:58 -0700
+Message-ID: <35fdb2a4-8514-4b4d-9332-127d6ed07908@linux.intel.com>
+Date: Wed, 30 Oct 2024 10:29:12 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -49,102 +67,63 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Dell WD19TB Thunderbolt Dock not working with kernel > 6.6.28-1
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: Mario Limonciello <mario.limonciello@amd.com>, Sanath.S@amd.com,
- christian@heusel.eu, fabian@fstab.de, gregkh@linuxfoundation.org,
- linux-usb@vger.kernel.org, regressions@lists.linux.dev,
- stable@vger.kernel.org
-References: <000f01db247b$d10e1520$732a3f60$@581238.xyz>
- <96560f8e-ab9f-4036-9b4d-6ff327de5382@amd.com>
- <22415e85-9397-42db-9030-43fc5f1c7b35@581238.xyz>
- <20241022161055.GE275077@black.fi.intel.com>
- <7f14476b-8084-4c43-81ec-e31ae3f7a3c6@581238.xyz>
- <20241023061001.GF275077@black.fi.intel.com>
- <4848c9fe-877f-4d73-84d6-e2249bb49840@581238.xyz>
- <20241028081813.GN275077@black.fi.intel.com>
+Subject: Re: [PATCH 0/2] xhci: Fix the NEC stop bug workaround
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: linux-usb@vger.kernel.org, "Neronin, Niklas" <niklas.neronin@intel.com>
+References: <20241025121806.628e32c0@foxbook>
+ <20241028083351.655d54cf@foxbook>
+ <f6dcf205-e8eb-4ba8-91d9-24fa0f769739@intel.com>
+ <20241029092800.32eccf3b@foxbook>
+ <7c2abdd1-c209-4616-9d18-be5fc99fc527@linux.intel.com>
 Content-Language: en-US
-From: Rick <rick@581238.xyz>
-Autocrypt: addr=rick@581238.xyz; keydata=
- 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
-In-Reply-To: <20241028081813.GN275077@black.fi.intel.com>
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <7c2abdd1-c209-4616-9d18-be5fc99fc527@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Mika,
-
-Thank you for your email.
-
-On 28-10-2024 09:18, Mika Westerberg wrote:
+On 29.10.2024 11.16, Mathias Nyman wrote:
+> On 29.10.2024 10.28, Michał Pecio wrote:
+>>
+>> By the way, I think this race is already possible today, without my
+>> patches. There is no testing for SET_DEQ_PENDING in xhci_urb_dequeue()
+>> and no testing in handle_cmd_stop_ep(). If this happens in the middle
+>> of a Set TR Deq chain on a streams endpoint, nothing seems to stop the
+>> Stop EP handler from attempting invalidation under SET_DEQ_PENDING.
+>>
+>> Maybe invalidate_cancelled_tds() should bail out if SET_DEQ_PENDING
+>> and later Set Deq completion handler should unconditionally call the
+>> invalidate/giveback combo before it exits.
+>>
 > 
-> I still see similar issue even with the v6.9 kernel. The link goes up an
-> down unexpectly.
+> I think you are on to something.
+> If we add invalidate/givaback to Set TR deq completion handler, allowing
+> it to possible queue new Set TR Deq commands, then we can bail out in
+> xhci_urb_dequeue() if SET_DEQ_PENDING is set.
 > 
-> I wonder if you could try to take traces of the control channel traffic?
-> I suggest to use v6.11 kernel because it should have all the tracing
-> bits added then install tbtools [1] and follow the steps here:
+> xhci_urb_dequeue() would not queue a extra stop endpoint command, only
+> set td->cancel_status to TD_DIRTY dirty, and Set TR Deq handler would
+> not ring the doorbell unnecessary.
 > 
->    https://github.com/intel/tbtools?tab=readme-ov-file#tracing
-> 
-> Then provide both full dmesg and the trace output. That hopefully shows
-> if some of the access we are doing in the Linux side is causing the link
-> to to drop. Let me know if you need more detailed instructions.
-> 
-> Also please drop the "thunderbolt.host_reset=0" from the command line as
-> that did not help, so it is not needed.
+> Sounds like a plan to ne.
 
-Dropped thank you.
+I wrote a testseries for this.
 
-> 
-> [1] https://github.com/intel/tbtools
+1st patch avoids stopping endpoint in urb cancel if Set TR Deq is pending
+2nd patch handles Set TR Deq command ctx error due to running ep.
+3rd patch tracks doorbell ring with a flag. It's for now only used to prevent
+     infinite stop ep retries. Flag is not properly cleared in other cases.
 
-tbtrace on 6.11.5: 
-https://gist.github.com/ricklahaye/69776e9c39fd30a80e2adb6156bdb42d
-dmesg on 6.11.5: 
-https://gist.github.com/ricklahaye/8588450725695a0bd45799d3d66c7aff
+Series can be found in my tree in a fix_stop_ep_race branch:
 
-Kind regards,
-Rick Lahaye
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/log/?h=fix_stop_ep_race
+git://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git fix_stop_ep_race branch
+
+Do these help in your NEC host case?
+
+I'll see if I can set up some system to trigger this myself
+
+Thanks
+Mathias
 
 
