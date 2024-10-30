@@ -1,65 +1,48 @@
-Return-Path: <linux-usb+bounces-16860-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16861-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EE7A9B6390
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 13:58:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F12339B63C5
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 14:10:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4112A1C203E0
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 12:58:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B488D2824A8
+	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 13:10:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D60C01EB9F4;
-	Wed, 30 Oct 2024 12:56:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1D941EABA0;
+	Wed, 30 Oct 2024 13:10:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WeCazum8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b8O327b6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB991E908D;
-	Wed, 30 Oct 2024 12:56:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 544391E9066
+	for <linux-usb@vger.kernel.org>; Wed, 30 Oct 2024 13:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730292998; cv=none; b=Ubn1YJFzTyKY/HSKk1aPoCDsmhqbFSHvwjWsH9Aa6fz0XwnMsDAP7XGgTEUOcBG2DOQP7cZDmoDI6PD8YWyZ257uc6jVK/7EdhR9SreNTXdv0an10ZLPO2uld6dsuGT9W+NbxIQ3/Ch6OQ4jWWrgDKlV5i+gX23DGrFfyMIHWCg=
+	t=1730293838; cv=none; b=BDJK0RJnRaFt7zJvGZ9caJP04dYtXptXB7MRqvvtn/UQhKSJe1QScPo7F1CCawhRfYjH10zIJqLQLUysUI2titRCRb1PTFNp2x+jPmoECxJy4YZ+oKtc17ioFKjduhtXVwN5YKJslxiZK3IQOuwFqkZycDuKUkcp6gVUXZRbhBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730292998; c=relaxed/simple;
-	bh=/xSQm3Ad5+59O2YqtB1Q8gI6LHOFjk/qqc8juVXssSQ=;
+	s=arc-20240116; t=1730293838; c=relaxed/simple;
+	bh=+uLWvVBY7M1ZsYNiD8248YT6lJ9Ix4OB7Fng9Yba3m0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=t9ZxOmpCklj2LGm74NFaHkTA64WjR9OhgcB9XbMWN5TXClA/YzH0OfoBA8/pAbR/9Iq+ov4TkPSdIX46+YUNfmwu3oDnmTa2rGhRKR0IZyfCHTY7HESC22j1dFuyNlDmFQGdFb7W1yX4eg2cs01fC2q3xasK2TOO+Xwd129YFxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WeCazum8; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730292996; x=1761828996;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=/xSQm3Ad5+59O2YqtB1Q8gI6LHOFjk/qqc8juVXssSQ=;
-  b=WeCazum8DUmF2ODdzyueJkkY3Atcz11MLD4LBBUxj4Jk77yNximwXxL0
-   Y+C7Ysyy/y/x5aAbqeNjUfX/2tGfNIviG3tATXNcgjoEQWuLoIeqXUgVi
-   RYW/JpFkgNsyxysOoEkSdkvzBT4Vg8M87DCTKBh/FEfqmGG1pIPbk3PCM
-   TBXYSiW07zqzUKwBEKVQoM0JCioSbSmW8mLL02/gkXTd4JwPA5RfstdDv
-   AAzpJkS/XHd/q8bzABeooMRBAOcFd8eDWvZ9juW1K5JgIMvIEQi0gUFl5
-   pv7kMYq9zOZIvAsxW9b3NPUq9rRSD8kw6fFHcEYDeccR5wR9M28CXkA+L
-   Q==;
-X-CSE-ConnectionGUID: vsD/Q23WR4C5BDKcYyiYzA==
-X-CSE-MsgGUID: 0j7/DLt3RzWGKBc1XR226w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11241"; a="30205718"
-X-IronPort-AV: E=Sophos;i="6.11,245,1725346800"; 
-   d="scan'208";a="30205718"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2024 05:56:36 -0700
-X-CSE-ConnectionGUID: sDXG5Jc7QyCsFsQD6L7aSA==
-X-CSE-MsgGUID: Y1uhV1WtSP+Vr6YcfwGkZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,245,1725346800"; 
-   d="scan'208";a="105620775"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa002.fm.intel.com with ESMTP; 30 Oct 2024 05:56:34 -0700
-Message-ID: <e156aec9-a30a-4f90-a158-634cb0ecea98@linux.intel.com>
-Date: Wed, 30 Oct 2024 14:58:47 +0200
+	 In-Reply-To:Content-Type; b=TAG+IjZBgHIOyFuwliGhTQ4BTxJabsIuZ68iNNLTDH/l4m3fU95nTh4kyoAxnceXb1gseEWQh34OzR5200cnjg8fueObqFoHM1eEIvTJcmCFDwRMCImbdkBy2mKV3784RoO0y7XQ3NT5WeT9+RlK6FWvK/LZQF1VKlolngTjcN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b8O327b6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D7B9C4CEE3;
+	Wed, 30 Oct 2024 13:10:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730293838;
+	bh=+uLWvVBY7M1ZsYNiD8248YT6lJ9Ix4OB7Fng9Yba3m0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=b8O327b6Oi0gUGZPEnDraqPcTyujl1bYV1Sfw1rjAOkxTr1ImIr+2z7/gyWHXR608
+	 R73BTkfRmFIN9gIo7BNzD7ePG++n1iBeiK2tKPBUkClLY5YgROUtGy3DsEWas/GBfR
+	 f5u/OGpT5DKmE2As0iltWDiwo10n0EJ+dnwpbkMTLaOSgIOyfQqsjUy8CPc66Ht77l
+	 kpvH28LFpFz9/boEjJXsMBPUMXxb2jXHQnrM9OYsHPgZgLXDFNRBvH7OgvlvOIttRm
+	 ZM/FcmHoGsdF9LGILPrIA6X5zbWsUZ5TDrNLpX159J/8cLMygNL6tSn7cUj7v11vEy
+	 xtuFwBDz/2SZw==
+Message-ID: <ca4daad3-9a34-4331-9faa-91b960924b9e@kernel.org>
+Date: Wed, 30 Oct 2024 15:10:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,52 +50,88 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] xhci: Don't issue Reset Device command to Etron
- xHCI host
-To: Kuangyi Chiang <ki.chiang65@gmail.com>, mathias.nyman@intel.com,
- gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20241028025337.6372-1-ki.chiang65@gmail.com>
- <20241028025337.6372-3-ki.chiang65@gmail.com>
+Subject: Re: [PATCH 2/2] usb: dwc3: core: Prevent phy suspend during init
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Chris Morgan <macroalpha82@gmail.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+References: <cover.1713310411.git.Thinh.Nguyen@synopsys.com>
+ <e8f04e642889b4c865aaf06762cde9386e0ff830.1713310411.git.Thinh.Nguyen@synopsys.com>
+ <1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org>
+ <671bef75.050a0220.e4bcd.1821@mx.google.com>
+ <20241025224003.yfujqurxhrgzgzld@synopsys.com>
+ <CADcbR4KhWdXpynk2c-tryx1=Eg4LhC4t=C6zcVHAMcMz2hH-8Q@mail.gmail.com>
+ <20241029224900.by3zglncf33izsgw@synopsys.com>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20241028025337.6372-3-ki.chiang65@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20241029224900.by3zglncf33izsgw@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 28.10.2024 4.53, Kuangyi Chiang wrote:
-> Sometimes the hub driver does not recognize the USB device connected
-> to the external USB2.0 hub when the system resumes from S4.
-> 
-> After the SetPortFeature(PORT_RESET) request is completed, the hub
-> driver calls the HCD reset_device callback, which will issue a Reset
-> Device command and free all structures associated with endpoints
-> that were disabled.
-> 
-> This happens when the xHCI driver issue a Reset Device command to
-> inform the Etron xHCI host that the USB device associated with a
-> device slot has been reset. Seems that the Etron xHCI host can not
-> perform this command correctly, affecting the USB device.
-> 
-> To work around this, the xHCI driver should obtain a new device slot
-> with reference to commit 651aaf36a7d7 ("usb: xhci: Handle USB transaction
-> error on address command"), which is another way to inform the Etron
-> xHCI host that the USB device has been reset.
-> 
-> Add a new XHCI_ETRON_HOST quirk flag to invoke the workaround in
-> xhci_discover_or_reset_device().
-> 
-> Fixes: 2a8f82c4ceaf ("USB: xhci: Notify the xHC when a device is reset.")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+Hi Chris,
 
-Ok, I see, this patch depends on previous one, that's why it had the tags
+On 30/10/2024 00:49, Thinh Nguyen wrote:
+> Hi,
+> 
+> On Tue, Oct 29, 2024, Chris Morgan wrote:
+>> Sorry, to be specific it was the fix that causes the issues I'm now
+>> observing. When I explicitly revert commit
+>> 705e3ce37bccdf2ed6f848356ff355f480d51a91 things start working again
+>> for me. With that commit in place, however, suspend fails for me.
+> 
+> Ok, Roger's patch is causing issue on your platform and the $subject
+> patch? Can you provide more details on your test sequence?
+> 
+> * What does "no longer able to suspend" mean exactly (what error?)
+> * What mode is your usb controller?
+> * Is there any device connected while going into suspend?
+> * Can you provide dwc3 regdump?
 
-Added this as well
+Commit 705e3ce37bccdf2ed6f848356ff355f480d51a91 will enable
+DWC3_GUSB2PHYCFG_SUSPHY in DWC3_GUSB2PHYCFG(i)
+and DWC3_GUSB3PIPECTL_SUSPHY in DWC3_GUSB3PIPECTL(i) during
+system suspend path, unless snps,dis_u2_susphy_quirk or
+snps,dis_u3_susphy_quirk is set.
 
-Thanks
-Mathias
+I see rK356x.dtsi has snps,dis_u2_susphy_quirk;
+Does adding snps,dis_u3_susphy_quirk resolve the issue?
 
+cheers,
+-roger
+> 
+> Thanks,
+> Thinh
+> 
+>>
+>> On Fri, Oct 25, 2024 at 5:40 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
+>>>
+>>> Hi,
+>>>
+>>> On Fri, Oct 25, 2024, Chris Morgan wrote:
+>>>>
+>>>> This patch seems to break system suspend on at least the Rockchip
+>>>> RK3566 platform. I noticed that I was no longer able to suspend
+>>>> and git bisect led me to this patch.
+>>>>
+>>>> My kernel message log shows the following, at which point it freezes
+>>>> and does not allow me to resume from suspend:
+>>>>
+>>>> [   27.235049] PM: suspend entry (deep)
+>>>> [   27.871641] Filesystems sync: 0.636 seconds
+>>>> [   27.885320] Freezing user space processes
+>>>> [   27.886932] Freezing user space processes completed (elapsed 0.001 seconds)
+>>>> [   27.887642] OOM killer disabled.
+>>>> [   27.887981] Freezing remaining freezable tasks
+>>>> [   27.889655] Freezing remaining freezable tasks completed (elapsed 0.001 seconds)
+>>>>
+>>>> Thank you,
+>>>> Chris
+>>>
+>>> Did you try out Roger's fix?
+>>> 705e3ce37bcc ("usb: dwc3: core: Fix system suspend on TI AM62 platforms")
+>>>
+>>> https://urldefense.com/v3/__https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=705e3ce37bccdf2ed6f848356ff355f480d51a91__;!!A4F2R9G_pg!ZXQdR2uLykSD67_3JSm0RZHuyJ7IVnw5EvmYvLnPsf3dDEilv5ZgHD9GX7gZr52t0H7oFKifzAEhbdK8EGYzmSji2UI$ 
+>>>
+>>> BR,
+>>> Thinh
 
 
