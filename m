@@ -1,118 +1,90 @@
-Return-Path: <linux-usb+bounces-16897-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16898-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14F859B7982
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 12:17:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7AA39B7B92
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 14:21:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 851BD28224A
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 11:17:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EBE11F2192D
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 13:21:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C097A19ABAC;
-	Thu, 31 Oct 2024 11:17:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BB4119E7D0;
+	Thu, 31 Oct 2024 13:21:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hdBY7CpN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XSJsEikm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FEC1991BA
-	for <linux-usb@vger.kernel.org>; Thu, 31 Oct 2024 11:17:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DAE1BD9FC;
+	Thu, 31 Oct 2024 13:21:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730373454; cv=none; b=gt+cNs0GqPDjpDTJQ7rdBnmXlpSK9mhr1cOS1reVrXO/Ndu+61zH18jU1gKrTRp8k26RwcpKuTYPT2gghUEnuuqLrH4mn5wu+m1KcrFl2kzhvcVs2XW2M0uOSka7oSKKRoDe2+b4Y49yj2Hnkf62cN2Hwm1o4RZ5qOC/q53aWFA=
+	t=1730380910; cv=none; b=u+ky5gD7hqG6/+Xf26tv9+KwHPWMUwyV0BlxXdJBJAztf2c11mVe33DytxHgPAXaehTXg7cSXdwSfT6Hf162E0aO6DjuQ4T3g/xj2QDpjN+pHoMbtI4o3GtOzbDfcKWX/gpf/s7ck6wPelHN0kJGHxy7b/Ib+0nO1xu2NzWQTAU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730373454; c=relaxed/simple;
-	bh=JIY4hvHjU7GbsJGxp/EiN2W3yZ4tJ7fCTIbxR8wtxsM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Lcerm3zu7AYDJr38/FJ6k1TyRJNOus0IHnurF1dYwDQVYByaUwdNQfZmrmqrodzwM8Dzx7B6nzteDLj40CgSW7iuTtb4O49qr6M02drBSy6p/NdlVSmcmY7kPOL9hMuFP0gHLAW0gwimDEh2krZJl6ojtLYJ4pnraQGDtA/JkzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hdBY7CpN; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2fb518014b9so6365521fa.3
-        for <linux-usb@vger.kernel.org>; Thu, 31 Oct 2024 04:17:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730373450; x=1730978250; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JIY4hvHjU7GbsJGxp/EiN2W3yZ4tJ7fCTIbxR8wtxsM=;
-        b=hdBY7CpNHCBZeiiZGzDyOVlnqEGXYlUubhKutDy76Nhwz3FDwv5i32D+Z0R3ovWeiH
-         gbbORHXvbkvCt94oaaakWPRw4XHkJgZN3H4mTmdfr9Cuv1eVzp+AuYBEqD10si2g6dN4
-         2jt8Lj0kP5zEATkBUyaJEGiEEEohcYgpi3gzZccs2IA35GnxL5sV19PRiMX19aWHSOoM
-         e55u46s+ym2G8yut+3uYlPoejccvSBPQZfaJgG4+0HElJCijTgtS/1Y3M/FpRCQBP5Hl
-         5SnMaN1EYHhMkWMU1/qTmGeU6FEdOT6p4yyHbWYSnglKuROVyPjp0h3ftqFMA/RyHVAD
-         r5qA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730373450; x=1730978250;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JIY4hvHjU7GbsJGxp/EiN2W3yZ4tJ7fCTIbxR8wtxsM=;
-        b=OyLATGyiZwIeLm9xJ0LGf5/o7COsFJAr1W7u5uMEZYi1dZwQ+Csuj9pyR3PfRI2EUI
-         sjLzrdQ36XerBfn2NGdNIbr2/gYKVKbFTHHdbzjwdd0RRdAiSVhln9WdVS/DxVs41ADE
-         KaBPXZKyrKzOTYOysrWrZXToF7Os6qk8qyC1lUKI+nkR0tmKQL3LObyQro0yIfpNIowa
-         6+mkm+fc+cQDiwJER5meryN0SBTKpP/RwOf1+/NmW10qwbpHALyvuo/B8/hfO+ANKemN
-         yjSRIgFyZB8JBzxddVGZtbx5p6mGi3OEIAZagS2O1sh2kMfKCSh7TAtzcijyHrchcYRH
-         mYzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVZc/Ud9j6cg2YZAFGpn6S/4tpKXXxGGbkQfhpj6CqUOKuIevHatj0a4SVem9bWqE7NcNggPEctjio=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxabH7xOIqG9zILUg1RVFrD26UfG3cQ1QXRAICJJ1D9212aqHP
-	3fkHcjvLqC4RjN+jv4u35wO+vj/si7gru40Vh09TwQGWRnOj40ON
-X-Google-Smtp-Source: AGHT+IEvIak3Xee5Yh23Ug2e4iXZ/XeiJJX/6au5wU9nZPYmbY5/Jz68xlzl/wmX2sMnUPrXSHiRKg==
-X-Received: by 2002:a05:6512:39ce:b0:539:fc86:ce38 with SMTP id 2adb3069b0e04-53b34c35b65mr8636216e87.60.1730373450258;
-        Thu, 31 Oct 2024 04:17:30 -0700 (PDT)
-Received: from foxbook (bfh123.neoplus.adsl.tpnet.pl. [83.28.45.123])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bc9c16dsm167079e87.109.2024.10.31.04.17.27
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 31 Oct 2024 04:17:28 -0700 (PDT)
-Date: Thu, 31 Oct 2024 12:17:24 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
- "Neronin, Niklas" <niklas.neronin@intel.com>
-Subject: Re: [PATCH 0/2] xhci: Fix the NEC stop bug workaround
-Message-ID: <20241031121724.5a259d6b@foxbook>
-In-Reply-To: <20241031114926.22ac4359@foxbook>
-References: <20241025121806.628e32c0@foxbook>
-	<20241028083351.655d54cf@foxbook>
-	<f6dcf205-e8eb-4ba8-91d9-24fa0f769739@intel.com>
-	<20241029092800.32eccf3b@foxbook>
-	<7c2abdd1-c209-4616-9d18-be5fc99fc527@linux.intel.com>
-	<35fdb2a4-8514-4b4d-9332-127d6ed07908@linux.intel.com>
-	<20241031091347.29b6ffdd@foxbook>
-	<20241031114926.22ac4359@foxbook>
+	s=arc-20240116; t=1730380910; c=relaxed/simple;
+	bh=4jTLrq+ZxELV1BhCEMSn5kaFlxZQ1y2nd9Kj/roH8nE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KUXPxRETsO/hMNiUUzAPDDlaWBDtR1YOFSjtSKa1zhkWHzu8t9yPnzqcVhm1K1bBnuyhHGIKmR8fhp5wVWFOpLbtQmWmqtdS9LxgOc3sfIgIPDmhA1sTj4CaE0OS8yCTQgs2x6D5I6mhjjqUJWv77ms0NDGOD7WPZ4Z9BahFEtE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XSJsEikm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3907C4E68D;
+	Thu, 31 Oct 2024 13:21:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730380910;
+	bh=4jTLrq+ZxELV1BhCEMSn5kaFlxZQ1y2nd9Kj/roH8nE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XSJsEikmsLzUezNvuCSuEPV4uqgYfwddbe5p9sRMlhpD0VnoYdHk37UIgYwTft6my
+	 +TJEpwTuk71IWPO+VFrfHXgS8aF3Tmzia4V3RIGYOL4j5mp9dYjGNELhJb4qIzb2Hx
+	 NJUS5dU451xPMydK8wt1TKdywlaGlmciJbg/3nUe+Te93PZc0cG22khCUuAukQU3un
+	 pvXwGDyfWfLlzTe6p6Sqe2fo/arxo8WOds3A73TErkdIpAJ5Lloh8PpdbtxKo+IJ4e
+	 3FJ3fEQmIb2OwhKneiwgDhQrkG/8lmy2+bWNUShgaaK/6MyiNWX7/8+kQJHiCsGgRT
+	 EkrG86dKcLtMA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t6V7T-000000003d6-2dUB;
+	Thu, 31 Oct 2024 14:21:47 +0100
+Date: Thu, 31 Oct 2024 14:21:47 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: Fix use after free in debug printk
+Message-ID: <ZyOEa9VuXVus79Ev@hovoldconsulting.com>
+References: <7d0481da-5852-4566-9adb-3a8bb74cb159@stanley.mountain>
+ <ZyNI3rQw6q4pkqpD@hovoldconsulting.com>
+ <8bad985d-4655-45d2-b448-2b3377a8438c@stanley.mountain>
+ <490dc872-fc62-49da-89ff-4eba067df8c0@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <490dc872-fc62-49da-89ff-4eba067df8c0@stanley.mountain>
 
-Update:
+On Thu, Oct 31, 2024 at 12:39:10PM +0300, Dan Carpenter wrote:
+> On Thu, Oct 31, 2024 at 12:35:31PM +0300, Dan Carpenter wrote:
+> > On Thu, Oct 31, 2024 at 10:07:42AM +0100, Johan Hovold wrote:
+> > > On Thu, Oct 31, 2024 at 09:59:10AM +0300, Dan Carpenter wrote:
+> > > > The dev_dbg() call dereferences "urb" but it was already freed on the
+> > > > previous line.  Move the debug output earlier in the function.
+> > > 
+> > > Thanks for catching this, but please use a temporary variable for the
+> > > struct device pointer instead of changing the flow.
+> > 
+> > Why?  The output is the same either way and this way is cleaner code.
+> 
+> Nah, you're right.  A temporary variable is nicer.  It avoids having two if
+> statements.
 
-> Your patch prints one dev_dbg() each time, mine spams many of them for
-> 100ms each time. I will remove this one retry limit from your patch to
-> see if starts spinning infinitely, but I strongly suspect it will.
+Yeah, and the debug printk belongs with the return.
 
-Yes, that's exactly what happens.
+v2 now applied, thanks.
 
-This time I have killed the ifconfig loop, unplugged the NIC and
-started 'rmmod xhci_pci', which is still hanging 10 minutes later.
-
-So business as usual when these things go wrong.
-
-> One retry is not enough. This is what I got on the first try with a
-> random UVC webcam:
-> [...]
-
-The Set TR Deq mismatch errors went away when I fixed your patch not
-to give up on first try. Maybe I remembered wrong and they have always
-been around.
-
-Regards,
-Michal
+Johan
 
