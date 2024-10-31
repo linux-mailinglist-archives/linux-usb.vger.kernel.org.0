@@ -1,111 +1,84 @@
-Return-Path: <linux-usb+bounces-16883-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16884-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72E1F9B74F1
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 08:04:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A0899B7588
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 08:43:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 364AE2817DD
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 07:04:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69D051C21B74
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 07:43:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A7C41537C9;
-	Thu, 31 Oct 2024 07:03:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6A2D14D2B7;
+	Thu, 31 Oct 2024 07:43:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="GSHrLcIQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJiKM/1Z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8FCE149005;
-	Thu, 31 Oct 2024 07:03:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C8F81494D9;
+	Thu, 31 Oct 2024 07:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730358213; cv=none; b=I9GCQqSdAolnVWL+QwQd2vgCaR9NdR1Z9FFPcpALh5uNfuRtr+r1VrcLi+M8nE4/KrCB7KgQyEaFw+66aBxFw+YrDL19heW3jrPhUqw2gjqxzO2T3U9ZrMr+rKooiJbLTdQhtF5IJTKUpb3b1LDMgXN9lXoiDcgEv619YY0XzCc=
+	t=1730360583; cv=none; b=iMYGKtAclnNKGS6kEpROPdx0WE5WVZBBU2RYlzzLHVFyaykh+JRI2mxB8ndVLCieUQ3RFasHiJaebTicKzR0RvRxbbY9Qcu0Pxfk8dUEX75ufIqpMmreP9bn1Wz2c4qbVXFWS1qenD8rZs6X3dR3G9aw6fLl+WZOYS328yRJSKU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730358213; c=relaxed/simple;
-	bh=0LhzF1eZO0izMe91R4cLDD2hqekd2yJ78S0js9TCEkc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kTkACAwvKirejqkX+xolQEYMT5D8Oab1WCIPFEqc2Nia4TdUXA0/VAWEK0m1GOtDK09wMpsv9kjFSCkvJWJa/CzW/pk1itfg0YS7+AOISeo4fB9G5eiAWX0yxk3iPkOwWo7rfRxXE+kFNQi6B8g7i6LbkFqm3l2WVxeRub/52s4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=GSHrLcIQ; arc=none smtp.client-ip=51.222.15.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
-	s=default; t=1730358203;
-	bh=0LhzF1eZO0izMe91R4cLDD2hqekd2yJ78S0js9TCEkc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GSHrLcIQavfOu5jndVUyp3moeN2WNYQqwpv6lKrnz0BCVLQCf1F7FCCatCJEZ3RRW
-	 qSeAFYcOuccXSwLFJYWeB7B6RzKPf0L1bbAULmlx1rTHpemWzpmF1dtz86hmpKua0h
-	 ZOacpnND60l/ExC0WrTkeoTrrBuuBn1q8db0/4qqGI9C5/0I0tBu0vnXvGvbEUHWe3
-	 RXpbCgrbniolgdQD09krx3sSfMLEsbohaswtDK4mqOjDSjDFCeqgvGCJ8aXrEPTuf3
-	 yI28ILLij8e4jrBbjfQuy5nD92jwtpJ+Hn0Q+vat2z1cbtGgJ8YRCjXB70vjyKpeRl
-	 Doh8eG5HYQBzg==
-X-Virus-Scanned: by epochal.quest
-From: Cody Eksal <masterr3c0rd@epochal.quest>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Maxime Ripard <mripard@kernel.org>
-Cc: Kishon Vijay Abraham I <kishon@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Nishanth Menon <nm@ti.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Yangtao Li <tiny.windzz@gmail.com>,
-	Parthiban <parthiban@linumiz.com>,
-	Andre Przywara <andre.przywara@arm.com>,
-	Cody Eksal <masterr3c0rd@epochal.quest>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 05/13] dt-bindings: usb: sunxi-musb: Add A100 compatible string
-Date: Thu, 31 Oct 2024 04:02:18 -0300
-Message-ID: <20241031070232.1793078-6-masterr3c0rd@epochal.quest>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <20241031070232.1793078-1-masterr3c0rd@epochal.quest>
+	s=arc-20240116; t=1730360583; c=relaxed/simple;
+	bh=/fr/RCOTKkcjP8HRjhrvpenBY16uNK8okKks2lbsVx8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K+Iio72AHCqTMV0Vw3X4rdxioNM7KPCtW/00tcaw/KHD04R+rEVc2aqewgGnt5Fdi8pPAuMcKIhAPuh/JXZzgP51iKk1UQ1qoGR8P+SUaqxWyklMl6cKTVAFI+5j2CTETdLFP5zblt8BUYf8FWaIi6f0JJexhqmxyPmguWRVkQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJiKM/1Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC1B2C4CEC3;
+	Thu, 31 Oct 2024 07:43:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730360582;
+	bh=/fr/RCOTKkcjP8HRjhrvpenBY16uNK8okKks2lbsVx8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JJiKM/1ZuU7wUrF0b140ekCe6P8inR6SEttAgNdjQ/Y2TdaGO8h+Vo+EPNMIZn0g/
+	 3JZXPapVjfGRpXMmnyQ1Y6bemsf41w2Ke3Vblxdohycx+ezw9w5Aog6RPbIAT06VMF
+	 0M/d3i1Vrf2GbqTpF3UX3zzpf2CaDpQZgguoUeI3EDfDYnmueQJYsxhotfdrr3Dh4n
+	 gekaZEdpKvZ2tHXi44OBDPcguBygCIw/PtH03OdnicdnF1TYeaJ+cgfFKzuPcICWq8
+	 L+fV0iF66Y25OnH5te0omnmQdCqKzMjpT5tiU3Y3vUP/j+fVDOZTSMT5EOS34mUycM
+	 RjvhmMbca4uTw==
+Date: Thu, 31 Oct 2024 08:42:59 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Cody Eksal <masterr3c0rd@epochal.quest>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Maxime Ripard <mripard@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
+	Michael Turquette <mturquette@baylibre.com>, Nishanth Menon <nm@ti.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Stephen Boyd <sboyd@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Viresh Kumar <vireshk@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Yangtao Li <tiny.windzz@gmail.com>, Parthiban <parthiban@linumiz.com>, 
+	Andre Przywara <andre.przywara@arm.com>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 05/13] dt-bindings: usb: sunxi-musb: Add A100
+ compatible string
+Message-ID: <a7dbx4ujgv2taovnycdy4sn2mggrwtkwhkxoyrilcns5qxepzh@szw4nv2y6tbk>
 References: <20241031070232.1793078-1-masterr3c0rd@epochal.quest>
+ <20241031070232.1793078-6-masterr3c0rd@epochal.quest>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241031070232.1793078-6-masterr3c0rd@epochal.quest>
 
-The A100 MUSB peripheral has 10 endpoints, and thus is compatible with
-the A33 version.
+On Thu, Oct 31, 2024 at 04:02:18AM -0300, Cody Eksal wrote:
+> The A100 MUSB peripheral has 10 endpoints, and thus is compatible with
+> the A33 version.
+> 
+> Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
 
-Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
----
-Changes in V2:
- - Fix ordering of compatibles
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
- .../devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml        | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml b/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
-index f972ce976e86..bb5010dcefe1 100644
---- a/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
-+++ b/Documentation/devicetree/bindings/usb/allwinner,sun4i-a10-musb.yaml
-@@ -23,6 +23,7 @@ properties:
-           - enum:
-               - allwinner,sun8i-a83t-musb
-               - allwinner,sun20i-d1-musb
-+              - allwinner,sun50i-a100-musb
-               - allwinner,sun50i-h6-musb
-           - const: allwinner,sun8i-a33-musb
-       - items:
--- 
-2.47.0
+Best regards,
+Krzysztof
 
 
