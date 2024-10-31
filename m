@@ -1,138 +1,118 @@
-Return-Path: <linux-usb+bounces-16896-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16897-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E50899B7925
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 11:56:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14F859B7982
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 12:17:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA663281BD0
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 10:56:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 851BD28224A
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 11:17:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1EFD199FC8;
-	Thu, 31 Oct 2024 10:56:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C097A19ABAC;
+	Thu, 31 Oct 2024 11:17:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lIdPDcS9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hdBY7CpN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951D51494AB;
-	Thu, 31 Oct 2024 10:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57FEC1991BA
+	for <linux-usb@vger.kernel.org>; Thu, 31 Oct 2024 11:17:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730372169; cv=none; b=fyrKlSVS63SEMt76B8JD4e4pf1sjzvmjBcqwbsk1RxXhizC2avMuzuAUOT1T/IeKILZ35ps8QVgZDj4/hiHQCbhkwxR8EU3mLlAOp3quEkDUzV/gJ/dDhidFgI1fBceByaF1XZXn9oOIh1LHkN1UenvYx6ZNky7lkft3qcrECws=
+	t=1730373454; cv=none; b=gt+cNs0GqPDjpDTJQ7rdBnmXlpSK9mhr1cOS1reVrXO/Ndu+61zH18jU1gKrTRp8k26RwcpKuTYPT2gghUEnuuqLrH4mn5wu+m1KcrFl2kzhvcVs2XW2M0uOSka7oSKKRoDe2+b4Y49yj2Hnkf62cN2Hwm1o4RZ5qOC/q53aWFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730372169; c=relaxed/simple;
-	bh=MA12dVLrm+VqZ/ae3pjPtbILpAB3JA5KVkEPvjBUlMY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gMbuCce4qWU7loVzqY2i7VRCjCWRbH+V5Qt7k0tmns+PozY3AnnrFVVsND4T26q1XpmsrhZgja3oFX88cigTLxfbP+deWRMD4bPTJ76DeCEFStwntf740SMvbbyWa49dDwJAFxhFM2sHxQJn1DfquEG83TsH2APM/uLDU1ngBx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lIdPDcS9; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730372167; x=1761908167;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=MA12dVLrm+VqZ/ae3pjPtbILpAB3JA5KVkEPvjBUlMY=;
-  b=lIdPDcS9U3VcNuj2INuN98I0Zj0S9aqku5ZeZFML+CpD5KVl69X+DLle
-   7VyzzK8W+wwJoAaZEK1R/PzLMwxrUGPmrFc+ct91oPq/bwWrgQQo6IKO8
-   oz92BKwaM1tkmY/qAZv6RN7o8rY3PC306Kabs9K6Vxb3sghBP6AsYNMUc
-   uP6lAd7QxLvqSZGSPCTVVnZliQdVJTkkRjANWz+LMZcEkiQRYPPhJCZkB
-   KZnSTof/03PLR1agf7h5S4+dVvBwz7yzSBgGjCLu71hBl8Oigh4ktiMLj
-   Ffla2qxNTTeUe1MAhKk75VPI7rJQacO1yU5Ll0/32XMgzdPSvAn0UPBmI
-   Q==;
-X-CSE-ConnectionGUID: 9Tf0XJjERCGaxilXzrvqnQ==
-X-CSE-MsgGUID: Z8SmUm50QraIjaRmjY0Crg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11241"; a="41473384"
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="41473384"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 03:56:06 -0700
-X-CSE-ConnectionGUID: 0kV5mYYyTy2NRvL6hEOUhw==
-X-CSE-MsgGUID: hnSDvds3SZmG+Nxh0hgtLQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="82245396"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa007.fm.intel.com with SMTP; 31 Oct 2024 03:56:02 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Oct 2024 12:56:01 +0200
-Date: Thu, 31 Oct 2024 12:56:01 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Rex Nie <rex.nie@jaguarmicro.com>
-Cc: bryan.odonoghue@linaro.org, gregkh@linuxfoundation.org,
-	linux@roeck-us.net, caleb.connolly@linaro.org,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, angus.chen@jaguarmicro.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v4] usb: typec: qcom-pmic: init value of
- hdr_len/txbuf_len earlier
-Message-ID: <ZyNiQUKPdUwE8EQZ@kuha.fi.intel.com>
-References: <20241030022753.2045-1-rex.nie@jaguarmicro.com>
- <20241030133632.2116-1-rex.nie@jaguarmicro.com>
+	s=arc-20240116; t=1730373454; c=relaxed/simple;
+	bh=JIY4hvHjU7GbsJGxp/EiN2W3yZ4tJ7fCTIbxR8wtxsM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Lcerm3zu7AYDJr38/FJ6k1TyRJNOus0IHnurF1dYwDQVYByaUwdNQfZmrmqrodzwM8Dzx7B6nzteDLj40CgSW7iuTtb4O49qr6M02drBSy6p/NdlVSmcmY7kPOL9hMuFP0gHLAW0gwimDEh2krZJl6ojtLYJ4pnraQGDtA/JkzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hdBY7CpN; arc=none smtp.client-ip=209.85.208.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2fb518014b9so6365521fa.3
+        for <linux-usb@vger.kernel.org>; Thu, 31 Oct 2024 04:17:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730373450; x=1730978250; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JIY4hvHjU7GbsJGxp/EiN2W3yZ4tJ7fCTIbxR8wtxsM=;
+        b=hdBY7CpNHCBZeiiZGzDyOVlnqEGXYlUubhKutDy76Nhwz3FDwv5i32D+Z0R3ovWeiH
+         gbbORHXvbkvCt94oaaakWPRw4XHkJgZN3H4mTmdfr9Cuv1eVzp+AuYBEqD10si2g6dN4
+         2jt8Lj0kP5zEATkBUyaJEGiEEEohcYgpi3gzZccs2IA35GnxL5sV19PRiMX19aWHSOoM
+         e55u46s+ym2G8yut+3uYlPoejccvSBPQZfaJgG4+0HElJCijTgtS/1Y3M/FpRCQBP5Hl
+         5SnMaN1EYHhMkWMU1/qTmGeU6FEdOT6p4yyHbWYSnglKuROVyPjp0h3ftqFMA/RyHVAD
+         r5qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730373450; x=1730978250;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JIY4hvHjU7GbsJGxp/EiN2W3yZ4tJ7fCTIbxR8wtxsM=;
+        b=OyLATGyiZwIeLm9xJ0LGf5/o7COsFJAr1W7u5uMEZYi1dZwQ+Csuj9pyR3PfRI2EUI
+         sjLzrdQ36XerBfn2NGdNIbr2/gYKVKbFTHHdbzjwdd0RRdAiSVhln9WdVS/DxVs41ADE
+         KaBPXZKyrKzOTYOysrWrZXToF7Os6qk8qyC1lUKI+nkR0tmKQL3LObyQro0yIfpNIowa
+         6+mkm+fc+cQDiwJER5meryN0SBTKpP/RwOf1+/NmW10qwbpHALyvuo/B8/hfO+ANKemN
+         yjSRIgFyZB8JBzxddVGZtbx5p6mGi3OEIAZagS2O1sh2kMfKCSh7TAtzcijyHrchcYRH
+         mYzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVZc/Ud9j6cg2YZAFGpn6S/4tpKXXxGGbkQfhpj6CqUOKuIevHatj0a4SVem9bWqE7NcNggPEctjio=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxabH7xOIqG9zILUg1RVFrD26UfG3cQ1QXRAICJJ1D9212aqHP
+	3fkHcjvLqC4RjN+jv4u35wO+vj/si7gru40Vh09TwQGWRnOj40ON
+X-Google-Smtp-Source: AGHT+IEvIak3Xee5Yh23Ug2e4iXZ/XeiJJX/6au5wU9nZPYmbY5/Jz68xlzl/wmX2sMnUPrXSHiRKg==
+X-Received: by 2002:a05:6512:39ce:b0:539:fc86:ce38 with SMTP id 2adb3069b0e04-53b34c35b65mr8636216e87.60.1730373450258;
+        Thu, 31 Oct 2024 04:17:30 -0700 (PDT)
+Received: from foxbook (bfh123.neoplus.adsl.tpnet.pl. [83.28.45.123])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bc9c16dsm167079e87.109.2024.10.31.04.17.27
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Thu, 31 Oct 2024 04:17:28 -0700 (PDT)
+Date: Thu, 31 Oct 2024 12:17:24 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
+ "Neronin, Niklas" <niklas.neronin@intel.com>
+Subject: Re: [PATCH 0/2] xhci: Fix the NEC stop bug workaround
+Message-ID: <20241031121724.5a259d6b@foxbook>
+In-Reply-To: <20241031114926.22ac4359@foxbook>
+References: <20241025121806.628e32c0@foxbook>
+	<20241028083351.655d54cf@foxbook>
+	<f6dcf205-e8eb-4ba8-91d9-24fa0f769739@intel.com>
+	<20241029092800.32eccf3b@foxbook>
+	<7c2abdd1-c209-4616-9d18-be5fc99fc527@linux.intel.com>
+	<35fdb2a4-8514-4b4d-9332-127d6ed07908@linux.intel.com>
+	<20241031091347.29b6ffdd@foxbook>
+	<20241031114926.22ac4359@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241030133632.2116-1-rex.nie@jaguarmicro.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Oct 30, 2024 at 09:36:32PM +0800, Rex Nie wrote:
-> If the read of USB_PDPHY_RX_ACKNOWLEDGE_REG failed, then hdr_len and
-> txbuf_len are uninitialized. This commit stops to print uninitialized
-> value and misleading/false data.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: a4422ff22142 (" usb: typec: qcom: Add Qualcomm PMIC Type-C driver")
-> Signed-off-by: Rex Nie <rex.nie@jaguarmicro.com>
+Update:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> Your patch prints one dev_dbg() each time, mine spams many of them for
+> 100ms each time. I will remove this one retry limit from your patch to
+> see if starts spinning infinitely, but I strongly suspect it will.
 
-> ---
-> V2 -> V3:
-> - add changelog, add Fixes tag, add Cc stable ml. Thanks heikki
-> - Link to v2: https://lore.kernel.org/all/20241030022753.2045-1-rex.nie@jaguarmicro.com/
-> V1 -> V2:
-> - keep printout when data didn't transmit, thanks Bjorn, bod, greg k-h
-> - Links: https://lore.kernel.org/all/b177e736-e640-47ed-9f1e-ee65971dfc9c@linaro.org/
-> ---
->  drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> index 5b7f52b74a40..726423684bae 100644
-> --- a/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> +++ b/drivers/usb/typec/tcpm/qcom/qcom_pmic_typec_pdphy.c
-> @@ -227,6 +227,10 @@ qcom_pmic_typec_pdphy_pd_transmit_payload(struct pmic_typec_pdphy *pmic_typec_pd
->  
->  	spin_lock_irqsave(&pmic_typec_pdphy->lock, flags);
->  
-> +	hdr_len = sizeof(msg->header);
-> +	txbuf_len = pd_header_cnt_le(msg->header) * 4;
-> +	txsize_len = hdr_len + txbuf_len - 1;
-> +
->  	ret = regmap_read(pmic_typec_pdphy->regmap,
->  			  pmic_typec_pdphy->base + USB_PDPHY_RX_ACKNOWLEDGE_REG,
->  			  &val);
-> @@ -244,10 +248,6 @@ qcom_pmic_typec_pdphy_pd_transmit_payload(struct pmic_typec_pdphy *pmic_typec_pd
->  	if (ret)
->  		goto done;
->  
-> -	hdr_len = sizeof(msg->header);
-> -	txbuf_len = pd_header_cnt_le(msg->header) * 4;
-> -	txsize_len = hdr_len + txbuf_len - 1;
-> -
->  	/* Write message header sizeof(u16) to USB_PDPHY_TX_BUFFER_HDR_REG */
->  	ret = regmap_bulk_write(pmic_typec_pdphy->regmap,
->  				pmic_typec_pdphy->base + USB_PDPHY_TX_BUFFER_HDR_REG,
-> -- 
-> 2.17.1
+Yes, that's exactly what happens.
 
--- 
-heikki
+This time I have killed the ifconfig loop, unplugged the NIC and
+started 'rmmod xhci_pci', which is still hanging 10 minutes later.
+
+So business as usual when these things go wrong.
+
+> One retry is not enough. This is what I got on the first try with a
+> random UVC webcam:
+> [...]
+
+The Set TR Deq mismatch errors went away when I fixed your patch not
+to give up on first try. Maybe I remembered wrong and they have always
+been around.
+
+Regards,
+Michal
 
