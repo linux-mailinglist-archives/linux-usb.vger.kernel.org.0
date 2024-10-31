@@ -1,66 +1,59 @@
-Return-Path: <linux-usb+bounces-16881-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16882-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE6C39B74E6
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 08:03:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50B6E9B74EE
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 08:04:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F1B0AB2419A
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 07:03:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 822B21C21E54
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 07:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93214148FE6;
-	Thu, 31 Oct 2024 07:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1164B14F9E7;
+	Thu, 31 Oct 2024 07:03:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="C95dSwTB"
+	dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b="GFS4Qz3u"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from thales.epochal.quest (thales.epochal.quest [51.222.15.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6CEB14830F;
-	Thu, 31 Oct 2024 07:03:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174991474BF;
+	Thu, 31 Oct 2024 07:03:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.222.15.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730358210; cv=none; b=b6sYzfrg4l6rr54siWim/v+bAm54bQEtLMaT6/5WDey5PZ90+w/R3F4XLul1IotBdriByVJGIFQpXrvpzPzNua6HHyX0ExtGcYelgsoutWIIjsAvlQiyw9o+re/p5rQAKiC44fC820XKZI7gkoUcegpIMCtRgf/njez88r/bO80=
+	t=1730358213; cv=none; b=AYYQ+2HgGRng8fClB58osF9N72Y1pHCVhQj434zi1BN8GvONI2scPaZ6qAsdYo2sh7fEIsjObNKN/6V+829aZ/lbvXm09/o6ELBlZLTB90+C/dZJFF0IN6MfubiN9jyLknoi5X/R0xre9YhF16zpgLgaELRMYJ8FEL3IfunAitw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730358210; c=relaxed/simple;
-	bh=8BCyeg5IzkuYMXudvFriGegtayHWd0iTD7AKHmg9Xqs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=kpRKPG/3LGo3KJrHUpFdHbqwylMxDPMbzRUe2wr9PcpIcJpAAaqOnAaSq5YmeM1RvjsPHmCFiHGyknyIq+egG/qQNiQ8ASdhqfTe6kuT3Ul0Tw+7GELwNN0k6ocHTnZryF/7uKBr56PjomhZdGeEizSKKehhvrSTizprXCQtwZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=C95dSwTB; arc=none smtp.client-ip=51.222.15.28
+	s=arc-20240116; t=1730358213; c=relaxed/simple;
+	bh=gCXgoaBUYXSYReLJKteTd41Q6MEmZ2zAzNHvT0JUlFc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=g/gPfTHeK5cs/Vq5V//Yq0mHeFa7DFqrG/g5YpBafUInp/G3SWX6nMmuT92nlCg89WJ9NERI1e1c+pr7yFsYItE6JB5cDVHyTFPkqN06nAKAmNouaYlvjs6f4QgeLU8uW5rJCDCLunymSrupnW+apjiGWeAVS4J1Ypx2VHJv8sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest; spf=pass smtp.mailfrom=epochal.quest; dkim=pass (2048-bit key) header.d=epochal.quest header.i=@epochal.quest header.b=GFS4Qz3u; arc=none smtp.client-ip=51.222.15.28
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=epochal.quest
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=epochal.quest
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=epochal.quest;
-	s=default; t=1730358201;
-	bh=8BCyeg5IzkuYMXudvFriGegtayHWd0iTD7AKHmg9Xqs=;
-	h=From:To:Cc:Subject:Date:From;
-	b=C95dSwTBaCseH3f5sJn3+wOaaokpEUVDX9BuzGLPjcJJt/7UjcMv+2g3uB/R//bjg
-	 Z4zS0OYvHol4CJkT/fYjO1YhPu+ht2CxehmbQV4hmAsit6iv50inWTzHbn3YlZgSnb
-	 ZNw5pUr3ALY40xqMzu8pOnh52KuNAAsqvYJnp4wKT9uWew4GmWkUgx++C6xldbp/Z4
-	 2OkSx//jd3yF0cDySi1h38cWVyRZLr8myTA4yq+gX2xiyJs+VafVWWbj8XeKh/j0aq
-	 WgmcdX4ci7bG7E1qcHB+M1DSI3s4lLJkc/ASJUKdcMvOQeVpc2GWfFc5ieqeqGGRsp
-	 G5hiNgw48kPpA==
+	s=default; t=1730358203;
+	bh=gCXgoaBUYXSYReLJKteTd41Q6MEmZ2zAzNHvT0JUlFc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=GFS4Qz3uSMolkFeoX0DkhKFzigFLUToTR8Nw0N7Sk1gGC/twb9fAKdkvXJJUmC7mM
+	 piBHbbOs44+xzCPYk1lAPrArwuL6se5v9eooujbWQP0Q0wlEVeo6+Txc9j48dUpG8T
+	 q1fWdAnRonwczDTkjF9JMD8mjljnormo2VMNt1cSyMavk6IbGAYxsIJTXBWJik2IoF
+	 rsfJnrRzRTcC6oQH4OfuwRZTo2ozKQ6kGVDE+GdYPSpeGs5PIDZdX1ZBljyGihnrq3
+	 oLLVD+Opy60v2BJ46FqiJgMIEtRZ1uGfLdITm6oJjAylh2vtywqVjArrfv0Dau9iTs
+	 OshsieeaZ0T6A==
 X-Virus-Scanned: by epochal.quest
 From: Cody Eksal <masterr3c0rd@epochal.quest>
-To: linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-phy@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linux-sunxi@lists.linux.dev,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
 Cc: Chen-Yu Tsai <wens@csie.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jernej Skrabec <jernej.skrabec@gmail.com>,
 	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Maxime Ripard <mripard@kernel.org>,
 	Michael Turquette <mturquette@baylibre.com>,
 	Nishanth Menon <nm@ti.com>,
 	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
 	Samuel Holland <samuel@sholland.org>,
 	Stephen Boyd <sboyd@kernel.org>,
 	Vinod Koul <vkoul@kernel.org>,
@@ -68,11 +61,17 @@ Cc: Chen-Yu Tsai <wens@csie.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
 	Yangtao Li <tiny.windzz@gmail.com>,
 	Parthiban <parthiban@linumiz.com>,
-	Andre Przywara <andre.przywara@arm.com>
-Subject: [PATCH v2 00/13] sunxi: A100/A133 second stage support
-Date: Thu, 31 Oct 2024 04:02:13 -0300
-Message-ID: <20241031070232.1793078-1-masterr3c0rd@epochal.quest>
+	Andre Przywara <andre.przywara@arm.com>,
+	Cody Eksal <masterr3c0rd@epochal.quest>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 04/13] dt-bindings: usb: Add A100 compatible string
+Date: Thu, 31 Oct 2024 04:02:17 -0300
+Message-ID: <20241031070232.1793078-5-masterr3c0rd@epochal.quest>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <20241031070232.1793078-1-masterr3c0rd@epochal.quest>
+References: <20241031070232.1793078-1-masterr3c0rd@epochal.quest>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,104 +80,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello again!
+The Allwinner A100 contains two fully OHCI/EHCI compatible USB host
+controllers. Add their compatible strings to the list of
+generic OHCI/EHCI controllers.
 
-This is V2 of this series [5], with some changes that were requested and
-others that were made after testing on more devices. Thank you for all of
-your feedback! A changelog is available below.
+Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
+Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
+---
+Changes in V2:
+ - Fix ordering of compatibles
 
-==================
-Back in 2020, two Allwinner employees, Yangtao Li and Shuosheng Huang, each
-submitted a patch series for the A100 series of SoCs; [1] intended to add
-support for the watchdog, ARM PMU, DMA, USB, and (e)MMC controller, and [2]
-implemented DVFS support. Some patches from the first series landed, but
-the rest were seemingly abandoned.
+ Documentation/devicetree/bindings/usb/generic-ehci.yaml | 1 +
+ Documentation/devicetree/bindings/usb/generic-ohci.yaml | 1 +
+ 2 files changed, 2 insertions(+)
 
-Although references to the A100 have been removed by Allwinner, it is
-believed that the A133 and A133 Plus, which are still available, are simply
-better binned variants of the A100; no other differences have been noted
-thus far, and the drivers for the A100 work on the A133 without any
-additional modifications. There has been a resurgence of interest in the
-A133; patches to allow mainline U-Boot to run on these devices are
-currently in progress.
-
-I have rebased the patches that failed to land, applying the feedback
-provided by maintainers at the time. Some DT binding patches were added, as
-there were a few cases where compatibles were used without being
-documented. Minor reworks were necessary to apply certain patches, as the
-drivers they modified have matured over time.
-
-Patches 1 and 2 add PMU and watchdog nodes to the device tree. This is
-followed by patches 3-7, which implement support for the USB host and OTG
-peripherals. Patches 8-10 add MMC nodes, rounding out what originally
-made up the first patch series; support for these already exists from
-earlier patches, though patch 7 fixes an issue with the clock definitions
-preventing the MMC controller from initializing. Patches 11-13 finish the
-job of the second original series and this series, implementing OPP and
-enabling DVFS on these SoCs.
-
-This series is also available on GitHub [3].
-
-A sincere thanks to Andre for encouraging me to submit these patches,
-Parthiban for testing this tree on his board, and to the linux-sunxi
-community and its resources for pointing me to these abandoned series in
-the first place [4].
-
-[1] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=380887&archive=both&state=*
-[2] https://patchwork.kernel.org/project/linux-arm-kernel/list/?series=396055&archive=both&state=*
-[3] https://github.com/BrokenR3C0RD/linux-a100/compare/c2ee9f59..allwinner-a100
-[4] https://linux-sunxi.org/Linux_mainlining_effort#Work_In_Progress
-[5] https://lore.kernel.org/all/20241024170540.2721307-1-masterr3c0rd@epochal.quest/
-
-Changelog - V2:
- - Change name of opp table to match bindings and pass CHECK_DTBS
- - Drop "phy: sun4i-usb: add support for A100 USB PHY" in favor of
-   falling back to "allwinner,sun20i-d1-usb-phy".
- - Add "allwinner,sun50i-a100" to the cpufreq-dt-platform blacklist
- - Update dt-bindings changes to keep intended ordering of compatibles
- - Update regs that were too small in the usbphy bindings
- - Add patch to remove CLK_SET_RATE_NO_REPARENT from the MMC drivers.
- - Fix error in the description of "arm64: dts: allwinner: a100: add usb
-   related nodes"
- - Add acks and reviews from Andre and Rob
-
-
-Cody Eksal (5):
-  dt-bindings: phy: sun50i-a64: add a100 compatible
-  dt-bindings: usb: Add A100 compatible string
-  dt-bindings: usb: sunxi-musb: Add A100 compatible string
-  clk: sunxi-ng: a100: enable MMC clock reparenting
-  dt-bindings: opp: h6: Add A100 operating points
-
-Shuosheng Huang (2):
-  cpufreq: sun50i: add a100 cpufreq support
-  arm64: dts: allwinner: a100: Add CPU Operating Performance Points
-    table
-
-Yangtao Li (6):
-  arm64: dts: allwinner: A100: Add PMU mode
-  arm64: dts: allwinner: a100: add watchdog node
-  arm64: dts: allwinner: a100: add usb related nodes
-  arm64: allwinner: A100: enable EHCI, OHCI and USB PHY nodes in Perf1
-  arm64: allwinner: a100: Add MMC related nodes
-  arm64: dts: allwinner: a100: perf1: Add eMMC and MMC node
-
- .../allwinner,sun50i-h6-operating-points.yaml |   1 +
- .../phy/allwinner,sun50i-a64-usb-phy.yaml     |  10 +-
- .../usb/allwinner,sun4i-a10-musb.yaml         |   1 +
- .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
- .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
- .../allwinner/sun50i-a100-allwinner-perf1.dts |  60 ++++++
- .../dts/allwinner/sun50i-a100-cpu-opp.dtsi    |  90 ++++++++
- .../arm64/boot/dts/allwinner/sun50i-a100.dtsi | 193 +++++++++++++++++-
- drivers/clk/sunxi-ng/ccu-sun50i-a100.c        |   6 +-
- drivers/cpufreq/cpufreq-dt-platdev.c          |   1 +
- drivers/cpufreq/sun50i-cpufreq-nvmem.c        |  28 +++
- 11 files changed, 383 insertions(+), 9 deletions(-)
- create mode 100644 arch/arm64/boot/dts/allwinner/sun50i-a100-cpu-opp.dtsi
-
-
-base-commit: 0fc810ae3ae110f9e2fcccce80fc8c8d62f97907
+diff --git a/Documentation/devicetree/bindings/usb/generic-ehci.yaml b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+index 2ed178f16a78..0d797e01fc0b 100644
+--- a/Documentation/devicetree/bindings/usb/generic-ehci.yaml
++++ b/Documentation/devicetree/bindings/usb/generic-ehci.yaml
+@@ -28,6 +28,7 @@ properties:
+       - items:
+           - enum:
+               - allwinner,sun4i-a10-ehci
++              - allwinner,sun50i-a100-ehci
+               - allwinner,sun50i-a64-ehci
+               - allwinner,sun50i-h6-ehci
+               - allwinner,sun50i-h616-ehci
+diff --git a/Documentation/devicetree/bindings/usb/generic-ohci.yaml b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+index b9576015736b..cf33764553fa 100644
+--- a/Documentation/devicetree/bindings/usb/generic-ohci.yaml
++++ b/Documentation/devicetree/bindings/usb/generic-ohci.yaml
+@@ -15,6 +15,7 @@ properties:
+       - items:
+           - enum:
+               - allwinner,sun4i-a10-ohci
++              - allwinner,sun50i-a100-ohci
+               - allwinner,sun50i-a64-ohci
+               - allwinner,sun50i-h6-ohci
+               - allwinner,sun50i-h616-ohci
 -- 
 2.47.0
 
