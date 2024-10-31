@@ -1,152 +1,129 @@
-Return-Path: <linux-usb+bounces-16902-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16903-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BA989B7CA4
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 15:20:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECF529B7CED
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 15:33:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B7E54282984
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 14:20:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 958BFB21110
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 14:33:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33FDA19AD8D;
-	Thu, 31 Oct 2024 14:20:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9161A1A070D;
+	Thu, 31 Oct 2024 14:33:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jH69cnlw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mUxE6R6l"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73EE84A52
-	for <linux-usb@vger.kernel.org>; Thu, 31 Oct 2024 14:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3FA8181B8D;
+	Thu, 31 Oct 2024 14:33:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730384405; cv=none; b=N1MIQUGA7LNGf/E3a5CPkjYLm4OSz2rcomk/d2pJcuXcPoUutMcn2wjP1tK2N213ksV+swqBxHyS/vtOlzvlkn8QCkdGzBXYDpfvzQqe4jmsvZwe8+FsuCncrPULEsm+m9p2IhC5hxSM+JA7KKC+cwdZ6pHAN0LnoOCYwyiu/2Y=
+	t=1730385192; cv=none; b=ihwhHeCc20TED5jyfxjC5atrSkCCe8o7xcMaqS2r1nlDkQj/Ii/4Yh61f6ZJEoo8u9yXW3A0J5RlKrPFS1n5EtAT4bmFhKb5IV4ocQI9faXD1g5FkEmxHfujPCrlJQofQ/8D9wZ6TU3rx1WwFVMpZ43ilzKbaebDq5TVBiIeRrI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730384405; c=relaxed/simple;
-	bh=8eUt7knGaRsJk5F8kAb0QladafcyNoIySjcKP0rtgJg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fOZnpRW3FSoJq82GvO05Dp38qGOYGYQpatqnpgsTj2ay3tsXTNUw2UZ0fl9GFVHeoK6eCztd0cztP/JPGT/i86Xf4IMAw8iHUyF2xCStIPARuqw2TZrqp8nea/fNK7nDxKIhN6MH6oigKmqalYP72nUPa1VYK7UrP8XPybQa9sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jH69cnlw; arc=none smtp.client-ip=198.175.65.10
+	s=arc-20240116; t=1730385192; c=relaxed/simple;
+	bh=ynPJoLvXglmyEg/wsGynZevUE2X2f/JoNLwfJ1zvlCg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T6am7neuXrpaBr9YWm4fd6R6fIIMh7yfVE4OIUkvSBuKhBQlzhZsZc84ZOxCipxX06BYhOPUDakO30orJIdP0fIHpLGTOC6zFqw2kwrNrvS7QUGERZ977lfnVLc3+46qj++BdIDa2MoXxbQQ270AlNkCMpppAQgGGGM6i7PDxEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mUxE6R6l; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730384404; x=1761920404;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=8eUt7knGaRsJk5F8kAb0QladafcyNoIySjcKP0rtgJg=;
-  b=jH69cnlwyIIy1D1ZZDRcSTIddFItl16XtWBdR5hEiWdi8oeUPz/S4w68
-   8Id8LmtDxw0N20ztM6TWcpXQKVBFZHtig2uKo5PN4VbAA04CPLD8RXWRz
-   UxVxDNJNRiTY5DailgMGWMEccSzKBI1mpnw6e6yONtxLPi0jNl2Zv4Q7C
-   TA50xf62ENVXKGKQZeYM7uRZTcrPwyeHOwFXclfQvXvYNqrVtqMONMcXH
-   qkPtEWLLWH5yNnNCdLpo9Zt8v5Z7xB04nfMm6LwuelmzidqjRh7SDHoO7
-   M9X5ti4jAUC8L6Nn4w9/x6P4BeXFu6ypO0iDmAOfwa+duwzqEV/GIeOf6
+  t=1730385190; x=1761921190;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ynPJoLvXglmyEg/wsGynZevUE2X2f/JoNLwfJ1zvlCg=;
+  b=mUxE6R6lPriGl2JQ0aUchsY6TMWsqKFBieWgJFb0fkdM3r42F5kdxHdj
+   GRIj6IE8MKsONkdRNcxK/aGSkTFGBPsKloj/AOgQ8IVYH7WqTVWYpfriE
+   zp0WqLoYdOEVPXDY7YiPcCrTd4UP5X+dwZhr03exzhLCQsiGH3YkkU1xR
+   RZSLpm+wgDUrCf6220zAJAExxKahd2Kqmfu37MK316SBV+3KFZWk3mjXZ
+   ww9G2h2cG8CF76THY3QVBVNX8Ezb3eWVqCKctSj0ybIjnWzc7sMYJmobC
+   C3T5PRzcQt0kzc8mXTe1AaD8a0UMJUdlFmUOM3qiSFkaS0rC7LIslVLJg
    A==;
-X-CSE-ConnectionGUID: P/nXvhEFTqKp+NAZwXLI7g==
-X-CSE-MsgGUID: fNoW6toVThSyRTNMCUvKNQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="47581617"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="47581617"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 07:20:04 -0700
-X-CSE-ConnectionGUID: JQHIKAoYTGmbCC1nln3hww==
-X-CSE-MsgGUID: FrDKkPq7SbC4DAVr1s3m7w==
+X-CSE-ConnectionGUID: jexEkTjSRlChI9y2QDTPxA==
+X-CSE-MsgGUID: bVYE8268TACIRemOcANF4Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11242"; a="41492948"
+X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
+   d="scan'208";a="41492948"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 07:33:09 -0700
+X-CSE-ConnectionGUID: 7RIA3JY0S6ih93TR62tj0Q==
+X-CSE-MsgGUID: axgnRfM8SoyjurbkOhcMdw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="87232639"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa004.fm.intel.com with ESMTP; 31 Oct 2024 07:20:00 -0700
-Message-ID: <c7199fd8-243c-4fe9-8f7e-323ff4c67765@linux.intel.com>
-Date: Thu, 31 Oct 2024 16:22:14 +0200
+   d="scan'208";a="87778818"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa004.jf.intel.com with SMTP; 31 Oct 2024 07:33:05 -0700
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 31 Oct 2024 16:33:04 +0200
+Date: Thu, 31 Oct 2024 16:33:04 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: tzungbi@kernel.org, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev, dmitry.baryshkov@linaro.org,
+	jthies@google.com, akuchynski@google.com, pmalani@chromium.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] usb: typec: Auto enter control for alternate modes
+Message-ID: <ZyOVIKGlrlj7kc9-@kuha.fi.intel.com>
+References: <20241030212854.998318-1-abhishekpandit@chromium.org>
+ <20241030142833.v2.3.I439cffc7bf76d94f5850eb85980f1197c4f9154c@changeid>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] xhci: Fix the NEC stop bug workaround
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
- "Neronin, Niklas" <niklas.neronin@intel.com>
-References: <20241025121806.628e32c0@foxbook>
- <20241028083351.655d54cf@foxbook>
- <f6dcf205-e8eb-4ba8-91d9-24fa0f769739@intel.com>
- <20241029092800.32eccf3b@foxbook>
- <7c2abdd1-c209-4616-9d18-be5fc99fc527@linux.intel.com>
- <35fdb2a4-8514-4b4d-9332-127d6ed07908@linux.intel.com>
- <20241031091347.29b6ffdd@foxbook> <20241031114926.22ac4359@foxbook>
- <20241031121724.5a259d6b@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20241031121724.5a259d6b@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241030142833.v2.3.I439cffc7bf76d94f5850eb85980f1197c4f9154c@changeid>
 
-On 31.10.2024 13.17, Michał Pecio wrote:
-> Update:
+On Wed, Oct 30, 2024 at 02:28:34PM -0700, Abhishek Pandit-Subedi wrote:
+> Add controls for whether an alternate mode is automatically entered when
+> a partner connects. The auto_enter control is only available on ports
+> and applies immediately after a partner connects. The default behavior
+> is to enable auto enter and drivers must explicitly disable it.
 > 
->> Your patch prints one dev_dbg() each time, mine spams many of them for
->> 100ms each time. I will remove this one retry limit from your patch to
->> see if starts spinning infinitely, but I strongly suspect it will.
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> ---
 > 
-> Yes, that's exactly what happens.
+> (no changes since v1)
 > 
-> This time I have killed the ifconfig loop, unplugged the NIC and
-> started 'rmmod xhci_pci', which is still hanging 10 minutes later.
+>  Documentation/ABI/testing/sysfs-bus-typec |  9 +++++++
+>  drivers/usb/typec/altmodes/displayport.c  |  6 +++--
+>  drivers/usb/typec/altmodes/thunderbolt.c  |  3 ++-
+>  drivers/usb/typec/class.c                 | 31 +++++++++++++++++++++++
+>  include/linux/usb/typec.h                 |  2 ++
+>  include/linux/usb/typec_altmode.h         |  2 ++
+>  6 files changed, 50 insertions(+), 3 deletions(-)
 > 
-> So business as usual when these things go wrong.
-> 
->> One retry is not enough. This is what I got on the first try with a
->> random UVC webcam:
->> [...]
+> diff --git a/Documentation/ABI/testing/sysfs-bus-typec b/Documentation/ABI/testing/sysfs-bus-typec
+> index 205d9c91e2e1..f09d05727b82 100644
+> --- a/Documentation/ABI/testing/sysfs-bus-typec
+> +++ b/Documentation/ABI/testing/sysfs-bus-typec
+> @@ -12,6 +12,15 @@ Description:
+>  
+>  		Valid values are boolean.
+>  
+> +What:		/sys/bus/typec/devices/.../auto_enter
+> +Date:		September 2024
+> +Contact:	Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> +Description:
+> +		Controls whether a mode will be automatically entered when a partner is
+> +		connected.
+> +
+> +		This field is only valid and displayed on a port. Valid values are boolean.
 
-Ok, good to know, then using flag is not enough.
+So, why can't this be controlled with the "active" property of the
+port altmode instead? That's why it's there.
 
-Using a retry timeout for failed stop endpoint commands also sounds good
-to me.
-It has a slight downside of a possible 100ms aggressive 'Stop Endpoint'
-retry loop in cases where endpoint was stopped earlier for some other reason.
+Sorry if I missed something in v1 related to this question.
 
-Not sure if that is a problem, if it is then we can add the flag and only
-retry for 100ms if flag is set (only clear flag in handle_tx_event())
+thanks,
 
-Another reason for the flag is the additional note in xhci 4.8.3 [1], we might
-need to track the state better in software.
-
-[1] xhci 4.8.3 Endpoint Context state
-
-"There are several cases where the EP State field in the Output Endpoint Context
-may not reflect the current state of an endpoint. The xHC should attempt to
-keep EP State as current as possible, however it may defer these updates to
-perform higher priority references to memory, e.g. Isoch data transfers, etc.
-Software should maintain an internal variable that tracks the state of an
-endpoint and not depend on EP State to represent the instantaneous state of
-an endpoint.
-For example, when a Command that affects EP State is issued, the value of EP
-State may be updated anytime between when software rings the Command
-Ring doorbell for a command and when the associated Command Completion
-Event is placed on the Event Ring by the xHC. The update of EP State may also
-be delayed relative to a Doorbell ring or error condition (e.g. TRB Error, STALL,
-or USB Transaction Error) that causes an EP State change not generated by a
-command.
-
-Software should maintain an accurate value for EP State, by tracking it with an
-internal variable that is driven by Events and Doorbell accesses associated with
-an endpoint using the following method:
-
-• When a command is issued to an endpoint that affects its state, software
-should use the Command Completion Event to update its image of EP State
-to the appropriate state.
-• When a Transfer Event reports a TRB Error, software should update its image
-of EP State to Error.
-• When a Transfer Event reports a Stall Error or USB Transaction Error,
-software should update its image of EP State to Halted.
-• When software rings the Doorbell of an endpoint to transition it from the
-Stopped to Running state, it should update its image of EP State to Running."
-
-Thanks
--Mathias
+-- 
+heikki
 
