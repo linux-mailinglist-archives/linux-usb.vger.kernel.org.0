@@ -1,952 +1,898 @@
-Return-Path: <linux-usb+bounces-16905-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16906-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A35C9B7EBE
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 16:43:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CC319B7F93
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 17:03:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E11E1C217A1
-	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 15:43:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B25001C214CB
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 16:03:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9BF1A2630;
-	Thu, 31 Oct 2024 15:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NfVT7u3O"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44274137905;
+	Thu, 31 Oct 2024 16:03:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1525113342F
-	for <linux-usb@vger.kernel.org>; Thu, 31 Oct 2024 15:42:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56EED13342F
+	for <linux-usb@vger.kernel.org>; Thu, 31 Oct 2024 16:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730389383; cv=none; b=LOinTZa9Tn7QQaK+k7aiUWAFXKwrMmT67ut1h0b4GDAjTOtWLybPOIB8Bj4IOIMVGX0ZELpJsoiGRYv6HzhbmX0n69dya9PFrXrVvsJLbxaRWWWPgbTOuNnQi3etZroGRTIkMMwuT1PvwE8TGQBP3GwWS6BMtHcuDcX1gRBVy4g=
+	t=1730390610; cv=none; b=dSKVP/j8xc7y+v1S8EDxU4AhX8DjSqutthmwsRj0JLasnbmC9aUXjTS6XToFQjblYcNUXVCuFucVQBMdYPR3X/RHLlbPaZ2rf4M/wYuY6qLmFrYy7mbpalrc9pShSUFCwOre3t+6oMmKnQCM/aM1ygaOhPbZ/b9tdw7csaWTRY8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730389383; c=relaxed/simple;
-	bh=09LmHfzGCyzSK1mmDHcgvMtaerQ9W9kCx/QF2UCRg3s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UqEIQwPS1xshgXEAMydDFIIapn7NoJGX5kLIXSXaJIMMRvS+KypRA4UK+GUQL91a78pvLSYZPKOFlbDe5oMVKSJqbm1CxCJxAVr4k9fxtlZjgV4A9+M8wePDEqOSM+By2nhR5ItUBPMVLRm1AnRCZEIC2KpFSVFvM5Ht7J/FXZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NfVT7u3O; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730389379; x=1761925379;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=09LmHfzGCyzSK1mmDHcgvMtaerQ9W9kCx/QF2UCRg3s=;
-  b=NfVT7u3Os2WnRHjibiLmvSWddJdPl0NPG64vIShqz5OrDndjZLPUA4mn
-   UTiap/keJedC+hsAaoyiGQCb54XL5gX6P8UUul8WMuQxMlpJswBcP56f6
-   p+nbGIPNOEVqHnZpd/VQLneN0dUqpJ1WOUJPTBpM2tzTTIy8VUHLyfWJU
-   tTP9dObljRHionOX/RvXZCRnJQggkUBb64mlxXEv508JKtFQxninyLetO
-   jkN4tP2tERFJV253RaE0vZPLc4W9rl/jZ1DBVtJHLtx/rJr6KM+woyTdA
-   52nfkN0W9Bm26QRRIL9+6DpSYIaTz3ujCwvxULVLHZAwwhZJemqn7c0at
-   w==;
-X-CSE-ConnectionGUID: laYJCayXRDeoLyeCR6h2ew==
-X-CSE-MsgGUID: xZK5rpw4RjGwZ3Fhw8V6cg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11242"; a="34072194"
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="34072194"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2024 08:41:26 -0700
-X-CSE-ConnectionGUID: BlhFnGaDT7KEoIemwm+2wg==
-X-CSE-MsgGUID: Sc+e2whBQK62qsTmkjyw+A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,247,1725346800"; 
-   d="scan'208";a="83001492"
-Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
-  by fmviesa010.fm.intel.com with ESMTP; 31 Oct 2024 08:41:23 -0700
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Jameson Thies <jthies@google.com>,
-	Benson Leung <bleung@chromium.org>,
-	Bartosz Szpila <bszpila@google.com>,
-	"Pilla, Siva sai kumar" <siva.sai.kumar.pilla@intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org
-Subject: [PATCH v1] usb: typec: ucsi: Convert connector specific commands to bitmaps
-Date: Thu, 31 Oct 2024 17:41:22 +0200
-Message-ID: <20241031154122.2641624-1-heikki.krogerus@linux.intel.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1730390610; c=relaxed/simple;
+	bh=YSrv74QK+pqXazfmz16kIr0iHEjJOSz5Mb+gYoJaqwc=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=AjGbK73ZOHAYIXEJP5N16fnqHrqI26whamQXFVP4lFvwXFEd8rceY/TBlPVApEgj7J1113Em4TBBmhyBiInpmaf4gMvboPImjLm/Ykf+QccQ1CUHkcRIRVZjX3UIAV/Y20hzT2yIyNic65yVZzlispHEstpWM98RFCBLnOZL3Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a6a9cb7efdso6276685ab.1
+        for <linux-usb@vger.kernel.org>; Thu, 31 Oct 2024 09:03:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730390605; x=1730995405;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GsiQ4pVBYoFfkxKOK+wCSMhO8DzCMj0T2d3kUXcRRwg=;
+        b=GDXrA9zrjkNUOr73+nzms/YBtaZEmly405rJtuYH0UFX6cXc5RkUL3R0xxF+gWGNhC
+         eeUuOWCu6qd+psi1A592VYSWYPyqRFoSz4aAOFEewuln1K+TVNPBpJcki5Bb00fJx60S
+         i+IH3NIni2Uq2vWjwB9CN90xHQFW81nRS2Mkq0500OjUsoMjzlSKAbA3tngNWWezs2I2
+         RcStJdbM6u+QAxcrHgwDHqT5x1c+ykaxv5nRpTTcWHLABwVHyxtkW6jIiQYkQlTRQxmB
+         MN9kc1i/PoZZD2Iw4vj5cqzpC2cwNLCpbxH5kUh0KTs3uoIZQxQxuTcSGwOcI3NktcBO
+         h9HQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV/MFpAsmurunp6HWXktOOKehoC6kYIontWSnEoVoSVmlym7SzddX0EmgEqcIcqfhkwN2YUBDlYn8E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUNkNBTi7lDG9vGJtyzHQ1cmVKEmjPvn54byTswtpgJqDb5oEl
+	AyWJKb103L4dQB5buoBOlgUqTxIdwi2JDRjHpQ9xTwunUveQenCUtJapnLRHFv8kWefZVmkqJiy
+	ik9rzYUV0Tv1iPdCoTVT5t5qfa2Kq41eGyJlNu2XDfAXpeWMdxtOQG7w=
+X-Google-Smtp-Source: AGHT+IGbWMGcLqnGSi9IwdYRtXEqtKKLkZaQt1LpCMg+xW/cXRbwA6HTo08sV4Bj5GrDv+Y2KY2VnJS6QrlLlzsKEJJxoEmR2O/Z
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a92:ca4f:0:b0:3a6:ac17:13d5 with SMTP id
+ e9e14a558f8ab-3a6ac1717c6mr19541515ab.11.1730390605271; Thu, 31 Oct 2024
+ 09:03:25 -0700 (PDT)
+Date: Thu, 31 Oct 2024 09:03:25 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6723aa4d.050a0220.35b515.0161.GAE@google.com>
+Subject: [syzbot] [mm?] [input?] [usb?] INFO: rcu detected stall in brk (2)
+From: syzbot <syzbot+7402e6c8042635c93ead@syzkaller.appspotmail.com>
+To: Liam.Howlett@oracle.com, akpm@linux-foundation.org, jannh@google.com, 
+	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-usb@vger.kernel.org, lorenzo.stoakes@oracle.com, 
+	syzkaller-bugs@googlegroups.com, vbabka@suse.cz
+Content-Type: text/plain; charset="UTF-8"
 
-That allows the fields in those command data structures to
-be easily validated. If an unsupported field is accessed, a
-warning is generated.
+Hello,
 
-This will not force UCSI version checks to be made in every
-place where these data structures are accessed, but it will
-make it easier to pinpoint issues that are caused by the
-unconditional accesses to those fields, and perhaps more
-importantly, allow those issues to be noticed immediately.
+syzbot found the following issue on:
 
-Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+HEAD commit:    c6d9e43954bf Merge 6.12-rc4 into usb-next
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=175cbe5f980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5aceb1f10131390c
+dashboard link: https://syzkaller.appspot.com/bug?extid=7402e6c8042635c93ead
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17b3cca7980000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fe53e83da4bf/disk-c6d9e439.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a9135a278859/vmlinux-c6d9e439.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/72fb7499fd06/bzImage-c6d9e439.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7402e6c8042635c93ead@syzkaller.appspotmail.com
+
+rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: {
+ 1-...D } 2636 jiffies s: 1593 root: 0x2/.
+rcu: blocking rcu_node structures (internal RCU debug):
+
+Sending NMI from CPU 0 to CPUs 1:
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+NMI backtrace for cpu 1
+CPU: 1 UID: 0 PID: 10933 Comm: modprobe Not tainted 6.12.0-rc4-syzkaller-00052-gc6d9e43954bf #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+RIP: 0010:io_serial_in+0x87/0xb0 drivers/tty/serial/8250/8250_port.c:407
+Code: 68 b5 fe 48 8d 7d 40 44 89 e1 48 b8 00 00 00 00 00 fc ff df 48 89 fa d3 e3 48 c1 ea 03 80 3c 02 00 75 1a 66 03 5d 40 89 da ec <5b> 0f b6 c0 5d 41 5c c3 cc cc cc cc e8 78 ef 0d ff eb a2 e8 01 f0
+RSP: 0018:ffffc900001b80a8 EFLAGS: 00000002
+RAX: dffffc0000000060 RBX: 00000000000003fd RCX: 0000000000000000
+RDX: 00000000000003fd RSI: ffffffff82a08a30 RDI: ffffffff93637660
+RBP: ffffffff93637620 R08: 0000000000000001 R09: 000000000000001f
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000020 R14: fffffbfff26c6f1e R15: dffffc0000000000
+FS:  00007f1b331b7380(0000) GS:ffff8881f5900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f1b3323219c CR3: 0000000119252000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <NMI>
+ </NMI>
+ <IRQ>
+ serial_in drivers/tty/serial/8250/8250.h:137 [inline]
+ serial_lsr_in drivers/tty/serial/8250/8250.h:159 [inline]
+ wait_for_lsr+0xda/0x180 drivers/tty/serial/8250/8250_port.c:2068
+ serial8250_console_fifo_write drivers/tty/serial/8250/8250_port.c:3315 [inline]
+ serial8250_console_write+0xf5a/0x17c0 drivers/tty/serial/8250/8250_port.c:3393
+ console_emit_next_record kernel/printk/printk.c:3092 [inline]
+ console_flush_all+0x800/0xc60 kernel/printk/printk.c:3180
+ __console_flush_and_unlock kernel/printk/printk.c:3239 [inline]
+ console_unlock+0xd9/0x210 kernel/printk/printk.c:3279
+ vprintk_emit+0x424/0x6f0 kernel/printk/printk.c:2407
+ vprintk+0x7f/0xa0 kernel/printk/printk_safe.c:68
+ _printk+0xc8/0x100 kernel/printk/printk.c:2432
+ printk_stack_address arch/x86/kernel/dumpstack.c:72 [inline]
+ show_trace_log_lvl+0x21f/0x3d0 arch/x86/kernel/dumpstack.c:285
+ sched_show_task kernel/sched/core.c:7604 [inline]
+ sched_show_task+0x3f0/0x5f0 kernel/sched/core.c:7579
+ show_state_filter+0xee/0x320 kernel/sched/core.c:7649
+ k_spec drivers/tty/vt/keyboard.c:667 [inline]
+ k_spec+0xed/0x150 drivers/tty/vt/keyboard.c:656
+ kbd_keycode drivers/tty/vt/keyboard.c:1522 [inline]
+ kbd_event+0xcbd/0x17a0 drivers/tty/vt/keyboard.c:1541
+ input_handler_events_default+0x116/0x1b0 drivers/input/input.c:2549
+ input_pass_values+0x777/0x8e0 drivers/input/input.c:126
+ input_event_dispose drivers/input/input.c:341 [inline]
+ input_handle_event+0xf0b/0x14d0 drivers/input/input.c:369
+ input_event drivers/input/input.c:398 [inline]
+ input_event+0x83/0xa0 drivers/input/input.c:390
+ input_sync include/linux/input.h:451 [inline]
+ hidinput_report_event+0xb2/0x100 drivers/hid/hid-input.c:1736
+ hid_report_raw_event+0x274/0x11c0 drivers/hid/hid-core.c:2047
+ __hid_input_report.constprop.0+0x341/0x440 drivers/hid/hid-core.c:2110
+ hid_irq_in+0x35e/0x870 drivers/hid/usbhid/hid-core.c:285
+ __usb_hcd_giveback_urb+0x389/0x6e0 drivers/usb/core/hcd.c:1650
+ usb_hcd_giveback_urb+0x396/0x450 drivers/usb/core/hcd.c:1734
+ dummy_timer+0x17f0/0x3930 drivers/usb/gadget/udc/dummy_hcd.c:1993
+ __run_hrtimer kernel/time/hrtimer.c:1691 [inline]
+ __hrtimer_run_queues+0x20a/0xae0 kernel/time/hrtimer.c:1755
+ hrtimer_run_softirq+0x17d/0x350 kernel/time/hrtimer.c:1772
+ handle_softirqs+0x206/0x8d0 kernel/softirq.c:554
+ __do_softirq kernel/softirq.c:588 [inline]
+ invoke_softirq kernel/softirq.c:428 [inline]
+ __irq_exit_rcu kernel/softirq.c:637 [inline]
+ irq_exit_rcu+0xac/0x110 kernel/softirq.c:649
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1049 [inline]
+ sysvec_apic_timer_interrupt+0x90/0xb0 arch/x86/kernel/apic/apic.c:1049
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:__sanitizer_cov_trace_pc+0x66/0x70 kernel/kcov.c:235
+Code: 82 30 15 00 00 83 f8 02 75 20 48 8b 8a 38 15 00 00 8b 92 34 15 00 00 48 8b 01 48 83 c0 01 48 39 d0 73 07 48 89 01 48 89 34 c1 <c3> cc cc cc cc 0f 1f 44 00 00 90 90 90 90 90 90 90 90 90 90 90 90
+RSP: 0018:ffffc90002dc7a50 EFLAGS: 00000293
+RAX: 0000000000000000 RBX: 0000000000000001 RCX: dffffc0000000000
+RDX: ffff88810fed9d40 RSI: ffffffff86e3ce73 RDI: 0000000000000005
+RBP: ffff888124e21e00 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000000 R12: ffff88811972fe00
+R13: ffffc90002dc7b88 R14: ffff88811ad2a540 R15: ffffc90002dc7bc5
+ mas_next_slot+0x12d3/0x21b0 lib/maple_tree.c:4693
+ mas_find+0x2c6/0x530 lib/maple_tree.c:6059
+ vma_next include/linux/mm.h:1007 [inline]
+ validate_mm+0xeb/0x4d0 mm/vma.c:535
+ do_brk_flags+0x943/0x1260 mm/mmap.c:1781
+ __do_sys_brk+0x68e/0xa20 mm/mmap.c:197
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f1b3330fc7c
+Code: 1a 64 c7 03 01 00 00 00 eb 11 64 44 89 23 31 f6 5b 31 ff 5d 41 5c e9 41 ff ff ff 5b 83 c8 ff 5d 41 5c c3 b8 0c 00 00 00 0f 05 <48> 8b 15 d5 61 0d 00 45 31 c0 48 89 02 48 39 c7 76 12 48 8b 05 73
+RSP: 002b:00007ffd9efad018 EFLAGS: 00000206 ORIG_RAX: 000000000000000c
+RAX: ffffffffffffffda RBX: 0000000000021000 RCX: 00007f1b3330fc7c
+RDX: 00007f1b333ee1b8 RSI: 00007f1b333e6b00 RDI: 00005562a3991000
+RBP: 00007f1b333e6aa0 R08: 0000000000000000 R09: 00007f1b333e6d80
+R10: 0000000000000037 R11: 0000000000000206 R12: 00005562a3970000
+R13: 0000000000000290 R14: 0000000000001000 R15: 0000000000000000
+ </TASK>
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f2087884a90
+RSP: 002b:00007ffe718808c8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f2087975860 RCX: 00007f2087884a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f2087975860 R08: 0000000000000001 R09: eb9e03d0b6065ae7
+R10: 00007ffe71880780 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f2087979658 R15: 0000000000000001
+ </TASK>
+task:kworker/u8:3    state:R  running task     stack:32568 pid:11825 tgid:11825 ppid:3004   flags:0x00004000
+Call Trace:
+ <TASK>
+ __switch_to_asm+0x70/0x70
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:11826 tgid:11826 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11828 tgid:11828 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:kworker/u8:4    state:R  running task     stack:32568 pid:11832 tgid:11832 ppid:3551   flags:0x00004000
+Call Trace:
+ <TASK>
+ __switch_to_asm+0x70/0x70
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11834 tgid:11834 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:11836 tgid:11836 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25344 pid:11837 tgid:11837 ppid:3004   flags:0x00004002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f596b783a90
+RSP: 002b:00007ffdaec1f738 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f596b874860 RCX: 00007f596b783a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f596b874860 R08: 0000000000000001 R09: d427ab9054769841
+R10: 00007ffdaec1f5f0 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f596b878658 R15: 0000000000000001
+ </TASK>
+task:kworker/u8:3    state:R  running task     stack:28656 pid:11839 tgid:11839 ppid:3004   flags:0x00004000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ preempt_schedule_common+0x44/0xc0 kernel/sched/core.c:6869
+ __cond_resched+0x1b/0x30 kernel/sched/core.c:7214
+ _cond_resched include/linux/sched.h:2031 [inline]
+ stop_one_cpu+0x112/0x190 kernel/stop_machine.c:151
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11843 tgid:11843 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:kworker/u8:6    state:R  running task     stack:32568 pid:11845 tgid:11845 ppid:1106   flags:0x00004000
+Call Trace:
+ <TASK>
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:11846 tgid:11846 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f62ec5faa90
+RSP: 002b:00007ffc77d2c6e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f62ec6eb860 RCX: 00007f62ec5faa90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f62ec6eb860 R08: 0000000000000001 R09: 73127a7182c281c0
+R10: 00007ffc77d2c5a0 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f62ec6ef658 R15: 0000000000000001
+ </TASK>
+task:kworker/u8:4    state:R  running task     stack:32568 pid:11849 tgid:11849 ppid:3551   flags:0x00004000
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11858 tgid:11858 ppid:2989   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ </TASK>
+task:modprobe        state:R  running task     stack:25136 pid:11860 tgid:11860 ppid:3551   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11864 tgid:11864 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:11865 tgid:11865 ppid:2989   flags:0x00004002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fe85a408a90
+RSP: 002b:00007ffe6d728978 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fe85a4f9860 RCX: 00007fe85a408a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007fe85a4f9860 R08: 0000000000000001 R09: 0d6f8889d938ef07
+R10: 00007ffe6d728830 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007fe85a4fd658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:24000 pid:11870 tgid:11870 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25136 pid:11874 tgid:11874 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f9ab6225a90
+RSP: 002b:00007ffd2d084458 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f9ab6316860 RCX: 00007f9ab6225a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f9ab6316860 R08: 0000000000000001 R09: 213f27e3772f6406
+R10: 00007ffd2d084310 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f9ab631a658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:24000 pid:11879 tgid:11879 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ __pfx_lock_release+0x10/0x10 kernel/locking/lockdep.c:5346
+ </TASK>
+task:modprobe        state:R  running task     stack:24416 pid:11882 tgid:11882 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fd1e055da90
+RSP: 002b:00007ffc2fdba8d8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fd1e064e860 RCX: 00007fd1e055da90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007fd1e064e860 R08: 0000000000000001 R09: 44bb0356e4044352
+R10: 00007ffc2fdba790 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007fd1e0652658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11888 tgid:11888 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25136 pid:11890 tgid:11890 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fed39e3ca90
+RSP: 002b:00007ffcaabe57b8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fed39f2d860 RCX: 00007fed39e3ca90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007fed39f2d860 R08: 0000000000000001 R09: 751a872febfbe0c2
+R10: 00007ffcaabe5670 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007fed39f31658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11896 tgid:11896 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11905 tgid:11905 ppid:3004   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:11908 tgid:11908 ppid:3004   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:11909 tgid:11909 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f91c01d1a90
+RSP: 002b:00007fff59a721a8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f91c02c2860 RCX: 00007f91c01d1a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f91c02c2860 R08: 0000000000000001 R09: 174dcf661f33f894
+R10: 00007fff59a72060 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f91c02c6658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11915 tgid:11915 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11918 tgid:11918 ppid:3551   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ </TASK>
+task:modprobe        state:R  running task     stack:25136 pid:11920 tgid:11920 ppid:3004   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f22572aea90
+RSP: 002b:00007fff9570b928 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f225739f860 RCX: 00007f22572aea90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f225739f860 R08: 0000000000000001 R09: 1d598a15939cff95
+R10: 00007fff9570b7e0 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f22573a3658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:11924 tgid:11924 ppid:3551   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25136 pid:11929 tgid:11929 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11933 tgid:11933 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f0644958a90
+RSP: 002b:00007fff8866c018 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f0644a49860 RCX: 00007f0644958a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f0644a49860 R08: 0000000000000001 R09: 6c69b7350d6b595d
+R10: 00007fff8866bed0 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f0644a4d658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11939 tgid:11939 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11951 tgid:11951 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:24000 pid:11959 tgid:11959 ppid:3551   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11963 tgid:11963 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f58d02e0a90
+RSP: 002b:00007ffc6626d778 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f58d03d1860 RCX: 00007f58d02e0a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f58d03d1860 R08: 0000000000000001 R09: 7e2759f2076a714e
+R10: 00007ffc6626d630 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f58d03d5658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11967 tgid:11967 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f1d0649da90
+RSP: 002b:00007ffd773ed488 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f1d0658e860 RCX: 00007f1d0649da90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f1d0658e860 R08: 0000000000000001 R09: dbfdc4bed4c4ff8f
+R10: 00007ffd773ed340 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f1d06592658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:11973 tgid:11973 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11976 tgid:11976 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:11984 tgid:11984 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f1385ec8a90
+RSP: 002b:00007ffcf976a3e8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f1385fb9860 RCX: 00007f1385ec8a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f1385fb9860 R08: 0000000000000001 R09: fd48b3f27557a6a1
+R10: 00007ffcf976a2a0 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f1385fbd658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:11990 tgid:11990 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25344 pid:12000 tgid:12000 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f622c1a5a90
+RSP: 002b:00007ffc7eb2d618 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f622c296860 RCX: 00007f622c1a5a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f622c296860 R08: 0000000000000001 R09: fb6da14796518947
+R10: 00007ffc7eb2d4d0 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f622c29a658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25136 pid:12005 tgid:12005 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12008 tgid:12008 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12010 tgid:12010 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fd9cbf9aa90
+RSP: 002b:00007ffddace9658 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fd9cc08b860 RCX: 00007fd9cbf9aa90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007fd9cc08b860 R08: 0000000000000001 R09: 742256a4a252f6b4
+R10: 00007ffddace9510 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007fd9cc08f658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:12015 tgid:12015 ppid:2989   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ __pfx_lock_release+0x10/0x10 kernel/locking/lockdep.c:5346
+ </TASK>
+task:modprobe        state:R  running task     stack:25136 pid:12018 tgid:12018 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f4008cfda90
+RSP: 002b:00007fffd5753b88 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f4008dee860 RCX: 00007f4008cfda90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f4008dee860 R08: 0000000000000001 R09: 57a0791dac7bd80f
+R10: 00007fffd5753a40 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f4008df2658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:24416 pid:12023 tgid:12023 ppid:2989   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12029 tgid:12029 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:24000 pid:12037 tgid:12037 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f3539f25a90
+RSP: 002b:00007ffdd9a78498 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f353a016860 RCX: 00007f3539f25a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f353a016860 R08: 0000000000000001 R09: 517fac0adb2b96eb
+R10: 00007ffdd9a78350 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f353a01a658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:12042 tgid:12042 ppid:3004   flags:0x00000002
+Call Trace:
+ <TASK>
+ prep_new_page mm/page_alloc.c:1545 [inline]
+ get_page_from_freelist+0xd5c/0x2630 mm/page_alloc.c:3457
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12049 tgid:12049 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12060 tgid:12060 ppid:2989   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f1c22cefa90
+RSP: 002b:00007fff7a4ca7f8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f1c22de0860 RCX: 00007f1c22cefa90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f1c22de0860 R08: 0000000000000001 R09: a9976d4a22f06c8e
+R10: 00007fff7a4ca6b0 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f1c22de4658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25136 pid:12065 tgid:12065 ppid:3551   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f40d09ada90
+RSP: 002b:00007ffe44700508 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007f40d0a9e860 RCX: 00007f40d09ada90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007f40d0a9e860 R08: 0000000000000001 R09: f1aa9b16a9cef104
+R10: 00007ffe447003c0 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007f40d0aa2658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12070 tgid:12070 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:24720 pid:12076 tgid:12076 ppid:1106   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ __pfx_lock_release+0x10/0x10 kernel/locking/lockdep.c:5346
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12079 tgid:12079 ppid:1106   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12084 tgid:12084 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ prepare_lock_switch kernel/sched/core.c:5066 [inline]
+ context_switch kernel/sched/core.c:5325 [inline]
+ __schedule+0x102c/0x34b0 kernel/sched/core.c:6690
+ __pfx_lock_release+0x10/0x10 kernel/locking/lockdep.c:5346
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12087 tgid:12087 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ do_task_dead+0xd6/0x110 kernel/sched/core.c:6706
+ do_exit+0x1de7/0x2ce0 kernel/exit.c:990
+ do_group_exit+0xd3/0x2a0 kernel/exit.c:1088
+ __do_sys_exit_group kernel/exit.c:1099 [inline]
+ __se_sys_exit_group kernel/exit.c:1097 [inline]
+ __x64_sys_exit_group+0x3e/0x50 kernel/exit.c:1097
+ x64_sys_call+0x14a9/0x16a0 arch/x86/include/generated/asm/syscalls_64.h:232
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fedf6344a90
+RSP: 002b:00007ffdd18ea6b8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+RAX: ffffffffffffffda RBX: 00007fedf6435860 RCX: 00007fedf6344a90
+RDX: 00000000000000e7 RSI: 000000000000003c RDI: 0000000000000001
+RBP: 00007fedf6435860 R08: 0000000000000001 R09: e0e65f21ab61f0e5
+R10: 00007ffdd18ea570 R11: 0000000000000246 R12: 0000000000000000
+R13: 0000000000000001 R14: 00007fedf6439658 R15: 0000000000000001
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12092 tgid:12092 ppid:3551   flags:0x00000000
+Call Trace:
+ <TASK>
+ context_switch kernel/sched/core.c:5328 [inline]
+ __schedule+0x105f/0x34b0 kernel/sched/core.c:6690
+ </TASK>
+task:modprobe        state:R  running task     stack:25424 pid:12098 tgid:12098 ppid:2989   flags:0x00000002
+Call Trace:
+ <TASK>
+
+
 ---
-Hi,
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-This was an RFC that I send earlier [1]. I used Dmitry's proposal
-for the macros, so they are now UCSI_DECLARE_BITFIELD_Vx_x.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-[1] https://lore.kernel.org/linux-usb/20240903145342.3449969-3-heikki.krogerus@linux.intel.com/
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-thanks,
----
- drivers/usb/typec/ucsi/psy.c       |  28 ++--
- drivers/usb/typec/ucsi/trace.h     |  28 ++--
- drivers/usb/typec/ucsi/ucsi.c      | 114 +++++++------
- drivers/usb/typec/ucsi/ucsi.h      | 252 +++++++++++++++++------------
- drivers/usb/typec/ucsi/ucsi_acpi.c |   7 +-
- 5 files changed, 235 insertions(+), 194 deletions(-)
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-diff --git a/drivers/usb/typec/ucsi/psy.c b/drivers/usb/typec/ucsi/psy.c
-index 1c631c7855a9..62ac69730405 100644
---- a/drivers/usb/typec/ucsi/psy.c
-+++ b/drivers/usb/typec/ucsi/psy.c
-@@ -55,8 +55,8 @@ static int ucsi_psy_get_online(struct ucsi_connector *con,
- 			       union power_supply_propval *val)
- {
- 	val->intval = UCSI_PSY_OFFLINE;
--	if (con->status.flags & UCSI_CONSTAT_CONNECTED &&
--	    (con->status.flags & UCSI_CONSTAT_PWR_DIR) == TYPEC_SINK)
-+	if (UCSI_CONSTAT(con, CONNECTED) &&
-+	    (UCSI_CONSTAT(con, PWR_DIR) == TYPEC_SINK))
- 		val->intval = UCSI_PSY_FIXED_ONLINE;
- 	return 0;
- }
-@@ -66,7 +66,7 @@ static int ucsi_psy_get_voltage_min(struct ucsi_connector *con,
- {
- 	u32 pdo;
- 
--	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
-+	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
- 	case UCSI_CONSTAT_PWR_OPMODE_PD:
- 		pdo = con->src_pdos[0];
- 		val->intval = pdo_fixed_voltage(pdo) * 1000;
-@@ -89,7 +89,7 @@ static int ucsi_psy_get_voltage_max(struct ucsi_connector *con,
- {
- 	u32 pdo;
- 
--	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
-+	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
- 	case UCSI_CONSTAT_PWR_OPMODE_PD:
- 		if (con->num_pdos > 0) {
- 			pdo = con->src_pdos[con->num_pdos - 1];
-@@ -117,7 +117,7 @@ static int ucsi_psy_get_voltage_now(struct ucsi_connector *con,
- 	int index;
- 	u32 pdo;
- 
--	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
-+	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
- 	case UCSI_CONSTAT_PWR_OPMODE_PD:
- 		index = rdo_index(con->rdo);
- 		if (index > 0) {
-@@ -145,7 +145,7 @@ static int ucsi_psy_get_current_max(struct ucsi_connector *con,
- {
- 	u32 pdo;
- 
--	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
-+	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
- 	case UCSI_CONSTAT_PWR_OPMODE_PD:
- 		if (con->num_pdos > 0) {
- 			pdo = con->src_pdos[con->num_pdos - 1];
-@@ -173,9 +173,7 @@ static int ucsi_psy_get_current_max(struct ucsi_connector *con,
- static int ucsi_psy_get_current_now(struct ucsi_connector *con,
- 				    union power_supply_propval *val)
- {
--	u16 flags = con->status.flags;
--
--	if (UCSI_CONSTAT_PWR_OPMODE(flags) == UCSI_CONSTAT_PWR_OPMODE_PD)
-+	if (UCSI_CONSTAT(con, PWR_OPMODE) == UCSI_CONSTAT_PWR_OPMODE_PD)
- 		val->intval = rdo_op_current(con->rdo) * 1000;
- 	else
- 		val->intval = 0;
-@@ -185,11 +183,9 @@ static int ucsi_psy_get_current_now(struct ucsi_connector *con,
- static int ucsi_psy_get_usb_type(struct ucsi_connector *con,
- 				 union power_supply_propval *val)
- {
--	u16 flags = con->status.flags;
--
- 	val->intval = POWER_SUPPLY_USB_TYPE_C;
--	if (flags & UCSI_CONSTAT_CONNECTED &&
--	    UCSI_CONSTAT_PWR_OPMODE(flags) == UCSI_CONSTAT_PWR_OPMODE_PD)
-+	if (UCSI_CONSTAT(con, CONNECTED) &&
-+	    UCSI_CONSTAT(con, PWR_OPMODE) == UCSI_CONSTAT_PWR_OPMODE_PD)
- 		val->intval = POWER_SUPPLY_USB_TYPE_PD;
- 
- 	return 0;
-@@ -197,18 +193,18 @@ static int ucsi_psy_get_usb_type(struct ucsi_connector *con,
- 
- static int ucsi_psy_get_charge_type(struct ucsi_connector *con, union power_supply_propval *val)
- {
--	if (!(con->status.flags & UCSI_CONSTAT_CONNECTED)) {
-+	if (!(UCSI_CONSTAT(con, CONNECTED))) {
- 		val->intval = POWER_SUPPLY_CHARGE_TYPE_NONE;
- 		return 0;
- 	}
- 
- 	/* The Battery Charging Cabability Status field is only valid in sink role. */
--	if ((con->status.flags & UCSI_CONSTAT_PWR_DIR) != TYPEC_SINK) {
-+	if (UCSI_CONSTAT(con, PWR_DIR) != TYPEC_SINK) {
- 		val->intval = POWER_SUPPLY_CHARGE_TYPE_UNKNOWN;
- 		return 0;
- 	}
- 
--	switch (UCSI_CONSTAT_BC_STATUS(con->status.pwr_status)) {
-+	switch (UCSI_CONSTAT(con, BC_STATUS)) {
- 	case UCSI_CONSTAT_BC_NOMINAL_CHARGING:
- 		val->intval = POWER_SUPPLY_CHARGE_TYPE_STANDARD;
- 		break;
-diff --git a/drivers/usb/typec/ucsi/trace.h b/drivers/usb/typec/ucsi/trace.h
-index a0d3a934d3d9..41701dee7056 100644
---- a/drivers/usb/typec/ucsi/trace.h
-+++ b/drivers/usb/typec/ucsi/trace.h
-@@ -40,8 +40,8 @@ DEFINE_EVENT(ucsi_log_command, ucsi_reset_ppm,
- );
- 
- DECLARE_EVENT_CLASS(ucsi_log_connector_status,
--	TP_PROTO(int port, struct ucsi_connector_status *status),
--	TP_ARGS(port, status),
-+	TP_PROTO(int port, struct ucsi_connector *con),
-+	TP_ARGS(port, con),
- 	TP_STRUCT__entry(
- 		__field(int, port)
- 		__field(u16, change)
-@@ -55,14 +55,14 @@ DECLARE_EVENT_CLASS(ucsi_log_connector_status,
- 	),
- 	TP_fast_assign(
- 		__entry->port = port - 1;
--		__entry->change = status->change;
--		__entry->opmode = UCSI_CONSTAT_PWR_OPMODE(status->flags);
--		__entry->connected = !!(status->flags & UCSI_CONSTAT_CONNECTED);
--		__entry->pwr_dir = !!(status->flags & UCSI_CONSTAT_PWR_DIR);
--		__entry->partner_flags = UCSI_CONSTAT_PARTNER_FLAGS(status->flags);
--		__entry->partner_type = UCSI_CONSTAT_PARTNER_TYPE(status->flags);
--		__entry->request_data_obj = status->request_data_obj;
--		__entry->bc_status = UCSI_CONSTAT_BC_STATUS(status->pwr_status);
-+		__entry->change = UCSI_CONSTAT(con, CHANGE);
-+		__entry->opmode = UCSI_CONSTAT(con, PWR_OPMODE);
-+		__entry->connected = UCSI_CONSTAT(con, CONNECTED);
-+		__entry->pwr_dir = UCSI_CONSTAT(con, PWR_DIR);
-+		__entry->partner_flags = UCSI_CONSTAT(con, PARTNER_FLAGS);
-+		__entry->partner_type = UCSI_CONSTAT(con, PARTNER_TYPE);
-+		__entry->request_data_obj = UCSI_CONSTAT(con, RDO);
-+		__entry->bc_status = UCSI_CONSTAT(con, BC_STATUS);
- 	),
- 	TP_printk("port%d status: change=%04x, opmode=%x, connected=%d, "
- 		"sourcing=%d, partner_flags=%x, partner_type=%x, "
-@@ -73,13 +73,13 @@ DECLARE_EVENT_CLASS(ucsi_log_connector_status,
- );
- 
- DEFINE_EVENT(ucsi_log_connector_status, ucsi_connector_change,
--	TP_PROTO(int port, struct ucsi_connector_status *status),
--	TP_ARGS(port, status)
-+	TP_PROTO(int port, struct ucsi_connector *con),
-+	TP_ARGS(port, con)
- );
- 
- DEFINE_EVENT(ucsi_log_connector_status, ucsi_register_port,
--	TP_PROTO(int port, struct ucsi_connector_status *status),
--	TP_ARGS(port, status)
-+	TP_PROTO(int port, struct ucsi_connector *con),
-+	TP_ARGS(port, con)
- );
- 
- DECLARE_EVENT_CLASS(ucsi_log_register_altmode,
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index e430a0ca4a2b..2249fa8a01df 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -651,10 +651,11 @@ static void ucsi_unregister_altmodes(struct ucsi_connector *con, u8 recipient)
- static int ucsi_get_connector_status(struct ucsi_connector *con, bool conn_ack)
- {
- 	u64 command = UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->num);
--	struct ucsi *ucsi = con->ucsi;
-+	size_t size = min(UCSI_GET_CONNECTOR_STATUS_SIZE, UCSI_MAX_DATA_LENGTH(con->ucsi));
- 	int ret;
- 
--	ret = ucsi_send_command_common(ucsi, command, &con->status, sizeof(con->status), conn_ack);
-+	ret = ucsi_send_command_common(con->ucsi, command, &con->status, size, conn_ack);
-+
- 	return ret < 0 ? ret : 0;
- }
- 
-@@ -668,8 +669,7 @@ static int ucsi_read_pdos(struct ucsi_connector *con,
- 
- 	if (is_partner &&
- 	    ucsi->quirks & UCSI_NO_PARTNER_PDOS &&
--	    ((con->status.flags & UCSI_CONSTAT_PWR_DIR) ||
--	     !is_source(role)))
-+	    (UCSI_CONSTAT(con, PWR_DIR) || !is_source(role)))
- 		return 0;
- 
- 	command = UCSI_COMMAND(UCSI_GET_PDOS) | UCSI_CONNECTOR_NUMBER(con->num);
-@@ -997,16 +997,16 @@ static int ucsi_check_connector_capability(struct ucsi_connector *con)
- 	}
- 
- 	typec_partner_set_pd_revision(con->partner,
--		UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(con->cap.flags));
-+		UCSI_SPEC_REVISION_TO_BCD(UCSI_CONCAP(con, PARTNER_PD_REVISION)));
- 
- 	return ret;
- }
- 
- static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
- {
--	switch (UCSI_CONSTAT_PWR_OPMODE(con->status.flags)) {
-+	switch (UCSI_CONSTAT(con, PWR_OPMODE)) {
- 	case UCSI_CONSTAT_PWR_OPMODE_PD:
--		con->rdo = con->status.request_data_obj;
-+		con->rdo = UCSI_CONSTAT(con, RDO);
- 		typec_set_pwr_opmode(con->port, TYPEC_PWR_MODE_PD);
- 		ucsi_partner_task(con, ucsi_get_src_pdos, 30, 0);
- 		ucsi_partner_task(con, ucsi_check_altmodes, 30, HZ);
-@@ -1030,7 +1030,7 @@ static void ucsi_pwr_opmode_change(struct ucsi_connector *con)
- 
- static int ucsi_register_partner(struct ucsi_connector *con)
- {
--	u8 pwr_opmode = UCSI_CONSTAT_PWR_OPMODE(con->status.flags);
-+	u8 pwr_opmode = UCSI_CONSTAT(con, PWR_OPMODE);
- 	struct typec_partner_desc desc;
- 	struct typec_partner *partner;
- 
-@@ -1039,7 +1039,7 @@ static int ucsi_register_partner(struct ucsi_connector *con)
- 
- 	memset(&desc, 0, sizeof(desc));
- 
--	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
-+	switch (UCSI_CONSTAT(con, PARTNER_TYPE)) {
- 	case UCSI_CONSTAT_PARTNER_TYPE_DEBUG:
- 		desc.accessory = TYPEC_ACCESSORY_DEBUG;
- 		break;
-@@ -1057,6 +1057,9 @@ static int ucsi_register_partner(struct ucsi_connector *con)
- 		desc.identity = &con->partner_identity;
- 	desc.usb_pd = pwr_opmode == UCSI_CONSTAT_PWR_OPMODE_PD;
- 
-+	if (con->ucsi->version >= UCSI_VERSION_2_1)
-+		desc.pd_revision = UCSI_SPEC_REVISION_TO_BCD(UCSI_CONCAP(con, PARTNER_PD_REVISION));
-+
- 	partner = typec_register_partner(con->port, &desc);
- 	if (IS_ERR(partner)) {
- 		dev_err(con->ucsi->dev,
-@@ -1067,13 +1070,11 @@ static int ucsi_register_partner(struct ucsi_connector *con)
- 
- 	con->partner = partner;
- 
--	if ((con->ucsi->version >= UCSI_VERSION_3_0) &&
--	    (UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) &
--	     UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN4))
-+	if (con->ucsi->version >= UCSI_VERSION_3_0 &&
-+	    UCSI_CONSTAT(con, PARTNER_FLAG_USB4_GEN4))
- 		typec_partner_set_usb_mode(partner, USB_MODE_USB4);
--	else if ((con->ucsi->version >= UCSI_VERSION_2_0) &&
--		 (UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) &
--		  UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN3))
-+	else if (con->ucsi->version >= UCSI_VERSION_2_0 &&
-+		 UCSI_CONSTAT(con, PARTNER_FLAG_USB4_GEN3))
- 		typec_partner_set_usb_mode(partner, USB_MODE_USB4);
- 
- 	return 0;
-@@ -1100,7 +1101,7 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 	enum usb_role u_role = USB_ROLE_NONE;
- 	int ret;
- 
--	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
-+	switch (UCSI_CONSTAT(con, PARTNER_TYPE)) {
- 	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
- 	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
- 		u_role = USB_ROLE_HOST;
-@@ -1116,8 +1117,8 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 		break;
- 	}
- 
--	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
--		switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
-+	if (UCSI_CONSTAT(con, CONNECTED)) {
-+		switch (UCSI_CONSTAT(con, PARTNER_TYPE)) {
- 		case UCSI_CONSTAT_PARTNER_TYPE_DEBUG:
- 			typec_set_mode(con->port, TYPEC_MODE_DEBUG);
- 			break;
-@@ -1125,14 +1126,13 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 			typec_set_mode(con->port, TYPEC_MODE_AUDIO);
- 			break;
- 		default:
--			if (UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) ==
--					UCSI_CONSTAT_PARTNER_FLAG_USB)
-+			if (UCSI_CONSTAT(con, PARTNER_FLAG_USB))
- 				typec_set_mode(con->port, TYPEC_STATE_USB);
- 		}
- 	}
- 
- 	/* Only notify USB controller if partner supports USB data */
--	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
-+	if (!(UCSI_CONSTAT(con, PARTNER_FLAG_USB)))
- 		u_role = USB_ROLE_NONE;
- 
- 	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
-@@ -1143,7 +1143,7 @@ static void ucsi_partner_change(struct ucsi_connector *con)
- 
- static int ucsi_check_connection(struct ucsi_connector *con)
- {
--	u8 prev_flags = con->status.flags;
-+	u8 prev_state = UCSI_CONSTAT(con, CONNECTED);
- 	int ret;
- 
- 	ret = ucsi_get_connector_status(con, false);
-@@ -1152,10 +1152,9 @@ static int ucsi_check_connection(struct ucsi_connector *con)
- 		return ret;
- 	}
- 
--	if (con->status.flags == prev_flags)
--		return 0;
--
--	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
-+	if (UCSI_CONSTAT(con, CONNECTED)) {
-+		if (prev_state)
-+			return 0;
- 		ucsi_register_partner(con);
- 		ucsi_pwr_opmode_change(con);
- 		ucsi_partner_change(con);
-@@ -1211,6 +1210,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 						  work);
- 	struct ucsi *ucsi = con->ucsi;
- 	enum typec_role role;
-+	u16 change;
- 	int ret;
- 
- 	mutex_lock(&con->lock);
-@@ -1227,14 +1227,15 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 		goto out_unlock;
- 	}
- 
--	trace_ucsi_connector_change(con->num, &con->status);
-+	trace_ucsi_connector_change(con->num, con);
- 
- 	if (ucsi->ops->connector_status)
- 		ucsi->ops->connector_status(con);
- 
--	role = !!(con->status.flags & UCSI_CONSTAT_PWR_DIR);
-+	change = UCSI_CONSTAT(con, CHANGE);
-+	role = UCSI_CONSTAT(con, PWR_DIR);
- 
--	if (con->status.change & UCSI_CONSTAT_POWER_DIR_CHANGE) {
-+	if (change & UCSI_CONSTAT_POWER_DIR_CHANGE) {
- 		typec_set_pwr_role(con->port, role);
- 
- 		/* Complete pending power role swap */
-@@ -1242,12 +1243,12 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 			complete(&con->complete);
- 	}
- 
--	if (con->status.change & UCSI_CONSTAT_CONNECT_CHANGE) {
-+	if (change & UCSI_CONSTAT_CONNECT_CHANGE) {
- 		typec_set_pwr_role(con->port, role);
- 		ucsi_port_psy_changed(con);
- 		ucsi_partner_change(con);
- 
--		if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
-+		if (UCSI_CONSTAT(con, CONNECTED)) {
- 			ucsi_register_partner(con);
- 			ucsi_partner_task(con, ucsi_check_connection, 1, HZ);
- 			if (con->ucsi->cap.features & UCSI_CAP_GET_PD_MESSAGE)
-@@ -1255,8 +1256,7 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 			if (con->ucsi->cap.features & UCSI_CAP_CABLE_DETAILS)
- 				ucsi_partner_task(con, ucsi_check_cable, 1, HZ);
- 
--			if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
--			    UCSI_CONSTAT_PWR_OPMODE_PD) {
-+			if (UCSI_CONSTAT(con, PWR_OPMODE) == UCSI_CONSTAT_PWR_OPMODE_PD) {
- 				ucsi_partner_task(con, ucsi_register_partner_pdos, 1, HZ);
- 				ucsi_partner_task(con, ucsi_check_connector_capability, 1, HZ);
- 			}
-@@ -1265,11 +1265,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 		}
- 	}
- 
--	if (con->status.change & UCSI_CONSTAT_POWER_OPMODE_CHANGE ||
--	    con->status.change & UCSI_CONSTAT_POWER_LEVEL_CHANGE)
-+	if (change & (UCSI_CONSTAT_POWER_OPMODE_CHANGE | UCSI_CONSTAT_POWER_LEVEL_CHANGE))
- 		ucsi_pwr_opmode_change(con);
- 
--	if (con->partner && con->status.change & UCSI_CONSTAT_PARTNER_CHANGE) {
-+	if (con->partner && (change & UCSI_CONSTAT_PARTNER_CHANGE)) {
- 		ucsi_partner_change(con);
- 
- 		/* Complete pending data role swap */
-@@ -1277,10 +1276,10 @@ static void ucsi_handle_connector_change(struct work_struct *work)
- 			complete(&con->complete);
- 	}
- 
--	if (con->status.change & UCSI_CONSTAT_CAM_CHANGE)
-+	if (change & UCSI_CONSTAT_CAM_CHANGE)
- 		ucsi_partner_task(con, ucsi_check_altmodes, 1, HZ);
- 
--	if (con->status.change & UCSI_CONSTAT_BC_CHANGE)
-+	if (change & UCSI_CONSTAT_BC_CHANGE)
- 		ucsi_port_psy_changed(con);
- 
- out_unlock:
-@@ -1440,7 +1439,7 @@ static int ucsi_dr_swap(struct typec_port *port, enum typec_data_role role)
- 		goto out_unlock;
- 	}
- 
--	partner_type = UCSI_CONSTAT_PARTNER_TYPE(con->status.flags);
-+	partner_type = UCSI_CONSTAT(con, PARTNER_TYPE);
- 	if ((partner_type == UCSI_CONSTAT_PARTNER_TYPE_DFP &&
- 	     role == TYPEC_DEVICE) ||
- 	    (partner_type == UCSI_CONSTAT_PARTNER_TYPE_UFP &&
-@@ -1484,7 +1483,7 @@ static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
- 		goto out_unlock;
- 	}
- 
--	cur_role = !!(con->status.flags & UCSI_CONSTAT_PWR_DIR);
-+	cur_role = UCSI_CONSTAT(con, PWR_DIR);
- 
- 	if (cur_role == role)
- 		goto out_unlock;
-@@ -1507,8 +1506,7 @@ static int ucsi_pr_swap(struct typec_port *port, enum typec_role role)
- 	mutex_lock(&con->lock);
- 
- 	/* Something has gone wrong while swapping the role */
--	if (UCSI_CONSTAT_PWR_OPMODE(con->status.flags) !=
--	    UCSI_CONSTAT_PWR_OPMODE_PD) {
-+	if (UCSI_CONSTAT(con, PWR_OPMODE) != UCSI_CONSTAT_PWR_OPMODE_PD) {
- 		ucsi_reset_connector(con, true);
- 		ret = -EPROTO;
- 	}
-@@ -1576,19 +1574,18 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 	if (ret < 0)
- 		goto out_unlock;
- 
--	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DRP)
-+	if (UCSI_CONCAP(con, OPMODE_DRP))
- 		cap->data = TYPEC_PORT_DRD;
--	else if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DFP)
-+	else if (UCSI_CONCAP(con, OPMODE_DFP))
- 		cap->data = TYPEC_PORT_DFP;
--	else if (con->cap.op_mode & UCSI_CONCAP_OPMODE_UFP)
-+	else if (UCSI_CONCAP(con, OPMODE_UFP))
- 		cap->data = TYPEC_PORT_UFP;
- 
--	if ((con->cap.flags & UCSI_CONCAP_FLAG_PROVIDER) &&
--	    (con->cap.flags & UCSI_CONCAP_FLAG_CONSUMER))
-+	if (UCSI_CONCAP(con, PROVIDER) && UCSI_CONCAP(con, CONSUMER))
- 		cap->type = TYPEC_PORT_DRP;
--	else if (con->cap.flags & UCSI_CONCAP_FLAG_PROVIDER)
-+	else if (UCSI_CONCAP(con, PROVIDER))
- 		cap->type = TYPEC_PORT_SRC;
--	else if (con->cap.flags & UCSI_CONCAP_FLAG_CONSUMER)
-+	else if (UCSI_CONCAP(con, CONSUMER))
- 		cap->type = TYPEC_PORT_SNK;
- 
- 	cap->revision = ucsi->cap.typec_version;
-@@ -1596,9 +1593,9 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 	cap->svdm_version = SVDM_VER_2_0;
- 	cap->prefer_role = TYPEC_NO_PREFERRED_ROLE;
- 
--	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_AUDIO_ACCESSORY)
-+	if (UCSI_CONCAP(con, OPMODE_AUDIO_ACCESSORY))
- 		*accessory++ = TYPEC_ACCESSORY_AUDIO;
--	if (con->cap.op_mode & UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY)
-+	if (UCSI_CONCAP(con, OPMODE_DEBUG_ACCESSORY))
- 		*accessory = TYPEC_ACCESSORY_DEBUG;
- 
- 	if (UCSI_CONCAP_USB2_SUPPORT(con))
-@@ -1646,7 +1643,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 	if (ucsi->ops->connector_status)
- 		ucsi->ops->connector_status(con);
- 
--	switch (UCSI_CONSTAT_PARTNER_TYPE(con->status.flags)) {
-+	switch (UCSI_CONSTAT(con, PARTNER_TYPE)) {
- 	case UCSI_CONSTAT_PARTNER_TYPE_UFP:
- 	case UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP:
- 		u_role = USB_ROLE_HOST;
-@@ -1663,9 +1660,8 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 	}
- 
- 	/* Check if there is already something connected */
--	if (con->status.flags & UCSI_CONSTAT_CONNECTED) {
--		typec_set_pwr_role(con->port,
--				  !!(con->status.flags & UCSI_CONSTAT_PWR_DIR));
-+	if (UCSI_CONSTAT(con, CONNECTED)) {
-+		typec_set_pwr_role(con->port, UCSI_CONSTAT(con, PWR_DIR));
- 		ucsi_register_partner(con);
- 		ucsi_pwr_opmode_change(con);
- 		ucsi_port_psy_changed(con);
-@@ -1676,7 +1672,7 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 	}
- 
- 	/* Only notify USB controller if partner supports USB data */
--	if (!(UCSI_CONSTAT_PARTNER_FLAGS(con->status.flags) & UCSI_CONSTAT_PARTNER_FLAG_USB))
-+	if (!(UCSI_CONSTAT(con, PARTNER_FLAG_USB)))
- 		u_role = USB_ROLE_NONE;
- 
- 	ret = usb_role_switch_set_role(con->usb_role_sw, u_role);
-@@ -1686,16 +1682,14 @@ static int ucsi_register_port(struct ucsi *ucsi, struct ucsi_connector *con)
- 		ret = 0;
- 	}
- 
--	if (con->partner &&
--	    UCSI_CONSTAT_PWR_OPMODE(con->status.flags) ==
--	    UCSI_CONSTAT_PWR_OPMODE_PD) {
-+	if (con->partner && UCSI_CONSTAT(con, PWR_OPMODE) == UCSI_CONSTAT_PWR_OPMODE_PD) {
- 		ucsi_register_device_pdos(con);
- 		ucsi_get_src_pdos(con);
- 		ucsi_check_altmodes(con);
- 		ucsi_check_connector_capability(con);
- 	}
- 
--	trace_ucsi_register_port(con->num, &con->status);
-+	trace_ucsi_register_port(con->num, con);
- 
- out:
- 	fwnode_handle_put(cap->fwnode);
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index b82dc4c16a0d..831b79a6a6e4 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -4,6 +4,7 @@
- #define __DRIVER_USB_TYPEC_UCSI_H
- 
- #include <linux/bitops.h>
-+#include <linux/bitmap.h>
- #include <linux/completion.h>
- #include <linux/device.h>
- #include <linux/power_supply.h>
-@@ -95,27 +96,31 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- /* -------------------------------------------------------------------------- */
- 
- /* Commands */
--#define UCSI_PPM_RESET			0x01
--#define UCSI_CANCEL			0x02
--#define UCSI_CONNECTOR_RESET		0x03
--#define UCSI_ACK_CC_CI			0x04
--#define UCSI_SET_NOTIFICATION_ENABLE	0x05
--#define UCSI_GET_CAPABILITY		0x06
--#define UCSI_GET_CONNECTOR_CAPABILITY	0x07
--#define UCSI_SET_UOM			0x08
--#define UCSI_SET_UOR			0x09
--#define UCSI_SET_PDM			0x0a
--#define UCSI_SET_PDR			0x0b
--#define UCSI_GET_ALTERNATE_MODES	0x0c
--#define UCSI_GET_CAM_SUPPORTED		0x0d
--#define UCSI_GET_CURRENT_CAM		0x0e
--#define UCSI_SET_NEW_CAM		0x0f
--#define UCSI_GET_PDOS			0x10
--#define UCSI_GET_CABLE_PROPERTY		0x11
--#define UCSI_GET_CONNECTOR_STATUS	0x12
--#define UCSI_GET_ERROR_STATUS		0x13
--#define UCSI_GET_PD_MESSAGE		0x15
--#define UCSI_SET_SINK_PATH		0x1c
-+#define UCSI_PPM_RESET				0x01
-+#define UCSI_CANCEL				0x02
-+#define UCSI_CONNECTOR_RESET			0x03
-+#define UCSI_ACK_CC_CI				0x04
-+#define UCSI_SET_NOTIFICATION_ENABLE		0x05
-+#define UCSI_GET_CAPABILITY			0x06
-+#define UCSI_GET_CAPABILITY_SIZE		128
-+#define UCSI_GET_CONNECTOR_CAPABILITY		0x07
-+#define UCSI_GET_CONNECTOR_CAPABILITY_SIZE	32
-+#define UCSI_SET_UOM				0x08
-+#define UCSI_SET_UOR				0x09
-+#define UCSI_SET_PDM				0x0a
-+#define UCSI_SET_PDR				0x0b
-+#define UCSI_GET_ALTERNATE_MODES		0x0c
-+#define UCSI_GET_CAM_SUPPORTED			0x0d
-+#define UCSI_GET_CURRENT_CAM			0x0e
-+#define UCSI_SET_NEW_CAM			0x0f
-+#define UCSI_GET_PDOS				0x10
-+#define UCSI_GET_CABLE_PROPERTY			0x11
-+#define UCSI_GET_CABLE_PROPERTY_SIZE		64
-+#define UCSI_GET_CONNECTOR_STATUS		0x12
-+#define UCSI_GET_CONNECTOR_STATUS_SIZE		152
-+#define UCSI_GET_ERROR_STATUS			0x13
-+#define UCSI_GET_PD_MESSAGE			0x15
-+#define UCSI_SET_SINK_PATH			0x1c
- 
- #define UCSI_CONNECTOR_NUMBER(_num_)		((u64)(_num_) << 16)
- #define UCSI_COMMAND(_cmd_)			((_cmd_) & 0xff)
-@@ -127,7 +132,6 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define UCSI_CONNECTOR_RESET_HARD_VER_1_0	BIT(23) /* Deprecated in v1.1 */
- #define UCSI_CONNECTOR_RESET_DATA_VER_2_0	BIT(23) /* Redefined in v2.0 */
- 
--
- /* ACK_CC_CI bits */
- #define UCSI_ACK_CONNECTOR_CHANGE		BIT(16)
- #define UCSI_ACK_COMMAND_COMPLETE		BIT(17)
-@@ -251,50 +255,6 @@ struct ucsi_capability {
- 	u16 typec_version;
- } __packed;
- 
--/* Data structure filled by PPM in response to GET_CONNECTOR_CAPABILITY cmd. */
--struct ucsi_connector_capability {
--	u8 op_mode;
--#define UCSI_CONCAP_OPMODE_DFP			BIT(0)
--#define UCSI_CONCAP_OPMODE_UFP			BIT(1)
--#define UCSI_CONCAP_OPMODE_DRP			BIT(2)
--#define UCSI_CONCAP_OPMODE_AUDIO_ACCESSORY	BIT(3)
--#define UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY	BIT(4)
--#define UCSI_CONCAP_OPMODE_USB2			BIT(5)
--#define UCSI_CONCAP_OPMODE_USB3			BIT(6)
--#define UCSI_CONCAP_OPMODE_ALT_MODE		BIT(7)
--	u32 flags;
--#define UCSI_CONCAP_FLAG_PROVIDER		BIT(0)
--#define UCSI_CONCAP_FLAG_CONSUMER		BIT(1)
--#define UCSI_CONCAP_FLAG_SWAP_TO_DFP		BIT(2)
--#define UCSI_CONCAP_FLAG_SWAP_TO_UFP		BIT(3)
--#define UCSI_CONCAP_FLAG_SWAP_TO_SRC		BIT(4)
--#define UCSI_CONCAP_FLAG_SWAP_TO_SINK		BIT(5)
--#define UCSI_CONCAP_FLAG_EX_OP_MODE(_f_) \
--	(((_f_) & GENMASK(13, 6)) >> 6)
--#define   UCSI_CONCAP_EX_OP_MODE_USB4_GEN2	BIT(0)
--#define   UCSI_CONCAP_EX_OP_MODE_EPR_SRC	BIT(1)
--#define   UCSI_CONCAP_EX_OP_MODE_EPR_SINK	BIT(2)
--#define   UCSI_CONCAP_EX_OP_MODE_USB4_GEN3	BIT(3)
--#define   UCSI_CONCAP_EX_OP_MODE_USB4_GEN4	BIT(4)
--#define UCSI_CONCAP_FLAG_MISC_CAPS(_f_) \
--	(((_f_) & GENMASK(17, 14)) >> 14)
--#define   UCSI_CONCAP_MISC_CAP_FW_UPDATE	BIT(0)
--#define   UCSI_CONCAP_MISC_CAP_SECURITY		BIT(1)
--#define UCSI_CONCAP_FLAG_REV_CURR_PROT_SUPPORT	BIT(18)
--#define UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV(_f_) \
--	(((_f_) & GENMASK(20, 19)) >> 19)
--#define UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV_AS_BCD(_f_) \
--	UCSI_SPEC_REVISION_TO_BCD(UCSI_CONCAP_FLAG_PARTNER_PD_MAJOR_REV(_f_))
--} __packed;
--
--#define UCSI_CONCAP_USB2_SUPPORT(_con_) ((_con_)->cap.op_mode & UCSI_CONCAP_OPMODE_USB2)
--#define UCSI_CONCAP_USB3_SUPPORT(_con_) ((_con_)->cap.op_mode & UCSI_CONCAP_OPMODE_USB3)
--#define UCSI_CONCAP_USB4_SUPPORT(_con_)					\
--	((_con_)->ucsi->version >= UCSI_VERSION_2_0 &&			\
--	 ((_con_)->cap.flags & (UCSI_CONCAP_EX_OP_MODE_USB4_GEN2 |	\
--				UCSI_CONCAP_EX_OP_MODE_USB4_GEN3 |	\
--				UCSI_CONCAP_EX_OP_MODE_USB4_GEN4)))
--
- struct ucsi_altmode {
- 	u16 svid;
- 	u32 mid;
-@@ -320,51 +280,143 @@ struct ucsi_cable_property {
- 	u8 latency;
- } __packed;
- 
--/* Data structure filled by PPM in response to GET_CONNECTOR_STATUS command. */
--struct ucsi_connector_status {
--	u16 change;
--#define UCSI_CONSTAT_EXT_SUPPLY_CHANGE		BIT(1)
--#define UCSI_CONSTAT_POWER_OPMODE_CHANGE	BIT(2)
--#define UCSI_CONSTAT_PDOS_CHANGE		BIT(5)
--#define UCSI_CONSTAT_POWER_LEVEL_CHANGE		BIT(6)
--#define UCSI_CONSTAT_PD_RESET_COMPLETE		BIT(7)
--#define UCSI_CONSTAT_CAM_CHANGE			BIT(8)
--#define UCSI_CONSTAT_BC_CHANGE			BIT(9)
--#define UCSI_CONSTAT_PARTNER_CHANGE		BIT(11)
--#define UCSI_CONSTAT_POWER_DIR_CHANGE		BIT(12)
--#define UCSI_CONSTAT_CONNECT_CHANGE		BIT(14)
--#define UCSI_CONSTAT_ERROR			BIT(15)
--	u16 flags;
--#define UCSI_CONSTAT_PWR_OPMODE(_f_)		((_f_) & GENMASK(2, 0))
-+/* Get Connector Capability Fields. */
-+#define UCSI_CONCAP_OPMODE			UCSI_DECLARE_BITFIELD(0, 0, 8)
-+#define   UCSI_CONCAP_OPMODE_DFP		UCSI_DECLARE_BITFIELD(0, 0, 1)
-+#define   UCSI_CONCAP_OPMODE_UFP		UCSI_DECLARE_BITFIELD(0, 1, 1)
-+#define   UCSI_CONCAP_OPMODE_DRP		UCSI_DECLARE_BITFIELD(0, 2, 1)
-+#define   UCSI_CONCAP_OPMODE_AUDIO_ACCESSORY	UCSI_DECLARE_BITFIELD(0, 3, 1)
-+#define   UCSI_CONCAP_OPMODE_DEBUG_ACCESSORY	UCSI_DECLARE_BITFIELD(0, 4, 1)
-+#define   UCSI_CONCAP_OPMODE_USB2		UCSI_DECLARE_BITFIELD(0, 5, 1)
-+#define   UCSI_CONCAP_OPMODE_USB3		UCSI_DECLARE_BITFIELD(0, 6, 1)
-+#define   UCSI_CONCAP_OPMODE_ALT_MODE		UCSI_DECLARE_BITFIELD(0, 7, 1)
-+#define UCSI_CONCAP_PROVIDER			UCSI_DECLARE_BITFIELD(0, 8, 1)
-+#define UCSI_CONCAP_CONSUMER			UCSI_DECLARE_BITFIELD(0, 9, 1)
-+#define UCSI_CONCAP_SWAP_TO_DFP			UCSI_DECLARE_BITFIELD_V1_1(10, 1)
-+#define UCSI_CONCAP_SWAP_TO_UFP			UCSI_DECLARE_BITFIELD_V1_1(11, 1)
-+#define UCSI_CONCAP_SWAP_TO_SRC			UCSI_DECLARE_BITFIELD_V1_1(12, 1)
-+#define UCSI_CONCAP_SWAP_TO_SNK			UCSI_DECLARE_BITFIELD_V1_1(13, 1)
-+#define UCSI_CONCAP_EXT_OPMODE			UCSI_DECLARE_BITFIELD_V2_0(14, 8)
-+#define   UCSI_CONCAP_EXT_OPMODE_USB4_GEN2	UCSI_DECLARE_BITFIELD_V2_0(14, 1)
-+#define   UCSI_CONCAP_EXT_OPMODE_EPR_SRC	UCSI_DECLARE_BITFIELD_V2_0(15, 1)
-+#define   UCSI_CONCAP_EXT_OPMODE_EPR_SINK	UCSI_DECLARE_BITFIELD_V2_0(16, 1)
-+#define   UCSI_CONCAP_EXT_OPMODE_USB4_GEN3	UCSI_DECLARE_BITFIELD_V2_0(17, 1)
-+#define   UCSI_CONCAP_EXT_OPMODE_USB4_GEN4	UCSI_DECLARE_BITFIELD_V2_0(18, 1)
-+#define UCSI_CONCAP_MISC			UCSI_DECLARE_BITFIELD_V2_0(22, 4)
-+#define   UCSI_CONCAP_MISC_FW_UPDATE		UCSI_DECLARE_BITFIELD_V2_0(22, 1)
-+#define   UCSI_CONCAP_MISC_SECURITY		UCSI_DECLARE_BITFIELD_V2_0(23, 1)
-+#define UCSI_CONCAP_REV_CURR_PROT_SUPPORT	UCSI_DECLARE_BITFIELD_V2_0(26, 1)
-+#define UCSI_CONCAP_PARTNER_PD_REVISION		UCSI_DECLARE_BITFIELD_V2_1(27, 2)
-+
-+/* Helpers for USB capability checks. */
-+#define UCSI_CONCAP_USB2_SUPPORT(_con_) UCSI_CONCAP((_con_), OPMODE_USB2)
-+#define UCSI_CONCAP_USB3_SUPPORT(_con_) UCSI_CONCAP((_con_), OPMODE_USB3)
-+#define UCSI_CONCAP_USB4_SUPPORT(_con_)					\
-+	((_con_)->ucsi->version >= UCSI_VERSION_2_0 &&			\
-+	 (UCSI_CONCAP((_con_), EXT_OPMODE_USB4_GEN2) |			\
-+	  UCSI_CONCAP((_con_), EXT_OPMODE_USB4_GEN3) |			\
-+	  UCSI_CONCAP((_con_), EXT_OPMODE_USB4_GEN4)))
-+
-+/* Get Connector Status Fields. */
-+#define UCSI_CONSTAT_CHANGE			UCSI_DECLARE_BITFIELD(0, 0, 16)
-+#define UCSI_CONSTAT_PWR_OPMODE			UCSI_DECLARE_BITFIELD(0, 16, 3)
- #define   UCSI_CONSTAT_PWR_OPMODE_NONE		0
- #define   UCSI_CONSTAT_PWR_OPMODE_DEFAULT	1
- #define   UCSI_CONSTAT_PWR_OPMODE_BC		2
- #define   UCSI_CONSTAT_PWR_OPMODE_PD		3
- #define   UCSI_CONSTAT_PWR_OPMODE_TYPEC1_5	4
- #define   UCSI_CONSTAT_PWR_OPMODE_TYPEC3_0	5
--#define UCSI_CONSTAT_CONNECTED			BIT(3)
--#define UCSI_CONSTAT_PWR_DIR			BIT(4)
--#define UCSI_CONSTAT_PARTNER_FLAGS(_f_)		(((_f_) & GENMASK(12, 5)) >> 5)
--#define   UCSI_CONSTAT_PARTNER_FLAG_USB		1
--#define   UCSI_CONSTAT_PARTNER_FLAG_ALT_MODE	2
--#define   UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN3	4
--#define   UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN4	8
--#define UCSI_CONSTAT_PARTNER_TYPE(_f_)		(((_f_) & GENMASK(15, 13)) >> 13)
-+#define UCSI_CONSTAT_CONNECTED			UCSI_DECLARE_BITFIELD(0, 19, 1)
-+#define UCSI_CONSTAT_PWR_DIR			UCSI_DECLARE_BITFIELD(0, 20, 1)
-+#define UCSI_CONSTAT_PARTNER_FLAGS		UCSI_DECLARE_BITFIELD(0, 21, 8)
-+#define   UCSI_CONSTAT_PARTNER_FLAG_USB		UCSI_DECLARE_BITFIELD(0, 21, 1)
-+#define   UCSI_CONSTAT_PARTNER_FLAG_ALT_MODE	UCSI_DECLARE_BITFIELD(0, 22, 1)
-+#define   UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN3	UCSI_DECLARE_BITFIELD(0, 23, 1)
-+#define   UCSI_CONSTAT_PARTNER_FLAG_USB4_GEN4	UCSI_DECLARE_BITFIELD(0, 24, 1)
-+#define UCSI_CONSTAT_PARTNER_TYPE		UCSI_DECLARE_BITFIELD(0, 29, 3)
- #define   UCSI_CONSTAT_PARTNER_TYPE_DFP		1
- #define   UCSI_CONSTAT_PARTNER_TYPE_UFP		2
--#define   UCSI_CONSTAT_PARTNER_TYPE_CABLE	3 /* Powered Cable */
--#define   UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP	4 /* Powered Cable */
-+#define   UCSI_CONSTAT_PARTNER_TYPE_CABLE	3   /* Powered Cable */
-+#define   UCSI_CONSTAT_PARTNER_TYPE_CABLE_AND_UFP 4 /* Powered Cable */
- #define   UCSI_CONSTAT_PARTNER_TYPE_DEBUG	5
- #define   UCSI_CONSTAT_PARTNER_TYPE_AUDIO	6
--	u32 request_data_obj;
--
--	u8 pwr_status;
--#define UCSI_CONSTAT_BC_STATUS(_p_)		((_p_) & GENMASK(1, 0))
-+#define UCSI_CONSTAT_RDO			UCSI_DECLARE_BITFIELD(0, 32, 32)
-+#define UCSI_CONSTAT_BC_STATUS			UCSI_DECLARE_BITFIELD(0, 64, 2)
- #define   UCSI_CONSTAT_BC_NOT_CHARGING		0
- #define   UCSI_CONSTAT_BC_NOMINAL_CHARGING	1
- #define   UCSI_CONSTAT_BC_SLOW_CHARGING		2
- #define   UCSI_CONSTAT_BC_TRICKLE_CHARGING	3
--} __packed;
-+#define UCSI_CONSTAT_PD_VERSION			UCSI_DECLARE_BITFIELD_V1_2(70, 16)
-+
-+/* Connector Status Change Bits.  */
-+#define UCSI_CONSTAT_EXT_SUPPLY_CHANGE		BIT(1)
-+#define UCSI_CONSTAT_POWER_OPMODE_CHANGE	BIT(2)
-+#define UCSI_CONSTAT_PDOS_CHANGE		BIT(5)
-+#define UCSI_CONSTAT_POWER_LEVEL_CHANGE		BIT(6)
-+#define UCSI_CONSTAT_PD_RESET_COMPLETE		BIT(7)
-+#define UCSI_CONSTAT_CAM_CHANGE			BIT(8)
-+#define UCSI_CONSTAT_BC_CHANGE			BIT(9)
-+#define UCSI_CONSTAT_PARTNER_CHANGE		BIT(11)
-+#define UCSI_CONSTAT_POWER_DIR_CHANGE		BIT(12)
-+#define UCSI_CONSTAT_CONNECT_CHANGE		BIT(14)
-+#define UCSI_CONSTAT_ERROR			BIT(15)
-+
-+#define UCSI_DECLARE_BITFIELD_V1_1(_offset_, _size_)			\
-+	  UCSI_DECLARE_BITFIELD(UCSI_VERSION_1_1, (_offset_), (_size_))
-+#define UCSI_DECLARE_BITFIELD_V1_2(_offset_, _size_)			\
-+	  UCSI_DECLARE_BITFIELD(UCSI_VERSION_1_2, (_offset_), (_size_))
-+#define UCSI_DECLARE_BITFIELD_V2_0(_offset_, _size_)			\
-+	  UCSI_DECLARE_BITFIELD(UCSI_VERSION_2_0, (_offset_), (_size_))
-+#define UCSI_DECLARE_BITFIELD_V2_1(_offset_, _size_)			\
-+	  UCSI_DECLARE_BITFIELD(UCSI_VERSION_2_1, (_offset_), (_size_))
-+#define UCSI_DECLARE_BITFIELD_V3_0(_offset_, _size_)			\
-+	  UCSI_DECLARE_BITFIELD(UCSI_VERSION_3_0, (_offset_), (_size_))
-+
-+#define UCSI_DECLARE_BITFIELD(_ver_, _offset_, _size_)			\
-+(struct ucsi_bitfield) {						\
-+	.version = _ver_,						\
-+	.offset = _offset_,						\
-+	.size = _size_,							\
-+}
-+
-+struct ucsi_bitfield {
-+	const u16 version;
-+	const u8 offset;
-+	const u8 size;
-+};
-+
-+/**
-+ * ucsi_bitfield_read - Read a field from UCSI command response
-+ * @_map_: UCSI command response
-+ * @_field_: The field offset in the response data structure
-+ * @_ver_: UCSI version where the field was introduced
-+ *
-+ * Reads the fields in the command responses by first checking that the field is
-+ * valid with the UCSI interface version that is used in the system.
-+ * @_ver_ is the minimum UCSI version for the @_field_. If the UCSI interface is
-+ * older than @_ver_, a warning is generated.
-+ *
-+ * Caveats:
-+ * - Removed fields are not checked - @_ver_ is just the minimum UCSI version.
-+ *
-+ * Returns the value of @_field_, or 0 when the UCSI interface is older than
-+ * @_ver_.
-+ */
-+#define ucsi_bitfield_read(_map_, _field_, _ver_)			\
-+({									\
-+	struct ucsi_bitfield f = (_field_);				\
-+	WARN((_ver_) < f.version,					\
-+	"Access to unsupported field at offset 0x%x (need version %04x)", \
-+	     f.offset, f.version) ? 0 :					\
-+	bitmap_read((_map_), f.offset, f.size);				\
-+})
-+
-+/* Helpers to access cached command responses. */
-+#define UCSI_CONCAP(_con_, _field_)					\
-+	ucsi_bitfield_read((_con_)->status, UCSI_CONCAP_##_field_, (_con_)->ucsi->version)
-+
-+#define UCSI_CONSTAT(_con_, _field_)					\
-+	ucsi_bitfield_read((_con_)->status, UCSI_CONSTAT_##_field_, (_con_)->ucsi->version)
- 
- /* -------------------------------------------------------------------------- */
- 
-@@ -444,8 +496,10 @@ struct ucsi_connector {
- 
- 	struct typec_capability typec_cap;
- 
--	struct ucsi_connector_status status;
--	struct ucsi_connector_capability cap;
-+	/* Cached command responses. */
-+	DECLARE_BITMAP(cap, UCSI_GET_CONNECTOR_CAPABILITY_SIZE);
-+	DECLARE_BITMAP(status, UCSI_GET_CONNECTOR_STATUS_SIZE);
-+
- 	struct power_supply *psy;
- 	struct power_supply_desc psy_desc;
- 	u32 rdo;
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 789f67dd9f81..5c5515551963 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -104,7 +104,6 @@ static int ucsi_gram_read_message_in(struct ucsi *ucsi, void *val, size_t val_le
- 	u16 bogus_change = UCSI_CONSTAT_POWER_LEVEL_CHANGE |
- 			   UCSI_CONSTAT_PDOS_CHANGE;
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
--	struct ucsi_connector_status *status;
- 	int ret;
- 
- 	ret = ucsi_acpi_read_message_in(ucsi, val, val_len);
-@@ -113,11 +112,9 @@ static int ucsi_gram_read_message_in(struct ucsi *ucsi, void *val, size_t val_le
- 
- 	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_CONNECTOR_STATUS &&
- 	    ua->check_bogus_event) {
--		status = (struct ucsi_connector_status *)val;
--
- 		/* Clear the bogus change */
--		if (status->change == bogus_change)
--			status->change = 0;
-+		if (*(u16 *)val == bogus_change)
-+			*(u16 *)val = 0;
- 
- 		ua->check_bogus_event = false;
- 	}
--- 
-2.45.2
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
