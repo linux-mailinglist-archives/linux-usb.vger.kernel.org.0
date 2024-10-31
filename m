@@ -1,132 +1,213 @@
-Return-Path: <linux-usb+bounces-16876-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16877-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A6209B6ED9
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 22:31:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6118C9B7156
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 01:50:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A0FA1C213E4
-	for <lists+linux-usb@lfdr.de>; Wed, 30 Oct 2024 21:31:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84FFA1C2144A
+	for <lists+linux-usb@lfdr.de>; Thu, 31 Oct 2024 00:50:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ABF7217442;
-	Wed, 30 Oct 2024 21:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D13245025;
+	Thu, 31 Oct 2024 00:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="fJKXZMMo"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="g/AnwqZ3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF803218958
-	for <linux-usb@vger.kernel.org>; Wed, 30 Oct 2024 21:29:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD33943AD9;
+	Thu, 31 Oct 2024 00:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730323759; cv=none; b=gi9Kqj4g/3PYWDJH0keFP7LO/eOcvZgN2Nntl/e+X0R8rYKtI0K9xud4rIh4OBkW0JZ+ox18uYoRWrP0PD7sLnaT1hBu0Mb+gOX4r9yRGFxkqWNIoBYzFRMLv9AnJgzHV8/hZocsr3YkVi1DnANRuNWsCwiRg0szyPyF8rk/sts=
+	t=1730335787; cv=none; b=PtgKTeZSzR0TPTUuEKMhFpuiVBiB6ry95/gg7Uz1oye33DOajP1JQjlp/Dsg6s+JsGNNAOMAulyorFj6Ulc4SIQhC8174IXo481CcwEvLMT8kVmoOK6GaZgyK/fPhKnJKoAXpbuAXfZ+BVOFgRFLEaG8UswqbCqthPfRBTFtucE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730323759; c=relaxed/simple;
-	bh=hAp/Wgn9qETJ9JtmrJOl57caWyJEtC39CrlS/6VnGMs=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cxwUBQ5ST4fGqmI1cVGnCdEh4DyMrVERrQG0C+dtctfM2APYV1y4x/2L7VoYdNMIYwUXSZVpH9HtAy8zVGfsJYGxAco9e7sit0NvraMf2vPNIjH2MO5M7KNMIkwEL2tFemeVZ7MVLrE6V/8Jefn7ZYK/iWza3xdOekB4hwNfTI4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=fJKXZMMo; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-20cb89a4e4cso2486915ad.3
-        for <linux-usb@vger.kernel.org>; Wed, 30 Oct 2024 14:29:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1730323756; x=1730928556; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p1LFW748m48R3d4nGBRyW7y9JsiXUpIXaqKR2jh3vhg=;
-        b=fJKXZMMoHhvpokEchR1lVDqSuAxz4eWJGDhOaTZGy006iHjzUHfISO0faYL1jRof1Z
-         HON2I0G0i8OpZf9P688gDiL4P4s5xnu1/YEapLu3NEL9sY0jK5bxhr3sMHNqF1j1YZbG
-         V3Ga4uL76reu89/D9+w5SFlETWmpCeWH8PJA4=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730323756; x=1730928556;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p1LFW748m48R3d4nGBRyW7y9JsiXUpIXaqKR2jh3vhg=;
-        b=Lr2l4X33178LI1Uj0k61nJzbPEQ8a7/9Y8i+N8ZzvY0w4ke4/IPQ6syUd8giiSzheB
-         rNVGNQdok6YdeD/1TSS22j8osuNuqrZ4Uaq7QZEv5+GxLbpf7XpcRllJhM5pxcnoZbpF
-         N/va7hwrpbW8Wrmc/2qbDx9HrZwO0g49TV8w8WR2qIxY7sTan+JrW0cFYPfoRWzu4u0s
-         4EPHNdvEBA+BYp+79cuhuqcgR12G1admMbYSPLUM94gb2EciLxPA8J8xvmvS+xz/UIPz
-         RfswMrVmLRWDjz+58PS2JvFtD9QfVsnpABOEmhHmfnoWqeGbugYHraKW6xGbbC6evlgj
-         a2AA==
-X-Forwarded-Encrypted: i=1; AJvYcCVzbzK3Tdx7dqRbG59HPwFRlpyZRAJWsPf1fbs/zkrRFXg7snO+3sw+QGosiJBvM94EzNgYNiqwiYk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy77wzULfM/4/jCl9bfgN45hWyYtUo0uUhBXC0pAO34XMDS4g6/
-	l6Gl7nt21PZKXFlDTPxL87Xdh4NA8qDXVqBQ+Heo5YMjdYcqVW0uw9aRoWtm2w==
-X-Google-Smtp-Source: AGHT+IH/KrpwE9PQHVPUqWJzTKYOAjHoclvbrW0UAtqgCiIc5SyQ/Ee9JadYFBZqNKDKLFyOZzsbDA==
-X-Received: by 2002:a17:902:d544:b0:20c:7181:51c7 with SMTP id d9443c01a7336-210c6c8ff93mr235487335ad.52.1730323756367;
-        Wed, 30 Oct 2024 14:29:16 -0700 (PDT)
-Received: from localhost (198.103.247.35.bc.googleusercontent.com. [35.247.103.198])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-211057d833fsm335115ad.261.2024.10.30.14.29.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 30 Oct 2024 14:29:16 -0700 (PDT)
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-To: heikki.krogerus@linux.intel.com,
-	tzungbi@kernel.org,
-	linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Cc: dmitry.baryshkov@linaro.org,
-	jthies@google.com,
-	akuchynski@google.com,
-	pmalani@chromium.org,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 7/7] platform/chrome: cros_ec_typec: Disable tbt auto_enter
-Date: Wed, 30 Oct 2024 14:28:38 -0700
-Message-ID: <20241030142833.v2.7.Ic14738918e3d026fa2d85e95fb68f8e07a0828d0@changeid>
-X-Mailer: git-send-email 2.47.0.163.g1226f6d8fa-goog
-In-Reply-To: <20241030212854.998318-1-abhishekpandit@chromium.org>
-References: <20241030212854.998318-1-abhishekpandit@chromium.org>
+	s=arc-20240116; t=1730335787; c=relaxed/simple;
+	bh=AouGVQ2CRkjpEWM70bUJlCu0V+yKP2XQnmW+HAZ45c8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=FiP3h2rh3ORjD+jgKuVqQNsDW+8FcI9Pxm5WU/di2rTGrTHU3OOjug5LarxJ8LaTMJ+8CXz0omag0PJ12CTa/DQCcm2lDbQl8JEA7ClDJ1pG0P1NzJW9QPm/B+t5R5UnTWCwlFVRFcy7yLkAXn5NbpitsND0lGBVO8uy6hBqB0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=g/AnwqZ3; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 49UCH9ug019847;
+	Thu, 31 Oct 2024 00:49:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	7xhMTx79uWJ0oHC0IxM8Ok0hQb/h6nRSursI6CrKMEE=; b=g/AnwqZ3Yif4Pzs9
+	KNW5jnZUznCrIQweqAJPN2eBbylguIg9A+Lb3oIoZ/6PVJ+K6OE8qFGSS9kW39i4
+	jqRrPlz4uQIfbSHSlMIx8YFg+l1p4wMsEfNbfVfakFk7UPY7S4X9vMPJp3WGVB4v
+	LFe3/fhmghYYimkF1MItCwkWuigpuJI+FLXRIgLjNp7PcRPXfD4H/XfNYZ+3kUyW
+	XHMhMBbexVYS9emVN69riDIRc+7EIVogY99NrtMJc3BSMjm8WRQ8ftxFZTKMg0bE
+	0YYLsxaAasl1dM/MhkJZ/KY22YvtnOhIUiZ3MwgrhVJbfTv7a9JnSkI8K5FumQ4R
+	hCFDCQ==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42kmp0ht14-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 31 Oct 2024 00:49:20 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 49V0nKMA010497
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 31 Oct 2024 00:49:20 GMT
+Received: from [10.71.115.184] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 30 Oct
+ 2024 17:49:19 -0700
+Message-ID: <07d5a8b5-e985-45c1-95e0-1def6695ba9b@quicinc.com>
+Date: Wed, 30 Oct 2024 17:49:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v29 04/33] xhci: sideband: add initial api to register a
+ sideband entity
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: "srinivas.kandagatla@linaro.org" <srinivas.kandagatla@linaro.org>,
+        "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
+        "perex@perex.cz"
+	<perex@perex.cz>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "dmitry.torokhov@gmail.com" <dmitry.torokhov@gmail.com>,
+        "corbet@lwn.net"
+	<corbet@lwn.net>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "tiwai@suse.com" <tiwai@suse.com>,
+        "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+        "pierre-louis.bossart@linux.intel.com"
+	<pierre-louis.bossart@linux.intel.com>,
+        "broonie@kernel.org"
+	<broonie@kernel.org>,
+        "bgoswami@quicinc.com" <bgoswami@quicinc.com>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org"
+	<devicetree@vger.kernel.org>,
+        "linux-sound@vger.kernel.org"
+	<linux-sound@vger.kernel.org>,
+        "linux-input@vger.kernel.org"
+	<linux-input@vger.kernel.org>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org"
+	<linux-arm-msm@vger.kernel.org>,
+        "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>,
+        "alsa-devel@alsa-project.org"
+	<alsa-devel@alsa-project.org>,
+        Mathias Nyman <mathias.nyman@linux.intel.com>
+References: <20241015212915.1206789-1-quic_wcheng@quicinc.com>
+ <20241015212915.1206789-5-quic_wcheng@quicinc.com>
+ <20241025232252.wsk4lviqzyzqjzuh@synopsys.com>
+ <52ea0b32-79c7-42e8-8e2c-192d08f41e64@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <52ea0b32-79c7-42e8-8e2c-192d08f41e64@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: OqRiUjmTcddOaQjqdwLe-IzQ-UetsT-M
+X-Proofpoint-ORIG-GUID: OqRiUjmTcddOaQjqdwLe-IzQ-UetsT-M
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 malwarescore=0 impostorscore=0 mlxscore=0 suspectscore=0
+ adultscore=0 clxscore=1015 phishscore=0 spamscore=0 mlxlogscore=999
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2410310005
 
-Altmodes with cros_ec are either automatically entered by the EC or
-entered by the AP if TBT or USB4 are supported on the system. Due to the
-security risk of PCIe tunneling, TBT modes should not be auto entered by
-the kernel at this time and will require user intervention.
+On 10/29/2024 11:58 AM, Wesley Cheng wrote:
+> Hi Thinh,
+>
+> On 10/25/2024 4:22 PM, Thinh Nguyen wrote:
+>> Hi,
+>>
+>> On Tue, Oct 15, 2024, Wesley Cheng wrote:
+>>> From: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>>
+>>> Introduce XHCI sideband, which manages the USB endpoints being requested by
+>>> a client driver.  This is used for when client drivers are attempting to
+>>> offload USB endpoints to another entity for handling USB transfers.  XHCI
+>>> sideband will allow for drivers to fetch the required information about the
+>>> transfer ring, so the user can submit transfers independently.  Expose the
+>>> required APIs for drivers to register and request for a USB endpoint and to
+>>> manage XHCI secondary interrupters.
+>>>
+>>> Multiple ring segment page linking, proper endpoint clean up, and allowing
+>>> module compilation added by Wesley Cheng to complete original concept code
+>>> by Mathias Nyman.
+>>>
+>>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>>> Co-developed-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>> ---
+>>>  drivers/usb/host/Kconfig          |   9 +
+>>>  drivers/usb/host/Makefile         |   2 +
+>>>  drivers/usb/host/xhci-sideband.c  | 424 ++++++++++++++++++++++++++++++
+>>>  drivers/usb/host/xhci.h           |   4 +
+>>>  include/linux/usb/xhci-sideband.h |  70 +++++
+>>>  5 files changed, 509 insertions(+)
+>>>  create mode 100644 drivers/usb/host/xhci-sideband.c
+>>>  create mode 100644 include/linux/usb/xhci-sideband.h
+>>>
+>>> diff --git a/drivers/usb/host/Kconfig b/drivers/usb/host/Kconfig
+>>> index 4448d0ab06f0..96659efa4be5 100644
+>>> --- a/drivers/usb/host/Kconfig
+>>> +++ b/drivers/usb/host/Kconfig
+>>> @@ -104,6 +104,15 @@ config USB_XHCI_RZV2M
+>>>  	  Say 'Y' to enable the support for the xHCI host controller
+>>>  	  found in Renesas RZ/V2M SoC.
+>>>  
+>>> +config USB_XHCI_SIDEBAND
+>>> +	tristate "xHCI support for sideband"
+>>> +	help
+>>> +	  Say 'Y' to enable the support for the xHCI sideband capability.
+>>> +	  Provide a mechanism for a sideband datapath for payload associated
+>> Please correct me if I'm wrong, but this doesn't look like the actual
+>> xHCI Audio Sideband capability described in the xHCI spec section 7.9
+>> but rather a specific implementation for Qcom right? For the xHCI Audio
+>> Sideband xHCI capability, the driver should detect this capability
+>> through the xHCI get extended capability. If this is not xHCI Audio
+>> Sideband capability, we should properly clarify this in the
+>> documentation and the naming of things to avoid any confusion.
+> Sure, that's a good point.  It does still currently rely on utilizing the system memory for USB IO transfers.  I can add some comments and update some of the documentation to reflect that this is different. 
 
-With this change, a userspace program will need to explicitly activate
-the thunderbolt mode on the partner in order to enter the mode and the
-thunderbolt driver will not automatically enter when a partner is
-connected.
+Hi Mathias,
 
-Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
----
+Would it make sense to rename the APIs and driver to something other than "sideband" so that users don't get confused with the audio sideband that is mentioned above by Thinh?  How about using something like xhci-sec-intr to signify that this driver has APIs that will help support the use of xHCI secondary interrupters?
 
-Changes in v2:
-- Only disable auto-enter for Thunderbolt
-- Update commit message to clearly indicate the need for userspace
-  intervention to enter TBT mode
+Thanks
 
- drivers/platform/chrome/cros_ec_typec.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Wesley Cheng
 
-diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-index 3e043b1c1cc8..aadd2704e445 100644
---- a/drivers/platform/chrome/cros_ec_typec.c
-+++ b/drivers/platform/chrome/cros_ec_typec.c
-@@ -313,7 +313,8 @@ static int cros_typec_register_port_altmodes(struct cros_typec_data *typec,
- 	if (typec->ap_driven_altmode) {
- 		memset(&desc, 0, sizeof(desc));
- 		desc.svid = USB_TYPEC_TBT_SID;
--		desc.mode = TYPEC_ANY_MODE;
-+		desc.mode = USB_TYPEC_TBT_MODE;
-+		desc.no_auto_enter = true;
- 		amode = cros_typec_register_thunderbolt(port, &desc);
- 		if (IS_ERR(amode))
- 			return PTR_ERR(amode);
--- 
-2.47.0.163.g1226f6d8fa-goog
-
+> Thanks
+>
+> Wesley Cheng
+>
+>> I believe your implementation still needs to provide the data to the
+>> host controller through the system memory right? The xHCI Audio Sideband
+>> capability may pass the data to the xHC other than the main memory.
+>>
+>> BR,
+>> Thinh
+>>
+>>> +	  with audio class endpoints. This allows for an audio DSP to use
+>>> +	  xHCI USB endpoints directly, allowing CPU to sleep while playing
+>>> +	  audio.
+>>> +
+>>>  config USB_XHCI_TEGRA
+>>>  	tristate "xHCI support for NVIDIA Tegra SoCs"
+>>>  	depends on PHY_TEGRA_XUSB
 
