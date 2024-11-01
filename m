@@ -1,109 +1,141 @@
-Return-Path: <linux-usb+bounces-16929-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16930-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7351A9B8845
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 02:20:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED8439B8953
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 03:30:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3D8BB21C70
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 01:20:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98EFE1F2227A
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 02:30:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCCCA51C5A;
-	Fri,  1 Nov 2024 01:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC97713775E;
+	Fri,  1 Nov 2024 02:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T30OEJa4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U6eiSZob"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4997220328;
-	Fri,  1 Nov 2024 01:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB783200CB;
+	Fri,  1 Nov 2024 02:30:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730424045; cv=none; b=D7EXjqYP2MYdDVu01c6A/MgaIZaNeLsNk8eL1DZiiQs4QeYdMkqYR5y6Hi42cbKxWpnoajzv1IM1G6VM84LgwIWqevQx4pyoFL/vQv108PPvVJ1+BWbgbqT6Xl22SMQQUmSiNJ862ObYsue4xd6WENaMRvEaJ1jXMzL8Ylkz7M0=
+	t=1730428224; cv=none; b=PzEzP1GonX6iC87f9RrcF7dyZ6ienVGy7OvmX6ExwPXuNHtmBHdQrMXnFOzkwBzuuFV89mXousFPtssFIKoi1Rz/Pc96KLd9t/7BRtq9+bLNCIhJQpDEGeL5s/6heRd5fryumZD852mR+fdmRHaTPpQ29qmFIKnzGD4hIpUP+XQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730424045; c=relaxed/simple;
-	bh=vuUWriRyJgNDUqoRutkuBPsZgLVx2wLFsmuENH79BFQ=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=UJnriN3vgHxIklz/qjl+ZZx+oB6B+4WTZk+ci5HI3aEnGq7Re/10/MJmRAYQb4x8nCbiC0EBOvzimVIVmKjXV/tQFLkze2DmfsQ0qpQXIZF6nT/g8d312qpF7Fsij1QlcSzs4SbiHnCBkoSqbSF5RRRjv2Hp08sGN3nXhftrlNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T30OEJa4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9847CC4CEC3;
-	Fri,  1 Nov 2024 01:20:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730424044;
-	bh=vuUWriRyJgNDUqoRutkuBPsZgLVx2wLFsmuENH79BFQ=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=T30OEJa45d3iql7Qu2R+dYAf41tbQbX0kqADVxG+zRsyE6NRa16qnwSuskCldUVzH
-	 DPGfBLPh6cFKluLGnYRXehPaptwmzDTW0lCSddoRm663c82dE7ox6XWQzntg35s1Wk
-	 +AcnOyiRLn/1yij7pXb8taVkQjj9FONvA2VRKmvLWk0VQI38Noub+TCHhL2nlDYR0J
-	 n52NekukHWAvqFPI2dPe0DKfqIY9vYXMi64gMPuZOVLff8XJ+F3sWGnFpafa9n9SiO
-	 R4xZZ5HXrZx7J8RMEO8qxBVFIMLHoMHpD+zDhITqzETu0vGy009Xve3wpZ+G6lGnlh
-	 JhA85E1xTQWxw==
-Date: Thu, 31 Oct 2024 20:20:43 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1730428224; c=relaxed/simple;
+	bh=qk3pVjM4j9p4R6OsPwAJ8dVXGT6jP0nT0Mfjm0PIrX0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EgYafyXgU0w5pUu0Y4kEM/QezW7iXqUkXFGeJFOG22GbMlRl4ASUv/6Y1ygtIKOBxKq+VsPcZ67y68PscpiiaREqdb6O+ELWEnXkYED0MRIeQDWv/JGjCm2mWQkFexZ8kQuBFLUEu7jNqHwH0XCmgIBsmsLddVLPXtwUamlh+v8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U6eiSZob; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2e2dc61bc41so1103916a91.1;
+        Thu, 31 Oct 2024 19:30:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730428218; x=1731033018; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fnyjs9mZfz0IFsGTjdAXi5ZB7RMeF0PETouQsH0UHcE=;
+        b=U6eiSZob7CR/tNrSxOerPOmjtRK+oJOGsSp0nMEpk9gtTpoc1QMs41d/O8G7oQrNIx
+         QZywONdEFMIMwEt20So06Y69nMemceA3xrBVkVxiTfg9PiKug+KsJ5/qkeGji2K/ji5A
+         j+OgijQrzk3yWHF33i3VpFVjxIq1UVNVirv3xhrbcRU5sQ+WkaZ81j7W8uJQzJdjFOQP
+         bCcdNVZud4wC/BaK6g3LwtEq0dJZiF0XYiXyuDDnRynwhp21Bzb9IwY6hetovTwbXX6m
+         /04BSgJnQFTaSwf643yg8SoAsMdtK/K9m3aA7r/gHFWtD7XLBO20ej6uTKema2b3LNMv
+         YQCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730428218; x=1731033018;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fnyjs9mZfz0IFsGTjdAXi5ZB7RMeF0PETouQsH0UHcE=;
+        b=Q99hOr+mzumvphm/9uYTOuNh9D6erEWMpysdVBLuKdWGbx04h+GuMfdg2KXjYqnrAb
+         qU/VsfJeKipUIQvPiOw4WMHTPUDx4/Anfj09LuV7acaVeSVZcZV0x5hGwW7fMgouzQmc
+         BFFHteUGfdYYWUggueCBMqQwlZ9ZOqNwgKilcRhTav+mDovynFW/HDhhOazx0q2V/V0b
+         ZW6G1rGslGtLQdk6HR8zKeHdZXf4L0fyG/klpYLZbGNX8jSpjfhnlYRQ0cCyHjFvxilR
+         s1J0QolUh54rcjGxpz9b8WRsS3xu5rlDTVSrzagEXMejW87l+FchQw50EVxzf9s/zIK1
+         WJfw==
+X-Forwarded-Encrypted: i=1; AJvYcCWUZ5gco3XyRWh94ALxtf3P+EUSt6wMz8/lA0gEBFY3NjHzXdeajIQXAR6tzLjrQLTDoekAe/02EdLL@vger.kernel.org, AJvYcCX836GeTAVyevmkdvyHwRD8BYsmMWeT8Myw7kcr532E6JbcMDPK9qNBi/RPF5u5soLOHhU6xSON@vger.kernel.org, AJvYcCXGnWpkXUBYuRpovBtM5RBjUhamk7Pw7RZkX7ttRMM7ewuqpefKPftfIrg81sAZL31RWhRBo9ziXHq4WqA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkPrPYcwcskqK9vRrMsHNY750u6AsL3SitojsiXrnzuF2YFGc/
+	wSgbrcp/XvFRGay+RA909MvGsZRLZ2n0VC8HBHtgYB35M3RThaQky5F9XAM6ZwnOwa07Sd6SZ4k
+	zHg0YF50pjODd+ZKgAqKMX2gv5Xg=
+X-Google-Smtp-Source: AGHT+IH6CwuFAuogBn3TuH9yoyjK1IF9VaMDPZudJbQuTXFL3Agi3fb+ynW2hbnGjFwmCycN+KMhplzkHCTn4N7jSCE=
+X-Received: by 2002:a17:90b:224c:b0:2e2:da8d:2098 with SMTP id
+ 98e67ed59e1d1-2e94c294fcemr2942926a91.2.1730428218001; Thu, 31 Oct 2024
+ 19:30:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: linux@roeck-us.net, gregkh@linuxfoundation.org, 
- linux-kernel@vger.kernel.org, kyletso@google.com, 
- heikki.krogerus@linux.intel.com, krzk+dt@kernel.org, 
- dmitry.baryshkov@linaro.org, conor+dt@kernel.org, badhri@google.com, 
- xu.yang_2@nxp.com, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- rdbabiera@google.com
-In-Reply-To: <20241031235957.1261244-3-amitsd@google.com>
-References: <20241031235957.1261244-1-amitsd@google.com>
- <20241031235957.1261244-3-amitsd@google.com>
-Message-Id: <173042404301.889048.6986869139957882077.robh@kernel.org>
-Subject: Re: [PATCH v1 2/3] dt-bindings: usb: maxim,max33359.yaml: add
- usage of sink bc12 time property
+References: <20241028025337.6372-1-ki.chiang65@gmail.com> <20241028025337.6372-2-ki.chiang65@gmail.com>
+ <bceb89ce-7a4b-4447-8bd6-3129a37bfdb3@linux.intel.com>
+In-Reply-To: <bceb89ce-7a4b-4447-8bd6-3129a37bfdb3@linux.intel.com>
+From: Kuangyi Chiang <ki.chiang65@gmail.com>
+Date: Fri, 1 Nov 2024 10:30:09 +0800
+Message-ID: <CAHN5xi2B5CcCKEsdQf1X7HD=8ZBAW66PefmO0ajvGCNdPOc-PA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/5] xhci: Combine two if statements for Etron xHCI host
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: mathias.nyman@intel.com, gregkh@linuxfoundation.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi,
 
-On Thu, 31 Oct 2024 16:59:53 -0700, Amit Sunil Dhamne wrote:
-> Add usage of "sink-bc12-completion-time-ms"  connector property to
-> max33359 controller for delaying PD negotiation till BC1.2 detection
-> completes. This overcomes the occasional delays observed while
-> receiving PD messages where BC1.2 detection runs in parallel.
-> 
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
-> ---
->  Documentation/devicetree/bindings/usb/maxim,max33359.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+I noticed that one of the patches in your queue has a typo:
 
-My bot found errors running 'make dt_binding_check' on your patch:
+Commit 3456904e4bce ("xhci: pci: Use standard pattern for device IDs")
 
-yamllint warnings/errors:
+The Etron xHC device names are EJ168 and EJ188, not J168 and J188.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb: maxtcpc@25: connector: Unevaluated properties are not allowed ('sink-bc12-completion-time-ms' was unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/maxim,max33359.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb: connector: Unevaluated properties are not allowed ('sink-bc12-completion-time-ms' was unexpected)
-	from schema $id: http://devicetree.org/schemas/connector/usb-connector.yaml#
+Thanks,
+Kuangyi Chiang
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241031235957.1261244-3-amitsd@google.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+Mathias Nyman <mathias.nyman@linux.intel.com> =E6=96=BC 2024=E5=B9=B410=E6=
+=9C=8830=E6=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=888:02=E5=AF=AB=E9=81=
+=93=EF=BC=9A
+>
+> On 28.10.2024 4.53, Kuangyi Chiang wrote:
+> > Combine two if statements, because these hosts have the same
+> > quirk flags applied.
+> >
+> > Fixes: 91f7a1524a92 ("xhci: Apply broken streams quirk to Etron EJ188 x=
+HCI host")
+> > Cc: <stable@vger.kernel.org>
+> > Signed-off-by: Kuangyi Chiang <ki.chiang65@gmail.com>
+>
+> Added to queue, but I removed the Fixes and stable tags as this is a smal=
+l
+> cleanup with no functional changes.
+>
+> > ---
+> >   drivers/usb/host/xhci-pci.c | 8 ++------
+> >   1 file changed, 2 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> > index 7e538194a0a4..33a6d99afc10 100644
+> > --- a/drivers/usb/host/xhci-pci.c
+> > +++ b/drivers/usb/host/xhci-pci.c
+> > @@ -395,12 +395,8 @@ static void xhci_pci_quirks(struct device *dev, st=
+ruct xhci_hcd *xhci)
+> >               xhci->quirks |=3D XHCI_DEFAULT_PM_RUNTIME_ALLOW;
+> >
+> >       if (pdev->vendor =3D=3D PCI_VENDOR_ID_ETRON &&
+> > -                     pdev->device =3D=3D PCI_DEVICE_ID_EJ168) {
+> > -             xhci->quirks |=3D XHCI_RESET_ON_RESUME;
+> > -             xhci->quirks |=3D XHCI_BROKEN_STREAMS;
+> > -     }
+> > -     if (pdev->vendor =3D=3D PCI_VENDOR_ID_ETRON &&
+> > -                     pdev->device =3D=3D PCI_DEVICE_ID_EJ188) {
+> > +         (pdev->device =3D=3D PCI_DEVICE_ID_EJ168 ||
+> > +          pdev->device =3D=3D PCI_DEVICE_ID_EJ188)) {
+> >               xhci->quirks |=3D XHCI_RESET_ON_RESUME;
+> >               xhci->quirks |=3D XHCI_BROKEN_STREAMS;
+> >       }
+>
 
