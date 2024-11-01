@@ -1,234 +1,232 @@
-Return-Path: <linux-usb+bounces-16960-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16961-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 579209B9917
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 20:57:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 416FB9B9B1B
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2024 00:08:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72B781C20E26
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 19:57:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8EAC5B21E0A
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 23:08:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F7A21D1F50;
-	Fri,  1 Nov 2024 19:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA5BE1E8822;
+	Fri,  1 Nov 2024 23:08:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kMxHUrUC"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="p6GKL8yJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C341CEE94
-	for <linux-usb@vger.kernel.org>; Fri,  1 Nov 2024 19:56:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D40471E47AE
+	for <linux-usb@vger.kernel.org>; Fri,  1 Nov 2024 23:08:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730491023; cv=none; b=kwb+ZVcRAJ1FbJw2wPgJdoowpCqYIBzTAX2v6rDZvGgyaXLoh9mWv5+Ry33q3wdpFSHnUNzHF2UAcojaqb74/Lqug6salLB//x3ozmENn+1KaYYcfkwKCSy3GDDvBVOkAK3E3LJdSjM4sI341opuZdqMs8xgrsaH8Utz6Zius6M=
+	t=1730502521; cv=none; b=K6K8KZw4Iwj7IaI/JXgEwPosHqEizEIz59wYNs0UloaCnWmZw6DYHegYVQluniaiSp3mi/s1XMbEV6tdo2y+Up0cRyvOlQozZ0GBKuT7xWyZA0K/ymtZ7ao+IvC6cWAV/DJ0t69ctMC0UI+JdQPy3sybZp5nQUdJWZUNXtUgPNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730491023; c=relaxed/simple;
-	bh=ujU/oq8j0668uOaJ6j8uCueCj+5zkiZndLJZE4BSnLw=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=EWMFi/3ZLgDDFzfUWCZtR+qgVx+D2sjD9Nxm/bpnnl6fIOnS83ZIj4aSMgEwhmc6i6bXTVXaENEVvulNn5BIr8GTQ7XSK1lWvNV9JI/1vDpCsKxUww9QAE8i0RwNkrMKxFg8igHwnetGZqfdMefzM69SiBvqvHL+ks943xSVSpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kMxHUrUC; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730491021; x=1762027021;
-  h=date:from:to:cc:subject:message-id;
-  bh=ujU/oq8j0668uOaJ6j8uCueCj+5zkiZndLJZE4BSnLw=;
-  b=kMxHUrUCabzVE1knPhIbQkkE8Q/lBy+VLz1jraRN9heQ7IinG5RwQp3v
-   y0Cy+cl/NY32gjJ15nPvYPTfTr4QrLEn7COeo0qoW3YfLDxuHO5rMPzTV
-   X/5bvZgd4dE9w93OWtayBUcl7DQQpaFNrEdlBosrK3uhEvcc63DnxQzTX
-   L2Cqcs5P7hBIWtSNXqOfps2f+PSRkuWYhOmtpt+kM9hohhjAQTYxA10Wy
-   L4WGnwlFfAfccCa06YOdnpen9Q8IF/wsByCV2rz2zxQfpzxtwwRCpyFol
-   Zd/zoZQzzuWevtgbCQLVXEXfFIdJqza9AZShitwz44yrW/l2aClmhxBru
-   Q==;
-X-CSE-ConnectionGUID: 4yoTMpzlTeS5SKHBhusydg==
-X-CSE-MsgGUID: yKanpQUnTuSkMS24PwTy1w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30425663"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30425663"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 12:56:59 -0700
-X-CSE-ConnectionGUID: CQ9IlARIQPaLnPW3DnBSog==
-X-CSE-MsgGUID: aKFIQm+aSw2mRAl7ygOsdQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,250,1725346800"; 
-   d="scan'208";a="120518922"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 01 Nov 2024 12:56:58 -0700
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t6xlP-000hyf-28;
-	Fri, 01 Nov 2024 19:56:55 +0000
-Date: Sat, 02 Nov 2024 03:56:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: linux-usb@vger.kernel.org
-Subject: [westeri-thunderbolt:next] BUILD SUCCESS
- 916f26f1c24cc0b538b222fc46f500950b942d99
-Message-ID: <202411020303.akSgkJq1-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1730502521; c=relaxed/simple;
+	bh=8HtLBGMrxbf3R+JEfh2c7UtM0kENC5qMxOs5dYms2kU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jElRuTWkNcrQp+KtTxhKSUANV+JoiJzmoOuqQtTqpitkk9lTS8RTP3XecLvONN84NW0BWO01eXScGplKQUJKWRF4Y594YIHvlr0tG3hnftYFe7ZhIjLI2l0sF003tdNcEtnTxGRefdINlPgy+mkwsDa9o04EqKkT/ShDv9TOLLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=p6GKL8yJ; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-20cf3e36a76so26911275ad.0
+        for <linux-usb@vger.kernel.org>; Fri, 01 Nov 2024 16:08:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1730502519; x=1731107319; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A2VK9rpRjUDVc3dgLj7IbRkd7AQMzzJw9gi42KAkjK4=;
+        b=p6GKL8yJFQ/43J5w2ewoAXa8LGv+uF1YAaqAh30M9W/tXqZOqJMtwypqAPiYy66EsA
+         zH/lmpQXsnpxGRJzAWfjf2In/BIHLnCx9yp3FDH94WyJF2GKPinhHHrUsYfI13dl4NkR
+         1Z5xMovP4L9JHp8Kx6Y9RalSWALjs3+rD0LrkJYobcj5dkIv17UOMnog1MT1frK1uA61
+         KkWCTyfQxhD8GL8yaMAQ+Lm1OfpsHpPV14zdKjzd0uUEf/l0Bn0iYTifA45uQ+KNxbYB
+         3vCSeeJs4xwLYdaHMzm2PkH9Cmjs/Bu+30RRCELmLqvJt5HIDz+2QQJDe9Hbw82j0E4b
+         SfIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730502519; x=1731107319;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A2VK9rpRjUDVc3dgLj7IbRkd7AQMzzJw9gi42KAkjK4=;
+        b=vtqQAlDsmDHdw8o7ZZemxSBC35Yqqeylx1EbHX/d0bO2/POcOQt/qGZhtfVVsOu7hj
+         oOQts64GfQ/J/G86VgeLdgp/I/1HttWI+imkqV4FGbjcvx+fEFVzcp/e+jLi7JN1z7eE
+         CxlZ8+wUfknDp3ROtR4e1hozeeinYP7bPJ1YNVasBGEVFXKkQOdsfnjiNhWkoUgr6AKY
+         4pC8HRCPqvlL1oYNWh1Wg5V7JCUM0cf40oJ8hUyf6+B4FaGwzFSwIM5reEqdc2tVp6ix
+         bVMehzlyBUJdZMNn0bQU6y7EmbKOpO+VUWG0yVb3RWlOkdklDZU271sdpqhTpiDGxFix
+         MwCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUC+v3nYk4K99Pka41zme34MqUH2nehXz6Y2dMiu5LeijtU5jqTpJO2XYHq7aFzmcuQfQwNNc1c7Tk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbJ99bZcb2x9PEuqKFGHE67ttjXtKeT4rr1HASZsZYFSDOmdRy
+	dOsm4jWXWrAx1TTXdTpeBrU1il3YguLtrggmpwslM7FaRs1pZrMh5A2RWay8nw==
+X-Google-Smtp-Source: AGHT+IHiSicuaWzRWdSxo5vFaFwO2XoBvjBBetkGaD/hMpauOfZ0WW9/tvooXwQneA/KyP9k1QkUHQ==
+X-Received: by 2002:a17:902:ec8e:b0:20c:bff7:2e5f with SMTP id d9443c01a7336-21103acc174mr117490335ad.13.1730502518543;
+        Fri, 01 Nov 2024 16:08:38 -0700 (PDT)
+Received: from google.com (128.65.83.34.bc.googleusercontent.com. [34.83.65.128])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057a6592sm26350655ad.166.2024.11.01.16.08.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 01 Nov 2024 16:08:38 -0700 (PDT)
+Date: Fri, 1 Nov 2024 16:08:33 -0700
+From: William McVicker <willmcvicker@google.com>
+To: Roger Quadros <rogerq@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+	Santosh Shilimkar <ssantosh@kernel.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>,
+	msp@baylibre.com, srk@ti.com, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v3] usb: dwc3: core: Fix system suspend on TI AM62
+ platforms
+Message-ID: <ZyVfcUuPq56R2m1Y@google.com>
+References: <20241011-am62-lpm-usb-v3-1-562d445625b5@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241011-am62-lpm-usb-v3-1-562d445625b5@kernel.org>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
-branch HEAD: 916f26f1c24cc0b538b222fc46f500950b942d99  thunderbolt: debugfs: Implement asymmetric lane margining
++linux-arm-msm@vger.kernel.org
 
-elapsed time: 784m
+Hi Roger,
 
-configs tested: 141
-configs skipped: 4
+On 10/11/2024, Roger Quadros wrote:
+> Since commit 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init"),
+> system suspend is broken on AM62 TI platforms.
+> 
+> Before that commit, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
+> bits (hence forth called 2 SUSPHY bits) were being set during core
+> initialization and even during core re-initialization after a system
+> suspend/resume.
+> 
+> These bits are required to be set for system suspend/resume to work correctly
+> on AM62 platforms.
+> 
+> Since that commit, the 2 SUSPHY bits are not set for DEVICE/OTG mode if gadget
+> driver is not loaded and started.
+> For Host mode, the 2 SUSPHY bits are set before the first system suspend but
+> get cleared at system resume during core re-init and are never set again.
+> 
+> This patch resovles these two issues by ensuring the 2 SUSPHY bits are set
+> before system suspend and restored to the original state during system resume.
+> 
+> Cc: stable@vger.kernel.org # v6.9+
+> Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
+> Link: https://lore.kernel.org/all/1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org/
+> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> ---
+> Changes in v3:
+> - Fix single line comment style
+> - add DWC3_GUSB3PIPECTL_SUSPHY to documentation of susphy_state
+> - Added Acked-by tag
+> - Link to v2: https://lore.kernel.org/r/20241009-am62-lpm-usb-v2-1-da26c0cd2b1e@kernel.org
+> 
+> Changes in v2:
+> - Fix comment style
+> - Use both USB3 and USB2 SUSPHY bits to determine susphy_state during system suspend/resume.
+> - Restore SUSPHY bits at system resume regardless if it was set or cleared before system suspend.
+> - Link to v1: https://lore.kernel.org/r/20241001-am62-lpm-usb-v1-1-9916b71165f7@kernel.org
+> ---
+>  drivers/usb/dwc3/core.c | 19 +++++++++++++++++++
+>  drivers/usb/dwc3/core.h |  3 +++
+>  2 files changed, 22 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 9eb085f359ce..ca77f0b186c4 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -2336,6 +2336,11 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+>  	u32 reg;
+>  	int i;
+>  
+> +	dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
+> +			    DWC3_GUSB2PHYCFG_SUSPHY) ||
+> +			    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
+> +			    DWC3_GUSB3PIPECTL_SUSPHY);
+> +
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+I'm running into an issue on my Pixel 6 device with this change when the
+dwc3-exynos device has runtime PM enabled. Basically, after the device boots up
+and I disconnect USB, the dwc3-exynos device enters runtime suspend followed by
+system suspend 15 seconds later. On system suspend, the clocks powering these
+dwc3 registers are off which results in an SError. I have verified that
+reverting this change fixes the issue.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.1.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.1.0
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.1.0
-arc                              allyesconfig    clang-20
-arc                           tb10x_defconfig    gcc-14.1.0
-arc                    vdk_hs38_smp_defconfig    gcc-14.1.0
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.1.0
-arm                              allyesconfig    clang-20
-arm                            dove_defconfig    gcc-14.1.0
-arm                        multi_v5_defconfig    gcc-14.1.0
-arm                           omap1_defconfig    gcc-14.1.0
-arm                           tegra_defconfig    gcc-14.1.0
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.1.0
-csky                              allnoconfig    gcc-14.1.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.1.0
-hexagon                          allyesconfig    clang-20
-i386                             allmodconfig    clang-19
-i386                              allnoconfig    clang-19
-i386                             allyesconfig    clang-19
-i386        buildonly-randconfig-001-20241101    gcc-12
-i386        buildonly-randconfig-002-20241101    gcc-12
-i386        buildonly-randconfig-003-20241101    gcc-12
-i386        buildonly-randconfig-004-20241101    gcc-12
-i386        buildonly-randconfig-005-20241101    gcc-12
-i386        buildonly-randconfig-006-20241101    gcc-12
-i386                                defconfig    clang-19
-i386                  randconfig-001-20241101    gcc-12
-i386                  randconfig-002-20241101    gcc-12
-i386                  randconfig-003-20241101    gcc-12
-i386                  randconfig-004-20241101    gcc-12
-i386                  randconfig-005-20241101    gcc-12
-i386                  randconfig-006-20241101    gcc-12
-i386                  randconfig-011-20241101    gcc-12
-i386                  randconfig-012-20241101    gcc-12
-i386                  randconfig-013-20241101    gcc-12
-i386                  randconfig-014-20241101    gcc-12
-i386                  randconfig-015-20241101    gcc-12
-i386                  randconfig-016-20241101    gcc-12
-loongarch                        allmodconfig    gcc-14.1.0
-loongarch                         allnoconfig    gcc-14.1.0
-m68k                             allmodconfig    gcc-14.1.0
-m68k                              allnoconfig    gcc-14.1.0
-m68k                             allyesconfig    gcc-14.1.0
-m68k                        m5307c3_defconfig    gcc-14.1.0
-m68k                        m5407c3_defconfig    gcc-14.1.0
-m68k                           sun3_defconfig    gcc-14.1.0
-microblaze                       allmodconfig    gcc-14.1.0
-microblaze                        allnoconfig    gcc-14.1.0
-microblaze                       allyesconfig    gcc-14.1.0
-microblaze                      mmu_defconfig    gcc-14.1.0
-mips                              allnoconfig    gcc-14.1.0
-mips                           ci20_defconfig    gcc-14.1.0
-mips                           ip30_defconfig    gcc-14.1.0
-nios2                            alldefconfig    gcc-14.1.0
-nios2                             allnoconfig    gcc-14.1.0
-openrisc                          allnoconfig    clang-20
-openrisc                         allyesconfig    gcc-14.1.0
-openrisc                            defconfig    gcc-12
-openrisc                    or1ksim_defconfig    gcc-14.1.0
-openrisc                 simple_smp_defconfig    gcc-14.1.0
-parisc                           allmodconfig    gcc-14.1.0
-parisc                            allnoconfig    clang-20
-parisc                           allyesconfig    gcc-14.1.0
-parisc                              defconfig    gcc-12
-powerpc                          allmodconfig    gcc-14.1.0
-powerpc                           allnoconfig    clang-20
-powerpc                          allyesconfig    gcc-14.1.0
-powerpc                      arches_defconfig    gcc-14.1.0
-powerpc                    mvme5100_defconfig    gcc-14.1.0
-powerpc                      pasemi_defconfig    gcc-14.1.0
-powerpc                      ppc44x_defconfig    gcc-14.1.0
-powerpc                         wii_defconfig    gcc-14.1.0
-riscv                            allmodconfig    gcc-14.1.0
-riscv                             allnoconfig    clang-20
-riscv                            allyesconfig    gcc-14.1.0
-riscv                               defconfig    gcc-12
-riscv             nommu_k210_sdcard_defconfig    gcc-14.1.0
-s390                             allmodconfig    gcc-14.1.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.1.0
-s390                                defconfig    gcc-12
-sh                               allmodconfig    gcc-14.1.0
-sh                                allnoconfig    gcc-14.1.0
-sh                               allyesconfig    gcc-14.1.0
-sh                        apsh4ad0a_defconfig    gcc-14.1.0
-sh                                  defconfig    gcc-12
-sh                             espt_defconfig    gcc-14.1.0
-sh                        sh7785lcr_defconfig    gcc-14.1.0
-sh                            titan_defconfig    gcc-14.1.0
-sparc                            allmodconfig    gcc-14.1.0
-sparc                       sparc64_defconfig    gcc-14.1.0
-sparc64                             defconfig    gcc-12
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                           x86_64_defconfig    gcc-12
-x86_64                           alldefconfig    gcc-14.1.0
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20241101    gcc-12
-x86_64      buildonly-randconfig-002-20241101    gcc-12
-x86_64      buildonly-randconfig-003-20241101    gcc-12
-x86_64      buildonly-randconfig-004-20241101    gcc-12
-x86_64      buildonly-randconfig-005-20241101    gcc-12
-x86_64      buildonly-randconfig-006-20241101    gcc-12
-x86_64                              defconfig    clang-19
-x86_64                                  kexec    clang-19
-x86_64                                  kexec    gcc-12
-x86_64                randconfig-001-20241101    gcc-12
-x86_64                randconfig-002-20241101    gcc-12
-x86_64                randconfig-003-20241101    gcc-12
-x86_64                randconfig-004-20241101    gcc-12
-x86_64                randconfig-005-20241101    gcc-12
-x86_64                randconfig-006-20241101    gcc-12
-x86_64                randconfig-011-20241101    gcc-12
-x86_64                randconfig-012-20241101    gcc-12
-x86_64                randconfig-013-20241101    gcc-12
-x86_64                randconfig-014-20241101    gcc-12
-x86_64                randconfig-015-20241101    gcc-12
-x86_64                randconfig-016-20241101    gcc-12
-x86_64                randconfig-071-20241101    gcc-12
-x86_64                randconfig-072-20241101    gcc-12
-x86_64                randconfig-073-20241101    gcc-12
-x86_64                randconfig-074-20241101    gcc-12
-x86_64                randconfig-075-20241101    gcc-12
-x86_64                randconfig-076-20241101    gcc-12
-x86_64                               rhel-8.3    gcc-12
-x86_64                           rhel-8.3-bpf    clang-19
-x86_64                         rhel-8.3-kunit    clang-19
-x86_64                           rhel-8.3-ltp    clang-19
-x86_64                          rhel-8.3-rust    clang-19
-xtensa                            allnoconfig    gcc-14.1.0
-xtensa                          iss_defconfig    gcc-14.1.0
-xtensa                         virt_defconfig    gcc-14.1.0
+I noticed that dwc3-qcom.c also supports runtime PM for their dwc3 device and
+most likely is affected by this as well. It would be great if someone with a
+Qualcomm device could test out dwc3 suspend as well.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Here is the crash stack:
+
+  SError Interrupt on CPU7, code 0x00000000be000011 -- SError
+  CPU: 7 UID: 1000 PID: 5661 Comm: binder:477_1 Tainted: G        W  OE      6.12.0-rc3-android16-0-maybe-dirty-4k #1 0439eacb3cff642033630df7ee2e250e0625f2f0
+  96 irq, BUS_DATA0 group, 0x0
+  Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+  Hardware name: Raven DVT (DT)
+  pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+  pc : readl+0x40/0x80
+  lr : readl+0x38/0x80
+  sp : ffffffc08baa39a0
+  x29: ffffffc08baa39a0 x28: ffffffd4dd140000 x27: ffffffd4dd140d70
+  x26: ffffffd4dd2b2000 x25: ffffff800cef2410 x24: ffffff800cef24c0
+  x23: ffffffd4dd24e000 x22: ffffff887df59440 x21: ffffffc085298100
+  x20: ffffffd4db8acf60 x19: ffffffc085298200 x18: ffffffc091b730b0
+  x17: 000000002a703c0b x16: 000000002a703c0b x15: 0000000000953000
+  x14: 0000000000000000 x13: 0000000000000030 x12: 0101010101010101
+  x11: 7f7f7f7f7f7fffff x10: 0000000000000000 x9 : ffffffd4dc0d7d48
+  x8 : 0000000000000000 x7 : 0000000000008000 x6 : 0000000000000000
+  x5 : 500020737562ffff x4 : 500020737562ffff x3 : ffffffd4db8acf60
+  x2 : ffffffd4db8a7bac x1 : ffffffc085298200 x0 : 0000000000000020
+  Kernel panic - not syncing: Asynchronous SError Interrupt
+  CPU: 7 UID: 1000 PID: 5661 Comm: binder:477_1 Tainted: G        W  OE      6.12.0-rc3-android16-0-maybe-dirty-4k #1 0439eacb3cff642033630df7ee2e250e0625f2f0
+  Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+  Hardware name: Raven DVT (DT)
+  Call trace:
+   dump_backtrace+0xec/0x128
+   show_stack+0x18/0x28
+   dump_stack_lvl+0x40/0x88
+   dump_stack+0x18/0x24
+   panic+0x134/0x45c
+   nmi_panic+0x3c/0x88
+   arm64_serror_panic+0x64/0x8c
+   do_serror+0xc4/0xc8
+   el1h_64_error_handler+0x34/0x48
+   el1h_64_error+0x68/0x6c
+   readl+0x40/0x80
+   dwc3_suspend_common+0x34/0x454
+   dwc3_suspend+0x20/0x40
+   platform_pm_suspend+0x40/0x90
+   dpm_run_callback+0x60/0x250
+   device_suspend+0x334/0x614
+   dpm_suspend+0xc4/0x368
+   dpm_suspend_start+0x90/0x100
+   suspend_devices_and_enter+0x128/0xad0
+   pm_suspend+0x354/0x650
+   state_store+0x104/0x144
+   kobj_attr_store+0x30/0x48
+   sysfs_kf_write+0x54/0x6c
+   kernfs_fop_write_iter+0x104/0x1e4
+   vfs_write+0x3bc/0x50c
+   ksys_write+0x78/0xe8
+   __arm64_sys_write+0x1c/0x2c
+   invoke_syscall+0x58/0x10c
+   el0_svc_common+0xa8/0xdc
+   do_el0_svc+0x1c/0x28
+   el0_svc+0x38/0x6c
+   el0t_64_sync_handler+0x70/0xbc
+   el0t_64_sync+0x1a8/0x1ac
+
+Thanks,
+Will
+
+<snip>
 
