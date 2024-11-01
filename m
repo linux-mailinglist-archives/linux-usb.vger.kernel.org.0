@@ -1,152 +1,109 @@
-Return-Path: <linux-usb+bounces-16928-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16929-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 880879B8773
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 01:01:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7351A9B8845
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 02:20:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F2B11C21264
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 00:01:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3D8BB21C70
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 01:20:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857F31AA7AF;
-	Fri,  1 Nov 2024 00:00:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCCCA51C5A;
+	Fri,  1 Nov 2024 01:20:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yu24/i3q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T30OEJa4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f202.google.com (mail-yw1-f202.google.com [209.85.128.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17D9149620
-	for <linux-usb@vger.kernel.org>; Fri,  1 Nov 2024 00:00:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4997220328;
+	Fri,  1 Nov 2024 01:20:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730419220; cv=none; b=u3m+uqjRG10hdU8vFx5goz9at9KmyDEg6bDw8kW4yd0a44bDCaJD1lT03vvJgfv9s8hOTmgApz6XQXaC4NocDpz3n0NJQaMvwdpTKwXHB5y+dWfvBpfnrNvKaKH4X1ACAhPq/dSKrguSmDJqR61qlSH+pmasO+W5OYhgUNzo700=
+	t=1730424045; cv=none; b=D7EXjqYP2MYdDVu01c6A/MgaIZaNeLsNk8eL1DZiiQs4QeYdMkqYR5y6Hi42cbKxWpnoajzv1IM1G6VM84LgwIWqevQx4pyoFL/vQv108PPvVJ1+BWbgbqT6Xl22SMQQUmSiNJ862ObYsue4xd6WENaMRvEaJ1jXMzL8Ylkz7M0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730419220; c=relaxed/simple;
-	bh=GcFamxwRDGPO3itT2MjcU3zPO7i7GG6u7AIRa1Q7oFg=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=qaUS3ZkQ7XK3F/VaZsTyRxHX1gCq9V+Lk1W3rNPhz00J1JJ13osHpSN18vp3ixCwNduJ9SIv62voALy6YMx45l2bsgDVJDCyvOfltpDf4ByAia9MpjfhMJuxyaHlSwuAd2Xfar+sZZOpooS23EUGiIiaNCBUnqIA3EG8+YHZeto=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Yu24/i3q; arc=none smtp.client-ip=209.85.128.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--amitsd.bounces.google.com
-Received: by mail-yw1-f202.google.com with SMTP id 00721157ae682-6e3705b2883so32794937b3.3
-        for <linux-usb@vger.kernel.org>; Thu, 31 Oct 2024 17:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730419212; x=1731024012; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQqXD8GGG81ZKLR68lhIbs8UaEvihWRfJOeJXcvzgOs=;
-        b=Yu24/i3q5aG87jJNVFOLjAvr9E/GVFHnfn6/TF7u/pE76/AgiMniNJUL2i5ISehmsB
-         Y0kHnmu/Z7eRdKr2/TkiHmwv9hoO/MWlaoKCZN1dj2EEe0Y81JXwl1aRyOiU1jfeUQjN
-         k7+Ep9Gt3ru1e2C1BeAeMKRa1u93JwaKB2btQgNxTdFAvhDyrB9xv0kdjzEZzY1IM8tj
-         Sd0Fs/q08Efin4rt6VZ6QftLp1xlRxnThdUaOVyH6b3y5RdyRL22h47HW8YzhNtwPBQz
-         5IUS87z314a/4/LxJrgKQpXm6EJpQPPWs5t9w77I+spAKAzY7qxlg6ZMq5J8zIKowgsy
-         /MdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730419212; x=1731024012;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dQqXD8GGG81ZKLR68lhIbs8UaEvihWRfJOeJXcvzgOs=;
-        b=a9aJuuVYnuEBTybpZ0n1qJIxc2J7syKgK5mNX+tY6/0rqF4AtGyRAB8cHep0l2Z+EG
-         ATl/RM01sDi5SBETJDo5s3HnV66mAoWq35sPJ+y03kn+Rs1azjwF4qysjsidPjNLRkjr
-         28Yii2b+nJkjZH+L7g2N/djkL2HKfO/4cSafuMPSqGNH6G9HqVHr1srVqFwoK4MM6nRG
-         mgjON7vTaQG0Fd/r5OtGYqOK1vpt3dRnf4ldlVnGMw546bKmWyBsS34JpnLYc6P12k4f
-         Z0CrjAVslVaLHay7EdgpuyEDmHuzTGa/4aD9pEL2SZWUph12d+nTv3VjiEC8jbSiqp5B
-         iVPQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZOUjZ4Ey3rqEhAEj4PxFmVKSyZMvc7O60z7BBYg1wIgqQlp2g9y13ub/Uox9szRD8Q5pJoiiiPE0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxcJjTrHmwUa5kjBmVSf/VX1gicjJzW55l4zt0AF1POym3rGry3
-	EI76k8r7aOLc7shvoguvCrl0Ixgxy8Z0YrMMhYRMrxG5uA1Q/70JVxYnor87QIH77N4Iy+pG27n
-	rVA==
-X-Google-Smtp-Source: AGHT+IF3kA3CN/HGj+QhxHeBH2gUZC8UXb3P2uSWUlJKoBcrreHMjjN4zZ3Ex75VcC0umN5SfVTmaiZ0oxw=
-X-Received: from amitsd-gti.c.googlers.com ([fda3:e722:ac3:cc00:20:ed76:c0a8:827])
- (user=amitsd job=sendgmr) by 2002:a05:690c:2e8f:b0:6ea:fa4:a365 with SMTP id
- 00721157ae682-6ea64c11f97mr45177b3.8.1730419212131; Thu, 31 Oct 2024 17:00:12
- -0700 (PDT)
-Date: Thu, 31 Oct 2024 16:59:54 -0700
-In-Reply-To: <20241031235957.1261244-1-amitsd@google.com>
+	s=arc-20240116; t=1730424045; c=relaxed/simple;
+	bh=vuUWriRyJgNDUqoRutkuBPsZgLVx2wLFsmuENH79BFQ=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=UJnriN3vgHxIklz/qjl+ZZx+oB6B+4WTZk+ci5HI3aEnGq7Re/10/MJmRAYQb4x8nCbiC0EBOvzimVIVmKjXV/tQFLkze2DmfsQ0qpQXIZF6nT/g8d312qpF7Fsij1QlcSzs4SbiHnCBkoSqbSF5RRRjv2Hp08sGN3nXhftrlNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T30OEJa4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9847CC4CEC3;
+	Fri,  1 Nov 2024 01:20:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730424044;
+	bh=vuUWriRyJgNDUqoRutkuBPsZgLVx2wLFsmuENH79BFQ=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=T30OEJa45d3iql7Qu2R+dYAf41tbQbX0kqADVxG+zRsyE6NRa16qnwSuskCldUVzH
+	 DPGfBLPh6cFKluLGnYRXehPaptwmzDTW0lCSddoRm663c82dE7ox6XWQzntg35s1Wk
+	 +AcnOyiRLn/1yij7pXb8taVkQjj9FONvA2VRKmvLWk0VQI38Noub+TCHhL2nlDYR0J
+	 n52NekukHWAvqFPI2dPe0DKfqIY9vYXMi64gMPuZOVLff8XJ+F3sWGnFpafa9n9SiO
+	 R4xZZ5HXrZx7J8RMEO8qxBVFIMLHoMHpD+zDhITqzETu0vGy009Xve3wpZ+G6lGnlh
+	 JhA85E1xTQWxw==
+Date: Thu, 31 Oct 2024 20:20:43 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: linux@roeck-us.net, gregkh@linuxfoundation.org, 
+ linux-kernel@vger.kernel.org, kyletso@google.com, 
+ heikki.krogerus@linux.intel.com, krzk+dt@kernel.org, 
+ dmitry.baryshkov@linaro.org, conor+dt@kernel.org, badhri@google.com, 
+ xu.yang_2@nxp.com, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ rdbabiera@google.com
+In-Reply-To: <20241031235957.1261244-3-amitsd@google.com>
 References: <20241031235957.1261244-1-amitsd@google.com>
-X-Mailer: git-send-email 2.47.0.199.ga7371fff76-goog
-Message-ID: <20241031235957.1261244-4-amitsd@google.com>
-Subject: [PATCH v1 3/3] usb: typec: tcpm: Add support for sink-bc12-completion-time-ms
- DT property
-From: Amit Sunil Dhamne <amitsd@google.com>
-To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com
-Cc: dmitry.baryshkov@linaro.org, kyletso@google.com, rdbabiera@google.com, 
-	badhri@google.com, linux@roeck-us.net, xu.yang_2@nxp.com, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, Amit Sunil Dhamne <amitsd@google.com>
-Content-Type: text/plain; charset="UTF-8"
+ <20241031235957.1261244-3-amitsd@google.com>
+Message-Id: <173042404301.889048.6986869139957882077.robh@kernel.org>
+Subject: Re: [PATCH v1 2/3] dt-bindings: usb: maxim,max33359.yaml: add
+ usage of sink bc12 time property
 
-Add support for parsing DT time property "sink-bc12-completion-time-ms".
-This timer is used to relax the PD state machine during Sink attach to
-allow completion of Battery Charging (BC1.2) charger type detection in
-TCPC before PD negotiations. BC1.2 detection is a hardware mechanism to
-detect charger port type that is run by some conrollers (such as
-"maxim,max33359") in parallel to Type-C connection state machines.
-This is to ensure that BC1.2 completes before PD is enabled as running
-BC1.2 in parallel with PD negotiation results in delays violating timer
-constraints in PD spec.
 
-This is an optional timer and will not add any delay unless explicitly
-set.
+On Thu, 31 Oct 2024 16:59:53 -0700, Amit Sunil Dhamne wrote:
+> Add usage of "sink-bc12-completion-time-ms"  connector property to
+> max33359 controller for delaying PD negotiation till BC1.2 detection
+> completes. This overcomes the occasional delays observed while
+> receiving PD messages where BC1.2 detection runs in parallel.
+> 
+> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+> ---
+>  Documentation/devicetree/bindings/usb/maxim,max33359.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
+My bot found errors running 'make dt_binding_check' on your patch:
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index b3d5d1d48937..8b325b93b5a9 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -319,6 +319,7 @@ struct pd_timings {
- 	u32 sink_wait_cap_time;
- 	u32 ps_src_off_time;
- 	u32 cc_debounce_time;
-+	u32 snk_bc12_cmpletion_time;
- };
- 
- struct tcpm_port {
-@@ -4978,7 +4979,16 @@ static void run_state_machine(struct tcpm_port *port)
- 		if (ret < 0)
- 			tcpm_set_state(port, SNK_UNATTACHED, 0);
- 		else
--			tcpm_set_state(port, SNK_STARTUP, 0);
-+			/*
-+			 * For Type C port controllers that use Battery Charging
-+			 * Detection (based on BCv1.2 spec) to detect USB
-+			 * charger type, add a delay of "snk_bc12_cmpletion_time"
-+			 * before transitioning to SNK_STARTUP to allow BC1.2
-+			 * detection to complete before PD is eventually enabled
-+			 * in later states.
-+			 */
-+			tcpm_set_state(port, SNK_STARTUP,
-+				       port->timings.snk_bc12_cmpletion_time);
- 		break;
- 	case SNK_STARTUP:
- 		opmode =  tcpm_get_pwr_opmode(port->polarity ?
-@@ -7090,6 +7100,10 @@ static void tcpm_fw_get_timings(struct tcpm_port *port, struct fwnode_handle *fw
- 		port->timings.cc_debounce_time = val;
- 	else
- 		port->timings.cc_debounce_time = PD_T_CC_DEBOUNCE;
-+
-+	ret = fwnode_property_read_u32(fwnode, "sink-bc12-completion-time-ms", &val);
-+	if (!ret)
-+		port->timings.snk_bc12_cmpletion_time = val;
- }
- 
- static int tcpm_fw_get_caps(struct tcpm_port *port, struct fwnode_handle *fwnode)
--- 
-2.47.0.199.ga7371fff76-goog
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb: maxtcpc@25: connector: Unevaluated properties are not allowed ('sink-bc12-completion-time-ms' was unexpected)
+	from schema $id: http://devicetree.org/schemas/usb/maxim,max33359.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb: connector: Unevaluated properties are not allowed ('sink-bc12-completion-time-ms' was unexpected)
+	from schema $id: http://devicetree.org/schemas/connector/usb-connector.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241031235957.1261244-3-amitsd@google.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
