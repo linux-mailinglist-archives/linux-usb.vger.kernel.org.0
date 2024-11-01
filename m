@@ -1,307 +1,234 @@
-Return-Path: <linux-usb+bounces-16959-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16960-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA5C99B97E1
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 19:48:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 579209B9917
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 20:57:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69091281CF1
-	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 18:48:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72B781C20E26
+	for <lists+linux-usb@lfdr.de>; Fri,  1 Nov 2024 19:57:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04BE21CEAC2;
-	Fri,  1 Nov 2024 18:48:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F7A21D1F50;
+	Fri,  1 Nov 2024 19:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Sg8psDxt"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kMxHUrUC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78AC1CC89A
-	for <linux-usb@vger.kernel.org>; Fri,  1 Nov 2024 18:48:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C341CEE94
+	for <linux-usb@vger.kernel.org>; Fri,  1 Nov 2024 19:56:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730486902; cv=none; b=sOSHhcRu3twdY5mfN7Q0F77YCSEwEAvgTEEtwbrPck4KSEJpz9SEKjFCIlAnpqTfn3vgp1X0rJwjB/ZZNwqqcEq49NiXpS5+gZX7cT3jzzFHV8vy3ffHfP/tY0ydGMmbg32+BahVVtwiE+LFK0R8PUl1P2gA/OxRo/Q/K1xTitc=
+	t=1730491023; cv=none; b=kwb+ZVcRAJ1FbJw2wPgJdoowpCqYIBzTAX2v6rDZvGgyaXLoh9mWv5+Ry33q3wdpFSHnUNzHF2UAcojaqb74/Lqug6salLB//x3ozmENn+1KaYYcfkwKCSy3GDDvBVOkAK3E3LJdSjM4sI341opuZdqMs8xgrsaH8Utz6Zius6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730486902; c=relaxed/simple;
-	bh=pyi9QpZiK5IS2oc9TWE6Zr8eiHo4wp+YcZ8sjnnrhCY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=lUI7JNupiFkOWQNTEXZ/azeM1Y+uoZz05bkGS7nkfy1bzib8Q3T4xToGZQnaYOWYTyClTTN7pLbRsoeGHfXQyukgG+1BThMSFkiT69a/ifM8dfeH0aWkL/8Z8wJ/Zh09diOuW42ldKaDqdELB0EoSvGmH+fjDY/RYDreJNEb3u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Sg8psDxt; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6ea7c26e195so1403907b3.0
-        for <linux-usb@vger.kernel.org>; Fri, 01 Nov 2024 11:48:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1730486899; x=1731091699; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s2WG2arvja/5OtR3j0Ql2Ai05SO92ltHmuVlmZ7nHwI=;
-        b=Sg8psDxtgtQPFBEcNwZH2QuoUp01qG8K8BqpgF08ZXDdSEcf3dyERtpJcKYfJgg+F5
-         88eSvRZiVK7FEZGIHGQ/rRW34Xmz/KK4/JtxZOXT9WdW2x/L2azHttmCbw6BhW6jWedp
-         w0JGyVJAH0tyZNVCztVRZpleqnVnB/NJ74ae0=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730486899; x=1731091699;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s2WG2arvja/5OtR3j0Ql2Ai05SO92ltHmuVlmZ7nHwI=;
-        b=rep8c+aneGmvIr+fAlO4RcYw/gCuOYnl0b3QwTPFw/GFUxP7RpiuaMjA1OwMv5cNta
-         Q3UeH9apu3ywAUo8j039eW1wMcEyd5Ca01QutxNln5rjU2E0Tn+q5xxlbDHMzJAV3fIb
-         3AlHNqZ/pMTrCDmYK9XfwNl/xWlnkE2402JQU2vkO0HOG5PCS3BW/FYjO1PFkUp4AnzB
-         3ULdy4eGeY0fU7nDMeSMrR2aMqL6bzOho8hC8iZPANYU5R1qjCPzJ/lbvI72MrnARuN/
-         5EaRO9lGIEgl0LtUw9xZuAgXSq847XOHSPJxyHJ4fUwBuYuwT7mfkU/Ozk4+bpKBAu4g
-         1CEA==
-X-Forwarded-Encrypted: i=1; AJvYcCVAxIesXIW/nwHiwveM15EMh2uVKwkQlhuSSzMzJ5x6Mo3qxofSGqPz+SfJZrYoVHJzZyzi6KByQIk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXsAFc0fZzwsWo5APGZNR56Qg8o7MOI82+oWCLXlzxwu1tS3wJ
-	MrcoEk1FJ4CuI5YxB4KH60YomwWJe/Mvxmx8LmS/232kbuaTxdbc1aDDoxZnhCi/k7aPbxIkZJt
-	FS4RI3V8Ufd4KCXemg8RQ8vGk+IDfrJXpVGCo
-X-Google-Smtp-Source: AGHT+IGZykLyDDusTf2p10kUkd81BwLJb5PLt+lso8Am/U6tNAKMIlDSU/zo5JWa/mMuc2OH4bfaSh5aFUXrsgUnbPU=
-X-Received: by 2002:a05:690c:6289:b0:6ea:7afd:d8f2 with SMTP id
- 00721157ae682-6ea7afddd75mr8978097b3.15.1730486899641; Fri, 01 Nov 2024
- 11:48:19 -0700 (PDT)
+	s=arc-20240116; t=1730491023; c=relaxed/simple;
+	bh=ujU/oq8j0668uOaJ6j8uCueCj+5zkiZndLJZE4BSnLw=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=EWMFi/3ZLgDDFzfUWCZtR+qgVx+D2sjD9Nxm/bpnnl6fIOnS83ZIj4aSMgEwhmc6i6bXTVXaENEVvulNn5BIr8GTQ7XSK1lWvNV9JI/1vDpCsKxUww9QAE8i0RwNkrMKxFg8igHwnetGZqfdMefzM69SiBvqvHL+ks943xSVSpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kMxHUrUC; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730491021; x=1762027021;
+  h=date:from:to:cc:subject:message-id;
+  bh=ujU/oq8j0668uOaJ6j8uCueCj+5zkiZndLJZE4BSnLw=;
+  b=kMxHUrUCabzVE1knPhIbQkkE8Q/lBy+VLz1jraRN9heQ7IinG5RwQp3v
+   y0Cy+cl/NY32gjJ15nPvYPTfTr4QrLEn7COeo0qoW3YfLDxuHO5rMPzTV
+   X/5bvZgd4dE9w93OWtayBUcl7DQQpaFNrEdlBosrK3uhEvcc63DnxQzTX
+   L2Cqcs5P7hBIWtSNXqOfps2f+PSRkuWYhOmtpt+kM9hohhjAQTYxA10Wy
+   L4WGnwlFfAfccCa06YOdnpen9Q8IF/wsByCV2rz2zxQfpzxtwwRCpyFol
+   Zd/zoZQzzuWevtgbCQLVXEXfFIdJqza9AZShitwz44yrW/l2aClmhxBru
+   Q==;
+X-CSE-ConnectionGUID: 4yoTMpzlTeS5SKHBhusydg==
+X-CSE-MsgGUID: yKanpQUnTuSkMS24PwTy1w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30425663"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="30425663"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2024 12:56:59 -0700
+X-CSE-ConnectionGUID: CQ9IlARIQPaLnPW3DnBSog==
+X-CSE-MsgGUID: aKFIQm+aSw2mRAl7ygOsdQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,250,1725346800"; 
+   d="scan'208";a="120518922"
+Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 01 Nov 2024 12:56:58 -0700
+Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1t6xlP-000hyf-28;
+	Fri, 01 Nov 2024 19:56:55 +0000
+Date: Sat, 02 Nov 2024 03:56:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:next] BUILD SUCCESS
+ 916f26f1c24cc0b538b222fc46f500950b942d99
+Message-ID: <202411020303.akSgkJq1-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20241030212854.998318-1-abhishekpandit@chromium.org>
- <20241030142833.v2.1.I3080b036e8de0b9957c57c1c3059db7149c5e549@changeid>
- <ZyOQJmF-PcFHgmeq@kuha.fi.intel.com> <CANFp7mXhwMMwyqbKqxe=SgCRPUyXVhKnsJwf0xgJ2LefOvrtjg@mail.gmail.com>
- <ZyTUsOg7cd6xSDhn@kuha.fi.intel.com>
-In-Reply-To: <ZyTUsOg7cd6xSDhn@kuha.fi.intel.com>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Fri, 1 Nov 2024 11:48:07 -0700
-Message-ID: <CANFp7mVC1RVLF=OPD-jiv5cQeYaA8uqNA0xB5os3iAKo2DFWoA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/7] usb: typec: Add driver for Thunderbolt 3 Alternate Mode
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: tzungbi@kernel.org, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev, dmitry.baryshkov@linaro.org, 
-	jthies@google.com, akuchynski@google.com, pmalani@chromium.org, 
-	Benson Leung <bleung@chromium.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 1, 2024 at 6:16=E2=80=AFAM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> On Thu, Oct 31, 2024 at 04:02:22PM -0700, Abhishek Pandit-Subedi wrote:
-> > On Thu, Oct 31, 2024 at 7:11=E2=80=AFAM Heikki Krogerus
-> > <heikki.krogerus@linux.intel.com> wrote:
-> > >
-> > > Hi Abhishek,
-> > >
-> > > On Wed, Oct 30, 2024 at 02:28:32PM -0700, Abhishek Pandit-Subedi wrot=
-e:
-> > > > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > >
-> > > > Thunderbolt 3 Alternate Mode entry flow is described in
-> > > > USB Type-C Specification Release 2.0.
-> > > >
-> > > > Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > Co-developed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.or=
-g>
-> > > > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> > > > ---
-> > > >
-> > > > Changes:
-> > > > * Delay cable + plug checks so that the module doesn't fail to prob=
-e
-> > > >   if cable + plug information isn't available by the time the partn=
-er
-> > > >   altmode is registered.
-> > > > * Remove unncessary brace after if (IS_ERR(plug))
-> > > >
-> > > > The rest of this patch should be the same as Heikki's original RFC.
-> > > >
-> > > >
-> > > > Changes in v2:
-> > > > - Use <linux/usb/typec_tbt.h> and add missing TBT_CABLE_ROUNDED
-> > > > - Pass struct typec_thunderbolt_data to typec_altmode_notify
-> > > > - Rename TYPEC_TBT_MODE to USB_TYPEC_TBT_MODE
-> > > > - Use USB_TYPEC_TBT_SID and USB_TYPEC_TBT_MODE for device id
-> > > > - Change module license to GPL due to checkpatch warning
-> > > >
-> > > >  drivers/platform/chrome/cros_ec_typec.c  |   2 +-
-> > > >  drivers/usb/typec/altmodes/Kconfig       |   9 +
-> > > >  drivers/usb/typec/altmodes/Makefile      |   2 +
-> > > >  drivers/usb/typec/altmodes/thunderbolt.c | 308 +++++++++++++++++++=
-++++
-> > > >  include/linux/usb/typec_tbt.h            |   3 +-
-> > > >  5 files changed, 322 insertions(+), 2 deletions(-)
-> > > >  create mode 100644 drivers/usb/typec/altmodes/thunderbolt.c
-> > > >
-> > > > diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/plat=
-form/chrome/cros_ec_typec.c
-> > > > index c7781aea0b88..53d93baa36a8 100644
-> > > > --- a/drivers/platform/chrome/cros_ec_typec.c
-> > > > +++ b/drivers/platform/chrome/cros_ec_typec.c
-> > > > @@ -499,7 +499,7 @@ static int cros_typec_enable_tbt(struct cros_ty=
-pec_data *typec,
-> > > >       }
-> > > >
-> > > >       port->state.data =3D &data;
-> > > > -     port->state.mode =3D TYPEC_TBT_MODE;
-> > > > +     port->state.mode =3D USB_TYPEC_TBT_MODE;
-> > > >
-> > > >       return typec_mux_set(port->mux, &port->state);
-> > > >  }
-> > >
-> > > The definition should be changed in a separate patch.
-> >
-> > Ack -- will pull the rename out into its own patch.
-> >
-> > >
-> > > > +static const struct typec_device_id tbt_typec_id[] =3D {
-> > > > +     { USB_TYPEC_TBT_SID, USB_TYPEC_TBT_MODE },
-> > > > +     { }
-> > > > +};
-> > > > +MODULE_DEVICE_TABLE(typec, tbt_typec_id);
-> > >
-> > > Now the mode would be the same thing as connector state, which is not
-> > > true. The connector state is supposed to reflect the pin assignment,
-> > > and the mode is the mode index used with the actual VDMs. For example=
-,
-> > > DP alt mode has several different states, but only one mode.
-> > >
-> > > The TBT3 altmode driver will not work with this patch alone, it will
-> > > never bind to the partner TBT3 alt mode because the mode does not
-> > > match.
-> > >
-> > > Can you reorganise this series so that the patch 2/7 comes before thi=
-s
-> > > one? Then I think you can just use the SVID unless I'm mistaken:
-> > >
-> > >         static const struct typec_device_id tbt_typec_id[] =3D {
-> > >                 { USB_TYPEC_TBT_SID },
-> > >                 { }
-> > >         };
-> > >         MODULE_DEVICE_TABLE(typec, tbt_typec_id);
-> > >
-> > > Alternatively, just leave it to TYPEC_ANY_MODE for now.
-> > >
-> >
-> > Sure, I'll re-order the patches and get rid of the mode. I'm actually
-> > a bit confused as to how mode is supposed to be used since typec_dp.h
-> > defines USB_TYPEC_DP_MODE=3D1, typec_tbt.h defines
-> > USB_TYPEC_TBT_MODE=3DTYPEC_STATE_MODAL and it looks like USB state also
-> > starts from TYPEC_STATE_MODAL and continues.
-> >
-> > Is this documented in the spec somewhere? How should this mode value
-> > be used and shared between USB and various alt-modes? At least the DP
-> > case seems clear because as you said it describes different pin
-> > assignments. However, the term "mode" seems to be overloaded since
-> > it's used in other areas.
->
-> Well, this is confusing, I admit. One problem is that the term "mode"
-> really means different things depending on the spec. In DP alt mode
-> specification for example, "mode" basically means the same as pin
-> assignment, so not the object position like it does in USB PD and
-> Type-C specifications.
->
-> But the alt modes are in any case meant to be differentiated from the
-> common USB and accessory modes simply by checking if there is struct
-> altmode or not.
->
-> So the mux drivers for example can use the "alt" member in struct
-> typec_mux_state to check is the connector meant to enter alt mode, or
-> USB or accessory mode.
->
-> I.e. if the "alt" member is there, then it's alt mode, and the "mode"
-> member value matches whatever is defined for that specific alt mode.
->
-> If "alt" is NULL, then connector is in USB mode or accessory mode, and
-> the "mode" member is one of the common modes:
->
-> enum {
->         TYPEC_MODE_USB2 =3D TYPEC_STATE_MODAL,    /* USB 2.0 mode */
->         TYPEC_MODE_USB3,                        /* USB 3.2 mode */
->         TYPEC_MODE_USB4,                        /* USB4 mode */
->         TYPEC_MODE_AUDIO,                       /* Audio Accessory */
->         TYPEC_MODE_DEBUG,                       /* Debug Accessory */
-> }
->
-> I hope this answers your question. Maybe this needs to be clarified in
-> this document:
-> https://docs.kernel.org/driver-api/usb/typec.html#multiplexer-demultiplex=
-er-switches
->
-> ..and the code obviously. Maybe the "mode" member struct
-> typec_mux_state should be renamed to "state"? Though, I'm not sure
-> that improves the situation.
->
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+branch HEAD: 916f26f1c24cc0b538b222fc46f500950b942d99  thunderbolt: debugfs: Implement asymmetric lane margining
 
-This does make things clearer -- thank you. Based on the various
-meanings of mode vs state, I think the following will make things
-clearer:
+elapsed time: 784m
 
-Let's change |mode| to |mode_index| in `struct typec_altmode_desc`.
-Looking at the Discover SVIDs and Discover Modes response in PD 3.2
-spec, the value we are passing here is actually the mode_index since
-that's what's necessary in the VDM to identify which mode we are
-trying to enter.
+configs tested: 141
+configs skipped: 4
 
-|USB_TYPEC_DP_MODE| needs to change to |USB_TYPEC_DP_MODE_INDEX| in typec_d=
-p.h
-|USB_TYPEC_TBT_MODE| should also be |USB_TYPEC_TBT_MODE_INDEX| with a
-value of 1 and we should define a new |TYPEC_TBT_STATE| as an enum
-with base value of TYPEC_STATE_MODAL.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Getting rid of the mode index for altmode matching makes sense for DP
-and TBT (since both have spec defined standard values) but for
-non-standard modes which might return >1 modes in Discover Modes the
-driver will match for all modes and not just the specific mode like it
-was prior to patch 2 in this series. Do we want to retain that and
-change the TBT driver to only match on mode_index =3D 1 instead. I have
-no examples of non-standard mode behavior to decide which is the
-better option here.
+tested configs:
+alpha                             allnoconfig    gcc-14.1.0
+alpha                            allyesconfig    clang-20
+alpha                               defconfig    gcc-14.1.0
+arc                              allmodconfig    clang-20
+arc                               allnoconfig    gcc-14.1.0
+arc                              allyesconfig    clang-20
+arc                           tb10x_defconfig    gcc-14.1.0
+arc                    vdk_hs38_smp_defconfig    gcc-14.1.0
+arm                              allmodconfig    clang-20
+arm                               allnoconfig    gcc-14.1.0
+arm                              allyesconfig    clang-20
+arm                            dove_defconfig    gcc-14.1.0
+arm                        multi_v5_defconfig    gcc-14.1.0
+arm                           omap1_defconfig    gcc-14.1.0
+arm                           tegra_defconfig    gcc-14.1.0
+arm64                            allmodconfig    clang-20
+arm64                             allnoconfig    gcc-14.1.0
+csky                              allnoconfig    gcc-14.1.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    gcc-14.1.0
+hexagon                          allyesconfig    clang-20
+i386                             allmodconfig    clang-19
+i386                              allnoconfig    clang-19
+i386                             allyesconfig    clang-19
+i386        buildonly-randconfig-001-20241101    gcc-12
+i386        buildonly-randconfig-002-20241101    gcc-12
+i386        buildonly-randconfig-003-20241101    gcc-12
+i386        buildonly-randconfig-004-20241101    gcc-12
+i386        buildonly-randconfig-005-20241101    gcc-12
+i386        buildonly-randconfig-006-20241101    gcc-12
+i386                                defconfig    clang-19
+i386                  randconfig-001-20241101    gcc-12
+i386                  randconfig-002-20241101    gcc-12
+i386                  randconfig-003-20241101    gcc-12
+i386                  randconfig-004-20241101    gcc-12
+i386                  randconfig-005-20241101    gcc-12
+i386                  randconfig-006-20241101    gcc-12
+i386                  randconfig-011-20241101    gcc-12
+i386                  randconfig-012-20241101    gcc-12
+i386                  randconfig-013-20241101    gcc-12
+i386                  randconfig-014-20241101    gcc-12
+i386                  randconfig-015-20241101    gcc-12
+i386                  randconfig-016-20241101    gcc-12
+loongarch                        allmodconfig    gcc-14.1.0
+loongarch                         allnoconfig    gcc-14.1.0
+m68k                             allmodconfig    gcc-14.1.0
+m68k                              allnoconfig    gcc-14.1.0
+m68k                             allyesconfig    gcc-14.1.0
+m68k                        m5307c3_defconfig    gcc-14.1.0
+m68k                        m5407c3_defconfig    gcc-14.1.0
+m68k                           sun3_defconfig    gcc-14.1.0
+microblaze                       allmodconfig    gcc-14.1.0
+microblaze                        allnoconfig    gcc-14.1.0
+microblaze                       allyesconfig    gcc-14.1.0
+microblaze                      mmu_defconfig    gcc-14.1.0
+mips                              allnoconfig    gcc-14.1.0
+mips                           ci20_defconfig    gcc-14.1.0
+mips                           ip30_defconfig    gcc-14.1.0
+nios2                            alldefconfig    gcc-14.1.0
+nios2                             allnoconfig    gcc-14.1.0
+openrisc                          allnoconfig    clang-20
+openrisc                         allyesconfig    gcc-14.1.0
+openrisc                            defconfig    gcc-12
+openrisc                    or1ksim_defconfig    gcc-14.1.0
+openrisc                 simple_smp_defconfig    gcc-14.1.0
+parisc                           allmodconfig    gcc-14.1.0
+parisc                            allnoconfig    clang-20
+parisc                           allyesconfig    gcc-14.1.0
+parisc                              defconfig    gcc-12
+powerpc                          allmodconfig    gcc-14.1.0
+powerpc                           allnoconfig    clang-20
+powerpc                          allyesconfig    gcc-14.1.0
+powerpc                      arches_defconfig    gcc-14.1.0
+powerpc                    mvme5100_defconfig    gcc-14.1.0
+powerpc                      pasemi_defconfig    gcc-14.1.0
+powerpc                      ppc44x_defconfig    gcc-14.1.0
+powerpc                         wii_defconfig    gcc-14.1.0
+riscv                            allmodconfig    gcc-14.1.0
+riscv                             allnoconfig    clang-20
+riscv                            allyesconfig    gcc-14.1.0
+riscv                               defconfig    gcc-12
+riscv             nommu_k210_sdcard_defconfig    gcc-14.1.0
+s390                             allmodconfig    gcc-14.1.0
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.1.0
+s390                                defconfig    gcc-12
+sh                               allmodconfig    gcc-14.1.0
+sh                                allnoconfig    gcc-14.1.0
+sh                               allyesconfig    gcc-14.1.0
+sh                        apsh4ad0a_defconfig    gcc-14.1.0
+sh                                  defconfig    gcc-12
+sh                             espt_defconfig    gcc-14.1.0
+sh                        sh7785lcr_defconfig    gcc-14.1.0
+sh                            titan_defconfig    gcc-14.1.0
+sparc                            allmodconfig    gcc-14.1.0
+sparc                       sparc64_defconfig    gcc-14.1.0
+sparc64                             defconfig    gcc-12
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-20
+um                               allyesconfig    clang-20
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                           x86_64_defconfig    gcc-12
+x86_64                           alldefconfig    gcc-14.1.0
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20241101    gcc-12
+x86_64      buildonly-randconfig-002-20241101    gcc-12
+x86_64      buildonly-randconfig-003-20241101    gcc-12
+x86_64      buildonly-randconfig-004-20241101    gcc-12
+x86_64      buildonly-randconfig-005-20241101    gcc-12
+x86_64      buildonly-randconfig-006-20241101    gcc-12
+x86_64                              defconfig    clang-19
+x86_64                                  kexec    clang-19
+x86_64                                  kexec    gcc-12
+x86_64                randconfig-001-20241101    gcc-12
+x86_64                randconfig-002-20241101    gcc-12
+x86_64                randconfig-003-20241101    gcc-12
+x86_64                randconfig-004-20241101    gcc-12
+x86_64                randconfig-005-20241101    gcc-12
+x86_64                randconfig-006-20241101    gcc-12
+x86_64                randconfig-011-20241101    gcc-12
+x86_64                randconfig-012-20241101    gcc-12
+x86_64                randconfig-013-20241101    gcc-12
+x86_64                randconfig-014-20241101    gcc-12
+x86_64                randconfig-015-20241101    gcc-12
+x86_64                randconfig-016-20241101    gcc-12
+x86_64                randconfig-071-20241101    gcc-12
+x86_64                randconfig-072-20241101    gcc-12
+x86_64                randconfig-073-20241101    gcc-12
+x86_64                randconfig-074-20241101    gcc-12
+x86_64                randconfig-075-20241101    gcc-12
+x86_64                randconfig-076-20241101    gcc-12
+x86_64                               rhel-8.3    gcc-12
+x86_64                           rhel-8.3-bpf    clang-19
+x86_64                         rhel-8.3-kunit    clang-19
+x86_64                           rhel-8.3-ltp    clang-19
+x86_64                          rhel-8.3-rust    clang-19
+xtensa                            allnoconfig    gcc-14.1.0
+xtensa                          iss_defconfig    gcc-14.1.0
+xtensa                         virt_defconfig    gcc-14.1.0
 
-> > > > +static struct typec_altmode_driver tbt_altmode_driver =3D {
-> > > > +     .id_table =3D tbt_typec_id,
-> > > > +     .probe =3D tbt_altmode_probe,
-> > > > +     .remove =3D tbt_altmode_remove,
-> > > > +     .driver =3D {
-> > > > +             .name =3D "typec-thunderbolt",
-> > > > +             .owner =3D THIS_MODULE,
-> > > > +     }
-> > > > +};
-> > > > +module_typec_altmode_driver(tbt_altmode_driver);
-> > > > +
-> > > > +MODULE_AUTHOR("Heikki Krogerus <heikki.krogerus@linux.intel.com>")=
-;
-> > > > +MODULE_LICENSE("GPL");
-> > > > +MODULE_DESCRIPTION("Thunderbolt3 USB Type-C Alternate Mode");
-> > > > diff --git a/include/linux/usb/typec_tbt.h b/include/linux/usb/type=
-c_tbt.h
-> > > > index fa97d7e00f5c..3ff82641f6a0 100644
-> > > > --- a/include/linux/usb/typec_tbt.h
-> > > > +++ b/include/linux/usb/typec_tbt.h
-> > > > @@ -10,7 +10,7 @@
-> > > >  #define USB_TYPEC_TBT_SID            USB_TYPEC_VENDOR_INTEL
-> > > >
-> > > >  /* Connector state for Thunderbolt3 */
-> > > > -#define TYPEC_TBT_MODE                       TYPEC_STATE_MODAL
-> > > > +#define USB_TYPEC_TBT_MODE           TYPEC_STATE_MODAL
-> > >
-> > > I think USB_TYPEC_STATE_TBT would be better. But please change this i=
-n
-> > > a separate patch in any case.
-> >
-> > Same question as above about mode vs state :)
->
-> Well, I was thinking that maybe we should use the term "state" here
-> with the idea that "state" would be something purely kernel specific,
-> and "mode" would then be something defined in a specification... But
-> now I'm not so sure (I don't think it's always clear).
->
-> Maybe USB_TYPEC_TBT_MODE after all. I'll leave the decision to you.
->
-> cheers,
->
-> --
-> heikki
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
