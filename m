@@ -1,271 +1,191 @@
-Return-Path: <linux-usb+bounces-16971-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16972-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B2539BA010
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2024 13:34:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50AFC9BA2C3
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2024 23:36:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C5CC9B21509
-	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2024 12:34:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B328B221E8
+	for <lists+linux-usb@lfdr.de>; Sat,  2 Nov 2024 22:36:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D25D18A6B2;
-	Sat,  2 Nov 2024 12:34:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F6871A0B07;
+	Sat,  2 Nov 2024 22:36:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SNqZNCIc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mKq6tEUd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD72623CB;
-	Sat,  2 Nov 2024 12:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4EDB1448E3;
+	Sat,  2 Nov 2024 22:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730550862; cv=none; b=sAU3jtavMBjg1f+3BdkRaZcbEkWXjNNULQB00a746huzuAowTjIGm2Q9ttOeWGMGZCPWoqdTdqAUdTDqK5RN8h2T3egocqeQt9HhQ7TOT8crkGXkTqLn9yip44FqKMKZ/2mQ7tBvxW+BX3RKdKEtRSBpaz8zoKhIMvIBLYKv4YY=
+	t=1730586970; cv=none; b=dOvld+BCN20xjPVGuAj2H1AE9v6cEPEtZ+AsK9q2epoXQaKH0VDyHkC6RBgMfaZtdL5PNHHpxaIteynQ+QFUr1wpR36gaZR7UN2aRwCsCz0oI9M1UmMQQRutLxKzRKzhHbVGgOYOPsBcaQhqLVc+OaFk3QhFrb82zgHNCJCjtiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730550862; c=relaxed/simple;
-	bh=8ZZMRwbrrqoS9MMACHoF1aLadlMIqcYJ+D0UmAY4EeE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=AGrYlpqvMud1FlhBPsmORkaseElrkx+dWRtYJ6d+K/eSUYzGVTo63De6JMvU1g/VVNAW/F64qJOssuDPWsgCysKzE3XoPp3A4D9u8dXBujESyIQ2b0I0THWdt9LptE8Y/fo3JlKV07pFvfP4lkgVWS0qnHf1HCThtyT+rXLZ3qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SNqZNCIc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A567C4CEC3;
-	Sat,  2 Nov 2024 12:34:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730550859;
-	bh=8ZZMRwbrrqoS9MMACHoF1aLadlMIqcYJ+D0UmAY4EeE=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=SNqZNCIcCJXR7BBfC4DQC2DVof8k924ACUpu+ym0n4eg6lAj0TfhK0knJugvIs7V6
-	 +3y9aJCJMYgWCLdQVeBE9sIr+GtXspg56L+vfQq05ickXF01uynZR2lJfuUfH4fhC+
-	 KyMoLDSFHGA/uL0dPy3ToDEKWUkRfktytSKhGBE2aXHVMVXdVj4Cex5Fvh9I5R1uZV
-	 Iz18MMSAm0C1AeIc8p0hujNSDKabs07fLOIFK5l246smYBb/FOznEMnWCujY4sqTrh
-	 uBZjeQSXyNqFFvbStc9fHkNu+2kcpG5XXf3hA58HAG1v/NfeCmDTgEc8K19NkQC4gd
-	 9PL22hxhXB1uA==
-Message-ID: <8df97a64-ab88-4bc6-b015-3995546172a7@kernel.org>
-Date: Sat, 2 Nov 2024 14:34:12 +0200
+	s=arc-20240116; t=1730586970; c=relaxed/simple;
+	bh=mwHBxMf7a3juFKJ7kHW2dew6ogV9YEE7i2OwP3DfDMI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=miY83Pq41o46pmAoZNsp91ymcf30d0SYKNmOd4xS7IgE2MKAtQMdbjhoqZht+7ZTF4UZ3JXV2FvASmAUFPHzcxRfbWXniualiDgQ2ipc2h0+xkWghkbWE1W2LLTmwUC2H+GQR/dWMsPMDeDrScAofZbSiE5bdnVNKWnW8m771Vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mKq6tEUd; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-71ec997ad06so2566527b3a.3;
+        Sat, 02 Nov 2024 15:36:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730586968; x=1731191768; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nsvgdFa2QQsuo7kLs9myF9/L4nMgfr6Gbvr3NEv0t9o=;
+        b=mKq6tEUdkRLXtxdI4KiaWomEakHGJYMGs5lUawD0z+qZqXOi2RLcXDb97WLEg0XTBB
+         bYa1kFq236JH2P+WPkvygLlWHIrLI7Bvya+HzzKhy/QVtIemXKZB3WXJDFNj3KYmwarb
+         z6UyXK3iE40gFWHLlmg4X4DzAbFXQDBgrV2ilf4S76zV/3VPRSSHaaKm0tFJ7tgvk9VT
+         ZJ57CvZG/ky0FzuvnRI5RyfYGzXGzlPw2hyPFafd+w2iVorE33mKL8egSMzkGJOMvD+D
+         Rbx0nRmPk0yoNRANFWcPE6j1SVwLA029OwjTIAIu71+QspjPYcMeeaqHA1+Eykm5mOF0
+         fJNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730586968; x=1731191768;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nsvgdFa2QQsuo7kLs9myF9/L4nMgfr6Gbvr3NEv0t9o=;
+        b=mRJTXAAOXxW2EbuFyIxcQ2HUMC8Va0tkNvYXIP8lA86D81Ba2JivMWT1/eqdjQ8Jiq
+         LmT53/iQB9G217OcshWSuV0GiUuSi2naQvgTJT+SXMMXyBwP1mHMkaAnT6yWEGtqKgBB
+         Tps2VxBqkgB60cLu7GJpEu0efD3C8VxfPAejWkBE+ihNc84H6f7XZfm8TTzTcf0FC49K
+         t53ao0w7rv9nf4spTWVR7cyyJzC4pkxT32Iz4P81rxVJCwSft8mbHFlYhBLH8BDJe3hu
+         JTD+mDs49zD2417nwJAINpWjqk7kLNfXCkvRaN0a50K+m2A/e9NUugQamijeixeOPrf4
+         IK+g==
+X-Forwarded-Encrypted: i=1; AJvYcCURxnEgkIfZPJaWlX2DskRgLs5UUc9no87s9Dz+3HdN+YzMdhXUAEuOLdnC5rfIdWxuCzE9TjWbjy3t@vger.kernel.org, AJvYcCWYFgT5gZI6tnMqRp1CBDX/Ge4f7TrvI8O3ZRmIBCyJVC7NxcAWkuJEJU7zDhkfNegERnYerB+tAfEbZVE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI7zvOMZJmGXu1RTF7t+jlDZ8axCrb+AspHBy0qWrH1Vtua42z
+	sFOHQNFMsovi8JWLrCqZKFZ13o1BJK4ifXrI64x1ZQals6/oJWGs
+X-Google-Smtp-Source: AGHT+IGyJtvM7CUeHXDJcpGo1thqAWdmHhwVu7nI3oeJWklq0dMGiT0eLp2FpIeZZmKN2a6FjMAutg==
+X-Received: by 2002:a05:6a21:e8b:b0:1d9:1f51:faeb with SMTP id adf61e73a8af0-1d9eee1e0bfmr19184510637.39.1730586967762;
+        Sat, 02 Nov 2024 15:36:07 -0700 (PDT)
+Received: from gmail.com ([24.130.68.0])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-720bc2eb6a5sm4820348b3a.144.2024.11.02.15.36.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 02 Nov 2024 15:36:07 -0700 (PDT)
+Date: Sat, 2 Nov 2024 15:36:05 -0700
+From: Chang Yu <marcus.yu.56@gmail.com>
+To: andreyknvl@gmail.com
+Cc: gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	skhan@linuxfoundation.org, marcus.yu.56@gmail.com
+Subject: [PATCH] usb: raw_gadget: Fix a KASAN double-free bug in raw_release
+Message-ID: <ZyapVdMqauFmeeng@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: dwc3: core: Fix system suspend on TI AM62
- platforms
-From: Roger Quadros <rogerq@kernel.org>
-To: William McVicker <willmcvicker@google.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Chris Morgan <macroalpha82@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>,
- Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
- Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>,
- msp@baylibre.com, srk@ti.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-usb@vger.kernel.org, stable@vger.kernel.org,
- linux-arm-msm@vger.kernel.org
-References: <20241011-am62-lpm-usb-v3-1-562d445625b5@kernel.org>
- <ZyVfcUuPq56R2m1Y@google.com>
- <f35aa5a1-96fd-4e9a-9ecc-5e900d440d4c@kernel.org>
-Content-Language: en-US
-In-Reply-To: <f35aa5a1-96fd-4e9a-9ecc-5e900d440d4c@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Hi William & Chris,
+syzkaller reported a double free bug
+(https://syzkaller.appspot.com/bug?extid=3e563d99e70973c0755c) in
+raw_release.
 
-On 02/11/2024 13:50, Roger Quadros wrote:
-> Hi William,
-> 
-> On 02/11/2024 01:08, William McVicker wrote:
->> +linux-arm-msm@vger.kernel.org
->>
->> Hi Roger,
->>
->> On 10/11/2024, Roger Quadros wrote:
->>> Since commit 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init"),
->>> system suspend is broken on AM62 TI platforms.
->>>
->>> Before that commit, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
->>> bits (hence forth called 2 SUSPHY bits) were being set during core
->>> initialization and even during core re-initialization after a system
->>> suspend/resume.
->>>
->>> These bits are required to be set for system suspend/resume to work correctly
->>> on AM62 platforms.
->>>
->>> Since that commit, the 2 SUSPHY bits are not set for DEVICE/OTG mode if gadget
->>> driver is not loaded and started.
->>> For Host mode, the 2 SUSPHY bits are set before the first system suspend but
->>> get cleared at system resume during core re-init and are never set again.
->>>
->>> This patch resovles these two issues by ensuring the 2 SUSPHY bits are set
->>> before system suspend and restored to the original state during system resume.
->>>
->>> Cc: stable@vger.kernel.org # v6.9+
->>> Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
->>> Link: https://lore.kernel.org/all/1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org/
->>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->>> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>> ---
->>> Changes in v3:
->>> - Fix single line comment style
->>> - add DWC3_GUSB3PIPECTL_SUSPHY to documentation of susphy_state
->>> - Added Acked-by tag
->>> - Link to v2: https://lore.kernel.org/r/20241009-am62-lpm-usb-v2-1-da26c0cd2b1e@kernel.org
->>>
->>> Changes in v2:
->>> - Fix comment style
->>> - Use both USB3 and USB2 SUSPHY bits to determine susphy_state during system suspend/resume.
->>> - Restore SUSPHY bits at system resume regardless if it was set or cleared before system suspend.
->>> - Link to v1: https://lore.kernel.org/r/20241001-am62-lpm-usb-v1-1-9916b71165f7@kernel.org
->>> ---
->>>  drivers/usb/dwc3/core.c | 19 +++++++++++++++++++
->>>  drivers/usb/dwc3/core.h |  3 +++
->>>  2 files changed, 22 insertions(+)
->>>
->>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>> index 9eb085f359ce..ca77f0b186c4 100644
->>> --- a/drivers/usb/dwc3/core.c
->>> +++ b/drivers/usb/dwc3/core.c
->>> @@ -2336,6 +2336,11 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>>  	u32 reg;
->>>  	int i;
->>>  
->>> +	dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
->>> +			    DWC3_GUSB2PHYCFG_SUSPHY) ||
->>> +			    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
->>> +			    DWC3_GUSB3PIPECTL_SUSPHY);
->>> +
->>
->> I'm running into an issue on my Pixel 6 device with this change when the
->> dwc3-exynos device has runtime PM enabled. Basically, after the device boots up
->> and I disconnect USB, the dwc3-exynos device enters runtime suspend followed by
->> system suspend 15 seconds later. On system suspend, the clocks powering these
->> dwc3 registers are off which results in an SError. I have verified that
->> reverting this change fixes the issue.
->>
->> I noticed that dwc3-qcom.c also supports runtime PM for their dwc3 device and
->> most likely is affected by this as well. It would be great if someone with a
->> Qualcomm device could test out dwc3 suspend as well.
-> 
-> Chris was facing another issue with this patch on Rockchip RK3566 [1]
-> 
-> Looks like we totally missed the runtime suspended case
-> I'll think about a solution and send something by today.
-> 
-> [1] - https://lore.kernel.org/all/671bef75.050a0220.e4bcd.1821@mx.google.com/
-> 
->>
->> Here is the crash stack:
->>
->>   SError Interrupt on CPU7, code 0x00000000be000011 -- SError
->>   CPU: 7 UID: 1000 PID: 5661 Comm: binder:477_1 Tainted: G        W  OE      6.12.0-rc3-android16-0-maybe-dirty-4k #1 0439eacb3cff642033630df7ee2e250e0625f2f0
->>   96 irq, BUS_DATA0 group, 0x0
->>   Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
->>   Hardware name: Raven DVT (DT)
->>   pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>   pc : readl+0x40/0x80
->>   lr : readl+0x38/0x80
->>   sp : ffffffc08baa39a0
->>   x29: ffffffc08baa39a0 x28: ffffffd4dd140000 x27: ffffffd4dd140d70
->>   x26: ffffffd4dd2b2000 x25: ffffff800cef2410 x24: ffffff800cef24c0
->>   x23: ffffffd4dd24e000 x22: ffffff887df59440 x21: ffffffc085298100
->>   x20: ffffffd4db8acf60 x19: ffffffc085298200 x18: ffffffc091b730b0
->>   x17: 000000002a703c0b x16: 000000002a703c0b x15: 0000000000953000
->>   x14: 0000000000000000 x13: 0000000000000030 x12: 0101010101010101
->>   x11: 7f7f7f7f7f7fffff x10: 0000000000000000 x9 : ffffffd4dc0d7d48
->>   x8 : 0000000000000000 x7 : 0000000000008000 x6 : 0000000000000000
->>   x5 : 500020737562ffff x4 : 500020737562ffff x3 : ffffffd4db8acf60
->>   x2 : ffffffd4db8a7bac x1 : ffffffc085298200 x0 : 0000000000000020
->>   Kernel panic - not syncing: Asynchronous SError Interrupt
->>   CPU: 7 UID: 1000 PID: 5661 Comm: binder:477_1 Tainted: G        W  OE      6.12.0-rc3-android16-0-maybe-dirty-4k #1 0439eacb3cff642033630df7ee2e250e0625f2f0
->>   Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
->>   Hardware name: Raven DVT (DT)
->>   Call trace:
->>    dump_backtrace+0xec/0x128
->>    show_stack+0x18/0x28
->>    dump_stack_lvl+0x40/0x88
->>    dump_stack+0x18/0x24
->>    panic+0x134/0x45c
->>    nmi_panic+0x3c/0x88
->>    arm64_serror_panic+0x64/0x8c
->>    do_serror+0xc4/0xc8
->>    el1h_64_error_handler+0x34/0x48
->>    el1h_64_error+0x68/0x6c
->>    readl+0x40/0x80
->>    dwc3_suspend_common+0x34/0x454
->>    dwc3_suspend+0x20/0x40
->>    platform_pm_suspend+0x40/0x90
->>    dpm_run_callback+0x60/0x250
->>    device_suspend+0x334/0x614
->>    dpm_suspend+0xc4/0x368
->>    dpm_suspend_start+0x90/0x100
->>    suspend_devices_and_enter+0x128/0xad0
->>    pm_suspend+0x354/0x650
->>    state_store+0x104/0x144
->>    kobj_attr_store+0x30/0x48
->>    sysfs_kf_write+0x54/0x6c
->>    kernfs_fop_write_iter+0x104/0x1e4
->>    vfs_write+0x3bc/0x50c
->>    ksys_write+0x78/0xe8
->>    __arm64_sys_write+0x1c/0x2c
->>    invoke_syscall+0x58/0x10c
->>    el0_svc_common+0xa8/0xdc
->>    do_el0_svc+0x1c/0x28
->>    el0_svc+0x38/0x6c
->>    el0t_64_sync_handler+0x70/0xbc
->>    el0t_64_sync+0x1a8/0x1ac
->>
+I suspect this is because a race between raw_release and
+raw_ioctl_run. While kref_get in raw_ioctl_run is protected by
+the spin lock, all kref_put in raw_release are not under the
+lock. This makes it possible that a kref_put might occur during
+kref_get, which is specifically prohibited by the kref
+documentation[1].
 
-Does this patch fix it for you?
+The fix is to ensure that all kref_put calls are made under lock
+and that we only call kfree(dev) after releasing the lock.
 
-From ee8b353523556a29a423261af9c15be261941ff8 Mon Sep 17 00:00:00 2001
-From: Roger Quadros <rogerq@kernel.org>
-Date: Sat, 2 Nov 2024 14:14:47 +0200
-Subject: [PATCH] usb: dwc3: fix fault at system suspend if device was already
- runtime suspended
+[1] https://docs.kernel.org/core-api/kref.html
 
-If the device was already runtime suspended then during system suspend
-we cannot access the device registers else it will crash.
-
-Cc: stable@vger.kernel.org # v5.15+
-Reported-by: William McVicker <willmcvicker@google.com>
-Closes: https://lore.kernel.org/all/ZyVfcUuPq56R2m1Y@google.com
-Fixes: 705e3ce37bcc ("usb: dwc3: core: Fix system suspend on TI AM62 platforms")
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
+Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
+Reported-by: syzbot+3e563d99e70973c0755c@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=3e563d99e70973c0755c
+Fixes: f2c2e717642c ("usb: gadget: add raw-gadget interface")
 ---
- drivers/usb/dwc3/core.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
+ drivers/usb/gadget/legacy/raw_gadget.c | 44 ++++++++++++++------------
+ 1 file changed, 24 insertions(+), 20 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 427e5660f87c..4933f1b4d9c6 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2342,10 +2342,12 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
- 	u32 reg;
- 	int i;
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index 112fd18d8c99..0c01d491d489 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -225,7 +225,6 @@ static void dev_free(struct kref *kref)
+ 		kfree(dev->eps[i].ep->desc);
+ 		dev->eps[i].state = STATE_EP_DISABLED;
+ 	}
+-	kfree(dev);
+ }
  
--	dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
--			    DWC3_GUSB2PHYCFG_SUSPHY) ||
--			    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
--			    DWC3_GUSB3PIPECTL_SUSPHY);
-+	if (!pm_runtime_suspended(dwc->dev)) {
-+		dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
-+				    DWC3_GUSB2PHYCFG_SUSPHY) ||
-+				    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
-+				    DWC3_GUSB3PIPECTL_SUSPHY);
-+	}
+ /*----------------------------------------------------------------------*/
+@@ -330,7 +329,8 @@ static void gadget_unbind(struct usb_gadget *gadget)
  
- 	switch (dwc->current_dr_role) {
- 	case DWC3_GCTL_PRTCAP_DEVICE:
-
-base-commit: 4b57d665bce1306a2a887cb760aa0c0e7efb42ab
+ 	set_gadget_data(gadget, NULL);
+ 	/* Matches kref_get() in gadget_bind(). */
+-	kref_put(&dev->count, dev_free);
++	if (kref_put(&dev->count, dev_free))
++		kfree(dev);
+ }
+ 
+ static int gadget_setup(struct usb_gadget *gadget,
+@@ -443,34 +443,38 @@ static int raw_open(struct inode *inode, struct file *fd)
+ static int raw_release(struct inode *inode, struct file *fd)
+ {
+ 	int ret = 0;
++	int freed = 0;
+ 	struct raw_dev *dev = fd->private_data;
+ 	unsigned long flags;
+-	bool unregister = false;
+ 
+ 	spin_lock_irqsave(&dev->lock, flags);
+ 	dev->state = STATE_DEV_CLOSED;
+-	if (!dev->gadget) {
+-		spin_unlock_irqrestore(&dev->lock, flags);
+-		goto out_put;
+-	}
+-	if (dev->gadget_registered)
+-		unregister = true;
++	if (!dev->gadget)
++		goto out_put_locked;
++	if (!dev->gadget_registered)
++		goto out_put_locked;
+ 	dev->gadget_registered = false;
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+ 
+-	if (unregister) {
+-		ret = usb_gadget_unregister_driver(&dev->driver);
+-		if (ret != 0)
+-			dev_err(dev->dev,
+-				"usb_gadget_unregister_driver() failed with %d\n",
+-				ret);
+-		/* Matches kref_get() in raw_ioctl_run(). */
+-		kref_put(&dev->count, dev_free);
+-	}
++	ret = usb_gadget_unregister_driver(&dev->driver);
++	if (ret != 0)
++		dev_err(dev->dev,
++			"usb_gadget_unregister_driver() failed with %d\n",
++			ret);
++
++	spin_lock_irqsave(&dev->lock, flags);
++	/* Matches kref_get() in raw_ioctl_run(). */
++	freed = kref_put(&dev->count, dev_free);
++	if (freed)
++		goto out_free_dev;
+ 
+-out_put:
++out_put_locked:
+ 	/* Matches dev_new() in raw_open(). */
+-	kref_put(&dev->count, dev_free);
++	freed = kref_put(&dev->count, dev_free);
++out_free_dev:
++	spin_unlock_irqrestore(&dev->lock, flags);
++	if (freed)
++		kfree(dev);
+ 	return ret;
+ }
+ 
 -- 
-2.34.1
+2.47.0
 
--- 
-cheers,
--roger
 
