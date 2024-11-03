@@ -1,110 +1,135 @@
-Return-Path: <linux-usb+bounces-16980-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16981-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CBF69BA411
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 06:23:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EA879BA557
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 13:02:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7A3DA1F2191F
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 05:23:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD23D1F218DB
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 12:02:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F031422D8;
-	Sun,  3 Nov 2024 05:22:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDF0116D4E5;
+	Sun,  3 Nov 2024 12:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tmeOx9Ak"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GwBfeXi/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE640800;
-	Sun,  3 Nov 2024 05:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71A031632DF;
+	Sun,  3 Nov 2024 12:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730611373; cv=none; b=OJPmA29rcnt1S2G8T+0WLpbEOIP2phtAnu9twjIivzJgrMlEr7Qqru8zijQ+uG6WzXvuJF8Q9XnrVWVagWKGCxVRfl++IarVLcrTeublNsmQRCwoC5mIsaR1yl8+QowRDgMSAYPUbXApOu7xMzOK/yLiCo4N0sX6+AtAimAODNk=
+	t=1730635345; cv=none; b=E/+alLZEo6rNGvgPZdwzKWJ0TvYGLMfgN1djCWLcV4baumEBcCjNK2nycMf22p+UP0rSDOusxS8DvEU4GxIfyIlO0vC2yy+Nvn5NccLUEBgnMDKpm1MWzrwkslz7l/eHL2JVj+u2tHDaXXtCgMZ1XwpBjuH8tayH+chJFBvkzzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730611373; c=relaxed/simple;
-	bh=h84tEPWQA32B7KuowAYEIaMRiPB0pEi18T4lhbSjVkk=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=KcIk8D9/N/8ZBFKTsNf3YlQeHDC03gfaHVjHuOZZtRf1KDQsSh8CoTUCR66uPqnf0349rDjkARGXwI5NnHsq5l+pUjsJEP7TE05viwX/w7oN2WKdLPuG5JlWS9iqm6v8QhRkmals55P3JGOE/r+wVzYNZIYE5O4F+sAQWNZhGdg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tmeOx9Ak; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33D04C4CECD;
-	Sun,  3 Nov 2024 05:22:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730611372;
-	bh=h84tEPWQA32B7KuowAYEIaMRiPB0pEi18T4lhbSjVkk=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=tmeOx9AkLPcwpNZFiBDenF18qJ5nS2iitVT2z5dbjVtGOXmoo7MJVkuFcU06tvG8L
-	 M1mc7bDFllofhF0Pt2ENTyRHlvIZ1dDHqHt6lvtLDO4HwmiQj/6zxM3H+5jRht2Skv
-	 UXPLrh0XJTxXFVeuQJ8ixbhNj/2S6FycNownfmHjLDnvV2b1W7ncuHh37OldgloTbU
-	 MDe1j1lRtwu2cEJ6cdEgMr9qEMZXDNwIBFia/Ik7SKpzm9cfJV2rvs1hfjvTt8y6CP
-	 6OtzpJlNDf8p2n8emR6gGWHomtIy3Py6SA/xMnrPfHChxZVp+ERBlIoiXWfE6/NG1k
-	 MJtmWI+88jFWQ==
-Date: Sun, 03 Nov 2024 00:22:50 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1730635345; c=relaxed/simple;
+	bh=Y4qG3SXaAVQ+YzeZZ3XeJ6pdiwxgT2z0KZ92aiDC474=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kD5Z1xvwNoJdaZUfkcYReXMwkt48vkq8SyG9nkD01+nY7OLJ/75qLKt0IJXnHuTndfwIbqLUllW4Dx+rVl08EvXcBU17BgedbplxONfeXipzJlcg5608AZYnsWrV1D2cwICXKntfioClGrcPiCQ3oRanji99zghYkSPj/eynLiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GwBfeXi/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E5DC4CECD;
+	Sun,  3 Nov 2024 12:02:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1730635345;
+	bh=Y4qG3SXaAVQ+YzeZZ3XeJ6pdiwxgT2z0KZ92aiDC474=;
+	h=Date:From:To:Cc:Subject:From;
+	b=GwBfeXi/XPHHNDMheuWWCahNMr0fBVdXoYo2Jw2DP5wEhhoF1otuvwcCSXzgHfR27
+	 2ksiFISJX2KzrAcn7gaEKZJtXri07tLrJHxOReqT6d9yYI0es639Z4/Qt3gFCiFAge
+	 5YsETtcLETaYHVCW7UCDKI8Htz+UB+GpKSc9gADI=
+Date: Sun, 3 Nov 2024 13:02:09 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB fixes for 6.12-rc6
+Message-ID: <ZydmQblqRdfE3dZ5@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: rdbabiera@google.com, linux-usb@vger.kernel.org, krzk+dt@kernel.org, 
- dmitry.baryshkov@linaro.org, conor+dt@kernel.org, 
- gregkh@linuxfoundation.org, badhri@google.com, linux@roeck-us.net, 
- xu.yang_2@nxp.com, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- heikki.krogerus@linux.intel.com, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, kyletso@google.com
-In-Reply-To: <20241103034402.2460252-3-amitsd@google.com>
-References: <20241103034402.2460252-1-amitsd@google.com>
- <20241103034402.2460252-3-amitsd@google.com>
-Message-Id: <173061137043.3549002.17300495931303369678.robh@kernel.org>
-Subject: Re: [PATCH v2 2/3] dt-bindings: usb: maxim,max33359: add usage of
- sink bc12 time property
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
+The following changes since commit 42f7652d3eb527d03665b09edac47f85fb600924:
 
-On Sat, 02 Nov 2024 20:43:29 -0700, Amit Sunil Dhamne wrote:
-> Add usage of "sink-bc12-completion-time-ms"  connector property to
-> max33359 controller for delaying PD negotiation till BC1.2 detection
-> completes. This overcomes the occasional delays observed while
-> receiving PD messages where BC1.2 detection runs in parallel.
-> 
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  Documentation/devicetree/bindings/usb/maxim,max33359.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+  Linux 6.12-rc4 (2024-10-20 15:19:38 -0700)
 
-My bot found errors running 'make dt_binding_check' on your patch:
+are available in the Git repository at:
 
-yamllint warnings/errors:
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.12-rc6
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb: maxtcpc@25: connector: Unevaluated properties are not allowed ('sink-bc12-completion-time-ms' was unexpected)
-	from schema $id: http://devicetree.org/schemas/usb/maxim,max33359.yaml#
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb: connector: Unevaluated properties are not allowed ('sink-bc12-completion-time-ms' was unexpected)
-	from schema $id: http://devicetree.org/schemas/connector/usb-connector.yaml#
+for you to fetch changes up to afb92ad8733ef0a2843cc229e4d96aead80bc429:
 
-doc reference errors (make refcheckdocs):
+  usb: typec: tcpm: restrict SNK_WAIT_CAPABILITIES_TIMEOUT transitions to non self-powered devices (2024-10-29 04:38:00 +0100)
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241103034402.2460252-3-amitsd@google.com
+----------------------------------------------------------------
+USB / Thunderbolt fixes for 6.12-rc6
 
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
+Here are some small USB and Thunderbolt driver fixes for 6.12-rc6 that
+have been sitting in my tree this week.  Included in here are the
+following:
+  - thunderbolt driver fixes for reported issues
+  - USB typec driver fixes
+  - xhci driver fixes for reported problems
+  - dwc2 driver revert for a broken change
+  - usb phy driver fix
+  - usbip tool fix
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+All of these have been in linux-next this week with no reported issues.
 
-pip3 install dtschema --upgrade
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
+----------------------------------------------------------------
+Amit Sunil Dhamne (1):
+      usb: typec: tcpm: restrict SNK_WAIT_CAPABILITIES_TIMEOUT transitions to non self-powered devices
 
+Basavaraj Natikar (1):
+      xhci: Use pm_runtime_get to prevent RPM on unsupported systems
+
+Faisal Hassan (1):
+      xhci: Fix Link TRB DMA in command ring stopped completion event
+
+Gil Fine (1):
+      thunderbolt: Honor TMU requirements in the domain when setting TMU mode
+
+Greg Kroah-Hartman (1):
+      Merge tag 'thunderbolt-for-v6.12-rc5' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+
+Javier Carrasco (4):
+      usb: typec: qcom-pmic-typec: use fwnode_handle_put() to release fwnodes
+      usb: typec: qcom-pmic-typec: fix missing fwnode removal in error path
+      usb: typec: fix unreleased fwnode_handle in typec_port_register_altmodes()
+      usb: typec: use cleanup facility for 'altmodes_node'
+
+Mathias Nyman (1):
+      usb: acpi: fix boot hang due to early incorrect 'tunneled' USB3 device links
+
+Mika Westerberg (1):
+      thunderbolt: Fix KASAN reported stack out-of-bounds read in tb_retimer_scan()
+
+Stefan Wahren (1):
+      Revert "usb: dwc2: Skip clock gating on Broadcom SoCs"
+
+Zijun Hu (1):
+      usb: phy: Fix API devm_usb_put_phy() can not release the phy
+
+Zongmin Zhou (1):
+      usbip: tools: Fix detach_port() invalid port error path
+
+ drivers/thunderbolt/retimer.c                 |  5 +--
+ drivers/thunderbolt/tb.c                      | 48 +++++++++++++++++++++++----
+ drivers/usb/core/usb-acpi.c                   |  4 +--
+ drivers/usb/dwc2/params.c                     |  1 -
+ drivers/usb/host/xhci-pci.c                   |  6 ++--
+ drivers/usb/host/xhci-ring.c                  | 16 ++++-----
+ drivers/usb/phy/phy.c                         |  2 +-
+ drivers/usb/typec/class.c                     |  6 ++--
+ drivers/usb/typec/tcpm/qcom/qcom_pmic_typec.c | 10 +++---
+ drivers/usb/typec/tcpm/tcpm.c                 | 10 ++++--
+ tools/usb/usbip/src/usbip_detach.c            |  1 +
+ 11 files changed, 78 insertions(+), 31 deletions(-)
 
