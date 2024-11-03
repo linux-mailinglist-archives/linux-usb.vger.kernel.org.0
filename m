@@ -1,163 +1,79 @@
-Return-Path: <linux-usb+bounces-16990-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16993-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74F1B9BA70B
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 18:06:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 58DCE9BA78D
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 20:02:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E54E82821CA
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 17:06:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 143752817BF
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 19:02:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09FCA1990C4;
-	Sun,  3 Nov 2024 17:04:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A26E518B478;
+	Sun,  3 Nov 2024 19:02:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="EM7F+ukH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KWWUiMmA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F4618BBB3;
-	Sun,  3 Nov 2024 17:04:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27C0E1E52D;
+	Sun,  3 Nov 2024 19:02:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730653486; cv=none; b=Y8pyxGPFyKDVRFlIvQVLlzgvX3IBA/p/D7w2dUa+1OGaVaxnWzPm5y/BVPbKQ02615WYmFPMJrzaTi5GI0tzQOog5DL7SYqHqZOxu0hncvlA/VePrqRHOm0BMIb2fmvexzvrTYxmlZ6nvx4JhAATwk21GSbFeSsxT9qUWp82LLQ=
+	t=1730660541; cv=none; b=dCnVwekD63la3Bu+UW/Y5LcO7/450r/oXJp+vaNQ1AQZ+pgIlg5U0Dd6vJuvlT+YKFPBns9EXsZUw+70K8Ox8VvHcyfHC6dYNciXTW1pkm0VhxUzwX9mf0AWI2BCJ88Fdg3wsOQdJbeJ4AKgEG+EOruYaAGMO3fbf0z0DZw+oGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730653486; c=relaxed/simple;
-	bh=i1lGRcvBSYaAkRCU3PsefBTXEi2eEGtd/RNZhauMerg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kPXNmUnKdw+u92G9SyQwSLpyamNDtlw75+5bYw6nWke1FtJuaeHzaYoFCiFh14TRBz2LWicBjp3syP8QMs7HOgxyKMADYr9haoxbkVkTgE6jqd4SE1AlhsotFmIJkvzzcmUUq6I7eB0CM9oTlJFCoUtDxI4N2lhEsWY13f9SbmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=EM7F+ukH; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1730653482;
-	bh=i1lGRcvBSYaAkRCU3PsefBTXEi2eEGtd/RNZhauMerg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=EM7F+ukHWaKuiEB29hQ+7phHHhsz/BJbMlrgdettJj9WGcUGv0v3iPxNVogNiJjoq
-	 vcsMlaO5j0xXKHGTsKj9Uz+7RKXbNXf3NumpUmVhz/FDM5899V8zcDLzETVL2nf/eJ
-	 stDuTk3uXiev7Lr6wHaszQGdn90xnrATN6qv4tN8=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 03 Nov 2024 17:03:39 +0000
-Subject: [PATCH v2 10/10] driver core: Constify attribute arguments of
- binary attributes
+	s=arc-20240116; t=1730660541; c=relaxed/simple;
+	bh=IUEJUSv4hPatVISPOHkqdxj2/5oHorSFN14ll9Mb4uk=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=jl5eS14DU2bdZANqlzk+plktaDkmlTkJ/5kyTku27jGP75lzrI2Gov1ADn/rO8brD7ekiOxi/aljqtW4NyY7ewUSCSoCRpxLg6TKXxY4OyumCN/ZBXkf4luP1lOwRd8yN1R33Oh3M2Kf4pk9Uxe3IDGb280D02fp9Umfexrfzdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KWWUiMmA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B26C4CED0;
+	Sun,  3 Nov 2024 19:02:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730660541;
+	bh=IUEJUSv4hPatVISPOHkqdxj2/5oHorSFN14ll9Mb4uk=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=KWWUiMmA8QDtrFv5Yzd99EeT1xfuET+eKiULD1OS346ZKyX9gDwPR5BuDUTYxfR5d
+	 C8pvsCb9VMQ43A+etHGpi5jfLXho0N/fSZKPE9U6EI6qPXZNyyeLoGLoAF61hSsl7N
+	 Ig+8g39Y+OBwatJkHGGKQrsCtSSrGnBteDtPzVe3BcL1KPtfubqFyHnwhK5ynvR4f6
+	 RYTyJ+1YRlR3mOMrVVb9xQMbljOrgOIii9T0gICwCSXPfRXL+WRQhvi77h+SxpxRpd
+	 Fw5/546Zlly/V1GkBA1Dq0sUyg71QXwZo5rXWrDi4GKXMMJ7CuOftm0jbsHD/klO6r
+	 GR1cUe5Wx/5fg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADCE838363C3;
+	Sun,  3 Nov 2024 19:02:30 +0000 (UTC)
+Subject: Re: [GIT PULL] USB fixes for 6.12-rc6
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZydmQblqRdfE3dZ5@kroah.com>
+References: <ZydmQblqRdfE3dZ5@kroah.com>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZydmQblqRdfE3dZ5@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.12-rc6
+X-PR-Tracked-Commit-Id: afb92ad8733ef0a2843cc229e4d96aead80bc429
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: be5bfa1378f238da4a35c7d4b7cc0505ae869fb4
+Message-Id: <173066054918.3233701.813371468727296290.pr-tracker-bot@kernel.org>
+Date: Sun, 03 Nov 2024 19:02:29 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241103-sysfs-const-bin_attr-v2-10-71110628844c@weissschuh.net>
-References: <20241103-sysfs-const-bin_attr-v2-0-71110628844c@weissschuh.net>
-In-Reply-To: <20241103-sysfs-const-bin_attr-v2-0-71110628844c@weissschuh.net>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Bjorn Helgaas <bhelgaas@google.com>, 
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
- Davidlohr Bueso <dave@stgolabs.net>, 
- Jonathan Cameron <jonathan.cameron@huawei.com>, 
- Dave Jiang <dave.jiang@intel.com>, 
- Alison Schofield <alison.schofield@intel.com>, 
- Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
- Alex Deucher <alexander.deucher@amd.com>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- Xinhui Pan <Xinhui.Pan@amd.com>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, 
- Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>, 
- Miquel Raynal <miquel.raynal@bootlin.com>, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>, 
- Carlos Bilbao <carlos.bilbao.osdev@gmail.com>, 
- Hans de Goede <hdegoede@redhat.com>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- "David E. Box" <david.e.box@linux.intel.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Richard Henderson <richard.henderson@linaro.org>, 
- Matt Turner <mattst88@gmail.com>, Frederic Barrat <fbarrat@linux.ibm.com>, 
- Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, 
- Logan Gunthorpe <logang@deltatee.com>, 
- "K. Y. Srinivasan" <kys@microsoft.com>, 
- Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
- Dexuan Cui <decui@microsoft.com>
-Cc: Dan Williams <dan.j.williams@intel.com>, linux-kernel@vger.kernel.org, 
- linux-pci@vger.kernel.org, linux-cxl@vger.kernel.org, 
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
- linux-rdma@vger.kernel.org, linux-mtd@lists.infradead.org, 
- platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-alpha@vger.kernel.org, 
- linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1730653468; l=2330;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=i1lGRcvBSYaAkRCU3PsefBTXEi2eEGtd/RNZhauMerg=;
- b=wjQlo57jq0Wj7AlLBOYWjC3NLTcXdQ4S/vHvyo3etlKonEvBK3xDMeXVEI2nFeo1fRBiMSJWq
- 8Dy1FhYi+4pDACqaxOlIcEPw5eL4UaDS9rJJgllbu0x7Wp3mt9dGtys
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-As preparation for the constification of struct bin_attribute,
-constify the arguments of the read and write callbacks.
+The pull request you sent on Sun, 3 Nov 2024 13:02:09 +0100:
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- drivers/base/node.c     | 4 ++--
- drivers/base/topology.c | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.12-rc6
 
-diff --git a/drivers/base/node.c b/drivers/base/node.c
-index eb72580288e62727e5b2198a6451cf9c2533225a..3e761633ac75826bedb5dd30b879f7cc1af95ec3 100644
---- a/drivers/base/node.c
-+++ b/drivers/base/node.c
-@@ -27,7 +27,7 @@ static const struct bus_type node_subsys = {
- };
- 
- static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
--				  struct bin_attribute *attr, char *buf,
-+				  const struct bin_attribute *attr, char *buf,
- 				  loff_t off, size_t count)
- {
- 	struct device *dev = kobj_to_dev(kobj);
-@@ -48,7 +48,7 @@ static inline ssize_t cpumap_read(struct file *file, struct kobject *kobj,
- static BIN_ATTR_RO(cpumap, CPUMAP_FILE_MAX_BYTES);
- 
- static inline ssize_t cpulist_read(struct file *file, struct kobject *kobj,
--				   struct bin_attribute *attr, char *buf,
-+				   const struct bin_attribute *attr, char *buf,
- 				   loff_t off, size_t count)
- {
- 	struct device *dev = kobj_to_dev(kobj);
-diff --git a/drivers/base/topology.c b/drivers/base/topology.c
-index 89f98be5c5b9915b2974e184bf89c4c25c183095..1090751d7f458ce8d2a50e82d65b8ce31e938f15 100644
---- a/drivers/base/topology.c
-+++ b/drivers/base/topology.c
-@@ -23,7 +23,7 @@ static ssize_t name##_show(struct device *dev,				\
- 
- #define define_siblings_read_func(name, mask)					\
- static ssize_t name##_read(struct file *file, struct kobject *kobj,		\
--			   struct bin_attribute *attr, char *buf,		\
-+			   const struct bin_attribute *attr, char *buf,		\
- 			   loff_t off, size_t count)				\
- {										\
- 	struct device *dev = kobj_to_dev(kobj);                                 \
-@@ -33,7 +33,7 @@ static ssize_t name##_read(struct file *file, struct kobject *kobj,		\
- }										\
- 										\
- static ssize_t name##_list_read(struct file *file, struct kobject *kobj,	\
--				struct bin_attribute *attr, char *buf,		\
-+				const struct bin_attribute *attr, char *buf,	\
- 				loff_t off, size_t count)			\
- {										\
- 	struct device *dev = kobj_to_dev(kobj);					\
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/be5bfa1378f238da4a35c7d4b7cc0505ae869fb4
+
+Thank you!
 
 -- 
-2.47.0
-
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
