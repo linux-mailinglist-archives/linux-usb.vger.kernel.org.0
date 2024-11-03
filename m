@@ -1,184 +1,82 @@
-Return-Path: <linux-usb+bounces-16995-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16996-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15EE89BAA23
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 02:25:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5764E9BAC28
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 06:46:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BD611F2135D
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 01:25:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CC89280D0E
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 05:46:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0024A156665;
-	Mon,  4 Nov 2024 01:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83C7918C003;
+	Mon,  4 Nov 2024 05:46:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="mwumFI9E"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N80uiclq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752BF26AF6;
-	Mon,  4 Nov 2024 01:25:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E3B800;
+	Mon,  4 Nov 2024 05:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730683532; cv=none; b=e91dvlxhXHeZimQigaA+YkhvhpZAZyPstdNLYn7xzIexp9z12JMkuAx7ebyZwTJ002h0iMCEC2Nlg86zw1b4mREZQwaX9ABKVyDc/E/oonlaKZoop0drSLlQr1J5aQ2o7MIP/z1ubHLuaXC+nHll2QVM+QRI6HDLIh7x7r+oLDE=
+	t=1730699200; cv=none; b=oqvJDumDd1dmfjH8r/W6Ols7MgS9d3CqrOcT0FFay5c2jp47mIYhb8z/vdWgI1NEnRdhWV7BVrK0kqNDy6UMKWoO96b5aUxRgvJF4l7t8bgG2b3bSpyn7ynJfWcR6jn1MxgJPQ/Kvn2uScD1lpbymPnWHFFe5FikBadmZu3XuTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730683532; c=relaxed/simple;
-	bh=KB98Un7mQM2y6mVpx6JRHoz0b/BTC5JATt4FtI33v0U=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CwrVqkKCKYpZA4YNiTRRcLRoB9sqiZCPMJFr3qrFx1fRRFcwun3gh195QYrPNtRbVnlDeEIZzx/AlAYarqplVz5cr2OLn7R1PSld2IYJLaiCL5bgkvBjH+7nA5XvFpwPocID3LHSuTwdi8ZCVzbUY3Nq+r32DqtnwXJ0X3v//3c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=mwumFI9E; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A41DSEh019476;
-	Mon, 4 Nov 2024 01:25:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=iMh8eF
-	HecHacE2bhwoTpB2hk6AqM865un55dFnhq1os=; b=mwumFI9ENq4rcML09znikW
-	bSKfPSoLpGiPwIVPNb+PTU/Z9iu2uh9/7IsfcbZ2541kn+9Pa1KaH43261DTcInL
-	pJ3rcjIjJBQ6fzmxg8ns9KWzD3Uc3+devvxJHHrJ42w5VT1xxl9HouMu+BQwVlnS
-	K2EOVqA7F3PdpEO8mnuj2Rhej4k3uU44TrsNEMww2Kr5veoMrGZuLbZbKka3UhPP
-	mwbaM/NWU4zi15DYpX7ZFZ8FllhKhAH1hafqawYZz+WNlB3YXAWAHnoeUXpPgJZB
-	zuibf6jNbtRmEvDez5JdDKt6c/vHhZGRrKjxNUpwH+T/eFfpc6soYKoS+By8HCdA
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 42pmcdg0ug-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Nov 2024 01:25:29 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4A3HiAe5019606;
-	Mon, 4 Nov 2024 01:25:28 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 42nxds1cr9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 04 Nov 2024 01:25:28 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4A41PQna34013876
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 4 Nov 2024 01:25:26 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 8294120043;
-	Mon,  4 Nov 2024 01:25:26 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0D44520040;
-	Mon,  4 Nov 2024 01:25:26 +0000 (GMT)
-Received: from ozlabs.au.ibm.com (unknown [9.63.197.14])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  4 Nov 2024 01:25:26 +0000 (GMT)
-Received: from jarvis.ozlabs.ibm.com (unknown [9.150.11.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ozlabs.au.ibm.com (Postfix) with ESMTPSA id 95503602B8;
-	Mon,  4 Nov 2024 12:25:07 +1100 (AEDT)
-Message-ID: <3b8312490c668a99b2a89667b7d1cbdf2019b885.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 06/10] sysfs: treewide: constify attribute callback
- of bin_attribute::mmap()
-From: Andrew Donnellan <ajd@linux.ibm.com>
-To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki"
- <rafael@kernel.org>,
-        Bjorn Helgaas	 <bhelgaas@google.com>,
-        Srinivas
- Kandagatla <srinivas.kandagatla@linaro.org>,
-        Davidlohr Bueso
- <dave@stgolabs.net>,
-        Jonathan Cameron <jonathan.cameron@huawei.com>,
-        Dave
- Jiang	 <dave.jiang@intel.com>,
-        Alison Schofield
- <alison.schofield@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Ira
- Weiny <ira.weiny@intel.com>,
-        Alex Deucher	 <alexander.deucher@amd.com>,
-        Christian =?ISO-8859-1?Q?K=F6nig?=	 <christian.koenig@amd.com>,
-        Xinhui Pan
- <Xinhui.Pan@amd.com>, David Airlie	 <airlied@gmail.com>,
-        Simona Vetter
- <simona@ffwll.ch>,
-        Dennis Dalessandro	
- <dennis.dalessandro@cornelisnetworks.com>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky	 <leon@kernel.org>,
-        Tudor Ambarus
- <tudor.ambarus@linaro.org>,
-        Pratyush Yadav	 <pratyush@kernel.org>,
-        Michael
- Walle <mwalle@kernel.org>,
-        Miquel Raynal	 <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>,
-        Carlos Bilbao	
- <carlos.bilbao.osdev@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ilpo
- =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        "David E. Box"
- <david.e.box@linux.intel.com>,
-        "James E.J. Bottomley"	
- <James.Bottomley@HansenPartnership.com>,
-        "Martin K. Petersen"	
- <martin.petersen@oracle.com>,
-        Richard Henderson
- <richard.henderson@linaro.org>,
-        Matt Turner <mattst88@gmail.com>,
-        Frederic
- Barrat <fbarrat@linux.ibm.com>,
-        Arnd Bergmann <arnd@arndb.de>, Logan
- Gunthorpe <logang@deltatee.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang	 <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>,
-        Dexuan Cui	 <decui@microsoft.com>
-Cc: Dan Williams <dan.j.williams@intel.com>, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-cxl@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-rdma@vger.kernel.org, linux-mtd@lists.infradead.org,
-        platform-driver-x86@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-alpha@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org
-Date: Mon, 04 Nov 2024 12:24:55 +1100
-In-Reply-To: <20241103-sysfs-const-bin_attr-v2-6-71110628844c@weissschuh.net>
-References: <20241103-sysfs-const-bin_attr-v2-0-71110628844c@weissschuh.net>
-	 <20241103-sysfs-const-bin_attr-v2-6-71110628844c@weissschuh.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.1 (3.54.1-1.fc41) 
+	s=arc-20240116; t=1730699200; c=relaxed/simple;
+	bh=VsaZ4KjQRsbAjLC6vSYbUfp8wn3g20hzPrGdvQVvyJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dv6kZ5itA3fLVp61/HDZmXdFOm7FQoFEORSgbWIzvDIpfKXD8zQCtEzJlT9nPL98Jz3bcuypb000DTfoLynW+f8Op6v30p26H66KZDqh0el1FL7Iir3FbtkOTFW0B2c8xitRuyvQETfULWVGLps2dpuLuHH+g/5yz6xVQRpLQzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N80uiclq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414DEC4CECE;
+	Mon,  4 Nov 2024 05:46:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1730699199;
+	bh=VsaZ4KjQRsbAjLC6vSYbUfp8wn3g20hzPrGdvQVvyJ8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=N80uiclqr9jZgv7xNsJL3qQCXO+zMytUriGgBQ9Kxvv7Zsir7uaFBvWe0czAu7xsv
+	 PTVxzyG+7Gf6nlLaxJNFMbmWSot9tSUa5Mk27ZFAuceWqtuZTQYWsYBZzYuslEgQmi
+	 JgCw/PTlUgxKR/a/rTaRCGo9i9AWQ0+08jWRl5lk=
+Date: Mon, 4 Nov 2024 00:08:12 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: Add SAR2130P compatible
+Message-ID: <2024110458-seclusion-impatient-a4ee@gregkh>
+References: <20241017-sar2130p-usb-v1-1-21e01264b70e@linaro.org>
+ <gohuncowxxud4rilmr23q3zc6rnkoqpbkl6v4puiexegvzr3fm@2zt4olzo64bu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: bUq8rE4yIowiOjV0r14rpmw3jkMEefMS
-X-Proofpoint-ORIG-GUID: bUq8rE4yIowiOjV0r14rpmw3jkMEefMS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- malwarescore=0 priorityscore=1501 adultscore=0 impostorscore=0
- suspectscore=0 mlxlogscore=358 bulkscore=0 clxscore=1011 mlxscore=0
- spamscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411040007
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <gohuncowxxud4rilmr23q3zc6rnkoqpbkl6v4puiexegvzr3fm@2zt4olzo64bu>
 
-On Sun, 2024-11-03 at 17:03 +0000, Thomas Wei=C3=9Fschuh wrote:
-> The mmap() callbacks should not modify the struct
-> bin_attribute passed as argument.
-> Enforce this by marking the argument as const.
->=20
-> As there are not many callback implementers perform this change
-> throughout the tree at once.
->=20
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+On Thu, Oct 31, 2024 at 07:37:43PM +0200, Dmitry Baryshkov wrote:
+> On Thu, Oct 17, 2024 at 09:16:38PM +0300, Dmitry Baryshkov wrote:
+> > Document compatible for the Synopsys DWC3 USB Controller on SAR2130P
+> > platform.
+> > 
+> > Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > ---
+> >  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
+> >  1 file changed, 2 insertions(+)
+> > 
+> 
+> Gracious ping, the patch has been acked by DT maintainers, but is still
+> not present in linux-next and got no other reviews.
 
-Acked-by: Andrew Donnellan <ajd@linux.ibm.com> # ocxl
+I don't see the ack here, where am I missing it?
 
---=20
-Andrew Donnellan    OzLabs, ADL Canberra
-ajd@linux.ibm.com   IBM Australia Limited
+thanks,
+
+greg k-h
 
