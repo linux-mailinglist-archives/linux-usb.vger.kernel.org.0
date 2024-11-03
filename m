@@ -1,47 +1,47 @@
-Return-Path: <linux-usb+bounces-16982-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-16987-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21CC89BA6E5
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 18:05:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 729959BA700
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 18:06:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52B961C217D5
-	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 17:05:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25F931F236CE
+	for <lists+linux-usb@lfdr.de>; Sun,  3 Nov 2024 17:06:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9655018A92A;
-	Sun,  3 Nov 2024 17:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 578D818DF79;
+	Sun,  3 Nov 2024 17:04:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="nF+i3TO1"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="TONv6hNY"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62E5617A597;
-	Sun,  3 Nov 2024 17:04:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C665418BBA3;
+	Sun,  3 Nov 2024 17:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730653482; cv=none; b=sRUeK3jaPUB1yaKtyEd4UaInJR2R0507nMGvDWHRaMxv+peVyN2n6N7+B2sSr2a2a7ocovRHun/tQ8UjSBghp9gCYHOBfqHMm12BNXQO5ZMosdKocGHW56zLjeFcZMYrH7/Ayri9/3ECmoInHpxilawOxjBv4bnnydLfjIYmlGc=
+	t=1730653485; cv=none; b=HE6pgGZMl6KplpY1gw58AMYNx7ibcvEvGasnTOvIdvjjw6A8Nn2tB7UoNeh66QyunkX5dCoqs7hd5jV/97cPGokJSno2IGSb8uFU/3/Wszl+W6fQdrnu7kQ28x6LXIYJefVo1KdtbV7VubHIVPa73b2vCMd7wqBkebdOqR3mzEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730653482; c=relaxed/simple;
-	bh=zDhPVchfMys7HnsVtwZsrXjRXhl5fZsRZ1XGARPtegE=;
+	s=arc-20240116; t=1730653485; c=relaxed/simple;
+	bh=Knwg+Z2CkMm4IK1d+HsEFrKnqSyqDlXFkrBwo+TwWXc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rfgqPLxWN0c81iG+Gt15h0UpdJGuJh6IRYvzzXjuX6CS09rcT3jb4fWBwbXho35KEYUmsn+pC+r7fa8qYrymOefJFhLcLuc+YRPeBMfKt4I5TZROGQNhkYOtScgeLhgpPNeUT+qSdLwYAKzd289p+Wp+Yj4IQwzn3DFEaLso3Bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=nF+i3TO1; arc=none smtp.client-ip=159.69.126.157
+	 In-Reply-To:To:Cc; b=gDuj+utISlNTKbO4lK02EdjFu7Af5G2VMVX4PHWAV+aCc+VWZmr0Z90dZbbSfrn8OqsAILEyUQzUI9M7z3e0TkaBQ+bQ/UKevaE6YgOBr6dP38esIkqEj2J5nrmYo1chG5aFjeMeTJbIJLJhRgM0FEx4p3pwKQdacSeiFZWhb6E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=TONv6hNY; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1730653478;
-	bh=zDhPVchfMys7HnsVtwZsrXjRXhl5fZsRZ1XGARPtegE=;
+	s=mail; t=1730653480;
+	bh=Knwg+Z2CkMm4IK1d+HsEFrKnqSyqDlXFkrBwo+TwWXc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=nF+i3TO19zkqViLZBPElPKvX/TvhJJeS1cvvIzeKcupp4M59PZzI/dmxNU82/FOOD
-	 b1PHpxxOeHOMATRE4iVFCkW9eR13J9JRa9AZRjbs61ruzxDt43px/4jqbxYk0GryTq
-	 17bNoP+ivw6mKFg334qDOC+P5FikSoHeR2wGq+Bo=
+	b=TONv6hNY4AEVVeYa1wAXVcccuLRstwqknXThdzM9t+2fLKSDfr6hOT9tkgsug1A0R
+	 NQmPlMzUKxHgxqKaUcuzhx8QEk1xWpSBNDdcvPixAP6olLbraqAsAKdcjrcKNYe27q
+	 9VoKF1eN13NjIkU6TSC12VKX/ebe7oE07QuN/730=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Sun, 03 Nov 2024 17:03:33 +0000
-Subject: [PATCH v2 04/10] nvmem: core: calculate bin_attribute size through
- bin_size()
+Date: Sun, 03 Nov 2024 17:03:36 +0000
+Subject: [PATCH v2 07/10] sysfs: treewide: constify attribute callback of
+ bin_attribute::llseek()
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241103-sysfs-const-bin_attr-v2-4-71110628844c@weissschuh.net>
+Message-Id: <20241103-sysfs-const-bin_attr-v2-7-71110628844c@weissschuh.net>
 References: <20241103-sysfs-const-bin_attr-v2-0-71110628844c@weissschuh.net>
 In-Reply-To: <20241103-sysfs-const-bin_attr-v2-0-71110628844c@weissschuh.net>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -95,56 +95,53 @@ Cc: Dan Williams <dan.j.williams@intel.com>, linux-kernel@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, linux-hyperv@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1730653468; l=1407;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1730653468; l=1737;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=zDhPVchfMys7HnsVtwZsrXjRXhl5fZsRZ1XGARPtegE=;
- b=LIJoZnee0F8KxWypgifoxx5C03UWzUsfKRD3mTuXEg8GZQDzU4bKngbG7gE6mho+vvHyDPpYb
- T0csHWK0CZAA7NKHFKir+h35XqhjNK7+x/o8Rk9YXpQi/8Q7SU3s9Ua
+ bh=Knwg+Z2CkMm4IK1d+HsEFrKnqSyqDlXFkrBwo+TwWXc=;
+ b=7BBy1cB2402AMdsGbWDhocbKrbJW2MgG/pXJPZgbbTP5a7oCuUuoE2vbVvQiK5iVSTaOOfRv6
+ UmT00qXCNvtDaYwwoMp7tKP4VGZJJQhLqLk6CjFCbnS/F84qc7ejcEm
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Stop abusing the is_bin_visible() callback to calculate the attribute
-size. Instead use the new, dedicated bin_size() one.
+The llseek() callbacks should not modify the struct
+bin_attribute passed as argument.
+Enforce this by marking the argument as const.
+
+As there are not many callback implementers perform this change
+throughout the tree at once.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
- drivers/nvmem/core.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
+ drivers/pci/pci-sysfs.c | 2 +-
+ include/linux/sysfs.h   | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-index 33ffa2aa4c1152398ec66b8dd7b30384c5346a6e..63370c76394ee9b8d514da074779617cef67c311 100644
---- a/drivers/nvmem/core.c
-+++ b/drivers/nvmem/core.c
-@@ -303,11 +303,19 @@ static umode_t nvmem_bin_attr_is_visible(struct kobject *kobj,
- 	struct device *dev = kobj_to_dev(kobj);
- 	struct nvmem_device *nvmem = to_nvmem_device(dev);
- 
--	attr->size = nvmem->size;
--
- 	return nvmem_bin_attr_get_umode(nvmem);
- }
- 
-+static size_t nvmem_bin_attr_size(struct kobject *kobj,
-+				  const struct bin_attribute *attr,
-+				  int i)
-+{
-+	struct device *dev = kobj_to_dev(kobj);
-+	struct nvmem_device *nvmem = to_nvmem_device(dev);
-+
-+	return nvmem->size;
-+}
-+
- static umode_t nvmem_attr_is_visible(struct kobject *kobj,
- 				     struct attribute *attr, int i)
+diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
+index 0ad3427228b12aa95325c6fc00e9686740559238..49bee70f7d375bca056476acd6528d19ead2c419 100644
+--- a/drivers/pci/pci-sysfs.c
++++ b/drivers/pci/pci-sysfs.c
+@@ -841,7 +841,7 @@ static const struct attribute_group pci_dev_config_attr_group = {
+ static __maybe_unused loff_t
+ pci_llseek_resource(struct file *filep,
+ 		    struct kobject *kobj __always_unused,
+-		    struct bin_attribute *attr,
++		    const struct bin_attribute *attr,
+ 		    loff_t offset, int whence)
  {
-@@ -383,6 +391,7 @@ static const struct attribute_group nvmem_bin_group = {
- 	.bin_attrs	= nvmem_bin_attributes,
- 	.attrs		= nvmem_attrs,
- 	.is_bin_visible = nvmem_bin_attr_is_visible,
-+	.bin_size	= nvmem_bin_attr_size,
- 	.is_visible	= nvmem_attr_is_visible,
- };
- 
+ 	return fixed_size_llseek(filep, offset, whence, attr->size);
+diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
+index 9fcdc8cd3118f359742bfd8b708d5c3eff511042..cb2a5e277c2384f2e8add8fbf2907e8a819576ec 100644
+--- a/include/linux/sysfs.h
++++ b/include/linux/sysfs.h
+@@ -307,7 +307,7 @@ struct bin_attribute {
+ 			char *, loff_t, size_t);
+ 	ssize_t (*write)(struct file *, struct kobject *, struct bin_attribute *,
+ 			 char *, loff_t, size_t);
+-	loff_t (*llseek)(struct file *, struct kobject *, struct bin_attribute *,
++	loff_t (*llseek)(struct file *, struct kobject *, const struct bin_attribute *,
+ 			 loff_t, int);
+ 	int (*mmap)(struct file *, struct kobject *, const struct bin_attribute *attr,
+ 		    struct vm_area_struct *vma);
 
 -- 
 2.47.0
