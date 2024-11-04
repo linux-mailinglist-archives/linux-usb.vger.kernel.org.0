@@ -1,181 +1,157 @@
-Return-Path: <linux-usb+bounces-17027-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17028-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D3C29BB108
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 11:25:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C6339BB139
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 11:36:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 516131C2116E
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 10:25:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE33FB22FF7
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 10:36:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF1C1B0F2C;
-	Mon,  4 Nov 2024 10:25:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="K5wuGBtZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7B71B2190;
+	Mon,  4 Nov 2024 10:36:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AA91B0F1D
-	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 10:25:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE0A1B0F2C
+	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 10:36:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730715948; cv=none; b=DPPWJYQbDn8tnD8yCq+li9NE4UtNmY7J766F5TtjVBHowmADVXtEJLP8A3iGUC4fpiipBmtxG29yQLeFGbRa2Lv9jcumz3HKbSH5s0S0pYfRZ6qMkBBsWDZ0x2He/geNn440m8zXJgPdJL8z5k8/nu6CRfdH0TWqMM/aEGzQpFc=
+	t=1730716587; cv=none; b=FQna36R048iHtWVmDkoP5+DVBO9EwwXrxLja+mzHcCw21flOgPWKCcqKmL4DANEDOUHI4V+CLc82n+OIJRPY2+J3lwy8wTSsjoGlg+JH8/5wlDFtzW4EJrkSlaFmYFxCRfjONaKWuZFnmJAGHLCx3cS3CLBAc7jTAjbsieKQD5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730715948; c=relaxed/simple;
-	bh=+gCuWEJn0C1lgXokyEhrPg1H1XcdYRJBgjY4pcDSDh0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SVt7ROX28VztOn47FVjoipWjOQL5yDHzJo8Kto86XB+YJIY/j3NxHNCD78BQS/pDogB8IvGpE3Ct0bEYObR5ri6cARv2Ru7ZF53Aj51PTjX36TUHuTP34tArTx9koJFV4rfUZeZuMr4E9S+20YJJIxoMo/hD1SMSJ5lAl/qSD6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=K5wuGBtZ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4A3NPerY032751
-	for <linux-usb@vger.kernel.org>; Mon, 4 Nov 2024 10:25:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	hFnvzZQahOtP+3FXIo1AE2b7BsvHwLPdNBWNlcuhJog=; b=K5wuGBtZbXxdrE0X
-	sbhgZ0Owv1dWxHvYRra1vJG3UHfUyuImX6IMoWAoe0RXWTfV06pCr9rWmO6I7mRV
-	h6JetzoCN6bBB8RjjQAT1gI0HDmqrRVHRI+bkirEITkyS/S+s8/G59+NwtGr64C2
-	1PJ67WsajhHk2PcXypjh0Jg6no2pC+2QgBv+WPxlYfNa2OmCvoumhAG+1E2Qh6Gx
-	Dj2SCeH6fIaSSFloczeR7vDCWfMY6omXnVnXPkX+agMnkpZfBykYe9K9jObsa2Tp
-	WctPgYr5hLV9RPqBWv9RTlp6kznB6tyESyGSAwKdDbmhb9IQUHi3agbuHAZMlwny
-	hNZTDg==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42ndc6urg4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 10:25:46 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-460f924d8bcso9507871cf.2
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 02:25:45 -0800 (PST)
+	s=arc-20240116; t=1730716587; c=relaxed/simple;
+	bh=OeXcuUqLK9bYzAA1BHzDEgYwPgFv19Wfs0jvrMvUS8Y=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=oSt2tCA9IVm1J0mD6OSmD5V+ChyVf+htBcF3ylhAU2yrznh+M5frPWYxpHMSYe78s/KO8ebske40yuvZVroNiPWANCav0eB2Jh10JORZ7LArqjNXmQVBMH+iyqTLY673FsBY7GybPimTrFQPuT9HVBXz4iUBNkTXaSIWjJPu7vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a3fa97f09cso42145905ab.0
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 02:36:25 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730715945; x=1731320745;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hFnvzZQahOtP+3FXIo1AE2b7BsvHwLPdNBWNlcuhJog=;
-        b=ughLY7DDlJpkduyiBzo7w3YLLpHE1Y2N9FpiaMfNhE6NPIUxLKX+joE7+joB/pHiF2
-         ZMtA2rrZ+D0vqiqN/nQsitOKz+K4UNd+diis05mhwPrBdDg1GFVnzcEEtvR9cEO+6bQa
-         Bu++v99mvksurVc+JKCkbwYQ9o6JuBbCooFz41ERwPoHdyR7ddTPORketWrIFwYqLmGn
-         kONoevEKcLBT+c6ee+ZNj5yLtRAu9nDQk4c4cTgiYSsSqvn5qhMdKNqpiOlGcXQhqSxN
-         C4mc0WBGEpbt7EwMZoXOQbpbGgv9QASiOBUQEgObCL7TwzKWm/roCgHd4nq0AnIf9gNV
-         l0ng==
-X-Forwarded-Encrypted: i=1; AJvYcCVbkiMuH+zZQmJ9qqPzAo13MJ5pWQVVlHa1YuymHJJnLtvVg23pNlhkA+kSq5cZCT6XfcxIkyuQMZI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxkn5mwlh9b0QyAPZIh9dzrA/Ceu5mPdN/SqILQO1KQgHAoF+C/
-	NsP2fPg/Aibv3tOKctGr5XNV0VxjES1kbJMhpWiuk66vQZoTgGw/8PCcelI1bDbKjAUVlPqbTar
-	96yVVtsKbr5Zv+OQWoEl6KSjLb+03wcawLh8qv3bvQv8HCCgiGoeXRRU58W0=
-X-Received: by 2002:a05:620a:1a1f:b0:7b1:e0f:bf97 with SMTP id af79cd13be357-7b193f5a54fmr2156646085a.13.1730715944644;
-        Mon, 04 Nov 2024 02:25:44 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHlUBFsv9IaGC6aIZhFfXyhX/0CySFI52XzinWd8aV3WzEGmCAoMoEBpKx9e/Qe+aZFYis8wQ==
-X-Received: by 2002:a05:620a:1a1f:b0:7b1:e0f:bf97 with SMTP id af79cd13be357-7b193f5a54fmr2156643785a.13.1730715944293;
-        Mon, 04 Nov 2024 02:25:44 -0800 (PST)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e5649454csm533238766b.8.2024.11.04.02.25.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2024 02:25:43 -0800 (PST)
-Message-ID: <ef1d1796-b45a-4b1b-bb61-4a3c63d3c718@oss.qualcomm.com>
-Date: Mon, 4 Nov 2024 11:25:40 +0100
+        d=1e100.net; s=20230601; t=1730716585; x=1731321385;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=45MKnYCR0HjR6EAdmcVBnlWYHf7EelS6cbO1gpSSq88=;
+        b=aYFXBDNPIAc5letvB9mr1lTVnT0h4nsIflqWQ4kRGSmfhTvL1DQOkqTdtjWCUhjX0M
+         Ghml201/rQ5x7YWfP2vxgC7fAxVTSZbXNq+yLO+kN4ajvpD+jBhD9KzA+qH9qQ2O9Sbr
+         DABL8vUeeT8dFqenPnSxNq5gwP8pK5WkcPUWvd3cldmiKGzX+E4KbZADw8L2rN/SmHK5
+         yLywvx0A9kaaO4FQ0r2sXd+BVtzl/mZ735kwtRtjzAXLHq97cMLLDCW2T/4+SNwL2Exf
+         AUzAWQVwsfFEVUbuWubIJslsEvTdhvjM7Izo0r5k7lgTw+tbjR0+Fy4TRgHFHBIeiuk4
+         dMUg==
+X-Forwarded-Encrypted: i=1; AJvYcCVpZHneRC+Ek4vDnVjgXPj4Ay4ngt0IuPbJ3uaXGsLOXlKEJlLlOq1PNzQD9CarNlgikl39F6ngJRE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGFuYIRGyfkHvn4nSbVsGAOI02hDYS+PISP5373WuprCJHdOpX
+	69DcYbWnfcE9C9iRFirwYXOW1Jh5hfMz6g5HHaJ8IDWkcbIRmZY6dR3o4FklNqr2+EtbVyMozAb
+	HFrAG3lDJbeSGR/4sfqlkLrzvfjL+10wIoULkWcEKJG8zExmm4ZCTJME=
+X-Google-Smtp-Source: AGHT+IHoGvGypx3NhStEVQDjdPhANng44DlnJGQ1DlDnMH5qtrMfgbn8AVZHdpkDjoLrjHec5/EDNltbCvS8IJcFrguYOE7jSkvp
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/4] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-To: Abel Vesa <abel.vesa@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>, Johan Hovold <johan@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Trilok Soni <quic_tsoni@quicinc.com>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org
-References: <20241101-x1e80100-ps8830-v4-0-f0f7518b263e@linaro.org>
- <20241101-x1e80100-ps8830-v4-2-f0f7518b263e@linaro.org>
- <ed0c77bd-770c-406d-851f-8589e53cde8b@oss.qualcomm.com>
- <ZyifBejZtb7x0Vyc@linaro.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <ZyifBejZtb7x0Vyc@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: M7D9Lz_wCMPFkg_i3XnYYWRSTaYg_T3b
-X-Proofpoint-GUID: M7D9Lz_wCMPFkg_i3XnYYWRSTaYg_T3b
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=749 adultscore=0 clxscore=1015 mlxscore=0
- phishscore=0 impostorscore=0 suspectscore=0 malwarescore=0 bulkscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411040092
+X-Received: by 2002:a05:6e02:13a5:b0:3a0:98b2:8f3b with SMTP id
+ e9e14a558f8ab-3a6b026372fmr121545735ab.7.1730716583498; Mon, 04 Nov 2024
+ 02:36:23 -0800 (PST)
+Date: Mon, 04 Nov 2024 02:36:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6728a3a7.050a0220.35b515.01b9.GAE@google.com>
+Subject: [syzbot] [io-uring?] [usb?] WARNING in io_get_cqe_overflow (2)
+From: syzbot <syzbot+e333341d3d985e5173b2@syzkaller.appspotmail.com>
+To: asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 4.11.2024 11:16 AM, Abel Vesa wrote:
-> On 24-11-02 10:17:56, Konrad Dybcio wrote:
->> On 1.11.2024 5:29 PM, Abel Vesa wrote:
->>> The Parade PS8830 is a USB4, DisplayPort and Thunderbolt 4 retimer,
->>> controlled over I2C. It usually sits between a USB/DisplayPort PHY
->>> and the Type-C connector, and provides orientation and altmode handling.
->>>
->>> The boards that use this retimer are the ones featuring the Qualcomm
->>> Snapdragon X Elite SoCs.
->>>
->>> Add a driver with support for the following modes:
->>>  - DisplayPort 4-lanes
->>>  - DisplayPort 2-lanes + USB3
->>>  - USB3
->>>
->>> There is another variant of this retimer which is called PS8833. It seems
->>> to be really similar to the PS8830, so future-proof this driver by
->>> naming it ps883x.
->>>
->>> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
->>> ---
->>
->> [...]
->>
->>> +static void ps883x_configure(struct ps883x_retimer *retimer, int cfg0, int cfg1, int cfg2)
->>> +{
->>> +	regmap_write(retimer->regmap, 0x0, cfg0);
->>> +	regmap_write(retimer->regmap, 0x1, cfg1);
->>> +	regmap_write(retimer->regmap, 0x2, cfg2);
->>> +}
->>
->> Somewhere between introducing regcache and dropping it, you removed
->> muxing to a safe mode during _configure()
-> 
-> Oh, yeah, I forgot to mention that in the change log, it seems.
-> 
-> Configuring to safe mode is not needed since we always do that on 
-> unplug anyway.
-> 
->>
->> [...]
->>
->>> +	/* skip resetting if already configured */
->>> +	if (regmap_test_bits(retimer->regmap, 0x00, BIT(0)))
->>> +		return 0;
->>
->> What is that register and what does BIT(0) mean?
-> 
-> Looking at the documentation, the first register is
-> REG_USB_PORT_CONN_STATUS and spans over the first 4 bytes.
-> 
-> But it doesn't really help here.
-> 
-> BIT(0) doesn't really have a name, it just says "Connection present".
+Hello,
 
-Please define both then. STATUS_CONNECTION_PRESENT sounds good for the bit.
+syzbot found the following issue on:
 
-Konrad
+HEAD commit:    c88416ba074a Add linux-next specific files for 20241101
+git tree:       linux-next
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14c04740580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=704b6be2ac2f205f
+dashboard link: https://syzkaller.appspot.com/bug?extid=e333341d3d985e5173b2
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ec06a7980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c04740580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/760a8c88d0c3/disk-c88416ba.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/46e4b0a851a2/vmlinux-c88416ba.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/428e2c784b75/bzImage-c88416ba.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e333341d3d985e5173b2@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 3508 at io_uring/io_uring.h:142 io_lockdep_assert_cq_locked io_uring/io_uring.h:142 [inline]
+WARNING: CPU: 1 PID: 3508 at io_uring/io_uring.h:142 io_get_cqe_overflow+0x43f/0x590 io_uring/io_uring.h:166
+Modules linked in:
+CPU: 1 UID: 0 PID: 3508 Comm: kworker/u8:8 Not tainted 6.12.0-rc5-next-20241101-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+Workqueue: iou_exit io_ring_exit_work
+RIP: 0010:io_lockdep_assert_cq_locked io_uring/io_uring.h:142 [inline]
+RIP: 0010:io_get_cqe_overflow+0x43f/0x590 io_uring/io_uring.h:166
+Code: 0f 0b 90 e9 62 fc ff ff e8 fe 43 ec fc 90 0f 0b 90 e9 90 fe ff ff e8 f0 43 ec fc 90 0f 0b 90 e9 82 fe ff ff e8 e2 43 ec fc 90 <0f> 0b 90 e9 74 fe ff ff e8 d4 43 ec fc 90 0f 0b 90 e9 66 fe ff ff
+RSP: 0018:ffffc9000d0df810 EFLAGS: 00010293
+RAX: ffffffff84a97a1e RBX: ffff888034e58000 RCX: ffff888032328000
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: 0000000000000001 R08: ffffffff84a97821 R09: fffff52001a1befc
+R10: dffffc0000000000 R11: fffff52001a1befc R12: 0000000000000000
+R13: dffffc0000000000 R14: dffffc0000000000 R15: ffffc9000d0df8a0
+FS:  0000000000000000(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fd6dd6c11f0 CR3: 000000004b8ac000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ io_get_cqe io_uring/io_uring.h:182 [inline]
+ io_fill_cqe_aux io_uring/io_uring.c:822 [inline]
+ __io_post_aux_cqe io_uring/io_uring.c:843 [inline]
+ io_post_aux_cqe+0xe5/0x420 io_uring/io_uring.c:855
+ io_free_rsrc_node+0xe3/0x220 io_uring/rsrc.c:453
+ io_put_rsrc_node io_uring/rsrc.h:81 [inline]
+ io_rsrc_data_free+0xf2/0x200 io_uring/rsrc.c:140
+ io_free_file_tables+0x23/0x70 io_uring/filetable.c:52
+ io_sqe_files_unregister+0x53/0x140 io_uring/rsrc.c:477
+ io_ring_ctx_free+0x49/0xdb0 io_uring/io_uring.c:2715
+ io_ring_exit_work+0x80f/0x8a0 io_uring/io_uring.c:2952
+ process_one_work kernel/workqueue.c:3229 [inline]
+ process_scheduled_works+0xa63/0x1850 kernel/workqueue.c:3310
+ worker_thread+0x870/0xd30 kernel/workqueue.c:3391
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
