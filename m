@@ -1,128 +1,156 @@
-Return-Path: <linux-usb+bounces-17000-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17001-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0AE79BAC9F
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 07:37:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 075879BAD95
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 09:03:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 611C22819E3
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 06:37:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BFC1B281EEB
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 08:03:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8979218CC1A;
-	Mon,  4 Nov 2024 06:37:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DBDA199FD3;
+	Mon,  4 Nov 2024 08:03:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eb0o2JvU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KHo5OcNW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DDB175D56;
-	Mon,  4 Nov 2024 06:37:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D7817C234
+	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 08:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730702222; cv=none; b=pltBlyvb59P1I/NLjp8OefYT5xJ9Fy6ZK6LZXZt7e1rUJJb3ptHGWMw4ckoQg4LnKNGeXGAbRamni1WsYdAi2mqtdOEFs9Fvh1/qNpl/staEC3sA9h4DTRsAyb9EANFu1uDC4BgmjC/3h8W5e2fJqMkkbsf4eC4OgL6PXOKS5Wk=
+	t=1730707425; cv=none; b=Rfxz3w9IsVfGf/jny8v5mLx8hIQ8QSJxgXUlIU3e8+bfQbHxpHuTdR2WBsD6H6Lc3a3tEdO4KIcUZKI14+6lJ+HbOPWNw4yiO/lvekNrjbpycpNQ13H+eNjrnsVnIqnu/u9h4QCZN0nABNW3Y6qjfCe/xWdYDOf6ukfWAoyWh1w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730702222; c=relaxed/simple;
-	bh=qKh/unJNmYHVD6p6LEuueFoUbyCLveUwKE8TAZ2UYjw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b26++bRJGQ2bwbFR/UG9mlG9WrFJvvy1M5fMlsy0ULDuoJGKJtV1+ouUChdmnQqMYsxw7wUl4KI/KMvUYpJMeDuFq+bFIPPjSeORkeuG7d+8v9IpkkmlY7jCqQ2rJGnB9r78wuiWVv6GOpLdp8kekH6QhXQLOxSj2E+hy8xfJjs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Eb0o2JvU; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730702221; x=1762238221;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qKh/unJNmYHVD6p6LEuueFoUbyCLveUwKE8TAZ2UYjw=;
-  b=Eb0o2JvUybvCtEHLaNz6Ev7hQGPEXjRIgKx28pJ7AAm05LjoXPyBBXoL
-   IpQ6WDVBy0K771SNHpbgyCrXegYAkTCobqtdNDpYTkNlSfub6oNXcgrp0
-   9lS4Q84JqlgqwxmfM6JhbhrXAuhk2BtwCv0BwQFGRE0NsypJGrXmH0dY0
-   B+dfHUJHBiIvG6Fl3R6Ok/xz7oobgCnyaFXLfTMz0sWACOjtm4hqf79D7
-   VOqQXtizynLzpwCF8II7389rHKIWSBMtHdDNf0IQiaCzE5vofkwVdjQGF
-   QfPVssR2BP4qasRfNtX1/vLTbCiyVs7V6o9Ope4gsrNu0nhq3rbfbqMWA
-   Q==;
-X-CSE-ConnectionGUID: HuOIxzK5Q+S/tZcJJWKDZw==
-X-CSE-MsgGUID: Hr2zP0ckRcKkyZop90wU5Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="41776458"
-X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="41776458"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 22:37:01 -0800
-X-CSE-ConnectionGUID: l1ZEc6tKRAqoXQOx3Z8CKA==
-X-CSE-MsgGUID: gugQqAFPSwufZvmi1+xJhw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="83901304"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa010.fm.intel.com with ESMTP; 03 Nov 2024 22:36:58 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id E37F91C8; Mon, 04 Nov 2024 08:36:56 +0200 (EET)
-Date: Mon, 4 Nov 2024 08:36:56 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Rick <rick@581238.xyz>
-Cc: Mario Limonciello <mario.limonciello@amd.com>, Sanath.S@amd.com,
-	christian@heusel.eu, fabian@fstab.de, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, regressions@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: Re: Dell WD19TB Thunderbolt Dock not working with kernel > 6.6.28-1
-Message-ID: <20241104063656.GZ275077@black.fi.intel.com>
-References: <96560f8e-ab9f-4036-9b4d-6ff327de5382@amd.com>
- <22415e85-9397-42db-9030-43fc5f1c7b35@581238.xyz>
- <20241022161055.GE275077@black.fi.intel.com>
- <7f14476b-8084-4c43-81ec-e31ae3f7a3c6@581238.xyz>
- <20241023061001.GF275077@black.fi.intel.com>
- <4848c9fe-877f-4d73-84d6-e2249bb49840@581238.xyz>
- <20241028081813.GN275077@black.fi.intel.com>
- <2c27683e-aca8-48d0-9c63-f0771c6a7107@581238.xyz>
- <20241030090625.GS275077@black.fi.intel.com>
- <70d8b6b2-04b4-48a6-964d-a957b2766617@581238.xyz>
+	s=arc-20240116; t=1730707425; c=relaxed/simple;
+	bh=HIxNNvr52FxTnzbRQw5NR71SxPTZBvRnH/ViR1JXEYI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=a9IxsI62gj9sg7ZIBMEdlWC0OndoV6MNAQgktYgcR1xczdCR5XE3ozR+TIZR+qt5Hnz/IfUuPZ6QWuZS+xCrxMLUBS3DViw18r/lzKcNgY69oeI25rICZWCOJ6DcQGpdrhGpjGgEfmb+ijJ0/jIPj/I+4oIi9E7qt3i0XuLOJ/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KHo5OcNW; arc=none smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-720d01caa66so2148427b3a.2
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 00:03:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730707423; x=1731312223; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aYM7dUD+Lu0xKZzzzkAuJPvDANk+JsuNprqSPffeDC8=;
+        b=KHo5OcNWpKx4/UaeF9IRZog/Jc9EmLScOSHmVfFTMRJXzdacy3A89Bp8o6s5MgHJ8o
+         3cdTRHTg045Xu0hIW5a/bTOONG6sAFxsOsv5fpsvNA/qsHjCf5xB1ROx7BQLwcQSefFr
+         vSUH/lS2cumhufFUa2rhwYLxqE1aqRFXAbA5j4zidGAGPTgWSW1aDpuGZ5iGmXAaxD7/
+         rDAwrvzdUphMbqDObcrhVXZy0lxgkbjChMFxdHUjkBXHHwL3R0bAQSLXSqn+820lJQ89
+         WREpqHaosKVfXGAeprlNiZ9f4zJwOq6a4UeSuTVx7fvaI+YHKV2fjr9gyOnJxz7Uzeu7
+         xTNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730707423; x=1731312223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=aYM7dUD+Lu0xKZzzzkAuJPvDANk+JsuNprqSPffeDC8=;
+        b=JlhrLujFq4Eo15vt5uiTwIeEF2NeeGlpnm3q6AMMrrddruFKQgVjS4JxeBz8vLdJ0v
+         DH3BgEqRLBeC1M94muBlkt/3GywvNN/Y38Ad3bZSXptcU5SH+XyMUiLZTja+IkIORdG3
+         8jtfZPWTPUR02qfksRCkX+qzvoEvC9yVg7XOibMzMx2HmlyBvylLfgbLUHzwOcmP59Tn
+         nRTcunvnxVh2yTW/R5CYTO29RlF5sEB7JreqqD27kQgjwQVpjgQ5LgdrA7CCr70EvI/u
+         HLsuiilZkm63HeNvrJfE5damvdQUInpV5H2qn5VQXjMN2M+OGgIg6sRSRlE/KbS07InM
+         FcUw==
+X-Forwarded-Encrypted: i=1; AJvYcCUFe+/j800XE2mchtr2BXegWXDeuzbvy2fndrvXBsz1/yWWQsCW/AOPeuSjfq0NVy/Gf6X91Hc7p7o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzRQMpFxkhsYgvpMRzg1Ez1hM+46TA95RqNuU1N5Ody0Vg6+UVK
+	aa+tLh74PYyUoyk7/ve/rFwr4VhSozGhr1VqmLWn9gL+28VBaIveRzg31lOkJhsliQUjFJHxC3r
+	yxj9RGyoR/H65ORO/YSjlRxSPUoOmDpzK
+X-Google-Smtp-Source: AGHT+IFCi3xZ8RsGclV7LA9x2EPmYLrMZ5b6abNrBA8p+4Ncytn0p+XowVbCRS+FrPQgx08xaAR/48IAouuE9hMBpMQ=
+X-Received: by 2002:a05:6a20:2451:b0:1db:e328:dd13 with SMTP id
+ adf61e73a8af0-1dbe328de0bmr1714110637.11.1730707423271; Mon, 04 Nov 2024
+ 00:03:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <70d8b6b2-04b4-48a6-964d-a957b2766617@581238.xyz>
+References: <CAOLjEn56gcrBLYqmtAPY49wpZCUzuKAGSt+L2ADBpAEELoQ1TQ@mail.gmail.com>
+ <6daafbf9-5999-463b-9198-cd699deb6721@rowland.harvard.edu>
+ <CAOLjEn41agaq4J99BFfekPLvnBBKfvBnj24pXLzpkn21_K4ouA@mail.gmail.com>
+ <467b1da8-325f-473d-bf46-96947993c626@rowland.harvard.edu>
+ <CAOLjEn4vJuxmRGUpUqMS6C7P82d18TkgURhd71UkXNTm5waYtw@mail.gmail.com>
+ <f5ab7ad5-9a9c-475a-9a1e-3f9de8d1a2a9@rowland.harvard.edu>
+ <20241029002209.5eqrdsvpxrh3ycxl@synopsys.com> <c6ce3f52-cd27-425f-ab3a-beb56e76a247@rowland.harvard.edu>
+In-Reply-To: <c6ce3f52-cd27-425f-ab3a-beb56e76a247@rowland.harvard.edu>
+From: Bart Van Severen <bart.v.severen@gmail.com>
+Date: Mon, 4 Nov 2024 09:03:26 +0100
+Message-ID: <CAOLjEn4kCYYcsde2SJv3sBZw5WEZ7RiYKoZNDTv_fSz=GAk4VA@mail.gmail.com>
+Subject: Re: usb: gadget: automatic remote wakeup on hid write
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Rick,
+On Tue, Oct 29, 2024 at 6:26=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Tue, Oct 29, 2024 at 12:22:10AM +0000, Thinh Nguyen wrote:
+> > On Mon, Oct 28, 2024, Alan Stern wrote:
+> > > And either way, it looks like there is a potential for races.  What i=
+f
+> > > the host puts the link into U3 just after an hid write occurs but bef=
+ore
+> >
+> > Regarding the potential race condition you mentioned, the f_hid can
+> > track when the ->suspend() and ->resume() callbacks are called to handl=
+e
+> > these corner cases. How it should handle that is up to the f_hid.
+> >
+> > > f_hid has had a chance to queue a packet informing the host?  Maybe w=
+e
+> > > need to add a flag to the usb_request structure, to let the UDC drive=
+r
+> > > know that it should issue a wakeup signal if the request is queued wh=
+ile
+> > > the link is suspended.
+> > >
+> >
+> > The host will sync with the gadget via SetFeature(remote_wakeup) contro=
+l
+> > request before entering U3/L2 to enable remote wakeup, and it should
+> > disable remote wakeup after resume. We have the flag
+> > gadget->wakeup_armed to track that. The dwc3_gadget_wakeup() will not
+> > trigger remote wakeup if wakeup_armed is disabled.
+> >
+> > > This part of the Gadget API has never been tested very much...
+> > >
+> > > Alan Stern
+> > >
+> >
+> > The f_hid just need to properly implement the handling of remote wakeup
+> > as Alan noted.
+>
+> Bart, it sounds like f_hid needs to do two things:
+>
+>         Use a private spinlock to protect all the places where a request
+>         is submitted, if the request might cause a wakeup to occur.
+>         Also take the spinlock within the suspend and resume callbacks,
+>         to keep accurate track of whether the function is suspended.
+>
+>         When a suspend occurs, check to see if there are any pending
+>         requests still queued that should cause a wakeup, and call
+>         usb_gadget_wakeup() if there are.  And likewise if such a
+>         request is submitted while the function is suspended.
+>
+> Alan Stern
 
-On Fri, Nov 01, 2024 at 01:57:50PM +0100, Rick wrote:
-> I compiled 6.12.0-rc5-00181-g6c52d4da1c74-dirty resulting in docking station
-> not working.
-> 
-> Then I compiled 6.12.0-rc5-00181-g6c52d4da1c74-dirty without commit
-> c6ca1ac9f472 (reverted), and now the docking station works correctly (as in
-> screen output + USBs + Ethernet)
-> 
-> So it seems c6ca1ac9f472 is causing issues for my setup.
+Hi Alan and Thinh,
 
-Okay, thanks for testing!
+Apologies for this late answer.
+Thanks for your valued inputs, I have a better view now on how to implement
+remote wakeup in a better way.
+I'll try to find some time to implement it, but it'll probably take
+some time given high workload.
 
-It indeed looks like there is no any kind of link issues anymore with
-that one reverted. So my suspect is that we are taking too long before
-we enumerate the device router which makes it to reset the link.
+Best regards,
 
-Can you try the below patch too on top of v6.12-rcX (without the revert)
-and see if that still keeps it working? This one cuts down the delay to
-1ms which I'm hoping is sufficient for the device. Can you share
-dmesg+trace from that test as well?
-
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index c6dcc23e8c16..1b740d7fc7da 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -48,7 +48,7 @@ enum usb4_ba_index {
- 
- /* Delays in us used with usb4_port_wait_for_bit() */
- #define USB4_PORT_DELAY			50
--#define USB4_PORT_SB_DELAY		5000
-+#define USB4_PORT_SB_DELAY		1000
- 
- static int usb4_native_switch_op(struct tb_switch *sw, u16 opcode,
- 				 u32 *metadata, u8 *status,
+Bart Van Severen
 
