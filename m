@@ -1,165 +1,152 @@
-Return-Path: <linux-usb+bounces-17055-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17056-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 286019BB6C2
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:52:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEC509BB6F8
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 15:01:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8E671F22569
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 13:52:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 10B891C22316
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:01:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95834139D19;
-	Mon,  4 Nov 2024 13:52:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5899C4502B;
+	Mon,  4 Nov 2024 14:00:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b="TNddlwN/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UX5LDSX4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com [209.85.222.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371E6487BF
-	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 13:52:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA3721CF8B;
+	Mon,  4 Nov 2024 14:00:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730728353; cv=none; b=kHE4iQzxB9dzZXLK7eoR2SrA2u6o22UUmKXEo4wUHmfFTyiQYk5ztITHpNC0NItXhmfwfdKoP2a4aJgKKBA1xG5CGvduRTCU8AfmtYSGUCuJA9Alj092i8drpEkwRjvqAJsQjEHbZp3g18X/I2p40d3mkzPqwaxzRgH14rZ90f8=
+	t=1730728820; cv=none; b=EoCTmEP7QH8bbayLzgieOeyfyaxDUPQ9bWBimax/UUDzTIOC/dywB1vG28zWjrsmOrcUWzUGIDLDu1FD0YvZE6dLnVgacp1vNSqw9cKAqiWk0TVMknd837GPQubSYlTc6yD16NuU+REtrBL9o5UnaIiSp1W0sGiqZvztmQL2uRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730728353; c=relaxed/simple;
-	bh=va+mJ8jqYuF1m2DMlIh3VClRv2mNCKxpQOuHse15mgE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IBRMUPKm+ZNohZntwtdF0vSMwSAZFOMo0Ch51dHm+a7RKSH7OV+ULdFYdkK4wKC8ElzDJgBD5+7PhVvM5Kur+CwOKt2794QOctoU0its1T604Wb5UeWA2mXIhekGmlaRwvC/ZTk2GSwoISlXK/ht7Vo7+E9TApeNQlbMspBp5xM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca; spf=pass smtp.mailfrom=ziepe.ca; dkim=pass (2048-bit key) header.d=ziepe.ca header.i=@ziepe.ca header.b=TNddlwN/; arc=none smtp.client-ip=209.85.222.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ziepe.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziepe.ca
-Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-84fcfe29e09so1220346241.2
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 05:52:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ziepe.ca; s=google; t=1730728349; x=1731333149; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=EkBaJUaQmNlDT9UG7F3IUEDB61PJd1lepS1O8vS2Df4=;
-        b=TNddlwN/cQFlt9b9NOt4ygwx4ZmhdBnD7UfEqeL0yjQxKSL4n2gd4M6UaUGP4tOFL4
-         YuDG5FuzEu7aQQ4U2Ak4kTWSWSL7pEIowGcwnpuKcdxz16CGtbmzPEAdyt83jXZqbfGU
-         IHojgiML0TF/a44/SfqOP53DqR1P2zxpRF3cqXyECVvQJEEUaz8xBPf+Yp6osgB1tMJU
-         rPHo7yuMB7lCs2OKBGFOnWom33RdUE0FUwr9oQmPO/dbhu9U7RL+i8Nn+eAJmmU7tgLx
-         l2ps9Leuc9AuGigcaoqZgKVPB8n0g4AMAloCHCsvocu84DwwJaEhLIdxm1s5/3di0NL2
-         eonQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730728349; x=1731333149;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EkBaJUaQmNlDT9UG7F3IUEDB61PJd1lepS1O8vS2Df4=;
-        b=KwCIQL18bOsboOEx/OUDjOAfoSS63+Pzhn+qAezuAw0Ptj5cdHbfTuFlTvusoNyRhj
-         VS/GEJSRRULht4uQS2GJc75c4SDHuZZMITGWjRWY1LZYpxXnbhxzwTYpgxsAXRIMZFAn
-         +OAySEoQwEIn/16hygQ88FmccWTWiFfFva5IMR9TNYtCuntLe5zV1v1UWSFqAWQ9iwwE
-         q8M9SO5zkkXMAYCrNZTf444bWCqfd8XlPklYnaAUInLX7Yxr4xL8FUDLZsB+MjZ77lws
-         86S8ZBbiVzwpAatvD98uCRhhGa2jPMMHmedBFz57aiquHOsqyqNztoO57zt+5nbjkSxW
-         z1HA==
-X-Forwarded-Encrypted: i=1; AJvYcCUTp9k5/1iwF1TwG7n5uzVtOGamHkV6Bc9jQFHXL0w7zNVa98yC/rKTJ7dp6InrBAA/5nHlBjYPPLw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzIUi+1TZkuH99Lixft6aG+VAP8uju4vTBe9DuVTszJt9KWIg4m
-	puQyw7HXmhOzaI9YA8TwD4BjTzxS8sRNCh5W7YweuwGSx6uZyePjra8740boGGI=
-X-Google-Smtp-Source: AGHT+IFmlPTEulo8PrBSa4hLGepjHWucd1eo0mnO56qT1Ydh9XheeGVoeKHcAHFWhX+avIDDQrBpSQ==
-X-Received: by 2002:a05:6102:3753:b0:4a4:8756:d899 with SMTP id ada2fe7eead31-4a9543ece24mr15248394137.29.1730728348895;
-        Mon, 04 Nov 2024 05:52:28 -0800 (PST)
-Received: from ziepe.ca (hlfxns017vw-142-68-128-5.dhcp-dynamic.fibreop.ns.bellaliant.net. [142.68.128.5])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-462ad0adffesm47192441cf.32.2024.11.04.05.52.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 05:52:28 -0800 (PST)
-Received: from jgg by wakko with local (Exim 4.97)
-	(envelope-from <jgg@ziepe.ca>)
-	id 1t7xVL-00000000hsn-2kgO;
-	Mon, 04 Nov 2024 09:52:27 -0400
-Date: Mon, 4 Nov 2024 09:52:27 -0400
-From: Jason Gunthorpe <jgg@ziepe.ca>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Xinhui Pan <Xinhui.Pan@amd.com>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Leon Romanovsky <leon@kernel.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Michael Walle <mwalle@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>,
-	Carlos Bilbao <carlos.bilbao.osdev@gmail.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	"David E. Box" <david.e.box@linux.intel.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Frederic Barrat <fbarrat@linux.ibm.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
-	Logan Gunthorpe <logang@deltatee.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-cxl@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-	linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] sysfs: treewide: constify attribute callback of
- bin_is_visible()
-Message-ID: <20241104135227.GE35848@ziepe.ca>
-References: <20241103-sysfs-const-bin_attr-v2-0-71110628844c@weissschuh.net>
- <20241103-sysfs-const-bin_attr-v2-5-71110628844c@weissschuh.net>
+	s=arc-20240116; t=1730728820; c=relaxed/simple;
+	bh=P1k0MUVMq1QqUtbiW9xLpMKx1OZ1yhgJFMtdzOL+cGQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=IHfc65LNhJ5oF533hYGUoKeyP1W62qJUvSuehxXEnOCBgsDn9Dy8JL7Xr9eKh1NuJb2qCW59FHmWXlllcaqQ2SeSIHo8TvbyYTDBHOHRlqaYm37nKNtI9z8+tM8F/pNO3gLQqlLbkY6WQQBuZLDrEhNLA/pb8IbYxVHgrFGnhCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UX5LDSX4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42486C4CECE;
+	Mon,  4 Nov 2024 14:00:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730728820;
+	bh=P1k0MUVMq1QqUtbiW9xLpMKx1OZ1yhgJFMtdzOL+cGQ=;
+	h=From:Date:Subject:To:Cc:From;
+	b=UX5LDSX416ittxWJFLtIK3h56f2siL7MxHeSChZXP9Qgwq9nbSSSu7sZr22zxDe46
+	 tbb6L7Kfk3hOGu/V7w07bldevkpsUSCi1MOHyEUFAjUpM6Ml2/SS2Q4lg4SGJBXgE2
+	 gR0KLTDOW0OgbOA8kCRuGYn65ANrCO0im8qLV3uxxwc8NS55yGUdScn7ColA0oBmWo
+	 kYyGPVzWqgDTb9eXFDMprWOKfGFsIE8xg7KP/LGRfmoqhATCvNkPYvkqbFO8cf8k79
+	 d8wqtiwsxLhDC9X+/7wszbV+j+Ox+S4aoFeN64Ukoulmd6emJrZanEk0ysdObm8nYQ
+	 df6g80HzIErPw==
+From: Roger Quadros <rogerq@kernel.org>
+Date: Mon, 04 Nov 2024 16:00:11 +0200
+Subject: [PATCH] usb: dwc3: fix fault at system suspend if device was
+ already runtime suspended
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241103-sysfs-const-bin_attr-v2-5-71110628844c@weissschuh.net>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241104-am62-lpm-usb-fix-v1-1-e93df73a4f0d@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAGrTKGcC/x2MSQqAMAwAvyI5G2hqXfAr4qHaqAE3WhSh+HeLx
+ xmYiRDYCwdoswiebwly7Akoz2Bc7D4ziksMWmlDpDTardK4nhteYcBJHixM7VxTUVGOBCk7PSf
+ 9L7v+fT+6wuvMYgAAAA==
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Dhruva Gole <d-gole@ti.com>, sashal@kernel.org, 
+ William McVicker <willmcvicker@google.com>, 
+ Chris Morgan <macroalpha82@gmail.com>
+Cc: Vishal Mahaveer <vishalm@ti.com>, msp@baylibre.com, srk@ti.com, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, Roger Quadros <rogerq@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2168; i=rogerq@kernel.org;
+ h=from:subject:message-id; bh=P1k0MUVMq1QqUtbiW9xLpMKx1OZ1yhgJFMtdzOL+cGQ=;
+ b=owEBbQKS/ZANAwAIAdJaa9O+djCTAcsmYgBnKNNwkMQZtv8N51Zpfl0t+0+S1Q/Vqsv7isk4/
+ LM0GMkE07CJAjMEAAEIAB0WIQRBIWXUTJ9SeA+rEFjSWmvTvnYwkwUCZyjTcAAKCRDSWmvTvnYw
+ kwTFEACsBb0SZTJAsj7DWP3Ea2zc5LO6JpvWSA8jicrLPdp1JEYQUwf9yhvKod2c8Db/HhHwnva
+ fXGwGJrDFHL/v7Z51nNqd+pwWRWanFJux7e1LvClsgG/8URpA24qnHDZsWaV+3/gDmgw+NeUHmJ
+ 02G/id7VO1StoYkZGyQmUZVxcJEZaKRP2iAzGXpv+iyaV3TA4fn1P10rchq3TzililZr2oH2VCG
+ GOdKSf2bF/Ni1h35GptC//EkE0OQ/N6ykCMeABj1gEjUGJW1C6okJB+XYTx4HhPQGGrGGLzdIJw
+ kLEE5QpEvzHmTgh/E4rsCuFSPBNIQJLRfhZ9kz/s+BmF9+n09+ZrMl0rU+bdFcVAMhXtUK0uoQn
+ 8a64bstTlTNdu5FFxsVwNlruwUsxRIdKdr8AKh9Kd7DMpquJUNnEp9bxVtWUWqpCDFtjN/dE3mR
+ xcqvFfUS0g32OTROKX1lyvglvNrJya2DhwdHneNGIl1UwtaXF4ql0Yt976TqTM/esaCn1b86grS
+ 0L8/OoVGcdTxapmvmm9n0GjzrxwEKD6Exj2MvenXDo87QYxLJ5R3tmQsuqvQvurLRzn7uP/2QGx
+ k85c82RPh/hvRG7UOL5KDlPqXl4IVV7z1Qf1rXU0RbqgoxT+B3za1OEg3Owr6OsGNca1Ijm9jeZ
+ YIQHRfY6BMXB+fg==
+X-Developer-Key: i=rogerq@kernel.org; a=openpgp;
+ fpr=412165D44C9F52780FAB1058D25A6BD3BE763093
 
-On Sun, Nov 03, 2024 at 05:03:34PM +0000, Thomas Weißschuh wrote:
-> The is_bin_visible() callbacks should not modify the struct
-> bin_attribute passed as argument.
-> Enforce this by marking the argument as const.
-> 
-> As there are not many callback implementers perform this change
-> throughout the tree at once.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->  drivers/cxl/port.c                      |  2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c |  2 +-
->  drivers/infiniband/hw/qib/qib_sysfs.c   |  2 +-
->  drivers/mtd/spi-nor/sysfs.c             |  2 +-
->  drivers/nvmem/core.c                    |  3 ++-
->  drivers/pci/pci-sysfs.c                 |  2 +-
->  drivers/pci/vpd.c                       |  2 +-
->  drivers/platform/x86/amd/hsmp.c         |  2 +-
->  drivers/platform/x86/intel/sdsi.c       |  2 +-
->  drivers/scsi/scsi_sysfs.c               |  2 +-
->  drivers/usb/core/sysfs.c                |  2 +-
->  include/linux/sysfs.h                   | 30 +++++++++++++++---------------
->  12 files changed, 27 insertions(+), 26 deletions(-)
+If the device was already runtime suspended then during system suspend
+we cannot access the device registers else it will crash.
 
-For infiniband:
+Also we cannot access any registers after dwc3_core_exit() on some
+platforms so move the dwc3_enable_susphy() call to the top.
 
-Acked-by: Jason Gunthorpe <jgg@nvidia.com>
+Cc: stable@vger.kernel.org # v5.15+
+Reported-by: William McVicker <willmcvicker@google.com>
+Closes: https://lore.kernel.org/all/ZyVfcUuPq56R2m1Y@google.com
+Fixes: 705e3ce37bcc ("usb: dwc3: core: Fix system suspend on TI AM62 platforms")
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+---
+ drivers/usb/dwc3/core.c | 25 ++++++++++++-------------
+ 1 file changed, 12 insertions(+), 13 deletions(-)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 427e5660f87c..98114c2827c0 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -2342,10 +2342,18 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+ 	u32 reg;
+ 	int i;
+ 
+-	dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
+-			    DWC3_GUSB2PHYCFG_SUSPHY) ||
+-			    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
+-			    DWC3_GUSB3PIPECTL_SUSPHY);
++	if (!pm_runtime_suspended(dwc->dev) && !PMSG_IS_AUTO(msg)) {
++		dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
++				    DWC3_GUSB2PHYCFG_SUSPHY) ||
++				    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
++				    DWC3_GUSB3PIPECTL_SUSPHY);
++		/*
++		 * TI AM62 platform requires SUSPHY to be
++		 * enabled for system suspend to work.
++		 */
++		if (!dwc->susphy_state)
++			dwc3_enable_susphy(dwc, true);
++	}
+ 
+ 	switch (dwc->current_dr_role) {
+ 	case DWC3_GCTL_PRTCAP_DEVICE:
+@@ -2398,15 +2406,6 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+ 		break;
+ 	}
+ 
+-	if (!PMSG_IS_AUTO(msg)) {
+-		/*
+-		 * TI AM62 platform requires SUSPHY to be
+-		 * enabled for system suspend to work.
+-		 */
+-		if (!dwc->susphy_state)
+-			dwc3_enable_susphy(dwc, true);
+-	}
+-
+ 	return 0;
+ }
+ 
+
+---
+base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
+change-id: 20241102-am62-lpm-usb-fix-347dd86135c1
+
+Best regards,
+-- 
+Roger Quadros <rogerq@kernel.org>
+
 
