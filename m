@@ -1,133 +1,115 @@
-Return-Path: <linux-usb+bounces-17045-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17046-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 939219BB29D
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 12:13:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C8A49BB32C
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 12:26:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D999B2377C
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 11:13:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7980CB27027
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 11:25:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8378E1F80C0;
-	Mon,  4 Nov 2024 10:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEDA41B0F15;
+	Mon,  4 Nov 2024 11:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TEFMfQ0J"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lNo3qFND"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBEF31F80AD;
-	Mon,  4 Nov 2024 10:55:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B83E1B218D
+	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 11:15:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730717751; cv=none; b=uwxdLL3zAHZOiY85QMxVjPdvZxzbQDntUfb6yXK6MJFT4clBU3apcHJA3FhpFTOg0VyovMpRPBfVXAybAIqOZDKKBVSJlh7oxsykbnpKfkX/Y9dLg+AKgd/oQhGwV9ATcfJ3GA2nptFkJXDrIQozo9iGu+OpyLolqwVtGe25M6Q=
+	t=1730718932; cv=none; b=dmuMlpydWluG1mpxPKi1a34LaIZYNLNsV1fFdBpu5cmTDOkSYpKWVpGS0CyLHDGF8B4xw11mxPEKthXOte6ApvoPHaJBkQjEZ22mDgzekFQvMwxO/SRoA8BuCb4hDz58a/H7+H3pavPICIm75FZx2QjDC9ZEwABQ6tK6KWpyzy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730717751; c=relaxed/simple;
-	bh=XqKUWGODd1BS1i/68lrWqZSmXb6XqGiYNwan4uKrTNg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=X1gXGdquNqMQdclYZ/YNbZICdQs7NX38hRTWvy0u6RQZmNS3ZX+/XV6u+LCQFJJ1A/9wWGOOXBGABRh6ATjUQeuxV7RFkBEy6v4EYHinXecAgPj22yS6p2gFjff8bGepgUvrpZ89Hnp/jsj4ZZgxfyT2fXHDthKrNtptJC9i3hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TEFMfQ0J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55BC9C4CED1;
-	Mon,  4 Nov 2024 10:55:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730717750;
-	bh=XqKUWGODd1BS1i/68lrWqZSmXb6XqGiYNwan4uKrTNg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TEFMfQ0Ji/9MGVKO04vk+iiTAAB1F2RBbGF3/teiB2vc9+umru0KwEIWwNTnaERoT
-	 up1324Yspf7LRzw2t56YOGkDBl932TCJpUcxFcz2w6wNaQiG6HuaU8u217VXWvAj3q
-	 PCTjz0bi8THmRNtc9jCzo0SfR0qsFJf7VbYkJKTv57Ij3rpsKjP7glIx/RwxWIZGjU
-	 9b3Z1ThJ3Nm8W/IxzOoVRLzRspmb6TxScs1l8yUa/DSTmJ0WtU5u+XlZAAksUSzLj7
-	 EqllID7UzUuS3E/BjSjv4cuCWE1GhSIU65FUxjboEdruhNuC9kLFnU3Z7Y2VS0198F
-	 SFWWbAWdLZJrw==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: =?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>,
-	Simon Horman <horms@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Sasha Levin <sashal@kernel.org>,
-	bjorn@mork.no,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 5/5] net: usb: qmi_wwan: add Quectel RG650V
-Date: Mon,  4 Nov 2024 05:55:34 -0500
-Message-ID: <20241104105539.98219-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241104105539.98219-1-sashal@kernel.org>
-References: <20241104105539.98219-1-sashal@kernel.org>
+	s=arc-20240116; t=1730718932; c=relaxed/simple;
+	bh=8Pb8sCWqVT78PKsPAopEAxFND+meVGRZNGnRJZybrj0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tLDP9XwnhgKqHfUQ699se9Xp2mnLjka6ujBEqP21tfrN8dXneFDs2E8D34cgAi7hu7sOZbA7ThI5/im3UlWYj+Dap6OmtIU9/AIu/mzCOXDTBCEI9nT/kNGXt1BDH9unN9tAhhzQ5TEq0M4v+N4A612z3YmxxUe4w+LiURIHJVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lNo3qFND; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-539e7e73740so1526252e87.3
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 03:15:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730718929; x=1731323729; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xH9DoC23Bb2/vYAIB0rsuoA8K2PG80L2HkKuDb8tLsE=;
+        b=lNo3qFND51bxdP8OWa7VkbuldLEz45VHLKotjLuYucAcGPygm9IwFIGwDw1H6IVHoQ
+         gr9Fn9fvqkdpkvUV8cMeJS5Tz+3olNlf4H3wSSe16AtnEVyWkzeE1Qd5sIwG3lL9/WOH
+         VzxgTwQn/wKei/C6S4jFo/fiswOVM07RJS9LBL65+ZcwnPVjYvL0WR60SE1cHH3H3vI5
+         YSN4ctq9Tae9hpOCk5wQUSqBAkcCpVsEH4CSN/FCgSKSuCTrljQmRy/BeWwO2oLjAorD
+         i/SEz/QpkEekimVFUdF7K1pyVmszyLojiIrwijXGUXSQP4u0Ty7aWh5Y4mmuqmlNP97k
+         2Msg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730718929; x=1731323729;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xH9DoC23Bb2/vYAIB0rsuoA8K2PG80L2HkKuDb8tLsE=;
+        b=AxyoxDBrvQaljrbw/4hAG8+bfwi65tyIwPxX1evm9idgGy49xsUQEXCS2PptqjRkv3
+         HRoBU4H3nSg1QG5wuza5wMZcH8YeEUauS6nP7LLCM3/cGcRH0hXrxRXuLfxehZe4y7VA
+         SYzivOlPewTWc73LLk5BJZyhhIJxNJI5JoQZavOFbBQwW12Jrkdvr+RnuebUSpiK5F1M
+         wPb5txrvBX8Yrxy8RWgymH2z46ODYmcnUdzhiMb7N+KPbgWGKCa0KoNDOmt4l4mqz+Hp
+         V696FxLTqXXIIalG04uOHP7fHq9c5gUu7TaWB5RW8NUBlC9MTBESKtlA2I45mVRACYvI
+         EPSg==
+X-Forwarded-Encrypted: i=1; AJvYcCWVR1ZrMfqE+5DeUYJpA7bhZKdNjawvB+snRUgWzfMDyhX9gna73dsHBp+2sOSPRzr9IzmxjZA9yHU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwiCI9FmdoT8P31QBlVZDA4pSqUw5N33X6Pkg96+FLNTdxSqw2L
+	zfO0QlwItgay4dvHF1HyVjk09bQ1YTPsp7lkU0sTOm2BrIrmy0tLhlQGMvkt0BUOQ7QkaHiBGjC
+	GXR0=
+X-Google-Smtp-Source: AGHT+IFEO+EDtDqFJQorDAHgKOspX3rc8SvNpXsw47ifoSIAuvGSd8clbgoZacNUkzbI2eHhD845gw==
+X-Received: by 2002:a05:6512:308a:b0:539:8d67:1b1b with SMTP id 2adb3069b0e04-53b7ecf1ff6mr10243566e87.26.1730718928569;
+        Mon, 04 Nov 2024 03:15:28 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bc961dbsm1650852e87.43.2024.11.04.03.15.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 04 Nov 2024 03:15:27 -0800 (PST)
+Date: Mon, 4 Nov 2024 13:15:24 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
+	hdegoede@redhat.com, linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: Drop reference to a fwnode
+Message-ID: <wygsgyxczjwr5mxrmqoqloww4dp5ac22bxkor2y2elbxi7ifvw@b2mb3woxye5y>
+References: <20241104083045.2101350-1-joe@pf.is.s.u-tokyo.ac.jp>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 4.19.322
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241104083045.2101350-1-joe@pf.is.s.u-tokyo.ac.jp>
 
-From: Benoît Monin <benoit.monin@gmx.fr>
+On Mon, Nov 04, 2024 at 05:30:45PM +0900, Joe Hattori wrote:
+> In typec_port_register_altmodes(), the fwnode reference obtained by
+> device_get_named_child_node() is not dropped. This commit adds a call to
+> fwnode_handle_put() to fix the possible reference leak.
 
-[ Upstream commit 6b3f18a76be6bbd237c7594cf0bf2912b68084fe ]
+Nit: s/This commit adds/Add/g , see
+Documentation/process/submitting-patches.rst
 
-Add support for Quectel RG650V which is based on Qualcomm SDX65 chip.
-The composition is DIAG / NMEA / AT / AT / QMI.
 
-T: Bus=02 Lev=01 Prnt=01 Port=03 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
-D: Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P: Vendor=2c7c ProdID=0122 Rev=05.15
-S: Manufacturer=Quectel
-S: Product=RG650V-EU
-S: SerialNumber=xxxxxxx
-C: #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
-I: If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E: Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I: If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I: If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=9ms
-I: If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E: Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=9ms
-I: If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
-E: Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E: Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=9ms
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Signed-off-by: Benoît Monin <benoit.monin@gmx.fr>
-Reviewed-by: Simon Horman <horms@kernel.org>
-Link: https://patch.msgid.link/20241024151113.53203-1-benoit.monin@gmx.fr
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index bbd5183e5e635..d297352ab3d81 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1045,6 +1045,7 @@ static const struct usb_device_id products[] = {
- 		USB_DEVICE_AND_INTERFACE_INFO(0x03f0, 0x581d, USB_CLASS_VENDOR_SPEC, 1, 7),
- 		.driver_info = (unsigned long)&qmi_wwan_info,
- 	},
-+	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0122)},	/* Quectel RG650V */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini PCIe */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
- 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
+> 
+> Fixes: 7b458a4c5d73 ("usb: typec: Add typec_port_register_altmodes()")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+> ---
+> Changes in v2:
+> - Add the Cc: stable@vger.kernel.org line.
+> ---
+>  drivers/usb/typec/class.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+
 -- 
-2.43.0
-
+With best wishes
+Dmitry
 
