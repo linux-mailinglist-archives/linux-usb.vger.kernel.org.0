@@ -1,193 +1,162 @@
-Return-Path: <linux-usb+bounces-17050-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17051-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43D3B9BB601
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:27:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B05339BB67E
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:41:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE4AE1F22758
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 13:27:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70588283AB4
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 13:41:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACF181B6CE7;
-	Mon,  4 Nov 2024 13:25:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B74B182B4;
+	Mon,  4 Nov 2024 13:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="V6M9zpgg"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WAhiYbbw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4D0111A8;
-	Mon,  4 Nov 2024 13:25:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F72513AC1
+	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 13:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730726738; cv=none; b=oyJTY1LRLkUKznARzWSc/xodL+lgQd3ogPyvJy4boX52eli9svNlbgZuG4Qim8A7b7wpKPZPEP8nHmyYcM519tqWeS+V+9gKTC7EolY3WulvkqkiuI9Z8hadKimzqig5IJyYl45igL2t0o/Q9ellCAyvr49JfMpPCu8MwLA8Nec=
+	t=1730727605; cv=none; b=GtpO4Y2y2AtlgEstngRarHlHWsfESVlsCK/cs2HMcaEyC70a4mv4vx8DVsn3+m7FolPvlHUl+sCW1e3hmkNqtH07GHk8END40ncL3MBglLlohVADY4mfmUsOEGcOR+QXMEDvK4ZieZB8wMBZyJmYXegH63BYc/aouNE4gfXNYZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730726738; c=relaxed/simple;
-	bh=oPBklUbvKL8bSKRIlaEBq6Ena9N6JHRIUOBA6mqrZ6c=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Ms9sUT3HFzOAlu6wH76v4GIo5JPQx0XTjONKbQ47BlriN2pLIMwJAo5252ZIX2Ppql95twB+dvHHo0JbJtqCgjcyX2H3UlIYI1BKJrU7RHPRHEftWLATKG1jY16RiPjfo+n8+4AEr7sGFKHHVOmY3+hnC+TMt2bINuK6GPmhicI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=V6M9zpgg; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730726736; x=1762262736;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=oPBklUbvKL8bSKRIlaEBq6Ena9N6JHRIUOBA6mqrZ6c=;
-  b=V6M9zpgg7MJtwljFRnQo2x+DXoviRvspP0NVDmRyAtFeIj1U6uUBzGB6
-   q7dNJz0Mm05awQeWH8RA0JBJ3xtkyAbcFrqW9EEV304wTBZGFMtiITI3O
-   jwn4ciqJCJu3V5LPn0sWATTqONxaNJs3BWl/sJ6S/8fUL5bIcvGYGqivl
-   /uATz2ZiJN8IG4KzLVgHrDm3hJHXWeT+ZFOZK2sISMZ49yW53xM/tz2jb
-   UG2dFYBlKmezQ9IrfIzt6ks+mBSCGwhXg+5rLE8axKJ6g70k/yaZpkdB3
-   JgUxVFXUX+CYe0er6i/JI7A100P/ObQ3VrnZh2f0Ov104dcp7n3gAI7Qv
-   Q==;
-X-CSE-ConnectionGUID: r5aOVlEITJe0ReUEquHbsQ==
-X-CSE-MsgGUID: DbG8CzipQOGfdLFcg6HSdQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30275394"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30275394"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 05:25:32 -0800
-X-CSE-ConnectionGUID: v9JmlMoUQFaNhWF7H45gGQ==
-X-CSE-MsgGUID: 4K1oV5FuTuelLKT3nBONXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,257,1725346800"; 
-   d="scan'208";a="83542204"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.33])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 05:25:17 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Mon, 4 Nov 2024 15:25:13 +0200 (EET)
-To: =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>
-cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    "Rafael J. Wysocki" <rafael@kernel.org>, 
-    Bjorn Helgaas <bhelgaas@google.com>, 
-    Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
-    Davidlohr Bueso <dave@stgolabs.net>, 
-    Jonathan Cameron <jonathan.cameron@huawei.com>, 
-    Dave Jiang <dave.jiang@intel.com>, 
-    Alison Schofield <alison.schofield@intel.com>, 
-    Vishal Verma <vishal.l.verma@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-    Alex Deucher <alexander.deucher@amd.com>, 
-    =?ISO-8859-15?Q?Christian_K=F6nig?= <christian.koenig@amd.com>, 
-    Xinhui Pan <Xinhui.Pan@amd.com>, David Airlie <airlied@gmail.com>, 
-    Simona Vetter <simona@ffwll.ch>, 
-    Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>, 
-    Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-    Tudor Ambarus <tudor.ambarus@linaro.org>, 
-    Pratyush Yadav <pratyush@kernel.org>, Michael Walle <mwalle@kernel.org>, 
-    Miquel Raynal <miquel.raynal@bootlin.com>, 
-    Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
-    Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>, 
-    Carlos Bilbao <carlos.bilbao.osdev@gmail.com>, 
-    Hans de Goede <hdegoede@redhat.com>, 
-    =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-    "David E. Box" <david.e.box@linux.intel.com>, 
-    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-    "Martin K. Petersen" <martin.petersen@oracle.com>, 
-    Richard Henderson <richard.henderson@linaro.org>, 
-    Matt Turner <mattst88@gmail.com>, Frederic Barrat <fbarrat@linux.ibm.com>, 
-    Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, 
-    Logan Gunthorpe <logang@deltatee.com>, 
-    "K. Y. Srinivasan" <kys@microsoft.com>, 
-    Haiyang Zhang <haiyangz@microsoft.com>, Wei Liu <wei.liu@kernel.org>, 
-    Dexuan Cui <decui@microsoft.com>, Dan Williams <dan.j.williams@intel.com>, 
-    LKML <linux-kernel@vger.kernel.org>, linux-pci@vger.kernel.org, 
-    linux-cxl@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
-    dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org, 
-    linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
-    linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org, 
-    linux-alpha@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-    linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH v2 05/10] sysfs: treewide: constify attribute callback
- of bin_is_visible()
-In-Reply-To: <20241103-sysfs-const-bin_attr-v2-5-71110628844c@weissschuh.net>
-Message-ID: <65f4dc4e-3b48-2baa-a13b-3cc34dd51ce1@linux.intel.com>
-References: <20241103-sysfs-const-bin_attr-v2-0-71110628844c@weissschuh.net> <20241103-sysfs-const-bin_attr-v2-5-71110628844c@weissschuh.net>
+	s=arc-20240116; t=1730727605; c=relaxed/simple;
+	bh=9gxC9h6S3EiFhmhu/cadNuVULNtnVnJFllcnThHfjZc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=srRAjvn03T+Jew2OHXYQHkSN/mrbJZ+AO3d5godyDBESn2JBjBtnbfeXi4TZZYUJOZg1Mt0wN7vm0473YPlrhTsQvXaDRLD0ImzpyE/xyGNcMYjvOpyCiAyqpuMvi0AN4fbkxzVBjQABrEWGu6XNKZjI7Ft5S458vSAjK51b3JY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WAhiYbbw; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730727602;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dzADOWrawgsVn5XhPwFPZBf8FcDLTQVqCU922gPDrEI=;
+	b=WAhiYbbwzRDwD1TGlyhRcxVfMS4eSJ7gF4rwjvBaX0rqaa5J1y1iKYrEJ05uw0ixHhBVBS
+	ekmh0FSJSP1glYsY2YuOTKAytw/SbhrE5uht6kvil4FxQ7WsUFjlkfHKs+/hU2JEvPWffd
+	tX7stIXZqoHJ35N3M0My7e2z2mquHEA=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-615-O5IU8I17MHOkYIl5Kn_Zgw-1; Mon, 04 Nov 2024 08:40:01 -0500
+X-MC-Unique: O5IU8I17MHOkYIl5Kn_Zgw-1
+Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5cbb635c3f3so4425523a12.0
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 05:40:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730727600; x=1731332400;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dzADOWrawgsVn5XhPwFPZBf8FcDLTQVqCU922gPDrEI=;
+        b=tQVKZntDtFP+cxiu3BT11/ilK9bbfcuoKfeW5ieTxIkHi61bHp9bhGt8eRedP/BlVQ
+         tiu89j79g+/vWqMOrCGJ7wxv+nSIUR14UFk5C7wzuk+ofSdPzq/laU9MvN5y7wcsG3Qt
+         wc7cual3w6GsUsZbWUgjfogn1i2bhGEBmZVXk92vdWmtLTRQKU9eRp/LmMuTJrR/1AT2
+         eNRkOoqABuzHxAl2zTOfjchhEQIE99X6Tm4YniA/qYo/D7pR3qyVXcVgupycmdI9uVlS
+         3CcsH63vwScDc1f8mr7WPcvA+p2Zs/VgbiKKx8jS4IKGp1UGC7YEWO/8HkMwPpFeD4nD
+         /xtg==
+X-Forwarded-Encrypted: i=1; AJvYcCWo8A4Rqtu9eesKyX0HOom2BuzLPUTO2kfvs/txheDN2E9q775L4N4ahxTkWyv0RfzBYBnUndjB4QY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxelV+RBZL34mM4QbCRiB0lbTe+LcJgASVpsvS8uC0HjF0DC7bU
+	dwzS2I7E89kvHX29JfSyK5pzEKqu5PSw5duYUkRMWiQb3OgQUjR4gpxy3E3yIN7D5/CT2b6ytcy
+	X/quoU8gEwmAWait7R+7OReAeJCzW5PYoHNAq12PURVhzIEm3NJfDnYR83G0cQyvHzg==
+X-Received: by 2002:a05:6402:514e:b0:5c9:85e8:ec8c with SMTP id 4fb4d7f45d1cf-5ceabf0d370mr12677784a12.6.1730727600274;
+        Mon, 04 Nov 2024 05:40:00 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHUiXoceojSJUeOz+6DO8mbzv/TqV9030Xps65Omq/Bev81Yw0ibbyuivBSIuBz9vdT/hG2JQ==
+X-Received: by 2002:a05:6402:514e:b0:5c9:85e8:ec8c with SMTP id 4fb4d7f45d1cf-5ceabf0d370mr12677773a12.6.1730727599885;
+        Mon, 04 Nov 2024 05:39:59 -0800 (PST)
+Received: from [10.40.98.157] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5ceac7e9286sm4443241a12.86.2024.11.04.05.39.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 05:39:59 -0800 (PST)
+Message-ID: <0e0d4146-a083-4263-a06b-c6277e89ddc5@redhat.com>
+Date: Mon, 4 Nov 2024 14:39:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-559502379-1730726713=:989"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/3] usb: misc: ljca: move usb_autopm_put_interface()
+ after wait for response
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ linux-usb@vger.kernel.org
+Cc: Wentong Wu <wentong.wu@intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20241104085056.652294-1-stanislaw.gruszka@linux.intel.com>
+Content-Language: en-US
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20241104085056.652294-1-stanislaw.gruszka@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi,
 
---8323328-559502379-1730726713=:989
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-
-On Sun, 3 Nov 2024, Thomas Wei=C3=9Fschuh wrote:
-
-> The is_bin_visible() callbacks should not modify the struct
-> bin_attribute passed as argument.
-> Enforce this by marking the argument as const.
->=20
-> As there are not many callback implementers perform this change
-> throughout the tree at once.
->=20
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+On 4-Nov-24 9:50 AM, Stanislaw Gruszka wrote:
+> Do not mark interface as ready to suspend when we are still waiting
+> for response messages from the device.
+> 
+> Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 > ---
->  drivers/cxl/port.c                      |  2 +-
->  drivers/gpu/drm/amd/amdgpu/amdgpu_psp.c |  2 +-
->  drivers/infiniband/hw/qib/qib_sysfs.c   |  2 +-
->  drivers/mtd/spi-nor/sysfs.c             |  2 +-
->  drivers/nvmem/core.c                    |  3 ++-
->  drivers/pci/pci-sysfs.c                 |  2 +-
->  drivers/pci/vpd.c                       |  2 +-
->  drivers/platform/x86/amd/hsmp.c         |  2 +-
->  drivers/platform/x86/intel/sdsi.c       |  2 +-
->  drivers/scsi/scsi_sysfs.c               |  2 +-
->  drivers/usb/core/sysfs.c                |  2 +-
->  include/linux/sysfs.h                   | 30 +++++++++++++++------------=
----
->  12 files changed, 27 insertions(+), 26 deletions(-)
+>  drivers/usb/misc/usb-ljca.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
+> index 01ceafc4ab78..dcb3c5d248ac 100644
+> --- a/drivers/usb/misc/usb-ljca.c
+> +++ b/drivers/usb/misc/usb-ljca.c
+> @@ -332,9 +332,6 @@ static int ljca_send(struct ljca_adapter *adap, u8 type, u8 cmd,
+>  
+>  	ret = usb_bulk_msg(adap->usb_dev, adap->tx_pipe, header,
+>  			   msg_len, &transferred, LJCA_WRITE_TIMEOUT_MS);
+> -
+> -	usb_autopm_put_interface(adap->intf);
+> -
+>  	if (ret < 0)
+>  		goto out;
+>  	if (transferred != msg_len) {
+> @@ -353,6 +350,8 @@ static int ljca_send(struct ljca_adapter *adap, u8 type, u8 cmd,
+>  	ret = adap->actual_length;
+>  
+>  out:
+> +	usb_autopm_put_interface(adap->intf);
+> +
 
-> diff --git a/drivers/platform/x86/amd/hsmp.c b/drivers/platform/x86/amd/h=
-smp.c
-> index 8fcf38eed7f00ee01aade6e3e55e20402458d5aa..8f00850c139fa8d419bc1c140=
-c1832bf84b2c3bd 100644
-> --- a/drivers/platform/x86/amd/hsmp.c
-> +++ b/drivers/platform/x86/amd/hsmp.c
-> @@ -620,7 +620,7 @@ static int hsmp_get_tbl_dram_base(u16 sock_ind)
->  }
-> =20
->  static umode_t hsmp_is_sock_attr_visible(struct kobject *kobj,
-> -=09=09=09=09=09 struct bin_attribute *battr, int id)
-> +=09=09=09=09=09 const struct bin_attribute *battr, int id)
+I'm afraid that this now does a double pm_runtime_put() on
+usb_autopm_get_interface() failures. usb_autopm_get_interface() uses
+pm_runtime_resume_and_get() which already does a pm_runtime_put()
+on failure.
 
-Hi Thomas,
+So you need to add a second out label which skips the new
+location of the usb_autopm_put_interface(adap->intf); call
+and jump to this second label on usb_autopm_get_interface()
+failures.
 
-This driver is reworked in pdx86/for-next.
+With that fixed this is:
 
---=20
- i.
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+I have also given this a test run on a "ThinkPad X1 Yoga Gen 8" and
+everything there works at least as well as before:
+
+Tested-by: Hans de Goede <hdegoede@redhat.com> # ThinkPad X1 Yoga Gen 8, ov2740
+
+Regards,
+
+Hans
 
 
->  {
->  =09if (plat_dev.proto_ver =3D=3D HSMP_PROTO_VER6)
->  =09=09return battr->attr.mode;
-> diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/int=
-el/sdsi.c
-> index 9d137621f0e6e7a23be0e0bbc6175c51c403169f..33f33b1070fdc949c1373251c=
-3bca4234d9da119 100644
-> --- a/drivers/platform/x86/intel/sdsi.c
-> +++ b/drivers/platform/x86/intel/sdsi.c
-> @@ -541,7 +541,7 @@ static struct bin_attribute *sdsi_bin_attrs[] =3D {
->  };
-> =20
->  static umode_t
-> -sdsi_battr_is_visible(struct kobject *kobj, struct bin_attribute *attr, =
-int n)
-> +sdsi_battr_is_visible(struct kobject *kobj, const struct bin_attribute *=
-attr, int n)
->  {
->  =09struct device *dev =3D kobj_to_dev(kobj);
->  =09struct sdsi_priv *priv =3D dev_get_drvdata(dev);
 
---8323328-559502379-1730726713=:989--
+
+>  	spin_lock_irqsave(&adap->lock, flags);
+>  	adap->ex_buf = NULL;
+>  	adap->ex_buf_len = 0;
+
 
