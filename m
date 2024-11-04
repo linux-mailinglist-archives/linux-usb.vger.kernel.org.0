@@ -1,174 +1,132 @@
-Return-Path: <linux-usb+bounces-17076-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17077-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90E6D9BBCD7
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 19:05:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 038519BBD77
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 19:47:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48BCC1F2060D
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 18:05:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 351F81C219E0
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 18:47:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 567AF1C9ED6;
-	Mon,  4 Nov 2024 18:04:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C652A1CB33E;
+	Mon,  4 Nov 2024 18:47:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ge8JaytE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NBdhTekT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B5861CACE5
-	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 18:04:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5B519BBA;
+	Mon,  4 Nov 2024 18:47:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730743490; cv=none; b=SsXRCSEXT48e3uJPG9JYGAbrG1LrXb24sB4oBPnTs7zaHQVzaPnF7T3AJEZZNQciv5VtUzJocYql26Iaa//ZMVGIA+D8rPgvLTG9/PW5NSY0YvROnJGMs7UYFBdExTYFrpW3Z7ywadlDBxC/NGPjE/+fi/gWOIjN1SsK0HDJDuI=
+	t=1730746038; cv=none; b=CQ/yO0c4505Qfg43eS4LtARNTR5/baSXOptOtn8xcSS0nhIZj/D94q07HIm2jzGNUsH4DEYAfmO/EPtIeK0iRonpoqv/irxLW6ACKz3LbQw5waphpbbP4NYZRzjdQWshMsf6lzOE2cYo7+Z2Wa6R5d/U69u6F2zPC/qnqWjDC28=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730743490; c=relaxed/simple;
-	bh=GVl1UEr0NWZX9IevbvvM2P+0VKWLEsKWWi7/kLeYQ/Y=;
+	s=arc-20240116; t=1730746038; c=relaxed/simple;
+	bh=rWhTWVbW4mGA5mw9ohHUzN2aUaoDA1BFpsVVEDEm4CE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sqyGR87uhPSGij+WoYTn8uygMOEqUUz8/O/spD2LnZKA/r5/lSsevJ+udLnA+BWlcJLPGxbVV6WTNVoaKeaIYNJNp0fXf0jiev48rIMdPapst/SuOAAtdS26sUw5h861zG3dSxW91C9Vga2gaToCqbUK1bbqqqMoaSnE6IAiSGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ge8JaytE; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2114214c63eso13002625ad.3
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 10:04:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1730743489; x=1731348289; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JRvQf1xuqfHPBwS7luz0cb6H5Ugq9JMPjVW+YufCtSs=;
-        b=Ge8JaytEEaAH6vCxwNZm8IcfvdwY00Rx2DT/rhn2sEvr3LT/9dlImoTSf+pxYFkQ/h
-         AAAIvVvyuY26pStdt9fMoe6e9wC9JnrSCS1RB0pffHyBtkEL0Zhwq5bIy94JtW7RH3xG
-         dQtPWGNqHzcgPOQJ+TOQvh/FJAFbTqEIazLkFZJSRQjJuY7nOGW6nH1wvws0YcYS22Wz
-         csi52ldxj2n3dPMD9oD4o9Nxzc207XvdbU3xraI9s+LykwodzrK8d7XklpvBaKtcmLUm
-         yWZ6ivmWSZ/a7lcrQMtDWTKKbGwRD2gtpNtUwZDYrhEhzuC5J+2DSWCFa0AOa7k/s7iC
-         fQgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730743489; x=1731348289;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JRvQf1xuqfHPBwS7luz0cb6H5Ugq9JMPjVW+YufCtSs=;
-        b=wTDxOsvPeKigbPeAoAk/cPKX4DgLLc3pvBEFpO0LMazVyKHO3lBF9CsyE7nCRMv2k+
-         /WlpxC+dCjUzSwTXXaOVmVGx132aKGg4t3cXqRCmcLA2wUw1v6u+n8B7FeG6R+KGA1K1
-         cqDXG1sKtdo9o2//80qHOxWpcpXqjCah118ct4WutBn8YzXBDa/oHde9HzYykIpBWT/M
-         Ct/cIDU1ybtqzJhUj7fF3ZBEfxRJQwqvgArosidUJAzO+2E80Pfti94sHZvAcumRhL/v
-         vaELQ08dk1Tq4EykF3iEXJQJTnk5xOy5MEp1lcfC/mjDNccL/Qm4pN0OIAg/GEq95214
-         /RMw==
-X-Forwarded-Encrypted: i=1; AJvYcCXIEIEz/RB8x/94Icf9VhvMW1Y3/YXtVCYk1vReiZjsaeydAF2iI8tiKzd5IcJiHIAJq3yCBflQAvQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVTFV8kF37bZOXbpadSWvVrSBwzwRQ41UfSMkF2Gjpx8GkmGta
-	m4Tb6UmqqNhXnhWVgBgrYTjBO+A3ZJGbDTZUftiGh7Ac/KGtiHHaR1NEZK7flQ==
-X-Google-Smtp-Source: AGHT+IFvuvps9+tEEfjMCZ4O3+x8fIkpxluQUBg5LTSx8jxApvw7eE44IevfvcA3aT6CY7QxgNhUjg==
-X-Received: by 2002:a17:903:182:b0:20b:8a71:b5c1 with SMTP id d9443c01a7336-210c6872b1amr454253325ad.1.1730743488429;
-        Mon, 04 Nov 2024 10:04:48 -0800 (PST)
-Received: from google.com (128.65.83.34.bc.googleusercontent.com. [34.83.65.128])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057063f9sm63286905ad.65.2024.11.04.10.04.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 10:04:47 -0800 (PST)
-Date: Mon, 4 Nov 2024 10:04:44 -0800
-From: William McVicker <willmcvicker@google.com>
-To: Roger Quadros <rogerq@kernel.org>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=HOu0SvpKeVuaOtnvzqf3y+Rce+cenpbLSOXlD8z/eNIdQa96S20N0c2+Y9M3uqPDla21sta3Vkr7pPpDBCK/SMyIRi7fwAWrynlBYL1rN4edQX1pkNhlvg4WWfhklI+a17bhNLCVv/FsrWweyg0pw70LTACMLwGIJxmnC9G8mrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NBdhTekT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 029BAC4CECE;
+	Mon,  4 Nov 2024 18:47:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1730746037;
+	bh=rWhTWVbW4mGA5mw9ohHUzN2aUaoDA1BFpsVVEDEm4CE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NBdhTekTdA/WpeLSglViKAU25A+dbJ2m5atIn1kG9m3IG/PkMCnp9SsoMI7qveMN7
+	 1RKFj2d5s3eR6cB8h1UtUItSmUErSlYA3V9P9rcVBvRGl1le/8fxHaYaQ42QqyaKU/
+	 SwPoyHFMk1f0c3zu3JwsrfqJa+DZVaxwZQHx2jiIwH2Tpfo8+52y768Q76Ee52TT7P
+	 wDQZdp298qgm6ALheVskJoyu52aQlLiM9M8SpPV8/WfaVcn1SEOMHQdK09dRdCM9K3
+	 55Lbeh33zG+h3rxNQ+V8Xk4Zg0KfzOULGiuI0wNT6n73kV6cnlUAT2EQyssffP/5r+
+	 +tH8DOCO1nhuQ==
+Date: Mon, 4 Nov 2024 18:47:11 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dhruva Gole <d-gole@ti.com>, sashal@kernel.org,
-	Chris Morgan <macroalpha82@gmail.com>,
-	Vishal Mahaveer <vishalm@ti.com>, msp@baylibre.com, srk@ti.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: fix fault at system suspend if device was
- already runtime suspended
-Message-ID: <ZykMvEXywBRuhZAM@google.com>
-References: <20241104-am62-lpm-usb-fix-v1-1-e93df73a4f0d@kernel.org>
+	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
+	Hari Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
+Subject: Re: [PATCH 2/5] dt-bindings: arm: ti: Add compatible for AM625-based
+ TQMa62xx SOM family and carrier board
+Message-ID: <20241104-floral-dexterous-7d3fee2ff616@spud>
+References: <cover.1730299760.git.matthias.schiffer@ew.tq-group.com>
+ <4f5ad877f44df35a3b2c7f336647f057c4e6377d.1730299760.git.matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="EATJd2ZSzXL2Ixpt"
 Content-Disposition: inline
-In-Reply-To: <20241104-am62-lpm-usb-fix-v1-1-e93df73a4f0d@kernel.org>
+In-Reply-To: <4f5ad877f44df35a3b2c7f336647f057c4e6377d.1730299760.git.matthias.schiffer@ew.tq-group.com>
 
-Hi Roger,
 
-On 11/04/2024, Roger Quadros wrote:
-> If the device was already runtime suspended then during system suspend
-> we cannot access the device registers else it will crash.
-> 
-> Also we cannot access any registers after dwc3_core_exit() on some
-> platforms so move the dwc3_enable_susphy() call to the top.
-> 
-> Cc: stable@vger.kernel.org # v5.15+
-> Reported-by: William McVicker <willmcvicker@google.com>
-> Closes: https://lore.kernel.org/all/ZyVfcUuPq56R2m1Y@google.com
-> Fixes: 705e3ce37bcc ("usb: dwc3: core: Fix system suspend on TI AM62 platforms")
-> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+--EATJd2ZSzXL2Ixpt
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-I verified the patch works on my Pixel 6 device with runtime PM enabled. Thanks
-for the fix! Feel free to add
+On Mon, Nov 04, 2024 at 10:47:25AM +0100, Matthias Schiffer wrote:
+> The TQMa62xx is a SoM family with a pluggable connector. The MBa62xx is
+> the matching reference/starterkit carrier board.
 
-Tested-by: Will McVicker <willmcvicker@google.com>
+Why all the wildcards? Why isn't there a compatible per device in the
+family?
 
-Thanks,
-Will
-
+>=20
+> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
 > ---
->  drivers/usb/dwc3/core.c | 25 ++++++++++++-------------
->  1 file changed, 12 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 427e5660f87c..98114c2827c0 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -2342,10 +2342,18 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  	u32 reg;
->  	int i;
->  
-> -	dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
-> -			    DWC3_GUSB2PHYCFG_SUSPHY) ||
-> -			    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
-> -			    DWC3_GUSB3PIPECTL_SUSPHY);
-> +	if (!pm_runtime_suspended(dwc->dev) && !PMSG_IS_AUTO(msg)) {
-> +		dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
-> +				    DWC3_GUSB2PHYCFG_SUSPHY) ||
-> +				    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
-> +				    DWC3_GUSB3PIPECTL_SUSPHY);
-> +		/*
-> +		 * TI AM62 platform requires SUSPHY to be
-> +		 * enabled for system suspend to work.
-> +		 */
-> +		if (!dwc->susphy_state)
-> +			dwc3_enable_susphy(dwc, true);
-> +	}
->  
->  	switch (dwc->current_dr_role) {
->  	case DWC3_GCTL_PRTCAP_DEVICE:
-> @@ -2398,15 +2406,6 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		break;
->  	}
->  
-> -	if (!PMSG_IS_AUTO(msg)) {
-> -		/*
-> -		 * TI AM62 platform requires SUSPHY to be
-> -		 * enabled for system suspend to work.
-> -		 */
-> -		if (!dwc->susphy_state)
-> -			dwc3_enable_susphy(dwc, true);
-> -	}
-> -
->  	return 0;
->  }
->  
-> 
-> ---
-> base-commit: 42f7652d3eb527d03665b09edac47f85fb600924
-> change-id: 20241102-am62-lpm-usb-fix-347dd86135c1
-> 
-> Best regards,
-> -- 
-> Roger Quadros <rogerq@kernel.org>
-> 
+>  Documentation/devicetree/bindings/arm/ti/k3.yaml | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>=20
+> diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documenta=
+tion/devicetree/bindings/arm/ti/k3.yaml
+> index b0be02f9d1253..d8b52b95fba7b 100644
+> --- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> +++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> @@ -73,6 +73,13 @@ properties:
+>            - const: toradex,verdin-am62          # Verdin AM62 Module
+>            - const: ti,am625
+> =20
+> +      - description: K3 AM625 SoC on TQ-Systems TQMa62xx SoM
+> +        items:
+> +          - enum:
+> +              - tq,am625-tqma6254-mba62xx # MBa62xx base board
+> +          - const: tq,am625-tqma6254
+> +          - const: ti,am625
+> +
+>        - description: K3 AM642 SoC
+>          items:
+>            - enum:
+> --=20
+> TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+> Amtsgericht M=FCnchen, HRB 105018
+> Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+> https://www.tq-group.com/
+>=20
 
+--EATJd2ZSzXL2Ixpt
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZykWrwAKCRB4tDGHoIJi
+0jo3AQC+LelXQR2pEsAaZyVgw5FfWNOZ0ohjhWoy+Oi8MG8yzgEAtUuldRsTZUU+
+yG2hlyDNYR07kMS1/Md+DDOKJb2DJQ4=
+=lA4g
+-----END PGP SIGNATURE-----
+
+--EATJd2ZSzXL2Ixpt--
 
