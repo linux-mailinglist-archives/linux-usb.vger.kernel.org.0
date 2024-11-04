@@ -1,85 +1,84 @@
-Return-Path: <linux-usb+bounces-16999-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17000-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 128609BAC48
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 07:02:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0AE79BAC9F
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 07:37:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D96F1C20F03
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 06:02:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 611C22819E3
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 06:37:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAE11898E8;
-	Mon,  4 Nov 2024 06:02:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8979218CC1A;
+	Mon,  4 Nov 2024 06:37:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cVPjgHEb"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eb0o2JvU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E277D44C7C;
-	Mon,  4 Nov 2024 06:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DDB175D56;
+	Mon,  4 Nov 2024 06:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730700125; cv=none; b=AK9MtgZZM/vz/HtjPwKK6kFs5/j5nh8DeLX8K6MOvE3BlPUgy7s4v7H/42MGnzwp3BKRaZLvr+CcK+FfkQQGw+1Rn/71Vfy+CeUV41dJA5/gRhDm7Ou30aDBdp3Hx9CueOQXtPqYRjYQ1Bjr0mVISrdHwUGzwA6FP2/Tcid/X9c=
+	t=1730702222; cv=none; b=pltBlyvb59P1I/NLjp8OefYT5xJ9Fy6ZK6LZXZt7e1rUJJb3ptHGWMw4ckoQg4LnKNGeXGAbRamni1WsYdAi2mqtdOEFs9Fvh1/qNpl/staEC3sA9h4DTRsAyb9EANFu1uDC4BgmjC/3h8W5e2fJqMkkbsf4eC4OgL6PXOKS5Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730700125; c=relaxed/simple;
-	bh=+S5xOXpBhWoMpNvX3Rj6Ot42dzDTDNRfbc0pnguElpI=;
+	s=arc-20240116; t=1730702222; c=relaxed/simple;
+	bh=qKh/unJNmYHVD6p6LEuueFoUbyCLveUwKE8TAZ2UYjw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hrhOJJ6/4tbnxjDaFFn9og2ri+NR4kg2xmJUN9CgNIUQrKyeYQJ4JjSYKqcFuH+TBUp+uuNcFFNCvIGdvGuD0S5UnpS+f4dovQYv8Lzw8sx3XEmeXkm3uGVM8RPHvgdjF70dmYC+w0hC+2ZAW8jrOJBlo1tyjJuZLpMyfHKcv4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cVPjgHEb; arc=none smtp.client-ip=198.175.65.14
+	 Content-Type:Content-Disposition:In-Reply-To; b=b26++bRJGQ2bwbFR/UG9mlG9WrFJvvy1M5fMlsy0ULDuoJGKJtV1+ouUChdmnQqMYsxw7wUl4KI/KMvUYpJMeDuFq+bFIPPjSeORkeuG7d+8v9IpkkmlY7jCqQ2rJGnB9r78wuiWVv6GOpLdp8kekH6QhXQLOxSj2E+hy8xfJjs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Eb0o2JvU; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730700124; x=1762236124;
+  t=1730702221; x=1762238221;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=+S5xOXpBhWoMpNvX3Rj6Ot42dzDTDNRfbc0pnguElpI=;
-  b=cVPjgHEbTnUPUU9lVqndP3SzLWCQUIeMISuZwXZWhH5VkdMkiEoM8Lam
-   CD5xTydG4o+0u1xUojVAhhDMXs3Yo62SqxKY/VjyfyinCmkh+FjN0e820
-   FAyaL81XWNAAYbngXid14uJu/TdElB8C2WZkZjjYLWWpoJ22ZPil1rj9z
-   polYu4VUNJUB67eaV6CP3CIz7LYkdV8zeNpf8RFbcnkIwE2e71tt/wdD1
-   +HxOqJkwcj6I9x1elQpO/3EbrgazEI2mOedTXoNuwfWr3ysMN79kLW+y1
-   oojjVGiw6XaXV00N2shdOZTYv4BVEYIaBih0xuPmlz3I9+B4gJru3vyEh
-   A==;
-X-CSE-ConnectionGUID: Om0f22BcT5GUsWIEO4CQ8A==
-X-CSE-MsgGUID: 2HKwGAfCQ8qXaZv6qPrUlQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="34171947"
+  bh=qKh/unJNmYHVD6p6LEuueFoUbyCLveUwKE8TAZ2UYjw=;
+  b=Eb0o2JvUybvCtEHLaNz6Ev7hQGPEXjRIgKx28pJ7AAm05LjoXPyBBXoL
+   IpQ6WDVBy0K771SNHpbgyCrXegYAkTCobqtdNDpYTkNlSfub6oNXcgrp0
+   9lS4Q84JqlgqwxmfM6JhbhrXAuhk2BtwCv0BwQFGRE0NsypJGrXmH0dY0
+   B+dfHUJHBiIvG6Fl3R6Ok/xz7oobgCnyaFXLfTMz0sWACOjtm4hqf79D7
+   VOqQXtizynLzpwCF8II7389rHKIWSBMtHdDNf0IQiaCzE5vofkwVdjQGF
+   QfPVssR2BP4qasRfNtX1/vLTbCiyVs7V6o9Ope4gsrNu0nhq3rbfbqMWA
+   Q==;
+X-CSE-ConnectionGUID: HuOIxzK5Q+S/tZcJJWKDZw==
+X-CSE-MsgGUID: Hr2zP0ckRcKkyZop90wU5Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11245"; a="41776458"
 X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="34171947"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 22:02:02 -0800
-X-CSE-ConnectionGUID: d3GovnOESL2FQyLUYosOWg==
-X-CSE-MsgGUID: 6zV+Ar7YQaihSdrlZ8Q0CQ==
+   d="scan'208";a="41776458"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2024 22:37:01 -0800
+X-CSE-ConnectionGUID: l1ZEc6tKRAqoXQOx3Z8CKA==
+X-CSE-MsgGUID: gugQqAFPSwufZvmi1+xJhw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,256,1725346800"; 
-   d="scan'208";a="114358812"
+   d="scan'208";a="83901304"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa001.fm.intel.com with ESMTP; 03 Nov 2024 22:02:00 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 03 Nov 2024 22:36:58 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 2623B1C8; Mon, 04 Nov 2024 08:01:59 +0200 (EET)
-Date: Mon, 4 Nov 2024 08:01:59 +0200
+	id E37F91C8; Mon, 04 Nov 2024 08:36:56 +0200 (EET)
+Date: Mon, 4 Nov 2024 08:36:56 +0200
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Aaron Rainbolt <arainbolt@kfocus.org>
-Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
-	andreas.noever@gmail.com, linux-usb@vger.kernel.org,
-	mmikowski@kfocus.org, linux-kernel@vger.kernel.org,
-	Gil Fine <gil.fine@linux.intel.com>
-Subject: Re: USB-C DisplayPort display failing to stay active with Intel
- Barlow Ridge USB4 controller, power-management related issue?
-Message-ID: <20241104060159.GY275077@black.fi.intel.com>
-References: <20241010232656.7fc6359e@kf-ir16>
- <20241011163811.GU275077@black.fi.intel.com>
- <20241011183751.7d27c59c@kf-ir16>
- <20241023062737.GG275077@black.fi.intel.com>
- <20241023073931.GH275077@black.fi.intel.com>
- <20241023174413.451710ea@kf-ir16>
- <20241024154341.GK275077@black.fi.intel.com>
- <20241031095542.587e8aa6@kf-ir16>
- <20241101072155.GW275077@black.fi.intel.com>
- <20241101181334.25724aff@kf-ir16>
+To: Rick <rick@581238.xyz>
+Cc: Mario Limonciello <mario.limonciello@amd.com>, Sanath.S@amd.com,
+	christian@heusel.eu, fabian@fstab.de, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: Dell WD19TB Thunderbolt Dock not working with kernel > 6.6.28-1
+Message-ID: <20241104063656.GZ275077@black.fi.intel.com>
+References: <96560f8e-ab9f-4036-9b4d-6ff327de5382@amd.com>
+ <22415e85-9397-42db-9030-43fc5f1c7b35@581238.xyz>
+ <20241022161055.GE275077@black.fi.intel.com>
+ <7f14476b-8084-4c43-81ec-e31ae3f7a3c6@581238.xyz>
+ <20241023061001.GF275077@black.fi.intel.com>
+ <4848c9fe-877f-4d73-84d6-e2249bb49840@581238.xyz>
+ <20241028081813.GN275077@black.fi.intel.com>
+ <2c27683e-aca8-48d0-9c63-f0771c6a7107@581238.xyz>
+ <20241030090625.GS275077@black.fi.intel.com>
+ <70d8b6b2-04b4-48a6-964d-a957b2766617@581238.xyz>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -88,76 +87,42 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241101181334.25724aff@kf-ir16>
+In-Reply-To: <70d8b6b2-04b4-48a6-964d-a957b2766617@581238.xyz>
 
-Hi,
+Hi Rick,
 
-On Fri, Nov 01, 2024 at 06:13:34PM -0500, Aaron Rainbolt wrote:
-> Thanks! We have tested the 6.11.5 kernel with this patch. Here's the
-> report from our testing team. dmesg logs are attached.
+On Fri, Nov 01, 2024 at 01:57:50PM +0100, Rick wrote:
+> I compiled 6.12.0-rc5-00181-g6c52d4da1c74-dirty resulting in docking station
+> not working.
 > 
-> -----
+> Then I compiled 6.12.0-rc5-00181-g6c52d4da1c74-dirty without commit
+> c6ca1ac9f472 (reverted), and now the docking station works correctly (as in
+> screen output + USBs + Ethernet)
 > 
-> 1. Created 2024-11-01_6.11.5_tbt-barlow-ridge-01.dmesg,
->   2024-11-01_6.11.5_tbt-barlow-ridge-02.dmesg.
->   Version 01 is with nouveau. Version 02 is with Nivida (rebuilt); could
->   NOT build keyboard module (complained did not support 6.11 kernel).
-> 2. In both cases, hot-plug does not wake display. However, after lspci
->   -k, displays wake and are reliable.
+> So it seems c6ca1ac9f472 is causing issues for my setup.
 
-Okay, thanks again for testing!
+Okay, thanks for testing!
 
-It means disabling adapter 16 in DROM is actually intentional as that
-is not connected to the dGPU and so makes sense.
+It indeed looks like there is no any kind of link issues anymore with
+that one reverted. So my suspect is that we are taking too long before
+we enumerate the device router which makes it to reset the link.
 
-> * Boot the system up, nothing connected.
-> * Wait for Barlow Ridge to enter runtime suspend. This takes ~15
->   seconds so waiting for > 15 seconds should be enough.
-> * Plug in USB-C monitor to the USB-C port of the Barlow Ridge.
->   Screen shows in log, screen wakes, but then no signal is received, and
->   no image ever appears. Screen then sleeps after its timeout.
-> * Run lspci -k to wake up the monitors. Once this is run, the display
->   shows correctly and is stable. Adding another USB-C display after this
->   also works correctly: It is recognized and lights up in seconds to
->   show the desktop background, and remains stable.
-> 
-> Notice that pre-6.5 kernels work fine with Barlow Ridge, which implies
-> that new code is causing this. It may be new support code for tbt
-> capability (and therefore pretty much required). But regardless, it's
-> still new code. With the current patch, we can run a udev rule that
-> enables hot plugging that likely always work, or (worst case) at least
-> empowers the customer to refresh monitors by clicking a button.
+Can you try the below patch too on top of v6.12-rcX (without the revert)
+and see if that still keeps it working? This one cuts down the delay to
+1ms which I'm hoping is sufficient for the device. Can you share
+dmesg+trace from that test as well?
 
-We definitely want to fix this properly so there is no need for anyone
-to run 'lspci' or similar hacks but because I'm unable to reproduce this
-with my reference Barlow Ridge setup, I need some help from you.
-
-You say with v6.5 it works? That's interesting because we only added
-this redrive mode workaround for v6.9 and without that the domain surely
-will not be kept powered but maybe I'm missing something.
-
-I wonder if your test team could provide log from v6.5 as well following
-the same steps, no need to run 'lspci' just do:
-
-  1. Boot the system up, nothing connected.
-  2. Wait for ~15 seconds for the domain to enter runtime suspend.
-  3. Plug in USB-C monitor to the USB-C port of Barlow Ridge.
-  4. Verify that it wakes up and, there is picture on the screen.
-  5. Wait for ~15 seconds.
-
-Expectation: After step 5 the monitor still displays picture.
-
-If this works as above then I'm really surprised but if that's the case
-then we can maybe think of another approach of dealing with the redrive
-mode.
-
-> -----
-> 
-> To my awareness, we have not yet reported the "device links to tunneled
-> native ports are missing" error to the hardware manufacturer. I'll see
-> if we can get that reported. Thanks for the heads-up!
-
-Okay thanks. The corresponding "requirement" is here:
-
-https://learn.microsoft.com/en-us/windows-hardware/drivers/pci/dsd-for-pcie-root-ports#map-native-protocols-pcie-displayport-tunneled-through-usb4-to-usb4-host-routers
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index c6dcc23e8c16..1b740d7fc7da 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -48,7 +48,7 @@ enum usb4_ba_index {
+ 
+ /* Delays in us used with usb4_port_wait_for_bit() */
+ #define USB4_PORT_DELAY			50
+-#define USB4_PORT_SB_DELAY		5000
++#define USB4_PORT_SB_DELAY		1000
+ 
+ static int usb4_native_switch_op(struct tb_switch *sw, u16 opcode,
+ 				 u32 *metadata, u8 *status,
 
