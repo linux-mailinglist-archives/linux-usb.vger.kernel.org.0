@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-17053-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17054-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1E859BB6A9
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:50:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A843D9BB6B3
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:51:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3A49B224E8
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 13:50:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB1701C22D5B
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 13:51:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E3514A91;
-	Mon,  4 Nov 2024 13:50:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83CCB7EEFD;
+	Mon,  4 Nov 2024 13:51:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gBdn+2JF"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KTrcvgBa"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8188BEE
-	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 13:50:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 561644EB50
+	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 13:51:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730728239; cv=none; b=nkTPOowmsPaQaWILfwQLRJe0TOKFhDNFjQ1DtuyF9c4lJi2LgKGV6XQfka14nbYm0zHgWqoRrjswcGA3CMqJWiZvepNs+HnnwFomnXZGtZH+sUpDMP1/bMGP8+0lvFbGv8HJLwoLuU9Gz9yP8J8EzGxlOQkRTFsZqPas0ggDFwc=
+	t=1730728291; cv=none; b=Pw+vD7JkQ6qhTuoTBO4SnzfSmmhbKjz+vvHENbVzJLUASmoiQzfj2Wj3KFscRaX6QGMBSYE17dKExeZCd5/NomVj1Zp96m7xlL6dVunelgSmGC6sU7PMh9VZgERMfavaLkJwx1SB0n8xiFRuUGy8gkLpVpY72qEoREljYjoviY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730728239; c=relaxed/simple;
-	bh=/rSzhwRtAdhGT8kPmq/SEVslJOM/EIxE9t6I6pIQ2Zs=;
+	s=arc-20240116; t=1730728291; c=relaxed/simple;
+	bh=hp5hEbArKXU4KRxw09tHKeCKWLpnK8BfIOlXLQs2KkU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gfj2EywWe8gGglW1hAjypuq3T5G1wsyr9GBNjtaDToGpS8HKCOFyTM0DGegPZGtGpyUeO4aU/kPG5nVUBZj7bLshIAkPN01KxQhBwMoSLMKc5+rtDP1U61hJjJLO9xCs+zfptH9CON+aDAxfMuhvKyhdG9LTf29PrRwE4n7576I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gBdn+2JF; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:Content-Type; b=ISVisaly94yWJTc0TV5BZDDM0+Ee5tggrYDE/vExF9pJ46dfOh8hwc6kg3smp+SvTA2HNKM2qyysQBpigjDVm7lsxwxqrwWgu2X7Z0U6+//fZx1RajmEVa9yIL0ttb9S9hmv2ijsoMQZ8eHW4mX31xZMw/r5qXCLIebOaZ35BVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KTrcvgBa; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730728236;
+	s=mimecast20190719; t=1730728288;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=P6LQUUf7X8lZcCb5D+M+QKKhaiG6AGnyLY/BSrt+eFQ=;
-	b=gBdn+2JFWGzS+ZuZTP7Jg6+s9D/0m1BlbqjjhZ1jiuPOuelxUF3ERsa2DSWO1UXVAxhopR
-	6yBrvRGxAXRlTHIeq0TY+IrtudiRZG6eto2pY85DjTK0F+q1dfdGm3SeNi8kRalQ4GtZ5i
-	Qyi16FGnj7QeBL2ZC0q3/kHMm49fJ3c=
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
- [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=3lF5IASooUpctwR6379w6BrGwF+LjoXzeDnJDL0nY1w=;
+	b=KTrcvgBaKhtIRdDNeIAxwFLVAtBjoG+q48qIRFBoJru377/2QF2fGF0L3Rk3PYIyHn7Fcz
+	kfedtCfkKLnt5XYt/sQ6WfCXCqf09swC0MOqDKi0cbVDt8S17Loq6IuY6MjzqgLa3OKhJ6
+	bHh/7ngktMSrcoPkOglLbk00gZ9sQ08=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-316-EIO5DUYIPuKjvbj5JZ-MhA-1; Mon, 04 Nov 2024 08:50:34 -0500
-X-MC-Unique: EIO5DUYIPuKjvbj5JZ-MhA-1
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a9a0710ca24so307600666b.3
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 05:50:33 -0800 (PST)
+ us-mta-686-dIjoz0nwNT-8JCLMUV44Ag-1; Mon, 04 Nov 2024 08:51:27 -0500
+X-MC-Unique: dIjoz0nwNT-8JCLMUV44Ag-1
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-a9a2ccb77ceso333790866b.2
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 05:51:27 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730728233; x=1731333033;
+        d=1e100.net; s=20230601; t=1730728286; x=1731333086;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P6LQUUf7X8lZcCb5D+M+QKKhaiG6AGnyLY/BSrt+eFQ=;
-        b=GQ57Ium1SopNOZ/7cQV3OOJEiVyO0Drw4NuNQAvaERlyB08htBQ0hB1Y4Cd9E69+GH
-         FArPh00mjUSrHhajSFjrnLJH4xdcNjINt5z2BZmDlanalhx6/NAEEa47ghFuGcdbMCd0
-         2ixnAtzrj62fMZd1ETMPlemROk7jM/0ETZ5p9yC5zz3SB0huy3SmOOJ++wq0AQU3XGqr
-         W0GCEAbvqxJZBWcRlV1J4KWiLnXsBep5lRPhDX/jNQJhP2/48j/zSiUmohnIBsSFvRPf
-         gIO1nWq0DFqUdU8MEqYBf5c4PrUZoSbfB2AcTKfpmyyRVMtURL6yl3uHcfNSiBZ0g+lC
-         L/1A==
-X-Forwarded-Encrypted: i=1; AJvYcCVFQ0qKSgDTILDZbHaAN56O+PiCvL2rfYH3zkz/iZdzaVmaMHYmvw5NV2KdK3GxpKwxNVwdZQ7NAEs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztKiPF5Hau0mb5j6u8I9dVeWw6U7NDHBuFwyDOu/yduxsN+hmH
-	osLtbpOlNZGy72Q5XEWdlgX3Rtv0PRs2HpsuuBBhILlIRoZ8mXQmunDfLzh4tVInA/wfs4YOqlM
-	XPH5U0j7pEM0OI5coqf73t5g+fur3PH9hKHK1RwXeq6ehkBXBIYsEKVP4Pg==
-X-Received: by 2002:a17:907:970e:b0:a9a:2a56:91e with SMTP id a640c23a62f3a-a9e3a574f2cmr1846708566b.6.1730728232707;
-        Mon, 04 Nov 2024 05:50:32 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFGopdOo66Tx26/OlD+wtkgB8IBZoM3N1TJQQqpplyg9WoT9v/7RUNNiwP3UuWMsOeOAqRUWw==
-X-Received: by 2002:a17:907:970e:b0:a9a:2a56:91e with SMTP id a640c23a62f3a-a9e3a574f2cmr1846706166b.6.1730728232310;
-        Mon, 04 Nov 2024 05:50:32 -0800 (PST)
+        bh=3lF5IASooUpctwR6379w6BrGwF+LjoXzeDnJDL0nY1w=;
+        b=I6TKIVVBbNqHCjmeNgFXjZN7LBa6JjvUmR2nj2IORyj/lJCvu4mHgP5bOnK40+8N82
+         j5vbqHZUpix8U1Y90GAoa+oWxBnPIQFOgjwwnG1sXJLK9FKuaNeCkNDgiRG2+TlutET8
+         U6+43vk8OwRu1WSqjtNc29OOEby6tE6TG8ZEyvbXyBT+cJHRrirlMJ9VX94unRYox80F
+         l5jU9CboBgJ1kW/JNKjv6L3GknXZ4Y7LdEMVCv24xeATRn7yiGhSvJNjxmRg2NF3lyZr
+         f3HubEpRSg7gQ4EXo1t2uWmB9MvIousL4yevxmOvH89YH3dLojqb39h2PomoioyI/C7w
+         sGvA==
+X-Forwarded-Encrypted: i=1; AJvYcCXhA/BD89Ub9SX/eoGog/SetE4WG85u0CsCvRbOm6qWjdZ5Z/inR/L+E6vHVubvPlVzRskf3gYyI84=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI1jZhrzm8H2tAQJFEqLSt2lqFs3ejoTDw7B64+96tSFD6wqRd
+	9M1B5XeEA3WpRAsBdtufQ6sehQvyBLDR93z421C/DDLW1j5i4HCq/au8Ubsy6CkxqgrsfQQui5D
+	xStDJYQUktvbANbRmvP6ElXioPKylHvDBf6hPv5FCXSb9mnoTCqp+bd/9fBNcuzEKlA==
+X-Received: by 2002:a17:907:94d0:b0:a9a:634:dd2 with SMTP id a640c23a62f3a-a9de61ceb81mr3223925166b.43.1730728285830;
+        Mon, 04 Nov 2024 05:51:25 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFCt+/cu1ypDKgoUBzKPTM743ISHFqGr1yn9jl+X24jkZ+AUXjHhFN4T7MJiP/kdMO3JRCqLg==
+X-Received: by 2002:a17:907:94d0:b0:a9a:634:dd2 with SMTP id a640c23a62f3a-a9de61ceb81mr3223922166b.43.1730728285370;
+        Mon, 04 Nov 2024 05:51:25 -0800 (PST)
 Received: from [10.40.98.157] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e565e0940sm554044166b.104.2024.11.04.05.50.31
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e5669941dsm558916366b.221.2024.11.04.05.51.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 04 Nov 2024 05:50:31 -0800 (PST)
-Message-ID: <c669e2fd-5c6e-4f8d-bee3-1af4abb8b61a@redhat.com>
-Date: Mon, 4 Nov 2024 14:50:31 +0100
+        Mon, 04 Nov 2024 05:51:24 -0800 (PST)
+Message-ID: <2d9e2b58-18d9-476b-badc-70089ff453f1@redhat.com>
+Date: Mon, 4 Nov 2024 14:51:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,70 +82,28 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/3] usb: misc: ljca: set small runtime autosuspend delay
+Subject: Re: [PATCH 3/3] usb: misc: ljca: print firmware version
 To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
  linux-usb@vger.kernel.org
 Cc: Wentong Wu <wentong.wu@intel.com>,
  Sakari Ailus <sakari.ailus@linux.intel.com>
 References: <20241104085056.652294-1-stanislaw.gruszka@linux.intel.com>
- <20241104085056.652294-2-stanislaw.gruszka@linux.intel.com>
+ <20241104085056.652294-3-stanislaw.gruszka@linux.intel.com>
 Content-Language: en-US
 From: Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20241104085056.652294-2-stanislaw.gruszka@linux.intel.com>
+In-Reply-To: <20241104085056.652294-3-stanislaw.gruszka@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 Hi,
 
 On 4-Nov-24 9:50 AM, Stanislaw Gruszka wrote:
-> On some Lenovo platforms, the patch workarounds problems with ov2740
-> sensor initialization, which manifest themself like below:
+> For diagnostics purposes read firmware version from device
+> and print it to dmesg during initialization.
 > 
-> [    4.540476] ov2740 i2c-INT3474:01: error -EIO: failed to find sensor
-> [    4.542066] ov2740 i2c-INT3474:01: probe with driver ov2740 failed with error -5
-> 
-> or
-> 
-> [    7.742633] ov2740 i2c-INT3474:01: chip id mismatch: 2740 != 0
-> [    7.742638] ov2740 i2c-INT3474:01: error -ENXIO: failed to find sensor
-> 
-> and also by random failures of video stream start.
-> 
-> Issue can be reproduced by this script:
-> 
-> n=0
-> k=0
-> while [ $n -lt 50 ] ; do
-> 	sudo modprobe -r ov2740
-> 	sleep `expr $RANDOM % 5`
-> 	sudo modprobe ov2740
-> 	if media-ctl -p  | grep -q ov2740 ; then
-> 		let k++
-> 	fi
-> 	let n++
-> done
-> echo Success rate $k/$n
-> 
-> Without the patch, success rate is approximately 15 or 50 tries.
-> With the patch it does not fail.
-> 
-> This problem is some hardware or firmware malfunction, that can not be
-> easy debug and fix. While setting small autosuspend delay is not perfect
-> workaround as user can configure it to any value, it will prevent
-> the failures by default.
-> 
-> Additionally setting small autosuspend delay should have positive effect
-> on power consumption as for most ljca workloads device is used for just
-> a few milliseconds flowed by long periods of at least 100ms of inactivity
-> (usually more).
-> 
-> Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
-> Cc: stable@vger.kernel.org
 > Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
-Thank you so much for looking into this and fixing it!
-
-Patch looks good to me:
+Thanks, patch looks good to me:
 
 Reviewed-by: Hans de Goede <hdegoede@redhat.com>
 
@@ -154,36 +112,79 @@ everything there works at least as well as before:
 
 Tested-by: Hans de Goede <hdegoede@redhat.com> # ThinkPad X1 Yoga Gen 8, ov2740
 
+On this laptop the reported LJCA firmware version is:
+
+[   25.704000] ljca 3-8:1.0: Firmware version: 1.0.0.544
+
 Regards,
 
 Hans
 
-p.s.
-
-I take it from the commit message that you have no clear idea what exactly is
-happening in the failure case ?
-
-
-
-
-
 
 
 > ---
->  drivers/usb/misc/usb-ljca.c | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/usb/misc/usb-ljca.c | 28 ++++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
 > 
 > diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
-> index dcb3c5d248ac..062b7fb47114 100644
+> index 062b7fb47114..0f8751c51bf6 100644
 > --- a/drivers/usb/misc/usb-ljca.c
 > +++ b/drivers/usb/misc/usb-ljca.c
-> @@ -810,6 +810,7 @@ static int ljca_probe(struct usb_interface *interface,
+> @@ -43,6 +43,7 @@ enum ljca_client_type {
+>  
+>  /* MNG client commands */
+>  enum ljca_mng_cmd {
+> +	LJCA_MNG_GET_VERSION = 1,
+>  	LJCA_MNG_RESET = 2,
+>  	LJCA_MNG_ENUM_GPIO = 4,
+>  	LJCA_MNG_ENUM_I2C = 5,
+> @@ -68,6 +69,13 @@ struct ljca_msg {
+>  	u8 data[] __counted_by(len);
+>  } __packed;
+>  
+> +struct ljca_fw_version {
+> +	u8 major;
+> +	u8 minor;
+> +	__le16 patch;
+> +	__le16 build;
+> +} __packed;
+> +
+>  struct ljca_i2c_ctr_info {
+>  	u8 id;
+>  	u8 capacity;
+> @@ -694,6 +702,24 @@ static int ljca_reset_handshake(struct ljca_adapter *adap)
+>  	return 0;
+>  }
+>  
+> +static void ljca_print_fw_version(struct ljca_adapter *adap)
+> +{
+> +	struct ljca_fw_version version = {};
+> +	int ret;
+> +
+> +	ret = ljca_send(adap, LJCA_CLIENT_MNG, LJCA_MNG_GET_VERSION, NULL, 0,
+> +			(u8 *)&version, sizeof(version), true, LJCA_WRITE_ACK_TIMEOUT_MS);
+> +
+> +	if (ret != sizeof(version)) {
+> +		dev_err(adap->dev, "Get version failed, ret: %d\n", ret);
+> +		return;
+> +	}
+> +
+> +	dev_info(adap->dev, "Firmware version: %d.%d.%d.%d\n",
+> +		 version.major, version.minor,
+> +		 le16_to_cpu(version.patch), le16_to_cpu(version.build));
+> +}
+> +
+>  static int ljca_enumerate_clients(struct ljca_adapter *adap)
+>  {
+>  	struct ljca_client *client, *next;
+> @@ -810,6 +836,8 @@ static int ljca_probe(struct usb_interface *interface,
 >  	if (ret)
 >  		goto err_free;
 >  
-> +	pm_runtime_set_autosuspend_delay(&usb_dev->dev, 10);
+> +	ljca_print_fw_version(adap);
+> +
+>  	pm_runtime_set_autosuspend_delay(&usb_dev->dev, 10);
 >  	usb_enable_autosuspend(usb_dev);
 >  
->  	return 0;
 
 
