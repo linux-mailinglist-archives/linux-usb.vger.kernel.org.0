@@ -1,161 +1,189 @@
-Return-Path: <linux-usb+bounces-17052-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17053-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A2039BB682
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:42:38 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1E859BB6A9
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:50:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 201491F2186F
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 13:42:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F3A49B224E8
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 13:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F841339A1;
-	Mon,  4 Nov 2024 13:42:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E3514A91;
+	Mon,  4 Nov 2024 13:50:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KJB9QF2a"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gBdn+2JF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D1A70813;
-	Mon,  4 Nov 2024 13:42:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF8188BEE
+	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 13:50:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730727749; cv=none; b=K7UrS/RZZ37xO681NxSkpxuIzmqckvQ8lOYeCRd5dXVlkkOTL1a4EWwm0i2A5oZ4ANW8YQOXGMQcxUQJYCjdNsMSVv3Ta3Eb08kSRN9EgWtq+2vv3k98mciOfIZZl8VhpwSisTClhinlmsbDJcc8BR4en6/rnbqcBe0rwSj/4xg=
+	t=1730728239; cv=none; b=nkTPOowmsPaQaWILfwQLRJe0TOKFhDNFjQ1DtuyF9c4lJi2LgKGV6XQfka14nbYm0zHgWqoRrjswcGA3CMqJWiZvepNs+HnnwFomnXZGtZH+sUpDMP1/bMGP8+0lvFbGv8HJLwoLuU9Gz9yP8J8EzGxlOQkRTFsZqPas0ggDFwc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730727749; c=relaxed/simple;
-	bh=sH/RYgeT8EV6l4e9LfxJpQHUCGusAJN0EsCrw0aDSNk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oy2eY2dj0tN2zcfip89hKf9aIHBTQmDlQL6z9PKqT68lTpmD0cUVdKr4gQZ2jZNp5t5DXDHdsU7EmbYRL3/8bZNJwahaCbOb0EeWVRGOkujsytg4Ae2bSVnzMqsP0VA0K0iVnYCDl+OxVRzKObcgBic4VyVtBLWUVlvZTY8FQi8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KJB9QF2a; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-539f7606199so1788162e87.0;
-        Mon, 04 Nov 2024 05:42:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730727744; x=1731332544; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z1kfPDrOQyOjZE2CymA0VUU4ashq3llSWs9vw5Q1LzQ=;
-        b=KJB9QF2aVrq2cWgJm5ac08UHpSZG6C1QcpOqArBw7tM/Hrf9Vb9qoJUezmJ0dtjWCA
-         ozShjOVFqdU/7yraSsoxEDA4UUzKGdC5G9IOq4jfmOV5qrZw9yU4uTOOzdX7U5Vhk9nc
-         mdEfa2Xr0dXXZj2c+373PDKl7EljCQSY14gbWGiud6ziO+g3wGmNgemt5r54DVIfdpoR
-         c01DXdGTYbQUgdCPyEw2xG299fU34MtmvFhVXdhqwclvWq2jAAMSj023R08rUbXIWEVa
-         HJWdbynKWQB75xleGwysN4oXJ9YSJJxu1yno+vGo1RCYGRZNYgdlsgcz5Q+TinZmLO7T
-         3M9g==
+	s=arc-20240116; t=1730728239; c=relaxed/simple;
+	bh=/rSzhwRtAdhGT8kPmq/SEVslJOM/EIxE9t6I6pIQ2Zs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Gfj2EywWe8gGglW1hAjypuq3T5G1wsyr9GBNjtaDToGpS8HKCOFyTM0DGegPZGtGpyUeO4aU/kPG5nVUBZj7bLshIAkPN01KxQhBwMoSLMKc5+rtDP1U61hJjJLO9xCs+zfptH9CON+aDAxfMuhvKyhdG9LTf29PrRwE4n7576I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gBdn+2JF; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1730728236;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=P6LQUUf7X8lZcCb5D+M+QKKhaiG6AGnyLY/BSrt+eFQ=;
+	b=gBdn+2JFWGzS+ZuZTP7Jg6+s9D/0m1BlbqjjhZ1jiuPOuelxUF3ERsa2DSWO1UXVAxhopR
+	6yBrvRGxAXRlTHIeq0TY+IrtudiRZG6eto2pY85DjTK0F+q1dfdGm3SeNi8kRalQ4GtZ5i
+	Qyi16FGnj7QeBL2ZC0q3/kHMm49fJ3c=
+Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com
+ [209.85.218.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-316-EIO5DUYIPuKjvbj5JZ-MhA-1; Mon, 04 Nov 2024 08:50:34 -0500
+X-MC-Unique: EIO5DUYIPuKjvbj5JZ-MhA-1
+Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-a9a0710ca24so307600666b.3
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 05:50:33 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730727744; x=1731332544;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z1kfPDrOQyOjZE2CymA0VUU4ashq3llSWs9vw5Q1LzQ=;
-        b=bQOn2QAtLp3STI+fPWRy8itdJT1/AqO06/DjZ5ZmYVPLfbjFxX2BH1Nr+qn9q2t32C
-         l8WZRrjaWX6iaEYRvAH21a3MUCwmnx0cC18KIwL8J8yUMLwnaT0m2qooxxaMjf+7gFIn
-         YWsntp7PuJ2tWTyyWxR1oyH39V4Ub62VLcq1uLHVrYCcaNlzUJ5NQxYvh+cMVLYe5JN2
-         6vtMEx43fQqXX90KZFgTS0TsJTA0xdGQZmCbaMWxr4v1by6a7lVnq2OpMllGC/1lL4C9
-         WkAFR1dKbYagS5OB1oidUphShAW0Nc67/wvCDwuI3/KOWL4e6Kt+kqzbVdmy3l5wDQ/l
-         66lA==
-X-Forwarded-Encrypted: i=1; AJvYcCWj3AwAm4nZmTCQgya5k/dhDiwyLqwmoWv2LTP3fnjr+Ia0W1gYlQfd4kMph/AFn2szvdedvNOr2G8HxR4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSORwSeuX4etnNx1P63j1D7tdP9azX7vwdDa79f8EpvVEnjpX+
-	mvJheThH+7OywNuXP8JsgVwb5dYxC/R/Qg5RzKKx6GnxmVZl6o2/
-X-Google-Smtp-Source: AGHT+IECPa3DlQD5Iey9jB7c3gpwS3dR3RcsFO/RMA/6PkAa50BWJysHhcMvZGpSwJGpmiofiY5/CQ==
-X-Received: by 2002:a05:6512:3b25:b0:539:ed5e:e224 with SMTP id 2adb3069b0e04-53b7ecd57efmr9330990e87.7.1730727743820;
-        Mon, 04 Nov 2024 05:42:23 -0800 (PST)
-Received: from localhost.localdomain (h-79-136-102-249.A137.corp.bahnhof.se. [79.136.102.249])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bcce4e4sm1699521e87.175.2024.11.04.05.42.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 05:42:22 -0800 (PST)
-From: Daniel Swanemar <d.swanemar@gmail.com>
-To: johan@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Daniel Swanemar <d.swanemar@gmail.com>
-Subject: [PATCH 1/1] Add TCL IK512 MBIM & ECM
-Date: Mon,  4 Nov 2024 14:42:17 +0100
-Message-ID: <20241104134217.3838-1-d.swanemar@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1730728233; x=1731333033;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P6LQUUf7X8lZcCb5D+M+QKKhaiG6AGnyLY/BSrt+eFQ=;
+        b=GQ57Ium1SopNOZ/7cQV3OOJEiVyO0Drw4NuNQAvaERlyB08htBQ0hB1Y4Cd9E69+GH
+         FArPh00mjUSrHhajSFjrnLJH4xdcNjINt5z2BZmDlanalhx6/NAEEa47ghFuGcdbMCd0
+         2ixnAtzrj62fMZd1ETMPlemROk7jM/0ETZ5p9yC5zz3SB0huy3SmOOJ++wq0AQU3XGqr
+         W0GCEAbvqxJZBWcRlV1J4KWiLnXsBep5lRPhDX/jNQJhP2/48j/zSiUmohnIBsSFvRPf
+         gIO1nWq0DFqUdU8MEqYBf5c4PrUZoSbfB2AcTKfpmyyRVMtURL6yl3uHcfNSiBZ0g+lC
+         L/1A==
+X-Forwarded-Encrypted: i=1; AJvYcCVFQ0qKSgDTILDZbHaAN56O+PiCvL2rfYH3zkz/iZdzaVmaMHYmvw5NV2KdK3GxpKwxNVwdZQ7NAEs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YztKiPF5Hau0mb5j6u8I9dVeWw6U7NDHBuFwyDOu/yduxsN+hmH
+	osLtbpOlNZGy72Q5XEWdlgX3Rtv0PRs2HpsuuBBhILlIRoZ8mXQmunDfLzh4tVInA/wfs4YOqlM
+	XPH5U0j7pEM0OI5coqf73t5g+fur3PH9hKHK1RwXeq6ehkBXBIYsEKVP4Pg==
+X-Received: by 2002:a17:907:970e:b0:a9a:2a56:91e with SMTP id a640c23a62f3a-a9e3a574f2cmr1846708566b.6.1730728232707;
+        Mon, 04 Nov 2024 05:50:32 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFGopdOo66Tx26/OlD+wtkgB8IBZoM3N1TJQQqpplyg9WoT9v/7RUNNiwP3UuWMsOeOAqRUWw==
+X-Received: by 2002:a17:907:970e:b0:a9a:2a56:91e with SMTP id a640c23a62f3a-a9e3a574f2cmr1846706166b.6.1730728232310;
+        Mon, 04 Nov 2024 05:50:32 -0800 (PST)
+Received: from [10.40.98.157] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9e565e0940sm554044166b.104.2024.11.04.05.50.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 05:50:31 -0800 (PST)
+Message-ID: <c669e2fd-5c6e-4f8d-bee3-1af4abb8b61a@redhat.com>
+Date: Mon, 4 Nov 2024 14:50:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] usb: misc: ljca: set small runtime autosuspend delay
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+ linux-usb@vger.kernel.org
+Cc: Wentong Wu <wentong.wu@intel.com>,
+ Sakari Ailus <sakari.ailus@linux.intel.com>
+References: <20241104085056.652294-1-stanislaw.gruszka@linux.intel.com>
+ <20241104085056.652294-2-stanislaw.gruszka@linux.intel.com>
+Content-Language: en-US
+From: Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20241104085056.652294-2-stanislaw.gruszka@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add the following TCL IK512 compositions:
+Hi,
 
-0x0530: Modem + Diag + AT + MBIM
-T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  3 Spd=10000 MxCh= 0
-D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=1bbb ProdID=0530 Rev=05.04
-S:  Manufacturer=TCL
-S:  Product=TCL 5G USB Dongle
-S:  SerialNumber=3136b91a
-C:  #Ifs= 5 Cfg#= 1 Atr=80 MxPwr=896mA
-I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=82(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 1 Cls=02(commc) Sub=0e Prot=00 Driver=cdc_mbim
-E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 4 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+On 4-Nov-24 9:50 AM, Stanislaw Gruszka wrote:
+> On some Lenovo platforms, the patch workarounds problems with ov2740
+> sensor initialization, which manifest themself like below:
+> 
+> [    4.540476] ov2740 i2c-INT3474:01: error -EIO: failed to find sensor
+> [    4.542066] ov2740 i2c-INT3474:01: probe with driver ov2740 failed with error -5
+> 
+> or
+> 
+> [    7.742633] ov2740 i2c-INT3474:01: chip id mismatch: 2740 != 0
+> [    7.742638] ov2740 i2c-INT3474:01: error -ENXIO: failed to find sensor
+> 
+> and also by random failures of video stream start.
+> 
+> Issue can be reproduced by this script:
+> 
+> n=0
+> k=0
+> while [ $n -lt 50 ] ; do
+> 	sudo modprobe -r ov2740
+> 	sleep `expr $RANDOM % 5`
+> 	sudo modprobe ov2740
+> 	if media-ctl -p  | grep -q ov2740 ; then
+> 		let k++
+> 	fi
+> 	let n++
+> done
+> echo Success rate $k/$n
+> 
+> Without the patch, success rate is approximately 15 or 50 tries.
+> With the patch it does not fail.
+> 
+> This problem is some hardware or firmware malfunction, that can not be
+> easy debug and fix. While setting small autosuspend delay is not perfect
+> workaround as user can configure it to any value, it will prevent
+> the failures by default.
+> 
+> Additionally setting small autosuspend delay should have positive effect
+> on power consumption as for most ljca workloads device is used for just
+> a few milliseconds flowed by long periods of at least 100ms of inactivity
+> (usually more).
+> 
+> Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
 
-0x0640: ECM + Modem + Diag + AT
-T:  Bus=04 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  4 Spd=10000 MxCh= 0
-D:  Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
-P:  Vendor=1bbb ProdID=0640 Rev=05.04
-S:  Manufacturer=TCL
-S:  Product=TCL 5G USB Dongle
-S:  SerialNumber=3136b91a
-C:  #Ifs= 5 Cfg#= 1 Atr=80 MxPwr=896mA
-I:  If#= 0 Alt= 0 #EPs= 1 Cls=02(commc) Sub=06 Prot=00 Driver=cdc_ether
-E:  Ad=81(I) Atr=03(Int.) MxPS=  16 Ivl=32ms
-I:  If#= 1 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=cdc_ether
-E:  Ad=0f(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-I:  If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
-E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+Thank you so much for looking into this and fixing it!
 
-Signed-off-by: Daniel Swanemar <d.swanemar@gmail.com>
----
- drivers/usb/serial/option.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Patch looks good to me:
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 4f18f189f309..11b180c07bac 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -2379,6 +2379,10 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x60) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0530, 0xff),			/* TCL IK512 MBIM */
-+	  .driver_info = NCTRL(1) },
-+	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0640, 0xff),			/* TCL IK512 ECM */
-+	  .driver_info = NCTRL(3) },
- 	{ } /* Terminating entry */
- };
- MODULE_DEVICE_TABLE(usb, option_ids);
--- 
-2.43.0
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+
+I have also given this a test run on a "ThinkPad X1 Yoga Gen 8" and
+everything there works at least as well as before:
+
+Tested-by: Hans de Goede <hdegoede@redhat.com> # ThinkPad X1 Yoga Gen 8, ov2740
+
+Regards,
+
+Hans
+
+p.s.
+
+I take it from the commit message that you have no clear idea what exactly is
+happening in the failure case ?
+
+
+
+
+
+
+
+> ---
+>  drivers/usb/misc/usb-ljca.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
+> index dcb3c5d248ac..062b7fb47114 100644
+> --- a/drivers/usb/misc/usb-ljca.c
+> +++ b/drivers/usb/misc/usb-ljca.c
+> @@ -810,6 +810,7 @@ static int ljca_probe(struct usb_interface *interface,
+>  	if (ret)
+>  		goto err_free;
+>  
+> +	pm_runtime_set_autosuspend_delay(&usb_dev->dev, 10);
+>  	usb_enable_autosuspend(usb_dev);
+>  
+>  	return 0;
 
 
