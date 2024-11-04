@@ -1,137 +1,100 @@
-Return-Path: <linux-usb+bounces-17061-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17062-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4115A9BB812
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 15:39:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9BE389BB81E
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 15:41:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 05EA32809D7
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:39:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A7322850B9
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:41:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2148F1BD50C;
-	Mon,  4 Nov 2024 14:39:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C8691B6D03;
+	Mon,  4 Nov 2024 14:41:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cRn/+vtb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUzM/nFN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E3C51BC9FE;
-	Mon,  4 Nov 2024 14:39:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D90F1369B6;
+	Mon,  4 Nov 2024 14:41:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730731165; cv=none; b=bYAccXl1HL53i5GstnWeIIgGh4mvCVoG9ott/9YJKUC2eLNgoPMctTipcsdBhgafr4eJETHB3zzqG3A5ieup/YD5djx/ZJp+lkVCN+FHRTL2jA2mllffeKCv7RfNk2YCinFiPd+bqBRgU4q1ZW5G+ft+4Hd7hn37pZdTmMySg1g=
+	t=1730731273; cv=none; b=MyALB8btX3QF2r4ImRvTuHbIX4ZG0oCZq0PTYrIGMHLLjRMpMYLnCK2tgxRz+wun64L8ikRzac/aVpbbXKkUMKqBDFA5LIFVE3QrfgQQ6CQcMJ7klyuCbNfJIMFIjsJWxo+M1r3gQBZ7yTey5vqdlUFF99lJsxPbAXIjRAWm1pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730731165; c=relaxed/simple;
-	bh=uuNW8QkqgnaDeBYjYCEj/zDRiaDiB3NGiL194aT02nA=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=sOe3qccXf6kBI+IbQvFUrTTZ6C+epx8SMc5nL31zb57rlIw9KT/sh0PHHMQ6dGczCB9NdZZ4Jt00doUp7/1WEV9GXdHy5v/6C7gaxCvLgiAS88XQS5oNB2QinJmQx3oStD7LC6Dj3vEN8Aue/hBeckSawh2MTp0izdArHg/pKb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cRn/+vtb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B03C4CED1;
-	Mon,  4 Nov 2024 14:39:24 +0000 (UTC)
+	s=arc-20240116; t=1730731273; c=relaxed/simple;
+	bh=RZqf7/lbIGoXx1+SMuA+O3AzMVC1PuJUuyLt5uaGs1o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DTFGvzCppHTrSLy8hg3/p/WGYDSMls85/YfcdrO56pOYRFF+UTeq6PbKOhxcghCatJUfmGKevOWZIkG10JtO3YzaDwLDCIHaHSLQUNoCKtTWggM6fAWMZYHzSUzy9Ncnrfyc15CBvIcDWLzjtNfi7TZcZwSPLbDMrLCdpIatLkQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUzM/nFN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3B36C4CECE;
+	Mon,  4 Nov 2024 14:41:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730731165;
-	bh=uuNW8QkqgnaDeBYjYCEj/zDRiaDiB3NGiL194aT02nA=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=cRn/+vtbSTam1Cs8Yl9oy23CvCJS08Zp0BZeig6G3nUi2Sm3Zl1DNOYMI+4ktZPVU
-	 eT930TVQMEqK5Z4NG2OCjLFwh5S3Q7K7cpKWRFeKa+KhZc+KYE7ruVB8f+A1YQex3W
-	 8G/qtAUPzZ9vLE63kJaYqThzf7mUqdGbIO4nRLCSOjNV7nZXteyaQWALOQOH0nF4YK
-	 0LvPU5O5h23KF8+dR30UxrV7llNQNvdCfOpM4mvCDoDHs++qWBA4Yx+n5bWMr++b19
-	 HVbS5pvttFfD2tlHSHnEHMbsxzU9kX2lCn7+N8t8icqFPq6EbjfZD8+JHurPSuurqM
-	 a//QVvoJooYzw==
-Date: Mon, 04 Nov 2024 08:39:23 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=k20201202; t=1730731273;
+	bh=RZqf7/lbIGoXx1+SMuA+O3AzMVC1PuJUuyLt5uaGs1o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RUzM/nFNsoJg70EQnCf96Cw6/A5Vqyjj4EV06akSEfCzVDqVaItPh3WEJ5N2qZRJC
+	 PkFA6LfEC7NfcSfOlO+hXqQf8UD1/uleUAuZeIc9R2WUWzEKgpXKvJF6pUOVBhnmLp
+	 xUMF5tYMOKWPWzAyTVJd3lfrATR0Nt8Om3ebqesOne2GYiO1mhJZD3II1Jn7h7w4yY
+	 MLBbEJEM6CX4AaWIuSSg2bYh7HLp3IBauqpesRVqufyhUBXcYBbN1RXvEX7NX/5pJl
+	 n69HfgqWNJAt2rV8PiitU7lTZJpFwBMQwlp4POiMz2V8B7Fzpwb8hjWSBOl08GI4wK
+	 lyXHhtuCLpbYw==
+Date: Mon, 4 Nov 2024 08:41:11 -0600
+From: Rob Herring <robh@kernel.org>
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: rdbabiera@google.com, linux-usb@vger.kernel.org, krzk+dt@kernel.org,
+	dmitry.baryshkov@linaro.org, conor+dt@kernel.org,
+	gregkh@linuxfoundation.org, badhri@google.com, linux@roeck-us.net,
+	xu.yang_2@nxp.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, heikki.krogerus@linux.intel.com,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	kyletso@google.com
+Subject: Re: [PATCH v2 2/3] dt-bindings: usb: maxim,max33359: add usage of
+ sink bc12 time property
+Message-ID: <20241104144111.GA4077878-robh@kernel.org>
+References: <20241103034402.2460252-1-amitsd@google.com>
+ <20241103034402.2460252-3-amitsd@google.com>
+ <173061137043.3549002.17300495931303369678.robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Tero Kristo <kristo@kernel.org>, linux-usb@vger.kernel.org, 
- Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- Devarsh Thakkar <devarsht@ti.com>, Conor Dooley <conor+dt@kernel.org>, 
- Felipe Balbi <balbi@kernel.org>, Hari Nagalla <hnagalla@ti.com>, 
- linux@ew.tq-group.com, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Guilherme G. Piccoli" <gpiccoli@igalia.com>, Nishanth Menon <nm@ti.com>, 
- Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
- linux-hardening@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>
-In-Reply-To: <cover.1730299760.git.matthias.schiffer@ew.tq-group.com>
-References: <cover.1730299760.git.matthias.schiffer@ew.tq-group.com>
-Message-Id: <173072771143.3690742.7100697196468196200.robh@kernel.org>
-Subject: Re: [PATCH 0/5] TQ-Systems TQMa62xx SoM and MBa62xx board
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <173061137043.3549002.17300495931303369678.robh@kernel.org>
 
-
-On Mon, 04 Nov 2024 10:47:23 +0100, Matthias Schiffer wrote:
-> This adds Device Trees for out AM62x-based SoM TQMa62xx and its
-> reference carrier board MBa62xx.
+On Sun, Nov 03, 2024 at 12:22:50AM -0500, Rob Herring (Arm) wrote:
 > 
-> Two of the patches are adapted from the TI vendor repo ti-linux-kernel to
-> add RemoteProc/RPMsg support for the R5F core. A similar patch has been
-> submitted for mainline by TI themselves for the closely related AM62A SoC.
+> On Sat, 02 Nov 2024 20:43:29 -0700, Amit Sunil Dhamne wrote:
+> > Add usage of "sink-bc12-completion-time-ms"  connector property to
+> > max33359 controller for delaying PD negotiation till BC1.2 detection
+> > completes. This overcomes the occasional delays observed while
+> > receiving PD messages where BC1.2 detection runs in parallel.
+> > 
+> > Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> > Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> >  Documentation/devicetree/bindings/usb/maxim,max33359.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
 > 
-> Not yet included are overlays to enable LVDS display output and MIPI-CSI
-> camera input.
+> My bot found errors running 'make dt_binding_check' on your patch:
 > 
-> Devarsh Thakkar (1):
->   arm64: dts: ti: k3-am62: Add DM R5 ranges in cbass
+> yamllint warnings/errors:
 > 
-> Hari Nagalla (1):
->   arm64: dts: ti: k3-am62-wakeup: Add R5F device node
-> 
-> Matthias Schiffer (3):
->   dt-bindings: usb: dwc3: Allow connector in USB controller node
->   dt-bindings: arm: ti: Add compatible for AM625-based TQMa62xx SOM
->     family and carrier board
->   arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and MBa62xx carrier board
->     Device Trees
-> 
->  .../devicetree/bindings/arm/ti/k3.yaml        |   7 +
->  .../devicetree/bindings/usb/snps,dwc3.yaml    |   6 +
->  arch/arm64/boot/dts/ti/Makefile               |   1 +
->  arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi    |  24 +
->  arch/arm64/boot/dts/ti/k3-am62.dtsi           |   8 +-
->  .../boot/dts/ti/k3-am625-tqma62xx-mba62xx.dts | 917 ++++++++++++++++++
->  arch/arm64/boot/dts/ti/k3-am625-tqma62xx.dtsi | 346 +++++++
->  7 files changed, 1307 insertions(+), 2 deletions(-)
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am625-tqma62xx-mba62xx.dts
->  create mode 100644 arch/arm64/boot/dts/ti/k3-am625-tqma62xx.dtsi
-> 
-> --
-> TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
-> Amtsgericht München, HRB 105018
-> Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
-> https://www.tq-group.com/
-> 
-> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb: maxtcpc@25: connector: Unevaluated properties are not allowed ('sink-bc12-completion-time-ms' was unexpected)
+> 	from schema $id: http://devicetree.org/schemas/usb/maxim,max33359.yaml#
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/maxim,max33359.example.dtb: connector: Unevaluated properties are not allowed ('sink-bc12-completion-time-ms' was unexpected)
+> 	from schema $id: http://devicetree.org/schemas/connector/usb-connector.yaml#
 
+This can be ignored as patch 1 couldn't be applied.
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y ti/k3-am625-tqma62xx-mba62xx.dtb' for cover.1730299760.git.matthias.schiffer@ew.tq-group.com:
-
-arch/arm64/boot/dts/ti/k3-am625-tqma62xx-mba62xx.dtb: syscon@43000000: compatible: ['syscon', 'simple-mfd'] is too short
-	from schema $id: http://devicetree.org/schemas/mfd/syscon-common.yaml#
-
-
-
-
+Rob
 
 
