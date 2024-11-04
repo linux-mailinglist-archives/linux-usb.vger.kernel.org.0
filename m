@@ -1,286 +1,233 @@
-Return-Path: <linux-usb+bounces-17057-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17058-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40D1F9BB70C
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 15:04:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D3D99BB7B8
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 15:27:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6471C1C221BC
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:04:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 811481C225F0
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 14:27:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8692185B4D;
-	Mon,  4 Nov 2024 14:03:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 203431AF0AB;
+	Mon,  4 Nov 2024 14:27:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SNv9aOuc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gpf0Qcm9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5823479FD;
-	Mon,  4 Nov 2024 14:03:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADA68BEE;
+	Mon,  4 Nov 2024 14:27:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730729033; cv=none; b=TW4WFyU688V9XWk2SjHSH7zLcnmyRosWcx4BkJGdNMmbQhydPilXAfLZT4UfxJCKsIku3Lx6mZ/uy70zzh6yfLkSN+HuAuQ5qAYV9ehPbqmW+DBFji6r1PClEteYEodzKHp2oYxt2Ev5bCWIpUvt55RVv7TZ+Yu1icpfvyFN+SU=
+	t=1730730450; cv=none; b=jC7fCmwfk+rBMfakqrZjHny4giLTTSfbkw2Auiw5UBPwuvazO7iiAXA+4lFDena/bN+K7bCuGaYtRKHp+oWpg7tx0Ii8BnMB8ybMHdJd/erKOYnS9zYylJ4Gs1q+jJHOkBP8e96F7mxvoy0posh4GYmslEU5cqneIrXJw/UKNCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730729033; c=relaxed/simple;
-	bh=Es7SovyKCYcHYnpFDoSqTBsJx27R1XCshX7bTOsxyh8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=dPRC9N2acGqP9IwSyttVJ7GmFistEEXLZUe25Du1JWFcQtKiAR8SCFBoKTzbqkxNT2M+DU/4PCJ/ZouUepSFbRd8ADLxEG+mh8lL8g1yOFgHKBgkI1HLYuXB9wQ86WwF3sq0EBIwWYFVBx/X+28wZl3N1TaY5rvmIvZiDTjMjSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SNv9aOuc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD533C4CED5;
-	Mon,  4 Nov 2024 14:03:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730729032;
-	bh=Es7SovyKCYcHYnpFDoSqTBsJx27R1XCshX7bTOsxyh8=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=SNv9aOucuUvEb0ZqFsqDoEuekZ2vVS0HRIq43+q9nBZvv7AnIKCCOC8lPOyEVMRMI
-	 Ghkk61OA3BtGSlLXzLm9tBNokmtp795r3/W866XqChiGx+59eN9bJpXNBGl8RAxtRY
-	 9YmbwOiog5c8SbeX/Zcyrz9JwVgpDgtyAFfKW3Vk4Y0aosLv1zMw/g2oMAeGqKhH81
-	 PJpsheLiJrdJTN5j1sMzTpAlBBQxmbBrc3NTj69EApVPfeTu+hhQSmD3wk3yLH9aKZ
-	 bPCF96n+XhblXHQZzhYSE/v9twxiiUpg/EIW6l1B8OOEQx5wVHmcwvk7AJZejas9Bd
-	 l05216w+8GvHQ==
-Message-ID: <6c06456c-0501-45ec-95b4-324f45ae2c5b@kernel.org>
-Date: Mon, 4 Nov 2024 16:03:46 +0200
+	s=arc-20240116; t=1730730450; c=relaxed/simple;
+	bh=mAacIEPRCIZdP88OUMaz6TpMwLO0OSldJPKYresI8kE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ec0UYBlMcbtHmyRL8ZSfTZNLOkagsZMKs+GRxNFxD8GeWeFb3WqzipSmnlOLV07zIK5k6yzJNf3qYr0NExuJnsZJz++r/ZhD/DrW+t6ZLqRNCI8i0pjRrRUHuCu26KwR+EuS6gWKJyrIgnFfGbLfflrSyKx8EsqNo4bXmtSU2VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gpf0Qcm9; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730730449; x=1762266449;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=mAacIEPRCIZdP88OUMaz6TpMwLO0OSldJPKYresI8kE=;
+  b=Gpf0Qcm9gQp0ECJc5Q+VsbUmoDliFKNQGWd7y/os7e8KSwHMTqmHB0TD
+   o94NYAQaNZfHlKuZ8V97eP8CwckTX0ezzxNnlczE3P5v4VrqE/CkVio2e
+   DcvcoFsv5qhLwGzrcTGSzWnFfSEhqNH4vWgVgRADiERfowJqBc/Wsxh6q
+   XjNhs7sPlRobUwo6s6cJdmYpB+R9wZ+ji91YkFFIShI2awe+s4VSAHp0E
+   Jt7rQ/1PDZlA70xXCdX7bBBjn59F+I/E5dkTZm3uxJd7GpvHAAJE4jbqH
+   75WXJMF0pOtW+UpauHoi+tv10cPk5ly08PV+I/DOU1Pbequ+95m3UrgvD
+   Q==;
+X-CSE-ConnectionGUID: huMsl/EFQearlXQVicIS7Q==
+X-CSE-MsgGUID: X5STIALZRyO6HGBpG1GCVg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="29851215"
+X-IronPort-AV: E=Sophos;i="6.11,257,1725346800"; 
+   d="scan'208";a="29851215"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 06:14:45 -0800
+X-CSE-ConnectionGUID: a0sBERauQP+/Cc23e6O4DA==
+X-CSE-MsgGUID: 466nElIvTsGCmVPB2Hxwfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,257,1725346800"; 
+   d="scan'208";a="88235457"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa004.fm.intel.com with SMTP; 04 Nov 2024 06:14:41 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 04 Nov 2024 16:14:40 +0200
+Date: Mon, 4 Nov 2024 16:14:40 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Cc: tzungbi@kernel.org, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev, dmitry.baryshkov@linaro.org,
+	jthies@google.com, akuchynski@google.com, pmalani@chromium.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/7] usb: typec: Auto enter control for alternate modes
+Message-ID: <ZyjW0CMXgGIt-usC@kuha.fi.intel.com>
+References: <20241030212854.998318-1-abhishekpandit@chromium.org>
+ <20241030142833.v2.3.I439cffc7bf76d94f5850eb85980f1197c4f9154c@changeid>
+ <ZyOVIKGlrlj7kc9-@kuha.fi.intel.com>
+ <CANFp7mX-DkyFqwoaq_4V1XEDBqK7bj6-nz2aJi7idM=Q2TT49w@mail.gmail.com>
+ <ZyTesZ3gCmYDmrA6@kuha.fi.intel.com>
+ <CANFp7mWim9VH+KLH3A+RJ5YFuvrVwDUgU2q8_qvDM3=jzYd6xg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: dwc3: core: Fix system suspend on TI AM62
- platforms
-From: Roger Quadros <rogerq@kernel.org>
-To: William McVicker <willmcvicker@google.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Chris Morgan <macroalpha82@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>,
- Pavel Machek <pavel@ucw.cz>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Nishanth Menon <nm@ti.com>,
- Tero Kristo <kristo@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>,
- Dhruva Gole <d-gole@ti.com>, Vishal Mahaveer <vishalm@ti.com>,
- msp@baylibre.com, srk@ti.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-usb@vger.kernel.org, stable@vger.kernel.org,
- linux-arm-msm@vger.kernel.org
-References: <20241011-am62-lpm-usb-v3-1-562d445625b5@kernel.org>
- <ZyVfcUuPq56R2m1Y@google.com>
- <f35aa5a1-96fd-4e9a-9ecc-5e900d440d4c@kernel.org>
- <8df97a64-ab88-4bc6-b015-3995546172a7@kernel.org>
- <dc534e9f-05c3-4f42-afdb-7d7cbe8cac6d@kernel.org>
-Content-Language: en-US
-In-Reply-To: <dc534e9f-05c3-4f42-afdb-7d7cbe8cac6d@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANFp7mWim9VH+KLH3A+RJ5YFuvrVwDUgU2q8_qvDM3=jzYd6xg@mail.gmail.com>
 
-Hi,
-
-On 04/11/2024 14:30, Roger Quadros wrote:
-> Hi,
+On Fri, Nov 01, 2024 at 09:53:14AM -0700, Abhishek Pandit-Subedi wrote:
+> On Fri, Nov 1, 2024 at 6:59 AM Heikki Krogerus
+> <heikki.krogerus@linux.intel.com> wrote:
+> >
+> > On Thu, Oct 31, 2024 at 03:48:45PM -0700, Abhishek Pandit-Subedi wrote:
+> > > On Thu, Oct 31, 2024 at 7:33 AM Heikki Krogerus
+> > > <heikki.krogerus@linux.intel.com> wrote:
+> > > >
+> > > > On Wed, Oct 30, 2024 at 02:28:34PM -0700, Abhishek Pandit-Subedi wrote:
+> > > > > Add controls for whether an alternate mode is automatically entered when
+> > > > > a partner connects. The auto_enter control is only available on ports
+> > > > > and applies immediately after a partner connects. The default behavior
+> > > > > is to enable auto enter and drivers must explicitly disable it.
+> > > > >
+> > > > > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > > > > ---
+> > > > >
+> > > > > (no changes since v1)
+> > > > >
+> > > > >  Documentation/ABI/testing/sysfs-bus-typec |  9 +++++++
+> > > > >  drivers/usb/typec/altmodes/displayport.c  |  6 +++--
+> > > > >  drivers/usb/typec/altmodes/thunderbolt.c  |  3 ++-
+> > > > >  drivers/usb/typec/class.c                 | 31 +++++++++++++++++++++++
+> > > > >  include/linux/usb/typec.h                 |  2 ++
+> > > > >  include/linux/usb/typec_altmode.h         |  2 ++
+> > > > >  6 files changed, 50 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/Documentation/ABI/testing/sysfs-bus-typec b/Documentation/ABI/testing/sysfs-bus-typec
+> > > > > index 205d9c91e2e1..f09d05727b82 100644
+> > > > > --- a/Documentation/ABI/testing/sysfs-bus-typec
+> > > > > +++ b/Documentation/ABI/testing/sysfs-bus-typec
+> > > > > @@ -12,6 +12,15 @@ Description:
+> > > > >
+> > > > >               Valid values are boolean.
+> > > > >
+> > > > > +What:                /sys/bus/typec/devices/.../auto_enter
+> > > > > +Date:                September 2024
+> > > > > +Contact:     Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > > > > +Description:
+> > > > > +             Controls whether a mode will be automatically entered when a partner is
+> > > > > +             connected.
+> > > > > +
+> > > > > +             This field is only valid and displayed on a port. Valid values are boolean.
+> > > >
+> > > > So, why can't this be controlled with the "active" property of the
+> > > > port altmode instead? That's why it's there.
+> > > >
+> > > > Sorry if I missed something in v1 related to this question.
+> > >
+> > > There was a bit of discussion around this in another patch in v1:
+> > > https://patchwork.kernel.org/project/chrome-platform/patch/20240925092505.8.Ic14738918e3d026fa2d85e95fb68f8e07a0828d0@changeid/
+> > > And this patch is probably a good place to continue that discussion.
+> > >
+> > > With the way altmodes drivers currently work, they will auto-enter
+> > > when probed. So if you have a partner that supports both displayport
+> > > and thunderbolt, they will both attempt to auto-enter on probe. I
+> > > think I could use the `active` field instead so that the port altmode
+> > > blocks entry until userspace enables it -- this would avoid the need
+> > > to add one more sysfs ABI. I'll actually go ahead and do this for the
+> > > next patch series I send up.
+> > >
+> > > However, the underlying problem I'm trying to solve still exists: how
+> > > do you choose a specific altmode to enter if there are multiple to
+> > > choose from? I tried to implement a method that first tries USB4 and
+> > > then Thunderbolt and then DP but I realized that the altmode drivers
+> > > don't necessarily bind immediately after a partner altmode is
+> > > registered so I can't just call `activate` (since no ops are attached
+> > > to the partner altmode yet). Do you have any thoughts about how to
+> > > handle multiple modes as well as how to handle fallback mode entry
+> > > (i.e. thunderbolt fails so you try DPAM next)?
+> >
+> > If the user space needs to take over control of the entry order, then
+> > can't it just de-activate all port alt modes by default, and then
+> > activate the one that needs to enter? The port driver probable needs
+> > to implent the "activate" callback for this.
+> >
+> > The user space can see when the driver is bound to a device by
+> > monitoring the uevents, no?
 > 
-> On 02/11/2024 14:34, Roger Quadros wrote:
->> Hi William & Chris,
->>
->> On 02/11/2024 13:50, Roger Quadros wrote:
->>> Hi William,
->>>
->>> On 02/11/2024 01:08, William McVicker wrote:
->>>> +linux-arm-msm@vger.kernel.org
->>>>
->>>> Hi Roger,
->>>>
->>>> On 10/11/2024, Roger Quadros wrote:
->>>>> Since commit 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init"),
->>>>> system suspend is broken on AM62 TI platforms.
->>>>>
->>>>> Before that commit, both DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY
->>>>> bits (hence forth called 2 SUSPHY bits) were being set during core
->>>>> initialization and even during core re-initialization after a system
->>>>> suspend/resume.
->>>>>
->>>>> These bits are required to be set for system suspend/resume to work correctly
->>>>> on AM62 platforms.
->>>>>
->>>>> Since that commit, the 2 SUSPHY bits are not set for DEVICE/OTG mode if gadget
->>>>> driver is not loaded and started.
->>>>> For Host mode, the 2 SUSPHY bits are set before the first system suspend but
->>>>> get cleared at system resume during core re-init and are never set again.
->>>>>
->>>>> This patch resovles these two issues by ensuring the 2 SUSPHY bits are set
->>>>> before system suspend and restored to the original state during system resume.
->>>>>
->>>>> Cc: stable@vger.kernel.org # v6.9+
->>>>> Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
->>>>> Link: https://lore.kernel.org/all/1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org/
->>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->>>>> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
->>>>> ---
->>>>> Changes in v3:
->>>>> - Fix single line comment style
->>>>> - add DWC3_GUSB3PIPECTL_SUSPHY to documentation of susphy_state
->>>>> - Added Acked-by tag
->>>>> - Link to v2: https://lore.kernel.org/r/20241009-am62-lpm-usb-v2-1-da26c0cd2b1e@kernel.org
->>>>>
->>>>> Changes in v2:
->>>>> - Fix comment style
->>>>> - Use both USB3 and USB2 SUSPHY bits to determine susphy_state during system suspend/resume.
->>>>> - Restore SUSPHY bits at system resume regardless if it was set or cleared before system suspend.
->>>>> - Link to v1: https://lore.kernel.org/r/20241001-am62-lpm-usb-v1-1-9916b71165f7@kernel.org
->>>>> ---
->>>>>  drivers/usb/dwc3/core.c | 19 +++++++++++++++++++
->>>>>  drivers/usb/dwc3/core.h |  3 +++
->>>>>  2 files changed, 22 insertions(+)
->>>>>
->>>>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>>>> index 9eb085f359ce..ca77f0b186c4 100644
->>>>> --- a/drivers/usb/dwc3/core.c
->>>>> +++ b/drivers/usb/dwc3/core.c
->>>>> @@ -2336,6 +2336,11 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>>>>  	u32 reg;
->>>>>  	int i;
->>>>>  
->>>>> +	dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
->>>>> +			    DWC3_GUSB2PHYCFG_SUSPHY) ||
->>>>> +			    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
->>>>> +			    DWC3_GUSB3PIPECTL_SUSPHY);
->>>>> +
->>>>
->>>> I'm running into an issue on my Pixel 6 device with this change when the
->>>> dwc3-exynos device has runtime PM enabled. Basically, after the device boots up
->>>> and I disconnect USB, the dwc3-exynos device enters runtime suspend followed by
->>>> system suspend 15 seconds later. On system suspend, the clocks powering these
->>>> dwc3 registers are off which results in an SError. I have verified that
->>>> reverting this change fixes the issue.
->>>>
->>>> I noticed that dwc3-qcom.c also supports runtime PM for their dwc3 device and
->>>> most likely is affected by this as well. It would be great if someone with a
->>>> Qualcomm device could test out dwc3 suspend as well.
->>>
->>> Chris was facing another issue with this patch on Rockchip RK3566 [1]
->>>
->>> Looks like we totally missed the runtime suspended case
->>> I'll think about a solution and send something by today.
->>>
->>> [1] - https://lore.kernel.org/all/671bef75.050a0220.e4bcd.1821@mx.google.com/
->>>
->>>>
->>>> Here is the crash stack:
->>>>
->>>>   SError Interrupt on CPU7, code 0x00000000be000011 -- SError
->>>>   CPU: 7 UID: 1000 PID: 5661 Comm: binder:477_1 Tainted: G        W  OE      6.12.0-rc3-android16-0-maybe-dirty-4k #1 0439eacb3cff642033630df7ee2e250e0625f2f0
->>>>   96 irq, BUS_DATA0 group, 0x0
->>>>   Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
->>>>   Hardware name: Raven DVT (DT)
->>>>   pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
->>>>   pc : readl+0x40/0x80
->>>>   lr : readl+0x38/0x80
->>>>   sp : ffffffc08baa39a0
->>>>   x29: ffffffc08baa39a0 x28: ffffffd4dd140000 x27: ffffffd4dd140d70
->>>>   x26: ffffffd4dd2b2000 x25: ffffff800cef2410 x24: ffffff800cef24c0
->>>>   x23: ffffffd4dd24e000 x22: ffffff887df59440 x21: ffffffc085298100
->>>>   x20: ffffffd4db8acf60 x19: ffffffc085298200 x18: ffffffc091b730b0
->>>>   x17: 000000002a703c0b x16: 000000002a703c0b x15: 0000000000953000
->>>>   x14: 0000000000000000 x13: 0000000000000030 x12: 0101010101010101
->>>>   x11: 7f7f7f7f7f7fffff x10: 0000000000000000 x9 : ffffffd4dc0d7d48
->>>>   x8 : 0000000000000000 x7 : 0000000000008000 x6 : 0000000000000000
->>>>   x5 : 500020737562ffff x4 : 500020737562ffff x3 : ffffffd4db8acf60
->>>>   x2 : ffffffd4db8a7bac x1 : ffffffc085298200 x0 : 0000000000000020
->>>>   Kernel panic - not syncing: Asynchronous SError Interrupt
->>>>   CPU: 7 UID: 1000 PID: 5661 Comm: binder:477_1 Tainted: G        W  OE      6.12.0-rc3-android16-0-maybe-dirty-4k #1 0439eacb3cff642033630df7ee2e250e0625f2f0
->>>>   Tainted: [W]=WARN, [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
->>>>   Hardware name: Raven DVT (DT)
->>>>   Call trace:
->>>>    dump_backtrace+0xec/0x128
->>>>    show_stack+0x18/0x28
->>>>    dump_stack_lvl+0x40/0x88
->>>>    dump_stack+0x18/0x24
->>>>    panic+0x134/0x45c
->>>>    nmi_panic+0x3c/0x88
->>>>    arm64_serror_panic+0x64/0x8c
->>>>    do_serror+0xc4/0xc8
->>>>    el1h_64_error_handler+0x34/0x48
->>>>    el1h_64_error+0x68/0x6c
->>>>    readl+0x40/0x80
->>>>    dwc3_suspend_common+0x34/0x454
->>>>    dwc3_suspend+0x20/0x40
->>>>    platform_pm_suspend+0x40/0x90
->>>>    dpm_run_callback+0x60/0x250
->>>>    device_suspend+0x334/0x614
->>>>    dpm_suspend+0xc4/0x368
->>>>    dpm_suspend_start+0x90/0x100
->>>>    suspend_devices_and_enter+0x128/0xad0
->>>>    pm_suspend+0x354/0x650
->>>>    state_store+0x104/0x144
->>>>    kobj_attr_store+0x30/0x48
->>>>    sysfs_kf_write+0x54/0x6c
->>>>    kernfs_fop_write_iter+0x104/0x1e4
->>>>    vfs_write+0x3bc/0x50c
->>>>    ksys_write+0x78/0xe8
->>>>    __arm64_sys_write+0x1c/0x2c
->>>>    invoke_syscall+0x58/0x10c
->>>>    el0_svc_common+0xa8/0xdc
->>>>    do_el0_svc+0x1c/0x28
->>>>    el0_svc+0x38/0x6c
->>>>    el0t_64_sync_handler+0x70/0xbc
->>>>    el0t_64_sync+0x1a8/0x1ac
->>>>
->>
->> Does this patch fix it for you?
->>
->> From ee8b353523556a29a423261af9c15be261941ff8 Mon Sep 17 00:00:00 2001
->> From: Roger Quadros <rogerq@kernel.org>
->> Date: Sat, 2 Nov 2024 14:14:47 +0200
->> Subject: [PATCH] usb: dwc3: fix fault at system suspend if device was already
->>  runtime suspended
->>
->> If the device was already runtime suspended then during system suspend
->> we cannot access the device registers else it will crash.
->>
->> Cc: stable@vger.kernel.org # v5.15+
->> Reported-by: William McVicker <willmcvicker@google.com>
->> Closes: https://lore.kernel.org/all/ZyVfcUuPq56R2m1Y@google.com
->> Fixes: 705e3ce37bcc ("usb: dwc3: core: Fix system suspend on TI AM62 platforms")
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->> ---
->>  drivers/usb/dwc3/core.c | 10 ++++++----
->>  1 file changed, 6 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 427e5660f87c..4933f1b4d9c6 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -2342,10 +2342,12 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->>  	u32 reg;
->>  	int i;
->>  
->> -	dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
->> -			    DWC3_GUSB2PHYCFG_SUSPHY) ||
->> -			    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
->> -			    DWC3_GUSB3PIPECTL_SUSPHY);
->> +	if (!pm_runtime_suspended(dwc->dev)) {
->> +		dwc->susphy_state = (dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0)) &
->> +				    DWC3_GUSB2PHYCFG_SUSPHY) ||
->> +				    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
->> +				    DWC3_GUSB3PIPECTL_SUSPHY);
->> +	}
->>  
->>  	switch (dwc->current_dr_role) {
->>  	case DWC3_GCTL_PRTCAP_DEVICE:
->>
->> base-commit: 4b57d665bce1306a2a887cb760aa0c0e7efb42ab
+> This requires userspace intervention to do the correct thing. Let's
+> take a real world example:
 > 
-> I think this is not sufficient to fix the issue as there is still a call
-> to dwc3_enable_susphy() in the end which needs to be avoided
-> if already runtime suspended.
+> I have a TBT4 dock that supports DPAM (svid 0xff01), TBT (svid 0x8087)
+> and also USB4.
 > 
+> * When I plug in the dock, it enumerates and registers the partner
+> altmodes. The altmode bus matches typec_displayport and
+> typec_thunderbolt and loads the drivers for them. By default, both
+> drivers will try to activate their altmode on probe(). Having a
+> userspace daemon disable the altmode on the ports and enable them on
+> connection will probably work here.
+> * If I boot with the dock connected, the same thing happens but my
+> userspace daemon may not be running yet. What should the default
+> kernel behavior be to enter alt-modes then? When you throw USB4 into
+> the mix, this becomes another can of worms since you probably don't
+> want to downgrade from USB4 to DPAM.
 
-I've sent a new patch [1]. Please test and give your feedback there. Thanks.
+If you have already entered USB4, then all alt modes need fail to
+enter with -EBUSY, just like when another alt mode was already
+entered successfully. Right now the port driver is responsible of
+checking USB4 status, but we can easily add a check for the usb_mode
+of the partner to the typec_altmode_enter().
 
-[1]- https://lore.kernel.org/all/20241104-am62-lpm-usb-fix-v1-1-e93df73a4f0d@kernel.org/
+The default entry order will in practice be the order in which the
+modes are discovered (so USB4 will always be first), but the port
+drivers can of course influence this by registering the modes in a
+specific order - first-come, first-served. But that is only useful if
+the port driver knows the priorities of the modes.
+
+You can leave the decision to the user space for example by adding
+that "no_auto_enter", that's not a problem, but it still does not
+require a new sysfs attribute file. You just use that flag to set the
+default value for the "active" attribute.
+
+> On ChromeOS, prior to this patch series, our userspace daemon (typecd)
+> could handle all of this in userspace since it could just wait for
+> `num_alt_modes` to be filled on partner-attach before trying to enter
+> the right mode (via a side-band channel to the EC). After this change,
+> typecd will be in a similar bind -- it will have to wait until all
+> attached partner SVIDs have drivers attached (if available).
+> 
+> Underlying all this, I guess the real need here is for some sort of
+> signal that says: All partner modes are registered, any necessary
+> drivers for these modes are bound and you are ready to make a decision
+> on which mode to enter. Then, we could iteratively try to enter the
+> best mode (USB4 > TBT > DP) and report failure conditions on why it
+> couldn't be entered (i.e. Cable speed, partner problem / link
+> training, etc). This could be done in kernel or userspace depending on
+> the system.
+
+In user space you use the "num_alt_modes" to see how many alt modes
+there are, and then simply wait for all of them (or just the ones that
+you are interested in) get registered and bind to a driver. After that
+you can enter which ever you want. I don't think you need anything
+else there.
+
+If you still need some way to tell the port drivers how to prioritise
+the modes without user space, then I think you need some way for the
+firmware to be able to deliver that information to the driver.
+
+thanks,
 
 -- 
-cheers,
--roger
+heikki
 
