@@ -1,101 +1,175 @@
-Return-Path: <linux-usb+bounces-17078-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17079-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F4BF9BBD7B
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 19:48:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB2BF9BBDC3
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 20:08:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBEE9B2195A
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 18:48:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC39A1C22A96
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 19:08:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A00C1CB9F0;
-	Mon,  4 Nov 2024 18:48:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3B2C1CCED2;
+	Mon,  4 Nov 2024 19:08:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gsd4f5Tj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HdKZJ063"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7893C18D642;
-	Mon,  4 Nov 2024 18:48:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 267AC1C9DDF;
+	Mon,  4 Nov 2024 19:08:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730746082; cv=none; b=IdalAhkdPKfIaDrvlFVi+nkkzKeLiJJjkwy2f/lhCt/boRtdvVArof4p3B1ggFKj4wyxd35nYLuaFu+PTTChKPRmpiu4FwZ4z54jdPmbkb6T0F8GYPZGEZ57Rf2GLlLV6UgAXrcei0+7hkNYYXGorT9TtjpXFzFKIKldxS20Yak=
+	t=1730747314; cv=none; b=IMdjXYbsxLhjMa6LV7Nkn+xTadxgEIkYi6j1YKtvt/Fa8CMrCOoYhU9IiRE5BPJdHF8BKihqiEYIdFqQ1wED6K7R3WG0PkKMyee0V7kIJo6osTOVKwdjMDE0JacIwVWMGQ+BJDZwoC7xavKsIcQ2HDjGl/9h9MDEW/HkEYAu7yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730746082; c=relaxed/simple;
-	bh=R6enrP37S1Lalzqg/vwJusOD1jfo+xSMpEE/34E4UvY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sRQLJX5wa2cZl/pMKCCGBrsOEL6Zc5gvkL5ep2CK+sF527qmhmbWy6VwT0QrbPmSfdaX6S3i7sxMrQXVsaYKKN+W+V4SPxprw7O5htWNV/E3msNgQBKlMw7uwk5EQoE8qaqMhnTOY7ccPPTz7RC9PcyMRzoUhqCvNRFKJWjlgCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gsd4f5Tj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C1CC4CECE;
-	Mon,  4 Nov 2024 18:47:58 +0000 (UTC)
+	s=arc-20240116; t=1730747314; c=relaxed/simple;
+	bh=j7klqenx4annFQS56VxG5XYt0rD6Z/IoBUva+ojwv4E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pTdi0a+M+ygDWx2usk+vdsOcjIuTLyGZpFUx9DbrUgNVcW9Czy5mAxrjTc6Oof8ca0F0dkbJi2ik9SzRZ/bSj7Lp/ONAGHvTYdeb5fqBx9HbzUUhJ0QfdiiQqsxX2FCP5rWvfH60/NN1GlKULwpMVGyViJ0zPYtEN+Ch7S9egYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HdKZJ063; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64C6EC4CECE;
+	Mon,  4 Nov 2024 19:08:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730746082;
-	bh=R6enrP37S1Lalzqg/vwJusOD1jfo+xSMpEE/34E4UvY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gsd4f5TjAfpKOeeA9jmcZKkCiTU/v4Si8fT8Xi8MCST4MLqB/1rWyte0a4Yn7SLYv
-	 n/J/EGbobg4mTbJ41BvPj2oXrsX0Cdglbb/aJTTZzG4FAAs/jynSw7buGoTXNi7sHz
-	 bEYqD6KbkbZzdUvacl5kliiRXIxdIljQ7GDHspXQOdAizWoNDptwBU02kDAdQIn4TN
-	 23ZaCGII+Cvgth04+5Er1rzCQL0sG2fFMMYf9WlcCE2JiYGLlKlf3uQePJrB40PSfU
-	 2mliFvqYVC77hbbTj3IH08iyf01NDrq7fUbUr7w2sVW8Jv1Lcn58CgiB9cZAV5lTtC
-	 7gPK855LhHaPA==
-Date: Mon, 4 Nov 2024 18:47:56 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
+	s=k20201202; t=1730747313;
+	bh=j7klqenx4annFQS56VxG5XYt0rD6Z/IoBUva+ojwv4E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=HdKZJ063PdQWe4KE3HDKzbd3TrFv6VyHEc+ElSkkrX68ltrXZnmwnA2VKN2tG455J
+	 76wgJeHu5PV6lrlCt6dpcmZ2SxyRK9hD2vv0FQ8OwOYUrvnnqcRLccV3mmXsWNEGWg
+	 kbFqNzXelXllXntRtsDbWP1nDPUO95rC5JKwGpnChuUttI765wrVh3SkZwOpcJUpGO
+	 h2DjbTXBQWoW7ys4r+PSOiCIEEdWFjvtdOuQOEn1V83R2ajOQiPmWs0+yiNc6nvrm3
+	 oKv0k9eGkelA0p+H9PpucsqzNsRU5y8zrLnLHtsi9Zgv9eOvVtRgBOS7qwrX9TOsbK
+	 HAPUU/i1XfzFw==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Peter Chen <peter.chen@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
-	Hari Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
-Subject: Re: [PATCH 1/5] dt-bindings: usb: dwc3: Allow connector in USB
- controller node
-Message-ID: <20241104-elevate-margarita-6d28317061d3@spud>
-References: <cover.1730299760.git.matthias.schiffer@ew.tq-group.com>
- <c8c9f19c300378916e920f5d3c26c67bac95d143.1730299760.git.matthias.schiffer@ew.tq-group.com>
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Chunfeng Yun <chunfeng.yun@mediatek.com>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH] usb: Use (of|device)_property_present() for non-boolean properties
+Date: Mon,  4 Nov 2024 13:08:18 -0600
+Message-ID: <20241104190820.277702-1-robh@kernel.org>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="Z6TAEo5WjG+TxVyM"
-Content-Disposition: inline
-In-Reply-To: <c8c9f19c300378916e920f5d3c26c67bac95d143.1730299760.git.matthias.schiffer@ew.tq-group.com>
+Content-Transfer-Encoding: 8bit
 
+The use of (of|device)_property_read_bool() for non-boolean properties
+is deprecated in favor of of_property_present() when testing for
+property presence.
 
---Z6TAEo5WjG+TxVyM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+ drivers/usb/chipidea/core.c        | 2 +-
+ drivers/usb/dwc3/core.c            | 2 +-
+ drivers/usb/dwc3/dwc3-omap.c       | 2 +-
+ drivers/usb/dwc3/dwc3-qcom.c       | 2 +-
+ drivers/usb/mtu3/mtu3_plat.c       | 2 +-
+ drivers/usb/phy/phy.c              | 2 +-
+ drivers/usb/renesas_usbhs/common.c | 2 +-
+ 7 files changed, 7 insertions(+), 7 deletions(-)
 
-On Mon, Nov 04, 2024 at 10:47:24AM +0100, Matthias Schiffer wrote:
-> Allow specifying the connector directly in the USB controller node, as
-> supported by other USB controller bindings.
->=20
-> Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 835bf2428dc6..18ecfcc08b97 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -765,7 +765,7 @@ static int ci_get_platdata(struct device *dev,
+ 
+ 	ext_id = ERR_PTR(-ENODEV);
+ 	ext_vbus = ERR_PTR(-ENODEV);
+-	if (of_property_read_bool(dev->of_node, "extcon")) {
++	if (of_property_present(dev->of_node, "extcon")) {
+ 		/* Each one of them is not mandatory */
+ 		ext_vbus = extcon_get_edev_by_phandle(dev, 0);
+ 		if (IS_ERR(ext_vbus) && PTR_ERR(ext_vbus) != -ENODEV)
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 9eb085f359ce..e1beb760e913 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1935,7 +1935,7 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+ 	struct extcon_dev *edev = NULL;
+ 	const char *name;
+ 
+-	if (device_property_read_bool(dev, "extcon"))
++	if (device_property_present(dev, "extcon"))
+ 		return extcon_get_edev_by_phandle(dev, 0);
+ 
+ 	/*
+diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
+index 2a11fc0ee84f..c2d7582c151a 100644
+--- a/drivers/usb/dwc3/dwc3-omap.c
++++ b/drivers/usb/dwc3/dwc3-omap.c
+@@ -416,7 +416,7 @@ static int dwc3_omap_extcon_register(struct dwc3_omap *omap)
+ 	struct device_node	*node = omap->dev->of_node;
+ 	struct extcon_dev	*edev;
+ 
+-	if (of_property_read_bool(node, "extcon")) {
++	if (of_property_present(node, "extcon")) {
+ 		edev = extcon_get_edev_by_phandle(omap->dev, 0);
+ 		if (IS_ERR(edev)) {
+ 			dev_vdbg(omap->dev, "couldn't get extcon device\n");
+diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
+index c1d4b52f25b0..649166e2a8b8 100644
+--- a/drivers/usb/dwc3/dwc3-qcom.c
++++ b/drivers/usb/dwc3/dwc3-qcom.c
+@@ -161,7 +161,7 @@ static int dwc3_qcom_register_extcon(struct dwc3_qcom *qcom)
+ 	struct extcon_dev	*host_edev;
+ 	int			ret;
+ 
+-	if (!of_property_read_bool(dev->of_node, "extcon"))
++	if (!of_property_present(dev->of_node, "extcon"))
+ 		return 0;
+ 
+ 	qcom->edev = extcon_get_edev_by_phandle(dev, 0);
+diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
+index 6858ed9fc3b2..2380552025e4 100644
+--- a/drivers/usb/mtu3/mtu3_plat.c
++++ b/drivers/usb/mtu3/mtu3_plat.c
+@@ -307,7 +307,7 @@ static int get_ssusb_rscs(struct platform_device *pdev, struct ssusb_mtk *ssusb)
+ 	if (otg_sx->role_sw_used || otg_sx->manual_drd_enabled)
+ 		goto out;
+ 
+-	if (of_property_read_bool(node, "extcon")) {
++	if (of_property_present(node, "extcon")) {
+ 		otg_sx->edev = extcon_get_edev_by_phandle(ssusb->dev, 0);
+ 		if (IS_ERR(otg_sx->edev)) {
+ 			return dev_err_probe(dev, PTR_ERR(otg_sx->edev),
+diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+index 06e0fb23566c..130f86a043ad 100644
+--- a/drivers/usb/phy/phy.c
++++ b/drivers/usb/phy/phy.c
+@@ -365,7 +365,7 @@ static int usb_add_extcon(struct usb_phy *x)
+ {
+ 	int ret;
+ 
+-	if (of_property_read_bool(x->dev->of_node, "extcon")) {
++	if (of_property_present(x->dev->of_node, "extcon")) {
+ 		x->edev = extcon_get_edev_by_phandle(x->dev, 0);
+ 		if (IS_ERR(x->edev))
+ 			return PTR_ERR(x->edev);
+diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
+index edc43f169d49..e4adfe692164 100644
+--- a/drivers/usb/renesas_usbhs/common.c
++++ b/drivers/usb/renesas_usbhs/common.c
+@@ -632,7 +632,7 @@ static int usbhs_probe(struct platform_device *pdev)
+ 	if (IS_ERR(priv->base))
+ 		return PTR_ERR(priv->base);
+ 
+-	if (of_property_read_bool(dev_of_node(dev), "extcon")) {
++	if (of_property_present(dev_of_node(dev), "extcon")) {
+ 		priv->edev = extcon_get_edev_by_phandle(dev, 0);
+ 		if (IS_ERR(priv->edev))
+ 			return PTR_ERR(priv->edev);
+-- 
+2.45.2
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-
---Z6TAEo5WjG+TxVyM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZykW3AAKCRB4tDGHoIJi
-0t5fAQCmiNYR6DPPTIjBTLUm3zGkagYYxIwcEcQPBoO9ZQ2u9AD/dLu9HA+JtHYH
-mgxreyJp3BHPFh+92r0t0rrQOhAfiwY=
-=Quc0
------END PGP SIGNATURE-----
-
---Z6TAEo5WjG+TxVyM--
 
