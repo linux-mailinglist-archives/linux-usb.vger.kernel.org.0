@@ -1,57 +1,63 @@
-Return-Path: <linux-usb+bounces-17037-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17038-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 819149BB1F6
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 11:59:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C99F59BB211
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 12:01:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45F91284C93
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 10:59:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 744D71F2121B
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 11:01:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DCFE1D1F76;
-	Mon,  4 Nov 2024 10:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF0571D4613;
+	Mon,  4 Nov 2024 10:53:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RiPYW3CL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XBpLQas+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E5B01B85FA;
-	Mon,  4 Nov 2024 10:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AB811D45FE;
+	Mon,  4 Nov 2024 10:53:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730717575; cv=none; b=HPwvI71254i1PBqFsiXEotM2G/aACkiSeGHSYCyIBXNUaG88yhq0C2e/jdQ91bBBR6JGH2va0IUg668SuGpo04RUpqmr0PuKvmZ7GnpgorxvDvj4YLlahATV4AY+zjCUDNyEEr+kMA97nce7G9W20E4Ajd4TlbRQNrfY/68iUJk=
+	t=1730717588; cv=none; b=KvkWU0BlhyIruJBQHv1F82RMV59nMrWsx20qp26aCc93/5jYI/AC01dsLvc1s5Ojx4yatMB5CRNAPjU6ZQo9HVJrna1y5/UTQTTXnvVvTvQAATbX188JWP7pA86d6Ho79BAa/KZh+y85h/eqVx0YjzRNnAfu8qH9TcQPDknaiu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730717575; c=relaxed/simple;
-	bh=W1q0XuIGZT0Uu6QYu/enQNtoSs+CtNsNCwXFGna+awg=;
+	s=arc-20240116; t=1730717588; c=relaxed/simple;
+	bh=D2bnAICpH5w/m2F+hbXh5PJUoLd2C/twiCxDE4eGzu4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cWISqEDbENVhTQQgKZhw+jJ0E36HdCNwR2SgSpEsDYV67cNTO/Y2GbJsR139eySvUKPk/TYClxAbLVjBTwqi5xNpz7ZKeRvrVP5m7OX+EakZsHDbhD5qQF4rEEl8IENUjEWNMN4x6ddf2AlOuUWjV8WPTT2WMUWFZxMx68SZN20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RiPYW3CL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39C4FC4CED2;
-	Mon,  4 Nov 2024 10:52:54 +0000 (UTC)
+	 MIME-Version:Content-Type; b=EWKyPaPx6lvCf0bHL9+hgQMiuvhzc7U91x9naW+cnUstb6ItKW8F2g+qxVVpK6DjzrcgKio38CbNHXcVr51L6BAfQvGeu+Hagkqs7HMR1NhlCg6faTqzNgac1omU/LPeLR5ZdElJDS0dI7SdFNGKHYaGivGVqy6vcogKS8l1MFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XBpLQas+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC2F5C4CED6;
+	Mon,  4 Nov 2024 10:53:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730717575;
-	bh=W1q0XuIGZT0Uu6QYu/enQNtoSs+CtNsNCwXFGna+awg=;
+	s=k20201202; t=1730717588;
+	bh=D2bnAICpH5w/m2F+hbXh5PJUoLd2C/twiCxDE4eGzu4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RiPYW3CLEpbr6EmGzanwJd3WLn3dcRw6xv/d0Rp1U7HN1v8oEI5CqXMgIOvg+Qr3F
-	 5jIXBQ5Rxuh6wVa9u837l/vZwfJip0ZYUM68Zwn2H+eojIQs95bguVrVSCG6BMsPFl
-	 0ocaXXuyRsKI7zN9hsiIIZMbDR4sRrqUGQT2RKCDH67c0toLYd4bZmPlTHDJbT1MK3
-	 i2avC3dddpx2TgQJOGQR1qvA106cJ2E7DNeLh1AswG8OVCHZ7aW0WojRYqQ/m/GA43
-	 a9qyFhs1pxee94IUseFPCRSHNLvc528R0IBUlvCmYlx8XR7QbUP+IpNlpDvoJHasje
-	 zsVAi7raOOTHw==
+	b=XBpLQas+tY4dWEehLVtH/rC0l5fJfUOlU+smmgkxKI7RHAM+9XkcVtvI9KEqbZEH+
+	 SBOI2Cnf7rhIDXLVc1wKKHzHzKqWv1TnQGs+2oJKpzDiLyiYtOPT6Mt0HyQDF5jmjY
+	 +1A3muiCN11KopaddMwhbpJy8lmrguUS7sHXTos62G93H8QqMDFYclvBnY62PYCuzw
+	 /e8dACw8z8ZDLQ9vz2RjdaRrFz/mKmR+ASIdr4o8gRkI+08CVI9NRwWtfxxbcuL5cf
+	 YHS+gR6HTZUg5NkoaoZZTSKVNurLTGsucU/nhAjm7WVeMPijZDP1pLLaOvhMK44/mg
+	 AtunsLqfxaLSw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Javier Carrasco <javier.carrasco.cruz@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+Cc: =?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@gmx.fr>,
+	Simon Horman <horms@kernel.org>,
+	Jakub Kicinski <kuba@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
+	bjorn@mork.no,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	netdev@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.6 09/14] usb: typec: use cleanup facility for 'altmodes_node'
-Date: Mon,  4 Nov 2024 05:52:01 -0500
-Message-ID: <20241104105228.97053-9-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 14/14] net: usb: qmi_wwan: add Quectel RG650V
+Date: Mon,  4 Nov 2024 05:52:06 -0500
+Message-ID: <20241104105228.97053-14-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241104105228.97053-1-sashal@kernel.org>
 References: <20241104105228.97053-1-sashal@kernel.org>
@@ -61,52 +67,66 @@ List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.6.59
 Content-Transfer-Encoding: 8bit
 
-From: Javier Carrasco <javier.carrasco.cruz@gmail.com>
+From: Benoît Monin <benoit.monin@gmx.fr>
 
-[ Upstream commit 1ab0b9ae587373f9f800b6fda01b8faf02b3530b ]
+[ Upstream commit 6b3f18a76be6bbd237c7594cf0bf2912b68084fe ]
 
-Use the __free() macro for 'altmodes_node' to automatically release the
-node when it goes out of scope, removing the need for explicit calls to
-fwnode_handle_put().
+Add support for Quectel RG650V which is based on Qualcomm SDX65 chip.
+The composition is DIAG / NMEA / AT / AT / QMI.
 
-Suggested-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Javier Carrasco <javier.carrasco.cruz@gmail.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Link: https://lore.kernel.org/r/20241021-typec-class-fwnode_handle_put-v2-2-3281225d3d27@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+T: Bus=02 Lev=01 Prnt=01 Port=03 Cnt=01 Dev#=  4 Spd=5000 MxCh= 0
+D: Ver= 3.20 Cls=00(>ifc ) Sub=00 Prot=00 MxPS= 9 #Cfgs=  1
+P: Vendor=2c7c ProdID=0122 Rev=05.15
+S: Manufacturer=Quectel
+S: Product=RG650V-EU
+S: SerialNumber=xxxxxxx
+C: #Ifs= 5 Cfg#= 1 Atr=a0 MxPwr=896mA
+I: If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E: Ad=01(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E: Ad=81(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I: If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=02(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E: Ad=82(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+I: If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=03(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E: Ad=83(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E: Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=9ms
+I: If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E: Ad=04(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E: Ad=85(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E: Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=9ms
+I: If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=ff Driver=qmi_wwan
+E: Ad=05(O) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E: Ad=87(I) Atr=02(Bulk) MxPS=1024 Ivl=0ms
+E: Ad=88(I) Atr=03(Int.) MxPS=   8 Ivl=9ms
+
+Signed-off-by: Benoît Monin <benoit.monin@gmx.fr>
+Reviewed-by: Simon Horman <horms@kernel.org>
+Link: https://patch.msgid.link/20241024151113.53203-1-benoit.monin@gmx.fr
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/class.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+ drivers/net/usb/qmi_wwan.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 79cad8d61dacd..00e7b095adcc0 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -2147,14 +2147,16 @@ void typec_port_register_altmodes(struct typec_port *port,
- 	const struct typec_altmode_ops *ops, void *drvdata,
- 	struct typec_altmode **altmodes, size_t n)
- {
--	struct fwnode_handle *altmodes_node, *child;
-+	struct fwnode_handle *child;
- 	struct typec_altmode_desc desc;
- 	struct typec_altmode *alt;
- 	size_t index = 0;
- 	u32 svid, vdo;
- 	int ret;
- 
--	altmodes_node = device_get_named_child_node(&port->dev, "altmodes");
-+	struct fwnode_handle *altmodes_node  __free(fwnode_handle) =
-+		device_get_named_child_node(&port->dev, "altmodes");
-+
- 	if (!altmodes_node)
- 		return; /* No altmodes specified */
- 
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 92c1500fa7c44..f88f7c972a9c0 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1084,6 +1084,7 @@ static const struct usb_device_id products[] = {
+ 		USB_DEVICE_AND_INTERFACE_INFO(0x03f0, 0x581d, USB_CLASS_VENDOR_SPEC, 1, 7),
+ 		.driver_info = (unsigned long)&qmi_wwan_info,
+ 	},
++	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0122)},	/* Quectel RG650V */
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0125)},	/* Quectel EC25, EC20 R2.0  Mini PCIe */
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0306)},	/* Quectel EP06/EG06/EM06 */
+ 	{QMI_MATCH_FF_FF_FF(0x2c7c, 0x0512)},	/* Quectel EG12/EM12 */
 -- 
 2.43.0
 
