@@ -1,115 +1,93 @@
-Return-Path: <linux-usb+bounces-17046-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17047-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C8A49BB32C
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 12:26:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A2A089BB3B2
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 12:43:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7980CB27027
-	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 11:25:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7FF0B24420
+	for <lists+linux-usb@lfdr.de>; Mon,  4 Nov 2024 11:35:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEDA41B0F15;
-	Mon,  4 Nov 2024 11:15:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lNo3qFND"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DD091B2186;
+	Mon,  4 Nov 2024 11:31:06 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B83E1B218D
-	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 11:15:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E105C18B473
+	for <linux-usb@vger.kernel.org>; Mon,  4 Nov 2024 11:31:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730718932; cv=none; b=dmuMlpydWluG1mpxPKi1a34LaIZYNLNsV1fFdBpu5cmTDOkSYpKWVpGS0CyLHDGF8B4xw11mxPEKthXOte6ApvoPHaJBkQjEZ22mDgzekFQvMwxO/SRoA8BuCb4hDz58a/H7+H3pavPICIm75FZx2QjDC9ZEwABQ6tK6KWpyzy8=
+	t=1730719866; cv=none; b=dTxrUQY0PAd5RAzJyAX6aDO+Vr2P9gP+84tqEYCA9ryJOUhvngBtlFgIJPtJXjTrNBkJXhBE9EVAq3Twst5hVcJTO4u7GMFVZjO4br8VhgSNjjFJ3bejopR+fynrpjWHylLDYYPp2M45BxoBY7Mr/RTlRIPQyz6U/ttTV+zVlF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730718932; c=relaxed/simple;
-	bh=8Pb8sCWqVT78PKsPAopEAxFND+meVGRZNGnRJZybrj0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tLDP9XwnhgKqHfUQ699se9Xp2mnLjka6ujBEqP21tfrN8dXneFDs2E8D34cgAi7hu7sOZbA7ThI5/im3UlWYj+Dap6OmtIU9/AIu/mzCOXDTBCEI9nT/kNGXt1BDH9unN9tAhhzQ5TEq0M4v+N4A612z3YmxxUe4w+LiURIHJVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lNo3qFND; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-539e7e73740so1526252e87.3
-        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 03:15:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1730718929; x=1731323729; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xH9DoC23Bb2/vYAIB0rsuoA8K2PG80L2HkKuDb8tLsE=;
-        b=lNo3qFND51bxdP8OWa7VkbuldLEz45VHLKotjLuYucAcGPygm9IwFIGwDw1H6IVHoQ
-         gr9Fn9fvqkdpkvUV8cMeJS5Tz+3olNlf4H3wSSe16AtnEVyWkzeE1Qd5sIwG3lL9/WOH
-         VzxgTwQn/wKei/C6S4jFo/fiswOVM07RJS9LBL65+ZcwnPVjYvL0WR60SE1cHH3H3vI5
-         YSN4ctq9Tae9hpOCk5wQUSqBAkcCpVsEH4CSN/FCgSKSuCTrljQmRy/BeWwO2oLjAorD
-         i/SEz/QpkEekimVFUdF7K1pyVmszyLojiIrwijXGUXSQP4u0Ty7aWh5Y4mmuqmlNP97k
-         2Msg==
+	s=arc-20240116; t=1730719866; c=relaxed/simple;
+	bh=USTEXjGieWszLGj5z6r32OOADjpD4CWIcX6mjLJKHQ4=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=csRXmwxOSFiwKPbN4XZHIr0P1KtvPajnc8h5zRGwBOjTsWA8Q71U2Xwb0DPAzk89vJSp5wkrQg9D3llLhNSD0x5aYrPy9NzNIAQaBeFf3fsagIffdcbSHZ/WBLjxOi8wvJzLRMtuXwVP30BZz2tn9wG+MK5JZjieoUb+bRtzXos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-83ae0af926dso418249639f.2
+        for <linux-usb@vger.kernel.org>; Mon, 04 Nov 2024 03:31:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730718929; x=1731323729;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xH9DoC23Bb2/vYAIB0rsuoA8K2PG80L2HkKuDb8tLsE=;
-        b=AxyoxDBrvQaljrbw/4hAG8+bfwi65tyIwPxX1evm9idgGy49xsUQEXCS2PptqjRkv3
-         HRoBU4H3nSg1QG5wuza5wMZcH8YeEUauS6nP7LLCM3/cGcRH0hXrxRXuLfxehZe4y7VA
-         SYzivOlPewTWc73LLk5BJZyhhIJxNJI5JoQZavOFbBQwW12Jrkdvr+RnuebUSpiK5F1M
-         wPb5txrvBX8Yrxy8RWgymH2z46ODYmcnUdzhiMb7N+KPbgWGKCa0KoNDOmt4l4mqz+Hp
-         V696FxLTqXXIIalG04uOHP7fHq9c5gUu7TaWB5RW8NUBlC9MTBESKtlA2I45mVRACYvI
-         EPSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVR1ZrMfqE+5DeUYJpA7bhZKdNjawvB+snRUgWzfMDyhX9gna73dsHBp+2sOSPRzr9IzmxjZA9yHU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiCI9FmdoT8P31QBlVZDA4pSqUw5N33X6Pkg96+FLNTdxSqw2L
-	zfO0QlwItgay4dvHF1HyVjk09bQ1YTPsp7lkU0sTOm2BrIrmy0tLhlQGMvkt0BUOQ7QkaHiBGjC
-	GXR0=
-X-Google-Smtp-Source: AGHT+IFEO+EDtDqFJQorDAHgKOspX3rc8SvNpXsw47ifoSIAuvGSd8clbgoZacNUkzbI2eHhD845gw==
-X-Received: by 2002:a05:6512:308a:b0:539:8d67:1b1b with SMTP id 2adb3069b0e04-53b7ecf1ff6mr10243566e87.26.1730718928569;
-        Mon, 04 Nov 2024 03:15:28 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bc961dbsm1650852e87.43.2024.11.04.03.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 03:15:27 -0800 (PST)
-Date: Mon, 4 Nov 2024 13:15:24 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
-	hdegoede@redhat.com, linux-usb@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH v2] usb: typec: Drop reference to a fwnode
-Message-ID: <wygsgyxczjwr5mxrmqoqloww4dp5ac22bxkor2y2elbxi7ifvw@b2mb3woxye5y>
-References: <20241104083045.2101350-1-joe@pf.is.s.u-tokyo.ac.jp>
+        d=1e100.net; s=20230601; t=1730719864; x=1731324664;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7K+Rxi0VCaGxt4BQbyfBUCQ8LjiJXLegtr22yoocie0=;
+        b=GbM+gUX44ZgIw+xHWSyd/q/VMA9VWm72F+i+4YvbtPogDVxgpRpCjZakc5xaLQgU9o
+         Lag3RE2d4qbDzc8Ay5uxmqFzv/geSvm0Vqhutg7q1Gn7duxQYkUE2dyncSN8nM9XXI4Q
+         3u79Hor4ZxBLIdW2TtO+L618uEB6Vd/71JKH+buIxW0ca1eoiNw7lf5A39DaTdouiYrB
+         cK6QICflBeo8UnnVpMJ2tTYrtukuDWw/49IbgNA/3LJ88PMU9dQ/MepCN+pjZ8Do69Ep
+         viWzVQI6avd+fRVYzcztJus2r0tz2K7e5u2JgIpV2fI2r3ZH4vEA/B097bY3gZr7tnD3
+         sLHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXaWmfhCcjy2P1SFOtKroyunqH7M+puprin9nJqpo2fsmWII8MLTT9ANAYbfsTADSeeWBC7K9GSzuA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzX0QXeWURyd+t/DHxNGERXctBtpS54yB0HfvBL9dPc4r+GGmVL
+	Rou+blAldTAKlDOFZ1hWYJjjoyGKIq3lasPFiCcC6tFDw7jWZw2QpV1tonfKOgvdIembUO88HWt
+	5m0Def9k9mh5IwLpdS7psCZ6Jb8kb9aj/1wEWR7l/0qK2Bqu9Y0jTzQU=
+X-Google-Smtp-Source: AGHT+IEHvYw/XzmB2HY4/rJQxloYCEvLWoq1GowHu4aappO6X751IG15/mI2XWUfsn57t3nkVzFOEfFEIWW4ziCCkwXvAQWgEKMz
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241104083045.2101350-1-joe@pf.is.s.u-tokyo.ac.jp>
+X-Received: by 2002:a05:6e02:1707:b0:39f:5e18:239d with SMTP id
+ e9e14a558f8ab-3a6b02fbee5mr99594675ab.15.1730719864025; Mon, 04 Nov 2024
+ 03:31:04 -0800 (PST)
+Date: Mon, 04 Nov 2024 03:31:03 -0800
+In-Reply-To: <6728a3a7.050a0220.35b515.01b9.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6728b077.050a0220.35b515.01ba.GAE@google.com>
+Subject: Re: [syzbot] [io-uring?] [usb?] WARNING in io_get_cqe_overflow (2)
+From: syzbot <syzbot+e333341d3d985e5173b2@syzkaller.appspotmail.com>
+To: asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Nov 04, 2024 at 05:30:45PM +0900, Joe Hattori wrote:
-> In typec_port_register_altmodes(), the fwnode reference obtained by
-> device_get_named_child_node() is not dropped. This commit adds a call to
-> fwnode_handle_put() to fix the possible reference leak.
+syzbot has bisected this issue to:
 
-Nit: s/This commit adds/Add/g , see
-Documentation/process/submitting-patches.rst
+commit 3f1a546444738b21a8c312a4b49dc168b65c8706
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Sat Oct 26 01:27:39 2024 +0000
 
+    io_uring/rsrc: get rid of per-ring io_rsrc_node list
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15aaa1f7980000
+start commit:   c88416ba074a Add linux-next specific files for 20241101
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=17aaa1f7980000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13aaa1f7980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=704b6be2ac2f205f
+dashboard link: https://syzkaller.appspot.com/bug?extid=e333341d3d985e5173b2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ec06a7980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12c04740580000
 
+Reported-by: syzbot+e333341d3d985e5173b2@syzkaller.appspotmail.com
+Fixes: 3f1a54644473 ("io_uring/rsrc: get rid of per-ring io_rsrc_node list")
 
-> 
-> Fixes: 7b458a4c5d73 ("usb: typec: Add typec_port_register_altmodes()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-> ---
-> Changes in v2:
-> - Add the Cc: stable@vger.kernel.org line.
-> ---
->  drivers/usb/typec/class.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-
--- 
-With best wishes
-Dmitry
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
