@@ -1,183 +1,136 @@
-Return-Path: <linux-usb+bounces-17085-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17086-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ADC49BC230
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 01:49:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA62D9BC26B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 02:20:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE917B21964
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 00:49:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 188CD1C21F22
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 01:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64F4A17555;
-	Tue,  5 Nov 2024 00:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BE911C68F;
+	Tue,  5 Nov 2024 01:20:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JAtNlfRE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S7imEkVB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D11FDB667;
-	Tue,  5 Nov 2024 00:49:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6467518643;
+	Tue,  5 Nov 2024 01:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730767761; cv=none; b=GGU4f60FodvECfPHNIP+rSdNNYxd21GtykjeEbDf/5f6KyGQBcS2xLiB3bZnUvY+czvWgZn6zeCc8Vv77hha4pVFJRnQynp41qlCekmHSSX1Uj6vwpKtms2VHZmnadt11rGTsml5ganT68vzl216qiH0lzCvV0JYlGesobOUwAY=
+	t=1730769616; cv=none; b=ZE5MsqVBPU7GjU3RTxyrZxRvVyQRC97DEaZm7/leMRa/vs4Mp+/nonFKQB00DX6uawqaLa2o/qjvfnQKICdHCdVJVRxA/E+bkr8jKpG0m2aD0jdI/uqbUlOH2ceIG+kCD9XwYQAqjxS+9495mN7ORlK9P4ikFh7TqbdYbtZuhEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730767761; c=relaxed/simple;
-	bh=WIqZTsHOsvR2cFhpx5SuKyMp6tJGa9n+Huix9B8qTm0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g8fPg0msWUISmTdmlq0ZoToOvwFszC7/lfs4j7r5VFHWKYhZEweaURgs3mHL/8s3O/zxCZAakq+i7RTZ3/9OzmXu/H3lAESoSH+jCtApM1Rhczj35Ti5/Tg3CBKUCXzjQFdHxLo3iNBefD8PPWu0kz2dLBy8LpY2AWSu6MKsXQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JAtNlfRE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F15FC4CECE;
-	Tue,  5 Nov 2024 00:49:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730767761;
-	bh=WIqZTsHOsvR2cFhpx5SuKyMp6tJGa9n+Huix9B8qTm0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JAtNlfREYYQHlbtaxoOJUWP8Iq2IDfDC22EX7yDKjiMQf2n4lIjBPR3ZlEibVlNaB
-	 GYzNgLSVCk7/gCV1ar8+cIUQtZE6fqr4uU2h3e6XLKPXBXfT1dqWhM9Qv4vLq/bZNB
-	 RbOzzk91S+Ibel9U9LiZD3bbRAZTcVBWrGI8eVt/5DO3zEnNDo0sn1/y2Fa2JplG1G
-	 IEI9N8vHGcoyz+nFGpZSMwixFPy8CoaCAoOwwu/UFa+N04vXZM4qIGsCXpRtaK8y5G
-	 40iy0u7zMTCncyv7ik6mta9XvtWRwewhy+LakW/BCLfqloo3VhBupJfGw8ao+JJTIC
-	 aQRUutQDlbEZQ==
-Date: Tue, 5 Nov 2024 08:49:12 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Chunfeng Yun <chunfeng.yun@mediatek.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] usb: Use (of|device)_property_present() for non-boolean
- properties
-Message-ID: <20241105004912.GA125226@nchen-desktop>
-References: <20241104190820.277702-1-robh@kernel.org>
+	s=arc-20240116; t=1730769616; c=relaxed/simple;
+	bh=4ZeODM8skcep6J2m+GGX7dhWp6HeU31CoF2rqvPJ0z0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=tgUZVGlVIIXHytBPq5CucxF441PKSlQ110sb0mvSxjuV+sqtNXOlMhfCfgoN5rZ9JTcdppN6wW0zMh56F2Dl3QQhc3LsgGcm7ufaZzmzK2eRXCVBAWNNPj+AS6YJfZm4JVuB9qDYo4L6Vo4e2Ccid3vEH6QT0VQHBmca6CRDrJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S7imEkVB; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-a9a6b4ca29bso632486666b.3;
+        Mon, 04 Nov 2024 17:20:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730769613; x=1731374413; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=8zDOYGOJYzIB3JQdGMKFXo1DFLDaK4hziGkm1F7ZkF0=;
+        b=S7imEkVB9qIaAAAcwTt++TJ0UgOGlQNg4u54UnAT210F2bCD7xqshAsQu4/+uQJJ0h
+         uFZl+1vdgqmAbcS/kZ+/rGfvVYLnMwWkFctsrHVmW/5mP0Epqrffv2HQejb8ddhY9NeZ
+         bTa64e5LurUNqkdANybyjzLptCtkpKhATFS9A8+Mq/x+FA3lQiwahzd/VTBqKdYnnAbc
+         gSqaYwCnM66WSinWRtGnthkNibuCWCCcmIWZz7P4mPE6Eszi+J015zt5cfcMv+Smgeqj
+         ugzBl5DLc0e74P0ko0riBk4/4HJfQ+gD6KNOG1qkHzWpnZI5Rdmm8l92Olf0/pzayO+Z
+         /VmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730769613; x=1731374413;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8zDOYGOJYzIB3JQdGMKFXo1DFLDaK4hziGkm1F7ZkF0=;
+        b=mbDCUGxkp1loi1irZ0v17g29+8qxForlHw5ZWd0KmCfX3zA3wl7tMvmOutlRMuU1bp
+         dmpA0Bp78zs27na0srjCPebJpxxkBtxGm/0eu24cctaeJnm8nG9DDQha06COnu24SQcz
+         yqBZTPCYggAOa5W5eNztV1bSVPvXYDYkCQ/vqemBYZrWXBdJKWBUEBPVKyYcPInjr4+j
+         9ffbi1lv1AinPBub7ovzz1JuzqmuwhNjj1Pa9zcDwGnib5OSVtR3MT/x/pn1W0zQKhpg
+         2rx3/Ds2CHi8O4VJg+k7TFveRf3J4R2KguHBg3Wt+LGsJ8QX1U8Udyvy/30ykH+KBHnl
+         r45A==
+X-Forwarded-Encrypted: i=1; AJvYcCWDL9uQU+JBGaLNJM2SQiHbtz2jvHY7jSENUITIQvP1qNLgpKAYQhAstQ8St7mVdhXUS8VtFyiUXDpo+CvF@vger.kernel.org, AJvYcCWluF9v3q4PXFjkyMdEto/eKo8chyaVpm3T9Ba0iF4spfMwbtdoyaV1PsDNzFLCGeUyj0NkyRAUtw==@vger.kernel.org, AJvYcCXWezvpnqYKc/4dvPeo1sJvRvZcXJHamDRAAKBfifd/8+APR6a2M/78esdPQx2An6KqOlvT4I2d/HFK@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy95+EkFeEEszbhPlCUKckSBpaGKxLm85+7XnTL0hq6X2SVjIPx
+	9v1T/GOoc6XYCseLO3NXeXVsIFuOcotV2IhCQQbDAwoe1bbppj2ZWZ++sw==
+X-Google-Smtp-Source: AGHT+IHT2qm2S6k5VB5g9yg+m4lEHMLIGG99uLnk4+glboo+zNf/MBRl0/XDlh55wrA8zQGBLAeEAw==
+X-Received: by 2002:a17:907:97c9:b0:a9a:eca:f7c4 with SMTP id a640c23a62f3a-a9e50b9e2a8mr1643037566b.54.1730769612361;
+        Mon, 04 Nov 2024 17:20:12 -0800 (PST)
+Received: from [192.168.42.95] ([148.252.145.116])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9eb16f8e2csm54116366b.91.2024.11.04.17.20.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 04 Nov 2024 17:20:11 -0800 (PST)
+Message-ID: <768a51d0-8c63-4d9f-a636-c9cb52a0c4f4@gmail.com>
+Date: Tue, 5 Nov 2024 01:20:15 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241104190820.277702-1-robh@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [io-uring?] [usb?] WARNING in io_get_cqe_overflow (2)
+To: Jens Axboe <axboe@kernel.dk>,
+ syzbot <syzbot+e333341d3d985e5173b2@syzkaller.appspotmail.com>,
+ io-uring@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <6728b077.050a0220.35b515.01ba.GAE@google.com>
+ <13da163a-d088-4b4d-8ad1-dbf609b03228@gmail.com>
+ <b29d2635-d640-4b8e-ad43-1aa25c20d7c8@kernel.dk>
+ <965a473d-596a-4cf4-8ec2-a8626c4c73f6@gmail.com>
+ <16f43422-91aa-4c6d-b36c-3e9cb52b1ff2@gmail.com>
+ <e003c787-71b5-4373-ac53-c98b6b260e04@kernel.dk>
+ <09b7008b-b8c1-4368-9d04-a3bdb96ab26d@gmail.com>
+ <0daae856-a3c6-4eff-95cc-e39674f24d41@kernel.dk>
+ <74004a91-2753-45fc-88b4-8b2103f9a155@kernel.dk>
+Content-Language: en-US
+From: Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <74004a91-2753-45fc-88b4-8b2103f9a155@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 24-11-04 13:08:18, Rob Herring (Arm) wrote:
-> The use of (of|device)_property_read_bool() for non-boolean properties
-> is deprecated in favor of of_property_present() when testing for
-> property presence.
+On 11/4/24 17:05, Jens Axboe wrote:
+> On 11/4/24 10:03 AM, Jens Axboe wrote:
+>> On 11/4/24 9:54 AM, Pavel Begunkov wrote:
+>>> On 11/4/24 15:43, Jens Axboe wrote:
+>>>> On 11/4/24 8:34 AM, Pavel Begunkov wrote:
+>>>>> On 11/4/24 15:27, Pavel Begunkov wrote:
+>>> ...
+>>>>> Regardless, the rule with sth like that should be simpler,
+>>>>> i.e. a ctx is getting killed => everything is run from fallback/kthread.
+>>>>
+>>>> I like it, and now there's another reason to do it. Can you out the
+>>>> patch?
+>>>
+>>> Let's see if it works, hopefully will try today.
+>>
+>> I already tried it here fwiw, does fix the issue (as expected) and it
+>> passes the full testing too.
 > 
-> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> ---
->  drivers/usb/chipidea/core.c        | 2 +-
->  drivers/usb/dwc3/core.c            | 2 +-
->  drivers/usb/dwc3/dwc3-omap.c       | 2 +-
->  drivers/usb/dwc3/dwc3-qcom.c       | 2 +-
->  drivers/usb/mtu3/mtu3_plat.c       | 2 +-
->  drivers/usb/phy/phy.c              | 2 +-
->  drivers/usb/renesas_usbhs/common.c | 2 +-
->  7 files changed, 7 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
-> index 835bf2428dc6..18ecfcc08b97 100644
-> --- a/drivers/usb/chipidea/core.c
-> +++ b/drivers/usb/chipidea/core.c
-> @@ -765,7 +765,7 @@ static int ci_get_platdata(struct device *dev,
->  
->  	ext_id = ERR_PTR(-ENODEV);
->  	ext_vbus = ERR_PTR(-ENODEV);
-> -	if (of_property_read_bool(dev->of_node, "extcon")) {
-> +	if (of_property_present(dev->of_node, "extcon")) {
->  		/* Each one of them is not mandatory */
->  		ext_vbus = extcon_get_edev_by_phandle(dev, 0);
->  		if (IS_ERR(ext_vbus) && PTR_ERR(ext_vbus) != -ENODEV)
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 9eb085f359ce..e1beb760e913 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1935,7 +1935,7 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
->  	struct extcon_dev *edev = NULL;
->  	const char *name;
->  
-> -	if (device_property_read_bool(dev, "extcon"))
-> +	if (device_property_present(dev, "extcon"))
->  		return extcon_get_edev_by_phandle(dev, 0);
->  
->  	/*
-> diff --git a/drivers/usb/dwc3/dwc3-omap.c b/drivers/usb/dwc3/dwc3-omap.c
-> index 2a11fc0ee84f..c2d7582c151a 100644
-> --- a/drivers/usb/dwc3/dwc3-omap.c
-> +++ b/drivers/usb/dwc3/dwc3-omap.c
-> @@ -416,7 +416,7 @@ static int dwc3_omap_extcon_register(struct dwc3_omap *omap)
->  	struct device_node	*node = omap->dev->of_node;
->  	struct extcon_dev	*edev;
->  
-> -	if (of_property_read_bool(node, "extcon")) {
-> +	if (of_property_present(node, "extcon")) {
->  		edev = extcon_get_edev_by_phandle(omap->dev, 0);
->  		if (IS_ERR(edev)) {
->  			dev_vdbg(omap->dev, "couldn't get extcon device\n");
-> diff --git a/drivers/usb/dwc3/dwc3-qcom.c b/drivers/usb/dwc3/dwc3-qcom.c
-> index c1d4b52f25b0..649166e2a8b8 100644
-> --- a/drivers/usb/dwc3/dwc3-qcom.c
-> +++ b/drivers/usb/dwc3/dwc3-qcom.c
-> @@ -161,7 +161,7 @@ static int dwc3_qcom_register_extcon(struct dwc3_qcom *qcom)
->  	struct extcon_dev	*host_edev;
->  	int			ret;
->  
-> -	if (!of_property_read_bool(dev->of_node, "extcon"))
-> +	if (!of_property_present(dev->of_node, "extcon"))
->  		return 0;
->  
->  	qcom->edev = extcon_get_edev_by_phandle(dev, 0);
-> diff --git a/drivers/usb/mtu3/mtu3_plat.c b/drivers/usb/mtu3/mtu3_plat.c
-> index 6858ed9fc3b2..2380552025e4 100644
-> --- a/drivers/usb/mtu3/mtu3_plat.c
-> +++ b/drivers/usb/mtu3/mtu3_plat.c
-> @@ -307,7 +307,7 @@ static int get_ssusb_rscs(struct platform_device *pdev, struct ssusb_mtk *ssusb)
->  	if (otg_sx->role_sw_used || otg_sx->manual_drd_enabled)
->  		goto out;
->  
-> -	if (of_property_read_bool(node, "extcon")) {
-> +	if (of_property_present(node, "extcon")) {
->  		otg_sx->edev = extcon_get_edev_by_phandle(ssusb->dev, 0);
->  		if (IS_ERR(otg_sx->edev)) {
->  			return dev_err_probe(dev, PTR_ERR(otg_sx->edev),
-> diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
-> index 06e0fb23566c..130f86a043ad 100644
-> --- a/drivers/usb/phy/phy.c
-> +++ b/drivers/usb/phy/phy.c
-> @@ -365,7 +365,7 @@ static int usb_add_extcon(struct usb_phy *x)
->  {
->  	int ret;
->  
-> -	if (of_property_read_bool(x->dev->of_node, "extcon")) {
-> +	if (of_property_present(x->dev->of_node, "extcon")) {
->  		x->edev = extcon_get_edev_by_phandle(x->dev, 0);
->  		if (IS_ERR(x->edev))
->  			return PTR_ERR(x->edev);
-> diff --git a/drivers/usb/renesas_usbhs/common.c b/drivers/usb/renesas_usbhs/common.c
-> index edc43f169d49..e4adfe692164 100644
-> --- a/drivers/usb/renesas_usbhs/common.c
-> +++ b/drivers/usb/renesas_usbhs/common.c
-> @@ -632,7 +632,7 @@ static int usbhs_probe(struct platform_device *pdev)
->  	if (IS_ERR(priv->base))
->  		return PTR_ERR(priv->base);
->  
-> -	if (of_property_read_bool(dev_of_node(dev), "extcon")) {
-> +	if (of_property_present(dev_of_node(dev), "extcon")) {
->  		priv->edev = extcon_get_edev_by_phandle(dev, 0);
->  		if (IS_ERR(priv->edev))
->  			return PTR_ERR(priv->edev);
-> -- 
-> 2.45.2
-> 
+> Forgot to include the basic reproducer I wrote for this report, it's
+> below.
 
-For chipidea part:
+Thanks for testing.
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+I was just looking at the patch, and the fun part is that it depends on
+failing tw off PF_KTHREAD tasks... Otherwise when the fallback executes
+a request the original task could still be alive =>
+(req->task->flags & PF_EXITING) check passes and the request continues
+doing stuff from the kthread (with no mm and so).
 
-Peter
+A side note that it should be marginally better than before on the
+cancellation front because we're killing task_work more eagerly
+for a dying ctx but alive tasks.
+
+I'll send the patch properly.
+
+-- 
+Pavel Begunkov
 
