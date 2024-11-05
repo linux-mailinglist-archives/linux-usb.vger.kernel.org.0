@@ -1,51 +1,59 @@
-Return-Path: <linux-usb+bounces-17107-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17108-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99C7D9BC94C
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 10:35:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3E169BC991
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 10:50:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F8D5283B49
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 09:35:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6187E284061
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 09:50:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2C81D414B;
-	Tue,  5 Nov 2024 09:33:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74131D172A;
+	Tue,  5 Nov 2024 09:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CEyEfIhK"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="b8RwmVx5"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FB9A1D0E13;
-	Tue,  5 Nov 2024 09:33:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 522221D0E3A;
+	Tue,  5 Nov 2024 09:50:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730799208; cv=none; b=LTvkuJfUyJse5NNJqz4vC+lNyEBYHfW9W+3mKknFSKxe8puPnULnfr8oby0XGYnYMs6qdNtQsBrZo/g5wsKACNTLgj40n6nHen2uS6Dn8IkG/SB3kT9tNPeLfraNctq/rL7Is9q2iGWQhq8yP2UoJpiRxd/IhSVb6e3q/tjl/ZM=
+	t=1730800235; cv=none; b=fAoIN97gq5xq2YU7phgcbYoeznVFKvRrENRGT0fqL+ee4rRcsqqtmekjHzFlvuOwiSkKXDj3PlhbL1oBGd9EO8PdfBe342INCDHQfEDQKys8tDrMAcIzotX4w5RP4Ant0RaniOCzBfPcrPtOQuusHzzPrQN3vunH42idVkvLLFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730799208; c=relaxed/simple;
-	bh=K9OCx9LNtrdZGJzEppAmA6jNl01dy5J7+Zp9gcGsYTg=;
+	s=arc-20240116; t=1730800235; c=relaxed/simple;
+	bh=TftNWG3NZOI1QG91r58byRtyjKzlyvVq7UW9RASECCk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=awdtvQQ0jKl9owPmgFxp/psQK/Iw25dogk9/5QsIVUnkL2Bwr/9QB709l8rfz+1jLaZGzWUEmbAb0I8kyUcYV0sz6LKHl9aiJ55SHoCw7fDhkV8gGrBDRnS10J9rBNaFbWW525Hj7QiGCGP65onk7R3xGSZG3xEd1vlPZaxvaEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CEyEfIhK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71791C4CECF;
-	Tue,  5 Nov 2024 09:33:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=AQlw7FPbN2v4wus5X/jUC1OtPJuHeEzVXvd6WrVC6cnx1AC+OhNMwwHqOALvvET16VMnLEvJpC55o7u794A4qViBRNwMkT782fZ3VbiiATbcdIDWkD0OMgYy54HjvmdWPHLi/tq+9qP+DU/QBgq9o4i/I3Nwi2Vak7Q/Jli+0ns=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=b8RwmVx5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3763C4CECF;
+	Tue,  5 Nov 2024 09:50:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1730799205;
-	bh=K9OCx9LNtrdZGJzEppAmA6jNl01dy5J7+Zp9gcGsYTg=;
+	s=korg; t=1730800235;
+	bh=TftNWG3NZOI1QG91r58byRtyjKzlyvVq7UW9RASECCk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CEyEfIhK9AOvRh5qngG6kbxuo4g9VinrcmF2p5DlPh8ZgaQij75X4YNNRdvpYavti
-	 dhUh6CPRn/1Waj6lEB3rTy7ADxIEwnaQfyCSj63uF2IJuhv1sB7L92TwfbRBMIRcqv
-	 nzHzidKJyIaU3+vdNdugPgEGIQnH8w5J/wFh4YkM=
-Date: Tue, 5 Nov 2024 10:33:08 +0100
+	b=b8RwmVx5mhTQwjgxCteUOSH2iftZOsYaeXXdd/YxcHeytYYjdXOML5uHI3vnXco3H
+	 AkokpZVaOcrkDI+2Wdk4CqW/CoDMF3DRraydEtkAkuie4bOUWmJaiPfetfng7RRQ52
+	 3+z9XimuASfnBGCZe+1wSGpXXSsVZm3eFXuOmDdQ=
+Date: Tue, 5 Nov 2024 10:50:17 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Raju Rangoju <Raju.Rangoju@amd.com>
-Cc: linux-usb@vger.kernel.org, mathias.nyman@intel.com,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: quirk for data loss in ISOC transfers
-Message-ID: <2024110557-trusting-dismount-1e27@gregkh>
-References: <20241105091850.3094-1-Raju.Rangoju@amd.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Rick Lahaye <rick@581238.xyz>,
+	Mario Limonciello <mario.limonciello@amd.com>, Sanath.S@amd.com,
+	christian@heusel.eu, fabian@fstab.de, regressions@lists.linux.dev
+Subject: Re: [PATCH] thunderbolt: Fix connection issue with Pluggable UD-4VPD
+ dock
+Message-ID: <2024110532-overdrawn-eggnog-4234@gregkh>
+References: <20241105085301.524312-1-mika.westerberg@linux.intel.com>
+ <2024110514-unashamed-amenity-6b9c@gregkh>
+ <20241105092412.GF275077@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -54,73 +62,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241105091850.3094-1-Raju.Rangoju@amd.com>
+In-Reply-To: <20241105092412.GF275077@black.fi.intel.com>
 
-On Tue, Nov 05, 2024 at 02:48:50PM +0530, Raju Rangoju wrote:
-> During the High-Speed Isochronous Audio transfers, xHCI
-> controller on certain AMD platforms experiences momentary data
-> loss. This results in Missed Service Errors (MSE) being
-> generated by the xHCI.
+On Tue, Nov 05, 2024 at 11:24:12AM +0200, Mika Westerberg wrote:
+> Hi Greg,
 > 
-> The root cause of the MSE is attributed to the ISOC OUT endpoint
-> being omitted from scheduling. This can happen either when an IN
-> endpoint with a 64ms service interval is pre-scheduled prior to
-> the ISOC OUT endpoint or when the interval of the ISOC OUT
-> endpoint is shorter than that of the IN endpoint. Consequently,
-> the OUT service is neglected when an IN endpoint with a service
-> interval exceeding 32ms is scheduled concurrently (every 64ms in
-> this scenario).
+> On Tue, Nov 05, 2024 at 10:17:43AM +0100, Greg KH wrote:
+> > On Tue, Nov 05, 2024 at 10:53:01AM +0200, Mika Westerberg wrote:
+> > > Rick reported that his Pluggable USB4 dock does not work anymore after
+> > > 6.6.28 kernel.
+> > > 
+> > > It looks like commit c6ca1ac9f472 ("thunderbolt: Increase sideband
+> > > access polling delay") makes the device router enumeration happen later
+> > > than what might be expected by the dock (although there is no such limit
+> > > in the USB4 spec) which probably makes it assume there is something
+> > > wrong with the high-speed link and reset it. After the link is reset the
+> > > same issue happens again and again.
+> > > 
+> > > For this reason lower the sideband access delay from 5ms to 1ms. This
+> > > seems to work fine according to Rick's testing.
+> > > 
+> > > Reported-by: Rick Lahaye <rick@581238.xyz>
+> > > Closes: https://lore.kernel.org/linux-usb/000f01db247b$d10e1520$732a3f60$@581238.xyz/
+> > > Tested-by: Rick Lahaye <rick@581238.xyz>
+> > > Fixes: c6ca1ac9f472 ("thunderbolt: Increase sideband access polling delay")
+> > 
+> > This commit is not in the 6.6.y tree, it only showed up in 6.10.y, so
+> > how does this resolve an issue in the 6.6.y tree?
 > 
-> This issue is particularly seen on certain older AMD platforms.
-> To mitigate this problem, it is recommended to adjust the service
-> interval of the IN endpoint to exceed 32ms (interval 8). This
-> adjustment ensures that the OUT endpoint will not be bypassed,
-> even if a smaller interval value is utilized.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
-> ---
->  drivers/usb/host/xhci-mem.c |  5 +++++
->  drivers/usb/host/xhci-pci.c | 14 ++++++++++++++
->  drivers/usb/host/xhci.h     |  1 +
->  3 files changed, 20 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-> index d2900197a49e..4892bb9afa6e 100644
-> --- a/drivers/usb/host/xhci-mem.c
-> +++ b/drivers/usb/host/xhci-mem.c
-> @@ -1426,6 +1426,11 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
->  	/* Periodic endpoint bInterval limit quirk */
->  	if (usb_endpoint_xfer_int(&ep->desc) ||
->  	    usb_endpoint_xfer_isoc(&ep->desc)) {
-> +		if ((xhci->quirks & XHCI_LIMIT_ENDPOINT_INTERVAL_9) &&
-> +		    usb_endpoint_xfer_int(&ep->desc) &&
-> +		    interval >= 9) {
-> +			interval = 8;
-> +		}
->  		if ((xhci->quirks & XHCI_LIMIT_ENDPOINT_INTERVAL_7) &&
->  		    udev->speed >= USB_SPEED_HIGH &&
->  		    interval >= 7) {
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index cb07cee9ed0c..a078e2e5517d 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -284,6 +284,20 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
->  	if (pdev->vendor == PCI_VENDOR_ID_NEC)
->  		xhci->quirks |= XHCI_NEC_HOST;
->  
-> +	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
-> +	    (pdev->device == 0x13ed ||
-> +	     pdev->device == 0x13ee ||
-> +	     pdev->device == 0x148c ||
-> +	     pdev->device == 0x15d4 ||
-> +	     pdev->device == 0x15d5 ||
-> +	     pdev->device == 0x15e0 ||
-> +	     pdev->device == 0x15e1 ||
-> +	     pdev->device == 0x15e5))
+> This refers to a mainline commit that caused the issue. The 6.6.28 is
+> the kernel version Rick used where it still worked. In other words, this
+> is not a backport of a fix but a fix intented to the mainline ;-) I hope
+> this clarifies. I can adjust the commit message if needed.
 
-Any need/want to name these pci devices with something we can refer to
-other than a hex value?
+Ah, yeah, that is confusing so rewording it might be good as the
+offending kernel is really 6.10, not 6.6.
+
+Also, do you want me to take this in my tree now when you resend it, or
+do you want to send it with other changes later?
 
 thanks,
 
