@@ -1,118 +1,93 @@
-Return-Path: <linux-usb+bounces-17136-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17137-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3819C9BD576
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 19:55:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF27E9BD591
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 20:02:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F09552840C2
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 18:55:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 83BB5284286
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 19:02:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F831E9082;
-	Tue,  5 Nov 2024 18:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C30C51EBA0F;
+	Tue,  5 Nov 2024 19:02:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="riXfZ0fP"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="u45KSegv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E87A1E766B;
-	Tue,  5 Nov 2024 18:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4112D1EB9E7;
+	Tue,  5 Nov 2024 19:02:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730832933; cv=none; b=ETGFOPbqsL2v0CyFECjzpx2HCW46rTERq6nK/rvUsLw05wll7mGD9Ma3uiPOy0gp+i4cfZFLe1txtto88DwMO7Nj9Adt1i7CzWugSptVxtNTBVYoHs5rFWwaqO/gbtysZrQ0ZP7kICH6AX6oZBwgIc25FQJc4l7K70oUYP/uTKg=
+	t=1730833358; cv=none; b=sKzoryVxV8iRclr56k3g+2t82VYwBpOKa5HqB2LIbl59r8QP2CNxuGKqdxK2SAJzgjs+qEqTHRBUEbSTFM/5EFNeQ7k3ReMzRoJQ0yf/JIb2dhZIdRe8FKfxZPpLSuF3W4v2FcKOXZ8W/VtakQSi2cLzyzor1nGMFL3Oqj1Rexk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730832933; c=relaxed/simple;
-	bh=fdvKRMgW7zF0SKQdqUfQdOZv/sf80HPqPrtGxl6gaIQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f7ROJLwMOZ40BhyGFYqpSWtP2p4YiO3TmmeWEL4LF6UE9pccvkW1HES8qGavhIPuzZy0bkJL1HqHl5RrFhcO967oRoPvv8MLTlrXu0a/Bub47Vgsdx7d7TO+VX4Bb+/FpeZqseRKY1nlem+Rjb9ClJELXaFEHOTMa5huJi8xgws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=riXfZ0fP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 367CDC4CED3;
-	Tue,  5 Nov 2024 18:55:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730832933;
-	bh=fdvKRMgW7zF0SKQdqUfQdOZv/sf80HPqPrtGxl6gaIQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=riXfZ0fP3TYDNEXcR84bacJljgVXs1yvtCSpGF6d0oi9AT/0PjnQgdGpb459+yjub
-	 /MVNxPsrXctufX4oDudFI6jIqlIHBpneRgJ0ryO5rPys1TCnH56noTJt4t4nL7XRoU
-	 YQLJbiVckj2UdroqxdDzCWkSax1UfOjdKZGa87ZX0hktzF2s+JCO42yXf1mu4Zsa0b
-	 qXLCKPFoD8cHOsXW5ONW/vKxFku4ROJ39T+6PPGMvh4HqzWbClYkPHU4raH6inlsA0
-	 7ffoHAW7rWCweJnUxXQ3oCiL2lHhyUdG+xPhV855qpNNRXU4lp3B+sTG/eCaidQQ4Z
-	 5MQnBQcNl0DBA==
-Date: Tue, 5 Nov 2024 18:55:27 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
-	Hari Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
-Subject: Re: [PATCH 2/5] dt-bindings: arm: ti: Add compatible for AM625-based
- TQMa62xx SOM family and carrier board
-Message-ID: <20241105-tinsmith-countable-fbb51045bc98@spud>
-References: <cover.1730299760.git.matthias.schiffer@ew.tq-group.com>
- <4f5ad877f44df35a3b2c7f336647f057c4e6377d.1730299760.git.matthias.schiffer@ew.tq-group.com>
- <20241104-floral-dexterous-7d3fee2ff616@spud>
- <c73cac598788ccabd1791b1232e8fd9d7ce23ac6.camel@ew.tq-group.com>
+	s=arc-20240116; t=1730833358; c=relaxed/simple;
+	bh=0v2wd5Jz2p/5neJZXwXEwg2oCHX8NYIqBryaYbkegO4=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=Hxhwb16e2pfBZuYkJuskGy+UT9bREb0M2uXlpuMjBnYDZwroesmopAXGFfU9aE4l5uBaUwQaMAf4/QO+1kAViTMJznRSyhPvSyuWda+E6W6D2s2QcW34d5GlFvpmaOI0M0givCln5Q11Yn+g3zkiectDVKMTk5ha+Kb+p6kcbGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=u45KSegv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BC8CC4CECF;
+	Tue,  5 Nov 2024 19:02:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1730833357;
+	bh=0v2wd5Jz2p/5neJZXwXEwg2oCHX8NYIqBryaYbkegO4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=u45KSegvLAB++aXRZIEOAQspDt2aA0GeT3ZGnC5e2Wr04NqxivocP+tYmSzgaokOx
+	 +F04RWJxRaZFRR4mqb1JNq1jal7x1b2b1jBKf/+MzbPgmDCgV9EDccmUV/zBLer9k+
+	 Z2NPK5+u/zJU5YCtwIKBf7cZo38HerCzRXfYbIoA=
+Date: Tue, 5 Nov 2024 11:02:36 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: syzbot <syzbot+ccc0e1cfdb72b664f0d8@syzkaller.appspotmail.com>,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ pasha.tatashin@soleen.com, syzkaller-bugs@googlegroups.com,
+ linux-usb@vger.kernel.org
+Subject: Re: [syzbot] [mm?] kernel BUG in __page_table_check_zero (2)
+Message-Id: <20241105110236.40819b7effad3f44de73dddf@linux-foundation.org>
+In-Reply-To: <f94f3351-be53-4d61-a31a-2bb07925c5ad@rowland.harvard.edu>
+References: <67230d7e.050a0220.529b6.0005.GAE@google.com>
+	<20241104200007.dc8d0f018cc536a4957a1cd0@linux-foundation.org>
+	<f94f3351-be53-4d61-a31a-2bb07925c5ad@rowland.harvard.edu>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="BiH5KkwowkxZuLss"
-Content-Disposition: inline
-In-Reply-To: <c73cac598788ccabd1791b1232e8fd9d7ce23ac6.camel@ew.tq-group.com>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+
+On Tue, 5 Nov 2024 11:39:59 -0500 Alan Stern <stern@rowland.harvard.edu> wrote:
+
+> On Mon, Nov 04, 2024 at 08:00:07PM -0800, Andrew Morton wrote:
+> > On Wed, 30 Oct 2024 21:54:22 -0700 syzbot <syzbot+ccc0e1cfdb72b664f0d8@syzkaller.appspotmail.com> wrote:
+> > 
+> > > Hello,
+> > > 
+> > > syzbot found the following issue on:
+> > 
+> > Thanks.  I'm suspecting some USB issue - fault injection was used to
+> > trigger a memory allocation failure and dec_usb_memory_use_count() ended
+> > up freeing an in-use page.  Could USB folks please have a look?
+> 
+> Andrew, I'm not sure what to look for.
+
+Thanks for looking.
+
+> Can you read through 
+> usbdev_mmap() in drivers/usb/core/devio.c, along with the four short 
+> routines preceding it, and let us know if anything seems obviously 
+> wrong?
+
+All I see is lots of USB code which I don't understand ;) It seems odd
+that usbdev_mmap() calls dec_usb_memory_use_count() on some error
+paths, but goes direct to usbfs_decrease_memory_usage() on others.
+
+Did you try running the "C reproducer"?
 
 
---BiH5KkwowkxZuLss
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Tue, Nov 05, 2024 at 11:40:20AM +0100, Matthias Schiffer wrote:
-> On Mon, 2024-11-04 at 18:47 +0000, Conor Dooley wrote:
-> > On Mon, Nov 04, 2024 at 10:47:25AM +0100, Matthias Schiffer wrote:
-> > > The TQMa62xx is a SoM family with a pluggable connector. The MBa62xx =
-is
-> > > the matching reference/starterkit carrier board.
-> >=20
-> > Why all the wildcards? Why isn't there a compatible per device in the
-> > family?
->=20
-> For the compatible string we've chosen the TQMa6254 as the representative=
- for the TQMa62xx family.
-
-And all the boards in the family are the exact same?
-
->=20
-> MBa62xx is the proper name of the baseboard; this board can be combined w=
-ith any TQMa62xx family
-> SOM.
-
-Then that one is fine.
-
-
---BiH5KkwowkxZuLss
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZypqHwAKCRB4tDGHoIJi
-0jlmAP9cOMTcv1GKBS/z0Rp5HGJWn1/Hbig/hZ/MpUT7ibMGbwD+PNjKY3hXXs+2
-2Co/oEtSJ8B74WmjFsXxTJYlYsmT8wA=
-=2Dxh
------END PGP SIGNATURE-----
-
---BiH5KkwowkxZuLss--
 
