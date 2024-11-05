@@ -1,138 +1,115 @@
-Return-Path: <linux-usb+bounces-17118-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17119-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD5429BCE64
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 14:56:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 720BA9BCE8B
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 15:02:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AB201C2174D
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 13:56:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 316FE283740
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 14:02:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3461D6DD1;
-	Tue,  5 Nov 2024 13:56:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ECA61D79A9;
+	Tue,  5 Nov 2024 14:02:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QOSZ5PfX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cNQph8hR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 316A01D45FD;
-	Tue,  5 Nov 2024 13:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3986A1D47BD
+	for <linux-usb@vger.kernel.org>; Tue,  5 Nov 2024 14:02:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730814965; cv=none; b=cxNB/petlLtBsGJcM4wqMeXq5kJTn9OrYmTVaZTBAPP8hBzzuaMr9HfaPR3cl3oUCEvYZgoxhWbWAabMmEeitySRoItetO+ssrsxx5hZl/G06W6D/36hyZk5UMfD+qI00Jsxd84NBLe3l0LwmRN07DIDn+I9iOoM22bilhB7cuo=
+	t=1730815359; cv=none; b=Ol7+vgFM2IO8txw6Ouk2JuvnpvhkffDLCW1p9XnTyr6k7+A6G8i3DkGV9rOjT//AHHdDzVOPmP4W6JMn5GWlxUezVAZyGZDMUjlbS0BzzCq+91RRSGI9odb6kviup6bJeGG1QqGqCsMiCROrjzMrPD9qNnxubhyeT117R9jBixI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730814965; c=relaxed/simple;
-	bh=B8zdbQ6cPYCK+6r67NeVRs7ZNcjG8oNdvJnXDQkqORM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=p4h4gmQTTI9KjYAfBLRSsGpPWemDrNfNb4clsBucOqhhBieVckdfnlIzdMTWdCZ6W0OZIFiqDuOO9CeLUD/vyoaks1tzNT68vqIcAVG7kAgYy+L+EkyJ8kmaZvW191Q4TIxQJe+R1FPZUciBHnD8GmY4ugexSqctPr896A6aXfg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QOSZ5PfX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 404F4C4CECF;
-	Tue,  5 Nov 2024 13:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730814964;
-	bh=B8zdbQ6cPYCK+6r67NeVRs7ZNcjG8oNdvJnXDQkqORM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=QOSZ5PfX5FLwW7vq+wN1jcMkHF3MzZIz6LSHNpHdsXrR1X0fCcNvXVfZ2/ycW8ZvP
-	 w+PL72WiMFxFI3Z6dlgoT6Aeq7B8RGAWQTAZv5GyVL2ksui36tnytAEbkZbumtUPaD
-	 GQsrXULOmAWespxKLsJVQGvM4q8aHn+3gdTubjDkVQaEl4RFepDBrAfFHiiQ58JLAL
-	 9fAIqGs0D76c1jKDx6HBbzOLT3SwhhX0LF2JhHqVuADAKfYzHVc/Prru+0xlG5jR89
-	 /qBEbk46oC4cZzMPa0sk6PL53agPVeNjyELsqN4hhBEs/KBJrm2V/gkNnt8iR4+HQQ
-	 fL4E/WhbkroDw==
-Message-ID: <48a687c7-24e2-4815-8cc1-d223b38e0e55@kernel.org>
-Date: Tue, 5 Nov 2024 15:56:00 +0200
+	s=arc-20240116; t=1730815359; c=relaxed/simple;
+	bh=zvY5U1Ns+j4lQGZFLag6/XccEwoqyJUGsrnhzV4yZJk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V0Q3MXcgeeVFOIaTZ7AmjAYNum9TugIsksou6e/WSuSf+yGmpcftiFcjq9Ks4Dh+1MRQOHm2b2Kx1Y5Zyc9JWYvZWbFTNeXcKvN30CKo2CAXWOISWz6QegqjzBMDNvj0xyjXDe9orHm1vlBRLPwonZIzkjG8g0tIX3cdruEXgfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cNQph8hR; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730815358; x=1762351358;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zvY5U1Ns+j4lQGZFLag6/XccEwoqyJUGsrnhzV4yZJk=;
+  b=cNQph8hRU8IRwu2lJ1mJCIr24GtMh05dqZycsrBEmK/kUHF1zu3vpPvQ
+   TxSTwGBm5nSQ+9y4hsK1vAW4kb5CIqhwtKsf5MuUtaUBkISVO4BcVDy9w
+   LcafwIFEJaiAhTr/8T2YB03GhQjH3mmQlKPQyUfTkanoJ0htf4wHZIchQ
+   oAbex7ACYkl/Ve/1Bn0FKrREEyvwGFhMhzlyYL/BiYXu7EYngouVBVT9O
+   HvwtVxz9p5ffBuJn4vall8KXqd9bkTtnS6Fwmca4jfXXQ7hTsNFOpGKcr
+   lEJfCNlr/dBS8+2abxikcFwC83pBS/H4DjI/jxbQquujbPWbiu2ZtlacW
+   w==;
+X-CSE-ConnectionGUID: zEnxyQ/SS4aARydzMM15pQ==
+X-CSE-MsgGUID: CLKp992dRCqL+NAEUVj+cQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="34347850"
+X-IronPort-AV: E=Sophos;i="6.11,260,1725346800"; 
+   d="scan'208";a="34347850"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 06:02:36 -0800
+X-CSE-ConnectionGUID: SzjGsnZmSG6HnMDfgO2lxA==
+X-CSE-MsgGUID: Rh+rT2k6QwuCuHkpvPiIzw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,260,1725346800"; 
+   d="scan'208";a="107363597"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa002.fm.intel.com with ESMTP; 05 Nov 2024 06:02:33 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 718541C4; Tue, 05 Nov 2024 16:02:31 +0200 (EET)
+Date: Tue, 5 Nov 2024 16:02:31 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Rick Lahaye <rick@581238.xyz>,
+	Mario Limonciello <mario.limonciello@amd.com>, Sanath.S@amd.com,
+	christian@heusel.eu, fabian@fstab.de, regressions@lists.linux.dev
+Subject: Re: [PATCH v2] thunderbolt: Fix connection issue with Pluggable
+ UD-4VPD dock
+Message-ID: <20241105140231.GH275077@black.fi.intel.com>
+References: <20241105103157.526823-1-mika.westerberg@linux.intel.com>
+ <2024110542-moaning-zap-7ac2@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: core: avoid reading register after bus clk is
- disabled
-To: Xu Yang <xu.yang_2@nxp.com>, Thinh.Nguyen@synopsys.com,
- gregkh@linuxfoundation.org, d-gole@ti.com
-Cc: linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-References: <20241105071426.2411166-1-xu.yang_2@nxp.com>
-Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20241105071426.2411166-1-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <2024110542-moaning-zap-7ac2@gregkh>
 
-Hello Xu,
-
-On 05/11/2024 09:14, Xu Yang wrote:
-> The driver may go through below sequence when works as device mode:
+On Tue, Nov 05, 2024 at 11:54:55AM +0100, Greg KH wrote:
+> On Tue, Nov 05, 2024 at 12:31:57PM +0200, Mika Westerberg wrote:
+> > Rick reported that his Pluggable USB4 dock does not work anymore after
+> > upgrading to v6.10 kernel.
+> > 
+> > It looks like commit c6ca1ac9f472 ("thunderbolt: Increase sideband
+> > access polling delay") makes the device router enumeration happen later
+> > than what might be expected by the dock (although there is no such limit
+> > in the USB4 spec) which probably makes it assume there is something
+> > wrong with the high-speed link and reset it. After the link is reset the
+> > same issue happens again and again.
+> > 
+> > For this reason lower the sideband access delay from 5ms to 1ms. This
+> > seems to work fine according to Rick's testing.
+> > 
+> > Reported-by: Rick Lahaye <rick@581238.xyz>
+> > Closes: https://lore.kernel.org/linux-usb/000f01db247b$d10e1520$732a3f60$@581238.xyz/
+> > Tested-by: Rick Lahaye <rick@581238.xyz>
+> > Fixes: c6ca1ac9f472 ("thunderbolt: Increase sideband access polling delay")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 > 
-> dwc3_suspend()
->   dwc3_suspend_common()
->     dwc3_core_exit()
->       dwc3_clk_disable()
-> 	clk_disable_unprepare(dwc->bus_clk);
->     dwc3_enable_susphy()
->       dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(i));
-> 
-> Then the driver will read dwc3 register after bus clk is disabled. If this
-> happens, the kernel will hang there. This will move dwc3_enable_susphy()
-> ahead to avoid such issue.
-> 
-> Fixes: 705e3ce37bcc ("usb: dwc3: core: Fix system suspend on TI AM62 platforms")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Thank you for the patch. But this was already addressed yesterday.
+Thanks!
 
-https://lore.kernel.org/all/20241104-am62-lpm-usb-fix-v1-1-e93df73a4f0d@kernel.org/
-
-> ---
->  drivers/usb/dwc3/core.c | 18 +++++++++---------
->  1 file changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index de434f78c560..b0f1e32d426f 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -2347,6 +2347,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  			    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
->  			    DWC3_GUSB3PIPECTL_SUSPHY);
->  
-> +	if (!PMSG_IS_AUTO(msg)) {
-
-This alone is not enough as device might have been runtime suspended before
-system suspend and we will still try to access the registers below causing a fault.
-
-> +		/*
-> +		 * TI AM62 platform requires SUSPHY to be
-> +		 * enabled for system suspend to work.
-> +		 */
-> +		if (!dwc->susphy_state)
-> +			dwc3_enable_susphy(dwc, true);
-> +	}
-> +
->  	switch (dwc->current_dr_role) {
->  	case DWC3_GCTL_PRTCAP_DEVICE:
->  		if (pm_runtime_suspended(dwc->dev))
-> @@ -2398,15 +2407,6 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
->  		break;
->  	}
->  
-> -	if (!PMSG_IS_AUTO(msg)) {
-> -		/*
-> -		 * TI AM62 platform requires SUSPHY to be
-> -		 * enabled for system suspend to work.
-> -		 */
-> -		if (!dwc->susphy_state)
-> -			dwc3_enable_susphy(dwc, true);
-> -	}
-> -
->  	return 0;
->  }
->  
-
--- 
-cheers,
--roger
+Applied to thunderbolt.git/fixes.
 
