@@ -1,146 +1,151 @@
-Return-Path: <linux-usb+bounces-17091-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17092-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4654B9BC4D5
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 06:45:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8A989BC572
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 07:31:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDE0D1F224FB
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 05:45:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B3271F2197A
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 06:31:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E67F1C07D9;
-	Tue,  5 Nov 2024 05:45:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D86B81C2324;
+	Tue,  5 Nov 2024 06:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aG2LproR"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y/PN8GDK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B477189B80;
-	Tue,  5 Nov 2024 05:45:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD1B12A1A4;
+	Tue,  5 Nov 2024 06:31:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730785522; cv=none; b=WpQbis/Qh7XNcJxhSMg8ncQhelsIVzVsnCqvYjaFUGCWkI/zC+3fuet7A08wJtg4d0Ga9DA4JarCMvN5ncLeREpyq69gAgLuIcWWv0MUDphOnqOavzfEVQURJP8BLVAWrqVwgjzAP2hbJvn3o2IP8vElLm7NlsQxpPaCMtC8Odc=
+	t=1730788283; cv=none; b=TaxpzF8Ap/eVzvWnZga8r9c1uGvjOhf/oS9sZpj9OhnkueqG+9t80zP0dlnjhxGz9uHUuloTBs0xxuSHhEeAhAJ0yOG3vq8olFro+f4/jnZH7mP43kbR/RTXIDidYCZ2VkopM0+4CkHiceKXf+dXoH+efz9Aj2Nv2F5/KHgcSGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730785522; c=relaxed/simple;
-	bh=pj4DDAoUIGokaC2yqQD6Sx1d6qPlmvPZHoKG6fJYE7M=;
+	s=arc-20240116; t=1730788283; c=relaxed/simple;
+	bh=lZHQ6oeCo+3J52PhOs3n6tSzunx3c7YQEzTKcxRQXS8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CQGsvdlkq++iV6oWhaVLqBjPfXggrt5gGDuCRTXuRtzljY1QCgY4qGaXpYI5jpwCLNIwzH+zCwJJzgasBo7ppmmnbDvnwgGOZAUexXNETJe7RNZfRvOsIVqY6+c8HOMdv6FaBhx/2UzuE0mhlLMppumgrMF3Nwtkx548Id+/sA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aG2LproR; arc=none smtp.client-ip=209.85.215.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-7ede6803585so4354416a12.0;
-        Mon, 04 Nov 2024 21:45:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730785521; x=1731390321; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/RDLe17+douEMkUYt4Wjjg5zMXictGIxgKdWzTriDi8=;
-        b=aG2LproRaL31sInjzNNpyyKMbtxVhzaI1F7RS/rmaP8OloFzi1OM+A8L+tPYY1DF6t
-         f2iBSG/P31nOUnr/3bB/Jcek500N/lvZQ+YEpo+c+Q5+Yhyg8drLrLjGAwzqoH8Nrg+h
-         2Lgp2GiH69LB1JdkWY9RNSd/gQyXgNqYPmHcJo0wO2iIsLcJQLG2ysDA5HVnXtdb+p1Y
-         PyRoRxDZEfOUnYDPHoRR7AdeG7Z5nhxuyI6AR4k7Sec88G97txMEaG4xd1G/+9Ja40LC
-         RONELe+eaWYa5evlSQ9ueJtW/vRCBW4qnfd0k4/owCk5o6vJgAuKFQr7GJwX1CV1EHkA
-         732Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730785521; x=1731390321;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/RDLe17+douEMkUYt4Wjjg5zMXictGIxgKdWzTriDi8=;
-        b=uTJdMg+IaTz1CzSL8CpcbmQgZR2kNOTQchs81AVKnfvSVg4bC/kuxo4M5fwnn5lcfm
-         Wr0+JYw3hLwlXY5D7qLSUnIB/WF0WZK/MHdwhYrpoOMFzpGX04dztClzWWTI3x0ph1dC
-         vff3cS7EC8bZ96qoHHAORWTYwiESP8+fkvUqtMgjQE9MhETPZEeMpFnTQCmwOwwFyNIA
-         JMA4t3kUl8Ktvt6/G20NO5M4AONn9V/MV1sq0Dg98rnb5Kc8kDjJ7cjl73egDOblMgbD
-         1yoVOAz7P1WOKo6sHNtYd5AXtcBC8/vNSWjRPIu7nfx/CRMiNtHTcpkAsER6N0fXhf+Z
-         oYzw==
-X-Forwarded-Encrypted: i=1; AJvYcCU11TfIgSzBPepy/vflvTiVXXhS49+kr901Q3YhTE3jaNf7oq4z12oey3oL2R5zfiMW8BDZvy46aFAY0A==@vger.kernel.org, AJvYcCU58bPnXMIfEaPIfxoYoPV0PYB/mthlLaH4nYaEPvS1RdAwb04wQaeBFebq6OCCys4TsHRE1WBi4y8S@vger.kernel.org, AJvYcCUxNP5VvY+SWqZnbueEGUZ3rXDMYvJRhHF6Rg4KPmZLEIdIO3lCxQBTMeprmcU6B4qGqrOp6dU90LxEbDQ=@vger.kernel.org, AJvYcCVdhX793hSuwuMtwQHLNd+oyy0EbtKwyuJFOcipxZdggQ8lcg74Eo5s4/NYA5fmCWZmT/ocuDdHnsyL@vger.kernel.org, AJvYcCXBVpEg2QQ35bYlJLKrFMTRO1RNQhn0uZ6GX/dPlKojBqTj4HCi6waBnHzAwzhkLmVBeEIiJYdHAlwaaO2u@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuU0XIlm3lkkGomHF1jgbFf+zFOGyiuBAHY0r7NKHxGYuRy9EW
-	IjuQUNM6W3ltSsIQRitaaGtoy1D8vRc0l4ncboKUn9OEaisl2BkT
-X-Google-Smtp-Source: AGHT+IGc+nG1wt+DMP+moaC/TTecbd98DJcbFy/BYzWTbFGMHiYt+g49EqO/yY9xHvXO/9A1wYjT9g==
-X-Received: by 2002:a17:90b:3ec9:b0:2d8:b510:170f with SMTP id 98e67ed59e1d1-2e94c23344emr19375465a91.20.1730785520437;
-        Mon, 04 Nov 2024 21:45:20 -0800 (PST)
-Received: from google.com ([2620:15c:9d:2:1bb4:1f23:1031:ac0e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057a60d6sm69822985ad.124.2024.11.04.21.45.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 04 Nov 2024 21:45:20 -0800 (PST)
-Date: Mon, 4 Nov 2024 21:45:17 -0800
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Pavel Machek <pavel@ucw.cz>,
-	Dominik Brodowski <linux@dominikbrodowski.net>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 2/6] Input: gpio_keys_polled - avoid using
- GPIOF_ACTIVE_LOW
-Message-ID: <Zymw7fduuSyCCdeS@google.com>
-References: <20241104093609.156059-1-andriy.shevchenko@linux.intel.com>
- <20241104093609.156059-3-andriy.shevchenko@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=BlY/vfqJp+0BXwqnYBuu/rpTgQev0Y82vtff3mkm5u37Y/RuN3XfXb/AyN2lk9XdNP/jx6vEONupo0vSEQ7oYxUVV/laXqBFsoX1+6kwojkLoZo0oXiVbeqkty3xC+1myTvyBcjl93b/D+E7zlwwkCy9N8emSMeDAticDXwe5Ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y/PN8GDK; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730788282; x=1762324282;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lZHQ6oeCo+3J52PhOs3n6tSzunx3c7YQEzTKcxRQXS8=;
+  b=Y/PN8GDKyZbn0mSk1ioOL5o90F817hl6mFBYc8sQp3WWSroxqehH+Z3M
+   6QU+HmyL1DYE+pZdBqebo+7Fb4CZMBkD0avjXnYgnXMS1FD65mQB+6VlV
+   wHY7oc65T9OBcxOnrkGFevRD+B1jygwrlKHfkgF9SnCSQom31d5sN3awC
+   RnPNlF2q/6EEl+XuUjFN0ZoVLjZQiBC1B/v45957PfskE0gWtsiurCUJH
+   0OHa0Lbps49fGW/E8FdsAQyTcpzQx74YoZfa2oLU258qMY1m9FkEo5Mum
+   6+kux6I1UGIXVv70WhfbA8OSMo4ZrVwn0zLeFsRm8ru2DAfgNckpQw+hO
+   w==;
+X-CSE-ConnectionGUID: W76ydK7XTzWs2uJIp73KdA==
+X-CSE-MsgGUID: lc8a/mdaQJShq2UwjJcgNA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11246"; a="34299444"
+X-IronPort-AV: E=Sophos;i="6.11,259,1725346800"; 
+   d="scan'208";a="34299444"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Nov 2024 22:31:22 -0800
+X-CSE-ConnectionGUID: aYmojHcwTECNv1lRRqwsOQ==
+X-CSE-MsgGUID: myFw6ZjFQImLl09u5VEoGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,259,1725346800"; 
+   d="scan'208";a="83414035"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa006.fm.intel.com with ESMTP; 04 Nov 2024 22:31:19 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 473CB1E0; Tue, 05 Nov 2024 08:31:18 +0200 (EET)
+Date: Tue, 5 Nov 2024 08:31:18 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Rick <rick@581238.xyz>
+Cc: Mario Limonciello <mario.limonciello@amd.com>, Sanath.S@amd.com,
+	christian@heusel.eu, fabian@fstab.de, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: Re: Dell WD19TB Thunderbolt Dock not working with kernel > 6.6.28-1
+Message-ID: <20241105063118.GE275077@black.fi.intel.com>
+References: <20241022161055.GE275077@black.fi.intel.com>
+ <7f14476b-8084-4c43-81ec-e31ae3f7a3c6@581238.xyz>
+ <20241023061001.GF275077@black.fi.intel.com>
+ <4848c9fe-877f-4d73-84d6-e2249bb49840@581238.xyz>
+ <20241028081813.GN275077@black.fi.intel.com>
+ <2c27683e-aca8-48d0-9c63-f0771c6a7107@581238.xyz>
+ <20241030090625.GS275077@black.fi.intel.com>
+ <70d8b6b2-04b4-48a6-964d-a957b2766617@581238.xyz>
+ <20241104063656.GZ275077@black.fi.intel.com>
+ <effdfd51-66dd-44a4-968c-0f762ab8f93b@581238.xyz>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241104093609.156059-3-andriy.shevchenko@linux.intel.com>
+In-Reply-To: <effdfd51-66dd-44a4-968c-0f762ab8f93b@581238.xyz>
 
-On Mon, Nov 04, 2024 at 11:34:20AM +0200, Andy Shevchenko wrote:
-> Avoid using GPIOF_ACTIVE_LOW as it's deprecated and subject to remove.
+Hi Rick,
+
+On Mon, Nov 04, 2024 at 07:04:08PM +0100, Rick wrote:
+> Hi Mika
 > 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
-> ---
->  drivers/input/keyboard/gpio_keys_polled.c | 12 +++++-------
->  1 file changed, 5 insertions(+), 7 deletions(-)
+> On 04-11-2024 07:36, Mika Westerberg wrote:
+> > Hi Rick,
+> > 
+> > On Fri, Nov 01, 2024 at 01:57:50PM +0100, Rick wrote:
+> > > I compiled 6.12.0-rc5-00181-g6c52d4da1c74-dirty resulting in docking station
+> > > not working.
+> > > 
+> > > Then I compiled 6.12.0-rc5-00181-g6c52d4da1c74-dirty without commit
+> > > c6ca1ac9f472 (reverted), and now the docking station works correctly (as in
+> > > screen output + USBs + Ethernet)
+> > > 
+> > > So it seems c6ca1ac9f472 is causing issues for my setup.
+> > 
+> > Okay, thanks for testing!
+> > 
+> > It indeed looks like there is no any kind of link issues anymore with
+> > that one reverted. So my suspect is that we are taking too long before
+> > we enumerate the device router which makes it to reset the link.
+> > 
+> > Can you try the below patch too on top of v6.12-rcX (without the revert)
+> > and see if that still keeps it working? This one cuts down the delay to
+> > 1ms which I'm hoping is sufficient for the device. Can you share
+> > dmesg+trace from that test as well?
+> > 
+> > diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+> > index c6dcc23e8c16..1b740d7fc7da 100644
+> > --- a/drivers/thunderbolt/usb4.c
+> > +++ b/drivers/thunderbolt/usb4.c
+> > @@ -48,7 +48,7 @@ enum usb4_ba_index {
+> >   /* Delays in us used with usb4_port_wait_for_bit() */
+> >   #define USB4_PORT_DELAY			50
+> > -#define USB4_PORT_SB_DELAY		5000
+> > +#define USB4_PORT_SB_DELAY		1000
+> >   static int usb4_native_switch_op(struct tb_switch *sw, u16 opcode,
+> >   				 u32 *metadata, u8 *status,
 > 
-> diff --git a/drivers/input/keyboard/gpio_keys_polled.c b/drivers/input/keyboard/gpio_keys_polled.c
-> index 41ca0d3c9098..e6707d72210e 100644
-> --- a/drivers/input/keyboard/gpio_keys_polled.c
-> +++ b/drivers/input/keyboard/gpio_keys_polled.c
-> @@ -306,13 +306,8 @@ static int gpio_keys_polled_probe(struct platform_device *pdev)
->  			 * Legacy GPIO number so request the GPIO here and
->  			 * convert it to descriptor.
->  			 */
-> -			unsigned flags = GPIOF_IN;
-> -
-> -			if (button->active_low)
-> -				flags |= GPIOF_ACTIVE_LOW;
-> -
-> -			error = devm_gpio_request_one(dev, button->gpio,
-> -					flags, button->desc ? : DRV_NAME);
-> +			error = devm_gpio_request_one(dev, button->gpio, GPIOF_IN,
-> +						      button->desc ? : DRV_NAME);
->  			if (error)
->  				return dev_err_probe(dev, error,
->  						     "unable to claim gpio %u\n",
-> @@ -325,6 +320,9 @@ static int gpio_keys_polled_probe(struct platform_device *pdev)
->  					button->gpio);
->  				return -EINVAL;
->  			}
-> +
-> +			if (button->active_low ^ gpiod_is_active_low(bdata->gpiod))
-> +				gpiod_toggle_active_low(bdata->gpiod);
->  		}
->  
->  		bdata->last_state = -1;
-> -- 
-> 2.43.0.rc1.1336.g36b5255a03ac
+> See below pasts without the revert, and with the above provided patch.
 > 
+> dmesg with patch (and without the revert):
+> https://gist.github.com/ricklahaye/8412af228063546dd8375ca796fffeef
+> tbtrace with patch (and without the revert):
+> https://gist.github.com/ricklahaye/4b9cbeeb36b546c6686ce79a044a2d61
+> 
+> Seems to be working correctly with the provided patch.
+> Thank you!
 
--- 
-Dmitry
+Thanks for testing! Yes, logs look good now.
+
+I will submit this fix upstream today then. Do you mind providing me your
+full name and email so that I can add tag like
+
+Reported-by: Rick ...
+
+in the commit message?
 
