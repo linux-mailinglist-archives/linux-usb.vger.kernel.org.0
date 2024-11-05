@@ -1,137 +1,305 @@
-Return-Path: <linux-usb+bounces-17115-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17116-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D24F9BCB53
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 12:12:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E00A9BCC84
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 13:18:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B8CB7B2171B
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 11:12:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 442261F23309
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 12:18:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6751D3590;
-	Tue,  5 Nov 2024 11:12:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D02B01D516D;
+	Tue,  5 Nov 2024 12:18:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="dQcJF7HR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qg5p78nH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 481681D2716
-	for <linux-usb@vger.kernel.org>; Tue,  5 Nov 2024 11:12:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6653C1D3199
+	for <linux-usb@vger.kernel.org>; Tue,  5 Nov 2024 12:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730805138; cv=none; b=g6/cINxqCv87yTZI+gJseo296oYq9Yp74Ulezeag2zsbuROAuHsbr9urSYyQqc/zGew+7e+GfEx4hWZeyorQodA96jsFdFqYxR1JlwM76PlIPtw6cBD15/jb1KyxyovbQ5RAtX9qxf75ydLRthk7emPovB+5d6mFuoTpnjXgcJQ=
+	t=1730809103; cv=none; b=G1cqhAxe8e7pNGTvOCTpZVAFfuD0BLPGnLnk+PfsZ78g2DsNILtJLx4P5IPyaWlgIE0SLsxpOZguJB0sKvWfmDtfdmHGHEsNDfTLRP9zn+60nLxwEYz5Os45yn30QwCWsaFoN6M1QJJy/4tkhoPRiD9a5Hv77mmiYX3vqaPMb0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730805138; c=relaxed/simple;
-	bh=EUjOR/V1/Ff7FCV0KtVJ6a801ILitSsONPj8+8g6O7E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rVF/uwCRlZMpUouTvu5WsT3hXPIWQtYh8apdctwumFJW6aSJrMTOwCxsvRL5A+/LHy2IaGGv4V8UQQpTNXVeeeyYxJQyAjt/nIX+wLrzZfKURFf3DSztosuFgMElFpl5rPbX96DGPyFVVdC9yuYOczZVoZkGLvQWNx5ghTFypwo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=dQcJF7HR; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730805136;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yCvdUfc//ZWvKe194x55fTwuIp9lO3BXGQHJFfiBiaE=;
-	b=dQcJF7HRkaQZ90vtbZLpQImlE+I0AGqt/+Zs2ierA92l9+cNmMeG1EELzxL5o4kMPYR6KN
-	/yzBbjtytteqIEMcamVMb2orxWU8inRPuCjVwuqRsKxx+2UQoL6/9y+KlFD0ZbWF1qBKP5
-	9RaUaKip5ta19OxKAccQuy4gP5Fnsr4=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-503-2-Fl5GM0MLeDE0MAAukqtg-1; Tue, 05 Nov 2024 06:12:15 -0500
-X-MC-Unique: 2-Fl5GM0MLeDE0MAAukqtg-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-4327bd6bd60so35483605e9.1
-        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2024 03:12:15 -0800 (PST)
+	s=arc-20240116; t=1730809103; c=relaxed/simple;
+	bh=nNgd3UcD8D8VkVUx+x3RAZrXEceRV3FqqnscXKZr/hw=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=a7RENfWXGFSZOoLMO8RxsLlvKrLHYOSxxhbGEPy9o7XddwYeIWyMYc5MtfTHc1l/mR35tmht8SnqkLgmqXkzLeTLUiboM/xB50uxsw8nkkFw9dPVTi6kDMWvx+j2z1KpC4BFOtmX4A9kIAc2btAuD2NQw0Q/RqH76jD7TiaN2dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qg5p78nH; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-539e8607c2aso5857969e87.3
+        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2024 04:18:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730809099; x=1731413899; darn=vger.kernel.org;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BdDLcMFY2mG2Phc+zx4HvMYHNxMj1KFZ+AdfDb2wysQ=;
+        b=Qg5p78nH6L1EmiyP8T0zyY81MBMMf3WzV22paUihKLGpC9RRT1NXFAuqrKIDF+CIoR
+         FKF6ghyEnR+F8t3RU98U6GCTbSg4WOunuVBQDCtCD+enMmnvEZjdGwKv/B3B4w5O92C9
+         O+/IrYSt5e4c/hAJfJD0Kh0bhBcNTGADsO0kjYneK2VtpLXZh0xQLQALq96fsOOLWGKL
+         EwDE9rkhARa7vG8Tx1PIElyTkRlYY5vD5FmnL4A4Iw/wXctw4QUtf8aVHUKAAHjvxHaJ
+         eqjDlGXtsHVgShSsigH7vbIc6gxeMVqZKzunRdav6P0klVdSTsUCzkWeWU7ZLwQoizrf
+         jPNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730805134; x=1731409934;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=yCvdUfc//ZWvKe194x55fTwuIp9lO3BXGQHJFfiBiaE=;
-        b=YWYLALcncyoIibpXD1IB62bZ+Ggu+u7BDwyMgol5xTIJwDLw77G9v8dCa9GQQgSRHa
-         HWXPEr4bg6tdK3uEKeqKNJBYRMqbFRvVtpbiLWa6oKHPPM9p7qtOESvbNLL1fK7+ZIEz
-         +CJ4KBxfy+gXZncFvI+0XfYcivv45wuDxm3zjETc23fkxbLPJbHSqWNBM4MVswUcteHw
-         EUonJ/Nwr+5HbFKdt+Rm5JuYedcpDKvFgStt8BY+KudQIB1tdbHoOSFtWAOtT++omG4a
-         0wENLF8+ERrYAkancawkClA831ODFt0Hhd5YJtC/Dt+h4/dc1b0fLUcdelVKaxtoG0LG
-         FxGQ==
-X-Gm-Message-State: AOJu0YyX8wWWFqFJtoFtxDagTd/cQu3iXQ985sVVcbdHHAl/39j3RiKi
-	VYchiKqIffJ+2fAoNXYmCfa9r4YpQ+50WJ1aVjDhhez+qM9V+9RtZN7y4ToYxecfK1Finrob8sK
-	EBKA4atUnqBeQWMsTwT8me8+o+rumGZl9w4fYaLaPasNOlZr7ws196a4isw==
-X-Received: by 2002:a5d:5f41:0:b0:37d:4f1b:35d with SMTP id ffacd0b85a97d-380611ff128mr28662023f8f.48.1730805134144;
-        Tue, 05 Nov 2024 03:12:14 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IESHCOZomXTbsA7mek+NYOSWPjCHtTlyjVpOUcf98wwcSXASlnKPOIrcK6yEt/H8DUdWzsINA==
-X-Received: by 2002:a5d:5f41:0:b0:37d:4f1b:35d with SMTP id ffacd0b85a97d-380611ff128mr28662000f8f.48.1730805133781;
-        Tue, 05 Nov 2024 03:12:13 -0800 (PST)
-Received: from eisenberg.redhat.com (nat-pool-muc-t.redhat.com. [149.14.88.26])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381c10d4392sm15860512f8f.36.2024.11.05.03.12.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2024 03:12:13 -0800 (PST)
-From: Philipp Stanner <pstanner@redhat.com>
-To: Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Philipp Stanner <pstanner@redhat.com>
-Subject: [PATCH] thunderbolt: Replace deprecated PCI functions
-Date: Tue,  5 Nov 2024 12:11:33 +0100
-Message-ID: <20241105111132.57339-2-pstanner@redhat.com>
-X-Mailer: git-send-email 2.47.0
+        d=1e100.net; s=20230601; t=1730809099; x=1731413899;
+        h=mime-version:references:in-reply-to:message-id:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BdDLcMFY2mG2Phc+zx4HvMYHNxMj1KFZ+AdfDb2wysQ=;
+        b=e2H2ZG0hebEXtflrgEZqUqQIEFAgVM01zttuNnjUfrJsxKsrv6wLLhH7uHJ5WMDGqu
+         8LKaVhOgYIrlG8YvQ05zKkJFYQ/tP/HwAqkT4QzNhqCo4BxEpkVFWXaeeG0zUkoaW7gy
+         AIgk/6ModiFFCouJYdTA1X0LB/lWKqzv6RBAWN2JZ+YrwzQpwh9lAOuyTCIQ2Y0tVefY
+         sSMsuW7s9MlkXdDe00mXMEghvQet/5Nagr3AslECz6Lx9u7wi8RUveeks5Vr8TagOJss
+         kRGLwiJVKdqHb+MrY/5dBBwvWPXPuySqAN3kdGusP3DXS76FdeoqUnnSuAFDR3yrq4j3
+         i7/w==
+X-Forwarded-Encrypted: i=1; AJvYcCVJSoS8CQs0rHltf/t4iHuym7ZD9W7XhfEP+B7FToxOHJKdwJlhYa27JLqSZY9Ji+2wZcXEaqr+o6Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwY5ITqFIhKBEwh6rc6AbrPYJWVbX+LYQvqi0eYxXtsmkWtNj1r
+	GmuEQJs6ucL3nA9LhjWJFyD7tytjiI+VNkBL00bKvPVvsFPYUGnK
+X-Google-Smtp-Source: AGHT+IHwwO949+p/oXFvlVivM+KW4M4wBfEdeOadcr4qLs3agbs5aAeWZpSqD8Xeq7nmQG2+bAC2hQ==
+X-Received: by 2002:a05:6512:ba2:b0:539:968a:9196 with SMTP id 2adb3069b0e04-53b34a2d6e3mr20132389e87.48.1730809099171;
+        Tue, 05 Nov 2024 04:18:19 -0800 (PST)
+Received: from foxbook (bhf124.neoplus.adsl.tpnet.pl. [83.28.95.124])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bde0c76sm2096927e87.265.2024.11.05.04.18.15
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 05 Nov 2024 04:18:17 -0800 (PST)
+Date: Tue, 5 Nov 2024 13:18:12 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] xhci: Fix Stop Endpoint problems
+Message-ID: <20241105131812.79c0dbf9@foxbook>
+In-Reply-To: <25bf5ad8-e0fd-4d4b-8288-021321f54d30@linux.intel.com>
+References: <20241104103200.533fe1fb@foxbook>
+	<25bf5ad8-e0fd-4d4b-8288-021321f54d30@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="MP_/iw5lsjaib6aD2lQC3+fxrkg"
 
-pcim_iomap_table() and pcim_request_regions() have been deprecated in
-commit e354bb84a4c1 ("PCI: Deprecate pcim_iomap_table(),
-pcim_iomap_regions_request_all()") and commit d140f80f60358 ("PCI:
-Deprecate pcim_iomap_regions() in favor of pcim_iomap_region()").
+--MP_/iw5lsjaib6aD2lQC3+fxrkg
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
 
-Replace these functions with pcim_iomap_region().
+On Tue, 5 Nov 2024 13:05:19 +0200, Mathias Nyman wrote:
+> Out of curiosity, what was the longest needed 'stop endpoint' retry
+> time you saw which still had a successful outcome?
 
-Signed-off-by: Philipp Stanner <pstanner@redhat.com>
----
- drivers/thunderbolt/nhi.c | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+On NEC, periodic endpoints appear to take up to one ESIT. It's one or
+two retries on fast isochronous EPs, but interrupt may take a while.
 
-diff --git a/drivers/thunderbolt/nhi.c b/drivers/thunderbolt/nhi.c
-index 7af2642b97cb..1257dd3ce7e6 100644
---- a/drivers/thunderbolt/nhi.c
-+++ b/drivers/thunderbolt/nhi.c
-@@ -1340,18 +1340,18 @@ static int nhi_probe(struct pci_dev *pdev, const struct pci_device_id *id)
- 	if (res)
- 		return dev_err_probe(dev, res, "cannot enable PCI device, aborting\n");
+The longest I have seen was 24ms on a SuperSpeed EP with bInterval 11,
+so it looks like this may be the chip's limit (bInterval 11 = 128ms),
+but admittedly, I haven't tested this thoroughly with many devices.
+
+No problems ever seen with bulk or control on NEC.
+
+On ASM3142 it seems that one retry tends to be enough, and IIRC all
+endpoint types can misbehave.
+
+
+I attached a patch, based on the earlier "redundant" patch, which tries
+to detect these bugs by looping until it sees EP Context state change.
+Looping under spinlock sure is dodgy, but with these timeout values it
+doesn't seem to completely break the driver and it finds these HC bugs.
+
+And yes, I have seen the "absolutely fubar" case on ASM1042 with bad
+cable (repeated halts, resets and stops). Some time later it "died".
+
+Regards,
+Michal
+
+--MP_/iw5lsjaib6aD2lQC3+fxrkg
+Content-Type: text/x-patch
+Content-Transfer-Encoding: 7bit
+Content-Disposition: attachment; filename=xhci-detect-stop-bugs.patch
+
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index b6eb928e260f..85289f09ca18 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -487,6 +487,27 @@ static int xhci_abort_cmd_ring(struct xhci_hcd *xhci, unsigned long flags)
+ 	return 0;
+ }
  
--	res = pcim_iomap_regions(pdev, 1 << 0, "thunderbolt");
--	if (res)
--		return dev_err_probe(dev, res, "cannot obtain PCI resources, aborting\n");
++static bool busywait(struct xhci_hcd *xhci, struct xhci_virt_ep *ep, int timeout_ms)
++{
++	struct xhci_ep_ctx *ep_ctx = xhci_get_ep_ctx(xhci, ep->vdev->out_ctx, ep->ep_index);
++	u64 t2, t1 = ktime_get_ns();
++
++	do {
++		t2 = ktime_get_ns();
++		if (GET_EP_CTX_STATE(READ_ONCE(ep_ctx)) == EP_STATE_RUNNING) {
++			xhci_info(xhci, "slot %d ep %d busy wait found ctx_state RUNNING after %lldus\n",
++					ep->vdev->slot_id, ep->ep_index,
++					(t2 - t1) / 1000);
++			return true;
++		}
++	} while (t2 < t1 + timeout_ms * 1000000);
++
++	xhci_info(xhci, "slot %d ep %d busy wait gave up after %lldus\n",
++			ep->vdev->slot_id, ep->ep_index,
++			(t2 - t1) / 1000);
++	return false;
++}
++
+ void xhci_ring_ep_doorbell(struct xhci_hcd *xhci,
+ 		unsigned int slot_id,
+ 		unsigned int ep_index,
+@@ -1114,6 +1135,20 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 		return;
+ 
+ 	ep_ctx = xhci_get_ep_ctx(xhci, ep->vdev->out_ctx, ep_index);
++	int ctx_state = GET_EP_CTX_STATE(READ_ONCE(ep_ctx));
++
++	if (ep->stop_retry)
++		xhci_info(xhci, comp_code == COMP_SUCCESS ?
++				"it worked!\n" : "it failed %d\n", comp_code);
++	ep->stop_retry = false;
++
++	if (comp_code != COMP_SUCCESS && comp_code != COMP_CONTEXT_STATE_ERROR)
++		xhci_err(xhci, "slot %d ep %d WTF BUG in ep_state 0x%x\n",
++				slot_id, ep_index, ep->ep_state);
++
++	if (comp_code == COMP_SUCCESS && busywait(xhci, ep, 3))
++		xhci_err(xhci, "slot %d ep %d ABSOLUTELY FUBAR BUG in ep_state 0x%x ctx_state %d\n",
++				slot_id, ep_index, ep->ep_state, ctx_state);
+ 
+ 	trace_xhci_handle_cmd_stop_ep(ep_ctx);
+ 
+@@ -1132,7 +1167,7 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 	 * next transfer, which then will return -EPIPE, and device side stall is
+ 	 * noted and cleared by class driver.
+ 	 */
+-		switch (GET_EP_CTX_STATE(ep_ctx)) {
++		switch (ctx_state) {
+ 		case EP_STATE_HALTED:
+ 			xhci_dbg(xhci, "Stop ep completion raced with stall, reset ep\n");
+ 			if (ep->ep_state & EP_HAS_STREAMS) {
+@@ -1149,19 +1184,55 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 				break;
+ 			ep->ep_state &= ~EP_STOP_CMD_PENDING;
+ 			return;
++
+ 		case EP_STATE_STOPPED:
++			bool predicted = true;
+ 			/*
+-			 * NEC uPD720200 sometimes sets this state and fails with
+-			 * Context Error while continuing to process TRBs.
+-			 * Be conservative and trust EP_CTX_STATE on other chips.
++			 * Per xHCI 4.6.9, Stop Endpoint command on a Stopped
++			 * EP is a Context State Error, and EP stays Stopped.
++			 * This outcome is valid if the command was redundant.
+ 			 */
+-			if (!(xhci->quirks & XHCI_NEC_HOST))
+-				break;
+-			fallthrough;
++			if (ep->ep_state & EP_STOP_CMD_REDUNDANT)
++				predicted = false;
++			/*
++			 * Or it really failed on Halted, but somebody ran Reset
++			 * Endpoint later. EP state is now Stopped and EP_HALTED
++			 * still set because Reset EP handler will run after us.
++			 */
++			if (ep->ep_state & EP_HALTED)
++				predicted = false;
++			/*
++			 * On some HCs EP state remains Stopped for some tens of
++			 * us to a few ms or more after a doorbell ring, and any
++			 * new Stop Endpoint fails without aborting the restart.
++			 * This handler may run quickly enough to still see this
++			 * Stopped state, but it will soon change to Running.
++			 *
++			 * Assume this bug on unexpected Stop Endpoint failures.
++			 * Keep retrying until the EP starts and stops again, on
++			 * chips known to have the bug and to react positively.
++			 */
++			if (busywait(xhci, ep, predicted? 30: 3)) {
++				xhci_err(xhci, "slot %d ep %d %sSTOPPED BUG in ep_state 0x%x\n",
++						slot_id, ep_index, predicted? "": "UNPREDICTED ",
++						ep->ep_state);
++				goto retry;
++			}
++			if (predicted)
++				xhci_err(xhci, "slot %d ep %d MISPREDICTED STOPPED BUG in ep_state 0x%x (busywait too short?)\n",
++						slot_id, ep_index, ep->ep_state);
++			else
++				xhci_info(xhci, "slot %d ep %d not a bug predicted in ep_state 0x%x\n",
++						slot_id, ep_index, ep->ep_state);
++			break;
++
+ 		case EP_STATE_RUNNING:
+ 			/* Race, HW handled stop ep cmd before ep was running */
+-			xhci_dbg(xhci, "Stop ep completion ctx error, ep is running\n");
 -
- 	nhi = devm_kzalloc(&pdev->dev, sizeof(*nhi), GFP_KERNEL);
- 	if (!nhi)
- 		return -ENOMEM;
++			xhci_err(xhci, "slot %d ep %d RUNNING BUG in ep_state %d\n",
++					slot_id, ep_index, ep->ep_state);
++retry:
++			xhci_info(xhci, "stop again and see what happens...\n");
++			ep->stop_retry = true;
+ 			command = xhci_alloc_command(xhci, false, GFP_ATOMIC);
+ 			if (!command) {
+ 				ep->ep_state &= ~EP_STOP_CMD_PENDING;
+@@ -4375,11 +4446,31 @@ int xhci_queue_evaluate_context(struct xhci_hcd *xhci, struct xhci_command *cmd,
+ int xhci_queue_stop_endpoint(struct xhci_hcd *xhci, struct xhci_command *cmd,
+ 			     int slot_id, unsigned int ep_index, int suspend)
+ {
++	struct xhci_virt_ep *ep;
+ 	u32 trb_slot_id = SLOT_ID_FOR_TRB(slot_id);
+ 	u32 trb_ep_index = EP_INDEX_FOR_TRB(ep_index);
+ 	u32 type = TRB_TYPE(TRB_STOP_RING);
+ 	u32 trb_suspend = SUSPEND_PORT_FOR_TRB(suspend);
  
- 	nhi->pdev = pdev;
- 	nhi->ops = (const struct tb_nhi_ops *)id->driver_data;
--	/* cannot fail - table is allocated in pcim_iomap_regions */
--	nhi->iobase = pcim_iomap_table(pdev)[0];
++	/*
++	 * Any of that means the EP is or will be Stopped by the time this
++	 * command runs. Queue it anyway for its side effects like calling
++	 * our default handler or complete(). But our handler must know if
++	 * the command is redundant, so check it now. The handler can't do
++	 * it later because those operations may finish before it runs.
++	 */
++	ep = xhci_get_virt_ep(xhci, slot_id, ep_index);
++	if (ep) {
++		if (ep->ep_state & (SET_DEQ_PENDING | EP_HALTED | EP_CLEARING_TT))
++			ep->ep_state |= EP_STOP_CMD_REDUNDANT;
++		else
++			ep->ep_state &= ~EP_STOP_CMD_REDUNDANT;
++		if (ep->ep_state & EP_STOP_CMD_REDUNDANT)
++			xhci_info(xhci, "slot %d ep %d queuing a redundant Stop Endpoint in ep_state 0x%x\n",
++					slot_id, ep_index, ep->ep_state);
++	}
++	/* else: don't care, the handler will do nothing anyway */
 +
-+	nhi->iobase = pcim_iomap_region(pdev, 0, "thunderbolt");
-+	res = PTR_ERR_OR_ZERO(nhi->iobase);
-+	if (res)
-+		return dev_err_probe(dev, res, "cannot obtain PCI resources, aborting\n");
+ 	return queue_command(xhci, cmd, 0, 0, 0,
+ 			trb_slot_id | trb_ep_index | type | trb_suspend, false);
+ }
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index f0fb696d5619..05555ca4f38a 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -670,6 +670,8 @@ struct xhci_virt_ep {
+ #define EP_SOFT_CLEAR_TOGGLE	(1 << 7)
+ /* usb_hub_clear_tt_buffer is in progress */
+ #define EP_CLEARING_TT		(1 << 8)
++/* queued Stop Endpoint is expected to fail */
++#define EP_STOP_CMD_REDUNDANT	(1 << 9)
+ 	/* ----  Related to URB cancellation ---- */
+ 	struct list_head	cancelled_td_list;
+ 	struct xhci_hcd		*xhci;
+@@ -694,6 +696,8 @@ struct xhci_virt_ep {
+ 	int			next_frame_id;
+ 	/* Use new Isoch TRB layout needed for extended TBC support */
+ 	bool			use_extended_tbc;
 +
- 	nhi->hop_count = ioread32(nhi->iobase + REG_CAPS) & 0x3ff;
- 	dev_dbg(dev, "total paths: %d\n", nhi->hop_count);
++	bool			stop_retry;
+ };
  
--- 
-2.47.0
+ enum xhci_overhead_type {
 
+--MP_/iw5lsjaib6aD2lQC3+fxrkg--
 
