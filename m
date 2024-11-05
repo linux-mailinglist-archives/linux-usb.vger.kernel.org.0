@@ -1,116 +1,111 @@
-Return-Path: <linux-usb+bounces-17131-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17132-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A436D9BD212
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 17:16:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 569079BD262
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 17:32:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 683862876FF
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 16:16:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 880AA1C2140D
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 16:31:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9AF217C9F8;
-	Tue,  5 Nov 2024 16:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAAD1D90A4;
+	Tue,  5 Nov 2024 16:31:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sWLIMHKb"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="NWpQZj7t"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B4DB640;
-	Tue,  5 Nov 2024 16:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF848153803
+	for <linux-usb@vger.kernel.org>; Tue,  5 Nov 2024 16:31:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730823352; cv=none; b=E2va0RqQ54SmErZxgcQ8w5y33kD0adEc6B1e2HLSn/6mNk5zCFaCMREa8zAJafk3vlp1ZFAAtEwnEKoPRoWa+wG2+QJz+nOdGOQ+RJ84Hq2FYIeHgT5N4JYrgwvT5eODeFdIJLYe1PKUoVtPEsNXvfNwNsw7OdyxZRPlHDQ4aRI=
+	t=1730824316; cv=none; b=UY2Gdwi0szIuJV0Yq5am0KELj4lxM6r830CLAOqv8yL507hSjAA9JRScluaI6f7abgUjFckHMmp+Xw4+vhqmvuLZDGrNxszkap719WTDFAxD3048p5vqDcUrR10YuFMxDYTWS9mJrgpG1MPqg4bhE/iGwbXacQr20rcSHYXW0fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730823352; c=relaxed/simple;
-	bh=I7deoQiI/I0s0AnBYc3st405nHQMaQq7EvD2UtzD7R0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=ndU7gzsCbS9ljoMeoXBjG4L3h9DjMfM/zCGBYxukw4BtF1VzHMZGpUYkIXhQM5JldvGdjoUJ1BNdERSmoK132St7r9GPQDdAlE4a5pILQ7DEU5PWcsA/1Zek/1dYT4x7J/HML/6CdLEQt5FP3VZw8O/6r9XfzSF5iHXSKixlaLU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sWLIMHKb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D505C4CECF;
-	Tue,  5 Nov 2024 16:15:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730823351;
-	bh=I7deoQiI/I0s0AnBYc3st405nHQMaQq7EvD2UtzD7R0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=sWLIMHKbpYnvH6vRYHC5fNsdXCCNIXg5Ll5/2V0vc6iO6jH8ObMQ4Be/2WJlSRkFO
-	 96/qxRGVh6YcfDqHdyjqlzEV4fxUjiBENL+duJ1uiL+Rqhoa3pZpaqTPPM+IhiqIFZ
-	 1Sk/o475+agOHv0qmgOhR36E0RtNgKxTuBr1ZJhfrXdvCOWlPgobXmSzUv+OFDnq3o
-	 nfjm0YQ6eFyuk0wALiKZYhYt2TgA8p2WUZTSSBteEaJwAKQSjXx+/iCrS96AAI40Ua
-	 e4I7EQ0gtyiErnCjgLdP+OJ0QkEAmXj83mHJYpDx6YeObr9yAZURKrOoBK0wWz3FbB
-	 ACYyypzEASVoA==
-Date: Tue, 5 Nov 2024 10:15:50 -0600
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Dave Jiang <dave.jiang@intel.com>,
-	Alison Schofield <alison.schofield@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Ira Weiny <ira.weiny@intel.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-	Xinhui Pan <Xinhui.Pan@amd.com>, David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Pratyush Yadav <pratyush@kernel.org>,
-	Michael Walle <mwalle@kernel.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Naveen Krishna Chatradhi <naveenkrishna.chatradhi@amd.com>,
-	Carlos Bilbao <carlos.bilbao.osdev@gmail.com>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	"David E. Box" <david.e.box@linux.intel.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Frederic Barrat <fbarrat@linux.ibm.com>,
-	Andrew Donnellan <ajd@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>,
-	Logan Gunthorpe <logang@deltatee.com>,
-	"K. Y. Srinivasan" <kys@microsoft.com>,
-	Haiyang Zhang <haiyangz@microsoft.com>,
-	Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-	Dan Williams <dan.j.williams@intel.com>,
-	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-cxl@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-rdma@vger.kernel.org,
-	linux-mtd@lists.infradead.org, platform-driver-x86@vger.kernel.org,
-	linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-alpha@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-hyperv@vger.kernel.org
-Subject: Re: [PATCH v2 00/10] sysfs: constify struct bin_attribute (Part 1)
-Message-ID: <20241105161550.GA1474637@bhelgaas>
+	s=arc-20240116; t=1730824316; c=relaxed/simple;
+	bh=4d9v2cWuaRVGT14XWrISLQJliQRGtTMvXYyJY44L6ks=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a96PbnFmq9WVTiG4h0bqTDO+yq2/zLqjNJEupWCA6qVVo218j3igxtcFBcmAAKjyLDOMR/kvx9YvR58TItQTqoYSbQHWxPEhwkIzNYWAs13Arl0YW14OkEW3kv7T/SsaFCw30pHwvBA+tYnow/oTtXLTv8Ztxph4y4zskS4PW50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=NWpQZj7t; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6cbf340fccaso44643426d6.1
+        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2024 08:31:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1730824313; x=1731429113; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wZo83BrAiQ9tG8XAHbhlF/IGbCc45iRSUdiOTPNnKCk=;
+        b=NWpQZj7tJ9Pva3kRfOOc31IHp/6eXsZ7ZAN4KIzr8bOVFsjowXJtAzFVkudzsSVaWc
+         i6yBbcuks0joyQ8lWVxmF+pDtDHmtRRhfhEXZ0lXEllR3sAh6wL6hy8/oKOFAuzIdnSg
+         udtXh4npKmSOoZUifGjWwQqyLa42cj83lhGHI+ne0GUICOaP0Ox8f/dWZh6bOl17DIL6
+         LlS9ZbOj7EwUWecDs0jQlb/b/yuXcpBpgRv0ysMFrCvu2xnCaiOBxcikk5F2+beDXq+d
+         28ogRq4wyem0ISTQ0Kr4Dqpdl7/jnZVCBcUniuvyhheHdYLdtHnQeX+PBm9POCaoqn62
+         TxCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730824313; x=1731429113;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wZo83BrAiQ9tG8XAHbhlF/IGbCc45iRSUdiOTPNnKCk=;
+        b=WvMoY99Qh4tmF4IP61VppZ6BsnKLe+4ocDsPLMZXYkTdCjPXR/XaBY2K5QNLG6h0Me
+         Zdbslwa9DJmAWliqryHYuJWsrErrWA42QuwEvvuODuBKoCk3kevoSXekfrd2NlaTGmAO
+         +Usd8I4WCBZi//CZvYMTsJmBE7/A7VUW43NvqdWkgVaPkbGiR9Y8sVT9PEhMjkRNRLun
+         vFYNZ/8zlWi9mXJNGFhhg3o1xIakdcvsYPcsXw/6HI+bGow88llsbr8LvkriBJ9Ys7a8
+         7d7IVDg7BqL0+Glsxv208Ha17jG+cVe/GKHWNY5v9FSUxCI4mxeX8NDBskW81lJr7EbJ
+         860A==
+X-Gm-Message-State: AOJu0YxynDbQ3ZVja7BweW+aogvhluWaNn5gbauHTy3McHhMXCFoHcP6
+	MuwH0zG8JA4rIel6OWIzH2eSxHeE00U7aQaO7ftB4jqvcGaZ6i4qQlDvDuiAa6GlEwkhsb0TYee
+	8AA==
+X-Google-Smtp-Source: AGHT+IGkigEPQ+WEHxrr6kTA77/7ZwOCz3sbE3+hPy9U41Vt8WvuKJVYqNs8AGx4esdFX1IiRDJEtQ==
+X-Received: by 2002:a05:6214:aca:b0:6cb:ee9c:7045 with SMTP id 6a1803df08f44-6d35b8e6c2amr276986036d6.2.1730824313630;
+        Tue, 05 Nov 2024 08:31:53 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.12.5])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d353f9e7f7sm61904736d6.29.2024.11.05.08.31.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Nov 2024 08:31:53 -0800 (PST)
+Date: Tue, 5 Nov 2024 11:31:50 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Stephen Hemminger <stephen@networkplumber.org>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: USB warning on boot
+Message-ID: <88368db2-f9f4-4ff0-a0e7-aa3b8bba0088@rowland.harvard.edu>
+References: <20241025135649.2d08be87@hermes.local>
+ <9b1343ee-2806-464c-a99c-5bae44985cc7@rowland.harvard.edu>
+ <20241025152340.35be2607@hermes.local>
+ <9d973212-fabe-43b3-bc3b-4a5c0632c230@rowland.harvard.edu>
+ <20241104205323.364bc684@hermes.local>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241103-sysfs-const-bin_attr-v2-0-71110628844c@weissschuh.net>
+In-Reply-To: <20241104205323.364bc684@hermes.local>
 
-On Sun, Nov 03, 2024 at 05:03:29PM +0000, Thomas Weißschuh wrote:
-> struct bin_attribute contains a bunch of pointer members, which when
-> overwritten by accident or malice can lead to system instability and
-> security problems.
-> Moving the definitions of struct bin_attribute to read-only memory
-> makes these modifications impossible.
-> The same change has been performed for many other structures in the
-> past. (struct class, struct ctl_table...)
+On Mon, Nov 04, 2024 at 08:53:23PM -0800, Stephen Hemminger wrote:
+> On Fri, 25 Oct 2024 22:23:54 -0400
+> Alan Stern <stern@rowland.harvard.edu> wrote:
+> > Nevertheless, even a malfunctioning device shouldn't provoke the
+> > kernel into a WARNING like you got.  The underlying reason for it is
+> > not at all clear, particularly since you didn't enable usbcore dynamic
+> > debugging -- although that might not provide enough information either.
+> > 
+> > One thing you could try doing is simply to replace that hub.
+> > 
+> > Alan Stern
+> 
+> Replaced the hub with a similar one which probably has same chip inside,
+> and the same problem happens. Which kernel cmdline parameter would enable
+> the debug you want.
 
-Throughout series, it would be more readable if you added blank lines
-between paragraphs.
+	dyndbg="module usbcore =p"
+
+However, I'm far from certain that this will be very helpful.  :-(
+
+Alan Stern
 
