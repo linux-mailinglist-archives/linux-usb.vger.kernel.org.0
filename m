@@ -1,82 +1,82 @@
-Return-Path: <linux-usb+bounces-17132-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17133-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 569079BD262
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 17:32:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15E8E9BD2A3
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 17:40:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 880AA1C2140D
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 16:31:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9EB62837F0
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 16:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FAAD1D90A4;
-	Tue,  5 Nov 2024 16:31:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E591D9A71;
+	Tue,  5 Nov 2024 16:40:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="NWpQZj7t"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="l1fuiiUg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-qk1-f194.google.com (mail-qk1-f194.google.com [209.85.222.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF848153803
-	for <linux-usb@vger.kernel.org>; Tue,  5 Nov 2024 16:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78AEF1D89F3
+	for <linux-usb@vger.kernel.org>; Tue,  5 Nov 2024 16:40:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730824316; cv=none; b=UY2Gdwi0szIuJV0Yq5am0KELj4lxM6r830CLAOqv8yL507hSjAA9JRScluaI6f7abgUjFckHMmp+Xw4+vhqmvuLZDGrNxszkap719WTDFAxD3048p5vqDcUrR10YuFMxDYTWS9mJrgpG1MPqg4bhE/iGwbXacQr20rcSHYXW0fw=
+	t=1730824805; cv=none; b=bNLn7FP82/yGlwi83C/rOh8LuP7+ACRTz64OgfTAr9Q/+QUnl0aRU5KP/Az5XdCP0e8cPXV/mBEJEv8V3bCmgWzvO6n6TltAJ9dNT5rkxmsvcQjwRs8D8EacprPkmC4sjay1cDZRRxcJj/BxSwVHcv8pcdGSAIVZovoMQwYKaio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730824316; c=relaxed/simple;
-	bh=4d9v2cWuaRVGT14XWrISLQJliQRGtTMvXYyJY44L6ks=;
+	s=arc-20240116; t=1730824805; c=relaxed/simple;
+	bh=jYK+4obkioSArbIr14R8ZfnXOA3M2j5bCr+EfxGIOBU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a96PbnFmq9WVTiG4h0bqTDO+yq2/zLqjNJEupWCA6qVVo218j3igxtcFBcmAAKjyLDOMR/kvx9YvR58TItQTqoYSbQHWxPEhwkIzNYWAs13Arl0YW14OkEW3kv7T/SsaFCw30pHwvBA+tYnow/oTtXLTv8Ztxph4y4zskS4PW50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=NWpQZj7t; arc=none smtp.client-ip=209.85.219.48
+	 Content-Type:Content-Disposition:In-Reply-To; b=u1F3M4p6UpD6O+D/1H8FNlsIvOoXJHWo9JtjaVOjFYny19c5vGql/NR+P9Kh3yuFEmVo07o86CrMswiGy++CfySQRYt0GmMY+WIyVz/eplUarDu7Ub7pabjLK9EU/TqIxM2cnCgd4UKz9M1NdzLdTLHa5c+hzXtgoQiiRigoujo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=l1fuiiUg; arc=none smtp.client-ip=209.85.222.194
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6cbf340fccaso44643426d6.1
-        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2024 08:31:54 -0800 (PST)
+Received: by mail-qk1-f194.google.com with SMTP id af79cd13be357-7b14554468fso416438685a.1
+        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2024 08:40:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1730824313; x=1731429113; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1730824801; x=1731429601; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wZo83BrAiQ9tG8XAHbhlF/IGbCc45iRSUdiOTPNnKCk=;
-        b=NWpQZj7tJ9Pva3kRfOOc31IHp/6eXsZ7ZAN4KIzr8bOVFsjowXJtAzFVkudzsSVaWc
-         i6yBbcuks0joyQ8lWVxmF+pDtDHmtRRhfhEXZ0lXEllR3sAh6wL6hy8/oKOFAuzIdnSg
-         udtXh4npKmSOoZUifGjWwQqyLa42cj83lhGHI+ne0GUICOaP0Ox8f/dWZh6bOl17DIL6
-         LlS9ZbOj7EwUWecDs0jQlb/b/yuXcpBpgRv0ysMFrCvu2xnCaiOBxcikk5F2+beDXq+d
-         28ogRq4wyem0ISTQ0Kr4Dqpdl7/jnZVCBcUniuvyhheHdYLdtHnQeX+PBm9POCaoqn62
-         TxCA==
+        bh=GRBcew+0JiL3+UmM8Y8pVven1H5td1/bh4NGZK/Ka30=;
+        b=l1fuiiUgEK+gB4xejJAfySZ1PM2J+KcSO4/vPHAgrFGveXrOdsqMIJnQNf+Qcv6vtn
+         1L+/g4UbxuUdsvYq7a8csgcldvWJkNd/PEXMEmT19654nV9++oBUwws9eW4ZyFSQf+OI
+         8WknGJOkrMiUafLyjaNoMExsgzue8IfFkV4S35lP2SXkjPUGpmE67bp4NVZeGnaKon+s
+         R1Fju8TKDy8ZtLO9AYvu+ESvo+xp9fqGCOtJWI5r6icynm8UOpFJdK298iL673ZyVHzI
+         nKtnPLIoZIun2lLGfBzkBsY6p4QMNjI0iwnV65dPVSY8bowZc67fAhpezUzqJIbBqmPZ
+         3Wfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730824313; x=1731429113;
+        d=1e100.net; s=20230601; t=1730824801; x=1731429601;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wZo83BrAiQ9tG8XAHbhlF/IGbCc45iRSUdiOTPNnKCk=;
-        b=WvMoY99Qh4tmF4IP61VppZ6BsnKLe+4ocDsPLMZXYkTdCjPXR/XaBY2K5QNLG6h0Me
-         Zdbslwa9DJmAWliqryHYuJWsrErrWA42QuwEvvuODuBKoCk3kevoSXekfrd2NlaTGmAO
-         +Usd8I4WCBZi//CZvYMTsJmBE7/A7VUW43NvqdWkgVaPkbGiR9Y8sVT9PEhMjkRNRLun
-         vFYNZ/8zlWi9mXJNGFhhg3o1xIakdcvsYPcsXw/6HI+bGow88llsbr8LvkriBJ9Ys7a8
-         7d7IVDg7BqL0+Glsxv208Ha17jG+cVe/GKHWNY5v9FSUxCI4mxeX8NDBskW81lJr7EbJ
-         860A==
-X-Gm-Message-State: AOJu0YxynDbQ3ZVja7BweW+aogvhluWaNn5gbauHTy3McHhMXCFoHcP6
-	MuwH0zG8JA4rIel6OWIzH2eSxHeE00U7aQaO7ftB4jqvcGaZ6i4qQlDvDuiAa6GlEwkhsb0TYee
-	8AA==
-X-Google-Smtp-Source: AGHT+IGkigEPQ+WEHxrr6kTA77/7ZwOCz3sbE3+hPy9U41Vt8WvuKJVYqNs8AGx4esdFX1IiRDJEtQ==
-X-Received: by 2002:a05:6214:aca:b0:6cb:ee9c:7045 with SMTP id 6a1803df08f44-6d35b8e6c2amr276986036d6.2.1730824313630;
-        Tue, 05 Nov 2024 08:31:53 -0800 (PST)
+        bh=GRBcew+0JiL3+UmM8Y8pVven1H5td1/bh4NGZK/Ka30=;
+        b=Lyp3ycqyulpS/SQIGraMoRwpxbRVcrZyXeJGQI5Xmyboe3vLAOK16D4FQ3YNZJ0SIX
+         PatzUiDqsRb27ygdVjf1ff/stwhQaBQkOsvsA7w5riXps4IMlowP/fd1rmagOcw5AGwf
+         ZbotdsOykrp5T/uvaEhZX0/OGUWRdQBlEZU2ra6zvBwcbuthpm+MrbdfyFAYl6IlMzZ9
+         4kwNR9SIp8u3253qN+JSostNGK8aRUXDPpu5/Se63QXyj0YfyQoVdacmEmE7DSsmPags
+         hXX9a4ozLIWc1DMFaguRGKX0bixGa3+Zp6iH2NTyUyMtJnB8ajKH3KFVq8QVnbJUtdmM
+         8R1g==
+X-Forwarded-Encrypted: i=1; AJvYcCVCgXNZKS7z1l6VbxvA/FNiIwa08kcP3Cpg0YClic49JZCGmiuJHhyJfmkSpUNtqlC1spLwqrY4UXQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVtD1LRvUAfauSfXvI6DNLvbNBPYsmcbMAqVO2hp3uMnpk+bmR
+	l1ZxBrCtnR/H3HNo28gKPfg97kNF9yuScn7MjXopg5TAGkW6e5SA8ie0vFlP8A==
+X-Google-Smtp-Source: AGHT+IF1lrJ55ZLaqsMQmCJc+nZLoIrd0pBKX6PyZTE2jGiWvlQkkwXauxY0gK7p2TEXIq7R5lQScQ==
+X-Received: by 2002:a05:6214:46a0:b0:6cc:255:202f with SMTP id 6a1803df08f44-6d18586b5e2mr624317936d6.51.1730824801484;
+        Tue, 05 Nov 2024 08:40:01 -0800 (PST)
 Received: from rowland.harvard.edu ([140.247.12.5])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d353f9e7f7sm61904736d6.29.2024.11.05.08.31.52
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d3541775a5sm62122436d6.110.2024.11.05.08.40.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 05 Nov 2024 08:31:53 -0800 (PST)
-Date: Tue, 5 Nov 2024 11:31:50 -0500
+        Tue, 05 Nov 2024 08:40:00 -0800 (PST)
+Date: Tue, 5 Nov 2024 11:39:59 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Stephen Hemminger <stephen@networkplumber.org>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: USB warning on boot
-Message-ID: <88368db2-f9f4-4ff0-a0e7-aa3b8bba0088@rowland.harvard.edu>
-References: <20241025135649.2d08be87@hermes.local>
- <9b1343ee-2806-464c-a99c-5bae44985cc7@rowland.harvard.edu>
- <20241025152340.35be2607@hermes.local>
- <9d973212-fabe-43b3-bc3b-4a5c0632c230@rowland.harvard.edu>
- <20241104205323.364bc684@hermes.local>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: syzbot <syzbot+ccc0e1cfdb72b664f0d8@syzkaller.appspotmail.com>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	pasha.tatashin@soleen.com, syzkaller-bugs@googlegroups.com,
+	linux-usb@vger.kernel.org
+Subject: Re: [syzbot] [mm?] kernel BUG in __page_table_check_zero (2)
+Message-ID: <f94f3351-be53-4d61-a31a-2bb07925c5ad@rowland.harvard.edu>
+References: <67230d7e.050a0220.529b6.0005.GAE@google.com>
+ <20241104200007.dc8d0f018cc536a4957a1cd0@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,27 +85,78 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241104205323.364bc684@hermes.local>
+In-Reply-To: <20241104200007.dc8d0f018cc536a4957a1cd0@linux-foundation.org>
 
-On Mon, Nov 04, 2024 at 08:53:23PM -0800, Stephen Hemminger wrote:
-> On Fri, 25 Oct 2024 22:23:54 -0400
-> Alan Stern <stern@rowland.harvard.edu> wrote:
-> > Nevertheless, even a malfunctioning device shouldn't provoke the
-> > kernel into a WARNING like you got.  The underlying reason for it is
-> > not at all clear, particularly since you didn't enable usbcore dynamic
-> > debugging -- although that might not provide enough information either.
-> > 
-> > One thing you could try doing is simply to replace that hub.
-> > 
-> > Alan Stern
+On Mon, Nov 04, 2024 at 08:00:07PM -0800, Andrew Morton wrote:
+> On Wed, 30 Oct 2024 21:54:22 -0700 syzbot <syzbot+ccc0e1cfdb72b664f0d8@syzkaller.appspotmail.com> wrote:
 > 
-> Replaced the hub with a similar one which probably has same chip inside,
-> and the same problem happens. Which kernel cmdline parameter would enable
-> the debug you want.
+> > Hello,
+> > 
+> > syzbot found the following issue on:
+> 
+> Thanks.  I'm suspecting some USB issue - fault injection was used to
+> trigger a memory allocation failure and dec_usb_memory_use_count() ended
+> up freeing an in-use page.  Could USB folks please have a look?
 
-	dyndbg="module usbcore =p"
-
-However, I'm far from certain that this will be very helpful.  :-(
+Andrew, I'm not sure what to look for.  Can you read through 
+usbdev_mmap() in drivers/usb/core/devio.c, along with the four short 
+routines preceding it, and let us know if anything seems obviously 
+wrong?
 
 Alan Stern
+
+> > HEAD commit:    850925a8133c Merge tag '9p-for-6.12-rc5' of https://github..
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1346c940580000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=309bb816d40abc28
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=ccc0e1cfdb72b664f0d8
+> > compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158ab65f980000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120e6a87980000
+> > 
+> > Downloadable assets:
+> > disk image: https://storage.googleapis.com/syzbot-assets/da8019730dec/disk-850925a8.raw.xz
+> > vmlinux: https://storage.googleapis.com/syzbot-assets/b1ee80babbbc/vmlinux-850925a8.xz
+> > kernel image: https://storage.googleapis.com/syzbot-assets/462580e2ad54/bzImage-850925a8.xz
+> > 
+> > IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> > Reported-by: syzbot+ccc0e1cfdb72b664f0d8@syzkaller.appspotmail.com
+> > 
+> > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 a1 1a 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > RSP: 002b:00007ffede422258 EFLAGS: 00000246 ORIG_RAX: 0000000000000009
+> > RAX: ffffffffffffffda RBX: 00007ffede422280 RCX: 00007f69e1b3c569
+> > RDX: 0000000002000005 RSI: 0000000000003000 RDI: 000000002001a000
+> > RBP: 0000000000000001 R08: 0000000000000003 R09: 0000000080000000
+> > R10: 0000000000011012 R11: 0000000000000246 R12: 00007ffede42227c
+> > R13: 431bde82d7b634db R14: 0000000000000001 R15: 0000000000000001
+> >  </TASK>
+> > ------------[ cut here ]------------
+> > kernel BUG at mm/page_table_check.c:157!
+> > Oops: invalid opcode: 0000 [#1] PREEMPT SMP KASAN NOPTI
+> > CPU: 1 UID: 0 PID: 5850 Comm: syz-executor279 Not tainted 6.12.0-rc4-syzkaller-00261-g850925a8133c #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+> > RIP: 0010:__page_table_check_zero+0x274/0x350 mm/page_table_check.c:157
+> > Code: c1 0f 8c 39 fe ff ff 48 89 df e8 87 28 f3 ff e9 2c fe ff ff e8 dd 6a 89 ff 90 0f 0b e8 d5 6a 89 ff 90 0f 0b e8 cd 6a 89 ff 90 <0f> 0b f3 0f 1e fa 4c 89 f6 48 81 e6 ff 0f 00 00 31 ff e8 95 6f 89
+> > RSP: 0018:ffffc900046bf6d8 EFLAGS: 00010293
+> > RAX: ffffffff820b7fa3 RBX: dffffc0000000000 RCX: ffff88802fc13c00
+> > RDX: 0000000000000000 RSI: 0000000000000004 RDI: ffff88801e97380c
+> > RBP: ffff88801e97380c R08: ffff88801e97380f R09: 1ffff11003d2e701
+> > R10: dffffc0000000000 R11: ffffed1003d2e702 R12: ffff88801e9737c0
+> > R13: 1ffffffff34887b4 R14: 0000000000000002 R15: 0000000000000000
+> > FS:  0000555570714380(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 00007f69e1b92385 CR3: 0000000073ae6000 CR4: 0000000000350ef0
+> > Call Trace:
+> >  <TASK>
+> >  page_table_check_free include/linux/page_table_check.h:41 [inline]
+> >  free_pages_prepare mm/page_alloc.c:1109 [inline]
+> >  free_unref_page+0xd0f/0xf20 mm/page_alloc.c:2638
+> >  dec_usb_memory_use_count+0x259/0x350 drivers/usb/core/devio.c:198
+> >  mmap_region+0x2180/0x2a30 mm/mmap.c:1574
+> >  do_mmap+0x8f0/0x1000 mm/mmap.c:496
+> >  vm_mmap_pgoff+0x1dd/0x3d0 mm/util.c:588
+> >  ksys_mmap_pgoff+0x4eb/0x720 mm/mmap.c:542
+> >  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+> >  do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+> >  entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
