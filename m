@@ -1,133 +1,171 @@
-Return-Path: <linux-usb+bounces-17111-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17112-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C22E69BCA78
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 11:32:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5EE49BCAAC
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 11:40:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25574B21AAC
-	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 10:32:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9AEC1C2130F
+	for <lists+linux-usb@lfdr.de>; Tue,  5 Nov 2024 10:40:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D40371C7609;
-	Tue,  5 Nov 2024 10:32:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18F8F1D2F42;
+	Tue,  5 Nov 2024 10:40:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eNP+zWdv"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="XDRTuwYl";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="f3iygS1G"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 421561D14EC
-	for <linux-usb@vger.kernel.org>; Tue,  5 Nov 2024 10:32:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B151D14E3;
+	Tue,  5 Nov 2024 10:40:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730802726; cv=none; b=tIFkBOoFZwVzpuWPc64DPsTkZhr7fyO6yMbNtIg+0G0wBJcvZxd5Gft0gpbhybrZvQh+VlZCBYecmBci8GoP39xobUfTNw2tMYm7zrk31kG7p07EhkuBQEqRAqBz8Cp+0ZMCjZUDa80lYVDJeuPw69L0LspIQZjKtqfZEHMvabs=
+	t=1730803240; cv=none; b=NuZKmgvvZ/VXRhTt5aIgUU5Xu5iDehpe/2J6E5L+LM6OItCP7JqFYMifmPpeYJd7Ulxa15fq/jx6RVPSv9UdR+azUrF/bo1HMafBxkJNH7+36yCz8bAAT21/eb3oDVQ2QFwu95nZTlERAmJOKuMQt6UEgL+Uz+4JJYB0hA1KzUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730802726; c=relaxed/simple;
-	bh=7vCxNX5CQAe9D1tDIJNhvGWOF6HU5Kdtv7rIt0sDmEg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OPNhk1xDJqpioFd9UmoUh0dp6jvh9wMrMBj0+inyQlOm0EJ+A+zsTB++Gb+Eez8IfKpnsbjDYw9GvHnaTQpsZ7Z5ixzyRcBaOnFYj7/ljRGEXgX2Yc0xnDtR/l1/G7lK8oVmzpTftnAjsl3hOj12tw2lAQtMqPrn9TcuRLRYPiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eNP+zWdv; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730802724; x=1762338724;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=7vCxNX5CQAe9D1tDIJNhvGWOF6HU5Kdtv7rIt0sDmEg=;
-  b=eNP+zWdvzqrCtyq0KZCEwB7rWcUQHi25rbGa+tzdbCgByfZ4gMbLRX7l
-   luHHn+05pQlFZv0xua6xuianb3Itov6RmME05itxy08VMbVzcFWpLHb/9
-   TdpiHwYCeA8VpwhoJChV4jJNWBpo/waq2d8CADOhOur9Y5IRFNS307k5H
-   YTbpc8JnwEqpJ8e+Av1c1vfiHX0jC6VeX37dvzIKdRHXH89/VKkGidgy3
-   8zS3F36btEbpNs5bsnEITgd+r9quFQn5h8cuNUoDwVEptaN5d0XFekrfF
-   eerBWBKHnzrhuTozCdHhl+t59IWu2otBNAdqtx89UrOTJXdTUlcv6NCaC
-   A==;
-X-CSE-ConnectionGUID: fL8kI+2SSxuKyJhvFKItxg==
-X-CSE-MsgGUID: qVuoc1I2TT21uleTMsxZ7w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41644129"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="41644129"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 02:32:03 -0800
-X-CSE-ConnectionGUID: AJJ7nDPFThaeyo77SBENmQ==
-X-CSE-MsgGUID: J52xlbSYR6GHtKV5jjRsVg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,259,1725346800"; 
-   d="scan'208";a="83621394"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa007.fm.intel.com with ESMTP; 05 Nov 2024 02:31:59 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 413B41E0; Tue, 05 Nov 2024 12:31:58 +0200 (EET)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Rick Lahaye <rick@581238.xyz>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Sanath.S@amd.com,
-	christian@heusel.eu,
-	fabian@fstab.de,
-	gregkh@linuxfoundation.org,
-	regressions@lists.linux.dev,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH v2] thunderbolt: Fix connection issue with Pluggable UD-4VPD dock
-Date: Tue,  5 Nov 2024 12:31:57 +0200
-Message-ID: <20241105103157.526823-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1730803240; c=relaxed/simple;
+	bh=ZeGJ32onS1PAytPMeWyffNKx42P4Y5ebI72qKCfQPwY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=oF6Y8yozPkRjUp0wdn8hS/5BwhDBqgVaA5p3sQ5obY9sY2JxR8kiFzGP9M71lMrojhU9rIWI/qXGnLjV0fZB9+EUlGQTxYSkzfh/7C5wsnFHjAYkFgpKi4XMg3ZNAyHstncDiTGQ6Ym90KE9nLMvrN69JdQenT4aC4Klp/EC1Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=XDRTuwYl; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=f3iygS1G reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1730803237; x=1762339237;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=HnhOcDqM62BM39XeYtBpS6hPjPuyhp80jJ6lENbc2lQ=;
+  b=XDRTuwYly0+xQ1keRhstg8Q+kyJL1bCPp5L16H+3VTrt1+sFKm7ETqkv
+   D3IFdmkXXDKHxmVkObXL1if3Bh1R4uPf/mF4r+TyeHCiVWpfbD16zz20H
+   E1s5neF9pYZD+a2FhNqIjwIFZ+hujVxiN4sLadVi68y4zN32ifXWLoIKC
+   8gjeEP9fm5a5Jt/fSfbGdjrF9tpLpu3CI1bjvmsiJCSFNGme77bKjzi//
+   fBni5qdH/IiFLJYjUVuzBruk5q9tqJlrfoumtWilo9xNBsqKfzjFc1v9N
+   +rDFl2g/xrSyL5mRiXaLpLdI5krsZIA+84eFigbuctGsIdP8sRP3blOCE
+   w==;
+X-CSE-ConnectionGUID: AIkgqKuXSf2GqGYxRnWDAw==
+X-CSE-MsgGUID: vkGBDWlmR2O3XtYPq2HK6g==
+X-IronPort-AV: E=Sophos;i="6.11,259,1725314400"; 
+   d="scan'208";a="39855291"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 05 Nov 2024 11:40:28 +0100
+X-CheckPoint: {6729F61B-23-5736D786-D50827BE}
+X-MAIL-CPID: 51C17FF78442E03FAB7181DB78149BC6_2
+X-Control-Analysis: str=0001.0A682F22.6729F61C.004F,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 62129161302;
+	Tue,  5 Nov 2024 11:40:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1730803223;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=HnhOcDqM62BM39XeYtBpS6hPjPuyhp80jJ6lENbc2lQ=;
+	b=f3iygS1GUJvasDTnbGPHuttJdMX/2lqYoS/6+vCQ3Th8WLd+VqtaZU/BSlaJ4s76JNRSAd
+	4AVJQzH467QFo8Vhb1O3Q5/0cXAPTZQXXN2QGfFk+aPT4ZCQgrqnmFE5SCCLwBv+oBHMKu
+	6ZgBPDlVNnTJG/RauHtIV6h7Hw7SFQBOFzIV31ro/lK61PgD3/x09ma3pA4vqtLyhubA/2
+	2ooJNAQpQUUkFORsFBckki5hutdrOo+0Zx488XI3HBHwWXZEsiofyFfZjFVGy6zF8DrFQT
+	bDsPF6dlPkdL//VXddmybEYk1ZSkiApd7QJAaMaD1mH6DRCGsI8wYfXoTAgp/w==
+Message-ID: <c73cac598788ccabd1791b1232e8fd9d7ce23ac6.camel@ew.tq-group.com>
+Subject: Re: [PATCH 2/5] dt-bindings: arm: ti: Add compatible for
+ AM625-based TQMa62xx SOM family and carrier board
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero
+ Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
+ Tony Luck <tony.luck@intel.com>, "Guilherme G. Piccoli"
+ <gpiccoli@igalia.com>, Felipe Balbi <balbi@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>, Hari
+ Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
+Date: Tue, 05 Nov 2024 11:40:20 +0100
+In-Reply-To: <20241104-floral-dexterous-7d3fee2ff616@spud>
+References: <cover.1730299760.git.matthias.schiffer@ew.tq-group.com>
+	 <4f5ad877f44df35a3b2c7f336647f057c4e6377d.1730299760.git.matthias.schiffer@ew.tq-group.com>
+	 <20241104-floral-dexterous-7d3fee2ff616@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Rick reported that his Pluggable USB4 dock does not work anymore after
-upgrading to v6.10 kernel.
+On Mon, 2024-11-04 at 18:47 +0000, Conor Dooley wrote:
+> On Mon, Nov 04, 2024 at 10:47:25AM +0100, Matthias Schiffer wrote:
+> > The TQMa62xx is a SoM family with a pluggable connector. The MBa62xx is
+> > the matching reference/starterkit carrier board.
+>=20
+> Why all the wildcards? Why isn't there a compatible per device in the
+> family?
 
-It looks like commit c6ca1ac9f472 ("thunderbolt: Increase sideband
-access polling delay") makes the device router enumeration happen later
-than what might be expected by the dock (although there is no such limit
-in the USB4 spec) which probably makes it assume there is something
-wrong with the high-speed link and reset it. After the link is reset the
-same issue happens again and again.
+For the compatible string we've chosen the TQMa6254 as the representative f=
+or the TQMa62xx family.
 
-For this reason lower the sideband access delay from 5ms to 1ms. This
-seems to work fine according to Rick's testing.
+MBa62xx is the proper name of the baseboard; this board can be combined wit=
+h any TQMa62xx family
+SOM.
 
-Reported-by: Rick Lahaye <rick@581238.xyz>
-Closes: https://lore.kernel.org/linux-usb/000f01db247b$d10e1520$732a3f60$@581238.xyz/
-Tested-by: Rick Lahaye <rick@581238.xyz>
-Fixes: c6ca1ac9f472 ("thunderbolt: Increase sideband access polling delay")
-Cc: stable@vger.kernel.org
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
-v1: https://lore.kernel.org/linux-usb/20241105085301.524312-1-mika.westerberg@linux.intel.com/
+Best,
+Matthias
 
-Changes from v1:
-  *  Reword the commit message to use mainline kernel version (v6.10)
-     instead.
 
- drivers/thunderbolt/usb4.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index 0a9b4aeb3fa1..402fdf8b1cde 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -48,7 +48,7 @@ enum usb4_ba_index {
- 
- /* Delays in us used with usb4_port_wait_for_bit() */
- #define USB4_PORT_DELAY			50
--#define USB4_PORT_SB_DELAY		5000
-+#define USB4_PORT_SB_DELAY		1000
- 
- static int usb4_native_switch_op(struct tb_switch *sw, u16 opcode,
- 				 u32 *metadata, u8 *status,
--- 
-2.45.2
+>=20
+> >=20
+> > Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+> > ---
+> >  Documentation/devicetree/bindings/arm/ti/k3.yaml | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documen=
+tation/devicetree/bindings/arm/ti/k3.yaml
+> > index b0be02f9d1253..d8b52b95fba7b 100644
+> > --- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> > +++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+> > @@ -73,6 +73,13 @@ properties:
+> >            - const: toradex,verdin-am62          # Verdin AM62 Module
+> >            - const: ti,am625
+> > =20
+> > +      - description: K3 AM625 SoC on TQ-Systems TQMa62xx SoM
+> > +        items:
+> > +          - enum:
+> > +              - tq,am625-tqma6254-mba62xx # MBa62xx base board
+> > +          - const: tq,am625-tqma6254
+> > +          - const: ti,am625
+> > +
+> >        - description: K3 AM642 SoC
+> >          items:
+> >            - enum:
+> > --=20
+> > TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, =
+Germany
+> > Amtsgericht M=C3=BCnchen, HRB 105018
+> > Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan=
+ Schneider
+> > https://www.tq-group.com/
+> >=20
+> Achtung externe E-Mail:=C2=A0=C3=96ffnen Sie Anh=C3=A4nge und Links nur, =
+wenn Sie wissen, dass diese aus einer sicheren Quelle stammen und sicher si=
+nd. Leiten Sie die E-Mail im Zweifelsfall zur Pr=C3=BCfung an den IT-Helpde=
+sk weiter.
+>   Attention external email:=C2=A0Open attachments and links only if you k=
+now that they are from a secure source and are safe. In doubt forward the e=
+mail to the IT-Helpdesk to check it.
+>=20
+> =C2=A0
 
+--=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+https://www.tq-group.com/
 
