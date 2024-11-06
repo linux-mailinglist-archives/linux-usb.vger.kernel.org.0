@@ -1,136 +1,158 @@
-Return-Path: <linux-usb+bounces-17156-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17157-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E30CC9BDDD0
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 04:53:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 636889BDDE6
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 05:12:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0AB031C20C94
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 03:53:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 271D6285049
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 04:12:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC7A1917C0;
-	Wed,  6 Nov 2024 03:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2CA714F9D9;
+	Wed,  6 Nov 2024 04:11:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="M0Kdc9z/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Qqc/Jouw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F5218FC85
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 03:52:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39181917CE;
+	Wed,  6 Nov 2024 04:11:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730865176; cv=none; b=lK1ETBDG5TmjNrkWMYpLzKSvO4QRmU/n6Im4ED/zcT4JAjG8BUwyWXjoHpMMhhJPRCZ6PgdM7/mQ6Y0BFZi3QgMLTuKEYPwqGjIqjBDQlHokmxZm8tqO9/8zq+neRp9TqhvQGp2+uXMDq4XuK6fFVScyZJi4ILTt8eI0y8rBsFQ=
+	t=1730866312; cv=none; b=ZBubmAiYwbix3u72v1+nQCbUUDOtEzFKm7kSMiDly+Ntu9sOKboBr6+A6LY28Y88kWT+guQB+7E6n9LjXRQPHHYMMtPjPlardmEbZaGZwHnNbzUExYfFkfeGlZ8fKZ0w/cqKKpK+j/KTCxJ8yktLixocn/Qo1THh7r5gEuH82NY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730865176; c=relaxed/simple;
-	bh=5aE09eJAw+DWO/GK0+6zxMbedIgfEssWtZFIf9Rdfcw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TTOTNs090cPqf9Ta4nJrq0iXwSQ7wL2+SBBVrb8iL41GUA5qXd9R+GY7+wYxTyYy8P5i9drehNmxpXhW2+LWSDkONfZfzJW8BvkBCbf8123UaN6F0mbd+/L5bFD3e28lZ1v0itW7n4+x6Cv8Y9o+ly6Cx7PVUFwyJn7qmy8dTf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=M0Kdc9z/; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1730865174;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1TiMSpJJDatpGrOSJe9rj+NgTUiSiplFcFvJnfcnFCY=;
-	b=M0Kdc9z/5pn60hTknqngCRY/ctNyZr+ZZjJPE7l5bsq5wyI11RyjCTM8yU2JqPf3jp15tY
-	DpdQ07z18KN1dNMKrV6mqixPrEeWPZn7NPRTCG+A2pP4si7EHv4bsNcv09eJiFGR1TKYlH
-	uedX2McbaX2ji7oM/Fn2JmuamTprFVc=
-Received: from mail-ua1-f71.google.com (mail-ua1-f71.google.com
- [209.85.222.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-448-jl1Gr3hJNkOTIaA2kajr7Q-1; Tue, 05 Nov 2024 22:52:51 -0500
-X-MC-Unique: jl1Gr3hJNkOTIaA2kajr7Q-1
-Received: by mail-ua1-f71.google.com with SMTP id a1e0cc1a2514c-84ff1850a9dso1480314241.3
-        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2024 19:52:50 -0800 (PST)
+	s=arc-20240116; t=1730866312; c=relaxed/simple;
+	bh=XkFnXu3Nbs+LBYkhmSZDcZZRbbQQ1gwS6Y0z4RTJorQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NMCJKhnMTvO/KFSwbsJpb6YzB3W/1Ob9/JoBpUCro4AIL+X01YW/Uv+nq4oQTB8vrfwjiQCADRZXmvbEpqLZ4qIY9XNKJ9XYBWJ+3vBHLCt7KVIexS39G2VqRWYY2mro6t1OHTUNQzYdD7lMV08zDUSDiwoUmKR6RY3uz4cQ104=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Qqc/Jouw; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-7ed9c16f687so4325231a12.0;
+        Tue, 05 Nov 2024 20:11:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730866310; x=1731471110; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NNft/kQrWN+6wLuYAR1EXFuR73F5xeJoDqmeVVt2J3s=;
+        b=Qqc/JouwoRYBCc79EbQze2hfIZyWmgAF1aqg8dZwQwuhcOMeihjwlU4pSm76Ic+mlD
+         2++V20D34WWHAuWqS7wOE/VkbFCe5fG2l8hvc5/JtsmQT6DhdQu1Cjo71fpz+kRhD2QG
+         ZZij48J2HP/BNBgFdNHnORJNeaZpd76UBdB5WfHDxUIqKMtnyjNOMDSF5TOPfNTFiNXZ
+         5ZGeizBkhjdstUmMk7FKP25tdfvCMkATIS1Cm/Q7Rf7RcOey1XOOPilmENSdu1WhYJoR
+         5xg90dP904T1bevGU1/onXGIIPAdWeUmOeK/XLos+aZ/yJGRuWd48GFB8nXZsfGvGqxZ
+         Hmzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730865170; x=1731469970;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1TiMSpJJDatpGrOSJe9rj+NgTUiSiplFcFvJnfcnFCY=;
-        b=kQvF1bywy2tY9WajT4u1T3NdNdWH/R58Fc4IHg/b6qxUH3q29FSvJdzn6serObXyF+
-         lheR2jtzlsbrN1I34lriGkZl2O4Klaxuog7Cv19aXcJOdA0s/9zshtU3vXm8QprUjRmW
-         g6ES1VV3QR9cPwApCOkFKWUzfyTWW3g6mRqATw2dUALqeJvCOrROWY40XvInVxJlBcES
-         SP61lNTa8OY6JV2BODhPIiLAgCaBIC++o+RhoXvHyessqVOOxM3DNyHDVtVxwO6IzEtr
-         N3TPN4EDKwbI7TfiJVcj6XBmSqCVtPBr386fvnB5GOt3K7rmf37QJghiKk1Kt5CSCr0A
-         DVBA==
-X-Forwarded-Encrypted: i=1; AJvYcCWEHqzB32tY8ao8AyJKd8GNA1S3pzdebrB2QIedcew6FhmbRHhr9lELctCmxXwBRH4+AyNGssrnTfc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhEi9NagYcu9cpMt6t89NLLeaF/yE37lKA+SPbzc/k7f+rtfrU
-	IIISxq8hOUZv1lVjt74IzEiraZOvcUUb+MBAtkS2gSJV94o7vsj3xglHfQvHRXVh5DNJl3NvC8f
-	DexmBN865kJgZlnSesMVQKC+1AQujDi4ZbfjWaSRggtNFE2vt9p5notyCmK4ALRdaJRQxN+OSAd
-	RBF4zMfR8M/o+nSBlSRNrLgZZL76ujhY6Q
-X-Received: by 2002:a05:6102:54a6:b0:4a3:a137:ba7 with SMTP id ada2fe7eead31-4a9542a6648mr20367588137.9.1730865170504;
-        Tue, 05 Nov 2024 19:52:50 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEhhXYpi0AcG+0c1Qcso/83tNVaNoAmn2rY1up2L2z39Hn10xr/7RtAngqs2ZydHcl7R3SGQT71bMWdEEDqwlk=
-X-Received: by 2002:a05:6102:54a6:b0:4a3:a137:ba7 with SMTP id
- ada2fe7eead31-4a9542a6648mr20367570137.9.1730865170142; Tue, 05 Nov 2024
- 19:52:50 -0800 (PST)
+        d=1e100.net; s=20230601; t=1730866310; x=1731471110;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NNft/kQrWN+6wLuYAR1EXFuR73F5xeJoDqmeVVt2J3s=;
+        b=Ix94tSVaF5vkxPsZo4++0X4AWZZZLTVUjn5gcAq83KxcMMLjl8uGTGwCzZURwbaSyo
+         zPtzzrqZGWzdt6OaKbMFpVWcKL4v9GwSiQQKYATnS+k4bU71K83UT/WAFCFbbIRlKr1U
+         p1iFVuMGLPGsJoKC3QwNKhN9VSTUgpXpGzO6h3AmTHXEOWKRl5YMTcC1/iwBqcILLdzO
+         ohKpBucs/9GPhSrwUt7XVshT524EWzfvyr9FAsOJxKlaFotvlNjTtimR4uxS8ij63FE9
+         xq8QvofOi+QDTUxGiRswChu6maTdG+NuYfBxJtv89vbgQMZxGywcvKp6fQx1H1LQ1R2K
+         Ggqw==
+X-Forwarded-Encrypted: i=1; AJvYcCVK25WSEgSrkdA0NKQ0kZbPNQgQouaWiRwBB6icsdswlXnKBftrEC3HX9G4Ap7D3XdHLbFN5weNmXN0@vger.kernel.org, AJvYcCXiuI3cjysVtOIpqRRyxU2PGjCsJZ1gD0au0cG8NvPd7BTySwcJV1ZO8ymn3M4ZRG3dQ8uhOsn3Jy20moc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw7t8QWWh4LVbcC5JyXAuheIyG1Lh4c7znLHjuYC24jkETXIbbV
+	QZRf7htbzYFo4JqOT/m9HTQ94yb4e9tZdbk1nvVhEVphEcjJCGCz
+X-Google-Smtp-Source: AGHT+IE8B4L179M7UCSeRqYieIZg2ubmeuJoXZEdLuYX3aeNZwbrJcGxdxrOeJ94IQhyAU/+GlIUoQ==
+X-Received: by 2002:a17:90b:1c8a:b0:2e2:e4d3:3401 with SMTP id 98e67ed59e1d1-2e93c174c7bmr30756891a91.20.1730866309829;
+        Tue, 05 Nov 2024 20:11:49 -0800 (PST)
+Received: from gmail.com ([24.130.68.0])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2e99a580662sm385069a91.24.2024.11.05.20.11.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 05 Nov 2024 20:11:49 -0800 (PST)
+Date: Tue, 5 Nov 2024 20:11:47 -0800
+From: Chang Yu <marcus.yu.56@gmail.com>
+To: andreyknvl@gmail.com
+Cc: gregkh@linuxfoundation.org, viro@zeniv.linux.org.uk,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stern@rowland.harvard.edu, skhan@linuxfoundation.org,
+	marcus.yu.56@gmail.com,
+	syzbot+3e563d99e70973c0755c@syzkaller.appspotmail.com
+Subject: [PATCH] usb: raw_gadget: Add debug logs to a troubleshoot a
+ double-free bug in raw_release.
+Message-ID: <Zyrsg3bvNu1rswqb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <672ad483.050a0220.2edce.1518.GAE@google.com>
-In-Reply-To: <672ad483.050a0220.2edce.1518.GAE@google.com>
-From: Ming Lei <ming.lei@redhat.com>
-Date: Wed, 6 Nov 2024 11:52:39 +0800
-Message-ID: <CAFj5m9+1dZtWufO0xzGgWPyMjD1NZ_a-kfeW+Q3ujH_rnR09hg@mail.gmail.com>
-Subject: Re: [syzbot] [block?] [usb?] WARNING: bad unlock balance in blk_mq_update_tag_set_shared
-To: syzbot <syzbot+5007209c85ecdb50b5da@syzkaller.appspotmail.com>
-Cc: axboe@kernel.dk, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Wed, Nov 6, 2024 at 10:38=E2=80=AFAM syzbot
-<syzbot+5007209c85ecdb50b5da@syzkaller.appspotmail.com> wrote:
->
-> Hello,
->
-> syzbot found the following issue on:
->
-> HEAD commit:    c88416ba074a Add linux-next specific files for 20241101
-> git tree:       linux-next
-> console output: https://syzkaller.appspot.com/x/log.txt?x=3D12d3474058000=
-0
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D704b6be2ac2f2=
-05f
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D5007209c85ecdb5=
-0b5da
-> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Deb=
-ian) 2.40
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D16d34740580=
-000
->
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/760a8c88d0c3/dis=
-k-c88416ba.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/46e4b0a851a2/vmlinu=
-x-c88416ba.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/428e2c784b75/b=
-zImage-c88416ba.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the comm=
-it:
-> Reported-by: syzbot+5007209c85ecdb50b5da@syzkaller.appspotmail.com
->
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> WARNING: bad unlock balance detected!
-> 6.12.0-rc5-next-20241101-syzkaller #0 Not tainted
-> -------------------------------------
-> kworker/1:1/57 is trying to release lock (&q->q_usage_counter(queue)) at:
-> [<ffffffff8497aa7f>] blk_mq_update_tag_set_shared+0x27f/0x350 block/blk-m=
-q.c:4131
-> but there are no more locks to release!
+syzkaller reported a double free bug
+(https://syzkaller.appspot.com/bug?extid=3e563d99e70973c0755c) in
+raw_release.
 
-#syz test: https://github.com/ming1/linux.git for-next
+From the stack traces it looks like either raw_release was invoked
+twice or there were some between kref_get in raw_ioctl_run and
+kref_put raw_release. But these should not be possible. We need
+more logs to understand the cause.
+
+Make raw_release and raw_ioctl_run report the ref count before
+and after get/put to help debug this.
+
+Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
+Reported-by: syzbot+3e563d99e70973c0755c@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?extid=3e563d99e70973c0755c
+---
+ drivers/usb/gadget/legacy/raw_gadget.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
+
+diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
+index 112fd18d8c99..ac4e319c743f 100644
+--- a/drivers/usb/gadget/legacy/raw_gadget.c
++++ b/drivers/usb/gadget/legacy/raw_gadget.c
+@@ -194,6 +194,8 @@ static struct raw_dev *dev_new(void)
+ 		return NULL;
+ 	/* Matches kref_put() in raw_release(). */
+ 	kref_init(&dev->count);
++	dev_dbg(dev->dev, "%s kref count initialized: %d\n",
++		__func__, kref_read(&dev->count));
+ 	spin_lock_init(&dev->lock);
+ 	init_completion(&dev->ep0_done);
+ 	raw_event_queue_init(&dev->queue);
+@@ -464,13 +466,21 @@ static int raw_release(struct inode *inode, struct file *fd)
+ 			dev_err(dev->dev,
+ 				"usb_gadget_unregister_driver() failed with %d\n",
+ 				ret);
++		dev_dbg(dev->dev, "%s kref count before unregister driver put: %d\n",
++				__func__, kref_read(&dev->count));
+ 		/* Matches kref_get() in raw_ioctl_run(). */
+ 		kref_put(&dev->count, dev_free);
++		dev_dbg(dev->dev, "%s kref count after unregister driver put: %d\n",
++				__func__, kref_read(&dev->count));
+ 	}
+ 
+ out_put:
++	dev_dbg(dev->dev, "%s kref count before final put: %d\n",
++			__func__, kref_read(&dev->count));
+ 	/* Matches dev_new() in raw_open(). */
+ 	kref_put(&dev->count, dev_free);
++	dev_dbg(dev->dev, "%s kref count after final put: %d\n",
++			__func__, kref_read(&dev->count));
+ 	return ret;
+ }
+ 
+@@ -603,8 +613,12 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
+ 	}
+ 	dev->gadget_registered = true;
+ 	dev->state = STATE_DEV_RUNNING;
++	dev_dbg(dev->dev, "%s kref count before get: %d\n",
++			__func__, kref_read(&dev->count));
+ 	/* Matches kref_put() in raw_release(). */
+ 	kref_get(&dev->count);
++	dev_dbg(dev->dev, "%s kref count after get: %d\n",
++			__func__, kref_read(&dev->count));
+ 
+ out_unlock:
+ 	spin_unlock_irqrestore(&dev->lock, flags);
+-- 
+2.47.0
 
 
