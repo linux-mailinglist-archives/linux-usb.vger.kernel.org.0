@@ -1,233 +1,206 @@
-Return-Path: <linux-usb+bounces-17143-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17144-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DE0F9BDB34
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 02:29:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F4459BDB7D
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 02:54:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64F86B21FF1
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 01:29:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 12912284A95
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 01:54:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39A5F189902;
-	Wed,  6 Nov 2024 01:29:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77B5918C03A;
+	Wed,  6 Nov 2024 01:54:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="XGbS+d6p"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2087.outbound.protection.outlook.com [40.107.22.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C83FC10E5;
-	Wed,  6 Nov 2024 01:29:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730856579; cv=none; b=EHL9ZwAtMdgEoN8Dtah2SGpKaajQie5eAi1Yie7PB1mFDIhRRXsZGZdbmap4P3D+p+shsyW9g5n3S1Qw1xx8SrZtPzswFPaO0J0O45QpW8GDi+P5GBppBgd3CSqXnYwq20X905lwB58tfkEahlyH3L8wwDy5zpF/q/RCtcD6Xck=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730856579; c=relaxed/simple;
-	bh=sEHlccvVIDnUA+pWV3Zdm/HwlJWyCMeUl+3zhMfrAPk=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XHYDTkeB8agPRjDM9iK6dYhxw5xskiOSoZ/Ua/7eiNNbH7+FDLATzf2o4oE8LzuIQEtSabS6SkPKjLS+mK5Ua/MYOkWr8c0jJHKprJoSr6gShAcjRPdroeUWndYAuhNYzjF/hnvC97qpgg2GCYrlzYe2GXJ8Ql/XM87HpN+r2CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 8e2598c09bde11efa216b1d71e6e1362-20241106
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_QP
-	HR_CTT_TXT, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NAME, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED
-	DN_TRUSTED, SA_EXISTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_C_CI, GTI_FG_IT, GTI_RG_INFO, GTI_C_BU, AMN_T1
-	AMN_GOOD, AMN_C_TI, AMN_C_BU, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.38,REQID:33516c21-8de6-47ef-8293-dc6222754ca8,IP:15,
-	URL:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACT
-	ION:release,TS:-5
-X-CID-INFO: VERSION:1.1.38,REQID:33516c21-8de6-47ef-8293-dc6222754ca8,IP:15,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:-15,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-5
-X-CID-META: VersionHash:82c5f88,CLOUDID:da3027b8c79bdb720694bd44dcd65b71,BulkI
-	D:241024105327XGBM1VDO,BulkQuantity:10,Recheck:0,SF:44|64|66|841|38|24|17|
-	19|102,TC:nil,Content:0,EDM:-3,IP:-2,URL:1,File:nil,RT:nil,Bulk:40,QS:nil,
-	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_FSI,TF_CID_SPAM_OBB,TF_CID_SPAM_ULS,
-	TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
-X-UUID: 8e2598c09bde11efa216b1d71e6e1362-20241106
-X-User: duanchenghao@kylinos.cn
-Received: from [172.30.80.21] [(39.156.73.13)] by mailgw.kylinos.cn
-	(envelope-from <duanchenghao@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 2086433120; Wed, 06 Nov 2024 09:29:24 +0800
-Message-ID: <2239f30a31d48b326c1b11a2f551439652781419.camel@kylinos.cn>
-Subject: Re: [PATCH v4] USB: Fix the issue of task recovery failure caused
- by USB status when S4 wakes up
-From: duanchenghao <duanchenghao@kylinos.cn>
-To: Greg KH <gregkh@linuxfoundation.org>, stern@rowland.harvard.edu
-Cc: stern@rowland.harvard.edu, saranya.gopal@intel.com, 
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-usb@vger.kernel.org, niko.mauno@vaisala.com, pavel@ucw.cz,
- rafael@kernel.org,  stanley_chang@realtek.com, tj@kernel.org,
- xiehongyu1@kylinos.cn,  xy521521@gmail.com, kernel test robot
- <lkp@intel.com>
-Date: Wed, 06 Nov 2024 09:29:15 +0800
-In-Reply-To: <31be22e3ee6633e0753a717c7c0994802662a39d.camel@kylinos.cn>
-References: <e795d88afb2b485fab97e2be7759664e823fbfad.camel@kylinos.cn>
-	 <20241024024038.26157-1-duanchenghao@kylinos.cn>
-	 <2024102432-conjoined-skylight-33f1@gregkh>
-	 <8aff9a5acbd21d7bd08b80e02ef2b34f2028cedf.camel@kylinos.cn>
-	 <2024102911-mooned-precise-f526@gregkh>
-	 <31be22e3ee6633e0753a717c7c0994802662a39d.camel@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4-0ubuntu2 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D64D18C011
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 01:54:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.87
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1730858083; cv=fail; b=G0XWWs9KJiwEUgHjNdmxVtIxCMR0UoVcJRhNWLnh4qymYfx5Yr7qrAh59gOPRzNGbh0dRD+JZgziJDpnA6UgEjVkVrZkIYR6tYOVIunZpu6iMQ3ii2m2Sr0BXX86aTt8vfgrKoxjKB4dv5GWIyjufHH9INOjCKQ+6mxjlCF5QoA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1730858083; c=relaxed/simple;
+	bh=zT52IcQqqAdVGjf6bJk/RShZzMLmJjQPnS/4mkbae54=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=roYLTjgF5x2H+PzH3+6J7N9mvpY5LqAcKB0AAwYLF83fnU2+GuwH5DKLU8SgGLWKPGPBio0gMhG3++LekumYBLfkMfKF1nSlNxm4pA1zUSGFX1AmBaREzFtZnCEwsKNspulaCiQm4YqfggyIZwtP4evxafOPSnIlZPyoHeBP0Fw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=XGbS+d6p; arc=fail smtp.client-ip=40.107.22.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=N+wHTBnp3fX3S8wDm7ahVWT587dJTgUOwhWZCKHAlmq8yJq7jrKGr3CbrfHK3C2a08cBIZIH4cktk8WQb9VYQ6bgb1T9GSNBQvhf6V/UO9mCdJKyop3AafbumXMp9lpURaRR0UXEEFviHiinwJVH6qao+8bffST+3r1qishyLOnA4pAnTzlzC/nhtTy1bbiOd/on8t8tj0xJ9lKY3crQUFJUyMQvZBmX50S7d0PaJtO0+pPs6dvqJXmAgcrQh6NJzYg+Oc1BYYqanOgL/4rDoBc5/CYJhdiHYgPkD4PiynLsmbJVJEJM5It/3xaH2SW669J8VIHxmeP1N/6ebTx8vw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YB5jt07gX937C8kzQ24aTITxdBm6EK131vswGnTVadI=;
+ b=qa3vtPodutcUnrr1jorktnJNeJNr2nEY6mN3g1THGCvaJMWT8eH99d+GqwvOvosTAVZQaMyGdhPjhmqCFNw4reMgryKGWKZby9FaQy+bf3GgpB2hee+3KRXKkmiDRvqRWNUEIxzOkuohSlTwRUgRKOKD7sUOH+gd61OTC5++SAHtufYR7t6hQ2LtJ+B9zVZacn2HbMkdcv5t5rW197HIYi402zzvxx8CD7SKMcXAqFHipiRMM9no5P2iDz4wC7lwsQsCAs8Uysx293CPDNa4flA6c3VhebylhJqjfcrYooEH07vAglKFryDhTp9B+BJm/7BnGNSyWiTei1kkHvY4cg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YB5jt07gX937C8kzQ24aTITxdBm6EK131vswGnTVadI=;
+ b=XGbS+d6p7iiEFWFhnEYoeAr33MbCduzbQr5eRfCKFzQyEDFMmAJm+e/nU3Wx2q2fhtHDpdkZBD39W1Q+GLkWKsB6nwAv+Or+mbhR24m8tKDb2t3SwSodqIIGEd/FSF3OokL/VRCltbmR3i1i44gj42BugRD8XX9eohSi3+TqyHlt6VUvbU8hbQNtx8ezSq3z2hrlvjWGhorEKi2aYR12SgWXFf2N4tgkcU+0qdlm5xv82YERu54KEDIO7BYIuL5Rh8Xb0YXIqprYTaOOD9AHkd3jvOUXKYVTETuXLNlRpqDMvry4lHGFFDRLSFGciFAORJMVa5IqVpKcCMHHK9Jktg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+ by PR3PR04MB7276.eurprd04.prod.outlook.com (2603:10a6:102:8c::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8137.19; Wed, 6 Nov
+ 2024 01:54:36 +0000
+Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
+ ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8137.018; Wed, 6 Nov 2024
+ 01:54:36 +0000
+Date: Wed, 6 Nov 2024 09:52:23 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: Roger Quadros <rogerq@kernel.org>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, d-gole@ti.com,
+	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH] usb: dwc3: core: avoid reading register after bus clk is
+ disabled
+Message-ID: <20241106015223.xreabx5vpo32p3yy@hippo>
+References: <20241105071426.2411166-1-xu.yang_2@nxp.com>
+ <48a687c7-24e2-4815-8cc1-d223b38e0e55@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48a687c7-24e2-4815-8cc1-d223b38e0e55@kernel.org>
+X-ClientProxiedBy: SG2PR06CA0234.apcprd06.prod.outlook.com
+ (2603:1096:4:ac::18) To DU2PR04MB8822.eurprd04.prod.outlook.com
+ (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|PR3PR04MB7276:EE_
+X-MS-Office365-Filtering-Correlation-Id: 27c3b383-a29c-47aa-6afb-08dcfe05f7a3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|376014|1800799024|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Pp7b8AINHspN1ZVHoi8pELC1TLNZwOMe35Q170JVahaHly2+gX6bby89HUxT?=
+ =?us-ascii?Q?ISA72RAT1LCaaufn1CDloRS8S9gpmtTp5YAXcXN/XdxNwUfeAkIx1ykYpH/c?=
+ =?us-ascii?Q?U5WjhG+ETxvqzA0Ag3PbP8hvk4UM7tJtIwobwnWjcvGKuLAr4ar16WJy3xhB?=
+ =?us-ascii?Q?J3Uaqr0n7PbH/5j3OMkGj0zkiAKVaHivM9E6r6qHWm2bNXlvb1Jjf3qeyn2p?=
+ =?us-ascii?Q?ILTWYxjm+sOv2rYcOfnmIp43b/ZLvqmqy6TACaIj9/ODh+ZGBlvwPQ7j/NwC?=
+ =?us-ascii?Q?ik90a/84K+0ZUCr+rnK//U7GQpTksqrNrmH1Tpy3y8IfvvlcR85DY7oNMluA?=
+ =?us-ascii?Q?mlffX2Hg1pzXtYjRPif9132+4jwofCbKoSh2yeO2e0Zk6sjr31dTdQkeCmRR?=
+ =?us-ascii?Q?uTLRK4zO24v62sinhzKhmsfj1Lem14rn+wP1JDk4tKslkZ6L1za5RzBskWvu?=
+ =?us-ascii?Q?njZMcIUFTaTiCr3vmuZmYRPXVkXfKTbri2dM+wiOQRcFJP/b8+K6/WukcHD9?=
+ =?us-ascii?Q?Ti+TB/aQl1auyyA0uncLXUtyFWnw7r2Rj0mJRj16wQ82tJBFhzODbBuCRPL8?=
+ =?us-ascii?Q?kvXVrEr3AqRIMwJeW907Zb/2TMENnCc07MkVcPaXboypv+VCuYTGty0AhVFO?=
+ =?us-ascii?Q?gnH97HEDqKXIv4zM6VT7qj1m8g526oGVFX4aGO2iqW+IZCHXE00oLXLDMz1i?=
+ =?us-ascii?Q?9bTxHip/BQDjhmxMK4glKS0/hPxWkF26wwMZGLbFJs7Jl0OrcHvtK8DWX8p3?=
+ =?us-ascii?Q?EuvxtwmWjUzyKHqMZ3Kk8XiiEqcu1m4+UUNvmaM0fKUG+ihZl3s5mEnYDYc4?=
+ =?us-ascii?Q?z76auBgvBHNz1N83ieKVNESYA8Vp+cj3seohRHdqsFY9usCAMYPLEHWTgEp5?=
+ =?us-ascii?Q?GhsExFVz1mym7ozO1Ezco0WVEhYcOnrqnnVQKZ8ub/7z1/ACufsEnQqEQ7vM?=
+ =?us-ascii?Q?1Il8saPCskJAxGw2M/Y84rKrcfHnce1hqqnnTefUNmE7YVvd3w7pPNQ3r9R3?=
+ =?us-ascii?Q?JYYX8oMrEg4cNWNrK6xyHO3MzL9Rzl9QObfC3Qah0VceNOMOdmR7kOwb4ln6?=
+ =?us-ascii?Q?9+2oAMsM4f+WcD+iDropxMY/ZTr2BgIcjf9fmYAYqlv+ux+Mp2Gfg/AYyrfW?=
+ =?us-ascii?Q?Z5frlGIqGqsf1QQNgrg+mbdsA5VOUpG6feLzIb0jZZbzNiulkt5gds9M/Xqn?=
+ =?us-ascii?Q?wAndYC45JC2xe0ZIwviCZyzSLPxndGBAkXLdJOGrnMmc59rt1b/Orpx+sV1B?=
+ =?us-ascii?Q?q8U+Qv5M5OrG/YiiYEoXiMlPbtEVaxQC386GZHUYxIyNniBZ6w3CA7ULBIq1?=
+ =?us-ascii?Q?r7jxjyEYCLVjrqVhT594acsm5YoqLwSE3YbTBuHYlnwQn7wKsEwx3K6HlaAP?=
+ =?us-ascii?Q?oqHRd+N4gAv2BG9otvAXa2R1+k9i?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?bb9U/Xg2IruY0psBL0TEOeJty/7UEhjaAqCtvTF2mpkO4zqiJ7y+eRu0G5zG?=
+ =?us-ascii?Q?WfO3iQ1eXk9Yo1XkEkpuhFGtvRpH7fVvaf9k/1R6oMrbHwtcFk6vnhhD44as?=
+ =?us-ascii?Q?7Kim1p74LG9gYmZM+fQ8/6y8rc7LcHkyElUWVQfunK/kYlG4hcgOWiEjf56x?=
+ =?us-ascii?Q?YDNmSvtW81gDQme2c4rXWP9/V9JFQTdx+ML+v9XrSPiMiX2MLol76RRkEiXO?=
+ =?us-ascii?Q?HqOl46kcEDuO1pTSiiysEm1R2IdislqsELx5xXNNoYSE4Pm3ybydZznsQtok?=
+ =?us-ascii?Q?h/bDlXG5qHcco72nzHv6TRYOoyZdbxk3mzggu3DLe32j+hXILxy6HF6v3kp/?=
+ =?us-ascii?Q?jx5jhiXNrDsRal6DAl/xEBUl6KH4aQh4mHKOgz2mPRHZp0xfDr/g7K2NKaow?=
+ =?us-ascii?Q?EUA8TVfNoBU/wdx0BpFBGrmkEPS8gKUV0quWmpD+MsbiYj59UfgENmIuw8eC?=
+ =?us-ascii?Q?PMTvKZO1o6ocbd18x2MculsVZXNGLnRrwA2vexEOFGeE2Vm7w3QYmoKt3bsb?=
+ =?us-ascii?Q?ryoDAJPl0PrqhQuQP246wWk5UhEB7lCyeOCmA5EwbWyYabk7ojCoxASM6/jZ?=
+ =?us-ascii?Q?pvok5pFdWqxACa6BLlpvvsj4DjmNn6msDJYDacVfVQdyKFW1x19iemRPmyuf?=
+ =?us-ascii?Q?wpRmYhJnbMf8x5xgqYIWuVXNk57TN+Z9cd378D6xXuttYYuonksYYu9n3Zng?=
+ =?us-ascii?Q?BaZURd9JKmh9ItaV3p3SaJ6uTYo0WjOkePQdN+3TYz1WMZemxVU3MDdrfF3Y?=
+ =?us-ascii?Q?Dn/+KeMSh8TxQKyD1KFuPnR3sMFbeqSXeJn1fF8FO40qi6Wc5kxw33kRlVe6?=
+ =?us-ascii?Q?EhPRp1n9cOF5OOPruErFpKafnNs/0zFhspErLx4mK49f/t5elSLUqwDuivA7?=
+ =?us-ascii?Q?hDmWS4e2o85ucMToTI2bCCL0CIx8VrOUM9+UFWykaZ5nCbcR0Ne3tjFC0kP0?=
+ =?us-ascii?Q?YaoUquorhoJxxNZHyHp5Hr694hQFaVerj56XXpg6QvF6sY/iO5zndb11dZWy?=
+ =?us-ascii?Q?ejRwTMQWdrsMPJkEH5v03fIrjQOsgTUg/LQKyZeMl7s16dlViivnO5wQrY4L?=
+ =?us-ascii?Q?895z/k0tpKthIHW9bWvCZb9kQlPOlXo6KNi1pAuYH+aB2SuBqs9bxa01QClN?=
+ =?us-ascii?Q?PxcPSB5Hj1Mt7aiCuVUqu5DXOmnld61d4VqJvhttATb2DoOtBPP2oo+kN+nl?=
+ =?us-ascii?Q?JeecqOX/dJXAxXzWacsrKNaoGuwJP9OKRQaWtd/dzFftYQ+dkmSxVdHRJdos?=
+ =?us-ascii?Q?6zAKA3+xyEBdEZlTdrPZcZWpwn1dj5QbAXI4yEODBGtrKe868y1rdiJZrnAU?=
+ =?us-ascii?Q?9YypyusZHnlDavsDW+nF7AD4tNk7/X20JWh04WxVpOCL8qhDvPmOINWNsodx?=
+ =?us-ascii?Q?vF6d4ZkNJbPttkqYgM4iAniWwgaJcTx5RBXIwQYDEk7vt0YDmyCL4MjKjVwG?=
+ =?us-ascii?Q?ICFTkCw9IVVuVEBSR4vhjB6c9QZUxAYDVmkz+M2I2lDr0eYuUJHn9n4sp5Rw?=
+ =?us-ascii?Q?Ro1sysUXDjL0MuvRf0vKveCDS27CpBoAtQnlCXOjiWkQzVfBgR/xi36LXw23?=
+ =?us-ascii?Q?xPunYVS9LI6hlivJbCjMttKbISIAqDK7YhbcRpGi?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 27c3b383-a29c-47aa-6afb-08dcfe05f7a3
+X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Nov 2024 01:54:36.4302
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: JQRzTetVLMYRaSCBDYX3pJ2RFQQ61EltlUEk6Y1KXPaGCt6N6kreu6pn4sFfixOhM5GWYGG5MXjBAT/R9rxfng==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR04MB7276
 
-Hi Greg k-h & Alan,
+On Tue, Nov 05, 2024 at 03:56:00PM +0200, Roger Quadros wrote:
+> Hello Xu,
+> 
+> On 05/11/2024 09:14, Xu Yang wrote:
+> > The driver may go through below sequence when works as device mode:
+> > 
+> > dwc3_suspend()
+> >   dwc3_suspend_common()
+> >     dwc3_core_exit()
+> >       dwc3_clk_disable()
+> > 	clk_disable_unprepare(dwc->bus_clk);
+> >     dwc3_enable_susphy()
+> >       dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(i));
+> > 
+> > Then the driver will read dwc3 register after bus clk is disabled. If this
+> > happens, the kernel will hang there. This will move dwc3_enable_susphy()
+> > ahead to avoid such issue.
+> > 
+> > Fixes: 705e3ce37bcc ("usb: dwc3: core: Fix system suspend on TI AM62 platforms")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 
+> Thank you for the patch. But this was already addressed yesterday.
+> 
+> https://lore.kernel.org/all/20241104-am62-lpm-usb-fix-v1-1-e93df73a4f0d@kernel.org/
 
-Excuse me, both of you. I've noticed that you haven't replied to the
-emails for quite some time, which prompted me to send this one. I'd
-like to inquire if the proposal in the current email is feasible and if
-it can be integrated into the community.
+Got it! Thanks!
 
-Thanks,
+> 
+> > ---
+> >  drivers/usb/dwc3/core.c | 18 +++++++++---------
+> >  1 file changed, 9 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> > index de434f78c560..b0f1e32d426f 100644
+> > --- a/drivers/usb/dwc3/core.c
+> > +++ b/drivers/usb/dwc3/core.c
+> > @@ -2347,6 +2347,15 @@ static int dwc3_suspend_common(struct dwc3 *dwc, pm_message_t msg)
+> >  			    (dwc3_readl(dwc->regs, DWC3_GUSB3PIPECTL(0)) &
+> >  			    DWC3_GUSB3PIPECTL_SUSPHY);
+> >  
+> > +	if (!PMSG_IS_AUTO(msg)) {
+> 
+> This alone is not enough as device might have been runtime suspended before
+> system suspend and we will still try to access the registers below causing a fault.
 
-Duan Chenghao
+Okay. Good!
 
-=E5=9C=A8 2024-10-29=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 16:01 +0800=EF=BC=
-=8Cduanchenghao=E5=86=99=E9=81=93=EF=BC=9A
-> hi greg k-h,
->=20
-> =E5=9C=A8 2024-10-29=E6=98=9F=E6=9C=9F=E4=BA=8C=E7=9A=84 04:27 +0100=EF=
-=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
-> > On Thu, Oct 24, 2024 at 04:46:48PM +0800, duanchenghao wrote:
-> > > hi greg k-h,
-> > >=20
-> > > =E5=9C=A8 2024-10-24=E6=98=9F=E6=9C=9F=E5=9B=9B=E7=9A=84 09:05 +0200=
-=EF=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
-> > > > On Thu, Oct 24, 2024 at 10:40:38AM +0800, Duan Chenghao wrote:
-> > > > > When a device is inserted into the USB port and an S4 wakeup
-> > > > > is
-> > > > > initiated,
-> > > > > after the USB-hub initialization is completed, it will
-> > > > > automatically enter
-> > > > > suspend mode. Upon detecting a device on the USB port, it
-> > > > > will
-> > > > > proceed with
-> > > > > resume and set the hcd to the HCD_FLAG_WAKEUP_PENDING state.
-> > > > > During
-> > > > > the S4
-> > > > > wakeup process, peripherals are put into suspend mode,
-> > > > > followed
-> > > > > by
-> > > > > task
-> > > > > recovery. However, upon detecting that the hcd is in the
-> > > > > HCD_FLAG_WAKEUP_PENDING state, it will return an EBUSY
-> > > > > status,
-> > > > > causing the
-> > > > > S4 suspend to fail and subsequent task recovery to not
-> > > > > proceed.
-> > > > > -
-> > > > > [=C2=A0=C2=A0 27.594598][ 1]=C2=A0 PM: pci_pm_freeze():
-> > > > > hcd_pci_suspend+0x0/0x28
-> > > > > returns -16
-> > > > > [=C2=A0=C2=A0 27.594601][ 1]=C2=A0 PM: dpm_run_callback():
-> > > > > pci_pm_freeze+0x0/0x100
-> > > > > returns -16
-> > > > > [=C2=A0=C2=A0 27.603420][ 1]=C2=A0 ehci-pci 0000:00:04.1:
-> > > > > pci_pm_freeze+0x0/0x100
-> > > > > returned 0 after 3 usecs
-> > > > > [=C2=A0=C2=A0 27.612233][ 1]=C2=A0 ehci-pci 0000:00:05.1:
-> > > > > pci_pm_freeze+0x0/0x100
-> > > > > returned -16 after 17223 usecs
-> > > > > [=C2=A0=C2=A0 27.810067][ 1]=C2=A0 PM: Device 0000:00:05.1 failed=
- to quiesce
-> > > > > async: error -16
-> > > > > [=C2=A0=C2=A0 27.816988][ 1]=C2=A0 PM: quiesce of devices aborted=
- after
-> > > > > 1833.282
-> > > > > msecs
-> > > > > [=C2=A0=C2=A0 27.823302][ 1]=C2=A0 PM: start quiesce of devices a=
-borted
-> > > > > after
-> > > > > 1839.975 msecs
-> > > > > ......
-> > > > > [=C2=A0=C2=A0 31.303172][ 1]=C2=A0 PM: recover of devices complet=
-e after
-> > > > > 3473.039
-> > > > > msecs
-> > > > > [=C2=A0=C2=A0 31.309818][ 1]=C2=A0 PM: Failed to load hibernation=
- image,
-> > > > > recovering.
-> > > > > [=C2=A0=C2=A0 31.348188][ 1]=C2=A0 PM: Basic memory bitmaps freed
-> > > > > [=C2=A0=C2=A0 31.352686][ 1]=C2=A0 OOM killer enabled.
-> > > > > [=C2=A0=C2=A0 31.356232][ 1]=C2=A0 Restarting tasks ... done.
-> > > > > [=C2=A0=C2=A0 31.360609][ 1]=C2=A0 PM: resume from hibernation fa=
-iled (0)
-> > > > > [=C2=A0=C2=A0 31.365800][ 1]=C2=A0 PM: Hibernation image not pres=
-ent or
-> > > > > could
-> > > > > not
-> > > > > be loaded.
-> > > > >=20
-> > > > > The "do_wakeup" is determined based on whether the
-> > > > > controller's
-> > > > > power/wakeup attribute is set. The current issue necessitates
-> > > > > considering
-> > > > > the type of suspend that is occurring. If the suspend type is
-> > > > > either
-> > > > > PM_EVENT_FREEZE or PM_EVENT_QUIESCE, then "do_wakeup" should
-> > > > > be
-> > > > > set
-> > > > > to
-> > > > > false.
-> > > > >=20
-> > > > > Reported-by: kernel test robot <lkp@intel.com>
-> > > > > Closes:
-> > > > > https://lore.kernel.org/oe-kbuild-all/202410151722.rfjtknRz-lkp@i=
-ntel.com/
-> > > > > Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> > > > > Signed-off-by: Duan Chenghao <duanchenghao@kylinos.cn>
-> > > >=20
-> > > > What commit id does this fix?
-> > >=20
-> > > The current patch is not intended to fix an issue with a specific
-> > > commit, but rather to address a long-standing problem in the USB
-> > > core.
-> >=20
-> > So should it be backported to older stable kernels?=C2=A0 If so, how fa=
-r
-> > back?
->=20
-> yes, It needs to be backported. The stable branches such as 6.6.y,
-> 6.10.y, and 6.11.y can be considered for the backport.
->=20
-> Should we backport to these versions?
->=20
-> Thanks=20
->=20
-> Duan Chenghao
-> >=20
-> > > > And I missed where Alan provided a signed-off-by, where was
-> > > > that?
-> > >=20
-> > > In the following email, Alan proposed using "Signed-off-by" for
-> > > signing.
-> > > https://lore.kernel.org/all/489805e7-c19c-4b57-9cd7-713e075261cd@rowl=
-and.harvard.edu/
-> >=20
-> > Ah, missed that, sorry.
-> >=20
-> > thanks,
-> >=20
-> > greg k-h
->=20
-
+Best Regards,
+Xu Yang
 
