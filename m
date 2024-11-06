@@ -1,71 +1,71 @@
-Return-Path: <linux-usb+bounces-17200-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17201-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AA0F9BE3F3
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:14:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0A439BE3F4
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 528C61F24C07
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:14:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4D329B23BC3
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:14:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EB941DE8A2;
-	Wed,  6 Nov 2024 10:13:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C5EA1DE2C1;
+	Wed,  6 Nov 2024 10:13:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NIhROk7O"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ikmaFtrz"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 593191DE889
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 10:13:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FA6B1DE2BA
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 10:13:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730888006; cv=none; b=Q/YU8GwVGNpPUh9TKK4EQWW7qrH7Q2y2HyMCdef/3Nq5AdDRNCYb85M7BQOY0tAe1pWVTskZzqv8Fmd4e6HqvmkoYdiiKxVUs4W2CYuoHAl5e0Ksxsm3lerq4K6fPeTTf1a8WIOUvexUa+yqzR12pd5+uPx912Ra2caN3SI+yzA=
+	t=1730888009; cv=none; b=lnVK0ILN3Be5LW+dcwQfLqUvssWRNalHFySCetSo9W0ZQdR6RbCjFpKAgz4UwbuXYspjg5oPrsDUmJr7gHhsxKPrPVoWhr12THHyV/fkAr5lvZYaplCdJGFDHBz0paadsTtF7iSQFwr3l7Qf4J/DabbU4sJkgiWW0ezoCGYtC0M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730888006; c=relaxed/simple;
-	bh=rNjVof70rreHdzjKu0X5PBB0SfsBcqUjXht8B1JT1EQ=;
+	s=arc-20240116; t=1730888009; c=relaxed/simple;
+	bh=xPnncC2wTinnsqvRulyZjDNfjp1oi2Wkye5abU3hCPE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J/7W4XgmgWahowDCUEt1kg7TfnYjyzhCMm875C/RVYfRFn6N1tueyXLOV359Ls8l+v+p1NZv9OKgmA7+WXsFoKPHHmOmfnyhln/+wbFRbPqAZzdLvFSulJQ4kUvYEcV5qVp8f5N1eNnpRCGazYWIW5L2nMhuFc3CR9wPtNQpR7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NIhROk7O; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=iAJuJXhbrrGCbZnmTXZ06WI0MA+64S7HuiG/D/O3V3sxy5pLJEqG6T8CB3HfDcjJx4UiPmbubJ/5ytKg1p2p8Q3w2uxxq+Dg1aZHzbA1QPVn8+0C5oH/7fG4As721xb5KbLovhdsdSwLnNw69aIm/5gJAxZ7QalvyK4ySYMPjmE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ikmaFtrz; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730888005; x=1762424005;
+  t=1730888008; x=1762424008;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=rNjVof70rreHdzjKu0X5PBB0SfsBcqUjXht8B1JT1EQ=;
-  b=NIhROk7OldeVE6QcYME77PHtBtknyi4lfxiWkRatIZLyWJ1uVlvmdRcY
-   PrRsiFA2gdZw4pEYdHyRDYW5j6zszFV8VtfQkKrGRM45p2Cefb1eg/wG9
-   9AE93ZVcVBNSATuIwOXBLrURQu/C3txa4SSdnVEdvl57dI9vpxzHeNGb4
-   kFxZ+8SkEfNyghjzAnqpaufHbiI9aqdxa0yyYpdnJSjjNQ3E4h/ID2QN9
-   mIPwya9wTb7jCh4Sg8TBcNz0JN3/skOiipM0v+v/wt8sLvRBwq2zGPuxS
-   tREKIO4BjA+Y2fgUbvBW1xmtFMeNjsUr42G974NO3EZ/8gsSnMYAEy+JD
-   g==;
-X-CSE-ConnectionGUID: D5C+i/KySoaicaczCMUBTQ==
-X-CSE-MsgGUID: Y/hGy0EERBWz1qsDXdeGmg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="42059459"
+  bh=xPnncC2wTinnsqvRulyZjDNfjp1oi2Wkye5abU3hCPE=;
+  b=ikmaFtrznzN6EQj2NyV33Q7guXiUdIUdkN0F9aJPr5So7MhMa/FLODHZ
+   6sbDhhDIDY89+Fz/eqzmWS63YxP2qTPcAr3q2r476FlOEzVzDFflntnt9
+   Meql2+lvQ7odwwFRAU45AqwBF/2mCm4cAzbo4V4NFoVlx7dTmjMc9UfTU
+   lGe9Ax3Gstuo2StIr9v5as2JnJOCJI2i7+xUbnkX2uFEOHmZiTL4p2EMG
+   RRvn1blvhdlYVqyPz/rIgRK+vTXJC4C9Q64+vovkyNxfES0ejXqQYiq7G
+   1yzhA9TKjxdpgoLEsuF+flWaGqs4o6wXunHsQtDAmHZitmbgqJdfF5AUn
+   A==;
+X-CSE-ConnectionGUID: 9w8w3tBWQiKvG+IRHw9BCA==
+X-CSE-MsgGUID: amLOTmfYQhiWnhSFSDty7A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="42059467"
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="42059459"
+   d="scan'208";a="42059467"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 02:13:25 -0800
-X-CSE-ConnectionGUID: uEYEhz4ZS2aobLX4GTzdIQ==
-X-CSE-MsgGUID: bCTmTM19QOGBTDbHWvB6ig==
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 02:13:26 -0800
+X-CSE-ConnectionGUID: m3Dqe88JTaO27Dp8/n58hQ==
+X-CSE-MsgGUID: 39F/KqGrQSK0IRfDw/uTVA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="84813354"
+   d="scan'208";a="84813388"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmviesa010.fm.intel.com with ESMTP; 06 Nov 2024 02:13:24 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 06 Nov 2024 02:13:25 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
 	Niklas Neronin <niklas.neronin@linux.intel.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 25/33] usb: xhci: request MSI/-X according to requested amount
-Date: Wed,  6 Nov 2024 12:14:51 +0200
-Message-Id: <20241106101459.775897-26-mathias.nyman@linux.intel.com>
+Subject: [PATCH 26/33] usb: xhci: improve xhci_clear_command_ring()
+Date: Wed,  6 Nov 2024 12:14:52 +0200
+Message-Id: <20241106101459.775897-27-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20241106101459.775897-1-mathias.nyman@linux.intel.com>
 References: <20241106101459.775897-1-mathias.nyman@linux.intel.com>
@@ -79,42 +79,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-Variable 'max_interrupters' contains the maximum supported interrupters
-or the maximum interrupters the user has requested. Thus, it should be
-used instead of HCS_MAX_INTRS().
+Remove redundant TRB cycle reset, the TRB cycle is already set to zero by
+the preceding memset(), making the explicit reset unnecessary.
 
-User set 'max_interrupters' value is validated in xhci_gen_setup(),
-otherwise 'max_interrupters' value is 'HCS_MAX_INTRS(xhci->hcs_params1)'.
+Clarify ring loop start point. Change the loop start from the dequeue
+segment to the start segment. Both approaches achieve the same result,
+but starting from the start segment makes it clearer that the entire ring
+is being zeroed out.
 
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-pci.c | 11 ++++-------
- 1 file changed, 4 insertions(+), 7 deletions(-)
+ drivers/usb/host/xhci.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index b1f4dd3f9eff..47c4f70793e4 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -149,14 +149,11 @@ static int xhci_try_enable_msi(struct usb_hcd *hcd)
- 	hcd->irq = 0;
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index e5719fd45a38..bc477cf99805 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -778,10 +778,8 @@ static void xhci_clear_command_ring(struct xhci_hcd *xhci)
+ 	struct xhci_segment *seg;
  
+ 	ring = xhci->cmd_ring;
+-	xhci_for_each_ring_seg(ring->deq_seg, seg) {
++	xhci_for_each_ring_seg(ring->first_seg, seg)
+ 		memset(seg->trbs, 0, sizeof(union xhci_trb) * (TRBS_PER_SEGMENT - 1));
+-		seg->trbs[TRBS_PER_SEGMENT - 1].link.control &= cpu_to_le32(~TRB_CYCLE);
+-	}
+ 
+ 	xhci_initialize_ring_info(ring);
  	/*
--	 * calculate number of MSI-X vectors supported.
--	 * - HCS_MAX_INTRS: the max number of interrupts the host can handle,
--	 *   with max number of interrupters based on the xhci HCSPARAMS1.
--	 * - num_online_cpus: maximum MSI-X vectors per CPUs core.
--	 *   Add additional 1 vector to ensure always available interrupt.
-+	 * Calculate number of MSI/MSI-X vectors supported.
-+	 * - max_interrupters: the max number of interrupts requested, capped to xhci HCSPARAMS1.
-+	 * - num_online_cpus: one vector per CPUs core, with at least one overall.
- 	 */
--	xhci->nvecs = min(num_online_cpus() + 1,
--			  HCS_MAX_INTRS(xhci->hcs_params1));
-+	xhci->nvecs = min(num_online_cpus() + 1, xhci->max_interrupters);
- 
- 	/* TODO: Check with MSI Soc for sysdev */
- 	xhci->nvecs = pci_alloc_irq_vectors(pdev, 1, xhci->nvecs,
 -- 
 2.25.1
 
