@@ -1,181 +1,125 @@
-Return-Path: <linux-usb+bounces-17230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BDAE9BF185
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 16:24:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A0759BF204
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 16:46:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FE5A1C2042B
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 15:24:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B617F1F23C68
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 15:46:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B70FF202F6C;
-	Wed,  6 Nov 2024 15:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3C5B204944;
+	Wed,  6 Nov 2024 15:46:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="l9QiK9pb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tTguHRgE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f195.google.com (mail-yb1-f195.google.com [209.85.219.195])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645BB1D63D3
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 15:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A012040B9
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 15:46:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730906669; cv=none; b=W8euWWfHwcZkODZvrtV47l0FKcrmCDv46MUosu+VNtA7LOue5QsPnagwaSWiMFvHa7IzO1t3cABMJDa4QbmTzBvTO3MAcRv5AMDUKwkhVYdQfJjLwK63KI4bWtEs8rwp2glUs/YXyf+Ep5VW+saiKEgcGKkfKqiURitBqbzL3aI=
+	t=1730907969; cv=none; b=YzhX0NsHelNTEwT/E2BEHvgCkyQ4axTVYpK5pCuBLO+VFk/obM6zcyRlo3FtIPq3HlVbyQHlZJ+pBgjW6koQ8d3Hy2hIo2tsQ589gJmByXxE5QZ86pDVexJrKew7lO7tVjSlbhcPfiSxZYmYxBsIF0VfMIREJ90ElQza/4dWaIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730906669; c=relaxed/simple;
-	bh=iWVoDSt16/6SO5SD84UmBUUnrUw2s3QZdnSOMTCJeEI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TC0kq9APG6gQU6vYlwqX269aZDM3svEkB2DhQJ9a5I2pL//o3VOvLnMprMpDj1SRx87RWZsG9u4VHlMvZb7o8NRCb8s3chk05KzG/qaxTXi7kjKpsGRSjJrTgD2oEI1VguNl+bY8H6hau2iGEzBL7IgkdSW4dUJiwO345X9ouFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=l9QiK9pb; arc=none smtp.client-ip=209.85.219.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-yb1-f195.google.com with SMTP id 3f1490d57ef6-e0875f1e9edso8634228276.1
-        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2024 07:24:27 -0800 (PST)
+	s=arc-20240116; t=1730907969; c=relaxed/simple;
+	bh=Q49gOcM+mbJ/X0FzkUv6ZaqCBSB1WkTEYzQp4xtHpmI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EmE/USrndNJ7QpR9tfS/2Gw42oTmPJPJpUKMUbc6bU49DFzBGKz0L8FroiDDRXHmLbwCwjwaRHmmbNc8D86UrWxJas8DykWaRM+cpTz3t31a8AgB66t7akVT3UG3A/S8YmgYYBAtMIBHTSXlKv088G3cmsJ5cvL3vN54jIWkenw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tTguHRgE; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-539f8490856so7234375e87.2
+        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2024 07:46:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1730906666; x=1731511466; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fRspcGjZXal6pVniQMFb2Ir3HusABO8VA+M0NXCiYpo=;
-        b=l9QiK9pb61EDbK+q40+lacw6OCQHJvHJpWYhMVMneOLECvV3+BiQVfOAT7RSuadXb9
-         jIMRJ0j+BserF9oebGk4Hn5tPwd8KEu+3vbETjbehAJE7ZZ0LOC7TrXIwIBTK9lkwrKG
-         /E93qQIryUg1tF+li6tSGnQPmBQBX9UHHdNvmUGpQdSDcJMxuBK/TMZCSbUBt3xy31Dg
-         FI72vjCbHnOYe0QcP+E2jx61qCHshZFAa3zClCIUlQpNEUhMs4WuFA8RmBGXjmdMmwES
-         0z6PaZMqsXTJVe+QpB8r9p0lne5lpnNenHGwIaJp2eOaXpg2bM2TN7Lbtew1hPlDBR16
-         hKSQ==
+        d=linaro.org; s=google; t=1730907966; x=1731512766; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TPNYTRPf8ptxBHF8ylH/q3ROnS54WebHSzeYDR0rcWA=;
+        b=tTguHRgEsfCkcqN6t384GEC3zdht21+Lgdaiavo0QU5BSK3D0s3Kcc/9ULfCO3beV6
+         ll+TwIHVbzpC1IYyOWYq7c9WHLXzRUBomLnteR+GlRGf9vbo+iAZzDGW4akHzvD6E0Q+
+         WGVHyYAYDYxAPjiHTRPjLOpf8uo+SO4Kr/ZRHinEwnFiFrYtgFS8s1/hqDtO77BnvfUy
+         shUoyWrwwzWTtykWeamoYaepyBM4HVePMJt+VDZeS4hLI6TUrvdK4mB+0Cg37CysYPWO
+         EKveAyZElC9kcZ3s69c0YuzA5Tp5W1ui2FRJZFPfBq4JUKwCwNq+LUcE6vmAkfc7z3k3
+         e+Cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730906666; x=1731511466;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fRspcGjZXal6pVniQMFb2Ir3HusABO8VA+M0NXCiYpo=;
-        b=QmmptnCP/AFpcEa/GEtqEdIFYxLy4tQ/aCLU6D2FNvszPElcw4YArbc1VHUWq5y/v2
-         soKUtwRYA/QbIiOM20NkcGIx0p/EXdn9h3Hc+WyX86NKs6gVkpZxO9LoJeBkcQft9SzD
-         VgHMnzuMJSePQ3db5ULIMLl3X13kPDo65MQi5bSbnfs9sbEI19xk2ibSdFXto9udII49
-         z+8bQYMtkxOjdHmLtUHwyxw8PatDd8YW+S1jeTUt5qXej++B880OU/+sfECarcdGXSyE
-         e7GI7VuHOHr+Vj1b/2XuLggXCqCN26NQpqjA24V6OmOX4vEJVrZfqRuWvv9LdHmuRtMU
-         k2vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXJkng/05wxQwONGCDmGtIt0EfRr/wXR6fiCHVxPmW/O0zPMeiFbZ5PUl5ljoLASi/F4Dehj5pcO8w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlIHLhnbYJtPgGX9bsmzCqoDjLRhnWMFxWvVvL8jJ/OKTSpSVR
-	QwbgdgZDxP+bqPGlRJRKLzdGoXWhwxCQxUusxucKyh/oLCdIER38tBrbiRPvcA==
-X-Google-Smtp-Source: AGHT+IGNIss1AEKTBNYwl9sR8shJAHZm84ppXhYfRfU/5Vn/q6gPrYZLUSgXJrtIV3Yu6ad0dHJMRw==
-X-Received: by 2002:a05:6902:1083:b0:e30:e3f6:75ec with SMTP id 3f1490d57ef6-e30e3f676dbmr22722700276.17.1730906666231;
-        Wed, 06 Nov 2024 07:24:26 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.12.5])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-462ad19b328sm72514791cf.85.2024.11.06.07.24.25
+        d=1e100.net; s=20230601; t=1730907966; x=1731512766;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TPNYTRPf8ptxBHF8ylH/q3ROnS54WebHSzeYDR0rcWA=;
+        b=WHsj//MW5/0IFW4CyzV/E0mTzooPcoqXR9rGwnKXJjLd7xN0R/MeRd8moEpNJ6hthw
+         aAW/dJoXsi92eVYTUhTOqJ4tneg3oqgvDx+dIaCnDd42dB3/hgjzngkqHRx/nDfe+b+C
+         oBLMYKXGXo/hNpVgQXrHw2vh70XJcFQaYpNQPtR2UKI6RwEwKcNCIB0r99MolDbWAFzb
+         cAMMHt+owQQAc0NOe4LGwcyF4gSAV7Npzrp9woZBxXG/ZACcdPEuZYG+7OZvGaw15x+y
+         SM482rgspXGryzJE/AHEB2Hrx/U/XfjmWlTMtQkzq4Kl4fq1eta1V5ycZRmtzHhyqKzG
+         qNVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWjJSp3wP6S3JO14fu4AN7L4whH4Xf81d9ZWrobERjoHZgj2blzxYzMfUHD+H6RyeTSYhNEWdznviE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzM+eOn5QkKyKtYDAYSMJHBILoRBxqC33Ky6s4eGTitqcfqvCop
+	QvX0FA9o1c6YP0Z4XenIqmjqJnOVOwxG7UcE3jG2zS/nqPjwLzjT+kIR61vrnZc=
+X-Google-Smtp-Source: AGHT+IEje9ZCjPgnwh2eoFubhHb7G/8/Iew+6zmeklBYZyJn3+HazClQLCGTRuOTDb2bq/nr2kD8gA==
+X-Received: by 2002:a05:6512:3d16:b0:539:f763:789d with SMTP id 2adb3069b0e04-53c79e91262mr12180687e87.43.1730907965746;
+        Wed, 06 Nov 2024 07:46:05 -0800 (PST)
+Received: from umbar.lan ([192.130.178.90])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53c7bc9598dsm2536626e87.22.2024.11.06.07.46.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 06 Nov 2024 07:24:25 -0800 (PST)
-Date: Wed, 6 Nov 2024 10:24:23 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Chang Yu <marcus.yu.56@gmail.com>, gregkh@linuxfoundation.org,
-	viro@zeniv.linux.org.uk, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, skhan@linuxfoundation.org,
-	syzbot+3e563d99e70973c0755c@syzkaller.appspotmail.com
-Subject: Re: [PATCH] usb: raw_gadget: Add debug logs to a troubleshoot a
- double-free bug in raw_release.
-Message-ID: <c616753b-2dfa-4d47-8e59-ae6fdf857708@rowland.harvard.edu>
-References: <Zyrsg3bvNu1rswqb@gmail.com>
- <CA+fCnZeThG-J7kCraPbr4NCpys=jne3dD4sOLT_0h6iPw2YZEw@mail.gmail.com>
+        Wed, 06 Nov 2024 07:46:04 -0800 (PST)
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [PATCH 0/2] usb: typec: ucsi: glink: fix and improve orientation
+ handling
+Date: Wed, 06 Nov 2024 17:45:53 +0200
+Message-Id: <20241106-ucsi-glue-fixes-v1-0-d0183d78c522@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CA+fCnZeThG-J7kCraPbr4NCpys=jne3dD4sOLT_0h6iPw2YZEw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADGPK2cC/x3L0QpAQBBG4VfRXJvaHXLhVeRirR9TQjuRkne3u
+ fw6nYcMSWHUFg8lXGq6bxm+LCguYZvBOmaTOKm9dw2f0ZTn9QRPesM4iIMMEhyqQPk6Ev6Qp65
+ /3w98cUCoYQAAAA==
+X-Change-ID: 20241106-ucsi-glue-fixes-a20e2b2a0e3a
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogeurs@linux.intel.com>, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>, 
+ Johan Hovold <johan+linaro@kernel.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=718;
+ i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
+ bh=Q49gOcM+mbJ/X0FzkUv6ZaqCBSB1WkTEYzQp4xtHpmI=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBnK487VXuui0ptL/OP97jyLJzCJD1cVnh5S8z94
+ gHmkVJOihiJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZyuPOwAKCRCLPIo+Aiko
+ 1aBGCACgjxYYqsd9fF9EKZaWCqCJdjJIrN9pbh0eugxHPXCawg+Lg1in+flKfjZkyorPArG/5t3
+ EOsYX9MTpgY9ZVdpOrmGFXRjANaFCVBC0MUu7r2sGkhMhyqHrJsTcwPg04/Ip9PYYXzy7JpWp2Q
+ UXvFd+ZrdRf3c+cKiwXWdx3Cm+MNkEDYgWdosK5f4zfy1ldWmZIl67L0z1vInoUH6CRmvgEK3QD
+ V5fKYj4NKebHvovzlnoZGn0XZ164ld6Wxg6zGpOG83VayqCxxD7nhpEwn5x2xP1ca7wrYTfdtW+
+ VH8F8qx6Zi6R2HMY3sBiUuSbRPECq69cMP14Wbi1q2KPhUXk
+X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
+ fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-On Wed, Nov 06, 2024 at 01:35:27PM +0900, Andrey Konovalov wrote:
-> On Wed, Nov 6, 2024 at 1:11 PM Chang Yu <marcus.yu.56@gmail.com> wrote:
-> >
-> > syzkaller reported a double free bug
-> > (https://syzkaller.appspot.com/bug?extid=3e563d99e70973c0755c) in
-> > raw_release.
-> >
-> > From the stack traces it looks like either raw_release was invoked
-> > twice or there were some between kref_get in raw_ioctl_run and
-> > kref_put raw_release. But these should not be possible. We need
-> > more logs to understand the cause.
-> >
-> > Make raw_release and raw_ioctl_run report the ref count before
-> > and after get/put to help debug this.
-> >
-> > Signed-off-by: Chang Yu <marcus.yu.56@gmail.com>
-> > Reported-by: syzbot+3e563d99e70973c0755c@syzkaller.appspotmail.com
-> > Link: https://syzkaller.appspot.com/bug?extid=3e563d99e70973c0755c
-> > ---
-> >  drivers/usb/gadget/legacy/raw_gadget.c | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/drivers/usb/gadget/legacy/raw_gadget.c b/drivers/usb/gadget/legacy/raw_gadget.c
-> > index 112fd18d8c99..ac4e319c743f 100644
-> > --- a/drivers/usb/gadget/legacy/raw_gadget.c
-> > +++ b/drivers/usb/gadget/legacy/raw_gadget.c
-> > @@ -194,6 +194,8 @@ static struct raw_dev *dev_new(void)
-> >                 return NULL;
-> >         /* Matches kref_put() in raw_release(). */
-> >         kref_init(&dev->count);
-> > +       dev_dbg(dev->dev, "%s kref count initialized: %d\n",
-> > +               __func__, kref_read(&dev->count));
-> >         spin_lock_init(&dev->lock);
-> >         init_completion(&dev->ep0_done);
-> >         raw_event_queue_init(&dev->queue);
-> > @@ -464,13 +466,21 @@ static int raw_release(struct inode *inode, struct file *fd)
-> >                         dev_err(dev->dev,
-> >                                 "usb_gadget_unregister_driver() failed with %d\n",
-> >                                 ret);
-> > +               dev_dbg(dev->dev, "%s kref count before unregister driver put: %d\n",
-> > +                               __func__, kref_read(&dev->count));
-> >                 /* Matches kref_get() in raw_ioctl_run(). */
-> >                 kref_put(&dev->count, dev_free);
-> > +               dev_dbg(dev->dev, "%s kref count after unregister driver put: %d\n",
-> > +                               __func__, kref_read(&dev->count));
-> >         }
-> >
-> >  out_put:
-> > +       dev_dbg(dev->dev, "%s kref count before final put: %d\n",
-> > +                       __func__, kref_read(&dev->count));
-> >         /* Matches dev_new() in raw_open(). */
-> >         kref_put(&dev->count, dev_free);
-> > +       dev_dbg(dev->dev, "%s kref count after final put: %d\n",
-> > +                       __func__, kref_read(&dev->count));
-> >         return ret;
-> >  }
-> >
-> > @@ -603,8 +613,12 @@ static int raw_ioctl_run(struct raw_dev *dev, unsigned long value)
-> >         }
-> >         dev->gadget_registered = true;
-> >         dev->state = STATE_DEV_RUNNING;
-> > +       dev_dbg(dev->dev, "%s kref count before get: %d\n",
-> > +                       __func__, kref_read(&dev->count));
-> >         /* Matches kref_put() in raw_release(). */
-> >         kref_get(&dev->count);
-> > +       dev_dbg(dev->dev, "%s kref count after get: %d\n",
-> > +                       __func__, kref_read(&dev->count));
-> >
-> >  out_unlock:
-> >         spin_unlock_irqrestore(&dev->lock, flags);
-> > --
-> > 2.47.0
-> >
-> 
-> Hi Chang,
-> 
-> This patch looks very specific to the bug we're trying to debug - I
-> don't think it makes sense to apply it to the mainline.
-> 
-> What you can do instead is ask syzbot to run the reproducer it has
-> with this patch applied via the #syz test command.
-> 
-> Thank you!
+Fix an off-by-one issue which resulted in USB-C connector #2 orientation
+being reported as unknown. While we are at it, correct the way we set
+orientation_aware flag for the USB-C connectors.
 
-In addition you should change your dev_dbg() calls to dev_info(), 
-because dev_dbg() output will not show up in the syzbot console log.
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+---
+Dmitry Baryshkov (2):
+      usb: typec: ucsi: glink: fix off-by-one in connector_status
+      usb: typec: ucsi: glink: be more precise on orientation-aware ports
 
-Alan Stern
+ drivers/usb/typec/ucsi/ucsi_glink.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+---
+base-commit: 0a2598971f04649933bd38f5db241b3bf23c04ec
+change-id: 20241106-ucsi-glue-fixes-a20e2b2a0e3a
+
+Best regards,
+-- 
+Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
 
