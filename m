@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-17149-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17150-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 882969BDC91
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 03:25:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2FD79BDCB7
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 03:29:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA0961C22FFC
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 02:25:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B18E1F29790
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 02:29:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DECE81F5825;
-	Wed,  6 Nov 2024 02:13:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA8F1917D4;
+	Wed,  6 Nov 2024 02:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NutuQfXG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ejr2rN/s"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6030E1D27BE;
-	Wed,  6 Nov 2024 02:13:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38332217339;
+	Wed,  6 Nov 2024 02:13:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730859186; cv=none; b=IZ9qJ+dB8PceUF7EJyLInM6ZwFC6wcOlg4+vXzMd52+2/GQbKZShq3qwYp828NOOIhLBgtLm3P9SVoeU3ahFJ0474ynDxWVnlZBHd050o/PDkDmWuESox/nZHSH9vDztsaKvffqjLwGIK9rPKReHWS8XO6udCf6OmAyV5XrmLUU=
+	t=1730859238; cv=none; b=ZATP36QXlaa7Uf8wiZcImg69dxcvSZ3ACpQxeaVWknwivlZ+ufeRSBNz5bb+yzEiREpu1qWhNHTUe6pdRCOhGHcYpi8SPOKEAld7hMmZude9PbqQQ78zY1RH1Cn8Y5jjvbEZNToRP9WbWPrx8fggY9Lkd/nD5AaHt3hrHGvPZ/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730859186; c=relaxed/simple;
-	bh=8A+xwRYV8w2bO7e1YA6Gj/62ESsKxVSjlFT0mV8BIVw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TkclbWRv2RdC55/Kh6gecPBlcu4GuOkXIZdDgC7lG9Yl1Eav75ywBkzzhKR87Dgv/VnbXFKwc/KUmVqKW3W49OkpW76LtWv+R2j9A+ZOIqZZqAoJ49phzdsKK5GFckA+HEQNaP4ogSgML5tEaRzNtvSso48VRKdso2Fgnyhk9Hs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NutuQfXG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAECAC4CECF;
-	Wed,  6 Nov 2024 02:13:04 +0000 (UTC)
+	s=arc-20240116; t=1730859238; c=relaxed/simple;
+	bh=iZHtLUDZRPpzSYKnNoP++IxuwIO4YiN99cYkpFMj2JQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WUSGQb0LILJLRqk+xvciXsteLe8lioEYKygjjeI4Q3pExHpCilBnhhEODzNdsCEpiw9xm5E5XFd3hozP8olrvmQV/MiUaLhD+OATKUZ/FlhRWQXCocsswEdczdB4MMk/w2RpvCqFhknlxhzQGxtcTT8pIeUPYlT4f17DRjC35UY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ejr2rN/s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50DFBC4CECF;
+	Wed,  6 Nov 2024 02:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730859186;
-	bh=8A+xwRYV8w2bO7e1YA6Gj/62ESsKxVSjlFT0mV8BIVw=;
+	s=k20201202; t=1730859238;
+	bh=iZHtLUDZRPpzSYKnNoP++IxuwIO4YiN99cYkpFMj2JQ=;
 	h=From:To:Cc:Subject:Date:From;
-	b=NutuQfXGkHKbadHKjr/95kvs2OtmuIiLbZbGs+Q2vULFyEL0CrspeoP6AOjmrBcwj
-	 7Pz6Lb6wlS0iXFwCx+2Sc4ENkTyZneD/YQTTAB1yyqzwXEAcWSsr7r+FrlNwoU0SN1
-	 VFfsYiHQZ7ObD7pbK0onJXOJjm5pZr93w/+EHOiEQP36Y1pUOaI3AY020HhCLJ8cu2
-	 4wkOBHlmBlFfbsZW0bw3WFvS1e4TLMUDLYODSr1/dQ/SgGZsgbb2CA9R8/rSwllndn
-	 6WxbFWYy6s0QnCE53E92GsvsmsJSDMd2IMcQfa2vsFpoq3Ghi4P03StTvfgI2funX7
-	 WjEKjSpWVyE0Q==
+	b=Ejr2rN/s3DNVnZL9RlUohB47LKXBYyIxs9xVK1P5WIXk+G8BP7ODgCy+Imhxw+4dg
+	 Jv5sl20DL+Oy/NyYtKC+cMBhZxgq1aGw0pCZkv+7EusYB8iwvmQWnnL23+tuF/M9Ma
+	 x23mlsLxPGw9uJgnXUKoWYCo3rYRpNrzcqDI3CLq02UQRHGw+r8oPjAHTbAp8eh0Zb
+	 BiODnuvwYcVVCETMmA01UXUDtohaDBcI6v3tfrAnHamLDzl4Cem10JwI3JUqH3BbF3
+	 li8ifIxrkmvPlK+FhhKAb6Hm2PJslfVKLMsGKL0osr2+ocoTsD/jKjUnmxND6fk0TA
+	 vlPho9FC8XcOg==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	gil.fine@linux.intel.com
 Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: FAILED: Patch "thunderbolt: Honor TMU requirements in the domain when setting TMU mode" failed to apply to v5.10-stable tree
-Date: Tue,  5 Nov 2024 21:13:02 -0500
-Message-ID: <20241106021302.183334-1-sashal@kernel.org>
+Subject: FAILED: Patch "thunderbolt: Honor TMU requirements in the domain when setting TMU mode" failed to apply to v5.4-stable tree
+Date: Tue,  5 Nov 2024 21:13:55 -0500
+Message-ID: <20241106021355.183925-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -60,7 +60,7 @@ X-Patchwork-Hint: ignore
 X-stable: review
 Content-Transfer-Encoding: 8bit
 
-The patch below does not apply to the v5.10-stable tree.
+The patch below does not apply to the v5.4-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable@vger.kernel.org>.
