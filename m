@@ -1,72 +1,72 @@
-Return-Path: <linux-usb+bounces-17184-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17185-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F39A9BE3DD
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:13:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA0499BE3DE
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:13:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A35891C23122
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:13:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69FED1F24C3D
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:13:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B25D1DDA33;
-	Wed,  6 Nov 2024 10:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDF411DE2B2;
+	Wed,  6 Nov 2024 10:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KJYUVk5E"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GLkBTL9b"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E6881DD0DB
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 10:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042931DDA17
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 10:13:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730887981; cv=none; b=RrP/2yyVG/FCxbYE/mYuvYdfImW8VcB8nQ4oeGECFb0rHfrPkVkeGF9tVQNFaDBIoqa/q8VdaC/ayOLQuVnQYBgneGN6ANf1p+CMDjizB0w6XF6n4jQmqM6E+r+uZgZrcIM40VoG/OONVfNo2VlrQ21mgPAAqNym9jE6EbZQX5M=
+	t=1730887983; cv=none; b=ONXq9D8JfRZe3/LwV8DSrigiRAJoSYADRRAZpO031j/sQZd+zp7EqiFOeMkR4IecscVJXrpAg6yADDujksxGGd5+4YUlrHbpLzJftgv+KbvINQs9b5nZuGfe9BWGECVlILPsW+lSR8jY1jHxyTlRNVbpCZczgnWpZ0quzAETyIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730887981; c=relaxed/simple;
-	bh=2Z/Ahek/DrgotZ6pVoDttPtts1yWkjqZF/PbnwlMHNA=;
+	s=arc-20240116; t=1730887983; c=relaxed/simple;
+	bh=7FMZEg3rWBCfXHTP9nAeVFE261EGB/fafGgy/2IQiGo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=UtjBOGwlaLF6fqewaAGMPZ4v3CihRRoDHJBWjRgq0HCp4sDBL2NJ5W58Yu7+VDUYgUYCpNm0zkOq6aOePiJcuv17LiqCBu1zAqluSL0d8lMclOQAziRuiIq+8yuz31GyH2tf7FpXLRkyqCIgkLAbk/npcga/5TRIGXKQHL4hSys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KJYUVk5E; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=MFqTjPYztBpYXWhJq5/kFPpTf3FX4IM/dk4q4q3oGJCTMhZRVP0SwvyuaGCT6tqKycLB2X56eibCIw4RdmYNps8qLb/e+aY1Hyub8kjqNjDZUJT47UKT7l8W31baPHTp6tumXXjpp9urbjllTl/79/5S+1yjkxBIoIBky0zdibE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GLkBTL9b; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730887980; x=1762423980;
+  t=1730887982; x=1762423982;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=2Z/Ahek/DrgotZ6pVoDttPtts1yWkjqZF/PbnwlMHNA=;
-  b=KJYUVk5EL0YIRZ2kxfJ82zDddSdbcjTQ9TPpVBGE0NZopZXmVAksI5E7
-   G0sYdNeWFqno3r1ynEuVqUcd/n896BfTH6mGzQ3DoyYqlYc+8iQUTyB5s
-   7kI7dVB+EuNcKWb2pb81MQmdVMLophf93iowZ8WxQFOG+XbfeKvjIp/Au
-   +t4YVXMPHs0dng/BFbGDWD1OEkpn9Q1NOBQiGdqsA8fSn5K+eIs/22LSZ
-   dulMeM21C8D41+Pfx3lMAAeV34ScOAZv/SHwFMgaFnp3iXAcBEZGcJmtQ
-   WenLDro4qfBzpq8UvchFDBxGM2sXqMik5OVFQ25qbAvzRWX8qfwJPwv/r
+  bh=7FMZEg3rWBCfXHTP9nAeVFE261EGB/fafGgy/2IQiGo=;
+  b=GLkBTL9bnQ9p1Yd6voDSViy8jJVLe17IMUt0WzrlVD6FvQZzKzCa4kZ7
+   wDRcZQZZUm/7jN8W4BVbcEA2HYGlRnr+8ZCfH/4kRH4KKUkwXQJQGLP2l
+   pboOOV3qSUfO0Qj2SpqjY2H2DfOqFqcE441T+dLD1CxlRtUpa5XgkyoBW
+   IEAr6mnmPypfQS+acG+qC8ukAiOVVal4LnQARNqzCRv1IfBJYTT1ucWqt
+   yyAmfROLxye/rab4Rzwzt4rPFK6GS86XOeyOjolNRnMnXiPSmntDmWqOR
+   88jWwM0rPt1wkxBEu29mATcs4busb/47aqG+rPJtfamsA1Rf1YRIfmthJ
    Q==;
-X-CSE-ConnectionGUID: 8QLu/AEXR/aZEW0ZhoascQ==
-X-CSE-MsgGUID: wu+3jGE4R52NIbEG+I4P0g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="42059392"
+X-CSE-ConnectionGUID: D9t18XGJSCClnJLu4WVE5A==
+X-CSE-MsgGUID: 4sLacFaESo6wyg9hHhJW5g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="42059396"
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="42059392"
+   d="scan'208";a="42059396"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 02:12:59 -0800
-X-CSE-ConnectionGUID: T6U4wM4uQsq9SBqAbyFsMA==
-X-CSE-MsgGUID: Rv64L2I4TwWuFQeNYYjRhQ==
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 02:13:01 -0800
+X-CSE-ConnectionGUID: rpJRtWNdSCe97A8v9svAOQ==
+X-CSE-MsgGUID: A9M8sLjpTmKUj+fbv6yKhg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="84813048"
+   d="scan'208";a="84813077"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmviesa010.fm.intel.com with ESMTP; 06 Nov 2024 02:12:58 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 06 Nov 2024 02:13:00 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
-	WangYuli <wangyuli@uniontech.com>,
-	Xu Rao <raoxu@uniontech.com>,
+	Niklas Neronin <niklas.neronin@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 09/33] xhci: debugfs: Add virt endpoint state to xhci debugfs
-Date: Wed,  6 Nov 2024 12:14:35 +0200
-Message-Id: <20241106101459.775897-10-mathias.nyman@linux.intel.com>
+Subject: [PATCH 10/33] usb: xhci: introduce macro for ring segment list iteration
+Date: Wed,  6 Nov 2024 12:14:36 +0200
+Message-Id: <20241106101459.775897-11-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20241106101459.775897-1-mathias.nyman@linux.intel.com>
 References: <20241106101459.775897-1-mathias.nyman@linux.intel.com>
@@ -78,42 +78,179 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: WangYuli <wangyuli@uniontech.com>
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-The ring data structure of each xHCI endpoint might stop sending
-data due to the virt endpoint state.
+Add macro to streamline and standardize the iteration over ring
+segment list.
 
-Show the virt endpoint state within the endpoint context via debugfs
-to facilitate debugging.
+xhci_for_each_ring_seg(): Iterates over the entire ring segment list.
 
-Co-developed-by: Xu Rao <raoxu@uniontech.com>
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
+The xhci_free_segments_for_ring() function's while loop has not been
+updated to use the new macro. This function has some underlying issues,
+and as a result, it will be handled separately in a future patch.
+
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-debugfs.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ drivers/usb/host/xhci-debugfs.c |  5 +----
+ drivers/usb/host/xhci-mem.c     | 24 +++++++-----------------
+ drivers/usb/host/xhci.c         | 20 ++++++++------------
+ drivers/usb/host/xhci.h         |  3 +++
+ 4 files changed, 19 insertions(+), 33 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-index f8ba15e7c225..35247cd50c74 100644
+index 35247cd50c74..4f0c1b96e208 100644
 --- a/drivers/usb/host/xhci-debugfs.c
 +++ b/drivers/usb/host/xhci-debugfs.c
-@@ -291,12 +291,13 @@ static int xhci_endpoint_context_show(struct seq_file *s, void *unused)
- 	for (ep_index = 0; ep_index < 31; ep_index++) {
- 		ep_ctx = xhci_get_ep_ctx(xhci, dev->out_ctx, ep_index);
- 		dma = dev->out_ctx->dma + (ep_index + 1) * CTX_SIZE(xhci->hcc_params);
--		seq_printf(s, "%pad: %s\n", &dma,
-+		seq_printf(s, "%pad: %s, virt_state:%#x\n", &dma,
- 			   xhci_decode_ep_context(str,
- 						  le32_to_cpu(ep_ctx->ep_info),
- 						  le32_to_cpu(ep_ctx->ep_info2),
- 						  le64_to_cpu(ep_ctx->deq),
--						  le32_to_cpu(ep_ctx->tx_info)));
-+						  le32_to_cpu(ep_ctx->tx_info)),
-+						  dev->eps[ep_index].ep_state);
- 	}
+@@ -214,14 +214,11 @@ static void xhci_ring_dump_segment(struct seq_file *s,
+ 
+ static int xhci_ring_trb_show(struct seq_file *s, void *unused)
+ {
+-	int			i;
+ 	struct xhci_ring	*ring = *(struct xhci_ring **)s->private;
+ 	struct xhci_segment	*seg = ring->first_seg;
+ 
+-	for (i = 0; i < ring->num_segs; i++) {
++	xhci_for_each_ring_seg(ring->first_seg, seg)
+ 		xhci_ring_dump_segment(s, seg);
+-		seg = seg->next;
+-	}
  
  	return 0;
+ }
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 2952737ccf6c..7aee76f846bc 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -224,7 +224,6 @@ static int xhci_update_stream_segment_mapping(
+ 		struct radix_tree_root *trb_address_map,
+ 		struct xhci_ring *ring,
+ 		struct xhci_segment *first_seg,
+-		struct xhci_segment *last_seg,
+ 		gfp_t mem_flags)
+ {
+ 	struct xhci_segment *seg;
+@@ -234,28 +233,22 @@ static int xhci_update_stream_segment_mapping(
+ 	if (WARN_ON_ONCE(trb_address_map == NULL))
+ 		return 0;
+ 
+-	seg = first_seg;
+-	do {
++	xhci_for_each_ring_seg(first_seg, seg) {
+ 		ret = xhci_insert_segment_mapping(trb_address_map,
+ 				ring, seg, mem_flags);
+ 		if (ret)
+ 			goto remove_streams;
+-		if (seg == last_seg)
+-			return 0;
+-		seg = seg->next;
+-	} while (seg != first_seg);
++	}
+ 
+ 	return 0;
+ 
+ remove_streams:
+ 	failed_seg = seg;
+-	seg = first_seg;
+-	do {
++	xhci_for_each_ring_seg(first_seg, seg) {
+ 		xhci_remove_segment_mapping(trb_address_map, seg);
+ 		if (seg == failed_seg)
+ 			return ret;
+-		seg = seg->next;
+-	} while (seg != first_seg);
++	}
+ 
+ 	return ret;
+ }
+@@ -267,17 +260,14 @@ static void xhci_remove_stream_mapping(struct xhci_ring *ring)
+ 	if (WARN_ON_ONCE(ring->trb_address_map == NULL))
+ 		return;
+ 
+-	seg = ring->first_seg;
+-	do {
++	xhci_for_each_ring_seg(ring->first_seg, seg)
+ 		xhci_remove_segment_mapping(ring->trb_address_map, seg);
+-		seg = seg->next;
+-	} while (seg != ring->first_seg);
+ }
+ 
+ static int xhci_update_stream_mapping(struct xhci_ring *ring, gfp_t mem_flags)
+ {
+ 	return xhci_update_stream_segment_mapping(ring->trb_address_map, ring,
+-			ring->first_seg, ring->last_seg, mem_flags);
++			ring->first_seg, mem_flags);
+ }
+ 
+ /* XXX: Do we need the hcd structure in all these functions? */
+@@ -438,7 +428,7 @@ int xhci_ring_expansion(struct xhci_hcd *xhci, struct xhci_ring *ring,
+ 
+ 	if (ring->type == TYPE_STREAM) {
+ 		ret = xhci_update_stream_segment_mapping(ring->trb_address_map,
+-						ring, first, last, flags);
++						ring, first, flags);
+ 		if (ret)
+ 			goto free_segments;
+ 	}
+diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+index fdb1b71eeec2..44e4ae201048 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -40,15 +40,15 @@ MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
+ 
+ static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
+ {
+-	struct xhci_segment *seg = ring->first_seg;
++	struct xhci_segment *seg;
+ 
+ 	if (!td || !td->start_seg)
+ 		return false;
+-	do {
++
++	xhci_for_each_ring_seg(ring->first_seg, seg) {
+ 		if (seg == td->start_seg)
+ 			return true;
+-		seg = seg->next;
+-	} while (seg && seg != ring->first_seg);
++	}
+ 
+ 	return false;
+ }
+@@ -785,14 +785,10 @@ static void xhci_clear_command_ring(struct xhci_hcd *xhci)
+ 	struct xhci_segment *seg;
+ 
+ 	ring = xhci->cmd_ring;
+-	seg = ring->deq_seg;
+-	do {
+-		memset(seg->trbs, 0,
+-			sizeof(union xhci_trb) * (TRBS_PER_SEGMENT - 1));
+-		seg->trbs[TRBS_PER_SEGMENT - 1].link.control &=
+-			cpu_to_le32(~TRB_CYCLE);
+-		seg = seg->next;
+-	} while (seg != ring->deq_seg);
++	xhci_for_each_ring_seg(ring->deq_seg, seg) {
++		memset(seg->trbs, 0, sizeof(union xhci_trb) * (TRBS_PER_SEGMENT - 1));
++		seg->trbs[TRBS_PER_SEGMENT - 1].link.control &= cpu_to_le32(~TRB_CYCLE);
++	}
+ 
+ 	xhci_initialize_ring_info(ring, 1);
+ 	/*
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 89337562440b..753d9343a4b1 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1263,6 +1263,9 @@ static inline const char *xhci_trb_type_string(u8 type)
+ #define AVOID_BEI_INTERVAL_MIN	8
+ #define AVOID_BEI_INTERVAL_MAX	32
+ 
++#define xhci_for_each_ring_seg(head, seg) \
++	for (seg = head; seg != NULL; seg = (seg->next != head ? seg->next : NULL))
++
+ struct xhci_segment {
+ 	union xhci_trb		*trbs;
+ 	/* private to HCD */
 -- 
 2.25.1
 
