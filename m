@@ -1,168 +1,117 @@
-Return-Path: <linux-usb+bounces-17223-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17224-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91B1C9BEF34
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 14:38:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE2D79BEF5B
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 14:44:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 498891F244F7
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 13:38:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BC3D1C21BDF
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 13:44:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED8B11DFE39;
-	Wed,  6 Nov 2024 13:38:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C1B1FA27E;
+	Wed,  6 Nov 2024 13:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jgkwvems"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="f3CcdIPo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12E241F9ABA
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 13:38:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D491FA256
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 13:43:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730900284; cv=none; b=u3hMUXchAqHTXDbLisvdEfQZErl0RWeSQOIk/oH6Df80ubWzEp5skJfU27xP/olJ+rFuOW3T+rWBEX5QnaRXzFk3M55LeVyG4q+8jse51NZ2WIromO/NpIwRQoHxtjvYxQ4znCSRhs0mLTc6GcYQkrFgFNSipMylVvYpxoii8/Q=
+	t=1730900627; cv=none; b=rfLgVWktSy1APAk00BYhG8Ww6D6ADsi39qDWDlNE/0pIX1dufnTq7soHd3EP0jY/D6n/k+ptaY92NuLc9BQKNaZxygxtaIeBvo2YDMCVO6P57avm40mLKTjmhXUTLpvm1+KPT8vo0Q++Ep87obzUEARuIt1z0Dvd1O/1f+wOMss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730900284; c=relaxed/simple;
-	bh=ylchiJaYSzzByTAqs/LY8coXR9n+8YqH+MLXSuG8Wzs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JUBno2sioZCjgq+9HQQQDwLt8qVyvvMttjCyQQWfcHjpU8k+Fr87+DqDOUFQ2E3HVKY9srqB4YUxy8jVAC9aC1ogWUa/QVJpmIJnUTMWuv0sKN1hSgkbDIP+wpEHCEFl8OEtBtIArNPXOyGdcBMT/6DOc5INwDn3T6SAcpCvBvs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jgkwvems; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730900284; x=1762436284;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ylchiJaYSzzByTAqs/LY8coXR9n+8YqH+MLXSuG8Wzs=;
-  b=JgkwvemsN2DBt2mjjcOmdy5tiiLmVDjB11u9bNQu8+ev0BqEy4lQ4vKS
-   mO+/SRlXjTb40ayLxoQnrh59pvh5HNUK9WhNc3wWBHyOmG8TPxGntkWjx
-   fdyrjhH4JlNbXjTNMxoemOGAu58f2J/aCT0UYlSkxt7ASdjXz6rYrVtYP
-   +TAHpL0KWtK7wBU1O9S2R+zTI00fmtAJbT2I0SaVsbpjfgiCuktKjGl4R
-   t6TV4ZCJHhXeV/PXPa7XgvCvrCPcM1Do+1SdqYumv+hxlrZiC0gjDJnxB
-   i6l+Fv+I5KHycAG1I4+rFILEeL7l3Xe91/6j4jj8/tpszsFTaZWO6R5ZE
-   A==;
-X-CSE-ConnectionGUID: xiQ2Xe5aRGmDMpWHAXeUlg==
-X-CSE-MsgGUID: pcGbmepaS0i5p+5Nr/gPgA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="42096998"
-X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="42096998"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 05:38:03 -0800
-X-CSE-ConnectionGUID: O1aZ2sa0T7+LFmVdGWcAlA==
-X-CSE-MsgGUID: rGOKVeofTT2IEeODj5kx2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="84901849"
-Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 05:38:01 -0800
-Received: from kekkonen.localdomain (localhost [127.0.0.1])
-	by kekkonen.fi.intel.com (Postfix) with SMTP id C20D511F9C3;
-	Wed,  6 Nov 2024 15:37:58 +0200 (EET)
-Date: Wed, 6 Nov 2024 13:37:58 +0000
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-From: Sakari Ailus <sakari.ailus@linux.intel.com>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	linux-usb@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>
-Subject: Re: [PATCH v2 3/3] usb: misc: ljca: print firmware version
-Message-ID: <ZytxNk1DEiwiXJ5b@kekkonen.localdomain>
-References: <20241106123438.337117-1-stanislaw.gruszka@linux.intel.com>
- <20241106123438.337117-3-stanislaw.gruszka@linux.intel.com>
- <2024110620-dating-roman-f820@gregkh>
+	s=arc-20240116; t=1730900627; c=relaxed/simple;
+	bh=07turtyFaUtqmTN7irIArurWZHjH3oZpuJFzYmQgqlU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kwvG5Xl3DHneuDjMWwQaNS9TYepJgwWgEl7+KO3EMIyJW/kFfw1i808sK5zLNsM/mgb4/RvvNviS7q4B+BlUf3Bx4FcDE764ahu3jsWZyEMjrkUPbHJ9RtzIpBIdeTB2DpkYgDQORwlQH07V3OzIo1UNOi/TrV49iLxa3t0uNSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=f3CcdIPo; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2fc96f9c41fso10623011fa.0
+        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2024 05:43:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1730900624; x=1731505424; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=07turtyFaUtqmTN7irIArurWZHjH3oZpuJFzYmQgqlU=;
+        b=f3CcdIPoULNOErGfe7BXfAsURIm4et373ySgVx6cdoUgNhp4INO93h6R/F2yDiDfLu
+         ldr/kxxfMhsdCTBO4RcOT3i+xlleOh6EIAVyvupoIGUXjOEbPAMoNDXWYyAQ8hjSTPPx
+         /FGUHI5TnpwImxyp5vlsMgDzQVhWKduYrGOtSRP5e4vGzQ8P6j7kkfO4CRCvfs4t8H/B
+         Pbl1MbBRrILWpxMq1M0rR85mBG77/ZXX20DC5hMUM8EJxMs6iRuQt1bvUHiqIbtq20zx
+         YrrDXLLp8jj09I7DE0vrVcdzxKLcZAI+zsSpF1DP+U+sKuXSwZ7YgxTCVPivyP50Lqby
+         NvvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730900624; x=1731505424;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=07turtyFaUtqmTN7irIArurWZHjH3oZpuJFzYmQgqlU=;
+        b=Aj0zcaziWYrFG9osqt+dZHC0L19YJbitOKoAUTTt6PQqfEaXmL312w1x7eMlEp3ZDS
+         klz4RBlpfaAVPOUCGnVeC+P2U1Yt+HkcMyWT9BDlkX2Oi9WRpqPGVh807+Kt4ryTGtc+
+         JZa9aiB4LblqD9TLnP39ZGyaGRUXOjCCqj0r2pL/ID52UHGJLJRYtgSUTYiNrQpqx0vi
+         0DJwiMVdUxrBkvQ8xSMSCLA5aczavYgn2IQ+1k4LwVWUe98p87Z8j9Eet+3bKAPONgcl
+         2KQzrzQp52vnewvW2T259v1gm2vMFHbbrcuUBF4tUT1TjbVTXDkcjdyeRDbhWqP3ohOy
+         YAAg==
+X-Forwarded-Encrypted: i=1; AJvYcCUH1tYQIa4ytHetEYRavM/SYRDDFDmOwLkjZGovW0KDVs+WuRVLUDJBRLkfQB3B8gFt95P04gzw3HY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzhVGTmoRx1aNgy0pbho7Js9uF8H6t2IywySmZ75ptuEgSldro5
+	R10FUo3LxvuMunxOECMu9AR6RWIszSsUMuFoMpFJnQm5k108AILpgXfrWWFG7j5YVmlPZRfEOMw
+	Way0dTEwz1IspMGGRX52zhjXwhR0tjQIkumc8ug==
+X-Google-Smtp-Source: AGHT+IHUtnnhEva3lCB8uWh8uIWC06tcgEpMXvu5am5NhlAEbhUxeQ79Id1SoLC6uXkPBOCC/N9jH1BHhM6ITnKzWf8=
+X-Received: by 2002:a05:651c:210a:b0:2fa:ce0d:ec34 with SMTP id
+ 38308e7fff4ca-2ff0cb2376emr8634191fa.2.1730900624427; Wed, 06 Nov 2024
+ 05:43:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2024110620-dating-roman-f820@gregkh>
+References: <20241104093609.156059-1-andriy.shevchenko@linux.intel.com> <ZytP0XGgmz_R5gos@smile.fi.intel.com>
+In-Reply-To: <ZytP0XGgmz_R5gos@smile.fi.intel.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 6 Nov 2024 14:43:32 +0100
+Message-ID: <CAMRc=MfQw1YmOoq-rK5Bq3uDK8cmjG_xsUgVDs28phsqkcHofA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/6] gpio: Get rid of deprecated GPIOF_ACTIVE_LOW
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>, 
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, 
+	Linus Walleij <linus.walleij@linaro.org>, Pavel Machek <pavel@ucw.cz>, 
+	Dominik Brodowski <linux@dominikbrodowski.net>, Daniel Mack <daniel@zonque.org>, 
+	Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Greg,
+On Wed, Nov 6, 2024 at 12:15=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Nov 04, 2024 at 11:34:18AM +0200, Andy Shevchenko wrote:
+> > This series targets the deprecated GPIOF_ACTIVE_LOW as only a few users
+> > left. Convert those users to call modern APIs and drop this legacy piec=
+e
+> > from the source tree.
+> >
+> > The idea is to route this via GPIO tree, please Ack.
+>
+> Thank you for Acks, folks!
+>
+> Dominik, is it possible to get yours or are you inactive nowadays (I saw
+> last mention of your name ca. 2023).
+>
+> Bart, we have all Acks except pcmcia (see also above), and the change is
+> the same all over the places, do you think it's okay to apply if Dominik
+> won't respond for a few days?
+>
 
-On Wed, Nov 06, 2024 at 01:42:33PM +0100, Greg KH wrote:
-> On Wed, Nov 06, 2024 at 01:34:38PM +0100, Stanislaw Gruszka wrote:
-> > For diagnostics purposes read firmware version from device
-> > and print it to dmesg during initialization.
-> 
-> No, sorry, when drivers work properly, they are quiet.  Think about what
-> your kernel log would look like if you did this for every single driver
-> in the tree.
-> 
-> > 
-> > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> > Tested-by: Hans de Goede <hdegoede@redhat.com> # ThinkPad X1 Yoga Gen 8, ov2740
-> > Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> > ---
-> >  drivers/usb/misc/usb-ljca.c | 29 +++++++++++++++++++++++++++++
-> >  1 file changed, 29 insertions(+)
-> > 
-> > diff --git a/drivers/usb/misc/usb-ljca.c b/drivers/usb/misc/usb-ljca.c
-> > index d9c21f783055..e698a1075a40 100644
-> > --- a/drivers/usb/misc/usb-ljca.c
-> > +++ b/drivers/usb/misc/usb-ljca.c
-> > @@ -43,6 +43,7 @@ enum ljca_client_type {
-> >  
-> >  /* MNG client commands */
-> >  enum ljca_mng_cmd {
-> > +	LJCA_MNG_GET_VERSION = 1,
-> >  	LJCA_MNG_RESET = 2,
-> >  	LJCA_MNG_ENUM_GPIO = 4,
-> >  	LJCA_MNG_ENUM_I2C = 5,
-> > @@ -68,6 +69,13 @@ struct ljca_msg {
-> >  	u8 data[] __counted_by(len);
-> >  } __packed;
-> >  
-> > +struct ljca_fw_version {
-> > +	u8 major;
-> > +	u8 minor;
-> > +	__le16 patch;
-> > +	__le16 build;
-> > +} __packed;
-> > +
-> >  struct ljca_i2c_ctr_info {
-> >  	u8 id;
-> >  	u8 capacity;
-> > @@ -695,6 +703,25 @@ static int ljca_reset_handshake(struct ljca_adapter *adap)
-> >  	return 0;
-> >  }
-> >  
-> > +static void ljca_print_fw_version(struct ljca_adapter *adap)
-> > +{
-> > +	struct ljca_fw_version version = {};
-> > +	int ret;
-> > +
-> > +	ret = ljca_send(adap, LJCA_CLIENT_MNG, LJCA_MNG_GET_VERSION, NULL, 0,
-> > +			(u8 *)&version, sizeof(version), true,
-> > +			LJCA_WRITE_ACK_TIMEOUT_MS);
-> > +
-> > +	if (ret != sizeof(version)) {
-> > +		dev_err(adap->dev, "Get version failed, ret: %d\n", ret);
-> > +		return;
-> 
-> Why not return the error?
+If we don't get an ack until Friday, I will take it as is.
 
-An error here would indicate something is a little fishy but doesn't
-prevent the device from working as such. I'd think it's fine as-is.
-
-> 
-> > +	}
-> > +
-> > +	dev_info(adap->dev, "Firmware version: %d.%d.%d.%d\n",
-> > +		 version.major, version.minor,
-> > +		 le16_to_cpu(version.patch), le16_to_cpu(version.build));
-> 
-> Again, sorry, but no.  Feel free to dump this in a sysfs file if you
-> really want to get access to it, but not in the kernel log.
-
-I guess dev_dbg() should do as well.
-
--- 
-Regards,
-
-Sakari Ailus
+Bart
 
