@@ -1,54 +1,54 @@
-Return-Path: <linux-usb+bounces-17150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17151-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2FD79BDCB7
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 03:29:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D819B9BDCDC
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 03:33:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6B18E1F29790
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 02:29:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F0EE28973A
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 02:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEA8F1917D4;
-	Wed,  6 Nov 2024 02:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AFAB2194A1;
+	Wed,  6 Nov 2024 02:14:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ejr2rN/s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nO9n2cDy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38332217339;
-	Wed,  6 Nov 2024 02:13:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E78A51D86C9;
+	Wed,  6 Nov 2024 02:14:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730859238; cv=none; b=ZATP36QXlaa7Uf8wiZcImg69dxcvSZ3ACpQxeaVWknwivlZ+ufeRSBNz5bb+yzEiREpu1qWhNHTUe6pdRCOhGHcYpi8SPOKEAld7hMmZude9PbqQQ78zY1RH1Cn8Y5jjvbEZNToRP9WbWPrx8fggY9Lkd/nD5AaHt3hrHGvPZ/k=
+	t=1730859287; cv=none; b=mBoKvLI9X8XNt/qDKL37vmbWGyUv5XDHzPnF5jXQ8gpdW5icqX3NU8Me67pqsIRCH5DX6b0Ik2N/UExwd0nvW/TfODzEzznlNa7MZ/+EQB7bhYHPrBPFWtdAdwV4UpyrhEhVt+AqJ1envaBGz3oyCsx68ecMQDzodGytiNaPzaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730859238; c=relaxed/simple;
-	bh=iZHtLUDZRPpzSYKnNoP++IxuwIO4YiN99cYkpFMj2JQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WUSGQb0LILJLRqk+xvciXsteLe8lioEYKygjjeI4Q3pExHpCilBnhhEODzNdsCEpiw9xm5E5XFd3hozP8olrvmQV/MiUaLhD+OATKUZ/FlhRWQXCocsswEdczdB4MMk/w2RpvCqFhknlxhzQGxtcTT8pIeUPYlT4f17DRjC35UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ejr2rN/s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50DFBC4CECF;
-	Wed,  6 Nov 2024 02:13:57 +0000 (UTC)
+	s=arc-20240116; t=1730859287; c=relaxed/simple;
+	bh=JyPJGtsm3K6JU32Nz/iopXhqEVlPNysU3RBw17FVilc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iFRAffa6O2t3gR1LyugU4QD7HM3NKdkI9V01L8ZAUSvnf8xlRtspV2H77+WRRIa/hUeohXXw6I7RF7Uv1H5kKzQjyXmtj+9A0bhcym81yaV0vwC70rV/UYhbae4+LdaFJcGLH8VOifrRknwhb/mIGIMtl6pK9KW6NraXT9z8ywE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nO9n2cDy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3F88C4CECF;
+	Wed,  6 Nov 2024 02:14:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730859238;
-	bh=iZHtLUDZRPpzSYKnNoP++IxuwIO4YiN99cYkpFMj2JQ=;
+	s=k20201202; t=1730859286;
+	bh=JyPJGtsm3K6JU32Nz/iopXhqEVlPNysU3RBw17FVilc=;
 	h=From:To:Cc:Subject:Date:From;
-	b=Ejr2rN/s3DNVnZL9RlUohB47LKXBYyIxs9xVK1P5WIXk+G8BP7ODgCy+Imhxw+4dg
-	 Jv5sl20DL+Oy/NyYtKC+cMBhZxgq1aGw0pCZkv+7EusYB8iwvmQWnnL23+tuF/M9Ma
-	 x23mlsLxPGw9uJgnXUKoWYCo3rYRpNrzcqDI3CLq02UQRHGw+r8oPjAHTbAp8eh0Zb
-	 BiODnuvwYcVVCETMmA01UXUDtohaDBcI6v3tfrAnHamLDzl4Cem10JwI3JUqH3BbF3
-	 li8ifIxrkmvPlK+FhhKAb6Hm2PJslfVKLMsGKL0osr2+ocoTsD/jKjUnmxND6fk0TA
-	 vlPho9FC8XcOg==
+	b=nO9n2cDy4CLNx+EX4Zmsxf8FZyiuKHxz5VoZi4tQXlEGmmKl5yOpEGI60uUeHBkT1
+	 Yukp8Tb6dgy1ltoHvY5KnzTUSmTGiuh7evRLKPzpnDdAua3c7VINfot1WzyUi8VQVV
+	 6Q9IOzlWYKvud1rnhcwBOkWpO0MsW9XM40hqjMMIhkpORJkvTdbZF9/IhfhbW2R0l7
+	 xvMuXVFKTDjPnYcdmYLU9yzbySzboE6g3rZlsg+y4Zb1eDJ5qD08uRuvicI4F/OyWu
+	 WacVGFZF/j2PuyzmGnNK7U1WjzRXV9VcNCsP9VyHa/TGSmsjU/7UWvMW3eqnUohffd
+	 1Pmag3ke3A5+A==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	gil.fine@linux.intel.com
 Cc: Mika Westerberg <mika.westerberg@linux.intel.com>,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: FAILED: Patch "thunderbolt: Honor TMU requirements in the domain when setting TMU mode" failed to apply to v5.4-stable tree
-Date: Tue,  5 Nov 2024 21:13:55 -0500
-Message-ID: <20241106021355.183925-1-sashal@kernel.org>
+Subject: FAILED: Patch "thunderbolt: Honor TMU requirements in the domain when setting TMU mode" failed to apply to v4.19-stable tree
+Date: Tue,  5 Nov 2024 21:14:43 -0500
+Message-ID: <20241106021444.184480-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -60,7 +60,7 @@ X-Patchwork-Hint: ignore
 X-stable: review
 Content-Transfer-Encoding: 8bit
 
-The patch below does not apply to the v5.4-stable tree.
+The patch below does not apply to the v4.19-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable@vger.kernel.org>.
