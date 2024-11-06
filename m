@@ -1,125 +1,101 @@
-Return-Path: <linux-usb+bounces-17225-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17226-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC9E39BEFCE
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 15:07:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 035209BEFE5
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 15:15:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1BAF1C218FA
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 14:07:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 346711C2307D
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 14:15:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9674F200CB7;
-	Wed,  6 Nov 2024 14:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1851C2010F0;
+	Wed,  6 Nov 2024 14:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ESGYYYcP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TNuKbhnl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15B8717DFF2;
-	Wed,  6 Nov 2024 14:07:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0892010E6;
+	Wed,  6 Nov 2024 14:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730902051; cv=none; b=Uu9klC6UEQ+aNJfWNl4E5W217kCIudkj4ByE//X7OCUyKmshHuoS2tPJBXrVnPe4YY4O/Xe/HEQTNzfQs8Z8X953zRLgPVl9wpFrLlihBYZ4BbQBAEpJbMrVbmtVUH/4J8TA5J3IEE33kLD4vcKWe81WC6Gje+2F9sPC7KnuYSo=
+	t=1730902491; cv=none; b=ZmcNioKPQyULvSFDuGCKmTM5VTa+gTRq7zGSg6/BTaKR0BPRKN6WhqfIy47vUxEJ2Za+w+d97+xwsFoSUrRirsofzn9oXRJdcNJpIyY/2CCxYM593PHbHCGuA45Cs/VxFlNSFlbo0Iw7wpghu+yGG7CntNeNFmfd0djujT7qj8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730902051; c=relaxed/simple;
-	bh=w4OAi8NjFxBZorVugcH4X3mQGwmGxL5wruUiOZSVGJQ=;
+	s=arc-20240116; t=1730902491; c=relaxed/simple;
+	bh=LZgHMglaalJFPre4ZauInW/LgNM368v+S2B0ogkJf9w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BHM4jTsF42Ot8pfxLBENJSquqH8bjXnPzaeM1NdBY+1lB3LWXJzs8ziTVeNY632C4SvxLItJyM71fkNl2TCcBJZ0/pfGzJ/fQ91gYEI9txKko+4fdRoh3wsylpQgVldTFwS+h6zjVJQ5HNEf8FbmoJpalp8KpOSaGlA+MV6/szk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ESGYYYcP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C23DC4CEC6;
-	Wed,  6 Nov 2024 14:07:30 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=hLe7FbCBYtK4ODggflyuInu+td+HxMHW2CAAvPtZYQctXuUNpDPx+bkZ4q1EsshtITHQ1Ze2mYOpH3k03j4Hr3/bFFjn09E6Lxil/kDD/4RTPZ+WUhCmNQkle02p7mBzDYn4Bqt8WRwixABK6Oe56BTvd2PL2ZGIwN53RkDZRH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TNuKbhnl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACB4C4CEC6;
+	Wed,  6 Nov 2024 14:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730902050;
-	bh=w4OAi8NjFxBZorVugcH4X3mQGwmGxL5wruUiOZSVGJQ=;
+	s=k20201202; t=1730902491;
+	bh=LZgHMglaalJFPre4ZauInW/LgNM368v+S2B0ogkJf9w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ESGYYYcPVGLc37OasmV/0YXPuPkpGfrvnDYki9so8a2he56OhSyfWZ/jrHZ1Igawb
-	 BoWb6Iq6tgaix2JKbJ1WtEq9RtZXToXIMd9jQptPqWc9xR28u9gUxTeayqYQkz5TeD
-	 tsHUPSbsKbA5MEAH614BVK6IdH651uH8BK83dbjoA2+joGIXKJ946eIRNj//yO/Dz3
-	 t5CJOq3U2HKN0BIMlfCNE06AcEY2+Tx2IdruHio4VAzmkFA9OCTq53rCikp3yhoMen
-	 9io0qb1RlSPTRwUBfrZZtSxly+DpsvXD6pvYInBskjz0KZwKzYPPgK1tlYuL5TbVNS
-	 LjWZY69N/U4vA==
+	b=TNuKbhnl33A/7cQ6fUGWx9jFuMxtGTw4Co8GXtGrC5josJ9S2RIv7GXLd1ongEOBl
+	 9rUY2rUrftyuExrtEm3v7geh3Q/4tPI0BVy32Axyx57RsLrV9a5D//OUT97t9ysJFB
+	 1nb+RLg1m1LrVdng+C2OjHKg7K3PwHiDIoodyPzP+WhAiaFhDBqwrJf/3GFKHgeQen
+	 G0WSKEh2R5+dYHMv5gV2kl7iOhDkIsem8nqEklhO+4QwH+oPvu2JtDd6ONib65iKdf
+	 B6w4KETUgl/m861wDsXMCBE32XAB8/hhE7hUjb2zEOJYyMIEw8s9XxX/RJKopVoCny
+	 7xD6SgWkG1xpw==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1t8gh1-000000004tY-0Mhq;
-	Wed, 06 Nov 2024 15:07:31 +0100
-Date: Wed, 6 Nov 2024 15:07:31 +0100
+	id 1t8go7-000000005Nt-1yfT;
+	Wed, 06 Nov 2024 15:14:52 +0100
+Date: Wed, 6 Nov 2024 15:14:51 +0100
 From: Johan Hovold <johan@kernel.org>
-To: =?utf-8?B?5ZCz6YC86YC8?= <wojackbb@gmail.com>
+To: wojackbb@gmail.com
 Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: option: add MediaTek T7XX compositions
-Message-ID: <Zyt4I2YFx5lm0cLi@hovoldconsulting.com>
-References: <20241028080415.697793-1-wojackbb@gmail.com>
- <ZyDRIW0DIGn_FIsD@hovoldconsulting.com>
- <CAAQ7Y6ZGrQt+rPBK9PzwJRC5ErbFgbc239X=iwjRboY3HU6O8g@mail.gmail.com>
+Subject: Re: [PATCH] [v3]USB: serial: qcserial: add support for Sierra
+ Wireless EM86xx
+Message-ID: <Zyt52y7uc3u99p2V@hovoldconsulting.com>
+References: <20241106105029.338457-1-wojackbb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAQ7Y6ZGrQt+rPBK9PzwJRC5ErbFgbc239X=iwjRboY3HU6O8g@mail.gmail.com>
+In-Reply-To: <20241106105029.338457-1-wojackbb@gmail.com>
 
-[ Please avoid top-posting. ]
+On Wed, Nov 06, 2024 at 06:50:29PM +0800, wojackbb@gmail.com wrote:
+> From: Jack Wu <wojackbb@gmail.com>
+> 
+> Add support for Sierra Wireless EM86xx with
+> USB-id 0x1199:0x90e5 & 0x1199:0x90e4.
 
-On Wed, Nov 06, 2024 at 07:09:22PM +0800, 吳逼逼 wrote:
-> I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> It is USB AP Log Port.
-> 
-> I:* If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> It is USB AP GNSS Port.
-> 
-> I:* If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> It is USB AP META Port.
-> 
-> I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=05(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> It is ADB port.
-> 
-> I:* If#= 6 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=06(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> It is USB MD AT Port. User can use the port send AT command.
-> 
-> I:* If#= 7 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=88(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=07(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> It is USB MD META Port.
-> 
-> I:* If#= 8 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=89(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=08(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> It is USB NTZ Port. User can use the port send MIPC command.
-> MIPC is an instruction set designed by MTK, similar to QCT's QMI
-> 
-> I:* If#= 9 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-> E:  Ad=8a(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=09(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> It is USB Debug port.
+> 0x1199:0x90e4
+> T:  Bus=03 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
+> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> P:  Vendor=1199 ProdID=90e4 Rev= 0.00
+> S:  Manufacturer=Sierra Wireless, Incorporated
+> S:  SerialNumber=004403161882339
+> C:* #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=  2mA
+> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=10 Driver=qcserial
+> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> ---
+> v3 changes: the entries sorted by PID
+> ---
+> Signed-off-by: Jack Wu <wojackbb@gmail.com>
+> ---
 
-Thanks for this. Please include this in some form in the commit message
-(e.g. a table listing the functions).
+Thanks for the update. Next time make sure you put the changelog here
+after your SoB and the --- line.
 
-> Sorry, I don't understand "not accepting modem control".
-> Should I set the non-MD ports to true?
-> for example: USB AP Log Port.
+As it currently stands you SoB is not included when I apply the patch.
+I've fixed it up manually, but please remember this for your future
+contributions.
 
-I meant that you should mark the interfaces that reject modem-control
-requests using the NCTRL() macro similar to what was done for the device
-with PID 0x7127.
+Also, the patch revision typically goes inside the PATCH marker:
+
+	[PATCH v3] USB: serial: ...
 
 Johan
 
