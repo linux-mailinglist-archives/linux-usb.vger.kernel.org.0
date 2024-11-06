@@ -1,72 +1,71 @@
-Return-Path: <linux-usb+bounces-17185-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17186-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA0499BE3DE
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:13:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD2FF9BE3DF
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:13:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69FED1F24C3D
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:13:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D350288F4F
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDF411DE2B2;
-	Wed,  6 Nov 2024 10:13:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FD661DE2B8;
+	Wed,  6 Nov 2024 10:13:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GLkBTL9b"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IZKfVfUR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042931DDA17
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 10:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A7D1DD0DB
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 10:13:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730887983; cv=none; b=ONXq9D8JfRZe3/LwV8DSrigiRAJoSYADRRAZpO031j/sQZd+zp7EqiFOeMkR4IecscVJXrpAg6yADDujksxGGd5+4YUlrHbpLzJftgv+KbvINQs9b5nZuGfe9BWGECVlILPsW+lSR8jY1jHxyTlRNVbpCZczgnWpZ0quzAETyIU=
+	t=1730887985; cv=none; b=L08Hd3H/cpY/eKrT+Xx5YsOkxJRW9XghWP8GfG7DLenqKlk4jOJQXcyG3wRr9UDUZOFTSSYErSCWBf5QSQAA1mtPh84GAeKVQcnf2ZFaeB29spAhePkwk35QN4l7L1kKgNVJeCXiu7XSfyxUFA9cR8lw0Ig7nNBfULEQhfjbwKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730887983; c=relaxed/simple;
-	bh=7FMZEg3rWBCfXHTP9nAeVFE261EGB/fafGgy/2IQiGo=;
+	s=arc-20240116; t=1730887985; c=relaxed/simple;
+	bh=WC6/nf2BOGDDQjQsq4+ooBCWTTiErA2rmahR0Xf4ejg=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=MFqTjPYztBpYXWhJq5/kFPpTf3FX4IM/dk4q4q3oGJCTMhZRVP0SwvyuaGCT6tqKycLB2X56eibCIw4RdmYNps8qLb/e+aY1Hyub8kjqNjDZUJT47UKT7l8W31baPHTp6tumXXjpp9urbjllTl/79/5S+1yjkxBIoIBky0zdibE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GLkBTL9b; arc=none smtp.client-ip=192.198.163.10
+	 MIME-Version; b=Nll+hirTNbuhMq2YGGKsfBea4+HRMnAkucFOZwtQ8/FKUZEnMgb0KN/WYMIAox/CN6re8z0s4GNuRoYpgiVqJ26HqpcvmjA1VW2xD0PUrZH3G6qIkzF8TYBBSpOp+fNyM8xNnjY0vU5plB2gzi0c3U3IYoiKJXC4x2PQ44u83b8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IZKfVfUR; arc=none smtp.client-ip=192.198.163.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730887982; x=1762423982;
+  t=1730887983; x=1762423983;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=7FMZEg3rWBCfXHTP9nAeVFE261EGB/fafGgy/2IQiGo=;
-  b=GLkBTL9bnQ9p1Yd6voDSViy8jJVLe17IMUt0WzrlVD6FvQZzKzCa4kZ7
-   wDRcZQZZUm/7jN8W4BVbcEA2HYGlRnr+8ZCfH/4kRH4KKUkwXQJQGLP2l
-   pboOOV3qSUfO0Qj2SpqjY2H2DfOqFqcE441T+dLD1CxlRtUpa5XgkyoBW
-   IEAr6mnmPypfQS+acG+qC8ukAiOVVal4LnQARNqzCRv1IfBJYTT1ucWqt
-   yyAmfROLxye/rab4Rzwzt4rPFK6GS86XOeyOjolNRnMnXiPSmntDmWqOR
-   88jWwM0rPt1wkxBEu29mATcs4busb/47aqG+rPJtfamsA1Rf1YRIfmthJ
-   Q==;
-X-CSE-ConnectionGUID: D9t18XGJSCClnJLu4WVE5A==
-X-CSE-MsgGUID: 4sLacFaESo6wyg9hHhJW5g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="42059396"
+  bh=WC6/nf2BOGDDQjQsq4+ooBCWTTiErA2rmahR0Xf4ejg=;
+  b=IZKfVfUR2/3rQDw+I3dVGNblqWC8zNIxTWkn2cF/Mc0I3fPK1ZWLAg9G
+   MibUnN/5g3qEunZECoX+npzmWDiR+kF/kk7d8WTxyz8dq9Bzs0Cqob31p
+   sjk+zP7SJFWP/cspTQOTJkIcgwMaqlTWUx2nTIdUBruWwSxrhIXDWDWQa
+   PT4euOqp4JJUmROqeYTRigs9k2cIoCGt60S3aFNMCHaIrk73HTsTHPBVk
+   MIyPhGAEENoAk4L9cG80m2ZrkiDOldcjOhgNk8CJMFqA9V5sssuAtlytM
+   0+8LZfGsweA6+koRbOF6bDh5vl/r3e9hrgLWZYTcwA2k5xyhmQFwq/WCx
+   g==;
+X-CSE-ConnectionGUID: lEeRCUJ3RGKY4DTmU3Uf3g==
+X-CSE-MsgGUID: wZDmIvNrQnCf8Jdc/UfM+Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="42059398"
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="42059396"
+   d="scan'208";a="42059398"
 Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 02:13:01 -0800
-X-CSE-ConnectionGUID: rpJRtWNdSCe97A8v9svAOQ==
-X-CSE-MsgGUID: A9M8sLjpTmKUj+fbv6yKhg==
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 02:13:03 -0800
+X-CSE-ConnectionGUID: H7gtMiElRZeHF/H/pWqS1g==
+X-CSE-MsgGUID: D5BwygplR+2SIUBtvyA+Jg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="84813077"
+   d="scan'208";a="84813101"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmviesa010.fm.intel.com with ESMTP; 06 Nov 2024 02:13:00 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 06 Nov 2024 02:13:02 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
 	Niklas Neronin <niklas.neronin@linux.intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 10/33] usb: xhci: introduce macro for ring segment list iteration
-Date: Wed,  6 Nov 2024 12:14:36 +0200
-Message-Id: <20241106101459.775897-11-mathias.nyman@linux.intel.com>
+Subject: [PATCH 11/33] usb: xhci: remove option to change a default ring's TRB cycle bit
+Date: Wed,  6 Nov 2024 12:14:37 +0200
+Message-Id: <20241106101459.775897-12-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20241106101459.775897-1-mathias.nyman@linux.intel.com>
 References: <20241106101459.775897-1-mathias.nyman@linux.intel.com>
@@ -80,177 +79,252 @@ Content-Transfer-Encoding: 8bit
 
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 
-Add macro to streamline and standardize the iteration over ring
-segment list.
+The TRB cycle bit indicates TRB ownership by the Host Controller (HC) or
+Host Controller Driver (HCD). New rings are initialized with 'cycle_state'
+equal to one, and all its TRBs' cycle bits are set to zero. When handling
+ring expansion, set the source ring cycle bits to the same value as the
+destination ring.
 
-xhci_for_each_ring_seg(): Iterates over the entire ring segment list.
+Move the cycle bit setting from xhci_segment_alloc() to xhci_link_rings(),
+and remove the 'cycle_state' argument from xhci_initialize_ring_info().
+The xhci_segment_alloc() function uses kzalloc_node() to allocate segments,
+ensuring that all TRB cycle bits are initialized to zero.
 
-The xhci_free_segments_for_ring() function's while loop has not been
-updated to use the new macro. This function has some underlying issues,
-and as a result, it will be handled separately in a future patch.
-
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
 ---
- drivers/usb/host/xhci-debugfs.c |  5 +----
- drivers/usb/host/xhci-mem.c     | 24 +++++++-----------------
- drivers/usb/host/xhci.c         | 20 ++++++++------------
- drivers/usb/host/xhci.h         |  3 +++
- 4 files changed, 19 insertions(+), 33 deletions(-)
+ drivers/usb/host/xhci-dbgcap.c |  2 +-
+ drivers/usb/host/xhci-mem.c    | 50 ++++++++++++++++------------------
+ drivers/usb/host/xhci.c        |  2 +-
+ drivers/usb/host/xhci.h        |  6 ++--
+ 4 files changed, 27 insertions(+), 33 deletions(-)
 
-diff --git a/drivers/usb/host/xhci-debugfs.c b/drivers/usb/host/xhci-debugfs.c
-index 35247cd50c74..4f0c1b96e208 100644
---- a/drivers/usb/host/xhci-debugfs.c
-+++ b/drivers/usb/host/xhci-debugfs.c
-@@ -214,14 +214,11 @@ static void xhci_ring_dump_segment(struct seq_file *s,
- 
- static int xhci_ring_trb_show(struct seq_file *s, void *unused)
- {
--	int			i;
- 	struct xhci_ring	*ring = *(struct xhci_ring **)s->private;
- 	struct xhci_segment	*seg = ring->first_seg;
- 
--	for (i = 0; i < ring->num_segs; i++) {
-+	xhci_for_each_ring_seg(ring->first_seg, seg)
- 		xhci_ring_dump_segment(s, seg);
--		seg = seg->next;
--	}
- 
- 	return 0;
- }
+diff --git a/drivers/usb/host/xhci-dbgcap.c b/drivers/usb/host/xhci-dbgcap.c
+index 408082372be1..227e513867dd 100644
+--- a/drivers/usb/host/xhci-dbgcap.c
++++ b/drivers/usb/host/xhci-dbgcap.c
+@@ -472,7 +472,7 @@ xhci_dbc_ring_alloc(struct device *dev, enum xhci_ring_type type, gfp_t flags)
+ 		trb->link.control = cpu_to_le32(LINK_TOGGLE | TRB_TYPE(TRB_LINK));
+ 	}
+ 	INIT_LIST_HEAD(&ring->td_list);
+-	xhci_initialize_ring_info(ring, 1);
++	xhci_initialize_ring_info(ring);
+ 	return ring;
+ dma_fail:
+ 	kfree(seg);
 diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 2952737ccf6c..7aee76f846bc 100644
+index 7aee76f846bc..164b22d0b475 100644
 --- a/drivers/usb/host/xhci-mem.c
 +++ b/drivers/usb/host/xhci-mem.c
-@@ -224,7 +224,6 @@ static int xhci_update_stream_segment_mapping(
- 		struct radix_tree_root *trb_address_map,
- 		struct xhci_ring *ring,
- 		struct xhci_segment *first_seg,
--		struct xhci_segment *last_seg,
- 		gfp_t mem_flags)
+@@ -27,14 +27,12 @@
+  * "All components of all Command and Transfer TRBs shall be initialized to '0'"
+  */
+ static struct xhci_segment *xhci_segment_alloc(struct xhci_hcd *xhci,
+-					       unsigned int cycle_state,
+ 					       unsigned int max_packet,
+ 					       unsigned int num,
+ 					       gfp_t flags)
  {
  	struct xhci_segment *seg;
-@@ -234,28 +233,22 @@ static int xhci_update_stream_segment_mapping(
- 	if (WARN_ON_ONCE(trb_address_map == NULL))
- 		return 0;
+ 	dma_addr_t	dma;
+-	int		i;
+ 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
  
--	seg = first_seg;
--	do {
-+	xhci_for_each_ring_seg(first_seg, seg) {
- 		ret = xhci_insert_segment_mapping(trb_address_map,
- 				ring, seg, mem_flags);
- 		if (ret)
- 			goto remove_streams;
--		if (seg == last_seg)
--			return 0;
--		seg = seg->next;
--	} while (seg != first_seg);
-+	}
- 
- 	return 0;
- 
- remove_streams:
- 	failed_seg = seg;
--	seg = first_seg;
--	do {
-+	xhci_for_each_ring_seg(first_seg, seg) {
- 		xhci_remove_segment_mapping(trb_address_map, seg);
- 		if (seg == failed_seg)
- 			return ret;
--		seg = seg->next;
--	} while (seg != first_seg);
-+	}
- 
- 	return ret;
- }
-@@ -267,17 +260,14 @@ static void xhci_remove_stream_mapping(struct xhci_ring *ring)
- 	if (WARN_ON_ONCE(ring->trb_address_map == NULL))
- 		return;
- 
--	seg = ring->first_seg;
--	do {
-+	xhci_for_each_ring_seg(ring->first_seg, seg)
- 		xhci_remove_segment_mapping(ring->trb_address_map, seg);
--		seg = seg->next;
--	} while (seg != ring->first_seg);
- }
- 
- static int xhci_update_stream_mapping(struct xhci_ring *ring, gfp_t mem_flags)
- {
- 	return xhci_update_stream_segment_mapping(ring->trb_address_map, ring,
--			ring->first_seg, ring->last_seg, mem_flags);
-+			ring->first_seg, mem_flags);
- }
- 
- /* XXX: Do we need the hcd structure in all these functions? */
-@@ -438,7 +428,7 @@ int xhci_ring_expansion(struct xhci_hcd *xhci, struct xhci_ring *ring,
- 
- 	if (ring->type == TYPE_STREAM) {
- 		ret = xhci_update_stream_segment_mapping(ring->trb_address_map,
--						ring, first, last, flags);
-+						ring, first, flags);
- 		if (ret)
- 			goto free_segments;
+ 	seg = kzalloc_node(sizeof(*seg), flags, dev_to_node(dev));
+@@ -56,11 +54,6 @@ static struct xhci_segment *xhci_segment_alloc(struct xhci_hcd *xhci,
+ 			return NULL;
+ 		}
  	}
+-	/* If the cycle state is 0, set the cycle bit to 1 for all the TRBs */
+-	if (cycle_state == 0) {
+-		for (i = 0; i < TRBS_PER_SEGMENT; i++)
+-			seg->trbs[i].link.control = cpu_to_le32(TRB_CYCLE);
+-	}
+ 	seg->num = num;
+ 	seg->dma = dma;
+ 	seg->next = NULL;
+@@ -138,6 +131,14 @@ static void xhci_link_rings(struct xhci_hcd *xhci, struct xhci_ring *ring,
+ 
+ 	chain_links = xhci_link_chain_quirk(xhci, ring->type);
+ 
++	/* If the cycle state is 0, set the cycle bit to 1 for all the TRBs */
++	if (ring->cycle_state == 0) {
++		xhci_for_each_ring_seg(ring->first_seg, seg) {
++			for (int i = 0; i < TRBS_PER_SEGMENT; i++)
++				seg->trbs[i].link.control |= cpu_to_le32(TRB_CYCLE);
++		}
++	}
++
+ 	next = ring->enq_seg->next;
+ 	xhci_link_segments(ring->enq_seg, first, ring->type, chain_links);
+ 	xhci_link_segments(last, next, ring->type, chain_links);
+@@ -287,8 +288,7 @@ void xhci_ring_free(struct xhci_hcd *xhci, struct xhci_ring *ring)
+ 	kfree(ring);
+ }
+ 
+-void xhci_initialize_ring_info(struct xhci_ring *ring,
+-			       unsigned int cycle_state)
++void xhci_initialize_ring_info(struct xhci_ring *ring)
+ {
+ 	/* The ring is empty, so the enqueue pointer == dequeue pointer */
+ 	ring->enqueue = ring->first_seg->trbs;
+@@ -302,7 +302,7 @@ void xhci_initialize_ring_info(struct xhci_ring *ring,
+ 	 * New rings are initialized with cycle state equal to 1; if we are
+ 	 * handling ring expansion, set the cycle state equal to the old ring.
+ 	 */
+-	ring->cycle_state = cycle_state;
++	ring->cycle_state = 1;
+ 
+ 	/*
+ 	 * Each segment has a link TRB, and leave an extra TRB for SW
+@@ -317,7 +317,6 @@ static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
+ 					struct xhci_segment **first,
+ 					struct xhci_segment **last,
+ 					unsigned int num_segs,
+-					unsigned int cycle_state,
+ 					enum xhci_ring_type type,
+ 					unsigned int max_packet,
+ 					gfp_t flags)
+@@ -328,7 +327,7 @@ static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
+ 
+ 	chain_links = xhci_link_chain_quirk(xhci, type);
+ 
+-	prev = xhci_segment_alloc(xhci, cycle_state, max_packet, num, flags);
++	prev = xhci_segment_alloc(xhci, max_packet, num, flags);
+ 	if (!prev)
+ 		return -ENOMEM;
+ 	num++;
+@@ -337,8 +336,7 @@ static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
+ 	while (num < num_segs) {
+ 		struct xhci_segment	*next;
+ 
+-		next = xhci_segment_alloc(xhci, cycle_state, max_packet, num,
+-					  flags);
++		next = xhci_segment_alloc(xhci, max_packet, num, flags);
+ 		if (!next)
+ 			goto free_segments;
+ 
+@@ -363,9 +361,8 @@ static int xhci_alloc_segments_for_ring(struct xhci_hcd *xhci,
+  * Set the end flag and the cycle toggle bit on the last segment.
+  * See section 4.9.1 and figures 15 and 16.
+  */
+-struct xhci_ring *xhci_ring_alloc(struct xhci_hcd *xhci,
+-		unsigned int num_segs, unsigned int cycle_state,
+-		enum xhci_ring_type type, unsigned int max_packet, gfp_t flags)
++struct xhci_ring *xhci_ring_alloc(struct xhci_hcd *xhci, unsigned int num_segs,
++				  enum xhci_ring_type type, unsigned int max_packet, gfp_t flags)
+ {
+ 	struct xhci_ring	*ring;
+ 	int ret;
+@@ -383,7 +380,7 @@ struct xhci_ring *xhci_ring_alloc(struct xhci_hcd *xhci,
+ 		return ring;
+ 
+ 	ret = xhci_alloc_segments_for_ring(xhci, &ring->first_seg, &ring->last_seg, num_segs,
+-					   cycle_state, type, max_packet, flags);
++					   type, max_packet, flags);
+ 	if (ret)
+ 		goto fail;
+ 
+@@ -393,7 +390,7 @@ struct xhci_ring *xhci_ring_alloc(struct xhci_hcd *xhci,
+ 		ring->last_seg->trbs[TRBS_PER_SEGMENT - 1].link.control |=
+ 			cpu_to_le32(LINK_TOGGLE);
+ 	}
+-	xhci_initialize_ring_info(ring, cycle_state);
++	xhci_initialize_ring_info(ring);
+ 	trace_xhci_ring_alloc(ring);
+ 	return ring;
+ 
+@@ -421,8 +418,8 @@ int xhci_ring_expansion(struct xhci_hcd *xhci, struct xhci_ring *ring,
+ 	struct xhci_segment	*last;
+ 	int			ret;
+ 
+-	ret = xhci_alloc_segments_for_ring(xhci, &first, &last, num_new_segs, ring->cycle_state,
+-					   ring->type, ring->bounce_buf_len, flags);
++	ret = xhci_alloc_segments_for_ring(xhci, &first, &last, num_new_segs, ring->type,
++					   ring->bounce_buf_len, flags);
+ 	if (ret)
+ 		return -ENOMEM;
+ 
+@@ -632,8 +629,7 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
+ 
+ 	for (cur_stream = 1; cur_stream < num_streams; cur_stream++) {
+ 		stream_info->stream_rings[cur_stream] =
+-			xhci_ring_alloc(xhci, 2, 1, TYPE_STREAM, max_packet,
+-					mem_flags);
++			xhci_ring_alloc(xhci, 2, TYPE_STREAM, max_packet, mem_flags);
+ 		cur_ring = stream_info->stream_rings[cur_stream];
+ 		if (!cur_ring)
+ 			goto cleanup_rings;
+@@ -976,7 +972,7 @@ int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id,
+ 	}
+ 
+ 	/* Allocate endpoint 0 ring */
+-	dev->eps[0].ring = xhci_ring_alloc(xhci, 2, 1, TYPE_CTRL, 0, flags);
++	dev->eps[0].ring = xhci_ring_alloc(xhci, 2, TYPE_CTRL, 0, flags);
+ 	if (!dev->eps[0].ring)
+ 		goto fail;
+ 
+@@ -1453,7 +1449,7 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
+ 
+ 	/* Set up the endpoint ring */
+ 	virt_dev->eps[ep_index].new_ring =
+-		xhci_ring_alloc(xhci, 2, 1, ring_type, max_packet, mem_flags);
++		xhci_ring_alloc(xhci, 2, ring_type, max_packet, mem_flags);
+ 	if (!virt_dev->eps[ep_index].new_ring)
+ 		return -ENOMEM;
+ 
+@@ -2263,7 +2259,7 @@ xhci_alloc_interrupter(struct xhci_hcd *xhci, unsigned int segs, gfp_t flags)
+ 	if (!ir)
+ 		return NULL;
+ 
+-	ir->event_ring = xhci_ring_alloc(xhci, segs, 1, TYPE_EVENT, 0, flags);
++	ir->event_ring = xhci_ring_alloc(xhci, segs, TYPE_EVENT, 0, flags);
+ 	if (!ir->event_ring) {
+ 		xhci_warn(xhci, "Failed to allocate interrupter event ring\n");
+ 		kfree(ir);
+@@ -2465,7 +2461,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 		goto fail;
+ 
+ 	/* Set up the command ring to have one segments for now. */
+-	xhci->cmd_ring = xhci_ring_alloc(xhci, 1, 1, TYPE_COMMAND, 0, flags);
++	xhci->cmd_ring = xhci_ring_alloc(xhci, 1, TYPE_COMMAND, 0, flags);
+ 	if (!xhci->cmd_ring)
+ 		goto fail;
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
 diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index fdb1b71eeec2..44e4ae201048 100644
+index 44e4ae201048..aa8c877f47ac 100644
 --- a/drivers/usb/host/xhci.c
 +++ b/drivers/usb/host/xhci.c
-@@ -40,15 +40,15 @@ MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
+@@ -790,7 +790,7 @@ static void xhci_clear_command_ring(struct xhci_hcd *xhci)
+ 		seg->trbs[TRBS_PER_SEGMENT - 1].link.control &= cpu_to_le32(~TRB_CYCLE);
+ 	}
  
- static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
- {
--	struct xhci_segment *seg = ring->first_seg;
-+	struct xhci_segment *seg;
- 
- 	if (!td || !td->start_seg)
- 		return false;
--	do {
-+
-+	xhci_for_each_ring_seg(ring->first_seg, seg) {
- 		if (seg == td->start_seg)
- 			return true;
--		seg = seg->next;
--	} while (seg && seg != ring->first_seg);
-+	}
- 
- 	return false;
- }
-@@ -785,14 +785,10 @@ static void xhci_clear_command_ring(struct xhci_hcd *xhci)
- 	struct xhci_segment *seg;
- 
- 	ring = xhci->cmd_ring;
--	seg = ring->deq_seg;
--	do {
--		memset(seg->trbs, 0,
--			sizeof(union xhci_trb) * (TRBS_PER_SEGMENT - 1));
--		seg->trbs[TRBS_PER_SEGMENT - 1].link.control &=
--			cpu_to_le32(~TRB_CYCLE);
--		seg = seg->next;
--	} while (seg != ring->deq_seg);
-+	xhci_for_each_ring_seg(ring->deq_seg, seg) {
-+		memset(seg->trbs, 0, sizeof(union xhci_trb) * (TRBS_PER_SEGMENT - 1));
-+		seg->trbs[TRBS_PER_SEGMENT - 1].link.control &= cpu_to_le32(~TRB_CYCLE);
-+	}
- 
- 	xhci_initialize_ring_info(ring, 1);
+-	xhci_initialize_ring_info(ring, 1);
++	xhci_initialize_ring_info(ring);
  	/*
+ 	 * Reset the hardware dequeue pointer.
+ 	 * Yes, this will need to be re-written after resume, but we're paranoid
 diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 89337562440b..753d9343a4b1 100644
+index 753d9343a4b1..d3b250c736b8 100644
 --- a/drivers/usb/host/xhci.h
 +++ b/drivers/usb/host/xhci.h
-@@ -1263,6 +1263,9 @@ static inline const char *xhci_trb_type_string(u8 type)
- #define AVOID_BEI_INTERVAL_MIN	8
- #define AVOID_BEI_INTERVAL_MAX	32
- 
-+#define xhci_for_each_ring_seg(head, seg) \
-+	for (seg = head; seg != NULL; seg = (seg->next != head ? seg->next : NULL))
-+
- struct xhci_segment {
- 	union xhci_trb		*trbs;
- 	/* private to HCD */
+@@ -1795,14 +1795,12 @@ void xhci_slot_copy(struct xhci_hcd *xhci,
+ int xhci_endpoint_init(struct xhci_hcd *xhci, struct xhci_virt_device *virt_dev,
+ 		struct usb_device *udev, struct usb_host_endpoint *ep,
+ 		gfp_t mem_flags);
+-struct xhci_ring *xhci_ring_alloc(struct xhci_hcd *xhci,
+-		unsigned int num_segs, unsigned int cycle_state,
++struct xhci_ring *xhci_ring_alloc(struct xhci_hcd *xhci, unsigned int num_segs,
+ 		enum xhci_ring_type type, unsigned int max_packet, gfp_t flags);
+ void xhci_ring_free(struct xhci_hcd *xhci, struct xhci_ring *ring);
+ int xhci_ring_expansion(struct xhci_hcd *xhci, struct xhci_ring *ring,
+ 		unsigned int num_trbs, gfp_t flags);
+-void xhci_initialize_ring_info(struct xhci_ring *ring,
+-			unsigned int cycle_state);
++void xhci_initialize_ring_info(struct xhci_ring *ring);
+ void xhci_free_endpoint_ring(struct xhci_hcd *xhci,
+ 		struct xhci_virt_device *virt_dev,
+ 		unsigned int ep_index);
 -- 
 2.25.1
 
