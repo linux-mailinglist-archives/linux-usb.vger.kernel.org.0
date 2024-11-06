@@ -1,59 +1,58 @@
-Return-Path: <linux-usb+bounces-17226-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17227-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 035209BEFE5
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 15:15:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66F6D9BF07A
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 15:37:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 346711C2307D
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 14:15:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 276E82839F2
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 14:37:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1851C2010F0;
-	Wed,  6 Nov 2024 14:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A81C5201256;
+	Wed,  6 Nov 2024 14:37:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TNuKbhnl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9dSy6QW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0892010E6;
-	Wed,  6 Nov 2024 14:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B65F18BBBB;
+	Wed,  6 Nov 2024 14:37:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730902491; cv=none; b=ZmcNioKPQyULvSFDuGCKmTM5VTa+gTRq7zGSg6/BTaKR0BPRKN6WhqfIy47vUxEJ2Za+w+d97+xwsFoSUrRirsofzn9oXRJdcNJpIyY/2CCxYM593PHbHCGuA45Cs/VxFlNSFlbo0Iw7wpghu+yGG7CntNeNFmfd0djujT7qj8c=
+	t=1730903830; cv=none; b=K9edOeFB20LKq48Mk9Ma+1YBAv8kBikdShjTOnGZGXPGNnjp5dYlXB4HrJkysReS6u0QmPhd4BK5F9ljYzCbjUI1OVbkKFe1Y1zFTnkB7vNnZh4lDxfMjm46qbSd9TQ/O0daYHuYisJ3gQbFKnVHLDew6qynGX3OFHyMOh/TBl8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730902491; c=relaxed/simple;
-	bh=LZgHMglaalJFPre4ZauInW/LgNM368v+S2B0ogkJf9w=;
+	s=arc-20240116; t=1730903830; c=relaxed/simple;
+	bh=+62y1ygdQsHlOvD9m8t+HDA1/rH9a4CtssEBamH87cY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hLe7FbCBYtK4ODggflyuInu+td+HxMHW2CAAvPtZYQctXuUNpDPx+bkZ4q1EsshtITHQ1Ze2mYOpH3k03j4Hr3/bFFjn09E6Lxil/kDD/4RTPZ+WUhCmNQkle02p7mBzDYn4Bqt8WRwixABK6Oe56BTvd2PL2ZGIwN53RkDZRH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TNuKbhnl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2ACB4C4CEC6;
-	Wed,  6 Nov 2024 14:14:51 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nWfLOE+JeKmlTp2cgtZNeM197/fewAjXHDwg1whuTt4akje75PaFivSvgEDYoVq+NjqZDhXr1H/YZDLufOEJZmNUQOTd9CcdUnrAIrd5rOGEjEF3zXkaglvsh/NY6y+JAX7wcmhkp+LHenM45FPbuuY0IxiKfEQQ4g8XlR7rbVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9dSy6QW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F47C4CEC6;
+	Wed,  6 Nov 2024 14:37:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730902491;
-	bh=LZgHMglaalJFPre4ZauInW/LgNM368v+S2B0ogkJf9w=;
+	s=k20201202; t=1730903829;
+	bh=+62y1ygdQsHlOvD9m8t+HDA1/rH9a4CtssEBamH87cY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TNuKbhnl33A/7cQ6fUGWx9jFuMxtGTw4Co8GXtGrC5josJ9S2RIv7GXLd1ongEOBl
-	 9rUY2rUrftyuExrtEm3v7geh3Q/4tPI0BVy32Axyx57RsLrV9a5D//OUT97t9ysJFB
-	 1nb+RLg1m1LrVdng+C2OjHKg7K3PwHiDIoodyPzP+WhAiaFhDBqwrJf/3GFKHgeQen
-	 G0WSKEh2R5+dYHMv5gV2kl7iOhDkIsem8nqEklhO+4QwH+oPvu2JtDd6ONib65iKdf
-	 B6w4KETUgl/m861wDsXMCBE32XAB8/hhE7hUjb2zEOJYyMIEw8s9XxX/RJKopVoCny
-	 7xD6SgWkG1xpw==
+	b=T9dSy6QW4g7WoJYraGZsEAzmgAmN8y5rzr5no0l2PYpEEzDF+LfP8j0W3E1Pa0R3S
+	 E487HCtaEreE1d8opvtZ6D7tsCgRqWS3clR2CMAoE55cLggQAW4G7UEm4ncqol2UYi
+	 0vbFFRwrs6iv1BqZyN++HuH0nHTqYcbPu62njpCzk/V87MpPQqT2HqaGQhsN+oBDnq
+	 cJw48h7nlIf2VV5FePW8aiURj7jBCFVAt9TM5vBv3HMHGtqO3r6HELsTVsOruDwzEc
+	 mBNdFqfMhXI3H+KsEwWHsjbc8ZXuInrC6i7ApzzG1vG3d19rozTTtTSz7mCC4fPgDm
+	 fPYTjMeDNEadQ==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1t8go7-000000005Nt-1yfT;
-	Wed, 06 Nov 2024 15:14:52 +0100
-Date: Wed, 6 Nov 2024 15:14:51 +0100
+	id 1t8h9i-000000005iC-1PjM;
+	Wed, 06 Nov 2024 15:37:11 +0100
+Date: Wed, 6 Nov 2024 15:37:10 +0100
 From: Johan Hovold <johan@kernel.org>
-To: wojackbb@gmail.com
+To: Qiu-ji Chen <chenqiuji666@gmail.com>
 Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] [v3]USB: serial: qcserial: add support for Sierra
- Wireless EM86xx
-Message-ID: <Zyt52y7uc3u99p2V@hovoldconsulting.com>
-References: <20241106105029.338457-1-wojackbb@gmail.com>
+	linux-kernel@vger.kernel.org, baijiaju1990@gmail.com
+Subject: Re: [PATCH] fdti_sio: Fix atomicity violation in get_serial_info()
+Message-ID: <Zyt_FvLvANrAA5ly@hovoldconsulting.com>
+References: <20241106101809.17632-1-chenqiuji666@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,40 +61,31 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241106105029.338457-1-wojackbb@gmail.com>
+In-Reply-To: <20241106101809.17632-1-chenqiuji666@gmail.com>
 
-On Wed, Nov 06, 2024 at 06:50:29PM +0800, wojackbb@gmail.com wrote:
-> From: Jack Wu <wojackbb@gmail.com>
-> 
-> Add support for Sierra Wireless EM86xx with
-> USB-id 0x1199:0x90e5 & 0x1199:0x90e4.
+On Wed, Nov 06, 2024 at 06:18:09PM +0800, Qiu-ji Chen wrote:
+> Our static checker found a bug where set_serial_info() uses a mutex, but 
+> get_serial_info() does not. Fortunately, the impact of this is relatively 
+> minor. It doesn't cause a crash or any other serious issues. However, if a 
+> race condition occurs between set_serial_info() and get_serial_info(), 
+> there is a chance that the data returned by get_serial_info() will be 
+> meaningless.
 
-> 0x1199:0x90e4
-> T:  Bus=03 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1199 ProdID=90e4 Rev= 0.00
-> S:  Manufacturer=Sierra Wireless, Incorporated
-> S:  SerialNumber=004403161882339
-> C:* #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=  2mA
-> I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=10 Driver=qcserial
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> ---
-> v3 changes: the entries sorted by PID
-> ---
-> Signed-off-by: Jack Wu <wojackbb@gmail.com>
-> ---
+Perhaps "inconsistent" is a better word here.
 
-Thanks for the update. Next time make sure you put the changelog here
-after your SoB and the --- line.
+> Similar issues have been submitted or confirmed: 
+> https://lore.kernel.org/all/20241002125845.785464707@linuxfoundation.org/ 
+> https://lore.kernel.org/all/20241106095819.15194-1-chenqiuji666@gmail.com/
 
-As it currently stands you SoB is not included when I apply the patch.
-I've fixed it up manually, but please remember this for your future
-contributions.
+This should go under the --- line so that it's not included in the git
+logs.
 
-Also, the patch revision typically goes inside the PATCH marker:
+> Signed-off-by: Qiu-ji Chen <chenqiuji666@gmail.com>
+> Fixes: 3ae36bed3a93 ("fdti_sio: switch to ->[sg]et_serial()")
 
-	[PATCH v3] USB: serial: ...
+And please use the expected patch prefix:
+
+	USB: serial: ftdi_sio: ...
 
 Johan
 
