@@ -1,184 +1,192 @@
-Return-Path: <linux-usb+bounces-17237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A9899BF3AB
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 17:53:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 487799BF3D4
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 18:01:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51F91285265
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 16:53:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4F8E1F22CFE
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 17:01:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ACAE205AC9;
-	Wed,  6 Nov 2024 16:53:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48EC42064E8;
+	Wed,  6 Nov 2024 17:01:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="ztpL3YL6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+Received: from mail-il1-f182.google.com (mail-il1-f182.google.com [209.85.166.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7751E0488
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 16:53:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044B0200CB7
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 17:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730912006; cv=none; b=utUPT0eEuVy/QAGMqwn3X0T5t9mGdy+6iwN18hklYpAKYzObKCbUuf01XbhZVnxwHkIP/n1bAdu8p9/7g8wi2jIc+JLDSQ7lkBymMR5u9vKwMkZnUUk+HDS1NtJqafloij9vYDpEmPQafVAw4kFeGzsoTG6ioxThp7afhYzvaYE=
+	t=1730912502; cv=none; b=VCgo9NUIE9yTSuVBD/vchgxkVCKA4ZZjdqz8nrOYZdqGKLb969in0cXy7e4Ydi72Hb14aJ4ZkGpYV/auiRm3MVnDceS93Hp8NGMRhSp/yhxydG6yNV6FchWtXrx4yuhIik7rEN8H3Rz2R0HEnWEARAKrztovvu3mKhUlvCvhsX4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730912006; c=relaxed/simple;
-	bh=xnQ4Y5OkLDw7+kpBIjjDpj/d4KDArPXb58DSwWlk9/c=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=nNTfUauG4fBvhp5t20ZnXo+clazsXjWapIzAnmUMJYoWwGJjzrNGdgTKKOIts041WelLOJV69wJSMsHvcP3qfyD1GN8v7RuEiZNgIi9dH0ZIUampDB/HEbZoDFN5+hBOG4Fyhr7giFxsJZR8Hz2XdnLkhL9CKebNGw4dPbzDd3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a6b563871eso585895ab.1
-        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2024 08:53:24 -0800 (PST)
+	s=arc-20240116; t=1730912502; c=relaxed/simple;
+	bh=dCqUWVAxFXnv42ES2FDGsclhdATI2oq7tHXpixuSIFg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ImM0cCWFpPd6qsdfK5bUKx2aeIsxf+1vLfGpCQ5MBVSEnww+3sjFkKORSViWtksE3r4rtLCzlMjHYXuTxpbtjHwsvj2QyIadMb2UNQ3rWG+9d2+enNFe1Hc8l1K7wf5n5WdY3pIGH6byn1Dix8OtCeIo9IK9LeWKw/OghEkuVPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=ztpL3YL6; arc=none smtp.client-ip=209.85.166.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
+Received: by mail-il1-f182.google.com with SMTP id e9e14a558f8ab-3a6be9bd626so209995ab.2
+        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2024 09:01:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1730912500; x=1731517300; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=op0VqxjjyKbJWNclEndGjJgNBVKWAngrK0jv+MxYK+M=;
+        b=ztpL3YL61PWre2O/W8AI0XYkV6LWfEmInFJpog7qO5XuaSvE6ZS/qKXg81dDLjGvMd
+         mKJSfTIwt1P2T69EH3g8izca0BIk2WG/Moq5ip6/AabOE4BaLxmKJHHBYR9moni706Zp
+         A2O0KbKkq/g+jsf4tKFTCGubkQ2I9QSuxWlh5MnudPeHlE8mlY0+Zw8e+3gGsX4bVDbY
+         NzL6091qQrMpDdgRZ4G7jeVnm0zLxWO7O+hsUSk3NfTCx69JH/kXF3AX79o1MuMKulC0
+         DNgIZzsARwFpURiCEWJgco7Bjc65j74cGbiXpDE6KLgQfUusj/EtmkZtTRtsnwinErPz
+         pkLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730912003; x=1731516803;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+        d=1e100.net; s=20230601; t=1730912500; x=1731517300;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=wAuJyuZyW3fwlKbDhzM6Z2xlWYFISeiwXKrwvgPNhqc=;
-        b=DH2lNbyyikW3wGDCfksyAoQQX72kcJBViAGLX5g+LLxcKO5dVYMgdAtY8zkfasH23e
-         3r0NDF5/lsQ66mvSrQLwQFuJZCPlnBzTj2RShmxSYj1Z3tDDegCB/Rg3XpSTP3P8PM+b
-         Q8VER/gCImvGLYwN//jaGHu4nRFrfC39VmCyIewU6+Lujp3g9TkhB1QprBifFixbDOfH
-         qQIA/sttHZirpQ/aMs3YSMWkHd0kpsqgEYg4eYvTLommNOUEwTmS8CRJ+6GW4uVWpnL7
-         hoQW1g+HtuOYteRg50JSmA+E+dujoDc1hdxmwxjMgAJDfD+Mn6K+wXwI6MupgMWDrxN+
-         ejNA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0nb2KvAq98KYIVqmVJmdcVeVBV8fQEbLvRtgRaN34DQeQ/aus0QkfRI2zOIXRs6A68kQaRu4ZdEo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4MD+hRILYbgZUxpLDZMBGLtwykaqDNwlst/U4uYF65FqMP7T5
-	Ie65msVfcwMke6GrYLGmignZKMPnfadRb7ty5/bKZXfJirJbbgAj7YQhDw5gegcb7B0p0grUeAM
-	qBOtqHExI7HCS6nvlrQzInghYfjFvgjKFlBLC87PTvsSCHW6aIRzP+6E=
-X-Google-Smtp-Source: AGHT+IHdPpKyWCNZXHoI1XBOWe8fIhCxF9cGjMgOMB/oUdi2ooOGWuK5QOMQ/He+FwMCTi3itzqPKo3pDdjNU1AKn8H67+g7mkQ1
+        bh=op0VqxjjyKbJWNclEndGjJgNBVKWAngrK0jv+MxYK+M=;
+        b=SpRwFxfI/+T439TWborPTdqY8mgppUm0WqW7h+H3ta3ZozBTUINH8WhHsRgbZeaxsa
+         5xzm6fi1+NGG0M/I4VcO8r7U3IrH7kzTVI2VDLxEee6ggpUdKGE8ZlzzeTVFSJkD/I6Y
+         LFBS1TqPBXUJQTRNOaZuV02N0TWLUMsR2j7K8dbvKckxw1Kt7QJAsiD8RNhaXG3wSnng
+         KyqwvZ0dc++BfU1wC95M5+ghsKfg+Lrar/7cyA+xQdDt4NaQ7a3pbucUaTwhKI1K9mSz
+         BR7KzigwK9NYe2ttVORBVib6TEZtZYCWLpdiZfb3rCe3/Ryr/ghsXRgO488Sw3D1jvjN
+         lBUg==
+X-Forwarded-Encrypted: i=1; AJvYcCWzVM1wLjikCPjyRX/5JYR5kdoI6j9ddSsJLTvniQsrslGXV128yNeWOOSTBzP5l9EaiVPEoTmiMxE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxY0YbSyeXnldpYQXqHctkRvjULYz6So/HQ2LDmIWNLAjrRrViZ
+	17V9ZcDMR463KsqEudvrPlsXX9XO0sE4uTbyChA9LpHpcGgu/VI2PLh7kRHfIgU=
+X-Google-Smtp-Source: AGHT+IHrgEte4B9b/UBa+XLmWhe+r+AV3JVWbrzbFsSpvtGtulthtgr4BgHksHJ2AMoNKT1NC7SN4A==
+X-Received: by 2002:a05:6e02:742:b0:3a6:c023:7e30 with SMTP id e9e14a558f8ab-3a6c0237f72mr163574695ab.7.1730912498556;
+        Wed, 06 Nov 2024 09:01:38 -0800 (PST)
+Received: from kf-ir16 ([2607:fb91:759:8d6:e1a2:ca5b:827b:eda7])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a6a97b009csm35012775ab.4.2024.11.06.09.01.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Nov 2024 09:01:38 -0800 (PST)
+Date: Wed, 6 Nov 2024 11:01:34 -0600
+From: Aaron Rainbolt <arainbolt@kfocus.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
+ andreas.noever@gmail.com, linux-usb@vger.kernel.org, mmikowski@kfocus.org,
+ linux-kernel@vger.kernel.org, Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: USB-C DisplayPort display failing to stay active with Intel
+ Barlow Ridge USB4 controller, power-management related issue?
+Message-ID: <20241106110134.1871a7f6@kf-ir16>
+In-Reply-To: <20241106060635.GJ275077@black.fi.intel.com>
+References: <20241011183751.7d27c59c@kf-ir16>
+	<20241023062737.GG275077@black.fi.intel.com>
+	<20241023073931.GH275077@black.fi.intel.com>
+	<20241023174413.451710ea@kf-ir16>
+	<20241024154341.GK275077@black.fi.intel.com>
+	<20241031095542.587e8aa6@kf-ir16>
+	<20241101072155.GW275077@black.fi.intel.com>
+	<20241101181334.25724aff@kf-ir16>
+	<20241104060159.GY275077@black.fi.intel.com>
+	<20241105141627.5e5199b3@kf-ir16>
+	<20241106060635.GJ275077@black.fi.intel.com>
+Organization: Kubuntu Focus
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1b07:b0:3a5:e5cf:c5b6 with SMTP id
- e9e14a558f8ab-3a5e5cfc68bmr286814735ab.10.1730912003663; Wed, 06 Nov 2024
- 08:53:23 -0800 (PST)
-Date: Wed, 06 Nov 2024 08:53:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <672b9f03.050a0220.350062.0276.GAE@google.com>
-Subject: [syzbot] [wpan?] [usb?] BUG: corrupted list in ieee802154_if_remove
-From: syzbot <syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com>
-To: alex.aring@gmail.com, davem@davemloft.net, edumazet@google.com, 
-	horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, linux-wpan@vger.kernel.org, 
-	miquel.raynal@bootlin.com, netdev@vger.kernel.org, pabeni@redhat.com, 
-	stefan@datenfreihafen.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On Wed, 6 Nov 2024 08:06:35 +0200
+Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
 
-syzbot found the following issue on:
+> Hi Aaron,
+> 
+> On Tue, Nov 05, 2024 at 02:16:36PM -0600, Aaron Rainbolt wrote:
+> > On Mon, 4 Nov 2024 08:01:59 +0200
+> > Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> > 
+> > ...snip...
+> >   
+> > > Okay, thanks again for testing!
+> > > 
+> > > It means disabling adapter 16 in DROM is actually intentional as
+> > > that is not connected to the dGPU and so makes sense.
+> > >   
+> > > > * Boot the system up, nothing connected.
+> > > > * Wait for Barlow Ridge to enter runtime suspend. This takes ~15
+> > > >   seconds so waiting for > 15 seconds should be enough.
+> > > > * Plug in USB-C monitor to the USB-C port of the Barlow Ridge.
+> > > >   Screen shows in log, screen wakes, but then no signal is
+> > > > received, and no image ever appears. Screen then sleeps after
+> > > > its timeout.
+> > > > * Run lspci -k to wake up the monitors. Once this is run, the
+> > > > display shows correctly and is stable. Adding another USB-C
+> > > > display after this also works correctly: It is recognized and
+> > > > lights up in seconds to show the desktop background, and
+> > > > remains stable.
+> > > > 
+> > > > Notice that pre-6.5 kernels work fine with Barlow Ridge, which
+> > > > implies that new code is causing this. It may be new support
+> > > > code for tbt capability (and therefore pretty much required).
+> > > > But regardless, it's still new code. With the current patch, we
+> > > > can run a udev rule that enables hot plugging that likely
+> > > > always work, or (worst case) at least empowers the customer to
+> > > > refresh monitors by clicking a button.    
+> > > 
+> > > We definitely want to fix this properly so there is no need for
+> > > anyone to run 'lspci' or similar hacks but because I'm unable to
+> > > reproduce this with my reference Barlow Ridge setup, I need some
+> > > help from you.
+> > > 
+> > > You say with v6.5 it works? That's interesting because we only
+> > > added this redrive mode workaround for v6.9 and without that the
+> > > domain surely will not be kept powered but maybe I'm missing
+> > > something.  
+> > 
+> > 6.5 is *broken*. 6.1 works correctly, but that's probably because it
+> > doesn't have Thunderbolt support for Barlow Ridge chips at all. I
+> > suspect this is because the chip is just acting as a USB-C
+> > controller, and that works just fine without the Thunderbolt
+> > driver.  
+> 
+> Exactly so while it "works" for this particular case all other cases
+> will not pass.
+> 
+> > > I wonder if your test team could provide log from v6.5 as well
+> > > following the same steps, no need to run 'lspci' just do:
+> > > 
+> > >   1. Boot the system up, nothing connected.
+> > >   2. Wait for ~15 seconds for the domain to enter runtime suspend.
+> > >   3. Plug in USB-C monitor to the USB-C port of Barlow Ridge.
+> > >   4. Verify that it wakes up and, there is picture on the screen.
+> > >   5. Wait for ~15 seconds.
+> > > 
+> > > Expectation: After step 5 the monitor still displays picture.
+> > > 
+> > > If this works as above then I'm really surprised but if that's the
+> > > case then we can maybe think of another approach of dealing with
+> > > the redrive mode.  
+> > 
+> > We'd be happy to run this testing on the 6.1 kernel if it would be
+> > helpful. Will that work, or is 6.1 too old?  
+> 
+> Unfortunately that does not help here. I need to figure something else
+> how to detect the redrive case with this firmware but first, does this
+> work in Windows? I mean if you install Windows to this same system
+> does it work as expected?
 
-HEAD commit:    557329bcecc2 Merge tag 'mmc-v6.12-rc3' of git://git.kernel..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14a9f740580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=921b01cbfd887a9b
-dashboard link: https://syzkaller.appspot.com/bug?extid=985f827280dc3a6e7e92
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15d76d5f980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12a9f740580000
+It does work as expected under Windows 11, with one major caveat. We
+used a Windows 11 ISO with a setup.exe created on April 05 2023 for
+installing the test system, and after initial installation it behaved
+exactly the same way as Linux behaves now (displays going blank soon
+after being plugged in). However, after installing all available
+Windows updates, the issue resolved, and the displays worked exactly as
+intended (the screens are recognized when attached and do not end up
+disconnecting after a timeout).
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/2b44e0081eb5/disk-557329bc.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/15b6a52c8e11/vmlinux-557329bc.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ab40912bec45/bzImage-557329bc.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:58!
-Oops: invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-CPU: 0 UID: 0 PID: 6277 Comm: syz-executor157 Not tainted 6.12.0-rc6-syzkaller-00005-g557329bcecc2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-RIP: 0010:__list_del_entry_valid_or_report+0xf4/0x140 lib/list_debug.c:56
-Code: e8 a1 7e 00 07 90 0f 0b 48 c7 c7 e0 37 60 8c 4c 89 fe e8 8f 7e 00 07 90 0f 0b 48 c7 c7 40 38 60 8c 4c 89 fe e8 7d 7e 00 07 90 <0f> 0b 48 c7 c7 a0 38 60 8c 4c 89 fe e8 6b 7e 00 07 90 0f 0b 48 c7
-RSP: 0018:ffffc9000490f3d0 EFLAGS: 00010246
-RAX: 000000000000004e RBX: dead000000000122 RCX: d211eee56bb28d00
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffff88805b278dd8 R08: ffffffff8174a12c R09: 1ffffffff2852f0d
-R10: dffffc0000000000 R11: fffffbfff2852f0e R12: dffffc0000000000
-R13: dffffc0000000000 R14: dead000000000100 R15: ffff88805b278cc0
-FS:  0000555572f94380(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000056262e4a3000 CR3: 0000000078496000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __list_del_entry_valid include/linux/list.h:124 [inline]
- __list_del_entry include/linux/list.h:215 [inline]
- list_del_rcu include/linux/rculist.h:157 [inline]
- ieee802154_if_remove+0x86/0x1e0 net/mac802154/iface.c:687
- rdev_del_virtual_intf_deprecated net/ieee802154/rdev-ops.h:24 [inline]
- ieee802154_del_iface+0x2c0/0x5c0 net/ieee802154/nl-phy.c:323
- genl_family_rcv_msg_doit net/netlink/genetlink.c:1115 [inline]
- genl_family_rcv_msg net/netlink/genetlink.c:1195 [inline]
- genl_rcv_msg+0xb14/0xec0 net/netlink/genetlink.c:1210
- netlink_rcv_skb+0x1e3/0x430 net/netlink/af_netlink.c:2551
- genl_rcv+0x28/0x40 net/netlink/genetlink.c:1219
- netlink_unicast_kernel net/netlink/af_netlink.c:1331 [inline]
- netlink_unicast+0x7f6/0x990 net/netlink/af_netlink.c:1357
- netlink_sendmsg+0x8e4/0xcb0 net/netlink/af_netlink.c:1901
- sock_sendmsg_nosec net/socket.c:729 [inline]
- __sock_sendmsg+0x221/0x270 net/socket.c:744
- ____sys_sendmsg+0x52a/0x7e0 net/socket.c:2607
- ___sys_sendmsg net/socket.c:2661 [inline]
- __sys_sendmsg+0x292/0x380 net/socket.c:2690
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-RIP: 0033:0x7fd094c32309
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 71 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffec50063a8 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007fd094c32309
-RDX: 0000000004000000 RSI: 0000000020000b00 RDI: 0000000000000004
-RBP: 00000000000f4240 R08: 0000000000000000 R09: 00000000000000a0
-R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000161b7
-R13: 00007ffec50063bc R14: 00007ffec50063d0 R15: 00007ffec50063c0
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__list_del_entry_valid_or_report+0xf4/0x140 lib/list_debug.c:56
-Code: e8 a1 7e 00 07 90 0f 0b 48 c7 c7 e0 37 60 8c 4c 89 fe e8 8f 7e 00 07 90 0f 0b 48 c7 c7 40 38 60 8c 4c 89 fe e8 7d 7e 00 07 90 <0f> 0b 48 c7 c7 a0 38 60 8c 4c 89 fe e8 6b 7e 00 07 90 0f 0b 48 c7
-RSP: 0018:ffffc9000490f3d0 EFLAGS: 00010246
-RAX: 000000000000004e RBX: dead000000000122 RCX: d211eee56bb28d00
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffff88805b278dd8 R08: ffffffff8174a12c R09: 1ffffffff2852f0d
-R10: dffffc0000000000 R11: fffffbfff2852f0e R12: dffffc0000000000
-R13: dffffc0000000000 R14: dead000000000100 R15: ffff88805b278cc0
-FS:  0000555572f94380(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000056262e4a3000 CR3: 0000000078496000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Would it be helpful to test on Windows 11, and provide a report and
+system logs?
 
