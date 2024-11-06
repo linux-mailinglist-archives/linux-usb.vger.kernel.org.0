@@ -1,68 +1,69 @@
-Return-Path: <linux-usb+bounces-17152-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17153-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDBF89BDD0E
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 03:38:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D68C89BDD44
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 03:51:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5A42283E45
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 02:38:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 831D31F21BE8
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 02:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20FE61D3656;
-	Wed,  6 Nov 2024 02:29:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EAB918FDC6;
+	Wed,  6 Nov 2024 02:51:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0702418FDC6
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 02:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 599FAA47
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 02:51:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730860165; cv=none; b=t+PjNMZIVRWqq/Cse6rAhGgoplMuXgUINBxpsJ6LDvKFHg6lhagFqFTk3luDAp4v4kezJAE3DGv19UG2tzW14u3JHuuEYW0zdORz+tnkHkYTSlAxzfgXnNL5RyeUFTVkIvrloJ4oARUBFQWOsNK1Oe+d0+3+/+/7VzbsPKt/j2w=
+	t=1730861482; cv=none; b=WLKM8e0uhtmAH8B5PSeiBOAYxaGiuNnbms32CK0GbvhaMSI+BxMo5BEBFILe71wbZNIP1K+3Su8x0q0p4CbXlvQ8Y7HEKAJenFKyJIHtI9q3v+GTe12LmmCRe7dY9hBpMwegIPZcFm4HkcJWmRZsCxGZH2LQzxBPYsCbotMjlvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730860165; c=relaxed/simple;
-	bh=IBdg2Bt0HwnQgeOdaWbIXBiypwjEJVsrD8ry0xyzL58=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=skuXBBn31cW77pkd+OkRojXwpPCChOlT5Ta4XWlDdg3DKWa/eJkn1nT7dmduIO0mOlUeUTExpIeneoBX477zacf+UDqU8I30R95+eZ8Vj/ry+Q52n09iqlNu6brf/8WVDbrW7S+yESDa0cX2pduY9uJWg8UauP91OikuFE49PxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
+	s=arc-20240116; t=1730861482; c=relaxed/simple;
+	bh=NfP7BlgLxSn2WKKVkdrepVfQTJK7R3TVBFB7/t9tjC8=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=fuOUX0cwGVcSEskx9ttLpvwdB/em+CZGfLytYzYjOxBwGlYH1CLfLTiRLB92K7A+vsZdgirsIAKPOmgmuJ+iSaxAqIN6Ek3UkxKJ1a73Y7DzAN05rwOkuzcCRiix0qgbBrj4XAgmOfiaruPLx2GL2hUcRf+14D/03BsTxgkH7OQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a6bb827478so46244125ab.0
-        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2024 18:29:23 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-83a8c0df400so635679739f.1
+        for <linux-usb@vger.kernel.org>; Tue, 05 Nov 2024 18:51:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730860163; x=1731464963;
+        d=1e100.net; s=20230601; t=1730861480; x=1731466280;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=CqvDHUXChDs5WDe5/A0Lk/jE4efsnc49CyWjy/J1UDk=;
-        b=XYGY5CD23RXaT0dyzMOLWcQK4TtvRTUCJ1/fzgnkg56y48ZbRxEyJhNqNp0ngshV5m
-         nvRmJyPDFF4N0P/c5iwASI8A6k+21011X+V/C5Sj9kJmt/3RapoazoZ3fWwOkFViV9Yj
-         7LjS/uqeB4TN9Yiq1F1orIRnKsqkzkAXhieNuZe+a/QkqQGG9VCBXxkXR8LYkJTx+bH0
-         ddEXrhbBcWX/LQwPH+6jdXR2rLC1kj9yg1zEXwTwvZJyefkhdWeOa0PUkYG6Nb+Pyx/z
-         FFQxXJ9HM7gdmFwfBZcjQkXXw1uNCKLBU3iuc3mD3KbzAR0oqrCiqoLqqJdj1pkWqhSJ
-         jm4A==
-X-Forwarded-Encrypted: i=1; AJvYcCV9P987WPQD5bGG21OdbLhWrgeapGqFABHwzxxc7RoJjylTb9Q2w7PFnAoSCfQqI7wwlAenaAXGK9Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/+IjANEx9Nje0mOzi36jueuTXGwXP6j1YYBT62LCG+hXnbhbS
-	v9a33hAOrvXk3J1A6BWpLgqIkSqc/6ZJVWnnW6AojiVMJqtPUVp2Ee9mJnl6Sgd+UryNOK8+TRf
-	/ZARtyjKtXCnjk8GadkqrH91hnbm6o/rDYEfkbY8uIS/qxLWsUHBiXyw=
-X-Google-Smtp-Source: AGHT+IF0PM6LpNGmfDNDBX/JVebDF8JkusyPUeZZAlJmS18m15mJWEpE7hw3epPNz8/f4UjHrjOPiaU1a7Eme+e35jDB0BhYHIvO
+        bh=47a/jn3+/iOcV/k21j0lppzSJhAAjbRAD5/il+fS9AY=;
+        b=l0ZWeRS7xQ1CJfgPX/bO2WjMP31YPmCYo9APfTMuWVg6s0nRFINTeNW27R7AV07eZ3
+         hRSXU46fnPKfqFlgsNXQlMjZegNrFf3mn5DX7yJIEYvIvO374swEvBLuVS9xPoSdye6K
+         RoQ71pm+XUFnpgLGCKKET70S0Bxc6ivRzduPQ7/5XywtaX2NugdRgfq5Qk21ELXJTMkW
+         usS64ocOMNv0y2OJrGkLmGzkiW3DwlTY84IQoMvLn2Qj2zf9FFhWIMw3qoDYtz7sbW1q
+         /EtLjEmIL/W5K//cKu+RwOxRovoePSWJE85cafFORdBDBDVcn5oP8l3VsXSqwC3H9uQz
+         ReFQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVz4VslQCEOwilMHAWfRYfd9hdTiIA28Rn092pKzePWjCQYdMBaXxA2Fo1vl/9pLkMLWbqhLDi8S4U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwqO8Xd5KVKSjjTkhuyujNrwEKCYZ+M6sNu3E+T/PRVCFGvXDhL
+	9hrrq/Zqoxf2jh0ubhHd/nYaIQpXojrRm6UXdcfsm1CNVcxhOHa8fhsnEW7rfXwLEbDl0eeR1k5
+	xGrYrRlTxvwvjp16vQQDZX5J7ppPxbyurrLsjK5ZFzM9rmEMtUjSNPlk=
+X-Google-Smtp-Source: AGHT+IGFA7vO4U2x3q6uAPBDzuTKgONZPR+0I/WW2RDdNThGI7VcDHE7KiA+lQeHU0V2dPevX7he5TheTnl8dkXWYd5ZPtDh9PWA
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c544:0:b0:3a0:8d60:8ba7 with SMTP id
- e9e14a558f8ab-3a6b02f128cmr186708005ab.14.1730860163216; Tue, 05 Nov 2024
- 18:29:23 -0800 (PST)
-Date: Tue, 05 Nov 2024 18:29:23 -0800
+X-Received: by 2002:a05:6e02:1487:b0:3a6:aee2:1693 with SMTP id
+ e9e14a558f8ab-3a6b0250c4emr195392805ab.6.1730861480603; Tue, 05 Nov 2024
+ 18:51:20 -0800 (PST)
+Date: Tue, 05 Nov 2024 18:51:20 -0800
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <672ad483.050a0220.2edce.1518.GAE@google.com>
-Subject: [syzbot] [block?] [usb?] WARNING: bad unlock balance in blk_mq_update_tag_set_shared
-From: syzbot <syzbot+5007209c85ecdb50b5da@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Message-ID: <672ad9a8.050a0220.2a847.1aac.GAE@google.com>
+Subject: [syzbot] [usb?] [scsi?] WARNING: bad unlock balance in sd_revalidate_disk
+From: syzbot <syzbot+331e232a5d7a69fa7c81@syzkaller.appspotmail.com>
+To: James.Bottomley@HansenPartnership.com, linux-kernel@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org, 
+	martin.petersen@oracle.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 
 Hello,
@@ -71,11 +72,11 @@ syzbot found the following issue on:
 
 HEAD commit:    c88416ba074a Add linux-next specific files for 20241101
 git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=12d34740580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1051f55f980000
 kernel config:  https://syzkaller.appspot.com/x/.config?x=704b6be2ac2f205f
-dashboard link: https://syzkaller.appspot.com/bug?extid=5007209c85ecdb50b5da
+dashboard link: https://syzkaller.appspot.com/bug?extid=331e232a5d7a69fa7c81
 compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16d34740580000
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16952b40580000
 
 Downloadable assets:
 disk image: https://storage.googleapis.com/syzbot-assets/760a8c88d0c3/disk-c88416ba.raw.xz
@@ -83,37 +84,24 @@ vmlinux: https://storage.googleapis.com/syzbot-assets/46e4b0a851a2/vmlinux-c8841
 kernel image: https://storage.googleapis.com/syzbot-assets/428e2c784b75/bzImage-c88416ba.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5007209c85ecdb50b5da@syzkaller.appspotmail.com
+Reported-by: syzbot+331e232a5d7a69fa7c81@syzkaller.appspotmail.com
 
+sd 2:0:0:1: [sdc] Test Unit Ready failed: Result: hostbyte=DID_NO_CONNECT driverbyte=DRIVER_OK
 =====================================
 WARNING: bad unlock balance detected!
 6.12.0-rc5-next-20241101-syzkaller #0 Not tainted
 -------------------------------------
-kworker/1:1/57 is trying to release lock (&q->q_usage_counter(queue)) at:
-[<ffffffff8497aa7f>] blk_mq_update_tag_set_shared+0x27f/0x350 block/blk-mq.c:4131
+udevd/5897 is trying to release lock (&q->q_usage_counter(queue)) at:
+[<ffffffff862f40d3>] sd_revalidate_disk+0x7933/0xbcf0 drivers/scsi/sd.c:3808
 but there are no more locks to release!
 
 other info that might help us debug this:
-7 locks held by kworker/1:1/57:
- #0: ffff888144aecd48 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3204 [inline]
- #0: ffff888144aecd48 ((wq_completion)usb_hub_wq){+.+.}-{0:0}, at: process_scheduled_works+0x93b/0x1850 kernel/workqueue.c:3310
- #1: ffffc9000101fd00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3205 [inline]
- #1: ffffc9000101fd00 ((work_completion)(&hub->events)){+.+.}-{0:0}, at: process_scheduled_works+0x976/0x1850 kernel/workqueue.c:3310
- #2: ffff8880284ce190 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:1014 [inline]
- #2: ffff8880284ce190 (&dev->mutex){....}-{4:4}, at: hub_event+0x1fe/0x5150 drivers/usb/core/hub.c:5849
- #3: ffff888032eab190 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:1014 [inline]
- #3: ffff888032eab190 (&dev->mutex){....}-{4:4}, at: usb_disconnect+0x103/0x950 drivers/usb/core/hub.c:2295
- #4: ffff88807fd02160 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:1014 [inline]
- #4: ffff88807fd02160 (&dev->mutex){....}-{4:4}, at: __device_driver_lock drivers/base/dd.c:1095 [inline]
- #4: ffff88807fd02160 (&dev->mutex){....}-{4:4}, at: device_release_driver_internal+0xce/0x7c0 drivers/base/dd.c:1293
- #5: ffff8880334480e0 (&shost->scan_mutex){+.+.}-{4:4}, at: scsi_remove_host+0x34/0x770 drivers/scsi/hosts.c:169
- #6: ffff8880334482d0 (&set->tag_list_lock){+.+.}-{4:4}, at: blk_mq_del_queue_tag_set block/blk-mq.c:4139 [inline]
- #6: ffff8880334482d0 (&set->tag_list_lock){+.+.}-{4:4}, at: blk_mq_exit_queue+0x1da/0x470 block/blk-mq.c:4461
+1 lock held by udevd/5897:
+ #0: ffff8881433c14c8 (&disk->open_mutex){+.+.}-{4:4}, at: bdev_open+0xf0/0xc50 block/bdev.c:904
 
 stack backtrace:
-CPU: 1 UID: 0 PID: 57 Comm: kworker/1:1 Not tainted 6.12.0-rc5-next-20241101-syzkaller #0
+CPU: 1 UID: 0 PID: 5897 Comm: udevd Not tainted 6.12.0-rc5-next-20241101-syzkaller #0
 Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-Workqueue: usb_hub_wq hub_event
 Call Trace:
  <TASK>
  __dump_stack lib/dump_stack.c:94 [inline]
@@ -123,67 +111,34 @@ Call Trace:
  lock_release+0x5cb/0xa30 kernel/locking/lockdep.c:5870
  blk_unfreeze_release_lock block/blk.h:745 [inline]
  blk_mq_unfreeze_queue+0xd2/0x140 block/blk-mq.c:213
- blk_mq_update_tag_set_shared+0x27f/0x350 block/blk-mq.c:4131
- blk_mq_del_queue_tag_set block/blk-mq.c:4145 [inline]
- blk_mq_exit_queue+0x3a4/0x470 block/blk-mq.c:4461
- blk_mq_destroy_queue+0x1c1/0x220 block/blk-mq.c:4284
- __scsi_remove_device+0x1f9/0x3c0 drivers/scsi/scsi_sysfs.c:1512
- scsi_forget_host+0xcf/0x110 drivers/scsi/scsi_scan.c:2068
- scsi_remove_host+0x1dd/0x770 drivers/scsi/hosts.c:181
- quiesce_and_remove_host drivers/usb/storage/usb.c:949 [inline]
- usb_stor_disconnect+0x14e/0x1f0 drivers/usb/storage/usb.c:1178
- usb_unbind_interface+0x25e/0x940 drivers/usb/core/driver.c:461
- device_remove drivers/base/dd.c:569 [inline]
- __device_release_driver drivers/base/dd.c:1273 [inline]
- device_release_driver_internal+0x503/0x7c0 drivers/base/dd.c:1296
- bus_remove_device+0x34f/0x420 drivers/base/bus.c:576
- device_del+0x57a/0x9b0 drivers/base/core.c:3861
- usb_disable_device+0x3bf/0x850 drivers/usb/core/message.c:1418
- usb_disconnect+0x340/0x950 drivers/usb/core/hub.c:2304
- hub_port_connect drivers/usb/core/hub.c:5361 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x1ebc/0x5150 drivers/usb/core/hub.c:5903
- process_one_work kernel/workqueue.c:3229 [inline]
- process_scheduled_works+0xa63/0x1850 kernel/workqueue.c:3310
- worker_thread+0x870/0xd30 kernel/workqueue.c:3391
- kthread+0x2f0/0x390 kernel/kthread.c:389
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ sd_revalidate_disk+0x7933/0xbcf0 drivers/scsi/sd.c:3808
+ sd_open+0x21e/0x610 drivers/scsi/sd.c:1534
+ blkdev_get_whole+0x8e/0x450 block/bdev.c:689
+ bdev_open+0x2d4/0xc50 block/bdev.c:916
+ blkdev_open+0x389/0x4f0 block/fops.c:627
+ do_dentry_open+0xbe1/0x1b70 fs/open.c:962
+ vfs_open+0x3e/0x330 fs/open.c:1092
+ do_open fs/namei.c:3774 [inline]
+ path_openat+0x2c84/0x3590 fs/namei.c:3933
+ do_filp_open+0x235/0x490 fs/namei.c:3960
+ do_sys_openat2+0x13e/0x1d0 fs/open.c:1419
+ do_sys_open fs/open.c:1434 [inline]
+ __do_sys_openat fs/open.c:1450 [inline]
+ __se_sys_openat fs/open.c:1445 [inline]
+ __x64_sys_openat+0x247/0x2a0 fs/open.c:1445
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f64b7d169a4
+Code: 24 20 48 8d 44 24 30 48 89 44 24 28 64 8b 04 25 18 00 00 00 85 c0 75 2c 44 89 e2 48 89 ee bf 9c ff ff ff b8 01 01 00 00 0f 05 <48> 3d 00 f0 ff ff 76 60 48 8b 15 55 a4 0d 00 f7 d8 64 89 02 48 83
+RSP: 002b:00007ffcdb024940 EFLAGS: 00000246 ORIG_RAX: 0000000000000101
+RAX: ffffffffffffffda RBX: 00005623a7271270 RCX: 00007f64b7d169a4
+RDX: 00000000000a0800 RSI: 00005623a725b4e0 RDI: 00000000ffffff9c
+RBP: 00005623a725b4e0 R08: 0000000000000006 R09: 7fffffffffffffff
+R10: 0000000000000000 R11: 0000000000000246 R12: 00000000000a0800
+R13: 00005623a726ee60 R14: 0000000000000001 R15: 00005623a724f910
  </TASK>
-usb 1-1: new full-speed USB device number 3 using dummy_hcd
-usb 1-1: config 0 has an invalid interface number: 189 but max is 0
-usb 1-1: config 0 has no interface number 0
-usb 1-1: config 0 interface 189 altsetting 0 has an invalid descriptor for endpoint zero, skipping
-usb 1-1: config 0 interface 189 altsetting 0 has an endpoint descriptor with address 0xE3, changing to 0x83
-usb 1-1: config 0 interface 189 altsetting 0 endpoint 0x83 has invalid maxpacket 33307, setting to 64
-usb 1-1: config 0 interface 189 altsetting 0 endpoint 0xB has invalid wMaxPacketSize 0
-usb 1-1: config 0 interface 189 altsetting 0 has 3 endpoint descriptors, different from the interface descriptor's value: 2
-usb 1-1: New USB device found, idVendor=07b4, idProduct=010a, bcdDevice= 1.02
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 1-1: Product: syz
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-usb 1-1: config 0 descriptor??
-ums-alauda 1-1:0.189: USB Mass Storage device detected
-scsi host2: usb-storage 1-1:0.189
-usb 1-1: USB disconnect, device number 3
-usb 1-1: new full-speed USB device number 4 using dummy_hcd
-usb 1-1: config 0 has an invalid interface number: 189 but max is 0
-usb 1-1: config 0 has no interface number 0
-usb 1-1: config 0 interface 189 altsetting 0 has an invalid descriptor for endpoint zero, skipping
-usb 1-1: config 0 interface 189 altsetting 0 has an endpoint descriptor with address 0xE3, changing to 0x83
-usb 1-1: config 0 interface 189 altsetting 0 endpoint 0x83 has invalid maxpacket 33307, setting to 64
-usb 1-1: config 0 interface 189 altsetting 0 endpoint 0xB has invalid wMaxPacketSize 0
-usb 1-1: config 0 interface 189 altsetting 0 has 3 endpoint descriptors, different from the interface descriptor's value: 2
-usb 1-1: New USB device found, idVendor=07b4, idProduct=010a, bcdDevice= 1.02
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 1-1: Product: syz
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-usb 1-1: config 0 descriptor??
-ums-alauda 1-1:0.189: USB Mass Storage device detected
-scsi host1: usb-storage 1-1:0.189
+udevd[5897]: inotify_add_watch(7, /dev/sdc, 10) failed: No such file or directory
 
 
 ---
