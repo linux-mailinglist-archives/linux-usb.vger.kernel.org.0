@@ -1,75 +1,81 @@
-Return-Path: <linux-usb+bounces-17208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17209-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8AAE69BE3FE
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:14:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B5929BE411
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:18:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C7231F24D8D
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:14:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C4530281BDA
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:18:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3A41DED6C;
-	Wed,  6 Nov 2024 10:13:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E5E31DDC2B;
+	Wed,  6 Nov 2024 10:18:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LxbLwjMw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CsDTdUhj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f194.google.com (mail-pl1-f194.google.com [209.85.214.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765AC1DE2DB;
-	Wed,  6 Nov 2024 10:13:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3DA1DD9AB;
+	Wed,  6 Nov 2024 10:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730888020; cv=none; b=tO04dW49attpXrngifVTR29UpFwYeXkiwNVjzap6JAkgArB/d3K+rW05r1A/yOfULteTsHKdGGB4qMN5TJFT2ZX/+LC20AwSHZAm42NEtWFfIwzz8Ru6zEi4gwZo9ZOFgIqiQ/HvpBOoORS/szAecCHLyCyYpUySmRggx15Hb8U=
+	t=1730888300; cv=none; b=pvy5FCJarEbML+HWAMPJM2PjhyOG/91o5ykZ+uWaMH80B9F7uzb/lueFG+l4yf8u/wrl+WHoSBoJt7/5berk9VYjyVjgK/m4QkqvjH/0P1G9KSgDOrYIx75wEYYtGEKa4Buy7L+C8CLs4gi1bLLEfLhKnTZM2ZitYXGVUNBzvQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730888020; c=relaxed/simple;
-	bh=jbZkr8iZPbdlbgogmpITnZZXPnS0YJL38OY6BQSHpVc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=LP0yBhbiwjbrtugu7pCnrIzYwmI6GaeejV7CBEJaxp+YNszwHvt0LV833LFNxaIyPHELIRgHBQMZGoRtcOahSsCt/GFk8y8AlZUYP8RC46euFxhGG4eai0Pf5MbyMGNHNdO08bHq6huhV4f3LOjAPNRAQeuwsYvGLATbVuxNPmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LxbLwjMw; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730888018; x=1762424018;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jbZkr8iZPbdlbgogmpITnZZXPnS0YJL38OY6BQSHpVc=;
-  b=LxbLwjMwKESWIdizxGexoykzLyOTvsyi3fJnXY0RonuGuDswyad/BxEI
-   FyGv9To2dKoUgQhKyh8yu9qQ4ivtWNh3IjbBihfEvIONSnODbeOBQDwz1
-   uwpeLN6ZXc5uP6ukRFMDEweMIU3KFr5sjkJicOUbQGimIsLAth4sdlUyb
-   0U3hh8LuzUrTm/6OsVEoDOkBNyF07/0Wm1B/bgOF+d60OA1WO7P/Rvhe/
-   hHVSRpFL0Kpo+9O8ixxc4oRSpWMm7JhlZIk5aE12MHyxROrhScjlhcc22
-   RBIOcbGeWY7jegkLOCGF+zWomEpKuYmW5eR0hwmITqc6F3roEroSMD/+i
-   Q==;
-X-CSE-ConnectionGUID: ziuZ7ba6SseN7awJ1XJ0BQ==
-X-CSE-MsgGUID: aMKgGTTvQo6Jrw7JaUfDVw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11247"; a="42059494"
-X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="42059494"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Nov 2024 02:13:38 -0800
-X-CSE-ConnectionGUID: nb2mc+XCTfWshh5dspQ1lw==
-X-CSE-MsgGUID: 6zE48ppbQ9+j4IHUjQ6sKQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="84813470"
-Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by fmviesa010.fm.intel.com with ESMTP; 06 Nov 2024 02:13:37 -0800
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	Michal Pecio <michal.pecio@gmail.com>,
-	stable@vger.kernel.org,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 33/33] usb: xhci: Avoid queuing redundant Stop Endpoint commands
-Date: Wed,  6 Nov 2024 12:14:59 +0200
-Message-Id: <20241106101459.775897-34-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20241106101459.775897-1-mathias.nyman@linux.intel.com>
-References: <20241106101459.775897-1-mathias.nyman@linux.intel.com>
+	s=arc-20240116; t=1730888300; c=relaxed/simple;
+	bh=bx5wR4OF+tSWOY1oFXdc8WR6H4liG92KD1Gs9ncyhKI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bF3hPJJRBtFGfksH5oqNJep9sxaw7qxY/XR/ZNSqkAJqhEswLhnkTvv6jARFSMBSSFrEbSpQm6h80eRtSTGjO6fl6j3aP0rsVeN3s4VTycxl8vZDASXcWi6yZvFRYOF6bN4x1jbt6n7kL6CgiDAQTX3qL/k3CNHjgAD7hPNwsqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CsDTdUhj; arc=none smtp.client-ip=209.85.214.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f194.google.com with SMTP id d9443c01a7336-20cf3e36a76so68360305ad.0;
+        Wed, 06 Nov 2024 02:18:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730888299; x=1731493099; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XBQMgshDmVosjPwIQ+cfXZfVAtw+llxJuRu3FIFY5fQ=;
+        b=CsDTdUhj4CBWD8IZ+a/IDMumOLQWDR58/OwkKtaLtgoE2oC+NXfWxuY7khzhfl/V8h
+         rBDS4qYpqXhlytubzc7MdRdYGOIhqnce7Za/ttn7ics6INRfCSmoM5d6ITAX0dWdHd22
+         bGDsgCq8Lh4Q7VV1mv6zxL67FtyAu9K56M60O9/B1ALVwvDnnsFFw7NjacYdI7uzKxBF
+         sdy7HnGFDcAxJS06m3axT6JGiO+Bom8Fc+34jWQreUwxVYeahCPIElX10JJMgMW4plOX
+         eOZEtqKAIsNGmQ08WAj0Ef0LvGH7JBXZ2TizANhhv851HGmD0xWS5+nnrFJvEPrYHNNl
+         Tr4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730888299; x=1731493099;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XBQMgshDmVosjPwIQ+cfXZfVAtw+llxJuRu3FIFY5fQ=;
+        b=Wa1Iy4I08RyUSf8C7PeE+fxtdJ3Ad+qmlhDsBiJjt4p1xzZuYMeZFM7juxrL26ingL
+         epNmWc1wOeZHCzd4DFvUH+awoiCbUtmQXwtGATyN6iu4qivEexKmD0qoxTbCFerNtWJ0
+         PmrqHA4Y02kCuDzMKgm5MYp3XIzYDTP4V8paqWw/AbjNuhd9ycPMeksHCZVuHFzcvi5N
+         FpPb5cZ2qSLUsnP8JJTyB5tzQlVmuv0ftnONIBX0/Y/YndmNcYMfAFMJ4uluqlVy+0pY
+         NxACm3Zp5MYcuqxHvbTUXbFgy7wCizWqa/28hlZgHrmlCigQI7KYxoiMTVjEWlWoPVmr
+         ExOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFMBjPTu+ntV32S30omflJM/4Ok74aiM+8XpCkzYZ2qN+/+seuQH5erKncCyDLo/FMjQAr0UcxiSdx3Us=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxE4e4Rmcp0h0zC9+Vq2xQJzPINgeP80Hco4GBfVTaCappi+kLQ
+	JSwX2ONyQMDhEnHX8xTP8VeQ86XzKAciUT6uhE9yXLDbuvkHOlSM
+X-Google-Smtp-Source: AGHT+IEpXOsaxdQpIGS3apfFuoV3E2KP3OR89WilS8+1iGZz+JdeLo1o/PLSlHFW+9XlzKT+FnvNNA==
+X-Received: by 2002:a17:903:2286:b0:20c:5fd7:d71 with SMTP id d9443c01a7336-21103ace2aemr326528375ad.22.1730888298685;
+        Wed, 06 Nov 2024 02:18:18 -0800 (PST)
+Received: from tom-QiTianM540-A739.. ([106.39.42.118])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-211057c0f11sm91831425ad.200.2024.11.06.02.18.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Nov 2024 02:18:18 -0800 (PST)
+From: Qiu-ji Chen <chenqiuji666@gmail.com>
+To: johan@kernel.org,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	baijiaju1990@gmail.com,
+	Qiu-ji Chen <chenqiuji666@gmail.com>
+Subject: [PATCH] fdti_sio: Fix atomicity violation in get_serial_info()
+Date: Wed,  6 Nov 2024 18:18:09 +0800
+Message-Id: <20241106101809.17632-1-chenqiuji666@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -78,115 +84,40 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Michal Pecio <michal.pecio@gmail.com>
+Our static checker found a bug where set_serial_info() uses a mutex, but 
+get_serial_info() does not. Fortunately, the impact of this is relatively 
+minor. It doesn't cause a crash or any other serious issues. However, if a 
+race condition occurs between set_serial_info() and get_serial_info(), 
+there is a chance that the data returned by get_serial_info() will be 
+meaningless.
 
-Stop Endpoint command on an already stopped endpoint fails and may be
-misinterpreted as a known hardware bug by the completion handler. This
-results in an unnecessary delay with repeated retries of the command.
+Similar issues have been submitted or confirmed: 
+https://lore.kernel.org/all/20241002125845.785464707@linuxfoundation.org/ 
+https://lore.kernel.org/all/20241106095819.15194-1-chenqiuji666@gmail.com/
 
-Avoid queuing this command when endpoint state flags indicate that it's
-stopped or halted and the command will fail. If commands are pending on
-the endpoint, their completion handlers will process cancelled TDs so
-it's done. In case of waiting for external operations like clearing TT
-buffer, the endpoint is stopped and cancelled TDs can be processed now.
-
-This eliminates practically all unnecessary retries because an endpoint
-with pending URBs is maintained in Running state by the driver, unless
-aforementioned commands or other operations are pending on it. This is
-guaranteed by xhci_ring_ep_doorbell() and by the fact that it is called
-every time any of those operations completes.
-
-The only known exceptions are hardware bugs (the endpoint never starts
-at all) and Stream Protocol errors not associated with any TRB, which
-cause an endpoint reset not followed by restart. Sounds like a bug.
-
-Generally, these retries are only expected to happen when the endpoint
-fails to start for unknown/no reason, which is a worse problem itself,
-and fixing the bug eliminates the retries too.
-
-All cases were tested and found to work as expected. SET_DEQ_PENDING
-was produced by patching uvcvideo to unlink URBs in 100us intervals,
-which then runs into this case very often. EP_HALTED was produced by
-restarting 'cat /dev/ttyUSB0' on a serial dongle with broken cable.
-EP_CLEARING_TT by the same, with the dongle on an external hub.
-
-Fixes: fd9d55d190c0 ("xhci: retry Stop Endpoint on buggy NEC controllers")
-CC: stable@vger.kernel.org
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+Signed-off-by: Qiu-ji Chen <chenqiuji666@gmail.com>
+Fixes: 3ae36bed3a93 ("fdti_sio: switch to ->[sg]et_serial()")
 ---
- drivers/usb/host/xhci-ring.c | 13 +++++++++++++
- drivers/usb/host/xhci.c      | 19 +++++++++++++++----
- drivers/usb/host/xhci.h      |  1 +
- 3 files changed, 29 insertions(+), 4 deletions(-)
+ drivers/usb/serial/ftdi_sio.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 55be03be2374..4cf5363875c7 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -1076,6 +1076,19 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
- 	return 0;
+diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
+index c6f17d732b95..e07c5e3eb18c 100644
+--- a/drivers/usb/serial/ftdi_sio.c
++++ b/drivers/usb/serial/ftdi_sio.c
+@@ -1443,9 +1443,11 @@ static void get_serial_info(struct tty_struct *tty, struct serial_struct *ss)
+ 	struct usb_serial_port *port = tty->driver_data;
+ 	struct ftdi_private *priv = usb_get_serial_port_data(port);
+ 
++	mutex_lock(&priv->cfg_lock);
+ 	ss->flags = priv->flags;
+ 	ss->baud_base = priv->baud_base;
+ 	ss->custom_divisor = priv->custom_divisor;
++	mutex_unlock(&priv->cfg_lock);
  }
  
-+/*
-+ * Erase queued TDs from transfer ring(s) and give back those the xHC didn't
-+ * stop on. If necessary, queue commands to move the xHC off cancelled TDs it
-+ * stopped on. Those will be given back later when the commands complete.
-+ *
-+ * Call under xhci->lock on a stopped endpoint.
-+ */
-+void xhci_process_cancelled_tds(struct xhci_virt_ep *ep)
-+{
-+	xhci_invalidate_cancelled_tds(ep);
-+	xhci_giveback_invalidated_tds(ep);
-+}
-+
- /*
-  * Returns the TD the endpoint ring halted on.
-  * Only call for non-running rings without streams.
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 4977ada0a19e..5ebde8cae4fc 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -1756,10 +1756,21 @@ static int xhci_urb_dequeue(struct usb_hcd *hcd, struct urb *urb, int status)
- 		}
- 	}
- 
--	/* Queue a stop endpoint command, but only if this is
--	 * the first cancellation to be handled.
--	 */
--	if (!(ep->ep_state & EP_STOP_CMD_PENDING)) {
-+	/* These completion handlers will sort out cancelled TDs for us */
-+	if (ep->ep_state & (EP_STOP_CMD_PENDING | EP_HALTED | SET_DEQ_PENDING)) {
-+		xhci_dbg(xhci, "Not queuing Stop Endpoint on slot %d ep %d in state 0x%x\n",
-+				urb->dev->slot_id, ep_index, ep->ep_state);
-+		goto done;
-+	}
-+
-+	/* In this case no commands are pending but the endpoint is stopped */
-+	if (ep->ep_state & EP_CLEARING_TT) {
-+		/* and cancelled TDs can be given back right away */
-+		xhci_dbg(xhci, "Invalidating TDs instantly on slot %d ep %d in state 0x%x\n",
-+				urb->dev->slot_id, ep_index, ep->ep_state);
-+		xhci_process_cancelled_tds(ep);
-+	} else {
-+		/* Otherwise, queue a new Stop Endpoint command */
- 		command = xhci_alloc_command(xhci, false, GFP_ATOMIC);
- 		if (!command) {
- 			ret = -ENOMEM;
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 6dd3138b2380..4914f0a10cff 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1922,6 +1922,7 @@ void inc_deq(struct xhci_hcd *xhci, struct xhci_ring *ring);
- unsigned int count_trbs(u64 addr, u64 len);
- int xhci_stop_endpoint_sync(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 			    int suspend, gfp_t gfp_flags);
-+void xhci_process_cancelled_tds(struct xhci_virt_ep *ep);
- 
- /* xHCI roothub code */
- void xhci_set_link_state(struct xhci_hcd *xhci, struct xhci_port *port,
+ static int set_serial_info(struct tty_struct *tty, struct serial_struct *ss)
 -- 
-2.25.1
+2.34.1
 
 
