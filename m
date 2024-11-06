@@ -1,91 +1,153 @@
-Return-Path: <linux-usb+bounces-17210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17211-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF54F9BE443
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:29:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A54619BE4D5
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:53:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A24AF283CBF
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:29:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A09F1F27A54
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 10:53:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 861CC1DDC3A;
-	Wed,  6 Nov 2024 10:29:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBC7A1DE4DA;
+	Wed,  6 Nov 2024 10:50:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HQLcU5Yd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HsccR76I"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A83F1DDC0F
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 10:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52F41DE3B2;
+	Wed,  6 Nov 2024 10:50:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730888964; cv=none; b=doIEIl/WKZ8u3+jlWP62fQOvVA6rTTYiZdoortinaGy4rkWJpXaf5SnKMW+kZ4ay5k+CA1mK6NkjKOr40jZm+/G7bFGqNFf/KfgY0de4Vt7fB57L1RYBbYjKe4vD4CqW22Q+z3FNeGrehaygn3yA0x88xh9JF4c9/IjVClYpuEs=
+	t=1730890242; cv=none; b=lS0yq55eaA+Xz7wk42rziMvoQgi49QlIuRbOK3v4NyktUdlR0IV2O3svKQszy4sxVAkxIpIuU68pP8DXx9g5xVhM5ajBF/N8UQHNJtilkEMuMmJcjT9hL4h1Xy4gCrOQsx+N1wUkwnnKL1DhpkboayI1vTJbo7zUzmDRAiFMFIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730888964; c=relaxed/simple;
-	bh=kMffz4j9lOIyK3AO5oYIrDCOcuYXmzl+Hw6yByC3I80=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=i8DkvRbHP9kwooixUfKJlSk+hamdb5i3yvzaFlNW9t+i8cMNVo30oXocLgmeNgkcxQudZa/IJaymzm208ENIK2+WuqRyE8mRSnU8idLXy1d7ADt3ooH2ISc45aSv0uqtYQhRUj7RMgSgZVxaPxK9iCrvbo/39w5NF9X+X60M+54=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HQLcU5Yd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 963ADC4CED4
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 10:29:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1730888963;
-	bh=kMffz4j9lOIyK3AO5oYIrDCOcuYXmzl+Hw6yByC3I80=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=HQLcU5Yd4iBgJTrP5lFflHSA97uvmwIq4RPzCVTfEnYwDxU/dw9SngkzR5BUue3+C
-	 8TA7HlJjUm2YpOHaNm6HX4uObtBg571yLg7Mq322glm5fE2VDgNIZxrkYHZHrZE6yB
-	 +Iu3hRgYDoUaHjSS3rEpOkZ2XwUBnWqT3ZfbU58i+dNCmSRsZl1jLTy8yae7f5t5nH
-	 CJ2yYn07QY57faopSEAfpIfw2e/M6ETgaMdydm3Rzgo8DJfgOPOyUUOZZfXeatsi2W
-	 u7UXdSTb/jUpUQrpyB+6+stZ6+EWlTA4T5QUvyoh5fvIbbfGdfmp0HnlXyyZKhn6fV
-	 nXmwCc79vDKGQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 8EDB4C53BC4; Wed,  6 Nov 2024 10:29:23 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218795] USB4 / Thunderbolt + AMD: unstable and slow link (many
- uncorrectable errors)
-Date: Wed, 06 Nov 2024 10:29:23 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: glite60@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218795-208809-zdEfTKYCMw@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218795-208809@https.bugzilla.kernel.org/>
-References: <bug-218795-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1730890242; c=relaxed/simple;
+	bh=enLWSo2YXRAv+ZqWC8kAIoUZxolAeWHZx8LOTN18IhQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Oj8Rvi989mnIL8a7NUNRzJafewKU8GvsCJt6cbCXVm8Y2SQ0Br3COgc76vEAFwfYJyQnFIPbOiSIsHbeZJVyClx4rO8K+oTactBqQUx+KLvCFAsQeoHxiL+9syTOhkRPTZuVbUv10qKKjpcnbNoxrhj13NC1/4UTNQ+K1vabYvQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HsccR76I; arc=none smtp.client-ip=209.85.210.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-720b2d8bcd3so5286816b3a.2;
+        Wed, 06 Nov 2024 02:50:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1730890240; x=1731495040; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z2QtLjExH5AoubN8x0Zn77So4C3gTd16bi72kzG07/Q=;
+        b=HsccR76I1HZGg3KrxFKByQ0S7j2xk+NrY57VC+UvswE04xFHQiiLvHdK6lGGXvwT+e
+         63XBZdREBcJIxMOjBN2R0cc8agRINoiwoiPmXKv4tglVUvR0ADQSFJugdf7jmhg8TBjn
+         4eJ5K07jOtTy6xL2ZlLdxGy2HrIOtYVv33sXrMSOjzrduLGlgk0hrctoFGh97IQpHQDb
+         Lt3Sh7l19TK5a4xc8xH7qaFS57xqAr59xVP7D0M3XiKeNT++eQhsqWokGAQJ36rgM6JK
+         3uQscGuCtLchWUrD1yIadOSmZKdVB1lXIoj9etgy+LW2/7Q/YBoM9N8srwahM9tK8IZm
+         7Ndg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730890240; x=1731495040;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Z2QtLjExH5AoubN8x0Zn77So4C3gTd16bi72kzG07/Q=;
+        b=d0RwrWUO/qeFgsWpEnknM3N9TXKReHiaBVIszi8iufrJafbM9CCfyMjFAp8nwQ5JuG
+         1EWBgWgDg9EoB+r4kGmD9ykdUoukyO8bxPbLPTsC/2sw2qg5dObe98mAqldusMQyp0Bx
+         o1ThrGtoty4PRyrbQoxVQirqzd4ZADJM8mE//tp2HmH16n6tiPIQMWVg1LE+R3tGK+r6
+         KaUUbQ+WKxN0ye0P2Hz5hy30Tl5Hevr5WeEhcCClFkgkjZXrDJlDMeIxQkKbNdt4jld6
+         yf2FOyAWOO0Gxh29fPiMvfh2d0b67sQuvZmEPz2cPF211y/KdfRL7sL4fCopF6guFGKe
+         Gipg==
+X-Forwarded-Encrypted: i=1; AJvYcCU5fuRtJP5D4NRfL+nYAh0ufzbA+tJ4J2JHYVhZA0MfnbIVKZbw0XAquy6cOcQTrcULBfmCtUW1pzU8GRs=@vger.kernel.org, AJvYcCUn5jJAkqcVJJNVsizeptYhuDUNDL3XZDSrucyNRUk+Zodw3thf+NjpPgwK0QTaHt0kxDsFbQL3ixzY@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLKGsVhvU38K/+Db96fLbSG+yjNmH1qr+u3OBwwN+BcA5Y9yTJ
+	YL4tapmG7VjAIStdGRcYY9NJlsxwNNvfOw2NvK4EKbTAFcEHX1jqZTQ7defx
+X-Google-Smtp-Source: AGHT+IH70Py1645yPhFYihm+YPJ01Phd4Hf24ER/37j+l5Wz6JMXmAEIJtg1Hl2CYam1jn1+xw1GFA==
+X-Received: by 2002:a05:6a00:39a8:b0:720:2e44:8781 with SMTP id d2e1a72fcca58-72062fb82bcmr51199352b3a.11.1730890239950;
+        Wed, 06 Nov 2024 02:50:39 -0800 (PST)
+Received: from localhost ([2402:7500:579:df4c:d854:3b57:31f1:c2a7])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7ee45a0dd6fsm10770077a12.81.2024.11.06.02.50.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 06 Nov 2024 02:50:39 -0800 (PST)
+From: wojackbb@gmail.com
+To: johan@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jack Wu <wojackbb@gmail.com>
+Subject: [PATCH] [v3]USB: serial: qcserial: add support for Sierra Wireless EM86xx
+Date: Wed,  6 Nov 2024 18:50:29 +0800
+Message-Id: <20241106105029.338457-1-wojackbb@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218795
+From: Jack Wu <wojackbb@gmail.com>
 
---- Comment #3 from Eduard Kachur (glite60@gmail.com) ---
-I guess person here is in the same boat:
-https://askubuntu.com/questions/1531087/pcie-bus-error-thunderbolt-4-bridge
+Add support for Sierra Wireless EM86xx with
+USB-id 0x1199:0x90e5 & 0x1199:0x90e4.
 
---=20
-You may reply to this email to add a comment.
+0x1199:0x90e5
+T:  Bus=03 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 14 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+P:  Vendor=1199 ProdID=90e5 Rev= 5.15
+S:  Manufacturer=Sierra Wireless, Incorporated
+S:  Product=Semtech EM8695 Mobile Broadband Adapter
+S:  SerialNumber=004403161882339
+C:* #Ifs= 6 Cfg#= 1 Atr=a0 MxPwr=500mA
+A:  FirstIf#=12 IfCount= 2 Cls=02(comm.) Sub=0e Prot=00
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=qcserial
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=usbfs
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=qcserial
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=85(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:* If#=12 Alt= 0 #EPs= 1 Cls=02(comm.) Sub=0e Prot=00 Driver=cdc_mbim
+E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#=13 Alt= 0 #EPs= 0 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+I:* If#=13 Alt= 1 #EPs= 2 Cls=0a(data ) Sub=00 Prot=02 Driver=cdc_mbim
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+0x1199:0x90e4
+T:  Bus=03 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 16 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1199 ProdID=90e4 Rev= 0.00
+S:  Manufacturer=Sierra Wireless, Incorporated
+S:  SerialNumber=004403161882339
+C:* #Ifs= 1 Cfg#= 1 Atr=a0 MxPwr=  2mA
+I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=10 Driver=qcserial
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+---
+v3 changes: the entries sorted by PID
+---
+Signed-off-by: Jack Wu <wojackbb@gmail.com>
+---
+ drivers/usb/serial/qcserial.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
+index c7de9585feb2..13c664317a05 100644
+--- a/drivers/usb/serial/qcserial.c
++++ b/drivers/usb/serial/qcserial.c
+@@ -166,6 +166,8 @@ static const struct usb_device_id id_table[] = {
+ 	{DEVICE_SWI(0x1199, 0x9090)},	/* Sierra Wireless EM7565 QDL */
+ 	{DEVICE_SWI(0x1199, 0x9091)},	/* Sierra Wireless EM7565 */
+ 	{DEVICE_SWI(0x1199, 0x90d2)},	/* Sierra Wireless EM9191 QDL */
++	{DEVICE_SWI(0x1199, 0x90e4)},	/* Sierra Wireless EM86xx QDL*/
++	{DEVICE_SWI(0x1199, 0x90e5)},	/* Sierra Wireless EM86xx */
+ 	{DEVICE_SWI(0x1199, 0xc080)},	/* Sierra Wireless EM7590 QDL */
+ 	{DEVICE_SWI(0x1199, 0xc081)},	/* Sierra Wireless EM7590 */
+ 	{DEVICE_SWI(0x413c, 0x81a2)},	/* Dell Wireless 5806 Gobi(TM) 4G LTE Mobile Broadband Card */
+-- 
+2.34.1
+
 
