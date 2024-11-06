@@ -1,164 +1,283 @@
-Return-Path: <linux-usb+bounces-17162-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17163-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B8CE9BDE7A
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 07:06:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D59B89BDF0E
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 08:00:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 147231C21958
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 06:06:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 942D0283643
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 07:00:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18773191F73;
-	Wed,  6 Nov 2024 06:06:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0521922D9;
+	Wed,  6 Nov 2024 07:00:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VudVv6p5"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="k0KWqQsu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D31D736D;
-	Wed,  6 Nov 2024 06:06:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B86B14D280
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 07:00:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730873202; cv=none; b=GMvvWKPvG5NsKOYDYJ7PV3QzJSAzDTVqPU1q6iO6gABo4MQJIouDAnIb07MP2vycu/ePk840QpSfVTXiwcxT2PBqInmlwbs0b8+KvKDbmwIi0zz3ugr/nQPT0zv175CbogkkF/6/Gm5Z48X46MUxWrfPRnyImZ/4Fr42pUDq4LA=
+	t=1730876425; cv=none; b=oxQm7GAOmqGcwUJ8XI8N7F7bqlcdWvJZ0UILdnQlhBAkB0XgGny+ITfqE1mDvNKHvM76364LkOG22no9FyhS/4vv/q381EWZrRA4DYoMBhz4Nw9fMvcy0pogLKbuFW9hEdScoQImf5HcX8wcn0N70WHVIbonez1C5nY3okvzJ3o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730873202; c=relaxed/simple;
-	bh=shvgXzW8dVMGYFd5CIjINKxCEvqPGZwVOe3y2HPRXGY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o3aeWjE1kbONsOr0FldYLBHbG/gOCxX9mXuXDhv3Mx9hhHOD8XT8CHKUwG2dgXCT96bVBPdYt2zmqQhmkdmTZ8Eep2QNviUfM4CfzOYtNZEMSEe7a8dmbbrK8WJmg0s5VlhQyDJByOXSyIlRd5CLcVFKVtTbn47AfGN6d6d8e1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VudVv6p5; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730873201; x=1762409201;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=shvgXzW8dVMGYFd5CIjINKxCEvqPGZwVOe3y2HPRXGY=;
-  b=VudVv6p5aDh4ib9WAVw5Vw/y0SwDNmfQLyWBIxjTALJ0i4j24EJlOr1s
-   YbwkSTZs67/UQZkDn2eb0hq4zffekjbeWoIwQvlAEyGxaGFoGQhgcEBO+
-   lQ7Vmfp8OTvMNUcfpGXuqixVE/z/ZZcIEWZbSw21/BobLWyjFlbxOWJuW
-   IAyhxH6snWl6Ptn/YSsgs1scuQiRfqTQH123iBBU06YMwgcD4EkW2gKYw
-   dUB95Vxlezolfa7I8My3OUy3UECi9yT70LuIo7sb0SqaI1PW35IXyZSdM
-   hnKWtvYhQIkxk22bNye+AKdRNLHHpK9mQT1mdT9crjC9vkOlKUSqmijgt
-   Q==;
-X-CSE-ConnectionGUID: AQQBocEgRN2zlgWiXnujow==
-X-CSE-MsgGUID: Gu6uFhxnR6O6LFzGdQibfQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="53218730"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="53218730"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Nov 2024 22:06:39 -0800
-X-CSE-ConnectionGUID: 4uVEvHwzRYmonJF/SS6/pA==
-X-CSE-MsgGUID: KDN4O9z8TT6g6yxRowNChQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,262,1725346800"; 
-   d="scan'208";a="115165065"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa002.jf.intel.com with ESMTP; 05 Nov 2024 22:06:38 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 720C71BD; Wed, 06 Nov 2024 08:06:35 +0200 (EET)
-Date: Wed, 6 Nov 2024 08:06:35 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Aaron Rainbolt <arainbolt@kfocus.org>
-Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
-	andreas.noever@gmail.com, linux-usb@vger.kernel.org,
-	mmikowski@kfocus.org, linux-kernel@vger.kernel.org,
-	Gil Fine <gil.fine@linux.intel.com>
-Subject: Re: USB-C DisplayPort display failing to stay active with Intel
- Barlow Ridge USB4 controller, power-management related issue?
-Message-ID: <20241106060635.GJ275077@black.fi.intel.com>
-References: <20241011183751.7d27c59c@kf-ir16>
- <20241023062737.GG275077@black.fi.intel.com>
- <20241023073931.GH275077@black.fi.intel.com>
- <20241023174413.451710ea@kf-ir16>
- <20241024154341.GK275077@black.fi.intel.com>
- <20241031095542.587e8aa6@kf-ir16>
- <20241101072155.GW275077@black.fi.intel.com>
- <20241101181334.25724aff@kf-ir16>
- <20241104060159.GY275077@black.fi.intel.com>
- <20241105141627.5e5199b3@kf-ir16>
+	s=arc-20240116; t=1730876425; c=relaxed/simple;
+	bh=H1q+kz7HeN1mgjpvFwXPm/8+AngBAeaCQfbCDQ450aY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=PKkCqocXLqxZ463C1VwteFzr0uMZ/6GA0hUklUppfKaUIr4SK94nbknvEJLOntgk3znoA+uTLCcssmvy/Jyab8O5QAsnaO4r6dcQ0d24FudjXzn0JF2ytz+j1qic+J3mFNljYnLtjzfpFPIVJmXSqulv6DYLMoONfQOuh0at1Hs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=k0KWqQsu; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20241106070019epoutp032aa95904fe06951608e7435341e4d1c8~FTu7CO7vn0326703267epoutp03L
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 07:00:19 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20241106070019epoutp032aa95904fe06951608e7435341e4d1c8~FTu7CO7vn0326703267epoutp03L
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1730876419;
+	bh=GTjuOk/dlcE8eyX6yp0X7lZB5UBYs8n0NUYxZCe8jY4=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=k0KWqQsupxZZbB6/jwyhUz5Rnb1sCKYqBeKRn7q3vmsjFeP9BEIwI1piHmvuC0KBL
+	 SG6sVjPZkZSFmEqNFCb7og5aVY5jPrkHiciyan18UrWDo9wj+YxoQjlXvBVXjyHdE0
+	 /+1SGnLDhpOQCU/8CNpwpjCz0DVQMoV/9JmcfBO8=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20241106070018epcas5p3d44f29526f61eddb0463737305f8575b~FTu6fSM9Q2464824648epcas5p3m;
+	Wed,  6 Nov 2024 07:00:18 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.179]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4Xjx0w0JRFz4x9QJ; Wed,  6 Nov
+	2024 07:00:16 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	4B.5E.08574.FF31B276; Wed,  6 Nov 2024 16:00:15 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20241106070014epcas5p23146dbb7865d00d789f7c90c88811de3~FTu2_B5Ka2493024930epcas5p2N;
+	Wed,  6 Nov 2024 07:00:14 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20241106070014epsmtrp175c08d1c4cded231d0fb8bc6150f6bdd~FTu25-ahI2325523255epsmtrp1H;
+	Wed,  6 Nov 2024 07:00:14 +0000 (GMT)
+X-AuditID: b6c32a44-93ffa7000000217e-9d-672b13ffd9e5
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	76.81.08227.EF31B276; Wed,  6 Nov 2024 16:00:14 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20241106070011epsmtip2bc1f3b4248e0c58eeeb3168b00345abf~FTuzwYJS52176321763epsmtip2g;
+	Wed,  6 Nov 2024 07:00:11 +0000 (GMT)
+Message-ID: <c1f6377f-5ddf-4617-bc69-9a4975c271e8@samsung.com>
+Date: Wed, 6 Nov 2024 12:29:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241105141627.5e5199b3@kf-ir16>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7] usb: dwc3: gadget: Refine the logic for resizing Tx
+ FIFOs
+To: Akash Kumar <quic_akakum@quicinc.com>, Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Jing Leng <jleng@ambarella.com>, Felipe Balbi
+	<balbi@kernel.org>, Jack Pham <quic_jackp@quicinc.com>, kernel@quicinc.com,
+	Wesley Cheng <quic_wcheng@quicinc.com>, Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>, Daniel Scally
+	<dan.scally@ideasonboard.com>
+Cc: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>, Krishna Kurapati
+	<quic_kriskura@quicinc.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <20241017064423.7056-1-quic_akakum@quicinc.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Ta0xTZxjed87pBZKSY5HxCRmW4wVhA9oNyoeBjgQkjRsbhml2SQYn5aQl
+	lLbpRbYlOhBhwATlIpMCA1FhlkWWCuiQrsDYQHC6DERFGSHrzBgi4do5uazlsI1/z/vmeZ43
+	z/t+Hx8XLnH9+BkaI6PX0GqK60l0fB8cFLru/bJSfCV/G3py18JBPxY4eKikqYuLHjVUYWiw
+	+TyG8i60clF5VzuBxif/IlD1gyqAzFcqASoqu8hDw521XNTYlI+j+R/WOejhio2DOtcaMeSc
+	nuOgp5NDAFlvlHKQpaiWQMPOb3FU3uODLA3dvDhfeb+zmyevKazmyK2WIq7cXvc1T17WdVxe
+	2mYB8jb7ApAvWAOS+e9nxqgYOp3RixiNQpueoVHGUm+kpManRkrFklBJNIqiRBo6i4mlEt5M
+	Dk3MULsyUqKjtNrkaiXTBgMVLovRa01GRqTSGoyxFKNLV+sidGEGOstg0ijDNIxxv0QsfjXS
+	RUzLVA18dRXTWUI/mr3fwssBA7uLAZ8PyQi42revGHjyheQNAH9quYuzxTyAed0FRDHwcBXL
+	AD6pNrqxW/Ddyshm3wZguzOcFcwAePJ2CeZ2FZAyuHJpv5tDkLvhePMSz40F5DZ4s9qxofUh
+	d8KJsXMbfW8yBa52N3LdPtvJszgsWp3juAuc/BuDQ8u3MDcLJ33hmKN+YwCXlMDHAzHutgcZ
+	AyvujGxSdsK89pqNBJCs8YAztknAxkyA4ycQG8Ab/tnfxmOxH5w6XbCJFbCrfHETq2CvpRdn
+	8euwpeEWx22Dk8GwtTOcHeUFS547MNZdAAsLhCx7DxzMHeay2B/+enGUw2I5bH7UhLGrOg1g
+	7mwucQaIzFvWYt4S0rwljfn/yQ2AsIAdjM6QpWQUkTqJhsn+79oKbZYVbLz/kITr4H79Wlgv
+	wPigF0A+Tm0XfMkEKYWCdPrjTxi9NlVvUjOGXhDpuk8Z7uej0Lo+kMaYKomIFkdIpdKI6Nek
+	EspXMJ1fly4klbSRyWQYHaP/V4fxPfxysMC1bNuEZBGtv3tbS5yZldhGSjzp1Qp65LdniQ/7
+	U7xKb6osvJkCsdfJynnDPWfiDnzo8KeiwcziHPuydO1xHY8IPJ62LjJO7GXa7FPro/XZ5oCU
+	y59Z35J1HHrp0sqFuA8dvh8sHAs2fmOeDpi+6jnXQURdFhaFXOv54oi1U38o9ynpkRYPlk5V
+	/NFzlvpdrTp/zZ60J6N0btHyOefgVPa+Win1c2QgD1yf/SXpgF+eYnTyiHdWpdb3WZIpapcp
+	vurg8FFZuSzncNiBAXv2e+WGuKRzrySaW1v68tKO9d2JLrn33F/2jiboFNexYMHffrB3rKbn
+	hL/thdAXp510baGAIgwqWhKC6w30P3dwd9GIBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA01RfUyMcRz3e97u6dnOHle6H7ayh7mEEuEXx/inHYual+Sl6VaP66Zyu+vN
+	a6bV3JmIvHShOnT1hLarM67rPSRbdmQKZVlOlilxsqS4Yuu/z/fz+X6+n8/2pXFJOzGbVicl
+	89okZQJHMcS9Js53yZjnItXS7NIF6PNLgUSPsntF6EyJnUJviy5hqNVcjKHMGxUUOm+3Eqir
+	5yeB8jsvAWS8mweQPvemCL2wXaWQqSQLR0MPx0n0ZrSGRLYxE4aG+7+S6EvPU4As1TkkEvRX
+	CfRi+AGOzjfMREJRvWi9VPF4uF6kKDiVTyosgp5S1F27LVLk2o8rcqoEoKiq+wYU3yw+EfRu
+	Rh7HJ6hTeW3guhgmvqW0EtMIS9IHOspFJ0DLfAPwoCEbDGtH2wkDYGgJWw1g9tkKMCnMgf1G
+	wz/sCcvGPorcWML2A5j1OcQAaFrMroOjt1a7aYKdD7vMrokVMTsDPsnvJdx4JusL372+MsF7
+	stvg73oT5c7yYi/jsLbDBdwDzo5g8GONCUy2OAugbdBCuS04K4WvewsxdxrFBkFni9xNe7By
+	eOFZOza5shIarJNF8b9pmdYC/ByQGKcUMU65ZJxiMU6xFAFCALN4jS5RlagL0ixL4tMCdMpE
+	XUqSKiD2YKIFTDze3/8+sAuDAY0Ao0EjgDTOeYmv8zKVRBynPHSY1x7cp01J4HWNYA5NcFLx
+	j/4zcRJWpUzmD/C8htf+VzHaY/YJrPJkaOxLs6dwIMMnj+k6/uGYOv7td5LeEvbrNBqfkbnm
+	SLr3qz1mLrxV4zCORNsdzK8wwwbHSSY9b2lwSniudN4bl3bI1/pcj9+qrrD7V283ODmHZm9E
+	W8x02yL1z0N7U2Vyp3x5lqpvsCgwMt1Z0rx4evTomF/UYEVoiLG5Y9NR9YrCrV5plSworrLe
+	a7IF+0V+Ouxz97SMrPxQLFMWRIU5nPPKQyMdyQNm1ffmkayGktVdhFS/0CSmeuO5TmGabieT
+	Y5GJiqMzmsLD3pPdqXkJgvdG9TGuLTp5y+a+gvWduRFzV7HCkGtt0EUnc3OX69HG5u6yHalD
+	e/bf4QhdvDLIH9fqlH8AChuXT2cDAAA=
+X-CMS-MailID: 20241106070014epcas5p23146dbb7865d00d789f7c90c88811de3
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241017064506epcas5p4fd10695c100c84c659d4124d2f77e6a8
+References: <CGME20241017064506epcas5p4fd10695c100c84c659d4124d2f77e6a8@epcas5p4.samsung.com>
+	<20241017064423.7056-1-quic_akakum@quicinc.com>
 
-Hi Aaron,
 
-On Tue, Nov 05, 2024 at 02:16:36PM -0600, Aaron Rainbolt wrote:
-> On Mon, 4 Nov 2024 08:01:59 +0200
-> Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
-> 
-> ...snip...
-> 
-> > Okay, thanks again for testing!
-> > 
-> > It means disabling adapter 16 in DROM is actually intentional as that
-> > is not connected to the dGPU and so makes sense.
-> > 
-> > > * Boot the system up, nothing connected.
-> > > * Wait for Barlow Ridge to enter runtime suspend. This takes ~15
-> > >   seconds so waiting for > 15 seconds should be enough.
-> > > * Plug in USB-C monitor to the USB-C port of the Barlow Ridge.
-> > >   Screen shows in log, screen wakes, but then no signal is
-> > > received, and no image ever appears. Screen then sleeps after its
-> > > timeout.
-> > > * Run lspci -k to wake up the monitors. Once this is run, the
-> > > display shows correctly and is stable. Adding another USB-C display
-> > > after this also works correctly: It is recognized and lights up in
-> > > seconds to show the desktop background, and remains stable.
-> > > 
-> > > Notice that pre-6.5 kernels work fine with Barlow Ridge, which
-> > > implies that new code is causing this. It may be new support code
-> > > for tbt capability (and therefore pretty much required). But
-> > > regardless, it's still new code. With the current patch, we can run
-> > > a udev rule that enables hot plugging that likely always work, or
-> > > (worst case) at least empowers the customer to refresh monitors by
-> > > clicking a button.  
-> > 
-> > We definitely want to fix this properly so there is no need for anyone
-> > to run 'lspci' or similar hacks but because I'm unable to reproduce
-> > this with my reference Barlow Ridge setup, I need some help from you.
-> > 
-> > You say with v6.5 it works? That's interesting because we only added
-> > this redrive mode workaround for v6.9 and without that the domain
-> > surely will not be kept powered but maybe I'm missing something.
-> 
-> 6.5 is *broken*. 6.1 works correctly, but that's probably because it
-> doesn't have Thunderbolt support for Barlow Ridge chips at all. I
-> suspect this is because the chip is just acting as a USB-C controller,
-> and that works just fine without the Thunderbolt driver.
+On 10/17/2024 12:14 PM, Akash Kumar wrote:
+> The current logic is rigid, setting num_fifos to fixed values.
+> 3 for any maxburst greater than 1.
+> tx_fifo_resize_max_num for maxburst greater than 6.
+> Additionally, it did not differentiate much between bulk and
+> isochronous transfers, applying similar logic to both.
+>
+> The updated logic is more flexible and specifically designed to meet
+> the unique requirements of both bulk and isochronous transfers. We
+> have made every effort to satisfy all needs and requirements, verified
+> on our specific platform and application.
+>
+> Bulk Transfers: Ensures that num_fifos is optimized by considering both
+> the maxburst and DT property "tx-fifo-max-num" for super speed and
+> above. For high-speed and below bulk endpoints, a 2K TxFIFO allocation
+> is used to meet efficient data transfer needs, considering
+> FIFO-constrained platforms.
+>
+> Isochronous Transfers: Ensures that num_fifos is sufficient by
+> considering the maximum packet multiplier for HS and below and maxburst
+> for Super-speed and above eps, along with a constraint with the DT
+> property "tx-fifo-max-num".
+>
+> This change aims to optimize the allocation of Tx FIFOs for both bulk
+> and isochronous endpoints, potentially improving data transfer efficiency
+> and overall performance. It also enhances support for all use cases,
+> which can be tweaked with DT parameters and the endpoint’s maxburst and
+> maxpacket. This structured approach ensures that the appropriate number
+> of FIFOs is allocated based on the endpoint type and USB speed.
+>
+> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+> ---
+> Changes for v7:
+> fixed indentations for if checks.
+>
+> Changes for v6:
+> The code has been refactored to replace multiple if checks with a
+> switch-case structure based on the USB speed. This change improves
+> readability and maintainability by clearly defining behavior for
+> different USB speeds. This structured approach ensures that the
+> appropriate number of FIFOs is allocated based on the endpoint
+> type and USB speed.
+>
+> Changes for v5:
+> Update Calculation for HS and below bulk and isoc eps based on
+> suggestion and fixed at 2k for bulk eps considering fifo constrained
+> platforms.
+>
+> Changes for v4:
+> Updated commit message as per review comments to clarify that it has
+> been tested on specific platforms only and tried best to match all
+> expectations.
+>
+> Changes for v3:
+> Redefine logic for resizing tx fifos,added check based on  operating
+> speed and used maxp for HS and maxburst for SS  and defined max allocation
+> based on dt property.
+>
+> Changes for v2:
+> Redefine logic for resizing tx fifos, handled fifo based on  minimum of
+> maxp and maxburts.
+>
+> Changes for v1:
+> Added additional condition to allocate tx fifo for hs isoc  eps, keeping
+> the other resize logic same
+> ---
+>   drivers/usb/dwc3/gadget.c | 33 ++++++++++++++++++++++++---------
+>   1 file changed, 24 insertions(+), 9 deletions(-)
+>
+> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+> index 10178e5eda5a..af3d5b2f7b67 100644
+> --- a/drivers/usb/dwc3/gadget.c
+> +++ b/drivers/usb/dwc3/gadget.c
+> @@ -771,15 +771,30 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+>   
+>   	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+>   
+> -	if ((dep->endpoint.maxburst > 1 &&
+> -	     usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
+> -	    usb_endpoint_xfer_isoc(dep->endpoint.desc))
+> -		num_fifos = 3;
+> -
+> -	if (dep->endpoint.maxburst > 6 &&
+> -	    (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+> -	     usb_endpoint_xfer_isoc(dep->endpoint.desc)) && DWC3_IP_IS(DWC31))
+> -		num_fifos = dwc->tx_fifo_resize_max_num;
+> +	switch (dwc->gadget->speed) {
+> +	case USB_SPEED_SUPER_PLUS:
+> +	case USB_SPEED_SUPER:
+> +		if (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
+> +		    usb_endpoint_xfer_isoc(dep->endpoint.desc))
+> +			num_fifos = min_t(unsigned int,
+> +					  dep->endpoint.maxburst,
+> +					  dwc->tx_fifo_resize_max_num);
+> +		break;
+> +	case USB_SPEED_HIGH:
+> +		if (usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
+> +			num_fifos = min_t(unsigned int,
+> +					  usb_endpoint_maxp_mult(dep->endpoint.desc) + 1,
 
-Exactly so while it "works" for this particular case all other cases
-will not pass.
+Hi Akash,
 
-> > I wonder if your test team could provide log from v6.5 as well
-> > following the same steps, no need to run 'lspci' just do:
-> > 
-> >   1. Boot the system up, nothing connected.
-> >   2. Wait for ~15 seconds for the domain to enter runtime suspend.
-> >   3. Plug in USB-C monitor to the USB-C port of Barlow Ridge.
-> >   4. Verify that it wakes up and, there is picture on the screen.
-> >   5. Wait for ~15 seconds.
-> > 
-> > Expectation: After step 5 the monitor still displays picture.
-> > 
-> > If this works as above then I'm really surprised but if that's the
-> > case then we can maybe think of another approach of dealing with the
-> > redrive mode.
-> 
-> We'd be happy to run this testing on the 6.1 kernel if it would be
-> helpful. Will that work, or is 6.1 too old?
+We are currently working on enabling UVC functionality on supports USB 
+HS and below speeds with using a single port RAM configuration.
 
-Unfortunately that does not help here. I need to figure something else
-how to detect the redrive case with this firmware but first, does this
-work in Windows? I mean if you install Windows to this same system does
-it work as expected?
+In order to better understand the logic behind resizing HS ISO transfers 
+when using a streaming packet size of 3072 in the UVC use case, we would 
+like to know if there is a specific reason for using 
+(usb_endpoint_maxp_mult(dep->endpoint.desc) + 1) to determine the number 
+of FIFOs. This calculation could result in having 4 FIFOs instead of 3, 
+even though 3 FIFOs should be sufficient for handling the 3072 streaming 
+packet size. In our specific use case, this could potentially lead to an 
+insufficient RAM issue, as we are limited by the amount of RAM available 
+in the single port RAM configuration and supports upto HS-speed.
+
+> +					  dwc->tx_fifo_resize_max_num);
+> +			break;
+> +		}
+> +		fallthrough;
+> +	case USB_SPEED_FULL:
+> +		if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
+> +			num_fifos = 2;
+
+
+And we need to understand on above logic as well. Why using num_fifos =2 
+for bulk transfer for HS and FULL speed?. It can ending with 2k (4 * 
+Maxpacktsize).
+As per our understanding (2 x Maxpacketsize) is sufficient for bulk. Its 
+means that num_fifos = 1 is sufficient for bulk. As i mentioned above 
+this could potentially lead to an insufficient RAM issue in our platform.
+> +		break;
+> +	default:
+> +		break;
+> +	}
+>   
+>   	/* FIFO size for a single buffer */
+>   	fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
 
