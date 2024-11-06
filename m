@@ -1,329 +1,261 @@
-Return-Path: <linux-usb+bounces-17214-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17215-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 006739BE598
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 12:32:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D5C89BE5DD
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 12:47:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23DA11C2177C
-	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:32:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A84E1C227FA
+	for <lists+linux-usb@lfdr.de>; Wed,  6 Nov 2024 11:47:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40291DED53;
-	Wed,  6 Nov 2024 11:32:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="c+d06WIk"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23D6B1DEFC5;
+	Wed,  6 Nov 2024 11:47:26 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3CF18C00E
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 11:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06E611D2784
+	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 11:47:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730892753; cv=none; b=kASeW2Sta5OHEnriDcTldh1/EwHgR9hKoHt+OnMuCdOI8ScW93GnrogYZPkcFwwjhweZez0tm63TdL10g+AE449Mfd90RhTj2s1fRK9+6Nc3LaEfT4pZFFTMRAyoKiRe9zGzmo0iK4HirW12g2Rv60AqcPpMZs0U3W736ECl4xU=
+	t=1730893645; cv=none; b=Y/cl64L7PGeP/FHD5rbIizyKXJNcMt1Z2vUqQ3lwnj/e7fHc4X1gwX7vJIAxr46Pej8okw7LR1taVI+dB6VPBPVpPBEX2BPpw/ESmk9f+cDc6WFQnwYc5Z1YX2WweibqzX83RS+8QMBtBpXsFswE8lx62mytOActAT1r9ghAekc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730892753; c=relaxed/simple;
-	bh=VCpc539OF1fAeEwGgR+sRyPNIq8B93Ktw8DpjWFYfgI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=iX8rBUWNbL0o0jV4Y8T+luFN6CfrRJpHNvcV+ZWrfHJ8aRHJ9IyAK65mDj9h7bfyRWTa2c3qpPYvNgVPydzUSuzsFx8LINhT9GkHuEIZLwrcucTSzm1P82pxNV9lSkn19Wbxq0rA73AkT9Bap0LYDJweqYmqbhdc3gwdcUpmAe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=c+d06WIk; arc=none smtp.client-ip=203.254.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20241106113227epoutp04dc8157befd0f3153be47f9d69c2edc3f~FXchycyRD2578725787epoutp04i
-	for <linux-usb@vger.kernel.org>; Wed,  6 Nov 2024 11:32:27 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20241106113227epoutp04dc8157befd0f3153be47f9d69c2edc3f~FXchycyRD2578725787epoutp04i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1730892747;
-	bh=R+5s6VymFEnWtxYabag004GA1OzT2/8V8FnlOrm5WJc=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=c+d06WIkYZuhuUNHWcwrL/qqcy/hkT/ICyzl1B0gvJrOXFG3/k4UyLXrSTKN1dwV6
-	 fRICbkDx4+AekCqpnkTyhgzG4YlkaWF+rL+QJNxM8jMpXfUZ6CTQhsLiwh2ddhN93L
-	 RMjpnW5ATPAnkDELMqs3xyH7tPNPcXfJ3EgitmQ4=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20241106113226epcas5p13b7d02f2d89c9ce83c389c14e786b1a0~FXchJ4pel0953509535epcas5p1b;
-	Wed,  6 Nov 2024 11:32:26 +0000 (GMT)
-Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.183]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4Xk32w6H9Xz4x9Pp; Wed,  6 Nov
-	2024 11:32:24 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	DB.45.37975.8C35B276; Wed,  6 Nov 2024 20:32:24 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20241106113224epcas5p351175a29d057ae276838a00c8803dff8~FXce9AuNF0298202982epcas5p3Y;
-	Wed,  6 Nov 2024 11:32:24 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20241106113224epsmtrp1b31bc78aac85738529746416df8022c4~FXce7Ijwe2127621276epsmtrp1k;
-	Wed,  6 Nov 2024 11:32:24 +0000 (GMT)
-X-AuditID: b6c32a50-085ff70000049457-8d-672b53c8680f
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	D9.7F.08227.7C35B276; Wed,  6 Nov 2024 20:32:24 +0900 (KST)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241106113220epsmtip2bd41dab924f75b9db5bc8718e1836a63~FXcbrEXri2851628516epsmtip2D;
-	Wed,  6 Nov 2024 11:32:20 +0000 (GMT)
-Message-ID: <2982615c-f5e4-42ca-be01-d321b24c5d8f@samsung.com>
-Date: Wed, 6 Nov 2024 17:02:19 +0530
+	s=arc-20240116; t=1730893645; c=relaxed/simple;
+	bh=zQtGfJPfnHLhLns5XEJVmtRKlE2e2lMWDmWoVS0hBgQ=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=lrydP/JnVvgsL+0hEhISfgae1VLOZ4BN4pr6BEoWJdV4JlT68/ZFKuFnXf4RaT0o+Ma0CN9PjFQXsfoZgW5uwK8KGJ+YyG/V5pfKAaRoBaw3eCeuFide8CoHJN8sZzx71khSP0MbZN5Kn72KVWhlOztc0erexGHVs5cdMOe6Jts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a6bd5be0faso58736125ab.3
+        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2024 03:47:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730893643; x=1731498443;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2Eg6NJKxWidr3qsyHkfEDGdOgJ+UqEwrnRl6ZxsC00w=;
+        b=F23Pd3lS/ywu3Lr78H0UH0dXEDtU5+vnpksqWvQwo2ibTCx3TuV8bEp6f59xzqicQF
+         m0ePsJHSuQMaaYFBiQmwhG/DH0Q0FFABHrks43uw8bKKHfArTwbcsf0H3j9D89Oq+e7Y
+         zHGPICeNPIS7UEyRLy6jJ1OmZlRFIefdRdrn/Dy3iTaSzhPA1V+o9Yg6ILGWxOA0OajR
+         QZFG8MRyRHhMo208KMRoHrwvYZJW5MDC17K2BpGG8KpwC1R4QazhNoi/PA0zX9RVUr7b
+         EHG0G2J8FWXQ8ob/lotE/rWMlB52fsxnrDwkbAZrMrAL3ZbPgi34lXI/iju0DUqvAI80
+         8Wiw==
+X-Forwarded-Encrypted: i=1; AJvYcCXeC/3JEfj48ZuP85wBu24B/4c5e3+2eF1ynGLUDMLyzgjsSNSFZIXH6sX5hTtAZGdEgGEDJodVggQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx1JUJZddK93NNiiC6YnW6/NNc9PJtIiFEC1gUVeIXTUfT7fVv6
+	QpB4W3JSJ/1ZcKK/ZK4YDIQcVFhD3oXfeixXFMAx9GdzDCyc+LwwotTxPnPqfMQqAU2uDvg3toM
+	i1imUIso9S8oGZmEq0I++JGHNDkU1gJdySb9+ilIjD+82HsurWnr36kQ=
+X-Google-Smtp-Source: AGHT+IF4S0FaMFI5ZlCJSh+hl2qFn9Sj5TQnOv0vG3mKXxXJJF9UudQxl1pAHqV3jmPxRcqMCRAtceTalsW7giLiJblum3d1MdUu
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7] usb: dwc3: gadget: Refine the logic for resizing Tx
- FIFOs
-To: AKASH KUMAR <quic_akakum@quicinc.com>, Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Jing Leng <jleng@ambarella.com>, Felipe Balbi
-	<balbi@kernel.org>, Jack Pham <quic_jackp@quicinc.com>, kernel@quicinc.com,
-	Wesley Cheng <quic_wcheng@quicinc.com>, Laurent Pinchart
-	<laurent.pinchart@ideasonboard.com>, Daniel Scally
-	<dan.scally@ideasonboard.com>
-Cc: Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>, Krishna Kurapati
-	<quic_kriskura@quicinc.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
-	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
-	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
-	eomji.oh@samsung.com, shijie.cai@samsung.com
-Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <e0e6875c-0979-41a3-964c-f3741bdcde6e@quicinc.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0zbVRTHvf311xaSup8dj2uZ0DSiDlNokZYLAiMOtVEwOAZBk6Wr7S9t
-	BdrSFkQSGBsPgTAGBOYo4zFGgLUTTMPGQyas23gU4uaaLQpDwiA63TArTEAG05Z2yn+fe875
-	3u899+QwMNYGjc1QqQ2kTi3N5NK8qZev7X+DN5HypoJfcisUPbpjwtFY2RIdnewcpqF7bacp
-	yNZ1joKKz/fSUN3wJSqaW9igosafTwNk7KkHqKK2g47sQ2dpqL2zFEMrN/7B0ezWFRwNPWun
-	oPWHDhz9uTAFkOW7ahyZKs5SkX19EEN1V32RqW2UHu8vHl8fpYubyhtxscVUQROPNF+ki2uH
-	C8XVfSYg7htZBeJVS2Ay49OMGCUplZM6DqmWaeQqtSKW+2GK5KBEKOILeIIoFMnlqKVZZCw3
-	ITGZ954q09kjl5MrzcxxhpKlej03LC5Gp8kxkBylRm+I5ZJaeaY2Qhuql2bpc9SKUDVpiBbw
-	+eFCZ+HRDOU3x3O0TfF5N+r76UWgUlgJvBiQiICDK12USuDNYBHDAHYv9tBcCRaxAmDLA7k7
-	sQZg8bNrlOcK+2MTcCeuAFjZbvIolgE0T+S7mEnEwb7xTczFVOJV2LpaQnHHX4KTjUtUF/sS
-	QXB+5gzdxXuJFLg92k5zXepDNGBwy7qJuw4YsUmBU2vTO2qM8IczS61OZjBohAD+OhHjCnsR
-	B+Ds3d+o7pIgWHypCXNpIfG1F5w5M0hzPzsBmk0W3M174R/jfXQ3s+Hvp8o8LIPDdU88rIRW
-	kxVz8wFobpvGXb4YsR/2DoW5vV6EJ58u7TwHEkxYXsZyVwdD23G7xzUA/tJx1+Mqhl33Oj1f
-	/TeAJquDUgM4xl3/YtzVpXFXO8b/ndsA1QTYpFafpSBlQq2Apya/+G/gMk2WBeysQEjyADB/
-	ux1qBRQGsALIwLg+zBbydQWLKZd+mU/qNBJdTiaptwKhc0K1GNtXpnHukNogEURE8SNEIlFE
-	1FsiAdef+bC0Wc4iFFIDmUGSWlL3XEdheLGLKOnXE+QDk3m3Dx1Z3nPR7vfRZpKtdzCSTJ4P
-	cGgzdKknJsvi6U9n788nvfxD5L7VYMsnpWv92Vk88g6/9WikcHSt5S9O4Jij4WZAdPdAWtDB
-	jeCFc69Ieo+ldy5GJx6+4HU5ze/Ia3ELiicOv9T0E/Z3H1TlV/uUj30/gZ+XBNmm61Xvtz+e
-	8ZnrTv246Hp4wQdJQuPn6zx8rmrqfk1SS2D61eyKW7k3C8qLtXlMcy77p2MZaVU1DVthAdEX
-	Ct9uVC0KNOkhPYkDtkKbT092imh0QeU/Hr7dP/BVEnuPXFu6r9YMyye8RxyHZc2DwoL824c6
-	ln8MbvxstST8hTw5u+LROwSXqldKBSGYTi/9F1Ut10qLBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Ra0hTYRjmO+ds57ganqa2Ty2jUQSas0WXTzA1MxhdqDAqKqmVh1nqZpuX
-	srCllW6UN6blvE8pHaVmTjOvGenMwMoulImORjOU0pytpKzWCvz3vO9zeR94KZz3kvCiTsgS
-	GIVMEitgc4imh4Jl/qYIP+maoU6AJl4aWKjnsoVEV2+0sdG78gIMPb5ZgaH0yjo2ymszEmjY
-	/I1AhW8KANLVagFS51aRaPB+MRvpb1zC0ZdHv1ho6Ec7C92f02PIPj7FQp/M/QA1tGaxkEFd
-	TKBBewuO8h54IEN5FxnKF/fau0hxUWYhS9xgULPFnSW3SHFuW6o4q9EAxI2d00A83eCzmzrI
-	CYpiYk8kMYqA4KOc6NsXEuOLQk8/0jaTKqBZrwEuFKTXwcFJA9AADsWjWwHM/NiJOQlvOK7T
-	ACd2gzVzVtIpGgdwdngKdxBcOhg29s7+xQS9ApZNX8Sc+0Wwr9BCOLAHvQyOvL1OOrAbHQF/
-	dunZjiB3+hoOn7WbCMeA07MYtLbr//X4DqDtoZntsOA0H761lP2JpSg2LYIfTEGOtQsdAode
-	WQmnZAPUGJ1V8T/X0o1FeA7g6eYV0c1L0s2z6OZZygFhAJ5MvDJOGqcUxa+VMclCpSROmSiT
-	Co/L4xrA38/7+t4DbYZJYTfAKNANIIUL3LmlzCopjxslOZPCKORHFImxjLIbeFOEgM/9On41
-	ikdLJQlMDMPEM4r/LEa5eKmw8rnhphTG84Fqi1tFpF9+OPHCFnMocmwnEAYECuvku46ZLOn2
-	zwn8luVZsr6wkx154cIZLT62fGH70/fnr2zrPxzOurWjhD6Xs4c7Rvpkp+wdyNh8rr/Lj1Tb
-	3SrHbLWVB/TZeU2T/UmBI/sO1Qycn3ud+TzGJ4zVSq30Cxmo5yw+XHz2STJYQvR4uQ6VWsn6
-	NcWrD/p7Wqub0yypxhFXExZTlrKpZunrCmGgOki+K22gVL5z5h0nIfvOzPCLPm1Ty/bp6nrp
-	/nubCiJCuKYMlWiHB+CbR6tnR3ebj9giI0Ubw7rzF0z4P+nQTkT95Kr0i71P2cNabFulmiqm
-	966AUEZLRL64Qin5DYCh7VhoAwAA
-X-CMS-MailID: 20241106113224epcas5p351175a29d057ae276838a00c8803dff8
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20241017064506epcas5p4fd10695c100c84c659d4124d2f77e6a8
-References: <CGME20241017064506epcas5p4fd10695c100c84c659d4124d2f77e6a8@epcas5p4.samsung.com>
-	<20241017064423.7056-1-quic_akakum@quicinc.com>
-	<c1f6377f-5ddf-4617-bc69-9a4975c271e8@samsung.com>
-	<e0e6875c-0979-41a3-964c-f3741bdcde6e@quicinc.com>
+X-Received: by 2002:a05:6e02:1d81:b0:3a6:cb15:42d2 with SMTP id
+ e9e14a558f8ab-3a6cb154862mr111725605ab.6.1730893643165; Wed, 06 Nov 2024
+ 03:47:23 -0800 (PST)
+Date: Wed, 06 Nov 2024 03:47:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <672b574b.050a0220.2edce.1523.GAE@google.com>
+Subject: [syzbot] [scsi?] [usb?] KASAN: slab-use-after-free Read in sg_release
+From: syzbot <syzbot+7efb5850a17ba6ce098b@syzkaller.appspotmail.com>
+To: James.Bottomley@HansenPartnership.com, dgilbert@interlog.com, 
+	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-usb@vger.kernel.org, martin.petersen@oracle.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    11066801dd4b Merge tag 'linux_kselftest-fixes-6.12-rc6' of..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=16146aa7980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=672325e7ab17fdf7
+dashboard link: https://syzkaller.appspot.com/bug?extid=7efb5850a17ba6ce098b
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e8755f980000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/d5100fe708c2/disk-11066801.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/581317b0fef2/vmlinux-11066801.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/c7571fdba64f/bzImage-11066801.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7efb5850a17ba6ce098b@syzkaller.appspotmail.com
+
+==================================================================
+BUG: KASAN: slab-use-after-free in lock_release+0x151/0xa30 kernel/locking/lockdep.c:5838
+Read of size 8 at addr ffff8880312a38c0 by task syz.2.335/8457
+
+CPU: 1 UID: 0 PID: 8457 Comm: syz.2.335 Not tainted 6.12.0-rc5-syzkaller-00299-g11066801dd4b #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:377 [inline]
+ print_report+0x169/0x550 mm/kasan/report.c:488
+ kasan_report+0x143/0x180 mm/kasan/report.c:601
+ lock_release+0x151/0xa30 kernel/locking/lockdep.c:5838
+ __mutex_unlock_slowpath+0xe2/0x750 kernel/locking/mutex.c:912
+ sg_release+0x1f4/0x2e0 drivers/scsi/sg.c:407
+ __fput+0x23f/0x880 fs/file_table.c:431
+ task_work_run+0x24f/0x310 kernel/task_work.c:239
+ resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
+ exit_to_user_mode_loop kernel/entry/common.c:114 [inline]
+ exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
+ __syscall_exit_to_user_mode_work kernel/entry/common.c:207 [inline]
+ syscall_exit_to_user_mode+0x168/0x370 kernel/entry/common.c:218
+ do_syscall_64+0x100/0x230 arch/x86/entry/common.c:89
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f312af7e719
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 a8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffdb5d17628 EFLAGS: 00000246 ORIG_RAX: 00000000000001b4
+RAX: 0000000000000000 RBX: 00007f312b137a80 RCX: 00007f312af7e719
+RDX: 0000000000000000 RSI: 000000000000001e RDI: 0000000000000003
+RBP: 00007f312b137a80 R08: 0000000000000000 R09: 00007ffdb5d1791f
+R10: 000000000003fdc8 R11: 0000000000000246 R12: 000000000005f4a4
+R13: 00007ffdb5d17730 R14: 0000000000000032 R15: ffffffffffffffff
+ </TASK>
+
+Allocated by task 7133:
+ kasan_save_stack mm/kasan/common.c:47 [inline]
+ kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
+ poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
+ __kasan_kmalloc+0x98/0xb0 mm/kasan/common.c:394
+ kasan_kmalloc include/linux/kasan.h:257 [inline]
+ __kmalloc_cache_noprof+0x19c/0x2c0 mm/slub.c:4295
+ kmalloc_noprof include/linux/slab.h:878 [inline]
+ kzalloc_noprof include/linux/slab.h:1014 [inline]
+ sg_alloc drivers/scsi/sg.c:1444 [inline]
+ sg_add_device+0x139/0xb10 drivers/scsi/sg.c:1518
+ device_add+0xa1f/0xbf0 drivers/base/core.c:3698
+ scsi_sysfs_add_sdev+0x306/0x5a0 drivers/scsi/scsi_sysfs.c:1435
+ scsi_sysfs_add_devices drivers/scsi/scsi_scan.c:1896 [inline]
+ scsi_finish_async_scan drivers/scsi/scsi_scan.c:1981 [inline]
+ do_scan_async+0x42a/0x7a0 drivers/scsi/scsi_scan.c:2024
+ async_run_entry_fn+0xa8/0x420 kernel/async.c:129
+ process_one_work kernel/workqueue.c:3229 [inline]
+ process_scheduled_works+0xa63/0x1850 kernel/workqueue.c:3310
+ worker_thread+0x870/0xd30 kernel/workqueue.c:3391
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+Freed by task 6000:
+ kasan_save_stack mm/kasan/common.c:47 [inline]
+ kasan_save_track+0x3f/0x80 mm/kasan/common.c:68
+ kasan_save_free_info+0x40/0x50 mm/kasan/generic.c:579
+ poison_slab_object mm/kasan/common.c:247 [inline]
+ __kasan_slab_free+0x59/0x70 mm/kasan/common.c:264
+ kasan_slab_free include/linux/kasan.h:230 [inline]
+ slab_free_hook mm/slub.c:2342 [inline]
+ slab_free mm/slub.c:4579 [inline]
+ kfree+0x1a0/0x440 mm/slub.c:4727
+ kref_put include/linux/kref.h:65 [inline]
+ sg_remove_sfp_usercontext+0x331/0x4d0 drivers/scsi/sg.c:2238
+ process_one_work kernel/workqueue.c:3229 [inline]
+ process_scheduled_works+0xa63/0x1850 kernel/workqueue.c:3310
+ worker_thread+0x870/0xd30 kernel/workqueue.c:3391
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+The buggy address belongs to the object at ffff8880312a3800
+ which belongs to the cache kmalloc-512 of size 512
+The buggy address is located 192 bytes inside of
+ freed 512-byte region [ffff8880312a3800, ffff8880312a3a00)
+
+The buggy address belongs to the physical page:
+page: refcount:1 mapcount:0 mapping:0000000000000000 index:0xffff8880312a2000 pfn:0x312a0
+head: order:2 mapcount:0 entire_mapcount:0 nr_pages_mapped:0 pincount:0
+flags: 0xfff00000000240(workingset|head|node=0|zone=1|lastcpupid=0x7ff)
+page_type: f5(slab)
+raw: 00fff00000000240 ffff88801ac41c80 ffffea00010c8910 ffffea0001fcb310
+raw: ffff8880312a2000 000000000010000d 00000001f5000000 0000000000000000
+head: 00fff00000000240 ffff88801ac41c80 ffffea00010c8910 ffffea0001fcb310
+head: ffff8880312a2000 000000000010000d 00000001f5000000 0000000000000000
+head: 00fff00000000002 ffffea0000c4a801 ffffffffffffffff 0000000000000000
+head: ffff888000000004 0000000000000000 00000000ffffffff 0000000000000000
+page dumped because: kasan: bad access detected
+page_owner tracks the page as allocated
+page last allocated via order 2, migratetype Unmovable, gfp_mask 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 5224, tgid 5224 (udevd), ts 31207973672, free_ts 31004401902
+ set_page_owner include/linux/page_owner.h:32 [inline]
+ post_alloc_hook+0x1f3/0x230 mm/page_alloc.c:1537
+ prep_new_page mm/page_alloc.c:1545 [inline]
+ get_page_from_freelist+0x303f/0x3190 mm/page_alloc.c:3457
+ __alloc_pages_noprof+0x292/0x710 mm/page_alloc.c:4733
+ alloc_pages_mpol_noprof+0x3e8/0x680 mm/mempolicy.c:2265
+ alloc_slab_page+0x6a/0x120 mm/slub.c:2412
+ allocate_slab+0x5a/0x2f0 mm/slub.c:2578
+ new_slab mm/slub.c:2631 [inline]
+ ___slab_alloc+0xcd1/0x14b0 mm/slub.c:3818
+ __slab_alloc+0x58/0xa0 mm/slub.c:3908
+ __slab_alloc_node mm/slub.c:3961 [inline]
+ slab_alloc_node mm/slub.c:4122 [inline]
+ __kmalloc_cache_noprof+0x1d5/0x2c0 mm/slub.c:4290
+ kmalloc_noprof include/linux/slab.h:878 [inline]
+ kzalloc_noprof include/linux/slab.h:1014 [inline]
+ kernfs_fop_open+0x3e0/0xd10 fs/kernfs/file.c:623
+ do_dentry_open+0x978/0x1460 fs/open.c:958
+ vfs_open+0x3e/0x330 fs/open.c:1088
+ do_open fs/namei.c:3774 [inline]
+ path_openat+0x2c84/0x3590 fs/namei.c:3933
+ do_filp_open+0x235/0x490 fs/namei.c:3960
+ do_sys_openat2+0x13e/0x1d0 fs/open.c:1415
+ do_sys_open fs/open.c:1430 [inline]
+ __do_sys_openat fs/open.c:1446 [inline]
+ __se_sys_openat fs/open.c:1441 [inline]
+ __x64_sys_openat+0x247/0x2a0 fs/open.c:1441
+page last free pid 16 tgid 16 stack trace:
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1108 [inline]
+ free_unref_page+0xcfb/0xf20 mm/page_alloc.c:2638
+ rcu_do_batch kernel/rcu/tree.c:2567 [inline]
+ rcu_core+0xaaa/0x17a0 kernel/rcu/tree.c:2823
+ handle_softirqs+0x2c5/0x980 kernel/softirq.c:554
+ run_ksoftirqd+0xca/0x130 kernel/softirq.c:927
+ smpboot_thread_fn+0x544/0xa30 kernel/smpboot.c:164
+ kthread+0x2f0/0x390 kernel/kthread.c:389
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+Memory state around the buggy address:
+ ffff8880312a3780: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
+ ffff8880312a3800: fa fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+>ffff8880312a3880: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+                                           ^
+ ffff8880312a3900: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+ ffff8880312a3980: fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb fb
+==================================================================
 
 
-On 11/6/2024 2:34 PM, AKASH KUMAR wrote:
-> Hi Selvarasu,
->
-> On 11/6/2024 12:29 PM, Selvarasu Ganesan wrote:
->> On 10/17/2024 12:14 PM, Akash Kumar wrote:
->>> The current logic is rigid, setting num_fifos to fixed values.
->>> 3 for any maxburst greater than 1.
->>> tx_fifo_resize_max_num for maxburst greater than 6.
->>> Additionally, it did not differentiate much between bulk and
->>> isochronous transfers, applying similar logic to both.
->>>
->>> The updated logic is more flexible and specifically designed to meet
->>> the unique requirements of both bulk and isochronous transfers. We
->>> have made every effort to satisfy all needs and requirements, verified
->>> on our specific platform and application.
->>>
->>> Bulk Transfers: Ensures that num_fifos is optimized by considering both
->>> the maxburst and DT property "tx-fifo-max-num" for super speed and
->>> above. For high-speed and below bulk endpoints, a 2K TxFIFO allocation
->>> is used to meet efficient data transfer needs, considering
->>> FIFO-constrained platforms.
->>>
->>> Isochronous Transfers: Ensures that num_fifos is sufficient by
->>> considering the maximum packet multiplier for HS and below and maxburst
->>> for Super-speed and above eps, along with a constraint with the DT
->>> property "tx-fifo-max-num".
->>>
->>> This change aims to optimize the allocation of Tx FIFOs for both bulk
->>> and isochronous endpoints, potentially improving data transfer 
->>> efficiency
->>> and overall performance. It also enhances support for all use cases,
->>> which can be tweaked with DT parameters and the endpoint’s maxburst and
->>> maxpacket. This structured approach ensures that the appropriate number
->>> of FIFOs is allocated based on the endpoint type and USB speed.
->>>
->>> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
->>> ---
->>> Changes for v7:
->>> fixed indentations for if checks.
->>>
->>> Changes for v6:
->>> The code has been refactored to replace multiple if checks with a
->>> switch-case structure based on the USB speed. This change improves
->>> readability and maintainability by clearly defining behavior for
->>> different USB speeds. This structured approach ensures that the
->>> appropriate number of FIFOs is allocated based on the endpoint
->>> type and USB speed.
->>>
->>> Changes for v5:
->>> Update Calculation for HS and below bulk and isoc eps based on
->>> suggestion and fixed at 2k for bulk eps considering fifo constrained
->>> platforms.
->>>
->>> Changes for v4:
->>> Updated commit message as per review comments to clarify that it has
->>> been tested on specific platforms only and tried best to match all
->>> expectations.
->>>
->>> Changes for v3:
->>> Redefine logic for resizing tx fifos,added check based on operating
->>> speed and used maxp for HS and maxburst for SS  and defined max 
->>> allocation
->>> based on dt property.
->>>
->>> Changes for v2:
->>> Redefine logic for resizing tx fifos, handled fifo based on minimum of
->>> maxp and maxburts.
->>>
->>> Changes for v1:
->>> Added additional condition to allocate tx fifo for hs isoc eps, keeping
->>> the other resize logic same
->>> ---
->>>    drivers/usb/dwc3/gadget.c | 33 ++++++++++++++++++++++++---------
->>>    1 file changed, 24 insertions(+), 9 deletions(-)
->>>
->>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
->>> index 10178e5eda5a..af3d5b2f7b67 100644
->>> --- a/drivers/usb/dwc3/gadget.c
->>> +++ b/drivers/usb/dwc3/gadget.c
->>> @@ -771,15 +771,30 @@ static int dwc3_gadget_resize_tx_fifos(struct 
->>> dwc3_ep *dep)
->>>           ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
->>>    -    if ((dep->endpoint.maxburst > 1 &&
->>> -         usb_endpoint_xfer_bulk(dep->endpoint.desc)) ||
->>> -        usb_endpoint_xfer_isoc(dep->endpoint.desc))
->>> -        num_fifos = 3;
->>> -
->>> -    if (dep->endpoint.maxburst > 6 &&
->>> -        (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
->>> -         usb_endpoint_xfer_isoc(dep->endpoint.desc)) && 
->>> DWC3_IP_IS(DWC31))
->>> -        num_fifos = dwc->tx_fifo_resize_max_num;
->>> +    switch (dwc->gadget->speed) {
->>> +    case USB_SPEED_SUPER_PLUS:
->>> +    case USB_SPEED_SUPER:
->>> +        if (usb_endpoint_xfer_bulk(dep->endpoint.desc) ||
->>> +            usb_endpoint_xfer_isoc(dep->endpoint.desc))
->>> +            num_fifos = min_t(unsigned int,
->>> +                      dep->endpoint.maxburst,
->>> +                      dwc->tx_fifo_resize_max_num);
->>> +        break;
->>> +    case USB_SPEED_HIGH:
->>> +        if (usb_endpoint_xfer_isoc(dep->endpoint.desc)) {
->>> +            num_fifos = min_t(unsigned int,
->>> + usb_endpoint_maxp_mult(dep->endpoint.desc) + 1,
->> Hi Akash,
->>
->> We are currently working on enabling UVC functionality on supports USB
->> HS and below speeds with using a single port RAM configuration.
->>
->> In order to better understand the logic behind resizing HS ISO transfers
->> when using a streaming packet size of 3072 in the UVC use case, we would
->> like to know if there is a specific reason for using
->> (usb_endpoint_maxp_mult(dep->endpoint.desc) + 1) to determine the number
->> of FIFOs. This calculation could result in having 4 FIFOs instead of 3,
->> even though 3 FIFOs should be sufficient for handling the 3072 streaming
->> packet size. In our specific use case, this could potentially lead to an
->> insufficient RAM issue, as we are limited by the amount of RAM available
->> in the single port RAM configuration and supports upto HS-speed.
-> the reason for using maxp +1 is to use higher fifo size to support 
-> 1080 mjpeg uvc streaming in HS or any uvc instances using less 
-> maxpacket like 512 for UVC usecase,
-> can use 2k fifo. For any fifo constraint environment we have suggested 
-> to use dt property "tx-fifo-max-num" which can set accordingly, for 
-> your case you can set to
-> 2 or 3.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Hi Akash,
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Thank you for the update.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-We can utilize the tx-fifo-max-num dt property to manage the FIFO size.
-However, we are unclear how the streaming image frame size or formats 
-are connected to the FIFO size. It seems more likely that it should be 
-related to the maximum packet size.
-For example, in  HS mode, it is possible to support 1080p MJPEG UVC 
-streaming if we set the maximum streaming packet size to 1024 bytes with 
-only one FIFO. In a typical UVC scenario, the maximum packet size is 
-3072 bytes. According to calculations, using three FIFOs (3 * 1024) 
-should be sufficient to handle this maximum packet size.
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
->>
->>> + dwc->tx_fifo_resize_max_num);
->>> +            break;
->>> +        }
->>> +        fallthrough;
->>> +    case USB_SPEED_FULL:
->>> +        if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
->>> +            num_fifos = 2;
->>
->> And we need to understand on above logic as well. Why using num_fifos =2
->> for bulk transfer for HS and FULL speed?. It can ending with 2k (4 *
->> Maxpacktsize).
->> As per our understanding (2 x Maxpacketsize) is sufficient for bulk. Its
->> means that num_fifos = 1 is sufficient for bulk. As i mentioned above
->> this could potentially lead to an insufficient RAM issue in our 
->> platform.
-> 2k Fifo is useful for bulk eps incase of multiple bulk operations 
-> simultaneously to avoid buffer underrrun issues,
-> Like i shared above DT property can be used to limit max fifo per ep 
-> to support platforms with less RAM size.
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
 
-
-Please correct me if we wrong.
-Each IN EPs has its own TxFIFOs. So, We are unclear how a buffer 
-under-run or overrun issue could occur if we only use HS mode, as it 
-does not support burst transfers.
-We cannot use the same tx-fifo-max-num property where require max 1 fifo 
-for bulk and max 3 fifo for ISO.
-
-
->>> +        break;
->>> +    default:
->>> +        break;
->>> +    }
->>>           /* FIFO size for a single buffer */
->>>        fifo = dwc3_gadget_calc_tx_fifo_size(dwc, 1);
-> Thanks,
-> Akash
->
+If you want to undo deduplication, reply with:
+#syz undup
 
