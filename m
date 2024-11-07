@@ -1,73 +1,79 @@
-Return-Path: <linux-usb+bounces-17298-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17299-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B9D7E9C0119
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 10:27:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 363B69C012A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 10:32:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 707DA1F22436
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 09:27:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 681241C21496
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 09:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E178C1DF273;
-	Thu,  7 Nov 2024 09:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6D6F1D5AC7;
+	Thu,  7 Nov 2024 09:32:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OQPt5t1v"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ChjdRKp7"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B7A196D8F
-	for <linux-usb@vger.kernel.org>; Thu,  7 Nov 2024 09:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2FDBA2D
+	for <linux-usb@vger.kernel.org>; Thu,  7 Nov 2024 09:32:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730971651; cv=none; b=Mra6fY3HJr2CKc3ThFqqvU17hF12Ab/Gexm7ih7KvoiMKrZ9q+Tg7eakVMXKLWe7i8GGIpCl4OUf6jM2pDiF9aac506fEqZ26pCcZos9VI1pk+DS/RMqrNhrv9QY7Tf3jUtZdfitEXds44KXvufMiHc5Btk2KvZ/9OTv2ebZE7E=
+	t=1730971968; cv=none; b=J2/ao43lzbrxK6s+K8Sw7E3wEdIRXCZHj6q0e2Bhja2OUkTbLsuN63wZ/elTEjF0EWduPdUfBRh+lXqpVAoxP814X+UIFvvJX3MtH6xCgoZe0A+OujdgW0KTmMEaYkfn+wYHYFmk56w13RPlZsBbJBpzzhnnd4Om6Rus8j/LUEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730971651; c=relaxed/simple;
-	bh=V9khQ1E7rWj5nI2UWo3kaKc9nV6T99bfyfLdaUNmP+8=;
+	s=arc-20240116; t=1730971968; c=relaxed/simple;
+	bh=YdeRu4qCayTIQe6uoGN8AMHuhaHW4h2jxa50Svo/FK4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RAd4RbTCd0H8TPybCpN7hL6tsWlVWXmW/HieDm6M9E+M2TkXSXQzs7eyCYjw1jTCYwzpgrg7Xjfo3TQaoGMFDvq5OYzeomIwEMn8qCt/rhcW4ANM/O/gSUGrVBqyOuvWWt/Vrz8yzVnMmAurPlV7EzLQICZp4EsF7HrpIaqUH/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OQPt5t1v; arc=none smtp.client-ip=192.198.163.13
+	 Content-Type:Content-Disposition:In-Reply-To; b=TI3S2D/XLS6FhAlBP3d00pGYytK0MPZhlT6GBOW0AITzSgskuFpxtOWGxCZq6tD/H9fCEQnyX+3xg2kj6Yua0wjr9l7T/QsHgdDb77lNKd2r85ImJSfaK22eW/ajnt1mJ/7LnhFL1wRnQ7oQROEFxsDkvhrd7A+fvaa+ex89+2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ChjdRKp7; arc=none smtp.client-ip=198.175.65.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1730971650; x=1762507650;
+  t=1730971967; x=1762507967;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=V9khQ1E7rWj5nI2UWo3kaKc9nV6T99bfyfLdaUNmP+8=;
-  b=OQPt5t1vaLlaI4dzijIR//1AuAXsOdGlWrcznnNR4vsdNZVVG4ncIfAk
-   WrqQdqwoCzULFBhgYZEvTptPtKMCsG7EiAiloc3Y3fjpA2q5GLQ2+ASg2
-   OVD/5uFRHcC6zexPREPk4VGDt/snOCjW7XYiJNsmbZLTQ4StFj/qmSESr
-   jh7KKoo8qEdnCwMhW/bjHkOGeU70I30FQGfqu9gZSRV8bdX16/VzLiUze
-   JQFqzR7U+UDGH9bHJlsB1WbrI6XX4Yr3VeKaIhVPl4xvYfN9lEv+Hlf3J
-   siNs3X29atJfbu6w1H7uIJNWJsDLnjIvdAOH3HKJOAmvqjwPEp1vwg8Dz
-   A==;
-X-CSE-ConnectionGUID: fpkjelQ0QW6L2WIQMH0zOA==
-X-CSE-MsgGUID: YR3KW1MgSzaB7XLgSf4odw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="33646653"
-X-IronPort-AV: E=Sophos;i="6.11,265,1725346800"; 
-   d="scan'208";a="33646653"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 01:27:29 -0800
-X-CSE-ConnectionGUID: p3mdsjDnS22d+OGJ4hPWag==
-X-CSE-MsgGUID: HR9FWMoZQ2SOwoq+bosRDA==
+  bh=YdeRu4qCayTIQe6uoGN8AMHuhaHW4h2jxa50Svo/FK4=;
+  b=ChjdRKp7ri1gUfYMIaPV4EK3vaviWvAKWmyGodOZx4mvQ9J6pv8HL4C7
+   mltaeN8ASVYfjb/WfzdUsFBUPL2e6Ht/U32VbrzTrn+I/UfwpF+luj13o
+   4Ts/HuZT7OZDWaK0vO38s1lmHUk8Uk227oRvjHD0iZOTEVic/Nj02bRAA
+   VQlc5vfdYroB3czwRlDXTru/wCHOx0ezh/XATHQgsO+Mu4HPmzrxW+66V
+   QjCf5JJYv7OJiBi7jHOAp9xtmHP4ohmDWWqqTVPKj5NYnHg7LLO015ZJW
+   IbsWufJBUocEZfgrr/RilkT8VjcABG+CSzN1FYalBBkjxXePNYZWFkv1C
+   w==;
+X-CSE-ConnectionGUID: U2NAgN6kQuyEf6Fa7sx9BQ==
+X-CSE-MsgGUID: XacpBOuvToC+SFjUhRLkvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30965231"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="30965231"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 01:32:46 -0800
+X-CSE-ConnectionGUID: OnsF47YlSqWDOMmyeLeoqA==
+X-CSE-MsgGUID: LlFFZl2gQY2JdmnVzutbdA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.11,265,1725346800"; 
-   d="scan'208";a="84942182"
-Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.245.83.36])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 01:27:28 -0800
-Date: Thu, 7 Nov 2024 10:27:25 +0100
-From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+   d="scan'208";a="122506145"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 01:32:45 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id E9C3C11F9BF;
+	Thu,  7 Nov 2024 11:32:38 +0200 (EET)
+Date: Thu, 7 Nov 2024 09:32:38 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
 To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v3 3/3] usb: misc: ljca: print firmware version
-Message-ID: <ZyyH/S8j3nxu8yTl@linux.intel.com>
+Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
+	linux-usb@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>
+Subject: Re: [PATCH v3 1/3] usb: misc: ljca: move usb_autopm_put_interface()
+ after wait for response
+Message-ID: <ZyyJNneC_jjoJIQw@kekkonen.localdomain>
 References: <20241107073718.405208-1-stanislaw.gruszka@linux.intel.com>
- <20241107073718.405208-3-stanislaw.gruszka@linux.intel.com>
- <2024110741-unfold-condense-6c54@gregkh>
+ <2024110743-dragonish-jokingly-8459@gregkh>
+ <ZyyAZaUNJ0kCEHG7@linux.intel.com>
+ <2024110710-duckbill-commodity-d1b5@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,17 +82,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2024110741-unfold-condense-6c54@gregkh>
+In-Reply-To: <2024110710-duckbill-commodity-d1b5@gregkh>
 
-On Thu, Nov 07, 2024 at 09:37:34AM +0100, Greg KH wrote:
-> On Thu, Nov 07, 2024 at 08:37:18AM +0100, Stanislaw Gruszka wrote:
-> > For diagnostics purposes read firmware version from device
-> > and print it to dmesg during initialization.
+Hi Greg,
+
+On Thu, Nov 07, 2024 at 10:03:56AM +0100, Greg KH wrote:
+> On Thu, Nov 07, 2024 at 09:55:01AM +0100, Stanislaw Gruszka wrote:
+> > On Thu, Nov 07, 2024 at 09:16:01AM +0100, Greg KH wrote:
+> > > On Thu, Nov 07, 2024 at 08:37:16AM +0100, Stanislaw Gruszka wrote:
+> > > > Do not mark interface as ready to suspend when we are still waiting
+> > > > for response messages from the device.
+> > > > 
+> > > > Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
+> > > > Cc: stable@vger.kernel.org
+> > > > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+> > > > Tested-by: Hans de Goede <hdegoede@redhat.com> # ThinkPad X1 Yoga Gen 8, ov2740
+> > > > Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> > > > Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+> > > > ---
+> > > > v2: fix handing error of usb_autopm_get_interface(),
+> > > >     add R-b, T-b tags from Hans
+> > > > v3: add A-b tag from Sakari
+> > > > 
+> > > >  drivers/usb/misc/usb-ljca.c | 12 ++++++------
+> > > >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > > 
+> > > For some reason you aren't sending this to the usb maintainer to be
+> > > applied, oh well...
+> > 
+> > Sorry, I thought sending patches to the mailing list is sufficient
+> > to get them applied. 
 > 
-> This changelog text isn't correct anymore :(
+> Please work with the Intel internal group to get their approval and
+> review before sending out your next round of patches for this, as they
+> know how to catch trivial stuff like this before forcing others to point
+> it out :)
 
-I'll drop this one from the set.
- 
-Regards
-Stanislaw
+Stanislaw's choses recipients are aligned with get_maintainer.pl output,
+sauf some who posted occasional cleanups. If that list wasn't correct, then
+there's something to fix in MAINTAINERS.
+
+-- 
+Kind regards,
+
+Sakari Ailus
 
