@@ -1,122 +1,184 @@
-Return-Path: <linux-usb+bounces-17320-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17321-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F56B9C079C
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 14:35:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0951E9C07FE
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 14:49:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 08C86B2335B
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 13:35:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94A3E2884D1
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 13:49:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CB9421262B;
-	Thu,  7 Nov 2024 13:33:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C404821264A;
+	Thu,  7 Nov 2024 13:48:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FbFeDhyy"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1OKZi6BC";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="n3Mgwdny";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1OKZi6BC";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="n3Mgwdny"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 011FA20FAA2;
-	Thu,  7 Nov 2024 13:33:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2E32101B7;
+	Thu,  7 Nov 2024 13:48:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730986432; cv=none; b=tRZ+VsNO1keSw/I9jf4kaep5VsQxc4LE82mqfytk+RqOAiV/vRKNrVFBn95G5YOWHOoUhTA67EZNDpj5jfYJXwGdPGxZeEiVYIWazM+hUkpWHyFJPJWA0sbYPl/ac++No5pRbCVf03tLUC/CStNjWscg0sjFoK/DRhO5kLzrAuI=
+	t=1730987318; cv=none; b=s19BxVRIYIVRN5r1EUogOfwyG+NPYGwyvvU7/wy4UklfyI9akMaD4s9dGB+Dbru/c+DU4apbp45qq8r+iFGE0UMNkR6tM9v81iQ5uHIudORBUc84T1p2pBdj29sS55P5R5G7aoqaV6tOUHxbt/WUGwwmWWNUrPE+n4tqAC26IVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730986432; c=relaxed/simple;
-	bh=E7vFx2yAcvc0WEyR9y8ZqTHmHaI00ioYVv4hf4bGIL4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=hNOesFBTviIG5I4FmZdjKfSdG/+Wen5mwI6STG2MhYWVCLKvCjeZLt/AVo0XlLpnizTlRrRcmdI9XVZcmI79UmiwI8LmsihIn/YpfU4YJeUWkBg7MsZzly0/cyAgkBAzKKGNPMWtqLlpW4jGTfGtSn44vFHiYaXB2X1G1QzmLK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FbFeDhyy; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-53c779ef19cso1070843e87.3;
-        Thu, 07 Nov 2024 05:33:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1730986429; x=1731591229; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ViY7sQ8AlwXM7+l1dCADz+1VsbIy8KN1FHcb7CbbhB4=;
-        b=FbFeDhyyKLx/h94iPobS79I9Uhw/j4NEiaez0AaXOQc2IE/bg6UR7NcbxhNj0CKOqo
-         E2YxkCx3Ze1dW9L0qxk7xfnBIn2LGogztPlyodrHUa5sP1fJnrPMZKjV6XuXkLH0UUqw
-         2dr4ndk+16rB51TjJwduKlP3dIWujU3F3jadj+r8MV/eqJqLL5TidR8FM6lH4kRjVDMO
-         hmsirSGVRi/FS/AmySPJLekGdZ62S+JGFiX/k/iLfznO87osWHUu8WlV8rh4f8sVPIny
-         xtrgHReYjQsQLr1+SVyh76hSTRbm7aOtBoT8FvvRsb6ka7dlL4pf7b3e5Tkst00iIR3Q
-         s3KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730986429; x=1731591229;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ViY7sQ8AlwXM7+l1dCADz+1VsbIy8KN1FHcb7CbbhB4=;
-        b=v1Qfaa1cJdiFOV0o1SBDgtODrq+fZs8kZgey1jjf7AudSEcQ91pIG2lKIeSPtoY40T
-         3QHSfIY9dRIL/uSYVRSRX6p7GXgUkZtxEh7eBA6pDwoG0hG1nnsZUQ9UT0uGCC7WFq0D
-         E+ap/8o0xUSgc+M7QC+Jvpf+9NClFXMMENpf7tnhdrbl/F+oOl6PM2siqL13Fhmda5od
-         qL/4GrXqSg1pkcNVjqH1wE/bNXOONY7zTZbjoTpbiRbcEXX0cOcohmGp8CH87s+GfYr2
-         VV+b+uz6wM49NA9xiKc0s54I8AWB2LPF4qki3+1Km3un0rkeTZl6vA8WnXprUK5NG6CY
-         Aicw==
-X-Forwarded-Encrypted: i=1; AJvYcCUknp0NQRPJPU83jjcDVPd/MSnFUD7ZJXzGXAp2/3ie2mUc9tHmyEN76TbbceA5g4vl6GO59/XkFSUE@vger.kernel.org, AJvYcCXuSrSi5Z0zDEklgjjEh5UDGtQuzt1857FNm4u3+6eWGls1KBY/50dCNcAdBzrdtUdHo1oMSqj27ofjjvQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjHNpE83y1uV+5dBOGwJC10U5ZrDi081B7pYqNeSChwThDd6mz
-	nft6fUJVL84JOFg9nsWBUc5Gc4NLM1tNP6w13aEnSgTtm3pBKgGBRndzAy5/7Dw=
-X-Google-Smtp-Source: AGHT+IGi8aMkz8VklETj3YLnYjbsXQ19G2kmHejVsQwIGAn154UBvsSV0dD/g/6Mhpzmod6RADHaYA==
-X-Received: by 2002:a05:6512:1321:b0:539:e7f8:7bf1 with SMTP id 2adb3069b0e04-53d858f36b8mr13326e87.2.1730986428811;
-        Thu, 07 Nov 2024 05:33:48 -0800 (PST)
-Received: from localhost ([194.120.133.65])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432aa709ec7sm62729315e9.35.2024.11.07.05.33.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2024 05:33:48 -0800 (PST)
-From: Colin Ian King <colin.i.king@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	s=arc-20240116; t=1730987318; c=relaxed/simple;
+	bh=FIR9m+KAwxOXexgMI4F6oCqFvMySRuYgOPelLzIFeYI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=bDeIo8quDmuXotiUA1B6ujjnhx5MJKcv0vINsf8zTVQLdRePTKTIpuipX666NKHZ+lscttzNduLfCjegcE1pCon0RxshFnAthZSwfrD9rvtqOdiZhkjuN4y0XIr9Nhrmwks1fqJvR+zoPu6l1dKx5GiUEkCLOnqEYMyFYZ3y1TM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1OKZi6BC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=n3Mgwdny; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1OKZi6BC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=n3Mgwdny; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 0283621C54;
+	Thu,  7 Nov 2024 13:48:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1730987309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1NDC0Q63BjLNRamLBaugx7A+QFjoMu00RkiPdFw64DY=;
+	b=1OKZi6BCQ2no9O+8mpOXNppbb+sXcgHNpr6eUvBKJSTpBdoePxN1SySwEMSA2A8yD+nYaZ
+	/RKluQGCEgq2bmijK/ceLRYB3SYBonl2963eVdsxK2ynvTZonBHc1uNB4iqEImCUKoaSY+
+	UskPAa1Tto2CWl+qPUM2ZjFcWEAu2JE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1730987309;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1NDC0Q63BjLNRamLBaugx7A+QFjoMu00RkiPdFw64DY=;
+	b=n3MgwdnydY7cDne0aVdPin3B5L2tw9/5baEdev4Zdbuov20tdiL3Y6uOvfbh4j4WCs3OW8
+	v6VEprhgE1zACiCQ==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1730987309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1NDC0Q63BjLNRamLBaugx7A+QFjoMu00RkiPdFw64DY=;
+	b=1OKZi6BCQ2no9O+8mpOXNppbb+sXcgHNpr6eUvBKJSTpBdoePxN1SySwEMSA2A8yD+nYaZ
+	/RKluQGCEgq2bmijK/ceLRYB3SYBonl2963eVdsxK2ynvTZonBHc1uNB4iqEImCUKoaSY+
+	UskPAa1Tto2CWl+qPUM2ZjFcWEAu2JE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1730987309;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=1NDC0Q63BjLNRamLBaugx7A+QFjoMu00RkiPdFw64DY=;
+	b=n3MgwdnydY7cDne0aVdPin3B5L2tw9/5baEdev4Zdbuov20tdiL3Y6uOvfbh4j4WCs3OW8
+	v6VEprhgE1zACiCQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C80C6139B3;
+	Thu,  7 Nov 2024 13:48:28 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Ss1nLyzFLGevTwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Thu, 07 Nov 2024 13:48:28 +0000
+Date: Thu, 07 Nov 2024 14:48:28 +0100
+Message-ID: <87zfmbgno3.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Colin Ian King <colin.i.king@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Takashi Iwai <tiwai@suse.de>,
-	linux-usb@vger.kernel.org
-Cc: kernel-janitors@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH][next] usb: gadget: function: remove redundant else statement
-Date: Thu,  7 Nov 2024 13:33:48 +0000
-Message-Id: <20241107133348.22762-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.39.5
+Subject: Re: [PATCH][next] usb: gadget: function: remove redundant else statement
+In-Reply-To: <20241107133348.22762-1-colin.i.king@gmail.com>
+References: <20241107133348.22762-1-colin.i.king@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Level: 
+X-Spamd-Result: default: False [-1.80 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TAGGED_RCPT(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_TLS_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:mid]
+X-Spam-Score: -1.80
+X-Spam-Flag: NO
 
-After an initial range change on the insigned int alt being > 1
-the only possible values for alt are 0 or 1. Therefore the else
-statement for values other than 0 or 1 is redundant and can be
-removed. Replace the else if (all == 1) check with just an else.
+On Thu, 07 Nov 2024 14:33:48 +0100,
+Colin Ian King wrote:
+> 
+> After an initial range change on the insigned int alt being > 1
+> the only possible values for alt are 0 or 1. Therefore the else
+> statement for values other than 0 or 1 is redundant and can be
+> removed. Replace the else if (all == 1) check with just an else.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/usb/gadget/function/f_midi2.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+Reviewed-by: Takashi Iwai <tiwai@suse.de>
 
-diff --git a/drivers/usb/gadget/function/f_midi2.c b/drivers/usb/gadget/function/f_midi2.c
-index 8285df9ed6fd..5f3f6e7700c7 100644
---- a/drivers/usb/gadget/function/f_midi2.c
-+++ b/drivers/usb/gadget/function/f_midi2.c
-@@ -1282,16 +1282,14 @@ static int f_midi2_set_alt(struct usb_function *fn, unsigned int intf,
- 
- 	if (intf != midi2->midi_if || alt > 1)
- 		return 0;
- 
- 	if (alt == 0)
- 		op_mode = MIDI_OP_MODE_MIDI1;
--	else if (alt == 1)
-+	else
- 		op_mode = MIDI_OP_MODE_MIDI2;
--	else
--		op_mode = MIDI_OP_MODE_UNSET;
- 
- 	if (midi2->operation_mode == op_mode)
- 		return 0;
- 
- 	midi2->operation_mode = op_mode;
- 
--- 
-2.39.5
+Also worth to put the original discussion thread:
 
+Link: https://lore.kernel.org/5f54ffd0-b5fe-4203-a626-c166becad362@gmail.com
+
+
+thanks,
+
+Takashi
+
+> ---
+>  drivers/usb/gadget/function/f_midi2.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_midi2.c b/drivers/usb/gadget/function/f_midi2.c
+> index 8285df9ed6fd..5f3f6e7700c7 100644
+> --- a/drivers/usb/gadget/function/f_midi2.c
+> +++ b/drivers/usb/gadget/function/f_midi2.c
+> @@ -1282,16 +1282,14 @@ static int f_midi2_set_alt(struct usb_function *fn, unsigned int intf,
+>  
+>  	if (intf != midi2->midi_if || alt > 1)
+>  		return 0;
+>  
+>  	if (alt == 0)
+>  		op_mode = MIDI_OP_MODE_MIDI1;
+> -	else if (alt == 1)
+> +	else
+>  		op_mode = MIDI_OP_MODE_MIDI2;
+> -	else
+> -		op_mode = MIDI_OP_MODE_UNSET;
+>  
+>  	if (midi2->operation_mode == op_mode)
+>  		return 0;
+>  
+>  	midi2->operation_mode = op_mode;
+>  
+> -- 
+> 2.39.5
+> 
 
