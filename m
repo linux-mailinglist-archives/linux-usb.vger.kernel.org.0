@@ -1,184 +1,136 @@
-Return-Path: <linux-usb+bounces-17321-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17322-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0951E9C07FE
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 14:49:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B525B9C08C0
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 15:21:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94A3E2884D1
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 13:49:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A0782837A5
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 14:21:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C404821264A;
-	Thu,  7 Nov 2024 13:48:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87DAB212646;
+	Thu,  7 Nov 2024 14:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1OKZi6BC";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="n3Mgwdny";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1OKZi6BC";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="n3Mgwdny"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M9gRiJXZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D2E32101B7;
-	Thu,  7 Nov 2024 13:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FC0D20F5DC;
+	Thu,  7 Nov 2024 14:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730987318; cv=none; b=s19BxVRIYIVRN5r1EUogOfwyG+NPYGwyvvU7/wy4UklfyI9akMaD4s9dGB+Dbru/c+DU4apbp45qq8r+iFGE0UMNkR6tM9v81iQ5uHIudORBUc84T1p2pBdj29sS55P5R5G7aoqaV6tOUHxbt/WUGwwmWWNUrPE+n4tqAC26IVc=
+	t=1730989267; cv=none; b=OWvudi8oxX0wkOHPKBSRB4iOM24bvVSHGkIt2qjY9VwVbplEUs/IF0jGUayivA1Vp0rrWAVqDaov39Y5rKNTTeGS/jPbnTULJdmau2YX8s3V+UaRwMaPpIyozygi86lKdYy8phBzU5qMxgvKyhqzIf7PIWgTfs+7Ytdt1Pzeeak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730987318; c=relaxed/simple;
-	bh=FIR9m+KAwxOXexgMI4F6oCqFvMySRuYgOPelLzIFeYI=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=bDeIo8quDmuXotiUA1B6ujjnhx5MJKcv0vINsf8zTVQLdRePTKTIpuipX666NKHZ+lscttzNduLfCjegcE1pCon0RxshFnAthZSwfrD9rvtqOdiZhkjuN4y0XIr9Nhrmwks1fqJvR+zoPu6l1dKx5GiUEkCLOnqEYMyFYZ3y1TM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1OKZi6BC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=n3Mgwdny; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1OKZi6BC; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=n3Mgwdny; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 0283621C54;
-	Thu,  7 Nov 2024 13:48:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1730987309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1NDC0Q63BjLNRamLBaugx7A+QFjoMu00RkiPdFw64DY=;
-	b=1OKZi6BCQ2no9O+8mpOXNppbb+sXcgHNpr6eUvBKJSTpBdoePxN1SySwEMSA2A8yD+nYaZ
-	/RKluQGCEgq2bmijK/ceLRYB3SYBonl2963eVdsxK2ynvTZonBHc1uNB4iqEImCUKoaSY+
-	UskPAa1Tto2CWl+qPUM2ZjFcWEAu2JE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1730987309;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1NDC0Q63BjLNRamLBaugx7A+QFjoMu00RkiPdFw64DY=;
-	b=n3MgwdnydY7cDne0aVdPin3B5L2tw9/5baEdev4Zdbuov20tdiL3Y6uOvfbh4j4WCs3OW8
-	v6VEprhgE1zACiCQ==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1730987309; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1NDC0Q63BjLNRamLBaugx7A+QFjoMu00RkiPdFw64DY=;
-	b=1OKZi6BCQ2no9O+8mpOXNppbb+sXcgHNpr6eUvBKJSTpBdoePxN1SySwEMSA2A8yD+nYaZ
-	/RKluQGCEgq2bmijK/ceLRYB3SYBonl2963eVdsxK2ynvTZonBHc1uNB4iqEImCUKoaSY+
-	UskPAa1Tto2CWl+qPUM2ZjFcWEAu2JE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1730987309;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1NDC0Q63BjLNRamLBaugx7A+QFjoMu00RkiPdFw64DY=;
-	b=n3MgwdnydY7cDne0aVdPin3B5L2tw9/5baEdev4Zdbuov20tdiL3Y6uOvfbh4j4WCs3OW8
-	v6VEprhgE1zACiCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id C80C6139B3;
-	Thu,  7 Nov 2024 13:48:28 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Ss1nLyzFLGevTwAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Thu, 07 Nov 2024 13:48:28 +0000
-Date: Thu, 07 Nov 2024 14:48:28 +0100
-Message-ID: <87zfmbgno3.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Colin Ian King <colin.i.king@gmail.com>
+	s=arc-20240116; t=1730989267; c=relaxed/simple;
+	bh=IEVwxSRNKA4Yn8NRHtPqnLyaZV9KG+cxBfFjKW7vWaI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=M6H6d7VE2NBEJ1KZaHjoXHZC14IUhlbKH9cKl3ulV6Lum0dEQxU2Lz2M1A4Af+f/0z9DxC/IL0Pt6sOLz+RgL1muNwsR3jWZOyYs3BLY/bf/EgNAjLFXhmdqvPrDmjN5vHlXQXotlIBawa3WENQUZ1v5R7fcql8Ek99G5EIr4xM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M9gRiJXZ; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730989265; x=1762525265;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IEVwxSRNKA4Yn8NRHtPqnLyaZV9KG+cxBfFjKW7vWaI=;
+  b=M9gRiJXZhq9GccQ2nxoXx5KY56SNh1j1MnCo+uAhGH8wH8qAVjjG3jnL
+   Qm0c3m+N3OtoH5cOyPu5rK88QDNrMo12H0CoZEQs4cmqwvdUskqtjtlNu
+   Ifg8HehiPFlVFCQ64+785CNk+hbqn30kVUs0LHj7Bizn0ednmHea/4wQG
+   iH9pbh0Z2WUO7/9Kxqmr3E42rWLGu4hDMruLZezfK5PCsWA1Nvat4y5h1
+   02ymskDRpUS/BkE35Wr2K5beFuUqgsgZF38zUEf8lLU4k3iLwXPxCQauJ
+   5rIH4ys4IIwKcDk8GewP8mUN1WnwAbPtnD4bLoY3oRunynggQotKI1whF
+   g==;
+X-CSE-ConnectionGUID: Tnz9CFBtQJqK5OUA7dx12A==
+X-CSE-MsgGUID: 7qMxSG8HTJSlmEjyaWF8SA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30994232"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="30994232"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 06:21:04 -0800
+X-CSE-ConnectionGUID: 1WTeQjKRRqGXF8bMqueftQ==
+X-CSE-MsgGUID: 3lzMI0LjRA6P0gjsBcUeWg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,266,1728975600"; 
+   d="scan'208";a="85901770"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa008.jf.intel.com with SMTP; 07 Nov 2024 06:21:02 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 07 Nov 2024 16:21:00 +0200
+Date: Thu, 7 Nov 2024 16:21:00 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: oliver.facklam@zuehlke.com
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Takashi Iwai <tiwai@suse.de>,
-	linux-usb@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH][next] usb: gadget: function: remove redundant else statement
-In-Reply-To: <20241107133348.22762-1-colin.i.king@gmail.com>
-References: <20241107133348.22762-1-colin.i.king@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Benedict von Heyl <benedict.vonheyl@zuehlke.com>,
+	Mathis Foerst <mathis.foerst@zuehlke.com>,
+	Michael Glettig <michael.glettig@zuehlke.com>
+Subject: Re: [PATCH 2/4] usb: typec: hd3ss3220: use typec_get_fw_cap() to
+ fill typec_cap
+Message-ID: <ZyzMzEHA9DPMc_z9@kuha.fi.intel.com>
+References: <20241107-usb-typec-controller-enhancements-v1-0-3886c1acced2@zuehlke.com>
+ <20241107-usb-typec-controller-enhancements-v1-2-3886c1acced2@zuehlke.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Level: 
-X-Spamd-Result: default: False [-1.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TAGGED_RCPT(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_ENVRCPT(0.00)[gmail.com];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_TLS_ALL(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:email,suse.de:mid]
-X-Spam-Score: -1.80
-X-Spam-Flag: NO
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241107-usb-typec-controller-enhancements-v1-2-3886c1acced2@zuehlke.com>
 
-On Thu, 07 Nov 2024 14:33:48 +0100,
-Colin Ian King wrote:
+Hi Oliver,
+
+On Thu, Nov 07, 2024 at 12:43:28PM +0100, Oliver Facklam via B4 Relay wrote:
+> From: Oliver Facklam <oliver.facklam@zuehlke.com>
 > 
-> After an initial range change on the insigned int alt being > 1
-> the only possible values for alt are 0 or 1. Therefore the else
-> statement for values other than 0 or 1 is redundant and can be
-> removed. Replace the else if (all == 1) check with just an else.
+> The type, data, and prefer_role properties were previously hard-coded
+> when creating the struct typec_capability.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Use typec_get_fw_cap() to populate these fields based on the
+> respective fwnode properties.
+> 
+> Signed-off-by: Oliver Facklam <oliver.facklam@zuehlke.com>
+> ---
+>  drivers/usb/typec/hd3ss3220.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+> index 56f74bf70895ca701083bde44a5bbe0b691551e1..e6e4b1871b5d805f8c367131509f4e6ec0d2b5f0 100644
+> --- a/drivers/usb/typec/hd3ss3220.c
+> +++ b/drivers/usb/typec/hd3ss3220.c
+> @@ -259,12 +259,12 @@ static int hd3ss3220_probe(struct i2c_client *client)
+>  		goto err_put_fwnode;
+>  	}
+>  
+> -	typec_cap.prefer_role = TYPEC_NO_PREFERRED_ROLE;
+> +	ret = typec_get_fw_cap(&typec_cap, connector);
+> +	if (ret)
+> +		goto err_put_role;
 
-Reviewed-by: Takashi Iwai <tiwai@suse.de>
+You are not leaving any fallback here. Are you sure all the existing
+systems supply those properties?
 
-Also worth to put the original discussion thread:
+There is another problem. At least "data-role" property is optional,
+but that will in practice make it a requirement.
 
-Link: https://lore.kernel.org/5f54ffd0-b5fe-4203-a626-c166becad362@gmail.com
+I think it would be safer to use the values from the device properties
+only if they are available. Otherwise simply use default values.
 
+>  	typec_cap.driver_data = hd3ss3220;
+> -	typec_cap.type = TYPEC_PORT_DRP;
+> -	typec_cap.data = TYPEC_PORT_DRD;
+>  	typec_cap.ops = &hd3ss3220_ops;
+> -	typec_cap.fwnode = connector;
+>  
+>  	hd3ss3220->port = typec_register_port(&client->dev, &typec_cap);
+>  	if (IS_ERR(hd3ss3220->port)) {
 
 thanks,
 
-Takashi
-
-> ---
->  drivers/usb/gadget/function/f_midi2.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/function/f_midi2.c b/drivers/usb/gadget/function/f_midi2.c
-> index 8285df9ed6fd..5f3f6e7700c7 100644
-> --- a/drivers/usb/gadget/function/f_midi2.c
-> +++ b/drivers/usb/gadget/function/f_midi2.c
-> @@ -1282,16 +1282,14 @@ static int f_midi2_set_alt(struct usb_function *fn, unsigned int intf,
->  
->  	if (intf != midi2->midi_if || alt > 1)
->  		return 0;
->  
->  	if (alt == 0)
->  		op_mode = MIDI_OP_MODE_MIDI1;
-> -	else if (alt == 1)
-> +	else
->  		op_mode = MIDI_OP_MODE_MIDI2;
-> -	else
-> -		op_mode = MIDI_OP_MODE_UNSET;
->  
->  	if (midi2->operation_mode == op_mode)
->  		return 0;
->  
->  	midi2->operation_mode = op_mode;
->  
-> -- 
-> 2.39.5
-> 
+-- 
+heikki
 
