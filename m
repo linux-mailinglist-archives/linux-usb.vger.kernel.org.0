@@ -1,79 +1,59 @@
-Return-Path: <linux-usb+bounces-17332-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17333-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E2DD9C0E15
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 19:51:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3888D9C0E38
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 20:03:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 310B11C22735
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 18:51:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F0912282F4A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 19:03:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36BC738DC8;
-	Thu,  7 Nov 2024 18:50:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD43D217672;
+	Thu,  7 Nov 2024 19:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YIp5U3B6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KR3+qkq0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A027E217645
-	for <linux-usb@vger.kernel.org>; Thu,  7 Nov 2024 18:50:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BC39217668
+	for <linux-usb@vger.kernel.org>; Thu,  7 Nov 2024 19:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731005448; cv=none; b=jN6UBq46Kc63Jri+wtT8sWIcdyl5VU0x54jZkurscBlSQP0DWUF8QWjQr61+c2ZNHcdeUJgSfhaf6pJzW3obvt0N6NYdIe5NWvJWfTCzFpdiLecjH1/lSv8OHAcV133PHm3gU5c2Sn4xj0b6kLmsHoe3cJP83/0z6crc8TD0SYY=
+	t=1731006176; cv=none; b=hXjk62D7uBFTi7AJD6DLp/s4uQlhaHDX4Xlydks4rI4D+JhI7rAzXv0UmkD6vp29dxCO12F8CnuKAdJthLZdfcKhdEUWruA3ZPU4E4C+2ZdkWjid+UyLImCEf+GDcqrrkVV7ipHZaVPvHGQsrmxk9Q8b0+dbpTJoDdj6RYnN2zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731005448; c=relaxed/simple;
-	bh=fYwSHX1/AQ9MJZ8bjS4dVYNMwaGIVn2g3FNKbsVOHSM=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O8gmTYpl94sH/Sl+ciVHEGDuzMbTDWrhLBvznAZh9sAuhSq4U7oK7KIgyPGNhVtwoxOCfMBUZk9h/JR9kGAn8T9a0dWXGXp90SQy4MWYD7hoYY9GSyKo07Fv6sJ4QyWPwSvSHx6CV3PQbPX/xdEBKHV1fXUu3AAwDNkarE5FO2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YIp5U3B6; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-718998df806so801428a34.1
-        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2024 10:50:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731005445; x=1731610245; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q/fl+NiGM38kZGX/ZgrGGC58p/MlPnMpAcKkDTYzqIE=;
-        b=YIp5U3B6mHCHDbFcXmWbFh05ZtWUY+AyO7SW0puMUGKf9zBqsc3T0m8nxzZieMJrHB
-         Ct++7+3tRHD5m8Z23iFnDc+Jg8qbwBGAbc25EAgS/I8RB/+aPyR2KEsj7c8MU4RZulDB
-         nrwe+3ZdZ1VxPoKo666ZwKxtZl+sWzpJ4PeMy9z0rBYOL+fiv0jc2AAt7H/LxCUFiopJ
-         ywmkn9iQsF3PYxO+JMuddheYIKrcd8wm2QhYpySyfcfm74pLgpLfKfWYCQUuhP7ND+gn
-         qvt0pCugu+VyTRD+TBOAXbRved+AZ7KooGxMnrmuTCWAber8XqzcEoxqXxFHx14+S2x0
-         JxMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731005445; x=1731610245;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Q/fl+NiGM38kZGX/ZgrGGC58p/MlPnMpAcKkDTYzqIE=;
-        b=QP35pxKYIxQz9NQG8ckkhIpmS1WzP/SwTjM6/HI/qAPXUnPwH1VKJsrnp3dPzmFDMl
-         Wy96LOy16pB1UFixNxylBjaGunavlWmbwPXk59mL1w9rU9PguouRN4ycr6Y6slQgLUIS
-         khgkPKYH3NQ6Zdz1CdCRGgi/9ezGZgnTPuM2SvwK3F0eqafqdmJF67Pl0jCJwec0QFWK
-         82WLUK28KVbrkPhX9h9+OUA/6nyIl61rAAojNloQc6wDlK5hXsjxN9+sl6iBhnFcDlmn
-         0xA64oejORXgSUkVYhnOO5a+0fyw0HqeF73/3lOC08q+st9RYxdweMG9z3STfM/5psyt
-         L42Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXymHuPN5YZiy4+ltdQeG9YWKmyESYWHELB9bDPOqKkSkelgw3GpYBx55I2ee9KUCPweR0d5jMmLrw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8GYYezoAEu+k7f1Jxpd6MdYmQcA9ufJtHr+SY0UTpSZbkVvls
-	KzW0cfQlC+p/ZGJeI4AnpjImu8IZhfqbooOLGDloo2301Au8f2cJQKl15nyt
-X-Google-Smtp-Source: AGHT+IHGyczBCdFzNmrNEYWNk9nRE/5K7ICRkmauLpvJzu0zUxxw3PDjUborYwZtuv1vzFkJ9CY0eQ==
-X-Received: by 2002:a05:6830:65c3:b0:718:7c3:f86a with SMTP id 46e09a7af769-71a1c1f1886mr60455a34.6.1731005445485;
-        Thu, 07 Nov 2024 10:50:45 -0800 (PST)
-Received: from neuromancer. ([2600:1700:fb0:1bcf::54])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-71a1094fedfsm380821a34.73.2024.11.07.10.50.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 07 Nov 2024 10:50:45 -0800 (PST)
-Message-ID: <672d0c05.050a0220.114196.1e8b@mx.google.com>
-X-Google-Original-Message-ID: <Zy0MA8Dqh8AORhVk@neuromancer.>
-Date: Thu, 7 Nov 2024 12:50:43 -0600
-From: Chris Morgan <macroalpha82@gmail.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Roger Quadros <rogerq@kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+	s=arc-20240116; t=1731006176; c=relaxed/simple;
+	bh=kIky1Dz2MgNJV5tjVARxYROJ3loqDlcVUJdKbs+CCe4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ml5AcH9138srQEaw7oq7TodWREOEJMox5tDlaHuLI1zpuNC51rOvX72FkPhNhwes+/AqnG8N9LU+R/GeNgv6YFp8qAQ3q1gbd+7Pn8MLajVeVpCytccFkhl9SD8pgjDVAwuH8OeKjYpL3Z4Q4D56wZ29xHWu9BJfi5d/PUNtm3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KR3+qkq0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BB31C4CECC;
+	Thu,  7 Nov 2024 19:02:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731006175;
+	bh=kIky1Dz2MgNJV5tjVARxYROJ3loqDlcVUJdKbs+CCe4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=KR3+qkq0j7WwjOjobeGqfT6vaSCYxNK6PvGElMYbiDl6MjI4Lj9wOojNoUenGuzxZ
+	 fOJ/IH8/NxlVCUNkbVOH3lSqk0zw8SPouj7P1MPGWVJZOT1OBunlnFO2qYPwjTmjh7
+	 kFzQb17IUTVA9T651ApZmhafHWzaTiFyN8mTEn3kShGY0kKuf1OihUueh5wq0iyA1Y
+	 +vwh7xdUdUTaBZLdWxkWwom05T4QlswpnbQ3rWd1C3RAHpLPUMzLKE5VqYSyei5OgX
+	 qpOJ7jrVHNTFCG2O5x/k3OWuOig5mYEOUkKEHMF8RHeOgERAeUdBNTW0szqQq4icN+
+	 95HQy7YT9lZlQ==
+Message-ID: <9546c6f0-7cff-4661-968d-a7415134e731@kernel.org>
+Date: Thu, 7 Nov 2024 21:02:51 +0200
+Precedence: bulk
+X-Mailing-List: linux-usb@vger.kernel.org
+List-Id: <linux-usb.vger.kernel.org>
+List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 2/2] usb: dwc3: core: Prevent phy suspend during init
+To: Chris Morgan <macroalpha82@gmail.com>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
 References: <cover.1713310411.git.Thinh.Nguyen@synopsys.com>
  <e8f04e642889b4c865aaf06762cde9386e0ff830.1713310411.git.Thinh.Nguyen@synopsys.com>
  <1519dbe7-73b6-4afc-bfe3-23f4f75d772f@kernel.org>
@@ -84,696 +64,78 @@ References: <cover.1713310411.git.Thinh.Nguyen@synopsys.com>
  <ca4daad3-9a34-4331-9faa-91b960924b9e@kernel.org>
  <672291b9.9d0a0220.1f040e.013f@mx.google.com>
  <20241031013353.cgxjqgboz6hcy4xx@synopsys.com>
-Precedence: bulk
-X-Mailing-List: linux-usb@vger.kernel.org
-List-Id: <linux-usb.vger.kernel.org>
-List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241031013353.cgxjqgboz6hcy4xx@synopsys.com>
+ <672d0c05.050a0220.114196.1e8b@mx.google.com>
+Content-Language: en-US
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <672d0c05.050a0220.114196.1e8b@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Oct 31, 2024 at 01:33:54AM +0000, Thinh Nguyen wrote:
-> On Wed, Oct 30, 2024, Chris Morgan wrote:
-> > On Wed, Oct 30, 2024 at 03:10:34PM +0200, Roger Quadros wrote:
-> > > Hi Chris,
-> > > 
-> > > On 30/10/2024 00:49, Thinh Nguyen wrote:
-> > > > Hi,
-> > > > 
-> > > > On Tue, Oct 29, 2024, Chris Morgan wrote:
-> > > >> Sorry, to be specific it was the fix that causes the issues I'm now
-> > > >> observing. When I explicitly revert commit
-> > > >> 705e3ce37bccdf2ed6f848356ff355f480d51a91 things start working again
-> > > >> for me. With that commit in place, however, suspend fails for me.
-> > > > 
-> > > > Ok, Roger's patch is causing issue on your platform and the $subject
-> > > > patch? Can you provide more details on your test sequence?
-> > > > 
-> > > > * What does "no longer able to suspend" mean exactly (what error?)
-> > > > * What mode is your usb controller?
-> > > > * Is there any device connected while going into suspend?
-> > > > * Can you provide dwc3 regdump?
-> > > 
-> > > Commit 705e3ce37bccdf2ed6f848356ff355f480d51a91 will enable
-> > > DWC3_GUSB2PHYCFG_SUSPHY in DWC3_GUSB2PHYCFG(i)
-> > > and DWC3_GUSB3PIPECTL_SUSPHY in DWC3_GUSB3PIPECTL(i) during
-> > > system suspend path, unless snps,dis_u2_susphy_quirk or
-> > > snps,dis_u3_susphy_quirk is set.
-> > > 
-> > > I see rK356x.dtsi has snps,dis_u2_susphy_quirk;
-> > > Does adding snps,dis_u3_susphy_quirk resolve the issue?
-> > 
-> > I'm afraid it does not fix the issue. Specifically when I do
-> > "systemctl suspend" the device begins to suspend but freezes with the
-> > kernel log output via serial console listed previously. Note I have
-> > console enabled in suspend. Additionally button input no longer
-> > works at this point.
-> > 
-> > Specifically, I'm testing this with the Anbernic RG353P device based on
-> > the Rockchip RK3566 SoC, in case you're curious.
-> > 
-> > I'm not able to get you a register dump post suspend attempt as the
-> > system completely freezes, however I can get you a dump prior to
-> > suspend if that will help?
+Hi Chris,
+
+On 07/11/2024 20:50, Chris Morgan wrote:
+> On Thu, Oct 31, 2024 at 01:33:54AM +0000, Thinh Nguyen wrote:
+>> On Wed, Oct 30, 2024, Chris Morgan wrote:
+>>> On Wed, Oct 30, 2024 at 03:10:34PM +0200, Roger Quadros wrote:
+>>>> Hi Chris,
+>>>>
+>>>> On 30/10/2024 00:49, Thinh Nguyen wrote:
+>>>>> Hi,
+>>>>>
+>>>>> On Tue, Oct 29, 2024, Chris Morgan wrote:
+>>>>>> Sorry, to be specific it was the fix that causes the issues I'm now
+>>>>>> observing. When I explicitly revert commit
+>>>>>> 705e3ce37bccdf2ed6f848356ff355f480d51a91 things start working again
+>>>>>> for me. With that commit in place, however, suspend fails for me.
+>>>>>
+>>>>> Ok, Roger's patch is causing issue on your platform and the $subject
+>>>>> patch? Can you provide more details on your test sequence?
+>>>>>
+>>>>> * What does "no longer able to suspend" mean exactly (what error?)
+>>>>> * What mode is your usb controller?
+>>>>> * Is there any device connected while going into suspend?
+>>>>> * Can you provide dwc3 regdump?
+>>>>
+>>>> Commit 705e3ce37bccdf2ed6f848356ff355f480d51a91 will enable
+>>>> DWC3_GUSB2PHYCFG_SUSPHY in DWC3_GUSB2PHYCFG(i)
+>>>> and DWC3_GUSB3PIPECTL_SUSPHY in DWC3_GUSB3PIPECTL(i) during
+>>>> system suspend path, unless snps,dis_u2_susphy_quirk or
+>>>> snps,dis_u3_susphy_quirk is set.
+>>>>
+>>>> I see rK356x.dtsi has snps,dis_u2_susphy_quirk;
+>>>> Does adding snps,dis_u3_susphy_quirk resolve the issue?
+>>>
+>>> I'm afraid it does not fix the issue. Specifically when I do
+>>> "systemctl suspend" the device begins to suspend but freezes with the
+>>> kernel log output via serial console listed previously. Note I have
+>>> console enabled in suspend. Additionally button input no longer
+>>> works at this point.
+>>>
+>>> Specifically, I'm testing this with the Anbernic RG353P device based on
+>>> the Rockchip RK3566 SoC, in case you're curious.
+>>>
+>>> I'm not able to get you a register dump post suspend attempt as the
+>>> system completely freezes, however I can get you a dump prior to
+>>> suspend if that will help?
+>>
+>> Yes, any data is useful.
+>>
+>>>
+>>> Thank you,
+>>> Chris
+>>
+>> Can you help answer the other bullet questions I have previously.
+>>
+>> Thanks,
+>> Thinh
 > 
-> Yes, any data is useful.
-> 
-> > 
-> > Thank you,
-> > Chris
-> 
-> Can you help answer the other bullet questions I have previously.
-> 
-> Thanks,
-> Thinh
+> I have 2 ports, here is a dump of each:
 
-I have 2 ports, here is a dump of each:
+Did you try this patch [1]. Does it fix the issue for you?
 
-usb@fcc00000:
-GSBUSCFG0 = 0x00000001
-GSBUSCFG1 = 0x00000300
-GTXTHRCFG = 0x00000000
-GRXTHRCFG = 0x00000000
-GCTL = 0x30c12004
-GEVTEN = 0x00000000
-GSTS = 0x7e800000
-GUCTL1 = 0x8504018a
-GSNPSID = 0x5533300a
-GGPIO = 0x00000000
-GUID = 0x00060c00
-GUCTL = 0x0a400010
-GBUSERRADDR0 = 0x00000000
-GBUSERRADDR1 = 0x00000000
-GPRTBIMAP0 = 0x00000000
-GPRTBIMAP1 = 0x00000000
-GHWPARAMS0 = 0x2020400a
-GHWPARAMS1 = 0x0160c93b
-GHWPARAMS2 = 0x20180101
-GHWPARAMS3 = 0x08290085
-GHWPARAMS4 = 0x47822010
-GHWPARAMS5 = 0x04204108
-GHWPARAMS6 = 0x075e8020
-GHWPARAMS7 = 0x03880800
-GDBGFIFOSPACE = 0x00420000
-GDBGLTSSM = 0x01090440
-GDBGBMU = 0x00000000
-GPRTBIMAP_HS0 = 0x00000000
-GPRTBIMAP_HS1 = 0x00000000
-GPRTBIMAP_FS0 = 0x00000000
-GPRTBIMAP_FS1 = 0x00000000
-GUCTL2 = 0x0000040d
-VER_NUMBER = 0x00000000
-VER_TYPE = 0x00000000
-GUSB2PHYCFG(0) = 0x40101508
-GUSB2PHYCFG(1) = 0x00000000
-GUSB2PHYCFG(2) = 0x00000000
-GUSB2PHYCFG(3) = 0x00000000
-GUSB2PHYCFG(4) = 0x00000000
-GUSB2PHYCFG(5) = 0x00000000
-GUSB2PHYCFG(6) = 0x00000000
-GUSB2PHYCFG(7) = 0x00000000
-GUSB2PHYCFG(8) = 0x00000000
-GUSB2PHYCFG(9) = 0x00000000
-GUSB2PHYCFG(10) = 0x00000000
-GUSB2PHYCFG(11) = 0x00000000
-GUSB2PHYCFG(12) = 0x00000000
-GUSB2PHYCFG(13) = 0x00000000
-GUSB2PHYCFG(14) = 0x00000000
-GUSB2PHYCFG(15) = 0x00000000
-GUSB2I2CCTL(0) = 0x00000000
-GUSB2I2CCTL(1) = 0x00000000
-GUSB2I2CCTL(2) = 0x00000000
-GUSB2I2CCTL(3) = 0x00000000
-GUSB2I2CCTL(4) = 0x00000000
-GUSB2I2CCTL(5) = 0x00000000
-GUSB2I2CCTL(6) = 0x00000000
-GUSB2I2CCTL(7) = 0x00000000
-GUSB2I2CCTL(8) = 0x00000000
-GUSB2I2CCTL(9) = 0x00000000
-GUSB2I2CCTL(10) = 0x00000000
-GUSB2I2CCTL(11) = 0x00000000
-GUSB2I2CCTL(12) = 0x00000000
-GUSB2I2CCTL(13) = 0x00000000
-GUSB2I2CCTL(14) = 0x00000000
-GUSB2I2CCTL(15) = 0x00000000
-GUSB2PHYACC(0) = 0x00000000
-GUSB2PHYACC(1) = 0x00000000
-GUSB2PHYACC(2) = 0x00000000
-GUSB2PHYACC(3) = 0x00000000
-GUSB2PHYACC(4) = 0x00000000
-GUSB2PHYACC(5) = 0x00000000
-GUSB2PHYACC(6) = 0x00000000
-GUSB2PHYACC(7) = 0x00000000
-GUSB2PHYACC(8) = 0x00000000
-GUSB2PHYACC(9) = 0x00000000
-GUSB2PHYACC(10) = 0x00000000
-GUSB2PHYACC(11) = 0x00000000
-GUSB2PHYACC(12) = 0x00000000
-GUSB2PHYACC(13) = 0x00000000
-GUSB2PHYACC(14) = 0x00000000
-GUSB2PHYACC(15) = 0x00000000
-GUSB3PIPECTL(0) = 0x010c0002
-GUSB3PIPECTL(1) = 0x00000000
-GUSB3PIPECTL(2) = 0x00000000
-GUSB3PIPECTL(3) = 0x00000000
-GUSB3PIPECTL(4) = 0x00000000
-GUSB3PIPECTL(5) = 0x00000000
-GUSB3PIPECTL(6) = 0x00000000
-GUSB3PIPECTL(7) = 0x00000000
-GUSB3PIPECTL(8) = 0x00000000
-GUSB3PIPECTL(9) = 0x00000000
-GUSB3PIPECTL(10) = 0x00000000
-GUSB3PIPECTL(11) = 0x00000000
-GUSB3PIPECTL(12) = 0x00000000
-GUSB3PIPECTL(13) = 0x00000000
-GUSB3PIPECTL(14) = 0x00000000
-GUSB3PIPECTL(15) = 0x00000000
-GTXFIFOSIZ(0) = 0x00000042
-GTXFIFOSIZ(1) = 0x00420184
-GTXFIFOSIZ(2) = 0x01c60184
-GTXFIFOSIZ(3) = 0x034a0184
-GTXFIFOSIZ(4) = 0x04ce0184
-GTXFIFOSIZ(5) = 0x06520184
-GTXFIFOSIZ(6) = 0x07d6002a
-GTXFIFOSIZ(7) = 0x08000000
-GTXFIFOSIZ(8) = 0x08000000
-GTXFIFOSIZ(9) = 0x08000000
-GTXFIFOSIZ(10) = 0x00000000
-GTXFIFOSIZ(11) = 0x00000000
-GTXFIFOSIZ(12) = 0x00000000
-GTXFIFOSIZ(13) = 0x00000000
-GTXFIFOSIZ(14) = 0x00000000
-GTXFIFOSIZ(15) = 0x00000000
-GTXFIFOSIZ(16) = 0x00000000
-GTXFIFOSIZ(17) = 0x00000000
-GTXFIFOSIZ(18) = 0x00000000
-GTXFIFOSIZ(19) = 0x00000000
-GTXFIFOSIZ(20) = 0x00000000
-GTXFIFOSIZ(21) = 0x00000000
-GTXFIFOSIZ(22) = 0x00000000
-GTXFIFOSIZ(23) = 0x00000000
-GTXFIFOSIZ(24) = 0x00000000
-GTXFIFOSIZ(25) = 0x00000000
-GTXFIFOSIZ(26) = 0x00000000
-GTXFIFOSIZ(27) = 0x00000000
-GTXFIFOSIZ(28) = 0x00000000
-GTXFIFOSIZ(29) = 0x00000000
-GTXFIFOSIZ(30) = 0x00000000
-GTXFIFOSIZ(31) = 0x00000000
-GRXFIFOSIZ(0) = 0x00000388
-GRXFIFOSIZ(1) = 0x03880000
-GRXFIFOSIZ(2) = 0x03880000
-GRXFIFOSIZ(3) = 0x00000000
-GRXFIFOSIZ(4) = 0x00000000
-GRXFIFOSIZ(5) = 0x00000000
-GRXFIFOSIZ(6) = 0x00000000
-GRXFIFOSIZ(7) = 0x00000000
-GRXFIFOSIZ(8) = 0x00000000
-GRXFIFOSIZ(9) = 0x00000000
-GRXFIFOSIZ(10) = 0x00000000
-GRXFIFOSIZ(11) = 0x00000000
-GRXFIFOSIZ(12) = 0x00000000
-GRXFIFOSIZ(13) = 0x00000000
-GRXFIFOSIZ(14) = 0x00000000
-GRXFIFOSIZ(15) = 0x00000000
-GRXFIFOSIZ(16) = 0x00000000
-GRXFIFOSIZ(17) = 0x00000000
-GRXFIFOSIZ(18) = 0x00000000
-GRXFIFOSIZ(19) = 0x00000000
-GRXFIFOSIZ(20) = 0x00000000
-GRXFIFOSIZ(21) = 0x00000000
-GRXFIFOSIZ(22) = 0x00000000
-GRXFIFOSIZ(23) = 0x00000000
-GRXFIFOSIZ(24) = 0x00000000
-GRXFIFOSIZ(25) = 0x00000000
-GRXFIFOSIZ(26) = 0x00000000
-GRXFIFOSIZ(27) = 0x00000000
-GRXFIFOSIZ(28) = 0x00000000
-GRXFIFOSIZ(29) = 0x00000000
-GRXFIFOSIZ(30) = 0x00000000
-GRXFIFOSIZ(31) = 0x00000000
-GEVNTADRLO(0) = 0x01d8d000
-GEVNTADRHI(0) = 0x00000000
-GEVNTSIZ(0) = 0x00001000
-GEVNTCOUNT(0) = 0x00000000
-GHWPARAMS8 = 0x0000075e
-GUCTL3 = 0x00000000
-GFLADJ = 0x0a07f000
-DCFG = 0x00080804
-DCTL = 0x00f00000
-DEVTEN = 0x00000000
-DSTS = 0x00d26c4c
-DGCMDPAR = 0x00000000
-DGCMD = 0x00000000
-DALEPENA = 0x00000000
-DEPCMDPAR2(0) = 0x00000000
-DEPCMDPAR1(0) = 0x00000000
-DEPCMDPAR0(0) = 0x00000000
-DEPCMD(0) = 0x00000000
-DEPCMDPAR2(1) = 0x00000000
-DEPCMDPAR1(1) = 0x00000000
-DEPCMDPAR0(1) = 0x00000000
-DEPCMD(1) = 0x00000000
-DEPCMDPAR2(2) = 0x00000000
-DEPCMDPAR1(2) = 0x00000000
-DEPCMDPAR0(2) = 0x00000000
-DEPCMD(2) = 0x00000000
-DEPCMDPAR2(3) = 0x00000000
-DEPCMDPAR1(3) = 0x00000000
-DEPCMDPAR0(3) = 0x00000000
-DEPCMD(3) = 0x00000000
-DEPCMDPAR2(4) = 0x00000000
-DEPCMDPAR1(4) = 0x00000000
-DEPCMDPAR0(4) = 0x00000000
-DEPCMD(4) = 0x00000000
-DEPCMDPAR2(5) = 0x00000000
-DEPCMDPAR1(5) = 0x00000000
-DEPCMDPAR0(5) = 0x00000000
-DEPCMD(5) = 0x00000000
-DEPCMDPAR2(6) = 0x00000000
-DEPCMDPAR1(6) = 0x00000000
-DEPCMDPAR0(6) = 0x00000000
-DEPCMD(6) = 0x00000000
-DEPCMDPAR2(7) = 0x00000000
-DEPCMDPAR1(7) = 0x00000000
-DEPCMDPAR0(7) = 0x00000000
-DEPCMD(7) = 0x00000000
-DEPCMDPAR2(8) = 0x00000000
-DEPCMDPAR1(8) = 0x00000000
-DEPCMDPAR0(8) = 0x00000000
-DEPCMD(8) = 0x00000000
-DEPCMDPAR2(9) = 0x00000000
-DEPCMDPAR1(9) = 0x00000000
-DEPCMDPAR0(9) = 0x00000000
-DEPCMD(9) = 0x00000000
-DEPCMDPAR2(10) = 0x00000000
-DEPCMDPAR1(10) = 0x00000000
-DEPCMDPAR0(10) = 0x00000000
-DEPCMD(10) = 0x00000000
-DEPCMDPAR2(11) = 0x00000000
-DEPCMDPAR1(11) = 0x00000000
-DEPCMDPAR0(11) = 0x00000000
-DEPCMD(11) = 0x00000000
-DEPCMDPAR2(12) = 0x00000000
-DEPCMDPAR1(12) = 0x00000000
-DEPCMDPAR0(12) = 0x00000000
-DEPCMD(12) = 0x00000000
-DEPCMDPAR2(13) = 0x00000000
-DEPCMDPAR1(13) = 0x00000000
-DEPCMDPAR0(13) = 0x00000000
-DEPCMD(13) = 0x00000000
-DEPCMDPAR2(14) = 0x00000000
-DEPCMDPAR1(14) = 0x00000000
-DEPCMDPAR0(14) = 0x00000000
-DEPCMD(14) = 0x00000000
-DEPCMDPAR2(15) = 0x00000000
-DEPCMDPAR1(15) = 0x00000000
-DEPCMDPAR0(15) = 0x00000000
-DEPCMD(15) = 0x00000000
-DEPCMDPAR2(16) = 0x00000000
-DEPCMDPAR1(16) = 0x00000000
-DEPCMDPAR0(16) = 0x00000000
-DEPCMD(16) = 0x00000000
-DEPCMDPAR2(17) = 0x00000000
-DEPCMDPAR1(17) = 0x00000000
-DEPCMDPAR0(17) = 0x00000000
-DEPCMD(17) = 0x00000000
-DEPCMDPAR2(18) = 0x00000000
-DEPCMDPAR1(18) = 0x00000000
-DEPCMDPAR0(18) = 0x00000000
-DEPCMD(18) = 0x00000000
-DEPCMDPAR2(19) = 0x00000000
-DEPCMDPAR1(19) = 0x00000000
-DEPCMDPAR0(19) = 0x00000000
-DEPCMD(19) = 0x00000000
-DEPCMDPAR2(20) = 0x00000000
-DEPCMDPAR1(20) = 0x00000000
-DEPCMDPAR0(20) = 0x00000000
-DEPCMD(20) = 0x00000000
-DEPCMDPAR2(21) = 0x00000000
-DEPCMDPAR1(21) = 0x00000000
-DEPCMDPAR0(21) = 0x00000000
-DEPCMD(21) = 0x00000000
-DEPCMDPAR2(22) = 0x00000000
-DEPCMDPAR1(22) = 0x00000000
-DEPCMDPAR0(22) = 0x00000000
-DEPCMD(22) = 0x00000000
-DEPCMDPAR2(23) = 0x00000000
-DEPCMDPAR1(23) = 0x00000000
-DEPCMDPAR0(23) = 0x00000000
-DEPCMD(23) = 0x00000000
-DEPCMDPAR2(24) = 0x00000000
-DEPCMDPAR1(24) = 0x00000000
-DEPCMDPAR0(24) = 0x00000000
-DEPCMD(24) = 0x00000000
-DEPCMDPAR2(25) = 0x00000000
-DEPCMDPAR1(25) = 0x00000000
-DEPCMDPAR0(25) = 0x00000000
-DEPCMD(25) = 0x00000000
-DEPCMDPAR2(26) = 0x00000000
-DEPCMDPAR1(26) = 0x00000000
-DEPCMDPAR0(26) = 0x00000000
-DEPCMD(26) = 0x00000000
-DEPCMDPAR2(27) = 0x00000000
-DEPCMDPAR1(27) = 0x00000000
-DEPCMDPAR0(27) = 0x00000000
-DEPCMD(27) = 0x00000000
-DEPCMDPAR2(28) = 0x00000000
-DEPCMDPAR1(28) = 0x00000000
-DEPCMDPAR0(28) = 0x00000000
-DEPCMD(28) = 0x00000000
-DEPCMDPAR2(29) = 0x00000000
-DEPCMDPAR1(29) = 0x00000000
-DEPCMDPAR0(29) = 0x00000000
-DEPCMD(29) = 0x00000000
-DEPCMDPAR2(30) = 0x00000000
-DEPCMDPAR1(30) = 0x00000000
-DEPCMDPAR0(30) = 0x00000000
-DEPCMD(30) = 0x00000000
-DEPCMDPAR2(31) = 0x00000000
-DEPCMDPAR1(31) = 0x00000000
-DEPCMDPAR0(31) = 0x00000000
-DEPCMD(31) = 0x00000000
-OCFG = 0x00000000
-OCTL = 0x00000000
-OEVT = 0x00000000
-OEVTEN = 0x00000000
-OSTS = 0x00000000
+[1] https://lore.kernel.org/all/20241104-am62-lpm-usb-fix-v1-1-e93df73a4f0d@kernel.org/
 
-
-fd000000:
-GSBUSCFG0 = 0x00000001
-GSBUSCFG1 = 0x00000300
-GTXTHRCFG = 0x00000000
-GRXTHRCFG = 0x00000000
-GCTL = 0x30c11004
-GEVTEN = 0x00000000
-GSTS = 0x7e800021
-GUCTL1 = 0x8104018a
-GSNPSID = 0x5533300a
-GGPIO = 0x00000000
-GUID = 0x00060c00
-GUCTL = 0x0a400010
-GBUSERRADDR0 = 0x00000000
-GBUSERRADDR1 = 0x00000000
-GPRTBIMAP0 = 0x00000000
-GPRTBIMAP1 = 0x00000000
-GHWPARAMS0 = 0x2020400a
-GHWPARAMS1 = 0x0160c93b
-GHWPARAMS2 = 0x20180101
-GHWPARAMS3 = 0x08290085
-GHWPARAMS4 = 0x47822010
-GHWPARAMS5 = 0x04204108
-GHWPARAMS6 = 0x075e8020
-GHWPARAMS7 = 0x03880800
-GDBGFIFOSPACE = 0x00820000
-GDBGLTSSM = 0x40010440
-GDBGBMU = 0x20000000
-GPRTBIMAP_HS0 = 0x00000000
-GPRTBIMAP_HS1 = 0x00000000
-GPRTBIMAP_FS0 = 0x00000000
-GPRTBIMAP_FS1 = 0x00000000
-GUCTL2 = 0x0000040d
-VER_NUMBER = 0x00000000
-VER_TYPE = 0x00000000
-GUSB2PHYCFG(0) = 0x40101508
-GUSB2PHYCFG(1) = 0x00000000
-GUSB2PHYCFG(2) = 0x00000000
-GUSB2PHYCFG(3) = 0x00000000
-GUSB2PHYCFG(4) = 0x00000000
-GUSB2PHYCFG(5) = 0x00000000
-GUSB2PHYCFG(6) = 0x00000000
-GUSB2PHYCFG(7) = 0x00000000
-GUSB2PHYCFG(8) = 0x00000000
-GUSB2PHYCFG(9) = 0x00000000
-GUSB2PHYCFG(10) = 0x00000000
-GUSB2PHYCFG(11) = 0x00000000
-GUSB2PHYCFG(12) = 0x00000000
-GUSB2PHYCFG(13) = 0x00000000
-GUSB2PHYCFG(14) = 0x00000000
-GUSB2PHYCFG(15) = 0x00000000
-GUSB2I2CCTL(0) = 0x00000000
-GUSB2I2CCTL(1) = 0x00000000
-GUSB2I2CCTL(2) = 0x00000000
-GUSB2I2CCTL(3) = 0x00000000
-GUSB2I2CCTL(4) = 0x00000000
-GUSB2I2CCTL(5) = 0x00000000
-GUSB2I2CCTL(6) = 0x00000000
-GUSB2I2CCTL(7) = 0x00000000
-GUSB2I2CCTL(8) = 0x00000000
-GUSB2I2CCTL(9) = 0x00000000
-GUSB2I2CCTL(10) = 0x00000000
-GUSB2I2CCTL(11) = 0x00000000
-GUSB2I2CCTL(12) = 0x00000000
-GUSB2I2CCTL(13) = 0x00000000
-GUSB2I2CCTL(14) = 0x00000000
-GUSB2I2CCTL(15) = 0x00000000
-GUSB2PHYACC(0) = 0x00000000
-GUSB2PHYACC(1) = 0x00000000
-GUSB2PHYACC(2) = 0x00000000
-GUSB2PHYACC(3) = 0x00000000
-GUSB2PHYACC(4) = 0x00000000
-GUSB2PHYACC(5) = 0x00000000
-GUSB2PHYACC(6) = 0x00000000
-GUSB2PHYACC(7) = 0x00000000
-GUSB2PHYACC(8) = 0x00000000
-GUSB2PHYACC(9) = 0x00000000
-GUSB2PHYACC(10) = 0x00000000
-GUSB2PHYACC(11) = 0x00000000
-GUSB2PHYACC(12) = 0x00000000
-GUSB2PHYACC(13) = 0x00000000
-GUSB2PHYACC(14) = 0x00000000
-GUSB2PHYACC(15) = 0x00000000
-GUSB3PIPECTL(0) = 0x010e0002
-GUSB3PIPECTL(1) = 0x00000000
-GUSB3PIPECTL(2) = 0x00000000
-GUSB3PIPECTL(3) = 0x00000000
-GUSB3PIPECTL(4) = 0x00000000
-GUSB3PIPECTL(5) = 0x00000000
-GUSB3PIPECTL(6) = 0x00000000
-GUSB3PIPECTL(7) = 0x00000000
-GUSB3PIPECTL(8) = 0x00000000
-GUSB3PIPECTL(9) = 0x00000000
-GUSB3PIPECTL(10) = 0x00000000
-GUSB3PIPECTL(11) = 0x00000000
-GUSB3PIPECTL(12) = 0x00000000
-GUSB3PIPECTL(13) = 0x00000000
-GUSB3PIPECTL(14) = 0x00000000
-GUSB3PIPECTL(15) = 0x00000000
-GTXFIFOSIZ(0) = 0x00000082
-GTXFIFOSIZ(1) = 0x00820103
-GTXFIFOSIZ(2) = 0x01850286
-GTXFIFOSIZ(3) = 0x040b0000
-GTXFIFOSIZ(4) = 0x040b0000
-GTXFIFOSIZ(5) = 0x040b0000
-GTXFIFOSIZ(6) = 0x040b0000
-GTXFIFOSIZ(7) = 0x040b0000
-GTXFIFOSIZ(8) = 0x040b0000
-GTXFIFOSIZ(9) = 0x040b0000
-GTXFIFOSIZ(10) = 0x00000000
-GTXFIFOSIZ(11) = 0x00000000
-GTXFIFOSIZ(12) = 0x00000000
-GTXFIFOSIZ(13) = 0x00000000
-GTXFIFOSIZ(14) = 0x00000000
-GTXFIFOSIZ(15) = 0x00000000
-GTXFIFOSIZ(16) = 0x00000000
-GTXFIFOSIZ(17) = 0x00000000
-GTXFIFOSIZ(18) = 0x00000000
-GTXFIFOSIZ(19) = 0x00000000
-GTXFIFOSIZ(20) = 0x00000000
-GTXFIFOSIZ(21) = 0x00000000
-GTXFIFOSIZ(22) = 0x00000000
-GTXFIFOSIZ(23) = 0x00000000
-GTXFIFOSIZ(24) = 0x00000000
-GTXFIFOSIZ(25) = 0x00000000
-GTXFIFOSIZ(26) = 0x00000000
-GTXFIFOSIZ(27) = 0x00000000
-GTXFIFOSIZ(28) = 0x00000000
-GTXFIFOSIZ(29) = 0x00000000
-GTXFIFOSIZ(30) = 0x00000000
-GTXFIFOSIZ(31) = 0x00000000
-GRXFIFOSIZ(0) = 0x00000084
-GRXFIFOSIZ(1) = 0x00840104
-GRXFIFOSIZ(2) = 0x01880200
-GRXFIFOSIZ(3) = 0x00000000
-GRXFIFOSIZ(4) = 0x00000000
-GRXFIFOSIZ(5) = 0x00000000
-GRXFIFOSIZ(6) = 0x00000000
-GRXFIFOSIZ(7) = 0x00000000
-GRXFIFOSIZ(8) = 0x00000000
-GRXFIFOSIZ(9) = 0x00000000
-GRXFIFOSIZ(10) = 0x00000000
-GRXFIFOSIZ(11) = 0x00000000
-GRXFIFOSIZ(12) = 0x00000000
-GRXFIFOSIZ(13) = 0x00000000
-GRXFIFOSIZ(14) = 0x00000000
-GRXFIFOSIZ(15) = 0x00000000
-GRXFIFOSIZ(16) = 0x00000000
-GRXFIFOSIZ(17) = 0x00000000
-GRXFIFOSIZ(18) = 0x00000000
-GRXFIFOSIZ(19) = 0x00000000
-GRXFIFOSIZ(20) = 0x00000000
-GRXFIFOSIZ(21) = 0x00000000
-GRXFIFOSIZ(22) = 0x00000000
-GRXFIFOSIZ(23) = 0x00000000
-GRXFIFOSIZ(24) = 0x00000000
-GRXFIFOSIZ(25) = 0x00000000
-GRXFIFOSIZ(26) = 0x00000000
-GRXFIFOSIZ(27) = 0x00000000
-GRXFIFOSIZ(28) = 0x00000000
-GRXFIFOSIZ(29) = 0x00000000
-GRXFIFOSIZ(30) = 0x00000000
-GRXFIFOSIZ(31) = 0x00000000
-GEVNTADRLO(0) = 0x00000000
-GEVNTADRHI(0) = 0x00000000
-GEVNTSIZ(0) = 0x00001000
-GEVNTCOUNT(0) = 0x00000000
-GHWPARAMS8 = 0x0000075e
-GUCTL3 = 0x00000000
-GFLADJ = 0x0a07f000
-DCFG = 0x00080804
-DCTL = 0x00f00000
-DEVTEN = 0x00000000
-DSTS = 0x00520004
-DGCMDPAR = 0x00000000
-DGCMD = 0x00000000
-DALEPENA = 0x00000000
-DEPCMDPAR2(0) = 0x00000000
-DEPCMDPAR1(0) = 0x00000002
-DEPCMDPAR0(0) = 0x01db2001
-DEPCMD(0) = 0x00000000
-DEPCMDPAR2(1) = 0x00000000
-DEPCMDPAR1(1) = 0x00000000
-DEPCMDPAR0(1) = 0x00000000
-DEPCMD(1) = 0x00000000
-DEPCMDPAR2(2) = 0x01db1000
-DEPCMDPAR1(2) = 0x00000000
-DEPCMDPAR0(2) = 0x00000040
-DEPCMD(2) = 0x00000000
-DEPCMDPAR2(3) = 0x00000000
-DEPCMDPAR1(3) = 0x00000000
-DEPCMDPAR0(3) = 0x00000000
-DEPCMD(3) = 0x00000000
-DEPCMDPAR2(4) = 0x01db5000
-DEPCMDPAR1(4) = 0x00000000
-DEPCMDPAR0(4) = 0x01db3000
-DEPCMD(4) = 0x00000000
-DEPCMDPAR2(5) = 0x00000000
-DEPCMDPAR1(5) = 0x00000000
-DEPCMDPAR0(5) = 0x00000000
-DEPCMD(5) = 0x00000000
-DEPCMDPAR2(6) = 0x00000000
-DEPCMDPAR1(6) = 0x00000000
-DEPCMDPAR0(6) = 0x00000000
-DEPCMD(6) = 0x00000000
-DEPCMDPAR2(7) = 0x00000000
-DEPCMDPAR1(7) = 0x00000000
-DEPCMDPAR0(7) = 0x00000000
-DEPCMD(7) = 0x00000000
-DEPCMDPAR2(8) = 0x00000000
-DEPCMDPAR1(8) = 0x00000000
-DEPCMDPAR0(8) = 0x00000000
-DEPCMD(8) = 0x00000000
-DEPCMDPAR2(9) = 0x00000000
-DEPCMDPAR1(9) = 0x00000000
-DEPCMDPAR0(9) = 0x00000000
-DEPCMD(9) = 0x00000000
-DEPCMDPAR2(10) = 0x00000000
-DEPCMDPAR1(10) = 0x00000000
-DEPCMDPAR0(10) = 0x00000000
-DEPCMD(10) = 0x00000000
-DEPCMDPAR2(11) = 0x00000000
-DEPCMDPAR1(11) = 0x00000000
-DEPCMDPAR0(11) = 0x00000000
-DEPCMD(11) = 0x00000000
-DEPCMDPAR2(12) = 0x00000000
-DEPCMDPAR1(12) = 0x00000000
-DEPCMDPAR0(12) = 0x00000000
-DEPCMD(12) = 0x00000000
-DEPCMDPAR2(13) = 0x00000000
-DEPCMDPAR1(13) = 0x00000000
-DEPCMDPAR0(13) = 0x00000000
-DEPCMD(13) = 0x00000000
-DEPCMDPAR2(14) = 0x00000000
-DEPCMDPAR1(14) = 0x00000000
-DEPCMDPAR0(14) = 0x00000000
-DEPCMD(14) = 0x00000000
-DEPCMDPAR2(15) = 0x00000000
-DEPCMDPAR1(15) = 0x00000000
-DEPCMDPAR0(15) = 0x00000000
-DEPCMD(15) = 0x00000000
-DEPCMDPAR2(16) = 0x00000000
-DEPCMDPAR1(16) = 0x00000000
-DEPCMDPAR0(16) = 0x00000000
-DEPCMD(16) = 0x00000000
-DEPCMDPAR2(17) = 0x00000000
-DEPCMDPAR1(17) = 0x00000000
-DEPCMDPAR0(17) = 0x00000000
-DEPCMD(17) = 0x00000000
-DEPCMDPAR2(18) = 0x00000000
-DEPCMDPAR1(18) = 0x00000000
-DEPCMDPAR0(18) = 0x00000000
-DEPCMD(18) = 0x00000000
-DEPCMDPAR2(19) = 0x00000000
-DEPCMDPAR1(19) = 0x00000000
-DEPCMDPAR0(19) = 0x00000000
-DEPCMD(19) = 0x00000000
-DEPCMDPAR2(20) = 0x00000000
-DEPCMDPAR1(20) = 0x00000000
-DEPCMDPAR0(20) = 0x00000000
-DEPCMD(20) = 0x00000000
-DEPCMDPAR2(21) = 0x00000000
-DEPCMDPAR1(21) = 0x00000000
-DEPCMDPAR0(21) = 0x00000000
-DEPCMD(21) = 0x00000000
-DEPCMDPAR2(22) = 0x00000000
-DEPCMDPAR1(22) = 0x00000000
-DEPCMDPAR0(22) = 0x00000000
-DEPCMD(22) = 0x00000000
-DEPCMDPAR2(23) = 0x00000000
-DEPCMDPAR1(23) = 0x00000000
-DEPCMDPAR0(23) = 0x00000000
-DEPCMD(23) = 0x00000000
-DEPCMDPAR2(24) = 0x00000000
-DEPCMDPAR1(24) = 0x00000000
-DEPCMDPAR0(24) = 0x00000000
-DEPCMD(24) = 0x00000000
-DEPCMDPAR2(25) = 0x00000000
-DEPCMDPAR1(25) = 0x00000000
-DEPCMDPAR0(25) = 0x00000000
-DEPCMD(25) = 0x00000000
-DEPCMDPAR2(26) = 0x00000000
-DEPCMDPAR1(26) = 0x00000000
-DEPCMDPAR0(26) = 0x00000000
-DEPCMD(26) = 0x00000000
-DEPCMDPAR2(27) = 0x00000000
-DEPCMDPAR1(27) = 0x00000000
-DEPCMDPAR0(27) = 0x00000000
-DEPCMD(27) = 0x00000000
-DEPCMDPAR2(28) = 0x00000000
-DEPCMDPAR1(28) = 0x00000000
-DEPCMDPAR0(28) = 0x00000000
-DEPCMD(28) = 0x00000000
-DEPCMDPAR2(29) = 0x00000000
-DEPCMDPAR1(29) = 0x00000000
-DEPCMDPAR0(29) = 0x00000000
-DEPCMD(29) = 0x00000000
-DEPCMDPAR2(30) = 0x00000000
-DEPCMDPAR1(30) = 0x00000000
-DEPCMDPAR0(30) = 0x00000000
-DEPCMD(30) = 0x00000000
-DEPCMDPAR2(31) = 0x00000000
-DEPCMDPAR1(31) = 0x00000000
-DEPCMDPAR0(31) = 0x00000000
-DEPCMD(31) = 0x00000000
-OCFG = 0x00000000
-OCTL = 0x00000000
-OEVT = 0x00000000
-OEVTEN = 0x00000000
-OSTS = 0x00000000
-
-Thank you,
-Chris
+-- 
+cheers,
+-roger
 
