@@ -1,69 +1,160 @@
-Return-Path: <linux-usb+bounces-17295-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17294-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5BC69C002F
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 09:41:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 892009C0023
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 09:37:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1A6A8B23458
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 08:41:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49508282F2A
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 08:37:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33DC41DB52A;
-	Thu,  7 Nov 2024 08:40:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B3DF1DACA9;
+	Thu,  7 Nov 2024 08:37:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fxJxxmou"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dURYm47l"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1651993BA
-	for <linux-usb@vger.kernel.org>; Thu,  7 Nov 2024 08:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85352D53F
+	for <linux-usb@vger.kernel.org>; Thu,  7 Nov 2024 08:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730968850; cv=none; b=dv9CTeH1qmPN7kKn1Vo6UigzhW5ctLQ+z9o7I82YT3zuAsXssn8ST9F7xEI1KhzRuRHJRDLa1l2LWR/Jvso5wDBi1X+r1YknaE3xSkSEhKTMz7XakQf8/tbk10QMmAgN9os+3Pwk3I1HJ19BiMQ+i0MfbHsUquhPv+iFP0B+Xcs=
+	t=1730968663; cv=none; b=XQukFzyOPZCeerz36zaeDl1eCvhcKl6NGduIUtpVR0ET2bDSMPro/O+1uo4uRTpOXAMGYo3cc7y0DXpF1sprF0v8Ia2M7eiIpqc6pLM/bZFxeWjpJvJ4/rjNnqIPpk4mSbGFrZ+V8/B5J/dhGMtWfLr9gKQMBPLgHh9FahRfK/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730968850; c=relaxed/simple;
-	bh=UfwTzqFdHBvvxWqsRk3igANXnlWz6R73b/QT4cu+x0s=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s4m1WIbnGY46Bhc7TfkmW1VXGzBVxmCScTGbH2UNq1xYwTVNDWwkXg7QntNlz+8vKpgi69Pz6cCVW0SQgeoC7yHbDAt0mtDGPoSowt3RRMuqD+T/wvir/IuXn5M24wa57hCceVXV1WjpE2K2Km2X674oTmjl7kxrrwrhEkpkC6Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fxJxxmou; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA052C4CED2;
-	Thu,  7 Nov 2024 08:40:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1730968850;
-	bh=UfwTzqFdHBvvxWqsRk3igANXnlWz6R73b/QT4cu+x0s=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fxJxxmouQS0ggzyi3lmIwMNv29/w/UOmP4eJn8nBJpK8gAWaSjVLv8t9FvXefi3sN
-	 cdTe5ZzNKs+JP8e59xAftRHex7brpMF2jROzHqlxmKiKiPHWLH+JiIwCFjOlRUWgT9
-	 2s6VHS56Nk9hanGhNN3X9/A/ndS5Qc6EAUqn4emw=
-Date: Thu, 7 Nov 2024 09:37:34 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>
-Subject: Re: [PATCH v3 3/3] usb: misc: ljca: print firmware version
-Message-ID: <2024110741-unfold-condense-6c54@gregkh>
-References: <20241107073718.405208-1-stanislaw.gruszka@linux.intel.com>
- <20241107073718.405208-3-stanislaw.gruszka@linux.intel.com>
+	s=arc-20240116; t=1730968663; c=relaxed/simple;
+	bh=5KKm7vNWJgWghFT5nNLhjDOshGpxtnvHC9TFhJK13ak=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ENN8vWyO2JXvfMROvi7JLX3PQ7TzZQGzP9vcBdoN5N2bQ4OfMoaEV1fz4j4iprIDVmx6pv8vzMBnbuuKl5B0ZWVkFx44ao7qknlTemgHt+KmocAeDrBKdcnPLKA9EDxTR0SRRSo8FBndeKkT4eJCZwDR28khw/ZyVy0h1LF1iJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dURYm47l; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5cb15b84544so825388a12.2
+        for <linux-usb@vger.kernel.org>; Thu, 07 Nov 2024 00:37:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1730968660; x=1731573460; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=fZao1C6pV4fJNRNyMk7syEnimVtRpaNTazE2wh1+Hz4=;
+        b=dURYm47lbCyeC5NypEX5uV4OBnpz9uEk6rcszAWN4Ytbr7Ez74r5gkGWQ0Rduumxo2
+         y8vh2y6RAsPFfe1IsdeVEcKjSceLEB00gvBDQ438RU1M/NN0Dvqyo3jaRPNB7xoXMNJE
+         L5oWMBc/8QFFdMwrQwIxXaGXFcwNjQGMwrljFQY2ixUg22c2QSrlJGGfPiASF95qedDf
+         TSATJjbi8tOE48vAM7Hrz9M1HzTqNxsMRJlzUrNzhbLtSYwwswkW06r794lEA2XkGhI2
+         bbrkOJu44OBXyopfGJjAR+IuwWuni2d62fwn3ViyuiN4kbg0PRBwRFb9OwilODd8R4Qk
+         uzkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1730968660; x=1731573460;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=fZao1C6pV4fJNRNyMk7syEnimVtRpaNTazE2wh1+Hz4=;
+        b=BKE1RVa9lfJMzk4etVyEK48NhmLfJ3hb/tsFbIWe6HYmSOQDVaIuKe1uj0Roq3uAg9
+         ecj8lJ0BLUpP4/55T+S+ifZoZYPECJBI9XJMJSQifG+XICJdmWap+Fsinj9c1K7CPv98
+         N8BArlnFX68o1zPul1anwYciCyl8VVueBHygpMFXsiU3F7mpCERNpHn6yX4pk0d8KlYK
+         VsbSLF7Lqe+suXWPzJvaepAJhngPKhQZZPmiODgIu/bvrqaPBo59lPPc7us89BrCJa0l
+         C2ixFzODfRhr/k3zjKMrfuVAkw+1GAnC8Uv7xXKlSi2UOfjoshDwc8C0HUqxojiCFEIM
+         Pe2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXmXDuhx5tHoWTMIFRKWJHlPtTua9wzZ7jRmUG4RGBbx/edP32FsFlQYcp+2ey2Pl3NjRLS7RF8zXQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAJiExAVmTI/TZSGjYU0KtFq/+Dub8u+yRfAZfuSuSV0tj4X59
+	Ntr0cdLRUhLQJdTLknYM6tzyHuSHxf+qKOxQz4zt45XdxQyJD+D0mqYG98JdCAJsguQXHmtoNZB
+	7OBM=
+X-Google-Smtp-Source: AGHT+IEhNtLHXpW2UW43FhKyRoSS3ZfYfyhsgWLjpZCVbTjlt3IsJUPg3RMTYn5vGgbY89sMKtA8FA==
+X-Received: by 2002:a17:907:7290:b0:a9a:7f84:93e3 with SMTP id a640c23a62f3a-a9e654cda4amr2101061966b.14.1730968659934;
+        Thu, 07 Nov 2024 00:37:39 -0800 (PST)
+Received: from [172.16.23.252] ([154.14.63.34])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0a17651sm60652766b.38.2024.11.07.00.37.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 07 Nov 2024 00:37:39 -0800 (PST)
+Message-ID: <f681e30e-35b6-42de-88d4-8ae9effb49ed@linaro.org>
+Date: Thu, 7 Nov 2024 09:37:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241107073718.405208-3-stanislaw.gruszka@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+From: neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 2/2] usb: typec: ucsi: glink: be more precise on
+ orientation-aware ports
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Heikki Krogerus <heikki.krogeurs@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
+ Johan Hovold <johan+linaro@kernel.org>
+References: <20241106-ucsi-glue-fixes-v1-0-d0183d78c522@linaro.org>
+ <20241106-ucsi-glue-fixes-v1-2-d0183d78c522@linaro.org>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20241106-ucsi-glue-fixes-v1-2-d0183d78c522@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Nov 07, 2024 at 08:37:18AM +0100, Stanislaw Gruszka wrote:
-> For diagnostics purposes read firmware version from device
-> and print it to dmesg during initialization.
+On 06/11/2024 16:45, Dmitry Baryshkov wrote:
+> Instead of checking if any of the USB-C ports have orientation GPIO and
+> thus is orientation-aware, check for the GPIO for the port being
+> registered.
+> 
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>   drivers/usb/typec/ucsi/ucsi_glink.c | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+> index 2e12758000a7d2d62f6e0b273cb29eafa631122c..90948cd6d2972402465a2adaba3e1ed055cf0cfa 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+> @@ -172,12 +172,12 @@ static int pmic_glink_ucsi_async_control(struct ucsi *__ucsi, u64 command)
+>   static void pmic_glink_ucsi_update_connector(struct ucsi_connector *con)
+>   {
+>   	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(con->ucsi);
+> -	int i;
+>   
+> -	for (i = 0; i < PMIC_GLINK_MAX_PORTS; i++) {
+> -		if (ucsi->port_orientation[i])
+> -			con->typec_cap.orientation_aware = true;
+> -	}
+> +	if (con->num > PMIC_GLINK_MAX_PORTS ||
+> +	    !ucsi->port_orientation[con->num - 1])
+> +		return;
+> +
+> +	con->typec_cap.orientation_aware = true;
+>   }
+>   
+>   static void pmic_glink_ucsi_connector_status(struct ucsi_connector *con)
+> 
 
-This changelog text isn't correct anymore :(
-
-thanks,
-
-greg k-h
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
