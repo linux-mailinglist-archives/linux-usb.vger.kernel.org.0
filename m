@@ -1,176 +1,109 @@
-Return-Path: <linux-usb+bounces-17276-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17277-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ECE39BFCBB
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 03:47:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB1809BFD5E
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 05:22:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E22691F225F1
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 02:47:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2B7C1B21F30
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 04:22:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2478284D0E;
-	Thu,  7 Nov 2024 02:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBBC818A943;
+	Thu,  7 Nov 2024 04:22:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="mohk9j7P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3446EBA2D
-	for <linux-usb@vger.kernel.org>; Thu,  7 Nov 2024 02:47:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343F0186E2D
+	for <linux-usb@vger.kernel.org>; Thu,  7 Nov 2024 04:22:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730947654; cv=none; b=ThfvUg6/io2aC4biFv2s8rGBcj2KgSYxPj9lJAKL5PoCgw4nhefhH87enrDgNgNZVtZqnsAtyCjD/SRcxi/HEm6Xgn7bJuYhwaqMs8LY6cLmb7OiC9pZhfuS4ofIbw+j84gpx+SaDpEcwor6l+MZrsGnYnu2fjSFr2gPZRl58ps=
+	t=1730953321; cv=none; b=eXea+YjzYq3PVgHZLsetdet6wHgXOkTTRNjh7qZCW/J0MyrzZbWCyOsGuTIKD1yqwwEpXBC+c6JKABr7s1X2th32I4gGvGsVgGAskb/xeMJ10iQIUo44q/MN+dNW1fPvco++ThBIO64n/yr9ezWuOLTuBdFjm10EMtLsKj/N23o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730947654; c=relaxed/simple;
-	bh=bm90jDI8Ej0DYvaaEtbwzUiDu0QOV5wcZv450KxnmRw=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=GV7lpZrG9VVtCoBKCII+EQe4No7M/E94GKE2rrB7dJtqg6XkJHajpcaoSuFBmMrn7bYM/XZA+IA9Owc3K8Of9PPEikxXtGfhjTqvB5W02GZoN8y2yoA3PrsaazlfSbP7ZETPHsmyzoO6qUmbgQqYoeJsvxugJrmUHQ5GIDdmQaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-83acaa1f819so61252339f.3
-        for <linux-usb@vger.kernel.org>; Wed, 06 Nov 2024 18:47:33 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1730947652; x=1731552452;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LD+Utao4/CGuzFO+zQjWs0boxzV6TvrdAHiSkX8IMQM=;
-        b=IfacdoSN7oHOfp6lDqpzBvyxuWnMvgfj0C0po5ovbiqukTbe/Bm/KjqnRwsBO+VX/H
-         WSMA3UjAqChq0CzxAhngLdm3Iv04f3YmIzm1G1T09RA6lVgD7pjBUeExz5SuM26ilZPq
-         Ywj4aIH1la3oil5MwlWcwCrNK9ogd6JwWBLbSBb1y3RVy+PBBBUGMRfFOYm3P3Ie+wFU
-         KVKRWzP/Mp/ESMCp40BIlCPcSv+cCtrJ0QSPS/5QrrIGymMYliXKG5OiabS3G9R7lrDE
-         bD5Zg1+dLSncz+JAoem1UklXyjJvz9kmaS+zP6X66nWXxTlvx7B8zO+/g+eNoeIEwJzC
-         32uA==
-X-Forwarded-Encrypted: i=1; AJvYcCXAiUAPaPlv9R2niaY0iLC6f+1MBEm0ait8uOOn0xlifTpLYIYSZnOUswHDc9i3eIjwFa36EAU7dvU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcCyjBqVKZ+YF54GAjMbbLtwtrNY+4VV+C+tskkqLbyWyaRhbj
-	c4aXVCQWiD9hU8cXQXtvxV1XlD0Xzv+i+LW50TBy05wlx3Bt5PUuC2gmmgE9b9BdlT+R0nsdhA5
-	7ErQAbcvsb9mvtAZP13B9qQTwkLRAbUsx98UAgHZ/xVc4kB1MY5Uex4U=
-X-Google-Smtp-Source: AGHT+IEYIX1kLJ9D0g+wSHWcXimE/udYx4Qw5b7gi/Ng8dTdM07EtGPI9m8+XxvR7ApAgMCCnopQwTo5YAZdoBIKcd9XBbAyakRJ
+	s=arc-20240116; t=1730953321; c=relaxed/simple;
+	bh=/3q/ayUN4G84HdA2ocVlTGexfbkVtK39oGfgna6NU3k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wm6PPaRe/gh3W0kHC8eemq30UFrLhjB/3sgV+grAewT0hnesUTl0bF0rg9ohx+0PuALdWVoSQH+RsYbfYHiHsG2nYT43TH01/70TxCnbdNOrY/N5PPgaVB98S5l0jiOgGO+exGWmL0UnH3BJ2tPCvFuK6QJivd0EOkLb0KF/0NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=mohk9j7P; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AA84C4CECC;
+	Thu,  7 Nov 2024 04:22:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1730953320;
+	bh=/3q/ayUN4G84HdA2ocVlTGexfbkVtK39oGfgna6NU3k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mohk9j7Pp2umzNi5UvJMs0ReYe09Tawmu1jt6gZgj/CUGtu/igjoLfKbgpMoD44u6
+	 EX2jnRZBx9Q9B7ud87rish/fPFCGVdvP7lGuFTDM27lUiZUXHbzK/vdSYXO6/J4Ui7
+	 VEIFwOMS9V8DdiftvobHE5jcO0Rv3G/7Rku2xBGg=
+Date: Thu, 7 Nov 2024 05:21:42 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+Cc: Sakari Ailus <sakari.ailus@linux.intel.com>, linux-usb@vger.kernel.org,
+	Wentong Wu <wentong.wu@intel.com>
+Subject: Re: [PATCH v2 3/3] usb: misc: ljca: print firmware version
+Message-ID: <2024110740-egotistic-isolation-52c7@gregkh>
+References: <20241106123438.337117-1-stanislaw.gruszka@linux.intel.com>
+ <20241106123438.337117-3-stanislaw.gruszka@linux.intel.com>
+ <2024110620-dating-roman-f820@gregkh>
+ <ZytxNk1DEiwiXJ5b@kekkonen.localdomain>
+ <ZyuCU/qVsLD8Symv@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1746:b0:3a6:c716:ab1f with SMTP id
- e9e14a558f8ab-3a6c716ae23mr167873565ab.9.1730947652453; Wed, 06 Nov 2024
- 18:47:32 -0800 (PST)
-Date: Wed, 06 Nov 2024 18:47:32 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <672c2a44.050a0220.350062.0283.GAE@google.com>
-Subject: [syzbot] [block?] [usb?] WARNING: bad unlock balance in elevator_init_mq
-From: syzbot <syzbot+a95fab8e491d4ac8cbe9@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZyuCU/qVsLD8Symv@linux.intel.com>
 
-Hello,
+On Wed, Nov 06, 2024 at 03:50:59PM +0100, Stanislaw Gruszka wrote:
+> On Wed, Nov 06, 2024 at 01:37:58PM +0000, Sakari Ailus wrote:
+> > Hi Greg,
+> > 
+> > On Wed, Nov 06, 2024 at 01:42:33PM +0100, Greg KH wrote:
+> > > On Wed, Nov 06, 2024 at 01:34:38PM +0100, Stanislaw Gruszka wrote:
+> > > > For diagnostics purposes read firmware version from device
+> > > > and print it to dmesg during initialization.
+> > > 
+> > > No, sorry, when drivers work properly, they are quiet.  Think about what
+> > > your kernel log would look like if you did this for every single driver
+> > > in the tree.
+> 
+> Not single one, but there are plenty of drivers in the tree that
+> print driver/firmware/hardware version to the log. Few in the usb
+> subsystem:
+> 
+> drivers/usb/fotg210/fotg210-udc.c:      dev_info(dev, "version %s\n", DRIVER_VERSION);
+> drivers/usb/gadget/legacy/acm_ms.c:     dev_info(&gadget->dev, "%s, version: " DRIVER_VERSION "\n",
+> drivers/usb/gadget/legacy/cdc2.c:       dev_info(&gadget->dev, "%s, version: " DRIVER_VERSION "\n",
+> drivers/usb/gadget/legacy/ether.c:      dev_info(&gadget->dev, "%s, version: " DRIVER_VERSION "\n",
+> drivers/usb/gadget/legacy/hid.c:        dev_info(&gadget->dev, DRIVER_DESC ", version: " DRIVER_VERSION "\n");
+> drivers/usb/gadget/udc/fusb300_udc.c:   dev_info(&pdev->dev, "version %s\n", DRIVER_VERSION);
+> drivers/usb/gadget/udc/lpc32xx_udc.c:   dev_info(udc->dev, "%s version %s\n", driver_name, DRIVER_VERSION);
+> drivers/usb/gadget/udc/m66592-udc.c:    dev_info(&pdev->dev, "version %s\n", DRIVER_VERSION);
+> drivers/usb/gadget/udc/net2272.c:       dev_info(dev->dev, "version: %s\n", driver_vers);
+> drivers/usb/gadget/udc/net2272.c:       dev_info(dev->dev, "RDK2 FPGA version %08x\n",
+> drivers/usb/gadget/udc/r8a66597-udc.c:  dev_info(dev, "version %s\n", DRIVER_VERSION);
+> drivers/usb/gadget/udc/renesas_usbf.c:  dev_info(dev, "USBF version: %08x\n",
+> drivers/usb/host/xhci-mtk.c:    dev_info(mtk->dev, "uwk - reg:0x%x, version:%d\n",
+> drivers/usb/mtu3/mtu3_core.c:   dev_info(mtu->dev, "IP version 0x%x(%s IP)\n", mtu->hw_version,
+> drivers/usb/mtu3/mtu3_host.c:   dev_info(ssusb->dev, "uwk - reg:0x%x, version:%d\n",
+> drivers/usb/typec/ucsi/ucsi_ccg.c:              dev_info(dev, "secondary fw version is too low (< %d)\n",
+> drivers/usb/typec/ucsi/ucsi_ccg.c:              dev_info(dev, "found primary fw with later version\n");
+> drivers/usb/typec/ucsi/ucsi_stm32g0.c:          dev_info(g0->dev, "Flashing FW: %08x (%08x cur)\n", fw_info->version, fw_version);
+> drivers/usb/typec/ucsi/ucsi_stm32g0.c:  dev_info(g0->dev, "Bootloader Version 0x%02x\n", g0->bl_version);
 
-syzbot found the following issue on:
+Yes, and all of those should be fixed up and removed.
 
-HEAD commit:    c88416ba074a Add linux-next specific files for 20241101
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=16e21aa7980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=704b6be2ac2f205f
-dashboard link: https://syzkaller.appspot.com/bug?extid=a95fab8e491d4ac8cbe9
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1722ab40580000
+Also, the idea of "DRIVER_VERSION" is obsolete for a very very long time
+and should also just be removed entirely.  We swept it from many drivers
+years ago, looks like it snuck back in or that we missed some.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/760a8c88d0c3/disk-c88416ba.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/46e4b0a851a2/vmlinux-c88416ba.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/428e2c784b75/bzImage-c88416ba.xz
+thanks,
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a95fab8e491d4ac8cbe9@syzkaller.appspotmail.com
-
-sd 4:0:0:1: [sdb] 0-byte physical blocks
-sd 4:0:0:1: [sdb] Test WP failed, assume Write Enabled
-sd 4:0:0:1: [sdb] Asking for cache data failed
-sd 4:0:0:1: [sdb] Assuming drive cache: write through
-=====================================
-WARNING: bad unlock balance detected!
-6.12.0-rc5-next-20241101-syzkaller #0 Not tainted
--------------------------------------
-kworker/u8:4/67 is trying to release lock (&q->q_usage_counter(queue)) at:
-[<ffffffff849207a2>] elevator_init_mq+0x1e2/0x2d0 block/elevator.c:607
-but there are no more locks to release!
-
-other info that might help us debug this:
-3 locks held by kworker/u8:4/67:
- #0: ffff88801d681148 ((wq_completion)async){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3204 [inline]
- #0: ffff88801d681148 ((wq_completion)async){+.+.}-{0:0}, at: process_scheduled_works+0x93b/0x1850 kernel/workqueue.c:3310
- #1: ffffc900020bfd00 ((work_completion)(&entry->work)){+.+.}-{0:0}, at: process_one_work kernel/workqueue.c:3205 [inline]
- #1: ffffc900020bfd00 ((work_completion)(&entry->work)){+.+.}-{0:0}, at: process_scheduled_works+0x976/0x1850 kernel/workqueue.c:3310
- #2: ffff8880327ca378 (&dev->mutex){....}-{4:4}, at: device_lock include/linux/device.h:1014 [inline]
- #2: ffff8880327ca378 (&dev->mutex){....}-{4:4}, at: __device_attach_async_helper+0xfc/0x300 drivers/base/dd.c:973
-
-stack backtrace:
-CPU: 1 UID: 0 PID: 67 Comm: kworker/u8:4 Not tainted 6.12.0-rc5-next-20241101-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-Workqueue: async async_run_entry_fn
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x241/0x360 lib/dump_stack.c:120
- print_unlock_imbalance_bug+0x25b/0x2d0 kernel/locking/lockdep.c:5287
- __lock_release kernel/locking/lockdep.c:5526 [inline]
- lock_release+0x5cb/0xa30 kernel/locking/lockdep.c:5870
- blk_unfreeze_release_lock block/blk.h:745 [inline]
- blk_mq_unfreeze_queue+0xd2/0x140 block/blk-mq.c:213
- elevator_init_mq+0x1e2/0x2d0 block/elevator.c:607
- add_disk_fwnode+0x10d/0xf80 block/genhd.c:413
- sd_probe+0xba6/0x1100 drivers/scsi/sd.c:4024
- really_probe+0x2b8/0xad0 drivers/base/dd.c:658
- __driver_probe_device+0x1a2/0x390 drivers/base/dd.c:800
- driver_probe_device+0x50/0x430 drivers/base/dd.c:830
- __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:958
- bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:459
- __device_attach_async_helper+0x22d/0x300 drivers/base/dd.c:987
- async_run_entry_fn+0xa8/0x420 kernel/async.c:129
- process_one_work kernel/workqueue.c:3229 [inline]
- process_scheduled_works+0xa63/0x1850 kernel/workqueue.c:3310
- worker_thread+0x870/0xd30 kernel/workqueue.c:3391
- kthread+0x2f0/0x390 kernel/kthread.c:389
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-sd 4:0:0:1: [sdb] Attached SCSI removable disk
-sd 5:0:0:0: [sdc] Media removed, stopped polling
-sd 5:0:0:0: [sdc] Attached SCSI removable disk
-sd 2:0:0:0: [sdb] Media removed, stopped polling
-sd 2:0:0:0: [sdb] Attached SCSI removable disk
-sd 1:0:0:0: [sdb] Media removed, stopped polling
-sd 1:0:0:0: [sdb] Attached SCSI removable disk
-sd 4:0:0:0: [sdb] Media removed, stopped polling
-sd 4:0:0:0: [sdb] Attached SCSI removable disk
-sd 1:0:0:1: [sdf] Media removed, stopped polling
-sd 1:0:0:1: [sdf] Attached SCSI removable disk
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+greg k-h
 
