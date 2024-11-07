@@ -1,113 +1,118 @@
-Return-Path: <linux-usb+bounces-17300-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17301-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F28D99C014A
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 10:39:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 929919C015D
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 10:45:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 967F2B219AA
-	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 09:39:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2956DB22316
+	for <lists+linux-usb@lfdr.de>; Thu,  7 Nov 2024 09:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4960F1E1328;
-	Thu,  7 Nov 2024 09:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5E9D1DFE37;
+	Thu,  7 Nov 2024 09:45:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fjVWYLPM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HZXF82rw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C621C18785B
-	for <linux-usb@vger.kernel.org>; Thu,  7 Nov 2024 09:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 031A9372;
+	Thu,  7 Nov 2024 09:45:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730972361; cv=none; b=J3fdYCr2ZnXL4E1WmMDAWPM4owFQ7SRCP6xRdJgY7a5fIA05xH6HKZQeQOcKqRfkVn+V2ELKn7Dgmw6PPIAv5xb5iP0zQO+GjS/dDyf1TI0bfFVZD3MWrmXYnt9nyUQoJacNFZ5xzmBFAuw7v7v8NOfXcnrcLpHCSwlH07dF8+g=
+	t=1730972749; cv=none; b=mDLhdgm9RAOT5iNueaebJa+z92vYbuOV2uNTGaq2z0dHnzsvP/jW/2IOiaY1VSXAIkXafE51rdRyKX4SALO+mNFnzmF8fGxGQiqUx2h3IfAjJQKQHYIbhfuBh91L+ZzMG/tYGseRj45cIh9NIfu8YCCoP1ucg+nsS6jF7SepcoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730972361; c=relaxed/simple;
-	bh=jcr+9kC2aXHfy+vEaQ260XikxslCb38CX6gnSja27ME=;
+	s=arc-20240116; t=1730972749; c=relaxed/simple;
+	bh=PqoizVj8OyvEeeSjCvB6UcJ2ogs3bCJ1y+agmRj5f/Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bt1blDFwJ6gv3Q/isKSguRzB+9zGeyQHMZbTxQE7npBPRa+uJy2oYKBNa8w8CP21Mnogrj1HPH6GKnHeS85vplUQBiDc9N21C9ru9utaY8PShzXyaHulJD1iRu5LXhLHjt4/ft03OXjEUg2uFQySxt1oJuoo7evFhpGyd2XwzPI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fjVWYLPM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17B99C4CECC;
-	Thu,  7 Nov 2024 09:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1730972361;
-	bh=jcr+9kC2aXHfy+vEaQ260XikxslCb38CX6gnSja27ME=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fjVWYLPM54n3zA6kd6zDU6frMKiTzZsxxk3UbWDthaWBwnxA3UQKx+ANPpNPRUPgK
-	 jTZIACddrYN3ISs/3VE/fH2mpcG/T+kK6YqwEv7RFXX8LJ9I0jDQHnv5PJ7300jKT9
-	 drWVKx2q5pFAg8GN0/ymX6wF80PUFR+gDXEGvo8c=
-Date: Thu, 7 Nov 2024 10:39:00 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	linux-usb@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>
-Subject: Re: [PATCH v3 1/3] usb: misc: ljca: move usb_autopm_put_interface()
- after wait for response
-Message-ID: <2024110709-relocate-excuse-288d@gregkh>
-References: <20241107073718.405208-1-stanislaw.gruszka@linux.intel.com>
- <2024110743-dragonish-jokingly-8459@gregkh>
- <ZyyAZaUNJ0kCEHG7@linux.intel.com>
- <2024110710-duckbill-commodity-d1b5@gregkh>
- <ZyyJNneC_jjoJIQw@kekkonen.localdomain>
+	 Content-Type:Content-Disposition:In-Reply-To; b=oy0yTH128Vnk5EqSccxLxnlzQK7iW28vo/jVyThsuNU39fnFvf0K5AAOwZYA5/TssxCOSHeF1y4cADXlQbtDR8asCAkuw3x7kfW3wfrYIAzE9x9v7DQBwkO4RpNS/QRDK8RclCy/HsOPrkd5/k22YhjriqAEZUHItoqYhL2OgHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HZXF82rw; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1730972749; x=1762508749;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PqoizVj8OyvEeeSjCvB6UcJ2ogs3bCJ1y+agmRj5f/Y=;
+  b=HZXF82rw+JEKUA195hep9X+PJTgPcBGmuqXMeok1IyIlOxSLMSErPF3F
+   yLh+xD5QJFpcBI9GXHTQCeklLgoPkS7ghg6xENzACE0gjs4svi3vgmfJF
+   8BPIghRWubpDqrceltPQ2bWqH/noF5/aBKoAM+ipnpHgQ1oTI87UL3T/Z
+   RntfC9t59f/0Jk5Ue72D3KQu5zYY93+Lt0JDLqaZT13TMes1QWefyQpE0
+   YU9dqAx1YVO0OT50ha480g8f+18PqfUVZP1sViWLEkhOzD9gXmTDtnZN5
+   BIa4RL3h2IxPGGAlG23MYT7hLOO/cQicmHJHx6Hyuj1wodPxs+yplwt1h
+   w==;
+X-CSE-ConnectionGUID: 0FsbCrp5Sy6aQkGoLRgXAA==
+X-CSE-MsgGUID: gyilO5gHSVizKQCCOPPn0A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11248"; a="42210411"
+X-IronPort-AV: E=Sophos;i="6.11,265,1725346800"; 
+   d="scan'208";a="42210411"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 01:45:48 -0800
+X-CSE-ConnectionGUID: O1NINg1TS7WgGAW3KnUGCQ==
+X-CSE-MsgGUID: EMLW/tBDRcOK9fQLgrm8Zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,265,1725346800"; 
+   d="scan'208";a="85132720"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa008.fm.intel.com with ESMTP; 07 Nov 2024 01:45:45 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 1828260D; Thu, 07 Nov 2024 11:45:44 +0200 (EET)
+Date: Thu, 7 Nov 2024 11:45:43 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Aaron Rainbolt <arainbolt@kfocus.org>
+Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
+	andreas.noever@gmail.com, linux-usb@vger.kernel.org,
+	mmikowski@kfocus.org, linux-kernel@vger.kernel.org,
+	Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: USB-C DisplayPort display failing to stay active with Intel
+ Barlow Ridge USB4 controller, power-management related issue?
+Message-ID: <20241107094543.GL275077@black.fi.intel.com>
+References: <20241023073931.GH275077@black.fi.intel.com>
+ <20241023174413.451710ea@kf-ir16>
+ <20241024154341.GK275077@black.fi.intel.com>
+ <20241031095542.587e8aa6@kf-ir16>
+ <20241101072155.GW275077@black.fi.intel.com>
+ <20241101181334.25724aff@kf-ir16>
+ <20241104060159.GY275077@black.fi.intel.com>
+ <20241105141627.5e5199b3@kf-ir16>
+ <20241106060635.GJ275077@black.fi.intel.com>
+ <20241106110134.1871a7f6@kf-ir16>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZyyJNneC_jjoJIQw@kekkonen.localdomain>
+In-Reply-To: <20241106110134.1871a7f6@kf-ir16>
 
-On Thu, Nov 07, 2024 at 09:32:38AM +0000, Sakari Ailus wrote:
-> Hi Greg,
+Hi,
+
+On Wed, Nov 06, 2024 at 11:01:34AM -0600, Aaron Rainbolt wrote:
+> > Unfortunately that does not help here. I need to figure something else
+> > how to detect the redrive case with this firmware but first, does this
+> > work in Windows? I mean if you install Windows to this same system
+> > does it work as expected?
 > 
-> On Thu, Nov 07, 2024 at 10:03:56AM +0100, Greg KH wrote:
-> > On Thu, Nov 07, 2024 at 09:55:01AM +0100, Stanislaw Gruszka wrote:
-> > > On Thu, Nov 07, 2024 at 09:16:01AM +0100, Greg KH wrote:
-> > > > On Thu, Nov 07, 2024 at 08:37:16AM +0100, Stanislaw Gruszka wrote:
-> > > > > Do not mark interface as ready to suspend when we are still waiting
-> > > > > for response messages from the device.
-> > > > > 
-> > > > > Fixes: acd6199f195d ("usb: Add support for Intel LJCA device")
-> > > > > Cc: stable@vger.kernel.org
-> > > > > Reviewed-by: Hans de Goede <hdegoede@redhat.com>
-> > > > > Tested-by: Hans de Goede <hdegoede@redhat.com> # ThinkPad X1 Yoga Gen 8, ov2740
-> > > > > Acked-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> > > > > Signed-off-by: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
-> > > > > ---
-> > > > > v2: fix handing error of usb_autopm_get_interface(),
-> > > > >     add R-b, T-b tags from Hans
-> > > > > v3: add A-b tag from Sakari
-> > > > > 
-> > > > >  drivers/usb/misc/usb-ljca.c | 12 ++++++------
-> > > > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > > > 
-> > > > For some reason you aren't sending this to the usb maintainer to be
-> > > > applied, oh well...
-> > > 
-> > > Sorry, I thought sending patches to the mailing list is sufficient
-> > > to get them applied. 
-> > 
-> > Please work with the Intel internal group to get their approval and
-> > review before sending out your next round of patches for this, as they
-> > know how to catch trivial stuff like this before forcing others to point
-> > it out :)
+> It does work as expected under Windows 11, with one major caveat. We
+> used a Windows 11 ISO with a setup.exe created on April 05 2023 for
+> installing the test system, and after initial installation it behaved
+> exactly the same way as Linux behaves now (displays going blank soon
+> after being plugged in). However, after installing all available
+> Windows updates, the issue resolved, and the displays worked exactly as
+> intended (the screens are recognized when attached and do not end up
+> disconnecting after a timeout).
 > 
-> Stanislaw's choses recipients are aligned with get_maintainer.pl output,
-> sauf some who posted occasional cleanups. If that list wasn't correct, then
-> there's something to fix in MAINTAINERS.
+> Would it be helpful to test on Windows 11, and provide a report and
+> system logs?
 
-Nothing is wrong with MAINTAINERS:
+Unfortunately, I don't know anything about Windows ;-)
 
-	$ ./scripts/get_maintainer.pl --file drivers/usb/misc/usb-ljca.c
-	Wentong Wu <wentong.wu@intel.com> (maintainer:INTEL LA JOLLA COVE ADAPTER (LJCA) USB I/O EXPA...)
-	Sakari Ailus <sakari.ailus@linux.intel.com> (maintainer:INTEL LA JOLLA COVE ADAPTER (LJCA) USB I/O EXPA...)
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org> (supporter:USB SUBSYSTEM)
-	linux-usb@vger.kernel.org (open list:USB SUBSYSTEM)
-	linux-kernel@vger.kernel.org (open list)
-
-
+However, I asked our Thunderbolt hardware/firmware team about this, if
+they have any idea how it was solved in Windows side. Might take a
+couple of days though.
 
