@@ -1,93 +1,88 @@
-Return-Path: <linux-usb+bounces-17373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17374-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18C5E9C20C9
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 16:41:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B36F9C2141
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 16:56:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 478E01C22D9F
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 15:41:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C43B1C23B98
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 15:56:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A24221A706;
-	Fri,  8 Nov 2024 15:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1EB321B449;
+	Fri,  8 Nov 2024 15:56:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jTYgn9nR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rs8LAjmT"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225721E7C26
-	for <linux-usb@vger.kernel.org>; Fri,  8 Nov 2024 15:41:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4478945023;
+	Fri,  8 Nov 2024 15:56:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731080467; cv=none; b=s426aAtDDvL+oK9BlLlSmRkrNLSDtp9vZshAeljfYHmv572Vae0nWYHwP3O/sknBis9rCUMGE9unMhQT1NQx2F2tNE9jNAMcY6Wo4VcyHEYpJwKAGb8YX4i1fWdneHI8cjzPXovWNBYyoOORRBlUkug+k3oXQ3sbY5Q9HuJyLpY=
+	t=1731081388; cv=none; b=WMa0T6bYJfVOA/wFraVa2zzoZ33NcbuIriAd1pwsHs2kdorNfgVxYwtlfucq6cbXx9gBARP2vsKcDInM+43L9qeMmUjsMWCczEoMSoHEjNSyVPetOaF7VeN102WXrJOqbhB1btSv5FMzOqsgYpR3ES1GzBfnQKmC0PwFjEfaphk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731080467; c=relaxed/simple;
-	bh=Q5hlZpMMhHjZI7GrK8/322y0TUieng4c0cMzE9dgeec=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MwsPjLflJDUAw3KGhVjeTU7Oaf1y+pqYNplsBb6kfb9cNMOQIVPxjsKhzglejCPWMmhcVSgknIRqcagsuH9o/4h6ZV8JAaQtjxwd++dauoiwvbG1Fm0Ql1M2WCNhEAEbkDTy7ZLNa0qemP2W8HdnAHVJJqMDmPKfrxUlgQdRldI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jTYgn9nR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id CB615C4CECF
-	for <linux-usb@vger.kernel.org>; Fri,  8 Nov 2024 15:41:06 +0000 (UTC)
+	s=arc-20240116; t=1731081388; c=relaxed/simple;
+	bh=M7Lc2QagtdMaBItv34y0AyMzk8MYqGKDbeTFdFJ0laI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eTNnlkowCxyTEJCXUmTHas/GrqchmqMmq9o44LAvAi3iHZlatX25H65Cr7KgHh8iTQNJNPx724SCurdIiOPacOzQ7h/01ctXQcbOiFKY9bTCkLOVCHXEEdRhR4W2aJY8hf/UxhLR3GtKEwJ8DGo6Ou7qaizf7JxPc8AxN0y49lU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rs8LAjmT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A5AC4CECF;
+	Fri,  8 Nov 2024 15:56:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731080466;
-	bh=Q5hlZpMMhHjZI7GrK8/322y0TUieng4c0cMzE9dgeec=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=jTYgn9nRKZRzJhjQLjMP2I/sT/eryv0WrcweSYtn01oGYESPGLHwpiKFhfS4vT6i5
-	 Vkk6PrSX0KMmUyl5kJkbRANwIdqjD6gsQaz9B/u47AWky56XgKF9lcUaruZrBlrSNh
-	 uxRGBXxhC9d3ne9FdYCXctVLNtJGCdz3vAHO2NxRB0muPlh741DkAJFpsdamXoCQyZ
-	 gUasicOqG4useqwTauVsMq11Xl8bH+x5fkRPq0Eqhdnp7ughesGtPWxORTfPZ6M+aW
-	 AxbE2lJuXVtPumRjkH1GrRLOD3BRkeE/ElbxdbXzjOqX/hgHqJx1oxOjBzY77UWbcl
-	 NhXQZJrqUxVNQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id B8C7FC53BC4; Fri,  8 Nov 2024 15:41:06 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 218795] USB4 / Thunderbolt + AMD: unstable and slow link (many
- uncorrectable errors)
-Date: Fri, 08 Nov 2024 15:41:06 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-218795-208809-CdvhPv0ouj@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-218795-208809@https.bugzilla.kernel.org/>
-References: <bug-218795-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1731081386;
+	bh=M7Lc2QagtdMaBItv34y0AyMzk8MYqGKDbeTFdFJ0laI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Rs8LAjmT5GwP0erV26mbKzgyu1LLyeHmFa21FsuMA00piroCs6eqAnG2raJ4kAZf0
+	 gIdhxFhRFRqoruDJVOlRpXDQQKLSKMGG1dN0MQg8TExJBGY5yq2pTNIXZXYjtWHnpx
+	 iXpEhPTzdvXQNk2pxwSq1+10hijxBA5lnhQ58WltJVeaZiXQSMFkXzvCR0EZMnK7J6
+	 1DLLXAyd6NbfbCiSCaMGaNyC+saHExI2HZ89olJ753gBPU5YgX6478Ac89oCPVbWtg
+	 7Fg153ID58b6YTg1RRBiWLvQc8i+pqieJJYd6Kd74aq95SecDwIw5v5MiW5STUbP0n
+	 GkB4SZn7ZYq+g==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1t9RLZ-000000008UN-1CLf;
+	Fri, 08 Nov 2024 16:56:29 +0100
+Date: Fri, 8 Nov 2024 16:56:29 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Heikki Krogerus <heikki.krogeurs@linux.intel.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH 1/2] usb: typec: ucsi: glink: fix off-by-one in
+ connector_status
+Message-ID: <Zy40rRqrWEbZKFsu@hovoldconsulting.com>
+References: <20241106-ucsi-glue-fixes-v1-0-d0183d78c522@linaro.org>
+ <20241106-ucsi-glue-fixes-v1-1-d0183d78c522@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241106-ucsi-glue-fixes-v1-1-d0183d78c522@linaro.org>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D218795
+On Wed, Nov 06, 2024 at 05:45:54PM +0200, Dmitry Baryshkov wrote:
+> UCSI connector's indices start from 1 up to 3, PMIC_GLINK_MAX_PORTS.
+> Correct the condition in the pmic_glink_ucsi_connector_status()
+> callback, fixing Type-C orientation reporting for the third USB-C
+> connector.
+> 
+> Fixes: 76716fd5bf09 ("usb: typec: ucsi: glink: move GPIO reading into connector_status callback")
+> Reported-by: Abel Vesa <abel.vesa@linaro.org>
+> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
---- Comment #7 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
-> Anyway, is there anything that can be done for PCIe errors except
-> pci=3Dnommconf?
+Nice find!
 
-If you want to ignore the errors you can use "pci=3Dnoaer".
+With CC-stable tag added:
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Johan Hovold <johan+linaro@kernel.org>
 
