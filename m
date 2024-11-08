@@ -1,158 +1,105 @@
-Return-Path: <linux-usb+bounces-17377-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17378-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45D9E9C24E3
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 19:29:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E00A09C2568
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 20:12:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 006E62847D1
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 18:29:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F2B31F2427F
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 19:12:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93CA61A9B2A;
-	Fri,  8 Nov 2024 18:29:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52AC1F26F0;
+	Fri,  8 Nov 2024 19:11:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="R96atp3O"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Bnhapw5f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9625D193075
-	for <linux-usb@vger.kernel.org>; Fri,  8 Nov 2024 18:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 692E31F26C4
+	for <linux-usb@vger.kernel.org>; Fri,  8 Nov 2024 19:11:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731090546; cv=none; b=Q1hTOhEGz31SgILROtk3idILiWQS8QQEVkwO/IUTy2zuEhCqUcfYgdod0EgSsr+jqFPfQ9dhLJkv725ri54CT5EEOJQCFmFyzKDNfjwzyKhdnv93w1pYVwGk0+duk7RrvVV5glJ/t29B+D9B2Ilwbni4S6lHNWahAhMdW+DgErs=
+	t=1731093085; cv=none; b=HTuUwYJa+AkSFIoFeclEd8GngX7Qekmo4lgqJ1b6JkCp+WXiRC1hOZmz44JEOYd+SMsClhQggLgennEN2CKQTH1YIE5X+g+gAUACRpIUJXos1ucecyqK7k7hpq+kn8SksmpOVwxVbGKhEjSj6js8xnjJCzAiETF5zMO+p1s3kIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731090546; c=relaxed/simple;
-	bh=02QQS4FNdXeeDmAaZnAYT1g9MLTNG9MtUURxZt8MuQg=;
+	s=arc-20240116; t=1731093085; c=relaxed/simple;
+	bh=VIRkx+efX/6GJFRSs+ScK+sQvOdc8uMwqc3bnd22j8Q=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SDwKgPXBp3kj9GkdyGsRCmJc3pUCbGRuw5WUNC0SQs8+XqBq96l75sv0VT9Wf7UJAWHO+hF0ZMKZfX+sv2DYEn0S+HOTvoSL0wYXYa5ESOcbXAhwKIcUUZLK0nvVK5/Ka+GjKPt/cFG7a76mM/ibP1Pb7Vax3nDIUpCdJFIaACc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=R96atp3O; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6e38ebcc0abso27035787b3.2
-        for <linux-usb@vger.kernel.org>; Fri, 08 Nov 2024 10:29:04 -0800 (PST)
+	 To:Cc:Content-Type; b=fl0rdC8tf0dzmg5aZdimpRHp8T1qC3wIZxTtXMzf/2jlYML3u98EJGpr/rlOCcKBzTGy+MJ7RPeHQ2WTSWL65dV4C2/fHqgwcXGc2LTt3tf0KZi87vKta6Gz+3aaLsHpYRaIdn89dWS3WZmGF5Y1FzVevNjt/Hv9gn+oJCxFL2I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Bnhapw5f; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-2fb5be4381dso21621421fa.2
+        for <linux-usb@vger.kernel.org>; Fri, 08 Nov 2024 11:11:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1731090543; x=1731695343; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1731093081; x=1731697881; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XXU0VBJGl3bTzKZlhr2VmDp9XP+CtZacH9WA2Oh4T1A=;
-        b=R96atp3O0cyEwiqYfBNrTrOiT+DkV9C8VdHeKZ3a49OA34ijunT0G4uIMJZV+C9a/g
-         FhhqDvNka9mpTYThzmt98daI3Ok7EOopBYOX+wRaOAFyD/vjEwSxRN+UlLl9327oqSn4
-         2C/av+q5xUzHSRm/yu5vpAXMBvE7egDcA6nrY=
+        bh=VIRkx+efX/6GJFRSs+ScK+sQvOdc8uMwqc3bnd22j8Q=;
+        b=Bnhapw5foka1Ig1WeR6wObMuvHk+Lkrn7kqmlqF+/eF0YfntamtnA6RoJgRnXGf8Jv
+         YY8KT/AFztF1GTtnF2u0ZfaFB4SENE1oc2ohWEwM+3YJ6l3x/q8xm+gMvfb4Tpurs9x+
+         G3YrI9rB0ERKoVnfLENfxxzYRGlFQAnWdT8O1Tm9EvhVk7W1RieTNDgGPABuE0KxIdMZ
+         WUGfSyzxXFKUEHiUVSJ+REFhwODHSMZGwOa8jDg+WbsWtfVlAboZivA5VPaEXC3Crva0
+         S6sPm1NUgCBrLKt8FTfWYA/NddiT8ORoS+FPzyqc8A7RQlBcWwCmySP12MrPwhC6gq9m
+         qUFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731090543; x=1731695343;
+        d=1e100.net; s=20230601; t=1731093081; x=1731697881;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XXU0VBJGl3bTzKZlhr2VmDp9XP+CtZacH9WA2Oh4T1A=;
-        b=rxc8HsIjdRfMJKgZHpwuQKwRnrx00qzvhxW/s99ZNMLxlwjnau3DuDfR+iiCIzVqUY
-         JwC5gj64dBLXB0ZDDmZVHbILszH9f3qsh0E35be3bTmYg2GVmMKEojGvwgw46VBNxxMj
-         CVtucqbu9vLtRG2hc4VTGCIG4bHL0ObJlNh7F4UGew5O+byJEtfosdwftJ33qiBz2fmA
-         fhessDlir50sJ/g4EvPeN5YXnp+eOzdY+jjtf8E8SVqhLJA2HnEa3O/9QFMnyAtY4ecs
-         iunyJd9zQDLRa3ao6Uyc1Qq0/c3ziQGMIh+GkOBG8EcICbKe/a7H2lyaHpx6H1rEKqRp
-         VluA==
-X-Forwarded-Encrypted: i=1; AJvYcCWfdCQgG/1SsPnRGCfyunS03ONdej9mzeHKpowWG04zr/0mqH5/Dx7thQL6gn8doPM0CcEDAPftYrU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywh9HnWr2kCYbxNq2ugPTEc91hrNBJSNYmeCzfEtoEcEHe6evFy
-	Ou4XttwT+ypNRLf6zvjjIyKoc8VCCsDWC6G4PaeOdDqlZhhWO6r2cqZ/cS1gQKUW2EVPTKCDyme
-	Jiq64oo8lOi9uF0rAdm2Ld2Fcr/fbpC9tq34q
-X-Google-Smtp-Source: AGHT+IFVH2rH/3J3+EfLqdmi06+2WK6Q7MhT8hFjbr9Dp+zaWTVq58fsnki1FEj5p7N6Y4mQH7jaBBjr/gCjs3pLBvA=
-X-Received: by 2002:a05:690c:60c4:b0:6e7:e3a9:f30d with SMTP id
- 00721157ae682-6eaddda335emr46720207b3.15.1731090543616; Fri, 08 Nov 2024
- 10:29:03 -0800 (PST)
+        bh=VIRkx+efX/6GJFRSs+ScK+sQvOdc8uMwqc3bnd22j8Q=;
+        b=OolRvKqSzwqoYm4Eq4rIOtP8h0Jc7e3dO3Y/I+lkR30CkaCrh5FCQjJlYIzkWjsE/E
+         5ClDEa58pOmUI95KA5zYmXCl9oziqWK/85/xTEkoVI8o0JDyUL0gCauyxsk6cxwFcPaL
+         C0Ov5RH6jgbbp6LdUjitDTmjMGuPIL2ePFfAtBht0GhLjDP4RtlhEwOoC/r5lXC0DeGt
+         pJrVoupkkyhCJMQJxXfJswzH3AVknOhGKGgtPPTwgjM53U2vK27y+ZewQEcHnhlhZ+A6
+         jJ+W8oCOA5v91vYVUQlTxjxibRmsJddnwx5mVBi975QksA9fPs4g+ltqC6dCPEEQuw1N
+         NYTg==
+X-Forwarded-Encrypted: i=1; AJvYcCWdxaVda+R6fq/rGvWK/JT/m0YzcK0yP5hYlch18KZPojZXrbijIAJaDsftGbgTb9g9xs3eeKX2MG8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywp90uSV9+/IOJD68LLv1E4A32e2i355T2R2LqduaIHFmzPUw9w
+	3uz6sQbt4odHUx8lXAVRjdnvjtdgQbMQ2NzG0SB3qeiGbSlBpcbA3CEZkksubiyF7+VBOnpHc7b
+	dmu166JqUIJYwHXOiQ1B6d3lRWzaQu+hKIoSi1Q==
+X-Google-Smtp-Source: AGHT+IEyu3ErGRSaoQFi38Acb6XQ4BU2dWUjhmoCrPXW6aChPPUQ0fFsyrxlijdB2I2MeCnQFX6bAQ4S/Z/CIgMGk7U=
+X-Received: by 2002:a2e:be24:0:b0:2fb:591d:3db8 with SMTP id
+ 38308e7fff4ca-2ff2028a90bmr22074941fa.35.1731093081457; Fri, 08 Nov 2024
+ 11:11:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241107193021.2690050-1-abhishekpandit@chromium.org>
- <20241107112955.v3.3.I439cffc7bf76d94f5850eb85980f1197c4f9154c@changeid> <2024110849-bonded-flatten-5f5e@gregkh>
-In-Reply-To: <2024110849-bonded-flatten-5f5e@gregkh>
-From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Date: Fri, 8 Nov 2024 10:28:52 -0800
-Message-ID: <CANFp7mU0h0=UimV_tCDw=YuQcdPZsSZ0sJEMv1kNJKiDjs1KHg@mail.gmail.com>
-Subject: Re: [PATCH v3 3/7] usb: typec: Check port is active before enter mode
- on probe
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org, 
-	linux-usb@vger.kernel.org, chrome-platform@lists.linux.dev, jthies@google.com, 
-	akuchynski@google.com, pmalani@chromium.org, dmitry.baryshkov@linaro.org, 
-	linux-kernel@vger.kernel.org
+References: <20220616013747.126051-1-frank@zago.net> <cf32d676-831c-4c3f-8965-c9be3abd5300@gmail.com>
+In-Reply-To: <cf32d676-831c-4c3f-8965-c9be3abd5300@gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Fri, 8 Nov 2024 20:11:10 +0100
+Message-ID: <CACRpkdb-VWnOcHBcHOfMMxKicDGvGt3vB-dSo2nhz_M7oxq35A@mail.gmail.com>
+Subject: Re: [PATCH v6 0/4] add driver for the WCH CH341 in I2C/GPIO mode
+To: "Matwey V. Kornilov" <matwey.kornilov@gmail.com>, Howard Harte <hharte@magicandroidapps.com>
+Cc: frank zago <frank@zago.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-kernel@vger.kernel.org, Bartosz Golaszewski <bgolaszewski@baylibre.com>, 
+	Wolfram Sang <wsa@kernel.org>, Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org, 
+	Lee Jones <lee.jones@linaro.org>, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Nov 8, 2024 at 5:17=E2=80=AFAM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Thu, Nov 07, 2024 at 11:29:56AM -0800, Abhishek Pandit-Subedi wrote:
-> > Enforce the same requirement as when we attempt to activate altmode via
-> > sysfs (do not enter partner mode if port mode is not active). In order
-> > to set a default value for this field, also introduce the inactive fiel=
-d
-> > in struct typec_altmode_desc.
-> >
-> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> > ---
-> >
-> > Changes in v3:
-> > - Use port.active instead of introducing auto-enter field
-> > - Introduce inactive field to typec_altmode_desc to set default value
-> >   for active.
-> > - Always make port 'active' field writable
-> >
-> >  drivers/usb/typec/altmodes/displayport.c | 7 +++++--
-> >  drivers/usb/typec/altmodes/thunderbolt.c | 6 +++++-
-> >  drivers/usb/typec/class.c                | 5 +++--
-> >  include/linux/usb/typec.h                | 2 ++
-> >  4 files changed, 15 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typ=
-ec/altmodes/displayport.c
-> > index 3245e03d59e6..f4116e96f6a1 100644
-> > --- a/drivers/usb/typec/altmodes/displayport.c
-> > +++ b/drivers/usb/typec/altmodes/displayport.c
-> > @@ -767,8 +767,11 @@ int dp_altmode_probe(struct typec_altmode *alt)
-> >       if (plug)
-> >               typec_altmode_set_drvdata(plug, dp);
-> >
-> > -     dp->state =3D plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTER;
-> > -     schedule_work(&dp->work);
-> > +     /* Only attempt to enter altmode if port is active. */
-> > +     if (port->active) {
-> > +             dp->state =3D plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTE=
-R;
-> > +             schedule_work(&dp->work);
-> > +     }
->
-> What prevents active from changing right after you checked it?
+On Fri, Nov 8, 2024 at 4:58=E2=80=AFPM Matwey V. Kornilov
+<matwey.kornilov@gmail.com> wrote:
 
-There's another check in `typec_altmode_enter` for the port itself:
-https://github.com/torvalds/linux/blob/master/drivers/usb/typec/bus.c#L138
 
-If I leave this out, it will just fail in `dp_altmode_work` when it
-calls `typec_altmode_enter` and will leave a dev_err("failed to enter
-mode"). This might be more user friendly since it's visible to the
-user that the partner supports the mode but the port blocked entry.
-I'll update the message on mode entry to also print the return value
-(-EPERM) in the next patch.
+> Hi Frank,
+>
+> Are you going to further proceed with this patch set? As far as I can
+> see, there were no updates since 2022.
 
->
-> > @@ -150,6 +151,7 @@ struct typec_altmode_desc {
-> >       u32                     vdo;
-> >       /* Only used with ports */
-> >       enum typec_port_data    roles;
-> > +     bool                    inactive : 1;
->
-> A boolean bitfield?  That's not needed, please just do this properly.
+I suggest you take it over if there is no reply in a week or so.
 
-Ack - will remove the bitfield. `struct typec_altmode` also does this
--- I'll remove that in a cleanup patch too.
+IIRC Howard Harte also has this very device inside the USR8200 router,
+but I don't know if it uses the I2C/GPIO portions in that device.
 
->
-> thanks,
->
-> greg k-h
+Yours,
+Linus Walleij
 
