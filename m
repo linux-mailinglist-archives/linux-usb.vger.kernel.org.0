@@ -1,311 +1,396 @@
-Return-Path: <linux-usb+bounces-17350-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17351-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E3439C1576
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 05:33:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C41239C15A6
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 05:54:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D06AB21401
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 04:32:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E714F1C227B5
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 04:54:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60CE5193060;
-	Fri,  8 Nov 2024 04:32:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C4F1CBE8E;
+	Fri,  8 Nov 2024 04:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VZ6876wA"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="qibg8kd/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E237F322E
-	for <linux-usb@vger.kernel.org>; Fri,  8 Nov 2024 04:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72F548F5B
+	for <linux-usb@vger.kernel.org>; Fri,  8 Nov 2024 04:54:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731040372; cv=none; b=RMCE0B4DIgeDvzgyu93nB+yV+LATnmG4hu6b0tZiecY71aPuiQdmXGdVwDO+rC8YP1PwM9KAWl1vz1CPNym2NVsfmgEIYgfX0sfj4jbn2eZaPJnXuw/92fbhS3ldVo54Nu1Sd8uILdhQti339WR+DNwIDAuYUb6MHl41+kyN45A=
+	t=1731041662; cv=none; b=nFrBJ4lGMSQknWmsui8O8SbHhi3eP2IX83r3fD5U51fHrogp2G4DIXaqQ+4RlRar9gkjwPUKDaFBuZzbjWbVoT+PInLLSo6xzzerpe1pr7ICOyNZmjHokbTbA/9y+CtEzkJS9Hs0iF7tycDbxcwl4LDGE+SmRopYcR0oWaBg5eQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731040372; c=relaxed/simple;
-	bh=j1mJSrQJiyzSb897e3QO45Q9+YNRgwolZ8MVL0jlxOU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=lW/vCkqeHsxX982tGDVLi9zNP8tvFJ4RgUeHKZU97Qp+M60fUYeSIqSd5rYg/pL5FPSV1wcndr+GnzfWY0iSi8A1Mwn5NNZ+GJRsNzG3hwAVZZUfqt5jVhWbjO/bCWMXZsmfUBXy1slb+5oHqh2zeZ/xxjR97ItpVJF8xortHGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VZ6876wA; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731040371; x=1762576371;
-  h=date:from:to:cc:subject:message-id;
-  bh=j1mJSrQJiyzSb897e3QO45Q9+YNRgwolZ8MVL0jlxOU=;
-  b=VZ6876wAUT+THbr+P8hGjubg/z3HGzzv7p8vWitAZFH0lGmmuu/culIx
-   I11WUjo3jzR0NAPbFab90TvL6TSwKkf411FItkPmVnHY5Jl7gZsVb3JkX
-   8JvRLvn/rtOLhbjonYLk6neoHMVhVubtijKTKkSAhTS6gfJlP95vq2qGG
-   sBwP8xjd9slTvDgedUTn5ymnbObEgZdfuByGuD5klKYtml4Vii0eiAZ+a
-   TQqHvteXXTiSDzhFV+0e2vtFUhGGAiZa+rF8rFFaGfCwEtWjqCvdD8TiO
-   AMyEWcNQa3uM8W7x4wT4VNE38tR00ArAXtxnqRRA9kEzyZqVfApSiiGHk
-   g==;
-X-CSE-ConnectionGUID: lm22dfQdQvCNfnEWlhGgZw==
-X-CSE-MsgGUID: 5vR0hfKiRma/G3XjZVtDtw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="30686703"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="30686703"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Nov 2024 20:32:50 -0800
-X-CSE-ConnectionGUID: B/VZ9hk6RomA9ku1CfWDpg==
-X-CSE-MsgGUID: FFYUs5sPROGcW9qNxPMrAQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,136,1728975600"; 
-   d="scan'208";a="90011699"
-Received: from lkp-server01.sh.intel.com (HELO a48cf1aa22e8) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 07 Nov 2024 20:32:49 -0800
-Received: from kbuild by a48cf1aa22e8 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1t9Gfv-000r22-0M;
-	Fri, 08 Nov 2024 04:32:47 +0000
-Date: Fri, 08 Nov 2024 12:31:48 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org
-Subject: [usb:usb-linus] BUILD SUCCESS
- 0c08402f64729e7ce5d082c4d04b4f20b7cf247f
-Message-ID: <202411081241.4jb8rUG9-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1731041662; c=relaxed/simple;
+	bh=C+nr/6ayK8SNvoyh7eUg7ItNcdmETK3vpxAWoCKJ9ts=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=Uule4Wq4G04qrkPd4W09uei9tjrLxmV8UyodvNGQCxz26YkxFFLorAfPqUrYoedx03vikkCBusU1DjKzerVDBT2Qa5hpzdsMBIBJHgmXBlbVlkhCQTp7ayTM2N2GEXvzCGsz/kWNNeHLY8RZKfAtiRSNxqX0wAvr/Pn7fge5yak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=qibg8kd/; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20241108045410epoutp0395419f8d3e7966a04d674c7f68f1fb60~F5TW-jPPX0863208632epoutp03c
+	for <linux-usb@vger.kernel.org>; Fri,  8 Nov 2024 04:54:10 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20241108045410epoutp0395419f8d3e7966a04d674c7f68f1fb60~F5TW-jPPX0863208632epoutp03c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1731041650;
+	bh=0YdHcX375BxNFDRbutohoNOLYAj1P+TuRkOr75XwxCM=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=qibg8kd/BZK4PvQJqBV5/lqtlNWxEuR052fWGUJArpiZNT6005bG3GQXJmXZVa0YB
+	 0XjUK/E/zaLGnZlzotOaw+9WCJj3QcdwcNblfF9Xfu2kXUztWOo3WiZL8dBND/L0eD
+	 Dc9UcLdRePQ0l/InUJ3etlKhokyv061C1K4RCP/4=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20241108045410epcas5p3aa167cfaf703485c64ae87281ac23ab3~F5TWjSNIR0196401964epcas5p3j;
+	Fri,  8 Nov 2024 04:54:10 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.177]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4Xl66T0XqGz4x9Q6; Fri,  8 Nov
+	2024 04:54:09 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	1C.8C.09420.0799D276; Fri,  8 Nov 2024 13:54:08 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20241108045408epcas5p49b4bb6c718b361b15c05850c6f593822~F5TUys2cb1667216672epcas5p4X;
+	Fri,  8 Nov 2024 04:54:08 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20241108045408epsmtrp196c8ad62864a948ea6aacc42c4cc3049~F5TUxx8hy1656116561epsmtrp1I;
+	Fri,  8 Nov 2024 04:54:08 +0000 (GMT)
+X-AuditID: b6c32a49-33dfa700000024cc-f3-672d99702f2f
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	D9.BD.08227.0799D276; Fri,  8 Nov 2024 13:54:08 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20241108045405epsmtip2cfd807cf00f63130534c9744bb162419~F5TSdlqyD0303203032epsmtip2I;
+	Fri,  8 Nov 2024 04:54:05 +0000 (GMT)
+Message-ID: <0c8b4491-605f-466c-86cd-1f17c70d6b7b@samsung.com>
+Date: Fri, 8 Nov 2024 10:24:04 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: gadget: Add TxFIFO resizing supports for
+ single port RAM
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"quic_akakum@quicinc.com" <quic_akakum@quicinc.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
+	<dh10.jung@samsung.com>, "naushad@samsung.com" <naushad@samsung.com>,
+	"akash.m5@samsung.com" <akash.m5@samsung.com>, "rc93.raju@samsung.com"
+	<rc93.raju@samsung.com>, "taehyun.cho@samsung.com"
+	<taehyun.cho@samsung.com>, "hongpooh.kim@samsung.com"
+	<hongpooh.kim@samsung.com>, "eomji.oh@samsung.com" <eomji.oh@samsung.com>,
+	"shijie.cai@samsung.com" <shijie.cai@samsung.com>, "stable@vger.kernel.org"
+	<stable@vger.kernel.org>, alim.akhtar@samsung.com
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <20241107233403.6li5oawn6d23e6gf@synopsys.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrMJsWRmVeSWpSXmKPExsWy7bCmum7BTN10gw8XTS3eXF3FavFg3jY2
+	izsLpjFZnFq+kMmiefF6NotJe7ayWNx9+IPF4vKuOWwWi5a1Mlt8Ovqf1eL2n72sFqs65wAl
+	vu9ktliw8RGjxaSDoharFhxgdxDw2D93DbvHxD11Hn1bVjF6bNn/mdHj8ya5ANaobJuM1MSU
+	1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxUWyUXnwBdt8wcoIuVFMoSc0qBQgGJ
+	xcVK+nY2RfmlJakKGfnFJbZKqQUpOQUmBXrFibnFpXnpenmpJVaGBgZGpkCFCdkZTyZnFCxy
+	rZgw4wlTA2OneRcjB4eEgInEzdb4LkZODiGB3YwS90+wdjFyAdmfGCV6v/2Gcr4xShxY9YUZ
+	pAqkYc3kzUwQHXsZJeb9zoMoessoMbUFpIOTg1fATqL97SMWEJtFQEXizqHL7BBxQYmTM5+A
+	xUUF5CXu35oBFhcWiJLYs/EA2AIRAR2JAyfOM4EMZRboZZNYufwaG0iCWUBc4taT+UwgZ7MJ
+	GEo8O2EDEuYUsJaYfvAQC0SJvETz1tnMIL0SAic4JJ5eWM0OcbWLxKy2RVAfCEu8Or4FKi4l
+	8bK/DcpOltgz6QuUnSFxaNUhqHp7idULzrCC7GUW0JRYv0sfYhefRO/vJ0yQUOSV6GgTgqhW
+	lTjVeJkNwpaWuLfkGiuE7SFxZO8pdkhY7WeU+NV7lG0Co8IspGCZheTLWUjemYWweQEjyypG
+	ydSC4tz01GLTAsO81HJ4bCfn525iBKdmLc8djHcffNA7xMjEwXiIUYKDWUmE1z9KO12INyWx
+	siq1KD++qDQntfgQoykwfiYyS4km5wOzQ15JvKGJpYGJmZmZiaWxmaGSOO/r1rkpQgLpiSWp
+	2ampBalFMH1MHJxSDUzshv3+P0NMzJymH6x9yTx7XeErmTxPfaZ47f31r4Oz+j7VaSa83Z3e
+	arjs/3UBU/Z9XyUvXE3izrvMw1CmZs2XXcbjp3ZHZWbs9YeXNH4Gn95zYcs5Hbnzq04fqjcr
+	eF94Ll/MMu3qns3p3+181sSdKPldNbO1MiDPtoAreuEmFqvZYkszNxkFsBspzHy7zeq0y2TF
+	zR9iEqpPC9RH8+z8yF1uNFvSRLoia+pzPq/nD6cdOvqxa94tFQfVM35i/6pjuvcvmiA3I2My
+	y6HOMnk19oQm45r9fgcON+14v+SlMBOnvGqIlaWtz/2+u0mTPj0z5X4+I+X4XnUJzzgmlbcS
+	B8urwo+8v71/S+DKbCWW4oxEQy3mouJEAHKKDZpWBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEIsWRmVeSWpSXmKPExsWy7bCSvG7BTN10gx8/BSzeXF3FavFg3jY2
+	izsLpjFZnFq+kMmiefF6NotJe7ayWNx9+IPF4vKuOWwWi5a1Mlt8Ovqf1eL2n72sFqs65wAl
+	vu9ktliw8RGjxaSDoharFhxgdxDw2D93DbvHxD11Hn1bVjF6bNn/mdHj8ya5ANYoLpuU1JzM
+	stQifbsErownkzMKFrlWTJjxhKmBsdO8i5GTQ0LARGLN5M1MXYxcHEICuxklpj5/xgKRkJZ4
+	PauLEcIWllj57zk7RNFroKJpa1lBErwCdhLtbx+BNbAIqEjcOXSZHSIuKHFy5hOwuKiAvMT9
+	WzPA4sICURJ7Nh5gBrFFBHQkDpw4D7aZWWAim8SVN+cZITbsZ5SYdaYJrINZQFzi1pP5QFUc
+	HGwChhLPTtiAhDkFrCWmHzzEAlFiJtG1FeJSZqBlzVtnM09gFJqF5I5ZSCbNQtIyC0nLAkaW
+	VYySqQXFuem5xYYFRnmp5XrFibnFpXnpesn5uZsYwdGopbWDcc+qD3qHGJk4GA8xSnAwK4nw
+	+kdppwvxpiRWVqUW5ccXleakFh9ilOZgURLn/fa6N0VIID2xJDU7NbUgtQgmy8TBKdXANH2p
+	2otTD04fDbwgeSyuTXVVf5FwRe6eaRkxoga8jM+1lzM1cJ6TzowpNuab8J6nneNHffTe4LPn
+	Mi9PiggTtXF9HSvxs8jZoGvqZE4fDpfDu0zOmh2fwiAm6XTPymSP+1SL1VYpM6QWZSg33eEK
+	OvNoUpiZb6z0TAnWm3VbdLcfY9317piySK/Dahf/5DL7J8unnla/Gx34vVKO7+NBgXlXQgRC
+	L6wIsva++Zzx+6tCz8VHU3l2bTHbJB3B/154y4P1kw48c5P6yqAcptE3LXqn7t5A4TsbbF7U
+	Nx989D2nwI2V81/+KRVz82+PamP1LypFnO6eLVTwdndJvpx2IkfJ7Ro2+/Mzttjw9PYpsRRn
+	JBpqMRcVJwIA+f2hCDUDAAA=
+X-CMS-MailID: 20241108045408epcas5p49b4bb6c718b361b15c05850c6f593822
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241107104306epcas5p136bea5d14a1bb3fe9ba1a7830bf366c6
+References: <CGME20241107104306epcas5p136bea5d14a1bb3fe9ba1a7830bf366c6@epcas5p1.samsung.com>
+	<20241107104040.502-1-selvarasu.g@samsung.com>
+	<20241107233403.6li5oawn6d23e6gf@synopsys.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
-branch HEAD: 0c08402f64729e7ce5d082c4d04b4f20b7cf247f  Merge tag 'thunderbolt-for-v6.12-rc7' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
 
-elapsed time: 728m
+On 11/8/2024 5:04 AM, Thinh Nguyen wrote:
+> On Thu, Nov 07, 2024, Selvarasu Ganesan wrote:
+>> This commit adds support for resizing the TxFIFO in USB2.0-only mode
+>> where using single port RAM, and limit the use of extra FIFOs for bulk
+> This should be split into 2 changes: 1 for adding support for
+> single-port RAM, and the other for budgeting the bulk fifo setting.
+>
+> The first change is not a fix, and the latter may be a fix (may need
+> more feedback from others).
+Hi Thinh,
+Thanks for reviewing.
+Sure i will do split into 2 changes.
+>> transfers in non-SS mode. It prevents the issue of limited RAM size
+>> usage.
+>>
+>> Fixes: fad16c823e66 ("usb: dwc3: gadget: Refine the logic for resizing Tx FIFOs")
+>> Cc: stable@vger.kernel.org # 6.12.x: fad16c82: usb: dwc3: gadget: Refine the logic for resizing Tx FIFOs
+>> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+>> ---
+>>   drivers/usb/dwc3/core.h   |  4 +++
+>>   drivers/usb/dwc3/gadget.c | 56 ++++++++++++++++++++++++++++++---------
+>>   2 files changed, 48 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index eaa55c0cf62f..8306b39e5c64 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -915,6 +915,7 @@ struct dwc3_hwparams {
+>>   #define DWC3_MODE(n)		((n) & 0x7)
+>>   
+>>   /* HWPARAMS1 */
+>> +#define DWC3_SPRAM_TYPE(n)	(((n) >> 23) & 1)
+>>   #define DWC3_NUM_INT(n)		(((n) & (0x3f << 15)) >> 15)
+>>   
+>>   /* HWPARAMS3 */
+>> @@ -925,6 +926,9 @@ struct dwc3_hwparams {
+>>   #define DWC3_NUM_IN_EPS(p)	(((p)->hwparams3 &		\
+>>   			(DWC3_NUM_IN_EPS_MASK)) >> 18)
+>>   
+>> +/* HWPARAMS6 */
+>> +#define DWC3_RAM0_DEPTH(n)	(((n) & (0xffff0000)) >> 16)
+>> +
+>>   /* HWPARAMS7 */
+>>   #define DWC3_RAM1_DEPTH(n)	((n) & 0xffff)
+>>   
+>> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+>> index 2fed2aa01407..d3e25f7d7cd0 100644
+>> --- a/drivers/usb/dwc3/gadget.c
+>> +++ b/drivers/usb/dwc3/gadget.c
+>> @@ -687,6 +687,42 @@ static int dwc3_gadget_calc_tx_fifo_size(struct dwc3 *dwc, int mult)
+>>   	return fifo_size;
+>>   }
+>>   
+>> +/**
+>> + * dwc3_gadget_calc_ram_depth - calculates the ram depth for txfifo
+>> + * @dwc: pointer to the DWC3 context
+>> + */
+>> +static int dwc3_gadget_calc_ram_depth(struct dwc3 *dwc)
+>> +{
+>> +	int ram_depth;
+>> +	int fifo_0_start;
+>> +	bool spram_type;
+>> +	int tmp;
+>> +
+>> +	/* Check supporting RAM type by HW */
+>> +	spram_type = DWC3_SPRAM_TYPE(dwc->hwparams.hwparams1);
+>> +
+>> +	/* If a single port RAM is utilized, then allocate TxFIFOs from
+>> +	 * RAM0. otherwise, allocate them from RAM1.
+>> +	 */
+> Please use this comment block style
+> /*
+>   * xxxx
+>   * xxxx
+>   */
+Sure, will update it in next version.
+>> +	ram_depth = spram_type ? DWC3_RAM0_DEPTH(dwc->hwparams.hwparams6) :
+>> +			DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+> Don't use spram_type as a boolean. Perhaps define a macro for type value
+> 1 and 0 (for single vs 2-port)
+Are you expecting something like below?
 
-configs tested: 218
-configs skipped: 7
+#define DWC3_SINGLE_PORT_RAM     1
+#define DWC3_TW0_PORT_RAM        0
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+// ...
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    clang-20
-alpha                               defconfig    gcc-14.2.0
-arc                              allmodconfig    clang-20
-arc                               allnoconfig    gcc-14.2.0
-arc                              allyesconfig    clang-20
-arc                      axs103_smp_defconfig    clang-20
-arc                                 defconfig    gcc-14.2.0
-arc                     haps_hs_smp_defconfig    gcc-14.2.0
-arc                            hsdk_defconfig    clang-14
-arc                 nsimosci_hs_smp_defconfig    clang-20
-arc                   randconfig-001-20241108    gcc-14.2.0
-arc                   randconfig-002-20241108    gcc-14.2.0
-arc                    vdk_hs38_smp_defconfig    clang-20
-arm                              allmodconfig    clang-20
-arm                               allnoconfig    gcc-14.2.0
-arm                              allyesconfig    clang-20
-arm                                 defconfig    gcc-14.2.0
-arm                            dove_defconfig    clang-14
-arm                          ep93xx_defconfig    clang-14
-arm                       imx_v4_v5_defconfig    gcc-14.2.0
-arm                      integrator_defconfig    gcc-14.2.0
-arm                        keystone_defconfig    clang-20
-arm                            mmp2_defconfig    clang-20
-arm                       multi_v4t_defconfig    clang-20
-arm                        multi_v5_defconfig    clang-20
-arm                        neponset_defconfig    gcc-14.2.0
-arm                       omap2plus_defconfig    gcc-14.2.0
-arm                         orion5x_defconfig    clang-20
-arm                   randconfig-001-20241108    gcc-14.2.0
-arm                   randconfig-002-20241108    gcc-14.2.0
-arm                   randconfig-003-20241108    gcc-14.2.0
-arm                   randconfig-004-20241108    gcc-14.2.0
-arm                           sama7_defconfig    clang-14
-arm                           sunxi_defconfig    clang-20
-arm64                            allmodconfig    clang-20
-arm64                             allnoconfig    gcc-14.2.0
-arm64                               defconfig    gcc-14.2.0
-arm64                 randconfig-001-20241108    gcc-14.2.0
-arm64                 randconfig-002-20241108    gcc-14.2.0
-arm64                 randconfig-003-20241108    gcc-14.2.0
-arm64                 randconfig-004-20241108    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                                defconfig    gcc-14.2.0
-csky                  randconfig-001-20241108    gcc-14.2.0
-csky                  randconfig-002-20241108    gcc-14.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    gcc-14.2.0
-hexagon                          allyesconfig    clang-20
-hexagon                             defconfig    gcc-14.2.0
-hexagon               randconfig-001-20241108    gcc-14.2.0
-hexagon               randconfig-002-20241108    gcc-14.2.0
-i386                             allmodconfig    clang-19
-i386                              allnoconfig    clang-19
-i386                             allyesconfig    clang-19
-i386        buildonly-randconfig-001-20241108    clang-19
-i386        buildonly-randconfig-002-20241108    clang-19
-i386        buildonly-randconfig-003-20241108    clang-19
-i386        buildonly-randconfig-004-20241108    clang-19
-i386        buildonly-randconfig-005-20241108    clang-19
-i386        buildonly-randconfig-006-20241108    clang-19
-i386                                defconfig    clang-19
-i386                  randconfig-001-20241108    clang-19
-i386                  randconfig-002-20241108    clang-19
-i386                  randconfig-003-20241108    clang-19
-i386                  randconfig-004-20241108    clang-19
-i386                  randconfig-005-20241108    clang-19
-i386                  randconfig-006-20241108    clang-19
-i386                  randconfig-011-20241108    clang-19
-i386                  randconfig-012-20241108    clang-19
-i386                  randconfig-013-20241108    clang-19
-i386                  randconfig-014-20241108    clang-19
-i386                  randconfig-015-20241108    clang-19
-i386                  randconfig-016-20241108    clang-19
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch                           defconfig    gcc-14.2.0
-loongarch             randconfig-001-20241108    gcc-14.2.0
-loongarch             randconfig-002-20241108    gcc-14.2.0
-m68k                             alldefconfig    clang-20
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                                defconfig    gcc-14.2.0
-m68k                       m5475evb_defconfig    clang-20
-m68k                        mvme147_defconfig    gcc-14.2.0
-m68k                          sun3x_defconfig    clang-20
-m68k                          sun3x_defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-microblaze                          defconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                          ath25_defconfig    gcc-14.2.0
-mips                            gpr_defconfig    clang-20
-mips                           jazz_defconfig    gcc-14.2.0
-mips                     loongson1b_defconfig    gcc-14.2.0
-mips                      maltaaprp_defconfig    clang-14
-mips                         rt305x_defconfig    clang-20
-mips                   sb1250_swarm_defconfig    clang-14
-nios2                         10m50_defconfig    clang-20
-nios2                             allnoconfig    gcc-14.2.0
-nios2                               defconfig    gcc-14.2.0
-nios2                 randconfig-001-20241108    gcc-14.2.0
-nios2                 randconfig-002-20241108    gcc-14.2.0
-openrisc                          allnoconfig    clang-20
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-12
-openrisc                       virt_defconfig    clang-14
-parisc                           alldefconfig    clang-20
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    clang-20
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-12
-parisc                randconfig-001-20241108    gcc-14.2.0
-parisc                randconfig-002-20241108    gcc-14.2.0
-parisc64                            defconfig    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    clang-20
-powerpc                          allyesconfig    gcc-14.2.0
-powerpc                    amigaone_defconfig    clang-14
-powerpc                      chrp32_defconfig    gcc-14.2.0
-powerpc                      cm5200_defconfig    clang-20
-powerpc                   currituck_defconfig    clang-20
-powerpc                 linkstation_defconfig    clang-20
-powerpc                   lite5200b_defconfig    clang-14
-powerpc                     mpc512x_defconfig    clang-14
-powerpc               mpc834x_itxgp_defconfig    clang-14
-powerpc                  mpc885_ads_defconfig    clang-20
-powerpc                      pasemi_defconfig    clang-20
-powerpc               randconfig-001-20241108    gcc-14.2.0
-powerpc               randconfig-002-20241108    gcc-14.2.0
-powerpc               randconfig-003-20241108    gcc-14.2.0
-powerpc                    sam440ep_defconfig    gcc-14.2.0
-powerpc                     sequoia_defconfig    clang-14
-powerpc                  storcenter_defconfig    clang-20
-powerpc                     taishan_defconfig    clang-20
-powerpc                     tqm8541_defconfig    clang-20
-powerpc64             randconfig-001-20241108    gcc-14.2.0
-powerpc64             randconfig-002-20241108    gcc-14.2.0
-powerpc64             randconfig-003-20241108    gcc-14.2.0
-riscv                            allmodconfig    gcc-14.2.0
-riscv                             allnoconfig    clang-20
-riscv                            allyesconfig    gcc-14.2.0
-riscv                               defconfig    gcc-12
-riscv                    nommu_virt_defconfig    gcc-14.2.0
-riscv                 randconfig-001-20241108    gcc-14.2.0
-riscv                 randconfig-002-20241108    gcc-14.2.0
-s390                             alldefconfig    clang-14
-s390                             allmodconfig    clang-20
-s390                             allmodconfig    gcc-14.2.0
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    gcc-12
-s390                  randconfig-001-20241108    gcc-14.2.0
-s390                  randconfig-002-20241108    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-12
-sh                               j2_defconfig    clang-20
-sh                          kfr2r09_defconfig    clang-14
-sh                            migor_defconfig    clang-14
-sh                          r7785rp_defconfig    clang-20
-sh                    randconfig-001-20241108    gcc-14.2.0
-sh                    randconfig-002-20241108    gcc-14.2.0
-sh                   rts7751r2dplus_defconfig    clang-20
-sh                          sdk7786_defconfig    clang-20
-sh                           se7724_defconfig    gcc-14.2.0
-sh                             shx3_defconfig    gcc-14.2.0
-sh                            titan_defconfig    clang-20
-sparc                            allmodconfig    gcc-14.2.0
-sparc64                             defconfig    gcc-12
-sparc64               randconfig-001-20241108    gcc-14.2.0
-sparc64               randconfig-002-20241108    gcc-14.2.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-20
-um                               allyesconfig    clang-20
-um                                  defconfig    gcc-12
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20241108    gcc-14.2.0
-um                    randconfig-002-20241108    gcc-14.2.0
-um                           x86_64_defconfig    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20241108    clang-19
-x86_64      buildonly-randconfig-002-20241108    clang-19
-x86_64      buildonly-randconfig-003-20241108    clang-19
-x86_64      buildonly-randconfig-004-20241108    clang-19
-x86_64      buildonly-randconfig-005-20241108    clang-19
-x86_64      buildonly-randconfig-006-20241108    clang-19
-x86_64                              defconfig    clang-19
-x86_64                                  kexec    clang-19
-x86_64                                  kexec    gcc-12
-x86_64                randconfig-001-20241108    clang-19
-x86_64                randconfig-002-20241108    clang-19
-x86_64                randconfig-003-20241108    clang-19
-x86_64                randconfig-004-20241108    clang-19
-x86_64                randconfig-005-20241108    clang-19
-x86_64                randconfig-006-20241108    clang-19
-x86_64                randconfig-011-20241108    clang-19
-x86_64                randconfig-012-20241108    clang-19
-x86_64                randconfig-013-20241108    clang-19
-x86_64                randconfig-014-20241108    clang-19
-x86_64                randconfig-015-20241108    clang-19
-x86_64                randconfig-016-20241108    clang-19
-x86_64                randconfig-071-20241108    clang-19
-x86_64                randconfig-072-20241108    clang-19
-x86_64                randconfig-073-20241108    clang-19
-x86_64                randconfig-074-20241108    clang-19
-x86_64                randconfig-075-20241108    clang-19
-x86_64                randconfig-076-20241108    clang-19
-x86_64                               rhel-8.3    gcc-12
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                generic_kc705_defconfig    clang-20
-xtensa                randconfig-001-20241108    gcc-14.2.0
-xtensa                randconfig-002-20241108    gcc-14.2.0
-xtensa                         virt_defconfig    clang-14
+int ram_depth;
+int fifo_0_start;
+int spram_type;
+int tmp;
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+/*
+* Check supporting RAM type by HW. If a single port RAM
+* is utilized, then allocate TxFIFOs from RAM0. otherwise,
+* allocate them from RAM1.
+*/
+spram_type = DWC3_SPRAM_TYPE(dwc->hwparams.hwparams1);
+
+/*
+* In a single port RAM configuration, the available RAM is shared
+* between the RX and TX FIFOs. This means that the txfifo can begin
+* at a non-zero address.
+*/
+
+if (spram_type == DWC3_SINGLE_PORT_RAM) {
+
+     ram_depth = DWC3_RAM0_DEPTH(dwc->hwparams.hwparams6);
+
+     /* Check if TXFIFOs start at non-zero addr */
+     tmp = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
+     fifo_0_start = DWC3_GTXFIFOSIZ_TXFSTADDR(tmp);
+
+ram_depth -= (fifo_0_start >> 16);
+} else
+     ram_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+
+return ram_depth;
+>> +
+>> +
+>> +	/* In a single port RAM configuration, the available RAM is shared
+>> +	 * between the RX and TX FIFOs. This means that the txfifo can begin
+>> +	 * at a non-zero address.
+>> +	 */
+>> +	if (spram_type) {
+> if (spram_type == DWC3_SPRAM_TYPE_SINGLE) {
+> 	...
+> }
+>
+>> +		/* Check if TXFIFOs start at non-zero addr */
+>> +		tmp = dwc3_readl(dwc->regs, DWC3_GTXFIFOSIZ(0));
+>> +		fifo_0_start = DWC3_GTXFIFOSIZ_TXFSTADDR(tmp);
+>> +
+>> +		ram_depth -= (fifo_0_start >> 16);
+>> +	}
+>> +
+>> +	return ram_depth;
+>> +}
+>> +
+>>   /**
+>>    * dwc3_gadget_clear_tx_fifos - Clears txfifo allocation
+>>    * @dwc: pointer to the DWC3 context
+>> @@ -753,7 +789,7 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+>>   {
+>>   	struct dwc3 *dwc = dep->dwc;
+>>   	int fifo_0_start;
+>> -	int ram1_depth;
+>> +	int ram_depth;
+>>   	int fifo_size;
+>>   	int min_depth;
+>>   	int num_in_ep;
+>> @@ -773,7 +809,7 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+>>   	if (dep->flags & DWC3_EP_TXFIFO_RESIZED)
+>>   		return 0;
+>>   
+>> -	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+>> +	ram_depth = dwc3_gadget_calc_ram_depth(dwc);
+>>   
+>>   	switch (dwc->gadget->speed) {
+>>   	case USB_SPEED_SUPER_PLUS:
+>> @@ -792,10 +828,6 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+>>   			break;
+>>   		}
+>>   		fallthrough;
+>> -	case USB_SPEED_FULL:
+>> -		if (usb_endpoint_xfer_bulk(dep->endpoint.desc))
+>> -			num_fifos = 2;
+>> -		break;
+> Please take out the fallthrough above if you remove this condition.
+will update it in next version.
+>
+>>   	default:
+>>   		break;
+>>   	}
+>> @@ -809,7 +841,7 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+>>   
+>>   	/* Reserve at least one FIFO for the number of IN EPs */
+>>   	min_depth = num_in_ep * (fifo + 1);
+>> -	remaining = ram1_depth - min_depth - dwc->last_fifo_depth;
+>> +	remaining = ram_depth - min_depth - dwc->last_fifo_depth;
+>>   	remaining = max_t(int, 0, remaining);
+>>   	/*
+>>   	 * We've already reserved 1 FIFO per EP, so check what we can fit in
+>> @@ -835,9 +867,9 @@ static int dwc3_gadget_resize_tx_fifos(struct dwc3_ep *dep)
+>>   		dwc->last_fifo_depth += DWC31_GTXFIFOSIZ_TXFDEP(fifo_size);
+>>   
+>>   	/* Check fifo size allocation doesn't exceed available RAM size. */
+>> -	if (dwc->last_fifo_depth >= ram1_depth) {
+>> +	if (dwc->last_fifo_depth >= ram_depth) {
+>>   		dev_err(dwc->dev, "Fifosize(%d) > RAM size(%d) %s depth:%d\n",
+>> -			dwc->last_fifo_depth, ram1_depth,
+>> +			dwc->last_fifo_depth, ram_depth,
+>>   			dep->endpoint.name, fifo_size);
+>>   		if (DWC3_IP_IS(DWC3))
+>>   			fifo_size = DWC3_GTXFIFOSIZ_TXFDEP(fifo_size);
+>> @@ -3090,7 +3122,7 @@ static int dwc3_gadget_check_config(struct usb_gadget *g)
+>>   	struct dwc3 *dwc = gadget_to_dwc(g);
+>>   	struct usb_ep *ep;
+>>   	int fifo_size = 0;
+>> -	int ram1_depth;
+>> +	int ram_depth;
+>>   	int ep_num = 0;
+>>   
+>>   	if (!dwc->do_fifo_resize)
+>> @@ -3113,8 +3145,8 @@ static int dwc3_gadget_check_config(struct usb_gadget *g)
+>>   	fifo_size += dwc->max_cfg_eps;
+>>   
+>>   	/* Check if we can fit a single fifo per endpoint */
+>> -	ram1_depth = DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+>> -	if (fifo_size > ram1_depth)
+>> +	ram_depth = dwc3_gadget_calc_ram_depth(dwc);
+>> +	if (fifo_size > ram_depth)
+>>   		return -ENOMEM;
+>>   
+>>   	return 0;
+>> -- 
+>> 2.17.1
+>>
+> We may need to think a little more on how to budgeting the resource
+> properly to accomodate for different requirements. If there's no single
+> formula to satisfy for all platform, perhaps we may need to introduce
+> parameters that users can set base on the needs of their application.
+Agree. Need to introduce some parameters to control the required fifos 
+by user that based their usecase.
+Here's a rephrased version of your proposal:
+
+To address the issue of determining the required number of FIFOs for 
+different types of transfers, we propose introducing dynamic FIFO 
+calculation for all type of EP transfers based on the maximum packet 
+size, and remove hard code value for required fifos in driver,  
+Additionally, we suggest introducing DT properties(tx-fifo-max-num-iso, 
+tx-fifo-max-bulk and tx-fifo-max-intr) for all types of transfers 
+(except control EP) to allow users to control the required FIFOs instead 
+of relying solely on the tx-fifo-max-num. This approach will provide 
+more flexibility and customization options for users based on their 
+specific use cases.
+
+Please let me know if you have any comments on the above approach.
+
+Thanks,
+Selva
+>
+> I'd like to Ack on the new change that checks single-port RAM. For the
+> budgeting of fifo, let's keep the discussion going a little more.
+>
+> Thanks,
+> Thinh
+
+
+
+
 
