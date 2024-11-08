@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-17368-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17369-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACE7B9C1C50
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 12:42:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8542E9C1CD5
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 13:21:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1991DB229FF
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 11:42:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 451E1284599
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 12:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 261491E47CB;
-	Fri,  8 Nov 2024 11:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E201E7C01;
+	Fri,  8 Nov 2024 12:21:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K128yael"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EuCzlnJu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F7E71E3DFC;
-	Fri,  8 Nov 2024 11:41:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D211E47C0;
+	Fri,  8 Nov 2024 12:21:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731066112; cv=none; b=R+zVs+nv3eOVRMoy6DFbWYXsUOqKXrfuDUvd5eXK9fgnrBojAHpIDTo6iuoa9M3CpK+Ys0yOPNofBQzcyLsqrJpiAGw+KCOTMBFrMJchhtKAvpZjqqMdskGbNsxKnD/CfpYLv9XLnbF1rOLLxTxYoaWGlIBoPuD0JjLEli1pcv0=
+	t=1731068477; cv=none; b=Ydk2WjI1Gaz3xpWNIjcshvpp8rCme1jnaqGX/nPfwsgAZZSW/KoJpk8VMHuqBFq04+px+hG55qf+//q7A+QBSXhhHVOWL4ACODYpQVgbtkwIE4NsK6pSbqNQ7UTj6+y7oUO/WqkKRL4ciC1gtljcRn6xWXFmdaF+4Stba0c94qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731066112; c=relaxed/simple;
-	bh=TXkIOp3uyndyYEvkJuBG+geJwUkD2tQM/QMtnBrWWOY=;
+	s=arc-20240116; t=1731068477; c=relaxed/simple;
+	bh=u0iXnKguoLXCt/Mm6UWe8peTQ8LV485EgYB6XyhyzXQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lIp8ZOHEJacuiJ6uhH7uhEGCLNIbH/ZaLWI96oeZCphFQgqKqoFyu4X/gfRrkOWmqlaSa5TfDGnVpU+FHMYtuZN6rQ2CNSGZuHyHm0LSs3L1sxIvigLti8vdohUNVISikQZZ5+esT+5Dgb82A1oZWZWiEkcDDGPBje9COjx1q2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K128yael; arc=none smtp.client-ip=192.198.163.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=GSy2FpGYNw7o5DJcR0PIlR9NjeMXnkfV2ga3yr41CBc4Q81vTQBbobGD0Y+E9O+ks/NpN9b2NbCIzhWbtLR/yom7gvCiy15WQVRtbsAQxGR0f4PO9JOw7R0nactpNDLjnWmHcHy3gthuuK50Q95GMttBVrHfkcCwImO1w/wO6C0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EuCzlnJu; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731066111; x=1762602111;
+  t=1731068476; x=1762604476;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=TXkIOp3uyndyYEvkJuBG+geJwUkD2tQM/QMtnBrWWOY=;
-  b=K128yaelRdAlLnK/Rm0R5oDu9sZLc28ZGRXtlj6Wf+WrYRebs/WICohn
-   QZvRocSsWZQq0h4zIlT+eugHBTZSCICfTG7o8PZsNXDnQwm0t7QIWNHEg
-   bDW073qP7ZrQF2HqpfvqY0gRaGeDEiT3KFKOq1S64/fXdUmb6iEH+/PaQ
-   ew0ATL5U3UbcsiBI2bUM2GPoXnkf0Zm+S7JlnldJ/kCa2bjYRVDBYXUbE
-   mtftgkAhpJoD5TV8Xc9NlPMdGoGa0NGa+aOvxNSJ0JQn3Aj8Ot9XRLqs3
-   ccNu1rbi6LLJxgSts0PONtLgQWwva75GvMb4OP39mwoiDouZDYxHBO6Ua
-   g==;
-X-CSE-ConnectionGUID: lZRkZnKdSwaZ9oz65Y8epA==
-X-CSE-MsgGUID: v8UCFla/TfCYXRW4OirmVQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11249"; a="30831449"
+  bh=u0iXnKguoLXCt/Mm6UWe8peTQ8LV485EgYB6XyhyzXQ=;
+  b=EuCzlnJuhRbMmS4i0NZyO3URV7lQ8HRVoCFiOcaDwQTaRIq1TbbmeTtm
+   v6edNYwnjCosZuukTkStn3yLJt4Yz5uKL+pNj89kI/hsDqBeiEQmywrAU
+   jeET4F5vBwC5AO+DKsnVGwqt+6/WH7UfOcUAT9GKNHHkiBBZo/yXg4Ngk
+   +lUQEtLyvOeiPQKpiGS71trYH9N9ZXZat43VBeVenf2i1Q6FzYUlGD7EP
+   6kvIdM+6/Q4aKHlh5nydp97szRAiWjvwd1WiV6ycjfrYSOo2z0M3y12QE
+   C2qIXNS92w1v1NRtsgh/zO1Q0oJSe8HANODRccZmTDczhssSD4dbF3dPJ
+   A==;
+X-CSE-ConnectionGUID: +TUqelrQQKOENZVkupxOCg==
+X-CSE-MsgGUID: vSkkWlJ+R6+2EG+DGO5Iig==
+X-IronPort-AV: E=McAfee;i="6700,10204,11249"; a="30347529"
 X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
-   d="scan'208";a="30831449"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 03:41:50 -0800
-X-CSE-ConnectionGUID: JDD+C71jRSyE5UvjICiUiw==
-X-CSE-MsgGUID: wtSH8iCNQliNxB3KdiB8CQ==
+   d="scan'208";a="30347529"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 04:21:15 -0800
+X-CSE-ConnectionGUID: VwFY/ZnXSx+CRNEC01ZXOw==
+X-CSE-MsgGUID: B5nmX/3bQoGbpciJqcmtLg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
-   d="scan'208";a="123041995"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="90350922"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa001.jf.intel.com with SMTP; 08 Nov 2024 03:41:46 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Nov 2024 13:41:44 +0200
-Date: Fri, 8 Nov 2024 13:41:44 +0200
+  by orviesa003.jf.intel.com with SMTP; 08 Nov 2024 04:21:11 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Nov 2024 14:21:10 +0200
+Date: Fri, 8 Nov 2024 14:21:10 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 Cc: tzungbi@kernel.org, linux-usb@vger.kernel.org,
@@ -67,14 +67,12 @@ Cc: tzungbi@kernel.org, linux-usb@vger.kernel.org,
 	akuchynski@google.com, pmalani@chromium.org,
 	dmitry.baryshkov@linaro.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas@fjasle.eu>, linux-kbuild@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/7] usb: typec: Only use SVID for matching altmodes
-Message-ID: <Zy34-G0uOUyA6EQc@kuha.fi.intel.com>
+Subject: Re: [PATCH v3 3/7] usb: typec: Check port is active before enter
+ mode on probe
+Message-ID: <Zy4CNtSDjbPTcCcI@kuha.fi.intel.com>
 References: <20241107193021.2690050-1-abhishekpandit@chromium.org>
- <20241107112955.v3.1.Ie0d37646f18461234777d88b4c3e21faed92ed4f@changeid>
+ <20241107112955.v3.3.I439cffc7bf76d94f5850eb85980f1197c4f9154c@changeid>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,13 +81,13 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241107112955.v3.1.Ie0d37646f18461234777d88b4c3e21faed92ed4f@changeid>
+In-Reply-To: <20241107112955.v3.3.I439cffc7bf76d94f5850eb85980f1197c4f9154c@changeid>
 
-On Thu, Nov 07, 2024 at 11:29:54AM -0800, Abhishek Pandit-Subedi wrote:
-> Mode in struct typec_altmode is used to indicate the index of the
-> altmode on a port, partner or plug. It is used in enter mode VDMs but
-> doesn't make much sense for matching against altmode drivers or for
-> matching partner to port altmodes.
+On Thu, Nov 07, 2024 at 11:29:56AM -0800, Abhishek Pandit-Subedi wrote:
+> Enforce the same requirement as when we attempt to activate altmode via
+> sysfs (do not enter partner mode if port mode is not active). In order
+> to set a default value for this field, also introduce the inactive field
+> in struct typec_altmode_desc.
 > 
 > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
 
@@ -98,124 +96,102 @@ Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > ---
 > 
 > Changes in v3:
-> - Removed mode from altmode device ids
-> - Updated modalias for typecd bus to remove mode
-> - Re-ordered to start of series
+> - Use port.active instead of introducing auto-enter field
+> - Introduce inactive field to typec_altmode_desc to set default value
+>   for active.
+> - Always make port 'active' field writable
 > 
-> Changes in v2:
-> - Update altmode_match to ignore mode entirely
-> - Also apply the same behavior to typec_match
-> 
->  drivers/usb/typec/altmodes/displayport.c | 2 +-
->  drivers/usb/typec/altmodes/nvidia.c      | 2 +-
->  drivers/usb/typec/bus.c                  | 6 ++----
->  drivers/usb/typec/class.c                | 4 ++--
->  scripts/mod/devicetable-offsets.c        | 1 -
->  scripts/mod/file2alias.c                 | 4 +---
->  6 files changed, 7 insertions(+), 12 deletions(-)
+>  drivers/usb/typec/altmodes/displayport.c | 7 +++++--
+>  drivers/usb/typec/altmodes/thunderbolt.c | 6 +++++-
+>  drivers/usb/typec/class.c                | 5 +++--
+>  include/linux/usb/typec.h                | 2 ++
+>  4 files changed, 15 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index 2f03190a9873..3245e03d59e6 100644
+> index 3245e03d59e6..f4116e96f6a1 100644
 > --- a/drivers/usb/typec/altmodes/displayport.c
 > +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -791,7 +791,7 @@ void dp_altmode_remove(struct typec_altmode *alt)
->  EXPORT_SYMBOL_GPL(dp_altmode_remove);
+> @@ -767,8 +767,11 @@ int dp_altmode_probe(struct typec_altmode *alt)
+>  	if (plug)
+>  		typec_altmode_set_drvdata(plug, dp);
 >  
->  static const struct typec_device_id dp_typec_id[] = {
-> -	{ USB_TYPEC_DP_SID, USB_TYPEC_DP_MODE },
-> +	{ USB_TYPEC_DP_SID },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(typec, dp_typec_id);
-> diff --git a/drivers/usb/typec/altmodes/nvidia.c b/drivers/usb/typec/altmodes/nvidia.c
-> index fe70b36f078f..2b77d931e494 100644
-> --- a/drivers/usb/typec/altmodes/nvidia.c
-> +++ b/drivers/usb/typec/altmodes/nvidia.c
-> @@ -24,7 +24,7 @@ static void nvidia_altmode_remove(struct typec_altmode *alt)
->  }
+> -	dp->state = plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTER;
+> -	schedule_work(&dp->work);
+> +	/* Only attempt to enter altmode if port is active. */
+> +	if (port->active) {
+> +		dp->state = plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTER;
+> +		schedule_work(&dp->work);
+> +	}
 >  
->  static const struct typec_device_id nvidia_typec_id[] = {
-> -	{ USB_TYPEC_NVIDIA_VLINK_SID, TYPEC_ANY_MODE },
-> +	{ USB_TYPEC_NVIDIA_VLINK_SID },
->  	{ },
->  };
->  MODULE_DEVICE_TABLE(typec, nvidia_typec_id);
-> diff --git a/drivers/usb/typec/bus.c b/drivers/usb/typec/bus.c
-> index aa879253d3b8..ae90688d23e4 100644
-> --- a/drivers/usb/typec/bus.c
-> +++ b/drivers/usb/typec/bus.c
-> @@ -454,8 +454,7 @@ static int typec_match(struct device *dev, const struct device_driver *driver)
->  	const struct typec_device_id *id;
->  
->  	for (id = drv->id_table; id->svid; id++)
-> -		if (id->svid == altmode->svid &&
-> -		    (id->mode == TYPEC_ANY_MODE || id->mode == altmode->mode))
-> +		if (id->svid == altmode->svid)
->  			return 1;
 >  	return 0;
 >  }
-> @@ -470,8 +469,7 @@ static int typec_uevent(const struct device *dev, struct kobj_uevent_env *env)
->  	if (add_uevent_var(env, "MODE=%u", altmode->mode))
->  		return -ENOMEM;
+> diff --git a/drivers/usb/typec/altmodes/thunderbolt.c b/drivers/usb/typec/altmodes/thunderbolt.c
+> index a945b9d35a1d..45567abc3bb8 100644
+> --- a/drivers/usb/typec/altmodes/thunderbolt.c
+> +++ b/drivers/usb/typec/altmodes/thunderbolt.c
+> @@ -212,6 +212,7 @@ static const struct typec_altmode_ops tbt_altmode_ops = {
 >  
-> -	return add_uevent_var(env, "MODALIAS=typec:id%04Xm%02X",
-> -			      altmode->svid, altmode->mode);
-> +	return add_uevent_var(env, "MODALIAS=typec:id%04X", altmode->svid);
->  }
+>  static int tbt_altmode_probe(struct typec_altmode *alt)
+>  {
+> +	const struct typec_altmode *port = typec_altmode_get_partner(alt);
+>  	struct tbt_altmode *tbt;
 >  
->  static int typec_altmode_create_links(struct altmode *alt)
+>  	tbt = devm_kzalloc(&alt->dev, sizeof(*tbt), GFP_KERNEL);
+> @@ -226,7 +227,10 @@ static int tbt_altmode_probe(struct typec_altmode *alt)
+>  	typec_altmode_set_drvdata(alt, tbt);
+>  	typec_altmode_set_ops(alt, &tbt_altmode_ops);
+>  
+> -	if (tbt_ready(alt)) {
+> +	/* Only attempt to enter altmode if port is active and cable/plug
+> +	 * information is ready.
+> +	 */
+> +	if (port->active && tbt_ready(alt)) {
+>  		if (tbt->plug[TYPEC_PLUG_SOP_PP])
+>  			tbt->state = TBT_STATE_SOP_PP_ENTER;
+>  		else if (tbt->plug[TYPEC_PLUG_SOP_P])
 > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 4b3047e055a3..febe453b96be 100644
+> index febe453b96be..b5e67a57762c 100644
 > --- a/drivers/usb/typec/class.c
 > +++ b/drivers/usb/typec/class.c
-> @@ -237,13 +237,13 @@ static int altmode_match(struct device *dev, void *data)
->  	if (!is_typec_altmode(dev))
->  		return 0;
+> @@ -458,7 +458,8 @@ static umode_t typec_altmode_attr_is_visible(struct kobject *kobj,
+>  	struct typec_altmode *adev = to_typec_altmode(kobj_to_dev(kobj));
 >  
-> -	return ((adev->svid == id->svid) && (adev->mode == id->mode));
-> +	return (adev->svid == id->svid);
->  }
+>  	if (attr == &dev_attr_active.attr)
+> -		if (!adev->ops || !adev->ops->activate)
+> +		if (!is_typec_port(adev->dev.parent) &&
+> +		    (!adev->ops || !adev->ops->activate))
+>  			return 0444;
 >  
->  static void typec_altmode_set_partner(struct altmode *altmode)
->  {
->  	struct typec_altmode *adev = &altmode->adev;
-> -	struct typec_device_id id = { adev->svid, adev->mode, };
-> +	struct typec_device_id id = { adev->svid };
->  	struct typec_port *port = typec_altmode2port(adev);
->  	struct altmode *partner;
->  	struct device *dev;
-> diff --git a/scripts/mod/devicetable-offsets.c b/scripts/mod/devicetable-offsets.c
-> index 9c7b404defbd..d3d00e85edf7 100644
-> --- a/scripts/mod/devicetable-offsets.c
-> +++ b/scripts/mod/devicetable-offsets.c
-> @@ -237,7 +237,6 @@ int main(void)
+>  	return attr->mode;
+> @@ -563,7 +564,7 @@ typec_register_altmode(struct device *parent,
 >  
->  	DEVID(typec_device_id);
->  	DEVID_FIELD(typec_device_id, svid);
-> -	DEVID_FIELD(typec_device_id, mode);
+>  	if (is_port) {
+>  		alt->attrs[3] = &dev_attr_supported_roles.attr;
+> -		alt->adev.active = true; /* Enabled by default */
+> +		alt->adev.active = !desc->inactive; /* Enabled by default */
+>  	}
 >  
->  	DEVID(tee_client_device_id);
->  	DEVID_FIELD(tee_client_device_id, uuid);
-> diff --git a/scripts/mod/file2alias.c b/scripts/mod/file2alias.c
-> index c4cc11aa558f..218ccb7150bf 100644
-> --- a/scripts/mod/file2alias.c
-> +++ b/scripts/mod/file2alias.c
-> @@ -1343,14 +1343,12 @@ static int do_tbsvc_entry(const char *filename, void *symval, char *alias)
->  	return 1;
->  }
+>  	sprintf(alt->group_name, "mode%d", desc->mode);
+> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> index d616b8807000..56c01771c190 100644
+> --- a/include/linux/usb/typec.h
+> +++ b/include/linux/usb/typec.h
+> @@ -140,6 +140,7 @@ int typec_cable_set_identity(struct typec_cable *cable);
+>   * @mode: Index of the Mode
+>   * @vdo: VDO returned by Discover Modes USB PD command
+>   * @roles: Only for ports. DRP if the mode is available in both roles
+> + * @inactive: Only for ports. Make this port inactive (default is active).
+>   *
+>   * Description of an Alternate Mode which a connector, cable plug or partner
+>   * supports.
+> @@ -150,6 +151,7 @@ struct typec_altmode_desc {
+>  	u32			vdo;
+>  	/* Only used with ports */
+>  	enum typec_port_data	roles;
+> +	bool			inactive : 1;
+>  };
 >  
-> -/* Looks like: typec:idNmN */
-> +/* Looks like: typec:idN */
->  static int do_typec_entry(const char *filename, void *symval, char *alias)
->  {
->  	DEF_FIELD(symval, typec_device_id, svid);
-> -	DEF_FIELD(symval, typec_device_id, mode);
->  
->  	sprintf(alias, "typec:id%04X", svid);
-> -	ADD(alias, "m", mode != TYPEC_ANY_MODE, mode);
->  
->  	return 1;
->  }
+>  void typec_partner_set_pd_revision(struct typec_partner *partner, u16 pd_revision);
 > -- 
 > 2.47.0.277.g8800431eea-goog
 
