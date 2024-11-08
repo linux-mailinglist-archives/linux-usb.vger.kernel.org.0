@@ -1,76 +1,53 @@
-Return-Path: <linux-usb+bounces-17369-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17370-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8542E9C1CD5
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 13:21:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D25A69C1DC1
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 14:17:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 451E1284599
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 12:21:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5338A1C2227A
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 13:17:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08E201E7C01;
-	Fri,  8 Nov 2024 12:21:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCAFC1EB9F3;
+	Fri,  8 Nov 2024 13:17:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="EuCzlnJu"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WngEN8pA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D211E47C0;
-	Fri,  8 Nov 2024 12:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42919197A82;
+	Fri,  8 Nov 2024 13:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731068477; cv=none; b=Ydk2WjI1Gaz3xpWNIjcshvpp8rCme1jnaqGX/nPfwsgAZZSW/KoJpk8VMHuqBFq04+px+hG55qf+//q7A+QBSXhhHVOWL4ACODYpQVgbtkwIE4NsK6pSbqNQ7UTj6+y7oUO/WqkKRL4ciC1gtljcRn6xWXFmdaF+4Stba0c94qo=
+	t=1731071848; cv=none; b=Pr5JjouUmEBtEAuACT57/kgACnoeJajkaGBSTGPSWgZ3Tddqb9AIbwWp/D8u2wQo6fmyHzJCg/XuEhFf9qoFdBOWeaSnWzH26TrxVSd/MgGtdVNkweRDCiOxjtr5oYu1SKiezgd+2uP8UO+MNUeBQ46C8URLkpu579iatyxo0g4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731068477; c=relaxed/simple;
-	bh=u0iXnKguoLXCt/Mm6UWe8peTQ8LV485EgYB6XyhyzXQ=;
+	s=arc-20240116; t=1731071848; c=relaxed/simple;
+	bh=aTlcdGF4Imb5wPzEWaP+ifFhnpk6S1zRFb9Re4B9pNI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GSy2FpGYNw7o5DJcR0PIlR9NjeMXnkfV2ga3yr41CBc4Q81vTQBbobGD0Y+E9O+ks/NpN9b2NbCIzhWbtLR/yom7gvCiy15WQVRtbsAQxGR0f4PO9JOw7R0nactpNDLjnWmHcHy3gthuuK50Q95GMttBVrHfkcCwImO1w/wO6C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=EuCzlnJu; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731068476; x=1762604476;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=u0iXnKguoLXCt/Mm6UWe8peTQ8LV485EgYB6XyhyzXQ=;
-  b=EuCzlnJuhRbMmS4i0NZyO3URV7lQ8HRVoCFiOcaDwQTaRIq1TbbmeTtm
-   v6edNYwnjCosZuukTkStn3yLJt4Yz5uKL+pNj89kI/hsDqBeiEQmywrAU
-   jeET4F5vBwC5AO+DKsnVGwqt+6/WH7UfOcUAT9GKNHHkiBBZo/yXg4Ngk
-   +lUQEtLyvOeiPQKpiGS71trYH9N9ZXZat43VBeVenf2i1Q6FzYUlGD7EP
-   6kvIdM+6/Q4aKHlh5nydp97szRAiWjvwd1WiV6ycjfrYSOo2z0M3y12QE
-   C2qIXNS92w1v1NRtsgh/zO1Q0oJSe8HANODRccZmTDczhssSD4dbF3dPJ
-   A==;
-X-CSE-ConnectionGUID: +TUqelrQQKOENZVkupxOCg==
-X-CSE-MsgGUID: vSkkWlJ+R6+2EG+DGO5Iig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11249"; a="30347529"
-X-IronPort-AV: E=Sophos;i="6.12,137,1728975600"; 
-   d="scan'208";a="30347529"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Nov 2024 04:21:15 -0800
-X-CSE-ConnectionGUID: VwFY/ZnXSx+CRNEC01ZXOw==
-X-CSE-MsgGUID: B5nmX/3bQoGbpciJqcmtLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="90350922"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa003.jf.intel.com with SMTP; 08 Nov 2024 04:21:11 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 08 Nov 2024 14:21:10 +0200
-Date: Fri, 8 Nov 2024 14:21:10 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IYs441d0waMhdBXHjkgfFMk/YhwEhTNn2g5XHpVATrQae6invBBwRpHSG6fz8tv/o00JXEL3WfpLJBMkCuk0HyEG5cpkd9NJy10hfuqWoKN9xVxRnJBoyncK0FlSu41a10y/j3l8fNBmakyzl1GsAurRj4o+Kzc1yZTudCuYYtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WngEN8pA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11587C4CECE;
+	Fri,  8 Nov 2024 13:17:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1731071847;
+	bh=aTlcdGF4Imb5wPzEWaP+ifFhnpk6S1zRFb9Re4B9pNI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=WngEN8pAwo0ecvflBVtVunkuvB1FY+gEmc4QVjM0bRfzpbrCXVJ/veBtQmeOcsqT7
+	 SkiidZoWNjkoPUy+Zbcaba3HfK3W5q4W23OIfnvxFLPQ316BRKNQhaMr28gyD0dNSS
+	 l4nelqULMEbrPfIh8v0OEIdwP2FRscpbsba+3eN0=
+Date: Fri, 8 Nov 2024 14:17:23 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: tzungbi@kernel.org, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev, jthies@google.com,
-	akuchynski@google.com, pmalani@chromium.org,
-	dmitry.baryshkov@linaro.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org
+Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org,
+	linux-usb@vger.kernel.org, chrome-platform@lists.linux.dev,
+	jthies@google.com, akuchynski@google.com, pmalani@chromium.org,
+	dmitry.baryshkov@linaro.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3 3/7] usb: typec: Check port is active before enter
  mode on probe
-Message-ID: <Zy4CNtSDjbPTcCcI@kuha.fi.intel.com>
+Message-ID: <2024110849-bonded-flatten-5f5e@gregkh>
 References: <20241107193021.2690050-1-abhishekpandit@chromium.org>
  <20241107112955.v3.3.I439cffc7bf76d94f5850eb85980f1197c4f9154c@changeid>
 Precedence: bulk
@@ -90,9 +67,6 @@ On Thu, Nov 07, 2024 at 11:29:56AM -0800, Abhishek Pandit-Subedi wrote:
 > in struct typec_altmode_desc.
 > 
 > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-
 > ---
 > 
 > Changes in v3:
@@ -122,79 +96,18 @@ Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 > +		dp->state = plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTER;
 > +		schedule_work(&dp->work);
 > +	}
->  
->  	return 0;
->  }
-> diff --git a/drivers/usb/typec/altmodes/thunderbolt.c b/drivers/usb/typec/altmodes/thunderbolt.c
-> index a945b9d35a1d..45567abc3bb8 100644
-> --- a/drivers/usb/typec/altmodes/thunderbolt.c
-> +++ b/drivers/usb/typec/altmodes/thunderbolt.c
-> @@ -212,6 +212,7 @@ static const struct typec_altmode_ops tbt_altmode_ops = {
->  
->  static int tbt_altmode_probe(struct typec_altmode *alt)
->  {
-> +	const struct typec_altmode *port = typec_altmode_get_partner(alt);
->  	struct tbt_altmode *tbt;
->  
->  	tbt = devm_kzalloc(&alt->dev, sizeof(*tbt), GFP_KERNEL);
-> @@ -226,7 +227,10 @@ static int tbt_altmode_probe(struct typec_altmode *alt)
->  	typec_altmode_set_drvdata(alt, tbt);
->  	typec_altmode_set_ops(alt, &tbt_altmode_ops);
->  
-> -	if (tbt_ready(alt)) {
-> +	/* Only attempt to enter altmode if port is active and cable/plug
-> +	 * information is ready.
-> +	 */
-> +	if (port->active && tbt_ready(alt)) {
->  		if (tbt->plug[TYPEC_PLUG_SOP_PP])
->  			tbt->state = TBT_STATE_SOP_PP_ENTER;
->  		else if (tbt->plug[TYPEC_PLUG_SOP_P])
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index febe453b96be..b5e67a57762c 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -458,7 +458,8 @@ static umode_t typec_altmode_attr_is_visible(struct kobject *kobj,
->  	struct typec_altmode *adev = to_typec_altmode(kobj_to_dev(kobj));
->  
->  	if (attr == &dev_attr_active.attr)
-> -		if (!adev->ops || !adev->ops->activate)
-> +		if (!is_typec_port(adev->dev.parent) &&
-> +		    (!adev->ops || !adev->ops->activate))
->  			return 0444;
->  
->  	return attr->mode;
-> @@ -563,7 +564,7 @@ typec_register_altmode(struct device *parent,
->  
->  	if (is_port) {
->  		alt->attrs[3] = &dev_attr_supported_roles.attr;
-> -		alt->adev.active = true; /* Enabled by default */
-> +		alt->adev.active = !desc->inactive; /* Enabled by default */
->  	}
->  
->  	sprintf(alt->group_name, "mode%d", desc->mode);
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index d616b8807000..56c01771c190 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -140,6 +140,7 @@ int typec_cable_set_identity(struct typec_cable *cable);
->   * @mode: Index of the Mode
->   * @vdo: VDO returned by Discover Modes USB PD command
->   * @roles: Only for ports. DRP if the mode is available in both roles
-> + * @inactive: Only for ports. Make this port inactive (default is active).
->   *
->   * Description of an Alternate Mode which a connector, cable plug or partner
->   * supports.
+
+What prevents active from changing right after you checked it?
+
 > @@ -150,6 +151,7 @@ struct typec_altmode_desc {
 >  	u32			vdo;
 >  	/* Only used with ports */
 >  	enum typec_port_data	roles;
 > +	bool			inactive : 1;
->  };
->  
->  void typec_partner_set_pd_revision(struct typec_partner *partner, u16 pd_revision);
-> -- 
-> 2.47.0.277.g8800431eea-goog
 
--- 
-heikki
+A boolean bitfield?  That's not needed, please just do this properly.
+
+thanks,
+
+greg k-h
 
