@@ -1,165 +1,158 @@
-Return-Path: <linux-usb+bounces-17376-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17377-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9680F9C214B
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 16:58:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45D9E9C24E3
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 19:29:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25EA41F214B2
-	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 15:58:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 006E62847D1
+	for <lists+linux-usb@lfdr.de>; Fri,  8 Nov 2024 18:29:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EA3B21B453;
-	Fri,  8 Nov 2024 15:58:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93CA61A9B2A;
+	Fri,  8 Nov 2024 18:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eeKkpdqy"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="R96atp3O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECBFF45023;
-	Fri,  8 Nov 2024 15:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9625D193075
+	for <linux-usb@vger.kernel.org>; Fri,  8 Nov 2024 18:29:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731081495; cv=none; b=DblHOWFWQSbZTomwXWIV66vPGZubdNq5zri2B12Ykd34EpcSE7zpQ2FPFfcSbNqE/l0/kyaFLaIV9VmF02gbCJYlnKDeomrqOlVP9grF2utkC0fXntZSIJGD4GHFyflGWAPVVtxyYXSis2Xu4Yo+nyhcuyRRCnzThsfrj8e0hlg=
+	t=1731090546; cv=none; b=Q1hTOhEGz31SgILROtk3idILiWQS8QQEVkwO/IUTy2zuEhCqUcfYgdod0EgSsr+jqFPfQ9dhLJkv725ri54CT5EEOJQCFmFyzKDNfjwzyKhdnv93w1pYVwGk0+duk7RrvVV5glJ/t29B+D9B2Ilwbni4S6lHNWahAhMdW+DgErs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731081495; c=relaxed/simple;
-	bh=DnSthTbu7M7mwlarqGz7sH5e43UB54ZbBR8qTG1CjLA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=PsMIooivPsoJrloEm2I/2Kzns1PqAynWEyEAEDqfYIbRojoT/yBOOjmeG7mJZ50pBUCippQMTFh6lFsJLCmX4O+tCw/RF0N4CCrTN8O3bHJAmLJ/0dRfZEhO/ime3s4htI7cOwkUniRNsQEu6FWl+PoI/u2LJgCUHoVbDgEVJhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eeKkpdqy; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-53a007743e7so2857515e87.1;
-        Fri, 08 Nov 2024 07:58:13 -0800 (PST)
+	s=arc-20240116; t=1731090546; c=relaxed/simple;
+	bh=02QQS4FNdXeeDmAaZnAYT1g9MLTNG9MtUURxZt8MuQg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SDwKgPXBp3kj9GkdyGsRCmJc3pUCbGRuw5WUNC0SQs8+XqBq96l75sv0VT9Wf7UJAWHO+hF0ZMKZfX+sv2DYEn0S+HOTvoSL0wYXYa5ESOcbXAhwKIcUUZLK0nvVK5/Ka+GjKPt/cFG7a76mM/ibP1Pb7Vax3nDIUpCdJFIaACc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=R96atp3O; arc=none smtp.client-ip=209.85.128.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6e38ebcc0abso27035787b3.2
+        for <linux-usb@vger.kernel.org>; Fri, 08 Nov 2024 10:29:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731081492; x=1731686292; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=bMuVQ8Erg4hrrl+JVXSYoq6sab0sBpa1d8BTm5zUoVI=;
-        b=eeKkpdqyQ4/RUbB/DMXgNPAnT2qRENeKmNw/uOEFpXivKbf7a+exh7ZWJvxciF4t5R
-         un3Nkyx0wiXOYT7npEl3J1cm3ImY8PyM7gY60iD3heUBZhvLvEGKpPtZmHT3arT6/b0b
-         am5axUGVDuJ+FgVZzJAwdcS7ohnOsvzmmiR4Scb+bEJVJJ8SoNcUcc4oj9FBsCybef6V
-         Lt58HWqbruxIh6P+IO5ZnpsqPBMnyffk22QH1BUb2O7tsDF7aRPk/W9ypmnSfLuBw319
-         UIIaupYv+kN/i9mvULGHWrkd5SKWWAe914A/i8E5HmBtLAYG9p/BPbdGCDSajiQc26dP
-         AFMg==
+        d=chromium.org; s=google; t=1731090543; x=1731695343; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XXU0VBJGl3bTzKZlhr2VmDp9XP+CtZacH9WA2Oh4T1A=;
+        b=R96atp3O0cyEwiqYfBNrTrOiT+DkV9C8VdHeKZ3a49OA34ijunT0G4uIMJZV+C9a/g
+         FhhqDvNka9mpTYThzmt98daI3Ok7EOopBYOX+wRaOAFyD/vjEwSxRN+UlLl9327oqSn4
+         2C/av+q5xUzHSRm/yu5vpAXMBvE7egDcA6nrY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731081492; x=1731686292;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bMuVQ8Erg4hrrl+JVXSYoq6sab0sBpa1d8BTm5zUoVI=;
-        b=FgBICUrrh6BoZPkEPPyoXRxhUGtw0o67XUPrsHv1eyd/rJTm6VKv2ROs7ippxFTxQF
-         J4zS/cScH1OF0Uo81JZ/rtdfnT0dUmktyZK/T4Dn1CLHHWjUnc8xqSm45Lz+L0hP3oDy
-         +qJd6xHQSDpU1u2+k2FretHdTc0Ruv5AEsW1wOT5V5gJs3WAs4f31Aoa0dpVFiK11LKN
-         z82jhdw/NepwYIpPUWh8rgDLVRHBPmqi0wqM5uoxawmsQlnyFZHOYq00tTNZZ3RTsFl3
-         r3lLe+ZCU+Sj7JpmdXoFWsL/6Vxudq69vibrNuhBj3pOWnKIXR6ci8aGohdUGdbAj8bY
-         5fCg==
-X-Forwarded-Encrypted: i=1; AJvYcCVBGhYYVHJdeheN4vS0QxQOf5LabBZ0/jFS2PGkeIp/Busx+kqgMcolUj3KA/8adlOYHP0tfNq9rdtc@vger.kernel.org, AJvYcCVIOVplChgQVBPz4PnJ8KBaYdVbYDcEm6hzJKTo3ULTPNMKBDQzC79hPmKK58xDvELJMgulpdDaufhb@vger.kernel.org, AJvYcCWAalcxi60hHRC2gbTY4oZ4kah2MIxhPy2XLmp2yYTJdl8HpsMOSLYkY8ETUaIWnf6XlAA7VUA3K22MVGza@vger.kernel.org, AJvYcCXAJmiBvxeAmiffKl5JxKAbaUbg6b1no+ODwaRRmdRtQbR6UcmATErKqcAELnX/0xZme+wJs9y1y4yN@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZ3BZU6R0UUwJCCSAR5Gu2sMxdbvsfyv3hqaFOJqZ0fwsAHNg6
-	kmfch6FKxg74Su0PtrbWxUlvSh17khNcDgaVzMIp87TQw2zXrY1l
-X-Google-Smtp-Source: AGHT+IE+YJRPuE45zAJuly7sRzZ9edVWYuRFA055vs6Y4HK/g7Ba5F53rGd+uT+sYiCfKR7OvGEqog==
-X-Received: by 2002:a05:651c:b10:b0:2fb:6169:c42a with SMTP id 38308e7fff4ca-2ff20225b59mr18443731fa.30.1731081491747;
-        Fri, 08 Nov 2024 07:58:11 -0800 (PST)
-Received: from ?IPV6:2001:470:dcf4:ac:f506:8665:9278:2fb6? ([2001:470:dcf4:ac:f506:8665:9278:2fb6])
-        by smtp.googlemail.com with ESMTPSA id 38308e7fff4ca-2ff178df92asm6986411fa.9.2024.11.08.07.58.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 08 Nov 2024 07:58:10 -0800 (PST)
-Message-ID: <cf32d676-831c-4c3f-8965-c9be3abd5300@gmail.com>
-Date: Fri, 8 Nov 2024 18:58:07 +0300
+        d=1e100.net; s=20230601; t=1731090543; x=1731695343;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XXU0VBJGl3bTzKZlhr2VmDp9XP+CtZacH9WA2Oh4T1A=;
+        b=rxc8HsIjdRfMJKgZHpwuQKwRnrx00qzvhxW/s99ZNMLxlwjnau3DuDfR+iiCIzVqUY
+         JwC5gj64dBLXB0ZDDmZVHbILszH9f3qsh0E35be3bTmYg2GVmMKEojGvwgw46VBNxxMj
+         CVtucqbu9vLtRG2hc4VTGCIG4bHL0ObJlNh7F4UGew5O+byJEtfosdwftJ33qiBz2fmA
+         fhessDlir50sJ/g4EvPeN5YXnp+eOzdY+jjtf8E8SVqhLJA2HnEa3O/9QFMnyAtY4ecs
+         iunyJd9zQDLRa3ao6Uyc1Qq0/c3ziQGMIh+GkOBG8EcICbKe/a7H2lyaHpx6H1rEKqRp
+         VluA==
+X-Forwarded-Encrypted: i=1; AJvYcCWfdCQgG/1SsPnRGCfyunS03ONdej9mzeHKpowWG04zr/0mqH5/Dx7thQL6gn8doPM0CcEDAPftYrU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywh9HnWr2kCYbxNq2ugPTEc91hrNBJSNYmeCzfEtoEcEHe6evFy
+	Ou4XttwT+ypNRLf6zvjjIyKoc8VCCsDWC6G4PaeOdDqlZhhWO6r2cqZ/cS1gQKUW2EVPTKCDyme
+	Jiq64oo8lOi9uF0rAdm2Ld2Fcr/fbpC9tq34q
+X-Google-Smtp-Source: AGHT+IFVH2rH/3J3+EfLqdmi06+2WK6Q7MhT8hFjbr9Dp+zaWTVq58fsnki1FEj5p7N6Y4mQH7jaBBjr/gCjs3pLBvA=
+X-Received: by 2002:a05:690c:60c4:b0:6e7:e3a9:f30d with SMTP id
+ 00721157ae682-6eaddda335emr46720207b3.15.1731090543616; Fri, 08 Nov 2024
+ 10:29:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 0/4] add driver for the WCH CH341 in I2C/GPIO mode
-To: frank zago <frank@zago.net>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-kernel@vger.kernel.org, Bartosz Golaszewski
- <bgolaszewski@baylibre.com>, Wolfram Sang <wsa@kernel.org>,
- Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
- Lee Jones <lee.jones@linaro.org>, Linus Walleij <linus.walleij@linaro.org>,
- linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org
-References: <20220616013747.126051-1-frank@zago.net>
-Content-Language: en-US
-From: "Matwey V. Kornilov" <matwey.kornilov@gmail.com>
-In-Reply-To: <20220616013747.126051-1-frank@zago.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20241107193021.2690050-1-abhishekpandit@chromium.org>
+ <20241107112955.v3.3.I439cffc7bf76d94f5850eb85980f1197c4f9154c@changeid> <2024110849-bonded-flatten-5f5e@gregkh>
+In-Reply-To: <2024110849-bonded-flatten-5f5e@gregkh>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Fri, 8 Nov 2024 10:28:52 -0800
+Message-ID: <CANFp7mU0h0=UimV_tCDw=YuQcdPZsSZ0sJEMv1kNJKiDjs1KHg@mail.gmail.com>
+Subject: Re: [PATCH v3 3/7] usb: typec: Check port is active before enter mode
+ on probe
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org, 
+	linux-usb@vger.kernel.org, chrome-platform@lists.linux.dev, jthies@google.com, 
+	akuchynski@google.com, pmalani@chromium.org, dmitry.baryshkov@linaro.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Nov 8, 2024 at 5:17=E2=80=AFAM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Nov 07, 2024 at 11:29:56AM -0800, Abhishek Pandit-Subedi wrote:
+> > Enforce the same requirement as when we attempt to activate altmode via
+> > sysfs (do not enter partner mode if port mode is not active). In order
+> > to set a default value for this field, also introduce the inactive fiel=
+d
+> > in struct typec_altmode_desc.
+> >
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > ---
+> >
+> > Changes in v3:
+> > - Use port.active instead of introducing auto-enter field
+> > - Introduce inactive field to typec_altmode_desc to set default value
+> >   for active.
+> > - Always make port 'active' field writable
+> >
+> >  drivers/usb/typec/altmodes/displayport.c | 7 +++++--
+> >  drivers/usb/typec/altmodes/thunderbolt.c | 6 +++++-
+> >  drivers/usb/typec/class.c                | 5 +++--
+> >  include/linux/usb/typec.h                | 2 ++
+> >  4 files changed, 15 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typ=
+ec/altmodes/displayport.c
+> > index 3245e03d59e6..f4116e96f6a1 100644
+> > --- a/drivers/usb/typec/altmodes/displayport.c
+> > +++ b/drivers/usb/typec/altmodes/displayport.c
+> > @@ -767,8 +767,11 @@ int dp_altmode_probe(struct typec_altmode *alt)
+> >       if (plug)
+> >               typec_altmode_set_drvdata(plug, dp);
+> >
+> > -     dp->state =3D plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTER;
+> > -     schedule_work(&dp->work);
+> > +     /* Only attempt to enter altmode if port is active. */
+> > +     if (port->active) {
+> > +             dp->state =3D plug ? DP_STATE_ENTER_PRIME : DP_STATE_ENTE=
+R;
+> > +             schedule_work(&dp->work);
+> > +     }
+>
+> What prevents active from changing right after you checked it?
 
-Hi Frank,
+There's another check in `typec_altmode_enter` for the port itself:
+https://github.com/torvalds/linux/blob/master/drivers/usb/typec/bus.c#L138
 
+If I leave this out, it will just fail in `dp_altmode_work` when it
+calls `typec_altmode_enter` and will leave a dev_err("failed to enter
+mode"). This might be more user friendly since it's visible to the
+user that the partner supports the mode but the port blocked entry.
+I'll update the message on mode entry to also print the return value
+(-EPERM) in the next patch.
 
-Are you going to further proceed with this patch set? As far as I can 
-see, there were no updates since 2022.
+>
+> > @@ -150,6 +151,7 @@ struct typec_altmode_desc {
+> >       u32                     vdo;
+> >       /* Only used with ports */
+> >       enum typec_port_data    roles;
+> > +     bool                    inactive : 1;
+>
+> A boolean bitfield?  That's not needed, please just do this properly.
 
+Ack - will remove the bitfield. `struct typec_altmode` also does this
+-- I'll remove that in a cleanup patch too.
 
-16.06.2022 04:37, frank zago пишет:
-> The CH341 is a multifunction chip, presenting 3 different USB PID. One
-> of these functions is for I2C/SPI/GPIO. This new set of drivers will
-> manage I2C and GPIO.
-> 
-> Changes from v5:
-> Addressed reviewers' comments.
-> Better handling of 0-bytes i2c commands
-> Use of better USB API.
-> 
-> Changes from v4:
-> I should have addressed all the comments: rework of the GPIO interrupt
-> handling code to be more modern, changes in Kconfig wording, some code
-> cleanup.
-> Driver was tested again with up to 4 of these devices. No
-> error seen.
-> 
-> Changes from v3:
->    - really converted to an MFD driver. Driver is now split into 3
->      modules (MFD+I2C+GPIO).
->    - minor code cleanups
-> 
-> Changes from v2:
->    - bug fixes
->    - more robust USB enumeration
->    - Changed to an MFD driver as suggested
-> 
-> During testing I found that i2c handles hot removal, but not gpio. The
-> gpio subsystem will complain with 'REMOVING GPIOCHIP WITH GPIOS STILL
-> REQUESTED', but it's a gpiolib issue.
-> 
-> Changes from v1:
->    - Removed double Signed-off-by
->    - Move Kconfig into the same directory as the driver
-> 
-> frank zago (4):
->    mfd: ch341: add core driver for the WCH CH341 in I2C/SPI/GPIO mode
->    gpio: ch341: add GPIO MFD cell driver for the CH341
->    i2c: ch341: add I2C MFD cell driver for the CH341
->    docs: misc: add documentation for ch341 driver
-> 
->   Documentation/misc-devices/ch341.rst | 109 ++++++++
->   Documentation/misc-devices/index.rst |   1 +
->   MAINTAINERS                          |   9 +
->   drivers/gpio/Kconfig                 |  10 +
->   drivers/gpio/Makefile                |   1 +
->   drivers/gpio/gpio-ch341.c            | 385 +++++++++++++++++++++++++++
->   drivers/i2c/busses/Kconfig           |  10 +
->   drivers/i2c/busses/Makefile          |   1 +
->   drivers/i2c/busses/i2c-ch341.c       | 377 ++++++++++++++++++++++++++
->   drivers/mfd/Kconfig                  |  10 +
->   drivers/mfd/Makefile                 |   1 +
->   drivers/mfd/ch341-core.c             |  90 +++++++
->   include/linux/mfd/ch341.h            |  26 ++
->   13 files changed, 1030 insertions(+)
->   create mode 100644 Documentation/misc-devices/ch341.rst
->   create mode 100644 drivers/gpio/gpio-ch341.c
->   create mode 100644 drivers/i2c/busses/i2c-ch341.c
->   create mode 100644 drivers/mfd/ch341-core.c
->   create mode 100644 include/linux/mfd/ch341.h
-> ---
-> 2.32.0
-
+>
+> thanks,
+>
+> greg k-h
 
