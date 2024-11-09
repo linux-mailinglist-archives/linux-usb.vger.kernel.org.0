@@ -1,196 +1,169 @@
-Return-Path: <linux-usb+bounces-17400-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17401-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 690689C2E37
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Nov 2024 16:28:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D3129C2ED8
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Nov 2024 18:37:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8862F1C20A3C
-	for <lists+linux-usb@lfdr.de>; Sat,  9 Nov 2024 15:28:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B20151F21183
+	for <lists+linux-usb@lfdr.de>; Sat,  9 Nov 2024 17:37:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B550019ABD1;
-	Sat,  9 Nov 2024 15:28:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5515E19DF98;
+	Sat,  9 Nov 2024 17:37:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S3KAtICK"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="koVjcZPA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ED5A6E2BE;
-	Sat,  9 Nov 2024 15:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53A502556E;
+	Sat,  9 Nov 2024 17:37:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731166111; cv=none; b=Kj7E2AoDS4htqXjY0TzQdsTkOVOw5sfolkEvJ/zBNigmqD4Px9rljFzRhvHNZoc0e6NlIhhd6AxOUlaK5yFINV2r1bv1Mv60sqZySNYzudNvrTt6v3+3jRefIFs3mK1I3A6BstpDUdAW9fkCZln0JR3UTV1J7WVBAfMmrV6d3R8=
+	t=1731173854; cv=none; b=slrW481dqrRGtDMjgbCOf3I4FpHnT20OIq8VXZG0FYAx8P0lJOPrQn1BCXikteftMZoemo3MPypZHFLzbacNudLKugpODi5j+dly8fV2qcNfSGQBd3jqL+pT6wf5neP/spd43S7TI2fEgvc3GgOqsDkWTj3x6BUpZ2wQ9BR/dxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731166111; c=relaxed/simple;
-	bh=EtT54TlB+gLCXHSp2zfKxHrva+zFZOR2PVxU3xLmJJ8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=NhM3HJctHpXRPVm9DbyYLCfpSFGYbbvzGcI51Y5z04r04u72lvc912w422URfuXKLnwy3BVcKxRwvn1y4ZlH3O8oPR4cvqh06pdw3lMJM88NbSJiGPQ/xuFO0C2VF0j2ag+QMaXlrA/PPZI1L1NSHDyMiIpd1pYN4JHvrKU4idU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S3KAtICK; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-2fb443746b8so23051601fa.0;
-        Sat, 09 Nov 2024 07:28:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731166108; x=1731770908; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lb695U3thUMY4W2kjj7hhP/zWEckwDz7lUeMPY0oj5E=;
-        b=S3KAtICK2Y3WjmPfC1V2SxcpbSPApTUeYx2Eb/nzNGqj9+rjl2vW2CTtKdlj6RnTQH
-         Sk9oLrfJQAsFrqYsFvlnkj5EaQlAzINRsVNNurGhr9j0phE4HT98fSfdkf6ANiL5jADl
-         60Pl9C3zw0Y0B4AiGChtOGwlMvGtdYkY+YOsw560DVXriJeUTkWI8087aMnj307vrtA4
-         mr2u5LdBBx9DeyFB3NgvxptYPHx+y6jQisyRtAmwMJwEro0xTflbNazksirbguOKYjB8
-         bX2JiKYyZ3V8DxG/nZXeiXbIaBJ9UPojx0OaTQuL/+ODzys3sC8w5KkdsZk+fPi39ybu
-         Fe0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731166108; x=1731770908;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lb695U3thUMY4W2kjj7hhP/zWEckwDz7lUeMPY0oj5E=;
-        b=nphp/c0dhaQNU8QZyoWPo3XOYdz1kX4Z3bOq2zT3bm+SRiGt2haMq+Mov25GtkpPgd
-         09UooxyqZJ5M2uJ6OG1evZF6LPto6ze/BjkM8uLw3gD24v+9oCxxu2cbbTAoySBTIuBd
-         ZlNDwoUOJ24cmCLzcA+iyiFuFUIDuipJQkyA8VPsj/JQhHpdGPNKOJlndXhbDt1uryBU
-         b6tTGWqwmfnZ9ljwX5gGeDoCZdLQ4xSBfqM0dYqHv6LDbfQ2+djvW6ZuZu+sSY5G14is
-         Kghp5hpeqYk2sM8MxhFP9Fw/hWXvQlqXiwlQHVnr1Ou/NMpZ9/GPnlJLSTlzXApR60Zj
-         4AiA==
-X-Forwarded-Encrypted: i=1; AJvYcCW+g+rLOuDeDnmBy2f46o2UsIA6GOTtReMd7L//px04E+DAKAKcx+bHWc+ofy8zc+T3f6tQsTKNBtGJ@vger.kernel.org, AJvYcCXtuF/Y3I0+3Q+vPli4m0emH1dek93BAucb75KmX7oHYqMNiduKsmzjNvVS4kjOsf489jLXdjNHGrkI/vk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGbCAFihkBIb8JFC0Hofipr8EjYmHOAaBLbUterLXe8lLO39TM
-	xpTNeYp3G6AivnUs7qYKeETM7l0m48/cfgU2AGtlH1lOcxe1P1ii
-X-Google-Smtp-Source: AGHT+IFImos+2zQyFmc63rS1xoaJ1GwHlcj2WH2pkBNAwCNpA0TIfsl4PujRx+pmCjIAyK+Eycd/Fw==
-X-Received: by 2002:a05:651c:b06:b0:2fa:cc86:f217 with SMTP id 38308e7fff4ca-2ff20307f42mr35527711fa.35.1731166107231;
-        Sat, 09 Nov 2024 07:28:27 -0800 (PST)
-Received: from work.. (2.133.25.254.dynamic.telecom.kz. [2.133.25.254])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ff178dfb4bsm10636991fa.15.2024.11.09.07.28.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Nov 2024 07:28:26 -0800 (PST)
-From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-To: syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com
-Cc: gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	oneukum@suse.com,
-	snovitoll@gmail.com
-Subject: [PATCH] usb/cdc-wdm: fix memory leak of wdm_device
-Date: Sat,  9 Nov 2024 20:28:21 +0500
-Message-Id: <20241109152821.3476218-1-snovitoll@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <000000000000e875fa0620253803@google.com>
-References: <000000000000e875fa0620253803@google.com>
+	s=arc-20240116; t=1731173854; c=relaxed/simple;
+	bh=i6yvpd4PiYqHCrO03Ai94gLpVeDRtmo8KRvnB3M/Fpc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AP3UL6OGCYBeLH0nX5N45PZxryKcvZnAJmTY2J2MkbFCHJJg86597//ln59fNfzwevYs6M+9DohE564X7NzlpOlkceGLMJVUPbY9bFHWoR7eN4BKl89dFhrSvOl8HKApBcm9/UsddoF4X4Dv+Vcts6gwRZzzK0iQLHwyAv3mhaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=koVjcZPA; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1731173829; x=1731778629; i=wahrenst@gmx.net;
+	bh=ID0U4v8IJwDheWM1GMjMt6YDBO95xzj8yHE+CefJD7M=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=koVjcZPAN3TgN0vh/aNhAnQeeko+NkgKFJ4h1F4VtB8yBykyhdHKYHV+tU/tMiZ9
+	 tlB9xVpOcO1GutBKUxVA1sY96xww15lbA18nMLnD5QUYIzSUJ9CNd+xnaz3SMXTg7
+	 z5DAAWZhHlt4fh+L/OjI98iWmSSOD/cCesYnRhJOwHsA5KdAsMbQ4DKsQ4PBn+oZx
+	 Hzfxfwrvve8xeDUAhY4MzVNml7KLvDmkrnnHDuD8kMmGmHiapmWdkLoXD8SrtydZC
+	 J4ZktRIFIgZhaWTGsGc754NV+yv+yxHXDY+2KcHYK2a2yptXaXi2agTTJLHfGFuzM
+	 JOTecv9qMEEvoqwcbQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.1.105] ([37.4.248.43]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MAfUe-1syr2z1s5Y-0097Bl; Sat, 09
+ Nov 2024 18:37:09 +0100
+Message-ID: <83a0282c-0263-46ba-8eba-78f6a81e7c98@gmx.net>
+Date: Sat, 9 Nov 2024 18:37:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V5 2/9] dmaengine: bcm2835-dma: add suspend/resume pm
+ support
+To: Russell King <linux@armlinux.org.uk>, Lukas Wunner <lukas@wunner.de>,
+ Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
+ <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Vinod Koul <vkoul@kernel.org>
+Cc: Peter Robinson <pbrobinson@gmail.com>, "Ivan T . Ivanov"
+ <iivanov@suse.de>, linux-arm-kernel@lists.infradead.org,
+ Ulf Hansson <ulf.hansson@linaro.org>, kernel-list@raspberrypi.com,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Minas Harutyunyan <hminas@synopsys.com>,
+ bcm-kernel-feedback-list@broadcom.com, dmaengine@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20241025103621.4780-1-wahrenst@gmx.net>
+ <20241025103621.4780-3-wahrenst@gmx.net>
+Content-Language: en-US
+From: Stefan Wahren <wahrenst@gmx.net>
+In-Reply-To: <20241025103621.4780-3-wahrenst@gmx.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:hN71PDERMZiyLGnEBo4kzNeGRlc5kNE3RE8MVnKiOzxG8c1bGzU
+ +go8AsrMPQugllh1JPxfyvkavCbZpNtALQi2JaZW1jrV1lYo03gLh0t/tS2SoAI/bDQKmW3
+ DdKWANT5sJm8Gyt2TuMUt0QEHrnmeqU1KGb145iQVlIVG9pddn+PPicibpIXDhYA/O8yDiK
+ cBnHsrnKR37Xz1+5GPWRg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:LUbR2To7WhQ=;ZEsSZRvxT7/lz0VEiqxCjoC1+0h
+ 4KFN2gZhUGHQpVKGN1Ks1Xos/+D2k6uhiF9v01JDs3Ov9unVOR632WPrldf3A9pauhU+nr9eh
+ t1OexOzAH+JCIotdNQMlIgiV+FDmuX0e/9yfkUDfGdgIRnuy8WPZoz8bzKdNn6y802PS54gTt
+ zcBmmTAmQq9OlkUe9TvwaNNeMighOIhiyHLy8SjkHopw9Vf8r1Hof1kLQDhiwMmqs7MLlpswa
+ h1YrV1nSPYepF3MGZ15disZWtKE8PGqN5CyMDBdqJ2yQArP7LzmGRAnGt0Xl3r8mwA2gtlxLl
+ E32MnPLxNhkz9tcJJ1lQx07TvdKdDj79ynm6i3UTT0S3xq0bMIlttlaeTupwFSCeeLLr45QcZ
+ /LBriAnID8R3VJAQT8Ht7AUvVRpregZLNbsEm548eoYsFdU3x+U9gU/WTduEc1/lH8fU9yTBe
+ r+qd1sXRlSfyv7Z4WDeQU/stPDdrb3aP3vJGZQhBvyP/9kaxbhMerh7+IuyeeymwzlyvXQL/A
+ fesWLW4tVgsQPRT1/hmUWKKQ37BJUxuQEUGK/RjHMLTRKNpZlj7/3pHYtvU4fNQ+DnvJbhilT
+ X8C8HxTA8k4ycQ7Mjfr2luOKquBPkSb51qOMSPjsSV0qMylqklOuV1EELzklXBmvvv084jMG9
+ AyBk8NFSm21Ufuf8Tpo6UnkXPGn1Z7blB0/7NlCKUtoODr0QSGQVbejSyCYHtZWO0SyzutvS+
+ KEyMeLACCXnnjZi0bbEcD1jiY0EzuDwkjchooLE2Pf9FkRKb4EpHKNN2u2u5ZpTQiyp9lia/1
+ TpE8gtz3MKLj90BbMY8wUeX88aFWG1/c3XndRfKf5MtTCB70gQgpcZzolQXygHmDOQNRI4YSN
+ KwmuxcrdGUltKdMouqKebAH44mwJsXnokO/1BB2xkJYgre0YAPudawPQl
 
-syzbot reported "KMSAN: kernel-infoleak in wdm_read", though there is no
-reproducer and the only report for this issue. This might be
-a false-positive, but while the reading the code, it seems,
-there is the way to leak kernel memory.
+Am 25.10.24 um 12:36 schrieb Stefan Wahren:
+> bcm2835-dma provides the service to others, so it should
+> suspend late and resume early.
+>
+> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
 
-Here what I understand so far from the report happening
-with ubuf in drivers/usb/class/cdc-wdm.c:
+Since there wasn't any feedback for this patch, i want to send a gentle
+ping ...
 
-1. kernel buffer "ubuf" is allocated during cdc-wdm device creation in
-   the "struct wdm_device":
+Regards
 
-	static int wdm_create()
-	{
-	   ...
-	   desc->ubuf = kmalloc(desc->wMaxCommand, GFP_KERNEL);
-	   ...
-	   usb_fill_control_urb(
-	      ...
-	      wdm_in_callback,
-	      ...
-	   );
-	
-	}
-
-2. during wdm_create() it calls wdm_in_callback() which MAY fill "ubuf"
-   for the first time via memmove if conditions are met.
-
-	static void wdm_in_callback()
-	{
-	   ...
-	   if (length + desc->length > desc->wMaxCommand) {
-	     ...
-	} else {
-	   /* we may already be in overflow */
-	   if (!test_bit(WDM_OVERFLOW, &desc->flags)) {
-	      memmove(desc->ubuf + desc->length, desc->inbuf, length);
-	      desc->length += length;
-	      desc->reslength = length;
-	   }
-	}
-	   ...
-	}
-
-3. if conditions are not fulfilled in step 2., then calling read() syscall
-   which calls wdm_read(), should leak the random kernel memory via
-   copy_to_user() from "ubuf" buffer which is allocated in kmalloc-256.
-
-	static ssize_t wdm_read()
-	{
-	    ...
-	    struct wdm_device *desc = file->private_data;
-	    cntr = READ_ONCE(desc->length);
-	    ...
-	    if (cntr > count)
-	        cntr = count;
-	    rv = copy_to_user(buffer, desc->ubuf, cntr);
-	   ...
-	}
-	
-	, where wMaxCommand is 256, AFAIU.
-
-syzbot report
-=============
-BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
-BUG: KMSAN: kernel-infoleak in _inline_copy_to_user include/linux/uaccess.h:180 [inline]
-BUG: KMSAN: kernel-infoleak in _copy_to_user+0xbc/0x110 lib/usercopy.c:26
- instrument_copy_to_user include/linux/instrumented.h:114 [inline]
- _inline_copy_to_user include/linux/uaccess.h:180 [inline]
- _copy_to_user+0xbc/0x110 lib/usercopy.c:26
- copy_to_user include/linux/uaccess.h:209 [inline]
- wdm_read+0x227/0x1270 drivers/usb/class/cdc-wdm.c:603
- vfs_read+0x2a1/0xf60 fs/read_write.c:474
- ksys_read+0x20f/0x4c0 fs/read_write.c:619
- __do_sys_read fs/read_write.c:629 [inline]
- __se_sys_read fs/read_write.c:627 [inline]
- __x64_sys_read+0x93/0xe0 fs/read_write.c:627
- x64_sys_call+0x3055/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:1
- do_syscall_x64 arch/x86/entry/common.c:52 [inline]
- do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Reported-by: syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=9760fbbd535cee131f81
-Signed-off-by: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
----
- drivers/usb/class/cdc-wdm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-index 86ee39db013f..8801e03196de 100644
---- a/drivers/usb/class/cdc-wdm.c
-+++ b/drivers/usb/class/cdc-wdm.c
-@@ -1063,7 +1063,7 @@ static int wdm_create(struct usb_interface *intf, struct usb_endpoint_descriptor
- 	if (!desc->command)
- 		goto err;
- 
--	desc->ubuf = kmalloc(desc->wMaxCommand, GFP_KERNEL);
-+	desc->ubuf = kzalloc(desc->wMaxCommand, GFP_KERNEL);
- 	if (!desc->ubuf)
- 		goto err;
- 
--- 
-2.34.1
-
+> ---
+>   drivers/dma/bcm2835-dma.c | 30 ++++++++++++++++++++++++++++++
+>   1 file changed, 30 insertions(+)
+>
+> diff --git a/drivers/dma/bcm2835-dma.c b/drivers/dma/bcm2835-dma.c
+> index e1b92b4d7b05..647dda9f3376 100644
+> --- a/drivers/dma/bcm2835-dma.c
+> +++ b/drivers/dma/bcm2835-dma.c
+> @@ -875,6 +875,35 @@ static struct dma_chan *bcm2835_dma_xlate(struct of=
+_phandle_args *spec,
+>   	return chan;
+>   }
+>
+> +static int bcm2835_dma_suspend_late(struct device *dev)
+> +{
+> +	struct bcm2835_dmadev *od =3D dev_get_drvdata(dev);
+> +	struct bcm2835_chan *c, *next;
+> +
+> +	list_for_each_entry_safe(c, next, &od->ddev.channels,
+> +				 vc.chan.device_node) {
+> +		void __iomem *chan_base =3D c->chan_base;
+> +
+> +		if (readl(chan_base + BCM2835_DMA_ADDR)) {
+> +			dev_warn(dev, "Suspend is prevented by chan %d\n",
+> +				 c->ch);
+> +			return -EBUSY;
+> +		}
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int bcm2835_dma_resume_early(struct device *dev)
+> +{
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops bcm2835_dma_pm_ops =3D {
+> +	SET_LATE_SYSTEM_SLEEP_PM_OPS(bcm2835_dma_suspend_late,
+> +				     bcm2835_dma_resume_early)
+> +};
+> +
+>   static int bcm2835_dma_probe(struct platform_device *pdev)
+>   {
+>   	struct bcm2835_dmadev *od;
+> @@ -1033,6 +1062,7 @@ static struct platform_driver bcm2835_dma_driver =
+=3D {
+>   	.driver =3D {
+>   		.name =3D "bcm2835-dma",
+>   		.of_match_table =3D of_match_ptr(bcm2835_dma_of_match),
+> +		.pm =3D pm_ptr(&bcm2835_dma_pm_ops),
+>   	},
+>   };
+>
+> --
+> 2.34.1
+>
 
