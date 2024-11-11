@@ -1,185 +1,243 @@
-Return-Path: <linux-usb+bounces-17434-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17435-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C19A89C40ED
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 15:29:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97B6B9C4120
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 15:40:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81ADC28204E
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 14:29:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 51A0928182D
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 14:40:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B41D11A070D;
-	Mon, 11 Nov 2024 14:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A98A1A08C1;
+	Mon, 11 Nov 2024 14:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="J2WhhjJG"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="rAZMpoVv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7254A15A85A
-	for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 14:29:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A4F019F104
+	for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 14:40:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731335388; cv=none; b=J+D3yb2UhK3fPDOs4a5IfVyxnUOwfI/JXm9gYT5DYD/hM5mqkvDBqPEj7B2E+dvk+iabrtNCcu8/8HwvqdJoVxHSxlnuk9i2RiYggSqea2K+/3avfsgonrRPbRomLAYP4HfiEQFfmWdjHRTaUgtZldjSTEfN/NBx6w8tzDBIibo=
+	t=1731336023; cv=none; b=ry82RlZpB6Ny1cjqTuZw7+4EIsikDZSpBYrvBaIRRlpNu4VnOxGVALyuJ2UpofFLu4gtlWBsI7+9CeibjSLxZjgMsi7w7tFcAN3+5c224dJ6ijvW5/ViMj2nKM2AKKSJPU0NKaAn25zBAk7MnrpuSDHYR/6Fy02eZZ7dWuGjrbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731335388; c=relaxed/simple;
-	bh=YxiyaRh+dLuumDJ5Q6z6ZrAiO9XXZPih+vaeLaU2iBA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Laf7PtBEsUd1h6yl4UfHwEHKgl5FlTuGE+YO1/Kx+Ay2++yULD+xDcYZoEyLVPUAI60+10qAAJDyHhr+S2DJ3sbD6jVbsgRQHMD9jNqH4Y2nYTGWrN0r6iutjXmIyU8/ETA2aZe9UyNrlKNjRyn8xTnl9d9jR/+XQeXsWJB7FG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=J2WhhjJG; arc=none smtp.client-ip=209.85.161.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5ebc349204cso1988754eaf.3
-        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 06:29:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1731335385; x=1731940185; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=v0qgwq9cSLKXP1AbvdyN/yc07GmYiB7Sf3eWHN2dzII=;
-        b=J2WhhjJGZaT2nCcFKLbZsFLiKLyv2ypcFKxBhUyRdJ9i2M+drl+Ho63G44GqEHMxD+
-         3k26ccujf4tE+I/D7OF6GH02sGIUzM6VT8A20FwHISETcG6rmBGDPmEEeZhUeIZW738j
-         VnXzNgJJHh14YWdF8I5yyK51AKJQCwAzUqBOqiygcyXp3yWl6NB3RUIGQzz0kyvZ+Eqx
-         Ohc7BH9Yj8XeB3+M7+x0q3YVR7JspW6o7ge7z7TXr4k+91A6Oejhj5W70XL3386VrO4N
-         uRJIBeVP/MWbHycHX+r5ZaxSbTpAEzQYEM+cZtTYps2ApuI+5u739wteP4OWbSB+QQFt
-         HKhg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731335385; x=1731940185;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v0qgwq9cSLKXP1AbvdyN/yc07GmYiB7Sf3eWHN2dzII=;
-        b=dC2tFYfN14U7La3G3rlWo8tsYtQq6nzIHDccLfIFYzzOHR9ArnSj9iWZ2pFOYwfOuf
-         KvBgTAHvdVhwLKYRJrtQTDxQlRGhFE8T5stkWODyPr2SurmU9qf/w8sDQXoQgjxmzhu3
-         u0aaJ8caIjyAnKI3XQD5Tv7Iei1ROwaprToSZSQh81tnRYnKTUzVM9s0SsCM3iJo9h89
-         ML05Blm26rzi3APAhiZhxVOqpPnIJ6xXBUCFaDneSziwX2qVhuX5ijfPGwqa6FZlj3Xy
-         P/37TrudeEcecVDoT59Iae7qEIuPLjsjR735UkmR18jDuzjcsVli9b6yWWBbL/YT2qQJ
-         s8YA==
-X-Forwarded-Encrypted: i=1; AJvYcCVYwkwVsETSxJPBrjmvO/vK6NnMFECysfazj/vi9XpEe3w8jCyYPMR+1k/3xVJl7yG6qxaTzQKsuxE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFyiPoR41djxO3dsim7eJ/UPwkIdpnvWHKRM3XhIYRO8ieC+S8
-	3f5lAVVz+KSaw3+euzTs6PAxK/HjiGve8iiSAlQ2f1ltVcN5Xx1dLderI4FOuA==
-X-Google-Smtp-Source: AGHT+IHu5vCBmqhTx33Qo98dUbjiKMG4HQP7r84CBNa0nhpxvoLg4YDsIMNnwb+sAPFPLWENHb2DMQ==
-X-Received: by 2002:a05:6359:2101:b0:1c3:9d1e:842 with SMTP id e5c5f4694b2df-1c641f5f4d9mr458084155d.20.1731335385482;
-        Mon, 11 Nov 2024 06:29:45 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::9dc2])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-462ff5d66d8sm63243721cf.79.2024.11.11.06.29.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 06:29:44 -0800 (PST)
-Date: Mon, 11 Nov 2024 09:29:42 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
-	syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com,
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] usb/cdc-wdm: fix memory leak of wdm_device
-Message-ID: <9447f943-5172-4386-b159-f6b37735fe13@rowland.harvard.edu>
-References: <000000000000e875fa0620253803@google.com>
- <20241109152821.3476218-1-snovitoll@gmail.com>
- <825be5e2-31b2-4cd6-a283-05935ea6161f@suse.com>
+	s=arc-20240116; t=1731336023; c=relaxed/simple;
+	bh=fq9gJQClxxuEn+YB4Igeb6OnqsFtKp4jQ2QPEItAL9Q=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:In-Reply-To:
+	 Content-Type:References; b=WxxlneaDZkC9FenzaQM4/WvYfOgI7rCQ7Ca/aeLXXwQP3HOSZRDUayFTberniPHTrizEavvS+zrI14JiF01LNpQbjvCagiJ9mgGKpcgT5qgGE3GsLCdUQXEDP4JHvNm8ub4kK/46MXnq/XtpRuvxoz3MHYL9IFvR5CPR9X5icto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=rAZMpoVv; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20241111144018epoutp019a27b9c8bc935a167d1f5e84e7edfa8d~G8O97i5l32848828488epoutp01Y
+	for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 14:40:18 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20241111144018epoutp019a27b9c8bc935a167d1f5e84e7edfa8d~G8O97i5l32848828488epoutp01Y
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1731336018;
+	bh=Ad3FP+ExoHUF9icH51NuRcqmBB1Fehm957KfuyYr74k=;
+	h=Date:From:Subject:To:Cc:In-Reply-To:References:From;
+	b=rAZMpoVv940X94tyt/pe+nJLPp3JdoY1JkY8oCw803Dl8VshtPN+OHQZoF7guIypc
+	 6Bvfvdc6SvOXSe+oDElnJ7ifGVSvV3CK0P2vNEP0+GUZuVwK5n+A+quAzg8o5Sxa2K
+	 Ob82aVvGUv8tfmAxOUG2teZuXnqIlNNjaJGvt3Iw=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20241111144017epcas5p201e45c7deb51b8a77353b590eb74beca~G8O9OHgbd1338413384epcas5p20;
+	Mon, 11 Nov 2024 14:40:17 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.182]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4XnBzN0b7yz4x9Pp; Mon, 11 Nov
+	2024 14:40:16 +0000 (GMT)
+Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	9C.4D.08574.F4712376; Mon, 11 Nov 2024 23:40:15 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20241111144015epcas5p4c8dfeacbef382017023b9f01a92b18b9~G8O7bQzbp3079230792epcas5p4r;
+	Mon, 11 Nov 2024 14:40:15 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20241111144015epsmtrp289b348945f3904561b7af618e7a7c607~G8O7aZrEO2928229282epsmtrp29;
+	Mon, 11 Nov 2024 14:40:15 +0000 (GMT)
+X-AuditID: b6c32a44-93ffa7000000217e-2b-6732174f9337
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	F0.DB.35203.F4712376; Mon, 11 Nov 2024 23:40:15 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20241111144012epsmtip12099e76e51040682300cfdc7fe414ce6~G8O4_8Oj_1138211382epsmtip1_;
+	Mon, 11 Nov 2024 14:40:12 +0000 (GMT)
+Message-ID: <7a79d1fb-60fb-4809-9542-02dfdf1156cd@samsung.com>
+Date: Mon, 11 Nov 2024 20:09:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <825be5e2-31b2-4cd6-a283-05935ea6161f@suse.com>
+User-Agent: Mozilla Thunderbird
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Subject: Re: [PATCH] usb: dwc3: gadget: Add TxFIFO resizing supports for
+ single port RAM
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Alan Stern
+	<stern@rowland.harvard.edu>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"quic_akakum@quicinc.com" <quic_akakum@quicinc.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"jh0801.jung@samsung.com" <jh0801.jung@samsung.com>, "dh10.jung@samsung.com"
+	<dh10.jung@samsung.com>, "naushad@samsung.com" <naushad@samsung.com>,
+	"akash.m5@samsung.com" <akash.m5@samsung.com>, "rc93.raju@samsung.com"
+	<rc93.raju@samsung.com>, "taehyun.cho@samsung.com"
+	<taehyun.cho@samsung.com>, "hongpooh.kim@samsung.com"
+	<hongpooh.kim@samsung.com>, "eomji.oh@samsung.com" <eomji.oh@samsung.com>,
+	"shijie.cai@samsung.com" <shijie.cai@samsung.com>, "stable@vger.kernel.org"
+	<stable@vger.kernel.org>, "alim.akhtar@samsung.com"
+	<alim.akhtar@samsung.com>
+Content-Language: en-US
+In-Reply-To: <20241109010542.q5walgpxwht6ghbx@synopsys.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrAJsWRmVeSWpSXmKPExsWy7bCmuq6/uFG6wZe3VhZvrq5itXgwbxub
+	xZ0F05gsTi1fyGTRvHg9m8WkPVtZLO4+/MFicXnXHDaLRctamS0+Hf3PanH7z15Wi1Wdc4AS
+	33cyWyzY+IjRYsLvC0AdB0UtVi04wO4g6LF/7hp2j4l76jxm3/3B6NG3ZRWjx5b9nxk9Pm+S
+	C2CLyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvMAbpd
+	SaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgUqBXnJhbXJqXrpeXWmJlaGBgZApU
+	mJCd8XLWC6aCe3IVv3e8Z2xgfC/RxcjBISFgIvF7UVQXIxeHkMBuRomnd9tYIZxPjBLfZ89h
+	g3C+MUrM3faMuYuRE6zj8rGrUFV7GSVuHNnMAuG8ZZRYeLuJDaSKV8BO4uCl9+wgNouAqsS1
+	q5cYIeKCEidnPmEBsUUF5CXu35rBDnIHm4ChxLMTNiBhYYEoiT0bD4AtExEIk1h2cTcTyHxm
+	gdVsEhPuTgbrZRYQl7j1ZD4TiM0pYC2x89xeRoi4vETz1tnMIA0SAlc4JNae+8EIcbaLxMdd
+	C1khbGGJV8e3sEPYUhKf3+1lg7CTJfZM+gIVz5A4tOoQ1Mv2EqsXnGEFOZRZQFNi/S59iF18
+	Er2/nzBBwpFXoqNNCKJaVeJU42WoidIS95Zcg9rqIXFk7yl2SFgtZZJYfWEb6wRGhVlIwTIL
+	yWuzkLwzC2HzAkaWVYySqQXFuempyaYFhnmp5fAIT87P3cQITtpaLjsYb8z/p3eIkYmD8RCj
+	BAezkgivhr9+uhBvSmJlVWpRfnxRaU5q8SFGU2D8TGSWEk3OB+aNvJJ4QxNLAxMzMzMTS2Mz
+	QyVx3tetc1OEBNITS1KzU1MLUotg+pg4OKUamDYHG2+4JBi57thyhSv/yrv3HEuRec22on1N
+	D4eu9cryWWtufo4+UPZ/k/ua17EHdVstC5ZGO/WsjrKofvVONSvT1U0l+H3ztli9mkP99oUH
+	M0W7eMruWU5p1VVkOF953LbqTlzf38Y/jsaK63dxa6veNZwSZtFz4um873W9U7cte8aa7CqY
+	/KlZN0Ra8rVkoGnXxYdffMvkY9gSp2k98pN988ZTIFNNU6/CkS0++U+6Zqro9s86JjMX/tM4
+	kffJav35BZnb7f9wCyxTVv7LOz0jUryva3MBV8Vb+dPmD91WPZvVrvr891Kx1lVBaTVbt9oU
+	OP0urrdr6XO+uv6zTt2iKv2dn8yLGN0Mt8kqsRRnJBpqMRcVJwIALKMG2WMEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrDIsWRmVeSWpSXmKPExsWy7bCSnK6/uFG6wbT1QhZvrq5itXgwbxub
+	xZ0F05gsTi1fyGTRvHg9m8WkPVtZLO4+/MFicXnXHDaLRctamS0+Hf3PanH7z15Wi1Wdc4AS
+	33cyWyzY+IjRYsLvC0AdB0UtVi04wO4g6LF/7hp2j4l76jxm3/3B6NG3ZRWjx5b9nxk9Pm+S
+	C2CL4rJJSc3JLEst0rdL4Mp4OesFU8E9uYrfO94zNjC+l+hi5OSQEDCRuHzsKmsXIxeHkMBu
+	RolnR28zQySkJV7P6mKEsIUlVv57zg5R9JpRomHnJCaQBK+AncTBS+/ZQWwWAVWJa1cvMULE
+	BSVOznzCAmKLCshL3L81A6iGg4NNwFDi2QkbkLCwQJTEno0HwHaJCIRJnDh1GWwMs8B6Nonu
+	HxUQu5YySRxcf4ARIiEucevJfLC9nALWEjvP7YWKm0l0be2CsuUlmrfOZp7AKDQLyRmzkLTP
+	QtIyC0nLAkaWVYySqQXFuem5xYYFhnmp5XrFibnFpXnpesn5uZsYwRGqpbmDcfuqD3qHGJk4
+	GA8xSnAwK4nwavjrpwvxpiRWVqUW5ccXleakFh9ilOZgURLnFX/RmyIkkJ5YkpqdmlqQWgST
+	ZeLglGpgkpjGLfOdV+W8rI7gcp8lTn4vnGdpGn0UYhf5L3L347LUOXaeny+a7Fa4e6i9YN/F
+	U3O8nLIuJHv6tiZ9M+ur/LgkKLvuRh7/tp/HGGdklB6LWeSw2zVvVRxX/vFog3MnGe/xKP6e
+	7fHg09XjU5RkGGsz3HnYVrGuMJ6dE+fAJlZyWHONkJjQwaLvW02/layRVJloMbkg+Bt/ygIb
+	O5ePb9NLb/0VXvxFu+Tkrd3XU2dJ25+8dExROOYAV9HVeNPdFz46L2OefzLqmchxpQSe6W/L
+	D3guX5RiYZvQYLtlWubfjJPP27XuNbAavExvLNHtm75B8d/U5OvHBM6mH/GV1JN0mbIk92jf
+	sfeTV5RcU2Ipzkg01GIuKk4EAH7h/uk/AwAA
+X-CMS-MailID: 20241111144015epcas5p4c8dfeacbef382017023b9f01a92b18b9
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241107104306epcas5p136bea5d14a1bb3fe9ba1a7830bf366c6
+References: <CGME20241107104306epcas5p136bea5d14a1bb3fe9ba1a7830bf366c6@epcas5p1.samsung.com>
+	<20241107104040.502-1-selvarasu.g@samsung.com>
+	<20241107233403.6li5oawn6d23e6gf@synopsys.com>
+	<0c8b4491-605f-466c-86cd-1f17c70d6b7b@samsung.com>
+	<20241109010542.q5walgpxwht6ghbx@synopsys.com>
 
-On Mon, Nov 11, 2024 at 10:44:43AM +0100, Oliver Neukum wrote:
-> On 09.11.24 16:28, Sabyrzhan Tasbolatov wrote:
-> 
-> Hi,
-> 
-> > syzbot reported "KMSAN: kernel-infoleak in wdm_read", though there is no
-> > reproducer and the only report for this issue. This might be
-> > a false-positive, but while the reading the code, it seems,
-> > there is the way to leak kernel memory.
-> 
-> As far as I can tell, the leak is real.
-> 
-> > Here what I understand so far from the report happening
-> > with ubuf in drivers/usb/class/cdc-wdm.c:
-> > 
-> > 1. kernel buffer "ubuf" is allocated during cdc-wdm device creation in
-> >     the "struct wdm_device":
-> 
-> Yes
-> [..]
-> 
-> > 2. during wdm_create() it calls wdm_in_callback() which MAY fill "ubuf"
-> >     for the first time via memmove if conditions are met.
-> 
-> Yes.
-> [..]
-> 
-> > 3. if conditions are not fulfilled in step 2., then calling read() syscall
-> >     which calls wdm_read(), should leak the random kernel memory via
-> >     copy_to_user() from "ubuf" buffer which is allocated in kmalloc-256.
-> 
-> Yes, sort of.
-> 
-> > -	desc->ubuf = kmalloc(desc->wMaxCommand, GFP_KERNEL);
-> > +	desc->ubuf = kzalloc(desc->wMaxCommand, GFP_KERNEL);
-> >   	if (!desc->ubuf)
-> >   		goto err;
-> 
-> No. I am sorry, but the fix is wrong. Absolutely wrong.
-> 
-> Let's look at the code of wdm_read():
-> 
->                 cntr = desc->length;
-> Here the method determines how much data is in the buffer.
-> "length" initially is zero, because the descriptor itself
-> is allocated with kzalloc. It is increased in the callback.
-> 
->                 spin_unlock_irq(&desc->iuspin);
->         }
-> 
->         if (cntr > count)
->                 cntr = count;
-> 
-> This is _supposed_ to make sure that user space does not get more
-> than we have in the buffer.
-> 
->         rv = copy_to_user(buffer, desc->ubuf, cntr);
->         if (rv > 0) {
->                 rv = -EFAULT;
->                 goto err;
->         }
-> 
->         spin_lock_irq(&desc->iuspin);
-> 
->         for (i = 0; i < desc->length - cntr; i++)
->                 desc->ubuf[i] = desc->ubuf[i + cntr];
-> 
->         desc->length -= cntr;
-> 
-> Here we decrease the count of what we have in the buffer.
-> 
-> Now please look at the check again
-> 
-> "cntr" is what we have in the buffer.
-> "count" is how much user space wants.
-> 
-> We should limit what we copy to the amount we have in the buffer.
-> But that is not what the check does. Instead it makes sure we never
-> copy more than user space requested. But we do not check whether
-> the buffer has enough data to satisfy the read.
 
-I don't understand your analysis.  As you said, cntr is initially set to 
-the amount in the buffer:
+On 11/9/2024 6:35 AM, Thinh Nguyen wrote:
+> ++ Alan Stern
+>
+> On Fri, Nov 08, 2024, Selvarasu Ganesan wrote:
+>
+>>>> +	ram_depth = spram_type ? DWC3_RAM0_DEPTH(dwc->hwparams.hwparams6) :
+>>>> +			DWC3_RAM1_DEPTH(dwc->hwparams.hwparams7);
+>>> Don't use spram_type as a boolean. Perhaps define a macro for type value
+>>> 1 and 0 (for single vs 2-port)
+>> Are you expecting something like below?
+>>
+>> #define DWC3_SINGLE_PORT_RAM     1
+>> #define DWC3_TW0_PORT_RAM        0
+> Yes. I think it's more readable if we name the variable to "ram_type"
+> and use the macros above as I suggested.
+>
+> If you still plan to use it as boolean, please rename the variable
+> spram_type to is_single_port_ram (no one knows what "spram_type" mean
+> without the programming guide or some documention).
 
-	If cntr <= count then cntr isn't changed, so the amount of data 
-	copied to the user is the same as what is in the buffer.
+We are fine to use variable name as a is_single_port_ram with boolean.
+Please find the below updated new patch for your review.
 
-	Otherwise, if cntr > count, then cntr is decreased so that the 
-	amount copied to the user is no larger than what the user asked 
-	for -- but then it's obviously smaller than what's in the buffer.
+https://lore.kernel.org/linux-usb/20241111142049.604-1-selvarasu.g@samsung.com/.
 
-In neither case does the code copy more data than the buffer contains.
 
-Alan Stern
+> < snip >
+>
+>>> We may need to think a little more on how to budgeting the resource
+>>> properly to accomodate for different requirements. If there's no single
+>>> formula to satisfy for all platform, perhaps we may need to introduce
+>>> parameters that users can set base on the needs of their application.
+>> Agree. Need to introduce some parameters to control the required fifos
+>> by user that based their usecase.
+>> Here's a rephrased version of your proposal:
+>>
+>> To address the issue of determining the required number of FIFOs for
+>> different types of transfers, we propose introducing dynamic FIFO
+>> calculation for all type of EP transfers based on the maximum packet
+>> size, and remove hard code value for required fifos in driver,
+> The current fifo calculation already takes on the max packet size into
+> account.
+>
+> For SuperSpeed and above, we can guess how much fifo is needed base on
+> the maxburst and mult settings. However, for bulk endpoint in highspeed,
+> it needs a bit more checking.
+Agree.
+>
+>> Additionally, we suggest introducing DT properties(tx-fifo-max-num-iso,
+>> tx-fifo-max-bulk and tx-fifo-max-intr) for all types of transfers
+> This constraint should be decided from the function driver. We should
+> try to keep this more generic since your gadget may be used as mass
+> storage device instead of UVC where bulk performance is needed more.
+Agree.
+>
+>> (except control EP) to allow users to control the required FIFOs instead
+>> of relying solely on the tx-fifo-max-num. This approach will provide
+>> more flexibility and customization options for users based on their
+>> specific use cases.
+>>
+>> Please let me know if you have any comments on the above approach.
+>>
+> How about this: Implement gadget->ops->match_ep() for dwc3 and update
+> the note in usb_ep_autoconfig() API.
+>
+> If the function driver looks for an endpoint by passing in the
+> descriptor with wMaxPacketSize set to 0, mark the endpoint to used for
+> performance. This is closely related to the usb_ep_autoconfig() behavior
+> where it returns the endpoint's maxpacket_limit if wMaxPacketSize is not
+> provided. We just need to expand this behavior to look for performance
+> endpoint.
+>
+> If the function driver provides the wMaxPacketSize during
+> usb_ep_autoconfig(), then use the minimum required fifo.
+>
+> What do you think? Will this work for you?
+
+
+Hi  Thinh,
+
+Thank you for the suggestions. This method makes more sense to us, and 
+we are fine proceeding with it. As we previously discussed, we plan to 
+create a separate patch for allocating resources for bulk EP.
+However, it may take some time on our end as we need to perform 
+additional testing with all possible scenarios. In the meantime, please 
+review and help to merge the patch for the single port RAM FIFO resizing 
+logic.
+
+Thanks,
+Selva
+
+>
+> BR,
+> Thinh
 
