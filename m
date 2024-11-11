@@ -1,198 +1,210 @@
-Return-Path: <linux-usb+bounces-17436-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17437-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7A259C418A
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 16:08:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 179849C41EA
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 16:34:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47DEC1F22239
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 15:08:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC09B286CB9
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 15:34:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8CBC1A2557;
-	Mon, 11 Nov 2024 15:08:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33E521A0B15;
+	Mon, 11 Nov 2024 15:32:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dq4ZRtgX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91A21A0BC5
-	for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 15:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B3EF1A0B13;
+	Mon, 11 Nov 2024 15:32:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731337712; cv=none; b=DW2MZabKC5DwA4vGh/tqQbmGPcvV7t92msb1i6htT0tjKvwmToEc0aHbVcsALOThmFq/CHllPE5kbZ98xuRs1TZacHZvfLDvg3AVt4Fo+TOrM7xN0TtmRHI8fplz3UKzVw0V+j2nIkASmYlh8Rz+GHtUw7ZzIgp63+rRv5hv6NY=
+	t=1731339175; cv=none; b=EuuXSisuUuF4ajV5EGRBRDepiqi7K9IfZ9e3IHgjyn7D25dEf/KyUHdNzx1Fz5XRr+VKnJufw65OYoch9TOwNlue2wkNVfWcXOsXFEgmYiFJtx+vWf7X+EWRO+QY7w4s2voWXfyRT4kcblao0HZjmzA3A9Btv39/MP1gaBSodcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731337712; c=relaxed/simple;
-	bh=FDCLdt6jTXusBq+H45UNYrhQXqtWmVoWcVPMg+KNF/c=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=AJN78+hX7pY0ORRfKh/PShnZTITShkA2W7W23WlBMxwwH0gJEosFrb/l98OUgFyhHKG4+9RIPesbaOGb486gPqZ6jlNbMtOzkNOlITedZjmpL5BzlG62fIy4cBnX3OBn2X6lcVar3+ymuViPFPk+N4N2J36KepRPtxHHL75rlVk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a3da2d46b9so51754125ab.0
-        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 07:08:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731337710; x=1731942510;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zZABHj6qRef2ZQjH9g/cV4sIBVHktb/q6XswMeQxqNg=;
-        b=H7J4g93K4LLBFNiiKmKKIhgsTeWgv01HhU4nZOffEi9ZjN9k8kRIoSyQiWuYoPKKHP
-         FwTgLpgmbT4FEoMCUuc7sqTQw9FQCGH7+kIz5HqOpxgVxYPLtgbslWEeN716y/NWem+z
-         ubY9sLN8yWMXa7OGx0grixxII7YEw6zLD59o160dUOHo7SJwQ2ccOs3MGOBHFNLObcRj
-         PqLSnuSdPDC3GYlWgRTLdFd+JI9VRHBSouyp+6OugwhdoMeY+/Gev9MtX4qMhVs0IggG
-         ZFYcrSzOM7enlEck/hZdLEvVkH4nvA9aJ4eRCPOgJZnQY5hmcCQgZq2G6r9Ir4JQTIOQ
-         ExCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVamXFHqD/RBL8T1vlhhHPeo5MwQjfvCEsFpUDj5e5uhB9yQnKcO/P4+0bGj/WFSfQMCE3T+M9n8/s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzS4AkmRYUtmJHKEs0v8wyiZs6hkOqKBOc0f9GTbw7JBV00qu4v
-	Mp84sAhJGZUl2fx13WkOjOX8WZ8UOvTwYIoTqMU0DKj1nABktwfGJHJtT3jIuLvwpLsGP0PoMeV
-	HXnvswDdH30Ah0YilsOdFBUE/8b32VGr/f2VbhUu4ohEHbIxArWy74x4=
-X-Google-Smtp-Source: AGHT+IHNFa+TL3YwCbai22qPDbdHnv9vPxDALx9Tn4KEQIkwvaOL/l5nc2QICiQt4GF6u5UQcHGIux9+0uHaFkflJzwGBiWkfr2p
+	s=arc-20240116; t=1731339175; c=relaxed/simple;
+	bh=r8avJOgeVnHmCQ1tIPDEAoD6KMM+18rldtBBgroTd4s=;
+	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
+	 Message-Id:Subject; b=qnVehbc6vwfMX40AdhRCVYYYxP36M0eTqS1lU/rE+Fah1zikVZRnKEukhWjxAXlrCIR/z9wotjC2x2SZs2U7GIrSUkwsvkrE91QjJKmhZj9reISthXat/4uyyCxytAUyEhOdzSsnD0A0aL7nPFFfQJLsTc9qT4smd8C0eRJxiXY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dq4ZRtgX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B86B5C4CED6;
+	Mon, 11 Nov 2024 15:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731339175;
+	bh=r8avJOgeVnHmCQ1tIPDEAoD6KMM+18rldtBBgroTd4s=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=Dq4ZRtgXjHZZ63uC5JzTAgqwfrl+cT85RYM80IhD1SuvaTaZaAeWymI4w9P6DAtyb
+	 TK1RZx6nYV1FxYpZ2aCtjgxxUCP/FbEZXXYrDW+kY48Ze7jqHHx9MnFr6+Vo9D/DYT
+	 xC8VqlmWRzcf330Zg8HtIFjZHdSJEa8lDToAg/uItkY36sJhJmX+HMKE8twd/OQCpP
+	 HqFCFnUYebC4+kGGiTc6mdU0mSguLM5NBK1yRokiZLRHEDxX+g4zLO+PUnJnObDVND
+	 1XeHxRM2JIENzbyjH6qgry5qx3hmAOZntzliUZw957ALIbxfB776IHt7LZEiIiSJps
+	 yk14S8C0s4gCw==
+Date: Mon, 11 Nov 2024 09:32:53 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:180e:b0:3a0:9829:100b with SMTP id
- e9e14a558f8ab-3a6f1a44d6fmr138535375ab.21.1731337709857; Mon, 11 Nov 2024
- 07:08:29 -0800 (PST)
-Date: Mon, 11 Nov 2024 07:08:29 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67321ded.050a0220.a83d0.0016.GAE@google.com>
-Subject: [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in s32ton
-From: syzbot <syzbot+3fa2af55f15bd21cada9@syzkaller.appspotmail.com>
-To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    226ff2e681d0 usb: typec: ucsi: Convert connector specific ..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=169619f7980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=358c1689354aeef3
-dashboard link: https://syzkaller.appspot.com/bug?extid=3fa2af55f15bd21cada9
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e48f2af8afd7/disk-226ff2e6.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/76328e28b54c/vmlinux-226ff2e6.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ab9f75a466a2/bzImage-226ff2e6.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+3fa2af55f15bd21cada9@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-UBSAN: shift-out-of-bounds in drivers/hid/hid-core.c:1352:16
-shift exponent 4294967295 is too large for 32-bit type 'int'
-CPU: 1 UID: 0 PID: 31701 Comm: kworker/1:9 Not tainted 6.12.0-rc6-syzkaller-00103-g226ff2e681d0 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- ubsan_epilogue lib/ubsan.c:231 [inline]
- __ubsan_handle_shift_out_of_bounds+0x2a5/0x480 lib/ubsan.c:468
- s32ton.cold+0x37/0x9c drivers/hid/hid-core.c:1352
- hid_set_field+0x1e0/0x370 drivers/hid/hid-core.c:1905
- hidinput_input_event+0x290/0x430 drivers/hid/hid-input.c:1865
- input_event_dispose drivers/input/input.c:321 [inline]
- input_handle_event+0x14e/0x14d0 drivers/input/input.c:369
- input_inject_event+0x1bb/0x370 drivers/input/input.c:428
- __led_set_brightness drivers/leds/led-core.c:52 [inline]
- led_set_brightness_nopm drivers/leds/led-core.c:323 [inline]
- led_set_brightness_nosleep drivers/leds/led-core.c:354 [inline]
- led_set_brightness+0x211/0x290 drivers/leds/led-core.c:316
- kbd_led_trigger_activate+0xcb/0x110 drivers/tty/vt/keyboard.c:1036
- led_trigger_set+0x59a/0xc60 drivers/leds/led-triggers.c:212
- led_match_default_trigger drivers/leds/led-triggers.c:269 [inline]
- led_match_default_trigger drivers/leds/led-triggers.c:263 [inline]
- led_trigger_set_default drivers/leds/led-triggers.c:287 [inline]
- led_trigger_set_default+0x1bd/0x2a0 drivers/leds/led-triggers.c:276
- led_classdev_register_ext+0x78c/0x9e0 drivers/leds/led-class.c:555
- led_classdev_register include/linux/leds.h:273 [inline]
- input_leds_connect+0x552/0x8e0 drivers/input/input-leds.c:145
- input_attach_handler.isra.0+0x181/0x260 drivers/input/input.c:1027
- input_register_device+0xa84/0x1110 drivers/input/input.c:2470
- hidinput_connect+0x1d9c/0x2ba0 drivers/hid/hid-input.c:2343
- hid_connect+0x13a8/0x18a0 drivers/hid/hid-core.c:2234
- hid_hw_start drivers/hid/hid-core.c:2349 [inline]
- hid_hw_start+0xaa/0x140 drivers/hid/hid-core.c:2340
- ms_probe+0x195/0x500 drivers/hid/hid-microsoft.c:391
- __hid_device_probe drivers/hid/hid-core.c:2699 [inline]
- hid_device_probe+0x2eb/0x490 drivers/hid/hid-core.c:2736
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:459
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:534
- device_add+0x114b/0x1a70 drivers/base/core.c:3672
- hid_add_device+0x37f/0xa70 drivers/hid/hid-core.c:2882
- usbhid_probe+0xd3b/0x1410 drivers/hid/usbhid/hid-core.c:1431
- usb_probe_interface+0x309/0x9d0 drivers/usb/core/driver.c:399
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:459
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:534
- device_add+0x114b/0x1a70 drivers/base/core.c:3672
- usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:254
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:294
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:459
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:534
- device_add+0x114b/0x1a70 drivers/base/core.c:3672
- usb_new_device+0xd90/0x1a10 drivers/usb/core/hub.c:2651
- hub_port_connect drivers/usb/core/hub.c:5521 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x2e58/0x4f40 drivers/usb/core/hub.c:5903
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3229
- process_scheduled_works kernel/workqueue.c:3310 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3391
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
----[ end trace ]---
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Andre Przywara <andre.przywara@arm.com>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-phy@lists.infradead.org, 
+ linux-mmc@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, devicetree@vger.kernel.org, 
+ linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-sunxi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+ linux-i2c@vger.kernel.org, Andi Shyti <andi.shyti@kernel.org>, 
+ Vinod Koul <vkoul@kernel.org>, linux-watchdog@vger.kernel.org, 
+ Thomas Gleixner <tglx@linutronix.de>, Chen-Yu Tsai <wens@csie.org>, 
+ Samuel Holland <samuel@sholland.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+ linux-usb@vger.kernel.org, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Guenter Roeck <linux@roeck-us.net>, Conor Dooley <conor+dt@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>
+In-Reply-To: <20241111013033.22793-1-andre.przywara@arm.com>
+References: <20241111013033.22793-1-andre.przywara@arm.com>
+Message-Id: <173133346581.1281779.16221268010355943435.robh@kernel.org>
+Subject: Re: [PATCH 00/14] arm64: dts: allwinner: Add basic Allwinner A523
+ support
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+On Mon, 11 Nov 2024 01:30:19 +0000, Andre Przywara wrote:
+> Hi,
+> 
+> this series adds basic DT support for the Allwinner A523 SoC, plus the
+> Avaota-A1 router board using the T527 package variant of that SoC.[1]
+> Functionality-wise it relies on the pinctrl[2] and clock[3] support
+> series, though there is no direct code dependency series to this series
+> (apart from the respective binding patches in the two series').
+> 
+> Most of the patches add DT binding documentation for the most basic
+> peripherals, the vast majority of them actually being already supported,
+> courtesy of identical IP being used. This includes MMC and USB 2.0, so
+> with the above mentioned clock and pinctrl support this gives an already
+> somewhat usable mainline support for this new SoC family.
+> The watchdog is not completely compatible, but is an easy addition, so
+> this bit is included in here as well.
+> 
+> The A523 features 8 Arm Cortex-A55 cores, organised in two clusters,
+> clocked separately, with different OPP limits, in some kind of
+> little/LITTLE configuration. The GPU is a Arm Mali G57 MC01, and the chip
+> also features a single PCIe 2.1 lane, sharing a PHY with some USB 3.1
+> controller - which means only one of the two can be used.
+> The rest of the SoC is the usual soup of multimedia SoC IP, with eDP
+> support and two Gigabit Ethernet MACs among the highlights.
+> 
+> The main feature is patch 11/14, which adds the SoC .dtsi. This for now
+> is limited to the parts that are supported and could be tested. At the
+> moment there is no PSCI firmware, even the TF-A port from the BSP does
+> not seem to work for me. That's why the secondary cores have been omitted
+> for now, among other instances of some IP that I couldn't test yet.
+> I plan to add them in one of the next revisions.
+> 
+> The last patch adds basic support for the Avaota-A1 router board,
+> designed by YuzukiHD, with some boards now built by Pine64.
+> 
+> The mainline firmware side in general is somewhat lacking still: I have
+> basic U-Boot support working (including MMC and USB), although still
+> without DRAM support. This is for now covered by some binary blob found
+> in the (otherwise Open Source) Syterkit firmware, which also provides
+> the BSP versions of TF-A and the required (RISC-V) management core
+> firmware. Fortunately we have indications that DRAM support is not that
+> tricky, as the IP blocks are very similar to already supported, and dev
+> boards are on their way to the right people.
+> 
+> Meanwhile I would like people to have a look at those DT bits here. Please
+> compare them to the available user manual, and test them if you have access
+> to hardware.
+> 
+> Based on v6.12-rc1.
+> I pushed a branch with all the three series combined here:
+> https://github.com/apritzel/linux/commits/a523-v1/
+> 
+> Cheers,
+> Andre
+> 
+> [1] https://linux-sunxi.org/A523#Family_of_sun55iw3
+> [2] https://lore.kernel.org/linux-sunxi/20241111005750.13071-1-andre.przywara@arm.com/T/#t
+> [3] https://lore.kernel.org/linux-sunxi/20241111004722.10130-1-andre.przywara@arm.com/T/#t
+> 
+> Andre Przywara (14):
+>   dt-bindings: mmc: sunxi: Simplify compatible string listing
+>   dt-bindings: mmc: sunxi: add compatible strings for Allwinner A523
+>   dt-bindings: watchdog: sunxi: add Allwinner A523 compatible string
+>   watchdog: sunxi_wdt: Add support for Allwinner A523
+>   dt-bindings: i2c: mv64xxx: Add Allwinner A523 compatible string
+>   dt-bindings: irq: sun7i-nmi: document the Allwinner A523 NMI
+>     controller
+>   dt-bindings: phy: document Allwinner A523 USB-2.0 PHY
+>   dt-bindings: usb: sunxi-musb: add Allwinner A523 compatible string
+>   dt-bindings: usb: add A523 compatible string for EHCI and OCHI
+>   dt-bindings: rtc: sun6i: Add Allwinner A523 support
+>   arm64: dts: allwinner: Add Allwinner A523 .dtsi file
+>   dt-bindings: vendor-prefixes: Add YuzukiHD name
+>   dt-bindings: arm: sunxi: Add Avaota A1 board
+>   arm64: dts: allwinner: a523: add Avaota-A1 router support
+> 
+>  .../devicetree/bindings/arm/sunxi.yaml        |   5 +
+>  .../bindings/i2c/marvell,mv64xxx-i2c.yaml     |   1 +
+>  .../allwinner,sun7i-a20-sc-nmi.yaml           |   1 +
+>  .../bindings/mmc/allwinner,sun4i-a10-mmc.yaml |  40 +-
+>  .../phy/allwinner,sun50i-a64-usb-phy.yaml     |  10 +-
+>  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |   4 +-
+>  .../usb/allwinner,sun4i-a10-musb.yaml         |   1 +
+>  .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
+>  .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
+>  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+>  .../watchdog/allwinner,sun4i-a10-wdt.yaml     |   2 +
+>  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
+>  .../arm64/boot/dts/allwinner/sun55i-a523.dtsi | 386 ++++++++++++++++++
+>  .../dts/allwinner/sun55i-t527-avaota-a1.dts   | 311 ++++++++++++++
+>  drivers/watchdog/sunxi_wdt.c                  |  11 +
+>  15 files changed, 751 insertions(+), 26 deletions(-)
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
+>  create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dts
+> 
+> --
+> 2.46.2
+> 
+> 
+> 
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
-If you want to undo deduplication, reply with:
-#syz undup
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y allwinner/sun55i-t527-avaota-a1.dtb' for 20241111013033.22793-1-andre.przywara@arm.com:
+
+In file included from arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dts:6:
+arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi:6:10: fatal error: dt-bindings/clock/sun55i-a523-ccu.h: No such file or directory
+    6 | #include <dt-bindings/clock/sun55i-a523-ccu.h>
+      |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+make[3]: *** [scripts/Makefile.dtbs:129: arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dtb] Error 1
+make[2]: *** [scripts/Makefile.build:478: arch/arm64/boot/dts/allwinner] Error 2
+make[2]: Target 'arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dtb' not remade because of errors.
+make[1]: *** [/home/rob/proj/linux-dt-testing/Makefile:1399: allwinner/sun55i-t527-avaota-a1.dtb] Error 2
+make: *** [Makefile:224: __sub-make] Error 2
+make: Target 'allwinner/sun55i-t527-avaota-a1.dtb' not remade because of errors.
+
+
+
+
+
 
