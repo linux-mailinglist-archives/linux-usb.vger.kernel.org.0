@@ -1,222 +1,199 @@
-Return-Path: <linux-usb+bounces-17439-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17440-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F15A29C43F1
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 18:44:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FA3D9C4624
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 20:47:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3585C1F214BF
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 17:43:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D40F4284E29
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 19:47:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7D5B1AAE13;
-	Mon, 11 Nov 2024 17:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D4B1ABEB5;
+	Mon, 11 Nov 2024 19:47:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IL/vZUxi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7F0114D283;
-	Mon, 11 Nov 2024 17:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E3F2AEE0;
+	Mon, 11 Nov 2024 19:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731346957; cv=none; b=e5djbGSQIuM9CKU37D7Gfmo2fk8TPWqBvht6XnwL0eqHAl3F67LVeQePfaaM7DqjN5dMHHZ2vMkOofW175Fj+N2BXfFn9ABqSjk8E931j98xTJHBzudsVBuySxdUFCT+Xk7C/JoSeg7W4MLp28SmKKYtV5MQEyMVndDCKCC5klI=
+	t=1731354426; cv=none; b=QLokDvPnuTKBdY/4YSOSbvL64eCAM4AMYVAcfMXIBtocevmDM20uZkpT/yfqvcvqFvLdKNrGbJzBLFuRhPNp5+YlD5W0E2UkZFPs14KGGoNAh8z1+gWifpkvZ8L+B9Qlbr03huKOmolGs3FwX0bBM9V84b9TeLwcxwpEV+w3ycI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731346957; c=relaxed/simple;
-	bh=cmj7w/AC35+7igYwRW+VE0YRdC0RtuUs2QaBfiFGsz0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Qq2ZqUo8q55LBJleSh/lh9kZU5hTGeyMAitpLv63YuKnV8iXPVFHP42GwScuYeMEtH1/RiqIDJWv6tYKJWPRw3QVggHPTJASaNH8S0InHlVq7HCgTO5zUNdfOm0YUJWTub4Wizo3KPFQxfT9GJ/QSSR1+tW8oOySgOv2roHNOls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 22A6B1480;
-	Mon, 11 Nov 2024 09:43:03 -0800 (PST)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EC2493F59E;
-	Mon, 11 Nov 2024 09:42:28 -0800 (PST)
-Date: Mon, 11 Nov 2024 17:42:25 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-phy@lists.infradead.org,
- linux-mmc@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>, Wim Van Sebroeck
- <wim@linux-watchdog.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-sunxi@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-i2c@vger.kernel.org, Andi Shyti
- <andi.shyti@kernel.org>, Vinod Koul <vkoul@kernel.org>,
- linux-watchdog@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
- Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>, Ulf
- Hansson <ulf.hansson@linaro.org>, linux-usb@vger.kernel.org, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Guenter Roeck <linux@roeck-us.net>, Conor
- Dooley <conor+dt@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>
-Subject: Re: [PATCH 00/14] arm64: dts: allwinner: Add basic Allwinner A523
- support
-Message-ID: <20241111174225.7360c6e4@donnerap.manchester.arm.com>
-In-Reply-To: <173133346581.1281779.16221268010355943435.robh@kernel.org>
-References: <20241111013033.22793-1-andre.przywara@arm.com>
-	<173133346581.1281779.16221268010355943435.robh@kernel.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1731354426; c=relaxed/simple;
+	bh=waIrtis7FuR7Y1TSuVP41KBpxAm+KAfN9/b1pnq4nsI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pMW8QcLkOkWwh+pmYpW6ES4F7A/viHriUCrKG08kHbH5OUfLcO5c/eUoAIajn4ajqTsiQSEGqwTfVEeFVsudTtTS+8k/+coRHK2jO7UqN5PPhIdTvvI+tFXgATOBVcXhwCCUY6tYox+TIAVSSMDQDjl4RgMeJt3G7gWvvChx5oQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IL/vZUxi; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B446240003;
+	Mon, 11 Nov 2024 19:46:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1731354420;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=g6LitTWAgz24VNApIoun+JJSEVyh1XHLlrSrHK1MMSQ=;
+	b=IL/vZUxi6rK1Dv1dIs5JYGW4WrA/+dbJ3FQVaSV4YJqsLfSaTj+YXSaX8JvX+3tjU5rL60
+	/JoCG5XACc5Xrv1qyECGgsQNVC5FoYeBGqYjCLD2l3VJefUbeLUUc1AUyHMLdsdHTZKlu3
+	88e7m0P+Jtj6gLDq6Hc78XqewP4yzCff9A4yn1pSPHUi1AaSVxJ3kMPgclBUlEzgaP8kIq
+	UqMODls0FJtTPkkvQN+fuX5mbIKLWRJfljM3KVUq36RS35hs/zHJ3YkCfjLs7bdd2YjQdt
+	P8u3aE+C2sRiZkNq1HjHeEo2klTaEgZNmJ4O9wGoQWfR0HDL7yZ5dy3uXgU8aw==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Lizhi Xu <lizhi.xu@windriver.com>
+Cc: <syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com>,
+  <alex.aring@gmail.com>,  <davem@davemloft.net>,  <edumazet@google.com>,
+  <horms@kernel.org>,  <kuba@kernel.org>,  <linux-kernel@vger.kernel.org>,
+  <linux-usb@vger.kernel.org>,  <linux-wpan@vger.kernel.org>,
+  <netdev@vger.kernel.org>,  <pabeni@redhat.com>,
+  <stefan@datenfreihafen.org>,  <syzkaller-bugs@googlegroups.com>, Dmitry
+ Antipov <dmantipov@yandex.ru>
+Subject: Re: [PATCH] mac802154: add a check for slave data list before delete
+In-Reply-To: <20241108145420.2445641-1-lizhi.xu@windriver.com> (Lizhi Xu's
+	message of "Fri, 8 Nov 2024 22:54:20 +0800")
+References: <672b9f03.050a0220.350062.0276.GAE@google.com>
+	<20241108145420.2445641-1-lizhi.xu@windriver.com>
+User-Agent: mu4e 1.12.1; emacs 29.4
+Date: Mon, 11 Nov 2024 20:46:57 +0100
+Message-ID: <87msi5pn7y.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Mon, 11 Nov 2024 09:32:53 -0600
-"Rob Herring (Arm)" <robh@kernel.org> wrote:
+Hello,
 
-Hi Rob,
+On 08/11/2024 at 22:54:20 +08, Lizhi Xu <lizhi.xu@windriver.com> wrote:
 
-> On Mon, 11 Nov 2024 01:30:19 +0000, Andre Przywara wrote:
-> > Hi,
-> > 
-> > this series adds basic DT support for the Allwinner A523 SoC, plus the
-> > Avaota-A1 router board using the T527 package variant of that SoC.[1]
-> > Functionality-wise it relies on the pinctrl[2] and clock[3] support
-> > series, though there is no direct code dependency series to this series
-> > (apart from the respective binding patches in the two series').
-> > 
-> > Most of the patches add DT binding documentation for the most basic
-> > peripherals, the vast majority of them actually being already supported,
-> > courtesy of identical IP being used. This includes MMC and USB 2.0, so
-> > with the above mentioned clock and pinctrl support this gives an already
-> > somewhat usable mainline support for this new SoC family.
-> > The watchdog is not completely compatible, but is an easy addition, so
-> > this bit is included in here as well.
-> > 
-> > The A523 features 8 Arm Cortex-A55 cores, organised in two clusters,
-> > clocked separately, with different OPP limits, in some kind of
-> > little/LITTLE configuration. The GPU is a Arm Mali G57 MC01, and the chip
-> > also features a single PCIe 2.1 lane, sharing a PHY with some USB 3.1
-> > controller - which means only one of the two can be used.
-> > The rest of the SoC is the usual soup of multimedia SoC IP, with eDP
-> > support and two Gigabit Ethernet MACs among the highlights.
-> > 
-> > The main feature is patch 11/14, which adds the SoC .dtsi. This for now
-> > is limited to the parts that are supported and could be tested. At the
-> > moment there is no PSCI firmware, even the TF-A port from the BSP does
-> > not seem to work for me. That's why the secondary cores have been omitted
-> > for now, among other instances of some IP that I couldn't test yet.
-> > I plan to add them in one of the next revisions.
-> > 
-> > The last patch adds basic support for the Avaota-A1 router board,
-> > designed by YuzukiHD, with some boards now built by Pine64.
-> > 
-> > The mainline firmware side in general is somewhat lacking still: I have
-> > basic U-Boot support working (including MMC and USB), although still
-> > without DRAM support. This is for now covered by some binary blob found
-> > in the (otherwise Open Source) Syterkit firmware, which also provides
-> > the BSP versions of TF-A and the required (RISC-V) management core
-> > firmware. Fortunately we have indications that DRAM support is not that
-> > tricky, as the IP blocks are very similar to already supported, and dev
-> > boards are on their way to the right people.
-> > 
-> > Meanwhile I would like people to have a look at those DT bits here. Please
-> > compare them to the available user manual, and test them if you have access
-> > to hardware.
-> > 
-> > Based on v6.12-rc1.
-> > I pushed a branch with all the three series combined here:
-> > https://github.com/apritzel/linux/commits/a523-v1/
-> > 
-> > Cheers,
-> > Andre
-> > 
-> > [1] https://linux-sunxi.org/A523#Family_of_sun55iw3
-> > [2] https://lore.kernel.org/linux-sunxi/20241111005750.13071-1-andre.przywara@arm.com/T/#t
-> > [3] https://lore.kernel.org/linux-sunxi/20241111004722.10130-1-andre.przywara@arm.com/T/#t
-> > 
-> > Andre Przywara (14):
-> >   dt-bindings: mmc: sunxi: Simplify compatible string listing
-> >   dt-bindings: mmc: sunxi: add compatible strings for Allwinner A523
-> >   dt-bindings: watchdog: sunxi: add Allwinner A523 compatible string
-> >   watchdog: sunxi_wdt: Add support for Allwinner A523
-> >   dt-bindings: i2c: mv64xxx: Add Allwinner A523 compatible string
-> >   dt-bindings: irq: sun7i-nmi: document the Allwinner A523 NMI
-> >     controller
-> >   dt-bindings: phy: document Allwinner A523 USB-2.0 PHY
-> >   dt-bindings: usb: sunxi-musb: add Allwinner A523 compatible string
-> >   dt-bindings: usb: add A523 compatible string for EHCI and OCHI
-> >   dt-bindings: rtc: sun6i: Add Allwinner A523 support
-> >   arm64: dts: allwinner: Add Allwinner A523 .dtsi file
-> >   dt-bindings: vendor-prefixes: Add YuzukiHD name
-> >   dt-bindings: arm: sunxi: Add Avaota A1 board
-> >   arm64: dts: allwinner: a523: add Avaota-A1 router support
-> > 
-> >  .../devicetree/bindings/arm/sunxi.yaml        |   5 +
-> >  .../bindings/i2c/marvell,mv64xxx-i2c.yaml     |   1 +
-> >  .../allwinner,sun7i-a20-sc-nmi.yaml           |   1 +
-> >  .../bindings/mmc/allwinner,sun4i-a10-mmc.yaml |  40 +-
-> >  .../phy/allwinner,sun50i-a64-usb-phy.yaml     |  10 +-
-> >  .../bindings/rtc/allwinner,sun6i-a31-rtc.yaml |   4 +-
-> >  .../usb/allwinner,sun4i-a10-musb.yaml         |   1 +
-> >  .../devicetree/bindings/usb/generic-ehci.yaml |   1 +
-> >  .../devicetree/bindings/usb/generic-ohci.yaml |   1 +
-> >  .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
-> >  .../watchdog/allwinner,sun4i-a10-wdt.yaml     |   2 +
-> >  arch/arm64/boot/dts/allwinner/Makefile        |   1 +
-> >  .../arm64/boot/dts/allwinner/sun55i-a523.dtsi | 386 ++++++++++++++++++
-> >  .../dts/allwinner/sun55i-t527-avaota-a1.dts   | 311 ++++++++++++++
-> >  drivers/watchdog/sunxi_wdt.c                  |  11 +
-> >  15 files changed, 751 insertions(+), 26 deletions(-)
-> >  create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi
-> >  create mode 100644 arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dts
-> > 
-> > --
-> > 2.46.2
-> > 
-> > 
-> >   
-> 
-> 
-> My bot found new DTB warnings on the .dts files added or changed in this
-> series.
-> 
-> Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-> are fixed by another series. Ultimately, it is up to the platform
-> maintainer whether these warnings are acceptable or not. No need to reply
-> unless the platform maintainer has comments.
-> 
-> If you already ran DT checks and didn't see these error(s), then
-> make sure dt-schema is up to date:
-> 
->   pip3 install dtschema --upgrade
-> 
-> 
-> New warnings running 'make CHECK_DTBS=y allwinner/sun55i-t527-avaota-a1.dtb' for 20241111013033.22793-1-andre.przywara@arm.com:
-> 
-> In file included from arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dts:6:
-> arch/arm64/boot/dts/allwinner/sun55i-a523.dtsi:6:10: fatal error: dt-bindings/clock/sun55i-a523-ccu.h: No such file or directory
->     6 | #include <dt-bindings/clock/sun55i-a523-ccu.h>
+> syzkaller reported a corrupted list in ieee802154_if_remove. [1]
+>
+> Remove an IEEE 802.15.4 network interface after unregister an IEEE 802.15=
+.4
+> hardware device from the system.
+>
+> CPU0					CPU1
+> =3D=3D=3D=3D					=3D=3D=3D=3D
+> genl_family_rcv_msg_doit		ieee802154_unregister_hw
+> ieee802154_del_iface			ieee802154_remove_interfaces
+> rdev_del_virtual_intf_deprecated	list_del(&sdata->list)
+> ieee802154_if_remove
+> list_del_rcu
 
-Argh, the headers, forgot about them! I was hoping there would only be a
-complaint about the undocumented compatible strings, and I didn't want to
-tie the three series together unnecessarily, to avoid a harder to handle
-28-patch series.
+FYI this is a "duplicate" but with a different approach than:
+https://lore.kernel.org/linux-wpan/87v7wtpngj.fsf@bootlin.com/T/#m02cebe86e=
+c0171fc4d3350676bbdd4a7e3827077
 
-I hope this doesn't prevent actual review by people, my github has
-the combined story, in case people want to avoid the issue:
-https://github.com/apritzel/linux/commits/a523-v1/
+Thanks,
+Miqu=C3=A8l
 
-Cheers,
-Andre
-
->       |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> compilation terminated.
-> make[3]: *** [scripts/Makefile.dtbs:129: arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dtb] Error 1
-> make[2]: *** [scripts/Makefile.build:478: arch/arm64/boot/dts/allwinner] Error 2
-> make[2]: Target 'arch/arm64/boot/dts/allwinner/sun55i-t527-avaota-a1.dtb' not remade because of errors.
-> make[1]: *** [/home/rob/proj/linux-dt-testing/Makefile:1399: allwinner/sun55i-t527-avaota-a1.dtb] Error 2
-> make: *** [Makefile:224: __sub-make] Error 2
-> make: Target 'allwinner/sun55i-t527-avaota-a1.dtb' not remade because of errors.
-> 
-> 
-> 
-> 
-> 
-
+>
+> Avoid this issue, by adding slave data state bit SDATA_STATE_LISTDONE, set
+> SDATA_STATE_LISTDONE when unregistering the hardware from the system, and
+> add state bit SDATA_STATE_LISTDONE judgment before removing the interface
+> to delete the list.=20
+>
+> [1]
+> kernel BUG at lib/list_debug.c:58!
+> Oops: invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+> CPU: 0 UID: 0 PID: 6277 Comm: syz-executor157 Not tainted 6.12.0-rc6-syzk=
+aller-00005-g557329bcecc2 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 09/13/2024
+> RIP: 0010:__list_del_entry_valid_or_report+0xf4/0x140 lib/list_debug.c:56
+> Code: e8 a1 7e 00 07 90 0f 0b 48 c7 c7 e0 37 60 8c 4c 89 fe e8 8f 7e 00 0=
+7 90 0f 0b 48 c7 c7 40 38 60 8c 4c 89 fe e8 7d 7e 00 07 90 <0f> 0b 48 c7 c7=
+ a0 38 60 8c 4c 89 fe e8 6b 7e 00 07 90 0f 0b 48 c7
+> RSP: 0018:ffffc9000490f3d0 EFLAGS: 00010246
+> RAX: 000000000000004e RBX: dead000000000122 RCX: d211eee56bb28d00
+> RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+> RBP: ffff88805b278dd8 R08: ffffffff8174a12c R09: 1ffffffff2852f0d
+> R10: dffffc0000000000 R11: fffffbfff2852f0e R12: dffffc0000000000
+> R13: dffffc0000000000 R14: dead000000000100 R15: ffff88805b278cc0
+> FS:  0000555572f94380(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000=
+000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 000056262e4a3000 CR3: 0000000078496000 CR4: 00000000003526f0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  __list_del_entry_valid include/linux/list.h:124 [inline]
+>  __list_del_entry include/linux/list.h:215 [inline]
+>  list_del_rcu include/linux/rculist.h:157 [inline]
+>  ieee802154_if_remove+0x86/0x1e0 net/mac802154/iface.c:687
+>  rdev_del_virtual_intf_deprecated net/ieee802154/rdev-ops.h:24 [inline]
+>  ieee802154_del_iface+0x2c0/0x5c0 net/ieee802154/nl-phy.c:323
+>  genl_family_rcv_msg_doit net/netlink/genetlink.c:1115 [inline]
+>  genl_family_rcv_msg net/netlink/genetlink.c:1195 [inline]
+>  genl_rcv_msg+0xb14/0xec0 net/netlink/genetlink.c:1210
+>  netlink_rcv_skb+0x1e3/0x430 net/netlink/af_netlink.c:2551
+>  genl_rcv+0x28/0x40 net/netlink/genetlink.c:1219
+>  netlink_unicast_kernel net/netlink/af_netlink.c:1331 [inline]
+>  netlink_unicast+0x7f6/0x990 net/netlink/af_netlink.c:1357
+>  netlink_sendmsg+0x8e4/0xcb0 net/netlink/af_netlink.c:1901
+>  sock_sendmsg_nosec net/socket.c:729 [inline]
+>  __sock_sendmsg+0x221/0x270 net/socket.c:744
+>  ____sys_sendmsg+0x52a/0x7e0 net/socket.c:2607
+>  ___sys_sendmsg net/socket.c:2661 [inline]
+>  __sys_sendmsg+0x292/0x380 net/socket.c:2690
+>  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+>  do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+>  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>
+> Reported-and-tested-by: syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail=
+.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3D985f827280dc3a6e7e92
+> Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+> ---
+>  net/mac802154/ieee802154_i.h | 1 +
+>  net/mac802154/iface.c        | 4 ++++
+>  2 files changed, 5 insertions(+)
+>
+> diff --git a/net/mac802154/ieee802154_i.h b/net/mac802154/ieee802154_i.h
+> index 08dd521a51a5..6771c0569516 100644
+> --- a/net/mac802154/ieee802154_i.h
+> +++ b/net/mac802154/ieee802154_i.h
+> @@ -101,6 +101,7 @@ enum {
+>=20=20
+>  enum ieee802154_sdata_state_bits {
+>  	SDATA_STATE_RUNNING,
+> +	SDATA_STATE_LISTDONE,
+>  };
+>=20=20
+>  /* Slave interface definition.
+> diff --git a/net/mac802154/iface.c b/net/mac802154/iface.c
+> index c0e2da5072be..aed2fc63395d 100644
+> --- a/net/mac802154/iface.c
+> +++ b/net/mac802154/iface.c
+> @@ -683,6 +683,9 @@ void ieee802154_if_remove(struct ieee802154_sub_if_da=
+ta *sdata)
+>  {
+>  	ASSERT_RTNL();
+>=20=20
+> +	if (test_bit(SDATA_STATE_LISTDONE, &sdata->state))
+> +		return;
+> +
+>  	mutex_lock(&sdata->local->iflist_mtx);
+>  	list_del_rcu(&sdata->list);
+>  	mutex_unlock(&sdata->local->iflist_mtx);
+> @@ -698,6 +701,7 @@ void ieee802154_remove_interfaces(struct ieee802154_l=
+ocal *local)
+>  	mutex_lock(&local->iflist_mtx);
+>  	list_for_each_entry_safe(sdata, tmp, &local->interfaces, list) {
+>  		list_del(&sdata->list);
+> +		set_bit(SDATA_STATE_LISTDONE, &sdata->state);
+>=20=20
+>  		unregister_netdevice(sdata->dev);
+>  	}
 
