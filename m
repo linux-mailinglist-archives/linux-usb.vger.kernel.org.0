@@ -1,199 +1,99 @@
-Return-Path: <linux-usb+bounces-17440-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17441-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FA3D9C4624
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 20:47:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C3A69C4700
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 21:38:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D40F4284E29
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 19:47:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2065C28A9F1
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 20:38:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D4B1ABEB5;
-	Mon, 11 Nov 2024 19:47:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CFD41B4F04;
+	Mon, 11 Nov 2024 20:38:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="IL/vZUxi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RqzaXjvB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36E3F2AEE0;
-	Mon, 11 Nov 2024 19:47:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0B813A250;
+	Mon, 11 Nov 2024 20:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731354426; cv=none; b=QLokDvPnuTKBdY/4YSOSbvL64eCAM4AMYVAcfMXIBtocevmDM20uZkpT/yfqvcvqFvLdKNrGbJzBLFuRhPNp5+YlD5W0E2UkZFPs14KGGoNAh8z1+gWifpkvZ8L+B9Qlbr03huKOmolGs3FwX0bBM9V84b9TeLwcxwpEV+w3ycI=
+	t=1731357522; cv=none; b=IO6WHQSWCnT2pz3hO9itwqaUf1m4evvLn3jPHlbKDEEZFKYv6beWFdzKhZUJ5fJRcSt9zZexdVUZOFNtZLO6Kgv9V9x0m3u5VyaUVAdeCtUrLOjIr7obDYLcyZsILcr97prIbkTF1OmhqRz64VkrVMP4lLnOlO+lZdExgTbk7xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731354426; c=relaxed/simple;
-	bh=waIrtis7FuR7Y1TSuVP41KBpxAm+KAfN9/b1pnq4nsI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=pMW8QcLkOkWwh+pmYpW6ES4F7A/viHriUCrKG08kHbH5OUfLcO5c/eUoAIajn4ajqTsiQSEGqwTfVEeFVsudTtTS+8k/+coRHK2jO7UqN5PPhIdTvvI+tFXgATOBVcXhwCCUY6tYox+TIAVSSMDQDjl4RgMeJt3G7gWvvChx5oQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=IL/vZUxi; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 5B446240003;
-	Mon, 11 Nov 2024 19:46:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1731354420;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g6LitTWAgz24VNApIoun+JJSEVyh1XHLlrSrHK1MMSQ=;
-	b=IL/vZUxi6rK1Dv1dIs5JYGW4WrA/+dbJ3FQVaSV4YJqsLfSaTj+YXSaX8JvX+3tjU5rL60
-	/JoCG5XACc5Xrv1qyECGgsQNVC5FoYeBGqYjCLD2l3VJefUbeLUUc1AUyHMLdsdHTZKlu3
-	88e7m0P+Jtj6gLDq6Hc78XqewP4yzCff9A4yn1pSPHUi1AaSVxJ3kMPgclBUlEzgaP8kIq
-	UqMODls0FJtTPkkvQN+fuX5mbIKLWRJfljM3KVUq36RS35hs/zHJ3YkCfjLs7bdd2YjQdt
-	P8u3aE+C2sRiZkNq1HjHeEo2klTaEgZNmJ4O9wGoQWfR0HDL7yZ5dy3uXgU8aw==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Lizhi Xu <lizhi.xu@windriver.com>
-Cc: <syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com>,
-  <alex.aring@gmail.com>,  <davem@davemloft.net>,  <edumazet@google.com>,
-  <horms@kernel.org>,  <kuba@kernel.org>,  <linux-kernel@vger.kernel.org>,
-  <linux-usb@vger.kernel.org>,  <linux-wpan@vger.kernel.org>,
-  <netdev@vger.kernel.org>,  <pabeni@redhat.com>,
-  <stefan@datenfreihafen.org>,  <syzkaller-bugs@googlegroups.com>, Dmitry
- Antipov <dmantipov@yandex.ru>
-Subject: Re: [PATCH] mac802154: add a check for slave data list before delete
-In-Reply-To: <20241108145420.2445641-1-lizhi.xu@windriver.com> (Lizhi Xu's
-	message of "Fri, 8 Nov 2024 22:54:20 +0800")
-References: <672b9f03.050a0220.350062.0276.GAE@google.com>
-	<20241108145420.2445641-1-lizhi.xu@windriver.com>
-User-Agent: mu4e 1.12.1; emacs 29.4
-Date: Mon, 11 Nov 2024 20:46:57 +0100
-Message-ID: <87msi5pn7y.fsf@bootlin.com>
+	s=arc-20240116; t=1731357522; c=relaxed/simple;
+	bh=152E4AMyrFyVth6NJr4o1obdZxNFdCxTvLupPgHqcR4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TvjnB1oV/SflyzlHbhF9OuVFQYvrwvKuVEvenbLjj5XrZ3bqnASd40PJ3uSxbpkU9SvZQ7F8fcvHbBclb7xsI+c16faTbhy2UkteSWZIV6+/oEmrXZ9HQJZokFuVagqIgK01VFXOm27NQRKPCGBuCNb+bK4JtMkVOXr9U+OZq64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RqzaXjvB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 128AFC4CECF;
+	Mon, 11 Nov 2024 20:38:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731357522;
+	bh=152E4AMyrFyVth6NJr4o1obdZxNFdCxTvLupPgHqcR4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RqzaXjvB+eygq7637ZG7G/eJ5DM9U1D/pEckw3OihBILO29k9uU9UKAExc6gUejDR
+	 NJRBYI445rRLUb6+SifOvLM3JKo4XiK6GcF6W7ueCowXgkGbvn0CPV/ekjADy238BN
+	 W6tuP1tdsLspbn5ebmUEBoAOvg253VHyT8CbzcUZnte5wvuKjc/im1hHhCBJL7yTC9
+	 goRxy6NBkKIOikKE5/j4uO3wN6Gu7wqW2jp2TdOejvH9Vn6MXrshK9g9LsEX7+sTgX
+	 DFmWoRu5n9xsopGs+4zkGjKmOesHtKiCFl7aWZJeG3BMq3wg9/PIJXDvyToaxTHHbN
+	 l06hr/n1QyR2Q==
+Date: Mon, 11 Nov 2024 20:38:37 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Andre Przywara <andre.przywara@arm.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 08/14] dt-bindings: usb: sunxi-musb: add Allwinner A523
+ compatible string
+Message-ID: <20241111-harvest-excusably-5e53d1fd362d@spud>
+References: <20241111013033.22793-1-andre.przywara@arm.com>
+ <20241111013033.22793-9-andre.przywara@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="pIS1unl9HesvjYym"
+Content-Disposition: inline
+In-Reply-To: <20241111013033.22793-9-andre.przywara@arm.com>
+
+
+--pIS1unl9HesvjYym
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: miquel.raynal@bootlin.com
 
-Hello,
+On Mon, Nov 11, 2024 at 01:30:27AM +0000, Andre Przywara wrote:
+> The Allwinner A523/T527 SoCs have a MUSB controller fully compatible to
+> the D1 (and ultimately the A33), with five endpoints.
+>=20
+> Add the new name to the list of compatible strings.
+>=20
+> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 
-On 08/11/2024 at 22:54:20 +08, Lizhi Xu <lizhi.xu@windriver.com> wrote:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-> syzkaller reported a corrupted list in ieee802154_if_remove. [1]
->
-> Remove an IEEE 802.15.4 network interface after unregister an IEEE 802.15=
-.4
-> hardware device from the system.
->
-> CPU0					CPU1
-> =3D=3D=3D=3D					=3D=3D=3D=3D
-> genl_family_rcv_msg_doit		ieee802154_unregister_hw
-> ieee802154_del_iface			ieee802154_remove_interfaces
-> rdev_del_virtual_intf_deprecated	list_del(&sdata->list)
-> ieee802154_if_remove
-> list_del_rcu
+--pIS1unl9HesvjYym
+Content-Type: application/pgp-signature; name="signature.asc"
 
-FYI this is a "duplicate" but with a different approach than:
-https://lore.kernel.org/linux-wpan/87v7wtpngj.fsf@bootlin.com/T/#m02cebe86e=
-c0171fc4d3350676bbdd4a7e3827077
+-----BEGIN PGP SIGNATURE-----
 
-Thanks,
-Miqu=C3=A8l
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZzJrTQAKCRB4tDGHoIJi
+0sMOAP950SFaA8lr6xbPJAxQ1ITCDG/C0OzjBW9aD/2hFBhNHQEAnY4Gt9XMpOdC
+iHYyvhfePxdmMQPg4fhAUFLOEusEBQk=
+=KMGT
+-----END PGP SIGNATURE-----
 
->
-> Avoid this issue, by adding slave data state bit SDATA_STATE_LISTDONE, set
-> SDATA_STATE_LISTDONE when unregistering the hardware from the system, and
-> add state bit SDATA_STATE_LISTDONE judgment before removing the interface
-> to delete the list.=20
->
-> [1]
-> kernel BUG at lib/list_debug.c:58!
-> Oops: invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
-> CPU: 0 UID: 0 PID: 6277 Comm: syz-executor157 Not tainted 6.12.0-rc6-syzk=
-aller-00005-g557329bcecc2 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
-oogle 09/13/2024
-> RIP: 0010:__list_del_entry_valid_or_report+0xf4/0x140 lib/list_debug.c:56
-> Code: e8 a1 7e 00 07 90 0f 0b 48 c7 c7 e0 37 60 8c 4c 89 fe e8 8f 7e 00 0=
-7 90 0f 0b 48 c7 c7 40 38 60 8c 4c 89 fe e8 7d 7e 00 07 90 <0f> 0b 48 c7 c7=
- a0 38 60 8c 4c 89 fe e8 6b 7e 00 07 90 0f 0b 48 c7
-> RSP: 0018:ffffc9000490f3d0 EFLAGS: 00010246
-> RAX: 000000000000004e RBX: dead000000000122 RCX: d211eee56bb28d00
-> RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-> RBP: ffff88805b278dd8 R08: ffffffff8174a12c R09: 1ffffffff2852f0d
-> R10: dffffc0000000000 R11: fffffbfff2852f0e R12: dffffc0000000000
-> R13: dffffc0000000000 R14: dead000000000100 R15: ffff88805b278cc0
-> FS:  0000555572f94380(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000=
-000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 000056262e4a3000 CR3: 0000000078496000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __list_del_entry_valid include/linux/list.h:124 [inline]
->  __list_del_entry include/linux/list.h:215 [inline]
->  list_del_rcu include/linux/rculist.h:157 [inline]
->  ieee802154_if_remove+0x86/0x1e0 net/mac802154/iface.c:687
->  rdev_del_virtual_intf_deprecated net/ieee802154/rdev-ops.h:24 [inline]
->  ieee802154_del_iface+0x2c0/0x5c0 net/ieee802154/nl-phy.c:323
->  genl_family_rcv_msg_doit net/netlink/genetlink.c:1115 [inline]
->  genl_family_rcv_msg net/netlink/genetlink.c:1195 [inline]
->  genl_rcv_msg+0xb14/0xec0 net/netlink/genetlink.c:1210
->  netlink_rcv_skb+0x1e3/0x430 net/netlink/af_netlink.c:2551
->  genl_rcv+0x28/0x40 net/netlink/genetlink.c:1219
->  netlink_unicast_kernel net/netlink/af_netlink.c:1331 [inline]
->  netlink_unicast+0x7f6/0x990 net/netlink/af_netlink.c:1357
->  netlink_sendmsg+0x8e4/0xcb0 net/netlink/af_netlink.c:1901
->  sock_sendmsg_nosec net/socket.c:729 [inline]
->  __sock_sendmsg+0x221/0x270 net/socket.c:744
->  ____sys_sendmsg+0x52a/0x7e0 net/socket.c:2607
->  ___sys_sendmsg net/socket.c:2661 [inline]
->  __sys_sendmsg+0x292/0x380 net/socket.c:2690
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
->
-> Reported-and-tested-by: syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail=
-.com
-> Closes: https://syzkaller.appspot.com/bug?extid=3D985f827280dc3a6e7e92
-> Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
-> ---
->  net/mac802154/ieee802154_i.h | 1 +
->  net/mac802154/iface.c        | 4 ++++
->  2 files changed, 5 insertions(+)
->
-> diff --git a/net/mac802154/ieee802154_i.h b/net/mac802154/ieee802154_i.h
-> index 08dd521a51a5..6771c0569516 100644
-> --- a/net/mac802154/ieee802154_i.h
-> +++ b/net/mac802154/ieee802154_i.h
-> @@ -101,6 +101,7 @@ enum {
->=20=20
->  enum ieee802154_sdata_state_bits {
->  	SDATA_STATE_RUNNING,
-> +	SDATA_STATE_LISTDONE,
->  };
->=20=20
->  /* Slave interface definition.
-> diff --git a/net/mac802154/iface.c b/net/mac802154/iface.c
-> index c0e2da5072be..aed2fc63395d 100644
-> --- a/net/mac802154/iface.c
-> +++ b/net/mac802154/iface.c
-> @@ -683,6 +683,9 @@ void ieee802154_if_remove(struct ieee802154_sub_if_da=
-ta *sdata)
->  {
->  	ASSERT_RTNL();
->=20=20
-> +	if (test_bit(SDATA_STATE_LISTDONE, &sdata->state))
-> +		return;
-> +
->  	mutex_lock(&sdata->local->iflist_mtx);
->  	list_del_rcu(&sdata->list);
->  	mutex_unlock(&sdata->local->iflist_mtx);
-> @@ -698,6 +701,7 @@ void ieee802154_remove_interfaces(struct ieee802154_l=
-ocal *local)
->  	mutex_lock(&local->iflist_mtx);
->  	list_for_each_entry_safe(sdata, tmp, &local->interfaces, list) {
->  		list_del(&sdata->list);
-> +		set_bit(SDATA_STATE_LISTDONE, &sdata->state);
->=20=20
->  		unregister_netdevice(sdata->dev);
->  	}
+--pIS1unl9HesvjYym--
 
