@@ -1,82 +1,74 @@
-Return-Path: <linux-usb+bounces-17429-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17430-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAE5F9C3CAB
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 12:08:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2BF29C3CAC
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 12:08:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B0262826F8
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 11:08:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A94F81F21F7F
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 11:08:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 313801714C6;
-	Mon, 11 Nov 2024 11:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82BF0188905;
+	Mon, 11 Nov 2024 11:08:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lsVs5Ns7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E7zH5x3s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82EE818453C
-	for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 11:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B28E14A4CC
+	for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 11:08:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731323293; cv=none; b=X0Rz0PhYBgqGrN4oMAHLpfQhWPVrZlrnFjWexP//TPEKxBDtFlKNMEO8dKOwE0H93JUPRMM5PlZYHF9flC4Hu4a1iTHQ+i4RQYIZjL/exJGdKzvjMFjBOXYmyYidvC9LYsxYhH3oobauKHPu8z2WgWP6iD4xuADjIeZUxUzUHZY=
+	t=1731323301; cv=none; b=EFQqKCge4JCiCROHWuc0edXEoGQGN6o8YaAJo0dRy9ffsyAvtrLUxHlERlQDcEgYP76daETRn+GezF7te9fOfTPYjJUDxKQIOZ+XQ3zGMjLpFAG24LKyk9N5sghzyNlamP9pwg4fAL0pkMdeuSRErAzLoqP4t7cAcZeMGOU9Lbk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731323293; c=relaxed/simple;
-	bh=KrzJzC5LjIibjn2LH2QxndnXkbjvaFOu7KX1OY6Y2S8=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BLexZsX7oKrySAfKyHR6Y57UAEEFtos8cxr97DlgvU5CSF90eQtnJQCUuvickviQrp/8wvZURKkcZelDeFOCbJVhQuwa9O/pIjP8u0jbP8fl/xF6EWig8fgdn1pI0U0ARo9IMt2e0tQiWjACNxgH9ONASKrhFCTcXJU6EovwhVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lsVs5Ns7; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-5c95a962c2bso6680954a12.2
-        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 03:08:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731323290; x=1731928090; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JaOpQCnb58xwQNpZJwrt/dM577zB1AHFFgREUTf53Ns=;
-        b=lsVs5Ns7v6s2hgGqNxi4GsbiwNcoUmoIQP60jsFv3r11zjG8IIXMXj481uoCNReRBK
-         VAYa0LHFURO/l7Ip8fHRNsf1YSSiGUG3RrmhHCmfkY/GBIDJ1Xv/UwijxZFNMVUmsxFo
-         93ZctszrjbbKfYKblkvcJNAf82w3MVB9dk67sdPHrvNGXIgbP0vfEgKmv77MgWfZeWjL
-         uQ5MDLDQ1XoMGMMJwKpBpocZ63ar3rFTlMSzLjkzTpyseQwF7KzerFTUSES9T9MNnAmL
-         YgnYcMptPu6dtMmJrm5YEv1u83Nbowu3DeHAAsXNYL7VERbNNoVRW4eVtXHfCRD6PK1a
-         DedA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731323290; x=1731928090;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JaOpQCnb58xwQNpZJwrt/dM577zB1AHFFgREUTf53Ns=;
-        b=lPekl5HHw6fUKHGXxFHjcVHLkY4o5K/i5WjDMCAOy2X/Ukg0ufVKnGCjFSbBpEVvTM
-         KO83v8E2qFk6eU1PRjZ+1wGDXo5JzhiOCFjuIVWdM5nckooTq4LanX6PUdQ3OwnEs2R6
-         n4x0yZTwUe9cXzDDfRMzJolBecLb9Wq/FMbJWycfMkbypF3y5K4VYqUXGTUto7s6c9hg
-         Ltyr0SBbx9A2/S9NsQvhxHqKK7sZHj9Iyj0fTItsd+1iO33gwkqhL1/zzShAkjp4kdXp
-         zbQ40V1ICZ6KSmFibzPOSznMU4rh4nPtSWcqIj4FGvSojQqZqg51JAqgtZfxVL1Urb4N
-         WavA==
-X-Forwarded-Encrypted: i=1; AJvYcCXg6reDBU6a5UQlNbwaSwTLMt5nXDNVOQwJZp5KCALRaQXPgJ0OQ5Gq6OGIxLwuYntXTXkMW2xoEAk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfwPCL1sbL4JUy7SasCV6uqTNV54A2ayiShcuR83aB6W1MyzEq
-	PebfhOTW4zWqeh86XEqqaWGuKLOYNl3Nm4xFaTXhvOf5tETSWLlvdq49F3NCBN8=
-X-Google-Smtp-Source: AGHT+IE8zTmpxJbeHHX6TsTo02EB6CL9dlS72DZFJARMZpcutHBxnoMI2RjnZgYXTYNZ3xGbE2kN8Q==
-X-Received: by 2002:a17:907:3fa2:b0:a99:5f16:3539 with SMTP id a640c23a62f3a-a9eefcebbd5mr1287269866b.0.1731323289768;
-        Mon, 11 Nov 2024 03:08:09 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0deef4bsm576319966b.138.2024.11.11.03.08.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 03:08:09 -0800 (PST)
-Date: Mon, 11 Nov 2024 14:08:06 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Ajay Gupta <ajayg@nvidia.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Haotien Hsu <haotienh@nvidia.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: [PATCH] usb: typec: fix potential array underflow in
- ucsi_ccg_sync_control()
-Message-ID: <c69ef0b3-61b0-4dde-98dd-97b97f81d912@stanley.mountain>
+	s=arc-20240116; t=1731323301; c=relaxed/simple;
+	bh=AtEsSyJhigBo9oEs8tGkKFMkrHlMa3RrI6Mo+p6ykX8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kaRcg4hRhiRPDSqy2r8pebaSMxVzHsjdh8OIVXnxE9eU4A751dvSafgpKB8sSROVCzeSJecDYkHpwC6Q6BE6K0R8vs6YVJFMBr5zPfEs6XvHuenT1sxOMVVAKSWCkS/opof/cmcE5qbhORaqixgystQ0cu33BwDTC+o4ygOVxDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E7zH5x3s; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731323300; x=1762859300;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=AtEsSyJhigBo9oEs8tGkKFMkrHlMa3RrI6Mo+p6ykX8=;
+  b=E7zH5x3sT/Mse1k46OPPAiAYmyFXJP+957ehCIrMN9w5VT3HdJ7TKfKy
+   /VKehAR0QHvw9bfzvdIL+GWFIV1Zy36pAJzwaunlW6eflnaUUE0Fox/7j
+   onE3wAyGZEWc93W2aFNHJw/sfQSJ7ydVioxt48ZGtNJnd4QB8CVCQIWwl
+   Zb74ThV0D0makDlyXUCoMuj0n+bnStfgxofApdosGRCN7kFt9vcKUlqgv
+   TMNggKECLx0m22Q4/eMZD9DbWc2CVk7pO6hjUnBgWzo6oLu5iGgNg8D2J
+   c+OXhXsbmJ2sA2LA2BgZDowFqXlA3yY/McC8rufWATPObyC0scjeW8CJy
+   g==;
+X-CSE-ConnectionGUID: SSShrD+0R/iYPWsfM8MWYA==
+X-CSE-MsgGUID: IXTI30VGSLeyHD6PK/49TQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="31283601"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="31283601"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2024 03:08:20 -0800
+X-CSE-ConnectionGUID: IBv9xPNMREGb9WAaIMNRSg==
+X-CSE-MsgGUID: qKg/iEa/SN+eVC9Jgtv9oA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,144,1728975600"; 
+   d="scan'208";a="117677133"
+Received: from sgruszka-mobl.ger.corp.intel.com (HELO localhost) ([10.245.97.183])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2024 03:08:18 -0800
+Date: Mon, 11 Nov 2024 12:08:10 +0100
+From: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Wentong Wu <wentong.wu@intel.com>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v3 3/3] usb: misc: ljca: print firmware version
+Message-ID: <ZzHlmqxwMKGvJJI5@linux.intel.com>
+References: <20241107073718.405208-1-stanislaw.gruszka@linux.intel.com>
+ <20241107073718.405208-3-stanislaw.gruszka@linux.intel.com>
+ <2024110741-unfold-condense-6c54@gregkh>
+ <ZyyH/S8j3nxu8yTl@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,42 +77,22 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Mailer: git-send-email haha only kidding
+In-Reply-To: <ZyyH/S8j3nxu8yTl@linux.intel.com>
 
-The "command" variable can be controlled by the user via debugfs.  The
-worry is that if con_index is zero then "&uc->ucsi->connector[con_index
-- 1]" would be an array underflow.
+On Thu, Nov 07, 2024 at 10:27:29AM +0100, Stanislaw Gruszka wrote:
+> On Thu, Nov 07, 2024 at 09:37:34AM +0100, Greg KH wrote:
+> > On Thu, Nov 07, 2024 at 08:37:18AM +0100, Stanislaw Gruszka wrote:
+> > > For diagnostics purposes read firmware version from device
+> > > and print it to dmesg during initialization.
+> > 
+> > This changelog text isn't correct anymore :(
+> 
+> I'll drop this one from the set.
 
-Fixes: 170a6726d0e2 ("usb: typec: ucsi: add support for separate DP altmode devices")
-Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/usb/typec/ucsi/ucsi_ccg.c | 5 +++++
- 1 file changed, 5 insertions(+)
+It was decided infernally to rewrite this patch to use
+sysfs attribute for providing FW version. I'll do this and
+will keep the patch in the next posting of the patchset.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index bccfc03b5986..fcb8e61136cf 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -644,6 +644,10 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
- 	    uc->has_multiple_dp) {
- 		con_index = (uc->last_cmd_sent >> 16) &
- 			UCSI_CMD_CONNECTOR_MASK;
-+		if (con_index == 0) {
-+			ret = -EINVAL;
-+			goto unlock;
-+		}
- 		con = &uc->ucsi->connector[con_index - 1];
- 		ucsi_ccg_update_set_new_cam_cmd(uc, con, &command);
- 	}
-@@ -651,6 +655,7 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
- 	ret = ucsi_sync_control_common(ucsi, command);
- 
- 	pm_runtime_put_sync(uc->dev);
-+unlock:
- 	mutex_unlock(&uc->lock);
- 
- 	return ret;
--- 
-2.45.2
-
+Regards
+Stanislaw
 
