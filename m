@@ -1,133 +1,181 @@
-Return-Path: <linux-usb+bounces-17419-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17420-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91D5F9C3A8E
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 10:10:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBD009C3B28
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 10:44:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C2D851C217C8
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 09:10:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB425280CAB
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 09:44:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB4AA170A0A;
-	Mon, 11 Nov 2024 09:10:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC8F14B956;
+	Mon, 11 Nov 2024 09:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RgZP3a8t"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BA5lv5ac"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E758A16C6A1;
-	Mon, 11 Nov 2024 09:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D892143C72
+	for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 09:44:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731316236; cv=none; b=BbkytG0+fNKgmcRYe6FgqG75MrEvTS1eoZCKReQT2vhHJ860bsHvz96QIDiU2VxWxztaWJVNbqCBOs39SSUBciNYA+sp3BlhaD6qG4Dpitc5DsQhfvPCVRGzO/R20S6dQUgHv/WDzRbwvE5PM/BF1ZxrzEfBS2JfGOVeajypoM4=
+	t=1731318288; cv=none; b=o5egz0ZtKmkFSX3QkO4jpYZQ3n/Rufx8SUZuYfP+g2WLjgz4izlBaBm+FK5b7xRoz+/AK1Kdu6RoXLCJ1D+50t3w1ruGQ0fBjPO5X4jzqn4ghodxgHUt33ce2Y/rlo1r/Dvk3lgLkPjec4LZBShPomYwg4zn78rtXUhxF2XGTTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731316236; c=relaxed/simple;
-	bh=o1/gfen9NI6hjZYBmRSoret7R0kHPZnUAbizO7uo+84=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IDWzIzYc4EkeUsUAVFMgg9K3UcKwWUhpnS+/XD3KxDsuc2oD88wRDMjP1lhAa1OOC5MCimXsCNwdX44QXK58wlJuSJLgeZ3pHbRxsKzP3X8qlH9TRNBWvHuB/pe/CUvFbGfwNJjiRXhqaBS3wxMYd5pnAN6s0B4gjGI4uUvCGgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RgZP3a8t; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731316235; x=1762852235;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=o1/gfen9NI6hjZYBmRSoret7R0kHPZnUAbizO7uo+84=;
-  b=RgZP3a8tAad/gEn1IuQEl86Z1hICym4t9mtSYPfGd+Xqhac1WAjAFu6h
-   b4enGdMsxNmwTxDUUcMzg4/GMeY0xKH75taMlfQLLaq+FAV7D2GbB5PEf
-   chWS7gkqla0ojDOv+d8WV8AS/eBx/GGSn54YErB04OhiqaEMOQCR2srMS
-   LqjFK5vDdjkFdYuCDiqXK6vF59SFXje8TG/9aTi2PBKA5oHBxX5Sqp2UI
-   Q1EVs6cGT5voCnAkd56+DA91dG3B0X4/UShb2ld8XHUJOBhOEfFPzzTwC
-   yJjqOHJHwZGyre6eTLu2q0Gxe/JTqphXUTfJ1841PfymynSqt8XbEY2kI
-   Q==;
-X-CSE-ConnectionGUID: VoBhO6ZVTSK/DSvGOny/nw==
-X-CSE-MsgGUID: lYa78zUeTL+e6/HKCpG9XQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="48563946"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="48563946"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2024 01:10:34 -0800
-X-CSE-ConnectionGUID: RYvbklKETdCGuCSSTGilkw==
-X-CSE-MsgGUID: JgFc1Iq5Sgqt10gTRNkYfg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,144,1728975600"; 
-   d="scan'208";a="86781793"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa009.jf.intel.com with SMTP; 11 Nov 2024 01:10:31 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 11 Nov 2024 11:10:29 +0200
-Date: Mon, 11 Nov 2024 11:10:29 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Heikki Krogerus <heikki.krogeurs@linux.intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>
-Subject: Re: [PATCH v2 2/2] usb: typec: ucsi: glink: be more precise on
- orientation-aware ports
-Message-ID: <ZzHKBVmpDfiwxeCn@kuha.fi.intel.com>
-References: <20241109-ucsi-glue-fixes-v2-0-8b21ff4f9fbe@linaro.org>
- <20241109-ucsi-glue-fixes-v2-2-8b21ff4f9fbe@linaro.org>
+	s=arc-20240116; t=1731318288; c=relaxed/simple;
+	bh=Y8VkXg5N4fjvLMeubnNBYWRYj1+b5e3Ehqe5iTDD1Jg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RTB/xstSuHEqw8RWr8qNzpH4EfICXTMcPzPSa/AsYZAb7CUYx8AjnCThHgoDcGx2jTNNPgeDJbLm7YC72JiHtzbdN0RETx1/kwlqPbdXRMbFb+IL1ASaSZheKMdrZ4R/eb64PhZ0bbZANICzNNJyWsHKwP934H6F8lP8Qa6l1aM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BA5lv5ac; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-539f2b95775so5349447e87.1
+        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 01:44:46 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1731318284; x=1731923084; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wYdHFQll/Jvx2aqgW7/Di3dB8XVUvFfsGgA/LhZ5sYk=;
+        b=BA5lv5ack7m3e6k+7MGybq0hU6NMLa+nmpHfKNXzDzMTh/eCj7lYCW7yCMq+8WelsY
+         a0z8Wugt3UyDy8V3jVmbJDW37BaOGN4DJCl0aLf8IAGr1jdT8cMubQHu93awsG77Fg4r
+         ND/hOGTUL3cU2B4eafp7y74vQXO785rMJShAB4hj7i4lSqMn4tRNdYjb3J/a4G8OUVdc
+         H1pAHKyysqpTQDXS4GZ+vwc6VACUmg63aBZjAqhDIyNDmXiNsP2wz3vYiZevNQJtUw9D
+         rGSPq/ax2CJg2nefQ1jNS1zdYn9rpxiJbIduD743ewTk/n6jtzqZvrkObsr+H2KKByRq
+         DQYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731318284; x=1731923084;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wYdHFQll/Jvx2aqgW7/Di3dB8XVUvFfsGgA/LhZ5sYk=;
+        b=ZTiom0tCwS0xOH4fGKiamMmlzR6uBu3aKo7g7RhnT5otZJyb7/aCFVJXEuadtGMuji
+         gEcpANQxEg9qAbsywVmR1yy8XiwJtCJnxMSoZ1ckAW3hensZ6rl6QfaPLzzSdOO9xIwS
+         U6JaTe1cbKDszzdjF2dEmwuNs1ULAcKDA+Aa5FUefzLe1XxrdSGH4LhpXYW2ycRHYB3c
+         dPyE9wVyRe18+eR1P4fmU5GcB2Uk3w8JDCb77Tgqo20RbI6z+i6QMZdl4IqUXRcmAtyd
+         Lk8EKf/etzNDLvSJzD+y5sewxN49kIZWfMPsV0VXt0b2pnpz57TkxId133Y94I4tPxYd
+         hmpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVyGQuG9/gLHUptG4u6VtpuYbwc7adXHYGpyUjZRshuduT7fdKqGVMhH22ScsOzYmvMbYM54/BIteg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yymkj3vwK1ES5/RbwJeNKqgpu17tXmWF7nqKKZPTadmkIC7MkXY
+	CnJRBassZ1VUTH9JB9Sd5BfauolFSxIY9JpEtzBGXV7WKdt/IubtD1xPsL7+tHM=
+X-Google-Smtp-Source: AGHT+IHK4vdhia2NXp3GYgdHBXfS5JmphfkYhtaQbxfub0asvj1UBs6mvIxTwhKb1VDqrzP+d2MjPA==
+X-Received: by 2002:a05:6512:6d6:b0:536:54ff:51c8 with SMTP id 2adb3069b0e04-53d862c6fa8mr6556182e87.17.1731318284409;
+        Mon, 11 Nov 2024 01:44:44 -0800 (PST)
+Received: from ?IPV6:2001:a61:1361:b001:5d85:e56f:d14e:8442? ([2001:a61:1361:b001:5d85:e56f:d14e:8442])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a9ee0dc4c97sm570367566b.131.2024.11.11.01.44.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 11 Nov 2024 01:44:44 -0800 (PST)
+Message-ID: <825be5e2-31b2-4cd6-a283-05935ea6161f@suse.com>
+Date: Mon, 11 Nov 2024 10:44:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241109-ucsi-glue-fixes-v2-2-8b21ff4f9fbe@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb/cdc-wdm: fix memory leak of wdm_device
+To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
+ syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com, oneukum@suse.com
+References: <000000000000e875fa0620253803@google.com>
+ <20241109152821.3476218-1-snovitoll@gmail.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <20241109152821.3476218-1-snovitoll@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Nov 09, 2024 at 02:04:15AM +0200, Dmitry Baryshkov wrote:
-> Instead of checking if any of the USB-C ports have orientation GPIO and
-> thus is orientation-aware, check for the GPIO for the port being
-> registered. There are no boards that are affected by this change at this
-> moment, so the patch is not marked as a fix, but it might affect other
-> boards in future.
+On 09.11.24 16:28, Sabyrzhan Tasbolatov wrote:
+
+Hi,
+
+> syzbot reported "KMSAN: kernel-infoleak in wdm_read", though there is no
+> reproducer and the only report for this issue. This might be
+> a false-positive, but while the reading the code, it seems,
+> there is the way to leak kernel memory.
+
+As far as I can tell, the leak is real.
+
+> Here what I understand so far from the report happening
+> with ubuf in drivers/usb/class/cdc-wdm.c:
 > 
-> Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-> Tested-by: Johan Hovold <johan+linaro@kernel.org>
-> Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> 1. kernel buffer "ubuf" is allocated during cdc-wdm device creation in
+>     the "struct wdm_device":
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Yes
+[..]
 
-> ---
->  drivers/usb/typec/ucsi/ucsi_glink.c | 10 +++++-----
->  1 file changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-> index 2e12758000a7d2d62f6e0b273cb29eafa631122c..90948cd6d2972402465a2adaba3e1ed055cf0cfa 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_glink.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-> @@ -172,12 +172,12 @@ static int pmic_glink_ucsi_async_control(struct ucsi *__ucsi, u64 command)
->  static void pmic_glink_ucsi_update_connector(struct ucsi_connector *con)
->  {
->  	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(con->ucsi);
-> -	int i;
->  
-> -	for (i = 0; i < PMIC_GLINK_MAX_PORTS; i++) {
-> -		if (ucsi->port_orientation[i])
-> -			con->typec_cap.orientation_aware = true;
-> -	}
-> +	if (con->num > PMIC_GLINK_MAX_PORTS ||
-> +	    !ucsi->port_orientation[con->num - 1])
-> +		return;
-> +
-> +	con->typec_cap.orientation_aware = true;
->  }
->  
->  static void pmic_glink_ucsi_connector_status(struct ucsi_connector *con)
-> 
-> -- 
-> 2.39.5
+> 2. during wdm_create() it calls wdm_in_callback() which MAY fill "ubuf"
+>     for the first time via memmove if conditions are met.
 
--- 
-heikki
+Yes.
+[..]
+
+> 3. if conditions are not fulfilled in step 2., then calling read() syscall
+>     which calls wdm_read(), should leak the random kernel memory via
+>     copy_to_user() from "ubuf" buffer which is allocated in kmalloc-256.
+
+Yes, sort of.
+
+>   
+> -	desc->ubuf = kmalloc(desc->wMaxCommand, GFP_KERNEL);
+> +	desc->ubuf = kzalloc(desc->wMaxCommand, GFP_KERNEL);
+>   	if (!desc->ubuf)
+>   		goto err;
+
+No. I am sorry, but the fix is wrong. Absolutely wrong.
+
+Let's look at the code of wdm_read():
+
+                 cntr = desc->length;
+Here the method determines how much data is in the buffer.
+"length" initially is zero, because the descriptor itself
+is allocated with kzalloc. It is increased in the callback.
+
+                 spin_unlock_irq(&desc->iuspin);
+         }
+
+         if (cntr > count)
+                 cntr = count;
+
+This is _supposed_ to make sure that user space does not get more
+than we have in the buffer.
+
+         rv = copy_to_user(buffer, desc->ubuf, cntr);
+         if (rv > 0) {
+                 rv = -EFAULT;
+                 goto err;
+         }
+
+         spin_lock_irq(&desc->iuspin);
+
+         for (i = 0; i < desc->length - cntr; i++)
+                 desc->ubuf[i] = desc->ubuf[i + cntr];
+
+         desc->length -= cntr;
+
+Here we decrease the count of what we have in the buffer.
+
+Now please look at the check again
+
+"cntr" is what we have in the buffer.
+"count" is how much user space wants.
+
+We should limit what we copy to the amount we have in the buffer.
+But that is not what the check does. Instead it makes sure we never
+copy more than user space requested. But we do not check whether
+the buffer has enough data to satisfy the read.
+
+You have discovered the bug. If you want to propose a fix, the honor is yours.
+Or do you want me to fix it?
+
+tl;dr: Excellent catch, wrong fix
+
+	Regards
+		Oliver
+
 
