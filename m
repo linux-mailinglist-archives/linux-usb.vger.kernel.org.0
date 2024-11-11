@@ -1,139 +1,208 @@
-Return-Path: <linux-usb+bounces-17423-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17424-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C32879C3B73
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 10:57:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F7F89C3B7C
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 10:59:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3FD45B22CA8
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 09:57:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3EDE2283597
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 09:59:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2B716F900;
-	Mon, 11 Nov 2024 09:57:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53B5617B4F6;
+	Mon, 11 Nov 2024 09:59:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NbnWku3I"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="PuCA/Y8B";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="K2zNtide"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32E7514600D;
-	Mon, 11 Nov 2024 09:56:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495011714B2;
+	Mon, 11 Nov 2024 09:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731319019; cv=none; b=DgNauHqiHg4nxNzaHMX6WESgCbtlJ5nLKhsVnSC0pabTsiOGLFAwIteqYs1cXXsWF3Roma4JUewyEu6mXnt7+JyzelHl7dxk8Ymz6jMglQfCMIk+Lqll4S4GvROuRNcG7cisHqw6S5UMZ1TtOtPeZ21hadY6OYpXCOrgmLyPQcc=
+	t=1731319157; cv=none; b=CngMn8Lki12hz5pTTbyMWuidUWFtAgWcwxnKqZpkI9u4RDpnPAqCEGUOWdV7R/UOgX13aKMZjveqleAxAkgV3JLhuWPDKRGo99G+coes0g+xRs+TzYlhuKBm1CLY2hKg6R4enXlbtwphmbEpkmaYx+TglTaVF37AiaAjk3rRjmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731319019; c=relaxed/simple;
-	bh=2GK5P7SlkHJ5glis3DlufjM73mrDrFvZT6cGKqNJrkA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xegx0Fvf/47YtYWJxCRVN28XuohIQhfnBb3zXmWOIh89bkZnv9Up64Ax4b8LcJddApW0AiwQ5Ynb3MLtxrBN31pHGnnBPjJPhCaXLosoIflVU1ef2OBppzhlg7mVGZDB+Ch9PM04htpOh5UTMjrJLlR8swOwjSMybA/K2HXhKoU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NbnWku3I; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731319018; x=1762855018;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=2GK5P7SlkHJ5glis3DlufjM73mrDrFvZT6cGKqNJrkA=;
-  b=NbnWku3IzQBxhHuK7WxAcNIeW0DK0VkknwDUsi/ro6Qfgvuf1pLzXdFV
-   IRpt1rup3QuVwZ2oSmAwSN44K2BaA8d8CsN28hdCvN+oiyW4y69Ba3BEe
-   CyaKGIT9dx0fT1DdwxWo0lYaPUrkgj9lwbUrh343BsjRe5Xj9ng99JJot
-   B6kspaRB6Kz24Q/p1yszV8VZCmHuzRJQixZQtvjYkFhsomOjgmnGpaHoW
-   eDq3ktyry0+5P3yxgWFS8oYbQ5FEDP0POxlXCqjBA7Mz8F7QAJ8zUnBbk
-   azUHg726sSCugD2mAAc6axLHD4NL9+K7ob884w4t8yxlSVUvy8LOLC6mg
-   A==;
-X-CSE-ConnectionGUID: rsi94sKJRMKeBKzuAV0gLw==
-X-CSE-MsgGUID: helcDn+jSVmYo99bRbOYvw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11252"; a="30532388"
-X-IronPort-AV: E=Sophos;i="6.12,144,1728975600"; 
-   d="scan'208";a="30532388"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2024 01:56:57 -0800
-X-CSE-ConnectionGUID: WMCZLN+uRM6Tq56sdPrgOA==
-X-CSE-MsgGUID: duWXw3rnTBmNKkmytjfRPQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,144,1728975600"; 
-   d="scan'208";a="86787521"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Nov 2024 01:56:53 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tARA9-0000000DYBD-2fgv;
-	Mon, 11 Nov 2024 11:56:49 +0200
-Date: Mon, 11 Nov 2024 11:56:49 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Pavel Machek <pavel@ucw.cz>,
-	Dominik Brodowski <linux@dominikbrodowski.net>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: [PATCH v1 3/6] leds: gpio: Avoid using GPIOF_ACTIVE_LOW
-Message-ID: <ZzHU4absCxcA1FBG@smile.fi.intel.com>
-References: <20241104093609.156059-1-andriy.shevchenko@linux.intel.com>
- <20241104093609.156059-4-andriy.shevchenko@linux.intel.com>
- <CAMuHMdXx6hYsdKo-5sw+-vH7GOJYWn_de=wSvhj1QVVpbwCN7Q@mail.gmail.com>
+	s=arc-20240116; t=1731319157; c=relaxed/simple;
+	bh=oqchIAOV+ujAuuqGpj2VFndIG4Bf4mSoSDUOyVmgWy0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qFtpHfaZbJefGalnuc3qMxbyEb2JmSXdbuiyKxjygrgVWB62wx0Vt4PUAVuCdDjxOrOIIOcKJg3Ho5/pCkWi3DVZt/E7/AOJVq0YtJ5ALoaysVceBBX5ktKvJEKya56Ea29CZZKG38n40QmxT99zxqKRRyjX2RwS8sojJ5Fu1vE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=PuCA/Y8B; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=K2zNtide reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1731319154; x=1762855154;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=oqchIAOV+ujAuuqGpj2VFndIG4Bf4mSoSDUOyVmgWy0=;
+  b=PuCA/Y8Boy6Je5SH6lPqNK7ey7Xc4gNXw5/M3mxRgFHUsqW47uRLF4Wm
+   g5z8Sl4LQQRymaPXZKcQk53NXMGcZpq3bGyCNDgnnLYoNaKrjTXcLbH+k
+   wd8nagAGQhrUyHAQCyDwS3BIF/Q6mFK54dQiwclVoRApW4MGdiHEnAA4q
+   jAm1CuM6w+FT8jleelBxWAuduiC6mc2cDfpRIjt+ZSGfaimrmxc+1tO3X
+   essB63JxJ6liRJvAONeQfWQ/XJTemih+2PSNxnJP7eyCNH6PTUazP2xt+
+   gY9efh+LzfB16Xrfp2QEWkTafwAuA61jlPnVrzVNpa0GmcJJnvuGFbB25
+   Q==;
+X-CSE-ConnectionGUID: bLzZoMNiTlC78uJSz6rOag==
+X-CSE-MsgGUID: fLtsWKQiRT+AHbmP2bbOBQ==
+X-IronPort-AV: E=Sophos;i="6.12,144,1728943200"; 
+   d="scan'208";a="39960460"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 11 Nov 2024 10:59:04 +0100
+X-CheckPoint: {6731D568-30-D31EDE1A-D52D6119}
+X-MAIL-CPID: 072718E0F89994E832C944FEBBA3E4C7_5
+X-Control-Analysis: str=0001.0A682F25.6731D569.005A,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 01EFA165700;
+	Mon, 11 Nov 2024 10:58:57 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1731319140;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=oqchIAOV+ujAuuqGpj2VFndIG4Bf4mSoSDUOyVmgWy0=;
+	b=K2zNtideaFnscstKqfITpwJxPHlZA+t9kTzTL9KSiI52w4VBrqmDKo1sX/5+uHpgJMPpGi
+	/KJV7gskuxM30VoCmQSkQEA3Ou/4t3wdza8k8GL2qQVfyBFSVPuIASlfHaIhBve4siYqcu
+	o8Fe86VdngGAsIuOIqMy+NWrg+Ycj0tCDAMplZP8KRMjXOooVjmxHPt4QLUQF4uGR4fW33
+	Z0ycB9lqfIxhALVFWdHv6iNmmzcRKCGcSVEF89XxYZN35jJwpi+Wd/ExWPGdLjKRHfGagp
+	d8XRWCbP7Zi94OJhOHMIgoXCtGZ8iWiyfwV53JxTFOQyARUUaJDOMbSWV9Qdgg==
+Message-ID: <068c22af19c07a7c79bb4abb0366a2505b4b1aae.camel@ew.tq-group.com>
+Subject: Re: [PATCH 2/5] dt-bindings: arm: ti: Add compatible for
+ AM625-based TQMa62xx SOM family and carrier board
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To: Conor Dooley <conor@kernel.org>
+Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero
+ Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
+ Tony Luck <tony.luck@intel.com>, "Guilherme G. Piccoli"
+ <gpiccoli@igalia.com>, Felipe Balbi <balbi@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>, Hari
+ Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
+Date: Mon, 11 Nov 2024 10:58:57 +0100
+In-Reply-To: <20241106-happy-anything-46f7293f6aca@spud>
+References: <cover.1730299760.git.matthias.schiffer@ew.tq-group.com>
+	 <4f5ad877f44df35a3b2c7f336647f057c4e6377d.1730299760.git.matthias.schiffer@ew.tq-group.com>
+	 <20241104-floral-dexterous-7d3fee2ff616@spud>
+	 <c73cac598788ccabd1791b1232e8fd9d7ce23ac6.camel@ew.tq-group.com>
+	 <20241105-tinsmith-countable-fbb51045bc98@spud>
+	 <7286141141fe4930cd2581dac7a1fb36a98e62c4.camel@ew.tq-group.com>
+	 <20241106-happy-anything-46f7293f6aca@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4-0ubuntu2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMuHMdXx6hYsdKo-5sw+-vH7GOJYWn_de=wSvhj1QVVpbwCN7Q@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, Nov 11, 2024 at 10:45:13AM +0100, Geert Uytterhoeven wrote:
-> On Mon, Nov 4, 2024 at 10:37 AM Andy Shevchenko
-> <andriy.shevchenko@linux.intel.com> wrote:
+On Wed, 2024-11-06 at 16:40 +0000, Conor Dooley wrote:
+> On Wed, Nov 06, 2024 at 01:03:08PM +0100, Matthias Schiffer wrote:
+> > On Tue, 2024-11-05 at 18:55 +0000, Conor Dooley wrote:
+> > > On Tue, Nov 05, 2024 at 11:40:20AM +0100, Matthias Schiffer wrote:
+> > > > On Mon, 2024-11-04 at 18:47 +0000, Conor Dooley wrote:
+> > > > > On Mon, Nov 04, 2024 at 10:47:25AM +0100, Matthias Schiffer wrote=
+:
+> > > > > > The TQMa62xx is a SoM family with a pluggable connector. The MB=
+a62xx is
+> > > > > > the matching reference/starterkit carrier board.
+> > > > >=20
+> > > > > Why all the wildcards? Why isn't there a compatible per device in=
+ the
+> > > > > family?
+> >=20
+> > Because all variants use the same Device Tree. There is also only one c=
+ompatible and one (main) DTSI
+> > for the AM62 SoC family, which our Device Trees are based on.
+>=20
+> So what varies between the members of the family?
 
-...
+There are currently 6 SoCs in the family:
+- AM6254
+- AM6252
+- AM6251
+- AM6234
+- AM6232
+- AM6231
 
-> > -       if (template->active_low)
-> > -               flags |= GPIOF_ACTIVE_LOW;
-> > -
-> > -       ret = devm_gpio_request_one(dev, template->gpio, flags,
-> > +       ret = devm_gpio_request_one(dev, template->gpio, GPIOF_OUT_INIT_LOW,
-> >                                     template->name);
-> 
-> Just wondering, as I am not 100% sure: can this change change the
-> initial state of the GPIO?
+They differ in:
+- Existence of GPU (AM625 vs AM623)
+- Number of Cortex-A53 cores (last digit)
+=20
+All of these use ti,am625 as their SoC-level compatible. The differences ar=
+e currently handled by U-
+Boot, which checks various feature flags in the SoC registers and patches t=
+he OS DTB accordingly by
+removing CPU nodes and disabling the GPU node if necessary.
 
-You probably wonder how ACTIVE_LOW affects the OUT_INIT_LOW given above.
-I have an answer to you, however I might be mistaken as well, but I spent some
-time to investigate.
+>=20
+> > > > For the compatible string we've chosen the TQMa6254 as the represen=
+tative for the TQMa62xx family.
+> > >=20
+> > > And all the boards in the family are the exact same?
+> >=20
+> > There is a single TQMa62xx PCB, which has some AM62 family SoC installe=
+d (AM6254 in the case of the
+> > TQMa6254, but all AM62 are possible). TQMa62xx is also the name used fo=
+r marketing when not talking
+> > about a specific SoC variant:
+> > https://www.tq-group.com/en/products/tq-embedded/arm-architecture/tqma6=
+2xx/
+> >=20
+> > Some SoM variants with different RAM/eMMC/SPI-NOR/... do exist, but the=
+y don't have separate device
+> > trees (firmware may patch some variant information into the DTB however=
+, like the correct RAM size).
+> >=20
+> > Choosing one representative for the family including the SoC variant nu=
+mber, but not distinguishing
+> > minor variants matches the level of detail used for our other SOMs alre=
+ady supported by mainline
+> > Linux (like the TQMa64xxL and various i.MX-based platforms).
+>=20
+> I don't like any of this wildcard stuff at all, who is to say that the
+> next soc you put on your SoM won't be an am62a7, which has a specific
+> compatible in the kernel? Your fallback then would be ti,am62a7 not
+> ti,am625. Probably someone will say "that's the am62a family not the
+> am62 family" - but that exact thing is why I hate all of this
+> wildcarding. It's barely any more effort to have a tqm6231 and a tqm6254
+> compatible than what you're doing with wildcard but it is unambiguous.
 
-The above mentioned call ends up in the gpiod_direction_output_raw_commit() which
-uses the value (low in this case) as an absolute value. It does not include the
-ACTIVE_LOW in the value calculations. Hence, setting ACTIVE_LOW before or afterwards
-has no effect on the existing flow.
+Our intention here is to have one SOM compatible string for each SoC compat=
+ible string. As all SoC
+variants use the same compatible ti,am625, we've chosen to do the same (usi=
+ng tq,am625-tqma6254 as
+the representative.) A hypothetical SOM using a ti,am62a7 would obviously n=
+ot use the
+tq,am625-tqma6254 compatible string.
 
-If you notice a mistake, please elaborate this, so I can fix the approach!
+At no point we're including wildcards in our compatible strings - we're reu=
+sing a specific
+compatible string for multiple compatible variants. Or is what you're takin=
+g issue with the wildcard
+in the description string in the YAML? That one I don't have much of an opi=
+nion on.
 
-> >         if (ret < 0)
-> >                 return ERR_PTR(ret);
-
-...
-
-> > +       if (template->active_low ^ gpiod_is_active_low(gpiod))
-> > +               gpiod_toggle_active_low(gpiod);
-> > +
-
--- 
-With Best Regards,
-Andy Shevchenko
+Best,
+Matthias
 
 
+>=20
+>=20
+> =C2=A0
+
+--=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+https://www.tq-group.com/
 
