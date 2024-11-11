@@ -1,142 +1,127 @@
-Return-Path: <linux-usb+bounces-17426-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17427-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 366069C3BCC
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 11:21:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E2199C3C0D
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 11:34:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8F24BB21A57
-	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 10:21:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 062881F2224C
+	for <lists+linux-usb@lfdr.de>; Mon, 11 Nov 2024 10:34:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D78817BB2E;
-	Mon, 11 Nov 2024 10:21:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BAF7158555;
+	Mon, 11 Nov 2024 10:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ca9OuJs9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB7016DEAA;
-	Mon, 11 Nov 2024 10:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3C715666B
+	for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 10:34:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731320493; cv=none; b=dh5f1LZ5/JXYpPTHYE/TJoHcb60cXOh7Tmd6B6ysdQHBLYl0a1l+qX9quBpKEp3wv0MN6J0zkCpm1IHVrBX8gJU1JPoNqohOT4xjUb+scZZX6xHk83Uygj4iOTVwrn8wkJgHArWKZhNyD5EqRsDMCFvTJRe/hbuR4DQK4XpctRA=
+	t=1731321248; cv=none; b=NZ0SpFJO7HifbmPHvuhGykFj+BqbJnLNGuYwZtEVNOVk9+n3nYL1nheJF7yBEAw90skLASeW7iCztrOBpyD9Dma2ti0Fl/uiaj3Tjqt5YXrfToc+uXdfONL0k25HR4XDNw5eG4mZ6TxC2Zm1kamYR5bFER9VYuGhXW4S4k+qWVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731320493; c=relaxed/simple;
-	bh=KdiGJu18JwQkumaQM+w3BP2/Lc/VQeBEoG4u7PY69rY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=H7/KeZu7yR1cgjVEU9U7Kn3NPKw4fFj4Z//mjVclUEferYEjJ2sh6dBAesmAQ6O6YiUHBkBVMlS9NO07i9DV7Flg+xvkapcRYDpMd61c58NC9IY9ZSOFaJetzbIA0KLOj0x1dtfqlhzEfYrBJoHAJYmLbxmsHa0YdIAKfb51EzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e30cef4ac5dso3936248276.0;
-        Mon, 11 Nov 2024 02:21:31 -0800 (PST)
+	s=arc-20240116; t=1731321248; c=relaxed/simple;
+	bh=rh2GeJF4QVyUpmHGJsOHbhA3iRjcTX6tfVlu+SANcmU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WqzI+nwAKNqPCeIfLbVrXnJKhUkXnsLQBLINPp7pes4vQHErqMWM31ZQ2D7IK4SrkzFAXH5OkJwhiCaBu90GAikBdzf0tY9KooyEagQPZFIDlBR/eH81K4yOultpMu4FNjFa9wXD0fy4+6XT7sKLtU0wke3zAYpV/BcUj18VDWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ca9OuJs9; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-37d5aedd177so2517972f8f.1
+        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 02:34:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731321245; x=1731926045; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FwuGf2+cwJHbTfTWkBmiXJ6p4B87DVWKG2r44BIZo/M=;
+        b=Ca9OuJs9ssBhclrO6e6kfI/wp5HiukZ+zhcOaZWMYFQCuPOir7e4gN2ZNa24No4IUJ
+         l/mA7LFl9iQOrbKrxZR1rkHOjjGxsj81eGPI+YbkKupuUisUmwh5Lhge0aPlqnfoSOSz
+         IT8b0xE7YKDZQxG4AJKHsadSzFPDCkSe/ngAtOgAIZrgvR2zE6vkCE6cI45cpcrc6Gxg
+         9pTdHUq/SMTTj7h02sxYRGnjOp+UmY8Ek5UAgPj0QakHEpfpS1rB4zaPn3jWgci0xiZp
+         8p+6MqmNEqPMxBnkDGA4vEZgGASedG57CHR6Zv5VDRJHKEWeEsU6mWoU28E7u++ywTGG
+         SOfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731320489; x=1731925289;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IaEOyMbaVWJTZKa+Sq5zT53vxz01/13ANVZcLosS5Ms=;
-        b=jDLJdejJlY/6TA84nbZD3l/s0gzRKm0hcQQ9+3+G52CdqJ5ooCb33SEn9rM7+e9Fdt
-         Mv9dkCkmws8olzvZPMJfW1glQdUf3lLAM7TsnU2GB5AT9/ENYdlvinPhfU8SK4P7ZBqU
-         7K/51gFH6Se/B4zEkwNiXB9Q2lIgsEMlAbrajDkQzJv8Le8ESgf2lG8SxVUD8f1J6A83
-         QcjFJ6lKnM06VJ8nF5oEj6yrQ1ycjQXAadW6HlAvUryThQrf4T5g6YtZCvPwG4gydcUd
-         XDfiBxy0Y+8cYqP73+mQYxh+zC6MN5gvVkaSXdoUj6YEAD7bauoIPiMutiywzTQ5OFye
-         xJ5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUsaqAplziFITNFej7hFdoyH6nykbhloKirUfC//J4zrR9ctbvaztniPf8yZ9sP0nmV1E0pA9+1IDMQ@vger.kernel.org, AJvYcCWNlJtk7TIjBs5Ztv6mkuF/Pt9MOu98ZGwbiBh8XYy8KYCtdWzBgf8XyrD/EdS7orunNk2AX6/dyycA++8=@vger.kernel.org, AJvYcCWT2zgFSQdv30cFZnLDxI4RPdRkMpVTHoXjiQC/F/4QxkTh9kK1Q09RWtIyvGSe/K5sR99F/6Hko0e23EMD@vger.kernel.org, AJvYcCXV6/K1GHa/hcYSYDoVI1a7GqT7iW3QF1X0JOQgbiLIcRsNamuS6nv0gaSpcPVhDTSrOwcErlmbflC2jw==@vger.kernel.org, AJvYcCXZuwiM6mjOLIxaGf6Y46ljofms6tmgoh6KmpuFAx4i+PWwfR410wHNmIC5aHANkoS/HORkXkeUkCYH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5+VKP4OMA53sUX1F2xtTMIrBf3vl0Zn5Micv4J00AkxMEOTUf
-	NrU0i5ZXjIs0ib0TT5vGoLqUoZIyZJ4lSW2sh/txrPXS1MfDAwF0Qi9SsyGG
-X-Google-Smtp-Source: AGHT+IH8py6XlkejS5DyRf+Z0e9sH7h9872vwc0BFnIf+3PeS1F4vKD44G6pnKQ65kR4Jc0vAdUO4g==
-X-Received: by 2002:a05:690c:4d83:b0:6e5:a4d6:e544 with SMTP id 00721157ae682-6eadddb5d23mr114054677b3.24.1731320488964;
-        Mon, 11 Nov 2024 02:21:28 -0800 (PST)
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com. [209.85.219.178])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6eace8ef432sm19515317b3.33.2024.11.11.02.21.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 11 Nov 2024 02:21:28 -0800 (PST)
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e333af0f528so3915956276.3;
-        Mon, 11 Nov 2024 02:21:27 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUI5bc8AoeoLZys7+iNnSC82DVSlYIWfU0RfrQBzdfhO0bF4kQVxsP5QT6eJxKkD0EtmPYDgE4wd7FATQ==@vger.kernel.org, AJvYcCUajA/u1aaYhXtdfvYlJIQqllqCjcgt9xLPTMrFRz+APXo+Kh1Dr1F0oud7QvXQi3rl2/nF0D8/d0L4@vger.kernel.org, AJvYcCWtoAbKrh0McsRLstayYKZU22LEe6LX2qcrFnVP+avGUtr3cJO+q4eoKOJ9RqGlrse5Nwl+fjfIFwXt@vger.kernel.org, AJvYcCXXkY3twezjs+O+Tu7BvQlUn+EGbYrcqV7BHZN+QL+vCImfZ9Cx5M+5BuiZLH8lVtmTvcZWH0GsXMnYn50=@vger.kernel.org, AJvYcCXxGMlN/X2f/wjwLWbyjaEy9cU/26+kQHIl2L569vOJlPOCjepc/VqHrGBJcvNFuDu27B+FKYdjMF7z1J/Y@vger.kernel.org
-X-Received: by 2002:a05:690c:6288:b0:6e5:9cb7:853c with SMTP id
- 00721157ae682-6eaddf6f2cemr115795827b3.31.1731320487426; Mon, 11 Nov 2024
- 02:21:27 -0800 (PST)
+        d=1e100.net; s=20230601; t=1731321245; x=1731926045;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FwuGf2+cwJHbTfTWkBmiXJ6p4B87DVWKG2r44BIZo/M=;
+        b=bgUYhuz4J1eS+FOgP630puAcs4uN0oi6Do304JlVmwS/VJWuFa1LwVJN45pKNflIR3
+         0/6YA5TC3tozynNyaB0aSgEwG1y1AuA+yJdhdmWj/33TYooAVYvGeB7eyAnyFoY3bnqV
+         qUhpqRpxzCwgawHIcWm0rDLXNy19pOnUyhD/SEuId9zHIWpzWF9MxuPx98MILZchSpUG
+         ENPYPMzH8UMK1GrjKqnSW4t2D0N0Zr8m+gFI6x+ctBUCV390ppfLvf1pmfuADFMa3+DU
+         8McF484soztPAbL1smOdchvnpulpUN7u0hSQm01JJfjdQjutOFGk5IasROOneyjZdC0D
+         qBoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW6q8oaMVXCMlAHDexscRw1byOKz5Ynb0qrpWWuEfW7xP55g80Z+QVSHv22wlgws3A4KWOEuNDHF1U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9Tsd2ySVGgOUgQD1CgxMmDZYwab0wFNbf10uRd3QP3PFd1K+R
+	fqodAoAfm6RO1dJ0P0/brVu4ruWRQellmyLzvoUmre3YBuiqerYpFh1t5hO+YVOjaoQXO9SUVfG
+	x
+X-Google-Smtp-Source: AGHT+IHZE4L79KxV4qbUKuzXhIozbYxbYxMLdAtAMoyuxlCVar8QGw2uQLLvgLJ67qC0VUxOpNxPTw==
+X-Received: by 2002:a05:6000:2a88:b0:381:f443:21b9 with SMTP id ffacd0b85a97d-381f44325e6mr7260492f8f.3.1731321245029;
+        Mon, 11 Nov 2024 02:34:05 -0800 (PST)
+Received: from linaro.org ([82.76.168.176])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381eda03e42sm12787299f8f.89.2024.11.11.02.34.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 11 Nov 2024 02:34:04 -0800 (PST)
+Date: Mon, 11 Nov 2024 12:34:03 +0200
+From: Abel Vesa <abel.vesa@linaro.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: ucsi: Fix a missing bits to bytes conversion
+ in ucsi_init()
+Message-ID: <ZzHdm5GMYrKe+IL0@linaro.org>
+References: <20241111100220.1743872-1-heikki.krogerus@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241104093609.156059-1-andriy.shevchenko@linux.intel.com>
- <20241104093609.156059-4-andriy.shevchenko@linux.intel.com>
- <CAMuHMdXx6hYsdKo-5sw+-vH7GOJYWn_de=wSvhj1QVVpbwCN7Q@mail.gmail.com> <ZzHU4absCxcA1FBG@smile.fi.intel.com>
-In-Reply-To: <ZzHU4absCxcA1FBG@smile.fi.intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 11 Nov 2024 11:21:15 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVsjfSCcdVQee6tFgvs6PDB+iKWd964XhHKmF9WRDHWkA@mail.gmail.com>
-Message-ID: <CAMuHMdVsjfSCcdVQee6tFgvs6PDB+iKWd964XhHKmF9WRDHWkA@mail.gmail.com>
-Subject: Re: [PATCH v1 3/6] leds: gpio: Avoid using GPIOF_ACTIVE_LOW
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>, 
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org, 
-	Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Pavel Machek <pavel@ucw.cz>, 
-	Dominik Brodowski <linux@dominikbrodowski.net>, Daniel Mack <daniel@zonque.org>, 
-	Haojian Zhuang <haojian.zhuang@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241111100220.1743872-1-heikki.krogerus@linux.intel.com>
 
-Hi Andy,
+On 24-11-11 12:02:20, Heikki Krogerus wrote:
+> The GET_CAPABILITY size is wrong. The definitions for the
+> command sizes are for bitfieds and therefore in bits, not
+> bytes.
+> 
+> This fixes an issue that prevents the interface from being
+> registered with UCSI versions older than 2.0 because the
+> command size exceeds the MESSAGE_IN field size.
+> 
+> Fixes: 226ff2e681d0 ("usb: typec: ucsi: Convert connector specific commands to bitmaps")
+> Reported-by: Abel Vesa <abel.vesa@linaro.org>
+> Closes: https://lore.kernel.org/linux-usb/Zy864W7sysWZbCTd@linaro.org/
+> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-On Mon, Nov 11, 2024 at 10:57=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> On Mon, Nov 11, 2024 at 10:45:13AM +0100, Geert Uytterhoeven wrote:
-> > On Mon, Nov 4, 2024 at 10:37=E2=80=AFAM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
->
-> ...
->
-> > > -       if (template->active_low)
-> > > -               flags |=3D GPIOF_ACTIVE_LOW;
-> > > -
-> > > -       ret =3D devm_gpio_request_one(dev, template->gpio, flags,
-> > > +       ret =3D devm_gpio_request_one(dev, template->gpio, GPIOF_OUT_=
-INIT_LOW,
-> > >                                     template->name);
-> >
-> > Just wondering, as I am not 100% sure: can this change change the
-> > initial state of the GPIO?
->
-> You probably wonder how ACTIVE_LOW affects the OUT_INIT_LOW given above.
-> I have an answer to you, however I might be mistaken as well, but I spent=
- some
-> time to investigate.
->
-> The above mentioned call ends up in the gpiod_direction_output_raw_commit=
-() which
-> uses the value (low in this case) as an absolute value. It does not inclu=
-de the
-> ACTIVE_LOW in the value calculations. Hence, setting ACTIVE_LOW before or=
- afterwards
-> has no effect on the existing flow.
->
-> If you notice a mistake, please elaborate this, so I can fix the approach=
-!
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+Tested-by: Abel Vesa <abel.vesa@linaro.org>
 
-Thanks, I had discovered the same, but wanted to double-check!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> index 974a441155e1..c435c0835744 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -1775,7 +1775,8 @@ static int ucsi_init(struct ucsi *ucsi)
+>  
+>  	/* Get PPM capabilities */
+>  	command = UCSI_GET_CAPABILITY;
+> -	ret = ucsi_send_command(ucsi, command, &ucsi->cap, UCSI_GET_CAPABILITY_SIZE);
+> +	ret = ucsi_send_command(ucsi, command, &ucsi->cap,
+> +				BITS_TO_BYTES(UCSI_GET_CAPABILITY_SIZE));
+>  	if (ret < 0)
+>  		goto err_reset;
+>  
+> -- 
+> 2.45.2
+> 
 
