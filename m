@@ -1,122 +1,166 @@
-Return-Path: <linux-usb+bounces-17488-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17483-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5992E9C5C0C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 16:38:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13F1A9C5C79
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 16:54:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F92D1F229FC
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 15:38:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84123B2EBA5
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 13:44:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E0B020125E;
-	Tue, 12 Nov 2024 15:38:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F7F31CEAC9;
+	Tue, 12 Nov 2024 13:44:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="F1icZC7u"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yQZxhrup"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EA7520111A
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 15:38:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E176A1531C4
+	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 13:44:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731425900; cv=none; b=e+4DGxcysmYd5t5DnitqrWsB9WITs2g27zI5Y9RNI5uo6vWI//C59KvFOGeC2cuyHiV4tRP3QW+sjwLjNl/bD8Yoi/QoKr63bljnGEUNtC4twDOFCeFS/kxQchHRrHhCbxrDjDekVWWvf6JlwdxyWbpMnE80bkVWy4SawLLI1gk=
+	t=1731419058; cv=none; b=di2z4e2ygKD0/GCJzDi3tz2tp2Rg0gvM0cVVja/qJkgWYMsRFTqIArdFYGCAOCRQ/JIWSnsj/3SZVBrkc2b/xyAAAW4+OSIMKBzE3ItCwcHTQe9FZcN4ywfLoYz4s2E9AbDZlQBUDsqquZZz6LfLLr8ObBUxid7LPC5zLuRfaHU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731425900; c=relaxed/simple;
-	bh=sdhx8TvevQPzP9rwHjeBQ0WqXkaUKN2RtRj7mimst3U=;
+	s=arc-20240116; t=1731419058; c=relaxed/simple;
+	bh=QzGHxcfoOYe3xDN7+yhw9DxRuWlEvc/M4ObJ0BC2+E4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SUxX+e/o2C/hDP0t7Y46a26BKgi/2e39gQ4b4K1m55gTlwQRW9Gq1O8sz9MfDV8XO3DsG/Ouval/JOwwhXmkzphWhyoeyaw5iqsNVWyAnsdpq91YdBX3fgVdoH4qZ7JFLrbQXVJxg+/SIPnUqeh4aWM/aZT/sRbG5v04JTNH9Cc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=F1icZC7u; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6ecaa45af7bso6948057b3.3
-        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 07:38:18 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=dM4jQBw1DUFRZ4NFexFMxrUNSL/Pbj/EKEz6WlieWDu2HelDkYxGkndxQChaleEDWYqaFqUA6og6m6JU5r5B2YoKZKmvrcGab4jz1x5UJEysFFv/YdQdx9Ynx5EfYmQ0cc73Kle/460EGetnfsxzk5sy7r2DpQouT5+Y2aFdzkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yQZxhrup; arc=none smtp.client-ip=209.85.167.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539e13375d3so6555936e87.3
+        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 05:44:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1731425897; x=1732030697; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=wgr2G18lvm+aKu8E73YpOcAkoG1t4AtxA2QHpWS3/f8=;
-        b=F1icZC7uprmZWuH5USgXIZI6JzHhuCaCsUIkYzVryfu6s+StZ/RqkSkopNme7sUiFj
-         sPNWrdSA72RBCFXdVuXzxCSV7bnNkMjLX4fsCyFf844845wBrAWOO8lFQ6x6/Jhez/wj
-         ysYHmLX+asibAbvPMlp6vJWlfBG0GWPqXMlqkafrKKIw1FAQB0LEVDYDs0wCPaowBuDg
-         Iwnk5qWYMRn3ORDzXn5yQKX7tV7seTn+OTDk0+mLTKQfFMUwAMhul0Bzhh3Yi87kU/mr
-         hhJsoae5DYE8NrsfGDfYspUfCBcQXI643edAocRGwyv1AvBvbAtJwM2Rl3ZMehCDCYXH
-         9+Mg==
+        d=linaro.org; s=google; t=1731419055; x=1732023855; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iDZVjDz8WaHN7Uzdxa3K3Hi8mi6UCuBy7yMBk40iTWc=;
+        b=yQZxhrupCKwqVHrJ5yLk7Hnpl/hBVX1XuWMc3u5hZadPsWwccVgDATeRNmBAvUjJ05
+         8ztceHhmFLiPlAlR0FOPnY3B1n1PgJBMlZ/7CskrNFXvzTH1nwFN4lHkkML//hVWCEd/
+         W9nUj0EHZrC6PUSTVN+ppfQRxXa7mTIdbw3AAk8F6RMMxfHqAFfgYjafkl2lAXyjJtu1
+         RIaGc5eyB0hR1MuMfeHU7gt5tPCbnLK9LM3hN+CKlUOKEPoBW2hglSVwtJGfdFL6sXpg
+         E9IIKdkbNRq4ovsy8GKpLNHdR2AV5t4EycLwliojOzgo30hmDiWUJpu8CRSGBEYWDMK2
+         Jbtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731425897; x=1732030697;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=wgr2G18lvm+aKu8E73YpOcAkoG1t4AtxA2QHpWS3/f8=;
-        b=Vcn0eevQq6aRD5C2tubflMN3sTbiAPfyijw7YDACpB5UfTcQCxVZFHbrRPCpe6VwJk
-         bw1VkJ3tMpPjb9qJkZzb4yuZUBqDauFXuep77W9WhcUKihNWgNXfiCyKWb1+4J2vjKZC
-         jQA6R4+Ka5ommOxFcSkI6rSd2zoM375T+yiGewVNopViVozTN7w054Dnvghhyp0s4Bw8
-         Xg+hsSgVP4QqkCVFHKsMFzTvHpwsB8qkUOX+s5DUW7ZMIjpi6uHp8j5WkDENYAR7fM+j
-         zVvlTl5/OzERmGEqgMRv1XxONUDw4Z5+p+Vg9dV0ENWFBTwaW6FXb5r0t6NvKMdD0TqS
-         eEoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXF5g/2tk59ZyoPJ2KCVZ84qfekR9w+VpeLeNMMtaArF881jaJSkpjDbK3yZSRP5AJ3R2/URKLlsQY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQuQoh7Omgz92PojJBORyr89a2g1YSWQnrLDDy16uEnwxcBIqX
-	/+mGaetVH1EMN3kIKpAsC6qUuUs4GkUcEuo6q/oIvglze4V85iIi2NEetBiDMg==
-X-Google-Smtp-Source: AGHT+IEvx8kjGI3x0PUBktGzbHj8Jxk6e0Ogjux8k1tUZhjwc7mbhV3SJD13bOyQRf9GiQ7DNvsx+A==
-X-Received: by 2002:a0d:c907:0:b0:6ea:4d3f:df7c with SMTP id 00721157ae682-6eaddd72e88mr114617417b3.9.1731425897546;
-        Tue, 12 Nov 2024 07:38:17 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.12.5])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d39643b377sm72819876d6.79.2024.11.12.07.38.16
+        d=1e100.net; s=20230601; t=1731419055; x=1732023855;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iDZVjDz8WaHN7Uzdxa3K3Hi8mi6UCuBy7yMBk40iTWc=;
+        b=Q0jFR4Tk+3YEpIb4g4eWBRFjf1MQ11zAQ9qg9LBiQQbqLnvXUl9KS3njhUHels9RST
+         ZJU9OYKlSeK5A7C13qCqzJYkSCJ8bpJdqE5ZPcO252B4txzfJ0ZPShlv3O+fAvDuA+nH
+         3u9AtEU9iHxQ6jSWQS57UIQP+cJ/Ga6XawLUE5BqzmXPzstng6ZlWO/SIMWXF7AvSucZ
+         DiGjNeLJAcIMamdq87JvYBeBRV6z+wp3rHfw3skztdwz/4QUbnKcaOI/AYolzr11kxt/
+         PO/dXDPmKxIM58TV/jDC7mnj+fFtS+DoEXzFarvw6R+ZKLiGnl8L4WTNQAYwdyuugmzM
+         9QRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUCieloOWBUnJONjNCBGDMPqjH0eZfsTH6vfgPN1FhSqmUM6wJHTziD4/udwAwYvD9SXEaWYoQUHRo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3a/BBRCAoK865QLZOh8p2XgkAJ6uCp5yZSQ1LGFJ1CloKVt9g
+	CPCndOjTlOD+FzUmpqIzm4/mvXSOG3Q2usLE89oQQ5famCKZ0ia+NKUiRRVP3XXrpAprl0Fm47/
+	h
+X-Google-Smtp-Source: AGHT+IF4DigzAsf4mgiTBlNcElKCvgjRc9RJrMYFwqjztVN7WEdLH0Y1ZR0nSSYwsHZKJQCBBLdvJw==
+X-Received: by 2002:a05:6512:3b9b:b0:539:fbd4:9c9a with SMTP id 2adb3069b0e04-53d8626c823mr8459877e87.35.1731419055072;
+        Tue, 12 Nov 2024 05:44:15 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53d8267859csm1886887e87.45.2024.11.12.05.44.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 07:38:17 -0800 (PST)
-Date: Tue, 12 Nov 2024 10:38:15 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Cc: Oliver Neukum <oneukum@suse.com>,
-	syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com,
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] usb/cdc-wdm: fix memory leak of wdm_device
-Message-ID: <7b25946e-265a-4939-98dc-d31555e143bb@rowland.harvard.edu>
-References: <000000000000e875fa0620253803@google.com>
- <20241109152821.3476218-1-snovitoll@gmail.com>
- <825be5e2-31b2-4cd6-a283-05935ea6161f@suse.com>
- <9447f943-5172-4386-b159-f6b37735fe13@rowland.harvard.edu>
- <CACzwLxht_ACYD4QdDqSWfYkZ7+0a+z8DWMt15KhGCF4E1g9-Lw@mail.gmail.com>
+        Tue, 12 Nov 2024 05:44:13 -0800 (PST)
+Date: Tue, 12 Nov 2024 15:44:11 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org, 
+	andersson@kernel.org, konradybcio@kernel.org, mantas@8devices.com, 
+	quic_rohiagar@quicinc.com, johan+linaro@kernel.org, quic_kriskura@quicinc.com, 
+	abel.vesa@linaro.org, quic_kbajaj@quicinc.com, quic_wcheng@quicinc.com, 
+	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v1 2/6] phy: qcom-qusb2: add QUSB2 support for IPQ5424
+Message-ID: <m2w5772mjsjaolawrfuhkmiq6iaagu746tqv5qtbrllvqpf75t@cykasimx4lff>
+References: <20241112091355.2028018-1-quic_varada@quicinc.com>
+ <20241112091355.2028018-3-quic_varada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACzwLxht_ACYD4QdDqSWfYkZ7+0a+z8DWMt15KhGCF4E1g9-Lw@mail.gmail.com>
+In-Reply-To: <20241112091355.2028018-3-quic_varada@quicinc.com>
 
-On Tue, Nov 12, 2024 at 02:34:13PM +0500, Sabyrzhan Tasbolatov wrote:
-> On Mon, Nov 11, 2024 at 7:29 PM Alan Stern <stern@rowland.harvard.edu> wrote:
-> > I don't understand your analysis.  As you said, cntr is initially set to
-> > the amount in the buffer:
-> >
-> >         If cntr <= count then cntr isn't changed, so the amount of data
-> >         copied to the user is the same as what is in the buffer.
-> >
-> >         Otherwise, if cntr > count, then cntr is decreased so that the
-> >         amount copied to the user is no larger than what the user asked
-> >         for -- but then it's obviously smaller than what's in the buffer.
-> >
-> > In neither case does the code copy more data than the buffer contains.
+On Tue, Nov 12, 2024 at 02:43:51PM +0530, Varadarajan Narayanan wrote:
+> Add the phy init sequence for the Super Speed ports found
+> on IPQ5424.
 > 
-> Hello,
-> I've sent the v3 patch [1] per Oliver's explanation if I interpreted
-> it correctly.
-> I don't have the reproducer to verify if the patch solves the problem.
-> If the analysis or patch is not right, please let me know.
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>  drivers/phy/qualcomm/phy-qcom-qusb2.c | 28 +++++++++++++++++++++++++++
+>  1 file changed, 28 insertions(+)
+> 
+> diff --git a/drivers/phy/qualcomm/phy-qcom-qusb2.c b/drivers/phy/qualcomm/phy-qcom-qusb2.c
+> index c52655a383ce..4513f0c81c50 100644
+> --- a/drivers/phy/qualcomm/phy-qcom-qusb2.c
+> +++ b/drivers/phy/qualcomm/phy-qcom-qusb2.c
+> @@ -151,6 +151,21 @@ static const struct qusb2_phy_init_tbl ipq6018_init_tbl[] = {
+>  	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_AUTOPGM_CTL1, 0x9F),
+>  };
+>  
+> +static const struct qusb2_phy_init_tbl ipq5424_init_tbl[] = {
+> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL, 0x14),
+> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE1, 0x00),
+> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE2, 0x53),
+> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE4, 0xC3),
+> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_TUNE, 0x30),
+> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_USER_CTL1, 0x79),
+> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_USER_CTL2, 0x21),
+> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE5, 0x00),
+> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_PWR_CTRL, 0x00),
+> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TEST2, 0x14),
+> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_TEST, 0x80),
+> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_AUTOPGM_CTL1, 0x9F),
 
-The analysis is not right.
+Lowercase hex numbers please. LGTM otherwise.
 
-The patch is also not right, because it doesn't change the meaning of 
-the code (except for one respect, in which it is wrong).  I'll send 
-another email responding to the patch itself.
+> +};
+> +
+>  static const unsigned int ipq6018_regs_layout[] = {
+>  	[QUSB2PHY_PLL_STATUS]              = 0x38,
+>  	[QUSB2PHY_PORT_TUNE1]              = 0x80,
+> @@ -331,6 +346,16 @@ static const struct qusb2_phy_cfg ipq6018_phy_cfg = {
+>  	.autoresume_en   = BIT(0),
+>  };
+>  
+> +static const struct qusb2_phy_cfg ipq5424_phy_cfg = {
+> +	.tbl            = ipq5424_init_tbl,
+> +	.tbl_num        = ARRAY_SIZE(ipq5424_init_tbl),
+> +	.regs           = ipq6018_regs_layout,
+> +
+> +	.disable_ctrl   = POWER_DOWN,
+> +	.mask_core_ready = PLL_LOCKED,
+> +	.autoresume_en   = BIT(0),
+> +};
+> +
+>  static const struct qusb2_phy_cfg qusb2_v2_phy_cfg = {
+>  	.tbl		= qusb2_v2_init_tbl,
+>  	.tbl_num	= ARRAY_SIZE(qusb2_v2_init_tbl),
+> @@ -905,6 +930,9 @@ static const struct phy_ops qusb2_phy_gen_ops = {
+>  
+>  static const struct of_device_id qusb2_phy_of_match_table[] = {
+>  	{
+> +		.compatible	= "qcom,ipq5424-qusb2-phy",
+> +		.data		= &ipq5424_phy_cfg,
+> +	}, {
+>  		.compatible	= "qcom,ipq6018-qusb2-phy",
+>  		.data		= &ipq6018_phy_cfg,
+>  	}, {
+> -- 
+> 2.34.1
+> 
 
-Alan Stern
+-- 
+With best wishes
+Dmitry
 
