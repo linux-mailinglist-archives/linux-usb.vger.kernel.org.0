@@ -1,247 +1,260 @@
-Return-Path: <linux-usb+bounces-17499-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17500-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D24129C5E81
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 18:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CBA299C5EE2
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 18:27:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27BF2BA513F
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 16:06:56 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D3CE8B308A5
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 17:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AC992123F3;
-	Tue, 12 Nov 2024 16:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 652EB2144C4;
+	Tue, 12 Nov 2024 17:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DUJRdw6M"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K2Oz469A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037E9206E61;
-	Tue, 12 Nov 2024 16:01:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F285B20C00A
+	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 17:01:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731427293; cv=none; b=DqKta/rPgfGQYlTHvVHNnELGp2IEHogQUZFuIly6MmQOboxjAhNdyD2EV5hFSazv1XSUBdGMC0KsfjfjaHmNW1tPSXqcGNJIsCQ4aZjjkZonCBPV6k2jkI2Z8PCaPKusavvWL6rxi3SIbnUUNcVZiKwZ/ZtxvI8x9aCEy/ruGq4=
+	t=1731430896; cv=none; b=NaoQfKtUFcAtUxES9gfoRHJ4Op0x1EHuAwP4qpEJVi6FPKkEXeeStORR9mFTiiWzGLbb0FhqYP+v//nM7JbkCQDUU+lO0U4/xTvIetrUoc3uBgIb5on3dEbCI/DEn15H0Zyyqf3cmqPpNcZIFcns4mIylwvZv443ie/JgA96wpg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731427293; c=relaxed/simple;
-	bh=rE1n742XV6Hh13YXAK03XaqAi+NRIgacwErEEh/8Nto=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Tgk4q+bPAJhgGQ8eGWIb+SgFnFiPRsgnOd9cYN6kS/xamsUZTWzXF0Li7ph7GNYCpuTZYQhkU32qKaM/kxxpnru4Ny0RBYHWc/nJTSFYXZ6qaluQl7V4+HED8AUZcVPi5Xmqrcpfs4kv0uoH0s38DG/RU1BXxO7EQ4i0He9Oy7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DUJRdw6M; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731427292; x=1762963292;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=rE1n742XV6Hh13YXAK03XaqAi+NRIgacwErEEh/8Nto=;
-  b=DUJRdw6Mux3ocdraaH8w4dphmI5Kxh0+lvt9V1QT80U2KSRoA3US2JG9
-   xur+QDzg2Ux0eqTkQF0Nda9D8Vzs+eZ4xnzU4HYX7I1SoOTvvp6YegTyh
-   4f9hlrLCQ+SM7jt6Cax5xfY3FXer2LRVYRc+xll5gDXMobCjAH+FDqO+7
-   4V3xY3u3HBXxdUIt2w4q1navglVz7ZZLYTlc1cQn0cxV1BBoxVs1c+IrY
-   ICYrVQ8KaKNXr62hK7cqiHMVLbq5d9gNjxp34oqAEAtqrEWrxpJxveORn
-   BP5PONUCrFlRZkqoTINgFv0/B9m5Tm+2yOvfw6Fz98mwzPtAS5I6UTNLP
-   w==;
-X-CSE-ConnectionGUID: r00eIVo0RXWAump5SFMEpA==
-X-CSE-MsgGUID: ryj38hkrTmmaXlz06P6hWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41831474"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="41831474"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 08:01:31 -0800
-X-CSE-ConnectionGUID: 7Orz8rzdQA+vB3J+K3Cg1A==
-X-CSE-MsgGUID: UQQKbw39RLis5EwXPvg7zw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
-   d="scan'208";a="87489572"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa009.jf.intel.com with ESMTP; 12 Nov 2024 08:01:28 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 440FA1BE; Tue, 12 Nov 2024 18:01:27 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	Fenghua Yu <fenghua.yu@intel.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org
-Cc: Peter Chen <peter.chen@kernel.org>,
-	Pawel Laszczak <pawell@cadence.com>,
-	Roger Quadros <rogerq@kernel.org>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>
-Subject: [PATCH v1 1/1] usb: cdns3: Synchronise PCI IDs via common data base
-Date: Tue, 12 Nov 2024 18:01:25 +0200
-Message-ID: <20241112160125.2340972-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+	s=arc-20240116; t=1731430896; c=relaxed/simple;
+	bh=YrGT/WEwbK7dfG3C5rwOmY8DGyE1bgHzA976KZUL9LA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=EQBe/4RK0JzW4XXylv0b92Oj8Q2Oriw8vO2pe3pa7eDZiQ2AzqErtNaMTF1PTQdcz/sWnPeI5klSWgcPaFEG4W9hHNOfp28Cy40vRyRsBx9EWRBjAWhANnXI/F9Nk1oGHIF56AyqtdiIClgiGwCGHR3fmvSArpPQ3HjB9dUv0eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K2Oz469A; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43152b79d25so49650095e9.1
+        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 09:01:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731430893; x=1732035693; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uziaVaDQy8BngtJNOSr5NK4taaWrQXTvr9ogdh6p4dM=;
+        b=K2Oz469AcorHeMz2SO8nb2dyP+iLTXqqnN1o7htz1M6tFHwaP66DjFvMBU5GyCrJTw
+         Dcsn7L6zShSo/cmLoz+zI8gF7IxCofeXCvdUk2e5df+11Sb7Pl1YJvQxuoo8TOQ5QjiW
+         2KCN1geYjipU4CuNT8jFFLQgY8Vm4rjjdx2WkIZpLpUS6VnkPkYBzQal36Bab7lH5xHr
+         iBOhhuMaq+Q+8KgciLGg3ayH2DV+bCegGXPx1EUnBXHgGgYEo93V/GgVwJOdFY71zoui
+         QXRSoJychEB54DwQmKZezFd1mXjTVmaIyJYMlFw15qWXAtLcynR224AkwtiYu+FMUpQA
+         9n3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731430893; x=1732035693;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uziaVaDQy8BngtJNOSr5NK4taaWrQXTvr9ogdh6p4dM=;
+        b=Nov1N7eAwRZvqR8Pcvg4v8nqT+cGDQs8WArfd+E+y5fb4M9j7AmYS7vcccVjixCYmb
+         LMwndA2mOIckkNmRW8+wMcBKZk5GFjb/U+N7XCCoUQHaVS3F/xWXMEMMScHXG9sRaGQj
+         cd45vHW/fBdsj/xoqPN71S5UKDitb+sf7p+JG/ukE/c1jDBeXXlQiGelUTmqPxxLAQMw
+         apg9UJZNBlcUcwAG0fIEB8ouoCWflbZNVyOjJTWpXSQVwfCbKByQVubh48QW8rtuQ+4t
+         1dboQbQ7oiCvECSbDq3WEXNPM/bpWJ7nH598ld7z5aU91k5nsv8zxGrZIWtlJNW7Dw+A
+         2w5w==
+X-Forwarded-Encrypted: i=1; AJvYcCVBVZsQ4iEi4+LlmXoN7CSqLBxO1FqbCdkc8zb9SnEw9T8AF1rRepB79WMVV27dPVnkr/7ZRPKSSCs=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxgr79n5RNvFlssojsoqmBftHd5I+m3cDO+XAkhB1oWS9FvBB3v
+	bDhbtku6Dc2S9ALRkfBhhWsmNxAO77hhquBFo9XltyHjMjsLc5sLFmaNvkmRPrM=
+X-Google-Smtp-Source: AGHT+IF4QB/2TjfUIR+6ZWX1pn7J7TNSNjSlmlqayg7VpkCyq6znrpxb5ljyhp4vt2yRgukJ8sW4dQ==
+X-Received: by 2002:a05:600c:354e:b0:431:5863:4240 with SMTP id 5b1f17b1804b1-432b751732emr141608445e9.24.1731430893070;
+        Tue, 12 Nov 2024 09:01:33 -0800 (PST)
+Received: from [127.0.1.1] ([82.76.168.176])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b053051fsm215018895e9.6.2024.11.12.09.01.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2024 09:01:32 -0800 (PST)
+From: Abel Vesa <abel.vesa@linaro.org>
+Date: Tue, 12 Nov 2024 19:01:10 +0200
+Subject: [PATCH v5 1/6] dt-bindings: usb: Add Parade PS8830 Type-C retimer
+ bindings
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241112-x1e80100-ps8830-v5-1-4ad83af4d162@linaro.org>
+References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
+In-Reply-To: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: Rajendra Nayak <quic_rjendra@quicinc.com>, 
+ Sibi Sankar <quic_sibis@quicinc.com>, Johan Hovold <johan@kernel.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Trilok Soni <quic_tsoni@quicinc.com>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ Abel Vesa <abel.vesa@linaro.org>
+X-Mailer: b4 0.15-dev-dedf8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3582; i=abel.vesa@linaro.org;
+ h=from:subject:message-id; bh=YrGT/WEwbK7dfG3C5rwOmY8DGyE1bgHzA976KZUL9LA=;
+ b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBnM4nixq6PvG7V/QXXBSKFVACKzyuCBX5+iG+7j
+ GzeYxHaqbeJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZzOJ4gAKCRAbX0TJAJUV
+ VnJ0D/4rOo9lVXeTA6bmTT63M3vE7zXlTM41dYUZXiEjhyB5IkhPrPGuqXoUaqthC3chJEBQYDK
+ ShG2d0d+IoMECDsbLnZ50gPdGjmORvJ3F00jUacV8m4rAn0tdhFtHELq8+UqxNVtgLi9+Wa0jtW
+ eocwGI9V/YGCmHPR8M79COTdIWIjgQ/7HFx6GTdhalD5mudk/4Q+PxKQFickMOjlRxCQsgRDY46
+ QXu8gjNI4T79xEQDkIyjzyQIDaX6GKnQzN18heqKIbeI55Fwlh6//VKyPPhaz+lndYqHGp7pgL3
+ PXt7vmAEAK1XaEdK2PwOtPZdh3SUofQjpZPAWCJx+O8QaJ6aLDejobrTHBW8gI+vPYSrHp+6x6h
+ C9hKo76RM7eAX6ouuirb0A5+UfEx1ZCY0aDEEVhazV/19GoqqvBOalXLkmwSQjXsSyDVmPvcMtC
+ hzoDSX/mLF8++gJQPFI3SZNEhPYLk0BhEm8mk4ApXOb360oPBZUh4qwxHkxtMGN/EYY3RXS4LiD
+ QHUP9ZD0DBEIXqs0mskVVciu/p8HDey0c0jvV8r/262DiU3T46fEJ0NUzrv8Sgt2BMr4SQE10ww
+ 96bpYjg7Chi5/wgugPF7P/QQpulMLLLywyAtywcpn2ZJCbNqX4ytyrUA49cvfG5g9bmaGtEloiU
+ KabIURFMUDxCmUA==
+X-Developer-Key: i=abel.vesa@linaro.org; a=openpgp;
+ fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
 
-There are a few places in the kernel where PCI IDs for different Cadence
-USB controllers are being used. Besides different naming, they duplicate
-each other. Make this all in order by providing common definitions via
-PCI IDs database and use in all users. While doing that, rename
-definitions as Roger suggested.
+The Parade PS8830 is a USB4, DisplayPort and Thunderbolt 4 retimer,
+controlled over I2C. It usually sits between a USB/DisplayPort PHY and the
+Type-C connector, and provides orientation and altmode handling.
 
-Suggested-by: Roger Quadros <rogerq@kernel.org>
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Currently, it is found on all boards featuring the Qualcomm Snapdragon
+X Elite SoCs.
+
+Document bindings for its new driver. Future-proof the schema for the
+PS8833 variant, which seems to be similar to PS8830.
+
+Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 ---
- drivers/usb/cdns3/cdns3-pci-wrap.c       |  4 +---
- drivers/usb/cdns3/cdnsp-pci.c            | 26 +++++++++---------------
- drivers/usb/gadget/udc/cdns2/cdns2-pci.c |  3 +--
- drivers/usb/host/xhci-pci.c              |  5 ++---
- include/linux/pci_ids.h                  |  4 ++++
- 5 files changed, 18 insertions(+), 24 deletions(-)
+ .../devicetree/bindings/usb/parade,ps8830.yaml     | 119 +++++++++++++++++++++
+ 1 file changed, 119 insertions(+)
 
-diff --git a/drivers/usb/cdns3/cdns3-pci-wrap.c b/drivers/usb/cdns3/cdns3-pci-wrap.c
-index 591d149de8f3..3b3b3dc75f35 100644
---- a/drivers/usb/cdns3/cdns3-pci-wrap.c
-+++ b/drivers/usb/cdns3/cdns3-pci-wrap.c
-@@ -37,8 +37,6 @@ struct cdns3_wrap {
- #define PCI_DRIVER_NAME		"cdns3-pci-usbss"
- #define PLAT_DRIVER_NAME	"cdns-usb3"
- 
--#define PCI_DEVICE_ID_CDNS_USB3	0x0100
--
- static struct pci_dev *cdns3_get_second_fun(struct pci_dev *pdev)
- {
- 	struct pci_dev *func;
-@@ -189,7 +187,7 @@ static void cdns3_pci_remove(struct pci_dev *pdev)
- }
- 
- static const struct pci_device_id cdns3_pci_ids[] = {
--	{ PCI_VDEVICE(CDNS, PCI_DEVICE_ID_CDNS_USB3) },
-+	{ PCI_VDEVICE(CDNS, PCI_DEVICE_ID_CDNS_USBSS) },
- 	{ 0, }
- };
- 
-diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
-index 2d05368a6745..a51144504ff3 100644
---- a/drivers/usb/cdns3/cdnsp-pci.c
-+++ b/drivers/usb/cdns3/cdnsp-pci.c
-@@ -28,12 +28,6 @@
- #define PCI_DRIVER_NAME		"cdns-pci-usbssp"
- #define PLAT_DRIVER_NAME	"cdns-usbssp"
- 
--#define PCI_DEVICE_ID_CDNS_USB3		0x0100
--#define PCI_DEVICE_ID_CDNS_UDC		0x0200
--
--#define PCI_CLASS_SERIAL_USB_CDNS_USB3	(PCI_CLASS_SERIAL_USB << 8 | 0x80)
--#define PCI_CLASS_SERIAL_USB_CDNS_UDC	PCI_CLASS_SERIAL_USB_DEVICE
--
- static struct pci_dev *cdnsp_get_second_fun(struct pci_dev *pdev)
- {
- 	/*
-@@ -41,10 +35,10 @@ static struct pci_dev *cdnsp_get_second_fun(struct pci_dev *pdev)
- 	 * Platform has two function. The fist keeps resources for
- 	 * Host/Device while the secon keeps resources for DRD/OTG.
- 	 */
--	if (pdev->device == PCI_DEVICE_ID_CDNS_UDC)
--		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USB3, NULL);
--	if (pdev->device == PCI_DEVICE_ID_CDNS_USB3)
--		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_UDC, NULL);
-+	if (pdev->device == PCI_DEVICE_ID_CDNS_USBSSP)
-+		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USBSS, NULL);
-+	if (pdev->device == PCI_DEVICE_ID_CDNS_USBSS)
-+		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USBSSP, NULL);
- 
- 	return NULL;
- }
-@@ -221,12 +215,12 @@ static const struct dev_pm_ops cdnsp_pci_pm_ops = {
- };
- 
- static const struct pci_device_id cdnsp_pci_ids[] = {
--	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC),
--	  .class = PCI_CLASS_SERIAL_USB_CDNS_UDC },
--	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC),
--	  .class = PCI_CLASS_SERIAL_USB_CDNS_USB3 },
--	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB3),
--	  .class = PCI_CLASS_SERIAL_USB_CDNS_USB3 },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
-+	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
-+	  .class = PCI_CLASS_SERIAL_USB_CDNS },
-+	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSS),
-+	  .class = PCI_CLASS_SERIAL_USB_CDNS },
- 	{ 0, }
- };
- 
-diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-index b1a8f772467c..e589593b4cbf 100644
---- a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-+++ b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
-@@ -15,7 +15,6 @@
- #include "cdns2-gadget.h"
- 
- #define PCI_DRIVER_NAME		"cdns-pci-usbhs"
--#define PCI_DEVICE_ID_CDNS_USB2	0x0120
- #define PCI_BAR_DEV		0
- #define PCI_DEV_FN_DEVICE	0
- 
-@@ -113,7 +112,7 @@ static const struct dev_pm_ops cdns2_pci_pm_ops = {
- };
- 
- static const struct pci_device_id cdns2_pci_ids[] = {
--	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB2),
-+	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB),
- 	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
- 	{ 0, }
- };
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 47c4f70793e4..b21474e81482 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -82,8 +82,6 @@
- #define PCI_DEVICE_ID_ASMEDIA_3042_XHCI			0x3042
- #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
- 
--#define PCI_DEVICE_ID_CDNS_SSP				0x0200
--
- static const char hcd_name[] = "xhci_hcd";
- 
- static struct hc_driver __read_mostly xhci_pci_hc_driver;
-@@ -475,8 +473,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 		if (pdev->device == 0x9203)
- 			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
- 	}
+diff --git a/Documentation/devicetree/bindings/usb/parade,ps8830.yaml b/Documentation/devicetree/bindings/usb/parade,ps8830.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..2f20d20a2bdfe2499588dc621c14cd16ab159002
+--- /dev/null
++++ b/Documentation/devicetree/bindings/usb/parade,ps8830.yaml
+@@ -0,0 +1,119 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/usb/parade,ps8830.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- 	if (pdev->vendor == PCI_VENDOR_ID_CDNS &&
--	    pdev->device == PCI_DEVICE_ID_CDNS_SSP)
-+	    pdev->device == PCI_DEVICE_ID_CDNS_USBSSP)
- 		xhci->quirks |= XHCI_CDNS_SCTX_QUIRK;
- 
- 	/* xHC spec requires PCI devices to support D3hot and D3cold */
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index e4bddb927795..d2402bf4aea2 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -121,6 +121,7 @@
- #define PCI_CLASS_SERIAL_USB_OHCI	0x0c0310
- #define PCI_CLASS_SERIAL_USB_EHCI	0x0c0320
- #define PCI_CLASS_SERIAL_USB_XHCI	0x0c0330
-+#define PCI_CLASS_SERIAL_USB_CDNS	0x0c0380
- #define PCI_CLASS_SERIAL_USB_DEVICE	0x0c03fe
- #define PCI_CLASS_SERIAL_FIBER		0x0c04
- #define PCI_CLASS_SERIAL_SMBUS		0x0c05
-@@ -2421,6 +2422,9 @@
- #define PCI_VENDOR_ID_QCOM		0x17cb
- 
- #define PCI_VENDOR_ID_CDNS		0x17cd
-+#define PCI_DEVICE_ID_CDNS_USBSS	0x0100
-+#define PCI_DEVICE_ID_CDNS_USB		0x0120
-+#define PCI_DEVICE_ID_CDNS_USBSSP	0x0200
- 
- #define PCI_VENDOR_ID_ARECA		0x17d3
- #define PCI_DEVICE_ID_ARECA_1110	0x1110
++title: Parade PS883x USB and DisplayPort Retimer
++
++maintainers:
++  - Abel Vesa <abel.vesa@linaro.org>
++
++properties:
++  compatible:
++    enum:
++      - parade,ps8830
++
++  reg:
++    maxItems: 1
++
++  clocks:
++    items:
++      - description: XO Clock
++
++  reset-gpios:
++    maxItems: 1
++
++  vdd-supply:
++    description: power supply (1.07V)
++
++  vdd33-supply:
++    description: power supply (3.3V)
++
++  vdd33-cap-supply:
++    description: power supply (3.3V)
++
++  vddar-supply:
++    description: power supply (1.07V)
++
++  vddat-supply:
++    description: power supply (1.07V)
++
++  vddio-supply:
++    description: power supply (1.2V or 1.8V)
++
++required:
++  - compatible
++  - reg
++  - clocks
++  - reset-gpios
++  - vdd-supply
++  - vdd33-supply
++  - vdd33-cap-supply
++  - vddat-supply
++  - vddio-supply
++  - orientation-switch
++  - retimer-switch
++
++allOf:
++  - $ref: usb-switch.yaml#
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        typec-mux@8 {
++            compatible = "parade,ps8830";
++            reg = <0x8>;
++
++            clocks = <&clk_rtmr_xo>;
++
++            vdd-supply = <&vreg_rtmr_1p15>;
++            vdd33-supply = <&vreg_rtmr_3p3>;
++            vdd33-cap-supply = <&vreg_rtmr_3p3>;
++            vddar-supply = <&vreg_rtmr_1p15>;
++            vddat-supply = <&vreg_rtmr_1p15>;
++            vddio-supply = <&vreg_rtmr_1p8>;
++
++            reset-gpios = <&tlmm 10 GPIO_ACTIVE_LOW>;
++
++            retimer-switch;
++            orientation-switch;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    reg = <0>;
++
++                    endpoint {
++                        remote-endpoint = <&typec_con_ss>;
++                    };
++                };
++
++                port@1 {
++                    reg = <1>;
++
++                    endpoint {
++                        remote-endpoint = <&usb_phy_ss>;
++                    };
++                };
++
++                port@2 {
++                    reg = <2>;
++
++                    endpoint {
++                        remote-endpoint = <&typec_dp_aux>;
++                    };
++                };
++            };
++        };
++    };
++...
+
 -- 
-2.43.0.rc1.1336.g36b5255a03ac
+2.34.1
 
 
