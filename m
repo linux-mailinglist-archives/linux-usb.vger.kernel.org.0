@@ -1,155 +1,234 @@
-Return-Path: <linux-usb+bounces-17507-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C2F39C6296
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 21:30:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 881C29C6174
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 20:30:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DACA2B61816
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 17:10:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 188FF1F23416
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 19:30:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1386421500C;
-	Tue, 12 Nov 2024 17:05:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B91214424;
+	Tue, 12 Nov 2024 19:30:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wS+DmfxZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DRctDRDp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from mail-wr1-f54.google.com (mail-wr1-f54.google.com [209.85.221.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6D420CCDD
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 17:05:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84E902003DD;
+	Tue, 12 Nov 2024 19:30:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731431120; cv=none; b=gwna61dtCSqoo73lrt28Vx2XwS4WnJUMBvsElJ/QwKAwth6U0sy1coSmxSQ0vC6VpC8Vcbf3G8/HMb85KejZImt9DbtXZKxpUb9f86JWHEdkLgO9ulc+yUKZ0Viax2Mj5pZLGpz2xDEu7WOrJmL1KPz2NX4NzLT5HpAuIHqResA=
+	t=1731439824; cv=none; b=A84xQTZPH1NnuABUcHJCHqRm9V/tU734aQ45exzrHCvkuprT5v5ORXB6FWq45E8U53teUZsPTAWq5c9FrE+ub9dDLy3wh80BOcfXXObxRELsv+W6L4Ye7yZij+vzpvMRievzuAsth2UivAY90g4i7c6cX3wwE19QCltnLPqwouY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731431120; c=relaxed/simple;
-	bh=+QhHbvTsdoN+h39DtOSWHLGO5rsf6lseXPlK1bc8n5Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AEgpNK43GktTI11xwSE5KiiK4QRiEtGV+VDOqRL8f9Oi3OioA7OOVTN6y29rznTBn26PRQh4rk7nzvbBS1X/KmZI7oCPYWXinlRKxoQMwBq3w18+2MM7qp/WF/83hgIL1mILGa+t/OypVKNXlHmMx2cZXy+k5nwGc/vpu9OUM5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wS+DmfxZ; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53a0c160b94so7157816e87.2
-        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 09:05:18 -0800 (PST)
+	s=arc-20240116; t=1731439824; c=relaxed/simple;
+	bh=fgE12BIwlMY7+KjyhOKwQsf0m/eIuliOwPbr2ir8Rl4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iyh423wfdk/IsQaChvNE1P+VrEDjnvQmF7l6WnUj7r8YsvPWR+atf3S4ckDQS34UoNs3n2h9SVVKG8Ja6yOvI03pbETpw6Az0QKQFm/ab0UVMm0ZlCggKT8nJLP0Z2rI0HuNAkn8M141pjmSDA7owDKuIQef+HEn7ubURm7zj00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DRctDRDp; arc=none smtp.client-ip=209.85.221.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f54.google.com with SMTP id ffacd0b85a97d-37d47eff9acso3687971f8f.3;
+        Tue, 12 Nov 2024 11:30:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731431117; x=1732035917; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NVKRrFlkkb4wg4R0ZPc49NQ3y+4Jopn/wW8d5M2TTXY=;
-        b=wS+DmfxZ3fjJTpiVxW2WgjHafA/BZ5bz0yMGe38l66xd3HT4Qko7oyNXE0AgA9wt8a
-         RXn1nlBTf5UNi3Re0gbi7vDxN83qgVVygDDj5TUvO5Vq7VbOlZWyzUhYhmLCQAtVM3uF
-         WLc91sJz0BGSRgUmKuljUc6uN9AFo607a6eNHDdkFQSL79zsAoiYm4MoRtCOn2qV2a1u
-         pZKxLhfLtBp0mA4U9tq3VCyIfYmlv88Ssya4pBtDzcBaF0y4mNMYZbGBs2usmHrq/F3Y
-         2doHzT9ChGioEKrX05Cg8jiTOzadR8ipwT2kDa1PhjGk3TGO1SX9mgB4s/W6HiyeX8Iv
-         aM+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731431117; x=1732035917;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1731439821; x=1732044621; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NVKRrFlkkb4wg4R0ZPc49NQ3y+4Jopn/wW8d5M2TTXY=;
-        b=XqGGbD2xodq0Oft7cS2UVukmmEmvooVHH86cHJBo6c86NiYxYTByKylrLInLo7QRmQ
-         DLOmlhYZeklKQM7lXamr7KFLRqOTi1k4Na3bMFzDot8rvcFlHHUYrv/A/cMBV4P/C8gB
-         h6ZME/OtWUc/wF2TGBiRpdpuedybCI3J1pDMdZZcBjBmw4BJPbdAWUPlnsa/yTVfvo6r
-         1WL+jnfefw89nbJm+PnVI5p1Mz1AeisSyJ8HGLSSe8xswVw03uZg01+wt7tVwACxXH2u
-         is1iMRMJTTCZGkAYoPlrn8jfl0xc2R4TgQVJgxiv70lWLbQ+fmqK7jBE0RodCk6kxLtR
-         rxww==
-X-Forwarded-Encrypted: i=1; AJvYcCUX36Shmppma9hzvAG4S1Qm+agc2Jn++G1Ua2/d20Bfx74cmUlGECVavMvB9XIzq02L3dmX2qB4ZgY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlHEmt3HcGGswM1Cygaf+pAh29F6KRZaZErejgAcwMQ6NnauT6
-	rA69FfDBy+NiIikONqG7yQ5oHlLFAwdhPauBdLFqxoJNALzqN0c+HSO07/aZwyg=
-X-Google-Smtp-Source: AGHT+IFktvxSEG21Y1Go2yfQvxLoLb0yDrWBRzLeB2+SLpucDdFBur1x+XpMAnkAtOQ4xTIMku4bxg==
-X-Received: by 2002:a05:6512:ac4:b0:53c:7624:586f with SMTP id 2adb3069b0e04-53d862c4785mr8425423e87.29.1731431117025;
-        Tue, 12 Nov 2024 09:05:17 -0800 (PST)
-Received: from linaro.org ([82.76.168.176])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b05e2a31sm214523895e9.36.2024.11.12.09.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 09:05:16 -0800 (PST)
-Date: Tue, 12 Nov 2024 19:05:14 +0200
-From: Abel Vesa <abel.vesa@linaro.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>
-Cc: Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Johan Hovold <johan@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 6/6] arm64: dts: qcom: x1e80100-t14s: Enable external
- DisplayPort support
-Message-ID: <ZzOKylgU3teUNuAe@linaro.org>
-References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
- <20241112-x1e80100-ps8830-v5-6-4ad83af4d162@linaro.org>
+        bh=l16f6QkdDHbu8NPQbi3zmZKB+rCbrufL1Zvvzn8jeo4=;
+        b=DRctDRDpp1nMiyaSvtYQo+Qm5Vyo7PD9lOFLaA7oG6DVt9TlBc9dT4w9lPAvrwufkF
+         I0jhBeRKcFfdSZ6LFKQNyxWkrXUO5Yhgaq5m3ffQMa23kQ4VBhHrElZDxM66tExpb5vD
+         bIUblk/FxhrdnHGLi4QXRPVig/iXE/KekENDSm+K5ki40yCBejo/hLoQHoQ9Lxp/13N/
+         fnfgMjSxuEh1nGtmwkD3ZVQh4YEzcZtQP0MYy10Tg2el7U+km8itJOzoL+kf6ebGlvE3
+         unmtGq/F7OF9ljvGlWSJh66NxFa0Xk2oOCD3YR2vGuO6HSsXJJARFnTIwyJMsYSq2L5V
+         z0KA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731439821; x=1732044621;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l16f6QkdDHbu8NPQbi3zmZKB+rCbrufL1Zvvzn8jeo4=;
+        b=xJJ49kMk03DtYC2qpU0aaK38xiOoQinC64xCWSGzabZpvOlAcCjYZYqIH2yeV9RH+v
+         bQbFpCu6chbNEY8DhFJCOU/VoYfhlvr5XR/a2NKYdWIrw5cfNbd7pG5G//ifIFIbTbO8
+         3YzuL6jcjxV4XEerwabmtUb0cKMBQneDRCdSK2te90hYEguLQiMlC3/tGxfJ23jHISmG
+         bvj8NIb9fgf9A57SCTdtTjI1uzWEZClhL2tpKARqa54VH8kgtFH0EJHgBp4doy1VYnuO
+         RoIBj8coUxTZPnzBL42bs7YLcJHhjUKnPdVFyF+MdAuvnUlJe9XcYBcPsAe64v9Qwoir
+         xHgg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3BTUg4MMdtkYgRXKS1UZgAOHQWysShPOc6vETlhP/tZGwMeO6+Q2RYPxPBVyy5KDrjxSbNEJKtDu1Cik=@vger.kernel.org, AJvYcCXhnZVVY6o9aGOGBErcRI9X5QOJfY02Dv9HSnPzPnt+gwhkPiyRAQ4fBxJ3D5BhJVJo8p3DQX+HFnwZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxcjV+9acU/m+zpNF1LxEJQDZGj4voZKtn8EsjRtLcCVjMJ2GR
+	REXT3sLIEt3jYWG+4lOPNGY9mGKZThxnOxsPyRo2weLDjiXv/HbgKTYzz3MMTRYPbPPx8sSioz1
+	irE3Jn/2rKmcngaE6lPkb3pJWGGU=
+X-Google-Smtp-Source: AGHT+IFwjFIsgpZQKzg8L4z2NM2FpJthfQ7fgjGpHDUe7iTEaYDD6h81rM9zbdkLpcHXF5PhFDanTHZv28KSbawmqYw=
+X-Received: by 2002:a5d:5f42:0:b0:37d:4436:4505 with SMTP id
+ ffacd0b85a97d-381f186ccdemr14970057f8f.32.1731439820582; Tue, 12 Nov 2024
+ 11:30:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241112-x1e80100-ps8830-v5-6-4ad83af4d162@linaro.org>
+References: <2024111232-relative-bottom-4995@gregkh> <20241112132931.3504749-1-snovitoll@gmail.com>
+ <824e839d-ee72-4923-bc88-e9cc58201b07@rowland.harvard.edu>
+In-Reply-To: <824e839d-ee72-4923-bc88-e9cc58201b07@rowland.harvard.edu>
+From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+Date: Wed, 13 Nov 2024 00:30:08 +0500
+Message-ID: <CACzwLxgVJ2jROr8RWHXv++2m2tD9fvskp_MqTL7VhCPr-Eeeiw@mail.gmail.com>
+Subject: Re: [PATCH v4] usb/cdc-wdm: fix memory info leak in wdm_read
+To: Alan Stern <stern@rowland.harvard.edu>, oneukum@suse.com
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, 
+	syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 24-11-12 19:01:15, Abel Vesa wrote:
-> The Lenovo ThinkPad T14s Gen6 provides external DisplayPort on all
-> 2 USB Type-C ports. Each one of this ports is connected to a dedicated
-> DisplayPort controller.
-> 
-> Due to support missing in the USB/DisplayPort combo PHY driver,
-> the external DisplayPort is limited to 2 lanes.
-> 
-> So enable the first and second DisplayPort controllers and limit their
-> data lanes number to 2.
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+On Tue, Nov 12, 2024 at 8:52=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Tue, Nov 12, 2024 at 06:29:31PM +0500, Sabyrzhan Tasbolatov wrote:
+> > syzbot reported "KMSAN: kernel-infoleak in wdm_read", though there is n=
+o
+> > reproducer and the only report for this issue.
+> >
+> > The check:
+> >
+> >       if (cntr > count)
+> >               cntr =3D count;
+> >
+> > only limits `cntr` to `count` (the number of bytes requested by
+> > userspace), but it doesn't verify that `desc->ubuf` actually has `count=
+`
+> > bytes. This oversight can lead to situations where `copy_to_user` reads
+> > uninitialized data from `desc->ubuf`.
+> >
+> > This patch makes sure `cntr` respects` both the `desc->length` and the
+> > `count` requested by userspace, preventing any uninitialized memory fro=
+m
+> > leaking into userspace.
+>
+> > ---
+> >  drivers/usb/class/cdc-wdm.c | 5 +++--
+> >  1 file changed, 3 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+> > index 86ee39db013f..5a500973b463 100644
+> > --- a/drivers/usb/class/cdc-wdm.c
+> > +++ b/drivers/usb/class/cdc-wdm.c
+> > @@ -598,8 +598,9 @@ static ssize_t wdm_read
+> >               spin_unlock_irq(&desc->iuspin);
+> >       }
+>
+> Note that the code immediately before the "if" statement which ends here
+> does:
+>
+>         cntr =3D READ_ONCE(desc->length);
+>
+> And the code at the end of the "if" block does:
+>
+>                 cntr =3D desc->length;
+>
+> (while holding the spinlock).  Thus it is guaranteed that either way,
+> cntr is equal to desc->length when we reach this point.
+>
+> >
+> > -     if (cntr > count)
+> > -             cntr =3D count;
+> > +     /* Ensure cntr does not exceed available data in ubuf. */
+> > +     cntr =3D min_t(size_t, count, desc->length);
+>
+> And therefore this line does exactly the same computation as the code
+> you removed.  Except for one thing: At this point the spinlock is not
+> held, and your new code does not call READ_ONCE().  That is an
+> oversight.
 
-Please do not merge this specific patch.
+I've re-read your and Oliver's comments and come up with this diff,
+which is the same as v4 except it is within a spinlock.
 
-It is provided just for context and testing purposes.
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index 86ee39db013f..47b299e03e11 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -598,8 +598,11 @@ static ssize_t wdm_read
+                spin_unlock_irq(&desc->iuspin);
+        }
 
-See the cover note for more details.
+-       if (cntr > count)
+-               cntr =3D count;
++       spin_lock_irq(&desc->iuspin);
++       /* Ensure cntr does not exceed available data in ubuf. */
++       cntr =3D min_t(size_t, count, desc->length);
++       spin_unlock_irq(&desc->iuspin);
++
+        rv =3D copy_to_user(buffer, desc->ubuf, cntr);
+        if (rv > 0) {
+                rv =3D -EFAULT;
 
-> ---
->  .../boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts      | 16 ++++++++++++++++
->  1 file changed, 16 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts b/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts
-> index ea3ecc7c5bda24f3a0a7bb027b456462b11daf4d..b08a173f0cfe2a2fc241a4e689d35b5e7e03d7e1 100644
-> --- a/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts
-> +++ b/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts
-> @@ -746,6 +746,22 @@ &mdss {
->  	status = "okay";
->  };
->  
-> +&mdss_dp0 {
-> +	status = "okay";
-> +};
-> +
-> +&mdss_dp0_out {
-> +	data-lanes = <0 1>;
-> +};
-> +
-> +&mdss_dp1 {
-> +	status = "okay";
-> +};
-> +
-> +&mdss_dp1_out {
-> +	data-lanes = <0 1>;
-> +};
-> +
->  &mdss_dp3 {
->  	compatible = "qcom,x1e80100-dp";
->  	/delete-property/ #sound-dai-cells;
-> 
-> -- 
-> 2.34.1
-> 
+>
+> Since the new code does the same thing as the old code, it cannot
+> possibly fix any bugs.
+
+Without the reproducer I can not confirm that this fixes the hypothetical b=
+ug,
+however here is my understand how the diff above can fix the memory info le=
+ak:
+
+static ssize_t wdm_read() {
+        cntr =3D READ_ONCE(desc->length);
+        if (cntr =3D=3D 0) {
+                spin_lock_irq(&desc->iuspin);
+
+                /* can remain 0 if not increased in wdm_in_callback() */
+                cntr =3D desc->length;
+
+                spin_unlock_irq(&desc->iuspin);
+        }
+
+        spin_lock_irq(&desc->iuspin);
+        /* take the minimum of whatever user requests `count` and
+desc->length =3D 0 */
+        cntr =3D min_t(size_t, count, desc->length);
+        spin_lock_irq(&desc->iuspin);
+
+        /* cntr is 0, nothing to copy to the user space. */
+        rv =3D copy_to_user(buffer, desc->ubuf, cntr);
+
+>
+> (Actually there is one other thing to watch out for: the difference
+> between signed and unsigned values.  Here cntr and desc->length are
+> signed whereas count is unsigned.  In theory that could cause problems
+> -- it might even be related to the cause of the original bug report.
+> Can you prove that desc->length will never be negative?)
+
+desc->length can not be negative if I understand the following correctly:
+
+static void wdm_in_callback(struct urb *urb)
+{
+        ...
+        int length =3D urb->actual_length;
+       ...
+       if (length + desc->length > desc->wMaxCommand) {
+              /* The buffer would overflow */
+             ...
+       } else {
+              /* we may already be in overflow */
+              if (!test_bit(WDM_OVERFLOW, &desc->flags)) {
+                     ...
+                     desc->length +=3D length;
+                     desc->reslength =3D length;
+       }
+}
+
+urb->actual_length is u32, actually, need to change `int length` to
+`u32 length` though.
+
+>
+> Alan Stern
+
+Please let me know if the diff makes sense and I will proceed with v5.
+
+Thanks
 
