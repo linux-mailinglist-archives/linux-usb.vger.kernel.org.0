@@ -1,579 +1,270 @@
-Return-Path: <linux-usb+bounces-17446-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17447-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3DC09C4ACB
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 01:29:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FE1C9C4A93
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 01:22:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A2927B27BFD
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 00:17:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20BBB288243
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 00:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 483AF50285;
-	Tue, 12 Nov 2024 00:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1H4jOx7c"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57FF754918;
+	Tue, 12 Nov 2024 00:22:17 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACB3433D9
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 00:16:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFFB523774;
+	Tue, 12 Nov 2024 00:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731370605; cv=none; b=j4WWGsyhWIf+2GFyIkauuHE84PEMg9ioE0ogYM9j/VXMGDMETffRTdulIb1Ckf2YNtIGDNzx+ndxgtQsWYV4OfO2N+qmfn8hyWs+qBNV3fUnmB06X+uCHkaGNL0+kp7PvbS6uLBLR16EfJK4OUj+Oi61zLnUkr46Q29xuf5jpxA=
+	t=1731370937; cv=none; b=JTS2adaH0FbguQvCCP2LXkEUabxZib1ae+1khmOavRiAroc17hq5WWhakyi+zR1BPDAwz2T7fy/lBkzYUmM/kHNzdUM4d1/KxLOBWhfSz5MoTr2lqKNkr5CRL28wFU9ogJ+z2ycWAu2YlMxGFOdabrs0ScOt49uXdc2Z+9H7s8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731370605; c=relaxed/simple;
-	bh=2vLFfyUQ/dpoi4iaOhGymGFCB+H3Nw5IZsGfOK7p+uc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O8g2lt3GJ24J3eqT9ccFsOGqFfc37th1kgzS8TRC+k4uXIvWVBix+Hm9a2+OccqasAlGKAugZ4Zs3GRYvSQNusFb9mV/l/ONkffVhFqZGObarrjdnczRkBFuvq5r7TXs+IESJBKyMJfJBTTmH3Nr+HPCWeqp6Gd0Lmde9iVTb3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1H4jOx7c; arc=none smtp.client-ip=209.85.210.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-71e5a62031aso3957676b3a.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 16:16:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731370603; x=1731975403; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=S+2d0eRXAkmyV5CZ3mOiKq9e9pd057IakuTB3MH2vmA=;
-        b=1H4jOx7cZNMR9mrg54O354dM/u2VuQN0+Q9SnPpZFRNc5HeufGj2fPIF2rH0Td6XV3
-         Hm3PGyTk7U0gySiD6tKvIelwrfmkkif1UZO+nmaynD3qsEfz0dPolqI3fWZ63yqmtfTQ
-         QjLQLme/iHhDOz3EjlwxqAR959vmz32jDjMCQcE+VMxvp8l1Pg62MQ+fXAi/pq9gWZLq
-         L6VpYj0IkvFZ/tHAhw/Ct+o+p5+RnpPGmWo4h5odMgIReLWcv1ZyKBZqSA3sW4In00Gg
-         aeR79vL9pCYNvtznQT/3Kp5ntI8aPrzhSiGpX85opNi5wQzBReOxzV/n9sxUYHX+kAJN
-         bnmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731370603; x=1731975403;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S+2d0eRXAkmyV5CZ3mOiKq9e9pd057IakuTB3MH2vmA=;
-        b=KiFr6Yj57eqvNlgpkgPV081B9irdi7v7rHHOKY7FKZIiUpPSXaDVLUZfznkoxYSgVC
-         wJwavVrpXcG+OH3mcYPyJ5xQ0p9ZiGegyo4CiSgfTrW5r1cvRs9ShcGD4xLAhrvdWGd0
-         8QqGJC+jHy+E0/S4WRAVy1Fdo0HLBu+SszYw8zVwFGAXL0RAccLUu80wjOTgroqyCOio
-         kynVn5+EIJjHFKJ6kzk1r3iyI2jhnKiZKhMCUdOOe0fNpDNMjOh1dFPqOgTWZ/CxeGpZ
-         ZvIT02kBZ0uezoU07Qrpg9jes0hFksksmrQcWgWxnqJXvWER05CM0fu+25j+Hp2q7Qbw
-         BubA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAtee78KVTsYWCJzHgdxrddlk7gjaQmewwBXeCElJ+r0LrflrBCeSqRT20i5CHq3DFqQLsqt3eE3o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBhgSkuWJBCyEoUDZZ9GlG2P1VbFA6RlRcULgGXv2iOhvWdQm2
-	uDZJAEphs55bKszIky824AAViewGqZPhFQAgohKpdOUm2Pr+TtDhWo8GKXzC/X/wTZG0zyZTevM
-	mPA==
-X-Google-Smtp-Source: AGHT+IFFQ16YUGU0HvK+6FX4i6bZ/TSJ11PAHRPpiKERpyPzLBFyV3i8gjTUxLB+FIJoAL6eKQnapw==
-X-Received: by 2002:a05:6a00:230a:b0:71e:108e:9c16 with SMTP id d2e1a72fcca58-724132c73a8mr19604190b3a.12.1731370602151;
-        Mon, 11 Nov 2024 16:16:42 -0800 (PST)
-Received: from google.com (30.176.125.34.bc.googleusercontent.com. [34.125.176.30])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724078bfccfsm9886763b3a.82.2024.11.11.16.16.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Nov 2024 16:16:41 -0800 (PST)
-Date: Tue, 12 Nov 2024 00:16:37 +0000
-From: Benson Leung <bleung@google.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org,
-	linux-usb@vger.kernel.org, chrome-platform@lists.linux.dev,
-	jthies@google.com, akuchynski@google.com, pmalani@chromium.org,
-	dmitry.baryshkov@linaro.org, Benson Leung <bleung@chromium.org>,
-	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 5/7] platform/chrome: cros_ec_typec: Displayport
- support
-Message-ID: <ZzKeZQfbxeZNDVzE@google.com>
-References: <20241107193021.2690050-1-abhishekpandit@chromium.org>
- <20241107112955.v3.5.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
+	s=arc-20240116; t=1731370937; c=relaxed/simple;
+	bh=LJnp9v0q1Yirat/K0CFKBiyXvSDiBm41PbaeT0HMU48=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nM0dZJSd9ErTN9ImaXKcEdfRBPQHE8AjcYEhmgcMs0m4ETaUC21wfoKc2oSuQgMWfxYYpiYmhsdQEC5Je4mAImgh4j08inuyXUWP/fRM4Og4x3C4Tfn1FEC12/ETvvcYADNLt00YBCzGYCpjzUKTP1ZKJr4RkyhlZ4fcfr4p4L0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.178.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AC00CAZ012998;
+	Tue, 12 Nov 2024 00:21:40 GMT
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.wrs.com [147.11.82.252])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 42sxq8jcac-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Tue, 12 Nov 2024 00:21:40 +0000 (GMT)
+Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 11 Nov 2024 16:21:38 -0800
+Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
+ 15.1.2507.39 via Frontend Transport; Mon, 11 Nov 2024 16:21:35 -0800
+From: Lizhi Xu <lizhi.xu@windriver.com>
+To: <miquel.raynal@bootlin.com>
+CC: <alex.aring@gmail.com>, <davem@davemloft.net>, <dmantipov@yandex.ru>,
+        <edumazet@google.com>, <horms@kernel.org>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-wpan@vger.kernel.org>, <lizhi.xu@windriver.com>,
+        <netdev@vger.kernel.org>, <pabeni@redhat.com>,
+        <stefan@datenfreihafen.org>,
+        <syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: [PATCH] mac802154: add a check for slave data list before delete
+Date: Tue, 12 Nov 2024 08:21:33 +0800
+Message-ID: <20241112002134.2003089-1-lizhi.xu@windriver.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <87msi5pn7y.fsf@bootlin.com>
+References: <87msi5pn7y.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="TbHvfp6kUy+f6lxN"
-Content-Disposition: inline
-In-Reply-To: <20241107112955.v3.5.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: hWFZ7f3jhr-QNd40K2CHu6HHzAWZW-no
+X-Proofpoint-ORIG-GUID: hWFZ7f3jhr-QNd40K2CHu6HHzAWZW-no
+X-Authority-Analysis: v=2.4 cv=Z+m+H2RA c=1 sm=1 tr=0 ts=67329f94 cx=c_pps a=/ZJR302f846pc/tyiSlYyQ==:117 a=/ZJR302f846pc/tyiSlYyQ==:17 a=IkcTkHD0fZMA:10 a=VlfZXiiP6vEA:10 a=t7CeM3EgAAAA:8 a=VwQbUJbxAAAA:8 a=P-IC7800AAAA:8 a=hSkVLCK3AAAA:8 a=1XWaLZrsAAAA:8
+ a=edf1wS77AAAA:8 a=3x1GYpjDyCIDGwwJR-wA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=FdTzh2GWekK77mhwV6Dw:22 a=d3PnA9EDa4IxuAV0gXij:22 a=cQPPKAXgyycSBL8etih5:22 a=DcSpbTIhAlouE1Uv7lRv:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-11_08,2024-11-08_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ phishscore=0 spamscore=0 suspectscore=0 mlxscore=0 bulkscore=0
+ impostorscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0
+ priorityscore=1501 classifier=spam authscore=0 adjust=0 reason=mlx
+ scancount=1 engine=8.21.0-2409260000 definitions=main-2411120001
 
+On Mon, 11 Nov 2024 20:46:57 +0100, Miquel Raynal wrote:
+> On 08/11/2024 at 22:54:20 +08, Lizhi Xu <lizhi.xu@windriver.com> wrote:
+> 
+> > syzkaller reported a corrupted list in ieee802154_if_remove. [1]
+> >
+> > Remove an IEEE 802.15.4 network interface after unregister an IEEE 802.15.4
+> > hardware device from the system.
+> >
+> > CPU0					CPU1
+> > ====					====
+> > genl_family_rcv_msg_doit		ieee802154_unregister_hw
+> > ieee802154_del_iface			ieee802154_remove_interfaces
+> > rdev_del_virtual_intf_deprecated	list_del(&sdata->list)
+> > ieee802154_if_remove
+> > list_del_rcu
+> 
+> FYI this is a "duplicate" but with a different approach than:
+> https://lore.kernel.org/linux-wpan/87v7wtpngj.fsf@bootlin.com/T/#m02cebe86ec0171fc4d3350676bbdd4a7e3827077
+No, my patch was the first to fix it, someone else copied my patch. Here is my patch:
 
---TbHvfp6kUy+f6lxN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+From: syzbot <syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org
+Subject: Re: [syzbot] Re: [syzbot] [wpan?] [usb?] BUG: corrupted list in ieee802154_if_remove
+Date: Fri, 08 Nov 2024 03:24:46 -0800	[thread overview]
+Message-ID: <672df4fe.050a0220.69fce.0011.GAE@google.com> (raw)
+In-Reply-To: <672b9f03.050a0220.350062.0276.GAE@google.com>
 
-Hi Abhishek,
+For archival purposes, forwarding an incoming command email to
+linux-kernel@vger.kernel.org.
 
-On Thu, Nov 07, 2024 at 11:29:58AM -0800, Abhishek Pandit-Subedi wrote:
-> Add support for entering and exiting displayport alt-mode on systems
-> using AP driven alt-mode.
->=20
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> ---
->=20
-> Changes in v3:
-> - Refactored typec_altmode_dp_data per review request
-> - Removed unused vdm operations during altmode registration
->=20
-> Changes in v2:
-> - Refactored displayport into cros_typec_altmode.c to extract common
->   implementation between altmodes
->=20
->  MAINTAINERS                                  |   3 +
->  drivers/platform/chrome/Makefile             |   4 +
->  drivers/platform/chrome/cros_ec_typec.c      |  12 +-
->  drivers/platform/chrome/cros_ec_typec.h      |   1 +
->  drivers/platform/chrome/cros_typec_altmode.c | 275 +++++++++++++++++++
->  drivers/platform/chrome/cros_typec_altmode.h |  34 +++
->  6 files changed, 326 insertions(+), 3 deletions(-)
->  create mode 100644 drivers/platform/chrome/cros_typec_altmode.c
->  create mode 100644 drivers/platform/chrome/cros_typec_altmode.h
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cd6aa609deba..5f9d8b8f1cb3 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -5369,9 +5369,12 @@ F:	include/linux/platform_data/cros_usbpd_notify.h
-> =20
->  CHROMEOS EC USB TYPE-C DRIVER
->  M:	Prashant Malani <pmalani@chromium.org>
-> +M:	Benson Leung <bleung@chromium.org>
-> +M:	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
->  L:	chrome-platform@lists.linux.dev
->  S:	Maintained
->  F:	drivers/platform/chrome/cros_ec_typec.*
-> +F:	drivers/platform/chrome/cros_typec_altmode.*
->  F:	drivers/platform/chrome/cros_typec_switch.c
->  F:	drivers/platform/chrome/cros_typec_vdm.*
-> =20
-> diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/M=
-akefile
-> index 2dcc6ccc2302..2f90d4db8099 100644
-> --- a/drivers/platform/chrome/Makefile
-> +++ b/drivers/platform/chrome/Makefile
-> @@ -18,7 +18,11 @@ obj-$(CONFIG_CROS_EC_SPI)		+=3D cros_ec_spi.o
->  obj-$(CONFIG_CROS_EC_UART)		+=3D cros_ec_uart.o
->  cros_ec_lpcs-objs			:=3D cros_ec_lpc.o cros_ec_lpc_mec.o
->  cros-ec-typec-objs			:=3D cros_ec_typec.o cros_typec_vdm.o
-> +ifneq ($(CONFIG_TYPEC_DP_ALTMODE),)
-> +	cros-ec-typec-objs		+=3D cros_typec_altmode.o
-> +endif
->  obj-$(CONFIG_CROS_EC_TYPEC)		+=3D cros-ec-typec.o
-> +
->  obj-$(CONFIG_CROS_EC_LPC)		+=3D cros_ec_lpcs.o
->  obj-$(CONFIG_CROS_EC_PROTO)		+=3D cros_ec_proto.o cros_ec_trace.o
->  obj-$(CONFIG_CROS_KBD_LED_BACKLIGHT)	+=3D cros_kbd_led_backlight.o
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/c=
-hrome/cros_ec_typec.c
-> index e3eabe5e42ac..3a6f5f2717b9 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -18,6 +18,7 @@
-> =20
->  #include "cros_ec_typec.h"
->  #include "cros_typec_vdm.h"
-> +#include "cros_typec_altmode.h"
-> =20
->  #define DRV_NAME "cros-ec-typec"
-> =20
-> @@ -293,12 +294,11 @@ static int cros_typec_register_port_altmodes(struct=
- cros_typec_data *typec,
+***
 
-As we debugged late last week, this desc here needs to be initialized ahead
-of  the register, as it had some junk from the stack that was causing the
-"active" property to be sometimes set to no.
+Subject: Re: [syzbot] [wpan?] [usb?] BUG: corrupted list in ieee802154_if_remove
+Author: lizhi.xu@windriver.com
 
-memset(&desc, 0, sizeof(desc));
+net device has been unregistered ?
 
-This worked for me when testing your series.
+#syz test
 
->  	desc.svid =3D USB_TYPEC_DP_SID;
->  	desc.mode =3D USB_TYPEC_DP_MODE;
->  	desc.vdo =3D DP_PORT_VDO;
-> -	amode =3D typec_port_register_altmode(port->port, &desc);
-> +	amode =3D cros_typec_register_displayport(port, &desc,
-> +						typec->ap_driven_altmode);
->  	if (IS_ERR(amode))
->  		return PTR_ERR(amode);
->  	port->port_altmode[CROS_EC_ALTMODE_DP] =3D amode;
-> -	typec_altmode_set_drvdata(amode, port);
-> -	amode->ops =3D &port_amode_ops;
-> =20
->  	/*
->  	 * Register TBT compatibility alt mode. The EC will not enter the mode
-> @@ -575,6 +575,10 @@ static int cros_typec_enable_dp(struct cros_typec_da=
-ta *typec,
->  	if (!ret)
->  		ret =3D typec_mux_set(port->mux, &port->state);
-> =20
-> +	if (!ret)
-> +		cros_typec_displayport_status_update(port->state.alt,
-> +						     port->state.data);
-> +
->  	return ret;
->  }
-> =20
-> @@ -1254,6 +1258,8 @@ static int cros_typec_probe(struct platform_device =
-*pdev)
-> =20
->  	typec->typec_cmd_supported =3D cros_ec_check_features(ec_dev, EC_FEATUR=
-E_TYPEC_CMD);
->  	typec->needs_mux_ack =3D cros_ec_check_features(ec_dev, EC_FEATURE_TYPE=
-C_MUX_REQUIRE_AP_ACK);
-> +	typec->ap_driven_altmode =3D cros_ec_check_features(
-> +		ec_dev, EC_FEATURE_TYPEC_REQUIRE_AP_MODE_ENTRY);
-> =20
->  	ret =3D cros_ec_cmd(typec->ec, 0, EC_CMD_USB_PD_PORTS, NULL, 0,
->  			  &resp, sizeof(resp));
-> diff --git a/drivers/platform/chrome/cros_ec_typec.h b/drivers/platform/c=
-hrome/cros_ec_typec.h
-> index deda180a646f..9fd5342bb0ad 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.h
-> +++ b/drivers/platform/chrome/cros_ec_typec.h
-> @@ -39,6 +39,7 @@ struct cros_typec_data {
->  	struct work_struct port_work;
->  	bool typec_cmd_supported;
->  	bool needs_mux_ack;
-> +	bool ap_driven_altmode;
->  };
-> =20
->  /* Per port data. */
-> diff --git a/drivers/platform/chrome/cros_typec_altmode.c b/drivers/platf=
-orm/chrome/cros_typec_altmode.c
-> new file mode 100644
-> index 000000000000..3598b8a6ceee
-> --- /dev/null
-> +++ b/drivers/platform/chrome/cros_typec_altmode.c
-> @@ -0,0 +1,275 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Alt-mode implementation on ChromeOS EC.
-> + *
-> + * Copyright 2024 Google LLC
-> + * Author: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> + */
-> +#include "cros_ec_typec.h"
-> +
-> +#include <linux/usb/typec_dp.h>
-> +#include <linux/usb/pd_vdo.h>
-> +
-> +#include "cros_typec_altmode.h"
-> +
-> +struct cros_typec_altmode_data {
-> +	struct work_struct work;
-> +	struct cros_typec_port *port;
-> +	struct typec_altmode *alt;
-> +	bool ap_mode_entry;
-> +
-> +	u32 header;
-> +	u32 *vdo_data;
-> +	u8 vdo_size;
-> +
-> +	u16 sid;
-> +	u8 mode;
-> +};
-> +
-> +struct cros_typec_dp_data {
-> +	struct cros_typec_altmode_data adata;
-> +	struct typec_displayport_data data;
-> +	bool configured;
-> +	bool pending_status_update;
-> +};
-> +
-> +static void cros_typec_altmode_work(struct work_struct *work)
-> +{
-> +	struct cros_typec_altmode_data *data =3D
-> +		container_of(work, struct cros_typec_altmode_data, work);
-> +
-> +	if (typec_altmode_vdm(data->alt, data->header, data->vdo_data,
-> +			      data->vdo_size))
-> +		dev_err(&data->alt->dev, "VDM 0x%x failed", data->header);
-> +
-> +	data->header =3D 0;
-> +	data->vdo_data =3D NULL;
-> +	data->vdo_size =3D 0;
-> +}
-> +
-> +static int cros_typec_altmode_enter(struct typec_altmode *alt, u32 *vdo)
-> +{
-> +	struct cros_typec_altmode_data *data =3D typec_altmode_get_drvdata(alt);
-> +	struct ec_params_typec_control req =3D {
-> +		.port =3D data->port->port_num,
-> +		.command =3D TYPEC_CONTROL_COMMAND_ENTER_MODE,
-> +	};
-> +	int svdm_version;
-> +	int ret;
-> +
-> +	if (!data->ap_mode_entry) {
-> +		const struct typec_altmode *partner =3D
-> +			typec_altmode_get_partner(alt);
-> +		dev_warn(&partner->dev,
-> +			 "EC does not support ap driven mode entry\n");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	if (data->sid =3D=3D USB_TYPEC_DP_SID)
-> +		req.mode_to_enter =3D CROS_EC_ALTMODE_DP;
-> +	else
-> +		return -EOPNOTSUPP;
-> +
-> +	ret =3D cros_ec_cmd(data->port->typec_data->ec, 0, EC_CMD_TYPEC_CONTROL,
-> +			  &req, sizeof(req), NULL, 0);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	svdm_version =3D typec_altmode_get_svdm_version(alt);
-> +	if (svdm_version < 0)
-> +		return svdm_version;
-> +
-> +	data->header =3D VDO(data->sid, 1, svdm_version, CMD_ENTER_MODE);
-> +	data->header |=3D VDO_OPOS(data->mode);
-> +	data->header |=3D VDO_CMDT(CMDT_RSP_ACK);
-> +
-> +	data->vdo_data =3D NULL;
-> +	data->vdo_size =3D 1;
-> +
-> +	schedule_work(&data->work);
-> +
-> +	return ret;
-> +}
-> +
-> +static int cros_typec_altmode_exit(struct typec_altmode *alt)
-> +{
-> +	struct cros_typec_altmode_data *data =3D typec_altmode_get_drvdata(alt);
-> +	struct ec_params_typec_control req =3D {
-> +		.port =3D data->port->port_num,
-> +		.command =3D TYPEC_CONTROL_COMMAND_EXIT_MODES,
-> +	};
-> +	int svdm_version;
-> +	int ret;
-> +
-> +	if (!data->ap_mode_entry) {
-> +		const struct typec_altmode *partner =3D
-> +			typec_altmode_get_partner(alt);
-> +		dev_warn(&partner->dev,
-> +			 "EC does not support ap driven mode entry\n");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	ret =3D cros_ec_cmd(data->port->typec_data->ec, 0, EC_CMD_TYPEC_CONTROL,
-> +			  &req, sizeof(req), NULL, 0);
-> +
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	svdm_version =3D typec_altmode_get_svdm_version(alt);
-> +	if (svdm_version < 0)
-> +		return svdm_version;
-> +
-> +	data->header =3D VDO(data->sid, 1, svdm_version, CMD_EXIT_MODE);
-> +	data->header |=3D VDO_OPOS(data->mode);
-> +	data->header |=3D VDO_CMDT(CMDT_RSP_ACK);
-> +
-> +	data->vdo_data =3D NULL;
-> +	data->vdo_size =3D 1;
-> +
-> +	schedule_work(&data->work);
-> +
-> +	return ret;
-> +}
-> +
-> +static int cros_typec_displayport_vdm(struct typec_altmode *alt, u32 hea=
-der,
-> +				      const u32 *data, int count)
-> +{
-> +	struct cros_typec_dp_data *dp_data =3D typec_altmode_get_drvdata(alt);
-> +	struct cros_typec_altmode_data *adata =3D &dp_data->adata;
-> +
-> +
-> +	int cmd_type =3D PD_VDO_CMDT(header);
-> +	int cmd =3D PD_VDO_CMD(header);
-> +	int svdm_version;
-> +
-> +	if (!adata->ap_mode_entry) {
-> +		const struct typec_altmode *partner =3D
-> +			typec_altmode_get_partner(alt);
-> +		dev_warn(&partner->dev,
-> +			 "EC does not support ap driven mode entry\n");
-> +		return -EOPNOTSUPP;
-> +	}
-> +
-> +	svdm_version =3D typec_altmode_get_svdm_version(alt);
-> +	if (svdm_version < 0)
-> +		return svdm_version;
-> +
-> +	switch (cmd_type) {
-> +	case CMDT_INIT:
-> +		if (PD_VDO_SVDM_VER(header) < svdm_version) {
-> +			typec_partner_set_svdm_version(adata->port->partner,
-> +						       PD_VDO_SVDM_VER(header));
-> +			svdm_version =3D PD_VDO_SVDM_VER(header);
-> +		}
-> +
-> +		adata->header =3D VDO(adata->sid, 1, svdm_version, cmd);
-> +		adata->header |=3D VDO_OPOS(adata->mode);
-> +
-> +		/*
-> +		 * DP_CMD_CONFIGURE: We can't actually do anything with the
-> +		 * provided VDO yet so just send back an ACK.
-> +		 *
-> +		 * DP_CMD_STATUS_UPDATE: We wait for Mux changes to send
-> +		 * DPStatus Acks.
-> +		 */
-> +		switch (cmd) {
-> +		case DP_CMD_CONFIGURE:
-> +			dp_data->data.conf =3D *data;
-> +			adata->header |=3D VDO_CMDT(CMDT_RSP_ACK);
-> +			dp_data->configured =3D true;
-> +			schedule_work(&adata->work);
-> +			break;
-> +		case DP_CMD_STATUS_UPDATE:
-> +			dp_data->pending_status_update =3D true;
-> +			break;
-> +		default:
-> +			adata->header |=3D VDO_CMDT(CMDT_RSP_ACK);
-> +			schedule_work(&adata->work);
-> +			break;
-> +		}
-> +
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int cros_typec_altmode_vdm(struct typec_altmode *alt, u32 header,
-> +				      const u32 *data, int count)
-> +{
-> +	struct cros_typec_altmode_data *adata =3D typec_altmode_get_drvdata(alt=
-);
-> +
-> +	if (adata->sid =3D=3D USB_TYPEC_DP_SID)
-> +		return cros_typec_displayport_vdm(alt, header, data, count);
-> +
-> +	return -EINVAL;
-> +}
-> +
-> +static const struct typec_altmode_ops cros_typec_altmode_ops =3D {
-> +	.enter =3D cros_typec_altmode_enter,
-> +	.exit =3D cros_typec_altmode_exit,
-> +	.vdm =3D cros_typec_altmode_vdm,
-> +};
-> +
-> +#if IS_ENABLED(CONFIG_TYPEC_DP_ALTMODE)
-> +int cros_typec_displayport_status_update(struct typec_altmode *altmode,
-> +					 struct typec_displayport_data *data)
-> +{
-> +	struct cros_typec_dp_data *dp_data =3D
-> +		typec_altmode_get_drvdata(altmode);
-> +	struct cros_typec_altmode_data *adata =3D &dp_data->adata;
-> +
-> +	if (!dp_data->pending_status_update) {
-> +		dev_dbg(&altmode->dev,
-> +			"Got DPStatus without a pending request");
-> +		return 0;
-> +	}
-> +
-> +	if (dp_data->configured && dp_data->data.conf !=3D data->conf)
-> +		dev_dbg(&altmode->dev,
-> +			"DP Conf doesn't match. Requested 0x%04x, Actual 0x%04x",
-> +			dp_data->data.conf, data->conf);
-> +
-> +	dp_data->data =3D *data;
-> +	dp_data->pending_status_update =3D false;
-> +	adata->header |=3D VDO_CMDT(CMDT_RSP_ACK);
-> +	adata->vdo_data =3D &dp_data->data.status;
-> +	adata->vdo_size =3D 2;
-> +
-> +	schedule_work(&adata->work);
-> +	return 0;
-> +}
-> +
-> +struct typec_altmode *
-> +cros_typec_register_displayport(struct cros_typec_port *port,
-> +				struct typec_altmode_desc *desc,
-> +				bool ap_mode_entry)
-> +{
-> +	struct typec_altmode *alt;
-> +	struct cros_typec_altmode_data *data;
-> +
-> +	alt =3D typec_port_register_altmode(port->port, desc);
-> +	if (IS_ERR(alt))
-> +		return alt;
-> +
-> +	data =3D devm_kzalloc(&alt->dev, sizeof(*data), GFP_KERNEL);
-> +	if (!data) {
-> +		typec_unregister_altmode(alt);
-> +		return ERR_PTR(-ENOMEM);
-> +	}
-> +
-> +	INIT_WORK(&data->work, cros_typec_altmode_work);
-> +	data->alt =3D alt;
-> +	data->port =3D port;
-> +	data->ap_mode_entry =3D ap_mode_entry;
-> +	data->sid =3D desc->svid;
-> +	data->mode =3D desc->mode;
-> +
-> +	typec_altmode_set_ops(alt, &cros_typec_altmode_ops);
-> +	typec_altmode_set_drvdata(alt, data);
-> +
-> +	return alt;
-> +}
-> +#endif
-> diff --git a/drivers/platform/chrome/cros_typec_altmode.h b/drivers/platf=
-orm/chrome/cros_typec_altmode.h
-> new file mode 100644
-> index 000000000000..c6f8fb02c99c
-> --- /dev/null
-> +++ b/drivers/platform/chrome/cros_typec_altmode.h
-> @@ -0,0 +1,34 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
-> +
-> +#ifndef __CROS_TYPEC_ALTMODE_H__
-> +#define __CROS_TYPEC_ALTMODE_H__
-> +
-> +struct cros_typec_port;
-> +struct typec_altmode;
-> +struct typec_altmode_desc;
-> +struct typec_displayport_data;
-> +
-> +#if IS_ENABLED(CONFIG_TYPEC_DP_ALTMODE)
-> +struct typec_altmode *
-> +cros_typec_register_displayport(struct cros_typec_port *port,
-> +				struct typec_altmode_desc *desc,
-> +				bool ap_mode_entry);
-> +
-> +int cros_typec_displayport_status_update(struct typec_altmode *altmode,
-> +					 struct typec_displayport_data *data);
-> +#else
-> +static inline struct typec_altmode *
-> +cros_typec_register_displayport(struct cros_typec_port *port,
-> +				struct typec_altmode_desc *desc,
-> +				bool ap_mode_entry)
-> +{
-> +	return typec_port_register_altmode(port->port, desc);
-> +}
-> +
-> +static inline int cros_typec_displayport_status_update(struct typec_altm=
-ode *altmode,
-> +					 struct typec_displayport_data *data)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +#endif /* __CROS_TYPEC_ALTMODE_H__ */
-> --=20
-> 2.47.0.277.g8800431eea-goog
->=20
->=20
+diff --git a/net/mac802154/ieee802154_i.h b/net/mac802154/ieee802154_i.h
+index 08dd521a51a5..6771c0569516 100644
+--- a/net/mac802154/ieee802154_i.h
++++ b/net/mac802154/ieee802154_i.h
+@@ -101,6 +101,7 @@ enum {
+ 
+ enum ieee802154_sdata_state_bits {
+ 	SDATA_STATE_RUNNING,
++	SDATA_STATE_LISTDONE,
+ };
+ 
+ /* Slave interface definition.
+diff --git a/net/mac802154/iface.c b/net/mac802154/iface.c
+index c0e2da5072be..95f11d377fd3 100644
+--- a/net/mac802154/iface.c
++++ b/net/mac802154/iface.c
+@@ -683,6 +683,10 @@ void ieee802154_if_remove(struct ieee802154_sub_if_data *sdata)
+ {
+ 	ASSERT_RTNL();
+ 
++	printk("sd: %p, sdl: %p, dev: %p, l: %p, if remove\n", sdata, sdata->list, sdata->dev, sdata->local);
++	if (test_bit(SDATA_STATE_LISTDONE, &sdata->state))
++		return;
++
+ 	mutex_lock(&sdata->local->iflist_mtx);
+ 	list_del_rcu(&sdata->list);
+ 	mutex_unlock(&sdata->local->iflist_mtx);
+@@ -697,7 +701,9 @@ void ieee802154_remove_interfaces(struct ieee802154_local *local)
+ 
+ 	mutex_lock(&local->iflist_mtx);
+ 	list_for_each_entry_safe(sdata, tmp, &local->interfaces, list) {
++		printk("sd: %p, sdl: %p, dev: %p, l: %p, rmv interfaces\n", sdata, sdata->list, sdata->dev, sdata->local);
+ 		list_del(&sdata->list);
++		set_bit(SDATA_STATE_LISTDONE, &sdata->state);
+ 
+ 		unregister_netdevice(sdata->dev);
+ 	}
+diff --git a/net/mac802154/main.c b/net/mac802154/main.c
+index 21b7c3b280b4..81289719584e 100644
+--- a/net/mac802154/main.c
++++ b/net/mac802154/main.c
+@@ -279,6 +279,7 @@ void ieee802154_unregister_hw(struct ieee802154_hw *hw)
+ 
+ 	rtnl_lock();
+ 
++	printk("l: %p unreg hw\n", local);
+ 	ieee802154_remove_interfaces(local);
+ 
+ 	rtnl_unlock();
 
---TbHvfp6kUy+f6lxN
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+> Thanks,
+> Miquèl
+> 
+> >
+> > Avoid this issue, by adding slave data state bit SDATA_STATE_LISTDONE, set
+> > SDATA_STATE_LISTDONE when unregistering the hardware from the system, and
+> > add state bit SDATA_STATE_LISTDONE judgment before removing the interface
+> > to delete the list.
+> >
+> > [1]
+> > kernel BUG at lib/list_debug.c:58!
+> > Oops: invalid opcode: 0000 [#1] PREEMPT SMP KASAN PTI
+> > CPU: 0 UID: 0 PID: 6277 Comm: syz-executor157 Not tainted 6.12.0-rc6-syzkaller-00005-g557329bcecc2 #0
+> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+> > RIP: 0010:__list_del_entry_valid_or_report+0xf4/0x140 lib/list_debug.c:56
+> > Code: e8 a1 7e 00 07 90 0f 0b 48 c7 c7 e0 37 60 8c 4c 89 fe e8 8f 7e 00 07 90 0f 0b 48 c7 c7 40 38 60 8c 4c 89 fe e8 7d 7e 00 07 90 <0f> 0b 48 c7 c7 a0 38 60 8c 4c 89 fe e8 6b 7e 00 07 90 0f 0b 48 c7
+> > RSP: 0018:ffffc9000490f3d0 EFLAGS: 00010246
+> > RAX: 000000000000004e RBX: dead000000000122 RCX: d211eee56bb28d00
+> > RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+> > RBP: ffff88805b278dd8 R08: ffffffff8174a12c R09: 1ffffffff2852f0d
+> > R10: dffffc0000000000 R11: fffffbfff2852f0e R12: dffffc0000000000
+> > R13: dffffc0000000000 R14: dead000000000100 R15: ffff88805b278cc0
+> > FS:  0000555572f94380(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
+> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > CR2: 000056262e4a3000 CR3: 0000000078496000 CR4: 00000000003526f0
+> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > Call Trace:
+> >  <TASK>
+> >  __list_del_entry_valid include/linux/list.h:124 [inline]
+> >  __list_del_entry include/linux/list.h:215 [inline]
+> >  list_del_rcu include/linux/rculist.h:157 [inline]
+> >  ieee802154_if_remove+0x86/0x1e0 net/mac802154/iface.c:687
+> >  rdev_del_virtual_intf_deprecated net/ieee802154/rdev-ops.h:24 [inline]
+> >  ieee802154_del_iface+0x2c0/0x5c0 net/ieee802154/nl-phy.c:323
+> >  genl_family_rcv_msg_doit net/netlink/genetlink.c:1115 [inline]
+> >  genl_family_rcv_msg net/netlink/genetlink.c:1195 [inline]
+> >  genl_rcv_msg+0xb14/0xec0 net/netlink/genetlink.c:1210
+> >  netlink_rcv_skb+0x1e3/0x430 net/netlink/af_netlink.c:2551
+> >  genl_rcv+0x28/0x40 net/netlink/genetlink.c:1219
+> >  netlink_unicast_kernel net/netlink/af_netlink.c:1331 [inline]
+> >  netlink_unicast+0x7f6/0x990 net/netlink/af_netlink.c:1357
+> >  netlink_sendmsg+0x8e4/0xcb0 net/netlink/af_netlink.c:1901
+> >  sock_sendmsg_nosec net/socket.c:729 [inline]
+> >  __sock_sendmsg+0x221/0x270 net/socket.c:744
+> >  ____sys_sendmsg+0x52a/0x7e0 net/socket.c:2607
+> >  ___sys_sendmsg net/socket.c:2661 [inline]
+> >  __sys_sendmsg+0x292/0x380 net/socket.c:2690
+> >  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+> >  do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+> >  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> >
+> > Reported-and-tested-by: syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com
+> > Closes: https://syzkaller.appspot.com/bug?extid=985f827280dc3a6e7e92
+> > Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+> > ---
+> >  net/mac802154/ieee802154_i.h | 1 +
+> >  net/mac802154/iface.c        | 4 ++++
+> >  2 files changed, 5 insertions(+)
+> >
+> > diff --git a/net/mac802154/ieee802154_i.h b/net/mac802154/ieee802154_i.h
+> > index 08dd521a51a5..6771c0569516 100644
+> > --- a/net/mac802154/ieee802154_i.h
+> > +++ b/net/mac802154/ieee802154_i.h
+> > @@ -101,6 +101,7 @@ enum {
+> >
+> >  enum ieee802154_sdata_state_bits {
+> >  	SDATA_STATE_RUNNING,
+> > +	SDATA_STATE_LISTDONE,
+> >  };
+> >
+> >  /* Slave interface definition.
+> > diff --git a/net/mac802154/iface.c b/net/mac802154/iface.c
+> > index c0e2da5072be..aed2fc63395d 100644
+> > --- a/net/mac802154/iface.c
+> > +++ b/net/mac802154/iface.c
+> > @@ -683,6 +683,9 @@ void ieee802154_if_remove(struct ieee802154_sub_if_data *sdata)
+> >  {
+> >  	ASSERT_RTNL();
+> >
+> > +	if (test_bit(SDATA_STATE_LISTDONE, &sdata->state))
+> > +		return;
+> > +
+> >  	mutex_lock(&sdata->local->iflist_mtx);
+> >  	list_del_rcu(&sdata->list);
+> >  	mutex_unlock(&sdata->local->iflist_mtx);
+> > @@ -698,6 +701,7 @@ void ieee802154_remove_interfaces(struct ieee802154_local *local)
+> >  	mutex_lock(&local->iflist_mtx);
+> >  	list_for_each_entry_safe(sdata, tmp, &local->interfaces, list) {
+> >  		list_del(&sdata->list);
+> > +		set_bit(SDATA_STATE_LISTDONE, &sdata->state);
+> >
+> >  		unregister_netdevice(sdata->dev);
+> >  	}
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZzKeZAAKCRBzbaomhzOw
-wgEIAQCdKzt65IStBSmMvdRMro0bcESyEJpmF0YrU0SonsTLUAEAg2ySnWBoNnja
-gvmOM+RRA3gC9yeEB22cd3vCEF1dugI=
-=9q05
------END PGP SIGNATURE-----
-
---TbHvfp6kUy+f6lxN--
+BR,
+Lizhi
 
