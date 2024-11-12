@@ -1,166 +1,147 @@
-Return-Path: <linux-usb+bounces-17483-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17490-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13F1A9C5C79
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 16:54:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B2B49C5EDA
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 18:24:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84123B2EBA5
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 13:44:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7D328B335B8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 16:01:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F7F31CEAC9;
-	Tue, 12 Nov 2024 13:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC5C2038A7;
+	Tue, 12 Nov 2024 15:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yQZxhrup"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QVS5gYWw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E176A1531C4
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 13:44:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6005D203713;
+	Tue, 12 Nov 2024 15:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731419058; cv=none; b=di2z4e2ygKD0/GCJzDi3tz2tp2Rg0gvM0cVVja/qJkgWYMsRFTqIArdFYGCAOCRQ/JIWSnsj/3SZVBrkc2b/xyAAAW4+OSIMKBzE3ItCwcHTQe9FZcN4ywfLoYz4s2E9AbDZlQBUDsqquZZz6LfLLr8ObBUxid7LPC5zLuRfaHU=
+	t=1731427110; cv=none; b=OnrjooKWmGso8MHBbqUMI71+pEc8Ln+h1BzmsyM53Mml1b6jwNJVIGQJNc14m3/QIoSSXbFVds8+15VDNpDxqeRNG0d95HE4r85iQw3p3e7b9MSpf2vlS921GDTh2y6pmyK8gsN0FJ4HaBXfcod6jsCFuw3Q7g0TvexaS+EsIGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731419058; c=relaxed/simple;
-	bh=QzGHxcfoOYe3xDN7+yhw9DxRuWlEvc/M4ObJ0BC2+E4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dM4jQBw1DUFRZ4NFexFMxrUNSL/Pbj/EKEz6WlieWDu2HelDkYxGkndxQChaleEDWYqaFqUA6og6m6JU5r5B2YoKZKmvrcGab4jz1x5UJEysFFv/YdQdx9Ynx5EfYmQ0cc73Kle/460EGetnfsxzk5sy7r2DpQouT5+Y2aFdzkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yQZxhrup; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-539e13375d3so6555936e87.3
-        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 05:44:16 -0800 (PST)
+	s=arc-20240116; t=1731427110; c=relaxed/simple;
+	bh=Wk29+QyBe2z3l3f7+Mpt9+b85LMwjK3ZL8cZ5FYsIuM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=o4JZ1wQ1v2etMquZX9sU+PL0K4rtAEefHdtsDUNbKk05eEWfCQzb7JPQKO9ntT2WDA7T/B7FvoXrfGLpoe8uafXCME6xKZm1lFrLrg16LizepEgNYB4Sa46JB7wFxn0cADOHRqV+Wn7ny2vR5O/LblYtKAaR+5va+SgmNd0qv8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QVS5gYWw; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-431688d5127so46516475e9.0;
+        Tue, 12 Nov 2024 07:58:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731419055; x=1732023855; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=iDZVjDz8WaHN7Uzdxa3K3Hi8mi6UCuBy7yMBk40iTWc=;
-        b=yQZxhrupCKwqVHrJ5yLk7Hnpl/hBVX1XuWMc3u5hZadPsWwccVgDATeRNmBAvUjJ05
-         8ztceHhmFLiPlAlR0FOPnY3B1n1PgJBMlZ/7CskrNFXvzTH1nwFN4lHkkML//hVWCEd/
-         W9nUj0EHZrC6PUSTVN+ppfQRxXa7mTIdbw3AAk8F6RMMxfHqAFfgYjafkl2lAXyjJtu1
-         RIaGc5eyB0hR1MuMfeHU7gt5tPCbnLK9LM3hN+CKlUOKEPoBW2hglSVwtJGfdFL6sXpg
-         E9IIKdkbNRq4ovsy8GKpLNHdR2AV5t4EycLwliojOzgo30hmDiWUJpu8CRSGBEYWDMK2
-         Jbtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731419055; x=1732023855;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1731427105; x=1732031905; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iDZVjDz8WaHN7Uzdxa3K3Hi8mi6UCuBy7yMBk40iTWc=;
-        b=Q0jFR4Tk+3YEpIb4g4eWBRFjf1MQ11zAQ9qg9LBiQQbqLnvXUl9KS3njhUHels9RST
-         ZJU9OYKlSeK5A7C13qCqzJYkSCJ8bpJdqE5ZPcO252B4txzfJ0ZPShlv3O+fAvDuA+nH
-         3u9AtEU9iHxQ6jSWQS57UIQP+cJ/Ga6XawLUE5BqzmXPzstng6ZlWO/SIMWXF7AvSucZ
-         DiGjNeLJAcIMamdq87JvYBeBRV6z+wp3rHfw3skztdwz/4QUbnKcaOI/AYolzr11kxt/
-         PO/dXDPmKxIM58TV/jDC7mnj+fFtS+DoEXzFarvw6R+ZKLiGnl8L4WTNQAYwdyuugmzM
-         9QRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUCieloOWBUnJONjNCBGDMPqjH0eZfsTH6vfgPN1FhSqmUM6wJHTziD4/udwAwYvD9SXEaWYoQUHRo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3a/BBRCAoK865QLZOh8p2XgkAJ6uCp5yZSQ1LGFJ1CloKVt9g
-	CPCndOjTlOD+FzUmpqIzm4/mvXSOG3Q2usLE89oQQ5famCKZ0ia+NKUiRRVP3XXrpAprl0Fm47/
-	h
-X-Google-Smtp-Source: AGHT+IF4DigzAsf4mgiTBlNcElKCvgjRc9RJrMYFwqjztVN7WEdLH0Y1ZR0nSSYwsHZKJQCBBLdvJw==
-X-Received: by 2002:a05:6512:3b9b:b0:539:fbd4:9c9a with SMTP id 2adb3069b0e04-53d8626c823mr8459877e87.35.1731419055072;
-        Tue, 12 Nov 2024 05:44:15 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53d8267859csm1886887e87.45.2024.11.12.05.44.12
+        bh=q/qVENU9+N/71Xr2X4szHCr6pk0/5uELMhfDCvBqSqQ=;
+        b=QVS5gYWwBrZL2JNxHxessaebchRBAYfpwdn0VXAHrusCNLa/4ZQQy3CJuZ9DgKY5q7
+         jQ51LKiIqmbzDQS2ID30ygPkiEYac/QagXaE4iD2yzKdQrmFAwaOOeVyvEYjRFSvRjwY
+         Iag0Ynek/kQEEVWYyomXD5KLO4UA3h8oy2mtNX9LR0Q5b+3U26cQq6YbeSOk5WS7OECk
+         4EMb5y3fmCV++MjVXmJZGln0b4Io8fBSSK9oV3R3mbaxZOwEvtHdOf4bWVJi2/lxkP32
+         BJo03haWin9aT3Qjtf+hVh66jfUEo3CILUbQbWyRmWDDpTn+5tVg6R5ancy/l6BYxVhb
+         rAtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731427105; x=1732031905;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q/qVENU9+N/71Xr2X4szHCr6pk0/5uELMhfDCvBqSqQ=;
+        b=AggCkUiKN9tspSosAa1Sic8lSy6etBqjDH0c3xhRyG27KiOK/BBViRUCJgbhCPOxWk
+         E7xXwsMQ5XvREHJW5OFo0ktQQCKrpGESlhAOd8Kq1dsviNG/3Bm5PuJ3bX1WF+lKPU6v
+         EBXRqFbqQdp6Rl218QL1g2S9JH/u9KaLQFphn5wsAD3o9LD7c+iNkjutqnZaDXsNs88X
+         dKCxfSPE8XKM3ynbyjnkHwkBTPWVv+lCTPP2bGAbzduMbAoHrVCJijNOVvvQFl4WP+V6
+         aXHk7ncPu4Gi2FltYfuNO5P2b8xkA5rCv7kli0amtxZYPmHzLT6K9ToGPezKb0IN4iH5
+         Y/ng==
+X-Forwarded-Encrypted: i=1; AJvYcCVnl60Dz/oLNKwxP/5zM8zwiUbybTrHFAIFNwoIbxiEFGhATiEXPEM//dKWcmzFHGHfcHQHnGohNmA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3v0sma75wNRkc9K7pzTLdbH9Lcke/jbRoxfkOrP+Ll5wHQHew
+	urKD6Zu0lqG0AzlogbBjMuvYB1c486kZF88g1CyFpwRTzE5OhD5I
+X-Google-Smtp-Source: AGHT+IH8rG7r+w6v7PiScq7laBsY6abFHvictPV12TRigvPRHmoKnFczKr7jaE8XylK+PpxauJSN9A==
+X-Received: by 2002:a05:600c:6987:b0:426:8884:2c58 with SMTP id 5b1f17b1804b1-432bcafd113mr118177695e9.4.1731427104394;
+        Tue, 12 Nov 2024 07:58:24 -0800 (PST)
+Received: from work.. (2.133.25.254.dynamic.telecom.kz. [2.133.25.254])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381edc1104asm15991136f8f.88.2024.11.12.07.58.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 05:44:13 -0800 (PST)
-Date: Tue, 12 Nov 2024 15:44:11 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org, 
-	andersson@kernel.org, konradybcio@kernel.org, mantas@8devices.com, 
-	quic_rohiagar@quicinc.com, johan+linaro@kernel.org, quic_kriskura@quicinc.com, 
-	abel.vesa@linaro.org, quic_kbajaj@quicinc.com, quic_wcheng@quicinc.com, 
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v1 2/6] phy: qcom-qusb2: add QUSB2 support for IPQ5424
-Message-ID: <m2w5772mjsjaolawrfuhkmiq6iaagu746tqv5qtbrllvqpf75t@cykasimx4lff>
-References: <20241112091355.2028018-1-quic_varada@quicinc.com>
- <20241112091355.2028018-3-quic_varada@quicinc.com>
+        Tue, 12 Nov 2024 07:58:23 -0800 (PST)
+From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+To: gregkh@linuxfoundation.org,
+	andreyknvl@gmail.com,
+	b-liu@ti.com,
+	johan@kernel.org,
+	oneukum@suse.com,
+	stern@rowland.harvard.edu
+Cc: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	snovitoll@gmail.com,
+	usb-storage@lists.one-eyed-alien.net
+Subject: [PATCH v2 0/8] drivers/usb: refactor min/max with min_t/max_t
+Date: Tue, 12 Nov 2024 20:58:09 +0500
+Message-Id: <20241112155817.3512577-1-snovitoll@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <2024111251-spill-hatchback-72da@gregkh>
+References: <2024111251-spill-hatchback-72da@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241112091355.2028018-3-quic_varada@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 12, 2024 at 02:43:51PM +0530, Varadarajan Narayanan wrote:
-> Add the phy init sequence for the Super Speed ports found
-> on IPQ5424.
-> 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
->  drivers/phy/qualcomm/phy-qcom-qusb2.c | 28 +++++++++++++++++++++++++++
->  1 file changed, 28 insertions(+)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qusb2.c b/drivers/phy/qualcomm/phy-qcom-qusb2.c
-> index c52655a383ce..4513f0c81c50 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qusb2.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qusb2.c
-> @@ -151,6 +151,21 @@ static const struct qusb2_phy_init_tbl ipq6018_init_tbl[] = {
->  	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_AUTOPGM_CTL1, 0x9F),
->  };
->  
-> +static const struct qusb2_phy_init_tbl ipq5424_init_tbl[] = {
-> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL, 0x14),
-> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE1, 0x00),
-> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE2, 0x53),
-> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE4, 0xC3),
-> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_TUNE, 0x30),
-> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_USER_CTL1, 0x79),
-> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_USER_CTL2, 0x21),
-> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TUNE5, 0x00),
-> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_PWR_CTRL, 0x00),
-> +	QUSB2_PHY_INIT_CFG_L(QUSB2PHY_PORT_TEST2, 0x14),
-> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_TEST, 0x80),
-> +	QUSB2_PHY_INIT_CFG(QUSB2PHY_PLL_AUTOPGM_CTL1, 0x9F),
+This patch series improves type safety in the drivers/usb/*
+by using `min_t()` and `max_t()` instead of min(), max()
+with the casting inside. It should address potential type promotion issues.
 
-Lowercase hex numbers please. LGTM otherwise.
+Scanned the current drivers/usb code with `max\(.*\(` and `min\(.*\(`
+regexp queries to find casting inside of min() and max() which
+may lead to subtle bugs or even security vulnerabilities,
+especially if negative values are involved.
 
-> +};
-> +
->  static const unsigned int ipq6018_regs_layout[] = {
->  	[QUSB2PHY_PLL_STATUS]              = 0x38,
->  	[QUSB2PHY_PORT_TUNE1]              = 0x80,
-> @@ -331,6 +346,16 @@ static const struct qusb2_phy_cfg ipq6018_phy_cfg = {
->  	.autoresume_en   = BIT(0),
->  };
->  
-> +static const struct qusb2_phy_cfg ipq5424_phy_cfg = {
-> +	.tbl            = ipq5424_init_tbl,
-> +	.tbl_num        = ARRAY_SIZE(ipq5424_init_tbl),
-> +	.regs           = ipq6018_regs_layout,
-> +
-> +	.disable_ctrl   = POWER_DOWN,
-> +	.mask_core_ready = PLL_LOCKED,
-> +	.autoresume_en   = BIT(0),
-> +};
-> +
->  static const struct qusb2_phy_cfg qusb2_v2_phy_cfg = {
->  	.tbl		= qusb2_v2_init_tbl,
->  	.tbl_num	= ARRAY_SIZE(qusb2_v2_init_tbl),
-> @@ -905,6 +930,9 @@ static const struct phy_ops qusb2_phy_gen_ops = {
->  
->  static const struct of_device_id qusb2_phy_of_match_table[] = {
->  	{
-> +		.compatible	= "qcom,ipq5424-qusb2-phy",
-> +		.data		= &ipq5424_phy_cfg,
-> +	}, {
->  		.compatible	= "qcom,ipq6018-qusb2-phy",
->  		.data		= &ipq6018_phy_cfg,
->  	}, {
-> -- 
-> 2.34.1
-> 
+Let's refactor to min_t() and max_t() specifying the data type
+to ensure it's applicable for the both compareable arguments.
+
+Changes v1 -> v2:
+  - split a single patch into a patch series
+	  per each drivers/usb/* subdirectory (Greg).
+
+Sabyrzhan Tasbolatov (8):
+  drivers/usb/gadget: refactor min with min_t
+  drivers/usb/core: refactor max with max_t
+  drivers/usb/host: refactor min/max with min_t/max_t
+  drivers/usb/misc: refactor min with min_t
+  drivers/usb/mon: refactor min with min_t
+  drivers/usb/musb: refactor min/max with min_t/max_t
+  drivers/usb/serial: refactor min with min_t
+  drivers/usb/storage: refactor min with min_t
+
+ drivers/usb/core/config.c                    |  2 +-
+ drivers/usb/gadget/composite.c               | 12 ++++++------
+ drivers/usb/gadget/configfs.c                |  2 +-
+ drivers/usb/gadget/function/f_fs.c           |  6 +++---
+ drivers/usb/gadget/function/f_mass_storage.c |  8 ++++----
+ drivers/usb/gadget/function/uvc_video.c      |  4 ++--
+ drivers/usb/gadget/legacy/raw_gadget.c       |  4 ++--
+ drivers/usb/gadget/udc/omap_udc.c            |  4 ++--
+ drivers/usb/gadget/usbstring.c               |  2 +-
+ drivers/usb/host/ehci-hcd.c                  |  2 +-
+ drivers/usb/host/oxu210hp-hcd.c              |  4 ++--
+ drivers/usb/host/r8a66597-hcd.c              |  2 +-
+ drivers/usb/misc/usbtest.c                   |  3 ++-
+ drivers/usb/mon/mon_bin.c                    |  2 +-
+ drivers/usb/musb/musb_core.c                 |  2 +-
+ drivers/usb/musb/musb_gadget_ep0.c           |  2 +-
+ drivers/usb/musb/musb_host.c                 |  5 ++---
+ drivers/usb/serial/io_edgeport.c             |  2 +-
+ drivers/usb/serial/sierra.c                  |  2 +-
+ drivers/usb/storage/sddr09.c                 |  4 ++--
+ drivers/usb/storage/sddr55.c                 |  8 ++++----
+ 21 files changed, 41 insertions(+), 41 deletions(-)
 
 -- 
-With best wishes
-Dmitry
+2.34.1
+
 
