@@ -1,186 +1,92 @@
-Return-Path: <linux-usb+bounces-17450-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17451-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E13A9C4D7B
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 04:46:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D16189C4DBD
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 05:31:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 864B6B2379C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 03:46:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97EE9287A82
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 04:31:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EAC5208222;
-	Tue, 12 Nov 2024 03:46:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444A4208975;
+	Tue, 12 Nov 2024 04:31:09 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F66A18CC15
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 03:46:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E7E79C4
+	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 04:31:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731383191; cv=none; b=P1ZpPRTx1Ljzjc5rcggbaKdmIkZV3Got7jmspjpiK7WvHtMbZltb92dQKEY8eZBogIBEyF7yVJXfHdeSgT0dGu8JHqJtu/6mELX1L0pIbO9hySmjJ0+Hj+sV18NYiMNcgN3+9q9z2k6J1ndi9lwN77391EX1Oouh+VG/NcGebEw=
+	t=1731385869; cv=none; b=HWHRHmpLW2gZfW9KlJHHSnhx67wLjxrtuskzD09yLugNggN4ffsaU9rwu6ULrtltmxXOzY9f5o13mlCS1jP/wEQx4OCacwNiTAW8gjKej4P0r0vVCg61ul6W/0Dvfh66LxYXI6F2Wo+Xxw6Erh6KCsALxbMbo6/EMh4nOYZPXTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731383191; c=relaxed/simple;
-	bh=MdF0vQAzDkjzPCpTxKOBblHlGzTL1baHSFNggrEk/FQ=;
+	s=arc-20240116; t=1731385869; c=relaxed/simple;
+	bh=UXtpxBefUNr3VcIYNI9rVjNQrYCyWHXXzZkWnLQ35Tc=;
 	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=cPUSvQP5ZVmQQE/SU2gxRDrxSoOgMPO5zgwmTjHWPbhThVGq/47y9f69F5GSX/1N1QBT1VlTWXkBkJqgySVvaEHGqPVtI6As8k/XYVnRLaAo2nWFN+HHjEyJCix/csmKweJKvSIkayuhEUPXfgCJ2g3t7Etrf4ulVNZf4EfN9rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+	 Content-Type; b=PMB0BgCRZ9ZLI/Cnk3inLCfmm9ZwI2szKVdmoeOdTPY3Gjr2rpdecOWQqoSS8MQ2wj+xyxvEAO6sN5Qn/7wwdAfAmB6b7dgoQUrEXxaa1piItlXp55cWcnHD3fz+FW94Hd7TWJbjWgNA4fjScJa/5oqxbEnhI10kH+EzP/sbBU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a3b506c87cso64740035ab.1
-        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 19:46:29 -0800 (PST)
+Received: by mail-io1-f70.google.com with SMTP id ca18e2360f4ac-83ac0354401so655873239f.3
+        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 20:31:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731383189; x=1731987989;
+        d=1e100.net; s=20230601; t=1731385867; x=1731990667;
         h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gTlS1My+IX6vUSKJh4vEvVCjOuHSbZWEzCPaUoxSiP0=;
-        b=fyT6Zh2BRfxCPGA/WkOYx9GJ8Q25DpdAmqGpfwucVvA2WIejXAtqI2jgAufewHXTzC
-         dvQ4cIVB2vvtByWVsuMyIU0c+pXurZc6VMvBRKAHrd1/an0BMcOFeqCdaVZrnl1TUOfb
-         Jzp7ZY2UbcnD++1fKhXWEGOIjWcOkS74BppnU3nEXUcZpf4TKnoaKIqHWAqr25UcUq1X
-         BLRi1ifCduyAaUjvffvauLsJ18S09LqMTRIvFfEncNZUXq8RGUyp7ag0YHgHfHlhpP5u
-         U4l+PuyN/HttAHqn0EJ8A43S7tzEPdcyG6KM8o5N040wp1hpHze0n3pRDk6w4/Pmuvby
-         2COg==
-X-Forwarded-Encrypted: i=1; AJvYcCXKd4TIUNi/hY+36IHmbTH863ssLk1jLOc+2KbSm8ANopWVYRWCvMzy4kAvIXmRBHrlcEvn027rnbE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqUhjE8ZCv/y/HcYQWdrMmwXPeF+zGd5O1ZXc1b3ekFSuThiVh
-	mDjBij1SHO/kI75JRTm1zH734rY80miJsgjGgHoB+JJ6Y/pHwcFz85dB/G3BkFTgwyiA+Kn0Gpz
-	uvocuG62OtOqxH9sgkjSQEnuF1xUf7Qx73b9A7jv+6wt+dDV5gmqc4ok=
-X-Google-Smtp-Source: AGHT+IG3ufhXQPfWoo/ORV9DkMtBnk/0diPUmflaxDDBBQ/UNSgc7NBkjFs68zErC0fsRRuARu/bX+P3GgrIsquVZiyX2HrALGLv
+        bh=57INWnZiq0HfAnj9yObF5CBGSGscztNUCHjuo+6K0KI=;
+        b=cFzK0mdoNUVW8Mg0b8SjDlHIWe/6W0Opineco0AH7nN/76xURibX1nEyUmvf1mQWUP
+         zuOX1dMUoFARwiyx4D1y9c58vHyr8W42WYolSw62yhm1uHmLinld8hFWZ8toRpa2mSuh
+         ZfMCyuNy3c094uONCW5BCgKetGa7xEsoDiuaPw2tJr+B0gNhQy9eAKDHVCYcZQjCIHjf
+         khkwBqqsMiP6cyfV68FVDHDKLqCFPe5SChwCIdwD7UaCHTyZrtJNnwQqYQlpa9PQiKTA
+         ffbZcW1vWTJPim3UUHnC3RwVcgSlCkdSO5lROWujtVVZvYFotWqagGeUQQkfIW18BRxg
+         heXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXUtdYA38QQYjzIVUZBOnTMT9qfOZOur3k9AWmAVus61NJtSAJJoLbK2VTz+JTrJ6qpjpVaxt8xHdc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBMPZXti95MvZwqlw/Cv9vxHCfXBax0dKjEOeTvsrg16ALss0C
+	kjgaV6IFv5Ls+F/yW5hKBiiifqt+ITs2bAbQofGOdj944dCUXLacMM/hn+V0sjk3p7Wfn1PC2QB
+	OFmAN5L6A4+dyFEHX+ZiPg8BqJAKPlJbBRB3TpEAhYqNuX0T6ysJUtLc=
+X-Google-Smtp-Source: AGHT+IFFUDjXKPivqzf1Tpm1sYMybaBdZY0FjaiXxICZysfVPEn6SL2GpDXPpaOREbFWte39HRrYxumuNBSVZgs5bBmZdVwHU/rz
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1f08:b0:3a6:b0a3:5402 with SMTP id
- e9e14a558f8ab-3a6f1a21dcdmr159700115ab.17.1731383188700; Mon, 11 Nov 2024
- 19:46:28 -0800 (PST)
-Date: Mon, 11 Nov 2024 19:46:28 -0800
-In-Reply-To: <0000000000009d5daa05ed9815fa@google.com>
+X-Received: by 2002:a05:6e02:1908:b0:3a4:ebfa:2ac7 with SMTP id
+ e9e14a558f8ab-3a6f1a0a674mr158303905ab.12.1731385866731; Mon, 11 Nov 2024
+ 20:31:06 -0800 (PST)
+Date: Mon, 11 Nov 2024 20:31:06 -0800
+In-Reply-To: <20241112002134.2003089-1-lizhi.xu@windriver.com>
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6732cf94.050a0220.5088e.0003.GAE@google.com>
-Subject: Re: [syzbot] [bluetooth] WARNING in call_timer_fn
-From: syzbot <syzbot+6fb78d577e89e69602f9@syzkaller.appspotmail.com>
-To: ben-linux@fluff.org, bp@alien8.de, daniel.sneddon@linux.intel.com, 
-	dave.hansen@linux.intel.com, gregkh@linuxfoundation.org, hdanton@sina.com, 
-	hpa@zytor.com, linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, luiz.dentz@gmail.com, marcel@holtmann.org, 
-	mingo@redhat.com, netdev@vger.kernel.org, pbonzini@redhat.com, 
-	penguin-kernel@I-love.SAKURA.ne.jp, penguin-kernel@i-love.sakura.ne.jp, 
-	rafael@kernel.org, rosted@goodmis.org, 
-	sathyanarayanan.kuppuswamy@linux.intel.com, syzkaller-bugs@googlegroups.com, 
-	tglx@linutronix.de, x86@kernel.org
+Message-ID: <6732da0a.050a0220.5088e.0005.GAE@google.com>
+Subject: Re: [syzbot] [wpan?] [usb?] BUG: corrupted list in ieee802154_if_remove
+From: syzbot <syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com>
+To: alex.aring@gmail.com, davem@davemloft.net, dmantipov@yandex.ru, 
+	edumazet@google.com, horms@kernel.org, kuba@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wpan@vger.kernel.org, lizhi.xu@windriver.com, miquel.raynal@bootlin.com, 
+	netdev@vger.kernel.org, pabeni@redhat.com, stefan@datenfreihafen.org, 
+	syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 
-syzbot has found a reproducer for the following issue on:
+Hello,
 
-HEAD commit:    de9df030ccb5 usb: typec: ucsi: glink: be more precise on o..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=15637ea7980000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=358c1689354aeef3
-dashboard link: https://syzkaller.appspot.com/bug?extid=6fb78d577e89e69602f9
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101db8c0580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1738f4e8580000
+syzbot has tested the proposed patch and the reproducer did not trigger any issue:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fcce9dc5242d/disk-de9df030.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/420ef3e22854/vmlinux-de9df030.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a6d0ac1f944e/bzImage-de9df030.xz
+Reported-by: syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com
+Tested-by: syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+6fb78d577e89e69602f9@syzkaller.appspotmail.com
+Tested on:
 
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 9 at kernel/workqueue.c:2257 __queue_work+0xc3a/0x1080 kernel/workqueue.c:2256
-Modules linked in:
-CPU: 0 UID: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.12.0-rc6-syzkaller-00106-gde9df030ccb5 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:__queue_work+0xc3a/0x1080 kernel/workqueue.c:2256
-Code: 07 83 c0 03 38 d0 7c 09 84 d2 74 05 e8 7f 46 8b 00 8b 5b 2c 31 ff 83 e3 20 89 de e8 40 bf 32 00 85 db 75 60 e8 f7 bc 32 00 90 <0f> 0b 90 e9 f9 f7 ff ff e8 e9 bc 32 00 90 0f 0b 90 e9 a8 f7 ff ff
-RSP: 0018:ffffc90000007bf0 EFLAGS: 00010046
-RAX: 0000000000000000 RBX: 0000000000000100 RCX: ffffffff812335c1
-RDX: ffff888101698000 RSI: ffffffff81233619 RDI: 0000000000000005
-RBP: ffff88811a063780 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000100 R11: 0000000000000000 R12: 1ffff92000000f90
-R13: 0000000000000001 R14: 0000000000000101 R15: ffff888106b28800
-FS:  0000000000000000(0000) GS:ffff8881f5800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f7cbbc0c258 CR3: 0000000116944000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- call_timer_fn+0x1a0/0x610 kernel/time/timer.c:1794
- expire_timers kernel/time/timer.c:1840 [inline]
- __run_timers+0x56a/0x930 kernel/time/timer.c:2419
- __run_timer_base kernel/time/timer.c:2430 [inline]
- __run_timer_base kernel/time/timer.c:2423 [inline]
- run_timer_base+0x111/0x190 kernel/time/timer.c:2439
- run_timer_softirq+0x1a/0x40 kernel/time/timer.c:2449
- handle_softirqs+0x206/0x8d0 kernel/softirq.c:554
- __do_softirq kernel/softirq.c:588 [inline]
- invoke_softirq kernel/softirq.c:428 [inline]
- __irq_exit_rcu kernel/softirq.c:637 [inline]
- irq_exit_rcu+0xac/0x110 kernel/softirq.c:649
- instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1049 [inline]
- sysvec_apic_timer_interrupt+0x90/0xb0 arch/x86/kernel/apic/apic.c:1049
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
-RIP: 0010:console_trylock_spinning kernel/printk/printk.c:2042 [inline]
-RIP: 0010:vprintk_emit+0x621/0x6f0 kernel/printk/printk.c:2406
-Code: 85 ed 0f 85 81 00 00 00 e8 0c 94 1f 00 9c 41 5c 41 81 e4 00 02 00 00 31 ff 4c 89 e6 e8 68 96 1f 00 4d 85 e4 0f 85 8d 00 00 00 <e8> ea 93 1f 00 45 31 c9 41 b8 01 00 00 00 31 c9 48 8d 05 00 00 00
-RSP: 0018:ffffc9000009f6e8 EFLAGS: 00000293
-RAX: 0000000000000000 RBX: 0000000000000029 RCX: ffffffff81365f9e
-RDX: ffff888101698000 RSI: ffffffff81365fa8 RDI: 0000000000000007
-RBP: 1ffff92000013edf R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: 0000000000000200 R14: ffff88810d331d40 R15: ffffc9000009f7b0
- dev_vprintk_emit drivers/base/core.c:4942 [inline]
- dev_printk_emit+0xfb/0x140 drivers/base/core.c:4953
- __dev_printk+0xf5/0x270 drivers/base/core.c:4965
- _dev_info+0xe5/0x120 drivers/base/core.c:5011
- usb_disconnect+0xec/0x920 drivers/usb/core/hub.c:2286
- hub_port_connect drivers/usb/core/hub.c:5361 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x1bed/0x4f40 drivers/usb/core/hub.c:5903
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3229
- process_scheduled_works kernel/workqueue.c:3310 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3391
- kthread+0x2c1/0x3a0 kernel/kthread.c:389
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-----------------
-Code disassembly (best guess):
-   0:	85 ed                	test   %ebp,%ebp
-   2:	0f 85 81 00 00 00    	jne    0x89
-   8:	e8 0c 94 1f 00       	call   0x1f9419
-   d:	9c                   	pushf
-   e:	41 5c                	pop    %r12
-  10:	41 81 e4 00 02 00 00 	and    $0x200,%r12d
-  17:	31 ff                	xor    %edi,%edi
-  19:	4c 89 e6             	mov    %r12,%rsi
-  1c:	e8 68 96 1f 00       	call   0x1f9689
-  21:	4d 85 e4             	test   %r12,%r12
-  24:	0f 85 8d 00 00 00    	jne    0xb7
-* 2a:	e8 ea 93 1f 00       	call   0x1f9419 <-- trapping instruction
-  2f:	45 31 c9             	xor    %r9d,%r9d
-  32:	41 b8 01 00 00 00    	mov    $0x1,%r8d
-  38:	31 c9                	xor    %ecx,%ecx
-  3a:	48                   	rex.W
-  3b:	8d                   	.byte 0x8d
-  3c:	05                   	.byte 0x5
-  3d:	00 00                	add    %al,(%rax)
+commit:         2d5404ca Linux 6.12-rc7
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1608335f980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1503500c6f615d24
+dashboard link: https://syzkaller.appspot.com/bug?extid=985f827280dc3a6e7e92
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=109ed35f980000
 
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+Note: testing is done by a robot and is best-effort only.
 
