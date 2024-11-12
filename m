@@ -1,95 +1,137 @@
-Return-Path: <linux-usb+bounces-17470-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17473-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC029C56C0
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 12:38:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D1969C566A
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 12:27:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 127F3B4165B
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 11:10:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0159E28779C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 11:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E232219E48;
-	Tue, 12 Nov 2024 10:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D860721730B;
+	Tue, 12 Nov 2024 11:11:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="riX5qwcs"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N+Od7uMv"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89D4020F5AF;
-	Tue, 12 Nov 2024 10:45:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBDB20F5AF;
+	Tue, 12 Nov 2024 11:11:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731408350; cv=none; b=Zbk2ouwlnzszTjmaPg1+TQ0IgDF4BTz0/Q47a7Au+nGQByHViCmFDV/xjBqgEsTBcdsY2Qy9LfY/FdlSxA8PnHRaftUpGxc0oH3ufB/Jw+GnErK0VInst54LNXO2cZcxRGbLLDG4Q/8rn1PokrwqvXhnIvK8RP2O6xSTNUjsGy4=
+	t=1731409866; cv=none; b=TVesnhNksXoBTIRXmzLwWOTRRZGHjkKTk1i8DtiWWEnmlGo3ekxP1TKxi8l51DX9BRMd7cA6T5NS2gshN3CW7dgYjsdYR93DKzc8zX0kmVQ1DW+z1bGK2ffb5HT6JZORXrOE91i91DeRh5ULeEq7ewXE+sZ/Yo/boObvwfkkcWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731408350; c=relaxed/simple;
-	bh=R6b2maNdwe+ovA4dr5//CKaFpQ6RmBWwyQHRZnAj7NY=;
+	s=arc-20240116; t=1731409866; c=relaxed/simple;
+	bh=XTmez6esYZix4zEIExzvryIvtWhzuaD1aYHB9dK8R4Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qb74BW3sU0sQFjfrP99Lhpypv4o9+KeaH7HGU7asjROkrHp0aEDOpy9tOG99TAZUE1bfrPGNET0ot2XkgkVJyX5RmV3CKDWO+LM5KuwmVzq8PqjlZ1dUG9RKHzlHH/M7pinKQV97qDqxwNKJrZVjWUcPswMt/B7fCj+55wS394w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=riX5qwcs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFF0AC4CECD;
-	Tue, 12 Nov 2024 10:45:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731408350;
-	bh=R6b2maNdwe+ovA4dr5//CKaFpQ6RmBWwyQHRZnAj7NY=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=XkQ6CoOue0ehSN8/Td0FbFel7MO2LBv5NGQ6dvf9v5+GFbDojzBFm4mRV7ANDsTV8FY9U2pqfAc19Ozy3nfQ+hXs/4QXKDdZfSMqZnKCBLF4Y+v825kW85HoBshfwHHAbd0S1+sTiBcb/EP7tGWBE/zbNgiNrZ8fGUmPQl28jbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N+Od7uMv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F9FC4CECD;
+	Tue, 12 Nov 2024 11:11:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1731409865;
+	bh=XTmez6esYZix4zEIExzvryIvtWhzuaD1aYHB9dK8R4Y=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=riX5qwcsg4XYrFblu7be/txKJ65JQUtTrvlr/nn64g/WObZ+T5nhF58jKivrdzmX4
-	 vCXHaRGbHM4NrO06rPFIBbJmDEKmsPzGnolNkireYwfxLVJLlV249TB66iu5LdXLz+
-	 oQSJt6BAFkSJOrJGSf0F/YQMnDgMbRxNtIt3/3K3FNQWezMeQ3u48ma5Vhs7OM1Dpm
-	 TDUaVuRuII9eRHJdjoI/kokTJ0kgPw2s0b3fBsQ8Fsi7in5rjrPJrc4g3Dr4ObM6JE
-	 yRI/q+ytTmoZzJCA4htAfKIfcxnjKOz/570pTQyskd5AnnwoB1E30XzHw8k7rPpv5Z
-	 3oH4GBdYgozNw==
-Date: Tue, 12 Nov 2024 18:45:43 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com,
-	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] usb: chipidea: imx: add imx8ulp support
-Message-ID: <20241112104543.GA663650@nchen-desktop>
-References: <20241111090916.1534047-1-xu.yang_2@nxp.com>
+	b=N+Od7uMv6TKw1xFecazXPs9sajbjNsQuhAWkWs6sb4NfumsiHXKSiYzyIkKFpNupE
+	 Ge1IquGZd3xjAcdsvCMg33y3FZISBLnm1XUNNKr1gypDUMZGgSQ0AE5S8hZwRYnae0
+	 Rexgk37itCLPKo7IZ4gB2hiWXmNDrfoIQYSWTrIE=
+Date: Tue, 12 Nov 2024 12:11:02 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Rex Nie <rex.nie@jaguarmicro.com>
+Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Angus Chen <angus.chen@jaguarmicro.com>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: =?utf-8?B?562U5aSNOiDnrZTlpI0=?= =?utf-8?Q?=3A?= [PATCH v2] USB:
+ core: remove dead code in do_proc_bulk()
+Message-ID: <2024111249-stifle-mundane-dbfc@gregkh>
+References: <20241109021140.2174-1-rex.nie@jaguarmicro.com>
+ <2024110947-umpire-unwell-ac00@gregkh>
+ <KL1PR0601MB5773F9F97A6AFC7E5D987323E65E2@KL1PR0601MB5773.apcprd06.prod.outlook.com>
+ <2024110911-professor-obnoxious-f411@gregkh>
+ <KL1PR0601MB5773FD459FC71707E5FB0B7FE6582@KL1PR0601MB5773.apcprd06.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241111090916.1534047-1-xu.yang_2@nxp.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <KL1PR0601MB5773FD459FC71707E5FB0B7FE6582@KL1PR0601MB5773.apcprd06.prod.outlook.com>
 
-On 24-11-11 17:09:16, Xu Yang wrote:
-> The dtbinding have imx7ulp and imx8ulp compatible with imx7d before. And
-> then the dtb follow the dtbinding. However, the driver doesn't add imx8ulp
-> compatible now. To make imx8ulp work well, this will add support for it.
+On Mon, Nov 11, 2024 at 08:01:59AM +0000, Rex Nie wrote:
 > 
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> 
+> > -----邮件原件-----
+> > 发件人: Greg KH <gregkh@linuxfoundation.org>
+> > 发送时间: 2024年11月9日 19:47
+> > 收件人: Rex Nie <rex.nie@jaguarmicro.com>
+> > 抄送: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org; Angus Chen
+> > <angus.chen@jaguarmicro.com>; stable@vger.kernel.org
+> > 主题: Re: 答复: [PATCH v2] USB: core: remove dead code in do_proc_bulk()
+> > 
+> > External Mail: This email originated from OUTSIDE of the organization!
+> > Do not click links, open attachments or provide ANY information unless you
+> > recognize the sender and know the content is safe.
+> > 
+> > 
+> > On Sat, Nov 09, 2024 at 11:38:43AM +0000, Rex Nie wrote:
+> > >
+> > >
+> > > > -----邮件原件-----
+> > > > 发件人: Greg KH <gregkh@linuxfoundation.org>
+> > > > 发送时间: 2024年11月9日 14:59
+> > > > 收件人: Rex Nie <rex.nie@jaguarmicro.com>
+> > > > 抄送: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org; Angus
+> > > > Chen <angus.chen@jaguarmicro.com>; stable@vger.kernel.org
+> > > > 主题: Re: [PATCH v2] USB: core: remove dead code in do_proc_bulk()
+> > > >
+> > > > External Mail: This email originated from OUTSIDE of the organization!
+> > > > Do not click links, open attachments or provide ANY information
+> > > > unless you recognize the sender and know the content is safe.
+> > > >
+> > > >
+> > > > On Sat, Nov 09, 2024 at 10:11:41AM +0800, Rex Nie wrote:
+> > > > > Since len1 is unsigned int, len1 < 0 always false. Remove it keep
+> > > > > code simple.
+> > > > >
+> > > > > Cc: stable@vger.kernel.org
+> > > > > Fixes: ae8709b296d8 ("USB: core: Make do_proc_control() and
+> > > > > do_proc_bulk() killable")
+> > > > > Signed-off-by: Rex Nie <rex.nie@jaguarmicro.com>
+> > > > > ---
+> > > > > changes in v2:
+> > > > > - Add "Cc: stable@vger.kernel.org" (kernel test robot)
+> > > >
+> > > > Why is this relevant for the stable kernels?  What bug is being
+> > > > fixed that users would hit that this is needed to resolve?
+> > > HI Greg k-h, I got a email from lkp@intel.com let me add Cc tag yesterday,
+> > so I apply v2 patch.
+> > 
+> > That was because you cc: stable and yet did not tag it as such.  That's not
+> > passing a judgement call on if it should have been done at all, which is what I
+> > am asking here.
+> > 
+> Thanks for detailed explanation.
+> > > Although this shouldn't bother users, the expression len1 < 0 in the
+> > > if condition doesn't make sense, and removing it makes the code more
+> > > simple and efficient. The original email from kernel robot test shows as
+> > follows. I think it no need a cc tag either.
+> > 
+> > Does this follow the patches as per the documentation for what should be
+> > accepted for stable kernels?
+> >
+> I check Documentation/process/stable-kernel-rules.rst again, it don't follow rules for stable kernels.
+> I think this patch can be picked up by mainline kernel tree.
 
-Acked-by: Peter Chen <peter.chen@kernel.org>
+Great, please resend this with that properly removed.
 
-Peter
-> ---
->  drivers/usb/chipidea/usbmisc_imx.c | 4 ++++
->  1 file changed, 4 insertions(+)
-> 
-> diff --git a/drivers/usb/chipidea/usbmisc_imx.c b/drivers/usb/chipidea/usbmisc_imx.c
-> index 173c78afd502..1394881fde5f 100644
-> --- a/drivers/usb/chipidea/usbmisc_imx.c
-> +++ b/drivers/usb/chipidea/usbmisc_imx.c
-> @@ -1285,6 +1285,10 @@ static const struct of_device_id usbmisc_imx_dt_ids[] = {
->  		.compatible = "fsl,imx7ulp-usbmisc",
->  		.data = &imx7ulp_usbmisc_ops,
->  	},
-> +	{
-> +		.compatible = "fsl,imx8ulp-usbmisc",
-> +		.data = &imx7ulp_usbmisc_ops,
-> +	},
->  	{ /* sentinel */ }
->  };
->  MODULE_DEVICE_TABLE(of, usbmisc_imx_dt_ids);
-> -- 
-> 2.34.1
-> 
+thanks,
+
+greg k-h
 
