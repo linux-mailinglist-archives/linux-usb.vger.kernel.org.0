@@ -1,127 +1,106 @@
-Return-Path: <linux-usb+bounces-17475-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17471-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0769D9C5703
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 12:52:08 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48F909C57A2
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 13:24:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C12A32810A8
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 11:52:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 281DFB469D3
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 11:22:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72BC1CD1F4;
-	Tue, 12 Nov 2024 11:51:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BABD1FB727;
+	Tue, 12 Nov 2024 11:01:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iE5MbN0N"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="CUyFtoHF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4EBD1BCA11;
-	Tue, 12 Nov 2024 11:51:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AA9E1F77A7;
+	Tue, 12 Nov 2024 11:01:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731412306; cv=none; b=Bh+q2ohESEFYTVyCHZSxaefol2gbyiLOL6rBK0YEOrezBaBZwI+0DGqY6Q9+qZsWrfTQYU5Do2U3w7UaJAwre+qzWi566QpCcAgRyhbbzqhlYSxkRRS6qWX43+JccK1XapWWUmI4p6hXeA6awjRLNN6w4BqkDrNzMZq73d+i8vg=
+	t=1731409293; cv=none; b=hYqgRMS0iqQxydKRQ58aLloY6SQI9RVCyAryIeZ7aWEtpJ4i8+YTRGgMilxg7SsV4zX8gQX1yvhEZp/JnQwh4VH7PLxZh2lnHEntSn/cRHaZgW6AgTo1k/gbfGOzpqJgK+t5AT2HuECAf9c9in8Ilh2XYze5RURDqoIrGK71fx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731412306; c=relaxed/simple;
-	bh=IDSB+0NIZbf11fpgWGAanQLivWHIwGk+LTEmDiC46GQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=N02LH9p7/3oaR7zpHab9SpAzw5jWAqeZ5uaLDEovzvG2VVG1qcBymjhdq5p4lkRNW11+JoMoHPM3fK5D5Do0w0pTJo6THj5/2h84XBIjfWqO8UfsPBgX30l6o1GVQ7P6CXuDVR43Yfo1EynKABCmFmpzbeJ4UystNl90VdSSBxQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iE5MbN0N; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731412304; x=1762948304;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IDSB+0NIZbf11fpgWGAanQLivWHIwGk+LTEmDiC46GQ=;
-  b=iE5MbN0NpUque0HCqJlL4wD4UAbP1ILCwQ3pYUCvhw4Jk+LKModqP+at
-   qkIkqx7X1GEfEFus6SomOP+72LjcvgaRqpr8YMwdrYGRoo4+uNbl4fb+C
-   QkfvmDcLLwP0DXsLvUkzeN+Ob/wZzZSNvvq2Q/sAtYIdtBn2628+sB206
-   Q6h57AmPrQWTlpFESak5VX6ACsmEwhVK7/14+mRs2NfjCvh6VutnA/77c
-   fjHf5pMfrWEEp8gW1ZJeaeGO1qE+8mMWujNlotjLiATlCoz+lF+Ho3M5P
-   PmdotqKH8pMM15egpv2hkWJDPPL2IRHx8cuJE7uvZUBRKdT4UhAd+FMDv
-   Q==;
-X-CSE-ConnectionGUID: dkEPb0/TT9KegDGW3GwRWg==
-X-CSE-MsgGUID: pzanGsajQwm+dwdouTChHw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11253"; a="48752980"
-X-IronPort-AV: E=Sophos;i="6.12,147,1728975600"; 
-   d="scan'208";a="48752980"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 03:51:43 -0800
-X-CSE-ConnectionGUID: mdq+nGRcQum9P7XzQZawtQ==
-X-CSE-MsgGUID: UqsmfTzNT/6N6P1an5K7tw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,147,1728975600"; 
-   d="scan'208";a="92196326"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa004.fm.intel.com with SMTP; 12 Nov 2024 03:51:40 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Nov 2024 13:51:39 +0200
-Date: Tue, 12 Nov 2024 13:51:39 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Ajay Gupta <ajayg@nvidia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Haotien Hsu <haotienh@nvidia.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: fix potential array underflow in
- ucsi_ccg_sync_control()
-Message-ID: <ZzNBS4M9c0tjSmX1@kuha.fi.intel.com>
-References: <c69ef0b3-61b0-4dde-98dd-97b97f81d912@stanley.mountain>
+	s=arc-20240116; t=1731409293; c=relaxed/simple;
+	bh=A/1yp0LaJZZY/+agPEY0mYZ96StMCvDdlakH86oaiKE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=JOuCvYc7L8tD2npllVgSSviJ2HC3BsOFZlTipq/bihF7yN3uc1KrCzQC31Z5sv74k7ONNm9FudBNUsomQB6WTpP6STJUwSvy0Y+v7sFfmcfTdK6nQToK6FoQqcCt8GQ1IcG0zm5MRff2wvJWMaDXm7y/E1GfOYglff6BfzyQ1/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=CUyFtoHF; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 38001240011;
+	Tue, 12 Nov 2024 11:01:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1731409283;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=osagrrumfDGl8S19V6hpWE8fnqHAIqSNeF5380MEu3w=;
+	b=CUyFtoHF/08sM1eEggzqP7IJe6O8R0TkpW63Bs9QPbEdltpEwqx575feeKDvJIgjExRxu3
+	S58bXqI/Fj8kpAt8YxV2ziwbVUsg4FlPj0VGcqr7rlpTal2QUPme2eDLdB9kA7cURMN91e
+	QE5SagNWrT2yPA7s6OpZS+2GegGVlbaiawgxOYKVCvHX3RkOa5drKDAwjcIsIjpej1LcXp
+	mZcddRk18xaXwz269r4UdXdckjewdoNEExtNIHl50eu0UCwTkrTkTHKj7E3TleHq+VTeYF
+	AWYg+8wZTVjqZz1phg+9KSXGxV8QsyY1eheqFBVjP4mC4by7oORFMmrW9gBXrg==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Lizhi Xu <lizhi.xu@windriver.com>
+Cc: <alex.aring@gmail.com>,  <davem@davemloft.net>,  <dmantipov@yandex.ru>,
+  <edumazet@google.com>,  <horms@kernel.org>,  <kuba@kernel.org>,
+  <linux-kernel@vger.kernel.org>,  <linux-usb@vger.kernel.org>,
+  <linux-wpan@vger.kernel.org>,  <netdev@vger.kernel.org>,
+  <pabeni@redhat.com>,  <stefan@datenfreihafen.org>,
+  <syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com>,
+  <syzkaller-bugs@googlegroups.com>
+Subject: Re: [PATCH] mac802154: add a check for slave data list before delete
+In-Reply-To: <20241112002134.2003089-1-lizhi.xu@windriver.com> (Lizhi Xu's
+	message of "Tue, 12 Nov 2024 08:21:33 +0800")
+References: <87msi5pn7y.fsf@bootlin.com>
+	<20241112002134.2003089-1-lizhi.xu@windriver.com>
+User-Agent: mu4e 1.12.1; emacs 29.4
+Date: Tue, 12 Nov 2024 12:01:21 +0100
+Message-ID: <87a5e4u35q.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c69ef0b3-61b0-4dde-98dd-97b97f81d912@stanley.mountain>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: miquel.raynal@bootlin.com
 
-On Mon, Nov 11, 2024 at 02:08:06PM +0300, Dan Carpenter wrote:
-> The "command" variable can be controlled by the user via debugfs.  The
-> worry is that if con_index is zero then "&uc->ucsi->connector[con_index
-> - 1]" would be an array underflow.
-> 
-> Fixes: 170a6726d0e2 ("usb: typec: ucsi: add support for separate DP altmode devices")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+On 12/11/2024 at 08:21:33 +08, Lizhi Xu <lizhi.xu@windriver.com> wrote:
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> On Mon, 11 Nov 2024 20:46:57 +0100, Miquel Raynal wrote:
+>> On 08/11/2024 at 22:54:20 +08, Lizhi Xu <lizhi.xu@windriver.com> wrote:
+>>=20
+>> > syzkaller reported a corrupted list in ieee802154_if_remove. [1]
+>> >
+>> > Remove an IEEE 802.15.4 network interface after unregister an IEEE 802=
+.15.4
+>> > hardware device from the system.
+>> >
+>> > CPU0					CPU1
+>> > =3D=3D=3D=3D					=3D=3D=3D=3D
+>> > genl_family_rcv_msg_doit		ieee802154_unregister_hw
+>> > ieee802154_del_iface			ieee802154_remove_interfaces
+>> > rdev_del_virtual_intf_deprecated	list_del(&sdata->list)
+>> > ieee802154_if_remove
+>> > list_del_rcu
+>>=20
+>> FYI this is a "duplicate" but with a different approach than:
+>> https://lore.kernel.org/linux-wpan/87v7wtpngj.fsf@bootlin.com/T/#m02cebe=
+86ec0171fc4d3350676bbdd4a7e3827077
+> No, my patch was the first to fix it, someone else copied my
+> patch. Here is my patch:
 
-> ---
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index bccfc03b5986..fcb8e61136cf 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -644,6 +644,10 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
->  	    uc->has_multiple_dp) {
->  		con_index = (uc->last_cmd_sent >> 16) &
->  			UCSI_CMD_CONNECTOR_MASK;
-> +		if (con_index == 0) {
-> +			ret = -EINVAL;
-> +			goto unlock;
-> +		}
->  		con = &uc->ucsi->connector[con_index - 1];
->  		ucsi_ccg_update_set_new_cam_cmd(uc, con, &command);
->  	}
-> @@ -651,6 +655,7 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
->  	ret = ucsi_sync_control_common(ucsi, command);
->  
->  	pm_runtime_put_sync(uc->dev);
-> +unlock:
->  	mutex_unlock(&uc->lock);
->  
->  	return ret;
-> -- 
-> 2.45.2
+Ok, so same question as to the other contributor, why not enclosing the
+remaining list_del_rcu() within mutex protection? Can we avoid the
+creation of the LISTDONE state bit?
 
--- 
-heikki
+Thanks,
+Miqu=C3=A8l
 
