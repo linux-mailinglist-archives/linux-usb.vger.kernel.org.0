@@ -1,221 +1,186 @@
-Return-Path: <linux-usb+bounces-17449-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17450-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57B559C4C8F
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 03:25:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E13A9C4D7B
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 04:46:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A3AEB2E05C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 02:20:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 864B6B2379C
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 03:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36FCD204035;
-	Tue, 12 Nov 2024 02:16:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="X2K2hn+S"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EAC5208222;
+	Tue, 12 Nov 2024 03:46:31 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vk1-f181.google.com (mail-vk1-f181.google.com [209.85.221.181])
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D82020493F
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 02:16:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F66A18CC15
+	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 03:46:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731377791; cv=none; b=FdB3cPHMwrwL0Hz7oB6lZuSqr72Vzvl47jdK6GxLdjJ52ZKvpOXJJF8oMVp4/rulRAQrXfKKJomSquu6Bjg6esUlbI8/y26zGz6LI7Kawkc9bXabFRtIXNTZuRQvEN9vORzaMjc48VZu02gb+0lyvu9lqFOOUWvmZceCc6MLtiU=
+	t=1731383191; cv=none; b=P1ZpPRTx1Ljzjc5rcggbaKdmIkZV3Got7jmspjpiK7WvHtMbZltb92dQKEY8eZBogIBEyF7yVJXfHdeSgT0dGu8JHqJtu/6mELX1L0pIbO9hySmjJ0+Hj+sV18NYiMNcgN3+9q9z2k6J1ndi9lwN77391EX1Oouh+VG/NcGebEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731377791; c=relaxed/simple;
-	bh=NxRKeUzGQNckc94jdll6DwNIvw1FmonhQhpVuy4egzI=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=B/bVtwZ+lFnjPz4bzn05YF61evOq9DeTx6VHdXMF3wXw6IST3UKbQQz74LK9ktxR1tzbwfwaHmGBq72yXeZP9DqpG7M4vqD9qAeqxz4b0Yx7F1pbN0d7Z9D1ToGR686O0scnKi0eJc9vGszZsOvECuxFdWHteA4wVrru5sIKJu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=X2K2hn+S; arc=none smtp.client-ip=209.85.221.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-vk1-f181.google.com with SMTP id 71dfb90a1353d-5139cd0032cso1953922e0c.2
-        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 18:16:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1731377788; x=1731982588; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NxRKeUzGQNckc94jdll6DwNIvw1FmonhQhpVuy4egzI=;
-        b=X2K2hn+S/nI9Jp6Mbaa6ZzyNxBGkDv6KAr8AQwellNoAfTqMQ8oFJzFSmgO4mrBMyn
-         z96gblR+kymGpX3P2qRA1/XIAXutB8tnYgy9TpttIbc1M8myEG9PP6B7kt43wAhg5Tm1
-         E8uK6fwoQUp8R9JxcGLV1ZuvW8TbamsZqCyXs=
+	s=arc-20240116; t=1731383191; c=relaxed/simple;
+	bh=MdF0vQAzDkjzPCpTxKOBblHlGzTL1baHSFNggrEk/FQ=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=cPUSvQP5ZVmQQE/SU2gxRDrxSoOgMPO5zgwmTjHWPbhThVGq/47y9f69F5GSX/1N1QBT1VlTWXkBkJqgySVvaEHGqPVtI6As8k/XYVnRLaAo2nWFN+HHjEyJCix/csmKweJKvSIkayuhEUPXfgCJ2g3t7Etrf4ulVNZf4EfN9rU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a3b506c87cso64740035ab.1
+        for <linux-usb@vger.kernel.org>; Mon, 11 Nov 2024 19:46:29 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731377788; x=1731982588;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NxRKeUzGQNckc94jdll6DwNIvw1FmonhQhpVuy4egzI=;
-        b=fPBf6Ya7xhx85t7+hpF/H/4gtCpEkwxhjp6fSmKLU8u6IMBDrJEZdgvjvSdwyr1TXU
-         l4UtlukvJ6l9E6gfxc6d9mQ54R4urL+DjzWeyWnbtYoaGuwT9nxu29wF9vbQ00/mIVn1
-         EUx1gT8lXhuG8E2QF66gOTC58jsrx0ltLqUTTQRZ6mJ0zdGlv+iBRRyO7uCucrIUIIJF
-         vtWqAz1Wd49s3//3iQ7pfQs7Jc5TOeqXSZKwHERfokLR10n1duecZz2MQouuZfQh6dRF
-         0YMM91GGA/i+kfO2z6WwnYg3PpPjLvKVtLQ8u7boKuQxI7jtBaBEANkfSXlBuF1qiVB+
-         FY7w==
-X-Forwarded-Encrypted: i=1; AJvYcCXrEzeNIGR5OenzQrDnxa0aHEkOf5qxaoPbJp/WvhaSTvcrTTF4AJNChMFH160Oy1UchozTsEJV2zo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy66pKN19/WlpEgbiUYp8erRjYH4DhS7PvdwjJ00XMCjqN3Gy+U
-	1cvryFdLkIcxSFf2dyVxddHGFhDoVaDZN6SRaoCt9BRE64T877njYxc88Wlptk6wF7TCOYaQHXT
-	+mmZ202T+c5lQvSmnQYcmR9B9bko8CV6tUkuS
-X-Google-Smtp-Source: AGHT+IFhUIXP7ugxUy7Dy8ell04Jmp5igMqxBklJN6VB90eF5BUKVkmxt6TVApQ3QciA6G8tm/1mdhhf0qwz2BvQ98Y=
-X-Received: by 2002:a05:6122:3d13:b0:50d:35d9:ad60 with SMTP id
- 71dfb90a1353d-51401ba6e0emr14533759e0c.5.1731377788451; Mon, 11 Nov 2024
- 18:16:28 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 11 Nov 2024 18:16:28 -0800
+        d=1e100.net; s=20230601; t=1731383189; x=1731987989;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gTlS1My+IX6vUSKJh4vEvVCjOuHSbZWEzCPaUoxSiP0=;
+        b=fyT6Zh2BRfxCPGA/WkOYx9GJ8Q25DpdAmqGpfwucVvA2WIejXAtqI2jgAufewHXTzC
+         dvQ4cIVB2vvtByWVsuMyIU0c+pXurZc6VMvBRKAHrd1/an0BMcOFeqCdaVZrnl1TUOfb
+         Jzp7ZY2UbcnD++1fKhXWEGOIjWcOkS74BppnU3nEXUcZpf4TKnoaKIqHWAqr25UcUq1X
+         BLRi1ifCduyAaUjvffvauLsJ18S09LqMTRIvFfEncNZUXq8RGUyp7ag0YHgHfHlhpP5u
+         U4l+PuyN/HttAHqn0EJ8A43S7tzEPdcyG6KM8o5N040wp1hpHze0n3pRDk6w4/Pmuvby
+         2COg==
+X-Forwarded-Encrypted: i=1; AJvYcCXKd4TIUNi/hY+36IHmbTH863ssLk1jLOc+2KbSm8ANopWVYRWCvMzy4kAvIXmRBHrlcEvn027rnbE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqUhjE8ZCv/y/HcYQWdrMmwXPeF+zGd5O1ZXc1b3ekFSuThiVh
+	mDjBij1SHO/kI75JRTm1zH734rY80miJsgjGgHoB+JJ6Y/pHwcFz85dB/G3BkFTgwyiA+Kn0Gpz
+	uvocuG62OtOqxH9sgkjSQEnuF1xUf7Qx73b9A7jv+6wt+dDV5gmqc4ok=
+X-Google-Smtp-Source: AGHT+IG3ufhXQPfWoo/ORV9DkMtBnk/0diPUmflaxDDBBQ/UNSgc7NBkjFs68zErC0fsRRuARu/bX+P3GgrIsquVZiyX2HrALGLv
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <hqmx7jtkvrwvb27n56hw7rpefhp37lhr3a5fawz7gsl76uuj5s@h7m6wpdhibkk>
-References: <20240901040658.157425-1-swboyd@chromium.org> <phdcjgqqpjpruxp7v2mw446q73xr3eg4wfgfbjw5tasgr2pgg2@77swbk47b2tg>
- <CAE-0n514QMaQC2yjKP8bZqyfbv6B3AQm=+NJ87vxo6NdYiL03A@mail.gmail.com>
- <lf7y7wpuca6kzqcglgs5d443iusf7xjocum4adi7t3npfavccx@zgsp37oyztme>
- <CAE-0n53-KmOS3zXmJPvOOZ7xxkek9-S=oBExgaY0PDnt_HjdNw@mail.gmail.com>
- <yk3xidaisbd56yndaucax7otijjauqmm7lqm6q4q633kdawlqo@qaq27lwxmvwd>
- <CAE-0n501j+8bMnMKabFyZjn+MLUy3Z68Hiv1PsfW0APy5ggN8g@mail.gmail.com>
- <gstohhcdnmnkszk4l2ikd5xiewtotgo5okia62paauj6zpaw7y@4wchyvoynm2p>
- <CAE-0n50z6MNa7WOsg-NU7k8BpFeJJyYfHX3ov6DsthLWauSNpA@mail.gmail.com> <hqmx7jtkvrwvb27n56hw7rpefhp37lhr3a5fawz7gsl76uuj5s@h7m6wpdhibkk>
-From: Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
-Date: Mon, 11 Nov 2024 18:16:27 -0800
-Message-ID: <CAE-0n50y1O2C47zOGJPmMjKXK_m6a=jhpEAP4nW+RymZbo2xyg@mail.gmail.com>
-Subject: Re: [PATCH v4 15/18] dt-bindings: usb: Add ports to
- google,cros-ec-typec for DP altmode
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, devicetree@vger.kernel.org, 
-	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>, 
-	dri-devel@lists.freedesktop.org, Guenter Roeck <groeck@chromium.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
-	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
-	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>
+X-Received: by 2002:a05:6e02:1f08:b0:3a6:b0a3:5402 with SMTP id
+ e9e14a558f8ab-3a6f1a21dcdmr159700115ab.17.1731383188700; Mon, 11 Nov 2024
+ 19:46:28 -0800 (PST)
+Date: Mon, 11 Nov 2024 19:46:28 -0800
+In-Reply-To: <0000000000009d5daa05ed9815fa@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6732cf94.050a0220.5088e.0003.GAE@google.com>
+Subject: Re: [syzbot] [bluetooth] WARNING in call_timer_fn
+From: syzbot <syzbot+6fb78d577e89e69602f9@syzkaller.appspotmail.com>
+To: ben-linux@fluff.org, bp@alien8.de, daniel.sneddon@linux.intel.com, 
+	dave.hansen@linux.intel.com, gregkh@linuxfoundation.org, hdanton@sina.com, 
+	hpa@zytor.com, linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, luiz.dentz@gmail.com, marcel@holtmann.org, 
+	mingo@redhat.com, netdev@vger.kernel.org, pbonzini@redhat.com, 
+	penguin-kernel@I-love.SAKURA.ne.jp, penguin-kernel@i-love.sakura.ne.jp, 
+	rafael@kernel.org, rosted@goodmis.org, 
+	sathyanarayanan.kuppuswamy@linux.intel.com, syzkaller-bugs@googlegroups.com, 
+	tglx@linutronix.de, x86@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-Quoting Dmitry Baryshkov (2024-11-08 23:05:18)
-> On Thu, Nov 07, 2024 at 04:28:24PM -0800, Stephen Boyd wrote:
-> > Quoting Dmitry Baryshkov (2024-10-31 15:54:49)
-> > > On Thu, Oct 31, 2024 at 02:45:29PM -0700, Stephen Boyd wrote:
-> > > > Quoting Dmitry Baryshkov (2024-10-31 11:42:36)
-> > > > > On Tue, Oct 29, 2024 at 01:15:51PM -0700, Stephen Boyd wrote:
-> > Long story short, I don't see how we can avoid _any_ lane assignment
-> > logic in drm_bridge. The logic shouldn't walk the entire bridge chain,
-> > but it should at least act on the bridge that is a DP bridge. I think
-> > you're saying pretty much the same thing here, but you want the lane
-> > remapping to be done via the typec layer whereas I want it to be done in
-> > the drm_bridge layer. To me it looks out of place to add a
-> > typec_switch_desc inside each DP drm_bridge because we duplicate the
-> > logic about USB type-c DP altmode lane assignment to each DP bridge. A
-> > DP bridge should just think about DP and not know or care about USB
-> > type-c.
-> >
-> > This is what's leading me to think we need some sort of lane assignment
-> > capability at the DP connector. How that assignment flows from the DP
-> > connector created in drm_bridge_connector.c to the hardware is where it
-> > is less clear to me. Should that be implemented as a typec_switch_desc,
-> > essentially out of band with drm_bridge, or as some drm_bridge_funcs
-> > function similar to struct drm_bridge_funcs::hdmi_*()? If you look at
-> > IT6505 in it6505_get_extcon_property() it actually wants to pull the
-> > orientation of the type-c port with extcon_get_property(EXTCON_DISP_DP,
-> > EXTCON_PROP_USB_TYPEC_POLARITY). Maybe pushing the orientation to the DP
-> > bridge is backwards and we should be exposing this as some sort of
-> > connector API that the drm_bridge can query whenever it wants.
->
-> And it6505_get_extcon_property() / EXTCON_PROP_USB_TYPEC_POLARITY is a
-> Type-C code, isn't it?
->
+syzbot has found a reproducer for the following issue on:
 
-Sort of? It's combining DP and USB_TYPEC enums there so it's not very
-clear if it's one or the other instead of just both.
+HEAD commit:    de9df030ccb5 usb: typec: ucsi: glink: be more precise on o..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=15637ea7980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=358c1689354aeef3
+dashboard link: https://syzkaller.appspot.com/bug?extid=6fb78d577e89e69602f9
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101db8c0580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1738f4e8580000
 
-> > and then a drm_bridge is created in cros-ec to terminate the bridge
-> > chain. The displayport altmode driver will find the drm_bridge and the
-> > drm_connector from the cros-ec node. When DP altmode is entered the
-> > displayport altmode driver will set the drm_connector orientation based
-> > on the presence of the dp-reverse-orientation property. We'll be able to
-> > hook the hpd_notify() path in cros-ec by adding code to the drm_bridge
-> > made there to do the HPD workaround. I'm not sure we need to use an
-> > auxiliary device in this case, because it's a one-off solution for
-> > cros-ec. And we don't even need to signal HPD from the cros-ec
-> > drm_bridge because the oob_hotplug event will do it for us. If anything,
-> > we need that displayport.c code to skip sending the hotplug event when
-> > "no-hpd" is present in the cros-ec node. Note, this works for any number
-> > of usb-c-connector nodes. And finally, DP bridges like IT6505 don't need
-> > to implement a typec_switch_desc, they can simply support flipping the
-> > orientation by querying the drm_connector for the bridge chain when they
-> > see fit. ANX7625 can support that as well when it doesn't see the
-> > 'orientation-switch' property.
-> >
-> > Did I miss anything? I suspect a drm_connector having an orientation is
-> > the most controversial part of this proposal.
->
-> Yes... I understand that having orientation-switch handling in the DRM
-> driver sounds strange, but this is what we do in the QMP PHY driver. It
-> makes the code easier, as it keeps lane remapping local to the place
-> where it belongs - to the Type-C handlers.
->
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/fcce9dc5242d/disk-de9df030.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/420ef3e22854/vmlinux-de9df030.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a6d0ac1f944e/bzImage-de9df030.xz
 
-The QMP PHY is a type-c PHY, similar to ANX7625. It sits on the output
-of the DP and USB PHYs and handles the type-c orientation and lane
-merging for different USB type-c alternate modes. It's not a great
-example of a plain DP bridge because it combines USB and USB type-c
-features.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+6fb78d577e89e69602f9@syzkaller.appspotmail.com
 
-Either way, doing this through Type-C handlers is weird because the port
-orientation in the Type-C framework is for the connector and there is an
-orientation control hardware that handles the orientation already. For
-example, with the IT6505 part on Corsola, the orientation is controlled
-by a redriver part that the EC controls. It takes the DP and USB signals
-and routes them to the correct pins on the usb-c-connector depending on
-the cable orientation. The input side pinout is basically 2 or 4 lanes
-DP and 2 lanes USB and the output side pinout is the USB type-c pinout
-SSTXRX1 and SSTXRX2.
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 9 at kernel/workqueue.c:2257 __queue_work+0xc3a/0x1080 kernel/workqueue.c:2256
+Modules linked in:
+CPU: 0 UID: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.12.0-rc6-syzkaller-00106-gde9df030ccb5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__queue_work+0xc3a/0x1080 kernel/workqueue.c:2256
+Code: 07 83 c0 03 38 d0 7c 09 84 d2 74 05 e8 7f 46 8b 00 8b 5b 2c 31 ff 83 e3 20 89 de e8 40 bf 32 00 85 db 75 60 e8 f7 bc 32 00 90 <0f> 0b 90 e9 f9 f7 ff ff e8 e9 bc 32 00 90 0f 0b 90 e9 a8 f7 ff ff
+RSP: 0018:ffffc90000007bf0 EFLAGS: 00010046
+RAX: 0000000000000000 RBX: 0000000000000100 RCX: ffffffff812335c1
+RDX: ffff888101698000 RSI: ffffffff81233619 RDI: 0000000000000005
+RBP: ffff88811a063780 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000100 R11: 0000000000000000 R12: 1ffff92000000f90
+R13: 0000000000000001 R14: 0000000000000101 R15: ffff888106b28800
+FS:  0000000000000000(0000) GS:ffff8881f5800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f7cbbc0c258 CR3: 0000000116944000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ call_timer_fn+0x1a0/0x610 kernel/time/timer.c:1794
+ expire_timers kernel/time/timer.c:1840 [inline]
+ __run_timers+0x56a/0x930 kernel/time/timer.c:2419
+ __run_timer_base kernel/time/timer.c:2430 [inline]
+ __run_timer_base kernel/time/timer.c:2423 [inline]
+ run_timer_base+0x111/0x190 kernel/time/timer.c:2439
+ run_timer_softirq+0x1a/0x40 kernel/time/timer.c:2449
+ handle_softirqs+0x206/0x8d0 kernel/softirq.c:554
+ __do_softirq kernel/softirq.c:588 [inline]
+ invoke_softirq kernel/softirq.c:428 [inline]
+ __irq_exit_rcu kernel/softirq.c:637 [inline]
+ irq_exit_rcu+0xac/0x110 kernel/softirq.c:649
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1049 [inline]
+ sysvec_apic_timer_interrupt+0x90/0xb0 arch/x86/kernel/apic/apic.c:1049
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:console_trylock_spinning kernel/printk/printk.c:2042 [inline]
+RIP: 0010:vprintk_emit+0x621/0x6f0 kernel/printk/printk.c:2406
+Code: 85 ed 0f 85 81 00 00 00 e8 0c 94 1f 00 9c 41 5c 41 81 e4 00 02 00 00 31 ff 4c 89 e6 e8 68 96 1f 00 4d 85 e4 0f 85 8d 00 00 00 <e8> ea 93 1f 00 45 31 c9 41 b8 01 00 00 00 31 c9 48 8d 05 00 00 00
+RSP: 0018:ffffc9000009f6e8 EFLAGS: 00000293
+RAX: 0000000000000000 RBX: 0000000000000029 RCX: ffffffff81365f9e
+RDX: ffff888101698000 RSI: ffffffff81365fa8 RDI: 0000000000000007
+RBP: 1ffff92000013edf R08: 0000000000000007 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: 0000000000000200 R14: ffff88810d331d40 R15: ffffc9000009f7b0
+ dev_vprintk_emit drivers/base/core.c:4942 [inline]
+ dev_printk_emit+0xfb/0x140 drivers/base/core.c:4953
+ __dev_printk+0xf5/0x270 drivers/base/core.c:4965
+ _dev_info+0xe5/0x120 drivers/base/core.c:5011
+ usb_disconnect+0xec/0x920 drivers/usb/core/hub.c:2286
+ hub_port_connect drivers/usb/core/hub.c:5361 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
+ port_event drivers/usb/core/hub.c:5821 [inline]
+ hub_event+0x1bed/0x4f40 drivers/usb/core/hub.c:5903
+ process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3229
+ process_scheduled_works kernel/workqueue.c:3310 [inline]
+ worker_thread+0x6c8/0xf00 kernel/workqueue.c:3391
+ kthread+0x2c1/0x3a0 kernel/kthread.c:389
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+----------------
+Code disassembly (best guess):
+   0:	85 ed                	test   %ebp,%ebp
+   2:	0f 85 81 00 00 00    	jne    0x89
+   8:	e8 0c 94 1f 00       	call   0x1f9419
+   d:	9c                   	pushf
+   e:	41 5c                	pop    %r12
+  10:	41 81 e4 00 02 00 00 	and    $0x200,%r12d
+  17:	31 ff                	xor    %edi,%edi
+  19:	4c 89 e6             	mov    %r12,%rsi
+  1c:	e8 68 96 1f 00       	call   0x1f9689
+  21:	4d 85 e4             	test   %r12,%r12
+  24:	0f 85 8d 00 00 00    	jne    0xb7
+* 2a:	e8 ea 93 1f 00       	call   0x1f9419 <-- trapping instruction
+  2f:	45 31 c9             	xor    %r9d,%r9d
+  32:	41 b8 01 00 00 00    	mov    $0x1,%r8d
+  38:	31 c9                	xor    %ecx,%ecx
+  3a:	48                   	rex.W
+  3b:	8d                   	.byte 0x8d
+  3c:	05                   	.byte 0x5
+  3d:	00 00                	add    %al,(%rax)
 
-This redriver is equivalent to the QMP PHY type-c part. Maybe to bring
-this example closer to QMP we can imagine if the QMP PHY was split into
-two pairs of lanes, and the USB functionality wasn't used. The
-orientation control for a usb-c-connector would be on a redriver that
-takes 2 DP lanes from the QMP PHY as input. Saying that this QMP PHY is
-the "orientation-switch" with that property in DT is confusing, because
-it isn't controlling the orientation of the type-c port. The orientation
-is handled by the redriver. That redriver may even be controlled by the
-kernel as an orientation-switch.
 
-I understand that the QMP PHY driver has implemented the lane control
-for orientation with a typec_switch_desc, but the QMP PHY is a plain DP
-PHY in this scenario. How would the type-c handlers work here? We
-couldn't call them through the type-c framework as far as I can tell.
-
-This is why I'm thinking the end of the bridge chain needs to have some
-sort of orientation. If we had that then the place where the chain ends
-and becomes muxed onto the usb-c-connector, i.e. the redriver, would be
-where the DP bridge is told that it needs to flip the lanes. In the
-cases I have, the redriver is the EC, and so we've combined them all
-together in one node, cros-ec-typec. In the QMP PHY case the redriver is
-the QMP PHY type-c part that sits on the DP and USB PHYs and sends their
-signals out of the SoC.
-
-Maybe the DT property in the ANX7625 or IT6505 node should be something
-like "dp-orientation-switch" and then we have the type-c framework find
-this property? Then we would need to add support for that property in
-IT6505 using a typec_switch_desc, which is weird. I guess it all feels
-like a hack because it's not always the case that the DP PHY is glued to
-a USB type-c PHY.
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
