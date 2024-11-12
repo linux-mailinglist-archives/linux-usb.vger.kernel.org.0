@@ -1,179 +1,168 @@
-Return-Path: <linux-usb+bounces-17479-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17480-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A79049C5890
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 14:06:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 875F39C5928
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 14:34:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 371C91F21CDF
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 13:06:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4006E2832C9
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 13:34:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3037913A3F2;
-	Tue, 12 Nov 2024 13:06:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 902B2187855;
+	Tue, 12 Nov 2024 13:29:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k76cPTL8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bZIPh1g4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3809A7080B
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 13:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A47C14F9FD;
+	Tue, 12 Nov 2024 13:29:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731416763; cv=none; b=GnfME/QZkyOEHdiy8QZxWwqWJe0DLrvDZrsF1CBuyRjSJ+9T/VE0fLG1kAVZxUyDSkc3e5yKyS3ElvhTFb3xcE62xm1ZNGU6lMZFkAIwRh16ylw/smXj9ULE0hcmDtdYYeSXUIBGT9Wbd7W8RBsPtop2Zn7XUHkiD31c0+tzgBo=
+	t=1731418179; cv=none; b=kbgE1BRZrpAt+HP0YNt6rtnD/u9UKaRUcHX2dwK6pOFVux0Irw/GuTDpLBJmw1EWM4kF6dkz2oNRF5q4/AqHfrhToMJ0OcNhiGTj3nO8yK2K4AWIgPrkk8pcvmk+KccPlTYGp5O/2Mxm+0uCSQ9lV39cB2G2ZWCsvmt6ZgQAKAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731416763; c=relaxed/simple;
-	bh=+eNuL3PJiA9W0bwntX3Jqcme9OdBpWzlzr43Judry/k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fBzKA3OtmzMv/Sv9Rkp5+kPyQJhtuOVBP7r6zVFn16dDMU/CDJKznZA3IHbFmsOyEfL7Y6uBaad/A/KGzaiZ+HZtPsSqZghgzEgeo38Yw5ezT0Wb4G6tQ/L7wFH+Y0DtrNqeEger6H3ntIV1oneQHGjc7Ao+AoRQZ7LQupr+NuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k76cPTL8; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731416761; x=1762952761;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=+eNuL3PJiA9W0bwntX3Jqcme9OdBpWzlzr43Judry/k=;
-  b=k76cPTL8kxD2buoRY+QO0ZWu/fmsTGIUK3amtKtp0UuKOLffOP1+Emyz
-   COg9Dw+zpjEGRa2eb8iq+QfpZ/fMtbpxa22g0jJ7SA/w3/16GHxgNn0gP
-   RU740vajItDabfIR2QT/g/Y7erIrkJk8o2Phva5KnvaUIC0M3XorHgkB7
-   BXKBfFVjfU5piBiKa1/U1LscdaimdDNU8icko2sOuuz0uHuRcQgQ7xTRr
-   8oFR2elDJ6DET0c35LHurUJGxrgbNf0S+7RkU4Rwjo59pxSHRMyErk6hT
-   e5l6VGu4w4v4M59D/qSp1tecGS12eEQ8azh69kHQOPJ4YdsuGTkrB4cgu
-   g==;
-X-CSE-ConnectionGUID: hyXGXry7S2WvuDAolPRjUw==
-X-CSE-MsgGUID: lr+/Y9OgSrqeryU4iQnkPg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11253"; a="48759292"
-X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
-   d="scan'208";a="48759292"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 05:06:01 -0800
-X-CSE-ConnectionGUID: 7tsVhCQWRGSYICI3Z6ocSA==
-X-CSE-MsgGUID: OEV09uSvS4SGN2RmsBLBdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
-   d="scan'208";a="87616891"
-Received: from lkp-server01.sh.intel.com (HELO bcfed0da017c) ([10.239.97.150])
-  by orviesa006.jf.intel.com with ESMTP; 12 Nov 2024 05:05:59 -0800
-Received: from kbuild by bcfed0da017c with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tAqai-0001K5-24;
-	Tue, 12 Nov 2024 13:05:56 +0000
-Date: Tue, 12 Nov 2024 21:05:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Stanislaw Gruszka <stanislaw.gruszka@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	Wentong Wu <wentong.wu@intel.com>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [PATCH v4 3/3] usb: misc: ljca: add firmware version sysfs
- attribute
-Message-ID: <202411122028.tylKQSQx-lkp@intel.com>
-References: <20241112075514.680712-3-stanislaw.gruszka@linux.intel.com>
+	s=arc-20240116; t=1731418179; c=relaxed/simple;
+	bh=Zt1iFl8bPvsVnfaior9rOt4ZNa8YowcKei0yxfdwlo0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=LjB0GClJi1n1jdqwZMQQLoG98U2kiG8vi6zE1KeV3JVgWwnfpAUHw4cXZZmcmS4MiGFQVnwrhe1rLvvLagh9E3TeAYD4SuvGIRqmCTkbFRlj0OnaT/ZHtx1qnu2yynceQWLlWm1yLtLZfa6YT1+AcuFAVGApr+jIhzKLs9Xb95U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bZIPh1g4; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-382026ba43eso1248348f8f.1;
+        Tue, 12 Nov 2024 05:29:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731418175; x=1732022975; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/mnP8i1P+vpLbvP/cUn7DPi/Fv02Hf/oohUMk15Vn8s=;
+        b=bZIPh1g4Ge7E1nG4ZcriwWPl0fntJfz63EFXH7+WW+ncLnN/BRDu3y877FTY30SLLe
+         y3FlOZ0MWSr9bkCvGqNXij5/8amvjHfexv47veMdo+uSQq8F6d9RdwxGyeqnQE+xYUsz
+         clWjklB7yc1RT+ebkLS2An3KUCgsYtU2u1D1Ap1LLOpePMpsohWD51eYE+HCW/+760QH
+         rllY3BzLQsRh07qoHwECbtT3MSZJ0h0eQreuDx5PKvtHAks28qG4mfHQjEjqf1S39AvL
+         uXJgHM+ogemI1C5OLOm3SeG+GFN8pFNSbrCcJ38NYhIZUHhdIImbjCRi3GWv7odKhN6l
+         IBXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731418175; x=1732022975;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/mnP8i1P+vpLbvP/cUn7DPi/Fv02Hf/oohUMk15Vn8s=;
+        b=mTVbMlxxj+AzaITAIB/ifaYI6iP3J6QijamluZS0LuOnSRhUXGWBCRgR/HAHz0ddCA
+         sfXGOOPmPASC1oERic82klcXaPF5Kcoh5cZNU23idV9ucvhp31Hlgx7DYP0nyYSv5xym
+         r+O6pulK2PQFonTvXzNYqoJwMqSCieRymL5kz3Fd0Hir39LMXDR2m4Ia72Af20SuSG7L
+         RNCpTz8Ocy4eS26cQTs/IYwXZHU2tqub6eTezA5wXPkoYl3tBhaiokeirp1zy7XmPwbJ
+         itQcuXeueynOCVWSN80xbln9slLz08IXXxxzAJbyFhsvO02rN1+xLElMMxvjTw9lFbQJ
+         XMbg==
+X-Forwarded-Encrypted: i=1; AJvYcCWuIVZfF4H6tTYXGomdpyigRbkWT35mkNIlwF9JXSKmrK1Ju6T4xMdKh5XuBOVD9ffpnDhihjKfA1M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLPp4bBr7043zBFMcsaON+ZotO+sSmUvAUanvNo/RiNvfxrOoU
+	aJLpoXOQVfFcdKQmK/KBFv98wGubnYsdJEQ3Mqen21VGjiDInRsz
+X-Google-Smtp-Source: AGHT+IGosRxkCc8ECvFcdmBsOMrfz8iVl+h+Kecsd7CY1ES03tYdT6k/oApMgIqx+jjpJwqFfWfXvA==
+X-Received: by 2002:a05:6000:1547:b0:374:c8e5:d568 with SMTP id ffacd0b85a97d-382081245e6mr2028721f8f.29.1731418175336;
+        Tue, 12 Nov 2024 05:29:35 -0800 (PST)
+Received: from work.. (2.133.25.254.dynamic.telecom.kz. [2.133.25.254])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381ed9973aesm15392966f8f.51.2024.11.12.05.29.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 12 Nov 2024 05:29:34 -0800 (PST)
+From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+To: gregkh@linuxfoundation.org,
+	oneukum@suse.com,
+	stern@rowland.harvard.edu
+Cc: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	snovitoll@gmail.com,
+	syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: [PATCH v4] usb/cdc-wdm: fix memory info leak in wdm_read
+Date: Tue, 12 Nov 2024 18:29:31 +0500
+Message-Id: <20241112132931.3504749-1-snovitoll@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <2024111232-relative-bottom-4995@gregkh>
+References: <2024111232-relative-bottom-4995@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241112075514.680712-3-stanislaw.gruszka@linux.intel.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Stanislaw,
+syzbot reported "KMSAN: kernel-infoleak in wdm_read", though there is no
+reproducer and the only report for this issue.
 
-kernel test robot noticed the following build warnings:
+The check:
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.12-rc7 next-20241112]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+	if (cntr > count)
+		cntr = count;
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Stanislaw-Gruszka/usb-misc-ljca-set-small-runtime-autosuspend-delay/20241112-155844
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20241112075514.680712-3-stanislaw.gruszka%40linux.intel.com
-patch subject: [PATCH v4 3/3] usb: misc: ljca: add firmware version sysfs attribute
-config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20241112/202411122028.tylKQSQx-lkp@intel.com/config)
-compiler: loongarch64-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241112/202411122028.tylKQSQx-lkp@intel.com/reproduce)
+only limits `cntr` to `count` (the number of bytes requested by
+userspace), but it doesn't verify that `desc->ubuf` actually has `count`
+bytes. This oversight can lead to situations where `copy_to_user` reads
+uninitialized data from `desc->ubuf`.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202411122028.tylKQSQx-lkp@intel.com/
+This patch makes sure `cntr` respects` both the `desc->length` and the
+`count` requested by userspace, preventing any uninitialized memory from
+leaking into userspace.
 
-All warnings (new ones prefixed by >>):
+syzbot report
+=============
+BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+BUG: KMSAN: kernel-infoleak in _inline_copy_to_user include/linux/uaccess.h:180 [inline]
+BUG: KMSAN: kernel-infoleak in _copy_to_user+0xbc/0x110 lib/usercopy.c:26
+ instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+ _inline_copy_to_user include/linux/uaccess.h:180 [inline]
+ _copy_to_user+0xbc/0x110 lib/usercopy.c:26
+ copy_to_user include/linux/uaccess.h:209 [inline]
+ wdm_read+0x227/0x1270 drivers/usb/class/cdc-wdm.c:603
+ vfs_read+0x2a1/0xf60 fs/read_write.c:474
+ ksys_read+0x20f/0x4c0 fs/read_write.c:619
+ __do_sys_read fs/read_write.c:629 [inline]
+ __se_sys_read fs/read_write.c:627 [inline]
+ __x64_sys_read+0x93/0xe0 fs/read_write.c:627
+ x64_sys_call+0x3055/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:1
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
 
->> drivers/usb/misc/usb-ljca.c:169: warning: Function parameter or struct member 'fw_version' not described in 'ljca_adapter'
->> drivers/usb/misc/usb-ljca.c:169: warning: Function parameter or struct member 'fw_version_valid' not described in 'ljca_adapter'
+Reported-by: syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=9760fbbd535cee131f81
+Signed-off-by: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+---
+Changes v3 -> v4:
+- changed min() to min_t() due to type safety (Greg).
 
+Changes v2 -> v3:
+- reverted kzalloc back to kmalloc as the fix is cntr related (Oliver).
+- added constraint to select the min length from count and desc->length.
+- refactored git commit description as the memory info leak is confirmed.
 
-vim +169 drivers/usb/misc/usb-ljca.c
+Changes v1 -> v2:
+- added explanation comment above kzalloc (Greg).
+- renamed patch title from memory leak to memory info leak (Greg).
+---
+ drivers/usb/class/cdc-wdm.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-acd6199f195d6de Wentong Wu        2023-10-09  114  
-acd6199f195d6de Wentong Wu        2023-10-09  115  /**
-acd6199f195d6de Wentong Wu        2023-10-09  116   * struct ljca_adapter - represent a ljca adapter
-acd6199f195d6de Wentong Wu        2023-10-09  117   *
-acd6199f195d6de Wentong Wu        2023-10-09  118   * @intf: the usb interface for this ljca adapter
-acd6199f195d6de Wentong Wu        2023-10-09  119   * @usb_dev: the usb device for this ljca adapter
-acd6199f195d6de Wentong Wu        2023-10-09  120   * @dev: the specific device info of the usb interface
-acd6199f195d6de Wentong Wu        2023-10-09  121   * @rx_pipe: bulk in pipe for receive data from firmware
-acd6199f195d6de Wentong Wu        2023-10-09  122   * @tx_pipe: bulk out pipe for send data to firmware
-acd6199f195d6de Wentong Wu        2023-10-09  123   * @rx_urb: urb used for the bulk in pipe
-acd6199f195d6de Wentong Wu        2023-10-09  124   * @rx_buf: buffer used to receive command response and event
-acd6199f195d6de Wentong Wu        2023-10-09  125   * @rx_len: length of rx buffer
-acd6199f195d6de Wentong Wu        2023-10-09  126   * @ex_buf: external buffer to save command response
-acd6199f195d6de Wentong Wu        2023-10-09  127   * @ex_buf_len: length of external buffer
-acd6199f195d6de Wentong Wu        2023-10-09  128   * @actual_length: actual length of data copied to external buffer
-acd6199f195d6de Wentong Wu        2023-10-09  129   * @tx_buf: buffer used to download command to firmware
-acd6199f195d6de Wentong Wu        2023-10-09  130   * @tx_buf_len: length of tx buffer
-acd6199f195d6de Wentong Wu        2023-10-09  131   * @lock: spinlock to protect tx_buf and ex_buf
-acd6199f195d6de Wentong Wu        2023-10-09  132   * @cmd_completion: completion object as the command receives ack
-acd6199f195d6de Wentong Wu        2023-10-09  133   * @mutex: mutex to avoid command download concurrently
-acd6199f195d6de Wentong Wu        2023-10-09  134   * @client_list: client device list
-acd6199f195d6de Wentong Wu        2023-10-09  135   * @disconnect: usb disconnect ongoing or not
-acd6199f195d6de Wentong Wu        2023-10-09  136   * @reset_id: used to reset firmware
-acd6199f195d6de Wentong Wu        2023-10-09  137   */
-acd6199f195d6de Wentong Wu        2023-10-09  138  struct ljca_adapter {
-acd6199f195d6de Wentong Wu        2023-10-09  139  	struct usb_interface *intf;
-acd6199f195d6de Wentong Wu        2023-10-09  140  	struct usb_device *usb_dev;
-acd6199f195d6de Wentong Wu        2023-10-09  141  	struct device *dev;
-acd6199f195d6de Wentong Wu        2023-10-09  142  
-acd6199f195d6de Wentong Wu        2023-10-09  143  	unsigned int rx_pipe;
-acd6199f195d6de Wentong Wu        2023-10-09  144  	unsigned int tx_pipe;
-acd6199f195d6de Wentong Wu        2023-10-09  145  
-acd6199f195d6de Wentong Wu        2023-10-09  146  	struct urb *rx_urb;
-acd6199f195d6de Wentong Wu        2023-10-09  147  	void *rx_buf;
-acd6199f195d6de Wentong Wu        2023-10-09  148  	unsigned int rx_len;
-acd6199f195d6de Wentong Wu        2023-10-09  149  
-acd6199f195d6de Wentong Wu        2023-10-09  150  	u8 *ex_buf;
-acd6199f195d6de Wentong Wu        2023-10-09  151  	u8 ex_buf_len;
-acd6199f195d6de Wentong Wu        2023-10-09  152  	u8 actual_length;
-acd6199f195d6de Wentong Wu        2023-10-09  153  
-acd6199f195d6de Wentong Wu        2023-10-09  154  	void *tx_buf;
-acd6199f195d6de Wentong Wu        2023-10-09  155  	u8 tx_buf_len;
-acd6199f195d6de Wentong Wu        2023-10-09  156  
-acd6199f195d6de Wentong Wu        2023-10-09  157  	spinlock_t lock;
-acd6199f195d6de Wentong Wu        2023-10-09  158  
-acd6199f195d6de Wentong Wu        2023-10-09  159  	struct completion cmd_completion;
-acd6199f195d6de Wentong Wu        2023-10-09  160  	struct mutex mutex;
-acd6199f195d6de Wentong Wu        2023-10-09  161  
-acd6199f195d6de Wentong Wu        2023-10-09  162  	struct list_head client_list;
-1368856f90435bb Stanislaw Gruszka 2024-11-12  163  	struct ljca_fw_version fw_version;
-acd6199f195d6de Wentong Wu        2023-10-09  164  
-acd6199f195d6de Wentong Wu        2023-10-09  165  	bool disconnect;
-1368856f90435bb Stanislaw Gruszka 2024-11-12  166  	bool fw_version_valid;
-acd6199f195d6de Wentong Wu        2023-10-09  167  
-acd6199f195d6de Wentong Wu        2023-10-09  168  	u32 reset_id;
-acd6199f195d6de Wentong Wu        2023-10-09 @169  };
-acd6199f195d6de Wentong Wu        2023-10-09  170  
-
+diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+index 86ee39db013f..5a500973b463 100644
+--- a/drivers/usb/class/cdc-wdm.c
++++ b/drivers/usb/class/cdc-wdm.c
+@@ -598,8 +598,9 @@ static ssize_t wdm_read
+ 		spin_unlock_irq(&desc->iuspin);
+ 	}
+ 
+-	if (cntr > count)
+-		cntr = count;
++	/* Ensure cntr does not exceed available data in ubuf. */
++	cntr = min_t(size_t, count, desc->length);
++
+ 	rv = copy_to_user(buffer, desc->ubuf, cntr);
+ 	if (rv > 0) {
+ 		rv = -EFAULT;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
