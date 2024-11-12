@@ -1,200 +1,301 @@
-Return-Path: <linux-usb+bounces-17466-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17467-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B51CF9C5223
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 10:34:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D39529C522F
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 10:37:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44C751F21DFF
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 09:34:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91F612824FF
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 09:36:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE02320E03E;
-	Tue, 12 Nov 2024 09:34:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0586B20EA23;
+	Tue, 12 Nov 2024 09:36:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f0aYpzg4"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="hCicwtwl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C6720DD78;
-	Tue, 12 Nov 2024 09:34:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D415620C028;
+	Tue, 12 Nov 2024 09:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731404069; cv=none; b=WOzz79AaHpKyDI1TfehZHEx6UgXNm2ehyxthb8djQC93X7j2QgFTnE572OVLYdm3RZdlymL2d/0+pQaMhIyBSxSk/7OzH2ACIlLJsGzmF2phAkXFhSQn82+v5pKK/BM77rkzpurad6vwefU5hPHDPKpdPWVfThohlReeAFdyljo=
+	t=1731404186; cv=none; b=DMKLoWd7oBEMCo0w2qyUvEPcWqreaulrcWWF3SH0gQBKIWDZPT/3cgkv7fq1LVNobA8cl7jpBAGzuBLPz6Z8E6QF2kmpl5KvGo3NIxl2pj24qTaVrYtqtu7unT2TBS0U2KQK8PAV4lF7dNyO5ml2AeY3NRNnoWliaXtnpSldAq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731404069; c=relaxed/simple;
-	bh=SHes6OGRvq8oLwDJGfMDAR3qR6dDumBKkf+y1CWPlq0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XyZoqsJCyw9x109rGzD0DazwjA4ZdYDQWGUjckywWdwySfo9NtJZj+gPW6n1GN8tt7r59IMa4W5lEmGyUnlmN/27tdavQQQfdLhpNG4SlsAmSpJ8Fz9W6Tes9JaswjW406V2mDaPvbUbLq+stnEI3iNoloeeIa0JnhAFlv0ILWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f0aYpzg4; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5c9634c9160so6617329a12.2;
-        Tue, 12 Nov 2024 01:34:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731404066; x=1732008866; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=veWI0wzxeXxsm+t2SNseiFfdJ4cLJENyf0HANu/LsHU=;
-        b=f0aYpzg4plPOL+kpB3FyVxIu4Q7WvqOjAzBZJ49OKnLShTM4rjnqTgaDKxrtmAmD1i
-         xretEndnJYAIQQkC52be0+kf8zkTUpY6TvEo07H73PJFOSaJxelr8Qh+w627h/nVlgmn
-         RwNuQ8RVIRAiNbyk4bHksCFfBnFXi9YGexjo5Kf+nHVwYkpgJXaml2ypXCLv7PpHilq9
-         l4jFqnnd3LKfZiqjjVFHaZQtXrAb8iSaYtvp8R4Sxx1yO8LL8IuqkkjDWDEt3jguGmSM
-         hb+6Kw2E1gc+tV46dkg0n7PhB5cqsV2dilsd/4J5UzXUWpg/qogJbg+HoiljZBsxo25M
-         gilQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731404066; x=1732008866;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=veWI0wzxeXxsm+t2SNseiFfdJ4cLJENyf0HANu/LsHU=;
-        b=C1ZG0s2lfqfM3cL+vwKd5wy59OW5kLhIY9YxYtZ7E5x5SzJz8fETJJmgOnL0DRormB
-         DhCoq0v317jcVtelgpbe193eOCh4FK2F5R93xp2ho/DN0Bc9nYLVg6NBsWlMvnpnnUMG
-         +mzNDvhoqU47BI5iian5EGABSqgHgqhuns00OW47gH+AXW+Ht0fU3w6d8nh46C8BAtn1
-         ymjruVCJ0XapbdAM/WPpAIIuWwk/1hrFYk0ipCND4NhhL6FQo1lQUcimNf1H7c5Yyf5Z
-         J3LwfXBTnC09PehxzvL03opNArT7B/jgnPcs0xZZ6YJ4XkjeTxbtvygzc9Hz53MhEBLX
-         x+cw==
-X-Forwarded-Encrypted: i=1; AJvYcCUSIOPWhoJDUtRKaFT6k9kzHQCYJwYKblkAhfgfMGTY3bavAJK0rCtExRXf5IqjJkvJZ1eYjW2jnsYS@vger.kernel.org, AJvYcCWrdUmkfEwMKjtpZE4ka3/Djt3rvuGG6OVQavTA3C8Lg252otdwX6RWSMAp4Ii9AuvxYECSbNJarJAgDd8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzethQ3fxUaSXu/1BhIjDELQHX68toscVV0xleVN88WbPBy8tNc
-	RAtgP5DgC9iYYeZ2BWS+CQSsHMJmZK4vKhTI96x6jd0Y2MkvuufK+WqJZbxp/cRj28Xv3GMXJeT
-	iCkdbdSQgvU86Vr1xPMtf4aN1PHU=
-X-Google-Smtp-Source: AGHT+IFhgvqEmLV3+B88dauhpYClk2Y78ALxpG/mB5y3fHyWQAhHl48zUbKsMkX3L1y8LUpLEH+7Q+6qUFmMbisMUsM=
-X-Received: by 2002:a05:6402:13d1:b0:5cf:451b:36c7 with SMTP id
- 4fb4d7f45d1cf-5cf451b3743mr4133124a12.32.1731404065367; Tue, 12 Nov 2024
- 01:34:25 -0800 (PST)
+	s=arc-20240116; t=1731404186; c=relaxed/simple;
+	bh=nlukdECBOiLwis2DHpUioNrlfKx3dZvmbDKH42pujAw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:CC:From:
+	 In-Reply-To:Content-Type; b=MK2KNXyqnPunSwgDAikq3i8353cqBrDz55lE7f5MAk1Ty4/N46UueDnFZ118nRZjJLwKjANMBAHss5irH913UdlgDEverLnMkWMCk/jP2mfDcIIQ6r9aW/4AfoYeg7RcsxA9CPgCjNBLKgcNiiMZREXOdvAVmqPcsUjdX0OxDtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=hCicwtwl; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AC0UmDY015967;
+	Tue, 12 Nov 2024 09:36:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	2ZpX3I5p+siCj0YxIfEOJ5jeJCZMFcu65cINBWGOiVQ=; b=hCicwtwlcEunvWRw
+	GEre6CWl55Gy/+/wQjr+HxhgGrAsY/2mEmRurZiojsU1iwvnhnlL8YDYIdjFdQhh
+	rKbKgN7faEpFfOpp/lMvIoB6EUKVwm/t9kagVpv9nuXjc8X8v8a45oxcQM5DMuQ0
+	8PERmWDhbp1dKA5ODMXnJTd4dhbdcAV1kbVJcQavW0D2JCzKBFSHrAX5zhNgVcEV
+	HmsdJjtUTY44ShxUbcSpGXWJB5Bhh/eI+DliYIK9M9jP9FXmLUjOh8WM2R6aFkep
+	uESJlp+jkjyHMtBX/+3tNsE41VSRTfOBacrWtYUmm0gbk2MYNfkcVI/7UUAfQvq1
+	BNtf5w==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42sytspsmn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Nov 2024 09:36:17 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AC9a62X008015
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 12 Nov 2024 09:36:06 GMT
+Received: from [10.216.16.167] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 12 Nov
+ 2024 01:36:00 -0800
+Message-ID: <e541fd10-7037-4cbf-b07a-6cac8a7a9452@quicinc.com>
+Date: Tue, 12 Nov 2024 15:05:57 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <000000000000e875fa0620253803@google.com> <20241109152821.3476218-1-snovitoll@gmail.com>
- <825be5e2-31b2-4cd6-a283-05935ea6161f@suse.com> <9447f943-5172-4386-b159-f6b37735fe13@rowland.harvard.edu>
-In-Reply-To: <9447f943-5172-4386-b159-f6b37735fe13@rowland.harvard.edu>
-From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Date: Tue, 12 Nov 2024 14:34:13 +0500
-Message-ID: <CACzwLxht_ACYD4QdDqSWfYkZ7+0a+z8DWMt15KhGCF4E1g9-Lw@mail.gmail.com>
-Subject: Re: [PATCH] usb/cdc-wdm: fix memory leak of wdm_device
-To: Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>
-Cc: syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com, 
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 6/6] arm64: dts: qcom: Add USB controller and phy nodes
+ for IPQ5424
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+References: <20241112091355.2028018-1-quic_varada@quicinc.com>
+ <20241112091355.2028018-7-quic_varada@quicinc.com>
+Content-Language: en-US
+CC: <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <gregkh@linuxfoundation.org>,
+        <robh@kernel.org>, <abel.vesa@linaro.org>, <johan+linaro@kernel.org>,
+        <dmitry.baryshkov@linaro.org>, <mantas@8devices.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <quic_kbajaj@quicinc.com>,
+        <linux-kernel@vger.kernel.org>, <quic_wcheng@quicinc.com>,
+        <vkoul@kernel.org>, <linux-usb@vger.kernel.org>,
+        <andersson@kernel.org>, <kishon@kernel.org>, <konradybcio@kernel.org>
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
+In-Reply-To: <20241112091355.2028018-7-quic_varada@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: mQVvx7n5wJYR7Fphuaq76HMSwkCI36fI
+X-Proofpoint-ORIG-GUID: mQVvx7n5wJYR7Fphuaq76HMSwkCI36fI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 suspectscore=0 bulkscore=0 impostorscore=0 phishscore=0
+ mlxlogscore=857 lowpriorityscore=0 malwarescore=0 spamscore=0 mlxscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411120078
 
-On Mon, Nov 11, 2024 at 7:29=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Mon, Nov 11, 2024 at 10:44:43AM +0100, Oliver Neukum wrote:
-> > On 09.11.24 16:28, Sabyrzhan Tasbolatov wrote:
-> >
-> > Hi,
-> >
-> > > syzbot reported "KMSAN: kernel-infoleak in wdm_read", though there is=
- no
-> > > reproducer and the only report for this issue. This might be
-> > > a false-positive, but while the reading the code, it seems,
-> > > there is the way to leak kernel memory.
-> >
-> > As far as I can tell, the leak is real.
-> >
-> > > Here what I understand so far from the report happening
-> > > with ubuf in drivers/usb/class/cdc-wdm.c:
-> > >
-> > > 1. kernel buffer "ubuf" is allocated during cdc-wdm device creation i=
-n
-> > >     the "struct wdm_device":
-> >
-> > Yes
-> > [..]
-> >
-> > > 2. during wdm_create() it calls wdm_in_callback() which MAY fill "ubu=
-f"
-> > >     for the first time via memmove if conditions are met.
-> >
-> > Yes.
-> > [..]
-> >
-> > > 3. if conditions are not fulfilled in step 2., then calling read() sy=
-scall
-> > >     which calls wdm_read(), should leak the random kernel memory via
-> > >     copy_to_user() from "ubuf" buffer which is allocated in kmalloc-2=
-56.
-> >
-> > Yes, sort of.
-> >
-> > > -   desc->ubuf =3D kmalloc(desc->wMaxCommand, GFP_KERNEL);
-> > > +   desc->ubuf =3D kzalloc(desc->wMaxCommand, GFP_KERNEL);
-> > >     if (!desc->ubuf)
-> > >             goto err;
-> >
-> > No. I am sorry, but the fix is wrong. Absolutely wrong.
-> >
-> > Let's look at the code of wdm_read():
-> >
-> >                 cntr =3D desc->length;
-> > Here the method determines how much data is in the buffer.
-> > "length" initially is zero, because the descriptor itself
-> > is allocated with kzalloc. It is increased in the callback.
-> >
-> >                 spin_unlock_irq(&desc->iuspin);
-> >         }
-> >
-> >         if (cntr > count)
-> >                 cntr =3D count;
-> >
-> > This is _supposed_ to make sure that user space does not get more
-> > than we have in the buffer.
-> >
-> >         rv =3D copy_to_user(buffer, desc->ubuf, cntr);
-> >         if (rv > 0) {
-> >                 rv =3D -EFAULT;
-> >                 goto err;
-> >         }
-> >
-> >         spin_lock_irq(&desc->iuspin);
-> >
-> >         for (i =3D 0; i < desc->length - cntr; i++)
-> >                 desc->ubuf[i] =3D desc->ubuf[i + cntr];
-> >
-> >         desc->length -=3D cntr;
-> >
-> > Here we decrease the count of what we have in the buffer.
-> >
-> > Now please look at the check again
-> >
-> > "cntr" is what we have in the buffer.
-> > "count" is how much user space wants.
-> >
-> > We should limit what we copy to the amount we have in the buffer.
-> > But that is not what the check does. Instead it makes sure we never
-> > copy more than user space requested. But we do not check whether
-> > the buffer has enough data to satisfy the read.
->
-> I don't understand your analysis.  As you said, cntr is initially set to
-> the amount in the buffer:
->
->         If cntr <=3D count then cntr isn't changed, so the amount of data
->         copied to the user is the same as what is in the buffer.
->
->         Otherwise, if cntr > count, then cntr is decreased so that the
->         amount copied to the user is no larger than what the user asked
->         for -- but then it's obviously smaller than what's in the buffer.
->
-> In neither case does the code copy more data than the buffer contains.
 
-Hello,
-I've sent the v3 patch [1] per Oliver's explanation if I interpreted
-it correctly.
-I don't have the reproducer to verify if the patch solves the problem.
-If the analysis or patch is not right, please let me know.
 
-[1] https://lore.kernel.org/all/20241111120139.3483366-1-snovitoll@gmail.co=
-m/
+On 11/12/2024 2:43 PM, Varadarajan Narayanan wrote:
+> The IPQ5424 SoC has both USB2.0 and USB3.0 controllers. The USB3.0
+> can connect to either of USB2.0 or USB3.0 phy and operate in the
+> respective mode.
+> 
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> ---
+>   arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts |  67 +++++++++
+>   arch/arm64/boot/dts/qcom/ipq5424.dtsi       | 153 ++++++++++++++++++++
+>   2 files changed, 220 insertions(+)
+> 
 
->
-> Alan Stern
+[...]
+
+> diff --git a/arch/arm64/boot/dts/qcom/ipq5424.dtsi b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+> index 5e219f900412..d8c045a311c2 100644
+> --- a/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
+> @@ -233,6 +233,159 @@ intc: interrupt-controller@f200000 {
+>   			msi-controller;
+>   		};
+>   
+> +		qusb_phy_1: phy@71000 {
+> +			compatible = "qcom,ipq5424-qusb2-phy";
+> +			reg = <0 0x00071000 0 0x180>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB1_PHY_CFG_AHB_CLK>,
+> +				<&xo_board>;
+> +			clock-names = "cfg_ahb", "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2_1_PHY_BCR>;
+> +			status = "disabled";
+> +		};
+> +
+> +		usb2: usb2@1e00000 {
+> +			compatible = "qcom,ipq5424-dwc3", "qcom,dwc3";
+> +			reg = <0 0x01ef8800 0 0x400>;
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_USB1_MASTER_CLK>,
+> +				 <&gcc GCC_USB1_SLEEP_CLK>,
+> +				 <&gcc GCC_USB1_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_USB1_PHY_CFG_AHB_CLK>,
+> +				 <&gcc GCC_CNOC_USB_CLK>;
+> +
+> +			clock-names = "core",
+> +				      "sleep",
+> +				      "mock_utmi",
+> +				      "iface",
+> +				      "cfg_noc";
+> +
+> +			assigned-clocks = <&gcc GCC_USB1_MASTER_CLK>,
+> +					  <&gcc GCC_USB1_MOCK_UTMI_CLK>;
+> +			assigned-clock-rates = <200000000>,
+> +					       <24000000>; > +
+
+Shouldn't this be 19.2MHz ?
+
+> +			interrupts-extended = <&intc GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "pwr_event",
+> +					  "qusb2_phy",
+> +					  "dm_hs_phy_irq",
+> +					  "dp_hs_phy_irq";
+> +
+
+Please check the hs_phy_irq as well and add it if its present.
+
+> +			resets = <&gcc GCC_USB1_BCR>;
+> +			qcom,select-utmi-as-pipe-clk;
+> +			status = "disabled";
+> +
+> +			dwc_1: usb@1e00000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0 0x01e00000 0 0xe000>;
+> +				clocks = <&gcc GCC_USB1_MOCK_UTMI_CLK>;
+> +				clock-names = "ref";
+
+Another clock in dwc3 node ?
+
+> +				interrupts = <GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>;
+> +				phys = <&qusb_phy_1>;
+> +				phy-names = "usb2-phy";
+> +				tx-fifo-resize;
+> +				snps,is-utmi-l1-suspend;
+> +				snps,hird-threshold = /bits/ 8 <0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_u3_susphy_quirk;
+> +			};
+> +		};
+> +
+> +		qusb_phy_0: phy@7b000 {
+> +			compatible = "qcom,ipq5424-qusb2-phy";
+> +			reg = <0 0x0007b000 0 0x180>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> +				<&xo_board>;
+> +			clock-names = "cfg_ahb", "ref";
+> +
+> +			resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
+> +			status = "disabled";
+> +		};
+> +
+> +		ssphy_0: phy@7d000 {
+> +			compatible = "qcom,ipq5424-qmp-usb3-phy";
+> +			reg = <0 0x0007d000 0 0xa00>;
+> +			#phy-cells = <0>;
+> +
+> +			clocks = <&gcc GCC_USB0_AUX_CLK>,
+> +				 <&xo_board>,
+> +				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> +				 <&gcc GCC_USB0_PIPE_CLK>;
+> +			clock-names = "aux",
+> +				      "ref",
+> +				      "cfg_ahb",
+> +				      "pipe";
+> +
+> +			resets = <&gcc GCC_USB0_PHY_BCR>,
+> +				 <&gcc GCC_USB3PHY_0_PHY_BCR>;
+> +			reset-names = "phy",
+> +				      "phy_phy";
+> +
+> +			#clock-cells = <0>;
+> +			clock-output-names = "usb0_pipe_clk";
+> +
+> +			status = "disabled";
+> +		};
+> +
+> +		usb3: usb3@8a00000 {
+> +			compatible = "qcom,ipq5424-dwc3", "qcom,dwc3";
+> +			reg = <0 0x08af8800 0 0x400>;
+> +
+> +			#address-cells = <2>;
+> +			#size-cells = <2>;
+> +			ranges;
+> +
+> +			clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +				 <&gcc GCC_USB0_SLEEP_CLK>,
+> +				 <&gcc GCC_USB0_MOCK_UTMI_CLK>,
+> +				 <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
+> +				 <&gcc GCC_CNOC_USB_CLK>;
+> +
+> +			clock-names = "core",
+> +				      "sleep",
+> +				      "mock_utmi",
+> +				      "iface",
+> +				      "cfg_noc";
+> +
+> +			assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
+> +					  <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +			assigned-clock-rates = <200000000>,
+> +					       <24000000>;
+> +
+
+same comment as above, isn't this supposed to be 19.2MHz ?
+
+> +			interrupts-extended = <&intc GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
+> +					      <&intc GIC_SPI 414 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "pwr_event",
+> +					  "qusb2_phy";
+> +
+
+DP/ DM interrupts ?
+
+> +			resets = <&gcc GCC_USB_BCR>;
+> +			status = "disabled";
+> +
+> +			dwc_0: usb@8a00000 {
+> +				compatible = "snps,dwc3";
+> +				reg = <0 0x08a00000 0 0xcd00>;
+> +				clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
+> +				clock-names = "ref";
+> +				interrupts = <GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>;
+> +				phys = <&qusb_phy_0>, <&ssphy_0>;
+> +				phy-names = "usb2-phy", "usb3-phy";
+> +				tx-fifo-resize;
+> +				snps,is-utmi-l1-suspend;
+> +				snps,hird-threshold = /bits/ 8 <0x0>;
+> +				snps,dis_u2_susphy_quirk;
+> +				snps,dis_u3_susphy_quirk;
+
+Disable u1/u2 entry as well please.
+
+Regards,
+Krishna,
+
+> +			};
+> +		};
+> +
+>   		timer@f420000 {
+>   			compatible = "arm,armv7-timer-mem";
+>   			reg = <0 0xf420000 0 0x1000>;
 
