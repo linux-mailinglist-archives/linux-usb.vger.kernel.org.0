@@ -1,242 +1,155 @@
-Return-Path: <linux-usb+bounces-17501-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17507-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F9A49C61DE
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 20:52:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C2F39C6296
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 21:30:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE01CBC1221
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 17:04:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DACA2B61816
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 17:10:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92D69215028;
-	Tue, 12 Nov 2024 17:01:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1386421500C;
+	Tue, 12 Nov 2024 17:05:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bqlgIdR5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wS+DmfxZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF37220C480
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 17:01:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6D420CCDD
+	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 17:05:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731430898; cv=none; b=Dx3BES7ItnnVB2qSj0dnompaFREQe7k3a3TkD8Q9YFVEeru0+xwI/Jd05tI9Q1CkE8mZVzMOXr+Rpmbh1iTS9uqwNoz+d8uNEsMs5t4WNm7+mp/Svda2zFkpZt27PNeQyGWXMnbIBQsrhOmI9CiWKI35vLsZNHUHfC/kmRxRqS8=
+	t=1731431120; cv=none; b=gwna61dtCSqoo73lrt28Vx2XwS4WnJUMBvsElJ/QwKAwth6U0sy1coSmxSQ0vC6VpC8Vcbf3G8/HMb85KejZImt9DbtXZKxpUb9f86JWHEdkLgO9ulc+yUKZ0Viax2Mj5pZLGpz2xDEu7WOrJmL1KPz2NX4NzLT5HpAuIHqResA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731430898; c=relaxed/simple;
-	bh=QdMcADmJnreZLQtMOGP7xsANBU/fDQvnrerd3qhqG5U=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UdqMDe2qAOF02LcM86swuiiekfR87wZVfSIxBG2/NEGRknYIDOorswLJskxLC6kv4eu5jxF/LaibX9RRUfZME0SaYHf7bRYu77c0FNv4mIjNZLVxRh7FKEsllXpTChSKF0ek9P608lHSER/43rsMF6ZpXJ1e9+aMBMTSYqc41f8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bqlgIdR5; arc=none smtp.client-ip=209.85.128.48
+	s=arc-20240116; t=1731431120; c=relaxed/simple;
+	bh=+QhHbvTsdoN+h39DtOSWHLGO5rsf6lseXPlK1bc8n5Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AEgpNK43GktTI11xwSE5KiiK4QRiEtGV+VDOqRL8f9Oi3OioA7OOVTN6y29rznTBn26PRQh4rk7nzvbBS1X/KmZI7oCPYWXinlRKxoQMwBq3w18+2MM7qp/WF/83hgIL1mILGa+t/OypVKNXlHmMx2cZXy+k5nwGc/vpu9OUM5Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wS+DmfxZ; arc=none smtp.client-ip=209.85.167.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-431688d5127so47119825e9.0
-        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 09:01:34 -0800 (PST)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-53a0c160b94so7157816e87.2
+        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 09:05:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731430893; x=1732035693; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hk0rqQWGF5qZIEm5N8ldf910xYUbQ8SJF6GsB6UMS8I=;
-        b=bqlgIdR5u4tZ7yt8CvCAvek9Tp15YMj5MCw5zYVyM8ziXVtn6sPPo5DIWrWt7waOTc
-         9sZFcWtux40/yZGNHmU2KH/eHYbTeb38C9kRYklRoYGwgQXqA033ncYxqak5SSsze6ZP
-         29fZ+Ri0MuVTj2SpIm6ynQNyjcEpO0RGjTxtdi1qpbG4Fn7csJL48YSwYRaREuz3lti8
-         Mx8G89VunO+NfgrEwQJzd0VNSkr3SJH+dGaTsXyUNVex0D4JOQ5W8VviriurCwAq2+IK
-         UWDGW6zX80ghcAsczvcFLABAIFQBH2VSqlwWB11rUuLKxSJ7omNdW9KntoaftzMnjcxX
-         vS2A==
+        d=linaro.org; s=google; t=1731431117; x=1732035917; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NVKRrFlkkb4wg4R0ZPc49NQ3y+4Jopn/wW8d5M2TTXY=;
+        b=wS+DmfxZ3fjJTpiVxW2WgjHafA/BZ5bz0yMGe38l66xd3HT4Qko7oyNXE0AgA9wt8a
+         RXn1nlBTf5UNi3Re0gbi7vDxN83qgVVygDDj5TUvO5Vq7VbOlZWyzUhYhmLCQAtVM3uF
+         WLc91sJz0BGSRgUmKuljUc6uN9AFo607a6eNHDdkFQSL79zsAoiYm4MoRtCOn2qV2a1u
+         pZKxLhfLtBp0mA4U9tq3VCyIfYmlv88Ssya4pBtDzcBaF0y4mNMYZbGBs2usmHrq/F3Y
+         2doHzT9ChGioEKrX05Cg8jiTOzadR8ipwT2kDa1PhjGk3TGO1SX9mgB4s/W6HiyeX8Iv
+         aM+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731430893; x=1732035693;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hk0rqQWGF5qZIEm5N8ldf910xYUbQ8SJF6GsB6UMS8I=;
-        b=U9nitE/7pu0QCm6kP2CnyxRfrRQiwvNMPOTrP0vlbmI7BJDEfXe77LkB5G5IXLRGfQ
-         V/qoMH67UzrGUiVwRW49rKQfuhq15NJSXCy0gYCtqoQPsMqF12pPmnv8BgA9BycO//hM
-         YtP73UzBEyH59CUokpaBPqi8TEGjkkr0Zjj5ZDvu0NRuWSpS22nwM+o53SwWQEg7ikco
-         JMtKL95QyH18zQki+kMHGSR0EiCrrSO9kHokFtKtlHYORYVWFPpIcb6wgQ/AmzStYmo1
-         HKi6A802PDLUiXYVWrNlVeMS6rXWI1pPWNXpDSf6SkjL+uLqU4aY410/AfCJTOePf4bX
-         SvBg==
-X-Forwarded-Encrypted: i=1; AJvYcCWEYxn9kHkT6J0i21sfND5mw3wZqOckOPBisD2Qa5mTw6wSCuukiVaMGpeTNLh7wsASKdmUXBj+O/A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQ353sSseDBwuxBu4LceWK7kl0+yumO9Fq3+8FJvnTcPi19bFM
-	x3DdBp0UcSOcA3r4WCKPY5eYIAOSPuXgH3j7CzSoEyUXRWnIHT4JYIV7oHhj000=
-X-Google-Smtp-Source: AGHT+IFSMBojI+Imkb0+JGLwd8jCmTi0rjRk9veZD23ZwWmx51GdgwxPkT5B+ORTlAzCVyhiswfvJw==
-X-Received: by 2002:a05:600c:3b82:b0:431:50fa:89c4 with SMTP id 5b1f17b1804b1-432b74fdef5mr151814295e9.3.1731430891290;
-        Tue, 12 Nov 2024 09:01:31 -0800 (PST)
-Received: from [127.0.1.1] ([82.76.168.176])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b053051fsm215018895e9.6.2024.11.12.09.01.29
+        d=1e100.net; s=20230601; t=1731431117; x=1732035917;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NVKRrFlkkb4wg4R0ZPc49NQ3y+4Jopn/wW8d5M2TTXY=;
+        b=XqGGbD2xodq0Oft7cS2UVukmmEmvooVHH86cHJBo6c86NiYxYTByKylrLInLo7QRmQ
+         DLOmlhYZeklKQM7lXamr7KFLRqOTi1k4Na3bMFzDot8rvcFlHHUYrv/A/cMBV4P/C8gB
+         h6ZME/OtWUc/wF2TGBiRpdpuedybCI3J1pDMdZZcBjBmw4BJPbdAWUPlnsa/yTVfvo6r
+         1WL+jnfefw89nbJm+PnVI5p1Mz1AeisSyJ8HGLSSe8xswVw03uZg01+wt7tVwACxXH2u
+         is1iMRMJTTCZGkAYoPlrn8jfl0xc2R4TgQVJgxiv70lWLbQ+fmqK7jBE0RodCk6kxLtR
+         rxww==
+X-Forwarded-Encrypted: i=1; AJvYcCUX36Shmppma9hzvAG4S1Qm+agc2Jn++G1Ua2/d20Bfx74cmUlGECVavMvB9XIzq02L3dmX2qB4ZgY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlHEmt3HcGGswM1Cygaf+pAh29F6KRZaZErejgAcwMQ6NnauT6
+	rA69FfDBy+NiIikONqG7yQ5oHlLFAwdhPauBdLFqxoJNALzqN0c+HSO07/aZwyg=
+X-Google-Smtp-Source: AGHT+IFktvxSEG21Y1Go2yfQvxLoLb0yDrWBRzLeB2+SLpucDdFBur1x+XpMAnkAtOQ4xTIMku4bxg==
+X-Received: by 2002:a05:6512:ac4:b0:53c:7624:586f with SMTP id 2adb3069b0e04-53d862c4785mr8425423e87.29.1731431117025;
+        Tue, 12 Nov 2024 09:05:17 -0800 (PST)
+Received: from linaro.org ([82.76.168.176])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-432b05e2a31sm214523895e9.36.2024.11.12.09.05.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 09:01:30 -0800 (PST)
+        Tue, 12 Nov 2024 09:05:16 -0800 (PST)
+Date: Tue, 12 Nov 2024 19:05:14 +0200
 From: Abel Vesa <abel.vesa@linaro.org>
-Subject: [PATCH v5 0/6] usb: typec: Add new driver for Parade PS8830 Type-C
- Retimer
-Date: Tue, 12 Nov 2024 19:01:09 +0200
-Message-Id: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>
+Cc: Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Johan Hovold <johan@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Trilok Soni <quic_tsoni@quicinc.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 6/6] arm64: dts: qcom: x1e80100-t14s: Enable external
+ DisplayPort support
+Message-ID: <ZzOKylgU3teUNuAe@linaro.org>
+References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
+ <20241112-x1e80100-ps8830-v5-6-4ad83af4d162@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANWJM2cC/2XQwWrDMAwG4FcpPs9Flq1G7qnvUXZIFKc1jKTYx
- bSUvPvcDtYNH3/B/wnpoXJIMWS13zxUCiXmuMw10MdGybmfT0HHsWaFgA4Ijb6ZwGAA9CUzW9A
- jiUjvaSDqVG1dUpji7SUeP2s+x3xd0v21oJjn9Mdi9I1VjAY9iLjOw2BGR4evOPdp2S7ppJ5Yw
- V+g1lwLYAVIRgZgYXHQAPYPgNgCtgI7rvdMlkzwvgHcGzDQvqO4CkwwdWR4wJ0N/4B1Xb8BN3N
- Sr3IBAAA=
-X-Change-ID: 20240521-x1e80100-ps8830-d5ccca95b557
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Rajendra Nayak <quic_rjendra@quicinc.com>, 
- Sibi Sankar <quic_sibis@quicinc.com>, Johan Hovold <johan@kernel.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Trilok Soni <quic_tsoni@quicinc.com>, 
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- Abel Vesa <abel.vesa@linaro.org>
-X-Mailer: b4 0.15-dev-dedf8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6048; i=abel.vesa@linaro.org;
- h=from:subject:message-id; bh=QdMcADmJnreZLQtMOGP7xsANBU/fDQvnrerd3qhqG5U=;
- b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBnM4ndKMK5bQ4WuVBzvhz013JOvxeDL1LJpNuYw
- 8O9mAOo+OeJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZzOJ3QAKCRAbX0TJAJUV
- VgICD/9si7SibFXI1TxZT8Gwca2OdCy/cGgJrwfG8IZCh5qzosrbst1JDEe2AK8oyZvB0BgPjV2
- LHSATOJBW138g+8De0iFEs3jYWxIe/6yRJuiRPTOg6n6D+G2eMmAsMFyhZ2VoMIP36BrtKqPPEa
- wPGc55AECt5riPGXmP7OqLLRoZogdG8fKlgUDFw++GMCsQ/WNagPNvcgGJB6eNsrym38srP3wRn
- uKpS93Mp0SNyEDEfE6gLqSUNoqORmYz68vuBqpQTkwV5dGoVR29aYlIG+VJw6SGjoyaF3RQFQPN
- ibrgbugRvZi0GftRHUZ6ctdPfDAJOj/3qaFUINy+lcY7fNIX4v/HQbrR9S1W/qeNWEzTNIoJI6t
- OOaDKPsrFYeJBawWNy0HmSOL9N6NlgUGZDDe+v95eRPhNoNdYK96+Txz3ogoXlZ/f8foqs0Axb6
- YTwwkJxgq8IXIr6i7nwh81WhvQPycwBWmXFZ2sRm6F+n4xHVj02myxTw7zFh9zHVbPY6Ip/vxVN
- 3x8DQAdpgxZc5ESzMoGTyd+m9J5ZMOLPA/GykQVjZ5kR4ZHikhVaK/w4jP2TR4dOBIXBuyu5SQd
- iZ4sO6/ytCDQxz183gK2LTkX4CkI9JCA4lNbuxQiv2TDQSGX0kDMltBa4UzaHlD1s2UwnEVU+Ir
- LD19O8/qpH/Yn5w==
-X-Developer-Key: i=abel.vesa@linaro.org; a=openpgp;
- fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241112-x1e80100-ps8830-v5-6-4ad83af4d162@linaro.org>
 
-The Parade PS8830 is a Type-C multi-protocol retimer that is controlled
-via I2C. It provides altmode and orientation handling and usually sits
-between the Type-C port and the PHY.
+On 24-11-12 19:01:15, Abel Vesa wrote:
+> The Lenovo ThinkPad T14s Gen6 provides external DisplayPort on all
+> 2 USB Type-C ports. Each one of this ports is connected to a dedicated
+> DisplayPort controller.
+> 
+> Due to support missing in the USB/DisplayPort combo PHY driver,
+> the external DisplayPort is limited to 2 lanes.
+> 
+> So enable the first and second DisplayPort controllers and limit their
+> data lanes number to 2.
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 
-It is currently used alongside Qualcomm Snapdragon X Elite SoCs on quite
-a few laptops already.
+Please do not merge this specific patch.
 
-This new driver adds support for the following 3 modes:
- - DP 4lanes (pin assignments C and E)
- - DP 2lanes + USB3 (pin assignment D)
- - USB3
+It is provided just for context and testing purposes.
 
-This retimer is a LTTPR (Link-Training Tunable PHY Repeater) which means
-it can support link training from source to itself. This means that the
-DP driver needs to be aware of the repeater presence and to handle
-the link training accordingly. This is currently missing from msm dp
-driver, but there is already a patchset [1] on the list that adds it.
-Once done, full external DP will be working on all X1E laptops that make
-use of this retimer.
+See the cover note for more details.
 
-NOTE: Currently, due to both LTTPR missing support in msm DP and a
-reported crash that can happen on DP unplug, the DP DT patches are not
-supposed to be merged yet. That patch is only shared for testing purposes.
-Once those 2 issues have been resolved, the MDSS DP 0-2 enablement patch
-will be respun.
-
-The LTTPR patchset is already on the list:
-[1] https://lore.kernel.org/all/20241031-drm-dp-msm-add-lttpr-transparent-mode-set-v1-0-cafbb9855f40@linaro.org/
-
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
-Changes in v5:
-- Renamed binding schema to be the same as the compatible.
-- Dropped the ps8830,boot-on from the schema.
-- Added register offsets and bits names to the driver, like Konrad
-  suggested.
-- Reordered the vregs and clocks enabling, as per Johan's request.
-- Used the dev_err_probe for regmap init failure and dropped the
-  multiple regulator disable calls, replacing it with single call to
-  helper, as Christophe suggested. Also replaced dev_err with
-  dev_err_probe on typec_switch_register and typec_mux_register failure.
-- Added some new pinctrl specific properties to all pmic provided
-  gpios that control retimer vregs.
-- Re-ordered alphabetically the retimers default state pinconfs.
-- Added the T14s patches with same exact support, as per Johan's
-  request.
-- Link to v4: https://lore.kernel.org/r/20241101-x1e80100-ps8830-v4-0-f0f7518b263e@linaro.org
-
-Changes in v4:
-- Renamed the driver and bindings schema to ps883x to allow future
-  support for the PS8833.
-- Dropped the dedicated DT property for keeping the retimers from
-  resetting on probe, and replaced that with a read to figure out
-  if it has been already configured or not. This involves leaving the
-  reset gpio as-is on probe if the retimer has been already configured.
-- Replaced the fwnode_typec_switch_get() call with typec_switch_get()
-- Replaced the fwnode_typec_mux_get() call with typec_mux_get()
-- Dropped the clock name, as there is only one clock. As per Bjorn's
-  suggestion.
-- Dropped regcache as it seems it is not needed.
-- Re-worded all commit messages to explain better the problem and the
-  proposed changes.
-- Link to v3: https://lore.kernel.org/r/20241022-x1e80100-ps8830-v3-0-68a95f351e99@linaro.org
-
-Changes in v3:
-- Reworked the schema binding by using the usb/usb-switch.yaml defined
-  port graph and properties. Addressed all comments from Johan and
-  Dmitry.
-- Dropped the manual caching of the config values on regmap write in the
-  driver.
-- Reordered the DP pin assignment states within the switch clause, as
-  Dmitry suggested.
-- Added SVID check to not allow any altmode other than DP.
-- Added DT patches (retimer for USB orientation handling and DP
-  enablement). Did this in order to offer a full picture of how it all
-  fits together.
-- Split the DP enablement in DT in a separate patchset so the USB
-  handling can be merged separately. 
-- Added ps8830,boot-on to let the driver know it is supposed to skip
-  resetting the retimer on driver probe, as the bootloader might already
-  let it in a pre-configured state.
-- Marked all retimer voltage regulators as boot-on since we want to
-  maintain the state for coldplug orientation.
-- Added pinconf for all retimer0 gpios.
-- Didn't pick up Konrad's T-b tags and Krzysztof's R-b tag as the rework
-  is quite extensive. Especially because of the ps8830,boot-on and what
-  it does.
-- Link to v2: https://lore.kernel.org/r/20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org
-
-Changes in v2:
-- Addressed all comments from Johan and Konrad.
-- Reworked the handling of the vregs so it would be more cleaner.
-  Dropped the usage of bulk regulators API and handled them separately.
-  Also discribed all regulators according to data sheet.
-- Added all delays according to data sheet.
-- Fixed coldplug (on boot) orientation detection.
-- Didn't pick Krzysztof's R-b tag because the bindings changed w.r.t
-  supplies.
-- Link to v1: https://lore.kernel.org/r/20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org
-
----
-Abel Vesa (6):
-      dt-bindings: usb: Add Parade PS8830 Type-C retimer bindings
-      usb: typec: Add support for Parade PS8830 Type-C Retimer
-      arm64: dts: qcom: x1e80100-crd: Describe the Parade PS8830 retimers
-      arm64: dts: qcom: x1e80100-crd: Enable external DisplayPort support
-      arm64: dts: qcom: x1e80100-t14s: Describe the Parade PS8830 retimers
-      arm64: dts: qcom: x1e80100-t14s: Enable external DisplayPort support
-
- .../devicetree/bindings/usb/parade,ps8830.yaml     | 119 ++++++
- .../dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts     | 321 +++++++++++++-
- arch/arm64/boot/dts/qcom/x1e80100-crd.dts          | 474 ++++++++++++++++++++-
- drivers/usb/typec/mux/Kconfig                      |  10 +
- drivers/usb/typec/mux/Makefile                     |   1 +
- drivers/usb/typec/mux/ps883x.c                     | 437 +++++++++++++++++++
- 6 files changed, 1352 insertions(+), 10 deletions(-)
----
-base-commit: 28955f4fa2823e39f1ecfb3a37a364563527afbc
-change-id: 20240521-x1e80100-ps8830-d5ccca95b557
-
-Best regards,
--- 
-Abel Vesa <abel.vesa@linaro.org>
-
+> ---
+>  .../boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts      | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts b/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts
+> index ea3ecc7c5bda24f3a0a7bb027b456462b11daf4d..b08a173f0cfe2a2fc241a4e689d35b5e7e03d7e1 100644
+> --- a/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts
+> +++ b/arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts
+> @@ -746,6 +746,22 @@ &mdss {
+>  	status = "okay";
+>  };
+>  
+> +&mdss_dp0 {
+> +	status = "okay";
+> +};
+> +
+> +&mdss_dp0_out {
+> +	data-lanes = <0 1>;
+> +};
+> +
+> +&mdss_dp1 {
+> +	status = "okay";
+> +};
+> +
+> +&mdss_dp1_out {
+> +	data-lanes = <0 1>;
+> +};
+> +
+>  &mdss_dp3 {
+>  	compatible = "qcom,x1e80100-dp";
+>  	/delete-property/ #sound-dai-cells;
+> 
+> -- 
+> 2.34.1
+> 
 
