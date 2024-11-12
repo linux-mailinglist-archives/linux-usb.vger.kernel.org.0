@@ -1,135 +1,133 @@
-Return-Path: <linux-usb+bounces-17473-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17474-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D1969C566A
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 12:27:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D38CD9C5671
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 12:28:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0159E28779C
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 11:27:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 474AB2882A1
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 11:28:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D860721730B;
-	Tue, 12 Nov 2024 11:11:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC3B9217F35;
+	Tue, 12 Nov 2024 11:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="N+Od7uMv"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wpwk+iqE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBDB20F5AF;
-	Tue, 12 Nov 2024 11:11:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E21B2144CF;
+	Tue, 12 Nov 2024 11:13:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731409866; cv=none; b=TVesnhNksXoBTIRXmzLwWOTRRZGHjkKTk1i8DtiWWEnmlGo3ekxP1TKxi8l51DX9BRMd7cA6T5NS2gshN3CW7dgYjsdYR93DKzc8zX0kmVQ1DW+z1bGK2ffb5HT6JZORXrOE91i91DeRh5ULeEq7ewXE+sZ/Yo/boObvwfkkcWQ=
+	t=1731410006; cv=none; b=jYpsg2olbdhaXG0+D8Z5Zp7SHU5/zs+47jGE8Ruy1+yxWUr1ZK9i4j6YzR0jGRqARzUtd5liCSKDeedIvjzGDIAVPYPCKc++/N2G1MUlLfesyvJy2SfV2Q2KszSKzlE565nvKgL2CV6bGVonPzfN5ijP+JzmG+YACl4FJzAlXWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731409866; c=relaxed/simple;
-	bh=XTmez6esYZix4zEIExzvryIvtWhzuaD1aYHB9dK8R4Y=;
+	s=arc-20240116; t=1731410006; c=relaxed/simple;
+	bh=0Iat0lTwpP+/G7Ddg3nrQ+Peg7j8NA0ItxrWTgviLEo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XkQ6CoOue0ehSN8/Td0FbFel7MO2LBv5NGQ6dvf9v5+GFbDojzBFm4mRV7ANDsTV8FY9U2pqfAc19Ozy3nfQ+hXs/4QXKDdZfSMqZnKCBLF4Y+v825kW85HoBshfwHHAbd0S1+sTiBcb/EP7tGWBE/zbNgiNrZ8fGUmPQl28jbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=N+Od7uMv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55F9FC4CECD;
-	Tue, 12 Nov 2024 11:11:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=MDyGxzTGmCHr+p04skOHz18zaLKAVyd/w6PGmeoYBwsVlK3vsJp4iBVv+5It83TH9nE4w++j6JVEupBvN/EQKom0Bbdp+kUgBNKF14Pm8Bv9xOlmeIqxfmQJCdrbgmH45k3IioTVfVU/M9ArN7AFjEo66ivZHPZX3dSZJGm7tBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wpwk+iqE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E22FC4CECD;
+	Tue, 12 Nov 2024 11:13:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1731409865;
-	bh=XTmez6esYZix4zEIExzvryIvtWhzuaD1aYHB9dK8R4Y=;
+	s=korg; t=1731410006;
+	bh=0Iat0lTwpP+/G7Ddg3nrQ+Peg7j8NA0ItxrWTgviLEo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N+Od7uMv6TKw1xFecazXPs9sajbjNsQuhAWkWs6sb4NfumsiHXKSiYzyIkKFpNupE
-	 Ge1IquGZd3xjAcdsvCMg33y3FZISBLnm1XUNNKr1gypDUMZGgSQ0AE5S8hZwRYnae0
-	 Rexgk37itCLPKo7IZ4gB2hiWXmNDrfoIQYSWTrIE=
-Date: Tue, 12 Nov 2024 12:11:02 +0100
+	b=wpwk+iqEUT3ij7WVcF0M/B/BPj1MvbOl4yo753HpKUyoSGIvyteOT2eAxnZSoLeSo
+	 ykF9EFCMtpvlgM1TdFJrVfzkCI6g2UR3/qZD8CLXizP2dckxaMk7TE0mS0JCyW1qI6
+	 VsEtIcjBOyO722LE3NDiN8AIj3nlgmy9C/DDSPBY=
+Date: Tue, 12 Nov 2024 12:13:22 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Rex Nie <rex.nie@jaguarmicro.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Angus Chen <angus.chen@jaguarmicro.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: =?utf-8?B?562U5aSNOiDnrZTlpI0=?= =?utf-8?Q?=3A?= [PATCH v2] USB:
- core: remove dead code in do_proc_bulk()
-Message-ID: <2024111249-stifle-mundane-dbfc@gregkh>
-References: <20241109021140.2174-1-rex.nie@jaguarmicro.com>
- <2024110947-umpire-unwell-ac00@gregkh>
- <KL1PR0601MB5773F9F97A6AFC7E5D987323E65E2@KL1PR0601MB5773.apcprd06.prod.outlook.com>
- <2024110911-professor-obnoxious-f411@gregkh>
- <KL1PR0601MB5773FD459FC71707E5FB0B7FE6582@KL1PR0601MB5773.apcprd06.prod.outlook.com>
+To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	oneukum@suse.com,
+	syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com,
+	syzkaller-bugs@googlegroups.com
+Subject: Re: [PATCH v3] usb/cdc-wdm: fix memory info leak in wdm_read
+Message-ID: <2024111232-relative-bottom-4995@gregkh>
+References: <CACzwLxjD0PceaD27Ya6fFxKnSQZajtG2sEArqX6toS8SjNcinw@mail.gmail.com>
+ <20241111120139.3483366-1-snovitoll@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <KL1PR0601MB5773FD459FC71707E5FB0B7FE6582@KL1PR0601MB5773.apcprd06.prod.outlook.com>
+In-Reply-To: <20241111120139.3483366-1-snovitoll@gmail.com>
 
-On Mon, Nov 11, 2024 at 08:01:59AM +0000, Rex Nie wrote:
+On Mon, Nov 11, 2024 at 05:01:39PM +0500, Sabyrzhan Tasbolatov wrote:
+> syzbot reported "KMSAN: kernel-infoleak in wdm_read", though there is no
+> reproducer and the only report for this issue.
 > 
+> The check:
 > 
-> > -----邮件原件-----
-> > 发件人: Greg KH <gregkh@linuxfoundation.org>
-> > 发送时间: 2024年11月9日 19:47
-> > 收件人: Rex Nie <rex.nie@jaguarmicro.com>
-> > 抄送: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org; Angus Chen
-> > <angus.chen@jaguarmicro.com>; stable@vger.kernel.org
-> > 主题: Re: 答复: [PATCH v2] USB: core: remove dead code in do_proc_bulk()
-> > 
-> > External Mail: This email originated from OUTSIDE of the organization!
-> > Do not click links, open attachments or provide ANY information unless you
-> > recognize the sender and know the content is safe.
-> > 
-> > 
-> > On Sat, Nov 09, 2024 at 11:38:43AM +0000, Rex Nie wrote:
-> > >
-> > >
-> > > > -----邮件原件-----
-> > > > 发件人: Greg KH <gregkh@linuxfoundation.org>
-> > > > 发送时间: 2024年11月9日 14:59
-> > > > 收件人: Rex Nie <rex.nie@jaguarmicro.com>
-> > > > 抄送: linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org; Angus
-> > > > Chen <angus.chen@jaguarmicro.com>; stable@vger.kernel.org
-> > > > 主题: Re: [PATCH v2] USB: core: remove dead code in do_proc_bulk()
-> > > >
-> > > > External Mail: This email originated from OUTSIDE of the organization!
-> > > > Do not click links, open attachments or provide ANY information
-> > > > unless you recognize the sender and know the content is safe.
-> > > >
-> > > >
-> > > > On Sat, Nov 09, 2024 at 10:11:41AM +0800, Rex Nie wrote:
-> > > > > Since len1 is unsigned int, len1 < 0 always false. Remove it keep
-> > > > > code simple.
-> > > > >
-> > > > > Cc: stable@vger.kernel.org
-> > > > > Fixes: ae8709b296d8 ("USB: core: Make do_proc_control() and
-> > > > > do_proc_bulk() killable")
-> > > > > Signed-off-by: Rex Nie <rex.nie@jaguarmicro.com>
-> > > > > ---
-> > > > > changes in v2:
-> > > > > - Add "Cc: stable@vger.kernel.org" (kernel test robot)
-> > > >
-> > > > Why is this relevant for the stable kernels?  What bug is being
-> > > > fixed that users would hit that this is needed to resolve?
-> > > HI Greg k-h, I got a email from lkp@intel.com let me add Cc tag yesterday,
-> > so I apply v2 patch.
-> > 
-> > That was because you cc: stable and yet did not tag it as such.  That's not
-> > passing a judgement call on if it should have been done at all, which is what I
-> > am asking here.
-> > 
-> Thanks for detailed explanation.
-> > > Although this shouldn't bother users, the expression len1 < 0 in the
-> > > if condition doesn't make sense, and removing it makes the code more
-> > > simple and efficient. The original email from kernel robot test shows as
-> > follows. I think it no need a cc tag either.
-> > 
-> > Does this follow the patches as per the documentation for what should be
-> > accepted for stable kernels?
-> >
-> I check Documentation/process/stable-kernel-rules.rst again, it don't follow rules for stable kernels.
-> I think this patch can be picked up by mainline kernel tree.
+> 	if (cntr > count)
+> 		cntr = count;
+> 
+> only limits `cntr` to `count` (the number of bytes requested by
+> userspace), but it doesn't verify that `desc->ubuf` actually has `count`
+> bytes. This oversight can lead to situations where `copy_to_user` reads
+> uninitialized data from `desc->ubuf`.
+> 
+> This patch makes sure `cntr` respects` both the `desc->length` and the
+> `count` requested by userspace, preventing any uninitialized memory from
+> leaking into userspace.
+> 
+> syzbot report
+> =============
+> BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+> BUG: KMSAN: kernel-infoleak in _inline_copy_to_user include/linux/uaccess.h:180 [inline]
+> BUG: KMSAN: kernel-infoleak in _copy_to_user+0xbc/0x110 lib/usercopy.c:26
+>  instrument_copy_to_user include/linux/instrumented.h:114 [inline]
+>  _inline_copy_to_user include/linux/uaccess.h:180 [inline]
+>  _copy_to_user+0xbc/0x110 lib/usercopy.c:26
+>  copy_to_user include/linux/uaccess.h:209 [inline]
+>  wdm_read+0x227/0x1270 drivers/usb/class/cdc-wdm.c:603
+>  vfs_read+0x2a1/0xf60 fs/read_write.c:474
+>  ksys_read+0x20f/0x4c0 fs/read_write.c:619
+>  __do_sys_read fs/read_write.c:629 [inline]
+>  __se_sys_read fs/read_write.c:627 [inline]
+>  __x64_sys_read+0x93/0xe0 fs/read_write.c:627
+>  x64_sys_call+0x3055/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:1
+>  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+>  do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
+>  entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> 
+> Reported-by: syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=9760fbbd535cee131f81
+> Signed-off-by: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+> ---
+> Changes v2 -> v3:
+> - reverted kzalloc back to kmalloc as the fix is cntr related (Oliver).
+> - added constraint to select the min length from count and desc->length.
+> - refactored git commit description as the memory info leak is confirmed.
+> 
+> Changes v1 -> v2:
+> - added explanation comment above kzalloc (Greg).
+> - renamed patch title from memory leak to memory info leak (Greg).
+> ---
+>  drivers/usb/class/cdc-wdm.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
+> index 86ee39db013f..dd7349f8a97a 100644
+> --- a/drivers/usb/class/cdc-wdm.c
+> +++ b/drivers/usb/class/cdc-wdm.c
+> @@ -598,8 +598,9 @@ static ssize_t wdm_read
+>  		spin_unlock_irq(&desc->iuspin);
+>  	}
+>  
+> -	if (cntr > count)
+> -		cntr = count;
+> +	/* Ensure cntr does not exceed available data in ubuf. */
+> +	cntr = min(count, (size_t) desc->length);
 
-Great, please resend this with that properly removed.
+You should never cast in a call to min(), please use min_t() instead as
+that is what it is there for.
 
 thanks,
 
