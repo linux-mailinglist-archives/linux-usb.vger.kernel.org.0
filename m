@@ -1,84 +1,61 @@
-Return-Path: <linux-usb+bounces-17515-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17516-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD7029C62A6
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 21:34:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34F909C635B
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 22:25:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA209B3A0B0
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 20:26:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6F141F23AE2
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 21:25:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F448219E33;
-	Tue, 12 Nov 2024 20:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570C421A4C7;
+	Tue, 12 Nov 2024 21:24:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="qBC7WSoW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtPc88R6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C772194B7
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 20:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C73242170DD;
+	Tue, 12 Nov 2024 21:24:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731443159; cv=none; b=BfHfNQ7Gtrwl1YEq56ZQOlHe1pW2+khT4NSZUYiy+1Ft8wGmX2Syg/hMldTnCxe5RqKWpaIK72kSoBhElSFYPgxCAvefRNHF+TSP7V6fBpU0Bh94JylILU2iUonDo9QfKQJUXMmSiIxiURaM4NU+KtPL1lm0IcuhT8cS50cv/OY=
+	t=1731446689; cv=none; b=Z4mgJ05NZOWI4u09sBwRqzr4tz8tZeBGoOMqd1/Z3if469h1WLDxWBAQj2I45gePKhFKHiXMGy4EFde5ZbiUGuo+6BT596psnmKxCeasKz8Z4SmH8tA2nRxO9nI72r35C8zHHDzNkH9hHmfRhCfmHJn51muE5sHocioV9t8HaUE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731443159; c=relaxed/simple;
-	bh=MdTfH+E7fr989/AY5JdLMHr+uSfW5aVjwietaX7i8EU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S+wAdvwrUqaDnTbLREIeNzYDQlcE7+xnTO2Bg+kmko9z5K57JYFFc8L8NQfpXcSP6oQBEZNBx/H/VTpXCglSxr/pEMapk4NCb15EBg8pMR/3MX5UwYmS1YisjXKxOTzTWwibSA5rRtHlsXQ55Ca+I36hrEBijFym8wZUaPxf770=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=qBC7WSoW; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7b18da94ba9so3278785a.0
-        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 12:25:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1731443156; x=1732047956; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=T4Y8BC5cx/asz6XOBwxn/nus2x9aqEp8mBzAEquRJAk=;
-        b=qBC7WSoWHTVCN4B7KQMvlvFLV36a5ADKu/2jUIPQqTUZO/awjyOL3+9/X92f+iresV
-         g2OGvP9eO2voL6Y5d9mcVrW4SIArMfqHxKrzgJpvztIOfkSEOBq+HDyjOCa2FnT0srC8
-         6UMLmdn3fzePoycH3j2zrnEpDkznhaz4EIQFXCBltWHZFmFCDBYdsFounb34+q3L6ZGU
-         8Yb3IaeXmjqA30JFQ/W/SscGlmQ7cRnb6Jn3S+W0qBl3zWOuDkXewsVBgWPKexA6BZQq
-         5ua4DKWl5rKjzbxzSyuDVuIZq+j0yziswF6XYSVNBT5dGKx0G0OcVFziTATr2D+97YZu
-         Lm7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731443156; x=1732047956;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T4Y8BC5cx/asz6XOBwxn/nus2x9aqEp8mBzAEquRJAk=;
-        b=JurLrdzXRt7/MpGirGCTRYfDmlXeudco3j2qDs0cipDntKaA4fvXtTHsAKXPbba9Vy
-         +laObg6grjprfU/5nJHf1GmlRPmVjsVVOYyeHHVnn7tOjg3cQ4Pt1bX8tdZli72cp6AR
-         Y0RL69YxMIJ/ce3mbsQqp0Ws2NkuBvoqRUraUmPWWqLDBAPZrTNdI7CNX3FlIgxsMvrD
-         ZdVX/z988LrDoMEHYiUU05Lquz9YldsYUjfxw6jvRGuo6KfB6Vwjb3p6QicJuHhRQKi9
-         6eywi/irjnvq4VaiTp3D6z4gkwQjjic+uDhcIYNCvQxSq1iGQ3LjwkUo3FRf4wfsD4Wk
-         oVyw==
-X-Forwarded-Encrypted: i=1; AJvYcCUko8PEd5crEhAZnRn16kuN39BDmTBktfYNOoRVtjCW5UXY8c6ddn4oyiB8heSQkd6Ewk78XfHhjBk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrxzFACMeYuRH5X3gNGz2le/yOUxM+DVtL/OWqOswMXwTh1KWg
-	MGw8rRfbRTaMm7+tWpf1h6Jn/4cpvgkyTKgLWjNvewjOKNaYiJfS5Xtbu5oj6Q==
-X-Google-Smtp-Source: AGHT+IEFVux3HN6tJzgVu7E2X1lRQvRziWl9XkNXgBuYbREjGETu2ERXVJqnkgV7yVGCEPshcAVYSQ==
-X-Received: by 2002:a05:620a:29d0:b0:7b1:4a2a:9ae0 with SMTP id af79cd13be357-7b3318d0163mr2813162085a.9.1731443156081;
-        Tue, 12 Nov 2024 12:25:56 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.12.5])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d3961df9f1sm76132086d6.23.2024.11.12.12.25.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 12:25:55 -0800 (PST)
-Date: Tue, 12 Nov 2024 15:25:53 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Cc: oneukum@suse.com, gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH v4] usb/cdc-wdm: fix memory info leak in wdm_read
-Message-ID: <4ea9e56b-0941-4ea4-8cf3-b62facdbff53@rowland.harvard.edu>
-References: <2024111232-relative-bottom-4995@gregkh>
- <20241112132931.3504749-1-snovitoll@gmail.com>
- <824e839d-ee72-4923-bc88-e9cc58201b07@rowland.harvard.edu>
- <CACzwLxgVJ2jROr8RWHXv++2m2tD9fvskp_MqTL7VhCPr-Eeeiw@mail.gmail.com>
+	s=arc-20240116; t=1731446689; c=relaxed/simple;
+	bh=IcTJgLodvSURGaK4wqAzdTDDMij+U5Fu23bdAxDaorg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=DWTEyq+Sd95Y7DQ8JMyZgSZ4MtZjkIxhmqxdoSM2FA9kz+1AyBjaRLMrSHRbduwM/FuJUnltNwXnDb9XLeWMZ3t0L0YHPx2bXrTfUcFfx2FhHe1hjDr9uY6CP6U29m3S83/+8gotlVIOLKITLZc/aNBqvoBpY0YGFLTfKSzSihM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QtPc88R6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2543BC4CECD;
+	Tue, 12 Nov 2024 21:24:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731446689;
+	bh=IcTJgLodvSURGaK4wqAzdTDDMij+U5Fu23bdAxDaorg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=QtPc88R6MNDMn8zqqI1B9uJrVb9jLqWL5ToBEKV+RxMCJW92huc1DxZg2adpjHUX6
+	 aZXq1kKE5zX0Ey1E4e4vSCGjuQHgMygguL5X0C657sxGqYbq8uohO+xYAJWTAq0DU8
+	 MN7w8BxC0H4dGiAF6lN4zyDAtx9UuMgT7D/NMc7vxIcaI6BGjRL9Ao7rwzzoySl0bm
+	 egE33GKzO7eo9qaJgvFU1cCBXXWbCOOhT+vWZJbaIKP+pqu9UXi864epLTZgyK+BtS
+	 g9zhmeVR3mFnD4xcc+F6UqPNkcqJ9X6nPcUKODln2QB8sd+DBYdTKPe2ULK6pmVXda
+	 JxCGpcywl/irA==
+Date: Tue, 12 Nov 2024 15:24:47 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Fenghua Yu <fenghua.yu@intel.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	Peter Chen <peter.chen@kernel.org>,
+	Pawel Laszczak <pawell@cadence.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Subject: Re: [PATCH v1 1/1] usb: cdns3: Synchronise PCI IDs via common data
+ base
+Message-ID: <20241112212447.GA1861184@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -87,99 +64,172 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CACzwLxgVJ2jROr8RWHXv++2m2tD9fvskp_MqTL7VhCPr-Eeeiw@mail.gmail.com>
+In-Reply-To: <20241112160125.2340972-1-andriy.shevchenko@linux.intel.com>
 
-On Wed, Nov 13, 2024 at 12:30:08AM +0500, Sabyrzhan Tasbolatov wrote:
-> I've re-read your and Oliver's comments and come up with this diff,
-> which is the same as v4 except it is within a spinlock.
+On Tue, Nov 12, 2024 at 06:01:25PM +0200, Andy Shevchenko wrote:
+> There are a few places in the kernel where PCI IDs for different Cadence
+> USB controllers are being used. Besides different naming, they duplicate
+> each other. Make this all in order by providing common definitions via
+> PCI IDs database and use in all users. While doing that, rename
+> definitions as Roger suggested.
 > 
-> diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-> index 86ee39db013f..47b299e03e11 100644
-> --- a/drivers/usb/class/cdc-wdm.c
-> +++ b/drivers/usb/class/cdc-wdm.c
-> @@ -598,8 +598,11 @@ static ssize_t wdm_read
->                 spin_unlock_irq(&desc->iuspin);
->         }
+> Suggested-by: Roger Quadros <rogerq@kernel.org>
+> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Acked-by: Bjorn Helgaas <bhelgaas@google.com>
+
+Looks like maybe something for the USB tree?
+
+> ---
+>  drivers/usb/cdns3/cdns3-pci-wrap.c       |  4 +---
+>  drivers/usb/cdns3/cdnsp-pci.c            | 26 +++++++++---------------
+>  drivers/usb/gadget/udc/cdns2/cdns2-pci.c |  3 +--
+>  drivers/usb/host/xhci-pci.c              |  5 ++---
+>  include/linux/pci_ids.h                  |  4 ++++
+>  5 files changed, 18 insertions(+), 24 deletions(-)
 > 
-> -       if (cntr > count)
-> -               cntr = count;
-> +       spin_lock_irq(&desc->iuspin);
-> +       /* Ensure cntr does not exceed available data in ubuf. */
-> +       cntr = min_t(size_t, count, desc->length);
-> +       spin_unlock_irq(&desc->iuspin);
+> diff --git a/drivers/usb/cdns3/cdns3-pci-wrap.c b/drivers/usb/cdns3/cdns3-pci-wrap.c
+> index 591d149de8f3..3b3b3dc75f35 100644
+> --- a/drivers/usb/cdns3/cdns3-pci-wrap.c
+> +++ b/drivers/usb/cdns3/cdns3-pci-wrap.c
+> @@ -37,8 +37,6 @@ struct cdns3_wrap {
+>  #define PCI_DRIVER_NAME		"cdns3-pci-usbss"
+>  #define PLAT_DRIVER_NAME	"cdns-usb3"
+>  
+> -#define PCI_DEVICE_ID_CDNS_USB3	0x0100
+> -
+>  static struct pci_dev *cdns3_get_second_fun(struct pci_dev *pdev)
+>  {
+>  	struct pci_dev *func;
+> @@ -189,7 +187,7 @@ static void cdns3_pci_remove(struct pci_dev *pdev)
+>  }
+>  
+>  static const struct pci_device_id cdns3_pci_ids[] = {
+> -	{ PCI_VDEVICE(CDNS, PCI_DEVICE_ID_CDNS_USB3) },
+> +	{ PCI_VDEVICE(CDNS, PCI_DEVICE_ID_CDNS_USBSS) },
+>  	{ 0, }
+>  };
+>  
+> diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
+> index 2d05368a6745..a51144504ff3 100644
+> --- a/drivers/usb/cdns3/cdnsp-pci.c
+> +++ b/drivers/usb/cdns3/cdnsp-pci.c
+> @@ -28,12 +28,6 @@
+>  #define PCI_DRIVER_NAME		"cdns-pci-usbssp"
+>  #define PLAT_DRIVER_NAME	"cdns-usbssp"
+>  
+> -#define PCI_DEVICE_ID_CDNS_USB3		0x0100
+> -#define PCI_DEVICE_ID_CDNS_UDC		0x0200
+> -
+> -#define PCI_CLASS_SERIAL_USB_CDNS_USB3	(PCI_CLASS_SERIAL_USB << 8 | 0x80)
+> -#define PCI_CLASS_SERIAL_USB_CDNS_UDC	PCI_CLASS_SERIAL_USB_DEVICE
+> -
+>  static struct pci_dev *cdnsp_get_second_fun(struct pci_dev *pdev)
+>  {
+>  	/*
+> @@ -41,10 +35,10 @@ static struct pci_dev *cdnsp_get_second_fun(struct pci_dev *pdev)
+>  	 * Platform has two function. The fist keeps resources for
+>  	 * Host/Device while the secon keeps resources for DRD/OTG.
+>  	 */
+> -	if (pdev->device == PCI_DEVICE_ID_CDNS_UDC)
+> -		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USB3, NULL);
+> -	if (pdev->device == PCI_DEVICE_ID_CDNS_USB3)
+> -		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_UDC, NULL);
+> +	if (pdev->device == PCI_DEVICE_ID_CDNS_USBSSP)
+> +		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USBSS, NULL);
+> +	if (pdev->device == PCI_DEVICE_ID_CDNS_USBSS)
+> +		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USBSSP, NULL);
+>  
+>  	return NULL;
+>  }
+> @@ -221,12 +215,12 @@ static const struct dev_pm_ops cdnsp_pci_pm_ops = {
+>  };
+>  
+>  static const struct pci_device_id cdnsp_pci_ids[] = {
+> -	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC),
+> -	  .class = PCI_CLASS_SERIAL_USB_CDNS_UDC },
+> -	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC),
+> -	  .class = PCI_CLASS_SERIAL_USB_CDNS_USB3 },
+> -	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB3),
+> -	  .class = PCI_CLASS_SERIAL_USB_CDNS_USB3 },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
+> +	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
+> +	  .class = PCI_CLASS_SERIAL_USB_CDNS },
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSS),
+> +	  .class = PCI_CLASS_SERIAL_USB_CDNS },
+>  	{ 0, }
+>  };
+>  
+> diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
+> index b1a8f772467c..e589593b4cbf 100644
+> --- a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
+> +++ b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
+> @@ -15,7 +15,6 @@
+>  #include "cdns2-gadget.h"
+>  
+>  #define PCI_DRIVER_NAME		"cdns-pci-usbhs"
+> -#define PCI_DEVICE_ID_CDNS_USB2	0x0120
+>  #define PCI_BAR_DEV		0
+>  #define PCI_DEV_FN_DEVICE	0
+>  
+> @@ -113,7 +112,7 @@ static const struct dev_pm_ops cdns2_pci_pm_ops = {
+>  };
+>  
+>  static const struct pci_device_id cdns2_pci_ids[] = {
+> -	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB2),
+> +	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB),
+>  	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
+>  	{ 0, }
+>  };
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 47c4f70793e4..b21474e81482 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -82,8 +82,6 @@
+>  #define PCI_DEVICE_ID_ASMEDIA_3042_XHCI			0x3042
+>  #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
+>  
+> -#define PCI_DEVICE_ID_CDNS_SSP				0x0200
+> -
+>  static const char hcd_name[] = "xhci_hcd";
+>  
+>  static struct hc_driver __read_mostly xhci_pci_hc_driver;
+> @@ -475,8 +473,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+>  		if (pdev->device == 0x9203)
+>  			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
+>  	}
 > +
->         rv = copy_to_user(buffer, desc->ubuf, cntr);
->         if (rv > 0) {
->                 rv = -EFAULT;
-
-You seem to be stuck in a rut, doing the same thing over and over again 
-and not realizing that it accomplishes nothing.  The spinlock here 
-doesn't help; it merely allows you to avoid calling READ_ONCE.
-
-> > Since the new code does the same thing as the old code, it cannot
-> > possibly fix any bugs.
+>  	if (pdev->vendor == PCI_VENDOR_ID_CDNS &&
+> -	    pdev->device == PCI_DEVICE_ID_CDNS_SSP)
+> +	    pdev->device == PCI_DEVICE_ID_CDNS_USBSSP)
+>  		xhci->quirks |= XHCI_CDNS_SCTX_QUIRK;
+>  
+>  	/* xHC spec requires PCI devices to support D3hot and D3cold */
+> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> index e4bddb927795..d2402bf4aea2 100644
+> --- a/include/linux/pci_ids.h
+> +++ b/include/linux/pci_ids.h
+> @@ -121,6 +121,7 @@
+>  #define PCI_CLASS_SERIAL_USB_OHCI	0x0c0310
+>  #define PCI_CLASS_SERIAL_USB_EHCI	0x0c0320
+>  #define PCI_CLASS_SERIAL_USB_XHCI	0x0c0330
+> +#define PCI_CLASS_SERIAL_USB_CDNS	0x0c0380
+>  #define PCI_CLASS_SERIAL_USB_DEVICE	0x0c03fe
+>  #define PCI_CLASS_SERIAL_FIBER		0x0c04
+>  #define PCI_CLASS_SERIAL_SMBUS		0x0c05
+> @@ -2421,6 +2422,9 @@
+>  #define PCI_VENDOR_ID_QCOM		0x17cb
+>  
+>  #define PCI_VENDOR_ID_CDNS		0x17cd
+> +#define PCI_DEVICE_ID_CDNS_USBSS	0x0100
+> +#define PCI_DEVICE_ID_CDNS_USB		0x0120
+> +#define PCI_DEVICE_ID_CDNS_USBSSP	0x0200
+>  
+>  #define PCI_VENDOR_ID_ARECA		0x17d3
+>  #define PCI_DEVICE_ID_ARECA_1110	0x1110
+> -- 
+> 2.43.0.rc1.1336.g36b5255a03ac
 > 
-> Without the reproducer I can not confirm that this fixes the hypothetical bug,
-> however here is my understand how the diff above can fix the memory info leak:
-> 
-> static ssize_t wdm_read() {
->         cntr = READ_ONCE(desc->length);
->         if (cntr == 0) {
->                 spin_lock_irq(&desc->iuspin);
-> 
->                 /* can remain 0 if not increased in wdm_in_callback() */
->                 cntr = desc->length;
-> 
->                 spin_unlock_irq(&desc->iuspin);
->         }
-> 
->         spin_lock_irq(&desc->iuspin);
->         /* take the minimum of whatever user requests `count` and
-> desc->length = 0 */
->         cntr = min_t(size_t, count, desc->length);
->         spin_lock_irq(&desc->iuspin);
-> 
->         /* cntr is 0, nothing to copy to the user space. */
->         rv = copy_to_user(buffer, desc->ubuf, cntr);
-
-This does not explain anything.  How do you think your change will avoid 
-the memory info leak?  That is, what differences between the old code 
-and the new code will cause the leak to happen with the old code and not 
-to happen with your new code?
-
-Note that if cntr is 0 then nothing is copied to user space so there is 
-no info leak.
-
-> > (Actually there is one other thing to watch out for: the difference
-> > between signed and unsigned values.  Here cntr and desc->length are
-> > signed whereas count is unsigned.  In theory that could cause problems
-> > -- it might even be related to the cause of the original bug report.
-> > Can you prove that desc->length will never be negative?)
-> 
-> desc->length can not be negative if I understand the following correctly:
-> 
-> static void wdm_in_callback(struct urb *urb)
-> {
->         ...
->         int length = urb->actual_length;
->        ...
->        if (length + desc->length > desc->wMaxCommand) {
->               /* The buffer would overflow */
->              ...
->        } else {
->               /* we may already be in overflow */
->               if (!test_bit(WDM_OVERFLOW, &desc->flags)) {
->                      ...
->                      desc->length += length;
->                      desc->reslength = length;
->        }
-> }
-> 
-> urb->actual_length is u32, actually, need to change `int length` to
-> `u32 length` though.
-
-You don't really need to change it.  urb->actual_length can never be 
-larger than urb->length.
-
-Alan Stern
 
