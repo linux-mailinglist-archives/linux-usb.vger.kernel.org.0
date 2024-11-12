@@ -1,153 +1,156 @@
-Return-Path: <linux-usb+bounces-17489-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17493-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6E79C607A
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 19:34:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1946C9C60F6
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 20:01:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7133CB305CA
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 15:56:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66359B85272
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 16:02:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE112205120;
-	Tue, 12 Nov 2024 15:52:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AEA6206E97;
+	Tue, 12 Nov 2024 15:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="A/tPLfXD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DhODKlZ3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91AD1204F8F
-	for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 15:52:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14CA9206E6E;
+	Tue, 12 Nov 2024 15:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731426756; cv=none; b=f+e/MKaT+MmOdc5S71971xHQPA90kfnQvxGHXfrjU5uwBDlxZ0BpPTH7urCaoklgNy6uCTHpgBQiXQ3oMnadFmJDeVhv6AppUt8LI9RV/1/A7ZSpnU4thCR6A80WSoG18KuOzDp9B2IYwTQzUZn/FZzzz7breGNQ+l/XJFyl0AQ=
+	t=1731427117; cv=none; b=KhrVvOSR4a/7Q9S4Q1SDpof4k3ry5lZzqEcOtIpN33PgTmkzMYO7O+5TtlFi8zfUExonu6ZTzfN0WbfWS6q5vjOWQo90+NPud4YrD/3tEDvbVyrNJCgtkmmPKD9st0/2rNKKZ3yayxI51V2cSBMeLHnsvTtXUyi2r8qbBp6X1MQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731426756; c=relaxed/simple;
-	bh=Tl1x5Bk+jUwBokslkn6nOHImIaTZVlEvg+0B1tgEYwU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hmIujtkDrF3v0gTOpP4Yb61IliZUMOgIH9jjgmv+8sqT09KR4nG3C/srUMyZKG2tK+MGJec2g4B5CZg5G63MYKY1Yb2vg2YpZKmMTR0OGGySl3KGDxvzqu4ugFN9Lzh+uLulNOiRMccM4CdZG/jOwp2ulbKSzRUrLwOS7zyoDxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=A/tPLfXD; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-460b16d4534so33688291cf.3
-        for <linux-usb@vger.kernel.org>; Tue, 12 Nov 2024 07:52:34 -0800 (PST)
+	s=arc-20240116; t=1731427117; c=relaxed/simple;
+	bh=kx9RV/7hh8OxwyU6O/CqIX9Yzgup8/L0Sqd2aGul450=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=W5Ja3ZBv0Xq+R6E/xbhSp6PoTR9VaPMm0YJmMD56uPgtgpNld6iHicgCLMsGSYuv+joZEuQEXYxouNWME1ZQQdjdyrpEn7+/PnwTsJQP/9b4hDAMWzSitoi2R9HBvxqO26dVHNBFMZMfOjxaxJIRyzAP5KW1i71imvcpgb7rBlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DhODKlZ3; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4315c1c7392so51784405e9.1;
+        Tue, 12 Nov 2024 07:58:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1731426753; x=1732031553; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1XEndPtU5GDkMHoEO1w7O3RQK19ymAjkNoxM3jg4QLk=;
-        b=A/tPLfXDJwRPCJBs9Gz3OdJLtmImtfMPu+JWHpbDzwwkf8EH770c7/eLM/35mpa7Wu
-         3yCkskezdXfn+p+E+4fgcl7DMe4Xvv5yfgpNBqQNCVcZFe0YzxK01ovacFsPiD1saoqo
-         yJ3OsbfX6DEijrCxRlNtsgZgr2pMnM4mS+wXfKOguQDJJ6KYuq9U/JDrOIQ36zxtCPyh
-         ZL4QeSebS5JOCwczM/yd/fY7yRM73xEAKxYGoDzfekyX6NMxWTwDphO0ZLuRnu00yggY
-         39kVcLdMVZ0NqyVKbC3+dcAzz8EAojbQ1X1kiwjnulwi6mpxzQAivy0PdwuIxSH5W8Yg
-         ZPgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731426753; x=1732031553;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1731427114; x=1732031914; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1XEndPtU5GDkMHoEO1w7O3RQK19ymAjkNoxM3jg4QLk=;
-        b=pNgwwDZH6/T+KTTBKqe7RMJX0NkFq2vKIGY7XplFwUGMnk9DWZaBhDL+MmIH6/YPJc
-         q//cntZWDP4b9PFi/IIb0Crpb/WZYcaceEUxCPX5ncneXd7T+pLTL/54GqlUOyYfNyLe
-         vWLdTAmEid0ki8wxfvpwWY+fuFdFbX/Xw7dzRnPHT27B3azTvXML5UBPE5H12RQKR9FE
-         WysNtRy9GjQHjDvYMYQMJWt+MuN/Wd51gXCfdidfYGBY7aCWW7fm+fZPn7JfuCVP/1YN
-         1YBqbmNcpJXx+CI3K76zCdRpLOpYZ36P0U4Gqvknff3NQbubMqA2WP1TCpRtSTfgJrhK
-         qVFA==
-X-Forwarded-Encrypted: i=1; AJvYcCX1adbnHslC+1iVzd+WvwmmtVXywbXLgLNk/Oc3AQE57bc3wYQUctjQbjsdc2ESyFCGeckZy434AqY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynVFHGAYWaBkSE43vDbb10hcRtDlj+kEOuuVt05pLG3aigCGA5
-	1LpSY3L1EGsCak3NR0g8NAm3byln3kwub14gqugA9gufokDamb8RFNVOs+kxoQ==
-X-Google-Smtp-Source: AGHT+IGx09QnY+a4QJcLEf4HugOufvp4qILo6Oon7AWW2cEFrH62MxQ9c2KHoGuxelT2bD8VHWHiRQ==
-X-Received: by 2002:a05:622a:1901:b0:45f:bca0:b8d2 with SMTP id d75a77b69052e-4630932b3efmr232082961cf.20.1731426753453;
-        Tue, 12 Nov 2024 07:52:33 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.12.5])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-462ff46d293sm76541571cf.47.2024.11.12.07.52.32
+        bh=jKbcoc75O9Cb98zpsIShjH5Q68sP76O0sTpNDdmUgyw=;
+        b=DhODKlZ3B+oSCMcRT7Iy8x+r1xllM4m1xtrqb5GCG/LVmfrxkpeyXh1XU95+jmNwt7
+         aPXZ7l0SDhXSbGKLILVBwUKahCyphbW9sUBKTaYSMwgfzTzUv+4DGsRnl5Dumk6bjdjk
+         dfFU7HmQ2adbC5FWBxYCNObD3Gfzpfg2u6HXXH2cvbAUMjJqKul1pEWcLdjhdT9lE3sC
+         Ysr7kgz24D7lglyMT3XFrRz7oahnRZBlCzUrmZnr3cvyBhB7fY1matZ68F5PMIEAQ5Fg
+         6wCZPHn4hbKce62/vbzsyYCXINeOP8eX7vcr9VXyEYs+cPn6HGVKSOikn7hjB+rrvPRz
+         Ehsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731427114; x=1732031914;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jKbcoc75O9Cb98zpsIShjH5Q68sP76O0sTpNDdmUgyw=;
+        b=RSlEWcqPrn+MPtR0N7B08C/S8OqBfzY1DABZpOPpLb3oDrsdw67qJSkjywSYlmVQBH
+         BKz3OEUlVU7Cd5nv3GEFUjD5UMJD8N87d5K+7OnMityl/W/69navb7MqnakFz/wjisdg
+         DV1FiI3Sy3dRO9dyuCp3sEEnXrODnV37AKATVExyrUWxa60na4WoC189OTv+pFxyMGEi
+         dmnC9DZaX9EcP46oX3Rg8PkHpgdpcx9wdfZ+5ZwfwB2/IHnSD5vLBgAuEIfoIpw/KFqo
+         IIgwzmQFNthnr5R5DuO/mPvolORuRKvm02W7U6fhYjCfJSmCXos4v0abbhCmfBgZjx1w
+         KJuQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXWTzuPShf/FRqVBa1uv8XGR4eIuTh3dQ5DyiDFmo+TXDZe+nyCOic367mLfmMhAnpFED8k9UBKXlc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLrFTm6Cva9ci8ykSJWVy4+SlvgdIU+0uXbXqBevIAXxYgiq1j
+	0e/ji0TB9pmB4e+aVb/pLCq+0PguRgPcGplUMB0/YcS6zlhBMVWX
+X-Google-Smtp-Source: AGHT+IHFM0NmW34275yJbQeBGl/55ILfHlCyt7SGKx4KH7xPXJmZehxAQekfXV7mMWXzQaSI1omRNw==
+X-Received: by 2002:a05:6000:402a:b0:37d:5103:8894 with SMTP id ffacd0b85a97d-381f1881319mr13351957f8f.42.1731427114129;
+        Tue, 12 Nov 2024 07:58:34 -0800 (PST)
+Received: from work.. (2.133.25.254.dynamic.telecom.kz. [2.133.25.254])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381edc1104asm15991136f8f.88.2024.11.12.07.58.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 07:52:32 -0800 (PST)
-Date: Tue, 12 Nov 2024 10:52:30 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Cc: gregkh@linuxfoundation.org, oneukum@suse.com,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH v4] usb/cdc-wdm: fix memory info leak in wdm_read
-Message-ID: <824e839d-ee72-4923-bc88-e9cc58201b07@rowland.harvard.edu>
-References: <2024111232-relative-bottom-4995@gregkh>
- <20241112132931.3504749-1-snovitoll@gmail.com>
+        Tue, 12 Nov 2024 07:58:33 -0800 (PST)
+From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+To: gregkh@linuxfoundation.org,
+	andreyknvl@gmail.com,
+	b-liu@ti.com,
+	johan@kernel.org,
+	oneukum@suse.com,
+	stern@rowland.harvard.edu
+Cc: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	snovitoll@gmail.com,
+	usb-storage@lists.one-eyed-alien.net
+Subject: [PATCH v2 3/8] drivers/usb/host: refactor min/max with min_t/max_t
+Date: Tue, 12 Nov 2024 20:58:12 +0500
+Message-Id: <20241112155817.3512577-4-snovitoll@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20241112155817.3512577-1-snovitoll@gmail.com>
+References: <2024111251-spill-hatchback-72da@gregkh>
+ <20241112155817.3512577-1-snovitoll@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241112132931.3504749-1-snovitoll@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 12, 2024 at 06:29:31PM +0500, Sabyrzhan Tasbolatov wrote:
-> syzbot reported "KMSAN: kernel-infoleak in wdm_read", though there is no
-> reproducer and the only report for this issue.
-> 
-> The check:
-> 
-> 	if (cntr > count)
-> 		cntr = count;
-> 
-> only limits `cntr` to `count` (the number of bytes requested by
-> userspace), but it doesn't verify that `desc->ubuf` actually has `count`
-> bytes. This oversight can lead to situations where `copy_to_user` reads
-> uninitialized data from `desc->ubuf`.
-> 
-> This patch makes sure `cntr` respects` both the `desc->length` and the
-> `count` requested by userspace, preventing any uninitialized memory from
-> leaking into userspace.
+Ensure type safety by using min_t/max_t instead of casted min/max.
 
-> ---
->  drivers/usb/class/cdc-wdm.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-> index 86ee39db013f..5a500973b463 100644
-> --- a/drivers/usb/class/cdc-wdm.c
-> +++ b/drivers/usb/class/cdc-wdm.c
-> @@ -598,8 +598,9 @@ static ssize_t wdm_read
->  		spin_unlock_irq(&desc->iuspin);
->  	}
+Signed-off-by: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+---
+ drivers/usb/host/ehci-hcd.c     | 2 +-
+ drivers/usb/host/oxu210hp-hcd.c | 4 ++--
+ drivers/usb/host/r8a66597-hcd.c | 2 +-
+ 3 files changed, 4 insertions(+), 4 deletions(-)
 
-Note that the code immediately before the "if" statement which ends here 
-does:
+diff --git a/drivers/usb/host/ehci-hcd.c b/drivers/usb/host/ehci-hcd.c
+index cbc0b86fcc36..6de79ac5e6a4 100644
+--- a/drivers/usb/host/ehci-hcd.c
++++ b/drivers/usb/host/ehci-hcd.c
+@@ -547,7 +547,7 @@ static int ehci_init(struct usb_hcd *hcd)
+ 		 * make problems:  throughput reduction (!), data errors...
+ 		 */
+ 		if (park) {
+-			park = min(park, (unsigned) 3);
++			park = min_t(unsigned int, park, 3);
+ 			temp |= CMD_PARK;
+ 			temp |= park << 8;
+ 		}
+diff --git a/drivers/usb/host/oxu210hp-hcd.c b/drivers/usb/host/oxu210hp-hcd.c
+index ca3859463ba1..eaa34ee0a535 100644
+--- a/drivers/usb/host/oxu210hp-hcd.c
++++ b/drivers/usb/host/oxu210hp-hcd.c
+@@ -902,7 +902,7 @@ static int oxu_buf_alloc(struct oxu_hcd *oxu, struct ehci_qtd *qtd, int len)
+ 
+ 	/* Find a suitable available data buffer */
+ 	for (i = 0; i < BUFFER_NUM;
+-			i += max(a_blocks, (int)oxu->db_used[i])) {
++			i += max_t(int, a_blocks, oxu->db_used[i])) {
+ 
+ 		/* Check all the required blocks are available */
+ 		for (j = 0; j < a_blocks; j++)
+@@ -3040,7 +3040,7 @@ static int oxu_hcd_init(struct usb_hcd *hcd)
+ 		 * make problems:  throughput reduction (!), data errors...
+ 		 */
+ 		if (park) {
+-			park = min(park, (unsigned) 3);
++			park = min_t(unsigned int, park, 3);
+ 			temp |= CMD_PARK;
+ 			temp |= park << 8;
+ 		}
+diff --git a/drivers/usb/host/r8a66597-hcd.c b/drivers/usb/host/r8a66597-hcd.c
+index 6576515a29cd..d693fdfaa542 100644
+--- a/drivers/usb/host/r8a66597-hcd.c
++++ b/drivers/usb/host/r8a66597-hcd.c
+@@ -1336,7 +1336,7 @@ static void packet_read(struct r8a66597 *r8a66597, u16 pipenum)
+ 		buf = (void *)urb->transfer_buffer + urb->actual_length;
+ 		urb_len = urb->transfer_buffer_length - urb->actual_length;
+ 	}
+-	bufsize = min(urb_len, (int) td->maxpacket);
++	bufsize = min_t(int, urb_len, td->maxpacket);
+ 	if (rcv_len <= bufsize) {
+ 		size = rcv_len;
+ 	} else {
+-- 
+2.34.1
 
-	cntr = READ_ONCE(desc->length);
-
-And the code at the end of the "if" block does:
-
-		cntr = desc->length;
-
-(while holding the spinlock).  Thus it is guaranteed that either way, 
-cntr is equal to desc->length when we reach this point.
-
->  
-> -	if (cntr > count)
-> -		cntr = count;
-> +	/* Ensure cntr does not exceed available data in ubuf. */
-> +	cntr = min_t(size_t, count, desc->length);
-
-And therefore this line does exactly the same computation as the code 
-you removed.  Except for one thing: At this point the spinlock is not 
-held, and your new code does not call READ_ONCE().  That is an 
-oversight.
-
-Since the new code does the same thing as the old code, it cannot 
-possibly fix any bugs.
-
-(Actually there is one other thing to watch out for: the difference 
-between signed and unsigned values.  Here cntr and desc->length are 
-signed whereas count is unsigned.  In theory that could cause problems 
--- it might even be related to the cause of the original bug report.  
-Can you prove that desc->length will never be negative?)
-
-Alan Stern
 
