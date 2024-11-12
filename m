@@ -1,90 +1,81 @@
-Return-Path: <linux-usb+bounces-17498-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17499-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 433289C5CB9
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 17:04:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D24129C5E81
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 18:14:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 01A8D28324A
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 16:04:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27BF2BA513F
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 16:06:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E075D20DD7E;
-	Tue, 12 Nov 2024 15:58:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AC992123F3;
+	Tue, 12 Nov 2024 16:01:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NkDuRESP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DUJRdw6M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8AAD20CCEF;
-	Tue, 12 Nov 2024 15:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037E9206E61;
+	Tue, 12 Nov 2024 16:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731427130; cv=none; b=dfxdd7PxMChRRok1Dfalbgp2mLYzA08EISRFRqsbYwnXRUI1+GNvTxTpUcrwSxl/TYG4/J8evAqnODh0+b4jwQ/63lTxd8hwPawNIdtFcZPl8j6g3TuBG/pE4Nn5cBJEhzvPC3eOGL1WS3gs4M5oiYK/7vxII67hddE5IJEwtKQ=
+	t=1731427293; cv=none; b=DqKta/rPgfGQYlTHvVHNnELGp2IEHogQUZFuIly6MmQOboxjAhNdyD2EV5hFSazv1XSUBdGMC0KsfjfjaHmNW1tPSXqcGNJIsCQ4aZjjkZonCBPV6k2jkI2Z8PCaPKusavvWL6rxi3SIbnUUNcVZiKwZ/ZtxvI8x9aCEy/ruGq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731427130; c=relaxed/simple;
-	bh=BS+W4NLNitc/rh658uxhSObPTer0s+SXmyx9+eClOOU=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=b0Cv3uJIjPe7yiAR/SPslOPl2SCkvaDcHrxevb0lAHm/NC71rDeP5932gDm2W7yXe+IiMlk3HF7Nikb0sOH/Wv4cQQ+0HUNficb85MzQXE7ZgHE1rIedNX8iSp/HPlcDJW48JbrNeGqqCintdMW47iMy823RDlEGl0WFhlg+z5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NkDuRESP; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-37d495d217bso5321322f8f.0;
-        Tue, 12 Nov 2024 07:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731427127; x=1732031927; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DPqm3+0wFCwqO/jzcOFah7stBZqw75yUdyOGq2gHnGA=;
-        b=NkDuRESPY9x71FUm22u5rIDSH3CnTX04iuRRgQkCizoPM22h4g+ctrlPbyzdFTKXph
-         73BQ3Up0867piPZ/ufmSRHfbkbZXHRzT1wN5xzjQzL/MFqIy4JhFnyjtP+dNK8FDIuoo
-         SmzdVANkpmEDA2KRMGNm8/5x/f8KZ7HQExt0qLyNyW1yEU5DUQ4bTw/dM0DkLPKSVV5J
-         MRMroDUdZ3G7zOh7233R4IkrH67QMylyRLCePy4uekUH/z8HcLGtaRKFW/9jx5K729hC
-         XhgS/YKqPbcOb6PP3lKxWJQMYPPIDdXtziYYNl5A+9udPlbGOMO7nq8rDLMaZwXarxyK
-         4JPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731427127; x=1732031927;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DPqm3+0wFCwqO/jzcOFah7stBZqw75yUdyOGq2gHnGA=;
-        b=YcZb6jO+9isep5qgZ91fex5oGQHOt8CsdOwWRt6QBn0ycFR4KYIHCKDtqypzcUXCKz
-         BtP8244N42Jg3vSMECrSUmKXsDUSpRPT48gDnjzNpVYBuSj2uQyW+5upOcZC2+82h+t4
-         P+51uQPceD4kywfuzYJl762WZ5mTAtYsEPS0ozDxZlyrraSdAPDWdAjbv3JLrKpwcsuE
-         FeiL9rzAd5Q1Krw0uLYMM4IVEWcb3ke7aUJhttpkDXsl0GXpv6INr+FbqVFentBLOxbT
-         qnYeA1kwoMa72f4swYG7ycedDhwMVrx9mSlJYqH1T2BYJ5OwSwd827QZONPvHvKJwE/B
-         WsNg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhVZY3MKqz6ir6pBbfSAi30Ttc4o12d3d9BmYH2swZ50KqzoN19bIfZV2HxNTmJaiF0DnSHE39c8Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytYb7pOF5R3wfVduC4cL5wXQDI92jaF8A6pZh8OKqIJi5efsNn
-	kZzekzJDI4HR8ZANVqQ45FhN/J6ycDnV9bqGRUTaqq4frXTWHRI3
-X-Google-Smtp-Source: AGHT+IGF1oY4L6RmN+BZPkWQctTMCBFmLlST8MkZ1QDOGfGAvINLvwrekWN3unxTDcmS+thQ/mgwCA==
-X-Received: by 2002:a05:6000:1564:b0:37d:4376:6e1d with SMTP id ffacd0b85a97d-381f1884855mr18317807f8f.41.1731427127167;
-        Tue, 12 Nov 2024 07:58:47 -0800 (PST)
-Received: from work.. (2.133.25.254.dynamic.telecom.kz. [2.133.25.254])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-381edc1104asm15991136f8f.88.2024.11.12.07.58.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 12 Nov 2024 07:58:46 -0800 (PST)
-From: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-To: gregkh@linuxfoundation.org,
-	andreyknvl@gmail.com,
-	b-liu@ti.com,
-	johan@kernel.org,
-	oneukum@suse.com,
-	stern@rowland.harvard.edu
-Cc: linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1731427293; c=relaxed/simple;
+	bh=rE1n742XV6Hh13YXAK03XaqAi+NRIgacwErEEh/8Nto=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Tgk4q+bPAJhgGQ8eGWIb+SgFnFiPRsgnOd9cYN6kS/xamsUZTWzXF0Li7ph7GNYCpuTZYQhkU32qKaM/kxxpnru4Ny0RBYHWc/nJTSFYXZ6qaluQl7V4+HED8AUZcVPi5Xmqrcpfs4kv0uoH0s38DG/RU1BXxO7EQ4i0He9Oy7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DUJRdw6M; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731427292; x=1762963292;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=rE1n742XV6Hh13YXAK03XaqAi+NRIgacwErEEh/8Nto=;
+  b=DUJRdw6Mux3ocdraaH8w4dphmI5Kxh0+lvt9V1QT80U2KSRoA3US2JG9
+   xur+QDzg2Ux0eqTkQF0Nda9D8Vzs+eZ4xnzU4HYX7I1SoOTvvp6YegTyh
+   4f9hlrLCQ+SM7jt6Cax5xfY3FXer2LRVYRc+xll5gDXMobCjAH+FDqO+7
+   4V3xY3u3HBXxdUIt2w4q1navglVz7ZZLYTlc1cQn0cxV1BBoxVs1c+IrY
+   ICYrVQ8KaKNXr62hK7cqiHMVLbq5d9gNjxp34oqAEAtqrEWrxpJxveORn
+   BP5PONUCrFlRZkqoTINgFv0/B9m5Tm+2yOvfw6Fz98mwzPtAS5I6UTNLP
+   w==;
+X-CSE-ConnectionGUID: r00eIVo0RXWAump5SFMEpA==
+X-CSE-MsgGUID: ryj38hkrTmmaXlz06P6hWg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="41831474"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="41831474"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 08:01:31 -0800
+X-CSE-ConnectionGUID: 7Orz8rzdQA+vB3J+K3Cg1A==
+X-CSE-MsgGUID: UQQKbw39RLis5EwXPvg7zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,148,1728975600"; 
+   d="scan'208";a="87489572"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa009.jf.intel.com with ESMTP; 12 Nov 2024 08:01:28 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 440FA1BE; Tue, 12 Nov 2024 18:01:27 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	Fenghua Yu <fenghua.yu@intel.com>,
 	linux-usb@vger.kernel.org,
-	snovitoll@gmail.com,
-	usb-storage@lists.one-eyed-alien.net
-Subject: [PATCH v2 8/8] drivers/usb/storage: refactor min with min_t
-Date: Tue, 12 Nov 2024 20:58:17 +0500
-Message-Id: <20241112155817.3512577-9-snovitoll@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241112155817.3512577-1-snovitoll@gmail.com>
-References: <2024111251-spill-hatchback-72da@gregkh>
- <20241112155817.3512577-1-snovitoll@gmail.com>
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org
+Cc: Peter Chen <peter.chen@kernel.org>,
+	Pawel Laszczak <pawell@cadence.com>,
+	Roger Quadros <rogerq@kernel.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>
+Subject: [PATCH v1 1/1] usb: cdns3: Synchronise PCI IDs via common data base
+Date: Tue, 12 Nov 2024 18:01:25 +0200
+Message-ID: <20241112160125.2340972-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -93,77 +84,164 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Ensure type safety by using min_t() instead of casted min().
+There are a few places in the kernel where PCI IDs for different Cadence
+USB controllers are being used. Besides different naming, they duplicate
+each other. Make this all in order by providing common definitions via
+PCI IDs database and use in all users. While doing that, rename
+definitions as Roger suggested.
 
-Signed-off-by: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+Suggested-by: Roger Quadros <rogerq@kernel.org>
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/usb/storage/sddr09.c | 4 ++--
- drivers/usb/storage/sddr55.c | 8 ++++----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/usb/cdns3/cdns3-pci-wrap.c       |  4 +---
+ drivers/usb/cdns3/cdnsp-pci.c            | 26 +++++++++---------------
+ drivers/usb/gadget/udc/cdns2/cdns2-pci.c |  3 +--
+ drivers/usb/host/xhci-pci.c              |  5 ++---
+ include/linux/pci_ids.h                  |  4 ++++
+ 5 files changed, 18 insertions(+), 24 deletions(-)
 
-diff --git a/drivers/usb/storage/sddr09.c b/drivers/usb/storage/sddr09.c
-index 03d1b9c69ea1..30ee76cfef05 100644
---- a/drivers/usb/storage/sddr09.c
-+++ b/drivers/usb/storage/sddr09.c
-@@ -752,7 +752,7 @@ sddr09_read_data(struct us_data *us,
- 	// a bounce buffer and move the data a piece at a time between the
- 	// bounce buffer and the actual transfer buffer.
+diff --git a/drivers/usb/cdns3/cdns3-pci-wrap.c b/drivers/usb/cdns3/cdns3-pci-wrap.c
+index 591d149de8f3..3b3b3dc75f35 100644
+--- a/drivers/usb/cdns3/cdns3-pci-wrap.c
++++ b/drivers/usb/cdns3/cdns3-pci-wrap.c
+@@ -37,8 +37,6 @@ struct cdns3_wrap {
+ #define PCI_DRIVER_NAME		"cdns3-pci-usbss"
+ #define PLAT_DRIVER_NAME	"cdns-usb3"
  
--	len = min(sectors, (unsigned int) info->blocksize) * info->pagesize;
-+	len = min_t(unsigned int, sectors, info->blocksize) * info->pagesize;
- 	buffer = kmalloc(len, GFP_NOIO);
- 	if (!buffer)
- 		return -ENOMEM;
-@@ -997,7 +997,7 @@ sddr09_write_data(struct us_data *us,
- 	 * at a time between the bounce buffer and the actual transfer buffer.
+-#define PCI_DEVICE_ID_CDNS_USB3	0x0100
+-
+ static struct pci_dev *cdns3_get_second_fun(struct pci_dev *pdev)
+ {
+ 	struct pci_dev *func;
+@@ -189,7 +187,7 @@ static void cdns3_pci_remove(struct pci_dev *pdev)
+ }
+ 
+ static const struct pci_device_id cdns3_pci_ids[] = {
+-	{ PCI_VDEVICE(CDNS, PCI_DEVICE_ID_CDNS_USB3) },
++	{ PCI_VDEVICE(CDNS, PCI_DEVICE_ID_CDNS_USBSS) },
+ 	{ 0, }
+ };
+ 
+diff --git a/drivers/usb/cdns3/cdnsp-pci.c b/drivers/usb/cdns3/cdnsp-pci.c
+index 2d05368a6745..a51144504ff3 100644
+--- a/drivers/usb/cdns3/cdnsp-pci.c
++++ b/drivers/usb/cdns3/cdnsp-pci.c
+@@ -28,12 +28,6 @@
+ #define PCI_DRIVER_NAME		"cdns-pci-usbssp"
+ #define PLAT_DRIVER_NAME	"cdns-usbssp"
+ 
+-#define PCI_DEVICE_ID_CDNS_USB3		0x0100
+-#define PCI_DEVICE_ID_CDNS_UDC		0x0200
+-
+-#define PCI_CLASS_SERIAL_USB_CDNS_USB3	(PCI_CLASS_SERIAL_USB << 8 | 0x80)
+-#define PCI_CLASS_SERIAL_USB_CDNS_UDC	PCI_CLASS_SERIAL_USB_DEVICE
+-
+ static struct pci_dev *cdnsp_get_second_fun(struct pci_dev *pdev)
+ {
+ 	/*
+@@ -41,10 +35,10 @@ static struct pci_dev *cdnsp_get_second_fun(struct pci_dev *pdev)
+ 	 * Platform has two function. The fist keeps resources for
+ 	 * Host/Device while the secon keeps resources for DRD/OTG.
  	 */
+-	if (pdev->device == PCI_DEVICE_ID_CDNS_UDC)
+-		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USB3, NULL);
+-	if (pdev->device == PCI_DEVICE_ID_CDNS_USB3)
+-		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_UDC, NULL);
++	if (pdev->device == PCI_DEVICE_ID_CDNS_USBSSP)
++		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USBSS, NULL);
++	if (pdev->device == PCI_DEVICE_ID_CDNS_USBSS)
++		return pci_get_device(pdev->vendor, PCI_DEVICE_ID_CDNS_USBSSP, NULL);
  
--	len = min(sectors, (unsigned int) info->blocksize) * info->pagesize;
-+	len = min_t(unsigned int, sectors, info->blocksize) * info->pagesize;
- 	buffer = kmalloc(len, GFP_NOIO);
- 	if (!buffer) {
- 		kfree(blockbuffer);
-diff --git a/drivers/usb/storage/sddr55.c b/drivers/usb/storage/sddr55.c
-index b8227478a7ad..a37fc505c57f 100644
---- a/drivers/usb/storage/sddr55.c
-+++ b/drivers/usb/storage/sddr55.c
-@@ -206,7 +206,7 @@ static int sddr55_read_data(struct us_data *us,
- 	// a bounce buffer and move the data a piece at a time between the
- 	// bounce buffer and the actual transfer buffer.
+ 	return NULL;
+ }
+@@ -221,12 +215,12 @@ static const struct dev_pm_ops cdnsp_pci_pm_ops = {
+ };
  
--	len = min((unsigned int) sectors, (unsigned int) info->blocksize >>
-+	len = min_t(unsigned int, sectors, info->blocksize >>
- 			info->smallpageshift) * PAGESIZE;
- 	buffer = kmalloc(len, GFP_NOIO);
- 	if (buffer == NULL)
-@@ -224,7 +224,7 @@ static int sddr55_read_data(struct us_data *us,
+ static const struct pci_device_id cdnsp_pci_ids[] = {
+-	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC),
+-	  .class = PCI_CLASS_SERIAL_USB_CDNS_UDC },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_UDC),
+-	  .class = PCI_CLASS_SERIAL_USB_CDNS_USB3 },
+-	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB3),
+-	  .class = PCI_CLASS_SERIAL_USB_CDNS_USB3 },
++	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
++	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
++	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSSP),
++	  .class = PCI_CLASS_SERIAL_USB_CDNS },
++	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USBSS),
++	  .class = PCI_CLASS_SERIAL_USB_CDNS },
+ 	{ 0, }
+ };
  
- 		// Read as many sectors as possible in this block
+diff --git a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
+index b1a8f772467c..e589593b4cbf 100644
+--- a/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
++++ b/drivers/usb/gadget/udc/cdns2/cdns2-pci.c
+@@ -15,7 +15,6 @@
+ #include "cdns2-gadget.h"
  
--		pages = min((unsigned int) sectors << info->smallpageshift,
-+		pages = min_t(unsigned int, sectors << info->smallpageshift,
- 				info->blocksize - page);
- 		len = pages << info->pageshift;
+ #define PCI_DRIVER_NAME		"cdns-pci-usbhs"
+-#define PCI_DEVICE_ID_CDNS_USB2	0x0120
+ #define PCI_BAR_DEV		0
+ #define PCI_DEV_FN_DEVICE	0
  
-@@ -333,7 +333,7 @@ static int sddr55_write_data(struct us_data *us,
- 	// a bounce buffer and move the data a piece at a time between the
- 	// bounce buffer and the actual transfer buffer.
+@@ -113,7 +112,7 @@ static const struct dev_pm_ops cdns2_pci_pm_ops = {
+ };
  
--	len = min((unsigned int) sectors, (unsigned int) info->blocksize >>
-+	len = min_t(unsigned int, sectors, info->blocksize >>
- 			info->smallpageshift) * PAGESIZE;
- 	buffer = kmalloc(len, GFP_NOIO);
- 	if (buffer == NULL)
-@@ -351,7 +351,7 @@ static int sddr55_write_data(struct us_data *us,
+ static const struct pci_device_id cdns2_pci_ids[] = {
+-	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB2),
++	{ PCI_DEVICE(PCI_VENDOR_ID_CDNS, PCI_DEVICE_ID_CDNS_USB),
+ 	  .class = PCI_CLASS_SERIAL_USB_DEVICE },
+ 	{ 0, }
+ };
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 47c4f70793e4..b21474e81482 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -82,8 +82,6 @@
+ #define PCI_DEVICE_ID_ASMEDIA_3042_XHCI			0x3042
+ #define PCI_DEVICE_ID_ASMEDIA_3242_XHCI			0x3242
  
- 		// Write as many sectors as possible in this block
+-#define PCI_DEVICE_ID_CDNS_SSP				0x0200
+-
+ static const char hcd_name[] = "xhci_hcd";
  
--		pages = min((unsigned int) sectors << info->smallpageshift,
-+		pages = min_t(unsigned int, sectors << info->smallpageshift,
- 				info->blocksize - page);
- 		len = pages << info->pageshift;
+ static struct hc_driver __read_mostly xhci_pci_hc_driver;
+@@ -475,8 +473,9 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 		if (pdev->device == 0x9203)
+ 			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
+ 	}
++
+ 	if (pdev->vendor == PCI_VENDOR_ID_CDNS &&
+-	    pdev->device == PCI_DEVICE_ID_CDNS_SSP)
++	    pdev->device == PCI_DEVICE_ID_CDNS_USBSSP)
+ 		xhci->quirks |= XHCI_CDNS_SCTX_QUIRK;
  
+ 	/* xHC spec requires PCI devices to support D3hot and D3cold */
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index e4bddb927795..d2402bf4aea2 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -121,6 +121,7 @@
+ #define PCI_CLASS_SERIAL_USB_OHCI	0x0c0310
+ #define PCI_CLASS_SERIAL_USB_EHCI	0x0c0320
+ #define PCI_CLASS_SERIAL_USB_XHCI	0x0c0330
++#define PCI_CLASS_SERIAL_USB_CDNS	0x0c0380
+ #define PCI_CLASS_SERIAL_USB_DEVICE	0x0c03fe
+ #define PCI_CLASS_SERIAL_FIBER		0x0c04
+ #define PCI_CLASS_SERIAL_SMBUS		0x0c05
+@@ -2421,6 +2422,9 @@
+ #define PCI_VENDOR_ID_QCOM		0x17cb
+ 
+ #define PCI_VENDOR_ID_CDNS		0x17cd
++#define PCI_DEVICE_ID_CDNS_USBSS	0x0100
++#define PCI_DEVICE_ID_CDNS_USB		0x0120
++#define PCI_DEVICE_ID_CDNS_USBSSP	0x0200
+ 
+ #define PCI_VENDOR_ID_ARECA		0x17d3
+ #define PCI_DEVICE_ID_ARECA_1110	0x1110
 -- 
-2.34.1
+2.43.0.rc1.1336.g36b5255a03ac
 
 
