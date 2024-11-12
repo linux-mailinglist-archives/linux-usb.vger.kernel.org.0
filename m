@@ -1,54 +1,77 @@
-Return-Path: <linux-usb+bounces-17474-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17475-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D38CD9C5671
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 12:28:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0769D9C5703
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 12:52:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 474AB2882A1
-	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 11:28:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C12A32810A8
+	for <lists+linux-usb@lfdr.de>; Tue, 12 Nov 2024 11:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC3B9217F35;
-	Tue, 12 Nov 2024 11:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E72BC1CD1F4;
+	Tue, 12 Nov 2024 11:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wpwk+iqE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iE5MbN0N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E21B2144CF;
-	Tue, 12 Nov 2024 11:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4EBD1BCA11;
+	Tue, 12 Nov 2024 11:51:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731410006; cv=none; b=jYpsg2olbdhaXG0+D8Z5Zp7SHU5/zs+47jGE8Ruy1+yxWUr1ZK9i4j6YzR0jGRqARzUtd5liCSKDeedIvjzGDIAVPYPCKc++/N2G1MUlLfesyvJy2SfV2Q2KszSKzlE565nvKgL2CV6bGVonPzfN5ijP+JzmG+YACl4FJzAlXWU=
+	t=1731412306; cv=none; b=Bh+q2ohESEFYTVyCHZSxaefol2gbyiLOL6rBK0YEOrezBaBZwI+0DGqY6Q9+qZsWrfTQYU5Do2U3w7UaJAwre+qzWi566QpCcAgRyhbbzqhlYSxkRRS6qWX43+JccK1XapWWUmI4p6hXeA6awjRLNN6w4BqkDrNzMZq73d+i8vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731410006; c=relaxed/simple;
-	bh=0Iat0lTwpP+/G7Ddg3nrQ+Peg7j8NA0ItxrWTgviLEo=;
+	s=arc-20240116; t=1731412306; c=relaxed/simple;
+	bh=IDSB+0NIZbf11fpgWGAanQLivWHIwGk+LTEmDiC46GQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MDyGxzTGmCHr+p04skOHz18zaLKAVyd/w6PGmeoYBwsVlK3vsJp4iBVv+5It83TH9nE4w++j6JVEupBvN/EQKom0Bbdp+kUgBNKF14Pm8Bv9xOlmeIqxfmQJCdrbgmH45k3IioTVfVU/M9ArN7AFjEo66ivZHPZX3dSZJGm7tBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wpwk+iqE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E22FC4CECD;
-	Tue, 12 Nov 2024 11:13:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1731410006;
-	bh=0Iat0lTwpP+/G7Ddg3nrQ+Peg7j8NA0ItxrWTgviLEo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=wpwk+iqEUT3ij7WVcF0M/B/BPj1MvbOl4yo753HpKUyoSGIvyteOT2eAxnZSoLeSo
-	 ykF9EFCMtpvlgM1TdFJrVfzkCI6g2UR3/qZD8CLXizP2dckxaMk7TE0mS0JCyW1qI6
-	 VsEtIcjBOyO722LE3NDiN8AIj3nlgmy9C/DDSPBY=
-Date: Tue, 12 Nov 2024 12:13:22 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	oneukum@suse.com,
-	syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH v3] usb/cdc-wdm: fix memory info leak in wdm_read
-Message-ID: <2024111232-relative-bottom-4995@gregkh>
-References: <CACzwLxjD0PceaD27Ya6fFxKnSQZajtG2sEArqX6toS8SjNcinw@mail.gmail.com>
- <20241111120139.3483366-1-snovitoll@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=N02LH9p7/3oaR7zpHab9SpAzw5jWAqeZ5uaLDEovzvG2VVG1qcBymjhdq5p4lkRNW11+JoMoHPM3fK5D5Do0w0pTJo6THj5/2h84XBIjfWqO8UfsPBgX30l6o1GVQ7P6CXuDVR43Yfo1EynKABCmFmpzbeJ4UystNl90VdSSBxQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iE5MbN0N; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731412304; x=1762948304;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IDSB+0NIZbf11fpgWGAanQLivWHIwGk+LTEmDiC46GQ=;
+  b=iE5MbN0NpUque0HCqJlL4wD4UAbP1ILCwQ3pYUCvhw4Jk+LKModqP+at
+   qkIkqx7X1GEfEFus6SomOP+72LjcvgaRqpr8YMwdrYGRoo4+uNbl4fb+C
+   QkfvmDcLLwP0DXsLvUkzeN+Ob/wZzZSNvvq2Q/sAtYIdtBn2628+sB206
+   Q6h57AmPrQWTlpFESak5VX6ACsmEwhVK7/14+mRs2NfjCvh6VutnA/77c
+   fjHf5pMfrWEEp8gW1ZJeaeGO1qE+8mMWujNlotjLiATlCoz+lF+Ho3M5P
+   PmdotqKH8pMM15egpv2hkWJDPPL2IRHx8cuJE7uvZUBRKdT4UhAd+FMDv
+   Q==;
+X-CSE-ConnectionGUID: dkEPb0/TT9KegDGW3GwRWg==
+X-CSE-MsgGUID: pzanGsajQwm+dwdouTChHw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11253"; a="48752980"
+X-IronPort-AV: E=Sophos;i="6.12,147,1728975600"; 
+   d="scan'208";a="48752980"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Nov 2024 03:51:43 -0800
+X-CSE-ConnectionGUID: mdq+nGRcQum9P7XzQZawtQ==
+X-CSE-MsgGUID: UqsmfTzNT/6N6P1an5K7tw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,147,1728975600"; 
+   d="scan'208";a="92196326"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa004.fm.intel.com with SMTP; 12 Nov 2024 03:51:40 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 12 Nov 2024 13:51:39 +0200
+Date: Tue, 12 Nov 2024 13:51:39 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Ajay Gupta <ajayg@nvidia.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Haotien Hsu <haotienh@nvidia.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
+Subject: Re: [PATCH] usb: typec: fix potential array underflow in
+ ucsi_ccg_sync_control()
+Message-ID: <ZzNBS4M9c0tjSmX1@kuha.fi.intel.com>
+References: <c69ef0b3-61b0-4dde-98dd-97b97f81d912@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,79 +80,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241111120139.3483366-1-snovitoll@gmail.com>
+In-Reply-To: <c69ef0b3-61b0-4dde-98dd-97b97f81d912@stanley.mountain>
 
-On Mon, Nov 11, 2024 at 05:01:39PM +0500, Sabyrzhan Tasbolatov wrote:
-> syzbot reported "KMSAN: kernel-infoleak in wdm_read", though there is no
-> reproducer and the only report for this issue.
+On Mon, Nov 11, 2024 at 02:08:06PM +0300, Dan Carpenter wrote:
+> The "command" variable can be controlled by the user via debugfs.  The
+> worry is that if con_index is zero then "&uc->ucsi->connector[con_index
+> - 1]" would be an array underflow.
 > 
-> The check:
-> 
-> 	if (cntr > count)
-> 		cntr = count;
-> 
-> only limits `cntr` to `count` (the number of bytes requested by
-> userspace), but it doesn't verify that `desc->ubuf` actually has `count`
-> bytes. This oversight can lead to situations where `copy_to_user` reads
-> uninitialized data from `desc->ubuf`.
-> 
-> This patch makes sure `cntr` respects` both the `desc->length` and the
-> `count` requested by userspace, preventing any uninitialized memory from
-> leaking into userspace.
-> 
-> syzbot report
-> =============
-> BUG: KMSAN: kernel-infoleak in instrument_copy_to_user include/linux/instrumented.h:114 [inline]
-> BUG: KMSAN: kernel-infoleak in _inline_copy_to_user include/linux/uaccess.h:180 [inline]
-> BUG: KMSAN: kernel-infoleak in _copy_to_user+0xbc/0x110 lib/usercopy.c:26
->  instrument_copy_to_user include/linux/instrumented.h:114 [inline]
->  _inline_copy_to_user include/linux/uaccess.h:180 [inline]
->  _copy_to_user+0xbc/0x110 lib/usercopy.c:26
->  copy_to_user include/linux/uaccess.h:209 [inline]
->  wdm_read+0x227/0x1270 drivers/usb/class/cdc-wdm.c:603
->  vfs_read+0x2a1/0xf60 fs/read_write.c:474
->  ksys_read+0x20f/0x4c0 fs/read_write.c:619
->  __do_sys_read fs/read_write.c:629 [inline]
->  __se_sys_read fs/read_write.c:627 [inline]
->  __x64_sys_read+0x93/0xe0 fs/read_write.c:627
->  x64_sys_call+0x3055/0x3ba0 arch/x86/include/generated/asm/syscalls_64.h:1
->  do_syscall_x64 arch/x86/entry/common.c:52 [inline]
->  do_syscall_64+0xcd/0x1e0 arch/x86/entry/common.c:83
->  entry_SYSCALL_64_after_hwframe+0x77/0x7f
-> 
-> Reported-by: syzbot+9760fbbd535cee131f81@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=9760fbbd535cee131f81
-> Signed-off-by: Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+> Fixes: 170a6726d0e2 ("usb: typec: ucsi: add support for separate DP altmode devices")
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
-> Changes v2 -> v3:
-> - reverted kzalloc back to kmalloc as the fix is cntr related (Oliver).
-> - added constraint to select the min length from count and desc->length.
-> - refactored git commit description as the memory info leak is confirmed.
+>  drivers/usb/typec/ucsi/ucsi_ccg.c | 5 +++++
+>  1 file changed, 5 insertions(+)
 > 
-> Changes v1 -> v2:
-> - added explanation comment above kzalloc (Greg).
-> - renamed patch title from memory leak to memory info leak (Greg).
-> ---
->  drivers/usb/class/cdc-wdm.c | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/class/cdc-wdm.c b/drivers/usb/class/cdc-wdm.c
-> index 86ee39db013f..dd7349f8a97a 100644
-> --- a/drivers/usb/class/cdc-wdm.c
-> +++ b/drivers/usb/class/cdc-wdm.c
-> @@ -598,8 +598,9 @@ static ssize_t wdm_read
->  		spin_unlock_irq(&desc->iuspin);
+> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> index bccfc03b5986..fcb8e61136cf 100644
+> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
+> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+> @@ -644,6 +644,10 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
+>  	    uc->has_multiple_dp) {
+>  		con_index = (uc->last_cmd_sent >> 16) &
+>  			UCSI_CMD_CONNECTOR_MASK;
+> +		if (con_index == 0) {
+> +			ret = -EINVAL;
+> +			goto unlock;
+> +		}
+>  		con = &uc->ucsi->connector[con_index - 1];
+>  		ucsi_ccg_update_set_new_cam_cmd(uc, con, &command);
 >  	}
+> @@ -651,6 +655,7 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
+>  	ret = ucsi_sync_control_common(ucsi, command);
 >  
-> -	if (cntr > count)
-> -		cntr = count;
-> +	/* Ensure cntr does not exceed available data in ubuf. */
-> +	cntr = min(count, (size_t) desc->length);
+>  	pm_runtime_put_sync(uc->dev);
+> +unlock:
+>  	mutex_unlock(&uc->lock);
+>  
+>  	return ret;
+> -- 
+> 2.45.2
 
-You should never cast in a call to min(), please use min_t() instead as
-that is what it is there for.
-
-thanks,
-
-greg k-h
+-- 
+heikki
 
