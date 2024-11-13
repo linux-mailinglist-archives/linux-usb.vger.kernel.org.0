@@ -1,155 +1,92 @@
-Return-Path: <linux-usb+bounces-17559-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17558-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 507999C7AEA
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 19:18:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCD1F9C7B9D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 19:51:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15300281994
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 18:18:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78C5FB2438F
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 18:14:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90F5D20402F;
-	Wed, 13 Nov 2024 18:18:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A21F205ABE;
+	Wed, 13 Nov 2024 18:11:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lodewillems.com header.i=@lodewillems.com header.b="FiJmoXtu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EvEgU1c4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777E82038D4;
-	Wed, 13 Nov 2024 18:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6822C13CFBD;
+	Wed, 13 Nov 2024 18:11:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731521913; cv=none; b=AR8qNwdHpzl1TPOc5TPLGveFcKgkGBvd4gPujEBdxfZB/LcyFoWhIBcAwLtfoj/G5k1L2gaHwm3KsfhWv5CLg3o6pQ0/cW5ctds2JYQV5OZTIZ8t83G9eooNH7VfX35pTGebVO7ffDwvM6CQPjlWJlH/UaeCJz1FNXOAI4PiMk4=
+	t=1731521502; cv=none; b=kbg2ORf0/A8q4jmC/xR2dI7qM5+rJZtg4OMnA2VJPX2QVlMB5tA+Mf54oTMoX6C+D4MPwFfivCpGQL0h4xH1VLvERtiLYGy/v3UdGvDid2EE6SSNoMcPWx3qI6g4fOfFUiFSAMTFLxCjB9T326agaeEvqkFF2jTbTPnvWH5fw18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731521913; c=relaxed/simple;
-	bh=rj2NLCwxfqX5S1Pk2cVGrE1lsmdAA+JKNUEah2kiwKc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FJR7IGxWNnMBKWr3L5Q+eDqyyav5tbjRv5yshX0ZT1AoU+TGX2yIPfBP2l6WXSpqPR0zAOJmPlPldxXENXOckY3aWuaBzuSwkaHJ97+4f1aknAnXdvmk58eG0kK4g9406Ab8kNHLlQKFDQuhU1I12GFcfQERMNc28QVkoUVBO2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lodewillems.com; spf=pass smtp.mailfrom=lodewillems.com; dkim=pass (2048-bit key) header.d=lodewillems.com header.i=@lodewillems.com header.b=FiJmoXtu; arc=none smtp.client-ip=80.241.56.161
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lodewillems.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lodewillems.com
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4XpWXh596yz9sdR;
-	Wed, 13 Nov 2024 19:10:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lodewillems.com;
-	s=MBO0001; t=1731521412;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=N7znE+uJkFhUaDn+LNG3BIj1Ldrazv+bL1n4aDjRP/c=;
-	b=FiJmoXtuUYaeJCgGdfTqrOj7V+059o6PknX+NT8A2Z+gUizdUfKsEHagn3z3vq1dJLYpch
-	gAus0lAkzq4naj0C8MsA3XYZVPedxl4wb+jgYPilWoId0mO/iAhGia6ftLfMKac6ey/qr8
-	6baZ9MtbAuH6mQG0n/KGVr8kzh2ekuTCh+ZgRtGYcbyyWyQNjpWiAs+m/Davp6HSwJCvun
-	4UKumkvCWqYyDWL4QHyYuIfQGRlYpFhL0lAYsJI6F5IEgsi2wtoLU6JYLScmTVdaaZEktP
-	LF78XYqm3MYIpbpKKwG9Ro3TYl9sXj9t+wRN7LHH42WUtg1Z6R4C4T40l73lhA==
-From: Lode Willems <me@lodewillems.com>
-To: johan@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lode Willems <me@lodewillems.com>
-Subject: [PATCH RESEND] USB: serial: CH341: add hardware flow control RTS/CTS
-Date: Wed, 13 Nov 2024 19:08:27 +0100
-Message-ID: <20241113180930.3741-1-me@lodewillems.com>
+	s=arc-20240116; t=1731521502; c=relaxed/simple;
+	bh=fujGutBZp/9h60ZjqyqAyU+r1u3fFTWP8gNIzYxYXF8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=u+fsr03Ce08v2yQrrXVE2LX0SEvIXGOAbqLeJ8KpEJQsKRn4Exas8EQmWUdHFGVR7Cb5RWjXEovSNtGXPrSrnHMBR/8Vv1+av0oiqyTCvPqOJoMFpScwhP/6Q1mzc9ZNsKGVWQ5boRnnInnM+Xxd85T617ev4Y0rkzXVmRKWGuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EvEgU1c4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2694C4CEC3;
+	Wed, 13 Nov 2024 18:11:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731521500;
+	bh=fujGutBZp/9h60ZjqyqAyU+r1u3fFTWP8gNIzYxYXF8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EvEgU1c4XeLEl4tM1nBnAJKfew+cCYyosddh3FVACqg1LvKag0LOQNC6wrJWurQdN
+	 OtqRufZ0Ii3nSM7M/7CTJXf+O3LPP1CUc2ciI2QQ2ELw2TkgUEw530Zbc2ZOWDmeQd
+	 nuFgV2I2jxOVN1yad45n2NwOhKG1EmCZvP+oM90uhbqz5dYfVFF5VwdXuqtbA/6/rK
+	 mvQsxzwCX3oduGiMERauuj47XlLN4iRjQExcPUCSS3VehlrBRKVjJPjD5xxRzy7IeT
+	 X+wPkphC0cymvvG4UNhUJijEnKly14hRP3TXoJh61De8RlmIwOLleWapkVYRE9aq5s
+	 BN+YYj3Mi2CoQ==
+Date: Wed, 13 Nov 2024 12:11:38 -0600
+From: Rob Herring <robh@kernel.org>
+To: Johan Hovold <johan@kernel.org>
+Cc: Varadarajan Narayanan <quic_varada@quicinc.com>, vkoul@kernel.org,
+	kishon@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	gregkh@linuxfoundation.org, andersson@kernel.org,
+	konradybcio@kernel.org, dmitry.baryshkov@linaro.org,
+	mantas@8devices.com, quic_rohiagar@quicinc.com,
+	quic_kriskura@quicinc.com, manivannan.sadhasivam@linaro.org,
+	abel.vesa@linaro.org, quic_kbajaj@quicinc.com,
+	quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org,
+	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 6/6] arm64: dts: qcom: Add USB controller and phy
+ nodes for IPQ5424
+Message-ID: <20241113181138.GA1011553-robh@kernel.org>
+References: <20241113072316.2829050-1-quic_varada@quicinc.com>
+ <20241113072316.2829050-7-quic_varada@quicinc.com>
+ <ZzSYU61pmFTcPf5_@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZzSYU61pmFTcPf5_@hovoldconsulting.com>
 
-This adds support for enabling and disabling
-RTS/CTS hardware flow control.
-Tested using a CH340E in combination with a CP2102.
+On Wed, Nov 13, 2024 at 01:15:15PM +0100, Johan Hovold wrote:
+> On Wed, Nov 13, 2024 at 12:53:16PM +0530, Varadarajan Narayanan wrote:
+> 
+> > --- a/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
+> > +++ b/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
+> > @@ -16,12 +16,71 @@ / {
+> >  	aliases {
+> >  		serial0 = &uart1;
+> >  	};
+> > +
+> > +	regulator_fixed_3p3: s3300 {
+> 
+> Fixed regulator nodes should have a "regulator-" prefix in their name.
 
-Fixes part of the following bug report:
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=197109
+Specifically, regulator-<voltage> is preferred. So "regulator-3300000"
 
-Signed-off-by: Lode Willems <me@lodewillems.com>
----
- drivers/usb/serial/ch341.c | 41 ++++++++++++++++++++++++++++++++++++++
- 1 file changed, 41 insertions(+)
+Not enforced because there are some exceptions.
 
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index d10e4c4848a0..62237f657320 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -63,6 +63,7 @@
- #define CH341_REG_DIVISOR      0x13
- #define CH341_REG_LCR          0x18
- #define CH341_REG_LCR2         0x25
-+#define CH341_REG_FLOW_CTL     0x27
- 
- #define CH341_NBREAK_BITS      0x01
- 
-@@ -77,6 +78,9 @@
- #define CH341_LCR_CS6          0x01
- #define CH341_LCR_CS5          0x00
- 
-+#define CH341_FLOW_CTL_NONE    0x000
-+#define CH341_FLOW_CTL_RTSCTS  0x101
-+
- #define CH341_QUIRK_LIMITED_PRESCALER	BIT(0)
- #define CH341_QUIRK_SIMULATE_BREAK	BIT(1)
- 
-@@ -478,6 +482,41 @@ static int ch341_open(struct tty_struct *tty, struct usb_serial_port *port)
- 	return r;
- }
- 
-+static void ch341_set_flow_control(struct tty_struct *tty,
-+				   struct usb_serial_port *port,
-+				   const struct ktermios *old_termios)
-+{
-+	int r;
-+
-+	if (old_termios &&
-+	    C_CRTSCTS(tty) == (old_termios->c_cflag & CRTSCTS))
-+		return;
-+
-+	if (C_CRTSCTS(tty)) {
-+		r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
-+				      CH341_REG_FLOW_CTL |
-+				      ((u16)CH341_REG_FLOW_CTL << 8),
-+				      CH341_FLOW_CTL_RTSCTS);
-+		if (r < 0) {
-+			dev_err(&port->dev,
-+				"%s - failed to enable flow control: %d\n",
-+				__func__, r);
-+			tty->termios.c_cflag &= ~CRTSCTS;
-+		}
-+	} else {
-+		r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
-+				      CH341_REG_FLOW_CTL |
-+				      ((u16)CH341_REG_FLOW_CTL << 8),
-+				      CH341_FLOW_CTL_NONE);
-+		if (r < 0) {
-+			dev_err(&port->dev,
-+				"%s - failed to disable flow control: %d\n",
-+				__func__, r);
-+			tty->termios.c_cflag |= CRTSCTS;
-+		}
-+	}
-+}
-+
- /* Old_termios contains the original termios settings and
-  * tty->termios contains the new setting to be used.
-  */
-@@ -546,6 +585,8 @@ static void ch341_set_termios(struct tty_struct *tty,
- 	spin_unlock_irqrestore(&priv->lock, flags);
- 
- 	ch341_set_handshake(port->serial->dev, priv->mcr);
-+
-+	ch341_set_flow_control(tty, port, old_termios);
- }
- 
- /*
--- 
-2.47.0
-
+Rob
 
