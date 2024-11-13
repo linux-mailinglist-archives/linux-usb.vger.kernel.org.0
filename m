@@ -1,122 +1,153 @@
-Return-Path: <linux-usb+bounces-17548-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17549-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B26A79C6CFB
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 11:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EAAB9C6D1D
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 11:46:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FE46282792
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 10:36:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33840283B2C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 10:46:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 643AB1FF02F;
-	Wed, 13 Nov 2024 10:36:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B31891FF03B;
+	Wed, 13 Nov 2024 10:46:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="ncQAHZ1v"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SAI7NdRF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from forward501b.mail.yandex.net (forward501b.mail.yandex.net [178.154.239.145])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 084781C8FB3;
-	Wed, 13 Nov 2024 10:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 886531F80BF
+	for <linux-usb@vger.kernel.org>; Wed, 13 Nov 2024 10:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731494181; cv=none; b=NsNVJ9u9I33ZfCqeKWD96PBQFHZjO3bCtrDZqdjEn6dvAn+P9eY+IqSngZL3PAAdyr8UWsKQaKaGJCSW2QpP4Ia8bUzBMkOruCICLngEqGBhUdd6ytddscl8mc4L0SiSqcIc+h0M+SMtNVKV1aqFtFyA/sa0TpEtfClTi2TYlk8=
+	t=1731494778; cv=none; b=tmrsGF8MmQTG/5JFGKwZDc3WZSWMXRbSmJG40HA/wUwNu6gLvUNUFm4NgnSNwVDH3z2oYNS+teMSxLLudPvfbWBRLLo2qAvMhj9QACCH/evppSvB7zs1n7fhGAMkSogVOvNia9cX0iU3MV/4kNUgNZMzEfR33wJcbKJETCNkXlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731494181; c=relaxed/simple;
-	bh=XkTIs7nu4bLDcQiU5a9HztKYuqyVNXyBCU1tsEqpHA8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=It0HbAhUshFPnEbolKO48e8iCnzskasAgiLS/ZGjXdiG+aoRN144DwMr/IEp/b7yf1bvQUZTLueQZFv0FZ9CqB+2Q2akA4hYR17qCIrACJi9KSHzEDqxXmIdbeBV3mUBAZNp/BZrHk+/XeG5veL6T0jX3bIUmwcC/fDGu6bGyUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=ncQAHZ1v; arc=none smtp.client-ip=178.154.239.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
-Received: from mail-nwsmtp-smtp-production-main-60.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-60.sas.yp-c.yandex.net [IPv6:2a02:6b8:c11:1115:0:640:1385:0])
-	by forward501b.mail.yandex.net (Yandex) with ESMTPS id 1B22761E78;
-	Wed, 13 Nov 2024 13:29:59 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-60.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id tTI4S8ROdeA0-nKNhkP8v;
-	Wed, 13 Nov 2024 13:29:58 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1731493798; bh=+cXUpe34/1kdGa6zXYoByQOZBAwAbSaDWTGSuPHsosY=;
-	h=In-Reply-To:To:From:Cc:Date:References:Subject:Message-ID;
-	b=ncQAHZ1vGLgEv0GiuJj4jHUvB7Oirh3rh8jmyzWiosC/lpFJdOy69f7DZGYaQGOm5
-	 fCZ04tSJZPXOjF2yO1Akm7GbFOROt9x0IzCDWX6wVdU3bry6twML466CBLQ0/0hGCG
-	 3ziNnurxFbUQOVgfhDYvWemNOZ4QkX2zkUUVvl4Y=
-Authentication-Results: mail-nwsmtp-smtp-production-main-60.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Message-ID: <6ff1052f-76d5-42a4-bf0c-ec587ca4faa4@yandex.ru>
-Date: Wed, 13 Nov 2024 13:29:55 +0300
+	s=arc-20240116; t=1731494778; c=relaxed/simple;
+	bh=Kp+BLfVyWf8Zi8+NKD+dUweFO180UCzKgD06LzuxrHY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jBOFdwTqNGRU1ziS9sTq5C6w264OYbEIxlhGz38VXi4jMNVHw6ymW8SaK8Hr30kGkdtD8WYYG72iML6EwGbb+aOh23x17JNK7TpvsnA7u9pwWsp/gs5nZms6hd/VviZaEAx7LBEzwAItatYt+M/O0IMwV/B+TzS9qg7lMVMjnKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SAI7NdRF; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2e3010478e6so5378770a91.1
+        for <linux-usb@vger.kernel.org>; Wed, 13 Nov 2024 02:46:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1731494773; x=1732099573; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JkdjSCY4IBY8cdoM/p6vlIUOl96lMNAE6LT/b/G4P44=;
+        b=SAI7NdRFKpW0hbPapeM4kf19Nn+X20x2DP9+x8CbRwCPkHkGYPX4CchxZZfw6mGzuS
+         FOoWA0d81rGm3MrXC+EZL2oXhCeBjBN4I5WpCIDYaoGEChQX3mjRbf1qW8Ch2Yd6RRES
+         2GNHX8l/VM09uGhADWKlFrGH8QFlFPIhceRmdi2mc0+a81/Q7djeo6k9udc0avXY6OEP
+         lBuWRhoUucU/4i4avqm69IN5zdq8vQPZBH5acFZfnCTrXKNTu72ZQuhg5Ss3Sk14YsEU
+         fbnwbp09AMor3h4hViut5s8cCiuwKjtqtS1LVjG0xKSzu7Q184zNIqXC/yiCIXSZBpCH
+         olzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731494773; x=1732099573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JkdjSCY4IBY8cdoM/p6vlIUOl96lMNAE6LT/b/G4P44=;
+        b=oJUI4gwxlR5Q9S9Ax0hW/6zWY6CrJGzOIQmWVaLQVA4XbYvuGd9wM58jCY624GpQCD
+         CRk555xE6nyHqCHCsPkN6rE9su3/K3imcyGxTZi6jlkdSfM0A3N4wZm7Pc8AaKEnrNBn
+         Kv+a+zJaE+Usvmfh2slzPKsXcDB+qarftxaLCjew6qbmiGMqvKonIdG0cB2iCeAhDEMU
+         ien51IBQDfMf2kB6FrzngHLjy8Qh9MmkCULk0XTWpFHm+hA29tMN9dugu8XYY/b8c0dG
+         Zfd3ZBTjuVcQ4sgsTb+NmGbtX2DVDNVtSRzF/8TD7xBySS56Gox0hclTHWWayZWhyiVj
+         0Tvg==
+X-Forwarded-Encrypted: i=1; AJvYcCVPJwj8jS86o96Pku5KlRleF6dU+pxK9ucNypV+cRsnVcmMV7/dOruf8HQ/niKx6j0uIzIyrTSi+Hw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAR4llb6M6kcevBMaY7SeLRlJxEUCQWBqu3mSpWjdoa/Uo0BYg
+	q3VpVZq3hp2emUYx6odCHyVbx0YdFvbqFZ3zeOIgBtumhpE3tlKcuma9l2fSwTEyhqMG16WSTdj
+	++nY6fmoYvsBs9nt8yFr92VTt1uFTFJwmslId
+X-Google-Smtp-Source: AGHT+IFn3w+1CivlSJtOoLQy9jPd2fijjv21m8eKpPGd9dfHQ1S1RTRG7WMozIirUVRQXxkc9zCZ/vV69nMRKooOd1I=
+X-Received: by 2002:a17:90b:1f8b:b0:2e2:ef25:ed35 with SMTP id
+ 98e67ed59e1d1-2e9b14d565fmr24768577a91.0.1731494772711; Wed, 13 Nov 2024
+ 02:46:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mac802154: add a check for slave data list before delete
-Content-Language: en-MW
-To: Lizhi Xu <lizhi.xu@windriver.com>, miquel.raynal@bootlin.com
-Cc: alex.aring@gmail.com, davem@davemloft.net, edumazet@google.com,
- horms@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-wpan@vger.kernel.org,
- netdev@vger.kernel.org, pabeni@redhat.com, stefan@datenfreihafen.org,
- syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com,
- syzkaller-bugs@googlegroups.com
-References: <87a5e4u35q.fsf@bootlin.com>
- <20241112134145.959501-1-lizhi.xu@windriver.com>
-From: Dmitry Antipov <dmantipov@yandex.ru>
-Autocrypt: addr=dmantipov@yandex.ru; keydata=
- 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
- A/UwwXBRuvydGV0=
-In-Reply-To: <20241112134145.959501-1-lizhi.xu@windriver.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <6731d32b.050a0220.1fb99c.014d.GAE@google.com> <1af819ae-cd88-4db0-af6e-02064489ebb2@rowland.harvard.edu>
+In-Reply-To: <1af819ae-cd88-4db0-af6e-02064489ebb2@rowland.harvard.edu>
+From: Aleksandr Nogikh <nogikh@google.com>
+Date: Wed, 13 Nov 2024 11:46:00 +0100
+Message-ID: <CANp29Y7RA00bKOinkjSDBchbkx3RDvWXGs4hr0PrPKyqSEC-_g@mail.gmail.com>
+Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in ld_usb_release
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: syzbot <syzbot+e8e879922808870c3437@syzkaller.appspotmail.com>, 
+	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
+	syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/12/24 4:41 PM, Lizhi Xu wrote:
+Hi Alan,
 
->   	mutex_lock(&sdata->local->iflist_mtx);
-> +	if (list_empty(&sdata->local->interfaces)) {
-> +		mutex_unlock(&sdata->local->iflist_mtx);
-> +		return;
-> +	}
->   	list_del_rcu(&sdata->list);
->   	mutex_unlock(&sdata->local->iflist_mtx);
+On Mon, Nov 11, 2024 at 4:45=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
+du> wrote:
+>
+> On Mon, Nov 11, 2024 at 01:49:31AM -0800, syzbot wrote:
+> > Hello,
+> >
+> > syzbot found the following issue on:
+> >
+> > HEAD commit:    2e1b3cc9d7f7 Merge tag 'arm-fixes-6.12-2' of git://git.=
+ker..
+> > git tree:       upstream
+> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D1650d6a7980=
+000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Db77c8a55ccf=
+1d9e2
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=3De8e8799228088=
+70c3437
+> > compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for=
+ Debian) 2.40
+> > userspace arch: i386
+> >
+> > Unfortunately, I don't have any reproducer for this issue yet.
+>
+> Question for the syzbot people:
+>
+> If I have a patch which I think will cause the issue to become
+> reproducible, is there any way to ask syzbot to apply the same test that
+> failed here to a kernel including my patch?
 
-Note https://syzkaller.appspot.com/text?tag=ReproC&x=12a9f740580000 makes an
-attempt to connect the only device. How this is expected to work if there are
-more than one device?
+No, that's unfortunately not supported.
 
-Dmitry
+In this particular case, it's at least evident from `Comm: ` which
+exact program was being executed when the kernel crashed:
 
+[  178.539707][ T8305] BUG: KASAN: slab-use-after-free in
+do_raw_spin_lock+0x271/0x2c0
+[  178.542477][ T8305] Read of size 4 at addr ffff888022387c0c by task
+syz.3.600/8305
+[  178.546823][ T8305]
+[  178.548202][ T8305] CPU: 3 UID: 0 PID: 8305 Comm: syz.3.600 Not
+tainted 6.12.0-rc6-syzkaller-00077-g2e1b3cc9d7f7 #0
+
+syz.3.600 means procid=3D3 and id=3D600, so it's the program that comes
+after the following line in
+https://syzkaller.appspot.com/x/log.txt?x=3D1650d6a7980000:
+
+551.627007ms ago: executing program 3 (id=3D600):
+<...>
+
+You may try to treat that program as a normal syz reproducer and run
+it against your patched kernel locally, that should be quite
+straightforward to do (just several commands). See e.g. the
+instructions here:
+https://github.com/google/syzkaller/blob/master/docs/syzbot_assets.md#run-a=
+-syz-reproducer-directly
+
+--=20
+Aleksandr
+
+>
+> Alan Stern
+>
+> --
 
