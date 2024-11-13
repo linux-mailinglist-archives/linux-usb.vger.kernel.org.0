@@ -1,72 +1,126 @@
-Return-Path: <linux-usb+bounces-17553-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17555-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA24A9C7030
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 14:05:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2F029C723C
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 15:05:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F07BB28198B
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 13:05:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 79BBF1F2358F
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 14:05:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DB51FCF78;
-	Wed, 13 Nov 2024 13:01:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41581F77AF;
+	Wed, 13 Nov 2024 14:04:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="uOvyWuzG"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BD1186E5F
-	for <linux-usb@vger.kernel.org>; Wed, 13 Nov 2024 13:01:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 486901F4FC6;
+	Wed, 13 Nov 2024 14:04:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731502911; cv=none; b=lJv8rsJJ1xD1O5k4KbqyWikdfSNzY7YLpjMRJh8iPKzicLGWkMRxGbAeGR+uJ+sylXgI1DLLVucsjwWH3lLohgUl/Fuc/r5MQMc8RB8TiJsMCngW+YDLG4v6jjY64OTM9gCwFbROTLIiZMgWhesjVWKBmCMrk68T03k/PSWGowA=
+	t=1731506690; cv=none; b=ifRFFqk9vZIq9f4HcWeBfNRkqAkgULK0wzL320LKhlR2X6kmjhOrQNJizLCgCI6gOsgh5Tf6s1TYAD2pAFIhp9VTzKG1Kfy8Y1TdiU5jEKxSToLsmbKQEQi7SHlY6oxQbEcjRYjXvaVFAUvqC80IsErPn4Lv+/kNlyKnAGcEyng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731502911; c=relaxed/simple;
-	bh=r/GK5ETu5SUe8BrH6Jx/A9KZ+KVswddu7fjovf7xzLM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Rg0nIPkRKf6Scc8NUgJFqbBGzXkYEDcR+8nNjxAKr9LAldXuDqR1jg3WSQ7aL0IRlArSijEuV+us5OPL9fueFrBlZKbIIUQmp3tZu5y2+5Kzl3pFNPN/CLJC5OenZWW8I+x/ANkJtXkxX1nsOND9T23su2fksXR89+4oUea+F8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; arc=none smtp.client-ip=217.70.183.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1D9DC1BF206;
-	Wed, 13 Nov 2024 13:01:39 +0000 (UTC)
-Message-ID: <9ded652d-b6c1-46a8-a043-015a5af238ee@korsgaard.com>
-Date: Wed, 13 Nov 2024 14:01:39 +0100
+	s=arc-20240116; t=1731506690; c=relaxed/simple;
+	bh=xEIsm82Us/2uPAaz8oc2KoXxc6pXZstnJKLajTBWF3w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KVgSI7NoQ/u9gIlgLD6Yc6kjI6KtLQwf5flopE12JIzkpKJrMqT3UUyN+JI0gXEnK2/kcIszxkYfh9vDOdl+fEiHel8eEwjBN7Rb+FqbB0m2+eqPs6cXQ3UTndV0OPVO2PFkOsjHvFLCA2YeuRAkJnNWM5YPXKJk0Ib1qqu8xlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=uOvyWuzG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CFE6C4CED2;
+	Wed, 13 Nov 2024 14:04:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1731506689;
+	bh=xEIsm82Us/2uPAaz8oc2KoXxc6pXZstnJKLajTBWF3w=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uOvyWuzGRZMZ3v8WO8IC97opH+xrf2NHI3nX2a9dd8qxplPBFinZD231V7lqkN7OB
+	 j6/SSUqK2XWYSKmnPrpxfKp9x4juyh7zXg+WNdGmtgOZnALVKD1TaLFXtqe+TqnBbi
+	 YAZ5QiwQ5L2zHXf3SilNlwgptxSYActnR2rr/H+A=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-usb@vger.kernel.org
+Cc: stern@rowland.harvard.edu,
+	gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan@kernel.org>,
+	Grant Grundler <grundler@chromium.org>,
+	Yajun Deng <yajun.deng@linux.dev>,
+	Oliver Neukum <oneukum@suse.com>,
+	Douglas Anderson <dianders@chromium.org>
+Subject: [PATCH v2 1/2] USB: make to_usb_driver() use container_of_const()
+Date: Wed, 13 Nov 2024 15:04:40 +0100
+Message-ID: <2024111339-shaky-goldsmith-b233@gregkh>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] Revert "usb: gadget: composite: fix OS descriptors
- w_value
-To: Elson Serrao <quic_eserrao@quicinc.com>,
- "Vrastil, Michal" <michal.vrastil@hidglobal.com>, Greg KH <greg@kroah.com>
-Cc: "Vodicka, Michal" <michal.vodicka@hidglobal.com>,
- "balbi@kernel.org" <balbi@kernel.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "stable@kernel.org" <stable@kernel.org>
-References: <AS8PR05MB10129E57ED13CF18746FC4BE18A9B2@AS8PR05MB10129.eurprd05.prod.outlook.com>
- <5f8cdcac-6927-429a-8ef5-0891c90e8efd@korsgaard.com>
- <2024100457-able-sake-47fd@gregkh>
- <9918669c-3bfd-4d42-93c4-218e9364b7cc@quicinc.com>
- <7bab2899-9150-4e8c-9a96-b1bbf20f4d61@quicinc.com>
-Content-Language: en-US
-From: Peter Korsgaard <peter@korsgaard.com>
-In-Reply-To: <7bab2899-9150-4e8c-9a96-b1bbf20f4d61@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: peter@korsgaard.com
+Lines: 60
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2292; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=xEIsm82Us/2uPAaz8oc2KoXxc6pXZstnJKLajTBWF3w=; b=owGbwMvMwCRo6H6F97bub03G02pJDOkmG7+z/Tt2R0tJ+FKhXnzxCbMHB7Z8lJb+JTLTKcd8g 7hKSuOVjlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZgIFwfD/OhtkttPJP65/eS8 p8qOWTb19rk5Sxjml/8+VfPrwuok9W9mD+b2Mj+vSPDnAgA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 
-On 11/12/24 19:11, Elson Serrao wrote:
+Turns out that we have some const pointers being passed to
+to_usb_driver() but were not catching this.  Change the macro to
+properly propagate the const-ness of the pointer so that we will notice
+when we try to write to memory that we shouldn't be writing to.
 
-> Since there has been no update for quite some time, would it be okay if I upload v2 with the feedback given ? This bug is impacting ADB enumeration on Qualcomm platforms, so would like to proceed with this fix.
+This requires fixing up the usb_match_dynamic_id() function as well,
+because it can handle a const * to struct usb_driver.
 
-Yes please!
+Cc: Johan Hovold <johan@kernel.org>
+Cc: Alan Stern <stern@rowland.harvard.edu>
+Cc: Grant Grundler <grundler@chromium.org>
+Cc: Yajun Deng <yajun.deng@linux.dev>
+Cc: Oliver Neukum <oneukum@suse.com>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+---
+v2: reordered patches, goes on top of series submitted at https://lore.kernel.org/r/2024111322-kindly-finalist-d247@gregkh
 
+ drivers/usb/core/driver.c | 4 ++--
+ include/linux/usb.h       | 2 +-
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
+index 9ea955a3d115..bc5c561bdbd5 100644
+--- a/drivers/usb/core/driver.c
++++ b/drivers/usb/core/driver.c
+@@ -228,7 +228,7 @@ static void usb_free_dynids(struct usb_driver *usb_drv)
+ }
+ 
+ static const struct usb_device_id *usb_match_dynamic_id(struct usb_interface *intf,
+-							struct usb_driver *drv)
++							const struct usb_driver *drv)
+ {
+ 	struct usb_dynid *dynid;
+ 
+@@ -890,7 +890,7 @@ static int usb_device_match(struct device *dev, const struct device_driver *drv)
+ 
+ 	} else if (is_usb_interface(dev)) {
+ 		struct usb_interface *intf;
+-		struct usb_driver *usb_drv;
++		const struct usb_driver *usb_drv;
+ 		const struct usb_device_id *id;
+ 
+ 		/* device drivers never match interfaces */
+diff --git a/include/linux/usb.h b/include/linux/usb.h
+index b66b1af3e439..7a9e96f9d886 100644
+--- a/include/linux/usb.h
++++ b/include/linux/usb.h
+@@ -1243,7 +1243,7 @@ struct usb_driver {
+ 	unsigned int disable_hub_initiated_lpm:1;
+ 	unsigned int soft_unbind:1;
+ };
+-#define	to_usb_driver(d) container_of(d, struct usb_driver, driver)
++#define	to_usb_driver(d) container_of_const(d, struct usb_driver, driver)
+ 
+ /**
+  * struct usb_device_driver - identifies USB device driver to usbcore
 -- 
-Bye, Peter Korsgaard
+2.47.0
 
 
