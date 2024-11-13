@@ -1,66 +1,53 @@
-Return-Path: <linux-usb+bounces-17527-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17528-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBAB29C6905
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 07:03:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9601B9C6910
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 07:06:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82B0A1F243F3
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 06:03:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48A5B1F22584
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 06:06:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34125176AB6;
-	Wed, 13 Nov 2024 06:03:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FEA517B401;
+	Wed, 13 Nov 2024 06:06:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="de/wS9hw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="P/VzbwCL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711A310F1;
-	Wed, 13 Nov 2024 06:03:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F47175D20;
+	Wed, 13 Nov 2024 06:06:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731477822; cv=none; b=gv/mLyB/Z8RbDapFF1kjTRALnujqzmpbllLLydfd0dsiZu/68+A+JtR1coha81bt+wDYCXaeX4VbIIMFXlm15S/ibSbV0OwV+wablEz61A28Z+7m7An4xQtv9Ty6K7g6CWn9oDJtDyS5H5K4yzLqijncNf25+x/K7Mez+7OYSiQ=
+	t=1731477962; cv=none; b=mDwpk3HCh2vTBTWRS7oXLNXKJ33ttyi5dAfvKb6mV/w83yn3PSY9yf+cZJNEJOEEx5hEyp1R1SlQGvmXyPCCYTBJ9i4ZEpR/+c6i+0Ol25y1lVGJ8dbPc6XOOevVs4cGlQ0EQvmXB1uUDuL5h/OtGLObQCy5x8yuDR5OhSfNcpM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731477822; c=relaxed/simple;
-	bh=AYmuM2b9645Yoo9Z1mFsCvVpUkr+Fpm2ignibA9XP0U=;
+	s=arc-20240116; t=1731477962; c=relaxed/simple;
+	bh=yaQum6PGgtZHU8rbzjpl4yQ8Vdgc6rT+xrm0zMXBfHQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rh85Qsrg2RGQgSDDbQMeIsdT7DGWJGUx89aA+ol5bWZnKMAYduKIA9GCzkyl6pyBMZeotlP/1R0srUmLdczT/s7g8NeRCw672exbxz5l8KBIod1ZFhGxJKVXvQRUaEYS2XrDkyae8+NjSew5YgsLGG535Up5Hf5TKLnzBM/glxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=de/wS9hw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71BE5C4CECD;
-	Wed, 13 Nov 2024 06:03:41 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=cHRdW/n6jRWAsdJQjZSP2jvLqD4pQ+O8iZXzhE6/uzNncfc4xojc6g7rGRrQNgw+KBve8riRB+pEff/+dUC7xexlW6ufqq6h518JflVsFhSv/S6QgglkCqLc7rzlkvjPdcndaFCT5knnRYAs/ZwKTBad7KBTxzCdRiXMBzoxtmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=P/VzbwCL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF843C4CECD;
+	Wed, 13 Nov 2024 06:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1731477822;
-	bh=AYmuM2b9645Yoo9Z1mFsCvVpUkr+Fpm2ignibA9XP0U=;
+	s=korg; t=1731477962;
+	bh=yaQum6PGgtZHU8rbzjpl4yQ8Vdgc6rT+xrm0zMXBfHQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=de/wS9hwI7o3bOyH6Mf8Nx60ot7cbBoEjUBYFWMWmpUNOl2kY9N0c12otcT4uZexx
-	 DXcsBeo8YIm2p3hkYys+84Zs2DEAOTEajzA76pgifSjccdfrgB4n3hKF2URZS4bI82
-	 5gPQhOhyXfbtk1x8apWV7VnZZ1fVKLpFxv1gl1j4=
-Date: Wed, 13 Nov 2024 07:03:38 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Johan Hovold <johan@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 4/6] arm64: dts: qcom: x1e80100-crd: Enable external
- DisplayPort support
-Message-ID: <2024111341-platter-disk-8238@gregkh>
-References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
- <20241112-x1e80100-ps8830-v5-4-4ad83af4d162@linaro.org>
- <ZzOK2Xz1QQvugGnG@linaro.org>
+	b=P/VzbwCLAPJ0huVfDamujqDIGr7n4Ah4eLBhoN6ZPbtzaJGlrSwiTuB7Ud96ghMR6
+	 m3OoplGxK9bmcmRsezqyHZdpmwLX4CGkQwbCMa6lTIFNfTXW1neKlNpL0IEbnl3o2H
+	 itfs8lnSAU8+KN6VlZHv7bgJ1hiUpI7NzK4WwBkk=
+Date: Wed, 13 Nov 2024 07:05:59 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: "Rangoju, Raju" <raju.rangoju@amd.com>
+Cc: linux-usb@vger.kernel.org, mathias.nyman@intel.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: xhci: quirk for data loss in ISOC transfers
+Message-ID: <2024111330-crusher-alike-a88d@gregkh>
+References: <20241112122104.120633-1-Raju.Rangoju@amd.com>
+ <2024111226-spender-saturate-dc6e@gregkh>
+ <2a02f0c3-f535-4ac0-d29f-a33e0c45cf4c@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,29 +56,47 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZzOK2Xz1QQvugGnG@linaro.org>
+In-Reply-To: <2a02f0c3-f535-4ac0-d29f-a33e0c45cf4c@amd.com>
 
-On Tue, Nov 12, 2024 at 07:05:29PM +0200, Abel Vesa wrote:
-> On 24-11-12 19:01:13, Abel Vesa wrote:
-> > The X Elite CRD provides external DisplayPort on all 3 USB Type-C ports.
-> > Each one of this ports is connected to a dedicated DisplayPort
-> > controller.
-> > 
-> > Due to support missing in the USB/DisplayPort combo PHY driver,
-> > the external DisplayPort is limited to 2 lanes.
-> > 
-> > So enable all 3 remaining DisplayPort controllers and limit their data
-> > lanes number to 2.
-> > 
-> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+On Tue, Nov 12, 2024 at 07:02:40PM +0530, Rangoju, Raju wrote:
 > 
-> Please do not merge this specific patch.
+> 
+> On 11/12/2024 5:54 PM, Greg KH wrote:
+> > On Tue, Nov 12, 2024 at 05:51:04PM +0530, Raju Rangoju wrote:
+> > > During the High-Speed Isochronous Audio transfers, xHCI
+> > > controller on certain AMD platforms experiences momentary data
+> > > loss. This results in Missed Service Errors (MSE) being
+> > > generated by the xHCI.
+> > > 
+> > > The root cause of the MSE is attributed to the ISOC OUT endpoint
+> > > being omitted from scheduling. This can happen either when an IN
+> > > endpoint with a 64ms service interval is pre-scheduled prior to
+> > > the ISOC OUT endpoint or when the interval of the ISOC OUT
+> > > endpoint is shorter than that of the IN endpoint. Consequently,
+> > > the OUT service is neglected when an IN endpoint with a service
+> > > interval exceeding 32ms is scheduled concurrently (every 64ms in
+> > > this scenario).
+> > > 
+> > > This issue is particularly seen on certain older AMD platforms.
+> > > To mitigate this problem, it is recommended to adjust the service
+> > > interval of the IN endpoint to not exceed 32ms (interval 8). This
+> > > adjustment ensures that the OUT endpoint will not be bypassed,
+> > > even if a smaller interval value is utilized.
+> > > 
+> > > Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
+> > 
+> > You don't want this backported to any older kernels?  Why not?
+> 
+> Hi Greg, Yes, backporting is needed, but some of products were released back
+> in 2018, not sure of the exact commit id to quote here for backporting as
+> there were no precise commits that added this initial support in the first
+> place.
+> 
+> Would you mind tagging it to all stable kernels. Let me know if the patch
+> needs to be respinned.
 
-Please do not mix patches that should, and should not, be applied in the
-same series as that plays havoc with our tools that want to take a whole
-series at once.  Stuff like this just makes me delete the whole series
-from my review queue, and if you got sent something like this, I imagine
-you would do the same :(
+Yes, please resend it with the proper tag, don't ask maintainers to
+hand-edit changes for you, that does not scale at all.
 
 thanks,
 
