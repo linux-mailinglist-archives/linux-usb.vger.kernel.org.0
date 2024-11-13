@@ -1,79 +1,61 @@
-Return-Path: <linux-usb+bounces-17557-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17559-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70CBE9C7510
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 16:01:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 507999C7AEA
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 19:18:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3575228AA29
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 15:01:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15300281994
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 18:18:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88B8F1369A8;
-	Wed, 13 Nov 2024 15:01:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90F5D20402F;
+	Wed, 13 Nov 2024 18:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="Qa7xk9HC"
+	dkim=pass (2048-bit key) header.d=lodewillems.com header.i=@lodewillems.com header.b="FiJmoXtu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-221-233.mail.qq.com (out203-205-221-233.mail.qq.com [203.205.221.233])
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA7D1C695;
-	Wed, 13 Nov 2024 15:01:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 777E82038D4;
+	Wed, 13 Nov 2024 18:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731510094; cv=none; b=EZ5xWnwjD246pCz2GCRO/UQVZiaTMdzaLHqFZtElBLHOOo5P6iIPwg01oVw3BQX+hzlOeOpQQcC2W8OFgqvJzVFuSWPBmSblWJ9Ro2CKwzyqfuNb9e6ARmkvpc5PE/FV4+Po85c+umX9kSPARi+aIED8GsiMYyzDE1NFEavatqs=
+	t=1731521913; cv=none; b=AR8qNwdHpzl1TPOc5TPLGveFcKgkGBvd4gPujEBdxfZB/LcyFoWhIBcAwLtfoj/G5k1L2gaHwm3KsfhWv5CLg3o6pQ0/cW5ctds2JYQV5OZTIZ8t83G9eooNH7VfX35pTGebVO7ffDwvM6CQPjlWJlH/UaeCJz1FNXOAI4PiMk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731510094; c=relaxed/simple;
-	bh=kNfBfrpv+RMFQKJp/cs7yD+wTK29G7PJUIoh/Mw9tFk=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=pWLQl4O7fandd4H7Wzu/1wAaB1gWAsKlpeNdZnodh6fEik9ZuBigE1PZsjLHK1EVa6gk3lnLpaAGmuS/H5cKG4BTvaQ2AXKwWi6BMVyCIZ6H4mJjck67bsqdMNMKgkv6kQ3/tF0tn2ZmJgILWsqK6Quo/CfFaN1zNgtlG0bJk+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=Qa7xk9HC; arc=none smtp.client-ip=203.205.221.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1731510079;
-	bh=ZqibbowZ3xqsN65J9BXl90mVsJZElGVT3wkPqqzm0NA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Qa7xk9HCiDys+9lce2A+lA6oiInFlYMTXML+ixQ/UwLgd3FjaaRBL/euXO2yJl186
-	 6b4J+aiw+vun1pLDE31XpnMbn6+BHzOOfisqYSQHZgMtQ/hFwchweRgX4e31i1UiSG
-	 IiHPBDZl0cGm2W+BnAGqwzy50MXfo+aAKEmst3FY=
-Received: from xp-virtual-machine.. ([119.39.76.12])
-	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
-	id EF497EEA; Wed, 13 Nov 2024 22:59:52 +0800
-X-QQ-mid: xmsmtpt1731509992tmizo1w9j
-Message-ID: <tencent_E8A1B94A44CC713F5139410A79159CC4CD0A@qq.com>
-X-QQ-XMAILINFO: NRN3UPsLzYKVUC0sdpESWOKDTSKXbPXm0pR8FNPDLt2CTVCa1FwKY86btYlXLB
-	 YJmYMugcNtSUGSS1y+EzXwPAcsWFjsYUzFCzUHPA2pj0uzIy2LrP74m/TVjzlMshwx87gHPS85Cz
-	 ROV4ZcUMk1+dTeMmW2bUZMfNqQIQzh3MpHZqQEdy7jdWCP5cu7VsDtiiB2ZRdepRwJORzeDLKOkw
-	 7z0T8rdgZjsF7REcbWT6/GKQI2jWcwci/7lrWd8DnHgyJJ1gN8O1cFSfZLLf2G+nYqn0DyJEMJec
-	 I4U3SA+AVECI0OX5KFB7EzalKoylCTPKbTx8u+TWJw8S9t8JL5H1jfK+ydFVY5Jm3ThIMiTLRx2m
-	 Gq/4wW+GFAkPs39Tbur7StGUIssdu5e9W5t4GG7g8Pu4bggmR8eXnSgOsQAlqN64U6VBbRgtS2u2
-	 YbGDj3tfOZ2fO5XC9HMhwP9aGsTvVZiC5yOm76B+N6G4XSvDcOat4GfJNaAmyfqXwwuX3UhlCLgm
-	 CXTM91X6ZUdqm4iWz5XGtSaI6vn+aow6fEnfFBnsRhoXx603jAOI2ODiu4l6gLtLv1QYpqfJTYpL
-	 eOJMeEubP8tSKi3r5RpDzTWDbHBezzmG5zCG6YrSM/OJgmvUP1muvJEJFqDv+B7qssEqnDwHdIOp
-	 tj0CFNmJVk3MEm9HwUUCIUWObgpkbYETaGNeIghn2E5felV56Rr1Fx7Un5pT3luEmfNobOdB3bQF
-	 jGC0xNohf2gzRq42c/IbVLa4Fvb3BjK9HhUP0gttLGmB5hhn0xsLDANJU+lenI0y2/i4m70ewCO2
-	 KyyNeLch7wEF+1M4BRf9NEY2Q6TYxow+1iJHAQ2obHqsg/JueTMDxSihUWqVEuspu9utCf3O6ldT
-	 VD5qsmyHzK3QVRTcKkNgb/VyFJDdymdhzZjGBOVcY7yss+A4yalbSYVmmODFywldBdKBU7SJ9XIp
-	 8mXKx3s0f/zekN/H5XQvtkg7yGZNNoUvP8lINtJE8=
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-From: xiaopeitux@foxmail.com
-To: syzbot+3fa2af55f15bd21cada9@syzkaller.appspotmail.com
-Cc: bentiss@kernel.org,
-	jikos@kernel.org,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1731521913; c=relaxed/simple;
+	bh=rj2NLCwxfqX5S1Pk2cVGrE1lsmdAA+JKNUEah2kiwKc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FJR7IGxWNnMBKWr3L5Q+eDqyyav5tbjRv5yshX0ZT1AoU+TGX2yIPfBP2l6WXSpqPR0zAOJmPlPldxXENXOckY3aWuaBzuSwkaHJ97+4f1aknAnXdvmk58eG0kK4g9406Ab8kNHLlQKFDQuhU1I12GFcfQERMNc28QVkoUVBO2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lodewillems.com; spf=pass smtp.mailfrom=lodewillems.com; dkim=pass (2048-bit key) header.d=lodewillems.com header.i=@lodewillems.com header.b=FiJmoXtu; arc=none smtp.client-ip=80.241.56.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lodewillems.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lodewillems.com
+Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4XpWXh596yz9sdR;
+	Wed, 13 Nov 2024 19:10:12 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lodewillems.com;
+	s=MBO0001; t=1731521412;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=N7znE+uJkFhUaDn+LNG3BIj1Ldrazv+bL1n4aDjRP/c=;
+	b=FiJmoXtuUYaeJCgGdfTqrOj7V+059o6PknX+NT8A2Z+gUizdUfKsEHagn3z3vq1dJLYpch
+	gAus0lAkzq4naj0C8MsA3XYZVPedxl4wb+jgYPilWoId0mO/iAhGia6ftLfMKac6ey/qr8
+	6baZ9MtbAuH6mQG0n/KGVr8kzh2ekuTCh+ZgRtGYcbyyWyQNjpWiAs+m/Davp6HSwJCvun
+	4UKumkvCWqYyDWL4QHyYuIfQGRlYpFhL0lAYsJI6F5IEgsi2wtoLU6JYLScmTVdaaZEktP
+	LF78XYqm3MYIpbpKKwG9Ro3TYl9sXj9t+wRN7LHH42WUtg1Z6R4C4T40l73lhA==
+From: Lode Willems <me@lodewillems.com>
+To: johan@kernel.org
+Cc: gregkh@linuxfoundation.org,
 	linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com,
-	xiaopeitux@foxmail.com,
-	xiaopei01@kylinos.cn
-Subject: Re: [syzbot] [input?] [usb?] UBSAN: shift-out-of-bounds in s32ton
-Date: Wed, 13 Nov 2024 22:59:52 +0800
-X-OQ-MSGID: <20241113145952.27197-1-xiaopeitux@foxmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <67321ded.050a0220.a83d0.0016.GAE@google.com>
-References: <67321ded.050a0220.a83d0.0016.GAE@google.com>
+	linux-kernel@vger.kernel.org,
+	Lode Willems <me@lodewillems.com>
+Subject: [PATCH RESEND] USB: serial: CH341: add hardware flow control RTS/CTS
+Date: Wed, 13 Nov 2024 19:08:27 +0100
+Message-ID: <20241113180930.3741-1-me@lodewillems.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,10 +64,92 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Thanks!
+This adds support for enabling and disabling
+RTS/CTS hardware flow control.
+Tested using a CH340E in combination with a CP2102.
 
-patch[1]: https://lore.kernel.org/all/f74754f0d7d870ac8301eb8f5760d473bdd0270b.1731492709.git.xiaopei01@kylinos.cn/
+Fixes part of the following bug report:
+Link: https://bugzilla.kernel.org/show_bug.cgi?id=197109
 
+Signed-off-by: Lode Willems <me@lodewillems.com>
+---
+ drivers/usb/serial/ch341.c | 41 ++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
+
+diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
+index d10e4c4848a0..62237f657320 100644
+--- a/drivers/usb/serial/ch341.c
++++ b/drivers/usb/serial/ch341.c
+@@ -63,6 +63,7 @@
+ #define CH341_REG_DIVISOR      0x13
+ #define CH341_REG_LCR          0x18
+ #define CH341_REG_LCR2         0x25
++#define CH341_REG_FLOW_CTL     0x27
  
+ #define CH341_NBREAK_BITS      0x01
+ 
+@@ -77,6 +78,9 @@
+ #define CH341_LCR_CS6          0x01
+ #define CH341_LCR_CS5          0x00
+ 
++#define CH341_FLOW_CTL_NONE    0x000
++#define CH341_FLOW_CTL_RTSCTS  0x101
++
+ #define CH341_QUIRK_LIMITED_PRESCALER	BIT(0)
+ #define CH341_QUIRK_SIMULATE_BREAK	BIT(1)
+ 
+@@ -478,6 +482,41 @@ static int ch341_open(struct tty_struct *tty, struct usb_serial_port *port)
+ 	return r;
+ }
+ 
++static void ch341_set_flow_control(struct tty_struct *tty,
++				   struct usb_serial_port *port,
++				   const struct ktermios *old_termios)
++{
++	int r;
++
++	if (old_termios &&
++	    C_CRTSCTS(tty) == (old_termios->c_cflag & CRTSCTS))
++		return;
++
++	if (C_CRTSCTS(tty)) {
++		r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
++				      CH341_REG_FLOW_CTL |
++				      ((u16)CH341_REG_FLOW_CTL << 8),
++				      CH341_FLOW_CTL_RTSCTS);
++		if (r < 0) {
++			dev_err(&port->dev,
++				"%s - failed to enable flow control: %d\n",
++				__func__, r);
++			tty->termios.c_cflag &= ~CRTSCTS;
++		}
++	} else {
++		r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
++				      CH341_REG_FLOW_CTL |
++				      ((u16)CH341_REG_FLOW_CTL << 8),
++				      CH341_FLOW_CTL_NONE);
++		if (r < 0) {
++			dev_err(&port->dev,
++				"%s - failed to disable flow control: %d\n",
++				__func__, r);
++			tty->termios.c_cflag |= CRTSCTS;
++		}
++	}
++}
++
+ /* Old_termios contains the original termios settings and
+  * tty->termios contains the new setting to be used.
+  */
+@@ -546,6 +585,8 @@ static void ch341_set_termios(struct tty_struct *tty,
+ 	spin_unlock_irqrestore(&priv->lock, flags);
+ 
+ 	ch341_set_handshake(port->serial->dev, priv->mcr);
++
++	ch341_set_flow_control(tty, port, old_termios);
+ }
+ 
+ /*
+-- 
+2.47.0
 
 
