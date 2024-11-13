@@ -1,132 +1,122 @@
-Return-Path: <linux-usb+bounces-17551-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17552-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE0FF9C6EF9
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 13:23:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFF5A9C6FB2
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 13:52:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB81EB33343
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 12:15:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 67B171F2142E
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 12:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD092010ED;
-	Wed, 13 Nov 2024 12:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 696411DFDB7;
+	Wed, 13 Nov 2024 12:45:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rMaNYGqZ"
+	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="qHIP4Nfy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from forward501b.mail.yandex.net (forward501b.mail.yandex.net [178.154.239.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F895200BB6;
-	Wed, 13 Nov 2024 12:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC26217B401;
+	Wed, 13 Nov 2024 12:45:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731500123; cv=none; b=OZX9Y9Slw81ErPov9mFO+itK1ees/xLYMBzHjW+yg2nXExzC3C2F1qgG3hEWcK5zKnli8HvByIvLr/rnQPczMU7L2eDqRAoldid0CymGAW1lYKRr6FbSgFfvav5El1OZ/9b6tkUIxhnyKbYWTwvnghgIzR+6rjDFyGJoBRtLTeU=
+	t=1731501946; cv=none; b=CmKcvuzaLtGXviFowVpCwKjQ7C4IHo0ksZnc9nqkjwctumxK8i4ZG0Bvr9m8Y81aq7VLcJQ80u6bsy6S2Kspw/hTVad0w+wQ6a+N8/BoUiqeOX6cC3Hic4Mma+UmGL9zvVdnBeWc83Kopa0aZIVds6W9XOmzUCVljcEUwmepgtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731500123; c=relaxed/simple;
-	bh=9YWmqx9A/xktQm++PEdttt53SjkgS0Z1jMoa8DxBCeg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ND9HIaC3x8pONUZCtxMftyWBY1I4neHjDs1fdkVGNWsYBULDd0Z045FP4umnft8xBv6m+JykRAxZl5NoZqWVSvt003IVSKs3k74FbhD5DP+5WEkW/HtbrxdcQTj8jiNllPf2GNhruXkqNWnWJNpSxe7h1ZPXFY15M+UlNyIltTQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rMaNYGqZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4B95C4CED2;
-	Wed, 13 Nov 2024 12:15:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731500122;
-	bh=9YWmqx9A/xktQm++PEdttt53SjkgS0Z1jMoa8DxBCeg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rMaNYGqZODAfOviPG9NNweaAZwNdMKPKm/r7m9y12m44Tec8i0OzAwTd7x4gjni4g
-	 s3YtR7e+s/D0MmQTRdIcxCELtQQ9d7LAiGcLvzcfve621XsYGkhHSnKmkoIkhIVaRY
-	 SEsGSmI5VP1jGC61MITWv986/Uv6h0dRiYyZrv82AxZCBIHGxI6EJFWXb19WqlSRcc
-	 BgnyRacgEdUqccH8JyhSiLN86ypg5v0g3kBux/gAzRcn0Ps3kCdL/VYeYNVUtcWxUS
-	 Fcv7kagYRz9cbT+bn+Sys0opSUgs0lM4zwRGR6JjCZCO827Gbv51UusFNeIi8Frrg8
-	 bl0M6/d+FoZDQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tBCHD-000000003zf-46qu;
-	Wed, 13 Nov 2024 13:15:16 +0100
-Date: Wed, 13 Nov 2024 13:15:15 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org,
-	andersson@kernel.org, konradybcio@kernel.org,
-	dmitry.baryshkov@linaro.org, mantas@8devices.com,
-	quic_rohiagar@quicinc.com, quic_kriskura@quicinc.com,
-	manivannan.sadhasivam@linaro.org, abel.vesa@linaro.org,
-	quic_kbajaj@quicinc.com, quic_wcheng@quicinc.com,
-	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 6/6] arm64: dts: qcom: Add USB controller and phy
- nodes for IPQ5424
-Message-ID: <ZzSYU61pmFTcPf5_@hovoldconsulting.com>
-References: <20241113072316.2829050-1-quic_varada@quicinc.com>
- <20241113072316.2829050-7-quic_varada@quicinc.com>
+	s=arc-20240116; t=1731501946; c=relaxed/simple;
+	bh=opOR9YZw0CrxnZL8RhalgHFJTGq5vO6cD7H/VXGcPu4=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=hH+0TOFZMN3trLVDaDsfinKwpH1J/+8Eck6V65TjtgKq7xYI7uTzNXnKNfF8fO2VjI5U99jMtLq+lJT15lutfhw8DOYMBEpqiEHHNW7pYdkIXXM7WCaYDn0UhnUI0QKlhplPxXhNHtbK9BevpI2Xex/Ox69qjSsBW3qM94ARY4M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=qHIP4Nfy; arc=none smtp.client-ip=178.154.239.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
+Received: from mail-nwsmtp-smtp-production-main-25.sas.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-25.sas.yp-c.yandex.net [IPv6:2a02:6b8:c1c:2911:0:640:4396:0])
+	by forward501b.mail.yandex.net (Yandex) with ESMTPS id E4A5161F87;
+	Wed, 13 Nov 2024 15:45:40 +0300 (MSK)
+Received: by mail-nwsmtp-smtp-production-main-25.sas.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id ajKC13TOcmI0-xlO3GQTV;
+	Wed, 13 Nov 2024 15:45:39 +0300
+X-Yandex-Fwd: 1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
+	t=1731501939; bh=xzUnup9lsF7Yn/7hev8VMKJhTvZiuEGUzU5++USG4P4=;
+	h=In-Reply-To:Subject:To:From:Cc:Date:References:Message-ID;
+	b=qHIP4Nfy0wnszrh4pBfyv421lwlhJNGBreWoiM0kpM28G/Z2qbrCOznZIX2GycGzN
+	 vfDqz1Lni1rrxFCFjbJA8Vt0WhefcYzAdtaQUdE+z4caRkyGLAYBwjpa3cyXiRtS/s
+	 ZmoCHu1XIv5vQj3SvcYRe4mnpNcmAMTooeOEScyc=
+Authentication-Results: mail-nwsmtp-smtp-production-main-25.sas.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
+Message-ID: <130193b3-6172-4fb0-b799-4e05d676f1dd@yandex.ru>
+Date: Wed, 13 Nov 2024 15:45:36 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241113072316.2829050-7-quic_varada@quicinc.com>
+User-Agent: Mozilla Thunderbird
+Content-Language: en-MW
+To: Miquel Raynal <miquel.raynal@bootlin.com>
+Cc: Lizhi Xu <lizhi.xu@windriver.com>, alex.aring@gmail.com,
+ davem@davemloft.net, edumazet@google.com, horms@kernel.org, kuba@kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wpan@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com,
+ stefan@datenfreihafen.org,
+ syzbot+985f827280dc3a6e7e92@syzkaller.appspotmail.com,
+ syzkaller-bugs@googlegroups.com
+References: <87a5e4u35q.fsf@bootlin.com>
+ <20241112134145.959501-1-lizhi.xu@windriver.com>
+ <6ff1052f-76d5-42a4-bf0c-ec587ca4faa4@yandex.ru> <87y11npfhj.fsf@bootlin.com>
+From: Dmitry Antipov <dmantipov@yandex.ru>
+Autocrypt: addr=dmantipov@yandex.ru; keydata=
+ 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
+ A/UwwXBRuvydGV0=
+Subject: Re: [PATCH] mac802154: add a check for slave data list before delete
+In-Reply-To: <87y11npfhj.fsf@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Nov 13, 2024 at 12:53:16PM +0530, Varadarajan Narayanan wrote:
+On 11/13/24 1:58 PM, Miquel Raynal wrote:
 
-> --- a/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
-> @@ -16,12 +16,71 @@ / {
->  	aliases {
->  		serial0 = &uart1;
->  	};
-> +
-> +	regulator_fixed_3p3: s3300 {
+>> Note https://syzkaller.appspot.com/text?tag=ReproC&x=12a9f740580000 makes an
+>> attempt to connect the only device. How this is expected to work if there are
+>> more than one device?
+> 
+> Isn't sdata already specific enough? What do you mean by "device"?
 
-Fixed regulator nodes should have a "regulator-" prefix in their name.
+Well, syzbot's reproducer triggers this issue via USB Raw Gadget API. IIUC this
+is a debugging feature and it is possible to have the only raw gadget device.
+So when running syzbot's reproducer, 'list_count_nodes(&sdata->local->interfaces)'
+is always <= 1. But how this is expected to work for >1 case?
 
-And please use a shorter label, look at the existing DTs for
-inspiration (e.g. "vreg_misc_3p3").
-
-
-> +		compatible = "regulator-fixed";
-> +		regulator-min-microvolt = <3300000>;
-> +		regulator-max-microvolt = <3300000>;
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +		regulator-name = "fixed_3p3";
-> +	};
-
-But is this really an accurate description of these regulators? Are
-they not part of some PMIC? Can they really not be turned off?
-
-Also please use the names from the schematics for these. I doubt they
-are named "fixed_3p3".
-
-> +
-> +	regulator_fixed_1p8: s1800 {
-> +		compatible = "regulator-fixed";
-> +		regulator-min-microvolt = <1800000>;
-> +		regulator-max-microvolt = <1800000>;
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +		regulator-name = "fixed_1p8";
-> +	};
-> +
-> +	regulator_fixed_0p925: s0925 {
-> +		compatible = "regulator-fixed";
-> +		regulator-min-microvolt = <925000>;
-> +		regulator-max-microvolt = <925000>;
-> +		regulator-boot-on;
-> +		regulator-always-on;
-> +		regulator-name = "fixed_0p925";
-> +	};
-> +
-
-Stray newline.
-
-> +};
-
-Johan
+Dmitry
 
