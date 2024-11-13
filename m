@@ -1,86 +1,99 @@
-Return-Path: <linux-usb+bounces-17526-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17527-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9FA39C68F3
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 06:58:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBAB29C6905
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 07:03:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF94E2840B8
-	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 05:58:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82B0A1F243F3
+	for <lists+linux-usb@lfdr.de>; Wed, 13 Nov 2024 06:03:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EE52174EFA;
-	Wed, 13 Nov 2024 05:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34125176AB6;
+	Wed, 13 Nov 2024 06:03:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nY+eVW0b"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="de/wS9hw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A792309AE;
-	Wed, 13 Nov 2024 05:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 711A310F1;
+	Wed, 13 Nov 2024 06:03:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731477480; cv=none; b=gCLQytd4/tAJ0D/sWj8ebpYuKbROzB3Zb0wil8ucELrEo3Xmhnd+cKVENAZDa3KY1b2t5555hoGU9ZXwCMOtqLCIBVX2GfD4jmW37+0DdjC1F3yA6+mG6Tj3BE0nHrVVAw9JSL6RYqPa7TKwjjXTGtNQksruz5VmFLrDyBNp3h8=
+	t=1731477822; cv=none; b=gv/mLyB/Z8RbDapFF1kjTRALnujqzmpbllLLydfd0dsiZu/68+A+JtR1coha81bt+wDYCXaeX4VbIIMFXlm15S/ibSbV0OwV+wablEz61A28Z+7m7An4xQtv9Ty6K7g6CWn9oDJtDyS5H5K4yzLqijncNf25+x/K7Mez+7OYSiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731477480; c=relaxed/simple;
-	bh=eh588OqJAZ11hzfiDHHRrxqtZLDGLQpnHKuyQK8kIXg=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=ITDFXTcR2FkFYIkV36x/JXv0uwGaXYbVgYPD3EBEvRkWGSFs+4jUOEFpQboVy6PfQB8MIkI+PUwyRy2U2C9ioE2PinTMZjUPUiMt64U8z/uxcon6tlx0/QJ2N2EClDAvrpXfV7oBNr2aocxSFUoIepXf1zO5Q0qlGmtnIRy50Q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nY+eVW0b; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e29218d34f8so279112276.1;
-        Tue, 12 Nov 2024 21:57:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731477478; x=1732082278; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=eh588OqJAZ11hzfiDHHRrxqtZLDGLQpnHKuyQK8kIXg=;
-        b=nY+eVW0boHX6cdVDKA9aMX+9eQLUwnWVdc37jhFgUETHNdKpScXh905JI5BeYTKmd1
-         Tfqfsk+XxJoEX18bJRSe7COEBzMBfI14g2b9RWr3VqOgX2Vw/0wgcf+2QpjKHCI808L2
-         OFWcRPYr2A3L+Ngf26N0qBK9lZsl1Lkn1eMMTdrV21IPPjqMMbFgX4M0ZtAjrrxT96Ie
-         Adn3Bj1dRcd0iuwJb84WDdKDdQneGCkgdRDYCIqqHnT3tFYpHl+tc8Zl3blwRwi5qe9C
-         VAdqwteEuq8Ysr8t7D1PhPSqpRrYca6yImTtawOQizGC+K2E7J4A+B8GJd+o+o3Id4OT
-         w1Yw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731477478; x=1732082278;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eh588OqJAZ11hzfiDHHRrxqtZLDGLQpnHKuyQK8kIXg=;
-        b=D4r9i526OQYyZdbQGe/qnrg3EXBKergWz44MIebMi0AQ7C4iKW7SFh1GvSAAVufhLQ
-         n4Ntvu/0UybV91n7XA9izuwg5T0Y3PKDtC6kxqXwmKgpI79GCtc2UsILNr0M3D66KOQe
-         fcGsYHbEoit2LTD0/TcnfPbODlELEFhhTEf4N2CMUFf6m9cYW1sml9ZFzRuzpZkajWrS
-         f5vCDPnQlTmzL9XFLN35bSmQJw2AkVs1IgBQeXWyZHCt38uK3ghNBYGMfjSJq7DSkt4H
-         q6a+vgL/dwXMPLSeUiaTovJF5I/QLa89Ui84zxfeEmLSYPpeKEhjWJCZhVqiVWynfwO0
-         oF8A==
-X-Forwarded-Encrypted: i=1; AJvYcCX0wFrzKwpQnT8Udu3o8xhSHr2zOnusC7CwQMxXQvXGbWEKE00vprFjcuSO5qJOnmDVcmoZ+olAxrESMGE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhpeT/4i5wp7aX5dpoLh4quUtNczsRjhls0LOIkHRldezW6FFa
-	oLUJEthflOD/zBTvjwMwnnV0VbaIcNalxhX7vViCY9oTAnNwsVUb2Jtm94gxAvaanCGsGpSPlzw
-	xuqsWKsqtjjGYTOmKBd4qVrcAcP/Cpg==
-X-Google-Smtp-Source: AGHT+IFiJOjP3oCdvBwWms4ccKi/MaLaMU01hwd4cfMw0NBwKOYaGRjGKo7rXblIW6SwLynbGgTcEct/wGY0HTd1roc=
-X-Received: by 2002:a25:8481:0:b0:e29:2988:ecf0 with SMTP id
- 3f1490d57ef6-e337e102bdfmr16069231276.10.1731477477981; Tue, 12 Nov 2024
- 21:57:57 -0800 (PST)
+	s=arc-20240116; t=1731477822; c=relaxed/simple;
+	bh=AYmuM2b9645Yoo9Z1mFsCvVpUkr+Fpm2ignibA9XP0U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rh85Qsrg2RGQgSDDbQMeIsdT7DGWJGUx89aA+ol5bWZnKMAYduKIA9GCzkyl6pyBMZeotlP/1R0srUmLdczT/s7g8NeRCw672exbxz5l8KBIod1ZFhGxJKVXvQRUaEYS2XrDkyae8+NjSew5YgsLGG535Up5Hf5TKLnzBM/glxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=de/wS9hw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71BE5C4CECD;
+	Wed, 13 Nov 2024 06:03:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1731477822;
+	bh=AYmuM2b9645Yoo9Z1mFsCvVpUkr+Fpm2ignibA9XP0U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=de/wS9hwI7o3bOyH6Mf8Nx60ot7cbBoEjUBYFWMWmpUNOl2kY9N0c12otcT4uZexx
+	 DXcsBeo8YIm2p3hkYys+84Zs2DEAOTEajzA76pgifSjccdfrgB4n3hKF2URZS4bI82
+	 5gPQhOhyXfbtk1x8apWV7VnZZ1fVKLpFxv1gl1j4=
+Date: Wed, 13 Nov 2024 07:03:38 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Abel Vesa <abel.vesa@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Johan Hovold <johan@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Trilok Soni <quic_tsoni@quicinc.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v5 4/6] arm64: dts: qcom: x1e80100-crd: Enable external
+ DisplayPort support
+Message-ID: <2024111341-platter-disk-8238@gregkh>
+References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
+ <20241112-x1e80100-ps8830-v5-4-4ad83af4d162@linaro.org>
+ <ZzOK2Xz1QQvugGnG@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Jason fab <siliconfab@gmail.com>
-Date: Wed, 13 Nov 2024 11:27:47 +0530
-Message-ID: <CAHXL5pfQjhpANBxNY1YjURhWwU17WD9gX4rDqi4ezYOKeFs=gQ@mail.gmail.com>
-Subject: VTIO support on USB
-To: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZzOK2Xz1QQvugGnG@linaro.org>
 
-Hello,
+On Tue, Nov 12, 2024 at 07:05:29PM +0200, Abel Vesa wrote:
+> On 24-11-12 19:01:13, Abel Vesa wrote:
+> > The X Elite CRD provides external DisplayPort on all 3 USB Type-C ports.
+> > Each one of this ports is connected to a dedicated DisplayPort
+> > controller.
+> > 
+> > Due to support missing in the USB/DisplayPort combo PHY driver,
+> > the external DisplayPort is limited to 2 lanes.
+> > 
+> > So enable all 3 remaining DisplayPort controllers and limit their data
+> > lanes number to 2.
+> > 
+> > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> 
+> Please do not merge this specific patch.
 
-I would like to know if the linux kernel usb subsystem supports
-Virtualization based Trusted IO Management (USB VTIO)?
-If yes, could you please point me to any documentation and steps on
-how to enable it?
+Please do not mix patches that should, and should not, be applied in the
+same series as that plays havoc with our tools that want to take a whole
+series at once.  Stuff like this just makes me delete the whole series
+from my review queue, and if you got sent something like this, I imagine
+you would do the same :(
 
--Thanks in advance
+thanks,
+
+greg k-h
 
