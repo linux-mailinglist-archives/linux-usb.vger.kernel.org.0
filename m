@@ -1,109 +1,138 @@
-Return-Path: <linux-usb+bounces-17605-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17606-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C2D69C95C2
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 00:04:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A965A9C960F
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 00:23:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9130AB22CA0
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 23:04:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 606781F22754
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 23:23:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 982AA1B21AC;
-	Thu, 14 Nov 2024 23:04:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB16E1B21A1;
+	Thu, 14 Nov 2024 23:22:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="GbuMwzpI"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="G8LOJ57s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9C81AAE09;
-	Thu, 14 Nov 2024 23:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D39C71AC444
+	for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 23:22:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731625464; cv=none; b=m0kdrsU7fPTuN1p0EwPlHxu2+ViP9+UzBNWzNyrNxLCYFGf/lFSbYLmFViAIoQYIU8bE7Oat/t/9o4nSUc+kMRiEx+umW6b4+iAFR/fAc1A79RbVhqgLvkyA4ReYQw+osGu9oRGscGIw4oKT6gR15GiXa4rWSRhc7J5ZPxPbBAc=
+	t=1731626578; cv=none; b=unTz5yDb7g2KFf/KJwfq0kEAP6aFhrLltBxfwv76UWHyHNhxVvpd6zXJE0MIPVAryKDi/scXibur0xVCsGHAYb62lY/GwvATamg12L2FzjVilhsIm/TCZHp3YD1SzkqhdL30LNrXCfB3DgoLIycIudQcLp0opDYTv8ulEDZEDJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731625464; c=relaxed/simple;
-	bh=OsGfGF/o5RpRQwcQvXjOZn+wKPv66BZqun6G0zAFjug=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fC5C/HfN/Ey2XyjSYbjUtZxt+s0welQzPrVjYjJAQTmSChuonC0A/W19qCahSagrin9Wwn/rrBUqu6ibYzRtUI0WJ/uS3CIsFbTkK2VTqBbz1B3+TB1vLQDrdvuq5r5/SOT7fyxwzb06IaDDsb/wRwnGpJjLGlv24CthsCFoZIY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=GbuMwzpI; arc=none smtp.client-ip=83.149.199.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
-Received: from ldvnode.intra.ispras.ru (unknown [10.10.2.153])
-	by mail.ispras.ru (Postfix) with ESMTPSA id 2DB0140777B9;
-	Thu, 14 Nov 2024 23:04:17 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 2DB0140777B9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1731625457;
-	bh=TSg5BOYF5KkmZaE8tI+lrU/1Mu+x0qt/noMtspsYKeM=;
-	h=From:To:Cc:Subject:Date:From;
-	b=GbuMwzpIFr+6skO8lVRVyDRQZ137I06PkPaAngrV+v1BWttjSyGlCLXZM9FgiIVJX
-	 pJnkvaPyIw5y6YbpprG69OR/k0KtQviXSZwFyHCpSbfNLKzA7u5maFs0/A0dFtyFRD
-	 WMUMbmoZ/zImKV1n8uR+jVPFjAPazzUXQGW7BUTM=
-From: Vitalii Mordan <mordan@ispras.ru>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Vitalii Mordan <mordan@ispras.ru>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1731626578; c=relaxed/simple;
+	bh=TWnpyIatOfVsTW5fWjCdwqVZjLxprKAsxdhtPO+S+RI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=j6+QuHkI92eLvSwDzgnWCCUQ8cLiMYHLenRBXCwhCjly/AGgHyE/lFU8n0x6WHvknu/rnE7ErkR0h/SJRLxlxeOS8i4qd3oage4n1ZKBdb6AXIDMmeDhUGqsBP2G5lYIr8wYMm/+g8E+tQNYXjzryn75wGg3qNZLn9Tku9V5AwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=G8LOJ57s; arc=none smtp.client-ip=209.85.222.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f179.google.com with SMTP id af79cd13be357-7b13bf566c0so65484085a.3
+        for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 15:22:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1731626575; x=1732231375; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3miarDpBKS5LhnK/EzKRYHtnDfo0D2mSnrLFUUoEoc8=;
+        b=G8LOJ57s4rMd3Cfk+FQP3ephIWB0pHS5e0yyex14o3svIQVppeFv6Qiyj5GoxyPkmP
+         8njkNy2QLt6+0hBqvEFf/O9Lwl0p0SuWRmkGdJDUItNqbx9GMSniQTh6he/aiYpPyDBS
+         BW5OLXV2tkRkZh1ZZaemgl+9x8HEQMQExLscrqpAxZ4YdbstwH4W5E83Lw6wVcWmFlLv
+         AAcVgSz1JQ7zv9Y7hP6zhcAC5kPZxONPUoSiJsaHdgJpPRNRBgWb2tKkl70BA/wLqY2Z
+         gSA3xaIBg9DTG02qhRFtHcNUbPeMPF3A3MqQGTYP9fsWToTrb2UwRxpn4i5FcjGfAQSe
+         SyzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731626575; x=1732231375;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3miarDpBKS5LhnK/EzKRYHtnDfo0D2mSnrLFUUoEoc8=;
+        b=ZZ4G7i3OmBp5Ouqu1a53gMRZjYR7yH9VzztO0YHLcoGkAJGP/zbwSLWhmMr7p9OmK0
+         L++Rz7XIFD8QLDDSe7aPckyTrvdwpZ73nw99K8YIaeK0+eAc/KG9MephXamR3TOw9pTt
+         mRlKmdjH3utQ2fYiCMA86qYHX8xErnIoZc3SzNwxRbrp9lSUZPssa+cQty9zZu6FYprR
+         nMghM4B8iE+4oJgY/UKSqGz50UR6H5CRGWV79VP5bVg+UpVeeDHuVCJEK/Coxev8bWb2
+         ipMv6RCFIUCqibOdFHBnEiZZQLDkl0R4/25zFJYIR1wsruK7c6XG2KtOiHRx1mbYFXjC
+         KtaA==
+X-Forwarded-Encrypted: i=1; AJvYcCUFttXyRRcHpFD+H12g7zRidxTaE2y4lvqJrwCEssA75cZ9uqvkvAprb+zAmGKnk3Di02vDeOi9+lI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxcg/s+/KNSA10RjyRS6kwkXgRtYdQ+TQ5sZtAIQdLfuOnC3yjX
+	Zoo0gH30pslRGk/p9anWvBaJNBJ4yCXjABqQy5jv7pawhzwKOSPeGUJQqncf9w==
+X-Google-Smtp-Source: AGHT+IFjqrMVlowDr20dpgTwYGF+thfsw4K47/2damjGsM8Ss1t2jb6yNgUAMmnFYAEV7eQ7+iqVVg==
+X-Received: by 2002:a05:620a:2446:b0:7a2:c13:458d with SMTP id af79cd13be357-7b36230fecbmr94929485a.42.1731626574793;
+        Thu, 14 Nov 2024 15:22:54 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::24f4])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b35c98458dsm100205185a.14.2024.11.14.15.22.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2024 15:22:53 -0800 (PST)
+Date: Thu, 14 Nov 2024 18:22:50 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Vitalii Mordan <mordan@ispras.ru>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Fedor Pchelkin <pchelkin@ispras.ru>,
 	Alexey Khoroshilov <khoroshilov@ispras.ru>,
-	Vadim Mutilin <mutilin@ispras.ru>,
-	stable@vger.kernel.org
-Subject: [PATCH] usb: ehci-spear: fix call balance of sehci clk handling routines
-Date: Fri, 15 Nov 2024 02:03:10 +0300
-Message-Id: <20241114230310.432213-1-mordan@ispras.ru>
-X-Mailer: git-send-email 2.25.1
+	Vadim Mutilin <mutilin@ispras.ru>, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: ehci-spear: fix call balance of sehci clk handling
+ routines
+Message-ID: <b507c3b1-931f-4abc-870c-68f377cd7b63@rowland.harvard.edu>
+References: <20241114230310.432213-1-mordan@ispras.ru>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241114230310.432213-1-mordan@ispras.ru>
 
-If the clock sehci->clk was not enabled in spear_ehci_hcd_drv_probe,
-it should not be disabled in any path.
+On Fri, Nov 15, 2024 at 02:03:10AM +0300, Vitalii Mordan wrote:
+> If the clock sehci->clk was not enabled in spear_ehci_hcd_drv_probe,
+> it should not be disabled in any path.
+> 
+> Conversely, if it was enabled in spear_ehci_hcd_drv_probe, it must be disabled
+> in all error paths to ensure proper cleanup.
+> 
+> Found by Linux Verification Center (linuxtesting.org) with Klever.
+> 
+> Fixes: 7675d6ba436f ("USB: EHCI: make ehci-spear a separate driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+> ---
 
-Conversely, if it was enabled in spear_ehci_hcd_drv_probe, it must be disabled
-in all error paths to ensure proper cleanup.
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
 
-Found by Linux Verification Center (linuxtesting.org) with Klever.
-
-Fixes: 7675d6ba436f ("USB: EHCI: make ehci-spear a separate driver")
-Cc: stable@vger.kernel.org
-Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
----
- drivers/usb/host/ehci-spear.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
-
-diff --git a/drivers/usb/host/ehci-spear.c b/drivers/usb/host/ehci-spear.c
-index d0e94e4c9fe2..11294f196ee3 100644
---- a/drivers/usb/host/ehci-spear.c
-+++ b/drivers/usb/host/ehci-spear.c
-@@ -105,7 +105,9 @@ static int spear_ehci_hcd_drv_probe(struct platform_device *pdev)
- 	/* registers start at offset 0x0 */
- 	hcd_to_ehci(hcd)->caps = hcd->regs;
- 
--	clk_prepare_enable(sehci->clk);
-+	retval = clk_prepare_enable(sehci->clk);
-+	if (retval)
-+		goto err_put_hcd;
- 	retval = usb_add_hcd(hcd, irq, IRQF_SHARED);
- 	if (retval)
- 		goto err_stop_ehci;
-@@ -130,8 +132,7 @@ static void spear_ehci_hcd_drv_remove(struct platform_device *pdev)
- 
- 	usb_remove_hcd(hcd);
- 
--	if (sehci->clk)
--		clk_disable_unprepare(sehci->clk);
-+	clk_disable_unprepare(sehci->clk);
- 	usb_put_hcd(hcd);
- }
- 
--- 
-2.25.1
-
+>  drivers/usb/host/ehci-spear.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/host/ehci-spear.c b/drivers/usb/host/ehci-spear.c
+> index d0e94e4c9fe2..11294f196ee3 100644
+> --- a/drivers/usb/host/ehci-spear.c
+> +++ b/drivers/usb/host/ehci-spear.c
+> @@ -105,7 +105,9 @@ static int spear_ehci_hcd_drv_probe(struct platform_device *pdev)
+>  	/* registers start at offset 0x0 */
+>  	hcd_to_ehci(hcd)->caps = hcd->regs;
+>  
+> -	clk_prepare_enable(sehci->clk);
+> +	retval = clk_prepare_enable(sehci->clk);
+> +	if (retval)
+> +		goto err_put_hcd;
+>  	retval = usb_add_hcd(hcd, irq, IRQF_SHARED);
+>  	if (retval)
+>  		goto err_stop_ehci;
+> @@ -130,8 +132,7 @@ static void spear_ehci_hcd_drv_remove(struct platform_device *pdev)
+>  
+>  	usb_remove_hcd(hcd);
+>  
+> -	if (sehci->clk)
+> -		clk_disable_unprepare(sehci->clk);
+> +	clk_disable_unprepare(sehci->clk);
+>  	usb_put_hcd(hcd);
+>  }
+>  
+> -- 
+> 2.25.1
+> 
 
