@@ -1,383 +1,224 @@
-Return-Path: <linux-usb+bounces-17597-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17598-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 754F59C8C08
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 14:43:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B6839C8FFB
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 17:41:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B9FFB2A4FC
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 13:29:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D40BE1F221B1
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 16:41:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE3BD1FAC59;
-	Thu, 14 Nov 2024 13:28:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B3A1126C03;
+	Thu, 14 Nov 2024 16:41:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UmtJLVSq"
+	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="GVLjHCf/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+Received: from mail-yb1-f196.google.com (mail-yb1-f196.google.com [209.85.219.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A901F9ED5
-	for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 13:28:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D565313CA8D
+	for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 16:41:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731590930; cv=none; b=gU8WK2fKTme7XARGRm2TaY+GEuSWWHRDyst2b6viasvTdaJv1B1wgk20Y1BQxkTjPkM50wLzoelexueTiy7GZ5Zwu5bv7gwQ/oayYYWm3T6H1rL/nfmukAoYgVLzf+z/8xs6qdq6mDwE95S5lg94f9M6+nPj5cfwwIvEMOZAxaQ=
+	t=1731602491; cv=none; b=eaRuzmwQTTZAtgkpLl+hFchmeuPceztb5hvShMX8jgcPY48YH0uiESQi0M7TFxf0XCLg5Z7bHcJ3TdJkLA0a2AB6zRwtqsHfHD/jepOlQ4ZukJJXAb3WgmB54gAButyIUyYO6iyoBGsWG3WKOpoAxmaxJsVb4GFjs3Yi+6M8X3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731590930; c=relaxed/simple;
-	bh=Sxx/Lai0zK42h/U29LKjUmar6IFE1Dx8OHn26s0hyjA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EqGW4locfwUKYdT331V8A2r/Pym7ZFK3iWKvEw2ZHU2KVtso9Aj9BpEFoVd62GqeEbJSaaj0vi95Fos1QCRqex9tAwUklRXlRjfXcXysNaY0Ww8dsjx4pCr7CSsTorI1dyihop2ssVDGE59dFdeOfHQYGpJmZ5Ec+j8ItSEcED4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UmtJLVSq; arc=none smtp.client-ip=209.85.128.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6e9ba45d67fso6800747b3.1
-        for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 05:28:48 -0800 (PST)
+	s=arc-20240116; t=1731602491; c=relaxed/simple;
+	bh=qFIEaL5IReucQlViHo26Nnec3Y60USrR6Ex1wLhrzx0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=B5PT4BvKNEoOQv9G80DIdNCeWxZI/m1x7A38f2p7oBPNox02HjAoADqQp5ll9ehBqyTC5gB8qukBVXB5C2GoRtnGERRkTIrz1Pg4/y4Al62jnQ/jBL3BZqPi5kUB+Kz3gH8Lw6WjLLPdENb3MK3pNMgn1Oaw3Jvhu7f+fKwGMMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=GVLjHCf/; arc=none smtp.client-ip=209.85.219.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
+Received: by mail-yb1-f196.google.com with SMTP id 3f1490d57ef6-e30cef4ac5dso925207276.0
+        for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 08:41:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731590927; x=1732195727; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mcQ5UiOW6mD+0cy+sSW1sUJ7XuSBho0hmBvy+z6MjTw=;
-        b=UmtJLVSq6uIZ8AO9ntnUrJXFoa+SW0xXRZBYfGcMTBHz9+UIhl0/w8rEy1js0sgkid
-         s6eddXSJZG1qS7R4or73xTyi9uFPtHmfsBkwfLkNlV1GBMsUVr7yKMKpygC6CtrhuZ8T
-         Tgoms0tAuhBuOK/0XxgmXiA6AK610j19wdJXE9lbXf7w23QFy20RG0Lkf9CVKEI1elau
-         B7aa3R980UbX+cEkPOHfXxmtD0DEEPVkJVnQYaekJ8GZ1xQp8qyPOOaz2+3Uw4QVdG3k
-         Ucc1ZQ/O7fbGzbcZAQgEbh9C2YF9Y2zLJO/rnmdnbwPnh5nxR9xWEQGhDfxeb+D7c1eI
-         72Fw==
+        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1731602489; x=1732207289; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SL08LjacC7rUX7MCRD0qhYmVjxHSE5H188E8poMRgtM=;
+        b=GVLjHCf/LmVVqAI3f8zOudSGioRnSNj1qABak04qk8H64GOReuaqInZuXOFhlOQ49P
+         +6/6DopY68lfmNDedF993JqAzXByWEWQmSouZf8gMV3ajOad7VDFRQx9N9ckFmT8WqRa
+         hcwV7mY5WyOh9mE6Y2FESbLWYlNOIgKZfUZxibRJQv1TaVPEF3fcykKHzus3CxFiLQMc
+         4fKhBIfUaHeOKB8BiE+hiVWbkOAn+daSHHAgAoWHNgDrOkPYHmgeC4YLEGDQO5DGF6AZ
+         a2jbfRNDZRQ0YqauYNYbUHRQtWgaD7CAK6bZTMJrj0mZ3WxbTpwPu0l5wU4gIRq3URtz
+         1Wjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731590927; x=1732195727;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mcQ5UiOW6mD+0cy+sSW1sUJ7XuSBho0hmBvy+z6MjTw=;
-        b=jpM9s7ZherlFCr84pnDYIMUSUjLLxUtz4asZsqYAz/8Mv5skiXfHeUVsOKli/JIZ+9
-         /V8kCQVhoBPVPmzFY3ZUpgRKpJjAprO8ixDS5MXLCkIF3AtEBg6qpXosnoFgpKHcvcvW
-         lLaB52d4mx3rs8CQnXzHLJ1313cg+Jk4i0/qlMlXpgPabF6sjDNuwFB6md2f+bHo7zub
-         edJOh2wb8uczROqOS4OIhamoistQ1L+9unNHF870aWDPOcwqXeJODgl2LepMY9tLkCQr
-         tAxUrG1zs9COu/GSCKdZnc8EJT8/N6OOwdbUzvvAjpV4T2z4ceo2F/vf1rRuMnqfisEu
-         bvRA==
-X-Forwarded-Encrypted: i=1; AJvYcCUuXsmu4KzGyTRUte8F/WJx38M0HWt/UlfNqjTNKZSAszwC41J7GaIMH//k9utj5lTjexAV0syekUI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRIxr0Wp16EqU1SaDKsZS1fjXb7WOo2M6AF8KZv8NhEUiy34Wx
-	CakHyCgg+00t4dU1dsNB4HU3PGIzBeX41CaI80IFd1PSB8gfQI1TmaN2RDdLCNWdWXxxAPWU/Wp
-	dSQI1vOBdGNo1IXL9glYDxcF6QdzTYBjHzfiDWg==
-X-Google-Smtp-Source: AGHT+IEugYhO3qu2pI5GTy+5MNobr83Oj1LIe7KV1mNroQS/7Hdfjqfs3RZ2KahktWJFX5bf8Yw2oc7xssKAL6x6h1s=
-X-Received: by 2002:a05:690c:2501:b0:6dd:cdd7:ce49 with SMTP id
- 00721157ae682-6eca4640ff7mr126602127b3.6.1731590927516; Thu, 14 Nov 2024
- 05:28:47 -0800 (PST)
+        d=1e100.net; s=20230601; t=1731602489; x=1732207289;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SL08LjacC7rUX7MCRD0qhYmVjxHSE5H188E8poMRgtM=;
+        b=QiEGY9ipAu05BTiL/PCjoN/PwtSX4uCIVizNGGzDIz4ezv5KBFEzJf9aSWocmttGEq
+         FTvY1nNfqc1nwsnYg1404l8q+VqA7prkGKy1o0R0tQipqov/KgyhE28uoP2TZTqu99Zj
+         ZAvSUKeQ203mGuBXKoKNOa89iOt8jTRwEdZQC4UglsHI03V1aGyxVeV2BUjx9iIzHDw3
+         NjUOvanOYLmxr68bbzHFbFhPVjCyzkZYsFGZnnN9oYD78rfqJ58n4pPZfm/2OE7svivC
+         S7eI5n5FjmxZbW2hGXdvyusKyDxS6EHh5dUp+c5EQPnI2GvCDen/hvljGaVnlhx1tpiG
+         hiYA==
+X-Forwarded-Encrypted: i=1; AJvYcCVZiBWMwm3uZRYMmJsBnFpm5hRgVvC7w66wC213YTj85aUJhL9apGXu3W8TLFrCuQXy5/1WhW534EQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyvm+qhB5ZwcdS5zLYyyFVaIPUT5jKXf/d3fvbI+zFkl6BKIriE
+	i3yAsjQNzb6hyBO1z5dU2EX90RGHDr9BaCMct6koTCBuiOe8fGX6H+JEFq3pFCQ=
+X-Google-Smtp-Source: AGHT+IEaP6fMi31v7hWmEvcvQvJvm61ChjgveUhIvu1IZuBu1iKqTOGRYw+1t45B97aO2vUW83NDGw==
+X-Received: by 2002:a05:6902:b1d:b0:e29:48ad:b845 with SMTP id 3f1490d57ef6-e35dc547994mr9707581276.22.1731602488742;
+        Thu, 14 Nov 2024 08:41:28 -0800 (PST)
+Received: from kf-ir16 ([2607:fb91:759:8d6:15e3:d4fb:c375:8d87])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e38152caccdsm399688276.14.2024.11.14.08.41.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 14 Nov 2024 08:41:28 -0800 (PST)
+Date: Thu, 14 Nov 2024 10:41:25 -0600
+From: Aaron Rainbolt <arainbolt@kfocus.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
+ andreas.noever@gmail.com, linux-usb@vger.kernel.org, mmikowski@kfocus.org,
+ linux-kernel@vger.kernel.org, Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: USB-C DisplayPort display failing to stay active with Intel
+ Barlow Ridge USB4 controller, power-management related issue?
+Message-ID: <20241114104125.00a02eb1@kf-ir16>
+In-Reply-To: <20241114115136.GB3187799@black.fi.intel.com>
+References: <20241031095542.587e8aa6@kf-ir16>
+	<20241101072155.GW275077@black.fi.intel.com>
+	<20241101181334.25724aff@kf-ir16>
+	<20241104060159.GY275077@black.fi.intel.com>
+	<20241105141627.5e5199b3@kf-ir16>
+	<20241106060635.GJ275077@black.fi.intel.com>
+	<20241106110134.1871a7f6@kf-ir16>
+	<20241107094543.GL275077@black.fi.intel.com>
+	<20241111082223.GP275077@black.fi.intel.com>
+	<20241112164447.4d81dc3a@kfocus.org>
+	<20241114115136.GB3187799@black.fi.intel.com>
+Organization: Kubuntu Focus
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241114074722.4085319-1-quic_varada@quicinc.com> <20241114074722.4085319-7-quic_varada@quicinc.com>
-In-Reply-To: <20241114074722.4085319-7-quic_varada@quicinc.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Thu, 14 Nov 2024 15:28:36 +0200
-Message-ID: <CAA8EJpr6xb=TPPgk7ERhKVp7OnYdPGCK6+1_2TBRLBt_eWM43A@mail.gmail.com>
-Subject: Re: [PATCH v3 6/6] arm64: dts: qcom: Add USB controller and phy nodes
- for IPQ5424
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, gregkh@linuxfoundation.org, andersson@kernel.org, 
-	konradybcio@kernel.org, mantas@8devices.com, quic_kbajaj@quicinc.com, 
-	quic_kriskura@quicinc.com, quic_rohiagar@quicinc.com, abel.vesa@linaro.org, 
-	quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org, 
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Thu, 14 Nov 2024 at 09:48, Varadarajan Narayanan
-<quic_varada@quicinc.com> wrote:
->
-> The IPQ5424 SoC has both USB2.0 and USB3.0 controllers. The USB3.0
-> can connect to either of USB2.0 or USB3.0 phy and operate in the
-> respective mode.
->
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v3: Regulator node names, labels and 'regulator-name' changed per review suggestions
->     Stray newline removed
->
-> v2: Add dm/dp_hs_phy_irq to usb3@8a00000 node
->     Add u1/u2-entry quirks to usb@8a00000 node
-> ---
->  arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts |  66 ++++++++
->  arch/arm64/boot/dts/qcom/ipq5424.dtsi       | 159 ++++++++++++++++++++
->  2 files changed, 225 insertions(+)
->
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts b/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
-> index d4d31026a026..859e15befb3f 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
-> +++ b/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
-> @@ -16,12 +16,70 @@ / {
->         aliases {
->                 serial0 = &uart1;
->         };
-> +
-> +       vreg_misc_3p3: regulator-3300000 {
+On Thu, 14 Nov 2024 13:51:36 +0200
+Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
 
-Technically these names are correct. However they don't match the
-approach that Qualcomm DT files have been using up to now.
-You can compare your data with the output of `git grep :.regulator-
-arch/arm64/boot/dts/qcom/`
+> Hi Aaron,
+> 
+> On Tue, Nov 12, 2024 at 04:44:47PM -0500, Aaron Rainbolt wrote:
+> > On Mon, 11 Nov 2024 10:22:23 +0200
+> > Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+> >   
+> > > Hi,
+> > > 
+> > > On Thu, Nov 07, 2024 at 11:45:44AM +0200, Mika Westerberg wrote:  
+> > > > Hi,
+> > > > 
+> > > > On Wed, Nov 06, 2024 at 11:01:34AM -0600, Aaron Rainbolt wrote:
+> > > >    
+> > > > > > Unfortunately that does not help here. I need to figure
+> > > > > > something else how to detect the redrive case with this
+> > > > > > firmware but first, does this work in Windows? I mean if you
+> > > > > > install Windows to this same system does it work as
+> > > > > > expected?    
+> > > > > 
+> > > > > It does work as expected under Windows 11, with one major
+> > > > > caveat. We used a Windows 11 ISO with a setup.exe created on
+> > > > > April 05 2023 for installing the test system, and after
+> > > > > initial installation it behaved exactly the same way as Linux
+> > > > > behaves now (displays going blank soon after being plugged
+> > > > > in). However, after installing all available Windows updates,
+> > > > > the issue resolved, and the displays worked exactly as
+> > > > > intended (the screens are recognized when attached and do not
+> > > > > end up disconnecting after a timeout).
+> > > > > 
+> > > > > Would it be helpful to test on Windows 11, and provide a
+> > > > > report and system logs?    
+> > > > 
+> > > > Unfortunately, I don't know anything about Windows ;-)
+> > > > 
+> > > > However, I asked our Thunderbolt hardware/firmware team about
+> > > > this, if they have any idea how it was solved in Windows side.
+> > > > Might take a couple of days though.    
+> > > 
+> > > While waiting for this, I wonder if you guys could do one more
+> > > experiment? I would like to get the traces what is happening there
+> > > (hoping something pops out there). Following steps:
+> > > 
+> > >   1. Download and install tbtools [1].
+> > >   2. Build and install the kernel with my "redrive" patch.
+> > >   3. Boot the system up, nothing connected.
+> > >   4. Wait until the Barlow Ridge is in runtime suspend (so wait
+> > > for ~30s or so)
+> > >   5. Enable tracing:
+> > > 
+> > >     # tbtrace enable
+> > > 
+> > >   6. Plug in USB-C monitor to the USB-C port of the Barlow Ridge.
+> > > Do not run 'lspci -k'. Expectation here is that there is no
+> > > picture on the monitor (in other words the issue reproduces).
+> > > 
+> > >   7. Stop tracing and take full dump:
+> > > 
+> > >     # tbtrace disable
+> > >     # tbtrace dump -vv > trace.out
+> > > 
+> > >   8. Send trace.out along with full dmesg to me.
+> > > 
+> > > Thanks!
+> > > 
+> > > [1] https://github.com/intel/tbtools  
+> > 
+> > Testing done as requested. Notes from tester:  
+> 
+> Thanks!
+> 
+> > * I verified lsmod |grep thunderbolt which showed module.
+> > * When running sudo ./tbtrace enable, output was Thunderbolt/USB4
+> >   tracing: Enabled.
+> > * When plugging in monitor, it wakes the backlight, but there is no
+> >   image. syslog shows it as LG monitor controls. The monitor reports
+> >   "no signal" and eventually turns off the backlight to save power.
+> > * When running sudo ./tbtrace disable, output was Thunderbolt/USB4
+> >   tracing: Disabled.
+> > * Output was save using tbtrace dump -vv > trace.out and sudo dmesg
+> > > trace.dmesg. trace.out is an empty file.
+> > 
+> > ---
+> > 
+> > (Yes, that's correct, trace.out is empty. I attached it nonetheless,
+> > but it's a 0-byte file. I'm guessing the Thunderbolt chip probably
+> > didn't come out of suspend?)  
+> 
+> Yes, that's possible and this could explain the Linux behaviour but it
+> does not explain why it works in Windows. Also the dmesg is full of
+> stacktraces, not much else.
+> 
+> I got reply from our experts. They say that we are expected to get the
+> DP IN unplugs every single time we enter redrive mode. There is
+> nothing "special" added to the Windows side for this either so there
+> is no real explanation why it works in Windows and why we see this in
+> Linux. What they also wanted to check is that with the "production
+> quality" Barlow Ridge firmwares this is not expected to happen and
+> yours is in 14.x so is this some pre-production hardware that you are
+> dealing with or this can be purchased from somewhere? Where did you
+> get the firmware?
 
-> +               compatible = "regulator-fixed";
-> +               regulator-min-microvolt = <3300000>;
-> +               regulator-max-microvolt = <3300000>;
-> +               regulator-boot-on;
-> +               regulator-always-on;
-> +               regulator-name = "usb_hs_vdda_3p3";
-> +       };
-> +
-> +       vreg_misc_1p8: regulator-1800000 {
-> +               compatible = "regulator-fixed";
-> +               regulator-min-microvolt = <1800000>;
-> +               regulator-max-microvolt = <1800000>;
-> +               regulator-boot-on;
-> +               regulator-always-on;
-> +               regulator-name = "vdda_1p8_usb";
-> +       };
-> +
-> +       vreg_misc_0p925: regulator-0925000 {
-> +               compatible = "regulator-fixed";
-> +               regulator-min-microvolt = <925000>;
-> +               regulator-max-microvolt = <925000>;
-> +               regulator-boot-on;
-> +               regulator-always-on;
-> +               regulator-name = "vdd_core_usb";
-> +       };
-> +};
-> +
-> +&dwc_0 {
-> +       dr_mode = "host";
-> +};
-> +
-> +&dwc_1 {
-> +       dr_mode = "host";
-> +};
-> +
-> +&qusb_phy_0 {
-> +       vdd-supply = <&vreg_misc_0p925>;
-> +       vdda-pll-supply = <&vreg_misc_1p8>;
-> +       vdda-phy-dpdm-supply = <&vreg_misc_3p3>;
-> +
-> +       status = "okay";
-> +};
-> +
-> +&qusb_phy_1 {
-> +       vdd-supply = <&vreg_misc_0p925>;
-> +       vdda-pll-supply = <&vreg_misc_1p8>;
-> +       vdda-phy-dpdm-supply = <&vreg_misc_3p3>;
-> +
-> +       status = "okay";
->  };
->
->  &sleep_clk {
->         clock-frequency = <32000>;
->  };
->
-> +&ssphy_0 {
-> +       vdda-pll-supply = <&vreg_misc_1p8>;
-> +       vdda-phy-supply = <&vreg_misc_0p925>;
-> +
-> +       status = "okay";
-> +};
-> +
->  &tlmm {
->         sdc_default_state: sdc-default-state {
->                 clk-pins {
-> @@ -53,6 +111,14 @@ &uart1 {
->         status = "okay";
->  };
->
-> +&usb2 {
-> +       status = "okay";
-> +};
-> +
-> +&usb3 {
-> +       status = "okay";
-> +};
-> +
->  &xo_board {
->         clock-frequency = <24000000>;
->  };
-> diff --git a/arch/arm64/boot/dts/qcom/ipq5424.dtsi b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
-> index 5e219f900412..f8afd6f0412d 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq5424.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq5424.dtsi
-> @@ -233,6 +233,165 @@ intc: interrupt-controller@f200000 {
->                         msi-controller;
->                 };
->
-> +               qusb_phy_1: phy@71000 {
-> +                       compatible = "qcom,ipq5424-qusb2-phy";
-> +                       reg = <0 0x00071000 0 0x180>;
-> +                       #phy-cells = <0>;
-> +
-> +                       clocks = <&gcc GCC_USB1_PHY_CFG_AHB_CLK>,
-> +                               <&xo_board>;
-> +                       clock-names = "cfg_ahb", "ref";
-> +
-> +                       resets = <&gcc GCC_QUSB2_1_PHY_BCR>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               usb2: usb2@1e00000 {
-> +                       compatible = "qcom,ipq5424-dwc3", "qcom,dwc3";
-> +                       reg = <0 0x01ef8800 0 0x400>;
-> +                       #address-cells = <2>;
-> +                       #size-cells = <2>;
-> +                       ranges;
-> +
-> +                       clocks = <&gcc GCC_USB1_MASTER_CLK>,
-> +                                <&gcc GCC_USB1_SLEEP_CLK>,
-> +                                <&gcc GCC_USB1_MOCK_UTMI_CLK>,
-> +                                <&gcc GCC_USB1_PHY_CFG_AHB_CLK>,
-> +                                <&gcc GCC_CNOC_USB_CLK>;
-> +
-> +                       clock-names = "core",
-> +                                     "sleep",
-> +                                     "mock_utmi",
-> +                                     "iface",
-> +                                     "cfg_noc";
-> +
-> +                       assigned-clocks = <&gcc GCC_USB1_MASTER_CLK>,
-> +                                         <&gcc GCC_USB1_MOCK_UTMI_CLK>;
-> +                       assigned-clock-rates = <200000000>,
-> +                                              <24000000>;
-> +
-> +                       interrupts-extended = <&intc GIC_SPI 395 IRQ_TYPE_LEVEL_HIGH>,
-> +                                             <&intc GIC_SPI 397 IRQ_TYPE_LEVEL_HIGH>,
-> +                                             <&intc GIC_SPI 387 IRQ_TYPE_LEVEL_HIGH>,
-> +                                             <&intc GIC_SPI 388 IRQ_TYPE_LEVEL_HIGH>;
-> +                       interrupt-names = "pwr_event",
-> +                                         "qusb2_phy",
-> +                                         "dm_hs_phy_irq",
-> +                                         "dp_hs_phy_irq";
-> +
-> +                       resets = <&gcc GCC_USB1_BCR>;
-> +                       qcom,select-utmi-as-pipe-clk;
-> +                       status = "disabled";
-> +
-> +                       dwc_1: usb@1e00000 {
-> +                               compatible = "snps,dwc3";
-> +                               reg = <0 0x01e00000 0 0xe000>;
-> +                               clocks = <&gcc GCC_USB1_MOCK_UTMI_CLK>;
-> +                               clock-names = "ref";
-> +                               interrupts = <GIC_SPI 396 IRQ_TYPE_LEVEL_HIGH>;
-> +                               phys = <&qusb_phy_1>;
-> +                               phy-names = "usb2-phy";
-> +                               tx-fifo-resize;
-> +                               snps,is-utmi-l1-suspend;
-> +                               snps,hird-threshold = /bits/ 8 <0x0>;
-> +                               snps,dis_u2_susphy_quirk;
-> +                               snps,dis_u3_susphy_quirk;
-> +                       };
-> +               };
-> +
-> +               qusb_phy_0: phy@7b000 {
-> +                       compatible = "qcom,ipq5424-qusb2-phy";
-> +                       reg = <0 0x0007b000 0 0x180>;
-> +                       #phy-cells = <0>;
-> +
-> +                       clocks = <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> +                               <&xo_board>;
-> +                       clock-names = "cfg_ahb", "ref";
-> +
-> +                       resets = <&gcc GCC_QUSB2_0_PHY_BCR>;
-> +                       status = "disabled";
-> +               };
-> +
-> +               ssphy_0: phy@7d000 {
-> +                       compatible = "qcom,ipq5424-qmp-usb3-phy";
-> +                       reg = <0 0x0007d000 0 0xa00>;
-> +                       #phy-cells = <0>;
-> +
-> +                       clocks = <&gcc GCC_USB0_AUX_CLK>,
-> +                                <&xo_board>,
-> +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> +                                <&gcc GCC_USB0_PIPE_CLK>;
-> +                       clock-names = "aux",
-> +                                     "ref",
-> +                                     "cfg_ahb",
-> +                                     "pipe";
-> +
-> +                       resets = <&gcc GCC_USB0_PHY_BCR>,
-> +                                <&gcc GCC_USB3PHY_0_PHY_BCR>;
-> +                       reset-names = "phy",
-> +                                     "phy_phy";
-> +
-> +                       #clock-cells = <0>;
-> +                       clock-output-names = "usb0_pipe_clk";
-> +
-> +                       status = "disabled";
-> +               };
-> +
-> +               usb3: usb3@8a00000 {
-> +                       compatible = "qcom,ipq5424-dwc3", "qcom,dwc3";
-> +                       reg = <0 0x08af8800 0 0x400>;
-> +
-> +                       #address-cells = <2>;
-> +                       #size-cells = <2>;
-> +                       ranges;
-> +
-> +                       clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> +                                <&gcc GCC_USB0_SLEEP_CLK>,
-> +                                <&gcc GCC_USB0_MOCK_UTMI_CLK>,
-> +                                <&gcc GCC_USB0_PHY_CFG_AHB_CLK>,
-> +                                <&gcc GCC_CNOC_USB_CLK>;
-> +
-> +                       clock-names = "core",
-> +                                     "sleep",
-> +                                     "mock_utmi",
-> +                                     "iface",
-> +                                     "cfg_noc";
-> +
-> +                       assigned-clocks = <&gcc GCC_USB0_MASTER_CLK>,
-> +                                         <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +                       assigned-clock-rates = <200000000>,
-> +                                              <24000000>;
-> +
-> +                       interrupts-extended = <&intc GIC_SPI 412 IRQ_TYPE_LEVEL_HIGH>,
-> +                                             <&intc GIC_SPI 414 IRQ_TYPE_LEVEL_HIGH>,
-> +                                             <&intc GIC_SPI 423 IRQ_TYPE_LEVEL_HIGH>,
-> +                                             <&intc GIC_SPI 424 IRQ_TYPE_LEVEL_HIGH>;
-> +                       interrupt-names = "pwr_event",
-> +                                         "qusb2_phy",
-> +                                         "dm_hs_phy_irq",
-> +                                         "dp_hs_phy_irq";
-> +
-> +                       resets = <&gcc GCC_USB_BCR>;
-> +                       status = "disabled";
-> +
-> +                       dwc_0: usb@8a00000 {
-> +                               compatible = "snps,dwc3";
-> +                               reg = <0 0x08a00000 0 0xcd00>;
-> +                               clocks = <&gcc GCC_USB0_MOCK_UTMI_CLK>;
-> +                               clock-names = "ref";
-> +                               interrupts = <GIC_SPI 409 IRQ_TYPE_LEVEL_HIGH>;
-> +                               phys = <&qusb_phy_0>, <&ssphy_0>;
-> +                               phy-names = "usb2-phy", "usb3-phy";
-> +                               tx-fifo-resize;
-> +                               snps,is-utmi-l1-suspend;
-> +                               snps,hird-threshold = /bits/ 8 <0x0>;
-> +                               snps,dis_u2_susphy_quirk;
-> +                               snps,dis_u3_susphy_quirk;
-> +                               snps,dis-u1-entry-quirk;
-> +                               snps,dis-u2-entry-quirk;
-> +                       };
-> +               };
-> +
->                 timer@f420000 {
->                         compatible = "arm,armv7-timer-mem";
->                         reg = <0 0xf420000 0 0x1000>;
-> --
-> 2.34.1
->
+This is production hardware (specifically Clevo's X370SNW1-G and
+X370SNV1-G laptops), available for purchase from Sager, XOTICPC,
+Schenker, likely many other resellers, and our own website
+at https://kfocus.org/spec/spec-m2.html (with a tool that allows users
+to work around the bug). The firmware is baked into the hardware
+provided to us by our ODM, and for the sake of stability we do not
+modify any firmware on the machines with the exception of applying BIOS
+updates provided to us directly by the ODM. They appear to get
+their firmware directly from Clevo.
 
+We have requested an updated BIOS from the ODM. If one is available, we
+will upgrade and run the tests again.
 
--- 
-With best wishes
-Dmitry
+Thanks again for your help!
+Aaron
+
+> Thanks!
+
 
