@@ -1,143 +1,130 @@
-Return-Path: <linux-usb+bounces-17595-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17596-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F8D69C8ABB
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 13:49:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7689D9C8BC1
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 14:26:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27A06B262F0
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 12:48:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 96DBD283097
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 13:26:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC1FE1FAC5D;
-	Thu, 14 Nov 2024 12:47:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7991FAF00;
+	Thu, 14 Nov 2024 13:26:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="geSCMfng"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="h7cUMFOS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB3A81F8900
-	for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 12:47:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B68391F9EC0
+	for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 13:26:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731588469; cv=none; b=aigiFOMoYUJp3QSRHaZn9LEBVlPh9ST2GiLpbmHWs+s31ZonVtxoc9Mxe4hhT+NTi9ttflB1ESaN++ByQuU2jXAitxd9UgP/knffazEAcEsmAjjSnMQ51qBevN9ie0vS6fR2kvPfKR8upnb9kufVjguwNnY2GyYTmCLCCeLtLf0=
+	t=1731590805; cv=none; b=Mm4bnPFnsMRcNF1i+zmj1lfPxwKkP5kqhfn5mPzwPWb91qBiuv7fhnTiSKUM/4Zxggd7bItKJdKOHZUepwPWrPzPmjEdB97VtVCuEgvEU7ET5CWUKcyt20iZP5T57CJXkwFmqsiO76AfxYQ3oeFdQu0JZD8KyIGqYg9/pUOwYW8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731588469; c=relaxed/simple;
-	bh=RTAd+3XLwNxGPeXfDfmBJBGafJ8wLyA2P1qPpPAMZfE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=U8JkhFigSJvsLNbm2bdtLWKIrfpb8wlfZcu0y/eSBu/ygQ096LwRdmp368URkI7x1mfm1zNeP+20Yz4A/toF3vC1p1JSTUBtqJW4FDWYsSp4B+4U4MclU/4s1yAFwIGkcTk6ErZ0oQhc0lGQcW6vpNXl87aJXd/8Wa8EYIb8HFI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=fail smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=geSCMfng; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AE4c4Iw001169
-	for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 12:47:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	TirkE3p4MW042XA9VvghCJxqECC+Uiw5LWNZTmDaOsw=; b=geSCMfngvs5+4/9Z
-	5nLUGeut9W9AmVnQA8ac3nFsFJdZVelclqF+2DLmuOjlfo8AF2ZcIQSZKwm5XDcw
-	DiLoyz56XfsGzNCe30SDAYx/cnF24SzlN8FSy8QTcjWVi+D+90+SZCMs4kxrOQKJ
-	gN/Mn5PkOSdXPSh3TbAJ/DYXF9RqvtMh1mgoTUrKAe6PzZPExTwCgArFm8rvSowd
-	wSpXbMcJPcePuWQamp3hwzEhI9yafSbxRBxDnzREyWgslfVAOEQDPnkwHlGl+tCm
-	WW6fpPBoijit6+GGssj8ua/ruJTpJIbiKUNUxz1NmoYiFl3uFx330xZbiUALkT6R
-	2j+TWw==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42vqbm5e0y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 12:47:45 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-460958ceccdso1319301cf.1
-        for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 04:47:45 -0800 (PST)
+	s=arc-20240116; t=1731590805; c=relaxed/simple;
+	bh=HC8zIVJhmZGBaTgVFGCULFt5nrR2kYgDBpJlRO/4s24=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MBVQAdppsYypLCW029J0qhDCPlUfeDa93QDUEVazeczIYGwh87IuZAdoaHTELFHc+pgWJDJp1zt31Xyll1P2/lkOo23fty6BmnsgPN0Ev3x+ZCux2ie75mCRyk7ZFxeYXSNtx5QaG59IjTaLAE1qaD1EuhVumFvjyU/syiJlzGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=h7cUMFOS; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6ea7c26e195so6835627b3.0
+        for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 05:26:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731590803; x=1732195603; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=44Uknm2sw9kBbdVK3KPiUzPorxfNwDSfI3ZnmRNP3ac=;
+        b=h7cUMFOSzOMwGjm7rgA8orgvarcVteVUJ4CkUj4NRaU59IYac7yOM2SiiOQ0MESCe2
+         /we5kxWZUkWuqxTUemeMhH2RE7V5wMrYqri9IzafZr6y3EorMywjv3AzVIDcoldl0vcH
+         8om2WME2s7tA+NUcVCXLfq7Hdg7OF5WGH6VqJ5FrvQXvCamuDIyqmlvDatGnK/UFnICG
+         JP6/rt/8eC5xWvL4L8zm1nNsyRv2IBJHQFLjbMmMhW7ObHaV731Sh6Z0h5UdrJEDNv/A
+         RotY5uqhilS8A1pkWkyV3nx+37K7ktNFtkdDErUSQeB7Z6yHS9s9dMypdlM/k+QccPzs
+         jFSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731588465; x=1732193265;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TirkE3p4MW042XA9VvghCJxqECC+Uiw5LWNZTmDaOsw=;
-        b=Xu74wnyX3NTR3h42KaaYPr1EwUemzO59ZUz1XpECHT0VrGTWYqN0VgmQy8AqNai8sI
-         TpeGcDH31HoGYE1gi9C2lKAo+Q1xvF5sQgx1R8YzGTS4e0AnY1a+fuB+T5T/G0zXCRD6
-         CRf0K17kZisJGB5F2k897JA4V9vjvGJDuYy/t/1kmueuf0vguNGvDg1DjzMkkpQITvua
-         7btCd0O9tlyny2gbeNhDDcfO5xejDt+FBLjUczibd55Qf5pX2YcYuVYRWG5zaws61GiI
-         ltgZ1sBKzQ96QRvswlsBKuGPeU7M/W8qHALy1d27wXpDb4BfFBExMxsnnJ6MzXR9Sz09
-         MQ7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXd1a6/Rls9W1ewR2l+ngI7ij7/Jp58A9iUBK1Y9ewwQNUvx48j96YNCau0x7SjcfyNaTTvtgviOLc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzm6JwWmMVyQnAZjYeN03/t0PrCzM8xkiiMUd3oUhIUFNEtlQv/
-	VCxIobhzRjYKNwp3Ds4wyOYcmaUOpYpdgxNgbxYLJY6crPbTv6mM3kbOv0shdqrttrSxqjYps2q
-	Mb+nOOCfYRIDgXaHzTQp6JO/y9TSFMPFyuBjiTXhFEEAzTvI83DmMpYytXtM=
-X-Received: by 2002:a05:622a:281:b0:461:5f08:e680 with SMTP id d75a77b69052e-463094018a8mr152959221cf.10.1731588464734;
-        Thu, 14 Nov 2024 04:47:44 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEsxDffnRImxMQgqIQ8TXOem5agf/yFgovxPS825RyYZPFwUerfkyI2ebwr6OsoRlLLmIc1hg==
-X-Received: by 2002:a05:622a:281:b0:461:5f08:e680 with SMTP id d75a77b69052e-463094018a8mr152959011cf.10.1731588464407;
-        Thu, 14 Nov 2024 04:47:44 -0800 (PST)
-Received: from [192.168.212.120] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20e046c68sm59057466b.167.2024.11.14.04.47.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 14 Nov 2024 04:47:43 -0800 (PST)
-Message-ID: <7e293d68-73c1-425d-ae52-e0893c8e0a61@oss.qualcomm.com>
-Date: Thu, 14 Nov 2024 13:47:41 +0100
+        d=1e100.net; s=20230601; t=1731590803; x=1732195603;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=44Uknm2sw9kBbdVK3KPiUzPorxfNwDSfI3ZnmRNP3ac=;
+        b=pzz2bYKqZvgVjba87Zq7BfnRI2y1BGYLzy3JX1/480CIpxrefq8phqtNAgmVhRfVnU
+         8BA8FlBhoqhfAsjOrInAp8H5S/gLbLfkC8/jzDdjCfQtSX1bgwA2R54nrMYtqRsQyahU
+         BW3Dbw8ZTMrxUgbJ6gzgf1DAq8EbcPK9hoKVXvLRsWJEAmVLDL5yxuMXg7rcYoILytvm
+         Z/U5gvEy1BG4CoiC38ezMi33S3RZzezK5YA3d5V1VJ8VIpd4SUbzi69lOWv++ED+vpAv
+         csmVfnb21zY9NCJHqyrYoeEa90ftgfE6Q2FpiayedIwd4yshw3nWn+ZG0PfKQRkYu2mE
+         gW4g==
+X-Forwarded-Encrypted: i=1; AJvYcCXtDeaAZrWQAq5W5r/oweg+N1OWH+dNm0LxtD1pxCRy9Li0evDPqEnUqtNhqasUQDUsCKVxoFIBn3o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkT8mcgioRfkf8qo6rcuYZcnGApbKGP3DopwnhE3n9mVFkzRy4
+	AEytJUuWP5mwPZ2B2NruP9/TzvYPQjivdn6+FPpTCkdmNR0gJZdQO8P/OsNrrXNT1SEkWNLVyPk
+	+heWC0d1mddx5L0fuCq77fNK6d+LxUDbUH+9cmA==
+X-Google-Smtp-Source: AGHT+IFwf8z1mFNYgsE8PD3lTDBZomFAHFwSNm4/O3SWdpkSZXwgnQCoA5dTaVPjasFbh6e4N903GF7+1g2FDtRLHK4=
+X-Received: by 2002:a05:690c:4482:b0:6ee:3f5e:1c18 with SMTP id
+ 00721157ae682-6ee3f5e2b1amr33209767b3.4.1731590802836; Thu, 14 Nov 2024
+ 05:26:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/6] phy: qcom: qmp: Enable IPQ5424 support
-To: Varadarajan Narayanan <quic_varada@quicinc.com>, vkoul@kernel.org,
-        kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, gregkh@linuxfoundation.org, andersson@kernel.org,
-        konradybcio@kernel.org, dmitry.baryshkov@linaro.org,
-        mantas@8devices.com, quic_kbajaj@quicinc.com,
-        quic_kriskura@quicinc.com, quic_rohiagar@quicinc.com,
-        abel.vesa@linaro.org, quic_wcheng@quicinc.com,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
 References: <20241114074722.4085319-1-quic_varada@quicinc.com>
- <20241114074722.4085319-5-quic_varada@quicinc.com>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241114074722.4085319-5-quic_varada@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: byZ2z5papDePJ37uoVFHT_H_CeZNawBZ
-X-Proofpoint-GUID: byZ2z5papDePJ37uoVFHT_H_CeZNawBZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=999
- spamscore=0 bulkscore=0 suspectscore=0 malwarescore=0 adultscore=0
- clxscore=1015 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2409260000 definitions=main-2411140100
+ <20241114074722.4085319-5-quic_varada@quicinc.com> <7e293d68-73c1-425d-ae52-e0893c8e0a61@oss.qualcomm.com>
+In-Reply-To: <7e293d68-73c1-425d-ae52-e0893c8e0a61@oss.qualcomm.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date: Thu, 14 Nov 2024 15:26:32 +0200
+Message-ID: <CAA8EJprqOxcm9NPdNZkA0XzCbv1E+MXicTcqx72sgCpZoE2sUg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/6] phy: qcom: qmp: Enable IPQ5424 support
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Varadarajan Narayanan <quic_varada@quicinc.com>, vkoul@kernel.org, kishon@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	gregkh@linuxfoundation.org, andersson@kernel.org, konradybcio@kernel.org, 
+	mantas@8devices.com, quic_kbajaj@quicinc.com, quic_kriskura@quicinc.com, 
+	quic_rohiagar@quicinc.com, abel.vesa@linaro.org, quic_wcheng@quicinc.com, 
+	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 14.11.2024 8:47 AM, Varadarajan Narayanan wrote:
-> Enable QMP USB3 phy support for IPQ5424 SoC.
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
-> v2: Add 'Reviewed-by: Dmitry Baryshkov'
-> ---
->  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> index acd6075bf6d9..f43823539a3b 100644
-> --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
-> @@ -2298,6 +2298,9 @@ static int qmp_usb_probe(struct platform_device *pdev)
->  
->  static const struct of_device_id qmp_usb_of_match_table[] = {
->  	{
-> +		.compatible = "qcom,ipq5424-qmp-usb3-phy",
-> +		.data = &ipq9574_usb3phy_cfg,
-> +	}, {
+On Thu, 14 Nov 2024 at 14:47, Konrad Dybcio
+<konrad.dybcio@oss.qualcomm.com> wrote:
+>
+> On 14.11.2024 8:47 AM, Varadarajan Narayanan wrote:
+> > Enable QMP USB3 phy support for IPQ5424 SoC.
+> >
+> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
+> > ---
+> > v2: Add 'Reviewed-by: Dmitry Baryshkov'
+> > ---
+> >  drivers/phy/qualcomm/phy-qcom-qmp-usb.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+> > index acd6075bf6d9..f43823539a3b 100644
+> > --- a/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+> > +++ b/drivers/phy/qualcomm/phy-qcom-qmp-usb.c
+> > @@ -2298,6 +2298,9 @@ static int qmp_usb_probe(struct platform_device *pdev)
+> >
+> >  static const struct of_device_id qmp_usb_of_match_table[] = {
+> >       {
+> > +             .compatible = "qcom,ipq5424-qmp-usb3-phy",
+> > +             .data = &ipq9574_usb3phy_cfg,
+> > +     }, {
+>
+> If the software interface is the same, can this just use ipq9574 as a
+> fallback compatible?
 
-If the software interface is the same, can this just use ipq9574 as a
-fallback compatible?
+Generally I'd agree here, but as PHY tables include not just setup
+values, but also platform and chip-specific tunes, I think it's better
+to have multiple entries rather than having to cope with the possible
+issues. The only "fallback" compatibles that we have are qcs615-ufs ->
+sm6115-ufs and qcs8300-ufs -> sa8775p-ufs. Thus I think it's better to
+stay within the single-compat model.
 
-Konrad
+-- 
+With best wishes
+Dmitry
 
