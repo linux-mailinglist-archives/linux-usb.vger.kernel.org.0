@@ -1,289 +1,192 @@
-Return-Path: <linux-usb+bounces-17593-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17594-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E5079C88C5
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 12:21:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6E4D9C8945
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 12:51:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25421B25EDF
-	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 11:05:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 765E81F22F24
+	for <lists+linux-usb@lfdr.de>; Thu, 14 Nov 2024 11:51:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5D41F80D2;
-	Thu, 14 Nov 2024 11:05:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F010E1F943C;
+	Thu, 14 Nov 2024 11:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ARNScUl3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="leKxIlsX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR02-DB5-obe.outbound.protection.outlook.com (mail-db5eur02on2058.outbound.protection.outlook.com [40.107.249.58])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEAF5189BA0;
-	Thu, 14 Nov 2024 11:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.249.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731582350; cv=fail; b=r8aIIcsYJbc0u/YeHKK97AuwcMnvXVByCoZnx4uUfCidN/KXciVN51pBdOXlk6QTTFnndIRm3cCdEGpP2BfMrhMsSQ9NnjKX79jYWU4jXNTzM7enVHV3XRUtrK5bVn/lJtjoovyGx6++vTtpYHv4psRPiWvDs56/1ohvKUe277Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731582350; c=relaxed/simple;
-	bh=xuzZmVsnCUQ7cOvT01Ro8J3FofsyC5kuLOwcy+1lfPo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ifF1j//jgpVK+gfxGOFcfFasQvrD6heLBe7pZ8p+scuzX6ROi/dNVkC+KooVocgLuMamck9ZSeoYqZWDJtPptHcyIyybhxWhvoIu4iQooX0wu4cGeRC/gpZZa8DnEkRlm6cCA/Awj5wWYRBySdo1pegfse4po2fNiuh2ta6o66c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ARNScUl3; arc=fail smtp.client-ip=40.107.249.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Fu+asE8BtsXhIInAeW9Gtr09U5jJpfL/FC6Rz9/jqUZPKsxEWMdAspiiYmS8Md7b+8P7HoQmy1JCxDPH/kK6Xtdm62du5XUFjj+V2c5tevjo40bD6vG9guctSjYhd55S1pF2OaAEAKdHBB60fFNA9zb+WhhHDrT1RuCLcKDNrgB/+IcNy5E6RcBuYLBevHgwfoVR8VnXx38w/uNOxgSn/jupxcTsDFDTKPXJlumt+NoePl1SJaFHMQ5yCtzKNBr/tsmLojJx8LKoajommt6yRySjN/hgFYOpPV3ienx7pRIMrKuH1XsKWFihtKcHkV2CCxn8qEfe1ZeFd+kTZjpEHA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=eMgRw/4KgLfzPzIqEQZxz4BhuAttqw9j8fbRZuCP3do=;
- b=Bo0AO6ieoEcpUCQwgjUsDfEO5z2eEdRZ81tokgjdC2RJ0A/M1aWmrCAkpYYL7bAWXE7DRrGpgfd7GqdmqA1FgfgPQslQjABwM4t+oITGBpUqni5UvZnePq+JIoaAKh+41v5TwwidAz3SnpoSQwvdnDMnJXcwxRiqBdgWNhQi/YjWS1oq1bARNfJMEZXoYuXlAbSypPalAYdAoLrCCqaHsRcCIm4CPk3Xq/StG07D8N1j6D7vAsbfuedhl5saSrNiNJ/VvskeddaMLa7x3zdR9Z9IO2l5gFbJYlRyg4fhm//4MOfUFBo4dEtcjENJOVBrxtRU0stuhIknI3mZkw+oBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=eMgRw/4KgLfzPzIqEQZxz4BhuAttqw9j8fbRZuCP3do=;
- b=ARNScUl3pUYm+PhDGoFt+/1zv47nym7tlMrFIotlH34HPT6HzBMh9lCsBb2NBBbQb2pUFg5Ur8jkhRS5dda1dmmLy6jUttPFHOm7n3WzpjmAaoMNesY0dN2FYn5+LxaYVEz89YOd0LL6i8p62wXc6Z+/s6s0yewtH+ZWWqnthdLtDcu+FfKyxSgP4yTJsePQkvzdXTft1czIUvKDA0kJJZzqGydt4SrvKGPObgO8zZbF43Y7W6c9TRflb4Tf1ssuCL0u80hfNSGxr6Tl/h7atet/HJ3folZM2EHhfQ181le4dN1enYBZ68JKkz+IIIgVp8bmS0m9tAmNuwW9Hydy9A==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by DB8PR04MB6842.eurprd04.prod.outlook.com (2603:10a6:10:11c::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.18; Thu, 14 Nov
- 2024 11:05:44 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8158.013; Thu, 14 Nov 2024
- 11:05:44 +0000
-Date: Thu, 14 Nov 2024 19:03:25 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-	gregkh@linuxfoundation.org, Frank.Li@nxp.com, jun.li@nxp.com,
-	l.stach@pengutronix.de, aford173@gmail.com, hongxing.zhu@nxp.com,
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v9 2/3] arm64: dts: imx95: add usb3 related nodes
-Message-ID: <20241114110325.qmakphgvkqoykzbl@hippo>
-References: <20241113080745.2300915-1-xu.yang_2@nxp.com>
- <20241113080745.2300915-2-xu.yang_2@nxp.com>
- <2968363.e9J7NaK4W3@steina-w>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2968363.e9J7NaK4W3@steina-w>
-X-ClientProxiedBy: SG2PR02CA0118.apcprd02.prod.outlook.com
- (2603:1096:4:92::34) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B708B18C32C;
+	Thu, 14 Nov 2024 11:51:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731585103; cv=none; b=ssjb1kS8OoALB1hhZa/CQTZEiMeO5yYFLpkZ+aTURY7NpRGSCtMSCFOoHI3LHMyorxm2zytjhy60orN99x4RYdiDT0atxXpwNqt5wwx8yDUzPuDrrlPAhxiDxxl+5sCBVtptSzTzGUoYtlmGux9XeKdUVCgha280O6tymh5Uhf8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731585103; c=relaxed/simple;
+	bh=yWNvnoXRvIL5L9rGGJxlutE5msSoXsLBNxKXbB6Wh/E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=K4PDQ13HsmX/+J52hySfMkAM9P5xr718DIhy04x/y6mT1oobrUgVk0f8jJVK2OesIV80Tm+cjEOWy0EXxu6o4kX4ZWLAvE3NMjhHBHy/vgwItxqAY1FI3mi7CvUzvp8i1K1AuHOXcwdGCXI0a9NsHSqcC4CIADl946cPhbUYIHw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=leKxIlsX; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731585102; x=1763121102;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yWNvnoXRvIL5L9rGGJxlutE5msSoXsLBNxKXbB6Wh/E=;
+  b=leKxIlsXDXVteHoN95vF/yrJo3fDYIyC+ti/2apFrTsN1ZQEXwOVS21R
+   Q4VmwBdO3nd9Ywn2iY7JKE0NAzM6DRZPS2wFp0+6AxeUQY0uLwvZkFehJ
+   EOouUIoCsevztsYe91bqH7TTh6wpq8H1S5/GBrAE97Hz60DL7J10iAYna
+   FsuraYPs6kHkBYhZjdjYUEyEJlOYEe6soYKKdGk6GyKSfS3rfeNCp3j4e
+   6OA2JoZZI9jxaTCHAj+f198WawC8oohEUWwKUlXIIJSrsSTQOx0BuxgAB
+   ZKXcmdmEYwYKDtQ26CLerjTbjCuv3sum7G9DYk7m89VtATthmAsWXwgkP
+   A==;
+X-CSE-ConnectionGUID: FIDMsMqBRuG0xPQ3tbj7FQ==
+X-CSE-MsgGUID: qta/+0xmSUC8pj6vzdOnJg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="48967242"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="48967242"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 03:51:40 -0800
+X-CSE-ConnectionGUID: /MDWVJEoQ+WWpAGpWVdRHg==
+X-CSE-MsgGUID: xopzvJh5T8KRM1q87e7zJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,153,1728975600"; 
+   d="scan'208";a="119114485"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa001.fm.intel.com with ESMTP; 14 Nov 2024 03:51:38 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 223C2193; Thu, 14 Nov 2024 13:51:37 +0200 (EET)
+Date: Thu, 14 Nov 2024 13:51:36 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Aaron Rainbolt <arainbolt@kfocus.org>
+Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
+	andreas.noever@gmail.com, linux-usb@vger.kernel.org,
+	mmikowski@kfocus.org, linux-kernel@vger.kernel.org,
+	Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: USB-C DisplayPort display failing to stay active with Intel
+ Barlow Ridge USB4 controller, power-management related issue?
+Message-ID: <20241114115136.GB3187799@black.fi.intel.com>
+References: <20241031095542.587e8aa6@kf-ir16>
+ <20241101072155.GW275077@black.fi.intel.com>
+ <20241101181334.25724aff@kf-ir16>
+ <20241104060159.GY275077@black.fi.intel.com>
+ <20241105141627.5e5199b3@kf-ir16>
+ <20241106060635.GJ275077@black.fi.intel.com>
+ <20241106110134.1871a7f6@kf-ir16>
+ <20241107094543.GL275077@black.fi.intel.com>
+ <20241111082223.GP275077@black.fi.intel.com>
+ <20241112164447.4d81dc3a@kfocus.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DB8PR04MB6842:EE_
-X-MS-Office365-Filtering-Correlation-Id: da213759-8fbd-46aa-16ee-08dd049c489d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|52116014|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?TDJhTHBWMjZxSUJmaWYvWEF3elRuT1F3aGhJTjRubmU2ZzZkWmRnbWJwNGFt?=
- =?utf-8?B?UEorUzdDSi9QRFgxdjVzdGtpdXRYbjhpbWErWUh5TU5abHE0SVN0SnUxN2N5?=
- =?utf-8?B?Nzg4U1doKzFENExCWVQyU1Y0b1BMYTcrMTBJS2g2NW5SMHlJQWVUYXFVZ2Zy?=
- =?utf-8?B?azZURmlOd0h0Z25uSGpuV0JxY28wZERqdWltemhvZjUwWTBRazJFRFZ2UkI1?=
- =?utf-8?B?YmROUURuNWRycG4zaDZGSjJsMTU1d0xWL1BFcHh5U0pqc2lHcGFTTXo1bC96?=
- =?utf-8?B?SUYwZUdaUEZKVDhUemtYeW1NeDFsa2hhU3kzQ0F0QTRFU2l2SnlLVHNaVUlP?=
- =?utf-8?B?bkh0U0dZUncyYjdjL0MvNkFDT0YxUlJKVk1tbXcySGZFT0dlOU5DZHNyV2Na?=
- =?utf-8?B?cFJHck5kSjNuTHVHRTd2RnZrZDdWMmxtbFR0Si9iL1A2MUYrUDhNOFZNREZS?=
- =?utf-8?B?YURucWNPRm9oK3pYT2dYYVRETC9WZXhjaHIyekxnWlNNb0tJUERkdkdRa3BB?=
- =?utf-8?B?NDRBVDJUY2Z3TjhxUXRIL1hzdC9HWG5ZTTlaUWg5cmUvQm54UkFMdVFNeTRq?=
- =?utf-8?B?Z2QwR2ZtYzVUVFJ1MVI1b21wNElTWHpkRGs2dzJTcjYwclVyb29IVVhLRDIx?=
- =?utf-8?B?VTBHVC8yNnROMVNBMkRiS2Q1UmUwSXpQZUxHNUtlcWZBaHFPM3N6TE9QMUUw?=
- =?utf-8?B?dWRuamdjeTBMTE04SDNOTVdKVnFZd3M2V3ZZeGE2ZWZ4RlJMa1BWQWtFSGs5?=
- =?utf-8?B?UC9YSW81cmJEbmZLKzRYU3FLbTJEcnBXNkpPMUhPWmNNSzJVL2xTK2tuUEFZ?=
- =?utf-8?B?Ly9SSmJLc1ZtMzNJN0FLbldJTS9Jb2lNQnRRcnJRVXFNSEs0TGhic2lEVUlj?=
- =?utf-8?B?dTNSMHRGNVR5U1EzNXpydGRuK0lCQ2phYXZqbTRkajcxNnBWbkswd1UvYW96?=
- =?utf-8?B?Wm5mSzZ2cWtTeHhRRmdpSlk1NStDUzJ0U1kwWmE1RkFCZ0tCSGJCc1ptQzZJ?=
- =?utf-8?B?MC8xYWxNVVRMWDlXQi9wVTVBTHpVa0UvL3IwcmJZajJ5UHlJWVpFMitOaFl5?=
- =?utf-8?B?MVRsVFErZE8zNjREWjVDL2tDNGQ2TmNMRXB5Q0hPdnJlMDk3WnVnOEdNamFL?=
- =?utf-8?B?M1JEanR2a050dE5GMzErcUhGamx2bXV2c3NSb3NTNjlxVTdySGs5Ym5qNm1T?=
- =?utf-8?B?R2Q2Yi9IYWh3TlJFdHVTYnlJaENmeC9oNDVlSFpMMzRuN2ZZenBSVUpPUXVK?=
- =?utf-8?B?SkJqUkRvMUJXTjdrMldNbk9rSEhVbHVJSWFwa2ZvaFZ4ZTVNQTQxbExqNmFv?=
- =?utf-8?B?emJsOHZxb0lja2dEL3hDUlFRdGdldFF3MVl0OXh3TFdoL3NzVGtrVU1yMUR2?=
- =?utf-8?B?NmpUbVVjenMzNmUxWExPODR5ckc5UjYvbnQ3R05VcG1wQkhxajFLOCtHQVc3?=
- =?utf-8?B?MlowQjNVWUc0QmxRcVdzVHN6THlTNlVGOXBDdVgvdmVwVWtRdC8vM1RIQnA2?=
- =?utf-8?B?eGpuV2FCU0NDeVJyVXB6dVEySm9ReDR3aEFvTmxMTzlPMzFCMlVpdkZLYTYw?=
- =?utf-8?B?c0lxcXlDZlZ0YjVjc1JTOUtXMXZ4RlU1OVIrZ2VsYk5oZWkwSi9sblMzV0VF?=
- =?utf-8?B?Um0wQ0pyeXdxVFUvZ1NwZWlGVm1tOEx2ZGFMcUdoL2h5eFI3cmFvcE9KajBl?=
- =?utf-8?B?bVd4MnBYY2lzbzhlS0orTWF4WkVJaUwrcDdXSld5RHNLcUZaeDd4TFpKY2JM?=
- =?utf-8?Q?zYJa67+9uH32lhONsgory1VHnzoblwAmPgrKc4L?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(52116014)(366016)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?c2VXOTM5T0tJeHlqa1JRNVlOdVYzYWI5eUx3RVM5dzhGNzJyTDYxVlhabEZY?=
- =?utf-8?B?MlkrVTlZWUk0L0VPaHcyVVZUbmNHZmdiZWszSVBLTEtLQUtmNEIrb0E1TmMw?=
- =?utf-8?B?MHkwRlVJbXdOZUNFVG5wci91NzBaTUw5ZjYwczltYmkrbElQS0c5RGh5bnpY?=
- =?utf-8?B?MFlHL0NDemxuYThyeWZsOHJ3MDVKTGFsK3c1VFc0M0J4WmtCd01DcHQrY25a?=
- =?utf-8?B?dTBWN2hlWE1Za0JVaGtBQzZubjcyQ2NOYTM3cmM0eWJad2FxWEFmNHgydUVZ?=
- =?utf-8?B?NjkrVEJOaWllSWlnU3cxRU1DazJqTjl0enRZRFNEbWhpa0dRNGdlT2J6b00w?=
- =?utf-8?B?Z0pxNEFwcmxDcGl4UDc3VEtvRUVPbE1TVldXa0hvdTlSemVscjE5S3ArSkFo?=
- =?utf-8?B?VjZLODUwa1RwOElKaXM0UytkbUJCSEp2QjJnWVJCU1RyZkxpUU5tNVNPY2dv?=
- =?utf-8?B?OFZVVVlVNDIxSXdxdFQwb0o2T1J6V3REb2ZOMitnU2pnbkVkMGhnanpzYVZX?=
- =?utf-8?B?L05RM1JRaU80bFFmQmtnQ1FxOW5RUHVKbEEvT1FoSUJ3K1hMREU3UUJnSS96?=
- =?utf-8?B?VGVablRRNm93ZHlKSnhzSW9PRlZaYlo3OUFmU1JrWHNHNW1HcDMrVFBEdGdt?=
- =?utf-8?B?enZpNVcwUldxdktaNW15YzNEOHJKT01VR1M0TFRiZnJqQzhaVHBabVM1eFpY?=
- =?utf-8?B?ZG5QV095cTVnVHJpRVF4V0tEd0FKL294L1MzQm5BZHZNSFA2Q2x6bFArc0Uy?=
- =?utf-8?B?aWYxUVdZekZ4eERRbUxsTWlHRDdqajNtaE5sNEp0UmV6Unp2VUE5ZFR6TGtL?=
- =?utf-8?B?bnJJbHdtVDJzSnBFZjZPR1RxMWxFZ0U1cHNwNndMbGtydEhRVnkxMWI1dEtt?=
- =?utf-8?B?SUNnejl2MmMvTHBXYXVOeUpscU5NYVYzKzlCeEo0amdEQ0xwT1hlN2czRjJ3?=
- =?utf-8?B?c3VMV0FXb0dLQ2crM3ZwOTFKTFJocDNGSDRkRG5VTUNCNyt6Z2xGWTltQXpj?=
- =?utf-8?B?eXMyZ2RRd3Z4VmNZSVRaMlp3R2t2OXRYOXZ2Z09PWXdoVzJJRUJEcFMxODNQ?=
- =?utf-8?B?MFdSVVpEYXVWL1BlcUIrWm1vTi9KemE1eWtMZERpN24rTHo1N0d6VDVSdTVM?=
- =?utf-8?B?RFA5SU84RjYvTEprSElpRS8wMFB1WUoxaDQxQ3BPSzljREE1c0ZqcjRXTHVC?=
- =?utf-8?B?RGtlRTc2SjFHa24zbUtBTU0xTmxjbFJEbTJYdlBBOHJ2K0MvcnoxZW9CTWJ5?=
- =?utf-8?B?UVhEdUJwLytrU3g3ZzNQbEwzYXhLdDQ5SHZ2Vmx3K0R2Vm50bGVHN0toM0RC?=
- =?utf-8?B?VDdxbHpPbkFQWUxTTEpENlg5VWhXUTNCaDVoanhrd1VGOHJJY2s5MmFHa3N3?=
- =?utf-8?B?VnlFWERYa2ljeGtUYTQ0WjRQUk85ZEp2dm5MOTFkbzBxSnJBT2hJS3lLaWZj?=
- =?utf-8?B?bm92RmE1VG1XTkZHYStVT0toWmxwWTl4Qko0aWZaN3ptc3RiWWROcG9MNmJo?=
- =?utf-8?B?eWQ0WldxM3RhMEhtbDVPWmVhZEVPTE5jQTI5Y1VLSFV4c2R2TVlaZDRPWEt0?=
- =?utf-8?B?WnFObk1rdkdTckxrdDcvZkNQcy9sMytteGpSZkRFV20xSit5TmZpeUFpekxn?=
- =?utf-8?B?M3BIcTdLNzZ1U0Fhd0JyS0JXZk1hR2t3ZVJINkI3NWtJamd1MUVoWWM3cmNK?=
- =?utf-8?B?M1lVdlA4T1F1YWl2VHJGNTNaRU02dFdOMysrMGE3enlHNXl4UDhHZzBLMVAz?=
- =?utf-8?B?dkZKNFZjb240VFlJQ3BnYmRPNnVRUlJYZDFIczN0a29VQkZQSGw2STROeGp1?=
- =?utf-8?B?NWd2RzhoZ0xaVVkxY2MvYU1NVzRsL1d0b1lSVlhxL3h1L1E3VTZlcWJDcExa?=
- =?utf-8?B?UVVwYXNWUllUa3dNL2szdzBCdmwwb0lrUGE5d29iZ2pjSTNDQk56anJnS1Zk?=
- =?utf-8?B?Wk5wN1F6THRYeUZCMkpOcE1MaUJHVVd2dVprTm5vd3d1Q1RJUS91MEsxQS9I?=
- =?utf-8?B?cHk4VWhPTG5SZEo3Tnc3cmdSUjM3QXM5NVNsU1ZUSCs4N2RKOC9acDFjTHlv?=
- =?utf-8?B?aU9aWWZiQ1ZpZlpzdWRlSGQrTk1xa0hLVHRiYUhDU1J2amtUTGlldnJtMm8w?=
- =?utf-8?Q?RLIr3AB6wfT0jh3H4Dq1QGcDw?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: da213759-8fbd-46aa-16ee-08dd049c489d
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Nov 2024 11:05:43.9377
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L/OsMiHYk1qr+rnlmlJQ9xu69pJsM7ave8HCKCmZ495TBf5nPskmvoKse52qAinhBN5qx+2MrtQYA11dmGoptg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR04MB6842
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241112164447.4d81dc3a@kfocus.org>
 
-On Thu, Nov 14, 2024 at 11:59:23AM +0100, Alexander Stein wrote:
-> Hi,
+Hi Aaron,
+
+On Tue, Nov 12, 2024 at 04:44:47PM -0500, Aaron Rainbolt wrote:
+> On Mon, 11 Nov 2024 10:22:23 +0200
+> Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
 > 
-> Am Mittwoch, 13. November 2024, 09:07:44 CET schrieb Xu Yang:
-> > Add usb3 phy and controller nodes for imx95.
+> > Hi,
 > > 
-> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > On Thu, Nov 07, 2024 at 11:45:44AM +0200, Mika Westerberg wrote:
+> > > Hi,
+> > > 
+> > > On Wed, Nov 06, 2024 at 11:01:34AM -0600, Aaron Rainbolt wrote:  
+> > > > > Unfortunately that does not help here. I need to figure
+> > > > > something else how to detect the redrive case with this
+> > > > > firmware but first, does this work in Windows? I mean if you
+> > > > > install Windows to this same system does it work as expected?  
+> > > > 
+> > > > It does work as expected under Windows 11, with one major caveat.
+> > > > We used a Windows 11 ISO with a setup.exe created on April 05
+> > > > 2023 for installing the test system, and after initial
+> > > > installation it behaved exactly the same way as Linux behaves now
+> > > > (displays going blank soon after being plugged in). However,
+> > > > after installing all available Windows updates, the issue
+> > > > resolved, and the displays worked exactly as intended (the
+> > > > screens are recognized when attached and do not end up
+> > > > disconnecting after a timeout).
+> > > > 
+> > > > Would it be helpful to test on Windows 11, and provide a report
+> > > > and system logs?  
+> > > 
+> > > Unfortunately, I don't know anything about Windows ;-)
+> > > 
+> > > However, I asked our Thunderbolt hardware/firmware team about this,
+> > > if they have any idea how it was solved in Windows side. Might take
+> > > a couple of days though.  
 > > 
-> > ---
-> > Changes in v2:
-> >  - no changes
-> > Changes in v3:
-> >  - no changes
-> > Changes in v4:
-> >  - reorder nodes
-> > Changes in v5:
-> >  - no changes
-> > Changes in v6:
-> >  - rebase to latest
-> > Changes in v7:
-> >  - no changes
-> > Changes in v8:
-> >  - no changes
-> > Changes in v9:
-> >  - no changes
-> > ---
-> >  arch/arm64/boot/dts/freescale/imx95.dtsi | 43 ++++++++++++++++++++++++
-> >  1 file changed, 43 insertions(+)
+> > While waiting for this, I wonder if you guys could do one more
+> > experiment? I would like to get the traces what is happening there
+> > (hoping something pops out there). Following steps:
 > > 
-> > diff --git a/arch/arm64/boot/dts/freescale/imx95.dtsi b/arch/arm64/boot/dts/freescale/imx95.dtsi
-> > index 03661e76550f..e3faa8462759 100644
-> > --- a/arch/arm64/boot/dts/freescale/imx95.dtsi
-> > +++ b/arch/arm64/boot/dts/freescale/imx95.dtsi
-> > @@ -1473,6 +1473,49 @@ smmu: iommu@490d0000 {
-> >  			};
-> >  		};
-> >  
-> > +		usb3: usb@4c010010 {
-> > +			compatible = "fsl,imx95-dwc3", "fsl,imx8mp-dwc3";
-> > +			reg = <0x0 0x4c010010 0x0 0x04>,
-> > +			      <0x0 0x4c1f0000 0x0 0x20>;
-> > +			clocks = <&scmi_clk IMX95_CLK_HSIO>,
-> > +				 <&scmi_clk IMX95_CLK_32K>;
-> > +			clock-names = "hsio", "suspend";
-> > +			interrupts = <GIC_SPI 173 IRQ_TYPE_LEVEL_HIGH>;
-> > +			#address-cells = <2>;
-> > +			#size-cells = <2>;
-> > +			ranges;
-> > +			power-domains = <&scmi_devpd IMX95_PD_HSIO_TOP>;
-> > +			dma-ranges = <0x0 0x0 0x0 0x0 0x10 0x0>;
-> > +			status = "disabled";
-> > +
-> > +			usb3_dwc3: usb@4c100000 {
-> > +				compatible = "snps,dwc3";
-> > +				reg = <0x0 0x4c100000 0x0 0x10000>;
-> > +				clocks = <&scmi_clk IMX95_CLK_HSIO>,
-> > +					 <&scmi_clk IMX95_CLK_24M>,
-> > +					 <&scmi_clk IMX95_CLK_32K>;
-> > +				clock-names = "bus_early", "ref", "suspend";
-> > +				interrupts = <GIC_SPI 175 IRQ_TYPE_LEVEL_HIGH>;
-> > +				phys = <&usb3_phy>, <&usb3_phy>;
-> > +				phy-names = "usb2-phy", "usb3-phy";
-> > +				snps,gfladj-refclk-lpm-sel-quirk;
-> > +				snps,parkmode-disable-ss-quirk;
-> > +				iommus = <&smmu 0xe>;
-> > +			};
-> > +		};
-> > +
-> > +		usb3_phy: phy@4c1f0040 {
-> > +			compatible = "fsl,imx95-usb-phy", "fsl,imx8mp-usb-phy";
-> > +			reg = <0x0 0x4c1f0040 0x0 0x40>,
-> > +			      <0x0 0x4c1fc000 0x0 0x100>;
-> > +			clocks = <&scmi_clk IMX95_CLK_HSIO>;
-> > +			clock-names = "phy";
-> > +			#phy-cells = <0>;
-> > +			power-domains = <&scmi_devpd IMX95_PD_HSIO_TOP>;
-> > +			orientation-switch;
-> 
-> This adds the orientation-switch to all imx95 based boards, which in turn
-> requires a port subnode.
-> This is incorrect if this USB interface is not connected to a USB Type-C
-> connector but an on-board USB hub.
-
-Okay. I'll move it to imx95-19x19-evk.dts file in next version.
-
-BTW, I just send a patch to fix your previous issue. You can test it.
-https://lore.kernel.org/imx/20241114102203.4065533-1-xu.yang_2@nxp.com/T/#u
-
-Thanks,
-Xu Yang
-
-> 
-> Best regards,
-> Alexander
-> 
-> > +			status = "disabled";
-> > +		};
-> > +
-> >  		pcie0: pcie@4c300000 {
-> >  			compatible = "fsl,imx95-pcie";
-> >  			reg = <0 0x4c300000 0 0x10000>,
+> >   1. Download and install tbtools [1].
+> >   2. Build and install the kernel with my "redrive" patch.
+> >   3. Boot the system up, nothing connected.
+> >   4. Wait until the Barlow Ridge is in runtime suspend (so wait for
+> >      ~30s or so)
+> >   5. Enable tracing:
 > > 
+> >     # tbtrace enable
+> > 
+> >   6. Plug in USB-C monitor to the USB-C port of the Barlow Ridge. Do
+> > not run 'lspci -k'. Expectation here is that there is no picture on
+> >      the monitor (in other words the issue reproduces).
+> > 
+> >   7. Stop tracing and take full dump:
+> > 
+> >     # tbtrace disable
+> >     # tbtrace dump -vv > trace.out
+> > 
+> >   8. Send trace.out along with full dmesg to me.
+> > 
+> > Thanks!
+> > 
+> > [1] https://github.com/intel/tbtools
 > 
+> Testing done as requested. Notes from tester:
+
+Thanks!
+
+> * I verified lsmod |grep thunderbolt which showed module.
+> * When running sudo ./tbtrace enable, output was Thunderbolt/USB4
+>   tracing: Enabled.
+> * When plugging in monitor, it wakes the backlight, but there is no
+>   image. syslog shows it as LG monitor controls. The monitor reports
+>   "no signal" and eventually turns off the backlight to save power.
+> * When running sudo ./tbtrace disable, output was Thunderbolt/USB4
+>   tracing: Disabled.
+> * Output was save using tbtrace dump -vv > trace.out and sudo dmesg >
+>   trace.dmesg. trace.out is an empty file.
 > 
-> -- 
-> TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
-> Amtsgericht München, HRB 105018
-> Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
-> http://www.tq-group.com/
+> ---
 > 
-> 
+> (Yes, that's correct, trace.out is empty. I attached it nonetheless,
+> but it's a 0-byte file. I'm guessing the Thunderbolt chip probably
+> didn't come out of suspend?)
+
+Yes, that's possible and this could explain the Linux behaviour but it
+does not explain why it works in Windows. Also the dmesg is full of
+stacktraces, not much else.
+
+I got reply from our experts. They say that we are expected to get the
+DP IN unplugs every single time we enter redrive mode. There is nothing
+"special" added to the Windows side for this either so there is no real
+explanation why it works in Windows and why we see this in Linux. What
+they also wanted to check is that with the "production quality" Barlow
+Ridge firmwares this is not expected to happen and yours is in 14.x so
+is this some pre-production hardware that you are dealing with or this
+can be purchased from somewhere? Where did you get the firmware?
+
+Thanks!
 
