@@ -1,113 +1,228 @@
-Return-Path: <linux-usb+bounces-17619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17620-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2640D9CE178
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 15:42:35 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 312C49CF08B
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 16:46:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3F0C1F21ED8
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 14:42:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88C5BB2AC56
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 15:13:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937101CF5C0;
-	Fri, 15 Nov 2024 14:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC451D5146;
+	Fri, 15 Nov 2024 15:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h6spUon9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9B0754769
-	for <linux-usb@vger.kernel.org>; Fri, 15 Nov 2024 14:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAE01CEEB8;
+	Fri, 15 Nov 2024 15:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731681745; cv=none; b=mvEGSHdi5AwmhttZbjjlT5A7dKwRzuGtFeP/RshFgzPjyIio63tR9J7774fSYMURa8Aij6pnjwOoNJoCezuhEWMBZnM8RIBQAFMj0p+FsC2xF7AjN9DChlF10EUGo2s3WqtATRECexWEYQ5Hc+r6TneXLjBVe476owRZ5sYsKYM=
+	t=1731683584; cv=none; b=AMs1Z03ZamlILHPigZXkvw+g+aaFDbdkneT3gmyOfGjayVtX+kV8i/uG8TziwJaiGvvUCHkLuBHBeQwnl8jVRJp5FxNXIQkKC8HrItQ6Yh2dX9q3rTJuABIhq+Qm8DWAr4rkBUqTq2fqQ7dq+sjLXu/DnwEXYMJVGrFj6XBuscQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731681745; c=relaxed/simple;
-	bh=LtNSkAzLSXCtPPaTga+LAQj/4pDrX/irLQXSdAVhvK4=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=iYdliADT5LL0LrQgyDw0QcJR0eYriSouj9sR844Srqdt3K5PUm4f8eMG2dRzfQlUnHoDZOWf9+hIR+TK57KvWA4i7rqrEEc2EgUk9M9G7d4c9BWHi1BHA+vImpp0T5rJyAsHEAcajx4tsxj/5gpxUsr9JbVawDlRvjMUZ9DbIgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a6b7974696so21340865ab.1
-        for <linux-usb@vger.kernel.org>; Fri, 15 Nov 2024 06:42:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731681743; x=1732286543;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KbN2ypUO22bhAatVep/TVVxgQVG+AeOeRHiEpaGVRlY=;
-        b=XaUvekPJtowRB5/7Yaat+VH3HyCfBQiDebfa9CKq3cJcGXjcZ/VSv71FZbIgQ/YD5I
-         YKgMCEmq1GV6S/yaG5wkdMD7X7T6yxjy+gjW1ZP3twBvU5HHokDrj4uKrbb/uYiUcVD2
-         61ONF9w9RrKigzAn/sZEt8OSuzzgQw9xlN1jQ4FiCFqHlsvCBjrORc0tLxo5L9868hwb
-         lq1imIryEIq4e6gdJ664zAkK4PbZMUhx0dUll3qZVEcVz5mJd4qp03Jj8t5vSrXuI2gk
-         Zo50l1FQyVAcnoMksdo5UR5PtR0mNMjgVig/ZEv0lmhekwNZF+fed25wVnqPwLazJC5z
-         y6oA==
-X-Forwarded-Encrypted: i=1; AJvYcCWCQBlZgXKBGKPi1q79aEM6W4HGLHKvEY9mW1gDsk73V6/gOTk+J4tnPrWnSXsC7F+ETmu24lfgK4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUGTcMI//w4drSF9TZlp6QdHLM9u/W0kt2ic988M3Ls9/gvLFM
-	aNxfN/UlIcDdwlVeAsIHli4ZVPsP5fYqLyYNGEKo4kOc0zKZ4SdpiSJE7//r+Y5gUqjvyEatugw
-	uh/Jf+JDE0/gpZtIjPfBeA4loU3uDYsEc0r84lzWoi50NNhFNLjHZ/bo=
-X-Google-Smtp-Source: AGHT+IEBeF6O3ZdAfz5TdbPb9Sj1ENMdzbhjcE0E3Ozv7YtXAqQMUb3hcM5t3X3XkyzK/DVlImRQEbPw3ZkCKjXBGqhYNDrDH7di
+	s=arc-20240116; t=1731683584; c=relaxed/simple;
+	bh=Hzl4HvXjPCBTOCpxlfz8euN/4InZC0Ja5eJZlmrRPck=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=SWMDGL7jctrhu2czmSyXdz62igUbf/VuBlhc66IoWARANTr1uu0OPLxXIKtZo4TbA9KuD8lQn4+96Pkab2Nlv9QVtilZ81xbb7/BJczjebLzEZl7dlktQ2jLCYl50pqATANCh63IVcjmh3Xk5zR7HPEn2U+Im0FYjemoCBDZaMs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h6spUon9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7D8C4CECF;
+	Fri, 15 Nov 2024 15:13:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1731683583;
+	bh=Hzl4HvXjPCBTOCpxlfz8euN/4InZC0Ja5eJZlmrRPck=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=h6spUon9NMMpScytIHHQVaeHUzntFFQCAx7szJtYUsgNJmqDn7QJTTsxHQ4SME+Rz
+	 kEHnxG3M8O5z+7BUQU/QNzNLwevpHFoMso/M/gGU0isvU1jRy1svL+mdj88W3mgyvA
+	 kFxrfb5E3gLAz4/qX3LnN4HHCpMVJhNZfqUSrbC9RfWk0aD8kKeR6RsNPi/q/TVYdU
+	 FwRuMhthDfMwgTrMRzP74vDh5+cxLrhK2upD/0ra06My4tcG6SM+AImWaK1h86NHh5
+	 dwYrrnaqxJ3gpxFZYKxLueggyWFlcCT6vPh7ZXbBXtfEed6XRDZsR2QKErOB9Z0Xcf
+	 XAlaJzDeJXVEg==
+Date: Fri, 15 Nov 2024 09:13:01 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:ca4f:0:b0:3a2:7592:2c5 with SMTP id
- e9e14a558f8ab-3a748078111mr30608885ab.17.1731681743038; Fri, 15 Nov 2024
- 06:42:23 -0800 (PST)
-Date: Fri, 15 Nov 2024 06:42:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67375dcf.050a0220.bb738.0002.GAE@google.com>
-Subject: [syzbot] Monthly usb report (Nov 2024)
-From: syzbot <syzbot+list77c90b8abe21b2b55fe6@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Rajendra Nayak <quic_rjendra@quicinc.com>, linux-kernel@vger.kernel.org, 
+ Trilok Soni <quic_tsoni@quicinc.com>, Conor Dooley <conor+dt@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+ linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
+ linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Sibi Sankar <quic_sibis@quicinc.com>, 
+ Bjorn Andersson <andersson@kernel.org>
+To: Abel Vesa <abel.vesa@linaro.org>
+In-Reply-To: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
+References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
+Message-Id: <173168321020.2749625.3094744897170113522.robh@kernel.org>
+Subject: Re: [PATCH v5 0/6] usb: typec: Add new driver for Parade PS8830
+ Type-C Retimer
 
-Hello usb maintainers/developers,
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+On Tue, 12 Nov 2024 19:01:09 +0200, Abel Vesa wrote:
+> The Parade PS8830 is a Type-C multi-protocol retimer that is controlled
+> via I2C. It provides altmode and orientation handling and usually sits
+> between the Type-C port and the PHY.
+> 
+> It is currently used alongside Qualcomm Snapdragon X Elite SoCs on quite
+> a few laptops already.
+> 
+> This new driver adds support for the following 3 modes:
+>  - DP 4lanes (pin assignments C and E)
+>  - DP 2lanes + USB3 (pin assignment D)
+>  - USB3
+> 
+> This retimer is a LTTPR (Link-Training Tunable PHY Repeater) which means
+> it can support link training from source to itself. This means that the
+> DP driver needs to be aware of the repeater presence and to handle
+> the link training accordingly. This is currently missing from msm dp
+> driver, but there is already a patchset [1] on the list that adds it.
+> Once done, full external DP will be working on all X1E laptops that make
+> use of this retimer.
+> 
+> NOTE: Currently, due to both LTTPR missing support in msm DP and a
+> reported crash that can happen on DP unplug, the DP DT patches are not
+> supposed to be merged yet. That patch is only shared for testing purposes.
+> Once those 2 issues have been resolved, the MDSS DP 0-2 enablement patch
+> will be respun.
+> 
+> The LTTPR patchset is already on the list:
+> [1] https://lore.kernel.org/all/20241031-drm-dp-msm-add-lttpr-transparent-mode-set-v1-0-cafbb9855f40@linaro.org/
+> 
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> Changes in v5:
+> - Renamed binding schema to be the same as the compatible.
+> - Dropped the ps8830,boot-on from the schema.
+> - Added register offsets and bits names to the driver, like Konrad
+>   suggested.
+> - Reordered the vregs and clocks enabling, as per Johan's request.
+> - Used the dev_err_probe for regmap init failure and dropped the
+>   multiple regulator disable calls, replacing it with single call to
+>   helper, as Christophe suggested. Also replaced dev_err with
+>   dev_err_probe on typec_switch_register and typec_mux_register failure.
+> - Added some new pinctrl specific properties to all pmic provided
+>   gpios that control retimer vregs.
+> - Re-ordered alphabetically the retimers default state pinconfs.
+> - Added the T14s patches with same exact support, as per Johan's
+>   request.
+> - Link to v4: https://lore.kernel.org/r/20241101-x1e80100-ps8830-v4-0-f0f7518b263e@linaro.org
+> 
+> Changes in v4:
+> - Renamed the driver and bindings schema to ps883x to allow future
+>   support for the PS8833.
+> - Dropped the dedicated DT property for keeping the retimers from
+>   resetting on probe, and replaced that with a read to figure out
+>   if it has been already configured or not. This involves leaving the
+>   reset gpio as-is on probe if the retimer has been already configured.
+> - Replaced the fwnode_typec_switch_get() call with typec_switch_get()
+> - Replaced the fwnode_typec_mux_get() call with typec_mux_get()
+> - Dropped the clock name, as there is only one clock. As per Bjorn's
+>   suggestion.
+> - Dropped regcache as it seems it is not needed.
+> - Re-worded all commit messages to explain better the problem and the
+>   proposed changes.
+> - Link to v3: https://lore.kernel.org/r/20241022-x1e80100-ps8830-v3-0-68a95f351e99@linaro.org
+> 
+> Changes in v3:
+> - Reworked the schema binding by using the usb/usb-switch.yaml defined
+>   port graph and properties. Addressed all comments from Johan and
+>   Dmitry.
+> - Dropped the manual caching of the config values on regmap write in the
+>   driver.
+> - Reordered the DP pin assignment states within the switch clause, as
+>   Dmitry suggested.
+> - Added SVID check to not allow any altmode other than DP.
+> - Added DT patches (retimer for USB orientation handling and DP
+>   enablement). Did this in order to offer a full picture of how it all
+>   fits together.
+> - Split the DP enablement in DT in a separate patchset so the USB
+>   handling can be merged separately.
+> - Added ps8830,boot-on to let the driver know it is supposed to skip
+>   resetting the retimer on driver probe, as the bootloader might already
+>   let it in a pre-configured state.
+> - Marked all retimer voltage regulators as boot-on since we want to
+>   maintain the state for coldplug orientation.
+> - Added pinconf for all retimer0 gpios.
+> - Didn't pick up Konrad's T-b tags and Krzysztof's R-b tag as the rework
+>   is quite extensive. Especially because of the ps8830,boot-on and what
+>   it does.
+> - Link to v2: https://lore.kernel.org/r/20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org
+> 
+> Changes in v2:
+> - Addressed all comments from Johan and Konrad.
+> - Reworked the handling of the vregs so it would be more cleaner.
+>   Dropped the usage of bulk regulators API and handled them separately.
+>   Also discribed all regulators according to data sheet.
+> - Added all delays according to data sheet.
+> - Fixed coldplug (on boot) orientation detection.
+> - Didn't pick Krzysztof's R-b tag because the bindings changed w.r.t
+>   supplies.
+> - Link to v1: https://lore.kernel.org/r/20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org
+> 
+> ---
+> Abel Vesa (6):
+>       dt-bindings: usb: Add Parade PS8830 Type-C retimer bindings
+>       usb: typec: Add support for Parade PS8830 Type-C Retimer
+>       arm64: dts: qcom: x1e80100-crd: Describe the Parade PS8830 retimers
+>       arm64: dts: qcom: x1e80100-crd: Enable external DisplayPort support
+>       arm64: dts: qcom: x1e80100-t14s: Describe the Parade PS8830 retimers
+>       arm64: dts: qcom: x1e80100-t14s: Enable external DisplayPort support
+> 
+>  .../devicetree/bindings/usb/parade,ps8830.yaml     | 119 ++++++
+>  .../dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts     | 321 +++++++++++++-
+>  arch/arm64/boot/dts/qcom/x1e80100-crd.dts          | 474 ++++++++++++++++++++-
+>  drivers/usb/typec/mux/Kconfig                      |  10 +
+>  drivers/usb/typec/mux/Makefile                     |   1 +
+>  drivers/usb/typec/mux/ps883x.c                     | 437 +++++++++++++++++++
+>  6 files changed, 1352 insertions(+), 10 deletions(-)
+> ---
+> base-commit: 28955f4fa2823e39f1ecfb3a37a364563527afbc
+> change-id: 20240521-x1e80100-ps8830-d5ccca95b557
+> 
+> Best regards,
+> --
+> Abel Vesa <abel.vesa@linaro.org>
+> 
+> 
+> 
 
-During the period, 12 new issues were detected and 1 were fixed.
-In total, 100 issues are still open and 359 have already been fixed.
 
-Some of the still happening issues:
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Ref  Crashes Repro Title
-<1>  9169    Yes   KASAN: slab-use-after-free Read in hdm_disconnect
-                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
-<2>  4442    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
-                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
-<3>  1537    Yes   INFO: task hung in jbd2_journal_commit_transaction (5)
-                   https://syzkaller.appspot.com/bug?extid=3071bdd0a9953bc0d177
-<4>  1524    Yes   INFO: task hung in uevent_show (2)
-                   https://syzkaller.appspot.com/bug?extid=592e2ab8775dbe0bf09a
-<5>  1203    Yes   INFO: rcu detected stall in hub_event
-                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
-<6>  1062    Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-<7>  967     Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<8>  878     Yes   general protection fault in ir_raw_event_store_with_filter
-                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
-<9>  862     Yes   INFO: task hung in usb_get_descriptor (2)
-                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
-<10> 660     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+  pip3 install dtschema --upgrade
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
 
-You may send multiple commands in a single email message.
+New warnings running 'make CHECK_DTBS=y qcom/x1e78100-lenovo-thinkpad-t14s.dtb qcom/x1e80100-crd.dtb' for 20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org:
+
+arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dtb: usb@a2f8800: interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
+	from schema $id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+arch/arm64/boot/dts/qcom/x1e80100-crd.dtb: usb@a2f8800: interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
+	from schema $id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+
+
+
+
+
 
