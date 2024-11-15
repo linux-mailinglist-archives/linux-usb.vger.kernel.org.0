@@ -1,228 +1,184 @@
-Return-Path: <linux-usb+bounces-17620-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17621-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 312C49CF08B
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 16:46:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B980A9CF1ED
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 17:44:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 88C5BB2AC56
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 15:13:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE8CEB430D2
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 15:53:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DC451D5146;
-	Fri, 15 Nov 2024 15:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E12CA1D54FA;
+	Fri, 15 Nov 2024 15:52:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h6spUon9"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="F4E+gs9O"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAE01CEEB8;
-	Fri, 15 Nov 2024 15:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA0301D47D2
+	for <linux-usb@vger.kernel.org>; Fri, 15 Nov 2024 15:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731683584; cv=none; b=AMs1Z03ZamlILHPigZXkvw+g+aaFDbdkneT3gmyOfGjayVtX+kV8i/uG8TziwJaiGvvUCHkLuBHBeQwnl8jVRJp5FxNXIQkKC8HrItQ6Yh2dX9q3rTJuABIhq+Qm8DWAr4rkBUqTq2fqQ7dq+sjLXu/DnwEXYMJVGrFj6XBuscQ=
+	t=1731685963; cv=none; b=Gc9l3+yp9iFCWmm79aPa6yeGBLx14dw0uiHBvkkkh0QqzxC89ROphK4KMVxBmFjFv2DoUvsMYakfBNWmdUpkmA1LUV7+00NenuEQj6ocIeQAjKtP3oH7MYmL9GuNKhhdGrC7NcE7NWf63lP71xtq3ZlNTKHZnwRqROonXIoOzeY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731683584; c=relaxed/simple;
-	bh=Hzl4HvXjPCBTOCpxlfz8euN/4InZC0Ja5eJZlmrRPck=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=SWMDGL7jctrhu2czmSyXdz62igUbf/VuBlhc66IoWARANTr1uu0OPLxXIKtZo4TbA9KuD8lQn4+96Pkab2Nlv9QVtilZ81xbb7/BJczjebLzEZl7dlktQ2jLCYl50pqATANCh63IVcjmh3Xk5zR7HPEn2U+Im0FYjemoCBDZaMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h6spUon9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D7D8C4CECF;
-	Fri, 15 Nov 2024 15:13:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1731683583;
-	bh=Hzl4HvXjPCBTOCpxlfz8euN/4InZC0Ja5eJZlmrRPck=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=h6spUon9NMMpScytIHHQVaeHUzntFFQCAx7szJtYUsgNJmqDn7QJTTsxHQ4SME+Rz
-	 kEHnxG3M8O5z+7BUQU/QNzNLwevpHFoMso/M/gGU0isvU1jRy1svL+mdj88W3mgyvA
-	 kFxrfb5E3gLAz4/qX3LnN4HHCpMVJhNZfqUSrbC9RfWk0aD8kKeR6RsNPi/q/TVYdU
-	 FwRuMhthDfMwgTrMRzP74vDh5+cxLrhK2upD/0ra06My4tcG6SM+AImWaK1h86NHh5
-	 dwYrrnaqxJ3gpxFZYKxLueggyWFlcCT6vPh7ZXbBXtfEed6XRDZsR2QKErOB9Z0Xcf
-	 XAlaJzDeJXVEg==
-Date: Fri, 15 Nov 2024 09:13:01 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1731685963; c=relaxed/simple;
+	bh=H17BZuibZEbgHVwLv70jSQBoM/iJtikYd8BFY+32w1Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Pt5rSS1StlGTBVwlnI397OmZQd6RgGxUR1jKzHXDjT1waWDCWNQHrFEoz/AF4pko7GNYO+Gat9TCgGdmiathC+bRnt3mkpK6xohmKBrCF037PzU+S62YMDWM68SPPwZO/A76tpElEmVn6vNK3IjXna5C/NinU45xf6/Ft9kbEjM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=F4E+gs9O; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-a9a4031f69fso301847166b.0
+        for <linux-usb@vger.kernel.org>; Fri, 15 Nov 2024 07:52:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1731685960; x=1732290760; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SM5VxVoDVFnDSYem6y5qbKOY3ILSrxsrmhZYEaBJqDY=;
+        b=F4E+gs9OhrqMxys76hilmhXiOUUN3FANGORmmtBH9++jJKDm8Dzahn7cUX0i6M0JcK
+         acgD257HsphemcPXVh/hTFsDEZKlZLa0U/TYsle2ecFGI3oFTe7rIvt/Z459LRz7G45h
+         qSPsgt7FIbqPxNo4a70qMVI0zVxNLYum+R4wM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731685960; x=1732290760;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SM5VxVoDVFnDSYem6y5qbKOY3ILSrxsrmhZYEaBJqDY=;
+        b=eYDA1gnGspSM8vNnX2g1fv6XX9ck7KyiVZAUgUkey0wndEgmbdMM0tkWnV9aeixFU+
+         YjKHidi7pIaHAtoDoxLGCVdAxWIwodpy1UzgXXLWcYHAnFQ2x1CohM4h02QOlhlvE/gH
+         80tYv/AtTriFkJgi5Ny/G+U4l7RVH1s149wKzWmGTkkFwDESs8AnQkeQ/Yc9zMlKF/sK
+         DiGsIkn3Qi34JdTHyQ49QcgM5Xw1SkP5Kco0Lim4EMBJ+pGorqHka7DjuH508M6/DPrM
+         ltaJbNnei+8bZEHoivA+T0LNQs6eWWemo8Cl3DrXmYJQAUoWz1xOZHSYJH8zWvnWg7xa
+         7fvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUUYTASZ1MMjdh+aXaIeJ6HVuxGQrStUs9u5M0jxRAksbmA9f6TghZHGajAIAL59L0SvLXSJJ1IUNo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YymOHSvLc2k2y865r+dsfmIjCtXWfCbNHTvunC9U5N1Aw8kz63r
+	XL8S82Dsd37Ovk3X2ppSdpRFFsosdh+Lb4kRsXVhtSNvw/XunWnB5wqscomR
+X-Google-Smtp-Source: AGHT+IGaBUhGHis6dz6P0L7QR+cy48R8R6NQqmzJu8uXBchhAvz0hMLhelT0qh5Cy5g9+a+848cLhw==
+X-Received: by 2002:a17:906:eecb:b0:a99:ecaf:4543 with SMTP id a640c23a62f3a-aa483483e45mr286490066b.25.1731685960109;
+        Fri, 15 Nov 2024 07:52:40 -0800 (PST)
+Received: from ukaszb-ng.c.googlers.com.com (103.45.147.34.bc.googleusercontent.com. [34.147.45.103])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa20e086244sm187758166b.177.2024.11.15.07.52.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 15 Nov 2024 07:52:39 -0800 (PST)
+From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Benson Leung <bleung@chromium.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Pavan Holla <pholla@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>,
+	linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Subject: [PATCH v7 0/3] usb: typec: Implement UCSI driver for ChromeOS
+Date: Fri, 15 Nov 2024 15:52:31 +0000
+Message-ID: <20241115155234.1587589-1-ukaszb@chromium.org>
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Rajendra Nayak <quic_rjendra@quicinc.com>, linux-kernel@vger.kernel.org, 
- Trilok Soni <quic_tsoni@quicinc.com>, Conor Dooley <conor+dt@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
- linux-usb@vger.kernel.org, Johan Hovold <johan@kernel.org>, 
- linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Sibi Sankar <quic_sibis@quicinc.com>, 
- Bjorn Andersson <andersson@kernel.org>
-To: Abel Vesa <abel.vesa@linaro.org>
-In-Reply-To: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
-References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
-Message-Id: <173168321020.2749625.3094744897170113522.robh@kernel.org>
-Subject: Re: [PATCH v5 0/6] usb: typec: Add new driver for Parade PS8830
- Type-C Retimer
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+This series implements a UCSI ChromeOS EC transport driver. 
+The ChromeOS EC is expected to implement UCSI Platform Policy
+Manager (PPM).
 
-On Tue, 12 Nov 2024 19:01:09 +0200, Abel Vesa wrote:
-> The Parade PS8830 is a Type-C multi-protocol retimer that is controlled
-> via I2C. It provides altmode and orientation handling and usually sits
-> between the Type-C port and the PHY.
-> 
-> It is currently used alongside Qualcomm Snapdragon X Elite SoCs on quite
-> a few laptops already.
-> 
-> This new driver adds support for the following 3 modes:
->  - DP 4lanes (pin assignments C and E)
->  - DP 2lanes + USB3 (pin assignment D)
->  - USB3
-> 
-> This retimer is a LTTPR (Link-Training Tunable PHY Repeater) which means
-> it can support link training from source to itself. This means that the
-> DP driver needs to be aware of the repeater presence and to handle
-> the link training accordingly. This is currently missing from msm dp
-> driver, but there is already a patchset [1] on the list that adds it.
-> Once done, full external DP will be working on all X1E laptops that make
-> use of this retimer.
-> 
-> NOTE: Currently, due to both LTTPR missing support in msm DP and a
-> reported crash that can happen on DP unplug, the DP DT patches are not
-> supposed to be merged yet. That patch is only shared for testing purposes.
-> Once those 2 issues have been resolved, the MDSS DP 0-2 enablement patch
-> will be respun.
-> 
-> The LTTPR patchset is already on the list:
-> [1] https://lore.kernel.org/all/20241031-drm-dp-msm-add-lttpr-transparent-mode-set-v1-0-cafbb9855f40@linaro.org/
-> 
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
-> Changes in v5:
-> - Renamed binding schema to be the same as the compatible.
-> - Dropped the ps8830,boot-on from the schema.
-> - Added register offsets and bits names to the driver, like Konrad
->   suggested.
-> - Reordered the vregs and clocks enabling, as per Johan's request.
-> - Used the dev_err_probe for regmap init failure and dropped the
->   multiple regulator disable calls, replacing it with single call to
->   helper, as Christophe suggested. Also replaced dev_err with
->   dev_err_probe on typec_switch_register and typec_mux_register failure.
-> - Added some new pinctrl specific properties to all pmic provided
->   gpios that control retimer vregs.
-> - Re-ordered alphabetically the retimers default state pinconfs.
-> - Added the T14s patches with same exact support, as per Johan's
->   request.
-> - Link to v4: https://lore.kernel.org/r/20241101-x1e80100-ps8830-v4-0-f0f7518b263e@linaro.org
-> 
-> Changes in v4:
-> - Renamed the driver and bindings schema to ps883x to allow future
->   support for the PS8833.
-> - Dropped the dedicated DT property for keeping the retimers from
->   resetting on probe, and replaced that with a read to figure out
->   if it has been already configured or not. This involves leaving the
->   reset gpio as-is on probe if the retimer has been already configured.
-> - Replaced the fwnode_typec_switch_get() call with typec_switch_get()
-> - Replaced the fwnode_typec_mux_get() call with typec_mux_get()
-> - Dropped the clock name, as there is only one clock. As per Bjorn's
->   suggestion.
-> - Dropped regcache as it seems it is not needed.
-> - Re-worded all commit messages to explain better the problem and the
->   proposed changes.
-> - Link to v3: https://lore.kernel.org/r/20241022-x1e80100-ps8830-v3-0-68a95f351e99@linaro.org
-> 
-> Changes in v3:
-> - Reworked the schema binding by using the usb/usb-switch.yaml defined
->   port graph and properties. Addressed all comments from Johan and
->   Dmitry.
-> - Dropped the manual caching of the config values on regmap write in the
->   driver.
-> - Reordered the DP pin assignment states within the switch clause, as
->   Dmitry suggested.
-> - Added SVID check to not allow any altmode other than DP.
-> - Added DT patches (retimer for USB orientation handling and DP
->   enablement). Did this in order to offer a full picture of how it all
->   fits together.
-> - Split the DP enablement in DT in a separate patchset so the USB
->   handling can be merged separately.
-> - Added ps8830,boot-on to let the driver know it is supposed to skip
->   resetting the retimer on driver probe, as the bootloader might already
->   let it in a pre-configured state.
-> - Marked all retimer voltage regulators as boot-on since we want to
->   maintain the state for coldplug orientation.
-> - Added pinconf for all retimer0 gpios.
-> - Didn't pick up Konrad's T-b tags and Krzysztof's R-b tag as the rework
->   is quite extensive. Especially because of the ps8830,boot-on and what
->   it does.
-> - Link to v2: https://lore.kernel.org/r/20241004-x1e80100-ps8830-v2-0-5cd8008c8c40@linaro.org
-> 
-> Changes in v2:
-> - Addressed all comments from Johan and Konrad.
-> - Reworked the handling of the vregs so it would be more cleaner.
->   Dropped the usage of bulk regulators API and handled them separately.
->   Also discribed all regulators according to data sheet.
-> - Added all delays according to data sheet.
-> - Fixed coldplug (on boot) orientation detection.
-> - Didn't pick Krzysztof's R-b tag because the bindings changed w.r.t
->   supplies.
-> - Link to v1: https://lore.kernel.org/r/20240829-x1e80100-ps8830-v1-0-bcc4790b1d45@linaro.org
-> 
-> ---
-> Abel Vesa (6):
->       dt-bindings: usb: Add Parade PS8830 Type-C retimer bindings
->       usb: typec: Add support for Parade PS8830 Type-C Retimer
->       arm64: dts: qcom: x1e80100-crd: Describe the Parade PS8830 retimers
->       arm64: dts: qcom: x1e80100-crd: Enable external DisplayPort support
->       arm64: dts: qcom: x1e80100-t14s: Describe the Parade PS8830 retimers
->       arm64: dts: qcom: x1e80100-t14s: Enable external DisplayPort support
-> 
->  .../devicetree/bindings/usb/parade,ps8830.yaml     | 119 ++++++
->  .../dts/qcom/x1e78100-lenovo-thinkpad-t14s.dts     | 321 +++++++++++++-
->  arch/arm64/boot/dts/qcom/x1e80100-crd.dts          | 474 ++++++++++++++++++++-
->  drivers/usb/typec/mux/Kconfig                      |  10 +
->  drivers/usb/typec/mux/Makefile                     |   1 +
->  drivers/usb/typec/mux/ps883x.c                     | 437 +++++++++++++++++++
->  6 files changed, 1352 insertions(+), 10 deletions(-)
-> ---
-> base-commit: 28955f4fa2823e39f1ecfb3a37a364563527afbc
-> change-id: 20240521-x1e80100-ps8830-d5ccca95b557
-> 
-> Best regards,
-> --
-> Abel Vesa <abel.vesa@linaro.org>
-> 
-> 
-> 
+---
+Changes in v7:
+- Dropped the following commits for now as I want to focus
+on upstreaming cros_ec_ucsi driver first. Then I will get
+back to the topic of trace events and netlink:
+  "usb: typec: cros_ec_ucsi: Add trace events"
+  "usb: typec: cros_ec_ucsi: Add netlink"
+- Squashed "usb: typec: cros_ec_ucsi: Use complete instead of resume"
+into "usb: typec: ucsi: Implement ChromeOS UCSI driver".
+- Added "usb: typec: cros_ec_ucsi: Recover from write timeouts" commmit.
+- Added usage of common functins ucsi_sync_control_common()
+and ucsi_notify_common().
+- Commits:
+  "platform/chrome: Update EC feature flags"
+  "mfd: cros_ec: Load cros_ec_ucsi on supported ECs"
+  "mfd: cros_ec: Don't load charger with UCSI"
+landed in the tree https://git.kernel.org/pub/scm/linux/kernel/git/lee/mfd.git/log/?h=for-mfd-next    
+- Link to v6: https://lore.kernel.org/linux-usb/20240910101527.603452-1-ukaszb@chromium.org
 
+Changes in v6:
+- Reverted to type names uint*_t in cros_ec_commands.h in order 
+to be consistent with type names used in other parts of the file.
+- Updated comments in cros_ec_commands.h related to UCSI.
+- Added missing sign-offs.
+- Fixed memory leak in cros_ucsi_async_control() by moving
+ec_params_ucsi_ppm_set request buffer to stack.
+- Replaced cros_ucsi_read with cros_ucsi_read_cci in cros_ucsi_work().
+- Updated changes in v5, it was missing information related to
+commits addition:
+  platform/chrome: Update EC feature flags
+  usb: typec: cros_ec_ucsi: Use complete instead of resume
+  mfd: cros_ec: Load cros_ec_ucsi on supported ECs
+  mfd: cros_ec: Don't load charger with UCSI
+- Link to v5: https://lore.kernel.org/r/all/20240903163033.3170815-1-ukaszb@chromium.org/
 
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
+Changes in v5:
+- Increased WRITE_TMO_MS to 5000.
+- Replaced DRV_NAME with KBUILD_MODNAME.
+- Added comments for WRITE_TMO_MS and MAX_EC_DATA_SIZE defines.
+- Refactored cros_ucsi_async_control() to dynamically allocate memory
+for a message to EC instead of allocating the message on stack.
+- Replaced type names uint*_t with u*.
+- Removed ret variable in cros_ucsi_work().
+- Updated ucsi_operations interface to align with changes introduced in
+  v6.11.
+- Replaced test_bit() with test_and_clear_bit() in cros_ucsi_work().
+- Updated EC feature flags in commit "platform/chrome: Update EC feature
+  flags".
+- Added new commit "usb: typec: cros_ec_ucsi: Use complete instead
+of resume".
+- Added trace events in commit "usb: typec: cros_ec_ucsi: Add trace
+  events".
+- Added netlink in commit "usb: typec: cros_ec_ucsi: Add netlink"
+for debugging and testing puropses.
+- Added new commit "mfd: cros_ec: Load cros_ec_ucsi on supported ECs".
+- Added new commit "mfd: cros_ec: Don't load charger with UCSI".
+- Link to v4: https://lore.kernel.org/all/CAB2FV=6We88NrvN8NZYt8NkMFH9N_ZBGyUWVUpGwPdja2X_+NA@mail.gmail.com/T/
 
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
+Changes in v4:
+- Setup notifications before calling ucsi_register.
+- Cancel work before destroying driver data.
+- Link to v3: https://lore.kernel.org/r/20240403-public-ucsi-h-v3-0-f848e18c8ed2@chromium.org
 
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
+Changes in v3:
+- Moved driver from platform/chrome to usb/typec/ucsi.
+- Used id_table instead of MODULE_ALIAS.
+- Split EC header changes into seperate commit.
+- Fixes from additional internal reviews and kernel bot warnings.
+- Link to v2: https://lore.kernel.org/r/20240325-public-ucsi-h-v2-0-a6d716968bb1@chromium.org
 
-  pip3 install dtschema --upgrade
+Changes in v2:
+- No code or commit message changes.
+- Added drivers/platform/chrome maintainers for review.
 
+Abhishek Pandit-Subedi (1):
+  usb: typec: cros_ec_ucsi: Recover from write timeouts
 
-New warnings running 'make CHECK_DTBS=y qcom/x1e78100-lenovo-thinkpad-t14s.dtb qcom/x1e80100-crd.dtb' for 20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org:
+Pavan Holla (2):
+  platform/chrome: Update ChromeOS EC header for UCSI
+  usb: typec: ucsi: Implement ChromeOS UCSI driver
 
-arch/arm64/boot/dts/qcom/x1e78100-lenovo-thinkpad-t14s.dtb: usb@a2f8800: interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
-	from schema $id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
-arch/arm64/boot/dts/qcom/x1e80100-crd.dtb: usb@a2f8800: interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
-	from schema $id: http://devicetree.org/schemas/usb/qcom,dwc3.yaml#
+ MAINTAINERS                                   |   7 +
+ drivers/usb/typec/ucsi/Kconfig                |  13 +
+ drivers/usb/typec/ucsi/Makefile               |   1 +
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c         | 329 ++++++++++++++++++
+ .../linux/platform_data/cros_ec_commands.h    |  28 +-
+ 5 files changed, 377 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi.c
 
-
-
-
+-- 
+2.47.0.338.g60cca15819-goog
 
 
