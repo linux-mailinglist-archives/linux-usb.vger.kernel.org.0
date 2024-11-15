@@ -1,88 +1,78 @@
-Return-Path: <linux-usb+bounces-17609-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17610-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB4219CD8E4
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 07:55:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 074409CD9CC
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 08:20:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A61EB26427
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 06:55:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0D4B282B6F
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 07:20:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36D2A189BA2;
-	Fri, 15 Nov 2024 06:54:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0131189902;
+	Fri, 15 Nov 2024 07:20:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cssjMrsB"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K+stSF71"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A2518873F
-	for <linux-usb@vger.kernel.org>; Fri, 15 Nov 2024 06:54:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A9B523A;
+	Fri, 15 Nov 2024 07:20:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731653695; cv=none; b=BqenB+TT3NcweB8kLWqWnu7Kl1By1OPIsrwr2ibwkpdRGYKIIwI4bb0STmbihlP8l5aNsEBij1VNo0hK7As+JRwd6p7rdRkHg0iEYw6yuqyzafyBYh+EfnKZAoUT58ynXWNJOTmoTlUvKihVRTMy+NhPs+RGlW9HozgEmPKgRB4=
+	t=1731655203; cv=none; b=NN0OD+HFqQLYEJAKBuFSJdUTaotDW+GV3CDB+7umGUr1blyfRwrsCth1kzNrPvnZ/VH/RH5S4Yd28GzX+Yc1/ch1WyTNI+7mGIX2IHL/ih97CfXSBPqCkYG8yiA5tATqilmR8u+hUZejLCKWsLL5g8eBscmhWaqWKxD9QhF2SOA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731653695; c=relaxed/simple;
-	bh=wcimBfT4KdslFpSdb7Mnrzgcs31Xrk5aFoelt2AivPQ=;
+	s=arc-20240116; t=1731655203; c=relaxed/simple;
+	bh=pkFLuOnuVU4cIsrNOTFdM80z9a1NziY/kk1IdFhaUFM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DZvAXyOOMfN8tKaYrvJC71E3Ip0BkfetsK+9g0/FI0G9P5GgYVhmFWTudhMGcS739ZBD90+HYGoo7QwOrnoiOJhg5Ol5Yamztv+s2YIWHh8ClSTwCnSfQJXtPNj6ZFo7/lsH1TMd+ziTv8MuOl5og6sBXSnkc0rbnFA1PcGr1Qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cssjMrsB; arc=none smtp.client-ip=209.85.167.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-53d9ff8ef3aso1579261e87.1
-        for <linux-usb@vger.kernel.org>; Thu, 14 Nov 2024 22:54:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1731653692; x=1732258492; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MjKLBvWETSBADZGUV6yqhakCmIaLRuQjCHp/Lt9M3AA=;
-        b=cssjMrsBLmM4fuB1gxR6lBwHNDLFni1ZVgPu/TbhlRN6Abd45Hqv6os9vWOjpoRyE3
-         DI20WIN8WYqYP/mZvCGBCTiX2KCx+ZxEFmXUBlb0Dj0b3ofQRSavHuv4I5n9HcKcbx/u
-         UL8+7SWQGcILQsVUf1JPLEqlEoUiZudk+nCFdNOoqRcsoHaV10wtZNuBW0isd7R72Yxf
-         tLgRd4eOTroka/AEdQ1oTucahlMvdzIXAmli8lp2qkRYvJNRzvLvOpy+kmiNRJxmlBVw
-         KRkqUIKqJZjB85EuTWMsjMNcPXAW871ZGvrdQlVg/cp0RrMGmEdRFB0s1XcfuW+Xs6jq
-         218g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731653692; x=1732258492;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MjKLBvWETSBADZGUV6yqhakCmIaLRuQjCHp/Lt9M3AA=;
-        b=lwMEjF9q9ENoZSQhNbCAMxhIUopeIgXlYifLPprnyevATDmqT9bdZGtnkStKT/LAWa
-         NIl+hwRdWs2a/Bnn57nuBktWpKpvPRHQ1GysokTZFB8BHe8w8gegtRNg/VhaAeCoWkVs
-         vg4QOW+FG9FX0SUzioQK8KxJgMUxsl6EP4FwzDBwQ4SeZtZ6rylB0w3Yei+IHwiAoMnd
-         GI2x/4af/JodVJ9eUH6I/2uKa8HGlRVxHF6710zfN+WQhJzoV1RmW3bkHpaYQz049VHS
-         tvGE1o/5WYooXAqPL5lE6LlLbTl1MagckE2UtbGPmdtcoeQvJNZzdZDijwLgAXRX1FrE
-         MjLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZ+9uXTqaaLFi9lsAO+bZsrW5TdaJVeB1bsUlAXPZfJnArAVDYs1gNId1SB6QGUKywr1cgSWKZm0o=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxh47ArwMemQHxH3MiJEMU5amKnG/uJNvAyF+KmCtA16+FNp8lF
-	MYjy3GT/1pA7U/XphBW5svv5gJ1UqSYjap2MB3BJ9caUfQ0xdcbeVxk3d5qio6A=
-X-Google-Smtp-Source: AGHT+IFYT9QcCK1sZ7kStHf5ogo5eN6v02g0qjiZW9C6KciiPEArLV3TRbiCPgAuKP6fFkQC+XS51w==
-X-Received: by 2002:a05:6512:3ba1:b0:53b:1f90:576f with SMTP id 2adb3069b0e04-53dab2a6022mr601193e87.22.1731653691696;
-        Thu, 14 Nov 2024 22:54:51 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53da6548eb8sm457776e87.255.2024.11.14.22.54.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Nov 2024 22:54:50 -0800 (PST)
-Date: Fri, 15 Nov 2024 08:54:47 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org, 
-	andersson@kernel.org, konradybcio@kernel.org, mantas@8devices.com, 
-	quic_kbajaj@quicinc.com, quic_kriskura@quicinc.com, quic_rohiagar@quicinc.com, 
-	abel.vesa@linaro.org, quic_wcheng@quicinc.com, linux-arm-msm@vger.kernel.org, 
-	linux-phy@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] arm64: dts: qcom: Add USB controller and phy
- nodes for IPQ5424
-Message-ID: <qx22rgezkym3guofdxwmvhrjjwjzshngb4cvpdhqahlykeeqhg@wc4zy3gicrsb>
-References: <20241114074722.4085319-1-quic_varada@quicinc.com>
- <20241114074722.4085319-7-quic_varada@quicinc.com>
- <CAA8EJpr6xb=TPPgk7ERhKVp7OnYdPGCK6+1_2TBRLBt_eWM43A@mail.gmail.com>
- <ZzbZGnKEovwoDPrP@hu-varada-blr.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CyJDLUJlGePxHBSf15BalBMoxOfSKjIheOffOE7MbWdjTio8oEEm2AK+jTk2aZAFWQm1ucWfwK1H6tvU59/Ijh5cKhDUrT8EjwnQLzZAeC0WpXBZoCLi4b8kCJG6wfb7SXduRYW/1gXTs0gM3qbwusFhVJ6mY1OhifMLEQ/MxoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K+stSF71; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731655202; x=1763191202;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pkFLuOnuVU4cIsrNOTFdM80z9a1NziY/kk1IdFhaUFM=;
+  b=K+stSF71GAtIhez5LwJNy6zZ12OoWD0y/bbqo8mp/mgGlFFF/6nLWozl
+   Gi+XdaczDEDCoRsBwEiO3mPL1W3AfLVSCZfVg8PChSlpLr14OE+MHYURI
+   qYOy/nXXKxXTrlGGFUqYZbb4p4sEXuFavmQ21ggqiiRsjfydrFT9IOipD
+   oX/kaRGGP3gcKl1/zfzTI21BjurME5oYQ57DIo6d7gNECAuwWS4sQ9AQs
+   +AfRvHiVpQD2ofE6Kd9lsgNGgDNNGMVyAcMBDdOFJBmSerFH4ZoR6e8hR
+   yXjbIWFk/7Hjrq49T8t1L25+mKWACYXupbn24oHovEytf2z85Lsil80am
+   w==;
+X-CSE-ConnectionGUID: kJCVF4m2Q/yhZjGVPtes9A==
+X-CSE-MsgGUID: HUFnz2c0TwiW+poQ7nCPoA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11256"; a="49181538"
+X-IronPort-AV: E=Sophos;i="6.12,156,1728975600"; 
+   d="scan'208";a="49181538"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 23:19:45 -0800
+X-CSE-ConnectionGUID: n2gyKpt/R3+bahmM3mewng==
+X-CSE-MsgGUID: LOWwPhyTTr24X81aHVY/Qg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,156,1728975600"; 
+   d="scan'208";a="88580045"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa008.fm.intel.com with SMTP; 14 Nov 2024 23:19:41 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 15 Nov 2024 09:19:40 +0200
+Date: Fri, 15 Nov 2024 09:19:39 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	gregkh@linuxfoundation.org, dmitry.baryshkov@linaro.org,
+	kyletso@google.com, rdbabiera@google.com, badhri@google.com,
+	linux@roeck-us.net, xu.yang_2@nxp.com, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] usb: typec: tcpm: Add support for
+ sink-bc12-completion-time-ms DT property
+Message-ID: <Zzb2CxPPZc09WfqV@kuha.fi.intel.com>
+References: <20241103034402.2460252-1-amitsd@google.com>
+ <20241103034402.2460252-4-amitsd@google.com>
+ <f244542a-7160-4f05-acaa-0e2574ee289d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,94 +81,80 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZzbZGnKEovwoDPrP@hu-varada-blr.qualcomm.com>
+In-Reply-To: <f244542a-7160-4f05-acaa-0e2574ee289d@google.com>
 
-On Fri, Nov 15, 2024 at 10:46:10AM +0530, Varadarajan Narayanan wrote:
-> On Thu, Nov 14, 2024 at 03:28:36PM +0200, Dmitry Baryshkov wrote:
-> > On Thu, 14 Nov 2024 at 09:48, Varadarajan Narayanan
-> > <quic_varada@quicinc.com> wrote:
-> > >
-> > > The IPQ5424 SoC has both USB2.0 and USB3.0 controllers. The USB3.0
-> > > can connect to either of USB2.0 or USB3.0 phy and operate in the
-> > > respective mode.
-> > >
-> > > Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> > > ---
-> > > v3: Regulator node names, labels and 'regulator-name' changed per review suggestions
-> > >     Stray newline removed
-> > >
-> > > v2: Add dm/dp_hs_phy_irq to usb3@8a00000 node
-> > >     Add u1/u2-entry quirks to usb@8a00000 node
-> > > ---
-> > >  arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts |  66 ++++++++
-> > >  arch/arm64/boot/dts/qcom/ipq5424.dtsi       | 159 ++++++++++++++++++++
-> > >  2 files changed, 225 insertions(+)
-> > >
-> > > diff --git a/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts b/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
-> > > index d4d31026a026..859e15befb3f 100644
-> > > --- a/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
-> > > +++ b/arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts
-> > > @@ -16,12 +16,70 @@ / {
-> > >         aliases {
-> > >                 serial0 = &uart1;
-> > >         };
-> > > +
-> > > +       vreg_misc_3p3: regulator-3300000 {
-> >
-> > Technically these names are correct. However they don't match the
-> > approach that Qualcomm DT files have been using up to now.
-> > You can compare your data with the output of `git grep :.regulator-
-> > arch/arm64/boot/dts/qcom/`
+On Thu, Nov 14, 2024 at 11:59:41AM -0800, Amit Sunil Dhamne wrote:
+> Hi Heikki,
 > 
-> Dmitry,
+> On 11/2/24 8:43 PM, Amit Sunil Dhamne wrote:
+> > Add support for parsing DT time property "sink-bc12-completion-time-ms".
+> > This timer is used to relax the PD state machine during Sink attach to
+> > allow completion of Battery Charging (BC1.2) charger type detection in
+> > TCPC before PD negotiations. BC1.2 detection is a hardware mechanism to
+> > detect charger port type that is run by some controllers (such as
+> > "maxim,max33359") in parallel to Type-C connection state machines.
+> > This is to ensure that BC1.2 completes before PD is enabled as running
+> > BC1.2 in parallel with PD negotiation results in delays violating timer
+> > constraints in PD spec.
+> > 
+> > This is an optional timer and will not add any delay unless explicitly
+> > set.
+> > 
+> > Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> > Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> >   drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
+> >   1 file changed, 15 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> > index b3d5d1d48937..8b325b93b5a9 100644
+> > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > @@ -319,6 +319,7 @@ struct pd_timings {
+> >   	u32 sink_wait_cap_time;
+> >   	u32 ps_src_off_time;
+> >   	u32 cc_debounce_time;
+> > +	u32 snk_bc12_cmpletion_time;
+> >   };
+> >   struct tcpm_port {
+> > @@ -4978,7 +4979,16 @@ static void run_state_machine(struct tcpm_port *port)
+> >   		if (ret < 0)
+> >   			tcpm_set_state(port, SNK_UNATTACHED, 0);
+> >   		else
+> > -			tcpm_set_state(port, SNK_STARTUP, 0);
+> > +			/*
+> > +			 * For Type C port controllers that use Battery Charging
+> > +			 * Detection (based on BCv1.2 spec) to detect USB
+> > +			 * charger type, add a delay of "snk_bc12_cmpletion_time"
+> > +			 * before transitioning to SNK_STARTUP to allow BC1.2
+> > +			 * detection to complete before PD is eventually enabled
+> > +			 * in later states.
+> > +			 */
+> > +			tcpm_set_state(port, SNK_STARTUP,
+> > +				       port->timings.snk_bc12_cmpletion_time);
+> >   		break;
+> >   	case SNK_STARTUP:
+> >   		opmode =  tcpm_get_pwr_opmode(port->polarity ?
+> > @@ -7090,6 +7100,10 @@ static void tcpm_fw_get_timings(struct tcpm_port *port, struct fwnode_handle *fw
+> >   		port->timings.cc_debounce_time = val;
+> >   	else
+> >   		port->timings.cc_debounce_time = PD_T_CC_DEBOUNCE;
+> > +
+> > +	ret = fwnode_property_read_u32(fwnode, "sink-bc12-completion-time-ms", &val);
+> > +	if (!ret)
+> > +		port->timings.snk_bc12_cmpletion_time = val;
+> >   }
+> >   static int tcpm_fw_get_caps(struct tcpm_port *port, struct fwnode_handle *fwnode)
 > 
-> This name was suggested by Rob Herring [1]. Shall I rename them as follows
 > 
-> 	regulator-usb-3p3
-> 	regulator-usb-1p8
-> 	regulator-usb-0p925
+> I wanted to gently follow up with you on this patchset if this looks okay to
+> you?
 
-I'd say so. Rob clearly stated that this is not a strict rule. It's
-always better to follow the customs of the particular platform, it helps
-other developers. Also in _many_ cases just defining the voltage is not
-enough, usually there are multiple networks providing 0.925 V or 1.8 V.
+Sorry, this is okay by me. I thought that there's still some problem
+with the device property itself, but I must have misunderstood.
 
-> 
-> Thanks
-> Varada
-> 
-> 1 - https://lore.kernel.org/linux-arm-msm/20241113181138.GA1011553-robh@kernel.org/
-> 
-> > > +               compatible = "regulator-fixed";
-> > > +               regulator-min-microvolt = <3300000>;
-> > > +               regulator-max-microvolt = <3300000>;
-> > > +               regulator-boot-on;
-> > > +               regulator-always-on;
-> > > +               regulator-name = "usb_hs_vdda_3p3";
-> > > +       };
-> > > +
-> > > +       vreg_misc_1p8: regulator-1800000 {
-> > > +               compatible = "regulator-fixed";
-> > > +               regulator-min-microvolt = <1800000>;
-> > > +               regulator-max-microvolt = <1800000>;
-> > > +               regulator-boot-on;
-> > > +               regulator-always-on;
-> > > +               regulator-name = "vdda_1p8_usb";
-> > > +       };
-> > > +
-> > > +       vreg_misc_0p925: regulator-0925000 {
-> > > +               compatible = "regulator-fixed";
-> > > +               regulator-min-microvolt = <925000>;
-> > > +               regulator-max-microvolt = <925000>;
-> > > +               regulator-boot-on;
-> > > +               regulator-always-on;
-> > > +               regulator-name = "vdd_core_usb";
-> > > +       };
-> > > +};
-> 
-> [. . .]
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 -- 
-With best wishes
-Dmitry
+heikki
 
