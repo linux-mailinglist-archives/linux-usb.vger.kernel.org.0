@@ -1,160 +1,141 @@
-Return-Path: <linux-usb+bounces-17610-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17611-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 074409CD9CC
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 08:20:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC10E9CDA7C
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 09:31:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0D4B282B6F
-	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 07:20:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 758961F22EC6
+	for <lists+linux-usb@lfdr.de>; Fri, 15 Nov 2024 08:31:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0131189902;
-	Fri, 15 Nov 2024 07:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FAC41632E7;
+	Fri, 15 Nov 2024 08:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="K+stSF71"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lYH503cF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86A9B523A;
-	Fri, 15 Nov 2024 07:20:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD1D1442F4;
+	Fri, 15 Nov 2024 08:31:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731655203; cv=none; b=NN0OD+HFqQLYEJAKBuFSJdUTaotDW+GV3CDB+7umGUr1blyfRwrsCth1kzNrPvnZ/VH/RH5S4Yd28GzX+Yc1/ch1WyTNI+7mGIX2IHL/ih97CfXSBPqCkYG8yiA5tATqilmR8u+hUZejLCKWsLL5g8eBscmhWaqWKxD9QhF2SOA=
+	t=1731659463; cv=none; b=h7tAg5tO5/3buii3Ocl0VebMR7Xo8MP+Upyz57wx5VdlSeE91GM0jqTRlMK9qoaaRn09YzmBa6Ka8g46giyFek7E3DvdfefVqwQb2e5tlSxr8ZQNTuwuD6hUwiDd0d3LuTdBafHwYDr0GN93EzkVCUh3kdIqwSSu6Oj4YpJYzKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731655203; c=relaxed/simple;
-	bh=pkFLuOnuVU4cIsrNOTFdM80z9a1NziY/kk1IdFhaUFM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CyJDLUJlGePxHBSf15BalBMoxOfSKjIheOffOE7MbWdjTio8oEEm2AK+jTk2aZAFWQm1ucWfwK1H6tvU59/Ijh5cKhDUrT8EjwnQLzZAeC0WpXBZoCLi4b8kCJG6wfb7SXduRYW/1gXTs0gM3qbwusFhVJ6mY1OhifMLEQ/MxoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=K+stSF71; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731655202; x=1763191202;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=pkFLuOnuVU4cIsrNOTFdM80z9a1NziY/kk1IdFhaUFM=;
-  b=K+stSF71GAtIhez5LwJNy6zZ12OoWD0y/bbqo8mp/mgGlFFF/6nLWozl
-   Gi+XdaczDEDCoRsBwEiO3mPL1W3AfLVSCZfVg8PChSlpLr14OE+MHYURI
-   qYOy/nXXKxXTrlGGFUqYZbb4p4sEXuFavmQ21ggqiiRsjfydrFT9IOipD
-   oX/kaRGGP3gcKl1/zfzTI21BjurME5oYQ57DIo6d7gNECAuwWS4sQ9AQs
-   +AfRvHiVpQD2ofE6Kd9lsgNGgDNNGMVyAcMBDdOFJBmSerFH4ZoR6e8hR
-   yXjbIWFk/7Hjrq49T8t1L25+mKWACYXupbn24oHovEytf2z85Lsil80am
-   w==;
-X-CSE-ConnectionGUID: kJCVF4m2Q/yhZjGVPtes9A==
-X-CSE-MsgGUID: HUFnz2c0TwiW+poQ7nCPoA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11256"; a="49181538"
-X-IronPort-AV: E=Sophos;i="6.12,156,1728975600"; 
-   d="scan'208";a="49181538"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2024 23:19:45 -0800
-X-CSE-ConnectionGUID: n2gyKpt/R3+bahmM3mewng==
-X-CSE-MsgGUID: LOWwPhyTTr24X81aHVY/Qg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,156,1728975600"; 
-   d="scan'208";a="88580045"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa008.fm.intel.com with SMTP; 14 Nov 2024 23:19:41 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 15 Nov 2024 09:19:40 +0200
-Date: Fri, 15 Nov 2024 09:19:39 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	gregkh@linuxfoundation.org, dmitry.baryshkov@linaro.org,
-	kyletso@google.com, rdbabiera@google.com, badhri@google.com,
-	linux@roeck-us.net, xu.yang_2@nxp.com, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 3/3] usb: typec: tcpm: Add support for
- sink-bc12-completion-time-ms DT property
-Message-ID: <Zzb2CxPPZc09WfqV@kuha.fi.intel.com>
-References: <20241103034402.2460252-1-amitsd@google.com>
- <20241103034402.2460252-4-amitsd@google.com>
- <f244542a-7160-4f05-acaa-0e2574ee289d@google.com>
+	s=arc-20240116; t=1731659463; c=relaxed/simple;
+	bh=aepKhY3q7EiZgbqSDNNifX5wqjXSYMCFZqfrRtPFLRs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZxSSohYVILUyNK+s+sv/C2ZA3434iE7gCNplPoyvi51zkYIaX3PzetUoyrdAkkIQgVzKbBFx4JWMody+yEev3W5CHly7YkEvv37XnFsSVan4KPq/xqS98xQH8f2TINIZGftQFsGuQy5yCIbTF9euByZVLSxDo7wVdxRmrnz+aTw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lYH503cF; arc=none smtp.client-ip=209.85.219.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e383bbcef9dso183012276.3;
+        Fri, 15 Nov 2024 00:31:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731659460; x=1732264260; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EHL/ci9VxK9VKzFDJdgaWG+Fff8ppDWDOwB2XTtPdQQ=;
+        b=lYH503cF7yphphttilW9IPOeUujw712ork4A+xIwAX2l9cdgdsjhUeNMXCOJYAlZWY
+         3Z3WnsZC/dw0jHdtNgE5tdwFtFbazLc3woHQiXBJo8HLBEsdba56giWIHI6GP+cqStxc
+         7XmqagHCRtjg2zwouVEiTnCVSxxGRkPePwBfgPmBbO2+Ilbc/ILy85j/TGPmUMa42hxU
+         nDhrEiD7+UA1dV9TGeAYusvANf6zeSXYzKvNpkuqJz1ZcXdyQTlhhDx8ADYyWXPzih1a
+         XFlpTzOOII3KVV6B+rEch6qyn/u72xLPDrByzZN4uEzYCvvM3imBLoWfTkut5agpmT7o
+         H4CQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731659460; x=1732264260;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EHL/ci9VxK9VKzFDJdgaWG+Fff8ppDWDOwB2XTtPdQQ=;
+        b=dDFMJGfUgbmn/mWlSIoQit+HMvVGNcnOAnjtmJmWMt+Zc/hYKsEdEillVVFh+L4Ls3
+         3Nfn3QKSm/N0ncf1dEJLiuF1/aN0otm2pJmb8m80/2h1EILsI3Cd4IVDO55N6UekegDR
+         yynf2hSsH5Cr+DkQc8MvwiCDNyO4hc+ZcGk2b1Yfkoh8g+e9nvcouZ5IjS+j13fvswQ1
+         5MrAsprh6S/0eWcqxWzHYLZ8vFRcd5lEClYfOkuaXw6f99gvTHKqZiEwMAn9jwnID1sp
+         ph/6a0YfXSWr+RH9wifl48wZj+f+3N234SVu7qg2kwTHgXdIexWcXvUalHN8goTjpnu2
+         4dZA==
+X-Forwarded-Encrypted: i=1; AJvYcCXmTOhPjHVwRfuEx9TEBbx0DjuEgYcuz2O0I99gVSZKG1rM62qvVKFgfLhYyHxCHavcFv5tbxUB+Dh4b5k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwB83nXwtNgdm32NnQ4hoMWmb/rx/zm1Ge8iy4xkZv2AdE0uCoT
+	JiMfT6bODyJdqF/HgYG19S3U8i2tKBRtImv4I7igJ9XhUzVLoW/w4tjMVejqc1vURxmY0Ydo48F
+	zraZX4ncxggPKLcXku6KK+FyWvzStKg==
+X-Google-Smtp-Source: AGHT+IEeIlTtLPul9ftiLGdznxoImq9rc+LVtgWtMqUBcyddRPwn4tya2o7Mj6XYFvro68rkyBJ1w/oHKEVmL/Vnk/4=
+X-Received: by 2002:a05:6902:1001:b0:e2e:472d:b107 with SMTP id
+ 3f1490d57ef6-e38265e0a6dmr1770716276.52.1731659460580; Fri, 15 Nov 2024
+ 00:31:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f244542a-7160-4f05-acaa-0e2574ee289d@google.com>
+References: <CAHXL5pfQjhpANBxNY1YjURhWwU17WD9gX4rDqi4ezYOKeFs=gQ@mail.gmail.com>
+ <2024111339-monogram-refried-f189@gregkh> <CAHXL5pdW-3P4vJf8wmUHc=VBzXsFYkHXw=6yVc-hqfY-mE8wWA@mail.gmail.com>
+In-Reply-To: <CAHXL5pdW-3P4vJf8wmUHc=VBzXsFYkHXw=6yVc-hqfY-mE8wWA@mail.gmail.com>
+From: Jason fab <siliconfab@gmail.com>
+Date: Fri, 15 Nov 2024 14:00:49 +0530
+Message-ID: <CAHXL5pfiy-yyDfhXnBjPREQULP4UFqTZHhOM9OXFxA07Q9LUpQ@mail.gmail.com>
+Subject: Re: VTIO support on USB
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 14, 2024 at 11:59:41AM -0800, Amit Sunil Dhamne wrote:
-> Hi Heikki,
-> 
-> On 11/2/24 8:43 PM, Amit Sunil Dhamne wrote:
-> > Add support for parsing DT time property "sink-bc12-completion-time-ms".
-> > This timer is used to relax the PD state machine during Sink attach to
-> > allow completion of Battery Charging (BC1.2) charger type detection in
-> > TCPC before PD negotiations. BC1.2 detection is a hardware mechanism to
-> > detect charger port type that is run by some controllers (such as
-> > "maxim,max33359") in parallel to Type-C connection state machines.
-> > This is to ensure that BC1.2 completes before PD is enabled as running
-> > BC1.2 in parallel with PD negotiation results in delays violating timer
-> > constraints in PD spec.
-> > 
-> > This is an optional timer and will not add any delay unless explicitly
-> > set.
-> > 
-> > Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> > Reviewed-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> >   drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
-> >   1 file changed, 15 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> > index b3d5d1d48937..8b325b93b5a9 100644
-> > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > @@ -319,6 +319,7 @@ struct pd_timings {
-> >   	u32 sink_wait_cap_time;
-> >   	u32 ps_src_off_time;
-> >   	u32 cc_debounce_time;
-> > +	u32 snk_bc12_cmpletion_time;
-> >   };
-> >   struct tcpm_port {
-> > @@ -4978,7 +4979,16 @@ static void run_state_machine(struct tcpm_port *port)
-> >   		if (ret < 0)
-> >   			tcpm_set_state(port, SNK_UNATTACHED, 0);
-> >   		else
-> > -			tcpm_set_state(port, SNK_STARTUP, 0);
-> > +			/*
-> > +			 * For Type C port controllers that use Battery Charging
-> > +			 * Detection (based on BCv1.2 spec) to detect USB
-> > +			 * charger type, add a delay of "snk_bc12_cmpletion_time"
-> > +			 * before transitioning to SNK_STARTUP to allow BC1.2
-> > +			 * detection to complete before PD is eventually enabled
-> > +			 * in later states.
-> > +			 */
-> > +			tcpm_set_state(port, SNK_STARTUP,
-> > +				       port->timings.snk_bc12_cmpletion_time);
-> >   		break;
-> >   	case SNK_STARTUP:
-> >   		opmode =  tcpm_get_pwr_opmode(port->polarity ?
-> > @@ -7090,6 +7100,10 @@ static void tcpm_fw_get_timings(struct tcpm_port *port, struct fwnode_handle *fw
-> >   		port->timings.cc_debounce_time = val;
-> >   	else
-> >   		port->timings.cc_debounce_time = PD_T_CC_DEBOUNCE;
-> > +
-> > +	ret = fwnode_property_read_u32(fwnode, "sink-bc12-completion-time-ms", &val);
-> > +	if (!ret)
-> > +		port->timings.snk_bc12_cmpletion_time = val;
-> >   }
-> >   static int tcpm_fw_get_caps(struct tcpm_port *port, struct fwnode_handle *fwnode)
-> 
-> 
-> I wanted to gently follow up with you on this patchset if this looks okay to
-> you?
+On Wed, Nov 13, 2024 at 12:24=E2=80=AFPM Jason fab <siliconfab@gmail.com> w=
+rote:
+>
+> On Wed, Nov 13, 2024 at 11:48=E2=80=AFAM Greg KH <gregkh@linuxfoundation.=
+org> wrote:
+> >
+> > On Wed, Nov 13, 2024 at 11:27:47AM +0530, Jason fab wrote:
+> > > Hello,
+> > >
+> > > I would like to know if the linux kernel usb subsystem supports
+> > > Virtualization based Trusted IO Management (USB VTIO)?
+> >
+> > What exactly is that, I can't seem to search for it and have not heard
+> > of it before.  Do you have a link to it somewhere?  Is there a USB.org
+> > specification published for it?
+>
+> I came across the below xHCI document and am wondering if the
+> Linux kernel already supports it.
+>
+> Here is the link to the document:
+> https://www.intel.com/content/dam/www/public/us/en/documents/technical-sp=
+ecifications/extensible-host-controler-interface-usb-xhci.pdf
+> Section 4.5 USB Virtualization Based Trusted IO Management (USB VTIO):
 
-Sorry, this is okay by me. I thought that there's still some problem
-with the device property itself, but I must have misunderstood.
+I would like to know if Linux Kernel supports the above USB VTIO
+feature. If yes, appreciate if someone can share steps/documents to
+enable it.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+-Thanks
 
--- 
-heikki
+>
+> The USB Virtualization based Trusted IO Management capability provided
+> by the xHC is optional functionality that enables a multi SW/HW function
+> ownership and access model for the various XHCI defined memory structures
+> and messages. As an example we can view a PCI based xHC implementation
+> as using the PCI defined function as the method to comply with the USB VT=
+IO
+> requirements.
+>
+> The PCI Bus/Device/Function (BDF) for a given PCI function is determined =
+during
+> the standard PCI enumeration of devices. PCI controllers captures its BDF=
+ when
+> it receives a downstream Type-0 Config Write (CfgWr0) cycle targeting its
+> Configuration header. This latched value is used as a "Requester ID" or
+> =E2=80=9CDMA Identification=E2=80=9D for all transactions initiated by th=
+e controller.
+> The PCI BDF
+> which is determined by the standard PCI discovery/enumeration process wil=
+l be
+> referred to as the Primary DMA-ID.
+> >
+> > thanks,
+> >
+> > greg k-h
 
