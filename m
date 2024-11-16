@@ -1,134 +1,128 @@
-Return-Path: <linux-usb+bounces-17637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17638-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 227399CFD2F
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Nov 2024 09:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F33BB9CFD33
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Nov 2024 09:09:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D813C281AE1
-	for <lists+linux-usb@lfdr.de>; Sat, 16 Nov 2024 08:06:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF42C288D2A
+	for <lists+linux-usb@lfdr.de>; Sat, 16 Nov 2024 08:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A45DA192B63;
-	Sat, 16 Nov 2024 08:06:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E1C1917F1;
+	Sat, 16 Nov 2024 08:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xf9uzds6"
+	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="lqlY7W21"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05B7619146E;
-	Sat, 16 Nov 2024 08:06:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0C4B64A
+	for <linux-usb@vger.kernel.org>; Sat, 16 Nov 2024 08:09:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731744362; cv=none; b=ncByz6OZ05jep/F7IVsNGPvKvJt9aH7+b8Rn0DaVOePM1LWyb/P/WjLj3zfiFD+v4yGcuAfJof38UmPi30PEMqCKwrCDRqWFgo/zwDZTooY9LWZLt4CJINaC4rBROfyEGX3G++J31TBZnx9gF2v0+U6wvrO19OCCNPS7dTegFYY=
+	t=1731744587; cv=none; b=HOaLezAd76tg4T2LLb89GFTwa8s6Ey5w6qgR9pk0DnPLXbUza0aRAZd/eDSfSU9JlRj3auOKHgfBAZY8KxlP4yJmO8d5/dAukxK4lfvDAid3urrdzQo5plq8W9Lx3mmPttlwZn8/pQ2B7f4XdGEJr448Ybo22JNNAbYYKNSbfJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731744362; c=relaxed/simple;
-	bh=bQ/rmffOm2v/gX5o6y6qAx3LH5jlMVgs8emLepbSxaE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hunzief3qxtb9rc6dwYsor9ayylHKchb7xmv4ww0uttzzU8mrl061XtMSXNZ7N9ooeAJHNCLb+NiyOm4pDrITQh8dFt+jAfjM8rb3U99YId2PLFdL0xyLEZBc3oDFF2/YoFx9RRZtQ+Ddhe1kn4THi+SveLREFaBP/4URkwfjqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xf9uzds6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B116C4CEC3;
-	Sat, 16 Nov 2024 08:06:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1731744361;
-	bh=bQ/rmffOm2v/gX5o6y6qAx3LH5jlMVgs8emLepbSxaE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=xf9uzds67a2eJp61+uQC+qqZv1QVVn0+RSAOWiwwWjYIF1EhHjWsN1AZMDM6SdxzX
-	 SBjeQf6v6VK8J+BtJbjKxXFd9I0z8UEowkx1QIVUJ2uUlrULO8kAICykISe5GBxgzv
-	 5bqQHEy62GZjD5G2b+q9acu9nehbEeh5ftB1XUFI=
-Date: Sat, 16 Nov 2024 09:05:34 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-Cc: Thinh.Nguyen@synopsys.com, michal.simek@amd.com,
-	robert.hancock@calian.com, linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	git@amd.com, Neal Frager <neal.frager@amd.com>
-Subject: Re: [PATCH] usb: dwc3: xilinx: make sure pipe clock is deselected in
- usb2 only mode
-Message-ID: <2024111625-afraid-pencil-b567@gregkh>
-References: <1731695460-1814409-1-git-send-email-radhey.shyam.pandey@amd.com>
+	s=arc-20240116; t=1731744587; c=relaxed/simple;
+	bh=oYQT922NFL2wvEOAit1za9mgeNMDO1SIqu6PQ6ssNT8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UzFlllo3SqmlGmIYJ3mpd8Ady7w3Y+Y1okV9SFgtRFbGrcyxoWifDWpscbuUxE6qTqSH/XnS28HpMt+uiEc/dNwJo+GoiKosWKViQXfKkWmPb7wqgihKmw5pMkgZ5B31GhkB/AguofCj5UAQXNoISg7HvI/zX2m6eMOmH9Xumnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=lqlY7W21; arc=none smtp.client-ip=209.85.210.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-71e592d7f6eso239187b3a.3
+        for <linux-usb@vger.kernel.org>; Sat, 16 Nov 2024 00:09:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1731744583; x=1732349383; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JZNghN2NOlAq/8+IdB9pBF3GNvy2ref8quaEsptkYVw=;
+        b=lqlY7W21+PD8eV01jqbIy7VkQESyOGn5m4tVuVClfR8VcTrpYUH9lkBE4i+cg9H7tD
+         jolUBLtkcXFIqq/H5UmPpjKKyFaWz2pGPETsnJWQ0mecdzeKPZaGnpfC9R9/WXXAK6UO
+         zAXJDJw/0HXLVSxg++SehEFAJPnTcRNyauJ9eBTROteZITb1laSSUWnB9n9VJrmH5tTL
+         yLuhbyYmQWZhy/elaEGdeQ6zqzCAadouyXZATkVygQrcXSI1MT2nsH2bMzw3rcz68t/p
+         f7Ld2Eqmx7rPEK/hVrNGjmCnIYhK47fhCrfXR8lPLZ2+qzvAf17CaBuraXQ+Yth2hGvX
+         BmEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731744583; x=1732349383;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JZNghN2NOlAq/8+IdB9pBF3GNvy2ref8quaEsptkYVw=;
+        b=cRo34zKAV1sk/Zg3RN8zJrjbMps6gbuxQBU+4F44TuUpHwpa9C0HWzl9bDUK2wIpbG
+         FwOnewKg1JeKY8BHBxxfiwoqfDBlVDEiv7NQfoOwG/OapQgs+gxopFrjH5O+8QV8lCHq
+         852TWuZ0cGKZBAyjb6dHTaearmdKc/XqjizlYzO58km3LF2xYUrle+tPBzNiVS7kHcE2
+         WlA/tMbgcyDJI2cVOioWu3m5Rd5K7ZutAmAlBDIXVuE0OrkHfSIA0EWq/UdsrhTwDpKY
+         CXvleoGwIooTn30VdP7UtMl5M3mWWJepdyAfFLxzr8o5anTXbXcT6gwv+eIDm8Q/vIDV
+         UfcA==
+X-Gm-Message-State: AOJu0YxaEtAdN1SQUeenQxFpdvgf6xTS9Tz2f9mizdE6Dg1LfLClo7ts
+	ADIFSacAcqPJaZXxwRNNYONZaicBiB4WJ+FPlEIW7x7V889+QcmkdqF5SprqYx73rr57L+aiki+
+	l
+X-Google-Smtp-Source: AGHT+IG49Zm7MaPqVoSG6fs7tRcYUOumE+OpJpNHDJ8egWo9bF2hFmKFg3k5xzB2D4n3Hie0i/rhzQ==
+X-Received: by 2002:a05:6a00:2309:b0:71e:1722:d019 with SMTP id d2e1a72fcca58-72476e7b88emr8040608b3a.22.1731744583266;
+        Sat, 16 Nov 2024 00:09:43 -0800 (PST)
+Received: from localhost.localdomain ([2001:f70:2520:9500:2c80:c37:9141:9411])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7247712086asm2575303b3a.46.2024.11.16.00.09.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 16 Nov 2024 00:09:42 -0800 (PST)
+From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+Subject: [PATCH] usb: typec: fix OF node reference leaks in anx7411_typec_switch_probe()
+Date: Sat, 16 Nov 2024 17:09:38 +0900
+Message-Id: <20241116080938.3798365-1-joe@pf.is.s.u-tokyo.ac.jp>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1731695460-1814409-1-git-send-email-radhey.shyam.pandey@amd.com>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Nov 16, 2024 at 12:01:00AM +0530, Radhey Shyam Pandey wrote:
-> From: Neal Frager <neal.frager@amd.com>
-> 
-> When the USB3 PHY is not defined in the Linux device tree, there could
-> still be a case where there is a USB3 PHY is active on the board and
-> enabled by the first stage bootloader.  If serdes clock is being used
-> then the USB will fail to enumerate devices in 2.0 only mode.
-> 
-> To solve this, make sure that the PIPE clock is deselected whenever the
-> USB3 PHY is not defined and guarantees that the USB2 only mode will work
-> in all cases.
-> 
-> Fixes: 9678f3361afc ("usb: dwc3: xilinx: Skip resets and USB3 register settings for USB2.0 mode")
-> Signed-off-by: Neal Frager <neal.frager@amd.com>
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-> ---
->  drivers/usb/dwc3/dwc3-xilinx.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
-> index e3738e1610db..a33a42ba0249 100644
-> --- a/drivers/usb/dwc3/dwc3-xilinx.c
-> +++ b/drivers/usb/dwc3/dwc3-xilinx.c
-> @@ -121,8 +121,11 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
->  	 * in use but the usb3-phy entry is missing from the device tree.
->  	 * Therefore, skip these operations in this case.
->  	 */
-> -	if (!priv_data->usb3_phy)
-> +	if (!priv_data->usb3_phy) {
-> +		/* Deselect the PIPE Clock Select bit in FPD PIPE Clock register */
-> +		writel(PIPE_CLK_DESELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
->  		goto skip_usb3_phy;
-> +	}
->  
->  	crst = devm_reset_control_get_exclusive(dev, "usb_crst");
->  	if (IS_ERR(crst)) {
-> 
-> base-commit: 744cf71b8bdfcdd77aaf58395e068b7457634b2c
-> -- 
-> 2.34.1
-> 
-> 
+The refcounts of the OF nodes obtained in by of_get_child_by_name()
+calls in anx7411_typec_switch_probe() are not decremented, so add
+fwnode_handle_put() calls to anx7411_unregister_switch() and
+anx7411_unregister_mux().
 
-Hi,
+Fixes: e45d7337dc0e ("usb: typec: anx7411: Use of_get_child_by_name() instead of of_find_node_by_name()")
+Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+---
+ drivers/usb/typec/anx7411.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
+index d1e7c487ddfb..7e61c3ac8777 100644
+--- a/drivers/usb/typec/anx7411.c
++++ b/drivers/usb/typec/anx7411.c
+@@ -29,6 +29,8 @@
+ #include <linux/workqueue.h>
+ #include <linux/power_supply.h>
+ 
++#include "mux.h"
++
+ #define TCPC_ADDRESS1		0x58
+ #define TCPC_ADDRESS2		0x56
+ #define TCPC_ADDRESS3		0x54
+@@ -1088,6 +1090,7 @@ static void anx7411_unregister_mux(struct anx7411_data *ctx)
+ {
+ 	if (ctx->typec.typec_mux) {
+ 		typec_mux_unregister(ctx->typec.typec_mux);
++		fwnode_handle_put(ctx->typec.typec_mux->dev.fwnode);
+ 		ctx->typec.typec_mux = NULL;
+ 	}
+ }
+@@ -1096,6 +1099,7 @@ static void anx7411_unregister_switch(struct anx7411_data *ctx)
+ {
+ 	if (ctx->typec.typec_switch) {
+ 		typec_switch_unregister(ctx->typec.typec_switch);
++		fwnode_handle_put(ctx->typec.typec_switch->dev.fwnode);
+ 		ctx->typec.typec_switch = NULL;
+ 	}
+ }
+-- 
+2.34.1
 
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
 
