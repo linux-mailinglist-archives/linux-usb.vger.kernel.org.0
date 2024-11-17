@@ -1,238 +1,87 @@
-Return-Path: <linux-usb+bounces-17650-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17651-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBC8A9D0285
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 09:34:20 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 571159D03B0
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 13:27:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D8C51F23CCD
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 08:34:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6E79B25DCF
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 12:27:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87969190499;
-	Sun, 17 Nov 2024 08:32:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6BFF198A08;
+	Sun, 17 Nov 2024 12:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=intelfx.name header.i=@intelfx.name header.b="a79QmQYM"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="mTU1+u6c"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f67.google.com (mail-wr1-f67.google.com [209.85.221.67])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BF218DF62
-	for <linux-usb@vger.kernel.org>; Sun, 17 Nov 2024 08:32:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A672B183CCA;
+	Sun, 17 Nov 2024 12:25:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731832356; cv=none; b=iG8hOk3rvArh9+1oquPPhSvLw6UEVa09POnkhP4JLpTkpBtglJPKYuHSpXgmGBaM8mwpHh4wDROvh4CKHl7LE7ZKGBM4VWdYTb1srxdjWh63/YxaQNdeowGbrcXtEUgF/3g2r6LD/4EqG4ItmPe2st9jn31y/iEeQbhCCtVRDW4=
+	t=1731846328; cv=none; b=peEy5TPddAbekjb+CxxKwwcOyU5nRzmLXf29TFmo6qkglRFfq+JjRxQcHllvjgdX4uI2hVsNWwWlJSbkmRbRIyrdOlzPF1nEk5LDknuPAhKlflSX3kFizdFN8MCnyjYWLckaIPP/+ixYHi1Z39pd7jh+QUIU0Ko6KFeJe7stcaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731832356; c=relaxed/simple;
-	bh=dyNI/yaxOyFxwYyVMFZqRo27ArIvOxCuFzInU9ylG7k=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=AwXM2Sw1IqdKCRz43OzJJMoP1HrwbWKXTqDaPesJtoIL1HN3tjfH7QLrkNzQUyO7jVRFddO90EZNTWAA8/O3Ar7lhlq9FC1boA1lJ+ZUQjlzgNXHYA09c414Ib6XD37BzOVu3RFLBxaV5XsTfqOWcCVHHGmgnobvaz7MMBTXGxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=intelfx.name; spf=pass smtp.mailfrom=intelfx.name; dkim=pass (1024-bit key) header.d=intelfx.name header.i=@intelfx.name header.b=a79QmQYM; arc=none smtp.client-ip=209.85.221.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=intelfx.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intelfx.name
-Received: by mail-wr1-f67.google.com with SMTP id ffacd0b85a97d-3821df9779eso701363f8f.2
-        for <linux-usb@vger.kernel.org>; Sun, 17 Nov 2024 00:32:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=intelfx.name; s=google; t=1731832352; x=1732437152; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xom3uBb5b9/sYwGOmidk6WilUn/pK9olyKnKJBxv3Jg=;
-        b=a79QmQYMfHZ6nx6XBt4pmHPa94SR115ZRmIDk3alW3qihd3zAkqgXBU2Aw6SyIwA8z
-         m61pOrouoBkC0DsWpNGn2HHJsy/DarzlJ7+7x8uSv2Teiu+hDeamfqXI/LsXaixOTwkg
-         PC23/IboCrl1WlrUFKgKnKePwHH+qWjjN5PtA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731832352; x=1732437152;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xom3uBb5b9/sYwGOmidk6WilUn/pK9olyKnKJBxv3Jg=;
-        b=pQlmz652AbZBBUTdjve1pgBptU/1Lyp/we9hlaRugXXm6wji1+aPTepOQpkfVV2lIl
-         JSk6ZCftKsbnxdax7gvp5E9oWT/MBKX2fdEXFC3FHEPq+p995M9aurpVOXZvF35CENbP
-         YyLaTcKrDdtTqhbXOmrpFE6+M9eMuu7uUVH1afiTgpl2MdjpHeNT4Wj4VhY+zwal7JRg
-         hW/umaOerCAVuOFIIvzbE4pBt5KZ5v6mbZWAkDBtvRQ2SVSaUTsIJy3ZNF5RcWUV/dm+
-         DHzBN3w4yfFaB1fqvx9d5jm9+AZXx1JbYP0oL04oE6yz7+J3I/YkBEGubrnmzHUOuu7f
-         Dlqw==
-X-Forwarded-Encrypted: i=1; AJvYcCUYk5rM6JRzvb5sWbazZ6NjsjRVBSMnEbQY/fxXaktKNxF2PXMiOUvCq6CFBtAcWo/NGNjnbKV+nDE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFnYnM4PaoAyxOkfMqMfP8uI7Zrc+8Mb5xdwpgYEYe3WdHGcZO
-	3JE00px//DpwB9IxrLhy12tvG9P4GgmqLFmagxA2R8LMhQNkDWyZ7YgKx27ApPY=
-X-Google-Smtp-Source: AGHT+IGntOurmOmmYz21EdJYG0aSCDtMfDVxiahWE3w+UBoOUvKoLdFK/jvUS9+ZXwLjtqUEaZQKxw==
-X-Received: by 2002:a5d:5987:0:b0:381:eb8a:7ddd with SMTP id ffacd0b85a97d-38225a67e3amr5585197f8f.15.1731832352508;
-        Sun, 17 Nov 2024 00:32:32 -0800 (PST)
-Received: from able.tailbefcf.ts.net (94-43-143-139.dsl.utg.ge. [94.43.143.139])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3821ae1685csm9466919f8f.83.2024.11.17.00.32.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Nov 2024 00:32:32 -0800 (PST)
-From: Ivan Shapovalov <intelfx@intelfx.name>
-To: linux-kernel@vger.kernel.org
-Cc: Ivan Shapovalov <intelfx@intelfx.name>,
-	=?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH 5/5] USB: serial: qcserial: enable ZLP for non-QDL interfaces
-Date: Sun, 17 Nov 2024 12:31:15 +0400
-Message-ID: <20241117083204.57738-5-intelfx@intelfx.name>
-X-Mailer: git-send-email 2.47.0.5.gd823fa0eac
-In-Reply-To: <20241117083204.57738-1-intelfx@intelfx.name>
-References: <20241117083204.57738-1-intelfx@intelfx.name>
+	s=arc-20240116; t=1731846328; c=relaxed/simple;
+	bh=2Vzu3RlYgWlUg+kP8l3nTLXS8GOcuKbfykkwWU/BOFg=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=LNQ/gtUOCrqCVL+bkvrll8bT2wbdXPTXG/AQzCW4TNqBig9lun9ZzyhGtaoC8TmFCule8Yti7BWeCAriCC+bdZRkdQJNsC5ycPVA0+rOU5HuQ013kHkoKAw+9UV6Jvu0Txm96BfjvUC8xIX0YFwaUlYTEi5x8JaXgd1B/c5Wj/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=fail (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=mTU1+u6c reason="signature verification failed"; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1731846322;
+	bh=tp2Q+8b3zGUBih3afpuzhAn88G4uKrpXKwQ9ivMWqHM=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=mTU1+u6copmZDAjfqnXWv+2ujIPjQ3JtoGu9so550WGMXDTKHgPRUtKWL5WTQKacA
+	 ukYIXyZnvXaIaM7phYyg2ffevuNcZwkVM+fGzA0yJe4hA6ivVJfsyMN2k5es56Dca2
+	 xnyEpYxwi2vRkSTSXt4SDnE54vHeCtrhpgtS0p+MhXC1a/iPqUZ6noNUE4xD/tX6x3
+	 9xyLmagErBzssEeKDZj2zkr4owFCFT2YctuTq6qJ9KGCJplX90TRwhVHol5EujIAFV
+	 JLHuHIFQhKPYuj26daIFU9Gqj0sP+YYyQFfmqJ5wJevMLVh4tXn5ub20TQGEUboHP9
+	 4WeeB6bi4EbDw==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4Xrqhp5Zp2z4xf5;
+	Sun, 17 Nov 2024 23:25:14 +1100 (AEDT)
+From: Michael Ellerman <patch-notifications@ellerman.id.au>
+To: linux-gpio@vger.kernel.org, Julia Lawall <Julia.Lawall@inria.fr>
+Cc: kernel-janitors@vger.kernel.org, audit@vger.kernel.org, linux-mtd@lists.infradead.org, Zhihao Cheng <chengzhihao1@huawei.com>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org, dri-devel@lists.freedesktop.org, linux-usb@vger.kernel.org, linux-mm@kvack.org, maple-tree@lists.infradead.org, alsa-devel@alsa-project.org, Sanyog Kale <sanyog.r.kale@intel.com>, Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>, dccp@vger.kernel.org, linux-fsdevel@vger.kernel.org, Jan Kara <jack@suse.cz>, drbd-dev@lists.linbit.com, linux-sound@vger.kernel.org, linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org, linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org, nvdimm@lists.linux.dev, linux-leds@vger.kernel.org, Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, linuxppc-dev@lists.ozlabs.org, tipc-discussion@lists.sourceforge.
+ net, Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, linux-trace-kernel@vger.kernel.org, Neil Brown <neilb@suse.de>, Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom Talpey <tom@talpey.com>, linux-nfs@vger.kernel.org, amd-gfx@lists.freedesktop.org, linux-wireless@vger.kernel.org, intel-wired-lan@lists.osuosl.org
+In-Reply-To: <20240930112121.95324-1-Julia.Lawall@inria.fr>
+References: <20240930112121.95324-1-Julia.Lawall@inria.fr>
+Subject: Re: (subset) [PATCH 00/35] Reorganize kerneldoc parameter names
+Message-Id: <173184539760.890800.14513086226459117952.b4-ty@ellerman.id.au>
+Date: Sun, 17 Nov 2024 23:09:57 +1100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 
-This is a port of the corresponding change from the qcserial.c driver
-distributed as part of the 9X50 SDK, tested using author's own EM7565
-device.
+On Mon, 30 Sep 2024 13:20:46 +0200, Julia Lawall wrote:
+> Reorganize kerneldoc parameter names to match the parameter
+> order in the function header.
+> 
+> The misordered cases were identified using the following
+> Coccinelle semantic patch:
+> 
+> // <smpl>
+> @initialize:ocaml@
+> @@
+> 
+> [...]
 
-The SDK qcserial.c driver enables ZLP unconditionally, however this was
-found to break QDL mode (as exercised by the qmi-firmware-update tool
-from libqmi[1], as well as the SDK-provided firmware update utility).
-Thus, ZLP is limited to non-QDL interfaces.
+Applied to powerpc/next.
 
-[1]: https://www.freedesktop.org/wiki/Software/libqmi/
+[11/35] powerpc/ps3: Reorganize kerneldoc parameter names
+        https://git.kernel.org/powerpc/c/276e036e5844116e563fa90f676c625bb742cc57
 
-Signed-off-by: Ivan Shapovalov <intelfx@intelfx.name>
----
- drivers/usb/serial/qcserial.c | 36 ++++++++++++++++++++++-------------
- 1 file changed, 23 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/usb/serial/qcserial.c b/drivers/usb/serial/qcserial.c
-index b2ae0b16bc2b..d51d022d76b1 100644
---- a/drivers/usb/serial/qcserial.c
-+++ b/drivers/usb/serial/qcserial.c
-@@ -32,6 +32,11 @@ enum qcserial_layouts {
- 	QCSERIAL_SWI_SDX55_RMNET = 7, /* Sierra Wireless SDX55 */
- };
- 
-+enum qcserial_flags {
-+	QC_SENDSETUP = (1 << 0),
-+	QC_ZLP = (1 << 1),
-+};
-+
- #define DEVICE_G1K(v, p) \
- 	USB_DEVICE(v, p), .driver_info = QCSERIAL_G1K
- #define DEVICE_SWI(v, p) \
-@@ -262,7 +267,7 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- 	__u8 nintf;
- 	__u8 ifnum;
- 	int altsetting = -1;
--	bool sendsetup = false;
-+	unsigned long flags = 0;
- 
- 	/* we only support vendor specific functions */
- 	if (intf->desc.bInterfaceClass != USB_CLASS_VENDOR_SPEC)
-@@ -301,6 +306,9 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- 	/* default to enabling interface */
- 	altsetting = 0;
- 
-+	/* default to enabling ZLP */
-+	flags |= QC_ZLP;
-+
- 	/*
- 	 * Composite mode; don't bind to the QMI/net interface as that
- 	 * gets handled by other drivers.
-@@ -386,11 +394,11 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- 			break;
- 		case 2:
- 			dev_dbg(dev, "NMEA GPS interface found\n");
--			sendsetup = true;
-+			flags |= QC_SENDSETUP;
- 			break;
- 		case 3:
- 			dev_dbg(dev, "Modem port found\n");
--			sendsetup = true;
-+			flags |= QC_SENDSETUP;
- 			break;
- 		default:
- 			/* don't claim any unsupported interface */
-@@ -446,11 +454,11 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- 		switch (ifnum) {
- 		case 2:
- 			dev_dbg(dev, "Modem port found\n");
--			sendsetup = true;
-+			flags |= QC_SENDSETUP;
- 			break;
- 		case 3:
- 			dev_dbg(dev, "NMEA GPS interface found\n");
--			sendsetup = true;
-+			flags |= QC_SENDSETUP;
- 			break;
- 		case 4:
- 			dev_dbg(dev, "DM/DIAG interface found\n");
-@@ -475,11 +483,11 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- 		switch (ifnum) {
- 		case 0:
- 			dev_dbg(dev, "Modem port found\n");
--			sendsetup = true;
-+			flags |= QC_SENDSETUP;
- 			break;
- 		case 1:
- 			dev_dbg(dev, "NMEA GPS interface found\n");
--			sendsetup = true;
-+			flags |= QC_SENDSETUP;
- 			break;
- 		case 2:
- 			dev_dbg(dev, "DM/DIAG interface found\n");
-@@ -502,7 +510,7 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- 		switch (ifnum) {
- 		case 3:
- 			dev_dbg(dev, "Modem port found\n");
--			sendsetup = true;
-+			flags |= QC_SENDSETUP;
- 			break;
- 		case 4:
- 			dev_dbg(dev, "DM/DIAG interface found\n");
-@@ -522,7 +530,7 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- 		switch (ifnum) {
- 		case 1:
- 			dev_dbg(dev, "Modem port found\n");
--			sendsetup = true;
-+			flags |= QC_SENDSETUP;
- 			break;
- 		case 2:
- 			dev_dbg(dev, "DM/DIAG interface found\n");
-@@ -551,7 +559,7 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- 	}
- 
- 	if (!retval)
--		usb_set_serial_data(serial, (void *)(unsigned long)sendsetup);
-+		usb_set_serial_data(serial, (void *)flags);
- 
- 	return retval;
- }
-@@ -559,15 +567,17 @@ static int qcprobe(struct usb_serial *serial, const struct usb_device_id *id)
- static int qc_attach(struct usb_serial *serial)
- {
- 	struct usb_wwan_intf_private *data;
--	bool sendsetup;
-+	unsigned long flags = 0;
- 
- 	data = kzalloc(sizeof(*data), GFP_KERNEL);
- 	if (!data)
- 		return -ENOMEM;
- 
--	sendsetup = !!(unsigned long)(usb_get_serial_data(serial));
--	if (sendsetup)
-+	flags = (unsigned long)(usb_get_serial_data(serial));
-+	if (flags & QC_SENDSETUP)
- 		data->use_send_setup = 1;
-+	if (flags & QC_ZLP)
-+		data->use_zlp = 1;
- 
- 	spin_lock_init(&data->susp_lock);
- 
--- 
-2.47.0.5.gd823fa0eac
-
+cheers
 
