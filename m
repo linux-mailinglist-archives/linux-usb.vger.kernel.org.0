@@ -1,166 +1,342 @@
-Return-Path: <linux-usb+bounces-17664-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17665-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C57B99D060B
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 22:03:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5B319D0702
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 00:27:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86B902821F6
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 21:03:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DA65B21D42
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 23:27:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBA381DD862;
-	Sun, 17 Nov 2024 21:02:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="W7uUTpcG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C721DE2CA;
+	Sun, 17 Nov 2024 23:27:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sundtek.de (sundtek.de [85.10.198.106])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC0B1DAC80
-	for <linux-usb@vger.kernel.org>; Sun, 17 Nov 2024 21:02:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2505C1DDA37
+	for <linux-usb@vger.kernel.org>; Sun, 17 Nov 2024 23:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.198.106
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731877377; cv=none; b=Hg0BT34p6SaFeTFVrlG4OkCwDEbphbCQ9Vk4wn98eEs5/kD08soQkQlcNLizFB7lfO8URWcxG8vN8la48njiIzD0FoViO4fWKPX5EoYFHsuCCJS2WcxOsDIB4YqO9+TsqYx4V2HaIYydIvIv62iA/5nMFHRSZ7GDwL9+vqxr0zc=
+	t=1731886041; cv=none; b=BAE/6tUlfch5svIZrQ6W8DSRlnptbtJGgyEsv8HwnD8CntPJX2DVGPQNtNSN4a3oLY/Ld+6LDKnOGT15M7dGHu/3co8YLi6XaBbQXu2BhsOyONCo8ITY+JkroQZk/P7qkPjT0my4SHoap370B6ZLL+5IWJ+ijKV/iWl4oBI0bCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731877377; c=relaxed/simple;
-	bh=PRFaT1as5OxBAOyjiziv8bUZQYDtkLJAhsKW6psnoGI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=musQDJLurjYBaMpfqFArlgK1vftGhfkq7Y9b4jBrYSyoOKGp1f71VQunZPHH3xi+6xu3CFhzQvKSLYnmCxufUVdLaXpOsMzHvkPJDte2DQdbz2oV1BhFhsOjv6v34dmPzhji26ShC4MtECJOCaPsiXIKrlMNMSyPddiW7jd3GyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=W7uUTpcG; arc=none smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-4608e389407so51154161cf.2
-        for <linux-usb@vger.kernel.org>; Sun, 17 Nov 2024 13:02:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1731877374; x=1732482174; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=6wjrpq+6MswuiTE+2/ghtZhteEiq8qgWQWvFqee2GXo=;
-        b=W7uUTpcGH/N6FD5qyR7303J5qU+Jdl6TVRMJRB7BKHTL+yPBooaADW8CI4RLCSOgln
-         7vIbMroUbC1ImqQGJVdr/pn3QDzvuTInU38bme51fzV3F144zPgAhklwhvcHGlN4NHT/
-         cr/19i/oH2Lq3HqcZGuoc6K8doCkB1c+tlQ/MDt2PsLOreR4qW9CzVHa7m3aCNDXaBl8
-         pnIOdJqEbZkkfA/KQbO3NYi22KayNY+hB3jHAW6+9cxZ0RtctWCN4q9JdY1QoKwNunZJ
-         GMxY46a/wGM6Tevsd/OsRNYuklR03aBo0UK2k7k/aMzq/6Fkq2giqwQHrs9u17RdKySe
-         vBhw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731877374; x=1732482174;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6wjrpq+6MswuiTE+2/ghtZhteEiq8qgWQWvFqee2GXo=;
-        b=Rkanil1iV++iR7ZlSKM/V8V3zJ1wAQdBImS1kt431SR4tDY3DS/e7YRS5RVgVSew0p
-         QJGW2nIzzksuKdinWssEtAWJhGUJWmJGFxFKxSpF6BRePXkvMURl8u1bC1XEUGA3ymeA
-         tnajelMXdQ/iJDvy+g/lWYbAjuQbeQYYpTdA+O/LoclHtWbDfsA8Cj/VzS3YZLQZScDA
-         p2qXvEeMupDzWY9gPPw9i+cx7PSnXX5T3PyOis9WCuw0GRDqLJdRf3EVm/2dDag+eFRU
-         TQOJO9W6URQ0PvfoUokAuBJR/PJa5kFYAkF0JAAAid31wKk2rVxp4GBtEEBAzASF1qFM
-         kJ2Q==
-X-Gm-Message-State: AOJu0Yxmf1MeuELEEyzCocblCdayqXi2n6FbMQ+7hsdUj3eQXH+fbWJg
-	HrBWNYsj0ZqKPO4/u971QttferBIJ2Di+MRnCUgt8c6MbEsjub3McA8jVLOBGnTuPTXS6srMYcc
-	=
-X-Google-Smtp-Source: AGHT+IEujOQD9HguVj3nlHAUK3YYh8UHHi5/lv2W0spWj0axGPSzGT5UihEI7OdVB25ic3mOyYKH7g==
-X-Received: by 2002:a05:622a:56:b0:461:285:9d7c with SMTP id d75a77b69052e-46363e0af04mr128743021cf.12.1731877374463;
-        Sun, 17 Nov 2024 13:02:54 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::24f4])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4635a9c64d4sm48211421cf.13.2024.11.17.13.02.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 17 Nov 2024 13:02:53 -0800 (PST)
-Date: Sun, 17 Nov 2024 16:02:49 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Markus Rechberger <linuxusb.ml@sundtek.de>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: Highly critical bug in XHCI Controller
-Message-ID: <dff9f24a-4aa2-45aa-920f-20876cf4ccbf@rowland.harvard.edu>
-References: <3905c1c88695e0ffcfabf700c06dd7223decef8d.camel@sundtek.de>
- <dd4239c7b0538e1cd2f2a85307c73299117d5f0e.camel@sundtek.de>
- <50f730ae-4918-4dac-88ec-b3632bee67e7@rowland.harvard.edu>
- <35c051354414ae9ef6e6b32b1a15a5dedf471176.camel@sundtek.de>
+	s=arc-20240116; t=1731886041; c=relaxed/simple;
+	bh=SiZrIa7IMhWCH1/3xGaryyfBG/bxqIefnGhJK9s/8hQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:References:Content-Type:
+	 MIME-Version; b=PwSJxi6kvY5NH+vAsZ41auwulFEL0T7gkNYHwtyKAdXadDdj/Ymn1jw14sUfKr11W4PtsDwjHNRx2P7FMetfpi5mT8yDjDH5VdSnFAszoogPvs0amlkmcP3ldPiWlporpyhwgQaVJgzmBy518rLcUIogmC8URWHnSc3cquqDGUs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de; spf=pass smtp.mailfrom=sundtek.de; arc=none smtp.client-ip=85.10.198.106
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sundtek.de
+Received: from Debian-exim by sundtek.de with spam-scanned (Exim 4.95)
+	(envelope-from <linuxusb.ml@sundtek.de>)
+	id 1tCofj-0001JO-DB
+	for linux-usb@vger.kernel.org;
+	Mon, 18 Nov 2024 00:27:17 +0100
+Received: from 1-175-135-24.dynamic-ip.hinet.net ([1.175.135.24] helo=[192.168.2.197])
+	by sundtek.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <linuxusb.ml@sundtek.de>)
+	id 1tCofb-0001IF-8a;
+	Mon, 18 Nov 2024 00:27:07 +0100
+Message-ID: <03c1ae453f2781dbcf3a5ea607640c696b748848.camel@sundtek.de>
+Subject: [PATCH] XHCI NULL Pointer check in xhci_check_bw_table
+From: Markus Rechberger <linuxusb.ml@sundtek.de>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc: Greg KH <gregkh@linuxfoundation.org>
+Date: Mon, 18 Nov 2024 07:27:03 +0800
+References: <b90d48df16cf74bb682af870cd71d7c5cc4a9d97.camel@sundtek.de>
+Content-Type: multipart/mixed; boundary="=-5urReUzQZxabI7oEQTBX"
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <35c051354414ae9ef6e6b32b1a15a5dedf471176.camel@sundtek.de>
+X-SA-Exim-Connect-IP: <locally generated>
+X-SA-Exim-Mail-From: linuxusb.ml@sundtek.de
+X-SA-Exim-Scanned: No (on sundtek.de); SAEximRunCond expanded to false
 
-On Sun, Nov 17, 2024 at 11:47:52PM +0800, Markus Rechberger wrote:
-> On Sun, 2024-11-17 at 10:18 -0500, Alan Stern wrote:
-> > On Sun, Nov 17, 2024 at 08:44:16PM +0800, Markus Rechberger wrote:
-> > > Basically the issue comes from hub_port_connect.
-> > > 
-> > > drivers/usb/core/hub.c
-> > > 
-> > > hub_port_init returns -71 -EPROTO and jumps to loop
-> > > https://github.com/torvalds/linux/blob/master/drivers/usb/core/hub.c#L5450
-> > > 
-> > > I'd question if usb_ep0_reinit is really required in loop which is
-> > > running following functions:
+--=-5urReUzQZxabI7oEQTBX
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> This should only go down there in case an error happened earlier no?
+This patch fixes a NULL Pointer exception when a device using the XHCI
+controller driver is not properly initialized. It's relatively easy to
+reproduce with a faulty connection to a USB Harddisk / USB Ethernet
+adapter.=C2=A0
+The way I used for testing this patch was to short USB D+/D- and pull
+them to ground.
 
-Of course, since -EPROTO indicates there was an error.
+We manufacture our own USB devices and use Linux for testing, lately we
+upgraded the system to Ubuntu noble with Kernel 6.8.0 and our system
+also crashed multiple times just when plugging in some devices (no
+commands need to be executed).
+We connect/disconnect devices > 100 times (eg uploading firmware, do
+electrical tests etc).
 
-> In case the hardware signed up correctly it should not even enter that
-> code.
-> 
-> My experience is just - reconnect the device in case an error happened
+I would rate this issue as highly critical.
+The problem is triggered via some fallback code in hub.c, a second
+patch will follow which
+removes the endpoint reset in the particular fallback.
 
-You can't reconnect some devices; they are permanently attached.  There 
-are other reasons why reconnecting might not be practical.
+2024-11-16T22:14:09.701229+08:00 sundtek-UX32VD kernel: usb 3-2: new
+full-speed USB device number 64 using xhci_hcd
+2024-11-16T22:14:09.816295+08:00 sundtek-UX32VD kernel: usb 3-2: device
+descriptor read/64, error -71
+2024-11-16T22:14:10.006157+08:00 sundtek-UX32VD kernel: audit:
+type=3D1400 audit(1731766450.004:3206): apparmor=3D"DENIED"
+operation=3D"open" class=3D"file" profile=3D"snap.skype.skype"
+name=3D"/sys/devices/pci0000:00/ACPI0003:00/power_supply/AC0/online"
+pid=3D4839 comm=3D"skypeforlinux" requested_mask=3D"r" denied_mask=3D"r"
+fsuid=3D1000 ouid=3D0
+2024-11-16T22:14:10.035263+08:00 sundtek-UX32VD kernel: usb 3-2: device
+descriptor read/64, error -71
+2024-11-16T22:14:10.251221+08:00 sundtek-UX32VD kernel: usb 3-2: new
+full-speed USB device number 65 using xhci_hcd
+2024-11-16T22:14:10.365247+08:00 sundtek-UX32VD kernel: usb 3-2: device
+descriptor read/64, error -71
+2024-11-16T22:14:10.587264+08:00 sundtek-UX32VD kernel: usb 3-2: device
+descriptor read/64, error -71
+2024-11-16T22:14:10.689265+08:00 sundtek-UX32VD kernel: usb usb3-port2:
+attempt power cycle
+2024-11-16T22:14:11.006217+08:00 sundtek-UX32VD kernel: audit:
+type=3D1400 audit(1731766451.004:3207): apparmor=3D"DENIED"
+operation=3D"open" class=3D"file" profile=3D"snap.skype.skype"
+name=3D"/sys/devices/pci0000:00/ACPI0003:00/power_supply/AC0/online"
+pid=3D4839 comm=3D"skypeforlinux" requested_mask=3D"r" denied_mask=3D"r"
+fsuid=3D1000 ouid=3D0
+2024-11-16T22:14:11.069247+08:00 sundtek-UX32VD kernel: usb 3-2: new
+full-speed USB device number 66 using xhci_hcd
+2024-11-16T22:14:11.069347+08:00 sundtek-UX32VD kernel: usb 3-2: Device
+not responding to setup address.
+2024-11-16T22:14:11.273256+08:00 sundtek-UX32VD kernel: usb 3-2: Device
+not responding to setup address.
+2024-11-16T22:14:12.122162+08:00 sundtek-UX32VD kernel: usb 3-2: device
+not accepting address 66, error -71
+2024-11-16T22:14:12.122196+08:00 sundtek-UX32VD kernel: BUG: kernel
+NULL pointer dereference, address: 0000000000000020
+2024-11-16T22:14:12.122203+08:00 sundtek-UX32VD kernel: #PF: supervisor
+read access in kernel mode
+2024-11-16T22:14:12.122206+08:00 sundtek-UX32VD kernel: #PF:
+error_code(0x0000) - not-present page
+2024-11-16T22:14:12.122210+08:00 sundtek-UX32VD kernel: PGD 0 P4D 0=20
+2024-11-16T22:14:12.122214+08:00 sundtek-UX32VD kernel: Oops: 0000 [#1]
+PREEMPT SMP PTI
+2024-11-16T22:14:12.122216+08:00 sundtek-UX32VD kernel: CPU: 2 PID:
+15600 Comm: kworker/2:1 Not tainted 6.8.0-48-generic #48-Ubuntu
+2024-11-16T22:14:12.122219+08:00 sundtek-UX32VD kernel: Hardware name:
+ASUSTeK COMPUTER INC. UX32VD/UX32VD, BIOS UX32VD.214 01/29/2013
+2024-11-16T22:14:12.122221+08:00 sundtek-UX32VD kernel: Workqueue:
+usb_hub_wq hub_event
+2024-11-16T22:14:12.122224+08:00 sundtek-UX32VD kernel: RIP:
+0010:xhci_check_bw_table+0x100/0x4d0
+2024-11-16T22:14:12.122227+08:00 sundtek-UX32VD kernel: Code: c7 c2 60
+35 70 9f 48 c7 c6 70 aa 79 9e 4c 89 55 c0 4c 89 5d d0 e8 d0 c7 01 00 4c
+8b 5d d0 4c 8b 55 c0 4c 8b 4d b8 41 8d 47 ff <41> 8b 4a 20 31 d2 45 8b
+72 08 89 45 d0 41 03 02 41 f7 f7 ba 80 00
+2024-11-16T22:14:12.122231+08:00 sundtek-UX32VD kernel: RSP:
+0018:ffffc3774ebeb758 EFLAGS: 00010046
+2024-11-16T22:14:12.122234+08:00 sundtek-UX32VD kernel: RAX:
+0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+2024-11-16T22:14:12.122236+08:00 sundtek-UX32VD kernel: RDX:
+0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+2024-11-16T22:14:12.122239+08:00 sundtek-UX32VD kernel: RBP:
+ffffc3774ebeb7c0 R08: 0000000000000000 R09: ffff9fcad3566000
+2024-11-16T22:14:12.122242+08:00 sundtek-UX32VD kernel: R10:
+0000000000000000 R11: ffff9fc9cc687260 R12: ffffc37741131000
+2024-11-16T22:14:12.122245+08:00 sundtek-UX32VD kernel: R13:
+0000000000000000 R14: ffff9fcad3566000 R15: 0000000000000001
+2024-11-16T22:14:12.122247+08:00 sundtek-UX32VD kernel: FS:=20
+0000000000000000(0000) GS:ffff9fcb65700000(0000) knlGS:0000000000000000
+2024-11-16T22:14:12.122250+08:00 sundtek-UX32VD kernel: CS:=C2=A0 0010 DS:
+0000 ES: 0000 CR0: 0000000080050033
+2024-11-16T22:14:12.122252+08:00 sundtek-UX32VD kernel: CR2:
+0000000000000020 CR3: 000000021c23c005 CR4: 00000000001706f0
+2024-11-16T22:14:12.122254+08:00 sundtek-UX32VD kernel: Call Trace:
+2024-11-16T22:14:12.122257+08:00 sundtek-UX32VD kernel:=C2=A0 <TASK>
+2024-11-16T22:14:12.122259+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+show_regs+0x6d/0x80
+2024-11-16T22:14:12.122261+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+__die+0x24/0x80
+2024-11-16T22:14:12.122263+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+page_fault_oops+0x99/0x1b0
+2024-11-16T22:14:12.122265+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+kernelmode_fixup_or_oops.isra.0+0x69/0x90
+2024-11-16T22:14:12.122267+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+__bad_area_nosemaphore+0x19d/0x2c0
+2024-11-16T22:14:12.122269+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+update_sg_lb_stats+0x97/0x5c0
+2024-11-16T22:14:12.122271+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+bad_area_nosemaphore+0x16/0x30
+2024-11-16T22:14:12.122273+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+do_user_addr_fault+0x29c/0x670
+2024-11-16T22:14:12.122275+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+exc_page_fault+0x83/0x1b0
+2024-11-16T22:14:12.122276+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+asm_exc_page_fault+0x27/0x30
+2024-11-16T22:14:12.122279+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+xhci_check_bw_table+0x100/0x4d0
+2024-11-16T22:14:12.122281+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+xhci_check_bw_table+0x357/0x4d0
+2024-11-16T22:14:12.122283+08:00 sundtek-UX32VD kernel:=20
+xhci_reserve_bandwidth+0x298/0xb20
+2024-11-16T22:14:12.122286+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+update_load_avg+0x82/0x850
+2024-11-16T22:14:12.122288+08:00 sundtek-UX32VD kernel:=20
+xhci_configure_endpoint+0xa8/0x730
+2024-11-16T22:14:12.122291+08:00 sundtek-UX32VD kernel:=20
+xhci_check_ep0_maxpacket.isra.0+0x14e/0x1d0
+2024-11-16T22:14:12.122293+08:00 sundtek-UX32VD kernel:=20
+xhci_endpoint_reset+0x254/0x4a0
+2024-11-16T22:14:12.122295+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+_raw_spin_lock_irqsave+0xe/0x20
+2024-11-16T22:14:12.122298+08:00 sundtek-UX32VD kernel:=20
+usb_hcd_reset_endpoint+0x28/0xa0
+2024-11-16T22:14:12.122300+08:00 sundtek-UX32VD kernel:=20
+usb_enable_endpoint+0x8c/0xa0
+2024-11-16T22:14:12.122302+08:00 sundtek-UX32VD kernel:=20
+hub_port_connect+0x176/0xb70
+2024-11-16T22:14:12.122305+08:00 sundtek-UX32VD kernel:=20
+hub_port_connect_change+0x88/0x2b0
+2024-11-16T22:14:12.122307+08:00 sundtek-UX32VD kernel:=20
+port_event+0x651/0x810
+2024-11-16T22:14:12.122309+08:00 sundtek-UX32VD kernel:=20
+hub_event+0x14a/0x450
+2024-11-16T22:14:12.122311+08:00 sundtek-UX32VD kernel:=20
+process_one_work+0x178/0x350
+2024-11-16T22:14:12.122313+08:00 sundtek-UX32VD kernel:=20
+worker_thread+0x306/0x440
+2024-11-16T22:14:12.122316+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+_raw_spin_lock_irqsave+0xe/0x20
+2024-11-16T22:14:12.122318+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+__pfx_worker_thread+0x10/0x10
+2024-11-16T22:14:12.122321+08:00 sundtek-UX32VD kernel:=20
+kthread+0xf2/0x120
+2024-11-16T22:14:12.122323+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+__pfx_kthread+0x10/0x10
+2024-11-16T22:14:12.122325+08:00 sundtek-UX32VD kernel:=20
+ret_from_fork+0x47/0x70
+2024-11-16T22:14:12.122327+08:00 sundtek-UX32VD kernel:=C2=A0 ?
+__pfx_kthread+0x10/0x10
+2024-11-16T22:14:12.122329+08:00 sundtek-UX32VD kernel:=20
+ret_from_fork_asm+0x1b/0x30
+2024-11-16T22:14:12.122331+08:00 sundtek-UX32VD kernel:=C2=A0 </TASK>
+2024-11-16T22:14:12.122334+08:00 sundtek-UX32VD kernel: Modules linked
+in: cpuid ufs qnx4 hfsplus hfs minix ntfs msdos jfs nls_ucs2_utils xfs
+usbtest rfcomm snd_seq_dummy snd_hrtimer qrtr uhid hid cmac algif_hash
+algif_skcipher af_alg bnep sunrpc snd_hda_codec_hdmi intel_rapl_msr
+intel_rapl_common binfmt_misc snd_hda_codec_realtek
+x86_pkg_temp_thermal snd_hda_codec_generic intel_powerclamp coretemp
+kvm_intel snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi uvcvideo
+snd_hda_codec kvm videobuf2_vmalloc snd_hda_core uvc btusb snd_hwdep
+irqbypass videobuf2_memops snd_pcm btrtl videobuf2_v4l2 iwldvm
+rtsx_usb_ms btintel videodev btbcm rapl btmtk at24 mei_pxp mei_hdcp
+memstick nls_iso8859_1 mac80211 asus_nb_wmi videobuf2_common mfd_aaeon
+libarc4 mc i915 snd_seq_midi bluetooth snd_seq_midi_event snd_rawmidi
+intel_cstate asus_wmi iwlwifi ledtrig_audio ecdh_generic sparse_keymap
+platform_profile i2c_i801 ecc mxm_wmi drm_buddy wmi_bmof snd_seq
+i2c_smbus cfg80211 ttm snd_seq_device snd_timer drm_display_helper snd
+acpi_als mei_me cec soundcore
+2024-11-16T22:14:12.122337+08:00 sundtek-UX32VD kernel:=20
+industrialio_triggered_buffer rc_core lpc_ich mei i2c_algo_bit
+int3400_thermal kfifo_buf int3402_thermal industrialio int3403_thermal
+acpi_thermal_rel asus_wireless int340x_thermal_zone joydev input_leds
+mac_hid serio_raw sch_fq_codel msr parport_pc ppdev lp parport
+efi_pstore nfnetlink dmi_sysfs ip_tables x_tables autofs4 btrfs
+blake2b_generic raid10 raid456 async_raid6_recov async_memcpy async_pq
+async_xor async_tx xor raid6_pq libcrc32c raid1 raid0 rtsx_usb_sdmmc
+rtsx_usb crct10dif_pclmul crc32_pclmul polyval_clmulni polyval_generic
+ghash_clmulni_intel sha256_ssse3 sha1_ssse3 video psmouse ahci xhci_pci
+libahci xhci_pci_renesas wmi aesni_intel crypto_simd cryptd
+2024-11-16T22:14:12.122340+08:00 sundtek-UX32VD kernel: CR2:
+0000000000000020
+2024-11-16T22:14:12.122342+08:00 sundtek-UX32VD kernel: ---[ end trace
+0000000000000000 ]---
+2024-11-16T22:14:12.122344+08:00 sundtek-UX32VD kernel: RIP:
+0010:xhci_check_bw_table+0x100/0x4d0
+2024-11-16T22:14:12.122346+08:00 sundtek-UX32VD kernel: Code: c7 c2 60
+35 70 9f 48 c7 c6 70 aa 79 9e 4c 89 55 c0 4c 89 5d d0 e8 d0 c7 01 00 4c
+8b 5d d0 4c 8b 55 c0 4c 8b 4d b8 41 8d 47 ff <41> 8b 4a 20 31 d2 45 8b
+72 08 89 45 d0 41 03 02 41 f7 f7 ba 80 00
+2024-11-16T22:14:12.122349+08:00 sundtek-UX32VD kernel: RSP:
+0018:ffffc3774ebeb758 EFLAGS: 00010046
+2024-11-16T22:14:12.122352+08:00 sundtek-UX32VD kernel: RAX:
+0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+2024-11-16T22:14:12.122355+08:00 sundtek-UX32VD kernel: RDX:
+0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+2024-11-16T22:14:12.122357+08:00 sundtek-UX32VD kernel: RBP:
+ffffc3774ebeb7c0 R08: 0000000000000000 R09: ffff9fcad3566000
+2024-11-16T22:14:12.122359+08:00 sundtek-UX32VD kernel: R10:
+0000000000000000 R11: ffff9fc9cc687260 R12: ffffc37741131000
+2024-11-16T22:14:12.122361+08:00 sundtek-UX32VD kernel: R13:
+0000000000000000 R14: ffff9fcad3566000 R15: 0000000000000001
+2024-11-16T22:14:12.122363+08:00 sundtek-UX32VD kernel: FS:=20
+0000000000000000(0000) GS:ffff9fcb65700000(0000) knlGS:0000000000000000
+2024-11-16T22:14:12.122366+08:00 sundtek-UX32VD kernel: CS:=C2=A0 0010 DS:
+0000 ES: 0000 CR0: 0000000080050033
+2024-11-16T22:14:12.122368+08:00 sundtek-UX32VD kernel: CR2:
+0000000000000020 CR3: 000000011ffde004 CR4: 00000000001706f0
+2024-11-16T22:14:12.122371+08:00 sundtek-UX32VD kernel: note:
+kworker/2:1[15600] exited with irqs disabled
+2024-11-16T22:14:12.122373+08:00 sundtek-UX32VD kernel: note:
+kworker/2:1[15600] exited with preempt_count 1
 
-> those
-> workarounds did not work properly for the device I deal with (but yes
-> that's
-> why I'm asking - maybe someone else has different hardware with
-> different
-> experience).
+Signed-off-by: Markus Rechberger <linuxusb.ml@sundtek.de>
 
-I doubt we will hear from these people, because they will not realize 
-that anything was wrong.
+This patch diff --git a/drivers/usb/host/xhci.c
+b/drivers/usb/host/xhci.c
+index 899c0effb5d3..f054e262176c 100644
+--- a/drivers/usb/host/xhci.c
++++ b/drivers/usb/host/xhci.c
+@@ -2380,6 +2380,17 @@ static int xhci_check_bw_table(struct xhci_hcd
+*xhci,
+=C2=A0	}
+=C2=A0
+=C2=A0	bw_table =3D virt_dev->bw_table;
++
++	/* second line of defense, this should not happen if bw_table
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 is not initialized this calculation s=
+hould not be called
++=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 any issue with bw_table is supposed t=
+o be handled earlier
++	*/
++	if (bw_table =3D=3D NULL) {
++		xhci_warn(xhci, "bw_table =3D=3D NULL, this should not
+happen\n"
++				"please report\n");
++		return -ENOMEM;
++	}
++
+=C2=A0	/* We need to translate the max packet size and max ESIT
+payloads into
+=C2=A0	 * the units the hardware uses.
+=C2=A0	 */
 
-In any case, it is generally recognized that the type of errors leading 
-to -EPROTO (bad CRC or no response, for instance) can be temporary or 
-intermittent.  Retrying is an appropriate strategy.
 
-> > > As a second issue I found in usb_reset_and_verify device 
-> > > https://github.com/torvalds/linux/blob/master/drivers/usb/core/hub.c#L6131
-> > > 
-> > >         ret = hub_port_init(parent_hub, udev, port1, i,
-> > > &descriptor);
-> > >         if (ret >= 0 || ret == -ENOTCONN || ret == -ENODEV) {
-> > >             break;
-> > >         }
-> > > 
-> > > hub_port_init can also return -71 / -EPROTO, the cases should be
-> > > very
-> > > rare when usb_reset_and_verify_device is triggered and that
-> > > happens.
-> > 
-> > If that happens, the loop which this code sits inside will simply 
-> > perform another iteration.  That's what  it's supposed to do, not an 
-> > issue at all.
-> > 
-> 
-> It doesn't cause any issue yes but it's not correct either.
 
-Why not?  What's wrong with it?
+--=-5urReUzQZxabI7oEQTBX
+Content-Disposition: attachment; filename="xhci_bwtable_check.diff"
+Content-Type: text/x-patch; name="xhci_bwtable_check.diff"; charset="UTF-8"
+Content-Transfer-Encoding: base64
 
-> -EPROTO will be returned if I disconnect or short the device here. So
-> initially someone
-> thought he should check for -ENODEV/-ENOTCONN (which should also
-> indicate that the device is gone), so -EPROTO should also be checked in
-> that case.
-> Otherwise just remove all those error checks.
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS5jIGIvZHJpdmVycy91c2IvaG9zdC94
+aGNpLmMKaW5kZXggODk5YzBlZmZiNWQzLi5mMDU0ZTI2MjE3NmMgMTAwNjQ0Ci0tLSBhL2RyaXZl
+cnMvdXNiL2hvc3QveGhjaS5jCisrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS5jCkBAIC0yMzgw
+LDYgKzIzODAsMTcgQEAgc3RhdGljIGludCB4aGNpX2NoZWNrX2J3X3RhYmxlKHN0cnVjdCB4aGNp
+X2hjZCAqeGhjaSwKIAl9CiAKIAlid190YWJsZSA9IHZpcnRfZGV2LT5id190YWJsZTsKKworCS8q
+IHNlY29uZCBsaW5lIG9mIGRlZmVuc2UsIHRoaXMgc2hvdWxkIG5vdCBoYXBwZW4gaWYgYndfdGFi
+bGUKKyAgICAgICBpcyBub3QgaW5pdGlhbGl6ZWQgdGhpcyBjYWxjdWxhdGlvbiBzaG91bGQgbm90
+IGJlIGNhbGxlZAorICAgICAgIGFueSBpc3N1ZSB3aXRoIGJ3X3RhYmxlIGlzIHN1cHBvc2VkIHRv
+IGJlIGhhbmRsZWQgZWFybGllcgorCSovCisJaWYgKGJ3X3RhYmxlID09IE5VTEwpIHsKKwkJeGhj
+aV93YXJuKHhoY2ksICJid190YWJsZSA9PSBOVUxMLCB0aGlzIHNob3VsZCBub3QgaGFwcGVuXG4i
+CisJCQkJInBsZWFzZSByZXBvcnRcbiIpOworCQlyZXR1cm4gLUVOT01FTTsKKwl9CisKIAkvKiBX
+ZSBuZWVkIHRvIHRyYW5zbGF0ZSB0aGUgbWF4IHBhY2tldCBzaXplIGFuZCBtYXggRVNJVCBwYXls
+b2FkcyBpbnRvCiAJICogdGhlIHVuaXRzIHRoZSBoYXJkd2FyZSB1c2VzLgogCSAqLwo=
 
--EPROTO does not necessarily indicate the device is gone; it indicates 
-there was a problem communicating with the device.  The problem might be 
-caused by a disconnection, or it might be caused by temporary 
-electromagnetic interference (for example), or by something else.
 
-Alan Stern
+
+--=-5urReUzQZxabI7oEQTBX--
 
