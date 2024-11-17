@@ -1,103 +1,92 @@
-Return-Path: <linux-usb+bounces-17644-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17645-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AB4E9D0257
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 08:33:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B0F09D0272
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 09:14:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6BE241F22C50
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 07:33:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 68327284F38
+	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 08:14:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C8F938FB0;
-	Sun, 17 Nov 2024 07:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97F69482ED;
+	Sun, 17 Nov 2024 08:14:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sundtek.de (sundtek.de [85.10.198.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C432E2C95
-	for <linux-usb@vger.kernel.org>; Sun, 17 Nov 2024 07:33:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.198.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6A879F6
+	for <linux-usb@vger.kernel.org>; Sun, 17 Nov 2024 08:14:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731828816; cv=none; b=meB5U1vlFVdoK5GAk6M6ynybhk7jwO/qY5P4iesydBpGK2v32kkSgdJq0RuHWqF+jsCJLafqN7+Zau0hIecexRbyRHvwTS95hBeikzczbwVh4ki/zFCJCYXnFhaFVepQyDo5BpDVSd4eNirlPVXK0CxfTscJTY1kUv35hW4DJKU=
+	t=1731831245; cv=none; b=Q4q2fZ/HuUHCdT9Gd+7VV5PTE19m6gPQ2Fz+asB4f4NUw7MFh6eiddSZBcQL1Vxd64kiqEXUCm3sjquKxmW140PsXz3HcI7LauOn9rnzgmm6Gjb7tiCaQ+/aZznsU31opSf0gOzl102LOFxBY9h9pkCHuRJFKR9frEj62+QXj3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731828816; c=relaxed/simple;
-	bh=QE5HpRlfZPD7nD/qiKO/hgmRaCB49b3+TQJFWEik8zQ=;
-	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version; b=nDXpkOcgYGIsFi7rJqONB6wc4JuJWTkaaVt4mL3vuQjJoZ3uOF2ssYm05JFCyDzdLWm2wv8vW2LHfMFrIl5j32XAG6yDcBbUX3h5cXxgekv7TWp1WU91jG85RfzWtgFMCYoMEO0HYfjYbgazXzN7DyAhxUEYWSDoIKSGKUUOaO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de; spf=pass smtp.mailfrom=sundtek.de; arc=none smtp.client-ip=85.10.198.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sundtek.de
-Received: from Debian-exim by sundtek.de with spam-scanned (Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tCZml-005Bi7-11
-	for linux-usb@vger.kernel.org;
-	Sun, 17 Nov 2024 08:33:33 +0100
-Received: from 1-175-135-24.dynamic-ip.hinet.net ([1.175.135.24] helo=[192.168.2.197])
-	by sundtek.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tCZmk-005Bi1-Kb;
-	Sun, 17 Nov 2024 08:33:30 +0100
-Message-ID: <3905c1c88695e0ffcfabf700c06dd7223decef8d.camel@sundtek.de>
-Subject: Highly critical bug in XHCI Controller
-From: Markus Rechberger <linuxusb.ml@sundtek.de>
-To: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Sun, 17 Nov 2024 15:33:28 +0800
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1731831245; c=relaxed/simple;
+	bh=sITDq9pgxV0JGeUE+jutRHugAwm7EjJ+KKPhCIWr8/s=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=uCZugNq1c3m8Qr5trz+cXNC0mthaE+z+rRxVPNYwBzZmvDCVUwiwpfVzOIKMRGtKQRpyD0kIXvrkkzwxez2BEVWlPzIG5TUT+vh0tD4A5P9HlVLUTeyOnknp0+FfaiMFUtY0tBLHxxeax5e8F6ER5o4n4ck+OR/Sys/M6/dCP1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a6b7974696so12642845ab.1
+        for <linux-usb@vger.kernel.org>; Sun, 17 Nov 2024 00:14:03 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731831243; x=1732436043;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0cAXStZgVrmvMzECPpPJcbsX24KNDbw/bMwbcFv7apo=;
+        b=nQKJzaclQ3wxFxUKpaFon65YlxqfYb/uahYrv5WltaV3gwYnEt/hnPbyJjcO/Uo9ao
+         2VZcQpz5xDB+UFCFdzC52r4se+9lNEhyTtq/EAYOtVroV3B1Mnf+EuAHmJe55bxPuED6
+         sJALADtk6foFBvOnt145md+0jBgc6cm/L/9YuAQZZ31NIMXRpJs5KgMA8qBHoG1sl4K0
+         2pgZqBuNxPGmbTcgFZ93kCSggZKyGnBvs7u0XJFhsd4XqWI6sSNEbjQBVsUudfn+iPq8
+         yvGxKdsoZuR9OrmdiapaAr7bFctMxSnh5x+2DEj2CKot8pvNwNwP+Bl3YiVwgIk+rXHF
+         FvxQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWbQ8XdxQF8DITdK4Qi5ESk5o1L/wiUlXhyJmGqGZCpO33EoKo5z7mxBEG2vS7SNzywJiVrxTmuc/c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzNVVHOgeNCEMWe30tXkZgKM3OXBpaejzEOVJovn8B0RHj9bWO9
+	aAXuY4svpQiGhC1teikRnkshFdbXBZmMY3g7yX8tKAtk8lujNZW02TMwF8a7P3ojCaRkMl6/o+4
+	vsV1yIG0K4HoScvDFMc50LqHIE9ufjxIX/ukBUOFcH2TRF0rxYE+KYPk=
+X-Google-Smtp-Source: AGHT+IFd1nbd3dh0Rhw8u+kcphrA3gBgDy9zioD/bdGdledmXplLVHrzifgX/GQ1F/B2kxhtseYyiN1YIX4ZI/wlZ3Q4qSUI0Xzz
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: linuxusb.ml@sundtek.de
-X-SA-Exim-Scanned: No (on sundtek.de); SAEximRunCond expanded to false
+X-Received: by 2002:a05:6e02:1ca8:b0:3a7:1891:c5f2 with SMTP id
+ e9e14a558f8ab-3a7480031bemr85191805ab.1.1731831243214; Sun, 17 Nov 2024
+ 00:14:03 -0800 (PST)
+Date: Sun, 17 Nov 2024 00:14:03 -0800
+In-Reply-To: <672c2a44.050a0220.350062.0283.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6739a5cb.050a0220.87769.0006.GAE@google.com>
+Subject: Re: [syzbot] [block?] [usb?] WARNING: bad unlock balance in elevator_init_mq
+From: syzbot <syzbot+a95fab8e491d4ac8cbe9@syzkaller.appspotmail.com>
+To: axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, ming.lei@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+syzbot has bisected this issue to:
 
+commit f1be1788a32e8fa63416ad4518bbd1a85a825c9d
+Author: Ming Lei <ming.lei@redhat.com>
+Date:   Fri Oct 25 00:37:20 2024 +0000
 
-the issue was first reported at vdr-portal.de
-https://www-vdr--portal-de.translate.goog/forum/index.php?thread/136541-emp=
-fehlung-dvb-s2-tuner-oder-satip/&postID=3D1376196&_x_tr_sl=3Dde&_x_tr_tl=3D=
-en&_x_tr_hl=3Dde&_x_tr_pto=3Dwapp#post1376196
+    block: model freeze & enter queue as lock for supporting lockdep
 
-we've got around a highly critical bug in the xhci driver.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13aa32c0580000
+start commit:   c88416ba074a Add linux-next specific files for 20241101
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=106a32c0580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17aa32c0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=704b6be2ac2f205f
+dashboard link: https://syzkaller.appspot.com/bug?extid=a95fab8e491d4ac8cbe9
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1722ab40580000
 
-https://sundtek.de/support/uxvd32.txt
+Reported-by: syzbot+a95fab8e491d4ac8cbe9@syzkaller.appspotmail.com
+Fixes: f1be1788a32e ("block: model freeze & enter queue as lock for supporting lockdep")
 
-In xhci.c
-
-The bug is still active in Mainline:
-https://github.com/torvalds/linux/blob/master/drivers/usb/host/xhci.c#L2382
-
-static int xhci_check_bw_table(struct xhci_hcd *xhci,
-        struct xhci_virt_device *virt_dev,
-        int old_active_eps)
-
-bw_table can end up with a NULL pointer.
-
-This problem will lead to a complete kernel crash, rendering the entire
-system unusable without any access to the actual linux system.
-
-How to trigger the problem?
-Short D+/D- or pull them to ground on a USB device while connecting the
-device.
-
-The problem can happen due to following cases:
-* a device is getting suddenly disconnected during enumeration
-* a faulty cable
-* a faulty device=20
-* a malicious device triggers this issue on purpose
-* if there are electrical issues during connecting a device.
-
-A quick hotfix would be to check if bw_table is NULL in
-xhci_check_bw_table, however the check should be performed earlier - in
-the area where bw_table is supposed to be assigned.
-
-Best Regards,
-Markus
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
