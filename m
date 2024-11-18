@@ -1,392 +1,186 @@
-Return-Path: <linux-usb+bounces-17696-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17697-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9583F9D12C8
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 15:18:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDC7A9D140D
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 16:09:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0C8FB23BC5
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 14:01:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F456283E79
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 15:09:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52C9419F124;
-	Mon, 18 Nov 2024 14:00:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CD9B1B0F29;
+	Mon, 18 Nov 2024 15:08:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zuehlke.com header.i=@zuehlke.com header.b="J2e6EISk"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="KDt8Icr1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from GVAP278CU002.outbound.protection.outlook.com (mail-switzerlandwestazon11020078.outbound.protection.outlook.com [52.101.188.78])
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2086.outbound.protection.outlook.com [40.107.237.86])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814838836;
-	Mon, 18 Nov 2024 14:00:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.188.78
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363C91AF0A3;
+	Mon, 18 Nov 2024 15:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.86
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731938456; cv=fail; b=UAJNa6I8EAoa6iM3dW6Od0VvrQ5DreCCi0Qb0HePW5cND5gwp6wi8qd/xg9YSPSiN/EBw131T/ZgOw9U4JOm4oGQ6LTTxzlhrM+O70St/0VPw7FovgxDl2oivih/FzHLVMjR4V1IKMvN4MiRw6JZJ1PhuHPXbljfsuYAKLe/lsw=
+	t=1731942519; cv=fail; b=XDYyMH2+j4JSpFNT0S/1LN1lzIkaGrm90QGJ2g9Cik258Qc/VExbP+97tikJv/qop1wqeThEQ70U77TwnANs7rQlfUMTMCt7j/67cSfelGTER+OHzsBtjWsqHvJjw0nAfGvn/B6Yi0hDxdKTJqWGOuQHjSAgE4c1DE6GM7WTyy8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731938456; c=relaxed/simple;
-	bh=W1KlV05vEj7y17aPjtWi08DBsHugB1vH5qfD9h+atQg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=OgjAthJOj2bWzyHfayl/ohO2eKZxhSWbN+HMd320fXgAAw85GqTqSDrRLuxmN2DIHaY0506jc2KcEuRrzvHcTrL9V1A+SHUOSSsU/gJj7A7anrQEoeb/SnY752kx9UJttlRUZs85FFRBZgkoWFQ6FJWwy1SNLbItLDgMB3EkM/E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zuehlke.com; spf=pass smtp.mailfrom=zuehlke.com; dkim=pass (1024-bit key) header.d=zuehlke.com header.i=@zuehlke.com header.b=J2e6EISk; arc=fail smtp.client-ip=52.101.188.78
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zuehlke.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zuehlke.com
+	s=arc-20240116; t=1731942519; c=relaxed/simple;
+	bh=Zkx0nzMDUxUoFmYetv+U1Ux2W/ySWBGNOQ58jhtn0+w=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CVZoIPMNyl82CPZRjH5YxsAmg0EVGc8EiGL510vuU2tt6OY3TEssU3vmvfyHRy3adDB3vICWplK1Qsi1EepEkW4uVBRwWwj7CXdMKspzgUMQtzFwkEIS+yKymmyVdNPv6drQebmMZXmg3FvMZ3oNMJDXiSid4c//tyDjc9zvB1w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=KDt8Icr1; arc=fail smtp.client-ip=40.107.237.86
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ktdaLTeCIPWqxMRgZ0obCpUvdnsKkSbAF0Wy9H8NLpyPo7xAm6gqiqDdywkajid4CYXzapJApcrGFIsf5KjXjuM3/CFPkcqoJdw1OENxwdsqSSpAhHusMwqRD7ujGZHWiJboywB+Zgz4FqQRqA6QIbqXd6wp3ZESMkhGglzLA9qUYmBJsdKGEejyLZ/AzzknBDuPE3Hz5HTVvN93Abid9/WDLgR2e6isJnNZJyoCcOXx6Lg2yIozX2+4v2U4oDUabUol17z4WcaQn9+YUSSzgM+siMsI823pUnFbhRQfJyuDrKFiVsvNBd3xEMCLh6IiD7rVYf3Q3jQB0hR9LFSXbQ==
+ b=s4o48sTMClG3uiB8X+A5XnimMgqIfmmbI+jjSgFzvwnaNo7IH1xGIdoR62xHMDl9s7ODh6thIi4eUfg2JwKrUsN+TKCo9EergMP1RdRzmI4DS66NtfEn9V78rdRBgZq+S9QzUZMsmjGAYXrhncVWC0hZWuToV5cHS4cdbQUXmYphovOVMnU8ZX5Za3jQ/zc3+XmVk0TkfspqVkaqQAMlR8kieyLRM3B/zuhcu8L7sgar064mDxlH9VUqXsj4xUDx9iQK077TE9cEaKzOLodhaHcwKPK4KGO3gU1tIrYXvI9a1Gg3cXiRpAU+CPPbyuJ42W4dVdo12b6KxN+h5q8HiA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8MTlHKFUYTmE5Lc5QMEGd3SNCq0WVteKnR7rXLrYe18=;
- b=rYgvdl5clyP0aY5otIZZsckVbpE6o25c59aNgEf1ERgH5y1ZzYBiqO3KQGC3Jm7CtyV4sA1JZJs3cxHFjIR/TI7Lyqy++epRR0xai9nhtqK17UN33ITiXqAXDPt8VmRTZAz9R6/Z8rrmTHJhMhBkWgO5QT8wcvM7mBjKm84IfsTpV+o4E0Rr+iarQF7bryZM5+ol492PF98lS6qMFlTWDuq2waJ2N88q/2PXVnmt536uVT5CQlVmYgUBiGS4NKtfJveuStgrwJd06sQoYbRunxvhA2eenVcPGBVS1gRXquVskbI+sSI797vCKizUxz3DL7nsComuSe1b55dOZXVlDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=zuehlke.com; dmarc=pass action=none header.from=zuehlke.com;
- dkim=pass header.d=zuehlke.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zuehlke.com;
- s=selector2;
+ bh=pqX/+YS8HQkrgSLStWGErKa2bZe5H7aZiEUmfPnTz0o=;
+ b=p3BjVIcyWy8IRd5p2Egh6OIyTWABe9TZxOaLagRa6nkY1LJ9m39j/MOzWvOud2PrdN+BffG1uaSWYS6b5P2wt4ORcWjsstEZ6Rw6/QMHVAM8KaaZwiRL7dFOGb2R0YeN/wzUDdYWANqLSknK4hGQP6hNWC5CLPUf7tAuxRCG32G2c5K8Kb9o0Ll9oSkxfbA/oP3BZt2foPHvSC91rE1HK7gEeqTEVJ6UbEDkuTalIlSqzq9ZekfM8l1n4yqi/jzla2j/wyue/Vupo8EeftC2oYmzM5LeDE2d0eCeIrLDTarMt6jw5fzvzl4LMJ/o9UAkfQVMrEPqVhdgQ5WeYIhroQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.12) smtp.rcpttodomain=synopsys.com smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8MTlHKFUYTmE5Lc5QMEGd3SNCq0WVteKnR7rXLrYe18=;
- b=J2e6EISk/2Rmc1q/TryN/ZXJl3n81k8rI7ol3O2Clqv19yvEilvYpJgFiFDL5y7DPWs1bnjliqv2q1gIBWmNqkoolFSbjMe6syQoryolABBzYU6YjfrEjM92BF2N5SInSqSjYZu07KIjcKrAGPUpqg5tdBacXEpBWLmB7w0FDlY=
-Received: from ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:5c::8) by
- ZR0P278MB0123.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:19::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8158.23; Mon, 18 Nov 2024 14:00:41 +0000
-Received: from ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM
- ([fe80::c887:bd2f:4c91:3d13]) by ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM
- ([fe80::c887:bd2f:4c91:3d13%3]) with mapi id 15.20.8158.023; Mon, 18 Nov 2024
- 14:00:41 +0000
-From: =?iso-8859-1?Q?Facklam=2C_Oliv=E9r?= <oliver.facklam@zuehlke.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC: Biju Das <biju.das@bp.renesas.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "von Heyl, Benedict"
-	<benedict.vonheyl@zuehlke.com>, =?iso-8859-1?Q?F=F6rst=2C_Mathis?=
-	<mathis.foerst@zuehlke.com>, "Glettig, Michael" <Michael.Glettig@zuehlke.com>
-Subject: RE: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring port
- type
-Thread-Topic: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring port
- type
-Thread-Index: AQHbNmuKAbQgSYuDD0+aIkfTlZwMRLK88xQAgAAYJXA=
-Date: Mon, 18 Nov 2024 14:00:41 +0000
-Message-ID:
- <ZR1P278MB10224924F48419CA813402309F272@ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM>
-References:
- <20241114-usb-typec-controller-enhancements-v2-0-362376856aea@zuehlke.com>
- <20241114-usb-typec-controller-enhancements-v2-3-362376856aea@zuehlke.com>
- <Zzsp2JOhnnPPOWvB@kuha.fi.intel.com>
-In-Reply-To: <Zzsp2JOhnnPPOWvB@kuha.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-processedbytemplafy: true
-x-templafyemailsigvstoversion: 9.16.0.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=zuehlke.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ZR1P278MB1022:EE_|ZR0P278MB0123:EE_
-x-ms-office365-filtering-correlation-id: 0106987f-7e9d-4213-8dfd-08dd07d9638c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?04RoPq7t0vXDgtTUsNtculpER4w4mPbn+i7Xr92R8Ms5ttw1AhA5PEvLpi?=
- =?iso-8859-1?Q?6NNMSY1MHzWRa2S+ZIj1V2ThwsJSXTSZ9ElRRJpB+Qt1WKBtNvsKs69RzN?=
- =?iso-8859-1?Q?h7ArMV0xHO/bpE0Mmt2bDzhmLW+K9Wkr+r72epv/racDRQwh1zq1eFzpY+?=
- =?iso-8859-1?Q?ESXOok5EZGaXjMeP9MVOzEaNm9+kf94MUYkpBf85BkCFg5r2JV06O4OUum?=
- =?iso-8859-1?Q?Jp+OngD2hkD0R72TMzRuPj/pPEnR5gURS2VpVErVR0r/WiUjwWLuGx+1PN?=
- =?iso-8859-1?Q?8KFVUEfe/AZEIT1TGsN4EvFQmsGvBle8kxvRIkg/G0o4NVn2fT+QK6kwCK?=
- =?iso-8859-1?Q?UnD8k6gQ2W6Eoe2/31Lv9MojRiu1EkikMWORxseHqXfzyNOiGGmpyX7mXW?=
- =?iso-8859-1?Q?7YpmQyQO/DHlw9Qf4/zw6A97E50XlNqC6FLRq32EE7HswFpd/fsUAWA+9v?=
- =?iso-8859-1?Q?m22q3O8H500bc73MtwkTZlaKMbVwGd33D86vsKRZgFWPGzTHZRujPy41KP?=
- =?iso-8859-1?Q?6MAsFgSh7Sml9as0URvASppFRzYKEpzAtAf5GdF/N8Kou2WNhGbYf5REU2?=
- =?iso-8859-1?Q?bylSmngAng0Y8w6gzBlh0o/T5x3ADLakL7Uv5Ne7W9/OkrmgnjLYIWtWxt?=
- =?iso-8859-1?Q?TOOPv+TOPjh2jUo3oD+KELKnpHWlWrWCuKh5RYhx1Psw9PLIQiVPT7Et2k?=
- =?iso-8859-1?Q?fjt3yq4gIIM+2i+frkHNZYMd8HTXvFyiyITWBICzoBYo2fwO9mipyDiP83?=
- =?iso-8859-1?Q?nxSjLaq/UasOsyvTi83DIRcOyRfY59/PvyYrApIUoW3RJPjWKvuhx3/rfK?=
- =?iso-8859-1?Q?NmTyWlpd/Rw1FFu/F8HGb75bEG4FLRouilp+s8Fya6akUaI1hZVuU7gjI7?=
- =?iso-8859-1?Q?7x1OGChSqWrzf4icBj/7BnM8LdPidYjVp2WaZy1rIb92SdnpE9mACchJS2?=
- =?iso-8859-1?Q?nzfra+eXaQibkSTo7gRua4hVYqzGIFoH/AbTeb8frffTRBKiS/wsyvB3ls?=
- =?iso-8859-1?Q?kbhqStfNBK8TcN5v0wVaXgZpFpXjd49mJzwtTEPxBlFyjN2AWwn0wTgNLM?=
- =?iso-8859-1?Q?Gt/Y2engpoBdxDLIp2NvvxTnYtQHceqxOfM4PKjNrXyv7DNYjR42IpWL9v?=
- =?iso-8859-1?Q?6RfWqacr8K4NBG9LrkbcegnRb2MBgmQkh/3V1k0NLWTUP/NYa4WHC/dopK?=
- =?iso-8859-1?Q?xDddvkcve6NhJsk0kTZ5l9rXCJbMUdKJQKWc0zcRjWXmWU6ipoeXte06cc?=
- =?iso-8859-1?Q?Fmt5neP65Xu2tpNWG4dLOp6sH0ViGzryy8MB3CByTZ1oSbjsCtMVr2quQr?=
- =?iso-8859-1?Q?ka/l/qQ6XKRyWBC5aQjoZL2oUx9+yrcyVP8FsvjVS7eOHgmypKoBJv+bqF?=
- =?iso-8859-1?Q?6oxRlxvaZWeWPMvPcq+ZdARawX4o0gBN/mjrUMiFrE7xK3mj9RfxE=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?QvSy1f2p9z8lA1latHjPCLavzhsOfRLt/9WwK+433kJnDileVSzsvhSQi+?=
- =?iso-8859-1?Q?vbzhjM2+cqSrAn6auh1HZE1FAMGqN8axFd7iIB5y50Z4bP+QrADuj+vprn?=
- =?iso-8859-1?Q?rCt++NofcWosxzmeuq0dcu4NoG93Wcbhxku99AN/iPtDnmQHJo3WqyenLe?=
- =?iso-8859-1?Q?KMcdxjN0IQB8BBLFmcA+K2SsWxUaYr2Vq6iPu8Pnu22921XVD4N0rRxEIB?=
- =?iso-8859-1?Q?rzaY7GkAzn92nblxTjhXcIM3L5MRTNmWb4or0vRplL3QW3G7pfFkd08jBs?=
- =?iso-8859-1?Q?VKqXKU4BHBiPxyEx/vYkGmM++r4aPg6oUVUqLEtQSpQmMjxIog90BlUZBg?=
- =?iso-8859-1?Q?z5Aj+NvjK1shNhzTYR2lER/Dz0f6PoE3MRmPiDZ8uvto8qa7q3DW0sjKL0?=
- =?iso-8859-1?Q?PLqZjN7QyZ8asf02uJJEmIcVq9G0/T+96Lj3uRE7MYWI4oV8D7U7d/C3v7?=
- =?iso-8859-1?Q?ITQ39Elxl1hirZprsfkEWaphSC4HT30tD+B+Pizn+F4z42h+KN6hjaBrri?=
- =?iso-8859-1?Q?JzipId6iPqdM9JVGpZCG/kv2rjwGRQ9aNcUVErKUp/L8aJiUNlj27ALPeM?=
- =?iso-8859-1?Q?L6Y8UR6nufeSLScuwGHx9WnAp8Elrx2B84A2zqlhO+8vCN7+TGzTT+JP6i?=
- =?iso-8859-1?Q?kDllbFnJa2J4Cr6Be7lDVrBuCYTdo76D0b38kql8aToGLLV7107mNo7CW9?=
- =?iso-8859-1?Q?4mOjNHRJfMa93M2sTxIKpfHe1G3jT89eOkvQe33YC8eEY6Ytvox4toottU?=
- =?iso-8859-1?Q?PK/j0HSyvqyC0OI0VMq0GrV4uJf3Y5AMIBqURL/fL/37ypLOZCn+DcwGOd?=
- =?iso-8859-1?Q?lKI14prdWmCOmruCkFiVVsJh5LGRJ8RLNMO0vtA1ROlz9Lz7UykoF22/NK?=
- =?iso-8859-1?Q?tvd+H2LODcpShHbTAyoYmeqoSk2Ei96fvYwJAeFVY/l6KoLkhXu9vLLUEg?=
- =?iso-8859-1?Q?hGUhOWMIk00qtg9N+icGhwcOREyVwCl7opomGKVA1DUVvx7dil9oHe4/qI?=
- =?iso-8859-1?Q?artJkGU23Fpf0rEc7n0gx7mBP5j1Mu7wy0MHXeZsxDLMCSxcZS5NouNFWr?=
- =?iso-8859-1?Q?Up9BIh1vlpn6GwcaYBfh5hzHXF1V2eUO4+4J9tbjjdxVNdi8U7Gtu8lRYr?=
- =?iso-8859-1?Q?NpQiStalvBH5m8+SNSizEbbXNQf+qP6hYo5uvOG+BLmrKCM0+AIwffMiLu?=
- =?iso-8859-1?Q?iueOhUlPxjU2pcrYaroKvBcSMiYlCV6rTC7Rx+8+EZq+6g8hzZlqydu6J9?=
- =?iso-8859-1?Q?eK25WFNgfw3okxoblxOZislbxUS1HYvKmF3TDF7+TEV6HCkmgUPtyC94RB?=
- =?iso-8859-1?Q?AV+YKRJJ8AJq/caTwQMPdL8jiT/aKWtDDoTuOTYGBLI91CHxpBRZZe7VO4?=
- =?iso-8859-1?Q?guXcPpUeFrWIVWjQD8vaNufH2tfzqbgli6XUWVlWpuc0k67CTtFB5TZZvX?=
- =?iso-8859-1?Q?RZde7SlN+JQ12edp/t1UjoLJELvytTf7UI+POuw21Z54iNbace03xmu4oN?=
- =?iso-8859-1?Q?RA5hIIi68JeF0fOtFLw3nBrXpmF9dmBMqJuyzedUQwEQSgawQHscism3C0?=
- =?iso-8859-1?Q?hR2kOXosFpoGujU4h0Yby0TpkEhMEOMU/q0WtY0yQEqxwq47asHTO9olhl?=
- =?iso-8859-1?Q?SyUhPLgaI8AXx7Eodpvn+OvlKFIE6MEha8?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ bh=pqX/+YS8HQkrgSLStWGErKa2bZe5H7aZiEUmfPnTz0o=;
+ b=KDt8Icr12nonU1LSzjLT9+q287xNWa9IFUCo86qd18SeOCKAJhGQDbfNJh9563JUdS32syfolzuz1eqMlIY3IKNIe9eRmLJiaiMLkZfhqw2f7VNt24ATutNFaiErjqHHorwzujxeZirRJh7ar5CqPOIcCJ1i+XEK+BSAkAsIy/c=
+Received: from SA9PR13CA0161.namprd13.prod.outlook.com (2603:10b6:806:28::16)
+ by LV2PR12MB5968.namprd12.prod.outlook.com (2603:10b6:408:14f::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8158.17; Mon, 18 Nov
+ 2024 15:08:33 +0000
+Received: from SN1PEPF0002BA4E.namprd03.prod.outlook.com
+ (2603:10b6:806:28:cafe::bf) by SA9PR13CA0161.outlook.office365.com
+ (2603:10b6:806:28::16) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.12 via Frontend
+ Transport; Mon, 18 Nov 2024 15:08:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.12)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.12 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.12; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.12) by
+ SN1PEPF0002BA4E.mail.protection.outlook.com (10.167.242.71) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8158.14 via Frontend Transport; Mon, 18 Nov 2024 15:08:30 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 18 Nov
+ 2024 09:08:28 -0600
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Mon, 18 Nov 2024 09:08:25 -0600
+From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To: <Thinh.Nguyen@synopsys.com>, <gregkh@linuxfoundation.org>,
+	<michal.simek@amd.com>, <robert.hancock@calian.com>
+CC: <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <git@amd.com>, Neal Frager
+	<neal.frager@amd.com>, <stable@vger.kernel.org>, Radhey Shyam Pandey
+	<radhey.shyam.pandey@amd.com>
+Subject: [PATCH v2] usb: dwc3: xilinx: make sure pipe clock is deselected in usb2 only mode
+Date: Mon, 18 Nov 2024 20:38:11 +0530
+Message-ID: <1731942491-1992368-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: zuehlke.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0106987f-7e9d-4213-8dfd-08dd07d9638c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2024 14:00:41.5765
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB03.amd.com: radhey.shyam.pandey@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN1PEPF0002BA4E:EE_|LV2PR12MB5968:EE_
+X-MS-Office365-Filtering-Correlation-Id: 640baccf-39e5-4184-66da-08dd07e2dcc4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|82310400026|36860700013|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?J8E7SIFkWV31nFHa8l/AurmIl3dvFa4qrJLXnC3/tzungbJtRgS09MV3yDE3?=
+ =?us-ascii?Q?x/uoR2IqHhKmFCGxOKNe9R1ZL7HIsGRSw3PWJFQMX5gv6aX34aEyyAbKjizl?=
+ =?us-ascii?Q?7xQLT7pIxEOR/TQ/HYGyY0Tr2dvNHP83435GFjqv+KaJ0OvY2tRTEkUVkY+W?=
+ =?us-ascii?Q?w3wfBMVndoiIAXkvC75J2Wf2MaOQ1n3cuAEmXdaghw67eN/1bwEZGpHLsOjb?=
+ =?us-ascii?Q?XXQBnnReHpYYlijcz9KPb7DjUOjFRx8uD1cSySSJg5cRM5+3FUJcKpry/FiX?=
+ =?us-ascii?Q?/hEOe2FKLUvNhZjGCjoNyOV1PfV7BfxJC5QKUEEUllTZO3sw3voBmy7EC03g?=
+ =?us-ascii?Q?/Qv0BlgOBhYGwgfkva4wGRnij9vcRSIEVxoTz2DSLUKHPLOumH8qaXwv2iPj?=
+ =?us-ascii?Q?HVYRZtRth4VXfe4HuqNsAud5dJ5d6U+eSJ3whKSPE/lbYb/YKfceVsJ3gFWw?=
+ =?us-ascii?Q?WrGeNHIupbYDofPItXJBlMCb92+ZdkwV6wBhHZUJ3XkHNJIejEZOAEziSRF6?=
+ =?us-ascii?Q?S48B/WRx2dFJzoZAfxgKW7Dptzue0uwYlMrcAKTw2UzuRdRB8MXt7t61uOC5?=
+ =?us-ascii?Q?9+FRdXwzy7szmsv5C4rdqX7lyzt+RXZpUdhJwlSqDIeJemJKwMvwp4ZQ9L3+?=
+ =?us-ascii?Q?bQoJEL7dGQNK/MOnAuQM1JQnRmTIQV+4iNVrdGDFAzFMc47Uluycso+jr3xs?=
+ =?us-ascii?Q?7V7aRG61lmSK04RdXhFbJmiOzCveEvK3YXTZH/fkDxKMsphAQy9oUOMI8x6t?=
+ =?us-ascii?Q?UnteN00yPUP1iqlUB9v19rfYwvfN1x4i8YPonfyJRQXZTxrxfN2UC/u5lcbL?=
+ =?us-ascii?Q?hZrgEH5v8B8JJys327k4t5lP82kZsuXMDMPFPfYADP8OldmUVlB1kWQpH4jR?=
+ =?us-ascii?Q?MYZ3aQ0f7JUZ/ovtn0wmca7rjGsp4ErlgHWsqoNoL69A8c7jhZUv/3XUOgLc?=
+ =?us-ascii?Q?na78Pf1CK3fRu3K4pOAfrSgVt1wBJ9nRB7xvSD9DGVcywhbgNQaXuWHKFUep?=
+ =?us-ascii?Q?bu8G8AUrQxFjN8Ut0TnCY3cOOkd0U+3P8bUmNcqy0Z5FZrpJvrD8/WHgB1ee?=
+ =?us-ascii?Q?IaRLScGsG+LKkd5P4GMae93yagfvesVtSRf5IUY7SjhXLL1pQs6eDwVmR5nY?=
+ =?us-ascii?Q?LXQKkCox+I+TOnDh5svewy0O2KkY4te4Gr4EYG33qSYxzR6zPKpWymv4lq30?=
+ =?us-ascii?Q?NzNVamQESBA50XxXJONNzYRM12lYPbM8B/SXR2YgCU3b2MWzHaxTpm+V8CA6?=
+ =?us-ascii?Q?I3hVqcw7uYqRPIv9qXMYQuYcDoHKoCH34+bfNqOHAf+Fxy3V96EV+j+Cku7T?=
+ =?us-ascii?Q?o5Hx2QueScUMDZauIXkJXlHxznrL8fqXjanYjlqcCBxjV7bl8tPI4gDJqF44?=
+ =?us-ascii?Q?p0sp22vODTMhMhmtY1Idokl171cZABeX1Rt5gmL2jIdzwjUUJQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.12;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:atlvpn-bp.amd.com;CAT:NONE;SFS:(13230040)(376014)(82310400026)(36860700013)(1800799024);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Nov 2024 15:08:30.3403
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: ccce7f5e-a35f-4bc3-8e63-b2215e7d14f9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: zNEPMRKCoMelSAB5+s2D94DU/P+Li9nLwE1SWVH3OLlMpLUz2W7ZszVpD1TIkdZxVLtTfcLHzzV8HFTMeTgKFhXpJ6aYnaZdQIzDfUAyzv0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZR0P278MB0123
+X-MS-Exchange-CrossTenant-Network-Message-Id: 640baccf-39e5-4184-66da-08dd07e2dcc4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.12];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	SN1PEPF0002BA4E.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB5968
 
-Hello Heikki,
+From: Neal Frager <neal.frager@amd.com>
 
-Thanks for reviewing.
+When the USB3 PHY is not defined in the Linux device tree, there could
+still be a case where there is a USB3 PHY is active on the board and
+enabled by the first stage bootloader.  If serdes clock is being used
+then the USB will fail to enumerate devices in 2.0 only mode.
 
-> -----Original Message-----
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Monday, November 18, 2024 12:50 PM
-> To: Facklam, Oliv=E9r <oliver.facklam@zuehlke.com>
-> Cc: Biju Das <biju.das@bp.renesas.com>; Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org>; linux-usb@vger.kernel.org; linux-
-> kernel@vger.kernel.org; von Heyl, Benedict
-> <benedict.vonheyl@zuehlke.com>; F=F6rst, Mathis
-> <mathis.foerst@zuehlke.com>; Glettig, Michael
-> <Michael.Glettig@zuehlke.com>
-> Subject: Re: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring po=
-rt
-> type
->=20
-> Hi Oliver,
->=20
-> I'm sorry, I noticed a problem with this...
->=20
-> On Thu, Nov 14, 2024 at 09:02:08AM +0100, Oliver Facklam wrote:
-> > The TI HD3SS3220 Type-C controller supports configuring the port type
-> > it will operate as through the MODE_SELECT field of the General
-> > Control Register.
-> >
-> > Configure the port type based on the fwnode property "power-role"
-> > during probe, and through the port_type_set typec_operation.
-> >
-> > The MODE_SELECT field can only be changed when the controller is in
-> > unattached state, so follow the sequence recommended by the datasheet
-> to:
-> > 1. disable termination on CC pins to disable the controller
-> > 2. change the mode
-> > 3. re-enable termination
-> >
-> > This will effectively cause a connected device to disconnect
-> > for the duration of the mode change.
->=20
-> Changing the type of the port is really problematic, and IMO we should
-> actually never support that.
+To solve this, make sure that the PIPE clock is deselected whenever the
+USB3 PHY is not defined and guarantees that the USB2 only mode will work
+in all cases.
 
-Could you clarify why you think it is problematic?
+Fixes: 9678f3361afc ("usb: dwc3: xilinx: Skip resets and USB3 register settings for USB2.0 mode")
+Cc: stable@vger.kernel.org
+Signed-off-by: Neal Frager <neal.frager@amd.com>
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+---
+Changes for v2:
+- Add stable@vger.kernel.org in CC.
+---
+ drivers/usb/dwc3/dwc3-xilinx.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
->=20
-> Consider for example, if your port is sink only, then the platform
-> almost certainly can't drive the VBUS. This patch would still allow
-> the port to be changed to source port.
+diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
+index e3738e1610db..a33a42ba0249 100644
+--- a/drivers/usb/dwc3/dwc3-xilinx.c
++++ b/drivers/usb/dwc3/dwc3-xilinx.c
+@@ -121,8 +121,11 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+ 	 * in use but the usb3-phy entry is missing from the device tree.
+ 	 * Therefore, skip these operations in this case.
+ 	 */
+-	if (!priv_data->usb3_phy)
++	if (!priv_data->usb3_phy) {
++		/* Deselect the PIPE Clock Select bit in FPD PIPE Clock register */
++		writel(PIPE_CLK_DESELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
+ 		goto skip_usb3_phy;
++	}
+ 
+ 	crst = devm_reset_control_get_exclusive(dev, "usb_crst");
+ 	if (IS_ERR(crst)) {
 
-In my testing, it appeared to me that when registering a type-c port with
-"typec_cap.type =3D TYPEC_PORT_SNK" (for example), then the type-c class
-disables the port_type_store functionality:
-	if (port->cap->type !=3D TYPEC_PORT_DRP ||
-	    !port->ops || !port->ops->port_type_set) {
-		dev_dbg(dev, "changing port type not supported\n");
-		return -EOPNOTSUPP;
-	}
+base-commit: 744cf71b8bdfcdd77aaf58395e068b7457634b2c
+-- 
+2.34.1
 
-So to my understanding, a platform which cannot drive VBUS should simply
-set the fwnode `power-role=3D"sink"`. Since patch 2/4 correctly parses this=
- property,
-wouldn't that solve this case?
-
->=20
-> Sorry for not realising this in v1.
->=20
-> I think what you want here is just a power role swap. Currently power
-> role swap is only supported when USB PD is supported in the class
-> code, but since the USB Type-C specification quite clearly states that
-> power role and data role swap can be optionally supported even when
-> USB PD is not supported (section 2.3.3) we need to fix that:
-
-My interpretation of section 2.3.3 is that the 2 mechanisms allowing=20
-power role swap are:
-- USB PD (after initial connection)
-- "as part of the initial connection process": to me this is simply referri=
-ng to the
-	Try.SRC / Try.SNK mechanism, for which we already have=20
-	the "try_role" callback.
-
-Maybe I'm misunderstanding what the intentions are behind each of the=20
-typec_operations, so if you could clarify that (or give some pointer), that=
- would
-be appreciated. My understanding:
-- "try_role": set Try.SRC / Try.SNK / no preference for a dual-role port fo=
-r initial connection
-- "pr_set" / "dr_set" / "vconn_set": swap power and data role resp.
-	after the initial connection using USB-PD.
-- "port_type_set": configure what port type to operate as, i.e. which initi=
-al connection
-	state machine from the USB-C standard to apply for the next connection
-Please correct me if any of these are incorrect.
-
->=20
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 58f40156de56..ee81909565a4 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -1535,11 +1535,6 @@ static ssize_t power_role_store(struct device
-> *dev,
->                 return -EOPNOTSUPP;
->         }
->=20
-> -       if (port->pwr_opmode !=3D TYPEC_PWR_MODE_PD) {
-> -               dev_dbg(dev, "partner unable to swap power role\n");
-> -               return -EIO;
-> -       }
-> -
->         ret =3D sysfs	_match_string(typec_roles, buf);
->         if (ret < 0)
->                 return ret;
->=20
->=20
-> After that it should be possible to do power role swap also in this
-> driver when the port is DRP capable.
->=20
-> > Signed-off-by: Oliver Facklam <oliver.facklam@zuehlke.com>
-> > ---
-> >  drivers/usb/typec/hd3ss3220.c | 66
-> ++++++++++++++++++++++++++++++++++++++++++-
-> >  1 file changed, 65 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/typec/hd3ss3220.c
-> b/drivers/usb/typec/hd3ss3220.c
-> > index
-> e581272bb47de95dee8363a5491f543354fcbbf8..e3e9b1597e3b09b82f0726a
-> 01f311fb60b4284da 100644
-> > --- a/drivers/usb/typec/hd3ss3220.c
-> > +++ b/drivers/usb/typec/hd3ss3220.c
-[...]
-> > @@ -131,8 +183,16 @@ static int hd3ss3220_dr_set(struct typec_port
-> *port, enum typec_data_role role)
-> >       return ret;
-> >  }
-> >
-> > +static int hd3ss3220_port_type_set(struct typec_port *port, enum
-> typec_port_type type)
-> > +{
-> > +     struct hd3ss3220 *hd3ss3220 =3D typec_get_drvdata(port);
-> > +
-> > +     return hd3ss3220_set_port_type(hd3ss3220, type);
-> > +}
->=20
-> This wrapper seems completely useless. You only need one function here
-> for the callback.
-
-The wrapper is to extract the struct hd3ss3220 from the typec_port.
-The underlying hd3ss3220_set_port_type I am also using during probe
-to configure initial port type.
-
-One point worth mentioning here is that if the MODE_SELECT register
-is not configured, the chip will operate according to a default which is=20
-chosen by an external pin (sorry if this was not detailed enough in commit =
-msg)
-From the datasheet:
--------------------
-| PORT | 4 | I | Tri-level input pin to indicate port mode. The state of th=
-is pin is sampled when HD3SS3220's
-		ENn_CC is asserted low, and VDD5 is active. This pin is also sampled foll=
-owing a
-		I2C_SOFT_RESET.
-		H - DFP (Pull-up to VDD5 if DFP mode is desired)
-		NC - DRP (Leave unconnected if DRP mode is desired)
-		L - UFP (Pull-down or tie to GND if UFP mode is desired)
-
-In our use case, it was not desirable to leave this default based on wiring=
-,
-and it makes more sense to me to allow the configuration to come from
-the fwnode property. Hence the port type setting in probe().
-
->=20
-> >  static const struct typec_operations hd3ss3220_ops =3D {
-> > -     .dr_set =3D hd3ss3220_dr_set
-> > +     .dr_set =3D hd3ss3220_dr_set,
-> > +     .port_type_set =3D hd3ss3220_port_type_set,
-> >  };
->=20
-> So here I think you should implement the pr_set callback instead.
-
-I can do that, but based on the MODE_SELECT register description,=20
-it seems to me that this setting is fundamentally changing the operation
-mode of the chip, i.e. the state machine that is being run for initial conn=
-ection.
-So there would have to be a way of "resetting" it to be a dual-role port ag=
-ain,
-which the "pr_set" callback doesn't seem to have?
-	This register can be written to set the HD3SS3220 mode
-	operation. The ADDR pin must be set to I2C mode. If the default
-	is maintained, HD3SS3220 shall operate according to the PORT
-	pin levels and modes. The MODE_SELECT can only be
-	changed when in the unattached state.
-	00 - DRP mode (start from unattached.SNK) (default)
-	01 - UFP mode (unattached.SNK)
-	10 - DFP mode (unattached.SRC)
-	11 - DRP mode (start from unattached.SNK)
-
->=20
-> Let me kwno wh
->=20
-> >  static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
-> > @@ -273,6 +333,10 @@ static int hd3ss3220_probe(struct i2c_client
-> *client)
-> >       if (ret !=3D 0 && ret !=3D -EINVAL && ret !=3D -ENXIO)
-> >               goto err_put_role;
-> >
-> > +     ret =3D hd3ss3220_set_port_type(hd3ss3220, typec_cap.type);
-> > +     if (ret < 0)
-> > +             goto err_put_role;
-> > +
-> >       hd3ss3220->port =3D typec_register_port(&client->dev, &typec_cap)=
-;
-> >       if (IS_ERR(hd3ss3220->port)) {
-> >               ret =3D PTR_ERR(hd3ss3220->port);
-> >
->=20
-> thanks,
->=20
-> --
-> heikki
-
-Thanks!
-Oliver
 
