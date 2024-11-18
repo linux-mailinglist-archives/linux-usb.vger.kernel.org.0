@@ -1,342 +1,260 @@
-Return-Path: <linux-usb+bounces-17665-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17666-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5B319D0702
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 00:27:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8DC49D081E
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 04:13:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DA65B21D42
-	for <lists+linux-usb@lfdr.de>; Sun, 17 Nov 2024 23:27:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50CDCB2166B
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 03:13:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C721DE2CA;
-	Sun, 17 Nov 2024 23:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0241846447;
+	Mon, 18 Nov 2024 03:13:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="qGqB1ALo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sundtek.de (sundtek.de [85.10.198.106])
+Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013057.outbound.protection.outlook.com [40.107.44.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2505C1DDA37
-	for <linux-usb@vger.kernel.org>; Sun, 17 Nov 2024 23:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.198.106
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731886041; cv=none; b=BAE/6tUlfch5svIZrQ6W8DSRlnptbtJGgyEsv8HwnD8CntPJX2DVGPQNtNSN4a3oLY/Ld+6LDKnOGT15M7dGHu/3co8YLi6XaBbQXu2BhsOyONCo8ITY+JkroQZk/P7qkPjT0my4SHoap370B6ZLL+5IWJ+ijKV/iWl4oBI0bCY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731886041; c=relaxed/simple;
-	bh=SiZrIa7IMhWCH1/3xGaryyfBG/bxqIefnGhJK9s/8hQ=;
-	h=Message-ID:Subject:From:To:Cc:Date:References:Content-Type:
-	 MIME-Version; b=PwSJxi6kvY5NH+vAsZ41auwulFEL0T7gkNYHwtyKAdXadDdj/Ymn1jw14sUfKr11W4PtsDwjHNRx2P7FMetfpi5mT8yDjDH5VdSnFAszoogPvs0amlkmcP3ldPiWlporpyhwgQaVJgzmBy518rLcUIogmC8URWHnSc3cquqDGUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de; spf=pass smtp.mailfrom=sundtek.de; arc=none smtp.client-ip=85.10.198.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sundtek.de
-Received: from Debian-exim by sundtek.de with spam-scanned (Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tCofj-0001JO-DB
-	for linux-usb@vger.kernel.org;
-	Mon, 18 Nov 2024 00:27:17 +0100
-Received: from 1-175-135-24.dynamic-ip.hinet.net ([1.175.135.24] helo=[192.168.2.197])
-	by sundtek.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tCofb-0001IF-8a;
-	Mon, 18 Nov 2024 00:27:07 +0100
-Message-ID: <03c1ae453f2781dbcf3a5ea607640c696b748848.camel@sundtek.de>
-Subject: [PATCH] XHCI NULL Pointer check in xhci_check_bw_table
-From: Markus Rechberger <linuxusb.ml@sundtek.de>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Date: Mon, 18 Nov 2024 07:27:03 +0800
-References: <b90d48df16cf74bb682af870cd71d7c5cc4a9d97.camel@sundtek.de>
-Content-Type: multipart/mixed; boundary="=-5urReUzQZxabI7oEQTBX"
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 055D62110E;
+	Mon, 18 Nov 2024 03:13:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.57
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1731899583; cv=fail; b=qyiR6e/ms7xFvKnxYmzeVcjI4UafD66SsotD1N3NjVKir1udn9apd8IZf39jzujMPUfxQttII7/arcOqz6gwdpASySXhJR6+eS+PLY8EVoiaqNEA67i/ZSweAVZkVwsHwMI2Kmqs487VqN//tMiKl1+UEdrQ0kLnFq+gkYglx8w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1731899583; c=relaxed/simple;
+	bh=XxKyxSvONLbTqk6AgaKx+MOzbGV5bIA42g7k7d8BrCs=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=tTu7DI7q8Ma8HxOeU2C0geTd9Yz2j/8Y13Hi2o2d4vzxdKzaNGhg2KmdBzqy/n0Ts/85G0d+H2UIzJM/Hp+jXNBrQ5LSOIU/gZZONDXIzFdR+OI8t/7s/WjJ1kbx7YFcfL/KR9H8vnu7694RFJfxZZGWFx0GwfLznNWhiXlT9oI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=qGqB1ALo; arc=fail smtp.client-ip=40.107.44.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=b/Kn5e8Z4OAut6+wo/qmwvCt5AITqlXUmmDrXVa4XSxnTV5yNYDh5Rz5mz/Uk7h1kjWLJseLdo4XGSuuztT+987hBvdx6wPA49LMydrml6tHUYDqQ7y721ym2FktkO0k4SbC46Q0THBAII2CPlJtJa8tKqJu8xEcF01aWO9K70NyV+p3J/e8482J7qqGqlHGw3gb9hN/XPOR7J7uaJaw1O6pwzJ5dVApMKuurG5w6OIJI/IsxfIDuoclvF0veWP8qwaP+GsI44LmSueEI1PqdYnXziH5zqHrfl16xWYWmxOXH+Pqj6I8awtKbvJDsWgRpy85wwFHGzG8eQJukKFSMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XxKyxSvONLbTqk6AgaKx+MOzbGV5bIA42g7k7d8BrCs=;
+ b=jfTrMNz69CsfiR6ClwmKRq4QP2cxq8uVFv2IuF6YU/Qmn/usZ1S2om3kk021UfKsaut2TcndhyGdxPwDfZkjxoc2vC1c/+GJrS9FvDOkBgbkK3vDthqa7Ye/fW80pOPkKdAbVFRepG/fT4dNA6DJq9BIsmsnJkisekcnHpfntbB/7gfKIr2DE/TQeJ0A+p0OsKoIhgCh1UKFGBUzJaU9crPRhQmCHF2tHvttAESBhMjoiP91wUSQrbVHJawN1za1OV02gQI65K9cmrd7flW/RzzpTVxXVbplyh7JwX1va5sBSuNgKzFoh75yzKxn5X01ZwtZnlk7RxE8jTTa8cWMpA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=XxKyxSvONLbTqk6AgaKx+MOzbGV5bIA42g7k7d8BrCs=;
+ b=qGqB1ALoz4J6naARwLQyKYaKCeyqyDRLf+ZMRRjWjG8azYqlB+SOPKkwlcmgYoz6tlCnmn0TrTpCEq93mZJ0vxxoiEFnt5FC+jIelsUHcug3GnhCm5v0Gibo6H0R3wVaGH+gtpjsI3N5lUTCSGhaociEn5j0iEdywTNnjMsAeu4/VKYLI5VODxDCnS42M29YGRoGG/ApaoaZmoYTjv8cD8fsy7spV/3o8W4FwRuZ1zc2jwTkaWrX2jYrhQIyvcBWMAsazADx6VQh7dQIpjDZo0H5o58p+tmVMxmrB4vvLeBbMXPv4bCLgbkZushANbRtsSPmaq/2tXd2tbHokX+fJw==
+Received: from TYUPR06MB6217.apcprd06.prod.outlook.com (2603:1096:400:358::7)
+ by KL1PR06MB6845.apcprd06.prod.outlook.com (2603:1096:820:10d::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.11; Mon, 18 Nov
+ 2024 03:12:54 +0000
+Received: from TYUPR06MB6217.apcprd06.prod.outlook.com
+ ([fe80::c18d:f7c6:7590:64fe]) by TYUPR06MB6217.apcprd06.prod.outlook.com
+ ([fe80::c18d:f7c6:7590:64fe%6]) with mapi id 15.20.8182.011; Mon, 18 Nov 2024
+ 03:12:54 +0000
+From: =?gb2312?B?uvrBrMfa?= <hulianqin@vivo.com>
+To: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>, "mwalle@kernel.org"
+	<mwalle@kernel.org>, Prashanth K <quic_prashk@quicinc.com>
+CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	opensource.kernel <opensource.kernel@vivo.com>, =?gb2312?B?uvrBrMfa?=
+	<hulianqin@vivo.com>
+Subject: [PATCH] usb: gadget: u_serial: Fix the issue that gs_start_io crashed
+ due to accessing null pointer
+Thread-Topic: [PATCH] usb: gadget: u_serial: Fix the issue that gs_start_io
+ crashed due to accessing null pointer
+Thread-Index: Ads5Z1bjTgbcKYBiSvSmNoAzjrMY+A==
+Date: Mon, 18 Nov 2024 03:12:54 +0000
+Message-ID:
+ <TYUPR06MB621737D16F68B5ABD6CF5772D2272@TYUPR06MB6217.apcprd06.prod.outlook.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYUPR06MB6217:EE_|KL1PR06MB6845:EE_
+x-ms-office365-filtering-correlation-id: c2626aa1-177a-48ea-fa0c-08dd077ee4e6
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?gb2312?B?OE9yUnV1RTlCRVdQaUs5R2crM3BIVmoxbXlYaFF5Zk5pY3Y3bTZwQXhkNTZ1?=
+ =?gb2312?B?K0ZyM0RLc3ZrQXM3amNteFFnczhoWFVFY0h0MXV5OXFsQzgvZGtjajNJYUt1?=
+ =?gb2312?B?aGtxUVhjeExxSkNJaWRoNExjVkN6WGZCbXJzdkNoRW94QUtzOXo0UzNaaERt?=
+ =?gb2312?B?Q3hkNEFwUHRBM2Z1SEVzd242d201VjExelZIL0lBTkZBNkZwV2hzem1kalQv?=
+ =?gb2312?B?MnFLWVR6WkNCblhIRGpnd242U2NzYlBsQUgyUXloUVFJdEhrQkgvditDTCsy?=
+ =?gb2312?B?TXRyc0lFT3lsdzFROVNXdjNRb1FqQS9VRFo0MHN3Y3RIMTlYU0llTHcvblJ3?=
+ =?gb2312?B?cDU2dkpkUHFSWGpmN21RUTl2M0FoRHNIVGhUb2hHZjU2VEZremhIcFFBLzVR?=
+ =?gb2312?B?OFZmOTBTelF6WHlWRmxLTmJoWjhPbGp4U0VOVWRVdHZpVFlBSXBmeEN1L1ps?=
+ =?gb2312?B?WDh0UlFKdVA0M1hqV01jdnVBM2ZmRFlxZ3VhbmZWbzdyNTB1S0xISldnZDB3?=
+ =?gb2312?B?RGFxc1B3NEs5b2JIUkdiRVRiV3plejhzanBNUXRtK2l5bWVZeGJkaVNLVE1u?=
+ =?gb2312?B?Y2E5Z0JWYk45QnhSbHMxVFc3U0I1c3Rzc3RoencvNXpCTXR5dlFQSCszK0dF?=
+ =?gb2312?B?cXdXaFFuNHYwa0pqWFhsSlplWnpNY0UxVnZiZ1JydUtma2IreThJYVZRdHhF?=
+ =?gb2312?B?QmV4VjAzSE56VHRUM3ZRbmg2NG9WWnZmcnBwQTZnVS96SGJFbmcvU3loNmpI?=
+ =?gb2312?B?d01jTUd5VURIQm1oalBhc1c2d2xyZmd0ZHM0RERxbWpIWGNHY2pPUEhPNWxT?=
+ =?gb2312?B?TGRwdFZselRLUm5HbUVQRGJ5TnE1bTZndjBRQ01kQ3RVZ1BodVZ0SjI1MTYx?=
+ =?gb2312?B?Ym1sTTFJTlJjNHdJcE91Y0IraU12aDFMVWxnZDRRVDgzOWhOQ1JOZlkwMmpC?=
+ =?gb2312?B?Nlc0OWN2em1JMS9md2F0Z0l6Zk9UTm0wUDFPNTlZb0ZralF0clE5Nk93QTZX?=
+ =?gb2312?B?clV1TnVOdTN3dVdrcEl3Y01iZ0Z3ZjBMNUZkSGtSUnQ5ZXZtYms4RnN5OVVI?=
+ =?gb2312?B?T2xhV2dHQy9PS1FOUHdrRzZuK1JCd285WDQ0RnZWUnUybllpYUtTMW1DK2Nq?=
+ =?gb2312?B?S1kzRmlmR0VGaGJVd1RFTFdybVRJUytZLzhQMnNpVmVjSUZCQk9zQkVDVHpF?=
+ =?gb2312?B?YlY4eTRwYUJsbG1vWnFvTUZMRXpzTVUwSC9VSEIwbUdXRGFmVzZRdXN3UWJX?=
+ =?gb2312?B?bDJ1YXFsbWUrN2wydG04N3BJUjBSU2o5YXRSdHk3WWx0VlJTeXRLckthcXpU?=
+ =?gb2312?B?c1hxcTNTMU1JR3VHR2swRDJtSjd3MjgzQmZGcVZxMVluYmhlR0RCZDAzaUVC?=
+ =?gb2312?B?MXZyQ3pyV2dleWJrTUgzcW4yUHpCTEo1UUFMSU90YW1TbFNxdk9aMFFmSUNT?=
+ =?gb2312?B?d20wcVFSZ3hVbStpaS9zV2tiRjR5NGIyaHZHZUcrVGFTMmpDaU1pVzZYLzFU?=
+ =?gb2312?B?RXIwNlZuTnphMFhaTk9NSThZeHE5OU9xMG9RQXl6ZHJRcVEzZDRYcStFNEVu?=
+ =?gb2312?B?alJqR2FXRmZDQzNoRDBGaFlZUDFmQTd6cFRqTnpQdkcvTjJ2ZDRiUGFleFlM?=
+ =?gb2312?B?MkEvZjBEV3hYMFJOU0N0ekFMTkhHVlM2R29ZVitkcHVvbTdUZmZ2U1FIQ3pv?=
+ =?gb2312?B?bkU2eXArbVJtcWFWT1pIdlF2K3NyWVFtUkFFMGwrd2s3TGxDZFlyNlhzd0Rz?=
+ =?gb2312?B?elllSk5jMTRDM1dEZ1VKSEtSZlg1bW9rV3lOTy9vZ1N3T1VMbVlJOE12NHpC?=
+ =?gb2312?Q?3vV6vCiG0MueheGjUnQ8YftVNnWnmmkrF9UHQ=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYUPR06MB6217.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?gb2312?B?dDFkMFYvVzlMc2FiQlM1ZWwyMDlJNUpPK0dhTWFmbnpFWVF6azZRdlA5bi9j?=
+ =?gb2312?B?bmZ6RFFkcTJSYmRPS004MUV0US9PWGU1bXN6Y0w4aFYvMGZCdzU0SDZOR0ZR?=
+ =?gb2312?B?ZEVGekh2VkV6TjREaUNhVWpQTmhzQ1VTZlZURHozbG4wSkV1UHRoRjNrQ1A0?=
+ =?gb2312?B?bGMzTmhBc01VTkc2UUxpa0NTY0s0bmRNT1VLNlQ0cGJEVlpRRjN5TjFBcy9o?=
+ =?gb2312?B?TDZFcEFSNitMcko3dFhjL2dhSVp1WDl3UnVUSyt4a1NQK3pKVEUzTEk4MWkx?=
+ =?gb2312?B?ZlhOUkpsa2h2ZDZLT2dzQ1ExTVF1ZkhvQjloK2cvN2ZmY3JYRldRUlcwRlRl?=
+ =?gb2312?B?UXdheWJlTyt6dmpRMGRSSlo4djhTbXZCOGk2NnFUVFp0MkZLZ2ZWQjhERE8z?=
+ =?gb2312?B?eDJ6ZVFZc3NyZGxWSTVzdlcxaGIyeW5UK0ZXbm1UNWVjRHYxOHFnWUF3SHNE?=
+ =?gb2312?B?MTM0a21Gc05aTEI3b2t3azBCTExJL0hKTEdEWVBvTE5TeUxiOTZRdUlTRU9C?=
+ =?gb2312?B?MHdjS2dabmpoejl3L2FGRURjck1kbXliRGcyWGJiV0ZaK09nTk4rSzdvYUxV?=
+ =?gb2312?B?UXpJc0Y4bjh2Q0I1N0twUWRadStqckttWURsUERkUG9helR1NGhZallzY2R0?=
+ =?gb2312?B?WEVJeGg2S1lKKzVvbmVPZm1qSXVWbnA0dGRicE9WVTREa2dNTzFFT2dCdDdM?=
+ =?gb2312?B?M0dhdG5BK2lnZ0M1YnBEcEtBcXArcXpQS0FWMU8rYTBIZFRiQUFkNk1VTmd1?=
+ =?gb2312?B?SExZais5ak16OGg0T1RiS29kd2hlQTBPM01kdC9sc2E4elRBeXlWWWFSV3Bw?=
+ =?gb2312?B?b2NiTERHUHJNaFh0RHU0a1YvUHMvNFkxMkJpRy9XbGlMbm9hQXpVb0VCczdy?=
+ =?gb2312?B?WXB3SG9BMEpMU1krbEJML1R4RWxtSEl1S21ZVHRwcm1JTkx4bVVxYVBhRW5q?=
+ =?gb2312?B?S1pZb2c4Q3gxcFV1dlBWUThhUVM2S3BhemtPZDJCTGRZYTRRZndwTVg0eGVD?=
+ =?gb2312?B?VUtTZERQMm5KRWNjRjRUT2JYMHdrR1A1aHZWYVhzdUU4UGYwSkgvQkNPSHZ3?=
+ =?gb2312?B?cU50anRNUWpheXBZV1ltM3hUVEdkMGIrc3NuZTFiZDVVenBac0lWSCszNXV6?=
+ =?gb2312?B?RmRNME1EbFBDakc0Q2Ewczl4R1Z3ZlBBZTBNK1FpNXBxMmxJRUQvbXJpbU5C?=
+ =?gb2312?B?RU45QjJlODFsL0hhN2ZVK29raHcxTFJabjZDZ2lTTlRTYitQV1luaGh3amVs?=
+ =?gb2312?B?M3dQRy8vMmFoN1Q4cFZBTzE5SzJnT0w2RVBkTFIybGZSMnBHSFhZMThuYWtQ?=
+ =?gb2312?B?UzdvY1BxOFlqcU5MYXlzSVV5M0xLVFY1YlVNcnRxeTJVSFFWQXdmeGs3Y054?=
+ =?gb2312?B?NGZBRjNabGM2ZUJobmthYmxaZS9jemNBcXB0dzNyV0JRQ2tCMTRyQ0FZbkZo?=
+ =?gb2312?B?My9zUUUzS2w1RUI5SWg2QTh2R0ZlY3ozbWlqRFRwY1dOaHp3OTUrYTJES3RI?=
+ =?gb2312?B?OGt3NEpXYWkyRmh5bjFnTGl1VmlCV0ZtNWtWNmMzNTZFZGF0Z0I3czZJdUJT?=
+ =?gb2312?B?d08xK1hUMS9FckowOHpPYkdtZGFyVDNzYkVsRjl5elNIMmozUlJrdkJjWWZG?=
+ =?gb2312?B?d2VxbWR6WC9hTEY3c0wrTVFaYXFEdit6eTJZT0tHeTF2V1hLUDNMdVJBR0hY?=
+ =?gb2312?B?UTBmL25Zak5kaVlLQkNzK3BGem5CbEx3TTB0R0RMS2NEK0ZPckt6di9zdUgw?=
+ =?gb2312?B?TUR4MGhNWHN3SkNIT1dKbmF0VnhjNXVITkg2ZUIzU0JPVEw2TGpiVGdrN0M5?=
+ =?gb2312?B?bEllMFZoQ1BrckpRRXdXSWljWVdoTkpTV3BYNVFQeUZnZ2NBbVQ3RVdTWHJC?=
+ =?gb2312?B?b3ZDNURQdFE0dkIwb0NXdFEvSXU1VVFESEMvMXFQbGpsUGVNeFFyRzh4c0F3?=
+ =?gb2312?B?SFJESnFkU2RvYVFQN0JpZXFJRGIzanpzSEs3aXlJSWNZRFV3UjFqQ0RBOEt2?=
+ =?gb2312?B?UzNrV2E3c29aZVhFVndkYUlhRG9kbXNZdUN5U3JaZ2RGeEFHeU5rYXlDdDUv?=
+ =?gb2312?B?a1V6V3JGT21iN2xvQS9BL0dtR2JoSGIvQjArRGo0VnpPU2JPaW03a0orbHJm?=
+ =?gb2312?Q?EvaU=3D?=
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: linuxusb.ml@sundtek.de
-X-SA-Exim-Scanned: No (on sundtek.de); SAEximRunCond expanded to false
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYUPR06MB6217.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c2626aa1-177a-48ea-fa0c-08dd077ee4e6
+X-MS-Exchange-CrossTenant-originalarrivaltime: 18 Nov 2024 03:12:54.3869
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: +YtjMYaEoTP0wAsBliUGRTfSQ68eQAfpDjJcwm930sJQIreJNH/6MTnirWbE3tJZidrHpH3mM07PAISLibMHVw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR06MB6845
 
---=-5urReUzQZxabI7oEQTBX
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-This patch fixes a NULL Pointer exception when a device using the XHCI
-controller driver is not properly initialized. It's relatively easy to
-reproduce with a faulty connection to a USB Harddisk / USB Ethernet
-adapter.=C2=A0
-The way I used for testing this patch was to short USB D+/D- and pull
-them to ground.
-
-We manufacture our own USB devices and use Linux for testing, lately we
-upgraded the system to Ubuntu noble with Kernel 6.8.0 and our system
-also crashed multiple times just when plugging in some devices (no
-commands need to be executed).
-We connect/disconnect devices > 100 times (eg uploading firmware, do
-electrical tests etc).
-
-I would rate this issue as highly critical.
-The problem is triggered via some fallback code in hub.c, a second
-patch will follow which
-removes the endpoint reset in the particular fallback.
-
-2024-11-16T22:14:09.701229+08:00 sundtek-UX32VD kernel: usb 3-2: new
-full-speed USB device number 64 using xhci_hcd
-2024-11-16T22:14:09.816295+08:00 sundtek-UX32VD kernel: usb 3-2: device
-descriptor read/64, error -71
-2024-11-16T22:14:10.006157+08:00 sundtek-UX32VD kernel: audit:
-type=3D1400 audit(1731766450.004:3206): apparmor=3D"DENIED"
-operation=3D"open" class=3D"file" profile=3D"snap.skype.skype"
-name=3D"/sys/devices/pci0000:00/ACPI0003:00/power_supply/AC0/online"
-pid=3D4839 comm=3D"skypeforlinux" requested_mask=3D"r" denied_mask=3D"r"
-fsuid=3D1000 ouid=3D0
-2024-11-16T22:14:10.035263+08:00 sundtek-UX32VD kernel: usb 3-2: device
-descriptor read/64, error -71
-2024-11-16T22:14:10.251221+08:00 sundtek-UX32VD kernel: usb 3-2: new
-full-speed USB device number 65 using xhci_hcd
-2024-11-16T22:14:10.365247+08:00 sundtek-UX32VD kernel: usb 3-2: device
-descriptor read/64, error -71
-2024-11-16T22:14:10.587264+08:00 sundtek-UX32VD kernel: usb 3-2: device
-descriptor read/64, error -71
-2024-11-16T22:14:10.689265+08:00 sundtek-UX32VD kernel: usb usb3-port2:
-attempt power cycle
-2024-11-16T22:14:11.006217+08:00 sundtek-UX32VD kernel: audit:
-type=3D1400 audit(1731766451.004:3207): apparmor=3D"DENIED"
-operation=3D"open" class=3D"file" profile=3D"snap.skype.skype"
-name=3D"/sys/devices/pci0000:00/ACPI0003:00/power_supply/AC0/online"
-pid=3D4839 comm=3D"skypeforlinux" requested_mask=3D"r" denied_mask=3D"r"
-fsuid=3D1000 ouid=3D0
-2024-11-16T22:14:11.069247+08:00 sundtek-UX32VD kernel: usb 3-2: new
-full-speed USB device number 66 using xhci_hcd
-2024-11-16T22:14:11.069347+08:00 sundtek-UX32VD kernel: usb 3-2: Device
-not responding to setup address.
-2024-11-16T22:14:11.273256+08:00 sundtek-UX32VD kernel: usb 3-2: Device
-not responding to setup address.
-2024-11-16T22:14:12.122162+08:00 sundtek-UX32VD kernel: usb 3-2: device
-not accepting address 66, error -71
-2024-11-16T22:14:12.122196+08:00 sundtek-UX32VD kernel: BUG: kernel
-NULL pointer dereference, address: 0000000000000020
-2024-11-16T22:14:12.122203+08:00 sundtek-UX32VD kernel: #PF: supervisor
-read access in kernel mode
-2024-11-16T22:14:12.122206+08:00 sundtek-UX32VD kernel: #PF:
-error_code(0x0000) - not-present page
-2024-11-16T22:14:12.122210+08:00 sundtek-UX32VD kernel: PGD 0 P4D 0=20
-2024-11-16T22:14:12.122214+08:00 sundtek-UX32VD kernel: Oops: 0000 [#1]
-PREEMPT SMP PTI
-2024-11-16T22:14:12.122216+08:00 sundtek-UX32VD kernel: CPU: 2 PID:
-15600 Comm: kworker/2:1 Not tainted 6.8.0-48-generic #48-Ubuntu
-2024-11-16T22:14:12.122219+08:00 sundtek-UX32VD kernel: Hardware name:
-ASUSTeK COMPUTER INC. UX32VD/UX32VD, BIOS UX32VD.214 01/29/2013
-2024-11-16T22:14:12.122221+08:00 sundtek-UX32VD kernel: Workqueue:
-usb_hub_wq hub_event
-2024-11-16T22:14:12.122224+08:00 sundtek-UX32VD kernel: RIP:
-0010:xhci_check_bw_table+0x100/0x4d0
-2024-11-16T22:14:12.122227+08:00 sundtek-UX32VD kernel: Code: c7 c2 60
-35 70 9f 48 c7 c6 70 aa 79 9e 4c 89 55 c0 4c 89 5d d0 e8 d0 c7 01 00 4c
-8b 5d d0 4c 8b 55 c0 4c 8b 4d b8 41 8d 47 ff <41> 8b 4a 20 31 d2 45 8b
-72 08 89 45 d0 41 03 02 41 f7 f7 ba 80 00
-2024-11-16T22:14:12.122231+08:00 sundtek-UX32VD kernel: RSP:
-0018:ffffc3774ebeb758 EFLAGS: 00010046
-2024-11-16T22:14:12.122234+08:00 sundtek-UX32VD kernel: RAX:
-0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-2024-11-16T22:14:12.122236+08:00 sundtek-UX32VD kernel: RDX:
-0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-2024-11-16T22:14:12.122239+08:00 sundtek-UX32VD kernel: RBP:
-ffffc3774ebeb7c0 R08: 0000000000000000 R09: ffff9fcad3566000
-2024-11-16T22:14:12.122242+08:00 sundtek-UX32VD kernel: R10:
-0000000000000000 R11: ffff9fc9cc687260 R12: ffffc37741131000
-2024-11-16T22:14:12.122245+08:00 sundtek-UX32VD kernel: R13:
-0000000000000000 R14: ffff9fcad3566000 R15: 0000000000000001
-2024-11-16T22:14:12.122247+08:00 sundtek-UX32VD kernel: FS:=20
-0000000000000000(0000) GS:ffff9fcb65700000(0000) knlGS:0000000000000000
-2024-11-16T22:14:12.122250+08:00 sundtek-UX32VD kernel: CS:=C2=A0 0010 DS:
-0000 ES: 0000 CR0: 0000000080050033
-2024-11-16T22:14:12.122252+08:00 sundtek-UX32VD kernel: CR2:
-0000000000000020 CR3: 000000021c23c005 CR4: 00000000001706f0
-2024-11-16T22:14:12.122254+08:00 sundtek-UX32VD kernel: Call Trace:
-2024-11-16T22:14:12.122257+08:00 sundtek-UX32VD kernel:=C2=A0 <TASK>
-2024-11-16T22:14:12.122259+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-show_regs+0x6d/0x80
-2024-11-16T22:14:12.122261+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-__die+0x24/0x80
-2024-11-16T22:14:12.122263+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-page_fault_oops+0x99/0x1b0
-2024-11-16T22:14:12.122265+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-kernelmode_fixup_or_oops.isra.0+0x69/0x90
-2024-11-16T22:14:12.122267+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-__bad_area_nosemaphore+0x19d/0x2c0
-2024-11-16T22:14:12.122269+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-update_sg_lb_stats+0x97/0x5c0
-2024-11-16T22:14:12.122271+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-bad_area_nosemaphore+0x16/0x30
-2024-11-16T22:14:12.122273+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-do_user_addr_fault+0x29c/0x670
-2024-11-16T22:14:12.122275+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-exc_page_fault+0x83/0x1b0
-2024-11-16T22:14:12.122276+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-asm_exc_page_fault+0x27/0x30
-2024-11-16T22:14:12.122279+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-xhci_check_bw_table+0x100/0x4d0
-2024-11-16T22:14:12.122281+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-xhci_check_bw_table+0x357/0x4d0
-2024-11-16T22:14:12.122283+08:00 sundtek-UX32VD kernel:=20
-xhci_reserve_bandwidth+0x298/0xb20
-2024-11-16T22:14:12.122286+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-update_load_avg+0x82/0x850
-2024-11-16T22:14:12.122288+08:00 sundtek-UX32VD kernel:=20
-xhci_configure_endpoint+0xa8/0x730
-2024-11-16T22:14:12.122291+08:00 sundtek-UX32VD kernel:=20
-xhci_check_ep0_maxpacket.isra.0+0x14e/0x1d0
-2024-11-16T22:14:12.122293+08:00 sundtek-UX32VD kernel:=20
-xhci_endpoint_reset+0x254/0x4a0
-2024-11-16T22:14:12.122295+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-_raw_spin_lock_irqsave+0xe/0x20
-2024-11-16T22:14:12.122298+08:00 sundtek-UX32VD kernel:=20
-usb_hcd_reset_endpoint+0x28/0xa0
-2024-11-16T22:14:12.122300+08:00 sundtek-UX32VD kernel:=20
-usb_enable_endpoint+0x8c/0xa0
-2024-11-16T22:14:12.122302+08:00 sundtek-UX32VD kernel:=20
-hub_port_connect+0x176/0xb70
-2024-11-16T22:14:12.122305+08:00 sundtek-UX32VD kernel:=20
-hub_port_connect_change+0x88/0x2b0
-2024-11-16T22:14:12.122307+08:00 sundtek-UX32VD kernel:=20
-port_event+0x651/0x810
-2024-11-16T22:14:12.122309+08:00 sundtek-UX32VD kernel:=20
-hub_event+0x14a/0x450
-2024-11-16T22:14:12.122311+08:00 sundtek-UX32VD kernel:=20
-process_one_work+0x178/0x350
-2024-11-16T22:14:12.122313+08:00 sundtek-UX32VD kernel:=20
-worker_thread+0x306/0x440
-2024-11-16T22:14:12.122316+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-_raw_spin_lock_irqsave+0xe/0x20
-2024-11-16T22:14:12.122318+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-__pfx_worker_thread+0x10/0x10
-2024-11-16T22:14:12.122321+08:00 sundtek-UX32VD kernel:=20
-kthread+0xf2/0x120
-2024-11-16T22:14:12.122323+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-__pfx_kthread+0x10/0x10
-2024-11-16T22:14:12.122325+08:00 sundtek-UX32VD kernel:=20
-ret_from_fork+0x47/0x70
-2024-11-16T22:14:12.122327+08:00 sundtek-UX32VD kernel:=C2=A0 ?
-__pfx_kthread+0x10/0x10
-2024-11-16T22:14:12.122329+08:00 sundtek-UX32VD kernel:=20
-ret_from_fork_asm+0x1b/0x30
-2024-11-16T22:14:12.122331+08:00 sundtek-UX32VD kernel:=C2=A0 </TASK>
-2024-11-16T22:14:12.122334+08:00 sundtek-UX32VD kernel: Modules linked
-in: cpuid ufs qnx4 hfsplus hfs minix ntfs msdos jfs nls_ucs2_utils xfs
-usbtest rfcomm snd_seq_dummy snd_hrtimer qrtr uhid hid cmac algif_hash
-algif_skcipher af_alg bnep sunrpc snd_hda_codec_hdmi intel_rapl_msr
-intel_rapl_common binfmt_misc snd_hda_codec_realtek
-x86_pkg_temp_thermal snd_hda_codec_generic intel_powerclamp coretemp
-kvm_intel snd_hda_intel snd_intel_dspcfg snd_intel_sdw_acpi uvcvideo
-snd_hda_codec kvm videobuf2_vmalloc snd_hda_core uvc btusb snd_hwdep
-irqbypass videobuf2_memops snd_pcm btrtl videobuf2_v4l2 iwldvm
-rtsx_usb_ms btintel videodev btbcm rapl btmtk at24 mei_pxp mei_hdcp
-memstick nls_iso8859_1 mac80211 asus_nb_wmi videobuf2_common mfd_aaeon
-libarc4 mc i915 snd_seq_midi bluetooth snd_seq_midi_event snd_rawmidi
-intel_cstate asus_wmi iwlwifi ledtrig_audio ecdh_generic sparse_keymap
-platform_profile i2c_i801 ecc mxm_wmi drm_buddy wmi_bmof snd_seq
-i2c_smbus cfg80211 ttm snd_seq_device snd_timer drm_display_helper snd
-acpi_als mei_me cec soundcore
-2024-11-16T22:14:12.122337+08:00 sundtek-UX32VD kernel:=20
-industrialio_triggered_buffer rc_core lpc_ich mei i2c_algo_bit
-int3400_thermal kfifo_buf int3402_thermal industrialio int3403_thermal
-acpi_thermal_rel asus_wireless int340x_thermal_zone joydev input_leds
-mac_hid serio_raw sch_fq_codel msr parport_pc ppdev lp parport
-efi_pstore nfnetlink dmi_sysfs ip_tables x_tables autofs4 btrfs
-blake2b_generic raid10 raid456 async_raid6_recov async_memcpy async_pq
-async_xor async_tx xor raid6_pq libcrc32c raid1 raid0 rtsx_usb_sdmmc
-rtsx_usb crct10dif_pclmul crc32_pclmul polyval_clmulni polyval_generic
-ghash_clmulni_intel sha256_ssse3 sha1_ssse3 video psmouse ahci xhci_pci
-libahci xhci_pci_renesas wmi aesni_intel crypto_simd cryptd
-2024-11-16T22:14:12.122340+08:00 sundtek-UX32VD kernel: CR2:
-0000000000000020
-2024-11-16T22:14:12.122342+08:00 sundtek-UX32VD kernel: ---[ end trace
-0000000000000000 ]---
-2024-11-16T22:14:12.122344+08:00 sundtek-UX32VD kernel: RIP:
-0010:xhci_check_bw_table+0x100/0x4d0
-2024-11-16T22:14:12.122346+08:00 sundtek-UX32VD kernel: Code: c7 c2 60
-35 70 9f 48 c7 c6 70 aa 79 9e 4c 89 55 c0 4c 89 5d d0 e8 d0 c7 01 00 4c
-8b 5d d0 4c 8b 55 c0 4c 8b 4d b8 41 8d 47 ff <41> 8b 4a 20 31 d2 45 8b
-72 08 89 45 d0 41 03 02 41 f7 f7 ba 80 00
-2024-11-16T22:14:12.122349+08:00 sundtek-UX32VD kernel: RSP:
-0018:ffffc3774ebeb758 EFLAGS: 00010046
-2024-11-16T22:14:12.122352+08:00 sundtek-UX32VD kernel: RAX:
-0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-2024-11-16T22:14:12.122355+08:00 sundtek-UX32VD kernel: RDX:
-0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-2024-11-16T22:14:12.122357+08:00 sundtek-UX32VD kernel: RBP:
-ffffc3774ebeb7c0 R08: 0000000000000000 R09: ffff9fcad3566000
-2024-11-16T22:14:12.122359+08:00 sundtek-UX32VD kernel: R10:
-0000000000000000 R11: ffff9fc9cc687260 R12: ffffc37741131000
-2024-11-16T22:14:12.122361+08:00 sundtek-UX32VD kernel: R13:
-0000000000000000 R14: ffff9fcad3566000 R15: 0000000000000001
-2024-11-16T22:14:12.122363+08:00 sundtek-UX32VD kernel: FS:=20
-0000000000000000(0000) GS:ffff9fcb65700000(0000) knlGS:0000000000000000
-2024-11-16T22:14:12.122366+08:00 sundtek-UX32VD kernel: CS:=C2=A0 0010 DS:
-0000 ES: 0000 CR0: 0000000080050033
-2024-11-16T22:14:12.122368+08:00 sundtek-UX32VD kernel: CR2:
-0000000000000020 CR3: 000000011ffde004 CR4: 00000000001706f0
-2024-11-16T22:14:12.122371+08:00 sundtek-UX32VD kernel: note:
-kworker/2:1[15600] exited with irqs disabled
-2024-11-16T22:14:12.122373+08:00 sundtek-UX32VD kernel: note:
-kworker/2:1[15600] exited with preempt_count 1
-
-Signed-off-by: Markus Rechberger <linuxusb.ml@sundtek.de>
-
-This patch diff --git a/drivers/usb/host/xhci.c
-b/drivers/usb/host/xhci.c
-index 899c0effb5d3..f054e262176c 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -2380,6 +2380,17 @@ static int xhci_check_bw_table(struct xhci_hcd
-*xhci,
-=C2=A0	}
-=C2=A0
-=C2=A0	bw_table =3D virt_dev->bw_table;
-+
-+	/* second line of defense, this should not happen if bw_table
-+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 is not initialized this calculation s=
-hould not be called
-+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 any issue with bw_table is supposed t=
-o be handled earlier
-+	*/
-+	if (bw_table =3D=3D NULL) {
-+		xhci_warn(xhci, "bw_table =3D=3D NULL, this should not
-happen\n"
-+				"please report\n");
-+		return -ENOMEM;
-+	}
-+
-=C2=A0	/* We need to translate the max packet size and max ESIT
-payloads into
-=C2=A0	 * the units the hardware uses.
-=C2=A0	 */
-
-
-
---=-5urReUzQZxabI7oEQTBX
-Content-Disposition: attachment; filename="xhci_bwtable_check.diff"
-Content-Type: text/x-patch; name="xhci_bwtable_check.diff"; charset="UTF-8"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2hvc3QveGhjaS5jIGIvZHJpdmVycy91c2IvaG9zdC94
-aGNpLmMKaW5kZXggODk5YzBlZmZiNWQzLi5mMDU0ZTI2MjE3NmMgMTAwNjQ0Ci0tLSBhL2RyaXZl
-cnMvdXNiL2hvc3QveGhjaS5jCisrKyBiL2RyaXZlcnMvdXNiL2hvc3QveGhjaS5jCkBAIC0yMzgw
-LDYgKzIzODAsMTcgQEAgc3RhdGljIGludCB4aGNpX2NoZWNrX2J3X3RhYmxlKHN0cnVjdCB4aGNp
-X2hjZCAqeGhjaSwKIAl9CiAKIAlid190YWJsZSA9IHZpcnRfZGV2LT5id190YWJsZTsKKworCS8q
-IHNlY29uZCBsaW5lIG9mIGRlZmVuc2UsIHRoaXMgc2hvdWxkIG5vdCBoYXBwZW4gaWYgYndfdGFi
-bGUKKyAgICAgICBpcyBub3QgaW5pdGlhbGl6ZWQgdGhpcyBjYWxjdWxhdGlvbiBzaG91bGQgbm90
-IGJlIGNhbGxlZAorICAgICAgIGFueSBpc3N1ZSB3aXRoIGJ3X3RhYmxlIGlzIHN1cHBvc2VkIHRv
-IGJlIGhhbmRsZWQgZWFybGllcgorCSovCisJaWYgKGJ3X3RhYmxlID09IE5VTEwpIHsKKwkJeGhj
-aV93YXJuKHhoY2ksICJid190YWJsZSA9PSBOVUxMLCB0aGlzIHNob3VsZCBub3QgaGFwcGVuXG4i
-CisJCQkJInBsZWFzZSByZXBvcnRcbiIpOworCQlyZXR1cm4gLUVOT01FTTsKKwl9CisKIAkvKiBX
-ZSBuZWVkIHRvIHRyYW5zbGF0ZSB0aGUgbWF4IHBhY2tldCBzaXplIGFuZCBtYXggRVNJVCBwYXls
-b2FkcyBpbnRvCiAJICogdGhlIHVuaXRzIHRoZSBoYXJkd2FyZSB1c2VzLgogCSAqLwo=
-
-
-
---=-5urReUzQZxabI7oEQTBX--
+RnJvbTogTGlhbnFpbiBIdSA8aHVsaWFucWluQHZpdm8uY29tPg0KDQpDb25zaWRlcmluZyB0aGF0
+IGluIHNvbWUgZXh0cmVtZSBjYXNlcywNCndoZW4gdV9zZXJpYWwgZHJpdmVyIGlzIGFjY2Vzc2Vk
+IGJ5IG11bHRpcGxlIHRocmVhZHMsDQpUaHJlYWQgQSBpcyBleGVjdXRpbmcgdGhlIG9wZW4gb3Bl
+cmF0aW9uIGFuZCBjYWxsaW5nIHRoZSBnc19vcGVuLA0KVGhyZWFkIEIgaXMgZXhlY3V0aW5nIHRo
+ZSBkaXNjb25uZWN0IG9wZXJhdGlvbiBhbmQgY2FsbGluZyB0aGUNCmdzZXJpYWxfZGlzY29ubmVj
+dCBmdW5jdGlvbixUaGUgcG9ydC0+cG9ydF91c2IgcG9pbnRlciB3aWxsIGJlIHNldCB0byBOVUxM
+Lg0KDQpFLmcuDQogICAgVGhyZWFkIEEgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBU
+aHJlYWQgQg0KDQogICAgZ3Nfb3BlbigpICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBn
+YWRnZXRfdW5iaW5kX2RyaXZlcigpDQoNCiAgICBnc19zdGFydF9pbygpICAgICAgICAgICAgICAg
+ICAgICAgICAgICAgIGNvbXBvc2l0ZV9kaXNjb25uZWN0KCkNCg0KICAgIGdzX3N0YXJ0X3J4KCkg
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgZ3NlcmlhbF9kaXNjb25uZWN0KCkNCiAgICAuLi4g
+ICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIC4uLg0KICAgIHNwaW5fdW5sb2Nr
+KCZwb3J0LT5wb3J0X2xvY2spDQogICAgc3RhdHVzID0gdXNiX2VwX3F1ZXVlKCkgICAgICAgICAg
+ICAgICAgICBzcGluX2xvY2soJnBvcnQtPnBvcnRfbG9jaykNCiAgICBzcGluX2xvY2soJnBvcnQt
+PnBvcnRfbG9jaykgICAgICAgICAgICAgIHBvcnQtPnBvcnRfdXNiID0gTlVMTA0KICAgIGdzX2Zy
+ZWVfcmVxdWVzdHMocG9ydC0+cG9ydF91c2ItPmluKSAgICAgc3Bpbl91bmxvY2soJnBvcnQtPnBv
+cnRfbG9jaykNCiAgICBDcmFzaA0KDQpUaGlzIGNhdXNlcyB0aHJlYWQgQSB0byBhY2Nlc3MgYSBu
+dWxsIHBvaW50ZXIgKHBvcnQtPnBvcnRfdXNiIGlzIG51bGwpDQp3aGVuIGNhbGxpbmcgdGhlIGdz
+X2ZyZWVfcmVxdWVzdHMgZnVuY3Rpb24sIGNhdXNpbmcgYSBjcmFzaC4NCg0KVG8gc29sdmUgdGhp
+cyBwcm9ibGVtLCBhZGQgdGhlIHJlYWRfYnVzeSBmbGFnLCBiZWZvcmUgc2V0dGluZyBwb3J0X3Vz
+Yg0KdG8gbnVsbCBpbiBnc2VyaWFsX2Rpc2Nvbm5lY3QsIGFkZCB0aGUgcmVhZF9idXN5IGZsYWcg
+anVkZ21lbnQuDQoNClVuYWJsZSB0byBoYW5kbGUga2VybmVsIE5VTEwgcG9pbnRlciBkZXJlZmVy
+ZW5jZSBhdA0KdmlydHVhbCBhZGRyZXNzIDAwMDAwMDAwMDAwMDAwZTgNCnBjIDogZ3Nfc3RhcnRf
+aW8rMHgxNjQvMHgyNWMNCmxyIDogZ3Nfc3RhcnRfaW8rMHgyMzgvMHgyNWMNCnNwIDogZmZmZmZm
+YzA4Yjc1YmEwMA0KeDI5OiBmZmZmZmZjMDhiNzViYTAwIHgyODogZmZmZmZmZWQ4YmEwMTAwMCB4
+Mjc6IDAwMDAwMDAwMDAwMjA5MDINCngyNjogZGVhZDAwMDAwMDAwMDEwMCB4MjU6IGZmZmZmZjg5
+OWY0M2E0MDAgeDI0OiBmZmZmZmY4ODYyMzI1NDAwDQp4MjM6IGZmZmZmZjg4NjIzMjU2YTQgeDIy
+OiBmZmZmZmY4ODYyMzI1NjkwIHgyMTogZmZmZmZmODg2MjMyNTVlYw0KeDIwOiBmZmZmZmY4ODYy
+MzI1NWQ4IHgxOTogZmZmZmZmODg1ZTE5ZDcwMCB4MTg6IGZmZmZmZmVkOGM0NWFlNDANCngxNzog
+MDAwMDAwMDBkNDhkMzBhZCB4MTY6IDAwMDAwMDAwZDQ4ZDMwYWQgeDE1OiAwMDEwMDAwMDAwMDAw
+MDAxDQp4MTQ6IGZmZmZmZmVkOGM1MGZjYzAgeDEzOiAwMDAwMDAwMDQwMDAwMDAwIHgxMjogMDAw
+MDAwMDAwMDAwMDAwMQ0KeDExOiAwMDAwMDAwMDgwMjAwMDEyIHgxMDogMDAwMDAwMDA4MDIwMDAx
+MiB4OSA6IGZmZmZmZjg4NjIzMjU1ZDgNCng4IDogMDAwMDAwMDAwMDAwMDAwMCB4NyA6IDAwMDAw
+MDAwMDAwMDAwMDAgeDYgOiAwMDAwMDAwMDAwMDAwMDNmDQp4NSA6IGZmZmZmZmVkOGFlMGI5YTQg
+eDQgOiBmZmZmZmZmZTI2N2QwZWEwIHgzIDogMDAwMDAwMDA4MDIwMDAxMg0KeDIgOiBmZmZmZmY4
+OTlmNDNhNDAwIHgxIDogMDAwMDAwMDA4MDIwMDAxMyB4MCA6IGZmZmZmZjg5OWY0M2IxMDANCkNh
+bGwgdHJhY2U6DQogZ3Nfc3RhcnRfaW8rMHgxNjQvMHgyNWMNCiBnc19vcGVuKzB4MTA4LzB4MTNj
+DQogdHR5X29wZW4rMHgzMTQvMHg2MzgNCiBjaHJkZXZfb3BlbisweDFiOC8weDI1OA0KIGRvX2Rl
+bnRyeV9vcGVuKzB4MmM0LzB4NzAwDQogdmZzX29wZW4rMHgyYy8weDNjDQogcGF0aF9vcGVuYXQr
+MHhhNjQvMHhjNjANCiBkb19maWxwX29wZW4rMHhiOC8weDE2NA0KIGRvX3N5c19vcGVuYXQyKzB4
+ODQvMHhmMA0KIF9fYXJtNjRfc3lzX29wZW5hdCsweDcwLzB4OWMNCiBpbnZva2Vfc3lzY2FsbCsw
+eDU4LzB4MTE0DQogZWwwX3N2Y19jb21tb24rMHg4MC8weGUwDQogZG9fZWwwX3N2YysweDFjLzB4
+MjgNCiBlbDBfc3ZjKzB4MzgvMHg2OA0KIGVsMHRfNjRfc3luY19oYW5kbGVyKzB4NjgvMHhiYw0K
+IGVsMHRfNjRfc3luYysweDFhOC8weDFhYw0KQ29kZTogZjJmYmQ1YmEgZWIxNDAxM2YgNTQwMDA0
+YTEgZjk0MGU3MDggKGY5NDA3NTEzKQ0KLS0tWyBlbmQgdHJhY2UgMDAwMDAwMDAwMDAwMDAwMCBd
+LS0tDQoNClNpZ25lZC1vZmYtYnk6IExpYW5xaW4gSHUgPGh1bGlhbnFpbkB2aXZvLmNvbT4NCi0t
+LQ0KIGRyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91X3NlcmlhbC5jIHwgMjUgKysrKysrKysr
+KysrKysrLS0tLS0tLS0tLQ0KIDEgZmlsZSBjaGFuZ2VkLCAxNSBpbnNlcnRpb25zKCspLCAxMCBk
+ZWxldGlvbnMoLSkNCg0KZGlmZiAtLWdpdCBhL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlvbi91
+X3NlcmlhbC5jIGIvZHJpdmVycy91c2IvZ2FkZ2V0L2Z1bmN0aW9uL3Vfc2VyaWFsLmMNCmluZGV4
+IDBhOGMwNWIyNzQ2Yi4uOWFiMmRiZWQ2MGE4IDEwMDY0NA0KLS0tIGEvZHJpdmVycy91c2IvZ2Fk
+Z2V0L2Z1bmN0aW9uL3Vfc2VyaWFsLmMNCisrKyBiL2RyaXZlcnMvdXNiL2dhZGdldC9mdW5jdGlv
+bi91X3NlcmlhbC5jDQpAQCAtMTI0LDYgKzEyNCw3IEBAIHN0cnVjdCBnc19wb3J0IHsNCiAJc3Ry
+dWN0IGtmaWZvCQlwb3J0X3dyaXRlX2J1ZjsNCiAJd2FpdF9xdWV1ZV9oZWFkX3QJZHJhaW5fd2Fp
+dDsJLyogd2FpdCB3aGlsZSB3cml0ZXMgZHJhaW4gKi8NCiAJYm9vbCAgICAgICAgICAgICAgICAg
+ICAgd3JpdGVfYnVzeTsNCisJYm9vbCAgICAgICAgICAgICAgICAgICAgcmVhZF9idXN5Ow0KIAl3
+YWl0X3F1ZXVlX2hlYWRfdAljbG9zZV93YWl0Ow0KIAlib29sCQkJc3VzcGVuZGVkOwkvKiBwb3J0
+IHN1c3BlbmRlZCAqLw0KIAlib29sCQkJc3RhcnRfZGVsYXllZDsJLyogZGVsYXkgc3RhcnQgd2hl
+biBzdXNwZW5kZWQgKi8NCkBAIC0zMzEsOSArMzMyLDExIEBAIF9fYWNxdWlyZXMoJnBvcnQtPnBv
+cnRfbG9jaykNCiAJCS8qIGRyb3AgbG9jayB3aGlsZSB3ZSBjYWxsIG91dDsgdGhlIGNvbnRyb2xs
+ZXIgZHJpdmVyDQogCQkgKiBtYXkgbmVlZCB0byBjYWxsIHVzIGJhY2sgKGUuZy4gZm9yIGRpc2Nv
+bm5lY3QpDQogCQkgKi8NCisJCXBvcnQtPnJlYWRfYnVzeSA9IHRydWU7DQogCQlzcGluX3VubG9j
+aygmcG9ydC0+cG9ydF9sb2NrKTsNCiAJCXN0YXR1cyA9IHVzYl9lcF9xdWV1ZShvdXQsIHJlcSwg
+R0ZQX0FUT01JQyk7DQogCQlzcGluX2xvY2soJnBvcnQtPnBvcnRfbG9jayk7DQorCQlwb3J0LT5y
+ZWFkX2J1c3kgPSBmYWxzZTsNCiANCiAJCWlmIChzdGF0dXMpIHsNCiAJCQlwcl9kZWJ1ZygiJXM6
+ICVzICVzIGVyciAlZFxuIiwNCkBAIC0xNDEyLDE5ICsxNDE1LDIxIEBAIHZvaWQgZ3NlcmlhbF9k
+aXNjb25uZWN0KHN0cnVjdCBnc2VyaWFsICpnc2VyKQ0KIAkvKiB0ZWxsIHRoZSBUVFkgZ2x1ZSBu
+b3QgdG8gZG8gSS9PIGhlcmUgYW55IG1vcmUgKi8NCiAJc3Bpbl9sb2NrKCZwb3J0LT5wb3J0X2xv
+Y2spOw0KIA0KLQlnc19jb25zb2xlX2Rpc2Nvbm5lY3QocG9ydCk7DQorCWlmICghcG9ydC0+cmVh
+ZF9idXN5KSB7DQorCQlnc19jb25zb2xlX2Rpc2Nvbm5lY3QocG9ydCk7DQogDQotCS8qIFJFVklT
+SVQgYXMgYWJvdmU6IGhvdyBiZXN0IHRvIHRyYWNrIHRoaXM/ICovDQotCXBvcnQtPnBvcnRfbGlu
+ZV9jb2RpbmcgPSBnc2VyLT5wb3J0X2xpbmVfY29kaW5nOw0KKwkJLyogUkVWSVNJVCBhcyBhYm92
+ZTogaG93IGJlc3QgdG8gdHJhY2sgdGhpcz8gKi8NCisJCXBvcnQtPnBvcnRfbGluZV9jb2Rpbmcg
+PSBnc2VyLT5wb3J0X2xpbmVfY29kaW5nOw0KIA0KLQlwb3J0LT5wb3J0X3VzYiA9IE5VTEw7DQot
+CWdzZXItPmlvcG9ydCA9IE5VTEw7DQotCWlmIChwb3J0LT5wb3J0LmNvdW50ID4gMCkgew0KLQkJ
+d2FrZV91cF9pbnRlcnJ1cHRpYmxlKCZwb3J0LT5kcmFpbl93YWl0KTsNCi0JCWlmIChwb3J0LT5w
+b3J0LnR0eSkNCi0JCQl0dHlfaGFuZ3VwKHBvcnQtPnBvcnQudHR5KTsNCisJCXBvcnQtPnBvcnRf
+dXNiID0gTlVMTDsNCisJCWdzZXItPmlvcG9ydCA9IE5VTEw7DQorCQlpZiAocG9ydC0+cG9ydC5j
+b3VudCA+IDApIHsNCisJCQl3YWtlX3VwX2ludGVycnVwdGlibGUoJnBvcnQtPmRyYWluX3dhaXQp
+Ow0KKwkJCWlmIChwb3J0LT5wb3J0LnR0eSkNCisJCQkJdHR5X2hhbmd1cChwb3J0LT5wb3J0LnR0
+eSk7DQorCQl9DQorCQlwb3J0LT5zdXNwZW5kZWQgPSBmYWxzZTsNCiAJfQ0KLQlwb3J0LT5zdXNw
+ZW5kZWQgPSBmYWxzZTsNCiAJc3Bpbl91bmxvY2soJnBvcnQtPnBvcnRfbG9jayk7DQogCXNwaW5f
+dW5sb2NrX2lycXJlc3RvcmUoJnNlcmlhbF9wb3J0X2xvY2ssIGZsYWdzKTsNCiANCi0tIA0KMi4z
+OS4wDQoNCg==
 
