@@ -1,228 +1,131 @@
-Return-Path: <linux-usb+bounces-17667-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17668-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AF5C9D08B0
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 06:14:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46A529D08D7
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 06:29:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55EB7281A4B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 05:14:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B934281F29
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 05:29:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 713D313BAC3;
-	Mon, 18 Nov 2024 05:14:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C832913D50C;
+	Mon, 18 Nov 2024 05:29:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ou9PHM6G"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sundtek.de (sundtek.de [85.10.198.106])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB9FC126C1C
-	for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 05:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.198.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A69D013A863;
+	Mon, 18 Nov 2024 05:29:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731906867; cv=none; b=C0As5gK5lTPoutT85DrLywxJ50nxUdznyFTppvsuYJG8/f+zfUDccSaY6WcN+TrbG5ozbBCQ71psoRpxqWBj4eFq0T/yIMdJACGNF/GzLBYnGvR6sYzH9mkA9q2B0udzZVAUcHg6KLk3BUHjMfwwGNN7hojqKMHStWXsa43hy8k=
+	t=1731907749; cv=none; b=qnH/VUPO57+0uTfiKlvmp3Z/qCJd/fGOjVfsidHUl/fQ1x51JfYtKIqn37SDXpe5z4G+kdqZIV3ASQmOeCkI3Mvk1KhrdUQpUa6u4Xq1Lj+Fe1lqjZROrVKckUmVdKMkMfyGIDoqUkDyv6FeGlCrqz5PdAizi3RuptteqvtGNJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731906867; c=relaxed/simple;
-	bh=QENXeW/sJ1ZIGrsu67Dxc0YkIdtz94gfQCpiSJmi1mc=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=a66v0oAt2dyy0rErYCZ5kRAzXckAP1CpuZVMI9sHYm7eUhq54++2ZlTR504sRI9thwDuwrgIBo2f6UtpxAeUGOBwf7gaMXNO+mbVbUpN4c0pEzQ+0cXf1Qc5CdwzGI6EK00l0jLmosIsUeUpONJCBbsDAWdspQcL5FAehVc8Ilc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de; spf=pass smtp.mailfrom=sundtek.de; arc=none smtp.client-ip=85.10.198.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sundtek.de
-Received: from Debian-exim by sundtek.de with spam-scanned (Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tCu5c-0006LA-IX
-	for linux-usb@vger.kernel.org;
-	Mon, 18 Nov 2024 06:14:22 +0100
-Received: from 1-175-135-24.dynamic-ip.hinet.net ([1.175.135.24] helo=[192.168.2.197])
-	by sundtek.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tCu5W-0006Kq-F5;
-	Mon, 18 Nov 2024 06:14:14 +0100
-Message-ID: <f34636ebeda843de9329ac0aa4ec51c6627a0e5c.camel@sundtek.de>
-Subject: Re: Highly critical bug in XHCI Controller
-From: Markus Rechberger <linuxusb.ml@sundtek.de>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Mon, 18 Nov 2024 13:14:09 +0800
-In-Reply-To: <dff9f24a-4aa2-45aa-920f-20876cf4ccbf@rowland.harvard.edu>
-References: <3905c1c88695e0ffcfabf700c06dd7223decef8d.camel@sundtek.de>
-	 <dd4239c7b0538e1cd2f2a85307c73299117d5f0e.camel@sundtek.de>
-	 <50f730ae-4918-4dac-88ec-b3632bee67e7@rowland.harvard.edu>
-	 <35c051354414ae9ef6e6b32b1a15a5dedf471176.camel@sundtek.de>
-	 <dff9f24a-4aa2-45aa-920f-20876cf4ccbf@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1731907749; c=relaxed/simple;
+	bh=kafwhTmqxxkxJfUeVx/8s1zWhgfrRKyVJu/EHmabrsM=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=INVsim+XIZzlWirqExFpGOAoYv5ZMzxSrF1PPBzfBABGm4isWYtiAiVLGyR2IC0RftCOy4CBR3qXboPz0tsWSZV0S/hiQJTa/riOAUIjFefCaxMF9hMz1L3cflLUNc/CPmd3ojlzp2qKosEJsXye68a7FiqPUHycsqHRYx3u4BM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ou9PHM6G; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AI5RdYR020043;
+	Mon, 18 Nov 2024 05:28:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=pwZBh2RtGY9XMlaWBuSL6g
+	ry5U44OKq8gOb0pkJc/zQ=; b=ou9PHM6GG8GhJGVl1F1KRWsR1rrd2MVHWLQ784
+	4iRSH2KcXW9tUB0V7AkkK+5L76O1PhNqbHz+7pc/0LZQUYa6kNv8TZ0Mxl+oZUH1
+	Dhduwtcniip2tTAlRAYYQrdcNGnGbYplGiTzNbcohzsS0oHrmUuPFDi/7YtGv1KC
+	IZqQr/9AzGGFb6LEEtlAkg3BruG2nPCVvnZrv/Y6VpFFZpxmJDvYFjZAsvsrzsCM
+	wrzQEKkRqstsZW/hDj1hfpkVFThWZIiBTlqmXwzjwKZFBNa06rtVHrUPDQqTfvME
+	Iv2rclw+QzbuYfe+7yZ2UquX3AtQGu5gRY2TuwbCIXi5OLxQ==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 42xksqkfux-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Nov 2024 05:28:58 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AI5SvKK004184
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 18 Nov 2024 05:28:57 GMT
+Received: from hu-varada-blr.qualcomm.com (10.80.80.8) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Sun, 17 Nov 2024 21:28:51 -0800
+From: Varadarajan Narayanan <quic_varada@quicinc.com>
+To: <vkoul@kernel.org>, <kishon@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <dmitry.baryshkov@linaro.org>,
+        <mantas@8devices.com>, <manivannan.sadhasivam@linaro.org>,
+        <abel.vesa@linaro.org>, <quic_kriskura@quicinc.com>,
+        <quic_rohiagar@quicinc.com>, <quic_kbajaj@quicinc.com>,
+        <quic_varada@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>
+Subject: [PATCH v4 0/6] Enable IPQ5424 USB support
+Date: Mon, 18 Nov 2024 10:58:33 +0530
+Message-ID: <20241118052839.382431-1-quic_varada@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: linuxusb.ml@sundtek.de
-X-SA-Exim-Scanned: No (on sundtek.de); SAEximRunCond expanded to false
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: jKxq4ZRDHj_iPZeYKlei5NIlD3r3-bZg
+X-Proofpoint-ORIG-GUID: jKxq4ZRDHj_iPZeYKlei5NIlD3r3-bZg
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=700 impostorscore=0 adultscore=0 spamscore=0 bulkscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1015 phishscore=0 mlxscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411180046
+
+The IPQ5424 SoC has both USB2.0 and USB3.0 controllers. The USB3.0
+can connect to either of USB2.0 or USB3.0 phy and operate in the
+respective mode.
+
+v4: Fix regulator names to match with other Qualcomm DT files
+
+v3: Added reviewed-by to one of the patches
+    dts: regulator node names changed
+
+v2: Added acked-by and reviewed-by to few of the patches
+    Changed uppercase hex digits to lowercase
+    dts: add more interrupts & quirks as suggested in the review
+
+Varadarajan Narayanan (6):
+  dt-bindings: phy: qcom,qusb2: Document IPQ5424 compatible
+  phy: qcom-qusb2: add QUSB2 support for IPQ5424
+  dt-bindings: phy: qcom,qmp-usb: Add IPQ5424 USB3 PHY
+  phy: qcom: qmp: Enable IPQ5424 support
+  dt-bindings: usb: qcom,dwc3: Add IPQ5424 to USB DWC3 bindings
+  arm64: dts: qcom: Add USB controller and phy nodes for IPQ5424
+
+ .../bindings/phy/qcom,qusb2-phy.yaml          |   1 +
+ .../phy/qcom,sc8280xp-qmp-usb3-uni-phy.yaml   |   2 +
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |   1 +
+ arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts   |  66 ++++++++
+ arch/arm64/boot/dts/qcom/ipq5424.dtsi         | 159 ++++++++++++++++++
+ drivers/phy/qualcomm/phy-qcom-qmp-usb.c       |   3 +
+ drivers/phy/qualcomm/phy-qcom-qusb2.c         |  28 +++
+ 7 files changed, 260 insertions(+)
 
 
-
-On Sun, 2024-11-17 at 16:02 -0500, Alan Stern wrote:
-> On Sun, Nov 17, 2024 at 11:47:52PM +0800, Markus Rechberger wrote:
-> > On Sun, 2024-11-17 at 10:18 -0500, Alan Stern wrote:
-> > > On Sun, Nov 17, 2024 at 08:44:16PM +0800, Markus Rechberger
-> > > wrote:
-> > > > Basically the issue comes from hub_port_connect.
-> > > >=20
-> > > > drivers/usb/core/hub.c
-> > > >=20
-> > > > hub_port_init returns -71 -EPROTO and jumps to loop
-> > > > https://github.com/torvalds/linux/blob/master/drivers/usb/core/hub.=
-c#L5450
-> > > >=20
-> > > > I'd question if usb_ep0_reinit is really required in loop which
-> > > > is
-> > > > running following functions:
->=20
-> > This should only go down there in case an error happened earlier
-> > no?
->=20
-> Of course, since -EPROTO indicates there was an error.
-
-Alan, first of all thank you for your feedback.
-
-Do you know any practical way how to test this?
-
->=20
-> > In case the hardware signed up correctly it should not even enter
-> > that
-> > code.
-> >=20
-> > My experience is just - reconnect the device in case an error
-> > happened
->=20
-> You can't reconnect some devices; they are permanently attached.=C2=A0
-> There=20
-> are other reasons why reconnecting might not be practical.
-
-
-I understand what you mean here but isn't it primarily about downsizing
-USB 2.0 -> USB 1.1?
-The next point would be if eg. an endpoint of a webcam downsizes to 1.1
-you don't have to expect a workable device because video would exceed
-the bandwidth easily.
-Do you know any practical example/hardware where this is really
-relevant?
-
-The failure handling will call the xhci reset which is not meant to be
-run without fully initialized data structures. In my case the driver
-returns -EPROTO (while the device is already disconnected), then first
-of all it tries to reset the endpoint which in the upstream kernel
-causes the NULL PTR exeption. For XHCI this code stream logic is simply
-not meant to be applied in such an error.
-My first submitted patch will solve the issue but just papers a higher
-logic issue.=20
-
->=20
-> > those
-> > workarounds did not work properly for the device I deal with (but
-> > yes
-> > that's
-> > why I'm asking - maybe someone else has different hardware with
-> > different
-> > experience).
->=20
-> I doubt we will hear from these people, because they will not realize
-> that anything was wrong.
->=20
-> In any case, it is generally recognized that the type of errors
-> leading=20
-> to -EPROTO (bad CRC or no response, for instance) can be temporary or
-> intermittent.=C2=A0 Retrying is an appropriate strategy.
->=20
-> > > > As a second issue I found in usb_reset_and_verify device=20
-> > > > https://github.com/torvalds/linux/blob/master/drivers/usb/core/hub.=
-c#L6131
-> > > >=20
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ret =3D hub_port_init(pa=
-rent_hub, udev, port1, i,
-> > > > &descriptor);
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (ret >=3D 0 || ret =
-=3D=3D -ENOTCONN || ret =3D=3D -ENODEV) {
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =
-break;
-> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 }
-> > > >=20
-> > > > hub_port_init can also return -71 / -EPROTO, the cases should
-> > > > be
-> > > > very
-> > > > rare when usb_reset_and_verify_device is triggered and that
-> > > > happens.
-> > >=20
-> > > If that happens, the loop which this code sits inside will simply
-> > > perform another iteration.=C2=A0 That's what=C2=A0 it's supposed to d=
-o, not
-> > > an=20
-> > > issue at all.
-> > >=20
-> >=20
-> > It doesn't cause any issue yes but it's not correct either.
->=20
-> Why not?=C2=A0 What's wrong with it?
->=20
-> > -EPROTO will be returned if I disconnect or short the device here.
-> > So
-> > initially someone
-> > thought he should check for -ENODEV/-ENOTCONN (which should also
-> > indicate that=C2=A0the=C2=A0device is gone), so -EPROTO should also be
-> > checked in
-> > that case.
-> > Otherwise just remove all those error checks.
->=20
-> -EPROTO does not necessarily indicate the device is gone; it
-> indicates=20
-> there was a problem communicating with the device.=C2=A0 The problem migh=
-t
-> be=20
-> caused by a disconnection, or it might be caused by temporary=20
-> electromagnetic interference (for example), or by something else.
-
-
-a bad CRC response on a short cable -  something has gone very wrong
-then.
-If there are temporary EMI issues ... I'd consider that an as an a
-absolute failure as well, they
-need to be handled in HW rather than a software workaround.
-
-In my experience with USB anything that is a 'temporary' failure can be
-considered as 'permanent' failure and I've really seen a lot over the
-last 1 1/2 decades.
-However issues are mostly related to immature controllers / missing
-quirks for some controllers.
-Our devices in the field since 2008 usually pump around 100-300mbit
-through the USB 2 link,
-streaming  devices which usually run for a long period of time (up to
-months / years).
-'retrying' something on a link where something has gone wrong for sure
-never worked properly for me, it would have continued with another
-followup issue at some point.
-
-I'm definitely in favor of telling the user if something went wrong
-either reconnect or submit a bug report for that particular device to
-add some quirk for special handling.
-
-Anyway can you give a particular example where this 'retrying'
-mechanism and reloading the endpoint size solves or solved a problem?
-Over the years people will certainly forget why this was implemented
-and take the code 'as is'
-and the next ones will just say it was always like that don't change.
-I don't mind keeping it as it is but it should be more clear / obvious
-why it's really done that
-way.
-
-Markus
->=20
-> Alan Stern
->=20
+base-commit: 744cf71b8bdfcdd77aaf58395e068b7457634b2c
+-- 
+2.34.1
 
 
