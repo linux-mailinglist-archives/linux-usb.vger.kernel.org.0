@@ -1,78 +1,86 @@
-Return-Path: <linux-usb+bounces-17694-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17695-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33D9A9D102B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 12:50:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E7269D110C
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 13:56:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC9BD1F2369B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 11:50:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4424328331E
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 12:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F103194A73;
-	Mon, 18 Nov 2024 11:49:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C477F19ABAB;
+	Mon, 18 Nov 2024 12:56:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X1BjMiFA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QowslvRV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53398190470;
-	Mon, 18 Nov 2024 11:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9692C1991B4
+	for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 12:56:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731930595; cv=none; b=uwvSiF31Wkkp4H2lH4c30W03m0qcekqj+aaovWu30nNbKfDi1ErZzb43vQo3BKm1OwU1VS5AWlTEfB3uvJdoA6Biazn2SDjaWzocIDhP6KNgEo162dLzTkCYrnmhjf5lK1UGSZyO/tD5lBqfc8p9EvYVa7M+spR3VUhH+mzGGaI=
+	t=1731934571; cv=none; b=rCQm1ojPmlB926WIhno+S/ixYrxYl7IYLcwLMB2qEY87+eXxSZyblF6n3w8tDrMLwZn9i3uz4f3/7DoC4fPsNVWYu6bZ115O0AtZ+I7CY/j1YW/SsF42k4sZvYSL/5YUyJ7qwBQgdubA2FRM5e5pRGP+gzb6dH5u99swElxb8MU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731930595; c=relaxed/simple;
-	bh=y/shz7LJykfGzzvEzrrxF6u6icM67RlSI5at4T/ucJY=;
+	s=arc-20240116; t=1731934571; c=relaxed/simple;
+	bh=GeWAFYEO669F+1bbu0zR8yfp+pZj13YEcoliIrUfJzQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PWjv5rkGdiW6qpGI2mXM4m9kUdlTetteul6nMmVhdAz5td4K4lSIDNGW6TwuszvMo+bQlrfPdWEkzsc4euN/J1jCOIq6VLLM93xJhLVY2IvGQEontZGy/IyXcN0w+mN119kg6JMQp+kjTPD/mBA2MCkevfyLZpgx11RUq+ZXMJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X1BjMiFA; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731930593; x=1763466593;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=y/shz7LJykfGzzvEzrrxF6u6icM67RlSI5at4T/ucJY=;
-  b=X1BjMiFAJFNumQrQSw2SPjI1+mrtjQqz+PRWbtam0DlG6iseR5ZOImzN
-   S8D7Cffb9GI1ymxFy4W+JiPHcH5Kk/inAU+aW4hloKKW4qTlKfmPQS8Jh
-   PS4MIZ/xs809M6Z0TU1vF4+4Wb2ogbDgUcMH2ljuoytd+UTAVLcJabt0U
-   HvQxuu4qCE3MDw4mzKwCRO5ny+cCHQH8rcZNpWbvrhaX7MYRwLQuJvCA4
-   cSqAHqaNoH42mQLjzxQIjQj2H2iUTfU2BFftcjBBcdmXj0cmyUcgS7OqK
-   LYhjF7zZqS7sRtps7EkE1XRmXkSWtTwXjV/6d7tAAW82DZziTUJB4DZyQ
-   Q==;
-X-CSE-ConnectionGUID: bVs1VyvYRGqFSUIVhoXdAA==
-X-CSE-MsgGUID: CVw8LPfDSTOEHYDXPLzkBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="32116551"
-X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
-   d="scan'208";a="32116551"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 03:49:48 -0800
-X-CSE-ConnectionGUID: Y5q5JUYXRHqqdGh1UVCO2g==
-X-CSE-MsgGUID: F8479wZnQm+mCm2oL3VcLg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,164,1728975600"; 
-   d="scan'208";a="89602526"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa007.jf.intel.com with SMTP; 18 Nov 2024 03:49:45 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Nov 2024 13:49:44 +0200
-Date: Mon, 18 Nov 2024 13:49:44 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Oliver Facklam <oliver.facklam@zuehlke.com>
-Cc: Biju Das <biju.das@bp.renesas.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Benedict von Heyl <benedict.vonheyl@zuehlke.com>,
-	Mathis Foerst <mathis.foerst@zuehlke.com>,
-	Michael Glettig <michael.glettig@zuehlke.com>
-Subject: Re: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring port
- type
-Message-ID: <Zzsp2JOhnnPPOWvB@kuha.fi.intel.com>
-References: <20241114-usb-typec-controller-enhancements-v2-0-362376856aea@zuehlke.com>
- <20241114-usb-typec-controller-enhancements-v2-3-362376856aea@zuehlke.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TzO5FRcsdqc1iCymLaDPW+ic+YeFjenCk8qZKBB2ZmnhwktpWH96ScPKAVI5qrxKP0XwLxXtQYrsY+NjOK4NEHwfcZO/cdM0DpMT2deNljnczn83t7uIK7bfiLc97DyX5fIi/7vLd0/AGbEGUNeJzCCxsxNWHUO3d1fQo5xrC+Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QowslvRV; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-53d9ff92b14so4275065e87.1
+        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 04:56:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1731934568; x=1732539368; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jAqwMGBkTmHKZ4CNoWBz4QXL8qsRGD9BwJ8T1sZ1LU8=;
+        b=QowslvRVYHIVzOIctggEZqu/EQzBnqzrAC0R1WBT/Oaa/WRvODHeupezsjz/VlC+mU
+         es0NDSZ0n7OLA18On4OMFa7RwqJj8O3wdjhYmKzAgxZAUpumiwFX8SXEsfau2ziiqWc2
+         sWI47f3x38ojxkHr39NztTpz6Y1MaS2ewHT1SeLvokVjSuo1VXhFMRzzkaZVeb1BUMnd
+         R/nHlcE6ey173ZHpB8gC19dS5gHDUE52cpRcTp66ynMIXNZYHLZBcCO/PhxMxiXRpMZt
+         L9AtQq3qRCwJhPnG2NmQBMCWwnJxnFf6BLfpNa9+WqqbDmbpahP/xtoRtJHv+1mZj3mQ
+         s7OQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731934568; x=1732539368;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jAqwMGBkTmHKZ4CNoWBz4QXL8qsRGD9BwJ8T1sZ1LU8=;
+        b=IvDfCxIOVzNv71yCUZwht2WMSozt74IKomirFerPFeUUQN15NZdBLVjxgyBhF3xfQY
+         MLXBLsA+qtLiSWHMFlYz1ypjxfBoAKvDHLNvtkvykN3S96Wg2nIit3Rn/YRNCTLwAKSb
+         PvqdEp0nxVTpt+BSIY49x2T8GDY8rOhxABzChnvRTwkTMyvGzcwfmPl5Wo4paQiOKhdO
+         rr/X/YVk8n+MHJGQtvoPzMrQm/TnGInSJ+UNz1N/8fAOIOpaYII4E7WzQxgkAhARUmVD
+         +rlw963fAOanCZqeiFgAPzVPdfWFlcUVvZ1EEc2JI0VDrGgaOvjxeKhXdwvUi4INMVLq
+         E8cw==
+X-Forwarded-Encrypted: i=1; AJvYcCXqcYL72fQMRk78wW68fPSjuQpqWRELjXC7iW3KYukrltN/5ohIX3ZMGgzOrcCLudU3OCfmE41i984=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxvYpr//dQK96pF8NgPs2lrN6MkXAGSkGezVtyB+7dUeKv/2rt
+	7wuh1B9NqT+zSJiGL7P4Hub3sy41aGrUrANhjUwp0N+NdB/GoStreM5SQSoj46M=
+X-Google-Smtp-Source: AGHT+IE1rwlqvuyY2O92e5DgZac5q8JPauzE9y+A00EL2MXWGS+FvI+OvGI5kWfZ80rMTLt0Z01AUQ==
+X-Received: by 2002:a05:6512:398e:b0:53c:7652:6c7a with SMTP id 2adb3069b0e04-53dab298aedmr3661459e87.8.1731934567633;
+        Mon, 18 Nov 2024 04:56:07 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53da6548e40sm1594497e87.258.2024.11.18.04.56.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Nov 2024 04:56:06 -0800 (PST)
+Date: Mon, 18 Nov 2024 14:56:04 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Varadarajan Narayanan <quic_varada@quicinc.com>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, gregkh@linuxfoundation.org, 
+	andersson@kernel.org, konradybcio@kernel.org, mantas@8devices.com, 
+	manivannan.sadhasivam@linaro.org, abel.vesa@linaro.org, quic_kriskura@quicinc.com, 
+	quic_rohiagar@quicinc.com, quic_kbajaj@quicinc.com, quic_wcheng@quicinc.com, 
+	linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v4 6/6] arm64: dts: qcom: Add USB controller and phy
+ nodes for IPQ5424
+Message-ID: <q3twp57aiwvsj2wimvszp7ecr5s4ldacxghzzepmxzcasgy5a4@nnqvq6tgruaa>
+References: <20241118052839.382431-1-quic_varada@quicinc.com>
+ <20241118052839.382431-7-quic_varada@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,184 +89,30 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241114-usb-typec-controller-enhancements-v2-3-362376856aea@zuehlke.com>
+In-Reply-To: <20241118052839.382431-7-quic_varada@quicinc.com>
 
-Hi Oliver,
-
-I'm sorry, I noticed a problem with this...
-
-On Thu, Nov 14, 2024 at 09:02:08AM +0100, Oliver Facklam wrote:
-> The TI HD3SS3220 Type-C controller supports configuring the port type
-> it will operate as through the MODE_SELECT field of the General
-> Control Register.
+On Mon, Nov 18, 2024 at 10:58:39AM +0530, Varadarajan Narayanan wrote:
+> The IPQ5424 SoC has both USB2.0 and USB3.0 controllers. The USB3.0
+> can connect to either of USB2.0 or USB3.0 phy and operate in the
+> respective mode.
 > 
-> Configure the port type based on the fwnode property "power-role"
-> during probe, and through the port_type_set typec_operation.
-> 
-> The MODE_SELECT field can only be changed when the controller is in
-> unattached state, so follow the sequence recommended by the datasheet to:
-> 1. disable termination on CC pins to disable the controller
-> 2. change the mode
-> 3. re-enable termination
-> 
-> This will effectively cause a connected device to disconnect
-> for the duration of the mode change.
-
-Changing the type of the port is really problematic, and IMO we should
-actually never support that.
-
-Consider for example, if your port is sink only, then the platform
-almost certainly can't drive the VBUS. This patch would still allow
-the port to be changed to source port.
-
-Sorry for not realising this in v1.
-
-I think what you want here is just a power role swap. Currently power
-role swap is only supported when USB PD is supported in the class
-code, but since the USB Type-C specification quite clearly states that
-power role and data role swap can be optionally supported even when
-USB PD is not supported (section 2.3.3) we need to fix that:
-
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 58f40156de56..ee81909565a4 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1535,11 +1535,6 @@ static ssize_t power_role_store(struct device *dev,
-                return -EOPNOTSUPP;
-        }
-
--       if (port->pwr_opmode != TYPEC_PWR_MODE_PD) {
--               dev_dbg(dev, "partner unable to swap power role\n");
--               return -EIO;
--       }
--
-        ret = sysfs_match_string(typec_roles, buf);
-        if (ret < 0)
-                return ret;
-
-
-After that it should be possible to do power role swap also in this
-driver when the port is DRP capable.
-
-> Signed-off-by: Oliver Facklam <oliver.facklam@zuehlke.com>
+> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
 > ---
->  drivers/usb/typec/hd3ss3220.c | 66 ++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 65 insertions(+), 1 deletion(-)
+> v4: Fix regulator names to match with other Qualcomm DT files
 > 
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index e581272bb47de95dee8363a5491f543354fcbbf8..e3e9b1597e3b09b82f0726a01f311fb60b4284da 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -35,10 +35,16 @@
->  #define HD3SS3220_REG_CN_STAT_CTRL_INT_STATUS		BIT(4)
->  
->  /* Register HD3SS3220_REG_GEN_CTRL*/
-> +#define HD3SS3220_REG_GEN_CTRL_DISABLE_TERM		BIT(0)
->  #define HD3SS3220_REG_GEN_CTRL_SRC_PREF_MASK		(BIT(2) | BIT(1))
->  #define HD3SS3220_REG_GEN_CTRL_SRC_PREF_DRP_DEFAULT	0x00
->  #define HD3SS3220_REG_GEN_CTRL_SRC_PREF_DRP_TRY_SNK	BIT(1)
->  #define HD3SS3220_REG_GEN_CTRL_SRC_PREF_DRP_TRY_SRC	(BIT(2) | BIT(1))
-> +#define HD3SS3220_REG_GEN_CTRL_MODE_SELECT_MASK		(BIT(5) | BIT(4))
-> +#define HD3SS3220_REG_GEN_CTRL_MODE_SELECT_DEFAULT	0x00
-> +#define HD3SS3220_REG_GEN_CTRL_MODE_SELECT_DFP		BIT(5)
-> +#define HD3SS3220_REG_GEN_CTRL_MODE_SELECT_UFP		BIT(4)
-> +#define HD3SS3220_REG_GEN_CTRL_MODE_SELECT_DRP		(BIT(5) | BIT(4))
->  
->  struct hd3ss3220 {
->  	struct device *dev;
-> @@ -75,6 +81,52 @@ static int hd3ss3220_set_power_opmode(struct hd3ss3220 *hd3ss3220, int power_opm
->  				  current_mode);
->  }
->  
-> +static int hd3ss3220_set_port_type(struct hd3ss3220 *hd3ss3220, int type)
-> +{
-> +	int mode_select, err;
-> +
-> +	switch (type) {
-> +	case TYPEC_PORT_SRC:
-> +		mode_select = HD3SS3220_REG_GEN_CTRL_MODE_SELECT_DFP;
-> +		break;
-> +	case TYPEC_PORT_SNK:
-> +		mode_select = HD3SS3220_REG_GEN_CTRL_MODE_SELECT_UFP;
-> +		break;
-> +	case TYPEC_PORT_DRP:
-> +		mode_select = HD3SS3220_REG_GEN_CTRL_MODE_SELECT_DRP;
-> +		break;
-> +	default:
-> +		dev_err(hd3ss3220->dev, "bad port type: %d\n", type);
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Disable termination before changing MODE_SELECT as required by datasheet */
-> +	err = regmap_update_bits(hd3ss3220->regmap, HD3SS3220_REG_GEN_CTRL,
-> +				 HD3SS3220_REG_GEN_CTRL_DISABLE_TERM,
-> +				 HD3SS3220_REG_GEN_CTRL_DISABLE_TERM);
-> +	if (err < 0) {
-> +		dev_err(hd3ss3220->dev, "Failed to disable port for mode change: %d\n", err);
-> +		return err;
-> +	}
-> +
-> +	err = regmap_update_bits(hd3ss3220->regmap, HD3SS3220_REG_GEN_CTRL,
-> +				 HD3SS3220_REG_GEN_CTRL_MODE_SELECT_MASK,
-> +				 mode_select);
-> +	if (err < 0) {
-> +		dev_err(hd3ss3220->dev, "Failed to change mode: %d\n", err);
-> +		regmap_update_bits(hd3ss3220->regmap, HD3SS3220_REG_GEN_CTRL,
-> +				   HD3SS3220_REG_GEN_CTRL_DISABLE_TERM, 0);
-> +		return err;
-> +	}
-> +
-> +	err = regmap_update_bits(hd3ss3220->regmap, HD3SS3220_REG_GEN_CTRL,
-> +				 HD3SS3220_REG_GEN_CTRL_DISABLE_TERM, 0);
-> +	if (err < 0)
-> +		dev_err(hd3ss3220->dev, "Failed to re-enable port after mode change: %d\n", err);
-> +
-> +	return err;
-> +}
-> +
->  static int hd3ss3220_set_source_pref(struct hd3ss3220 *hd3ss3220, int src_pref)
->  {
->  	return regmap_update_bits(hd3ss3220->regmap, HD3SS3220_REG_GEN_CTRL,
-> @@ -131,8 +183,16 @@ static int hd3ss3220_dr_set(struct typec_port *port, enum typec_data_role role)
->  	return ret;
->  }
->  
-> +static int hd3ss3220_port_type_set(struct typec_port *port, enum typec_port_type type)
-> +{
-> +	struct hd3ss3220 *hd3ss3220 = typec_get_drvdata(port);
-> +
-> +	return hd3ss3220_set_port_type(hd3ss3220, type);
-> +}
-
-This wrapper seems completely useless. You only need one function here
-for the callback.
-
->  static const struct typec_operations hd3ss3220_ops = {
-> -	.dr_set = hd3ss3220_dr_set
-> +	.dr_set = hd3ss3220_dr_set,
-> +	.port_type_set = hd3ss3220_port_type_set,
->  };
-
-So here I think you should implement the pr_set callback instead.
-
-Let me kwno wh
-
->  static void hd3ss3220_set_role(struct hd3ss3220 *hd3ss3220)
-> @@ -273,6 +333,10 @@ static int hd3ss3220_probe(struct i2c_client *client)
->  	if (ret != 0 && ret != -EINVAL && ret != -ENXIO)
->  		goto err_put_role;
->  
-> +	ret = hd3ss3220_set_port_type(hd3ss3220, typec_cap.type);
-> +	if (ret < 0)
-> +		goto err_put_role;
-> +
->  	hd3ss3220->port = typec_register_port(&client->dev, &typec_cap);
->  	if (IS_ERR(hd3ss3220->port)) {
->  		ret = PTR_ERR(hd3ss3220->port);
+> v3: Regulator node names, labels and 'regulator-name' changed per review suggestions
+>     Stray newline removed
+> 
+> v2: Add dm/dp_hs_phy_irq to usb3@8a00000 node
+>     Add u1/u2-entry quirks to usb@8a00000 node
+> ---
+>  arch/arm64/boot/dts/qcom/ipq5424-rdp466.dts |  66 ++++++++
+>  arch/arm64/boot/dts/qcom/ipq5424.dtsi       | 159 ++++++++++++++++++++
+>  2 files changed, 225 insertions(+)
 > 
 
-thanks,
-
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 -- 
-heikki
+With best wishes
+Dmitry
 
