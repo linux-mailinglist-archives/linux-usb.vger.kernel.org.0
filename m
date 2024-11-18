@@ -1,130 +1,197 @@
-Return-Path: <linux-usb+bounces-17684-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17685-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F1399D0C9B
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 10:52:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1C489D0DAC
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 11:03:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6943F28348C
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 09:52:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ED342B24B40
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 10:03:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5784E1940AA;
-	Mon, 18 Nov 2024 09:51:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AEBB18EFDE;
+	Mon, 18 Nov 2024 10:03:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KTbwSX+r"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sundtek.de (sundtek.de [85.10.198.106])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82406193418
-	for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 09:51:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.198.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C8338F9C;
+	Mon, 18 Nov 2024 10:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731923495; cv=none; b=nhNyhI9Dn4u3RZ3hgbLfDAcbI2W6naPhG/ktUxNRJyoCp2MGgvPoX6A+ZOsvwkjF8QxUSF170QbM7EOsMUyws6tNXRNt+QSAqJBIIejkx1FQCx0/M4vE8Ec2a6LDq4ZcrNkqHnSjRB/4jr2NiK1XyPc+B0ZuJkIDMsDL8r9BTK4=
+	t=1731924183; cv=none; b=T36Cps/g+KPxfs49t9YEXL0upZsQgTfjr+mgjeCvj9qLevNNIa2r6QXVTbiKN8aUPVQad6CewhXeFWHAcyC70EQpQTOmDzp6ge9XwxANtQ+bk2CcV2YJv3FN9kPSqbrvIGjfS9JthuIAaSLFWoNj+0fyKp5R79L6/uu4i+m4duM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731923495; c=relaxed/simple;
-	bh=AaOCuP6UOLNHz84wi5YfXqKDRWmgxfdi5kg06OdT494=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MbZM2hVdrIPsoBLRGe3YteaDILpG3XnwpXr7SWJPW7E8aCIs7gTPHpLz2LH5vog5xQ+jBtQuoHTRaVeXrqIgciBoiczxLPhnvqhgyOBZxNidP7zjF798fuJ+l0o2rAhthDEsyiksTtcXzrrtJFx6iEpCotb8VhSH6DXVF6NGfY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de; spf=pass smtp.mailfrom=sundtek.de; arc=none smtp.client-ip=85.10.198.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sundtek.de
-Received: from Debian-exim by sundtek.de with spam-scanned (Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tCyPp-000Awm-Li
-	for linux-usb@vger.kernel.org;
-	Mon, 18 Nov 2024 10:51:31 +0100
-Received: from 220-143-194-41.dynamic-ip.hinet.net ([220.143.194.41] helo=[192.168.2.197])
-	by sundtek.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tCyPX-000AwK-La;
-	Mon, 18 Nov 2024 10:51:11 +0100
-Message-ID: <4ce9b10dff6eecf78cee53b6f34d4e6f8df37b59.camel@sundtek.de>
-Subject: Re: [PATCH] XHCI NULL Pointer check in xhci_check_bw_table
-From: Markus Rechberger <linuxusb.ml@sundtek.de>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Cc: Greg KH <gregkh@linuxfoundation.org>
-Date: Mon, 18 Nov 2024 17:51:08 +0800
-In-Reply-To: <a02cfe06-b227-431f-baa1-a504857a8dea@linux.intel.com>
-References: <b90d48df16cf74bb682af870cd71d7c5cc4a9d97.camel@sundtek.de>
-	 <a02cfe06-b227-431f-baa1-a504857a8dea@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1731924183; c=relaxed/simple;
+	bh=oZC1ed1sfLvebXHdVBfc8m0S/2K29wIF9TyDeHdhG7Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dd5En+S3V2sq+kK0RA5s+eprDDJ8gz6kfMLLysY+kEY2K6KeLLoJ/UDrIMrO0FJQA6oV1xW40zF1vTuMsueMCPi6WRaRobBtYk+oPsTsRTNgM16cGJHqGQ5imMKmKZPlqN6dm3+CK+N2RaqKSYd5/Hkdm3tjgEAmeUGHvXeLW2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KTbwSX+r; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1731924183; x=1763460183;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oZC1ed1sfLvebXHdVBfc8m0S/2K29wIF9TyDeHdhG7Q=;
+  b=KTbwSX+rK6j2g7UzWh8VOPTuXYRg9vCIqJvW/5b4Mg1AHNGDjCQ+z0JD
+   3KyO5AowdP+Egp6Rq6k0WZ1m4NGLe/tmJcVLKPaGD5VF3nV+toAr4LtpG
+   RZamGylVRwCDgjX5TH2u1vELWYX1tiG5CDqvBuDnUAO0TsFyyPuchIVQX
+   5hUdotwgXUuGxlQmFd5T1MqYTYGnCL4AB4xoqjPlCvoiyJGfjlldsfP0D
+   bMK0jFmvv07gxLOv8Fcj/FcaGw2TKkD4sb5w+GrFbB33uixGNsiP5ypgZ
+   TzgnRU3Zpu+3cTMMaZTL5RJZouvNmnaqAPmKp4/EW7gZZXTurl9wLyyVM
+   A==;
+X-CSE-ConnectionGUID: 7DmdGUB7ScKNOC+6dY9X0A==
+X-CSE-MsgGUID: zheAlziiR9SNeaoflb5b4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="32011209"
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="32011209"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 02:03:02 -0800
+X-CSE-ConnectionGUID: JxIrzfjvQU+VJaOBLt3W5A==
+X-CSE-MsgGUID: AjZ+8XJHTTaY0MXTMmzA4A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
+   d="scan'208";a="89593924"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa010.fm.intel.com with SMTP; 18 Nov 2024 02:02:58 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Nov 2024 12:02:57 +0200
+Date: Mon, 18 Nov 2024 12:02:57 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Oliver Facklam <oliver.facklam@zuehlke.com>
+Cc: Biju Das <biju.das@bp.renesas.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Benedict von Heyl <benedict.vonheyl@zuehlke.com>,
+	Mathis Foerst <mathis.foerst@zuehlke.com>,
+	Michael Glettig <michael.glettig@zuehlke.com>
+Subject: Re: [PATCH v2 1/4] usb: typec: hd3ss3220: configure advertised power
+ opmode based on fwnode property
+Message-ID: <ZzsQ0QeFS6qWdHd6@kuha.fi.intel.com>
+References: <20241114-usb-typec-controller-enhancements-v2-0-362376856aea@zuehlke.com>
+ <20241114-usb-typec-controller-enhancements-v2-1-362376856aea@zuehlke.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: linuxusb.ml@sundtek.de
-X-SA-Exim-Scanned: No (on sundtek.de); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241114-usb-typec-controller-enhancements-v2-1-362376856aea@zuehlke.com>
 
-On Mon, 2024-11-18 at 11:36 +0200, Mathias Nyman wrote:
-> Hi
->=20
-> On 17.11.2024 17.32, Sundtek wrote:
-> > This patch fixes a NULL Pointer exception when a device using the
-> > XHCI
-> > controller driver is not properly initialized. It's relatively easy
-> > to
-> > reproduce with a faulty connection to a USB Harddisk / USB Ethernet
-> > adapter.
-> > The way I used for testing this patch was to short USB D+/D- and
-> > pull
-> > them to ground.
-> >=20
-> > We manufacture our own USB devices and use Linux for testing,
-> > lately we
-> > upgraded the system to Ubuntu noble with Kernel 6.8.0 and our
-> > system
-> > also crashed multiple times just when plugging in some devices (no
-> > commands need to be executed).
-> > We connect/disconnect devices > 100 times (eg uploading firmware,
-> > do
-> > electrical tests etc).
-> >=20
-> > I would rate this issue as highly critical.
-> > The problem is triggered via some fallback code in hub.c, a second
-> > patch will follow which
-> > removes the endpoint reset in the particular fallback.
-> >=20
->=20
->=20
-> > 2024-11-16T22:14:12.122224+08:00 sundtek-UX32VD kernel: RIP:
-> > 0010:xhci_check_bw_table+0x100/0x4d0
->=20
-> This looks very similar to a null pointer issue I fixed recently.
-> Patch should be in 6.11 and recent stable releases:
->=20
-> af8e119f52e9 xhci: Fix Panther point NULL pointer deref at full-speed
-> re-enumeration
->=20
-> What kernel are you running?
+On Thu, Nov 14, 2024 at 09:02:06AM +0100, Oliver Facklam wrote:
+> The TI HD3SS3220 Type-C controller supports configuring its advertised
+> power operation mode over I2C using the CURRENT_MODE_ADVERTISE field
+> of the Connection Status Register.
+> 
+> Configure this power mode based on the existing (optional) property
+> "typec-power-opmode" of /schemas/connector/usb-connector.yaml
+> 
+> Signed-off-by: Oliver Facklam <oliver.facklam@zuehlke.com>
 
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-thanks for pointing out to that, I was testing this on Linux 6.8.12.
-I will recompile the latest kernel and double check.
+> ---
+>  drivers/usb/typec/hd3ss3220.c | 53 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 53 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
+> index fb1242e82ffdc64a9a3330f50155bb8f0fe45685..56f74bf70895ca701083bde44a5bbe0b691551e1 100644
+> --- a/drivers/usb/typec/hd3ss3220.c
+> +++ b/drivers/usb/typec/hd3ss3220.c
+> @@ -16,10 +16,17 @@
+>  #include <linux/delay.h>
+>  #include <linux/workqueue.h>
+>  
+> +#define HD3SS3220_REG_CN_STAT		0x08
+>  #define HD3SS3220_REG_CN_STAT_CTRL	0x09
+>  #define HD3SS3220_REG_GEN_CTRL		0x0A
+>  #define HD3SS3220_REG_DEV_REV		0xA0
+>  
+> +/* Register HD3SS3220_REG_CN_STAT */
+> +#define HD3SS3220_REG_CN_STAT_CURRENT_MODE_MASK		(BIT(7) | BIT(6))
+> +#define HD3SS3220_REG_CN_STAT_CURRENT_MODE_DEFAULT	0x00
+> +#define HD3SS3220_REG_CN_STAT_CURRENT_MODE_MID		BIT(6)
+> +#define HD3SS3220_REG_CN_STAT_CURRENT_MODE_HIGH		BIT(7)
+> +
+>  /* Register HD3SS3220_REG_CN_STAT_CTRL*/
+>  #define HD3SS3220_REG_CN_STAT_CTRL_ATTACHED_STATE_MASK	(BIT(7) | BIT(6))
+>  #define HD3SS3220_REG_CN_STAT_CTRL_AS_DFP		BIT(6)
+> @@ -43,6 +50,31 @@ struct hd3ss3220 {
+>  	bool poll;
+>  };
+>  
+> +static int hd3ss3220_set_power_opmode(struct hd3ss3220 *hd3ss3220, int power_opmode)
+> +{
+> +	int current_mode;
+> +
+> +	switch (power_opmode) {
+> +	case TYPEC_PWR_MODE_USB:
+> +		current_mode = HD3SS3220_REG_CN_STAT_CURRENT_MODE_DEFAULT;
+> +		break;
+> +	case TYPEC_PWR_MODE_1_5A:
+> +		current_mode = HD3SS3220_REG_CN_STAT_CURRENT_MODE_MID;
+> +		break;
+> +	case TYPEC_PWR_MODE_3_0A:
+> +		current_mode = HD3SS3220_REG_CN_STAT_CURRENT_MODE_HIGH;
+> +		break;
+> +	case TYPEC_PWR_MODE_PD: /* Power delivery not supported */
+> +	default:
+> +		dev_err(hd3ss3220->dev, "bad power operation mode: %d\n", power_opmode);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return regmap_update_bits(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT,
+> +				  HD3SS3220_REG_CN_STAT_CURRENT_MODE_MASK,
+> +				  current_mode);
+> +}
+> +
+>  static int hd3ss3220_set_source_pref(struct hd3ss3220 *hd3ss3220, int src_pref)
+>  {
+>  	return regmap_update_bits(hd3ss3220->regmap, HD3SS3220_REG_GEN_CTRL,
+> @@ -162,6 +194,23 @@ static irqreturn_t hd3ss3220_irq_handler(int irq, void *data)
+>  	return hd3ss3220_irq(hd3ss3220);
+>  }
+>  
+> +static int hd3ss3220_configure_power_opmode(struct hd3ss3220 *hd3ss3220,
+> +					    struct fwnode_handle *connector)
+> +{
+> +	/*
+> +	 * Supported power operation mode can be configured through device tree
+> +	 */
+> +	const char *cap_str;
+> +	int ret, power_opmode;
+> +
+> +	ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
+> +	if (ret)
+> +		return 0;
+> +
+> +	power_opmode = typec_find_pwr_opmode(cap_str);
+> +	return hd3ss3220_set_power_opmode(hd3ss3220, power_opmode);
+> +}
+> +
+>  static const struct regmap_config config = {
+>  	.reg_bits = 8,
+>  	.val_bits = 8,
+> @@ -223,6 +272,10 @@ static int hd3ss3220_probe(struct i2c_client *client)
+>  		goto err_put_role;
+>  	}
+>  
+> +	ret = hd3ss3220_configure_power_opmode(hd3ss3220, connector);
+> +	if (ret < 0)
+> +		goto err_unreg_port;
+> +
+>  	hd3ss3220_set_role(hd3ss3220);
+>  	ret = regmap_read(hd3ss3220->regmap, HD3SS3220_REG_CN_STAT_CTRL, &data);
+>  	if (ret < 0)
+> 
+> -- 
+> 2.34.1
 
-your one:
-[46711.125623] Workqueue: usb_hub_wq hub_event [usbcore]
-[46711.125668] RIP: 0010:xhci_reserve_bandwidth
-(drivers/usb/host/xhci.c
-
-vs my one:
-kernel: Workqueue: usb_hub_wq hub_event
-kernel: RIP: 0010:xhci_check_bw_table+0x100/0x4d0
-
-https://sundtek.de/support/uxvd32.txt
-
-Best Regards,
-Markus
-
->=20
-> Thanks
-> Mathias
-
+-- 
+heikki
 
