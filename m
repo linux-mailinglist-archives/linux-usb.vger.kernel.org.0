@@ -1,139 +1,134 @@
-Return-Path: <linux-usb+bounces-17703-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17704-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FA769D18DF
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 20:27:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 586C59D1A90
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 22:24:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 007FFB21C13
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 19:27:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B65128180F
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 21:24:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFEBC1E5037;
-	Mon, 18 Nov 2024 19:27:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9BF1E4937;
+	Mon, 18 Nov 2024 21:24:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b="WXiN559Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fqQ4Enoj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from 009.lax.mailroute.net (009.lax.mailroute.net [199.89.1.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2211E1301;
-	Mon, 18 Nov 2024 19:27:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=199.89.1.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FE11C07DE;
+	Mon, 18 Nov 2024 21:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731958054; cv=none; b=CAP/bq9+Jc1xCXtkrtIyEAbUR7h7cUsXVS+RrRWCw9PvNORN6/Hw+78BkQFcUEKGD25aqsWcov2l6jot5sJOaZ/VDpgJnDwhp/Tsy0IHlD3+liZDs+MSY1zC3ftghS9DpIlUIuA1ma+wlzyaP4GidT4Ww4jFinQhbeXHLdAdY9M=
+	t=1731965045; cv=none; b=qg6KgJyIM5jJ5Wtl+Qf93IxqOxskpTmDxbXy4I66jTVvJ6b+a+GrUeKjigPRXg7xCQvEjk7te7vtI5IqLEtxqRnaOcUbjP/IHEMmv3bCB0HiG1t+uydTMDc5KgrnkexjLhfRXDLPz7hcLGMXXs6BKuE1HT/jDEMXWSxnt8Qarpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731958054; c=relaxed/simple;
-	bh=RcPIYbyMlZ34oP2LBXyEIbCgPpT3+dQrSy/cfQ6AqU4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=DCNUbhp6CxC6mKttYIXFUIhGYAMD8b370NvR8iUIQMVpwVs7xeOD6Dvxch0e2QxJy8rolGntL8rGxwkskcxFDopFywKtpy0ixtjUFhlGjCFPjXQS/dQgq0kNAw4itOFtkOHobBhwaWtpn7flCnfuecT9T7ZotjpJToAvCSGhftw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org; spf=pass smtp.mailfrom=acm.org; dkim=pass (2048-bit key) header.d=acm.org header.i=@acm.org header.b=WXiN559Z; arc=none smtp.client-ip=199.89.1.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=acm.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=acm.org
-Received: from localhost (localhost [127.0.0.1])
-	by 009.lax.mailroute.net (Postfix) with ESMTP id 4Xsd1T6y26zlgVXv;
-	Mon, 18 Nov 2024 19:27:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=acm.org; h=
-	content-transfer-encoding:content-type:content-type:in-reply-to
-	:from:from:content-language:references:subject:subject
-	:user-agent:mime-version:date:date:message-id:received:received;
-	 s=mr01; t=1731958042; x=1734550043; bh=pJOpEX/ldT1R99usUkIIxpTX
-	afIC3dd1RVWEnQ/TPLU=; b=WXiN559ZnZZDMueOh0xvD2n/D9hm0No2wx1qNojw
-	DlY2a3a5XW+0RMKwVM9VQaTdcsHa8k5l8UFXJPCe6aXGD+ECURHliJmvrtlZJ3Yx
-	/kbkQzUMahEKbHcNMHHpjx02omMgbRI/epYuQI8pQeRjhiGfCVrnci7m2+H4OOfL
-	iWaYXjy/DtHVhbBiYWB9VL5jf6geb+HUFTxaDA5fE8+m2uCJ9HyGk0oIx72Xb9+0
-	c4CQGSOsdj/msK/lOpPQuliDBFIdQLbraEIDRk9SGW4viISdmLeHye9dtRy77Qk6
-	46rs/eO2mf3bhCmSSlmEcXPxfrJ/Xp11eFugm32Mjm0M3g==
-X-Virus-Scanned: by MailRoute
-Received: from 009.lax.mailroute.net ([127.0.0.1])
- by localhost (009.lax [127.0.0.1]) (mroute_mailscanner, port 10029) with LMTP
- id fOWhWX0pm2FQ; Mon, 18 Nov 2024 19:27:22 +0000 (UTC)
-Received: from [100.66.154.22] (unknown [104.135.204.82])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: bvanassche@acm.org)
-	by 009.lax.mailroute.net (Postfix) with ESMTPSA id 4Xsd1P3mYJzlgTWQ;
-	Mon, 18 Nov 2024 19:27:20 +0000 (UTC)
-Message-ID: <6bc47ad5-e815-46c4-b689-3e2cdcea16ea@acm.org>
-Date: Mon, 18 Nov 2024 11:27:17 -0800
+	s=arc-20240116; t=1731965045; c=relaxed/simple;
+	bh=c9UhAjUBlkxv9mlymFO0Ge+Bp5TE8IQsom42POhP/8A=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=bR7iPArt/IhH5ipq+Q6r9jQAGYEkn7dwOdWkNy0QVh7s+I6DbYSvE4rTrNqgKYNGdgyDHkN7EY9pP7av8Yfk91R++5GUrF9yAHRacYQpmGqcCq1CdjYpaWu1oBCqf8SLU3aPvr4vzRXDC2wR5Ljb8CDWhVmVuJEd9XBj0mbA75w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fqQ4Enoj; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539fb49c64aso3344422e87.0;
+        Mon, 18 Nov 2024 13:24:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1731965041; x=1732569841; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=du7rn+xd73aBEFKmEKLpUk9SFO0TFC/LlPx37xg2nPM=;
+        b=fqQ4EnojbPh9eTkZiaTSuog+S1E2IiHN4K433AtA6mK+M5PY7WUebq3vpi1+BKttAR
+         xC8X8xdCd6CWDhCZVhDj8wPTA4QDWd2Q0Kb+lTupV7x9ksEg6wysNF3KkJInJKmpuDIb
+         qnk9V+PyUWPXnsdggZYxbEOe8menWM9swSsFUIRWR0uRBsCUytvHfGhrb1OczC9qMg7f
+         FZnTwQeKzkil+INpwg6lFm+qN9lGMEXxlX3WoQQMUh3FnXxUkeQBmuzfLhQenCKZYeuX
+         gpUqt8BfbI1dfa5mOQwsYtetTEb8NYWiD2F8AMpTqVRRdFTGhKWUShax9rMRaZJ4sqgS
+         Peqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731965041; x=1732569841;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=du7rn+xd73aBEFKmEKLpUk9SFO0TFC/LlPx37xg2nPM=;
+        b=ird04b+5E4aTdHSDVUM9ftHNUhD2NIpLS3hLkiYUMLhuR+E+ctM/ua8C5HIqJlXT80
+         LQ1RvhPBGFrJ7qR5cVq4r/0fqU5ORmz2+WcdI3gDyHMe95vD4IzxtLd8Q9EybECrVDpR
+         eUvlOKsrj3g+J2eyl+nfRHTWFYgqNWnD8DEHmEEwkOK/idXcCdzgNrkzWQhLQqWS5/fl
+         UMZj+0yH/5+J+DaZ0hM4KgRpYmVrLbgVMGL8QC5FoEv5or9YtzMyioomZ4QLPayRa172
+         pUEigVcJwLbfS8C59bTRx5wqvL0znCV6YXBYpCOrpsiiNdFCiCfVd8C9eYJNr/hgnCCl
+         Ba8w==
+X-Forwarded-Encrypted: i=1; AJvYcCUvDMV3cvTG/tyOXgk1iHTXum/kqWFxT+xsQZHSjQhSZ3FxzFxlRs9cjmgVfqyaccVFqGhMYFnllSQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbWg7PFSyvwgrym03cNOzt6xXruSD/fSabg9ME9JrZCQuNDxLJ
+	mbAwcDrgM27dEtwejN5kpzxthK3kvNIoz2Xbcm+CYKmX660JwgEO
+X-Google-Smtp-Source: AGHT+IG1m/2Bl2HtT20tIO/hOr+2WAW27qY11aZSIxhG9F72VHsMZMT0o8huZvd+PKFiULX3DtPpJw==
+X-Received: by 2002:a05:6512:1155:b0:53d:a998:51b5 with SMTP id 2adb3069b0e04-53dab29f183mr8244205e87.20.1731965041094;
+        Mon, 18 Nov 2024 13:24:01 -0800 (PST)
+Received: from foxbook (bhf154.neoplus.adsl.tpnet.pl. [83.28.95.154])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53dbd47b595sm69326e87.250.2024.11.18.13.23.58
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 18 Nov 2024 13:24:00 -0800 (PST)
+Date: Mon, 18 Nov 2024 22:23:55 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: linuxusb.ml@sundtek.de
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ stern@rowland.harvard.edu
+Subject: Re: Highly critical bug in XHCI Controller
+Message-ID: <20241118222355.482cf783@foxbook>
+In-Reply-To: <f34636ebeda843de9329ac0aa4ec51c6627a0e5c.camel@sundtek.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [scsi?] [usb?] KASAN: slab-use-after-free Read in
- sg_release
-To: linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <6737dd3b.050a0220.85a0.0005.GAE@google.com>
-Content-Language: en-US
-From: Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <6737dd3b.050a0220.85a0.0005.GAE@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 11/15/24 3:46 PM, syzbot wrote:
-> Hello,
-> 
-> syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-> KASAN: slab-use-after-free Read in sg_release
-> 
-> ==================================================================
-> BUG: KASAN: slab-use-after-free in sg_device_destroy+0x57/0x180 drivers/scsi/sg.c:1572
-> Read of size 8 at addr ffff888034a06008 by task syz.3.47/7437
-> 
-> CPU: 1 UID: 0 PID: 7437 Comm: syz.3.47 Not tainted 6.12.0-rc1-syzkaller-00116-g9024d215a5d3 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/30/2024
-> Call Trace:
->   <TASK>
->   __dump_stack lib/dump_stack.c:94 [inline]
->   dump_stack_lvl+0x241/0x360 lib/dump_stack.c:120
->   print_address_description mm/kasan/report.c:377 [inline]
->   print_report+0x169/0x550 mm/kasan/report.c:488
->   kasan_report+0x143/0x180 mm/kasan/report.c:601
->   sg_device_destroy+0x57/0x180 drivers/scsi/sg.c:1572
->   kref_put include/linux/kref.h:65 [inline]
->   sg_release+0x274/0x3c0 drivers/scsi/sg.c:404
->   __fput+0x23f/0x880 fs/file_table.c:431
->   task_work_run+0x24f/0x310 kernel/task_work.c:228
->   resume_user_mode_work include/linux/resume_user_mode.h:50 [inline]
->   exit_to_user_mode_loop kernel/entry/common.c:114 [inline]
->   exit_to_user_mode_prepare include/linux/entry-common.h:328 [inline]
->   __syscall_exit_to_user_mode_work kernel/entry/common.c:207 [inline]
->   syscall_exit_to_user_mode+0x168/0x370 kernel/entry/common.c:218
->   do_syscall_64+0x100/0x230 arch/x86/entry/common.c:89
->   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+> In my experience with USB anything that is a 'temporary' failure can
+> be considered as 'permanent' failure and I've really seen a lot over
+> the last 1 1/2 decades.
+> However issues are mostly related to immature controllers / missing
+> quirks for some controllers.
+> Our devices in the field since 2008 usually pump around 100-300mbit
+> through the USB 2 link,
+> streaming  devices which usually run for a long period of time (up to
+> months / years).
+> 'retrying' something on a link where something has gone wrong for sure
+> never worked properly for me, it would have continued with another
+> followup issue at some point.
 
-The above output shows that the tested patch postponed the use-after-
-free from the mutex_unlock() call in sg_release to the code that I
-inserted after that call. This is the patch that has been tested:
+You may have simply seen hardware going dead or buggy drivers failing
+to recover from recoverable errors.
 
-diff --git a/drivers/scsi/sg.c b/drivers/scsi/sg.c
-index 84334ab39c81..6c6e03f37b5f 100644
---- a/drivers/scsi/sg.c
-+++ b/drivers/scsi/sg.c
-@@ -385,6 +385,8 @@ sg_release(struct inode *inode, struct file *filp)
-  		return -ENXIO;
-  	SCSI_LOG_TIMEOUT(3, sg_printk(KERN_INFO, sdp, "sg_release\n"));
+Random bit errors really happen and (excepting isochronous endpoints)
+can be recovered from. But if you get -EPROTO on a bulk endpoint, for
+example, it means the endpoint halted and should be reset. Few Linux
+drivers seem to bother with such things.
 
-+	kref_get(&sdp->d_ref);
-+
-  	mutex_lock(&sdp->open_rel_lock);
-  	kref_put(&sfp->f_ref, sg_remove_sfp);
-  	sdp->open_cnt--;
-@@ -398,6 +400,9 @@ sg_release(struct inode *inode, struct file *filp)
-  		wake_up_interruptible(&sdp->open_wait);
-  	}
-  	mutex_unlock(&sdp->open_rel_lock);
-+
-+	kref_put(&sdp->d_ref, sg_device_destroy);
-+
-  	return 0;
-  }
+I even think xHCI's handling of halted endpoints and usb_clear_halt()
+is broken, but it looks like fixing it would break all the buggy class
+drivers on the other hand, which are currently "sort of functional".
 
+> Anyway can you give a particular example where this 'retrying'
+> mechanism and reloading the endpoint size solves or solved a problem?
 
+It seems to happen when you insert the plug slowly or at an angle, and
+contact is briefly lost while the device is being initialized.
+
+The first three lines below come from hub_port_init(), which looks like
+it is being called by hub_port_connect() in a loop.
+
+[81169.840924] usb 5-1: new full-speed USB device number 61 using ohci-pci
+[81170.387927] usb 5-1: device not accepting address 61, error -62
+[81170.742931] usb 5-1: new full-speed USB device number 62 using ohci-pci
+[81170.901914] usb 5-1: New USB device found, idVendor=067b, idProduct=2303, bcdDevice= 3.00
+[81170.901919] usb 5-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
+[81170.901921] usb 5-1: Product: USB-Serial Controller
+[81170.901922] usb 5-1: Manufacturer: Prolific Technology Inc.
+
+Another example which could trigger retries is a device which includes
+a permanent "presence detect" resistor (such as PL2303, coincidentally)
+but takes a long time to initialize itself and start responding.
+
+Regards,
+Michal
 
