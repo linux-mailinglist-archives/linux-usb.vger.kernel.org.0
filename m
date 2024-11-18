@@ -1,127 +1,198 @@
-Return-Path: <linux-usb+bounces-17686-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17687-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C9DA9D0DB1
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 11:04:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD50D9D0DE1
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 11:11:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40F8E1F229A5
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 10:04:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AD19B27EBF
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 10:11:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 614241922F2;
-	Mon, 18 Nov 2024 10:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05FD1192D7F;
+	Mon, 18 Nov 2024 10:10:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="alZ+GpNi"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="cn/wiVy2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1059718E03A;
-	Mon, 18 Nov 2024 10:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2066194C9D
+	for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 10:10:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731924243; cv=none; b=Ya+n5cmhRf2t0dF1+/FhWVQViW9iykKe2GTAZAY19sUvKydfvAIsqcePJji03qYplJpoUAhOPzuJG7IBOe4LBKjZqObZT+9PFFtd5QT9ewF0h/8ZCM0z0wNcyNqnt2nk2m8BbGdxtI2T+swF3NFUfbZewfRUz/gHOY6rfwCjsRo=
+	t=1731924609; cv=none; b=bhO/zTZFproSBUaXEomsLkC3fGorb55JAtj/E9me9moFRyJCaKe/DdhlIXD6+AILlyZbrGQYPxMYYhn3xVhlhfrsjj4fMWG7jT/9YHlo0BvqLDhdwafBG9LVtag7lPQPeNUl9CGX++gUId7wvex18AON4hhVmUd0XGmSlzagUuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731924243; c=relaxed/simple;
-	bh=zgyIH/dPqO9AR+6eGxLLGKeaGjr33djGd8vinQ9wohk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pbXukL+Zdoy+hL5v7yg7VFmfFir6CvRhm0cov0OMrBwvRzqlYaePlsvh4Sm3v2rdevNrn2A268EgLa3Dy8K/TSbDKdaTaYiT3juHo9DJzYfEhQHVWf8DtE5eKjO4dh64LwYS/8QIxgJgVmkLRI+9Ye62JZI8x5aGkAEUG/j3U0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=alZ+GpNi; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1731924243; x=1763460243;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=zgyIH/dPqO9AR+6eGxLLGKeaGjr33djGd8vinQ9wohk=;
-  b=alZ+GpNi4VKNmAEUf/+iQsxUrFK737WyoSt1Wk7G9fGV4CoD0ho0Z/M9
-   qPuy5JIn2/8BcR6mi9rcPKD7wyd+0fm50Wjl5YV4amXghvDSKZA++RPxh
-   R4/jbgs3pT10TogDAiwiRCKxTn9gx1tqa9Zv2Kk6xwMd4GNYutNnTgeLq
-   zOU1mrBBwyWYrymrHDtSyAj8km0MIRgrVLLiD4Up/Kj0te/wQEYryuJpo
-   TGAS0PAfOQ7PEamq4p5lqEP2IjIVow6K95rm+JDbw7vBig3XidhSLl7OL
-   QT2G3BWYI15LtC9uY0qnBNMyAquJgaSYqruvZnRBjVygsGOjFXcR1BbMc
-   A==;
-X-CSE-ConnectionGUID: Kw2NaMpoRDOKs62bTfJUMQ==
-X-CSE-MsgGUID: 9aIkFJ8ISPOr06eVAJlXsQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11259"; a="32011317"
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="32011317"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Nov 2024 02:04:01 -0800
-X-CSE-ConnectionGUID: yFgWo+ZHQpu439qQW1HqsA==
-X-CSE-MsgGUID: pY47fUwNQT6bFIK227wFyQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,163,1728975600"; 
-   d="scan'208";a="89594260"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa010.fm.intel.com with SMTP; 18 Nov 2024 02:03:57 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 18 Nov 2024 12:03:56 +0200
-Date: Mon, 18 Nov 2024 12:03:56 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Oliver Facklam <oliver.facklam@zuehlke.com>
-Cc: Biju Das <biju.das@bp.renesas.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Benedict von Heyl <benedict.vonheyl@zuehlke.com>,
-	Mathis Foerst <mathis.foerst@zuehlke.com>,
-	Michael Glettig <michael.glettig@zuehlke.com>
-Subject: Re: [PATCH v2 2/4] usb: typec: hd3ss3220: use typec_get_fw_cap() to
- fill typec_cap
-Message-ID: <ZzsRDK_9LZLs8Hf3@kuha.fi.intel.com>
-References: <20241114-usb-typec-controller-enhancements-v2-0-362376856aea@zuehlke.com>
- <20241114-usb-typec-controller-enhancements-v2-2-362376856aea@zuehlke.com>
+	s=arc-20240116; t=1731924609; c=relaxed/simple;
+	bh=5ZEjIWsEI0/tVQP3E06ZdjXqkBJT2vfSsRwTmsgeYbg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V/vENz8qFw0mI/EG7qczq7Jwfmm/PB7OBv4PQfSXjHFdeG83I/+0QfQU20weVte2p1Z9g6ru1DJf4N28o9B9M1N3sppx7MsE4HetfjvmiYs441rxboGz28qQgEa7AMs7W41lGOr0G+6vYNpEroGSY29oRMaRFos89NY7Mm6TVzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=cn/wiVy2; arc=none smtp.client-ip=209.85.208.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-2fb51e00c05so18532691fa.0
+        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 02:10:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1731924606; x=1732529406; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UvhlZgzgDxMQLozpaQpaBRbppS3q/9Mpwy2g6yeeX2g=;
+        b=cn/wiVy2nTOXq2pgQOkGgqtoSgI2VYZxVmvvYStyUnG80rr17BjdK5tVkYg3Sw73l1
+         lOcqRg89jrx5CIcDk48uPgqo9lsPKZJAMyfgRZ4GzYgzQezSiMcuV9yxBhRwsajbTTvA
+         Yom1aw2nDOSsvBfP317At7ts3BCvnZz5Viehc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1731924606; x=1732529406;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UvhlZgzgDxMQLozpaQpaBRbppS3q/9Mpwy2g6yeeX2g=;
+        b=JD4zOHXXhpUMEDkFKf5L1ZUcWGYKvpRXxgo67FxU6uJ5PCazXI83VhESj/UoIeBOq3
+         I2611/rYZELsWZTsh1fR2Eir8mda2ajalo4yNEMTA7q04GYFHtorUqbCLHG/kI21W0Ra
+         HjoE4lSzScPnZ5ycLazoo3sKhrUt6CBCw6UjHcFAolnPE9/0dDOxhkILuS6dKSJKa34j
+         tKuKUs/4+JFCm7eH9W+OJVNTVBUvTIrFOoGzqz1Q+zUhJIcJHEa4sFLgEfsw1REK42NZ
+         sqRb+xkqpqlaASguggZ3RO/QYQRBoh4A5UWP5seVi9bCSuO1egoZooams6TTRRk8/nlv
+         u26A==
+X-Forwarded-Encrypted: i=1; AJvYcCWGhfblwFO5yd84C+WbbMTx9W7uxdWU7Z7b6U8okuXEFa1G82VRdc5F6vJFGJ0uRaUtVmaKDFyeCzY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywjrc8Aiz/UgmYYh38Ma7NRNwbKm2en6vKr/jZRArhKIPtIFI7X
+	RqFcUhoUgvF5Eua5L/OpZ3oN9TNZHvucOgIOXCPL/1znSoLWo7Th9uCXi7WY4YjmxE+cyVODMG9
+	JiS9oMeeDcYLAtavFoYoFS5foVPmNDki4G28=
+X-Google-Smtp-Source: AGHT+IFHMdc8+VJMKwLx0wnjVeTW3YqK2FwnPhXo+GJV3wNseaCvDPvR7y4K3nvoDoEmEl3KPB6KANMyHE20/F6iXfo=
+X-Received: by 2002:a05:651c:905:b0:2fb:5206:1675 with SMTP id
+ 38308e7fff4ca-2ff606dccb7mr75024861fa.27.1731924605750; Mon, 18 Nov 2024
+ 02:10:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241114-usb-typec-controller-enhancements-v2-2-362376856aea@zuehlke.com>
+References: <20241115155234.1587589-1-ukaszb@chromium.org> <20241115155234.1587589-3-ukaszb@chromium.org>
+ <jatq645z65hthaud4up6h6mxbggqpm73djtd6t3fxxkwccsifu@bb7bn24b7dak>
+In-Reply-To: <jatq645z65hthaud4up6h6mxbggqpm73djtd6t3fxxkwccsifu@bb7bn24b7dak>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Date: Mon, 18 Nov 2024 11:09:54 +0100
+Message-ID: <CALwA+NZ16WigkZuTwsRzDNC96OOR=+ZA-_UxtMq=fTWJ23a_Ag@mail.gmail.com>
+Subject: Re: [PATCH v7 2/3] usb: typec: ucsi: Implement ChromeOS UCSI driver
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Benson Leung <bleung@chromium.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Jameson Thies <jthies@google.com>, 
+	Pavan Holla <pholla@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
+	chrome-platform@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 14, 2024 at 09:02:07AM +0100, Oliver Facklam wrote:
-> The type, data, and prefer_role properties were previously hard-coded
-> when creating the struct typec_capability.
-> 
-> Use typec_get_fw_cap() to populate these fields based on the
-> respective fwnode properties, if present.
-> 
-> Signed-off-by: Oliver Facklam <oliver.facklam@zuehlke.com>
+On Fri, Nov 15, 2024 at 6:00=E2=80=AFPM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Fri, Nov 15, 2024 at 03:52:33PM +0000, =C5=81ukasz Bartosik wrote:
+> > From: Pavan Holla <pholla@chromium.org>
+> >
+> > Implementation of a UCSI transport driver for ChromeOS.
+> > This driver will be loaded if the ChromeOS EC implements a PPM.
+> >
+> > Signed-off-by: Pavan Holla <pholla@chromium.org>
+> > Co-developed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > Co-developed-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
+> > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
+> > ---
+> >  MAINTAINERS                           |   7 +
+> >  drivers/usb/typec/ucsi/Kconfig        |  13 ++
+> >  drivers/usb/typec/ucsi/Makefile       |   1 +
+> >  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 248 ++++++++++++++++++++++++++
+> >  4 files changed, 269 insertions(+)
+> >  create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi.c
+>
+> > +static int cros_ucsi_sync_control(struct ucsi *ucsi, u64 cmd)
+> > +{
+> > +     return ucsi_sync_control_common(ucsi, cmd);
+> > +}
+> > +
+> > +struct ucsi_operations cros_ucsi_ops =3D {
+> > +     .read_version =3D cros_ucsi_read_version,
+> > +     .read_cci =3D cros_ucsi_read_cci,
+> > +     .read_message_in =3D cros_ucsi_read_message_in,
+> > +     .async_control =3D cros_ucsi_async_control,
+> > +     .sync_control =3D cros_ucsi_sync_control,
+>
+> .sync_control =3D ucsi_sync_control_common,
+>
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+I will change.
 
-> ---
->  drivers/usb/typec/hd3ss3220.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/hd3ss3220.c b/drivers/usb/typec/hd3ss3220.c
-> index 56f74bf70895ca701083bde44a5bbe0b691551e1..e581272bb47de95dee8363a5491f543354fcbbf8 100644
-> --- a/drivers/usb/typec/hd3ss3220.c
-> +++ b/drivers/usb/typec/hd3ss3220.c
-> @@ -264,7 +264,14 @@ static int hd3ss3220_probe(struct i2c_client *client)
->  	typec_cap.type = TYPEC_PORT_DRP;
->  	typec_cap.data = TYPEC_PORT_DRD;
->  	typec_cap.ops = &hd3ss3220_ops;
-> -	typec_cap.fwnode = connector;
-> +
-> +	/*
-> +	 * Try to get properties from connector,
-> +	 * but continue with defaults anyway if they are not found
-> +	 */
-> +	ret = typec_get_fw_cap(&typec_cap, connector);
-> +	if (ret != 0 && ret != -EINVAL && ret != -ENXIO)
-> +		goto err_put_role;
->  
->  	hd3ss3220->port = typec_register_port(&client->dev, &typec_cap);
->  	if (IS_ERR(hd3ss3220->port)) {
-> 
-> -- 
-> 2.34.1
+> > +};
+> > +
+>
+> [...]
+>
+> > +
+> > +static int __maybe_unused cros_ucsi_suspend(struct device *dev)
+> > +{
+> > +     struct cros_ucsi_data *udata =3D dev_get_drvdata(dev);
+> > +
+> > +     cancel_work_sync(&udata->work);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static void __maybe_unused cros_ucsi_complete(struct device *dev)
+> > +{
+> > +     struct cros_ucsi_data *udata =3D dev_get_drvdata(dev);
+> > +
+> > +     ucsi_resume(udata->ucsi);
+> > +}
+> > +
+> > +static const struct dev_pm_ops cros_ucsi_pm_ops =3D {
+> > +#ifdef CONFIG_PM_SLEEP
+> > +     .suspend =3D cros_ucsi_suspend,
+> > +     .complete =3D cros_ucsi_complete,
+> > +#endif
+>
+> SET_SYSTEM_SLEEP_PM_OPS ? Or even better, DEFINE_SIMPLE_DEV_PM_OPS() ?
+>
+> What is the reason for using complete() instead of resume()?
+>
 
--- 
-heikki
+Due to change in
+https://lore.kernel.org/linux-usb/20240910101527.603452-1-ukaszb@chromium.o=
+rg/T/#m25bc17cc0a8d30439830415018c7f44f342900d1
+we moved from using macro SIMPLE_DEV_PM_OPS and resume() to complete().
+Per Heikki's suggestion I also squashed this change into "usb: typec:
+ucsi: Implement ChromeOS UCSI driver".
+
+Thank you,
+Lukasz
+
+> > +};
+> > +
+> > +static const struct platform_device_id cros_ucsi_id[] =3D {
+> > +     { KBUILD_MODNAME, 0 },
+> > +     {}
+> > +};
+> > +MODULE_DEVICE_TABLE(platform, cros_ucsi_id);
+> > +
+> > +static struct platform_driver cros_ucsi_driver =3D {
+> > +     .driver =3D {
+> > +             .name =3D KBUILD_MODNAME,
+> > +             .pm =3D &cros_ucsi_pm_ops,
+> > +     },
+> > +     .id_table =3D cros_ucsi_id,
+> > +     .probe =3D cros_ucsi_probe,
+> > +     .remove =3D cros_ucsi_remove,
+> > +};
+> > +
+> > +module_platform_driver(cros_ucsi_driver);
+> > +
+> > +MODULE_LICENSE("GPL");
+> > +MODULE_DESCRIPTION("UCSI driver for ChromeOS EC");
+> > --
+> > 2.47.0.338.g60cca15819-goog
+> >
+>
+> --
+> With best wishes
+> Dmitry
 
