@@ -1,175 +1,117 @@
-Return-Path: <linux-usb+bounces-17698-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17699-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E5DA9D1418
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 16:12:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6ED69D14E3
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 17:01:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0612F1F2209C
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 15:12:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 84DBC2863CB
+	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 16:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87E721AC885;
-	Mon, 18 Nov 2024 15:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WNt9Ruir"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 938A51BD9DA;
+	Mon, 18 Nov 2024 16:00:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884C41A08B6
-	for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 15:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBF451BBBE5;
+	Mon, 18 Nov 2024 16:00:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731942721; cv=none; b=qHNI1TTMUH9H3l1WlrqdFAYf2ss1f9zHsf+r8dFBgdOJkI6CZG92jvRdQS3gdRmIVYWxV/HGbPqPDcVVR2fFvhK0PolQ+7ENL2LKzDeQgZWVDljdr3/MvxyZsyMpyFHYrbxCf3AX2VcWhxON/HaU2iZoj1b/g+bUHzheZBPP9d0=
+	t=1731945637; cv=none; b=otUQGbuNwItT8JKjeqdOGzqWKGcrg3X52E3I2CNkxuBiFzPvyjUVCNXUsoMuufQJS5xOhLNCYoYLDlhme3W6IVkqxk5l87SLaeFN/M8IL14QVwSAmCjPKTtMz+S6NjCav10lXhy7wf8o+xaikezS5FY3mDlcynWi06RavRyGbLc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731942721; c=relaxed/simple;
-	bh=L9u4djOarGr7R4ePq4khHIOJD1iKc5G+rEeGtjnMB48=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d92j145qt44+xDHVUOAqKJIv+U5H31CvNNRbAomvsszGzT0jWe4b5tFTVW9WEYIpWryxsBKJlTHBcfC7AIATzJtRtGGA88kZA3e1GTMp71L0FUFMnsQ93SzeOexSVeJRaqvgXhmzErNq1ZMYScsJ6N85csEkWvB0HLuZcTC+UQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WNt9Ruir; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-20c8b557f91so41760195ad.2
-        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 07:11:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1731942719; x=1732547519; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZKBcsDimJww6pYRM1GJfE4zk512cTlx5BHsoCw7EaLw=;
-        b=WNt9Ruir6k34qW1M8h5DPRsNGgumtEkN728Y8l8RjX2ZwqS/k+X5TY1UmlR7OSs8rb
-         zUyde93LfJjeFLr+Gx1eM7/jjbZcoPBm/0V3HACfDoaVROfJUqUE7+upKNhURv+fInzR
-         nDZHFc2lgjVNhXpyb8zGOPsb7R0bpFMFkaLm6sWBp23iROafFQNVieZk9PBU3wdUmN4l
-         b3pxZcPJFhaaQU/AV1avTIM3kSJLBsYZmESDSlk+H5wp2OrW8b/uDiydqzbUrA8MHDxv
-         xgidmB+tsmcklrNwJj8f3Ag12b+Kp+E8O/N4KhJESElH+2vxYGaljdSzwRldWIF6gEJU
-         y9ZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731942719; x=1732547519;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZKBcsDimJww6pYRM1GJfE4zk512cTlx5BHsoCw7EaLw=;
-        b=W17ARHd+cR1JEFIcAJTioeEypjKmo/Q5DKSc/DN5/RQbfiKnAu0HceGZAwI1EHEun2
-         K9ijzW5sUxAE5anSYbZ7qxrYslPULRpFMA/H/2jxeMYpkR1SCsY/jxy07x8SAui7wQpG
-         qfzUt2RcZHKsvNT2VMU79knPbL8d2JcgrbZ2ra/gTzMBCoy2EurRf3JAMLq2EqqRc5gg
-         2LQYPoj1xXK9fWiyH3+WlgYgR1AARXjfKPeM33aehaOXV5AJULR8qo4EnAO3qM9whRBY
-         KQOnTEhgI12yjgwJdPIT22AMGS3w4blTaOcADiQR9cuNYNK9FDQ+PA2s4ccx4dDYC+ce
-         VXcw==
-X-Forwarded-Encrypted: i=1; AJvYcCUtcIFaJcdTHcErB2uBZ8Xy2vz6lb48qIdQyeesSJEf7aZs2Sotoe/mt7X+KsBPBYj9yo6i4G0jmtk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqgS1q0b1yFCEhn54Xp6L/HnL4D27obAkiY03geOr8o33JnGCM
-	/0s5qU0hsJdDELU6BF80UuvZDqo90P97I68cJeuc2/SMvwDPJqfZ/2iNwTokzRYPFjTw+7THPWe
-	LnTqrtYZ+ynU3iIhs6J2/AeZuPWrwT+3a9E+9
-X-Google-Smtp-Source: AGHT+IFjfo/P9iieM7k3RDDAKQkvHdROHwdE7KrApXM3Ox4639CjYPlUVBIU1hPxB9Eq00WcnPDLHK03pzGg2veHBUw=
-X-Received: by 2002:a17:902:e80e:b0:20c:f27f:fcc with SMTP id
- d9443c01a7336-211d0ebc0bamr195870035ad.44.1731942718549; Mon, 18 Nov 2024
- 07:11:58 -0800 (PST)
+	s=arc-20240116; t=1731945637; c=relaxed/simple;
+	bh=Zb7WTimXNAmtjSJ2AjvonPJRWoVTRctyLlR21r3QJlE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GiTeU/YYdYJ39lYtYnN11sfRF5N7rCaQPu/Y1AHhhxq4muQOO1fOk0uQZFssTL6UHRy51eM5oVs9BQvr9E5h+bHi377/c64V32Xv4BGyHdYkSZBvRxv1URUXCchS2Eg5EYLgal/jijxRKXKlVqDKsUfz8vwo+OyQW0N0COEKDbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com; spf=pass smtp.mailfrom=korsgaard.com; arc=none smtp.client-ip=217.70.183.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=korsgaard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=korsgaard.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B72082000B;
+	Mon, 18 Nov 2024 16:00:30 +0000 (UTC)
+Message-ID: <a35ba8dc-fd4a-41ae-9ad7-7702f4f48980@korsgaard.com>
+Date: Mon, 18 Nov 2024 17:00:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6731d32b.050a0220.1fb99c.014d.GAE@google.com> <1af819ae-cd88-4db0-af6e-02064489ebb2@rowland.harvard.edu>
- <CANp29Y7RA00bKOinkjSDBchbkx3RDvWXGs4hr0PrPKyqSEC-_g@mail.gmail.com> <efc7e41c-b4a3-469a-983a-24b167b944e3@rowland.harvard.edu>
-In-Reply-To: <efc7e41c-b4a3-469a-983a-24b167b944e3@rowland.harvard.edu>
-From: Aleksandr Nogikh <nogikh@google.com>
-Date: Mon, 18 Nov 2024 16:11:46 +0100
-Message-ID: <CANp29Y4X9v_G-JE342xpvGRiso=48R-kgO85R5FWau5CGYCFHQ@mail.gmail.com>
-Subject: Re: [syzbot] [usb?] KASAN: slab-use-after-free Read in ld_usb_release
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: syzbot <syzbot+e8e879922808870c3437@syzkaller.appspotmail.com>, 
-	gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
-	syzkaller <syzkaller@googlegroups.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: dwc3: xilinx: make sure pipe clock is deselected
+ in usb2 only mode
+To: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>,
+ Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, michal.simek@amd.com,
+ robert.hancock@calian.com
+Cc: linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, git@amd.com, Neal Frager
+ <neal.frager@amd.com>, stable@vger.kernel.org
+References: <1731942491-1992368-1-git-send-email-radhey.shyam.pandey@amd.com>
+Content-Language: en-US
+From: Peter Korsgaard <peter@korsgaard.com>
+In-Reply-To: <1731942491-1992368-1-git-send-email-radhey.shyam.pandey@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: peter@korsgaard.com
 
-On Fri, Nov 15, 2024 at 6:48=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Wed, Nov 13, 2024 at 11:46:00AM +0100, Aleksandr Nogikh wrote:
-> > Hi Alan,
-> >
-> > On Mon, Nov 11, 2024 at 4:45=E2=80=AFPM Alan Stern <stern@rowland.harva=
-rd.edu> wrote:
-> > >
-> > > On Mon, Nov 11, 2024 at 01:49:31AM -0800, syzbot wrote:
-> > > > Hello,
-> > > >
-> > > > syzbot found the following issue on:
-> > > >
-> > > > HEAD commit:    2e1b3cc9d7f7 Merge tag 'arm-fixes-6.12-2' of git://=
-git.ker..
-> > > > git tree:       upstream
-> > > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D1650d6a=
-7980000
-> > > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Db77c8a5=
-5ccf1d9e2
-> > > > dashboard link: https://syzkaller.appspot.com/bug?extid=3De8e879922=
-808870c3437
-> > > > compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils=
- for Debian) 2.40
-> > > > userspace arch: i386
-> > > >
-> > > > Unfortunately, I don't have any reproducer for this issue yet.
-> > >
-> > > Question for the syzbot people:
-> > >
-> > > If I have a patch which I think will cause the issue to become
-> > > reproducible, is there any way to ask syzbot to apply the same test t=
-hat
-> > > failed here to a kernel including my patch?
-> >
-> > No, that's unfortunately not supported.
-> >
-> > In this particular case, it's at least evident from `Comm: ` which
-> > exact program was being executed when the kernel crashed:
-> >
-> > [  178.539707][ T8305] BUG: KASAN: slab-use-after-free in
-> > do_raw_spin_lock+0x271/0x2c0
-> > [  178.542477][ T8305] Read of size 4 at addr ffff888022387c0c by task
-> > syz.3.600/8305
-> > [  178.546823][ T8305]
-> > [  178.548202][ T8305] CPU: 3 UID: 0 PID: 8305 Comm: syz.3.600 Not
-> > tainted 6.12.0-rc6-syzkaller-00077-g2e1b3cc9d7f7 #0
-> >
-> > syz.3.600 means procid=3D3 and id=3D600, so it's the program that comes
-> > after the following line in
-> > https://syzkaller.appspot.com/x/log.txt?x=3D1650d6a7980000:
-> >
-> > 551.627007ms ago: executing program 3 (id=3D600):
-> > <...>
-> >
-> > You may try to treat that program as a normal syz reproducer and run
-> > it against your patched kernel locally, that should be quite
-> > straightforward to do (just several commands). See e.g. the
-> > instructions here:
-> > https://github.com/google/syzkaller/blob/master/docs/syzbot_assets.md#r=
-un-a-syz-reproducer-directly
->
-> One of the beauties of syzbot is that it will run potential reproducers
-> and test patches for us with very little effort on our part.
->
-> Can I request an enhancement of the "#syz test:" email command?  It
-> would be great if it would be willing to run a test even if the test
-> program isn't considered a bona fide reproducer.
+On 11/18/24 16:08, Radhey Shyam Pandey wrote:
+> From: Neal Frager <neal.frager@amd.com>
+> 
+> When the USB3 PHY is not defined in the Linux device tree, there could
+> still be a case where there is a USB3 PHY is active on the board and
 
-That could be doable I think, thanks for the suggestion!
+2nd "is " should be dropped. This sounds a bit confusing to me as the 
+PHY is on-chip on zynqmp, maybe you are referring to a reference clock 
+input to the PS-GTR instead?
 
-We actually have a related action item in our backlog:
-https://github.com/google/syzkaller/issues/613
 
-I've referenced your comment there.
+> enabled by the first stage bootloader.  If serdes clock is being used
+> then the USB will fail to enumerate devices in 2.0 only mode.
+> 
+> To solve this, make sure that the PIPE clock is deselected whenever the
+> USB3 PHY is not defined and guarantees that the USB2 only mode will work
+> in all cases.
+> 
+> Fixes: 9678f3361afc ("usb: dwc3: xilinx: Skip resets and USB3 register settings for USB2.0 mode")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Neal Frager <neal.frager@amd.com>
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+> ---
+> Changes for v2:
+> - Add stable@vger.kernel.org in CC.
 
---=20
-Aleksandr
+Other than that looks good, thanks.
 
->
-> I don't really need it for this particular bug report; the underlying
-> cause of the problem in this case is pretty clear.  But having this
-> capability in the future could be a big help.
->
-> Alan Stern
+Acked-by: Peter Korsgaard <peter@korsgaard.com>
+
+
+> ---
+>   drivers/usb/dwc3/dwc3-xilinx.c | 5 ++++-
+>   1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
+> index e3738e1610db..a33a42ba0249 100644
+> --- a/drivers/usb/dwc3/dwc3-xilinx.c
+> +++ b/drivers/usb/dwc3/dwc3-xilinx.c
+> @@ -121,8 +121,11 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+>   	 * in use but the usb3-phy entry is missing from the device tree.
+>   	 * Therefore, skip these operations in this case.
+>   	 */
+> -	if (!priv_data->usb3_phy)
+> +	if (!priv_data->usb3_phy) {
+> +		/* Deselect the PIPE Clock Select bit in FPD PIPE Clock register */
+> +		writel(PIPE_CLK_DESELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
+>   		goto skip_usb3_phy;
+> +	}
+>   
+>   	crst = devm_reset_control_get_exclusive(dev, "usb_crst");
+>   	if (IS_ERR(crst)) {
+> 
+> base-commit: 744cf71b8bdfcdd77aaf58395e068b7457634b2c
+
+-- 
+Bye, Peter Korsgaard
+
 
