@@ -1,134 +1,117 @@
-Return-Path: <linux-usb+bounces-17704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 586C59D1A90
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 22:24:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91A809D1DE9
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 03:04:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B65128180F
-	for <lists+linux-usb@lfdr.de>; Mon, 18 Nov 2024 21:24:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 157D6B20C66
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 02:04:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C9BF1E4937;
-	Mon, 18 Nov 2024 21:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 494442E406;
+	Tue, 19 Nov 2024 02:03:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fqQ4Enoj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k94sGCZ5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FE11C07DE;
-	Mon, 18 Nov 2024 21:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BDC93FF1
+	for <linux-usb@vger.kernel.org>; Tue, 19 Nov 2024 02:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731965045; cv=none; b=qg6KgJyIM5jJ5Wtl+Qf93IxqOxskpTmDxbXy4I66jTVvJ6b+a+GrUeKjigPRXg7xCQvEjk7te7vtI5IqLEtxqRnaOcUbjP/IHEMmv3bCB0HiG1t+uydTMDc5KgrnkexjLhfRXDLPz7hcLGMXXs6BKuE1HT/jDEMXWSxnt8Qarpo=
+	t=1731981833; cv=none; b=Poi2h/fOrONBs9UE/TJqa1mHrKFBx4WJ8ZwDwBO8dQrLdYXDuVBU0TSvqJhQoIWZzFV2Wayz2VsxSIW4T1jS5TO8ag185aIvvR5ktqDuvqV24fQMWlmA+yOB9EFtjQOsZSAHSKa8Jaf0084klaUjKVl2Mqq2U+CM7km4avpThls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731965045; c=relaxed/simple;
-	bh=c9UhAjUBlkxv9mlymFO0Ge+Bp5TE8IQsom42POhP/8A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=bR7iPArt/IhH5ipq+Q6r9jQAGYEkn7dwOdWkNy0QVh7s+I6DbYSvE4rTrNqgKYNGdgyDHkN7EY9pP7av8Yfk91R++5GUrF9yAHRacYQpmGqcCq1CdjYpaWu1oBCqf8SLU3aPvr4vzRXDC2wR5Ljb8CDWhVmVuJEd9XBj0mbA75w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fqQ4Enoj; arc=none smtp.client-ip=209.85.167.44
+	s=arc-20240116; t=1731981833; c=relaxed/simple;
+	bh=hMn4Hqr1bGqU8PzrIfAz5Vks9qRNHipYHIDPqOKqwAc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LvTR0lxsyOe/NXvkOYL3fYTLSJ7n6urQo8koakdhHfxlyVrhLxkv8xVCWLRDogxCusqiwMLvELmpP5pYGS6gwEJ+Vx+e4s40W27lztO1jhKiYBPbalTU0nHL0X3WSgeNrhhK/HWWb9tthsjccRZAQK0XmPf6a9wt+lHCxwqNLp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k94sGCZ5; arc=none smtp.client-ip=209.85.219.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-539fb49c64aso3344422e87.0;
-        Mon, 18 Nov 2024 13:24:03 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e383bbcef9dso387847276.3
+        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 18:03:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1731965041; x=1732569841; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=du7rn+xd73aBEFKmEKLpUk9SFO0TFC/LlPx37xg2nPM=;
-        b=fqQ4EnojbPh9eTkZiaTSuog+S1E2IiHN4K433AtA6mK+M5PY7WUebq3vpi1+BKttAR
-         xC8X8xdCd6CWDhCZVhDj8wPTA4QDWd2Q0Kb+lTupV7x9ksEg6wysNF3KkJInJKmpuDIb
-         qnk9V+PyUWPXnsdggZYxbEOe8menWM9swSsFUIRWR0uRBsCUytvHfGhrb1OczC9qMg7f
-         FZnTwQeKzkil+INpwg6lFm+qN9lGMEXxlX3WoQQMUh3FnXxUkeQBmuzfLhQenCKZYeuX
-         gpUqt8BfbI1dfa5mOQwsYtetTEb8NYWiD2F8AMpTqVRRdFTGhKWUShax9rMRaZJ4sqgS
-         Peqg==
+        d=gmail.com; s=20230601; t=1731981831; x=1732586631; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ax0dvY9oUglv+4j5DYFBVornrMHtQLVkgbG3kphnP0Q=;
+        b=k94sGCZ524KweFohfPJDl360rJaeN/1chOLgLl3V07JZ6bWppEFbXepv0luGZ5demT
+         xSgQ0U2UIwkGGZTP6BIcvxSRmCAbfTbuX0IQKN5waOyJ6YdyTkWvCyEWRs/HouDGRGth
+         PLk56ZZRY3vyfYre1A3WONtY39QTBz18atf898w5O/miwM3gaH12i46b3EolOz9ExFwz
+         wX3nDWAfGNX8w9sETIxfYgnGirqGAmK8CL7vlXsZ5I4OF+h1RyAv+5lNDBgV789wcdgp
+         OlHLUwh1egIn97wizBuO9DeFU5waVLwfKINu4JTXtoToqUirDxfNxykwrVtDP5N9sqv4
+         Df4g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731965041; x=1732569841;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=du7rn+xd73aBEFKmEKLpUk9SFO0TFC/LlPx37xg2nPM=;
-        b=ird04b+5E4aTdHSDVUM9ftHNUhD2NIpLS3hLkiYUMLhuR+E+ctM/ua8C5HIqJlXT80
-         LQ1RvhPBGFrJ7qR5cVq4r/0fqU5ORmz2+WcdI3gDyHMe95vD4IzxtLd8Q9EybECrVDpR
-         eUvlOKsrj3g+J2eyl+nfRHTWFYgqNWnD8DEHmEEwkOK/idXcCdzgNrkzWQhLQqWS5/fl
-         UMZj+0yH/5+J+DaZ0hM4KgRpYmVrLbgVMGL8QC5FoEv5or9YtzMyioomZ4QLPayRa172
-         pUEigVcJwLbfS8C59bTRx5wqvL0znCV6YXBYpCOrpsiiNdFCiCfVd8C9eYJNr/hgnCCl
-         Ba8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUvDMV3cvTG/tyOXgk1iHTXum/kqWFxT+xsQZHSjQhSZ3FxzFxlRs9cjmgVfqyaccVFqGhMYFnllSQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbWg7PFSyvwgrym03cNOzt6xXruSD/fSabg9ME9JrZCQuNDxLJ
-	mbAwcDrgM27dEtwejN5kpzxthK3kvNIoz2Xbcm+CYKmX660JwgEO
-X-Google-Smtp-Source: AGHT+IG1m/2Bl2HtT20tIO/hOr+2WAW27qY11aZSIxhG9F72VHsMZMT0o8huZvd+PKFiULX3DtPpJw==
-X-Received: by 2002:a05:6512:1155:b0:53d:a998:51b5 with SMTP id 2adb3069b0e04-53dab29f183mr8244205e87.20.1731965041094;
-        Mon, 18 Nov 2024 13:24:01 -0800 (PST)
-Received: from foxbook (bhf154.neoplus.adsl.tpnet.pl. [83.28.95.154])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53dbd47b595sm69326e87.250.2024.11.18.13.23.58
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 18 Nov 2024 13:24:00 -0800 (PST)
-Date: Mon, 18 Nov 2024 22:23:55 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: linuxusb.ml@sundtek.de
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- stern@rowland.harvard.edu
-Subject: Re: Highly critical bug in XHCI Controller
-Message-ID: <20241118222355.482cf783@foxbook>
-In-Reply-To: <f34636ebeda843de9329ac0aa4ec51c6627a0e5c.camel@sundtek.de>
+        d=1e100.net; s=20230601; t=1731981831; x=1732586631;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ax0dvY9oUglv+4j5DYFBVornrMHtQLVkgbG3kphnP0Q=;
+        b=s3+7ssXSmEfVTXjPp+bpRUHq0MiG5U/b6C3mDAflqoOIWY4NOi11C30jjDkM6nGM2S
+         woNTdIfX9TY2d5TsjOzO2kPhMiEWXVnhRyNuKI+4UsyGS7QL32wnZboib5O0l4MQV+yz
+         iV4wn6kIzKeNClSKCwvXKiMPAanJGU6sJxeO3q3LSiMRsZNyBVAkvSsWJZWytAEZaok7
+         qXDgba0pgnG62gp8x1hMMa+JISIdHMw6X+qajW5xMDhXOeUxdIxbQS80tjk7iwGjfBuf
+         C8yR0Vle5xpPMGM9rqnERT4Fcueo54ci8Bf4I14Er6mi6z0Jya37cYYqUNNVUgkJiT7z
+         O/Aw==
+X-Forwarded-Encrypted: i=1; AJvYcCVje9oydUeB/fy+hNyu+FTRLbNOGojf14oZirNKJPTWW3NGZEq+BM1/+QBJRoWYinglnW9Ks/DwLlA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylV85jkIhhdjmFulxVcYCibBRUpTPDphQYCo4XWrR3kbBSlxU6
+	QJDbGoGWEdf7bU/K0gGzsPGTbQmlI5nt28bWvOgtRd6SH3GaNC6XZb40Il0ZsVY=
+X-Google-Smtp-Source: AGHT+IGhAYQf8LRbXV79WxQOcdnXqecZV/qeeG4Kqr5dtrCtN0QOpV14krWw/eCzx1GhUKicEOO+rA==
+X-Received: by 2002:a05:6902:120b:b0:e29:5540:7f85 with SMTP id 3f1490d57ef6-e3825d34f4emr11111845276.1.1731981831319;
+        Mon, 18 Nov 2024 18:03:51 -0800 (PST)
+Received: from x13.localdomain (syn-142-197-128-048.res.spectrum.com. [142.197.128.48])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-856dfe039f8sm1185748241.33.2024.11.18.18.03.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 18 Nov 2024 18:03:49 -0800 (PST)
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+To: Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org
+Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
+	skhan@linuxfoundation.org,
+	ricardo@marliere.net,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] Documentation: usb: dwc3: add missing doc for sg
+Date: Mon, 18 Nov 2024 21:03:41 -0500
+Message-ID: <20241119020345.30663-1-luis.hernandez093@gmail.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-> In my experience with USB anything that is a 'temporary' failure can
-> be considered as 'permanent' failure and I've really seen a lot over
-> the last 1 1/2 decades.
-> However issues are mostly related to immature controllers / missing
-> quirks for some controllers.
-> Our devices in the field since 2008 usually pump around 100-300mbit
-> through the USB 2 link,
-> streaming  devices which usually run for a long period of time (up to
-> months / years).
-> 'retrying' something on a link where something has gone wrong for sure
-> never worked properly for me, it would have continued with another
-> followup issue at some point.
+This patch updates the documentation for the dwc3_request struct to
+describe the purpose of the sg field. This field is a pointer to a
+scatter-gather list used for managing memory buffers in DMA
+operations during USB transfers.
 
-You may have simply seen hardware going dead or buggy drivers failing
-to recover from recoverable errors.
+- Add description for 'sg' in the doc block for dwc3_request
 
-Random bit errors really happen and (excepting isochronous endpoints)
-can be recovered from. But if you get -EPROTO on a bulk endpoint, for
-example, it means the endpoint halted and should be reset. Few Linux
-drivers seem to bother with such things.
+This change resolves a documentation warning related to the missing
+description for this field.
 
-I even think xHCI's handling of halted endpoints and usb_clear_halt()
-is broken, but it looks like fixing it would break all the buggy class
-drivers on the other hand, which are currently "sort of functional".
+Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+---
+ drivers/usb/dwc3/core.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-> Anyway can you give a particular example where this 'retrying'
-> mechanism and reloading the endpoint size solves or solved a problem?
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index ee73789326bc..a53e6e14f27d 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -941,6 +941,7 @@ struct dwc3_hwparams {
+  * @request: struct usb_request to be transferred
+  * @list: a list_head used for request queueing
+  * @dep: struct dwc3_ep owning this request
++ * @sg: pointer to the sg for this request
+  * @start_sg: pointer to the sg which should be queued next
+  * @num_pending_sgs: counter to pending sgs
+  * @remaining: amount of data remaining
+-- 
+2.47.0
 
-It seems to happen when you insert the plug slowly or at an angle, and
-contact is briefly lost while the device is being initialized.
-
-The first three lines below come from hub_port_init(), which looks like
-it is being called by hub_port_connect() in a loop.
-
-[81169.840924] usb 5-1: new full-speed USB device number 61 using ohci-pci
-[81170.387927] usb 5-1: device not accepting address 61, error -62
-[81170.742931] usb 5-1: new full-speed USB device number 62 using ohci-pci
-[81170.901914] usb 5-1: New USB device found, idVendor=067b, idProduct=2303, bcdDevice= 3.00
-[81170.901919] usb 5-1: New USB device strings: Mfr=1, Product=2, SerialNumber=0
-[81170.901921] usb 5-1: Product: USB-Serial Controller
-[81170.901922] usb 5-1: Manufacturer: Prolific Technology Inc.
-
-Another example which could trigger retries is a device which includes
-a permanent "presence detect" resistor (such as PL2303, coincidentally)
-but takes a long time to initialize itself and start responding.
-
-Regards,
-Michal
 
