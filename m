@@ -1,101 +1,122 @@
-Return-Path: <linux-usb+bounces-17724-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17725-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65DA89D2C34
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 18:13:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA29A9D2D08
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 18:52:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 152081F21986
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 17:13:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A186281788
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 17:52:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DA11D0F5C;
-	Tue, 19 Nov 2024 17:13:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C64FE1D2F66;
+	Tue, 19 Nov 2024 17:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T+Omqzkc"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="psOrmQmI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914FE25763;
-	Tue, 19 Nov 2024 17:13:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C921F1D2F4E;
+	Tue, 19 Nov 2024 17:51:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732036398; cv=none; b=kOIgZjjDY1Fim1is78KEpVok1Xgao9YE6IAGOeIApa2oFWhbojZJL5PD33SLucnGvU8yGMc9q6iE9L50tUpjN6kqdzI1+0O05WKMSotioty2LGA+zY3PnRKzg96PNFu8P/CoTf5njF5fF3gKYtAnCKP3jEf5+Q5CK0hmE4Ayysw=
+	t=1732038690; cv=none; b=X4BHJwEp8uIgZCpsXSSMTlj7uttqoJM5ZLq8fw0K/g2xYKHltnhJc9LLuAuQiYMP0W9rDhBwIjA/Q895dLbw8TWMg4QvalhAMTmleIbnRunjzA6zAtxpbt47jnclV9L9VbPEasq+iPQWwGQke0wO06kK/U7w5t7iUcvXrVa37ss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732036398; c=relaxed/simple;
-	bh=ggE7Kv8fbEJQDnLfRqnMQ5FSxw3wmUl+igo2b35kd5I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jwF9mqgmcXTp1rFvAQ8zqt7nBjwgi9C0Lg6Wt8qRA9QEkKwQNvqRUD19xYArMc8zMXtNp3f5Qun5SIHeewhv/wcdOip3hypRCn2k8PilxbM2ayH2kKxemkWguJbUj5TvcgopkZsrCaWjg4fx/7bdV8OR3PbFc1hA0OlemFWOt2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T+Omqzkc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03AA7C4CECF;
-	Tue, 19 Nov 2024 17:13:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732036397;
-	bh=ggE7Kv8fbEJQDnLfRqnMQ5FSxw3wmUl+igo2b35kd5I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T+OmqzkcJCiucFF2UnxpJpQ/xcYpsSxBx4gI5KO1T1OwBMnQKhkkThRuwN3Gzvmqj
-	 m2XWQo+7i5YIpBsTfJm7yzOLc2LMILt6nQPlb2EofC2Tpadgp2zhxmIhF2o8r2pq2j
-	 M1GwJ5kyKMzq2r1XF/PWMw8tl0EkClBvImKVFdi8n15wS/4vO28MOcQ4Bu4le7ANTO
-	 guPpw0F7FRjkN2aKoUgUVmUwr78fyfEVQw07tnz0Dyw8WvIj5SVcwyM7Ps62uTfMSg
-	 RM1uSxB7CroCjSelz16lXVMkyCZSAkTVnVMqh9boSPRB7CpIjVt4FbURWJWiB3vYIk
-	 Xs9Zy6M2sD15w==
-Date: Tue, 19 Nov 2024 11:13:15 -0600
-From: Rob Herring <robh@kernel.org>
-To: Konrad Dybcio <konradybcio@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: Make ss_phy_irq optional
- for X1E80100
-Message-ID: <20241119171315.GA1805024-robh@kernel.org>
-References: <20241116-topic-x1e_usb2_bindings-v1-1-dde2d63f428f@oss.qualcomm.com>
+	s=arc-20240116; t=1732038690; c=relaxed/simple;
+	bh=xBMFegjNkus0JpTIZETJYTQf6n/Qx03PTCo1stoNYy0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pOMZAZe2PPNy43PiXEZWSgBbM59JXMCkNFszDxG0kD1UzBbhFoUGU7pDFfiTGIqwq0nUvP9SjVE3VVo1mHLkq6nvE1y7Xfj+Ozg+UrqVSHhYDn1zF8GAmaZjabdqLaq1wdUfjKfolZvR8AXzVMv4IybFqesDr1IHPba07XJmg8E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=psOrmQmI; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AJHer60028573;
+	Tue, 19 Nov 2024 17:51:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	xBMFegjNkus0JpTIZETJYTQf6n/Qx03PTCo1stoNYy0=; b=psOrmQmIPUJpFanx
+	fv4M0ZXCaOrz8LfH1A6TWiUxzOowcMO3EdJsD+c6vQTbL4H91kf6jhITuuBAcVM6
+	Udt0ZfsVoNwpiTmBJq2DO9/r1TR41Xwbzz7PZJgKNj2VLQCMJZCP3WHfQmTtYh9y
+	iMybl1jFMLzUlfd+yzQqgp6P6R4QlTsbJhXpom+TZcBcq23LtJHpDICdX5gQDI1Z
+	69UCGEsl94dbN51/CUqb5b8B1eyzZEhO6XuRe5EPGwZ3vTkdDzh8z3Eydu6qlEvD
+	VXLETdBLpYFe7gCYUBPJnsiz0e6ZCgX/1ZGCwSqmAWOfXIe2xKcRgUI8TzBAba+h
+	mxZXrg==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4308y5uc1y-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Nov 2024 17:51:08 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AJHp7F2025626
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 19 Nov 2024 17:51:07 GMT
+Received: from [10.110.84.1] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 19 Nov
+ 2024 09:50:54 -0800
+Message-ID: <2f512d8d-e5f3-4bdd-8172-37114a382a69@quicinc.com>
+Date: Tue, 19 Nov 2024 09:50:52 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241116-topic-x1e_usb2_bindings-v1-1-dde2d63f428f@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v30 00/30] Introduce QC USB SND audio offloading support
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
+        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <krzk+dt@kernel.org>, <pierre-louis.bossart@linux.intel.com>,
+        <Thinh.Nguyen@synopsys.com>, <tiwai@suse.com>, <robh@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
+ <edfeb642-297e-42bb-ad09-cbf74f995514@quicinc.com>
+ <2024111655-approve-throwback-e7df@gregkh>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <2024111655-approve-throwback-e7df@gregkh>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: pKjXw9S6mKWpmx0A5iA_3JA36dS7lRls
+X-Proofpoint-ORIG-GUID: pKjXw9S6mKWpmx0A5iA_3JA36dS7lRls
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0
+ clxscore=1015 spamscore=0 impostorscore=0 priorityscore=1501
+ mlxlogscore=936 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2411190132
 
-On Sat, Nov 16, 2024 at 12:17:52PM +0100, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> 
-> X1 has multiple DWC3 hosts, including one that's USB2, which naturally
-> means it doesn't have a SuperSpeed interrupt. Make it optional to fix
-> warnings such as:
-> 
-> usb@a2f8800: interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
 
-That's a good start, but what about all the other warnings for usb 
-interrupts?:
+On 11/15/2024 11:42 PM, Greg KH wrote:
+> On Fri, Nov 15, 2024 at 02:42:47PM -0800, Wesley Cheng wrote:
+>> Hi,
+>>
+>> On 11/6/2024 11:33 AM, Wesley Cheng wrote:
+>>> Requesting to see if we can get some Acked-By tags, and merge on usb-next.
+>> Are there any more clarifications that I can help with to get this
+>> series going?  I know its been a long time coming, so folks may have
+>> lost context, but if there are any points that might be blocking the
+>> series from getting merged, please let me know.
+> I would like others to review this (xhci maintainer for one), to give
+> their blessing before I even consider this.
 
-     13  usb@f92f8800: 'interrupt-names' is a required property
-     11  usb@76f8800: interrupt-names: ['pwr_event', 'qusb2_phy', 'hs_phy_irq'] is too short
-     11  usb@6af8800: interrupts: [[0, 347, 4], [0, 243, 4]] is too short
-     11  usb@6af8800: interrupt-names:1: 'qusb2_phy' was expected
-     11  usb@6af8800: interrupt-names:0: 'pwr_event' was expected
-     11  usb@6af8800: interrupt-names: ['hs_phy_irq', 'ss_phy_irq'] is too short
-      9  usb@a2f8800: interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
-      7  usb@c2f8800: interrupt-names: ['pwr_event', 'qusb2_phy', 'hs_phy_irq'] is too short
-      5  usb@8af8800: interrupts-extended: [[1, 0, 134, 4]] is too short
-      5  usb@8af8800: interrupt-names: ['pwr_event'] is too short
-      4  usb@8af8800: interrupts: [[0, 62, 4]] is too short
-      4  usb@8af8800: interrupt-names: ['hs_phy_irq'] is too short
+Thanks, Greg...Yes, I was hoping to see if I could clarify any points for Mathias and Takashi if they had any concerns.  Just so folks are also aware, we did deploy a portion of the series (specifically the XHCI sec interrupter and USB SND core changes) into devices on the market, if that adds any confidence into those changes.  For the most part, there were no major issues within those drivers, and the single minor bug (in the XHCI sec intr) that we did catch was fixed in previous submissions, and should be highlighted in the change revision list.
 
+Thanks
 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> ---
->  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
->  1 file changed, 2 insertions(+)
+Wesley Cheng
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
