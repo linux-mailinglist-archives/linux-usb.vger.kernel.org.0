@@ -1,113 +1,83 @@
-Return-Path: <linux-usb+bounces-17722-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17723-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56B929D2AD3
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 17:25:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 988EC9D2C20
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 18:09:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D2D4B2D5AB
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 16:21:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FD1B28558F
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 17:09:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 887751D0E27;
-	Tue, 19 Nov 2024 16:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB5901D0BAE;
+	Tue, 19 Nov 2024 17:08:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="VWmOj0dL"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JGfLtTPI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6E71D0DE6;
-	Tue, 19 Nov 2024 16:20:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0544E57D;
+	Tue, 19 Nov 2024 17:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732033245; cv=none; b=RbLFpMdgqw8sWVN6Sn4bnlhegzXLDsZgzSbFvcEYYnZAfkmhCprINpP4v2NMrVRuXhv9FNiffWbdTgleMyZGxjISd9p5ONe9uzy7pUoF10SJ1RuB+pZDreX9LN6r/4dDqU8RuGcOKYz1RAKPd2tiHvU4p+aSyDYH1moHID4t5N0=
+	t=1732036139; cv=none; b=koBnqc0CkNaxu4/qqC3ZcJqt+3kpQYeNwGdYI1b/TFcvtjrCv6j9Y/CGnRPO173DblmiBnWgm6Tdt8WYZ44uujUSA85MRiFQeq73n7WERQzFqLPG7ymWfyF/XpkDzW/JTHHgtYEFIwVXsvOxshdjsZi7VUeXGUhoA2LjjFuk5As=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732033245; c=relaxed/simple;
-	bh=/OeQ9IC9XtCJF9VlCTnneCePK0BnZfneZJ10PUHr+i0=;
+	s=arc-20240116; t=1732036139; c=relaxed/simple;
+	bh=jsziOO9YUbowy87BvWTnC8X1lFfY8X8yPem1cuFkzzw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LtJA9RMOlYdIw42d0tmr8Qkkh8i43l/IXyhwFqF/s3NIHBmxeyv8rlTqO+FlGba/kmC6ufW8qxsklM8BMpA9ioJemc1rAuVqvoHGEd/+warTyv4O3k9DfiAy5NkEyHjNyD8/ishj7tUxTIW3sAlINH1sjAKhNHBqArLiqFCil98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=VWmOj0dL; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=LoQB2YBfTaN1K4JPLmVKXFvx1STyXVcKxEJnp1Odqwc=; b=VW
-	mOj0dL+lpeG5RitAljRuELwjwDLbv4gS6AsjzEBs8+/a6tUJ7GFM47qX8IF08gRwU9bvSlqN+A+D2
-	UwGE7BZXuGH5mOVsR5veHvOXhycyv8aPTip5Xy2dIl/JEMUPiDKYaE2KuHVT4MTjdbUHIXcsFue/W
-	85mTiOK6L6ZVuQ4=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tDQxu-00Dpby-DJ; Tue, 19 Nov 2024 17:20:34 +0100
-Date: Tue, 19 Nov 2024 17:20:34 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
-Cc: netdev <netdev@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	Ming Lei <ming.lei@canonical.com>
-Subject: Re: [PATCH] usbnet_link_change() fails to call netif_carrier_on()
-Message-ID: <9baf4f17-bae6-4f5c-b9a1-92dc48fd7a8d@lunn.ch>
-References: <m34j43gwto.fsf@t19.piap.pl>
+	 Content-Type:Content-Disposition:In-Reply-To; b=STSJw5sEkwLKTLbgRCjHSgQvuUkz7LMNT/gG+C315A+bJr8zb5nQOzgTQ4WcFBOHhTRsIp2yPQcRpLSPqUR9O1+vRF8naxIojn8JAWB9Z8iCAnU3wu1SWCRScdSOYHl/mn19Wt7B2d69tH1Vi9tIHGI1r0z3QGRNegX0HOgX/HI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JGfLtTPI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 638C0C4CECF;
+	Tue, 19 Nov 2024 17:08:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1732036138;
+	bh=jsziOO9YUbowy87BvWTnC8X1lFfY8X8yPem1cuFkzzw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=JGfLtTPIqzcit5VvNsJUVfT/vg9o1LawHE22rSxWK1UcM4MGyOP5a7izMSURy7+VN
+	 tWH0YXo08kIUIJgbgfhcPuEreJVJwaR6gSgYEyTiUL9dDj5W6Mmb9fEgp/x7zt1xTR
+	 pM3W6BtNqQFTCnfEhxyB1BiDdgHf8e9HOcekMV1s=
+Date: Tue, 19 Nov 2024 18:08:34 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+Cc: Thinh.Nguyen@synopsys.com, skhan@linuxfoundation.org,
+	ricardo@marliere.net, linux-usb@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] Documentation: usb: dwc3: remove deprecated member
+Message-ID: <2024111922-pantyhose-panorama-6f16@gregkh>
+References: <20241119154309.98747-1-luis.hernandez093@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <m34j43gwto.fsf@t19.piap.pl>
+In-Reply-To: <20241119154309.98747-1-luis.hernandez093@gmail.com>
 
-On Tue, Nov 19, 2024 at 02:46:59PM +0100, Krzysztof Hałasa wrote:
-> Hi,
+On Tue, Nov 19, 2024 at 10:43:07AM -0500, Luis Felipe Hernandez wrote:
+> This patch updates the documentation for the dwc3_request struct,
+> removing the sg (scatter list pointer) member.
 > 
-> ASIX AX88772B based USB 10/100 Ethernet adapter doesn't come
-> up ("carrier off"), despite the built-in 100BASE-FX PHY positive link
-> indication.
+> - Remove 'sg' in the doc block for dwc3_request
 > 
-> The problem appears to be in usbnet.c framework:
+> This change resolves a documentation warning related to the missing
+> description for this field.
 > 
-> void usbnet_link_change(struct usbnet *dev, bool link, bool need_reset)
-> {
-> 	/* update link after link is reseted */
-> 	if (link && !need_reset)
-> 		netif_carrier_on(dev->net);
-> 	else
-> 		netif_carrier_off(dev->net);
-> 
-> 	if (need_reset && link)
-> 		usbnet_defer_kevent(dev, EVENT_LINK_RESET);
-> 	else
-> 		usbnet_defer_kevent(dev, EVENT_LINK_CHANGE);
-> }
+> Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+> ---
+> v1->v2: remove unused sg struct member as per review[1]
+> [1] https://lore.kernel.org/linux-usb/20241119020807.cn7ugxnhbkqwrr2b@synopsys.com/#t
+> ---
+>  drivers/usb/dwc3/core.h | 1 -
+>  1 file changed, 1 deletion(-)
 
-static int ax88772_phylink_setup(struct usbnet *dev)
-{
-        struct asix_common_private *priv = dev->driver_priv;
-        phy_interface_t phy_if_mode;
-        struct phylink *phylink;
+What about the "Reported-by:" tag?
 
-        priv->phylink_config.dev = &dev->net->dev;
-        priv->phylink_config.type = PHYLINK_NETDEV;
-        priv->phylink_config.mac_capabilities = MAC_SYM_PAUSE | MAC_ASYM_PAUSE |
-                MAC_10 | MAC_100;
+thanks,
 
-etc.
-
-This device is using phylink to manage the PHY. phylink will than
-manage the carrier. It assumes it is solely responsible for the
-carrier. So i think your fix is wrong. You probably should be removing
-all code in this driver which touches the carrier.
-
-	Andrew
+greg k-h
 
