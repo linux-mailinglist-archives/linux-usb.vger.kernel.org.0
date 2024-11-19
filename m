@@ -1,120 +1,116 @@
-Return-Path: <linux-usb+bounces-17720-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17721-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E5C49D2A08
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 16:47:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A06E89D2A98
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 17:16:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C0531F2365E
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 15:47:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AA1EBB329AA
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 15:54:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAB8A1D0954;
-	Tue, 19 Nov 2024 15:43:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A9E71CEABA;
+	Tue, 19 Nov 2024 15:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c5n2aaAu"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c6X80phY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C65851CEAA6;
-	Tue, 19 Nov 2024 15:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46E951CF2BD;
+	Tue, 19 Nov 2024 15:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732030998; cv=none; b=n5wDsL9j2RqR7gcJCLXuujGlb/qoNWRsOZc1Lo5QYASEIONHXSPM6TY93OLuOtwXwO3/FarXJo0lmCavo4Ip5tRO6dsQ1ZlJtDZ6l8VXQPl13FvoUTBjfHA+pVpZsVjmDGHcC1zDX6QQNsYP3YU2f6IEiem9QfH+l15poJC/RgA=
+	t=1732031642; cv=none; b=nmjKgEx2/6GgG3RjzXbS989pe6VnnVcyBum20e2xcY+5prPd0RL1elofSiYHco2+F/SJl6oftEAZWZ/q3NjfC980O9ZRMZJCg5iDiQyUOczNIxezrf+VR12T2t660lDAmxh2PJ2faKFxnF1FWIy2yCMxmN3FNq7TFIbw+j8WsDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732030998; c=relaxed/simple;
-	bh=FkL5bkKtAiHvQTF29E9UZy7IZKVw5GcwQnU8LPk+eyg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CkdXFDvu9+eaRyfDSOnbZ98GGHIBknGqoI4ND67AryqctnA+GpUa9ekuGilVnnboBFgaZ0c7jFZXh9YM2MhGacsUab1skt/zi+6muLwxOBpVM9ps6QUhR+wUzem25Jxrwd3lOrFLdAwbF2mNAhTVc5Ndi71UclQE8b+V0jZoJHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c5n2aaAu; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e388ff24cfeso2294695276.1;
-        Tue, 19 Nov 2024 07:43:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732030996; x=1732635796; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=wEGUj1o7pb0AzUqV7Fkn4ZlKTwE9iZsUWbsWf714dAg=;
-        b=c5n2aaAuIFAbAD0IbdT8hM5ghMXI3FkP/+TwOVhc1PHfk0+dU/jPsjECYbIbH6DDzl
-         aHdzxbgPiO5ljEYgZ/4q2hvi99HBqW4B85gAK/pGYtNdHI13dWEJUPgtGNGo2PTAGI8G
-         cMGtQJ8jGvOXB/W8qYujiGui5ZmF340HnlJNq7amn3pEeL75jqpCKJ9FMSzYKzK3SJqc
-         0jCA3hmOnKb7O2btxr3ezGOp+ScV+6aKojqFifQIOQX1DeAaQZH/+8Irhd/FOPUpljJe
-         xTgtj92Iefc9bbPOXIhYJtYclW5XFaOmuMjKOGKtlr+9PVgX5Gnnn8LnhqFWtTNeuYoN
-         iZ7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732030996; x=1732635796;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wEGUj1o7pb0AzUqV7Fkn4ZlKTwE9iZsUWbsWf714dAg=;
-        b=B4F8NNaE9PdD8nfFwIXMuinxahPeJoK6yVbIHvL/Jw0XzUQwvKotYS1I7i3QPHt7GY
-         3Eo4aaEMEaByHq0yDxK5ReRbXePl4FvcSHnNw0ZfArNPjxfxPhNJkGJaLkplQgM6yWUk
-         9MuYdxO2nKNIHB+lg7ZwoVEawQRajbG5yadLJSAWRnOt7o7//hmKCeP4jA3SHmStgMzM
-         OetfJgO3QfXtf/O2bpcZCJaTRujP2OTr0PUfS62zCDrytSSIdl0HfHgXNVZ03h4MlbPp
-         wuZoxtrf3yr8pAmfk3iE0H2CM7CqC17dLAJ1Hujk/ZKZyvKIkGSP0MeuQgJ4smW95371
-         1Yxw==
-X-Forwarded-Encrypted: i=1; AJvYcCX04UovC6/FLE+QfvjTGUBH2lyAj9lxpj+dMb2fFboe9OYbP29vr7vNz76lXLX6YKzBSow2ZdErwdxo3Go=@vger.kernel.org, AJvYcCX4SDpmHljLj9TTDikTiNZa/HyQiResWSLtnwOmuqIB9HEs26V0qY459/oNrWfmUUn6KFf7Y12J58OI@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyj8fuBqMcBrgx0PAZoKOv9lubB5trBGC5LTKkNT9pa9oOupZKc
-	jzHvNMaIZrsyiA0NAcxqfZ4waeTeJw2jwlrxz9K6mdLsdpQI6E7Y
-X-Google-Smtp-Source: AGHT+IEdUneL+IdFdTDxewMisaVAR0l3eDRbxXY6aYZEdvtBXu14ad10c2xaIszw9JSsl0K5XvOwiQ==
-X-Received: by 2002:a05:6902:1022:b0:e38:8a7e:6a6 with SMTP id 3f1490d57ef6-e388a7e16c5mr7387684276.11.1732030995702;
-        Tue, 19 Nov 2024 07:43:15 -0800 (PST)
-Received: from x13.. ([157.23.249.72])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e387e763c98sm2530152276.28.2024.11.19.07.43.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 19 Nov 2024 07:43:15 -0800 (PST)
-From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
-To: Thinh.Nguyen@synopsys.com,
-	gregkh@linuxfoundation.org
-Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	skhan@linuxfoundation.org,
-	ricardo@marliere.net,
-	linux-usb@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] Documentation: usb: dwc3: remove deprecated member
-Date: Tue, 19 Nov 2024 10:43:07 -0500
-Message-ID: <20241119154309.98747-1-luis.hernandez093@gmail.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1732031642; c=relaxed/simple;
+	bh=oerxtD3nEVi4XTue4l49odCUQx6jpGjoapzMXc667oY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ciVRuwuEOUs6sLS56UhxGUZF8QJudn5KtWy9TrklzKGJdEsj1BVKi2KpC2RFSV+klRl2q3XSGUIH2KOyG01fNj1wNZ1R593wWUqJh2+WkwcjbBPHkZAGEEJb2C+91YiDZke14JbHkLnhbmupm7tmDxWPCOB4ujxrF89UeZ2JAAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c6X80phY; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732031640; x=1763567640;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oerxtD3nEVi4XTue4l49odCUQx6jpGjoapzMXc667oY=;
+  b=c6X80phYHuQND484BhLxMWzBv1dHeca9zVXxPEg6BYD2AkQL4leVABMu
+   a6ISKjtEotloxaqjtYlh6g9Lzqw8yy98WAgtQ2/6G9OXk5yBOGuA8cQ9w
+   Is3MMvvSaA4qLvu+kUMe7MPsIHIOdHO0e1XWbt3z/EhJKrwVmgo0D+Jgd
+   G/L22PkG6Sj/2BdQsDyQCgKz/I7LH9sxSGEk35xeIYcktmpm+oKcxJ9Lj
+   VkLu6YOgu2/VTJceaFBTGzjur1OnvO3x8BzwZLgr8jdKEeYLB7qvdsxfx
+   Gxc9NdFZm98iKUXnnqzz44GUFHAJFvQfwHBzqYDKtv+v+sD+7V6n/Xc79
+   g==;
+X-CSE-ConnectionGUID: KmGTDzjRSAyvWMsr1KscYw==
+X-CSE-MsgGUID: mpGTs0N1SvOGEGUUTxy6AQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11261"; a="31420434"
+X-IronPort-AV: E=Sophos;i="6.12,166,1728975600"; 
+   d="scan'208";a="31420434"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Nov 2024 07:53:59 -0800
+X-CSE-ConnectionGUID: 2vowImP2Qoe5lB+Anw/K8Q==
+X-CSE-MsgGUID: brq/mmlnTOm8eWaPpVdyzQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,166,1728975600"; 
+   d="scan'208";a="89535173"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa010.jf.intel.com with SMTP; 19 Nov 2024 07:53:57 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 19 Nov 2024 17:53:55 +0200
+Date: Tue, 19 Nov 2024 17:53:55 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+Cc: linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 14/15] usb: typec: tcpci_mt6370: don't include
+ 'pm_wakeup.h' directly
+Message-ID: <Zzy0kz54bW3Xe0Al@kuha.fi.intel.com>
+References: <20241118072917.3853-1-wsa+renesas@sang-engineering.com>
+ <20241118072917.3853-15-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241118072917.3853-15-wsa+renesas@sang-engineering.com>
 
-This patch updates the documentation for the dwc3_request struct,
-removing the sg (scatter list pointer) member.
+On Mon, Nov 18, 2024 at 08:29:13AM +0100, Wolfram Sang wrote:
+> The header clearly states that it does not want to be included directly,
+> only via 'device.h'. 'platform_device.h' works equally well. Remove the
+> direct inclusion.
+> 
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 
-- Remove 'sg' in the doc block for dwc3_request
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-This change resolves a documentation warning related to the missing
-description for this field.
+> ---
+>  drivers/usb/typec/tcpm/tcpci_mt6370.c | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_mt6370.c b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> index 9cda1005ef01..bc5fd2557e6f 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_mt6370.c
+> @@ -11,7 +11,6 @@
+>  #include <linux/mod_devicetable.h>
+>  #include <linux/module.h>
+>  #include <linux/platform_device.h>
+> -#include <linux/pm_wakeup.h>
+>  #include <linux/pm_wakeirq.h>
+>  #include <linux/regmap.h>
+>  #include <linux/regulator/consumer.h>
+> -- 
+> 2.39.2
 
-Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
----
-v1->v2: remove unused sg struct member as per review[1]
-[1] https://lore.kernel.org/linux-usb/20241119020807.cn7ugxnhbkqwrr2b@synopsys.com/#t
----
- drivers/usb/dwc3/core.h | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index ee73789326bc..3be069c4520e 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -956,7 +956,6 @@ struct dwc3_request {
- 	struct usb_request	request;
- 	struct list_head	list;
- 	struct dwc3_ep		*dep;
--	struct scatterlist	*sg;
- 	struct scatterlist	*start_sg;
- 
- 	unsigned int		num_pending_sgs;
 -- 
-2.47.0
-
+heikki
 
