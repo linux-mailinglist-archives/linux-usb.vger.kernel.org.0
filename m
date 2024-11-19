@@ -1,108 +1,121 @@
-Return-Path: <linux-usb+bounces-17707-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17708-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 076D49D1EB5
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 04:12:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2351F9D1F73
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 05:55:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C12BE2815F6
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 03:12:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDFAB282952
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 04:55:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A6F145348;
-	Tue, 19 Nov 2024 03:11:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4F2C14D2A0;
+	Tue, 19 Nov 2024 04:55:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="EfYwb+HG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dgmtY7na"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C98713C683
-	for <linux-usb@vger.kernel.org>; Tue, 19 Nov 2024 03:11:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED6A29CA;
+	Tue, 19 Nov 2024 04:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1731985915; cv=none; b=qGACaWs2BcLwphLdiogIBdZp9iw+cEalJ5F6LblA0Cy0wgnvBb750oFxoRp4IanrL8DPpiWCLh9FFbEiw4/L7kCYL8OQvkfZVR2ydd36svmUgFnsdG5XmugurttZ/0HJqguStq2xfbpBFUdLg5Mk/lNxAP9o1boomai9EHIcdJ0=
+	t=1731992120; cv=none; b=kDRW4FmkK/WzY2Wluzr2ytSHJPrsKAC5H/HzZoapn/etaBOW7UGb70zQS2Obyf+GXPCXHz0xm4UiEDfrlk1eP3FtDQYCRNaZZvxMzw9J8NBXGtMy8TVahZDDH7ZPzfiozQSPLm794Tuf74NTjPsIYPLEBxzc7VtcUYykIkdi9HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1731985915; c=relaxed/simple;
-	bh=IVb86MOVRYv8LRYfnxl7sn/j7eIWJwGxMw9CYLU24ZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HsHke16PlCa8px/F7VKyZBaGv74JByu3J5njfh3VnTE3dxCGf72jaXUjMKx2h4USWj6nanPJsQrMMBLjpIGCtAcg6JR5FUZqIuCRm3T9eVlJYhULlcvUDPWKIu2MKB56nyWJw00cLLoGOKJpYYM7+q6WRjNdjNh4V+4ucfFHCOM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=EfYwb+HG; arc=none smtp.client-ip=209.85.219.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6d403b1d050so2837666d6.1
-        for <linux-usb@vger.kernel.org>; Mon, 18 Nov 2024 19:11:53 -0800 (PST)
+	s=arc-20240116; t=1731992120; c=relaxed/simple;
+	bh=z/81dZ1tk15Q42b63Uiw78Bw0opOjg0YrmHT0HY9ny0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ptQCJJGPdJxpesSm69ihJ/aIbu7aMnkms1dGo+OAsqRjh0w6JCWZa5PA691K4o9P02dr0KgPLJ/xcT9/U0QAAgRcC++UuHKu62/zoMGDZcgJbEGsJC14rkN6nsZGYzOGFW39cYy/kcZcmrZVwd1Pum8Lgm8xaXefqa7zkE3FVZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dgmtY7na; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-20cf3f68ff2so3132795ad.2;
+        Mon, 18 Nov 2024 20:55:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1731985912; x=1732590712; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZG8UleUmTiC5OzQO3TOWEjc2/hE+cAHTzOdjRLKK+N0=;
-        b=EfYwb+HGrs0T62VUODK4S/1JBO3UfdcHdnjrN5Y8fVduT5dFWXJNqCekTQi50n/gc8
-         pN2+x+V5oOYH85NS5ItTFBpBbU9XarvepGNeZAz7G/8No6Xj/V1ync4Wpe/M8h+wKbLR
-         uSKwn322Dszdusy7BhA6jsdCrmoLuS/bz5jAjOvbK3mm1+RMm81PGoHuk53ZBdhc72q5
-         PyPfSZXIOKXA4AFZ+lOtGJg/KcgctnkjUEY0yYkxz6N+GppR5dYV65tPKeSWLO99kv6+
-         OUCN/zjaEtam8cDiqN74gosFFlQjQRGDtAcVlZ5iw8MEe6DOSJYv/yDuM4VWyJTedPfb
-         rfAw==
+        d=gmail.com; s=20230601; t=1731992118; x=1732596918; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mhvO12J46IBOnMPjBeMGgT1CgETrMfY9BeH8e1iABdk=;
+        b=dgmtY7na1Lz8QO2fCaDkGELWIECD45yNmr/g6pz7fKuQAZ4ZxnRgv7O8Y/Vtvo+fOz
+         thfUPifyiEeWqjJ+MsDfdjHO0oLvysoef/L3mMuJ/EefZUySv4KTnWxwIORX7YQGNgPr
+         xlbNLbDE9LVaUbw6lEgZOz64guZWvBDtEFBNty9KmKRsFnIZ/ypQemjhkfYbmG/H1iAs
+         wFjIblWnqEE/Z4LskWvlRj53j0ZYksronDEoc6mVuYfLez3gJNU/s/MQqBlkxD4XHAER
+         fu6HMDIbdEPT1/la1QXQgxbCQtqeAm23Uf7s9TMDJvHF7svqWuQto0OSBAg9XVxxPgkQ
+         7i9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1731985912; x=1732590712;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZG8UleUmTiC5OzQO3TOWEjc2/hE+cAHTzOdjRLKK+N0=;
-        b=lyWe8QIKQHSmE6EYXWQw3+QON8hLB14j1/GfOhCS+XZr0yGMxFGhy/8CGh5P2bqT2W
-         5neOSIWjOBop/c3uiHOLR1/GdBAENeF9CIpJ+zzu+KHWdpS5BHPtMlOvHW1fAIhnEtaw
-         hKJxRhPq7Wyl1zwAtHKqkPjVbLb9LEGESe1SN1jvOey4a3y9RL5FAD63NBG4a+IntKFx
-         e544mkSBT1kdCJ60Y5sR1YiNzq4X6jxcOFxCUJw9XX/RbI/zw3av0dJM+Dwvzds/t/FA
-         djKH12H3yCxsMF1Ps89SE8KVYQQF9imzeowLG0GvL5ZJwb9RY9ClXngat7x6LKMQp8cB
-         A9LA==
-X-Gm-Message-State: AOJu0YyrNWYAtzKPzbdw65v2HW2IDXNea8tr9Mt7oLaVnrlMMjjeAa2i
-	xZyXaWeLE7Q2f8hkYqX4XJdUCsGHsT2P+JGbD2wgiPXnHA95pM7SDbRjvCuk/B8fd7/UCp5hDP0
-	=
-X-Google-Smtp-Source: AGHT+IFt2H4z3M9ZFjC/fRAKcMgiLs3Rkuhy63PsZxibwZ5Wa2k+SaS/CYbgqoo2OYDiegOpPANkVw==
-X-Received: by 2002:ad4:4ee6:0:b0:6d4:1d4a:70e9 with SMTP id 6a1803df08f44-6d41d4a73c9mr120390466d6.19.1731985912301;
-        Mon, 18 Nov 2024 19:11:52 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::24f4])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d40dd22699sm43366186d6.88.2024.11.18.19.11.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Nov 2024 19:11:51 -0800 (PST)
-Date: Mon, 18 Nov 2024 22:11:48 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Markus Rechberger <linuxusb.ml@sundtek.de>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: USB Autosuspend
-Message-ID: <3e9d6d03-eed7-4f46-9926-4d395c0bc46d@rowland.harvard.edu>
-References: <77b79e95c092511a695ac0b6a8eade57b12ff3db.camel@sundtek.de>
+        d=1e100.net; s=20230601; t=1731992118; x=1732596918;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mhvO12J46IBOnMPjBeMGgT1CgETrMfY9BeH8e1iABdk=;
+        b=g8paOqGhMJRO6AlZyeelWRVU6xBYWLi1JQT5osPZFyBxjpUyVd4l6LYm56EjAVG5m8
+         cmQ7M1yk3RrWECFoec6p6I7P0lyqye+B6CZlNGkDrglB7kpBLAYGBa56jFX4S36mc6a0
+         cIcFwtc5hA1wsHN7UM1Hhc4NWdaTY/NtOaTbFNKlJxwV6L2rh8POPyQpt17csZhDtNF6
+         fHaHG/m1UNZyv4n4NvowsxE8j4KDfjVKDDKdd7sRimTasQ+TKXOKsoxVX07Iw13SaEgc
+         eOCfMpYzx4aRRRvxhwW9uZr/SnzIyQ0uvOb1NvdmZ0baN5aq0YAH8/92S0Eb0y0P1934
+         q3Rg==
+X-Forwarded-Encrypted: i=1; AJvYcCUnqHS/GicR4XNC/meDcfyrVDnqRyAnQ571AdC++ttU35APtyz32wV5GW6gThn+vuRlnImNdZMz@vger.kernel.org, AJvYcCVMKDtxym6w4NgqXzgRsUGzqv7kubxKTeJKsVLRa+rss3SLYC3zUDwTl4Pp0A78Gw88iW/rCzvBjNGWUH4=@vger.kernel.org, AJvYcCWCgxkSnRI5AYpz/IenWY70c4tNI0X8D7OAiLTWniNnCoCAYz1+RyBh7/v7V59Hz1wA7OVaYq+IZnPu@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTlF1qhhYYVOnlrrEO3OB6sbT248LtkXjsEqQH1sPkqVsHQxc7
+	2C36Z7eCIFlFc8rfX6FJZhp2aC2i7FBqsbaOETUKm9t3jCJjvAwt
+X-Google-Smtp-Source: AGHT+IF3mhBrDjfmp0C3Iophs8XzghD6ZnW3lCAX9J/ycI3fY1Re/4HNouU3JBCzcdHIUNZ/pjn5Qg==
+X-Received: by 2002:a17:903:2b08:b0:20c:b527:d460 with SMTP id d9443c01a7336-211d0d77e16mr82030975ad.6.1731992118089;
+        Mon, 18 Nov 2024 20:55:18 -0800 (PST)
+Received: from [192.168.1.7] ([119.42.110.94])
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-21253619d4bsm3963345ad.173.2024.11.18.20.55.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 18 Nov 2024 20:55:17 -0800 (PST)
+Message-ID: <26889f86-82bd-4bf2-808e-7476ad6671f7@gmail.com>
+Date: Tue, 19 Nov 2024 11:55:10 +0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77b79e95c092511a695ac0b6a8eade57b12ff3db.camel@sundtek.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/5] net: usb: qmi_wwan: add IDs for EM7565 (9X50) in
+ "MBIM USBIF" config
+To: Ivan Shapovalov <intelfx@intelfx.name>, linux-kernel@vger.kernel.org
+Cc: =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Johan Hovold <johan@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20241117083204.57738-1-intelfx@intelfx.name>
+Content-Language: en-US
+From: Lars Melin <larsm17@gmail.com>
+In-Reply-To: <20241117083204.57738-1-intelfx@intelfx.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon, Nov 18, 2024 at 04:13:29PM +0800, Markus Rechberger wrote:
-> Hi,
+
+On 2024-11-17 15:31, Ivan Shapovalov wrote:
+> This change was discovered and tested using author's own EM7565 device.
 > 
-> we repeatedly received issues from customers with usb autosuspend, our
-> devices are randomly disconnected on some systems, it did not happen
-> many times but if more than 4-5 customers report this there's usually
-> some real issue behind that.
-> 
-> I'm asking here because the Libreelec distribution recently got my
-> attention that they seem to set usb autosuspend to -1 during boot time
-> so they probably figured that out much earlier with other devices.
-> I have never experienced that issue on an Ivy or Haswell based system.
-> 
-> Were there some issues with particular kernel versions in the past or
-> are there any issues known in general with USB autosuspend?
+> This "MBIM USBIF" configuration corresponds to the `AT!USBCOMP=1,1,xxx`
+> on-device USB composition setting. When activated, the VID:PID resets
+> to 1199:90b1 ("application" mode) + 1199:90b0 ("boot" mode, i.e. QDL).
 
-I'm not aware of any such issues.
+Hi Ivan,
+for the whole series 1-5, please include an lsusb -v or usb-devices 
+listing for any device that you add support for.
+What you find in device firmware or in Qualcomm SDK drivers does not 
+necessarily reflect what has actually been manufactured and consequently 
+  how those Id's could be used for a future different product.
 
-Do you think you can get kernel debugging logs from your customers 
-showing examples of these disconnections?
+The 1199:90d3 is already supported by the option serial driver and that 
+is where devices with interfaces supported by their unique interface 
+attributes belong instead of being supported by interface number in 
+qcserial.
 
-Alan Stern
+thanks
+Lars
+
+
+
 
