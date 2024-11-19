@@ -1,141 +1,132 @@
-Return-Path: <linux-usb+bounces-17716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17717-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAA739D2663
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 14:06:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A31C9D276A
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 14:55:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 910A92834FE
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 13:06:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 305F02854D0
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 13:55:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 712751CCB58;
-	Tue, 19 Nov 2024 13:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=turris.com header.i=@turris.com header.b="RExPBm/R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E35A71CCEFA;
+	Tue, 19 Nov 2024 13:55:16 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.nic.cz (mail.nic.cz [217.31.204.67])
+Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE3771CCB2C;
-	Tue, 19 Nov 2024 13:06:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.31.204.67
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4851154670;
+	Tue, 19 Nov 2024 13:55:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732021597; cv=none; b=rWt6sgA8LzxO6ULfdODCjHhTXDz79TjUn2utd0/4iHiuDrsntyEprKjTXzJsryaGzq7RjGVhCdBBZHPEk6kqQ4qo2FRkwlh+mQfHczvEuSK0R8i9w6VFJhGwW8TmLnAy15nxGfXeYiz5/M9AIpzyMhNNWxZl4VE5JiDECXXYeYI=
+	t=1732024516; cv=none; b=q4bxsV/fTr02O3l/yjUD7yQgFbeuBtBX9IhP27T6wbQD/TsgtTLYsDY/Ffu5ta2S7M7qtbrp4pCqjCJfO28/FfD5Lyh9pBOKbDON7q4BI9HS6r+3S3FEWTC+9OVeJTyVzi4FsJvr4vWRnwj0EMxEG+qdlgrx2FlGsAa5EiFywkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732021597; c=relaxed/simple;
-	bh=JtWIzyY/2ym9dryXGJVbXWARmJW5m80KEY9YH8YDy4A=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=rEsDByjtjB9KaejNupKypbbC0bTWPsokSIxs7bX25jMsYrk0DQAEOL31bfbZBKapyk6cIG9bCtwZYqXDvCzSQX8IyUlJrFcWFMoHejAgyNJ3tNVraE5cFsl9HqHD+xQWKAumo7irulg7OMyLMReFbBGqdFpbq57IE9MQtOncBIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=turris.com; spf=pass smtp.mailfrom=turris.com; dkim=pass (1024-bit key) header.d=turris.com header.i=@turris.com header.b=RExPBm/R; arc=none smtp.client-ip=217.31.204.67
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=turris.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=turris.com
-Received: from localhost (unknown [IPv6:2001:1488:fffe:6:1e96:d231:26b0:9350])
-	by mail.nic.cz (Postfix) with ESMTPSA id 4AFEA1C12EA;
-	Tue, 19 Nov 2024 14:00:19 +0100 (CET)
-Authentication-Results: mail.nic.cz;
-	auth=pass smtp.auth=michal.hrusecky@nic.cz smtp.mailfrom=michal.hrusecky@turris.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=turris.com;
-	s=default; t=1732021219;
-	bh=JtWIzyY/2ym9dryXGJVbXWARmJW5m80KEY9YH8YDy4A=;
-	h=Date:From:To:Cc:Subject:From:Reply-To:Subject:To:Cc;
-	b=RExPBm/R+/c+FYSRhBVHrHg7HFgQcd+dIWAeflNaflwSNpYCrHDAGsMnp3Bo/ejzH
-	 YLmjvNmSQ9+jomw3+dlcKI26AC8L6/53sJOxzpOiW0T9H2tqgC7o3bZx5QkpZXEHV6
-	 qIDWP9eUwLiSgOYUnfzAZ8qB4qzcgYW7/v+R2TiM=
-Date: Tue, 19 Nov 2024 14:00:18 +0100
-From: Michal Hrusecky <michal.hrusecky@turris.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] USB: serial: option: add MeiG Smart SLM770A
-Message-ID: <6uel66cvf2cn2jenpoc43usee3pwnmtaerqnpfl7tnoa6s5mff@5xxrpbabupah>
-X-Operating-System: Linux
+	s=arc-20240116; t=1732024516; c=relaxed/simple;
+	bh=SLr8wLJHObtcmee23pr+3IM8O4qo1N6BBgQ9Io8vn78=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GPTdByZIiUwrIYk1wjJIjERQP05tesQn7ea1H05cPYppD4gCNwycHzJQCOVYVexwpakDafhrS90+I5OX5YtpvrYBqx/jS4P33N40HMeTXMoBFTxCrVOvgg3MPfIkUoAHcEQyzXjEIxSdb0n0U9AMIDLQ2t6yTpI6u4bjoMhSzC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+	by ni.piap.pl (Postfix) with ESMTPS id C067BC3EEAC5;
+	Tue, 19 Nov 2024 14:47:00 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl C067BC3EEAC5
+From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To: netdev <netdev@vger.kernel.org>
+Cc: Oliver Neukum <oneukum@suse.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Jose Ignacio Tornos Martinez
+ <jtornosm@redhat.com>, Ming Lei <ming.lei@canonical.com>
+Subject: [PATCH] usbnet_link_change() fails to call netif_carrier_on()
+Sender: khalasa@piap.pl
+Date: Tue, 19 Nov 2024 14:46:59 +0100
+Message-ID: <m34j43gwto.fsf@t19.piap.pl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Rspamd-Action: no action
-X-Rspamd-Pre-Result: action=no action;
-	module=multimap;
-	Matched map: WHITELISTED_IP
-X-Rspamd-Server: mail
-X-Spamd-Bar: /
-X-Rspamd-Queue-Id: 4AFEA1C12EA
-X-Spamd-Result: default: False [-0.10 / 16.00];
-	MIME_GOOD(-0.10)[text/plain];
-	WHITELISTED_IP(0.00)[2001:1488:fffe:6:1e96:d231:26b0:9350];
-	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:25192, ipnet:2001:1488::/32, country:CZ];
-	FROM_EQ_ENVFROM(0.00)[];
-	ARC_NA(0.00)[];
-	FROM_HAS_DN(0.00)[]
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Update the USB serial option driver to support MeiG Smart SLM770A.
+Hi,
 
-ID 2dee:4d57 Marvell Mobile Composite Device Bus
+ASIX AX88772B based USB 10/100 Ethernet adapter doesn't come
+up ("carrier off"), despite the built-in 100BASE-FX PHY positive link
+indication.
 
-T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.00 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
-P:  Vendor=2dee ProdID=4d57 Rev= 1.00
-S:  Manufacturer=Marvell
-S:  Product=Mobile Composite Device Bus
-C:* #Ifs= 6 Cfg#= 1 Atr=c0 MxPwr=500mA
-A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
-I:* If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
-E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0c(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0b(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 5 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=0e(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+The problem appears to be in usbnet.c framework:
 
-Tested successfully connecting to the Internet via rndis interface after
-dialing via AT commands on If#=3 or If#=4.
-Not sure of the purpose of the other serial interfaces.
+void usbnet_link_change(struct usbnet *dev, bool link, bool need_reset)
+{
+	/* update link after link is reseted */
+	if (link && !need_reset)
+		netif_carrier_on(dev->net);
+	else
+		netif_carrier_off(dev->net);
 
-Signed-off-by: Michal Hrusecky <michal.hrusecky@turris.com>
----
- drivers/usb/serial/option.c | 3 +++
- 1 file changed, 3 insertions(+)
+	if (need_reset && link)
+		usbnet_defer_kevent(dev, EVENT_LINK_RESET);
+	else
+		usbnet_defer_kevent(dev, EVENT_LINK_CHANGE);
+}
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 4f18f189f309..31b3d007750c 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -624,6 +624,8 @@ static void option_instat_callback(struct urb *urb);
- #define MEIGSMART_PRODUCT_SRM825L		0x4d22
- /* MeiG Smart SLM320 based on UNISOC UIS8910 */
- #define MEIGSMART_PRODUCT_SLM320		0x4d41
-+/* MeiG Smart SLM770A based on ASR1803 */
-+#define MEIGSMART_PRODUCT_SLM770A		0x4d57
- 
- /* Device flags */
- 
-@@ -2376,6 +2378,7 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, LUAT_PRODUCT_AIR720U, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SLM320, 0xff, 0, 0) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SLM770A, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x30) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x40) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x60) },
--- 
-2.47.0
+I think the author's idea was a bit different than what the code really
+ended doing. Especially when called with link =3D 1 and need_reset =3D 1.
 
+It seems it may have already caused problems - possible workarounds:
+- commit 7be4cb7189f7 ("net: usb: ax88179_178a: improve reset check")
+- commit ecf848eb934b ("net: usb: ax88179_178a: fix link status when
+  link is set to down/up")
+Can't check those due to -ENOHW but ax88179_link_reset() adds
+a netif_carrier_on() call on link ups.
+
+Not sure about the "reset" name, though (and the comment in
+usbnet_link_change()). It seems it's when the link goes up.
+
+Signed-off-by: Krzysztof Ha=C5=82asa <khalasa@piap.pl>
+Fixes: ac64995da872 ("usbnet: introduce usbnet_link_change API")
+Fixes: 4b49f58fff00 ("usbnet: handle link change")
+
+--- a/drivers/net/usb/usbnet.c
++++ b/drivers/net/usb/usbnet.c
+@@ -1978,16 +1978,18 @@ EXPORT_SYMBOL(usbnet_manage_power);
+=20
+ void usbnet_link_change(struct usbnet *dev, bool link, bool need_reset)
+ {
+-	/* update link after link is reseted */
+-	if (link && !need_reset)
++	if (link)
+ 		netif_carrier_on(dev->net);
+ 	else
+ 		netif_carrier_off(dev->net);
+=20
+-	if (need_reset && link)
+-		usbnet_defer_kevent(dev, EVENT_LINK_RESET);
+-	else
+-		usbnet_defer_kevent(dev, EVENT_LINK_CHANGE);
++	if (need_reset) {
++		/* update link after link is reset */
++		if (link)
++			usbnet_defer_kevent(dev, EVENT_LINK_RESET);
++		else
++			usbnet_defer_kevent(dev, EVENT_LINK_CHANGE);
++	}
+ }
+ EXPORT_SYMBOL(usbnet_link_change);
+=20
+
+The code has been introduced in 2013, by 4b49f58fff00 and a bunch of
+related commits. Perhaps it visibly affects only AXIS and dm9601
+adapters, though.
+--=20
+Krzysztof "Chris" Ha=C5=82asa
+
+Sie=C4=87 Badawcza =C5=81ukasiewicz
+Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+Al. Jerozolimskie 202, 02-486 Warszawa
 
