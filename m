@@ -1,53 +1,61 @@
-Return-Path: <linux-usb+bounces-17723-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17724-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 988EC9D2C20
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 18:09:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65DA89D2C34
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 18:13:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FD1B28558F
-	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 17:09:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 152081F21986
+	for <lists+linux-usb@lfdr.de>; Tue, 19 Nov 2024 17:13:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB5901D0BAE;
-	Tue, 19 Nov 2024 17:08:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DA11D0F5C;
+	Tue, 19 Nov 2024 17:13:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JGfLtTPI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T+Omqzkc"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0544E57D;
-	Tue, 19 Nov 2024 17:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 914FE25763;
+	Tue, 19 Nov 2024 17:13:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732036139; cv=none; b=koBnqc0CkNaxu4/qqC3ZcJqt+3kpQYeNwGdYI1b/TFcvtjrCv6j9Y/CGnRPO173DblmiBnWgm6Tdt8WYZ44uujUSA85MRiFQeq73n7WERQzFqLPG7ymWfyF/XpkDzW/JTHHgtYEFIwVXsvOxshdjsZi7VUeXGUhoA2LjjFuk5As=
+	t=1732036398; cv=none; b=kOIgZjjDY1Fim1is78KEpVok1Xgao9YE6IAGOeIApa2oFWhbojZJL5PD33SLucnGvU8yGMc9q6iE9L50tUpjN6kqdzI1+0O05WKMSotioty2LGA+zY3PnRKzg96PNFu8P/CoTf5njF5fF3gKYtAnCKP3jEf5+Q5CK0hmE4Ayysw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732036139; c=relaxed/simple;
-	bh=jsziOO9YUbowy87BvWTnC8X1lFfY8X8yPem1cuFkzzw=;
+	s=arc-20240116; t=1732036398; c=relaxed/simple;
+	bh=ggE7Kv8fbEJQDnLfRqnMQ5FSxw3wmUl+igo2b35kd5I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=STSJw5sEkwLKTLbgRCjHSgQvuUkz7LMNT/gG+C315A+bJr8zb5nQOzgTQ4WcFBOHhTRsIp2yPQcRpLSPqUR9O1+vRF8naxIojn8JAWB9Z8iCAnU3wu1SWCRScdSOYHl/mn19Wt7B2d69tH1Vi9tIHGI1r0z3QGRNegX0HOgX/HI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JGfLtTPI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 638C0C4CECF;
-	Tue, 19 Nov 2024 17:08:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1732036138;
-	bh=jsziOO9YUbowy87BvWTnC8X1lFfY8X8yPem1cuFkzzw=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=jwF9mqgmcXTp1rFvAQ8zqt7nBjwgi9C0Lg6Wt8qRA9QEkKwQNvqRUD19xYArMc8zMXtNp3f5Qun5SIHeewhv/wcdOip3hypRCn2k8PilxbM2ayH2kKxemkWguJbUj5TvcgopkZsrCaWjg4fx/7bdV8OR3PbFc1hA0OlemFWOt2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T+Omqzkc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03AA7C4CECF;
+	Tue, 19 Nov 2024 17:13:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732036397;
+	bh=ggE7Kv8fbEJQDnLfRqnMQ5FSxw3wmUl+igo2b35kd5I=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JGfLtTPIqzcit5VvNsJUVfT/vg9o1LawHE22rSxWK1UcM4MGyOP5a7izMSURy7+VN
-	 tWH0YXo08kIUIJgbgfhcPuEreJVJwaR6gSgYEyTiUL9dDj5W6Mmb9fEgp/x7zt1xTR
-	 pM3W6BtNqQFTCnfEhxyB1BiDdgHf8e9HOcekMV1s=
-Date: Tue, 19 Nov 2024 18:08:34 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
-Cc: Thinh.Nguyen@synopsys.com, skhan@linuxfoundation.org,
-	ricardo@marliere.net, linux-usb@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] Documentation: usb: dwc3: remove deprecated member
-Message-ID: <2024111922-pantyhose-panorama-6f16@gregkh>
-References: <20241119154309.98747-1-luis.hernandez093@gmail.com>
+	b=T+OmqzkcJCiucFF2UnxpJpQ/xcYpsSxBx4gI5KO1T1OwBMnQKhkkThRuwN3Gzvmqj
+	 m2XWQo+7i5YIpBsTfJm7yzOLc2LMILt6nQPlb2EofC2Tpadgp2zhxmIhF2o8r2pq2j
+	 M1GwJ5kyKMzq2r1XF/PWMw8tl0EkClBvImKVFdi8n15wS/4vO28MOcQ4Bu4le7ANTO
+	 guPpw0F7FRjkN2aKoUgUVmUwr78fyfEVQw07tnz0Dyw8WvIj5SVcwyM7Ps62uTfMSg
+	 RM1uSxB7CroCjSelz16lXVMkyCZSAkTVnVMqh9boSPRB7CpIjVt4FbURWJWiB3vYIk
+	 Xs9Zy6M2sD15w==
+Date: Tue, 19 Nov 2024 11:13:15 -0600
+From: Rob Herring <robh@kernel.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH] dt-bindings: usb: qcom,dwc3: Make ss_phy_irq optional
+ for X1E80100
+Message-ID: <20241119171315.GA1805024-robh@kernel.org>
+References: <20241116-topic-x1e_usb2_bindings-v1-1-dde2d63f428f@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,28 +64,38 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241119154309.98747-1-luis.hernandez093@gmail.com>
+In-Reply-To: <20241116-topic-x1e_usb2_bindings-v1-1-dde2d63f428f@oss.qualcomm.com>
 
-On Tue, Nov 19, 2024 at 10:43:07AM -0500, Luis Felipe Hernandez wrote:
-> This patch updates the documentation for the dwc3_request struct,
-> removing the sg (scatter list pointer) member.
+On Sat, Nov 16, 2024 at 12:17:52PM +0100, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > 
-> - Remove 'sg' in the doc block for dwc3_request
+> X1 has multiple DWC3 hosts, including one that's USB2, which naturally
+> means it doesn't have a SuperSpeed interrupt. Make it optional to fix
+> warnings such as:
 > 
-> This change resolves a documentation warning related to the missing
-> description for this field.
-> 
-> Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+> usb@a2f8800: interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
+
+That's a good start, but what about all the other warnings for usb 
+interrupts?:
+
+     13  usb@f92f8800: 'interrupt-names' is a required property
+     11  usb@76f8800: interrupt-names: ['pwr_event', 'qusb2_phy', 'hs_phy_irq'] is too short
+     11  usb@6af8800: interrupts: [[0, 347, 4], [0, 243, 4]] is too short
+     11  usb@6af8800: interrupt-names:1: 'qusb2_phy' was expected
+     11  usb@6af8800: interrupt-names:0: 'pwr_event' was expected
+     11  usb@6af8800: interrupt-names: ['hs_phy_irq', 'ss_phy_irq'] is too short
+      9  usb@a2f8800: interrupt-names: ['pwr_event', 'dp_hs_phy_irq', 'dm_hs_phy_irq'] is too short
+      7  usb@c2f8800: interrupt-names: ['pwr_event', 'qusb2_phy', 'hs_phy_irq'] is too short
+      5  usb@8af8800: interrupts-extended: [[1, 0, 134, 4]] is too short
+      5  usb@8af8800: interrupt-names: ['pwr_event'] is too short
+      4  usb@8af8800: interrupts: [[0, 62, 4]] is too short
+      4  usb@8af8800: interrupt-names: ['hs_phy_irq'] is too short
+
+
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 > ---
-> v1->v2: remove unused sg struct member as per review[1]
-> [1] https://lore.kernel.org/linux-usb/20241119020807.cn7ugxnhbkqwrr2b@synopsys.com/#t
-> ---
->  drivers/usb/dwc3/core.h | 1 -
->  1 file changed, 1 deletion(-)
+>  Documentation/devicetree/bindings/usb/qcom,dwc3.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-What about the "Reported-by:" tag?
-
-thanks,
-
-greg k-h
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
 
