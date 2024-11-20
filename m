@@ -1,137 +1,146 @@
-Return-Path: <linux-usb+bounces-17739-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17740-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C0989D3957
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 12:20:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 265CF9D39C9
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 12:46:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF35F281D20
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 11:20:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A9A6CB24B0F
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 11:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EB9C1A0711;
-	Wed, 20 Nov 2024 11:20:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3591A0B0E;
+	Wed, 20 Nov 2024 11:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hpakLSG+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fJ5w4NSY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502FA19F461
-	for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 11:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62C81865E1;
+	Wed, 20 Nov 2024 11:45:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732101609; cv=none; b=TrpHi6cctQx6paR8jq9q5w9f4CCCtLgh2opQI/SRSr6mUEy8bTjjarV+IG0yGW68na/Bq4tR/wzVrdY0ZC1xYfh2YY/xLUj5TTjFzs5NmpSmXfF0AdHj2bfBBlJLkHRv2r3LotjhutL7NSaZo3wF0nN4zKeUVvhmqrxdZvNwnbE=
+	t=1732103153; cv=none; b=cgBMd+St7KMq74sUlT5z7i2jj2XAzC1W+Eprfi2HamrPXE0bpYquCgbHK8l7fb3hj0OQbd0gAlXJ49pWNqHnRLZhVKh7rzTA2Zf2HYnwfGagNMlKldqZpBjEREEW2whsT5QcvavGSu5j8+cwGl5yRRyIfakmzSsatAbyekScOXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732101609; c=relaxed/simple;
-	bh=WK7LUDYk0ktBvrzmwC6g3ElNSp5LcnP3ZDHG3ZDYMLA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oumzEJ8YdZp4siIwTO8Fz20NQCPieUL9Kmhd5D9BNYAAxK35A5uU+GWEXk9ydsJljk2pnrDDo/7scbERCc+EhW5LkonVUb3rH6C8OOpPCQLYygb8XdlE7wGzCRahqljdFoiv05l9kN77zBnX9xuxGZjjs2S8+PdwmL5Bhf+KKmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hpakLSG+; arc=none smtp.client-ip=192.198.163.18
+	s=arc-20240116; t=1732103153; c=relaxed/simple;
+	bh=2/whBXtLl01qHsz9y/HxzllZz/4ll8CgpqYA7gqJMyU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MERRJDQginbAYQ1Bg/aPFQjCdOf5ZsX/cOBpJdbyq9Gif3J/xOdNSrLEk0FqjUmVNIzQRqnnidptAB7dmwDHwgORnfDUCRavk5a5ImoSrrodgA7ytVG3EB7pgBb3aKeEN1GI9fg8ld+qFIHqS3xiQxps9NQTb6VVnQxITekqo78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fJ5w4NSY; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732101608; x=1763637608;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=WK7LUDYk0ktBvrzmwC6g3ElNSp5LcnP3ZDHG3ZDYMLA=;
-  b=hpakLSG+YuOLF9MfI0UEfL+sJMTZzbplWhrEG/hP1CF7a3GXSX3grPoM
-   mv0F6RBbz35BtuBAhcUa+DZEP9nXN3yJ4Cyk4oJnbCmPJ++h5ZrcBOQ8s
-   BvxPRkDPtWLhGy1wTLeHrvOTdMkDpebtCwyPntWhHdaxB/rT2nq0UZYBg
-   S4LJe/WAfJQsHpJ8jO9b1PA6jwm3tO92hfL+/WW6cbDN8jDXhdbeiHo+p
-   OPuPUxj/HMkO21J+G0wjoBkVjQ0TtlzRCoDAdbT1ZOEpUvjz6LP45uxKe
-   mugkqmRtUwisv6VhyL62EjSyc7g3HDi+QJeIbRH7bFuTB3U1P0nRzb0Tl
-   g==;
-X-CSE-ConnectionGUID: qepSNFWYRiKiBYMjJX2eIA==
-X-CSE-MsgGUID: NEf4WjFDTNGuLt2EPpzxxA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11261"; a="31523528"
+  t=1732103152; x=1763639152;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=2/whBXtLl01qHsz9y/HxzllZz/4ll8CgpqYA7gqJMyU=;
+  b=fJ5w4NSYw10c4vdmghBrzhsW/WtoJKoeUCkcAur+2y/IcyFhwWaPJIXS
+   WHDx5M87CW/2jH0BdbhkE9JbVmm0LcjXz5Fz19d6cW9aWlezPfEX8FdWE
+   Vp5HJUbQjB3Cv5HCx4PXG0OgB1Jb5RbDe3hSv/NDUYuO8brXa3ci9a8o1
+   y186YCceTbrsb83nWHKAHp9Q2cIi1pH0Lg1dHJUoiqyfLIcjwKHJKI7Sm
+   twaesEpUWo0inuFRYp/8zRSkq9cyYRhLmC1wMLPn91BEOpdzsqOip8qYI
+   slKQik8o7mJ0I+GYarbn+DXHSZMHWBnrnn3/dNI+g/s8+Jugk+Tb6AeP5
+   Q==;
+X-CSE-ConnectionGUID: MQEqo+9NTtWYgnysDaly1g==
+X-CSE-MsgGUID: 6n+hzpAlT5SJejW7ydmgCw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11261"; a="43222780"
 X-IronPort-AV: E=Sophos;i="6.12,169,1728975600"; 
-   d="scan'208";a="31523528"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 03:20:08 -0800
-X-CSE-ConnectionGUID: r06Kk9QQSue0FZsSKRqx1Q==
-X-CSE-MsgGUID: 0otTONDaR1qxIqJgJUjrCw==
+   d="scan'208";a="43222780"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 03:45:52 -0800
+X-CSE-ConnectionGUID: na3r3SMiQFqhaD8+hnDfIg==
+X-CSE-MsgGUID: 7KWy1XxYSUaTmmSzIbNcAw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,169,1728975600"; 
-   d="scan'208";a="89834954"
-Received: from klitkey1-mobl1.ger.corp.intel.com (HELO mdjait-mobl) ([10.245.244.210])
-  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Nov 2024 03:20:06 -0800
-Date: Wed, 20 Nov 2024 12:19:57 +0100
-From: Mehdi Djait <mehdi.djait@linux.intel.com>
-To: amilsananak <amilsananak@gmail.com>
-Cc: gregkh@linuxfoundation.org, mailing-list-name@vger.kernel.org, 
-	laurent.pinchart@ideasonboard.com, dan.scally@ideasonboard.com, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] add a device in uvc_driver
-Message-ID: <jnbogrvahgnoegglrrht4keb5kaizkrlg6k3lg2bzexejfstd6@nybu5q4g3ewq>
-References: <20241120051328.7613-1-amilsananak@gmail.com>
+   d="scan'208";a="90701180"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa008.jf.intel.com with ESMTP; 20 Nov 2024 03:45:45 -0800
+Message-ID: <18a691df-e7b6-42fc-8dbc-c10c2608cd9c@linux.intel.com>
+Date: Wed, 20 Nov 2024 13:48:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241120051328.7613-1-amilsananak@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v30 01/30] usb: host: xhci: Repurpose event handler for
+ skipping interrupter events
+To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
+ mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
+ dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
+ lgirdwood@gmail.com, krzk+dt@kernel.org,
+ pierre-louis.bossart@linux.intel.com, Thinh.Nguyen@synopsys.com,
+ tiwai@suse.com, robh@kernel.org, gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-doc@vger.kernel.org
+References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
+ <20241106193413.1730413-2-quic_wcheng@quicinc.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20241106193413.1730413-2-quic_wcheng@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi amilsananak,
-
-add the necessary information in the commit message.
-
-Look at this example, which is also adding support for a webcam
-
-commit 53c264544dfce30f7741a2b1e78f90d046e5d8ff
-    media: uvcvideo: Add support for Apple T2-attached FaceTime HD Camera
-
-    Adds the requisite device id to support detection of the Apple FaceTime
-    HD webcam exposed over the T2 BCE VHCI interface.
-
-look at the git log to see more examples
-$ git log drivers/media/usb/uvc/uvc_driver.c
-
-On Wed, Nov 20, 2024 at 10:43:27AM +0530, amilsananak wrote:
-> From: amilsanan <amilsananak@gmail.com>
+On 6.11.2024 21.33, Wesley Cheng wrote:
+> Depending on the interrupter use case, the OS may only be used to handle
+> the interrupter event ring clean up.  In these scenarios, event TRBs don't
+> need to be handled by the OS, so introduce an xhci interrupter flag to tag
+> if the events from an interrupter needs to be handled or not.
 > 
-> Signed-off-by: amilsanan <amilsananak@gmail.com>
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
 > ---
->  drivers/media/usb/uvc/uvc_driver.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>   drivers/usb/host/xhci-ring.c | 17 +++++++++++++----
+>   drivers/usb/host/xhci.h      |  1 +
+>   2 files changed, 14 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/media/usb/uvc/uvc_driver.c b/drivers/media/usb/uvc/uvc_driver.c
-> index f0febdc08..1a3229ab6 100644
-> --- a/drivers/media/usb/uvc/uvc_driver.c
-> +++ b/drivers/media/usb/uvc/uvc_driver.c
-> @@ -2441,6 +2441,15 @@ static const struct usb_device_id uvc_ids[] = {
->  	  .driver_info		= (kernel_ulong_t)&(const struct uvc_device_info){
->  		.uvc_version = 0x010a,
->  	  } },
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 9f1e150a1c76..b8f6983b7369 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -2931,14 +2931,22 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>   }
+>   
+>   /*
+> - * This function handles one OS-owned event on the event ring. It may drop
+> - * xhci->lock between event processing (e.g. to pass up port status changes).
+> + * This function handles one OS-owned event on the event ring, or ignores one event
+> + * on interrupters which are non-OS owned. It may drop xhci->lock between event
+> + * processing (e.g. to pass up port status changes).
+>    */
+>   static int xhci_handle_event_trb(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
+>   				 union xhci_trb *event)
+>   {
+>   	u32 trb_type;
+>   
+> +	/*
+> +	 * Some interrupters do not need to handle event TRBs, as they may be
+> +	 * managed by another entity, but rely on the OS to clean up.
+> +	 */
+> +	if (ir->skip_events)
+> +		return 0;
 
-I think you should add a comment containing the name of the camera model you
-want to add support for. Look at other examples in uvc_ids[]
+This works for your special case but is a small step sideways from other possible xhci
+secondary interrupter usecases.
 
-e.g. look at this comment for a camera also from Quanta
+We currently support just one event handler function even if we support several secondary
+interrupters. Idea was to add support to pass dedicated handlers for each secondary interrupter,
+set when the secondary interrupter is requested.
 
-	/* Quanta USB2.0 HD UVC Webcam */
+In your case this dedicated handler wouldn't do anything.
 
-> +	  { .match_flags 	= USB_DEVICE_ID_MATCH_DEVICE
-> +			| USB_DEVICE_ID_MATCH_INT_INFO,
-> +	  .idVendor = 0x0408,
-> +	  .idProduct = 0x4033,
-> +	  .bInterfaceClass = USB_CLASS_VIDEO,
-> +	  .bInterfaceSubClass = 1,
-> +	  .bInterfaceProtocol =	UVC_PC_PROTOCOL_15,
-> +	  .driver_info = (kernel_ulong_t) &(const struct uvc_device_info ) 
-> +		{.uvc_version = 0x010a, } },
->  	/* LogiLink Wireless Webcam */
->  	{ .match_flags		= USB_DEVICE_ID_MATCH_DEVICE
->  				| USB_DEVICE_ID_MATCH_INT_INFO,
-> -- 
-> 2.43.0
-> 
+This patch again has a different approach, it keeps the default handler, and instead adds
+flags to it, preventing it from handling the event trb.
 
---
-Kind Regards
-Mehdi Djait
+Not sure if we should take the time and implement dedicated handlers now, even if we don't
+have any real users yet, or just take this quick change and rework it later when needed.
+
+Thanks
+Mathias
+
 
