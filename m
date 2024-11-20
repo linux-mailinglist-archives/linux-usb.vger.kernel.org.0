@@ -1,178 +1,126 @@
-Return-Path: <linux-usb+bounces-17746-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17747-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB0CF9D3CB2
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 14:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CD439D3D61
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 15:19:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BE4628820C
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 13:45:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF9D8281629
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 14:19:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 857C31AB508;
-	Wed, 20 Nov 2024 13:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4801B1AAE0C;
+	Wed, 20 Nov 2024 14:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VXNhBV1i"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66AE01AB6C0
-	for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 13:45:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5EF2746D;
+	Wed, 20 Nov 2024 14:17:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732110332; cv=none; b=khK5nPbtZxp05LzMtZf+K0trfMTy//uD2WwRi3iMbLCIXrRwNOBFkcMwde5iqezZbtm6qUW0hswLnixJSgYunHaEIyZeqGu5xQ4J9kPVT/Na4h3CvVsBMmJRt4WNBjY83+VKiOdkcRwPhzoWcBcgsGcUJskLvChjS7DCkI6S3L4=
+	t=1732112250; cv=none; b=gH+KjGkeOf1JF+3jC4OS9usHQUpRkFsnXr4D2AnzWcK5bUAG2K6pSUu6eJf4rU+OBA+2HpeNJllLaAE5yYLDicjeH4Ln+SMl9JK6IRfvV4ZidC9QQcSq9rQ4lac4tx+9x4tLzzO0MOW4cnmubVDGrMg2depv9xoXNMCtGGTA6fE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732110332; c=relaxed/simple;
-	bh=HHaoBCC8MK64RwHit1JQhYwaHeQLH9QM8pOD53gKPRI=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=DPBnss8LNOVPyA4SpXCPIYsQAwllwJSSAFGp/8M6cTGPsdq65Dn5ls8PUPsUnVrhSGfSjyNHUdwuxVIrUlbu4KRLGcOxfRS0CN7z+/MkWi7BYfxdxO+Ad4Zcwo1XQTDeLBMImR4YvWa2vTskemjyCN9VS/AMUnlLvKnOdLMB0DM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-83abad6594fso612154439f.3
-        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 05:45:30 -0800 (PST)
+	s=arc-20240116; t=1732112250; c=relaxed/simple;
+	bh=HogWdnf+gEHBSeIlBDgdFSdAuYMxYp4y2Azfwc74ToU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GA7M/dexjjkWFDeXI3El/2y0KnpAPZR2/5zT17fHs1NRqd80ElWZxejdod9iZWaEmXrEE+u23L0WX/qA2HJzFcXdvWMlWgBslxUiih+uf+ttobpb4wJtCNHiq3JEt6oeT/NxzS4aPTF4+iMV5iYe/uLwE5ZNdk3BH81QbS5/7MM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VXNhBV1i; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6eea47d51aeso28907247b3.2;
+        Wed, 20 Nov 2024 06:17:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1732112248; x=1732717048; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=0ccxSot4avXFbxADK2ckghODPjyViSvYvN2WCFkbOZs=;
+        b=VXNhBV1ian+kdGEWiTgo5orY0eX9xty5Usmw2aWyP9BCJMhj6d6xSV48fyIyHC/UJF
+         eR7WP8PRRchGA8n9sUl+uTCOD1cmfPpZyeqXp/XRw4pGb6SeP4oVVrOBtaSt+9lTKil7
+         vXe4ZvKXWs2VZki6GxwYQlNq+LLUoy/ufZnf8SpFGIV+jYTvmOTrvGsvWA0r+ekfdVrK
+         ngfFlYAh84eC+p8NrjEmNJgSJ4skplWId+g1V+I5g/CoyuHIhmUIE+QJL60ohE5U24Ca
+         nBjpWVYLqQ8ckVmD+5fq4wnDdfaEdGfUc4QwoTHlx9wP2le0ZhEdWo1/z8LH5vIfcSoR
+         jstg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732110329; x=1732715129;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ycQjTfS2NOM91awP/bXrJt0XnXXfKhyI2pL/uuArTSY=;
-        b=OuXIhGynEgIkluCITXcBSIjxOzMLBjFgd6gQyNuhuYd9HivtajxeMJ3hSAszFaXkGi
-         f/ZVg/m0F8jMd3+NVyvWLJxrJJygt3zaNzADyrvvHYJjZIlRdb9IDlyB16QvQHCQqyCu
-         66peihM4up4z3gWOXNeSSj8qKIYWW+DN/8eaaK7asgo4DC4pC9QU3qVmrEbfcWqMosLa
-         UyLS355DH+Kn8fCeOvZXl86+Qx6FnSy3gEu+Q7ATuFcSyNFYn5Xe9rb4ATxAetGqh3vQ
-         fiDHSlsReILPShtk079o6qcaXYr+wWwGB+F9R0RdfKpDTIlqZacDO+EWINKxQf263xqw
-         oRvA==
-X-Forwarded-Encrypted: i=1; AJvYcCXnSqJqtT7tAsDT6inKs2zjj+WDRiwgpXJwfGcrDatq9QaiOX9g1uhPQ5UuuZtXfGvdzYKjkJxw1U4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz35bok/G6qiMMBsBZRi1SzRg3XuQAjaDOMptECWRXRL3kF0Mjn
-	YsMC/VR/eZNqaQhB6wVsV5qxO05N2e8BmOiLCye0XL/EbCD0a+EgRQaqpnHdByqTGBTHu4QMSU0
-	/xXHgqjr+DxKHnHpw2rR2YT/xYXsmhr7YOPwUsPwkn35MW8JWPlC4bHQ=
-X-Google-Smtp-Source: AGHT+IH3ad3T4hqc4asFT+D/H0cLBeVbVwxflb+dKyaNJA3S9UIzmGps4B/nbsOee5ELbKoSC1Rbu6wLAQc02EMCjv44hZeJstqA
+        d=1e100.net; s=20230601; t=1732112248; x=1732717048;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0ccxSot4avXFbxADK2ckghODPjyViSvYvN2WCFkbOZs=;
+        b=i6+S/iBXuEyZMl4rTlS3inWY/I9Ld+Qd5PG0r4Neh3e6RN35D4JiA0fGxa7tqiWo1m
+         +7MLYhyR9L5Op1l8qqmj4u/LUPtLDjC4ESlt6OgPpKdCpXHhTLGhIVbVt9uC5nmEvn/G
+         /AqJwuK5+McWkr7i9MxVZ3ZfsPCjSbwuXCQc3Fobex1/97/pfGbtHxSf3NTAzG8rGn+2
+         Ky0Tefu/ZihQgnPZ0r+v9bjIph4cQFg1BzDISelNqRL5mD0S40jkbLtwQOjxF/nGOgTX
+         W5SeOV3TmuUYoOXqs8DzkXNGK1jeVmgCOBIdOUgs8bsZw5/WgY/e6zCmlqS+8ezyJf8/
+         Uhvg==
+X-Forwarded-Encrypted: i=1; AJvYcCUZSoAdYH57NfWkbeflaAxKraO+z7LYs/Yhpqn3nD8bIofj6iBi6tN2Gwt1QFm8yJaEquUpmxF68nOwW9g=@vger.kernel.org, AJvYcCWDzrvKrmdkKdnePqUeI6SOgNJbIY8lGYeeHSxEowLD+CrCqZuIhXbi4ebHWhtjvbVcsRbywNzmdz7k@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywdv0CzykO5XzxJg3GoNzMPjx0ilu4p7zEoNZpqpmeDJsv2pU4P
+	NvW/JJFlcHb5vMzjBUtsBFo6aRD+2T7Trmz8Y/www7lfclkoYkcuCTNhNo3wmpQ=
+X-Google-Smtp-Source: AGHT+IG2fbF9JPwAVnL8nmjAvhR+0CJ3T/VO5RNO7UqN1gUoGlhS73H4DQR0txfc26cb3YoxEIeBYQ==
+X-Received: by 2002:a05:690c:4b81:b0:6ee:7797:672 with SMTP id 00721157ae682-6eebd0d6e1emr32242637b3.7.1732112248013;
+        Wed, 20 Nov 2024 06:17:28 -0800 (PST)
+Received: from x13 ([157.23.249.72])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ee71341f80sm22515297b3.85.2024.11.20.06.17.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 20 Nov 2024 06:17:27 -0800 (PST)
+Date: Wed, 20 Nov 2024 09:17:26 -0500
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"rbm@suse.com" <rbm@suse.com>,
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel-mentees@lists.linuxfoundation.org" <linux-kernel-mentees@lists.linuxfoundation.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3] usb: dwc3: remove unused sg struct member
+Message-ID: <Zz3vdkEzSobJ54bI@x13>
+References: <20241119212452.269255-1-luis.hernandez093@gmail.com>
+ <20241119221907.tyt4luboduaymukl@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1b03:b0:3a7:7ee3:108d with SMTP id
- e9e14a558f8ab-3a7865a9107mr32230585ab.23.1732110329481; Wed, 20 Nov 2024
- 05:45:29 -0800 (PST)
-Date: Wed, 20 Nov 2024 05:45:29 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <673de7f9.050a0220.363a1b.0011.GAE@google.com>
-Subject: [syzbot] [media?] [usb?] WARNING in iguanair_get_features/usb_submit_urb
-From: syzbot <syzbot+e3ae1e7f4b88f3e696f5@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-usb@vger.kernel.org, mchehab@kernel.org, sean@mess.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241119221907.tyt4luboduaymukl@synopsys.com>
 
-Hello,
+Thanks, Thinh and Greg, for the feedback!
 
-syzbot found the following issue on:
+On Tue, Nov 19, 2024 at 10:19:09PM +0000, Thinh Nguyen wrote:
+> > Previously, this patch addressed a documentation warning caused by the
+> 
+> Remove this paragraph. This context only makes sense in this thread
+> where the previous patch version is visible.
+> 
 
-HEAD commit:    f868cd251776 Merge tag 'drm-fixes-2024-11-16' of https://g..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=175892c0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d2aeec8c0b2e420c
-dashboard link: https://syzkaller.appspot.com/bug?extid=e3ae1e7f4b88f3e696f5
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10edf1a7980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d892c0580000
+I’ll update the commit message and remove the unnecessary paragraph as suggested.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/50674231b58f/disk-f868cd25.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c6a8d7f6f69f/vmlinux-f868cd25.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5b4f3e883f4a/bzImage-f868cd25.xz
+> > Reported-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> 
+> I'm not the one who should be attributed to by the Reported-by tag.
+> 
+> I think Greg was alluding to this report by Stephen Rothwell:
+> https://lore.kernel.org/all/20241118194006.77c7b126@canb.auug.org.au/
+> 
+> It wasn't Cc to the linux-usb list, so I'm not sure if you've seen it.
+> If your change was base on the report above, then you can update the
+> Reported-by tag accordingly.
+> 
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+e3ae1e7f4b88f3e696f5@syzkaller.appspotmail.com
+Regarding the report by Stephen Rothwell, I wasn’t aware of it before. I found the warning independently while trying to compile the Documentation subsystem, looking for bugs to address.
 
-usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
-usb 1-1: Product: syz
-usb 1-1: Manufacturer: syz
-usb 1-1: SerialNumber: syz
-usb 1-1: config 0 descriptor??
-------------[ cut here ]------------
-URB ffff88802128ea00 submitted while active
-WARNING: CPU: 0 PID: 972 at drivers/usb/core/urb.c:379 usb_submit_urb+0x1039/0x1930 drivers/usb/core/urb.c:379
-Modules linked in:
-CPU: 0 UID: 0 PID: 972 Comm: kworker/0:2 Not tainted 6.12.0-rc7-syzkaller-00187-gf868cd251776 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/30/2024
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:usb_submit_urb+0x1039/0x1930 drivers/usb/core/urb.c:379
-Code: 00 eb 66 e8 f9 b9 5b fa e9 79 f0 ff ff e8 ef b9 5b fa c6 05 4c a6 cd 08 01 90 48 c7 c7 80 21 b1 8c 4c 89 ee e8 48 b0 1c fa 90 <0f> 0b 90 90 e9 40 f0 ff ff e8 c9 b9 5b fa eb 12 e8 c2 b9 5b fa 41
-RSP: 0018:ffffc9000378ec50 EFLAGS: 00010246
-RAX: 60687f36e4038100 RBX: 0000000000000cc0 RCX: ffff88802606bc00
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffff88802128ea08 R08: ffffffff8155e312 R09: fffffbfff1cf9fd0
-R10: dffffc0000000000 R11: fffffbfff1cf9fd0 R12: ffff88802fb894a8
-R13: ffff88802128ea00 R14: dffffc0000000000 R15: ffff88802fb89400
-FS:  0000000000000000(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00005653c9143738 CR3: 0000000028d30000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- iguanair_send drivers/media/rc/iguanair.c:193 [inline]
- iguanair_get_features+0x1c8/0x7c0 drivers/media/rc/iguanair.c:218
- iguanair_probe+0xb1c/0x1540 drivers/media/rc/iguanair.c:438
- usb_probe_interface+0x645/0xbb0 drivers/usb/core/driver.c:399
- really_probe+0x2b8/0xad0 drivers/base/dd.c:658
- __driver_probe_device+0x1a2/0x390 drivers/base/dd.c:800
- driver_probe_device+0x50/0x430 drivers/base/dd.c:830
- __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:958
- bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:459
- __device_attach+0x333/0x520 drivers/base/dd.c:1030
- bus_probe_device+0x189/0x260 drivers/base/bus.c:534
- device_add+0x856/0xbf0 drivers/base/core.c:3672
- usb_set_configuration+0x1976/0x1fb0 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0x88/0x140 drivers/usb/core/generic.c:254
- usb_probe_device+0x1b8/0x380 drivers/usb/core/driver.c:294
- really_probe+0x2b8/0xad0 drivers/base/dd.c:658
- __driver_probe_device+0x1a2/0x390 drivers/base/dd.c:800
- driver_probe_device+0x50/0x430 drivers/base/dd.c:830
- __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:958
- bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:459
- __device_attach+0x333/0x520 drivers/base/dd.c:1030
- bus_probe_device+0x189/0x260 drivers/base/bus.c:534
- device_add+0x856/0xbf0 drivers/base/core.c:3672
- usb_new_device+0x104a/0x19a0 drivers/usb/core/hub.c:2651
- hub_port_connect drivers/usb/core/hub.c:5521 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5661 [inline]
- port_event drivers/usb/core/hub.c:5821 [inline]
- hub_event+0x2d6d/0x5150 drivers/usb/core/hub.c:5903
- process_one_work kernel/workqueue.c:3229 [inline]
- process_scheduled_works+0xa63/0x1850 kernel/workqueue.c:3310
- worker_thread+0x870/0xd30 kernel/workqueue.c:3391
- kthread+0x2f0/0x390 kernel/kthread.c:389
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:147
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
+That said, now that I’m aware of Stephen’s thread, I wouldn’t mind updating the commit message to include a reference to it if you think it would help link the two discussions. Let me know your thoughts on this.
 
+Thanks again for the clarification and the reviews!
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Best,
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Felipe
 
