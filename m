@@ -1,189 +1,178 @@
-Return-Path: <linux-usb+bounces-17750-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17751-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D72DD9D3E7D
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 16:05:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D13CE9D3F92
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 17:01:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4BE2EB29390
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 15:00:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 94C09B2732D
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 15:09:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5D7D1DE3B3;
-	Wed, 20 Nov 2024 14:49:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7745D1DEFDD;
+	Wed, 20 Nov 2024 14:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gj+kVtgK"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="C+1F921w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F4891BBBDA;
-	Wed, 20 Nov 2024 14:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C3931DEFDC
+	for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 14:56:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732114179; cv=none; b=Qc+nE+JEEanAILVxBMYQWOIlLQLRlSa1dksdT8XZ7sLn/2RQiPInq6C2Roi8d/7JLOaAhIS2O3gZ6zvu6JgPk9AwcCnHZa7m3Qnttx22tyc4v44Yk3iS2545791RstlIPMZN7t5KfS0yqHPO0dpPCsqBe02TRTVrST6ghb8smRE=
+	t=1732114616; cv=none; b=IowNJvi+RCaPVvRj7wZlgiNGaVrQgJCFLAN+4GX5AGbbHeVM1p+T54aCCg+QpktwlU7QHEdPB981o9LPWOc2wtDWOtbBVydSN5cHuEam2qlgWgw0hBG6nWgU7jhFToLw/pLSHmVcGCZ7bUgkxuBD5dKBzjOt5lwXP+ss3Yo1rAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732114179; c=relaxed/simple;
-	bh=jMjgTssF8JTk16sOo+gXL1KKvtQZooI008o2ZjDi9Zk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YV+PwvoYNVKNYBn9+FhKRYTcRwJPZa4L/Yo3s7rstnSZ0+cCKL+K9xlK/3ZXUJyZj25SJgu7WDVgb2pecdL0qbzeN4lKo5CTGeBoY89xdHGU0RdFbOcD4L706b8pHJTefSTAUk5MrP5tErO3fd9HIu4Did2j86uLp3cZADumUFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gj+kVtgK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB5F9C4CED1;
-	Wed, 20 Nov 2024 14:49:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732114177;
-	bh=jMjgTssF8JTk16sOo+gXL1KKvtQZooI008o2ZjDi9Zk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Gj+kVtgKs2fEbZoaLU/WK4qRB6Y5lmlFlXJ1B6a/qhogii+CuftNsMve1n963nsNg
-	 ubUXC+PT+yFzorSeTCOIT5NKbk4UsnFDVsl/LIRJhhDReLa6NAhnXg5tDGNS4VUE62
-	 n75s710NFzJCfQqvV/bU2D1TiYJUJgETZJdV1WigkNUxP8DclWfw6g57arCdUQip5T
-	 f7YE1BTYH6JRvoRvwqG2INosdOYalseGBR2VjT3KLcoAqS8AP/XFJdlZTS95v9VaOB
-	 xVlayAtsMW16jBXlOyDAGzbQwmK2SkJ7umMPAatdDyJ/6L3QEPtnyu4ai2HpeDjtkj
-	 iFXLMwLDeiopg==
-Message-ID: <ea3b4e40-8798-4352-8f45-242962532500@kernel.org>
-Date: Wed, 20 Nov 2024 16:49:31 +0200
+	s=arc-20240116; t=1732114616; c=relaxed/simple;
+	bh=Sdrpx2VPHJkkk8R9qLhdWl2/2DIy6v4cR2cwXM8ZlxU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CFO9wHxP/Qgi/1Cant8KwP9kcc5JNlIDeZdVM+7juZh9bDQsLB2JKWvwlK7ZmHAbM/e6+0IqfnvCEI18kLBITQWIQWRQYNh7LSF3oNFzQWlz344iaj+lZfqoXCFa6kRiGYLVD3lFIYQpDpqJU8zuI4sGVxJAegLlMsq8OYiDExo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=C+1F921w; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2fb57f97d75so24200911fa.2
+        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 06:56:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1732114612; x=1732719412; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3NBsV/rg/DvM7RipSshL11jcFCJtCro+s6m5KThfTUg=;
+        b=C+1F921wLH97NjKiGYUo3kD/ZBtTgmz4cORSOi0eTfFNAWVbkVdxGx4zSWRdY5lb44
+         OErxKvmWm5xsHYrsbQ0qXvdnZJjHqobrqc/yZXqmV2p/zaLm4TlmH97LM7lqF3iMEkRW
+         a8vvyylHD96nNA8K/Gu8jRmw4OT6EGN2EpCkA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732114612; x=1732719412;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3NBsV/rg/DvM7RipSshL11jcFCJtCro+s6m5KThfTUg=;
+        b=ap/1B/IesxPV/WYVDWUdGWOhtHU/Otditx/N1RL6HZKAaoHyyyqmyTqmVZdzJnfcFj
+         yr+hny3ldLCba6swIpBCDlb7DrUmwWH8BCEzGgPspsZElclUxrv+lICWO5qyXnYQ3urd
+         3glMyTOjQxMk+ScDYtRTm6njL8fUppeJ0Zrdm8fGPST01xu1DvRwwAgIbIBEIaHM/Weh
+         kjQQNEeYu5kBiCKDSr7UPwql9ELazfd3i0pz2oQ3VXL5wERSI1VmJhwEPKnup9/RqIzA
+         ZiOT7ovTCKVJ640xJRMoBs1tJq79xt1ctKGLB1GAi+iFxNYnVsNeGmMLxFPw0I9MKpu4
+         TPtQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWLaiOT8fJTiH038reBqWby1i1SEyeOzdMw2RflopoHTz2DutJG8elceiB29E9ZTWYqgdLbfqEbbuw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAnsyN5Yeq1qtOS3tl8mkeG7skHWZNj4mC2WbHrAJWJNLr1pc3
+	njzPdKntq7jY0CaSKLSYyEYsCWfzWdSHHI8z7OPq4xdJu8i//5ydCmWTlw3U6AFUdK3IVtBS4G/
+	pJL11xpI/FzvqyYsaIrA3DeUe3k+cUR6aSo4=
+X-Google-Smtp-Source: AGHT+IE34no18QMiQZWPw8C1ekAOHMd7xhhyFqGs9+uBMiogoqk1//tsHgwT+WkuzpTcz4PGs/pTNf6Y7b/DV/9f2jI=
+X-Received: by 2002:a05:651c:12c4:b0:2fb:607b:4cde with SMTP id
+ 38308e7fff4ca-2ff8dcd2f96mr16013621fa.39.1732114612186; Wed, 20 Nov 2024
+ 06:56:52 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 09/12] xhci: introduce xhci->lost_power flag
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Peter Chen <peter.chen@kernel.org>,
- Pawel Laszczak <pawell@cadence.com>, Mathias Nyman
- <mathias.nyman@intel.com>, Nishanth Menon <nm@ti.com>,
- Vignesh Raghavendra <vigneshr@ti.com>, Tero Kristo <kristo@kernel.org>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Kevin Hilman <khilman@kernel.org>,
- =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-References: <20240726-s2r-cdns-v5-0-8664bfb032ac@bootlin.com>
- <20240726-s2r-cdns-v5-9-8664bfb032ac@bootlin.com>
- <1cd45625-84e4-43aa-ae2b-a59f10add898@kernel.org>
- <D42NIH63EHZG.KKWZR2WZB68L@bootlin.com>
-Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <D42NIH63EHZG.KKWZR2WZB68L@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20241104154252.1463188-1-ukaszb@chromium.org> <5iacpnq5akk3gk7kdg5wkbaohbtwtuc6cl7xyubsh2apkteye3@2ztqtkpoauyg>
+In-Reply-To: <5iacpnq5akk3gk7kdg5wkbaohbtwtuc6cl7xyubsh2apkteye3@2ztqtkpoauyg>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Date: Wed, 20 Nov 2024 15:56:41 +0100
+Message-ID: <CALwA+Nb31ukU2Ox782Mq+ucBvEqm9_SioSAE23ifhX7DsHayhA@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: typec: ucsi: Fix completion notifications
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
+	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello Théo,
+On Mon, Nov 18, 2024 at 6:58=E2=80=AFPM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Mon, Nov 04, 2024 at 03:42:52PM +0000, =C5=81ukasz Bartosik wrote:
+> > OPM                         PPM                         LPM
+> >  |        1.send cmd         |                           |
+> >  |-------------------------->|                           |
+> >  |                           |--                         |
+> >  |                           |  | 2.set busy bit in CCI  |
+> >  |                           |<-                         |
+> >  |      3.notify the OPM     |                           |
+> >  |<--------------------------|                           |
+> >  |                           | 4.send cmd to be executed |
+> >  |                           |-------------------------->|
+> >  |                           |                           |
+> >  |                           |      5.cmd completed      |
+> >  |                           |<--------------------------|
+> >  |                           |                           |
+> >  |                           |--                         |
+> >  |                           |  | 6.set cmd completed    |
+> >  |                           |<-       bit in CCI        |
+> >  |                           |                           |
+> >  |   7.handle notification   |                           |
+> >  |   from point 3, read CCI  |                           |
+> >  |<--------------------------|                           |
+> >  |                           |                           |
+> >  |     8.notify the OPM      |                           |
+> >  |<--------------------------|                           |
+> >  |                           |                           |
+> >
+> > When the PPM receives command from the OPM (p.1) it sets the busy bit
+> > in the CCI (p.2), sends notification to the OPM (p.3) and forwards the
+> > command to be executed by the LPM (p.4). When the PPM receives command
+> > completion from the LPM (p.5) it sets command completion bit in the CCI
+> > (p.6) and sends notification to the OPM (p.8). If command execution by
+> > the LPM is fast enough then when the OPM starts handling the notificati=
+on
+> > from p.3 in p.7 and reads the CCI value it will see command completion =
+bit
+> > and will call complete(). Then complete() might be called again when th=
+e
+> > OPM handles notification from p.8.
+>
+> I think the change is fine, but I'd like to understand, what code path
+> causes the first read from the OPM side before the notification from
+> the PPM?
+>
 
-On 10/09/2024 16:50, Théo Lebrun wrote:
-> On Mon Aug 5, 2024 at 3:41 PM CEST, Roger Quadros wrote:
->> On 26/07/2024 21:17, Théo Lebrun wrote:
->>> The XHCI_RESET_ON_RESUME quirk allows wrappers to signal that they
->>> expect a reset after resume. It is also used by some to enforce a XHCI
->>> reset on resume (see needs-reset-on-resume DT prop).
->>>
->>> Some wrappers are unsure beforehands if they will reset. Add a mechanism
->>> to signal *at resume* if power has been lost. Parent devices can set
->>> this flag, that defaults to the XHCI_RESET_ON_RESUME value.
->>>
->>> The XHCI_RESET_ON_RESUME quirk still triggers a runtime_pm_get() on the
->>> controller. This is required as we do not know if a suspend will
->>> trigger a reset, so the best guess is to avoid runtime PM.
->>>
->>> Reset the xhci->lost_power value each time in xhci_resume(), making it
->>> safe for devices to only set lost_power on some resumes.
->>>
->>> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
->>> ---
->>>  drivers/usb/host/xhci.c | 8 +++++++-
->>>  drivers/usb/host/xhci.h | 6 ++++++
->>>  2 files changed, 13 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
->>> index 0a8cf6c17f82..2c9b32d339f9 100644
->>> --- a/drivers/usb/host/xhci.c
->>> +++ b/drivers/usb/host/xhci.c
->>> @@ -1029,9 +1029,12 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
->>>  
->>>  	spin_lock_irq(&xhci->lock);
->>>  
->>> -	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
->>> +	if (hibernated || xhci->lost_power || xhci->broken_suspend)
->>
->> Why not treat xhci->lost_power and xhci->quriks & XHCI_RESET_ON_RESUME independently?
->>
->> XHCI_RESET_ON_RESUME is sued by devices that know they always need to be reset on resume.
->>
->> xhci->lost_power is used by devices that don't have consistent behavior.
-> 
-> The goal is to avoid almost-duplicate functionality. I feel like:
-> 
->     XHCI_RESET_ON_RESUME is the default value of xhci->lost_power,
->     which might be modified at resume.
-> 
-> Is a more straight forward solution than:
-> 
->     Both XHCI_RESET_ON_RESUME and xhci->lost_power define if power was
->     lost at resume. First must be statically known, second can be
->     updated during runtime. If second is used, first one must NOT be
->     set.
-> 
-> Indeed, the first solution brings two additional lines of code as you
-> commented below. I'd argue the easier-to-wrap-your-head-around logic is
-> more important.
-> 
-> Tell me if you are convinced the second approach is better.
-> 
+The read from the OPM in p.7 is a result of notification in p.3 but I agree
+it is misleading since you pointed it out. I will reorder p.7 and p.8.
 
-I would still vote to keep logic tied to separate flags.
+Thanks,
+Lukasz
 
-so XHCI_RESET_ON_RESUME to always resume on RESET
-xhci->lost_power, reset based on runtime checks.
-
-Which implies that platforms using xhci->lost_power should not
-set XHCI_RESET_ON_RESUME.
-
-But XHCI maintainers should give their opinion on this.
-
->>
->>
->>>  		reinit_xhc = true;
->>>  
->>> +	/* Reset to default value, parent devices might correct it at next resume. */
->>> +	xhci->lost_power = !!(xhci->quirks & XHCI_RESET_ON_RESUME);
->>> +
->>
->> then you don't need to do this.
-> 
-> To be honest, I added this line out of rigor. We could remove it and say
-> that any device that modifies xhci->lost_power once at resume must set
-> it at each later resume.
-> 
-> The above line felt like a small safety net to avoid logic mistakes.
-> 
->>
->>>  	if (!reinit_xhc) {
->>>  		/*
->>>  		 * Some controllers might lose power during suspend, so wait
->>> @@ -5228,6 +5231,9 @@ int xhci_gen_setup(struct usb_hcd *hcd, xhci_get_quirks_t get_quirks)
->>>  	if (get_quirks)
->>>  		get_quirks(dev, xhci);
->>>  
->>> +	/* Default value, that can be corrected at resume. */
->>> +	xhci->lost_power = !!(xhci->quirks & XHCI_RESET_ON_RESUME);
->>> + 
->>
->> nor this.
-> 
-> Regards,
-> 
+> >
+> > This fix replaces test_bit() with test_and_clear_bit()
+> > in ucsi_notify_common() in order to call complete() only
+> > once per request.
+> >
+> > Fixes: 584e8df58942 ("usb: typec: ucsi: extract common code for command=
+ handling")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
+> > ---
+> >  drivers/usb/typec/ucsi/ucsi.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucs=
+i.c
+> > index e0f3925e401b..7a9b987ea80c 100644
+> > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > @@ -46,11 +46,11 @@ void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+> >               ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+> >
+> >       if (cci & UCSI_CCI_ACK_COMPLETE &&
+> > -         test_bit(ACK_PENDING, &ucsi->flags))
+> > +         test_and_clear_bit(ACK_PENDING, &ucsi->flags))
+> >               complete(&ucsi->complete);
+> >
+> >       if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> > -         test_bit(COMMAND_PENDING, &ucsi->flags))
+> > +         test_and_clear_bit(COMMAND_PENDING, &ucsi->flags))
+> >               complete(&ucsi->complete);
+> >  }
+> >  EXPORT_SYMBOL_GPL(ucsi_notify_common);
+> > --
+> > 2.47.0.199.ga7371fff76-goog
+> >
+>
 > --
-> Théo Lebrun, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
--- 
-cheers,
--roger
-
+> With best wishes
+> Dmitry
 
