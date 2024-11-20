@@ -1,138 +1,169 @@
-Return-Path: <linux-usb+bounces-17752-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17753-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D74CE9D3F50
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 16:46:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B2D19D4231
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 19:48:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 98D332841B4
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 15:46:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E40181F215AB
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 18:48:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C09DE140E34;
-	Wed, 20 Nov 2024 15:46:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DAFC1BC9E2;
+	Wed, 20 Nov 2024 18:48:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XqwB+GLn"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="b9L1TiaO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDDD85C5E;
-	Wed, 20 Nov 2024 15:46:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4B0155742;
+	Wed, 20 Nov 2024 18:48:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732117572; cv=none; b=Jn3QT/QAC2wkdNVbL7T0mMbWs9dELTzEKlh56YNDCb7l/OZnKlUhk8bjlt6ODqlFIUUaryOiisXRsildyeJcL6zjLm88bwYOYiUBiQ1MzrnkjpbKaQpDnE8EXz4fjrU6V3ZxZyAPf17MFNkgT/OmU8GV66kcbY/tOB0vUrt+WLk=
+	t=1732128504; cv=none; b=QKGC9Iun+mCW6QbXAxtzCYG+u7urVB4UGMxsN4WobQwKsDpTYQ+cAZzusVleweUXEnFZrO2AIMFsQpySxCHbUOSw8AxFEyccac96s9SGngR4Ql46VfWs3mOLLZVs6uy6kULk9NKfb9raseeTq9LQW1l3lNYg+w2s4X50S4zvibk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732117572; c=relaxed/simple;
-	bh=NoAx2DXVAyrCS/4irxTbhJAiFco/Aqrx4Ig8U69PSHs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Pj0dbjZcQXljdKuE0L+uCQJkJeMyb0DVANUe8qx0goli8LSiXKYev0B6gJkuQYEpU3VchHIBznO1LOfxnisSY7L27G/ZrAgdS83Wi4ySUxHM2Seop5Hr1r0Tqt7ycrxwKwPpTT5Z+sOEbnmTD4pFwavL0mFbllF5DMjmIsx4aDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XqwB+GLn; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-72061bfec2dso3783261b3a.2;
-        Wed, 20 Nov 2024 07:46:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732117570; x=1732722370; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mlC1fiUhPeILfOtmUrQ/N6IVvKcd/i9shLrZYcMb/8g=;
-        b=XqwB+GLn712YpETVHXn/KObtD9Dn2dBTNmd7uUGWHG9Mh+/A6D+mDNcgkd0vPiBfbS
-         AzmVrgrt0pFCuvePw+dSbopuHEXnuJF2LI+rPYHnxi+W/iPqmYGo8wY8WDzyJ563UVdf
-         kmFjo0zZcfTRWNMNZhPX65tiqTWZBXbPWeTvibfiP+ZOogLGY8fNBsUJ5VhmjWx4M7bJ
-         Edq88Rhhp9BLk7289UTBAKlB0XxbYSlPG9dGPF5HuN32cr61IwncBGuFS+hq3Es/ki6Q
-         N4Ln1A8H9Sv8yS8EJpD07W6c/J9B2D0CesSb48VZgk1I9fKGQ5XaroQiaaFz6dUBDxSo
-         Eclw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732117570; x=1732722370;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mlC1fiUhPeILfOtmUrQ/N6IVvKcd/i9shLrZYcMb/8g=;
-        b=hI+5gRt7sa3tZD3Qq1aiMCcbXjjAk+bmPv8PMjWZ084/uJWFI7jz6EWo+xt0+5ScZv
-         uF9WByxxZV02fO4JpxHjliqVoA6HZIpROD97lnZTUM1vmxBvNi/a+ujttcvNlKzv/Tdr
-         WK23hL/GuyPwYL28COIdm+MNjoYA0yknZiPnifca2zXQu0WyNm7E3Dwrfty/9RtVz+NR
-         J9q1fzb5Tlg0uWe149JQJeu1oadNRQtP1DfWmY78E5SoafJaGlablBoK2NjtyCN2w0b/
-         bk3eqoiBy6tsstd34kvnFoJRnRg6QCmiSp68qHZG8FIzqiPc2ZCx7JtzhGRd4VqnLIyi
-         bO3g==
-X-Forwarded-Encrypted: i=1; AJvYcCXm5+2nka8EASKYST43ueqiyt6aCbocKUZld0Tk0pCRPVllrwHXiOz0vrnU3r95qjmPJ/CQU1twOAYkg+M=@vger.kernel.org, AJvYcCXwrgCbjDwLjD7GpEBnB307TTLq0hKJwiCn22WNBx3StISkCdF5DAuvoi0tnKO4JiaX8nYxNxzF5xtO@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9X6vCQVSiHMO0zKJqpAy0EFTVhMwXVEWOEIAz/R0QNoRIQw85
-	DwmLuJoL9How+W0ElThrSqTJEGd7rQ/oead8RGJpcR7zsyTpL8e4gjbhAXYcDSs=
-X-Google-Smtp-Source: AGHT+IFNRYwFJYtTRsYFIAe54Lh4omf9H/vO8B1hc+P4dH5FyrlHuZmBlJaXnBwLQ8pp45dbnF1nBQ==
-X-Received: by 2002:a05:6a00:138b:b0:71e:695:41ee with SMTP id d2e1a72fcca58-724becd76f7mr4397056b3a.5.1732117570022;
-        Wed, 20 Nov 2024 07:46:10 -0800 (PST)
-Received: from x13.. ([149.40.62.6])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724bef8daa5sm1844109b3a.102.2024.11.20.07.46.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2024 07:46:09 -0800 (PST)
-From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
-To: Thinh.Nguyen@synopsys.com,
-	gregkh@linuxfoundation.org,
-	rbm@suse.com
-Cc: Luis Felipe Hernandez <luis.hernandez093@gmail.com>,
-	skhan@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel-mentees@lists.linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: [PATCH v4] usb: dwc3: remove unused sg struct member
-Date: Wed, 20 Nov 2024 10:46:03 -0500
-Message-ID: <20241120154604.51815-1-luis.hernandez093@gmail.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1732128504; c=relaxed/simple;
+	bh=ujSDzaApsf9yiTgCIRSrJbgFe+qCH4hd9AnhtUVjtFM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=utbpiSZWL3CwKSK8UqEjyo0sIhrD1WUgLcDej6mQo3dVbtukXIakTMi/ym/IfOj2eNktsfV7uCb8S1N23iKCFWnhfJcyPZYCuhuo67C4iBIQyZw4laqGw+b9dwqLia1Yo7XaWyeEt/Ep58vWayYQJOAU+U0QwGGedT/Awhtwby0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=b9L1TiaO; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AK9FN5s007711;
+	Wed, 20 Nov 2024 18:48:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	ujSDzaApsf9yiTgCIRSrJbgFe+qCH4hd9AnhtUVjtFM=; b=b9L1TiaOdke1hTcg
+	GjOUPgn6HQSjns/mMLEpvvWpJ2ZeOscobZOhuKMmxDBBqZu0TxWjUVhCGMneZKTC
+	6PAEFvVqZuIwM1bEOS92htP6FAH13ZxRTIH6MsYJUujWAQDb4ACpA31nPB3S6rlc
+	H8lJz/WENmiwMztc7APVPGiFrYSZZVetwfRqubTCQwOxTCOv3PRy/Ov2L23YqZIN
+	12Dgq3RmKJt55TQY6f/mBKUER+G6tHJwRMsXUSxdvRgopjONhjTYWRqnccjZBG9F
+	7cVXVbPTsmcJ6N+knKcxrU4PiVeITwDPGhVuvUdGPpKydqcLiBPQhi7iR8W31Hyc
+	fVm4Jg==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4318uvj41e-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Nov 2024 18:48:03 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AKIm2OH012549
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Nov 2024 18:48:02 GMT
+Received: from [10.110.30.192] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 20 Nov
+ 2024 10:48:01 -0800
+Message-ID: <a7bca9f6-06f9-4e14-a1ab-761e92a68ceb@quicinc.com>
+Date: Wed, 20 Nov 2024 10:48:00 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v30 01/30] usb: host: xhci: Repurpose event handler for
+ skipping interrupter events
+To: Mathias Nyman <mathias.nyman@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
+        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <krzk+dt@kernel.org>, <pierre-louis.bossart@linux.intel.com>,
+        <Thinh.Nguyen@synopsys.com>, <tiwai@suse.com>, <robh@kernel.org>,
+        <gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>
+References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
+ <20241106193413.1730413-2-quic_wcheng@quicinc.com>
+ <18a691df-e7b6-42fc-8dbc-c10c2608cd9c@linux.intel.com>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <18a691df-e7b6-42fc-8dbc-c10c2608cd9c@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: UJkgSqup_QCVRf1BrXCSUM8P7P6OytC2
+X-Proofpoint-GUID: UJkgSqup_QCVRf1BrXCSUM8P7P6OytC2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ priorityscore=1501 phishscore=0 adultscore=0 malwarescore=0 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=999 spamscore=0 suspectscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411200130
 
-The sg (scatter-gather list pointer) member of the dwc3_request struct
-is no longer used and should be removed. This patch eliminates the unused
-member, cleaning up the struct.
+Hi Mathias,
 
-This change improves code clarity and avoids maintaining unnecessary 
-members in the structure.
+On 11/20/2024 3:48 AM, Mathias Nyman wrote:
+> On 6.11.2024 21.33, Wesley Cheng wrote:
+>> Depending on the interrupter use case, the OS may only be used to handle
+>> the interrupter event ring clean up.  In these scenarios, event TRBs don't
+>> need to be handled by the OS, so introduce an xhci interrupter flag to tag
+>> if the events from an interrupter needs to be handled or not.
+>>
+>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>> ---
+>>   drivers/usb/host/xhci-ring.c | 17 +++++++++++++----
+>>   drivers/usb/host/xhci.h      |  1 +
+>>   2 files changed, 14 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+>> index 9f1e150a1c76..b8f6983b7369 100644
+>> --- a/drivers/usb/host/xhci-ring.c
+>> +++ b/drivers/usb/host/xhci-ring.c
+>> @@ -2931,14 +2931,22 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>>   }
+>>     /*
+>> - * This function handles one OS-owned event on the event ring. It may drop
+>> - * xhci->lock between event processing (e.g. to pass up port status changes).
+>> + * This function handles one OS-owned event on the event ring, or ignores one event
+>> + * on interrupters which are non-OS owned. It may drop xhci->lock between event
+>> + * processing (e.g. to pass up port status changes).
+>>    */
+>>   static int xhci_handle_event_trb(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
+>>                    union xhci_trb *event)
+>>   {
+>>       u32 trb_type;
+>>   +    /*
+>> +     * Some interrupters do not need to handle event TRBs, as they may be
+>> +     * managed by another entity, but rely on the OS to clean up.
+>> +     */
+>> +    if (ir->skip_events)
+>> +        return 0;
+>
+> This works for your special case but is a small step sideways from other possible xhci
+> secondary interrupter usecases.
+>
+> We currently support just one event handler function even if we support several secondary
+> interrupters. Idea was to add support to pass dedicated handlers for each secondary interrupter,
+> set when the secondary interrupter is requested.
+>
+> In your case this dedicated handler wouldn't do anything.
+>
+> This patch again has a different approach, it keeps the default handler, and instead adds
+> flags to it, preventing it from handling the event trb.
+>
+> Not sure if we should take the time and implement dedicated handlers now, even if we don't
+> have any real users yet, or just take this quick change and rework it later when needed.
+>
+>
+Yes, I think we had a small discussion on this on v20:
 
-Reviewed-by: Ricardo B. Marliere <rbm@suse.com>
-Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-Closes: https://lore.kernel.org/all/20241118194006.77c7b126@canb.auug.org.au/
-Signed-off-by: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
----
-v2: remove unused sg struct member as per review[1]
-v3: 
-  - Add reported-by tag as per review [2]
-  - Carry over reviewed-by tag from v2 [3]
-  - Update commit subject to reflect maintainers
-  - Update commit message to reflect actual change gathered from 
-    Thinh Nguyen's feedback
+https://lore.kernel.org/linux-usb/a88b41f4-7e53-e162-5a6a-2d470e29c0bb@quicinc.com/
 
-[1] https://lore.kernel.org/all/20241119020807.cn7ugxnhbkqwrr2b@synopsys.com/
-[2] https://lore.kernel.org/all/2024111922-pantyhose-panorama-6f16@gregkh/
-[3] https://lore.kernel.org/all/5l65sdskdzbehxamff5ax4ptiqhaxh7ewi4umtpp6ynen45nj6@nebuxjg4c4rx/
-v4:
-  - Remove out of context paragraph from commit message as per 
-    Thinh Nguyen's[1]
-  - Fix Reported-by, correctly attribute report to Stephen Rothwell
+Since I didn't have an environment that exercised the path where we'd actually want to handle secondary interrupter events, I wasn't sure if it was valid to add bits and pieces of it to support such use cases w/o proper testing.  I think having this driver (as is) is still a step forward into the right direction, as these APIs are still going to be required if enabling secondary interrupter events in the Linux environment.
 
-[1] https://lore.kernel.org/all/20241119221907.tyt4luboduaymukl@synopsys.com/
----
- drivers/usb/dwc3/core.h | 1 -
- 1 file changed, 1 deletion(-)
+Thanks
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index ee73789326bc..3be069c4520e 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -956,7 +956,6 @@ struct dwc3_request {
- 	struct usb_request	request;
- 	struct list_head	list;
- 	struct dwc3_ep		*dep;
--	struct scatterlist	*sg;
- 	struct scatterlist	*start_sg;
- 
- 	unsigned int		num_pending_sgs;
--- 
-2.47.0
+Wesley Cheng
 
 
