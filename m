@@ -1,127 +1,151 @@
-Return-Path: <linux-usb+bounces-17757-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17758-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C46CD9D4451
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 00:11:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8301D9D4462
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 00:19:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70AAC1F21AAF
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 23:11:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB6BCB23FD2
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 23:18:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A92D219E7D1;
-	Wed, 20 Nov 2024 23:11:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFADF1C877E;
+	Wed, 20 Nov 2024 23:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LpqYN3xu"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Ibo4fAAD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 907D342048
-	for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 23:11:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61C8A27447;
+	Wed, 20 Nov 2024 23:18:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732144308; cv=none; b=kqo17QNpXOyYvs6iWW8R8T+fFfIbN4yph8rfof8hJXL3n//r5haecwj+C/jK77WevU12AdYPHDrwJeQsTGVJtxkhBgH9aqwNUx9raJ/iNefb20wbkc8G1N2PWZxpjzpyKbQvMPWuptUXVx+Mm5OBSMLyR0vZu9pKYXZhRW+t6FM=
+	t=1732144713; cv=none; b=gPr9HY+Da8Fou/QGFI645me1XutXYSIw+/15TuV1MrLy9cnivl6u9XuHMPY38mdBGyJPUgBzZDjqmxCQumj/oKEfccHsfkABd35EeBBF/jrGy678EgJwTyktW00L9aH5tTkvAf8er2uyZV7/ot7cdr4IXu9WzcgyS9ddCwWbwI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732144308; c=relaxed/simple;
-	bh=UTH/6KkcvTnJs+HdFV8VOkwtBex5NbX5E7rNfCG5THo=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=G9SCOTAYyQMFpEXO9wuwIWOXtrmv82FvRxrGYDsQ67pCEu2IukL1T8GvF75zExQl2uicTxTX7Sj3Rl8WJOIz55odLrURr1TThPpNeSSBRmbxQCk+Dn32OzGi2Xawkou/Q0GKtGOEORW3Qy9+oI2h5ji4C3PYBYsj93t7fAYhzDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LpqYN3xu; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2fb3c3d5513so3306171fa.1
-        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 15:11:46 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732144305; x=1732749105; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UTH/6KkcvTnJs+HdFV8VOkwtBex5NbX5E7rNfCG5THo=;
-        b=LpqYN3xuM1bVSHy/z+4DkiqlvAMYXscgI1DuTTqkSr2E4SxBWKJi+0bj0t9jshmsRL
-         15dCcRcqMkaRMcxdmfWRpLQ5d4LHxgy7kRoIf00oMyjvXObqF2uhvzwXhEVYB+6TCQDQ
-         o3GIntLDBJqkGrdRHkIw4Gsd6MO3j7cXenazhuQUCjRuU/ZnViNIvLJmOnwUnjM3rjfU
-         8rizT1sy6YrL6T6Ky5uxM/Hrau6K5xY8fdlXvvebLOyysfV2EKaEzskqaasW0ddElLQE
-         KoqbDeugTpiSD+lNWBonI9iWHumNzMv4ZMD/unpKJAJ9NTAqj4rkCHcVHih7r4J6kPw+
-         xTOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732144305; x=1732749105;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UTH/6KkcvTnJs+HdFV8VOkwtBex5NbX5E7rNfCG5THo=;
-        b=Pir/1Kqd9GhW8EJVMNBCCiDtMMk8CnCdBggV4N1omwtPm1FKLPy/stDuPJCQxi+97p
-         JqjHrpoWJSts5eedvrTRn/RIVZC2Fci1dIbtmv+cX5iya2WTi87ACxBtOz0XlkvHKdta
-         6DG+6QTbQnUTtTJJsTp0fepWuQmCen+RNXUUB98YB8D40JSyi2QJuuvZX9fENe4NWi5h
-         TPsarGQY2GRbT8kdRGHQmpsv5kAjWiNdbcgnXCiq6QVMaUPEXBvCptx6hSdPRh/4Xov+
-         SV0Ye7P5h+tuoMsW79xURNriBCXI38jjNDHe9J9IjPXHZ65JjTFYQ6ZwOhIW5lyHwxfZ
-         uODQ==
-X-Gm-Message-State: AOJu0Yyn4gusd4JkTJMUMpry+MLd5+K38iOcEBFRRP62uuDV9bbz4Q5I
-	x4h/iJMfsdhfy5aLHsEIEWxD0F+4JxkT93CqYfQieQJS0j+9pIO0nH340g==
-X-Google-Smtp-Source: AGHT+IF8S9WfGWTCSweWq9NTEPXzQgHd8LvPnlA6Mqb4yatgDJ5Gu+0bD2MKlIl6hmieKQ8ZAeCWwg==
-X-Received: by 2002:a05:651c:1542:b0:2ff:5b2c:3cc8 with SMTP id 38308e7fff4ca-2ff8dc62367mr34951041fa.32.1732144304330;
-        Wed, 20 Nov 2024 15:11:44 -0800 (PST)
-Received: from foxbook (bfh193.neoplus.adsl.tpnet.pl. [83.28.45.193])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ff698517cesm16734231fa.4.2024.11.20.15.11.42
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 20 Nov 2024 15:11:42 -0800 (PST)
-Date: Thu, 21 Nov 2024 00:11:38 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: <linux-usb@vger.kernel.org>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: How are halted endpoints supposed to be handled in Linux?
-Message-ID: <20241121001138.23a45f6c@foxbook>
+	s=arc-20240116; t=1732144713; c=relaxed/simple;
+	bh=SVAHyeGTzoghoI1kXDg2gcjhAZXFJM9LY16aIDIrBCA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=sL5Y5h0jro62tOD2eyMgSafR0Cua6pUTKTyU4oKiff3B244h5OWWCDBSf/aMJBuMMvpiRuYfKW7ANLuwQn6a2YN+xb8A5mjNozFN6CFTsYTjNaLrxqTErWCUhp6WWcVrWXrrW5HObKgVVNPwOkPcT6xEWziEbqOwDJIKrP5JS8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Ibo4fAAD; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AKLNB3d003945;
+	Wed, 20 Nov 2024 23:18:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	lanws6Yx3ikB7msfjQOOsmduMmYwECqYx43uI2TK1no=; b=Ibo4fAADwmwti8Rd
+	dqa17jA8omDgxnj3+QoHhRaVx5TIpePypG0rZNAchheHpXLd+ATN/13qsYvwROqc
+	6YFzfzUXBqhscSNc7rfbxlOjVfaOYhuw18ix5s4AWZ8V6VPmtTHRPGWH6CF26BCw
+	O6fqCBqG04155VJG4B9pYMaQfg+9vdA3eZgbyklYy8a5RqJhy19f+mjitzuzXj/5
+	m8OnhXYIwGbVOVPp9JpGFeuIjB247Zx89l+oNQhoE/l7qiNv+mB9sQXlwJzjWLaI
+	fSBRw9k1miT7nRD0IZ7YqFLSYW4YyaElCvfHI1RfXAHlSHsmeGqLQ3n58mea3MH9
+	c/BzMQ==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 431ce3a42s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Nov 2024 23:18:09 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4AKNI9I4029347
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Nov 2024 23:18:09 GMT
+Received: from [10.110.30.192] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 20 Nov
+ 2024 15:18:08 -0800
+Message-ID: <d0da6552-238a-41be-b596-58da6840efbb@quicinc.com>
+Date: Wed, 20 Nov 2024 15:18:07 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-
-Hi,
-
-I have been wondering about it after seeing how it's done in xhci_hcd,
-which looks wrong to me.
-
-USB 2.0 spec 5.7.5/5.8.5 states that halt condition due to either STALL
-handshake or "transmission error" should cause both the device and host
-endpoints to be reset. I presume "transmission error" means any error
-detected by the HC which causes it to halt, various examples exist.
-
-USB 3.0 just refers to USB 2.0.
-
-Linux appears to ignore this part and only reset on STALL handshake, as
-advised in Documentation/driver-api/usb/error-codes.rst and practiced
-by drivers - they don't seem to bother with usb_clear_halt() on -EPROTO.
-This wouldn't necessarily be bad in itself, but:
-
-On the HCD side, xHCI will:
-- give back the current URB with -EPROTO/-EPIPE status
-- reset the host side endpoint, clearing its toggle state
-- point the HC at the next URB if one exist
-- restart the endpoint without waiting for hcd->endpoint_reset()
-- ignore one subsequent call to hcd->endpoint_reset()
-
-For STALL, I think it's a little awkward, but acceptable. The ultimate
-result appears to be that all pending URBs are given back with -EPIPE
-and things start moving again after usb_clear_halt().
-
-But if the device isn't stalled, the next URB may execute right away if
-the failure was transient. This makes it impossible to ensure in-order
-delivery on bulk OUT pipes, because one URB is skipped and the driver
-has no reliable way to retry it before some later ones may get executed.
-
-This behavior also creates an opportunity for toggle mismatch, and as
-far as I understand, the hardware will resolve it by silently dropping
-one packet. Another could be dropped if usb_clear_halt() were called.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v30 00/30] Introduce QC USB SND audio offloading support
+To: Takashi Iwai <tiwai@suse.de>
+CC: Greg KH <gregkh@linuxfoundation.org>, <srinivas.kandagatla@linaro.org>,
+        <mathias.nyman@intel.com>, <perex@perex.cz>, <conor+dt@kernel.org>,
+        <dmitry.torokhov@gmail.com>, <corbet@lwn.net>, <broonie@kernel.org>,
+        <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
+        <pierre-louis.bossart@linux.dev>, <Thinh.Nguyen@synopsys.com>,
+        <tiwai@suse.com>, <robh@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>
+References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
+ <edfeb642-297e-42bb-ad09-cbf74f995514@quicinc.com>
+ <2024111655-approve-throwback-e7df@gregkh>
+ <2f512d8d-e5f3-4bdd-8172-37114a382a69@quicinc.com>
+ <875xoi3wqw.wl-tiwai@suse.de>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <875xoi3wqw.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: CyBvhwumMXz5hdJs_nJXfcoj34E6y-gX
+X-Proofpoint-ORIG-GUID: CyBvhwumMXz5hdJs_nJXfcoj34E6y-gX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 clxscore=1011 priorityscore=1501 impostorscore=0
+ bulkscore=0 mlxscore=0 adultscore=0 spamscore=0 mlxlogscore=999
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2409260000 definitions=main-2411200162
 
 
-Either I'm missing something, or it seems quite broken?
+On 11/20/2024 4:39 AM, Takashi Iwai wrote:
+> On Tue, 19 Nov 2024 18:50:52 +0100,
+> Wesley Cheng wrote:
+>>
+>> On 11/15/2024 11:42 PM, Greg KH wrote:
+>>> On Fri, Nov 15, 2024 at 02:42:47PM -0800, Wesley Cheng wrote:
+>>>> Hi,
+>>>>
+>>>> On 11/6/2024 11:33 AM, Wesley Cheng wrote:
+>>>>> Requesting to see if we can get some Acked-By tags, and merge on usb-next.
+>>>> Are there any more clarifications that I can help with to get this
+>>>> series going?  I know its been a long time coming, so folks may have
+>>>> lost context, but if there are any points that might be blocking the
+>>>> series from getting merged, please let me know.
+>>> I would like others to review this (xhci maintainer for one), to give
+>>> their blessing before I even consider this.
+>> Thanks, Greg...Yes, I was hoping to see if I could clarify any points for Mathias and Takashi if they had any concerns.  Just so folks are also aware, we did deploy a portion of the series (specifically the XHCI sec interrupter and USB SND core changes) into devices on the market, if that adds any confidence into those changes.  For the most part, there were no major issues within those drivers, and the single minor bug (in the XHCI sec intr) that we did catch was fixed in previous submissions, and should be highlighted in the change revision list.
+> Well, from the sound subsystem side, the only concerns are the design
+> issues: namely, whether the implementations with two cards are
+> acceptable, and whether the current control of PCM mapping is OK from
+> the user POV.  IIRC, there were discussions with Intel people and
+> others, and I haven't followed whether we got consensus.
+> If we reached some agreement, it'd be appreciated if you can put acks
+> from them in the patches, too.
 
-I wonder what other HCDs are doing in this case, and what's the idea
-behind it all?
+I believe Amadeusz was still against having the two card design, and wants the routing to automatically happen when playback happens on the sound card created by the USB SND layer.  However, even with that kind of implementation, the major pieces brought in by this series should still be relevant, ie soc-usb and the vendor offload driver.  The only thing that would really change is adding a path from the USB SND PCM ops to interact with the ASoC entities.  Complexity-wise, this would obviously have a good amount of changes to the USB SND/ASoC core drivers.  Some things I can think of that we'd need to introduce:
 
-Regards,
-Michal
+1.  Exposing some of the ASoC PCM (soc-pcm) APIs to be able to be called by soc-usb (to mimic a FE open from ASoC), so we can trigger ASoC DAI ops when USB SND FE is opened.
+
+2.  Proper fallback mechanism in case offload path enablement fails to the legacy USB SND path.
+
+3.  Master kcontrol to disable offload logic for each USB SND device.
+
+IMO, both the points you mentioned correspond to the same topic.  If we go with having offload being operated on one FE, then there is no need for the kcontrol of PCM mapping.  If we have two cards, then we will need the control for offload device mapping.  Can't speak for Pierre, but at least with my discussions with him, I don't think he's against the two card design, just as long as we have the proper kcontrol that notifies userspace of how to utilize the offload path.
+
+> The internal implementation details can be adjusted later, but those
+> two must be set in stone after merging the stuff to the upstream.
+>
+> (BTW, the mail address of Pierre changed; I corrected in this mail.)
+>
+Thanks for updating the email address.
+
+Thanks
+
+Wesley Cheng
+
 
