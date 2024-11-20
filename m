@@ -1,85 +1,56 @@
-Return-Path: <linux-usb+bounces-17747-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17748-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CD439D3D61
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 15:19:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6901D9D3D7C
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 15:25:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF9D8281629
-	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 14:19:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EF9E281B8F
+	for <lists+linux-usb@lfdr.de>; Wed, 20 Nov 2024 14:25:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4801B1AAE0C;
-	Wed, 20 Nov 2024 14:17:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 973DB1AA78D;
+	Wed, 20 Nov 2024 14:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VXNhBV1i"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Rl8xdE18"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5EF2746D;
-	Wed, 20 Nov 2024 14:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FC91A4F1B;
+	Wed, 20 Nov 2024 14:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732112250; cv=none; b=gH+KjGkeOf1JF+3jC4OS9usHQUpRkFsnXr4D2AnzWcK5bUAG2K6pSUu6eJf4rU+OBA+2HpeNJllLaAE5yYLDicjeH4Ln+SMl9JK6IRfvV4ZidC9QQcSq9rQ4lac4tx+9x4tLzzO0MOW4cnmubVDGrMg2depv9xoXNMCtGGTA6fE=
+	t=1732112728; cv=none; b=BXW5yyXqmQO9ahsRlsnqp+8m5VAKCzoltYTMnwRqOnfn3kkK2irnXef2W2HJkV/5hZVsihsMOTPxZM0/yTq7dTjBkuvxzS7eXp/LQr+SQVFQct1YU/U3jdNajGIY4dJsWfAMaduJFFt1Z1zALL80KoJ69vcnSFcoMxyH/ItI/0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732112250; c=relaxed/simple;
-	bh=HogWdnf+gEHBSeIlBDgdFSdAuYMxYp4y2Azfwc74ToU=;
+	s=arc-20240116; t=1732112728; c=relaxed/simple;
+	bh=y6qu8dBLA0LCgbdRq7LXfUlUzWcMqEAMFsWovlz6Unc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GA7M/dexjjkWFDeXI3El/2y0KnpAPZR2/5zT17fHs1NRqd80ElWZxejdod9iZWaEmXrEE+u23L0WX/qA2HJzFcXdvWMlWgBslxUiih+uf+ttobpb4wJtCNHiq3JEt6oeT/NxzS4aPTF4+iMV5iYe/uLwE5ZNdk3BH81QbS5/7MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VXNhBV1i; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6eea47d51aeso28907247b3.2;
-        Wed, 20 Nov 2024 06:17:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732112248; x=1732717048; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=0ccxSot4avXFbxADK2ckghODPjyViSvYvN2WCFkbOZs=;
-        b=VXNhBV1ian+kdGEWiTgo5orY0eX9xty5Usmw2aWyP9BCJMhj6d6xSV48fyIyHC/UJF
-         eR7WP8PRRchGA8n9sUl+uTCOD1cmfPpZyeqXp/XRw4pGb6SeP4oVVrOBtaSt+9lTKil7
-         vXe4ZvKXWs2VZki6GxwYQlNq+LLUoy/ufZnf8SpFGIV+jYTvmOTrvGsvWA0r+ekfdVrK
-         ngfFlYAh84eC+p8NrjEmNJgSJ4skplWId+g1V+I5g/CoyuHIhmUIE+QJL60ohE5U24Ca
-         nBjpWVYLqQ8ckVmD+5fq4wnDdfaEdGfUc4QwoTHlx9wP2le0ZhEdWo1/z8LH5vIfcSoR
-         jstg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732112248; x=1732717048;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0ccxSot4avXFbxADK2ckghODPjyViSvYvN2WCFkbOZs=;
-        b=i6+S/iBXuEyZMl4rTlS3inWY/I9Ld+Qd5PG0r4Neh3e6RN35D4JiA0fGxa7tqiWo1m
-         +7MLYhyR9L5Op1l8qqmj4u/LUPtLDjC4ESlt6OgPpKdCpXHhTLGhIVbVt9uC5nmEvn/G
-         /AqJwuK5+McWkr7i9MxVZ3ZfsPCjSbwuXCQc3Fobex1/97/pfGbtHxSf3NTAzG8rGn+2
-         Ky0Tefu/ZihQgnPZ0r+v9bjIph4cQFg1BzDISelNqRL5mD0S40jkbLtwQOjxF/nGOgTX
-         W5SeOV3TmuUYoOXqs8DzkXNGK1jeVmgCOBIdOUgs8bsZw5/WgY/e6zCmlqS+8ezyJf8/
-         Uhvg==
-X-Forwarded-Encrypted: i=1; AJvYcCUZSoAdYH57NfWkbeflaAxKraO+z7LYs/Yhpqn3nD8bIofj6iBi6tN2Gwt1QFm8yJaEquUpmxF68nOwW9g=@vger.kernel.org, AJvYcCWDzrvKrmdkKdnePqUeI6SOgNJbIY8lGYeeHSxEowLD+CrCqZuIhXbi4ebHWhtjvbVcsRbywNzmdz7k@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywdv0CzykO5XzxJg3GoNzMPjx0ilu4p7zEoNZpqpmeDJsv2pU4P
-	NvW/JJFlcHb5vMzjBUtsBFo6aRD+2T7Trmz8Y/www7lfclkoYkcuCTNhNo3wmpQ=
-X-Google-Smtp-Source: AGHT+IG2fbF9JPwAVnL8nmjAvhR+0CJ3T/VO5RNO7UqN1gUoGlhS73H4DQR0txfc26cb3YoxEIeBYQ==
-X-Received: by 2002:a05:690c:4b81:b0:6ee:7797:672 with SMTP id 00721157ae682-6eebd0d6e1emr32242637b3.7.1732112248013;
-        Wed, 20 Nov 2024 06:17:28 -0800 (PST)
-Received: from x13 ([157.23.249.72])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ee71341f80sm22515297b3.85.2024.11.20.06.17.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2024 06:17:27 -0800 (PST)
-Date: Wed, 20 Nov 2024 09:17:26 -0500
-From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"rbm@suse.com" <rbm@suse.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sk+ypJpmCExe7Xv7i23/I0tnfB100lO+VnoTs+4VHCmK3fw9SCSd6MqhQafSMFWWca/oVeeRQDO6B0pmVEoAy4ajqPwvBsgdOp+xbgatEf6hu5cYkleu3utGXxnxiB5phAyQuA9a6/jpuVrC+JoKXW0Ge/AbkLLaKBkyWOiL4wM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Rl8xdE18; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47140C4CECD;
+	Wed, 20 Nov 2024 14:25:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1732112725;
+	bh=y6qu8dBLA0LCgbdRq7LXfUlUzWcMqEAMFsWovlz6Unc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Rl8xdE186zc9YHa9wdheQGVrp4/5QVCl/CW4AkkvQbPspSciM9q9phIJJ7KChVJOW
+	 oDh/GZ5uDMq1CCRL9pehXvCz2viEY8+Vk3PqLnaAArnVvuQkZAIBh2I1C4JHn+McoI
+	 64SDYeJ4482YWDHNlyvI4AfZDxTcn+NDG34ctLv8=
+Date: Wed, 20 Nov 2024 15:25:00 +0100
+From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, "rbm@suse.com" <rbm@suse.com>,
 	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
 	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
 	"linux-kernel-mentees@lists.linuxfoundation.org" <linux-kernel-mentees@lists.linuxfoundation.org>,
 	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v3] usb: dwc3: remove unused sg struct member
-Message-ID: <Zz3vdkEzSobJ54bI@x13>
+Message-ID: <2024112037-grader-outsource-e821@gregkh>
 References: <20241119212452.269255-1-luis.hernandez093@gmail.com>
  <20241119221907.tyt4luboduaymukl@synopsys.com>
+ <Zz3vdkEzSobJ54bI@x13>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -89,38 +60,40 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241119221907.tyt4luboduaymukl@synopsys.com>
+In-Reply-To: <Zz3vdkEzSobJ54bI@x13>
 
-Thanks, Thinh and Greg, for the feedback!
-
-On Tue, Nov 19, 2024 at 10:19:09PM +0000, Thinh Nguyen wrote:
-> > Previously, this patch addressed a documentation warning caused by the
+On Wed, Nov 20, 2024 at 09:17:26AM -0500, Luis Felipe Hernandez wrote:
+> Thanks, Thinh and Greg, for the feedback!
 > 
-> Remove this paragraph. This context only makes sense in this thread
-> where the previous patch version is visible.
+> On Tue, Nov 19, 2024 at 10:19:09PM +0000, Thinh Nguyen wrote:
+> > > Previously, this patch addressed a documentation warning caused by the
+> > 
+> > Remove this paragraph. This context only makes sense in this thread
+> > where the previous patch version is visible.
+> > 
 > 
-
-I’ll update the commit message and remove the unnecessary paragraph as suggested.
-
-> > Reported-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> I’ll update the commit message and remove the unnecessary paragraph as suggested.
 > 
-> I'm not the one who should be attributed to by the Reported-by tag.
+> > > Reported-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+> > 
+> > I'm not the one who should be attributed to by the Reported-by tag.
+> > 
+> > I think Greg was alluding to this report by Stephen Rothwell:
+> > https://lore.kernel.org/all/20241118194006.77c7b126@canb.auug.org.au/
+> > 
+> > It wasn't Cc to the linux-usb list, so I'm not sure if you've seen it.
+> > If your change was base on the report above, then you can update the
+> > Reported-by tag accordingly.
+> > 
 > 
-> I think Greg was alluding to this report by Stephen Rothwell:
-> https://lore.kernel.org/all/20241118194006.77c7b126@canb.auug.org.au/
+> Regarding the report by Stephen Rothwell, I wasn’t aware of it before. I found the warning independently while trying to compile the Documentation subsystem, looking for bugs to address.
 > 
-> It wasn't Cc to the linux-usb list, so I'm not sure if you've seen it.
-> If your change was base on the report above, then you can update the
-> Reported-by tag accordingly.
-> 
+> That said, now that I’m aware of Stephen’s thread, I wouldn’t mind updating the commit message to include a reference to it if you think it would help link the two discussions. Let me know your thoughts on this.
 
-Regarding the report by Stephen Rothwell, I wasn’t aware of it before. I found the warning independently while trying to compile the Documentation subsystem, looking for bugs to address.
+Sure, it can not hurt, as it was reported by them, and fixed by you,
+everyone gets credit!
 
-That said, now that I’m aware of Stephen’s thread, I wouldn’t mind updating the commit message to include a reference to it if you think it would help link the two discussions. Let me know your thoughts on this.
+thanks,
 
-Thanks again for the clarification and the reviews!
-
-Best,
-
-Felipe
+greg k-h
 
