@@ -1,64 +1,88 @@
-Return-Path: <linux-usb+bounces-17776-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17777-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD3DA9D4EA7
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 15:25:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A04E19D4F68
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 16:07:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E991284167
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 14:25:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 261DA1F23CB0
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 15:07:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E55241D932F;
-	Thu, 21 Nov 2024 14:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136601CACD6;
+	Thu, 21 Nov 2024 15:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="npEi2vOd"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="WGxaCmCW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4530C20330;
-	Thu, 21 Nov 2024 14:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6FC1D47A3
+	for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 15:06:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732199140; cv=none; b=f86lYBJVOfu0XS1MCxToJOrTFqOKLxmXIsyzty8JufmU835c996TziwbjiuLMKYorv1utD0b8Qzrk2PerPAhGIvFuuyoPVkpudlfRCFqkJJjL1nonjUWNVJLSsFlpuUibU+Oyi5xZ9csAmXc+mtKPAmgwm+9f6eryGEPs8SPcvQ=
+	t=1732201617; cv=none; b=mDZIWs0LSFBgSg5TLkLMDAbV47HR78unZLqLuXxu4GY0BLfFp6uR6medX/EwocffWMMiuyqh7yWH86VEXbERWk2ibmz9rwn4alJs5Vp4hFKBhsXjC9iAGHZwP/Lu2urA9slQvQSSt3xnkVzX8wdA90jL/yWxPw7ismlOPSAfXeo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732199140; c=relaxed/simple;
-	bh=/xoURug9mFlPXUzDX/hahpXmfY+g2zn4YGL+kl59M5U=;
+	s=arc-20240116; t=1732201617; c=relaxed/simple;
+	bh=iUnfgooy/b9ZDQhkodhaGLYUYpvz7Qbgfo8YDR6nLbY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e2GI00hRjZEWzRWLJeSJdrE1Q4OjW6UWdpTZiEzJjGfXDe8KvpfjPdUfRz4lY4Yqhl0oyuhv9kx19VHZNglQ7WH31QyeVeDNAVlQ/pLS2tezFuxb26SlbRqTQ9m3bh+f3sWkUbwZwC/8enI+taA+Rgxk/BSABNfI+QHyOCUfGNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=npEi2vOd; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
-	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
-	In-Reply-To:References; bh=eKS76cxQEKPIR4MEzycu9OJBS5rxGLqkxBAvZUIpwVY=; b=np
-	Ei2vOdB6W7Zu4BhKLa323a/lO6SQZ8TcrZ6ky4luNxD9+wHZKN+Z/mn9zLt0LPN1U6G31mm6W2qqc
-	cnStju9YD4aum2igneGTkuOlV4kWSLux0KTLZyCwgEyygQ2xpO9aNVJI4+1fNT7dZnqMaXpQ7hkJR
-	/JyeuCitN9EV9EI=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tE87g-00E3vg-8B; Thu, 21 Nov 2024 15:25:32 +0100
-Date: Thu, 21 Nov 2024 15:25:32 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
-Cc: netdev <netdev@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
-	Ming Lei <ming.lei@redhat.com>
-Subject: Re: [PATCH] usbnet_link_change() fails to call netif_carrier_on()
-Message-ID: <b1888530-1bf8-4ced-948d-d3989f9896b6@lunn.ch>
-References: <m34j43gwto.fsf@t19.piap.pl>
- <9baf4f17-bae6-4f5c-b9a1-92dc48fd7a8d@lunn.ch>
- <m3plmpf5ar.fsf@t19.piap.pl>
+	 Content-Type:Content-Disposition:In-Reply-To; b=I1UCkK7WaFtylKfkRYUzNaYJj9bQjDS7Bo7QfRczQgwklDeFXTE/Yn8lTrKRRvHl7j9/PGEzVbOFKniZ9ztda41go8/H+9hmwTE0/zLan1goQznJtQNAORZ8Um2aW3gi7lKWC192lNpg9bu9DpvU8qRsIG8wfk5GNnQLzuRtNiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=WGxaCmCW; arc=none smtp.client-ip=209.85.219.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6d41d46162eso6038826d6.0
+        for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 07:06:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1732201614; x=1732806414; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZxzIUFSZp+2FxRy9UIpkCax5GS4kefJIV53cZfFhVUY=;
+        b=WGxaCmCWvMs6YJDvgmzCIhmXmGuz+lFFeHGQ/VGXVRQRXIXhk+eWaDAH3siloq3HI8
+         iwjyAAZwRZMUSb7mYtEyZasjdMJ870soJn6ixoOlz2zZ5qsnYhl7CfShXyeRC7Uqun0o
+         O2smg1tiEAiwMlUhwQmI1UHNTVdBabGr3p6/gojSGXzM6MQnIRPwZ1369aDOOStXN5J1
+         p5dpSJRdTi7ifg6AdNLF8wfPeeyThQMbJlEArPT5wU0dnGWtHn9QsDjtCDrF53dyckLA
+         d73lC4u3jjXGr7te4m/9+TBzu93vHuf4fugEtH2DVtygq7ryfEqB13BUslXZ+O5K8G1J
+         /mTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732201614; x=1732806414;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZxzIUFSZp+2FxRy9UIpkCax5GS4kefJIV53cZfFhVUY=;
+        b=tGSE5qwv7ZpSUhqjNBI4gwBzvInOXyK5/dKOYVqxCATneSTyK27flkPiTnDCaCnqGv
+         jDh/4XCyw00DGT8vdHVLLAaT26/nVMKUkvAUdSFGrDAT4wMxCkr4X6AYQtySHLSEqGNT
+         GAC09/7qTqtvaVUqJEU69I4cXbf621QmI4/8pv2HhXeIzsbpvSfkMQj/11epFqh9j050
+         T3wzc6PIjCrzMjLpSrBmvO3K3zaOWoxaDlcGoNzkLXsfvlo1JZOhEivQTPDZgHvcbxLF
+         5cXhSTMHVroOhHwYgBlirExdBl2o1d3tUgDFlLRM8i87hnR0/Nknl6/uDOdk1tOd4RyT
+         BX+g==
+X-Forwarded-Encrypted: i=1; AJvYcCXPUJ3uDwfZd6Vg6VOdTtfw00k4YywwrgftX3jRL49wfzDAm223lqqRZAr+gt/oU4Wjt1FV4V8UbGk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdFZQJT+xtjFIu/6cC+EfH5tocVskGZV8avhQSleUN2IX//RWB
+	SDtAE8TBbciNvwMVifa06p5itNFqN0080jbzQk8XZrvqA+VIKj2QSifyt6u2cQ==
+X-Gm-Gg: ASbGncuJ/+CG/f9iUNV9bO2r4ikiv1Ud6G1BMGEdHhZaQc4HLTPM9jmYnO/S2p6GPaH
+	2XxTlmRFICJVe6mUOYuD2tRW0xUwRLYtA3BJlUQ4nZmKehRdPPX4to61GNtPVmrZy+giA4/TEAT
+	MBefC7iJGAqhlJw9hMy3cOe2CB4Krk3xWfRO56jRv2aAIuIv6qm8TDojH+iOVWcXt8xYt/KqVHG
+	pn5v0xIDl8nImNaCnPd3dHSFqQ8H9f+3C8VmnjSOvl/c5/Jehk=
+X-Google-Smtp-Source: AGHT+IH72BBiqZFZLG25QEFhm1QwfuqwX4woHk1d9CdqlDTfqfUGfnZc2ov2ivQZ9QIiExY2ovV4og==
+X-Received: by 2002:a05:6214:e84:b0:6d4:1530:a0a3 with SMTP id 6a1803df08f44-6d4377b45b4mr72911616d6.6.1732201614204;
+        Thu, 21 Nov 2024 07:06:54 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::24f4])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d4381377cbsm24337696d6.122.2024.11.21.07.06.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Nov 2024 07:06:53 -0800 (PST)
+Date: Thu, 21 Nov 2024 10:06:50 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: How are halted endpoints supposed to be handled in Linux?
+Message-ID: <0dd70803-a074-4859-8cc9-5bd210d12536@rowland.harvard.edu>
+References: <20241121001138.23a45f6c@foxbook>
+ <20241121000216.kif557p3p6xyahax@synopsys.com>
+ <b34b5ea0-2804-4692-bede-70ba9065c86c@rowland.harvard.edu>
+ <20241121112653.06ba4ee5@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,84 +92,161 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <m3plmpf5ar.fsf@t19.piap.pl>
+In-Reply-To: <20241121112653.06ba4ee5@foxbook>
 
-On Thu, Nov 21, 2024 at 07:51:24AM +0100, Krzysztof Hałasa wrote:
-> Hi Andrew,
-> thanks for a looking at this.
+On Thu, Nov 21, 2024 at 11:26:53AM +0100, Michał Pecio wrote:
+> Hi Alan,
 > 
-> Andrew Lunn <andrew@lunn.ch> writes:
-> 
-> >> void usbnet_link_change(struct usbnet *dev, bool link, bool need_reset)
-> >> {
-> >>       /* update link after link is reseted */
-> >>       if (link && !need_reset)
-> >>               netif_carrier_on(dev->net);
-> >>       else
-> >>               netif_carrier_off(dev->net);
-> >>
-> >>       if (need_reset && link)
-> >>               usbnet_defer_kevent(dev, EVENT_LINK_RESET);
-> >>       else
-> >>               usbnet_defer_kevent(dev, EVENT_LINK_CHANGE);
-> >> }
-> >
-> > This device is using phylink to manage the PHY. phylink will than
-> > manage the carrier. It assumes it is solely responsible for the
-> > carrier. So i think your fix is wrong. You probably should be removing
-> > all code in this driver which touches the carrier.
-> 
-> Ok, I wasn't aware that phylink manages netdev's carrier state.
-> 
-> Then, is the patch wrong just because the asix driver shouldn't use the
-> function, or is it wrong because the function should work differently
-> (i.e., the semantics are different)?
-> 
-> Surely the function is broken, isn't it? Calling netif_carrier_off()
-> on link up event can't be right?
-> 
-> 
-> Now the ASIX driver, I'm looking at it for some time now. It consists
-> of two parts linked together. The ax88172a.c part doesn't use phylink,
-> while the main asix_devices.c does. So I'm leaving ax88172a.c alone for
-> now (while it could probably be better ported to the same framework,
-> i.e., phylink).
-> 
-> The main part uses usbnet.c, which does netif_carrier_{on,off}() in the
-> above usbnet_link_change(). I guess I can make it use directly
-> usbnet_defer_kevent() only so it won't be a problem.
-> 
-> Also, usbnet.c calls usbnet_defer_kevent() and thus netif_carrier_off()
-> in usbnet_probe, removing FLAG_LINK_INTR from asix_devices.c will stop
-> that.
-> 
-> The last place interacting with carrier status is asix_status(), called
-> about 8 times a second by usbnet.c intr_complete(). This is independent
-> of any MDIO traffic. Should I now remove this as well? I guess removing
-> asix_status would suffice.
+> Thank you for taking the time to answer. I'm beginning to regret not
+> asking this question earlier.
 
-I've not looked at this driver in detail, nor usbnet. So i can only
-make general comments. I do see there are a number of drivers which
-re-invent the wheel and do their own PHY handling, when they should
-allow Linux to do it via phylib/phylink.
+I hope all the material here is accurate; it's been a long time since I 
+worked on these matters.
 
-When the MAC driver is using phylink, or phylib, it should not touch
-the carrier, nor access the PHY directly. The exception can be during
-probe, when it can turn the carrier off. What the MAC driver should be
-doing is exposing its MDIO bus as a Linux MDIO bus. phylib will then
-enumerate the bus and find the PHYs on it. The MAC driver which does
-not have access to device tree then typically uses phy_find_first() to
-find a PHY on the bus, and uses phy_connect() to bind the PHY to the
-MAC. The MAC driver then uses phy_start() when the interface is
-opened. phylib will poll the PHY for changing in link status, and call
-the callback function registered via phy_connect() to let the MAC know
-about what the PHY has negotiated. Other than that, the MAC driver
-does nothing with the PHY.
+> On Wed, 20 Nov 2024 21:31:29 -0500, Alan Stern wrote:
+> > > > Linux appears to ignore this part and only reset on STALL
+> > > > handshake, as advised in
+> > > > Documentation/driver-api/usb/error-codes.rst and practiced by
+> > > > drivers - they don't seem to bother with usb_clear_halt() on
+> > > > -EPROTO.  
+> > 
+> > This is generally a weakness in the drivers.  It would be nice if the 
+> > class specifications said what to do in these situations, but most of 
+> > them don't.
+> 
+> There is also proprietary hardware with no specification at all.
 
-It could well be there are historical discrepancies in usbnet, in that
-having Linux drive the PHY is somewhat new for usbnet, historically
-the wheel was reinvented, and maybe part of that is in the usbnet
-core.
+Indeed.
 
-	Andrew
+> > > > On the HCD side, xHCI will:
+> > > > - give back the current URB with -EPROTO/-EPIPE status
+> > > > - reset the host side endpoint, clearing its toggle state
+> > > > - point the HC at the next URB if one exist
+> > > > - restart the endpoint without waiting for hcd->endpoint_reset()
+> > > > - ignore one subsequent call to hcd->endpoint_reset()  
+> > 
+> > This behavior is not correct.  See the kerneldoc for 
+> > usb_unlink_urb() in drivers/usb/core/urb.c, especially the section 
+> > labelled "Unlinking and Endpoint Queues".
+> 
+> OK, let's go through it.
+> 
+>  * But when an URB terminates with an
+>  * error its queue generally stops (see below), at least until that URB's
+>  * completion routine returns.
+> 
+> I don't see this working after xHCI adopted bottom half giveback, which
+> is asynchronous. As you are the maintainer of EHCI, which also uses BH,
+> how is EHCI dealing with it?
+
+Yes, I am.
+
+For Bulk endpoints: When a transmission error occurs, ehci-hcd removes 
+the endpoint's queue header from the controller's async list, in 
+addition to giving back the failed URB.  When the removal is complete, 
+the queue is scanned for other unlinked URBs, and they are given back.  
+After that happens, the next URB submission will cause the queue header 
+to be put back on the controller's async list.
+
+You're right about the lack of synchronization caused by use of a BH.  
+The HCD has no way to know when the class driver has finished processing 
+a giveback.  We do need to fix this.
+
+> One way I see with existing APIs is to wait until the driver submits a
+> new URB, but are drivers prepared for this? Is EHCI doing the same?
+
+Yes; see above.
+
+>  * It is guaranteed that a stopped queue
+>  * will not restart until all its unlinked URBs have been fully retired,
+>  * with their completion routines run
+> 
+> I think xHCI can currently guarantee that nothing is restarted until
+> any URB unlinked for any reason is given to the BH worker, but that's
+> all we have, and I just broke it in usb-next:
+> 
+> +               /* Try to restart the endpoint if all is done */
+> +               ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
+> +               /* Start giving back any TDs invalidated above */
+> +               xhci_giveback_invalidated_tds(ep);
+> 
+> This is part of a legitimate bugfix patch tagged for stable. I should
+> have insisted on keeping it a separate change, but it seemed a good idea
+> at the time which would soon get implemented anyway... Maybe no more?
+> 
+>  * even if that's not until some time
+>  * after the original completion handler returns.
+> 
+> Not entirely sure what this means.
+
+Suppose URBs 1, 2, and 3 are queued when URB 1 gets a transmission 
+error.  It is given back, and its completion handler unlinks URBs 2 and 
+3.  The completion handler for URB 1 then returns, but the queue won't 
+restart until the completion handlers for URBs 2 and 3 have returned, 
+even if that doesn't occur for some time.  At least, that is the intent.
+
+>  * The same behavior and
+>  * guarantee apply when an URB terminates because it was unlinked.
+> 
+> Same caveat about BH asynchronicity in xHCI.
+> 
+> > In general, the only safe thing for class drivers to do when they get 
+> > one of these errors on a bulk or interrupt endpoint is to unlink all
+> > the pending URBs for the endpoint and then call usb_clear_halt() when
+> > they have all completed.  I know that usb-storage does this; I
+> > suspect that not many other drivers do.
+> 
+> Your suspicion isn't wrong AFAIK.
+> 
+> One more thing which is safe at least wrt data corruption is to simply
+> retry the same URB without resetting anything. But if an HCD wants to
+> do it, existing API gives no way to notify the driver and allow it to
+> opt out and handle things differently, so it mustn't retry forever.
+
+Yes, and in fact ehci-hcd _does_ retry up to 32 times.
+
+> > I suppose the USB core could take care of this automatically so that 
+> > neither the class drivers nor the HCDs would have to worry about it.
+> > If everyone agrees that this wouldn't lead to other problems, it
+> > could be implemented without too much difficulty.
+> 
+> This still appears to run into the double delivery problem that you
+> described in the discussion linked by Thinh Nguyen, particularly in
+> case of dodgy drivers for dodgy hardware.
+> 
+> Considering that, I'm not sure if automatically resetting anything on
+> -EPROTO is a good idea.
+
+What about automatic unlinking?
+
+Note that some class drivers treat -EPROTO as a fatal error.  That is, 
+they don't retry and their completion-resubmission loop breaks down.  
+When that happens, the only way forward is to unbind the driver (for 
+example, by unplugging the device).  Of course, this isn't a problem if 
+the original cause of the -EPROTO error is that the device just _was_ 
+unplugged.  All other cases are sufficiently rare that we don't have a 
+generally agreed-upon strategy for handling them.
+
+> > > > I wonder what other HCDs are doing in this case, and what's the
+> > > > idea behind it all?  
+> > 
+> > As far as I know, they don't automatically send Clear-Halt requests
+> > to the device or automatically unlink anything.
+> 
+> That's what it looks like, grepping through drivers/usb/host. But my
+> question was mainly about -EPROTO. When should an HCD restart a halted
+> endpoint? Should it clear the sequence state? (probably not).
+
+Except for an immediate retry, I suspect the HCD should never restart a 
+halted Bulk or Interrupt endpoint on its own initiative.  Not until 
+another URB is submitted.
+
+However, this seems impractical if the class driver wants to retain the 
+existing URBs already on the endpoint's queue.  (I don't know of any 
+drivers that do this, but still...)  Perhaps we should adopt the policy 
+that -EPROTO, -EILSEQ, and -ETIME cause all outstanding URBs to fail and 
+enforce this policy in usbcore by automatic unlinking so that HC 
+drivers don't have to do it.
+
+Alan Stern
 
