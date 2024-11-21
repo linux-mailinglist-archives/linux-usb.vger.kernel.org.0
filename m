@@ -1,252 +1,183 @@
-Return-Path: <linux-usb+bounces-17777-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17778-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A04E19D4F68
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 16:07:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B5FF9D4FAB
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 16:26:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 261DA1F23CB0
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 15:07:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B491283D1C
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 15:26:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136601CACD6;
-	Thu, 21 Nov 2024 15:06:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFDF81DBB13;
+	Thu, 21 Nov 2024 15:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="WGxaCmCW"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Kc4NtqD5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C6FC1D47A3
-	for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 15:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C181CD1E2;
+	Thu, 21 Nov 2024 15:26:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732201617; cv=none; b=mDZIWs0LSFBgSg5TLkLMDAbV47HR78unZLqLuXxu4GY0BLfFp6uR6medX/EwocffWMMiuyqh7yWH86VEXbERWk2ibmz9rwn4alJs5Vp4hFKBhsXjC9iAGHZwP/Lu2urA9slQvQSSt3xnkVzX8wdA90jL/yWxPw7ismlOPSAfXeo=
+	t=1732202793; cv=none; b=q9ehLG8A0CX5pnPS+tHwFmluDdIhAWxUynKW15G8x6VmNRWNmmDI3iem6nj61OSiqSWu7fZbNhMjvv0cQqIpxKfTm3tLBcTkdgBQ0W92CsRJ3Wque/xA1RkufB8ep2POUQFmI+H2eh0XisNpRYLxB7AGs58nUm6uywlBEtsqh2k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732201617; c=relaxed/simple;
-	bh=iUnfgooy/b9ZDQhkodhaGLYUYpvz7Qbgfo8YDR6nLbY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I1UCkK7WaFtylKfkRYUzNaYJj9bQjDS7Bo7QfRczQgwklDeFXTE/Yn8lTrKRRvHl7j9/PGEzVbOFKniZ9ztda41go8/H+9hmwTE0/zLan1goQznJtQNAORZ8Um2aW3gi7lKWC192lNpg9bu9DpvU8qRsIG8wfk5GNnQLzuRtNiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=WGxaCmCW; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-6d41d46162eso6038826d6.0
-        for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 07:06:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1732201614; x=1732806414; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ZxzIUFSZp+2FxRy9UIpkCax5GS4kefJIV53cZfFhVUY=;
-        b=WGxaCmCWvMs6YJDvgmzCIhmXmGuz+lFFeHGQ/VGXVRQRXIXhk+eWaDAH3siloq3HI8
-         iwjyAAZwRZMUSb7mYtEyZasjdMJ870soJn6ixoOlz2zZ5qsnYhl7CfShXyeRC7Uqun0o
-         O2smg1tiEAiwMlUhwQmI1UHNTVdBabGr3p6/gojSGXzM6MQnIRPwZ1369aDOOStXN5J1
-         p5dpSJRdTi7ifg6AdNLF8wfPeeyThQMbJlEArPT5wU0dnGWtHn9QsDjtCDrF53dyckLA
-         d73lC4u3jjXGr7te4m/9+TBzu93vHuf4fugEtH2DVtygq7ryfEqB13BUslXZ+O5K8G1J
-         /mTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732201614; x=1732806414;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZxzIUFSZp+2FxRy9UIpkCax5GS4kefJIV53cZfFhVUY=;
-        b=tGSE5qwv7ZpSUhqjNBI4gwBzvInOXyK5/dKOYVqxCATneSTyK27flkPiTnDCaCnqGv
-         jDh/4XCyw00DGT8vdHVLLAaT26/nVMKUkvAUdSFGrDAT4wMxCkr4X6AYQtySHLSEqGNT
-         GAC09/7qTqtvaVUqJEU69I4cXbf621QmI4/8pv2HhXeIzsbpvSfkMQj/11epFqh9j050
-         T3wzc6PIjCrzMjLpSrBmvO3K3zaOWoxaDlcGoNzkLXsfvlo1JZOhEivQTPDZgHvcbxLF
-         5cXhSTMHVroOhHwYgBlirExdBl2o1d3tUgDFlLRM8i87hnR0/Nknl6/uDOdk1tOd4RyT
-         BX+g==
-X-Forwarded-Encrypted: i=1; AJvYcCXPUJ3uDwfZd6Vg6VOdTtfw00k4YywwrgftX3jRL49wfzDAm223lqqRZAr+gt/oU4Wjt1FV4V8UbGk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwdFZQJT+xtjFIu/6cC+EfH5tocVskGZV8avhQSleUN2IX//RWB
-	SDtAE8TBbciNvwMVifa06p5itNFqN0080jbzQk8XZrvqA+VIKj2QSifyt6u2cQ==
-X-Gm-Gg: ASbGncuJ/+CG/f9iUNV9bO2r4ikiv1Ud6G1BMGEdHhZaQc4HLTPM9jmYnO/S2p6GPaH
-	2XxTlmRFICJVe6mUOYuD2tRW0xUwRLYtA3BJlUQ4nZmKehRdPPX4to61GNtPVmrZy+giA4/TEAT
-	MBefC7iJGAqhlJw9hMy3cOe2CB4Krk3xWfRO56jRv2aAIuIv6qm8TDojH+iOVWcXt8xYt/KqVHG
-	pn5v0xIDl8nImNaCnPd3dHSFqQ8H9f+3C8VmnjSOvl/c5/Jehk=
-X-Google-Smtp-Source: AGHT+IH72BBiqZFZLG25QEFhm1QwfuqwX4woHk1d9CdqlDTfqfUGfnZc2ov2ivQZ9QIiExY2ovV4og==
-X-Received: by 2002:a05:6214:e84:b0:6d4:1530:a0a3 with SMTP id 6a1803df08f44-6d4377b45b4mr72911616d6.6.1732201614204;
-        Thu, 21 Nov 2024 07:06:54 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::24f4])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d4381377cbsm24337696d6.122.2024.11.21.07.06.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2024 07:06:53 -0800 (PST)
-Date: Thu, 21 Nov 2024 10:06:50 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: How are halted endpoints supposed to be handled in Linux?
-Message-ID: <0dd70803-a074-4859-8cc9-5bd210d12536@rowland.harvard.edu>
-References: <20241121001138.23a45f6c@foxbook>
- <20241121000216.kif557p3p6xyahax@synopsys.com>
- <b34b5ea0-2804-4692-bede-70ba9065c86c@rowland.harvard.edu>
- <20241121112653.06ba4ee5@foxbook>
+	s=arc-20240116; t=1732202793; c=relaxed/simple;
+	bh=OHWQm2VRZ1ER4KnT2oWoJP+6nlIkLvtdAABfjToY01A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=jvRuM1r3UW1aEcTruaIJK1T4+M6wV/PkGHSmdfwC1bTlQOAJki4a1seTK/zy7nILDKirXvoZptBGYxkife75dNWkdSJCB5UunmsQTCV6m2JYnR0piNEfoqwElnbZzyABWe3BDczYXlez6v3N634wlmWgHx7LM/sVurABolM90cY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Kc4NtqD5; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4AL8xWCA019249;
+	Thu, 21 Nov 2024 15:26:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	kRCjDYD4w0WJlkjoLPG8L8w0uuKnmPwbmXPSZA313CU=; b=Kc4NtqD52KWvoCZr
+	NBrHn7EgMY9UoX0wAwt0Q9sPBTeImmX1MOudwJqgOmak2W1konuxzID8ummwZadw
+	uQqtYCGsyaUkxQE5A8DRNmDufFrM3GRel//m+nwc3C+OnDFYAd+NA+m1DHR5zAwD
+	8RrTNu54lDNt2do7HsrJTKRgAcmhArb9n6rsa2Yyd4t4PpLb3W7jNJJ8BeHPF4sp
+	C0a9Dup9HcfIe1E/UaWo7xqic4DzJUTQRQg+6ED9wzqIt6nOGs7nhBz7j2KC0x+U
+	JMZz/hzOEpXV8UtruGf+Gde07n/5mFwNWKykKqdsHYfYQJE2DMZfNNkDCEy56yRq
+	oZ4abQ==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 431c7hmhtg-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Nov 2024 15:26:22 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4ALFQLwV025490
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 21 Nov 2024 15:26:21 GMT
+Received: from [10.216.32.38] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 21 Nov
+ 2024 07:26:18 -0800
+Message-ID: <c12b1668-43c2-4b42-9379-99582e45e38a@quicinc.com>
+Date: Thu, 21 Nov 2024 20:56:14 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/2] dt-bindings: usb: Add microchip USB5807 HUB
+Content-Language: en-US
+To: Mike Looijmans <mike.looijmans@topic.nl>, Rob Herring <robh@kernel.org>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <devicetree@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Krzysztof
+ Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring
+	<robh+dt@kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1b153bce-a66a-45ee-a5c6-963ea6fb1c82.949ef384-8293-46b8-903f-40a477c056ae.656f2a13-85bf-42a3-8490-f97f2538d8c3@emailsignatures365.codetwo.com>
+ <20230522074510.16367-1-mike.looijmans@topic.nl>
+ <168474408440.1935852.10036260685386476051.robh@kernel.org>
+ <96bc29bf-b601-4852-ac9a-50091698529d@quicinc.com>
+ <e3c88450-fbe3-42b9-a2ed-901ffdadfe1c@topic.nl>
+From: AKASH KUMAR <quic_akakum@quicinc.com>
+In-Reply-To: <e3c88450-fbe3-42b9-a2ed-901ffdadfe1c@topic.nl>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241121112653.06ba4ee5@foxbook>
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BGdlCCllxYGgqSoxenT3z0spYZdQfnqF
+X-Proofpoint-GUID: BGdlCCllxYGgqSoxenT3z0spYZdQfnqF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 adultscore=0
+ phishscore=0 priorityscore=1501 malwarescore=0 bulkscore=0 spamscore=0
+ mlxscore=0 impostorscore=0 suspectscore=0 lowpriorityscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2409260000 definitions=main-2411210119
 
-On Thu, Nov 21, 2024 at 11:26:53AM +0100, Michał Pecio wrote:
-> Hi Alan,
-> 
-> Thank you for taking the time to answer. I'm beginning to regret not
-> asking this question earlier.
+On 11/21/2024 3:24 PM, Mike Looijmans wrote:
 
-I hope all the material here is accurate; it's been a long time since I 
-worked on these matters.
-
-> On Wed, 20 Nov 2024 21:31:29 -0500, Alan Stern wrote:
-> > > > Linux appears to ignore this part and only reset on STALL
-> > > > handshake, as advised in
-> > > > Documentation/driver-api/usb/error-codes.rst and practiced by
-> > > > drivers - they don't seem to bother with usb_clear_halt() on
-> > > > -EPROTO.  
-> > 
-> > This is generally a weakness in the drivers.  It would be nice if the 
-> > class specifications said what to do in these situations, but most of 
-> > them don't.
-> 
-> There is also proprietary hardware with no specification at all.
-
-Indeed.
-
-> > > > On the HCD side, xHCI will:
-> > > > - give back the current URB with -EPROTO/-EPIPE status
-> > > > - reset the host side endpoint, clearing its toggle state
-> > > > - point the HC at the next URB if one exist
-> > > > - restart the endpoint without waiting for hcd->endpoint_reset()
-> > > > - ignore one subsequent call to hcd->endpoint_reset()  
-> > 
-> > This behavior is not correct.  See the kerneldoc for 
-> > usb_unlink_urb() in drivers/usb/core/urb.c, especially the section 
-> > labelled "Unlinking and Endpoint Queues".
-> 
-> OK, let's go through it.
-> 
->  * But when an URB terminates with an
->  * error its queue generally stops (see below), at least until that URB's
->  * completion routine returns.
-> 
-> I don't see this working after xHCI adopted bottom half giveback, which
-> is asynchronous. As you are the maintainer of EHCI, which also uses BH,
-> how is EHCI dealing with it?
-
-Yes, I am.
-
-For Bulk endpoints: When a transmission error occurs, ehci-hcd removes 
-the endpoint's queue header from the controller's async list, in 
-addition to giving back the failed URB.  When the removal is complete, 
-the queue is scanned for other unlinked URBs, and they are given back.  
-After that happens, the next URB submission will cause the queue header 
-to be put back on the controller's async list.
-
-You're right about the lack of synchronization caused by use of a BH.  
-The HCD has no way to know when the class driver has finished processing 
-a giveback.  We do need to fix this.
-
-> One way I see with existing APIs is to wait until the driver submits a
-> new URB, but are drivers prepared for this? Is EHCI doing the same?
-
-Yes; see above.
-
->  * It is guaranteed that a stopped queue
->  * will not restart until all its unlinked URBs have been fully retired,
->  * with their completion routines run
-> 
-> I think xHCI can currently guarantee that nothing is restarted until
-> any URB unlinked for any reason is given to the BH worker, but that's
-> all we have, and I just broke it in usb-next:
-> 
-> +               /* Try to restart the endpoint if all is done */
-> +               ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
-> +               /* Start giving back any TDs invalidated above */
-> +               xhci_giveback_invalidated_tds(ep);
-> 
-> This is part of a legitimate bugfix patch tagged for stable. I should
-> have insisted on keeping it a separate change, but it seemed a good idea
-> at the time which would soon get implemented anyway... Maybe no more?
-> 
->  * even if that's not until some time
->  * after the original completion handler returns.
-> 
-> Not entirely sure what this means.
-
-Suppose URBs 1, 2, and 3 are queued when URB 1 gets a transmission 
-error.  It is given back, and its completion handler unlinks URBs 2 and 
-3.  The completion handler for URB 1 then returns, but the queue won't 
-restart until the completion handlers for URBs 2 and 3 have returned, 
-even if that doesn't occur for some time.  At least, that is the intent.
-
->  * The same behavior and
->  * guarantee apply when an URB terminates because it was unlinked.
-> 
-> Same caveat about BH asynchronicity in xHCI.
-> 
-> > In general, the only safe thing for class drivers to do when they get 
-> > one of these errors on a bulk or interrupt endpoint is to unlink all
-> > the pending URBs for the endpoint and then call usb_clear_halt() when
-> > they have all completed.  I know that usb-storage does this; I
-> > suspect that not many other drivers do.
-> 
-> Your suspicion isn't wrong AFAIK.
-> 
-> One more thing which is safe at least wrt data corruption is to simply
-> retry the same URB without resetting anything. But if an HCD wants to
-> do it, existing API gives no way to notify the driver and allow it to
-> opt out and handle things differently, so it mustn't retry forever.
-
-Yes, and in fact ehci-hcd _does_ retry up to 32 times.
-
-> > I suppose the USB core could take care of this automatically so that 
-> > neither the class drivers nor the HCDs would have to worry about it.
-> > If everyone agrees that this wouldn't lead to other problems, it
-> > could be implemented without too much difficulty.
-> 
-> This still appears to run into the double delivery problem that you
-> described in the discussion linked by Thinh Nguyen, particularly in
-> case of dodgy drivers for dodgy hardware.
-> 
-> Considering that, I'm not sure if automatically resetting anything on
-> -EPROTO is a good idea.
-
-What about automatic unlinking?
-
-Note that some class drivers treat -EPROTO as a fatal error.  That is, 
-they don't retry and their completion-resubmission loop breaks down.  
-When that happens, the only way forward is to unbind the driver (for 
-example, by unplugging the device).  Of course, this isn't a problem if 
-the original cause of the -EPROTO error is that the device just _was_ 
-unplugged.  All other cases are sufficiently rare that we don't have a 
-generally agreed-upon strategy for handling them.
-
-> > > > I wonder what other HCDs are doing in this case, and what's the
-> > > > idea behind it all?  
-> > 
-> > As far as I know, they don't automatically send Clear-Halt requests
-> > to the device or automatically unlink anything.
-> 
-> That's what it looks like, grepping through drivers/usb/host. But my
-> question was mainly about -EPROTO. When should an HCD restart a halted
-> endpoint? Should it clear the sequence state? (probably not).
-
-Except for an immediate retry, I suspect the HCD should never restart a 
-halted Bulk or Interrupt endpoint on its own initiative.  Not until 
-another URB is submitted.
-
-However, this seems impractical if the class driver wants to retain the 
-existing URBs already on the endpoint's queue.  (I don't know of any 
-drivers that do this, but still...)  Perhaps we should adopt the policy 
-that -EPROTO, -EILSEQ, and -ETIME cause all outstanding URBs to fail and 
-enforce this policy in usbcore by automatic unlinking so that HC 
-drivers don't have to do it.
-
-Alan Stern
+> Hi Akash,
+>
+> I was planning to, but the project was terminated so there was no 
+> budget to finalize it. You're free to take over and make the required 
+> changes.
+>
+> M.
+Thanks for quick response, will push the updated patchset.
+Akash
+>
+> On 21-11-2024 09:34, AKASH KUMAR wrote:
+>> Hi @Mike
+>>
+>> Do you have plans to mainline this change?
+>>
+>> We are using microchip hub in one of our project and we need this 
+>> driver,
+>> we have taken your change and able to enable usb hub.
+>> Please check if you can push updated patchset addressing the comments 
+>> from Rob.
+>>
+>> On 5/22/2023 1:58 PM, Rob Herring wrote:
+>>> On Mon, 22 May 2023 09:45:09 +0200, Mike Looijmans wrote:
+>>>> The USB5807 is a 7-port USB 3.1 hub that can be configured by I2C.
+>>>> This driver resets the chip, optionally allows D+/D- lines to be
+>>>> swapped in the devicetree config, and then sends an ATTACH command to
+>>>> put the device in operational mode.
+>>>>
+>>>> Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+>>>>
+>>>> ---
+>>>>
+>>>> Changes in v3:
+>>>> Add minItems
+>>>>
+>>>> Changes in v2:
+>>>> Rename to microchip,usb5807.yaml
+>>>> Remove reset-gpios description
+>>>> Add maxItems
+>>>> Add vddXX-supply properties
+>>>>
+>>>>   .../bindings/usb/microchip,usb5807.yaml       | 58 
+>>>> +++++++++++++++++++
+>>>>   1 file changed, 58 insertions(+)
+>>>>   create mode 100644 
+>>>> Documentation/devicetree/bindings/usb/microchip,usb5807.yaml
+>>>>
+>>> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+>>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>>>
+>>> yamllint warnings/errors:
+>>>
+>>> dtschema/dtc warnings/errors:
+>>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/usb251xb.example.dtb: 
+>>> usb-hub@2d: swap-dx-lanes: size is 32, expected 8
+>>>     From schema: 
+>>> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/usb251xb.yaml
+>>>
+>>> doc reference errors (make refcheckdocs):
+>>>
+>>> See 
+>>> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230522074510.16367-1-mike.looijmans@topic.nl
+>>>
+>>> The base for the series is generally the latest rc1. A different 
+>>> dependency
+>>> should be noted in *this* patch.
+>>>
+>>> If you already ran 'make dt_binding_check' and didn't see the above
+>>> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+>>> date:
+>>>
+>>> pip3 install dtschema --upgrade
+>>>
+>>> Please check and re-submit after running the above command yourself. 
+>>> Note
+>>> that DT_SCHEMA_FILES can be set to your schema file to speed up 
+>>> checking
+>>> your schema. However, it must be unset to test all examples with 
+>>> your schema.
+>>
 
