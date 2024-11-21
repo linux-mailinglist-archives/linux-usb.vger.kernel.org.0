@@ -1,179 +1,149 @@
-Return-Path: <linux-usb+bounces-17774-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17775-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D6819D4E45
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 15:06:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C94D69D4E6E
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 15:15:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32ED128321A
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 14:06:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F7411F2147D
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 14:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E5F1D88D5;
-	Thu, 21 Nov 2024 14:06:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54B541D932F;
+	Thu, 21 Nov 2024 14:15:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DcNUZz4C"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="EKm1ZzKW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com [209.85.222.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD66C1CD3F
-	for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 14:05:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E18981D9324
+	for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 14:15:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732197961; cv=none; b=PHWbLtNExYi/JTvCGs/IDD78k/1s6g/7wBOnPVk4FqRDoigFygBbmzfZLGJ225MpPuI5syg2jF9N8+LbuQfHIJFdN6UtsvP6QIxgcjTaSn+sad9W0Pr8FcT2xWVqfhgb07DQ670502MMjzt+GmYIkk5y4MdHfFvCd/1Kfh9QNfc=
+	t=1732198503; cv=none; b=lTLBSBTXz4+Q9PeRHkJijpZFDWrFxrKc4NIRHlfCcMiNj1Q4eH9/eC/SJ7lGhvl4de0rLLAOnjdidHM5iMhhX9aPUa7g7QyEeVM62ub5/xd7+h5Hxpsjr/N2UKiUQe7Y9vo+ds2kPrjnFuQ1SilyFVL9S1ezy90Tu/V5fXgQV6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732197961; c=relaxed/simple;
-	bh=N+hWhe/VgGW+4Rk0pwm0nMWrFYhUoLUzeXf2EE+WeHk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OMe8qi9W6TMTp7ASHqKUgcqkKPg5WrKLzdbo3tkx+WvcEnAuDOxdSlN2FQ07CwhiareVt2+xQi3Sp/FiL4RlLmS6iNTc69jW/Qd6iLGUmwFAeLXxY5iQLqJUhJIWO2QJH56KPys3oHBuUEQnp3PeNvNdqHZq/A7qZ+UzH8/8CMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DcNUZz4C; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732197959; x=1763733959;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=N+hWhe/VgGW+4Rk0pwm0nMWrFYhUoLUzeXf2EE+WeHk=;
-  b=DcNUZz4CVhGkJvZQ3T2gtaSYyUhA5FN1CP3kLVIePZAsDSaP63xWZUww
-   0yB4xDur1ztnZE5CMRezoWkc3TkXTYt/lGrxaKVQfjiENtKtSCpDA5b+7
-   iW5j0rjFienkr8DFCSqJ92zrlMrxyZnH54QvEs15dM642L2Xn4zukMNer
-   sGi1irI/s/UA7YpijRLUgNXxeC/fJpZnD0Rapaeej3HCPJD2jDnz5kt5e
-   ADTx4StEf6mYeYVG/3C/5KYLDDSKYKaa1aZcBAYHUmdTAeVuwJJCrNeUR
-   w1wWTKGhBx72cN+t3rAh+dHV2uLhoVnO2K/J5QG8Jn14isbKMA56caoJt
-   A==;
-X-CSE-ConnectionGUID: 9vGpCAKLSSOJZpECkPsEcw==
-X-CSE-MsgGUID: L2eMZFxET5e8fF0InhbycA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11263"; a="42951880"
-X-IronPort-AV: E=Sophos;i="6.12,172,1728975600"; 
-   d="scan'208";a="42951880"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Nov 2024 06:05:59 -0800
-X-CSE-ConnectionGUID: md0VWAhIQDWXzJQXvaIPEw==
-X-CSE-MsgGUID: PolpmzCQTz2t5OHtWhEUag==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,173,1728975600"; 
-   d="scan'208";a="90671333"
-Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa007.jf.intel.com with ESMTP; 21 Nov 2024 06:05:56 -0800
-Message-ID: <f5a2d3f8-b895-4617-b11e-cc134e3922c3@linux.intel.com>
-Date: Thu, 21 Nov 2024 16:08:15 +0200
+	s=arc-20240116; t=1732198503; c=relaxed/simple;
+	bh=erThW1OGyGmnngei9Q/m2VLvSn8gzUyk3dmtRCfhvtw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cB8TMXmF3jQS/f1TerqIAYFOrDmwqaQGMmpEozGN/8ujFWpV660y8eYUhdUHhmGQqn5oNy+tiiIdPzeKH55nBgHoAERGGAI82qq+zg7yNwYYn0ZgJifNd8DoSb8xMynF8X/9eJo4kS4upatXp6Kvr+Z8gStWjG5pbR+pSWFAthA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=EKm1ZzKW; arc=none smtp.client-ip=209.85.222.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7b175e059bdso55200585a.0
+        for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 06:15:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1732198501; x=1732803301; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PjKzNa4Wt9P5AMmEq40asXaTN0r0As03Gh+lkx3j2Nw=;
+        b=EKm1ZzKWcDi/VSb7ugbGEdvQpFEl22YQsXxQXBvIpIAHH/aRc70X+i4VqA+g+f/vDa
+         /9LXFyizda20XZZVMVxxLFEP0iTpLO2PUQRN3fMGytBDE2Q3Uh+JG+IaMUBkEhHmFslO
+         +9Y7wrXCzxFCKZ7wR3ACunlTjQQge4afQq1/MkDruobiUzzFo3azW1LoUkpRNq4alI/Y
+         I2kVqqEbgL2+Plt3c4HSPAsNUfrs/jsR6hULl7lzMFPuZ4kO3M0sg+Dl/6Nx8ULsKPfv
+         A60QMeZWtINfW5EGhpfAUL6QLeacJw8cbXupto1nVBm+GRA7FeSEDBEG3bTR0TOtVliB
+         AYPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732198501; x=1732803301;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PjKzNa4Wt9P5AMmEq40asXaTN0r0As03Gh+lkx3j2Nw=;
+        b=vrdYRmRiM6nueAasfBJXli0HCyftAc8aSPR7DIXztDumMa5EgNrPESWyHuv2Tn6Qik
+         2S5wFUcvpmmgUgv6myAydDBWWqv/JKdoZ/22b2UnyCXHwKQfrzQEMJifNGjRYXU3MUoC
+         cXl9tJ98f+GHNackslM6lZ9HGl5IpuBQKg56HK24sRH1owT9BtyGSfVMy3Z50SLHzywS
+         xOEgjFOC8NpkWE+Y0QhZlX10Qy+tr7N2D0kwXt6biebZWhH8kD4dcLXQ7d8feFoJtbDH
+         mXh15cNfYh0bmTjEUFBgCyoPLJsM4hdiMTBEsZLq8o8imZ+mAzEyBSQdG3F+gdip/J8R
+         2zXA==
+X-Forwarded-Encrypted: i=1; AJvYcCX5rsA1BfSOolwFkiPYKVnRLhcJgXfnXvz/n+J+mPXa6ZAl05AKmdtBn96HYbi451UoGepZBrKg8Zs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwsRkJRxm7ps2M34yBDeX6emT19a3iK270G8oSYUoTbGYGr3o7i
+	e1HA9NW/d/1h0jt/1ceTpaMwK/LO5tfwYOjnD++mmEFjNYAkpz/JVgZiMsVPQwY3swS0ZFHfOWw
+	=
+X-Gm-Gg: ASbGncuZVSwyuNvDsqAIMrWbf0VZkwXru4PWzdsPgaaQgr0Esze3vfCN5DKPdYNUlpK
+	RZHQierq2zW+QIk/mgOmqgwzlpNP0hI+FxVfIMpZtaKOTuZhedKG6e/0XVuHakHUYTR3pM6TUS/
+	kehXqITraPesQpy25YWVdtK3aKosWpkYZionad+1SvN8oisqPTs5lDEYjC8kAC5j5+5MMfl9zIS
+	+lS7exLp/alGGnNfRleI9MC5MU5uLCqqzrQP94lPSjk6ychvTQ=
+X-Google-Smtp-Source: AGHT+IEjivB/S41tjWIV/c8AS6tlp/Mnmwua/auantw80dON5nrXFhojr6Y6q+wWhOW2Zgz/hnhLlA==
+X-Received: by 2002:a05:620a:44d5:b0:7b1:7da1:e733 with SMTP id af79cd13be357-7b42edbd036mr1042684585a.30.1732198500717;
+        Thu, 21 Nov 2024 06:15:00 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::24f4])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7b48524101dsm213697485a.100.2024.11.21.06.14.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 21 Nov 2024 06:15:00 -0800 (PST)
+Date: Thu, 21 Nov 2024 09:14:56 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Vitalii Mordan <mordan@ispras.ru>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	linux-sh@vger.kernel.org, Fedor Pchelkin <pchelkin@ispras.ru>,
+	Alexey Khoroshilov <khoroshilov@ispras.ru>,
+	Vadim Mutilin <mutilin@ispras.ru>, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: ehci-hcd: fix call balance of clocks handling
+ routines
+Message-ID: <23e85b98-92bc-46a5-a36f-fd5d7cfa944d@rowland.harvard.edu>
+References: <20241121114700.2100520-1-mordan@ispras.ru>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: How are halted endpoints supposed to be handled in Linux?
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
- Alan Stern <stern@rowland.harvard.edu>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-References: <20241121001138.23a45f6c@foxbook>
- <20241121000216.kif557p3p6xyahax@synopsys.com>
- <b34b5ea0-2804-4692-bede-70ba9065c86c@rowland.harvard.edu>
- <20241121112653.06ba4ee5@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20241121112653.06ba4ee5@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241121114700.2100520-1-mordan@ispras.ru>
 
-On 21.11.2024 12.26, Michał Pecio wrote:
-> Hi Alan,
+On Thu, Nov 21, 2024 at 02:47:00PM +0300, Vitalii Mordan wrote:
+> If the clocks priv->iclk and priv->fclk were not enabled in ehci_hcd_sh_probe,
+> they should not be disabled in any path.
 > 
-> Thank you for taking the time to answer. I'm beginning to regret not
-> asking this question earlier.
+> Conversely, if they was enabled in ehci_hcd_sh_probe, they must be disabled
+> in all error paths to ensure proper cleanup.
 > 
-> On Wed, 20 Nov 2024 21:31:29 -0500, Alan Stern wrote:
->>>> Linux appears to ignore this part and only reset on STALL
->>>> handshake, as advised in
->>>> Documentation/driver-api/usb/error-codes.rst and practiced by
->>>> drivers - they don't seem to bother with usb_clear_halt() on
->>>> -EPROTO.
-
-For xhci I assumed that the device endpoint is halted when we receive
-a  'Stall Error' transfer event for bulk or interrupt transfers.
-
-Other errors such as 'Transaction Error' do halt the host side,
-but does not necessarily mean whole endpoint is halted. This is based
-on the info in xhci 4.6.8.1 "Soft Retry" :
-
-"xHC shall halt an endpoint with a USB Transaction Error after CErr
-retries have been performed. The USB device is not aware that the xHC
-has halted the endpoint, and will be waiting for another retry, so a
-Soft Retry may be used to perform additional retries and recover from
-an error which has caused the xHC to halt an endpoint."
-
->>
->> This is generally a weakness in the drivers.  It would be nice if the
->> class specifications said what to do in these situations, but most of
->> them don't.
+> Found by Linux Verification Center (linuxtesting.org) with Klever.
 > 
-> There is also proprietary hardware with no specification at all.
-> 
->>>> On the HCD side, xHCI will:
->>>> - give back the current URB with -EPROTO/-EPIPE status
->>>> - reset the host side endpoint, clearing its toggle state
->>>> - point the HC at the next URB if one exist
->>>> - restart the endpoint without waiting for hcd->endpoint_reset()
+> Fixes: 63c845522263 ("usb: ehci-hcd: Add support for SuperH EHCI.")
+> Cc: stable@vger.kernel.org # ff30bd6a6618: sh: clk: Fix clk_enable() to return 0 on NULL clk
+> Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+> ---
 
-Intention was not to restart the endpoint, but turns out we end up doing it.
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
-Basically we should not ring the doorbell  when 'Set TR Deq' command completes
-for a bulk or interrupt endpoint in case the command was queued to resolve a
-Stall Error. For control endpoint we should restart the ring (xHC halts
-the internal control endpoint on errors/stall)
-
->>>> - ignore one subsequent call to hcd->endpoint_reset()
-
->>
->> This behavior is not correct.  See the kerneldoc for
->> usb_unlink_urb() in drivers/usb/core/urb.c, especially the section
->> labelled "Unlinking and Endpoint Queues".
+>  drivers/usb/host/ehci-sh.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
 > 
-> OK, let's go through it.
+> diff --git a/drivers/usb/host/ehci-sh.c b/drivers/usb/host/ehci-sh.c
+> index d31d9506e41a..77460aac6dbd 100644
+> --- a/drivers/usb/host/ehci-sh.c
+> +++ b/drivers/usb/host/ehci-sh.c
+> @@ -119,8 +119,12 @@ static int ehci_hcd_sh_probe(struct platform_device *pdev)
+>  	if (IS_ERR(priv->iclk))
+>  		priv->iclk = NULL;
+>  
+> -	clk_enable(priv->fclk);
+> -	clk_enable(priv->iclk);
+> +	ret = clk_enable(priv->fclk);
+> +	if (ret)
+> +		goto fail_request_resource;
+> +	ret = clk_enable(priv->iclk);
+> +	if (ret)
+> +		goto fail_iclk;
+>  
+>  	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
+>  	if (ret != 0) {
+> @@ -136,6 +140,7 @@ static int ehci_hcd_sh_probe(struct platform_device *pdev)
+>  
+>  fail_add_hcd:
+>  	clk_disable(priv->iclk);
+> +fail_iclk:
+>  	clk_disable(priv->fclk);
+>  
+>  fail_request_resource:
+> -- 
+> 2.25.1
 > 
->   * But when an URB terminates with an
->   * error its queue generally stops (see below), at least until that URB's
->   * completion routine returns.
-> 
-> I don't see this working after xHCI adopted bottom half giveback, which
-> is asynchronous. As you are the maintainer of EHCI, which also uses BH,
-> how is EHCI dealing with it?
-> 
-> One way I see with existing APIs is to wait until the driver submits a
-> new URB, but are drivers prepared for this? Is EHCI doing the same?
-
-Using a BH also means class driver may queue a new URB to xhci after xhci has
-cleared its internal endpoint halt condition, but before class driver is
-aware that endpoint halted.
-
-> 
->   * It is guaranteed that a stopped queue
->   * will not restart until all its unlinked URBs have been fully retired,
->   * with their completion routines run
-> 
-> I think xHCI can currently guarantee that nothing is restarted until
-> any URB unlinked for any reason is given to the BH worker, but that's
-> all we have, and I just broke it in usb-next:
-> 
-> +               /* Try to restart the endpoint if all is done */
-> +               ring_doorbell_for_active_rings(xhci, slot_id, ep_index);
-> +               /* Start giving back any TDs invalidated above */
-> +               xhci_giveback_invalidated_tds(ep);
-> 
-> This is part of a legitimate bugfix patch tagged for stable. I should
-> have insisted on keeping it a separate change, but it seemed a good idea
-> at the time which would soon get implemented anyway... Maybe no more?
-
-I don't think your patch makes the existing issue worse in any significant
-way.
-
-Thanks
-Mathias
-
 
