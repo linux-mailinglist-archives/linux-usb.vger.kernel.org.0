@@ -1,235 +1,282 @@
-Return-Path: <linux-usb+bounces-17788-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17789-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEC1E9D55E7
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2024 00:00:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A96669D5603
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2024 00:06:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A947628322D
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 23:00:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 396D71F219CE
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 23:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDDD61DE2B6;
-	Thu, 21 Nov 2024 22:59:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA94B1DDC1E;
+	Thu, 21 Nov 2024 23:06:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U+eagUwa"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RzvFDedb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FF331DDA3C
-	for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 22:59:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D4321C877E
+	for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 23:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732229990; cv=none; b=CUywKZmMJQxo8AVojUJjHEjvj56Qb74WcnuolUt465rm+ytQzpx8eKk8gWpucfQR3Z2BNSo9FtPqrPqke+kQ/zbapaQBJFDrtYCe7W0LyN+HItPG5y908DwzyifZkBsh82lizlw97oPbkWlwP/UgueMTB3RDZhZxDFyzCZcEt1s=
+	t=1732230364; cv=none; b=VjoAvWQBthX3yO4efnoW4bAkXrQhDBGF1ko8/jmbyLFHuGWC7VB04Wl2ptkKaD3z1i3Z4t/qKAKr9FQergxHMDQ3qw7ZRqIFtM891izGc1BZHYTfDsx1RMj6JY1ZjRdmLsoeEG1p3Wi6fb8M1B7OST3fCosFjE+KWCBco+Xot4E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732229990; c=relaxed/simple;
-	bh=JAnb6dLWv/ZvYlsCvkvpoLKdQ07alwEyCGRJXetdvTU=;
+	s=arc-20240116; t=1732230364; c=relaxed/simple;
+	bh=7vVsWJAlaxSvMOvtdje6yXGcypqw9no47hXoQMLek34=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZIMUVv8JxYhBre6l/A4aGFCuBfTgTASsSHl7/vN3jXrhyg1Ydk+ZCsNETnNv9ik1XqY3zUOpuDbHXtaHhXjN8ea8EDTU5IG0vUzggozast8tsqL+wYfWF9mAmnPBxVBqgN0X81D3UuMovMsLb82VmKvEqvQBa5hw1KOibsrAk6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U+eagUwa; arc=none smtp.client-ip=209.85.167.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=QF4Bs9Dxm7+HZT6yc7S6IDzKC7uXGVk8tujaR8P7N9YHdX06SqmI+xHHmbnIPBRLgP/s7C0wFHiBnFGHED/Vs1pI4NJChr414U+bIlZNCMWPSTBKoiJjcIxCigXgl+c7+gy0TR/2KS58sn0yvtytGOwzhifvnG/hqf1hQQ2IpsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RzvFDedb; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-53da07b78dfso1665464e87.0
-        for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 14:59:48 -0800 (PST)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-53da209492cso1949829e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 15:06:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1732229986; x=1732834786; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=QURbtaV3ukiez0tTpXs4XxFFZ1jpH59O/Y0WaDRjYZ8=;
-        b=U+eagUwaWMq3SrgLjqFv73fy9hs6pGCnmXcPfx5CLPsjhJGhAL06350mfo83CcTeM6
-         h8KWClpmPiGGJuCIoAdPUvys4zHn4v3rnHQIWCGkyegTMN48l/XCHPLpUP+nUtuRPNg8
-         K0O/FDHOvWQjVCtiCKw8POIC9Jz+XejxTXMJmpJ3+WT6BPuhxuNn2QkT08cgVcPovday
-         HbG3sDdBOSR/PnZKfybwDVxMLRbk8zD5fgvcuDbV5SFeluZ/FDquqExTj1HMzArWeJUm
-         szvVM/A/CH6/1knEys7Z67qkN+ppwldnbpAPubAioG0cSTZJF7JbmrC8RctnyUmqw25q
-         KndQ==
+        d=linaro.org; s=google; t=1732230359; x=1732835159; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=skGr7TzxYrDaJmlRy1zO1szKe6aQTSkC3fXLyAmXUUw=;
+        b=RzvFDedbCMYbPrXxb+z4zcjrkTXoRDBSqTheEKHaJyfQpIobOohxaJ7qdafmOuONOA
+         3+tiXD2nj3UrJZj/GWq5SShFgV59xyKwbCSPjZPAF/z3fZWcpKtwzQHM2PLbJUkWnXRc
+         YimUVKb1l1Oxoqe28GsGc9jrWWkSc7nLiBOxn0+bCcAPeMCUDO8YWoEEcSFbJFCvpuZz
+         d3fNbo1otOPzGezAebnV3seirLMUZQ0TZUCbp4FVYT3rQgl+xHEQo03q4Ef3r4lntqkV
+         F/J3D4VVwAkR6dqaGTTg6LmdpVGae8c+VhDOjBKozYTtwm7j2XX8vLXoCfas+oydc+Iw
+         OWcg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732229986; x=1732834786;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QURbtaV3ukiez0tTpXs4XxFFZ1jpH59O/Y0WaDRjYZ8=;
-        b=nBEbnHoOwuOmxjJv1tBBLWuLer8ud75gjA7HRG85fxTRKODY7KGM/fQ/vgd0RxK/ub
-         2i8wcw6Ya56bGzrkFok+LJNAdgecy7JxfSxmhB7Nm/kP7gZ5/YlXPBhIIOwjQjT/bb6C
-         POx4ioy5XgygFhg+b00VKUrd2P4fC6ELLlnA9HTMGCz+bYr0Q7CFLl9D1sRm4eO4uRn9
-         oGdN/dOZStl8pdEnpdpPctuw3FsdUhj/SSTiW8jzoYOK7M/SXPhFVSse1+7cmGPvDSOA
-         tpNA5WnfEjsKSQtL+ZX3mOCpuSWHNgoqfjx/nQQkv/S3nbKbkQkjh9I46LhkwyPvuV19
-         PgwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXooSqOIMlPod2rK6DMx9rkAVy+j92PyxpbTScHW+jHlxOVZx5aqHFO8zzcuqstBPQhF7mlJqB0U1U=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yws45utd0NsMnEuqp3b9W8Pm9uhZMppXc4z77SxnIgBZUxma8XL
-	KR7RX3O4N6DKhf7GGsewgfm3sJSpT31CXKW70YnSijgoWojyHB40falUbmkj3GM=
-X-Gm-Gg: ASbGncvw+vtjOx8YtXvO1W4LY7L/1HG/iJgyjvhzwYbqbctILqcP2JV7NufAgXzfU1k
-	oVlOyYWUC+0yPxqFhPyIyZm9kCyUL5defiAvV5OF+5FR9OZiTzCiO+/C18lz3z2Ht3fu8fkDec0
-	oNhogVfkczjYA26GlIY07OAtSfhykNPHYjEibz3qKWCNrFeodVmd2YVSkf//dMXYLfkPZkxtB95
-	Nb/I28A7Vv+HhZe57y35RIop1nqXgHC5gY08PK9tA163MWuQs78Nl+xpPbombbxsGnH8PuoRgja
-	V+I1BBsKN8ULTm1tNl/KTYCbAZwyaw==
-X-Google-Smtp-Source: AGHT+IE6DjiOZhXmoiIdOsYpY9drZdFOpFVFxO9EFxt4q6f2ze6fD79PWnzY9ZmQkAwPJkgf0DziAg==
-X-Received: by 2002:a05:6512:b12:b0:53d:a2a6:ef67 with SMTP id 2adb3069b0e04-53dd39b5620mr232580e87.49.1732229986274;
-        Thu, 21 Nov 2024 14:59:46 -0800 (PST)
+        d=1e100.net; s=20230601; t=1732230359; x=1732835159;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=skGr7TzxYrDaJmlRy1zO1szKe6aQTSkC3fXLyAmXUUw=;
+        b=n4bj0Gyxgp3wED+4kK3kFJmgySU0Tv5mG/x+IzMnI2m7yBKeY26vTs+HHbsrrBxRmr
+         dPz5dzBiSWcR9tq0elI7FfJ773ttemTU5fEZn7Fof5UiE5zOyaDvs99WYx2IYSND+xMy
+         sDy9YJGV8N7Jc7VTQjMLZEgmLGmt+/S59rDttbSay0mgRSC1YNehIa1OaK+fgUp46tee
+         6SMxZFQSWVdyry5tlT2ojQWHI4B0JxRk3ZzZFPdFycVsMzeSoX31jHSsR+AHv3tOVf5W
+         racpbBeVKiFdr8YpSok5n7OTEdBlHVv41g9rMhgmd7kk0CXFN2JD6k8oA8KhNz5uDI+9
+         mTsQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVVXfU27JP/CLepUvA18Li+vcx8omUaTL3ge1IiBcHTO2HLcHA6jOpp8auq49gja0c71QmPXzSs77o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyS4GWX37k/wG4UfXCoUFb6f1/ObidAdkbGrl43zafGbi7dTJPE
+	lOZhQa71vAO8bvMEBOHfI3TyUMgjCb8uVdcIk1C+TuN/NcJJHIfKPFi1VbjCUXY=
+X-Gm-Gg: ASbGncs9G2AHqbroCZHkL+bwqfueW7G/QPjprYmNU1iCxoZY7sI0093O15Y/qkgaFw3
+	65HKO8iIl/orAR/C4C6KBMC1O3Cp1mKCmDruaKpkV+cCS8oUsGDIRdBfqJz7i28jWpK/XzqJqqT
+	WZL5d2d73v3wLjdvZNYXGBwng98Z3SdR879NmoTZhd4H7sT23HTKjXGShZ5TZb04Sxoyz1t8Uvb
+	y4cdmu8haMm9szllEsm/HPoseHKHHkSfjKQ7H2SYsqohCU9WsQt5x3s+ARCGE7CzfTrhNU14f9K
+	v5NpXmDsW21zT9M9Eox7FNM9rPeOHw==
+X-Google-Smtp-Source: AGHT+IFsFiPswuTvKRAMZXTwEOWckEDYLeJUZ4aXoe/XaGXinnkHcCPuSeYBh8t3kFTwrpf2UNrmrA==
+X-Received: by 2002:a05:6512:b81:b0:539:ddf1:ac6f with SMTP id 2adb3069b0e04-53dd39a4c7dmr232459e87.46.1732230359158;
+        Thu, 21 Nov 2024 15:05:59 -0800 (PST)
 Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53dd24456a7sm105592e87.14.2024.11.21.14.59.43
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53dd4253c64sm11188e87.107.2024.11.21.15.05.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 21 Nov 2024 14:59:44 -0800 (PST)
-Date: Fri, 22 Nov 2024 00:59:42 +0200
+        Thu, 21 Nov 2024 15:05:58 -0800 (PST)
+Date: Fri, 22 Nov 2024 01:05:55 +0200
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Stephen Boyd <swboyd@chromium.org>
-Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, devicetree@vger.kernel.org, 
-	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, 
-	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org, 
-	Guenter Roeck <groeck@chromium.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Jonas Karlman <jonas@kwiboo.se>, Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
-	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Daniel Scally <djrscally@gmail.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
-	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, 
-	Sakari Ailus <sakari.ailus@linux.intel.com>, Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v4 15/18] dt-bindings: usb: Add ports to
- google,cros-ec-typec for DP altmode
-Message-ID: <cartdeijkv6z23dgm7uif4lti3lahfqmuyxcmruzqbefhsp6yk@m6ocjhncs2ko>
-References: <lf7y7wpuca6kzqcglgs5d443iusf7xjocum4adi7t3npfavccx@zgsp37oyztme>
- <CAE-0n53-KmOS3zXmJPvOOZ7xxkek9-S=oBExgaY0PDnt_HjdNw@mail.gmail.com>
- <yk3xidaisbd56yndaucax7otijjauqmm7lqm6q4q633kdawlqo@qaq27lwxmvwd>
- <CAE-0n501j+8bMnMKabFyZjn+MLUy3Z68Hiv1PsfW0APy5ggN8g@mail.gmail.com>
- <gstohhcdnmnkszk4l2ikd5xiewtotgo5okia62paauj6zpaw7y@4wchyvoynm2p>
- <CAE-0n50z6MNa7WOsg-NU7k8BpFeJJyYfHX3ov6DsthLWauSNpA@mail.gmail.com>
- <hqmx7jtkvrwvb27n56hw7rpefhp37lhr3a5fawz7gsl76uuj5s@h7m6wpdhibkk>
- <CAE-0n50y1O2C47zOGJPmMjKXK_m6a=jhpEAP4nW+RymZbo2xyg@mail.gmail.com>
- <5kisfv22tgqwzjpxqrbx56ywr7l4r7pny3pl2r7crv4rijqbwk@azricdasttg7>
- <CAE-0n50Bxi2GfnxOmMwe-F+k5jMSiyAVPDb6K8pYm-i6hpJTOA@mail.gmail.com>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Benson Leung <bleung@chromium.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Jameson Thies <jthies@google.com>, 
+	Pavan Holla <pholla@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v7 2/3] usb: typec: ucsi: Implement ChromeOS UCSI driver
+Message-ID: <wyz6rxgimqsas4giychio227mpivoqfihyvxmpqfh2it4vfqlq@3o4urzbow2c2>
+References: <20241115155234.1587589-1-ukaszb@chromium.org>
+ <20241115155234.1587589-3-ukaszb@chromium.org>
+ <jatq645z65hthaud4up6h6mxbggqpm73djtd6t3fxxkwccsifu@bb7bn24b7dak>
+ <CALwA+NZ16WigkZuTwsRzDNC96OOR=+ZA-_UxtMq=fTWJ23a_Ag@mail.gmail.com>
+ <CAA8EJprRQuXtGwiDeOiS56Nq=RW3p82-LTWGt8RervqGwP-=Vw@mail.gmail.com>
+ <CALwA+NbUCstuayfm3ag-mBBRus1y-RM53auVFfffE_1OcW2zzA@mail.gmail.com>
+ <CAA8EJppJ6FKDRvZg0WHk7+uygFTUDKqBnx0swQ=A_E7WiUQUdA@mail.gmail.com>
+ <CALwA+Nbdah1SML92GPtsYmVKmPzTLTGSu1kuphp+PDGuERT27A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CAE-0n50Bxi2GfnxOmMwe-F+k5jMSiyAVPDb6K8pYm-i6hpJTOA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALwA+Nbdah1SML92GPtsYmVKmPzTLTGSu1kuphp+PDGuERT27A@mail.gmail.com>
 
-On Tue, Nov 19, 2024 at 08:09:31PM -0500, Stephen Boyd wrote:
-> Quoting Dmitry Baryshkov (2024-11-15 09:17:15)
-> > On Mon, Nov 11, 2024 at 06:16:27PM -0800, Stephen Boyd wrote:
-> > > Quoting Dmitry Baryshkov (2024-11-08 23:05:18)
-> > > > On Thu, Nov 07, 2024 at 04:28:24PM -0800, Stephen Boyd wrote:
-> > > > > Quoting Dmitry Baryshkov (2024-10-31 15:54:49)
-> > > > > > On Thu, Oct 31, 2024 at 02:45:29PM -0700, Stephen Boyd wrote:
-> > > > > > > Quoting Dmitry Baryshkov (2024-10-31 11:42:36)
-> > > > > > > > On Tue, Oct 29, 2024 at 01:15:51PM -0700, Stephen Boyd wrote:
-> > > > > Long story short, I don't see how we can avoid _any_ lane assignment
-> > > > > logic in drm_bridge. The logic shouldn't walk the entire bridge chain,
-> > > > > but it should at least act on the bridge that is a DP bridge. I think
-> > > > > you're saying pretty much the same thing here, but you want the lane
-> > > > > remapping to be done via the typec layer whereas I want it to be done in
-> > > > > the drm_bridge layer. To me it looks out of place to add a
-> > > > > typec_switch_desc inside each DP drm_bridge because we duplicate the
-> > > > > logic about USB type-c DP altmode lane assignment to each DP bridge. A
-> > > > > DP bridge should just think about DP and not know or care about USB
-> > > > > type-c.
+On Mon, Nov 18, 2024 at 12:18:17PM +0100, Łukasz Bartosik wrote:
+> On Mon, Nov 18, 2024 at 12:08 PM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > On Mon, 18 Nov 2024 at 12:38, Łukasz Bartosik <ukaszb@chromium.org> wrote:
+> > >
+> > > On Mon, Nov 18, 2024 at 11:21 AM Dmitry Baryshkov
+> > > <dmitry.baryshkov@linaro.org> wrote:
+> > > >
+> > > > On Mon, 18 Nov 2024 at 12:10, Łukasz Bartosik <ukaszb@chromium.org> wrote:
 > > > > >
-> > > > > This is what's leading me to think we need some sort of lane assignment
-> > > > > capability at the DP connector. How that assignment flows from the DP
-> > > > > connector created in drm_bridge_connector.c to the hardware is where it
-> > > > > is less clear to me. Should that be implemented as a typec_switch_desc,
-> > > > > essentially out of band with drm_bridge, or as some drm_bridge_funcs
-> > > > > function similar to struct drm_bridge_funcs::hdmi_*()? If you look at
-> > > > > IT6505 in it6505_get_extcon_property() it actually wants to pull the
-> > > > > orientation of the type-c port with extcon_get_property(EXTCON_DISP_DP,
-> > > > > EXTCON_PROP_USB_TYPEC_POLARITY). Maybe pushing the orientation to the DP
-> > > > > bridge is backwards and we should be exposing this as some sort of
-> > > > > connector API that the drm_bridge can query whenever it wants.
+> > > > > On Fri, Nov 15, 2024 at 6:00 PM Dmitry Baryshkov
+> > > > > <dmitry.baryshkov@linaro.org> wrote:
+> > > > > >
+> > > > > > On Fri, Nov 15, 2024 at 03:52:33PM +0000, Łukasz Bartosik wrote:
+> > > > > > > From: Pavan Holla <pholla@chromium.org>
+> > > > > > >
+> > > > > > > Implementation of a UCSI transport driver for ChromeOS.
+> > > > > > > This driver will be loaded if the ChromeOS EC implements a PPM.
+> > > > > > >
+> > > > > > > Signed-off-by: Pavan Holla <pholla@chromium.org>
+> > > > > > > Co-developed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > > > > > > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> > > > > > > Co-developed-by: Łukasz Bartosik <ukaszb@chromium.org>
+> > > > > > > Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+> > > > > > > ---
+> > > > > > >  MAINTAINERS                           |   7 +
+> > > > > > >  drivers/usb/typec/ucsi/Kconfig        |  13 ++
+> > > > > > >  drivers/usb/typec/ucsi/Makefile       |   1 +
+> > > > > > >  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 248 ++++++++++++++++++++++++++
+> > > > > > >  4 files changed, 269 insertions(+)
+> > > > > > >  create mode 100644 drivers/usb/typec/ucsi/cros_ec_ucsi.c
+> > > > > >
+> > > > > > > +static int cros_ucsi_sync_control(struct ucsi *ucsi, u64 cmd)
+> > > > > > > +{
+> > > > > > > +     return ucsi_sync_control_common(ucsi, cmd);
+> > > > > > > +}
+> > > > > > > +
+> > > > > > > +struct ucsi_operations cros_ucsi_ops = {
+> > > > > > > +     .read_version = cros_ucsi_read_version,
+> > > > > > > +     .read_cci = cros_ucsi_read_cci,
+> > > > > > > +     .read_message_in = cros_ucsi_read_message_in,
+> > > > > > > +     .async_control = cros_ucsi_async_control,
+> > > > > > > +     .sync_control = cros_ucsi_sync_control,
+> > > > > >
+> > > > > > .sync_control = ucsi_sync_control_common,
+> > > > > >
+> > > > >
+> > > > > I will change.
+> > > > >
+> > > > > > > +};
+> > > > > > > +
+> > > > > >
+> > > > > > [...]
+> > > > > >
+> > > > > > > +
+> > > > > > > +static int __maybe_unused cros_ucsi_suspend(struct device *dev)
+> > > > > > > +{
+> > > > > > > +     struct cros_ucsi_data *udata = dev_get_drvdata(dev);
+> > > > > > > +
+> > > > > > > +     cancel_work_sync(&udata->work);
+> > > > > > > +
+> > > > > > > +     return 0;
+> > > > > > > +}
+> > > > > > > +
+> > > > > > > +static void __maybe_unused cros_ucsi_complete(struct device *dev)
+> > > > > > > +{
+> > > > > > > +     struct cros_ucsi_data *udata = dev_get_drvdata(dev);
+> > > > > > > +
+> > > > > > > +     ucsi_resume(udata->ucsi);
+> > > > > > > +}
+> > > > > > > +
+> > > > > > > +static const struct dev_pm_ops cros_ucsi_pm_ops = {
+> > > > > > > +#ifdef CONFIG_PM_SLEEP
+> > > > > > > +     .suspend = cros_ucsi_suspend,
+> > > > > > > +     .complete = cros_ucsi_complete,
+> > > > > > > +#endif
+> > > > > >
+> > > > > > SET_SYSTEM_SLEEP_PM_OPS ? Or even better, DEFINE_SIMPLE_DEV_PM_OPS() ?
+> > > > > >
+> > > > > > What is the reason for using complete() instead of resume()?
+> > > > > >
+> > > > >
+> > > > > Due to change in
+> > > > > https://lore.kernel.org/linux-usb/20240910101527.603452-1-ukaszb@chromium.org/T/#m25bc17cc0a8d30439830415018c7f44f342900d1
+> > > > > we moved from using macro SIMPLE_DEV_PM_OPS and resume() to complete().
+> > > > > Per Heikki's suggestion I also squashed this change into "usb: typec:
+> > > > > ucsi: Implement ChromeOS UCSI driver".
 > > > >
-> > > > And it6505_get_extcon_property() / EXTCON_PROP_USB_TYPEC_POLARITY is a
-> > > > Type-C code, isn't it?
+> > > > Neither original patch, nor this one document, why this is necessary
 > > > >
 > > >
-> > > Sort of? It's combining DP and USB_TYPEC enums there so it's not very
-> > > clear if it's one or the other instead of just both.
+> > > The https://lore.kernel.org/linux-usb/20240910101527.603452-1-ukaszb@chromium.org/T/#m25bc17cc0a8d30439830415018c7f44f342900d1
+> > > commit messages says:
+> > > "On platforms using cros_ec_lpc, resume is split into .resume_early
+> > > and .complete.
+> > > To avoid missing EC events, use .complete to schedule work when resuming."
+> > >
+> > > I will add this as a comment on top of cros_ucsi_pm_ops struct.
+> > > Do you find it sufficient ?
 > >
-> > But EXTCON_PROP_USB_TYPEC_POLARITY is just a Type-C, nothing about DP in it.
+> > IMHO, no
+> >
 > 
-> It's extcon_get_property(it6505->extcon, EXTCON_DISP_DP,
-> EXTCON_PROP_USB_TYPEC_POLARITY, ...) which has EXTCON_DISP_DP in there,
-> so there's something about DP there. That's all I'm saying.
+> Ok. If you please tell me what is not clear or missing in this
+> explanation in your opinion
+> then I will update it.
+
+For me it is a question of imbalance. The .complete() should be paired
+with .prepare(), .suspend() with .resume(), etc. Also by using just
+.suspend and .complete you are missing all other suspend/resume cases
+which are covered by SET_SYSTEM_SLEEP_PM_OPS() or
+SET_LATE_SYSTEM_SLEEP_PM_OPS().
+
+So, back to your question. I'm reviewing the UCSI part. I don't know
+anything about the cros_ec_lpc.c or any other CrOS EC drivers. You are
+doing some non-standard thing in your driver. As such you should provide
+a sensible explanation for it. If I understand correctly, it might be
+something in line with "UCSI is used with the systems using
+cros_ec_lpc.c. On such systems ... is not available until the
+.complete() callback of the cros_ec_lpc is executed. For this reason,
+delay ucsi_resume() until the .complete() stage."
+
+> 
+> Thanks,
+> Lukasz
 > 
 > > >
-> > > I understand that the QMP PHY driver has implemented the lane control
-> > > for orientation with a typec_switch_desc, but the QMP PHY is a plain DP
-> > > PHY in this scenario. How would the type-c handlers work here? We
-> > > couldn't call them through the type-c framework as far as I can tell.
+> > > Thanks,
+> > > Lukasz
+> > >
+> > > > >
+> > > > > Thank you,
+> > > > > Lukasz
+> > > > >
+> > > > > > > +};
+> > > > > > > +
+> > > > > > > +static const struct platform_device_id cros_ucsi_id[] = {
+> > > > > > > +     { KBUILD_MODNAME, 0 },
+> > > > > > > +     {}
+> > > > > > > +};
+> > > > > > > +MODULE_DEVICE_TABLE(platform, cros_ucsi_id);
+> > > > > > > +
+> > > > > > > +static struct platform_driver cros_ucsi_driver = {
+> > > > > > > +     .driver = {
+> > > > > > > +             .name = KBUILD_MODNAME,
+> > > > > > > +             .pm = &cros_ucsi_pm_ops,
+> > > > > > > +     },
+> > > > > > > +     .id_table = cros_ucsi_id,
+> > > > > > > +     .probe = cros_ucsi_probe,
+> > > > > > > +     .remove = cros_ucsi_remove,
+> > > > > > > +};
+> > > > > > > +
+> > > > > > > +module_platform_driver(cros_ucsi_driver);
+> > > > > > > +
+> > > > > > > +MODULE_LICENSE("GPL");
+> > > > > > > +MODULE_DESCRIPTION("UCSI driver for ChromeOS EC");
+> > > > > > > --
+> > > > > > > 2.47.0.338.g60cca15819-goog
+> > > > > > >
+> > > > > >
+> > > > > > --
+> > > > > > With best wishes
+> > > > > > Dmitry
+> > > >
+> > > >
+> > > >
+> > > > --
+> > > > With best wishes
+> > > > Dmitry
 > >
-> > If QMP PHY is a plain DP PHY, it usually has no support for lane remapping
-> > (e.g. phy-qcom-edp doesn't).
 > >
-> > Let me reiterate, please: lane management is outside of the DisplayPort
-> > spec, at least as far as I can understand it. All lane remapping
-> > (especially a dynamic one) is a pure vendor extension to the standard.
-> > I'm trying to find a way to support Corsola and Trogdor without adding
-> > "this is done specially for Google" kind of API. Usually that doesn't
-> > fly in the long term.
-> 
-> Got it.
-> 
 > >
-> > I understand that using Type-C API for the DRM bridge sounds strange.
-> > But even the mentioned bridge uses Type-C API. It asks for the Type-C
-> > polarity, not the DP polarity.
-> >
-> 
-> I understand that lane assignment isn't part of the DisplayPort spec,
-> while it is part of the USB Type-C DisplayPort Altmode spec.
-> 
-> I'm not entirely convinced that lane assignment is _only_ part of the
-> altmode spec
-
-just to clarify: I'm only talking about a dynamic lane management here.
-If the DP bridge hardware supports remapping lanes in a weird way and
-board designers decided to use that "feature", then having a property
-linke data-lanes = <2 1 3 0>; makes perfect sense to me.
-
-> and should be implemented with a typec switch though,
-> because I imagine some hardware design could be created that has two
-> DisplayPort connectors, just like these two USB-C connectors, and some
-> sort of HPD redriver logic similar to the EC that decides which DP port
-> "wins" and should have DP sent to it. Or perhaps 2 lanes DP to a DP
-> connector and 2 lanes DP sent to a DP to HDMI bridge (shudder). In
-> either case, USB type-c isn't involved.
-
-/me keeps fingers crossed that hw designers won't do such a thing
-
-But I see your point.
-
-> 
-> It sounds like we're debating how to handle lane assignment in the
-> kernel. Either way, the code is going to be implemented in the bridge
-> driver because it's the one that has to change what physical lane a
-> logical lane is assigned to. The question is if it should be some sort
-> of bridge_funcs callback, or should bridge drivers hook into the typec
-> framework to expose an orientation switch, or something else?
-
-I was assuming that orientation switch is such kind of a hook.
-
-> 
-> I'm thinking we should introduce some sort of bridge_funcs callback that
-> can be called from the DP altmode driver, either parallel to the
-> drm_connector_oob_hotplug_event() function or from it directly. If we
-> can pass the fwnode for the usb-c-connector to the oob_hotplug_event
-> callback, maybe that's all we need to figure out which lanes go where.
-> And then in the 2 DP connector muxing world we can call
-> drm_connector_oob_hotplug_event() with one or the other DP connector
-> node, which will likely be children nodes of the "HPD redriver" device.
-
-If you call it from drm_bridge_connector's oob_hotplug_event handler,
-this should fly. Does it cover your 3-DP or 4-DP usecases?
+> > --
+> > With best wishes
+> > Dmitry
 
 -- 
 With best wishes
