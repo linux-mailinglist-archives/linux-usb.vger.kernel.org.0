@@ -1,174 +1,94 @@
-Return-Path: <linux-usb+bounces-17764-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17765-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67DFA9D45CC
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 03:39:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B97A9D4607
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 04:06:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 285992844C5
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 02:39:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E5E8280C9F
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 03:06:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 994E123099A;
-	Thu, 21 Nov 2024 02:39:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="E3m6zsTI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C964139D1E;
+	Thu, 21 Nov 2024 03:06:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDD7E136358
-	for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 02:39:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B49770817
+	for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 03:06:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732156769; cv=none; b=M2waasWYksLhN8yFqAFi0kDJeosyyu+nL49GIEXn6Cy36gVucS46BFSGxbYROV/X3qYxmtKdkSqNXGonQ//f0P7P9dgTQ+WdJIyNGbMaNlm4Vxhk8YLGAWrIz5AmvmX6FbcNiP9B9QPqj0RGNcAwmCvwRhd1bX8T81EdaopKhCA=
+	t=1732158364; cv=none; b=QBxE5Y98npX3Hl4uxOzBJkyTimHVxZODUbgOObFCSyDf4r0gUtdezBIS0TeAg9Ntwz7spSz3BqFlt5U8NQzPqxWzgWELcysGHYfYqCRCfiPolhNClZ5wDPwMPxWJrFjakqrUORffemRNAIB6/SelSWfeP/HPld4DR/J44LjgLOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732156769; c=relaxed/simple;
-	bh=2H7mtQzYp0TLoyfuYgyWe2slyZ2FdqNj/Q1Q7UJc4vs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aNSL25W44DEEHEhW9KW3LnjCfN+9UgBTi51JOA59gn3ed8QTwdphY/ymTl20l3t73pkW4u4PUz98FqUUQxUZN6ClqhS1jp5UAgvK7AAQvs+uf79AE/mqKw2zV/jNwl/1yDhKepXQJCKt9jRyYTTCa3TCi45WMG2sPzKccan9LZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=E3m6zsTI; arc=none smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-7ea8c4ce232so461056a12.0
-        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 18:39:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1732156765; x=1732761565; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mMEAUur1BpykWlac5weiHbatFHF9XI1zWsCYMdjHiJ4=;
-        b=E3m6zsTIpMqDYghLB5yQBpcbwpGXP5NPDVGnuffn+glOpVji5f3GwlQwyzjn2issgK
-         Tboa79tWlASEJhdvsGeq7XE1SSkzJoGn8UvbnZZZJSSWEJWUR7I9CSgb8jfaXGXPImJu
-         Qo5AMJjHyYIs/1oJsa1TNMSI4iRzIR9gBCO4mGzyC/v41qVCgIgkxgZ32PY+9OejAfAH
-         mYQIu77P6FD+bVy+xRLA9HXV+28bwcLPAVwwbl8Lw2LYApVyaFxOHMfGq/9QdBGGdv1+
-         wNJFHs7bf0iBOFVfVUTCt8nktyGAkxRb62nQ/1h8aM8Co7612w0BNB4Pl4Qh0q1j8+df
-         /IcA==
+	s=arc-20240116; t=1732158364; c=relaxed/simple;
+	bh=19lMze4FBt9ZcAS9KWRp6i8uOH9mPAA59vjy+SmM7MU=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=uzWArIT6O51ITygXGV4LaBxHhkCEHH5dae/W7KxSaIEr8P3cxnxIyJU04UN3ektG2ZUwv502q/MwMqvBy+azk6cRPs/1TTuMY+OPtpZbWF+R/e9ykzzlv+wcrY/1VbN2B2sh5wVPhgXs+jn93kU7mT5GWaRPN6KkjM+S5qTeJHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a7932544c4so215755ab.1
+        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 19:06:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732156765; x=1732761565;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mMEAUur1BpykWlac5weiHbatFHF9XI1zWsCYMdjHiJ4=;
-        b=o119RwqIWf8yVuYqqvIq7P8tUrGMNh9GQg2zYIjCkveBI1iMZdidxKTQufQOVUHTa/
-         NxTr2CzeIv1LrVbDfBP25B1afc3PA54rlw4IJtrgy4buxHO4m0P+W03out5FP050lMUV
-         5LKNTew0X6sXBq7a8YX2aCgItoYd07WqSwL9L5JgmKQAC3i0/yIiTNQ495lClOgqptpo
-         RPscxm2ICyUtOwBvV3DrcOCXXvJKdkt/x5b+dixM7gNxfP/svQScytOn3JswISQ6kZab
-         +IhKY0Qtqrzg6MP5c6JSWnNtPjPd3WAxmXoyF/DT7nS9GLiDF4ONEuezbL14h6RWG+0Q
-         TPKA==
-X-Gm-Message-State: AOJu0YzK9wLCH+A232R01CGkcN+nV/xWvxUGx3x9AHibNZRbSIMVtQ76
-	oRtjPvKymtqvfIMAwUwC05NRcrbBuvrquVXIsXXcRf70PlrRU768+AkVxNHtgD4=
-X-Gm-Gg: ASbGnctzMKsKDTOI/VsBsdsvXVlPT6c4nx8mnHf6rCdUPjzcRly9T5N157KOhczsdk/
-	v+NFngGoNMVoFk726gIP2LWMn9aueO84rAxqr0CC50BbRCRJgbtAt4ZexnwND5J4mR4mHP5PCg5
-	mpIbshono7B6cUiqbscXEa1zNy5NWAYQEXTLrBllwKSmMEGzHUo6qujf9k7r2IY2dJuNxlfdk/q
-	zMJJNgSjekXFqs1/VJOQLAEtO4iQBlc58N0c6loobCsrDs3BtjR746KAX/8kkspON0i4a/T9g==
-X-Google-Smtp-Source: AGHT+IHI5jcjo/SbYG3H3PQ9jXV+M8eqBfpICerWU4nqBvnHNPBnXqddR0amd9ZDq9cLAwlUHwyAZA==
-X-Received: by 2002:a05:6a20:a110:b0:1db:f02d:dd49 with SMTP id adf61e73a8af0-1ddb10dfb56mr7310382637.40.1732156765193;
-        Wed, 20 Nov 2024 18:39:25 -0800 (PST)
-Received: from localhost.localdomain ([2001:f70:39c0:3a00:2973:c72c:77ad:fd3c])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-724bef8d94bsm2390701b3a.114.2024.11.20.18.39.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 20 Nov 2024 18:39:24 -0800 (PST)
-From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>,
-	stable@vger.kernel.org
-Subject: [PATCH v3] usb: typec: anx7411: fix OF node reference leaks in anx7411_typec_switch_probe()
-Date: Thu, 21 Nov 2024 11:39:14 +0900
-Message-Id: <20241121023914.1194333-1-joe@pf.is.s.u-tokyo.ac.jp>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1732158362; x=1732763162;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iT+tkk0XtBVTI1mvaBLoNdXL417sN5a09utqyP6Jzj8=;
+        b=Gl3IOLrAs+DKRkXQL2UPe74pL6VLBb/FNBk5kIddeBC/7fYyHUEMg3hkh1ZeX9mNMs
+         Go6AhKCEdEVAeXFHvYWinsu4TPKvwPdFjv+ne96FxUKLFVOvWtEhGfoFu0DWQv83g7K+
+         0GAq0p3wrU+7qubuRbSaHXl03pBB6wBDlIW7L0K7y9TDU5w8syTRWOGIIXyBsViZiVEU
+         5NMCj2E9QLswBR+EySzA88N+nsjypswRrtO1wbqGDc9BSmt2QCa7f9ZVXUzgSLVY6vQ+
+         EKMs/oqhdSn1jOSPkfYaCBymhSRAIRxh+wqnQ9uaFa9EU2Ilr+MDi7Mh2i00z9Vpf2Am
+         uKog==
+X-Forwarded-Encrypted: i=1; AJvYcCVqtQLdLriUt56meTwPBsyYljcJgkyPjwU1mgIiM6uZCfyiZdhTR2m38MXOMFmi4NH0fIincSTLR/A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOq6p+GM+n7qicCdY5VgKRKzJWCB77s2rIOE9ESsZ3JXIpf5Li
+	B5EJoeA5AZNj9B5MYQIGW0PChRFPPHpngWzlpLlPc3C1wVbctLkoQg+rzPhRaRT4fSZtO/BMiWc
+	RjHY+jawOf93zyFY0JjEn0BuQ9U0g80cna/5Wk7HsvhFcsUP+2zFzvdA=
+X-Google-Smtp-Source: AGHT+IFECs3xXLfzjty274CbuoSdxurVt/fnTybIl9OmWuhos3xSfe2yEatqrch5aDBMJHYLJNfKVj2in1cYGsxmcp6oDAg9FTWC
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:3b87:b0:3a7:87f2:b010 with SMTP id
+ e9e14a558f8ab-3a787f2b18fmr50885135ab.5.1732158362777; Wed, 20 Nov 2024
+ 19:06:02 -0800 (PST)
+Date: Wed, 20 Nov 2024 19:06:02 -0800
+In-Reply-To: <673de7f9.050a0220.363a1b.0011.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <673ea39a.050a0220.363a1b.0083.GAE@google.com>
+Subject: Re: [syzbot] [media?] [usb?] WARNING in iguanair_get_features/usb_submit_urb
+From: syzbot <syzbot+e3ae1e7f4b88f3e696f5@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-media@vger.kernel.org, linux-usb@vger.kernel.org, mchehab@kernel.org, 
+	oneukum@suse.com, sean@mess.org, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The refcounts of the OF nodes obtained in by of_get_child_by_name()
-calls in anx7411_typec_switch_probe() are not decremented. Add
-additional device_node fields to anx7411_data, and call of_node_put() on
-them in the error path and in the unregister functions.
+syzbot has bisected this issue to:
 
-Fixes: e45d7337dc0e ("usb: typec: anx7411: Use of_get_child_by_name() instead of of_find_node_by_name()")
-Cc: stable@vger.kernel.org
-Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
----
-Changes in v3:
-- Add new fields to anx7411_data.
-- Remove an unnecessary include.
----
- drivers/usb/typec/anx7411.c | 19 ++++++++++++-------
- 1 file changed, 12 insertions(+), 7 deletions(-)
+commit b3e40fc85735b787ce65909619fcd173107113c2
+Author: Oliver Neukum <oneukum@suse.com>
+Date:   Thu May 2 11:51:40 2024 +0000
 
-diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
-index 95607efb9f7e..e714b04399fa 100644
---- a/drivers/usb/typec/anx7411.c
-+++ b/drivers/usb/typec/anx7411.c
-@@ -290,6 +290,8 @@ struct anx7411_data {
- 	struct power_supply *psy;
- 	struct power_supply_desc psy_desc;
- 	struct device *dev;
-+	struct device_node *switch_node;
-+	struct device_node *mux_node;
- };
- 
- static u8 snk_identity[] = {
-@@ -1099,6 +1101,7 @@ static void anx7411_unregister_mux(struct anx7411_data *ctx)
- 	if (ctx->typec.typec_mux) {
- 		typec_mux_unregister(ctx->typec.typec_mux);
- 		ctx->typec.typec_mux = NULL;
-+		of_node_put(ctx->mux_node);
- 	}
- }
- 
-@@ -1107,6 +1110,7 @@ static void anx7411_unregister_switch(struct anx7411_data *ctx)
- 	if (ctx->typec.typec_switch) {
- 		typec_switch_unregister(ctx->typec.typec_switch);
- 		ctx->typec.typec_switch = NULL;
-+		of_node_put(ctx->switch_node);
- 	}
- }
- 
-@@ -1114,28 +1118,29 @@ static int anx7411_typec_switch_probe(struct anx7411_data *ctx,
- 				      struct device *dev)
- {
- 	int ret;
--	struct device_node *node;
- 
--	node = of_get_child_by_name(dev->of_node, "orientation_switch");
--	if (!node)
-+	ctx->switch_node = of_get_child_by_name(dev->of_node, "orientation_switch");
-+	if (!ctx->switch_node)
- 		return 0;
- 
--	ret = anx7411_register_switch(ctx, dev, &node->fwnode);
-+	ret = anx7411_register_switch(ctx, dev, &ctx->switch_node->fwnode);
- 	if (ret) {
- 		dev_err(dev, "failed register switch");
-+		of_node_put(ctx->switch_node);
- 		return ret;
- 	}
- 
--	node = of_get_child_by_name(dev->of_node, "mode_switch");
--	if (!node) {
-+	ctx->mux_node = of_get_child_by_name(dev->of_node, "mode_switch");
-+	if (!ctx->mux_node) {
- 		dev_err(dev, "no typec mux exist");
- 		ret = -ENODEV;
- 		goto unregister_switch;
- 	}
- 
--	ret = anx7411_register_mux(ctx, dev, &node->fwnode);
-+	ret = anx7411_register_mux(ctx, dev, &ctx->mux_node->fwnode);
- 	if (ret) {
- 		dev_err(dev, "failed register mode switch");
-+		of_node_put(ctx->mux_node);
- 		ret = -ENODEV;
- 		goto unregister_switch;
- 	}
--- 
-2.34.1
+    USB: usb_parse_endpoint: ignore reserved bits
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13907ae8580000
+start commit:   f868cd251776 Merge tag 'drm-fixes-2024-11-16' of https://g..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=10507ae8580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=17907ae8580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d2aeec8c0b2e420c
+dashboard link: https://syzkaller.appspot.com/bug?extid=e3ae1e7f4b88f3e696f5
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10edf1a7980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d892c0580000
+
+Reported-by: syzbot+e3ae1e7f4b88f3e696f5@syzkaller.appspotmail.com
+Fixes: b3e40fc85735 ("USB: usb_parse_endpoint: ignore reserved bits")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
