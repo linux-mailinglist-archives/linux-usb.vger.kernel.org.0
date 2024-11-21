@@ -1,94 +1,119 @@
-Return-Path: <linux-usb+bounces-17765-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17766-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B97A9D4607
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 04:06:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 754FC9D47F5
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 07:51:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E5E8280C9F
-	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 03:06:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 22F9D1F22B60
+	for <lists+linux-usb@lfdr.de>; Thu, 21 Nov 2024 06:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C964139D1E;
-	Thu, 21 Nov 2024 03:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49ED11C9B8C;
+	Thu, 21 Nov 2024 06:51:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B49770817
-	for <linux-usb@vger.kernel.org>; Thu, 21 Nov 2024 03:06:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3EB1AC8A2;
+	Thu, 21 Nov 2024 06:51:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732158364; cv=none; b=QBxE5Y98npX3Hl4uxOzBJkyTimHVxZODUbgOObFCSyDf4r0gUtdezBIS0TeAg9Ntwz7spSz3BqFlt5U8NQzPqxWzgWELcysGHYfYqCRCfiPolhNClZ5wDPwMPxWJrFjakqrUORffemRNAIB6/SelSWfeP/HPld4DR/J44LjgLOE=
+	t=1732171896; cv=none; b=bz7sszpmOq7HW+hwpnZsVUCWs+JfX9/CDKTKDdphULwJDs+GdYjmZOQtL8gSX9SmGhdXyjq4CrKVOO1N01PxQkA+OIP1YETePIDPePQ49UIAaa/pdgl5OSA+G3JTOKIwv6nirEdFTHycMsUEmQf+m7M8mzPNEKyIydx2sKNUjLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732158364; c=relaxed/simple;
-	bh=19lMze4FBt9ZcAS9KWRp6i8uOH9mPAA59vjy+SmM7MU=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=uzWArIT6O51ITygXGV4LaBxHhkCEHH5dae/W7KxSaIEr8P3cxnxIyJU04UN3ektG2ZUwv502q/MwMqvBy+azk6cRPs/1TTuMY+OPtpZbWF+R/e9ykzzlv+wcrY/1VbN2B2sh5wVPhgXs+jn93kU7mT5GWaRPN6KkjM+S5qTeJHA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a7932544c4so215755ab.1
-        for <linux-usb@vger.kernel.org>; Wed, 20 Nov 2024 19:06:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732158362; x=1732763162;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iT+tkk0XtBVTI1mvaBLoNdXL417sN5a09utqyP6Jzj8=;
-        b=Gl3IOLrAs+DKRkXQL2UPe74pL6VLBb/FNBk5kIddeBC/7fYyHUEMg3hkh1ZeX9mNMs
-         Go6AhKCEdEVAeXFHvYWinsu4TPKvwPdFjv+ne96FxUKLFVOvWtEhGfoFu0DWQv83g7K+
-         0GAq0p3wrU+7qubuRbSaHXl03pBB6wBDlIW7L0K7y9TDU5w8syTRWOGIIXyBsViZiVEU
-         5NMCj2E9QLswBR+EySzA88N+nsjypswRrtO1wbqGDc9BSmt2QCa7f9ZVXUzgSLVY6vQ+
-         EKMs/oqhdSn1jOSPkfYaCBymhSRAIRxh+wqnQ9uaFa9EU2Ilr+MDi7Mh2i00z9Vpf2Am
-         uKog==
-X-Forwarded-Encrypted: i=1; AJvYcCVqtQLdLriUt56meTwPBsyYljcJgkyPjwU1mgIiM6uZCfyiZdhTR2m38MXOMFmi4NH0fIincSTLR/A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzOq6p+GM+n7qicCdY5VgKRKzJWCB77s2rIOE9ESsZ3JXIpf5Li
-	B5EJoeA5AZNj9B5MYQIGW0PChRFPPHpngWzlpLlPc3C1wVbctLkoQg+rzPhRaRT4fSZtO/BMiWc
-	RjHY+jawOf93zyFY0JjEn0BuQ9U0g80cna/5Wk7HsvhFcsUP+2zFzvdA=
-X-Google-Smtp-Source: AGHT+IFECs3xXLfzjty274CbuoSdxurVt/fnTybIl9OmWuhos3xSfe2yEatqrch5aDBMJHYLJNfKVj2in1cYGsxmcp6oDAg9FTWC
+	s=arc-20240116; t=1732171896; c=relaxed/simple;
+	bh=WJIdoe0ZU3QvNR5tZoSQf3L46qRt/MN+rIPPxriDbIM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WLp9vV2+vpnxT5v6D39uursEw+25i7bYqe2FNIlLow2V8vT0PqgX8Plza2RUb1+1kulDfbibtdzsFpNilCdueXkeZ9oZA5tN8yvg/idIWGgbe+zeaM0jPgm+WTXMOgsTof7xsje9Zr4JSwv2LwEn9JtTUlB92cRCzAXZVHfzTEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+	by ni.piap.pl (Postfix) with ESMTPS id 4C2EBC3EEAC5;
+	Thu, 21 Nov 2024 07:51:24 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 4C2EBC3EEAC5
+From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: netdev <netdev@vger.kernel.org>,  Oliver Neukum <oneukum@suse.com>,
+  Andrew Lunn <andrew+netdev@lunn.ch>,  "David S. Miller"
+ <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Jakub
+ Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
+  linux-usb@vger.kernel.org,  linux-kernel@vger.kernel.org,  Jose Ignacio
+ Tornos Martinez <jtornosm@redhat.com>,  Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH] usbnet_link_change() fails to call netif_carrier_on()
+In-Reply-To: <9baf4f17-bae6-4f5c-b9a1-92dc48fd7a8d@lunn.ch> (Andrew Lunn's
+	message of "Tue, 19 Nov 2024 17:20:34 +0100")
+References: <m34j43gwto.fsf@t19.piap.pl>
+	<9baf4f17-bae6-4f5c-b9a1-92dc48fd7a8d@lunn.ch>
+Sender: khalasa@piap.pl
+Date: Thu, 21 Nov 2024 07:51:24 +0100
+Message-ID: <m3plmpf5ar.fsf@t19.piap.pl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3b87:b0:3a7:87f2:b010 with SMTP id
- e9e14a558f8ab-3a787f2b18fmr50885135ab.5.1732158362777; Wed, 20 Nov 2024
- 19:06:02 -0800 (PST)
-Date: Wed, 20 Nov 2024 19:06:02 -0800
-In-Reply-To: <673de7f9.050a0220.363a1b.0011.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <673ea39a.050a0220.363a1b.0083.GAE@google.com>
-Subject: Re: [syzbot] [media?] [usb?] WARNING in iguanair_get_features/usb_submit_urb
-From: syzbot <syzbot+e3ae1e7f4b88f3e696f5@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-media@vger.kernel.org, linux-usb@vger.kernel.org, mchehab@kernel.org, 
-	oneukum@suse.com, sean@mess.org, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-syzbot has bisected this issue to:
+Hi Andrew,
+thanks for a looking at this.
 
-commit b3e40fc85735b787ce65909619fcd173107113c2
-Author: Oliver Neukum <oneukum@suse.com>
-Date:   Thu May 2 11:51:40 2024 +0000
+Andrew Lunn <andrew@lunn.ch> writes:
 
-    USB: usb_parse_endpoint: ignore reserved bits
+>> void usbnet_link_change(struct usbnet *dev, bool link, bool need_reset)
+>> {
+>>       /* update link after link is reseted */
+>>       if (link && !need_reset)
+>>               netif_carrier_on(dev->net);
+>>       else
+>>               netif_carrier_off(dev->net);
+>>
+>>       if (need_reset && link)
+>>               usbnet_defer_kevent(dev, EVENT_LINK_RESET);
+>>       else
+>>               usbnet_defer_kevent(dev, EVENT_LINK_CHANGE);
+>> }
+>
+> This device is using phylink to manage the PHY. phylink will than
+> manage the carrier. It assumes it is solely responsible for the
+> carrier. So i think your fix is wrong. You probably should be removing
+> all code in this driver which touches the carrier.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=13907ae8580000
-start commit:   f868cd251776 Merge tag 'drm-fixes-2024-11-16' of https://g..
-git tree:       upstream
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=10507ae8580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=17907ae8580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=d2aeec8c0b2e420c
-dashboard link: https://syzkaller.appspot.com/bug?extid=e3ae1e7f4b88f3e696f5
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10edf1a7980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10d892c0580000
+Ok, I wasn't aware that phylink manages netdev's carrier state.
 
-Reported-by: syzbot+e3ae1e7f4b88f3e696f5@syzkaller.appspotmail.com
-Fixes: b3e40fc85735 ("USB: usb_parse_endpoint: ignore reserved bits")
+Then, is the patch wrong just because the asix driver shouldn't use the
+function, or is it wrong because the function should work differently
+(i.e., the semantics are different)?
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Surely the function is broken, isn't it? Calling netif_carrier_off()
+on link up event can't be right?
+
+
+Now the ASIX driver, I'm looking at it for some time now. It consists
+of two parts linked together. The ax88172a.c part doesn't use phylink,
+while the main asix_devices.c does. So I'm leaving ax88172a.c alone for
+now (while it could probably be better ported to the same framework,
+i.e., phylink).
+
+The main part uses usbnet.c, which does netif_carrier_{on,off}() in the
+above usbnet_link_change(). I guess I can make it use directly
+usbnet_defer_kevent() only so it won't be a problem.
+
+Also, usbnet.c calls usbnet_defer_kevent() and thus netif_carrier_off()
+in usbnet_probe, removing FLAG_LINK_INTR from asix_devices.c will stop
+that.
+
+The last place interacting with carrier status is asix_status(), called
+about 8 times a second by usbnet.c intr_complete(). This is independent
+of any MDIO traffic. Should I now remove this as well? I guess removing
+asix_status would suffice.
+--=20
+Krzysztof "Chris" Ha=C5=82asa
+
+Sie=C4=87 Badawcza =C5=81ukasiewicz
+Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+Al. Jerozolimskie 202, 02-486 Warszawa
 
