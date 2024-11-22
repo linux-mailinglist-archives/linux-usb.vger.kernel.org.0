@@ -1,528 +1,153 @@
-Return-Path: <linux-usb+bounces-17801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17802-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A4839D6452
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2024 19:51:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E3249D6495
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2024 20:29:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E3937B237F6
-	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2024 18:51:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B41AB22350
+	for <lists+linux-usb@lfdr.de>; Fri, 22 Nov 2024 19:29:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5AA71DF250;
-	Fri, 22 Nov 2024 18:51:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69C61DFE02;
+	Fri, 22 Nov 2024 19:29:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Vpxm+/ud"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="SOJ0yigV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
+Received: from mail-oo1-f47.google.com (mail-oo1-f47.google.com [209.85.161.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 606DF26AEC
-	for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2024 18:51:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2CB4C62B
+	for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2024 19:29:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732301462; cv=none; b=Vfp8IpAdU88hKZObtdiif8vXonXsby8R504KOvQE36YtMQAF9Fi3ACkE2q6HNsYCGKbiBIlhWXXRCRc8H4pgl93eF8KlLqO4HIP58R2ovzIkQi6vg8TJKAUCrTajr1A1CPzv4HmsJIZl8Wa4nghw1TaPcNIP2rG09+DEuh9Jxr0=
+	t=1732303744; cv=none; b=g3jnhUMyG4nSShLoN6Yf8DGvFBlgE4fSn+7S1TKChI4UIVPQMJHg/TJdz8uTOKvIZin4Iu12P/48fEIM5kIiTAJRAfrSDdnG5XWwkhjxVMTzwjbXO9jB/aRl16BHBYa8RBJEnbQEVpg+hZ21suPSa2dc0B0IXGP3/zKpAZAS3pM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732301462; c=relaxed/simple;
-	bh=P8f3z3KImlG0Iv7G9gouR/0Ewo2VbVuTWyHT/5H1kcw=;
+	s=arc-20240116; t=1732303744; c=relaxed/simple;
+	bh=+wvYqj0hzUo8CjjpGtwcJM9IzujjbwiQcJq6R6HNMnc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iN0KXgLYmO2IpXOxfoQCTvOKyiQVFTTW3TLJDQGpqV/i6pk8335UxYtLZK4kBv2MpWW74tlBDNyyfwUao60+TIDcZ5tcsFhLJvC0mDc+MnCyrc6V1uU1kDzgpgr+cECr2g9oVRLGsFKOKfZX3KdxBISkXUDgGZkDfDuv0XRsqiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Vpxm+/ud; arc=none smtp.client-ip=209.85.210.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-71e4e481692so2170815b3a.1
-        for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2024 10:51:00 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=lyY3WC+zZN48wY82eIUqJ0RZpQxJYHHYobiJdFQ0rgsf5SwVRv07yjrfsH+3QzMhqAyHeOD2dYC7r3haKFxPjeD2qjFq3yfHJk/F/lQFPK5s4UhuctXoQ9JdvnQjIPw37Bx9t7pFyXMxPTzfysXMO6nmBTmlkwprACqpbEQsp+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=SOJ0yigV; arc=none smtp.client-ip=209.85.161.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5ebc1af8f10so1238797eaf.2
+        for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2024 11:29:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1732301460; x=1732906260; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=O6gj0+7Va7J9njdmM7N9rJJ2/haGWOYo/Av9YNf4X90=;
-        b=Vpxm+/udgeqv833mBTDF4Sq4pOa3RE0tFLzWCZcjdjqN8lK72yXJluVdoVWjl/bZBZ
-         kt5mijtE68Ekv5HGEVebJgjX+9FOAbDjY9vxE04yQhPgmUYmVutxvNZ7rvILRdhsfMGk
-         +ueOeHk6TjNXClUYte/j0tWs5enseZOC9xrRzaz4gCnlK1b28X64sMap8xuraDW7EA49
-         wudJ4CgSk/8lZtfiLSKT/64xpSMSmkeltTwKnMqDPRwByu6YKg47A3XJrmhbhLLInJcZ
-         9C7i5U8cNT7zQNJkrty3NGoQR0MCfmQv1OW6mDIlWJLviyuFLrWZ3ma2ZFZ4w1baWwHA
-         40tA==
+        d=rowland.harvard.edu; s=google; t=1732303742; x=1732908542; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=p1x7xfvlrmJaDu80BzB9IqPpgykKRgIKzolHaNu7VII=;
+        b=SOJ0yigVHXo/niBc7Wwaj1nU9Q26Q0DkCqipyBxe8rJhJbxLgn80BK2tALawzfubFp
+         HJNwmUp855HhoAaNUIyZM+39TzpgkplXkwr7UuuxL8NGX4gfLYXqbReKnVPZ8qplR3s1
+         WkfeJFJLo7Rf5uWrfwoFg5bISa7eFg0nT8Q4SJACpt3Yq2uqbcJQA3nSr1toeZ2sEAnq
+         wvxSDKDmhpSxIvCQQsd57QjIpzizE7EyAoE8t3mi+TAeT+L75972GFzRh4N+UBcdqtjk
+         cAl9MjhgpMawDdjdGS+dzW0WGwG1dWeXvg3yQbcmq+OuAVD610Oxqfp7F1wfvPEdebw1
+         NaoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732301460; x=1732906260;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=O6gj0+7Va7J9njdmM7N9rJJ2/haGWOYo/Av9YNf4X90=;
-        b=fGZkdUYrtPxI96KhJqAa/LX8TBOn1IHErTf/CTHHET78a4cRfr0fR0+Lqyf/WovrxU
-         7rkVfSPwuaoeSGsd0u8s4OXq8endzP+T67f0Tg93etv5K8a7FG7zSiXGc0nPbXD6P+aF
-         myZjONN2FtCv5DM+f/iwstio78BM47Cptk5xvOeSP+3L/mdSFvoxCUeUPFBBplvc4Exc
-         j/fbRCB9/xsuwMsREZYTZZnUEC3gKEAWuVVYNtp3H1Q4MqfYAvdTDvWsEzQrGTz5LGTk
-         p21ZIIyo5Gr8fdkI7vAwEnN4eCCnyZrXq6BFwTBq9BiknQM2oTQYf/HKCSrX//lWISkL
-         AkDw==
-X-Forwarded-Encrypted: i=1; AJvYcCU8smX4Kn9WiJIxta+gu0JZTGst9CrFYIIaXqKz0kErdH6e9y39PQQZuLDw5+Gs5svzafvAcT+J5jw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX9KJm6GN4CwuJ+mjVuam01TxEEYGDfRlZ3tzV4SlB2YKVJrFJ
-	5vM04E1ulWeUThKeUt7Nqdh97zne7goNHmaRenbAuraKPbHFxfFnewmTGeCp1A==
-X-Gm-Gg: ASbGncv09DNg1g7A+acGmXPrCMuvV0PIcxUQSR2oK6+tmXkiSTnNG+13tp50vhe0M8C
-	G5UZ5O2oVFMjCY9oNwetVtkmD7BASQD1yRVo11WWgs16K19BTLxdRbA4Uc90ZEs3QehW6Uk8XOB
-	WBFhEcSVBETGBzloBAB2N8JINZCMeYgLE4fMCGq9E/4axpRRw/yfgjqdz+tTunvW7+FYuM/plnF
-	1ptnOBFrmtHIC7TK7AUT8uZdXwbjINZIrwqJnnQAx9pbH5KEqxvC0nMC7z0npgN6uamhvy/6F/s
-	EHn8RVu8NA==
-X-Google-Smtp-Source: AGHT+IHlHdUQZrAYBrn8jYfzeAbm/PUGlL+6jkZKwPyjqhDb+NJB7h3nT1GxGlaQHCtKtx7JDklLTQ==
-X-Received: by 2002:a05:6a00:2d10:b0:71e:695:41ee with SMTP id d2e1a72fcca58-724df3e2869mr5107604b3a.5.1732301459241;
-        Fri, 22 Nov 2024 10:50:59 -0800 (PST)
-Received: from google.com (30.176.125.34.bc.googleusercontent.com. [34.125.176.30])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fbcbfbc69esm1713825a12.6.2024.11.22.10.50.57
+        d=1e100.net; s=20230601; t=1732303742; x=1732908542;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p1x7xfvlrmJaDu80BzB9IqPpgykKRgIKzolHaNu7VII=;
+        b=KJZe4xMz4zrxcjT+APQLABtZUU9UQ37kdz0sOnjQacviWlV0ZoIKtq9+DmQTh4Otj9
+         f68WkbbwXkP6zy2S3sfIiv9JulUCXP1qfou15L8oc1m4VUskdZLO4y91WA5HUlMjvm2h
+         V2+q+dQJcDtjK5wOIefs3+wP5WVl+Jn2SeO6oVhiAK/gSzq19Stu5PRECGOB3PcDWbo6
+         CAdlVdhthqSUFMYvG8xdxcbi+UpxA2xBeAaIkmw+pZFyKlJzzuX4UzNvlxePFetI/UVc
+         1ho57XANq0Zkyt2C/uRjM69ubmaDWmNZCiVfbB9tElqwkwFFRJKVR3fZBL4z+ez5LfkO
+         SeVA==
+X-Forwarded-Encrypted: i=1; AJvYcCW/MVF4RhuqQeglYgcO4zd8q0zo18ywO4urgtMuwvFZc81N07mWoLR6HjLwpEOVIe+iYTP+QiT5Xpw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBHa1guK7STPL9YosTbS/+EAxyJkpz6f3Of+sMgUd+Re1NjIQR
+	tjkc2TH5JoyO4Pg2+GAgk+7oW71wkihyj9GoE8LexgfOXWWudsHpunziMwOnYA==
+X-Gm-Gg: ASbGncu756TBZhmFmZbeODO9/n1k0j+ncrPBDDPOw0SFtumQfpAooVhohSYydyPfaiE
+	piGdkU1UBl85S89vLaccGuaSCyRaeGvopRnL5MdELsR+g+Qf8wB7rklhErNpWQkMZbBDyC5ViRe
+	ZGEXlBb4SnGBI/JmUqJt5Skgj6nDc1wl06ECB5PE8zunvQoiV/RVZkWKBc9ajJiGaERNwCWfu6w
+	ybflojfjO1BktLftVCTSYpvB9c6hnxvNjYoAHh+vZRCGfOOPpIWG4F4y3Q5Vm5UU058GIIpe8dz
+	CjuYxkk0PRzLCQnSfB+JYjVm3O/AfrtWwa7i/rZ3W80=
+X-Google-Smtp-Source: AGHT+IFJaJYbdl27WU0YoIhk0eZMlk3wAZgpIRwLhTBQlnEtI/cEe0mTaSPO41FsOpZmATx51CvHWg==
+X-Received: by 2002:a05:6358:2810:b0:1c3:98de:facf with SMTP id e5c5f4694b2df-1ca7972486amr417098755d.13.1732303741650;
+        Fri, 22 Nov 2024 11:29:01 -0800 (PST)
+Received: from rowland.harvard.edu (nat-65-112-8-56.harvard-secure.wrls.harvard.edu. [65.112.8.56])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4653c4901bdsm14933581cf.86.2024.11.22.11.29.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2024 10:50:58 -0800 (PST)
-Date: Fri, 22 Nov 2024 18:50:54 +0000
-From: Benson Leung <bleung@google.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: heikki.krogerus@linux.intel.com, tzungbi@kernel.org,
-	linux-usb@vger.kernel.org, chrome-platform@lists.linux.dev,
-	jthies@google.com, akuchynski@google.com, pmalani@chromium.org,
-	dmitry.baryshkov@linaro.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org, danielgeorgem@google.com
-Subject: Re: [PATCH v3 2/7] usb: typec: Add driver for Thunderbolt 3
- Alternate Mode
-Message-ID: <Z0DRWhZ745-N0DFE@google.com>
-References: <20241107193021.2690050-1-abhishekpandit@chromium.org>
- <20241107112955.v3.2.I3080b036e8de0b9957c57c1c3059db7149c5e549@changeid>
+        Fri, 22 Nov 2024 11:29:00 -0800 (PST)
+Date: Fri, 22 Nov 2024 14:28:58 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: Re: How are halted endpoints supposed to be handled in Linux?
+Message-ID: <eb3bae13-dd89-4c84-a4c9-4fb49348928c@rowland.harvard.edu>
+References: <20241121001138.23a45f6c@foxbook>
+ <20241121000216.kif557p3p6xyahax@synopsys.com>
+ <b34b5ea0-2804-4692-bede-70ba9065c86c@rowland.harvard.edu>
+ <20241121112653.06ba4ee5@foxbook>
+ <0dd70803-a074-4859-8cc9-5bd210d12536@rowland.harvard.edu>
+ <20241122135733.3d040c0d@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="RLz5mJDVYXyB69SQ"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241107112955.v3.2.I3080b036e8de0b9957c57c1c3059db7149c5e549@changeid>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241122135733.3d040c0d@foxbook>
 
+On Fri, Nov 22, 2024 at 01:57:33PM +0100, Michał Pecio wrote:
+> On Thu, 21 Nov 2024 10:06:50 -0500, Alan Stern wrote:=
+> > > One way I see with existing APIs is to wait until the driver
+> > > submits a new URB, but are drivers prepared for this? Is EHCI doing
+> > > the same?  
+> > 
+> > Yes; see above.
+> 
+> That's comforting to hear.
+> But still seems to have races, see Mathias and my reply to him.
+> 
+> I suppose alternative solutions include: bypassing the BH on unlink and
+> error paths, or making it call the HCD back when it's done. The latter
+> may not be so trivial, as it would ideally be per-endpoint.
 
---RLz5mJDVYXyB69SQ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Bypassing the BH might not be a good idea, because driver's completion 
+handlers expect to be called in order of URB completion.  It probably 
+wouldn't make any difference, but it's hard to be sure.
 
-Hi Abhishek,
+> > What about automatic unlinking?
+> 
+> Maybe it could make things go faster and smoother.
+> 
+> Networking can tolerate dropped packets, but considering that their MTU
+> is larger than USB MTU, I suppose they have to split payloads across
+> multiple USB packets and may get out of sync if only part of a payload
+> is dropped. But I don't know, they could use packet headers to resync.
+> 
+> > Note that some class drivers treat -EPROTO as a fatal error.  That
+> > is, they don't retry and their completion-resubmission loop breaks
+> > down.
+> 
+> Well, that's on EHCI.
 
+No, it's the behavior of the class driver and is independent of the 
+type of host controller.
 
-On Thu, Nov 07, 2024 at 11:29:55AM -0800, Abhishek Pandit-Subedi wrote:
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
->=20
-> Thunderbolt 3 Alternate Mode entry flow is described in
-> USB Type-C Specification Release 2.0.
->=20
-> Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Co-developed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> ---
->=20
-> Changes:
-> * Delay cable + plug checks so that the module doesn't fail to probe
->   if cable + plug information isn't available by the time the partner
->   altmode is registered.
-> * Remove unncessary brace after if (IS_ERR(plug))
->=20
-> The rest of this patch should be the same as Heikki's original RFC.
->=20
->=20
-> Changes in v3:
-> - Revert rename of TYPEC_TBT_MODE
-> - Remove mode from typec_device_id
->=20
-> Changes in v2:
-> - Use <linux/usb/typec_tbt.h> and add missing TBT_CABLE_ROUNDED
-> - Pass struct typec_thunderbolt_data to typec_altmode_notify
-> - Rename TYPEC_TBT_MODE to USB_TYPEC_TBT_MODE
-> - Use USB_TYPEC_TBT_SID and USB_TYPEC_TBT_MODE for device id
-> - Change module license to GPL due to checkpatch warning
->=20
->  drivers/usb/typec/altmodes/Kconfig       |   9 +
->  drivers/usb/typec/altmodes/Makefile      |   2 +
->  drivers/usb/typec/altmodes/thunderbolt.c | 308 +++++++++++++++++++++++
->  include/linux/usb/typec_tbt.h            |   1 +
->  4 files changed, 320 insertions(+)
->  create mode 100644 drivers/usb/typec/altmodes/thunderbolt.c
->=20
-> diff --git a/drivers/usb/typec/altmodes/Kconfig b/drivers/usb/typec/altmo=
-des/Kconfig
-> index 1a6b5e872b0d..7867fa7c405d 100644
-> --- a/drivers/usb/typec/altmodes/Kconfig
-> +++ b/drivers/usb/typec/altmodes/Kconfig
-> @@ -23,4 +23,13 @@ config TYPEC_NVIDIA_ALTMODE
->  	  To compile this driver as a module, choose M here: the
->  	  module will be called typec_nvidia.
-> =20
-> +config TYPEC_TBT_ALTMODE
-> +	tristate "Thunderbolt3 Alternate Mode driver"
-> +	help
-> +	  Select this option if you have Thunderbolt3 hardware on your
-> +	  system.
-> +
-> +	  To compile this driver as a module, choose M here: the
-> +	  module will be called typec_thunderbolt.
-> +
->  endmenu
-> diff --git a/drivers/usb/typec/altmodes/Makefile b/drivers/usb/typec/altm=
-odes/Makefile
-> index 45717548b396..508a68351bd2 100644
-> --- a/drivers/usb/typec/altmodes/Makefile
-> +++ b/drivers/usb/typec/altmodes/Makefile
-> @@ -4,3 +4,5 @@ obj-$(CONFIG_TYPEC_DP_ALTMODE)		+=3D typec_displayport.o
->  typec_displayport-y			:=3D displayport.o
->  obj-$(CONFIG_TYPEC_NVIDIA_ALTMODE)	+=3D typec_nvidia.o
->  typec_nvidia-y				:=3D nvidia.o
-> +obj-$(CONFIG_TYPEC_TBT_ALTMODE)		+=3D typec_thunderbolt.o
-> +typec_thunderbolt-y			:=3D thunderbolt.o
-> diff --git a/drivers/usb/typec/altmodes/thunderbolt.c b/drivers/usb/typec=
-/altmodes/thunderbolt.c
-> new file mode 100644
-> index 000000000000..a945b9d35a1d
-> --- /dev/null
-> +++ b/drivers/usb/typec/altmodes/thunderbolt.c
-> @@ -0,0 +1,308 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/**
-> + * USB Typec-C Thuderbolt3 Alternate Mode driver
-> + *
-> + * Copyright (C) 2019 Intel Corporation
-> + * Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> + */
-> +
-> +#include <linux/delay.h>
-> +#include <linux/mutex.h>
-> +#include <linux/module.h>
-> +#include <linux/usb/pd_vdo.h>
-> +#include <linux/usb/typec_altmode.h>
-> +#include <linux/usb/typec_tbt.h>
-> +
-> +enum tbt_state {
-> +	TBT_STATE_IDLE,
-> +	TBT_STATE_SOP_P_ENTER,
-> +	TBT_STATE_SOP_PP_ENTER,
-> +	TBT_STATE_ENTER,
-> +	TBT_STATE_EXIT,
-> +	TBT_STATE_SOP_PP_EXIT,
-> +	TBT_STATE_SOP_P_EXIT
-> +};
-> +
-> +struct tbt_altmode {
-> +	enum tbt_state state;
-> +	struct typec_cable *cable;
-> +	struct typec_altmode *alt;
-> +	struct typec_altmode *plug[2];
-> +	u32 enter_vdo;
-> +
-> +	struct work_struct work;
-> +	struct mutex lock; /* device lock */
-> +};
-> +
-> +static bool tbt_ready(struct typec_altmode *alt);
-> +
-> +static int tbt_enter_mode(struct tbt_altmode *tbt)
-> +{
-> +	struct typec_altmode *plug =3D tbt->plug[TYPEC_PLUG_SOP_P];
-> +	u32 vdo;
-> +
-> +	vdo =3D tbt->alt->vdo & (TBT_VENDOR_SPECIFIC_B0 | TBT_VENDOR_SPECIFIC_B=
-1);
-> +	vdo |=3D tbt->alt->vdo & TBT_INTEL_SPECIFIC_B0;
-> +	vdo |=3D TBT_MODE;
-> +
-> +	if (plug) {
-> +		if (typec_cable_is_active(tbt->cable))
-> +			vdo |=3D TBT_ENTER_MODE_ACTIVE_CABLE;
-> +
-> +		vdo |=3D TBT_ENTER_MODE_CABLE_SPEED(TBT_CABLE_SPEED(plug->vdo));
-> +		vdo |=3D plug->vdo & TBT_CABLE_ROUNDED;
-> +		vdo |=3D plug->vdo & TBT_CABLE_OPTICAL;
-> +		vdo |=3D plug->vdo & TBT_CABLE_RETIMER;
-> +		vdo |=3D plug->vdo & TBT_CABLE_LINK_TRAINING;
-> +	} else {
-> +		vdo |=3D TBT_ENTER_MODE_CABLE_SPEED(TBT_CABLE_USB3_PASSIVE);
-> +	}
-> +
-> +	tbt->enter_vdo =3D vdo;
-> +	return typec_altmode_enter(tbt->alt, &vdo);
-> +}
-> +
-> +static void tbt_altmode_work(struct work_struct *work)
-> +{
-> +	struct tbt_altmode *tbt =3D container_of(work, struct tbt_altmode, work=
-);
-> +	int ret;
-> +
-> +	mutex_lock(&tbt->lock);
-> +
-> +	switch (tbt->state) {
-> +	case TBT_STATE_SOP_P_ENTER:
-> +		ret =3D typec_altmode_enter(tbt->plug[TYPEC_PLUG_SOP_P], NULL);
-> +		if (ret)
-> +			dev_dbg(&tbt->plug[TYPEC_PLUG_SOP_P]->dev,
-> +				"failed to enter mode (%d)\n", ret);
-> +		break;
-> +	case TBT_STATE_SOP_PP_ENTER:
-> +		ret =3D typec_altmode_enter(tbt->plug[TYPEC_PLUG_SOP_PP], NULL);
-> +		if (ret)
-> +			dev_dbg(&tbt->plug[TYPEC_PLUG_SOP_PP]->dev,
-> +				"failed to enter mode (%d)\n", ret);
-> +		break;
-> +	case TBT_STATE_ENTER:
-> +		ret =3D tbt_enter_mode(tbt);
-> +		if (ret)
-> +			dev_dbg(&tbt->alt->dev, "failed to enter mode (%d)\n",
-> +				ret);
-> +		break;
-> +	case TBT_STATE_EXIT:
-> +		typec_altmode_exit(tbt->alt);
-> +		break;
-> +	case TBT_STATE_SOP_PP_EXIT:
-> +		typec_altmode_exit(tbt->plug[TYPEC_PLUG_SOP_PP]);
-> +		break;
-> +	case TBT_STATE_SOP_P_EXIT:
-> +		typec_altmode_exit(tbt->plug[TYPEC_PLUG_SOP_P]);
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	tbt->state =3D TBT_STATE_IDLE;
-> +
-> +	mutex_unlock(&tbt->lock);
-> +}
-> +
-> +static int tbt_altmode_vdm(struct typec_altmode *alt,
-> +			   const u32 hdr, const u32 *vdo, int count)
-> +{
-> +	struct tbt_altmode *tbt =3D typec_altmode_get_drvdata(alt);
-> +	int cmd_type =3D PD_VDO_CMDT(hdr);
-> +	int cmd =3D PD_VDO_CMD(hdr);
-> +
-> +	mutex_lock(&tbt->lock);
-> +
-> +	if (tbt->state !=3D TBT_STATE_IDLE) {
-> +		mutex_unlock(&tbt->lock);
-> +		return -EBUSY;
-> +	}
-> +
-> +	switch (cmd_type) {
-> +	case CMDT_RSP_ACK:
-> +		switch (cmd) {
-> +		case CMD_ENTER_MODE:
-> +			/*
-> +			 * Following the order describeded in USB Type-C Spec
-> +			 * R2.0 Section 6.7.3.
-> +			 */
-> +			if (alt =3D=3D tbt->plug[TYPEC_PLUG_SOP_P]) {
-> +				if (tbt->plug[TYPEC_PLUG_SOP_PP])
-> +					tbt->state =3D TBT_STATE_SOP_PP_ENTER;
-> +				else
-> +					tbt->state =3D TBT_STATE_ENTER;
-> +			} else if (alt =3D=3D tbt->plug[TYPEC_PLUG_SOP_PP]) {
-> +				tbt->state =3D TBT_STATE_ENTER;
-> +			} else {
-> +				struct typec_thunderbolt_data data;
-> +
-> +				data.device_mode =3D tbt->alt->vdo;
-> +				data.cable_mode =3D
-> +					tbt->plug[TYPEC_PLUG_SOP_P] ?
-> +						tbt->plug[TYPEC_PLUG_SOP_P]
-> +							->vdo :
-> +						0;
-> +				data.enter_vdo =3D tbt->enter_vdo;
-> +
-> +				typec_altmode_notify(alt, TYPEC_STATE_MODAL, &data);
-> +			}
-> +			break;
-> +		case CMD_EXIT_MODE:
-> +			if (alt =3D=3D tbt->alt) {
-> +				if (tbt->plug[TYPEC_PLUG_SOP_PP])
-> +					tbt->state =3D TBT_STATE_SOP_PP_EXIT;
-> +				else if (tbt->plug[TYPEC_PLUG_SOP_P])
-> +					tbt->state =3D TBT_STATE_SOP_P_EXIT;
-> +			} else if (alt =3D=3D tbt->plug[TYPEC_PLUG_SOP_PP]) {
-> +				tbt->state =3D TBT_STATE_SOP_P_EXIT;
-> +			}
-> +			break;
-> +		}
-> +		break;
-> +	case CMDT_RSP_NAK:
-> +		switch (cmd) {
-> +		case CMD_ENTER_MODE:
-> +			dev_warn(&alt->dev, "Enter Mode refused\n");
-> +			break;
-> +		default:
-> +			break;
-> +		}
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	if (tbt->state !=3D TBT_STATE_IDLE)
-> +		schedule_work(&tbt->work);
-> +
-> +	mutex_unlock(&tbt->lock);
-> +
-> +	return 0;
-> +}
-> +
-> +static int tbt_altmode_activate(struct typec_altmode *alt, int activate)
-> +{
-> +	struct tbt_altmode *tbt =3D typec_altmode_get_drvdata(alt);
-> +	int ret;
-> +
-> +	mutex_lock(&tbt->lock);
-> +
-> +	if (!tbt_ready(alt))
-> +		return -ENODEV;
+>  xHCI gives them a chance to continue with the
+> remaining URBs. Hopefuly nobody relies on that...
+> 
+> > However, this seems impractical if the class driver wants to retain
+> > the existing URBs already on the endpoint's queue.  (I don't know of
+> > any drivers that do this, but still...)  Perhaps we should adopt the
+> > policy that -EPROTO, -EILSEQ, and -ETIME cause all outstanding URBs
+> > to fail and enforce this policy in usbcore by automatic unlinking so
+> > that HC drivers don't have to do it.
+> 
+> I wouldn't exclude the possibility of sloppy drivers leaving URBs
+> simply because they don't care. Hard to tell what's right for them.
 
+If they don't care then they won't care if the URBs get unlinked.
 
-You need to mutex_unlock(&tbt->lock);  before the return.
-
-Credit to danielgeorgem@google.com for his catching this in his code review.
-
-> +
-> +	/* Preventing the user space from entering/exiting the cable alt mode */
-> +	if (alt !=3D tbt->alt)
-> +		ret =3D -EPERM;
-> +	else if (activate)
-> +		ret =3D tbt_enter_mode(tbt);
-> +	else
-> +		ret =3D typec_altmode_exit(alt);
-> +
-> +	mutex_unlock(&tbt->lock);
-> +
-> +	return ret;
-> +}
-> +
-> +static const struct typec_altmode_ops tbt_altmode_ops =3D {
-> +	.vdm		=3D tbt_altmode_vdm,
-> +	.activate	=3D tbt_altmode_activate
-> +};
-> +
-> +static int tbt_altmode_probe(struct typec_altmode *alt)
-> +{
-> +	struct tbt_altmode *tbt;
-> +
-> +	tbt =3D devm_kzalloc(&alt->dev, sizeof(*tbt), GFP_KERNEL);
-> +	if (!tbt)
-> +		return -ENOMEM;
-> +
-> +	INIT_WORK(&tbt->work, tbt_altmode_work);
-> +	mutex_init(&tbt->lock);
-> +	tbt->alt =3D alt;
-> +
-> +	alt->desc =3D "Thunderbolt3";
-> +	typec_altmode_set_drvdata(alt, tbt);
-> +	typec_altmode_set_ops(alt, &tbt_altmode_ops);
-> +
-> +	if (tbt_ready(alt)) {
-> +		if (tbt->plug[TYPEC_PLUG_SOP_PP])
-> +			tbt->state =3D TBT_STATE_SOP_PP_ENTER;
-> +		else if (tbt->plug[TYPEC_PLUG_SOP_P])
-> +			tbt->state =3D TBT_STATE_SOP_P_ENTER;
-> +		else
-> +			tbt->state =3D TBT_STATE_ENTER;
-> +		schedule_work(&tbt->work);
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void tbt_altmode_remove(struct typec_altmode *alt)
-> +{
-> +	struct tbt_altmode *tbt =3D typec_altmode_get_drvdata(alt);
-> +
-> +	for (int i =3D TYPEC_PLUG_SOP_PP; i > 0; --i) {
-> +		if (tbt->plug[i])
-> +			typec_altmode_put_plug(tbt->plug[i]);
-> +	}
-> +
-> +	if (tbt->cable)
-> +		typec_cable_put(tbt->cable);
-> +}
-> +
-> +static bool tbt_ready(struct typec_altmode *alt)
-> +{
-> +	struct tbt_altmode *tbt =3D typec_altmode_get_drvdata(alt);
-> +	struct typec_altmode *plug;
-> +
-> +	if (tbt->cable)
-> +		return true;
-> +
-> +	/* Thundebolt 3 requires a cable with eMarker */
-> +	tbt->cable =3D typec_cable_get(typec_altmode2port(tbt->alt));
-> +	if (!tbt->cable)
-> +		return false;
-> +
-> +	/* We accept systems without SOP' or SOP''. This means the port altmode
-> +	 * driver will be responsible for properly ordering entry/exit.
-> +	 */
-> +	for (int i =3D 0; i < TYPEC_PLUG_SOP_PP + 1; i++) {
-> +		plug =3D typec_altmode_get_plug(tbt->alt, i);
-> +		if (IS_ERR(plug))
-> +			continue;
-> +
-> +		if (!plug || plug->svid !=3D USB_TYPEC_VENDOR_INTEL)
-> +			break;
-> +
-> +		plug->desc =3D "Thunderbolt3";
-> +		plug->ops =3D &tbt_altmode_ops;
-> +		typec_altmode_set_drvdata(plug, tbt);
-> +
-> +		tbt->plug[i] =3D plug;
-> +	}
-> +
-> +	return true;
-> +}
-> +
-> +static const struct typec_device_id tbt_typec_id[] =3D {
-> +	{ USB_TYPEC_TBT_SID },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(typec, tbt_typec_id);
-> +
-> +static struct typec_altmode_driver tbt_altmode_driver =3D {
-> +	.id_table =3D tbt_typec_id,
-> +	.probe =3D tbt_altmode_probe,
-> +	.remove =3D tbt_altmode_remove,
-> +	.driver =3D {
-> +		.name =3D "typec-thunderbolt",
-> +		.owner =3D THIS_MODULE,
-> +	}
-> +};
-> +module_typec_altmode_driver(tbt_altmode_driver);
-> +
-> +MODULE_AUTHOR("Heikki Krogerus <heikki.krogerus@linux.intel.com>");
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("Thunderbolt3 USB Type-C Alternate Mode");
-> diff --git a/include/linux/usb/typec_tbt.h b/include/linux/usb/typec_tbt.h
-> index fa97d7e00f5c..55dcea12082c 100644
-> --- a/include/linux/usb/typec_tbt.h
-> +++ b/include/linux/usb/typec_tbt.h
-> @@ -44,6 +44,7 @@ struct typec_thunderbolt_data {
-> =20
->  #define   TBT_GEN3_NON_ROUNDED                 0
->  #define   TBT_GEN3_GEN4_ROUNDED_NON_ROUNDED    1
-> +#define TBT_CABLE_ROUNDED		BIT(19)
->  #define TBT_CABLE_OPTICAL		BIT(21)
->  #define TBT_CABLE_RETIMER		BIT(22)
->  #define TBT_CABLE_LINK_TRAINING		BIT(23)
-> --=20
-> 2.47.0.277.g8800431eea-goog
->=20
->=20
-
---RLz5mJDVYXyB69SQ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZ0DSjQAKCRBzbaomhzOw
-wkZvAP9YUwUqtJYVatouMpu3qUVFMaRJg1rnGFyCqyYzyt8bnwD/RarBErzGvVKG
-2GIfmjuCfDWuTW5U74cOleOqWkpscgM=
-=1bCC
------END PGP SIGNATURE-----
-
---RLz5mJDVYXyB69SQ--
+Alan Stern
 
