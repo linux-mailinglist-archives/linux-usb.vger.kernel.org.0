@@ -1,145 +1,114 @@
-Return-Path: <linux-usb+bounces-17809-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17810-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FCF59D696A
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2024 15:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 333129D6C41
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 00:49:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FC8A16165D
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2024 14:25:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FE4F161906
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2024 23:49:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 602A618E29;
-	Sat, 23 Nov 2024 14:25:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DB0B1A76CC;
+	Sat, 23 Nov 2024 23:48:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Orq5bQ0O"
+	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="W2gT9Kr6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from ci74p00im-qukt09081702.me.com (ci74p00im-qukt09081702.me.com [17.57.156.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7B01C695
-	for <linux-usb@vger.kernel.org>; Sat, 23 Nov 2024 14:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 922A6193092
+	for <linux-usb@vger.kernel.org>; Sat, 23 Nov 2024 23:48:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.156.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732371921; cv=none; b=qTEMSSGCvntc5heyWzEDb1GPPQzIh4xb4kfCsqNDHS2XUnMuwRckTN93eloB74ij//Q7pLYPF9K0pgYgmtDBx2zSwWE1aYYzqb5UngpAYtFKbEY/e5wM+fZXp1S1uHE6ZkqRq/LovFbztHDG5d3Ack4AAunn/lHbDCO5vbgVVrw=
+	t=1732405737; cv=none; b=AUP35Orrs7dOw3jUUTAkZydv9NPkQ8Vs6jkMWa4nNNhgU6DUJXCLQ54QPfJzVoBNvNCr7il71zpFCPxRh6d+4FQypX0QJc0+MNx04H2Pv+uckl0nktJiAsq1QUxE8FKCLVCEHnU1P756oFstdXVgp1BzCqLEa1h5BwG+H/gM9wQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732371921; c=relaxed/simple;
-	bh=d9paCNUtTAIclI8exRJEv8oo8tuTSJZ73JbFw9U2zos=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UElxgh8+ysAF+EjXZF8WjPM5OiqEpe2XqWi7sriOXac9rIc2PxWIOWQqKQ0pF+fXIJSrG06pZWfzMENQTa4sq0AgfOW3Tzcf+BiomCLqEI8THaYwR7YjwQj7ZZ2So34xWms6dKiLU/ZrxekZIOEnlP5MaleC1kDpyNQDIvs+fNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Orq5bQ0O; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ffa3e8e917so24927381fa.3
-        for <linux-usb@vger.kernel.org>; Sat, 23 Nov 2024 06:25:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732371918; x=1732976718; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XWc1hsS1vI2lcA0sYinoW65Qc486LVTBbqx/HlzYaT0=;
-        b=Orq5bQ0Oc5PVJJ2X11FsOHMx2akScnNETjzlq2ldaaItvlLVa5gF1Y9hHl35DzZtsJ
-         5VFh1cXIt5o6ABGelcd1y+ei4Nx3yynU0ayKoIFCd1R1RVUiiYrD6DpgRbqj6Qy9AWLa
-         WpQC3OgPKPqeIzexZj4c0zxUNs1EHroGe6iV2seEuyJW9DF3HX+AlKpesg0ULfF0GPcK
-         /hAL0+bSItPSVMcQSMAnynUGwxyCxn5nD8EucWCOxBy3mJHdUIybGo7kFtcyRAxN2Tov
-         syd/8hbSLB1+NDKHoCiIZmyNU/xWx+rz3RDU0XCHa955pgzn1HxPbhPbdkVm3/u9cuIy
-         Y+WA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732371918; x=1732976718;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XWc1hsS1vI2lcA0sYinoW65Qc486LVTBbqx/HlzYaT0=;
-        b=V52cR0WViCT+R5RC1hPCw4lLrlR7/D6qi1638lmzoch+fpMFTdee/Xar2CVwjKihgM
-         iCn2nPO2JnPoFDZ3iI/aPSFfRvh9Ui6PIIiA6VidARO+I/wKGwVV3EmQGItjKHs44Nj2
-         0j2CHWZgGVuTXhU06FLIheEy9hfl5+MkCZl2F8Dxgp3b1c9kI/ga+i5OHe/+6T+ih9bA
-         SsUEWOMpDg9n/3IRnjuk0vi1pFOPG+GAOKR9XwoBoaY9ymNQ6sjAzDY9BSEPV0eC6Utw
-         Y5s7Xd+o8TjQYorZSI2IBTpWhfrATpy32wkoNPP9ih7EjVwtF4+LTEwOOsoWEtb8iaHC
-         tDZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCIa3u4r0lVfkSGzTh/CRsiWoxD/Cb9Go4rG717GhsKqsx+2yBUirqZszesli7E4AhlysDMZNZdns=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwR6Uxeap0TGaUCqPw/x9av3AwIOtOMEWp+JUGwq6E8iVnL9xI+
-	9g18Vwz6c8Opfrd/E8nOJzvLvaDesDE+M9nt8hcCzc+J0Ao9EQ+S
-X-Gm-Gg: ASbGnctayg1Nsd2xITKD1Yven+V5jdBHKeMG6vCDsbBX4Sj2V3lMIMaspdJhNMHAoVN
-	8WvNNLRfC6dD0nqrHa84/WRpAzo9NWVHC/5d8g1qr5MQ3ImOQRbAZt2VyphcLLUybxZVmiVMIHz
-	e2Sm5zCRI0C6BNseL5CkTSgL0gOg/Qee0WraxOvnlBGSOcqUKMu9GXSXaiI4x7cGge/9lk4F8uG
-	ZRWOeU+a6d2jDqJlPcVXuMKYHe2jaAmVOLGBO5ak/FH2Y0QO/nXCQazB3Ih/Ja5yPY=
-X-Google-Smtp-Source: AGHT+IGJ7+Ilw8e8JmKBtqbb5WQ1WYjCBkXEHXGMHG0utjC3CtdioGCerOZQKvCBuWYE/s9GztHRIw==
-X-Received: by 2002:a2e:bccd:0:b0:2ff:9494:969b with SMTP id 38308e7fff4ca-2ffa6d20bebmr38521571fa.0.1732371917878;
-        Sat, 23 Nov 2024 06:25:17 -0800 (PST)
-Received: from foxbook (adqi121.neoplus.adsl.tpnet.pl. [79.185.142.121])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-2ffa538ea19sm9038281fa.95.2024.11.23.06.25.15
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sat, 23 Nov 2024 06:25:17 -0800 (PST)
-Date: Sat, 23 Nov 2024 15:25:12 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "a1134123566@gmail.com" <a1134123566@gmail.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
-Subject: Re: Inquiry about the f_tcm: Enhance UASP driver work
-Message-ID: <20241123152512.68853a5a@foxbook>
-In-Reply-To: <20241123000209.5qowmsx3dxianl64@synopsys.com>
-References: <20241122022146.ykwhz4byhy645njg@synopsys.com>
-	<20241122085755.29cebea1@foxbook>
-	<20241123000209.5qowmsx3dxianl64@synopsys.com>
+	s=arc-20240116; t=1732405737; c=relaxed/simple;
+	bh=vSQV+/6AcGbpdVdJuogQvs9SKIfTiqWVXooVwop6kls=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:From:Subject:
+	 In-Reply-To:Content-Type; b=FPaDEvPB4n2gEcfwL65fotZ2rg4tMWNo606YeekweCZ7HKNnoSVd+W7ckNQaTQQUCF0CyVcu8tZuIJx4VW5NGCRsrMxSiMS1xXBXZQl3MFDEAxS0IbW+YSLrijDKDp+I5BXKf7fkQC2Eubtfos/JoXm/+M+14O2uu7pvADIHCh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=W2gT9Kr6; arc=none smtp.client-ip=17.57.156.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
+	t=1732405734; bh=jJm8KXrM77W3wmhhCk4DVMm0FGYOcYIEqdy+y350Cwc=;
+	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type:
+	 x-icloud-hme;
+	b=W2gT9Kr6jAHZpAvXOXfPtFUxx5Cgb3Qyg5CNl3YT5pEdP/zELR/XLAJOt3fbtybVG
+	 Fm9x2ZSlzrV/qd3g7AdBLK+Zs3U1/R0hrc92HB5MYrZPW5z7jQN7Qjn3MzgiN+2wTB
+	 6feZYsH8FdjWwEck4+ahNS1H1Yw+wEaNJZOo7zHA7Dfyon6YHs/e/6pJH1vjJ9sOPp
+	 x19CV9EedyZypANwEhNRfKuywPCMvRpILYKdcRIHpH/+XIkuLY8Kp5N2e/+wk5sUzy
+	 1FUUT32tvzoAfFjXrub1mlqW3tYV70Tfi1zRsMOn33ccTNnQ6d+5UsOu/YuEcNnVE3
+	 dBxCElxAuhyBA==
+Received: from [192.168.40.217] (ci77p00im-dlb-asmtp-mailmevip.me.com [17.57.156.26])
+	by ci74p00im-qukt09081702.me.com (Postfix) with ESMTPSA id A21A63BC05A7;
+	Sat, 23 Nov 2024 23:48:51 +0000 (UTC)
+Message-ID: <b815626a-6190-4746-824f-089952b733ba@pen.gy>
+Date: Sun, 24 Nov 2024 00:48:48 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird Beta
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Georgi Valkov <gvalkov@gmail.com>, Simon Horman <horms@kernel.org>,
+ Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>
+References: <20240912211817.1707844-1-forst@pen.gy>
+ <vSvb6XcNhy1ZYogJpYDvryDWNVzCeaJlQ9vxV62ypbgpPPpEjdIxBnqHOM4j-Jxl3MSfkc94xRCv0808FN5cLA==@protonmail.internalid>
+ <fa3b39c4-8509-49ca-91cf-1536059b79d5@redhat.com>
+Content-Language: en-GB
+From: Foster Snowhill <forst@pen.gy>
+Autocrypt: addr=forst@pen.gy; keydata=
+ xjMEYB86GRYJKwYBBAHaRw8BAQdAx9dMHkOUP+X9nop8IPJ1RNiEzf20Tw4HQCV4bFSITB7N
+ G2ZvcnN0QHBlbi5neSA8Zm9yc3RAcGVuLmd5PsKPBBAWCgAgBQJgHzoZBgsJBwgDAgQVCAoC
+ BBYCAQACGQECGwMCHgEAIQkQfZTG0T8MQtgWIQTYzKaDAhzR7WvpGD59lMbRPwxC2EQWAP9M
+ XyO82yS1VO/DWKLlwOH4I87JE1wyUoNuYSLdATuWvwD8DRbeVIaCiSPZtnwDKmqMLC5sAddw
+ 1kDc4FtMJ5R88w7OOARgHzoZEgorBgEEAZdVAQUBAQdARX7DpC/YwQVQLTUGBaN0QuMwx9/W
+ 0WFYWmLGrrm6CioDAQgHwngEGBYIAAkFAmAfOhkCGwwAIQkQfZTG0T8MQtgWIQTYzKaDAhzR
+ 7WvpGD59lMbRPwxC2BqxAQDWMSnhYyJTji9Twic7n+vnady9mQIy3hdB8Dy1yDj0MgEA0DZf
+ OsjaMQ1hmGPmss4e3lOGsmfmJ49io6ornUzJTQ0=
+Subject: Re: [PATCH net-next v2] usbnet: ipheth: prevent OoB reads of NDP16
+In-Reply-To: <fa3b39c4-8509-49ca-91cf-1536059b79d5@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: CVgHIaUydYtUd1W2rZnQaiCkE8TrpBgk
+X-Proofpoint-ORIG-GUID: CVgHIaUydYtUd1W2rZnQaiCkE8TrpBgk
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
+ definitions=2024-11-23_19,2024-11-21_01,2024-09-30_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=432 suspectscore=0
+ phishscore=0 spamscore=0 bulkscore=0 malwarescore=0 adultscore=0
+ mlxscore=0 clxscore=1030 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2411230197
 
-On Sat, 23 Nov 2024 00:02:10 +0000, Thinh Nguyen wrote:
-> > Long delays I have seen mainly on some unfortunate pairings of HC
-> > and device (HW bugs?) which trigger unusual error conditions poorly
-> > handled by xhci_hcd. Try with dynamic debug on
-> > handle_transferless_tx_event(), if your kernel is recent enough for
-> > that to be a separate function.  
-> 
-> No, this delay is not a HW bug. When there's transaction error, the
-> xHCI driver will reset the endpoint. The packet sequence number is
-> reset and out of sync with the device. The next packet cannot proceed
-> until there's some sort of recovery. There's no usb_clear_halt() or
-> port reset immediately after a -EPROTO. The only recovery (port
-> reset) will happen is after a timeout.
+Hello Paolo,
 
-I think you are right. I tried to repro and I got this:
+Apologies for the delay. Very much appreciate the feedback! I've actually
+been working on and off on v3 based on your suggestions since I got your
+e-mail, but I wasn't happy with how I initially split the changes, put it
+in the drawer, blinked my eyes once and two months have passed, oops.
 
-[Nov23 14:01] xhci-pci-renesas 0000:03:00.0: Transfer error for slot 1 ep 6 on endpoint
-[  +0.000380] xhci-pci-renesas 0000:03:00.0: Transfer error for slot 1 ep 6 on endpoint
-[ +30.096820] sd 6:0:0:0: [sdb] tag#1 uas_eh_abort_handler 0 uas-tag 2 inflight: IN 
-[  +0.000006] sd 6:0:0:0: [sdb] tag#1 CDB: opcode=0x28 28 00 02 d0 30 08 00 02 00 00
-[  +0.012009] scsi host6: uas_eh_device_reset_handler start
-[  +0.114634] usb 13-2: reset SuperSpeed USB device number 6 using xhci-pci-renesas
-[  +0.017603] scsi host6: uas_eh_device_reset_handler success
-[  +0.000072] sd 6:0:0:0: [sdb] tag#1 UNKNOWN(0x2003) Result: hostbyte=0x07 driverbyte=DRIVER_OK cmd_age=30s
-[  +0.000003] sd 6:0:0:0: [sdb] tag#1 CDB: opcode=0x28 28 00 02 d0 30 08 00 02 00 00
-[  +0.000001] I/O error, dev sdb, sector 47198216 op 0x0:(READ) flags 0x80700 phys_seg 64 prio class 0
+On 2024-09-19 10:05, Paolo Abeni wrote:
+> This indeed looks like a fix. I suggest to post it for the net tree
+> including a suitable fixes tag.
 
-I will keep it running for a few more hours and if those timeouts
-keep happening I will have to conclude that I remembered wrong.
+Ack, will submit v3 shortly for the net tree.
 
-> > before resetting, but the whole endpoint is stopped and nothing
-> > moves forward. At least that's the impression I got, I was looking
-> > at other things.
+> Additionally since it looks like the patch addressed several issues, it
+> would be probably better to split it in a small series, each patch
+> addressing a single issue - and each patch with it's own fixed tag.
 
-But a completely stopped endpoint is *also* possible if you encounter
-COMP_INVALID_STREAM_ID. I see it after some command errors on this chip:
+Agreed, v3 will be split into smaller atomic changes to the best of
+my ability.
 
-13fd:5910 Initio Corporation
+Thank you!
 
-> Perhaps this can be enhanced in the future in the storage class
-> driver regarding -EPROTO recovery.
-
-It's a universal problem with xhci_hcd, it always resets the host
-sequence state on every error, which is against Linux convention,
-so nobody expects it and nobody handles it. It's nuts.
-
-One thing I'm going to try is patch it to stop doing this and see
-what happens.
-
-Regards,
-Michal
+-- 
+Best regards,
+Foster
 
