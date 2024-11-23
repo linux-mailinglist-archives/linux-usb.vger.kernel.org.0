@@ -1,92 +1,87 @@
-Return-Path: <linux-usb+bounces-17806-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17807-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 348849D6731
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2024 03:39:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21F329D6755
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2024 03:49:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA3411616A8
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2024 02:39:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B22616153E
+	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2024 02:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6E82D057;
-	Sat, 23 Nov 2024 02:39:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13BC745008;
+	Sat, 23 Nov 2024 02:49:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Nri/fbzk"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="VvixNpYJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+Received: from mail-qv1-f53.google.com (mail-qv1-f53.google.com [209.85.219.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F3B817
-	for <linux-usb@vger.kernel.org>; Sat, 23 Nov 2024 02:39:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB2BA46BF
+	for <linux-usb@vger.kernel.org>; Sat, 23 Nov 2024 02:49:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732329552; cv=none; b=oEj4AOHCF+7jvBvpHWJ2KhM3s1/l/+QikhANuFi5BrVi1AI6zgSA1MtUOfITBrcwCw+S+5DDdCVduJmLKLe+QOzZKUcEUnYgHPZHjWdXe4s+lu/ki0MQvbC6276I+wohncONC/8SmYYlSbBf1WwfnG5owUodanAsoEJTb8jKjjE=
+	t=1732330151; cv=none; b=Q0Gj5nOymDek6UxB+eXRJHcDnopcUBYZoNYExbKRJfl489IKtOC9690hprw558O4Iw8fe28mhnKRd9tUs+AihLWa1PRgQR1wTkdbVWOWW80UWUnh9wd1r8Fu9Cz/MI5nBkyaCAroalDXRkV7/jU2xi/Vxd8DgjeWtZY2Vl5ZhBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732329552; c=relaxed/simple;
-	bh=kC4rn+OA6GK1SCTmeP6i9rwpfxQ4jTwo8wE53O4k/Is=;
+	s=arc-20240116; t=1732330151; c=relaxed/simple;
+	bh=EvM9q/9s62JhxKR+Um9cKVjUkgBtPUTtDA3OU2gQZG0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dqQIT3ngr6FYZnW9x4ZyQmQZLuHo64LP4wAe5YRqtCgtr6eAJ1uGz/Vf0hFAlEaqetrabzuEUfcsf642eFcmf9HsDZGIgNE8lalTqCnOvdeY4yEWQyTQ87pGMC1CCHNeAT7XZnqwJsODx+m0zr9XQl5cDhBcVhNp29iNHZYPXrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Nri/fbzk; arc=none smtp.client-ip=209.85.160.179
+	 Content-Type:Content-Disposition:In-Reply-To; b=I0fmdMvTRRmnhTiSC5r2YJOdF/ex+tGGZPoSVzeI2qUGLqvjVpYKdj+AVUxqBzUfZv+AwMC7TrFepNjPM+CaumVZJQnZUBtZJ6gi8BOGfF1iPuXQ4SiZlEu+zfXTncP7PEq+VPtUS8Q58/8vCBrYMaimjGIdX3TTwLXghC/ZqYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=VvixNpYJ; arc=none smtp.client-ip=209.85.219.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-46097806aaeso18175461cf.2
-        for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2024 18:39:09 -0800 (PST)
+Received: by mail-qv1-f53.google.com with SMTP id 6a1803df08f44-6d419832bf5so22571826d6.1
+        for <linux-usb@vger.kernel.org>; Fri, 22 Nov 2024 18:49:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1732329549; x=1732934349; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1732330148; x=1732934948; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=flj1oheU2betwTSuRbz5hWYpT/8uyM4nLv4x9JJzr7g=;
-        b=Nri/fbzkV/ny/tNwCp2Fv5qQ6WuVP2e8O8zkeaIWqn36lBsXK3+Pu1qBwOyik2XQmh
-         llEkuRGkj0/gPeYJPxSmXC8CqYYZo8PC58hTjPjnW3Doae3eWrqOWoZh1Sl0/QE2YkjA
-         7DJykhrI5m+rn6KQX0pbkwPY1A/3EeFCirVhGf+ekGp7szPwGHIR/PdACh/17inhvsSx
-         Sh6EDofl48LlphuXTZDKZMi3YOtqTe/tEojFh+1ZideDGgE0ta2Lts934a4TjPxrr4Hr
-         X9zSssVihmGsMpUOaG3TQbb12/HjKWqS/UVjV00T5nRbui43gDsO5eqx7WbQASE8nw9g
-         1Pcg==
+        bh=abhTd5a2w9/ehx92sHtVDdZ5gpjrBHS3WBCQPos8PDM=;
+        b=VvixNpYJtndnCsk0TNMHd8YWLvBkDbWo5UNvRB/OHi/GRDEhvRCiyTIb0jqSW8dq5L
+         JdvyVaHvPe+v+k86A5lT9PMa/UsSPMOIUuuiJyclc7d2KLUo9immaxpkcKMxHj5DZTdW
+         ABs8RB1GL4wzfTcMN7YSbHMA5tgrFx91nU6DruEBsbkKEvxzzALNL5w91OfHrl1ypLsp
+         SFNZgmKUgaIbZQfD2m5Xb8hsqDWEC4FO3RWuNXVN4p0dyGSL8c4nlTLr4ebA3KnqZnch
+         /8EzAqAzM6dgzVpCuMJQyHKtzEgt/iMOxvxgY8XGS0AH0TXv6p/CB4m5yzqav+7Svc9O
+         0mww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732329549; x=1732934349;
+        d=1e100.net; s=20230601; t=1732330148; x=1732934948;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=flj1oheU2betwTSuRbz5hWYpT/8uyM4nLv4x9JJzr7g=;
-        b=DrHy1mNI0o4/sojjxDj89L+gOARfgbwmzXF53D7ECBIZqMR6SfhzWNbc8EE409eWbQ
-         z5+QlKqVTV8U3QzVBIBVRllvLNYwE0pLO4S3EQ7rrw7FQzwODakvL9/Sjbq9N1ZK4a5e
-         sbJ2IiYUgbcGKSioPPZ8nVIiYmGoxrJ1l/zb0BKF2vHYD/PGv1ssQqVcNfTnpwkOCS2f
-         409grRIKJiZfG/UTEiDH9fPITfe7DnlfYLJUzHx0BSqupwOgUslRwcg8DqT+ITM17NHW
-         oarF4YKsMm2HWnPRxXehiFc2scI6GK/jbsi2rcMWx/UI/6T/uOsSsYzeakr5GNI9gq7o
-         F8Hg==
-X-Forwarded-Encrypted: i=1; AJvYcCWNI/XaPUf+xZwzZQrv0UygELmu8KAVTkJLpb/wGVDmoWSHAtdzjRNeT4wyBI+iKnbQf55LeYeC/WI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWdAZ+LAvmojfq3FaZ58c0hHxk8j56JJjBZVmlpwB5Gfw0jd01
-	RycXBHj+Gq/EdySSJlWZk/MghJiyKU8N3U+6cj7qLgM69ZduAHsVZjIljT5vbw==
-X-Gm-Gg: ASbGncvtx1ScjrL5+2j9nicS6T12dQaDjh8CrLVr7rcwwxPGu2WZ58p8KypA1+4MFkL
-	G8AJ2zFBfzIY4KBXkL9XPJi4gSlkjvhe8TjUo3ukx4fWNa66HTnFYCTHl+1E78DQOU7ZN3wxgxo
-	7m1dR9A/Uv85fTbpuREnICDqu6Id6p/JmzoOJbXu4KFn+BnaOd/sRZ3Ux+3sn6iPcBbX8HQEa+u
-	Is2gh8X2h7v2cu3xmwvkYTk6cKCwtzGGjeq8R+vgNUY/sW2o4s=
-X-Google-Smtp-Source: AGHT+IHuWDSg57GwZrAgVbVvAHdtZLcRyFBoWKaUOeQHIr9/hVM5vpqALsn27vQsJOPQtWCjeUWVuA==
-X-Received: by 2002:a05:622a:107:b0:458:3a5a:94a5 with SMTP id d75a77b69052e-4653d52257dmr64607761cf.2.1732329548944;
-        Fri, 22 Nov 2024 18:39:08 -0800 (PST)
+        bh=abhTd5a2w9/ehx92sHtVDdZ5gpjrBHS3WBCQPos8PDM=;
+        b=BZ0BWJ+Ifc0/s3kJwk1lczUMSnRZzjHwGIbI9jgvfaNJIIWRMehK1zZXAbseJEKerZ
+         k3SIWpuo/7Nq45Sta+hr8ssK3VmjkklsJGELQPAEBtOTuS/gh3VGBbcAhnZQj84pWXdA
+         tLZe5YPUKTgdmVvtdef7jDuVKrkEs7sowwWyO0LFLwrPFRGg1crT4I/nmVsixig+T5Vg
+         9igEZnTYtG4qYMPO/x8DVzEsBbBB3RXmv+a58IX/LnFzICdHuNCrkl/FfEEa8orQY31r
+         uVZcHp/+gpOQXj+RKl+SNH9pM2f9q/jjmqPtaGM2VqZQ3cbRt1gImNymhS9I/GU/dxgN
+         sN0w==
+X-Forwarded-Encrypted: i=1; AJvYcCWLHmUXaCpBrY82SHf4s04oNRGLZ1xJTjehrfnBrQGt7KsO2SqIbVm8CBh/oSiLbUf43I6HxzSfmMQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfXNTbgGrbnghcVbNiTOIfiRmlsPvwHC5OzMjCk9pD/TFfgP+A
+	ad33thp1itd9bgr+d3n34+Pww1SHnJwQHIivMVKUWhMQGLEBp8H+peGwUk+Tpw==
+X-Gm-Gg: ASbGncvvkwKT6xBb+ZQmxadkFuqZ3DWTs0kxKdG4dn30RnJYhWbLJmXhNMPJ9NnyuAG
+	0mmvK1Od/7UJfa+UlmRwppNXyPyBODCNRxN6o6J398tbmonpLrOTnQqeHfOgwLWt+RS+XIHQ81X
+	bM5EKIcI3PUmPCHeAaByB8zq/xcztT5Z0CiSZ5fBo6Z+FO7eU8N/ahw0pSEL/5hHdhYaILlpWR2
+	Ly3IHedmO5U4CwKyD31pTl+/LHca6xpX5DK/6xottNpFjpQQl4=
+X-Google-Smtp-Source: AGHT+IHdPLBrBjH2j9xNxvkBEk8sTJPFaZSH3fITF1XDR4oEd4y2HvWLCAiQpsCUn6HcwllWgicMUQ==
+X-Received: by 2002:a05:6214:2508:b0:6d3:fa98:cf4a with SMTP id 6a1803df08f44-6d45138e0damr58629156d6.34.1732330148633;
+        Fri, 22 Nov 2024 18:49:08 -0800 (PST)
 Received: from rowland.harvard.edu ([2601:19b:681:fd10::7cc6])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4653c417f27sm19276201cf.51.2024.11.22.18.39.07
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d451ab576bsm17121256d6.59.2024.11.22.18.49.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Nov 2024 18:39:08 -0800 (PST)
-Date: Fri, 22 Nov 2024 21:39:05 -0500
+        Fri, 22 Nov 2024 18:49:08 -0800 (PST)
+Date: Fri, 22 Nov 2024 21:49:05 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: Re: How are halted endpoints supposed to be handled in Linux?
-Message-ID: <c682221a-2688-4938-89f7-923907f5a996@rowland.harvard.edu>
-References: <20241121001138.23a45f6c@foxbook>
- <20241121000216.kif557p3p6xyahax@synopsys.com>
- <b34b5ea0-2804-4692-bede-70ba9065c86c@rowland.harvard.edu>
- <20241121112653.06ba4ee5@foxbook>
- <0dd70803-a074-4859-8cc9-5bd210d12536@rowland.harvard.edu>
- <20241122135733.3d040c0d@foxbook>
- <eb3bae13-dd89-4c84-a4c9-4fb49348928c@rowland.harvard.edu>
- <20241123002535.368f1d72@foxbook>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>,
+	"a1134123566@gmail.com" <a1134123566@gmail.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>
+Subject: Re: Inquiry about the f_tcm: Enhance UASP driver work
+Message-ID: <e390b1b7-b79a-46c6-aadf-bf443b87f0f3@rowland.harvard.edu>
+References: <20241122022146.ykwhz4byhy645njg@synopsys.com>
+ <20241122085755.29cebea1@foxbook>
+ <20241123000209.5qowmsx3dxianl64@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -96,61 +91,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241123002535.368f1d72@foxbook>
+In-Reply-To: <20241123000209.5qowmsx3dxianl64@synopsys.com>
 
-On Sat, Nov 23, 2024 at 12:25:35AM +0100, Michał Pecio wrote:
-> On Fri, 22 Nov 2024 14:28:58 -0500, Alan Stern wrote:
-> > > > Note that some class drivers treat -EPROTO as a fatal error.  That
-> > > > is, they don't retry and their completion-resubmission loop breaks
-> > > > down.  
-> > > 
-> > > Well, that's on EHCI.  
+On Sat, Nov 23, 2024 at 12:02:10AM +0000, Thinh Nguyen wrote:
+> On Fri, Nov 22, 2024, Michał Pecio wrote:
+> > Hi,
 > > 
-> > No, it's the behavior of the class driver and is independent of the 
-> > type of host controller.
+> > > > I tried to use it on dwc3, though I fix some other problems, the host side xhci
+> > > > (ubuntu client) using fio for stress testing, and I encountered the following
+> > > > error on host:
+> > > > [18836.092159] xhci_hcd 0000:00:0d.0: Transfer error for slot 3 ep 1 on
+> > > > endpoint
+> > > > [18836.092211] sd 0:0:0:0: [sda] tag#11 data cmplt err -71 uas-tag 1 inflight:
+> > > > CMD
+> > > > [18836.092213] sd 0:0:0:0: [sda] tag#11 CDB: Write(10) 2a 00 02 5e 31 00 00 01
+> > > > 00 00
+> > > > .....more and mores....
+> > > > [18867.369118] scsi host0: uas_eh_device_reset_handler start [18867.453796] usb
+> > > > 2-3.2: reset SuperSpeed USB device number 4 using xhci_hcd
+> > > > and the gadget side is keep resetting configfs and printing wait_for_completion
+> > > > timeout (since dwc3 have )
+> > > > 
+> > > > I am not sure whether this is due to the stream exception of dwc3 or some
+> > > > logical in f_tcm and target.
+
+Homura Akemi: You can try using usbmon to record the transfers between 
+the host and the f_tcm target.  Seeing that data might help explain 
+what's going on.
+
+> > > 
+> > > The error is -71. This is transaction error (could be a CRC error). It
+> > > could be due to the host, device hardware, electrical interference, or
+> > > even the cable. No logical issue from software.
+> > 
+> > A transaction error is a transaction error, but waiting 30 seconds for
+> > UAS to reset the device afterwards looks wrong. I seem to recall seeing
+> > sporadic transaction errors which triggered the reset instantly.
 > 
-> xHCI has been doing things differently for over a decade as far as I
-> see, and it seems to implement the usb_unlink_urb() rules absolutely
-> literally (restart when everything is given back), except for the BH
-> delay problem added later.
-> 
-> Maybe it was a common "idiom" before xHCI, but it seems to rely on
-> undocumented behavior, and other undocumented behaviors exist today
-> that sloppy drivers might depend on.
+> That's not what happening. I don't recall the storage class handles
+> transaction error as such. It just waits for the scsi command timeout.
 
-I think you're misunderstanding what I wrote.  I meant that several 
-class drivers have completion handlers that look like this:
+For what it's worth, usb-storage handles transaction errors right away, 
+without waiting for the SCSI timeout.  It initiates a USB port reset, 
+which of course clears out all the messed-up state on both the device 
+and the controller.
 
-	urb_complete(struct usb_urb *urb, int status)
-	{
-		switch (status) {
-		...
-		case -EPROTO:
-			dev_warn(dev, "USB communication error\n");
-			return;
-		...
-		}
-
-		/* Process data from the URB */
-		...
-		usb_fill_bulk_urb(urb, ....);
-		usb_submit_urb(urb);
-	}
-
-The driver works by resubmitting a single URB over and over again.  But 
-when there's a -EPROTO error, it doesn't resubmit and the loop stops.  
-The driver doesn't do anything more after that; it becomes useless.
-
-This behavior has nothing to do with EHCI or xHCI or any other type of 
-host controller.  And overall it works, because -EPROTO errors hardly 
-ever occur except when a device is unplugged.
-
-> So I don't know, it seems risky either way.
-
-This approach is only a little risky, in the sense that the driver 
-might die in a situation where it didn't really need to -- but that 
-outcome is most unlikely.  There is no risk of further communication 
-errors or data corruption.
+I don't know about uas, though.
 
 Alan Stern
 
