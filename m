@@ -1,46 +1,46 @@
-Return-Path: <linux-usb+bounces-17826-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17827-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A817E9D72E6
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 15:23:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D7D649D7260
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 15:07:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C920B2473C
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 13:24:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FB7DB3840C
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 13:26:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2986D1FBCBE;
-	Sun, 24 Nov 2024 12:57:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9474E1FCF64;
+	Sun, 24 Nov 2024 12:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B6h8vk/m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jXyU5+M2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FABC1FBCB4;
-	Sun, 24 Nov 2024 12:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 122791E0DF8;
+	Sun, 24 Nov 2024 12:58:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732453028; cv=none; b=GcRiTrSuOHCVqvWZtOpu0EjLCVb1ZUGI+nQuIXxXHrGjjMObNAbbVbcPg2pK/GxcW+W3GbjSd9HWnGVocZulL0vP9FFj06Ik9apgJ5jDOQw/CVn3bLL9onQdyV5UbsegtCb26ApvB5h9DsFHNWFB0rG8587Tcvbp7FYC3kA17wE=
+	t=1732453085; cv=none; b=EDBalOcGZPVtuSguLj+OIE66Rpnfeao/t19xDigXshNNcaKt3RBMiXInJ7L4+3OdMmhmkdu2TZ2pMhYgFRpTUxAJ/rDFAFJAEOS8VeaTzPUrmhVYAsl/quTqhN3HOYPflC3YWZLrJMmxBC3LinC05gZk/11j116yS0l7BFadB3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732453028; c=relaxed/simple;
-	bh=xdM+kv2HWu02jw89xKzwMEcH37/DzEPvCJtaXqCpG5E=;
+	s=arc-20240116; t=1732453085; c=relaxed/simple;
+	bh=LholdvR3UhcQdCCDyRLxrggGRbNmQ48l0Ti9x/4pk/o=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CQgAIC89l8sYrCIaAhSr+F5z/UpErbt4jeon4zvVPptiaxxiyu3BVoCcX42XVNkxwA8Up5BBdmQXJ5ATb+11fUPq6FfVPmKLrU6EQTCLsH2iFAXaUy57b6BCAd/NtzwTdfRzzgsbIt8k7zQNHoBWf1rEqpXmqPeYCwh+Y3bH/wM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B6h8vk/m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21931C4CECC;
-	Sun, 24 Nov 2024 12:57:05 +0000 (UTC)
+	 MIME-Version; b=FOjm1UJMFfNxO0JdVA7fR9kD8aCQvKnGkVf6B21H5vNPzr2buHgu+lmCMaMFR3QzJtPl54kWid4sGa6CRqYKk2Jfi+ewVil05LVNHM7/nIuTES5Nr2Faw3IE1EzTggRFzmT5oV0a8n76s95VEdDEfFfLSMw82N9P+i+FPMIOUWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jXyU5+M2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30374C4CECC;
+	Sun, 24 Nov 2024 12:58:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732453028;
-	bh=xdM+kv2HWu02jw89xKzwMEcH37/DzEPvCJtaXqCpG5E=;
+	s=k20201202; t=1732453084;
+	bh=LholdvR3UhcQdCCDyRLxrggGRbNmQ48l0Ti9x/4pk/o=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=B6h8vk/mHJ5Wz9uc+rV2eQSUW8Khlj47mZxP8yqioLXVjxa8if+rwRMLYpH0h8OoT
-	 VJKj7AxWfJxXaeYG1RAa6QLQNrYZvyCkzSAZqh+02y7ASbjfY3udXtkLMXvXWzEKjh
-	 Md+gSTeyosqZZDnsnPZcmWkHFWqdqJQq64WC9uhoXS/WbnKCe1ZYpJBLd1YbGv6H8Z
-	 s7ejdb+MrRByGGByBJO/LQF1nrabV4st4l9zXW3uP1V4H+xb6T7c39AwQMxq4c7DWi
-	 FKGOPGpSQYBRt/JTzgmQrQFT9xpJll19aFXfIAeBcfnwso70BqWnxFUmXOHavGgomg
-	 KhAOXKO4UROLA==
+	b=jXyU5+M280T/ECn2NUNsRTOkmoTCVt9Ly/I41QmMHusfNiNOSd7+G62stDoxCX7Qb
+	 6A9HCjpEp56Jn/tgq47YHdLS/hJi9bKCSWjoj/0Z552aUuKi8hsRmArlWDfpvXhJZL
+	 yJZiEBBpTjMsC5xJrbkXBErMWf0meTY+f6Jq3Af/434tEQ6ZHMrVYZyXMh3bSTQ/Zs
+	 LYnhBKmfjh/N8Q9m93bFWA9FQG4aE+1ewQLykH48rLmj7RXIrPLuYsd7sGM3fMq7AV
+	 pM9QrrpaaH8O5Z8QIW7Jf7L85yX5uGKqgeQ2cuX3tcqacltG0J5PeQJHapiGpkAOqW
+	 f8l7eW5N4hnQA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	robert.jarzmik@free.fr,
 	linux-arm-kernel@lists.infradead.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 7/7] USB: gadget: pxa27x_udc: Avoid using GPIOF_ACTIVE_LOW
-Date: Sun, 24 Nov 2024 07:55:52 -0500
-Message-ID: <20241124125636.3340867-7-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 6/6] USB: gadget: pxa27x_udc: Avoid using GPIOF_ACTIVE_LOW
+Date: Sun, 24 Nov 2024 07:57:08 -0500
+Message-ID: <20241124125742.3341086-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241124125636.3340867-1-sashal@kernel.org>
-References: <20241124125636.3340867-1-sashal@kernel.org>
+In-Reply-To: <20241124125742.3341086-1-sashal@kernel.org>
+References: <20241124125742.3341086-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.173
+X-stable-base: Linux 5.10.230
 Content-Transfer-Encoding: 8bit
 
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
@@ -88,10 +88,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 4 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/usb/gadget/udc/pxa27x_udc.c b/drivers/usb/gadget/udc/pxa27x_udc.c
-index 282b114f382f8..ec5e903cfa675 100644
+index cfaeca457fa72..001f666eefffe 100644
 --- a/drivers/usb/gadget/udc/pxa27x_udc.c
 +++ b/drivers/usb/gadget/udc/pxa27x_udc.c
-@@ -2355,18 +2355,19 @@ static int pxa_udc_probe(struct platform_device *pdev)
+@@ -2356,18 +2356,19 @@ static int pxa_udc_probe(struct platform_device *pdev)
  	struct pxa_udc *udc = &memory;
  	int retval = 0, gpio;
  	struct pxa2xx_udc_mach_info *mach = dev_get_platdata(&pdev->dev);
