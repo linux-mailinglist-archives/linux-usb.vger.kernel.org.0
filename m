@@ -1,123 +1,233 @@
-Return-Path: <linux-usb+bounces-17816-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17817-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A67D79D6C4E
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 00:55:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D8729D6CA0
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 06:03:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CBB62815F5
-	for <lists+linux-usb@lfdr.de>; Sat, 23 Nov 2024 23:55:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B825A2815DA
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 05:03:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EC7D1AC448;
-	Sat, 23 Nov 2024 23:55:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="NgvUv7fr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB0D43D3B8;
+	Sun, 24 Nov 2024 05:03:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pv50p00im-ztdg10012001.me.com (pv50p00im-ztdg10012001.me.com [17.58.6.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DF9F1AB517
-	for <linux-usb@vger.kernel.org>; Sat, 23 Nov 2024 23:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02311FDA
+	for <linux-usb@vger.kernel.org>; Sun, 24 Nov 2024 05:03:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732406144; cv=none; b=Xd/Mv9b70ZECsFNTND6nB+2GxR/qGg6PqeLZB4E4bEVnhY7dcYWLP935tuaCYjLP8eazSqisqt6JTaMq2uFfr9B9ChEwxheeZZbRgVkUPihf9PHLBUGraVNQHg62kFdD12t4vCAEh8FzhPbOxc73LqazQTru0VB8Jx3AjFWqOzk=
+	t=1732424603; cv=none; b=FOWAjmclweIUKPmP9fZp/ibfebGASiaFyv6Cf36QYo8ReBwhVj/35XlOK99VzBmm9AvcX6EXeyoz1rqjkVMqpRFBewVFcEf0h86qpaT7/rABudybHmD0XdaM7xEHa7djAfn8KlVn8ITKIHVR9zB/ZzKdVwfZQAHLPHr3vR2RbJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732406144; c=relaxed/simple;
-	bh=oXQZ2VDpv1/BrJk0Vu+5FPKR77QM9/qErsjYaXDm+wc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iePwf9oNbngqZbS1/taNmdaZ86ZN3+M43M5CREpYfHSFLzxuyjmsOkgNQd+/5uhFKb+RBtSzrajWFU1LzSvfVBNSEUT+ooZtL7rxxNajY0BW6yVbcI5GkjClgp5XdUC1rZNxqMO8kKqoDe+S2TPq4s5HPHMzgNa1T5m0Wgd+bLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=NgvUv7fr; arc=none smtp.client-ip=17.58.6.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
-	t=1732406142; bh=NcPVdecsLpad7zKtLOlVRkPyAjVC/v4Y7h1/Q3t03Cw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme;
-	b=NgvUv7frQv9OaDXSaqH1CAyxylMkiYMw3Th7U3c6PBp7wSqntGPyp0MTGec0eyQrB
-	 DrrZPGPIlZvCuo1JZO7q+eLpkMgtMVOzkdY+OFZoJdVHZ5T1nzFTahR9cDGYGZr0hz
-	 4b9trRyKm77TBkQua7+A+/WIvuYF05vo9tqlMPmy6F4s7d4uGUlfT7GHiSfA7rFdWA
-	 mud+jb24BuqnwOsk+E7gn0l7/BZZqjzFCLUEgmnU194ypkP1WUYZMdRXUevrC2V8aZ
-	 2Lu57bidaWfzuEGi8u42EtlzYnmQcNyICjcUzy1SkUhEAxAuLAmnS8O15IDufWrbVb
-	 9QfNkT6qpd6IA==
-Received: from fossa.se1.pen.gy (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-ztdg10012001.me.com (Postfix) with ESMTPSA id ED8CCA0179;
-	Sat, 23 Nov 2024 23:55:37 +0000 (UTC)
-From: Foster Snowhill <forst@pen.gy>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>
-Cc: Georgi Valkov <gvalkov@gmail.com>,
-	Simon Horman <horms@kernel.org>,
-	Oliver Neukum <oneukum@suse.com>,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH net v3 6/6] usbnet: ipheth: document scope of NCM implementation
-Date: Sun, 24 Nov 2024 00:54:32 +0100
-Message-ID: <20241123235432.821220-6-forst@pen.gy>
-X-Mailer: git-send-email 2.45.1
-In-Reply-To: <20241123235432.821220-1-forst@pen.gy>
-References: <20241123235432.821220-1-forst@pen.gy>
+	s=arc-20240116; t=1732424603; c=relaxed/simple;
+	bh=Dn5sQDgGxJJ6YiNXUo+XpXRi6AW9tI9kR/PSmTOSsws=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=YG57MSCwvbzTQKYucvHiimHa+gRlPl5QAgBDdul5MB+/bY4qtvap7mNncLYYQDuZACysipWP5Gl+O1thZCnE2XwjDTJTJSsTf3vof22t2RpmioUQlRNRQUFsUoffO/1Tzys/kCf3ujaA6qSH1UqkTWT+ikf7xK1KoKRswsAUl7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a7634d8538so28879575ab.0
+        for <linux-usb@vger.kernel.org>; Sat, 23 Nov 2024 21:03:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732424601; x=1733029401;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hPJlpwU0KFvqi6U6GhuJwlXkw8FGPfP92KSasoIAGFk=;
+        b=mLg+gK9+3sL51bgeiY+tkTDgktDlCDb7yICbvjWuTUjZ+Wu8+hSQdAY4swNbStKT/r
+         Vc0MR52JYP6MzINtcKxfZ2LH+RVc8s43xzz2bM18R3F97pdQedX6dieK8edcy623UH1A
+         6+bxGbkToOHHw+EK1UnxRgXDcm1XcmmK1IE4DHv5mSrqkHgPPuOzTqDCblPrKr0IBL1n
+         jXX+7U8TB/rFq8r5P/HY1CaciL73YA4n1uE5iqpLp67sEcIQtPaJMk7cj4XnhnU9am6r
+         ZT+zZsl0k/d05KCr+mBxMMrinCtZKpcUZfRyZPTbmsgxJPrF8zD9kYmYeviPp3RNI4VM
+         MiSA==
+X-Forwarded-Encrypted: i=1; AJvYcCVMmyA45KgNWfOpK0LQsAQB76I+Una0BCLhDMGk7REuEhXU5qwK0CpnCgFS6RqCrYoGyao2NqS1llc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzikGemO/uF/ROfUHDT3jGeN0IMafppJ1olWrAzAnl1GKlw6bVK
+	q7R54CYXH70+AqGqObHt4yzK5wagEly/96B4MXIQz6p0dGN+pCEPlzW5lkflftc7nCNMrV0DTGs
+	BnLaFumsN0YxLdLsFIilbMBA1Hg//pXDMLxCHc50Cu826Xutc8VCkFFA=
+X-Google-Smtp-Source: AGHT+IHtwYnwlpfoGFlnrGXp39OR37CMWOHKh8rUpmnAh6XL16+CL2fO60pdoDbwljgNWEYOnk1VMlLF/56YFknrL+1nb6WndZHb
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 6Ni2wP-kL7_kiiZ8VNi83iHAvl3uEL17
-X-Proofpoint-ORIG-GUID: 6Ni2wP-kL7_kiiZ8VNi83iHAvl3uEL17
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-11-23_19,2024-11-21_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=925 malwarescore=0 clxscore=1030 spamscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2411230200
+X-Received: by 2002:a05:6e02:1a4f:b0:3a7:9860:d7e5 with SMTP id
+ e9e14a558f8ab-3a79afda47bmr87116365ab.23.1732424601161; Sat, 23 Nov 2024
+ 21:03:21 -0800 (PST)
+Date: Sat, 23 Nov 2024 21:03:21 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6742b399.050a0220.1cc393.0033.GAE@google.com>
+Subject: [syzbot] [usb?] general protection fault in dummy_timer (2)
+From: syzbot <syzbot+faf3a6cf579fc65591ca@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Clarify that the "NCM" implementation in `ipheth` is very limited, as
-iOS devices aren't compatible with the CDC NCM specification in regular
-tethering mode.
+Hello,
 
-For a standards-compliant implementation, one shall turn to
-the `cdc_ncm` module.
+syzbot found the following issue on:
 
-Signed-off-by: Foster Snowhill <forst@pen.gy>
+HEAD commit:    237d4e0f4113 usb: typec: tcpm: Add support for sink-bc12-c..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=114e76e8580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=358c1689354aeef3
+dashboard link: https://syzkaller.appspot.com/bug?extid=faf3a6cf579fc65591ca
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/1d16b8e77d72/disk-237d4e0f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9636263bfc8f/vmlinux-237d4e0f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/36d0ba4d90fb/bzImage-237d4e0f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+faf3a6cf579fc65591ca@syzkaller.appspotmail.com
+
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000040: 0000 [#1] PREEMPT SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000200-0x0000000000000207]
+CPU: 1 UID: 0 PID: 13433 Comm: syz-executor Not tainted 6.12.0-rc6-syzkaller-00153-g237d4e0f4113 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+RIP: 0010:strcmp+0x5b/0xb0 lib/string.c:266
+Code: fa 48 c1 e8 03 83 e2 07 42 0f b6 04 28 38 d0 7f 04 84 c0 75 58 0f b6 6b ff 4c 8d 66 01 48 89 f0 48 89 f2 48 c1 e8 03 83 e2 07 <42> 0f b6 04 28 38 d0 7f 04 84 c0 75 2c 41 3a 6c 24 ff 74 ae 19 c0
+RSP: 0018:ffffc900001b8850 EFLAGS: 00010046
+RAX: 0000000000000040 RBX: ffffffff8746fac1 RCX: ffffffff8fb08b60
+RDX: 0000000000000000 RSI: 0000000000000200 RDI: ffffffff8746fac0
+RBP: 0000000000000066 R08: 0000000000000001 R09: dffffc0000000000
+R10: ffffffff8fb08b70 R11: ffffffff8fb08b60 R12: 0000000000000201
+R13: dffffc0000000000 R14: 00000000000001f2 R15: ffffffff934a7980
+FS:  0000555591f43500(0000) GS:ffff8881f5900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000110c30aef3 CR3: 00000001166a8000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ count_matching_names kernel/locking/lockdep.c:875 [inline]
+ register_lock_class+0x63b/0x1240 kernel/locking/lockdep.c:1340
+ __lock_acquire+0x135/0x3ce0 kernel/locking/lockdep.c:5077
+ lock_acquire.part.0+0x11b/0x380 kernel/locking/lockdep.c:5825
+ __raw_spin_lock_irqsave include/linux/spinlock_api_smp.h:110 [inline]
+ _raw_spin_lock_irqsave+0x3a/0x60 kernel/locking/spinlock.c:162
+ complete_with_flags kernel/sched/completion.c:20 [inline]
+ complete+0x1d/0x200 kernel/sched/completion.c:47
+ transfer drivers/usb/gadget/udc/dummy_hcd.c:1522 [inline]
+ dummy_timer+0x1c04/0x3930 drivers/usb/gadget/udc/dummy_hcd.c:1977
+ __run_hrtimer kernel/time/hrtimer.c:1691 [inline]
+ __hrtimer_run_queues+0x20a/0xae0 kernel/time/hrtimer.c:1755
+ hrtimer_run_softirq+0x17d/0x350 kernel/time/hrtimer.c:1772
+ handle_softirqs+0x206/0x8d0 kernel/softirq.c:554
+ __do_softirq kernel/softirq.c:588 [inline]
+ invoke_softirq kernel/softirq.c:428 [inline]
+ __irq_exit_rcu kernel/softirq.c:637 [inline]
+ irq_exit_rcu+0xac/0x110 kernel/softirq.c:649
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1049 [inline]
+ sysvec_apic_timer_interrupt+0x90/0xb0 arch/x86/kernel/apic/apic.c:1049
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:lock_acquire.part.0+0x155/0x380 kernel/locking/lockdep.c:5790
+Code: b8 ff ff ff ff 65 0f c1 05 90 1f cf 7e 83 f8 01 0f 85 d0 01 00 00 9c 58 f6 c4 02 0f 85 e5 01 00 00 48 85 ed 0f 85 b6 01 00 00 <48> b8 00 00 00 00 00 fc ff df 48 01 c3 48 c7 03 00 00 00 00 48 c7
+RSP: 0018:ffffc9001499f500 EFLAGS: 00000206
+RAX: 0000000000000046 RBX: 1ffff92002933ea1 RCX: 0000000000000001
+RDX: 0000000000000001 RSI: ffffffff8727f520 RDI: ffffffff8746ec80
+RBP: 0000000000000200 R08: 0000000000000000 R09: fffffbfff1f559b4
+R10: ffffffff8faacda7 R11: 0000000000000000 R12: 0000000000000000
+R13: ffffffff88ebb140 R14: 0000000000000000 R15: 0000000000000000
+ rcu_lock_acquire include/linux/rcupdate.h:337 [inline]
+ rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ page_ext_get+0x3a/0x310 mm/page_ext.c:525
+ page_table_check_set mm/page_table_check.c:114 [inline]
+ page_table_check_set+0x285/0x9c0 mm/page_table_check.c:102
+ __page_table_check_ptes_set+0x44c/0x710 mm/page_table_check.c:225
+ page_table_check_ptes_set include/linux/page_table_check.h:74 [inline]
+ set_ptes include/linux/pgtable.h:267 [inline]
+ __copy_present_ptes mm/memory.c:969 [inline]
+ copy_present_ptes+0xc03/0x3540 mm/memory.c:1052
+ copy_pte_range mm/memory.c:1167 [inline]
+ copy_pmd_range mm/memory.c:1255 [inline]
+ copy_pud_range mm/memory.c:1292 [inline]
+ copy_p4d_range mm/memory.c:1316 [inline]
+ copy_page_range+0xbd7/0x2420 mm/memory.c:1414
+ dup_mmap kernel/fork.c:746 [inline]
+ dup_mm kernel/fork.c:1675 [inline]
+ copy_mm kernel/fork.c:1724 [inline]
+ copy_process+0x8236/0x91e0 kernel/fork.c:2374
+ kernel_clone+0xfd/0x960 kernel/fork.c:2786
+ __do_sys_clone+0xba/0x100 kernel/fork.c:2929
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7ff90ac55093
+Code: 1f 84 00 00 00 00 00 64 48 8b 04 25 10 00 00 00 45 31 c0 31 d2 31 f6 bf 11 00 20 01 4c 8d 90 d0 02 00 00 b8 38 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 35 89 c2 85 c0 75 2c 64 48 8b 04 25 10 00 00
+RSP: 002b:00007ffc36e1b4e8 EFLAGS: 00000246 ORIG_RAX: 0000000000000038
+RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007ff90ac55093
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000001200011
+RBP: 0000000000000000 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000555591f437d0 R11: 0000000000000246 R12: 0000000000000001
+R13: 00000000001091bd R14: 0000000000108c37 R15: 00007ffc36e1b670
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:strcmp+0x5b/0xb0 lib/string.c:266
+Code: fa 48 c1 e8 03 83 e2 07 42 0f b6 04 28 38 d0 7f 04 84 c0 75 58 0f b6 6b ff 4c 8d 66 01 48 89 f0 48 89 f2 48 c1 e8 03 83 e2 07 <42> 0f b6 04 28 38 d0 7f 04 84 c0 75 2c 41 3a 6c 24 ff 74 ae 19 c0
+RSP: 0018:ffffc900001b8850 EFLAGS: 00010046
+RAX: 0000000000000040 RBX: ffffffff8746fac1 RCX: ffffffff8fb08b60
+RDX: 0000000000000000 RSI: 0000000000000200 RDI: ffffffff8746fac0
+RBP: 0000000000000066 R08: 0000000000000001 R09: dffffc0000000000
+R10: ffffffff8fb08b70 R11: ffffffff8fb08b60 R12: 0000000000000201
+R13: dffffc0000000000 R14: 00000000000001f2 R15: ffffffff934a7980
+FS:  0000555591f43500(0000) GS:ffff8881f5900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000110c30aef3 CR3: 00000001166a8000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	fa                   	cli
+   1:	48 c1 e8 03          	shr    $0x3,%rax
+   5:	83 e2 07             	and    $0x7,%edx
+   8:	42 0f b6 04 28       	movzbl (%rax,%r13,1),%eax
+   d:	38 d0                	cmp    %dl,%al
+   f:	7f 04                	jg     0x15
+  11:	84 c0                	test   %al,%al
+  13:	75 58                	jne    0x6d
+  15:	0f b6 6b ff          	movzbl -0x1(%rbx),%ebp
+  19:	4c 8d 66 01          	lea    0x1(%rsi),%r12
+  1d:	48 89 f0             	mov    %rsi,%rax
+  20:	48 89 f2             	mov    %rsi,%rdx
+  23:	48 c1 e8 03          	shr    $0x3,%rax
+  27:	83 e2 07             	and    $0x7,%edx
+* 2a:	42 0f b6 04 28       	movzbl (%rax,%r13,1),%eax <-- trapping instruction
+  2f:	38 d0                	cmp    %dl,%al
+  31:	7f 04                	jg     0x37
+  33:	84 c0                	test   %al,%al
+  35:	75 2c                	jne    0x63
+  37:	41 3a 6c 24 ff       	cmp    -0x1(%r12),%bpl
+  3c:	74 ae                	je     0xffffffec
+  3e:	19 c0                	sbb    %eax,%eax
+
+
 ---
-v3:
-    This comment was part of the commit message for v2. With v3, given
-    how the patches are split up, it makes more sense to add the comment
-    directly in code.
-v2: https://lore.kernel.org/netdev/20240912211817.1707844-1-forst@pen.gy/
-    No code changes. Update commit message to further clarify that
-    `ipheth` is not and does not aim to be a complete or spec-compliant
-    CDC NCM implementation.
-v1: n/a
----
- drivers/net/usb/ipheth.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index 122557b5e5a9..e906ec4b7969 100644
---- a/drivers/net/usb/ipheth.c
-+++ b/drivers/net/usb/ipheth.c
-@@ -218,6 +218,14 @@ static int ipheth_rcvbulk_callback_legacy(struct urb *urb)
- 	return ipheth_consume_skb(buf, len, dev);
- }
- 
-+/* In "NCM mode", the iOS device encapsulates RX (phone->computer) traffic
-+ * in NCM Transfer Blocks (similarly to CDC NCM). However, unlike reverse
-+ * tethering (handled by the `cdc_ncm` driver), regular tethering is not
-+ * compliant with the CDC NCM spec, as the device is missing the necessary
-+ * descriptors, and TX (computer->phone) traffic is not encapsulated
-+ * at all. Thus `ipheth` implements a very limited subset of the spec with
-+ * the sole purpose of parsing RX URBs.
-+ */
- static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
- {
- 	struct usb_cdc_ncm_nth16 *ncmh;
--- 
-2.45.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
