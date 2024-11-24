@@ -1,127 +1,121 @@
-Return-Path: <linux-usb+bounces-17829-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17830-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37F119D7816
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 21:30:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 008029D787B
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 23:14:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83725B2297F
-	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 20:30:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B109C282A74
+	for <lists+linux-usb@lfdr.de>; Sun, 24 Nov 2024 22:14:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0439814F136;
-	Sun, 24 Nov 2024 20:30:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52958165F1E;
+	Sun, 24 Nov 2024 22:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D8Z2M9KY"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="S/dhdC82"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D53901514CC;
-	Sun, 24 Nov 2024 20:30:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 588042500C2
+	for <linux-usb@vger.kernel.org>; Sun, 24 Nov 2024 22:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732480210; cv=none; b=DlAcjKaKetmv69KXbX34F7gXt6QW/zmDrRoFSM6Z3nxNv9y6YJB/MbHt9NzQRVH5N5rbsNDjl5kUO8MOvj1cUzjHJ7Y7rWIti5hqJhKMIpey9AvRTEZ7AIfv9pDULpo5H40qz9iCIlqmp3//tly0CKoOf7GI7+HFsL6/pyk0Swo=
+	t=1732486490; cv=none; b=ERjKr2WWmPbT1n4UjKmE9V1YC1w3cVHiuPCmkyea+/bhYLilanKOYQfPk+3sET4z2KtOms5/V5pcI3uBPneWqZImroFSkpxTaxjSq5rQUlCt/yibVdYpgDHDsC6F39iopI7WG4t1k9lI+BJ0QoH+kTVEEnZveu2yXUkA4BIjw8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732480210; c=relaxed/simple;
-	bh=b0zJ+1w0rSXrcUfJFVsZHYWclzP9koqNBleKNvcaNI4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=goMNV+/bdth+yhr7ZPNRNB7JZvIPdzQnDmUQYD6KTHlN1Q+ZkgMCyZuPrFRqIa3wTVunzhIQM/at5BhFqEW8MkHfapCWfiFsn+KdnHp1OHUyw2w+65H3Z/Ghd5aIUAEpSJ5nFzmj/8sOTW2Qwrxu2n5piKTvL8fR0xknRCs6ThU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D8Z2M9KY; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-38242abf421so2626943f8f.2;
-        Sun, 24 Nov 2024 12:30:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732480207; x=1733085007; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uEHD4xg3fpEqhVxo7h0zl2GuAd3y3pi4wZYTTu+6Nqg=;
-        b=D8Z2M9KYB+eo8IapsoInTPJU8zABc8UO0S4MWcvrY69uIQcW2hbia3zlNuibCGgEXh
-         OBS4RM1em4KQsZcKd4/hs/yFEG1Ewz8W6Q9we6VfwiBnGg3M5SNZCg94pcd5iZ5ffqem
-         +8mvN1HYtqQ3e2AbGky1tCyEK6o4NJCZwPpHTCETyKuL2FNrHM4fsXpe+S39gU+WbLoh
-         yy9qG1O9NOagEh6hXideR/0nDSVJW8ls775Ak+nrTeSWu7XKOA8XbkaiCijhwErrFapM
-         ifHqIWoNYQItEo1zCL1dTicg/5UME6gzRhC4yd1DGIzLI/51xxkLL1PDTElfZa99ggtq
-         sIcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732480207; x=1733085007;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uEHD4xg3fpEqhVxo7h0zl2GuAd3y3pi4wZYTTu+6Nqg=;
-        b=eL803ZhMk3ptQDAFh4GCQZJNDK954RTDyABWACd2WlCKz7Sh0kVQeTR7bBjSHND88Z
-         o/Zc+ZJCuoIIHcG+BE7G2dlmshDtfUUjVmd8Z//N6ULPkh/FDp2Sq6JBtYxOMpWy8TSy
-         qp87A4U6RDJl4/r6KeX5RX3kweNFy30HqtJZDSrC/udY+Jlu60eW3Dv5V/7QSsNcAbOH
-         tznSbFwZRzF6vA8R+sAJTrtTw0ivo3KloV3Gv4RI9CSO9AbcNT0jzsVZ55JqXmTleYE7
-         jDUcgjd4CvehIjQrH/zBJOIbDdLGuHZduhl7SW3ICVgPM/6LMQteaanUXzz2A+Ti/Q1E
-         8LyA==
-X-Forwarded-Encrypted: i=1; AJvYcCWBsMCq1W1vrzE4VHoqoOleEyQGw0hWfoxMuc+aDCeS5Wh6+vmnbKpcbXu5DAU7PfJK3/vxsukcKBFR@vger.kernel.org, AJvYcCWqeC83Et1Z1Bjta934G2U7RrJiY6Na+DgDfcoC4TDcIwwwaqqQEYftsXpy6qA8ZukI8PhnakVc2wKcrNk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6+xjhWikSAoIjo5cRCsxaS8O79rTD1LhnYnC2cya+fIi6s3ho
-	nSlL/1bkE8cXmNGjy0YVxuydDlP4t1P1J4SSVkTUOykfBXQp+JT7ijkQsEsCXRcEuwCa8NcmK9a
-	csm0fq/74azpvBAqLLuGzARNBFVo=
-X-Gm-Gg: ASbGncvWWVqUHIx5d7AiEos/IOrBY5Mgi26AFbY0oxDBjS31m6Fg3hIPPcymYNdw55/
-	mlgAXeEmwrZzHEuUYDZlO6I2+1Rcb0u/dQA==
-X-Google-Smtp-Source: AGHT+IHxY9xhVK60hNmUjHbJsFLHkW8fRnXfpPQFrMPAKXdy6tzBwn69pHtqDTq0suqecrS+4hFqSAciP+G2GL2/kis=
-X-Received: by 2002:a05:6000:1866:b0:382:4a3b:5139 with SMTP id
- ffacd0b85a97d-38260bed0dcmr8542633f8f.59.1732480207065; Sun, 24 Nov 2024
- 12:30:07 -0800 (PST)
+	s=arc-20240116; t=1732486490; c=relaxed/simple;
+	bh=5LCkleFSbaQtCG4x5qMTLCfSc8sP2dhui/dkVkiMwDE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=dUKZXRE8TXgiEEBLDghxQhSA5lXW2uthXfw07S7cQHJCu3junduEJqc35q1VGFSav0fRF01qpwvWQsFcZDcboMOp83gmI9IgAutUUQUUNN247rdIom+KVux6ehfmsVrosf4T8u0Bj7wM1ylk3OAu+bEOB5x3XSB4OhdVuTYG4gA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=S/dhdC82; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id E31732C057D;
+	Mon, 25 Nov 2024 11:14:44 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1732486484;
+	bh=O92f3zpvDXMuVRxHboYfiuDPDnXc3HizrQNIyXRegKc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=S/dhdC82RKL8iLHFbf11HkRVSyYLF029dKO0Wr3EqDBstSXR/RtetQnHYnls/aSrh
+	 L5LOeh/eM8RFzkbb+fT7zMXZf8j9C4j7hiuhqlmQfQLGopYozj8EEHuWst+jlIr6Hv
+	 qvISQp3LbjxPI69eDGe1BWJ9jQSefynyVrMi2+zylelaspj/7QI0cYeMRv8ibVOR85
+	 XqR0tStSwboM3+M99N6R9gpwsnO69FsLrFD4NkCetzUU5ro2haT8LemZZzApU9LLPY
+	 BDLeTrcAnFiYwYSxqcTjXY26XP+S5sccCkehgkyA1AN4UH05O+H16yGa8XcnwFmcOo
+	 BVZdWeEwyqWgg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B6743a5540000>; Mon, 25 Nov 2024 11:14:44 +1300
+Received: from markto-dl.ws.atlnz.lc (markto-dl.ws.atlnz.lc [10.33.23.16])
+	by pat.atlnz.lc (Postfix) with ESMTP id BEAE713ED95;
+	Mon, 25 Nov 2024 11:14:44 +1300 (NZDT)
+Received: by markto-dl.ws.atlnz.lc (Postfix, from userid 1155)
+	id B2DED40678; Mon, 25 Nov 2024 11:14:44 +1300 (NZDT)
+From: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+Subject: [PATCH] usb: host: max3421-hcd: Correctly abort a USB request.
+Date: Mon, 25 Nov 2024 11:14:30 +1300
+Message-ID: <20241124221430.1106080-1-mark.tomlinson@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <0000000000003c68f3061fd2c285@google.com> <000000000000e82e420622326e3f@google.com>
- <CA+fCnZd2b70N6nXTyWO2UYivh_U7Wey==XWURpFy7B_x8xEFHQ@mail.gmail.com> <ZyVn1tNVntbykOuG@gmail.com>
-In-Reply-To: <ZyVn1tNVntbykOuG@gmail.com>
-From: Andrey Konovalov <andreyknvl@gmail.com>
-Date: Sun, 24 Nov 2024 21:29:56 +0100
-Message-ID: <CA+fCnZcA4hEujDLUtzN=3q7akeG8qMMbYrL1Jyj=JKN0C1D12g@mail.gmail.com>
-Subject: Re: [syzbot] [usb?] KASAN: invalid-free in dev_free
-To: Andrey Konovalov <andreyknvl@gmail.com>
-Cc: Chang Yu <marcus.yu.56@gmail.com>, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com, 
-	syzbot <syzbot+3e563d99e70973c0755c@syzkaller.appspotmail.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=Gam0nhXL c=1 sm=1 tr=0 ts=6743a554 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=VlfZXiiP6vEA:10 a=9JeQPKVsZYsqtNgjPSQA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Sat, Nov 2, 2024 at 12:44=E2=80=AFAM Chang Yu <marcus.yu.56@gmail.com> w=
-rote:
->
-> On Sat, Nov 02, 2024 at 12:26:30AM +0100, Andrey Konovalov wrote:
-> > On Mon, Sep 16, 2024 at 3:24=E2=80=AFAM syzbot
-> > <syzbot+3e563d99e70973c0755c@syzkaller.appspotmail.com> wrote:
-> > >
-> > > syzbot has found a reproducer for the following issue on:
-> > >
-> > > HEAD commit:    68d4209158f4 sub: cdns3: Use predefined PCI vendor ID=
- cons..
-> > > git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregk=
-h/usb.git usb-testing
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=3D10a962005=
-80000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dcb61872d4=
-d8c5df9
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D3e563d99e70=
-973c0755c
-> > > compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils f=
-or Debian) 2.40
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D1297cc0=
-7980000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D1217c8a99=
-80000
-> >
-> > I'm not sure what the correct patch would be though, as I don't
-> > understand what the issue is. It seems that dev_free() indeed gets
-> > called twice, but since it's guarded by kref_put(), this shouldn't
-> > happen AFAIU. Or at least we should get a bad refcount report.
+If the current USB request was aborted, the spi thread would not respond
+to any further requests. This is because the "curr_urb" pointer would
+not become NULL, so no further requests would be taken off the queue.
+The solution here is to set the "urb_done" flag, as this will cause the
+correct handling of the URB. Also clear interrupts that should only be
+expected if an URB is in progress.
 
-Interestingly, crashes stopped happening 20 days ago. It could be that
-there was some kind of bug in the refcount or the generic USB code,
-and that got fixed (at least I don't see a problem in the Raw Gadget
-code). Let's keep this bug open for now and monitor, and late I'll
-close it if there are no more crashes.
+Fixes: 2d53139f3162 ("Add support for using a MAX3421E chip as a host dri=
+ver.")
+Signed-off-by: Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+---
+ drivers/usb/host/max3421-hcd.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hc=
+d.c
+index 9fe4f48b1898..0881fdd1823e 100644
+--- a/drivers/usb/host/max3421-hcd.c
++++ b/drivers/usb/host/max3421-hcd.c
+@@ -779,11 +779,17 @@ max3421_check_unlink(struct usb_hcd *hcd)
+ 				retval =3D 1;
+ 				dev_dbg(&spi->dev, "%s: URB %p unlinked=3D%d",
+ 					__func__, urb, urb->unlinked);
+-				usb_hcd_unlink_urb_from_ep(hcd, urb);
+-				spin_unlock_irqrestore(&max3421_hcd->lock,
+-						       flags);
+-				usb_hcd_giveback_urb(hcd, urb, 0);
+-				spin_lock_irqsave(&max3421_hcd->lock, flags);
++				if (urb =3D=3D max3421_hcd->curr_urb) {
++					max3421_hcd->urb_done =3D 1;
++					max3421_hcd->hien &=3D ~(BIT(MAX3421_HI_HXFRDN_BIT) |
++							       BIT(MAX3421_HI_RCVDAV_BIT));
++				} else {
++					usb_hcd_unlink_urb_from_ep(hcd, urb);
++					spin_unlock_irqrestore(&max3421_hcd->lock,
++							       flags);
++					usb_hcd_giveback_urb(hcd, urb, 0);
++					spin_lock_irqsave(&max3421_hcd->lock, flags);
++				}
+ 			}
+ 		}
+ 	}
+--=20
+2.47.0
+
 
