@@ -1,273 +1,219 @@
-Return-Path: <linux-usb+bounces-17844-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17845-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 786B19D8D49
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 21:12:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37FA49D8D6D
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 21:33:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBFAB289CD6
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 20:11:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA80D2870B4
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 20:33:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD66F1C1F19;
-	Mon, 25 Nov 2024 20:11:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13F2B1C4A2D;
+	Mon, 25 Nov 2024 20:33:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="axoqzmBM";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="HW6a3ciU";
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="vwpxQj6f"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Oob8mAq8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA2932500CC;
-	Mon, 25 Nov 2024 20:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.158.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732565514; cv=fail; b=uhNsWZqlloNjES4c7p0xxlY7NmKB+xbsLsSHh437n45VYPOxghfUBtXvI8AU7CpMYfZPIlBHJHQSlhtpSCckcIEF9F4hM6wg95kkibnljOcfNkXd6ax9Cf1PTMZ9NtL2Ei/AAolgE2n53t/H+3msRH7APHJo6eWwOdmoicffCRk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732565514; c=relaxed/simple;
-	bh=s9+mBHYnH9q31yTwTJaoygEfwEMCvH1tVQZOu2J5bxM=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=etdxR7Ztainyiabw1LgMY3In2u2TzlS7iH6QLrCFabEIriQzpe33ENId82IhgOdnAqwtYTLJg2/kZJxafarsohMNrPsuLTiNHaDTqpOxp2QW0670j5LDEZcA545MxIvTknCBhOJqdQpioUIzQA7V0sKIrZtoHXmMMpTo9HORbKQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=axoqzmBM; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=HW6a3ciU; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=vwpxQj6f reason="signature verification failed"; arc=fail smtp.client-ip=148.163.158.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0297265.ppops.net [127.0.0.1])
-	by mx0a-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4APJ4CKb008696;
-	Mon, 25 Nov 2024 12:11:45 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
-	cc:content-id:content-transfer-encoding:content-type:date:from
-	:in-reply-to:message-id:mime-version:references:subject:to; s=
-	pfptdkimsnps; bh=s9+mBHYnH9q31yTwTJaoygEfwEMCvH1tVQZOu2J5bxM=; b=
-	axoqzmBMhYZc1Rd94mE+I+14i9t6CVm7LCBgZs47r1OYZuzvF3i9iVOM/SnCoWLN
-	87oYbHYDJYUBgRiRXQPHpUAoJ/9da2fXD40D1u2SfcZQ1opLj7pkR5AzxaFgzRdp
-	vZwN7kewIuSx2MIdXRRW0eIPytiJ1XhG33y1sDjlyKWwkzrZhIoSvRLRVAh59rUv
-	0A9iAwgQ3J5PD7QCMMe357mXgd+iZGkrY5DqeWusJK6t1gK9jdLEc+nK4AMCFIs2
-	WpnDXeoR7kKmVG5U4lKhPGPLcy+9lObLvmp+VJzdPMz19SDIZbQh9WmYkIhE2oCW
-	Xt+d53vW/lfibMUJGX5Q5Q==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
-	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 434ge5vw5e-1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76AEE181CE1;
+	Mon, 25 Nov 2024 20:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732566806; cv=none; b=eHJ0bEXps50EBNVJG1HsRJCthJwOTi2Qzq5rBJhvcsJDk+IVh7D4uo4x3/ntDtjsLxzl9ezdL272rCY9ObX1XHq+dCAoE5gcYA3fnAwqFPF+VDuzCK9SnUYCnm6iPBFH3l6rCI1ex3GYC7xe6w/sj0WmcELhKRzGjR0GtROcbEk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732566806; c=relaxed/simple;
+	bh=Uqz7a4sPXvnjaUxPZ+YCYB+4Kmxi8l8O0znJw9BiFvo=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:CC:References:
+	 In-Reply-To:Content-Type; b=aXIlHAMRSdxCrv4XWSssmv8B/8IZUhhRfn4FSt3IMpB8cIfLQ6zIb+lUnHPk7EKqyf5Uaq1HzU3dZOeanXqL7wZU7z6VEnG1TX3LsSUoGswuMqOH8R7472uMhoJsqYjFY5atefS6Tt+p3uBIN6Vysiro570asKKoEmIt2jhjzSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Oob8mAq8; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4APJZW8J016332;
+	Mon, 25 Nov 2024 20:33:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	lMJw5yo0FOgWaQH+j3OGpbM3FauPstx2VfkaHJNAIGU=; b=Oob8mAq8IElqpqKr
+	y2+Qpy9lSP7Q3VrJXJACZQJKNe0BXOW9bRjogud4IMBfcrpquB8vJtLEk+zgK88f
+	U99kudzvcoGDistNGqOARFBn0Fa7gBhvDdsfgckkxKibRwoyx0j/7RmYs9v8hW71
+	kt8hwOq468zsUC1DZsazwxIa9oW9B84EmhLm3JZk7kz2/JUwQmVtIGCT4BV8mglx
+	wnwU47BBdm1Oz00vF1XQC3s7jxkGXja8tHikeJATZowBvMh+iU2GblvKc1inqCIi
+	ikNOgmSvjQvCSTOeXeuBDsqa9L04X4AqWdSbDR48JFbiYKoHOuNFdMQHF97LL8sf
+	ydevyg==
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4334rd67ch-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 25 Nov 2024 12:11:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1732565504; bh=s9+mBHYnH9q31yTwTJaoygEfwEMCvH1tVQZOu2J5bxM=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=HW6a3ciU76TvZQmQzSOULmHVyDv8H8AUymjobtC8a9gW+5PxGcJfMNDZDKIV8j98u
-	 26fIOBTzN18p9DUDdPA8UgpReBlRPNlmwk9r12uMPrTlRPLhHRSKQtT9wdGm9jUN4N
-	 CQuD6xUUj3+ytuqTjTshuqiVT0Sd/Ii6fSYca6YEJmWVZvrDKN7r+mDLQNJXV0+rjv
-	 ERCntl94GIjH/gihEKo1GRaVDPJ4VnZsp6843zBB7JRKXDZ48Lm2hZPCXEErTwpEWc
-	 tOo51Wzg0bVCtqjuMMWhPMhKb+OGt0VLKf+IDOQ7xaEdLXUyIBqb9B/tCs9HRgspa8
-	 hJ48BLIRGRA3A==
-Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id A2C8C40226;
-	Mon, 25 Nov 2024 20:11:43 +0000 (UTC)
-Received: from o365relay-in.synopsys.com (us03-o365relay3.synopsys.com [10.4.161.139])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (not verified))
-	by mailhost.synopsys.com (Postfix) with ESMTPS id 4B7E1A0070;
-	Mon, 25 Nov 2024 20:11:43 +0000 (UTC)
-Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
-Authentication-Results: o365relay-in.synopsys.com;
-	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=vwpxQj6f;
-	dkim-atps=neutral
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11lp2177.outbound.protection.outlook.com [104.47.56.177])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256
-	 client-signature RSA-PSS (2048 bits) client-digest SHA256)
-	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
-	by o365relay-in.synopsys.com (Postfix) with ESMTPS id 6DF834045C;
-	Mon, 25 Nov 2024 20:11:42 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Sr+6UboXPyklHLjUAm03B3QfxZE0XI6193sIPpFijgL7x/mXBGxv2N1Y+upT7OMB3ws5o/VzB3nhNWbVd7U3a4ofh+BtiTPBcAN2QRs6O1FATMqX9c/zeRv/K4bbxTX1UmhdtbbQhq9YULTfV3rscp2/p6JXV376waAsL3rg1+bEA5t15cQ+Q4QxtL2EhBR2JlAG8+PHIb4923mcYcwFwTM1Ef/Pd8GLxJikn6lazCMiV+W3Wv/h7Yh0VNpKYCNHVJknQBpzF4Q7SOwxv61JQN0T7QK72EiHE20KW40tJvfSLEVv5fHIOHPlgphpkdkG9dywZP1sV2f+ausl+MQjEw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s9+mBHYnH9q31yTwTJaoygEfwEMCvH1tVQZOu2J5bxM=;
- b=a1+vvzxN35hxMnQwsrrXQnYR4iM6XJHoQ3oCd4NOxiGsginuLDqWK268aFqNwnRVfb1VgamzCAx+a+ygxmdd2BV+yjowFz6UZTZn9mmPqQD0dPoYQB99gu+32FRlBOJDTGNZqsOzL/DmtFHmm8bct9x6bgN2CNcbQBr28KQzdTWDOO8ycUAcQjMitXK18PPRShKAal8UQgCZ3mGpHKLDjdaV7hG/amnRwH5TaqZOVAu80yyhBWLsSZmO1fBKe/bL9Uk9+oax4n+BIkKB48+Dvm/NaULjeV12E1SVZhZwG2F/dvw3atjuu9P+dIHVdTB9Pkkr1XewLywizjQ7RzKuZg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
- dkim=pass header.d=synopsys.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s9+mBHYnH9q31yTwTJaoygEfwEMCvH1tVQZOu2J5bxM=;
- b=vwpxQj6fnxk8U4xZUbXS9uxqwO3OlaVyHW6f0HDLhs+QF/i7jDRPKc3ibpIfHRTiHA/upWhnt/q7mQOfPxAr4IqPsM82bZI0N2dQsUu8fUuhgihx5mgmpqT6LD50zovghu6Emjhs70ghiaYDhWeKPmn63bPxdNFZ34hXJQSKhwM=
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
- by SA1PR12MB7149.namprd12.prod.outlook.com (2603:10b6:806:29c::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.20; Mon, 25 Nov
- 2024 20:11:38 +0000
-Received: from LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::3d09:f15f:d888:33a8]) by LV2PR12MB5990.namprd12.prod.outlook.com
- ([fe80::3d09:f15f:d888:33a8%4]) with mapi id 15.20.8182.019; Mon, 25 Nov 2024
- 20:11:38 +0000
-X-SNPS-Relay: synopsys.com
-From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-To: =?utf-8?B?QW5kcsOpIERyYXN6aWs=?= <andre.draszik@linaro.org>
-CC: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        Tudor Ambarus <tudor.ambarus@linaro.org>,
-        Will McVicker <willmcvicker@google.com>,
-        Peter Griffin <peter.griffin@linaro.org>,
-        "kernel-team@android.com" <kernel-team@android.com>,
-        "linux-samsung-soc@vger.kernel.org" <linux-samsung-soc@vger.kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Subject: Re: DWC3 runtime suspend on cable disconnect while UDC is active
-Thread-Topic: DWC3 runtime suspend on cable disconnect while UDC is active
-Thread-Index:
- AQHa6nSXcGA8h7s8dE6vnyL947IEfLIfjakAgAQoRoCAAh//gICceLEAgAA5AICABo/rgA==
-Date: Mon, 25 Nov 2024 20:11:37 +0000
-Message-ID: <20241125201135.kmif7pglkhitenfh@synopsys.com>
-References: <269e3ad7cbdb3b97fb8dc75cae4d487ce7f908c3.camel@linaro.org>
- <20240809231012.lmgqemcwjdfiaxak@synopsys.com>
- <cd87836fbd0a030d0b52902e04167fe044ce447d.camel@linaro.org>
- <20240813230625.jgkatqstyhcmpezv@synopsys.com>
- <a40ac04beb4501ad95b50f79be3495315e38a880.camel@linaro.org>
- <e40f27c2323077d9b35fac7572f30114b6e33372.camel@linaro.org>
-In-Reply-To: <e40f27c2323077d9b35fac7572f30114b6e33372.camel@linaro.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|SA1PR12MB7149:EE_
-x-ms-office365-filtering-correlation-id: f2470ba4-630d-4dbe-88b7-08dd0d8d5e4a
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?SXQ0NTZ5VnIvNFdiQzI1ZWZXVHJQenVPcU1aV2UwYkNJTmN1T3A4Q3FpSS80?=
- =?utf-8?B?ZisrQU9HNHJCNWVlei94aHJUTWs0OHl3cTY3Mk40V0I0MjZlZmI2TnNTVU9E?=
- =?utf-8?B?TzJJd3gxblp1bnB2YmdtRUY2bEpnSVc0ZWR0OVZyT2ZkNUN4YmNMNm1XaTdI?=
- =?utf-8?B?c2JsWWxaSFdwY210Rmh0azRab3FYRDVwZnc4eXRCb0ZtUFArQjdWVHJoRWxy?=
- =?utf-8?B?blVKb2xoWVQxRktXa0JuM0N1b1hSU09qOUU4Z1daSnVkSUFYVmNjcTZCWXBr?=
- =?utf-8?B?dmtISWk4SzdFdVFMeTdXWmgwMUM4Z0VqOGVScUk4VEFKTTZaSmo1SVNua09I?=
- =?utf-8?B?TUV6Q3lodWlYOTQ1aGE1SFhtRlJyWDZkTWR1U3dLZFlGVVcxK2hyWTFKR3ht?=
- =?utf-8?B?QjlEV2cveVRmWXVLS2laRmJ4M2lWYjFMcGdEM2JPNjFLMW1GcXdLcmVLRUN0?=
- =?utf-8?B?UDhpREhIV1Ezd0syckswR2wyTFdkVDZQOXlYR2dZQWp1N3dnWEVJRllkSXE4?=
- =?utf-8?B?T3VWamR5SnJVVGxkWWtXc09HZ1g2SXRNUTFMTHVHWEo0a2JIOTFSL3JpNXNI?=
- =?utf-8?B?ZlZuTXVjT1QyZEFCMHloVXMza1RTTVF5R1R4RlNndncrc2JxZG5tQkpWeEhp?=
- =?utf-8?B?b1VySS96SU1WVm9SNFdaeEJ1MCtBajArSkVvNjVHeGdZOGZ6b3FpUGVXaFpt?=
- =?utf-8?B?a3ZxaUhUMlVyVTJ1aG5wY2ZyekF4dVpJYzhNczEwU005aThQNWFFcmE1bWMz?=
- =?utf-8?B?L0owM3NFUjQ4V2JLWmRBM0U1dTFjRWdycEJrR2NRbDlxYy9mUHhtMS9IMzJB?=
- =?utf-8?B?SVVXK1JxaExrNFdzYlhFWnRmVFFiREk5N0ZiUWZqQ3NPUHEvQmpuTjFLd2NC?=
- =?utf-8?B?czZDb3NONmNqSVk5UGI1UDR1UGNDNUk1OE1MM2tuTlV6THBNNHB6dDQwRXJR?=
- =?utf-8?B?UTBDSVlubTRzY2pERVREZER1WXdEUGxRS2xyZHExZGJlMGJucjI4eVlydkVD?=
- =?utf-8?B?VnhacDY4bHBFTXJOTkdTOFlQNTJGelJnVXFrMk94OEMwVXFxZ0s5b1M1b2Jl?=
- =?utf-8?B?V0dhTGRCMHliaWlhRzhvRDJYQmppVndEUkp2MlJqcjkyRmJEVllpeDVZOVVw?=
- =?utf-8?B?YnBxa0dMZitzb3h3bGlxZUs5VTNCRHc4NDM4NWFNNUhUZmNVUFpIMFgwd1R5?=
- =?utf-8?B?K2FXOHNTbi84SFJMMitQQWtjVUdXelhzNUJtUHozeWh2cDNKUFVLM1RTa0Ra?=
- =?utf-8?B?TDAvWTVMRE9hSkkzbW1WemszYVdsbk40bit1RDlFVkdkMDZDWFBibStUY1ZN?=
- =?utf-8?B?RnJWanZwWGNheFVtRURWV1AvYkhVUWF2MHNJUWdCV0NtaGs2YlpxRmJaSUVj?=
- =?utf-8?B?TnlMZksvSUY0OUUyV3ZWWXJibFVQaW10R2YyNkhKRFRCSklyelRMckRxSGtT?=
- =?utf-8?B?a1AyQlFTMWFaNCtZa0V2Z29rWkJ5elkvcFpRbmhxM1p0QklhdVRBNmlyVnVL?=
- =?utf-8?B?VFBoNE1DdXZCMlZhTWF4L3RmSnZ3T2Zob2dkNXF4Y3RIQU9ONFFSU1BkMlJO?=
- =?utf-8?B?QmFVNTUzUEFhMzlUZkQ4dXVKUVpsa1pydGpxalJUUjhLT29NWDVOd3QrS252?=
- =?utf-8?B?b2lQMnJ4RExEdkEydjRhRVEwckZaeldHYjNhT3BHTVA1SVJMWDU2d3l3djZ2?=
- =?utf-8?B?N2hyYlhaQ3RmbkxvbDZ5bTVJN0RsaFgxc0ZNVlRKd1d5Y3AvWjZMdzV5K2tu?=
- =?utf-8?B?V0lxRjR5RHpaV0VNc1c4WjV6aFBMUzczblpVSStUekdkeHhLbXpTZzZrZ3ZC?=
- =?utf-8?B?eXZrNERiNEQvclZXbzVDcGhxUWFhVHFuNk56K1VDZjhGc3hWZ3hxRjFYbUFU?=
- =?utf-8?B?LytmdUN6UU5VeHVXRndybjE0UFg2ODRMVjdOVm8vWUpxckE9PQ==?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?TncwVTczeVN6Mklidy8vYWoxYjZYeVpHNVRJWUtyYWFvSUdCalBnTE8xVWk4?=
- =?utf-8?B?VEhGaUk3TWxzaG9LbUx6blNrbTFkWC9NK0RDdmdUd1BjeTd2aFl0enFwL3Yv?=
- =?utf-8?B?TzFzU3NIYk1uRHhwQ3lCazk5QmUxTnN6ZXdvZ2pOYmM4c1VMSzJRVGU0ai84?=
- =?utf-8?B?WTdveWhOU3JiRDRhOGtjTWNzeHNsNTgzY2tub01YdzA4T1NvcXVhR0RRUGh0?=
- =?utf-8?B?NmxDZTRQM2gyUURNY3pZYS9hYWU4c1BKOXUzdDY4MFBFQ3FDVkszcHlDbkhJ?=
- =?utf-8?B?UWxKRGhRdDBJTUxaNlhJbjJHZFMzekFLN3R2dlpPbXI2dlpPcGdjcjl4enEr?=
- =?utf-8?B?NTlFV0tYSTU5THJITHFlMU00OVJVcjRrZ1diTFJLdEllOEM2VFdld1hSY0lD?=
- =?utf-8?B?cWp5Nlp2WCt4cXU3cnpxdEQwWHgxck1xMkVLak4rWFBMTkJCZEdwdkxRcVBB?=
- =?utf-8?B?NVA1Q2ZVdjk5QnVLMEJWZnVhS3V2T0JIVGhMZ1c4R01xN3RoTEQzK29aWGhS?=
- =?utf-8?B?bkZDdkVNTEEvYjZSU1gwZ0FFT0htTUVQUFhlQmo5dloySmIvS3A4Tk81UDN3?=
- =?utf-8?B?aVg1eGV6RmZZdWMvcWU0alVFSjdFR0tVclVlbUNsTit4OEtuU1U4QWNZUjBP?=
- =?utf-8?B?bi8xOWpwdVd2NnY0VDU2Qkd0N0FDdUlNcXYyT05RdXYxSTU1ZUQ0amxHNEVh?=
- =?utf-8?B?WFkwYlYvRzVaT0kvQ3RkanBZelNCQUxQb3o5bXhhNlI1RW5IK01NUjZmQWM0?=
- =?utf-8?B?QTR2Rzlka2tMajBJb1pGWDY1SWhMWFNWMCtIdzhVeU5lVThhUlZqSGNwUkJ0?=
- =?utf-8?B?WEU4Wm1iMEVxTllwQzVtS2dFTG9BQnhUZHYvU09FSEw2L1N5d3NnYUhYZXlP?=
- =?utf-8?B?dUR0VFo1bkhRcC9XNVVXeE12d09LWUdJMkFCSllCL2N3cGpRQW5xLzM0RGhx?=
- =?utf-8?B?KzhGVG1zWXVHcVJQZjhhbGRHdzBMVzFHaS9TaG9FM1B0eWgyZkVCVERWTDVm?=
- =?utf-8?B?bFNQQTZybVh6bno5TW1tMDVFRTVZWkh1QjYvbUpHOEphUXVpOFVYUHZ4YitL?=
- =?utf-8?B?T0NWNmV1MkJNUWVHNVhISVVxUkZFMWVBRm9WVXNYMXBDVEFOQ1YzRmh2Q3hz?=
- =?utf-8?B?dFlRS2ZPZTdxS2xsSTJqU2JYenBucU90UFQvbjlNTnhjK3lMTER6Y2c3RVFy?=
- =?utf-8?B?RlZOZnNXZE9IdVNNa3BMQ3JCWVErYzNhQlAvb08vbGs1UW5Mc0M3ek1YRCs0?=
- =?utf-8?B?Y01TQWxvOHVrNUI5K3l0OUVBZnBWRkxvVFJZbGVhRnZza213ZEZBZnFBZmhu?=
- =?utf-8?B?aFJKeGJEV0pWbWtEamhLK1E1R0Q2ZkxJVlIyN1N5ZisxcEt0ZS9BbU9rODk4?=
- =?utf-8?B?RzlpSnF3YkhMZHJjZXptdmExZitvN3pGRGZwL3ZMQ3B1cEF3WjVueFp2aFpu?=
- =?utf-8?B?QWtHcC9IWEVhVEpqdTAyc1d0aHZSOFY5aFZHK1NPUjNIdEZ3dDQ4MFcvUXY1?=
- =?utf-8?B?Z0pEOTFEOVNZejZyaERZVzI4NzN0enZPNmFnZUM1bEpubWJ0NzIyWmhnRDZ0?=
- =?utf-8?B?bFR1ZUJzZXNiYnpCeVNraWVPeHk5V0FGL1F1U044Y2JSWk1aS3hBWXZJSzRE?=
- =?utf-8?B?OS9nbTkzZHkwc014b0ozcXBMRU5IRVRKN2FFOEh5Sk9QcXVNb2dDWllYZXRR?=
- =?utf-8?B?ZkZJQ1E3RytPams1WCtqMG9PUE5QK1hva2V2VlRZZEVnN3lFNjN6M1R0eXJR?=
- =?utf-8?B?SG9FL1U4OW53d1NkRzBCUFpXVFAwRkpaQmdmWnhNM1FyOFFFYWJxVUpUWSts?=
- =?utf-8?B?RFpZbXFLUDFvclEzOXFHMVNhN21LQTFvY0wxZjZpQi9qdW5Zc1ZwYWs4L0la?=
- =?utf-8?B?YmtEc21rSWlFc29TZ1FSZmRZRDNDZG1PbVA1WkJObWk1MGUvM0t2Wmk5aVcv?=
- =?utf-8?B?cFMzOFplQk0rVHppSW9UV3J0T09QckpTRVZxOHdjYnFDWUZ0NUl3ZUgvUzIr?=
- =?utf-8?B?RHpMVjN0K0hqUjlLTmZ3SkxSZ1pQK1lUbmg3SG9QMHBCWFF6YnlLTHBVcEw5?=
- =?utf-8?B?MGFDZEVFMkZoWjNkZndmb0dkajNzWlAwSWpuZHFjdThjaVRlY3drYlo1L0Rp?=
- =?utf-8?B?bkQwR3M1Y0c2WG00YlhjTjR5bWtVV0djQUVYQnRYN25GclNCbjYxSyt2ajR6?=
- =?utf-8?B?RHc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <97176908A6D28E4FBBB937080362788D@namprd12.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	Mon, 25 Nov 2024 20:33:06 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4APKX4k5025346
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 25 Nov 2024 20:33:04 GMT
+Received: from [10.110.81.241] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 25 Nov
+ 2024 12:33:03 -0800
+Message-ID: <8fc53dd9-0c26-410c-b1b1-3d6df7894a44@quicinc.com>
+Date: Mon, 25 Nov 2024 12:33:03 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	65+Gq6w9YNd4ltV3VoCNpKY0z0NtpDH/j/ney5BNjiKz3SLhGd9jfcuumg6/WL8xN7BkOxD4KfLkb4H38Wb7qagLV9D+lfDuNv+VjO6lpbEx2pn2Ci8juuZPIpf2TTcQzK+MCppYB2018k3klzjiFWEMnNtHBQ/TA6W+OCeNCtWkqTZEGf0rt5rmD2CQpEItY6FMq1FAXkuf9O90kEszjQriA6dIo8Tr0z8EBHz5QTtoYTSHUIi4vWUI7zj4326bwStU5o5PMh2U2lSGfGth/IpDuQWLaNK0lIs+2mPaP4W/KcN7uCzLvcKJww29gnDCGbknyCi6veA/8sXpR5ExiSvZSFzjlTwyJtNIcE4R17kY6aer1bFtfb9zz0lNfuICPWvn/2cu18ftUBwOacFRR61xt2pQC5s+/TLTfmuI6tHPzRpnwX2XSGhQOIKPFWRHgv13jq+Nyg8mBdiMHtxOaGOl3IjLWlLjduPdIBW/vfV6bc9CxLLhSA4GnMMv0ENn/ubJ/Ojod4yROp50IAkmZQQKFLuG/f/NT0ssKd72xUoSMslyFO8AZKVT4eoht77BDZAVM4rz77DErFjMqDotMCemGAb2e+mRPaiR7PBmEsRfr40xoPJrqt6iEwzQ9zXRCdf6KLAccaLYP2ErHmE4wQ==
-X-OriginatorOrg: synopsys.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2470ba4-630d-4dbe-88b7-08dd0d8d5e4a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Nov 2024 20:11:37.9368
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: IKmbuhg2jJuyN6IaCAspDdHTolMfzktI4V+tSGa2sQu8oZxDZsHEZx0RAp0puu5U4/c0Bzk2us6nU1oUU/9JNw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7149
-X-Proofpoint-GUID: 6wxkNl1u1GRR-XZRHQk5p2e_nAh3QH0v
-X-Proofpoint-ORIG-GUID: 6wxkNl1u1GRR-XZRHQk5p2e_nAh3QH0v
-X-Authority-Analysis: v=2.4 cv=F80FdbhN c=1 sm=1 tr=0 ts=6744da01 cx=c_pps a=t4gDRyhI9k+KZ5gXRQysFQ==:117 a=t4gDRyhI9k+KZ5gXRQysFQ==:17 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=VlfZXiiP6vEA:10 a=nEwiWwFL_bsA:10 a=qPHU084jO2kA:10 a=eQpJJLL9KTGeQKuszesA:9 a=QEXdDO2ut3YA:10
+User-Agent: Mozilla Thunderbird
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+Subject: Re: [PATCH v30 28/30] ALSA: usb-audio: Add USB offload route kcontrol
+To: Takashi Iwai <tiwai@suse.de>
+CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
+        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <krzk+dt@kernel.org>, <pierre-louis.bossart@linux.intel.dev>,
+        <Thinh.Nguyen@synopsys.com>, <tiwai@suse.com>, <robh@kernel.org>,
+        <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>
+References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
+ <20241106193413.1730413-29-quic_wcheng@quicinc.com>
+ <87bjya3xzw.wl-tiwai@suse.de>
+ <02c20b06-34ef-459b-9cd1-2d2735eb1352@quicinc.com>
+ <87zfls1t7x.wl-tiwai@suse.de>
+Content-Language: en-US
+In-Reply-To: <87zfls1t7x.wl-tiwai@suse.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: GBDQF2YIkOXH2dvk_aUVeSXZoFBT9G8g
+X-Proofpoint-GUID: GBDQF2YIkOXH2dvk_aUVeSXZoFBT9G8g
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- spamscore=0 impostorscore=0 mlxscore=0 clxscore=1011 phishscore=0
- lowpriorityscore=0 bulkscore=0 priorityscore=1501 adultscore=0
- suspectscore=0 mlxlogscore=999 malwarescore=0 classifier=spam authscore=0
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
- definitions=main-2411250168
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ bulkscore=0 clxscore=1011 suspectscore=0 priorityscore=1501 malwarescore=0
+ spamscore=0 adultscore=0 impostorscore=0 phishscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2409260000
+ definitions=main-2411250171
 
-T24gVGh1LCBOb3YgMjEsIDIwMjQsIEFuZHLDqSBEcmFzemlrIHdyb3RlOg0KPiBPbiBUaHUsIDIw
-MjQtMTEtMjEgYXQgMTI6MzQgKzAwMDAsIEFuZHLDqSBEcmFzemlrIHdyb3RlOg0KPiA+IFVuZm9y
-dHVuYXRlbHksIHRoaXMgb25seSB3b3JrcyBvbmNlOiBBZnRlciByZXN0b3JpbmcgdGhvc2UgYml0
-cyBhbmQNCj4gPiByZWNvbm5lY3RpbmcgdGhlIGNhYmxlLCBVU0IgY29tZXMgdXAgYXMgZXhwZWN0
-ZWQsIGJ1dCBhIHN1YnNlcXVlbnQNCj4gPiBkaXNjb25uZWN0IHdpdGggdGhlIHNhbWUgc2VxdWVu
-Y2UgYXMgZHVyaW5nIHRoZSBmaXJzdCBkaXNjb25uZWN0IGRvZXNuJ3QNCj4gPiB0cmlnZ2VyIHRo
-ZSBEV0MzX0RFVklDRV9FVkVOVF9ESVNDT05ORUNUIGV2ZW50IGFueW1vcmUgKG90aGVycyBzdGls
-bA0KPiA+IGhhcHBlbiwNCj4gPiBsaWtlIERXQzNfREVWSUNFX0VWRU5UX1NVU1BFTkQpLg0KPiA+
-IA0KPiA+IEtpbmRhIGxvb2tzIHRvIG1lIGxpa2UgZWl0aGVyIEknbSBzdGlsbCBtaXNzaW5nIHNv
-bWV0aGluZywgb3IgZS5nLiB0aGUNCj4gPiBldmVudA0KPiA+IGlzIHNvbWVob3cgbWFza2VkLg0K
-PiA+IA0KPiA+IEkgYW55Ym9keSBhd2FyZSBvZiBhbnl0aGluZyByZWxhdGVkIGJ5IGFueSBjaGFu
-Y2U/DQo+IA0KPiBIbSwgdGhlIG1pc3NpbmcgRFdDM19ERVZJQ0VfRVZFTlRfRElTQ09OTkVDVCBl
-dmVudCBjb21lcyB3aGVuIEkgaW5zZXJ0IHRoZQ0KPiBjYWJsZSBhbm90aGVyIHRpbWUsIGkuZS4g
-YWZ0ZXIgdGhlIERXQzMgZHJpdmVyIGhhcyByZWNvbmZpZ3VyZWQgZXZlcnl0aGluZw0KPiBhZnRl
-ciBjYWJsZSBhdHRhY2guIFRoaXMgdGhyb3dzIGV2ZXJ5dGhpbmcgb2ZmIG9mIGNvdXJzZS4NCj4g
-DQo+IExvb2tzIGxpa2Ugc3RpbGwgc29tZXRoaW5nIHdyb25nIGluIHBoeS9kd2MzIGludGVyYWN0
-aW9uIGluIHRoZSBFeHlub3MgY2FzZS4NCj4gSSdsbCBkZWJ1ZyBhIGJpdCBtb3JlLg0KPiANCg0K
-T2suDQoNCkJSLA0KVGhpbmg=
+Hi Takashi,
+
+On 11/21/2024 7:50 AM, Takashi Iwai wrote:
+> On Wed, 20 Nov 2024 20:13:34 +0100,
+> Wesley Cheng wrote:
+>> Hi Takashi,
+>>
+>> On 11/20/2024 4:12 AM, Takashi Iwai wrote:
+>>> On Wed, 06 Nov 2024 20:34:11 +0100,
+>>> Wesley Cheng wrote:
+>>>> In order to allow userspace/applications know about USB offloading status,
+>>>> expose a sound kcontrol that fetches information about which sound card
+>>>> and PCM index the USB device is mapped to for supporting offloading.  In
+>>>> the USB audio offloading framework, the ASoC BE DAI link is the entity
+>>>> responsible for registering to the SOC USB layer.
+>>>>
+>>>> It is expected for the USB SND offloading driver to add the kcontrol to the
+>>>> sound card associated with the USB audio device.  An example output would
+>>>> look like:
+>>>>
+>>>> tinymix -D 1 get 'USB Offload Playback Route PCM#0'
+>>>> -1, -1 (range -1->255)
+>>>>
+>>>> This example signifies that there is no mapped ASoC path available for the
+>>>> USB SND device.
+>>>>
+>>>> tinymix -D 1 get 'USB Offload Playback Route PCM#0'
+>>>> 0, 0 (range -1->255)
+>>>>
+>>>> This example signifies that the offload path is available over ASoC sound
+>>>> card index#0 and PCM device#0.
+>>>>
+>>>> The USB offload kcontrol will be added in addition to the existing
+>>>> kcontrols identified by the USB SND mixer.  The kcontrols used to modify
+>>>> the USB audio device specific parameters are still valid and expected to be
+>>>> used.  These parameters are not mirrored to the ASoC subsystem.
+>>>>
+>>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+>>> IIRC, this representation of kcontrol was one argued issue; Pierre
+>>> expressed the concern about the complexity of the kcontrol.
+>>> I didn't follow exactly, but did we get consensus?
+>> So the part that Pierre had concerns on was that previously, the
+>>> implementation was placing offload kcontrols to the ASoC platform
+>>> card, and had some additional controls that complicated the
+>>> offload implementation about the offload status for each USB audio
+>>> device.  This was discussed here:
+>> https://lore.kernel.org/linux-usb/957b3c13-e4ba-45e3-b880-7a313e48c33f@quicinc.com/
+>>
+>> To summarize, I made the decision to move the offload status
+>> kcontrols from ASoC --> USB SND and limited it to only one kcontrol
+>> (mapped offload device).  So now, there exists a kcontrol for every
+>> USB SND device (if the offload mixer is enabled), where it tells
+>> userspace the mapped ASoC platform card and pcm device that handles
+>> USB offloading, else you'll see the "-1, -1" pair, which means
+>> offload is not possible for that USB audio device.
+> OK, the simplification is good.  But I wonder whether the current
+> representation is the best.  Why not just providing two controls per
+> PCM, one for card and one for device, instead of two integer array?
+> It would look more intuitive to me.
+>
+
+I could separate it, but we would have to have a pair of controls for each available USB PCM playback stream supported by the device.  However, before I get into making that change, I think the decision for either two or one FE needs to be decided.  Again, I think the 2 FE approach is much less invasive to the USB SND/ASoC core files, and ensures the legacy USB SND path still works through the non-offloaded data path. 
+
+
+>>> Apart from that: the Kconfig defition below ...
+>>>
+>>>> +config SND_USB_OFFLOAD_MIXER
+>>>> +	tristate "USB Audio Offload mixer control"
+>>>> +	help
+>>>> +	 Say Y to enable the USB audio offloading mixer controls.  This
+>>>> +	 exposes an USB offload capable kcontrol to signal to applications
+>>>> +	 about which platform sound card can support USB audio offload.
+>>>> +	 The returning values specify the mapped ASoC card and PCM device
+>>>> +	 the USB audio device is associated to.
+>>> ... and Makefile addition below ...
+>>>
+>>>> --- a/sound/usb/Makefile
+>>>> +++ b/sound/usb/Makefile
+>>>> @@ -36,3 +36,5 @@ obj-$(CONFIG_SND_USB_US122L) += snd-usbmidi-lib.o
+>>>>  
+>>>>  obj-$(CONFIG_SND) += misc/ usx2y/ caiaq/ 6fire/ hiface/ bcd2000/ qcom/
+>>>>  obj-$(CONFIG_SND_USB_LINE6)	+= line6/
+>>>> +
+>>>> +obj-$(CONFIG_SND_USB_OFFLOAD_MIXER) += mixer_usb_offload.o
+>>> ... indicates that this code will be an individual module, although
+>>> it's solely used from snd-usb-audio-qmi driver.  This should be rather
+>>> a boolean and moved to sound/usb/qcom/, and linked to
+>>> snd-usb-audio-qmi driver itself, e.g.
+>>>
+>>> --- a/sound/usb/qcom/Makefile
+>>> +++ b/sound/usb/qcom/Makefile
+>>> @@ -1,2 +1,3 @@
+>>>  snd-usb-audio-qmi-objs := usb_audio_qmi_v01.o qc_audio_offload.o
+>>> +snd-usb-audio-qmi-$(CONFIG_SND_USB_OFFLOAD_MIXER) += mixer_usb_offload.o
+>>>  obj-$(CONFIG_SND_USB_AUDIO_QMI) += snd-usb-audio-qmi.o
+>>>
+>>> Then you can drop EXPORT_SYMBOL_GPL(), too.
+>> Had a discussion with Pierre on this too below.
+>>
+>> https://lore.kernel.org/linux-usb/f507a228-4865-4df5-9215-bc59e330a82f@linux.intel.com/
+>>
+>> I remember you commenting to place it in this vendor offload module,
+>> which is what I did on v24.
+> I assume that my early comment was based on your old implementations,
+> and I guess it was because the mixer part didn't belong to the qcom
+> stuff.  Now it belongs solely to qcom, the situation changed; it makes
+> no sense to make it an individual module at all.
+>
+>
+I guess Pierre's feedback was that he believed this should be vendor agnostic, because any vendor that could potentially support USB audio offload should have the same kcontrol within the USB SND device.  Hence the reason for keeping it within generic code.  Since QC is the only user of this now.  Do you prefer to make this part of the vendor module for now, until another user comes along and introduces offload support?
+
+Thanks
+
+Wesley Cheng
+
 
