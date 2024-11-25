@@ -1,250 +1,321 @@
-Return-Path: <linux-usb+bounces-17833-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17834-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF1D9D8329
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 11:13:41 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D8989D83E1
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 11:55:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF21528BC62
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 10:13:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2CFAB2BB4E
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 10:28:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3443E195808;
-	Mon, 25 Nov 2024 10:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B267E1922FB;
+	Mon, 25 Nov 2024 10:28:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="hCw6r4Ed"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fouxrzBd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2059.outbound.protection.outlook.com [40.107.241.59])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E29A1946B9
-	for <linux-usb@vger.kernel.org>; Mon, 25 Nov 2024 10:10:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732529426; cv=fail; b=pXTEP3jufurZjm/274fuNhC3easxKK8dh543E5PbkkilPVE3GhNIKtdaElTaKsb1QRe0M5Y32D5JbBY/fbmhZEuE4Vz+LcWZmZiGkZp97lA96VDhW1CdScXoN54vRdCAzQLuyLxZEF9NE+zEth5yZr1plEeYrKrJjyIITSY65X4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732529426; c=relaxed/simple;
-	bh=lpBeQXIlVuU+c5fmLUNl7LW3kIcNF1/9Kb7TF21kqjA=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=YI/z5c8tE1bGpkdNKC7rvGsmWKgwhOla/+JL5774Myoo8s8HWGKRx2ivBypWG9VoKM+0nO0GzWyexzqQ6nY3PP2RgOPNPxnmjNudxWWJJaKQRUo9lQhd4SrwAm0pP0SG+66n5YTKZ8gqppCBBiIrwIpkZ+FWM/UHMoK8MX8Mw2A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=hCw6r4Ed; arc=fail smtp.client-ip=40.107.241.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=D9x6snDzWFTzaWHf+hKJs2/HC0CcFaf/msY3sFc21P/Bm6d2ZUDTtWEGehuB1fp6PZQil2VfuZjIxRMjnRNv2TJUa8n8Yg1LjJv8DPgsyBp579x8DDOOAGSiK0rYupRDLICg9dfSdM2HC/ybb8mDW3zYJP3cbwUukCC9SLDcyUh7J4qxI3Vxl5Mw8QeFekBkryzQxpQDwCPmg4OwwuDYPPwzixSF6hO5YfsYttU1mPTokcy363PHJfjARQZN5hyYkrumfWsDq/JyGumbt+VAykfOxtyMFPk1GCEMK76VwrihUa0gsScDFX9/YkZxrNFeV0+ouvJgzbpHZhzBauLegQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AVGYA7mo/jcwnyrXRTXfhggNwF4mQNsbqIMjuimExB4=;
- b=N8uKQehwZdE9CWtByTVuohUiD8d/xSjK0e9EsyZfUknQgKwQZORZtBOJ4bVQUP0jGy8fXkdxe/fQCpMWVq0OhKr80HZG+16iCAjVEmMk7Q5ZbcgYmgYCtiS/L8bcnHS3In9Ee+YuIYzmAd4o9NhMqc2YpG5IauNNDNhNn7/88pmjTGDyvplD4wtpf5O7ZNOIRMGp3KPSnDjCD5P/CR1JRwgiUjWEKKqGRIYjLnPg0GaBrCRAjs6gc3I7npdwuFpnxp6+iB4cTth5Ypi18DMtcMxnN0OjWA/ppvTLg8Xc3n/V0SUNkU0qQcjB1TXZtjIPv5Yp1pgmRqYbZrl/g9VV3w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AVGYA7mo/jcwnyrXRTXfhggNwF4mQNsbqIMjuimExB4=;
- b=hCw6r4Ed5JMGpHuT6CxhiZVq1yRvMKNmtRhsrlwpUX/VMe2Z4LGCatGEQ7FYaNOdEBdqF51EwtioEtLDTOz4Ps71QweVF+q0w481COPnSCDcKJ8QPaRZwyqn9WtnqgYbNq43ZTp3wEuMhD87dLbrqMc2FA/zmkR0esGFMCJZnqmkzEx2RzKUbYgU6mvE0OxBnSUmk7/xWmB3eXCDS3EeC+toS0tinliRoR9bwmYhuJNfxzD+9A1/uS9WJXevdLSpU8NaT7IMNrOYw65GgmlPrmg0nd/WvwQiT7wha5xBvXFMSzLZ8g61lXCVEaEnxT+eumiSbMl0N05gLbrpPf1X/g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by VI0PR04MB10440.eurprd04.prod.outlook.com (2603:10a6:800:218::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.19; Mon, 25 Nov
- 2024 10:10:21 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8182.019; Mon, 25 Nov 2024
- 10:10:21 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Thinh.Nguyen@synopsys.com,
-	gregkh@linuxfoundation.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	Frank.Li@nxp.com
-Cc: linux-usb@vger.kernel.org,
-	imx@lists.linux.dev,
-	jun.li@nxp.com
-Subject: [PATCH] usb: dwc3: imx8mp: fix software node kernel dump
-Date: Mon, 25 Nov 2024 18:10:17 +0800
-Message-Id: <20241125101017.2398904-1-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0196.apcprd06.prod.outlook.com (2603:1096:4:1::28)
- To DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F19191F7E;
+	Mon, 25 Nov 2024 10:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732530505; cv=none; b=Tq4FeBAB6hWGjr5T0hs9FKhwNbJyYF37q/RqMu4RF/ezAanbqPpIBXeolXmnwrw4wcyM14AM9oG6bzCpmITIRUyVRch7271Xxmgi6SPSt05nXcjRayIOpsvEMVVhY+BX6sJi20jSWLrSSZzqWkUFdMuPo+zoQxFqIwu7O5dQPsc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732530505; c=relaxed/simple;
+	bh=Td+5EEQzC5KgR6blIuLKDXD2I/H9vF133xyB8vmFB5w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BG3VWIu/KaX36qftHMdqqOLDde65V/QJUZ6o51oBxqUGRZEPAUWRLKUO6oxoBzKZpiIG4+GwD9amGflsegQswLzgDvhiJtQvRmRhsxbe7HA/BVI5thWprkZX3YH6emZG5clftsu/HBePe++adYcC2UvsogDw/1Sdj7bkQYb41LA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fouxrzBd; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1732530503; x=1764066503;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Td+5EEQzC5KgR6blIuLKDXD2I/H9vF133xyB8vmFB5w=;
+  b=fouxrzBdLWJAV1Iu7lW7blEKPcvi9RAafytdQEK29FCWH4qMdFh6hZc+
+   N98IS+OI1cx4g3P6SERIOhZvDtyKWG4/yW+IPR4wM7/1t5TFyAFmsPHnU
+   h/Hm01D8D6Au6CjXNmj0sCJaX2ySf8YX6f+OI7HFb725SKgDQHVyNOZKz
+   sClJqi9z2PaoQf3pgWrCBUVeJMxGRoXr8WFvOhNCuQwz89I7txDDAPYvg
+   yRhswW0l7V96qefrFui+YjhCZgA4ks07zy0zR3bDs9QEfc/CiZdts+IcU
+   SjQD9IFyPB+WuTIVMhPcul3udTf3Bejesnf7D4335vVyIi0880aRsI1/f
+   Q==;
+X-CSE-ConnectionGUID: sXNajUbFQRGz6hZT8xzXWA==
+X-CSE-MsgGUID: U3ouv+TARG6ovC58wEeziA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="50150111"
+X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
+   d="scan'208";a="50150111"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 02:28:22 -0800
+X-CSE-ConnectionGUID: dVnJtMhfRZmqq5ZpmG8VFA==
+X-CSE-MsgGUID: 1YF3asDURs6i2eCuFEW+Ig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
+   d="scan'208";a="122172790"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa001.fm.intel.com with SMTP; 25 Nov 2024 02:28:19 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Nov 2024 12:28:18 +0200
+Date: Mon, 25 Nov 2024 12:28:18 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: =?iso-8859-1?Q?Facklam=2C_Oliv=E9r?= <oliver.facklam@zuehlke.com>
+Cc: Biju Das <biju.das@bp.renesas.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"von Heyl, Benedict" <benedict.vonheyl@zuehlke.com>,
+	=?iso-8859-1?B?RvZyc3Qs?= Mathis <mathis.foerst@zuehlke.com>,
+	"Glettig, Michael" <Michael.Glettig@zuehlke.com>
+Subject: Re: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring port
+ type
+Message-ID: <Z0RRQoRN7721FF-Z@kuha.fi.intel.com>
+References: <20241114-usb-typec-controller-enhancements-v2-0-362376856aea@zuehlke.com>
+ <20241114-usb-typec-controller-enhancements-v2-3-362376856aea@zuehlke.com>
+ <Zzsp2JOhnnPPOWvB@kuha.fi.intel.com>
+ <ZR1P278MB10224924F48419CA813402309F272@ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|VI0PR04MB10440:EE_
-X-MS-Office365-Filtering-Correlation-Id: c70d206b-2d92-40d0-14bc-08dd0d395eb5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|376014|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?AFv8mQIVm1nukfIjkxTc8ual/EvQNPRmhk2OIlMxMCKbsO/i8qoFJz80dr8R?=
- =?us-ascii?Q?T8HQ1dMDVdGhHij8Zyb7TWGtMxZiY29GIvOrZC8GJxzYG2ZtSoYNoZ+tlvWQ?=
- =?us-ascii?Q?YdfYOdrFMSAiXS7hj9yj+Tqx1zYYmKGrNHtZyuCiwgKoEleU+jO6kxd2rgSf?=
- =?us-ascii?Q?0tzQhWKCYjzYbkEzF1UFIAUcnK5n7oVdr3FZcA904fO1f4w0T1qPhUIBo63P?=
- =?us-ascii?Q?6BKwhnM90DpTWTe4JwUDAgDqM+G5J/z1UmKTYONoNFQPBLbiySfQz+kPAhYu?=
- =?us-ascii?Q?uUfsJ1pp7Ab707kyEJJMHP/0/69hxffkC0S1NabvgJHu1hlcFqIjFEs2riy1?=
- =?us-ascii?Q?o8HWrNFs9vQLnGmZ46Lpy1VK7CaXcmj69EkuSmXTOfsURBa8M0kPoebRTcBy?=
- =?us-ascii?Q?6K4KEXB2HzzEj77I6iuM9fcUaxBwHfKaB2j5H35KQPoKU9gv7fCaBlcfJVPH?=
- =?us-ascii?Q?prRqAoI1b/GjM1E5wftXJAWnqxP6L9EXVgAaduJf5ZDzUA/SHmCNibPz0aLB?=
- =?us-ascii?Q?Q1Y3NVUMQ6NSO71yc+kivMmC+nYXeorfmNySbSH6q3slnOMaE2c+JdKnHsTg?=
- =?us-ascii?Q?Ep8EOftHyeBZssyD6WAHqtFkgE+omRRu/Z0NT/XSYkS7kTp7P8vIN1Cdl9bx?=
- =?us-ascii?Q?SfweJJP4XryVGLKZKjJKeFuuLFly3Cn/4DwCrKHoxCeKjy+zGITDlUDk1EOg?=
- =?us-ascii?Q?bAZ3eaYo7G4Ls0UEK2uIgjiPbP+s7L7jQhWk5xGPM1xANzrnBZ2oRnEQNFJ4?=
- =?us-ascii?Q?62VHAS+AlfB9zq1j8cuBBs+jIZMyYW0oEei0OZqYW03cMeGuoWc3bDK2kgVA?=
- =?us-ascii?Q?JM1tKJFK58v2pw+EpBWEfkJaQvqJ6wJPuJCrPtJy2jKkvEHjjSR42/G/xUMF?=
- =?us-ascii?Q?UvP7G0CxQYVdnK430+xtPUWBNH7e1BPRygkxB5X3y9ZYKdxdLYKiIplWrmfF?=
- =?us-ascii?Q?eC8Zx6ueb9suqGxi3D42BsDsbhaxNmlx5J3mwH3V7G3ElM0f5UXJuZhyxZVu?=
- =?us-ascii?Q?yq8/8XLFf/iNw6gjnD+wOtZH7+Jpo7o7/hofrGmwmN6wKpykM+yfzLFbt4xH?=
- =?us-ascii?Q?lIwuhkDcx4IA2/qObromsgsEBrEoY83kpsID1tUqez6D5RlwEjEt+xebKYUV?=
- =?us-ascii?Q?cVd2Ws75wD5PSvL3Xs+DDvxX7P1mH0u0D7NYU60O5fd/qDm+bja+EyLpnipp?=
- =?us-ascii?Q?+vfFRecPbUm7BsPtJUqmccDnF3apvvSTG4XC6P+lyMDn6S3M7yS0G+svDLyS?=
- =?us-ascii?Q?aSbdPTjePTDRaRKtZQleufYKu9F8MawvY76EOT5ISSt5u1ipKPJJLH7Su9Oe?=
- =?us-ascii?Q?DrLGsNFYuqK7iGHqlCqJrMBX3F3m6mzocBGJQr/T42fbGl1N2Mo5Xfl0T93F?=
- =?us-ascii?Q?SX8jVmce19GqSfzwEiDeH4ckFMtIXirjhpHiWFCUiAEQYAVD0g=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(52116014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?C0SIM+VmiL6aKio537uJzAGfw98xYU5z7cPGYHRhdsfsv02I4AgYfxN/U5SC?=
- =?us-ascii?Q?cXJp6etlzDsMm2sZRrp9OddPv5LUBO2lHPS6I0bRx9Ec3TFIOSHXkIHKTh+n?=
- =?us-ascii?Q?cLpUzZ2n96ubQB2jy2731GG+z6G7/KF+PRHZO3SoKIRJx5eSP+2tb2Jsbg7W?=
- =?us-ascii?Q?GMqxb6eDCfu89/+7TNx9xEAgwbRBqwoOlDR6W3xkCk8oKv2R+GJ/LVCaWvMf?=
- =?us-ascii?Q?S+wtlLDE8DhrBLxvVdFijnH/3igc6V2qSZxf7qhLAmjPi4Qve86jJRA72DdU?=
- =?us-ascii?Q?f5ra2mDVxrIJK+/SQLcsh+PUdIQfbC5RrHFRojVFj+hcIK5hU1Il9oFEP2B8?=
- =?us-ascii?Q?icCiaTbd6ArR/lN7+nxcmV5kR97EkU7aBZa4I3B/sr2BoE9k05LqBekpPHNN?=
- =?us-ascii?Q?ggAA27Pauc53QJbYm+/HdS2RNufUtagkP64KV9saWLzqdp/nBfMKgjrAdShL?=
- =?us-ascii?Q?DjXePRjvEfMvqHLdRg068A77cSpg6TQdjnQCIKoMbZTXqiI4DxhIpztmqyXs?=
- =?us-ascii?Q?5CKrTZ2/xK47fEPze5qkRPxspFJ4R5OJGoDDeLpFF5xIQg7TC9yvSTR3prvp?=
- =?us-ascii?Q?DDGOUu3P+lTZ23K2ABZ9jlQ0JeW4ykY8ahCdlSBlXjBnkAYiJDMxhytoP5ts?=
- =?us-ascii?Q?g6xmM3EF77zSbGJ66TcVVG9fdoc2HtR7x3FvTrgb/R9z2GMHddO6GVLr/5Yo?=
- =?us-ascii?Q?40ijRc234Li8LXCG8jnHjTIMybKSD8ACb2rIsoX6fGE9bPqhZkShBjxlQ+Br?=
- =?us-ascii?Q?e+v8gF7b8Sco2NjYUnT59izhcU+ncZxBWkfEbHCNN7jqXFz5ARyRYqe/j68y?=
- =?us-ascii?Q?eOnFY5BXTsB3+SHme0UmCmW8GLCFAZos84K1exxqOIMR9hhLdDojnwc+7cTH?=
- =?us-ascii?Q?1HN3DwfNtEJTNeeQos6jaVvPeQF2xIuozfkn/a1bYgic8FF+lzDs7DE6Y+2n?=
- =?us-ascii?Q?QWQ7odIKc2LIicIAZdLan/2MoCG5U1l9Dz1ZQJJauPjTF7wns7giX0wKqxIa?=
- =?us-ascii?Q?sZjxQ9MMtGHH7jDMqsHo8E0wc4nrtIJ2iU9WdJ1iHSjYR6amK4Xa+DiYIhPE?=
- =?us-ascii?Q?VowOcbREWCS+YlJaWa3HjQLeWOfiRmZfU3YUM8LLlGAHez4ohSYDZaVZSRTd?=
- =?us-ascii?Q?eIRsSgWjsWNQRfSS9H1fZb9/HZhvhp3YegPOSigidzwFP5vyLedqJ0lJj7Yx?=
- =?us-ascii?Q?4+AUhvk/przKAvvRteASB9krUoFX34l9XqbsgQ1eqLFC3QeNKRmqaiBy+xGr?=
- =?us-ascii?Q?h57NeIR0Q3Qkl5sJ8843Ph8v429XDO7ALpA2wPWO2zGDZXdyD5JXvJIVAtk8?=
- =?us-ascii?Q?Pf6S979TpgjnKyNCr7WfrhLQ9ZT3RxFXsRlaG3kb0iUmoBK3Z1z8SMUbKXxI?=
- =?us-ascii?Q?hjeVJJ9dG8vsv1YUsxVr6YLc5pJc8XMdHu1O1bCE+9juPrfyQ2HGlkZRmdGI?=
- =?us-ascii?Q?53yv71ERNHGEaRH7tCOspNgAvtrJ6Vof0xyMmzQN4976Xna8inHF12BM7gMf?=
- =?us-ascii?Q?EWsi1v5A8J5NwCATZYkckiuYT7Hxvddzg0MN5F8ST+JOSr6U5zGrva4zS3jH?=
- =?us-ascii?Q?FizOwX923vmoBsLuLHAlnwf8vagKMZ08Jykb94Zn?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c70d206b-2d92-40d0-14bc-08dd0d395eb5
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Nov 2024 10:10:21.2779
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rlcGGJSEh6mm3t04dfjapJDUgbqpeTKrLPnRFt95SH3Ldg2HK2u0XW3pPLJVZHGzr+Y9RYmBohouqesOxq798Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10440
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZR1P278MB10224924F48419CA813402309F272@ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM>
 
-When unbind and bind the device again, kernel will dump below warning:
+Hi Olivér,
 
-[  173.972130] sysfs: cannot create duplicate filename '/devices/platform/soc/4c010010.usb/software_node'
-[  173.981564] CPU: 2 UID: 0 PID: 536 Comm: sh Not tainted 6.12.0-rc6-06344-g2aed7c4a5c56 #144
-[  173.989923] Hardware name: NXP i.MX95 15X15 board (DT)
-[  173.995062] Call trace:
-[  173.997509]  dump_backtrace+0x90/0xe8
-[  174.001196]  show_stack+0x18/0x24
-[  174.004524]  dump_stack_lvl+0x74/0x8c
-[  174.008198]  dump_stack+0x18/0x24
-[  174.011526]  sysfs_warn_dup+0x64/0x80
-[  174.015201]  sysfs_do_create_link_sd+0xf0/0xf8
-[  174.019656]  sysfs_create_link+0x20/0x40
-[  174.023590]  software_node_notify+0x90/0x100
-[  174.027872]  device_create_managed_software_node+0xec/0x108
-...
+Sorry to keep you waiting.
 
-The root cause is the '4c010010.usb' device is a platform device which is
-created during initcall and it will never be removed. So the software node
-will never be removed too even using device_create_managed_software_node().
-This will use device_add/remove_software_node() to improve the logic.
+On Mon, Nov 18, 2024 at 02:00:41PM +0000, Facklam, Olivér wrote:
+> Hello Heikki,
+> 
+> Thanks for reviewing.
+> 
+> > -----Original Message-----
+> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > Sent: Monday, November 18, 2024 12:50 PM
+> > To: Facklam, Olivér <oliver.facklam@zuehlke.com>
+> > Cc: Biju Das <biju.das@bp.renesas.com>; Greg Kroah-Hartman
+> > <gregkh@linuxfoundation.org>; linux-usb@vger.kernel.org; linux-
+> > kernel@vger.kernel.org; von Heyl, Benedict
+> > <benedict.vonheyl@zuehlke.com>; Först, Mathis
+> > <mathis.foerst@zuehlke.com>; Glettig, Michael
+> > <Michael.Glettig@zuehlke.com>
+> > Subject: Re: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring port
+> > type
+> > 
+> > Hi Oliver,
+> > 
+> > I'm sorry, I noticed a problem with this...
+> > 
+> > On Thu, Nov 14, 2024 at 09:02:08AM +0100, Oliver Facklam wrote:
+> > > The TI HD3SS3220 Type-C controller supports configuring the port type
+> > > it will operate as through the MODE_SELECT field of the General
+> > > Control Register.
+> > >
+> > > Configure the port type based on the fwnode property "power-role"
+> > > during probe, and through the port_type_set typec_operation.
+> > >
+> > > The MODE_SELECT field can only be changed when the controller is in
+> > > unattached state, so follow the sequence recommended by the datasheet
+> > to:
+> > > 1. disable termination on CC pins to disable the controller
+> > > 2. change the mode
+> > > 3. re-enable termination
+> > >
+> > > This will effectively cause a connected device to disconnect
+> > > for the duration of the mode change.
+> > 
+> > Changing the type of the port is really problematic, and IMO we should
+> > actually never support that.
+> 
+> Could you clarify why you think it is problematic?
 
-Fixes: a9400f1979a0 ("usb: dwc3: imx8mp: add 2 software managed quirk properties for host mode")
-Cc: stable@vger.kernel.org
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
----
- drivers/usb/dwc3/dwc3-imx8mp.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+It's not completely clear to me what it's meant for. If it was just
+for fixing the type of the port to be sink, source or DRP before
+connections, it would make sense, but since it can be use even when
+there is an actice connection (there is nothing preventing that), it
+can in practice be used to swap the role.
 
-diff --git a/drivers/usb/dwc3/dwc3-imx8mp.c b/drivers/usb/dwc3/dwc3-imx8mp.c
-index 356812cbcd88..edd544c6e1c1 100644
---- a/drivers/usb/dwc3/dwc3-imx8mp.c
-+++ b/drivers/usb/dwc3/dwc3-imx8mp.c
-@@ -129,6 +129,16 @@ static void dwc3_imx8mp_wakeup_disable(struct dwc3_imx8mp *dwc3_imx)
- 	writel(val, dwc3_imx->hsio_blk_base + USB_WAKEUP_CTRL);
- }
- 
-+static const struct property_entry dwc3_imx8mp_properties[] = {
-+	PROPERTY_ENTRY_BOOL("xhci-missing-cas-quirk"),
-+	PROPERTY_ENTRY_BOOL("xhci-skip-phy-init-quirk"),
-+	{},
-+};
-+
-+static const struct software_node dwc3_imx8mp_swnode = {
-+	.properties = dwc3_imx8mp_properties,
-+};
-+
- static irqreturn_t dwc3_imx8mp_interrupt(int irq, void *_dwc3_imx)
- {
- 	struct dwc3_imx8mp	*dwc3_imx = _dwc3_imx;
-@@ -148,17 +158,6 @@ static irqreturn_t dwc3_imx8mp_interrupt(int irq, void *_dwc3_imx)
- 	return IRQ_HANDLED;
- }
- 
--static int dwc3_imx8mp_set_software_node(struct device *dev)
--{
--	struct property_entry props[3] = { 0 };
--	int prop_idx = 0;
--
--	props[prop_idx++] = PROPERTY_ENTRY_BOOL("xhci-missing-cas-quirk");
--	props[prop_idx++] = PROPERTY_ENTRY_BOOL("xhci-skip-phy-init-quirk");
--
--	return device_create_managed_software_node(dev, props, NULL);
--}
--
- static int dwc3_imx8mp_probe(struct platform_device *pdev)
- {
- 	struct device		*dev = &pdev->dev;
-@@ -221,10 +220,10 @@ static int dwc3_imx8mp_probe(struct platform_device *pdev)
- 	if (err < 0)
- 		goto disable_rpm;
- 
--	err = dwc3_imx8mp_set_software_node(dev);
-+	err = device_add_software_node(dev, &dwc3_imx8mp_swnode);
- 	if (err) {
- 		err = -ENODEV;
--		dev_err(dev, "failed to create software node\n");
-+		dev_err(dev, "failed to add software node\n");
- 		goto disable_rpm;
- 	}
- 
-@@ -268,6 +267,7 @@ static void dwc3_imx8mp_remove(struct platform_device *pdev)
- 
- 	pm_runtime_get_sync(dev);
- 	of_platform_depopulate(dev);
-+	device_remove_software_node(dev);
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
+And in some cases in the past where this attribute file was proposed
+to be used with some other drivers, the actual goal really ended up
+being to be able to just swap the role with an existing connection
+instead of being able to fix the type of the port. The commit message
+made it sound like that could be the goal in this case as well, but
+maybe I misunderstood.
+
+Even in cases where it's clear that the intention is to just fix the
+role before connections, why would user space needs to control that is
+still not completely clear, at least not to me.
+
+> > Consider for example, if your port is sink only, then the platform
+> > almost certainly can't drive the VBUS. This patch would still allow
+> > the port to be changed to source port.
+> 
+> In my testing, it appeared to me that when registering a type-c port with
+> "typec_cap.type = TYPEC_PORT_SNK" (for example), then the type-c class
+> disables the port_type_store functionality:
+> 	if (port->cap->type != TYPEC_PORT_DRP ||
+> 	    !port->ops || !port->ops->port_type_set) {
+> 		dev_dbg(dev, "changing port type not supported\n");
+> 		return -EOPNOTSUPP;
+> 	}
+> 
+> So to my understanding, a platform which cannot drive VBUS should simply
+> set the fwnode `power-role="sink"`. Since patch 2/4 correctly parses this property,
+> wouldn't that solve this case?
+
+True. I stand corrected.
+
+> > Sorry for not realising this in v1.
+> > 
+> > I think what you want here is just a power role swap. Currently power
+> > role swap is only supported when USB PD is supported in the class
+> > code, but since the USB Type-C specification quite clearly states that
+> > power role and data role swap can be optionally supported even when
+> > USB PD is not supported (section 2.3.3) we need to fix that:
+> 
+> My interpretation of section 2.3.3 is that the 2 mechanisms allowing 
+> power role swap are:
+> - USB PD (after initial connection)
+> - "as part of the initial connection process": to me this is simply referring to the
+> 	Try.SRC / Try.SNK mechanism, for which we already have 
+> 	the "try_role" callback.
+> 
+> Maybe I'm misunderstanding what the intentions are behind each of the 
+> typec_operations, so if you could clarify that (or give some pointer), that would
+> be appreciated. My understanding:
+> - "try_role": set Try.SRC / Try.SNK / no preference for a dual-role port for initial connection
+> - "pr_set" / "dr_set" / "vconn_set": swap power and data role resp.
+> 	after the initial connection using USB-PD.
+> - "port_type_set": configure what port type to operate as, i.e. which initial connection
+> 	state machine from the USB-C standard to apply for the next connection
+> Please correct me if any of these are incorrect.
+
+I don't know what's the intention with the port_type attribute file
+unfortunately.
+
+> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> > index 58f40156de56..ee81909565a4 100644
+> > --- a/drivers/usb/typec/class.c
+> > +++ b/drivers/usb/typec/class.c
+> > @@ -1535,11 +1535,6 @@ static ssize_t power_role_store(struct device
+> > *dev,
+> >                 return -EOPNOTSUPP;
+> >         }
+> > 
+> > -       if (port->pwr_opmode != TYPEC_PWR_MODE_PD) {
+> > -               dev_dbg(dev, "partner unable to swap power role\n");
+> > -               return -EIO;
+> > -       }
+> > -
+> >         ret = sysfs	_match_string(typec_roles, buf);
+> >         if (ret < 0)
+> >                 return ret;
+> > 
+> > 
+> > After that it should be possible to do power role swap also in this
+> > driver when the port is DRP capable.
+> > 
+> > > Signed-off-by: Oliver Facklam <oliver.facklam@zuehlke.com>
+> > > ---
+> > >  drivers/usb/typec/hd3ss3220.c | 66
+> > ++++++++++++++++++++++++++++++++++++++++++-
+> > >  1 file changed, 65 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/usb/typec/hd3ss3220.c
+> > b/drivers/usb/typec/hd3ss3220.c
+> > > index
+> > e581272bb47de95dee8363a5491f543354fcbbf8..e3e9b1597e3b09b82f0726a
+> > 01f311fb60b4284da 100644
+> > > --- a/drivers/usb/typec/hd3ss3220.c
+> > > +++ b/drivers/usb/typec/hd3ss3220.c
+> [...]
+> > > @@ -131,8 +183,16 @@ static int hd3ss3220_dr_set(struct typec_port
+> > *port, enum typec_data_role role)
+> > >       return ret;
+> > >  }
+> > >
+> > > +static int hd3ss3220_port_type_set(struct typec_port *port, enum
+> > typec_port_type type)
+> > > +{
+> > > +     struct hd3ss3220 *hd3ss3220 = typec_get_drvdata(port);
+> > > +
+> > > +     return hd3ss3220_set_port_type(hd3ss3220, type);
+> > > +}
+> > 
+> > This wrapper seems completely useless. You only need one function here
+> > for the callback.
+> 
+> The wrapper is to extract the struct hd3ss3220 from the typec_port.
+> The underlying hd3ss3220_set_port_type I am also using during probe
+> to configure initial port type.
+
+Ah, I missed that. Sorry about that.
+
+> One point worth mentioning here is that if the MODE_SELECT register
+> is not configured, the chip will operate according to a default which is 
+> chosen by an external pin (sorry if this was not detailed enough in commit msg)
+> >From the datasheet:
+> -------------------
+> | PORT | 4 | I | Tri-level input pin to indicate port mode. The state of this pin is sampled when HD3SS3220's
+> 		ENn_CC is asserted low, and VDD5 is active. This pin is also sampled following a
+> 		I2C_SOFT_RESET.
+> 		H - DFP (Pull-up to VDD5 if DFP mode is desired)
+> 		NC - DRP (Leave unconnected if DRP mode is desired)
+> 		L - UFP (Pull-down or tie to GND if UFP mode is desired)
+> 
+> In our use case, it was not desirable to leave this default based on wiring,
+> and it makes more sense to me to allow the configuration to come from
+> the fwnode property. Hence the port type setting in probe().
+
+I get that, but that just means you want to fix the type during probe,
+no? Why do you need to expose this to the user space?
+
+> > >  static const struct typec_operations hd3ss3220_ops = {
+> > > -     .dr_set = hd3ss3220_dr_set
+> > > +     .dr_set = hd3ss3220_dr_set,
+> > > +     .port_type_set = hd3ss3220_port_type_set,
+> > >  };
+> > 
+> > So here I think you should implement the pr_set callback instead.
+> 
+> I can do that, but based on the MODE_SELECT register description, 
+> it seems to me that this setting is fundamentally changing the operation
+> mode of the chip, i.e. the state machine that is being run for initial connection.
+> So there would have to be a way of "resetting" it to be a dual-role port again,
+> which the "pr_set" callback doesn't seem to have?
+> 	This register can be written to set the HD3SS3220 mode
+> 	operation. The ADDR pin must be set to I2C mode. If the default
+> 	is maintained, HD3SS3220 shall operate according to the PORT
+> 	pin levels and modes. The MODE_SELECT can only be
+> 	changed when in the unattached state.
+> 	00 - DRP mode (start from unattached.SNK) (default)
+> 	01 - UFP mode (unattached.SNK)
+> 	10 - DFP mode (unattached.SRC)
+> 	11 - DRP mode (start from unattached.SNK)
+
+Okay, I see. This is not a case for pr_set.
+
+I'm still confused about the use case here. It seems you are not
+interested in role swapping after all, so why would you need this
+functionality to be exposed to the user space?
+
+I'm sorry if I've missed something.
+
+About the port_type attribute file itself. I would feel more
+comfortable with it if it was allowed to be written only when there is
+nothing connected to the port. At the very least, I think it should be
+documented better so what it's really meant for would be more clear to
+everybody.
+
+thanks,
+
 -- 
-2.34.1
-
+heikki
 
