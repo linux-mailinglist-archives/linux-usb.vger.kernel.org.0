@@ -1,188 +1,126 @@
-Return-Path: <linux-usb+bounces-17836-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17837-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42CDF9D849F
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 12:38:24 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16AD19D87E6
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 15:27:50 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB221B27E6A
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 11:16:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F4C9168601
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 14:27:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4DA01957FF;
-	Mon, 25 Nov 2024 11:16:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C03A1B0F1B;
+	Mon, 25 Nov 2024 14:27:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FhU7YJ56"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VRPloq9M"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE9F16F8F5;
-	Mon, 25 Nov 2024 11:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2C71AF0CA
+	for <linux-usb@vger.kernel.org>; Mon, 25 Nov 2024 14:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732533369; cv=none; b=rNYoeTTeMI4M0I5ATs+eCfh+mp/Q/hhjy7GPUYJ0VZ/F0vkvMk6xEzvlT+uEh1rLhN/3SZeOCE/VliOzCMuMQz45YxL+HdDKqwLZkQ8xrb3vaMomKMeTf0D2pupDkb/VVvFPrHUZwQGZn1brBJ9kZzLrQ5nDBZWIH86Za7/hG7I=
+	t=1732544856; cv=none; b=JaQUCTury//CoLZoFjhuj/DdXshSII9NCQ08YOoS1OKzbuF4V7l+CFdG5sAkTWuoXubwOpihr/I5MRS1bcPdckdD5WQ+pkU7gkekyuDKy74mE3+bOzCFtmd2dgCLVFtn80osW8ceh0j9B/Yha34u8cMJDCsfvQHmJu9SZSyP8k8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732533369; c=relaxed/simple;
-	bh=kdnVlIG+B0GvyzI6XnIWhqcMOJeA2ir/FehYBjUqKeg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k9oCQdkNeJEPbS/EPZ3DqGqMHtVNz0PCe9u2SlMsvIBwHbPtLZE8NruMBSsyUe3XhLmJFp1Yz3+UBO+ZVtUrOx78XE6AnCdBGYCTgM0MQXaQ3GRj8NRHWGbxNOR6Ew54JyHWFU7KaqoMHY+o87Egdfxrw4VrAusGJMGjyIjsq3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FhU7YJ56; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732533366; x=1764069366;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=kdnVlIG+B0GvyzI6XnIWhqcMOJeA2ir/FehYBjUqKeg=;
-  b=FhU7YJ56sRfpjO2NPOdG6krrzBI1MMPfhAsuuIVMesQX9Yy1iQBV1jwX
-   thbuujFYLD3U3oMTeAZAuXyRnNH3wyOHwQQRK3inrLsZGpxF0GiUpwWyd
-   Yqvkg7/AIIAxB/5AyUpWZlQ/AFbq+smdmzVE7ZSGfQ2c1O+1o8g50jpPi
-   XIXOhiS3cNQ24sYjnvuWeE6LuIbXO31eIul8hPnu+oXUnRLL7dJbOQfWB
-   lyHKjn4ntt6KR6yA/TasKImdCbWyvAIln33Vxh916jC6JVuCSZXNczsuv
-   0sNMC9wQoL64thEDaxbx5xja+cGjsLVjzpwxxzDm4A9yq5IjIATJT5Pee
-   A==;
-X-CSE-ConnectionGUID: nzGlADILRxeKvcOwX41Gbg==
-X-CSE-MsgGUID: 8yBrSqIuRuquV+7XblJRTQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="35486595"
-X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="35486595"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 03:16:06 -0800
-X-CSE-ConnectionGUID: gBeP8Lr+RZqCkZddfOJNRw==
-X-CSE-MsgGUID: spSc4BW6RXSzi0N0AoewcQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="91690128"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa009.fm.intel.com with SMTP; 25 Nov 2024 03:16:04 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Nov 2024 13:16:03 +0200
-Date: Mon, 25 Nov 2024 13:16:03 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v3] usb: typec: anx7411: fix OF node reference leaks in
- anx7411_typec_switch_probe()
-Message-ID: <Z0Rcc3_E25-2KJaw@kuha.fi.intel.com>
-References: <20241121023914.1194333-1-joe@pf.is.s.u-tokyo.ac.jp>
+	s=arc-20240116; t=1732544856; c=relaxed/simple;
+	bh=U7o1D57jtLh59OsO10ECFtaACJakljAhHoDMoWgTwTk=;
+	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:References:
+	 From:In-Reply-To; b=N/TFY8gfBgj6MMkw/6BElR9IIwfqpXZmVYu581zgvcnlu4QZXqoYJnMV1P6glzGwBRV13NaDdpPm8mpKfcgm5jj46yw3CjDIJZPZbO3r15TjxhTmiOCvFM7TNXP4ibktmsrahYKon2uD+f/IErCUftjhIpMjnTFJMPgQJnz1jsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VRPloq9M; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aa54adcb894so161127766b.0
+        for <linux-usb@vger.kernel.org>; Mon, 25 Nov 2024 06:27:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1732544852; x=1733149652; darn=vger.kernel.org;
+        h=in-reply-to:from:content-language:references:to:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=y/ahLoTkOQbUNPLddwR8ZxbuZmpOwlJuFObCG9r4Ks0=;
+        b=VRPloq9MfDUX9YWH/ZTbcLKHfTH+RH1IyFwzvIQQ7XJFhbgW2xKN22HB1RGsHqYtM1
+         b/BppOySOW3r5nRi9/052TMv2XE1pcks8qjJCdHf8DLy2BFI62kN+wGiRHmG6yOz1Yyv
+         b+VmMZEcOnnVZP8LFOXe1jwLDan/UNgLlN3/J4aFq3QTLOdqeHO/IPgTlR7yHERerKaL
+         IfVw4rZs27sKRi8OCGgBop8p4FiyqE6844hVAEWuCtlj1a0Bd2r9ULEs3Gt1fhmb+MMr
+         6WMKl7+akeSlt1DaxPkQsMxfC59ALozdNnLIqLVuxv5GOfTme5Hl0jfVG6wmDgAZdY7w
+         FDTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732544852; x=1733149652;
+        h=in-reply-to:from:content-language:references:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=y/ahLoTkOQbUNPLddwR8ZxbuZmpOwlJuFObCG9r4Ks0=;
+        b=uslBCsHQmekO6LvViC6g/APrMHoD1BbQT8qhEB+CGFeXjJNOjQenHqqZDgQvd9hMzE
+         rys2SvUZxZ1q4/MM9JmjnedMGr4VtJlqRt2ZbVhiz8pOCcKDemSRB7t8znHdYlFkiJzK
+         YpNCCLnf7cNS6a8sCKFiFaOAVhskNqz65zI5PhpJ9ezJRhN+9fSTJBSd8vqiRao5EN/E
+         MNZSG6PH3F1xn541DvRLiWlSMZ34vnlQ/m7wIzfCYDVdDYk864OZzUwX29LO+EP3nElV
+         dInNJaAS+aYA0VtVpjVOC4HYuMJlie8X+g9Ab8wNfYKzN0Jnd3/GCQCJmyypmoDUz+O5
+         nHSg==
+X-Forwarded-Encrypted: i=1; AJvYcCVxElUrjujDkM1zxMTv8du7b3pxRnBb5XQrOnx34DN+UVi7FqjLt0/HkckYF231oFyVdqmnSMtk3rk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyuZCCvmFFKl2B00A+KS1TBEY22amifo6dJIZN/lwmoy2eOb/do
+	bk39beEh5yRmSjmapHOEyFhdVqGsv27t/QSZlfTawdaeW/8jmBHq5S+ekp0tHVM=
+X-Gm-Gg: ASbGncuQi7nqf6cxrJu0Gme38NYKAU//NSUj7eA21+IPdRzmZDqUsLPRnxlng8Xh4DB
+	eRJjnPLwuN+cthw9UBsJfaVy+2gEa10kt3b98cABU5I4KBRmx5yM+rD5PZbqdGc8a31LGPX6Jid
+	cBHpFZaN0JtJ0UBBrTpZXy5694chuMjkkW7xHUjPAd9DEDfSlimph/ul3OqYSlr9MUpySTvIU2V
+	jPls2qxI22NNECWgCaWxHCHEO560RotMXJ1fcxVgcCiDf8ch5OTTPwJ7IfbPnE5sFMzJeuzsQOK
+	6Flj+M7CerNxwMI=
+X-Google-Smtp-Source: AGHT+IFgbHxmjImxNV3kZB80V8ydJqDA7TNH+whiROTVRZ0/HcdPVatBu2UqWg0PqhvwrOKRhKe/uQ==
+X-Received: by 2002:a17:906:4c2:b0:aa5:da4:3c0a with SMTP id a640c23a62f3a-aa50da43c96mr847236066b.59.1732544852161;
+        Mon, 25 Nov 2024 06:27:32 -0800 (PST)
+Received: from ?IPV6:2001:a61:13d6:901:7eb2:25b5:1313:4c48? ([2001:a61:13d6:901:7eb2:25b5:1313:4c48])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b5bdffesm466680866b.204.2024.11.25.06.27.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 25 Nov 2024 06:27:31 -0800 (PST)
+Content-Type: multipart/mixed; boundary="------------28AC3v0ghe0AXOY8l22zAvJY"
+Message-ID: <21c2fc3f-e55a-47bb-a51b-b53e5cab1e67@suse.com>
+Date: Mon, 25 Nov 2024 15:27:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241121023914.1194333-1-joe@pf.is.s.u-tokyo.ac.jp>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [syzbot] [media?] WARNING in iguanair_probe/usb_submit_urb (2)
+To: syzbot <syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com>,
+ linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-usb@vger.kernel.org, mchehab@kernel.org, sean@mess.org,
+ syzkaller-bugs@googlegroups.com
+References: <673f740d.050a0220.3c9d61.0176.GAE@google.com>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <673f740d.050a0220.3c9d61.0176.GAE@google.com>
 
-Hi,
+This is a multi-part message in MIME format.
+--------------28AC3v0ghe0AXOY8l22zAvJY
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Sorry to keep you waiting.
 
-On Thu, Nov 21, 2024 at 11:39:14AM +0900, Joe Hattori wrote:
-> The refcounts of the OF nodes obtained in by of_get_child_by_name()
-> calls in anx7411_typec_switch_probe() are not decremented. Add
-> additional device_node fields to anx7411_data, and call of_node_put() on
-> them in the error path and in the unregister functions.
+
+On 21.11.24 18:55, syzbot wrote:
+
+> #syz test: git://repo/address.git branch-or-commit-hash
+> If you attach or paste a git patch, syzbot will apply it before testing.
 > 
-> Fixes: e45d7337dc0e ("usb: typec: anx7411: Use of_get_child_by_name() instead of of_find_node_by_name()")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-> ---
-> Changes in v3:
-> - Add new fields to anx7411_data.
-> - Remove an unnecessary include.
-> ---
->  drivers/usb/typec/anx7411.c | 19 ++++++++++++-------
->  1 file changed, 12 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
-> index 95607efb9f7e..e714b04399fa 100644
-> --- a/drivers/usb/typec/anx7411.c
-> +++ b/drivers/usb/typec/anx7411.c
-> @@ -290,6 +290,8 @@ struct anx7411_data {
->  	struct power_supply *psy;
->  	struct power_supply_desc psy_desc;
->  	struct device *dev;
-> +	struct device_node *switch_node;
-> +	struct device_node *mux_node;
+#syz test:  https://github.com/google/kasan.git 43fb83c17ba2
 
-Please make these fwnodes.
+--------------28AC3v0ghe0AXOY8l22zAvJY
+Content-Type: text/x-patch; charset=UTF-8; name="iguana.patch"
+Content-Disposition: attachment; filename="iguana.patch"
+Content-Transfer-Encoding: base64
 
->  };
->  
->  static u8 snk_identity[] = {
-> @@ -1099,6 +1101,7 @@ static void anx7411_unregister_mux(struct anx7411_data *ctx)
->  	if (ctx->typec.typec_mux) {
->  		typec_mux_unregister(ctx->typec.typec_mux);
->  		ctx->typec.typec_mux = NULL;
-> +		of_node_put(ctx->mux_node);
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvcmMvaWd1YW5haXIuYyBiL2RyaXZlcnMvbWVk
+aWEvcmMvaWd1YW5haXIuYwppbmRleCAyNzZiZjNjOGE4Y2IuLjhhZjk0MjQ2ZTU5MSAxMDA2
+NDQKLS0tIGEvZHJpdmVycy9tZWRpYS9yYy9pZ3VhbmFpci5jCisrKyBiL2RyaXZlcnMvbWVk
+aWEvcmMvaWd1YW5haXIuYwpAQCAtMTk0LDggKzE5NCwxMCBAQCBzdGF0aWMgaW50IGlndWFu
+YWlyX3NlbmQoc3RydWN0IGlndWFuYWlyICppciwgdW5zaWduZWQgc2l6ZSkKIAlpZiAocmMp
+CiAJCXJldHVybiByYzsKIAotCWlmICh3YWl0X2Zvcl9jb21wbGV0aW9uX3RpbWVvdXQoJmly
+LT5jb21wbGV0aW9uLCBUSU1FT1VUKSA9PSAwKQorCWlmICh3YWl0X2Zvcl9jb21wbGV0aW9u
+X3RpbWVvdXQoJmlyLT5jb21wbGV0aW9uLCBUSU1FT1VUKSA9PSAwKSB7CisJCXVzYl9raWxs
+X3VyYihpci0+dXJiX291dCk7CiAJCXJldHVybiAtRVRJTUVET1VUOworCX0KIAogCXJldHVy
+biByYzsKIH0K
 
-fwnode_handle_put(ctx->mux_node);
-
->  	}
->  }
->  
-> @@ -1107,6 +1110,7 @@ static void anx7411_unregister_switch(struct anx7411_data *ctx)
->  	if (ctx->typec.typec_switch) {
->  		typec_switch_unregister(ctx->typec.typec_switch);
->  		ctx->typec.typec_switch = NULL;
-> +		of_node_put(ctx->switch_node);
-
-fwnode_handle_put(ctx->switch_node);
-
->  	}
->  }
->  
-> @@ -1114,28 +1118,29 @@ static int anx7411_typec_switch_probe(struct anx7411_data *ctx,
->  				      struct device *dev)
->  {
->  	int ret;
-> -	struct device_node *node;
->  
-> -	node = of_get_child_by_name(dev->of_node, "orientation_switch");
-> -	if (!node)
-> +	ctx->switch_node = of_get_child_by_name(dev->of_node, "orientation_switch");
-
-ctx->switch_node = device_get_named_child_node(dev, "orientation_switch");
-
-> +	if (!ctx->switch_node)
->  		return 0;
->  
-> -	ret = anx7411_register_switch(ctx, dev, &node->fwnode);
-> +	ret = anx7411_register_switch(ctx, dev, &ctx->switch_node->fwnode);
->  	if (ret) {
->  		dev_err(dev, "failed register switch");
-> +		of_node_put(ctx->switch_node);
->  		return ret;
->  	}
->  
-> -	node = of_get_child_by_name(dev->of_node, "mode_switch");
-> -	if (!node) {
-> +	ctx->mux_node = of_get_child_by_name(dev->of_node, "mode_switch");
-
-ctx->mux_node = device_get_named_child_node(dev, "mode_switch");
-
-> +	if (!ctx->mux_node) {
->  		dev_err(dev, "no typec mux exist");
->  		ret = -ENODEV;
->  		goto unregister_switch;
->  	}
->  
-> -	ret = anx7411_register_mux(ctx, dev, &node->fwnode);
-> +	ret = anx7411_register_mux(ctx, dev, &ctx->mux_node->fwnode);
->  	if (ret) {
->  		dev_err(dev, "failed register mode switch");
-> +		of_node_put(ctx->mux_node);
->  		ret = -ENODEV;
->  		goto unregister_switch;
->  	}
-
-thanks,
-
--- 
-heikki
+--------------28AC3v0ghe0AXOY8l22zAvJY--
 
