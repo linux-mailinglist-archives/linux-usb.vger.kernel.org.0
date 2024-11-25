@@ -1,126 +1,198 @@
-Return-Path: <linux-usb+bounces-17837-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17838-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16AD19D87E6
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 15:27:50 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E0B89D88BA
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 16:05:53 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F4C9168601
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 14:27:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF00B2864C3
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 15:05:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C03A1B0F1B;
-	Mon, 25 Nov 2024 14:27:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 355A11B3940;
+	Mon, 25 Nov 2024 15:05:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="VRPloq9M"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="V3A2MUbJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-qk1-f195.google.com (mail-qk1-f195.google.com [209.85.222.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE2C71AF0CA
-	for <linux-usb@vger.kernel.org>; Mon, 25 Nov 2024 14:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32591B392E
+	for <linux-usb@vger.kernel.org>; Mon, 25 Nov 2024 15:05:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732544856; cv=none; b=JaQUCTury//CoLZoFjhuj/DdXshSII9NCQ08YOoS1OKzbuF4V7l+CFdG5sAkTWuoXubwOpihr/I5MRS1bcPdckdD5WQ+pkU7gkekyuDKy74mE3+bOzCFtmd2dgCLVFtn80osW8ceh0j9B/Yha34u8cMJDCsfvQHmJu9SZSyP8k8=
+	t=1732547138; cv=none; b=QCYdtxQWP22FIGZBHvRhcKhOGZx590l0zlMHMGG8uAg93j4rBrn+Oq2O5P+Nb5QLrJESMB3ybksJXhBLnYvcQXid02+7I7bJgoGRhUOLSWTLG507jh2SXjZQIbsXHfb430zKplsttW88YTN8rVuabV5LE+FljmVFzGZLBGMJhMs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732544856; c=relaxed/simple;
-	bh=U7o1D57jtLh59OsO10ECFtaACJakljAhHoDMoWgTwTk=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:References:
-	 From:In-Reply-To; b=N/TFY8gfBgj6MMkw/6BElR9IIwfqpXZmVYu581zgvcnlu4QZXqoYJnMV1P6glzGwBRV13NaDdpPm8mpKfcgm5jj46yw3CjDIJZPZbO3r15TjxhTmiOCvFM7TNXP4ibktmsrahYKon2uD+f/IErCUftjhIpMjnTFJMPgQJnz1jsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=VRPloq9M; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aa54adcb894so161127766b.0
-        for <linux-usb@vger.kernel.org>; Mon, 25 Nov 2024 06:27:33 -0800 (PST)
+	s=arc-20240116; t=1732547138; c=relaxed/simple;
+	bh=Bi+CayR3aJOX+1KChTDriMlvBJ7UwoRJcYh84Q6MLGw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PL5BK0P1jd1aXPCqFtKoC1MZhe3fz/s4UUcMyKqGsYpNuEdZg8/qLe/C2pmrQCw7nb+3rmcnYS90rlKM5EoBzcRWUJoOJ0ljWVxI3aYszifGKSQecUb9KumAc94cBq/Q1tQ5TrV1WaWP0RFJXVApl2ca68/n1jFk3RLVWNd8vXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=V3A2MUbJ; arc=none smtp.client-ip=209.85.222.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f195.google.com with SMTP id af79cd13be357-7b66402d0b0so92359185a.0
+        for <linux-usb@vger.kernel.org>; Mon, 25 Nov 2024 07:05:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1732544852; x=1733149652; darn=vger.kernel.org;
-        h=in-reply-to:from:content-language:references:to:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y/ahLoTkOQbUNPLddwR8ZxbuZmpOwlJuFObCG9r4Ks0=;
-        b=VRPloq9MfDUX9YWH/ZTbcLKHfTH+RH1IyFwzvIQQ7XJFhbgW2xKN22HB1RGsHqYtM1
-         b/BppOySOW3r5nRi9/052TMv2XE1pcks8qjJCdHf8DLy2BFI62kN+wGiRHmG6yOz1Yyv
-         b+VmMZEcOnnVZP8LFOXe1jwLDan/UNgLlN3/J4aFq3QTLOdqeHO/IPgTlR7yHERerKaL
-         IfVw4rZs27sKRi8OCGgBop8p4FiyqE6844hVAEWuCtlj1a0Bd2r9ULEs3Gt1fhmb+MMr
-         6WMKl7+akeSlt1DaxPkQsMxfC59ALozdNnLIqLVuxv5GOfTme5Hl0jfVG6wmDgAZdY7w
-         FDTw==
+        d=rowland.harvard.edu; s=google; t=1732547135; x=1733151935; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eIcIEwreB6jMpQBW0713qszSdgFb5KeefQ1lDCrxAUU=;
+        b=V3A2MUbJhu4dIadfpLtfmXCjXbm7od1xsQfu/RFf3Qb4yTudu5JKMcEa3motBpj7p7
+         IDPJUqXkR7vyArltdrWHQHwbPejvawqX6e1rM926z12M7T8t73wDU57cvxxWzVANp5tQ
+         XJQK5bgKi8URI7N39+va3KFQwGKg9oNvfchRuIrbFxh33JRlxk3Lw/4TbLW+PrR2jIYX
+         NJxbubAE+SZoWYkqLcMXP3RFBtbN9Nfkhl7X2juGc170xOEzWORLknXm2sgq7l7Wgq+o
+         eDG2Qh/cSBVsLjW6RSKf1VA0NoPtyhMSollJxP+RuWkq3NBMhdNvOg1muTt0Cx2jKdHZ
+         pScw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732544852; x=1733149652;
-        h=in-reply-to:from:content-language:references:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=y/ahLoTkOQbUNPLddwR8ZxbuZmpOwlJuFObCG9r4Ks0=;
-        b=uslBCsHQmekO6LvViC6g/APrMHoD1BbQT8qhEB+CGFeXjJNOjQenHqqZDgQvd9hMzE
-         rys2SvUZxZ1q4/MM9JmjnedMGr4VtJlqRt2ZbVhiz8pOCcKDemSRB7t8znHdYlFkiJzK
-         YpNCCLnf7cNS6a8sCKFiFaOAVhskNqz65zI5PhpJ9ezJRhN+9fSTJBSd8vqiRao5EN/E
-         MNZSG6PH3F1xn541DvRLiWlSMZ34vnlQ/m7wIzfCYDVdDYk864OZzUwX29LO+EP3nElV
-         dInNJaAS+aYA0VtVpjVOC4HYuMJlie8X+g9Ab8wNfYKzN0Jnd3/GCQCJmyypmoDUz+O5
-         nHSg==
-X-Forwarded-Encrypted: i=1; AJvYcCVxElUrjujDkM1zxMTv8du7b3pxRnBb5XQrOnx34DN+UVi7FqjLt0/HkckYF231oFyVdqmnSMtk3rk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyuZCCvmFFKl2B00A+KS1TBEY22amifo6dJIZN/lwmoy2eOb/do
-	bk39beEh5yRmSjmapHOEyFhdVqGsv27t/QSZlfTawdaeW/8jmBHq5S+ekp0tHVM=
-X-Gm-Gg: ASbGncuQi7nqf6cxrJu0Gme38NYKAU//NSUj7eA21+IPdRzmZDqUsLPRnxlng8Xh4DB
-	eRJjnPLwuN+cthw9UBsJfaVy+2gEa10kt3b98cABU5I4KBRmx5yM+rD5PZbqdGc8a31LGPX6Jid
-	cBHpFZaN0JtJ0UBBrTpZXy5694chuMjkkW7xHUjPAd9DEDfSlimph/ul3OqYSlr9MUpySTvIU2V
-	jPls2qxI22NNECWgCaWxHCHEO560RotMXJ1fcxVgcCiDf8ch5OTTPwJ7IfbPnE5sFMzJeuzsQOK
-	6Flj+M7CerNxwMI=
-X-Google-Smtp-Source: AGHT+IFgbHxmjImxNV3kZB80V8ydJqDA7TNH+whiROTVRZ0/HcdPVatBu2UqWg0PqhvwrOKRhKe/uQ==
-X-Received: by 2002:a17:906:4c2:b0:aa5:da4:3c0a with SMTP id a640c23a62f3a-aa50da43c96mr847236066b.59.1732544852161;
-        Mon, 25 Nov 2024 06:27:32 -0800 (PST)
-Received: from ?IPV6:2001:a61:13d6:901:7eb2:25b5:1313:4c48? ([2001:a61:13d6:901:7eb2:25b5:1313:4c48])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b5bdffesm466680866b.204.2024.11.25.06.27.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 25 Nov 2024 06:27:31 -0800 (PST)
-Content-Type: multipart/mixed; boundary="------------28AC3v0ghe0AXOY8l22zAvJY"
-Message-ID: <21c2fc3f-e55a-47bb-a51b-b53e5cab1e67@suse.com>
-Date: Mon, 25 Nov 2024 15:27:28 +0100
+        d=1e100.net; s=20230601; t=1732547135; x=1733151935;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eIcIEwreB6jMpQBW0713qszSdgFb5KeefQ1lDCrxAUU=;
+        b=HqFqxOJKvGgFf4+ooJiLiPsuA8QgTlZMvs3uBkdWevLr6LgA+xiTDnKglSQ+80EnkI
+         NthOqsyOzM670La1D8A+P3HGFnqUkzd+s7DlfwUo3M8iNWljps5eUykA6Ecy4IAkHZR1
+         WqIxI0oSgj3BFuzBM6rg9DMU78+a6QbvqLb3knnHepGTxsraUAF722Gg5A0WnybR55+W
+         DvLXmeFuX0mUp4yxcLRIo2Q6qB6jk2mDhkrgogxYFWlLmsA50xDcSJokr+uSc9KXx1RR
+         naWWslPkICc/6sgiC5jAL9JuwlwZlTTGNwdPWk32Ee6qORwCHucu9+x4pa2uUvgf/iGM
+         /6hA==
+X-Forwarded-Encrypted: i=1; AJvYcCVkXQdzGl1eXaq8uRoPXUZri8nmpjnT8Uk8UTXoznk/6QEp3Bjs5CEbhggz8fXa3nm46sBlo1434Zk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrlHHYZOjFDlRSpegZg0yM1qY99UtUv9kXrMKN32bt9bNiPrpf
+	r23JtyFlNQIIkZzZh42I7KNiMuWv7rKKEpHGwT696usedvOZSAMZOFwQaIoPwA==
+X-Gm-Gg: ASbGnctGmJw2EBdiormlv9pXoFjr+xzR/EpRAydxfKuRnBjgk8BNtAPmYthonpzglgP
+	RhbrIPCnoAaf22ylABFauPcb1WKuI8KBi6hMy5XjCRK2Ro8baYr7HM+h3rumxgaTjXSyjrCyEXd
+	pC+8SQFFejPrcWP95XY8OCwK/pKL9rp2M6XrkCdLUxUZ07LoqFclGlGNvhdczG0smS+sSojm69J
+	hi6e3CF4Zfbq9AEjrcFIlhd1AYtWTwKfaPm+GTxy7+d7QwqBf7fPFf6YI4PG1r3wa2X
+X-Google-Smtp-Source: AGHT+IFQ3vwhNmqC/XSxFE5yYBxxFkA9WmddQ3gcy06Prn5QNk/WjE6EahTflZu7yCfbcojXZD+Rig==
+X-Received: by 2002:a05:6214:21a9:b0:6d4:22e9:b8b6 with SMTP id 6a1803df08f44-6d4514b68dbmr185354926d6.41.1732547135280;
+        Mon, 25 Nov 2024 07:05:35 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6d451ab532bsm43616236d6.69.2024.11.25.07.05.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 25 Nov 2024 07:05:34 -0800 (PST)
+Date: Mon, 25 Nov 2024 10:05:33 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Dingyan Li <18500469033@163.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, usb-storage@lists.one-eyed-alien.net
+Subject: Re: [PATCH v1] usb: storage: add a macro for the upper limit of max
+ LUN
+Message-ID: <30019a70-d496-41d5-9159-c991ac93f326@rowland.harvard.edu>
+References: <20241030083858.46907-1-18500469033@163.com>
+ <56abaf44.86c3.19362571bee.Coremail.18500469033@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [syzbot] [media?] WARNING in iguanair_probe/usb_submit_urb (2)
-To: syzbot <syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com>,
- linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
- linux-usb@vger.kernel.org, mchehab@kernel.org, sean@mess.org,
- syzkaller-bugs@googlegroups.com
-References: <673f740d.050a0220.3c9d61.0176.GAE@google.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <673f740d.050a0220.3c9d61.0176.GAE@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <56abaf44.86c3.19362571bee.Coremail.18500469033@163.com>
 
-This is a multi-part message in MIME format.
---------------28AC3v0ghe0AXOY8l22zAvJY
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-
-
-
-On 21.11.24 18:55, syzbot wrote:
-
-> #syz test: git://repo/address.git branch-or-commit-hash
-> If you attach or paste a git patch, syzbot will apply it before testing.
+On Mon, Nov 25, 2024 at 04:01:36PM +0800, Dingyan Li wrote:
+> Hi Experts,
 > 
-#syz test:  https://github.com/google/kasan.git 43fb83c17ba2
+> Any thoughts on this patch?
+> 
+> Regards,
 
---------------28AC3v0ghe0AXOY8l22zAvJY
-Content-Type: text/x-patch; charset=UTF-8; name="iguana.patch"
-Content-Disposition: attachment; filename="iguana.patch"
-Content-Transfer-Encoding: base64
+It looks fine to me.
 
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvbWVkaWEvcmMvaWd1YW5haXIuYyBiL2RyaXZlcnMvbWVk
-aWEvcmMvaWd1YW5haXIuYwppbmRleCAyNzZiZjNjOGE4Y2IuLjhhZjk0MjQ2ZTU5MSAxMDA2
-NDQKLS0tIGEvZHJpdmVycy9tZWRpYS9yYy9pZ3VhbmFpci5jCisrKyBiL2RyaXZlcnMvbWVk
-aWEvcmMvaWd1YW5haXIuYwpAQCAtMTk0LDggKzE5NCwxMCBAQCBzdGF0aWMgaW50IGlndWFu
-YWlyX3NlbmQoc3RydWN0IGlndWFuYWlyICppciwgdW5zaWduZWQgc2l6ZSkKIAlpZiAocmMp
-CiAJCXJldHVybiByYzsKIAotCWlmICh3YWl0X2Zvcl9jb21wbGV0aW9uX3RpbWVvdXQoJmly
-LT5jb21wbGV0aW9uLCBUSU1FT1VUKSA9PSAwKQorCWlmICh3YWl0X2Zvcl9jb21wbGV0aW9u
-X3RpbWVvdXQoJmlyLT5jb21wbGV0aW9uLCBUSU1FT1VUKSA9PSAwKSB7CisJCXVzYl9raWxs
-X3VyYihpci0+dXJiX291dCk7CiAJCXJldHVybiAtRVRJTUVET1VUOworCX0KIAogCXJldHVy
-biByYzsKIH0K
+Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
 
---------------28AC3v0ghe0AXOY8l22zAvJY--
+Alan Stern
+
+> At 2024-10-30 16:38:58, "Dingyan Li" <18500469033@163.com> wrote:
+> >The meaning of this value is already used in several places,
+> >but with constant values and comments to explain it separately.
+> >It's better to have a central place to do this then use the macro
+> >in those places for better readability.
+> >
+> >Signed-off-by: Dingyan Li <18500469033@163.com>
+> >---
+> > drivers/usb/gadget/function/f_tcm.c          | 8 ++------
+> > drivers/usb/gadget/function/storage_common.h | 2 +-
+> > drivers/usb/storage/transport.c              | 8 ++------
+> > include/linux/usb/storage.h                  | 8 ++++++++
+> > 4 files changed, 13 insertions(+), 13 deletions(-)
+> >
+> >diff --git a/drivers/usb/gadget/function/f_tcm.c b/drivers/usb/gadget/function/f_tcm.c
+> >index 15bb3aa12aa8..e1914b20f816 100644
+> >--- a/drivers/usb/gadget/function/f_tcm.c
+> >+++ b/drivers/usb/gadget/function/f_tcm.c
+> >@@ -441,14 +441,10 @@ static int usbg_bot_setup(struct usb_function *f,
+> > 			pr_err("No LUNs configured?\n");
+> > 			return -EINVAL;
+> > 		}
+> >-		/*
+> >-		 * If 4 LUNs are present we return 3 i.e. LUN 0..3 can be
+> >-		 * accessed. The upper limit is 0xf
+> >-		 */
+> > 		luns--;
+> >-		if (luns > 0xf) {
+> >+		if (luns > US_BULK_MAX_LUN_LIMIT) {
+> > 			pr_info_once("Limiting the number of luns to 16\n");
+> >-			luns = 0xf;
+> >+			luns = US_BULK_MAX_LUN_LIMIT;
+> > 		}
+> > 		ret_lun = cdev->req->buf;
+> > 		*ret_lun = luns;
+> >diff --git a/drivers/usb/gadget/function/storage_common.h b/drivers/usb/gadget/function/storage_common.h
+> >index ced5d2b09234..11ac785d5eee 100644
+> >--- a/drivers/usb/gadget/function/storage_common.h
+> >+++ b/drivers/usb/gadget/function/storage_common.h
+> >@@ -131,7 +131,7 @@ static inline bool fsg_lun_is_open(struct fsg_lun *curlun)
+> > #define FSG_BUFLEN	((u32)16384)
+> > 
+> > /* Maximal number of LUNs supported in mass storage function */
+> >-#define FSG_MAX_LUNS	16
+> >+#define FSG_MAX_LUNS	(US_BULK_MAX_LUN_LIMIT + 1)
+> > 
+> > enum fsg_buffer_state {
+> > 	BUF_STATE_SENDING = -2,
+> >diff --git a/drivers/usb/storage/transport.c b/drivers/usb/storage/transport.c
+> >index 9d767f6bf722..e6bc8ecaecbb 100644
+> >--- a/drivers/usb/storage/transport.c
+> >+++ b/drivers/usb/storage/transport.c
+> >@@ -1087,13 +1087,9 @@ int usb_stor_Bulk_max_lun(struct us_data *us)
+> > 	usb_stor_dbg(us, "GetMaxLUN command result is %d, data is %d\n",
+> > 		     result, us->iobuf[0]);
+> > 
+> >-	/*
+> >-	 * If we have a successful request, return the result if valid. The
+> >-	 * CBW LUN field is 4 bits wide, so the value reported by the device
+> >-	 * should fit into that.
+> >-	 */
+> >+	/* If we have a successful request, return the result if valid. */
+> > 	if (result > 0) {
+> >-		if (us->iobuf[0] < 16) {
+> >+		if (us->iobuf[0] <= US_BULK_MAX_LUN_LIMIT) {
+> > 			return us->iobuf[0];
+> > 		} else {
+> > 			dev_info(&us->pusb_intf->dev,
+> >diff --git a/include/linux/usb/storage.h b/include/linux/usb/storage.h
+> >index 8539956bc2be..51be3bb8fccb 100644
+> >--- a/include/linux/usb/storage.h
+> >+++ b/include/linux/usb/storage.h
+> >@@ -82,4 +82,12 @@ struct bulk_cs_wrap {
+> > #define US_BULK_RESET_REQUEST   0xff
+> > #define US_BULK_GET_MAX_LUN     0xfe
+> > 
+> >+/*
+> >+ * If 4 LUNs are supported then the LUNs would be
+> >+ * numbered from 0 to 3, and the return value for
+> >+ * US_BULK_GET_MAX_LUN request would be 3. The valid
+> >+ * LUN field is 4 bits wide, the upper limit is 0x0f.
+> >+ */
+> >+#define US_BULK_MAX_LUN_LIMIT   0x0f
+> >+
+> > #endif
+> >-- 
+> >2.25.1
+> 
+> -- 
+> You received this message because you are subscribed to the Google Groups "USB Mass Storage on Linux" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to usb-storage+unsubscribe@lists.one-eyed-alien.net.
+> To view this discussion visit https://groups.google.com/a/lists.one-eyed-alien.net/d/msgid/usb-storage/56abaf44.86c3.19362571bee.Coremail.18500469033%40163.com.
 
