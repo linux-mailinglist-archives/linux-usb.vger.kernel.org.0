@@ -1,320 +1,239 @@
-Return-Path: <linux-usb+bounces-17834-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17835-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D8989D83E1
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 11:55:56 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF3529D83F3
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 12:00:10 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D2CFAB2BB4E
-	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 10:28:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3340B168EFE
+	for <lists+linux-usb@lfdr.de>; Mon, 25 Nov 2024 11:00:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B267E1922FB;
-	Mon, 25 Nov 2024 10:28:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB74B194A65;
+	Mon, 25 Nov 2024 11:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fouxrzBd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iY5+TkMw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05F19191F7E;
-	Mon, 25 Nov 2024 10:28:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F94B194C8B;
+	Mon, 25 Nov 2024 11:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732530505; cv=none; b=Tq4FeBAB6hWGjr5T0hs9FKhwNbJyYF37q/RqMu4RF/ezAanbqPpIBXeolXmnwrw4wcyM14AM9oG6bzCpmITIRUyVRch7271Xxmgi6SPSt05nXcjRayIOpsvEMVVhY+BX6sJi20jSWLrSSZzqWkUFdMuPo+zoQxFqIwu7O5dQPsc=
+	t=1732532405; cv=none; b=l5sdloeV9mKgL4jMOY0xXRh9p/5KbF/w8r0Aso3xXPefRCK8qSL5izsL7sSNFNvEunN/QsnWZ5dL/2FSw0J0XtoTYVrpKGLn52RL4bksFS0CQ6lb2ruqlvcQggKS+93dMUo6KTcXoOSQ3ir4CaSJRbdyHyx3GMjlJ+qUadSj6oY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732530505; c=relaxed/simple;
-	bh=Td+5EEQzC5KgR6blIuLKDXD2I/H9vF133xyB8vmFB5w=;
+	s=arc-20240116; t=1732532405; c=relaxed/simple;
+	bh=/Quc3TVGoy4pGDVfFhN+c7f352a24FKIfVvfUuYHk+8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BG3VWIu/KaX36qftHMdqqOLDde65V/QJUZ6o51oBxqUGRZEPAUWRLKUO6oxoBzKZpiIG4+GwD9amGflsegQswLzgDvhiJtQvRmRhsxbe7HA/BVI5thWprkZX3YH6emZG5clftsu/HBePe++adYcC2UvsogDw/1Sdj7bkQYb41LA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fouxrzBd; arc=none smtp.client-ip=192.198.163.8
+	 Content-Type:Content-Disposition:In-Reply-To; b=LEKrlgT+288j6Pd+qRxWn0l50PLe2a/qOV/cM+A+sQXQApisRE4hgkk0YIsxvtK0BiGoX12ADzAjK11Rh2VTOIgeXG5my3yOqBo7i7lnLb4k16Y/C/Hbm1mPGoXLQdZM39FcFyuDlRqA8iTbUK01a43cwNqowXX+Yw3dkpqmUSA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iY5+TkMw; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732530503; x=1764066503;
+  t=1732532403; x=1764068403;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Td+5EEQzC5KgR6blIuLKDXD2I/H9vF133xyB8vmFB5w=;
-  b=fouxrzBdLWJAV1Iu7lW7blEKPcvi9RAafytdQEK29FCWH4qMdFh6hZc+
-   N98IS+OI1cx4g3P6SERIOhZvDtyKWG4/yW+IPR4wM7/1t5TFyAFmsPHnU
-   h/Hm01D8D6Au6CjXNmj0sCJaX2ySf8YX6f+OI7HFb725SKgDQHVyNOZKz
-   sClJqi9z2PaoQf3pgWrCBUVeJMxGRoXr8WFvOhNCuQwz89I7txDDAPYvg
-   yRhswW0l7V96qefrFui+YjhCZgA4ks07zy0zR3bDs9QEfc/CiZdts+IcU
-   SjQD9IFyPB+WuTIVMhPcul3udTf3Bejesnf7D4335vVyIi0880aRsI1/f
-   Q==;
-X-CSE-ConnectionGUID: sXNajUbFQRGz6hZT8xzXWA==
-X-CSE-MsgGUID: U3ouv+TARG6ovC58wEeziA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="50150111"
+   mime-version:in-reply-to;
+  bh=/Quc3TVGoy4pGDVfFhN+c7f352a24FKIfVvfUuYHk+8=;
+  b=iY5+TkMwflkiq2p7G25vglDaTuL97ZgezgnI9wW4QsVUkxROvLxQvlmN
+   NumecsIhhV5bNMt8nOapIiJ4mQM3QF3XjEPnOgORfVzY5MPfPLiTrNbW8
+   6QuHkaHBKkIlOdzMUDhr830XM/DkMWnAHNvWJNPtpwiUI1+ti+1fq5lFA
+   GI1zVMiEB3ZarSL/Z0JNDJbrqag+712LatZ6G+BwiKRTiCX0+iLRnyHwI
+   /OugwdKx8UA0ZdWjEI11pr8VOGISkX3Xhm6xH3r873c5YVC2UvA9ZIM8C
+   q/YNTAuef7OtT6/5YD8WXlt9d5ZJ9w+BgcbjfNd6LPi8qeS+Rkk5qehJf
+   g==;
+X-CSE-ConnectionGUID: ognIg0BJQda1GYSB77J2Cw==
+X-CSE-MsgGUID: 5yPVQ9crRFeP6uOY6KNCYA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11266"; a="36553094"
 X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="50150111"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 02:28:22 -0800
-X-CSE-ConnectionGUID: dVnJtMhfRZmqq5ZpmG8VFA==
-X-CSE-MsgGUID: 1YF3asDURs6i2eCuFEW+Ig==
+   d="scan'208";a="36553094"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Nov 2024 03:00:03 -0800
+X-CSE-ConnectionGUID: vT8KuZrQQYuCAXmurDgi+g==
+X-CSE-MsgGUID: cV61WAkET5aMz6yX58YW9g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,182,1728975600"; 
-   d="scan'208";a="122172790"
+   d="scan'208";a="91415169"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa001.fm.intel.com with SMTP; 25 Nov 2024 02:28:19 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Nov 2024 12:28:18 +0200
-Date: Mon, 25 Nov 2024 12:28:18 +0200
+  by fmviesa008.fm.intel.com with SMTP; 25 Nov 2024 03:00:00 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 25 Nov 2024 12:59:59 +0200
+Date: Mon, 25 Nov 2024 12:59:59 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: =?iso-8859-1?Q?Facklam=2C_Oliv=E9r?= <oliver.facklam@zuehlke.com>
-Cc: Biju Das <biju.das@bp.renesas.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"von Heyl, Benedict" <benedict.vonheyl@zuehlke.com>,
-	=?iso-8859-1?B?RvZyc3Qs?= Mathis <mathis.foerst@zuehlke.com>,
-	"Glettig, Michael" <Michael.Glettig@zuehlke.com>
-Subject: Re: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring port
- type
-Message-ID: <Z0RRQoRN7721FF-Z@kuha.fi.intel.com>
-References: <20241114-usb-typec-controller-enhancements-v2-0-362376856aea@zuehlke.com>
- <20241114-usb-typec-controller-enhancements-v2-3-362376856aea@zuehlke.com>
- <Zzsp2JOhnnPPOWvB@kuha.fi.intel.com>
- <ZR1P278MB10224924F48419CA813402309F272@ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM>
+To: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: anx7411: fix fwnode_handle reference leak
+Message-ID: <Z0RYr_H-sy0pfLHN@kuha.fi.intel.com>
+References: <20241121023429.962848-1-joe@pf.is.s.u-tokyo.ac.jp>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZR1P278MB10224924F48419CA813402309F272@ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM>
+In-Reply-To: <20241121023429.962848-1-joe@pf.is.s.u-tokyo.ac.jp>
 
-Hi Olivér,
-
-Sorry to keep you waiting.
-
-On Mon, Nov 18, 2024 at 02:00:41PM +0000, Facklam, Olivér wrote:
-> Hello Heikki,
+On Thu, Nov 21, 2024 at 11:34:29AM +0900, Joe Hattori wrote:
+> An fwnode_handle and usb_role_switch are obtained with an incremented
+> refcount in anx7411_typec_port_probe(), however the refcounts are not
+> decremented in the error path. The fwnode_handle is also not decremented
+> in the .remove() function. Therefore, call fwnode_handle_put() and
+> usb_role_switch_put() accordingly.
 > 
-> Thanks for reviewing.
+> Fixes: fe6d8a9c8e64 ("usb: typec: anx7411: Add Analogix PD ANX7411 support")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+
+You don't need to check for the port nor the role_sw, but never mind:
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
+> ---
+> Changes in v2:
+> - Call usb_role_switch_put()
+> - Remove the port in anx7411_port_unregister().
+> ---
+>  drivers/usb/typec/anx7411.c | 47 +++++++++++++++++++++++--------------
+>  1 file changed, 29 insertions(+), 18 deletions(-)
 > 
-> > -----Original Message-----
-> > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > Sent: Monday, November 18, 2024 12:50 PM
-> > To: Facklam, Olivér <oliver.facklam@zuehlke.com>
-> > Cc: Biju Das <biju.das@bp.renesas.com>; Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org>; linux-usb@vger.kernel.org; linux-
-> > kernel@vger.kernel.org; von Heyl, Benedict
-> > <benedict.vonheyl@zuehlke.com>; Först, Mathis
-> > <mathis.foerst@zuehlke.com>; Glettig, Michael
-> > <Michael.Glettig@zuehlke.com>
-> > Subject: Re: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring port
-> > type
-> > 
-> > Hi Oliver,
-> > 
-> > I'm sorry, I noticed a problem with this...
-> > 
-> > On Thu, Nov 14, 2024 at 09:02:08AM +0100, Oliver Facklam wrote:
-> > > The TI HD3SS3220 Type-C controller supports configuring the port type
-> > > it will operate as through the MODE_SELECT field of the General
-> > > Control Register.
-> > >
-> > > Configure the port type based on the fwnode property "power-role"
-> > > during probe, and through the port_type_set typec_operation.
-> > >
-> > > The MODE_SELECT field can only be changed when the controller is in
-> > > unattached state, so follow the sequence recommended by the datasheet
-> > to:
-> > > 1. disable termination on CC pins to disable the controller
-> > > 2. change the mode
-> > > 3. re-enable termination
-> > >
-> > > This will effectively cause a connected device to disconnect
-> > > for the duration of the mode change.
-> > 
-> > Changing the type of the port is really problematic, and IMO we should
-> > actually never support that.
-> 
-> Could you clarify why you think it is problematic?
-
-It's not completely clear to me what it's meant for. If it was just
-for fixing the type of the port to be sink, source or DRP before
-connections, it would make sense, but since it can be use even when
-there is an actice connection (there is nothing preventing that), it
-can in practice be used to swap the role.
-
-And in some cases in the past where this attribute file was proposed
-to be used with some other drivers, the actual goal really ended up
-being to be able to just swap the role with an existing connection
-instead of being able to fix the type of the port. The commit message
-made it sound like that could be the goal in this case as well, but
-maybe I misunderstood.
-
-Even in cases where it's clear that the intention is to just fix the
-role before connections, why would user space needs to control that is
-still not completely clear, at least not to me.
-
-> > Consider for example, if your port is sink only, then the platform
-> > almost certainly can't drive the VBUS. This patch would still allow
-> > the port to be changed to source port.
-> 
-> In my testing, it appeared to me that when registering a type-c port with
-> "typec_cap.type = TYPEC_PORT_SNK" (for example), then the type-c class
-> disables the port_type_store functionality:
-> 	if (port->cap->type != TYPEC_PORT_DRP ||
-> 	    !port->ops || !port->ops->port_type_set) {
-> 		dev_dbg(dev, "changing port type not supported\n");
-> 		return -EOPNOTSUPP;
-> 	}
-> 
-> So to my understanding, a platform which cannot drive VBUS should simply
-> set the fwnode `power-role="sink"`. Since patch 2/4 correctly parses this property,
-> wouldn't that solve this case?
-
-True. I stand corrected.
-
-> > Sorry for not realising this in v1.
-> > 
-> > I think what you want here is just a power role swap. Currently power
-> > role swap is only supported when USB PD is supported in the class
-> > code, but since the USB Type-C specification quite clearly states that
-> > power role and data role swap can be optionally supported even when
-> > USB PD is not supported (section 2.3.3) we need to fix that:
-> 
-> My interpretation of section 2.3.3 is that the 2 mechanisms allowing 
-> power role swap are:
-> - USB PD (after initial connection)
-> - "as part of the initial connection process": to me this is simply referring to the
-> 	Try.SRC / Try.SNK mechanism, for which we already have 
-> 	the "try_role" callback.
-> 
-> Maybe I'm misunderstanding what the intentions are behind each of the 
-> typec_operations, so if you could clarify that (or give some pointer), that would
-> be appreciated. My understanding:
-> - "try_role": set Try.SRC / Try.SNK / no preference for a dual-role port for initial connection
-> - "pr_set" / "dr_set" / "vconn_set": swap power and data role resp.
-> 	after the initial connection using USB-PD.
-> - "port_type_set": configure what port type to operate as, i.e. which initial connection
-> 	state machine from the USB-C standard to apply for the next connection
-> Please correct me if any of these are incorrect.
-
-I don't know what's the intention with the port_type attribute file
-unfortunately.
-
-> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> > index 58f40156de56..ee81909565a4 100644
-> > --- a/drivers/usb/typec/class.c
-> > +++ b/drivers/usb/typec/class.c
-> > @@ -1535,11 +1535,6 @@ static ssize_t power_role_store(struct device
-> > *dev,
-> >                 return -EOPNOTSUPP;
-> >         }
-> > 
-> > -       if (port->pwr_opmode != TYPEC_PWR_MODE_PD) {
-> > -               dev_dbg(dev, "partner unable to swap power role\n");
-> > -               return -EIO;
-> > -       }
-> > -
-> >         ret = sysfs	_match_string(typec_roles, buf);
-> >         if (ret < 0)
-> >                 return ret;
-> > 
-> > 
-> > After that it should be possible to do power role swap also in this
-> > driver when the port is DRP capable.
-> > 
-> > > Signed-off-by: Oliver Facklam <oliver.facklam@zuehlke.com>
-> > > ---
-> > >  drivers/usb/typec/hd3ss3220.c | 66
-> > ++++++++++++++++++++++++++++++++++++++++++-
-> > >  1 file changed, 65 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/usb/typec/hd3ss3220.c
-> > b/drivers/usb/typec/hd3ss3220.c
-> > > index
-> > e581272bb47de95dee8363a5491f543354fcbbf8..e3e9b1597e3b09b82f0726a
-> > 01f311fb60b4284da 100644
-> > > --- a/drivers/usb/typec/hd3ss3220.c
-> > > +++ b/drivers/usb/typec/hd3ss3220.c
-> [...]
-> > > @@ -131,8 +183,16 @@ static int hd3ss3220_dr_set(struct typec_port
-> > *port, enum typec_data_role role)
-> > >       return ret;
-> > >  }
-> > >
-> > > +static int hd3ss3220_port_type_set(struct typec_port *port, enum
-> > typec_port_type type)
-> > > +{
-> > > +     struct hd3ss3220 *hd3ss3220 = typec_get_drvdata(port);
-> > > +
-> > > +     return hd3ss3220_set_port_type(hd3ss3220, type);
-> > > +}
-> > 
-> > This wrapper seems completely useless. You only need one function here
-> > for the callback.
-> 
-> The wrapper is to extract the struct hd3ss3220 from the typec_port.
-> The underlying hd3ss3220_set_port_type I am also using during probe
-> to configure initial port type.
-
-Ah, I missed that. Sorry about that.
-
-> One point worth mentioning here is that if the MODE_SELECT register
-> is not configured, the chip will operate according to a default which is 
-> chosen by an external pin (sorry if this was not detailed enough in commit msg)
-> >From the datasheet:
-> -------------------
-> | PORT | 4 | I | Tri-level input pin to indicate port mode. The state of this pin is sampled when HD3SS3220's
-> 		ENn_CC is asserted low, and VDD5 is active. This pin is also sampled following a
-> 		I2C_SOFT_RESET.
-> 		H - DFP (Pull-up to VDD5 if DFP mode is desired)
-> 		NC - DRP (Leave unconnected if DRP mode is desired)
-> 		L - UFP (Pull-down or tie to GND if UFP mode is desired)
-> 
-> In our use case, it was not desirable to leave this default based on wiring,
-> and it makes more sense to me to allow the configuration to come from
-> the fwnode property. Hence the port type setting in probe().
-
-I get that, but that just means you want to fix the type during probe,
-no? Why do you need to expose this to the user space?
-
-> > >  static const struct typec_operations hd3ss3220_ops = {
-> > > -     .dr_set = hd3ss3220_dr_set
-> > > +     .dr_set = hd3ss3220_dr_set,
-> > > +     .port_type_set = hd3ss3220_port_type_set,
-> > >  };
-> > 
-> > So here I think you should implement the pr_set callback instead.
-> 
-> I can do that, but based on the MODE_SELECT register description, 
-> it seems to me that this setting is fundamentally changing the operation
-> mode of the chip, i.e. the state machine that is being run for initial connection.
-> So there would have to be a way of "resetting" it to be a dual-role port again,
-> which the "pr_set" callback doesn't seem to have?
-> 	This register can be written to set the HD3SS3220 mode
-> 	operation. The ADDR pin must be set to I2C mode. If the default
-> 	is maintained, HD3SS3220 shall operate according to the PORT
-> 	pin levels and modes. The MODE_SELECT can only be
-> 	changed when in the unattached state.
-> 	00 - DRP mode (start from unattached.SNK) (default)
-> 	01 - UFP mode (unattached.SNK)
-> 	10 - DFP mode (unattached.SRC)
-> 	11 - DRP mode (start from unattached.SNK)
-
-Okay, I see. This is not a case for pr_set.
-
-I'm still confused about the use case here. It seems you are not
-interested in role swapping after all, so why would you need this
-functionality to be exposed to the user space?
-
-I'm sorry if I've missed something.
-
-About the port_type attribute file itself. I would feel more
-comfortable with it if it was allowed to be written only when there is
-nothing connected to the port. At the very least, I think it should be
-documented better so what it's really meant for would be more clear to
-everybody.
-
-thanks,
+> diff --git a/drivers/usb/typec/anx7411.c b/drivers/usb/typec/anx7411.c
+> index d1e7c487ddfb..95607efb9f7e 100644
+> --- a/drivers/usb/typec/anx7411.c
+> +++ b/drivers/usb/typec/anx7411.c
+> @@ -1021,6 +1021,16 @@ static void anx7411_port_unregister_altmodes(struct typec_altmode **adev)
+>  		}
+>  }
+>  
+> +static void anx7411_port_unregister(struct typec_params *typecp)
+> +{
+> +	fwnode_handle_put(typecp->caps.fwnode);
+> +	anx7411_port_unregister_altmodes(typecp->port_amode);
+> +	if (typecp->port)
+> +		typec_unregister_port(typecp->port);
+> +	if (typecp->role_sw)
+> +		usb_role_switch_put(typecp->role_sw);
+> +}
+> +
+>  static int anx7411_usb_mux_set(struct typec_mux_dev *mux,
+>  			       struct typec_mux_state *state)
+>  {
+> @@ -1154,34 +1164,34 @@ static int anx7411_typec_port_probe(struct anx7411_data *ctx,
+>  	ret = fwnode_property_read_string(fwnode, "power-role", &buf);
+>  	if (ret) {
+>  		dev_err(dev, "power-role not found: %d\n", ret);
+> -		return ret;
+> +		goto put_fwnode;
+>  	}
+>  
+>  	ret = typec_find_port_power_role(buf);
+>  	if (ret < 0)
+> -		return ret;
+> +		goto put_fwnode;
+>  	cap->type = ret;
+>  
+>  	ret = fwnode_property_read_string(fwnode, "data-role", &buf);
+>  	if (ret) {
+>  		dev_err(dev, "data-role not found: %d\n", ret);
+> -		return ret;
+> +		goto put_fwnode;
+>  	}
+>  
+>  	ret = typec_find_port_data_role(buf);
+>  	if (ret < 0)
+> -		return ret;
+> +		goto put_fwnode;
+>  	cap->data = ret;
+>  
+>  	ret = fwnode_property_read_string(fwnode, "try-power-role", &buf);
+>  	if (ret) {
+>  		dev_err(dev, "try-power-role not found: %d\n", ret);
+> -		return ret;
+> +		goto put_fwnode;
+>  	}
+>  
+>  	ret = typec_find_power_role(buf);
+>  	if (ret < 0)
+> -		return ret;
+> +		goto put_fwnode;
+>  	cap->prefer_role = ret;
+>  
+>  	/* Get source pdos */
+> @@ -1193,7 +1203,7 @@ static int anx7411_typec_port_probe(struct anx7411_data *ctx,
+>  						     typecp->src_pdo_nr);
+>  		if (ret < 0) {
+>  			dev_err(dev, "source cap validate failed: %d\n", ret);
+> -			return -EINVAL;
+> +			goto put_fwnode;
+>  		}
+>  
+>  		typecp->caps_flags |= HAS_SOURCE_CAP;
+> @@ -1207,7 +1217,7 @@ static int anx7411_typec_port_probe(struct anx7411_data *ctx,
+>  						     typecp->sink_pdo_nr);
+>  		if (ret < 0) {
+>  			dev_err(dev, "sink cap validate failed: %d\n", ret);
+> -			return -EINVAL;
+> +			goto put_fwnode;
+>  		}
+>  
+>  		for (i = 0; i < typecp->sink_pdo_nr; i++) {
+> @@ -1251,13 +1261,21 @@ static int anx7411_typec_port_probe(struct anx7411_data *ctx,
+>  		ret = PTR_ERR(ctx->typec.port);
+>  		ctx->typec.port = NULL;
+>  		dev_err(dev, "Failed to register type c port %d\n", ret);
+> -		return ret;
+> +		goto put_usb_role_switch;
+>  	}
+>  
+>  	typec_port_register_altmodes(ctx->typec.port, NULL, ctx,
+>  				     ctx->typec.port_amode,
+>  				     MAX_ALTMODE);
+>  	return 0;
+> +
+> +put_usb_role_switch:
+> +	if (ctx->typec.role_sw)
+> +		usb_role_switch_put(ctx->typec.role_sw);
+> +put_fwnode:
+> +	fwnode_handle_put(fwnode);
+> +
+> +	return ret;
+>  }
+>  
+>  static int anx7411_typec_check_connection(struct anx7411_data *ctx)
+> @@ -1523,8 +1541,7 @@ static int anx7411_i2c_probe(struct i2c_client *client)
+>  	destroy_workqueue(plat->workqueue);
+>  
+>  free_typec_port:
+> -	typec_unregister_port(plat->typec.port);
+> -	anx7411_port_unregister_altmodes(plat->typec.port_amode);
+> +	anx7411_port_unregister(&plat->typec);
+>  
+>  free_typec_switch:
+>  	anx7411_unregister_switch(plat);
+> @@ -1548,17 +1565,11 @@ static void anx7411_i2c_remove(struct i2c_client *client)
+>  
+>  	i2c_unregister_device(plat->spi_client);
+>  
+> -	if (plat->typec.role_sw)
+> -		usb_role_switch_put(plat->typec.role_sw);
+> -
+>  	anx7411_unregister_mux(plat);
+>  
+>  	anx7411_unregister_switch(plat);
+>  
+> -	if (plat->typec.port)
+> -		typec_unregister_port(plat->typec.port);
+> -
+> -	anx7411_port_unregister_altmodes(plat->typec.port_amode);
+> +	anx7411_port_unregister(&plat->typec);
+>  }
+>  
+>  static const struct i2c_device_id anx7411_id[] = {
+> -- 
+> 2.34.1
 
 -- 
 heikki
