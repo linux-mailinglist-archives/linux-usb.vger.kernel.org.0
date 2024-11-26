@@ -1,252 +1,304 @@
-Return-Path: <linux-usb+bounces-17883-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17884-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 448EA9D98BB
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 14:44:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CE279D9964
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 15:15:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5F0EB22F4C
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 13:44:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5CC5C2824FE
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 14:15:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D471D47C6;
-	Tue, 26 Nov 2024 13:44:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271321D5CEA;
+	Tue, 26 Nov 2024 14:15:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="loGPZGS+"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="F8OoYr3O";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="9E8VXs4H";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MGlOfHQ7";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="0bFYP/Rk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from TY3P286CU002.outbound.protection.outlook.com (mail-japaneastazon11010009.outbound.protection.outlook.com [52.101.229.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40459DDCD;
-	Tue, 26 Nov 2024 13:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.229.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732628673; cv=fail; b=h86p1zNr7VmliybWFRm/8dHw/AAFDmSL3MqtFpDIycTZBp+/QkKolrYj9LwQji5GH5aDmmnU/azU4szMdIw/RhA9x86xUHvH4g2tS4fqReTmV3hYDI91rf/n1OeiEOXb7Kwi2bVeqbmsfGZ2qk/vjMIsoMv5Ji/CqIaO1UJX5OE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732628673; c=relaxed/simple;
-	bh=Fh/4vg+T8zSjb8OH0aSFXpOnkbMIucLfa33uQn4vITE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=U7m8hfOaVDEomJXOahDxXaLv7/PUu7R8UaqSgZgb91Z8Juv2n6gUpzPZjIx933xD57KS08PScJDkxTZT1dQycF4hJJkCzg2XCMx0GyJKUHopFDVRKBB+NBdJ3uJpHvpu8VNY+hghcnViMPJGHt7sjmqYaKcDMbJ0cmXISbk2svk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=loGPZGS+; arc=fail smtp.client-ip=52.101.229.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sFruQ+taePBirT3Fv6TaoIomyrBeW9xnu1XLRXSg0bAsNi9yTrSP5WPq37dq7VXUfGAewhlMBiTgHtcnOkrYdqA2Nlx2yNSseE9OsZHE+uKgBFRb2attNqzYnEbo2G9wKj67Q4pc5vC1W3HJfaYJfqOG7ASn+sP43ehc10bPiJ5z3E4ZZ0w6P06z0f6fiQLm+5otSslqT9kjJJGqZtW+fH6bl1uf2mR5pn3qETGtT+nCUT34hlV5CUh5baU5fW5Od6AKTSKFQkd27eWLzOj+eEQYcAfhypOQxMAEqWXDzlpsdxJ4/S4dit/18TIxKIFEeGodKw3tccGadfNQAzK04Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Fh/4vg+T8zSjb8OH0aSFXpOnkbMIucLfa33uQn4vITE=;
- b=l8bffJo8QNDo+HQBP3Fp8s7q1aGVIubodMclgbBcoVbqmsFUy3roO9mqycnpPmjaRWcPSk8ll+EKLLABLNnLKm/2Lngfo5omFGjwAMJkbyXNgv9MLd2NyYb474hHoyufq3MhkXuR3lvxnA56u9teW4MzUYPnYbHRQ0h1ktSh4lzdsBayr5hvcW9twVJCVTfGHbBP1eVaoKs85ndJvhL/Lx5SbqFbV5vGQLnjoxmyKs5BxSKhIjjdFcj4MNpPcQ9bv70Dg5UB3W0GrI+kEWYlGyAoAVW0+B4VL1rVmnRuH47Cpdpkxskp8YOnztumm4K85MXrlEjyNOnwvPqm+tAajQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Fh/4vg+T8zSjb8OH0aSFXpOnkbMIucLfa33uQn4vITE=;
- b=loGPZGS+bgV0ZLJczsWb38YkXSnP1a/hx2A1KeU8yu4c67A6ifw0PSTzf9hUmHJ5y+COvXmSzDksVz+djIg+lBGlugbPNDEJwwAEbaZobSrR3o3AncXJVRN3CCTT1WyvgiA9MZiuHWYpMfDCI+Xx+Pp01GZA6nmG8XvNPDF7E8w=
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com (2603:1096:400:3d0::7)
- by TYYPR01MB8000.jpnprd01.prod.outlook.com (2603:1096:400:f9::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8182.20; Tue, 26 Nov
- 2024 13:44:25 +0000
-Received: from TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1]) by TY3PR01MB11346.jpnprd01.prod.outlook.com
- ([fe80::86ef:ca98:234d:60e1%5]) with mapi id 15.20.8182.019; Tue, 26 Nov 2024
- 13:44:25 +0000
-From: Biju Das <biju.das.jz@bp.renesas.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-CC: Claudiu.Beznea <claudiu.beznea@tuxon.dev>, "vkoul@kernel.org"
-	<vkoul@kernel.org>, "kishon@kernel.org" <kishon@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
-	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>, "geert+renesas@glider.be"
-	<geert+renesas@glider.be>, "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, Yoshihiro Shimoda
-	<yoshihiro.shimoda.uh@renesas.com>, "christophe.jaillet@wanadoo.fr"
-	<christophe.jaillet@wanadoo.fr>, "linux-phy@lists.infradead.org"
-	<linux-phy@lists.infradead.org>, "devicetree@vger.kernel.org"
-	<devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux-renesas-soc@vger.kernel.org"
-	<linux-renesas-soc@vger.kernel.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, Claudiu Beznea
-	<claudiu.beznea.uj@bp.renesas.com>
-Subject: RE: [PATCH v2 02/15] soc: renesas: Add SYSC driver for Renesas RZ
- family
-Thread-Topic: [PATCH v2 02/15] soc: renesas: Add SYSC driver for Renesas RZ
- family
-Thread-Index: AQHbP+SZef71s6SoPkyzSsFLPei/obLJSsNQgABHZQCAAACCMA==
-Date: Tue, 26 Nov 2024 13:44:25 +0000
-Message-ID:
- <TY3PR01MB11346A26DECCFBD41B83131D0862F2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
-References: <20241126092050.1825607-1-claudiu.beznea.uj@bp.renesas.com>
- <20241126092050.1825607-3-claudiu.beznea.uj@bp.renesas.com>
- <TY3PR01MB11346C9A56B483666575EB23A862F2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
- <CAMuHMdVkXo=HSqoF2hur8Nvder6yOg_Aqgzq=aFvfti+9=PnJA@mail.gmail.com>
-In-Reply-To:
- <CAMuHMdVkXo=HSqoF2hur8Nvder6yOg_Aqgzq=aFvfti+9=PnJA@mail.gmail.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TY3PR01MB11346:EE_|TYYPR01MB8000:EE_
-x-ms-office365-filtering-correlation-id: 2cb817f8-edf5-4a67-5be1-08dd0e2070fe
-x-ld-processed: 53d82571-da19-47e4-9cb4-625a166a4a2a,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?UENpVlhDY01XV294Z3p2eXJ0ay85cmJnYVU4YXVabndybmlVVm4wOVI3Vytl?=
- =?utf-8?B?RWJpUjVwNFFrblBVZjc5dkNEMmhGd1ZxajFyNGZoaE9HNzZPckwwbVZESHFk?=
- =?utf-8?B?Ujlpem4rNUFwazZjOW1nMU05aXpTR29WbjhqOHZwVjJLaUtFMjZWOTE2d2ov?=
- =?utf-8?B?Q2RCck9hSUp6M1h5Z3JpdE5kZlVhaUFIWG9tZUpLdjFHMlNlWXgyVjVmZmJz?=
- =?utf-8?B?NkNUUkZScFZjUWlKN0xGM29VVUJNQU9USVlsa3hSZXF1OFBOcmhVYUpLWVhH?=
- =?utf-8?B?dVRVMXNhQ3BWU3orbWVBU1RWVnhxSVROMWdpRXk0WVpJelcweHRDbEVQa1Rj?=
- =?utf-8?B?SFgxZmVqb3h3OTRhbnpyMjJyL1ZiZzVtUkNBckp0MitSRTcrbXNHYmJYVUNE?=
- =?utf-8?B?c2ZId1BZejRKdmR4emVHcnVUZ3l3R2lKbzZVRDJ4aUsybjlWMXVQdGIyWlU0?=
- =?utf-8?B?alNMYmt0bVVETUlnYk5PclhQQmZJclU5V1BxeTNYanhvT3BCK28zeXV4STIv?=
- =?utf-8?B?SmFHZFVFdllzdDJuNCtUWWtJUUFWWm5IN08vWW5xclIwZ0xnbDhNcnlQYmJC?=
- =?utf-8?B?dHVQd3plelB5Q25Pd3ZvVDZhVlREQ1JyNTdIeXhXQ2YwSEQvUmtOcFRBUDlV?=
- =?utf-8?B?Uk81em9XMzFrMzBPWkZzeWpYWEtlWFhIQ1RjaHJld3Z5SVh2RkhmR1hwcldu?=
- =?utf-8?B?QjhacFZudlpwaTlVWG1rMW5NdG81SmRLMzBkZkNSbUdIbTZ0S2JZb09wdXRV?=
- =?utf-8?B?a0lvQ0JFSXFmeWNNRXRDSVB3dkw5S0RmcmJ5QVhZV3d1RXM3djJYMVJwMEhX?=
- =?utf-8?B?VXBlSDM1NGdjTE1TTlQ5Q1d2WlJhL3c1UjlFUlBXeHZKSDgyZzBJbUo2bSt6?=
- =?utf-8?B?K1N0RDZqU0QzVTZ1UE55VllHUS9QQWNWN2FJekRiS3hMUmVnSVkzR20zRG01?=
- =?utf-8?B?YUFmM3JkdkhoeEd5YTVubWlwYlJoTE9iZnJCWGI0R2lRc1VEZlZXNUhQOVNH?=
- =?utf-8?B?UnIrdmxONkhUaUNkMFVQc1hQYWxRSVVJRjhNYmpLOXM1YjFDQTFudGtVZlli?=
- =?utf-8?B?NnpPQmF4WHlSdXF2OUtZTXNlN0QvOGhiQXNjZENudU1kaHZxZExTdGVuaTMy?=
- =?utf-8?B?NFlyYUxZdFpSbUl4YmNNZ2pjRE1jbkNLY1YyQmVoRlQvWDR4enVMRmR2T0FW?=
- =?utf-8?B?Z1FmWDFjQSt3TEVXYU1IbzVENHVEVnBnTGE3ZXJoRStGcVdXU3JUM05OejVs?=
- =?utf-8?B?dUhUallwUVJMeFg1UC9JSU1SMjhpQXM4OGdQaU42TFFhUTd6azFzY2ZsZHdr?=
- =?utf-8?B?VWp1MFZnWEtiYTdzQXQvajR6bVhCZUF4QW5qemlFQklrWHJxaUtpRUkxbkNx?=
- =?utf-8?B?Qis0YjJGdHR2WW1teVRHcWh5Z1BjZisrVzY1am5qWUNMOWMzVTNtYkgwYjZk?=
- =?utf-8?B?dFNySG1Sek83MHhUY2hwU3RZS2ZoMXhQSXpDREJUV1F2elRxdTNNR0xKZkk0?=
- =?utf-8?B?OFRkMExXNVBtYjM5aHpqelo0Z216TXJhRU1LVzFzTHkyRmZSa1IxQVhwb2dx?=
- =?utf-8?B?a2c4THRSaEFwMTAvYVQ1djl0d21RVXo2WFg3RTkxTld6b1BxTWNtcU41Sm44?=
- =?utf-8?B?ZkRxeVk2ZmRocGR3Q29sc29aQmNCandpZmZXMVg0eEtxY09XMTRndFh6Rkcy?=
- =?utf-8?B?YnpmYjVKbittZklxYStFQ1hvK09HbTR4QkZtVGxIekhWbllWN1FBM3RycERH?=
- =?utf-8?B?dW1yQVJYVUhFanJGYU1zbHVRbkdZSG1tQTJEVXhYRG9sUXRQZ0lUb0JZREVE?=
- =?utf-8?B?VkFoV0VkNE94azlrTExoajFvTXdwUEdmRmMvTVYyU2lkRE5rNEdMZ1B0bHpX?=
- =?utf-8?B?UjNkMDQ3RVNzQmFKQTBDeWZUSmY2MDJaNUVNWjY5OUNkTEE9PQ==?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TY3PR01MB11346.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?Vmp6QXJCVm9wWWg1OFdMMWRZSVZZbmZCZUg0T2VMQ0RwRU1YRnJUNkE4VDhL?=
- =?utf-8?B?ZzhGWFNaQ28zZkF3QUM5Tmh5MHJnaE1MVWpxM0RwL0VUbUhoMWNjQmZCK3VU?=
- =?utf-8?B?NVE3Ym1EU3lFNVJTNXpQdkFQRVVNU2c2UUlQd3o4TUhheTJEdlplSklCbDBm?=
- =?utf-8?B?alMvUGFFczFvNEs2MWJwWVJvYXJWczJQRzZZTnZJMkRpSUZNcmc0U2RDMnFw?=
- =?utf-8?B?ZEZZYkhVeFNhZUFsblZwajJibyttenhlQy9MOE1OYWN1NEtOdHlZRng4V2tE?=
- =?utf-8?B?eEZ6bEU4Y1BTV1B3NHF2MnpES1cwWndDU3Y4dE1FVXRoUW9mVjhTTmk5VTUz?=
- =?utf-8?B?T1RXaVY2dmRFS1BCUzhGWHJWdkEvVElDcE03NDA0aHM0U1c3NEVCQ2tNajVV?=
- =?utf-8?B?dmQzUzk5Ym5GZXIrU0hxRWVKVTI4QkpFU3VyS0thRFBpWVh2ZnllanYvMVpw?=
- =?utf-8?B?NGFacDB6bzdtalZQZVU3bk0yOEJwWGM5Q0dudmQ4WTJYTG5LL3FWdWkrcDZD?=
- =?utf-8?B?eDdXbERIZVh5cEFxSDYvRkd3STg4OWg0K3FCaXJzbjFhL0prdDdVZndUb3NS?=
- =?utf-8?B?UGJWRmo0cDZVWUw3ZC9FczJ4MzlmeG5NNlJWMlRPUkdOMGFSN3J4UnNLZ3Zi?=
- =?utf-8?B?VlgzSzgxY1kxWkd2VStUUUxoTnI1b1QvY01DNVhoTGJ0WGFxSXUyOERGdjhG?=
- =?utf-8?B?dzNuWm5aY2JGM0hlY3RJVHEvRU9XTHRUOVIzcDEvNDl4QVQreVArWmN2WFZn?=
- =?utf-8?B?UndRcFdYNUZUOE56elZ1c0hqQ1FzeWlkVjZsU0kxb3dtM3Q5ZWVnV2pmYWNX?=
- =?utf-8?B?bXVyTGhTVVF6RFkvM1VDbDNpOEdsUkxDMllPTnlvZmliQVZxM0h3c0pMR292?=
- =?utf-8?B?elR6R1FkSC9idUJzK1RTWG5SQVk0TDRDRWs1bnJMcnoxS0k5aWM0SjVCc2Fz?=
- =?utf-8?B?NkhNZnZPbEZUajFrSzdDa3VkOHUwR0l1TERhcE92K3VoTmxaVXVXbXpqeGxK?=
- =?utf-8?B?dnlsV2tVa21oRExqMjJvdFQvb2ZKM2hKcXZwVmFaK3Eva2RRNmpBUHBFNUxK?=
- =?utf-8?B?RTJUMjQ5NXA1TGNNc3JnSkJZRnZwMk16R1JjcFpVWjBySTV5M3lRZk81UDJx?=
- =?utf-8?B?SnNHZ3VhdTNTUFhpb21pQUdVMjlpR3dmYTJWK1lNSmt3L01jLzZ3bU5UamU3?=
- =?utf-8?B?Q3o5MERuamthaEFqcWNQR1NXekFtWFpnQ2RtYnBKcmg2d3JFU1JoV0wxRmZ6?=
- =?utf-8?B?Y09sd1NmUEtPR0RTYU9aeVBIQlpXcXBPZ3EydHNjMFNzUzg2UU04dXpMZUkz?=
- =?utf-8?B?SmhZV0twRVBlWXovTEd0NHhaY2prOUhWSHJzTCs5SnVMcmNudHpjdTVMRSsy?=
- =?utf-8?B?SHJndmdid05La3R1UzBqZXcyOTB5bVI4V2JvTzNXN3RkeDB2ZWNmVVBPcGo5?=
- =?utf-8?B?WlVkS0Y5UStHR3AwNGhiWnRWTzRYYk5jUmVQZkwvZDByL0JuTW9pbnZrYWJl?=
- =?utf-8?B?NkVpSjExbWF3aFY0SmpraDRpZHhWdEpNV0VwVnBQSWpTUEg2S1RYdENpMmZG?=
- =?utf-8?B?UTBFTUFDVjNNVmdJTC9qRDVLd0tPZExVQmhWa3BHL09zeTBKT3FZWmMrdFU4?=
- =?utf-8?B?d3VJOHBqY1pYbThBL0JDUlNSbUQvVlVWMEpKUi82OFhFNDE3U0FMZEJXdCtZ?=
- =?utf-8?B?MlBOTEdOYmdpMWErYzN4Sm5ySTBuNjdUYVhCZE1RaGVLdklCOFIyU1hEbWxi?=
- =?utf-8?B?emt6Tk42M0tCMW1NcjhLbTBTRzFWdVkrbjNmRkN0bVRiektTdWlKM1NLd3dD?=
- =?utf-8?B?cFM0M1lJa0NtUGRObEhYVGpCZDJEdTg0S1FtRTMzMEhJemxWVUpzZ3FjR3E5?=
- =?utf-8?B?c3N4Y1prdmRzNWRtZWZqcy9VMGdySFhQVzllVDVqYTRkWTB2aUUxODk4TE13?=
- =?utf-8?B?REJSdnBnOGhhMkVXdTZYaUQvUGpDUTRja2k0aGsrOVE0SWticTJnK1BMYnBv?=
- =?utf-8?B?U0c4cVkwdlY2QUx5cGwxN2tULzJudHNDdlAyeXNERThmZnFMb0tjTkVLcmhB?=
- =?utf-8?B?czJPVmhBSm5CaklGNjdsZXJIdm9JQzlKbHZKN0JoN1dhNUtraXJWaEJjWldV?=
- =?utf-8?B?M0dNZHR2VExab3MwUldXQzBTYmlzWjlrdXRPRDFTb3V5ZFErWDZRcjkycm5l?=
- =?utf-8?B?amc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDF581D5AB7;
+	Tue, 26 Nov 2024 14:14:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732630500; cv=none; b=WHP77vLXADBZY/2LhGcAEuFt4G1omw7ZwRh7IMvYpda/tJuMQm0xnzpsV+2rVEP/U4Xcvfup/Z0zxWGc6EPDhtGx7NYDrH9aSvHJ51uhl6sHpK1WRdVacCPB5SeDogLJjw3DKsYSpG7AmFC/dMO1lFJ9zX7srW6hxMjfLNDTUDo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732630500; c=relaxed/simple;
+	bh=ZvtRiNM+JH0yEZl2YCu1V3cqQmWYtZw6utlTRkgZD9E=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BV9v6VjKbqa9Ve5syxygwzKV6BcMjzlf5XdgkXry8ynhXY3H6ML4OisccX2Z08qIQrpSyzWLF4ppRSq7FSkcM76IIZO12mZDpMlp5CZbdYl4J1ScdFM9B94Hb9kOpzsM4AmwkHtLC17AHr36d05cqXCWydG15RqncMzfdgvJ8fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=F8OoYr3O; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=9E8VXs4H; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MGlOfHQ7; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=0bFYP/Rk; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 05D3C1F74B;
+	Tue, 26 Nov 2024 14:14:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1732630497; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZgQZm9M6XxBfdUImBopgep7lJubNHrTvnu6+/i4rdEc=;
+	b=F8OoYr3OWnsNa5tx+zlyQR7Lud7Vd3EYmoozh4esv0E7dp960I+rOSFS/K2U0MI3mKM97n
+	LElVytyeYFQo66wIgLrmj7tRFRsDhXmFVz2pRheYwFce+V19zsv9BBnhuDjRqgZyt8jIMW
+	hdAiNpkBUeypiTvY4lWKpOt/sMjmRAQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1732630497;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZgQZm9M6XxBfdUImBopgep7lJubNHrTvnu6+/i4rdEc=;
+	b=9E8VXs4Hl6Z/ycqZL6ea8B4aqjp+45/pD6NHRjOeVvnHD4WYMau0R8Ge+ApdOQfcPJDQMj
+	2WDTy+y78hUCBMBA==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1732630496; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZgQZm9M6XxBfdUImBopgep7lJubNHrTvnu6+/i4rdEc=;
+	b=MGlOfHQ77sUrgALK85j9yzIkPB0Pa75NKE4uAooA2JIqRq8Lk393JcVnZ/dUQo+z8nFXbz
+	/gR1IIw6jfB3zFtf4jGSrAGVDPVDqoFtt5CSGM2y5aztrXWeCvWpXdcSx/m9OeGKCcH9Xs
+	fE1pCOQ5gVC3OSnWhqJZCf7KxFTLPNI=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1732630496;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZgQZm9M6XxBfdUImBopgep7lJubNHrTvnu6+/i4rdEc=;
+	b=0bFYP/RkhVhLJLwTRn9xX0jfKTlsPUVtyVTMsPYAgImmnsr+aaf6rXahREhgVXfpGZsn+t
+	E6Cfp6P75HXQUWDg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B2C41139AA;
+	Tue, 26 Nov 2024 14:14:55 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id gbOUKt/XRWeWcwAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Tue, 26 Nov 2024 14:14:55 +0000
+Date: Tue, 26 Nov 2024 15:14:55 +0100
+Message-ID: <87cyiiaxpc.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Takashi Iwai <tiwai@suse.de>,
+	<srinivas.kandagatla@linaro.org>,
+	<mathias.nyman@intel.com>,
+	<perex@perex.cz>,
+	<conor+dt@kernel.org>,
+	<dmitry.torokhov@gmail.com>,
+	<corbet@lwn.net>,
+	<broonie@kernel.org>,
+	<lgirdwood@gmail.com>,
+	<krzk+dt@kernel.org>,
+	<pierre-louis.bossart@linux.intel.dev>,
+	<Thinh.Nguyen@synopsys.com>,
+	<tiwai@suse.com>,
+	<robh@kernel.org>,
+	<gregkh@linuxfoundation.org>,
+	<linux-kernel@vger.kernel.org>,
+	<devicetree@vger.kernel.org>,
+	<linux-sound@vger.kernel.org>,
+	<linux-usb@vger.kernel.org>,
+	<linux-input@vger.kernel.org>,
+	<linux-arm-msm@vger.kernel.org>,
+	<linux-doc@vger.kernel.org>
+Subject: Re: [PATCH v30 28/30] ALSA: usb-audio: Add USB offload route kcontrol
+In-Reply-To: <8fc53dd9-0c26-410c-b1b1-3d6df7894a44@quicinc.com>
+References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
+	<20241106193413.1730413-29-quic_wcheng@quicinc.com>
+	<87bjya3xzw.wl-tiwai@suse.de>
+	<02c20b06-34ef-459b-9cd1-2d2735eb1352@quicinc.com>
+	<87zfls1t7x.wl-tiwai@suse.de>
+	<8fc53dd9-0c26-410c-b1b1-3d6df7894a44@quicinc.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TY3PR01MB11346.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2cb817f8-edf5-4a67-5be1-08dd0e2070fe
-X-MS-Exchange-CrossTenant-originalarrivaltime: 26 Nov 2024 13:44:25.3867
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6A8IyRUtm8pZCLWFA1HtqW5NAO/g5INEMluhBzeHhCGkrKhz7jPeCFasGvvBMn61kAQJyt/cBNjCqez6eB3DP9vtKHlPflrGFXAqV/5qn1g=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB8000
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=ISO-8859-1
+Content-Transfer-Encoding: 8bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-1.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-0.999];
+	MIME_GOOD(-0.10)[text/plain];
+	TAGGED_RCPT(0.00)[dt];
+	RCPT_COUNT_TWELVE(0.00)[23];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.de,linaro.org,intel.com,perex.cz,kernel.org,gmail.com,lwn.net,linux.intel.dev,synopsys.com,suse.com,linuxfoundation.org,vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid,quicinc.com:email]
+X-Spam-Score: -1.80
+X-Spam-Flag: NO
 
-SGkgR2VlcnQsDQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogR2VlcnQg
-VXl0dGVyaG9ldmVuIDxnZWVydEBsaW51eC1tNjhrLm9yZz4NCj4gU2VudDogMjYgTm92ZW1iZXIg
-MjAyNCAxMzo0Mg0KPiBTdWJqZWN0OiBSZTogW1BBVENIIHYyIDAyLzE1XSBzb2M6IHJlbmVzYXM6
-IEFkZCBTWVNDIGRyaXZlciBmb3IgUmVuZXNhcyBSWiBmYW1pbHkNCj4gDQo+IEhpIEJpanUsDQo+
-IA0KPiBPbiBUdWUsIE5vdiAyNiwgMjAyNCBhdCAxMDoyOOKAr0FNIEJpanUgRGFzIDxiaWp1LmRh
-cy5qekBicC5yZW5lc2FzLmNvbT4gd3JvdGU6DQo+ID4gPiAtLS0tLU9yaWdpbmFsIE1lc3NhZ2Ut
-LS0tLQ0KPiA+ID4gRnJvbTogQ2xhdWRpdSA8Y2xhdWRpdS5iZXpuZWFAdHV4b24uZGV2Pg0KPiA+
-ID4gU2VudDogMjYgTm92ZW1iZXIgMjAyNCAwOToyMQ0KPiA+ID4gU3ViamVjdDogW1BBVENIIHYy
-IDAyLzE1XSBzb2M6IHJlbmVzYXM6IEFkZCBTWVNDIGRyaXZlciBmb3IgUmVuZXNhcw0KPiA+ID4g
-UlogZmFtaWx5DQo+ID4gPg0KPiA+ID4gRnJvbTogQ2xhdWRpdSBCZXpuZWEgPGNsYXVkaXUuYmV6
-bmVhLnVqQGJwLnJlbmVzYXMuY29tPg0KPiA+ID4NCj4gPiA+IFRoZSBSWi9HM1Mgc3lzdGVtIGNv
-bnRyb2xsZXIgKFNZU0MpIGhhcyB2YXJpb3VzIHJlZ2lzdGVycyB0aGF0DQo+ID4gPiBjb250cm9s
-IHNpZ25hbHMgc3BlY2lmaWMgdG8gaW5kaXZpZHVhbCBJUHMuIElQIGRyaXZlcnMgbXVzdCBjb250
-cm9sIHRoZXNlIHNpZ25hbHMgYXQgZGlmZmVyZW50DQo+IGNvbmZpZ3VyYXRpb24gcGhhc2VzLg0K
-PiA+ID4NCj4gPiA+IEFkZCBTWVNDIGRyaXZlciB0aGF0IGFsbG93cyBpbmRpdmlkdWFsIFNZU0Mg
-Y29uc3VtZXJzIHRvIGNvbnRyb2wNCj4gPiA+IHRoZXNlIHNpZ25hbHMuIFRoZSBTWVNDIGRyaXZl
-ciBleHBvcnRzIGEgc3lzY29uIHJlZ21hcCBlbmFibGluZyBJUA0KPiA+ID4gZHJpdmVycyB0byB1
-c2UgYSBzcGVjaWZpYyBTWVNDIG9mZnNldCBhbmQgbWFzayBmcm9tIHRoZSBkZXZpY2UgdHJlZSwg
-d2hpY2ggY2FuIHRoZW4gYmUgYWNjZXNzZWQNCj4gdGhyb3VnaCByZWdtYXBfdXBkYXRlX2JpdHMo
-KS4NCj4gPiA+DQo+ID4gPiBDdXJyZW50bHksIHRoZSBTWVNDIGRyaXZlciBwcm92aWRlcyBjb250
-cm9sIHRvIHRoZSBVU0IgUFdSUkRZIHNpZ25hbCwgd2hpY2ggaXMgcm91dGVkIHRvIHRoZSBVU0IN
-Cj4gUEhZLg0KPiA+ID4gVGhpcyBzaWduYWwgbmVlZHMgdG8gYmUgbWFuYWdlZCBiZWZvcmUgb3Ig
-YWZ0ZXIgcG93ZXJpbmcgdGhlIFVTQiBQSFkgb2ZmIG9yIG9uLg0KPiA+ID4NCj4gPiA+IE90aGVy
-IFNZU0Mgc2lnbmFscyBjYW5kaWRhdGVzIChhcyBleHBvc2VkIGluIHRoZSB0aGUgaGFyZHdhcmUg
-bWFudWFsIG9mIHRoZSBSWi9HM1MgU29DKSBpbmNsdWRlOg0KPiA+ID4NCj4gPiA+ICogUENJZToN
-Cj4gPiA+IC0gQUxMT1dfRU5URVJfTDEgc2lnbmFsIGNvbnRyb2xsZWQgdGhyb3VnaCB0aGUgU1lT
-X1BDSUVfQ0ZHIHJlZ2lzdGVyDQo+ID4gPiAtIFBDSUVfUlNUX1JTTV9CIHNpZ25hbCBjb250cm9s
-bGVkIHRocm91Z2ggdGhlIFNZU19QQ0lFX1JTVF9SU01fQg0KPiA+ID4gICByZWdpc3Rlcg0KPiA+
-ID4gLSBNT0RFX1JYVEVSTUlOQVRJT04gc2lnbmFsIGNvbnRyb2xsZWQgdGhyb3VnaCBTWVNfUENJ
-RV9QSFkgcmVnaXN0ZXINCj4gPiA+DQo+ID4gPiAqIFNQSToNCj4gPiA+IC0gU0VMX1NQSV9PQ1RB
-IHNpZ25hbCBjb250cm9sbGVkIHRocm91Z2ggU1lTX0lQQ09OVF9TRUxfU1BJX09DVEENCj4gPiA+
-ICAgcmVnaXN0ZXINCj4gPiA+DQo+ID4gPiAqIEkyQy9JM0M6DQo+ID4gPiAtIGFmX2J5cGFzcyBJ
-MkMgc2lnbmFscyBjb250cm9sbGVkIHRocm91Z2ggU1lTX0kyQ3hfQ0ZHIHJlZ2lzdGVycw0KPiA+
-ID4gICAoeD0wLi4zKQ0KPiA+ID4gLSBhZl9ieXBhc3MgSTNDIHNpZ25hbCBjb250cm9sbGVkIHRo
-cm91Z2ggU1lTX0kzQ19DRkcgcmVnaXN0ZXINCj4gPiA+DQo+ID4gPiAqIEV0aGVybmV0Og0KPiA+
-ID4gLSBGRUNfR0lHQV9FTkFCTEUgRXRoZXJuZXQgc2lnbmFscyBjb250cm9sbGVkIHRocm91Z2gg
-U1lTX0dFVEh4X0NGRw0KPiA+ID4gICByZWdpc3RlcnMgKHg9MC4uMSkNCj4gPiA+DQo+ID4gPiBB
-cyBkaWZmZXJlbnQgUmVuZXNhcyBSWiBTb0Mgc2hhcmVzIG1vc3Qgb2YgdGhlIFNZU0MgZnVuY3Rp
-b25hbGl0aWVzDQo+ID4gPiBhdmFpbGFibGUgb24gdGhlIFJaL0czUyBTb0MsIHRoZSBkcml2ZXIg
-aWYgZm9ybWVkIG9mIGEgU1lTQyBjb3JlDQo+ID4gPiBwYXJ0IGFuZCBhIFNvQyBzcGVjaWZpYyBw
-YXJ0IGFsbG93aW5nIGluZGl2aWR1YWwgU1lTQyBTb0MgdG8gcHJvdmlkZSBmdW5jdGlvbmFsaXRp
-ZXMgdG8gdGhlIFNZU0MNCj4gY29yZS4NCj4gPiA+DQo+ID4gPiBTaWduZWQtb2ZmLWJ5OiBDbGF1
-ZGl1IEJlem5lYSA8Y2xhdWRpdS5iZXpuZWEudWpAYnAucmVuZXNhcy5jb20+DQo+ID4NCj4gPiBS
-ZXZpZXdlZC1ieTogQmlqdSBEYXMgPGJpanUuZGFzLmp6QGJwLnJlbmVzYXMuY29tPg0KPiANCj4g
-VGhhbmtzIGZvciB5b3VyIHJldmlldyENCj4gDQo+ID4gPiAtLS0NCj4gPiA+DQo+ID4gPiBDaGFu
-Z2UgaW4gdjI6DQo+ID4gPiAtIHRoaXMgd2FzIHBhdGNoIDA0LzE2IGluIHYxDQo+ID4gPiAtIGRy
-b3BwZWQgdGhlIGluaXRpYWwgYXBwcm9hY2ggcHJvcG9zZWQgaW4gdjEgd2hlcmUgYSB3aXRoIGEg
-cmVzZXQNCj4gPiA+ICAgY29udHJvbGxlciBkcml2ZXIgd2FzIHByb3Bvc2VkIHRvIGhhbmRsZSB0
-aGUgVVNCIFBXUlJEWSBzaWduYWwNCj4gPiA+IC0gaW1wbGVtZW50ZWQgaXQgd2l0aCBzeXNjb24g
-cmVnbWFwIGFuZCB0aGUgU1lTQyBzaWduYWwgY29uY2VwdA0KPiA+ID4gICAoaW50cm9kdWNlZCBp
-biB0aGlzIHBhdGNoKQ0KPiANCj4gWy4uLl0NCj4gDQo+IFdoZW4gcmV2aWV3aW5nLCBwbGVhc2Ug
-dHJpbSB5b3VyIHJlc3BvbnNlLCBzbyBvdGhlciBwZW9wbGUgZG9uJ3QgaGF2ZSB0byBzY3JvbGwg
-dGhyb3VnaCBodW5kcmVkcyBvZg0KPiBsaW5lcyBvZiBxdW90ZWQgdGV4dCwgdG8gZmluZCBhbnkg
-b3RoZXIgY29tbWVudHMgKGlmIGFueSkuDQoNClNvcnJ5IGZvciB0aGF0LiBXaWxsIHRha2UgY2Fy
-ZSBuZXh0IHRpbWUuDQoNCkNoZWVycywNCkJpanUNCg==
+On Mon, 25 Nov 2024 21:33:03 +0100,
+Wesley Cheng wrote:
+> 
+> Hi Takashi,
+> 
+> On 11/21/2024 7:50 AM, Takashi Iwai wrote:
+> > On Wed, 20 Nov 2024 20:13:34 +0100,
+> > Wesley Cheng wrote:
+> >> Hi Takashi,
+> >>
+> >> On 11/20/2024 4:12 AM, Takashi Iwai wrote:
+> >>> On Wed, 06 Nov 2024 20:34:11 +0100,
+> >>> Wesley Cheng wrote:
+> >>>> In order to allow userspace/applications know about USB offloading status,
+> >>>> expose a sound kcontrol that fetches information about which sound card
+> >>>> and PCM index the USB device is mapped to for supporting offloading.  In
+> >>>> the USB audio offloading framework, the ASoC BE DAI link is the entity
+> >>>> responsible for registering to the SOC USB layer.
+> >>>>
+> >>>> It is expected for the USB SND offloading driver to add the kcontrol to the
+> >>>> sound card associated with the USB audio device.  An example output would
+> >>>> look like:
+> >>>>
+> >>>> tinymix -D 1 get 'USB Offload Playback Route PCM#0'
+> >>>> -1, -1 (range -1->255)
+> >>>>
+> >>>> This example signifies that there is no mapped ASoC path available for the
+> >>>> USB SND device.
+> >>>>
+> >>>> tinymix -D 1 get 'USB Offload Playback Route PCM#0'
+> >>>> 0, 0 (range -1->255)
+> >>>>
+> >>>> This example signifies that the offload path is available over ASoC sound
+> >>>> card index#0 and PCM device#0.
+> >>>>
+> >>>> The USB offload kcontrol will be added in addition to the existing
+> >>>> kcontrols identified by the USB SND mixer.  The kcontrols used to modify
+> >>>> the USB audio device specific parameters are still valid and expected to be
+> >>>> used.  These parameters are not mirrored to the ASoC subsystem.
+> >>>>
+> >>>> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> >>> IIRC, this representation of kcontrol was one argued issue; Pierre
+> >>> expressed the concern about the complexity of the kcontrol.
+> >>> I didn't follow exactly, but did we get consensus?
+> >> So the part that Pierre had concerns on was that previously, the
+> >>> implementation was placing offload kcontrols to the ASoC platform
+> >>> card, and had some additional controls that complicated the
+> >>> offload implementation about the offload status for each USB audio
+> >>> device.  This was discussed here:
+> >> https://lore.kernel.org/linux-usb/957b3c13-e4ba-45e3-b880-7a313e48c33f@quicinc.com/
+> >>
+> >> To summarize, I made the decision to move the offload status
+> >> kcontrols from ASoC --> USB SND and limited it to only one kcontrol
+> >> (mapped offload device).  So now, there exists a kcontrol for every
+> >> USB SND device (if the offload mixer is enabled), where it tells
+> >> userspace the mapped ASoC platform card and pcm device that handles
+> >> USB offloading, else you'll see the "-1, -1" pair, which means
+> >> offload is not possible for that USB audio device.
+> > OK, the simplification is good.  But I wonder whether the current
+> > representation is the best.  Why not just providing two controls per
+> > PCM, one for card and one for device, instead of two integer array?
+> > It would look more intuitive to me.
+> >
+> 
+> I could separate it, but we would have to have a pair of controls
+> for each available USB PCM playback stream supported by the device.
+> However, before I get into making that change, I think the decision
+> for either two or one FE needs to be decided. Again, I think the 2
+> FE approach is much less invasive to the USB SND/ASoC core files,
+> and ensures the legacy USB SND path still works through the
+> non-offloaded data path.
+
+Sure, the decision about the 2 FEs is the most significant one, and
+those controls depend on that.
+
+So my comment assumes that, and if that applied, we need to consider
+which kcontrol representation is better for users.  I don't mind too
+much about that, but generally speaking, simpler representation is
+better in the end, even if it leads to more elements.  e.g. sysfs
+allows basically only one value per file principle, too.
+
+
+> >>> Apart from that: the Kconfig defition below ...
+> >>>
+> >>>> +config SND_USB_OFFLOAD_MIXER
+> >>>> +	tristate "USB Audio Offload mixer control"
+> >>>> +	help
+> >>>> +	 Say Y to enable the USB audio offloading mixer controls.  This
+> >>>> +	 exposes an USB offload capable kcontrol to signal to applications
+> >>>> +	 about which platform sound card can support USB audio offload.
+> >>>> +	 The returning values specify the mapped ASoC card and PCM device
+> >>>> +	 the USB audio device is associated to.
+> >>> ... and Makefile addition below ...
+> >>>
+> >>>> --- a/sound/usb/Makefile
+> >>>> +++ b/sound/usb/Makefile
+> >>>> @@ -36,3 +36,5 @@ obj-$(CONFIG_SND_USB_US122L) += snd-usbmidi-lib.o
+> >>>>  
+> >>>>  obj-$(CONFIG_SND) += misc/ usx2y/ caiaq/ 6fire/ hiface/ bcd2000/ qcom/
+> >>>>  obj-$(CONFIG_SND_USB_LINE6)	+= line6/
+> >>>> +
+> >>>> +obj-$(CONFIG_SND_USB_OFFLOAD_MIXER) += mixer_usb_offload.o
+> >>> ... indicates that this code will be an individual module, although
+> >>> it's solely used from snd-usb-audio-qmi driver.  This should be rather
+> >>> a boolean and moved to sound/usb/qcom/, and linked to
+> >>> snd-usb-audio-qmi driver itself, e.g.
+> >>>
+> >>> --- a/sound/usb/qcom/Makefile
+> >>> +++ b/sound/usb/qcom/Makefile
+> >>> @@ -1,2 +1,3 @@
+> >>>  snd-usb-audio-qmi-objs := usb_audio_qmi_v01.o qc_audio_offload.o
+> >>> +snd-usb-audio-qmi-$(CONFIG_SND_USB_OFFLOAD_MIXER) += mixer_usb_offload.o
+> >>>  obj-$(CONFIG_SND_USB_AUDIO_QMI) += snd-usb-audio-qmi.o
+> >>>
+> >>> Then you can drop EXPORT_SYMBOL_GPL(), too.
+> >> Had a discussion with Pierre on this too below.
+> >>
+> >> https://lore.kernel.org/linux-usb/f507a228-4865-4df5-9215-bc59e330a82f@linux.intel.com/
+> >>
+> >> I remember you commenting to place it in this vendor offload module,
+> >> which is what I did on v24.
+> > I assume that my early comment was based on your old implementations,
+> > and I guess it was because the mixer part didn't belong to the qcom
+> > stuff.  Now it belongs solely to qcom, the situation changed; it makes
+> > no sense to make it an individual module at all.
+> >
+> >
+> I guess Pierre's feedback was that he believed this should be vendor
+> agnostic, because any vendor that could potentially support USB
+> audio offload should have the same kcontrol within the USB SND
+> device.  Hence the reason for keeping it within generic code.  Since
+> QC is the only user of this now.  Do you prefer to make this part of
+> the vendor module for now, until another user comes along and
+> introduces offload support?
+
+Yes, less module is preferred for now.  If the stuff is agnostic and
+really used by multiple instances, we can factor out to an individual
+module again.
+
+
+thanks,
+
+Takashi
 
