@@ -1,145 +1,191 @@
-Return-Path: <linux-usb+bounces-17881-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17882-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 889139D9818
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 14:17:37 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DF269D98B6
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 14:42:44 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30B7316474A
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 13:17:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5678DB2337A
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 13:42:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC4B1D4354;
-	Tue, 26 Nov 2024 13:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Uw+YYQeo";
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="Uw+YYQeo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51E131D47AF;
+	Tue, 26 Nov 2024 13:42:21 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D2C41BDAA1;
-	Tue, 26 Nov 2024 13:17:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576271D52B;
+	Tue, 26 Nov 2024 13:42:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732627051; cv=none; b=lgnblenzhoaPl8wHMtoNCeTl1sEtkjZ8ncFsxmgVdNBNGebnRTgxzLWg30A9/pr1MlaKhyhegC87GkXh6R6z51TC6tenxWz5Aj8hf4seRWoEzV7eqi8hnD2BjPIgsFCmtcg1KzVlxA7gjKbvrJ84BFbyn6iiMG1Yfv3S4PveFJQ=
+	t=1732628541; cv=none; b=Tqy00tEjZU6rfLumsNp8GvOfo6OtAPob6zRCXBMZDM2tvm2FT+1Q3Pw8lsU7/Kc3HfKfGbjyo58NrUWf494Z4dMeYg4BkIaBd4X6WRP7FT1+N1LloogxsN9k/jxI2BvW4Gy+ggdJRSundVfi+6ub7XErlIZp0J5RrXpCpf5Mm0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732627051; c=relaxed/simple;
-	bh=kGWYvRyKkgDEq45vYjYWq6dvUkqj/3c1Mu2ElpMKN9M=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DzD0rz822y1uVeJuJdMA26DQpGY/DktfVWM/29O8xFi2//Zo2OQqPp4zzIN0UPKxBsNOn+BilK6ZZvd0+Yz8kgukoE2JuZixuAi75DGE8df6zTwJ4fr5hRZgNZHTLVwfJGVvdkjVinm640+VZNssB46GU5DIxUUsMdYOMiIWnxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Uw+YYQeo; dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b=Uw+YYQeo; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 3B1AE1F750;
-	Tue, 26 Nov 2024 13:17:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1732627045; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=YSBkGuLf4r4wgewrViI+yhQRaVyazBo9x3CWk8Y+w/s=;
-	b=Uw+YYQeo8ekSZxaZx+fVu55yN6cAQvuFORuTewrjSju5xeG95fSgGvjloOGRt+SUj9MgkG
-	brCJWbCZC/bedsYx8GnQjjOTBW5b4insEvP5LkNEyi4dZlV5dlarg1sPgA05M6m3jtE4Yq
-	cGkSnrzI7xZyi37Bxf9SZVebTGBkUps=
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1732627045; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=YSBkGuLf4r4wgewrViI+yhQRaVyazBo9x3CWk8Y+w/s=;
-	b=Uw+YYQeo8ekSZxaZx+fVu55yN6cAQvuFORuTewrjSju5xeG95fSgGvjloOGRt+SUj9MgkG
-	brCJWbCZC/bedsYx8GnQjjOTBW5b4insEvP5LkNEyi4dZlV5dlarg1sPgA05M6m3jtE4Yq
-	cGkSnrzI7xZyi37Bxf9SZVebTGBkUps=
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 0ED7313890;
-	Tue, 26 Nov 2024 13:17:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id Y/9uAmXKRWcPYAAAD6G6ig
-	(envelope-from <oneukum@suse.com>); Tue, 26 Nov 2024 13:17:25 +0000
-From: Oliver Neukum <oneukum@suse.com>
-To: sean@mess.org,
-	mchehab@kernel.org,
-	linux-media@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Cc: Oliver Neukum <oneukum@suse.com>,
-	syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com
-Subject: [PATCH] media: rc: iguanair: handle timeouts
-Date: Tue, 26 Nov 2024 14:17:22 +0100
-Message-ID: <20241126131722.22175-1-oneukum@suse.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1732628541; c=relaxed/simple;
+	bh=Nqp+tSKa5TBc0GFn3kfkMzj6rtuwiH6tAT8BgyAa5Zc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ly2keNgMp7OCBFEzqqfUp9hQunTq9jFWRrf644MzcKBraVoHK3JpMKmizfe3SHaWBivSGGCHz6Jxndifgo9UlNVHNqikhkvkCv4WK+enMRnF3McwYpeQFRSzEci26UmKOmzih6mvkHdErHDRYfbdoeUw10BcovkIL04aNfed3Yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6ef0cee54daso22593907b3.3;
+        Tue, 26 Nov 2024 05:42:19 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732628536; x=1733233336;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vwzB/qcs+FEe5xmAoaiq0XfbUwF5QZEVDjPtTScGPCA=;
+        b=Whv8RJI59/wH5/TUqt1mnhQPZAlZBMH6WTJVqi8nhi0W7iSBe4lsRIkv5XtQXP2n+K
+         zmFIWA4mQO95lkkjglh1PXU1s7HBKTy8dWcahbwBTbTCk3T/zUu9SkYGEVw8whJExJKY
+         3V43N6Yjg0B+kT5MsdexPJEMeEW38BloMzxmWLHlLr8IYV9gl9hJ26Zja1jGnuN1misi
+         PfXtZpd4F5nl7h7eIxddluuZy5hcGdf1U5x1Yd2uqLFq4Vh+diKvkljUr5GZCyORQUFO
+         n4qj+Sv27jhq6th0rQyAFtUZJ7AFwMvgBjOhfIy8JCGKCbb17GUtE8y675pRO4c7+uzI
+         cE1g==
+X-Forwarded-Encrypted: i=1; AJvYcCUeeNfZfrWm5/g2zCqdIVnDyqUWsTiT5stMGyOQRjtRwTqpe5GMZ8a8L4xZDyQ0EMyqiCMH12a6K7eGxndSJsmmeg8=@vger.kernel.org, AJvYcCW5ZDbH1V/0SR9l07C8lArvPiBOeDV1P5IvfkPXIoQ8VmA/6CWbZWLku07u8WCzPTpSE1Z3wp0aFDJg@vger.kernel.org, AJvYcCXRGM07vxbIr4RIxxNcJVzGicwLCBfOKQk+Ncyl7p2OFPJIbHpl817pD484J8BIijZ3ESzN+HRDC6zGrg/Y@vger.kernel.org, AJvYcCXcZIRp6P/g802CWp2mZLV433J2T3QZuD2BSIaAxPuHGieLSnr1doG9KElVq0L5xf+ouOR8B/UqoEUh@vger.kernel.org
+X-Gm-Message-State: AOJu0YxwxgPm8cRE+maCnBlTSdSVeI/hodDjxOtv0Zs2OUK+HXHeF+bN
+	CBHpf5zrxXZjsRyYcowDSuPQpMX/+bYz7HOr+A6xDuSyaL0VBv9VhS3neobB
+X-Gm-Gg: ASbGncvf1gIx3kgvUv6hfAzOy6Nsu/GgoXd49M5ulytcULps/mG+UpHYCSkVxrdfXkZ
+	ajJBAVpRY2jUi1trUdFX5+dgLNvmWVXe5YxJphO+BUtY22grN3ZC+jH6yr88OOPeV200fC6jllY
+	SEoK9r4SBEdibfjIUDtUtr0n/WIte6eW1plkFHqT8oQUmzGo5ieP6PgD+iTCcTu5n1eWWeyG2Fr
+	y15QWQ7yhcHe9EtNigBa5+D118r2GyThT666cjoyE22p218J1jcWnd4ZF2PKIOGwvoHlbhyMdwc
+	4ERUw0Js1VZCq4Ly
+X-Google-Smtp-Source: AGHT+IFSpRNSa8EM7brwKud9YrFpNQe2U0pZSD52kVm/5mffIyhBE9hZxo8AsuxNu8Uk/bOfv8/zUQ==
+X-Received: by 2002:a05:690c:6f81:b0:6e3:32e2:ecbf with SMTP id 00721157ae682-6eee08ea243mr173968207b3.24.1732628536086;
+        Tue, 26 Nov 2024 05:42:16 -0800 (PST)
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com. [209.85.128.173])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6eedfe2a150sm22445107b3.30.2024.11.26.05.42.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Nov 2024 05:42:14 -0800 (PST)
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6eeb66727e7so54824267b3.2;
+        Tue, 26 Nov 2024 05:42:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVdx5IGn1yfeUul1zcMCHIqyGDosPaOdKp4qDRFgt1OIxzA5CK+tNAp9MdK0EuK0NaDaPy3cbOzD8cc4ESu@vger.kernel.org, AJvYcCVemDdZvTqzVZvxbXe6OB5bPw+CamdLdMzatvoHyBRCEtsqN5IseZ6tDU95pYd+QywR/QGqcA/sm99F@vger.kernel.org, AJvYcCX1e5lZ+8bDFKbZPxDzVJ0Fj0161E3qGR1q6EVHIyPeTAvjiGDKOD0mOyCZGqR6rJAKG/CW7ulRQ5TFamVJ6ERyeEc=@vger.kernel.org, AJvYcCXeaCE9RtmsD0+joMFcBar7DOdb2uuBbeAlU3DpG0HuUkY/QdkI6esY/qSu9u4IhYJ3SswTXgVdDjPg@vger.kernel.org
+X-Received: by 2002:a05:690c:67c1:b0:6ea:95f5:2607 with SMTP id
+ 00721157ae682-6eee08a90a2mr143879177b3.5.1732628534112; Tue, 26 Nov 2024
+ 05:42:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-1.30 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_TWO(0.00)[2];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	TAGGED_RCPT(0.00)[ffba8e636870dac0e0c0];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.com:email,suse.com:mid];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Score: -1.30
-X-Spam-Flag: NO
+References: <20241126092050.1825607-1-claudiu.beznea.uj@bp.renesas.com>
+ <20241126092050.1825607-3-claudiu.beznea.uj@bp.renesas.com> <TY3PR01MB11346C9A56B483666575EB23A862F2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+In-Reply-To: <TY3PR01MB11346C9A56B483666575EB23A862F2@TY3PR01MB11346.jpnprd01.prod.outlook.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 26 Nov 2024 14:42:02 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVkXo=HSqoF2hur8Nvder6yOg_Aqgzq=aFvfti+9=PnJA@mail.gmail.com>
+Message-ID: <CAMuHMdVkXo=HSqoF2hur8Nvder6yOg_Aqgzq=aFvfti+9=PnJA@mail.gmail.com>
+Subject: Re: [PATCH v2 02/15] soc: renesas: Add SYSC driver for Renesas RZ family
+To: Biju Das <biju.das.jz@bp.renesas.com>
+Cc: "Claudiu.Beznea" <claudiu.beznea@tuxon.dev>, "vkoul@kernel.org" <vkoul@kernel.org>, 
+	"kishon@kernel.org" <kishon@kernel.org>, "robh@kernel.org" <robh@kernel.org>, 
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, 
+	"p.zabel@pengutronix.de" <p.zabel@pengutronix.de>, 
+	"geert+renesas@glider.be" <geert+renesas@glider.be>, "magnus.damm@gmail.com" <magnus.damm@gmail.com>, 
+	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
+	"christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>, 
+	"linux-phy@lists.infradead.org" <linux-phy@lists.infradead.org>, 
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-In case of a timeout the IO must be cancelled or
-the next IO using the URB will fail and/or overwrite
-an operational URB.
+Hi Biju,
 
-The automatic bisection fails because it arrives
-at a commit that correctly lets the test case run
-without an error.
+On Tue, Nov 26, 2024 at 10:28=E2=80=AFAM Biju Das <biju.das.jz@bp.renesas.c=
+om> wrote:
+> > -----Original Message-----
+> > From: Claudiu <claudiu.beznea@tuxon.dev>
+> > Sent: 26 November 2024 09:21
+> > Subject: [PATCH v2 02/15] soc: renesas: Add SYSC driver for Renesas RZ =
+family
+> >
+> > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >
+> > The RZ/G3S system controller (SYSC) has various registers that control =
+signals specific to individual
+> > IPs. IP drivers must control these signals at different configuration p=
+hases.
+> >
+> > Add SYSC driver that allows individual SYSC consumers to control these =
+signals. The SYSC driver
+> > exports a syscon regmap enabling IP drivers to use a specific SYSC offs=
+et and mask from the device
+> > tree, which can then be accessed through regmap_update_bits().
+> >
+> > Currently, the SYSC driver provides control to the USB PWRRDY signal, w=
+hich is routed to the USB PHY.
+> > This signal needs to be managed before or after powering the USB PHY of=
+f or on.
+> >
+> > Other SYSC signals candidates (as exposed in the the hardware manual of=
+ the RZ/G3S SoC) include:
+> >
+> > * PCIe:
+> > - ALLOW_ENTER_L1 signal controlled through the SYS_PCIE_CFG register
+> > - PCIE_RST_RSM_B signal controlled through the SYS_PCIE_RST_RSM_B
+> >   register
+> > - MODE_RXTERMINATION signal controlled through SYS_PCIE_PHY register
+> >
+> > * SPI:
+> > - SEL_SPI_OCTA signal controlled through SYS_IPCONT_SEL_SPI_OCTA
+> >   register
+> >
+> > * I2C/I3C:
+> > - af_bypass I2C signals controlled through SYS_I2Cx_CFG registers
+> >   (x=3D0..3)
+> > - af_bypass I3C signal controlled through SYS_I3C_CFG register
+> >
+> > * Ethernet:
+> > - FEC_GIGA_ENABLE Ethernet signals controlled through SYS_GETHx_CFG
+> >   registers (x=3D0..1)
+> >
+> > As different Renesas RZ SoC shares most of the SYSC functionalities ava=
+ilable on the RZ/G3S SoC, the
+> > driver if formed of a SYSC core part and a SoC specific part allowing i=
+ndividual SYSC SoC to provide
+> > functionalities to the SYSC core.
+> >
+> > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>
+> Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
 
-Signed-off-by: Oliver Neukum <oneukum@suse.com>
-Fixes: e99a7cfe93fd9  ("[media] iguanair: reuse existing urb callback for command responses")
-Reported-by: syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com
-Tested-by: syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com
----
- drivers/media/rc/iguanair.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Thanks for your review!
 
-diff --git a/drivers/media/rc/iguanair.c b/drivers/media/rc/iguanair.c
-index 276bf3c8a8cb..8af94246e591 100644
---- a/drivers/media/rc/iguanair.c
-+++ b/drivers/media/rc/iguanair.c
-@@ -194,8 +194,10 @@ static int iguanair_send(struct iguanair *ir, unsigned size)
- 	if (rc)
- 		return rc;
- 
--	if (wait_for_completion_timeout(&ir->completion, TIMEOUT) == 0)
-+	if (wait_for_completion_timeout(&ir->completion, TIMEOUT) == 0) {
-+		usb_kill_urb(ir->urb_out);
- 		return -ETIMEDOUT;
-+	}
- 
- 	return rc;
- }
--- 
-2.47.0
+> > ---
+> >
+> > Change in v2:
+> > - this was patch 04/16 in v1
+> > - dropped the initial approach proposed in v1 where a with a reset
+> >   controller driver was proposed to handle the USB PWRRDY signal
+> > - implemented it with syscon regmap and the SYSC signal concept
+> >   (introduced in this patch)
 
+[...]
+
+When reviewing, please trim your response, so other people don't have
+to scroll through hundreds of lines of quoted text, to find any other
+comments (if any).
+
+Thanks!
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
