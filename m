@@ -1,127 +1,109 @@
-Return-Path: <linux-usb+bounces-17889-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17890-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12F3F9D9F2F
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 23:28:04 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EFBA9D9F75
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 00:09:40 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B13981687C3
-	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 22:28:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34BB42842F7
+	for <lists+linux-usb@lfdr.de>; Tue, 26 Nov 2024 23:09:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 808DB1DFDB4;
-	Tue, 26 Nov 2024 22:27:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B7911DBB3A;
+	Tue, 26 Nov 2024 23:09:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="tN+Dy8AW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZH0e42YK"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB3621DA632;
-	Tue, 26 Nov 2024 22:27:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C675A1ACDED
+	for <linux-usb@vger.kernel.org>; Tue, 26 Nov 2024 23:09:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732660078; cv=none; b=p5+WN840NetrH+I8J01hfmMHqOzneOWubCnOYoMSVYoa5Tsw+vPInoI1aGU7YscTCu1GpaJ3n2gD3tcRMk7dGCqqJqwvVxO1sdDTZx9X8WdzViKVdaSmUoPb0oLSsmU4siupVoBOXM1nIry4w/f/WHiR/Uhr3mpew1NDVPWHz20=
+	t=1732662575; cv=none; b=e+DARlm++tIDKaAKalaHxoyku4eD8DSegWq6TuE1hFGWrbxqCcuCAk84dD1+Gjv1ijNCIuGfmJwdSJ62aB9n/UY6m+8jwuzOjrX0D2Tapo8t5uhdhMyH0rfmbxaCHOJV0K2DIJeMUHcypTMulmSwxMLNChI3iiEJK3fAO5NW+nY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732660078; c=relaxed/simple;
-	bh=GzZ8oVk5MZ79g5dw7DokNA5vq6PyiBw5xTLBORCElQk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JFo0Flz/hgYeGTYc4LBr7546ptGr6lobcdckY6AIUdsCGQi//s0T4ryShcUamwu2Lv4CRVNhBCNZRMB6liC5SxwQyzvrpF3psV/KxEoe4GT79w6eUFPayMg7rHDCW045AGpOI2Q/miSJcil+zvoNhUjxRzaPotwFj6Y2MlbgQgM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=tN+Dy8AW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2799DC4CECF;
-	Tue, 26 Nov 2024 22:27:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1732660077;
-	bh=GzZ8oVk5MZ79g5dw7DokNA5vq6PyiBw5xTLBORCElQk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tN+Dy8AW26HHkT7e7XD6Y2+YyIUtZ2IXKUvPC6qI1Bd6b8+JqyAIXCkcKq8R+Oqqc
-	 EcTOUUhpsXs2yH7KOaq0QgQGL+0KEZPQgFY8om9gvuhlA3DNWNE254n8M9GRkxuATZ
-	 fithpFoR83Gy5xicW+oeDah8SnZfWFhP4D25sudk=
-Date: Tue, 26 Nov 2024 23:27:28 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: sean@mess.org, mchehab@kernel.org, linux-media@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com
-Subject: Re: [PATCH] media: rc: iguanair: handle timeouts
-Message-ID: <2024112608-easter-radiance-4a6c@gregkh>
-References: <20241126131722.22175-1-oneukum@suse.com>
+	s=arc-20240116; t=1732662575; c=relaxed/simple;
+	bh=6Tq9Kq6MWH1OFdHge5pMtjbhpW6wGYU+vv9Yt/WArK0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Zm0HxKrDNdcx3bFzXgzVvm+4h+6UkltWkB62rAssoc7UEPtYe4kn+7BNMy4OyKJKyyhD/vteab0oWcxOPJkw7cH9QWbDAKp27Z3L7JBiBOkm+Xd1h8PJNw/RCQxdpY5FUsn/CyCspMHXSwB5JlPL4/Hms/wi8AnNSBmflmN2ADs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZH0e42YK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 56ED9C4CED0
+	for <linux-usb@vger.kernel.org>; Tue, 26 Nov 2024 23:09:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732662574;
+	bh=6Tq9Kq6MWH1OFdHge5pMtjbhpW6wGYU+vv9Yt/WArK0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=ZH0e42YKZqC6rlTuoPFH/G7r6oKE3D5a8RssGpoALqbKtAegT9tS4UuBcSWPlxmyT
+	 louUnfSrK6GfBH6IJx9sKIwSoc9PODuAlC1dQFDVjKdJ3Mx2QSrefh47zom+/UssnK
+	 bIyAoJvmu7LrTQtniWYt4VdMZDYf7wDZM84ch1NRgPfqGxtrkgphaX+JfOTraHAfWI
+	 +SPW44rOmzWTWVUUWqCklfxxQDc3lFFx9CAYSF0CjFEoP0l7bZyJRiKHcvSU6RVhAn
+	 ZvRyWsZB2Rs+XkcBzt9bBLCrVTpb8ohuHb9FHPcfMAUjX9ANlJwttOjCbvvTv+272w
+	 fdAObNjSwNylQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 3C008C53BBF; Tue, 26 Nov 2024 23:09:34 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219532] Crash in RIP: 0010:xhci_handle_stopped_cmd_ring
+Date: Tue, 26 Nov 2024 23:09:34 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-219532-208809-8gVHeUXs1r@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219532-208809@https.bugzilla.kernel.org/>
+References: <bug-219532-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241126131722.22175-1-oneukum@suse.com>
 
-On Tue, Nov 26, 2024 at 02:17:22PM +0100, Oliver Neukum wrote:
-> In case of a timeout the IO must be cancelled or
-> the next IO using the URB will fail and/or overwrite
-> an operational URB.
-> 
-> The automatic bisection fails because it arrives
-> at a commit that correctly lets the test case run
-> without an error.
-> 
-> Signed-off-by: Oliver Neukum <oneukum@suse.com>
-> Fixes: e99a7cfe93fd9  ("[media] iguanair: reuse existing urb callback for command responses")
-> Reported-by: syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com
-> Tested-by: syzbot+ffba8e636870dac0e0c0@syzkaller.appspotmail.com
-> ---
->  drivers/media/rc/iguanair.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/rc/iguanair.c b/drivers/media/rc/iguanair.c
-> index 276bf3c8a8cb..8af94246e591 100644
-> --- a/drivers/media/rc/iguanair.c
-> +++ b/drivers/media/rc/iguanair.c
-> @@ -194,8 +194,10 @@ static int iguanair_send(struct iguanair *ir, unsigned size)
->  	if (rc)
->  		return rc;
->  
-> -	if (wait_for_completion_timeout(&ir->completion, TIMEOUT) == 0)
-> +	if (wait_for_completion_timeout(&ir->completion, TIMEOUT) == 0) {
-> +		usb_kill_urb(ir->urb_out);
->  		return -ETIMEDOUT;
-> +	}
->  
->  	return rc;
->  }
-> -- 
-> 2.47.0
-> 
-> 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219532
 
-Hi,
+Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |michal.pecio@gmail.com
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+--- Comment #5 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+It looks like some device doesn't respond to address assignment after
+connection. If you weren't connecting anything at the time, it's possible t=
+hat
+a device is buggy and had disconnected by itself a moment earlier, but the =
+log
+is too short to tell.
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+Not sure why it crashed. It looks like there were two attempts 6 seconds ap=
+art
+and no crash on the first attempt.
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+It's unlikely that xhci was NULL near the end of the function. If it were,
+there were several opportunities to crash earlier. The call to
+xhci_mod_cmd_timer() in the next line dereferences xhci->cur_cmd, which is
+perhaps more suspicious.
 
-thanks,
+--=20
+You may reply to this email to add a comment.
 
-greg k-h's patch email bot
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
