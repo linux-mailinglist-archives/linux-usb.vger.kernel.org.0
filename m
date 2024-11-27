@@ -1,111 +1,100 @@
-Return-Path: <linux-usb+bounces-17910-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17911-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99F099DAB35
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 16:57:43 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6DDD9DAC98
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 18:37:54 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1ECA4B22ACF
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 15:57:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 012531654EF
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 17:37:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E21200B97;
-	Wed, 27 Nov 2024 15:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 080B2201034;
+	Wed, 27 Nov 2024 17:37:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XekDxYIg"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="XW0l3LaK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD5F200B83;
-	Wed, 27 Nov 2024 15:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BE04200BBA;
+	Wed, 27 Nov 2024 17:37:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732723045; cv=none; b=SRs/nKFpn0biVCHjwoaH5IrfFAut/4sayjZ3hIGGV2cgmSYFlDusIPlYJIn1jDk+IsDt/lw1Kvv8tW7bM0qelfhRtO6CuJAHMkCaPlw9U9mSNFStGwR7j1xzNN3mrL5EKzSUZRNqEaUGiTyC/2uYz5f+GTI1E32zgZwe7GN7w0Y=
+	t=1732729066; cv=none; b=EMO73vnngIq6gNayOq2+lNj9tx47b/bcGr7fKE7Oo4RxUw+2ICAZOygSrUuDevbMCOqS68ZNObgyWRQ3Gpvz0skYH8285Y8ZDl3w2T8kYII9C7ZsNRSvmFWO/5QYDem5KBib4YwPj88Kg3cCv4cE2LNanEE3siG9eA1M2JlSJIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732723045; c=relaxed/simple;
-	bh=WSGkgXaL4N5p2uwRcTTHYvq/3QczX507d7c/2vEeemg=;
+	s=arc-20240116; t=1732729066; c=relaxed/simple;
+	bh=3t0Wty8o3TmEheD0SKwcH6u8OAx0lepMeADNC4O2PZI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hXU/WyGo2CwIrpvDkJUJ9Np+u+6lEMW2CGcU/9J4607krTP8X11yNSRm8R88jbVHvOxyN4WTNrMisZC9bwPT5EGECp3IC6QmDjUTfiMQaxReeyLFfPP+B3XupT7iEjE04Cm64LEn5pjNb6JKx7w5UYunKRaK3iLYPM2YKJiPCM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XekDxYIg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC0EC4CECC;
-	Wed, 27 Nov 2024 15:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1732723044;
-	bh=WSGkgXaL4N5p2uwRcTTHYvq/3QczX507d7c/2vEeemg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XekDxYIgmckQWV1NFhqDy2VJTp7NPCiygIgd3uwhCCLqARbnjTzUNlHeLRJmFVXuu
-	 G8BrMiepbHsftZ1ahwYMYEkJda+0ttpBUdNqmA13Fvdb1QQbKp8ir+IjNKtJ7mRzcc
-	 H/SP2D8S/UI/yMS52eOF3oH8YkaNFg6rZ5LFYKbMGwnnsviRvcb9LwPb9sGWvOAHQX
-	 ceO1zo7F7MyUaVpqYZEza0FGCJLuLJRGhKPujjZDFlAqPCb8akifWpNY6tfdgN4VgH
-	 gkMt2mSKVc8zGV2U0lkuIF8m3X20L/9yb4Ssrb7RqHM8q+pwe00W1hih/3nxkNvxIn
-	 7jO4tsg9dNP2w==
-Date: Wed, 27 Nov 2024 15:57:19 +0000
-From: Conor Dooley <conor@kernel.org>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Jagan Sridharan <badhri@google.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Peter Griffin <peter.griffin@linaro.org>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>,
-	Sam Protsenko <semen.protsenko@linaro.org>,
-	Will McVicker <willmcvicker@google.com>,
-	Roy Luo <royluo@google.com>, kernel-team@android.com,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-samsung-soc@vger.kernel.org
-Subject: Re: [PATCH 2/6] dt-bindings: usb: max33359: add max77759 flavor
-Message-ID: <20241127-chloride-pantyhose-74f3d81e91f8@spud>
-References: <20241127-gs101-phy-lanes-orientation-dts-v1-0-5222d8508b71@linaro.org>
- <20241127-gs101-phy-lanes-orientation-dts-v1-2-5222d8508b71@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=s20esZaw5TLCsx5inH0d9BQDKlu0Ap3yn7HbXPfvYH0f8JsZ3p0qdieWg7N77PMpnXzZau7+8LVmfETe2EFPhYeBCj9jb7oFGdjnojSw3mTQuNop9waJKqgq3ujgA+l4DV5TB+m/eqLu9iNACFW0X13VkfG/5SvmsiUUjHUtPyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=XW0l3LaK; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+	In-Reply-To:References; bh=Gp03uKbGgj9n4g8SVip9GrkABU7383Qnzar2YQ/Nf3A=; b=XW
+	0l3LaKx+mtdHGbaqvtS9reZ2S7yVzM1Ytdg5cjHmvccaM0cQY3JWcPyR6qW6YQrATmvq2WoP7YTA2
+	CmCKbv0yORf4GC8AW2ND9/PcXVM0CS8VnZweqFLLMbBKER7hup8C/off703RQOCvjLaZOPZSV2aea
+	Vye9KoIJNCyFIVM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tGLyq-00EdWw-Cy; Wed, 27 Nov 2024 18:37:36 +0100
+Date: Wed, 27 Nov 2024 18:37:36 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Cc: netdev <netdev@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
+	Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH] PHY: Fix no autoneg corner case
+Message-ID: <c57a8f12-744c-4855-bd18-2197a8caf2a2@lunn.ch>
+References: <m3plmhhx6d.fsf@t19.piap.pl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="YAvHQQ/l8A2Bxt50"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241127-gs101-phy-lanes-orientation-dts-v1-2-5222d8508b71@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <m3plmhhx6d.fsf@t19.piap.pl>
 
+On Wed, Nov 27, 2024 at 09:56:42AM +0100, Krzysztof Hałasa wrote:
+> phydev->autoneg appears to indicate if autonegotiation is enabled or
+> not.
 
---YAvHQQ/l8A2Bxt50
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Correct.
 
-On Wed, Nov 27, 2024 at 11:01:40AM +0000, Andr=E9 Draszik wrote:
-> On the surface, Maxim's max77759 appears identical to max33359. It
-> should still have a dedicated compatible, though, as it is a different
-> IC. This will allow for handling differences in case they are
-> discovered in the future.
->=20
-> max77759 is used on Google Pixel 6 and Pixel 6 Pro.
->=20
-> Add a dedicated compatible to allow for potential differences in the
-> future.
->=20
-> Signed-off-by: Andr=E9 Draszik <andre.draszik@linaro.org>
+> Unfortunately it's initially set based on the supported capability
+> rather than the actual hw setting.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+We need a clear definition of 'initially', and when does it actually
+matter.
 
---YAvHQQ/l8A2Bxt50
-Content-Type: application/pgp-signature; name="signature.asc"
+Initially, things like speed, duplex and set to UNKNOWN. They don't
+make any sense until the link is up. phydev->advertise is set to
+phydev->supported, so that we advertise all the capabilities of the
+PHY. However, at probe, this does not really matter, it is only when
+phy_start() is called is the hardware actually configured with what it
+should advertise, or even if it should do auto-neg or not.
 
------BEGIN PGP SIGNATURE-----
+In the end, this might not matter.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ0dBXgAKCRB4tDGHoIJi
-0mj5AQCDzK12u7YaMkhu+D9SK/V2jSyYP8eYKIAjoZDcb9CwkQD/YdlfFSRpxyel
-DUeDcV6Z54WafX5zftL10U6v86kzHgQ=
-=vXaV
------END PGP SIGNATURE-----
+> While in most cases there is no
+> difference (i.e., autoneg is supported and on by default), certain
+> adapters (e.g. fiber optics) use fixed settings, configured in hardware.
 
---YAvHQQ/l8A2Bxt50--
+If the hardware is not capable of supporting autoneg, why is autoneg
+in phydev->supported? To me, that is the real issue here.
+
+	Andrew
 
