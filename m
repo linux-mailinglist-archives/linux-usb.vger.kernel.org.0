@@ -1,80 +1,80 @@
-Return-Path: <linux-usb+bounces-17900-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17901-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F34999DA660
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 12:01:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D14B9DA661
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 12:01:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B65BB2825CA
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 11:01:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 52B6C283253
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 11:01:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91CC01EBFF1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC6EA1EE003;
 	Wed, 27 Nov 2024 11:01:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kI4G/oGp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jlVqIjaI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CFE31EBA0D
-	for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 11:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 706F31E5707
+	for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 11:01:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732705303; cv=none; b=hE4en4N2vSpNqmU6VffgCYUhOdTx/6mmjSAWD7iCjUGGrcnUEFAS9rCOlgdZres+M44IJa//g4UgPKohALsdnqQbX9SisOFzSO2hWeKKRCd+dfvZSdJrY+/0PYpD5z4ENsYv7tb3II8Yh8RFV07jqdemdHkAUYAU9mKyUYIhnd8=
+	t=1732705304; cv=none; b=tAQdml7KjmrRwfhVH1R2/IryPfTAP17FJfWEPN36RdIX/pbQ3BJMh6Y/CYJc9J9ZpmppCdAOk1aJtv5hFSMDo5NrUw5hJAnVNXwT7qQ5XkvSPxKBQ2/aroZcEaQ34/zimwvvnmLB1MQVXz/2v5MaZdlXRlm6L8/dm2SbB5wJ7eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732705303; c=relaxed/simple;
-	bh=LYkr9r33Y5XKXLryrepschQpm2XBjm1H7bQnk6ENV30=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JgYG1WsaWboBAGyny2YgjmPzP/u4GV1+J8yZUSb697gX4YgguJ63A1ahvJjXB8vPNEceoAgNKZZTUMyU7LBb9ZHHaNTPWQXG62xnsRRhEfB35whvl5IuuHU09FiHZOn6I7l0pKkucyHq60x72iKi7t8W5Sdawkc+H+nECx8jgc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kI4G/oGp; arc=none smtp.client-ip=209.85.218.51
+	s=arc-20240116; t=1732705304; c=relaxed/simple;
+	bh=lozZ7p/MhDuRt6nX+BtkrwBuJHf1C84dqV892qIj6RI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=PH0bXIBudb5BoSJljUf8FWQJMbjm9O6IeniEsYFxp6iFHeOfLv8btVs7/qoy6kW8IHqTVh6ccZ5d4NjfJikYl8XibD8/aYZ6f5Td7L8ZOSXi47IlN3BXZTRXNVRCHtzIJT0uDE7U4S6Imev6TTG3mjRQ4xNv6jYVwU000b6d3SQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jlVqIjaI; arc=none smtp.client-ip=209.85.218.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aa51bf95ce1so795032666b.3
-        for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 03:01:41 -0800 (PST)
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-aa1e6ecd353so442508366b.1
+        for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 03:01:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1732705300; x=1733310100; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=cBZr6b/b4WAms1NkzQ7R3CufwwQCxtnEtvUYSb5nf9M=;
-        b=kI4G/oGpdd3nQMinjYs4IwQOVXqxFP7b4S9fakKeT1EN2p1X6TLXOzVb/tQZCd6ncR
-         Rd5fCsaXUVngu7wJQ1x9SU4PMDB7PKhbSZkKYh9MOwkn8xxWvWEeuqQFGHomPm2AzNdn
-         0pB9456I/YiEWbSW1GVFvZwwH2hRheiMfAMp3aDF785o5cUqYjaqfCxvfUqxsQhI1qbl
-         LTWWIUsdKOvVS0hAifU0Om5JEoMEFwW9OCnRcbiPBgRhkAw3iuTs3fWuSBAfgeD3Wz1F
-         mrzqW/D/Myi+d+U6fuWlOv78+LU6XOyf/5G715QgckKJ+o9lMhmyrBv5kTPoiin0y/Vj
-         5JhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732705300; x=1733310100;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1732705301; x=1733310101; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cBZr6b/b4WAms1NkzQ7R3CufwwQCxtnEtvUYSb5nf9M=;
-        b=oc4WfRysEY0IANKtp5Bhnmb/79XOdhCXgu/I6sbdPoGunkCEF8xDZqv4TbTyInhkj0
-         zKF1IdBP3WYUt8FQZb3+13m8M6t5jXZ4eHoA2y+QZGEg51eHpARoyCURrEPDJs8DCQCX
-         u3oSdTMNwdm4n5dj5ZbB0EsFx8GN6P1FCOWkyzDvdcVXStzbr3gGElktlXJUVP9+SsoZ
-         HDAIn9KNb0x8qE3alrFEcwQumLn00lDpEezdDgLe1D9KTEujplHk9skRqrK5vFu+oJ6Y
-         p6CWQDzKRYjrlx9hFqMJRYaEgAVLgU7XD2C7h+EYmlWn5QzyqF+KWQxBmxxg/YUh6Hxo
-         uc1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXkIiCYmnNP38df6T9xSibjASAe+Qjmetn1UyxoM1yERvSpehOwVwfXyfk/mgeOfOdDA+kHQLlngc8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk04owhCxKHxZhnjjdwQ0aVTSbNZA7EouyvhHl1XlT4G1SXJX6
-	xQoFj5NHpHqMgXG5nhHDwZqinMqBQRNR/cXCYVDjE7Yax02YuwWftWNJ6knp6hg=
-X-Gm-Gg: ASbGncvpCCGlSxBxuK8QhiyV8pt2OS4GwPr0/tDu573HRxt7kGDsvQcYZay95iY2pq1
-	TJq8myr0dmaAcIq1spn5+WdhvM39blt1byR9bxHI6S2MX0pLv5hMvui5JZhoJRDmS0OpyzGLBG7
-	EljyduB9K87vUN8upUYN+NfeyZSl8PlPx0+/qYj+mWX7zHAqeIxdusNR8KEbw83/NPQhTYs1U6B
-	JzWnoWtWETpku2pXbYYAjH+EzySiCPOkDdmVGHALdXLChc97pIJog13SDyD6lBAfZQdNGtvY1hR
-	sSiU2CTuxG1gH6wCot4WF3ZbhC6LhHvvhg==
-X-Google-Smtp-Source: AGHT+IG9LM9nsHo2L6pr+d8lMcVcqFeZ9vngEOtHUmqHJbBLX24wsz6VfzC5liy6xxjFk86MjURtsg==
-X-Received: by 2002:a17:906:4ca:b0:aa5:b32:6966 with SMTP id a640c23a62f3a-aa581076b11mr207938666b.50.1732705300206;
+        bh=VB/ikfiNeJLME2Jkz2PKwShANoRD6KN3KhS7opfVViA=;
+        b=jlVqIjaIdGwz+w9ViTUCIOrQYfZcRdmM+eCcGyQsn/32+a4NfONrvtQvuxtm0b0RR1
+         pK2ezWO53I2ZBg1v31KUlH3PunVEFYyk9uqIjT6+mZ0mJRlKiGlsQ5G6AUJ267uU4N+f
+         6lrsEI+QEWEPpFLhPlkEiSA6R/vzVzqhSbSgl7iSlFkEYEmkwT6u9pguqVk9/LIN+yjj
+         jVrAd7XAppBxCBY1z2Ctfod9gX7bAXy9H+gYRhhc+YqZh4fRPx4ego6sYGwQRgRoAv6E
+         LH9Wwx5BeXti8rhJTdFYKAOO3MBU04ryyOtil320/PXelKyB2W4fdXb6oeWZscrsEJ1a
+         mQnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732705301; x=1733310101;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VB/ikfiNeJLME2Jkz2PKwShANoRD6KN3KhS7opfVViA=;
+        b=Ca/LGc+0o4O7EqjSQkzTg4N/il1UE+wRoUK/i8iZvajO4BxPX7gEVmyK9jF5MtHgyK
+         eyjHnHMOPpWa57pjj/Ywgr95Aim8vAs6S3vghuEKkHREc1HvmYoxVRn3Z1TmhMBFc5yz
+         r7wVLOzLcw6FPY7lebnF5yIK7AUjvq5a5hFVt96hpKvPE6YTCL8y4PuRVKTZD8fR8Ink
+         dR4o8YEjvQZ1JqQQOyt+0e5e/XoexSxhRmKfGO7/dUTqJGYE9EEqhlUlwMZSNKhgszMp
+         fgVPiokPL6u5dXH1DUSTMApdzRSODx3Neoby+QzEE85GJkkJ/LV6KwUE8upa+SfVXLrJ
+         +41Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWc8wwjpp2NOw8KbflMYQsSwaGKZ/jIDHlilwRPGnYOVTBVc0UI6dJfX057y3IpsGM7n8F2SxuxWGQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/rcOc80L5cLnL6g9tuXUKqduvn36ppJRP49wnHNOW6+rkZqZn
+	T0fDkFr2HK/CQfBzI+w5x+Qxc90m2UpfuY2gHH4SFsXZFBCATt2QACD+WiX+DPU=
+X-Gm-Gg: ASbGncunlWtlM8rsa2BOBD3SgzKgUtrYZO1RDtxXgzrNApCeNXKPHSwKLqcj1ac0sE1
+	aGamFmFPAMtkCWykHD3AqoOKtytvOMYLro6nFcYpmukBf7aAG6XjOm4Z0mO40ib/xcD4lSAbI0F
+	BBZyNdbU8kyqBIbpiNgpi6MGpuJk7sfdrFqv9Yy/o2/Lo2h/AR2fLaBinZQ0eP0Aj6QqATLCDFK
+	fe8K3fmuO8DY1Hh1arLto0MsQAPImpZeVKyVIc0KCcgYOah0GhlvrSstEBCHfmincqGI1MO9Qyw
+	ceNSYx0pkyqFPPcOP/6xroTR6yKEFTCRdw==
+X-Google-Smtp-Source: AGHT+IFomp5IYrPwtodVx4NfkTQ1BU4IT3aD00OknD9fip4RuVHiqXSHZTCSxH7nkJmeEnB3wrFv4A==
+X-Received: by 2002:a05:6402:1d55:b0:5d0:88ea:6560 with SMTP id 4fb4d7f45d1cf-5d088ea65a4mr876701a12.31.1732705300646;
         Wed, 27 Nov 2024 03:01:40 -0800 (PST)
 Received: from puffmais.c.googlers.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b339612sm693762966b.84.2024.11.27.03.01.39
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa50b339612sm693762966b.84.2024.11.27.03.01.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2024 03:01:39 -0800 (PST)
+        Wed, 27 Nov 2024 03:01:40 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Subject: [PATCH 0/6] Google Pixel 6 (oriole): TCPCI enablement & USB
- updates
-Date: Wed, 27 Nov 2024 11:01:38 +0000
-Message-Id: <20241127-gs101-phy-lanes-orientation-dts-v1-0-5222d8508b71@linaro.org>
+Date: Wed, 27 Nov 2024 11:01:39 +0000
+Subject: [PATCH 1/6] arm64: defconfig: enable Maxim TCPCI driver
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -83,9 +83,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIABL8RmcC/x2NQQqDQAwAvyI5N2CCRepXpIewphooq2yWUhH/b
- vA4h5k5wLWYOgzNAUV/5rbmAHo0kBbJs6JNwcAtd0Tc4+zUEm7Ljl/J6riGnqvU8HCqji9J2nf
- CiZ8JorIV/dj/Pozv87wAXVvef3EAAAA=
+Message-Id: <20241127-gs101-phy-lanes-orientation-dts-v1-1-5222d8508b71@linaro.org>
+References: <20241127-gs101-phy-lanes-orientation-dts-v1-0-5222d8508b71@linaro.org>
+In-Reply-To: <20241127-gs101-phy-lanes-orientation-dts-v1-0-5222d8508b71@linaro.org>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
  Will Deacon <will@kernel.org>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -102,39 +102,28 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 X-Mailer: b4 0.13.0
 
-Hi,
-
-This series adds and enables the Maxim MAX77759 TCPCI for Google Pixel
-6 (Oriole).
-
-It relies on the bindings update proposed as part of
-https://lore.kernel.org/r/20241127-gs101-phy-lanes-orientation-phy-v1-0-1b7fce24960b@linaro.org
-
-With these patches, we allow the usb phy to detect usb cable
-orientation, and we make it possible for the USB DWC3 core to enter
-runtime suspend upon cable disconnect.
+Enable the Maxim max33359 as this is used by the gs101-oriole (Google
+Pixel 6) board.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
-André Draszik (6):
-      arm64: defconfig: enable Maxim TCPCI driver
-      dt-bindings: usb: max33359: add max77759 flavor
-      arm64: dts: exynos: gs101: phy region for exynos5-usbdrd is larger
-      arm64: dts: exynos: gs101: enable snps,dis_rxdet_inp3_quirk for DWC3
-      arm64: dts: exynos: gs101-oriole: enable Maxim max77759 TCPCi
-      arm64: dts: exynos: gs101-oriole: add pd-disable and typec-power-opmode
+ arch/arm64/configs/defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../devicetree/bindings/usb/maxim,max33359.yaml    |   8 +-
- arch/arm64/boot/dts/exynos/google/gs101-oriole.dts | 104 +++++++++++++++++++++
- arch/arm64/boot/dts/exynos/google/gs101.dtsi       |   3 +-
- arch/arm64/configs/defconfig                       |   1 +
- 4 files changed, 113 insertions(+), 3 deletions(-)
----
-base-commit: ed9a4ad6e5bd3a443e81446476718abebee47e82
-change-id: 20241127-gs101-phy-lanes-orientation-dts-9ace74a2c25c
+diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+index d13218d0c30f..5080fe2ce776 100644
+--- a/arch/arm64/configs/defconfig
++++ b/arch/arm64/configs/defconfig
+@@ -1121,6 +1121,7 @@ CONFIG_USB_MASS_STORAGE=m
+ CONFIG_TYPEC=m
+ CONFIG_TYPEC_TCPM=m
+ CONFIG_TYPEC_TCPCI=m
++CONFIG_TYPEC_TCPCI_MAXIM=m
+ CONFIG_TYPEC_FUSB302=m
+ CONFIG_TYPEC_QCOM_PMIC=m
+ CONFIG_TYPEC_UCSI=m
 
-Best regards,
 -- 
-André Draszik <andre.draszik@linaro.org>
+2.47.0.338.g60cca15819-goog
 
 
