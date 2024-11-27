@@ -1,147 +1,111 @@
-Return-Path: <linux-usb+bounces-17909-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17910-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CD1B9DAAB4
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 16:22:55 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99F099DAB35
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 16:57:43 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAA121679B3
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 15:22:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1ECA4B22ACF
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 15:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B781FF7DC;
-	Wed, 27 Nov 2024 15:22:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E21200B97;
+	Wed, 27 Nov 2024 15:57:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="rDV+Lzps"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XekDxYIg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A47DC1FF7D8
-	for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 15:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AD5F200B83;
+	Wed, 27 Nov 2024 15:57:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732720965; cv=none; b=d0SwiRx9qACyK2pSOTbGKXxgMbJNrqs0Sd+4meiM9PO42UIbQKehktRhlLoZT5AmOpzJW6MYbmwwVmvXqKtW3EF5NUmVg9WM2C5YfQSi/2+HmQebGHAC5Xh+RMb+3yLilYaxa40gMChQmVKe+UCWSnJnIi2Pc2g1clo7PP01UyM=
+	t=1732723045; cv=none; b=SRs/nKFpn0biVCHjwoaH5IrfFAut/4sayjZ3hIGGV2cgmSYFlDusIPlYJIn1jDk+IsDt/lw1Kvv8tW7bM0qelfhRtO6CuJAHMkCaPlw9U9mSNFStGwR7j1xzNN3mrL5EKzSUZRNqEaUGiTyC/2uYz5f+GTI1E32zgZwe7GN7w0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732720965; c=relaxed/simple;
-	bh=mrAaqMYnYNbYClnVnh8NslHC+9xBQHMgf6rc0Dm7Vjk=;
+	s=arc-20240116; t=1732723045; c=relaxed/simple;
+	bh=WSGkgXaL4N5p2uwRcTTHYvq/3QczX507d7c/2vEeemg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=peOATgVWfxbLzMAuzrJZ/hyhQmq5iIruOiQje8psajMCKIChLyqh9N0pFptbLn/WRQPduTvWzxkPB5k4MATYIlst7GELAGIuceiZA9gC1+1sQrUobaWmGyNJrUC/9TgWND80Q868x+GZE2AP7mouaEJ06ogy/aVVBfKPDDvkRnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=rDV+Lzps; arc=none smtp.client-ip=209.85.160.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4668d7d40f2so25125981cf.1
-        for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 07:22:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1732720962; x=1733325762; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BY/Ou50N+gSwJiNfdjq4bSUvfb5j+LmncEk49Aqd0ho=;
-        b=rDV+LzpsGbpKs/tVPED90GM+7W98iYZwrojHZh99ibNp0Dp9G6SBnW9Q3jQ61SVlnL
-         F7+fr+nxaKy3dtw6SHzm/uW5jOwL4mDv84OuWOsM8fTokiE+rIN/nHT6ZdZGN/XGHE8i
-         BVvdLwA6xRvzrrbuMB4kiyQ4xt6Ah4ty0cc7+1SKzclXvm80I9Xiuy50VgNVYiB4kb5v
-         B9QL31QtgrUJXvEuR5NxaBkA/YuRMUYDg/OxnHV2ciHOqZFpWtvGbvFre2/6A793PVuj
-         8R1BXvcwLBCTPvvDW6y1TK72fEt8JAjRM7AIQy775egWmmnlRy7ftQZJOLxZkckARhpT
-         xmOQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732720962; x=1733325762;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BY/Ou50N+gSwJiNfdjq4bSUvfb5j+LmncEk49Aqd0ho=;
-        b=T7co36+3Pgpz+IfuG6Ee1DNuk5ZMs4IX0LQo8lAo85JVgT38zhTLWtTGXaE6y606eO
-         cl1BrZubaRF1i4+Qj6x6bLn3FmpZK7wNblcDrvGUnd/ogZM/pVJMP5IdBQFgrdSUjPMy
-         Kye1jObF85lKX/U2ThRlq9E0KoRlW/DOvj/H878y8ZtAqqp6ktCQAntLAUZ5UTOLGyZg
-         Z+BiR0kRpSdLqJfm0dLs/p9ZtAuf6SQuTcMHxIWcwVNsikwkafqc0d/uNEweifqNQzKS
-         56KIs/l73qg9OJBNb+f4FMv1A51EHlBcWCU/r7ViByWcssXF/zYUj5POGA0KZH8zGdbZ
-         nJlA==
-X-Gm-Message-State: AOJu0YwKKmSFvi4/qOyklxLnNmmZFH7tDIrY3L5CsWUHi7WbvC8sbdkM
-	MRpHqdkAOr7uLpLsyEDBI5werlZKbTWU3lH/5lM4LesPRgv6cfySULGiSqhWVgPS/yCcoQZ8sEE
-	=
-X-Gm-Gg: ASbGncu92t5gtOViSZE1iSQY1gndUl4mI6QAfmfOp1sThzQ8FBs77z0fZ2Bhxaow0MY
-	ciHdYBOXwPpMuWDV4oR/724SwDjEBo1mFWD8o3UxYhEmAHvXhYje9xrLCwyGoBiSXtcdoFGDKm1
-	qexp+EyzEoFVDULHrnZF9q1Sn/cnUyJ1xxt903aaU1uxhIEc8YbZE83Actr/pleiBobW9N6lye0
-	/0LbIaE/6BSQorFJaCZRC6rOt6jVvO+vCVpuxc3FFBdidIUWhg=
-X-Google-Smtp-Source: AGHT+IHIsrqcr1EJxYcbm3xub5ocUmIHzG3fzWBDFRBcDC3VtyBMKmcEvizkXOFubDT/1p0F7dxWUA==
-X-Received: by 2002:a05:622a:14a:b0:463:1677:c05 with SMTP id d75a77b69052e-466b36b88edmr38889331cf.54.1732720962451;
-        Wed, 27 Nov 2024 07:22:42 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::32b3])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-466a43545besm23240751cf.83.2024.11.27.07.22.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2024 07:22:42 -0800 (PST)
-Date: Wed, 27 Nov 2024 10:22:39 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: David Disseldorp <ddiss@suse.de>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH] usb: collapse USB_STORAGE Kconfig comment
-Message-ID: <3844413c-7d43-4402-98d6-91011f74a09e@rowland.harvard.edu>
-References: <20241127072644.3591-2-ddiss@suse.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hXU/WyGo2CwIrpvDkJUJ9Np+u+6lEMW2CGcU/9J4607krTP8X11yNSRm8R88jbVHvOxyN4WTNrMisZC9bwPT5EGECp3IC6QmDjUTfiMQaxReeyLFfPP+B3XupT7iEjE04Cm64LEn5pjNb6JKx7w5UYunKRaK3iLYPM2YKJiPCM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XekDxYIg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BC0EC4CECC;
+	Wed, 27 Nov 2024 15:57:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732723044;
+	bh=WSGkgXaL4N5p2uwRcTTHYvq/3QczX507d7c/2vEeemg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XekDxYIgmckQWV1NFhqDy2VJTp7NPCiygIgd3uwhCCLqARbnjTzUNlHeLRJmFVXuu
+	 G8BrMiepbHsftZ1ahwYMYEkJda+0ttpBUdNqmA13Fvdb1QQbKp8ir+IjNKtJ7mRzcc
+	 H/SP2D8S/UI/yMS52eOF3oH8YkaNFg6rZ5LFYKbMGwnnsviRvcb9LwPb9sGWvOAHQX
+	 ceO1zo7F7MyUaVpqYZEza0FGCJLuLJRGhKPujjZDFlAqPCb8akifWpNY6tfdgN4VgH
+	 gkMt2mSKVc8zGV2U0lkuIF8m3X20L/9yb4Ssrb7RqHM8q+pwe00W1hih/3nxkNvxIn
+	 7jO4tsg9dNP2w==
+Date: Wed, 27 Nov 2024 15:57:19 +0000
+From: Conor Dooley <conor@kernel.org>
+To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Jagan Sridharan <badhri@google.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Peter Griffin <peter.griffin@linaro.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Sam Protsenko <semen.protsenko@linaro.org>,
+	Will McVicker <willmcvicker@google.com>,
+	Roy Luo <royluo@google.com>, kernel-team@android.com,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-samsung-soc@vger.kernel.org
+Subject: Re: [PATCH 2/6] dt-bindings: usb: max33359: add max77759 flavor
+Message-ID: <20241127-chloride-pantyhose-74f3d81e91f8@spud>
+References: <20241127-gs101-phy-lanes-orientation-dts-v1-0-5222d8508b71@linaro.org>
+ <20241127-gs101-phy-lanes-orientation-dts-v1-2-5222d8508b71@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="YAvHQQ/l8A2Bxt50"
 Content-Disposition: inline
-In-Reply-To: <20241127072644.3591-2-ddiss@suse.de>
+In-Reply-To: <20241127-gs101-phy-lanes-orientation-dts-v1-2-5222d8508b71@linaro.org>
 
-On Wed, Nov 27, 2024 at 06:26:45PM +1100, David Disseldorp wrote:
-> The two Kconfig "comment" calls render in /proc/config.gz as split
-> sections:
-> ---
->  #
->  # NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may
->  #
-> 
->  #
->  # also be needed; see USB_STORAGE Help for more info
->  #
-> ---
 
-You'll need to rewrite this message; the "---" lines will confuse 
-people's patch-handling tools.
+--YAvHQQ/l8A2Bxt50
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> "make menuconfig" renders the comments as:
-> ---
->  *** NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may ***
->  *** also be needed; see USB_STORAGE Help for more info ***
-> ---
-> 
-> Kconfig doesn't support splitting a comment cleanly over two lines, so
-> just collapse it into a single oversize comment.
-> 
-> Given the content of the comment, it might make more sense to change it
-> to a '#' Kconfig source file comment, or drop it altogether.
+On Wed, Nov 27, 2024 at 11:01:40AM +0000, Andr=E9 Draszik wrote:
+> On the surface, Maxim's max77759 appears identical to max33359. It
+> should still have a dedicated compatible, though, as it is a different
+> IC. This will allow for handling differences in case they are
+> discovered in the future.
+>=20
+> max77759 is used on Google Pixel 6 and Pixel 6 Pro.
+>=20
+> Add a dedicated compatible to allow for potential differences in the
+> future.
+>=20
+> Signed-off-by: Andr=E9 Draszik <andre.draszik@linaro.org>
 
-I think making it one long line is fine.  When you resubmit, you can 
-add:
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+--YAvHQQ/l8A2Bxt50
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> Signed-off-by: David Disseldorp <ddiss@suse.de>
-> ---
->  drivers/usb/storage/Kconfig | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/storage/Kconfig b/drivers/usb/storage/Kconfig
-> index d17b60a644efb..4be1d617d63db 100644
-> --- a/drivers/usb/storage/Kconfig
-> +++ b/drivers/usb/storage/Kconfig
-> @@ -3,8 +3,7 @@
->  # USB Storage driver configuration
->  #
->  
-> -comment "NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may"
-> -comment "also be needed; see USB_STORAGE Help for more info"
-> +comment "NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may also be needed; see USB_STORAGE Help for more info"
->  
->  config USB_STORAGE
->  	tristate "USB Mass Storage support"
-> -- 
-> 2.43.0
+-----BEGIN PGP SIGNATURE-----
 
-Alan Stern
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ0dBXgAKCRB4tDGHoIJi
+0mj5AQCDzK12u7YaMkhu+D9SK/V2jSyYP8eYKIAjoZDcb9CwkQD/YdlfFSRpxyel
+DUeDcV6Z54WafX5zftL10U6v86kzHgQ=
+=vXaV
+-----END PGP SIGNATURE-----
+
+--YAvHQQ/l8A2Bxt50--
 
