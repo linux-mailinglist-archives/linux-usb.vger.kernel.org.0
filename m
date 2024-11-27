@@ -1,143 +1,125 @@
-Return-Path: <linux-usb+bounces-17907-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17908-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8A319DA68D
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 12:09:17 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD0B69DA9E7
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 15:35:30 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5964E16430E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 14:35:27 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B3131FF7A6;
+	Wed, 27 Nov 2024 14:35:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RtVgWSWr"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D9D9281F34
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 11:09:16 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C4031E0DFC;
-	Wed, 27 Nov 2024 11:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="UJFq4QYO"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C7F189F20
-	for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 11:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C18F226AD0;
+	Wed, 27 Nov 2024 14:35:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732705752; cv=none; b=d3Tosn1nTkKPj9HwnJRVGr1RJdNPa/pyMWWEGds19EV9RoWwdLOTc7/i+gH0yWVCRMQ1P9vvbVJbxXYVRPrUBAtuzD1BFPWG+hd1G4ICYb2MysFFwECsgshcPLqaN6Gn9MpbMP54eYUrRXtsyeeWcNL/3N/sePN9huYACNOA/oI=
+	t=1732718123; cv=none; b=VTPrFOy0BKOWSOZ70bBsGYavnlo7CFPfIR7JilwnicHLSCiD5/tNUmthTpzif8AdXf1om7Nih6G//mj/F0xj1mljRpOzxAZ9D2JAcyrnm+f0Oxk9er3uL/EI+K33L8G5EvpHRb874E+qQieTd+HPlwTrAGLZbg89jM78TrMEc6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732705752; c=relaxed/simple;
-	bh=KIHyVa4m2W+IgrN2rte6ZTxtItq9mIpsQ6FBYB1Vvus=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cFGWPmxSpcVZ/AMg4TtWby/57Amwq1CvdBFTSl0YvZg396+aWXXZuuN/tQT1mQvHMKin/T9+fbAWXDG26rJw381WB+HTi7U2SUPk0BuZLPqTC7yE3fgVJLlkH3C/UuzjLJbhqB6iD19A2iocZ4uAYHvoJmpYebSmoyOky4PPHRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=UJFq4QYO; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3823eaad37aso436262f8f.0
-        for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 03:09:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1732705749; x=1733310549; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KIHyVa4m2W+IgrN2rte6ZTxtItq9mIpsQ6FBYB1Vvus=;
-        b=UJFq4QYO1KvssG7XYaNNKQjRiDycPZwl1qhEgeMDLXgn5oF/rnU8t6glrPlEz0Pdm0
-         BrHc5zNzRgbDhagG5jnRuEGaMaetsW16OI4cVSAHyYCkwoD/gtswQ+yucFVTnXkmX26f
-         0Ewgk9L6p6ZUxjbdj+tVEuNWjOz4YQDEWP5kOVy1l6eaJ79NQvZy4kum5X0t1GuA9s3G
-         5UiBn8STmxWKqVGkMBkppMSYf22e0r06D9riX8hnxQzJc3Z7jvZBK/NXdA2F/ec6kr7w
-         D1X/uix1iQKAl0I4F/bUOFcZNRL0pISaFKMUTypAiS2e873B5ayFzLv/2FUpXA9hNxAA
-         wOCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732705749; x=1733310549;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KIHyVa4m2W+IgrN2rte6ZTxtItq9mIpsQ6FBYB1Vvus=;
-        b=WyODL36uUDc9uwnD7ptDiUkN7TF/hxRPtsIhQrnbLYniNiNdxu7j6Ts1Z8bu/xVt6L
-         n/xRH1ezb4+dqvkCH5cTDwuR8QMEmspRpJTyQQWeDnOELNFDkEGijh5eUK9gVcP5veB8
-         tXuAkYgs3tOX6AnnAKakIwQYlrFMSEXCiQMcDsRr+2tyU7uZLxfHe6wf4lo4hy9uNyL6
-         t8Sf6F+gczK5c6uB2EuAs8kr2Vy7GvFt1kPbOTkdDTJpXOhe3NNi+jD2mXpnOWGgjTGX
-         +4Oa/WO8gmCfLPrtNSwp0bDvTS7hIQL4kuVBO79ZcZkLx4eLsJx4GRHeZE3FE6/b/XZo
-         zY6Q==
-X-Gm-Message-State: AOJu0Ywd0yxjuj5HUys7qJmjGLsMCd0Q+qfNrTTcbgDtgtPAt7e/7zf2
-	VW4sOiYY3NfmFOaLOUVRLZjJRTvpbcy20J+IYeevDSIimPps//NpdPM/CAbcmaA=
-X-Gm-Gg: ASbGncse4haS7LnQmxLA8w1/L8FXBAOOOKNeU48qXY3qPQ8BIFbCRSYvrJvPidkwNgP
-	ac+bXZlosCS3BoiS0QkZZL5dACdnFayzz4PjAPgHoKGWNQfZkdJpDJE9t25lxINTFGIrtCbbPCY
-	vDSLgIAnL74U6zdRwDE/OnQDkQv0tSbv6FhfXtWu3c7PvdgkoTfAxExWMCfYkOHQaVts8ej/5WF
-	+xsS/e4viupJb/dWuPDINlK3/99tsUwislWETyTXb0bdCIn3ubJGas=
-X-Google-Smtp-Source: AGHT+IG1kjd60OoIDsm2k9fnmTAzFppDmAUl6jdHsRKDvKHyjWcAMie1uR5e6BNHQ7g7zmDFBCuRIA==
-X-Received: by 2002:a5d:6d0e:0:b0:37d:46ad:127f with SMTP id ffacd0b85a97d-385bfb1e4bamr5480665f8f.26.1732705748772;
-        Wed, 27 Nov 2024 03:09:08 -0800 (PST)
-Received: from [10.1.1.109] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825fbedf40sm15826667f8f.98.2024.11.27.03.09.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 27 Nov 2024 03:09:08 -0800 (PST)
-Message-ID: <6e53c7c71d6fecc232d6d94720c9dfa04f1fecf0.camel@linaro.org>
-Subject: Re: DWC3 runtime suspend on cable disconnect while UDC is active
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, Tudor Ambarus
- <tudor.ambarus@linaro.org>, Will McVicker <willmcvicker@google.com>, Peter
- Griffin <peter.griffin@linaro.org>, "kernel-team@android.com"
- <kernel-team@android.com>,  "linux-samsung-soc@vger.kernel.org"
- <linux-samsung-soc@vger.kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Date: Wed, 27 Nov 2024 11:09:07 +0000
-In-Reply-To: <20241125201135.kmif7pglkhitenfh@synopsys.com>
-References: <269e3ad7cbdb3b97fb8dc75cae4d487ce7f908c3.camel@linaro.org>
-	 <20240809231012.lmgqemcwjdfiaxak@synopsys.com>
-	 <cd87836fbd0a030d0b52902e04167fe044ce447d.camel@linaro.org>
-	 <20240813230625.jgkatqstyhcmpezv@synopsys.com>
-	 <a40ac04beb4501ad95b50f79be3495315e38a880.camel@linaro.org>
-	 <e40f27c2323077d9b35fac7572f30114b6e33372.camel@linaro.org>
-	 <20241125201135.kmif7pglkhitenfh@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.1-4 
+	s=arc-20240116; t=1732718123; c=relaxed/simple;
+	bh=cGcZHaMQtle2IcrxcOfO29L9Bv2SJC1rKcXJPH2eSqE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dwHI8GYCHN0peQK7vLKQtA0tKHR2Fg8Gq3+jrTrlUOR1rMc7oR8ZaWO/CryllkbKnr/HCKepI359ac0GAzouJx+xOrlJS2tR09WHjMbEAqgAMtEQKCGaM6Hcz2BipFeKUZKigCl5s5IspVLrxa9zA4JRjeNlEeZPvPTGHr9nrOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RtVgWSWr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB8BC4CECC;
+	Wed, 27 Nov 2024 14:35:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732718123;
+	bh=cGcZHaMQtle2IcrxcOfO29L9Bv2SJC1rKcXJPH2eSqE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RtVgWSWr6L+OMIViUYHjY1nlwUl8WxOfBfWe0Vq/Se2lIBFGur/MjmicE84pjFaks
+	 NyeAibnY7AALXe/00TQRW20GsnoqAaDfuuSS3fyPaMKM9M/x4VORjK5+BfKR4eczZF
+	 jeb9iRaFSQBhWLxRkbiu/I5IwavU+0y8PtJVOxVesWJ3ClnkKiKAV11HOZ3kcIWRmW
+	 1OzR+6y2rzXch4Tr4rbKgYhbXu8aa/+rtwnwfN9AJT37f3fFPbhC1ehk7TGVzjMxMS
+	 peSbbndjTvS3UGl9L/YenRqSIBe/gpk/x+hde/IpEfuKkChybLjgRh6LLFk4J4Etdo
+	 Z6DagVhn9Krag==
+Message-ID: <1abbedd9-f34d-40be-9d3f-f33fcd012cb3@kernel.org>
+Date: Wed, 27 Nov 2024 16:35:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: dwc3: dwc3-am62: Re-initialize controller if lost
+ power in PM suspend
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Siddharth Vadapalli <s-vadapalli@ti.com>, "srk@ti.com" <srk@ti.com>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20241122-am62-dwc3-io-ddr-v1-1-cc4956449420@kernel.org>
+ <20241125182343.bfnecsub2oxohrns@synopsys.com>
+ <523727cd-7950-45b1-a0d3-3f978e789015@kernel.org>
+ <20241126221536.n4ecwbndpelx3bmv@synopsys.com>
+Content-Language: en-US
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <20241126221536.n4ecwbndpelx3bmv@synopsys.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, 2024-11-25 at 20:11 +0000, Thinh Nguyen wrote:
-> On Thu, Nov 21, 2024, Andr=C3=A9 Draszik wrote:
-> > On Thu, 2024-11-21 at 12:34 +0000, Andr=C3=A9 Draszik wrote:
-> > > Unfortunately, this only works once: After restoring those bits and
-> > > reconnecting the cable, USB comes up as expected, but a subsequent
-> > > disconnect with the same sequence as during the first disconnect
-> > > doesn't
-> > > trigger the DWC3_DEVICE_EVENT_DISCONNECT event anymore (others still
-> > > happen,
-> > > like DWC3_DEVICE_EVENT_SUSPEND).
-> > >=20
-> > > Kinda looks to me like either I'm still missing something, or e.g. th=
-e
-> > > event
-> > > is somehow masked.
-> > >=20
-> > > I anybody aware of anything related by any chance?
-> >=20
-> > Hm, the missing DWC3_DEVICE_EVENT_DISCONNECT event comes when I insert
-> > the
-> > cable another time, i.e. after the DWC3 driver has reconfigured
-> > everything
-> > after cable attach. This throws everything off of course.
-> >=20
-> > Looks like still something wrong in phy/dwc3 interaction in the Exynos
-> > case.
-> > I'll debug a bit more.
-> >=20
->=20
-> Ok.
+Hi Thinh,
 
-I have a working solution now - with snps,dis_rxdet_inp3_quirk in the DT,
-this works reliably now:
+On 27/11/2024 00:15, Thinh Nguyen wrote:
+> On Mon, Nov 25, 2024, Roger Quadros wrote:
+>>
+>>
+>> On 25/11/2024 20:23, Thinh Nguyen wrote:
+>>> On Fri, Nov 22, 2024, Roger Quadros wrote:
+>>>> If controller looses power during PM suspend then re-initialize
+>>>> it. We use the DEBUG_CFG register to track if controller lost power
+>>>> or was reset in PM suspend.
+>>>>
+>>>> Move all initialization code into dwc3_ti_init() so it can be re-used.
+>>>>
+>>>> Signed-off-by: Roger Quadros <rogerq@kernel.org>
+>>>> ---
+>>>>  drivers/usb/dwc3/dwc3-am62.c | 82 +++++++++++++++++++++++++++++---------------
+>>>>  1 file changed, 55 insertions(+), 27 deletions(-)
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
+>>>> index fad151e78fd6..2192222faf4f 100644
+>>>> --- a/drivers/usb/dwc3/dwc3-am62.c
+>>>> +++ b/drivers/usb/dwc3/dwc3-am62.c
+>>>> @@ -108,6 +108,9 @@
+>>>>  
+>>>>  #define DWC3_AM62_AUTOSUSPEND_DELAY	100
+>>>>  
+>>>> +#define USBSS_DEBUG_CFG_OFF		0x7
+>>>> +#define USBSS_DEBUG_CFG_DISABLED	0x7
+>>>
+>>> Do we need 2 different macros with the same value of the same register
+>>> for this?
+>>
+>> Oops. This is a mistake. The second one should be 0.
+>>
+> 
+> Ok. Please send a fix.
 
-https://lore.kernel.org/r/20241127-gs101-phy-lanes-orientation-phy-v1-0-1b7=
-fce24960b@linaro.org
-https://lore.kernel.org/r/20241127-gs101-phy-lanes-orientation-phy-v1-0-1b7=
-fce24960b@linaro.org
+Yes I will send a v2.
 
-Thanks again,
-Andre'
+I have a query regarding this. Even though we restore the USB wrapper context
+the XHCI driver still complains with below message.
+
+[   68.235111] xhci-hcd xhci-hcd.0.auto: xHC error in resume, USBSTS 0x401, Reinit
+
+Clearly the Save/restore failed and so SRE bit is set.
+Is this something to be concerned about or needs addressing?
+
+the host controller functions fine as it is re-initialized by the
+XHCI driver.
+
+-- 
+cheers,
+-roger
 
 
