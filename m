@@ -1,94 +1,121 @@
-Return-Path: <linux-usb+bounces-17898-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17899-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 788619DA495
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 10:14:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C0899DA4DF
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 10:36:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 269AC161DF6
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 09:14:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EF87316808E
+	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 09:36:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6ABAA191F79;
-	Wed, 27 Nov 2024 09:14:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10851194091;
+	Wed, 27 Nov 2024 09:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f58oXJrc"
+	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="oPslwh63"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9546E1917C2
-	for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 09:14:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34AD917DE2D;
+	Wed, 27 Nov 2024 09:36:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732698892; cv=none; b=FPUXLFg8XnWgc7O7BDfC9YFbxvRtFc48dPudcaUPpMh9tV1At0rAusYZ0wSjZRVFe0ewmHq3f7RWX0v9eAPdf9aMgVXKGPiNgXrJRZTQakMLpZMe984rJtUsK9rJYP/KKPD61sI5rrV3Vu0NEYsPUzi2BCUncehnlcpfnREfWmw=
+	t=1732700172; cv=none; b=LucuB8efZagC5Lo7C51iF7gwhkqVYpEYoVUuaIhrEdAftb6Xe2XqyCErtAs3Zt9H4ighvFBB2Sy1IMtK1Eqb5MER7vIxsmMvOHcBUJoWXcvkL1VLMTwXP0t2Wh3tI6Ojy6OsfwDPQtB0r7H8udDkmER5PWHcylRq3DSB4WReXKg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732698892; c=relaxed/simple;
-	bh=+QE+M24fNM5/eVgcefx+ClWRg9PNN6EZ4F6IgEgRY4g=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=fgy6OoDCWLXGe9fpXPQdmXzamYZroo6FEraVOPMD8TavvOF4dSmy2W9oDEJRNx7t7tBeihp0EVIQrkX6lircZDYVshGjesolOE65MDHBoQnoyNVORdmEdJqSz1WWtniB87tetr3m3FUZK8OiAqUUbbKDG12b+9ATbCTSZ27Dul0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f58oXJrc; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e38866c8b2dso5774501276.2
-        for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 01:14:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732698889; x=1733303689; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=+QE+M24fNM5/eVgcefx+ClWRg9PNN6EZ4F6IgEgRY4g=;
-        b=f58oXJrc8lnjIGfDOvL15743MzywrfVR+L7INW9TL//JKqhjWL8qYjdWhPjtM7JAAC
-         6Jd+JoE6AJqnoLiXDQDewCaPGecm7enBU+R9sGg8BRzxB/5fylGsQyIaL2UMZdWzlxny
-         U/V+Ju4O4Zt9G3FDQg22zm3ZS/IWcJ8mO4UF/Yy6si7NRG/N8TxumaGGmoqYRg5XuFu2
-         LVutnPGE4irEs0Ba5XLIAg6PK3C2CQnkgBU1V4ITncBkcasyqie9wqHVCSuPl8NHqKwA
-         NFZqhwrYDSsnXwhAGvM+4q6SpPOVZCV45DiBPezitXYMVF3skN68gRwdMxzcHMXB2CNS
-         HN9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732698889; x=1733303689;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+QE+M24fNM5/eVgcefx+ClWRg9PNN6EZ4F6IgEgRY4g=;
-        b=LtsgKe/ksq+2Mf0PM6SlsJsdncz1tSM5/kOt6Vp1xr6AcJVs9GfyGIyIDLU0HcTZtf
-         9o/vusMRX2LB180gwvMp5kaf9bL+6dZZMGmb8CL60t4TDy3VDnwMGvFc2dlrR1WOi6Z+
-         NIuexqgdL0B+oyJGqbB0yBtRwnBWtniAjbSX+IlKWhyV9XWUX7f+kv/8ubKhL5XeJVDn
-         DyxFmnTFN4EQABDgneAiUachQWLUSAE4CFhKCCpBBxjSF5nhhr2Fr/+dpLJiBRjfP6GO
-         1FRDn2Lgf4ZuB6AHEM0JFyfgbuF/rkP0YJbHbUjPJs0IPMMlqNohT5sTTp3ttRT5vto/
-         gy6A==
-X-Forwarded-Encrypted: i=1; AJvYcCVmtmY0+QPgK/6DU89IsPgebLgy/at3gJJsx4mzFOqXUoMG4ZNbyrIMYwdF8x+nG3hC4d8n1oCQLAE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkPh2XF/A57+qm8JYloXppdi7rqYN7iigRPUhEwIvOJU7l+PVg
-	MuN63SQgPaWUh8NAH+8rLZJiVRatFfvcHC6lihrYxM/9YWO/xDEg/fg6bjtp6FJr9aBXdkGIk+L
-	a7OuDnZ859/yvON015/dftcC6N3Q=
-X-Gm-Gg: ASbGncsuqDfUuOQvZQRAaHLs9eOa3D8IrEUc7wTV0D0W0m9nCytm97InGlUANOG9+bP
-	fLbuqiN+xIVozivLiYv0UGwncM4+uu8I=
-X-Google-Smtp-Source: AGHT+IG/x+629epGOKSzNYyowLD5NUlws8HX63cTL/LRg95Yx1vti1JfWtGKqHg9v8wCPaFQEZvVa0rHipd7dxpY+pg=
-X-Received: by 2002:a05:6902:703:b0:e30:c0bf:4227 with SMTP id
- 3f1490d57ef6-e395b86a605mr2120725276.2.1732698888148; Wed, 27 Nov 2024
- 01:14:48 -0800 (PST)
+	s=arc-20240116; t=1732700172; c=relaxed/simple;
+	bh=1u4uIdQ2/rmajlvwyy7unnQa+t/pVj8ruCo/2BXNkEc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oDT5xRVXvjhOIm7scKhUoO1ky4Ghw2WQnEhJo4DgOsxE4B5uO5OyMO7TiebG/tYX5Vv4SARRTXPFDQtxTOMlPL4QMRTe5PVfE5okcq42HGLDl9tiMgQlopI1my4deOQW+8tBWpCXeGQcPkf/VIEjh4FMkuKjit3ZiZ0B9LkjaIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=oPslwh63; arc=none smtp.client-ip=83.149.199.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
+Received: from ldvnode.intra.ispras.ru (unknown [10.10.2.153])
+	by mail.ispras.ru (Postfix) with ESMTPSA id F3A40518E779;
+	Wed, 27 Nov 2024 09:35:59 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru F3A40518E779
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+	s=default; t=1732700160;
+	bh=Jb0Y1dF2tosHQGPB8IaDnTH85DqetT79SPymVo0PUi8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=oPslwh63qVaA7aCPQfka1iCGuSGyXsC1IwVnOuBP4i5TpiiEaxdqDpuFeCsgASzMh
+	 wjVP+6g3Comis+VZ/8sQmdV1vFtaFtlLy5mrRTQaP6eHXuawTUGOnmg0cyCRzTpXlB
+	 VCaPaqGLLj854fBYFPem/bqgYdn4h6xvoX95e+Ak=
+From: Vitalii Mordan <mordan@ispras.ru>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Vitalii Mordan <mordan@ispras.ru>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	Fedor Pchelkin <pchelkin@ispras.ru>,
+	Alexey Khoroshilov <khoroshilov@ispras.ru>,
+	Vadim Mutilin <mutilin@ispras.ru>,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: aspeed-vhub: fix call balance of vhub->clk handling routines
+Date: Wed, 27 Nov 2024 12:35:47 +0300
+Message-Id: <20241127093547.3000267-1-mordan@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Homura Akemi <a1134123566@gmail.com>
-Date: Wed, 27 Nov 2024 17:14:37 +0800
-Message-ID: <CAC7i41Nz4KW9EE4hD_oiotK5B9CwaAmWs34ePk0F1KhbUYFiwg@mail.gmail.com>
-Subject: Re: dwc3 Disable Compliance Mode
-To: rob@gnarbox.com
-Cc: felipe.balbi@linux.intel.com, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hi Rob,
+If the clock vhub->clk was not enabled in ast_vhub_probe,
+vhub->clk will contain a non-NULL value leading to the clock being
+incorrectly disabled later in ast_vhub_remove().
 
-I hope you are doing well. I recently encounter this Compliance Mode issue very
-similar to yours with a dwc3 gadget product without a redriver, there
-is no obvious
-clue found. I found your discussion here, have you find out what cause
-the timeout
-eventually?
-Do you have any suggestions on debugging this issue? Your help will be much
-appreciated.
+Use the devm_clk_get_enabled helper function to ensure proper call
+balance for vhub->clk.
 
-Thank you!
-H. Akemi
+Found by Linux Verification Center (linuxtesting.org) with Klever.
+
+Fixes: 7ecca2a4080c ("usb/gadget: Add driver for Aspeed SoC virtual hub")
+Cc: stable@vger.kernel.org
+Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+---
+ drivers/usb/gadget/udc/aspeed-vhub/core.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/drivers/usb/gadget/udc/aspeed-vhub/core.c b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+index f60a019bb173..7566594fc447 100644
+--- a/drivers/usb/gadget/udc/aspeed-vhub/core.c
++++ b/drivers/usb/gadget/udc/aspeed-vhub/core.c
+@@ -277,9 +277,6 @@ static void ast_vhub_remove(struct platform_device *pdev)
+ 	       VHUB_CTRL_PHY_RESET_DIS,
+ 	       vhub->regs + AST_VHUB_CTRL);
+ 
+-	if (vhub->clk)
+-		clk_disable_unprepare(vhub->clk);
+-
+ 	spin_unlock_irqrestore(&vhub->lock, flags);
+ 
+ 	if (vhub->ep0_bufs)
+@@ -337,14 +334,10 @@ static int ast_vhub_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, vhub);
+ 
+-	vhub->clk = devm_clk_get(&pdev->dev, NULL);
++	vhub->clk = devm_clk_get_enabled(&pdev->dev, NULL);
+ 	if (IS_ERR(vhub->clk)) {
+ 		rc = PTR_ERR(vhub->clk);
+-		goto err;
+-	}
+-	rc = clk_prepare_enable(vhub->clk);
+-	if (rc) {
+-		dev_err(&pdev->dev, "Error couldn't enable clock (%d)\n", rc);
++		dev_err(&pdev->dev, "Error couldn't get and enable clock (%d)\n", rc);
+ 		goto err;
+ 	}
+ 
+-- 
+2.25.1
+
 
