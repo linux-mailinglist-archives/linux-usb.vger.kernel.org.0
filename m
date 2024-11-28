@@ -1,134 +1,215 @@
-Return-Path: <linux-usb+bounces-17930-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17931-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF4AA9DB4A8
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 10:16:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 990D49DB566
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 11:10:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD8F8282084
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 09:16:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4ABB5B28C49
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 10:10:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16D22156222;
-	Thu, 28 Nov 2024 09:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E5011917E7;
+	Thu, 28 Nov 2024 10:09:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O7v/rPWC"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="n3ZUOmIH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6678153565
-	for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 09:16:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7375157A67
+	for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 10:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732785372; cv=none; b=JjID0ZA4wHI5nFcyFhvPewOvy4uNZvTxgPPWlT6t4J6MW9S3PxuPPa5Ecr2HzGDkNmpZRwT3MeHe3AXRJioxd4+H6I+a8DgmJA3EaIlNRd7rHoBe3IcypUZGsLAamLwjOVGncFgXUDeTirsVkW8w3xoFq7Qc7qZeAsexjNsHMgs=
+	t=1732788541; cv=none; b=mQ+Yva64Spie2Uf01+Z26QtovbTUyv8WB8ZEbfYElHDF41WXZpkGb2nUuhNdqAueKBygUMdGCNNathjESvsncEJ7RKDeEil07ttJe3I/QKKx/DbKMpJcw9sRGXknJ29xwUoOCe5sWyw5k2c4A4Pmwjxpkp8CDhtOSjALyN4LWBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732785372; c=relaxed/simple;
-	bh=FyV9k9BiWIiG1fLXMC/clklAqIvfhz7ndK0Tus2EcXA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gxoacLWAdFEAHR9G0n3T8B5DIqDC7jJ1WT9AzTsGHS+qIFOB3Q1lOcuM8sjTXxUUbo5mPNptHbtgzcq0xhS0FndzkHPj6BFUHcwmvAasgx3DLee+enGFjlmt35Q5U7qhowjaXq2kxPufVjacIYJfcAaS/rDPvV0SesdWD1Vjg40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O7v/rPWC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1732785369;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ha5L68y3ev/uSENMtjj0g79NbkHzUtOgDv6uIZ/ru/4=;
-	b=O7v/rPWCZkGIWxh0pteMbzrjMXlkyWJ1tPVCs+I6ffMvwAyAvF5QkQvfgfmx8DjF6V243Q
-	kF5O3OKiqD5+yMQWf6Iv1lK+ANl0bj5gb3FwCYw3z8ppf58GhJNzzZp2QsH4T+3Rdx9ocM
-	P3S56P5o5SUAQ79tlRNMhsTIFB0PLRQ=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-w70WOq-8OiGS8vHMp_XM0w-1; Thu, 28 Nov 2024 04:16:07 -0500
-X-MC-Unique: w70WOq-8OiGS8vHMp_XM0w-1
-X-Mimecast-MFC-AGG-ID: w70WOq-8OiGS8vHMp_XM0w
-Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-434ad71268dso3540765e9.1
-        for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 01:16:07 -0800 (PST)
+	s=arc-20240116; t=1732788541; c=relaxed/simple;
+	bh=8JTTnCHZnnMo3oxuwzguJnJc/O1rDNf/9TTzaUfiCC4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dU9ysFNDfpAa2z1vMVf4jDOxCo2ZvWDoNbhIy3oFFuRYXZpB5N7I1u2gMihzYRmPMwxcX00QGol/8XF8siq57d3Pug2WlgQ8DRkAXI9CDuyFAdgIKm3T5L4zltj+xMZN0BPYnyHEOp+qiHfE3iMICKw7UnWizexvsm2TOWewHjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=n3ZUOmIH; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2f7657f9f62so6644591fa.3
+        for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 02:08:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1732788538; x=1733393338; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qH69DGlARRYVL50i80W3i9hrrH9KaWwkcgqBCO+wAFY=;
+        b=n3ZUOmIHbd6AUqPjy8ZzEApsl6I+UZzDQXttslC8VAmLG87x1bSfRlA49do7tbWCso
+         UP7wSHIsle0Na0IYHPWa1wOgY/JsMcEVkBDp4z4nbqF+X7F7WIKL/EnWW07yrm/Njnpd
+         Q9EAvBYZd4G3cCPEJiH5XJ4sZIUMurQKdSJlQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732785366; x=1733390166;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ha5L68y3ev/uSENMtjj0g79NbkHzUtOgDv6uIZ/ru/4=;
-        b=RoTQlyRmA7Ozt6PV5hQv8nVKVO0/UG2500BBILMdHir7Amds4gUpASaH3l8JQ9Dqhf
-         Qo1ZO/Pcayq42hAHvqjQ6sVR6ckvwgXR8uJGPIFCdoDkZJRsGO/zs1UcyI6sJbDzo0kv
-         cB+aTbLm/1RUEC83Gpozm11JaBnn3ZX6cpUQ64cKGePhM3iY/rLpFa0u/DX6teawevP7
-         aGUBKTdSjMYIqXYebaLQGiLEnvCMYlaR89BLdJcjyKl0jHZkmmM5nkjoPhO1JHiDB7au
-         1bio/1QdDJFB6Oe0zObJVgkYQDS6BbyJlfwwSG/XrWI4Ie0GQjpD4UD8Fz3J8HTwnOqx
-         CF8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVgyZbxfsgLpLmTdfr78VlqKAMv/bghYbAe2EuSJ7vDXm8xnahIffCHUtsiqZ7NXujlzuAiBTN6RXY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmMZhx+RM6OiZiQ+kGqw8aSmUVv0/ZH5sbYHtCHhGGMzpJrPIj
-	z09UKEkmGPBdc2TgAwJeCtFCwTtQxKn7T1aAvZ5fLsvDyNhjVkTI+UR5Ae/+JGSWpTCsQL+jJ9q
-	Riqvj4A4lgmwxvm+G/BBhZLuHrfI3WNM9XWzOixY0tipDCQ6biCLAn2Xp+Q==
-X-Gm-Gg: ASbGncsonl/zE03XQ+ke/2Saagxnx7dRmRX1f70cHMCjIp01YIL4zbUg3TsxT6Puk5k
-	p6H32/CIWku+LDGzOLmxA1EYnS1iRBiARWHp7WKI1NnvBtjWLj6gF9V57sTB1BQWxlKzXVI3zsw
-	5pBarY3aMDwXaQJ0Mc6DW4cjRIFiVPBhOf/oowLrQN80bBHXzSHsymlsuHTEm3xqo1KVIuBVmNN
-	oE95UCm1vx7GjFEF8PtE4Detrov4NRjVvoxQw5aUKygM/OYK9TUqBHtzS1bgFXm+EcpYFaBnrQ1
-X-Received: by 2002:a05:600c:2d4b:b0:42c:baf1:4c7 with SMTP id 5b1f17b1804b1-434afb94427mr17485325e9.4.1732785366573;
-        Thu, 28 Nov 2024 01:16:06 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEmEDvmrJ8pRI64i/AmdhJmU2UDmqW0+eegVh9JzZIG7I6SenmIEe3Gvcu2M3TCNPYSuisvzQ==
-X-Received: by 2002:a05:600c:2d4b:b0:42c:baf1:4c7 with SMTP id 5b1f17b1804b1-434afb94427mr17485175e9.4.1732785366270;
-        Thu, 28 Nov 2024 01:16:06 -0800 (PST)
-Received: from [192.168.88.24] (146-241-60-32.dyn.eolo.it. [146.241.60.32])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa7d25c5sm46864315e9.28.2024.11.28.01.16.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Nov 2024 01:16:05 -0800 (PST)
-Message-ID: <551a761c-ebc3-423c-ac8d-865b429cf8b8@redhat.com>
-Date: Thu, 28 Nov 2024 10:16:04 +0100
+        d=1e100.net; s=20230601; t=1732788538; x=1733393338;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qH69DGlARRYVL50i80W3i9hrrH9KaWwkcgqBCO+wAFY=;
+        b=umO85KETJ9h9N3m/GpNMdPTyydwa17AOcqkZI/4oDraR/A4f7aczPRYHBu9MzoOOSJ
+         21Eoz1Rzsj11ucxk/ao1B/yHY1gF9K7TZfVntIwTq/EPp87RnRtWGe5WjhWfY5kRYAcL
+         VMHzbBfFn6UKMJXpa+gnoAdivd9Pu0yiceseBfB6YZUqKI32OS8Ojof1Jwg1oBJSPqhf
+         O158rZOr4q6VAm/iG1awut4keOInIrDAsYb0p0lBD0OV/kpz11upU29fjfhSJc+f6eiv
+         /S6q9W3//VesDJtH4Yr8IFhA6xILvQzGl/T4Ipotb0qB375HZVkIQPPIrZHbxIsrd146
+         n7Nw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBsrj77ALHGGPxjYNXJ2fDz6tH9dELxLGJ1K7VRNH72cn7Ab9OOI1W+iCIR0yuEUbgzidOo/7xLHU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSnxvpx2sqAW0uiFr9bQuo/p/7gL+goM1r/VjkCFT0GJPxtwN5
+	boE5U2/pq7MoJ0xwegFCGwiRSxYSgmPu8zsv2E1iqKS+0CrLsJKIMEHo+ckxDrJg4PvVBMZs3EP
+	KtDkWCyqaH3Fmq7ZzQ7JmxlD0nL3s2fVaozU=
+X-Gm-Gg: ASbGncuIWYb3m8qUa0EcuU7cvhRj4l0aHc+TCU8ZoJHqhN7p1RFJbrfOnCHE7mZOW/M
+	pVnIjzLDpey7HLElX0ciHqlejTGm4+nTdr3s6IKU2/YjUSwB9EVNpXesT
+X-Google-Smtp-Source: AGHT+IGwyQRa0PyyAxqMwrDBn3GABwFRoQjHsMo4wzJLNgIAsloiPCavUY3TRo7zYcP7WoCb5P11lcE30BShy2iFre8=
+X-Received: by 2002:a2e:bd83:0:b0:2ff:c4a3:882a with SMTP id
+ 38308e7fff4ca-2ffd6059f80mr35507821fa.18.1732788537986; Thu, 28 Nov 2024
+ 02:08:57 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v3 1/6] usbnet: ipheth: break up NCM header size
- computation
-To: Foster Snowhill <forst@pen.gy>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: Georgi Valkov <gvalkov@gmail.com>, Simon Horman <horms@kernel.org>,
- Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20241123235432.821220-1-forst@pen.gy>
-Content-Language: en-US
-From: Paolo Abeni <pabeni@redhat.com>
-In-Reply-To: <20241123235432.821220-1-forst@pen.gy>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20241104154252.1463188-1-ukaszb@chromium.org> <5iacpnq5akk3gk7kdg5wkbaohbtwtuc6cl7xyubsh2apkteye3@2ztqtkpoauyg>
+ <CALwA+Nb31ukU2Ox782Mq+ucBvEqm9_SioSAE23ifhX7DsHayhA@mail.gmail.com> <yphjztfvehbqd4xbdo7wtdfd4d3ziibq6hytuuxnoypdpsr462@zwl2cfj6f5kw>
+In-Reply-To: <yphjztfvehbqd4xbdo7wtdfd4d3ziibq6hytuuxnoypdpsr462@zwl2cfj6f5kw>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Date: Thu, 28 Nov 2024 11:08:46 +0100
+Message-ID: <CALwA+NYOm5mrw7=PSD+w_ma0hzR2CQ5dspz5X-bqi1o7ikfq6Q@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: typec: ucsi: Fix completion notifications
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
+	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/24/24 00:54, Foster Snowhill wrote:
-> Originally, the total NCM header size was computed as the sum of two
-> vaguely labelled constants. While accurate, it's not particularly clear
-> where they're coming from.
-> 
-> Use sizes of existing NCM structs where available. Define the total
-> NDP16 size based on the maximum amount of DPEs that can fit into the
-> iOS-specific fixed-size header.
-> 
-> Fixes: a2d274c62e44 ("usbnet: ipheth: add CDC NCM support")
-> Signed-off-by: Foster Snowhill <forst@pen.gy>
+On Thu, Nov 21, 2024 at 11:53=E2=80=AFPM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On Wed, Nov 20, 2024 at 03:56:41PM +0100, =C5=81ukasz Bartosik wrote:
+> > On Mon, Nov 18, 2024 at 6:58=E2=80=AFPM Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > > On Mon, Nov 04, 2024 at 03:42:52PM +0000, =C5=81ukasz Bartosik wrote:
+> > > > OPM                         PPM                         LPM
+> > > >  |        1.send cmd         |                           |
+> > > >  |-------------------------->|                           |
+> > > >  |                           |--                         |
+> > > >  |                           |  | 2.set busy bit in CCI  |
+> > > >  |                           |<-                         |
+> > > >  |      3.notify the OPM     |                           |
+> > > >  |<--------------------------|                           |
+> > > >  |                           | 4.send cmd to be executed |
+> > > >  |                           |-------------------------->|
+> > > >  |                           |                           |
+> > > >  |                           |      5.cmd completed      |
+> > > >  |                           |<--------------------------|
+> > > >  |                           |                           |
+> > > >  |                           |--                         |
+> > > >  |                           |  | 6.set cmd completed    |
+> > > >  |                           |<-       bit in CCI        |
+> > > >  |                           |                           |
+> > > >  |   7.handle notification   |                           |
+> > > >  |   from point 3, read CCI  |                           |
+> > > >  |<--------------------------|                           |
+> > > >  |                           |                           |
+> > > >  |     8.notify the OPM      |                           |
+> > > >  |<--------------------------|                           |
+> > > >  |                           |                           |
+> > > >
+> > > > When the PPM receives command from the OPM (p.1) it sets the busy b=
+it
+> > > > in the CCI (p.2), sends notification to the OPM (p.3) and forwards =
+the
+> > > > command to be executed by the LPM (p.4). When the PPM receives comm=
+and
+> > > > completion from the LPM (p.5) it sets command completion bit in the=
+ CCI
+> > > > (p.6) and sends notification to the OPM (p.8). If command execution=
+ by
+> > > > the LPM is fast enough then when the OPM starts handling the notifi=
+cation
+> > > > from p.3 in p.7 and reads the CCI value it will see command complet=
+ion bit
+> > > > and will call complete(). Then complete() might be called again whe=
+n the
+> > > > OPM handles notification from p.8.
+> > >
+> > > I think the change is fine, but I'd like to understand, what code pat=
+h
+> > > causes the first read from the OPM side before the notification from
+> > > the PPM?
+> > >
+> >
+> > The read from the OPM in p.7 is a result of notification in p.3 but I a=
+gree
+> > it is misleading since you pointed it out. I will reorder p.7 and p.8.
+>
+> Ack, thanks for the explanation. Do you think that it also might be
+> beneficial to call reinit_completion() when sending the command? I think
+> we discussed this change few months ago on the ML, but I failed to send
+> the patch...
+>
 
-This change is not addressing any real issue, it just makes the
-following ones simpler, right?
+Dmitry sorry for delayed response.
 
-If so, I think it's better to drop the fixes tag here and add the above
-reasoning.
-
-> ---
-> Each individual patch in the v3 series tested with iPhone 15 Pro Max,
-> iOS 18.1.1: compiled cleanly, ran iperf3 between phone and computer,
-> observed no errors in either kernel log or interface statistics.
-
-This should go in the cover letter (currently missing, please add it in
-the next iteration).
+IMHO it makes sense to clear completion in ucsi_sync_control_common()
+with reinit_completion().
+But I wonder whether with this change moving from test_bit ->
+test_and_clear_bit do you still see a potential
+scenario for a race ?
 
 Thanks,
+Lukasz
 
-Paolo
-
+> >
+> > Thanks,
+> > Lukasz
+> >
+> > > >
+> > > > This fix replaces test_bit() with test_and_clear_bit()
+> > > > in ucsi_notify_common() in order to call complete() only
+> > > > once per request.
+> > > >
+> > > > Fixes: 584e8df58942 ("usb: typec: ucsi: extract common code for com=
+mand handling")
+> > > > Cc: stable@vger.kernel.org
+> > > > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
+> > > > ---
+> > > >  drivers/usb/typec/ucsi/ucsi.c | 4 ++--
+> > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi=
+/ucsi.c
+> > > > index e0f3925e401b..7a9b987ea80c 100644
+> > > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > > @@ -46,11 +46,11 @@ void ucsi_notify_common(struct ucsi *ucsi, u32 =
+cci)
+> > > >               ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+> > > >
+> > > >       if (cci & UCSI_CCI_ACK_COMPLETE &&
+> > > > -         test_bit(ACK_PENDING, &ucsi->flags))
+> > > > +         test_and_clear_bit(ACK_PENDING, &ucsi->flags))
+> > > >               complete(&ucsi->complete);
+> > > >
+> > > >       if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> > > > -         test_bit(COMMAND_PENDING, &ucsi->flags))
+> > > > +         test_and_clear_bit(COMMAND_PENDING, &ucsi->flags))
+> > > >               complete(&ucsi->complete);
+> > > >  }
+> > > >  EXPORT_SYMBOL_GPL(ucsi_notify_common);
+> > > > --
+> > > > 2.47.0.199.ga7371fff76-goog
+> > > >
+> > >
+> > > --
+> > > With best wishes
+> > > Dmitry
+>
+> --
+> With best wishes
+> Dmitry
 
