@@ -1,449 +1,207 @@
-Return-Path: <linux-usb+bounces-17937-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17938-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9312F9DB8BB
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 14:31:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40D829DB970
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 15:16:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D8868B22EA7
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 13:31:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78AB3B20BFF
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 14:16:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B590D1A9B44;
-	Thu, 28 Nov 2024 13:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93021192D77;
+	Thu, 28 Nov 2024 14:16:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zuehlke.com header.i=@zuehlke.com header.b="e+oPs6DI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YgNkF+Il"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from GVAP278CU002.outbound.protection.outlook.com (mail-switzerlandwestazon11020131.outbound.protection.outlook.com [52.101.188.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54B7C1A29A;
-	Thu, 28 Nov 2024 13:31:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.188.131
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732800692; cv=fail; b=u7AijhG4yGAkT1SOPssOGuAeYvl2yQsVk43aBme0h+c0qeNSowzPFuUvarlJlo1Q6DjT3+tyyFV+qnxratQUk2VjmIRJG8ybwuC1BkhOkBQI8a842xQ6IhwVTDJjflYkTzIdUuURF/Vbxg4w2v8n7AC18vuic8hzYdewOUFwwKU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732800692; c=relaxed/simple;
-	bh=Kz8cuO0oO3xYy7tzdUg5U4wR+/si2KnJgfn6b8nkP6Q=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=sf8joHlCcB0elCDsPPNbswdi+/StLWWUD7aNFjxSEAbmbFdrdAY6yW084nMBZNZHhEFolHK3A3JCuD5UoisgbvjEsxqJWwhdPCq0kCXPFyQ4pr1TftaNWMHNdiQYxWy+GuVDP5/6jFGDL0/WBabB1D9CHDPN/Z3JbHxU4yUDLus=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zuehlke.com; spf=pass smtp.mailfrom=zuehlke.com; dkim=pass (1024-bit key) header.d=zuehlke.com header.i=@zuehlke.com header.b=e+oPs6DI; arc=fail smtp.client-ip=52.101.188.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zuehlke.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zuehlke.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=PBCFpX8FF/UoV0gDZ0HEDPzTNtPDVJSc2dbR+tZ1eCw0BI7pnq1lOrjFkWwfVlPLlHDhbhv84pU/T6GeSi90VsgqVtOswcFrGA1VXlRqzz9HAlT7SMtzTl6JcT53tU+/OlR7P8BkQM/6nOucKTLGpN0AoEUCw40ODNm9Q7rsKtFApkjux179tVuqijFOULEqniMyn9igirtazPhqzmrUlR6+K+8I+vEHvfhR39vtcVQ8hc2a4YWPJ5qB6VjGUrSs7TUmo0D44WPvExkDi0umi5F7LoCChrUHA1UZNfQxxUbvQorpa+a4PO8RP6VvVgtmrYLSsREmdD8iUksy0S3OZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2W+OFBZGLeI/soXLWYMWc7ViCXe/YFxZ22AmWcLxtE0=;
- b=LxcB8svjLnklGjc0dws6TG1j/QTtWIdFgzVPLQCZXoxmakCImrr6PTzYK6v2Dtk5DHpyq3vpe2Itm0LsV7x7OlWX1HjyRcPzotWdMp8EXvkjqUdCpjceJKyQ7tGGDQjVxga920mfbvP93rd35JZZAYj3ieBRantDUWZsyC4AJmR/idUp9dgftDCwqM/jlsm/fH6PWdk2ptdh5rSKKCpOoLSCNiEQmnsXJ2trSIdHxCg7v4qPzyBpckMMtvR2EAHU0yIvn5/BYPeL6Tyc8nVMBXmRbW3tNPvphYhfkn5X2iPAAWbDo4I73b1jnp+JVjypJSVRNWPHfgXfXaHGjtDXog==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=zuehlke.com; dmarc=pass action=none header.from=zuehlke.com;
- dkim=pass header.d=zuehlke.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zuehlke.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2W+OFBZGLeI/soXLWYMWc7ViCXe/YFxZ22AmWcLxtE0=;
- b=e+oPs6DI1NjghzU/Zas1DF1srHg4LhoAKsdiM6w2h1w3KZITcK5eFA9Lei6kGtJ+rl00Eh7k5LL7a+bk8iRz526erqeO7TQYcqjBw4hMCP6esjee6eUfWwqwHuqBpdTGGuF94NDcf3eSwD/GhcW35zIxyPYMNGuxU7wLnMqNCKM=
-Received: from ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM (2603:10a6:910:5c::8) by
- GV0P278MB1570.CHEP278.PROD.OUTLOOK.COM (2603:10a6:710:62::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8207.14; Thu, 28 Nov 2024 13:31:22 +0000
-Received: from ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM
- ([fe80::c887:bd2f:4c91:3d13]) by ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM
- ([fe80::c887:bd2f:4c91:3d13%5]) with mapi id 15.20.8207.010; Thu, 28 Nov 2024
- 13:31:22 +0000
-From: =?iso-8859-1?Q?Facklam=2C_Oliv=E9r?= <oliver.facklam@zuehlke.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-CC: Biju Das <biju.das@bp.renesas.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "von Heyl, Benedict"
-	<benedict.vonheyl@zuehlke.com>, =?iso-8859-1?Q?F=F6rst=2C_Mathis?=
-	<mathis.foerst@zuehlke.com>, "Glettig, Michael" <Michael.Glettig@zuehlke.com>
-Subject: RE: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring port
- type
-Thread-Topic: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring port
- type
-Thread-Index:
- AQHbNmuKAbQgSYuDD0+aIkfTlZwMRLK88xQAgAAYJXCACtFsAIAC7fPAgAH3oQCAAAPlEA==
-Date: Thu, 28 Nov 2024 13:31:21 +0000
-Message-ID:
- <ZR1P278MB10226AAB6D237E96CEEE05719F292@ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM>
-References:
- <20241114-usb-typec-controller-enhancements-v2-0-362376856aea@zuehlke.com>
- <20241114-usb-typec-controller-enhancements-v2-3-362376856aea@zuehlke.com>
- <Zzsp2JOhnnPPOWvB@kuha.fi.intel.com>
- <ZR1P278MB10224924F48419CA813402309F272@ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM>
- <Z0RRQoRN7721FF-Z@kuha.fi.intel.com>
- <ZR1P278MB1022EC72C26F483A416DB1979F282@ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM>
- <Z0hs1ougC6HSt5KO@kuha.fi.intel.com>
-In-Reply-To: <Z0hs1ougC6HSt5KO@kuha.fi.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-processedbytemplafy: true
-x-templafyemailsigvstoversion: 9.16.0.0
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=zuehlke.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: ZR1P278MB1022:EE_|GV0P278MB1570:EE_
-x-ms-office365-filtering-correlation-id: 57c6530d-c3b9-4cc7-4502-08dd0fb0f2eb
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|376014|1800799024|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?Lv6HqhMHrQzVdb3w15lMZMXiT9Tj2zJm7+poQEs9TvSGXLZwWDu0Q0DPYx?=
- =?iso-8859-1?Q?UN7bKcMXmsNSeBwEltyTnz3efOvakoJdJIGs7r0CYPTRgU9/NRB6OXUS4+?=
- =?iso-8859-1?Q?8Ez9hu0J1DUKM9aNzoptZ0+fhOBzTviEuJtjLt1n4fHpZpTebRcXh90o/q?=
- =?iso-8859-1?Q?9gu1Lk7pEEM/veqIdFjuPv0j0SSivXdKgZYkYNZN8IpSpv3EJGPmEO+vwY?=
- =?iso-8859-1?Q?pD2w/K/ccJrNDZb8fc+YCqOn4HsphCsyJsI5GpjFlvPOuAKxXHtkOE+fw9?=
- =?iso-8859-1?Q?AQ9pzWPNZbpk3PWKHqQ56Np/zu09iRnqrb8RE5BXU/41lpUeRwGuC//8EP?=
- =?iso-8859-1?Q?GwRS9ScmPOKH4KQTRKyc7VPk0jre2PIwWdAk2fnyyhGfIjC254mOOWBgFq?=
- =?iso-8859-1?Q?iOA+FJGJRh7XT+RL4UoZB/P7YkXeGz4/r9LnrZHQwN0Rc+pbfL4mUKCaJw?=
- =?iso-8859-1?Q?bS8prH/V35A2Q5jOlUu8sBBkHBNO2pvpwjX5w0xsCbFlDrKti9JLpLJcIu?=
- =?iso-8859-1?Q?sXp5IpUwGeeagivGGDF8ctaOkFP4Id1qkVGQKVi8JTBZAWGkxWVDcyGim0?=
- =?iso-8859-1?Q?4yMdJRpUU/n5a/lpiqci4dcCJFhiDVGmTgYUzUYQoNtM20Jp2lgmjB1ub7?=
- =?iso-8859-1?Q?QMcduOzoBqAwZNJkmSXPV42l/LK97ieaJUQ/lMUV4CX9IPBCdsyiDGKihh?=
- =?iso-8859-1?Q?1aiUiBibljjBVjQ6IaAKGY9FOK1bHVYK8bJuF2YOC4uEUSrebIsA2AlqFa?=
- =?iso-8859-1?Q?EQipe3Hcak/a8vItf/C9FG8GfMeOpMKZB3r5CZJ3EZUFbMLfxPTydalGmf?=
- =?iso-8859-1?Q?etbiDuRzI4SW/9DxNZprXRRlm4zenYZ7RKx7+/ndQfJ0LaQdn3GRHPM5Sr?=
- =?iso-8859-1?Q?B5X8T+FfUX6tL+xqLJH76CasD8ZtCYg8IIVdFc+Ddooj0YEE7ajufWhuqu?=
- =?iso-8859-1?Q?CxnfR7azjWaHZ5EIltRjxu3DoDaS+zqL3Jf8WlXshoHodR+O0i6ydsTYnF?=
- =?iso-8859-1?Q?IVfv5edd9FoBGUyK+087Ood80XR26n9gou4SybJcsUNP8Blv9PZysd9uBo?=
- =?iso-8859-1?Q?bfVjl0/sEcubusDVYzAHAlLHZmAt60oZ75Qv55Hbdp1QKjVYrq7wYVkIkt?=
- =?iso-8859-1?Q?mcK5IBl5mfmj+xApO67Tph4nNX8IX0w6NdktzDxbtXV07eH6wHAsvW0lQ0?=
- =?iso-8859-1?Q?1/+n04lR4Z4OLPvoNsixzjaefete2PFOMSkSfoFYZggYEYfUsIvL+sxlmr?=
- =?iso-8859-1?Q?XgFWcFV3rLwXaDlR0hE88tdz7HPxqAYbBEz5dsdDiSDWe04dtojJOn9E7i?=
- =?iso-8859-1?Q?t6MQ9dxfliFwonUFKlDNzx/RKdeE8+4qFo22uFLPdyV7xbmb/SQTfmON3Z?=
- =?iso-8859-1?Q?bXw9CUi14lPEmC7u5C4MC6wIjF+wJaSSvoJAH4ppbwyPN/3P8WaTSuhFs9?=
- =?iso-8859-1?Q?Rq97oHmjUdubUKQ3NhKt9UDL0O0BJEW23x2m7Q=3D=3D?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?27H5uXh2QwzQ/ZULw/NY4xOENQcTjra7DOasiL2jW1Kurf8AvJrIydJoZJ?=
- =?iso-8859-1?Q?7Y6dU7vdL252+U3e0rzcJlIX0dxRWlLw9k1yvgQpJMVQGyOwfD4YcOYN7D?=
- =?iso-8859-1?Q?Ua6L3DrqT96FrL3Afmc5kDLDZbw6y3/FPu9NxHIeHdpH+wrN/5ePRcQ7cl?=
- =?iso-8859-1?Q?y1MMrMYo9x1dtsOfZI3fxeJ7vQrCCno4e6CC6V/cbh8kq+1q8WXPBNmyft?=
- =?iso-8859-1?Q?quDuRtOrmBUIhJu9r0qiYvl3XDYMSgAYVy1W3C/dGn44BP8QbygAgUb7gX?=
- =?iso-8859-1?Q?faNAk5YzbLIuNu84YU+sSc24x3m5L/qL8T9kOnit6qf0OxHTyigGnjewM7?=
- =?iso-8859-1?Q?7loFy1AA4V+NugrX7dmMt860oIuV8fqhM6FKzMG4F4+8zXa6HPxYN/xWYQ?=
- =?iso-8859-1?Q?FgzAm6Plh/OQtCy7U6b/5IiOWotGApXeh+iqek+WIxm5SkqW8r62kansPu?=
- =?iso-8859-1?Q?lLmQWKDepjXFpzZP2XUnJizMhxzMMRAeXvdqc6IKNUbiMZd8uIg90VN+MR?=
- =?iso-8859-1?Q?YmjlUoOLu/a020pWTDlTizvTXFWtLGRIHy0hi4Irpe6e0LxHBjOTO96UMs?=
- =?iso-8859-1?Q?Qms5jwmhCx0MBGbJMwft+pLYgrtnN4iWG9UPkhJQK0Hn7fThPxXOk2Z6ET?=
- =?iso-8859-1?Q?W83+ouMDNlg16beZCsSiYD2cdUbO4Yhi+KMs1ChbOohPJeDwnfqnTXvux+?=
- =?iso-8859-1?Q?AVs6t9UrZsnC9pZ900sZxb+rUUcW/Bg05gScjxy9/mxxZWfGag/PMPTyVH?=
- =?iso-8859-1?Q?bbuAEUiNHMG2PS1uEQU54OClwvfnznbLrN1+egqcTI2FxbFSxX/HiqKeON?=
- =?iso-8859-1?Q?rRI+fyLOYt1MrX3BjJpD+DxaALFU2Jl+GswqUKOjf1z4DooOKqLOReYzCW?=
- =?iso-8859-1?Q?bh1ouWiiPoIzzhNm7s2nlBoPRtCfLH+CG5s/zpQ9uGP9dVr9phjiqUC6K/?=
- =?iso-8859-1?Q?L68+qHDPmPpjUJuuggXfz2tgk88kKrz1GnBLSyyJmFSTDgTZANxGq7CQj7?=
- =?iso-8859-1?Q?mXcewq26PLGCvDC6MfHSALE3ObV8uN0LRqKhzYx6mt/IY1liPQRamgFTUc?=
- =?iso-8859-1?Q?iVD1wRIwVLtILty+d8Zsufqjv+w9Te+7qH7d8rp3GtQCIhysN+Kowsz/CH?=
- =?iso-8859-1?Q?9/lW/a3heknCEVt6TdBmkw/UtHSQ08Sbn/KSXOrCAIlotIEKRw6g6x3GZ1?=
- =?iso-8859-1?Q?cH1xXJnu3hAPDD2gGTEVVR6pXyvnfNsNhcb7nT4lhwD1mZQvFAoc2ue7V1?=
- =?iso-8859-1?Q?kKn3ERucvBGBCLjWjZvjFdlaGFKz4oxNR/mTitNo/rPeSkBZCVFxLoa8ah?=
- =?iso-8859-1?Q?C7Hd3t7nrEpXuCf2AsnK6JaLipcK2TPzEJ0fJ/8n1GfZzdWCNbdSUyfOMu?=
- =?iso-8859-1?Q?N4xCih3VIRcSV4b22+BckiMZiU/FzAxLcr4HQAvFxf32IHHaRT92nLKAYM?=
- =?iso-8859-1?Q?sgK39q+QOo8Rzb8a0u6SY11REuEmlLnKx+q3Jx78KosewQDfi1+7S+SjGe?=
- =?iso-8859-1?Q?cYt1BQQ4eDIwkiPq8NWSyQtCDHfBjpibVZXRqzXV06WWu2lxKlyFaG55xq?=
- =?iso-8859-1?Q?GiddKl0lADJBMvhlJXbPiv/kakOfRmrk/R2aIDdoKWhje2hH3sGd124ByA?=
- =?iso-8859-1?Q?gxiigvkK+rBH29ba7IsXtaG/DszcxgEzGHQStc/33wGmGKVj6gZu3IbQ?=
- =?iso-8859-1?Q?=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53F3A19CC2E
+	for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 14:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1732803404; cv=none; b=uL8nNSP4a8ivrVSJILQ5THx7giZkpcPWe0YJWYbUA+Kb8PsiI1knaM8KxK+zYYyEbaUZTVihOv5I5Vh8bZwYIeVOM5sir5I+TjM65TDvh+A0x9qa5C3GjmTN68ImX0XWGdiIblCauxrTKNMjPV0M4tg9KcmPWr4D50sViUVLtYg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1732803404; c=relaxed/simple;
+	bh=pGJwVkhBavn7usUj1U3H0VsG3g3e1vAC4GGeds7ZWO0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nFuyTEOKIUk+EHCj1jcYcwBCEuyHS21PP0wjUM9xuEYz8TUOkuf6Zss7+j4qOr1/u534OuY91dPpllOuMUUQ3nV2JvDrwquw4sir8du3EeaprDm09MH6RSUJXu4mqOhxIi+TWlIGFQLbp2rq477kkqtlVG5RyEQZhjEVC73jWtA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YgNkF+Il; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-53df63230d0so875619e87.3
+        for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 06:16:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1732803400; x=1733408200; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Weqeryws7cMd2oim1FlBCZJW7c40sebxRrMb3q5ySJQ=;
+        b=YgNkF+Il1jYqaeBDqdZrDBardJnnXGcp1rKvtdOo7tfyZRarvvhOQ7+00HpjYK80gY
+         dR7XjJ+9tLnNucUmKG7g190aqasK7gmgbUpaX4wpFESnMGf+rzfzRchqPtD5zi7nv5Y2
+         PV/+sAMrItmYRqx+n0Btx8zukjaCndVqhR2dqlBOtlnDqai56e497AfdgKoSGggsklm6
+         f2rbFdCMyBYr69dUTmSlY56fddqaK9Yrd6hwP/xHgYCTMnYpX7llmg5meKJAcfPX8YAE
+         Ug6xO3JNWcxS6joA1+KHPXYbTt72z8MvONzCILDDYYhu79Vs9J7VQPNdXZuMdWwDYVaR
+         32vg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1732803400; x=1733408200;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Weqeryws7cMd2oim1FlBCZJW7c40sebxRrMb3q5ySJQ=;
+        b=pSTMzgGkPEcVUpiHK68RJcbi/tIokCF9hKu8jC1qRvke42bC6hDd+36o6q6KH4P33P
+         K4aCERL1e0aNJGUhxcUZWWyMbjBdYmPkMfjVoFeO0KnfMTgkPJzWXzNr17uFBPooe2TN
+         gP8NgxfEZ5fKAK0yqJ2/9x+E+21SgmAFFQz5mFwzUXZAjvWUUy563BC4HorD0ANBv6C6
+         Sw2iYMHGn+OYHQw8KSUTLmq0wWASMuIZY2RfzL2NN8EF5Z0llrNxOuTem17E5fPXZgvX
+         eorSOLZBd+h5lxpjT83WFfPEnJ7+OflnlB8UghvnMjZ2wjyi1HVGqBbl3G7Q/jfj/dpO
+         d3rw==
+X-Forwarded-Encrypted: i=1; AJvYcCXXEl39n3vmJIutCnaKMdq9VQeFzqECBFGzJP1+9yp01bFemZXVVjBXhUQtyRvhot39nBXmr/Osnis=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyi3IpX9gCPBkeN6iUP3VQnzUZJjI6CYZrXJ5E6vDy3MZngADg2
+	y9scv4wkfa24U3zd6bi/xjdbHN/kEITqyUzTdxcWMbqGNBSJiOGxo2edCymfjlE=
+X-Gm-Gg: ASbGncv1j21GX39XcCSUyoRdgo/fo0K4mDFEjRtPWdXgcgA1JTu1JwAP2XZ5ddPsDzE
+	MISdW6pKkVjrKyfkRjFr8xwhK7LU0kz9lDyUKgiiT3mJ6RYWyF52QSUc5GMGCRZ0hExb6AWxB4T
+	HLVJcZgkeoVC+KhEe2K1v2WxarDlXHnGwjxGorIuxH9Pu0foDde6ofu2KidbJLzYiidWhkdJxrH
+	qJrrK4ckmS0KMc3lsuLVxn2TGvDTywiefVcVxqWAvf6Ege3Ai7x2toIkZOSIok/kNctdemS70s2
+	7bD/xzsQrTnUPJ0wkeLqYSgABy87uw==
+X-Google-Smtp-Source: AGHT+IH86Bw/EX6P3h1wRisNh0npZ+oiUFEi9OATWnxDcSUA7CdbhOWFzSmutrVwhuZzNJKNDXSKAw==
+X-Received: by 2002:a05:6512:3ba2:b0:539:9505:7e5 with SMTP id 2adb3069b0e04-53df0106cccmr4621382e87.36.1732803400286;
+        Thu, 28 Nov 2024 06:16:40 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-53df646efd9sm187897e87.143.2024.11.28.06.16.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 28 Nov 2024 06:16:39 -0800 (PST)
+Date: Thu, 28 Nov 2024 16:16:37 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
+	Benson Leung <bleung@chromium.org>, Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org, 
+	stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: ucsi: Fix completion notifications
+Message-ID: <7e5p2ekpvxosb4axrzenifrtitzof6femyzld6wdcp3i7a5jh6@v476mzjit5zw>
+References: <20241104154252.1463188-1-ukaszb@chromium.org>
+ <5iacpnq5akk3gk7kdg5wkbaohbtwtuc6cl7xyubsh2apkteye3@2ztqtkpoauyg>
+ <CALwA+Nb31ukU2Ox782Mq+ucBvEqm9_SioSAE23ifhX7DsHayhA@mail.gmail.com>
+ <yphjztfvehbqd4xbdo7wtdfd4d3ziibq6hytuuxnoypdpsr462@zwl2cfj6f5kw>
+ <CALwA+NYOm5mrw7=PSD+w_ma0hzR2CQ5dspz5X-bqi1o7ikfq6Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: zuehlke.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: ZR1P278MB1022.CHEP278.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57c6530d-c3b9-4cc7-4502-08dd0fb0f2eb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 28 Nov 2024 13:31:22.0229
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: ccce7f5e-a35f-4bc3-8e63-b2215e7d14f9
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: ctJtfLfR/MPxBitP3+kp1Tcpz8xmJh3zHkE1xMCUM1y9lGAqTzUJVsmhZ8fhGaJrZ7cEOy+AEToLnA9IDhFehygs0+3xKYMqeSKGUemjYuE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV0P278MB1570
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALwA+NYOm5mrw7=PSD+w_ma0hzR2CQ5dspz5X-bqi1o7ikfq6Q@mail.gmail.com>
 
-Hello,
+On Thu, Nov 28, 2024 at 11:08:46AM +0100, Łukasz Bartosik wrote:
+> On Thu, Nov 21, 2024 at 11:53 PM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+> >
+> > On Wed, Nov 20, 2024 at 03:56:41PM +0100, Łukasz Bartosik wrote:
+> > > On Mon, Nov 18, 2024 at 6:58 PM Dmitry Baryshkov
+> > > <dmitry.baryshkov@linaro.org> wrote:
+> > > >
+> > > > On Mon, Nov 04, 2024 at 03:42:52PM +0000, Łukasz Bartosik wrote:
+> > > > > OPM                         PPM                         LPM
+> > > > >  |        1.send cmd         |                           |
+> > > > >  |-------------------------->|                           |
+> > > > >  |                           |--                         |
+> > > > >  |                           |  | 2.set busy bit in CCI  |
+> > > > >  |                           |<-                         |
+> > > > >  |      3.notify the OPM     |                           |
+> > > > >  |<--------------------------|                           |
+> > > > >  |                           | 4.send cmd to be executed |
+> > > > >  |                           |-------------------------->|
+> > > > >  |                           |                           |
+> > > > >  |                           |      5.cmd completed      |
+> > > > >  |                           |<--------------------------|
+> > > > >  |                           |                           |
+> > > > >  |                           |--                         |
+> > > > >  |                           |  | 6.set cmd completed    |
+> > > > >  |                           |<-       bit in CCI        |
+> > > > >  |                           |                           |
+> > > > >  |   7.handle notification   |                           |
+> > > > >  |   from point 3, read CCI  |                           |
+> > > > >  |<--------------------------|                           |
+> > > > >  |                           |                           |
+> > > > >  |     8.notify the OPM      |                           |
+> > > > >  |<--------------------------|                           |
+> > > > >  |                           |                           |
+> > > > >
+> > > > > When the PPM receives command from the OPM (p.1) it sets the busy bit
+> > > > > in the CCI (p.2), sends notification to the OPM (p.3) and forwards the
+> > > > > command to be executed by the LPM (p.4). When the PPM receives command
+> > > > > completion from the LPM (p.5) it sets command completion bit in the CCI
+> > > > > (p.6) and sends notification to the OPM (p.8). If command execution by
+> > > > > the LPM is fast enough then when the OPM starts handling the notification
+> > > > > from p.3 in p.7 and reads the CCI value it will see command completion bit
+> > > > > and will call complete(). Then complete() might be called again when the
+> > > > > OPM handles notification from p.8.
+> > > >
+> > > > I think the change is fine, but I'd like to understand, what code path
+> > > > causes the first read from the OPM side before the notification from
+> > > > the PPM?
+> > > >
+> > >
+> > > The read from the OPM in p.7 is a result of notification in p.3 but I agree
+> > > it is misleading since you pointed it out. I will reorder p.7 and p.8.
+> >
+> > Ack, thanks for the explanation. Do you think that it also might be
+> > beneficial to call reinit_completion() when sending the command? I think
+> > we discussed this change few months ago on the ML, but I failed to send
+> > the patch...
+> >
+> 
+> Dmitry sorry for delayed response.
+> 
+> IMHO it makes sense to clear completion in ucsi_sync_control_common()
+> with reinit_completion().
 
-> -----Original Message-----
-> From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> Sent: Thursday, November 28, 2024 2:15 PM
-> Subject: Re: [PATCH v2 3/4] usb: typec: hd3ss3220: support configuring po=
-rt
-> type
->=20
-> Hi,
->=20
-> On Wed, Nov 27, 2024 at 08:02:55AM +0000, Facklam, Oliv=E9r wrote:
-> > Hi Heikki,
-> >
-> > > -----Original Message-----
-> > > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > Sent: Monday, November 25, 2024 11:28 AM
-> > >
-> > > Hi Oliv=E9r,
-> > >
-> > > Sorry to keep you waiting.
-> > >
-> > > On Mon, Nov 18, 2024 at 02:00:41PM +0000, Facklam, Oliv=E9r wrote:
-> > > > Hello Heikki,
-> > > >
-> > > > Thanks for reviewing.
-> > > >
-> > > > > -----Original Message-----
-> > > > > From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-> > > > > Sent: Monday, November 18, 2024 12:50 PM
-> > > > >
-> > > > > Hi Oliver,
-> > > > >
-> > > > > I'm sorry, I noticed a problem with this...
-> > > > >
-> > > > > On Thu, Nov 14, 2024 at 09:02:08AM +0100, Oliver Facklam wrote:
-> > > > > > The TI HD3SS3220 Type-C controller supports configuring the
-> > > > > > port type it will operate as through the MODE_SELECT field of
-> > > > > > the General Control Register.
-> > > > > >
-> > > > > > Configure the port type based on the fwnode property "power-rol=
-e"
-> > > > > > during probe, and through the port_type_set typec_operation.
-> > > > > >
-> > > > > > The MODE_SELECT field can only be changed when the controller
-> > > > > > is in unattached state, so follow the sequence recommended by
-> > > > > > the datasheet
-> > > > > to:
-> > > > > > 1. disable termination on CC pins to disable the controller 2.
-> > > > > > change the mode 3. re-enable termination
-> > > > > >
-> > > > > > This will effectively cause a connected device to disconnect
-> > > > > > for the duration of the mode change.
-> > > > >
-> > > > > Changing the type of the port is really problematic, and IMO we
-> > > > > should actually never support that.
-> > > >
-> > > > Could you clarify why you think it is problematic?
-> > >
-> > > It's not completely clear to me what it's meant for. If it was just
-> > > for fixing the type of the port to be sink, source or DRP before
-> > > connections, it would make sense, but since it can be use even when
-> > > there is an actice connection (there is nothing preventing that), it =
-can in
-> practice be used to swap the role.
-> > >
-> > > And in some cases in the past where this attribute file was proposed
-> > > to be used with some other drivers, the actual goal really ended up
-> > > being to be able to just swap the role with an existing connection
-> > > instead of being able to fix the type of the port. The commit
-> > > message made it sound like that could be the goal in this case as wel=
-l, but
-> maybe I misunderstood.
-> > >
-> > > Even in cases where it's clear that the intention is to just fix the
-> > > role before connections, why would user space needs to control that
-> > > is still not completely clear, at least not to me.
-> >
-> > The idea is to give the user the possibility to control/restrict how
-> > the port is operating even if they have an actual dual-role capable por=
-t.
-> >
-> > Let me clarify. In my use case, I have a DRP port, and in most cases I
-> > would like to use it as such.
-> > However, there are cases where this operating mode causes additional
-> > difficulties -- for example when connecting to another dual-role port
-> > implementing the same role preference (e.g. 2 Try.SNK devices
-> > connected together). Then the role outcome is random.
-> > Since this chip doesn't support PD, there is no way to switch the role
-> > from userspace.
-> > When I know I'm going to be working with these types of connections,
-> > it would be better if I can restrict the operation mode to "sink-only"
-> > (for example) for that duration. Without needing to change my device tr=
-ee.
-> >
-> > Sure, the mechanism can be abused to switch the role on an active
-> > connection, but that was not the primary idea here.
-> > I would even argue that calling a port type change during an active
-> > connection terminates that connection, and starts a new connection
-> > from scratch with the new behavior.
->=20
-> Okay, thanks for the explanation.
->=20
-> > > > > Consider for example, if your port is sink only, then the
-> > > > > platform almost certainly can't drive the VBUS. This patch would
-> > > > > still allow the port to be changed to source port.
-> > > >
-> > > > In my testing, it appeared to me that when registering a type-c
-> > > > port with "typec_cap.type =3D TYPEC_PORT_SNK" (for example), then
-> > > > the type-c class disables the port_type_store functionality:
-> > > > 	if (port->cap->type !=3D TYPEC_PORT_DRP ||
-> > > > 	    !port->ops || !port->ops->port_type_set) {
-> > > > 		dev_dbg(dev, "changing port type not supported\n");
-> > > > 		return -EOPNOTSUPP;
-> > > > 	}
-> > > >
-> > > > So to my understanding, a platform which cannot drive VBUS should
-> > > > simply set the fwnode `power-role=3D"sink"`. Since patch 2/4
-> > > > correctly parses this property, wouldn't that solve this case?
-> > >
-> > > True. I stand corrected.
-> > >
-> > > > > Sorry for not realising this in v1.
-> > > > >
-> > > > > I think what you want here is just a power role swap. Currently
-> > > > > power role swap is only supported when USB PD is supported in
-> > > > > the class code, but since the USB Type-C specification quite
-> > > > > clearly states that power role and data role swap can be
-> > > > > optionally supported even when USB PD is not supported (section
-> > > > > 2.3.3) we need to
-> > > fix that:
-> > > >
-> > > > My interpretation of section 2.3.3 is that the 2 mechanisms
-> > > > allowing power role swap are:
-> > > > - USB PD (after initial connection)
-> > > > - "as part of the initial connection process": to me this is
-> > > > simply referring to
-> > > the
-> > > > 	Try.SRC / Try.SNK mechanism, for which we already have
-> > > > 	the "try_role" callback.
-> > > >
-> > > > Maybe I'm misunderstanding what the intentions are behind each of
-> > > > the typec_operations, so if you could clarify that (or give some
-> > > > pointer), that would be appreciated. My understanding:
-> > > > - "try_role": set Try.SRC / Try.SNK / no preference for a
-> > > > dual-role port for initial connection
-> > > > - "pr_set" / "dr_set" / "vconn_set": swap power and data role resp.
-> > > > 	after the initial connection using USB-PD.
-> > > > - "port_type_set": configure what port type to operate as, i.e.
-> > > > which initial
-> > > connection
-> > > > 	state machine from the USB-C standard to apply for the next
-> > > > connection Please correct me if any of these are incorrect.
-> > >
-> > > I don't know what's the intention with the port_type attribute file
-> > > unfortunately.
-> > >
-> > > > > diff --git a/drivers/usb/typec/class.c
-> > > > > b/drivers/usb/typec/class.c index 58f40156de56..ee81909565a4
-> > > > > 100644
-> > > > > --- a/drivers/usb/typec/class.c
-> > > > > +++ b/drivers/usb/typec/class.c
-> > > > > @@ -1535,11 +1535,6 @@ static ssize_t power_role_store(struct
-> > > > > device *dev,
-> > > > >                 return -EOPNOTSUPP;
-> > > > >         }
-> > > > >
-> > > > > -       if (port->pwr_opmode !=3D TYPEC_PWR_MODE_PD) {
-> > > > > -               dev_dbg(dev, "partner unable to swap power role\n=
-");
-> > > > > -               return -EIO;
-> > > > > -       }
-> > > > > -
-> > > > >         ret =3D sysfs	_match_string(typec_roles, buf);
-> > > > >         if (ret < 0)
-> > > > >                 return ret;
-> > > > >
-> > > > >
-> > > > > After that it should be possible to do power role swap also in
-> > > > > this driver when the port is DRP capable.
-> > > > >
-> > > > > > Signed-off-by: Oliver Facklam <oliver.facklam@zuehlke.com>
-> > > > > > ---
-> > > > > >  drivers/usb/typec/hd3ss3220.c | 66
-> > > > > ++++++++++++++++++++++++++++++++++++++++++-
-> > > > > >  1 file changed, 65 insertions(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/usb/typec/hd3ss3220.c
-> > > > > b/drivers/usb/typec/hd3ss3220.c
-> > > > > > index
-> > > > >
-> > >
-> e581272bb47de95dee8363a5491f543354fcbbf8..e3e9b1597e3b09b82f0726a
-> > > > > 01f311fb60b4284da 100644
-> > > > > > --- a/drivers/usb/typec/hd3ss3220.c
-> > > > > > +++ b/drivers/usb/typec/hd3ss3220.c
-> > > > [...]
-> > > > > > @@ -131,8 +183,16 @@ static int hd3ss3220_dr_set(struct
-> > > > > > typec_port
-> > > > > *port, enum typec_data_role role)
-> > > > > >       return ret;
-> > > > > >  }
-> > > > > >
-> > > > > > +static int hd3ss3220_port_type_set(struct typec_port *port,
-> > > > > > +enum
-> > > > > typec_port_type type)
-> > > > > > +{
-> > > > > > +     struct hd3ss3220 *hd3ss3220 =3D typec_get_drvdata(port);
-> > > > > > +
-> > > > > > +     return hd3ss3220_set_port_type(hd3ss3220, type); }
-> > > > >
-> > > > > This wrapper seems completely useless. You only need one
-> > > > > function here for the callback.
-> > > >
-> > > > The wrapper is to extract the struct hd3ss3220 from the typec_port.
-> > > > The underlying hd3ss3220_set_port_type I am also using during
-> > > > probe to configure initial port type.
-> > >
-> > > Ah, I missed that. Sorry about that.
-> > >
-> > > > One point worth mentioning here is that if the MODE_SELECT
-> > > > register is not configured, the chip will operate according to a
-> > > > default which is chosen by an external pin (sorry if this was not
-> > > > detailed enough in commit msg)
-> > > > >From the datasheet:
-> > > > -------------------
-> > > > | PORT | 4 | I | Tri-level input pin to indicate port mode. The
-> > > > | state of this pin is sampled when HD3SS3220's
-> > > > 		ENn_CC is asserted low, and VDD5 is active. This pin is also
-> > > sampled following a
-> > > > 		I2C_SOFT_RESET.
-> > > > 		H - DFP (Pull-up to VDD5 if DFP mode is desired)
-> > > > 		NC - DRP (Leave unconnected if DRP mode is desired)
-> > > > 		L - UFP (Pull-down or tie to GND if UFP mode is desired)
-> > > >
-> > > > In our use case, it was not desirable to leave this default based
-> > > > on wiring, and it makes more sense to me to allow the
-> > > > configuration to come from the fwnode property. Hence the port type
-> setting in probe().
-> > >
-> > > I get that, but that just means you want to fix the type during probe=
-, no?
-> > > Why do you need to expose this to the user space?
-> >
-> > I've been thinking a bit more about this "fixing the type during probe"
-> feature.
-> > My current implementation always fixes the type, even if no device
-> > tree entry for "power-role" was found. Could that cause issues for
-> > people relying on the configuration through the PORT pin?
-> >
-> > I could consider a solution where if the property is absent, the type
-> > is not reconfigured during the probe. Although then I would have to do
-> > manual parsing of that DT property. With typec_get_fw_cap() from patch
-> > 2/4, I loose the information about individual properties being
-> present/absent.
-> > Would be interested in hearing your thoughts.
->=20
-> I don't think it's a problem to check does the property exist directly in=
- the
-> driver. It sounds like that's what should be done in this case.
+yes. before sending the command.
 
-Thanks for the input.
-I'll shortly send a v3 where I drop patch 2/4, and instead have the parsing
-of the relevant property in patch 3/4 and 4/4 respectively.
+> But I wonder whether with this change moving from test_bit ->
+> test_and_clear_bit do you still see a potential
+> scenario for a race ?
 
->=20
-> Br,
->=20
-> --
-> heikki
+Two notifications coming close enough so that the second one starts being
+processed after receiving the first one but before completing it? On the
+other hand, test_and_clear_bit() will handle that already.
 
-Thanks
-Oliver
+> > > > > This fix replaces test_bit() with test_and_clear_bit()
+> > > > > in ucsi_notify_common() in order to call complete() only
+> > > > > once per request.
+> > > > >
+> > > > > Fixes: 584e8df58942 ("usb: typec: ucsi: extract common code for command handling")
+> > > > > Cc: stable@vger.kernel.org
+> > > > > Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+> > > > > ---
+> > > > >  drivers/usb/typec/ucsi/ucsi.c | 4 ++--
+> > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+> > > > > index e0f3925e401b..7a9b987ea80c 100644
+> > > > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > > > @@ -46,11 +46,11 @@ void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+> > > > >               ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+> > > > >
+> > > > >       if (cci & UCSI_CCI_ACK_COMPLETE &&
+> > > > > -         test_bit(ACK_PENDING, &ucsi->flags))
+> > > > > +         test_and_clear_bit(ACK_PENDING, &ucsi->flags))
+> > > > >               complete(&ucsi->complete);
+> > > > >
+> > > > >       if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> > > > > -         test_bit(COMMAND_PENDING, &ucsi->flags))
+> > > > > +         test_and_clear_bit(COMMAND_PENDING, &ucsi->flags))
+> > > > >               complete(&ucsi->complete);
+> > > > >  }
+> > > > >  EXPORT_SYMBOL_GPL(ucsi_notify_common);
+
+-- 
+With best wishes
+Dmitry
 
