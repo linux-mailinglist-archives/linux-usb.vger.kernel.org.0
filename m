@@ -1,53 +1,60 @@
-Return-Path: <linux-usb+bounces-17916-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17917-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A46BC9DB181
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 03:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 607399DB1F6
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 04:38:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A62B282276
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 02:36:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24A6A281D1B
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 03:38:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A91F455896;
-	Thu, 28 Nov 2024 02:36:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23F6C13A24D;
+	Thu, 28 Nov 2024 03:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="DZpyTLxW"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="OdSpSESP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD2B117BA5;
-	Thu, 28 Nov 2024 02:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22646136347;
+	Thu, 28 Nov 2024 03:37:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732761388; cv=none; b=jRn25Zv/UIOhZ0ZcYxlc8DZ8OcpLJwiL/KUoJlWcEiz7HuULMqymIoiOFqx//eSw47JAytpQYP7LPT634oMCLXUXQQH3pkCOAFolv+XAWuSb2BvD4c9vGot5AwSR/47wPBZl5arb5zqCW298qhdwkyqrCtwfHkjHfaTQPTEGhRo=
+	t=1732765080; cv=none; b=NtID+Klu9HOI+P4nr2HxGiEcSr4FEGG+IkstUCIRS3sV56B1YH2wsHGowhPDpP7RWCW/L2alvESRjzjkXeXxWn7gZB9flaDcmndcqItFFtGrrLeAdtU0xKIVDwmEIBRxloMsgvJtAkuNyvI3k27Ne83OYMaLQtGB+hZEpg1szKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732761388; c=relaxed/simple;
-	bh=CDWtJA22XxWPUqAzFUdqwiKlqqD4AMX1Fb9SNu4k9ds=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mW969vBnRiDyMuupxCiLH01u9Ia5dcTsVr1N3SgaP2lEQ0jLTKaizXFh1NOR+Kpdrka/M+SoYmocsGGLxyVWfmybZJOFtUaO+46tcgIM0UWD82qdE4Phb8P4JZXHmUQd7WFkbb+BvFkySvhq17n7wiw3j0JEJWMNagjdLQskiAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=DZpyTLxW; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-ID:MIME-Version; bh=wYpyv
-	YO0SbkKvoEUs6cEl+NAs+sVqb4AFuBouUZl2E0=; b=DZpyTLxWIcIJUbFEilHj4
-	TJQKIC8mwGRtu209/GBmpPqUZiPoi7zTeZLvpE/VSJmGZ3cnIvp23eUCGzPlEs2f
-	dA2f7VdOqMzMtUitzH/wss17biVqYPCpjPC76PrQdoHYMzjZ5Lf1o9e+zl+RDY5o
-	p7cZBhWMNUZDjZ79+2wFCM=
-Received: from ubuntu.. (unknown [171.213.136.25])
-	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wAnT98U10dnVPtOBg--.23721S2;
-	Thu, 28 Nov 2024 10:36:05 +0800 (CST)
-From: junan <junan76@163.com>
-To: jikos@kernel.org,
-	bentiss@kernel.org
-Cc: linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	junan <junan76@163.com>
-Subject: [PATCH] HID: Fix the bit shift number for LED_KANA.
-Date: Thu, 28 Nov 2024 10:35:18 +0800
-Message-ID: <20241128023518.23372-1-junan76@163.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1732765080; c=relaxed/simple;
+	bh=+tACbwppzt9NfZulu2/5Qkz0fbhJc6wEoNrVkgcTxJQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KWKQ3HzJXbuRMYefU+HRBkg2GiFgxpAfwjf1p2sdEknw8GlIHnFWusDUViDI+JVGyXIIKhLkzpA39ixZ3zAwPR/L+v1ylPr7dPTFA7sxcLouEw9+GFWiwciVVPiu5a7c01mETYyHwAqNQVzGjUTUc5uPWOIh7JP+Ts+Afka1wa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=OdSpSESP; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=b2KUGoNLMUqCAxnefaN/mEalsv6wN282lWA1j+r7Vzk=; b=OdSpSESP0zOP6r/AV7kLCda55W
+	uGWVvRtEE/Kc3RLokVAWCYtuzbdP13Cw/9tq28M4EVroulJX9XaJCWsq/aj57BUa3aYcIAjkiXHfI
+	c8ODVoRn/VYC8HlSbgxm4we8jarG5Le9MEOemms05sQKnJKOFVe2lrr1jDtvZjLyz5pHLgooMVIvC
+	W+yHqph5m152jlT6Uzn7pVae8+AAUmQRd0WnUmRUQU3kbhIrzJsWUyv+50sSK355YYo0FVpxicrEE
+	HBaGNMkPBlgGQcIg3X4XWEq8oBZecDhpK4KFg6JIF00aI0JW9ru9B9nYckquIBIZUFO/GdkueN+FK
+	lsP75LrA==;
+Received: from [50.53.2.24] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tGVLp-0000000EdIZ-1dvx;
+	Thu, 28 Nov 2024 03:37:57 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	Michal Nazarewicz <mina86@mina86.com>,
+	Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: gadget: functionfs: fix spellos
+Date: Wed, 27 Nov 2024 19:37:56 -0800
+Message-ID: <20241128033756.373517-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,34 +62,56 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAnT98U10dnVPtOBg--.23721S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrtryfCw4rKw48XFWkCrW7Jwb_yoWfCrbE9r
-	45ur9Fkr15JFs3Wr4kXrWFyasayw1DXw4jqr4S9rW3W34akw45ZrWDXw1rZw1Y9w4rGF92
-	yrZ8KFyfC3W3ZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRuGQh3UUUUU==
-X-CM-SenderInfo: pmxqt0ixw6il2tof0z/xtbBFQylsWdHzbL07gAAsI
 
-Since "LED_KANA" was defined as "0x04", the shift number should be "4".
+Fix typos in documentation as reported by codespell.
 
-Signed-off-by: junan <junan76@163.com>
+Fixes: f0175ab51993 ("usb: gadget: f_fs: OS descriptors support")
+Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Michal Nazarewicz <mina86@mina86.com>
+Cc: Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
 ---
- drivers/hid/usbhid/usbkbd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/uapi/linux/usb/functionfs.h |    8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/hid/usbhid/usbkbd.c b/drivers/hid/usbhid/usbkbd.c
-index c439ed2f16db..af6bc76dbf64 100644
---- a/drivers/hid/usbhid/usbkbd.c
-+++ b/drivers/hid/usbhid/usbkbd.c
-@@ -160,7 +160,7 @@ static int usb_kbd_event(struct input_dev *dev, unsigned int type,
- 		return -1;
- 
- 	spin_lock_irqsave(&kbd->leds_lock, flags);
--	kbd->newleds = (!!test_bit(LED_KANA,    dev->led) << 3) | (!!test_bit(LED_COMPOSE, dev->led) << 3) |
-+	kbd->newleds = (!!test_bit(LED_KANA,    dev->led) << 4) | (!!test_bit(LED_COMPOSE, dev->led) << 3) |
- 		       (!!test_bit(LED_SCROLLL, dev->led) << 2) | (!!test_bit(LED_CAPSL,   dev->led) << 1) |
- 		       (!!test_bit(LED_NUML,    dev->led));
- 
--- 
-2.43.0
-
+--- linux-next-20241125.orig/include/uapi/linux/usb/functionfs.h
++++ linux-next-20241125/include/uapi/linux/usb/functionfs.h
+@@ -206,7 +206,7 @@ struct usb_ffs_dmabuf_transfer_req {
+  * +-----+-----------------+------+--------------------------+
+  * | off | name            | type | description              |
+  * +-----+-----------------+------+--------------------------+
+- * |   0 | inteface        | U8   | related interface number |
++ * |   0 | interface       | U8   | related interface number |
+  * +-----+-----------------+------+--------------------------+
+  * |   1 | dwLength        | U32  | length of the descriptor |
+  * +-----+-----------------+------+--------------------------+
+@@ -224,7 +224,7 @@ struct usb_ffs_dmabuf_transfer_req {
+  * +-----+-----------------+------+--------------------------+
+  * | off | name            | type | description              |
+  * +-----+-----------------+------+--------------------------+
+- * |   0 | inteface        | U8   | related interface number |
++ * |   0 | interface       | U8   | related interface number |
+  * +-----+-----------------+------+--------------------------+
+  * |   1 | dwLength        | U32  | length of the descriptor |
+  * +-----+-----------------+------+--------------------------+
+@@ -237,7 +237,7 @@ struct usb_ffs_dmabuf_transfer_req {
+  * |  11 | ExtProp[]       |      | list of ext. prop. d.    |
+  * +-----+-----------------+------+--------------------------+
+  *
+- * ExtCompat[] is an array of valid Extended Compatiblity descriptors
++ * ExtCompat[] is an array of valid Extended Compatibility descriptors
+  * which have the following format:
+  *
+  * +-----+-----------------------+------+-------------------------------------+
+@@ -295,7 +295,7 @@ struct usb_functionfs_strings_head {
+  * |  16 | stringtab  | StringTab[lang_count] | table of strings per lang  |
+  *
+  * For each language there is one stringtab entry (ie. there are lang_count
+- * stringtab entires).  Each StringTab has following format:
++ * stringtab entries).  Each StringTab has following format:
+  *
+  * | off | name    | type              | description                        |
+  * |-----+---------+-------------------+------------------------------------|
 
