@@ -1,116 +1,94 @@
-Return-Path: <linux-usb+bounces-17934-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17935-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 325A89DB609
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 11:52:33 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E54C9DB708
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 12:58:14 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB2F0163567
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 10:52:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1DAADB218F9
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 11:58:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8869E19342B;
-	Thu, 28 Nov 2024 10:52:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GuSwNG/f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F0619B5A9;
+	Thu, 28 Nov 2024 11:58:04 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95A4D14D70F
-	for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 10:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CB58199234
+	for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 11:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732791146; cv=none; b=gVY4UNLBmRFEO00ED2CLmREPX+GB4CbE4RW1XcKOB4zVoEkhG0MJJPWgS7mWGvKgvKfezDwBw7cWIpAwbLspVoe6wGmKTUsbJLF9RTXNV8XinzlrqBYzBIHOEid3hD4qxXdXmBP6JuzC4Zf+cYJG6LdGdTUbCZfjXZP9M9lhzv0=
+	t=1732795084; cv=none; b=WxrfvXVPOUDbw/cf4XgGQlSgkzPpjBUpDoaFPp50l1LrSAX6junNVZJ1uQ8WOJCp+PhaKcPm/ucpvoAPKW48VZbhMAKX2tA8sZOcRqvx0X5zAvjgWvd2TRVImWm+wk+JJQHLRIM0BrVdGJ+aqLdeBOtsC0x0Rpn9e23MJmcWXis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732791146; c=relaxed/simple;
-	bh=8TeU+tv7JrsndEEL0MAFURTZ0bIagtJxFoR3pCrar/I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pZVtOX3FErhOFzFFCwvoxu/0Lo48QbZQwMud9/9Lo0T658paxJnT6Um3p1VjCwacemBmDRVb2t31AC8LAxVlPkyWjh/vUjXJUARt4pQo9O6IHmnEtyf8xWvhkwz+d3CeKbrwBzcddnbpOEhT7r1cajXG6I1MMyURkprhIr+Aa+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GuSwNG/f; arc=none smtp.client-ip=209.85.210.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-71d46995b34so358121a34.1
-        for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 02:52:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1732791144; x=1733395944; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8TeU+tv7JrsndEEL0MAFURTZ0bIagtJxFoR3pCrar/I=;
-        b=GuSwNG/fjg77WtQNCYs7QNKypAHxDadLQ8uxjTsnE8GHWBpkH3E8w//UYmfbqIF9VC
-         7tWo5UbRr1faHsp4pwN4MLln3KTIV2fzFoY4fAdxzuSXUDAMWjbbNqOsRo2peXYvgb5P
-         KTmXak3xxjYZTKrBKlzq2cFJaOmsizt7E3Z8nYUwyTvNGrwuf5dm6pWT+6FNZ84rak3f
-         bM6lNofylCSolLjRDd1G2vgccnuIEzE4RqfU8aefs1ygMAqL4mBBpDvb2CJpN1wkTO18
-         zj67Uqg84j7V5iZPitNmn8hqifYCzbnZcE3WDGPaFdDNwU851FgRPpkfra1TDfVENc9d
-         l26Q==
+	s=arc-20240116; t=1732795084; c=relaxed/simple;
+	bh=OCJWJ+u4Yh9hvmQMZXkM8KRn/EgI9awMfpPqzOpmNeQ=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=q1MvDOJMHAr6Hf9IZELsr6I/4qX/ua0C8pgdTHaxfEoYCZE8WCfKAmQFkCJH9e9+3yxz8SpWTBxzJLMXn88typ/YtcUPht+Mo0uZ/BvnxGDBAP4xsa+x2XARZBKRxMlrRyAwPLENY3JjMkuEwLyWHKJDdXYLz02vP27l7J36KXM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a78b04470cso7672105ab.0
+        for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 03:58:02 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732791144; x=1733395944;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8TeU+tv7JrsndEEL0MAFURTZ0bIagtJxFoR3pCrar/I=;
-        b=F+O6P7thLF076auQW9Zd6p8EF3N/mbQhP4/LIvWYkr5iJ2RSdC/17oWC/VlzrBNZT8
-         WmdZVx7uIG0saA1KebuRHbHSiPMvoVCLt2CX9ftzBUjkxNG9Lcm+laQV5SXG97l6pG+y
-         NY21vZjUPhT4lhVvzlsln9WlsX8K3C3+um9NSjxn5yvDZ4S0HBj6eru7ba1eAPnBX1uG
-         SS/sGQC+MZf0B68WWDzeO3KbJwPi7nBdgKL14i4cmMHukVEA5kWFYGl+EoCuWk5SLKqx
-         zSubw9HI1Qlp+UKEsgJIU5RQEUmn7l1JUIiyK7K17j/PiHZ9LVrf/tJb8ldLeaFOLQ0z
-         amCQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVmTGTkqyw/1ryNzSmzy6D5PcXrkj/+F5/K7Q9Xv5saBGhpr0gf7XDz10iOAzPuovCuONgeEVlerMY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzV4R6kEqNTgjHmQ3pHtXluUR4ARckXbyL8+cAk5QDS1eEqCUEd
-	X6fyHb2f9qDuY+OyYGuzclxa7z/gk4IFhqDHUKAnsQikE2bvEy7d28SV62rIemhcN1Ak02mdS5U
-	1xSg7cOuKDoouDhzfrNW1fWDjzPI8yKyiP0cR4g==
-X-Gm-Gg: ASbGncu1nkoOjO/MX3V16n5fH7NVQ/EYk/JYzmWDEy6P6cMTK93EHXZnVq9eD4RflBM
-	my3i0VidZ05SdL0CZwXZ0Ra8p7gRkssqA
-X-Google-Smtp-Source: AGHT+IEe3DTn7WUrmyIboVCIgXQ/VYxi2uKjmWccnEGTGP4Hj1gIqkfk10m1pzmDQDSsO2Kqy7TSKyl4Kujutj7mbtI=
-X-Received: by 2002:a05:6830:52:b0:71d:51a4:ed48 with SMTP id
- 46e09a7af769-71d70c11a6dmr1359704a34.8.1732791143800; Thu, 28 Nov 2024
- 02:52:23 -0800 (PST)
+        d=1e100.net; s=20230601; t=1732795082; x=1733399882;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=E4G4wt0qmrICABsL3fTmVUbz6tUyHRU/aFIpdT35VU4=;
+        b=Sr6PJwmLiMW7Hv0My/9mcmsirHtxjpout4MBodZkhtkUzw+GJT4hOHYfqUqFwHV2jO
+         ry+5YBujq8IQzieVuDDVbWGXEoXjAPGc+RfK3Htnxxbp3VVJdmdcWXrslqq+FJ1wHXF2
+         u2dCHknl0Nff5VAjf4TXwgs9GTHS59c2kOSZnAibSzGNeO31BfYMdTFezDJvxB+oofSf
+         vaxEEoUYlHmquKQsAyUOSSIlJyZfZsDEqN2aq7nrzU/3xzHaEm0KOSJV3tnVgaMoKZAR
+         dNehmE9W1tFBZBKyylCirBx4XMv1u5AEz/Y9SSiC29TMyzjSA7RLy/rlGtojT6ZjxBvn
+         lSmg==
+X-Forwarded-Encrypted: i=1; AJvYcCX40jaVtR2Wqp0sBlb5D/q6HTfLm5LP8ccwtz+IINw6JdSfghiLpJasn2wHWVii+clk8UmempsHqfA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5P4o89nVCq3Ea9O2LstVN37Kk9OlpylexApaWyLElqVuLDDks
+	OzkWaXAIhlpzesLZWMxlkBXPzE/d3mEDa3hXRDt0TDJSSendxwJGKHDrfbJ/QCt81Ih4YJMdSKh
+	4JqofijKdpjKcJFI2cWttDGk/W9iZOQL6yuSZGujGI1w8Pv3P47fsX0s=
+X-Google-Smtp-Source: AGHT+IEVZ7aUJUgjShFgHR95vCPF7KZvaAgWHrtmMp9hLIBxTo6zaewL/H4pbgsZ6+AQhlvQFduZe6J/eDefsrYwF1fpY7cEo7si
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241128-dtbinding-max77759-v1-1-733ce24c0802@linaro.org>
-In-Reply-To: <20241128-dtbinding-max77759-v1-1-733ce24c0802@linaro.org>
-From: Peter Griffin <peter.griffin@linaro.org>
-Date: Thu, 28 Nov 2024 10:52:13 +0000
-Message-ID: <CADrjBPoa21ni02Gs_Lsv-r5GB-ufD19+Z09g=hun39w4oDYYeg@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: max33359: add max77759 flavor
-To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jagan Sridharan <badhri@google.com>, Tudor Ambarus <tudor.ambarus@linaro.org>, 
-	Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>
+X-Received: by 2002:a05:6e02:160a:b0:3a7:6dde:c78b with SMTP id
+ e9e14a558f8ab-3a7c55446e3mr62921795ab.8.1732795081892; Thu, 28 Nov 2024
+ 03:58:01 -0800 (PST)
+Date: Thu, 28 Nov 2024 03:58:01 -0800
+In-Reply-To: <000000000000ac553b061e675573@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67485ac9.050a0220.253251.0082.GAE@google.com>
+Subject: Re: [syzbot] [wireless?] WARNING in plfxlc_mac_release
+From: syzbot <syzbot+51a42f7c2e399392ea82@syzkaller.appspotmail.com>
+To: davem@davemloft.net, eadavis@qq.com, kuba@kernel.org, kvalo@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-wireless@vger.kernel.org, netdev@vger.kernel.org, pabeni@redhat.com, 
+	srini.raju@purelifi.com, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Andr=C3=A9,
+syzbot has bisected this issue to:
 
-On Thu, 28 Nov 2024 at 08:51, Andr=C3=A9 Draszik <andre.draszik@linaro.org>=
- wrote:
->
-> On the surface, Maxim's max77759 appears identical to max33359. It
-> should still have a dedicated compatible, though, as it is a different
-> IC. This will allow for handling differences in case they are
-> discovered in the future.
->
-> max77759 is used on Google Pixel 6 and Pixel 6 Pro.
->
-> Add a dedicated compatible to allow for potential differences in the
-> future.
->
-> Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
-> ---
+commit 68d57a07bfe5bb29b80cd8b8fa24c9d1ea104124
+Author: Srinivasan Raju <srini.raju@purelifi.com>
+Date:   Thu Feb 24 18:20:07 2022 +0000
 
-Acked-by: Peter Griffin <peter.griffin@linaro.org>
+    wireless: add plfxlc driver for pureLiFi X, XL, XC devices
 
-regards,
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15001f5f980000
+start commit:   cfba9f07a1d6 Add linux-next specific files for 20241122
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=17001f5f980000
+console output: https://syzkaller.appspot.com/x/log.txt?x=13001f5f980000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=45719eec4c74e6ba
+dashboard link: https://syzkaller.appspot.com/bug?extid=51a42f7c2e399392ea82
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=101a59c0580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12bcc778580000
 
-Peter
+Reported-by: syzbot+51a42f7c2e399392ea82@syzkaller.appspotmail.com
+Fixes: 68d57a07bfe5 ("wireless: add plfxlc driver for pureLiFi X, XL, XC devices")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
