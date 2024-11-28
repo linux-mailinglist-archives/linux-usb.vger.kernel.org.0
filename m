@@ -1,114 +1,135 @@
-Return-Path: <linux-usb+bounces-17918-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17919-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E2319DB2CA
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 07:32:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 152109DB38D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 09:18:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 993F62828C1
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 06:32:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C02E528265C
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 08:18:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95C9145FE8;
-	Thu, 28 Nov 2024 06:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27E814A0B9;
+	Thu, 28 Nov 2024 08:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JRuF+cpI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E7985628;
-	Thu, 28 Nov 2024 06:31:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDF383CC1;
+	Thu, 28 Nov 2024 08:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732775515; cv=none; b=ka1eKFygYV/6/hV+fdwg8mCSKDcka33I3rD6hTmAgjpCIf68CuEP1Rovw9hGUK05JNBihQc+eLof3hNqXPbNLZ/BTEMoIHBi5/eHPE8YzOUkZdH63vWaqwV6XvMfgo7h5yXzyi+3ecSTIQSEQto4OUjULJJblo3mLuMrUZ2QwP8=
+	t=1732781882; cv=none; b=ay2QfjRVV8m70YwrLpyG03YubISUwKy1tqYK10vazztIf+NlUd8GSEmZMkWv4P3STM9WLbnQnHSRtmMv5mFcQAPLIiE14LTKpS8yYLcNTW63NBy4nPFkWNFEO5RMLW27r7xDE4dp1YLoaTIZKI0lHFfk5X5h2qM46MIXNUKgvWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732775515; c=relaxed/simple;
-	bh=8MIb454F747QhCp+41gOydAJ0LMkRoVG4yoK6ZtJz6g=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=X12HyaZ5A77nvB+Jrnw7zudV6Hy8r/XUpAaNsIM5AKhXQh3s57CH7TkIUsAy78nTHeJ7eosVznWVhLBlAZxRSk2iaFom5L1D5cyCJTShDaZ2iXGZqj4iCT2UIAZuJY3bPzlQzyVcZapdvLRI9yIxq6ktSSGQ3SSYKSpcqqQp1qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
-Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
-	by ni.piap.pl (Postfix) with ESMTPS id 65B69C3EEACD;
-	Thu, 28 Nov 2024 07:31:48 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl 65B69C3EEACD
-From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: netdev <netdev@vger.kernel.org>,  Oliver Neukum <oneukum@suse.com>,
-  Andrew Lunn <andrew+netdev@lunn.ch>,  "David S. Miller"
- <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,  Jakub
- Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
-  linux-usb@vger.kernel.org,  linux-kernel@vger.kernel.org,  Jose Ignacio
- Tornos Martinez <jtornosm@redhat.com>,  Ming Lei <ming.lei@redhat.com>
-Subject: Re: [PATCH] PHY: Fix no autoneg corner case
-In-Reply-To: <c57a8f12-744c-4855-bd18-2197a8caf2a2@lunn.ch> (Andrew Lunn's
-	message of "Wed, 27 Nov 2024 18:37:36 +0100")
-References: <m3plmhhx6d.fsf@t19.piap.pl>
-	<c57a8f12-744c-4855-bd18-2197a8caf2a2@lunn.ch>
-Sender: khalasa@piap.pl
-Date: Thu, 28 Nov 2024 07:31:48 +0100
-Message-ID: <m3wmgnhnsb.fsf@t19.piap.pl>
+	s=arc-20240116; t=1732781882; c=relaxed/simple;
+	bh=eaJUqJCbsZi7hy1XkH+mjMCn/jPIKtO2zNY74RJZ6+4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kEvSp59X8ilSVZCpaAcmnki1lEUwXraTNw+0cayZtfF+rr94NzkO6I8x8C/CU/tKP7qEl/PYycmFc7ExYN562X5sbUPZ35DJzu3av6nBMP4hTxBdEHlmDMMamc+J71BffJl39XB6xoXVU986fkOGVA+1sXAeiXMqnpwO2C0whZk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JRuF+cpI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3CAC4CECE;
+	Thu, 28 Nov 2024 08:17:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732781881;
+	bh=eaJUqJCbsZi7hy1XkH+mjMCn/jPIKtO2zNY74RJZ6+4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JRuF+cpI3WKLwTt8tmD88JGC1VSZfQY+eH6/aA01JQ7zyKeUKP8LrlBJYIeI6ixQP
+	 v0uuo8/TfBuryqrnGROwQBisnVy/sixxHBiT0d9DLiHYlgx90E1UUiui/M9Vjch3gy
+	 CtJZq/cLZFDY6HG2ri7Hu2q7BRF08Wq2OfZBSU6YBvKVu/hPjO+o95XgrNMlIpfdwl
+	 cfYmsoHXibK1CwLXk4iQU9zHUNf52KcIOlu7yfjgEe/BRchWLZ/JpBubnrfc1zL7QU
+	 HR9yLrwQVDhmzZhvu9COMpJjy+ECyjJi8oq/Au5dbMHDmj7CVoANMq5XrmlPIGu2Xj
+	 /baySCDD4pRMg==
+Message-ID: <8325415b-4af9-4bef-8310-39410b10aa84@kernel.org>
+Date: Thu, 28 Nov 2024 09:17:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] dt-bindings: usb: max33359: add max77759 flavor
+To: =?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Jagan Sridharan <badhri@google.com>,
+ Alim Akhtar <alim.akhtar@samsung.com>
+Cc: Peter Griffin <peter.griffin@linaro.org>,
+ Tudor Ambarus <tudor.ambarus@linaro.org>,
+ Sam Protsenko <semen.protsenko@linaro.org>,
+ Will McVicker <willmcvicker@google.com>, Roy Luo <royluo@google.com>,
+ kernel-team@android.com, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+References: <20241127-gs101-phy-lanes-orientation-dts-v1-0-5222d8508b71@linaro.org>
+ <20241127-gs101-phy-lanes-orientation-dts-v1-2-5222d8508b71@linaro.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20241127-gs101-phy-lanes-orientation-dts-v1-2-5222d8508b71@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Andrew,
+On 27/11/2024 12:01, André Draszik wrote:
+> On the surface, Maxim's max77759 appears identical to max33359. It
+> should still have a dedicated compatible, though, as it is a different
+> IC. This will allow for handling differences in case they are
+> discovered in the future.
+> 
+> max77759 is used on Google Pixel 6 and Pixel 6 Pro.
+> 
+> Add a dedicated compatible to allow for potential differences in the
+> future.
+> 
+> Signed-off-by: André Draszik <andre.draszik@linaro.org>
 
-Andrew Lunn <andrew@lunn.ch> writes:
+This should be sent separately to USB.
 
->> Unfortunately it's initially set based on the supported capability
->> rather than the actual hw setting.
->
-> We need a clear definition of 'initially', and when does it actually
-> matter.
->
-> Initially, things like speed, duplex and set to UNKNOWN. They don't
-> make any sense until the link is up. phydev->advertise is set to
-> phydev->supported, so that we advertise all the capabilities of the
-> PHY. However, at probe, this does not really matter, it is only when
-> phy_start() is called is the hardware actually configured with what it
-> should advertise, or even if it should do auto-neg or not.
->
-> In the end, this might not matter.
-
-Nevertheless, it seems it does matter.
-
->> While in most cases there is no
->> difference (i.e., autoneg is supported and on by default), certain
->> adapters (e.g. fiber optics) use fixed settings, configured in hardware.
->
-> If the hardware is not capable of supporting autoneg, why is autoneg
-> in phydev->supported? To me, that is the real issue here.
-
-Well, autoneg *IS* supported by the PHY in this case.
-No autoneg in phydev->supported would mean I can't enable it if needed,
-wouldn't it?
-
-It is supported but initially disabled.
-
-With current code, PHY correctly connects to the other side, all the
-registers are valid etc., the PHY indicates, for example, a valid link
-with 100BASE-FX full duplex etc.
-
-Yet the Linux netdev, ethtool etc. indicate no valid link, autoneg on,
-and speed/duplex unknown. It's just completely inconsistent with the
-real hardware state.
-
-It seems the phy/phylink code assumes the PHY starts with autoneg
-enabled (if supported). This is simply an incorrect assumption.
-
-BTW if the code meant to enable autoneg, it would do exactly that -
-enable it by writing to PHY command register. Then the hw and sw state
-would be consistent again (though initial configuration would be
-ignored, not very nice). Now the code doesn't enable autoneg, it only
-*indicates* it's enabled and in reality it's not.
---=20
-Krzysiek
-PAMI=C4=98TAJ: WR=C3=93G TE=C5=BB TO CZYTA
+Best regards,
+Krzysztof
 
