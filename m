@@ -1,78 +1,64 @@
-Return-Path: <linux-usb+bounces-17939-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17940-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E1F19DB9DD
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 15:46:39 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DE34164740
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 14:46:35 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 549F4156661;
-	Thu, 28 Nov 2024 14:46:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KxtkaT0v"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF3719DB9FB
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 15:55:11 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79DCD2233A
-	for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 14:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63ABAB21645
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 14:55:09 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B35EB1B3933;
+	Thu, 28 Nov 2024 14:55:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="ZEZXvS2j"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D1CF25761;
+	Thu, 28 Nov 2024 14:54:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732805189; cv=none; b=VFm/flxwBMPVwVsoNxY5iig9DOgieP1v2o3LzbmNys2Qpf8DWvb0zWh5/70n+dHuQP57uvaX4ipKUaG7tAJdPYwDebDIX8Ew4pVz0GCeki0T8jp+obad1vOiNdRREevyiMhATSf7pmeP+gEbRHHca98Jsi30s4h80+c7hPvRsEw=
+	t=1732805701; cv=none; b=r8oqAt6JQKCTp03I2BRAyPoBxNFdl2oSbGUCbwSGdVgoD/kDipREYAdqj0/agkLQ0IYy5vTDaiBkoLTdHM+f81e/Py6dbvE9ctF9j7vybWSFAV62CtcD6dpDTgVq5OcJ/NCG2qFIKE/9pHA6J5SDltHgpAb4dqszla5nbCB5x/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732805189; c=relaxed/simple;
-	bh=dm+H6duiKZ1ALxKoVK3GAQQ7hN4dp0ZpY/FeLJZA0d0=;
+	s=arc-20240116; t=1732805701; c=relaxed/simple;
+	bh=oK5/ZfLAfITjssEqahd/DRUlrl74PB/u3ZIoqPO5Xp0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SOisPM3Wmyd7N3UIPNAaY8I3vyf/fuXDyhVB796GXz4258Fc36i5vL6Y3aVM2Sn4z0QoSZScTi4rsV5kNscin+PbM+lghW7YhqjsVBbPAe4lokMbvpvtIcYnFOrMD9BY56YnlztEBCex3Fb/qXyQxIj3UsJDjBjv5zewg1YbTL4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KxtkaT0v; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1732805188; x=1764341188;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=dm+H6duiKZ1ALxKoVK3GAQQ7hN4dp0ZpY/FeLJZA0d0=;
-  b=KxtkaT0vD71eZbo2PjVxk/sBEmh2CPSEfR4SUCtRGKFnj/WLNs4Xxm1T
-   w6WnWutVsa1Tz2ti4P3ZjFQE1yw5V1WXL98v3W7Z9YgJVJDK5tRU4XR5H
-   bCVQQiu+azGxKwgkitiDzceEzHvkv9rg+QcUCOOsccmzatI1cFv6YXqtA
-   JVnnKQecPtymv+AnWMtm/cIVNk+IcyExQhM7XKtKmBm7L3sSPfo/mS+1z
-   8EfgaViekKBgxwjbtnV9Sn12MLlThzRzsCsvB8A5M2Qz5l89TpQzs4y5G
-   fJEmPWsQQd39GKvNj3Wf0K1OGUjeZorcSighDx44R/sVXFbJbt1swCKEd
-   A==;
-X-CSE-ConnectionGUID: s2tn2Mp8TN+I/GVOrwHn0w==
-X-CSE-MsgGUID: ouNfkupjSza6Vv186Y3pvg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11270"; a="43529529"
-X-IronPort-AV: E=Sophos;i="6.12,192,1728975600"; 
-   d="scan'208";a="43529529"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Nov 2024 06:46:28 -0800
-X-CSE-ConnectionGUID: nM5wbWuuSmaje/cHbTB9fg==
-X-CSE-MsgGUID: RMdJQHu9SRyn7//9a6cjow==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,192,1728975600"; 
-   d="scan'208";a="97014315"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa004.fm.intel.com with SMTP; 28 Nov 2024 06:46:24 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 28 Nov 2024 16:46:24 +0200
-Date: Thu, 28 Nov 2024 16:46:23 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Benson Leung <bleung@chromium.org>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Pavan Holla <pholla@chromium.org>,
-	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev
-Subject: Re: [PATCH v7 2/3] usb: typec: ucsi: Implement ChromeOS UCSI driver
-Message-ID: <Z0iCP_2RM-c_yvU1@kuha.fi.intel.com>
-References: <20241115155234.1587589-1-ukaszb@chromium.org>
- <20241115155234.1587589-3-ukaszb@chromium.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OqAQoketzLZc1kjLaG+9xfpzT+p5j5Z3XpDfGSNgjkDqK2b7fhLAlCac40EyIR4t7i71DPQaCFiTfNDvsk/pxudhl8Y5AxV6gsgCh1H30JMrsbNA3Rgn56SpnS6vVsT5mCFgASGMudkPuNfSeta31nUwGYURxYuyQygQLo54DVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=ZEZXvS2j; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Transfer-Encoding:Content-Disposition:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:From:
+	Sender:Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Content-Disposition:
+	In-Reply-To:References; bh=07eZLac9ud6nmkcZrKjIbBNlfOQ1ZTo1Ed25V+4ovnY=; b=ZE
+	ZXvS2jS+V/aPeNgWSa1MnaQP91+4gTLqgBMyQ114EzGNLpCusrI83fLfgM7jV8N7ScMDi+DddoptI
+	hZ1G1484vxq/rmNjSHWCPRuUjR2+cdYW9zHf57r7ylMrr99HaAaRtOeK1K/CRNGnZ18iZXivUqQlk
+	Te7O75DKELfEFvo=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tGfuu-00EiLw-Uk; Thu, 28 Nov 2024 15:54:52 +0100
+Date: Thu, 28 Nov 2024 15:54:52 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Krzysztof =?utf-8?Q?Ha=C5=82asa?= <khalasa@piap.pl>
+Cc: netdev <netdev@vger.kernel.org>, Oliver Neukum <oneukum@suse.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jose Ignacio Tornos Martinez <jtornosm@redhat.com>,
+	Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH] PHY: Fix no autoneg corner case
+Message-ID: <2428ec56-f2db-4769-aaca-ca09e57b8162@lunn.ch>
+References: <m3plmhhx6d.fsf@t19.piap.pl>
+ <c57a8f12-744c-4855-bd18-2197a8caf2a2@lunn.ch>
+ <m3wmgnhnsb.fsf@t19.piap.pl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,22 +68,87 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241115155234.1587589-3-ukaszb@chromium.org>
+In-Reply-To: <m3wmgnhnsb.fsf@t19.piap.pl>
 
-Hi Łukasz,
+On Thu, Nov 28, 2024 at 07:31:48AM +0100, Krzysztof Hałasa wrote:
+> Andrew,
+> 
+> Andrew Lunn <andrew@lunn.ch> writes:
+> 
+> >> Unfortunately it's initially set based on the supported capability
+> >> rather than the actual hw setting.
+> >
+> > We need a clear definition of 'initially', and when does it actually
+> > matter.
+> >
+> > Initially, things like speed, duplex and set to UNKNOWN. They don't
+> > make any sense until the link is up. phydev->advertise is set to
+> > phydev->supported, so that we advertise all the capabilities of the
+> > PHY. However, at probe, this does not really matter, it is only when
+> > phy_start() is called is the hardware actually configured with what it
+> > should advertise, or even if it should do auto-neg or not.
+> >
+> > In the end, this might not matter.
+> 
+> Nevertheless, it seems it does matter.
+> 
+> >> While in most cases there is no
+> >> difference (i.e., autoneg is supported and on by default), certain
+> >> adapters (e.g. fiber optics) use fixed settings, configured in hardware.
+> >
+> > If the hardware is not capable of supporting autoneg, why is autoneg
+> > in phydev->supported? To me, that is the real issue here.
+> 
+> Well, autoneg *IS* supported by the PHY in this case.
+> No autoneg in phydev->supported would mean I can't enable it if needed,
+> wouldn't it?
+> 
+> It is supported but initially disabled.
+> 
+> With current code, PHY correctly connects to the other side, all the
+> registers are valid etc., the PHY indicates, for example, a valid link
+> with 100BASE-FX full duplex etc.
+> 
+> Yet the Linux netdev, ethtool etc. indicate no valid link, autoneg on,
+> and speed/duplex unknown. It's just completely inconsistent with the
+> real hardware state.
+> 
+> It seems the phy/phylink code assumes the PHY starts with autoneg
+> enabled (if supported). This is simply an incorrect assumption.
 
-This LGTM, but since you'll send one more version in any case..
+This is sounding like a driver bug. When phy_start() is called it
+kicks off the PHY state machine. That should result in
+phy_config_aneg() being called. That function is badly named, since it
+is used both for autoneg and forced setting. The purpose of that call
+is to configure the PHY to the configuration stored in
+phydev->advertise, etc. So if the PHY by hardware defaults has autoneg
+disabled, but the configuration in phydev says it should be enabled,
+calling phy_config_aneg() should actually enabled autoneg. It is
+possible there is a phylib bug here, because we try to not to kick off
+autoneg if it is not needed, because it is slow. I've not looked at
+the code, but it could be we see there is link, and skip calling
+phy_config_aneg()? Maybe try booting with the cable disconnected so
+there is no link?
 
-> +/*
-> + * Maximum time in miliseconds the cros_ec_ucsi driver
-> + * will wait for a response to a command or and ack.
-> + */
-> +#define WRITE_TMO_MS		5000
+> BTW if the code meant to enable autoneg, it would do exactly that -
+> enable it by writing to PHY command register.
 
-s/miliseconds/milliseconds/
+Assuming bug free code.
 
-thanks,
+> Then the hw and sw state
+> would be consistent again (though initial configuration would be
+> ignored, not very nice). Now the code doesn't enable autoneg, it only
+> *indicates* it's enabled and in reality it's not.
 
--- 
-heikki
+I would say there are two different issues here.
+
+1) It seems like we are not configuring the hardware to match phydev.
+2) We are overwriting how the bootloader etc configured the hardware.
+
+2) is always hard, because how do we know the PHY is not messed up
+from a previous boot/crash cycle etc. In general, a driver should try
+to put the hardware into a well known state. If we have a clear use
+case for this, we can consider how to implement it.
+
+	Andrew
 
