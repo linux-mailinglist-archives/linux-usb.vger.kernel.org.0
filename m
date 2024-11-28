@@ -1,164 +1,93 @@
-Return-Path: <linux-usb+bounces-17912-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17913-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 774EB9DAFDC
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 00:33:06 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 302769DB036
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 01:19:09 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29AF81626AC
-	for <lists+linux-usb@lfdr.de>; Wed, 27 Nov 2024 23:33:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C42B282077
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 00:19:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C0F197A82;
-	Wed, 27 Nov 2024 23:33:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFAE69460;
+	Thu, 28 Nov 2024 00:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MolQ24FG";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="YomptmrK";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="MolQ24FG";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="YomptmrK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rGGmO120"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9296417E01B
-	for <linux-usb@vger.kernel.org>; Wed, 27 Nov 2024 23:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328DE8F64
+	for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 00:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732750381; cv=none; b=oZJ9OjXN6toCdu/kv0uAWoCAoZv0Qh7KystQGJUCd5sP6vsvfzxIlQLdzNxhzviieiFivREHfAP45RJBqD7M0R99Lj8waArAdiIkObTbgqSBVzdFBEKpwe/UlBiGOsV/EsOGY/KzWP2+5icNM5fg7HBpNvzhbY4QlyMCWd7cwgk=
+	t=1732753143; cv=none; b=VGOfklr0Wegse3v0pDfUM0szIUPkHAVMbV8/bSfWlIHiap3nMUAoccMKC4y65+FM0xAfm5hOB+QJK/j8qTmfxGBfjDjRcFUf2tjw3vkvSMPekuWE8GdZoVYJP7WtWVyS9RaYyXHDbWNVXEXLtphGn15VoUrrKmswBXogNh2Z1tQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732750381; c=relaxed/simple;
-	bh=DTCi4wb+9H+DBj8G5RJXgWD1TzkPP4M/8GjbtmKvR+w=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jDGTYgviuz5VEkpeFue6ob9OBXH5pVez0MlK2wtzL5vDCNJsvWNW/gSlNrD2+Y8oX7Jl9hV2ZBtin1wHMRiuUnl5X/4dJJuLF0U75/NPVu1beH67Q03vKiueVIXA5ulOJtzKz6dhxptmVGTkKHXlGxUGxU6sDqnMke7Lk1uOEVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MolQ24FG; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=YomptmrK; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=MolQ24FG; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=YomptmrK; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 94F091F45A;
-	Wed, 27 Nov 2024 23:32:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1732750377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=HMwEF8rsEu5W4al3T02ghYPyteqvjm7g6ARgTfx7PME=;
-	b=MolQ24FG3G6cQMgAAvSkccgV7+T5msfA9grV/x0/7kYwWqAVvJ+GMJfkNglRsfcfs/9vII
-	SMYdfAR1iy1dpiFQ66U/CObznpoU/EssL77XqNpsBME/q8IulEpwwWsjTWL3mvDxY7qKuM
-	PkHkLFoaJs6I/2zfXct2DZIq+gkBmdM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1732750377;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=HMwEF8rsEu5W4al3T02ghYPyteqvjm7g6ARgTfx7PME=;
-	b=YomptmrKLlZeumNzcSCDeAuvTV8L8spUagD3LK9i6TjvMLYXX/P4kvIYPj6W3pNbwKYkr5
-	bwT5/r5lsUN0QlCQ==
-Authentication-Results: smtp-out2.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1732750377; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=HMwEF8rsEu5W4al3T02ghYPyteqvjm7g6ARgTfx7PME=;
-	b=MolQ24FG3G6cQMgAAvSkccgV7+T5msfA9grV/x0/7kYwWqAVvJ+GMJfkNglRsfcfs/9vII
-	SMYdfAR1iy1dpiFQ66U/CObznpoU/EssL77XqNpsBME/q8IulEpwwWsjTWL3mvDxY7qKuM
-	PkHkLFoaJs6I/2zfXct2DZIq+gkBmdM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1732750377;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=HMwEF8rsEu5W4al3T02ghYPyteqvjm7g6ARgTfx7PME=;
-	b=YomptmrKLlZeumNzcSCDeAuvTV8L8spUagD3LK9i6TjvMLYXX/P4kvIYPj6W3pNbwKYkr5
-	bwT5/r5lsUN0QlCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 152CF139AA;
-	Wed, 27 Nov 2024 23:32:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id g8AJLyesR2cGKgAAD6G6ig
-	(envelope-from <ddiss@suse.de>); Wed, 27 Nov 2024 23:32:55 +0000
-From: David Disseldorp <ddiss@suse.de>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org,
-	David Disseldorp <ddiss@suse.de>
-Subject: [PATCH v2] usb: collapse USB_STORAGE Kconfig comment
-Date: Thu, 28 Nov 2024 10:28:31 +1100
-Message-ID: <20241127232830.26923-2-ddiss@suse.de>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1732753143; c=relaxed/simple;
+	bh=CT8WfCVdx4dyocZOHNd8QK2X0dsl6bBVNfH1UUoEp7I=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=TACrXIMvr79tpH3Qbxb+wRkewFo/PGIxE8aV4U9UPnEGmL+oxz/Ix6etFYCFC4M2ZQCoL2vMGlF+qjGWZ8Pb31RvfyOHDaNc9wyD3dx8S1BEdYqXbS1ICYa5QXhdCIVnNXozuagrl+YAwkh6zzZg3m6ZeQnXHWxtmy+otJKRK1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rGGmO120; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 03A36C4CED2
+	for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 00:19:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1732753143;
+	bh=CT8WfCVdx4dyocZOHNd8QK2X0dsl6bBVNfH1UUoEp7I=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=rGGmO1206ftSicObipoPqeQkzd5KIK/yej56wQ7p3Vees+yvOReQQTM2OUeEXxpQk
+	 Sdsmwe/t2hvMkhHX5wgkdYtPCFWYu88uYg+k5ARobJ/fqm2G9JrUGIwM/51PKQn6RI
+	 u9MnwOqzWpTn+4HSowLJRQsofagj/YKyaUh+YAK3pBKS8hLmN/KLUe9uYjGhBJkYcS
+	 kl9Ti/UpbiUPxjhbMQkX/n6co7qt8yUTfuYH98yfmFpDFCibC/lsBR0hwbS3/jLcw6
+	 SRg+hJ3dZZyaJq93Y0u7ZOR2Sb0mjhNrRD2gt2nRXpjbaZiMBRh+DpTJMHA2jrT5Rz
+	 C6aXk+W9yb00A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id F29A9C53BC9; Thu, 28 Nov 2024 00:19:02 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219532] Crash in RIP: 0010:xhci_handle_stopped_cmd_ring
+Date: Thu, 28 Nov 2024 00:19:02 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: James.Dutton@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219532-208809-bwxHKDo9EZ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219532-208809@https.bugzilla.kernel.org/>
+References: <bug-219532-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:email,suse.de:mid];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Score: -2.80
-X-Spam-Flag: NO
 
-The two Kconfig "comment" calls render in /proc/config.gz as split
-sections:
- #
- # NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may
- #
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219532
 
- #
- # also be needed; see USB_STORAGE Help for more info
- #
+--- Comment #6 from James.Dutton@gmail.com ---
+It might be dealing with a buggy device. My question is how should one do e=
+rror
+recovery here when xhci is null but the function has no error return value =
+as
+its a void function.
 
-"make menuconfig" renders the comments as:
- *** NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may ***
- *** also be needed; see USB_STORAGE Help for more info ***
+--=20
+You may reply to this email to add a comment.
 
-Kconfig doesn't support splitting a comment cleanly over two lines, so
-just collapse it into a single oversize comment.
-
-Signed-off-by: David Disseldorp <ddiss@suse.de>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
----
-Changes since v1:
-- slightly rework commit message
-
- drivers/usb/storage/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/usb/storage/Kconfig b/drivers/usb/storage/Kconfig
-index d17b60a644efb..4be1d617d63db 100644
---- a/drivers/usb/storage/Kconfig
-+++ b/drivers/usb/storage/Kconfig
-@@ -3,8 +3,7 @@
- # USB Storage driver configuration
- #
- 
--comment "NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may"
--comment "also be needed; see USB_STORAGE Help for more info"
-+comment "NOTE: USB_STORAGE depends on SCSI but BLK_DEV_SD may also be needed; see USB_STORAGE Help for more info"
- 
- config USB_STORAGE
- 	tristate "USB Mass Storage support"
--- 
-2.43.0
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
