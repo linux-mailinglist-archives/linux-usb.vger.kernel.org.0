@@ -1,474 +1,230 @@
-Return-Path: <linux-usb+bounces-17943-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17944-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7197D9DBA74
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 16:24:54 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C73229DBA9D
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 16:36:25 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B19D163C52
-	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 15:24:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27958B245C3
+	for <lists+linux-usb@lfdr.de>; Thu, 28 Nov 2024 15:36:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38EF21B9835;
-	Thu, 28 Nov 2024 15:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F3F1DA23;
+	Thu, 28 Nov 2024 15:36:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="PppgPyiX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D52A0847B;
-	Thu, 28 Nov 2024 15:24:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D01ED25761
+	for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 15:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732807486; cv=none; b=ipZzucYIS0r6A+2ztT9sF12DL5rTDL5U7DrNgVB1HMuaFG6ii8RLucncmTp+4N1d2hGMldGXVEfPIH4nmEEFf+iDPskC8yquRj1o62CJO0WPzIXNgbMGLqtVPEs1gdWP+BF+PlNeUCQxj7fpLmtCL2i8G84XQf+JwbT3QDJho0Y=
+	t=1732808176; cv=none; b=jbmNNeBYkBVDHY9/qNxV/sLg75nmj937NY1PNBZAJ8ClD3IJeJ/ub20JmUMuQvLDlsNsyOxbiPW1PFJevOIiLpDC9jtFjvzWUKGInF9cV04nCKOL6ZAQzUZmpXlq2LGAR5YjgSuIJAvEkwD/20k31opx/oQRBVxGsQh+Lh+aJPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732807486; c=relaxed/simple;
-	bh=3ovcNO+H467fYtG/ZtWHRJGoNwJiT3rEW9Ri3EM4jZs=;
+	s=arc-20240116; t=1732808176; c=relaxed/simple;
+	bh=iKmGxWR3SCPnTr9MmZjU5whhKxQRR6eabS48BJf4/e8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=arqXsufc4yoahuB1ktZVJBiNzaEiQbS14L80aIKRnFl/NL/XXXOd2hLaR9Q9nv3YWClLDwiD/BiIwZWIuPO1qhC0LJeyMPTnQzJ+076iTc3tj8m8IMAjLbh0Ex68DLfu6EdcF0O4sGW6/0lyunCfQWY76rkZ1UnS8MwqU7LtwcM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6eebae6f013so10867537b3.0;
-        Thu, 28 Nov 2024 07:24:44 -0800 (PST)
+	 To:Cc:Content-Type; b=P4B38J/v+PaanckH1Ll8+ukTw2/F2NG2kqlloflZCBBGWAweG0fnl3jalEbP057HjMEvE+hOgHVEIW7slPkCu2C7D2aMHRd54PzKQ5bB+GExzMHyjSW+ryKG8mu11qDTGY8rpdUxaNQpOLOd9h4Nt6XbBsF5D62xdIhjtHEHiUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=PppgPyiX; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-2ffc016f301so10484581fa.1
+        for <linux-usb@vger.kernel.org>; Thu, 28 Nov 2024 07:36:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1732808173; x=1733412973; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4x8/klYZb6w+q3jJndkpAwg46a3f9b5Itiq/5RBjupE=;
+        b=PppgPyiXvOt/X98cK1J5ARgUTMtUsEn42DsQRoIbdDocsUDSpjxNaXQAu+XEpdWBIv
+         462rN1NsTjkjk1p8Q6aqO42Neh7Sko7g1BO9m0hIunIHPKV0JGYvMxyj2h7r/rxPCNdI
+         JbHdKEoFiXomyC6FRqwJv9VPhW5A+2PESDCbQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732807483; x=1733412283;
+        d=1e100.net; s=20230601; t=1732808173; x=1733412973;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eMC+Y9JuRtxGshUE5GtedzEOjkDfE7uG8aVt6EbRvFg=;
-        b=A/xtmfvt+VCIBrxg00YIUb/Ar7F8Nwi63W6iGZXRHF3r73jRqArksaqDS+hX24N3Hx
-         xnMMcmKfZif55RtpHBcByS4MSkWgcU+Bl8ofbGe8vbLXMHPLGR6a0k3Bz+cCSsXpIEpJ
-         ZKfnyPFmbLo+vBMRwzovLexK9g/aaZrL+5HusXHq4V33g0GCCAgMWcEpkYgql3+Zmyoa
-         oDxXl+moev1wJqqIXJLW/lFWwPU7fH429gUog0YpNVR8cUcxhY6e90j3f2assMtw2TU9
-         Y6bKNNCL3SYGvnd96kLexk4P7y1xkzf9Pb+765sZ242HMeV9zvIa1LzGRtP3blLqd71P
-         R0vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU8clRKX88pGxxhTERn9SwAbfsXNHn0lXpaIwwqHEECzGuP3rCnB59vbRQsdxXI2tDsRVe+zd+zeMwF@vger.kernel.org, AJvYcCUAW0/Dwej7cx8JuvtyLe4fsPRSk+vJEbTy1Lke7RcYxTAryg1nbR/DWt5F/c8L7KNdd9HgZA76x4OE@vger.kernel.org, AJvYcCV12nDMaPV097faGgKX8PJb33iYfFjdWdqyPuL/E57u+DTg61rF15pRGE4n5FBFlO8nZ5abpMvTuFq94S7X@vger.kernel.org, AJvYcCVi3kJfB21IYsMsUy+G3XAl9XtB308ri3yBuARK4OTHF+5xa4Wbp1jeM828R0m9UOlPeV8iU+4eTaewO+XGgdfJJTU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+xxfwYsbRBIJhRZl8XokoQ5K4zGYIcbl9grCW7ylXDMoxray2
-	tw2LrfVoT1m2OtSxVEK2JtqrdBhF090NN+Y2S4C2Rn+a1UtNPgeAuTwGMM/tOiY=
-X-Gm-Gg: ASbGnctws7IXftpdT1Y11y6c38cpU+wcsdySjT7Hb4FmKYRJoXwJHatDI7AY8SOIJ+A
-	jz6LhgBCZKUK4ang5bXx7W1iq/DZr6ab0mpk3QZ1I667osS+Xvbdl6E69S3MFL6HihUS0jl+5mu
-	AMTDYlxRZqx2U7vZJn6unWK8CVOrxL/otga6P7IotjVWqOIxkbA3tnB1WBifTpP+nrJP1OtFbnn
-	U3RgNppFU7tmap92uHv8TvXH6m5eeGjuvKwy9mEpsfUMaD/ESCzufAj06mQ1lFs5xfMAfy5Y6Dm
-	iOGSS7MqeBcT9CVM
-X-Google-Smtp-Source: AGHT+IHw9ux3A4LTveT7mp5991xdeQG6HxSL0UA0rEOPMjP0qdMJBk0bM/ufcVfa3aIbgDi+HhaZpw==
-X-Received: by 2002:a05:690c:6084:b0:6e3:323f:d8fb with SMTP id 00721157ae682-6ef371fc30amr87312637b3.14.1732807482843;
-        Thu, 28 Nov 2024 07:24:42 -0800 (PST)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6ef4ddb64d9sm3525227b3.105.2024.11.28.07.24.38
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 28 Nov 2024 07:24:39 -0800 (PST)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-6eeca160f14so10384157b3.2;
-        Thu, 28 Nov 2024 07:24:38 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWG6FV7e9oUjOMfL06zrBEvjAVeOFs+m5LfI03pbCLTWRjr73gJ2lixU7ulznRJRO0MK+yffWPwNr1xVa93A4Km61A=@vger.kernel.org, AJvYcCWR+ijSIVe85odahagMCbXIP9DqSYtDMYxbT+aU9ZDthY55IwRwVhP3C/+jB8geOntj8nYeBSDjxMJY@vger.kernel.org, AJvYcCXVEvcV5nrbIP8ToM83rzg8HII7MkT2/ZvHMOtdaR4mpgWOnPF9mPVndvgyFcpqXe3QRWpcfVcFAo2P@vger.kernel.org, AJvYcCXgep1lS/ag6fninzB9hz4bhLyliC6hJztDnVhExCwCdb1Zg6Q7DH31hRqDSeUxprPP4SGsUm4zsmCffLnc@vger.kernel.org
-X-Received: by 2002:a05:690c:4c0f:b0:6ee:b5ea:5fe8 with SMTP id
- 00721157ae682-6ef37274a4amr87747517b3.30.1732807478236; Thu, 28 Nov 2024
- 07:24:38 -0800 (PST)
+        bh=4x8/klYZb6w+q3jJndkpAwg46a3f9b5Itiq/5RBjupE=;
+        b=CqfkYt0pUeuRkvINm1fMgGHLF8LrbmvgcruJFH0+93N6Cw/Mfw6+PB5WqTMMpovs5s
+         7lLsJ7J0d/dZzPM1eKzE5Ti4sOVnCuSv7jSD71NHzlJLqwgwJNHPwbpCVwfVRVsU+BIt
+         x/X6mD9OC/JpVbTmwkV3cfNUy4y586MBWXXB48GbJt6vRzvE3rWuowNOZqBjA35WvbwJ
+         9Il5fRqK7ptk7wzP2odkfSNO1OLnj3IxqlrQDvyNqyhKc/F4Xw7qBXtlminSkTCX2SG2
+         820qTfCH7kIAzBcxcga+1872E31YKycJy5RNaWPYiJXg1GjH9EvS/s8+tM90URRK5avj
+         NvMw==
+X-Forwarded-Encrypted: i=1; AJvYcCU42KfTHB7Bo9MpmbPtXD5G6XZeEvWokPY/YrHcPJDAR7heHwWH8J3fBRwHwhQjQhtCqtnBB6YAeFE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwocrsTgvgSIKOslKJfmdag+ZH9hG/OwkiSCdUN1+qFgl/E6F4i
+	MNlVnd2lD60a/UCKiFKxTJ/ytFNu5J+hVQLhyMWiJMAL1p3HdJ1GGvQXNeI6YV4eIO/gbS8CEsO
+	dG0MtcbM2srgW6e2xj7bqsMIJDbRI8cTatoo=
+X-Gm-Gg: ASbGncuyqmCIGDKMozF4Wnh1xTiLiFVE1Ib7VBr/63kELZWIoJXUY91rqQVXa/eJRhU
+	iKLyIhhf0eH35jg1kpzIs2xTe7kVRSaWPUvsss0IL+xvkcbVDuPjY/xMiEV0=
+X-Google-Smtp-Source: AGHT+IGmRQWOUKzM5MLkJ1jlcef7zw+jO3ZoNUzMkDKt1VFUb2Mx0ndQxLmBfkKjQttZK35T1KWw1y0Arwjt2DkVCoQ=
+X-Received: by 2002:a05:651c:220d:b0:2fa:cc50:3f2 with SMTP id
+ 38308e7fff4ca-2ffd604a2b1mr46164301fa.5.1732808172924; Thu, 28 Nov 2024
+ 07:36:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241126092050.1825607-1-claudiu.beznea.uj@bp.renesas.com> <20241126092050.1825607-3-claudiu.beznea.uj@bp.renesas.com>
-In-Reply-To: <20241126092050.1825607-3-claudiu.beznea.uj@bp.renesas.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 28 Nov 2024 16:24:26 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUvmTQeQXxhsXtj23-OS=aL3UgsyOtnawdmnusrEJ2JQw@mail.gmail.com>
-Message-ID: <CAMuHMdUvmTQeQXxhsXtj23-OS=aL3UgsyOtnawdmnusrEJ2JQw@mail.gmail.com>
-Subject: Re: [PATCH v2 02/15] soc: renesas: Add SYSC driver for Renesas RZ family
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, p.zabel@pengutronix.de, magnus.damm@gmail.com, 
-	gregkh@linuxfoundation.org, yoshihiro.shimoda.uh@renesas.com, 
-	christophe.jaillet@wanadoo.fr, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20241104154252.1463188-1-ukaszb@chromium.org> <5iacpnq5akk3gk7kdg5wkbaohbtwtuc6cl7xyubsh2apkteye3@2ztqtkpoauyg>
+ <CALwA+Nb31ukU2Ox782Mq+ucBvEqm9_SioSAE23ifhX7DsHayhA@mail.gmail.com>
+ <yphjztfvehbqd4xbdo7wtdfd4d3ziibq6hytuuxnoypdpsr462@zwl2cfj6f5kw>
+ <CALwA+NYOm5mrw7=PSD+w_ma0hzR2CQ5dspz5X-bqi1o7ikfq6Q@mail.gmail.com> <7e5p2ekpvxosb4axrzenifrtitzof6femyzld6wdcp3i7a5jh6@v476mzjit5zw>
+In-Reply-To: <7e5p2ekpvxosb4axrzenifrtitzof6femyzld6wdcp3i7a5jh6@v476mzjit5zw>
+From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
+Date: Thu, 28 Nov 2024 16:36:01 +0100
+Message-ID: <CALwA+NaWkmcCYKn0eiA75dRo-tKu2+exrrGKrSgtNGXZzPGBug@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: typec: ucsi: Fix completion notifications
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
+	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Claudiu,
-
-Thanks for your patch!
-
-On Tue, Nov 26, 2024 at 10:21=E2=80=AFAM Claudiu <claudiu.beznea@tuxon.dev>=
- wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Thu, Nov 28, 2024 at 3:16=E2=80=AFPM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
 >
-> The RZ/G3S system controller (SYSC) has various registers that control
-> signals specific to individual IPs. IP drivers must control these signals
-> at different configuration phases.
+> On Thu, Nov 28, 2024 at 11:08:46AM +0100, =C5=81ukasz Bartosik wrote:
+> > On Thu, Nov 21, 2024 at 11:53=E2=80=AFPM Dmitry Baryshkov
+> > <dmitry.baryshkov@linaro.org> wrote:
+> > >
+> > > On Wed, Nov 20, 2024 at 03:56:41PM +0100, =C5=81ukasz Bartosik wrote:
+> > > > On Mon, Nov 18, 2024 at 6:58=E2=80=AFPM Dmitry Baryshkov
+> > > > <dmitry.baryshkov@linaro.org> wrote:
+> > > > >
+> > > > > On Mon, Nov 04, 2024 at 03:42:52PM +0000, =C5=81ukasz Bartosik wr=
+ote:
+> > > > > > OPM                         PPM                         LPM
+> > > > > >  |        1.send cmd         |                           |
+> > > > > >  |-------------------------->|                           |
+> > > > > >  |                           |--                         |
+> > > > > >  |                           |  | 2.set busy bit in CCI  |
+> > > > > >  |                           |<-                         |
+> > > > > >  |      3.notify the OPM     |                           |
+> > > > > >  |<--------------------------|                           |
+> > > > > >  |                           | 4.send cmd to be executed |
+> > > > > >  |                           |-------------------------->|
+> > > > > >  |                           |                           |
+> > > > > >  |                           |      5.cmd completed      |
+> > > > > >  |                           |<--------------------------|
+> > > > > >  |                           |                           |
+> > > > > >  |                           |--                         |
+> > > > > >  |                           |  | 6.set cmd completed    |
+> > > > > >  |                           |<-       bit in CCI        |
+> > > > > >  |                           |                           |
+> > > > > >  |   7.handle notification   |                           |
+> > > > > >  |   from point 3, read CCI  |                           |
+> > > > > >  |<--------------------------|                           |
+> > > > > >  |                           |                           |
+> > > > > >  |     8.notify the OPM      |                           |
+> > > > > >  |<--------------------------|                           |
+> > > > > >  |                           |                           |
+> > > > > >
+> > > > > > When the PPM receives command from the OPM (p.1) it sets the bu=
+sy bit
+> > > > > > in the CCI (p.2), sends notification to the OPM (p.3) and forwa=
+rds the
+> > > > > > command to be executed by the LPM (p.4). When the PPM receives =
+command
+> > > > > > completion from the LPM (p.5) it sets command completion bit in=
+ the CCI
+> > > > > > (p.6) and sends notification to the OPM (p.8). If command execu=
+tion by
+> > > > > > the LPM is fast enough then when the OPM starts handling the no=
+tification
+> > > > > > from p.3 in p.7 and reads the CCI value it will see command com=
+pletion bit
+> > > > > > and will call complete(). Then complete() might be called again=
+ when the
+> > > > > > OPM handles notification from p.8.
+> > > > >
+> > > > > I think the change is fine, but I'd like to understand, what code=
+ path
+> > > > > causes the first read from the OPM side before the notification f=
+rom
+> > > > > the PPM?
+> > > > >
+> > > >
+> > > > The read from the OPM in p.7 is a result of notification in p.3 but=
+ I agree
+> > > > it is misleading since you pointed it out. I will reorder p.7 and p=
+.8.
+> > >
+> > > Ack, thanks for the explanation. Do you think that it also might be
+> > > beneficial to call reinit_completion() when sending the command? I th=
+ink
+> > > we discussed this change few months ago on the ML, but I failed to se=
+nd
+> > > the patch...
+> > >
+> >
+> > Dmitry sorry for delayed response.
+> >
+> > IMHO it makes sense to clear completion in ucsi_sync_control_common()
+> > with reinit_completion().
 >
-> Add SYSC driver that allows individual SYSC consumers to control these
-> signals. The SYSC driver exports a syscon regmap enabling IP drivers to
-> use a specific SYSC offset and mask from the device tree, which can then =
-be
-> accessed through regmap_update_bits().
+> yes. before sending the command.
 >
-> Currently, the SYSC driver provides control to the USB PWRRDY signal, whi=
-ch
-> is routed to the USB PHY. This signal needs to be managed before or after
-> powering the USB PHY off or on.
+
+Ack
+
+> > But I wonder whether with this change moving from test_bit ->
+> > test_and_clear_bit do you still see a potential
+> > scenario for a race ?
 >
-> Other SYSC signals candidates (as exposed in the the hardware manual of t=
-he
-
-s/the the/the/
-
-> RZ/G3S SoC) include:
+> Two notifications coming close enough so that the second one starts being
+> processed after receiving the first one but before completing it? On the
+> other hand, test_and_clear_bit() will handle that already.
 >
-> * PCIe:
-> - ALLOW_ENTER_L1 signal controlled through the SYS_PCIE_CFG register
-> - PCIE_RST_RSM_B signal controlled through the SYS_PCIE_RST_RSM_B
->   register
-> - MODE_RXTERMINATION signal controlled through SYS_PCIE_PHY register
+
+I agree test_and_clear_bit() should handle such a scenario.
+Nonetheless I will add a call to reinit_completion() in
+ucsi_sync_control_common().
+
+Thanks,
+Lukasz
+
+> > > > > > This fix replaces test_bit() with test_and_clear_bit()
+> > > > > > in ucsi_notify_common() in order to call complete() only
+> > > > > > once per request.
+> > > > > >
+> > > > > > Fixes: 584e8df58942 ("usb: typec: ucsi: extract common code for=
+ command handling")
+> > > > > > Cc: stable@vger.kernel.org
+> > > > > > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
+> > > > > > ---
+> > > > > >  drivers/usb/typec/ucsi/ucsi.c | 4 ++--
+> > > > > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > > > > >
+> > > > > > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/=
+ucsi/ucsi.c
+> > > > > > index e0f3925e401b..7a9b987ea80c 100644
+> > > > > > --- a/drivers/usb/typec/ucsi/ucsi.c
+> > > > > > +++ b/drivers/usb/typec/ucsi/ucsi.c
+> > > > > > @@ -46,11 +46,11 @@ void ucsi_notify_common(struct ucsi *ucsi, =
+u32 cci)
+> > > > > >               ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cc=
+i));
+> > > > > >
+> > > > > >       if (cci & UCSI_CCI_ACK_COMPLETE &&
+> > > > > > -         test_bit(ACK_PENDING, &ucsi->flags))
+> > > > > > +         test_and_clear_bit(ACK_PENDING, &ucsi->flags))
+> > > > > >               complete(&ucsi->complete);
+> > > > > >
+> > > > > >       if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> > > > > > -         test_bit(COMMAND_PENDING, &ucsi->flags))
+> > > > > > +         test_and_clear_bit(COMMAND_PENDING, &ucsi->flags))
+> > > > > >               complete(&ucsi->complete);
+> > > > > >  }
+> > > > > >  EXPORT_SYMBOL_GPL(ucsi_notify_common);
 >
-> * SPI:
-> - SEL_SPI_OCTA signal controlled through SYS_IPCONT_SEL_SPI_OCTA
->   register
->
-> * I2C/I3C:
-> - af_bypass I2C signals controlled through SYS_I2Cx_CFG registers
->   (x=3D0..3)
-> - af_bypass I3C signal controlled through SYS_I3C_CFG register
->
-> * Ethernet:
-> - FEC_GIGA_ENABLE Ethernet signals controlled through SYS_GETHx_CFG
->   registers (x=3D0..1)
->
-> As different Renesas RZ SoC shares most of the SYSC functionalities
-> available on the RZ/G3S SoC, the driver if formed of a SYSC core
-> part and a SoC specific part allowing individual SYSC SoC to provide
-> functionalities to the SYSC core.
->
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-
-> --- /dev/null
-> +++ b/drivers/soc/renesas/r9a08g045-sysc.c
-> @@ -0,0 +1,31 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * RZ/G3S System controller driver
-> + *
-> + * Copyright (C) 2024 Renesas Electronics Corp.
-> + */
-> +
-> +#include <linux/array_size.h>
-> +#include <linux/bits.h>
-> +#include <linux/init.h>
-> +
-> +#include "rz-sysc.h"
-> +
-> +#define SYS_USB_PWRRDY         0xd70
-> +#define SYS_USB_PWRRDY_PWRRDY_N        BIT(0)
-> +#define SYS_MAX_REG            0xe20
-> +
-> +static const struct rz_sysc_signal_init_data rzg3s_sysc_signals_init_dat=
-a[] __initconst =3D {
-
-This is marked __initconst...
-
-> +       {
-> +               .name =3D "usb-pwrrdy",
-> +               .offset =3D SYS_USB_PWRRDY,
-> +               .mask =3D SYS_USB_PWRRDY_PWRRDY_N,
-> +               .refcnt_incr_val =3D 0
-> +       }
-> +};
-> +
-> +const struct rz_sysc_init_data rzg3s_sysc_init_data =3D {
-
-... but this is not __init, causing a section mismatch.
-
-> +       .signals_init_data =3D rzg3s_sysc_signals_init_data,
-> +       .num_signals =3D ARRAY_SIZE(rzg3s_sysc_signals_init_data),
-> +       .max_register_offset =3D SYS_MAX_REG,
-> +};
-
-> --- /dev/null
-> +++ b/drivers/soc/renesas/rz-sysc.c
-
-> +/**
-> + * struct rz_sysc - RZ SYSC private data structure
-> + * @base: SYSC base address
-> + * @dev: SYSC device pointer
-> + * @signals: SYSC signals
-> + * @num_signals: number of SYSC signals
-> + */
-> +struct rz_sysc {
-> +       void __iomem *base;
-> +       struct device *dev;
-> +       struct rz_sysc_signal *signals;
-> +       u8 num_signals;
-
-You could change signals to a flexible array at the end, tag it with
-__counted_by(num_signals), and allocate space for both struct rz_sysc
-and the signals array using struct_size(), reducing the number of
-allocations.
-
-> +};
-
-> +static struct rz_sysc_signal *rz_sysc_off_to_signal(struct rz_sysc *sysc=
-, unsigned int offset,
-> +                                                   unsigned int mask)
-> +{
-> +       struct rz_sysc_signal *signals =3D sysc->signals;
-> +
-> +       for (u32 i =3D 0; i < sysc->num_signals; i++) {
-
-s/u32/unsigned int/
-
-> +               if (signals[i].init_data->offset !=3D offset)
-> +                       continue;
-> +
-> +               /*
-> +                * In case mask =3D=3D 0 we just return the signal data w=
-/o checking the mask.
-> +                * This is useful when calling through rz_sysc_reg_write(=
-) to check
-> +                * if the requested setting is for a mapped signal or not=
-.
-> +                */
-> +               if (mask) {
-> +                       if (signals[i].init_data->mask =3D=3D mask)
-> +                               return &signals[i];
-> +               } else {
-> +                       return &signals[i];
-> +               }
-
-if (!mask || signals[i].init_data->mask =3D=3D mask)
-        return &signals[i];
-
-> +       }
-> +
-> +       return NULL;
-> +}
-> +
-> +static int rz_sysc_reg_update_bits(void *context, unsigned int off,
-> +                                  unsigned int mask, unsigned int val)
-> +{
-> +       struct rz_sysc *sysc =3D context;
-> +       struct rz_sysc_signal *signal;
-> +       bool update =3D false;
-> +
-> +       signal =3D rz_sysc_off_to_signal(sysc, off, mask);
-> +       if (signal) {
-> +               if (signal->init_data->refcnt_incr_val =3D=3D val) {
-> +                       if (!refcount_read(&signal->refcnt)) {
-> +                               refcount_set(&signal->refcnt, 1);
-> +                               update =3D true;
-> +                       } else {
-> +                               refcount_inc(&signal->refcnt);
-> +                       }
-> +               } else {
-> +                       update =3D refcount_dec_and_test(&signal->refcnt)=
-;
-> +               }
-> +       } else {
-> +               update =3D true;
-> +       }
-
-You could reduce indentation/number of lines by reordering the logic:
-
-    if (!signal) {
-            update =3D true;
-    } else if (signal->init_data->refcnt_incr_val !=3D val) {
-            update =3D refcount_dec_and_test(&signal->refcnt);
-    } else if (!refcount_read(&signal->refcnt)) {
-            refcount_set(&signal->refcnt, 1);
-            update =3D true;
-    } else {
-            refcount_inc(&signal->refcnt);
-    }
-
-> +
-> +       if (update) {
-> +               u32 tmp;
-> +
-> +               tmp =3D readl(sysc->base + off);
-> +               tmp &=3D ~mask;
-> +               tmp |=3D val & mask;
-> +               writel(tmp, sysc->base + off);
-> +       }
-> +
-> +       return 0;
-> +}
-> +
-> +static int rz_sysc_reg_write(void *context, unsigned int off, unsigned i=
-nt val)
-> +{
-> +       struct rz_sysc *sysc =3D context;
-> +       struct rz_sysc_signal *signal;
-> +
-> +       /*
-> +        * Force using regmap_update_bits() for signals to have reference=
- counter
-> +        * per individual signal in case there are multiple signals contr=
-olled
-> +        * through the same register.
-> +        */
-> +       signal =3D rz_sysc_off_to_signal(sysc, off, 0);
-> +       if (signal) {
-> +               dev_err(sysc->dev,
-> +                       "regmap_write() not allowed on register controlli=
-ng a signal. Use regmap_update_bits()!");
-> +               return -EOPNOTSUPP;
-> +       }
-> +
-
-Can you ever get here, given rz_sysc_writeable_reg() below would have
-returned false? If not, is there any point in having this function?
-
-> +       writel(val, sysc->base + off);
-> +
-> +       return 0;
-> +}
-> +
-> +static bool rz_sysc_writeable_reg(struct device *dev, unsigned int off)
-> +{
-> +       struct rz_sysc *sysc =3D dev_get_drvdata(dev);
-> +       struct rz_sysc_signal *signal;
-> +
-> +       /* Any register containing a signal is writeable. */
-> +       signal =3D rz_sysc_off_to_signal(sysc, off, 0);
-> +       if (signal)
-> +               return true;
-> +
-> +       return false;
-> +}
-
-> +static int rz_sysc_signals_show(struct seq_file *s, void *what)
-> +{
-> +       struct rz_sysc *sysc =3D s->private;
-> +
-> +       seq_printf(s, "%-20s Enable count\n", "Signal");
-> +       seq_printf(s, "%-20s ------------\n", "--------------------");
-> +
-> +       for (u8 i =3D 0; i < sysc->num_signals; i++) {
-> +               seq_printf(s, "%-20s %d\n", sysc->signals[i].init_data->n=
-ame,
-> +                          refcount_read(&sysc->signals[i].refcnt));
-> +       }
-> +
-> +       return 0;
-> +}
-> +DEFINE_SHOW_ATTRIBUTE(rz_sysc_signals);
-
-What is the use-case for this? Just (initial) debugging?
-
-> +
-> +static void rz_sysc_debugfs_remove(void *data)
-> +{
-> +       debugfs_remove_recursive(data);
-> +}
-> +
-> +static int rz_sysc_signals_init(struct rz_sysc *sysc,
-> +                               const struct rz_sysc_signal_init_data *in=
-it_data,
-> +                               u32 num_signals)
-> +{
-> +       struct dentry *root;
-> +       int ret;
-> +
-> +       sysc->signals =3D devm_kcalloc(sysc->dev, num_signals, sizeof(*sy=
-sc->signals),
-> +                                    GFP_KERNEL);
-> +       if (!sysc->signals)
-> +               return -ENOMEM;
-> +
-> +       for (u32 i =3D 0; i < num_signals; i++) {
-
-unsigned int
-
-> +               struct rz_sysc_signal_init_data *id;
-> +
-> +               id =3D devm_kzalloc(sysc->dev, sizeof(*id), GFP_KERNEL);
-> +               if (!id)
-> +                       return -ENOMEM;
-> +
-> +               id->name =3D devm_kstrdup(sysc->dev, init_data->name, GFP=
-_KERNEL);
-> +               if (!id->name)
-> +                       return -ENOMEM;
-> +
-> +               id->offset =3D init_data->offset;
-> +               id->mask =3D init_data->mask;
-> +               id->refcnt_incr_val =3D init_data->refcnt_incr_val;
-> +
-> +               sysc->signals[i].init_data =3D id;
-> +               refcount_set(&sysc->signals[i].refcnt, 0);
-> +       }
-> +
-> +       sysc->num_signals =3D num_signals;
-> +
-> +       root =3D debugfs_create_dir("renesas-rz-sysc", NULL);
-> +       ret =3D devm_add_action_or_reset(sysc->dev, rz_sysc_debugfs_remov=
-e, root);
-> +       if (ret)
-> +               return ret;
-> +       debugfs_create_file("signals", 0444, root, sysc, &rz_sysc_signals=
-_fops);
-> +
-> +       return 0;
-> +}
-
-> --- /dev/null
-> +++ b/drivers/soc/renesas/rz-sysc.h
-> @@ -0,0 +1,52 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +/*
-> + * Renesas RZ System Controller
-> + *
-> + * Copyright (C) 2024 Renesas Electronics Corp.
-> + */
-> +
-> +#ifndef __SOC_RENESAS_RZ_SYSC_H__
-> +#define __SOC_RENESAS_RZ_SYSC_H__
-> +
-> +#include <linux/refcount.h>
-> +#include <linux/types.h>
-> +
-> +/**
-> + * struct rz_sysc_signal_init_data - RZ SYSC signals init data
-> + * @name: signal name
-> + * @offset: register offset controling this signal
-> + * @mask: bitmask in register specific to this signal
-> + * @refcnt_incr_val: increment refcnt when setting this value
-> + */
-> +struct rz_sysc_signal_init_data {
-> +       const char *name;
-> +       u32 offset;
-> +       u32 mask;
-> +       u32 refcnt_incr_val;
-> +};
-> +
-> +/**
-> + * struct rz_sysc_signal - RZ SYSC signals
-> + * @init_data: signals initialization data
-> + * @refcnt: reference counter
-> + */
-> +struct rz_sysc_signal {
-> +       const struct rz_sysc_signal_init_data *init_data;
-
-Can't you just embed struct rz_sysc_signal_init_data?
-That way you could allocate the rz_sysc_signal and
-rz_sysc_signal_init_data structures in a single allocation.
-
-> +       refcount_t refcnt;
-> +};
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+> --
+> With best wishes
+> Dmitry
 
