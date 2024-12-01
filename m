@@ -1,154 +1,157 @@
-Return-Path: <linux-usb+bounces-17975-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17976-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDEF09DF47E
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Dec 2024 04:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B71F69DF73D
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Dec 2024 22:57:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 410E6B211AD
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Dec 2024 03:14:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9BC3B2148B
+	for <lists+linux-usb@lfdr.de>; Sun,  1 Dec 2024 21:57:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2EA117C64;
-	Sun,  1 Dec 2024 03:14:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 212CF1D90DC;
+	Sun,  1 Dec 2024 21:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DsCRGPtz"
+	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="MSSvRnxs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
+Received: from qs51p00im-qukt01071901.me.com (qs51p00im-qukt01071901.me.com [17.57.155.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F5D17BD9
-	for <linux-usb@vger.kernel.org>; Sun,  1 Dec 2024 03:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 956F11D7E21
+	for <linux-usb@vger.kernel.org>; Sun,  1 Dec 2024 21:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.155.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733022888; cv=none; b=QHj5Tm9LcmehGS1FQ1uDt1UcNJumGxIzz3VtgaMgtgXDMpJHmU+tb0ZNoDMu6MarXNLBR+512tXqF4XYg5Xo6BWqOXprAUzu5S/tnXSYju1K+4LOHEQnbDF+WEY5CE2ll3+CXESylw3lHan/RO0f/+3HJtIQzNp6aO9VrBJOQxc=
+	t=1733090262; cv=none; b=ayqO5lPph0wOWuxXeHOBAwNqeuZxW5Abkc/HwXWUNNG2ZVkzFTq6j7eij65Pbn0NJD+Hh4SWHMW0QX1ObdzIl9Km3Om3a9bxJMsw6MwYhel/910HD0mTZ1vaxpCli3cU6dx5Vdm3YppFdfolk01Yop7TVW5gy/VrCPTTY/bTq2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733022888; c=relaxed/simple;
-	bh=/c9nDbTyDnsTU/IXGr9Y3UwKa6KDl4HSGz7JUK5GUh0=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=rD1ZCQPjyrhfNzFTs9C9SBqXCJdT15mdgJf+T99hUBNvY6zzvN88NOJSLHRpElr/dZuIw02L4jKJtsu6CJVIRNWsUVbRGJdRY56cnn++8DaPwlTMEDS7gMp7b42Eu8FnJ2HqGpEV9RFfxJhbvE4cI/Ue0qkNJvh15CiysS7PlTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DsCRGPtz; arc=none smtp.client-ip=95.215.58.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1733022883;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M7DCEiN8KnkC92T6ACDy+l0PONNF1zjnEOfw/bgxVvw=;
-	b=DsCRGPtzEiV7AGKx/3/wcfaJWCWJGKJvdtIaXAb43y7pFpK14Hu4M1LD6Q8ViiMdHRxcCW
-	sQuemTLgHRXhY96+OU12ViF7TGwr74055sLMU/Qpub/VclCIkPtPHbIvlKufGzikqQ+Yzc
-	1fi7qvIOHd/ht+XlQUyxN3qBv6JFUQo=
+	s=arc-20240116; t=1733090262; c=relaxed/simple;
+	bh=5ejI8qRyQnF8Rsja0qD9sju8XG2hrWPyxiO64CuBeqk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S0WWmuoP7u8HOUMnbXrE6VpFdml+8D09MHeVHewUOBFB5SNsBOcOVn4wYuds283wWWHF8a+qg4LbbBcbS5ICaFwKWyvErXH96kfD9Ms09pUxWak3CHoQSHG/qboZlcIGYlcZ6rdQh2kQPun4LgkB4Q8TitGvoxqKl3o39JZwV7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=MSSvRnxs; arc=none smtp.client-ip=17.57.155.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
+	t=1733090259; bh=ABrBciAwBhUunaBQ7WqL823Ola3lFqYqfmIalqO+ivU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
+	 x-icloud-hme;
+	b=MSSvRnxsvpzQfCZR9mjOcCvQyDZ6NBNINHXqaW11t5Do2a2urOkMJSvAyYSct99xF
+	 yM8BC0uFxztQMuxJzN7GpGxz3UxW7O+eEbF1XLFrEotjnrHgbkIzuf21LzLEhWbwoR
+	 di0O9WzFXHQE9OYVfqiekPjshqhw8QG3rADOzdBOPd1XpXRtFdRU4rqd2xTNkCMGZB
+	 3EXSMIF0//PJaxHw9SBPIZvFoLilD2ysckpFd+VNVYKkWIMr1tCrLYlfhBe1pqaTtc
+	 rYlNNbJPpLPUrJf/VnvYTmS62qSWm99UObo00a9oeYZZ5VM6qGjt/RqohDcef0rgXj
+	 D5jHfSogbFvuQ==
+Received: from [192.168.40.3] (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
+	by qs51p00im-qukt01071901.me.com (Postfix) with ESMTPSA id E70CB6280352;
+	Sun,  1 Dec 2024 21:57:35 +0000 (UTC)
+Message-ID: <b0052319-dd9f-40e3-a969-4cf6c57dad12@pen.gy>
+Date: Sun, 1 Dec 2024 22:57:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 14.0 \(3654.120.0.1.15\))
-Subject: Re: [PATCH v30 00/30] Introduce QC USB SND audio offloading support
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
-In-Reply-To: <d0da6552-238a-41be-b596-58da6840efbb@quicinc.com>
-Date: Sat, 30 Nov 2024 21:14:36 -0600
-Cc: Takashi Iwai <tiwai@suse.de>,
- Greg KH <gregkh@linuxfoundation.org>,
- srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com,
- perex@perex.cz,
- conor+dt@kernel.org,
- dmitry.torokhov@gmail.com,
- corbet@lwn.net,
- broonie@kernel.org,
- lgirdwood@gmail.com,
- krzk+dt@kernel.org,
- Thinh.Nguyen@synopsys.com,
- tiwai@suse.com,
- robh@kernel.org,
- linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org,
- linux-usb@vger.kernel.org,
- linux-input@vger.kernel.org,
- linux-arm-msm@vger.kernel.org,
- linux-doc@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <CF49CA0A-4562-40BC-AA98-E550E39B366A@linux.dev>
-References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
- <edfeb642-297e-42bb-ad09-cbf74f995514@quicinc.com>
- <2024111655-approve-throwback-e7df@gregkh>
- <2f512d8d-e5f3-4bdd-8172-37114a382a69@quicinc.com>
- <875xoi3wqw.wl-tiwai@suse.de>
- <d0da6552-238a-41be-b596-58da6840efbb@quicinc.com>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net v3 4/6] usbnet: ipheth: use static NDP16 location in
+ URB
+To: Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>
+Cc: Georgi Valkov <gvalkov@gmail.com>, Simon Horman <horms@kernel.org>,
+ Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20241123235432.821220-1-forst@pen.gy>
+ <20241123235432.821220-4-forst@pen.gy>
+ <kMEBlTaAnz-Ity7mnkhpkSez5G8SW3G5yOsqCErjGdKWgJweOsifjnxY3cHtkiHqMXzMoE8qjDXdkZuEJ4cf8g==@protonmail.internalid>
+ <f3657bf6-7980-4c5f-8c82-66c68beb96e4@redhat.com>
+Content-Language: en-GB
+From: Foster Snowhill <forst@pen.gy>
+In-Reply-To: <f3657bf6-7980-4c5f-8c82-66c68beb96e4@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: kNsGRrFycfYpqSc9dkqnnStCtw_76o90
+X-Proofpoint-GUID: kNsGRrFycfYpqSc9dkqnnStCtw_76o90
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-01_17,2024-11-28_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 malwarescore=0
+ phishscore=0 suspectscore=0 mlxscore=0 bulkscore=0 clxscore=1030
+ adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2412010191
 
-Sorry to chime in late, I only look at email occasionally.
+Hello Paolo,
 
->> Well, from the sound subsystem side, the only concerns are the design
->> issues: namely, whether the implementations with two cards are
->> acceptable, and whether the current control of PCM mapping is OK from
->> the user POV.  IIRC, there were discussions with Intel people and
->> others, and I haven't followed whether we got consensus.
->> If we reached some agreement, it'd be appreciated if you can put acks
->> from them in the patches, too.
+On 2024-11-28 10:08, Paolo Abeni wrote:
+>> On iOS devices, the NDP16 header always directly follows NTH16. Rely on
+>> and check for this specific format.
+>> <snip>
+> 
+> This choice looks fragile. What if the next iOS version moves around
+> such header?
 
-My Reviewed-by tags were added in the last updates. I am not sure if =
-anyone else at Intel had the time to review this large patchset.
+This is a valid concern, and something I've been pondering myself
+for a while. My thinking so far can be summed up as follows:
 
-> I believe Amadeusz was still against having the two card design, and =
-wants the routing to automatically happen when playback happens on the =
-sound card created by the USB SND layer.  However, even with that kind =
-of implementation, the major pieces brought in by this series should =
-still be relevant, ie soc-usb and the vendor offload driver.  The only =
-thing that would really change is adding a path from the USB SND PCM ops =
-to interact with the ASoC entities.  Complexity-wise, this would =
-obviously have a good amount of changes to the USB SND/ASoC core =
-drivers.  Some things I can think of that we'd need to introduce:
+"iOS devices aren't fully compliant with NCM for regular tethering (missing
+necessary descriptors, computer->phone not encapsulated at all), so it can't
+be handled by the existing fully-featured spec-compliant `cdc_ncm` driver.
+The `cdc_ncm` driver includes the functionality I need to parse incoming
+NCM data, but I don't see an easy way for me to call that code from `ipheth`.
+I don't want to mess with the `cdc_ncm` driver's code. So I'll approach this
+by implementing the bare minimum of the NCM spec in `ipheth` just to parse
+incoming NCM URBs, relying on the specific URB format that iOS devices have."
 
-The notion of two cards was agreed inside Intel as far back as 2018, =
-when Rakesh first looked at USB offload.=20
+I didn't want to reimplement more than I absolutely had to, because that work
+had already been done in `cdc_ncm`. I relied on the specific URB format of
+iOS devices that hasn't changed since the NCM mode was introduced there.
 
-Having a single USB card in IMHO more complicated:  what happens for =
-example if you plug-in two or more USB devices? Which of the USB cards =
-will expose an optimized path? The design with an ASoC-based card which =
-exposes as many PCM devices as the SOC can support is simpler =
-conceptually and scales well. This would allow e.g. to allocate these =
-PCM devices with different policies (last plugged, preferred, etc).
+You're right, the URB format can change, without warning. If/when that
+happens, it would be a good time to re-think the approach, and maybe figure
+out a way to make use of the parsing code in `cdc_ncm`.
 
-Conceptually for the simple case with a single USB device, it does not =
-really matter if there are two cards or not. What matters is that there =
-is a clear mapping visible to userspace so that application can decide =
-to use the optimized PCM device, when enabled, instead of the legacy =
-one. And in the end, the application is *always* in control in terms of =
-routing. It=E2=80=99s really similar to the compress offload path, some =
-application changes will be required.=20
+For now I wanted to limit the scope of changes to "let's make it work with
+the assumptions that hold to this day".
 
->=20
-> 1.  Exposing some of the ASoC PCM (soc-pcm) APIs to be able to be =
-called by soc-usb (to mimic a FE open from ASoC), so we can trigger ASoC =
-DAI ops when USB SND FE is opened.
->=20
-> 2.  Proper fallback mechanism in case offload path enablement fails to =
-the legacy USB SND path.
->=20
-> 3.  Master kcontrol to disable offload logic for each USB SND device.
->=20
-> IMO, both the points you mentioned correspond to the same topic.  If =
-we go with having offload being operated on one FE, then there is no =
-need for the kcontrol of PCM mapping.  If we have two cards, then we =
-will need the control for offload device mapping.  Can't speak for =
-Pierre, but at least with my discussions with him, I don't think he's =
-against the two card design, just as long as we have the proper kcontrol =
-that notifies userspace of how to utilize the offload path.
+> I think you should add least validate the assumption in the actual URB
+> payload.
 
-Even if there=E2=80=99s a single card you need to have a mapping between =
-a =E2=80=98legacy=E2=80=99 PCM device and an =E2=80=98optimized=E2=80=99 =
-one. This would be a scalar mapping instead of a (card, device) pair, =
-but it=E2=80=99s a minor change.
+This is already validated by checking that ncm0->dwSignature matches
+the four-byte constant defined in the NCM 1.0 spec. However I think you're
+right that it may not be enough, if by some random chance the initial four
+bytes right after NTH16 are set to the desired constant, yet aren't part
+of a real NDP16 header. The condition below should cover it:
 
--Pierre=
+	ncmh->wNdpIndex == cpu_to_le16(sizeof(struct usb_cdc_ncm_nth16))
+
+I'll add it in v4.
+
+>> diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
+>> index 48c79e69bb7b..3f9ea6546720 100644
+>> --- a/drivers/net/usb/ipheth.c
+>> +++ b/drivers/net/usb/ipheth.c
+>> @@ -236,16 +236,14 @@ static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
+>>  	}
+>>
+>>  	ncmh = urb->transfer_buffer;
+>> -	if (ncmh->dwSignature != cpu_to_le32(USB_CDC_NCM_NTH16_SIGN) ||
+>> -	    le16_to_cpu(ncmh->wNdpIndex) >= urb->actual_length) {
+>> +	if (ncmh->dwSignature != cpu_to_le32(USB_CDC_NCM_NTH16_SIGN)) {
+>>  		dev->net->stats.rx_errors++;
+>>  		return retval;
+>>  	}
+> 
+> The URB length is never checked, why it's safe to access (a lot of)
+> bytes inside the URB without any check?
+
+There is a length check right above this hunk, starting with:
+
+	if (urb->actual_length < IPHETH_NCM_HEADER_SIZE) {
+
+IPHETH_NCM_HEADER_SIZE is defined in such a way that it covers NTH16,
+the fixed-size NDP16 part plus up to 22 DPEs. This is described in the
+commit message.
+
+
+Thank you,
+Foster.
 
