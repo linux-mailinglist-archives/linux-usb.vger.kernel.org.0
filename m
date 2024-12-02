@@ -1,70 +1,84 @@
-Return-Path: <linux-usb+bounces-17991-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17992-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C9809DF96F
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 04:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8930A9DFA1B
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 06:02:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 866CBB208F1
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 03:19:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F090EB21F2A
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 05:02:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5418A364BA;
-	Mon,  2 Dec 2024 03:19:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDA71F8AC5;
+	Mon,  2 Dec 2024 05:02:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C6supe+h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C661C32;
-	Mon,  2 Dec 2024 03:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 964EE2F46;
+	Mon,  2 Dec 2024 05:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733109546; cv=none; b=t6zEVIci1hTF5a1Z8u9IDHwCoQtfyPDcu2o+e7bvCDq5e0ALEzTSuSKk/3d/ztDVKcd7xfYpWdqUiq9iP21Oo/B/0H7L0WHJSh1UHx5eqD1IEOoOE8XUAhp1dBfi5FHRsisY0/XSQa3cO+evFFUit7N3lfZKwzrY5o49F8UafzA=
+	t=1733115762; cv=none; b=XyNeAZiddLa/uwTaISGY4AphniR+FqqoGRlIhzeXQytZFByShyS8c0c81zZK0Ln+ZHfGSo0eF4W5QyHU9liXyLHjLMgmCNYO1eX43KUGZ5X7XbQs2qqeBV6Dr20Tlx5WCqh35cwWHIDRIETGGvsXzdaX1/BYjjhjnha4m1j0p9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733109546; c=relaxed/simple;
-	bh=zQI9LNrAw0U3W1yd1RZC4APDtdDOsYbvXPLl2bx7gCQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=C/x3QrjpjIMqsTrkXw6YbHDU4u4zCiXrRZrMPlneeu76nHWWMmPBmXBAcMFmIxFQrIYDe+qCFMr/ph5y7wen6Hh+acBRtVrLDVzT5eGhzrozFEwhLI6Zw6nrSDrTmKai0i2J52Go+W2psJcM0sFCjum5PwkiRAwRPPz3GXaw+CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+	s=arc-20240116; t=1733115762; c=relaxed/simple;
+	bh=4ikIEsU+W+e2hoO7liGbdu/DYueAPavkn1wiJrMa2XI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mHBUzVaqx6cYv3NxJxGDc1Bqr+RGTGm2ZCMtTct4Mo+vDiV2gP5apoG44GEP0RHgN6xMuXeI1ErHAj8F2J/KFaUG0TzbVViCh04720545Fmqo8CCwTeneJq0Gp52FUO/ft6NhTcKnu87cxwIfgUJsUE5OGf7jPmqpfxLnMuMR/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C6supe+h; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-7f4325168c8so1756301a12.1;
-        Sun, 01 Dec 2024 19:19:02 -0800 (PST)
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-7e9e38dd5f1so3091717a12.0;
+        Sun, 01 Dec 2024 21:02:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733115760; x=1733720560; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+j9IC5yOXv1JTRyF5XSayRukRHAqen5dl9p7+tZk9ho=;
+        b=C6supe+h6ePoU8YOWc52SxjCyBSZALTB5ixociVF2kDNMxnL4BMCb3vFmlgjRT0UuJ
+         QhSCnhE1XQzmG+LF60OEOpT85z4vg+FsDwUnXteNZgFnar+H+SgueVj9fNIXRD6QRdId
+         XtoBHWac8suCgUenRJnnAKpQdeZQQj2duoYX8WRGSg+JV6P7WZjzeFT5TL1bwk0tPKwg
+         Ra42XefQ70SRyyPTY5xXtrMDkTevf1MmjTmySBjS7OqKPJuLANFs80FxVJnMubFU1sDH
+         MDvhl1HOiDpsx/ez8WWOBl35suOpEedDPoT1u1TNDaBOl9Oxtz0lY9k9X9XxOB+0T7Fe
+         0/tA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733109542; x=1733714342;
+        d=1e100.net; s=20230601; t=1733115760; x=1733720560;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=qhhdmVzb03dDHwEnyn8Hx0xwKg5F3kJKkUjzhUBPrK0=;
-        b=tfDsU/3tVGl7YAxoAypkbLo0h+3l4FHTknhxdaGOM8SPeOeo966wjiz51cP+sUrD/3
-         p1lxv1+vlDMwNesQwxpIFBQekxunqsqjut0MPDTCdXOOFgXO9tGyq6tL1gsJ1+7nLyWi
-         oGMD1EupWfT110wRv7N6fLBUmJynGwLjmT+/i3qdVyMONiRuSMqKztakuH9yTMROvfx5
-         I9r6Qvstl618w9uWkMe0r1J+w+mNzuubICVvT9hok9CXGH6b6LLwyLcjANYVh+EoFhTL
-         feJ1ZLl82W1mp3L5aoxDrYHp5+uqNuhSgIjl2+nPpkSjTI0M6iaPBG9vEbhhMZnJWdsI
-         R8wg==
-X-Forwarded-Encrypted: i=1; AJvYcCUeCCvQ+riT0DBWMpZ1GtWBfCKkvw8eC6z75f7zptWLLEb/57pkT2u1w6MBZqY8jc6VT781nEX/YmecSuo=@vger.kernel.org, AJvYcCVc7givL7DurxkoEn5ti9NNcyZ/6N+hi63+jIZXNOS8h4D/DwKs4wbEeg1jNs//OpBF36kNVnZm81W5@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNG3pLLhvPiQ2qD0tClxM1Lak26GQ/z69frNdJD07GtKdTN7vM
-	Rm3u0E9Pp4cAvVMvZSEbV5VzSFU/o+9DBLJ6Ewy5nQtpo7hcNLOIws4HRxmWqpk=
-X-Gm-Gg: ASbGncvp9UgrC/QcZL3t+GV2NtpYTKeoh9Z3nsM6HF4oKCNfzolng3NaQKf9W1Ft5jx
-	pckjCW5jvx8CYW60d9hlawI8gAnh0sJ7JbaMsW8UmC1B+13mSqG4O4ojD08KrsxDCxJkVYyD1s3
-	sIXNMX6COd45psWqIy5Yf16mZe9YreZbP9ULtFH0CVRsM+Y6oGTh3HE4UoVxoIl0qn/VwEc4Na6
-	iQnJLpTW5Z+e/zoHS2WhwnjXJ6sUO8rGxnnuQHGXOmfCOx6Fcgf/6bAH9pbzypkGHA=
-X-Google-Smtp-Source: AGHT+IFAQDbWrqzcyspSaGD4Zoo5g+jmeo5Y50m6GjcwjnjubJ0iH0V0gqND+RXJSBaLwv1tsGTUkA==
-X-Received: by 2002:a05:6a20:9150:b0:1db:d8a5:7c82 with SMTP id adf61e73a8af0-1e0e0ac3171mr31721623637.5.1733109542310;
-        Sun, 01 Dec 2024 19:19:02 -0800 (PST)
-Received: from localhost.localdomain ([116.128.244.171])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c2d38dbsm6816138a12.15.2024.12.01.19.18.59
+        bh=+j9IC5yOXv1JTRyF5XSayRukRHAqen5dl9p7+tZk9ho=;
+        b=vdMugEodfEBGMBvlKlqChJh/YPoWaMLFUFzUKjyXHR6guO6Bh2PpJW1FAjIyb9Jour
+         TzJlceAjTRwAVKOBY8tP5nyNbCXfnCK3PU1jzzkHx5KxnjKKy0QRNcfD8W8UYLlSdd0y
+         SYT1PYXGksiHIVelmatEEhslOy4TaUnMmSfjwqr5YYae9O31Y3VNUSr5bv+wIFMWWmrp
+         rpozIxYtIGO3HwYi6zP3upYV0mfJeSe9nrxUZ2n0rz+StkjhmlbLpBQwUB4WA10kI0sW
+         O1qzyXf3NnAulbRnccRh0tM/rQ6o+Ta9IoulEF7m191FGEuurznSaVUI+gsb5TyGJzbj
+         POpw==
+X-Forwarded-Encrypted: i=1; AJvYcCU2EQ6Q/w5WaJPKQhFnrpkHxjMyVZZbUNpgcbCsMwnYgUgt8j21PzUzy7vOVof5bTrmgFXwukCT9MGvsuI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg5xAbF7LRSxn4zCf6YCaUm97wJsJpGEG9vy0kBkpO7bfHsMLw
+	w5Wg9XHqf71bL0St9F/AZZYVCvsHzo8FXEhKfe0BwkXusTiEdxv5YRpJ+A==
+X-Gm-Gg: ASbGncv9Yp3ZVkIQzP9Ebvd98hAcROaxViyRi2ZhdChLdLqyQBQ7CdX7ES0bn8GqevI
+	JWA9c3pp6slpu/KWWrOwrzulZ8Ok4X1oXJap+RmcTRazWq1VImir3m2GlfuTTZ//O5X2eLRGvmz
+	Xhc70GABzoiNwVaG4rHmu6OhIjnoQfov2nrsksnOmb8jIhh3pyX27JgNYJmgk8DfVaCKj8Mkwc8
+	50XJglWyY+G/hJl97oGIVISjYjxaoXhystucHBkeU4Dwc/8Nx1goDqZL4j5cXJjC37KHXTVj38k
+	K9Lrq+TW4IZ+sfhwnO5zzh2quDvI4SRqUWBa6XaGLQ==
+X-Google-Smtp-Source: AGHT+IH3vryCaeBX4bRAztqst6zuSkFgqnrZnOJcXfAGJYfBjOBQKYZ2G16BZgOarv2Y6NbHFRUv5A==
+X-Received: by 2002:a05:6a20:6a28:b0:1db:f01a:cf12 with SMTP id adf61e73a8af0-1e0e0b5cc80mr32083457637.34.1733115760456;
+        Sun, 01 Dec 2024 21:02:40 -0800 (PST)
+Received: from kic-machine.localdomain (122-117-151-175.hinet-ip.hinet.net. [122.117.151.175])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-7fc9c3034c8sm6844302a12.31.2024.12.01.21.02.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 01 Dec 2024 19:19:01 -0800 (PST)
-From: xiehongyu1@kylinos.cn
-To: mathias.nyman@intel.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
+        Sun, 01 Dec 2024 21:02:39 -0800 (PST)
+From: Kuangyi Chiang <ki.chiang65@gmail.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: [PATCH] usb: xhci: Add module param for compliance quirk checking
-Date: Mon,  2 Dec 2024 11:18:55 +0800
-Message-Id: <20241202031855.1319821-1-xiehongyu1@kylinos.cn>
+	ki.chiang65@gmail.com
+Subject: [PATCH v3 0/1] xhci: Some improvement for Etron xHCI host
+Date: Mon,  2 Dec 2024 13:01:34 +0800
+Message-Id: <20241202050135.13504-1-ki.chiang65@gmail.com>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,65 +88,32 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+To prevent the xHCI driver from printing a "Transfer event TRB DMA
+ptr not part of current TD" error message when an error is detected
+while processing the last TRB of an isoc TD:
+  xhci: Correctly handle last TRB of isoc TD on Etron xHCI host
 
-In the old way, vendor name and product name need to be put in
-xhci_compliance_mode_recovery_timer_quirk_check, it's not convenient.
-
-So add two module param for convenience.
-
-usage: put xhci-hcd.compliance_vendor=[vendor name]
-xhci-hcd.compliance_product=[product name] in cmdline.
-
-In Ubuntu you can use "dmidecode -t system" to get vendor name and
-product name.
-
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
 ---
- drivers/usb/host/xhci.c | 18 ++++++++++++++++--
- 1 file changed, 16 insertions(+), 2 deletions(-)
+Changes in v3:
+- Update subject and commit message
+- Use error_mid_td instead of last_td_was_short to solve the problem, as suggested by Michal
+- Link to v2: https://lore.kernel.org/all/20241028025337.6372-1-ki.chiang65@gmail.com
 
-diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-index 5ebde8cae4fc..2007c27bfaf4 100644
---- a/drivers/usb/host/xhci.c
-+++ b/drivers/usb/host/xhci.c
-@@ -39,6 +39,14 @@ static unsigned long long quirks;
- module_param(quirks, ullong, S_IRUGO);
- MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
- 
-+static char *compliance_product;
-+module_param(compliance_product, charp, 0644);
-+MODULE_PARM_DESC(compliance_product, "Product name for compliance comparison");
-+
-+static char *compliance_vendor;
-+module_param(compliance_vendor, charp, 0644);
-+MODULE_PARM_DESC(compliance_vendor, "Vendor name for compliance comparison");
-+
- static bool td_on_ring(struct xhci_td *td, struct xhci_ring *ring)
- {
- 	struct xhci_segment *seg;
-@@ -442,13 +450,19 @@ static bool xhci_compliance_mode_recovery_timer_quirk_check(void)
- 	if (!dmi_product_name || !dmi_sys_vendor)
- 		return false;
- 
--	if (!(strstr(dmi_sys_vendor, "Hewlett-Packard")))
-+	if (!(strstr(dmi_sys_vendor, "Hewlett-Packard")) && !compliance_vendor)
-+		return false;
-+
-+	if (compliance_vendor && !(strstr(dmi_sys_vendor,
-+				  compliance_vendor)))
- 		return false;
- 
- 	if (strstr(dmi_product_name, "Z420") ||
- 			strstr(dmi_product_name, "Z620") ||
- 			strstr(dmi_product_name, "Z820") ||
--			strstr(dmi_product_name, "Z1 Workstation"))
-+			strstr(dmi_product_name, "Z1 Workstation") ||
-+			(compliance_product && strstr(dmi_product_name,
-+						     compliance_product)))
- 		return true;
- 
- 	return false;
+Changes in v2:
+- Modify commit message
+- Remove XHCI_NO_RESET_DEVICE/XHCI_NO_BREAK_CTRL_TD quirk flag
+- Add XHCI_ETRON_HOST quirk flag, thanks for the suggestion by Michal
+- Check device speed before invoking the workaround
+- Add (xhci: Combine two if statements for Etron xHCI host)
+- Add (xhci: Correct handling of one-TRB isoc TD on Etron xHCI host)
+- Link to v1: https://lore.kernel.org/all/20240911051716.6572-4-ki.chiang65@gmail.com
+
+Kuangyi Chiang (1):
+  xhci: Correctly handle last TRB of isoc TD on Etron xHCI host
+
+ drivers/usb/host/xhci-ring.c | 29 +++++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 8 deletions(-)
+
 -- 
 2.25.1
 
