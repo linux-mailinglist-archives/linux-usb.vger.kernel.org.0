@@ -1,89 +1,91 @@
-Return-Path: <linux-usb+bounces-18008-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18007-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B8549E0B4A
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 19:48:45 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BC26164522
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 18:48:42 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E24841DE2AD;
-	Mon,  2 Dec 2024 18:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Mig94dba"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2065.outbound.protection.outlook.com [40.107.94.65])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C1949E0BD7
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 20:16:09 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36A61DDC39;
-	Mon,  2 Dec 2024 18:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.65
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56917B2E33B
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 18:12:23 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADBA71DDA3E;
+	Mon,  2 Dec 2024 18:12:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="sZX9aaiG"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2053.outbound.protection.outlook.com [40.107.223.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A22561D9694;
+	Mon,  2 Dec 2024 18:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.53
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733165317; cv=fail; b=c8wx57IosEp2zdwyxHuIeBvHht6eTczcOsBJ1udEChCAcZ9m7TNkuSICXla+AzqcpX1KmapRu2Q/t/45k1xkBHjIAPosBb4E85OwXzf/PEVQCog3pvaQ+asEHGgXuRvunJeFG78lsl3+Dj4wvPei0PbDbz0bSL9em3VkaWjH4t8=
+	t=1733163136; cv=fail; b=hURUBG+b8UCbEMo9toZZV8uCXj8v/Xdz384cyTQvEc1GFyVLB/hs65ctq/Hx3JgyHZLofmKQE12Z+AGUYwdEXv//hNah0hiT1ju5x5KSVRW9yOSBykPIhdbXD4lYClQTDbkImrsPz25VQGuPjqakJQJNZddt7HYB8qXYVJ/PQ8Y=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733165317; c=relaxed/simple;
-	bh=WRmDbxkj4Z+2iUoQvvnymrb1wyhBXuyUEUoRMv9Oecs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VJunaZwMSw302G543bXNKKtReChRRdzRJET5C0SVrxff5ze5kafJ24QtmRWqLLhQNGeeVQi7NuorHpvqXUuqaKddfJE42UTUhTkltcwGnZ8yE4TlfIT1YU/GeV9lwhZY1ukfvuJbs5MtfK9uSstBKJ6q9L9oXcINyvyqb2ecRVk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Mig94dba; arc=fail smtp.client-ip=40.107.94.65
+	s=arc-20240116; t=1733163136; c=relaxed/simple;
+	bh=whXt3smGQXQzNmrC4ki23SEp6otSPeI1Kqcm16mUcLo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Y9bhAnApwOjNsG6J2FoMR1reurN69yuYBQUBLnykd45oSS5eXWFCpadN9OFzgwWTSjCPs8awOc3Kn9p/MS8fKQepxVfO3cT17jtTuBd2DCzAKw85cfC+Icl72Q4/TX1nYRtndoQPycJ83XtZlyAr6DqaqOQXWC6KZC0uIJ2qbxM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=sZX9aaiG; arc=fail smtp.client-ip=40.107.223.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=DbN3SIvspCOSUr5TbzDlKGvkb7xk7OSJU1uBTvUR/2e3xv1KQIOb3GpvRZlYgnf/ugR0N20m1MF7h1Q7XR0sQM2XSULvWIKDWQJI+95jZvhwYthEcG+36LQ+s/uo24uOPtBF+DSQeBysTUSSyy2yZiy3ezV8eHbJQq3gDkxk3psYBQu5DnNPkgybVfw8znRE4N6ISlBpeB/xTlObEgGgX9D9hJBwk3WOGJ3hJjwlOxF7YmjnlzLgzGn5ZlzbD2w/981kdsi1ydjlc9ImbPR6z21/KXeW90gGOTds9taraltIUv9vMVCXt7LyDnMcAWDsEp2lSYLtmtLKMCOtYZJmUg==
+ b=RKPM5LaeTMMo/rTnf5RktM1HXKwFu1DgM6Xx2IdNw3tw6WUJZfu56vdem9Ocm25NCDS7uL6+nPL9vVkHaYV3H9Rhhlta0qhyCx9NMJjhQyf7drOA/dYfoldEEsVNi5Dny53l6UgfnpZOT8AKSYeTstb8Bbo3OsY2Wxq8AAHRB+ZKa92Vhp5MP0hn1chqDZdAO7FZa8MD9wilIcudDnjz4lvYL2FYa0ToP2Ds8gn1tOArULDWUOODCkKg1VzLhcA6Z9PkPfjuu6dk+UTNlsEYNu86XxD9P6buWhuE8p8vnV6GADPgWOBijM6pp2m0LFwvdWLh80p7RwjPShhJ6os5Wg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cOtZgqwXCqtwubgP4KpRV2iFdeEXYQWSTpfB/sz/1sU=;
- b=wz7RqcjHct18YlOTSNLAkogwy3rLovPBYqdSa91f29WtEppThQa0WZirXAO3T8miDetfmUKtxRR+R2tVWpzdsu8pAk8jOcTAWssxR/VkUsLkfVS3RIof4RB4YeYF9HfNIxdHSoDqf1I7CWA3kqrLOQNVXNQCMQ7Dt90N2srPCUbXWjoO6Ir+yOkebzsaKRnpQHdUB0ELXZg2w2i5LIsBcqzaupr/zWhbFAwrEHnCusl7EbKy36NFH2QM8k0UYbfVK5n/gBf26zsQhf4WwXHpFO+m4FnVfLo2oP0KgKiB6SjEKof6uzLgI8xQQhomSQluW5DqIHxUajphIt+RpknAXQ==
+ bh=E2u+KRhwgC9PpLo4ffimzyQk7sng45JvvL7Bf57V0G4=;
+ b=jSKXOoSanr8XZ/41nHBfV1P9yL+W6dAb1yI74xSUK+lPhGvngIEqpDoHAkbz7RzfM66sTPs6mK/x1EDrTwdOZJoMbPy2m8lTL8JjbpGmAEeD2GGeyrFw72X3+5iLUwc0GsB1L2Dxt6R8NOt5OV1+gJG/h/j5+lqXbNPUtj1o69wpxNSUYEjGduI0Ww61/vK3AvEzmTyBZ9/xMWQ3Cuuxl4DnuuY/Bcb/+0FW3nXmDTcnTRqD+3SiWUI4qehPF/998RewFo6lyVbSYFOsz4u8KQ4OdwgKQCkUpudxCyEDgMUMr1kpaXT//AWBmHixJjhb494OwB0McBkxmGlBDZoakQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
+ 165.204.84.17) smtp.rcpttodomain=synopsys.com smtp.mailfrom=amd.com;
  dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
  header.from=amd.com; dkim=none (message not signed); arc=none (0)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cOtZgqwXCqtwubgP4KpRV2iFdeEXYQWSTpfB/sz/1sU=;
- b=Mig94dbaRfwmZ0y+YgwQDcxD7xoQcJRieXXGKAlLkJX19e9XmkLpl3Xqe2uLVg2VdH2gX2zK9t8b4xqF8p5CBV4ES8uPiSnkKl8unWuMqEdR02blu9Dwd2HX474IP5pHlCTM+1EtMPQeZA7ZTzBrZu+tFSCI8c6cZtVaVnsrl8g=
-Received: from CH2PR10CA0013.namprd10.prod.outlook.com (2603:10b6:610:4c::23)
- by CH3PR12MB8710.namprd12.prod.outlook.com (2603:10b6:610:173::15) with
+ bh=E2u+KRhwgC9PpLo4ffimzyQk7sng45JvvL7Bf57V0G4=;
+ b=sZX9aaiGOkC1OmpxYBuUAo7x+EhF2UHSZxbWAisWRlqO1yzZyKyiYfDWXYl0Rv28+Ee+7GOEVJZBNqWgO1Fz2WIk4On2f6h3EV3U0SEQVx8nb0KWqmUTpfY7vfbNn+X3+cbeduwlTflZpKh/AWMrC2ItYQ3TUnk223k491xepPw=
+Received: from SJ0PR13CA0201.namprd13.prod.outlook.com (2603:10b6:a03:2c3::26)
+ by PH7PR12MB7305.namprd12.prod.outlook.com (2603:10b6:510:209::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.17; Mon, 2 Dec
- 2024 18:48:31 +0000
-Received: from CH2PEPF00000144.namprd02.prod.outlook.com
- (2603:10b6:610:4c:cafe::28) by CH2PR10CA0013.outlook.office365.com
- (2603:10b6:610:4c::23) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8207.18 via Frontend Transport; Mon,
- 2 Dec 2024 18:48:31 +0000
+ 2024 18:12:09 +0000
+Received: from SJ5PEPF00000208.namprd05.prod.outlook.com
+ (2603:10b6:a03:2c3:cafe::ad) by SJ0PR13CA0201.outlook.office365.com
+ (2603:10b6:a03:2c3::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8230.7 via Frontend Transport; Mon, 2
+ Dec 2024 18:12:08 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
 Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
-Received: from SATLEXMB03.amd.com (165.204.84.17) by
- CH2PEPF00000144.mail.protection.outlook.com (10.167.244.101) with Microsoft
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ SJ5PEPF00000208.mail.protection.outlook.com (10.167.244.41) with Microsoft
  SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8230.7 via Frontend Transport; Mon, 2 Dec 2024 18:48:31 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ 15.20.8230.7 via Frontend Transport; Mon, 2 Dec 2024 18:12:08 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 2 Dec
- 2024 12:48:30 -0600
-Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ 2024 12:12:07 -0600
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 2 Dec
- 2024 12:48:29 -0600
-Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Mon, 2 Dec 2024 12:48:27 -0600
+ 2024 12:12:06 -0600
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Mon, 2 Dec 2024 12:12:03 -0600
 From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
-To: <mka@chromium.org>, <gregkh@linuxfoundation.org>,
+To: <Thinh.Nguyen@synopsys.com>, <gregkh@linuxfoundation.org>,
+	<michal.simek@amd.com>, <robert.hancock@calian.com>
+CC: <linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <git@amd.com>, Neal Frager
+	<neal.frager@amd.com>, <stable@vger.kernel.org>, Radhey Shyam Pandey
 	<radhey.shyam.pandey@amd.com>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<git@amd.com>, <stable@vger.kernel.org>
-Subject: [PATCH] usb: misc: onboard_usb_dev: skip suspend/resume sequence for USB5744 SMBus support
-Date: Tue, 3 Dec 2024 00:18:22 +0530
-Message-ID: <1733165302-1694891-1-git-send-email-radhey.shyam.pandey@amd.com>
+Subject: [PATCH v3] usb: dwc3: xilinx: make sure pipe clock is deselected in usb2 only mode
+Date: Mon, 2 Dec 2024 23:41:51 +0530
+Message-ID: <1733163111-1414816-1-git-send-email-radhey.shyam.pandey@amd.com>
 X-Mailer: git-send-email 2.1.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -92,88 +94,97 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain
-Received-SPF: None (SATLEXMB05.amd.com: radhey.shyam.pandey@amd.com does not
- designate permitted sender hosts)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH2PEPF00000144:EE_|CH3PR12MB8710:EE_
-X-MS-Office365-Filtering-Correlation-Id: b27f5a3c-a324-4253-d73f-08dd1301ead6
+X-MS-TrafficTypeDiagnostic: SJ5PEPF00000208:EE_|PH7PR12MB7305:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f5dbcce-fe8d-4dd6-628b-08dd12fcd5ef
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|376014;
+	BCL:0;ARA:13230040|376014|82310400026|1800799024|36860700013;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?qZWyHM7vC2K0Q2IEC9iPHBYOK0XLY6Frz/C/1gaZwbEkk84MnrJD195b7YQA?=
- =?us-ascii?Q?9OMAgWLFHpXy/wIrOxJe2rB2SnjGa2CUv9MFKnYCcj098yZKhf/hIAPrgDsg?=
- =?us-ascii?Q?IafCrPXxDYwL2XzS3FxkYdURAeef0RW8Ct5khSMOVXJPJ8rnCypLl+jTSY2Z?=
- =?us-ascii?Q?fZ8LY6OMdfjayzFsN7t5j1TkhZgdZRQkvekokJ++HHt74C0DS3E22Qo9m+8w?=
- =?us-ascii?Q?GgcjsRoKW0SjF7lPwfZ/CQFQArrDBw8xJsIC9C5kk8n8izNuy/jn7RCg8da5?=
- =?us-ascii?Q?nl881VAso8HxLJ1pR+Obc7APkFxXg/RwFmE/J7Dr+1/Vc7BAhj1uo4mFRpyA?=
- =?us-ascii?Q?OogrtjygRwiqKrY+7PAAZ0Grd5lOp0tCc2Eds+EVBmrCGqgoUeRwbmB3Nuba?=
- =?us-ascii?Q?Ton1xS9GOjtW9HKxFz4pQk2dPJmFSVSDBZ5/ka+ZnCERJszyW4jfD2K12ZW1?=
- =?us-ascii?Q?LMp/U7w5sdqIz5ea7gWULIndMVD9y0udeXj3neTSyom8uerE502DhUrciq9B?=
- =?us-ascii?Q?7w5ZtU/N1D+P3IqCYSyg551NaU60hftCZ9a9qJxjhCzvKdZnMeCx2GS4I1Q6?=
- =?us-ascii?Q?293Psvb2iuO6IE/w/v7xqwNem/oJPPQSmkMmpwHSNGF5X/Nf58xAeWmrZfUj?=
- =?us-ascii?Q?MJxokhKJrl4AM0chAQjTEA+KzVKG1XZCAOFoYd0WJfC+9pacuDNOF1yk1Cml?=
- =?us-ascii?Q?sm2xhMICXxTxWOHQX+YBspbyV46QOKU2lJ03lREkwv4nyPhasuSERO1x4qCi?=
- =?us-ascii?Q?fJhKsVvXOdlmLVCVVgTTdADTeVESPJENmF1znESuP3YNrQMIOdGDQkGU9duW?=
- =?us-ascii?Q?ziWMtPfjKNlQWaSHdL1eyhoD5O1FHFILLiH2PcHMztywu2IffxIuBtfV81oN?=
- =?us-ascii?Q?vN1Ll8Tmj/8Luw33+crygWQx0vWb2nbpRxVz7NFvRaW3Rrq3qokhCDipNSiC?=
- =?us-ascii?Q?eRcgnjshlrRKfb4jRR8Bjbf+kzlDHO21l2R/lkluACH9m8TaMBdl2Sm0mj2t?=
- =?us-ascii?Q?VkbttpG++9WlZKTA6SxcMdmuipWcjNP3qouYHXG42A/O/f6E6IL+Q5jeLYTC?=
- =?us-ascii?Q?mdyA8na87qw2qnmulSnOWumbNpYH0mfJ2QygvaTpmnUcdX8zxQG3bCOp3PVz?=
- =?us-ascii?Q?sy1TwJV2Zm2W7nUo+tVCQGMIe1v51mmxBweYloGmd23/g0FzUOTBaln/4C2g?=
- =?us-ascii?Q?j31bfzNvnvZBDcEQCmeejUa0qwzVJBZpF4A5hrdL4jnYCw9ZAalz/eo8xPwY?=
- =?us-ascii?Q?4IxSxFUknen2RIxu0KAA/gAnDOFevKWF8FrzeyZvy5QTt4EKiDwpTCLiCdYy?=
- =?us-ascii?Q?9wuBl+xgg0kbYWpJVHPgVHce3wzEpLGLSSdcu1ljvsyVIyJMvSEoaeDtDcg4?=
- =?us-ascii?Q?8dtd5x9vJoVl+PtrJg4x6vfslh1g6TryGnZM4OE0ZJL5DNSH4TTtrDtxLk2R?=
- =?us-ascii?Q?ueUDgoofFZoMbTulbH+Sept7YM+SbCbV?=
+	=?us-ascii?Q?G+0x3vrlL0oT3OJQW3v1JUAf5k5uQEs7/DTOZwcSzstOH62p89zrHn3rKJl1?=
+ =?us-ascii?Q?HQgKfztVe73359Ae3XUhbSyj+5J6NsFyyJ+gpsHZP1raa4GdFUhfX+KbrMzr?=
+ =?us-ascii?Q?OS+gSPbiwzeIOTcd/5yg7BZE6csOX6HnJh6z+sPCgLY99IRCNzmiEjTR4vQO?=
+ =?us-ascii?Q?DCrrl044yM3rYYUIBDrMhbS+Ne0eyJpM+Q2CoJmp1j0z3dza5fpHgWTCiYY7?=
+ =?us-ascii?Q?gIgeMGqG6zgyzj5XQ8OF1/wAJ1hG5a0v2QGTnKxwMEM3u+XlWo6AfwKHr83q?=
+ =?us-ascii?Q?0pLlx1jk2w9Hks0iNNId0zeQxuECGRLLmFwlTmXlGca9Di7U0UdyCY76EY+y?=
+ =?us-ascii?Q?NxcJbiDGzVU+PnqZyfPIzH6xSLrk7UnQ6bnVQJ7v5zt26q/Ua4gETzQ+zSo+?=
+ =?us-ascii?Q?//gv3y9tq74CRzQwFHMSQUM5Fq8HhoO/ioS2YjoZuR29CIbPNyEmF01VkeXO?=
+ =?us-ascii?Q?0kGeZYuqjE4l/v+VYxtdnxxE883hVDe56KXhGa+ha28RchoSOzjnj/7Gvm8d?=
+ =?us-ascii?Q?AIdvUob6a2vYxm/ZGdOXu1urPFbwxhGc9N/Sd6o7PM9kBO4P5awytztl69Ay?=
+ =?us-ascii?Q?I4YUNrGP/5IDyV2fR1NhIZU7NePo4BnGUC9XmXhYUbCtOZa9SrLdLyk/CRHf?=
+ =?us-ascii?Q?dyNWnnvrfX9AmCxiCgABPtlO1/bWCFCK4UUPeXMc1rtcZDY1V56FRnky1yUC?=
+ =?us-ascii?Q?bPhWMyxMhBwoeFXQO5uMs97aDsYHbBVB7wqWmW8W6gfUKHZL0oyl1xq8qss7?=
+ =?us-ascii?Q?Xk5DD1ZLDBf9HGPKN5Y9ZLgkkJN2LE8GUaInN1cY6mK2z28TyFsmBE/sLPFA?=
+ =?us-ascii?Q?yDk4CP/FS4ZKf3Fs0spgG6sKAjnLLNzifsJIM9RIkUYktvzr8J+HqVETehIg?=
+ =?us-ascii?Q?LNvMN1kfqNrQoG4oh3xT/+RNLaDbsDmCVj1rjyQ21ttEE3/id1gO70JcvY/j?=
+ =?us-ascii?Q?luI5h6ITMcfUc5rZ3yYVJrBrFxRU7ic7ydnsQ7MGEDHYFMosIgl88suJKMOx?=
+ =?us-ascii?Q?0bEPlpnmQgujU/nuevTBIK+sy2Ykw7srzabnxwWNpU9AkuTgLtll9NbaUOIJ?=
+ =?us-ascii?Q?Y+TMr4sLuWcrDJYQMdDMnjDkUzfeZ2+qZh92iD8YG2Veia5fsAuTIT2WnENU?=
+ =?us-ascii?Q?v6j+9ycEuaNPIPS4iGGorbnVvhrrCdOmeqnKU2d6vRmZ1e2mTkxEgRV3UyYj?=
+ =?us-ascii?Q?jQxYY/+2RbDLzWT1KIJLofkWeAscVQ2Cr5F3VYNBParz//oNEG6rUW/VgP23?=
+ =?us-ascii?Q?wdNyzDEdXVD/T1ajbEzni4si4WnABfml24jKeE6P+hU+13PazwcAzdPaglZ8?=
+ =?us-ascii?Q?t82H03N5Fyz8aAmrK6oUngLv/ePv3EGAUPN4oU9kv82X5fXj4d436kLyHrsW?=
+ =?us-ascii?Q?cet5Pdgzx7suKF5SxWqEu4Ms3WfTKp46XyVHVkYzMQjRrrleYIFlvnamNoaW?=
+ =?us-ascii?Q?myMx4Nc6sVvQSolFxALP6oQ1xUfuv+bD?=
 X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014);DIR:OUT;SFP:1101;
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(82310400026)(1800799024)(36860700013);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2024 18:48:31.1540
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2024 18:12:08.5209
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: b27f5a3c-a324-4253-d73f-08dd1301ead6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f5dbcce-fe8d-4dd6-628b-08dd12fcd5ef
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	CH2PEPF00000144.namprd02.prod.outlook.com
+	SJ5PEPF00000208.namprd05.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8710
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7305
 
-USB5744 SMBus initialization is done once in probe() and doing it in resume
-is not supported so avoid going into suspend and reset the HUB.
+From: Neal Frager <neal.frager@amd.com>
 
-There is a sysfs property 'always_powered_in_suspend' to implement this
-feature but since default state should be set to a working configuration
-so override this property value.
+When the USB3 PHY is not defined in the Linux device tree, there could
+still be a case where there is a USB3 PHY active on the board and enabled
+by the first stage bootloader. If serdes clock is being used then the USB
+will fail to enumerate devices in 2.0 only mode.
 
-It fixes the suspend/resume testcase on Kria KR260 Robotics Starter Kit.
+To solve this, make sure that the PIPE clock is deselected whenever the
+USB3 PHY is not defined and guarantees that the USB2 only mode will work
+in all cases.
 
-Fixes: 6782311d04df ("usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming support")
+Fixes: 9678f3361afc ("usb: dwc3: xilinx: Skip resets and USB3 register settings for USB2.0 mode")
 Cc: stable@vger.kernel.org
+Signed-off-by: Neal Frager <neal.frager@amd.com>
 Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+Acked-by: Peter Korsgaard <peter@korsgaard.com>
 ---
- drivers/usb/misc/onboard_usb_dev.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+Changes for v3:
+- Modify commit description to drop second "is" and add Peter ack.
 
-diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
-index 36b11127280f..75ac3c6aa92d 100644
---- a/drivers/usb/misc/onboard_usb_dev.c
-+++ b/drivers/usb/misc/onboard_usb_dev.c
-@@ -407,8 +407,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
- 		}
+Changes for v2:
+- Add stable@vger.kernel.org in CC.
+---
+ drivers/usb/dwc3/dwc3-xilinx.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/usb/dwc3/dwc3-xilinx.c b/drivers/usb/dwc3/dwc3-xilinx.c
+index e3738e1610db..a33a42ba0249 100644
+--- a/drivers/usb/dwc3/dwc3-xilinx.c
++++ b/drivers/usb/dwc3/dwc3-xilinx.c
+@@ -121,8 +121,11 @@ static int dwc3_xlnx_init_zynqmp(struct dwc3_xlnx *priv_data)
+ 	 * in use but the usb3-phy entry is missing from the device tree.
+ 	 * Therefore, skip these operations in this case.
+ 	 */
+-	if (!priv_data->usb3_phy)
++	if (!priv_data->usb3_phy) {
++		/* Deselect the PIPE Clock Select bit in FPD PIPE Clock register */
++		writel(PIPE_CLK_DESELECT, priv_data->regs + XLNX_USB_FPD_PIPE_CLK);
+ 		goto skip_usb3_phy;
++	}
  
- 		if (of_device_is_compatible(pdev->dev.of_node, "usb424,2744") ||
--		    of_device_is_compatible(pdev->dev.of_node, "usb424,5744"))
-+		    of_device_is_compatible(pdev->dev.of_node, "usb424,5744")) {
- 			err = onboard_dev_5744_i2c_init(client);
-+			onboard_dev->always_powered_in_suspend = true;
-+		}
- 
- 		put_device(&client->dev);
- 		if (err < 0)
+ 	crst = devm_reset_control_get_exclusive(dev, "usb_crst");
+ 	if (IS_ERR(crst)) {
 -- 
 2.34.1
 
