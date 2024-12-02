@@ -1,104 +1,105 @@
-Return-Path: <linux-usb+bounces-17996-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17997-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88A359DFAC9
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 07:38:23 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 549959DFB8C
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 08:58:20 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E6320B21629
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 06:38:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B35C161882
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 07:58:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D9081F8F0A;
-	Mon,  2 Dec 2024 06:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zIWtysUB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2E41F9AB4;
+	Mon,  2 Dec 2024 07:58:12 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ni.piap.pl (ni.piap.pl [195.187.100.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E795E33F6;
-	Mon,  2 Dec 2024 06:38:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3585D1F8EF0;
+	Mon,  2 Dec 2024 07:58:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.187.100.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733121495; cv=none; b=YeZ6AGsVf73rofpUTZvmE7q35HWOAr0uSmTinivnSEiDu0q/n38mPsO53wE6m4jccokkL8dbaEtWSu+MKADDbxghmV+EM+t3jV0U4CMXoqmOguxhpf5u5qmqQAIC0fglFPkRyBqRlRr0xS09UU8dpfsNHuOZNqS/gOKaVJj0mE8=
+	t=1733126292; cv=none; b=AW/MbtIMxdjVkUJ8TzO6ezvqE/XKwvy73BznapXPDg1Nwbw+EJK73d/KCx9modzUGwp+VEydFeFq8Kt663dJtvek0pqxrtvMB/alFcfnWuPcy/3EXRqUDHhimHsyQJ4FClJHI3U+tIjgDNL8u9RAUmSQxO/+ioxOLCNfCtsur8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733121495; c=relaxed/simple;
-	bh=hjFPsnjl1TckYY8nwQkI7+uOHoyQgZX9O6/y3kU0jWA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MMpW+HH+VUAjG5t3MXBE7a0GyiMoHPruCqBne2Pd6r10bmoM+2c9o8Zggvq87b+4tqP0j1gl3nFRDkWhsROuZhhDvZam1PlGhFOeIldpQpxFdhZ1q75cJSxT+JRUAI1O+1A0wFKsEVHOB+lr/MHvUELxjC0XBcbocuSW0O/TVy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zIWtysUB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF249C4CED2;
-	Mon,  2 Dec 2024 06:38:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1733121494;
-	bh=hjFPsnjl1TckYY8nwQkI7+uOHoyQgZX9O6/y3kU0jWA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=zIWtysUBHgDaA3yE+fJxOQXNLU3uZ1o8fOMjIY0owZ0JWLXHfDBZgSfyAbnIP99v+
-	 snPDR4LUh8DDEb2h0ql2hawmBHVfU4h2PrAGcgw3nqfR5pi50ywCivq4lIkNoRgwfg
-	 paKMwbLXUZPeviZ7sl5w8+NdXrRDOdNrBbViuh9A=
-Date: Mon, 2 Dec 2024 07:38:11 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: xiehongyu1@kylinos.cn
-Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Add module param for compliance quirk checking
-Message-ID: <2024120205-collected-trapezoid-9dde@gregkh>
-References: <20241202031855.1319821-1-xiehongyu1@kylinos.cn>
+	s=arc-20240116; t=1733126292; c=relaxed/simple;
+	bh=5n73uMdwQbFgV2Fx+/Rw7cLPrVE0hEVu/BDKxMK536I=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=ia05bnJjXZ2x5zMUjmFfyo/I+HOVMI0EvVj9FH5wGzSlnvJL77tRiQjwGoTUZc+IEJMTVtYHVYbC2i7vVKrVV4UEvEyfmBCNc8VqPA3VQ6PzB7fTA3HM2h/WkK/zYI7tsA/7E9xUzoHSIFPbLtCwx7YaWaT4ZC2Qw3GTWmQ2d0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl; spf=pass smtp.mailfrom=piap.pl; arc=none smtp.client-ip=195.187.100.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=piap.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=piap.pl
+Received: from t19.piap.pl (OSB1819.piap.pl [10.0.9.19])
+	by ni.piap.pl (Postfix) with ESMTPS id ADC37C3EEAC5;
+	Mon,  2 Dec 2024 08:57:59 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ni.piap.pl ADC37C3EEAC5
+From: =?utf-8?Q?Krzysztof_Ha=C5=82asa?= <khalasa@piap.pl>
+To: Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Andrew Lunn <andrew@lunn.ch>,  netdev <netdev@vger.kernel.org>,  Oliver
+ Neukum <oneukum@suse.com>,  Andrew Lunn <andrew+netdev@lunn.ch>,  "David
+ S. Miller" <davem@davemloft.net>,  Eric Dumazet <edumazet@google.com>,
+  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni <pabeni@redhat.com>,
+  linux-usb@vger.kernel.org,  linux-kernel@vger.kernel.org,  Jose Ignacio
+ Tornos Martinez <jtornosm@redhat.com>,  Ming Lei <ming.lei@redhat.com>
+Subject: Re: [PATCH] PHY: Fix no autoneg corner case
+In-Reply-To: <f870d2c7-cf0a-4e78-80d6-faa490a13820@gmail.com> (Heiner
+	Kallweit's message of "Fri, 29 Nov 2024 07:49:32 +0100")
+References: <m3plmhhx6d.fsf@t19.piap.pl>
+	<c57a8f12-744c-4855-bd18-2197a8caf2a2@lunn.ch>
+	<m3wmgnhnsb.fsf@t19.piap.pl>
+	<2428ec56-f2db-4769-aaca-ca09e57b8162@lunn.ch>
+	<m3serah8ch.fsf@t19.piap.pl>
+	<f870d2c7-cf0a-4e78-80d6-faa490a13820@gmail.com>
+Sender: khalasa@piap.pl
+Date: Mon, 02 Dec 2024 08:57:59 +0100
+Message-ID: <m3ldwyh5yw.fsf@t19.piap.pl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241202031855.1319821-1-xiehongyu1@kylinos.cn>
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 02, 2024 at 11:18:55AM +0800, xiehongyu1@kylinos.cn wrote:
-> From: Hongyu Xie <xiehongyu1@kylinos.cn>
-> 
-> In the old way, vendor name and product name need to be put in
-> xhci_compliance_mode_recovery_timer_quirk_check, it's not convenient.
-> 
-> So add two module param for convenience.
+Heiner,
 
-Please no.  Module parameters are from the 1990's, they do not scale or
-work well anymore, please never add them.
+Heiner Kallweit <hkallweit1@gmail.com> writes:
 
-> 
-> usage: put xhci-hcd.compliance_vendor=[vendor name]
-> xhci-hcd.compliance_product=[product name] in cmdline.
-> 
-> In Ubuntu you can use "dmidecode -t system" to get vendor name and
-> product name.
-> 
-> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
-> ---
->  drivers/usb/host/xhci.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 5ebde8cae4fc..2007c27bfaf4 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -39,6 +39,14 @@ static unsigned long long quirks;
->  module_param(quirks, ullong, S_IRUGO);
->  MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
->  
-> +static char *compliance_product;
-> +module_param(compliance_product, charp, 0644);
-> +MODULE_PARM_DESC(compliance_product, "Product name for compliance comparison");
-> +
-> +static char *compliance_vendor;
-> +module_param(compliance_vendor, charp, 0644);
-> +MODULE_PARM_DESC(compliance_vendor, "Vendor name for compliance comparison");
+> If autoneg is supported, then phylib defaults to enable it. I don't see
+> anything wrong with this. BaseT modes from 1000Mbps on require autoneg.
+> Your original commit message seems to refer to a use case where a certain
+> operation mode of the PHY doesn't support autoneg. Then the PHY driver
+> should detect this operation mode and clear the autoneg-supported bit.
 
-Also, you have provided no documentation as to why these are needed at
-all, so that's not going to work :(
+I'm not sure about it, but if there is consensus it should stay this
+way, no problem.
 
-thanks,
+WRT specific case, It seems the SFP port doesn't support autoneg on
+AX88772BL (I don't have any SFP copper 10/100 module).
 
-greg k-h
+The PHY registers (100BASE-FX, no link currently):
+          x0   x1   x2   x3   x4   x5   x6   x7   x8
+  0000: 2100 7809   3B 1881  501
+  0010:  250  80C 8620   20 2314  3C8 4716 724F 8024
+
+BMCR: fixed speed 100 Mb/s
+      The datasheet says "autoneg is fixed to 1 and speed to 100", but
+      it's apparently the case only with 100BASE-TX, not FX.
+
+      It seems autoneg, speed and duplex bits are read only
+      (bits 13, 12, 9, 8). So, basically, you can't enable autoneg at
+      all and this is maybe the source of the "bug".
+
+BMSR: 10 and 100 Mb/s FD/HD autoneg support indicated. Hmm. R/O.
+
+ANAR: quite standard, but doesn't matter since autoneg is disabled.
+
+I will think about it a bit more.
+--=20
+Krzysztof "Chris" Ha=C5=82asa
+
+Sie=C4=87 Badawcza =C5=81ukasiewicz
+Przemys=C5=82owy Instytut Automatyki i Pomiar=C3=B3w PIAP
+Al. Jerozolimskie 202, 02-486 Warszawa
 
