@@ -1,210 +1,214 @@
-Return-Path: <linux-usb+bounces-17998-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17999-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0A409DFBFE
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 09:35:01 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6C789DFE6C
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 11:12:58 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 620D0281BAC
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 08:35:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B1E7163F68
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 10:12:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCE2E1F9ECE;
-	Mon,  2 Dec 2024 08:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543061FCD0B;
+	Mon,  2 Dec 2024 10:11:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="Fmyediqh"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="itzXzNIS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2042.outbound.protection.outlook.com [40.107.22.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18E451F9A90
-	for <linux-usb@vger.kernel.org>; Mon,  2 Dec 2024 08:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.22.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733128496; cv=fail; b=WwINW1cJzdci13oNUPyl1lRmpolNguUcK2sAw/2sLIxCz1+Y0iA3yTvReOVyQF5lDxV8VYnjO69j+2Hl7+JSUtF2rL3HImJ4kEWlmWum4cw+MLe/yxBaAsfk3//RnQW664UJuPdJahFiZ6V4gAxGW3iz6cf8siPo1KYQYuPaFFM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733128496; c=relaxed/simple;
-	bh=HTob8ECnYY0pjWqn/UP/a/G9BgScLq+wE81engs67HY=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=FwcN7vZdMe/VRl7IjqgGv+U931mdF1NVtHSZjVgG1HlD8doDxHaOv3wq/5wgcBdzV/psLpiiBJFWCBWZoBAiU48BuZKWKqA2R0LAMRhr1ph5Ex7/vldr4IJToppeS0THnW7y5SpPTycSq1LWg78KgDxMq0sC3Y+6S1/85iA4gso=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=Fmyediqh; arc=fail smtp.client-ip=40.107.22.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lB8f+kR5KQhxUW6Zi29pAFKe9M05HKssxUYb9YvjNnmN5kw5PDxyvYr17nEdN2d2Gi7LEGL5Osa5A60wJ/fnzGTnFY2LvoqweGVQDB2F31bVMPI5YNgCgzKRwXsJ8FQbK0Yac7nOd7w9y7YV/h2feSW5MyjtV2c/suf+jDUEoaF3RXSymmI9ZOOW699HZo/o5vAU5GxlCxPazSqqhAbU1Ri5c88HHuEN6XzpPEHD8tK625LLmYdHG44+Y3+chzN2Xa0pS4zvBiKbZeSzt8BDVsD0cODmsoYbvNc8RUpMgklaHvIbPBvk9k/NGMV7UDiMEmkRHMI/m93U/aKWlD7NoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sAmwkI3N8VF9+/ZMJfYG958lbQBPl0INIn+c0P5H8UU=;
- b=m80NAqUyprwB7mddmVFuKbD6d5kKOaeDgBvJR1gCPCs0iYJceSiZA4LqGaA9GXqR7JrDniC907TKVL8TdtCc+5aBnsxQsXWUnD0mchLdaGa3uFwOC5m1Z4zKuhccuJG2a8hMJLYAkOtGpwh4f05ZytPK0Y0fSlPrG9fe441o3are6Bv5KyLlEgPtMsqGxNaG56bY4sF9RjC+LNDtu7SMA3IbkntIrXJhCMeNFhmw9OzncAvBzz1q4LeEft+tBMEbmKC2mjtcaP+kkYUH7FMOMcW1lXt2LiawjXPtf4WwFQ8qo/ERfV6lwB+EJhwPH/Erd6u/zb7btQ0hFhpgRWVZ+A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sAmwkI3N8VF9+/ZMJfYG958lbQBPl0INIn+c0P5H8UU=;
- b=FmyediqhZpod9eSDHOWHN2kgfTTkiu83BaoHkmAT9rDfOOw1sI9nMfXRY4ACJA1jl5tVaea5pB7incuD7sPTj6a1cjyDP6f82Z+7yOyqncd5JkB3y5YQAYtKhH+ZN6YUGg9lILZRbDIanKHcW2m7jj4vy7oLNXA63IY0de5lclMKraaVwoGnQq34OpuwmIrbr+XtoBiuUtSmADqaLTfMb4f1LM7F4rDfLCwqG36kvbVG3jua9qkI6VmCqWOuGWFaB4oxA2MuKTVGqp1w4kawDNZYickdiZslBoqqiW/00NgxdhPu6ELAxyU6ciCPNYB4ESYzE5wE1dwN7PPlhtafMg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by AS8PR04MB7543.eurprd04.prod.outlook.com (2603:10a6:20b:29b::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.18; Mon, 2 Dec
- 2024 08:34:51 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8207.014; Mon, 2 Dec 2024
- 08:34:50 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: peter.chen@kernel.org,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	imx@lists.linux.dev,
-	jun.li@nxp.com
-Subject: [PATCH v2] usb: chipidea: host: Improve port index sanitizing
-Date: Mon,  2 Dec 2024 16:34:53 +0800
-Message-Id: <20241202083453.704533-1-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: JH0PR06CA0004.apcprd06.prod.outlook.com
- (2603:1096:990:77::11) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0442F1FBEA9
+	for <linux-usb@vger.kernel.org>; Mon,  2 Dec 2024 10:11:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733134271; cv=none; b=UhJWYQE6eXEYF8KMZrQCHW9sp+fp88VfIsRrMkTDCtqbrzxVh7lPMcNQwrzkvNLz6O03aFWFi5/9nnLsbKfKdxrIhOEOPDmsgqvHsyCcyt5G5j9Zz8zj1ZegxjCMMwJ3n2J3RmEgQuETkLh58+exPNCsVEXLdFsKD/DRiblyuIA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733134271; c=relaxed/simple;
+	bh=VhG3rq+iTy9Ea+5rk5iSMoBYCrjEGHdVkuGWSFpQ38w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZiQLnm7zKmm+2Tc1j0MU5vh6uHZNAoRSzFbAXDsQl9kw5RO4t7UaaXduTFj4VWVVUtOphIOyJxsfcIAFaB9Py0GolwSEqKT7dmEgQq4wNz1DYq5yYsc3uNv5wl2f2Nw+vIHbu1OXHq+scgf1n8Hor/0n9N2pRj1ib9P6tAisWy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=itzXzNIS; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-434ab938e37so24915995e9.0
+        for <linux-usb@vger.kernel.org>; Mon, 02 Dec 2024 02:11:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1733134268; x=1733739068; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uALrewd2bf6VCEyNjbilrOuFF8ofT7dZTVrBfsuxsiI=;
+        b=itzXzNISgbYOjPSzFg0Gt8afHHqlFeLge8D3lBCW8mtp7QpPJGtRN4DbeAHRutZzsj
+         IGn/9hcfed0uKvIYLEH0xwfahU/PCCXyAhSMJtwXJI9D9QiML6YDplME0h0pH2ybChrI
+         nkni2avrsu5WtzD+05Tw23tUZgpJWXgqR7PrmeD/M7H1XyZMzCvVTOV0tSrb0PDUmfqq
+         wRhIVOl5qIyzJPVssqvPZl+DYnOwG6J3X/xMwYlG1w2b4iQU9WEDMedgtwEQHotb+dhx
+         6B/xCyLuPibLxC4073IsOBao6LVMV75zOgI8/S+ACq/9dl4JDsUTb3pCObRf1hMGlYPO
+         vs+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733134268; x=1733739068;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uALrewd2bf6VCEyNjbilrOuFF8ofT7dZTVrBfsuxsiI=;
+        b=EgmAp79i8eJxRW1zJ+3DdZ6PVgvCdvcjWVezCtYDJGlo7eck1ftHjBaM6KbXkTXohL
+         0qgHEJyTdSQrE0q68iFYf0Q2h07bqgFdmrIeEFSxbwGFqnERoxRZmE4b55oX5Bnl9cgP
+         Lo4ymcM6QFReE8XAIwDBtBQInBKM4PdCwVXCf9IV8CZn9j9Fhq0cHENyo5SuDXcdpRh6
+         OlDwpIK5kAJG6ggD5YtkRahfK72gXEzYt+nxU2ksOkzCoReXupHE1OOoxDu7Bg5Ljowu
+         gn/6MX/7GVhSo1HIQJe5p5K9+uo2KyAt2U2mB2S6G4K8h1ybEIp/doH/Y3j5cX/46WBS
+         vEQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU1hSCVvTGCN8oXiF37QaGiIobePcKVOatYB6iYQ/VBH0N1m5ay8Qwfhm0yHtxyM8CfR1PSc0P9tWU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXyxHK+s0MPg6TOmtCXnJDS2Cy0c5cRYEpDFNWU6SvO6W1KAan
+	f0UN61PfANA/T860hoZVk10ckIkcqBLCMxSqYjR8AaoQ2+eL5Bodye0PDx+dCV0=
+X-Gm-Gg: ASbGnctm0SDBbC+0XUZpql1XPpOnLX5Z4mAfppPzNcHW/3ji+EVcwYLZ3077bzI0e8v
+	qrgFypdgGa5OKAq/fUFwKT8gBMiymfJpYBbtegdoQg5FgHUt7jEITgCBhDsLdVamj7o8Tvl9/II
+	hAVbemFTfjFxKjjX2I2UvRdRnKCPma4nJThh1Rr8TZVMKcf9qgLu4d05Dla4MqGL59DIGaF8un8
+	UQZsJQvauyslK9jCEjJn2u8SjDVCq5YhBwHd7mW6TFAgQDJ3uFWjQslIg==
+X-Google-Smtp-Source: AGHT+IErBHQMNcCywMPgGeLil++jgNC3MB2USHxqD4fnoD5fhsRnNjP8lRK2LV8oHmVsxpRvL8auCQ==
+X-Received: by 2002:a05:600c:314a:b0:434:9e63:fb15 with SMTP id 5b1f17b1804b1-434a9dbb864mr173023505e9.1.1733134268229;
+        Mon, 02 Dec 2024 02:11:08 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.46])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434aa78c202sm177567155e9.26.2024.12.02.02.11.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 02 Dec 2024 02:11:07 -0800 (PST)
+Message-ID: <014a8db6-adcc-4755-8ab5-a15afa1d3f44@tuxon.dev>
+Date: Mon, 2 Dec 2024 12:11:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|AS8PR04MB7543:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9aaba9c0-5d83-4d65-dcaa-08dd12ac2fe0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|366016|52116014|376014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?x9B/syM1fy2lm2I360iHCAZ2pwErS5hYJWhwT062zxEnH3uVI+yKPLmrXBd3?=
- =?us-ascii?Q?bru4keDvMrP0axcffJdikIolhKF/C4Bnk1TMhhxOJq6gpcZxSnycxL4k1yMq?=
- =?us-ascii?Q?++ozjfAL+x3l/7MZOeuqmO7yKlLm549ZH7bGKy5XPYF3P4OcHFD6Aw9psYYK?=
- =?us-ascii?Q?ji4QJY3cBhn1ym0GMDj+tCEO8Q6c0EtNyD81j9d5HSiZRo758RBw3W9066Uw?=
- =?us-ascii?Q?qh5wX7Besf7tsyxWVvWKie+h5lkbAhKzQB/xJit3+ccdxaUFhqS+8MNPuyx/?=
- =?us-ascii?Q?2iUgzjAm+LfrwLqRVYCc1FcUXhNNwNj55cly/A/BdeeIA5hd92kAOC/L/06e?=
- =?us-ascii?Q?jPcTxFJJ4On2RcILmrOgF/lQH3RAS3OuaTHy9ouTbSfFXgp8pBGRTXAUg6Vv?=
- =?us-ascii?Q?UJN312EiY/ruBo2n/MSG1xqLZFn8kvYId4KWa0gdCPhyh0g2GtVr7lRlHjMg?=
- =?us-ascii?Q?kgDBmkC1HoWNWrrUjZ2BCbdnZzj39NcTVebPdqV3RbL860QmdmVYaS/eaqYK?=
- =?us-ascii?Q?Ejqnz2HA3zqF9iGrm9kfv/jzqQV0ZZGyYf6gP3GlA+HZgtwojjRpMet8RPg/?=
- =?us-ascii?Q?dsV/FM3+sDGewP9WbSSd4y8sMYYegSn5V2cjbdcPq4Wip4VmI9fw+0FwLhT+?=
- =?us-ascii?Q?hUAwu7de/lV6+jzjS/3QgLlMp7Eo3u8tQ94psdgWtNcghVZH7JrG1iEVFlga?=
- =?us-ascii?Q?GancypeNRiPU41ZOIzdyHFjXGdUYWxXyUWv30O48L94ROnnkGSxUkcLSnNgQ?=
- =?us-ascii?Q?GLhiuderOdzwnFxxZuSqR0h1M67SbXDNVJVSrfeYn8/bJgsZCfrd/As/0wyY?=
- =?us-ascii?Q?NK6/xOoxGKiCm3VlMJTrz9wQiVzrWccAzzNAcZQNpi0xHrd9mmdzCKrrSSL2?=
- =?us-ascii?Q?DKeZ3xhye7qNahu7k2Z0j/QzcJsMGD/W9MP5HE4u+QLAh90if61dNyChpf9d?=
- =?us-ascii?Q?vwuydyfuGNtMIAWc7bD9+gHpiD9I+Ty37CGx4PSi9z44AF37U89sm+Q2TziS?=
- =?us-ascii?Q?EtltOKL2p1Ki7OIs28MgwAykmQ8HxtTT+oTgx1XSByGtmLRIiniSKXKfgvil?=
- =?us-ascii?Q?9SuP4uziK3DCj+iEj9GHT5ozSNmSabLXEtbhMK8EvScn+2oOD+8a9lgcRtSZ?=
- =?us-ascii?Q?Nf/K50bev7h1atgLI2cSKRvb60JV3+yeECaTDVo/4/zqqAvxqa07vyscDG0P?=
- =?us-ascii?Q?GG85C5vi+0OGcOlkdbT6y68GR54+HZS3gnDNsH3cS01upzMvGyEjOq/UjCFr?=
- =?us-ascii?Q?+8pQP5uscDWZEE9UKHWetvBe8g+XF2Uyy1fJ9NkMB2hG0IvX8ozy90POmzyw?=
- =?us-ascii?Q?JJJQm3ogr5GTRm9WTfgsFu0hSM+9W5yHIFWk2WK32MDiuUrbDEcsZfwqyUdY?=
- =?us-ascii?Q?ytZfOwVQAh0cFXHxdB06MhFpC2aJheVcOTWSDOW54MBMkCVnLw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(52116014)(376014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?tJMSeZ67ZJWnrkYNv++KJilFKyOvOiVWJH8BE5Mv0lSvcWbvzSavABWRaSUu?=
- =?us-ascii?Q?iMDYnRGeQkdZzkzj+FOeAfdYR4SOGErZFILguXvdFFKkzcGFnj/75c7LITCO?=
- =?us-ascii?Q?eA0YljmFLuwRHNeCKLSkJwEOsgyy3VPRiKJYha2LfMXDMqed9GdUX45Bpq8t?=
- =?us-ascii?Q?a3MQczEqKo3tBOQZ4JOvFwRRJk/TY9GE9EZNvtFX6xscoSeBaX/yTI97rJyN?=
- =?us-ascii?Q?QAE1RsBAtz6Cb92388udsg5NALQYnWfEJiLiQ/qi3bbgx51Z9BQ0Ro9CfwZS?=
- =?us-ascii?Q?bv+aZ+Dmwl+SZiIyuTD/AetEounnw0FHZOgaTZbRgbjhA4/XCMgSf9Qb2OKs?=
- =?us-ascii?Q?34FvlaPAwnogZSWiCVZ5GUpInOBVNq5ujaAC3FXL1AKIEGqcjkxZDC9sidM/?=
- =?us-ascii?Q?Mx7FbQI5RF46mF1/MEUPAWZTY3NZKMP3p0FrigM8R/4bqscVfuhgn7Tvd2BJ?=
- =?us-ascii?Q?t1yGtcWZkJwwYYy2gRkUKLwYGhUJnlBxfWZNm86vq242PN2JNUgpQzivxw+C?=
- =?us-ascii?Q?o2JcXhksYY6aH3OtI7Eas1Ztgd051adv7rSvsgJed4iJ/x9n/QDDEezFBf+e?=
- =?us-ascii?Q?gia8u49iukGoNKNADt9+sJgnpOzmNH1bERm0GLecwRJkPPaxArMtf30+XFKj?=
- =?us-ascii?Q?Qt+o4aD22P7BHNv/rV4JlSLkR1VMmHODlMSibVs7W+AS3bsq1AM64CB160iG?=
- =?us-ascii?Q?fHd/677pOnTxOB9kak2UZ8Iypm6AATO0DJ4sgreJLg/KfH/eY9k1XAekjayG?=
- =?us-ascii?Q?4O3CyGf7hMxaXbiddhnB1eg6YjX6tRlH00LYaQtJfdCrOjTONmKTmRifvUfK?=
- =?us-ascii?Q?Reu50f6pUkGgLDH2NsYc1wX//cRxc4bRULCZ4X/Vy8H+Bsm+Wx+ZmhDHbmzi?=
- =?us-ascii?Q?c/NCsWCUTN4OqUF1nbgDjxIAqgJDk4b6r3ovFdzENf/075XsG17duD2E75O3?=
- =?us-ascii?Q?oaFzrCkymeWEs4v/+mtoe4kMmrNPXajAXtProUZ9oVpWcIAzf0X1uT4LNorR?=
- =?us-ascii?Q?O4rCyPnoGTlAdBtWg6tqF+sbNQYrAlVIA3NlpPNWJciDpG7EIbXjYhlFizjK?=
- =?us-ascii?Q?nntkfVlb47oU71WnsWR/YqnD4wfgm+YwV1pgpjvyZD32HaiD6s4b/wSGSV3L?=
- =?us-ascii?Q?PpTDJ2Rlw5XhqjO39ZQsxGoFwnNGCpiIbu5j4Yjqd90/1xTJQEIAoz2iRCyx?=
- =?us-ascii?Q?jTcR3Jft74epFqpxchKtviD3/SRh1G+iVu6j33mqvefAohIIq+9f1JNK70cX?=
- =?us-ascii?Q?Q31t/SzExDStA61N1wLqDk8LYXxaFkszDJ4wvrWPv1fbJNtb+8HAZ/OTCsrb?=
- =?us-ascii?Q?5AJrdanshnN4mseovXhsNiNgAwjbeRj3bW8ha8nyJV2D7pBkAl9htjoVsigh?=
- =?us-ascii?Q?2l0/jnUdA1Q+MSPMgT0QroRhirAZdMAaTuhGWf++na46G5EscAZfA/St5mbW?=
- =?us-ascii?Q?PYO1hHodKHMfhnsOXJiBWiHs//Nj4ZL83zaHB08HR/iQ8GZUywAHHxptxLa1?=
- =?us-ascii?Q?aMKt4PrZ7GqjLtxnjRkDM7MWPHeZ2nNUHU10E0WQr0RrctgH4AP39yBKoYQ8?=
- =?us-ascii?Q?DKlSjOrBLDpiW0SLOVV23PMrXmgcvF/aOouAdkUQ?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9aaba9c0-5d83-4d65-dcaa-08dd12ac2fe0
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2024 08:34:50.7121
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: obV8rgniP1r5xsnkV7Zw7qCS6N7AUrhBuQx3M8WYuLxg9iHUNMKrhVMqeUC71Q2qPwWO+IsFr/LXglJ0qCL2CQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7543
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/15] dt-bindings: soc: renesas: renesas,rzg2l-sysc:
+ Add #renesas,sysc-signal-cells
+Content-Language: en-US
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, magnus.damm@gmail.com,
+ gregkh@linuxfoundation.org, yoshihiro.shimoda.uh@renesas.com,
+ christophe.jaillet@wanadoo.fr, linux-phy@lists.infradead.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ Ulf Hansson <ulf.hansson@linaro.org>
+References: <20241126092050.1825607-1-claudiu.beznea.uj@bp.renesas.com>
+ <20241126092050.1825607-2-claudiu.beznea.uj@bp.renesas.com>
+ <CAMuHMdWjzR6vgbr_CfR7r-h1FqWxs1nY0hm274kxFmoHjCtRAA@mail.gmail.com>
+ <0bb9f461-c7a2-4db0-9492-c04cc298504d@tuxon.dev>
+ <CAMuHMdUuRSJu1c2zJvOc8EGrZy1uYcN0aiUG6T7WShawPmCNJg@mail.gmail.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAMuHMdUuRSJu1c2zJvOc8EGrZy1uYcN0aiUG6T7WShawPmCNJg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Coverity from Synopsys complains "Illegal address computation (OVERRUN)"
-on status_reg.
+Hi, Geert,
 
-After below code executed,
+On 29.11.2024 10:38, Geert Uytterhoeven wrote:
+> Hi Claudiu,
+> 
+> On Fri, Nov 29, 2024 at 9:21 AM Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>> On 28.11.2024 17:46, Geert Uytterhoeven wrote:
+>>> On Tue, Nov 26, 2024 at 10:21 AM Claudiu <claudiu.beznea@tuxon.dev> wrote:
+>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>
+>>>> The RZ/G3S system controller (SYSC) has registers to control signals that
+>>>> are routed to various IPs. These signals must be controlled during
+>>>> configuration of the respective IPs. One such signal is the USB PWRRDY,
+>>>> which connects the SYSC and the USB PHY. This signal must to be controlled
+>>>> before and after the power to the USB PHY is turned off/on.
+>>>>
+>>>> Other similar signals include the following (according to the RZ/G3S
+>>>> hardware manual):
+>>>>
+>>>> * PCIe:
+>>>> - ALLOW_ENTER_L1 signal controlled through the SYS_PCIE_CFG register
+>>>> - PCIE_RST_RSM_B signal controlled through the SYS_PCIE_RST_RSM_B
+>>>>   register
+>>>> - MODE_RXTERMINATION signal controlled through SYS_PCIE_PHY register
+>>>>
+>>>> * SPI:
+>>>> - SEL_SPI_OCTA signal controlled through SYS_IPCONT_SEL_SPI_OCTA
+>>>>   register
+>>>>
+>>>> * I2C/I3C:
+>>>> - af_bypass I2C signals controlled through SYS_I2Cx_CFG registers
+>>>>   (x=0..3)
+>>>> - af_bypass I3C signal controlled through SYS_I3C_CFG register
+>>>>
+>>>> * Ethernet:
+>>>> - FEC_GIGA_ENABLE Ethernet signals controlled through SYS_GETHx_CFG
+>>>>   registers (x=0..1)
+>>>>
+>>>> Add #renesas,sysc-signal-cells DT property to allow different SYSC signals
+>>>> consumers to manage these signals.
+>>>>
+>>>> The goal is to enable consumers to specify the required access data for
+>>>> these signals (through device tree) and let their respective drivers
+>>>> control these signals via the syscon regmap provided by the system
+>>>> controller driver. For example, the USB PHY will describe this relation
+>>>> using the following DT property:
+>>>>
+>>>> usb2_phy1: usb-phy@11e30200 {
+>>>>         // ...
+>>>>         renesas,sysc-signal = <&sysc 0xd70 0x1>;
+>>>>         // ...
+>>>> };
+>>>
+>>> IIUIC, the consumer driver will  appear to control the SYSC bits
+>>> directly, but due to the use of custom validating regmap accessors
+>>> and reference counting in the SYSC driver, this is safe?
+>>
+>> I'm not sure I fully understand the safety concern.
+> 
+> Sorry for my bad expression, this was more like a rhetorical question.
+> I meant that it is safe because:
+>   1. Consumers cannot perform arbitrary register accesses,
+>   2. The reference counting guarantees correct operation, despite
+>       both usb-phy nodes using the same renesas,sysc-signal.
+> 
+> So everything is fine.
+> 
+>>> The extra safety requires duplicating the register bits in both DT
+>>> and the SYSC driver.
+>>
+>> One other option I saw was to have common defines for registers that could
+>> have been shared b/w driver and DTSes. But it looked better to me the way
+>> it has been presented in this series.
+>>
+>>> Both usb-phy nodes on RZG3S use the same renesas,sysc-signal, so the
+>>> reference counting is indeed needed.  They are in different power
+>>> domains, could that be an issue w.r.t. ordering?
+>>
+>> In chapter "32.4.2.1 USB/PHY related pins", section "When either Port1 or
+>> Port2 is unused" of the RZ/G3S HW manual it is mentioned "Since USB_VDD18 /
+>> USB_VDD33 are common to 2 Port PHY, it is necessary to supply power even
+>> when one of the
+>>  ports is not in use".
+> 
+> Does that mean you have to power the other PHY on through the
+> CPG_BUS_PERI_COM_MSTOP register, too?
 
-  port_index = wIndex & 0xff;
-  port_index -= (port_index > 0);
+I don't know at the moment if there is hard requirement b/w USB PWRRDY and
+the USB PHY CPG MSTOP bit. I'll have to ask further internally.
 
-the static analysis tool see the value of port_index is now between 0 and
-254 (inclusive).
+Thank you,
+Claudiu
 
-However, ehci_def.h define port_status as below:
-
-  #define HCS_N_PORTS_MAX         15
-  u32     port_status[HCS_N_PORTS_MAX];
-
-So the tool think illegal array pointer may be obtained.
-
-  status_reg = &ehci->regs->port_status[port_index];
-
-This will follow "846cbf98cbef USB: EHCI: Improve port index sanitizing" to
-improve port index sanitizing.
-
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-
----
-Changes in v2:
- - rewrite commit message to better understand the issue
----
- drivers/usb/chipidea/host.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/usb/chipidea/host.c b/drivers/usb/chipidea/host.c
-index 0cce19208370..442d79e32a65 100644
---- a/drivers/usb/chipidea/host.c
-+++ b/drivers/usb/chipidea/host.c
-@@ -256,8 +256,14 @@ static int ci_ehci_hub_control(
- 	struct device *dev = hcd->self.controller;
- 	struct ci_hdrc *ci = dev_get_drvdata(dev);
- 
--	port_index = wIndex & 0xff;
--	port_index -= (port_index > 0);
-+	/*
-+	 * Avoid out-of-bounds values while calculating the port index
-+	 * from wIndex. The compiler doesn't like pointers to invalid
-+	 * addresses, even if they are never used.
-+	 */
-+	port_index = (wIndex - 1) & 0xff;
-+	if (port_index >= HCS_N_PORTS_MAX)
-+		port_index = 0;
- 	status_reg = &ehci->regs->port_status[port_index];
- 
- 	spin_lock_irqsave(&ehci->lock, flags);
--- 
-2.34.1
-
+> (I know you haven't added R9A08G045_PD_USBx to the USB nodes yet,
+>  as #power-domain-cells is still 0).
+> 
+>> (From the discussions w/ the internal HW team) The PWRRDY is an (software
+>> controlled) indicator to the USB PHY that power supply is ready.
+>>
+>> From that and [1] I get that both PHYs are powered by the same regulators
+>> (USB_VDD18/USB_VDD33) and the USB PWRRDY signal need to be set before/after
+>> the USB PHY power off/on. Because of this I consider the order doesn't matter.
+>>
+>> [1] https://gcdnb.pbrd.co/images/0a1zYBFZXZVb.png
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
 
