@@ -1,124 +1,109 @@
-Return-Path: <linux-usb+bounces-17980-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-17983-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF0829DF743
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Dec 2024 23:08:16 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC0689DF780
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 01:17:05 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 924DF2816AF
-	for <lists+linux-usb@lfdr.de>; Sun,  1 Dec 2024 22:08:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90AC21627B8
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 00:17:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24AAA1D935F;
-	Sun,  1 Dec 2024 22:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69094AD5E;
+	Mon,  2 Dec 2024 00:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="H3CJPGMm"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="rsIAOXCD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from qs51p00im-qukt01080501.me.com (qs51p00im-qukt01080501.me.com [17.57.155.22])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D05361863E
-	for <linux-usb@vger.kernel.org>; Sun,  1 Dec 2024 22:08:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.155.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0EBB4A01
+	for <linux-usb@vger.kernel.org>; Mon,  2 Dec 2024 00:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733090892; cv=none; b=BmcYM9yrgPxjkLWktzNMvmUZtUShkZkdGz41+kt9mf+LXsCQ1dOjcy0YwlQTyapim7pE5YY6HvVLIW/+TT3S1B9OktpnKK7V9d0tUhuBSEB0t+rI66SdyZKFuygZ0bs2ExJNA7w1MqPZE7tWD4eVmuadJH8drqI2TZXmnMnQOF4=
+	t=1733098615; cv=none; b=fiFKvceXK+6VOm4OPgUEGU/TQUoHLExHALnDpHxqcVEb1KNfX/2qY/S2/7ojbTN3FTRVSJu/6Q42IA2VTP/7j+ZFyfMEjCfltF9+l5dJAgGvLD+NWURbUox4SsnDhPzh3DCPcnFUHbnE1M3REgwkxT5apZqU/E2Nm4c7g2sPvxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733090892; c=relaxed/simple;
-	bh=KEUSa3SiEoR9ODDCSX/P8QiseLknNgDRtIe131gVRtg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PwlNgRQWjURqx0DrgPEYTXJi9n2+qqlZT3DP2/QHszs5lyMnJPiBanaqbqTvoJABGVLs4G0H2ll9NWB7Cl6hPfwdsXZXs+cEyhuPQonI6n9TaT1dv3ruXx5xCqnZiZ48et7Bbn/9J+kPGUrOVp469B3oU8m5TY7XYrIQmngM76U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=H3CJPGMm; arc=none smtp.client-ip=17.57.155.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
-	t=1733090889; bh=HM/IKhF3wf0DGCw7jrIctJrCObDXfg1/ve97Sy/TSHY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
-	 x-icloud-hme;
-	b=H3CJPGMmyt1ty93tdfVBXSqWUSqNRMk6lJasTP2zhaBKM5sbQwjWBl3WSu2vWu6Dl
-	 kZvh31S9tdYmLjCwPaRhqmhk4NvgSHwjQwN5+tvcDDqxFrWbpC+UgGO45RNBGhG0zw
-	 cGS/DF9c5EwSu/7zQoz2c4ikHS++m5gKRtX6EEHqzlsn43u7pBn55khprvDPomgy17
-	 ntPqAl9KDaNVh+BBNdSDO80WBuE9Z8lrMS1QMy+3IV1LUYvoWxVNjOYgJaRhR+mh39
-	 FyFVfqDuySnOAumoyDcxtk41stwq6v4VOFlR7KRfdgeuAxugzDD7JT9stYt72oBVZ1
-	 kiyi5QJozKOFw==
-Received: from [192.168.40.3] (qs51p00im-dlb-asmtp-mailmevip.me.com [17.57.155.28])
-	by qs51p00im-qukt01080501.me.com (Postfix) with ESMTPSA id 1A4A6198041F;
-	Sun,  1 Dec 2024 22:08:06 +0000 (UTC)
-Message-ID: <5be4f8f1-af40-4114-963e-76f645380081@pen.gy>
-Date: Sun, 1 Dec 2024 23:08:04 +0100
+	s=arc-20240116; t=1733098615; c=relaxed/simple;
+	bh=450luPz+W2htBwK6D18AcbLFM508RCXa1JvCxPcBVwo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lswXHaFml5500JmZhefkC6CZPoFLxPtGRPJZ3hvM8rHZqkMYVR+XOJqpOBA9LWi1YkQsOc4JIjgaOWDJtNl0cK8f91bgW+tkccRj3bXGWRPasTKvvg3fVUL5peyqbpjhM45s66EaKsnk9bhMI84XkYTQMAS9szporHAYb23XGCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=rsIAOXCD; arc=none smtp.client-ip=212.227.15.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1733098598; x=1733703398; i=wahrenst@gmx.net;
+	bh=LsLrPVxdPPM88Lsuw9W4JxVinjdPLNWv/2GSWcv7fHg=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=rsIAOXCD6SDPCPzhyuNo3WnPYNEMxC4P0mbPErZ8sIpuz2GbjfwIb8OVKD2SAXA0
+	 fA6WQoidaMIhSQRGVWnVyrZFt16NSYEf1kR27THkT48ADSxqriUiqOSLLjTwqfYfX
+	 WzJzgebEy2z6bq24cqifpasfPyDB8y3ZbX6sQluWeooCMM6w5J0RjoT1931N+buYy
+	 +QfVEBRPpzY9K9nKqh/o7GTt4T2D47i0mFnTDzKQaubAKpeNNvFOtEEJvvGGpyNf8
+	 hnhIGNSGnwLmJBY/a8dbKoXS6wqHJpCaCY6d94RSfBCxRZPXebLVGwCEz26izLitP
+	 jtGqHdFK5W5dE14wzw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from stefanw-SCHENKER ([37.4.251.153]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MOzOw-1t1J2g1slg-00X5KM; Mon, 02
+ Dec 2024 01:16:38 +0100
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Minas Harutyunyan <hminas@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Artur Petrosyan <Arthur.Petrosyan@synopsys.com>,
+	Douglas Anderson <dianders@chromium.org>,
+	Lukas Wunner <lukas@wunner.de>,
+	Peter Robinson <pbrobinson@gmail.com>,
+	"Ivan T . Ivanov" <iivanov@suse.de>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH 0/3] usb: dwc2: Fix HCD issues on Raspberry Pi
+Date: Mon,  2 Dec 2024 01:16:28 +0100
+Message-Id: <20241202001631.75473-1-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v3 1/6] usbnet: ipheth: break up NCM header size
- computation
-Content-Language: en-GB
-To: Paolo Abeni <pabeni@redhat.com>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: Georgi Valkov <gvalkov@gmail.com>, Simon Horman <horms@kernel.org>,
- Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20241123235432.821220-1-forst@pen.gy>
- <JWND33OD9jZkCkQRVDIgm48R2gSfUh7b4Nw6S466ykaeSzUfotQYvUYOxBMxaYy5D08n-dS8tvxRbidQPLPgpw==@protonmail.internalid>
- <551a761c-ebc3-423c-ac8d-865b429cf8b8@redhat.com>
-From: Foster Snowhill <forst@pen.gy>
-In-Reply-To: <551a761c-ebc3-423c-ac8d-865b429cf8b8@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: W150WLYc0v8EQJYy0De-PWzFg6REFOYk
-X-Proofpoint-ORIG-GUID: W150WLYc0v8EQJYy0De-PWzFg6REFOYk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-01_17,2024-11-28_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=1 spamscore=1 bulkscore=0 adultscore=0
- mlxscore=1 phishscore=0 malwarescore=0 clxscore=1030 mlxlogscore=220
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2412010192
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:GZb6XypkJ2trclZRcE3wdoCOXnsMwh7WXxoEQxLIUWyrxO0MvCq
+ bbgRMP8ZPXPAYJNI8f8LvtlECdnkhnfOSVC+lu3u+TDL2EcJcPOSHh4fwhbHiEy1AV93+yN
+ vLlTKX4O1IT6MT5csY6GtTqyHz3ISXeOLsG8uJ6x7l4zm+gNXydx3GKtZnD1MYTky4OyqOa
+ yVhNUZeGSdiTAMnIRqNkQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:W0K37wS3vf0=;g5CYaqlhzi9kxXOEWJ1H9fA9+lV
+ vaRSCnM0UKe9y0osLlWumG1BlrTmv8DwQr1Bzi798Pmu/ogV9OucrjLDLC7LQ1T2uclWO4Q5s
+ wckyS1si1QIDbuivsckUL6nErbstyAr2s53gOXrliCLSXHg9B1pdpfcYj6JrSpT5qzayty2hX
+ 9PFfxCXt9tM+lt7VT2zs1YTlMCQHF2k94yYH+JblGMcvg1g1JeiEe0sMaAiUYfrw6THs4fLtm
+ kXApuhaunKbpQGsLdlBMPvVBlsw4At49ZvhF1wRTxvugkQp4JMaDTd1SoMeun9Btw5l7zlRn3
+ LgkEeMpSTn8YMAljhLKrBMieCDNs1hrBYwGV+Pci3I/QwOvr4X+Zjm9JiIRG9PzSfmVgbvtUr
+ RtYtsKXYFvdk0n8KqtxPCympxH9l87dHUt99S6iJ+fwf4YNkLgA5nkLzw4PJ/zEontK8kTZIy
+ z2BzEqYKPlJjL5pYXayZjt2SRypzHRkXxxU5gOGn0EcEOlSOSBExJ9Y9cFQImJIlyj6RA5Jlq
+ niIgHasz1aDO/elf/FAS5RBYJN60BAEBCVdALTWQaiP5TljgGN3VSYU8pc9XQW6r2XhZHBd4a
+ 18zvRCBe88KrTh4S5f34Li2LON1qyPrI89mnUEvcI8ZdwkqjdTQc6yKVJ0413gwryop2gFNF8
+ sbKih5HY92Fr4lGxhicOoGRsrSzM8xbTkMAbtJqS4GEMhj102s2MR0LH+sr6dd2M5ZML7Z+vt
+ 5UwjRxoyTYRF0Kt5rbhx//ZCqoYyFjFkGMeYbqeOy+iaZSD+orGsIKLsXrj9ijIHM6I3RYt4O
+ 7NtaVZGEtiDnjm0iVl+Wi0ei/U21wPJvvg3j15/6eUNIg+Ua/kGR4GTvqSsvj6K4sRhYHFp25
+ DYPPQ4KKhIziZEfAlt4vZfkSIqT9AGW2NvVEDG8CRzsjVyVCXCRjl65xG928UDk/zADZVR5A3
+ agE2Ij/p6QRl25tQYY4kOKxlQWuxxxTfra+2EXP0LUarZJXXzU/AME32STLZAWkQsgsSLSWeR
+ g8yNQzdKe3t4Uky2WnwHu6rpnxApRqKCi0VVd1W3qFbk7wkNOa2Wp+ist4Fso9UXv8kVL1Qo7
+ ypmOZr6Xwo8G3rBMdfwuDi8i+ybc98
 
-On 2024-11-28 10:16, Paolo Abeni wrote:
-> On 11/24/24 00:54, Foster Snowhill wrote:
->> Originally, the total NCM header size was computed as the sum of two
->> vaguely labelled constants. While accurate, it's not particularly clear
->> where they're coming from.
->>
->> Use sizes of existing NCM structs where available. Define the total
->> NDP16 size based on the maximum amount of DPEs that can fit into the
->> iOS-specific fixed-size header.
->>
->> Fixes: a2d274c62e44 ("usbnet: ipheth: add CDC NCM support")
->> Signed-off-by: Foster Snowhill <forst@pen.gy>
-> 
-> This change is not addressing any real issue, it just makes the
-> following ones simpler, right?
-> 
-> If so, I think it's better to drop the fixes tag here and add the above
-> reasoning.
+This series address some serious HCD issues on the Raspberry Pi.
 
-Correct, this doesn't fix any real issue. It has two purposes:
+Stefan Wahren (3):
+  usb: dwc2: Fix HCD resume
+  usb: dwc2: hcd: Fix GetPortStatus & SetPortFeature
+  usb: dwc2: Fix HCD port connection race
 
-* Make it clearer for the reader where the numeric constants come from.
-* Like you said, make subsequent changes simpler by introducing intermediate
-constants that are used by subsequent patches.
+ drivers/usb/dwc2/hcd.c | 19 ++++++++-----------
+ 1 file changed, 8 insertions(+), 11 deletions(-)
 
-Ack, will remove the "Fixes" tag and add the above description to justify
-the change.
-
->> ---
->> Each individual patch in the v3 series tested with iPhone 15 Pro Max,
->> iOS 18.1.1: compiled cleanly, ran iperf3 between phone and computer,
->> observed no errors in either kernel log or interface statistics.
-> 
-> This should go in the cover letter (currently missing, please add it in
-> the next iteration).
-
-Agreed, will add a cover letter for v4. Depending on the outcome of the
-comments/discussion on patch 4/6 in the series ("usbnet: ipheth: use static
-NDP16 location in URB") will likely reiterate the explanation of why I
-approached the changes the way I did. I think it provides important context,
-and also points at a potential way to enhance the driver to make it more
-flexible in case of possible future changes to iOS.
+=2D-
+2.34.1
 
 
