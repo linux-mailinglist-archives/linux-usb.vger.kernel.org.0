@@ -1,300 +1,180 @@
-Return-Path: <linux-usb+bounces-18005-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18008-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D6979E09F9
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 18:31:59 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B8549E0B4A
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 19:48:45 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3BC26164522
+	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 18:48:42 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E24841DE2AD;
+	Mon,  2 Dec 2024 18:48:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Mig94dba"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2065.outbound.protection.outlook.com [40.107.94.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8E26B48097
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 15:35:13 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A65BE20899B;
-	Mon,  2 Dec 2024 15:35:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="dhRrVLuJ"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5062E208993
-	for <linux-usb@vger.kernel.org>; Mon,  2 Dec 2024 15:35:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733153710; cv=none; b=GvxHS3QF7jh9zQmB/gvFWB62qNPbEvTUfCtzYRI2E75x1Nxyda4ChrhK94CbpFEzGrmHqYCi4ODn/r69ags65BxD5DKpOwhAdLFtElBnkmP9c75Q37/u+lUTKoLDqvVHDBV6gHo03FZASVBivW+xAYxwlkbc/p4C1Ov3Zx0wdfI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733153710; c=relaxed/simple;
-	bh=wET5iUvdjdRBR+mAqN2BzzvlWPpGl4352cNBjiC+WwU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WMTqO53RW6Z3vH03v93FD9mh0SEA0jDJQsryVJYbeERqYW8JMVADTnCsU+y8eWNhXECyRd6Pdio8mQV8Hw/d3gszG8T1N1BXACe2GVai23DcCAwve6WuPj+pJDyfCxRGTB7BXFFh5BdGeOolZDHtaWIF2rcmgioHSJ/2y4BV+A4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=dhRrVLuJ; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-2ffc86948dcso43843781fa.2
-        for <linux-usb@vger.kernel.org>; Mon, 02 Dec 2024 07:35:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733153706; x=1733758506; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YTNygzoOaggPdN5UwohHlIdEXipF1yLKnsPhAigGFzk=;
-        b=dhRrVLuJg6V5SNjB+Nxt8gwl1XfcpJhdZcgiCa8ab/58WG5vAn9NlR0e80z7DF4Xn9
-         aWHNY1yfs/BwoVoUWSNamaIEoM8ih4Yzho4nizXAw89qng+feC6cDd81ycQLBlXAxPR7
-         cGXtUl/aXfLcEiEdCe19fhSFvwnpkflCdxXOs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733153706; x=1733758506;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YTNygzoOaggPdN5UwohHlIdEXipF1yLKnsPhAigGFzk=;
-        b=bBNsrvNBG1C8hVjXd8o8Kx+VztyvwU5tWyojUJnB5BhBdV5A9BpzUG6zRFMADsitCV
-         YVHTDlfsovKXYNrHvqYA8hOLjWa5s3L2HhVLK252KRoVHEhEyH/SgDqhGIk9rdlKsVbd
-         jPIfOqiVPPJB6ZdAWu95RgxymZ1/Pzv3Qdxci879zHXltQxWV4GjuZfXMgfApdWbR94g
-         rVAzM7f5p3Vqe5gp0LJQpoSwkaQW1dMo4CfcsUayU/p4LE5EKReM87KNa/iyhdQg9pqY
-         IG8aErGYbRy1PmHuQCWkAaU9USExuCLLIckiSgV+jNAyASf0Z/0cAmQe0NB/FKqRRx9t
-         Saug==
-X-Forwarded-Encrypted: i=1; AJvYcCUR5bdd4jFMDJMncZxsk2a99M0uPYp7J0hBJMxOn7hBs+RzOwrcowNAR16BfynF5T6Zoe9+XI8V9Ds=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxsas5+qLdGCAELL7mHMNRPXuSIdYnWBDwe07fq1iJt3nSbJ0+f
-	3e/RAdqmIl1oT7QUENKo6PaT6YU5hXuZ7tNqSZZtInuaUUGKwxePR4wkh6eN4fF7KJx96Ym6LGM
-	0zyvk1isEK8lNEr4iuDWe+Mp61MypZczAVE0=
-X-Gm-Gg: ASbGnculAazluRsFli1B2lDFeY6/eBYkQS7ga4I2HVyz3xdp6jFu7ZtdMHJSOnmuPIk
-	luhQHnLGBossAT1+lJ5iaCNf+01y7rn8RhYyS2B+2zlZf39+K2I4rcOQ7hbU=
-X-Google-Smtp-Source: AGHT+IFho6OCDoejpt8T1j/LPhusZpc57QvNJuFpM3qw8J9ipJ/39T9tYhrHkiywnuBcmRC7AjGn+JFtfWTKEXFxY1E=
-X-Received: by 2002:a05:651c:19aa:b0:2ff:afef:3ec5 with SMTP id
- 38308e7fff4ca-2ffd60de30bmr118782021fa.27.1733153706401; Mon, 02 Dec 2024
- 07:35:06 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36A61DDC39;
+	Mon,  2 Dec 2024 18:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.65
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733165317; cv=fail; b=c8wx57IosEp2zdwyxHuIeBvHht6eTczcOsBJ1udEChCAcZ9m7TNkuSICXla+AzqcpX1KmapRu2Q/t/45k1xkBHjIAPosBb4E85OwXzf/PEVQCog3pvaQ+asEHGgXuRvunJeFG78lsl3+Dj4wvPei0PbDbz0bSL9em3VkaWjH4t8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733165317; c=relaxed/simple;
+	bh=WRmDbxkj4Z+2iUoQvvnymrb1wyhBXuyUEUoRMv9Oecs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VJunaZwMSw302G543bXNKKtReChRRdzRJET5C0SVrxff5ze5kafJ24QtmRWqLLhQNGeeVQi7NuorHpvqXUuqaKddfJE42UTUhTkltcwGnZ8yE4TlfIT1YU/GeV9lwhZY1ukfvuJbs5MtfK9uSstBKJ6q9L9oXcINyvyqb2ecRVk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Mig94dba; arc=fail smtp.client-ip=40.107.94.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=DbN3SIvspCOSUr5TbzDlKGvkb7xk7OSJU1uBTvUR/2e3xv1KQIOb3GpvRZlYgnf/ugR0N20m1MF7h1Q7XR0sQM2XSULvWIKDWQJI+95jZvhwYthEcG+36LQ+s/uo24uOPtBF+DSQeBysTUSSyy2yZiy3ezV8eHbJQq3gDkxk3psYBQu5DnNPkgybVfw8znRE4N6ISlBpeB/xTlObEgGgX9D9hJBwk3WOGJ3hJjwlOxF7YmjnlzLgzGn5ZlzbD2w/981kdsi1ydjlc9ImbPR6z21/KXeW90gGOTds9taraltIUv9vMVCXt7LyDnMcAWDsEp2lSYLtmtLKMCOtYZJmUg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=cOtZgqwXCqtwubgP4KpRV2iFdeEXYQWSTpfB/sz/1sU=;
+ b=wz7RqcjHct18YlOTSNLAkogwy3rLovPBYqdSa91f29WtEppThQa0WZirXAO3T8miDetfmUKtxRR+R2tVWpzdsu8pAk8jOcTAWssxR/VkUsLkfVS3RIof4RB4YeYF9HfNIxdHSoDqf1I7CWA3kqrLOQNVXNQCMQ7Dt90N2srPCUbXWjoO6Ir+yOkebzsaKRnpQHdUB0ELXZg2w2i5LIsBcqzaupr/zWhbFAwrEHnCusl7EbKy36NFH2QM8k0UYbfVK5n/gBf26zsQhf4WwXHpFO+m4FnVfLo2oP0KgKiB6SjEKof6uzLgI8xQQhomSQluW5DqIHxUajphIt+RpknAXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=cOtZgqwXCqtwubgP4KpRV2iFdeEXYQWSTpfB/sz/1sU=;
+ b=Mig94dbaRfwmZ0y+YgwQDcxD7xoQcJRieXXGKAlLkJX19e9XmkLpl3Xqe2uLVg2VdH2gX2zK9t8b4xqF8p5CBV4ES8uPiSnkKl8unWuMqEdR02blu9Dwd2HX474IP5pHlCTM+1EtMPQeZA7ZTzBrZu+tFSCI8c6cZtVaVnsrl8g=
+Received: from CH2PR10CA0013.namprd10.prod.outlook.com (2603:10b6:610:4c::23)
+ by CH3PR12MB8710.namprd12.prod.outlook.com (2603:10b6:610:173::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.17; Mon, 2 Dec
+ 2024 18:48:31 +0000
+Received: from CH2PEPF00000144.namprd02.prod.outlook.com
+ (2603:10b6:610:4c:cafe::28) by CH2PR10CA0013.outlook.office365.com
+ (2603:10b6:610:4c::23) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8207.18 via Frontend Transport; Mon,
+ 2 Dec 2024 18:48:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CH2PEPF00000144.mail.protection.outlook.com (10.167.244.101) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8230.7 via Frontend Transport; Mon, 2 Dec 2024 18:48:31 +0000
+Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 2 Dec
+ 2024 12:48:30 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB05.amd.com
+ (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 2 Dec
+ 2024 12:48:29 -0600
+Received: from xhdradheys41.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Mon, 2 Dec 2024 12:48:27 -0600
+From: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+To: <mka@chromium.org>, <gregkh@linuxfoundation.org>,
+	<radhey.shyam.pandey@amd.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<git@amd.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: misc: onboard_usb_dev: skip suspend/resume sequence for USB5744 SMBus support
+Date: Tue, 3 Dec 2024 00:18:22 +0530
+Message-ID: <1733165302-1694891-1-git-send-email-radhey.shyam.pandey@amd.com>
+X-Mailer: git-send-email 2.1.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241128232035.1525978-1-ukaszb@chromium.org> <20241128232035.1525978-4-ukaszb@chromium.org>
- <Z02-57oN7h_E1VQ1@kuha.fi.intel.com>
-In-Reply-To: <Z02-57oN7h_E1VQ1@kuha.fi.intel.com>
-From: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Date: Mon, 2 Dec 2024 16:34:55 +0100
-Message-ID: <CALwA+NbCupB-N8j1-a96EJPimd1VpLfH8tAYKbE1j+RC_J0q4g@mail.gmail.com>
-Subject: Re: [PATCH v8 3/3] usb: typec: cros_ec_ucsi: Recover from write timeouts
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Benson Leung <bleung@chromium.org>, 
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Jameson Thies <jthies@google.com>, 
-	Pavan Holla <pholla@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org, 
-	chrome-platform@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB05.amd.com: radhey.shyam.pandey@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF00000144:EE_|CH3PR12MB8710:EE_
+X-MS-Office365-Filtering-Correlation-Id: b27f5a3c-a324-4253-d73f-08dd1301ead6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|36860700013|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?qZWyHM7vC2K0Q2IEC9iPHBYOK0XLY6Frz/C/1gaZwbEkk84MnrJD195b7YQA?=
+ =?us-ascii?Q?9OMAgWLFHpXy/wIrOxJe2rB2SnjGa2CUv9MFKnYCcj098yZKhf/hIAPrgDsg?=
+ =?us-ascii?Q?IafCrPXxDYwL2XzS3FxkYdURAeef0RW8Ct5khSMOVXJPJ8rnCypLl+jTSY2Z?=
+ =?us-ascii?Q?fZ8LY6OMdfjayzFsN7t5j1TkhZgdZRQkvekokJ++HHt74C0DS3E22Qo9m+8w?=
+ =?us-ascii?Q?GgcjsRoKW0SjF7lPwfZ/CQFQArrDBw8xJsIC9C5kk8n8izNuy/jn7RCg8da5?=
+ =?us-ascii?Q?nl881VAso8HxLJ1pR+Obc7APkFxXg/RwFmE/J7Dr+1/Vc7BAhj1uo4mFRpyA?=
+ =?us-ascii?Q?OogrtjygRwiqKrY+7PAAZ0Grd5lOp0tCc2Eds+EVBmrCGqgoUeRwbmB3Nuba?=
+ =?us-ascii?Q?Ton1xS9GOjtW9HKxFz4pQk2dPJmFSVSDBZ5/ka+ZnCERJszyW4jfD2K12ZW1?=
+ =?us-ascii?Q?LMp/U7w5sdqIz5ea7gWULIndMVD9y0udeXj3neTSyom8uerE502DhUrciq9B?=
+ =?us-ascii?Q?7w5ZtU/N1D+P3IqCYSyg551NaU60hftCZ9a9qJxjhCzvKdZnMeCx2GS4I1Q6?=
+ =?us-ascii?Q?293Psvb2iuO6IE/w/v7xqwNem/oJPPQSmkMmpwHSNGF5X/Nf58xAeWmrZfUj?=
+ =?us-ascii?Q?MJxokhKJrl4AM0chAQjTEA+KzVKG1XZCAOFoYd0WJfC+9pacuDNOF1yk1Cml?=
+ =?us-ascii?Q?sm2xhMICXxTxWOHQX+YBspbyV46QOKU2lJ03lREkwv4nyPhasuSERO1x4qCi?=
+ =?us-ascii?Q?fJhKsVvXOdlmLVCVVgTTdADTeVESPJENmF1znESuP3YNrQMIOdGDQkGU9duW?=
+ =?us-ascii?Q?ziWMtPfjKNlQWaSHdL1eyhoD5O1FHFILLiH2PcHMztywu2IffxIuBtfV81oN?=
+ =?us-ascii?Q?vN1Ll8Tmj/8Luw33+crygWQx0vWb2nbpRxVz7NFvRaW3Rrq3qokhCDipNSiC?=
+ =?us-ascii?Q?eRcgnjshlrRKfb4jRR8Bjbf+kzlDHO21l2R/lkluACH9m8TaMBdl2Sm0mj2t?=
+ =?us-ascii?Q?VkbttpG++9WlZKTA6SxcMdmuipWcjNP3qouYHXG42A/O/f6E6IL+Q5jeLYTC?=
+ =?us-ascii?Q?mdyA8na87qw2qnmulSnOWumbNpYH0mfJ2QygvaTpmnUcdX8zxQG3bCOp3PVz?=
+ =?us-ascii?Q?sy1TwJV2Zm2W7nUo+tVCQGMIe1v51mmxBweYloGmd23/g0FzUOTBaln/4C2g?=
+ =?us-ascii?Q?j31bfzNvnvZBDcEQCmeejUa0qwzVJBZpF4A5hrdL4jnYCw9ZAalz/eo8xPwY?=
+ =?us-ascii?Q?4IxSxFUknen2RIxu0KAA/gAnDOFevKWF8FrzeyZvy5QTt4EKiDwpTCLiCdYy?=
+ =?us-ascii?Q?9wuBl+xgg0kbYWpJVHPgVHce3wzEpLGLSSdcu1ljvsyVIyJMvSEoaeDtDcg4?=
+ =?us-ascii?Q?8dtd5x9vJoVl+PtrJg4x6vfslh1g6TryGnZM4OE0ZJL5DNSH4TTtrDtxLk2R?=
+ =?us-ascii?Q?ueUDgoofFZoMbTulbH+Sept7YM+SbCbV?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700013)(376014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Dec 2024 18:48:31.1540
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: b27f5a3c-a324-4253-d73f-08dd1301ead6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF00000144.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB8710
 
-On Mon, Dec 2, 2024 at 3:06=E2=80=AFPM Heikki Krogerus
-<heikki.krogerus@linux.intel.com> wrote:
->
-> Hi =C5=81ukasz,
->
-> On Thu, Nov 28, 2024 at 11:20:35PM +0000, =C5=81ukasz Bartosik wrote:
-> > From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> >
-> > In a suspend-resume edge case, the OPM is timing out in ucsi_resume and
-> > the PPM is getting stuck waiting for a command complete ack. Add a writ=
-e
-> > timeout recovery task that will get us out of this state.
->
-> Sorry, I did not realise this before, but this is in practice a fix
-> (or workaround) to the driver that you just introduced in the previous
-> patch. Please merge it into that.
->
+USB5744 SMBus initialization is done once in probe() and doing it in resume
+is not supported so avoid going into suspend and reset the HUB.
 
-Hi Heikki,
+There is a sysfs property 'always_powered_in_suspend' to implement this
+feature but since default state should be set to a working configuration
+so override this property value.
 
-Yes I will merge it. I deliberately sent it as a separate commit for
-review so that
-it would be easier to see the changes.
+It fixes the suspend/resume testcase on Kria KR260 Robotics Starter Kit.
 
-> > Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-> > Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> > ---
-> >  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 88 ++++++++++++++++++++++++++-
-> >  1 file changed, 87 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/=
-ucsi/cros_ec_ucsi.c
-> > index c588d9a57643..6daf61e7e62a 100644
-> > --- a/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> > +++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
-> > @@ -7,6 +7,7 @@
-> >
-> >  #include <linux/container_of.h>
-> >  #include <linux/dev_printk.h>
-> > +#include <linux/jiffies.h>
-> >  #include <linux/mod_devicetable.h>
-> >  #include <linux/module.h>
-> >  #include <linux/platform_data/cros_ec_commands.h>
-> > @@ -29,6 +30,9 @@
-> >   */
-> >  #define WRITE_TMO_MS         5000
-> >
-> > +/* Number of times to attempt recovery from a write timeout before giv=
-ing up. */
-> > +#define WRITE_TMO_CTR_MAX    5
-> > +
-> >  struct cros_ucsi_data {
-> >       struct device *dev;
-> >       struct ucsi *ucsi;
-> > @@ -36,6 +40,8 @@ struct cros_ucsi_data {
-> >       struct cros_ec_device *ec;
-> >       struct notifier_block nb;
-> >       struct work_struct work;
-> > +     struct delayed_work write_tmo;
-> > +     int tmo_counter;
-> >
-> >       struct completion complete;
-> >       unsigned long flags;
-> > @@ -99,12 +105,43 @@ static int cros_ucsi_async_control(struct ucsi *uc=
-si, u64 cmd)
-> >       return 0;
-> >  }
-> >
-> > +static int cros_ucsi_sync_control(struct ucsi *ucsi, u64 cmd)
-> > +{
-> > +     struct cros_ucsi_data *udata =3D ucsi_get_drvdata(ucsi);
-> > +     int ret;
-> > +
-> > +     ret =3D ucsi_sync_control_common(ucsi, cmd);
-> > +     if (ret)
-> > +             goto out;
-> > +
-> > +     /* Successful write. Cancel any pending recovery work. */
-> > +     cancel_delayed_work_sync(&udata->write_tmo);
-> > +
-> > +     return 0;
-> > +out:
->
-> This label looks a bit unnecessary to me. How about a switch statement?
->
+Fixes: 6782311d04df ("usb: misc: onboard_usb_dev: add Microchip usb5744 SMBus programming support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@amd.com>
+---
+ drivers/usb/misc/onboard_usb_dev.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Good point. I will rework this part of the code to use switch.
+diff --git a/drivers/usb/misc/onboard_usb_dev.c b/drivers/usb/misc/onboard_usb_dev.c
+index 36b11127280f..75ac3c6aa92d 100644
+--- a/drivers/usb/misc/onboard_usb_dev.c
++++ b/drivers/usb/misc/onboard_usb_dev.c
+@@ -407,8 +407,10 @@ static int onboard_dev_probe(struct platform_device *pdev)
+ 		}
+ 
+ 		if (of_device_is_compatible(pdev->dev.of_node, "usb424,2744") ||
+-		    of_device_is_compatible(pdev->dev.of_node, "usb424,5744"))
++		    of_device_is_compatible(pdev->dev.of_node, "usb424,5744")) {
+ 			err = onboard_dev_5744_i2c_init(client);
++			onboard_dev->always_powered_in_suspend = true;
++		}
+ 
+ 		put_device(&client->dev);
+ 		if (err < 0)
+-- 
+2.34.1
 
-Thanks,
-=C5=81ukasz
-
->         ret =3D ucsi_sync_control_common(ucsi, cmd);
->         switch (ret) {
->         case -EBUSY:
->         case -ETIMEDOUT:
->                 cancel_delayed_work_sync(&udata->write_tmo);
->                 schedule_delayed_work(&udata->write_tmo, msecs_to_jiffies=
-(WRITE_TMO_MS));
->                 break;
->         case 0:
->                 cancel_delayed_work_sync(&udata->write_tmo);
->                 break;
->         }
->
->         return ret;
->
-> > +     /* EC may return -EBUSY if CCI.busy is set. Convert this to a tim=
-eout.
-> > +      */
-> > +     if (ret =3D=3D -EBUSY)
-> > +             ret =3D -ETIMEDOUT;
-> > +
-> > +     /* Schedule recovery attempt when we timeout or tried to send a c=
-ommand
-> > +      * while still busy.
-> > +      */
-> > +     if (ret =3D=3D -ETIMEDOUT) {
-> > +             cancel_delayed_work_sync(&udata->write_tmo);
-> > +             schedule_delayed_work(&udata->write_tmo,
-> > +                                   msecs_to_jiffies(WRITE_TMO_MS));
-> > +     }
-> > +
-> > +     return ret;
-> > +}
-> > +
-> >  struct ucsi_operations cros_ucsi_ops =3D {
-> >       .read_version =3D cros_ucsi_read_version,
-> >       .read_cci =3D cros_ucsi_read_cci,
-> >       .read_message_in =3D cros_ucsi_read_message_in,
-> >       .async_control =3D cros_ucsi_async_control,
-> > -     .sync_control =3D ucsi_sync_control_common,
-> > +     .sync_control =3D cros_ucsi_sync_control,
-> >  };
-> >
-> >  static void cros_ucsi_work(struct work_struct *work)
-> > @@ -118,6 +155,54 @@ static void cros_ucsi_work(struct work_struct *wor=
-k)
-> >       ucsi_notify_common(udata->ucsi, cci);
-> >  }
-> >
-> > +static void cros_ucsi_write_timeout(struct work_struct *work)
-> > +{
-> > +     struct cros_ucsi_data *udata =3D
-> > +             container_of(work, struct cros_ucsi_data, write_tmo.work)=
-;
-> > +     u32 cci;
-> > +     u64 cmd;
-> > +
-> > +     if (cros_ucsi_read(udata->ucsi, UCSI_CCI, &cci, sizeof(cci))) {
-> > +             dev_err(udata->dev,
-> > +                     "Reading CCI failed; no write timeout recovery po=
-ssible.");
-> > +             return;
-> > +     }
-> > +
-> > +     if (cci & UCSI_CCI_BUSY) {
-> > +             udata->tmo_counter++;
-> > +
-> > +             if (udata->tmo_counter <=3D WRITE_TMO_CTR_MAX)
-> > +                     schedule_delayed_work(&udata->write_tmo,
-> > +                                           msecs_to_jiffies(WRITE_TMO_=
-MS));
-> > +             else
-> > +                     dev_err(udata->dev,
-> > +                             "PPM unresponsive - too many write timeou=
-ts.");
-> > +
-> > +             return;
-> > +     }
-> > +
-> > +     /* No longer busy means we can reset our timeout counter. */
-> > +     udata->tmo_counter =3D 0;
-> > +
-> > +     /* Need to ack previous command which may have timed out. */
-> > +     if (cci & UCSI_CCI_COMMAND_COMPLETE) {
-> > +             cmd =3D UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE;
-> > +             cros_ucsi_async_control(udata->ucsi, &cmd);
-> > +
-> > +             /* Check again after a few seconds that the system has
-> > +              * recovered to make sure our async write above was succe=
-ssful.
-> > +              */
-> > +             schedule_delayed_work(&udata->write_tmo,
-> > +                                   msecs_to_jiffies(WRITE_TMO_MS));
-> > +             return;
-> > +     }
-> > +
-> > +     /* We recovered from a previous timeout. Treat this as a recovery=
- from
-> > +      * suspend and call resume.
-> > +      */
-> > +     ucsi_resume(udata->ucsi);
-> > +}
-> > +
-> >  static int cros_ucsi_event(struct notifier_block *nb,
-> >                          unsigned long host_event, void *_notify)
-> >  {
-> > @@ -162,6 +247,7 @@ static int cros_ucsi_probe(struct platform_device *=
-pdev)
-> >       platform_set_drvdata(pdev, udata);
-> >
-> >       INIT_WORK(&udata->work, cros_ucsi_work);
-> > +     INIT_DELAYED_WORK(&udata->write_tmo, cros_ucsi_write_timeout);
-> >       init_completion(&udata->complete);
-> >
-> >       udata->ucsi =3D ucsi_create(dev, &cros_ucsi_ops);
->
-> thanks,
->
-> --
-> heikki
 
