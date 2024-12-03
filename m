@@ -1,153 +1,138 @@
-Return-Path: <linux-usb+bounces-18009-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18010-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32E449E0D6D
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 21:58:13 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 094089E0FB9
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 01:31:10 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E7FDB37CD8
-	for <lists+linux-usb@lfdr.de>; Mon,  2 Dec 2024 18:52:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90F43164A31
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 00:31:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9BE1DE3AC;
-	Mon,  2 Dec 2024 18:51:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="d1+850v/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9AFD18B03;
+	Tue,  3 Dec 2024 00:30:57 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A2E5381C4;
-	Mon,  2 Dec 2024 18:51:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40B08A941;
+	Tue,  3 Dec 2024 00:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733165518; cv=none; b=JzSjEjGJCFY/s2hdt6GhnevIRuPNJYjl0kdu8KXOOm8X8FRi+kRP/SUr+eUqhU14WMHGRhnYmf7qZXFeDrazFoxZ5dtwDKvD9r5TNtlIEQvSNLftkpMKgQrue2gAXgBRuzJQHXpaUIQj834dzY+eCt9Mw48JRn4LJiLJ1N64DwI=
+	t=1733185857; cv=none; b=uizbpxc+IXh60lYY4RQSZ3SuulHoJF5yV7d9ZpcmVgLwdpGtLLNeqvMZvDKK01uNv7hNzeS90cQfv1rPJFXEiu4xG0UTVhecOMO+nF00NquQyo+pZQNbmCE/3bjNaEhtgyyxFnO5U9cjy+uP5CTXa8xdZ0TCBnaSHncafuvZcbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733165518; c=relaxed/simple;
-	bh=n24wWnsvKSEhSnkWZ3SQ2qlUtbn8L5c/kgAuqA70Ock=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JJnmFvyG5z2cC92y41TI/IEYhO7ed98rizWTvttbN/uVbAPMTDh70nPJQ6YS25+0PATgPHLd/Njr48NisIbFYAkpkFfGKmT3dixnjlAFCp3o59WgV0DuYz9FQDlJ/QnJAsYTYqPnq2f8NI16+dNKoGNf4xojYWKi5aWwA6JKwAI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=d1+850v/; arc=none smtp.client-ip=212.227.17.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1733165494; x=1733770294; i=wahrenst@gmx.net;
-	bh=ZgB/0b4DRUYfPuTkx30gmOcph3LtRPAAxoRoTJ+aweo=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To:Content-Type:
-	 Content-Transfer-Encoding:cc:content-transfer-encoding:
-	 content-type:date:from:message-id:mime-version:reply-to:subject:
-	 to;
-	b=d1+850v/UjxK7V8+HZxecukwNyaInPHNRcoDefqRUjy9+ZdpDd+sAKJ92HDeKkaH
-	 Ydlrz0Pa+y4aS2BwCL8BqHlrXJYHIbmDPDYzo9Jp2e5nDHCMro8kSopd/zvBw/xoP
-	 GAhEdQvcO9aAhpaG3HXuJzo68/jfkNzxsZxFOnzMD/2EuBF1xBQUYxmxvB8uYyrvO
-	 8pzhVWqLwm1TV8HzWSxUNiqoBRb0Mzg+rghtO1XrT0kMOCEmdgN4Tx7H4vo45EOPo
-	 FP2RDPJP1UpwOUAsga8//6/14iZT5hLLeyP30ifrRuvDWwl6koEdW5QEAqyh/TpFf
-	 +cIGeF5yaBkQPbZXew==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.1.105] ([37.4.251.153]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MYeMt-1tDdDR35xj-00WWt9; Mon, 02
- Dec 2024 19:51:34 +0100
-Message-ID: <d418a30d-f0b0-49c5-8f2a-ddda9a7eeb07@gmx.net>
-Date: Mon, 2 Dec 2024 19:51:28 +0100
+	s=arc-20240116; t=1733185857; c=relaxed/simple;
+	bh=i3WRUpl0BZLoxANNr42JxqL0CF66B0J3ZcaV8LEb3IQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=XKh+o+Z78z11QeSvVC4aCMDgdOtZDvBEuBuxjDF/aN77zxmlQtq1s3M7WmsoZX/3tQCb5XaruyJ0W8+FUU0/heszcgDZ6Jfh/hxEwZ7R/yowvZOT0p/41ZfsVDNYWUybYFj9lJnRp+14PK5ORcUXRIkakkRXcsAZhxmLNadiwAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2ee76befe58so2371050a91.2;
+        Mon, 02 Dec 2024 16:30:53 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733185852; x=1733790652;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9rEKgMITY6eL0RJk47OCb/MNEcyttEyLYDtt3MElhYE=;
+        b=PJ8juDj8/QfuKqz7ydb7I4SyuHshAHHMgmHsdyDLoGKPO28yrVLO7guji56t8OYN5S
+         Ytv1NJrYg1PCWVR5dYca3yAlSCvLK/I1z0g3+n6TZWzo+gs1nqhv5e7rR8ZIGG+LxTQj
+         mERGqtM16JPKvButic27lWV57FJ2iJNR2YfOH1Cnmm827LFB2nDmSySD+hFeVqTMLFHz
+         nas3RWEtZJnc5gGYJGIvTahLiNQUL77wJalhjOMDTT6gwV/IYdQ35os1B7gfj3VHkqh8
+         n9etYkiIOKlHp2zezc9R2EvIj9pJOZhMC3gw7tPF3OGwoRhTYYO+zFa2/iLAmxsAhTln
+         CKfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVqhPBi2XZnXxKhEMXMAfZgRef6l7HP7ApK1hIHg2t8+sNzyfceQmrfLeVgtK0XMHbsygFYCgZbSkA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZEprR3PzRmF3Av9T79m92ZqwU/StY8owTwkLvOH6+EyleR5UM
+	zPV92CTNLhgUlDkgN3QmD818KLtjVP9BhzxiLT/hlxjzAg3FMKC8
+X-Gm-Gg: ASbGncunfJN6gW4U12gHzhBPpE41GLDqdXNUGpm3HZnT8Wjqmgd5zj3DBzMGTjGdIym
+	ElgGVdPDDOWRGsXr1TykHP5eUhSPczGwBqzHAk52vE1UT0RubeBb3SmI37heQ1bdQS+ZX++x/4m
+	Blzl5CDAflO3qMPWMdF3aXp3M9pmdRpvVBuq/P7bDO4mLKu2kf97ZV8TU950QKhKw5fJYZtHtRV
+	yNRzTPJttwAnLzS8kuEhA2rGmehhQKVXe8GnfPVsnQqXyAyMhTiWcRPedPdGW8fZeU=
+X-Google-Smtp-Source: AGHT+IF64s/rjJNZnYcx/5CAI5cVxhxP2TWCnsnHeGRE1N1g6MDcCexDyP479VeqRx4Te2WwMesFJA==
+X-Received: by 2002:a17:90b:2f48:b0:2ee:c918:cd42 with SMTP id 98e67ed59e1d1-2ef0120461cmr772697a91.22.1733185852439;
+        Mon, 02 Dec 2024 16:30:52 -0800 (PST)
+Received: from localhost.localdomain ([116.128.244.171])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7254180f7c4sm9167412b3a.134.2024.12.02.16.30.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 02 Dec 2024 16:30:52 -0800 (PST)
+From: xiehongyu1@kylinos.cn
+To: gregkh@linuxfoundation.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	mathias.nyman@intel.com,
+	xiehongyu1@kylinos.cn
+Subject: Re: [PATCH] usb: xhci: Add module param for compliance quirk checking
+Date: Tue,  3 Dec 2024 08:30:40 +0800
+Message-Id: <20241203003040.1518504-1-xiehongyu1@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <2024120205-collected-trapezoid-9dde@gregkh>
+References: <2024120205-collected-trapezoid-9dde@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 2/9] dmaengine: bcm2835-dma: add suspend/resume pm
- support
-To: Vinod Koul <vkoul@kernel.org>
-Cc: Russell King <linux@armlinux.org.uk>,
- Florian Fainelli <florian.fainelli@broadcom.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
- Ulf Hansson <ulf.hansson@linaro.org>, Minas Harutyunyan
- <hminas@synopsys.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Lukas Wunner <lukas@wunner.de>, Peter Robinson <pbrobinson@gmail.com>,
- "Ivan T . Ivanov" <iivanov@suse.de>, linux-arm-kernel@lists.infradead.org,
- kernel-list@raspberrypi.com, bcm-kernel-feedback-list@broadcom.com,
- dmaengine@vger.kernel.org, linux-mmc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20241025103621.4780-1-wahrenst@gmx.net>
- <20241025103621.4780-3-wahrenst@gmx.net> <Z03l308ur7xuE1SB@vaman>
-Content-Language: en-US
-From: Stefan Wahren <wahrenst@gmx.net>
-In-Reply-To: <Z03l308ur7xuE1SB@vaman>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:JFDPQWC/iWpVzlUOkBhNid0hdinoSmvzk39ECSz5KjcFNJzYYLQ
- bBJMN8vYMo8K65/OG7nxKZi2ufJFsPLlUks4fTHwBgeG5A6u58gKNWajQ3rbJDbo69Q86rS
- RtZNPwoSGajeAVR+DOZiOCxm/H1bdwtbTF6N9RzFTSM5ECdql2Jx3a1XcD0+mDFkL8hSQvM
- A7RwEWwiFuPMe2lQdAq/g==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:HAeP/ZkyvB4=;PI/pDBlpVI/bM72GS5GvEQE1UE8
- SKq+3RgesVtT2pv+9/2xfw+yP78CjWdpPe5yI9KVb7dkz4sIfpfmCOTWLNzTAS9F/qVhzn6xW
- HrqPuHyJVT/YEmcKwoANZMOOYoPmPpy9EtA4WpZU1Q0H5mCjWiM64ss1dM18TpohYmEA9shsX
- oPWAC9l0ksfyx5wQgXdG+815rPT11ve4dPBjIAJLH9xoKdVZ70OKTfMKxyc0zh09tP7MqdHCh
- 8dAUwyzYVPKpcuyqoCTHlbVgs/2UPsNTS7pPOD+0DrL0dHC5o1xQbV7BYIhLLtoNTXkdIAPZl
- Joe0hw2nk1rUyWb5Uki0nJrNjVoNn2bUOVFd+wV1E2EbzRNOFBO6qMWIA5zxcywFv1zssKDBU
- 8FJaldSzveeB8JY5hI3u3buV57t0sGzaHNzpiTY2fHqVStBzVrQ8eWgJtW9LmHM7IwyYyAfeo
- cr5FJ2bDtt9mIRn92X//m1rcSuoO9749wbPCi9+U389Z2/ZztyyfI0TsrfJfNuIjBzn/NtGj4
- XvOEAxzRSBFqJc1TR1PRrBjaCF3mYwMhy6groxUWSHKsrPaJ4a9ftYYWh5+VgVFRLlj7f8MAQ
- Sg92jkCl3N9fpW1yitEOfgNey/NGxTw7YFFU1iPAijVR9jgbVZJ3+nucM/U0Iu7GVmO0a1xzQ
- kpm/0eoFWNc1SX7hSSfiqCgbPDBrPxk7QS2DrsqKYhUNQlfVD//cWEj/PeWhP1NwEibciYC0+
- Jw19uT9aM412Gl/k5JtTl5GkBkqj7W7+4+nhL+vhfXp0MEMn/gzx0ckpQTQ561LJtnZnWidg/
- SA0LsUg1H2BFAR2V7lWDFe2kdTLQKisTyHn+70lAQ3rt8bRjL8W1nzL1Xe4Upw9Ad9KPSqB7U
- LHp7odcaeJqLLSATuOWSucCg4iJGFppwihygh8f0lcb37uGQ1OSrgNw/tBnD1ZIZc540i3IEF
- rrrxqKfio4YpH+u3rPfrMDnJblgubSmKTkaXGnJ2dofZOFlNklo5QHGBicf5N7oInPK/A1hVK
- xjD3Nz10ndbDDBdtiIB8jbdIP+34RC+c7C3NFE0F/5m61+PGIt8pfZb3KJAir9y7ekYerfQUa
- 9wwDlmugDl457aIlAYHr3UmCetY4z8
+Content-Transfer-Encoding: 8bit
 
-Hi Vinod,
+Hi Greg,
 
-Am 02.12.24 um 17:52 schrieb Vinod Koul:
-> On 25-10-24, 12:36, Stefan Wahren wrote:
->> bcm2835-dma provides the service to others, so it should
->> suspend late and resume early.
+On 2024/12/2 14:38, Greg KH wrote:
+> On Mon, Dec 02, 2024 at 11:18:55AM +0800, xiehongyu1@kylinos.cn wrote:
+>> From: Hongyu Xie <xiehongyu1@kylinos.cn>
 >>
->> Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+>> In the old way, vendor name and product name need to be put in
+>> xhci_compliance_mode_recovery_timer_quirk_check, it's not convenient.
+>>
+>> So add two module param for convenience.
+>
+> Please no.  Module parameters are from the 1990's, they do not scale or
+> work well anymore, please never add them.
+>
+>>
+>> usage: put xhci-hcd.compliance_vendor=[vendor name]
+>> xhci-hcd.compliance_product=[product name] in cmdline.
+>>
+>> In Ubuntu you can use "dmidecode -t system" to get vendor name and
+>> product name.
+>>
+>> Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
 >> ---
->>   drivers/dma/bcm2835-dma.c | 30 ++++++++++++++++++++++++++++++
->>   1 file changed, 30 insertions(+)
+>>  drivers/usb/host/xhci.c | 18 ++++++++++++++++--
+>>  1 file changed, 16 insertions(+), 2 deletions(-)
 >>
->> diff --git a/drivers/dma/bcm2835-dma.c b/drivers/dma/bcm2835-dma.c
->> index e1b92b4d7b05..647dda9f3376 100644
->> --- a/drivers/dma/bcm2835-dma.c
->> +++ b/drivers/dma/bcm2835-dma.c
->> @@ -875,6 +875,35 @@ static struct dma_chan *bcm2835_dma_xlate(struct o=
-f_phandle_args *spec,
->>   	return chan;
->>   }
->>
->> +static int bcm2835_dma_suspend_late(struct device *dev)
->> +{
->> +	struct bcm2835_dmadev *od =3D dev_get_drvdata(dev);
->> +	struct bcm2835_chan *c, *next;
+>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>> index 5ebde8cae4fc..2007c27bfaf4 100644
+>> --- a/drivers/usb/host/xhci.c
+>> +++ b/drivers/usb/host/xhci.c
+>> @@ -39,6 +39,14 @@ static unsigned long long quirks;
+>>  module_param(quirks, ullong, S_IRUGO);
+>>  MODULE_PARM_DESC(quirks, "Bit flags for quirks to be enabled as default");
+>>  
+>> +static char *compliance_product;
+>> +module_param(compliance_product, charp, 0644);
+>> +MODULE_PARM_DESC(compliance_product, "Product name for compliance comparison");
 >> +
->> +	list_for_each_entry_safe(c, next, &od->ddev.channels,
->> +				 vc.chan.device_node) {
->> +		void __iomem *chan_base =3D c->chan_base;
->> +
->> +		if (readl(chan_base + BCM2835_DMA_ADDR)) {
->> +			dev_warn(dev, "Suspend is prevented by chan %d\n",
->> +				 c->ch);
->> +			return -EBUSY;
->> +		}
-> Can you help understand how this helps by logging... we are not adding
-> anything except checking this and resume is NOP as well!
-My intention of this patch is just to make sure, that no DMA transfer is
-in progress during late_suspend. So i followed the implementation of
-fsldma.c
-
-Additionally i added this warning mostly to know if this ever occurs.
-But i wasn't able to trigger.
-
-Should i drop the warning and make resume callback =3D NULL?
-
-Best regards
-
-
+>> +static char *compliance_vendor;
+>> +module_param(compliance_vendor, charp, 0644);
+>> +MODULE_PARM_DESC(compliance_vendor, "Vendor name for compliance comparison");
+>
+> Also, you have provided no documentation as to why these are needed at
+> all, so that's not going to work :(
+Engenieer from RENESA suggested to put vendor name and product name in
+xhci_compliance_mode_recovery_timer_quirk_check for some buggy
+motherboard that using uPD720201.
+For oem(or odm), there might be multiple names for the same
+motherboard(or same design). And put all the names in
+xhci_compliance_mode_recovery_timer_quirk_check might not be a good
+idea. So I figure using module_param can do the job. Anyway, Is there
+better way to do this in kernel?
+>
+>
+> thanks,
+>
+> greg k-h
+>
 
