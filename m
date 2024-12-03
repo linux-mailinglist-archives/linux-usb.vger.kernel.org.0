@@ -1,151 +1,182 @@
-Return-Path: <linux-usb+bounces-18036-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18037-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0C3F9E1B57
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 12:52:43 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0279E9E1B94
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 13:01:22 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DE6C1678D8
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 11:52:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B6FB12835BA
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 12:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32C4C1E47DB;
-	Tue,  3 Dec 2024 11:50:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE22B1E5705;
+	Tue,  3 Dec 2024 12:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mygRsT0g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fdDeCtLV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF121E47B2
-	for <linux-usb@vger.kernel.org>; Tue,  3 Dec 2024 11:50:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E26B3398B;
+	Tue,  3 Dec 2024 12:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733226645; cv=none; b=QcZdrl0AMwzkVv+nBYyC9ea333Rv8HIQvwX0n9JVasF1ADzKeTXTNO+vdwV5qTpf3z1nWY8RVpS7zKG9R0zFLNeDKQG22BYQ4Yuh4gFJDSKLdi80h/8jc0Ld/De3eiJoFN54i98QZUPuroK1eH0O+QZ+b9XrNBfks+tP8VSPi6U=
+	t=1733227262; cv=none; b=FzO7zdcCbOGmFYMs76UesdXZ0Fc7Nl77VPhE/Ky8oPsmxh/+t/NuBngY4P11WQjiQKcoLXZUEeL+oLyj6J/lIYtd2avhg8Q37+X7gzST0DfTkg1ND5XKKKL2m2xNT2XRxgIuOqLRSGQZaCkfxUqnU/RvX7tcXDXl2ecIS5xu6yE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733226645; c=relaxed/simple;
-	bh=VmRVHJ89hHaC702KNj5DVwjGknfJqcSrEMUZ3plgFAw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=q+mx1HO3fggjcyLO48gvQk9j61swegVHGRDF3f5KnClJuLDdrCgICyUO4ia0SIwG3cMBCT/us/y81xpwqqnWb7xmz0WEa/Oxpf+Mp18x8oz7c73uUqFkB+BQU7C9ViekfT/a9M8UcYsPqt5BjizrA2FdCAwYiNUrYXe9WrjmZvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mygRsT0g; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e38938a55e7so4495693276.2
-        for <linux-usb@vger.kernel.org>; Tue, 03 Dec 2024 03:50:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1733226643; x=1733831443; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iFlYiwHjDzAWalA/ssIPWrafHRu3dey++ZE5NO1gWmM=;
-        b=mygRsT0gAYQ65F7Nq4GW4iAoPj6H7u+hmFZlJbJmbd6Jr1azQSUP0Ey5E/w0b8wF1o
-         ISzUu0xGHVbt/RjudldUIzaW1VXlPPOpgHE0xmQg0ICWKZ/FQ1Hsu8Xdba4SUi0oXPHH
-         Dy6UDOV6yURIxFu4urEyVnvA1d/6H9GbekoB+27jEtJmKnX/Bdaztbx16jQAc/RxpwSk
-         kqBSIVyg0Mw48Pjf9Db2yEGYrYimWRBOvW4+TUFKEpbIcXHpV8PYjNiYdbjDHB+KXmbo
-         Dfsdlp/PAesrcOYnV2RBV4JVjWURpWxyQWq+mOgdxF0gn8W5c9Lf28YnOfl6p7+erzNg
-         slQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733226643; x=1733831443;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iFlYiwHjDzAWalA/ssIPWrafHRu3dey++ZE5NO1gWmM=;
-        b=KGOrwfKZPwH2ubyw2iJI11Zq3YkE6IhXqi6ebdhFC+kJVxdfIoektxTYpqqQhKpKLk
-         5LiQG8/r9A6W1vu7zuke7q5Pn0p7Mqc0jwTjF6qE+B/0/2NAZr3Zi8xOxPN0LoPL/yQW
-         w1pZZHxt9B1y2bJg9MsqwqhUTMmlrb5IRxsjYmVIRfKRubINHAp5UASZaAVwupVy6k1P
-         IDX2c/zcu902NBx8GLZZcUkA1R8ISm9RnqjNbkW0cIWxmNAswqye6vdG/M7M5wroFeeA
-         8COqIywNjF3QP5Q3Rg0m50cgCWJOxymK+kTJpUcDUdjsDEAC1jqPY03X44W8PVcfuknB
-         5bFQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV/hvzrsv/DnU04vUMFg4SSMETTrq+fLZVk+T72nCtgWgvGSF4YpPFeu51IcakTWOnhPg9jNkcQ3tI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrBcTCoXD1ucOmA9DUBZ1U93nCtyGpZSWpPg5lb1YpdPKhZISj
-	8KJQ6+q4gyQk54BkyorV0x0mPhNd8Xyp3+UsDv4wn/7fuiISjlO575sef++GuBDz5JRU4if4WxV
-	EUp63EtlRMgFwyvhlXxVq00OyxwP+sgVOTcwODg==
-X-Gm-Gg: ASbGncuMI8coZnUsW/sjHtpfHhjScZQQ6YsfD+FCoi1qZm77vOCG2ZyEBhIqA4wd8qm
-	0u+pAMxbSV6c2Y8M1UroXj0YyLQjfZg==
-X-Google-Smtp-Source: AGHT+IFyTnURgL93B+5dKdQPXnHOV8tQW0IsxTMXNH0c/0ZmEOV3U3JgbfPlCK64NvS19G7Z6OStEBzOxJ2NzXELGWo=
-X-Received: by 2002:a05:6902:f89:b0:e30:e39b:9d72 with SMTP id
- 3f1490d57ef6-e39d3a2a894mr2330987276.16.1733226643017; Tue, 03 Dec 2024
- 03:50:43 -0800 (PST)
+	s=arc-20240116; t=1733227262; c=relaxed/simple;
+	bh=rlz53vWDp5E/pYVOEj1URbYGt1AREB4Xo9ogjRjCu50=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rKPWitPTPIjPGJJtxcIdmX9tRnFLzlNuAIpWz2zE5F6v0tYsKpF7koC+Eb9bnpcfT39KKfLnppZUfH1YZHoE/zenBBuGQYVTNY9OhPRt+8L0D+bhGfVOiUWog413yWrdxB93lVnyAt02SIsC/sAreWOlPPF9/n13xvOgo4IWFA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fdDeCtLV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBAF4C4CECF;
+	Tue,  3 Dec 2024 12:01:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733227261;
+	bh=rlz53vWDp5E/pYVOEj1URbYGt1AREB4Xo9ogjRjCu50=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fdDeCtLVqECfRfNoqbCzzD0S2R+ze8fu4xgXlPdQFJQ+STayO+czgml6vxR6gAr9u
+	 SfvYrgXRdRmOjMEDiUcIg8Ywi35riI0nUxeZrJIGAla7/uurms7YmN220IRsCbVxR6
+	 0RLGXO472a27O/MHnrmTkWCsCE1MnHGszPPpy+ATOMh/r4ZUNj1XVz+G2aEnELC83Q
+	 5zXc30+JHwj5J8xXpxDpdRcwIa3kank2REKqd9CMrbu3SZA6RQSEQqgx6shuUaL3BU
+	 er9sxGEV01E1uZex0+a/6+JDYf3SqBVZ3ELFg7wS+IFimmHwT30DsHPjPlqmlPz8Tg
+	 GqLyWYoqGameA==
+Date: Tue, 3 Dec 2024 13:00:58 +0100
+From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+To: Zijun Hu <zijun_hu@icloud.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
+	Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Jean Delvare <jdelvare@suse.com>, 
+	Guenter Roeck <linux@roeck-us.net>, Martin Tuma <martin.tuma@digiteqautomotive.com>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Andreas Noever <andreas.noever@gmail.com>, 
+	Michael Jamet <michael.jamet@intel.com>, Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Yehezkel Bernat <YehezkelShB@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>, Andrew Lunn <andrew@lunn.ch>, 
+	Vladimir Oltean <olteanv@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Dan Williams <dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, 
+	Dave Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Takashi Sakamoto <o-takashi@sakamocchi.jp>, Jiri Slaby <jirislaby@kernel.org>, 
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
+	Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>, 
+	Mike Christie <michael.christie@oracle.com>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Nilesh Javali <njavali@marvell.com>, 
+	Manish Rangankar <mrangankar@marvell.com>, GR-QLogic-Storage-Upstream@marvell.com, 
+	Davidlohr Bueso <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, 
+	Alison Schofield <alison.schofield@intel.com>, Andreas Larsson <andreas@gaisler.com>, 
+	Stuart Yoder <stuyoder@gmail.com>, Laurentiu Tudor <laurentiu.tudor@nxp.com>, 
+	Jens Axboe <axboe@kernel.dk>, Sudeep Holla <sudeep.holla@arm.com>, 
+	Cristian Marussi <cristian.marussi@arm.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Mathieu Poirier <mathieu.poirier@linaro.org>, 
+	linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, netdev@vger.kernel.org, linux-pwm@vger.kernel.org, 
+	nvdimm@lists.linux.dev, linux1394-devel@lists.sourceforge.net, 
+	linux-serial@vger.kernel.org, linux-sound@vger.kernel.org, open-iscsi@googlegroups.com, 
+	linux-scsi@vger.kernel.org, linux-cxl@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-block@vger.kernel.org, arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org, 
+	linux-remoteproc@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+Subject: Re: [PATCH v2 00/32] driver core: Constify API device_find_child()
+ and adapt for various existing usages
+Message-ID: <g32cigmktmj4egkq2tof27el2yss4liccfxgebkgqvkil32mlb@e3ta4ezv7y4m>
+References: <20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241203102318.3386345-1-ukaszb@chromium.org>
-In-Reply-To: <20241203102318.3386345-1-ukaszb@chromium.org>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Tue, 3 Dec 2024 13:50:34 +0200
-Message-ID: <CAA8EJpqnOm0y5T+jAZJGL4FLzUz+jp+_ieaOC4j3av+tHaoJ_Q@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: typec: ucsi: Fix completion notifications
-To: =?UTF-8?Q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, 
-	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="35h4iyqfzzpzpkno"
+Content-Disposition: inline
+In-Reply-To: <20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com>
+
+
+--35h4iyqfzzpzpkno
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 00/32] driver core: Constify API device_find_child()
+ and adapt for various existing usages
+MIME-Version: 1.0
 
-On Tue, 3 Dec 2024 at 12:23, =C5=81ukasz Bartosik <ukaszb@chromium.org> wro=
-te:
->
-> OPM                         PPM                         LPM
->  |        1.send cmd         |                           |
->  |-------------------------->|                           |
->  |                           |--                         |
->  |                           |  | 2.set busy bit in CCI  |
->  |                           |<-                         |
->  |      3.notify the OPM     |                           |
->  |<--------------------------|                           |
->  |                           | 4.send cmd to be executed |
->  |                           |-------------------------->|
->  |                           |                           |
->  |                           |      5.cmd completed      |
->  |                           |<--------------------------|
->  |                           |                           |
->  |                           |--                         |
->  |                           |  | 6.set cmd completed    |
->  |                           |<-       bit in CCI        |
->  |                           |                           |
->  |     7.notify the OPM      |                           |
->  |<--------------------------|                           |
->  |                           |                           |
->  |   8.handle notification   |                           |
->  |   from point 3, read CCI  |                           |
->  |<--------------------------|                           |
->  |                           |                           |
->
-> When the PPM receives command from the OPM (p.1) it sets the busy bit
-> in the CCI (p.2), sends notification to the OPM (p.3) and forwards the
-> command to be executed by the LPM (p.4). When the PPM receives command
-> completion from the LPM (p.5) it sets command completion bit in the CCI
-> (p.6) and sends notification to the OPM (p.7). If command execution by
-> the LPM is fast enough then when the OPM starts handling the notification
-> from p.3 in p.8 and reads the CCI value it will see command completion bi=
-t
-> set and will call complete(). Then complete() might be called again when
-> the OPM handles notification from p.7.
->
-> This fix replaces test_bit() with test_and_clear_bit()
-> in ucsi_notify_common() in order to call complete() only
-> once per request.
->
-> This fix also reinitializes completion variable in
-> ucsi_sync_control_common() before a command is sent.
+Hello,
 
-Thank you!
+On Tue, Dec 03, 2024 at 08:33:22AM +0800, Zijun Hu wrote:
+> This patch series is to constify the following API:
+> struct device *device_find_child(struct device *dev, void *data,
+> 		int (*match)(struct device *dev, void *data));
+> To :
+> struct device *device_find_child(struct device *dev, const void *data,
+> 				 device_match_t match);
+> typedef int (*device_match_t)(struct device *dev, const void *data);
 
->
-> Fixes: 584e8df58942 ("usb: typec: ucsi: extract common code for command h=
-andling")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
-> ---
+This series isn't bisectible. With only the first two patches applied I
+hit:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+  CC      drivers/pwm/core.o
+drivers/pwm/core.c: In function =E2=80=98pwm_unexport_child=E2=80=99:
+drivers/pwm/core.c:1292:55: error: passing argument 3 of =E2=80=98device_fi=
+nd_child=E2=80=99 from incompatible pointer type [-Wincompatible-pointer-ty=
+pes]
+ 1292 |         pwm_dev =3D device_find_child(pwmchip_dev, pwm, pwm_unexpor=
+t_match);
+      |                                                       ^~~~~~~~~~~~~=
+~~~~~
+      |                                                       |
+      |                                                       int (*)(struc=
+t device *, void *)
+In file included from include/linux/acpi.h:14,
+                 from drivers/pwm/core.c:11:
+include/linux/device.h:1085:49: note: expected =E2=80=98device_match_t=E2=
+=80=99 {aka =E2=80=98int (*)(struct device *, const void *)=E2=80=99} but a=
+rgument is of type =E2=80=98int (*)(struct device *, void *)=E2=80=99
+ 1085 |                                  device_match_t match);
+      |                                  ~~~~~~~~~~~~~~~^~~~~
+drivers/pwm/core.c: In function =E2=80=98pwm_class_get_state=E2=80=99:
+drivers/pwm/core.c:1386:55: error: passing argument 3 of =E2=80=98device_fi=
+nd_child=E2=80=99 from incompatible pointer type [-Wincompatible-pointer-ty=
+pes]
+ 1386 |         pwm_dev =3D device_find_child(pwmchip_dev, pwm, pwm_unexpor=
+t_match);
+      |                                                       ^~~~~~~~~~~~~=
+~~~~~
+      |                                                       |
+      |                                                       int (*)(struc=
+t device *, void *)
+include/linux/device.h:1085:49: note: expected =E2=80=98device_match_t=E2=
+=80=99 {aka =E2=80=98int (*)(struct device *, const void *)=E2=80=99} but a=
+rgument is of type =E2=80=98int (*)(struct device *, void *)=E2=80=99
+ 1085 |                                  device_match_t match);
+      |                                  ~~~~~~~~~~~~~~~^~~~~
+make[5]: *** [scripts/Makefile.build:194: drivers/pwm/core.o] Error 1
+make[4]: *** [scripts/Makefile.build:440: drivers/pwm] Error 2
+make[3]: *** [scripts/Makefile.build:440: drivers] Error 2
+make[2]: *** [Makefile:1989: .] Error 2
+make[1]: *** [Makefile:372: __build_one_by_one] Error 2
+make: *** [Makefile:251: __sub-make] Error 2
 
---=20
-With best wishes
-Dmitry
+Best regards
+Uwe
+
+--35h4iyqfzzpzpkno
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdO8vgACgkQj4D7WH0S
+/k5hrwgAmMfv4tgQM/zHhRunXZer+6rbqIrp5LbiXSYngMgHSWkkF/Aqcp/Uejmb
+FQwdlGB47gyVlHT5SP4HCDeST+PhX0lg3vHxP2lg0HaHp7/vgJRZAI65iOfy7DY7
+xqXQ+U2+YvtY+lwSneGFeXo9VZZtuu/YfpP8Qg6jH8dGaIojaU57rB+uJCpdvZmt
+VJhc51IAA6eHPcPMGf5mvS8/A7M8uPDwyEgWBDP/MRE0z6oKEjVLPWYFzXjUaVnZ
+MMOmGyzIfvhHTMxlkisgCC+PwmjrO2lZFsM1jD6SVNzMp6XeT2jiGa7lbfXaK9Rk
+7TvM1d7dwtqa42JTuIjTWWBR7AfmBA==
+=Sef0
+-----END PGP SIGNATURE-----
+
+--35h4iyqfzzpzpkno--
 
