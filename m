@@ -1,192 +1,180 @@
-Return-Path: <linux-usb+bounces-18033-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18034-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D4BB9E1915
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 11:21:02 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0122A163569
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 10:20:59 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26FA91E1A3E;
-	Tue,  3 Dec 2024 10:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TcJfdsmS"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE5DD9E1937
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 11:27:24 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901E41E1A08;
-	Tue,  3 Dec 2024 10:20:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BF3CB307E4
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 10:23:34 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE5C21E1C24;
+	Tue,  3 Dec 2024 10:23:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="OS1xNeSD"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254E21DDC3D
+	for <linux-usb@vger.kernel.org>; Tue,  3 Dec 2024 10:23:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733221253; cv=none; b=n+e4fpTYZE+AoXZs+v+IgAe/VOESIoDlZJxwjij6XIaVuEsJBVSPbDRRo44Zc46iNDdjIScpUB5Er/5hipJ1GodfXN3ei2KYIwcgac2/b7FGgWQKOkLPRFeM680TI1jRKV/OIQodMoAdLIP5sQs6sTY3rw1nYkLOWjfj8HZ16i4=
+	t=1733221406; cv=none; b=uaa3hzd/umunzbSXwuDHXlJ81cZCFEhoAJ3B4b5qYgxNO+f70sChwpu9CS2ACXO83Xc/29F4ydxtSbCwF5+oefEwF5uK9+s3AKNq6fN29v7015ovc5TmcWXAYgUUFrVtAapf7Zmze3pAaF1y1Lzf9m5bhMfVyrt/NmqpG+AXHDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733221253; c=relaxed/simple;
-	bh=9pdmzxINkxEkN9dX9ei/EdSwvHoE6Vl+IzYelHP85Sw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MbnBY283Vdvm1auxcEpo/yY8Fw7jnl1GE3nhFRSGMPuVX4B23ZCbQpsnZnOgX4quZvgUKnOx1eKxauYi8lFzoHmmdc0dIS7rwplLthNg5ZiJyXlwKIEVqx4rAfMrXRj5r8TfpJtoP4+vI/mhr5qeMQhw/8UZsNJqWQFIPqn11p4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TcJfdsmS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EAC1C4CECF;
-	Tue,  3 Dec 2024 10:20:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733221253;
-	bh=9pdmzxINkxEkN9dX9ei/EdSwvHoE6Vl+IzYelHP85Sw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TcJfdsmS0C3Sl6/bO8Ngmz5qwVTQLGllAt9pf4QJXipMFcCDhh1hqjm887k9I3l6I
-	 Bz6MXnOVd1kuwVmdZCmshKvDdBqJVmPz2cCoBu0MhjvwficzEmtGGSpqPcDCo/CIeL
-	 OgQ70G1k9VSgk0GxK3Vk4S+J7dp31xJfYksCCoVr8pwooloPjSpEhS4Az4+lxmdFp5
-	 /PCA7Vy3J/p7g50jeYAqxutNhxNpRwSM+DNFIrfv2/iP4tr/scSuYQmlAI0MJjmbl3
-	 7TQUk4uBseG0REiS2ddjhxYqLEJjSv5xo2KB1ZnUs6FM/IzIECxaWaEhjxpfFRYJwE
-	 6vjfe4hSQHhng==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tIQ1Q-0000000023I-3yyK;
-	Tue, 03 Dec 2024 11:20:49 +0100
-Date: Tue, 3 Dec 2024 11:20:48 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Krishna Kurapati <quic_kriskura@quicinc.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64: dts: qcom: x1e80100-crd: Add USB multiport
- fingerprint reader
-Message-ID: <Z07bgH5vVk44zuEH@hovoldconsulting.com>
-References: <20241118-x1e80100-crd-fp-v1-0-ec6b553a2e53@linaro.org>
- <20241118-x1e80100-crd-fp-v1-1-ec6b553a2e53@linaro.org>
+	s=arc-20240116; t=1733221406; c=relaxed/simple;
+	bh=ETw7u1mk0LjlQqPvj8gR4APdnoQAxNUE+W5cxhDMBCg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eqrUvHZBXLwlA6jdx/lyq7akPN0d/s1Srp5z/V28iT4Fl73kcVFrooxU2lw3iGgk+PEXnYbUi3ccKXfLKnUdCEl97YqqpiY9/5gTCoguAEEHjw8Pwr3WvqlYqjqZS2ZGS4U7rO3r25G3MeUnPbx0mia/JNwnujeZEZMcMPBLE+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=OS1xNeSD; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5d0d4a2da4dso3371977a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 03 Dec 2024 02:23:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1733221402; x=1733826202; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RJzpjZ91uuCvgpzILXkD8zrAjfL5m7WyfegMJCZBGNo=;
+        b=OS1xNeSDFRucWUPYzNa4KkWLxq2n/G+Te8RHXpU/jaGhzQVVCxUeHIQrif/bUYWx0U
+         JMlarphRDAkG0/fQjrqKISCDNhpHnh0zAQE3JNYISpEDJ6Yy0JHLGt4vVIaEbTICHOBi
+         +XgFjGiYx+bqe1Z1698fpD39UvnE2FMBGCQsI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733221402; x=1733826202;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RJzpjZ91uuCvgpzILXkD8zrAjfL5m7WyfegMJCZBGNo=;
+        b=IR0gFqsI9rlMk4Z505qff02ppYp+64WYxUZR23zNg9LrneWPSjHQsc0i/t7Vk/vEyH
+         49tz5UO32l3YdNsimrK9OhjIdPbzfsLJSLlrJArjQX+8yK2IWZSQOmQWi3JaO8wW37mj
+         0VofiIoxgjpJ6c5otmTBjoiIIGWTTgF/8e1pv9hbdugUXSMlMDHdKXeDW7WhYLcrvp/w
+         iycyqVEv1E7ivOUsJRNQhbG1YKDGDvRGOws/kEaF+0PTt20oegbN2YxYrMGopmfu5Kaz
+         toxnpBESYHCWun5NjQ497OkeoL6KBrzxL4p0NDkaQsRmReS2XhFg4Lx6uoJ+yP2d/mXg
+         WBng==
+X-Forwarded-Encrypted: i=1; AJvYcCX7PNV1vM3mzjizFhXItcLfj6z8ZdwDfgurK+V0dEr3N/vmYXNtz73gRVeLK9dPm6Ia7zYSDe+8Vk8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3ADKR2ujfi70ced9PuPC4ge4dmY5qdGQCmHumHcTMNM14XvdN
+	QaitWmhTkbVQvXmHr0aLhaQz1RaDNidNFM5herg1o8gpEJBe3coySE1PlrT2
+X-Gm-Gg: ASbGncuwbZ85eTCWhziofWU5MAIwjFF0aGDlMWBMlr3YvmYGT7cmaJcptDJiMo+jtAF
+	ZF0R+aIw8Ex/wf4jYv1lCzU5mZkVidxn1r+bKlk2l3jsqpVhEdo96Yvbs4s5F0SXUpDyhrVsXu+
+	WQatv0nTyhStH3uXt/ilbWTLz9GE0VqTIqOvu0qOU8WinQLdlyi0cIHoWzORk1mNV3l4y3cuWj8
+	vaA2Cxa0G59FndFeOLgh3acylsPabnrto/1GIs5XrYdpq9dDwVXa/is0gb+PL68O/RvBeWv4QHq
+	VIn/IMSG5gq2AgJ4+rBbuqvLY3uhXYfIwkk=
+X-Google-Smtp-Source: AGHT+IFVjs1rNJEw3UFMNZnu1wLLGO1PKNpGomwEtLmWDel9W+iixQKGmicK6vakDP7uGLvRDgW1hw==
+X-Received: by 2002:a05:6402:34c5:b0:5d0:bd2a:fc2a with SMTP id 4fb4d7f45d1cf-5d10cb80224mr1426909a12.26.1733221402401;
+        Tue, 03 Dec 2024 02:23:22 -0800 (PST)
+Received: from ukaszb-ng.c.googlers.com.com (103.45.147.34.bc.googleusercontent.com. [34.147.45.103])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d0f6cf4bbesm1720851a12.43.2024.12.03.02.23.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Dec 2024 02:23:21 -0800 (PST)
+From: =?UTF-8?q?=C5=81ukasz=20Bartosik?= <ukaszb@chromium.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v2] usb: typec: ucsi: Fix completion notifications
+Date: Tue,  3 Dec 2024 10:23:18 +0000
+Message-ID: <20241203102318.3386345-1-ukaszb@chromium.org>
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241118-x1e80100-crd-fp-v1-1-ec6b553a2e53@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-[ +CC: Krishna, Thinh and the USB list ]
+OPM                         PPM                         LPM
+ |        1.send cmd         |                           |
+ |-------------------------->|                           |
+ |                           |--                         |
+ |                           |  | 2.set busy bit in CCI  |
+ |                           |<-                         |
+ |      3.notify the OPM     |                           |
+ |<--------------------------|                           |
+ |                           | 4.send cmd to be executed |
+ |                           |-------------------------->|
+ |                           |                           |
+ |                           |      5.cmd completed      |
+ |                           |<--------------------------|
+ |                           |                           |
+ |                           |--                         |
+ |                           |  | 6.set cmd completed    |
+ |                           |<-       bit in CCI        |
+ |                           |                           |
+ |     7.notify the OPM      |                           |
+ |<--------------------------|                           |
+ |                           |                           |
+ |   8.handle notification   |                           |
+ |   from point 3, read CCI  |                           |
+ |<--------------------------|                           |
+ |                           |                           |
 
-On Mon, Nov 18, 2024 at 11:34:29AM +0100, Stephan Gerhold wrote:
-> The X1E80100 CRD has a Goodix fingerprint reader connected to the USB
-> multiport controller on eUSB6. All other ports (including USB super-speed
-> pins) are unused.
-> 
-> Set it up in the device tree together with the NXP PTN3222 repeater.
-> 
-> Signed-off-by: Stephan Gerhold <stephan.gerhold@linaro.org>
-> ---
->  arch/arm64/boot/dts/qcom/x1e80100-crd.dts | 48 +++++++++++++++++++++++++++++++
->  1 file changed, 48 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/x1e80100-crd.dts b/arch/arm64/boot/dts/qcom/x1e80100-crd.dts
-> index 39f9d9cdc10d..44942931c18f 100644
-> --- a/arch/arm64/boot/dts/qcom/x1e80100-crd.dts
-> +++ b/arch/arm64/boot/dts/qcom/x1e80100-crd.dts
-> @@ -735,6 +735,26 @@ keyboard@3a {
->  	};
->  };
->  
-> +&i2c5 {
-> +	clock-frequency = <400000>;
-> +
-> +	status = "okay";
-> +
-> +	eusb6_repeater: redriver@4f {
-> +		compatible = "nxp,ptn3222";
-> +		reg = <0x4f>;
+When the PPM receives command from the OPM (p.1) it sets the busy bit
+in the CCI (p.2), sends notification to the OPM (p.3) and forwards the
+command to be executed by the LPM (p.4). When the PPM receives command
+completion from the LPM (p.5) it sets command completion bit in the CCI
+(p.6) and sends notification to the OPM (p.7). If command execution by
+the LPM is fast enough then when the OPM starts handling the notification
+from p.3 in p.8 and reads the CCI value it will see command completion bit
+set and will call complete(). Then complete() might be called again when
+the OPM handles notification from p.7.
 
-The driver does not currently check that there's actually anything at
-this address. Did you verify that this is the correct address? 
+This fix replaces test_bit() with test_and_clear_bit()
+in ucsi_notify_common() in order to call complete() only
+once per request.
 
-(Abel is adding a check to the driver as we speak to catch any such
-mistakes going forward).
+This fix also reinitializes completion variable in
+ucsi_sync_control_common() before a command is sent.
 
-> +		#phy-cells = <0>;
+Fixes: 584e8df58942 ("usb: typec: ucsi: extract common code for command handling")
+Cc: stable@vger.kernel.org
+Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+---
 
-nit: I'd put provider properties like this one last.
+Changes in v2:
+- Swapped points 7 and 8 in the commit description
+in order to make diagram more clear. 
+- Added reinitialization of completion variable
+in the ucsi_sync_control_common().
+---
 
-> +		vdd3v3-supply = <&vreg_l13b_3p0>;
-> +		vdd1v8-supply = <&vreg_l4b_1p8>;
+ drivers/usb/typec/ucsi/ucsi.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-Sort by supply name?
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index c435c0835744..7a65a7672e18 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -46,11 +46,11 @@ void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+ 		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
+ 
+ 	if (cci & UCSI_CCI_ACK_COMPLETE &&
+-	    test_bit(ACK_PENDING, &ucsi->flags))
++	    test_and_clear_bit(ACK_PENDING, &ucsi->flags))
+ 		complete(&ucsi->complete);
+ 
+ 	if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+-	    test_bit(COMMAND_PENDING, &ucsi->flags))
++	    test_and_clear_bit(COMMAND_PENDING, &ucsi->flags))
+ 		complete(&ucsi->complete);
+ }
+ EXPORT_SYMBOL_GPL(ucsi_notify_common);
+@@ -65,6 +65,8 @@ int ucsi_sync_control_common(struct ucsi *ucsi, u64 command)
+ 	else
+ 		set_bit(COMMAND_PENDING, &ucsi->flags);
+ 
++	reinit_completion(&ucsi->complete);
++
+ 	ret = ucsi->ops->async_control(ucsi, command);
+ 	if (ret)
+ 		goto out_clear_bit;
+-- 
+2.47.0.338.g60cca15819-goog
 
-> +		reset-gpios = <&tlmm 184 GPIO_ACTIVE_LOW>;
-> +
-> +		pinctrl-0 = <&eusb6_reset_n>;
-> +		pinctrl-names = "default";
-> +	};
-> +};
-> +
->  &i2c8 {
->  	clock-frequency = <400000>;
->  
-> @@ -1047,6 +1067,14 @@ edp_reg_en: edp-reg-en-state {
->  		bias-disable;
->  	};
->  
-> +	eusb6_reset_n: eusb6-reset-n-state {
-> +		pins = "gpio184";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-disable;
-> +		output-low;
-
-I don't think the pin config should assert reset, that should be up to
-the driver to control.
-
-> +	};
-> +
->  	hall_int_n_default: hall-int-n-state {
->  		pins = "gpio92";
->  		function = "gpio";
-> @@ -1260,3 +1288,23 @@ &usb_1_ss2_dwc3_hs {
->  &usb_1_ss2_qmpphy_out {
->  	remote-endpoint = <&pmic_glink_ss2_ss_in>;
->  };
-> +
-> +&usb_mp {
-> +	status = "okay";
-> +};
-> +
-> +&usb_mp_dwc3 {
-> +	/* Limit to USB 2.0 and single port */
-> +	maximum-speed = "high-speed";
-> +	phys = <&usb_mp_hsphy1>;
-> +	phy-names = "usb2-1";
-> +};
-
-The dwc3 driver determines (and acts on) the number of ports based on
-the port interrupts in DT and controller capabilities. 
-
-I'm not sure we can (should) just drop the other HS PHY and the SS PHYs
-that would still be there in the SoC (possibly initialised by the boot
-firmware).
-
-I had a local patch to enable the multiport controller (for the suspend
-work) and I realise that you'd currently need to specify a repeater also
-for the HS PHY which does not have one, but that should be possible to
-fix somehow.
-
-> +
-> +&usb_mp_hsphy1 {
-> +	vdd-supply = <&vreg_l2e_0p8>;
-> +	vdda12-supply = <&vreg_l3e_1p2>;
-> +
-> +	phys = <&eusb6_repeater>;
-> +
-> +	status = "okay";
-> +};
-
-Johan
 
