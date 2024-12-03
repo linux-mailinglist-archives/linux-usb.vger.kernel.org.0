@@ -1,98 +1,193 @@
-Return-Path: <linux-usb+bounces-18066-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18060-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B976A9E285E
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 17:57:48 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C05D39E2A2F
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 19:01:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EBB6289F66
-	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 16:57:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD285B30819
+	for <lists+linux-usb@lfdr.de>; Tue,  3 Dec 2024 16:06:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40CDE1F9F6B;
-	Tue,  3 Dec 2024 16:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09E7D1F893C;
+	Tue,  3 Dec 2024 16:06:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="a9HWlm9G"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="lHnQZbqT";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="lHnQZbqT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A4CC1304BA;
-	Tue,  3 Dec 2024 16:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 112031F890D;
+	Tue,  3 Dec 2024 16:06:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733245057; cv=none; b=pUf/y7JNG9brNJ5WTHDP8MjYSX5xQaxU/trUpFcIJTMyvx7ZGDHe8sNc0HGw0ezVYKXZlAK4qms9lskpM0o7re1sOyxlFQXqRCFy3He5MxX/zEYGY/lAqjBSvoH1KJbD7rNYnGvG3nEJsihAG0tlpSPCOgWnVW2/Yagyj2ryyJU=
+	t=1733241988; cv=none; b=HvWod2SqmFkg1DvrTpYJmPACvaYAqiujjHJaUP5XogQl5IHsfeqePQ7/qFGEZO9jORmXBT9peLO2EvhCbYsLOP1W/1ulVWHrIMmdWjS/0+kEXiId5r6KJkStbDewnCAKuGXOPZTlmczrBd1Ep8DRJPmEfx5NeoKk7j93DeGQbEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733245057; c=relaxed/simple;
-	bh=wGKBlGJR9PYQuQmm+KN9fPDWsy9XNuxCnD1p9Jbj42g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bxbE4pgNxEUVA3c8INzdd0QLQi83VbbiTo2wepVj0bskp6ABYy08CaQ0DWA1U86Qaa0IYWC/cLYQDOmwyhKlhZaPgNzrIalQriBlz5Yb/Wln8DkcfCBNt1JqJ/7UkS6LSzhbg36p2OKoqPg98+YwCJHgPTAE5eH3Rr2juEMBeZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=a9HWlm9G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38AF0C4CECF;
-	Tue,  3 Dec 2024 16:57:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1733245056;
-	bh=wGKBlGJR9PYQuQmm+KN9fPDWsy9XNuxCnD1p9Jbj42g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=a9HWlm9GsQYghXAdB/zR5ovWElWz2sGgYAbhIdEJYdM/LvFW+9filE4+EP+QnLmEP
-	 zG6dFpFYYTyUsFqQyR7iEKkEHI/cBlX9Mhh2xRauscv5BAxYUPhR17HqooidCPJS2T
-	 2xzN0iEuVQi6loIif9+i2LAv3i5ZkPUshTxSoa+Q=
-Date: Tue, 3 Dec 2024 17:57:33 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Cezary Rojewski <cezary.rojewski@intel.com>
-Cc: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Takashi Iwai <tiwai@suse.de>, srinivas.kandagatla@linaro.org,
-	mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
-	dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
-	lgirdwood@gmail.com, krzk+dt@kernel.org, Thinh.Nguyen@synopsys.com,
-	tiwai@suse.com, robh@kernel.org, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v30 00/30] Introduce QC USB SND audio offloading support
-Message-ID: <2024120320-recant-tameness-6c81@gregkh>
-References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
- <edfeb642-297e-42bb-ad09-cbf74f995514@quicinc.com>
- <2024111655-approve-throwback-e7df@gregkh>
- <2f512d8d-e5f3-4bdd-8172-37114a382a69@quicinc.com>
- <875xoi3wqw.wl-tiwai@suse.de>
- <d0da6552-238a-41be-b596-58da6840efbb@quicinc.com>
- <CF49CA0A-4562-40BC-AA98-E550E39B366A@linux.dev>
- <65273bba-5ec1-44ea-865b-fb815afccc91@intel.com>
+	s=arc-20240116; t=1733241988; c=relaxed/simple;
+	bh=VBBfv3eA4AsVsLgBF8VnP+EajJe1ALpu2GW7YHfiN/w=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:Content-Type:
+	 MIME-Version; b=BiAXw5SXoTVaegE2WpiwoTt2OQDYpyrbUID2w5o0Ic0vKQD8ynBzTdo3OHScW0i+07RqXHOrls8c/ufPc5plYzAU/yqDt/25f+eksOCqOK8i46ietWYs7/7nN3Ofn7iWv/MaV3eyP+SbZ2s6ogcwyaUF05hkjAgsKrWQdaGF+gg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=lHnQZbqT; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=lHnQZbqT; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1733241982;
+	bh=VBBfv3eA4AsVsLgBF8VnP+EajJe1ALpu2GW7YHfiN/w=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:From;
+	b=lHnQZbqTPw8lccD9LZoQTnjENuqFmq3M4qdXn9YwdcXuh8kaYOH60UbGnuArtEJoE
+	 Px4kL7hmZa2/uxmjqmqHUiq2gnIFhqP/9JNM4Zxjm340Kjh3IenF17vJPycyc5doEz
+	 9qzMTvJH2/Dq+wqAj7McqxgXVZICR0uf3Mza6cXQ=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 9B55D12871C9;
+	Tue, 03 Dec 2024 11:06:22 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id OEo6FblEm0Xs; Tue,  3 Dec 2024 11:06:22 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1733241982;
+	bh=VBBfv3eA4AsVsLgBF8VnP+EajJe1ALpu2GW7YHfiN/w=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:From;
+	b=lHnQZbqTPw8lccD9LZoQTnjENuqFmq3M4qdXn9YwdcXuh8kaYOH60UbGnuArtEJoE
+	 Px4kL7hmZa2/uxmjqmqHUiq2gnIFhqP/9JNM4Zxjm340Kjh3IenF17vJPycyc5doEz
+	 9qzMTvJH2/Dq+wqAj7McqxgXVZICR0uf3Mza6cXQ=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits))
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 1133D128718C;
+	Tue, 03 Dec 2024 11:06:17 -0500 (EST)
+Message-ID: <7ed3b713f8901398f52d7485d59613c19ea0e752.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 09/10] sysfs: bin_attribute: add const read/write
+ callback variants
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: linux@weissschuh.net
+Cc: James.Bottomley@HansenPartnership.com, Xinhui.Pan@amd.com, 
+ airlied@gmail.com, ajd@linux.ibm.com, alexander.deucher@amd.com, 
+ alison.schofield@intel.com, amd-gfx@lists.freedesktop.org, arnd@arndb.de, 
+ bhelgaas@google.com, carlos.bilbao.osdev@gmail.com,
+ christian.koenig@amd.com,  dan.j.williams@intel.com, dave.jiang@intel.com,
+ dave@stgolabs.net,  david.e.box@linux.intel.com, decui@microsoft.com, 
+ dennis.dalessandro@cornelisnetworks.com, dri-devel@lists.freedesktop.org, 
+ fbarrat@linux.ibm.com, gregkh@linuxfoundation.org, haiyangz@microsoft.com, 
+ hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, ira.weiny@intel.com, 
+ jgg@ziepe.ca, jonathan.cameron@huawei.com, kys@microsoft.com,
+ leon@kernel.org,  linux-alpha@vger.kernel.org, linux-cxl@vger.kernel.org, 
+ linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-mtd@lists.infradead.org, linux-pci@vger.kernel.org, 
+ linux-rdma@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ logang@deltatee.com,  martin.petersen@oracle.com, mattst88@gmail.com,
+ miquel.raynal@bootlin.com,  mwalle@kernel.org,
+ naveenkrishna.chatradhi@amd.com,  platform-driver-x86@vger.kernel.org,
+ pratyush@kernel.org, rafael@kernel.org,  richard.henderson@linaro.org,
+ richard@nod.at, simona@ffwll.ch,  srinivas.kandagatla@linaro.org,
+ tudor.ambarus@linaro.org, vigneshr@ti.com,  vishal.l.verma@intel.com,
+ wei.liu@kernel.org
+Date: Tue, 03 Dec 2024 11:06:16 -0500
+In-Reply-To: <20241103-sysfs-const-bin_attr-v2-9-71110628844c@weissschuh.net>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <65273bba-5ec1-44ea-865b-fb815afccc91@intel.com>
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 03, 2024 at 05:17:48PM +0100, Cezary Rojewski wrote:
-> On 2024-12-01 4:14 AM, Pierre-Louis Bossart wrote:
-> > Sorry to chime in late, I only look at email occasionally.
-> > 
-> 
-> ...
-> 
-> > My Reviewed-by tags were added in the last updates. I am not sure if anyone else at Intel had the time to review this large patchset.
-> > 
-> > > I believe Amadeusz was still against having the two card design, and wants the routing to automatically happen when playback happens on the sound card created by the USB SND layer.  However, even with that kind of implementation, the major pieces brought in by this series should still be relevant, ie soc-usb and the vendor offload driver.  The only thing that would really change is adding a path from the USB SND PCM ops to interact with the ASoC entities.  Complexity-wise, this would obviously have a good amount of changes to the USB SND/ASoC core drivers.  Some things I can think of that we'd need to introduce:
-> > 
-> > The notion of two cards was agreed inside Intel as far back as 2018, when Rakesh first looked at USB offload.
-> 
-> 
-> Well, I believe a lot has changed since then, not sure if USB Audio Offload
-> (UAOL) was even stable on the Windows solution back then. Obviously we want
-> to incorporate what we have learned during all that time into our solution
-> before it lands on upstream.
+> diff --git a/include/linux/sysfs.h b/include/linux/sysfs.h
+> index
+> d17c473c1ef292875475bf3bdf62d07241c13882..d713a6445a6267145a7014f308d
+> f3bb25b8c3287 100644
+> --- a/include/linux/sysfs.h
+> +++ b/include/linux/sysfs.h
+> @@ -305,8 +305,12 @@ struct bin_attribute {
+>  	struct address_space *(*f_mapping)(void);
+>  	ssize_t (*read)(struct file *, struct kobject *, struct
+> bin_attribute *,
+>  			char *, loff_t, size_t);
+> +	ssize_t (*read_new)(struct file *, struct kobject *, const
+> struct bin_attribute *,
+> +			    char *, loff_t, size_t);
+>  	ssize_t (*write)(struct file *, struct kobject *, struct
+> bin_attribute *,
+>  			 char *, loff_t, size_t);
+> +	ssize_t (*write_new)(struct file *, struct kobject *,
+> +			     const struct bin_attribute *, char *,
+> loff_t, size_t);
+>  	loff_t (*llseek)(struct file *, struct kobject *, const
+> struct bin_attribute *,
+>  			 loff_t, int);
+>  	int (*mmap)(struct file *, struct kobject *, const struct
+> bin_attribute *attr,
+> @@ -325,11 +329,28 @@ struct bin_attribute {
+>   */
+>  #define sysfs_bin_attr_init(bin_attr) sysfs_attr_init(&(bin_attr)-
+> >attr)
+>  
+> +typedef ssize_t __sysfs_bin_rw_handler_new(struct file *, struct
+> kobject *,
+> +					   const struct
+> bin_attribute *, char *, loff_t, size_t);
+> +
+>  /* macros to create static binary attributes easier */
+>  #define __BIN_ATTR(_name, _mode, _read, _write, _size)
+> {		\
+>  	.attr = { .name = __stringify(_name), .mode = _mode
+> },		\
+> -	.read	=
+> _read,						\
+> -	.write	=
+> _write,						\
+> +	.read =
+> _Generic(_read,						\
+> +		__sysfs_bin_rw_handler_new * :
+> NULL,			\
+> +		default :
+> _read						\
+> +	),							
+> 	\
+> +	.read_new =
+> _Generic(_read,					\
+> +		__sysfs_bin_rw_handler_new * :
+> _read,			\
+> +		default :
+> NULL						\
+> +	),							
+> 	\
+> +	.write =
+> _Generic(_write,					\
+> +		__sysfs_bin_rw_handler_new * :
+> NULL,			\
+> +		default :
+> _write					\
+> +	),							
+> 	\
+> +	.write_new =
+> _Generic(_write,					\
+> +		__sysfs_bin_rw_handler_new * :
+> _write,			\
+> +		default :
+> NULL						\
+> +	),							
+> 	\
+>  	.size	=
+> _size,						\
+>  }
 
-Great, can you help review this series please?
+It's probably a bit late now, but you've done this the wrong way
+around.  What you should have done is added the const to .read/.write
+then added a .read_old/.write_old with the original function prototype
+and used _Generic() to switch between them.  Then when there are no
+more non const left, you can simply remove .read_old and .write_old
+without getting Linus annoyed by having to do something like this:
 
-thanks,
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=e70140ba0d2b1a30467d4af6bcfe761327b9ec95
 
-greg k-h
+Regards,
+
+James
+
 
