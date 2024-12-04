@@ -1,61 +1,63 @@
-Return-Path: <linux-usb+bounces-18115-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18116-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F31B9E493D
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 00:35:26 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F51F9E4967
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 00:38:03 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3F3A285633
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 23:35:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55B78161C36
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 23:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 833F6206F3C;
-	Wed,  4 Dec 2024 23:28:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 260972163AC;
+	Wed,  4 Dec 2024 23:29:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ADfdy8zY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R8j3prPo"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0474620D50D;
-	Wed,  4 Dec 2024 23:28:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D841206F37;
+	Wed,  4 Dec 2024 23:29:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733354935; cv=none; b=gL2OMourwK8iSISWRg7rND6H1dKVM3/ebVb5rt8zn4MMCmW85IOqaoT/9oxXwBHSx2K4P2gNuCxTlRCk4tA2tnO5ZlnFY5hPfYcaiplRVyJt1MbSVJmT2h0L6CdC3hwEA+WJlu9xci4UATzqgCTlGf/PxaOAy5zEt+ppgZKrC3A=
+	t=1733354949; cv=none; b=UpkYYRuNKtIG44dUS61MSOgxfC8sl9mLkHi4UtpDhWmdwGWd5mtcG9AH+hYwXRLs+wUtaRJAaAd5EQ6l7lFyiHkpSt2k9E6jp+7Fn/C8jiz61SHQ653YNHFDahR9ZcJMhRi5UNGm/t734pGXtaDIJSjgxsI0xcKw2rNJeLpv/3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733354935; c=relaxed/simple;
-	bh=iwmQgpFpv3ojbLRaQam3mb39EDcfTKLT2dz4T1Vlnvc=;
+	s=arc-20240116; t=1733354949; c=relaxed/simple;
+	bh=0eDEW6i6XtbVsACgcLGCE4SB5PmCXHG3CZLfi4lBKHQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EgQl6ujF0dbqLgltCKpnjIC2lFjr/gVjy6CuqNmWGkb552uxJeZXCXTdCngd7zt6D2PnS3TzK1J9wYF5V8ag/WYgTo6muObPe5kqIBz00V2ue8bnxEzWWLfxytKGoI9BXd+x1oq3gzbqLRybfx4JWPFeTOUKtFf+DNiHGSmFHY4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ADfdy8zY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C0E7C4CED2;
-	Wed,  4 Dec 2024 23:28:53 +0000 (UTC)
+	 MIME-Version; b=Ldq/GLA2NOJVGlb8px91Co1P+0Y5csxjbL2EiEdYRofMTP6ZruzFVKYhnIevgv0tYjmEHdVJROWGjaU7tCdZ0lh+4f0rFQ/OI4uO+1k1+5YM7wH+wJL2Nq6ZCPSJ8kSu1HtSACUJI/1I/N/PFe8T5WdZxa1xD7T4tanC5Phw5fs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R8j3prPo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B14C4CEE0;
+	Wed,  4 Dec 2024 23:29:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733354934;
-	bh=iwmQgpFpv3ojbLRaQam3mb39EDcfTKLT2dz4T1Vlnvc=;
+	s=k20201202; t=1733354949;
+	bh=0eDEW6i6XtbVsACgcLGCE4SB5PmCXHG3CZLfi4lBKHQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ADfdy8zYr55S7NN3wpf/ZqUw8W1QSWvZKv9qZQpVaeKdhmlb8JOmk7YQljp1KjG60
-	 ZCYrJg+huuKZ6jV0Qev/Po2O8P2xvRwJs03eVauL9M+eI9tn3K+JobOGx8J9uiIL7B
-	 1Z3uin+QFVD4l5YbZNekSFfdopU5EmhNDZyprBmGPUYrQs40xKRJKYiXtl/2wchBsc
-	 XmSAIgXEkos60Mhv4icbquSSRra2C5WwOpy18y13/f28nXGZDVIBRqvvWYZOxXf2vV
-	 aqV4B9ofKkwZ2JOGzrSxouFdlbanXRuQo2fkCh0AhHy1Vvk0zlFKTzzjGcxx6VkoD8
-	 pJnLAriimo8+A==
+	b=R8j3prPoKJxpe+mpo6cynqOe8uqb74/6ybWR0ZetM5RTqsEV/ELBJhdYYxhRJQ2ZS
+	 jHB3ZauvesUQa6C7BIxwRBaHRv2gDosjSBvmPo1Q5kYhIoEcJq6D2+WL78A9Up2VgG
+	 TGb3bmOB+KO1RxfhltOU/pzrNhD5ePfDx3ZFp56WpLjg2vBVcI5tawe/gt3A0ifNCY
+	 jPSaxkKMhM1fkxWlEN9UsmHSNONmNfqcHSdQlbwdr/x483MrxhVz7juXuFrCaviSGo
+	 o6javOlSdDcZdyjf2RT05Nt6TxBlel2992AvkflMaI6F1JiqbwClqHfK9rWAvKAweX
+	 0UWe2uZDIWVBQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Saranya Gopal <saranya.gopal@intel.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	"Christian A . Ehrhardt" <lk@c--e.de>,
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	dmitry.baryshkov@linaro.org,
-	u.kleine-koenig@baylibre.com,
-	diogo.ivo@tecnico.ulisboa.pt,
+	heikki.krogerus@linux.intel.com,
+	quic_bjorande@quicinc.com,
+	javier.carrasco.cruz@gmail.com,
+	quic_kriskura@quicinc.com,
 	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.11 05/15] usb: typec: ucsi: Do not call ACPI _DSM method for UCSI read operations
-Date: Wed,  4 Dec 2024 17:16:59 -0500
-Message-ID: <20241204221726.2247988-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.11 10/15] usb: typec: ucsi: glink: be more precise on orientation-aware ports
+Date: Wed,  4 Dec 2024 17:17:04 -0500
+Message-ID: <20241204221726.2247988-10-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241204221726.2247988-1-sashal@kernel.org>
 References: <20241204221726.2247988-1-sashal@kernel.org>
@@ -70,114 +72,50 @@ X-Patchwork-Hint: Ignore
 X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
 
-From: Saranya Gopal <saranya.gopal@intel.com>
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-[ Upstream commit fa48d7e81624efdf398b990a9049e9cd75a5aead ]
+[ Upstream commit de9df030ccb5d3e31ee0c715d74cd77c619748f8 ]
 
-ACPI _DSM methods are needed only for UCSI write operations and for reading
-CCI during RESET_PPM operation. So, remove _DSM calls from other places.
-While there, remove the Zenbook quirk also since the default behavior
-now aligns with the Zenbook quirk. With this change, GET_CONNECTOR_STATUS
-returns at least 6 seconds faster than before in Arrowlake-S platforms.
+Instead of checking if any of the USB-C ports have orientation GPIO and
+thus is orientation-aware, check for the GPIO for the port being
+registered. There are no boards that are affected by this change at this
+moment, so the patch is not marked as a fix, but it might affect other
+boards in future.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Signed-off-by: Saranya Gopal <saranya.gopal@intel.com>
-Reviewed-by: Christian A. Ehrhardt <lk@c--e.de>
-Link: https://lore.kernel.org/r/20240830084342.460109-1-saranya.gopal@intel.com
+Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+Tested-by: Johan Hovold <johan+linaro@kernel.org>
+Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Link: https://lore.kernel.org/r/20241109-ucsi-glue-fixes-v2-2-8b21ff4f9fbe@linaro.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/ucsi/ucsi_acpi.c | 56 +++---------------------------
- 1 file changed, 5 insertions(+), 51 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_glink.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 7a5dff8d9cc6c..accf15ff1306a 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -61,9 +61,11 @@ static int ucsi_acpi_read_cci(struct ucsi *ucsi, u32 *cci)
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
- 	int ret;
- 
--	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
--	if (ret)
--		return ret;
-+	if (UCSI_COMMAND(ua->cmd) == UCSI_PPM_RESET) {
-+		ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
-+		if (ret)
-+			return ret;
-+	}
- 
- 	memcpy(cci, ua->base + UCSI_CCI, sizeof(*cci));
- 
-@@ -73,11 +75,6 @@ static int ucsi_acpi_read_cci(struct ucsi *ucsi, u32 *cci)
- static int ucsi_acpi_read_message_in(struct ucsi *ucsi, void *val, size_t val_len)
+diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
+index 6aace19d595bc..ad0bc7804939b 100644
+--- a/drivers/usb/typec/ucsi/ucsi_glink.c
++++ b/drivers/usb/typec/ucsi/ucsi_glink.c
+@@ -172,12 +172,12 @@ static int pmic_glink_ucsi_async_control(struct ucsi *__ucsi, u64 command)
+ static void pmic_glink_ucsi_update_connector(struct ucsi_connector *con)
  {
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
--	int ret;
--
--	ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
--	if (ret)
--		return ret;
+ 	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(con->ucsi);
+-	int i;
  
- 	memcpy(val, ua->base + UCSI_MESSAGE_IN, val_len);
- 
-@@ -102,42 +99,6 @@ static const struct ucsi_operations ucsi_acpi_ops = {
- 	.async_control = ucsi_acpi_async_control
- };
- 
--static int
--ucsi_zenbook_read_cci(struct ucsi *ucsi, u32 *cci)
--{
--	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
--	int ret;
--
--	if (UCSI_COMMAND(ua->cmd) == UCSI_PPM_RESET) {
--		ret = ucsi_acpi_dsm(ua, UCSI_DSM_FUNC_READ);
--		if (ret)
--			return ret;
+-	for (i = 0; i < PMIC_GLINK_MAX_PORTS; i++) {
+-		if (ucsi->port_orientation[i])
+-			con->typec_cap.orientation_aware = true;
 -	}
--
--	memcpy(cci, ua->base + UCSI_CCI, sizeof(*cci));
--
--	return 0;
--}
--
--static int
--ucsi_zenbook_read_message_in(struct ucsi *ucsi, void *val, size_t val_len)
--{
--	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
--
--	/* UCSI_MESSAGE_IN is never read for PPM_RESET, return stored data */
--	memcpy(val, ua->base + UCSI_MESSAGE_IN, val_len);
--
--	return 0;
--}
--
--static const struct ucsi_operations ucsi_zenbook_ops = {
--	.read_version = ucsi_acpi_read_version,
--	.read_cci = ucsi_zenbook_read_cci,
--	.read_message_in = ucsi_zenbook_read_message_in,
--	.sync_control = ucsi_sync_control_common,
--	.async_control = ucsi_acpi_async_control
--};
--
- static int ucsi_gram_read_message_in(struct ucsi *ucsi, void *val, size_t val_len)
- {
- 	u16 bogus_change = UCSI_CONSTAT_POWER_LEVEL_CHANGE |
-@@ -190,13 +151,6 @@ static const struct ucsi_operations ucsi_gram_ops = {
- };
++	if (con->num > PMIC_GLINK_MAX_PORTS ||
++	    !ucsi->port_orientation[con->num - 1])
++		return;
++
++	con->typec_cap.orientation_aware = true;
+ }
  
- static const struct dmi_system_id ucsi_acpi_quirks[] = {
--	{
--		.matches = {
--			DMI_MATCH(DMI_SYS_VENDOR, "ASUSTeK COMPUTER INC."),
--			DMI_MATCH(DMI_PRODUCT_NAME, "ZenBook UX325UA_UM325UA"),
--		},
--		.driver_data = (void *)&ucsi_zenbook_ops,
--	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "LG Electronics"),
+ static void pmic_glink_ucsi_connector_status(struct ucsi_connector *con)
 -- 
 2.43.0
 
