@@ -1,335 +1,189 @@
-Return-Path: <linux-usb+bounces-18095-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18096-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22AA29E3F89
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 17:25:06 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B8299E3FF6
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 17:43:29 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CBB702819DE
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 16:25:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 129261655AF
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 16:43:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CBBF20C48F;
-	Wed,  4 Dec 2024 16:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAC3B20DD57;
+	Wed,  4 Dec 2024 16:42:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PSqVLw+n"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="u7h8O5xt";
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="jwLrm3XJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [96.44.175.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B974E19993D;
-	Wed,  4 Dec 2024 16:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E3820CCE4;
+	Wed,  4 Dec 2024 16:42:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=96.44.175.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733329497; cv=none; b=eJoCaBIvjFQHgLfN6cFwJF/9vhdrF2kATlrkuvKaDMa/2+SkfTyRTaSC28Z1hxJzy9lnpwd+Z6mk1DYm/t2j5vu33jfvWMgUw2zlRV2S9+48EEIjnczAw0/DsFM+MPMNc9qEHwfhb2A+BRkqDcTQerI5yN42O4WqncbxtMBWPJk=
+	t=1733330566; cv=none; b=M5r7f52+KjUR+/IMvrT/kERb7/1tzrblJ9QBDgqZlgbufr/38VU95Kf8C1H6QSqEgZA5VzgHSTrhdrWsH9GkRp49Stgs7zz2HCW8q9t6Xz32lp+gjLYoAaVxy+NyMl/2ZpHgVFcCCTTPPlDM/E1J85UjatBkD9qoyGo536C/nNY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733329497; c=relaxed/simple;
-	bh=uB7DsP1F0FDOCbpTD/scevBqJRno5Bgra1OjBEcv41A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h1P5YCDfSmSAp7Su897QhFH7q1LXyeKRq5rowScSRFXdI0yhGNCiyzWqo7p67bT+rBjHcqw/PQhHLY3hhDpS9roFBYEmsstSRsnhxXVvISQU50PZGarcEUpK/cjDviR4X+MsNauqN31bL6g8DFQKleKySKgy4y481orViYEhV/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PSqVLw+n; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09824C4CECD;
-	Wed,  4 Dec 2024 16:24:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733329497;
-	bh=uB7DsP1F0FDOCbpTD/scevBqJRno5Bgra1OjBEcv41A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PSqVLw+nBR1NMFIgbfB6/zuFxO9GaTDvlgXutNOD+ud7zC6pHYP8v0KXpaO5/fV4G
-	 ytHbMLE1f7czCdrXQTvz03oNktG3i8+bea1NEJyb+yb2S9IYtzdtoqxcJxfrbD1hhc
-	 cUxhuVr5r1RR2MXT5/eJtqq8SbA7Mv/JpGITHDe/2sN9POxuDlxjMyTpqbFKdbgic7
-	 q63+HpFVuqJIWcfnaQLiQnX+Q3KNraCdajCnJ+IEHsjvTwQn5qLYQMOA9iY5+LSm92
-	 k6IGSL3vNYv+pWbC5VILpdiSQRrkz+A06PUe5/dxadyqbRi9jA9zWNmEkAPO8CagQz
-	 VMFKCqdUcwUKQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tIsBK-000000000uP-15N5;
-	Wed, 04 Dec 2024 17:24:55 +0100
-Date: Wed, 4 Dec 2024 17:24:54 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 2/6] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-Message-ID: <Z1CCVjEZMQ6hJ-wK@hovoldconsulting.com>
-References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
- <20241112-x1e80100-ps8830-v5-2-4ad83af4d162@linaro.org>
+	s=arc-20240116; t=1733330566; c=relaxed/simple;
+	bh=/tV2/rqC9g/RzItU4xjpFfq9TJiKncFzSdSN5cVSPCI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=SwVBeuyi5v4Lu3+qjVlZ8iH1SiBRWChE28dBLwbwKnQdQjFyYFaUJ3HjQ0Whr0F8P3iZtcbx2PFNWv2XgHcRGqazdjRc+nPb+PqT2WDeYUYqAIGgpTrIbLt1FgzXtOJ9TPs5Yql3fWFXJf/y3h0MDt6urmx/iYF6l1SdgnQnq3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=u7h8O5xt; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=jwLrm3XJ; arc=none smtp.client-ip=96.44.175.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=HansenPartnership.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1733330562;
+	bh=/tV2/rqC9g/RzItU4xjpFfq9TJiKncFzSdSN5cVSPCI=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=u7h8O5xtkqg9XTRjnm2AByw4j1oANOrzOdAZMt8HHLl3Yjm3FyhEHxMbav7cjDIHA
+	 rH9JDDrakhhHcgYv4A62tmDfzUMvJQoGwAdV/vD+hl7hO/48F0u9n++jPP9OAsaCaz
+	 8lQA+iSncabPRQrhy+aNTkLi+yhrKeJAE1MSyUWQ=
+Received: from localhost (localhost [127.0.0.1])
+	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 0036B12819C7;
+	Wed, 04 Dec 2024 11:42:42 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id UnAtfjdAjrWL; Wed,  4 Dec 2024 11:42:41 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+	d=hansenpartnership.com; s=20151216; t=1733330561;
+	bh=/tV2/rqC9g/RzItU4xjpFfq9TJiKncFzSdSN5cVSPCI=;
+	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+	b=jwLrm3XJJg0bE+y+jmRYNMFwEElygfQC2HGQiHPd5Xz/u0WtyW7YWY3rX060euBo7
+	 f9S1jUzBwKhA2RFoWPD/ZkuHcVNkBdGsPnMe1XGCn2DaqvTsyQjVXKsqZzFLZSZ0Tt
+	 bvl4/NIRU0Ww5p2EbpvPP+Glg6xJuhny+E4/K7oQ=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id 13309128116A;
+	Wed, 04 Dec 2024 11:42:36 -0500 (EST)
+Message-ID: <5c905df49a332b1136787a524955b46b6153c012.camel@HansenPartnership.com>
+Subject: Re: [PATCH v2 00/32] driver core: Constify API device_find_child()
+ and adapt for various existing usages
+From: James Bottomley <James.Bottomley@HansenPartnership.com>
+To: Zijun Hu <zijun_hu@icloud.com>, Thomas =?ISO-8859-1?Q?Wei=DFschuh?=
+	 <thomas@t-8ch.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Uwe
+ =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, Chun-Kuang Hu <chunkuang.hu@kernel.org>, Philipp Zabel
+ <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>, Simona Vetter
+ <simona@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Jean
+ Delvare <jdelvare@suse.com>,  Guenter Roeck <linux@roeck-us.net>, Martin
+ Tuma <martin.tuma@digiteqautomotive.com>, Mauro Carvalho Chehab
+ <mchehab@kernel.org>, Andreas Noever <andreas.noever@gmail.com>, Michael
+ Jamet <michael.jamet@intel.com>, Mika Westerberg
+ <mika.westerberg@linux.intel.com>,  Yehezkel Bernat
+ <YehezkelShB@gmail.com>, Linus Walleij <linus.walleij@linaro.org>, Bartosz
+ Golaszewski <brgl@bgdev.pl>, Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean
+ <olteanv@gmail.com>,  "David S. Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+ <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Dan Williams
+ <dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Dave
+ Jiang <dave.jiang@intel.com>, Ira Weiny <ira.weiny@intel.com>, Takashi
+ Sakamoto <o-takashi@sakamocchi.jp>, Jiri Slaby <jirislaby@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>, Srinivas Kandagatla
+ <srinivas.kandagatla@linaro.org>, Lee Duncan <lduncan@suse.com>, Chris
+ Leech <cleech@redhat.com>, Mike Christie <michael.christie@oracle.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>, Nilesh Javali
+ <njavali@marvell.com>, Manish Rangankar <mrangankar@marvell.com>,
+ GR-QLogic-Storage-Upstream@marvell.com, Davidlohr Bueso
+ <dave@stgolabs.net>, Jonathan Cameron <jonathan.cameron@huawei.com>, Alison
+ Schofield <alison.schofield@intel.com>, Andreas Larsson
+ <andreas@gaisler.com>, Stuart Yoder <stuyoder@gmail.com>, Laurentiu Tudor
+ <laurentiu.tudor@nxp.com>, Jens Axboe <axboe@kernel.dk>, Sudeep Holla
+ <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>, Ard
+ Biesheuvel <ardb@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>, 
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-gpio@vger.kernel.org,
+ netdev@vger.kernel.org,  linux-pwm@vger.kernel.org, nvdimm@lists.linux.dev,
+  linux1394-devel@lists.sourceforge.net, linux-serial@vger.kernel.org, 
+ linux-sound@vger.kernel.org, open-iscsi@googlegroups.com, 
+ linux-scsi@vger.kernel.org, linux-cxl@vger.kernel.org, 
+ sparclinux@vger.kernel.org, linux-block@vger.kernel.org, 
+ arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org, 
+ linux-remoteproc@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+Date: Wed, 04 Dec 2024 11:42:34 -0500
+In-Reply-To: <235ce0a9-1db1-4558-817b-6f92f22be5ab@icloud.com>
+References: <20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com>
+	 <g32cigmktmj4egkq2tof27el2yss4liccfxgebkgqvkil32mlb@e3ta4ezv7y4m>
+	 <9d34bd6f-b120-428a-837b-5a5813e14618@icloud.com>
+	 <2024120320-manual-jockey-dfd1@gregkh>
+	 <b9885785-d4d4-4c72-b425-3dc552651d7e@icloud.com>
+	 <8eb7c0c54b280b8eb72f82032ede802c001ab087.camel@HansenPartnership.com>
+	 <8fb887a0-3634-4e07-9f0d-d8d7c72ca802@t-8ch.de>
+	 <f5ea7e17-5550-4658-8f4c-1c51827c7627@icloud.com>
+	 <108c63c753f2f637a72c2e105ac138f80d4b0859.camel@HansenPartnership.com>
+	 <235ce0a9-1db1-4558-817b-6f92f22be5ab@icloud.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241112-x1e80100-ps8830-v5-2-4ad83af4d162@linaro.org>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Nov 12, 2024 at 07:01:11PM +0200, Abel Vesa wrote:
-> The Parade PS8830 is a USB4, DisplayPort and Thunderbolt 4 retimer,
-> controlled over I2C. It usually sits between a USB/DisplayPort PHY
-> and the Type-C connector, and provides orientation and altmode handling.
+On Wed, 2024-12-04 at 20:26 +0800, Zijun Hu wrote:
+> On 2024/12/3 23:34, James Bottomley wrote:
+> > > > This also enables an incremental migration.
+> > > change the API prototype from:
+> > > device_find_child(..., void *data_0, int (*match)(struct device
+> > > *dev, void *data));
+> > > 
+> > > to:
+> > > device_find_child(..., const void *data_0, int (*match)(struct
+> > > device *dev, const void *data));
+> > > 
+> > > For @data_0,  void * -> const void * is okay.
+> > > but for @match, the problem is function pointer type
+> > > incompatibility.
+> > > 
+> > > there are two solutions base on discussions.
+> > > 
+> > > 1) squashing likewise Greg mentioned.
+> > >    Do all of the "prep work" first, and then
+> > >    do the const change at the very end, all at once.
+> > > 
+> > > 2)  as changing platform_driver's remove() prototype.
+> > > Commit: e70140ba0d2b ("Get rid of 'remove_new' relic from
+> > > platform driver struct")
+> > > 
+> > >  introduce extra device_find_child_new() which is constified  ->
+> > > use *_new() replace ALL device_find_child() instances one by one
+> > > -> remove device_find_child() -> rename *_new() to
+> > > device_find_child() once.
+> > Why bother with the last step, which churns the entire code base
+> > again?
 > 
-> The boards that use this retimer are the ones featuring the Qualcomm
-> Snapdragon X Elite SoCs.
+> keep the good API name device_find_child().
 
-> +static int ps883x_sw_set(struct typec_switch_dev *sw,
-> +			 enum typec_orientation orientation)
-> +{
-> +	struct ps883x_retimer *retimer = typec_switch_get_drvdata(sw);
-> +	int ret = 0;
-> +
-> +	ret = typec_switch_set(retimer->typec_switch, orientation);
-> +	if (ret)
-> +		return ret;
-> +
-> +	mutex_lock(&retimer->lock);
-> +
-> +	if (retimer->orientation != orientation) {
-> +		retimer->orientation = orientation;
-> +
-> +		ret = ps883x_set(retimer);
-> +	}
-> +
-> +	mutex_unlock(&retimer->lock);
-> +
-> +	return ret;
-> +}
+Well, I think it's a good opportunity to rename the API better, but if
+that's the goal, you can still do it with _Generic() without churning
+the code base a second time.  The example is in
+slab.h:kmem_cache_create
 
-This seems to indicate a bigger problem, but I see this function called
-during early resume while the i2c controller is suspended:
+> > Why not call the new function device_find_child_const() and simply
+> > keep it (it's descriptive of its function).  That way you can have
+> > a patch series without merging and at the end simply remove the old
+> > function.
+> 
+> device_find_child is a good name for the API, 'find' already means
+> const.
 
-[   54.213900] ------------[ cut here ]------------
-[   54.213942] i2c i2c-2: Transfer while suspended
-[   54.214125] WARNING: CPU: 0 PID: 126 at drivers/i2c/i2c-core.h:56 __i2c_transfer+0x874/0x968 [i2c_core]
-...
-[   54.214833] CPU: 0 UID: 0 PID: 126 Comm: kworker/0:2 Not tainted 6.13.0-rc1 #11
-[   54.214844] Hardware name: Qualcomm CRD, BIOS 6.0.231221.BOOT.MXF.2.4-00348.1-HAMOA-1 12/21/2023
-[   54.214852] Workqueue: events pmic_glink_altmode_worker [pmic_glink_altmode]
-...
-[   54.215090] Call trace:
-[   54.215097]  __i2c_transfer+0x874/0x968 [i2c_core] (P)
-[   54.215112]  __i2c_transfer+0x874/0x968 [i2c_core] (L)
-[   54.215126]  i2c_transfer+0x94/0xf0 [i2c_core]
-[   54.215140]  i2c_transfer_buffer_flags+0x5c/0x90 [i2c_core]
-[   54.215153]  regmap_i2c_write+0x20/0x58 [regmap_i2c]
-[   54.215166]  _regmap_raw_write_impl+0x740/0x894
-[   54.215184]  _regmap_bus_raw_write+0x60/0x7c
-[   54.215192]  _regmap_write+0x60/0x1b4
-[   54.215200]  regmap_write+0x4c/0x78
-[   54.215207]  ps883x_set+0xb0/0x10c [ps883x]
-[   54.215219]  ps883x_sw_set+0x74/0x98 [ps883x]
-[   54.215227]  typec_switch_set+0x58/0x90 [typec]
-[   54.215248]  pmic_glink_altmode_worker+0x3c/0x23c [pmic_glink_altmode]
-[   54.215257]  process_one_work+0x20c/0x610
-[   54.215274]  worker_thread+0x23c/0x378
-[   54.215283]  kthread+0x124/0x128
-[   54.215291]  ret_from_fork+0x10/0x20
-[   54.215303] irq event stamp: 28140
-[   54.215309] hardirqs last  enabled at (28139): [<ffffd15e3bc2a434>] __up_console_sem+0x6c/0x80
-[   54.215325] hardirqs last disabled at (28140): [<ffffd15e3c596aa4>] el1_dbg+0x24/0x8c
-[   54.215341] softirqs last  enabled at (28120): [<ffffd15e3bb9b82c>] handle_softirqs+0x4c4/0x4dc
-[   54.215355] softirqs last disabled at (27961): [<ffffd15e3bb501ec>] __do_softirq+0x14/0x20
-[   54.215363] ---[ end trace 0000000000000000 ]---
-[   54.216889] Enabling non-boot CPUs ...
+Not to me it doesn't, but that's actually not what I think is wrong
+with the API name: it actually only returns the first match, so I'd
+marginally prefer it to be called device_find_first_child() ... not
+enough to churn the code to change it, but since you're doing that
+anyway it might make sense as an update.
 
-This can be reproduced on the CRD (or T14s) by disconnecting, for
-example, a mass storage device while the laptop is suspended.
+Regards,
 
-> +static int ps883x_retimer_set(struct typec_retimer *rtmr,
-> +			      struct typec_retimer_state *state)
-> +{
-> +	struct ps883x_retimer *retimer = typec_retimer_get_drvdata(rtmr);
-> +	struct typec_mux_state mux_state;
-> +	int ret = 0;
-> +
-> +	mutex_lock(&retimer->lock);
-> +
-> +	if (state->mode != retimer->mode) {
-> +		retimer->mode = state->mode;
-> +
-> +		if (state->alt)
-> +			retimer->svid = state->alt->svid;
-> +		else
-> +			retimer->svid = 0; // No SVID
+James
 
-Nit: I'd prefer if you avoid c99 comments for consistency.
-
-> +		ret = ps883x_set(retimer);
-> +	}
-> +
-> +	mutex_unlock(&retimer->lock);
-> +
-> +	if (ret)
-> +		return ret;
-> +
-> +	mux_state.alt = state->alt;
-> +	mux_state.data = state->data;
-> +	mux_state.mode = state->mode;
-> +
-> +	return typec_mux_set(retimer->typec_mux, &mux_state);
-> +}
-
-> +static int ps883x_retimer_probe(struct i2c_client *client)
-> +{
-> +	struct device *dev = &client->dev;
-> +	struct typec_switch_desc sw_desc = { };
-> +	struct typec_retimer_desc rtmr_desc = { };
-> +	struct ps883x_retimer *retimer;
-> +	int ret;
-> +
-> +	retimer = devm_kzalloc(dev, sizeof(*retimer), GFP_KERNEL);
-> +	if (!retimer)
-> +		return -ENOMEM;
-> +
-> +	retimer->client = client;
-> +
-> +	mutex_init(&retimer->lock);
-> +
-> +	retimer->regmap = devm_regmap_init_i2c(client, &ps883x_retimer_regmap);
-> +	if (IS_ERR(retimer->regmap))
-> +		return dev_err_probe(dev, PTR_ERR(retimer->regmap),
-> +				     "failed to allocate register map\n");
-> +
-> +	ret = ps883x_get_vregs(retimer);
-> +	if (ret)
-> +		return ret;
-> +
-> +	retimer->xo_clk = devm_clk_get(dev, NULL);
-> +	if (IS_ERR(retimer->xo_clk))
-> +		return dev_err_probe(dev, PTR_ERR(retimer->xo_clk),
-> +				     "failed to get xo clock\n");
-> +
-> +	retimer->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_ASIS);
-
-GPIOD_ASIS is documented as requiring you to later set the direction,
-but this does not happen unconditionally below.
-
-> +	if (IS_ERR(retimer->reset_gpio))
-> +		return dev_err_probe(dev, PTR_ERR(retimer->reset_gpio),
-> +				     "failed to get reset gpio\n");
-> +
-> +	retimer->typec_switch = typec_switch_get(dev);
-> +	if (IS_ERR(retimer->typec_switch))
-> +		return dev_err_probe(dev, PTR_ERR(retimer->typec_switch),
-> +				     "failed to acquire orientation-switch\n");
-> +
-> +	retimer->typec_mux = typec_mux_get(dev);
-> +	if (IS_ERR(retimer->typec_mux)) {
-> +		ret = dev_err_probe(dev, PTR_ERR(retimer->typec_mux),
-> +				    "failed to acquire mode-mux\n");
-> +		goto err_switch_put;
-> +	}
-> +
-> +	ret = drm_aux_bridge_register(dev);
-> +	if (ret)
-> +		goto err_mux_put;
-> +
-> +	ret = ps883x_enable_vregs(retimer);
-> +	if (ret)
-> +		goto err_mux_put;
-> +
-> +	ret = clk_prepare_enable(retimer->xo_clk);
-> +	if (ret) {
-> +		dev_err(dev, "failed to enable XO: %d\n", ret);
-> +		goto err_vregs_disable;
-> +	}
-> +
-> +	sw_desc.drvdata = retimer;
-> +	sw_desc.fwnode = dev_fwnode(dev);
-> +	sw_desc.set = ps883x_sw_set;
-> +
-> +	retimer->sw = typec_switch_register(dev, &sw_desc);
-> +	if (IS_ERR(retimer->sw)) {
-> +		ret = dev_err_probe(dev, PTR_ERR(retimer->sw),
-> +				    "failed to register typec switch\n");
-> +		goto err_clk_disable;
-> +	}
-> +
-> +	rtmr_desc.drvdata = retimer;
-> +	rtmr_desc.fwnode = dev_fwnode(dev);
-> +	rtmr_desc.set = ps883x_retimer_set;
-> +
-> +	retimer->retimer = typec_retimer_register(dev, &rtmr_desc);
-> +	if (IS_ERR(retimer->retimer)) {
-> +		ret = dev_err_probe(dev, PTR_ERR(retimer->sw),
-> +				    "failed to register typec retimer\n");
-> +		goto err_switch_unregister;
-> +	}
-
-The registration functions do not return -EPROBE_DEFER so I'd prefer if
-you switch back to dev_err() here as we already discussed. A driver must
-not probe defer after having registered child devices so it's important
-to document which functions can actually trigger a probe deferral. 
-
-I know there's been a recent change to the dev_err_probe() suggesting
-that it could be used anyway, but I think that's a really bad idea and
-I'm considering sending a revert for that.
-
-> +
-> +	/* skip resetting if already configured */
-> +	if (regmap_test_bits(retimer->regmap, REG_USB_PORT_CONN_STATUS_0,
-> +			     CONN_STATUS_0_CONNECTION_PRESENT))
-> +		return 0;
-
-What if the device is held in reset? This looks like it only works if
-the boot firmware has already enabled the retimer. Otherwise you may
-return success from probe here with the retimer still in reset.
-
-> +	gpiod_direction_output(retimer->reset_gpio, 1);
-> +
-> +	/* VDD IO supply enable to reset release delay */
-> +	usleep_range(4000, 14000);
-> +
-> +	gpiod_set_value(retimer->reset_gpio, 0);
-> +
-> +	/* firmware initialization delay */
-> +	msleep(60);
-> +
-> +	return 0;
-> +
-> +err_switch_unregister:
-> +	typec_switch_unregister(retimer->sw);
-> +err_vregs_disable:
-> +	ps883x_disable_vregs(retimer);
-> +err_clk_disable:
-> +	clk_disable_unprepare(retimer->xo_clk);
-> +err_mux_put:
-> +	typec_mux_put(retimer->typec_mux);
-> +err_switch_put:
-> +	typec_switch_put(retimer->typec_switch);
-> +
-> +	return ret;
-> +}
-> +
-> +static void ps883x_retimer_remove(struct i2c_client *client)
-> +{
-> +	struct ps883x_retimer *retimer = i2c_get_clientdata(client);
-> +
-> +	typec_retimer_unregister(retimer->retimer);
-> +	typec_switch_unregister(retimer->sw);
-> +
-> +	gpiod_set_value(retimer->reset_gpio, 1);
-> +
-> +	clk_disable_unprepare(retimer->xo_clk);
-> +
-> +	ps883x_disable_vregs(retimer);
-> +
-> +	typec_mux_put(retimer->typec_mux);
-> +	typec_switch_put(retimer->typec_switch);
-> +}
-
-Johan
 
