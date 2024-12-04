@@ -1,118 +1,128 @@
-Return-Path: <linux-usb+bounces-18098-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18097-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88DE29E42D4
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 19:05:33 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C23249E4616
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 21:50:29 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9A3A1666A9
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 18:05:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C7F2BE1984
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 17:59:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F45A20E30B;
-	Wed,  4 Dec 2024 17:53:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748CE21767C;
+	Wed,  4 Dec 2024 17:30:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dvY6gWCY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oXwlaOyF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E230E20E306;
-	Wed,  4 Dec 2024 17:53:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC0481A8F61;
+	Wed,  4 Dec 2024 17:30:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733334833; cv=none; b=YPupMSIwxsRqoq9rDGDTk/BnVjo7x8KCgjgVXdj0g0efAuuWi7y+ovtGyNtJ9KVMpNqVBu96aZkqC3fKZufQcHxB2+O0k++IPeV/Q04UEq93pyFXb7sD7c/DzNcUjTqBKPmGOlZ2IreBbYllS+3oqfSVY+eiCgC2oZNloL98J8s=
+	t=1733333453; cv=none; b=QwS8Uv3ToeY3uB7nYJ4V1Dmjx6np6WYCrdiF1khU1tT7ZVPM+7935T52TBrS754bWSQ0vcGHVteDz/8N5XorqeZWazAh4rEnaO0wGpnZz7wKaY8xGYhorbVToD5Nd9MjWfazd7zQLrNOoI5GcxoSKQwk9qfowYAPpm6pWohPj3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733334833; c=relaxed/simple;
-	bh=YgI6bbVf8fawNLoh5G27JRcUteiQDukkT9IoSyRi4/g=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ajun7SM8n0sg8hD1k8Fett4zawKyXWGqVLLi9SWguWU9gj9ymS8er3SSoptdvcg1wUfTqnvIGCNTVoS+aG488d7BIlmqTEK45n4i9CysOZeO6Gf32StQlXJpwuRAazZQL6igJenqlUjJ7+RaK9EhNtVJ4sXrUQVpKTT/aE/4WwE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dvY6gWCY; arc=none smtp.client-ip=209.85.208.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2ffa49f623cso89410091fa.1;
-        Wed, 04 Dec 2024 09:53:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733334830; x=1733939630; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Gzu3n2Qpj3CtMKuLFOgq+iWAfCQoArTJr+VrPbBeo9E=;
-        b=dvY6gWCYperKkFM10bamyG2DJb6eyxD/mWr0DrFWndVM/9Hgx+dwH3EUB3bOva1hGd
-         Of4POnF8zRn+gxU6RJGtv02B4r3Oaw31sw3Yd/egP/MPLDdH5eBlDX1lNTksyZ4eBARn
-         p0YkoYYDT85nfkzAcK77dh7cNPxZWjb3ZpqtP7+bRdqfMB4BPE4y/9N/b4X5OKG1EA7l
-         hhcPiUGSEscfh/lpbI+2U5/54jcttTbthW6wR4PNXoVkmLsgjxKbkS220MIbWK37T+D0
-         wTeJM+DisSj+WGG6HpCVCjDiTF6D3EA+uWESAhrmooi0ZVYMTMlbDhZjIRQn81dbH9LF
-         li6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733334830; x=1733939630;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Gzu3n2Qpj3CtMKuLFOgq+iWAfCQoArTJr+VrPbBeo9E=;
-        b=uhHz2TqEarbBUCo6xEltDPFkdEb0aQHz/MpomQJGHDdcA3LqPSXxj7UI2Mtko7oVI8
-         P09WVhAQqyBWA+vn21tYrsUCTnkWwcrP9MDhRFefd1Sx+NjQ99b4rdYHsWBfH/1a0njs
-         Hqd8vC/L4D0Jc6s62u08gzh0kb4gfdipUoit0eZcHUxMTMZzOqo94h4W2UjM5ykwJ/9a
-         O2EtTGX/mzJXIdx/NggsRLQdZf/70P0ryB7Rkf5bAz7XZN7abYYDSKd4Lfd2k+k+Xcv3
-         uUXsxzaTh7gpSuumXVh2FiGg+9bRwKQXtKAUIKmka8Hc9TBmdZlY4OK5RWcMlMYasFFn
-         JMYQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVmo44LDR4yOEoO7qpJ0z708U/K3hhysaCwpgCwUVYk5xheks6u9+12C0I5tXe/mm0ivkk4lH4dWkqzT4Y=@vger.kernel.org, AJvYcCW1hsr3icy0dT9vosrI4dGGKqfmMO7b4MpVfGIi65NklGZldMjWM5igQVXj0JQ55MeMDKAt62w8GGup@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoSLoW0Im6UI3VIDrs9DRsbT5fyU/cpgeyfxwkXplxTa7LWMKg
-	SztYc8ocKT0sfScYunHZldaJwPEjoHbd9xXGmDu7vSRDKAlxX6Ts
-X-Gm-Gg: ASbGncufG+9oY92wfQ/3YqXpg3UtXkZ48cmeqrQmyV54mxy7qteS1YmlhjJ8MX3MZDN
-	+AIdOFQ6SEvLz4f7KU3SWNlDRSSdV/5qGX3urx2ZpK4bOlSiPgFnVw07duZuRtpeVon9X/uZA6L
-	Yl1xBBqXjmwwVcRtdylcXCf6uSNmYyaW9CmEsKMY1iLpBvvxMkEAPl99/Qon5WAMxnpoFDJJbwl
-	S+qVlPoZ2NWTo1lF6yj54LTcCkgeqHHxumFls7iDWkCWHQsT1tX0UBSEhU1nox98lw=
-X-Google-Smtp-Source: AGHT+IFBp8c7Yqy9B76Hkkh7O7QcdGo83+Q1/4MpNXwhFipbF7NUX1lTPPYUaOz1fhbjmJvK4fW8Ww==
-X-Received: by 2002:a05:651c:502:b0:300:1c7a:e22f with SMTP id 38308e7fff4ca-3001c7ae68amr6011191fa.5.1733334829763;
-        Wed, 04 Dec 2024 09:53:49 -0800 (PST)
-Received: from foxbook (adqz254.neoplus.adsl.tpnet.pl. [79.185.159.254])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3001959c429sm2305771fa.103.2024.12.04.09.53.44
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 04 Dec 2024 09:53:48 -0800 (PST)
-Date: Wed, 4 Dec 2024 18:53:35 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: xhci: Fix NULL pointer dereference on certain
- command aborts
-Message-ID: <20241204185335.7514166d@foxbook>
-In-Reply-To: <20241203205249.513f1153@foxbook>
-References: <20241203205123.05b32413@foxbook>
-	<20241203205249.513f1153@foxbook>
+	s=arc-20240116; t=1733333453; c=relaxed/simple;
+	bh=jwt44kHNB6fF2lg1PZA37n3lhUUOfzmfyHuqFyxEzww=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fHUyEPmp1YRvJWWTi4yb7y+9SMpCiH5bvA7x5o9uVE8RiQUQkaXno3Z8YalNZXb9Y0wnrUJhoToyIG9FMQ//pupUjGyTNfS/MkVLiBJnj6bsZN+I15inT6M4ZmMvHIcKUPV/Ck/3aku/0DXcDByO0X/3vi7cWrzKs1iwzdo3Buo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oXwlaOyF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BB94C4CED1;
+	Wed,  4 Dec 2024 17:30:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733333453;
+	bh=jwt44kHNB6fF2lg1PZA37n3lhUUOfzmfyHuqFyxEzww=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oXwlaOyFHg8r2lL1BHPIjfcGkrFbwecYJGEFvO0y2n2WGa9QjxVB2n6v5AWgYvRiA
+	 cApyakaYuHBRDA9fw5DzBGwENK90QWg4pG9R9597vAPkR0WIp5Yq5AjSfFMsRYUw3k
+	 mngs9w6InT3USE+pAvgEG9lEgtSpTXYWNeVzAsNgs+8Ovvo8qCxuzc8v92iB5WCdsD
+	 3wvmgIxNiwd1Rbrg50g3wvr0ilnm5iwtLaz9v+vUHSyw6s5gDBT3gay+VrunKjU5Cw
+	 GD+XzQXuzvWGSUzuCecr1T+OWDv4blQOAuXBOPT0V1/elHBz3f45zUg+rVh8Bbl0/P
+	 1wwnsg9t27qrw==
+Message-ID: <aaac430f-ba1a-47ee-a290-0bb1559dcf24@kernel.org>
+Date: Wed, 4 Dec 2024 11:30:51 -0600
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 0/5] Verify devices transition from D3cold to D0
+To: Bjorn Helgaas <bhelgaas@google.com>
+Cc: "open list : PCI SUBSYSTEM" <linux-pci@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list : USB XHCI DRIVER" <linux-usb@vger.kernel.org>,
+ Daniel Drake <drake@endlessos.org>, Gary Li <Gary.Li@amd.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>
+References: <20240823154023.360234-1-superm1@kernel.org>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <20240823154023.360234-1-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-I confirmed that the bug is real and behaves exactly as expected, using
-a USB microcontroller programmed to NAK the status stage of SET_ADDRESS
-requests forever and to reconnect if the host gives up enumerating it.
+On 8/23/2024 10:40, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+> 
+> Gary has reported that when a dock is plugged into a system at the same
+> time the autosuspend delay has tripped that the USB4 stack malfunctions.
+> 
+> Messages show up like this:
+> 
+> ```
+> thunderbolt 0000:e5:00.6: ring_interrupt_active: interrupt for TX ring 0 is already enabled
+> ```
+> 
+> Furthermore the USB4 router is non-functional at this point.
+> 
+> Those messages happen because the device is still in D3cold at the time
+> that the PCI core handed control back to the USB4 connection manager
+> (thunderbolt).
+> 
+> The issue is that it takes time for a device to enter D3cold and do a
+> conventional reset, and then more time for it to exit D3cold.
+> 
+> This appears not to be a new problem; previously there were very similar
+> reports from Ryzen XHCI controllers.  Quirks were added for those.
+> Furthermore; adding extra logging it's apparent that other PCI devices
+> in the system can take more than 10ms to recover from D3cold as well.
+> 
+> This series add a wait into pci_power_up() specifically for D3cold exit and
+> then drops the quirks that were previously used for the Ryzen XHCI controllers.
+> 
+> Mario Limonciello (5):
+>    PCI: Use an enum for reset type in pci_dev_wait()
+>    PCI: Check PCI_PM_CTRL instead of PCI_COMMAND in pci_dev_wait()
+>    PCI: Verify functions currently in D3cold have entered D0
+>    PCI: Allow Ryzen XHCI controllers into D3cold and drop delays
+>    PCI: Drop Radeon quirk for Macbook Pro 8.2
+> 
+>   drivers/pci/pci-driver.c    |  2 +-
+>   drivers/pci/pci.c           | 70 +++++++++++++++++++++++++++----------
+>   drivers/pci/pci.h           | 13 ++++++-
+>   drivers/pci/pcie/dpc.c      |  2 +-
+>   drivers/pci/quirks.c        | 25 -------------
+>   drivers/usb/host/xhci-pci.c | 11 ------
+>   6 files changed, 66 insertions(+), 57 deletions(-)
+> 
 
-Command timeout was reduced to 500ms to sooner reach the segment's end
-and some relevant debug info was added, hopefully self-explanatory:
+Bjorn,
 
-[  +0,378926] usb 10-1: new full-speed USB device number 109 using xhci_hcd
-[  +0,501006] xhci_hcd 0000:03:00.0: cur_cmd 0000000000000000 enq ffff88814671bff0 deq ffff88814671b000
-[  +0,000001] xhci_hcd 0000:03:00.0: Timeout while waiting for setup device command
-[  +0,000005] xhci_hcd 0000:03:00.0: !!! avoiding dereferencing a NULL pointer !!!
-[  +0,712001] xhci_hcd 0000:03:00.0: cur_cmd 0000000000000000 enq ffff88814671b010 deq ffff88814671b010
-[  +0,000001] xhci_hcd 0000:03:00.0: Timeout while waiting for setup device command
-[  +0,207981] usb 10-1: device not accepting address 109, error -62
+This series has stalled a while.
 
-The driver and host controller continue working normally after one hour
-of testing and several avoided crashes.
+Mika and I went back and forth and I think are generally in agreement so 
+I think it's waiting on your feedback.
 
-The only thing I haven't tried is actually crashing the kernel, but
-considering what's inside xhci_mod_cmd_timer() I think it's obvious
-that this is exactly what would happen next without this patch.
+Can you take another look?
 
-Regards,
-Michal
+The alternative is to add some more piles of quirks, but I'm hoping that 
+we can go this direction and drop a bunch of the old ones instead.
+
+LMK if you want me to rebase it on 6.13-rc1 and resend a v6.
 
