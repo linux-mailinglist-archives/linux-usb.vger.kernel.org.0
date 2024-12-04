@@ -1,66 +1,60 @@
-Return-Path: <linux-usb+bounces-18110-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18111-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BDE29E4940
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 00:35:28 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13DC79E4930
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 00:34:27 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6432A18818E8
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 23:33:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C7C3628531D
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 23:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02DD1206F1C;
-	Wed,  4 Dec 2024 23:28:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C16A20CCC3;
+	Wed,  4 Dec 2024 23:28:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aI1OWgGs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtSBvPEE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74342206F19;
-	Wed,  4 Dec 2024 23:28:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8EA82066D4;
+	Wed,  4 Dec 2024 23:28:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733354890; cv=none; b=tQVRfO1Y+H0lykS0dOHX3GLSc0kiQWH57SPj8DwCasmcObPRGU1ccTNiNMfdU++gf4fpFXvml4eH3lpbwvb4/2w8bq9PhQWCecWJWfxMbYiAwKC4SP33idwK0A6HEZpYE1ROowVQft6iEl3BOX9FqAYErN9tl4tmAklRXE0qQdc=
+	t=1733354926; cv=none; b=D5HzXRosFqmHeIrJD9zSFgQHq63KuD5MXtGqTqKMgf60piIxK+9zmf5zF1JUnrvptraEDDrXjlP1hU/URb/jPEsokwOM145OfsFiomzCYpI5J2JgO8EEugYGfbHqKaUJKkYm1KsKM23ob7ig0yEGI9FU3iSZ9zHUNB79X99SDw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733354890; c=relaxed/simple;
-	bh=qHhAUuyhQXNQrTTjUNmUBsCanrlnuEay1E2XfKz3Vpo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pN3LTWREyH8HFUqD6PRb0/9q8ZdgSyKJl4ytmKAO++TLDRwlnA//g0mls/vOJJ0EWRzSpPrdar5nWsZdadF4dXi+L/kxLpfztz6RHtNQ/uMJH/lZjPyYF6E2l9UYBj/9XrHvq1hEwScVB9z6pFmFnGDbPjGslnBR4tAApLl6z30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aI1OWgGs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E63C4CED2;
-	Wed,  4 Dec 2024 23:28:08 +0000 (UTC)
+	s=arc-20240116; t=1733354926; c=relaxed/simple;
+	bh=TGuyA9UR05R0EA//8oCib2q+/iAF7KW5tp/fKrg23IQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AFQrlYYDAsaeAvs2FD5+NkJENMuAUaRjtH97vlcJllWOeHR0raSCOTr/kgbgxHRl8BbDu+Rn/TjbDuhi2mcwP2rsVtQ+Cx/JYe8dUwy1VCE+Ww6OoV+yfI2RD5bQWdc0S5EZtzJ4ZSYdObY30sx7yXrZW8fW4Umn1tBYkadRDtk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtSBvPEE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A96EC4CECD;
+	Wed,  4 Dec 2024 23:28:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733354889;
-	bh=qHhAUuyhQXNQrTTjUNmUBsCanrlnuEay1E2XfKz3Vpo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aI1OWgGstTG8P9AVoGPy4fb5DUov6N3bJFGiugd1155SdJkFRq8z6N2xSprk3qMXY
-	 zT3iJpxfOAHd8Qr3y+/PJwM11sDCTnxrYt5RYkpOrB1oBMZ1n6GPmt/F75/Htaog54
-	 qXnoMU7UmeBjxQ7Q6drYmsW/YZBDXpLfQiB8JyI7N7vyDQaWP/WRNDJsAtk6qQ+urN
-	 0zpCvQxeFHnw2KfMUKm63/pLl7mG/DJuOMRmDGBHSupfXCicgoz3ngbuF/H7eV0UXS
-	 S9KUYtoAPQnr7UfCqTqs0UH/SLcK0Wbzrwgolh+OQYIqZtc153MimRbATZihu953hk
-	 QJTYes5fnq2qw==
+	s=k20201202; t=1733354926;
+	bh=TGuyA9UR05R0EA//8oCib2q+/iAF7KW5tp/fKrg23IQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jtSBvPEEQmYvHVQDnZaqb2/YY0N9ZmPseVNRJHHctbWOrjFwScEHT8Xyv8UC5aOP2
+	 87WBaQvVkCn4oIleujX1HB/OOjkv1heYmb7AR0O3iXh4O5AhMu/WqzNhnDDBj3QelI
+	 P60eOWcWkOZM3uQVmbUh3yxUl5DkbzKtGCC3tPaiPfSQ1n4jwbF9Vfr6XxzHxZE/VL
+	 OixR2Y4g8qVV8FP/RoPnBaNCAudisdwdOipeo+tacnmht2hWuKn+Q+ygSsT3nFHeGF
+	 2cprZsSzycsIU8k9v6PhgpxNRVuyZY02gHGGVxka0O3vypPCXPEQINm5RsQeBASI3f
+	 5jgjW24Sg/mGw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Abel Vesa <abel.vesa@linaro.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
+Cc: Xu Yang <xu.yang_2@nxp.com>,
+	Peter Chen <peter.chen@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Sasha Levin <sashal@kernel.org>,
-	heikki.krogerus@linux.intel.com,
-	quic_bjorande@quicinc.com,
-	javier.carrasco.cruz@gmail.com,
-	quic_kriskura@quicinc.com,
-	linux-usb@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 10/15] usb: typec: ucsi: glink: be more precise on orientation-aware ports
-Date: Wed,  4 Dec 2024 17:16:04 -0500
-Message-ID: <20241204221627.2247598-10-sashal@kernel.org>
+	shawnguo@kernel.org,
+	linux-usb@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.11 01/15] usb: chipidea: add CI_HDRC_HAS_SHORT_PKT_LIMIT flag
+Date: Wed,  4 Dec 2024 17:16:55 -0500
+Message-ID: <20241204221726.2247988-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204221627.2247598-1-sashal@kernel.org>
-References: <20241204221627.2247598-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -69,53 +63,91 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.1
+X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
 
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+From: Xu Yang <xu.yang_2@nxp.com>
 
-[ Upstream commit de9df030ccb5d3e31ee0c715d74cd77c619748f8 ]
+[ Upstream commit ec841b8d73cff37f8960e209017efe1eb2fb21f2 ]
 
-Instead of checking if any of the USB-C ports have orientation GPIO and
-thus is orientation-aware, check for the GPIO for the port being
-registered. There are no boards that are affected by this change at this
-moment, so the patch is not marked as a fix, but it might affect other
-boards in future.
+Currently, the imx deivice controller has below limitations:
 
-Reviewed-by: Abel Vesa <abel.vesa@linaro.org>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-Tested-by: Johan Hovold <johan+linaro@kernel.org>
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Link: https://lore.kernel.org/r/20241109-ucsi-glue-fixes-v2-2-8b21ff4f9fbe@linaro.org
+1. can't generate short packet interrupt if IOC not set in dTD. So if one
+   request span more than one dTDs and only the last dTD set IOC, the usb
+   request will pending there if no more data comes.
+2. the controller can't accurately deliver data to differtent usb requests
+   in some cases due to short packet. For example: one usb request span 3
+   dTDs, then if the controller received a short packet the next packet
+   will go to 2nd dTD of current request rather than the first dTD of next
+   request.
+3. can't build a bus packet use multiple dTDs. For example: controller
+   needs to send one packet of 512 bytes use dTD1 (200 bytes) + dTD2
+   (312 bytes), actually the host side will see 200 bytes short packet.
+
+Based on these limits, add CI_HDRC_HAS_SHORT_PKT_LIMIT flag and use it on
+imx platforms.
+
+Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Acked-by: Peter Chen <peter.chen@kernel.org>
+Link: https://lore.kernel.org/r/20240923081203.2851768-1-xu.yang_2@nxp.com
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/usb/typec/ucsi/ucsi_glink.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/usb/chipidea/ci.h          | 1 +
+ drivers/usb/chipidea/ci_hdrc_imx.c | 1 +
+ drivers/usb/chipidea/core.c        | 2 ++
+ include/linux/usb/chipidea.h       | 1 +
+ 4 files changed, 5 insertions(+)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_glink.c b/drivers/usb/typec/ucsi/ucsi_glink.c
-index 03c0fa8edc8db..50a23578d0f26 100644
---- a/drivers/usb/typec/ucsi/ucsi_glink.c
-+++ b/drivers/usb/typec/ucsi/ucsi_glink.c
-@@ -172,12 +172,12 @@ static int pmic_glink_ucsi_async_control(struct ucsi *__ucsi, u64 command)
- static void pmic_glink_ucsi_update_connector(struct ucsi_connector *con)
- {
- 	struct pmic_glink_ucsi *ucsi = ucsi_get_drvdata(con->ucsi);
--	int i;
+diff --git a/drivers/usb/chipidea/ci.h b/drivers/usb/chipidea/ci.h
+index 2a38e1eb65466..e4b003d060c26 100644
+--- a/drivers/usb/chipidea/ci.h
++++ b/drivers/usb/chipidea/ci.h
+@@ -260,6 +260,7 @@ struct ci_hdrc {
+ 	bool				b_sess_valid_event;
+ 	bool				imx28_write_fix;
+ 	bool				has_portsc_pec_bug;
++	bool				has_short_pkt_limit;
+ 	bool				supports_runtime_pm;
+ 	bool				in_lpm;
+ 	bool				wakeup_int;
+diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+index bdc04ce919f7a..b76e7c3fa2c6e 100644
+--- a/drivers/usb/chipidea/ci_hdrc_imx.c
++++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+@@ -342,6 +342,7 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+ 	struct ci_hdrc_platform_data pdata = {
+ 		.name		= dev_name(&pdev->dev),
+ 		.capoffset	= DEF_CAPOFFSET,
++		.flags		= CI_HDRC_HAS_SHORT_PKT_LIMIT,
+ 		.notify_event	= ci_hdrc_imx_notify_event,
+ 	};
+ 	int ret;
+diff --git a/drivers/usb/chipidea/core.c b/drivers/usb/chipidea/core.c
+index 835bf2428dc6e..5aa16dbfc289c 100644
+--- a/drivers/usb/chipidea/core.c
++++ b/drivers/usb/chipidea/core.c
+@@ -1076,6 +1076,8 @@ static int ci_hdrc_probe(struct platform_device *pdev)
+ 		CI_HDRC_SUPPORTS_RUNTIME_PM);
+ 	ci->has_portsc_pec_bug = !!(ci->platdata->flags &
+ 		CI_HDRC_HAS_PORTSC_PEC_MISSED);
++	ci->has_short_pkt_limit = !!(ci->platdata->flags &
++		CI_HDRC_HAS_SHORT_PKT_LIMIT);
+ 	platform_set_drvdata(pdev, ci);
  
--	for (i = 0; i < PMIC_GLINK_MAX_PORTS; i++) {
--		if (ucsi->port_orientation[i])
--			con->typec_cap.orientation_aware = true;
--	}
-+	if (con->num > PMIC_GLINK_MAX_PORTS ||
-+	    !ucsi->port_orientation[con->num - 1])
-+		return;
-+
-+	con->typec_cap.orientation_aware = true;
- }
- 
- static void pmic_glink_ucsi_connector_status(struct ucsi_connector *con)
+ 	ret = hw_device_init(ci, base);
+diff --git a/include/linux/usb/chipidea.h b/include/linux/usb/chipidea.h
+index 5a7f96684ea22..ebdfef124b2bc 100644
+--- a/include/linux/usb/chipidea.h
++++ b/include/linux/usb/chipidea.h
+@@ -65,6 +65,7 @@ struct ci_hdrc_platform_data {
+ #define CI_HDRC_PHY_VBUS_CONTROL	BIT(16)
+ #define CI_HDRC_HAS_PORTSC_PEC_MISSED	BIT(17)
+ #define CI_HDRC_FORCE_VBUS_ACTIVE_ALWAYS	BIT(18)
++#define	CI_HDRC_HAS_SHORT_PKT_LIMIT	BIT(19)
+ 	enum usb_dr_mode	dr_mode;
+ #define CI_HDRC_CONTROLLER_RESET_EVENT		0
+ #define CI_HDRC_CONTROLLER_STOPPED_EVENT	1
 -- 
 2.43.0
 
