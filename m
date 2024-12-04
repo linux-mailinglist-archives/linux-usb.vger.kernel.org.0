@@ -1,209 +1,211 @@
-Return-Path: <linux-usb+bounces-18075-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18076-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 384F89E3044
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 01:14:46 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 789699E304F
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 01:21:47 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CE61281B61
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 00:14:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4224316439A
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 00:21:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D89627E1;
-	Wed,  4 Dec 2024 00:14:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C92F1FA4;
+	Wed,  4 Dec 2024 00:21:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="h95vEHT7"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1fJeGdL5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760D9184;
-	Wed,  4 Dec 2024 00:14:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733271278; cv=pass; b=m0toKVBsgY57n0l63fpx+o3LtFPpLXziwRBk5rsFFFDEkRlLRDJ3/dIVsVamjAmD+IC8OKu2tc/KjC+8oMZiEyBKLgE7Lh5d2lChN40XfNpcG2uXLiK5Pp7Hu8sMwkFziALa6nnEzdashcA3Ryhq5QOtGB/jQkPo22X5ITmiJZg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733271278; c=relaxed/simple;
-	bh=3srQ/r3grw37OwKmTRBg1if+Gw0Wm+4bQwH60SnaNdo=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F42F624
+	for <linux-usb@vger.kernel.org>; Wed,  4 Dec 2024 00:21:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733271701; cv=none; b=WaC4+8gCCRPhu8grja/cTNVMouyHv/xbzBujOEvrCxXezELza35UNSPCQd50QpOTleyFFmqAJyhKmzozFXgPWRebWpfC14aAeAr6MEF6hHzAcp/mIo1p0EaG3EZq+rFGPuSVAAIXdWreNaVE1uLP2ltkoIp6SLkZZOKk2qyUE3g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733271701; c=relaxed/simple;
+	bh=7HTKs0VUDZkY/qob9RuaQrShW0s3SXyxEq5Aazn9TCo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UEEibL3mMufKsnuUtqHh1E4rIP/IR1gGMD/7WFOa0gLBqAbL4jFbCXNQ/+aM2CZbxgXBvXmK10U/Hb1Wc0nZzxKUteETJvzGhtp7DQrURB5GFnlCVXeMsRBZ07TFO+v+2+ndJPP2gNG5GfFoKNyunD0ljWl2WRMOF5g3NtLDudY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=h95vEHT7; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1733271260; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=WATrzLiz9aq2R3x3LNGJQelV+mMPwI74pLDhIX4uG3KKx8XQXff2vXZlUOMVAcqfhRqJ0a4MFVdzOmmS2dFelhp7yedKbojq/Q5ZmlHn+r8zwCflpum8+47qLaAb1Bl/c+M30zDsQ8cD33VI0N9lHS3CO74pJmwf/J8RWB/fSI8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1733271260; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=kMFduA2UZLHkHSBrwEPDL6sUPC2WEILAGJhJGs+BC0A=; 
-	b=hI45oxiUl9PIlYv0/iBEHxUrIWnPklrHe+puGXrK6q+lScHGFP7bF+3CY/M3LKwJOUet0HS/XjULKUG99iXjf9yteRdmQbs7GnY8AjTBTvCZGTDfRmi6eQQlSl0SRGYgAED5cRH17vOnwczdDTaNDi4s8bgGY1gNlKsNmpHvlb8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1733271260;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=kMFduA2UZLHkHSBrwEPDL6sUPC2WEILAGJhJGs+BC0A=;
-	b=h95vEHT7WNCd50e86nmcy0RTDhJhoqzcwmQWLpo3o5rDYMnbt/KfSx5w98mmbSLD
-	MWp2GV5h1wmW7Y7e99ulQRBFUfIkWnLe0XfwLwaxZRm7oi0WiVlSUnhpxVeW8w51ZdR
-	i8DueKM6E7zTUVmLrPe3vQ0raTudj97QI01f7HnI=
-Received: by mx.zohomail.com with SMTPS id 1733271258498314.62793491642253;
-	Tue, 3 Dec 2024 16:14:18 -0800 (PST)
-Received: by mercury (Postfix, from userid 1000)
-	id A853110604D3; Wed, 04 Dec 2024 01:14:13 +0100 (CET)
-Date: Wed, 4 Dec 2024 01:14:13 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Lucas De Marchi <lucas.demarchi@intel.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	intel-xe@lists.freedesktop.org, intel-gfx@lists.freedesktop.org, 
-	Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, chaitanya.kumar.borah@intel.com, Luca Coelho <luca@coelho.fi>
-Subject: Re: [PATCH] usb: typec: ucsi: Fix connector status writing past
- buffer size
-Message-ID: <6wlapsdavvauxoim2pegsbxju3sxvtebt4h2tfycobpcvco74i@jcggovw47bar>
-References: <20241203200010.2821132-1-lucas.demarchi@intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=J1v5Kd1aIk9/FEG9hsgB+CmYiB9uXm+oa/qP85DNc0+SZ3hkv1EdKYqx/l0cR4cgU0kra5pIfBHRFcL3cS+JX4bdrAcDFeFN1oOpaaSy9/5HdZ8TStIIoshfTUuQr7kxZXMBLaz+u/I/yLaAoaT8EZ97jGTChiHTbw0jE2knLRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1fJeGdL5; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-215a7e487bfso20170235ad.2
+        for <linux-usb@vger.kernel.org>; Tue, 03 Dec 2024 16:21:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1733271699; x=1733876499; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zpT/AlPwJiVeeLr30xrIvlukqthTxhmrspNV2T+3D8I=;
+        b=1fJeGdL5oWl51YKI8m3PYIJXyrhFTbi5QsH+mspXuHEBHy3Xi3+9agvUvuswBFV9ur
+         yG1Qhpg5SFZ4j5ExPd58LReroEQivYHUV45fk5ttlwtrCKTuau5Jfp0LewMlxI4+6IZD
+         9SBzsUE+jHykl6YGXCXntMU33gxkkyNJaRqgw8m0v3PZUmeP6KurfM2SkSJ3YZtwrQzh
+         hIGAX6r80QeC/QxSNJx4MA3spFN8ofjIoV9V5lYh5tLLZQ2aZKvYpE9ob0ii2ESFssib
+         WUQDsAzeQBksCnh3S6sgYkG2pZbAUS2/e1kS95B8BAz+9emNOQQaVN6wq6wCld8FPoEt
+         6CrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733271699; x=1733876499;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zpT/AlPwJiVeeLr30xrIvlukqthTxhmrspNV2T+3D8I=;
+        b=SmYSTw8dt5vm4qqh6Ejg3zzNw7ONfhmYBhHaJA6EdA3F/cDtWgNShMrw3kG/5eEbCG
+         SoVjPkaDvvgxjp9K2FQTNKOT/UcMvFIT/f4RqZ8obMUmlkRO6WDE5jgq+/mYxwwrHvbQ
+         pzAgoogW+evzSJQDP47DMgxXsaBBb6Qx8XhWcW3iIqtGpW38GtJQXW2rqU5goYs9Qr8X
+         BGJCXm5vYmxz2g+dPh7vbvs0oHnSPmqbbKmptpf1RDbFDTxJUyqRKhyOWRvlpK/nthgf
+         V/HkSIbyEYFVExq1jv2Vt19g7xjj8EYixnxBcMTHmiHjF4vZSLViazkjo0QsNwO32Imm
+         WZwg==
+X-Forwarded-Encrypted: i=1; AJvYcCWxVArrRCMJTnwdml3VrPHsmYNTZCBqFWBIxXmcgVfknd9A/jzCmYZCG0m8pG5cfwkdiHq/g78qS+4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZ3wuNaD7JUgOt1L2cik8W/HU8RSveY0FkQM3hX4JNvw2SLF4j
+	S5gztNnj/BBdjWFYPHqLcnrvfWSXCM+cUZmhNrXqIllhYfV29xrDIM9EQo8w1Q==
+X-Gm-Gg: ASbGncsboWxDo5002xI3BBXY0auXvtAtm8ChxBjSz1tZGxg4GbjaNUm4n+vSZwDdGWp
+	lzzMMWMGt+oFvaj9CFfvIwwxee8Nfv2D4hTHyhLeAethMbcS4toL+K0Mxj7uCI3JikKKMhH8fT8
+	KDkNp2hV6lpJ6lRmezWdCmeTSNSEwV7dhSWm/6cM6ku77ZreXM+yfk58J/L5Fn60CjNADHoKMWH
+	81VweNw8GfM+1quy2hY89p1lMpF3NMw/XRXa5kggE61LXxmaNES3oRnor7aKs2EIowhgS2iCaaJ
+	PnoATRvpaA==
+X-Google-Smtp-Source: AGHT+IHoiOLENLGhLXWGELB6ox9z/tzngT3DeCxXBg38Og9THlvL6975U1umNVzFH7Cshp+aGBEl2w==
+X-Received: by 2002:a17:902:e888:b0:215:7faa:ece2 with SMTP id d9443c01a7336-215bd168ddcmr59048055ad.35.1733271698603;
+        Tue, 03 Dec 2024 16:21:38 -0800 (PST)
+Received: from google.com (30.176.125.34.bc.googleusercontent.com. [34.125.176.30])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21548aec039sm79389225ad.113.2024.12.03.16.21.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Dec 2024 16:21:37 -0800 (PST)
+Date: Wed, 4 Dec 2024 00:21:33 +0000
+From: Benson Leung <bleung@google.com>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>, linux-usb@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: typec: ucsi: Fix completion notifications
+Message-ID: <Z0-gjXEceyMeh03B@google.com>
+References: <20241203102318.3386345-1-ukaszb@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4vmdr4gttltcdigu"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="388AzRB7epXEOkPt"
 Content-Disposition: inline
-In-Reply-To: <20241203200010.2821132-1-lucas.demarchi@intel.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.3.1/233.118.59
-X-ZohoMailClient: External
+In-Reply-To: <20241203102318.3386345-1-ukaszb@chromium.org>
 
 
---4vmdr4gttltcdigu
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+--388AzRB7epXEOkPt
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] usb: typec: ucsi: Fix connector status writing past
- buffer size
-MIME-Version: 1.0
 
-Hi,
-
-On Tue, Dec 03, 2024 at 12:00:10PM -0800, Lucas De Marchi wrote:
-> Similar to commit 65c4c9447bfc ("usb: typec: ucsi: Fix a missing bits to
-> bytes conversion in ucsi_init()"), there was a missing conversion from
-> bits to bytes. Here the outcome is worse though: since the value is
-> lower than UCSI_MAX_DATA_LENGTH, instead of bailing out with an error,
-> it writes past the buffer size.
+On Tue, Dec 03, 2024 at 10:23:18AM +0000, =C5=81ukasz Bartosik wrote:
+> OPM                         PPM                         LPM
+>  |        1.send cmd         |                           |
+>  |-------------------------->|                           |
+>  |                           |--                         |
+>  |                           |  | 2.set busy bit in CCI  |
+>  |                           |<-                         |
+>  |      3.notify the OPM     |                           |
+>  |<--------------------------|                           |
+>  |                           | 4.send cmd to be executed |
+>  |                           |-------------------------->|
+>  |                           |                           |
+>  |                           |      5.cmd completed      |
+>  |                           |<--------------------------|
+>  |                           |                           |
+>  |                           |--                         |
+>  |                           |  | 6.set cmd completed    |
+>  |                           |<-       bit in CCI        |
+>  |                           |                           |
+>  |     7.notify the OPM      |                           |
+>  |<--------------------------|                           |
+>  |                           |                           |
+>  |   8.handle notification   |                           |
+>  |   from point 3, read CCI  |                           |
+>  |<--------------------------|                           |
+>  |                           |                           |
 >=20
-> The error is then seen in other places like below:
+> When the PPM receives command from the OPM (p.1) it sets the busy bit
+> in the CCI (p.2), sends notification to the OPM (p.3) and forwards the
+> command to be executed by the LPM (p.4). When the PPM receives command
+> completion from the LPM (p.5) it sets command completion bit in the CCI
+> (p.6) and sends notification to the OPM (p.7). If command execution by
+> the LPM is fast enough then when the OPM starts handling the notification
+> from p.3 in p.8 and reads the CCI value it will see command completion bit
+> set and will call complete(). Then complete() might be called again when
+> the OPM handles notification from p.7.
 >=20
-> 	Oops: general protection fault, probably for non-canonical address 0x891=
-e812cd0ed968: 0000 [#1] PREEMPT SMP NOPTI
-> 	CPU: 3 UID: 110 PID: 906 Comm: prometheus-node Not tainted 6.13.0-rc1-xe=
- #1
-> 	Hardware name: Intel Corporation Lunar Lake Client Platform/LNL-M LP5 RV=
-P1, BIOS LNLMFWI1.R00.3222.D84.2410171025 10/17/2024
-> 	RIP: 0010:power_supply_get_property+0x3e/0xe0
-> 	Code: 85 c0 7e 4f 4c 8b 07 89 f3 49 89 d4 49 8b 48 20 48 85 c9 74 72 49 =
-8b 70 18 31 d2 31 c0 eb 0b 83 c2 01 48 63 c2 48 39 c8 73 5d <3b> 1c 86 75 f=
-0 49 8b 40 28 4c 89 e2 89 de ff d0 0f 1f 00 5b 41 5c
-> 	RSP: 0018:ffffc900017dfa50 EFLAGS: 00010246
-> 	RAX: 0000000000000000 RBX: 0000000000000011 RCX: c963b02c06092008
-> 	RDX: 0000000000000000 RSI: 0891e812cd0ed968 RDI: ffff888121dd6800
-> 	RBP: ffffc900017dfa68 R08: ffff88810a4024b8 R09: 0000000000000000
-> 	R10: 0000000000000000 R11: 0000000000000000 R12: ffffc900017dfa78
-> 	R13: ffff888121dd6800 R14: ffff888138ad2c00 R15: ffff88810c57c528
-> 	FS:  00007713a2ffd6c0(0000) GS:ffff88846f380000(0000) knlGS:000000000000=
-0000
-> 	CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> 	CR2: 000000c0004b1000 CR3: 0000000121ce8003 CR4: 0000000000f72ef0
-> 	DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> 	DR3: 0000000000000000 DR6: 00000000ffff07f0 DR7: 0000000000000400
-> 	PKRU: 55555554
-> 	Call Trace:
-> 	 <TASK>
-> 	 ? show_regs+0x6c/0x80
-> 	 ? die_addr+0x37/0xa0
-> 	 ? exc_general_protection+0x1c1/0x440
-> 	 ? asm_exc_general_protection+0x27/0x30
-> 	 ? power_supply_get_property+0x3e/0xe0
-> 	 power_supply_hwmon_read+0x50/0xe0
-> 	 hwmon_attr_show+0x46/0x170
-> 	 dev_attr_show+0x1a/0x70
-> 	 sysfs_kf_seq_show+0xaa/0x120
-> 	 kernfs_seq_show+0x41/0x60
+> This fix replaces test_bit() with test_and_clear_bit()
+> in ucsi_notify_common() in order to call complete() only
+> once per request.
 >=20
-> Just use the buffer size as argument to fix it.
+> This fix also reinitializes completion variable in
+> ucsi_sync_control_common() before a command is sent.
 >=20
-> Fixes: 226ff2e681d0 ("usb: typec: ucsi: Convert connector specific comman=
-ds to bitmaps")
-> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
+> Fixes: 584e8df58942 ("usb: typec: ucsi: extract common code for command h=
+andling")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: =C5=81ukasz Bartosik <ukaszb@chromium.org>
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
-Also you are missing at some tags:
-
-Reported-by: Chaitanya Kumar Borah <chaitanya.kumar.borah@intel.com>
-Closes: https://lore.kernel.org/all/SJ1PR11MB6129CCD82CD78D8EE6E27EF4B9362@=
-SJ1PR11MB6129.namprd11.prod.outlook.com/
-
-and considering he figured out the root cause (and there is no
-better tag AFAIK):
-
-Suggested-by: Thomas Wei=DFschuh <linux@weissschuh.net>
-
-Greetings,
-
--- Sebastian
+Reviewed-by: Benson Leung <bleung@chromium.org>
 
 > ---
->  drivers/usb/typec/ucsi/ucsi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> Changes in v2:
+> - Swapped points 7 and 8 in the commit description
+> in order to make diagram more clear.=20
+> - Added reinitialization of completion variable
+> in the ucsi_sync_control_common().
+> ---
+>=20
+>  drivers/usb/typec/ucsi/ucsi.c | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
 >=20
 > diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-> index c435c0835744a..69caae84879e9 100644
+> index c435c0835744..7a65a7672e18 100644
 > --- a/drivers/usb/typec/ucsi/ucsi.c
 > +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -651,7 +651,8 @@ static void ucsi_unregister_altmodes(struct ucsi_conn=
-ector *con, u8 recipient)
->  static int ucsi_get_connector_status(struct ucsi_connector *con, bool co=
-nn_ack)
->  {
->  	u64 command =3D UCSI_GET_CONNECTOR_STATUS | UCSI_CONNECTOR_NUMBER(con->=
-num);
-> -	size_t size =3D min(UCSI_GET_CONNECTOR_STATUS_SIZE, UCSI_MAX_DATA_LENGT=
-H(con->ucsi));
-> +	size_t size =3D min(sizeof(con->status),
-> +			  UCSI_MAX_DATA_LENGTH(con->ucsi));
->  	int ret;
+> @@ -46,11 +46,11 @@ void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+>  		ucsi_connector_change(ucsi, UCSI_CCI_CONNECTOR(cci));
 > =20
->  	ret =3D ucsi_send_command_common(con->ucsi, command, &con->status, size=
-, conn_ack);
+>  	if (cci & UCSI_CCI_ACK_COMPLETE &&
+> -	    test_bit(ACK_PENDING, &ucsi->flags))
+> +	    test_and_clear_bit(ACK_PENDING, &ucsi->flags))
+>  		complete(&ucsi->complete);
+> =20
+>  	if (cci & UCSI_CCI_COMMAND_COMPLETE &&
+> -	    test_bit(COMMAND_PENDING, &ucsi->flags))
+> +	    test_and_clear_bit(COMMAND_PENDING, &ucsi->flags))
+>  		complete(&ucsi->complete);
+>  }
+>  EXPORT_SYMBOL_GPL(ucsi_notify_common);
+> @@ -65,6 +65,8 @@ int ucsi_sync_control_common(struct ucsi *ucsi, u64 com=
+mand)
+>  	else
+>  		set_bit(COMMAND_PENDING, &ucsi->flags);
+> =20
+> +	reinit_completion(&ucsi->complete);
+> +
+>  	ret =3D ucsi->ops->async_control(ucsi, command);
+>  	if (ret)
+>  		goto out_clear_bit;
 > --=20
-> 2.47.0
->=20
+> 2.47.0.338.g60cca15819-goog
 >=20
 
---4vmdr4gttltcdigu
+--388AzRB7epXEOkPt
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmdPntIACgkQ2O7X88g7
-+po82g/8Cm1ZlaQVplzBswhmtc+dXTCc3Wi6aEVs0+ihW7wSxtFp6WmFxt0oLbK4
-FujrftLPH8u3mtQQEUVKOwByACL5z4+TIC7V4ndwwSiXWIFRirOjVD4sFhzzsZKz
-f9pk87n82a1onvJKqmUe7KmUVXJvhtr0MKbtzVXDd9cGCqe0xi28gmsZ8arNlAuS
-fBf3B11aE+bEIiiYHFgq49dIUeNk12mCAdX5Bm7Xd+Z2s8EvxbqwmSJFqVebPoFR
-0N/n+/URE1g2bRsQpK5TxVCsrlvBdxOpcV69aIAppqmQa3mTbd8wvdM9fsHeQyyW
-aYra1IN4tkXXb4Mc3H0FxgQ01oPD9FY/2dxiUTPgx4Lu9BxcvbklnadT8txvs9fx
-4lOGiUK3if+GAJwz8+TQ7OKIJkrse086FG8Hk5yqXLHsvSp1mDsq5szwMX2yL5lm
-TlsGWizRqhlHcVs8CMjlK7YaerFP87vNcSyucaEIL3shd2rOCb6CVcggBABlXdDx
-10jkH3PTKyF04dTbSFBiKJGTVfar1eDINS94/Jvh5NtMzHq8HWm2hIzAIOO5PhPo
-tHN65w28CANEmt6AoX82FuMD/U2nEPc4hb5YHHND6cRM96VJ0Q3pOc2Bpt5xnksO
-ThvZmHEbPy5B+8EPC2ZJZO0W7w9fyzzm4me7lJDa0jjxPLmcttI=
-=VOt4
+iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZ0+gjAAKCRBzbaomhzOw
+wru7AP0Xyu+d6bTAj4cclKtJ8F6OISalWKMW3PYciK0D+FE7mQD8D0k9pQsfjRpK
+q97GXgutHLh6ITcFW76qAWnPpYLugQA=
+=FZ/1
 -----END PGP SIGNATURE-----
 
---4vmdr4gttltcdigu--
+--388AzRB7epXEOkPt--
 
