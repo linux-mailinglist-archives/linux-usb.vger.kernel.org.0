@@ -1,319 +1,300 @@
-Return-Path: <linux-usb+bounces-18081-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18082-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 626259E32FD
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 06:10:34 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AD3D9E3348
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 06:47:42 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21FB8285E3C
-	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 05:10:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46FF216111B
+	for <lists+linux-usb@lfdr.de>; Wed,  4 Dec 2024 05:47:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15BFE18871E;
-	Wed,  4 Dec 2024 05:09:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B2217E017;
+	Wed,  4 Dec 2024 05:47:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="ATasXh34"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Co3dcCuc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2075.outbound.protection.outlook.com [40.107.20.75])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FBF18872F;
-	Wed,  4 Dec 2024 05:09:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.20.75
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D966155398;
+	Wed,  4 Dec 2024 05:47:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733288962; cv=fail; b=UIiyT6Qt5QMyZWogtycZmOwwa7x/WndyuAJGwbtvVnvIWwXfA5HIj8ymeKMkfI191TojmoU5Kcw/EZN5hDOdNCcQV5YpQymL9HuUklsFwt1nAIom4fDHCubJCZiJ1jHmKoxwKo+tX3n3A8rvBqkNMCWsbcSAnKqCRmQ84CAcBO0=
+	t=1733291256; cv=fail; b=o9K+kkaIG4kVqAlRLfKGV4snsrJ/cEA4t9fyxRAvvWLG434Dmzk/ftoks8Uf3bhs0qt0R8nu4SWtIAcWRRUPCqTA1B+NoJkKt/fcZdaXBFZDM4qAn8arU42RcEgNh76tqu9KOtBvYh338GGwz+TeBA9dPaHw6XZuibo7oC6sYLE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733288962; c=relaxed/simple;
-	bh=NcArKHhqijZ3zBR5EOzFS3R010SXAcOtW79LP2S+kcs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rP7NTUPWC9Z/SbysPjpyyPul3nJeMN1mu8ZLJguTZl3pUTwwdHlCIX3MV4HXhfc2uhHwLzEP+EhnEJsDJwBaEcKeureUD+CxWYS91xtaiFTU7MJ/UVweo+0YHgo4EXvIhacZd8jCIZ1yKnrJ1n/cWg53Kp5DHEEQ9qLbIgCRyFY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=ATasXh34; arc=fail smtp.client-ip=40.107.20.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1733291256; c=relaxed/simple;
+	bh=gezJIpXYT3ZAkASmPN4pZwbUgMfN0qQ6bW6A8jnQa+Q=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=rAV/PPO012GwtbyuLm+br3M6W6QqRJDsc5V08VaJ+OT++NA9+4PpEILUsXEIPpz6C0mYoCp/aEQGjy3T2nLw3Hj6hZX7fw4IJumMe702kTOwPbJRkBmPVN3b9T5ohUZsHRqcXxT2L3vp7rl/X6e0oPg2gyyX7ZSceJRexS4s1K4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Co3dcCuc; arc=fail smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733291255; x=1764827255;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=gezJIpXYT3ZAkASmPN4pZwbUgMfN0qQ6bW6A8jnQa+Q=;
+  b=Co3dcCuc6O6riO65WzC8J0f6m4SLcaKpltYOPNM/5gTonMyrULELu3v5
+   kq74YChmi00upB6vAStMk8uh33y5S67Z0JvGYd6xp+xvz2oI+dMbz7S5n
+   +9ag+ZSLI5Uz3xcEM5XO0nm/MxYr3/4UJPYtKD5kG+0AlKFWYBgTngfA1
+   MBg41/TG/Oo8N4vIqByW2h3iAR46wuFpCa1Bk3Fvu563BWx1HWcUvdIjW
+   Iyw0oFtnTatLI9HU5GCSrACG/aS3a9AoSApXKPB7x8UFChg8RqWA4Rh6a
+   jX50m5oekSDe7J0DqnXwMVviybSyTkrWGTCa70wRmZD9rp84UwS6PDUrs
+   A==;
+X-CSE-ConnectionGUID: tj7D7LESQAiRfMA2hqKxtA==
+X-CSE-MsgGUID: D+NuRGD2Rce7pr96gtJD8w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="33599609"
+X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
+   d="scan'208";a="33599609"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2024 21:47:34 -0800
+X-CSE-ConnectionGUID: H3JmaEWbT+mdJX0+JPYGRw==
+X-CSE-MsgGUID: exzesj9QR1CzxcT3Msuvfg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
+   d="scan'208";a="93848888"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 03 Dec 2024 21:47:34 -0800
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Tue, 3 Dec 2024 21:47:33 -0800
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39 via Frontend Transport; Tue, 3 Dec 2024 21:47:33 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.173)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.39; Tue, 3 Dec 2024 21:47:33 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H74oHdKl/XjHd+FevOA9LhQj50dfN5ReYxZUH1sK9YI5t8M38uJMwteVRTCMXBAmDC+3+XWq6yV5VAEr3pT8K/VaarePHN1FxBW2a2WE8rjeh+cd4XamBvxhwV9je+7QZrGnZQgUbfu9Qg00Qg3emImjRrHuIkiklc7HIM+FKK3LtS7X+iE0qO9PATaj05W9jYAmHmE2caZuHzqKk+EW9L9rm54XOB2Y2uvDMt6PaPG9z6IwF2dGOo/0nvb/CaTZ3pqbi8B3BSURqxgk5F3nqLWputQN1im5IlwACllv1FcXlLoqg7L6wy8MJEajUEBWJdSE4MPeGjfMrv9+Z4oSfA==
+ b=Dg4WhvcajpE5bWr4JSK8h1Zjwtk+DqLbybciZA5YvU4mtgRIjivQ95ZV0/4YOGJtJsiX0bcv16FgWsfQyyi9FCOOt1qKS8KnDVYGTfhgd4B0lUDs2NBf+0k5NnMF2y8WXdRqHkzblhz3GclwmpFdJWWL6vyAkQ6a48XyHQAacQG8lgB8d3V6/TJTCBnO++YUoB1cleUiJbxhLauc3OMmx5PBoFNlnvuH0cVsV6l27XbYbdV7paY/KZdE3ZncHt/rhxXIk9voqPMmsgeq8llPd2SMddc1SDPnQKRfg0+n6IjKRppvEPySQnJllZ+q3rCWzddb8trPnByVe4P8bqDq1w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Ucu1Uq6LBa13cy1DJBXpSyfMyV0l8vUPRjsUNVZGuEc=;
- b=BZ/ySGKvXoK3AWtoUh47kmQmQjlEe607cmomajZvKgeubmeJwYEK+3TP5BcaDa5j/SATSkuynbLZy0XMjrxwFzKk/sbubxVvGltqN1ePXoXLlJIqZHAgh4Tj205vdrokH+GzOI31mMa91EMHr6RfEIBZlUzzu8GmhJDEtswiok1Th8cYOPlkrwLF00Jm+dEv5Opdf3sfxKVONoRCoJI4OYCPoo2AA19AezCsXzoyFMqah40BCfJEEQ0WrWltU1OpCvuok5OIkuAC0jo2uoaROmoRkZThVk3UmZ5ZWLToJHMRwHTs/z217NqviH7cVwZrKbICUCGpJ2A/5zdjHvGSgQ==
+ bh=/2ysxBZ3T9qRBZyV0sIu2eFDHncmLcRfpSYxQMgDYHc=;
+ b=zCEyvkLz0heD51WBpQSZyeqZrt/r+oo/wJA2h7kTEY22qmVGb5iLBcqD0alXP7Emh+4w7I0jwlhlifH5TKVea6ipmBmLfWgQrY58cD9SxI61T0LIWMU02COHXyT+qFx4EggTxYtwFYs/9nKEh4HAblJjlTl6ALSckgsX1Qet5vwfuVKgZkLOtYFaq/+K4RLb2i4IuONocpf8sV4M+8CB/lnqXDNI2jUxxy7z4yNkkPDS08fy6w7fshvtUauxdrfJXMb80qYfgn3mhjuQv6CYHsSr++l3EJG/xtzpS68a0GmJ7s9x/PmK6mmHCoIOpqnGieA3jlQe6LQRQ+oLb7LSRw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Ucu1Uq6LBa13cy1DJBXpSyfMyV0l8vUPRjsUNVZGuEc=;
- b=ATasXh342TLXfE6CMeqgGq1dT019rK86qylukQ0ymfQqTm7OetMhcCJStCf91OVaiy9BqJKynhp4HSpAyvsQms268GuLC8BX+PUJjUwQhtrv6D1vCbtnr0reZCMixUOTxLuiD1IXO2q70EzG1e99ypgSY0cN5TCNr5TQEefo7Y1Bq0/GojsKKZKL8PWj7L3VCHcLXPGN1LvcXWB4WDyJHIbM8tLETWfjmy7VXbkqwn+jxRuc3hB/BMFWGxnpw1xjwn148yvMVNEHt1uoWxND5393CXzqEh71Ouz6qF678rtwe8US62mo419OHBUNrBHtQwKHKPYM2XS3uc8x0grZvw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by DU4PR04MB10435.eurprd04.prod.outlook.com (2603:10a6:10:568::15) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6129.namprd11.prod.outlook.com (2603:10b6:a03:488::12)
+ by MW4PR11MB6984.namprd11.prod.outlook.com (2603:10b6:303:22e::22) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.19; Wed, 4 Dec
- 2024 05:09:17 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8207.017; Wed, 4 Dec 2024
- 05:09:16 +0000
-From: Xu Yang <xu.yang_2@nxp.com>
-To: vkoul@kernel.org,
-	kishon@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com,
-	gregkh@linuxfoundation.org,
-	jun.li@nxp.com,
-	alexander.stein@ew.tq-group.com
-Cc: linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH v11 3/3] arm64: dts: imx95-19x19-evk: add typec nodes and enable usb3 node
-Date: Wed,  4 Dec 2024 13:09:07 +0800
-Message-Id: <20241204050907.1081781-3-xu.yang_2@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241204050907.1081781-1-xu.yang_2@nxp.com>
-References: <20241204050907.1081781-1-xu.yang_2@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR06CA0235.apcprd06.prod.outlook.com
- (2603:1096:4:ac::19) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.11; Wed, 4 Dec
+ 2024 05:47:27 +0000
+Received: from SJ1PR11MB6129.namprd11.prod.outlook.com
+ ([fe80::21c3:4b36:8cc5:b525]) by SJ1PR11MB6129.namprd11.prod.outlook.com
+ ([fe80::21c3:4b36:8cc5:b525%4]) with mapi id 15.20.8230.010; Wed, 4 Dec 2024
+ 05:47:26 +0000
+From: "Borah, Chaitanya Kumar" <chaitanya.kumar.borah@intel.com>
+To: "De Marchi, Lucas" <lucas.demarchi@intel.com>, "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>
+CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Heikki Krogerus
+	<heikki.krogerus@linux.intel.com>, "intel-xe@lists.freedesktop.org"
+	<intel-xe@lists.freedesktop.org>, "intel-gfx@lists.freedesktop.org"
+	<intel-gfx@lists.freedesktop.org>, =?iso-8859-1?Q?Thomas_Wei=DFschuh?=
+	<linux@weissschuh.net>, Luca Coelho <luca@coelho.fi>
+Subject: RE: [PATCH] usb: typec: ucsi: Fix connector status writing past
+ buffer size
+Thread-Topic: [PATCH] usb: typec: ucsi: Fix connector status writing past
+ buffer size
+Thread-Index: AQHbRb4ggL3Z6Ovy2kaSNCuLzlX+7bLVlBbQ
+Date: Wed, 4 Dec 2024 05:47:26 +0000
+Message-ID: <SJ1PR11MB612948FEE159D29D262B8E3BB9372@SJ1PR11MB6129.namprd11.prod.outlook.com>
+References: <20241203200010.2821132-1-lucas.demarchi@intel.com>
+In-Reply-To: <20241203200010.2821132-1-lucas.demarchi@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6129:EE_|MW4PR11MB6984:EE_
+x-ms-office365-filtering-correlation-id: 5e7ae8d1-439f-4e04-a47a-08dd14272203
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|7053199007|38070700018;
+x-microsoft-antispam-message-info: =?iso-8859-1?Q?1coWnQN7jdgfj/CZgGBZPyS2buUvt9EG+Bf783nOwHLWiyc+eNsKo8a+dm?=
+ =?iso-8859-1?Q?2AQahI5iK4tPYi4BDf3BSLNaHjxsT8m33vRxXlmV8y1reKuYz4RZQ/Lfzr?=
+ =?iso-8859-1?Q?MRBdyUIhOkAMaSzSIdk351tcvsfwMzKiT+ntdw29hfWOUvjDWCSuMS9GDZ?=
+ =?iso-8859-1?Q?JOJcDel3pkuiUTeUV/wtukANKiVNxJmQlOYAotzz6B+5Y3/c+urrPI/huP?=
+ =?iso-8859-1?Q?BA83Okxn4TcJzt31AGEdmM/1Eczt8GX/D3xaOmCTomsh9sXlXAfj8Wrkfv?=
+ =?iso-8859-1?Q?+tn2tUJKYI57cCG/v1OQj0uerlBNOl6x+TRuFGHa1I6Ql+4568hLG2wTxT?=
+ =?iso-8859-1?Q?oPMOwOtpa8IcCVf4lVXqaCHzCvlPwHoT1yuQNj3cd+Gayj1lu8ehzQlZem?=
+ =?iso-8859-1?Q?iQDzptSIAwwweVeFa+bJwxlkSMz1KwJEROpaCy4WJ0zt7nrmU/PQCnTLso?=
+ =?iso-8859-1?Q?gqYV+F5iK+WWfXs1EAWJBVdjpa+mmjKQlgM165jGl7/bLuPvo1iFB3jpNT?=
+ =?iso-8859-1?Q?buAx9WEf2Tz4fg9QdyvXZ0aVrAwF7FMUoqQgBCCgBo1J6TXqvVQpImOZ7B?=
+ =?iso-8859-1?Q?z/ZUasUGVlrukudkoPJ0ZA0M8P10/fKwwmNEqdMwyxcCSwfJH4aiplRFRL?=
+ =?iso-8859-1?Q?lNfsnxM9bRu0YPrxxCgtYLqSrcBpdHwDmy9/3fOmqtz/gC1ELOuURZujLP?=
+ =?iso-8859-1?Q?tsLUXZbeOjTfceBjkATx8FWkvY4jZ2xfnayJF2LRi7ymf6NvYU311hvlzc?=
+ =?iso-8859-1?Q?bjiiRVwUovtwcn+Gk4ICGVmVq38Vs0GbjLvqL6wOW5yudguUFGT0tALNr5?=
+ =?iso-8859-1?Q?bJ57QLH58PXTTTRWCIHB/Nb7vSVIurl7lBrqK22e3fX4NuF6G6UjjkBomU?=
+ =?iso-8859-1?Q?qjNwltcCNCRvyUwOGdNHCLSHwtpcbEbqH6kdXFhULywIZLb7qd1Z/e1NCT?=
+ =?iso-8859-1?Q?Y+cZrb3XOx3jvuw82EFk7o0PQt+upIiHvfmI+LtxcH/O1sGNmujpBly81v?=
+ =?iso-8859-1?Q?AB36Q10pxX9H90FtQ7IkIrJRLOdn9D0QfKrGavavF8w4UJFYgIzJ5bVFeB?=
+ =?iso-8859-1?Q?Gn/qLWYfSATxfW0PgFk5mi4efW+3tZRF2VSyvw2OIU0OSVGmoRHv5+iA/n?=
+ =?iso-8859-1?Q?5QBlShv+qi0LEdkGLCMndfnL8hL/1Y2NHYuqJFjlmN9NE8C/MWAqi6ywhH?=
+ =?iso-8859-1?Q?dFhQEusBWBzQhTRCWoBBGasD+k6keP7QfW5Vhq2UtcWUOjm+4FYdKgHOHX?=
+ =?iso-8859-1?Q?8S2kdJ9ZSMD8ZEDl1299J4nB7ByhV56cr3adcbTCT31spCXilmwwzBgbf3?=
+ =?iso-8859-1?Q?7/d2Yj+wunUKTDdoPBD2tGCzitUqAZoafk0PNCfIfeDQT34TA5vyPm/9Xh?=
+ =?iso-8859-1?Q?zPGTYc7Wq97QOlXvtN2kt7thFw6UrFsp22gx7QOnGkPxu5DsMnvlNFMFkT?=
+ =?iso-8859-1?Q?/pGl+LVffntY9+tL5HPQjWuwVV+k8W33lPCA8Q=3D=3D?=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6129.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7053199007)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?Wu3MIQwPG1Rky/HM7vESLBBZW5oMzTyFV4Gp588wQRLKyedpydQrCRDQ4Z?=
+ =?iso-8859-1?Q?jWPYMkrsMJa8d6/na8q2gu1RXZDqSo1NGsveUc+mnf4k5ON8eSopBKqMmm?=
+ =?iso-8859-1?Q?jYiXd2GQjguLzMfGpXyXvkG6UN7TPkHYxbLMLlIane/p4s0K/N+OIx+u07?=
+ =?iso-8859-1?Q?VtPVlAsJwkj98ZC/My+0EzFI/Mf8YatvllbUnMtTTM1V21TpHGwVBVHMqM?=
+ =?iso-8859-1?Q?nOtAzN0BFpC3AwxoxVJMiVFxlo5a+iSlrFhW2yczXsE12WBl3tzLJstwbV?=
+ =?iso-8859-1?Q?it3XVvEiSKM30nRJ2s3Lm4BBoIg6ezuMr13mOT2MARHIUTLnXl+A+GI2Lk?=
+ =?iso-8859-1?Q?5rXvG0g1fPfQ5LXcq/7JL/KWeT87CcwzatMj+C9UihbpRCM7H/wX4pJ4S4?=
+ =?iso-8859-1?Q?wNpPANcy4YHAv8ZUTOH+FvYdtqGq4jXO2Yi0ae3ROxQV4qH9lmB0TwndEN?=
+ =?iso-8859-1?Q?wmb8Z6dJ6DOpuGnV34pkq31wAyG3X9WoZO8SHNUu/kpDzTZj8SbITIp00D?=
+ =?iso-8859-1?Q?NUTXsWOPu1j9n5t+sTIcA3fN6l809R++uXdIaA4+YJ+KFAX1kLoRIwoTGV?=
+ =?iso-8859-1?Q?GY1JUl9JyNF/mqvH5V0NDbTPvaHVGREq/VtmnOp7JOR/8r5jTzC7QoU7KW?=
+ =?iso-8859-1?Q?Q8XJFwx+3oLld8keEnqniVfIrSd1ljCPhJV5ToAfZVK1EfSdPqX6HO569/?=
+ =?iso-8859-1?Q?nJuo3Bein/KfpOx+dMSL4vYFNptjGtxQoop7eL0iImiWScPwXIQ2RD3hPS?=
+ =?iso-8859-1?Q?rzq7xGriC4sONmFVqDaV+/2usnuZFAa276/2pVTvH2hoBssxq9cYRd80ji?=
+ =?iso-8859-1?Q?CkbnsAdyCO2D10O2jbViorGn9dIr6smUhMLqjI1vg0wpckxS6o4I1WEtyG?=
+ =?iso-8859-1?Q?5zzKSTdgBinTFlOcAfdn/ICZD0FEMzWPts5/WkU6zbPEgiwLhaF+BE7QEn?=
+ =?iso-8859-1?Q?N2LGVl+zlux4kZtr332P9Qe/d958yGNlQtqpk0P5C2UhrGSC7z/0gDuIEJ?=
+ =?iso-8859-1?Q?kgGeU9RmCtWx9RyGnZGiG4Rr6XwmbCrkdeRyVxvzDN3Nq+NNtFgNhCEZcb?=
+ =?iso-8859-1?Q?ZgOeKhAHaSNVPrO4bxZzppWw5M6KmdLTJpsDSerPLvD3LaQ5uo8ZOUKoSR?=
+ =?iso-8859-1?Q?ErEORBHQzJQ2nr0z96FUyHXIz3dCQ/ZAIbPs/fYb7Mdtc7muANZSVrvbXZ?=
+ =?iso-8859-1?Q?tmZj4fBzJjkuJlWCKcBHpzdlHOJgU2oAgIzk3H9UkUVeQcfLg+rbfEkNqh?=
+ =?iso-8859-1?Q?pW6dvWLN2j6z9pbYV0/pC85nLB3MfTzqfEh/IdynnoRW3VwWOjr0Pu+czt?=
+ =?iso-8859-1?Q?3KAsTFwQ8HY3QwrdWWKHLHlJs3ouhX459ZeiFhAciuChdogfARSdFm47zy?=
+ =?iso-8859-1?Q?0NQl3h7rG55EavwFXvn5tT/M6Y0e8NkKwI8RSQAR+ZuL1X5o6CGVracEuM?=
+ =?iso-8859-1?Q?cRJcUgL8ttF/7BlkXXYhljvsTPPOCI+wdDw4SqSZYr7UCsYvZifRReUvt6?=
+ =?iso-8859-1?Q?Zoru0N95ronyP8AebaSGJf3neIMafjHxccQ3ShPWzwhM9FBYejG78xIrUC?=
+ =?iso-8859-1?Q?K7z4dIG0WZzvF1+aNG+2oi4CKM0xRMO+S+pMnNjOapHQbPyp3uwdH3oh1h?=
+ =?iso-8859-1?Q?Bvtg4YeDdZk1i7SsRCC9OPrAOIO5ZJEoU9ZDnZiL7M/4tH9NmrVhqLZw?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DU4PR04MB10435:EE_
-X-MS-Office365-Filtering-Correlation-Id: d4f9dc6e-b301-4ec4-3d81-08dd1421cd43
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|366016|52116014|1800799024|376014|38350700014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ITwXntoQ4HzqpBoG8wuHwm5SegPzZEJibmCP8Ev2XMr8MJ3vcaQ/hPsUy1VS?=
- =?us-ascii?Q?cFqnaqAoGcoMOz5pBTplfiFghyN5f5fQMv0zfGCMKeiinC7sRlBCTWkmYpww?=
- =?us-ascii?Q?I7bd6zYMMM7BPLGPpOJKaHCmwmr7v3GKhiyasenPECVXSxj9CAYa8dU9HA6B?=
- =?us-ascii?Q?ltn5UZckpQPzFDh6flJnuixxpZWamLIur0u312i24kWLihiEym8aFNd2pDvW?=
- =?us-ascii?Q?2IMgtwEGSxHTualbbiDH1zcOOYGlE2Q/F/al5VotVfeZQcbjcrGksB+pSGdz?=
- =?us-ascii?Q?lbox0hrDz9UsdzK9TZlNEF32O8fFwKdVuuAJkiXPUpMpao2b1KgJX2RH/GHW?=
- =?us-ascii?Q?KVMGDMsjYn2mbUNUEGS0wXostHtNZHxSufmHC9YBL2UFJTwsOkwm+VGNPNY2?=
- =?us-ascii?Q?aIVihw6g6CPQz+Ow1wJQUjjQ93jnt4lvzcg4h9bJfRHf1ehFJJGyYED3Hsie?=
- =?us-ascii?Q?rjOdG1FuyGWNRjVvI/8gP/LChcFwVtdXhuIydlIUhOzjiYRECpFvne5iGFTN?=
- =?us-ascii?Q?uXDZnoyvl5+HShf8H06vHGrLdRpCQ9o4C0+R+TNKhMMLhM16zwMDkkyDaEw0?=
- =?us-ascii?Q?MZA/9McrrwXWRjGOtzgkiQ3vQC4Ctrm9TSxfnJ4pMMr/uQv0k3tw5WJ8q9ea?=
- =?us-ascii?Q?KYP6Ee43vZzHZ978K6SjlkpJ7dUCw9+GKnjeRnbLzLTBpqS1MSB0074PcNQP?=
- =?us-ascii?Q?juOEimJsygblwlBphX2t/PJ5flVrqhP4ktp8b7aoAzhhKQdTPhhjCEWkfSVz?=
- =?us-ascii?Q?7SjgT7kH90XomJCSvjp4Go3HlBQsdUCXCdPTOvfo0FcIDlC222Y0Z8JzC+Qm?=
- =?us-ascii?Q?Px4gccoVSmHueJFDXtYu0+heC1R2kp+H/hVF4T8uVHfkKwi0B/IkOx06iH5m?=
- =?us-ascii?Q?frD7fKm89w6MLtMFiTccFi2JVgg3gZ8Gy5PLkKBhT5kI5B57AHqoH3kSnhEa?=
- =?us-ascii?Q?Dyx2CuSUAPeptJcszqNYa8lOZnRdedIlWiKv3n6/MIy8uyMeroJKHkK6Y5Yw?=
- =?us-ascii?Q?A0sdoI+jijGM6QiYtdBHYqUFaPJyzi70mrBzsDPO1+Df//3VAxSneV6qsZ1b?=
- =?us-ascii?Q?QqcqBF6gOoQKbHF7kbhn7KA94iFrd8dqJEgJltRfb4/X6KhGJfSdELpDXytb?=
- =?us-ascii?Q?GT+Q6jvS7X0MyFmUSaDIl+/0E8Q9pUsKaplyw6AH/MPgdPgvXabuLpXixK3Z?=
- =?us-ascii?Q?r56y/MA8GiqJhyWdS3/nPmiL79g/8rYeii9cb1ZNB702Rjneyj4Ui2gd68wu?=
- =?us-ascii?Q?FB+38ed+8EwYIiO4H6Smvd1DBs6SDNRPCdyBFIRfpnqXXcFZQurPXqr78SCT?=
- =?us-ascii?Q?kizGS3AJzfZ8h+Be0J1Y6PkSvQnGlUOrJfm9fUIOXOUutLiyJkpEx6PVqS5A?=
- =?us-ascii?Q?jjlmiguTND7gAv989VsDt9Ac/zMtUju0RK3sTcK36su1wkhRERupgRyLCjlN?=
- =?us-ascii?Q?LU27jlvbcq4=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(52116014)(1800799024)(376014)(38350700014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ExaJGOaTqKdtNsgz2q10NabFk6JAsXCyPF8eMfb2HYWF5pQj8GHZA8LPTakb?=
- =?us-ascii?Q?EwBTyMxT7an6UbwOE6GRaJO5ROkHM7lH4pfovjLUY4a3P/HsKNC/STqsAYwN?=
- =?us-ascii?Q?EBH6P+Rudxo/Izk2PNjnto6UrrKStL3Bq8OhKq35r+myKAzWvxcWk7/TcrKe?=
- =?us-ascii?Q?ocrgeQxXQvpVYhkLPLQ/kO4/9qiYL9CfW/yiyp4uLmC9wC2kkZ5TSzZu1Lcv?=
- =?us-ascii?Q?QxmEafU2cg4f7vlzQ6fZCLhnoconPjy5OBlr4i9oi/tH05Io8EbY4jHk7gip?=
- =?us-ascii?Q?eloGOTXnVjLQ2yq7tJQ1NHO0rogT5oFAupVrOuG4/ur7tcrLAzQpGRhJXdRV?=
- =?us-ascii?Q?bmc2J3lCNt4xQPj7NfMwV8sGrQ3bApovSLVd3vcHjbe14g7Dux0xAiQuEFSF?=
- =?us-ascii?Q?NMJw28pXZ20h9th2iMY81zoMa409BjGX+NQ6B6D4ztFR5jhRxYB7i6FvyN1o?=
- =?us-ascii?Q?xWm9wABIMOBvejxB8ZIH456sQADX2s1waHsXNImi4fO+DqIv+2fgk+pWeclS?=
- =?us-ascii?Q?grs/hteUwrNspZok3CHzbL6Z/7MrxBVlmdAtmu134FzCQDa2eUKX5pSjf4au?=
- =?us-ascii?Q?hH/Nd3IRmauB8gxzK3H1PaffIARQWIa1nmgZT8bzippUS7R8bg691FXp/CBN?=
- =?us-ascii?Q?4jUVL3vJet0Md3hRpF2NF/A67zuXARPs/yUQWZYMcI/svgIqa+XlR30T0Kne?=
- =?us-ascii?Q?wWuZdSdlfUXag49buotuFLYjUKcixRamXGfptpLA1/jDplC3jfbfVSL4ehq9?=
- =?us-ascii?Q?xNyoS/OvOptFsIxKnFliyZvMWxrM0g8XHiFTT2YO+33DlswSIQHtTZkwfyfa?=
- =?us-ascii?Q?jBuwZ0PeDvM+GnZ3NoqxPmgNOFazWzCNy8szZ3he0+phg4JLYFKzakwAkxRz?=
- =?us-ascii?Q?0MQ/ArHJsFMV5/6lsLAk2edtdPOOO2405obbZPjPprjogZya03kBoPXTDo8B?=
- =?us-ascii?Q?wbGEfXLu1Yz0GfAqzVdnwMsQqDvEc0Zz61U/mtJrRJlfd5bs4UkZqpF5FOxR?=
- =?us-ascii?Q?Q93bbEGM6pFu+6awgcBf1UNntGsqL5fGZeVWYzltO7FsrfvfjhK5XtrT2t2h?=
- =?us-ascii?Q?rc0twhYuccyyhItI6NZ6UoZ+WmbE4HZar3Ip0VsZI4RH9B4Pd3rf64rarJjX?=
- =?us-ascii?Q?QItnqcyyUOwEczguQc4WkFUwpg2PIWAX5LgXPbsvMlHUn6rg2KzKk0vlThpb?=
- =?us-ascii?Q?HP+xGQBWp3ZNdJW5n84ysYbdUWMc1+pcBdRaKRWAHZRjve4DYcff+u8GXSMC?=
- =?us-ascii?Q?I7bQm8EbNUsU8+bbBLBXswMQxTpmHiRwBBxj/6s9f+M80hEft+Kiixl5B6Zx?=
- =?us-ascii?Q?tJVyGgnqj6ZQIIMDb2sPq3qe56fZzyUaHNt9CpjroYN8ZhxZnoMf1870hxNL?=
- =?us-ascii?Q?LfiDpZNhlXreGlN7IDFRXs0GYmARFh6ssajHJEiBtSxYorpl489SsCD+XSNk?=
- =?us-ascii?Q?aiBlvmdH7AHQztRgBRnqBQuRxET2aey6MLVcEy+A7QVGHJW812fmY3njSRuj?=
- =?us-ascii?Q?wiuyNvr45vefeCb4dkaFmxgu0TtftB/MME83pmNk+cXS/wU9WIASev/N3F+j?=
- =?us-ascii?Q?Ft1IWMN7GYigb7J/Ar1uF1vLyjzzQQqHPFLtmfmy?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d4f9dc6e-b301-4ec4-3d81-08dd1421cd43
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Dec 2024 05:09:16.9297
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6129.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e7ae8d1-439f-4e04-a47a-08dd14272203
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Dec 2024 05:47:26.3225
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AroEbNZfXS5yLnDkBvntTuEkH6kS6aVd1t+niW5dheDolGpJ5/sLLhrx/PhHssWy67/mOJf4x+Uhrc70OWfVNw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU4PR04MB10435
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GKmAK6j4M1eWuCT7ryDz8C5tvv/ZYf9D3e7qFV798TVxIeZ0h+Dm2lPshlOchT6S1ems5OwSW8GJ9v5qKUWbPsDP8QbLslXZtQqrqw4BLbk=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR11MB6984
+X-OriginatorOrg: intel.com
 
-This board has one Type-C port which has USB3 capability. This will
-add typec nodes and enable usb3 node.
+> -----Original Message-----
+> From: De Marchi, Lucas <lucas.demarchi@intel.com>
+> Sent: Wednesday, December 4, 2024 1:30 AM
+> To: linux-usb@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org; Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org>; Heikki Krogerus
+> <heikki.krogerus@linux.intel.com>; intel-xe@lists.freedesktop.org; intel-
+> gfx@lists.freedesktop.org; Thomas Wei=DFschuh <linux@weissschuh.net>;
+> Borah, Chaitanya Kumar <chaitanya.kumar.borah@intel.com>; Luca Coelho
+> <luca@coelho.fi>; De Marchi, Lucas <lucas.demarchi@intel.com>
+> Subject: [PATCH] usb: typec: ucsi: Fix connector status writing past buff=
+er size
+>=20
+> Similar to commit 65c4c9447bfc ("usb: typec: ucsi: Fix a missing bits to =
+bytes
+> conversion in ucsi_init()"), there was a missing conversion from bits to =
+bytes.
+> Here the outcome is worse though: since the value is lower than
+> UCSI_MAX_DATA_LENGTH, instead of bailing out with an error, it writes pas=
+t
+> the buffer size.
+>=20
+> The error is then seen in other places like below:
+>=20
+> 	Oops: general protection fault, probably for non-canonical address
+> 0x891e812cd0ed968: 0000 [#1] PREEMPT SMP NOPTI
+> 	CPU: 3 UID: 110 PID: 906 Comm: prometheus-node Not tainted
+> 6.13.0-rc1-xe #1
+> 	Hardware name: Intel Corporation Lunar Lake Client Platform/LNL-M
+> LP5 RVP1, BIOS LNLMFWI1.R00.3222.D84.2410171025 10/17/2024
+> 	RIP: 0010:power_supply_get_property+0x3e/0xe0
+> 	Code: 85 c0 7e 4f 4c 8b 07 89 f3 49 89 d4 49 8b 48 20 48 85 c9 74 72
+> 49 8b 70 18 31 d2 31 c0 eb 0b 83 c2 01 48 63 c2 48 39 c8 73 5d <3b> 1c 86=
+ 75
+> f0 49 8b 40 28 4c 89 e2 89 de ff d0 0f 1f 00 5b 41 5c
+> 	RSP: 0018:ffffc900017dfa50 EFLAGS: 00010246
+> 	RAX: 0000000000000000 RBX: 0000000000000011 RCX:
+> c963b02c06092008
+> 	RDX: 0000000000000000 RSI: 0891e812cd0ed968 RDI:
+> ffff888121dd6800
+> 	RBP: ffffc900017dfa68 R08: ffff88810a4024b8 R09: 0000000000000000
+> 	R10: 0000000000000000 R11: 0000000000000000 R12:
+> ffffc900017dfa78
+> 	R13: ffff888121dd6800 R14: ffff888138ad2c00 R15: ffff88810c57c528
+> 	FS:  00007713a2ffd6c0(0000) GS:ffff88846f380000(0000)
+> knlGS:0000000000000000
+> 	CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> 	CR2: 000000c0004b1000 CR3: 0000000121ce8003 CR4:
+> 0000000000f72ef0
+> 	DR0: 0000000000000000 DR1: 0000000000000000 DR2:
+> 0000000000000000
+> 	DR3: 0000000000000000 DR6: 00000000ffff07f0 DR7:
+> 0000000000000400
+> 	PKRU: 55555554
+> 	Call Trace:
+> 	 <TASK>
+> 	 ? show_regs+0x6c/0x80
+> 	 ? die_addr+0x37/0xa0
+> 	 ? exc_general_protection+0x1c1/0x440
+> 	 ? asm_exc_general_protection+0x27/0x30
+> 	 ? power_supply_get_property+0x3e/0xe0
+> 	 power_supply_hwmon_read+0x50/0xe0
+> 	 hwmon_attr_show+0x46/0x170
+> 	 dev_attr_show+0x1a/0x70
+> 	 sysfs_kf_seq_show+0xaa/0x120
+> 	 kernfs_seq_show+0x41/0x60
+>=20
+> Just use the buffer size as argument to fix it.
+>=20
+> Fixes: 226ff2e681d0 ("usb: typec: ucsi: Convert connector specific comman=
+ds
+> to bitmaps")
+> Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
 
-Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+Tested-by: Chaitanya Kumar Borah <chaitanya.kumar.borah@intel.com>
 
----
-Changes in v2:
- - no changes
-Changes in v3:
- - no changes
-Changes in v4:
- - no changes
-Changes in v5:
- - correct nodes order
-Changes in v6:
- - rebase to latest
-Changes in v7:
- - no changes
-Changes in v8:
- - no changes
-Changes in v9:
- - add tunning param for usb3_phy
-Changes in v10:
- - move orientation-switch from dtsi
- - rebase to latest
-Changes in v11:
- - no changes
----
- .../boot/dts/freescale/imx95-19x19-evk.dts    | 83 +++++++++++++++++++
- 1 file changed, 83 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts b/arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts
-index 6086cb7fa5a0..68b2ae091279 100644
---- a/arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts
-+++ b/arch/arm64/boot/dts/freescale/imx95-19x19-evk.dts
-@@ -6,6 +6,7 @@
- /dts-v1/;
- 
- #include <dt-bindings/pwm/pwm.h>
-+#include <dt-bindings/usb/pd.h>
- #include "imx95.dtsi"
- 
- #define FALLING_EDGE			1
-@@ -308,6 +309,48 @@ i2c7_pcal6524: i2c7-gpio@22 {
- 		interrupt-parent = <&gpio5>;
- 		interrupts = <16 IRQ_TYPE_LEVEL_LOW>;
- 	};
-+
-+	ptn5110: tcpc@50 {
-+		compatible = "nxp,ptn5110", "tcpci";
-+		reg = <0x50>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_typec>;
-+		interrupt-parent = <&gpio5>;
-+		interrupts = <14 IRQ_TYPE_LEVEL_LOW>;
-+
-+		typec_con: connector {
-+			compatible = "usb-c-connector";
-+			label = "USB-C";
-+			power-role = "dual";
-+			data-role = "dual";
-+			try-power-role = "sink";
-+			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
-+			sink-pdos = <PDO_FIXED(5000, 0, PDO_FIXED_USB_COMM)>;
-+			op-sink-microwatt = <0>;
-+			self-powered;
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					typec_con_hs: endpoint {
-+						remote-endpoint = <&usb3_data_hs>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					typec_con_ss: endpoint {
-+						remote-endpoint = <&usb3_data_ss>;
-+					};
-+				};
-+			};
-+		};
-+	};
- };
- 
- &lpuart1 {
-@@ -390,6 +433,40 @@ &sai3 {
- 	status = "okay";
- };
- 
-+&usb3 {
-+	status = "okay";
-+};
-+
-+&usb3_dwc3 {
-+	dr_mode = "otg";
-+	hnp-disable;
-+	srp-disable;
-+	adp-disable;
-+	usb-role-switch;
-+	role-switch-default-mode = "peripheral";
-+	snps,dis-u1-entry-quirk;
-+	snps,dis-u2-entry-quirk;
-+	status = "okay";
-+
-+	port {
-+		usb3_data_hs: endpoint {
-+			remote-endpoint = <&typec_con_hs>;
-+		};
-+	};
-+};
-+
-+&usb3_phy {
-+	fsl,phy-tx-preemp-amp-tune-microamp = <600>;
-+	orientation-switch;
-+	status = "okay";
-+
-+	port {
-+		usb3_data_ss: endpoint {
-+			remote-endpoint = <&typec_con_ss>;
-+		};
-+	};
-+};
-+
- &usdhc1 {
- 	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
- 	pinctrl-0 = <&pinctrl_usdhc1>;
-@@ -624,6 +701,12 @@ IMX95_PAD_SD2_RESET_B__GPIO3_IO_BIT7		0x31e
- 		>;
- 	};
- 
-+	pinctrl_typec: typecgrp {
-+		fsl,pins = <
-+			IMX95_PAD_GPIO_IO34__GPIO5_IO_BIT14			0x31e
-+		>;
-+	};
-+
- 	pinctrl_usdhc2_gpio: usdhc2gpiogrp {
- 		fsl,pins = <
- 			IMX95_PAD_SD2_CD_B__GPIO3_IO_BIT0		0x31e
--- 
-2.34.1
+> ---
+>  drivers/usb/typec/ucsi/ucsi.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.=
+c index
+> c435c0835744a..69caae84879e9 100644
+> --- a/drivers/usb/typec/ucsi/ucsi.c
+> +++ b/drivers/usb/typec/ucsi/ucsi.c
+> @@ -651,7 +651,8 @@ static void ucsi_unregister_altmodes(struct
+> ucsi_connector *con, u8 recipient)  static int ucsi_get_connector_status(=
+struct
+> ucsi_connector *con, bool conn_ack)  {
+>  	u64 command =3D UCSI_GET_CONNECTOR_STATUS |
+> UCSI_CONNECTOR_NUMBER(con->num);
+> -	size_t size =3D min(UCSI_GET_CONNECTOR_STATUS_SIZE,
+> UCSI_MAX_DATA_LENGTH(con->ucsi));
+> +	size_t size =3D min(sizeof(con->status),
+> +			  UCSI_MAX_DATA_LENGTH(con->ucsi));
+>  	int ret;
+>=20
+>  	ret =3D ucsi_send_command_common(con->ucsi, command, &con-
+> >status, size, conn_ack);
+> --
+> 2.47.0
 
 
