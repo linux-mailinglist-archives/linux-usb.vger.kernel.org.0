@@ -1,112 +1,131 @@
-Return-Path: <linux-usb+bounces-18152-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18153-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A02509E4F67
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 09:10:48 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F0C9E4F84
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 09:16:23 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6964B167DC8
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 08:10:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70F1D2866F5
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 08:16:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 642FA1D2F50;
-	Thu,  5 Dec 2024 08:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9D361D4348;
+	Thu,  5 Dec 2024 08:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FpPs2GWb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WIgPuRN4"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8290A19645D;
-	Thu,  5 Dec 2024 08:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 362461D364C;
+	Thu,  5 Dec 2024 08:16:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733386229; cv=none; b=Q0C3uIbdHa90lrx7uDALFG5WrGe3826jY5SIwyYlC0lv8v40nqQSkfCnnNDbnR9hE7iP9KFkx/VoC37KI9EK5U/TkNz7tny2PAgEBMqsFGefV9Lhh4PZP6TkoRDIFm1H+6hGz1xXgCUAFkXeiTKR3S/Njz8wGudLR2CODozd044=
+	t=1733386567; cv=none; b=j/aR3Pe4rzwdBmve8mGNdRZXaMYYlFqVqDIq2oYQWEXzIkXL3LmK4jCge4o59FmlPa3Ci0+Q/wfTzR8y7fC/3Y2MSwwOi8IplElNDNVsAUVM2DSe2RUZXMDjrgxDWPLkvXuVU1vLSe7aMf6UWp/8W9SC16obwGwd5/2cnJXXbk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733386229; c=relaxed/simple;
-	bh=dm+XaarJmRd4PNMM8493FEpsyQu1VayQlRTan4XCkBA=;
+	s=arc-20240116; t=1733386567; c=relaxed/simple;
+	bh=3FQdoGHbtK4vxVzpu1LkgtvENvTPq08yLxgUVs8oYPw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pLdZXHgoEBmit39Ln2LBdxYBUkhf1ffVUZbDQEmM8/TZfYQnYcUjp8kH160b8YGvLY9m7oAHS8HkLQlp8WkZvO0pzqscwkbl+iF1ri9ne5VHqD2lQUwehh+LBsCUvEowJuidvPi5Zj+/z7Wg5fn/E5ZN2AW61EarJ8o4fTWzTc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FpPs2GWb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39BB7C4CED1;
-	Thu,  5 Dec 2024 08:10:28 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=kMt7nWh3iHSQRX5vu0erW1to8CGj/6Etu8KcmQ0zAloI6hzSbsIWW59h+lFLAE4sbO4gZ+QcRECpP2Rm5ExxRHjXlCghTSaqM5rS/f0gDLpq6nEFa8rYQgMWsPJF2MIZQxT8/4mtiPPoNJlnReg+7nWha+5gWW/5O5QbgxX8aSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WIgPuRN4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A770FC4CEE1;
+	Thu,  5 Dec 2024 08:16:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733386229;
-	bh=dm+XaarJmRd4PNMM8493FEpsyQu1VayQlRTan4XCkBA=;
+	s=k20201202; t=1733386565;
+	bh=3FQdoGHbtK4vxVzpu1LkgtvENvTPq08yLxgUVs8oYPw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FpPs2GWbGgUz5ytJZ+QuBg7XSizF7MBLb5wQ47CrA74Do8i70h2t2SfmkVVxQxJwp
-	 RFeHBA6N+1cKlVI8Shsh2lySUArR5RSI6914U1xBrr+bvhH7rr7cEdzsA4Rgi1d66U
-	 zkLJI2jbu5xXvGwGUD8mz6V+6eqzicBTjawuRRljctphJ44a5cfQaamr4YGrDaX/zh
-	 IbgvB4IO9782E6ZkMrskDL8DfFasy49Ius/Vc5afr1384a7Ak3SKFeTCK94J8odFfT
-	 MaHtfcFW9mpHPKOXqE35SDPO05JukSUMC0SYTE1DD/M4FAoBDI7at285cpbtMDTdO+
-	 RFuFFL23OJDcA==
-Date: Thu, 5 Dec 2024 09:10:25 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Zijun Hu <zijun_hu@icloud.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
-	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev, linux-sound@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-block@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-mediatek@lists.infradead.org, linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	open-iscsi@googlegroups.com, linux-usb@vger.kernel.org, linux-serial@vger.kernel.org, 
-	netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-Subject: Re: [PATCH v3 08/11] gpio: sim: Remove gpio_sim_dev_match_fwnode()
-Message-ID: <7ugfaj2h3sy77jpaadco5xtjalnten3gmvozowcle3g7zcdqs4@sqf5l47onbsi>
-References: <20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com>
- <20241205-const_dfc_done-v3-8-1611f1486b5a@quicinc.com>
+	b=WIgPuRN4Xrn4bkadyn8DMZ/h9U0a9wSzY3HJyFpYa9fMErDpJhXWuK5tEdnuPwttX
+	 vNNF7fxByZr7Kzh1eASsFa5nHv5yWVyuqm+4YxRXxxR7n6zFl+hUygtRpzK1ZMfPPv
+	 YJmPFtytJInKofdzmnJWlzc1UVBpZA+sSpHGCYXKL36zGudTTEtLKHvcDaLBaJOVPc
+	 IkrpmJ6BaiFkGyqBn/tlANtL/q2emfE+0pNNqupvwUozTQTttLRqTx4kVRvSO0OZtB
+	 cgivhs/DQ/b4rTIaYHfMg/0lcOccEqXeRjEJZvBYDyMLdqVMxqw2HpWxvRYPQU+gT7
+	 9X/aiHpEdGHeg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tJ71n-000000007QL-2hW1;
+	Thu, 05 Dec 2024 09:16:04 +0100
+Date: Thu, 5 Dec 2024 09:16:03 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Cc: Stephan Gerhold <stephan.gerhold@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, linux-arm-msm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Abel Vesa <abel.vesa@linaro.org>,
+	Krishna Kurapati <quic_kriskura@quicinc.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/2] arm64: dts: qcom: x1e80100-crd: Add USB multiport
+ fingerprint reader
+Message-ID: <Z1FhQ3OUI0t3k1_q@hovoldconsulting.com>
+References: <20241118-x1e80100-crd-fp-v1-0-ec6b553a2e53@linaro.org>
+ <20241118-x1e80100-crd-fp-v1-1-ec6b553a2e53@linaro.org>
+ <Z07bgH5vVk44zuEH@hovoldconsulting.com>
+ <d095ae2a-3f9d-464c-9dc8-a3e73eac6598@oss.qualcomm.com>
+ <98b2b88b-9690-44a7-9b22-2f23e6606e82@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ya6wyfjwhlqhd5wu"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241205-const_dfc_done-v3-8-1611f1486b5a@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <98b2b88b-9690-44a7-9b22-2f23e6606e82@oss.qualcomm.com>
 
+On Thu, Dec 05, 2024 at 01:32:29PM +0530, Krishna Kurapati wrote:
+> On 12/3/2024 6:45 PM, Krishna Kurapati wrote:
+> > On 12/3/2024 3:50 PM, Johan Hovold wrote:
+> >> On Mon, Nov 18, 2024 at 11:34:29AM +0100, Stephan Gerhold wrote:
 
---ya6wyfjwhlqhd5wu
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 08/11] gpio: sim: Remove gpio_sim_dev_match_fwnode()
-MIME-Version: 1.0
+> >>> +&usb_mp_dwc3 {
+> >>> +    /* Limit to USB 2.0 and single port */
+> >>> +    maximum-speed = "high-speed";
+> >>> +    phys = <&usb_mp_hsphy1>;
+> >>> +    phy-names = "usb2-1";
+> >>> +};
+> >>
+> >> The dwc3 driver determines (and acts on) the number of ports based on
+> >> the port interrupts in DT and controller capabilities.
+> >>
+> >> I'm not sure we can (should) just drop the other HS PHY and the SS PHYs
+> >> that would still be there in the SoC (possibly initialised by the boot
+> >> firmware).
+> > 
+> > The DWC3 core driver identifies number of ports based on xHCI registers. 
+> > The QC Wrapper reads this number via interrupts. But these two values 
+> > are independent of each other. The core driver uses these values to 
+> > identify and manipulate phys. Even if only one HS is given in multiport 
+> > it would be sufficient if the name is "usb2-1". If the others are 
+> > missing, those phys would be read by driver as NULL and any ops to phys 
+> > would be NOP.
 
-On Thu, Dec 05, 2024 at 08:10:17AM +0800, Zijun Hu wrote:
-> From: Zijun Hu <quic_zijuhu@quicinc.com>
->=20
-> gpio_sim_dev_match_fwnode() is a simple wrapper of device_match_fwnode()
-> Remvoe the unnecessary wrapper.
->=20
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> ---
->  drivers/gpio/gpio-sim.c | 7 +------
+No, the core driver still acts on these ports (to some extent) even if
+there is no PHY specified (e.g. updates DWC3_GUSB2PHYCFG on suspend).
 
-I think if you move this patch before patch #4 in your series, you only
-have to touch this file once.
+And IIRC I even had to specify more than just the fingerprint reader PHY
+on the X13s to get it to enumerate. I never had time to fully determine
+why this was the case though.
 
-Best regards
-Uwe
+> However do we need to reduce the number of interrupts used in DTS ?
+> We don't need to give all interrupts as there is only one port present.
+> We don't want to enable all interrupts when ports are not exposed.
 
---ya6wyfjwhlqhd5wu
-Content-Type: application/pgp-signature; name="signature.asc"
+No, the interrupts are still there, wired up in the SoC, so we should
+not change that.
 
------BEGIN PGP SIGNATURE-----
+With runtime PM eventually enabled and working as it should, the OS
+should be able to power down any unused ports. And we could also
+consider marking some ports as not physically accessible and not
+connected as a further hint to the OS that they can be disabled even
+sooner.
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdRX+8ACgkQj4D7WH0S
-/k6rewf+KsN2Irmv5Td5FMMxi+83vZgDfjxwj+eoLUlf72jMXWx89mPqbHAWyq2W
-DVJONM/HQoPhG9ILJDxvkaVLetBPRY7QPBSVY8bMUaDT9ljXmnbxed/NGNngiATy
-r1JyYMzf3dqlGSgJl6LhRpugodssXbGiDv8oVNRtLIHFd5MLH+xlUr0CFu0KsPSd
-E4NADLSFAkpDIDer3BYt19RGkXNgCrbqzP8rfGN50Q9t+xuS58qoK2oY5+jzT11a
-qccGFlDCzdaHWCVsLHVwXYWN2L5mxrrm09Dv8aS/0TcFMueK4nsasVRpUAplw+Gd
-j791qtNhdb4QQUhbiOamc5BP/g6LvQ==
-=1ED3
------END PGP SIGNATURE-----
-
---ya6wyfjwhlqhd5wu--
+Johan
 
