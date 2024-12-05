@@ -1,125 +1,135 @@
-Return-Path: <linux-usb+bounces-18165-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18166-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A48D79E5668
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 14:19:39 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F2FD1883558
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 13:19:38 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76035218E92;
-	Thu,  5 Dec 2024 13:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="IN6sqLn/"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from pv50p00im-tydg10021701.me.com (pv50p00im-tydg10021701.me.com [17.58.6.54])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36AF69E573E
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 14:33:37 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A286214A68
-	for <linux-usb@vger.kernel.org>; Thu,  5 Dec 2024 13:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.54
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E94C328541A
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 13:33:35 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62F24218E8B;
+	Thu,  5 Dec 2024 13:33:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="XAvpQWug"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47F1C218AB8;
+	Thu,  5 Dec 2024 13:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733404770; cv=none; b=TIxJqkw8ALWOR6HmHgfm2cJJtrxgJrPccLXhrSDlxN/V/C9Z5Qyugl8jVRqLg1/uZhKNc7dq7/mcG/fGhYVNR3+FOwHpPdcgftraRTM/7lLxoN1Gq/v/9Odblc54ZP4t6OmUjGA9ZmN0QusVyFED5DDxsNdAAp63gM+buIBSLtE=
+	t=1733405609; cv=none; b=OmYdIZwOzC4DPNyESTHI0euUZkl2g7tSQasseFZx2M4hp3INSh+4paLHBfGWl1MIxLMgBcFBWclcJJ5/EDooCH+WprWPy7dqOTaLLoQqOfn61EmIS4feLlcYhZp0uOPzq/RJYITI0h6ZPxgO9/AvuKeINdHubQ3uqhmrAn4k8TM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733404770; c=relaxed/simple;
-	bh=Y8SH9YRW4Y+tbLnxz2fC5g3ZDI0vc4mItkQNyvm6VZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zerx/feZlLf5oLxE9CQdOXXh2nqUl4cG5RilVWZ4Z/PVjvth9b2BkLWiwFl32Qp3jUcEGrxHpEB52Rtcz5ZFvEQqYvb/E/vUjFGRHEnv2RnLlVPYWxBXSPA/y03+qVdzUeMp3KdKYwCJ8jbcRjR3SMHWSaBL+fY9AbAg3vXLPDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=IN6sqLn/; arc=none smtp.client-ip=17.58.6.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1733404763;
-	bh=DeIIq7By5hb3j6D6u79xafAimRNm6W+G83In10fjfT4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
-	 x-icloud-hme;
-	b=IN6sqLn/x5OCaqJO4vF5gn/fcjmZc3fZlyeytDMJnKp7XQ3de7PoFnmqSe0zeC9a5
-	 vUwI0Tptt7E+4Q3DWUqdgUpD0xOI9lBpQ4RQvwZlnJGvBh2ctgzycf7q159ExifH7K
-	 a8AIRvkTNSgebMbC7lLYAk5B4kjmGYrIRQclMfECHJrJ1+KGG+jAbVUk+xSHPoDbnh
-	 1e9j8QEBXLJX5ZxwWzRD/5Q41qX+s8eZZmLJoAKcnBcHGPNxbbfWDhHq6Q/v1949Vm
-	 rVciEGx0K4GT+eFIHW+pi7hnAXPVyGUzlxkEJ6XEG1lJhoSlPxkPp1AOo8we43GZSE
-	 xVpU9Q2Rr6i5g==
-Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-tydg10021701.me.com (Postfix) with ESMTPSA id C58AC3A1052;
-	Thu,  5 Dec 2024 13:19:06 +0000 (UTC)
-Message-ID: <f150fd45-7f84-4036-aa0e-32bd04fbeb67@icloud.com>
-Date: Thu, 5 Dec 2024 21:19:02 +0800
+	s=arc-20240116; t=1733405609; c=relaxed/simple;
+	bh=lczAqVQfpP9AYgOE79ExuSe2liZMUmXcyvl2haixi/M=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cQA61lkqN6vq+ET81FgGrbWtDtgr4SmfO0Dm1vAdLspuvo7kDtQ8357OyKGoF8O0KNbaAQ2bI/EmD53+VQkHO0D9MDnUoGZbJ6KKC9PQKDNpwnkObUo7j93dSGBFBW1gjr7dEiMc7OxDqeK33S6yZEJjBu/PK/YlKho+ZUpkW78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=XAvpQWug; arc=none smtp.client-ip=83.149.199.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
+Received: from ldvnode.intra.ispras.ru (unknown [10.10.2.153])
+	by mail.ispras.ru (Postfix) with ESMTPSA id BA1C840762DC;
+	Thu,  5 Dec 2024 13:33:15 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru BA1C840762DC
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+	s=default; t=1733405595;
+	bh=j0BGhnmGhO8DhdcdiITa7Hz70d0+hDipGh+uz2C2l9U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=XAvpQWug+JRVbPPJSkYq6+qysJM9+WgBEyCqlgmJUP7WZBVmXZ+JraFosMDtxIHZg
+	 Ns6vK67zdrr6Y4VssMzWHcn34mD0yNygqbga0dqZQnzZlfxZuGSsKBPMxkqiv/KVKK
+	 e2XL21Y/VDaUxYwVuj+tM6mx43Sm9mtAKzNhS+Sw=
+From: Vitalii Mordan <mordan@ispras.ru>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Vitalii Mordan <mordan@ispras.ru>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Deepak Saxena <dsaxena@linaro.org>,
+	Manjunath Goudar <manjunath.goudar@linaro.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Fedor Pchelkin <pchelkin@ispras.ru>,
+	Alexey Khoroshilov <khoroshilov@ispras.ru>,
+	Vadim Mutilin <mutilin@ispras.ru>,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: ohci-spear: fix call balance of sohci_p->clk handling routines
+Date: Thu,  5 Dec 2024 16:33:00 +0300
+Message-Id: <20241205133300.884353-1-mordan@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 08/11] gpio: sim: Remove gpio_sim_dev_match_fwnode()
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
- quic_zijuhu <quic_zijuhu@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- James Bottomley <James.Bottomley@hansenpartnership.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
- linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
- linux-sound@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
- linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org,
- linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
- linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-serial@vger.kernel.org, netdev@vger.kernel.org
-References: <20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com>
- <20241205-const_dfc_done-v3-8-1611f1486b5a@quicinc.com>
- <7ugfaj2h3sy77jpaadco5xtjalnten3gmvozowcle3g7zcdqs4@sqf5l47onbsi>
- <ac42e652-4128-44ea-976e-5234360d8183@quicinc.com>
- <eyu7nm5hvwfqxgysnrzsvianzf7abvlovpxfo7snsxowmuuhpj@tah3gkqm5ldj>
-Content-Language: en-US
-From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <eyu7nm5hvwfqxgysnrzsvianzf7abvlovpxfo7snsxowmuuhpj@tah3gkqm5ldj>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: 2qHgOEYCHFJo6csSrQf0NeEl1TvG8_uZ
-X-Proofpoint-ORIG-GUID: 2qHgOEYCHFJo6csSrQf0NeEl1TvG8_uZ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-05_11,2024-12-05_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=736 spamscore=0
- phishscore=0 clxscore=1011 suspectscore=0 mlxscore=0 malwarescore=0
- bulkscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2412050096
 
-On 2024/12/5 18:37, Uwe Kleine-König wrote:
-> On Thu, Dec 05, 2024 at 04:37:08PM +0800, quic_zijuhu wrote:
->> On 12/5/2024 4:10 PM, Uwe Kleine-König wrote:
->>> On Thu, Dec 05, 2024 at 08:10:17AM +0800, Zijun Hu wrote:
->>>> From: Zijun Hu <quic_zijuhu@quicinc.com>
->>>>
->>>> gpio_sim_dev_match_fwnode() is a simple wrapper of device_match_fwnode()
->>>> Remvoe the unnecessary wrapper.
-> 
-> Just spotted: s/Remvoe/Remove/
-> 
+If the clock sohci_p->clk was not enabled in spear_ohci_hcd_drv_probe,
+it should not be disabled in any path.
 
-this typo error is my mistake, will correct it.
+Conversely, if it was enabled in spear_ohci_hcd_drv_probe, it must be disabled
+in all error paths to ensure proper cleanup.
 
->>>> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
->>>> ---
->>>>  drivers/gpio/gpio-sim.c | 7 +------
->>>
->>> I think if you move this patch before patch #4 in your series, you only
->>> have to touch this file once.
->>
->> the precondition of this change is patch #4, it will have building error
->> if moving it before #4.
->>
->> actually, we can only do simplifications with benefits brought by #4.
-> 
-> Ah I see. I thought that device_match_fwnode only got the const for the
-> 2nd parameter in patch #4.
-> 
-> Best regards
-> Uwe
+The check inside spear_ohci_hcd_drv_resume() actually doesn't prevent
+the clock to be unconditionally disabled later during the driver removal but
+it is still good to have the check at least so that the PM core would duly
+print the errors in the system log. This would also be consistent with
+the similar code paths in ->resume() functions of other usb drivers, e.g. in
+exynos_ehci_resume().
+
+Found by Linux Verification Center (linuxtesting.org) with Klever.
+
+Fixes: 1cc6ac59ffaa ("USB: OHCI: make ohci-spear a separate driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+---
+ drivers/usb/host/ohci-spear.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/host/ohci-spear.c b/drivers/usb/host/ohci-spear.c
+index 993f347c5c28..6f6ae6fadfe5 100644
+--- a/drivers/usb/host/ohci-spear.c
++++ b/drivers/usb/host/ohci-spear.c
+@@ -80,7 +80,9 @@ static int spear_ohci_hcd_drv_probe(struct platform_device *pdev)
+ 	sohci_p = to_spear_ohci(hcd);
+ 	sohci_p->clk = usbh_clk;
+ 
+-	clk_prepare_enable(sohci_p->clk);
++	retval = clk_prepare_enable(sohci_p->clk);
++	if (retval)
++		goto err_put_hcd;
+ 
+ 	retval = usb_add_hcd(hcd, irq, 0);
+ 	if (retval == 0) {
+@@ -103,8 +105,7 @@ static void spear_ohci_hcd_drv_remove(struct platform_device *pdev)
+ 	struct spear_ohci *sohci_p = to_spear_ohci(hcd);
+ 
+ 	usb_remove_hcd(hcd);
+-	if (sohci_p->clk)
+-		clk_disable_unprepare(sohci_p->clk);
++	clk_disable_unprepare(sohci_p->clk);
+ 
+ 	usb_put_hcd(hcd);
+ }
+@@ -137,12 +138,15 @@ static int spear_ohci_hcd_drv_resume(struct platform_device *dev)
+ 	struct usb_hcd *hcd = platform_get_drvdata(dev);
+ 	struct ohci_hcd	*ohci = hcd_to_ohci(hcd);
+ 	struct spear_ohci *sohci_p = to_spear_ohci(hcd);
++	int ret;
+ 
+ 	if (time_before(jiffies, ohci->next_statechange))
+ 		msleep(5);
+ 	ohci->next_statechange = jiffies;
+ 
+-	clk_prepare_enable(sohci_p->clk);
++	ret = clk_prepare_enable(sohci_p->clk);
++	if (ret)
++		return ret;
+ 	ohci_resume(hcd, false);
+ 	return 0;
+ }
+-- 
+2.25.1
 
 
