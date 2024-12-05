@@ -1,128 +1,108 @@
-Return-Path: <linux-usb+bounces-18162-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18163-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FBFA9E52C3
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 11:44:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5094A9E541C
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 12:39:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49C68169DCE
-	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 10:43:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2AE7816406B
+	for <lists+linux-usb@lfdr.de>; Thu,  5 Dec 2024 11:39:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A62B0202C5E;
-	Thu,  5 Dec 2024 10:42:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F05FE20764F;
+	Thu,  5 Dec 2024 11:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VnMLmm3t"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fW3c0cb4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC7E81D63C7;
-	Thu,  5 Dec 2024 10:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C54A5206F3A
+	for <linux-usb@vger.kernel.org>; Thu,  5 Dec 2024 11:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733395320; cv=none; b=Q+bdYvbVHfK5izp5vVwzXUbLwdp206/jX08VmwRn1JljuzKBzAby/0d3rOe9gDEUJtW7pkCYr/3nfq1j4spwfYmrfgTy9o27twMsPuDkggzVRuKjjIZA9/xEO5IPZ/NOF0PhqqpCF4RD+x/CNitcKj+9QM/JfgPtsN+AuN3n8Wo=
+	t=1733398764; cv=none; b=pLzhibxWUa+A+t/XWZI3VrBUbsoloMxuQk4S/gc1JwZ5UplEr16RE5FsjaECe7afzbFh/UsRILniSOO5FHfVmsx6RwNnR7lBOgnMF+kr/N/+j3owOnzRk12spfzF/f29IEIG48g/O/kZKrztgYSOQuuFuizJ9X81hCNgzY2SeHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733395320; c=relaxed/simple;
-	bh=NZpLIj+aF6yV18wyiV+hZZsvH1NLZeOx7bLmfti8dgM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jCI9FrCK1VolvGDDZF4jeniyUIGQJAs2fyqalzv26BVCawgEzBN9F3DsziPVUT5euLx1agvK+uiPgDTVVwnZ29k/wvMXcShqas862dywiD+B9FtuQyO+2ttuWcKzTBadFdtqHkmga2CqUnXArfKX713jAIfxJWoEEBY2Xx0ko5s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VnMLmm3t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C73D7C4CED1;
-	Thu,  5 Dec 2024 10:41:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733395319;
-	bh=NZpLIj+aF6yV18wyiV+hZZsvH1NLZeOx7bLmfti8dgM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VnMLmm3tlYwB1Ys4r5Vn/PjbwurVtHQJbu2Sp9+upCl8vyYMiKZJtRNZi9p41s3dd
-	 +QwXcCDWaVNsFDd7tYDQKJycBt3wIkC592WOq5c2OCWOox4WrIqAu/bKBeyRsi9N93
-	 T1aLVwyzqHihZ94hruw1akFGxr+cDy3yHC2zrIbMFU3LuOjZrbl8eYf2Xf9teq8jxz
-	 2r20V8p90hvV6R/o7HM9bEiRQkiL/bJUld2qbg2DALga5ZVfRhhR8QSVihRYtnbPZN
-	 Wqeewe7ZalHOUg6pZrwnuZb9WoFgbLJW6wGDJL2UxBTqsu9BZIZAp8fWpe9+R5mTX7
-	 45eztKwfLgngQ==
-Date: Thu, 5 Dec 2024 11:41:56 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-To: Zijun Hu <zijun_hu@icloud.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	James Bottomley <James.Bottomley@hansenpartnership.com>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
-	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev, linux-sound@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-block@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-mediatek@lists.infradead.org, linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org, 
-	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	open-iscsi@googlegroups.com, linux-usb@vger.kernel.org, linux-serial@vger.kernel.org, 
-	netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-Subject: Re: [PATCH v3 04/11] driver core: Constify API device_find_child()
- then adapt for various usages
-Message-ID: <h4pndknfwvck5yjnbs5rdmrxkqeksfxldwj4qbjqyvdzs5cjbf@i4afsjsg3obw>
-References: <20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com>
- <20241205-const_dfc_done-v3-4-1611f1486b5a@quicinc.com>
+	s=arc-20240116; t=1733398764; c=relaxed/simple;
+	bh=IOecpit39uK1zz0V4oWMuEghMneSee+ddX+JwmodRr0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KUxj0VKoml0j54QotXD9l+gSEMAX/1QL7clA0DeYYcC5+IHqrLJ3ybac0pka3S+g5I8cgm22VBnqzqchkxUZZ4MhEIXZyg9R2FaTmZfSk6aBiFpgcH78M2UDzFqfgrCJDS7ab8e/J6+K2h/RatrPkiP0cGKuuhqOctiVXOqhFSY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fW3c0cb4; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733398762; x=1764934762;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IOecpit39uK1zz0V4oWMuEghMneSee+ddX+JwmodRr0=;
+  b=fW3c0cb4h5QV7sdv9GJYr7ucglTL3GQmQ4oFg+UxEu6eWGZ3cux8JOx9
+   UD5H/2pMh+1LbpR9XjRKGO9hULGKNR0qbY7u9jNNJsLt7GFgmUOWI+6YU
+   +3wGGFdPWGD0hJCHzMwq3MuncGMzNgGBh5PSoAyJy5O7EUz8Mu9/xOuD1
+   WCccNuq6qjFORtw+V3TxwFAhWI9/TgKpb3Cs85LHlS5lyZ8ytyC6yFKb3
+   qGcvYFQ3LuGIRP2eXOZm4Tn7oCiK54uV/a0PBZ+VoTkDIfNGISKdZR3+N
+   DZaqeBc35UKHEkcQDAlarRKxYlQtM0SNLjFuftFrWcSugMg7X0r2yCo6K
+   Q==;
+X-CSE-ConnectionGUID: nZF1XiQLTTOY2zQTEipyhQ==
+X-CSE-MsgGUID: msv5u4GuTuG13KQC+95BCg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11276"; a="33059633"
+X-IronPort-AV: E=Sophos;i="6.12,210,1728975600"; 
+   d="scan'208";a="33059633"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Dec 2024 03:39:22 -0800
+X-CSE-ConnectionGUID: r1G//U9BTDipAW7Aj1kmzw==
+X-CSE-MsgGUID: b0HbqW/DTwCZmOjSN1ur7w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,210,1728975600"; 
+   d="scan'208";a="94511708"
+Received: from black.fi.intel.com (HELO black.fi.intel.com.) ([10.237.72.28])
+  by orviesa007.jf.intel.com with ESMTP; 05 Dec 2024 03:39:21 -0800
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	kernel test robot <lkp@intel.com>,
+	Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Subject: [PATCH] usb: typec: intel_pmc_mux: Silence snprintf() output truncation warning
+Date: Thu,  5 Dec 2024 13:39:19 +0200
+Message-ID: <20241205113919.1182673-1-heikki.krogerus@linux.intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="7cmlxza5fdv22slz"
-Content-Disposition: inline
-In-Reply-To: <20241205-const_dfc_done-v3-4-1611f1486b5a@quicinc.com>
+Content-Transfer-Encoding: 8bit
 
+In the function pmc_mux_port_debugfs_init() the buffer for
+the name of the port is limited to six bytes. That makes the
+compiler think that the output of "port%d" may be truncated.
+That can't actually happen as the interface can support
+maximum of eight ports. To make the compiler happy just
+increase the buffer to where the warning goes away.
 
---7cmlxza5fdv22slz
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 04/11] driver core: Constify API device_find_child()
- then adapt for various usages
-MIME-Version: 1.0
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202412031437.vX580pxx-lkp@intel.com/
+Cc: Rajat Khandelwal <rajat.khandelwal@linux.intel.com>
+Signed-off-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+---
+ drivers/usb/typec/mux/intel_pmc_mux.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Thu, Dec 05, 2024 at 08:10:13AM +0800, Zijun Hu wrote:
-> diff --git a/arch/sparc/kernel/vio.c b/arch/sparc/kernel/vio.c
-> index 07933d75ac815160a2580dce39fde7653a9502e1..1a1a9d6b8f2e8dfedefafde84=
-6315a06a167fbfb 100644
-> --- a/arch/sparc/kernel/vio.c
-> +++ b/arch/sparc/kernel/vio.c
-> @@ -419,13 +419,13 @@ struct vio_remove_node_data {
->  	u64 node;
->  };
-> =20
-> -static int vio_md_node_match(struct device *dev, void *arg)
-> +static int vio_md_node_match(struct device *dev, const void *arg)
->  {
->  	struct vio_dev *vdev =3D to_vio_dev(dev);
-> -	struct vio_remove_node_data *node_data;
-> +	const struct vio_remove_node_data *node_data;
->  	u64 node;
-> =20
-> -	node_data =3D (struct vio_remove_node_data *)arg;
-> +	node_data =3D (const struct vio_remove_node_data *)arg;
+diff --git a/drivers/usb/typec/mux/intel_pmc_mux.c b/drivers/usb/typec/mux/intel_pmc_mux.c
+index 5dfe95754394..65dda9183e6f 100644
+--- a/drivers/usb/typec/mux/intel_pmc_mux.c
++++ b/drivers/usb/typec/mux/intel_pmc_mux.c
+@@ -718,7 +718,7 @@ DEFINE_SHOW_ATTRIBUTE(port_iom_status);
+ static void pmc_mux_port_debugfs_init(struct pmc_usb_port *port)
+ {
+ 	struct dentry *debugfs_dir;
+-	char name[6];
++	char name[8];
+ 
+ 	snprintf(name, sizeof(name), "port%d", port->usb3_port - 1);
+ 
+-- 
+2.45.2
 
-You can just drop the cast here. But maybe that is better be done i a
-separate change.
-
->  	node =3D vio_vdev_node(node_data->hp, vdev);
-> =20
-
-Best regards
-Uwe
-
---7cmlxza5fdv22slz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmdRg3IACgkQj4D7WH0S
-/k6XGAf6Av8yk2DAhSYXPrLn/Ud4m0Je4HKR7wDERTkoucUo/owwlaJH19v3/SEN
-BoXiIS4oqDNVJbzYsEPr2ZJQLZUTvBMyzKLJ4oNU1RzaivgdSipCPyK6I0OAHNui
-CtQI8qTG+gSxHLhoEeFCl2kcnUCtV4nGeXk44by5/Mu3CkC/pXRfbRn7iLrDX34F
-XHQ9MMrA6tMoRuStbxo3xHkRI7CkjOJVO6hWgv6PPAoKdFb63QX7jdTrZQTIoNtP
-2SMqVunbF87nTNTOQZWDCN1E3vELVsVjs6YsrlJeMYI9Gs7tcbVD4OHKUvrtSf86
-UHoREl5N4LOf8l+HqvTaxQnH6pb+QQ==
-=qufa
------END PGP SIGNATURE-----
-
---7cmlxza5fdv22slz--
 
