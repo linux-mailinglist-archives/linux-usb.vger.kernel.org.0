@@ -1,151 +1,281 @@
-Return-Path: <linux-usb+bounces-18204-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18205-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 999AC9E7A22
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 21:43:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 025B99E7B57
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 23:03:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADD111885BEB
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 20:43:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9303D1887A13
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 22:03:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA38820458B;
-	Fri,  6 Dec 2024 20:43:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 676A31EBFFC;
+	Fri,  6 Dec 2024 22:03:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NC1lA9kX"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="h3BYADFy";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="vNJ/Nw21";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="h3BYADFy";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="vNJ/Nw21"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571ED1C54AF;
-	Fri,  6 Dec 2024 20:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E5722C6F4;
+	Fri,  6 Dec 2024 22:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733517822; cv=none; b=BiIcj6rRFwHu3c9eug+ECSMl7XTt2j02fH3bqxuCCid/BKNNAFAKymOV7pLRdmzDB6c47jMxwsMkuPQFJa/A08X08RF8Vsd5kZmD3vUkeX+99ryA81BfddH3LsqQpAaR1k+6MlwL96pG1rZR65MXduJ/csO5hBljp3Gj8mkXZMI=
+	t=1733522580; cv=none; b=nNwFSsnFcsLXBjsKEwaWeQ//0xvPWroqAx5MTzmb67NMBc13NnK5fhBUjn3XsPHsGu1xeM6etu76MqJ+9uWr4P8skXjfWOgpOH+P7bkOu4JPhjHCO3Xwz1c94TWl712FUBZdRte8GBKpMHYInzPOftfKWCBDHrBNOrAIYdfIczs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733517822; c=relaxed/simple;
-	bh=HkUtFt5yNEyOKOT57xnkxN4TB3SkK29GTeg3yPR2eEA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qipZy33vViKbPlasb2TpKxizm/Prjyu9CDMOqmSlhbPXOPaw3bkXjV9rmW1WD8nM9DhMOZqXJDu+y1zg5kLCtnfIek6lxrJMHSCfnIlfBfLcnc/2u5Oa7KVSA0wx7Pme3anA032TBro8WI/1D9cJmF4Qmf9Yor7Pn0ljOFSOcD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NC1lA9kX; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B6BZ57X003204;
-	Fri, 6 Dec 2024 20:43:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	HkUtFt5yNEyOKOT57xnkxN4TB3SkK29GTeg3yPR2eEA=; b=NC1lA9kXljJwRNZ/
-	jyGx38NCt6kSZMSxw27ZZQfIFXopTSQNDIoHiJnfYnod7Mm+fb87sgx76mNM19za
-	LWD8J1KHKzhJ05C31MdD0xuQ2SYc47yExWP0wfjsiNa4cuTKeMV0tlYRyHt4hDm1
-	FBMz71HGYCu7v8CgEAnlv52Uc9XA3rWVch5dkeQjLxE7XTSYF+qCfdLDPgvZY/Gn
-	wZYZ6zjftxmSzfIqHZdNw5DZmFQYv6qawfnlO6tG81rOvzCZxd3Arss7rUh4qfmf
-	EfHd9juph0xL0aVcnIC3XvqnWpwONZeFXfOkq3y4v6FdKPCz2ThZ65BpsbXeOMUe
-	aq1Wkg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43brgp2qny-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Dec 2024 20:43:22 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B6KhLiq013837
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 6 Dec 2024 20:43:21 GMT
-Received: from [10.71.112.120] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 6 Dec 2024
- 12:43:21 -0800
-Message-ID: <3e246be8-22a9-4473-8c78-39788ae95650@quicinc.com>
-Date: Fri, 6 Dec 2024 12:43:20 -0800
+	s=arc-20240116; t=1733522580; c=relaxed/simple;
+	bh=hqG/8AfkucCrxer8P3uRIrkeW0+aE/pp3YUuoahCgxQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hTAJT4BTE9Pg8gNxbxF4TE6yYUeqUif7PgSgYNV4nwsIR+hiY4g+CbHI9Zs6ia/Z1I53XlpL45zFaYLDtDx4idpreuVMOzMfs/d+kydv3D8/lGH34lIhcRbS/5KTPlzBGrJHJi1oEBndCORlguj2TnagbyS18F9XPtt2SfKX5ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=h3BYADFy; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=vNJ/Nw21; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=h3BYADFy; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=vNJ/Nw21; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 114BE1F381;
+	Fri,  6 Dec 2024 22:02:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1733522576;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TRsn1BchjmOhokJgfVzCQkyd8e3Sysm6z1gUOGD9C/M=;
+	b=h3BYADFyyk+bD8jh9zvVNQK6JM09MIrH3O6AaOL5NPZu6qXN/8ZbkYYr15YmnovDMtiMkZ
+	NjcgvZG/G0GsHphSAS/QLQiju3Oqc9PKRfnFakbPzHq2yIPZVTCJWhbB6Lr2vM/UluPHSC
+	E5YYb3x5yB8bYOwWUo2KWDwBNdERNuo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1733522576;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TRsn1BchjmOhokJgfVzCQkyd8e3Sysm6z1gUOGD9C/M=;
+	b=vNJ/Nw21WeZTLCZdqpA43Go3CWwEJhkbvAp+K//0/+pBi04Zc/gpt3ap7TQ8AP6sdCL6R5
+	lD65JSiC6eJXzKBQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1733522576;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TRsn1BchjmOhokJgfVzCQkyd8e3Sysm6z1gUOGD9C/M=;
+	b=h3BYADFyyk+bD8jh9zvVNQK6JM09MIrH3O6AaOL5NPZu6qXN/8ZbkYYr15YmnovDMtiMkZ
+	NjcgvZG/G0GsHphSAS/QLQiju3Oqc9PKRfnFakbPzHq2yIPZVTCJWhbB6Lr2vM/UluPHSC
+	E5YYb3x5yB8bYOwWUo2KWDwBNdERNuo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1733522576;
+	h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+	 cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TRsn1BchjmOhokJgfVzCQkyd8e3Sysm6z1gUOGD9C/M=;
+	b=vNJ/Nw21WeZTLCZdqpA43Go3CWwEJhkbvAp+K//0/+pBi04Zc/gpt3ap7TQ8AP6sdCL6R5
+	lD65JSiC6eJXzKBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 75C4C138A7;
+	Fri,  6 Dec 2024 22:02:54 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ph9aGo50U2d2ZAAAD6G6ig
+	(envelope-from <pvorel@suse.cz>); Fri, 06 Dec 2024 22:02:54 +0000
+Date: Fri, 6 Dec 2024 23:02:52 +0100
+From: Petr Vorel <pvorel@suse.cz>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Yassine Oudjana <y.oudjana@protonmail.com>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Konrad Dybcio <konradybcio@gmail.com>,
+	=?iso-8859-2?Q?Kry=B9tof_=C8ern=FD?= <cleverline1mc@gmail.com>,
+	Alexander Reimelt <alexander.reimelt@posteo.de>,
+	Dominik Kobinski <dominikkobinski314@gmail.com>,
+	Harry Austen <hpausten@protonmail.com>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH RFT 4/4] arm64: dts: qcom: msm8994: Describe USB
+ interrupts
+Message-ID: <20241206220252.GA138783@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20241129-topic-qcom_usb_dtb_fixup-v1-0-cba24120c058@oss.qualcomm.com>
+ <20241129-topic-qcom_usb_dtb_fixup-v1-4-cba24120c058@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v30 28/30] ALSA: usb-audio: Add USB offload route kcontrol
-To: Cezary Rojewski <cezary.rojewski@intel.com>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <srinivas.kandagatla@linaro.org>,
-        <mathias.nyman@intel.com>, <perex@perex.cz>, <conor+dt@kernel.org>,
-        <dmitry.torokhov@gmail.com>, <corbet@lwn.net>, <broonie@kernel.org>,
-        <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
-        <pierre-louis.bossart@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
-        <tiwai@suse.com>, <robh@kernel.org>, <gregkh@linuxfoundation.org>
-References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
- <20241106193413.1730413-29-quic_wcheng@quicinc.com>
- <1a361446-7a18-4f49-9eeb-d60d1adaa088@intel.com>
- <28023a83-04a5-4c62-85a9-ca41be0ba9e1@quicinc.com>
- <1644aa6b-a4e0-4dbd-a361-276cb95eb534@intel.com>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <1644aa6b-a4e0-4dbd-a361-276cb95eb534@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 4H_AQnMFekfz5gW6YWnFHVmnH-Jb32Ho
-X-Proofpoint-ORIG-GUID: 4H_AQnMFekfz5gW6YWnFHVmnH-Jb32Ho
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- adultscore=0 lowpriorityscore=0 mlxscore=0 spamscore=0 suspectscore=0
- priorityscore=1501 phishscore=0 impostorscore=0 mlxlogscore=870
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412060156
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241129-topic-qcom_usb_dtb_fixup-v1-4-cba24120c058@oss.qualcomm.com>
+X-Spam-Level: 
+X-Spamd-Result: default: False [-2.00 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	HAS_REPLYTO(0.30)[pvorel@suse.cz];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[dt];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[19];
+	RCVD_TLS_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com,protonmail.com];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,quicinc.com,protonmail.com,somainline.org,vger.kernel.org,gmail.com,posteo.de,oss.qualcomm.com];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.cz:replyto,imap1.dmz-prg2.suse.org:helo];
+	RCVD_COUNT_TWO(0.00)[2];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Spam-Score: -2.00
+X-Spam-Flag: NO
 
+Hi Konrad, all,
 
-On 12/6/2024 1:09 AM, Cezary Rojewski wrote:
-> On 2024-12-04 12:15 AM, Wesley Cheng wrote:
->>
->> On 12/3/2024 8:13 AM, Cezary Rojewski wrote:
->>> On 2024-11-06 8:34 PM, Wesley Cheng wrote:
->>>> In order to allow userspace/applications know about USB offloading status,
->>>> expose a sound kcontrol that fetches information about which sound card
->>>> and PCM index the USB device is mapped to for supporting offloading.  In
->>>> the USB audio offloading framework, the ASoC BE DAI link is the entity
->>>> responsible for registering to the SOC USB layer.
->
-> ...
->
->>> R) += mixer_usb_offload.o
->>>> diff --git a/sound/usb/mixer_usb_offload.c b/sound/usb/mixer_usb_offload.c
->>>> new file mode 100644
->>>> index 000000000000..e0689a3b9b86
->>>> --- /dev/null
->>>> +++ b/sound/usb/mixer_usb_offload.c
->>>> @@ -0,0 +1,102 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
->>>> + */
->>>> +
->>>> +#include <linux/usb.h>
->>>> +
->>>> +#include <sound/core.h>
->>>> +#include <sound/control.h>
->>>> +#include <sound/soc-usb.h>
->>>
->>> ALSA-components should not be dependent on ASoC ones. It should be done the other way around: ALSA <- ASoC.
->>>
->>
->> At least for this kcontrol, we need to know the status of the ASoC state, so that we can communicate the proper path to userspace.  If the ASoC path is not probed or ready, then this module isn't blocked.  It will just communicate that there isn't a valid offload path.
->
-> I'm not asking _why_ you need soc-usb.h header, your reasoning is probably perfectly fine. The code hierarchy is not though. If a sound module is dependent on soc-xxx.h i.e. ASoC symbols, it shall be part of sound/soc/ space.
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
+> Previously the interrupt lanes were not described, fix that.
 
-That would basically require a significant change in the current design.  Was that requirement documented somewhere, where ALSA components should not be dependent on ASoC?  What was the reasoning for making it one direction, but not the other?
+> Fixes: d9be0bc95f25 ("arm64: dts: qcom: msm8994: Add USB support")
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> ---
+>  arch/arm64/boot/dts/qcom/msm8994.dtsi | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8994.dtsi b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+> index 1acb0f159511996db07bc7543cf4f194a4ebd0fa..8c0b1e3a99a767e7c28bcaf3b9687501cc15cd58 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8994.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8994.dtsi
+> @@ -437,6 +437,15 @@ usb3: usb@f92f8800 {
+>  			#size-cells = <1>;
+>  			ranges;
 
-Thanks
+> +			interrupts = <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>,
+> +				     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>;
+> +			interrupt-names = "pwr_event",
+> +					  "qusb2_phy",
+> +					  "hs_phy_irq",
+> +					  "ss_phy_irq";
+> +
 
-Wesley Cheng
+Tested-by: Petr Vorel <petr.vorel@gmail.com>
 
+Well, I tested this on msm8994 Huawei Nexus 6P. It did not break anything,
+but obviously it's not enough for phone to get USB working. IMHO none of
+msm899[24] has working USB.
+
+msm8996 has usb3phy, hsusb_phy[12] labels, I suppose USB will not be working
+until this is set. Below is a snippet of a downstream device tree. I might
+be able to transform it to the mainline tree, but feel free to post a patch
+(probably obvious for you).
+
+Kind regards,
+Petr
+
+		ssphy@f9b38000 {
+			phandle = <0xf1>;
+			linux,phandle = <0xf1>;
+			clock-names = "aux_clk\0pipe_clk\0cfg_ahb_clk\0phy_reset\0phy_phy_reset\0ldo_clk";
+			clocks = <0xaa 0xd9a36e0 0xaa 0xf279aff2 0xaa 0xd1231a0e 0xaa 0x3d559f1 0xaa 0xb1a4f885 0xaa 0x124410f7>;
+			qcom,no-pipe-clk-switch;
+			qcom,vbus-valid-override;
+			qcom,vdd-voltage-level = <0x00 0xf4240 0xf4240>;
+			vdda18-supply = <0xf4>;
+			vdd-supply = <0x2e>;
+			reg-names = "qmp_phy_base\0qmp_ahb2phy_base";
+			reg = <0xf9b38000 0x800 0xf9b3e000 0x3ff>;
+			status = "ok";
+			compatible = "qcom,usb-ssphy-qmp";
+		};
+
+		hsphy@f92f8800 {
+			phandle = <0xf0>;
+			linux,phandle = <0xf0>;
+			qcom,hsphy-host-init = <0xd1c9a7>;
+			clock-names = "phy_sleep_clk";
+			clocks = <0xaa 0x2e4d8839>;
+			qcom,vdda-force-on;
+			qcom,sleep-clk-reset;
+			qcom,set-pllbtune;
+			qcom,vbus-valid-override;
+			qcom,ext-vbus-id;
+			qcom,vdd-voltage-level = <0x01 0x05 0x07>;
+			vdda33-supply = <0xed>;
+			vdda18-supply = <0xf4>;
+			vddcx-supply = <0xf3>;
+			vdd-supply = <0xf2>;
+			qcom,hsphy-init = <0xd191a4>;
+			reg-names = "core\0phy_csr";
+			reg = <0xf92f8800 0x3ff 0xf9b3a000 0x110>;
+			status = "ok";
+			compatible = "qcom,usb-hsphy";
+		};
+
+		ssusb@f9200000 {
+			phandle = <0xea>;
+			linux,phandle = <0xea>;
+			clock-names = "core_clk\0iface_clk\0utmi_clk\0sleep_clk\0ref_clk\0xo";
+			clocks = <0xaa 0xb3b4e2cb 0xaa 0x94d26800 0xaa 0xa800b65a 0xaa 0xd0b65c92 0x47 0x3ab0b36d 0x47 0xf79c19f6>;
+			qcom,por-after-power-collapse;
+			qcom,power-collapse-on-cable-disconnect;
+			qcom,msm-bus,vectors-KBps = <0x3d 0x200 0x00 0x00 0x3d 0x200 0x3a980 0xea600>;
+			qcom,msm-bus,num-paths = <0x01>;
+			qcom,msm-bus,num-cases = <0x02>;
+			qcom,msm-bus,name = "usb3";
+			qcom,usb-dbm = <0xef>;
+			qcom,dwc-usb3-msm-qdss-tx-fifo-size = <0x2000>;
+			qcom,dwc-usb3-msm-tx-fifo-size = <0x7400>;
+			vbus_dwc3-supply = <0xee>;
+			vdda33-supply = <0xed>;
+			USB3_GDSC-supply = <0xec>;
+			interrupt-names = "hs_phy_irq\0pwr_event_irq\0pmic_id_irq";
+			interrupt-map = <0x00 0x00 0x01 0x00 0x85 0x00 0x00 0x01 0x01 0x00 0xb4 0x00 0x00 0x01 0xeb 0x00 0x00 0x09 0x00>;
+			interrupt-map-mask = <0x00 0xffffffff>;
+			#interrupt-cells = <0x01>;
+			interrupts = <0x00 0x01>;
+			interrupt-parent = <0xea>;
+			ranges;
+			#size-cells = <0x01>;
+			#address-cells = <0x01>;
+			reg = <0xf9200000 0xfc000 0xfd4ab000 0x04>;
+			status = "ok";
+			compatible = "qcom,dwc-usb3-msm";
+
+			dwc3@f9200000 {
+				maximum-speed = "high-speed";
+				usb-phy = <0xf0 0xf1>;
+				snps,usb3-u1u2-disable;
+				tx-fifo-resize;
+				interrupts = <0x00 0x83 0x00>;
+				interrupt-parent = <0x01>;
+				reg = <0xf9200000 0xfc000>;
+				compatible = "synopsys,dwc3";
+			};
+		};
+
+>  			clocks = <&gcc GCC_USB30_MASTER_CLK>,
+>  				 <&gcc GCC_SYS_NOC_USB3_AXI_CLK>,
+>  				 <&gcc GCC_USB30_SLEEP_CLK>,
 
