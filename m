@@ -1,143 +1,147 @@
-Return-Path: <linux-usb+bounces-18194-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18195-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33F4F9E6CC7
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 12:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FA229E6DF0
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 13:19:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D31282826AF
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 11:09:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3FA9A2827B0
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 12:19:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BA61FC106;
-	Fri,  6 Dec 2024 11:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F9A620100D;
+	Fri,  6 Dec 2024 12:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="MgjiqdzZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="woGS3ZOj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pv50p00im-ztdg10011301.me.com (pv50p00im-ztdg10011301.me.com [17.58.6.40])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39AC31FBC80
-	for <linux-usb@vger.kernel.org>; Fri,  6 Dec 2024 11:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.40
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A324B1FECC6
+	for <linux-usb@vger.kernel.org>; Fri,  6 Dec 2024 12:19:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733483333; cv=none; b=VH3z14kodM5H/CFIHhHbZ2MWXGVhke0omDe6P4mdBN9gmWmtZ+vIHl3QkHHML1NT+aVx7nb3VhD1GZZ1hH8Q1tgsTm87fn8L7Jxccsh3nEfdQXLgBtz4BVLSwRRYfiCh3ZUDeDzowroR+WD+uByAzAZ++Nf4SGMK/utRaORgVMo=
+	t=1733487591; cv=none; b=QbVHg6hqCfuFHb+bjG4gaVeqHicGieo5LIIVqyBJ+QHKzU+xlwWcyyHsqJ60Y0G5LW46f6Mq1sXB71UylVN1o2s3frUVkq68u/vyfIdoS0AfhSbH0vcYYklINkBtopdjyrRH5OZDokKQALC+ycQkvrHKgDqlH7vyiZ/M55e8GR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733483333; c=relaxed/simple;
-	bh=W4VuhT+Jm07xuaoOKTSneZ6zXj4xO3p37XsQxo6QhR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NmcrlLNHC+kNug5KOAa2BbqNEbU6zGLgQKiMH7X9woqCjtGQQDpCDC6P7+Do5KFYF74vszzos3jxBVqmZ4v5szhKI3s7RoZyPMx97aRffZh64IysAE2EzmaX8mkSXXbJd6oEd2F/F8w7/Jpxi2ZmQRGB78+69sEn7o4EVOM2ieU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=MgjiqdzZ; arc=none smtp.client-ip=17.58.6.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1733483330;
-	bh=NhyG+EmDBcuL7ITc5tFv2+rP51hoW90ADGxMFzERI+c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
-	 x-icloud-hme;
-	b=MgjiqdzZfTmb/mVFTbzsypOWruuPXKPmqalwnrapBSSPRX9ZBXWuKx/rXEQNHK2pa
-	 Owdt0fT/DfIcknjmrc9RiPQm03DTgyCIfZaA0Ct84DRgRPn41GH/9ATt9WarD4oB7Z
-	 kp1tye/lvFsVtcUt9wEaRY3KIi4c4XR2lvGXACZO95dn1BzrfkmojzfeVy6LNqPP4n
-	 cuKwE61BSO3ibR5Zaj2OZLFYfkZ3aOGDENNFUeS+do+P7PcdFzPCx3SylOoxqhlQzu
-	 3vBrnTd0dnstMjHvqU/2HZ8ig8tIq43Kbs7RsrkBBEg+Xa3q76Kaj+3nG3pAqDsniz
-	 8LIg8qyWiAoMg==
-Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-ztdg10011301.me.com (Postfix) with ESMTPSA id 604B31801BD;
-	Fri,  6 Dec 2024 11:08:42 +0000 (UTC)
-Message-ID: <71d9c99f-aa7d-4697-8561-17b54cfe97c6@icloud.com>
-Date: Fri, 6 Dec 2024 19:08:37 +0800
+	s=arc-20240116; t=1733487591; c=relaxed/simple;
+	bh=thFV7LBxkJQUfZP0M1Yl6fEmqEUxZ85Tj1GZWMRA1ak=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ugkbrj7iJ67Sq4g6REsSIRfxt1J5/z0xQLaUhJvbCpV6gGAxQ0cREokC70EH31aGiIXbCAFdlortsjpa/TAqsAGaNtP9aGUo3O8jecgQ+dA5KBO8TXnQiZW5oJeUbcAtjuy92aWI2+Bjd7/VGsuJWZFYgJ2WKpQIRSjR/a4lKBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=woGS3ZOj; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-aa5325af6a0so310308066b.2
+        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2024 04:19:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733487588; x=1734092388; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qSCifDtkaWLlhiA+C6rx5IdqAlS5jx1eBvIpRLAtEMo=;
+        b=woGS3ZOjIJWQCcWoqKoi4xAPHIAyPS6gv2SA5bJ1Zm+71ubaUnLSzKxFk02kE6kmUn
+         BEmsbIhtnD8pmrxk4VfOzqketL7pR+POk/uGsWqOT8TL28d+XfRgasns6RtduD4dyaGm
+         Vx8HQqWmGx39gs3RieghG9hR3YiTOiYpdadGwFLg6PSTkdaKm+LkjLE+LEC4z5xMgtLG
+         P17ttr5km0i7VLtPQ6rXdlaMMFrVFYV8tDguQPE4NIsWToDD0u6uKQN6q4nd2DcIh7d9
+         72Avy+AsUHPHaHxd1KrrK9sdova8NoT65odEEgDUGw4FzCUKQa9I/QfIXbRfvMCuH+z8
+         q6fA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733487588; x=1734092388;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qSCifDtkaWLlhiA+C6rx5IdqAlS5jx1eBvIpRLAtEMo=;
+        b=GwvRG6kIYsblfIlgTdrq8wn5uZb0jTnjaV8f4PU8uILjW3ap8yWZwHbUNsVYMFBVDO
+         /zdV0RNnHWIt7ObU7RV7YH1cOqsl2w9drCswPR6/FefOj92a3NXkiYt28V6lbJPxoINq
+         z1YIrSXBRkdfR+3oTkDKj8SUmbRmhc8e+kCU6Jxumfm4qWFZCzIJDxBqwsf+Fn9OhjnT
+         OTbT5EZ7ZuSWOcgZYKYKJq6m6SuK2LRVwqvMlFtW1X2qGyLxJwo22QNsIRcItAKpJ6Zc
+         bmq/LgdQTyD//FmJfFYiX3u+Uulr+3loKUmN13ySRW86vuJOXqcq8VL1wsjqq4xpdH4j
+         pdfw==
+X-Gm-Message-State: AOJu0Yz59RxnVGB5nHyW3RhwGd+MQoxVXuJKiWHdzhezAry2sXN+YT1p
+	kiEmeZwU9KW6hcPjlY0OweVkR0H69yo7mNc8qDqaj8Hh9yiE8VpRD8C6L49m7rw=
+X-Gm-Gg: ASbGncsee3oB6vdwJCsHITIpOEdIrhav6cQyWiW+SsBMkLi6crO0gku6T+EAtYIkIzl
+	g8+oy4aJic2Blt6viOApNb88GhYpaQpavjpRLwbp2jj0IQpPRruGYuLJKDLFF/e6F1bupLFgviE
+	FrPT/1wZUQP6ha6+vYvzE6sW5D+bM0GDTNKJJdJJSJCafWubTpL8nXuECZTzyXEXRzotVJlVDyU
+	uktlcL4P1Ag+/+5rp6HBCXZTdgY6XDsQtOWRnMMapYbQ8ahjB4mM1n4JI7XJUVZZmwbkcWoaNag
+	QIHtQlmjjvBNr49YEavA9KQlYO+1cbRzsg==
+X-Google-Smtp-Source: AGHT+IG3wUHCeCtLSEd9ZYbvjU6RybecaVohOs0cXxkPW3wU9kse4Zc5thov3RTYg0Hdfn/4iK6HjQ==
+X-Received: by 2002:a17:907:784b:b0:aa6:29a0:b650 with SMTP id a640c23a62f3a-aa63a005da1mr240377066b.17.1733487587837;
+        Fri, 06 Dec 2024 04:19:47 -0800 (PST)
+Received: from puffmais.c.googlers.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa625eb1ad6sm233624066b.82.2024.12.06.04.19.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Dec 2024 04:19:47 -0800 (PST)
+From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Date: Fri, 06 Dec 2024 12:19:47 +0000
+Subject: [PATCH] usb: dwc3: gadget: fix writing NYET threshold
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/11] driver core: Constify API device_find_child()
- then adapt for various usages
-To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- James Bottomley <James.Bottomley@hansenpartnership.com>,
- =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
- linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
- linux-sound@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
- linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org,
- linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
- linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
- linux-scsi@vger.kernel.org, open-iscsi@googlegroups.com,
- linux-usb@vger.kernel.org, linux-serial@vger.kernel.org,
- netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-References: <20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com>
- <20241205-const_dfc_done-v3-4-1611f1486b5a@quicinc.com>
- <7ylfj462lf6g3ej6d2cmsxadawsmajogbimi7cl4pjemb7df4h@snr73pd7vaid>
-Content-Language: en-US
-From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <7ylfj462lf6g3ej6d2cmsxadawsmajogbimi7cl4pjemb7df4h@snr73pd7vaid>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: UViy4Z1HSo-8jLvn8-7u7fwR8c_nYln5
-X-Proofpoint-GUID: UViy4Z1HSo-8jLvn8-7u7fwR8c_nYln5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-06_07,2024-12-05_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 suspectscore=0
- spamscore=0 mlxscore=0 bulkscore=0 malwarescore=0 phishscore=0
- adultscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2308100000 definitions=main-2412060082
+Message-Id: <20241206-dwc3-nyet-fix-v1-1-293bc74f644f@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAOLrUmcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxNDIwMz3ZTyZGPdvMrUEt20zApdcwML0zSzFHPDFAMTJaCegqJUoDDYvOj
+ Y2loAmjMGeV8AAAA=
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+X-Mailer: b4 0.13.0
 
-On 2024/12/6 15:21, Uwe Kleine-König wrote:
-> Hello,
-> 
-> On Thu, Dec 05, 2024 at 08:10:13AM +0800, Zijun Hu wrote:
->> From: Zijun Hu <quic_zijuhu@quicinc.com>
->>
->> Constify the following API:
->> struct device *device_find_child(struct device *dev, void *data,
->> 		int (*match)(struct device *dev, void *data));
->> To :
->> struct device *device_find_child(struct device *dev, const void *data,
->>                                  device_match_t match);
->> typedef int (*device_match_t)(struct device *dev, const void *data);
->> with the following reasons:
->>
->> - Protect caller's match data @*data which is for comparison and lookup
->>   and the API does not actually need to modify @*data.
->>
->> - Make the API's parameters (@match)() and @data have the same type as
->>   all of other device finding APIs (bus|class|driver)_find_device().
->>
->> - All kinds of existing device match functions can be directly taken
->>   as the API's argument, they were exported by driver core.
->>
->> Constify the API and adapt for various existing usages by simply making
->> various match functions take 'const void *' as type of match data @data.
-> 
-> With the discussion that a new name would ease the conversion, maybe
-> consider device_find_child_device() to also align the name (somewhat) to
-> the above mentioned (bus|class|driver)_find_device()?
-> i finally select this squashing method after considerations as shown by
-link below:
-https://lore.kernel.org/all/3a4de1bb-3eb2-469a-8ff7-ff706804f5bb@icloud.com
+Before writing a new value to the register, the old value needs to be
+masked out for the new value to be programmed as intended.
 
-device_find_child() is consist with existing device_find_child_by_name()
-and device_find_any_child, device's child is also a device, so we may
-not need the tail _device().
+At the moment, the dwc3 core initialises the threshold to the maximum
+value (0xf), with the option to override it via a DT. No upstream DTs
+seem to override it, therefore this commit doesn't change behaviour for
+any upstream platform. Nevertheless, the code should be fixed to have
+the desired outcome.
 
-> Do you have a merge plan already? I guess this patch will go through
-> Greg's driver core tree?
-> 
+Do so.
 
-this patch series is already squashing solution.
+Signed-off-by: André Draszik <andre.draszik@linaro.org>
+---
+ drivers/usb/dwc3/core.h   | 1 +
+ drivers/usb/dwc3/gadget.c | 4 +++-
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-yes. hope it move toward mainline by Greg's driver core tree.
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index ee73789326bc..9335fd095968 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -465,6 +465,7 @@
+ 
+ /* These apply for core versions 1.94a and later */
+ #define DWC3_DCTL_NYET_THRES(n)		(((n) & 0xf) << 20)
++#define DWC3_DCTL_NYET_THRES_MASK	DWC3_DCTL_NYET_THRES(0xf)
+ 
+ #define DWC3_DCTL_KEEP_CONNECT		BIT(19)
+ #define DWC3_DCTL_L1_HIBER_EN		BIT(18)
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index 83dc7304d701..31a654c6f15b 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -4195,8 +4195,10 @@ static void dwc3_gadget_conndone_interrupt(struct dwc3 *dwc)
+ 		WARN_ONCE(DWC3_VER_IS_PRIOR(DWC3, 240A) && dwc->has_lpm_erratum,
+ 				"LPM Erratum not available on dwc3 revisions < 2.40a\n");
+ 
+-		if (dwc->has_lpm_erratum && !DWC3_VER_IS_PRIOR(DWC3, 240A))
++		if (dwc->has_lpm_erratum && !DWC3_VER_IS_PRIOR(DWC3, 240A)) {
++			reg &= ~DWC3_DCTL_NYET_THRES_MASK;
+ 			reg |= DWC3_DCTL_NYET_THRES(dwc->lpm_nyet_threshold);
++		}
+ 
+ 		dwc3_gadget_dctl_write_safe(dwc, reg);
+ 	} else {
 
-(^^)(^^)
+---
+base-commit: c245a7a79602ccbee780c004c1e4abcda66aec32
+change-id: 20241206-dwc3-nyet-fix-7085f6d71d04
 
-> Best regards
-> Uwe
+Best regards,
+-- 
+André Draszik <andre.draszik@linaro.org>
 
 
