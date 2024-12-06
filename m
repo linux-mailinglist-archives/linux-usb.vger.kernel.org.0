@@ -1,173 +1,211 @@
-Return-Path: <linux-usb+bounces-18208-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18209-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 844029E7BF6
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 23:52:10 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2F157188597A
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 22:52:10 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F6D81FBE80;
-	Fri,  6 Dec 2024 22:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jIPmhKbn"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59CE59E7C38
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2024 00:07:38 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABEBF22C6D9
-	for <linux-usb@vger.kernel.org>; Fri,  6 Dec 2024 22:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14F312840AC
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 23:07:37 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAF2320458C;
+	Fri,  6 Dec 2024 23:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="bHt92Kik"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9691EF090
+	for <linux-usb@vger.kernel.org>; Fri,  6 Dec 2024 23:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733525525; cv=none; b=gaO3FcYpgNx1fYhrfJ/xEYpjaT/ETzmdfQueIH1m/RZwGBeHDgQFiNH1YSmPC94Rfgo/YQtAcW66mLwzFHXRjSa56oTgmUqZ8OpT974rsV6+XfGn04AR/OLibsEEOOovqCMrqAQ+0N2sozaOEnInj/3XR419HP9MB5RLjucD22A=
+	t=1733526453; cv=none; b=R4NNfGb7I21UXD1QkAB+DIZgx8lFCJwerDuuLnnKVplmteoBjTsS+RC79bjX01b6NNK9f3OhT4PbVunG/Us0kLbZbS63pKmmy2kiTlV6mf3CLKapTMyvigkpb9KDGfpCF6mBJUr67m65UrBSBuLGyeiIHJPj1K5I2QDy5geVS0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733525525; c=relaxed/simple;
-	bh=OC4AnMEOrFD4sYfJxlrIEq2oAzdLxoVoB/V+kuEhhsA=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=umG/QMqmk2XyKFN5c1yQ50Vln5QHbFz4nMopTVdVc6Z3seAPFGHahk2wRTw0ta09b1LTgpxzCM5l9ImEPCuOcFaPZyOXxhROUKD4XB0anzA8wkRsZZNb8lrj2gByhYI+L6BpxQycqaVYI3vXDEMZbfYzPFXQQcfedkE9EhcyMQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jIPmhKbn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 385E7C4CED1
-	for <linux-usb@vger.kernel.org>; Fri,  6 Dec 2024 22:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733525525;
-	bh=OC4AnMEOrFD4sYfJxlrIEq2oAzdLxoVoB/V+kuEhhsA=;
-	h=From:To:Subject:Date:From;
-	b=jIPmhKbnO5FHVK/KurA4sTJ48Ql0afNRo1r7clzuXb87SLvMoeZ8l1PoRKLMiLBTe
-	 D4d4Pn8TdJr0YQ0A2kRm6rOQ+F6fofl12TWYy/hzo+IpMhhxMB7iYEB+ZqmuoodynS
-	 MXwxVbp1IGepEMbRYRCdna6dv13ke7tWT0b7s1UrTivzosyGyVs80TV5fypevl9Mrz
-	 9GXn6poQaRWQia5OwiMX9ISZwjv+sk47WT/THVu4KpD36rDfg37xnZQQ+kZrH5Uq+a
-	 8OlK5Xd05+6wZdJKtOpEm+ijczGH4byjZPcVFI4EAPHYCSihg0idF8weIKmRD5vDL3
-	 61IwW7JQ8aK7A==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 2182DC3279F; Fri,  6 Dec 2024 22:52:05 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219569] New: The 0c45:671d camera fails to initialize despite
- being visible in USB.
-Date: Fri, 06 Dec 2024 22:52:04 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mzagozdzonster@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-219569-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1733526453; c=relaxed/simple;
+	bh=ZrckKwaxd0iOvVnVJwtqfyNeC8EMZfsPgTDPfgGI/4E=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=RWB00lDeMFTdxd0OJD2sUoIgTi/Tin+6NkO+RWa51eU4GxukRCMVvPg/pDD3DIpZyq1+5+9I0N1RVycylwoJGJzkWQh9wuWbxPJ5kOrT0rEnltHwGAHF6uYUthkrWGiLBN/0szq8n3hJPxLc0QQM9meQvVIXgE+0PbgYJq2D3dw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=bHt92Kik; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-53de8ecb39bso3489958e87.2
+        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2024 15:07:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1733526448; x=1734131248; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6YU/vIe183Tuess7TedgK95pVnAD6FsLbz2wLM00SLc=;
+        b=bHt92KikgE46z5RZIzBsZSkdzghCYTChLL/cj4YFPG5sfCajiNEr3lWs448xB05Luz
+         qwDiM14dFobzmGuoqaWzS5CFISWqpzo3yGb89UiK3xghDFCV5ZCd5IJ8u6G62QjIHnPo
+         h6e2tvVK5xZm3sVksU1u8VjOCAwnu9yb3/d6o=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733526448; x=1734131248;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6YU/vIe183Tuess7TedgK95pVnAD6FsLbz2wLM00SLc=;
+        b=fl77/y/Z2E8vj4PRy0Qv4d0pHX2ym2yiCy7oVu8uO02ocuQJ9BmXt7kmq78BCD5B3q
+         5EjUclgzqRkwgwFlpCst8q2S2RT9o7BuNUdMC7K0yNMPPBtEKmzPH3btzrBqOShYcBgT
+         C2t5EUrzWd8GXdlVxI2zYM9eUqIrvpCNw79g0P7ZvmhMg11mfEnM1LdGRQzc5okhoX2/
+         Mll/rOS+Pp+PDurJJg1VmQo6b2wzyfXj3GcUWfBMDYUySLSe+TlgaPsOPjPCAKVHsDDG
+         /GFJ021Pov8a2G6g4VPSWexpE6yW+nF6cnBUg2yGTz4Z5/328SYFvYnwElFFGkus+w5c
+         XOFg==
+X-Gm-Message-State: AOJu0YxqwlQGw7xgxgx+u2ipcZAPUpP486p6JADPSH2t+k3tzmH2iqb3
+	N4yieNSLts1Qc+YYwXwHoRX8J6dbRdE518UzJjg1HMj2MskgggUoSxVWs6dZiv+X3AEcJZVIw4c
+	drwtS8g==
+X-Gm-Gg: ASbGncvigWQ1dmaZmBTLWar5BUcv19YyOoC5GTOuhNF4Ea8Keoop4dC0ApWlSiwFWz1
+	4zzcSRGnrYaLHfSbYkGMV7nwXEv3RI82lmFqr0JaJFaUewRmOm0awoZ5axv1Ry4uYudwLhV+jJP
+	y6HRhqUZEZQ0NBn2qLBvd7bNB7CS249v+imvgLRyzXb0CfQ6S7Fs91m0yltLDpq6v84gmb6Rhi+
+	uysmrVqGn/0OMzLj4mP6HFzVG5enHN1Kfw6SQeX0YsKTM5gFreBhn97ZT5OteWpRHaGaoGcUDGx
+	AfNGMU07IDmAbh23QbW60wUd
+X-Google-Smtp-Source: AGHT+IGFMcdIGA39We1ZiDHZ4HS1IHc5HK5+uMp9y8su7kInONYcz9MYFKbaBVHQwJ75b8Jp9uiN3g==
+X-Received: by 2002:a05:6512:3d0c:b0:53d:effd:b06e with SMTP id 2adb3069b0e04-53e2c4fed26mr2526520e87.42.1733526448462;
+        Fri, 06 Dec 2024 15:07:28 -0800 (PST)
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com. [209.85.218.42])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa625e4da51sm303438366b.37.2024.12.06.15.07.27
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Dec 2024 15:07:27 -0800 (PST)
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-a9a0ef5179dso321128566b.1
+        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2024 15:07:27 -0800 (PST)
+X-Received: by 2002:a17:906:30cc:b0:aa5:1d08:dad7 with SMTP id
+ a640c23a62f3a-aa639fb0e5bmr294353266b.9.1733526447203; Fri, 06 Dec 2024
+ 15:07:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 6 Dec 2024 15:07:10 -0800
+X-Gmail-Original-Message-ID: <CAHk-=whPKnwZbbAp1MjogDP1aDYrCmQ63VC82+OnsLKy9M+gvg@mail.gmail.com>
+Message-ID: <CAHk-=whPKnwZbbAp1MjogDP1aDYrCmQ63VC82+OnsLKy9M+gvg@mail.gmail.com>
+Subject: USB: workqueues stuck in 'D' state?
+To: Mathias Nyman <mathias.nyman@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: USB subsystem <linux-usb@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219569
+So I'm not sure if this is new or not, but I *think* I would have
+noticed it earlier.
 
-            Bug ID: 219569
-           Summary: The 0c45:671d camera fails to initialize despite being
-                    visible in USB.
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: mzagozdzonster@gmail.com
-        Regression: No
+On my Ampere Altra (128-core arm64 system), I started seeing 'top'
+claiming a load average of roughly 2.3 even when idle, and it seems to
+be all due to this:
 
-Bus 004 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 003 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
-Bus 002 Device 001: ID 1d6b:0003 Linux Foundation 3.0 root hub
-Bus 001 Device 002: ID 8087:0025 Intel Corp. Wireless-AC 9260 Bluetooth Ada=
-pter
-Bus 001 Device 005: ID 0d8c:0014 C-Media Electronics, Inc. Audio Adapter
-(Unitek Y-247A)
-Bus 001 Device 003: ID 0c45:671d Microdia Integrated_Webcam_HD
-Bus 001 Device 001: ID 1d6b:0002 Linux Foundation 2.0 root hub
+  $ ps ax | grep ' [DR] '
+    869 ?        D      0:00 [kworker/24:1+usb_hub_wq]
+   1900 ?        D      0:00 [kworker/24:7+pm]
 
-T:  Bus=3D01 Lev=3D00 Prnt=3D00 Port=3D00 Cnt=3D00 Dev#=3D  1 Spd=3D480 MxC=
-h=3D16
-D:  Ver=3D 2.00 Cls=3D09(hub  ) Sub=3D00 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D1d6b ProdID=3D0002 Rev=3D06.08
-S:  Manufacturer=3DLinux 6.8.0-49-generic xhci-hcd
-S:  Product=3DxHCI Host Controller
-S:  SerialNumber=3D0000:00:14.0
-C:  #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D0mA
-I:  If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Driver=
-=3Dhub
-E:  Ad=3D81(I) Atr=3D03(Int.) MxPS=3D   4 Ivl=3D256ms
+where sometimes there are multiple of those 'pm' workers.
 
-T:  Bus=3D01 Lev=3D01 Prnt=3D01 Port=3D11 Cnt=3D01 Dev#=3D  3 Spd=3D480 MxC=
-h=3D 0
-D:  Ver=3D 2.00 Cls=3Def(misc ) Sub=3D02 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D0c45 ProdID=3D671d Rev=3D81.31
-S:  Manufacturer=3DCN0VGCNHLOG00917A8A8A00
-S:  Product=3DIntegrated_Webcam_HD
-C:  #Ifs=3D 2 Cfg#=3D 1 Atr=3D80 MxPwr=3D500mA
-I:  If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D0e(video) Sub=3D01 Prot=3D00 Driver=
-=3D(none)
-E:  Ad=3D83(I) Atr=3D03(Int.) MxPS=3D  16 Ivl=3D4ms
-I:  If#=3D 1 Alt=3D 0 #EPs=3D 0 Cls=3D0e(video) Sub=3D02 Prot=3D00 Driver=
-=3D(none)
+Doing a sysrq-w, I get this:
 
-T:  Bus=3D02 Lev=3D00 Prnt=3D00 Port=3D00 Cnt=3D00 Dev#=3D  1 Spd=3D10000 M=
-xCh=3D10
-D:  Ver=3D 3.10 Cls=3D09(hub  ) Sub=3D00 Prot=3D03 MxPS=3D 9 #Cfgs=3D  1
-P:  Vendor=3D1d6b ProdID=3D0003 Rev=3D06.08
-S:  Manufacturer=3DLinux 6.8.0-49-generic xhci-hcd
-S:  Product=3DxHCI Host Controller
-S:  SerialNumber=3D0000:00:14.0
-C:  #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D0mA
-I:  If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Driver=
-=3Dhub
-E:  Ad=3D81(I) Atr=3D03(Int.) MxPS=3D   4 Ivl=3D256ms
+  task:kworker/24:3    state:D stack:0     pid:1308  tgid:1308  ppid:2
+     flags:0x00000008
+  Workqueue: pm pm_runtime_work
+  Call trace:
+   __switch_to+0xf4/0x168 (T)
+   __schedule+0x248/0x648
+   schedule+0x3c/0xe0
+   usleep_range_state+0x118/0x150
+   xhci_hub_control+0xe80/0x1090
+   rh_call_control+0x274/0x7a0
+   usb_hcd_submit_urb+0x13c/0x3a0
+   usb_submit_urb+0x1c8/0x600
+   usb_start_wait_urb+0x7c/0x180
+   usb_control_msg+0xcc/0x150
+   usb_port_suspend+0x414/0x510
+   usb_generic_driver_suspend+0x68/0x90
+   usb_suspend_both+0x1c8/0x290
+   usb_runtime_suspend+0x3c/0xb0
+   __rpm_callback+0x50/0x1f0
+   rpm_callback+0x70/0x88
+   rpm_suspend+0xe8/0x5a8
+   __pm_runtime_suspend+0x4c/0x130
+   usb_runtime_idle+0x48/0x68
+   rpm_idle+0xa4/0x358
+   pm_runtime_work+0xb0/0xe0
 
-T:  Bus=3D03 Lev=3D00 Prnt=3D00 Port=3D00 Cnt=3D00 Dev#=3D  1 Spd=3D480 MxC=
-h=3D 2
-D:  Ver=3D 2.00 Cls=3D09(hub  ) Sub=3D00 Prot=3D01 MxPS=3D64 #Cfgs=3D  1
-P:  Vendor=3D1d6b ProdID=3D0002 Rev=3D06.08
-S:  Manufacturer=3DLinux 6.8.0-49-generic xhci-hcd
-S:  Product=3DxHCI Host Controller
-S:  SerialNumber=3D0000:3a:00.0
-C:  #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D0mA
-I:  If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Driver=
-=3Dhub
-E:  Ad=3D81(I) Atr=3D03(Int.) MxPS=3D   4 Ivl=3D256ms
+  task:kworker/24:7    state:D stack:0     pid:1900  tgid:1900  ppid:2
+     flags:0x00000208
+  Workqueue: pm pm_runtime_work
+  Call trace:
+   __switch_to+0xf4/0x168 (T)
+   __schedule+0x248/0x648
+   schedule+0x3c/0xe0
+   usleep_range_state+0x118/0x150
+   xhci_hub_control+0xe80/0x1090
+   rh_call_control+0x274/0x7a0
+   usb_hcd_submit_urb+0x13c/0x3a0
+   usb_submit_urb+0x1c8/0x600
+   usb_start_wait_urb+0x7c/0x180
+   usb_control_msg+0xcc/0x150
+   usb_port_suspend+0x414/0x510
+   usb_generic_driver_suspend+0x68/0x90
+   usb_suspend_both+0x1c8/0x290
+   usb_runtime_suspend+0x3c/0xb0
+   __rpm_callback+0x50/0x1f0
+   rpm_callback+0x70/0x88
+   rpm_suspend+0xe8/0x5a8
+   __pm_runtime_suspend+0x4c/0x130
 
-T:  Bus=3D04 Lev=3D00 Prnt=3D00 Port=3D00 Cnt=3D00 Dev#=3D  1 Spd=3D10000 M=
-xCh=3D 2
-D:  Ver=3D 3.10 Cls=3D09(hub  ) Sub=3D00 Prot=3D03 MxPS=3D 9 #Cfgs=3D  1
-P:  Vendor=3D1d6b ProdID=3D0003 Rev=3D06.08
-S:  Manufacturer=3DLinux 6.8.0-49-generic xhci-hcd
-S:  Product=3DxHCI Host Controller
-S:  SerialNumber=3D0000:3a:00.0
-C:  #Ifs=3D 1 Cfg#=3D 1 Atr=3De0 MxPwr=3D0mA
-I:  If#=3D 0 Alt=3D 0 #EPs=3D 1 Cls=3D09(hub  ) Sub=3D00 Prot=3D00 Driver=
-=3Dhub
-E:  Ad=3D81(I) Atr=3D03(Int.) MxPS=3D   4 Ivl=3D256ms
-6.8.0-49-generic
+so it seems to be all in that xhci_hub_control() path. I'm not seeing
+anything that has changed in the xhci driver in this merge window, so
+maybe this goes back further, and I just haven't noticed this odd load
+average issue before.
 
---=20
-You may reply to this email to add a comment.
+The call trace for the usb_hub_wq seems a lot less stable, but I've
+seen backtraces like
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+  task:kworker/24:1    state:D stack:0     pid:869   tgid:869   ppid:2
+     flags:0x00000008
+  Workqueue: usb_hub_wq hub_event
+  Call trace:
+   __switch_to+0xf4/0x168 (T)
+   __schedule+0x248/0x648
+   schedule+0x3c/0xe0
+   schedule_preempt_disabled+0x2c/0x50
+   __mutex_lock.constprop.0+0x478/0x968
+   __mutex_lock_slowpath+0x1c/0x38
+   mutex_lock+0x6c/0x88
+   hub_event+0x144/0x4a0
+   process_one_work+0x170/0x408
+   worker_thread+0x2cc/0x400
+   kthread+0xf4/0x108
+   ret_from_fork+0x10/0x20
+
+But also just
+
+  Workqueue: usb_hub_wq hub_event
+  Call trace:
+   __switch_to+0xf4/0x168 (T)
+   usb_control_msg+0xcc/0x150
+
+or
+
+  Workqueue: usb_hub_wq hub_event
+  Call trace:
+   __switch_to+0xf4/0x168 (T)
+   __schedule+0x248/0x648
+   schedule+0x3c/0xe0
+   schedule_timeout+0x94/0x120
+   msleep+0x30/0x50
+
+so at a guess it's just some interaction with that 'pm' workqueue.
+
+I did a reboot just to verify that yes, it happened again after a
+fresh boot. So it is at least *somewhat* consistently repeatable,
+although I wouldn't be surprised if it's some kind of timing-dependent
+race condition that just happens to trigger on this machine.
+
+I could try to see if it's so consistent that I could bisect it, but
+before I start doing that, maybe just the backtraces makes somebody go
+"Ahh, that smells like XYZ"..
+
+Hmm?
+
+             Linus
 
