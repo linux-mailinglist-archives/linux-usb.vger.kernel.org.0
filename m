@@ -1,152 +1,213 @@
-Return-Path: <linux-usb+bounces-18211-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18212-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D9569E7C8F
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2024 00:36:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DDAE9E7CAD
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2024 00:38:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFF6C16B5B6
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 23:36:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A00CB18879CF
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 23:38:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8E8A213E79;
-	Fri,  6 Dec 2024 23:35:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77846213E66;
+	Fri,  6 Dec 2024 23:38:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dQhUjTPS"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gcz1q44n"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f175.google.com (mail-pf1-f175.google.com [209.85.210.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2006C1EBFFC;
-	Fri,  6 Dec 2024 23:35:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B499212F85
+	for <linux-usb@vger.kernel.org>; Fri,  6 Dec 2024 23:38:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733528153; cv=none; b=Bc5VpaIF1+PG3XVkw77UW7QGCxA2sMmjsYCzAxoXufyQs1pJ7l+E16WUD49zWnaW2kNqzhnR6GIdP4hr/HR3RDVLcpcz3CW99Yu2sFjZvKCJlqzpPO56fWnrK85t9xoaDJ9RIJQBCBrgLU7yQF0TbVm7u3z2m2p2nZWPzofNGWM=
+	t=1733528323; cv=none; b=ffZR/t2yLHQSEUDM+Il6HbaTvaJT7g/RWj7JBm6ZUdH9Ygpbml3s2tE07PYXEHVAiBt7PYeuh8C0oZhhzbIs6/sO95bCuLM7Ge9hI9wlNXc4y0LLRoU9wykhWcMYJZmAgMj1u+wZlCsePFvxh14055stLIyurkoxeakBqGjqKck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733528153; c=relaxed/simple;
-	bh=MXIwrQewAajDh1gfesHB1c2CKu8WD9CnQN3aFCayvec=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=AuQyzrGmN7ILsc/KLFH8AhozKtj1wls/tx366B51iOzK7PgPrx+ZEv+Ahz+6Z1lwvRhWaRfvjtUS+suaNuyqk/ysnjg9edHb1zJfAge8fnBF4FgRX7ie+oDTmXC8H3/ZuExBiyfs0eUz4jDARrE/3q25xtM0NPgVFPvHQes476E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dQhUjTPS; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B6LL67m016383;
-	Fri, 6 Dec 2024 23:35:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	MXIwrQewAajDh1gfesHB1c2CKu8WD9CnQN3aFCayvec=; b=dQhUjTPS9V+2stxc
-	mVLD8Jp5EnNTj/zTKUCu53bYpzWqePP8noc68BiHhuoRt0S71NhtCVubHR2UbDPr
-	dk9dKmmrH7Axh+a7YEe9HDgEl+GFFQS2Jj0cffkha2km113gm84zSuqTfu1W30hq
-	5qXhNlbP3gRYykDfJHpWGfBmX2wRLB4sVZt2bO2VSm+1jcDyqJSPvqhfTYHVOMsW
-	sJC6xj8q3iMCxnujrvYLJPVNUJMOvmMpB+2JgYzumiYBLzNcto234wgSMAXQ1l91
-	Mjku0wFdMJ6JIImHRWDMoSMdilo8r8cvfvzFZ7OfqiJC4i/0M1fjkKel+eDvpCkY
-	Xleq8g==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43bxnya034-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 06 Dec 2024 23:35:27 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B6NZQ6x018811
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 6 Dec 2024 23:35:26 GMT
-Received: from [10.71.112.120] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 6 Dec 2024
- 15:35:25 -0800
-Message-ID: <33afcc55-1597-4aff-a20c-7a0df4b23236@quicinc.com>
-Date: Fri, 6 Dec 2024 15:35:23 -0800
+	s=arc-20240116; t=1733528323; c=relaxed/simple;
+	bh=WXa72mHQrBWrS/09dYwuBRNffw100ctDcz92BZvdr5g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mY2F/vv+xHupcRelIb8IqHsfVyXoF6QgiiHOScDQCY9gonKllBf96DWtrSbO4m/P7w/XvabZTVyowjrV8MRn9mpzrDdhZnEcrWAjMEow5EiMnZ6uE1zP8QFiBBX3usFD8V9WxhNpA2icj/Cc7yMxt21jf7bNUidtlAON0koLStU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=gcz1q44n; arc=none smtp.client-ip=209.85.210.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pf1-f175.google.com with SMTP id d2e1a72fcca58-7242f559a9fso2807806b3a.1
+        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2024 15:38:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1733528321; x=1734133121; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bliC/7ngsldUriRdPv0FfcilaOEufGfZUp9MYyymSd4=;
+        b=gcz1q44nXqD0R+dBRpL0xGbecb1NRtHvfo40kltslWzTPEjTNt4ZXw64VsMJYcnYcd
+         9YjPb4NW3EfNxZKkKMVU4OMVKlGcXfNyLIlrY3TD34AagoRWTT9FDUAW6oBBJp+SYr48
+         L936YU8LhdCNhA+3elGJP28JPQXpFJoEsKmT0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733528321; x=1734133121;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bliC/7ngsldUriRdPv0FfcilaOEufGfZUp9MYyymSd4=;
+        b=Ak+zoTBRjqxvVF2LIm5R6lsM9iWy1UVVrDoY8FOMeZa/ngFnVR2Ib5cPcV8c15bffL
+         +bmKUfkFW7c8Q5TuDCN965V14LlUn9DzVbzN36PRyVtEkjjw8I5zGKbOKuDgOfsLJ90e
+         L+1ESbfneJOe0gUMzGsi+xpisCism4NU89UkoM9GhM4rIJ0CJZgwtgc9piFbEExMnn2g
+         fESN+n/XSaNy36bPgaJo/522xVcQ3+O8b7LE8yb89XWHEga4PYwAMtg1SdnPlfSyin2G
+         zVZbkZUZxXXz9PmuN+9ZKj+x+Dc+kHzHjFiXPeocgJUudOXmqbDjCKvVI9xoJHXZt8wR
+         iAPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUVWQd+zCYnN4TltmD+N0mk60tXSbqTyD5XQe1VbwJT7Nk2DEGCL5xQcpUod6vsAnVXDeRvw6qEX7U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGsbM49oiuR7pUYPwXfUD3tE/hpvQzP2ph40IbfWcxgesKAnXX
+	MOOFe+t3FUvJYBqegh5LWKYJc8g9az7JlmKXrnDPPexwg2UXctRObxxcdVhMBQ==
+X-Gm-Gg: ASbGncupPih1B19br6elq1Q4KAXasZKjHVWAV7D4PMlvZzNHqBmdT3Fk9RopgD0Gp1x
+	yngSVWfoQ/q51xYR6ojPi9tN7m4KDuJUc8Ujv55EvmvSacg8jLg6mpUzv8JqdeIn7LHT0oHSPk+
+	2K+m8wqFj7Nv3u5pAkFCOUqbFqAxkC2jA5DIJs6hPMRf8OFdE5fW8KRJrCmbHjeR3Dh3XjFuyAJ
+	8DcyK7DCHBinC16yRtuHwarMb4ltCmsrvErPAZLnWd4pBVi6CqFgBYggQXihqbTb02iCjZQ6CFC
+	+TPs4R7HD72yMcyWxYDU437k
+X-Google-Smtp-Source: AGHT+IEkA+EzntcpC7SX4bylZJEqihRp/oHlKdoDMfiAiGb+uqmJYJKq5YjJPM+7LI1gzxn2Knk5YA==
+X-Received: by 2002:a05:6a00:22d1:b0:725:9ec3:7ee4 with SMTP id d2e1a72fcca58-725b80e1435mr6302505b3a.1.1733528321623;
+        Fri, 06 Dec 2024 15:38:41 -0800 (PST)
+Received: from localhost (227.180.227.35.bc.googleusercontent.com. [35.227.180.227])
+        by smtp.gmail.com with UTF8SMTPSA id d2e1a72fcca58-725a29c5b1asm3476216b3a.32.2024.12.06.15.38.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 06 Dec 2024 15:38:40 -0800 (PST)
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+To: heikki.krogerus@linux.intel.com,
+	tzungbi@kernel.org,
+	linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Cc: akuchynski@google.com,
+	pmalani@chromium.org,
+	jthies@google.com,
+	dmitry.baryshkov@linaro.org,
+	badhri@google.com,
+	rdbabiera@google.com,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Guenter Roeck <groeck@chromium.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>,
+	linux-kbuild@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/7] Thunderbolt and DP altmode support for cros-ec-typec
+Date: Fri,  6 Dec 2024 15:38:11 -0800
+Message-ID: <20241206233830.2401638-1-abhishekpandit@chromium.org>
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v30 28/30] ALSA: usb-audio: Add USB offload route kcontrol
-To: Cezary Rojewski <cezary.rojewski@intel.com>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <srinivas.kandagatla@linaro.org>,
-        <mathias.nyman@intel.com>, <perex@perex.cz>, <conor+dt@kernel.org>,
-        <dmitry.torokhov@gmail.com>, <corbet@lwn.net>, <broonie@kernel.org>,
-        <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
-        Pierre-Louis Bossart
-	<pierre-louis.bossart@linux.dev>,
-        <Thinh.Nguyen@synopsys.com>, <tiwai@suse.com>, <robh@kernel.org>,
-        <gregkh@linuxfoundation.org>
-References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
- <20241106193413.1730413-29-quic_wcheng@quicinc.com>
- <1a361446-7a18-4f49-9eeb-d60d1adaa088@intel.com>
- <28023a83-04a5-4c62-85a9-ca41be0ba9e1@quicinc.com>
- <1644aa6b-a4e0-4dbd-a361-276cb95eb534@intel.com>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <1644aa6b-a4e0-4dbd-a361-276cb95eb534@intel.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: GLu9OkWF2xnRrV0lI092seNdox1_pfiG
-X-Proofpoint-ORIG-GUID: GLu9OkWF2xnRrV0lI092seNdox1_pfiG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- phishscore=0 spamscore=0 bulkscore=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 clxscore=1015 mlxlogscore=999 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412060179
 
 
-On 12/6/2024 1:09 AM, Cezary Rojewski wrote:
-> On 2024-12-04 12:15 AM, Wesley Cheng wrote:
->>
->> On 12/3/2024 8:13 AM, Cezary Rojewski wrote:
->>> On 2024-11-06 8:34 PM, Wesley Cheng wrote:
->>>> In order to allow userspace/applications know about USB offloading status,
->>>> expose a sound kcontrol that fetches information about which sound card
->>>> and PCM index the USB device is mapped to for supporting offloading.  In
->>>> the USB audio offloading framework, the ASoC BE DAI link is the entity
->>>> responsible for registering to the SOC USB layer.
->
-> ...
->
->>> R) += mixer_usb_offload.o
->>>> diff --git a/sound/usb/mixer_usb_offload.c b/sound/usb/mixer_usb_offload.c
->>>> new file mode 100644
->>>> index 000000000000..e0689a3b9b86
->>>> --- /dev/null
->>>> +++ b/sound/usb/mixer_usb_offload.c
->>>> @@ -0,0 +1,102 @@
->>>> +// SPDX-License-Identifier: GPL-2.0
->>>> +/*
->>>> + * Copyright (c) 2022-2024 Qualcomm Innovation Center, Inc. All rights reserved.
->>>> + */
->>>> +
->>>> +#include <linux/usb.h>
->>>> +
->>>> +#include <sound/core.h>
->>>> +#include <sound/control.h>
->>>> +#include <sound/soc-usb.h>
->>>
->>> ALSA-components should not be dependent on ASoC ones. It should be done the other way around: ALSA <- ASoC.
->>>
->>
->> At least for this kcontrol, we need to know the status of the ASoC state, so that we can communicate the proper path to userspace.  If the ASoC path is not probed or ready, then this module isn't blocked.  It will just communicate that there isn't a valid offload path.
->
-> I'm not asking _why_ you need soc-usb.h header, your reasoning is probably perfectly fine. The code hierarchy is not though. If a sound module is dependent on soc-xxx.h i.e. ASoC symbols, it shall be part of sound/soc/ space.
+Hi Heikki, Tzung-Bi et al,
 
+This patch series adds support for alternate mode entry for the
+cros-ec-typec driver for Displayport and Thunderbolt.
 
-I'm still reviewing the HDAudio flow a bit, so please correct me if I'm wrong.  During module initialization, it looks like there will be some overall platform card that will call snd_hdac_ext_bus_init() to create the HDA bus.  I referred to the Intel AVS core.  How do you ensure that the ALSA entities are loaded before this call goes out?  I think once the bus is created dynamic creation/removal of HDA devices is fine, and the hdev_attach/detach is executed. 
+Thunderbolt support is added by adapting an RFC Heikki had posted
+previously:
 
-Thanks
+https://lore.kernel.org/linux-usb/20191230152857.43917-1-heikki.krogerus@linux.intel.com/
 
-Wesley Cheng
+A few comments on the series:
+
+* The cros-ec interface will not accept any VDOs/VDMs so we simply
+  ignore any configurations we are passed (i.e. DPConfigure). This means
+  the sysfs control of DP lanes won't work.
+* ChromeOS has two modes of operation for alt-modes: entirely EC driven
+  or AP-driven from userspace (via the typec daemon). Thus, we don't
+  expect the kernel alt-mode drivers to auto-enter modes in all cases.
+  This series allows auto-enter for displayport but disables it for TBT
+  for this reason.
+
+This was tested with a ChromeOS Brya device using kernel 6.6 and built
+with allmodconfig for linux-usb.
+
+Thanks,
+Abhishek
+
+Changes in v4:
+- Large refactor to use cable_altmodes
+- Fixed ordering of cable mode enter/exit (SOP', SOP", then port for
+  enter; reverse order for exit)
+- Other small fixes from v3 feedback
+- memset struct typec_altmode_desc
+- Add CONFIG_CROS_EC_TYPEC_ALTMODES for Makefile use
+- Move ap_driven_altmode check to common vdm function
+- Add locking to protect shared data
+- Update enter/exit error messages
+- Update Makefile + Kconfig to use CONFIG_CROS_EC_TYPEC_ALTMODES
+- Add locking in vdm function
+
+Changes in v3:
+- Removed mode from altmode device ids
+- Updated modalias for typecd bus to remove mode
+- Re-ordered to start of series
+- Revert rename of TYPEC_TBT_MODE
+- Remove mode from typec_device_id
+- Refactored typec_altmode_dp_data per review request
+- Removed unused vdm operations during altmode registration
+- Fix usage of TBT sid and mode.
+- Removed unused vdm operations during altmode registration
+- Set port.inactive = true instead of auto-enter.
+
+Changes in v2:
+- Update altmode_match to ignore mode entirely
+- Also apply the same behavior to typec_match
+- Use <linux/usb/typec_tbt.h> and add missing TBT_CABLE_ROUNDED
+- Pass struct typec_thunderbolt_data to typec_altmode_notify
+- Rename TYPEC_TBT_MODE to USB_TYPEC_TBT_MODE
+- Use USB_TYPEC_TBT_SID and USB_TYPEC_TBT_MODE for device id
+- Change module license to GPL due to checkpatch warning
+- Refactored displayport into cros_typec_altmode.c to extract common
+  implementation between altmodes
+- Refactored thunderbolt support into cros_typec_altmode.c
+- Only disable auto-enter for Thunderbolt
+- Update commit message to clearly indicate the need for userspace
+  intervention to enter TBT mode
+
+Changes in v1:
+- Delay cable + plug checks so that the module doesn't fail to probe
+  if cable + plug information isn't available by the time the partner
+  altmode is registered.
+- Remove unncessary brace after if (IS_ERR(plug))
+
+Abhishek Pandit-Subedi (6):
+  usb: typec: Only use SVID for matching altmodes
+  usb: typec: Print err when displayport fails to enter
+  platform/chrome: cros_ec_typec: Update partner altmode active
+  platform/chrome: cros_ec_typec: Displayport support
+  platform/chrome: cros_ec_typec: Thunderbolt support
+  platform/chrome: cros_ec_typec: Disable tbt on port
+
+Heikki Krogerus (1):
+  usb: typec: Add driver for Thunderbolt 3 Alternate Mode
+
+ MAINTAINERS                                  |   3 +
+ drivers/platform/chrome/Kconfig              |   7 +
+ drivers/platform/chrome/Makefile             |   4 +
+ drivers/platform/chrome/cros_ec_typec.c      |  48 ++-
+ drivers/platform/chrome/cros_ec_typec.h      |   1 +
+ drivers/platform/chrome/cros_typec_altmode.c | 369 ++++++++++++++++++
+ drivers/platform/chrome/cros_typec_altmode.h |  48 +++
+ drivers/usb/typec/altmodes/Kconfig           |   9 +
+ drivers/usb/typec/altmodes/Makefile          |   2 +
+ drivers/usb/typec/altmodes/displayport.c     |   5 +-
+ drivers/usb/typec/altmodes/nvidia.c          |   2 +-
+ drivers/usb/typec/altmodes/thunderbolt.c     | 387 +++++++++++++++++++
+ drivers/usb/typec/bus.c                      |   6 +-
+ drivers/usb/typec/class.c                    |   9 +-
+ include/linux/usb/typec.h                    |   2 +
+ include/linux/usb/typec_tbt.h                |   1 +
+ scripts/mod/devicetable-offsets.c            |   1 -
+ scripts/mod/file2alias.c                     |   4 +-
+ 18 files changed, 879 insertions(+), 29 deletions(-)
+ create mode 100644 drivers/platform/chrome/cros_typec_altmode.c
+ create mode 100644 drivers/platform/chrome/cros_typec_altmode.h
+ create mode 100644 drivers/usb/typec/altmodes/thunderbolt.c
+
+-- 
+2.47.0.338.g60cca15819-goog
 
 
