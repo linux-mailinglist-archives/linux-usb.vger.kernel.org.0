@@ -1,145 +1,120 @@
-Return-Path: <linux-usb+bounces-18199-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18200-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C39A9E7672
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 17:53:04 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD009E7820
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 19:33:36 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 815F7161709
-	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 16:52:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9C68B2827CE
+	for <lists+linux-usb@lfdr.de>; Fri,  6 Dec 2024 18:33:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFE841F63E1;
-	Fri,  6 Dec 2024 16:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD9531D515D;
+	Fri,  6 Dec 2024 18:33:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZOy4snWv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DjXcnDMq"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59FD3206262;
-	Fri,  6 Dec 2024 16:52:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39324198837;
+	Fri,  6 Dec 2024 18:33:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733503973; cv=none; b=RKxmMsJDg/EFXhWmTipFJydJhMdIgJ9BPk9oYGg9UYZsY5R24BIOP0I3nbaaCdKUuTc67HBdrz3mMiOjeodBvJycWqIj+4XLp9MAtSlKbhVqFC7KRiH5X6Zm08DybA+oHeaN5KhJSNV+8ceHH0/ozRJnEq0O2YQuumhP84/TRfI=
+	t=1733510010; cv=none; b=kzIw0ekQz2qQQD8DjLpEvmazk4b9mbYbOvt747c/nVG5ryS8kGKQF2QpuyHqCxf0fKctwmHkKGFL+FjjfCCmF8AtSvlQnp81NLJYJyDx9u+qTLVaQuzraqF8Gtf49ZJ8ClOrnVFycOritt6u4zT/xvWvPdtyRfXIYPLMubholQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733503973; c=relaxed/simple;
-	bh=sq7dQBficLSadbyGg1ToMr9fEj08H3sh3k8KpNn23aA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lPBI6vD53XT+laYRN/bDq5n/xmXDtXnbY0hYYSm8ovokdnCq4szgQYT2Jj5fWGz4+wXPMBkNb46HFTTrhn+zz61pyDjxHUc/qcVATGCIm5CQpOQfgDX2DyS2FcOKyNLTkQiv7n2kWtqX/IeuiB9mlGl5FM/iaOWZ8GCrZobJUiQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZOy4snWv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A385C4CED1;
-	Fri,  6 Dec 2024 16:52:50 +0000 (UTC)
+	s=arc-20240116; t=1733510010; c=relaxed/simple;
+	bh=Q86J75Wlse8wJ2ag9BsAM2NfLtB+qhOPLFY/afXDp1g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sYSOfUW/GPLy9/xOX4e/n8/0efm20m1oKMNdqNrjPdrlCSjM6VUS0nFNGWXWhROUA9b+ukciEXEOOrFbFHAkVhkylVzIhWxRNh4zh8DHDml1/g5Nnh3TNB86MqlHjhj06d4efrJ2WUMSCOVrWJ8/DcDNt9mBYzFaCTShNn68q4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DjXcnDMq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97EB5C4CED1;
+	Fri,  6 Dec 2024 18:33:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733503972;
-	bh=sq7dQBficLSadbyGg1ToMr9fEj08H3sh3k8KpNn23aA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZOy4snWvS4vUEJ5vkEuZVku7kZ18NLUWIIhvcDv8E/k00XTb4+5L42fr3LXAhC+ju
-	 52WeOo0Lg4Mvm0wQDES96OVxOMUZGxc1Y2/rV02BqV4DuavlUjEQyweFb4wR8CeybG
-	 Hm12bA51/qiM4EZ9uTSm8ZNFGetL7XuQ2voxRc7KTydsRw2ebsqhSCwTQnzsyslte+
-	 xwsbZVZ3R6aNkHqaebBzk/2zFJTyYafi/+xMzgqrp2TV1ShporV1m8ZBl7XBE6RGXD
-	 RKQrhF9yEPWgPRxzgqQ9D2Ldt/iFrVji1wAo/NBcPqT3lsEWarY/Vvha3VpGbJ1qGV
-	 w2HY+WrhmQEjw==
-Date: Fri, 6 Dec 2024 16:52:48 +0000
-From: Conor Dooley <conor@kernel.org>
-To: amitsd@google.com
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Kyle Tso <kyletso@google.com>, RD Babiera <rdbabiera@google.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: connector: Add pd-revision property
-Message-ID: <20241206-perch-elliptic-4e8a8170426e@spud>
-References: <20241205-get_rev_upstream-v1-0-90158ee7d75f@google.com>
- <20241205-get_rev_upstream-v1-1-90158ee7d75f@google.com>
+	s=k20201202; t=1733510009;
+	bh=Q86J75Wlse8wJ2ag9BsAM2NfLtB+qhOPLFY/afXDp1g=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DjXcnDMqvMdaL7Xb8arLi3mOmq/w2e60TiTSQ7qYsBmps7Iv/GKe5BREyNPFOnFES
+	 RBSfgjEHSPKqzVaBhvH/WLnHNouPXNBH7Ya8sKhMzK7IBzm6qkNXXRcprUebZ9n5Cj
+	 XyKbzOfyehZ/QAD1B+xkF3LWx2097Pne3jA4vz66SzGd8nutUsjfIkj7ivxQu8hm6q
+	 CuTbR660fGvOIU1VmiOR+yqEH/4jxmspBVfEp0q+wU8I07VdlndtZ2stsb8c7VkNNR
+	 bz6JgS71ABpfa4LkP22eHKTmehgO1h9Glovirbj2E6zwMt3EyB8HKmWQ7aDxl/o1r0
+	 tVabPjpxAl2uQ==
+From: Mario Limonciello <superm1@kernel.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org (open list:THUNDERBOLT DRIVER),
+	linux-kernel@vger.kernel.org,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Richard Hughes <hughsient@gmail.com>
+Subject: [PATCH] thunderbolt: Don't display retimers unless nvm was initialized
+Date: Fri,  6 Dec 2024 12:33:18 -0600
+Message-ID: <20241206183318.1701180-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="pNSV/oThW7kFwOxz"
-Content-Disposition: inline
-In-Reply-To: <20241205-get_rev_upstream-v1-1-90158ee7d75f@google.com>
+Content-Transfer-Encoding: 8bit
 
+From: Mario Limonciello <mario.limonciello@amd.com>
 
---pNSV/oThW7kFwOxz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The read will never succeed if nvm wasn't initialized.
 
-On Thu, Dec 05, 2024 at 11:46:08PM -0800, Amit Sunil Dhamne via B4 Relay wr=
-ote:
-> From: Amit Sunil Dhamne <amitsd@google.com>
->=20
-> Add pd-revision property definition, to specify the maximum Power
-> Delivery Revision and Version supported by the connector.
->=20
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
-> ---
->  Documentation/devicetree/bindings/connector/usb-connector.yaml | 6 ++++++
->  Documentation/devicetree/bindings/usb/maxim,max33359.yaml      | 1 +
->  2 files changed, 7 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.ya=
-ml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> index 67700440e23b5b7ca0db2c395c8a455bcf650864..341d2872e8d43450d219b7b72=
-d48790051dc4e2b 100644
-> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
-> @@ -293,6 +293,12 @@ properties:
->        PD negotiation till BC1.2 detection completes.
->      default: 0
-> =20
-> +  pd-revision:
-> +    description: Specifies the maximum USB PD revision and version suppo=
-rted by
-> +      the connector. This property is specified in the following order;
-> +      <revision_major, revision_minor, version_major, version_minor>.
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +
->  dependencies:
->    sink-vdos-v1: [ sink-vdos ]
->    sink-vdos: [ sink-vdos-v1 ]
-> diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml b/=
-Documentation/devicetree/bindings/usb/maxim,max33359.yaml
-> index 20b62228371bdedf2fe92767ffe443bec87babc5..350d39fbf2dcd4d99db07cb8f=
-099467e6fc653ee 100644
-> --- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
-> +++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
-> @@ -70,6 +70,7 @@ examples:
->                                         PDO_FIXED_DUAL_ROLE)
->                                         PDO_FIXED(9000, 2000, 0)>;
->                  sink-bc12-completion-time-ms =3D <500>;
-> +                pd-revision =3D /bits/ 8 <0x03 0x01 0x01 0x08>;
+Reported-by: Richard Hughes <hughsient@gmail.com>
+Closes: https://github.com/fwupd/fwupd/issues/8200
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/thunderbolt/retimer.c | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
 
-Why do you need this? Doesn't the compatible already give you this
-information?
+diff --git a/drivers/thunderbolt/retimer.c b/drivers/thunderbolt/retimer.c
+index 89d2919d0193e..7be435aee7217 100644
+--- a/drivers/thunderbolt/retimer.c
++++ b/drivers/thunderbolt/retimer.c
+@@ -321,9 +321,7 @@ static ssize_t nvm_version_show(struct device *dev,
+ 	if (!mutex_trylock(&rt->tb->lock))
+ 		return restart_syscall();
+ 
+-	if (!rt->nvm)
+-		ret = -EAGAIN;
+-	else if (rt->no_nvm_upgrade)
++	if (rt->no_nvm_upgrade)
+ 		ret = -EOPNOTSUPP;
+ 	else
+ 		ret = sysfs_emit(buf, "%x.%x\n", rt->nvm->major, rt->nvm->minor);
+@@ -342,6 +340,18 @@ static ssize_t vendor_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(vendor);
+ 
++static umode_t retimer_is_visible(struct kobject *kobj,
++				      struct attribute *attr, int n)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct tb_retimer *rt = tb_to_retimer(dev);
++
++	if (!rt->nvm)
++		return 0;
++	return attr->mode;
++
++}
++
+ static struct attribute *retimer_attrs[] = {
+ 	&dev_attr_device.attr,
+ 	&dev_attr_nvm_authenticate.attr,
+@@ -351,6 +361,7 @@ static struct attribute *retimer_attrs[] = {
+ };
+ 
+ static const struct attribute_group retimer_group = {
++	.is_visible = retimer_is_visible,
+ 	.attrs = retimer_attrs,
+ };
+ 
+-- 
+2.43.0
 
->              };
->          };
->      };
->=20
-> --=20
-> 2.47.0.338.g60cca15819-goog
->=20
->=20
-
---pNSV/oThW7kFwOxz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ1Mr4AAKCRB4tDGHoIJi
-0n8rAQDOcuOF4z1yyHB5vS3KHL2iVJpdDPRUgaVgB/49RTnkmgD8CEZVAB9v0JqY
-jgZOP7ZJdQNGphOiKh47LLIMMteXBAk=
-=kNCV
------END PGP SIGNATURE-----
-
---pNSV/oThW7kFwOxz--
 
