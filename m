@@ -1,193 +1,219 @@
-Return-Path: <linux-usb+bounces-18220-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18221-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B4AD9E7D96
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2024 01:43:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E6DE19E7DF6
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2024 03:03:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CA891888540
-	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2024 00:43:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9434F1888DBE
+	for <lists+linux-usb@lfdr.de>; Sat,  7 Dec 2024 02:03:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E31F4A35;
-	Sat,  7 Dec 2024 00:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9964317BD5;
+	Sat,  7 Dec 2024 02:02:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dPsriZyU"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="ZMTP0IXR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4E607482
-	for <linux-usb@vger.kernel.org>; Sat,  7 Dec 2024 00:43:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D615829422
+	for <linux-usb@vger.kernel.org>; Sat,  7 Dec 2024 02:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733532229; cv=none; b=po38WUJiyBxkjxuFWWUnQrJOcZUHi+bP51iPRSJmSSVBofdLOU06bsjgSTuV5iVSX9I+3njvCYZ0meYxV8WRfzZIajQ1DR22Pv7yDA0K4EPecjQe7USAic24JR9ItrFpq13qaqrp8N+CMt9YV+BW/4lUoPYY4kWLpz6BE9Qn0a4=
+	t=1733536978; cv=none; b=KcWZ5VODC7vJe76tTEKuDRm+9a1lqV1Ji12PB/lcXhRvkC7cviBKk7eWWpQabNaf47CjkXB96uiT6EQjRN8Kj9eYh6T3+bYG+xY9WTFl2k4HVEfpOASuVVmQygV8v9+9INWz7cDFOFC0lzPLCcQhxVfzxvhanWVezAODvc9vnXw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733532229; c=relaxed/simple;
-	bh=I5aPFrrZTUBk/62S5inzq4+BzJ5o1AWv5cTs6wryKXU=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=c6uk240pS3uLM7+JqIBaVjyGlmZXM3FSs0zRcbKLBm40eGzke0dlSDzMNp4qBQndWPcydjaZrHYGtIuOkeLTtskKzbuKG2jT6sVOVCYHEtyhDCg02ssOQs9Efxin0wy5csPzAZPXmu5+2+W5UgANDVFmSAQdKfdtYs/hUNAl8t4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dPsriZyU; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-20cf3e36a76so23424945ad.0
-        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2024 16:43:47 -0800 (PST)
+	s=arc-20240116; t=1733536978; c=relaxed/simple;
+	bh=MX6AL2PXvCUddcZm6bPMj3VDsfz+JC3fFzzQErt42Ow=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D5Wg1/RTBLi/gNXG4H+F24etF+nssqIYadFLqoCGx4ry5sg+8LfaE3ruQ4MpkLnFejLUp1E9LsCrjo/YDr18PyNMxJgJjFEOKfVXdorYusCwCHXmbGAdUSAwISZg9ygUcru1qAHl8N3woQI4YuDdHbaQRR+53ypwwUVpZTrBgPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=ZMTP0IXR; arc=none smtp.client-ip=209.85.160.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-4667931f14bso41573381cf.2
+        for <linux-usb@vger.kernel.org>; Fri, 06 Dec 2024 18:02:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733532227; x=1734137027; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=8NIYiYj0/6/7s0kJXH6ifIMfCVcOVZk9pSt5UkH2yQA=;
-        b=dPsriZyU3053Kbc3An/5+nYthjlhC9bb46xjuKvprSy0/a1kvhYX9dE3OcbVlVLkNm
-         2MVYYLnIkssNDOoAg+jDLbHtuLaQ6WV1Edxy/iFOXI+tpSuCBeijXlhXMnuDyqlEUo6f
-         vNNtx4+KghY2KYGupV/BXdRitmu+O2DcuBxkVh7v2xAfy3umkK2O4KbrRJ6NVvi1Z26C
-         6YbgPC4/TzoXAd8Gx7InLLXZZTDkKTmzAf0/rQSkyjxsuYKS79I7fRigpmPelOdX4W2F
-         F2wj8vtgWQ8wjsfmUkP8JZG43LVKH7+tmRjkxALzqD1XNAVr2BXWZ6Wvsa//pNb8CLpr
-         dqaA==
+        d=rowland.harvard.edu; s=google; t=1733536975; x=1734141775; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=yiB6O7PlhtO75E8o7uTGHXDvInV4HFK7WMYXDid+W3M=;
+        b=ZMTP0IXRGxiNzolkQVfn+ut2mdtXZWpE99fySHnGAwLQkWfFuVFufCbHi1j86nxOtJ
+         CzdX9YKIkTwYYXQM0VJwOLiyULNvfn2g/fy9V8ZBh93jcW1DzyFi5D5adGM/hDb8GfbW
+         ZknQFiDA4RYs2PDYINhb7fkSYO5P+7LZrdKV8mpP8Z39P997F9uwaW9qxH/u9TuwA4CI
+         l+6rcK/zjkDKjJ8c3e+guEvqabt4d2NvUyn7rTD1MYU75LADpzZ+xbXhJ3X85OS3aWSG
+         D21Ai4rsTiRsUgjCJx9ItswaUTSoyS6Lj0qnDWogOJ8crk1ATd17VCi85c5ltCILDPhd
+         uVaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733532227; x=1734137027;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8NIYiYj0/6/7s0kJXH6ifIMfCVcOVZk9pSt5UkH2yQA=;
-        b=GWs+BTUetrGvq+LciIP7BcioycgyIeHeeRbfH2TTVBN7WgnCqG77bMc9QKjV3rX/pB
-         lLpTofVSGS9oEiQ7pylbxtzduLhHQvpXbU7+TxwcpHMrVmVUjR4peLW2hAmQYezLkY/2
-         059QUHQkQO7mpbvyiiMxokYWPDgfeA+u8TJAGlw8exGFJxtBEOHfq0NvwdJKPGwZLt7Y
-         gze/kQeSy0NxWvRLF6WqJdwmJYClcY6DZoXbWH/qiNjGxYqbvA+u2YfTxnsZ66LkUlVd
-         ds79+Up4Gl43pJuV/kQeXoecv78GdBQ7S7xQwN+OhI8gkYWxO629pX/lyiPCflK65fyH
-         1y9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXhEz6W/6+duOxRDtLAFR7CBF8HbiFQBgKhzZYt2rEwUjMu7lXyXtEQ3iSn1dqyk7cZ339NZAQQteY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBA5Qg7YrW3SMb4IZDjsDWWE2l4wJW+G8yW5T+meDHiXPmdSXq
-	MeC4BLii0m4cP5ffvthtsj7YhCTlN+hcWH/8T9etwyRZO5YKn/Jk8TDtUoJ9XA==
-X-Gm-Gg: ASbGncu4bdaBgrhTahB39mKMkvlVpNzWiFJlm4Aq1yl5AwXgxohR175z3uVy8t3GARn
-	D9RZs9K+kGuKK3h0JHhY0IUCGmSEuyBCqtn9lCrGY/dHOtv1sQIHQJ7S7ilh0x804X2oq++dBz9
-	6pRjtmuZ2/ttjzN1VvFSV7pCVfnalv7gjlN6LboXp+8pHlKs3vi4SkCgvMvj3YgQMKO4RtzqFEE
-	jTdlwR/Lt1fOUJoRD3+SVXgYoZEI+U0FMnvyNHbzdUyQBgvUNWeFMo7ZPI3rlJl91cdHdRM05Nm
-	YirxmuC+On8sppQeutqY/nCZgvBx9slAwse/LRSTcLEeX7tB
-X-Google-Smtp-Source: AGHT+IEOKHnRBxgiTbuZLsDRAnvMI2qF3hSlWxPihqAZqfK7X7tsgLE1K38TVOOeBz0TthqVRuvZGg==
-X-Received: by 2002:a17:902:e550:b0:215:7ce8:1363 with SMTP id d9443c01a7336-21614d54c4emr73123065ad.19.1733532227003;
-        Fri, 06 Dec 2024 16:43:47 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e14:7:fe59:ca2e:5783:910c? ([2a00:79e0:2e14:7:fe59:ca2e:5783:910c])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-215f8f29c2dsm34332065ad.249.2024.12.06.16.43.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 06 Dec 2024 16:43:46 -0800 (PST)
-Message-ID: <e8b2501a-0808-4e14-960b-7355fa52e8ea@google.com>
-Date: Fri, 6 Dec 2024 16:43:44 -0800
+        d=1e100.net; s=20230601; t=1733536975; x=1734141775;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=yiB6O7PlhtO75E8o7uTGHXDvInV4HFK7WMYXDid+W3M=;
+        b=MsrOKfTGbrkb0rRprLpY+aEn1Ve2o2aYtYroe0OeK+gjWy7/7qKNR2B6fh+kjsc4Xi
+         OMKVker7kLV4gd1p1AwLU9v0CG9prMSeRz6Kn3kOIo231/iEm3TIgp30qPd1cAlDrvIg
+         d09xvZ+mHFuHZYKBqIOs9ie9cYwGx9Cdxn0yuE8EA/Kv6yhuMXzONWWVTZLHN6w9d3mU
+         A9nQTWWxUX1mGmno9F7BsNVB9AW6TIagpFxY7YwhQ01kvHn/KdKOhKn5OWaCN/uV5vr1
+         t8y5lfOqPsGR69to9NAOm5tBcrFDGwqOoa1AupULTArfwUmv5f2zh8Rue/MHc6CpMMuQ
+         2DBw==
+X-Forwarded-Encrypted: i=1; AJvYcCVWG9mFw8WIDJVD4YHSdKbCP4qwV9cSR6TNTgtHFjMnEwtTqEmspR01P7yE8NqQ8X1A2QzZfFwKqqU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBNhtglOka5dPL9btEbp/r2gatWB0SdrXJz6Yf+4MtiNCuR4nN
+	U0xM+ec+xZbRSMwgwRWobh3cUY5/BRCZgFzAQ0N5R8kCVJebQW7EXFzrbo49UAi1SjuiNdGLujY
+	=
+X-Gm-Gg: ASbGncslsBqJgSE7Jc+OSR93MdT3Fjjy5Lq69p/4hRakun7/GF6D53pxH620OriZq3+
+	8qO1yYaGX2NZ4VLN2l09w823rEZIDp2pgsSiRRpT4xJiRm5CIq3oteYNhgnZqslzk1TfTUU5sS7
+	WnHqQWYNImxwxT73bXja8RhzWW2wk8fPk+MYEXw8KFD5aXhJVrt0LnknlezfgeBc6GLQYLHdPwn
+	ALw+OkS90FwoLUeS1K0vArKHLp/hsCw7MwcojuLS8+jkQMDfhc=
+X-Google-Smtp-Source: AGHT+IE7J1c4rrMnkQ6gTFez34r3YXO2Y/CRdVOx6/s28nEDF5V0PkzlisbMoPoTdEJ19fYVxuPBig==
+X-Received: by 2002:a05:622a:1ccd:b0:461:18fb:f0a2 with SMTP id d75a77b69052e-46734f3dee1mr121728621cf.52.1733536974746;
+        Fri, 06 Dec 2024 18:02:54 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::a6b3])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467296c8d1asm27257981cf.21.2024.12.06.18.02.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 06 Dec 2024 18:02:53 -0800 (PST)
+Date: Fri, 6 Dec 2024 21:02:51 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Mathias Nyman <mathias.nyman@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	USB subsystem <linux-usb@vger.kernel.org>
+Subject: Re: USB: workqueues stuck in 'D' state?
+Message-ID: <897f0c44-e0de-4185-ae4e-75fd6acc1211@rowland.harvard.edu>
+References: <CAHk-=whPKnwZbbAp1MjogDP1aDYrCmQ63VC82+OnsLKy9M+gvg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Amit Sunil Dhamne <amitsd@google.com>
-Subject: Re: [PATCH 1/3] dt-bindings: connector: Add pd-revision property
-To: Conor Dooley <conor@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Kyle Tso <kyletso@google.com>, RD Babiera <rdbabiera@google.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20241205-get_rev_upstream-v1-0-90158ee7d75f@google.com>
- <20241205-get_rev_upstream-v1-1-90158ee7d75f@google.com>
- <20241206-perch-elliptic-4e8a8170426e@spud>
-Content-Language: en-US
-In-Reply-To: <20241206-perch-elliptic-4e8a8170426e@spud>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHk-=whPKnwZbbAp1MjogDP1aDYrCmQ63VC82+OnsLKy9M+gvg@mail.gmail.com>
 
-Hi Conor,
+On Fri, Dec 06, 2024 at 03:07:10PM -0800, Linus Torvalds wrote:
+> So I'm not sure if this is new or not, but I *think* I would have
+> noticed it earlier.
+> 
+> On my Ampere Altra (128-core arm64 system), I started seeing 'top'
+> claiming a load average of roughly 2.3 even when idle, and it seems to
+> be all due to this:
+> 
+>   $ ps ax | grep ' [DR] '
+>     869 ?        D      0:00 [kworker/24:1+usb_hub_wq]
+>    1900 ?        D      0:00 [kworker/24:7+pm]
+> 
+> where sometimes there are multiple of those 'pm' workers.
+> 
+> Doing a sysrq-w, I get this:
+> 
+>   task:kworker/24:3    state:D stack:0     pid:1308  tgid:1308  ppid:2
+>      flags:0x00000008
+>   Workqueue: pm pm_runtime_work
+>   Call trace:
+>    __switch_to+0xf4/0x168 (T)
+>    __schedule+0x248/0x648
+>    schedule+0x3c/0xe0
+>    usleep_range_state+0x118/0x150
+>    xhci_hub_control+0xe80/0x1090
+>    rh_call_control+0x274/0x7a0
+>    usb_hcd_submit_urb+0x13c/0x3a0
+>    usb_submit_urb+0x1c8/0x600
+>    usb_start_wait_urb+0x7c/0x180
+>    usb_control_msg+0xcc/0x150
+>    usb_port_suspend+0x414/0x510
+>    usb_generic_driver_suspend+0x68/0x90
+>    usb_suspend_both+0x1c8/0x290
+>    usb_runtime_suspend+0x3c/0xb0
+>    __rpm_callback+0x50/0x1f0
+>    rpm_callback+0x70/0x88
+>    rpm_suspend+0xe8/0x5a8
+>    __pm_runtime_suspend+0x4c/0x130
+>    usb_runtime_idle+0x48/0x68
+>    rpm_idle+0xa4/0x358
+>    pm_runtime_work+0xb0/0xe0
+> 
+>   task:kworker/24:7    state:D stack:0     pid:1900  tgid:1900  ppid:2
+>      flags:0x00000208
+>   Workqueue: pm pm_runtime_work
+>   Call trace:
+>    __switch_to+0xf4/0x168 (T)
+>    __schedule+0x248/0x648
+>    schedule+0x3c/0xe0
+>    usleep_range_state+0x118/0x150
+>    xhci_hub_control+0xe80/0x1090
+>    rh_call_control+0x274/0x7a0
+>    usb_hcd_submit_urb+0x13c/0x3a0
+>    usb_submit_urb+0x1c8/0x600
+>    usb_start_wait_urb+0x7c/0x180
+>    usb_control_msg+0xcc/0x150
+>    usb_port_suspend+0x414/0x510
+>    usb_generic_driver_suspend+0x68/0x90
+>    usb_suspend_both+0x1c8/0x290
+>    usb_runtime_suspend+0x3c/0xb0
+>    __rpm_callback+0x50/0x1f0
+>    rpm_callback+0x70/0x88
+>    rpm_suspend+0xe8/0x5a8
+>    __pm_runtime_suspend+0x4c/0x130
+> 
+> so it seems to be all in that xhci_hub_control() path. I'm not seeing
+> anything that has changed in the xhci driver in this merge window, so
+> maybe this goes back further, and I just haven't noticed this odd load
+> average issue before.
+> 
+> The call trace for the usb_hub_wq seems a lot less stable, but I've
+> seen backtraces like
+> 
+>   task:kworker/24:1    state:D stack:0     pid:869   tgid:869   ppid:2
+>      flags:0x00000008
+>   Workqueue: usb_hub_wq hub_event
+>   Call trace:
+>    __switch_to+0xf4/0x168 (T)
+>    __schedule+0x248/0x648
+>    schedule+0x3c/0xe0
+>    schedule_preempt_disabled+0x2c/0x50
+>    __mutex_lock.constprop.0+0x478/0x968
+>    __mutex_lock_slowpath+0x1c/0x38
+>    mutex_lock+0x6c/0x88
+>    hub_event+0x144/0x4a0
+>    process_one_work+0x170/0x408
+>    worker_thread+0x2cc/0x400
+>    kthread+0xf4/0x108
+>    ret_from_fork+0x10/0x20
+> 
+> But also just
+> 
+>   Workqueue: usb_hub_wq hub_event
+>   Call trace:
+>    __switch_to+0xf4/0x168 (T)
+>    usb_control_msg+0xcc/0x150
+> 
+> or
+> 
+>   Workqueue: usb_hub_wq hub_event
+>   Call trace:
+>    __switch_to+0xf4/0x168 (T)
+>    __schedule+0x248/0x648
+>    schedule+0x3c/0xe0
+>    schedule_timeout+0x94/0x120
+>    msleep+0x30/0x50
+> 
+> so at a guess it's just some interaction with that 'pm' workqueue.
+> 
+> I did a reboot just to verify that yes, it happened again after a
+> fresh boot. So it is at least *somewhat* consistently repeatable,
+> although I wouldn't be surprised if it's some kind of timing-dependent
+> race condition that just happens to trigger on this machine.
+> 
+> I could try to see if it's so consistent that I could bisect it, but
+> before I start doing that, maybe just the backtraces makes somebody go
+> "Ahh, that smells like XYZ"..
+> 
+> Hmm?
 
-On 12/6/24 8:52 AM, Conor Dooley wrote:
-> On Thu, Dec 05, 2024 at 11:46:08PM -0800, Amit Sunil Dhamne via B4 Relay wrote:
->> From: Amit Sunil Dhamne<amitsd@google.com>
->>
->> Add pd-revision property definition, to specify the maximum Power
->> Delivery Revision and Version supported by the connector.
->>
->> Signed-off-by: Amit Sunil Dhamne<amitsd@google.com>
->> ---
->>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 6 ++++++
->>   Documentation/devicetree/bindings/usb/maxim,max33359.yaml      | 1 +
->>   2 files changed, 7 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> index 67700440e23b5b7ca0db2c395c8a455bcf650864..341d2872e8d43450d219b7b72d48790051dc4e2b 100644
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> @@ -293,6 +293,12 @@ properties:
->>         PD negotiation till BC1.2 detection completes.
->>       default: 0
->>   
->> +  pd-revision:
->> +    description: Specifies the maximum USB PD revision and version supported by
->> +      the connector. This property is specified in the following order;
->> +      <revision_major, revision_minor, version_major, version_minor>.
->> +    $ref: /schemas/types.yaml#/definitions/uint8-array
->> +
->>   dependencies:
->>     sink-vdos-v1: [ sink-vdos ]
->>     sink-vdos: [ sink-vdos-v1 ]
->> diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> index 20b62228371bdedf2fe92767ffe443bec87babc5..350d39fbf2dcd4d99db07cb8f099467e6fc653ee 100644
->> --- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> +++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> @@ -70,6 +70,7 @@ examples:
->>                                          PDO_FIXED_DUAL_ROLE)
->>                                          PDO_FIXED(9000, 2000, 0)>;
->>                   sink-bc12-completion-time-ms = <500>;
->> +                pd-revision = /bits/ 8 <0x03 0x01 0x01 0x08>;
-> Why do you need this?
+In the past (not recently) I have seen the system get into a loop, 
+repeatedly suspending and resuming some device over and over.
 
-This DT property helps Type-C Port Manager (TCPM, consumer of the 
-connector class properties) fetch the exact Power Delivery (PD) revision 
-& version information of the Type-C port controller (TCPC)'s connector. 
-In turn, we require it to be able to support "Revision_Information" 
-Atomic Message Sequence (AMS) in TCPM to be USB PD spec compliant for 
-all revision & versions after PD3.1 v1.x.
+What do you get if you enable dynamic debugging for usbcore?
 
-> Doesn't the compatible already give you this
-> information?
-
-Compatible property does not give information regarding the PD revision 
-& version but only gives info on the type of connector (usb a, b or c). 
-Also, connector class is used by several TCPCs like maxim,max33359, 
-ptn5110, etc. and each of them may be compliant to  different 
-combinations of revision & version. This feature would help users set 
-these values based on the revision/versions their TCPC supports.
-
-Currently  TCPM driver hardcodes the Revision value to 3.0 and doesn't 
-provide any info on version (undesirable).
-
-It should be noted that:
-
-1. There are multiple versions & revisions of the USB PD spec and they 
-keep evolving frequently. A certain connector hardware may only be spec 
-compliant for up to a certain version + version. Thus, this is the only 
-way for TCPM to know what ver + rev the connector hardware supports. 
-This will enable the TCPC system to present the exact rev & ver values 
-when requested for revision info by the port partner.
-
-2. I also considered incrementing the revision & version information 
-values in the TCPM code. However, that won't be backward compatible for 
-connectors whose hardware doesn't support features in the latest spec. 
-In this case we would be presenting incorrect revision & version values 
-(higher than what is actually supported by the hardware).
-
-Regards,
-
-Amit
-
->>               };
->>           };
->>       };
->>
->> -- 
->> 2.47.0.338.g60cca15819-goog
->>
->>
+Alan Stern
 
