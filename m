@@ -1,136 +1,144 @@
-Return-Path: <linux-usb+bounces-18268-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18269-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4CD79E9B58
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 17:15:30 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2141A1888B6C
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 16:15:30 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D07C7142633;
-	Mon,  9 Dec 2024 16:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="UwN/nAXd"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83B079E9B91
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 17:26:02 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD049233131;
-	Mon,  9 Dec 2024 16:15:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF788282434
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 16:26:00 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6246145B1B;
+	Mon,  9 Dec 2024 16:25:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iFqSzKDA"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373BE142900;
+	Mon,  9 Dec 2024 16:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733760922; cv=none; b=kG4XeouWJsxylklYKyGNcGmcyGqF/j1Gj83v05mVfzvqGmv/mS9nyPkpIFylCRA6F0hjNoYCgyKws32nLuQUdwWcEsKL6vkFqDMJw12TBYANob/dxz20QNxJloUIihwFIwkUekIP2VFm3mBttrcSunQJmQIjY76o0yXVuWXDCr8=
+	t=1733761556; cv=none; b=sMXVPU6yKe3D9BcCuP1Cr8UxHm80yV3HOwPS1gRoedKYyXm36eQI1ycdfu7ToKHaGn6tejGf/V2An9zn5mPrTltVhq26rljGxmLl/IfbvCd/kqzfkOraQHPYXw+2ZMXQEZU8GA+imV6/SGDElqMRPRKTY2DKWnk+DB37I8O2So4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733760922; c=relaxed/simple;
-	bh=/Jxmin0WMSDkwTD01xsxrZ8uovoPnaZG01fKLhFI/VM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OWx/G7o66NnaNZ4xQrMc0poTu8kIbQXJsIKOLkx0fYagUX6Snhd/HyfDeG5FOUtjV1DbJ/1YcOvc5Qb6hCdhzmiBiGFzVe5856Vd/byGj7sGZoGBtdeOclPcp+FS7C9TFUks7bUiTPCY/Ox1ksPJ/6siANRbGHm4GyqICA6ZgN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=UwN/nAXd; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=jhuAePAZ8ZQ2jPG7JG2KWJmbb/vDD1kvHPakjiEM5uk=; b=UwN/nAXdCbg5hTnPExU+Z7mgLx
-	SbL6GdW45VGT2qd8kBufCqrskyGXUAPznVedKM/Nix9MQKqUo8jM1R4t/QacwQNaahHbLwFAMd4Q/
-	oxoHwri9w986EdBfksTcBcYCVs6huLVOG0Ruq3+otfivHXk5tORU1pcn8jTKcVFwHHd0=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tKgPR-00Fgw5-QG; Mon, 09 Dec 2024 17:14:57 +0100
-Date: Mon, 9 Dec 2024 17:14:57 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
-	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-	Felipe Balbi <balbi@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
-	Hari Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
-Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and
- MBa62xx carrier board Device Trees
-Message-ID: <a2a2f201-73a4-4a99-baef-0d593a88c872@lunn.ch>
-References: <cover.1733737487.git.matthias.schiffer@ew.tq-group.com>
- <95ff66ca2c89f69d893c2ce9eed9a0c677633c7b.1733737487.git.matthias.schiffer@ew.tq-group.com>
- <a9c5cfda-e3e3-436a-8d05-b2f096157cfe@lunn.ch>
- <c902a56cf34838f60cee67624bb923e91d74e9e0.camel@ew.tq-group.com>
- <d25b1447-c28b-4998-b238-92672434dc28@lunn.ch>
- <e16076d16349e929af82fa987a658bff1d9804c4.camel@ew.tq-group.com>
+	s=arc-20240116; t=1733761556; c=relaxed/simple;
+	bh=D2x5fHTQCDa81i7TcZDxFnrvfS3HasdzbgffyKZH0p0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KUa4wUPsSv+35Da5Sv31tN+xA5gTSf+VEA4mTnEF3b81UE2cOAB/ncZD3674XWma3T8vjoOuvgbyaMXrHpbyp6K3W8814lpf/rYuTHCtDAVXgh1wuS7UCECedM3z+3zdHHySKya4tEABf10pnTuMKejbk98FPVBfNnHjMvyML78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iFqSzKDA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED0E2C4CED1;
+	Mon,  9 Dec 2024 16:25:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733761555;
+	bh=D2x5fHTQCDa81i7TcZDxFnrvfS3HasdzbgffyKZH0p0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iFqSzKDA2XWCSVu2JbKqlgqbcWVU4HbdPd6O3vVVDtjylqbfFg+Jfr9trhpTlJJIy
+	 8HnznYbDt9cAIFoFs+IIbhbmpilpB5s2O9+ii6jp7hqDNDnAw17FZdaP+fwbYMWbd5
+	 JR/vZJQLzRnU9C28mORXkY1mouv4gAAjsRF6R4rrcnDDQpa1rgnO9fTTccrC+/rONM
+	 C1Gb7qYWR1XLHvqcI7LIkCbjh6hflfVhxnj/564iWjRZGUU7mrSURwXAQB6Cr6Tc1f
+	 yPU4/4GUNkZckHneGHvBMaqfU7dRvmQ1NJDjieusb76/w2aY+bmmyEaVxC9IfBmeJ9
+	 Ou/abrBTbXwVQ==
+From: Mario Limonciello <superm1@kernel.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org (open list:THUNDERBOLT DRIVER),
+	linux-kernel@vger.kernel.org,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Richard Hughes <hughsient@gmail.com>
+Subject: [PATCH v2] thunderbolt: Don't display nvm_version unless upgrade supported
+Date: Mon,  9 Dec 2024 10:25:51 -0600
+Message-ID: <20241209162551.888749-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e16076d16349e929af82fa987a658bff1d9804c4.camel@ew.tq-group.com>
+Content-Transfer-Encoding: 8bit
 
-> Not our board, but the AM62 SoC. From the datasheet:
-> 
-> "TXC is delayed internally before being driven to the RGMII[x]_TXC pin. This
-> internal delay is always enabled." So enabling the TX delay on the PHY side
-> would result in a double delay.
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-phy-mode describes the board. If the board does not have extra long
-clock lines, phy-mode should be rgmii-id.
+The read will never succeed if nvm wasn't initialized due to an
+unknown format.
 
-The fact the MAC is doing something which no other MAC does should be
-hidden away in the MAC driver, as much as possible.
+Add a new callback for visibility to only show when supported.
 
-The MAC driver should return -EINVAL with phy-mode rgmii, or
-rmgii-rxid, because the MAC driver is physically incapable of being
-used on a board which has extra long TX clock lines, which 'rmgii' or
-rgmii-rxid would indicate.
-
-Since the MAC driver is forcing the TX delay, it needs to take the
-value returned from of_get_phy_mode() and mask out the TX bit before
-passing it to the PHY.
-
-Now, it could be that history has got in the way. There are boards out
-there which have broken DT but work. Fixing the MAC driver to do the
-correct thing will break those boards. Vendors with low quality code
-which works, but not really.
-
-~/linux/arch/arm64/boot/dts/ti$ grep rgmii k3-am625-*
-k3-am625-beagleplay.dts:	phy-mode = "rgmii-rxid";
-k3-am625-sk.dts:	phy-mode = "rgmii-rxid";
-
-Yep, these two have broken DT, they don't describe the board
-correctly.
-
-O.K. Can we fix this for you board? Yes, i think we can. If you take
-rmgii-rxid, aka PHY_INTERFACE_MODE_RGMII_RXID, and mask out the TX,
-you still get PHY_INTERFACE_MODE_RGMII_RXID. If you take rgmii-id,
-a.k.a. PHY_INTERFACE_MODE_RGMII_ID and mask out the TX, you get
-PHY_INTERFACE_MODE_RGMII_RXID, which is what you want.
-
-Please produce a patch to the MAC driver, explaining the horrible mess
-the vendor made, and how this fixes it, but should also not break
-other boards.
-
-> No such defaults exist in the DP83867 driver. If any rgmii-*id mode is used, the
-> corresponding delays *must* be specified in the DTB:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/dp83867.c#n532
-
-That is bad, different to pretty every other PHY driver :-(
-
-If you want, you could patch this driver as well, make it default to
-2ns if delays are asked for.
-
-    Andrew
-
+Fixes: aef9c693e7e5 ("thunderbolt: Move vendor specific NVM handling into nvm.c")
+Reported-by: Richard Hughes <hughsient@gmail.com>
+Closes: https://github.com/fwupd/fwupd/issues/8200
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-pw-bot: cr
+v2:
+ * Use no_nvm_upgrade instead of changing logic
+ * Adjust commit message
+---
+ drivers/thunderbolt/retimer.c | 19 +++++++++++++++----
+ 1 file changed, 15 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/thunderbolt/retimer.c b/drivers/thunderbolt/retimer.c
+index 89d2919d0193e..eeb64433ebbca 100644
+--- a/drivers/thunderbolt/retimer.c
++++ b/drivers/thunderbolt/retimer.c
+@@ -103,6 +103,7 @@ static int tb_retimer_nvm_add(struct tb_retimer *rt)
+ 
+ err_nvm:
+ 	dev_dbg(&rt->dev, "NVM upgrade disabled\n");
++	rt->no_nvm_upgrade = true;
+ 	if (!IS_ERR(nvm))
+ 		tb_nvm_free(nvm);
+ 
+@@ -182,8 +183,6 @@ static ssize_t nvm_authenticate_show(struct device *dev,
+ 
+ 	if (!rt->nvm)
+ 		ret = -EAGAIN;
+-	else if (rt->no_nvm_upgrade)
+-		ret = -EOPNOTSUPP;
+ 	else
+ 		ret = sysfs_emit(buf, "%#x\n", rt->auth_status);
+ 
+@@ -323,8 +322,6 @@ static ssize_t nvm_version_show(struct device *dev,
+ 
+ 	if (!rt->nvm)
+ 		ret = -EAGAIN;
+-	else if (rt->no_nvm_upgrade)
+-		ret = -EOPNOTSUPP;
+ 	else
+ 		ret = sysfs_emit(buf, "%x.%x\n", rt->nvm->major, rt->nvm->minor);
+ 
+@@ -342,6 +339,19 @@ static ssize_t vendor_show(struct device *dev, struct device_attribute *attr,
+ }
+ static DEVICE_ATTR_RO(vendor);
+ 
++static umode_t retimer_is_visible(struct kobject *kobj, struct attribute *attr,
++				  int n)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct tb_retimer *rt = tb_to_retimer(dev);
++
++	if (attr == &dev_attr_nvm_authenticate.attr ||
++	    attr == &dev_attr_nvm_version.attr)
++		return rt->no_nvm_upgrade ? 0 : attr->mode;
++
++	return attr->mode;
++}
++
+ static struct attribute *retimer_attrs[] = {
+ 	&dev_attr_device.attr,
+ 	&dev_attr_nvm_authenticate.attr,
+@@ -351,6 +361,7 @@ static struct attribute *retimer_attrs[] = {
+ };
+ 
+ static const struct attribute_group retimer_group = {
++	.is_visible = retimer_is_visible,
+ 	.attrs = retimer_attrs,
+ };
+ 
+-- 
+2.43.0
+
 
