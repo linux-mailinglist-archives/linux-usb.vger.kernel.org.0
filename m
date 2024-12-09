@@ -1,109 +1,136 @@
-Return-Path: <linux-usb+bounces-18235-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18236-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D44299E87A5
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Dec 2024 21:17:28 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0AD69E8A46
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 05:29:25 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2A691884B80
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 04:29:25 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50C9D158851;
+	Mon,  9 Dec 2024 04:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M8ytS9XU"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4AB93281967
-	for <lists+linux-usb@lfdr.de>; Sun,  8 Dec 2024 20:17:27 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79E4D145324;
-	Sun,  8 Dec 2024 20:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i9lfGnGK"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59F8322318
-	for <linux-usb@vger.kernel.org>; Sun,  8 Dec 2024 20:17:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18407158534;
+	Mon,  9 Dec 2024 04:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733689043; cv=none; b=aNT9BGIWXApxv+oN3gcjAnqnRclUFTpqtw74xl5EXE5RLY3Ri9M6EXNyCx/jW2jhwLEE2lkbwXQuYl4vrBoCMEMKizaavAeb48Q2/f0r0aTKweCsOf+2MDe0X+sfSwS8zzXvhmIua3Yu+wFXPoSW+gh8XLKVcyLl6SyTD+eF6Rk=
+	t=1733718560; cv=none; b=AICZR/BviNNQMOQ2irrTjB0ACpOXoYuZXU/b//FUM8JqU7aRZ7cDUrgPDy4BrH7Gf7tm55xm4P9nHwhMqOQFX8CDj3YG3PHWpH7uopMYgg2+tEcpDWg2u4WY2QMriatTgpiSJiwWlGmPXhXyl7Epj2jGe33MDqjLi+bgfwdCgag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733689043; c=relaxed/simple;
-	bh=zdyNlJjZaTA38GAjkMlMkKOapIEcG6qUnH5pJog0+CY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=egaW/lDUyD+pRANZTbFujGu0otJu/aBknh04KkjXVkHBZS4pF0mbUnTcK+cZcB0k19/boTWC34GqIW2DgCp3nZMQvjFVqxRpZgZigMDLjY7EjnQU3dpx7dQ1zIkl3JfvB9fxM02TqSEqNTbOPdZo04JMH8Jx8Czo8l4K+jfdTbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i9lfGnGK; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-540201cfedbso139544e87.3
-        for <linux-usb@vger.kernel.org>; Sun, 08 Dec 2024 12:17:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733689039; x=1734293839; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdyNlJjZaTA38GAjkMlMkKOapIEcG6qUnH5pJog0+CY=;
-        b=i9lfGnGKVgbt7PT4ePmD9jxba1CU/S1iMbJdtHcx2rDwf4t7oBmP/zsCW7mkWb2PeI
-         0TMe9sY9SeUf4MAEKWCxHp2nwQZGmpgyUprs4vnceHvFfj9+S8ONoHU5WoqHYpsKLtCY
-         hTcnK/7Dkg/zJGrH8c3cQilF6w/z21QiaVNZxBh5dWCvgFsEdkjyQeJwlObVqFxPg8mN
-         VgrQS2rZ8BEWqau/OVufuR7hboikdFl6x/1+vewr90n3nMxaPRiQINHZqgVMRp9bVPhv
-         mIK2eTN8SkrGsH6wkel4RBF+RUxI60jGisAmeYArpj3WiSDiHl6Atssf7FJB4jcW3eKF
-         SyJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733689039; x=1734293839;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zdyNlJjZaTA38GAjkMlMkKOapIEcG6qUnH5pJog0+CY=;
-        b=BpObBEY549rzv0eDkLHAw925UVab6x3E0RLMsw3AUr7Xos3X7fu/m/totdHA1SGPq6
-         IULbZYC33Qfb+w09PQaFEIIAh8nG5BUpVxc/uhSWaPTE/Pea1iw8CzTjXQNWFaC+Obuj
-         jqV6R11kc224na+jsRANSzjKoBjtqzAw9TPCK0zdSiatNnFEj+CB1lZqvK6wQPFISNqK
-         1lzwA/7YsRsowkyuQf6zmpX+MFyBX3M34g0soEL/7E1vqHDKY1IAlZKdZ/YTjisHKqDt
-         Hl+UtBEjrmdHXFn0FIwD0ikSScb2YRAMPupMTDolcRpVkEGD0F0jLR3FyQhByZUnvpbW
-         Ruyw==
-X-Forwarded-Encrypted: i=1; AJvYcCUMJ7dZed9pk7BOXkgZUSUhn2GUBGaGgkpL7zuTUgSnflhfnZXRL5y7U42yaUhcAVZeDOXuFUUaSbU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy12jd6dpxyVYu+i87e5BpznKsveenkgf5MYMgswlzhelhT9DjL
-	hEREzE/bM75+dl7M1tjMwA4B5pg3sAKPMt32zd2yDuSV2QonlIO8JAEwrg==
-X-Gm-Gg: ASbGncv1iIniWaxk9vd58tdkIlgHjdUn5340+NQZ+4RHQvs4JJdDaYHEpDqxW8562pL
-	nNXXagQ3gf6dmsd5kxt6APHlK+Haru/e+LnqKwlO5O0epYFhlNrw8R1T1GoYLvo6xYys+ER1c4h
-	+VwNyb5u+MJcC/9O1PRd41Rh0V3ppfHIeuv1kxHur0kIeivuuxzr6EXOuxG4shTu5xUsxJd14Tk
-	jBOUUiRVYreCHPbznn1l/A3npFnME2tXgWYu0XcT9KH+S5743oZGgLmqHtKgLARBN0=
-X-Google-Smtp-Source: AGHT+IH58GIkq2z6/X3xr5OwHRymDj+jggBVNiq3TQQ+2mie8uP0O0Ehq33ciGyQur33x6+4EVC8bg==
-X-Received: by 2002:a05:6512:ac4:b0:53e:3a73:fd2c with SMTP id 2adb3069b0e04-53e3a73fdb6mr1942279e87.49.1733689038896;
-        Sun, 08 Dec 2024 12:17:18 -0800 (PST)
-Received: from foxbook (adtu138.neoplus.adsl.tpnet.pl. [79.185.232.138])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5401c0382c5sm287186e87.32.2024.12.08.12.17.16
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 08 Dec 2024 12:17:17 -0800 (PST)
-Date: Sun, 8 Dec 2024 21:17:12 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: torvalds@linux-foundation.org
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
- mathias.nyman@intel.com
-Subject: Re: USB: workqueues stuck in 'D' state?
-Message-ID: <20241208211712.7d475295@foxbook>
-In-Reply-To: <CAHk-=wgBm_x2EfaSHvSL3otbcDbw06XW2j9EFNMK2_8XoMHYqA@mail.gmail.com>
+	s=arc-20240116; t=1733718560; c=relaxed/simple;
+	bh=h4HEKX5WEfX5MF5rDNMl63OuBmbaPdc6Xc34HEpI9d4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IeYOM6d/LPINs7UTAd8PUprceqNeGIBF+4bhIp5xo9NZLgxMT0+hUYbUUpPH3Om+RYyAsiZfB6Qtaor7N8hzoiseElR2EeZa6K3617nzyR/f5N+zEU/lOtoB/PMOMjHwjdduw3xlgfS8inIdwYwHXeSRlJsXCApqQutYdkhWuCQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M8ytS9XU; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1733718559; x=1765254559;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h4HEKX5WEfX5MF5rDNMl63OuBmbaPdc6Xc34HEpI9d4=;
+  b=M8ytS9XUQp/7kdu/+/v3kWlHLICcMS9aS9zbMl6l+V/ZLVINI7BRnPHr
+   zfH2EhKWBIs584ZQFATC8jmeH0dkaQRlkDq6Jpry+Wm3zoDO+BafLPnub
+   perd4hC3Eptw5RyYJYQzA6x/0nTsx9UjyIO96NjDIMdrgKSEACNCV3+Ub
+   kZEurJiCxxs3t6y/38d/yKsBl8g/+sZffUsYQo1U+FOo/lPCcgxKz06Qk
+   lLcXzSh1UfCYF2Upn6rDrJHa92LAfEqxw42Nl2xb2C0dls9kr7/VtsHgN
+   ANEaNrsVXj+VxVGFiOyQRApOSj9q6UNHcdVyPD1r/S22QxnDzS8qKUmlq
+   A==;
+X-CSE-ConnectionGUID: L/1AoaUiQ6ijiFVIgU0v8g==
+X-CSE-MsgGUID: UxvOtF1zRCGrmzqmU3/j+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="34122913"
+X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
+   d="scan'208";a="34122913"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:29:18 -0800
+X-CSE-ConnectionGUID: BeSSpaOaRwGjAPOQUvdpKA==
+X-CSE-MsgGUID: f+5nCGJ8T42Mi1IFY5kmuw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
+   d="scan'208";a="99404806"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by fmviesa005.fm.intel.com with ESMTP; 08 Dec 2024 20:29:15 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tKVOS-0003r9-2x;
+	Mon, 09 Dec 2024 04:29:12 +0000
+Date: Mon, 9 Dec 2024 12:28:12 +0800
+From: kernel test robot <lkp@intel.com>
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	heikki.krogerus@linux.intel.com, tzungbi@kernel.org,
+	linux-usb@vger.kernel.org, chrome-platform@lists.linux.dev
+Cc: oe-kbuild-all@lists.linux.dev, akuchynski@google.com,
+	pmalani@chromium.org, jthies@google.com,
+	dmitry.baryshkov@linaro.org, badhri@google.com,
+	rdbabiera@google.com,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 2/7] usb: typec: Add driver for Thunderbolt 3
+ Alternate Mode
+Message-ID: <202412080010.bWqlreGq-lkp@intel.com>
+References: <20241206153813.v4.2.I3080b036e8de0b9957c57c1c3059db7149c5e549@changeid>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241206153813.v4.2.I3080b036e8de0b9957c57c1c3059db7149c5e549@changeid>
 
-Hi,
+Hi Abhishek,
 
-> > Are you using any USB devices on this thing, or is that just for
-> > internal connections?
->
-> All internal motherboard devices. Mostly the usual random hubs, but
-> also some "ASRR USB Ethernet" and a "Multifunction Composite Gadget".
+kernel test robot noticed the following build warnings:
 
-Dynamic debug has been suggested, it would tell which ports are being
-suspended and how often. Either usbcore and/or this should do:
+[auto build test WARNING on v6.12]
+[cannot apply to chrome-platform/for-next chrome-platform/for-firmware-next usb/usb-testing usb/usb-next usb/usb-linus masahiroy-kbuild/for-next masahiroy-kbuild/fixes linus/master v6.13-rc1 next-20241206]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-func xhci_set_link_state +p
+url:    https://github.com/intel-lab-lkp/linux/commits/Abhishek-Pandit-Subedi/usb-typec-Only-use-SVID-for-matching-altmodes/20241207-074104
+base:   v6.12
+patch link:    https://lore.kernel.org/r/20241206153813.v4.2.I3080b036e8de0b9957c57c1c3059db7149c5e549%40changeid
+patch subject: [PATCH v4 2/7] usb: typec: Add driver for Thunderbolt 3 Alternate Mode
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20241208/202412080010.bWqlreGq-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241208/202412080010.bWqlreGq-lkp@intel.com/reproduce)
 
-Stacktrace looks like this function has just returned and the driver
-is waiting for the HW to confirm new link state. (Which confirmation,
-or lack thereof, seems to be subsequently ignored by the way.)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412080010.bWqlreGq-lkp@intel.com/
 
-Regards,
-Michal
+All warnings (new ones prefixed by >>):
+
+>> drivers/usb/typec/altmodes/thunderbolt.c:16: warning: cannot understand function prototype: 'enum tbt_state '
+
+
+vim +16 drivers/usb/typec/altmodes/thunderbolt.c
+
+    15	
+  > 16	enum tbt_state {
+    17		TBT_STATE_IDLE,
+    18		TBT_STATE_SOP_P_ENTER,
+    19		TBT_STATE_SOP_PP_ENTER,
+    20		TBT_STATE_ENTER,
+    21		TBT_STATE_EXIT,
+    22		TBT_STATE_SOP_PP_EXIT,
+    23		TBT_STATE_SOP_P_EXIT
+    24	};
+    25	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
