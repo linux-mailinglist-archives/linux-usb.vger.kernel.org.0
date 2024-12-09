@@ -1,220 +1,191 @@
-Return-Path: <linux-usb+bounces-18261-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18263-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC5209E99FC
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 16:06:10 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F0889E9A77
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 16:27:09 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D92E281E59
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 15:06:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 00511161CF2
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 15:26:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F7B31B425E;
-	Mon,  9 Dec 2024 15:06:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4F661BEF9B;
+	Mon,  9 Dec 2024 15:26:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="OX9jiPZQ";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="YiZMU+M2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B2E2SzSi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C267F1A23B7;
-	Mon,  9 Dec 2024 15:05:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABB3823312A;
+	Mon,  9 Dec 2024 15:26:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733756762; cv=none; b=P8VIGVsTTw2VfuQ55XpPEP6m05iX5Q9tyb/04e6ixxy9lqKwFEPAIfkdNi5tUXBlFzKluRPtgOM+OQHA9Xda2adzDVHgwrCYhjy4Qinj23N2ZGPSsaP31cC2fvaJH5ucxT80pZV7UXM4Bkzhe0iogRqpzyYR41B6z2mIdfvlH4Q=
+	t=1733758004; cv=none; b=MfgZsVtZEmgbzkrS+ZqqAHlOAsDW6YF4R8qjUF/Ky+ktj7jqOrhqKol1UZHZcMI+PmTvqLuV+bsotJPtk2n0nYuLekw6vekj3GmfCLLoO2NaoefPjK0p1wHPmBE9yWVridLvJsm64e/8ImF4+WSbaB9YbfBmAYNeVY0XwgtBZY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733756762; c=relaxed/simple;
-	bh=2My4XARRaO1nUpL9bjfa6zYnjXrL8EvGlIsUfc7RlfA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RCyfLH2jmTrYiaiXgMxtG6XlhWcdWz4bneTzTPWqeq1BJC2dVeMY8tfLihPjdBlWJA7CTfDEHWqufX8OOVHSwT984+e2Pwl530CY53cfXZC1MHwgU32BhwuCUNPEtOOVcoUTYICYTFrFKH9smO7WcVsSCEozPh4k2wsHmIMRZpQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=OX9jiPZQ; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=YiZMU+M2 reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	s=arc-20240116; t=1733758004; c=relaxed/simple;
+	bh=32fZ2FltM4y9ebWmx9NWnFF9QHAfLue/T6EkweyWMKE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=jO5hJe/ecaqsXxUEyiqoEvj2w0w+lQ/qdbegiuv0pnVE4I4/yYyA3IqqSi8vU4N0p3Ljpya8MOWbMahlFXQ9bDSZpFORU9oAVo+3Kk3P9BB129nzfghhKh8D3e8OONIiravnrYmMAL07YlWieFQDKP1+JhW5X3OUr23NWtEF9As=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B2E2SzSi; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-434ab114753so29895405e9.0;
+        Mon, 09 Dec 2024 07:26:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1733756758; x=1765292758;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=vksvUByCwEXIhDlzgAmyb4aBjr3hSBbXTum0gcldopE=;
-  b=OX9jiPZQWp1uiiQvCN9G8NXZRHH2CHHzT81HEp1vBELAi652+AJGRVqs
-   2m9gPdMGGAl6O5ddEhav0mFyRl2IW8W85uT3BvA1EVIWwUg9FgnQTMYri
-   7jincifGbhmAS3K8uqW+d7egui0Q5FlSW7w5VV/PC/eCMPT1WnD3k6nmW
-   4+aNZYwhR8GhtFUrl/n+yvnVeNLys0S/TfS2zqoUqKT3dFB4Zey7eaERx
-   2qhWK8xxrIi0TlhHsSJV3eK5VHGM4FNmg1XkCUk5dOSjMzskhdGyvMe9Q
-   aCwHtv9bEL9in7D91sx16vGXpicwq9RldeOTf+xduOOZdn7ifkDP/x9TQ
-   Q==;
-X-CSE-ConnectionGUID: poYgBc8HRRGLk7FRHWt4dw==
-X-CSE-MsgGUID: J2pcjPvrRn+RzsTK4ZAeuw==
-X-IronPort-AV: E=Sophos;i="6.12,219,1728943200"; 
-   d="scan'208";a="40490430"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 09 Dec 2024 16:05:54 +0100
-X-CheckPoint: {67570752-B-1B231F50-D910A4E3}
-X-MAIL-CPID: 975DDE29B4A2D72A1889DEB0E7CA7530_5
-X-Control-Analysis: str=0001.0A682F19.67570752.0082,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 13AA0165653;
-	Mon,  9 Dec 2024 16:05:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1733756749;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vksvUByCwEXIhDlzgAmyb4aBjr3hSBbXTum0gcldopE=;
-	b=YiZMU+M2nnsaXHE2rANfrtKVcBhPqrpr0DG3Rno+5Vm0NEuDPNMUEMPXgQD/XP5fWG436O
-	MAN/yy3RkHSS8oQGZ9I1CYF9YNLut5rct3shpwTxz6UsIHMHgFBjnxTLXTlwSCmBlDGH0T
-	QtzQIn/z5fhGBs0HhVYsKrcjsU5mNGjxoPkqtzlrGFGo1RD9RJwJ4pLsSt/jlRto/5BJIj
-	y1UQjQKhA2vq9mYA/a6a2JVNO8mefvSjTfEYSwlMc2WdhsQpPrU8fddjQ7fho4Ecfa/Z+/
-	1hN6ENO+l+preBwwshGaJHyVFRGX5Bgn6/3VXfucEfJJTpsZQYJIunXRj22C0A==
-Message-ID: <e16076d16349e929af82fa987a658bff1d9804c4.camel@ew.tq-group.com>
-Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and
- MBa62xx carrier board Device Trees
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero
- Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
- Tony Luck <tony.luck@intel.com>, "Guilherme G. Piccoli"
- <gpiccoli@igalia.com>, Felipe Balbi <balbi@kernel.org>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>, Hari
- Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
-Date: Mon, 09 Dec 2024 16:05:46 +0100
-In-Reply-To: <d25b1447-c28b-4998-b238-92672434dc28@lunn.ch>
-References: <cover.1733737487.git.matthias.schiffer@ew.tq-group.com>
-	 <95ff66ca2c89f69d893c2ce9eed9a0c677633c7b.1733737487.git.matthias.schiffer@ew.tq-group.com>
-	 <a9c5cfda-e3e3-436a-8d05-b2f096157cfe@lunn.ch>
-	 <c902a56cf34838f60cee67624bb923e91d74e9e0.camel@ew.tq-group.com>
-	 <d25b1447-c28b-4998-b238-92672434dc28@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+        d=gmail.com; s=20230601; t=1733758001; x=1734362801; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=XD5KkTOUR7sdY2Mte2HHFyXLJwYOvwevVjoh92gGMBo=;
+        b=B2E2SzSiTLUFLwx5Xdo8ByemV2iZjI8+33YJzDXjsFp2SvTmr2ys7gMg1i9VLA5kJH
+         IWf+7pbKuVsH9HzrrMIcEvyfdDX9gdi3FZRNp1qWEnz0PTngjjMv3qLeva3Go2x+XW48
+         o6YnHdSJg3v8wnGtVOjrp+IsuDrfzRlmFBxVDfw+53zS2n0R8H+IBSWvDGoPcdqS4f84
+         1QsllxcYL2BLPkJwy8gqNms+4V3rigS5U8BOOdxHFVvwU4NA02dPgIliu4cvviRv27SZ
+         0em0AHeDmS7bnsoiggmnpm/OPMRx3BDWzyoFM0PitCEdShBxtd0sucLYz+l8ccGaUYy9
+         qVXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733758001; x=1734362801;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XD5KkTOUR7sdY2Mte2HHFyXLJwYOvwevVjoh92gGMBo=;
+        b=KSHJHII49b7trPNZGi0CjNJG8VGVZIW1i0610plToOCqIcX1b/dZ09zH1KGDC1L+Wx
+         DIC1AIuhEfS27c0dNZh5ktr0kZbn5Zsi9WQXP4EbTkovWK3vsLsasSTNCQ/c1Rg1n3QR
+         zewB0q6WTL2Ef/u7MzypvSEtxGh9ctZEU5tRXPqS10/LGGMOBfoOcfhsffJBij0sijZF
+         yFIGEY1PzQ5q21tNpylph9TsSaULECEG3YysseFry+amF44W3arlujvBEXAaS85gLNBi
+         ZcZbmgwpEJUWd/0uaf+7nZndiifE9lxHHe7qfVYNdLNMiJeqov3ywl+vP/qPCr2urmuy
+         zWvg==
+X-Forwarded-Encrypted: i=1; AJvYcCWH+l+/V6NIaDJKSQPVjo5J/X1aJkBdVlq2DjxO+st5X40/rhImnn9kzY/OE170ANZitAhz9kX0uD8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYwZSNc+81qLZJpdfm7UWHtsdIjmBTJIKwh+gu1uq7JdKZv9Nu
+	MmNZWSvxaslw8hGZT+4ozeCVocqiWAp2L5ffYczIeA/q3vBe38gX
+X-Gm-Gg: ASbGncum1Db2A9vyasXySfGBJyX5sAIFrradQWyMSif89JeDI4PC1j6uCOzs99Zy95O
+	4d00iACM4GxAtrUJ8Gtg9wBWjk2tsNuAenewUBcyMAV+TG+qrG4/610Kbkxkt42UhWPEtq0xbBU
+	rRTCP5Yo9O1dY2wzA8XD80U8UkpDdtLuXQBkPY7U3g5JQT0dtGjTrXyu8Hzh/2gZhqAK2908J68
+	IypXgZGGzSWgVucfnVgkJCOxXu6v8IZwVRO3Ws0dLAFz5/YzWqBUmKc7YCTxlyK+yFx3v4Vpg==
+X-Google-Smtp-Source: AGHT+IEyd1PvqvJ6dInZc5hW4upBqIdUVgkvugLKCXr2Fllrbysc9NyMJ4JrvFJXDzC6+FwIHhMpbw==
+X-Received: by 2002:a05:600c:350c:b0:434:a6af:d333 with SMTP id 5b1f17b1804b1-434fff5567cmr9200955e9.16.1733758000641;
+        Mon, 09 Dec 2024 07:26:40 -0800 (PST)
+Received: from ThinkStation-P340.tmt.telital.com ([2a01:7d0:4800:7:664c:aec9:433c:7b34])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434da0dc152sm158081695e9.25.2024.12.09.07.26.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Dec 2024 07:26:40 -0800 (PST)
+From: Daniele Palmas <dnlplm@gmail.com>
+To: =?UTF-8?q?Bj=C3=B8rn=20Mork?= <bjorn@mork.no>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Eric Dumazet <edumazet@google.com>
+Cc: netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Daniele Palmas <dnlplm@gmail.com>
+Subject: [PATCH net 1/1] net: usb: qmi_wwan: add Telit FE910C04 compositions
+Date: Mon,  9 Dec 2024 16:18:21 +0100
+Message-Id: <20241209151821.3688829-1-dnlplm@gmail.com>
+X-Mailer: git-send-email 2.37.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2024-12-09 at 15:42 +0100, Andrew Lunn wrote:
->=20
-> On Mon, Dec 09, 2024 at 02:55:31PM +0100, Matthias Schiffer wrote:
-> > On Mon, 2024-12-09 at 14:24 +0100, Andrew Lunn wrote:
-> > >=20
-> > > > +&cpsw_port1 {
-> > > > +	phy-mode =3D "rgmii-rxid";
-> > > > +	phy-handle =3D <&cpsw3g_phy0>;
-> > > > +};
-> > > > +
-> > > > +&cpsw_port2 {
-> > > > +	phy-mode =3D "rgmii-rxid";
-> > > > +	phy-handle =3D <&cpsw3g_phy3>;
-> > > > +};
-> > >=20
-> > > rgmii-rxid is very odd.
-> > >=20
-> > > > +
-> > > > +&cpsw3g_mdio {
-> > > > +	status =3D "okay";
-> > > > +	pinctrl-names =3D "default";
-> > > > +	pinctrl-0 =3D <&main_mdio1_pins>;
-> > > > +
-> > > > +	cpsw3g_phy0: ethernet-phy@0 {
-> > > > +		compatible =3D "ethernet-phy-ieee802.3-c22";
-> > > > +		reg =3D <0x0>;
-> > > > +		reset-gpios =3D <&main_gpio1 11 GPIO_ACTIVE_LOW>;
-> > > > +		reset-assert-us =3D <1000>;
-> > > > +		reset-deassert-us =3D <1000>;
-> > > > +		ti,rx-internal-delay =3D <DP83867_RGMIIDCTL_2_00_NS>;
-> > >=20
-> > > I guess this is the explanation.
-> > >=20
-> > > What happens when you use rgmii-id, and don't have this delay here?
-> > > That would be normal.
-> > >=20
-> > > 	Andrew
-> >=20
-> >=20
-> > This is normal for AM62-based boards, see the DTSI of the TI reference
-> > starterkit for example:
-> >=20
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi#n451
-> >=20
-> > With rgmii-id, both ti,rx-internal-delay and ti,tx-internal-delay shoul=
-d be set.
-> > As ti,*-internal-delay sets the delay on the PHY side, phy-mode "rgmii"=
- is the
-> > one that would not use either:
-> >=20
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/Documentation/devicetree/bindings/net/ti,dp83867.yaml#n78
-> >=20
-> > At the end of the day, does it really matter as long as MAC and PHY agr=
-ee on the
-> > used mode? We copied this part of the hardware design from the TI refer=
-ence
-> > board, and did our hardware qualification with these settings, so I thi=
-nk it
-> > makes sense to use the same phy-mode configuration.
->=20
-> What i try to achieve is every board uses the same configuration. The
-> PHY adds the delays, not the MAC. There are a few exceptions, because
-> a few cheap PHYs don't support delays, and so the MAC needs to add
-> them. But in general, any board i review, i always ask that the PHY
-> does the delay.
->=20
-> Also, don't put too much value in vendor code. Vendors don't care
-> about Linux has a whole, being uniform across all systems. Many
-> vendors do the minimum to get their stuff working, sometimes Monkeys
-> typing Shakespeare, and not a lot more.
->=20
-> I also find a lot of developers don't really understand what phy-mode
-> and PHY_INTERFACE_MODE_RGMII_* actually mean. phy-mode =3D 'rgmii' means
-> the board has extra long clock lines, so the MAC/PHY does not need to
-> add delays. rgmii-rxid means the board has an extra long rx clock
-> line, but a normal length tx clock line. Now, i doubt your board is
-> actually like this?
+Add the following Telit FE910C04 compositions:
 
-Not our board, but the AM62 SoC. From the datasheet:
+0x10c0: rmnet + tty (AT/NMEA) + tty (AT) + tty (diag)
+T:  Bus=02 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 13 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10c0 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FE910
+S:  SerialNumber=f71b8b32
+C:  #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-"TXC is delayed internally before being driven to the RGMII[x]_TXC pin. Thi=
-s
-internal delay is always enabled." So enabling the TX delay on the PHY side
-would result in a double delay.
+0x10c4: rmnet + tty (AT) + tty (AT) + tty (diag)
+T:  Bus=02 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 14 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10c4 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FE910
+S:  SerialNumber=f71b8b32
+C:  #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
->=20
-> You want to correctly describe your hardware in DT, which i guess is
-> "rgmii-id". That means something, either the MAC or the PHY needs to
-> add delays. PHY_INTERFACE_MODE_RGMII_* is what is passed to the
-> PHY. To get it to add the 2ns delays, you pass
-> PHY_INTERFACE_MODE_RGMII_ID, and you should not need any additional
-> properties in DT, it should default to 2ns. If you need to tune the
-> delay, 2ns does not work, but you actually need 1.8ns etc, then you
-> can add additional parameters. But given you have
-> DP83867_RGMIIDCTL_2_00_NS, i doubt you need this.
+0x10c8: rmnet + tty (AT) + tty (diag) + DPL (data packet logging) + adb
+T:  Bus=02 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 17 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10c8 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FE910
+S:  SerialNumber=f71b8b32
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-No such defaults exist in the DP83867 driver. If any rgmii-*id mode is used=
-, the
-corresponding delays *must* be specified in the DTB:
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+---
+ drivers/net/usb/qmi_wwan.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/dri=
-vers/net/phy/dp83867.c#n532
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 0c011d8f5d4d..9fe7f704a2f7 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1365,6 +1365,9 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a0, 0)}, /* Telit FN920C04 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a4, 0)}, /* Telit FN920C04 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a9, 0)}, /* Telit FN920C04 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10c0, 0)}, /* Telit FE910C04 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10c4, 0)}, /* Telit FE910C04 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10c8, 0)}, /* Telit FE910C04 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
+-- 
+2.37.1
 
-Best regards,
-Matthias
-
-
---=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-https://www.tq-group.com/
 
