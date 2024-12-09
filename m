@@ -1,97 +1,119 @@
-Return-Path: <linux-usb+bounces-18247-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18248-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E4DF9E90D6
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 11:48:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3BE29E9115
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 11:57:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A711F1881CE6
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 10:48:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CCFB3161929
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 10:57:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA854219EB2;
-	Mon,  9 Dec 2024 10:47:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A656D21765E;
+	Mon,  9 Dec 2024 10:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BB7M/WCG"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="orB4Z5An"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E1D0219EA6;
-	Mon,  9 Dec 2024 10:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F691216393;
+	Mon,  9 Dec 2024 10:57:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733741223; cv=none; b=SqFKM22OD4i/2K1qwZd4POBGtWdTas6tNz/hOrt8yrSohu5gz1vDaBymZ+CQFN65uzftRDUdpyWclEjVb1Rq21JD6+UCkiTARPnWdvPYxqYOYRWMDIUJrcin8g+7ubhpGJ7MpmJYFDaE7T4nJjWhIHjc671AIBkaprA5cz4GzW0=
+	t=1733741872; cv=none; b=JF9158CaL0q2scIDjtIsmfQZ3NA4M1tMQCujOhfk74o6Y2poMsirIrJJmZ6dmG9TKAtBf54AhblR0srKWA7gB8CRWCSonVd0mCIvfD0TRk+UMuvJyZxPYIrknTzzMGBifEBshaMUjQpFm4WR/pSnni9URInTn8fBaJKxAgS8rBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733741223; c=relaxed/simple;
-	bh=p40zvoqNnmMgLDzeT3TQxp7nVKwGGO8zm87pc/8n94Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Aa54bmgTQ0WcL8etDuy5as6V9810gTVuu/zUzPMYtZG0ot3k9O0yudZHxId6HZluXDMR5/1uv2+ty9BZd+/wa8l0XcCIgSlhb3WEcWZ+GRPuOkDZiskfFVZ5hKdZog0EL6fkJfTS2z6FfCeWjo3a6aMM8fofyiNssGBZIne09ow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BB7M/WCG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B16EC4CEE0;
-	Mon,  9 Dec 2024 10:47:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1733741222;
-	bh=p40zvoqNnmMgLDzeT3TQxp7nVKwGGO8zm87pc/8n94Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BB7M/WCGd4Ehth9tpTcT4MBtPYH6ps0dNh6ohkxy0xyqoQ9ziw2lvu3WJCcJ5hP1w
-	 tdPvZKDL6uoap5GwEnhgvQ+hPPh/ygkdDbAL/Po3kBSp8k7brhQHRB+WRCd1lzcgqE
-	 lxTQDmDLHr9DjIMJbwA5AltKHZwI/MxUX5DijM14=
-Date: Mon, 9 Dec 2024 11:46:59 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: mathias.nyman@intel.com, Frank.Li@nxp.com, linux-usb@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v2] usb: host: xhci-plat: set skip_phy_initialization if
- software node has XHCI_SKIP_PHY_INIT property
-Message-ID: <2024120913-exploring-pueblo-da0e@gregkh>
-References: <20241209104149.4080315-1-xu.yang_2@nxp.com>
+	s=arc-20240116; t=1733741872; c=relaxed/simple;
+	bh=/iBnR9Ld9+iCIUQLKuVYtxZIMOQV3jgyKmVe1tDe33A=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oT/hFAxAqlx+KN5K+pF8XxIeRKlO2sezWOZKJ/OVOMWzy3zHKLvctrDsyyx+g7o78ZGY6wOgPNA0gjyNFR0i3Ur9QC6y+P7eCl62c4TMb+V8wPogJ8nv06sXfXgvxGuHT68jkdjNPFTW25eSpVFa6pbxDihACP0vwpaXQBgbxx8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=orB4Z5An; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B9AWriq002578;
+	Mon, 9 Dec 2024 10:57:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=QztADghPPB1Z1CVJ2/czzj
+	c2ZG3W/9nXzHJbuK3O2Es=; b=orB4Z5AnH+XXX0HNRTf3HosChj0LZQK89NRkH/
+	X/Vwc5agiv12YvIlnvQ03NQ2SpNzqKmINHWfzQjXxDKCJfXBR+j1NTZ6528RVEWt
+	om4KCdFkQCIRi7+CDRZQD+SVGIwD7qtU9umpLvGmpyJhR/88CYq2C/v4o16tMX2k
+	FI8zkOVO+MQr3X6UTIr5/r1fVsShuNpiKK3+KigMy5mrgfejhY6WdEZk4S3RC0o9
+	ixBND7495N8BdnCPbb+Wehj4Gb9bJyrWRybD+1C6raww+cmWvmA9srmETOVe3zdq
+	66J+y+/b1cL/2NIYYBXNX7znstoQkJZ/PPGu06rcKWp8MCrw==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43dxw403bb-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 09 Dec 2024 10:57:47 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4B9AvkhM008688
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 9 Dec 2024 10:57:46 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 9 Dec 2024 02:57:43 -0800
+From: Prashanth K <quic_prashk@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>
+CC: Aswath Govindraju <a-govindraju@ti.com>, <linux-kernel@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, Prashanth K <quic_prashk@quicinc.com>,
+        <stable@vger.kernel.org>
+Subject: [PATCH] usb: dwc3-am62: Disable autosuspend during remove
+Date: Mon, 9 Dec 2024 16:27:28 +0530
+Message-ID: <20241209105728.3216872-1-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241209104149.4080315-1-xu.yang_2@nxp.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: f0Tt3uI4ANUgFTVcq8K8X8Ho7kehXwKy
+X-Proofpoint-GUID: f0Tt3uI4ANUgFTVcq8K8X8Ho7kehXwKy
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ suspectscore=0 priorityscore=1501 adultscore=0 mlxlogscore=558
+ clxscore=1011 spamscore=0 mlxscore=0 lowpriorityscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412090085
 
-On Mon, Dec 09, 2024 at 06:41:49PM +0800, Xu Yang wrote:
-> The source of quirk XHCI_SKIP_PHY_INIT comes from xhci_plat_priv.quirks or
-> software node property. This will set skip_phy_initialization if software
-> node also has XHCI_SKIP_PHY_INIT property.
-> 
-> Fixes: a6cd2b3fa894 ("usb: host: xhci-plat: Parse xhci-missing_cas_quirk and apply quirk")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> 
-> ---
-> Changes in v2:
->  - fix indentation
->  - add fix tag and stable list
-> ---
->  drivers/usb/host/xhci-plat.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-> index e6c9006bd568..77853b86794a 100644
-> --- a/drivers/usb/host/xhci-plat.c
-> +++ b/drivers/usb/host/xhci-plat.c
-> @@ -290,7 +290,8 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
->  
->  	hcd->tpl_support = of_usb_host_tpl_support(sysdev->of_node);
->  
-> -	if (priv && (priv->quirks & XHCI_SKIP_PHY_INIT))
-> +	if ((priv && (priv->quirks & XHCI_SKIP_PHY_INIT)) ||
-> +		(xhci->quirks & XHCI_SKIP_PHY_INIT))
+Runtime PM documentation (Section 5) mentions, during remove()
+callbacks, drivers should undo the runtime PM changes done in
+probe(). Usually this means calling pm_runtime_disable(),
+pm_runtime_dont_use_autosuspend() etc. Hence add missing
+function to disable autosuspend on dwc3-am62 driver unbind.
 
-Doesn't checkpatch.pl complain about this?  This is still not correct,
-please follow the proper indentation rules here.  If you have questions
-about this, please ask your coworkers who understand the style
-requirements for Linux.
+Fixes: e8784c0aec03 ("drivers: usb: dwc3: Add AM62 USB wrapper driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+ drivers/usb/dwc3/dwc3-am62.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-thanks,
+diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
+index 5e3d1741701f..7d43da5f2897 100644
+--- a/drivers/usb/dwc3/dwc3-am62.c
++++ b/drivers/usb/dwc3/dwc3-am62.c
+@@ -309,6 +309,7 @@ static void dwc3_ti_remove(struct platform_device *pdev)
+ 
+ 	pm_runtime_put_sync(dev);
+ 	pm_runtime_disable(dev);
++	pm_runtime_dont_use_autosuspend(dev);
+ 	pm_runtime_set_suspended(dev);
+ }
+ 
+-- 
+2.25.1
 
-greg k-h
 
