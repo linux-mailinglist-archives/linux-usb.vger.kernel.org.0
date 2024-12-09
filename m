@@ -1,153 +1,149 @@
-Return-Path: <linux-usb+bounces-18237-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18238-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9BF59E8B75
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 07:24:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7453C9E8F5A
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 10:54:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 931D7280FD8
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 06:24:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A57D82849C7
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 09:54:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC33F2147F8;
-	Mon,  9 Dec 2024 06:24:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F73921767A;
+	Mon,  9 Dec 2024 09:52:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TIvRbPYm"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="Ky3f6Smg";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="DnwjRk2w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EC320FAAE;
-	Mon,  9 Dec 2024 06:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18FD5217665;
+	Mon,  9 Dec 2024 09:52:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733725461; cv=none; b=aVeMwKZKv7cz2oBFUsmzXtgSqLZGTZ127UF10qmFGZdsCHUroXfm0P/sPcZ/Sw705mO0ypVd6/Kq9q206xXPHCgkyWhWkMrdtaHM3vezWfRECRXlN2LS81x0ZpEKJihJ3OUxEX20N9ncNW/bb1sdxLnqBdB7yeyrDyCOmm9UBbQ=
+	t=1733737953; cv=none; b=kuMbDWkNgObCHuoTnbxWqtv13yR2Qf5/6FHLP5qx69bkpVvk3FeMtdkTb4L9K+k3sG0979FTDHiGsWgG3noq58U8Mp9LjWGRzF5CrIp6cQE5tPVDLmSHlCvwB7DwoU3yo+/cIBb1h2q5fXZ1AuwaAoJ9KZBPXc3CrWuBrJqBRG0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733725461; c=relaxed/simple;
-	bh=FQfbj4zVf9aROxsrkzjQ011Ql/GUnDTiTcj2kpiDxq8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=reC26uI37jcPt0hdO/pw9noYIjHVi4eRkxAVghkC1UwzH8rGzvja2qBPuVnFajw2YiL8bi3Ns4KmOavkJXJO4PixkMIvI05fSPDCLovgfkpasHaaK2mFi6Pl5rxJF+ZOm3sGqSxI4/96+NLr1xlPvm1z25zR0MC1RnqdAxlsCkw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TIvRbPYm; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733725460; x=1765261460;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FQfbj4zVf9aROxsrkzjQ011Ql/GUnDTiTcj2kpiDxq8=;
-  b=TIvRbPYmkbXqhUYQHVIXSKPhmtM8JKjF1Y3ypyQSVcCKa+HGwBvI0Icp
-   CH6p7X+K5tpWQQd2qFATUat0C5OmWoMbx75CEBnut0MYCy1xz+7KOlE33
-   +NPHNzOlkXQ/gN+rLW1QK1MadcQ7DDUuDDEtfcf+oOdFlLqX8tWKpTInB
-   uPVJp6cDQUTIYgkAotKANTa0k/okU06PhRbVQoWXVEuMf3pQNkqZfni4k
-   lvSaq/EKpvX9Md89RJIaNiB6hnGB16q9vTn1X0mgEy7zWmqaTBVRzn07u
-   U8CqTrJ7qkSE9EKRQCGoIdi4DakSdhxhbqa4i+ZLOOJb/728X9lzUoCoQ
-   Q==;
-X-CSE-ConnectionGUID: ejHA5g9OTeOO6r/JmCgw1Q==
-X-CSE-MsgGUID: dxx+Pfo2QAu5yuuSzolNaQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="45387764"
-X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
-   d="scan'208";a="45387764"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 22:24:19 -0800
-X-CSE-ConnectionGUID: Z+XJzFntTGmEbaCk9F6+JQ==
-X-CSE-MsgGUID: lQl9WmidSzuGjvJv0+v90g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="94788192"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa010.jf.intel.com with ESMTP; 08 Dec 2024 22:24:17 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id EE42F1FD; Mon, 09 Dec 2024 08:24:15 +0200 (EET)
-Date: Mon, 9 Dec 2024 08:24:15 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+	s=arc-20240116; t=1733737953; c=relaxed/simple;
+	bh=QK8t3doX4427AgFW5c7+ZlsJZTM8e5QQTn7PJ3MiCe4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=k+3253jqE+RdnhAMb3vWcfltLmYYbqVLz3Ww+2tZe0EnrCmCX/ADq7oqIY7jobxXEbRN/PQwHE1FoNinwTeMwkQauW1QGq+ceR3IeygMRULXLA7LRJFoKcE07KGXAi10XHeYUD6UQhyAW0ocQJTSdK+fY7gVPFcGEu7jcdfIiSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=Ky3f6Smg; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=DnwjRk2w reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1733737949; x=1765273949;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=vCOSzguE5smY7X3uU2S+cYXVmp6ep2y6ONwY7bkEaQw=;
+  b=Ky3f6SmgZPkaZcXS6GE14gCBbZllQzGQqHHj3M9eLslsE2Ph6sjMrBwX
+   Lb4R92qqMWle4LVtFWD4aR/uxcPEzVY78evxSU4ERQjUzPm7/ayw6WRtJ
+   QOWKMnKL9gyS6hlyW8GJN2UHK+/WhbJLRsF0AKRu5WTVU3HR5GYzEnSTG
+   7IzjVLPP110bdDyFk6Ggsa/t4UutrVvgnkbJjmTmFWlWHYTwSezFyXz5s
+   9uPTFTcM4nvOszpKnXmxUsUVO5AGYgkNASHNkiKlBYed+KOBeCNGvsYbs
+   Pp2ZvrCi0ADJviSBhV9AgNtdRkmqQSsNyjpGzRGNIly81+eU/Vmk7NjQ5
+   g==;
+X-CSE-ConnectionGUID: v0l5HM21S0CnAgO0ZCZRJQ==
+X-CSE-MsgGUID: OSL/ddO3TFOKicyZEhfkqw==
+X-IronPort-AV: E=Sophos;i="6.12,219,1728943200"; 
+   d="scan'208";a="40481347"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 09 Dec 2024 10:52:18 +0100
+X-CheckPoint: {6756BDD2-E-90CD5875-E0265C0B}
+X-MAIL-CPID: AFAF0358426999AB480C9A5F2119583B_3
+X-Control-Analysis: str=0001.0A682F1E.6756BDD2.0099,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 07F92166523;
+	Mon,  9 Dec 2024 10:52:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1733737933;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vCOSzguE5smY7X3uU2S+cYXVmp6ep2y6ONwY7bkEaQw=;
+	b=DnwjRk2wR1VQQqxBHqHzNiqUe/HKDqfUgY1FMWDuGH867ZxfognDBfaBja1wyfmp2I5aE8
+	oN1rjIwFBUFM4EnhHfMc0gdCdb+zf+IfM+pgi12xz5d2VzJCNefLWjJOhbm92ESQeRkRvS
+	KouPrHTSKfHRZCDIH6oJA0gPHkWeri1k+J4We6IWoyIFOuIxQhnOUR2NuM6E/cmhgbupJr
+	kZ/e1adfUbe+Nt1MmyZwyOPLPROXJZFr0YkafnpUy62Y0CahM2ULN1euVQLkOKloee7v+6
+	PzgHu7+2wRG5MRmwYvBpqaKTf/kycHvvaaLAd1YfUp90Pwn87ZeopqAhHbbckA==
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To: Nishanth Menon <nm@ti.com>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kees Cook <kees@kernel.org>,
+	Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Richard Hughes <hughsient@gmail.com>
-Subject: Re: [PATCH] thunderbolt: Don't display retimers unless nvm was
- initialized
-Message-ID: <20241209062415.GG4955@black.fi.intel.com>
-References: <20241206183318.1701180-1-superm1@kernel.org>
+	linux-usb@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	Devarsh Thakkar <devarsht@ti.com>,
+	Hari Nagalla <hnagalla@ti.com>,
+	linux@ew.tq-group.com,
+	Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH v2 0/5] TQ-Systems TQMa62xx SoM and MBa62xx board
+Date: Mon,  9 Dec 2024 10:51:31 +0100
+Message-ID: <cover.1733737487.git.matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241206183318.1701180-1-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Mario,
+This adds Device Trees for out AM62x-based SoM TQMa62xx and its
+reference carrier board MBa62xx.
 
-On Fri, Dec 06, 2024 at 12:33:18PM -0600, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> The read will never succeed if nvm wasn't initialized.
+Two of the patches are adapted from the TI vendor repo ti-linux-kernel to
+add RemoteProc/RPMsg support for the R5F core. A similar patch has been
+submitted for mainline by TI themselves for the closely related AM62A SoC.
 
-Okay but we would need to understand why it was not initialized in the
-first place?
+Not yet included are overlays to enable LVDS display output and MIPI-CSI
+camera input.
 
-I see this is ThinkPad Thunderbolt 4 Dock so probably Intel hardware? You
-say you can reproduce this too so can you send me full dmesg with
-thunderbolt dynamic debugging enabled? I would like to understand this bit
-more deeper before we add any workarounds.
+Changes in v2:
+- Collected acks and reviews
+- Rebased onto v6.13-rc1
 
-> Reported-by: Richard Hughes <hughsient@gmail.com>
-> Closes: https://github.com/fwupd/fwupd/issues/8200
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/thunderbolt/retimer.c | 17 ++++++++++++++---
->  1 file changed, 14 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/thunderbolt/retimer.c b/drivers/thunderbolt/retimer.c
-> index 89d2919d0193e..7be435aee7217 100644
-> --- a/drivers/thunderbolt/retimer.c
-> +++ b/drivers/thunderbolt/retimer.c
-> @@ -321,9 +321,7 @@ static ssize_t nvm_version_show(struct device *dev,
->  	if (!mutex_trylock(&rt->tb->lock))
->  		return restart_syscall();
->  
-> -	if (!rt->nvm)
-> -		ret = -EAGAIN;
-> -	else if (rt->no_nvm_upgrade)
-> +	if (rt->no_nvm_upgrade)
->  		ret = -EOPNOTSUPP;
->  	else
->  		ret = sysfs_emit(buf, "%x.%x\n", rt->nvm->major, rt->nvm->minor);
-> @@ -342,6 +340,18 @@ static ssize_t vendor_show(struct device *dev, struct device_attribute *attr,
->  }
->  static DEVICE_ATTR_RO(vendor);
->  
-> +static umode_t retimer_is_visible(struct kobject *kobj,
-> +				      struct attribute *attr, int n)
-> +{
-> +	struct device *dev = kobj_to_dev(kobj);
-> +	struct tb_retimer *rt = tb_to_retimer(dev);
-> +
-> +	if (!rt->nvm)
-> +		return 0;
-> +	return attr->mode;
-> +
-> +}
-> +
->  static struct attribute *retimer_attrs[] = {
->  	&dev_attr_device.attr,
->  	&dev_attr_nvm_authenticate.attr,
-> @@ -351,6 +361,7 @@ static struct attribute *retimer_attrs[] = {
->  };
->  
->  static const struct attribute_group retimer_group = {
-> +	.is_visible = retimer_is_visible,
->  	.attrs = retimer_attrs,
->  };
->  
-> -- 
-> 2.43.0
+
+Devarsh Thakkar (1):
+  arm64: dts: ti: k3-am62: Add DM R5 ranges in cbass
+
+Hari Nagalla (1):
+  arm64: dts: ti: k3-am62-wakeup: Add R5F device node
+
+Matthias Schiffer (3):
+  dt-bindings: usb: dwc3: Allow connector in USB controller node
+  dt-bindings: arm: ti: Add compatible for AM625-based TQMa62xx SOM
+    family and carrier board
+  arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and MBa62xx carrier board
+    Device Trees
+
+ .../devicetree/bindings/arm/ti/k3.yaml        |   7 +
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |   6 +
+ arch/arm64/boot/dts/ti/Makefile               |   1 +
+ arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi    |  24 +
+ arch/arm64/boot/dts/ti/k3-am62.dtsi           |   8 +-
+ .../boot/dts/ti/k3-am625-tqma62xx-mba62xx.dts | 917 ++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-am625-tqma62xx.dtsi | 346 +++++++
+ 7 files changed, 1307 insertions(+), 2 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-tqma62xx-mba62xx.dts
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am625-tqma62xx.dtsi
+
+-- 
+TQ-Systems GmbH | Mühlstraße 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht München, HRB 105018
+Geschäftsführer: Detlef Schneider, Rüdiger Stahl, Stefan Schneider
+https://www.tq-group.com/
+
 
