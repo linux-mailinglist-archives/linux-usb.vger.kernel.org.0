@@ -1,136 +1,153 @@
-Return-Path: <linux-usb+bounces-18236-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18237-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0AD69E8A46
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 05:29:25 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2A691884B80
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 04:29:25 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50C9D158851;
-	Mon,  9 Dec 2024 04:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="M8ytS9XU"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9BF59E8B75
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 07:24:27 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18407158534;
-	Mon,  9 Dec 2024 04:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 931D7280FD8
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 06:24:26 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC33F2147F8;
+	Mon,  9 Dec 2024 06:24:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TIvRbPYm"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EC320FAAE;
+	Mon,  9 Dec 2024 06:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733718560; cv=none; b=AICZR/BviNNQMOQ2irrTjB0ACpOXoYuZXU/b//FUM8JqU7aRZ7cDUrgPDy4BrH7Gf7tm55xm4P9nHwhMqOQFX8CDj3YG3PHWpH7uopMYgg2+tEcpDWg2u4WY2QMriatTgpiSJiwWlGmPXhXyl7Epj2jGe33MDqjLi+bgfwdCgag=
+	t=1733725461; cv=none; b=aVeMwKZKv7cz2oBFUsmzXtgSqLZGTZ127UF10qmFGZdsCHUroXfm0P/sPcZ/Sw705mO0ypVd6/Kq9q206xXPHCgkyWhWkMrdtaHM3vezWfRECRXlN2LS81x0ZpEKJihJ3OUxEX20N9ncNW/bb1sdxLnqBdB7yeyrDyCOmm9UBbQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733718560; c=relaxed/simple;
-	bh=h4HEKX5WEfX5MF5rDNMl63OuBmbaPdc6Xc34HEpI9d4=;
+	s=arc-20240116; t=1733725461; c=relaxed/simple;
+	bh=FQfbj4zVf9aROxsrkzjQ011Ql/GUnDTiTcj2kpiDxq8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IeYOM6d/LPINs7UTAd8PUprceqNeGIBF+4bhIp5xo9NZLgxMT0+hUYbUUpPH3Om+RYyAsiZfB6Qtaor7N8hzoiseElR2EeZa6K3617nzyR/f5N+zEU/lOtoB/PMOMjHwjdduw3xlgfS8inIdwYwHXeSRlJsXCApqQutYdkhWuCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=M8ytS9XU; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=reC26uI37jcPt0hdO/pw9noYIjHVi4eRkxAVghkC1UwzH8rGzvja2qBPuVnFajw2YiL8bi3Ns4KmOavkJXJO4PixkMIvI05fSPDCLovgfkpasHaaK2mFi6Pl5rxJF+ZOm3sGqSxI4/96+NLr1xlPvm1z25zR0MC1RnqdAxlsCkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TIvRbPYm; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733718559; x=1765254559;
+  t=1733725460; x=1765261460;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=h4HEKX5WEfX5MF5rDNMl63OuBmbaPdc6Xc34HEpI9d4=;
-  b=M8ytS9XUQp/7kdu/+/v3kWlHLICcMS9aS9zbMl6l+V/ZLVINI7BRnPHr
-   zfH2EhKWBIs584ZQFATC8jmeH0dkaQRlkDq6Jpry+Wm3zoDO+BafLPnub
-   perd4hC3Eptw5RyYJYQzA6x/0nTsx9UjyIO96NjDIMdrgKSEACNCV3+Ub
-   kZEurJiCxxs3t6y/38d/yKsBl8g/+sZffUsYQo1U+FOo/lPCcgxKz06Qk
-   lLcXzSh1UfCYF2Upn6rDrJHa92LAfEqxw42Nl2xb2C0dls9kr7/VtsHgN
-   ANEaNrsVXj+VxVGFiOyQRApOSj9q6UNHcdVyPD1r/S22QxnDzS8qKUmlq
-   A==;
-X-CSE-ConnectionGUID: L/1AoaUiQ6ijiFVIgU0v8g==
-X-CSE-MsgGUID: UxvOtF1zRCGrmzqmU3/j+g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11280"; a="34122913"
-X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="34122913"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 20:29:18 -0800
-X-CSE-ConnectionGUID: BeSSpaOaRwGjAPOQUvdpKA==
-X-CSE-MsgGUID: f+5nCGJ8T42Mi1IFY5kmuw==
+  bh=FQfbj4zVf9aROxsrkzjQ011Ql/GUnDTiTcj2kpiDxq8=;
+  b=TIvRbPYmkbXqhUYQHVIXSKPhmtM8JKjF1Y3ypyQSVcCKa+HGwBvI0Icp
+   CH6p7X+K5tpWQQd2qFATUat0C5OmWoMbx75CEBnut0MYCy1xz+7KOlE33
+   +NPHNzOlkXQ/gN+rLW1QK1MadcQ7DDUuDDEtfcf+oOdFlLqX8tWKpTInB
+   uPVJp6cDQUTIYgkAotKANTa0k/okU06PhRbVQoWXVEuMf3pQNkqZfni4k
+   lvSaq/EKpvX9Md89RJIaNiB6hnGB16q9vTn1X0mgEy7zWmqaTBVRzn07u
+   U8CqTrJ7qkSE9EKRQCGoIdi4DakSdhxhbqa4i+ZLOOJb/728X9lzUoCoQ
+   Q==;
+X-CSE-ConnectionGUID: ejHA5g9OTeOO6r/JmCgw1Q==
+X-CSE-MsgGUID: dxx+Pfo2QAu5yuuSzolNaQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="45387764"
+X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
+   d="scan'208";a="45387764"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2024 22:24:19 -0800
+X-CSE-ConnectionGUID: Z+XJzFntTGmEbaCk9F6+JQ==
+X-CSE-MsgGUID: lQl9WmidSzuGjvJv0+v90g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,218,1728975600"; 
-   d="scan'208";a="99404806"
-Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 08 Dec 2024 20:29:15 -0800
-Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tKVOS-0003r9-2x;
-	Mon, 09 Dec 2024 04:29:12 +0000
-Date: Mon, 9 Dec 2024 12:28:12 +0800
-From: kernel test robot <lkp@intel.com>
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	heikki.krogerus@linux.intel.com, tzungbi@kernel.org,
-	linux-usb@vger.kernel.org, chrome-platform@lists.linux.dev
-Cc: oe-kbuild-all@lists.linux.dev, akuchynski@google.com,
-	pmalani@chromium.org, jthies@google.com,
-	dmitry.baryshkov@linaro.org, badhri@google.com,
-	rdbabiera@google.com,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/7] usb: typec: Add driver for Thunderbolt 3
- Alternate Mode
-Message-ID: <202412080010.bWqlreGq-lkp@intel.com>
-References: <20241206153813.v4.2.I3080b036e8de0b9957c57c1c3059db7149c5e549@changeid>
+   d="scan'208";a="94788192"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa010.jf.intel.com with ESMTP; 08 Dec 2024 22:24:17 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id EE42F1FD; Mon, 09 Dec 2024 08:24:15 +0200 (EET)
+Date: Mon, 9 Dec 2024 08:24:15 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
+	linux-kernel@vger.kernel.org,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Richard Hughes <hughsient@gmail.com>
+Subject: Re: [PATCH] thunderbolt: Don't display retimers unless nvm was
+ initialized
+Message-ID: <20241209062415.GG4955@black.fi.intel.com>
+References: <20241206183318.1701180-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241206153813.v4.2.I3080b036e8de0b9957c57c1c3059db7149c5e549@changeid>
+In-Reply-To: <20241206183318.1701180-1-superm1@kernel.org>
 
-Hi Abhishek,
+Hi Mario,
 
-kernel test robot noticed the following build warnings:
+On Fri, Dec 06, 2024 at 12:33:18PM -0600, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+> 
+> The read will never succeed if nvm wasn't initialized.
 
-[auto build test WARNING on v6.12]
-[cannot apply to chrome-platform/for-next chrome-platform/for-firmware-next usb/usb-testing usb/usb-next usb/usb-linus masahiroy-kbuild/for-next masahiroy-kbuild/fixes linus/master v6.13-rc1 next-20241206]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Okay but we would need to understand why it was not initialized in the
+first place?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Abhishek-Pandit-Subedi/usb-typec-Only-use-SVID-for-matching-altmodes/20241207-074104
-base:   v6.12
-patch link:    https://lore.kernel.org/r/20241206153813.v4.2.I3080b036e8de0b9957c57c1c3059db7149c5e549%40changeid
-patch subject: [PATCH v4 2/7] usb: typec: Add driver for Thunderbolt 3 Alternate Mode
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20241208/202412080010.bWqlreGq-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241208/202412080010.bWqlreGq-lkp@intel.com/reproduce)
+I see this is ThinkPad Thunderbolt 4 Dock so probably Intel hardware? You
+say you can reproduce this too so can you send me full dmesg with
+thunderbolt dynamic debugging enabled? I would like to understand this bit
+more deeper before we add any workarounds.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412080010.bWqlreGq-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/usb/typec/altmodes/thunderbolt.c:16: warning: cannot understand function prototype: 'enum tbt_state '
-
-
-vim +16 drivers/usb/typec/altmodes/thunderbolt.c
-
-    15	
-  > 16	enum tbt_state {
-    17		TBT_STATE_IDLE,
-    18		TBT_STATE_SOP_P_ENTER,
-    19		TBT_STATE_SOP_PP_ENTER,
-    20		TBT_STATE_ENTER,
-    21		TBT_STATE_EXIT,
-    22		TBT_STATE_SOP_PP_EXIT,
-    23		TBT_STATE_SOP_P_EXIT
-    24	};
-    25	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Reported-by: Richard Hughes <hughsient@gmail.com>
+> Closes: https://github.com/fwupd/fwupd/issues/8200
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+>  drivers/thunderbolt/retimer.c | 17 ++++++++++++++---
+>  1 file changed, 14 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/thunderbolt/retimer.c b/drivers/thunderbolt/retimer.c
+> index 89d2919d0193e..7be435aee7217 100644
+> --- a/drivers/thunderbolt/retimer.c
+> +++ b/drivers/thunderbolt/retimer.c
+> @@ -321,9 +321,7 @@ static ssize_t nvm_version_show(struct device *dev,
+>  	if (!mutex_trylock(&rt->tb->lock))
+>  		return restart_syscall();
+>  
+> -	if (!rt->nvm)
+> -		ret = -EAGAIN;
+> -	else if (rt->no_nvm_upgrade)
+> +	if (rt->no_nvm_upgrade)
+>  		ret = -EOPNOTSUPP;
+>  	else
+>  		ret = sysfs_emit(buf, "%x.%x\n", rt->nvm->major, rt->nvm->minor);
+> @@ -342,6 +340,18 @@ static ssize_t vendor_show(struct device *dev, struct device_attribute *attr,
+>  }
+>  static DEVICE_ATTR_RO(vendor);
+>  
+> +static umode_t retimer_is_visible(struct kobject *kobj,
+> +				      struct attribute *attr, int n)
+> +{
+> +	struct device *dev = kobj_to_dev(kobj);
+> +	struct tb_retimer *rt = tb_to_retimer(dev);
+> +
+> +	if (!rt->nvm)
+> +		return 0;
+> +	return attr->mode;
+> +
+> +}
+> +
+>  static struct attribute *retimer_attrs[] = {
+>  	&dev_attr_device.attr,
+>  	&dev_attr_nvm_authenticate.attr,
+> @@ -351,6 +361,7 @@ static struct attribute *retimer_attrs[] = {
+>  };
+>  
+>  static const struct attribute_group retimer_group = {
+> +	.is_visible = retimer_is_visible,
+>  	.attrs = retimer_attrs,
+>  };
+>  
+> -- 
+> 2.43.0
 
