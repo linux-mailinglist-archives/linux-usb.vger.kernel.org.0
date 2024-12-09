@@ -1,99 +1,107 @@
-Return-Path: <linux-usb+bounces-18255-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18256-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EC8D9E93BC
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 13:23:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAFE59E96DB
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 14:30:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 21DA6188760E
-	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 12:23:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 382B6188026F
+	for <lists+linux-usb@lfdr.de>; Mon,  9 Dec 2024 13:25:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D8F2236EF;
-	Mon,  9 Dec 2024 12:23:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE55923315C;
+	Mon,  9 Dec 2024 13:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jeXPe+Ok"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="Lea7Y9Yx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EABB822C6F7;
-	Mon,  9 Dec 2024 12:23:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29840233146;
+	Mon,  9 Dec 2024 13:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733747016; cv=none; b=auhgody3NLtrDzyDvHyu6fe2QWIfHE9eErxjZpvO77EBb/Wv0zwQ01vRcGeEbCSb120DHk8bKagmyARalEY3tStVX5KBNHa9/aCDG9PQAs795FHhkAc2QGqrgcFL041PjIt9kGM/HQpmeTp19CXvXsfYR0eAk1bgOUo45h0IO18=
+	t=1733750691; cv=none; b=nNJAnqliakiSoybsu8wXlUxj3ZzWGF7AZQjTTSJjRXJjsJHs3fI2NhURhMrnScPzUa5rWmbJYuaTLsMiObnQhMkf1x/MZc6++XfW6RxfETcDVI8NFJH8j/EhDhq6UhY8/SNqAzMNQ4hpG2Z+NrUL0UNkMZN5tT5pZShrx3Ii6UM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733747016; c=relaxed/simple;
-	bh=KVkjfWYylqMPK7Oa6OyaK9/zznA/avVPXE/BE+dfzKg=;
+	s=arc-20240116; t=1733750691; c=relaxed/simple;
+	bh=NkhX649mCYlm7UTdk/xDLU53bUCSolAXgQE7UT4MYkA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EtZ+LdbMuEcyVmiwUY+Y8yGOzw54ncpfoM0KiVuz9xvYaegc1HDtvhlj2Qs5iKVMlGLVLiBvepx65gjDFZZxr17qcjIRIzk79rkWppxSoWTS5u6Dl0uEZ2VYnDfEPk7mCpyFoVfpFsl+oOp4g7dJLfgGlrEQHTYJMxj7WrD/ViE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jeXPe+Ok; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A238C4CED1;
-	Mon,  9 Dec 2024 12:23:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1733747015;
-	bh=KVkjfWYylqMPK7Oa6OyaK9/zznA/avVPXE/BE+dfzKg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jeXPe+OkHXQBiEYRXm89kz7qkuDJxNhiVo7UGbrnjlWh4nh+SJIyJOCD4k4dg2tHd
-	 WW5jmGTDfEij74UUOuPQWdy3k90IZORDMYw4EBpTUQ6MqlijvULNlfOr3RT1sd5b9J
-	 GizKWiFOktufK/3kh0oNHyokK9uSLRa8kNba8FGQ=
-Date: Mon, 9 Dec 2024 13:23:32 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: =?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH for stable 5.4 v2] usb: dwc3: gadget: fix writing NYET
- threshold
-Message-ID: <2024120910-triage-consent-c442@gregkh>
-References: <20241209-dwc3-nyet-fix-5-4-v2-1-66a67836ae70@linaro.org>
- <2024120926-uncolored-lip-b571@gregkh>
- <127a17f0d7cf74f2fb69e996817dd783e768e0eb.camel@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=F6LxJjNcfIu4enZMRr57j2Y1Gjj1vx9dg4onC8bwEtXdkJQZtkffg19/Fck5WgE1fKY3QqOQnb9546mXnpEed5mKwb+SS6ChAaxjHoApiwSXrEM4An5ct7k+7hrlhEppbaP0EzpMHJyFV3jifyZNqMJfH6loJxw0iJ1neUECGbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=Lea7Y9Yx; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=72S7Y0m68TBMZpKjMYQCWjvfm2dgENRCYqhWK6vxrak=; b=Lea7Y9YxXbamN6pcuB6gVBs3b1
+	H7qlEJ7sripF744GpmuSDBQaAaaCeESaiMVUhZHbNzFvhejhDuyKpsAk3oIDOWdRIrGslWxXK0kej
+	c+Omu7VKApsh9wOfv7iCEevSiwBvwvHtxql7ZkYoI2PV7HrR9fvaoHmnObZbkVKbWxmg=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tKdkb-00Ffga-6D; Mon, 09 Dec 2024 14:24:37 +0100
+Date: Mon, 9 Dec 2024 14:24:37 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
+	Hari Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
+Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and
+ MBa62xx carrier board Device Trees
+Message-ID: <a9c5cfda-e3e3-436a-8d05-b2f096157cfe@lunn.ch>
+References: <cover.1733737487.git.matthias.schiffer@ew.tq-group.com>
+ <95ff66ca2c89f69d893c2ce9eed9a0c677633c7b.1733737487.git.matthias.schiffer@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <127a17f0d7cf74f2fb69e996817dd783e768e0eb.camel@linaro.org>
+In-Reply-To: <95ff66ca2c89f69d893c2ce9eed9a0c677633c7b.1733737487.git.matthias.schiffer@ew.tq-group.com>
 
-On Mon, Dec 09, 2024 at 12:12:05PM +0000, André Draszik wrote:
-> On Mon, 2024-12-09 at 13:05 +0100, Greg Kroah-Hartman wrote:
-> > On Mon, Dec 09, 2024 at 11:50:57AM +0000, André Draszik wrote:
-> > > Before writing a new value to the register, the old value needs to be
-> > > masked out for the new value to be programmed as intended, because at
-> > > least in some cases the reset value of that field is 0xf (max value).
-> > > 
-> > > At the moment, the dwc3 core initialises the threshold to the maximum
-> > > value (0xf), with the option to override it via a DT. No upstream DTs
-> > > seem to override it, therefore this commit doesn't change behaviour for
-> > > any upstream platform. Nevertheless, the code should be fixed to have
-> > > the desired outcome.
-> > > 
-> > > Do so.
-> > > 
-> > > Fixes: 80caf7d21adc ("usb: dwc3: add lpm erratum support")
-> > > Cc: stable@vger.kernel.org # 5.4 (needs adjustment for 5.10+)
-> > > Signed-off-by: André Draszik <andre.draszik@linaro.org>
-> > > ---
-> > > * has been marked as v2, to be in line with the 5.10+ patch
-> > > * for stable-5.10+, the if() test is slightly different, so a separate
-> > >   patch has been sent for it for the patch to apply.
-> > 
-> > What is the git id of this in Linus's tree?
-> 
-> I guess I misunderstood the docs... It's not merged into Linus' tree
-> yet - the proposed patch is here:
-> 
-> https://lore.kernel.org/all/20241209-dwc3-nyet-fix-v2-1-02755683345b@linaro.org/
+> +&cpsw_port1 {
+> +	phy-mode = "rgmii-rxid";
+> +	phy-handle = <&cpsw3g_phy0>;
+> +};
+> +
+> +&cpsw_port2 {
+> +	phy-mode = "rgmii-rxid";
+> +	phy-handle = <&cpsw3g_phy3>;
+> +};
 
-Ah.  Yeah, wait until it hits Linus's tree before telling us about this,
-otherwise we'll just get confused :)
+rgmii-rxid is very odd.
 
-thanks,
+> +
+> +&cpsw3g_mdio {
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_mdio1_pins>;
+> +
+> +	cpsw3g_phy0: ethernet-phy@0 {
+> +		compatible = "ethernet-phy-ieee802.3-c22";
+> +		reg = <0x0>;
+> +		reset-gpios = <&main_gpio1 11 GPIO_ACTIVE_LOW>;
+> +		reset-assert-us = <1000>;
+> +		reset-deassert-us = <1000>;
+> +		ti,rx-internal-delay = <DP83867_RGMIIDCTL_2_00_NS>;
 
-greg k-h
+I guess this is the explanation.
+
+What happens when you use rgmii-id, and don't have this delay here?
+That would be normal.
+
+	Andrew
 
