@@ -1,48 +1,75 @@
-Return-Path: <linux-usb+bounces-18286-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18287-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1111F9EB027
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 12:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 130719EB2D1
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 15:12:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF29E284291
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 11:48:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32EEE28485A
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 14:12:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BDCC19E96A;
-	Tue, 10 Dec 2024 11:47:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B19C71A08CC;
+	Tue, 10 Dec 2024 14:12:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WUlgVH/Y"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="AJSUtyuR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DFA519924F;
-	Tue, 10 Dec 2024 11:47:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C1161AAA15
+	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 14:12:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733831278; cv=none; b=Az4Q4gF1n4UqpE74M+7qzUNYHwlv464xHPon8weOEMYGL7dq5xThs1oBRdWHB0oGlNTuO3ueBV9HVhnJq44MNOG5Lxr5gwyOSmnwxYk9UQ7nzVSKbOQ1IuB2mUZXYwtI+i6ac/XZPjoi4a6Uh34+D9BQuD0D/I4pObcNruI2gM0=
+	t=1733839925; cv=none; b=DzVq9rHuGi0Bw/5oRyk65k9gcRae5SUe49ODAr3AlWD874aKsJeFpUP2n3Ekt90t4sJYbh0pDWGGUnsnNFTtUeJiKDOaa8oBs71uT9owhIB/i20banQaxfekmH8ZzoHEYEcVtwM6gMkiIxjPGe2WAgoOlFPKUOL0gjCrzLSmey4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733831278; c=relaxed/simple;
-	bh=rzjp/TyXIjzKiZW1IwrY6tCvrOTe5liapYdopftQ+4A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JM0Uu6ufE3P1jkHPLRLacIqsbJBxYep1MtdRJFpBJMO3su/S77fxDabQnt5IyE9G5It+JqZhcrmPRcJb4/OHaXdIuTJ0gh3cE94E9Bqsv/doPSSExiUY3bX4ebsbO4iqzKjdMDCKXAmWQk31TLOAcySgN/a30nfnYt8OlBcgDEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WUlgVH/Y; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B388EC4CED6;
-	Tue, 10 Dec 2024 11:47:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733831278;
-	bh=rzjp/TyXIjzKiZW1IwrY6tCvrOTe5liapYdopftQ+4A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WUlgVH/Y66Lxis+Z70rcXNgHpmrvqRrAoDbGTY5Vrny52YhDpeV6eHOuNLhHKUmHO
-	 f1Eb5l32s+d+B+R1R8ki0fvWgjm7z/E0fWLuzwHW8E+JAV4V/mfFf1+EFIPSOOT0dJ
-	 fmMxdwExiXAra/0adHF14oFwZzaJnqZg3cdhs9x9C5y2bXtIgThzttRltOJ43TSojy
-	 uqH5eyMDolaaNfrRsvmiDjQ68ZqDt7/9LUcrsA6xLTDq9aSstPXd/Cy98P/vLruB/6
-	 ZBtndUS5PTVAu4XHfyvioxDKk6GHGdGfER8i+57yF1D2bzqJJNGCxb3vtFW6ia1/mH
-	 q/dEQdY2H7Jnw==
-Message-ID: <1cbaa7a3-e26a-4f8e-a7e0-8f148d516b75@kernel.org>
-Date: Tue, 10 Dec 2024 12:47:50 +0100
+	s=arc-20240116; t=1733839925; c=relaxed/simple;
+	bh=zTzEWizpRaM8ODZvWNOpxJ8TZzIGu5NbRBoMbnMFbQU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=jNo5kixNkdtAfFsvVzD1ZDTR3I2NjEu2sT1s7ScZWy9bMDRtWJIlQTN9ntQy0V7XHW/zDcTvkYziWMRL70P7C8gamhwhhl0PWj8Go8e7O2EyZ2RJejFbUIHCLLmb7MxrrPwGj2RVnD7BerN2YdXy5O131pBobtph7Sj8DGDX8wU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=AJSUtyuR; arc=none smtp.client-ip=203.254.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20241210141200epoutp04e752fe2a499885d276fc30927f4cdf59~P1jjDWCSX0727907279epoutp04e
+	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 14:12:00 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20241210141200epoutp04e752fe2a499885d276fc30927f4cdf59~P1jjDWCSX0727907279epoutp04e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1733839920;
+	bh=HfwqOcrO3Cvy54+XQ2mqcIc5mAMae4tZNeYE/5TOFLc=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=AJSUtyuR01TIKiB9qiX5y4nHwh2m6vDfgk8YjY6Rj1YQ+9U2xrFURXk1mshfboSof
+	 wR/WK3vJ3FyU6UWmsZ6gU6VLXAsWgF8u+0pVvcSJyKAM/YPmXsxdlpDhqQ7h/xGHOk
+	 U4bzE63SmjzlOSa1uOezVKQDLM9jecod4Ef0T7L8=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20241210141159epcas5p217de40b5a6a540752a998faa14f2fa07~P1jiJ6Dqe1988119881epcas5p2G;
+	Tue, 10 Dec 2024 14:11:59 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.182]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4Y70zL5XKnz4x9Pt; Tue, 10 Dec
+	2024 14:11:58 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	E4.7D.19710.E2C48576; Tue, 10 Dec 2024 23:11:58 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20241210141157epcas5p2ff173636946d70e2b6d0a44cd7c087be~P1jgCIQj10084800848epcas5p2G;
+	Tue, 10 Dec 2024 14:11:57 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20241210141157epsmtrp2922d6521234b8ec8c5d3657f0a4bc104~P1jf-PUeU3088230882epsmtrp2L;
+	Tue, 10 Dec 2024 14:11:57 +0000 (GMT)
+X-AuditID: b6c32a44-363dc70000004cfe-13-67584c2e12e6
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	21.B7.18949.D2C48576; Tue, 10 Dec 2024 23:11:57 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20241210141154epsmtip22eb775c181d0f8e44c3ead32f983c546~P1jdghQqC0507705077epsmtip2h;
+	Tue, 10 Dec 2024 14:11:54 +0000 (GMT)
+Message-ID: <e3f45175-a17d-4b88-b6e4-5c75e91132be@samsung.com>
+Date: Tue, 10 Dec 2024 19:41:53 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,152 +77,91 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: snps,dwc3: Add
- snps,filter-se0-fsls-eop quirk
-To: Krishna Kurapati <quic_kriskura@quicinc.com>,
- Uttkarsh Aggarwal <quic_uaggarwa@quicinc.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- quic_ppratap@quicinc.com, quic_jackp@quicinc.com
-References: <20241017114055.13971-1-quic_uaggarwa@quicinc.com>
- <20241017114055.13971-2-quic_uaggarwa@quicinc.com>
- <gclvciv5cmrcut6qvo3kh3ycutqt5sot5k4i2nwics6myhuxvq@cf6ajwflxdlc>
- <1129e0a7-6bd0-416e-8c56-6b8d75600c4e@quicinc.com>
- <f9f66565-6356-4b61-8653-1e9c006b892c@kernel.org>
- <99810132-85b6-45ee-9933-7a00c3672c47@quicinc.com>
- <aa67ea21-b451-4a1d-b4bf-4912b88c0341@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
+	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	stable@vger.kernel.org
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <aa67ea21-b451-4a1d-b4bf-4912b88c0341@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-
-On 10/12/2024 11:12, Krishna Kurapati wrote:
-> 
-> 
-> On 11/20/2024 2:53 PM, Krishna Kurapati wrote:
->>
->>
->> On 11/7/2024 3:25 PM, Krzysztof Kozlowski wrote:
->>> On 07/11/2024 07:17, Krishna Kurapati wrote:
->>>>
->>>>
->>>> On 10/18/2024 11:57 AM, Krzysztof Kozlowski wrote:
->>>>> On Thu, Oct 17, 2024 at 05:10:54PM +0530, Uttkarsh Aggarwal wrote:
->>>>>> Adding a new 'snps,filter-se0-fsls-eop quirk' DT quirk to dwc3 core 
->>>>>> to set
->>>>>> GUCTL1 BIT 29. When set, controller will ignore single SE0 glitch 
->>>>>> on the
->>>>>> linestate during transmission. Only two or more SE0 is considered as
->>>>>> valid EOP on FS/LS port. This bit is applicable only in FS in 
->>>>>> device mode
->>>>>> and FS/LS mode of operation in host mode.
->>>>>
->>>>> Why this is not device/compatible specific? Just like all other quirks
->>>>> pushed last one year.
->>>>
->>>> Hi Krzysztof,
->>>>
->>>>    Apologies for a late reply from our end.
->>>>
->>>>    In DWC3 core/dwc3-qcom atleast, there have been no compatible 
->>>> specific
->>>> quirks added.
->>>
->>
->> Sorry again for late reply.
->>
->>> Nothing stops from adding these, I think.
->>>>
->> Agree, we can take that approach of adding soc specific compatibles to 
->> dwc3 driver instead of adding through bindings.
->>
->>>> Also since this is a property of the Synopsys controller
->>>> hardware and not QC specific one, can we add it in bindings itself.
->>>> Because this is a property other vendors might also use and adding it
->>>> via compatible might not be appropriate.
->>>
->>> This does no answer my question. I don't see how this is not related to
->>> one specific piece of SoC.
->>>
->>> If you claim this is board-related, not SoC, give some arguments.
->>> Repeating the same is just no helping.
->>>
->>
->> But my point was that although the issue was found only on some QC 
->> SoC's, the solution still lies in some bits being set in controller 
->> register space and it is part of Synopsys IP. So wouldn't officially we 
->> add that support in bindings and then enable/disable the feature via DT 
->> like we did for other quirks ? If many SoC's need it in future, the 
->> driver needs to add a long list of compatible specific data which 
->> otherwise might be quirks in DT.
->>
-> 
-> Hi Krzysztof,
-> 
->   Gentle ping to provide your feedback on the last comment.
-You got clear comments yet you still do not accept them. Nothing
-changed, this is implied by compatible. The only reason this is not
-compatible implied is that this is board specific. I asked for arguments
-for this. Did you provide them? No. Instead we keep discussing same over
-and over again.
-
-You bring downstream arguments - one compatible and hundreds of
-properties - and it is tiring to discuss over and over. There were
-already multiple guidelines written and multiple comments for multiple
-patches on the exact same topic.
-
-I don't find nice being pushed over this and pinged for every little
-disagreement with standard Devicetree rules and guidelines.
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <2024121035-manicure-defiling-e92c@gregkh>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01TbUxbZRT27W1vLyQ11wLjpRhWS3CjDNZKKRcFhoraDGJIFMX9AAp90xL6
+	td4ydVnMmAKyrQIFy0Zg1LlBLM3IsBusdk5r+BgjI9K5CIE5PlSmQwcU5zIctr04+fecc55z
+	znPOeV8C40/iAqJCb0YmvVIrwsPZF79L3Jmckl+klty8I6Zabec51N0fHBzq9qmLODVtt7Go
+	0e7PWNSHn/filNVzgU3NzP7Nps4tjXMon7sdp0531WCUq/YGi1oZ3OBQ1a4ZDuWob2dTvvuX
+	MMp+fg5Q1m+jcviKPkc9rrjS4eQqhhaHuYqGfySKJs8Hik9cDqBY7Ysr4O6rzNQgpQqZhEhf
+	blBV6NVZorw3Sl4uSZNLpMnSDCpdJNQrdShLlJtfkPxqhTYwhEh4QKmtCrgKlDQt2p2daTJU
+	mZFQY6DNWSJkVGmNMmMKrdTRVXp1ih6Zn5dKJM+lBYillZq16nq2sYvznmWthnUYHGMfBWEE
+	JGXw54ZrARxO8MmvAOw6bsUZYwXAiS+cgDH+ArBltulxirPTvsm6DGDzcFsowCeXAJxtjAxi
+	HpkNu4/0giBmkwnQbfGwGP9T8OrJhRA/itwOf5o6wQ3iCLICrrUeDfEjyZ3wzuBUSBNGOjE4
+	6bfgwQBGRsOphc5AIYLASSn8ZSQz6A4j0+GDlUkOQ9kO+5fasWAuJBcJuD7WzWFU58KW6ebN
+	CSLgb8MuLoMFcPWPyziDy6HH6t/0a6DX4cUYvAf22Mc4wb4YmQh73buZXk9Cy8OFkBxI8uDH
+	tXyGnQBHq32bFWPhrTM3NxUo4GjtfS6zt2UA29tPshqBsG3LWtq2TNm2ZZy2/zvbAdsBYpCR
+	1qlReZpRqkfvPj54uUHXB0JvXJw7AH7sfJTiBSwCeAEkMFEkj8grVPN5KuX7B5HJUGKq0iLa
+	C9IC92nCBFHlhsAn0ZtLpLIMiUwul8syUuVSUTTv95oOFZ9UK82oEiEjMv2XxyLCBIdZbx86
+	fdc1Vi8wz003H6lZuTXWeX2c7mk13Xv9lcJdWtmyHMvj7zjw6UZxcVbHs18bY9aKfOjLb6JL
+	cGG/c1413zQ0V1X3jm1A6E9tXD4eH/HRE/2nDsGRc2XHyjguhG+rkK/HJ9ahmQahLW6FezYu
+	cZsb7d1fm1+XPhvpH7FdM6Ra7/H23x7cI6j5NSf+0UPjRGOzeEiBvNMt44kFNp9YTydMXvHP
+	r/qGz7SUJvcoIsqSsi/p7JKnVaNOosV9Y4efdzB+LClG80J+TvheS2zR1cIOZHrmtfCNPy/s
+	S5rgOR8U8y0vnRiULM5cB2ffetGte3N9YJfXEzvwfV8pn1ctYtMapVSMmWjlv4MjXMpsBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGIsWRmVeSWpSXmKPExsWy7bCSvK6uT0S6wcHjkhbTp21ktXhzdRWr
+	xYN529gs7iyYxmRxavlCJovmxevZLCbt2cpicffhDxaLdW/Ps1pc3jWHzWLRslZmiy1tV5gs
+	Ph39z2rRuOUuq8WqzjksFpe/72S2WLDxEaPFpIOiDkIem1Z1snnsn7uG3ePYi+PsHv1/DTwm
+	7qnz6NuyitHj8ya5APYoLpuU1JzMstQifbsEroyvjZ0sBctYK3q/tjI1MHazdDFyckgImEis
+	mb+ArYuRi0NIYDejxJ85Z9ggEtISr2d1MULYwhIr/z1nhyh6zSjx7MVGdpAEr4CdxPKm9WBF
+	LAKqErt69zBBxAUlTs58ArZBVEBe4v6tGWD1wgKZEvdOzQRbICKgIfHy6C0WkKHMAmuYJX7N
+	6GCE2PCRUeJH1ySwKmYBcYlbT+YDTeXgYBMwlHh2wgYkzClgLvHz001WiBIzia6tEJcyAy3b
+	/nYO8wRGoVlI7piFZNIsJC2zkLQsYGRZxSiZWlCcm55bbFhglJdarlecmFtcmpeul5yfu4kR
+	HLVaWjsY96z6oHeIkYmD8RCjBAezkggvh3douhBvSmJlVWpRfnxRaU5q8SFGaQ4WJXHeb697
+	U4QE0hNLUrNTUwtSi2CyTBycUg1MxX+qyjdxPr3XqPb1l9mTFV8NW8zV5DhKpjNERxzLCpiV
+	w1BsL37p9t9Yplnx8x09A4OijSwz2jLMD4t6yN3ntjlXXLPH6Fk5N++WCg1+N29HyVk2G4/M
+	WbljxlVth+cPJIXyJRdkvJGu1DYQCc5gZHQ48Eb9r4Xuuxt2fz7+2XPk7/Kb7vOYtRY731y1
+	00codUrnhi2C6Qz5vxU5tq+o522fzJf5KzE/bv38PW3c5Y67DafWtPN9EJuWfOEL69mERFFN
+	fYGEL6m3P30ODs4ycpbzfFSwM5RxM0diXrPiaZlbJ2oWFTgHfr4x8XaurMc2s7NLBNd9f/+7
+	7V36B7dnFps4Sp8nX034pruPv1yJpTgj0VCLuag4EQAXdKj5SQMAAA==
+X-CMS-MailID: 20241210141157epcas5p2ff173636946d70e2b6d0a44cd7c087be
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241208152338epcas5p4fde427bb4467414417083221067ac7ab
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+	<20241208152322.1653-1-selvarasu.g@samsung.com>
+	<6b3b314e-20a3-4b3f-a3ab-bb2df21de4f5@samsung.com>
+	<2024121035-manicure-defiling-e92c@gregkh>
 
 
-Best regards,
-Krzysztof
+On 12/10/2024 3:48 PM, Greg KH wrote:
+> On Tue, Dec 10, 2024 at 03:23:22PM +0530, Selvarasu Ganesan wrote:
+>> Hello Maintainers.
+>>
+>> Gentle remainder for review.
+> You sent this 2 days ago, right?
+>
+> Please take the time to review other commits on the miailing list if you
+> wish to see your patches get reviewed faster, to help reduce the
+> workload of people reviewing your changes.
+>
+> Otherwise just wait for people to get to it, what is the rush here?
+>
+> thanks,
+>
+> greg k-h
+
+
+Hi Greg,
+
+
+There is no rush. I understand that the review will take time and I 
+apologize for any inconvenience caused by sending the reminder email.
+
+Thanks,
+Selva
 
