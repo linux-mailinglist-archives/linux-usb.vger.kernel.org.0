@@ -1,185 +1,231 @@
-Return-Path: <linux-usb+bounces-18280-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18281-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02AE49EAD37
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 10:57:52 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D74D09EAD75
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 11:02:46 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9D91290260
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 09:57:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18CE818842EF
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 10:00:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C466226168;
-	Tue, 10 Dec 2024 09:53:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC95212D8E;
+	Tue, 10 Dec 2024 09:57:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="bhAYBPqK"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="N9hfPxR3";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="lLSEVIYs"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0702153F8
-	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 09:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F08212D60;
+	Tue, 10 Dec 2024 09:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733824415; cv=none; b=p4k2PW+XfKwVwDZ2JR19vm7s5YW1nyC/EYP80dTbA3uYXg0E4QV3as7ljXehLVnklkNgmRngOwRmJtWREr2tbJ7G7CPecAiQjG5UI3SXieqsr4NEK7MjDJUdbd6+iDaUxVw0ITEXSV8mqIHMmfSqWr5NZbGSQ0IgjtfMF0J2IaI=
+	t=1733824622; cv=none; b=l6siaLlcQnGg+5BPHH8N0N4Bds9j/O3wzWhF9npphgYJcgNPs84CrM3MbCoO5Do6B5hCoxcT2aS8LwcwO7I4QrqinQ6MENH79991BmG+3FeT6qNUXC7wi/S/ZSWGWnbZLRk8SRTDzmOJWBtJkeMO92mEoGCneEs++4Dq1B9SzsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733824415; c=relaxed/simple;
-	bh=f2wXsLu93ld7H5hW2vfOqoFIUWvM4bM6iQGQZM3hGLU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=dDq338pBOOPt9Al7WHKt3MiYUS1SwZEtZwDeP8WFkJNkgC+A9aLTD7u7L52AxhBfTo02a+AW9q+NI1tazZk4av5XGCKExImL1chYuHVZtvUuZ66fvYqdfMSD9UjmV9zP18dAsKe41WCT+J3wzLfVIRPbqILbhNGFWbW9h+m1MeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=bhAYBPqK; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20241210095329epoutp023d17d8e22040117d34bae47abb2f9c07~PyB0zHZ2g1258912589epoutp026
-	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 09:53:29 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20241210095329epoutp023d17d8e22040117d34bae47abb2f9c07~PyB0zHZ2g1258912589epoutp026
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1733824409;
-	bh=Au+as8CBZsENQNOVCtoyLwjUW/xu13aSSffNENYc9/8=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=bhAYBPqKAxcqjBIUnoYjaqYNVklyTd9ERldvwTexbyv++egJNM3TN64hxTaGRClnt
-	 hgOCjLmLrXb3URwYTGrOVvrPbnq0eb66kJeqWej207utU0n7GEq+KQ8VNej3sVIzHa
-	 sx8FKF5al7hl/yKYAFmmsrJyfJE9KEDzHhcmuZIA=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20241210095328epcas5p12771ea8fe08eb534f608317b315752ad~PyB0LS3NP3223232232epcas5p1E;
-	Tue, 10 Dec 2024 09:53:28 +0000 (GMT)
-Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.178]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4Y6vF31Pjsz4x9Q2; Tue, 10 Dec
-	2024 09:53:27 +0000 (GMT)
-Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
-	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	5B.39.29212.69F08576; Tue, 10 Dec 2024 18:53:27 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20241210095325epcas5p47339f18d446e8da3efa84bbf3c9e10e5~PyBxudcuU2137121371epcas5p4J;
-	Tue, 10 Dec 2024 09:53:25 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20241210095325epsmtrp23baf7b30fd10f3a2528d0145247ec01e~PyBxthtCA1022410224epsmtrp2C;
-	Tue, 10 Dec 2024 09:53:25 +0000 (GMT)
-X-AuditID: b6c32a50-801fa7000000721c-d7-67580f96b568
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	06.3F.18729.59F08576; Tue, 10 Dec 2024 18:53:25 +0900 (KST)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241210095323epsmtip260b68af7f4d84985d469d96fa5179354~PyBvP-Ak21208112081epsmtip2A;
-	Tue, 10 Dec 2024 09:53:23 +0000 (GMT)
-Message-ID: <6b3b314e-20a3-4b3f-a3ab-bb2df21de4f5@samsung.com>
-Date: Tue, 10 Dec 2024 15:23:22 +0530
+	s=arc-20240116; t=1733824622; c=relaxed/simple;
+	bh=/TeuGAbZ26vSbNhjubofgZnnehIACA5UrhaAhnM3RD8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QHixMekA2jpfEkCj4ebb+6RQNnz3qHEoVfeuCx4P7IjDWCURbY4Wpo9c6jnJOrnj5rcZG3dfFLMdnh9Ull8Iac1SMS0F2CQtgK8vtfLIKJnLbn+qbBoqYDNPTjxrXyPpppiZV/VwsLOdw+XfOzjXvdalmjpy4JGtfalY/EOTpiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=N9hfPxR3; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=lLSEVIYs reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1733824619; x=1765360619;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=LPh0yVGEQ9vWISI1i/TYH0JhPJ9KKecMDH0Xpu48hcc=;
+  b=N9hfPxR3BBsqJFXfN5JzGh1juxmDc6mli1GCpsAP296F2BioSDc0LC4z
+   IqUYDBHsM4HSKrozybuPIw83SLeTVE+ClyNomh/T1lMw2YIkRY/DXzLSy
+   gKGLWyltYYwudf0x/jMLEjoWmZJ2QTfyGqqqLHDHfXKU0KNXgbdwPGKg3
+   DqW5ujJyUXTVFT7V693G41TkwS14um9Amp9/NgMapTbwYQLHr3QlmOfCh
+   rDaqMDPJWk/zUg5v/ZKMnjOTn4QnNwFnqPZmQXNZkFfb9iME4FzEFIRUs
+   CWeGpiZ+JHtId+lvlGJUiN3GULZ0XNIOAC8m+6OOZhWJlIdkTa6eP874c
+   Q==;
+X-CSE-ConnectionGUID: L4jbIdFJRearAlIyQVVXcQ==
+X-CSE-MsgGUID: pmEQQ7tuSc27gjXA3zX56g==
+X-IronPort-AV: E=Sophos;i="6.12,222,1728943200"; 
+   d="scan'208";a="40507636"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 10 Dec 2024 10:56:50 +0100
+X-CheckPoint: {67581062-5-98002871-E6E29D66}
+X-MAIL-CPID: 3E6B7F7F1FE94745951728CD9D1DD495_3
+X-Control-Analysis: str=0001.0A682F1A.67581062.0054,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5BA3D167FF3;
+	Tue, 10 Dec 2024 10:56:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1733824605;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LPh0yVGEQ9vWISI1i/TYH0JhPJ9KKecMDH0Xpu48hcc=;
+	b=lLSEVIYs5+7Y+CXHWwxGjqyRow8kmqPCwwfsqJRbU0dGB3uPArrRjNJZIt8AQsDkjzL/s8
+	GKke8uKjGNfjS2wkeVbymV+A15exlcdlbbXcWEYCAxm4iQAV3x5DUbCZqllq3Y6WQtzpWe
+	ijW/PsTwD08MBNJc36SVETUAei4hL92vI2Wl/lfM9LJHE3CPe/8t1C9fQM/joAekRntcJG
+	zkKg4f26O8tuJ7dZHeLkJBhKbkjt38lr98UbV6CvVJbrxfP4L77DjDqe6tWjYe4qARu9ot
+	4+XqcHL6rmyYfckuo8ljhOet1+EiN43ItM5YUOXUWzWMrQyw/2q37MCyoyW8AA==
+Message-ID: <309052f3f69950fe43390505cc7254aee8c8f5c6.camel@ew.tq-group.com>
+Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and
+ MBa62xx carrier board Device Trees
+From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero
+ Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
+ Tony Luck <tony.luck@intel.com>, "Guilherme G. Piccoli"
+ <gpiccoli@igalia.com>, Felipe Balbi <balbi@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>, Hari
+ Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
+Date: Tue, 10 Dec 2024 10:56:41 +0100
+In-Reply-To: <a2a2f201-73a4-4a99-baef-0d593a88c872@lunn.ch>
+References: <cover.1733737487.git.matthias.schiffer@ew.tq-group.com>
+	 <95ff66ca2c89f69d893c2ce9eed9a0c677633c7b.1733737487.git.matthias.schiffer@ew.tq-group.com>
+	 <a9c5cfda-e3e3-436a-8d05-b2f096157cfe@lunn.ch>
+	 <c902a56cf34838f60cee67624bb923e91d74e9e0.camel@ew.tq-group.com>
+	 <d25b1447-c28b-4998-b238-92672434dc28@lunn.ch>
+	 <e16076d16349e929af82fa987a658bff1d9804c4.camel@ew.tq-group.com>
+	 <a2a2f201-73a4-4a99-baef-0d593a88c872@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
- issue during MIDI bind retries
-To: gregkh@linuxfoundation.org, quic_jjohnson@quicinc.com, kees@kernel.org,
-	abdul.rahim@myyahoo.com, m.grzeschik@pengutronix.de,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
-	akash.m5@samsung.com, rc93.raju@samsung.com, taehyun.cho@samsung.com,
-	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
-	alim.akhtar@samsung.com, stable@vger.kernel.org
-Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <20241208152322.1653-1-selvarasu.g@samsung.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf0wbZRjed3e9Hgzk6KB8YiJdE0yKgfVcC4cpjDCEZjSBhJRM44QLvRSk
-	tE1bdBBiQAcTVn66wEbYZDiYlm0IFhDsWCgpTNycivoHSmk3wsYE3A8cLoDacqj897xPnvfH
-	877fR6CCWTySKNJbWJOe0YnxQGxoQiKJbQs5qpXWegHd1trPo5d/svFoz/khnP61sxWhpy9d
-	QOgPPunD6RbHIEbPef/E6Ksrt3n0zGgHTnf1VKO0veZHhH7s+ptHV9nneLSttgOjZ9ZHULqz
-	/w6gW8bDUwTKAVstrrx+7jJfOXl/iq9s3JIqmx3vKRvsNqB8MvBiNv+NYkUhy2hYk4jVFxg0
-	RXptkjgzJ+9wnjxeSsVSiXSCWKRnStgkcZoqOza9SOczIRa9w+hKfVQ2YzaLDyQrTIZSCysq
-	NJgtSWLWqNEZZcY4M1NiLtVr4/Ss5VVKKn1F7hPmFxcuVb5mHA05fs+7CSqBO6gOBBCQlMFb
-	J1uxOhBICEgHgFtjV3hc8BjAU3cvAS54CuDmoMcnI7ZTusde5/hrALqtHpwLVgCcvFLJ99cN
-	JpPhdye6UT/GyGi44KjGOT4Ufn12AfPjcDIKzs+e2dbvI4vgH211293C/HPcctv5/gAlrQi0
-	Phzn+VUoGQFnFz5G/GPgJAUXbyj8dACpgC1L3QgniYLDKx2oPxeSywRc/n0AcE7ToGfShXJ4
-	H3wwZedzOBI+Wb2Gc7gAOlrWdvhC6LQ5d/SHYG/nTZ6/L0pKYN/oAa7Xc7B+YwHhthIMP6wR
-	cOpoOF01s1PxBei++DOPw0o4XbPO55bVCOBH7f1IExC179pL+y6X7bvstP/fuRNgNhDJGs0l
-	WrZAbqRi9ey7/128wFAyALYfeUz2l6D38604J0AI4ASQQMVhwUSmWisI1jBl5azJkGcq1bFm
-	J5D7LtSMRoYXGHy/RG/Jo2SJUll8fLws8WA8JY4I/q36nEZAahkLW8yyRtb0bx5CBERWIgw1
-	Gw3e5qdjmfvD7vHJNSt/Zv9VRqW6vipVn/9UteVuXO/aW3YyWXE/7a5C/vT7MmJ+8ODY7bEb
-	KUTOnbX31aHCr4Tzw6L0z3pPewWThxQdoUPqwYoMYUJPU6y54uKFJWGKEGa99FCl3XDmbwY1
-	fPNI5ekn38wtU4UkxuHl43vsz6f2h/UJn3kbb1ZUTuUKTkSNLza/NZeQsYZPTOzNdS0es9Sn
-	/rWhri7WZHl+sQe6JAHlEZT0UU7MD64eXsPLw66u1pXS+eOnjzVJquwZ+V2XdbI97iNfdJTE
-	LaaeqjnS9SArKMQqyB3ZOqONqFLX0yLJtz3PVnOoQGzk8NFRMWYuZKgY1GRm/gHosdzCbQQA
-	AA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKIsWRmVeSWpSXmKPExsWy7bCSvO5U/oh0g3+PzSymT9vIavHm6ipW
-	iwfztrFZ3Fkwjcni1PKFTBbNi9ezWUzas5XF4u7DHywW696eZ7W4vGsOm8WiZa3MFlvarjBZ
-	fDr6n9WicctdVotVnXNYLC5/38lssWDjI0aLSQdFHYQ8Nq3qZPPYP3cNu8exF8fZPfr/GnhM
-	3FPn0bdlFaPH501yAexRXDYpqTmZZalF+nYJXBkvG1wLdvFXPH/4h7GB8R5PFyMHh4SAicTS
-	fZFdjFwcQgK7GSU6lq9l72LkBIpLS7ye1cUIYQtLrPz3nB2i6DWjxJrmj2wgCV4BO4kLLUuZ
-	QWwWAVWJJ3taoeKCEidnPmEBsUUF5CXu35oBNlRYIFPi3qmZbCCDRAT2AG1794AFxGEW6GGS
-	uL7mMRvEin5GiTsHv4GNYhYQl7j1ZD4TyK1sAoYSz07YgIQ5BWwkJr1cygRRYibRtRXiVGag
-	bdvfzmGewCg0C8khs5BMmoWkZRaSlgWMLKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS83M3
-	MYJjVktzB+P2VR/0DjEycTAeYpTgYFYS4eXwDk0X4k1JrKxKLcqPLyrNSS0+xCjNwaIkziv+
-	ojdFSCA9sSQ1OzW1ILUIJsvEwSnVwLR2enIT06wLsW8PlPDlbWILDEl6fvlNTewKm0/N/5+K
-	aszaX7jU8/OuBb/1O951yJ/bXl90Vqx/0dxje7JPL5zTl7Ir8u60bcyXD3nfr3n17pTQl2+N
-	hpILkyb5S9+K32vpfGTe7aZla3heneTViuJ1OBIrP7WVf0ZVaf3ET4wJ2x9tat20KL5jT7fn
-	mYkNEwwjJ9hOOl3xLVJB49L/y3cEF3RmO95wV5Fhvr6uXfy0L8NEPtmsww8ONM2NkgzVyLyU
-	NbvsxbywPVJsOx03vZpZ87T7ye9wLw7z6+m7U27a/b0Y+8Io9vzeaBvWnybvDHg+TNoS8Xvv
-	u+M1fLL7Q5lvP+pvCj4U/58j1bC4ULdDiaU4I9FQi7moOBEAtyi3QkgDAAA=
-X-CMS-MailID: 20241210095325epcas5p47339f18d446e8da3efa84bbf3c9e10e5
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20241208152338epcas5p4fde427bb4467414417083221067ac7ab
-References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
-	<20241208152322.1653-1-selvarasu.g@samsung.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hello Maintainers.
+On Mon, 2024-12-09 at 17:14 +0100, Andrew Lunn wrote:
+>=20
+> > Not our board, but the AM62 SoC. From the datasheet:
+> >=20
+> > "TXC is delayed internally before being driven to the RGMII[x]_TXC pin.=
+ This
+> > internal delay is always enabled." So enabling the TX delay on the PHY =
+side
+> > would result in a double delay.
+>=20
+> phy-mode describes the board. If the board does not have extra long
+> clock lines, phy-mode should be rgmii-id.
+>=20
+> The fact the MAC is doing something which no other MAC does should be
+> hidden away in the MAC driver, as much as possible.
 
-Gentle remainder for review.
-
-Thanks,
-Selva
+Isn't it kind of a philosophical question whether a delay added by the SoC
+integration is part of the MAC or not? One could also argue that the MAC IP=
+ core
+is always the same, with some SoCs adding the delay and others not. (I don'=
+t
+know if there are actually SoCs with the same IP core that don't add a dela=
+y;
+I'm just not a big fan of hiding details in the driver that could easily be
+described by the Device Tree, thus making the driver more generic)
 
 
-On 12/8/2024 8:53 PM, Selvarasu Ganesan wrote:
-> The current implementation sets the wMaxPacketSize of bulk in/out
-> endpoints to 1024 bytes at the end of the f_midi_bind function. However,
-> in cases where there is a failure in the first midi bind attempt,
-> consider rebinding. This scenario may encounter an f_midi_bind issue due
-> to the previous bind setting the bulk endpoint's wMaxPacketSize to 1024
-> bytes, which exceeds the ep->maxpacket_limit where configured TX/RX
-> FIFO's maxpacket size of 512 bytes for IN/OUT endpoints in support HS
-> speed only.
-> This commit addresses this issue by resetting the wMaxPacketSize before
-> endpoint claim.
->
-> Fixes: 46decc82ffd5 ("usb: gadget: unconditionally allocate hs/ss descriptor in bind operation")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+>=20
+> The MAC driver should return -EINVAL with phy-mode rgmii, or
+> rmgii-rxid, because the MAC driver is physically incapable of being
+> used on a board which has extra long TX clock lines, which 'rmgii' or
+> rgmii-rxid would indicate.
+>=20
+> Since the MAC driver is forcing the TX delay, it needs to take the
+> value returned from of_get_phy_mode() and mask out the TX bit before
+> passing it to the PHY.
+
+Hmm okay, this is what the similar ICSSG/PRUETH driver does. I've always fo=
+und
+that solution to be particularly confusing, but if that's how it's supposed=
+ to
+work, I'll have to accept that.
+
+In my opinion the documentation Documentation/networking/phy.rst is not ver=
+y
+clear on this matter - the whole section "(RG)MII/electrical interface
+considerations" talks about whether the PHY inserts the delay or not, so my
+assumption was that phy-mode describes the PHY side of things and only that=
+.
+
+It gets even more confusing when taking into account
+Documentation/devicetree/bindings/net/ethernet-controller.yaml, which conta=
+ins
+comments like "RGMII with internal RX delay provided by the PHY, the MAC sh=
+ould
+not add an RX delay in this case", which sounds like there are only the cas=
+es
+"delay is added by the PHY" and "delay is added by the MAC" - the case "del=
+ay is
+part of the board design, neither MAC nor PHY add it" doesn't even appear.
+
+>=20
+> Now, it could be that history has got in the way. There are boards out
+> there which have broken DT but work. Fixing the MAC driver to do the
+> correct thing will break those boards. Vendors with low quality code
+> which works, but not really.
+>=20
+> ~/linux/arch/arm64/boot/dts/ti$ grep rgmii k3-am625-*
+> k3-am625-beagleplay.dts:	phy-mode =3D "rgmii-rxid";
+> k3-am625-sk.dts:	phy-mode =3D "rgmii-rxid";
+>=20
+> Yep, these two have broken DT, they don't describe the board
+> correctly.
+>=20
+> O.K. Can we fix this for you board? Yes, i think we can. If you take
+> rmgii-rxid, aka PHY_INTERFACE_MODE_RGMII_RXID, and mask out the TX,
+> you still get PHY_INTERFACE_MODE_RGMII_RXID. If you take rgmii-id,
+> a.k.a. PHY_INTERFACE_MODE_RGMII_ID and mask out the TX, you get
+> PHY_INTERFACE_MODE_RGMII_RXID, which is what you want.
+>=20
+> Please produce a patch to the MAC driver, explaining the horrible mess
+> the vendor made, and how this fixes it, but should also not break
+> other boards.
+
+I can make this change, but "am65-cpsw-nuss" currently supports 6 different
+compatible strings, many of which are used for multiple SoC families.
+
+Maybe someone from TI could chime in and say whether all of these have the =
+fixed
+TXC delay, or at least the current compatible strings are already specific
+enough to tell whether the SoC adds a delay?
+
+
+>=20
+> > No such defaults exist in the DP83867 driver. If any rgmii-*id mode is =
+used, the
+> > corresponding delays *must* be specified in the DTB:
+> >=20
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
+/drivers/net/phy/dp83867.c#n532
+>=20
+> That is bad, different to pretty every other PHY driver :-(
+>=20
+> If you want, you could patch this driver as well, make it default to
+> 2ns if delays are asked for.
+
+Makes sense, I'll write a patch for that as well.
+
+Best regards,
+Matthias
+
+
+>=20
+>     Andrew
+>=20
 > ---
->   drivers/usb/gadget/function/f_midi.c | 9 +++++++++
->   1 file changed, 9 insertions(+)
->
-> diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-> index 837fcdfa3840..5caa0e4eb07e 100644
-> --- a/drivers/usb/gadget/function/f_midi.c
-> +++ b/drivers/usb/gadget/function/f_midi.c
-> @@ -907,6 +907,15 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
->   
->   	status = -ENODEV;
->   
-> +	/*
-> +	 * Reset wMaxPacketSize with maximum packet size of FS bulk transfer before
-> +	 * endpoint claim. This ensures that the wMaxPacketSize does not exceed the
-> +	 * limit during bind retries where configured TX/RX FIFO's maxpacket size
-> +	 * of 512 bytes for IN/OUT endpoints in support HS speed only.
-> +	 */
-> +	bulk_in_desc.wMaxPacketSize = cpu_to_le16(64);
-> +	bulk_out_desc.wMaxPacketSize = cpu_to_le16(64);
-> +
->   	/* allocate instance-specific endpoints */
->   	midi->in_ep = usb_ep_autoconfig(cdev->gadget, &bulk_in_desc);
->   	if (!midi->in_ep)
+> pw-bot: cr
+
+--=20
+TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
+any
+Amtsgericht M=C3=BCnchen, HRB 105018
+Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
+neider
+https://www.tq-group.com/
 
