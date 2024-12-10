@@ -1,231 +1,175 @@
-Return-Path: <linux-usb+bounces-18281-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18282-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D74D09EAD75
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 11:02:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4956F9EADAA
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 11:12:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18CE818842EF
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 10:00:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FCE0162805
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 10:12:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC95212D8E;
-	Tue, 10 Dec 2024 09:57:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC12323DEBB;
+	Tue, 10 Dec 2024 10:12:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="N9hfPxR3";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="lLSEVIYs"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="g/WW6Ko4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F08212D60;
-	Tue, 10 Dec 2024 09:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49DE23DE8B;
+	Tue, 10 Dec 2024 10:12:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733824622; cv=none; b=l6siaLlcQnGg+5BPHH8N0N4Bds9j/O3wzWhF9npphgYJcgNPs84CrM3MbCoO5Do6B5hCoxcT2aS8LwcwO7I4QrqinQ6MENH79991BmG+3FeT6qNUXC7wi/S/ZSWGWnbZLRk8SRTDzmOJWBtJkeMO92mEoGCneEs++4Dq1B9SzsY=
+	t=1733825543; cv=none; b=dXIr59GAvzJSzusTQDNXusw0ebMEkpsJKArwGBfxtccp6O9FniUNCFF290kY6oEmI61ROe2J1Jv/W6k5EIIh8plJMMIGsuBZfiUE5kOjDXXwrX8fNYyUvWFGGK2fa0wf0DR8S5CBpX0XVcgpLb+6xZ+ajGD9zVbu9TKVR0O8Hfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733824622; c=relaxed/simple;
-	bh=/TeuGAbZ26vSbNhjubofgZnnehIACA5UrhaAhnM3RD8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QHixMekA2jpfEkCj4ebb+6RQNnz3qHEoVfeuCx4P7IjDWCURbY4Wpo9c6jnJOrnj5rcZG3dfFLMdnh9Ull8Iac1SMS0F2CQtgK8vtfLIKJnLbn+qbBoqYDNPTjxrXyPpppiZV/VwsLOdw+XfOzjXvdalmjpy4JGtfalY/EOTpiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=N9hfPxR3; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=lLSEVIYs reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1733824619; x=1765360619;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=LPh0yVGEQ9vWISI1i/TYH0JhPJ9KKecMDH0Xpu48hcc=;
-  b=N9hfPxR3BBsqJFXfN5JzGh1juxmDc6mli1GCpsAP296F2BioSDc0LC4z
-   IqUYDBHsM4HSKrozybuPIw83SLeTVE+ClyNomh/T1lMw2YIkRY/DXzLSy
-   gKGLWyltYYwudf0x/jMLEjoWmZJ2QTfyGqqqLHDHfXKU0KNXgbdwPGKg3
-   DqW5ujJyUXTVFT7V693G41TkwS14um9Amp9/NgMapTbwYQLHr3QlmOfCh
-   rDaqMDPJWk/zUg5v/ZKMnjOTn4QnNwFnqPZmQXNZkFfb9iME4FzEFIRUs
-   CWeGpiZ+JHtId+lvlGJUiN3GULZ0XNIOAC8m+6OOZhWJlIdkTa6eP874c
-   Q==;
-X-CSE-ConnectionGUID: L4jbIdFJRearAlIyQVVXcQ==
-X-CSE-MsgGUID: pmEQQ7tuSc27gjXA3zX56g==
-X-IronPort-AV: E=Sophos;i="6.12,222,1728943200"; 
-   d="scan'208";a="40507636"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 10 Dec 2024 10:56:50 +0100
-X-CheckPoint: {67581062-5-98002871-E6E29D66}
-X-MAIL-CPID: 3E6B7F7F1FE94745951728CD9D1DD495_3
-X-Control-Analysis: str=0001.0A682F1A.67581062.0054,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5BA3D167FF3;
-	Tue, 10 Dec 2024 10:56:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1733824605;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=LPh0yVGEQ9vWISI1i/TYH0JhPJ9KKecMDH0Xpu48hcc=;
-	b=lLSEVIYs5+7Y+CXHWwxGjqyRow8kmqPCwwfsqJRbU0dGB3uPArrRjNJZIt8AQsDkjzL/s8
-	GKke8uKjGNfjS2wkeVbymV+A15exlcdlbbXcWEYCAxm4iQAV3x5DUbCZqllq3Y6WQtzpWe
-	ijW/PsTwD08MBNJc36SVETUAei4hL92vI2Wl/lfM9LJHE3CPe/8t1C9fQM/joAekRntcJG
-	zkKg4f26O8tuJ7dZHeLkJBhKbkjt38lr98UbV6CvVJbrxfP4L77DjDqe6tWjYe4qARu9ot
-	4+XqcHL6rmyYfckuo8ljhOet1+EiN43ItM5YUOXUWzWMrQyw/2q37MCyoyW8AA==
-Message-ID: <309052f3f69950fe43390505cc7254aee8c8f5c6.camel@ew.tq-group.com>
-Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and
- MBa62xx carrier board Device Trees
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To: Andrew Lunn <andrew@lunn.ch>
-Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>, Tero
- Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>, Kees Cook <kees@kernel.org>,
- Tony Luck <tony.luck@intel.com>, "Guilherme G. Piccoli"
- <gpiccoli@igalia.com>, Felipe Balbi <balbi@kernel.org>,
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>, Hari
- Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
-Date: Tue, 10 Dec 2024 10:56:41 +0100
-In-Reply-To: <a2a2f201-73a4-4a99-baef-0d593a88c872@lunn.ch>
-References: <cover.1733737487.git.matthias.schiffer@ew.tq-group.com>
-	 <95ff66ca2c89f69d893c2ce9eed9a0c677633c7b.1733737487.git.matthias.schiffer@ew.tq-group.com>
-	 <a9c5cfda-e3e3-436a-8d05-b2f096157cfe@lunn.ch>
-	 <c902a56cf34838f60cee67624bb923e91d74e9e0.camel@ew.tq-group.com>
-	 <d25b1447-c28b-4998-b238-92672434dc28@lunn.ch>
-	 <e16076d16349e929af82fa987a658bff1d9804c4.camel@ew.tq-group.com>
-	 <a2a2f201-73a4-4a99-baef-0d593a88c872@lunn.ch>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1733825543; c=relaxed/simple;
+	bh=vYg8wU42z6GwnwQ6+y+kBfKrFpVAPNchj09BZz4eGr0=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
+	 In-Reply-To:Content-Type; b=s0Lj7iWEWRLEClWyft1qeAR6orz0hmtVQK5YBwrDaL8/EN36yOEJQIxea5MPKJhKRt6YwiTtUhLrkDzrjcGVSIxDJkdDpwrjknWoCQgqb3k24V9KeDo2GZI8pWMSblUC1WsFWinbXzFXohZI5D3294ys+abhVWEdGdZ4/+BSxKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=g/WW6Ko4; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BA94bf0014580;
+	Tue, 10 Dec 2024 10:12:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	+xSULu1W4jer6gCjVvUYVNZD9AKl7ksD1gp8ZetqYb4=; b=g/WW6Ko4K0egBxut
+	6ATlTnMjlzxR+31CZEPsoOUk4Yr/JJhNEp4g5uVCl4eQQ5eYpmtKPlKD9CPyLP9G
+	sN+jlPgQx5HoVntuAvQLM3DdcgUOZ4LdljB9GouSRP8unETgu9LqshkImXgHhbQU
+	wFWGBJbZI8OcKRun8HQZKOUCts0dPKqbjUsUHXETr5Z5n7CysYdhuKmDOLFbbWXF
+	+rfttMVhJ6MUCqlEVOFfUM09wk3tJyqnBg/cI0qxI29CP5oLsIfo/4r/x4bDULkn
+	mHO2frzqd7hjie7ISfwQtSvJtzC1BdwYiwvOE/BXvQ/mSGTA/j2mg5bxTcO8NB8c
+	XVG3oA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43dy8tujgk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Dec 2024 10:12:16 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BAACFwu000891
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 10 Dec 2024 10:12:15 GMT
+Received: from [10.216.28.232] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 10 Dec
+ 2024 02:12:11 -0800
+Message-ID: <aa67ea21-b451-4a1d-b4bf-4912b88c0341@quicinc.com>
+Date: Tue, 10 Dec 2024 15:42:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Last-TLS-Session-Version: TLSv1.3
-
-On Mon, 2024-12-09 at 17:14 +0100, Andrew Lunn wrote:
->=20
-> > Not our board, but the AM62 SoC. From the datasheet:
-> >=20
-> > "TXC is delayed internally before being driven to the RGMII[x]_TXC pin.=
- This
-> > internal delay is always enabled." So enabling the TX delay on the PHY =
-side
-> > would result in a double delay.
->=20
-> phy-mode describes the board. If the board does not have extra long
-> clock lines, phy-mode should be rgmii-id.
->=20
-> The fact the MAC is doing something which no other MAC does should be
-> hidden away in the MAC driver, as much as possible.
-
-Isn't it kind of a philosophical question whether a delay added by the SoC
-integration is part of the MAC or not? One could also argue that the MAC IP=
- core
-is always the same, with some SoCs adding the delay and others not. (I don'=
-t
-know if there are actually SoCs with the same IP core that don't add a dela=
-y;
-I'm just not a big fan of hiding details in the driver that could easily be
-described by the Device Tree, thus making the driver more generic)
-
-
->=20
-> The MAC driver should return -EINVAL with phy-mode rgmii, or
-> rmgii-rxid, because the MAC driver is physically incapable of being
-> used on a board which has extra long TX clock lines, which 'rmgii' or
-> rgmii-rxid would indicate.
->=20
-> Since the MAC driver is forcing the TX delay, it needs to take the
-> value returned from of_get_phy_mode() and mask out the TX bit before
-> passing it to the PHY.
-
-Hmm okay, this is what the similar ICSSG/PRUETH driver does. I've always fo=
-und
-that solution to be particularly confusing, but if that's how it's supposed=
- to
-work, I'll have to accept that.
-
-In my opinion the documentation Documentation/networking/phy.rst is not ver=
-y
-clear on this matter - the whole section "(RG)MII/electrical interface
-considerations" talks about whether the PHY inserts the delay or not, so my
-assumption was that phy-mode describes the PHY side of things and only that=
-.
-
-It gets even more confusing when taking into account
-Documentation/devicetree/bindings/net/ethernet-controller.yaml, which conta=
-ins
-comments like "RGMII with internal RX delay provided by the PHY, the MAC sh=
-ould
-not add an RX delay in this case", which sounds like there are only the cas=
-es
-"delay is added by the PHY" and "delay is added by the MAC" - the case "del=
-ay is
-part of the board design, neither MAC nor PHY add it" doesn't even appear.
-
->=20
-> Now, it could be that history has got in the way. There are boards out
-> there which have broken DT but work. Fixing the MAC driver to do the
-> correct thing will break those boards. Vendors with low quality code
-> which works, but not really.
->=20
-> ~/linux/arch/arm64/boot/dts/ti$ grep rgmii k3-am625-*
-> k3-am625-beagleplay.dts:	phy-mode =3D "rgmii-rxid";
-> k3-am625-sk.dts:	phy-mode =3D "rgmii-rxid";
->=20
-> Yep, these two have broken DT, they don't describe the board
-> correctly.
->=20
-> O.K. Can we fix this for you board? Yes, i think we can. If you take
-> rmgii-rxid, aka PHY_INTERFACE_MODE_RGMII_RXID, and mask out the TX,
-> you still get PHY_INTERFACE_MODE_RGMII_RXID. If you take rgmii-id,
-> a.k.a. PHY_INTERFACE_MODE_RGMII_ID and mask out the TX, you get
-> PHY_INTERFACE_MODE_RGMII_RXID, which is what you want.
->=20
-> Please produce a patch to the MAC driver, explaining the horrible mess
-> the vendor made, and how this fixes it, but should also not break
-> other boards.
-
-I can make this change, but "am65-cpsw-nuss" currently supports 6 different
-compatible strings, many of which are used for multiple SoC families.
-
-Maybe someone from TI could chime in and say whether all of these have the =
-fixed
-TXC delay, or at least the current compatible strings are already specific
-enough to tell whether the SoC adds a delay?
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: snps,dwc3: Add
+ snps,filter-se0-fsls-eop quirk
+From: Krishna Kurapati <quic_kriskura@quicinc.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>,
+        Uttkarsh Aggarwal
+	<quic_uaggarwa@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>, <linux-usb@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>
+References: <20241017114055.13971-1-quic_uaggarwa@quicinc.com>
+ <20241017114055.13971-2-quic_uaggarwa@quicinc.com>
+ <gclvciv5cmrcut6qvo3kh3ycutqt5sot5k4i2nwics6myhuxvq@cf6ajwflxdlc>
+ <1129e0a7-6bd0-416e-8c56-6b8d75600c4e@quicinc.com>
+ <f9f66565-6356-4b61-8653-1e9c006b892c@kernel.org>
+ <99810132-85b6-45ee-9933-7a00c3672c47@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <99810132-85b6-45ee-9933-7a00c3672c47@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: UY41v4HwgMP5vdunX35jyK2vr4GVxLh2
+X-Proofpoint-GUID: UY41v4HwgMP5vdunX35jyK2vr4GVxLh2
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ priorityscore=1501 mlxlogscore=733 clxscore=1015 mlxscore=0 spamscore=0
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412100076
 
 
->=20
-> > No such defaults exist in the DP83867 driver. If any rgmii-*id mode is =
-used, the
-> > corresponding delays *must* be specified in the DTB:
-> >=20
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree=
-/drivers/net/phy/dp83867.c#n532
->=20
-> That is bad, different to pretty every other PHY driver :-(
->=20
-> If you want, you could patch this driver as well, make it default to
-> 2ns if delays are asked for.
 
-Makes sense, I'll write a patch for that as well.
+On 11/20/2024 2:53 PM, Krishna Kurapati wrote:
+> 
+> 
+> On 11/7/2024 3:25 PM, Krzysztof Kozlowski wrote:
+>> On 07/11/2024 07:17, Krishna Kurapati wrote:
+>>>
+>>>
+>>> On 10/18/2024 11:57 AM, Krzysztof Kozlowski wrote:
+>>>> On Thu, Oct 17, 2024 at 05:10:54PM +0530, Uttkarsh Aggarwal wrote:
+>>>>> Adding a new 'snps,filter-se0-fsls-eop quirk' DT quirk to dwc3 core 
+>>>>> to set
+>>>>> GUCTL1 BIT 29. When set, controller will ignore single SE0 glitch 
+>>>>> on the
+>>>>> linestate during transmission. Only two or more SE0 is considered as
+>>>>> valid EOP on FS/LS port. This bit is applicable only in FS in 
+>>>>> device mode
+>>>>> and FS/LS mode of operation in host mode.
+>>>>
+>>>> Why this is not device/compatible specific? Just like all other quirks
+>>>> pushed last one year.
+>>>
+>>> Hi Krzysztof,
+>>>
+>>>    Apologies for a late reply from our end.
+>>>
+>>>    In DWC3 core/dwc3-qcom atleast, there have been no compatible 
+>>> specific
+>>> quirks added.
+>>
+> 
+> Sorry again for late reply.
+> 
+>> Nothing stops from adding these, I think.
+>> >
+> Agree, we can take that approach of adding soc specific compatibles to 
+> dwc3 driver instead of adding through bindings.
+> 
+>>> Also since this is a property of the Synopsys controller
+>>> hardware and not QC specific one, can we add it in bindings itself.
+>>> Because this is a property other vendors might also use and adding it
+>>> via compatible might not be appropriate.
+>>
+>> This does no answer my question. I don't see how this is not related to
+>> one specific piece of SoC.
+>>
+>> If you claim this is board-related, not SoC, give some arguments.
+>> Repeating the same is just no helping.
+>>
+> 
+> But my point was that although the issue was found only on some QC 
+> SoC's, the solution still lies in some bits being set in controller 
+> register space and it is part of Synopsys IP. So wouldn't officially we 
+> add that support in bindings and then enable/disable the feature via DT 
+> like we did for other quirks ? If many SoC's need it in future, the 
+> driver needs to add a long list of compatible specific data which 
+> otherwise might be quirks in DT.
+> 
 
-Best regards,
-Matthias
+Hi Krzysztof,
 
+  Gentle ping to provide your feedback on the last comment.
 
->=20
->     Andrew
->=20
-> ---
-> pw-bot: cr
-
---=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-https://www.tq-group.com/
+Regards,
+Krishna,
 
