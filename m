@@ -1,60 +1,56 @@
-Return-Path: <linux-usb+bounces-18283-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18284-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC95F9EADD4
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 11:19:22 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3819D9EADF8
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 11:29:24 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DA832883E5
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 10:19:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17F4A1888F5C
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 10:29:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593E11DC98C;
-	Tue, 10 Dec 2024 10:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 160E21DC9A2;
+	Tue, 10 Dec 2024 10:29:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bqc78wMp"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="AQq1pcMM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from st43p00im-ztdg10073201.me.com (st43p00im-ztdg10073201.me.com [17.58.63.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A3A23DEB5;
-	Tue, 10 Dec 2024 10:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333FB1DC982
+	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 10:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.63.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733825952; cv=none; b=D+zaR6L7RNdCNzbh7t5Hf0eYBv3BXmc8sbclKfm0vReS6Ad2UwJ+c2vM+PFeVQk+mumgiq7pZyAn5axY7S3HrvmtMOeqUW6HdU1bdbUQ5IRM1CV8Ja3pmRlNaMippkrr+eY9JgEPM7mYaIGYKPvTOlAF3dv1VCd/ooGsVrN9qHQ=
+	t=1733826557; cv=none; b=WDaS4ANZNujhKQMDzzmIJlJcXfCttfNVa5SckO7T08fT/pDkMxnhfGhczUI8VWYCupHvINaxLXa17o2tCrTN667Qy76CEONaf+tc2zW9hnKih/uviSaZ4WW/U5LJf0vDltSnPVoDRR+I/kmIR+ZG5YN2d23RP/3OeWoGfg2cbgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733825952; c=relaxed/simple;
-	bh=vFa1uvOLC+eKcjuhtS0bQ9lL/5VAw4GivQJT1gJtRNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cqgyvT7KtDae5QZmL3ERONKy131VR8To3B/uJfz/OPb/LJ0HgTxkbDcvbUXpmxGf4XshPGu/aTXOQLH9O9f9OtpZd2fYuWgJRQIVSf4ppYDfalfGRsKlzRHbrMS8Qwo4WuT+Bi9JLVq1xdaF04Rf9d3RSEvq9GMtDmVGFhHs+Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bqc78wMp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACFFCC4CED6;
-	Tue, 10 Dec 2024 10:19:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1733825952;
-	bh=vFa1uvOLC+eKcjuhtS0bQ9lL/5VAw4GivQJT1gJtRNk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bqc78wMpEhXqMWil441mbdhqhEdLLteSpU7Xa70Xb2+MUBse+v7OtJgF2bOSnRIvu
-	 RRefrUhLC9RNj3XYmF1z5wHyQaR3BfuMWksHdUo9KK1EMOf2uqOOHkkDR0mYpRpk+J
-	 /ZmBRFwlGq+fRFYdpEgU4OmixyoQMgmWuW4945FQ=
-Date: Tue, 10 Dec 2024 11:18:36 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Selvarasu Ganesan <selvarasu.g@samsung.com>
-Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
-	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
-	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
-	rc93.raju@samsung.com, taehyun.cho@samsung.com,
-	hongpooh.kim@samsung.com, eomji.oh@samsung.com,
-	shijie.cai@samsung.com, alim.akhtar@samsung.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
- issue during MIDI bind retries
-Message-ID: <2024121035-manicure-defiling-e92c@gregkh>
-References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
- <20241208152322.1653-1-selvarasu.g@samsung.com>
- <6b3b314e-20a3-4b3f-a3ab-bb2df21de4f5@samsung.com>
+	s=arc-20240116; t=1733826557; c=relaxed/simple;
+	bh=fRVkXHtgtj3c1+fA3Njm4bAmaUPEMEzaLzODzHPIQDc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=VnBZxwVSI9HvkdHQKq1y2upoatH1vq5ifW6L+KQm0X/fvjRAdD9sMa6yDUquFbozTX486uur9gd4659QTfK9sfnEZNjUcaulm0wJVqrJYSp7h3OR8705ysl7PiSx6GMUK8KoKrCi1x4m6GYk7eZ9tqhOgB9SmFjZ9ewIjA/MV3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=AQq1pcMM; arc=none smtp.client-ip=17.58.63.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1733826555;
+	bh=SAQCPLZ/4O4cpIzB3DaPnXL/WMcxQBBd3sR7WcIeCQU=;
+	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
+	 x-icloud-hme;
+	b=AQq1pcMMIIUBTG0YNK+gyWxmkRq/igs5SLFtLV+LlV6GUdbF9FaOhMc5wjoNwD9yI
+	 mdvT140UdjjU6d9qODpG3gwHRsL8hp8wDYVcQTcBhJ7uQbXZlMdYa0EvL1iztHYuCa
+	 xXAGJdycpScoeAqZYgbNifKJ5VJJExE0GWyD5hsUoQTozQICY+OoURRSHxorhcc+UL
+	 wgL5nQ9GzlOKegkwK9LdKrEETYm1NRtZ0H2XdiqrZxyoYm1/Q7gvlu3yjlcqUI4Oep
+	 pk7WzTBBoTbCbh1bAWKi6cWB56Ar9SXE7w1CpzmZxN3unYepdORPNQoaac6Oce+OzX
+	 RhLFxm5Bx0K2w==
+Received: from lunix (st43p00im-dlb-asmtp-mailmevip.me.com [17.42.251.41])
+	by st43p00im-ztdg10073201.me.com (Postfix) with ESMTPSA id 1D7C49C026C;
+	Tue, 10 Dec 2024 10:29:12 +0000 (UTC)
+Date: Tue, 10 Dec 2024 11:29:09 +0100
+From: Lucy Mielke <lucymielke@icloud.com>
+To: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: common: expand documentation for USB functions
+Message-ID: <6nvegfmo6d5ak4soaf5nyifsaasfts4qlsnnpsd4sgpnikc2jd@amfmgdr5n3bi>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,22 +59,60 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6b3b314e-20a3-4b3f-a3ab-bb2df21de4f5@samsung.com>
+X-Proofpoint-GUID: DEkAsDe8nbglDuPl1HF32w5YwVZqyioL
+X-Proofpoint-ORIG-GUID: DEkAsDe8nbglDuPl1HF32w5YwVZqyioL
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-10_04,2024-12-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=432 spamscore=0
+ suspectscore=0 malwarescore=0 adultscore=0 phishscore=0 bulkscore=0
+ mlxscore=0 clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2412100078
 
-On Tue, Dec 10, 2024 at 03:23:22PM +0530, Selvarasu Ganesan wrote:
-> Hello Maintainers.
-> 
-> Gentle remainder for review.
+This patch adds documentation for two USB functions:
+- usb_otg_state_string(), which returns a human-readable name for OTG
+  states and
+- usb_get_dr_mode_from_string(), which returns the dual role mode for a
+  given string.
 
-You sent this 2 days ago, right?
+Signed-off-by: Lucy Mielke <lucymielke@icloud.com>
+---
+ drivers/usb/common/common.c | 14 ++++++++++++++
+ 1 file changed, 14 insertions(+)
 
-Please take the time to review other commits on the miailing list if you
-wish to see your patches get reviewed faster, to help reduce the
-workload of people reviewing your changes.
+diff --git a/drivers/usb/common/common.c b/drivers/usb/common/common.c
+index 871cf199b6bf..fc0845f681be 100644
+--- a/drivers/usb/common/common.c
++++ b/drivers/usb/common/common.c
+@@ -41,6 +41,12 @@ const char *usb_ep_type_string(int ep_type)
+ }
+ EXPORT_SYMBOL_GPL(usb_ep_type_string);
+ 
++/**
++ * usb_otg_state_string() - returns human readable name of OTG state.
++ * @state: the OTG state to return the human readable name of. If it's not
++ *    any of the states defined in usb_otg_state enum, 'UNDEFINED' will be
++ *    returned.
++ */
+ const char *usb_otg_state_string(enum usb_otg_state state)
+ {
+ 	static const char *const names[] = {
+@@ -179,6 +185,14 @@ static const char *const usb_dr_modes[] = {
+ 	[USB_DR_MODE_OTG]		= "otg",
+ };
+ 
++/**
++ * usb_get_dr_mode_from_string() - Get dual role mode for given string
++ * @str: String to find the corresponding dual role mode for
++ *
++ * This function performs a lookup for the given string and returns the
++ * corresponding enum usb_dr_mode. If no match for the string could be found,
++ * 'USB_DR_MODE_UNKNOWN' is returned.
++ */
+ static enum usb_dr_mode usb_get_dr_mode_from_string(const char *str)
+ {
+ 	int ret;
+-- 
+2.47.1
 
-Otherwise just wait for people to get to it, what is the rush here?
-
-thanks,
-
-greg k-h
 
