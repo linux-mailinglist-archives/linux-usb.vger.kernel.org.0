@@ -1,175 +1,84 @@
-Return-Path: <linux-usb+bounces-18282-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18283-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4956F9EADAA
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 11:12:33 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4FCE0162805
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 10:12:27 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC12323DEBB;
-	Tue, 10 Dec 2024 10:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="g/WW6Ko4"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC95F9EADD4
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 11:19:22 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A49DE23DE8B;
-	Tue, 10 Dec 2024 10:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DA832883E5
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 10:19:18 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593E11DC98C;
+	Tue, 10 Dec 2024 10:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="bqc78wMp"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9A3A23DEB5;
+	Tue, 10 Dec 2024 10:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733825543; cv=none; b=dXIr59GAvzJSzusTQDNXusw0ebMEkpsJKArwGBfxtccp6O9FniUNCFF290kY6oEmI61ROe2J1Jv/W6k5EIIh8plJMMIGsuBZfiUE5kOjDXXwrX8fNYyUvWFGGK2fa0wf0DR8S5CBpX0XVcgpLb+6xZ+ajGD9zVbu9TKVR0O8Hfc=
+	t=1733825952; cv=none; b=D+zaR6L7RNdCNzbh7t5Hf0eYBv3BXmc8sbclKfm0vReS6Ad2UwJ+c2vM+PFeVQk+mumgiq7pZyAn5axY7S3HrvmtMOeqUW6HdU1bdbUQ5IRM1CV8Ja3pmRlNaMippkrr+eY9JgEPM7mYaIGYKPvTOlAF3dv1VCd/ooGsVrN9qHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733825543; c=relaxed/simple;
-	bh=vYg8wU42z6GwnwQ6+y+kBfKrFpVAPNchj09BZz4eGr0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=s0Lj7iWEWRLEClWyft1qeAR6orz0hmtVQK5YBwrDaL8/EN36yOEJQIxea5MPKJhKRt6YwiTtUhLrkDzrjcGVSIxDJkdDpwrjknWoCQgqb3k24V9KeDo2GZI8pWMSblUC1WsFWinbXzFXohZI5D3294ys+abhVWEdGdZ4/+BSxKI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=g/WW6Ko4; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BA94bf0014580;
-	Tue, 10 Dec 2024 10:12:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	+xSULu1W4jer6gCjVvUYVNZD9AKl7ksD1gp8ZetqYb4=; b=g/WW6Ko4K0egBxut
-	6ATlTnMjlzxR+31CZEPsoOUk4Yr/JJhNEp4g5uVCl4eQQ5eYpmtKPlKD9CPyLP9G
-	sN+jlPgQx5HoVntuAvQLM3DdcgUOZ4LdljB9GouSRP8unETgu9LqshkImXgHhbQU
-	wFWGBJbZI8OcKRun8HQZKOUCts0dPKqbjUsUHXETr5Z5n7CysYdhuKmDOLFbbWXF
-	+rfttMVhJ6MUCqlEVOFfUM09wk3tJyqnBg/cI0qxI29CP5oLsIfo/4r/x4bDULkn
-	mHO2frzqd7hjie7ISfwQtSvJtzC1BdwYiwvOE/BXvQ/mSGTA/j2mg5bxTcO8NB8c
-	XVG3oA==
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43dy8tujgk-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Dec 2024 10:12:16 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BAACFwu000891
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 10 Dec 2024 10:12:15 GMT
-Received: from [10.216.28.232] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 10 Dec
- 2024 02:12:11 -0800
-Message-ID: <aa67ea21-b451-4a1d-b4bf-4912b88c0341@quicinc.com>
-Date: Tue, 10 Dec 2024 15:42:07 +0530
+	s=arc-20240116; t=1733825952; c=relaxed/simple;
+	bh=vFa1uvOLC+eKcjuhtS0bQ9lL/5VAw4GivQJT1gJtRNk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cqgyvT7KtDae5QZmL3ERONKy131VR8To3B/uJfz/OPb/LJ0HgTxkbDcvbUXpmxGf4XshPGu/aTXOQLH9O9f9OtpZd2fYuWgJRQIVSf4ppYDfalfGRsKlzRHbrMS8Qwo4WuT+Bi9JLVq1xdaF04Rf9d3RSEvq9GMtDmVGFhHs+Ig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=bqc78wMp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ACFFCC4CED6;
+	Tue, 10 Dec 2024 10:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1733825952;
+	bh=vFa1uvOLC+eKcjuhtS0bQ9lL/5VAw4GivQJT1gJtRNk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bqc78wMpEhXqMWil441mbdhqhEdLLteSpU7Xa70Xb2+MUBse+v7OtJgF2bOSnRIvu
+	 RRefrUhLC9RNj3XYmF1z5wHyQaR3BfuMWksHdUo9KK1EMOf2uqOOHkkDR0mYpRpk+J
+	 /ZmBRFwlGq+fRFYdpEgU4OmixyoQMgmWuW4945FQ=
+Date: Tue, 10 Dec 2024 11:18:36 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
+	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com,
+	shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+Message-ID: <2024121035-manicure-defiling-e92c@gregkh>
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+ <20241208152322.1653-1-selvarasu.g@samsung.com>
+ <6b3b314e-20a3-4b3f-a3ab-bb2df21de4f5@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: usb: snps,dwc3: Add
- snps,filter-se0-fsls-eop quirk
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Uttkarsh Aggarwal
-	<quic_uaggarwa@quicinc.com>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC: Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Felipe Balbi <balbi@kernel.org>,
-        Thinh Nguyen
-	<Thinh.Nguyen@synopsys.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_jackp@quicinc.com>
-References: <20241017114055.13971-1-quic_uaggarwa@quicinc.com>
- <20241017114055.13971-2-quic_uaggarwa@quicinc.com>
- <gclvciv5cmrcut6qvo3kh3ycutqt5sot5k4i2nwics6myhuxvq@cf6ajwflxdlc>
- <1129e0a7-6bd0-416e-8c56-6b8d75600c4e@quicinc.com>
- <f9f66565-6356-4b61-8653-1e9c006b892c@kernel.org>
- <99810132-85b6-45ee-9933-7a00c3672c47@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <99810132-85b6-45ee-9933-7a00c3672c47@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: UY41v4HwgMP5vdunX35jyK2vr4GVxLh2
-X-Proofpoint-GUID: UY41v4HwgMP5vdunX35jyK2vr4GVxLh2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
- priorityscore=1501 mlxlogscore=733 clxscore=1015 mlxscore=0 spamscore=0
- lowpriorityscore=0 malwarescore=0 bulkscore=0 phishscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412100076
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6b3b314e-20a3-4b3f-a3ab-bb2df21de4f5@samsung.com>
 
+On Tue, Dec 10, 2024 at 03:23:22PM +0530, Selvarasu Ganesan wrote:
+> Hello Maintainers.
+> 
+> Gentle remainder for review.
 
+You sent this 2 days ago, right?
 
-On 11/20/2024 2:53 PM, Krishna Kurapati wrote:
-> 
-> 
-> On 11/7/2024 3:25 PM, Krzysztof Kozlowski wrote:
->> On 07/11/2024 07:17, Krishna Kurapati wrote:
->>>
->>>
->>> On 10/18/2024 11:57 AM, Krzysztof Kozlowski wrote:
->>>> On Thu, Oct 17, 2024 at 05:10:54PM +0530, Uttkarsh Aggarwal wrote:
->>>>> Adding a new 'snps,filter-se0-fsls-eop quirk' DT quirk to dwc3 core 
->>>>> to set
->>>>> GUCTL1 BIT 29. When set, controller will ignore single SE0 glitch 
->>>>> on the
->>>>> linestate during transmission. Only two or more SE0 is considered as
->>>>> valid EOP on FS/LS port. This bit is applicable only in FS in 
->>>>> device mode
->>>>> and FS/LS mode of operation in host mode.
->>>>
->>>> Why this is not device/compatible specific? Just like all other quirks
->>>> pushed last one year.
->>>
->>> Hi Krzysztof,
->>>
->>>    Apologies for a late reply from our end.
->>>
->>>    In DWC3 core/dwc3-qcom atleast, there have been no compatible 
->>> specific
->>> quirks added.
->>
-> 
-> Sorry again for late reply.
-> 
->> Nothing stops from adding these, I think.
->> >
-> Agree, we can take that approach of adding soc specific compatibles to 
-> dwc3 driver instead of adding through bindings.
-> 
->>> Also since this is a property of the Synopsys controller
->>> hardware and not QC specific one, can we add it in bindings itself.
->>> Because this is a property other vendors might also use and adding it
->>> via compatible might not be appropriate.
->>
->> This does no answer my question. I don't see how this is not related to
->> one specific piece of SoC.
->>
->> If you claim this is board-related, not SoC, give some arguments.
->> Repeating the same is just no helping.
->>
-> 
-> But my point was that although the issue was found only on some QC 
-> SoC's, the solution still lies in some bits being set in controller 
-> register space and it is part of Synopsys IP. So wouldn't officially we 
-> add that support in bindings and then enable/disable the feature via DT 
-> like we did for other quirks ? If many SoC's need it in future, the 
-> driver needs to add a long list of compatible specific data which 
-> otherwise might be quirks in DT.
-> 
+Please take the time to review other commits on the miailing list if you
+wish to see your patches get reviewed faster, to help reduce the
+workload of people reviewing your changes.
 
-Hi Krzysztof,
+Otherwise just wait for people to get to it, what is the rush here?
 
-  Gentle ping to provide your feedback on the last comment.
+thanks,
 
-Regards,
-Krishna,
+greg k-h
 
