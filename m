@@ -1,62 +1,73 @@
-Return-Path: <linux-usb+bounces-18314-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18315-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 189449EB98D
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 19:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B9649EBA59
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 20:54:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B94A283BDD
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 18:46:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D3AB28327B
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 19:54:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BB8635967;
-	Tue, 10 Dec 2024 18:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8827226869;
+	Tue, 10 Dec 2024 19:54:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l6S36Kue"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="cAsno5oY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5EE81D7996;
-	Tue, 10 Dec 2024 18:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37AD023ED59;
+	Tue, 10 Dec 2024 19:54:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733856345; cv=none; b=ujHfmffvBGB7cTdeyjKhvnhazgk3nk6xiQ8aYHPX7Ud3tHB8seO3/S9jKdl+qKLk7XLQcbvA2kuMmzj8mSb7ffjW2QMCbTXS44LKSgY4C/Nx9VYw/qlAUlVd2KE+MF6ePsvHJemiEirp+Mifw8LHZGo638yPjo9ecUINzsykB2w=
+	t=1733860480; cv=none; b=hBmt2l57Dq+sIknsA5/P93OJlkBW3L/4GksKrcQ+nbpu+rd45P2jQDo6Ed5XOOmfLdKIM8Qt4CY7jokUsDbdTm6eFoPW4K8Vigw6afNlgyhMFarEt9eILPOM41BXJJUe/lbsup73ekpMCWiE64XatlmhO/Pe2TeaFzkqLWE6RhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733856345; c=relaxed/simple;
-	bh=OB5DgYuePvYBlbGv8W3gJQ1FsMSp+KmUVfAIg9wjr8M=;
+	s=arc-20240116; t=1733860480; c=relaxed/simple;
+	bh=4QD1jq7IN/UMgjwr2EzUkF3AbcDeXPhUr3d1bSOs3Ik=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cQE3T8BGZBrkBOW1P6cXlMzqlTg9F7Tp/lcJZiDDzOHGwygT7PQ/Jbk4sx1w/BFQk8Ewoaal7zvYvPafrmU1vBS/l+RUdDW0gS8VMrh++il6W9zjcgGiePBPo4GzhagwcYirD85FAuH+sOoWORhNfYl+wOLiB5M+mB0Httpumvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l6S36Kue; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C80DC4CED6;
-	Tue, 10 Dec 2024 18:45:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733856344;
-	bh=OB5DgYuePvYBlbGv8W3gJQ1FsMSp+KmUVfAIg9wjr8M=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=l6S36KueRi870kpf9AOxkZRG7YV24Ph05U8fJBCcU1qmYjUe5Wo6ro9oCAH96EK8P
-	 u2q9VKDFig43EadBkj4bumesqcumc2XBav6oTqS3cV7Bh31aH11kLtx371WtwSOnlg
-	 C4Vki6vtERNHDxJMdeLSYv8VcYX8a46hJNWX6IMBanfcqd8RYSIwa2ef9y62fBlkO/
-	 ECYwMhopKBWsnOVkPZ/jBgwmeMEuhdisurdadEno6NpuMnD+6YxsqBPXpKPwzyt2y6
-	 2ifO4nGrYvCGaqEaIuFaikHl94gZpT0rJFniFm1orY7KeGSQmzV0d0yFgauSnybni+
-	 7y+EAR299GbKQ==
-Date: Tue, 10 Dec 2024 12:45:42 -0600
-From: Rob Herring <robh@kernel.org>
-To: Claudiu <claudiu.beznea@tuxon.dev>
-Cc: vkoul@kernel.org, kishon@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, p.zabel@pengutronix.de,
-	geert+renesas@glider.be, magnus.damm@gmail.com,
-	gregkh@linuxfoundation.org, yoshihiro.shimoda.uh@renesas.com,
-	christophe.jaillet@wanadoo.fr, linux-phy@lists.infradead.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org, linux-usb@vger.kernel.org,
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-Subject: Re: [PATCH v2 01/15] dt-bindings: soc: renesas: renesas,rzg2l-sysc:
- Add #renesas,sysc-signal-cells
-Message-ID: <20241210184542.GA4077820-robh@kernel.org>
-References: <20241126092050.1825607-1-claudiu.beznea.uj@bp.renesas.com>
- <20241126092050.1825607-2-claudiu.beznea.uj@bp.renesas.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WglaaIIWV7usW2AxhuJHW6/OScHl/aq4ZyAr8kY2Ztetq/Z/rTkeP15oB6Qmeh1xwdtxrDMDXgfIW0uPn+av/a8kPP3ZGHb/ynsIn5Rvc+4PDLz1BAvndGm7bi+dj78w3VKrmzovGT9eOAdhMJq9KKRQNf0JYsBgjMpE711GND4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=cAsno5oY; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=qqR4+EDOTOKUygjAju/GpX8orxXt5neI5PHSlKTEs2U=; b=cAsno5oYRVseXjiVyM/UxIK07w
+	qtwmVLePT9tyGDCOACnIbCo40y4bTizPr6kk63/9XWmj/J55i3q114gzkNk4xoRKYXmQOOdNnUIwd
+	e0z5ZPxhUJZrzSP4ACjLwX4i6KMaSWHX+743h08HRYQNDmcTQeeK8YlV1y3hzlnQT+Iw=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tL6JH-00FqUX-Bp; Tue, 10 Dec 2024 20:54:19 +0100
+Date: Tue, 10 Dec 2024 20:54:19 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Cc: Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
+	Tero Kristo <kristo@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-hardening@vger.kernel.org, Devarsh Thakkar <devarsht@ti.com>,
+	Hari Nagalla <hnagalla@ti.com>, linux@ew.tq-group.com
+Subject: Re: [PATCH v2 5/5] arm64: dts: ti: Add TQ-Systems TQMa62xx SoM and
+ MBa62xx carrier board Device Trees
+Message-ID: <2953e10c-0a57-4d49-b831-3864a07eefd5@lunn.ch>
+References: <cover.1733737487.git.matthias.schiffer@ew.tq-group.com>
+ <95ff66ca2c89f69d893c2ce9eed9a0c677633c7b.1733737487.git.matthias.schiffer@ew.tq-group.com>
+ <a9c5cfda-e3e3-436a-8d05-b2f096157cfe@lunn.ch>
+ <c902a56cf34838f60cee67624bb923e91d74e9e0.camel@ew.tq-group.com>
+ <d25b1447-c28b-4998-b238-92672434dc28@lunn.ch>
+ <e16076d16349e929af82fa987a658bff1d9804c4.camel@ew.tq-group.com>
+ <a2a2f201-73a4-4a99-baef-0d593a88c872@lunn.ch>
+ <309052f3f69950fe43390505cc7254aee8c8f5c6.camel@ew.tq-group.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,137 +76,77 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241126092050.1825607-2-claudiu.beznea.uj@bp.renesas.com>
+In-Reply-To: <309052f3f69950fe43390505cc7254aee8c8f5c6.camel@ew.tq-group.com>
 
-On Tue, Nov 26, 2024 at 11:20:36AM +0200, Claudiu wrote:
-> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+On Tue, Dec 10, 2024 at 10:56:41AM +0100, Matthias Schiffer wrote:
+> On Mon, 2024-12-09 at 17:14 +0100, Andrew Lunn wrote:
+> > 
+> > > Not our board, but the AM62 SoC. From the datasheet:
+> > > 
+> > > "TXC is delayed internally before being driven to the RGMII[x]_TXC pin. This
+> > > internal delay is always enabled." So enabling the TX delay on the PHY side
+> > > would result in a double delay.
+> > 
+> > phy-mode describes the board. If the board does not have extra long
+> > clock lines, phy-mode should be rgmii-id.
+> > 
+> > The fact the MAC is doing something which no other MAC does should be
+> > hidden away in the MAC driver, as much as possible.
 > 
-> The RZ/G3S system controller (SYSC) has registers to control signals that
-> are routed to various IPs. These signals must be controlled during
-> configuration of the respective IPs. One such signal is the USB PWRRDY,
-> which connects the SYSC and the USB PHY. This signal must to be controlled
-> before and after the power to the USB PHY is turned off/on.
-> 
-> Other similar signals include the following (according to the RZ/G3S
-> hardware manual):
-> 
-> * PCIe:
-> - ALLOW_ENTER_L1 signal controlled through the SYS_PCIE_CFG register
-> - PCIE_RST_RSM_B signal controlled through the SYS_PCIE_RST_RSM_B
->   register
-> - MODE_RXTERMINATION signal controlled through SYS_PCIE_PHY register
-> 
-> * SPI:
-> - SEL_SPI_OCTA signal controlled through SYS_IPCONT_SEL_SPI_OCTA
->   register
-> 
-> * I2C/I3C:
-> - af_bypass I2C signals controlled through SYS_I2Cx_CFG registers
->   (x=0..3)
-> - af_bypass I3C signal controlled through SYS_I3C_CFG register
-> 
-> * Ethernet:
-> - FEC_GIGA_ENABLE Ethernet signals controlled through SYS_GETHx_CFG
->   registers (x=0..1)
-> 
-> Add #renesas,sysc-signal-cells DT property to allow different SYSC signals
-> consumers to manage these signals.
-> 
-> The goal is to enable consumers to specify the required access data for
-> these signals (through device tree) and let their respective drivers
-> control these signals via the syscon regmap provided by the system
-> controller driver. For example, the USB PHY will describe this relation
-> using the following DT property:
-> 
-> usb2_phy1: usb-phy@11e30200 {
-> 	// ...
-> 	renesas,sysc-signal = <&sysc 0xd70 0x1>;
-> 	// ...
-> };
-> 
-> Along with it, add the syscon to the compatible list as it will be
-> requested by the consumer drivers. The syscon was added to the rest of
-> system controller variants as these are similar with RZ/G3S and can
-> benefit from the implementation proposed in this series.
-> 
-> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> ---
-> 
-> Changes in v2:
-> - none; this patch is new
-> 
-> 
->  .../soc/renesas/renesas,rzg2l-sysc.yaml       | 23 ++++++++++++++-----
->  1 file changed, 17 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
-> index 4386b2c3fa4d..90f827e8de3e 100644
-> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
-> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
-> @@ -19,11 +19,13 @@ description:
->  
->  properties:
->    compatible:
-> -    enum:
-> -      - renesas,r9a07g043-sysc # RZ/G2UL and RZ/Five
-> -      - renesas,r9a07g044-sysc # RZ/G2{L,LC}
-> -      - renesas,r9a07g054-sysc # RZ/V2L
-> -      - renesas,r9a08g045-sysc # RZ/G3S
-> +    items:
-> +      - enum:
-> +          - renesas,r9a07g043-sysc # RZ/G2UL and RZ/Five
-> +          - renesas,r9a07g044-sysc # RZ/G2{L,LC}
-> +          - renesas,r9a07g054-sysc # RZ/V2L
-> +          - renesas,r9a08g045-sysc # RZ/G3S
-> +      - const: syscon
->  
->    reg:
->      maxItems: 1
-> @@ -42,9 +44,17 @@ properties:
->        - const: cm33stbyr_int
->        - const: ca55_deny
->  
-> +  "#renesas,sysc-signal-cells":
-> +    description:
-> +      The number of cells needed to configure a SYSC controlled signal. First
-> +      cell specifies the SYSC offset of the configuration register, second cell
-> +      specifies the bitmask in register.
-> +    const: 2
+> Isn't it kind of a philosophical question whether a delay added by the SoC
+> integration is part of the MAC or not? One could also argue that the MAC IP core
+> is always the same, with some SoCs adding the delay and others not. (I don't
+> know if there are actually SoCs with the same IP core that don't add a delay;
+> I'm just not a big fan of hiding details in the driver that could easily be
+> described by the Device Tree, thus making the driver more generic)
 
-If there's only one possible value, then just fix the size in the users. 
-We don't need #foo-cells until things are really generic. Plus patch 
-8 already ignores this based on the schema. And there's implications to 
-defining them. For example, the pattern is that the consumer property 
-name is renesas,sysc-signals, not renesas,sysc-signal.
+It is more about, what does phy-mode = "rgmii"; mean? It means the
+board provides the delay via extra long clock lines. Except for when
+some random MAC driver has a completely different meaning, it is not
+documented it means something else, you have to read the sources and
+the mailing lists, to find out what this particularly MAC driver is
+doing for phy-mode = "rgmii".
 
-Maybe someone wants to create a 'h/w (signal) control' subsystem (and 
-binding) that is just 'read, assert, or deassert a h/w signal'. Perhaps 
-even the reset subsystem could be morphed into that as I think there 
-would be a lot of overlap. Maybe that would cut down on a lot of these 
-syscon phandle properties. I would find that a lot more acceptable than 
-the generic 'syscons' and '#syscon-cells' binding that was proposed at 
-some point.
+Do we really want that. Or should we define that phy-mode = "rgmii"
+means the PCB provides the delay. End of story, no exceptions. And
+that "rgmii-id" means the MAC/PHY pair need to provide the delay? End
+of story, no exceptions.
 
+> > Since the MAC driver is forcing the TX delay, it needs to take the
+> > value returned from of_get_phy_mode() and mask out the TX bit before
+> > passing it to the PHY.
+> 
+> Hmm okay, this is what the similar ICSSG/PRUETH driver does. I've always found
+> that solution to be particularly confusing, but if that's how it's supposed to
+> work, I'll have to accept that.
 
-> +
->  required:
->    - compatible
->    - reg
-> +  - "#renesas,sysc-signal-cells"
+It has to be that why. If the MAC does the delay, the MAC needs to
+ensure the PHY does not do the delays and well, and it achieves that
+by setting PHY_INTERFACE_MODE to indicate the PHY should not add
+delays. Do you have a better idea how this can be done?
 
-New required properties are an ABI break.
+> In my opinion the documentation Documentation/networking/phy.rst is not very
+> clear on this matter - the whole section "(RG)MII/electrical interface
+> considerations" talks about whether the PHY inserts the delay or not, so my
+> assumption was that phy-mode describes the PHY side of things and only that.
+> 
+> It gets even more confusing when taking into account
+> Documentation/devicetree/bindings/net/ethernet-controller.yaml, which contains
+> comments like "RGMII with internal RX delay provided by the PHY, the MAC should
+> not add an RX delay in this case", which sounds like there are only the cases
+> "delay is added by the PHY" and "delay is added by the MAC" - the case "delay is
+> part of the board design, neither MAC nor PHY add it" doesn't even appear.
 
->  
->  additionalProperties: false
->  
-> @@ -53,7 +63,7 @@ examples:
->      #include <dt-bindings/interrupt-controller/arm-gic.h>
->  
->      sysc: system-controller@11020000 {
-> -            compatible = "renesas,r9a07g044-sysc";
-> +            compatible = "renesas,r9a07g044-sysc", "syscon";
+We have tried to improve the documentation. We have also been very
+rigid in reviewing DT bindings, and what these things mean. But it
+seems like many developers don't read reviews other developers get. Go
+search the email archive. How many times have i had this very same
+conversation?
 
-What happens on a new kernel and a DT without this change?
+Everybody gets pause wrong. Everybody gets EEE wrong. Everybody gets
+RGMII delays wrong, not matter how many times we tell developers they
+are getting it wrong.... phylink is helping with this, it takes it out
+of developers hands so they cannot get pause or soon EEE wrong.
 
-Rob
+	Andrew
 
