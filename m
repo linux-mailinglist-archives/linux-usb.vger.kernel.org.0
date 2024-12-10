@@ -1,115 +1,122 @@
-Return-Path: <linux-usb+bounces-18312-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18313-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FD1E9EB7FC
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 18:17:39 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 312951882609
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 17:17:11 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0CF246F63;
-	Tue, 10 Dec 2024 17:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TGrBid1D"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 306A79EB818
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 18:19:49 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCDC423027A;
-	Tue, 10 Dec 2024 17:13:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2BA9282726
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 17:19:47 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70F5323ED69;
+	Tue, 10 Dec 2024 17:18:34 +0000 (UTC)
+X-Original-To: linux-usb@vger.kernel.org
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2713B23ED59
+	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 17:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733850828; cv=none; b=KI3RECW27QJw8GCHzKYuEpH9TO/K3SVaesECDUOMogdPjup4Svfv0xdJBrbyxulbosnRxAla1ZsTbXd5dUjrdWY1Ehh68atnJJigLCUhdLkGpIEOWpkW0gXyC+82E4Nmf1zd0I8dfejMSqcwBU1nXYqvoMUG+QOpvk2d9YWhUs4=
+	t=1733851114; cv=none; b=nY4+A4Yb7Tmw9rjFr3C0sq6pVbZ3KGEuGBBtjlK8TkJndQ5nQLiY4ObbjeIz7hwL9Ygdc3QfR8NaGPV9m8j+82Eo4fir5TQKpd8p//+lmfyYvj61DVS7irrwVqgG5oIFHzbaQvdD5MXM5lEvQW9WoYl6s0XaJlmcapxjMxvx0rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733850828; c=relaxed/simple;
-	bh=9UworTV+MS2F0uSh6HanIBJMieYjtOPqmcELQRuAOVY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=tzyXkC4/LrlTAOJHAvU7PMuNdPw8fzEdjKBaSypY4Z9+yE4HzGBKQa/cc8CO8P6MQCYNi7I82/64XAeTNqRYqs+gWsNIXPZjeoMfhQ5WfkGZU4yn2cZ2HWMjPj4nela+zVcbvDAoHpyEcVFYzj3JSJBb3ZCDIEwQPUF82NXgTvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TGrBid1D; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B86C02000E;
-	Tue, 10 Dec 2024 17:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1733850819;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XbbIr+l87r3GthSaZw6V9C5/nV0qXTuiEhfkpu/VVQc=;
-	b=TGrBid1DB4hY47GDZhFwerb5YK19J+jimSLkvBYdsxe/UU8cx7N/KYmeP9P9+UC7fA7+2p
-	MmyYFqKIrwHfgfYItFEQW8a3V1bQlzjh7tlIuQEwc+BZITlDg5povEMNqGsXqTGD6Zldq+
-	kp/0uzP5ffFmd0kLjCnPi/Cc2TRxIUjlsmKR8vGmCwron/n1LMjlbb7etJ4vSAEvlYBKNs
-	VHXgcrDJ19S7ylH7yKtQ+b4aYqajd7cOPmnWOo1ZzrTGVYVZgJUsTrKfteV+sXQ+9gstqd
-	shmZeEoQ3xP02jiIYsKlpch6pgXgjkxFFOO0iRTZT8akGN1x3D7aHk8pjdZEXQ==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Tue, 10 Dec 2024 18:13:39 +0100
-Subject: [PATCH v6 5/5] usb: cdns3: host: transmit lost_power signal from
- wrapper to XHCI
+	s=arc-20240116; t=1733851114; c=relaxed/simple;
+	bh=ES8PXM0LUbmm9wGb9zppk+2HxQE9nCLGnoNQX0MU5q8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=URUc6beGwwFf/S68i1G1/kmCdrHOTb0gu3ntcBRb7Q0bdKT4AZphpBAEKMdmqzbdN+lOxtGO1CzVNrm5DMy7XZtmcKUSQaYe7VJtI8tQm6OOg4DvVCrmJzm/q3406TjK6JGSzGIS5bDncN0/sl62Zoc/UTxscYlvp2pUvbmrElk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=plauener.de; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=plauener.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e3989d27ba3so4496298276.1
+        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 09:18:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733851110; x=1734455910;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ES8PXM0LUbmm9wGb9zppk+2HxQE9nCLGnoNQX0MU5q8=;
+        b=SpbPwFqUqoEb1xc19gEAfvR8YEO5gQqr9rYMN6sWY/Ftd6B3gdOxUp9FC6wIBqobMJ
+         pnTYDeF0kAXCFcjlsYfqXP/bfkAFNgmHVO4x0MozqT3snVbEOEBF3/cniuiqQEX2Dvj6
+         e8eJsKR6Q61W2A2Sn2MSBcr+ErVhbBPrk0RQZeLG8l3asaJpHM/oaZnmTg89sfsv35Sz
+         iiQ2OBuldG179CBsypnUfyoCWXXCQQXPGGQH34ULrjlrUWR/5TQ5svIhKLEQW7GZ6HIy
+         E3fEZaxIXmnFSmaurpxgzWvNqFcPI3A39uNv7nPOBEMZ1xsYoreDW4bslT47h1IejNnW
+         9DTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUFDFDtrEHvzV2XmnwmF3u4Z2mC5WEdR1/YJeS3mIPMQztuQExTt6225Dkw27sxTqFWbpvphoc5TIo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyDwkSJFLPnT0+OBy65Nf/uXjni8ZHyCbHJkJ/lYW73slRj+eNc
+	jjiAZDF4c4dGtYakTaaWS53gfBNyx5gtRnw0AyzLRIfEwDuzsRvv/0IjGLKvXl6AqiNBswNmrtu
+	Gr8HjxZJsI/8VmdXu/ckecYNqcbY=
+X-Gm-Gg: ASbGncuHMoz2EwkrOfc0d52beQfNwhLxINRfN6fjRLg9h+vQWhgHFP2PSdBNkps5PGt
+	8ccsptZ71DNDGpD5r3jSSUBhRJj5mRsh2NK98OIXFfhoL0WGkK81OmLBsM91PLdlKLRj0
+X-Google-Smtp-Source: AGHT+IE8MOniJa9Ei6hzyb8Cp+9zamPUiqRGKStRsjYBwO5OT2eLWpE5g1ZnRIXb0HCiZNgnQGcHAssHi4hsG3Kci6w=
+X-Received: by 2002:a05:690c:63c8:b0:6ef:9017:3cc4 with SMTP id
+ 00721157ae682-6efe3c837cfmr172564197b3.26.1733851110019; Tue, 10 Dec 2024
+ 09:18:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20241210-s2r-cdns-v6-5-28a17f9715a2@bootlin.com>
-References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
-In-Reply-To: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
-To: Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, 
- Roger Quadros <rogerq@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: theo.lebrun@bootlin.com
+References: <CAJugSwwpWKFbniGkdDCcGtKAbeYhoCsP=rMdmfaWGdFiFGEB0g@mail.gmail.com>
+ <20241209230325.5a683364@foxbook>
+In-Reply-To: <20241209230325.5a683364@foxbook>
+From: Christian Krause <chkr@plauener.de>
+Date: Tue, 10 Dec 2024 18:18:18 +0100
+Message-ID: <CAJugSwzYjWYEy7WTu73BQPODcNaYFXn5nHpTNPPkprF6LGQ20Q@mail.gmail.com>
+Subject: Re: Different speed of USB control transfers for HS USB devices
+ depending on used USB port
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: chkr@plauener.de, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-cdns_role_driver->resume() receives the information if power was lost
-across suspend (ie if a reset occurred). Transmit that to the XHCI core
-using the newly introduced lost_power flag.
+Hi Michal,
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- drivers/usb/cdns3/host.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+On Mon, Dec 9, 2024 at 11:03=E2=80=AFPM Micha=C5=82 Pecio <michal.pecio@gma=
+il.com> wrote:
+> I see obvious pattern that the bad ports are bus 001 and the good port
+> is bus 003, and they are two different chips.
+>
+> Do you see similar correlation with chip types on other motherboards?
 
-diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-index 7ba760ee62e3310e9c678d269d7675c9cb952ec6..01a3d6aad12886096ab2833a7bc276467f08cb1a 100644
---- a/drivers/usb/cdns3/host.c
-+++ b/drivers/usb/cdns3/host.c
-@@ -138,6 +138,15 @@ static void cdns_host_exit(struct cdns *cdns)
- 	cdns_drd_host_off(cdns);
- }
- 
-+static int cdns_host_resume(struct cdns *cdns, bool lost_power)
-+{
-+	struct usb_hcd *hcd = platform_get_drvdata(cdns->host_dev);
-+	struct xhci_hcd *xhci = hcd_to_xhci(hcd);
-+
-+	xhci->lost_power = lost_power;
-+	return 0;
-+}
-+
- int cdns_host_init(struct cdns *cdns)
- {
- 	struct cdns_role_driver *rdrv;
-@@ -148,6 +157,7 @@ int cdns_host_init(struct cdns *cdns)
- 
- 	rdrv->start	= __cdns_host_init;
- 	rdrv->stop	= cdns_host_exit;
-+	rdrv->resume	= cdns_host_resume;
- 	rdrv->state	= CDNS_ROLE_STATE_INACTIVE;
- 	rdrv->name	= "host";
- 
+Yes. Here's the result of my test:
 
--- 
-2.47.1
+HCs which show the problem:
+Advanced Micro Devices, Inc. [AMD] 400 Series Chipset USB 3.1 xHCI
+Compliant Host Controller [1022:43d5] (rev 01)
+Advanced Micro Devices, Inc. [AMD] 500 Series Chipset USB 3.1 XHCI
+Controller [1022:43ee]
+Advanced Micro Devices, Inc. [AMD] 600 Series Chipset USB 3.2
+Controller [1022:43f7] (rev 01)
 
+HCs which don't show the problem:
+Advanced Micro Devices, Inc. [AMD] Device [1022:15b6]
+Advanced Micro Devices, Inc. [AMD] Device [1022:15b7]
+Advanced Micro Devices, Inc. [AMD] Device [1022:15b8]
+Advanced Micro Devices, Inc. [AMD] Matisse USB 3.0 Host Controller [1022:14=
+9c]
+Intel Corporation Cannon Lake PCH USB 3.1 xHCI Host Controller
+[8086:a36d] (rev 10)
+
+The tests were done without any external hubs.
+
+> Generally, with xHCI it's on the controller to packetize and schedule
+> such transfers, so this is likey a hardware problem.
+
+Sounds plausible. On one of the systems I also booted Windows and I
+observed exactly the same issue.
+
+Since most USB devices use control requests mainly for the enumeration
+with quite small data sizes, the problem is typically not visible.
+
+I stumbled over the issue when using DFU (Device Firmware Upgrade).
+DFU does all data transfer via control requests and so any larger data
+transfer with the problematic HCs is about 50 times slower.
+
+I'm open for any suggestions on how to proceed from here.
+
+Best regards,
+Christian
 
