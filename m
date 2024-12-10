@@ -1,92 +1,185 @@
-Return-Path: <linux-usb+bounces-18279-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18280-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68B0C9EA892
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 07:13:47 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D72D167CC4
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 06:13:44 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D6022ACF9;
-	Tue, 10 Dec 2024 06:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FTJWsIdD"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02AE49EAD37
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 10:57:52 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 474D6227599
-	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 06:13:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9D91290260
+	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 09:57:41 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C466226168;
+	Tue, 10 Dec 2024 09:53:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="bhAYBPqK"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A0702153F8
+	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 09:53:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733811222; cv=none; b=sdBHAWBM2Pfpms5ah5SAZtUvOe5lfR0hO7rFHHUuqTZE1lx9GA7hz2s+N/69d2YA4/U9lv8Ege6bitqbhdDguYvWgy/gXNo+TWa8IUz1Jzd8AD3RqG4F9X/Lnynj+0e1zn1JTOuGbHtK2DYKi8/BlzmeIv3WwV81VuUFH6Nu2WE=
+	t=1733824415; cv=none; b=p4k2PW+XfKwVwDZ2JR19vm7s5YW1nyC/EYP80dTbA3uYXg0E4QV3as7ljXehLVnklkNgmRngOwRmJtWREr2tbJ7G7CPecAiQjG5UI3SXieqsr4NEK7MjDJUdbd6+iDaUxVw0ITEXSV8mqIHMmfSqWr5NZbGSQ0IgjtfMF0J2IaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733811222; c=relaxed/simple;
-	bh=1kessOnplRs/w+ECVpuZz5QrtMhmCrMgihh9BohsWEw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O7FQRB3DWquUTMI58qO4QVSS5m/+1Snj0XjXVG9UQZEs0SeNmDw1psCG2n/umuTqN/DmRCuwPiVfTjIGQP8SR4ocOCON4rJ9zdv3XfIl17yrO09CgLGvF0WiBQ0jpj4FhTa8ponqdoQW0JXGCqxK9Ge52KeTBmxd3pn+zYjbGG8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FTJWsIdD; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733811220; x=1765347220;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1kessOnplRs/w+ECVpuZz5QrtMhmCrMgihh9BohsWEw=;
-  b=FTJWsIdDPTUWqPagVK+cvcddbjMf6sj6YH4+6croxVk8hQh0muP2qNB3
-   qLIHgWnZXKtLhrbcMETi7//1bMQxRTD9xkO/zVnAWVDayE4R+45hr350T
-   zr+ybGFYdsIdEplA4TIkvqdCK6QJmlhqshCe8qGORIKYMCvFtN42SBQTV
-   bs9FaNTQ99mcOUZgN/0AJ2Drz/EIvAAv/4609c3KOjPmnZpZOLtHLRJfi
-   T39A9lQxp/lkmzveikzlJv0j5WSt+4b/mRUioUui7p6YB40ukcjX6RA4t
-   CemE5m1uvZQytIcY+akC2jAkqwG5gX6NDJVl4/A2t/NW+lZPbA3tiacBa
-   w==;
-X-CSE-ConnectionGUID: jYn+PokETv+TU1eHd1toIg==
-X-CSE-MsgGUID: e0D1PzecTam5vBR7VIEEDQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11281"; a="21724063"
-X-IronPort-AV: E=Sophos;i="6.12,221,1728975600"; 
-   d="scan'208";a="21724063"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Dec 2024 22:13:39 -0800
-X-CSE-ConnectionGUID: eCV0xIS3RSyMtLy3FLNFNg==
-X-CSE-MsgGUID: jSCJq925QXy81Ie2im/k8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,221,1728975600"; 
-   d="scan'208";a="95499596"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa008.fm.intel.com with ESMTP; 09 Dec 2024 22:13:38 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id D476A28E; Tue, 10 Dec 2024 08:13:36 +0200 (EET)
-Date: Tue, 10 Dec 2024 08:13:36 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: [PATCH] thunderbolt: Add support for Intel Panther Lake-M/P
-Message-ID: <20241210061336.GN4955@black.fi.intel.com>
-References: <20241204095636.1051165-1-mika.westerberg@linux.intel.com>
+	s=arc-20240116; t=1733824415; c=relaxed/simple;
+	bh=f2wXsLu93ld7H5hW2vfOqoFIUWvM4bM6iQGQZM3hGLU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=dDq338pBOOPt9Al7WHKt3MiYUS1SwZEtZwDeP8WFkJNkgC+A9aLTD7u7L52AxhBfTo02a+AW9q+NI1tazZk4av5XGCKExImL1chYuHVZtvUuZ66fvYqdfMSD9UjmV9zP18dAsKe41WCT+J3wzLfVIRPbqILbhNGFWbW9h+m1MeU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=bhAYBPqK; arc=none smtp.client-ip=203.254.224.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
+	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20241210095329epoutp023d17d8e22040117d34bae47abb2f9c07~PyB0zHZ2g1258912589epoutp026
+	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 09:53:29 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20241210095329epoutp023d17d8e22040117d34bae47abb2f9c07~PyB0zHZ2g1258912589epoutp026
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1733824409;
+	bh=Au+as8CBZsENQNOVCtoyLwjUW/xu13aSSffNENYc9/8=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=bhAYBPqKAxcqjBIUnoYjaqYNVklyTd9ERldvwTexbyv++egJNM3TN64hxTaGRClnt
+	 hgOCjLmLrXb3URwYTGrOVvrPbnq0eb66kJeqWej207utU0n7GEq+KQ8VNej3sVIzHa
+	 sx8FKF5al7hl/yKYAFmmsrJyfJE9KEDzHhcmuZIA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+	20241210095328epcas5p12771ea8fe08eb534f608317b315752ad~PyB0LS3NP3223232232epcas5p1E;
+	Tue, 10 Dec 2024 09:53:28 +0000 (GMT)
+Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.178]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4Y6vF31Pjsz4x9Q2; Tue, 10 Dec
+	2024 09:53:27 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	5B.39.29212.69F08576; Tue, 10 Dec 2024 18:53:27 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20241210095325epcas5p47339f18d446e8da3efa84bbf3c9e10e5~PyBxudcuU2137121371epcas5p4J;
+	Tue, 10 Dec 2024 09:53:25 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20241210095325epsmtrp23baf7b30fd10f3a2528d0145247ec01e~PyBxthtCA1022410224epsmtrp2C;
+	Tue, 10 Dec 2024 09:53:25 +0000 (GMT)
+X-AuditID: b6c32a50-801fa7000000721c-d7-67580f96b568
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	06.3F.18729.59F08576; Tue, 10 Dec 2024 18:53:25 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20241210095323epsmtip260b68af7f4d84985d469d96fa5179354~PyBvP-Ak21208112081epsmtip2A;
+	Tue, 10 Dec 2024 09:53:23 +0000 (GMT)
+Message-ID: <6b3b314e-20a3-4b3f-a3ab-bb2df21de4f5@samsung.com>
+Date: Tue, 10 Dec 2024 15:23:22 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241204095636.1051165-1-mika.westerberg@linux.intel.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+To: gregkh@linuxfoundation.org, quic_jjohnson@quicinc.com, kees@kernel.org,
+	abdul.rahim@myyahoo.com, m.grzeschik@pengutronix.de,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
+	akash.m5@samsung.com, rc93.raju@samsung.com, taehyun.cho@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
+	alim.akhtar@samsung.com, stable@vger.kernel.org
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <20241208152322.1653-1-selvarasu.g@samsung.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Tf0wbZRjed3e9Hgzk6KB8YiJdE0yKgfVcC4cpjDCEZjSBhJRM44QLvRSk
+	tE1bdBBiQAcTVn66wEbYZDiYlm0IFhDsWCgpTNycivoHSmk3wsYE3A8cLoDacqj897xPnvfH
+	877fR6CCWTySKNJbWJOe0YnxQGxoQiKJbQs5qpXWegHd1trPo5d/svFoz/khnP61sxWhpy9d
+	QOgPPunD6RbHIEbPef/E6Ksrt3n0zGgHTnf1VKO0veZHhH7s+ptHV9nneLSttgOjZ9ZHULqz
+	/w6gW8bDUwTKAVstrrx+7jJfOXl/iq9s3JIqmx3vKRvsNqB8MvBiNv+NYkUhy2hYk4jVFxg0
+	RXptkjgzJ+9wnjxeSsVSiXSCWKRnStgkcZoqOza9SOczIRa9w+hKfVQ2YzaLDyQrTIZSCysq
+	NJgtSWLWqNEZZcY4M1NiLtVr4/Ss5VVKKn1F7hPmFxcuVb5mHA05fs+7CSqBO6gOBBCQlMFb
+	J1uxOhBICEgHgFtjV3hc8BjAU3cvAS54CuDmoMcnI7ZTusde5/hrALqtHpwLVgCcvFLJ99cN
+	JpPhdye6UT/GyGi44KjGOT4Ufn12AfPjcDIKzs+e2dbvI4vgH211293C/HPcctv5/gAlrQi0
+	Phzn+VUoGQFnFz5G/GPgJAUXbyj8dACpgC1L3QgniYLDKx2oPxeSywRc/n0AcE7ToGfShXJ4
+	H3wwZedzOBI+Wb2Gc7gAOlrWdvhC6LQ5d/SHYG/nTZ6/L0pKYN/oAa7Xc7B+YwHhthIMP6wR
+	cOpoOF01s1PxBei++DOPw0o4XbPO55bVCOBH7f1IExC179pL+y6X7bvstP/fuRNgNhDJGs0l
+	WrZAbqRi9ey7/128wFAyALYfeUz2l6D38604J0AI4ASQQMVhwUSmWisI1jBl5azJkGcq1bFm
+	J5D7LtSMRoYXGHy/RG/Jo2SJUll8fLws8WA8JY4I/q36nEZAahkLW8yyRtb0bx5CBERWIgw1
+	Gw3e5qdjmfvD7vHJNSt/Zv9VRqW6vipVn/9UteVuXO/aW3YyWXE/7a5C/vT7MmJ+8ODY7bEb
+	KUTOnbX31aHCr4Tzw6L0z3pPewWThxQdoUPqwYoMYUJPU6y54uKFJWGKEGa99FCl3XDmbwY1
+	fPNI5ekn38wtU4UkxuHl43vsz6f2h/UJn3kbb1ZUTuUKTkSNLza/NZeQsYZPTOzNdS0es9Sn
+	/rWhri7WZHl+sQe6JAHlEZT0UU7MD64eXsPLw66u1pXS+eOnjzVJquwZ+V2XdbI97iNfdJTE
+	LaaeqjnS9SArKMQqyB3ZOqONqFLX0yLJtz3PVnOoQGzk8NFRMWYuZKgY1GRm/gHosdzCbQQA
+	AA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKIsWRmVeSWpSXmKPExsWy7bCSvO5U/oh0g3+PzSymT9vIavHm6ipW
+	iwfztrFZ3Fkwjcni1PKFTBbNi9ezWUzas5XF4u7DHywW696eZ7W4vGsOm8WiZa3MFlvarjBZ
+	fDr6n9WicctdVotVnXNYLC5/38lssWDjI0aLSQdFHYQ8Nq3qZPPYP3cNu8exF8fZPfr/GnhM
+	3FPn0bdlFaPH501yAexRXDYpqTmZZalF+nYJXBkvG1wLdvFXPH/4h7GB8R5PFyMHh4SAicTS
+	fZFdjFwcQgK7GSU6lq9l72LkBIpLS7ye1cUIYQtLrPz3nB2i6DWjxJrmj2wgCV4BO4kLLUuZ
+	QWwWAVWJJ3taoeKCEidnPmEBsUUF5CXu35oBNlRYIFPi3qmZbCCDRAT2AG1794AFxGEW6GGS
+	uL7mMRvEin5GiTsHv4GNYhYQl7j1ZD4TyK1sAoYSz07YgIQ5BWwkJr1cygRRYibRtRXiVGag
+	bdvfzmGewCg0C8khs5BMmoWkZRaSlgWMLKsYJVMLinPTc4sNCwzzUsv1ihNzi0vz0vWS83M3
+	MYJjVktzB+P2VR/0DjEycTAeYpTgYFYS4eXwDk0X4k1JrKxKLcqPLyrNSS0+xCjNwaIkziv+
+	ojdFSCA9sSQ1OzW1ILUIJsvEwSnVwLR2enIT06wLsW8PlPDlbWILDEl6fvlNTewKm0/N/5+K
+	aszaX7jU8/OuBb/1O951yJ/bXl90Vqx/0dxje7JPL5zTl7Ir8u60bcyXD3nfr3n17pTQl2+N
+	hpILkyb5S9+K32vpfGTe7aZla3heneTViuJ1OBIrP7WVf0ZVaf3ET4wJ2x9tat20KL5jT7fn
+	mYkNEwwjJ9hOOl3xLVJB49L/y3cEF3RmO95wV5Fhvr6uXfy0L8NEPtmsww8ONM2NkgzVyLyU
+	NbvsxbywPVJsOx03vZpZ87T7ye9wLw7z6+m7U27a/b0Y+8Io9vzeaBvWnybvDHg+TNoS8Xvv
+	u+M1fLL7Q5lvP+pvCj4U/58j1bC4ULdDiaU4I9FQi7moOBEAtyi3QkgDAAA=
+X-CMS-MailID: 20241210095325epcas5p47339f18d446e8da3efa84bbf3c9e10e5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241208152338epcas5p4fde427bb4467414417083221067ac7ab
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+	<20241208152322.1653-1-selvarasu.g@samsung.com>
 
-On Wed, Dec 04, 2024 at 11:56:36AM +0200, Mika Westerberg wrote:
-> Intel Panther Lake-M/P has the same integrated Thunderbolt/USB4
-> controller as Lunar Lake. Add these PCI IDs to the driver list of
-> supported devices.
-> 
+Hello Maintainers.
+
+Gentle remainder for review.
+
+Thanks,
+Selva
+
+
+On 12/8/2024 8:53 PM, Selvarasu Ganesan wrote:
+> The current implementation sets the wMaxPacketSize of bulk in/out
+> endpoints to 1024 bytes at the end of the f_midi_bind function. However,
+> in cases where there is a failure in the first midi bind attempt,
+> consider rebinding. This scenario may encounter an f_midi_bind issue due
+> to the previous bind setting the bulk endpoint's wMaxPacketSize to 1024
+> bytes, which exceeds the ep->maxpacket_limit where configured TX/RX
+> FIFO's maxpacket size of 512 bytes for IN/OUT endpoints in support HS
+> speed only.
+> This commit addresses this issue by resetting the wMaxPacketSize before
+> endpoint claim.
+>
+> Fixes: 46decc82ffd5 ("usb: gadget: unconditionally allocate hs/ss descriptor in bind operation")
 > Cc: stable@vger.kernel.org
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-
-Applied to thunderbolt.git/fixes.
+> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+> ---
+>   drivers/usb/gadget/function/f_midi.c | 9 +++++++++
+>   1 file changed, 9 insertions(+)
+>
+> diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+> index 837fcdfa3840..5caa0e4eb07e 100644
+> --- a/drivers/usb/gadget/function/f_midi.c
+> +++ b/drivers/usb/gadget/function/f_midi.c
+> @@ -907,6 +907,15 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
+>   
+>   	status = -ENODEV;
+>   
+> +	/*
+> +	 * Reset wMaxPacketSize with maximum packet size of FS bulk transfer before
+> +	 * endpoint claim. This ensures that the wMaxPacketSize does not exceed the
+> +	 * limit during bind retries where configured TX/RX FIFO's maxpacket size
+> +	 * of 512 bytes for IN/OUT endpoints in support HS speed only.
+> +	 */
+> +	bulk_in_desc.wMaxPacketSize = cpu_to_le16(64);
+> +	bulk_out_desc.wMaxPacketSize = cpu_to_le16(64);
+> +
+>   	/* allocate instance-specific endpoints */
+>   	midi->in_ep = usb_ep_autoconfig(cdev->gadget, &bulk_in_desc);
+>   	if (!midi->in_ep)
 
