@@ -1,159 +1,116 @@
-Return-Path: <linux-usb+bounces-18367-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18370-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C0D89EC295
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 03:55:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D357B9EC2D2
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 04:07:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8198A162CA0
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 02:55:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48938165DFB
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 03:07:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCCA01FCCFF;
-	Wed, 11 Dec 2024 02:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85C3F209F52;
+	Wed, 11 Dec 2024 03:07:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="WOB79qNU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MpzG/ymu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C914A1FBE87
-	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 02:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA3FE1FECA0;
+	Wed, 11 Dec 2024 03:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733885739; cv=none; b=YgRcImHPbRNEFAebkKPpEv4zhQ9sFCgcTonuXY+VdvuomxE07lWl+Ti2/H2uD3mO9IHA2RKzpI/SgCJ4oPnPdiCLehsXayv9iDNTJjkZ/XLbAOKM/ne9cb7TVo3wCeg2zSHccH+bAq9Hjbrw5kUVfylEBkbQobg2u4RHtqxHcEs=
+	t=1733886446; cv=none; b=CLW4Tz2mcsKL1tmpQArovkLJgigGcKr/KhzTnc8un4BfGNmCzNdyPPol/u4q5htTklQOHo4uU6N7rzoO5CNkOI3Lsg1nEMYxXNoqZilcZwj9qZhLIBLI24FBvm2Wv9G2hcDr5RMnYPJFXu0w/K/QlWzD06KXBKQpOOdfGauF0WI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733885739; c=relaxed/simple;
-	bh=Sw8qwKP5Mjvc92ndpHaw95kF/VIlsOKmmdEgToCodR4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=upOzlnQdIEGY/H7e41xsd6miLeGPKkpR66lpj3VNxrW6ujLb3xKcpC0B+glAErEU6Y6dfxxbc5MVn2naWE4VzodNEmlrtB98RcLjo0mCtfl9O4bNTyUsv84V0ofoXQ0ZuYG1P13Mkg6n6CUmaHBEponhoBajWivnktflKdiCNws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=WOB79qNU; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2161eb94cceso30259205ad.2
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 18:55:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733885737; x=1734490537; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=piHU200dFKtsmyLyhlKF3Y91bwGI1DoICgmV0GUXM0Q=;
-        b=WOB79qNUBaxzoTKSn1t+JdxgyFqK2A3umWJ9LZqn1zlM3iLL9yD5i7gP6WI1A/qhLa
-         YuCnS20ip9WgXljdi4AfB0THgPP08av4kZZGanx9dSdxNYUW5+TfaX8KTSBWC6es+iO/
-         DoLBNbSRVhDBMkh2GoM+V27r2ngILJo7rdVPem044IN9pp3/VqK0kj7OAfKzy6qbDz7l
-         VLNrUo1MKL1fZOC1WHswXp+5Hf+q/us4J6yR1Xi6m7qoGUo7oSW5pDVNzG4fBiTaTiTB
-         +gnT/hEyKd0F5tBp/yqmPXpJE9OUoX7g8WAevKudvRZo5QzKlN2lp5oF0MQtwyT7NmDb
-         4FzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733885737; x=1734490537;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=piHU200dFKtsmyLyhlKF3Y91bwGI1DoICgmV0GUXM0Q=;
-        b=trgQvfDATnFc4XUd7c6wLN/17GFM0WEOXPCGGppyQQc5aTG2TdZQw/k2QTMFaP4Tq2
-         rRMEyT4DMtaAIFYLvIyignq5ZYPb0pwyeXmM4BEfo+9wU2XdtQ1ndZ25o+tm73BoB0/1
-         MFj8YHKSnLMKUqY6xDqEHIbaUE+OA1ZVYGNbeCpDVJtrEpHQfBcBEw9n5P7SrA10ZeFn
-         OHH6hb1eivmSw51RH/GbrvKlaRClauTt7gX1YgEBnA1ytXuoq4UzNcZJTNghdPWTnzlS
-         oe3yLYHppZo5JBFEkXeaXpHCrhSDDtqrQTG6tYii4UZx2Fa3WES/ce8jrU55nTmKBqt4
-         ++KQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWJ71LlbR4Ju9tY4gfI15A9ATT2ZHALk5wpjWA7I3llwNiXLwqQIEt8MGf4luzg8Fxzy/ABgJz+nDw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJF4HGw8lGJTd1RsEGQexIf2kfdt9urz6A7gStYtA1SSMtwjo1
-	ozG1REFfdxjVfPMYfchpO39jBgxvw2iZAhn7Se4xvFfly3w7+Tu0uWxvQUFw1Q==
-X-Gm-Gg: ASbGncvNxnPXv5TvWZBtv1I5dTiu6JLWOz+zJpgMeS80EBd8pI5MnbgcSRQJHlbtp5a
-	JaLJWWgMGuz1s/9KCMZzuis5ek56k8ViLyRoK/yxBf4y4iFyuTYMUQ89mjKUfIZISuBY8MJ1KYf
-	TPqiXHv/GzsA/EfOHsqFJWJj+RZTnehLmYZPmS5SwLdkqriytUPOTW8Y/R4NyI5wnVZtqPigVV1
-	HiT8Qt3jxDr2buUTATv6/QLAeLz8ZJDzjZURco3VzcAAe2VnZpVB0aZvCbVW4gIe6Y7sbiAc55S
-	4EbebhjFvfJQNOqHljh8l4jy16MQS/Y4qP3GZiGOU+ReNGGP+xkw
-X-Google-Smtp-Source: AGHT+IEFDbvNFnnUCGvlIHi60aKS6Y53fiAmKXiI38k2LXQkGTfNbOOvQbHeFT61eEagzjXtKdQr9A==
-X-Received: by 2002:a17:902:c94a:b0:216:3466:7414 with SMTP id d9443c01a7336-217785059abmr24941895ad.44.1733885736953;
-        Tue, 10 Dec 2024 18:55:36 -0800 (PST)
-Received: from ?IPV6:2a00:79e0:2e14:7:b50f:e19c:87e4:10bc? ([2a00:79e0:2e14:7:b50f:e19c:87e4:10bc])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-216796e2101sm17149335ad.167.2024.12.10.18.55.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 10 Dec 2024 18:55:36 -0800 (PST)
-Message-ID: <df40c098-2bd7-43c6-be53-77171b9b90d9@google.com>
-Date: Tue, 10 Dec 2024 18:55:34 -0800
+	s=arc-20240116; t=1733886446; c=relaxed/simple;
+	bh=CEwUdYH0nCr9FSjB3Vc7SkwELpFgK6Eq00uXcIMkpiM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ks+C3ZzAHWqoK7iOwQqDASSNZTXMHYgxydkQPGmeaAJCrNDf+eP7bQU+QxXvhm/omY2WKTyxZl38kYGlNCV/ig8FQxS0t1XZJaKFOw9N2lB9VFBZ1lSB2S+6fHWRDuS4p5oqtfQetMnQsSbjk0GBpuJM1h46LMsrs6UxWrMpZ1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MpzG/ymu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6D178C4CED6;
+	Wed, 11 Dec 2024 03:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733886445;
+	bh=CEwUdYH0nCr9FSjB3Vc7SkwELpFgK6Eq00uXcIMkpiM=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=MpzG/ymucHJoGU1OFLMgsZiilcgUzrksPj6+cgIgjUuq3diZ8Ddod//l9TBR4MqN0
+	 rhUvpzp6uyEjZhYSNXVsQpV5A57+Z7T/BokVQbD8A6wK70+rVXLY4VRKXnV6SrhSjt
+	 /U/B6LTAFyTS7U5yNsaWAMdqRCivYlc789VTvZ9XP0zuWMt3kX3TAc1JLDyXNvn+9w
+	 c8pJa33mdO6t9wT6QyGAIBR0xOgUnmRLYsXheq1XvSazdpnaa4QlwdabexMgolVm0Q
+	 0RYmMOpRbsJ/eW6qEbNzen7sipro8g645dSAG8A2jDlwGBF28mhf1AfhX/DxcpjNFS
+	 K7v4a+a9/ArVQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C17EE7717F;
+	Wed, 11 Dec 2024 03:07:25 +0000 (UTC)
+From: Amit Sunil Dhamne via B4 Relay <devnull+amitsd.google.com@kernel.org>
+Subject: [PATCH v2 0/3] Add support for responding to Get_Revision request
+Date: Tue, 10 Dec 2024 19:07:06 -0800
+Message-Id: <20241210-get_rev_upstream-v2-0-d0094e52d48f@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] dt-bindings: connector: Add pd-revision property
-To: Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Badhri Jagan Sridharan <badhri@google.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Kyle Tso <kyletso@google.com>, RD Babiera <rdbabiera@google.com>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20241205-get_rev_upstream-v1-0-90158ee7d75f@google.com>
- <20241205-get_rev_upstream-v1-1-90158ee7d75f@google.com>
- <20241210230615.GA766674-robh@kernel.org>
-Content-Language: en-US
-From: Amit Sunil Dhamne <amitsd@google.com>
-In-Reply-To: <20241210230615.GA766674-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANoBWWcC/32NTQ7CIBCFr9LMWsyAlmpX3sM0DbYDJbGlASSah
+ ruLPYBv9728nw0CeUsB2moDT8kG65YC4lDBMKnFELNjYRAozlxgzQzFvgT71xqiJzUz+ZBYJE+
+ oNJTa6knb9z557wpPNkTnP/tD4j/3z1jiDNkVeX0hasam1jfjnHnScXAzdDnnL/C4TpKxAAAA
+X-Change-ID: 20241205-get_rev_upstream-6b60000630af
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Badhri Jagan Sridharan <badhri@google.com>, 
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: Kyle Tso <kyletso@google.com>, RD Babiera <rdbabiera@google.com>, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, Amit Sunil Dhamne <amitsd@google.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733886444; l=1318;
+ i=amitsd@google.com; s=20241031; h=from:subject:message-id;
+ bh=CEwUdYH0nCr9FSjB3Vc7SkwELpFgK6Eq00uXcIMkpiM=;
+ b=NZyEywntSJaRNYEZgJ8E1nGOMQ+NnCFvACWapkVOKgSHnikaWWYbndwYepCoL4hFEpOZ6EbpJ
+ X+zZYEYLd6mCY2VY+ChM5709KSmPLyIzVgxByByztlHn5EoHhA/6+a+
+X-Developer-Key: i=amitsd@google.com; a=ed25519;
+ pk=wD+XZSST4dmnNZf62/lqJpLm7fiyT8iv462zmQ3H6bI=
+X-Endpoint-Received: by B4 Relay for amitsd@google.com/20241031 with
+ auth_id=262
+X-Original-From: Amit Sunil Dhamne <amitsd@google.com>
+Reply-To: amitsd@google.com
 
-Hi Rob,
+Currently TCPM doesn't support responding to Get_Revision request
+message. However, as per Message Applicability in USB PD Spec 3.1 v1.8
+("6.13.2 Applicability of Data Messages") "Revision" is a Normative
+(compulsory) message and needs to be supported. As part of this patchset
+add support for responding to Get_Revision requests as part of
+Revision_Information AMS.
 
-On 12/10/24 3:06 PM, Rob Herring wrote:
-> On Thu, Dec 05, 2024 at 11:46:08PM -0800, Amit Sunil Dhamne wrote:
->> Add pd-revision property definition, to specify the maximum Power
->> Delivery Revision and Version supported by the connector.
->>
->> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
->> ---
->>   Documentation/devicetree/bindings/connector/usb-connector.yaml | 6 ++++++
->>   Documentation/devicetree/bindings/usb/maxim,max33359.yaml      | 1 +
->>   2 files changed, 7 insertions(+)
->>
->> diff --git a/Documentation/devicetree/bindings/connector/usb-connector.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> index 67700440e23b5b7ca0db2c395c8a455bcf650864..341d2872e8d43450d219b7b72d48790051dc4e2b 100644
->> --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
->> @@ -293,6 +293,12 @@ properties:
->>         PD negotiation till BC1.2 detection completes.
->>       default: 0
->>   
->> +  pd-revision:
->> +    description: Specifies the maximum USB PD revision and version supported by
->> +      the connector. This property is specified in the following order;
->> +      <revision_major, revision_minor, version_major, version_minor>.
->> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> Always exactly 4 entries? Then:
->
-> maxItems: 4
+Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+---
+Changes in v2:
+- Added maxItems constraint to "pd-revision" property
+- Link to v1: https://lore.kernel.org/r/20241205-get_rev_upstream-v1-0-90158ee7d75f@google.com
 
-Thanks for the catch! Updating it in the next revision.
+---
+Amit Sunil Dhamne (3):
+      dt-bindings: connector: Add pd-revision property
+      usb: typec: tcpm: Add support for parsing pd-revision DT property
+      usb: typec: tcpm: Add new AMS for Get_Revision response
 
-Regards,
+ .../bindings/connector/usb-connector.yaml          |  7 ++
+ .../devicetree/bindings/usb/maxim,max33359.yaml    |  1 +
+ drivers/usb/typec/tcpm/tcpm.c                      | 87 +++++++++++++++++++++-
+ include/linux/usb/pd.h                             | 22 +++++-
+ 4 files changed, 112 insertions(+), 5 deletions(-)
+---
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+change-id: 20241205-get_rev_upstream-6b60000630af
 
-Amit
+Best regards,
+-- 
+Amit Sunil Dhamne <amitsd@google.com>
 
->> +
->>   dependencies:
->>     sink-vdos-v1: [ sink-vdos ]
->>     sink-vdos: [ sink-vdos-v1 ]
->> diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> index 20b62228371bdedf2fe92767ffe443bec87babc5..350d39fbf2dcd4d99db07cb8f099467e6fc653ee 100644
->> --- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> +++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
->> @@ -70,6 +70,7 @@ examples:
->>                                          PDO_FIXED_DUAL_ROLE)
->>                                          PDO_FIXED(9000, 2000, 0)>;
->>                   sink-bc12-completion-time-ms = <500>;
->> +                pd-revision = /bits/ 8 <0x03 0x01 0x01 0x08>;
->>               };
->>           };
->>       };
->>
->> -- 
->> 2.47.0.338.g60cca15819-goog
->>
+
 
