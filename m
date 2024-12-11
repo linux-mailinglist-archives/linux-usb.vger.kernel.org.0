@@ -1,101 +1,115 @@
-Return-Path: <linux-usb+bounces-18373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18374-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 054D59EC56B
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 08:14:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 943799EC6E9
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 09:18:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CE7F284698
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 07:14:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDB842832FC
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 08:18:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C442F1C5CDB;
-	Wed, 11 Dec 2024 07:14:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D6501D9593;
+	Wed, 11 Dec 2024 08:18:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a55pNOK7"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="IoekGvcc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74F1D1C2443;
-	Wed, 11 Dec 2024 07:14:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD911D61AF
+	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 08:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733901264; cv=none; b=u69QXVY1D0Dyr1fWmwpUxelPAtpL0gNMVOJcQloG76lS0ivEFeLQm/vsqqtcpXQfMXBYy9+c0P/Z9WDjHlvnL152I9VI92OtZLVEbPxDoxdgyeICwhuXa97wnMmm/dc2ewVIYhCDAhHatPcNzesJRHE3ON6BsfnFBqg+HK2z41Y=
+	t=1733905113; cv=none; b=PeNbrYuwL8wnynL2kwVYL28RWBGfwr5ewxvSWFYwKQMvlx50gvTuBo14iAmlBepxUBDfUyghaIxG7eAv5ou3h5lRXi3Skm8dKzg7Vhsz6HhFWcbZK0O0dqXUCMGTSvDYsP+hqr00EElZy005W9eRTQbJmmF/GePK1xn89K0OJ2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733901264; c=relaxed/simple;
-	bh=eNbU40uTyE9XaSbbEj0HmIYTCwXeVochwHLRD0TMXV8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G5DikMDkB0Twmgb5Inzpni+0ErugDmA/wDM18TmFPUa8B1QMcs5i7rDb6zA9jWK3do7ROOsT23Ie3VMemhDBI6zOgAvaiKagTqjWY5NFSee9J3ATHJAqxTl3iVXSbpG7D+gNAm7liN+Z2DTQ1hTGGeB6pqLNEDgw5NB3awyBLF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a55pNOK7; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733901263; x=1765437263;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=eNbU40uTyE9XaSbbEj0HmIYTCwXeVochwHLRD0TMXV8=;
-  b=a55pNOK7MTf8TjaS5rrLIZh+uzYps19lCAjKr1KUgevQJt48hfVFhmzY
-   odRdemVF7+LEUjxJa+7de/0exCM86SnB81gZnQVpsOTPMgkadIPOKtHzg
-   PkPPLzZyOVrSmsSqWw5Ig26vh5REsHwwwWShejLSrcJq33XGXkgkRpe6J
-   FMrhL3VlzLJK5zJ3skmm7jQd0wosokM0thm0sCVu/5J/VARCoV0BBPh9I
-   iQlVMfGOxSEUfqyPPbn7J3mzrnzsx8eGE6tIZq0JuBnwVbUQ5w1nDu+0L
-   LU3CqWvdDOh6BoauYYMioamFpGrToh+I0DheKoXN5lF3XdniQb9SIT8cC
-   A==;
-X-CSE-ConnectionGUID: /8Cspmn4R9esyf1tKjMqUQ==
-X-CSE-MsgGUID: dpnzu76WSfm+mO4JiJTjTA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="33589466"
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="33589466"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 23:14:22 -0800
-X-CSE-ConnectionGUID: iKZY6jk5TUaUBBdDGmIuuw==
-X-CSE-MsgGUID: QjDW+gXsTaqJpPZK60khGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118934774"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa002.fm.intel.com with ESMTP; 10 Dec 2024 23:14:19 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 9F35D192; Wed, 11 Dec 2024 09:14:18 +0200 (EET)
-Date: Wed, 11 Dec 2024 09:14:18 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: "open list:THUNDERBOLT DRIVER" <linux-usb@vger.kernel.org>,
-	linux-kernel@vger.kernel.org,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Richard Hughes <hughsient@gmail.com>
-Subject: Re: [PATCH v2] thunderbolt: Don't display nvm_version unless upgrade
- supported
-Message-ID: <20241211071418.GP4955@black.fi.intel.com>
-References: <20241209162551.888749-1-superm1@kernel.org>
+	s=arc-20240116; t=1733905113; c=relaxed/simple;
+	bh=XskHzUQ0wP3xisQAsDVTIVaMiwmap3TuSXWv2UwOOoE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aOORhf2tnNwyKGp2/E+QLyf14SSlD3xRXavPo/9VKBof+78BgUri07bKi+dkdnGNRjL9t0ck4r4xPX8LYHgtUUolgwIyWvrVvg9qLFx8ERjyjj1/+miqc0N/RQVzgSZwRth15KSbQmwj5zcbD8Ir/1CwUb2e02t8mqYykMDoIcU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=IoekGvcc; arc=none smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-3004028c714so38042051fa.2
+        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 00:18:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1733905108; x=1734509908; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XskHzUQ0wP3xisQAsDVTIVaMiwmap3TuSXWv2UwOOoE=;
+        b=IoekGvccNyR3/8I0UHPuhLZecAyr4HJw3FrGwOlZnUyrpVBWhfdQVmXdzzu49yqvat
+         1uMWuL6AJP5/rHSQRtmBLqHoP4gdsWWeZX0hoU3V3P71fSlzxMZgUpqiIfkxvkR77BeS
+         HB2xqPsWS8TK4jmjivCUlpiXyZ4ZzdD5LuqQ/owoA4WnFLVodhfbCCKM3l9NTxUREITk
+         P+r9yEoGDmBSLyznzXbHDdK8AsE9XAVrjfESe+flsVXPOaEqUoLluDMtFzHk2eSi1PX5
+         CEl5D7XkONCmF1YX4dvA2bh965GgrnYMeJWeZpPCkJLGaqTSacwNZp2FhgKA2BKqQdu2
+         zQeg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733905108; x=1734509908;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XskHzUQ0wP3xisQAsDVTIVaMiwmap3TuSXWv2UwOOoE=;
+        b=LJo9yKJ/qFMvhWiK3GZvnDqbuhraCPiiq7uZvNDz/LX7kfT225yFaMzdIhPEUT3L5i
+         YTp0DD5Fsa+FcIjxVR7cfLKehML36T7rJLLxM46+QRDnGJXj88j2Jljt7BXt29G+n04s
+         6yoNHLpQFn/bdhfg5JfxuFzxRzU4h2bdujNMDtZJtbUO3yFxrZH9I0yu2LwTcln9fNz8
+         JYo6HH+CyphMmydiPZ1rhl9s6NAE04ajrOpaHLH4gRsDZodIhrbhjRloBaV/uOiQEXWy
+         iJEXS9+/GyxiMnjSXFffCmjoUAxD/vhbSB6apPTavd4qdfRWYqlcJlCEZnjkks6aH7D+
+         Ky/A==
+X-Forwarded-Encrypted: i=1; AJvYcCVCm2tdG52j9cW5WbrefcsvxqoYYQ7UR/2gxuwqTrmY1fptL+KkIVxmV7X6fPgwOXlVYyTa/6xrxCY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDrmJgs98iqPw6nKXSsYfAdYrc65ymULfL6l27/4D7R8/uUJOC
+	4OfR28Hst3IwPtuz4l+76V0C6ER6WoZerxCFI17GsB0C10esL8iK8rjxxeAK5jP8/nr6lw9JsPP
+	h9P+675EtIjHYhea2vaTFDKPyq7mtio2LUBQ6Qg==
+X-Gm-Gg: ASbGncuxqfdcxuxUceZRSngVlS+a+No7HU1vWkCdLArp6MoxaaI/+jDUxId0R8csq1U
+	ynPIX2hS9ogGic1dqLhicz75WUoSfab+ATjqng5zA9YleAgPjrJlBNGwvZ1m4F/BhB14=
+X-Google-Smtp-Source: AGHT+IEyqSnEBMMtZyEj5jF6bo6/CxMQUAS8l/Vem+Q0Tg0zwJltPimb/BXxYNi4dNa8OIsM4j3xdj7bHzlce3zdJRY=
+X-Received: by 2002:a2e:bcc6:0:b0:2ff:c95a:a067 with SMTP id
+ 38308e7fff4ca-30240d08829mr5734311fa.13.1733905108362; Wed, 11 Dec 2024
+ 00:18:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241209162551.888749-1-superm1@kernel.org>
+References: <20241211-const_dfc_done-v4-0-583cc60329df@quicinc.com> <20241211-const_dfc_done-v4-8-583cc60329df@quicinc.com>
+In-Reply-To: <20241211-const_dfc_done-v4-8-583cc60329df@quicinc.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 11 Dec 2024 09:18:17 +0100
+Message-ID: <CAMRc=MdJuy9ghgLHxbygdHME2EkttZ7zBMJzCis=t94EUMbGiQ@mail.gmail.com>
+Subject: Re: [PATCH v4 08/11] gpio: sim: Remove gpio_sim_dev_match_fwnode()
+To: Zijun Hu <zijun_hu@icloud.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linus Walleij <linus.walleij@linaro.org>, 
+	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <ukleinek@kernel.org>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
+	linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev, 
+	linux-sound@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-block@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org, 
+	linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org, 
+	linux-serial@vger.kernel.org, netdev@vger.kernel.org, 
+	Zijun Hu <quic_zijuhu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Dec 09, 2024 at 10:25:51AM -0600, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> The read will never succeed if nvm wasn't initialized due to an
-> unknown format.
-> 
-> Add a new callback for visibility to only show when supported.
-> 
-> Fixes: aef9c693e7e5 ("thunderbolt: Move vendor specific NVM handling into nvm.c")
-> Reported-by: Richard Hughes <hughsient@gmail.com>
-> Closes: https://github.com/fwupd/fwupd/issues/8200
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+On Wed, Dec 11, 2024 at 1:10=E2=80=AFAM Zijun Hu <zijun_hu@icloud.com> wrot=
+e:
+>
+> From: Zijun Hu <quic_zijuhu@quicinc.com>
+>
+> gpio_sim_dev_match_fwnode() is a simple wrapper of API
+> device_match_fwnode().
+>
+> Remove the needless wrapper and use the API instead.
+>
+> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+> ---
 
-Applied to thunderbolt.git/fixes, thanks Mario!
+Acked-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
