@@ -1,76 +1,59 @@
-Return-Path: <linux-usb+bounces-18379-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18380-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7AFF9EC8CB
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 10:20:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28EC59EC906
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 10:25:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05D2C1885058
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 09:19:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC2CF16560B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 09:25:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2DFA233691;
-	Wed, 11 Dec 2024 09:19:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C7E7236F9D;
+	Wed, 11 Dec 2024 09:25:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MbQCZRk3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bHpV9tak"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4440F1A8408;
-	Wed, 11 Dec 2024 09:18:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEA2D236F82;
+	Wed, 11 Dec 2024 09:25:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733908746; cv=none; b=eoxQdwrylcZPQEzlFFKMMDgKX2A8u/xum9d7EWvl3uqjGOSLoJesab3Z47koG26g1QI83+pvf914YlmVjjSfOQX+uckuTU3DrZIfgKM+JCs+WPDltZl7cQKZ5ZcxDjLz3eZbhP4zskm0cRJ0kVxXRBM5GeGt8COaKyCcyV+bVTo=
+	t=1733909137; cv=none; b=TlMDkcpQ2gxZrWLIuNn/TJVGQe7aSHV4ybYN+HyXjqi67CFkw7FMwtJwi3qwx+xgzYpKjqxfDxiTs9ZOr7iDgy3rb9z1/7k/Hn/1Sh+zuWvYw+v86ZeKc+0c2zBmEx8N50JVCbv0q5TUwj+KxdgtUjHFHUuwFYTpholLsJy5Q9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733908746; c=relaxed/simple;
-	bh=EAZc5BG/lGj4Chm2b9mW1NY7iiGPZNBIY+xChKuEvmo=;
+	s=arc-20240116; t=1733909137; c=relaxed/simple;
+	bh=7Z6ZEz/7EY0QbTtmfvRdaK1H/XC8daw2re/LkqTNMyM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WvkGvTUO+yJcmjDnYlDoLgJKa2Xb6ffJkPDJlMous8vRMY3zkcmasofS0dZTQOh2W6PCF+2vIM19Q3S+X0vzc+u86c4lraoPvZo+jokbQUGIpPplZfbEx3f9Ew/4V94bgF2UWMsHnYOBz/sdnnxXm8F30kBGElorExjrKgCHn0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MbQCZRk3; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733908741; x=1765444741;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EAZc5BG/lGj4Chm2b9mW1NY7iiGPZNBIY+xChKuEvmo=;
-  b=MbQCZRk3tX1ryDDg+dN4pAH/aFVV3GSoeKA4NTguBVRjKhze9GFDAI45
-   lHP76WLph0MRDV6GqykZPPmQ739ogVfO2UePT5Wb1ZfTVs5CJHFJMozaM
-   s0mrVbpA2ai+mEmeztb/jk+dfmjpSQ5i0D/LsaZvaCRJSlFOXiWwD+QrE
-   2OI2760cNUjEeugDJpJvfDZkrNxpt5GLx6cUveDr0/TDkeBaSUBm1KfH6
-   HDt9AyFH9nkGsiSsrCqJawHwVCwbZ6HhgPoKRIF7esaIwPwss8KHFJZkH
-   5MiNzX26WKT4lcjALYKwqkpmv88J+12vMdKAZIwyREn4xz/KCeNVkeMZ3
-   Q==;
-X-CSE-ConnectionGUID: n6NGchO+T+6myJ2PV9dDKg==
-X-CSE-MsgGUID: /jsb/KS2RPyWx4k9Hy2kJA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="44951279"
-X-IronPort-AV: E=Sophos;i="6.12,225,1728975600"; 
-   d="scan'208";a="44951279"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Dec 2024 01:18:58 -0800
-X-CSE-ConnectionGUID: yOTttQY1SJmWD38zPJwHSw==
-X-CSE-MsgGUID: AIOLTSZPRBmMr4J7M5fB/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,225,1728975600"; 
-   d="scan'208";a="96203619"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa009.fm.intel.com with SMTP; 11 Dec 2024 01:18:52 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Wed, 11 Dec 2024 11:18:51 +0200
-Date: Wed, 11 Dec 2024 11:18:51 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Badhri Jagan Sridharan <badhri@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: tcpm/tcpci_maxim: fix error code in
- max_contaminant_read_resistance_kohm()
-Message-ID: <Z1lY-9ik5T76U_Yn@kuha.fi.intel.com>
-References: <f1bf3768-419e-40dd-989c-f7f455d6c824@stanley.mountain>
+	 Content-Type:Content-Disposition:In-Reply-To; b=G25A69vsK1jrUmzA7n0bZlTAoGegj1e2SgZEk44Ge8LKB21UhOfuijnrxGbcK9agVeWQjb5p7+bBdAn5hEJg+WecdXRqhYFFUH/wW5U5/WqllfZllk5GSmQMuwTB73bO2FdXq4CQv3wzyfS4k0QFdk6N6DRzDP5XuMOJxLaKbJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bHpV9tak; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B682C4CED2;
+	Wed, 11 Dec 2024 09:25:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733909137;
+	bh=7Z6ZEz/7EY0QbTtmfvRdaK1H/XC8daw2re/LkqTNMyM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bHpV9takOa+fL5xbGTVbtpbqxyTcYNlLXYBcxqEasHy499CJONYnhTCP17O45WI6s
+	 mCOo8OtwxErUqju6gHsVDH2a0s/ZK8mhj6X7KOR+0u7PZ2Y/5yXGoy9wpzNX9Aq5RB
+	 ZDElbHTvgix6ebIDYmhQKJ+nG0vKdOwfauwUzV42fH1ACAc/ZZOYX1TKzLnR358SzC
+	 Xvx/R7fv2SXCz662cic+O+ojHIQ0V2k7KweByaHbYxxzJkFEsAQwIUEgjRoX/VhUIv
+	 1Qa/elmU4UPG1r+jn6RXESAUXYzjH0RP2d0KgiaKQohVc7yDnbOsKaEYGweXX3ovie
+	 wjWBgRMG9svmQ==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tLIyR-0000000048B-1ldU;
+	Wed, 11 Dec 2024 10:25:40 +0100
+Date: Wed, 11 Dec 2024 10:25:39 +0100
+From: Johan Hovold <johan@kernel.org>
+To: wojackbb@gmail.com
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] [v2]USB: serial: option: add MediaTek T7XX compositions
+ Add the MediaTek T7XX compositions:
+Message-ID: <Z1lak9hPtRVrDTRO@hovoldconsulting.com>
+References: <20241128022227.717101-1-wojackbb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,46 +62,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f1bf3768-419e-40dd-989c-f7f455d6c824@stanley.mountain>
+In-Reply-To: <20241128022227.717101-1-wojackbb@gmail.com>
 
-On Fri, Dec 06, 2024 at 04:09:18PM +0300, Dan Carpenter wrote:
-> If max_contaminant_read_adc_mv() fails, then return the error code.  Don't
-> return zero.
+On Thu, Nov 28, 2024 at 10:22:27AM +0800, wojackbb@gmail.com wrote:
+> From: Jack Wu <wojackbb@gmail.com>
+
+Your commit message appears to have been corrupted. The first sentence
+of the message has been merged with the commit summary (i.e. is included
+in Subject):
+
+	Add the MediaTek T7XX compositions:
+
+> T:  Bus=03 Lev=01 Prnt=01 Port=05 Cnt=01 Dev#= 74 Spd=480  MxCh= 0
+> D:  Ver= 2.10 Cls=ef(misc ) Sub=02 Prot=01 MxPS=64 #Cfgs=  1
+> P:  Vendor=0e8d ProdID=7129 Rev= 0.01
+> S:  Manufacturer=MediaTek Inc.
+> S:  Product=USB DATA CARD
+
+> -------------------------------
+> | If Number | Function        |
+> -------------------------------
+> | 2         | USB AP Log Port |
+> -------------------------------
+> | 3         | USB AP GNSS Port|
+> -------------------------------
+> | 4         | USB AP META Port|
+> -------------------------------
+> | 5         | ADB port        |
+> -------------------------------
+> | 6         | USB MD AT Port  |
+> ------------------------------
+> | 7         | USB MD META Port|
+> -------------------------------
+> | 8         | USB NTZ Port    |
+> -------------------------------
+> | 9         | USB Debug port  |
+> -------------------------------
 > 
-> Fixes: 02b332a06397 ("usb: typec: maxim_contaminant: Implement check_contaminant callback")
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Signed-off-by: Jack Wu <wojackbb@gmail.com>
+> v2: add NCTRL and more description
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Thanks for the v2.
 
-> ---
->  drivers/usb/typec/tcpm/maxim_contaminant.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/maxim_contaminant.c b/drivers/usb/typec/tcpm/maxim_contaminant.c
-> index 22163d8f9eb0..0cdda06592fd 100644
-> --- a/drivers/usb/typec/tcpm/maxim_contaminant.c
-> +++ b/drivers/usb/typec/tcpm/maxim_contaminant.c
-> @@ -135,7 +135,7 @@ static int max_contaminant_read_resistance_kohm(struct max_tcpci_chip *chip,
->  
->  		mv = max_contaminant_read_adc_mv(chip, channel, sleep_msec, raw, true);
->  		if (mv < 0)
-> -			return ret;
-> +			return mv;
->  
->  		/* OVP enable */
->  		ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, CCOVPDIS, 0);
-> @@ -157,7 +157,7 @@ static int max_contaminant_read_resistance_kohm(struct max_tcpci_chip *chip,
->  
->  	mv = max_contaminant_read_adc_mv(chip, channel, sleep_msec, raw, true);
->  	if (mv < 0)
-> -		return ret;
-> +		return mv;
->  	/* Disable current source */
->  	ret = regmap_update_bits(regmap, TCPC_VENDOR_CC_CTRL2, SBURPCTRL, 0);
->  	if (ret < 0)
-> -- 
-> 2.45.2
+Next time, please put the change log below the --- line so that it does
+not included in the commit message when I apply the patch.
 
--- 
-heikki
+I fixed up the above when applying.
+
+Johan
 
