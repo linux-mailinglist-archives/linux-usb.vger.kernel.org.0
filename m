@@ -1,216 +1,269 @@
-Return-Path: <linux-usb+bounces-18396-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18397-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1AB49ECD1A
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 14:23:10 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EFA19ECD32
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 14:30:10 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94437282233
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 13:23:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43ABA1887E68
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 13:30:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD10E22915C;
-	Wed, 11 Dec 2024 13:23:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E9A622C351;
+	Wed, 11 Dec 2024 13:29:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jfvDxqIk"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="RV4yZDiP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32EB523FD06
-	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 13:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D125822C354
+	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 13:29:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733923381; cv=none; b=X5y8qxvvV581B8eFgCTMqQUj0eQcTnkCD1WvItDuOcev/JlVYSdz48raAbmDbnCwYXvuQTlLMgcOsvs/v/wynfJxd8DJNjIURmoQBUOeN/bGXWBNXQEnl6gZsnXv1VC0bdoI2ZTHS7r/UqNNYe0QN41ApJI0pzwQsEnrBNbIYeE=
+	t=1733923789; cv=none; b=XJbxhjxa6QgRoukkUbOrew+OY9gj67otCFC08RTZ+kbeQ6R+eboxh5rm0TbbJjVlHflRT8W1MlaJPs13J5/h6Tvhx1CfCTIfNinpp9I0I+J911aIjTq3FJYHSxKN7SA+2HbuvEGSKm70bCF+f40HzQYttbasjC4UKwmmDxi9ogk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733923381; c=relaxed/simple;
-	bh=KN6fzIByeoS2kAP7gC2cc2pjeJ0vpZJcdd99nF3P79I=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=UD89H4OiPkzjNBhmVpTH3p1yxq5Ns5KQ8CrTOVNqCv07h0Wf41VF1CTCM9SLwNXYCs/LHGMxhv2v3+7lpvqG1Ypj3HZzwEH/DDaXoubCcgPF54Lb2pCVwHv6rBOeZy6KnFWjSzJRVvm9gFy8oSrab1QpYZFjI1KXNK/DKqzyzaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jfvDxqIk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B89CEC4CEDD
-	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 13:23:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733923380;
-	bh=KN6fzIByeoS2kAP7gC2cc2pjeJ0vpZJcdd99nF3P79I=;
-	h=From:To:Subject:Date:From;
-	b=jfvDxqIkiMdb0ACPNiOUr2bIYnJYtJk4REHsAORjj6AtEMWQUe8uWgzKX7K7S076N
-	 uniyUnO4qFiQHiTZIhI7MMDX8ucZbHDbbyUpRShzLai/MVRf/fWd/9p6UR+VoX1Gph
-	 or/WbqsJrWaTPmgx5+KHjZ3/AsIoluqgr1GPEkdqFxuKmp6Qg7x0GBL2lZOZOybjOb
-	 jC01q3TCVtNIYr9N3YnsKXvH+8UswmsqjGcBg+ibQ9ovGW+cJSBs1mL2cUEBpT7w0+
-	 pFJAIdmZneoO2+DRk748UYHfL8o+a5KnC4RJp4cUoYgAeNmaPA6oie5ZQRSxyk5kXO
-	 WeqXCLVa7fLzw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id A0302C3279E; Wed, 11 Dec 2024 13:23:00 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219590] New: Linux 6.13 ucsi driver error
-Date: Wed, 11 Dec 2024 13:23:00 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: guido.iodice@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression
-Message-ID: <bug-219590-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1733923789; c=relaxed/simple;
+	bh=4YXjyAoD98+cfiKscwgre+GWi+bFfECJxhiIsEr0EBY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qwrokIgkW7f+9qJ1ZPRQ8D4AP4/QARAogO3hkostK39df8qOUaNJhmnJ/R5sTU/uqfTBUPgcXEfb1kgKw7JkAtpM4gVjpGis47OrN34sON9dHxV83oSekg6sltokBmPz8wEqg8dXPhVB9PP7OtIZaihoa9oID58sjtx0nCAsU80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=RV4yZDiP; arc=none smtp.client-ip=209.85.128.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-434e69857d9so4212835e9.0
+        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 05:29:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1733923784; x=1734528584; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZAzVPgqaMUfEWjQsC1i4irC02Ex7gL3bmsg03DGegR0=;
+        b=RV4yZDiPXoFWF10cXkxm9RGlEXNfHcpyhrKFxRvKvT6TjbrMQUq4nQuoREFKitb0zp
+         U+DFbbh6SpJInkP37On80o5w3UQQ1BDOBYkO3I9yB1finZjNyZaHfuUWEVAAKE5M6i0H
+         oJRK9QTO34l2i7pj2qnp5tzcgUXorWb1yxWRFyeWgfuGvyDitD+kTQet3Qh7ysFMuHY6
+         lMVNuk3QYQc4Ed1UHycztPTmelad6jHdQlAnsKoe7veeeHuaurIQIB5+L1G0k5KCPd0R
+         oRLzkRy9/f48r+pimJ3se7LUXf289/EACuQus4hZrFK08mqQZ2wQSo5chXSucG7dgIDd
+         9djw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733923784; x=1734528584;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZAzVPgqaMUfEWjQsC1i4irC02Ex7gL3bmsg03DGegR0=;
+        b=TRDm7HArujQNmF7LqhqPxBUpIDIEjjVhuXpDxyKuMAvqyPmRV/8noIPqgpoKJ3aBul
+         OePCDnzVO5HqYIgZDuJ4GQfcaxwZWLfNzo6o1Tb8DpdQR1qWvKAu1ns56PUSigJhfNgV
+         ud1b4aWwGqccIvAQCHDS2gxcUyGwz+ame7IVCzaEO5OfNeyouWB12VDSM+7nma0/cR1b
+         QLz2XRwDdn6alMY0PyEa5/mKAoFlsV43b6X6IMF961Owmbi9MPYG2viz5WH78Q6xPEeE
+         pTXivTUPNxFMZyNCO7lq4HQwlwHoM9O1N1A9oY7NCvwcaFbeoYWYwDFEBoiup3Coji4+
+         lY7A==
+X-Forwarded-Encrypted: i=1; AJvYcCV/q99IPkdqsyef+fZ/qDekKNcT5pMwzflmbbGxIqHRqLca9TTrNVRw/NqZFuO4gl1uLZnZ73Lt4Xk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8u6DfvIQjjuCCMwAYtHk1knexdDPxtI3TOk9MARPduC+fuIBq
+	EgHkspaI97p2NTfhv333EPzTv49zT0mx6cBmqib+MhhZs9419B0GXWEJ5dGjgCg=
+X-Gm-Gg: ASbGncv6icYTYxWLrkFU7dVA7RhHgrRbLBUwUQde1vyH1cIjLJxUL28CvdKGXBDp8oP
+	4fa6opART5NSdC/m81ZsCPREuZ3ZbruadRsv3bKDJil4wYfd19oG7yY0DtCoQXezir4lnI2vav0
+	5wavN1igpHtn0nfajCAspQtt+yC98eBlBkAXiKPHHflA/+ubX1yxgrzI029Z/X8dFBkBvM4ThWa
+	ditv1q/TMJ+5xcY2bQ85dtAQhgiD+8M/1J2/fVLqM94IoKdxommwDF1CPTqoi4=
+X-Google-Smtp-Source: AGHT+IGcI12gDXybQxwcAzQEejE9ZVyUNB6RappGD5rtEDkW1ikp9QuBYtlqVjXICVCqXZ+/45HwDA==
+X-Received: by 2002:a05:600c:8a3:b0:42c:baf1:4c7 with SMTP id 5b1f17b1804b1-4361c5a2ec2mr18849105e9.4.1733923783947;
+        Wed, 11 Dec 2024 05:29:43 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.161])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434f063357csm141361975e9.22.2024.12.11.05.29.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 11 Dec 2024 05:29:43 -0800 (PST)
+Message-ID: <5418a6e3-0f90-4922-ac91-c16da9677b32@tuxon.dev>
+Date: Wed, 11 Dec 2024 15:29:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 01/15] dt-bindings: soc: renesas: renesas,rzg2l-sysc:
+ Add #renesas,sysc-signal-cells
+Content-Language: en-US
+To: Rob Herring <robh@kernel.org>
+Cc: vkoul@kernel.org, kishon@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, p.zabel@pengutronix.de, geert+renesas@glider.be,
+ magnus.damm@gmail.com, gregkh@linuxfoundation.org,
+ yoshihiro.shimoda.uh@renesas.com, christophe.jaillet@wanadoo.fr,
+ linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-usb@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20241126092050.1825607-1-claudiu.beznea.uj@bp.renesas.com>
+ <20241126092050.1825607-2-claudiu.beznea.uj@bp.renesas.com>
+ <20241210184542.GA4077820-robh@kernel.org>
+ <437b8d13-8ec1-40c7-b95c-ddb836e123d6@tuxon.dev>
+ <CAL_Jsq+sdX+3R0USwfYT2yqC9aTGc+LzwyPsQiT770fJ1BgEAw@mail.gmail.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+In-Reply-To: <CAL_Jsq+sdX+3R0USwfYT2yqC9aTGc+LzwyPsQiT770fJ1BgEAw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219590
 
-            Bug ID: 219590
-           Summary: Linux 6.13 ucsi driver error
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: guido.iodice@gmail.com
-        Regression: No
 
-11.12.2024 14:15:37:410 kernel  ------------[ cut here ]------------
-11.12.2024 14:15:37:410 kernel  WARNING: CPU: 7 PID: 82 at
-drivers/usb/typec/ucsi/ucsi.c:1374 ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi]
-11.12.2024 14:15:37:410 kernel  Modules linked in: cmac algif_hash
-algif_skcipher af_alg bnep uvcvideo videobuf2_vmalloc uvc btusb
-videobuf2_memops videobuf2_v4l2 btrtl videobuf2_common btintel btbcm videod=
-ev
-btmtk mc bluetooth vfat fat snd_ctl_led snd_soc_skl_hda_dsp
-snd_soc_intel_sof_board_helpers snd_sof_probes snd_soc_intel_hda_dsp_common
-cdc_ether usbnet snd_hda_codec_hdmi snd_hda_codec_realtek snd_hda_codec_gen=
-eric
-snd_hda_scodec_component snd_soc_dmic snd_sof_pci_intel_tgl
-snd_sof_pci_intel_cnl snd_sof_intel_hda_generic soundwire_intel
-soundwire_cadence snd_sof_intel_hda_common snd_soc_hdac_hda
-snd_sof_intel_hda_mlink snd_sof_intel_hda snd_sof_pci snd_sof_xtensa_dsp r8=
-152
-intel_uncore_frequency mii intel_uncore_frequency_common libphy snd_sof
-snd_sof_utils snd_soc_acpi_intel_match snd_soc_acpi_intel_sdca_quirks
-soundwire_generic_allocation snd_soc_acpi hid_sensor_custom soundwire_bus
-x86_pkg_temp_thermal intel_powerclamp coretemp snd_soc_sdca hid_sensor_hub
-kvm_intel intel_ishtp_hid snd_soc_avs snd_soc_hda_codec kvm
-11.12.2024 14:15:37:410 kernel   snd_hda_ext_core joydev mousedev snd_soc_c=
-ore
-crct10dif_pclmul ath10k_pci polyval_clmulni snd_compress polyval_generic
-ac97_bus ghash_clmulni_intel ath10k_core sha512_ssse3 snd_pcm_dmaengine
-sha256_ssse3 sha1_ssse3 snd_hda_intel aesni_intel intel_pmc_bxt ath
-snd_intel_dspcfg gf128mul dell_pc snd_intel_sdw_acpi platform_profile
-hid_multitouch ee1004 iTCO_vendor_support mei_pxp mei_hdcp ext4 crypto_simd
-mac80211 cryptd dell_laptop crc32c_generic snd_hda_codec rapl crc32c_intel
-intel_rapl_msr dell_wmi crc16 processor_thermal_device_pci_legacy snd_hda_c=
-ore
-tcp_bbr intel_cstate mbcache dell_smbios xe jbd2 intel_uncore sch_fq snd_hw=
-dep
-psmouse processor_thermal_device pcspkr dell_wmi_sysman snd_pcm dcdbas liba=
-rc4
-dell_smm_hwmon dell_wmi_ddv processor_thermal_wt_hint i2c_i801 ucsi_acpi
-spi_nor processor_thermal_rfim firmware_attributes_class dell_wmi_descriptor
-wmi_bmof mtd uhid drm_gpuvm typec_ucsi snd_timer processor_thermal_rapl
-i2c_smbus cfg80211 i2c_mux drm_exec intel_pmc_core mei_me intel_rapl_common
-typec
-11.12.2024 14:15:37:410 kernel   snd gpu_sched i2c_dev pmt_telemetry
-intel_lpss_pci processor_thermal_wt_req intel_ish_ipc int3400_thermal intel=
-_hid
-i2c_hid_acpi intel_lpss processor_thermal_power_floor drm_ttm_helper sg
-processor_thermal_mbox soundcore int3403_thermal rfkill mei intel_ishtp idm=
-a64
-thunderbolt drm_suballoc_helper intel_soc_dts_iosf roles igen6_edac intel_v=
-sec
-i2c_hid acpi_thermal_rel pmt_class int340x_thermal_zone acpi_tad acpi_pad
-pinctrl_tigerlake sparse_keymap mac_hid crypto_user dm_mod loop nfnetlink z=
-ram
-842_decompress 842_compress ip_tables x_tables hid_generic ums_realtek uas
-usbhid usb_storage f2fs crc32_generic lz4hc_compress lz4_compress intel_agp
-serio_raw atkbd libps2 nvme vivaldi_fmap nvme_core crc32_pclmul spi_intel_p=
-ci
-i915 nvme_auth spi_intel i8042 serio i2c_algo_bit drm_buddy video wmi ttm
-drm_display_helper cec intel_gtt
-11.12.2024 14:15:37:410 kernel  CPU: 7 UID: 0 PID: 82 Comm: kworker/7:1
-Tainted: G     U             6.13.0-rc2-1-MANJARO #1
-6d43e27d429ca07d76d7976ef33956c8e42d8727
-11.12.2024 14:15:37:410 kernel  Tainted: [U]=3DUSER
-11.12.2024 14:15:37:410 kernel  Hardware name: Dell Inc. Inspiron 5502/0WNV=
-YK,
-BIOS 1.32.0 09/12/2024
-11.12.2024 14:15:37:410 kernel  Workqueue: events_long ucsi_init_work
-[typec_ucsi]
-11.12.2024 14:15:37:410 kernel  RIP: 0010:ucsi_reset_ppm+0x1b4/0x1c0
-[typec_ucsi]
-11.12.2024 14:15:37:410 kernel  Code: 8b 44 24 04 a9 00 00 00 08 0f 85 36 f=
-f ff
-ff 4c 89 74 24 10 48 8b 05 9b fe 20 e0 49 39 c5 79 8f bb 92 ff ff ff e9 1b =
-ff
-ff ff <0f> 0b e9 50 ff ff ff e8 00 01 ee de 90 90 90 90 90 90 90 90 90 90
-11.12.2024 14:15:37:410 kernel  RSP: 0018:ffffb849403abdb0 EFLAGS: 00010206
-11.12.2024 14:15:37:410 kernel  RAX: 0000000008000000 RBX: 0000000000000000
-RCX: 0000000000000002
-11.12.2024 14:15:37:410 kernel  RDX: 00000000fffeab5b RSI: ffffb849403abdb4
-RDI: ffff9d70b1f11000
-11.12.2024 14:15:37:410 kernel  RBP: ffff9d70b1f11000 R08: 0000000000000002
-R09: 0000000000000014
-11.12.2024 14:15:37:410 kernel  R10: 0000000000000001 R11: 0000000000000000
-R12: ffffb849403abdb4
-11.12.2024 14:15:37:410 kernel  R13: 00000000fffeab59 R14: ffff9d70b1f11060
-R15: ffff9d70b1f110c0
-11.12.2024 14:15:37:410 kernel  FS:  0000000000000000(0000)
-GS:ffff9d70bf780000(0000) knlGS:0000000000000000
-11.12.2024 14:15:37:410 kernel  CS:  0010 DS: 0000 ES: 0000 CR0:
-0000000080050033
-11.12.2024 14:15:37:410 kernel  CR2: 000074f2cc000020 CR3: 0000000195a22002
-CR4: 0000000000f72ef0
-11.12.2024 14:15:37:410 kernel  PKRU: 55555554
-11.12.2024 14:15:37:410 kernel  Call Trace:
-11.12.2024 14:15:37:410 kernel   <TASK>
-11.12.2024 14:15:37:410 kernel   ? ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi
-73c1f8300683accb26cf49ce7a68d1bd10954a34]
-11.12.2024 14:15:37:410 kernel   ? __warn.cold+0x93/0xf6
-11.12.2024 14:15:37:410 kernel   ? ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi
-73c1f8300683accb26cf49ce7a68d1bd10954a34]
-11.12.2024 14:15:37:410 kernel   ? report_bug+0xff/0x140
-11.12.2024 14:15:37:410 kernel   ? handle_bug+0x58/0x90
-11.12.2024 14:15:37:410 kernel   ? exc_invalid_op+0x17/0x70
-11.12.2024 14:15:37:410 kernel   ? asm_exc_invalid_op+0x1a/0x20
-11.12.2024 14:15:37:410 kernel   ? ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi
-73c1f8300683accb26cf49ce7a68d1bd10954a34]
-11.12.2024 14:15:37:410 kernel   ucsi_init_work+0x3c/0x9c0 [typec_ucsi
-73c1f8300683accb26cf49ce7a68d1bd10954a34]
-11.12.2024 14:15:37:410 kernel   process_one_work+0x17b/0x330
-11.12.2024 14:15:37:410 kernel   worker_thread+0x2ce/0x3f0
-11.12.2024 14:15:37:410 kernel   ? __pfx_worker_thread+0x10/0x10
-11.12.2024 14:15:37:410 kernel   kthread+0xcf/0x100
-11.12.2024 14:15:37:410 kernel   ? __pfx_kthread+0x10/0x10
-11.12.2024 14:15:37:410 kernel   ret_from_fork+0x31/0x50
-11.12.2024 14:15:37:410 kernel   ? __pfx_kthread+0x10/0x10
-11.12.2024 14:15:37:410 kernel   ret_from_fork_asm+0x1a/0x30
-11.12.2024 14:15:37:410 kernel   </TASK>
-11.12.2024 14:15:37:410 kernel  ---[ end trace 0000000000000000 ]---
+On 11.12.2024 14:46, Rob Herring wrote:
+> On Wed, Dec 11, 2024 at 6:23 AM Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>>
+>> Hi, Rob,
+>>
+>> On 10.12.2024 20:45, Rob Herring wrote:
+>>> On Tue, Nov 26, 2024 at 11:20:36AM +0200, Claudiu wrote:
+>>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>>
+>>>> The RZ/G3S system controller (SYSC) has registers to control signals that
+>>>> are routed to various IPs. These signals must be controlled during
+>>>> configuration of the respective IPs. One such signal is the USB PWRRDY,
+>>>> which connects the SYSC and the USB PHY. This signal must to be controlled
+>>>> before and after the power to the USB PHY is turned off/on.
+>>>>
+>>>> Other similar signals include the following (according to the RZ/G3S
+>>>> hardware manual):
+>>>>
+>>>> * PCIe:
+>>>> - ALLOW_ENTER_L1 signal controlled through the SYS_PCIE_CFG register
+>>>> - PCIE_RST_RSM_B signal controlled through the SYS_PCIE_RST_RSM_B
+>>>>   register
+>>>> - MODE_RXTERMINATION signal controlled through SYS_PCIE_PHY register
+>>>>
+>>>> * SPI:
+>>>> - SEL_SPI_OCTA signal controlled through SYS_IPCONT_SEL_SPI_OCTA
+>>>>   register
+>>>>
+>>>> * I2C/I3C:
+>>>> - af_bypass I2C signals controlled through SYS_I2Cx_CFG registers
+>>>>   (x=0..3)
+>>>> - af_bypass I3C signal controlled through SYS_I3C_CFG register
+>>>>
+>>>> * Ethernet:
+>>>> - FEC_GIGA_ENABLE Ethernet signals controlled through SYS_GETHx_CFG
+>>>>   registers (x=0..1)
+>>>>
+>>>> Add #renesas,sysc-signal-cells DT property to allow different SYSC signals
+>>>> consumers to manage these signals.
+>>>>
+>>>> The goal is to enable consumers to specify the required access data for
+>>>> these signals (through device tree) and let their respective drivers
+>>>> control these signals via the syscon regmap provided by the system
+>>>> controller driver. For example, the USB PHY will describe this relation
+>>>> using the following DT property:
+>>>>
+>>>> usb2_phy1: usb-phy@11e30200 {
+>>>>      // ...
+>>>>      renesas,sysc-signal = <&sysc 0xd70 0x1>;
+>>>>      // ...
+>>>> };
+>>>>
+>>>> Along with it, add the syscon to the compatible list as it will be
+>>>> requested by the consumer drivers. The syscon was added to the rest of
+>>>> system controller variants as these are similar with RZ/G3S and can
+>>>> benefit from the implementation proposed in this series.
+>>>>
+>>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+>>>> ---
+>>>>
+>>>> Changes in v2:
+>>>> - none; this patch is new
+>>>>
+>>>>
+>>>>  .../soc/renesas/renesas,rzg2l-sysc.yaml       | 23 ++++++++++++++-----
+>>>>  1 file changed, 17 insertions(+), 6 deletions(-)
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>>> index 4386b2c3fa4d..90f827e8de3e 100644
+>>>> --- a/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>>> +++ b/Documentation/devicetree/bindings/soc/renesas/renesas,rzg2l-sysc.yaml
+>>>> @@ -19,11 +19,13 @@ description:
+>>>>
+>>>>  properties:
+>>>>    compatible:
+>>>> -    enum:
+>>>> -      - renesas,r9a07g043-sysc # RZ/G2UL and RZ/Five
+>>>> -      - renesas,r9a07g044-sysc # RZ/G2{L,LC}
+>>>> -      - renesas,r9a07g054-sysc # RZ/V2L
+>>>> -      - renesas,r9a08g045-sysc # RZ/G3S
+>>>> +    items:
+>>>> +      - enum:
+>>>> +          - renesas,r9a07g043-sysc # RZ/G2UL and RZ/Five
+>>>> +          - renesas,r9a07g044-sysc # RZ/G2{L,LC}
+>>>> +          - renesas,r9a07g054-sysc # RZ/V2L
+>>>> +          - renesas,r9a08g045-sysc # RZ/G3S
+>>>> +      - const: syscon
+>>>>
+>>>>    reg:
+>>>>      maxItems: 1
+>>>> @@ -42,9 +44,17 @@ properties:
+>>>>        - const: cm33stbyr_int
+>>>>        - const: ca55_deny
+>>>>
+>>>> +  "#renesas,sysc-signal-cells":
+>>>> +    description:
+>>>> +      The number of cells needed to configure a SYSC controlled signal. First
+>>>> +      cell specifies the SYSC offset of the configuration register, second cell
+>>>> +      specifies the bitmask in register.
+>>>> +    const: 2
+>>>
+>>> If there's only one possible value, then just fix the size in the users.
+>>> We don't need #foo-cells until things are really generic. Plus patch
+>>> 8 already ignores this based on the schema. And there's implications to
+>>> defining them. For example, the pattern is that the consumer property
+>>> name is renesas,sysc-signals, not renesas,sysc-signal.
+>>
+>> OK, I'll fix the size in users.
+> 
+> You already did for the one in this series.
+> 
+>>>
+>>> Maybe someone wants to create a 'h/w (signal) control' subsystem (and
+>>> binding) that is just 'read, assert, or deassert a h/w signal'. Perhaps
+>>
+>> Until then, is it OK for you to keep it as proposed here?
+> 
+> Yes.
+> 
+>>> even the reset subsystem could be morphed into that as I think there
+>>> would be a lot of overlap.
+>>
+>> The USB PWRRDY signal handling has been initially implemented though a
+>> reset controller driver but, after discussion with Philipp it has been
+>> concluded that it should be handled differently, since it is not a reset
+>> signal.
+> 
+> Every reset is a signal, but every signal is not a reset.
+> 
+>>> Maybe that would cut down on a lot of these
+>>> syscon phandle properties. I would find that a lot more acceptable than
+>>> the generic 'syscons' and '#syscon-cells' binding that was proposed at
+>>> some point.
+>>>
+>>>
+>>>> +
+>>>>  required:
+>>>>    - compatible
+>>>>    - reg
+>>>> +  - "#renesas,sysc-signal-cells"
+>>>
+>>> New required properties are an ABI break.
+>>
+>> I've added it as in the old DTs the system-controller node is disabled.
+> 
+> Ok, so it depends if the consumers treat this node as required or not.
 
---=20
-You may reply to this email to add a comment.
+The only current consumer is the the RZ/G3S USB PHY which is added along
+with this series.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+> Or maybe they are all disabled too.
+> 
+>> With that, do you consider it OK to keep it?
+> 
+> No, as we're dropping the property aren't we?
+
+You're right! Stupid question from me, sorry.
+
+Thank you for your review,
+Claudiu
+
+> 
+> Rob
 
