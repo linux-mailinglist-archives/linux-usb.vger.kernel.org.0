@@ -1,180 +1,119 @@
-Return-Path: <linux-usb+bounces-18392-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18393-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D11689ECB92
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 12:51:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A2509ECBA1
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 12:59:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0C861637A0
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 11:51:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8604188B587
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 11:59:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ACFC211A37;
-	Wed, 11 Dec 2024 11:51:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4A302210F9;
+	Wed, 11 Dec 2024 11:59:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="0cHN60wz"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="pl5T2ult"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF724211A0E
-	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 11:51:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6D81DA634;
+	Wed, 11 Dec 2024 11:59:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733917871; cv=none; b=OgNfSuEtZJEpgUJSIbZbJndtNm5gBqAO/JHsE1iqzteJ4YAnu/S33qzY15eS5mCwCv8SBrlNtA/lFiaVEpzd4ylc9h0+15qiE4cu1u4D5AMUzbGFUVxp95bIU6VwqNNeav5/w6WY/CtLjVAhbxi8STIppzeONi3f/Zfq5sz4BwQ=
+	t=1733918371; cv=none; b=id+i0RCyxusVjaQQAwxVG0e/NZL12SI+urwqpZiR7XSUYkbOYm0+XOe7zLaI+E/ETXHiLOpA3fZK8bmjSxddbyDmny/MXi02CvRQxUjh4lufgqEVEVOEpt+mWNZ2ridHMGKeZUXQwgnu3heC+H0IoP9Ae734DYF0Tl+V7pMXbPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733917871; c=relaxed/simple;
-	bh=JfSAZV8nHR7plBqhAcM3ssz1fJ5m7AvASguGF56Ca+8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rd9Pa8TxU3aUSHzupmkwKlS7VZ62dAb9hjfKwv2Gyw3JX/zY4mkm2luY/QR6QujpI+Xi+UnO2e2qdkTEIhONypfZ4yJUAF5FQTju7Ym6ETenB4e5tpwDAQUT+lSWaJvUXJHNcDeNVmJzFOD3rzoDe1V8c9ddpO5c6sjGhldlFFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=0cHN60wz; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from gaggiata.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id BA73B1FB2E;
-	Wed, 11 Dec 2024 12:51:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1733917866;
-	bh=hQspnATgpoCR69ojpggcdOmMaSmUW/pX/983LFLSYiA=;
-	h=Received:From:To:Subject;
-	b=0cHN60wzef/opGNij18/2TU1VDwE80xdaREvdMjRO1MevBXTj2yUWLw0DnzdEuBht
-	 fvMMPu31LBVDRBoJSOEvV21yBnD+/LMKAedVAk+Q1sVGY0Hsl1IKylVSQ/E6QuloK+
-	 KnPW6Lbn5Zb6c8MCRb2cpGd+vWDMxlTAiIYdfSQzAQfQaPGT9oi7dgggxopOi91YTU
-	 HJQd6OPPcNsQr08lNjpvTaYP/supSBVASX22fNFgNq1A4cisVj0pllMlsgw6pcWyJV
-	 6MUjD2S2CblvmeDalqbS3v9rRQBQ79YqdiUkIZERuYxLM40Cs6nrO5GR9PnBWokm5w
-	 M0E4tcMhET8og==
-Received: by gaggiata.pivistrello.it (Postfix, from userid 1000)
-	id 620807F96B; Wed, 11 Dec 2024 12:51:06 +0100 (CET)
-Date: Wed, 11 Dec 2024 12:51:06 +0100
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
-	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	andre.draszik@linaro.org, rdbabiera@google.com,
-	m.felsch@pengutronix.de, dan.carpenter@linaro.org,
-	emanuele.ghidoli@toradex.com, parth.pancholi@toradex.com,
-	francesco.dolcini@toradex.com, linux-usb@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH] usb: typec: tcpci: fix NULL pointer issue on shared irq
- case
-Message-ID: <Z1l8qiIu-169Gyxj@gaggiata.pivistrello.it>
-References: <20241211105953.1205343-1-xu.yang_2@nxp.com>
- <20241211110928.GA25492@francesco-nb>
- <20241211114006.ebrut7rvmixznc22@hippo>
+	s=arc-20240116; t=1733918371; c=relaxed/simple;
+	bh=I6wZVNs22wQMqttdoXVPOQc2PvNhdU0A7mQSIPBVFYE=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=t+jUVlpMzkPudgj64G34iNKHj+brnEmUQ/6RbHxwlqkBLjkhb3kxFuepxVy6c1zRyNwlHN4wLkgQN48jwbmOfNvMXcKB1mPgqlBb7Y2bnloUprl8ll1SLDMJSPU6/N9t/uw3C43mvlH4Z7G9w30MI5wZjub0R/mtsnb0qYOGO8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=pl5T2ult; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BB308ud016161;
+	Wed, 11 Dec 2024 11:59:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=hY1t1N2sMbvghIafaPKPju
+	O22QsxZgIAGYAQ3X7NipA=; b=pl5T2ult2bgpt0B9ExDS0ZUKDE95UIbnF2SxHL
+	eV3catX6Kr9HOlccvX9HWfk2rWxgRLnS2snkGMUAdexGE1yx+nzJzjA5DY2Sidlg
+	9QlsIXgHuvHr8fBbCDwT0zIP6FDkZc59M6572gJT7lIt73TBq8qTVmu6Fg8k2W+U
+	uwX4C4RGzCWq3Vxl7bsMB+/MVcKP3Av3Ammn50865pkWQbg3U2+wTzfb8SxQRmaP
+	HxmHkd+dCWESZqHj42ftBpw4ArsVTLCCg12fvbxGBSV1tXJS+LrlZ+4f5GcetHFL
+	OwXMSI4kqEp8oSCGAvKkVXVTxaJrRpjd7RZJtZag6VscSgxA==
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43ee3ncyru-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Dec 2024 11:59:27 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BBBxRLf012567
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 11 Dec 2024 11:59:27 GMT
+Received: from hu-prashk-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Wed, 11 Dec 2024 03:59:25 -0800
+From: Prashanth K <quic_prashk@quicinc.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        Prashanth K
+	<quic_prashk@quicinc.com>, <stable@vger.kernel.org>
+Subject: [PATCH] usb: gadget: f_uac2: Fix incorrect setting of bNumEndpoints
+Date: Wed, 11 Dec 2024 17:29:15 +0530
+Message-ID: <20241211115915.159864-1-quic_prashk@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241211114006.ebrut7rvmixznc22@hippo>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: nW7eMYvWMyMIYOr_V8V1HqY84IAUFcvJ
+X-Proofpoint-ORIG-GUID: nW7eMYvWMyMIYOr_V8V1HqY84IAUFcvJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 priorityscore=1501 mlxscore=0 impostorscore=0
+ mlxlogscore=476 lowpriorityscore=0 adultscore=0 clxscore=1015 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412110087
 
-On Wed, Dec 11, 2024 at 07:40:51PM +0800, Xu Yang wrote:
-> On Wed, Dec 11, 2024 at 12:09:28PM +0100, Francesco Dolcini wrote:
-> > Hello,
-> > 
-> > On Wed, Dec 11, 2024 at 06:59:53PM +0800, Xu Yang wrote:
-> > > The tcpci_irq() may meet below NULL pointer dereference issue:
-> > > 
-> > > [    2.641851] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
-> > > [    2.641951] status 0x1, 0x37f
-> > > [    2.650659] Mem abort info:
-> > > [    2.656490]   ESR = 0x0000000096000004
-> > > [    2.660230]   EC = 0x25: DABT (current EL), IL = 32 bits
-> > > [    2.665532]   SET = 0, FnV = 0
-> > > [    2.668579]   EA = 0, S1PTW = 0
-> > > [    2.671715]   FSC = 0x04: level 0 translation fault
-> > > [    2.676584] Data abort info:
-> > > [    2.679459]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-> > > [    2.684936]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-> > > [    2.689980]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-> > > [    2.695284] [0000000000000010] user address but active_mm is swapper
-> > > [    2.701632] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-> > > [    2.707883] Modules linked in:
-> > > [    2.710936] CPU: 1 UID: 0 PID: 87 Comm: irq/111-2-0051 Not tainted 6.12.0-rc6-06316-g7f63786ad3d1-dirty #4
-> > > [    2.720570] Hardware name: NXP i.MX93 11X11 EVK board (DT)
-> > > [    2.726040] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> > > [    2.732989] pc : tcpci_irq+0x38/0x318
-> > > [    2.736647] lr : _tcpci_irq+0x14/0x20
-> > > [    2.740295] sp : ffff80008324bd30
-> > > [    2.743597] x29: ffff80008324bd70 x28: ffff800080107894 x27: ffff800082198f70
-> > > [    2.750721] x26: ffff0000050e6680 x25: ffff000004d172ac x24: ffff0000050f0000
-> > > [    2.757845] x23: ffff000004d17200 x22: 0000000000000001 x21: ffff0000050f0000
-> > > [    2.764969] x20: ffff000004d17200 x19: 0000000000000000 x18: 0000000000000001
-> > > [    2.772093] x17: 0000000000000000 x16: ffff80008183d8a0 x15: ffff00007fbab040
-> > > [    2.779217] x14: ffff00007fb918c0 x13: 0000000000000000 x12: 000000000000017a
-> > > [    2.786341] x11: 0000000000000001 x10: 0000000000000a90 x9 : ffff80008324bd00
-> > > [    2.793465] x8 : ffff0000050f0af0 x7 : ffff00007fbaa840 x6 : 0000000000000031
-> > > [    2.800589] x5 : 000000000000017a x4 : 0000000000000002 x3 : 0000000000000002
-> > > [    2.807713] x2 : ffff80008324bd3a x1 : 0000000000000010 x0 : 0000000000000000
-> > > [    2.814838] Call trace:
-> > > [    2.817273]  tcpci_irq+0x38/0x318
-> > > [    2.820583]  _tcpci_irq+0x14/0x20
-> > > [    2.823885]  irq_thread_fn+0x2c/0xa8
-> > > [    2.827456]  irq_thread+0x16c/0x2f4
-> > > [    2.830940]  kthread+0x110/0x114
-> > > [    2.834164]  ret_from_fork+0x10/0x20
-> > > [    2.837738] Code: f9426420 f9001fe0 d2800000 52800201 (f9400a60)
-> > > 
-> > > This may happen on shared irq case. Such as two Type-C ports share one
-> > > irq. After the first port finished tcpci_register_port(), it may trigger
-> > > interrupt. However, if the interrupt comes by chance the 2nd port finishes
-> > > devm_request_threaded_irq(), the 2nd port interrupt handler may be run at
-> > > first. Then the above issue may happen.
-> > > 
-> > >   devm_request_threaded_irq()
-> > > 				<-- port1 irq comes
-> > >   disable_irq(client->irq);
-> > >   tcpci_register_port()
-> > > 
-> > > This will restore the logic to the state before commit (77e85107a771 "usb:
-> > > typec: tcpci: support edge irq").
-> > > 
-> > > Fixes: 77e85107a771 ("usb: typec: tcpci: support edge irq")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > > ---
-> > >  drivers/usb/typec/tcpm/tcpci.c | 18 ++++++++----------
-> > >  1 file changed, 8 insertions(+), 10 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> > > index 2f15734a5043..db42f4bf3632 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpci.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> > > @@ -923,22 +923,20 @@ static int tcpci_probe(struct i2c_client *client)
-> > >  
-> > >  	chip->data.set_orientation = err;
-> > >  
-> > > +	chip->tcpci = tcpci_register_port(&client->dev, &chip->data);
-> > > +	if (IS_ERR(chip->tcpci))
-> > > +		return PTR_ERR(chip->tcpci);
-> > > +
-> > >  	err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
-> > >  					_tcpci_irq,
-> > >  					IRQF_SHARED | IRQF_ONESHOT,
-> > >  					dev_name(&client->dev), chip);
-> > 
-> > I do not think this is the correct fix, what about using
-> > IRQF_NO_AUTOEN ? Would it solve the issue? You need to adjust also the
-> > disable/enable irq accordingly.
-> 
-> Not work. Probe failed directly.
-> 
-> [    2.646391] tcpci 2-0050: probe with driver tcpci failed with error -22
-> [    2.680086] tcpci 2-0051: probe with driver tcpci failed with error -22
+Currently afunc_bind sets std_ac_if_desc.bNumEndpoints to 1 if
+controls (mute/volume) are enabled. During next afunc_bind call,
+bNumEndpoints would be unchanged and incorrectly set to 1 even
+if the controls aren't enabled.
 
-Ok, clear. The reason is the shared IRQ.
+Fix this by resetting the value of bNumEndpoints to 0 on every
+afunc_bind call.
 
-I think your change will break the support for edge IRQ, because we have
-interrupt generated calling tcpci_register_port and they will just be lost if
-the interrupt is not already requested.
+Fixes: eaf6cbe09920 ("usb: gadget: f_uac2: add volume and mute support")
+Cc: stable@vger.kernel.org
+Signed-off-by: Prashanth K <quic_prashk@quicinc.com>
+---
+ drivers/usb/gadget/function/f_uac2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-I think a better solution is needed.
-
-Francesco
-
+diff --git a/drivers/usb/gadget/function/f_uac2.c b/drivers/usb/gadget/function/f_uac2.c
+index ce5b77f89190..9b324821c93b 100644
+--- a/drivers/usb/gadget/function/f_uac2.c
++++ b/drivers/usb/gadget/function/f_uac2.c
+@@ -1185,6 +1185,7 @@ afunc_bind(struct usb_configuration *cfg, struct usb_function *fn)
+ 		uac2->as_in_alt = 0;
+ 	}
+ 
++	std_ac_if_desc.bNumEndpoints = 0;
+ 	if (FUOUT_EN(uac2_opts) || FUIN_EN(uac2_opts)) {
+ 		uac2->int_ep = usb_ep_autoconfig(gadget, &fs_ep_int_desc);
+ 		if (!uac2->int_ep) {
+-- 
+2.25.1
 
 
