@@ -1,248 +1,267 @@
-Return-Path: <linux-usb+bounces-18365-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18366-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1ACF79EC1DD
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 03:00:55 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 229B19EC20B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 03:20:42 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5452B282C35
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 02:00:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 409DE188B91F
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 02:20:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A231FA841;
-	Wed, 11 Dec 2024 02:00:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44CDE1FC0F4;
+	Wed, 11 Dec 2024 02:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="kYAjQvzM"
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="P+HNYza/";
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="egdp84iV";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="r2GGRf4w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A0A31FA25D;
-	Wed, 11 Dec 2024 02:00:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733882444; cv=none; b=F+3OLszZnE9sfYn3W8kVJ8DG/VIGi+6w+P7oywILGfCwQZxe3GCNPXvTiaAEYKXRNUJEGCgMb3HVWI/jC8FHMK47adQkGfi0Aw3hoqtJE4zZQPJchDJVH8hYEEr1NjQfd+cxKjLBfrJGQF0C6aLzMYGoyjzLdzuwEOm0kYVWIO0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733882444; c=relaxed/simple;
-	bh=tQmw66eR8RXYovE9PyXHz4mGVai1Hk1iAlAaPKqFXtw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=laRK8jduT3Z3HDJGVDzG81wtM+eragb18z3jFkRvto64MFq4pecKhq0FbQHsl417cMvUFsvE9/U4oJapgOEs07pJGfSxlGetglXIMWCKifBJEb4uG9hXhd14ZH+GEdIienZJ89vK7JrCl4zVrD/lI2OlwH4Et4hpsLod2XNt1ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=kYAjQvzM; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BADFXPt019472;
-	Wed, 11 Dec 2024 02:00:16 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	m1hIFjvV5WKQJt6B6MFLaU2NvCADjnnIFHht+ldnWM8=; b=kYAjQvzMcGcR6SK2
-	jCFDPomEV8fkaluWiDqqOmkDYmjO10sDtZSpTABncL+Y7/bceBCD8TiiekJ+393c
-	isP/zX7vOHv3fLnzW/n7mSZdB5axEOXRIl6dYjqg7EZxV2yX5mvpeBcVVqOuWaZT
-	l/iZmulsVs34+gbYR+Z53Hq0woRIPgwx0fhwVgQTao1g9LndiTWAdGpa6BnknBwr
-	+AQXDA85dZ091FD/IyXBQMdlDO++qxOQYpzEiX4dDFjGHbmjc7CUFxuDQP7byVnM
-	gOStLhiKuTJfVbXJkWqu9BRCREYl8qrMHTf+a9vkgTId5RfB2H7wowP9CL1J6ks5
-	dy8m9w==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43e341d55w-1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3530478F3E;
+	Wed, 11 Dec 2024 02:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.158.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733883631; cv=fail; b=Qho9rdg6gBIN23KrNUNEYUP5L00ttakjjX5PNckcPr89rk4qI/fTk4iBAxVXlaLNua3ZQO4SmZGvpvC0DM55JHPx/C7Fjqu2ByBkR95UU+O9eDHSoGTrDntdJYz0UaIZE+AHEYUaNJDR/9QHh4TaGcq27FTKAt5s7uvr0DvVhLc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733883631; c=relaxed/simple;
+	bh=YkvVHPfwLXWc1ZBpTtJnA4GESwM60wl2Tv4u5ryGbn8=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=jf2gx9OTm/j9WyhV/rgBC+q0znnCEUkRcFSBuReaTDbY+WKSb8WE9A6svGxfRLPIahCwapw0rKNVQHJnQiwlqisz2k1NqkQMqlI6PGocoFzfhRio57k9L1tIaGvHW15N23SLH6WCojZEG0aIwL387yDcEQpsAfKPR8cMRyS4wGU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=P+HNYza/; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=egdp84iV; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=r2GGRf4w reason="signature verification failed"; arc=fail smtp.client-ip=148.163.158.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
+Received: from pps.filterd (m0098572.ppops.net [127.0.0.1])
+	by mx0b-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BALFNOi000621;
+	Tue, 10 Dec 2024 18:20:23 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
+	cc:content-id:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	pfptdkimsnps; bh=YkvVHPfwLXWc1ZBpTtJnA4GESwM60wl2Tv4u5ryGbn8=; b=
+	P+HNYza/sZ+ENICw/Z3u0uLmIRITYO4Wypu1pGwsm2uOOQbCkpYgJ13xVmdgNy2Y
+	ElABCy0H6EGiyDgZNnHVKy8vtW1Y7epWTC0KF2CFvR24uD7oqi+C0UJdTsw/3hQz
+	67h/BY9f49jVfuY/vXBDsezrY12Yu9U13xrXMItJWWACRVqx/1GV6UF6+6bjJHkY
+	0Xksgaq5jFBP2Uc2QIwaVi0exsWkRvYmgmZb9usUgYDFGgfagkSq2OqA9tXM2pn2
+	mfVwoSyxQhMmyaDAMZPGBwwgeaftM2UGawxSFdv+D8XxEMmSb2nfErvyX35CC/t1
+	TtxvIraxvf7UQW2sQd6cCA==
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+	by mx0b-00230701.pphosted.com (PPS) with ESMTPS id 43cnvkae69-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Dec 2024 02:00:15 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BB20EVZ019497
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 11 Dec 2024 02:00:14 GMT
-Received: from [10.110.54.253] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 10 Dec
- 2024 18:00:14 -0800
-Message-ID: <03c79eca-f79b-4008-9037-ea96e18f093f@quicinc.com>
-Date: Tue, 10 Dec 2024 18:00:13 -0800
+	Tue, 10 Dec 2024 18:20:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+	t=1733883621; bh=YkvVHPfwLXWc1ZBpTtJnA4GESwM60wl2Tv4u5ryGbn8=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=egdp84iVJIDqJpKkDHWFGOyObh/M/dO1W3Wd0jNEKgXn5HMxeqa/wkMaNUqUYA4pC
+	 Bxw3P5LMwychvZTqPb3aLxClrvDSCNZ9cTCHsol2n8nt13XTaDHxzof2OwQAQIaRiJ
+	 aeLkT1xwbIxYk+56o/obdnqZ2shD0EFDbBwWVYUxsj4hk5BQliN0xzBXGk0BI3GZuL
+	 SYMjB9T1oDgWT9VK5wH/1WdRNIyRTi8JFOJNnALAtpyQiapWlUXc6vzaouMqeLCSKW
+	 JZDmsSaW8wyhrj3OFdf1itsyGxZXYzWiWmSJGrKEE+trDBgjY6FK/FadhkoOYdfyZi
+	 tv2ILUVWJ+9Zg==
+Received: from mailhost.synopsys.com (sv1-mailhost1.synopsys.com [10.205.2.131])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
+	 client-signature RSA-PSS (2048 bits))
+	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 6BDDE4013B;
+	Wed, 11 Dec 2024 02:20:21 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (not verified))
+	by mailhost.synopsys.com (Postfix) with ESMTPS id 03ABFA0063;
+	Wed, 11 Dec 2024 02:20:20 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=r2GGRf4w;
+	dkim-atps=neutral
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2170.outbound.protection.outlook.com [104.47.59.170])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256
+	 client-signature RSA-PSS (2048 bits) client-digest SHA256)
+	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+	by o365relay-in.synopsys.com (Postfix) with ESMTPS id E3E6A40347;
+	Wed, 11 Dec 2024 02:20:19 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=C9T0Azgm5QlfRf41RqPyGrFCC0KXaHy0Q3DnR0KchkTlXnDOZR9wyQIFYdh+kA7Lu9QkGXZ9hJMePTkeIvSZJrm3VaRv2hGSiAjYKwavH4U4tmnQxFIxp7Be+TkROkIOrjvEheLH99bn6tFrR5DqkKGZMG0jj7K22r6Fex58hLmvW2pF4iZE+0Vt3v5yydzYDhVrYPIHxAXG6XI1YdmON561HI+1DDhj/rczS5uaqxtiSgAt8a/Ko4KbjQWMQyGuMl6xJsJZZ1pUSZrvuYvDNExFZZ+90S+/zg+2Vv7PRZ8vCUCyx06DFtgCfETMrEpMVf+RZ5+3+mqExuWiWlaPQg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YkvVHPfwLXWc1ZBpTtJnA4GESwM60wl2Tv4u5ryGbn8=;
+ b=p9wUdgfKWv6UexHUNNsZPKOhmM31gjz7iyw3l1HxwrX4rhKhQVR4m7NzTOeNF770vs2xyzCfG4CJBM0s19jBlGfw30Mtgp2QQtzsDS29ru5ziAXWhAw537fmS4oNKsrlkpS1sRyLDbAhoSJdXvnX9ZJccMR9GDlR78ZgCoiHn0oJP43YLtvy/Zu5b8xamX9t0hTahaC3rwIkfREbrS69TV13Oz0j4VvMEm5TSwvTIHCP6CIBpvPwGnTQGiDNk06BSw/WDV7IyvJPM3O7AaC1zFSBzhrRo1WRhd59T2ZGQyJVXVuoGvUZHn30/XraZk/J1UEwotqnF/M/Q4kNvtyKcw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YkvVHPfwLXWc1ZBpTtJnA4GESwM60wl2Tv4u5ryGbn8=;
+ b=r2GGRf4wfKOYt5ZSaEQvsZwIB2OO0CB1CdSChrdGQpXK6No/FQgyQv3vVuE/877RGoWsrXcNNaLJEcTOzY8jWlGv3cfq37+ckjnVGl0Ecu0KF7wP1EH8GyGK9sod1Dlvfatli5Y1KSaM4lk/1S814ZRYynUfxrbuE1TPT8AY9Vo=
+Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
+ by PH0PR12MB8798.namprd12.prod.outlook.com (2603:10b6:510:28d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.18; Wed, 11 Dec
+ 2024 02:20:16 +0000
+Received: from LV2PR12MB5990.namprd12.prod.outlook.com
+ ([fe80::3d09:f15f:d888:33a8]) by LV2PR12MB5990.namprd12.prod.outlook.com
+ ([fe80::3d09:f15f:d888:33a8%7]) with mapi id 15.20.8251.008; Wed, 11 Dec 2024
+ 02:20:16 +0000
+X-SNPS-Relay: synopsys.com
+From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To: Prashanth K <quic_prashk@quicinc.com>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] usb: dwc3-am62: Disable autosuspend during remove
+Thread-Topic: [PATCH] usb: dwc3-am62: Disable autosuspend during remove
+Thread-Index: AQHbSikzEfaQlLh+W063PgCUQcWAGrLgUgiA
+Date: Wed, 11 Dec 2024 02:20:16 +0000
+Message-ID: <20241211021959.xoexyncdyiv7vpew@synopsys.com>
+References: <20241209105728.3216872-1-quic_prashk@quicinc.com>
+In-Reply-To: <20241209105728.3216872-1-quic_prashk@quicinc.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|PH0PR12MB8798:EE_
+x-ms-office365-filtering-correlation-id: 9f22731a-d74b-44a3-6bc0-08dd198a5a05
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?cXcvak5WOThnbTBBK3JGd1FyQ3h1TWRhczZSaTRDOW9GbEJKZGlGOWNOY0VO?=
+ =?utf-8?B?bkt4SnVmQi9uUDRWZWl0SlEzK3hwaEZmbmZnU2h3UDdoUVFzNHBBRkJZUDdQ?=
+ =?utf-8?B?M1I3RVJLSllHRVZERDc3aDM3TDViTWFKNWp6b1pYd3FsaEMxcnhpdENBTnJ4?=
+ =?utf-8?B?bkZOdGdxT1g0dlVyWS9NUVBIaUM4a3NKaFZVVnpmdndrNm5GSC9kRjN2eThj?=
+ =?utf-8?B?Z255MFJUbFZnQ0VBcmJheTRQbW4ybnlHUGp0alBtQ0F5UzJhRi9pRWNaUkVX?=
+ =?utf-8?B?ZU9wV2xQTDFaRmh0M1JpTmVEVW94dGE2SWdoeG13VUwvTDdUZmszTEZldmcr?=
+ =?utf-8?B?aW5lOTB3R05uVHE1dnZCRWw0TkR6anh3OGtyMmlTd1ZybiswZUVFL2RyMm5S?=
+ =?utf-8?B?T3pJM05iOUtRTmJxbTFGRk50WmtoYWFLOWN3d0ZzVDhVbnlMaENSL21RUlE0?=
+ =?utf-8?B?THV1ZFZqeEROREtIWTZzMU1ubWVwUVJsdVVselpiVUlYYjR0aTMyVmFqbjRF?=
+ =?utf-8?B?RVJYa1g0c051SWl1T3hDVW5wS0dhdzRFbkpuSmg0VTNCdkYzazN5RWVEV3p4?=
+ =?utf-8?B?YnE2OG1NN093ZE1qOVpndzRhYTdHT2lOZjk0M3oyUm9CdGxPUEQrRXZkM0Rj?=
+ =?utf-8?B?dDgxbVU2Y2V2MHBQS2Y3SVZSdDB6dUxVM0JWZ3RBMHRzSDFIUzJ4VlpGY0FO?=
+ =?utf-8?B?UVRmbXRveFpqY013VGJkS1FzR2dRNm96RzFSZTJyQ255RXR6Yi9WTnpObits?=
+ =?utf-8?B?STM1SlRtRG5wdkZ4RTllY0ZONWN2QXJTWGFRUEhnWFQwTGVWdElnMmJtbkU3?=
+ =?utf-8?B?cEZhcGI0OTAwOFRvcmpRTnhIYTU4eVNXOTR0ZkcvU2wrU1d0Zm9SZnJ3bEtq?=
+ =?utf-8?B?bHdPczFVRy9GYTY3V09qeU9MTW01MnZ1NXdydDN3SmNIenJod2M0OXdyeHJm?=
+ =?utf-8?B?cTdRbURnNUdoNlhnK3ZNWTlKRTNSelVtWlk4cWlSVHlOdTdtRFFpZW1Gc2lG?=
+ =?utf-8?B?Y0d3b3dES0twcVhzdEZiOW1FWFFsZms4SHl5V3dWNEIzdzU2WHlpcTFFWUlL?=
+ =?utf-8?B?SGVUV21HaEVYOGJXU1BMNS92OGR3NTB1OEVrZTFQeHBCQlZ2dVEzRUZkTUFw?=
+ =?utf-8?B?RE9jL1YxMFZXZUMzUWNhVDNkU0JuZ29LVE1LL2R5L2Q2ZjdvZUhxUm1tMmFo?=
+ =?utf-8?B?RjN1amFNWlFKb3QxMFR3WGNlNENZWXZQUnlTclJZMUdXNU12Z1BEamllQ2NB?=
+ =?utf-8?B?MStEd0s4cGZBRmtkVGt5QVpXVm15TW1hdXBvRi9iZXlaVGpkRFkyVFd2N21j?=
+ =?utf-8?B?NEJWNHZ2dnVKcUo1WERXVmVhSDJCMCtiVmsxUHJFQ2lObHNvd3kvaXMrbHZB?=
+ =?utf-8?B?OUpnd0FUMk0xeWtnYXZjaVZCcWhValUzaUlOTHNIc0J3c2JnUlY3Q0M1ellH?=
+ =?utf-8?B?SHJDL2xqdldzRkl5TEtjVjJRYllHNFppTFIxTjhxcTE5UWdLR2x2RTlnZHM4?=
+ =?utf-8?B?NEdVMklCRUdjRjBXRTMyM2xXOUl3QU9OdytmMlR6ZTJjZXB3OVF6Ny9xcDc0?=
+ =?utf-8?B?WndjblpZaFRPMUowQUl5VlZodVpaejR2eGd5UU1NaXRWV2daeitTVmhScXUy?=
+ =?utf-8?B?NWFnOE5zRExiOTdXVEgvc2RLcU0vKzRSNXNCTGNUOTR6YkozMTVaSllUcmtO?=
+ =?utf-8?B?VkFjN1o2RjFzMDhiZ3lMNFpMeDdnZFZETVhWRHA1NTBZd2VmcGNqaFZVWnlR?=
+ =?utf-8?B?RVRpOGdmUGw3RmwrVTVDSk9xTXoxeTJDTjJFbXB1VUFScHB6aDdsSzFSdXM5?=
+ =?utf-8?B?N3IrNUF5enhJZEFYc1ZwQ0NHQnU1akY2OHlhdlBDQmRQMTV0SkZ3ait3QUFZ?=
+ =?utf-8?B?SVBuTUx4M1hFNEVjcVJZN0VNam9jVjQ4R2NVVjhNZm1jakE9PQ==?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?M2xTYm1sa1ZBYTc3bXUzUUJMSUJtMTgwdEx2U2NWSjI3ZjdzYnpsSWppSnlj?=
+ =?utf-8?B?UUN0cmIxcEk1UlU3U0dPd0VjZGtES1ZiSzNORGwwSVRlaDdScTA2UmRkNjFW?=
+ =?utf-8?B?emRRWmdMODVDM0pzdDRkaWY3eGtCbC9PZDBqNEdVcUhWWFRkUWIyQXNyaVI2?=
+ =?utf-8?B?dEdRdHZ4My9VZFRRMDEvaWRXTVdrTDlsc3ZZRkFKMkEwSS9UWWtNa1ZiM3Q5?=
+ =?utf-8?B?czdpTnI5cjBpZnBrWVF2d1pOMkZnNzFrUzNTYU1xWE5RSGNobzg5dnloTWtw?=
+ =?utf-8?B?VitSeDJNMjVLdVJWcUVuSWtQUytiQThFM2NVZXduNU1ndUlTd3EzNUo3aDl2?=
+ =?utf-8?B?VFBBdS9nWVNrZnJXcXlFOUdvL3lpN3NyRmN5YnpWcFFsazhBTXRyZm8vSFZr?=
+ =?utf-8?B?MmQxV21uc1dVaXVUSk9nSlZpM09lMndRbE5NL1FYV0VEaWZBdDNYR0lMVnFt?=
+ =?utf-8?B?ZFVEWnhtT2xZZnkzd3JuakFCVG9wZERDcXlNaDk4aU9OQXhZT25tNUcvL3c0?=
+ =?utf-8?B?OHNsYmI4L1NkWVVxcFN4Y3FZdU1rNGFnaWpPT1U4eUtwR1FkNVI3UXp2QkJV?=
+ =?utf-8?B?WWFpU1Fzc3hQbmFySWEvWHNVT21uVHowVE85V2RXY05wOWlLNG1vZitCSjBw?=
+ =?utf-8?B?TVJ2OGM0YnVFMGE1bnc5STNXdkw5bkhjWlRCVFVZaXRSMERKTnRTaUZpRUU4?=
+ =?utf-8?B?QW02SVdnejVFNm5OOUFIV1JzOVhoY0dDdU9teDh1N3dCeWVhcURIMUdNb09H?=
+ =?utf-8?B?N2VZSVFlWktpcmZ0SnZTN3BPYmdiVTZadWNmcUpOS3QxOHZZOXRseE56RnhY?=
+ =?utf-8?B?T1lNaUVOK2VGaXZGbzdoYU91WXdHTVlrNnYwMTBITEtpRitpU2MwNkxuUUY5?=
+ =?utf-8?B?bityemJpaGZnRFZSN3g2eXVWeUM4Uy82Q29xYjhzL2YwUWFDUForM05tUkND?=
+ =?utf-8?B?Nk0wbzJKNDVmRDZiVDNoR2NRWVdYWmFmSVB4MWlGbWY1TVY3cllPUk9ZSmxV?=
+ =?utf-8?B?KzZLNklIcFR2YnVKU1Y3WUYzYm9vbHVudEdpa0FNUVNpNnBob041VkxpTmd5?=
+ =?utf-8?B?UHRINVhGU3BaLzcreDRRd2VsVFFjVWtXTGFOK05EVXhyYzJYNzhkaUEwRHNn?=
+ =?utf-8?B?Z1Rnb2JMc1RiVm0zUHIwU2RZa2RvZXhyeXUyYWNHVjdJYzFsMDByL0I1TTEz?=
+ =?utf-8?B?YVVwcGtVQU8ybGlWL2VGaWxxNHlYVk9JR05aL1NsdHhwdGdiZ21JUVZ0dkFX?=
+ =?utf-8?B?SkpQZXh3bjIxOEdXQkF2RWNSQmtEbTgwOXBiNk5XdS95aFBtY2Y0VHpaVXhu?=
+ =?utf-8?B?SkxqQ3RrSUM0MnhqUUgzckQ2MWQyOXk5LzJVUTZrMEVPRHBWekpwY3ZOalM1?=
+ =?utf-8?B?eHk3d1FiY2lZeitmd2tFVjNyQWZ3NmFUTGw3Nm1BUFUyeFFLOHg5bjRDY3U1?=
+ =?utf-8?B?ZThrRitwRks5TFZKVHJsOU5NRVpmUlpHQWtQbzhxb0hzRUdINk1Qdlg0M1NY?=
+ =?utf-8?B?YzJwNDFQOE1NeFJLS0ZCVlprSUNRcEM3STZSTzNHaVdBYXlEQXhNWEkzY0xv?=
+ =?utf-8?B?blZjWnM0Q1liMFFXRlRBU3BtaTVnM3FPSnY4V08vUWIrK2FIR0dJSVZySGJV?=
+ =?utf-8?B?U1hZUjZ4TTkyUGNoZ3d3eFhqakIraGRuZCtoeGNBbjA3K1p4Q1JGdzl1blhr?=
+ =?utf-8?B?eVN6MnNHd3N1YTlGdnU5bXhJRjZCTnBuTGg5T0wrTURmS2dQbDlZRE9JT3Zm?=
+ =?utf-8?B?VGQ0ZzdQSEVTKytFZ1dFVU1HcXM2dTFjQ2dHckUwRy82SW9SMkhkVU9xZnlV?=
+ =?utf-8?B?ZHFrTXl4MWxybXo0VTVzWnFoMzlVV2RpZWZ6T21KNkFWUXA0dXJ6NjB5MWJp?=
+ =?utf-8?B?NmIvMmlPYzBLRDNnLytmZUROSVVKbjdnN0dlZ0lXaEo3bjlHOG5GTXpGbmlU?=
+ =?utf-8?B?dVNHWjBMTUxTdE9HbXNGRThoUjVmWkNpbGZVaVpqbnV3RUh4QmNuUU5hOUg0?=
+ =?utf-8?B?ZmJtMHFMK0J0UWRnMWtZWjFmdWNqeXJJMjBaTzA3cHl5ODB3QTVxWnNUaFN3?=
+ =?utf-8?B?aTFjOFB5ZnlpWk1IalY4SWhHemlvWHB0d015SXphYkdiMld2ZTBIcGhrZkpv?=
+ =?utf-8?B?eEEwb0FxVE1HVDRVTTZsRlJGZDl6ZnBNK3NVcWdQVjl1YzBoelUxSHVCcGRX?=
+ =?utf-8?B?OGc9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <B2830CA32E22F548BB038548441ADA2C@namprd12.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v30 00/30] Introduce QC USB SND audio offloading support
-To: Takashi Iwai <tiwai@suse.de>
-CC: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>,
-        Cezary Rojewski
-	<cezary.rojewski@intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>, <srinivas.kandagatla@linaro.org>,
-        <mathias.nyman@intel.com>, <perex@perex.cz>, <conor+dt@kernel.org>,
-        <dmitry.torokhov@gmail.com>, <corbet@lwn.net>, <broonie@kernel.org>,
-        <lgirdwood@gmail.com>, <krzk+dt@kernel.org>,
-        <Thinh.Nguyen@synopsys.com>, <tiwai@suse.com>, <robh@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>
-References: <20241106193413.1730413-1-quic_wcheng@quicinc.com>
- <edfeb642-297e-42bb-ad09-cbf74f995514@quicinc.com>
- <2024111655-approve-throwback-e7df@gregkh>
- <2f512d8d-e5f3-4bdd-8172-37114a382a69@quicinc.com>
- <875xoi3wqw.wl-tiwai@suse.de>
- <d0da6552-238a-41be-b596-58da6840efbb@quicinc.com>
- <CF49CA0A-4562-40BC-AA98-E550E39B366A@linux.dev>
- <65273bba-5ec1-44ea-865b-fb815afccc91@intel.com>
- <4C900353-B977-451C-B003-BAA51E458726@linux.dev>
- <e7b8f141-efd4-4933-b074-641638914905@intel.com>
- <4E9925AF-F297-42A5-9CB8-F8568F0A5EDF@linux.dev>
- <0a36814a-5818-493a-a9e3-b1a1e9559387@quicinc.com>
- <75e6516f-5cf5-4b0d-ade8-bfbc5632765f@quicinc.com>
- <87y10n3300.wl-tiwai@suse.de>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <87y10n3300.wl-tiwai@suse.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: BTnO5BhfzOONhA051ooUPB4oIf-4-_2p
-X-Proofpoint-ORIG-GUID: BTnO5BhfzOONhA051ooUPB4oIf-4-_2p
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	6r0wd4rbFn1HzOOrjFMHrt8VsggU5AW9jcDU0iDmU6mLG2PUZnGyhDc6jW1F6U/Pkw829pDbJ/6uOWAURhjks6tQ8p7SLY8Dsoyu0NSNjgkQ5io07m1lE+cbCNpJ8RNCbK4KaNGdFUrn23OIEFt6PrmsMVnIjyxKb0v22PBVdS/aZPy1nWVPUX1B1Rn8AuaE1D1ian7cdJButpZXjR413Fvqj6MLjZVltnyNbJMdIwDimsDStBsySXvEq4JWlkLfmv3LBP3zh6/ZA5wnlW7BWzAfsZulgarmbTZdEPO72/4aARqCpR7ZPjsnKRbzrwVvsMN4XAO0cMYF8aPxIKdK+8s4k2O9GwLRP3bRBaeJFtn/YfhMVWhrHqXC72BOn7rMNKEOWdJ6zShSKJBXkD2ZG282sSihKNxo2JXIVoQeRVt7/EDaIHtcfxeCKz+3JZvLzX5QFhlPQdFMx0udBM7viTdUp7AJ/y8QRDnhi0VJSYylpkXelSDyI3N4em70w0w0PeIwLM8a1K09bK5kMTCtSYzU7lkeLwKd2d5u0LirX8NyejomZ8eDefT/BQqkqST2wez0WiKBvK8lnbHYtVXBxA923GtKLlmp8BaNh11jc28yHJmoPG2GI7lxMR4MMIZtALdjoZGg9f85emP48E6CNg==
+X-OriginatorOrg: synopsys.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f22731a-d74b-44a3-6bc0-08dd198a5a05
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Dec 2024 02:20:16.2368
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: oKjPrQGLF920j+SVFGEq1rGt10o1dJALThXb/hkV/7w5aq8WMsqLmZSeFffP8Ln68aMVrpQeBJvYW8c6F7tzhg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8798
+X-Authority-Analysis: v=2.4 cv=fNPD3Yae c=1 sm=1 tr=0 ts=6758f6e6 cx=c_pps a=t4gDRyhI9k+KZ5gXRQysFQ==:117 a=t4gDRyhI9k+KZ5gXRQysFQ==:17 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=RZcAm9yDv7YA:10 a=nEwiWwFL_bsA:10 a=qPHU084jO2kA:10 a=VwQbUJbxAAAA:8 a=COk6AnOGAAAA:8 a=jIQo8A4GAAAA:8 a=x5PO_QLvagec1hsWN-8A:9 a=QEXdDO2ut3YA:10 a=TjNXssC_j7lpFel5tvFf:22 a=Lf5xNeLK5dgiOs8hzIjU:22
+X-Proofpoint-ORIG-GUID: 1vLV-QFLrDfFnrCFzEEhY2kiHbWGpAdL
+X-Proofpoint-GUID: 1vLV-QFLrDfFnrCFzEEhY2kiHbWGpAdL
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=999 clxscore=1015 mlxscore=0
- spamscore=0 phishscore=0 malwarescore=0 adultscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412110014
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ mlxlogscore=743 impostorscore=0 clxscore=1011 phishscore=0 spamscore=0
+ mlxscore=0 bulkscore=0 priorityscore=1501 lowpriorityscore=0
+ suspectscore=0 adultscore=0 malwarescore=0 classifier=spam authscore=0
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412110017
 
-
-On 12/10/2024 8:40 AM, Takashi Iwai wrote:
-> On Tue, 10 Dec 2024 01:59:10 +0100,
-> Wesley Cheng wrote:
->> On 12/5/2024 4:53 PM, Wesley Cheng wrote:
->>> On 12/4/2024 2:49 PM, Pierre-Louis Bossart wrote:
->>>>>>> UAOL is one of our priorities right now and some (e.g.: me) prefe=
-r to not pollute their mind with another approaches until what they have =
-in mind is crystalized. In short, I'd vote for a approach where USB devic=
-e has a ASoC representative in sound/soc/codecs/ just like it is the case=
- for HDAudio. Either that or at least a ASoC-component representative, a =
-dependency for UAOL-capable card to enumerate.
->>>>>> The main difference is that we don=E2=80=99t want the USB audio *c=
-ontrol* part to be seen in two places. The only requirement is to stream =
-data with an alternate optimized path, but all the volume control and wha=
-tnot is supposed to be done using the regular usb-audio card. It would be=
- complete chaos for userspace if the same volume can be represented diffe=
-rently.
->>>>>> The comparison with HDaudio is not quite right either. In the case=
- of HDaudio, it=E2=80=99s an all-or-nothing solution. The external device=
- is controlled by one entity, either legacy or ASoC based. That choice is=
- made at driver probe time. In the case of USB, the application needs to =
-have the choice of using either the legacy path, or the optimized path th=
-at goes through a DSP. I think the last thing you want given this context=
- is to make the USB audio device an ASoC codec.
->>>>>> I find it rather interesting that this architectural feedback come=
-s at the v30, it=E2=80=99s unfair to Wesley really...
->>>>> Hi Pierre,
->>>>>
->>>>> Obviously I'm late. After scanning the history of this one, indeed =
-it's been a while since v1 has been sent. And thus I posted no NACKs. At =
-the same time if I am to choose between: provide feedback vs provide no-f=
-eedback, I'd rather choose the former even if I'm to be ignored/overridde=
-n by a subsystem maintainer.
->>>>>
->>>>> The subsystem maintainers also hold the last word, and I have no pr=
-oblem with them merging the patches if they believe its existing shape is=
- good-enough. For example, my team could follow up this implementation ne=
-xt year with a patchset expanding/updating the functionality. I see this =
-as a viable option.
->>>> That=E2=80=99s what we had in mind before I left Intel. The interfac=
-es seen by userspace are PCM devices and kcontrols, it doesn=E2=80=99t ma=
-tter too much if there is one card, two cards, and if the implementation =
-relies on an ASoC codec, a library or something else.=C2=A0
->>>> The bulk of the work is to enable the USB offload from top to bottom=
-, by changing PipeWire/CRAS/HAL to select the new optimized path when ava=
-ilable and deal with plug/unplug events.
->>>> Improvements at the kernel level can be done later if required. It=E2=
-=80=99s hard to argue that the proposal in this series is fundamentally b=
-roken, but as usual it=E2=80=99s likely that some requirements are missin=
-g or not known yet. The same thing happened with compressed offload, none=
- one thought about gapless playback until Android made it a requirement. =
-Maybe what we=E2=80=99d need is a =E2=80=98protocol version=E2=80=99 for =
-USB offload so that changes can be tracked and handled?
->>> Thanks for chiming in, Pierre.=C2=A0 So for now, with the next revisi=
-on I have prepared, I'm currently adding:
->>>
->>> 1.=C2=A0 Some improvements to xHCI sideband to account for core seque=
-nces that need to be notified to the offload driver, ie transfer ring fre=
-e
->>>
->>> 2.=C2=A0 Moved the USB SND offload mixer driver into the QC vendor mo=
-dule for now, as instructed by Takashi:
->>>
->>> https://lore.kernel.org/linux-usb/87cyiiaxpc.wl-tiwai@suse.de/
->>>
->>> 3.=C2=A0 Added separate kcontrols for fetching mapped PCM device and =
-card indexes (versus one that returns a card and PCM device pair [array])=
-
->>>
->>> 4.=C2=A0 Removed some jack controls (enable/disable) from soc-usb
->>>
->>> 5.=C2=A0 Updated documentation for #3
->>>
->>>
->>> Those are the major changes that will come in the next revision.=C2=A0=
- I'm just trying to figure out who/where the "protocol version" should be=
- checked if we decided to add it.=C2=A0 (or if we need to check for it an=
-ywhere...)=C2=A0 From the userspace perspective, it should be agnostic to=
- how we've implemented offloading from the kernel, and I don't see any ma=
-jor shifts in how userspace implements things even if we make improvement=
-s from kernel.
->>
->> Hi Takashi,
->>
->> Could you possibly help share some direction on what you think of the =
-current design, and if you think its detrimental that we make modificatio=
-ns mentioned by Cezary?=C2=A0 I have the next revision ready for review, =
-but I wanted to get a better sense on the likeliness of this landing upst=
-ream w/o the major modifications.
-> Honestly speaking, I have no big preference about that design
-> question.  The most important thing is rather what's visible change to
-> users.  An advantage of the current design (sort of add-on to the
-> existing USB-audio driver) is that it's merely a few card controls
-> that are added and visible, and the rest is just as of now.  The
-> remaining design issue (two cards or single card) is rather
-> kernel-internal, and has nothing to do with users.  So I'm fine with
-> the current design.
->
-> OTOH, if we follow the pattern of HD-audio, at least there will be
-> more preliminary changes in USB-audio driver side like we've done for
-> HD-audio.  That is, make most of USB-audio code to be usable as (a
-> kind of) library code.  It's more work, but certainly doable.  And if
-> that can be achieved and there other similar use cases of this stuff
-> not only from Qualcomm, it might make sense to go in that way, too.
-> That said, it's rather a question about what's extended in future.
-> If Intel will need / want to move on that direction, too, that's a
-> good reason to reconsider the basic design.
->
-
-So to clarify, what Cezary and I are proposing are actually two different=
- concepts to achieve some sort of offloading for audio data.=C2=A0 In my =
-use case, we're trying to leverage as much of the USB SND implementation =
-as possible, and only offloading the handling of audio transfers.=C2=A0 E=
-verything else is still handled by USB SND, hence the reason for it being=
- an add-on since most of it stays the same.=C2=A0 Unfortunately, I don't =
-have any details about the full HW offload design, as public material on =
-it is fairly minimal.=C2=A0 So it would be difficult for me to rework my =
-series to something I don't have a line of sight into.=C2=A0 Personally (=
-and as you can probably tell :)), I would prefer if we could do the refac=
-toring in stages (if actually required), since I've been pushing this met=
-hod for awhile now, and I'm not sure if I can take up that effort to do t=
-hat on my next submission.=C2=A0 At least from the QC perspective if we d=
-id move to the HDaudio-type implementation, I think I'd need to also
-change up the ASoC design we have currently implemented as well, so it wo=
-uldn't be a trivial change.
-
-
-Thanks
-
-Wesley Cheng
-
+T24gTW9uLCBEZWMgMDksIDIwMjQsIFByYXNoYW50aCBLIHdyb3RlOg0KPiBSdW50aW1lIFBNIGRv
+Y3VtZW50YXRpb24gKFNlY3Rpb24gNSkgbWVudGlvbnMsIGR1cmluZyByZW1vdmUoKQ0KPiBjYWxs
+YmFja3MsIGRyaXZlcnMgc2hvdWxkIHVuZG8gdGhlIHJ1bnRpbWUgUE0gY2hhbmdlcyBkb25lIGlu
+DQo+IHByb2JlKCkuIFVzdWFsbHkgdGhpcyBtZWFucyBjYWxsaW5nIHBtX3J1bnRpbWVfZGlzYWJs
+ZSgpLA0KPiBwbV9ydW50aW1lX2RvbnRfdXNlX2F1dG9zdXNwZW5kKCkgZXRjLiBIZW5jZSBhZGQg
+bWlzc2luZw0KPiBmdW5jdGlvbiB0byBkaXNhYmxlIGF1dG9zdXNwZW5kIG9uIGR3YzMtYW02MiBk
+cml2ZXIgdW5iaW5kLg0KPiANCj4gRml4ZXM6IGU4Nzg0YzBhZWMwMyAoImRyaXZlcnM6IHVzYjog
+ZHdjMzogQWRkIEFNNjIgVVNCIHdyYXBwZXIgZHJpdmVyIikNCj4gQ2M6IHN0YWJsZUB2Z2VyLmtl
+cm5lbC5vcmcNCj4gU2lnbmVkLW9mZi1ieTogUHJhc2hhbnRoIEsgPHF1aWNfcHJhc2hrQHF1aWNp
+bmMuY29tPg0KPiAtLS0NCj4gIGRyaXZlcnMvdXNiL2R3YzMvZHdjMy1hbTYyLmMgfCAxICsNCj4g
+IDEgZmlsZSBjaGFuZ2VkLCAxIGluc2VydGlvbigrKQ0KPiANCj4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvdXNiL2R3YzMvZHdjMy1hbTYyLmMgYi9kcml2ZXJzL3VzYi9kd2MzL2R3YzMtYW02Mi5jDQo+
+IGluZGV4IDVlM2QxNzQxNzAxZi4uN2Q0M2RhNWYyODk3IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJz
+L3VzYi9kd2MzL2R3YzMtYW02Mi5jDQo+ICsrKyBiL2RyaXZlcnMvdXNiL2R3YzMvZHdjMy1hbTYy
+LmMNCj4gQEAgLTMwOSw2ICszMDksNyBAQCBzdGF0aWMgdm9pZCBkd2MzX3RpX3JlbW92ZShzdHJ1
+Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgDQo+ICAJcG1fcnVudGltZV9wdXRfc3luYyhk
+ZXYpOw0KPiAgCXBtX3J1bnRpbWVfZGlzYWJsZShkZXYpOw0KPiArCXBtX3J1bnRpbWVfZG9udF91
+c2VfYXV0b3N1c3BlbmQoZGV2KTsNCj4gIAlwbV9ydW50aW1lX3NldF9zdXNwZW5kZWQoZGV2KTsN
+Cj4gIH0NCj4gIA0KPiAtLSANCj4gMi4yNS4xDQo+IA0KDQpBY2tlZC1ieTogVGhpbmggTmd1eWVu
+IDxUaGluaC5OZ3V5ZW5Ac3lub3BzeXMuY29tPg0KDQpUaGFua3MsDQpUaGluaA==
 
