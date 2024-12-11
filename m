@@ -1,94 +1,108 @@
-Return-Path: <linux-usb+bounces-18401-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18402-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F62A9ED097
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 16:59:14 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8642F9ED23C
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 17:39:50 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7337C28F516
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 15:59:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EA371887A0B
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 16:39:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E8C71D6DBE;
-	Wed, 11 Dec 2024 15:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A2341DDC30;
+	Wed, 11 Dec 2024 16:39:41 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB1D246340
-	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 15:59:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+Received: from smtp.ps-zuehlke.com (smtp.ps-zuehlke.com [193.135.254.84])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 285A724635B;
+	Wed, 11 Dec 2024 16:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.135.254.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733932745; cv=none; b=Ckz6dc4xejksOTHi7BXHRQj9E3Opt1xfZXR8PeLHO4iJjmvzB6p8V+9tD/qDTYxLRyx/2jbbu4cWD+MeTUq0XPHjtzIwwUlj1+AHjBLF1gaOd4DTZjrmbsS6KC1L+bxAAZO6WwIiw6FE5HG/eBdZOf/7Ia4xtk6GGxIpVkIZLMw=
+	t=1733935180; cv=none; b=umXfpRxULRdxEGP5WMNGgfuyUOr8gD4I9CuyZrbnpoVcdzzxfHqvLGK41aiVbDzElfvGs0936Hw6EE8Az+eBCvRgWiRD7TTAg/WicJQHXzYa5LLmlAh/g5UwTNzJpujoFM3INXBGM9E4dsemVnVOw4NLGD8DV3ghow8+893UQp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733932745; c=relaxed/simple;
-	bh=0/Vw5d5yOtudfwTIu9urOUrFiXLWivKI9DLs+LdBcPg=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=diJAZ/OJK3sSxJ3FJvhnN5aS5fvFDfYKCI2GpsVEmLH4SgK2C+BQxVT0kyEyjXt7YTdMgIZKnYLmLuxkO6eotwxBezOt4AIpfkJSZuaMT/9Xm2j9C0K8EEVcZCUxAVb42svdZXeOwEKWPlL0Y3Rcb8VPld+KLc0kPtYjzB9nhxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3a7de3ab182so143876845ab.1
-        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 07:59:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733932743; x=1734537543;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zj6T53eA5aQ2odejJoDohrPW2sAzNQlf1f+jwWd2Ack=;
-        b=SHAq7YuEjNk+JcpsdCnPFOtbVM1656p1DpgK1qADwBTE69AvYHtlANObOXlNb6lgkb
-         gmyLzqLStSBszF8X2oc9Q/6qcIc4Bp/ES2pNamTExcKdHUcJxH6KFQi6ACdciFo8GKC/
-         U3uAMrS+hoy3KjYPEaSliQwYyu9SnIr0M8/OXnZB3qZdNSUQCynvkONMD2BAQonUgH+h
-         wF3awl/aAjppYy4MTpBNmQAZSrnu7gzejvxvkJVCb9e6ZAb92A7Sv8Qy6ZvgWtXtRket
-         UwWOzOd7JJh58hb1XoMGaN+NNegmVAJQesM1sTVkxKH/RtPC/Y0LTHanx5Qy0c25Q0J4
-         tcEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUIJjgwPmv9o95aB/EEKx54Kv4cigOoi6qHCD/wT5Baq6E6up0aiGnI/o+S1VByQMR5vzPRDv45gVE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxo4UG4bffOtuW0q0C9dVLaMddTKP4roM6zfPmU46aGYr6Qg2gE
-	6Ekn1oyLIZoeGz5WTSrh11R8fLe05L/pBl7qrFO0uE5Hu/vOvOMlzQ9nj4461To0B/rbzIK4JJp
-	sVlkAZ9FW8H4ln6u/VL/oJOONkfW+72TtF1xoiINjJvrcWOcGRoe5Y4g=
-X-Google-Smtp-Source: AGHT+IEEdlHtCcs6pgaXG9IhBvQUaCMmLQBHZ2UcOp4P4DbnRkRT5JDDXDstbwp2NkhgqGweFj2OIyOScjAfsUjoi5I3aY+/Z59X
+	s=arc-20240116; t=1733935180; c=relaxed/simple;
+	bh=eBVMF9KKaCTuPJwYSYTzpRoFRPJG6hmrgAglBk+tkI8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ji9oGY/jHcx92KxZIvu5pvEY+etbUaSG057WwoLT11+QurF2DCjYKzWiDDs+RVUfToc+tC9cSS5XFerxrsFV4qqFxD7Y9Jf/vd/joEy77ODUc9My7zL4EXzpeUcNGVXuUzdWd7ZumgKnWFWEvGl1KCpHMfmxJR2B/YWJEbECLxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zuehlke.com; spf=pass smtp.mailfrom=zuehlke.com; arc=none smtp.client-ip=193.135.254.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zuehlke.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zuehlke.com
+Received: from ZUEN49445. (unknown [10.195.248.60])
+	by smtp.ps-zuehlke.com (Postfix) with ESMTP id B46062B5;
+	Wed, 11 Dec 2024 17:32:57 +0100 (CET)
+From: Oliver Facklam <oliver.facklam@zuehlke.com>
+Subject: [PATCH v3 0/3] usb: typec: hd3ss3220: enhance driver with port
+ type, power opmode, and role preference settings
+Date: Wed, 11 Dec 2024 17:32:44 +0100
+Message-Id: <20241211-usb-typec-controller-enhancements-v3-0-e4bc1b6e1441@zuehlke.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1c46:b0:3a7:4e3e:d03a with SMTP id
- e9e14a558f8ab-3aa0ab3889fmr28024725ab.22.1733932743110; Wed, 11 Dec 2024
- 07:59:03 -0800 (PST)
-Date: Wed, 11 Dec 2024 07:59:03 -0800
-In-Reply-To: <67230d7e.050a0220.529b6.0005.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6759b6c7.050a0220.17f54a.003f.GAE@google.com>
-Subject: Re: [syzbot] [mm?] kernel BUG in __page_table_check_zero (2)
-From: syzbot <syzbot+ccc0e1cfdb72b664f0d8@syzkaller.appspotmail.com>
-To: akpm@linux-foundation.org, broonie@kernel.org, hdanton@sina.com, 
-	liam.howlett@oracle.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-usb@vger.kernel.org, lorenzo.stoakes@oracle.com, 
-	pasha.tatashin@soleen.com, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com, vbabka@suse.cz
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAKy+WWcC/43O0Q6CIBQG4FdxXEcDNMSueo/WBeExWQoOkGXOd
+ w/d2urOy//f2fefGXlwGjw6ZzNyELXX1qSQHzKkWmkegHWdMmKEFZSSAo/+jsM0gMLKmuBs14H
+ DYNKtgh5M8JiLkrKiKljVEJScwUGjX9vG9ZZyq32wbtomI13br17u0CPFBOdCcEWlUlCzy3uEt
+ nvCUdkerX5kPybd83Fkq8lZXnJx4hLkv7ksywcH7Ih4KAEAAA==
+X-Change-ID: 20241104-usb-typec-controller-enhancements-6871249429f0
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
+ Biju Das <biju.das@bp.renesas.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Benedict von Heyl <benedict.vonheyl@zuehlke.com>, 
+ Mathis Foerst <mathis.foerst@zuehlke.com>, 
+ Michael Glettig <michael.glettig@zuehlke.com>, 
+ Oliver Facklam <oliver.facklam@zuehlke.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1733934778; l=1736;
+ i=oliver.facklam@zuehlke.com; s=20241107; h=from:subject:message-id;
+ bh=eBVMF9KKaCTuPJwYSYTzpRoFRPJG6hmrgAglBk+tkI8=;
+ b=6K0HC1cOhKnLaJOrGQHAktrsQzYlzVnZQN3qj9M1HOwBRY+V4399aHr3+sblBtbNsDz6qSmz1
+ wqAYCzAFnSJDVl/2JrP2xHEOoSORjW+m301CtQej3dxNDI1NB0pMiLT
+X-Developer-Key: i=oliver.facklam@zuehlke.com; a=ed25519;
+ pk=bMlB+nko+ewJHQJLwq2t26VDbmRmNDPr/1woleqp7Lw=
 
-syzbot suspects this issue was fixed by commit:
+The TI HD3SS3220 Type-C controller supports configuring the port type,
+the advertised power operation mode, and its role preference
+through its I2C register map.
 
-commit 5de195060b2e251a835f622759550e6202167641
-Author: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Date:   Tue Oct 29 18:11:48 2024 +0000
+This patch series adds support for configuring these registers
+based on existing fwnode properties and typec_operations.
 
-    mm: resolve faulty mmap_region() error path behaviour
+Signed-off-by: Oliver Facklam <oliver.facklam@zuehlke.com>
+---
+Changes in v3:
+- Drop PATCH 2/4 from v2 (using typec_get_fw_cap() for capability
+  parsing)
+- Implement parsing manually to have better control over
+  each property being present / absent.
+- If the "power-role"/"try-power-role" property is absent, we don't
+  set the corresponding register during probe anymore, but let the
+  chip use its default.
+- Link to v2: https://lore.kernel.org/r/20241114-usb-typec-controller-enhancements-v2-0-362376856aea@zuehlke.com
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1507b8f8580000
-start commit:   850925a8133c Merge tag '9p-for-6.12-rc5' of https://github..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=309bb816d40abc28
-dashboard link: https://syzkaller.appspot.com/bug?extid=ccc0e1cfdb72b664f0d8
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=158ab65f980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=120e6a87980000
+Changes in v2:
+- Better support optional fwnode properties being absent by setting
+  defaults in struct typec_capability and checking return code of
+  typec_get_fw_cap()
+- Link to v1: https://lore.kernel.org/r/20241107-usb-typec-controller-enhancements-v1-0-3886c1acced2@zuehlke.com
 
-If the result looks correct, please mark the issue as fixed by replying with:
+---
+Oliver Facklam (3):
+      usb: typec: hd3ss3220: configure advertised power opmode based on fwnode property
+      usb: typec: hd3ss3220: support configuring port type
+      usb: typec: hd3ss3220: support configuring role preference based on fwnode property and typec_operation
 
-#syz fix: mm: resolve faulty mmap_region() error path behaviour
+ drivers/usb/typec/hd3ss3220.c | 207 +++++++++++++++++++++++++++++++++++++-----
+ 1 file changed, 184 insertions(+), 23 deletions(-)
+---
+base-commit: 237d4e0f41130a5ff0e1c7dc1cb41ee2fe21cd2a
+change-id: 20241104-usb-typec-controller-enhancements-6871249429f0
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Best regards,
+-- 
+Oliver Facklam <oliver.facklam@zuehlke.com>
+
 
