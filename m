@@ -1,156 +1,144 @@
-Return-Path: <linux-usb+bounces-18412-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18413-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B49E89ED929
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 22:58:41 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3025B1623DC
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 21:58:37 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019E51DDC29;
-	Wed, 11 Dec 2024 21:58:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eB1LaUrL"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 485D79EDA2F
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 23:40:30 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740751EC4D6;
-	Wed, 11 Dec 2024 21:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08AC0282BBF
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 22:40:29 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CA1C1F4E25;
+	Wed, 11 Dec 2024 22:33:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nplhLgUr"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 542BE1F3D42;
+	Wed, 11 Dec 2024 22:33:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733954313; cv=none; b=AIewNXfyXO+7NM34K1mEEwfPqJBDESdvXnuy5TM0R+2rPLnVWUwsY7Ug4o0oTu6rcinyLi5rG7JL9z/8EKioglZwHXaDMlO5irB2HTLrNdSXo3aNP5E/OJoc4tpYvFdKiUBGceN9lUBakeIfCVikUn/0DgvAJ9676ZujfAqZ/Jc=
+	t=1733956409; cv=none; b=VJUZP7ub9qVGNT6EOHUHWYHtModXB+6bzx51qWj5+zVlfed4ZUjwVNZXjUqVVIUIfxaBjHrVOYXfOvKMdSHSXJQ8HKQ/w54iy2pHXEaUZSOSWaZCwR0c3yT+zyM/pA+V4NewsjfsbOJKxGyjeMrtjD0zBhvo5XGn8CnHSsG5Wto=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733954313; c=relaxed/simple;
-	bh=ecYaIqbhPkBRnuxvN6uDBKdB3dID8uXl1k/yBNk9WKk=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=DbNtHG22rsp0kE9w4EiJil+w72ZvD64CUy8leIRBwxdTzAXCwvIkMm1aWWZocitXcUmx4xQdHm/Y+j4vK+WkI/skdDP2byAkVKg8+gXW0CDaDEErKONKZcuQ75QN006RUmVxbCpYB/UArdZdmq5r8zSkn79AIqo6dBDHAlZg02Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eB1LaUrL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B62FC4CED3;
-	Wed, 11 Dec 2024 21:58:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733954313;
-	bh=ecYaIqbhPkBRnuxvN6uDBKdB3dID8uXl1k/yBNk9WKk=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=eB1LaUrLAjVkJMp0r+/TknFJUX3D9KF3mx5R0C0sSljyiM1ONcDQHQ8PchdwcoZJi
-	 yCyBZ9sgPOJs3EgNGPiz7cxqpxDp+F0sxkspQIcpVpy51kaMPcuVwxUn/+2vFUVgd8
-	 nw3FDuIv4ygJ7J2R+YckfrRdQzkS/S//26Ty23HyLsYPv+BfOTTNikeQ5fERTxspOK
-	 wyVys8PL+E/fBuVnPvbuAch84rEyHOOWwXwUTCqSWUjgS04VvtGlEUWnsyICjGkX0+
-	 +ZG3SFF0vTKfGr0sVH3alKbzBAWVGuArGawPhIfltTPPoe0Ww69Z4WwhLTYDnyirjg
-	 Vxv4xz7HSA5eA==
-Message-ID: <2bfe74d6a29ca13a7f89f116a2f0c6be.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1733956409; c=relaxed/simple;
+	bh=hJzLzUCdutP40QODZOuWNWc476NWXbIFA8vEAw6MtLg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vl5CcwljOQYzTtiLZuFtllNkHcr8rTwcP8UJ7S/x05DPXvjMq7/2nsLRSarmLO3/z0lSonF8CaFf4E0umg+c9UlSxzRChODBovw+mYRRK2yMjkx3wWMqdc5z0n+gRcN8STPk+BZfYpZlZOeI8bAHsjK/QV2vSU9RgPrjt12G0B4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nplhLgUr; arc=none smtp.client-ip=209.85.219.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e3982e9278bso6142088276.2;
+        Wed, 11 Dec 2024 14:33:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1733956405; x=1734561205; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OesgqZoKOnUmsMZ0y45VbDn9q4aedLqh2tLJxCl9AN8=;
+        b=nplhLgUrHyoZRv00/2A0T2FYK+28H1kA9+3ajiPm/9C+fv2o2ym0hGSa2DeJwwW0ip
+         XCEV2tiXsmAeSRj+DuAkrbzhE+zVLHnd91uoaeJv/tOtmrpdFNb90APsYhJBBB5Xqy5+
+         2sd03ac2ubiZ2dsGHtg7NuIiS+X673pq97pn6pZGz5kH0oh0NEBhbhR+ig7liIBTaEZh
+         8RjHuuuJw2yXBvzFCPioT4pBXw1VMFq0U505O7gRL0ec8p1ttFAB9vw3n10oX1h07svG
+         lLmq6Cm/hKfnWSUrxc0hDvvOdmYn3lBufQwWQnbjzl66+ulh1M1BlqDT6EcsbH+Lscye
+         n6Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733956405; x=1734561205;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OesgqZoKOnUmsMZ0y45VbDn9q4aedLqh2tLJxCl9AN8=;
+        b=vM/zRgkCRG9/RhUUIvu8ogahVgPrbE6Jovbl32CfkKmM+PJf2V5vFSAjxZqW1+oU1j
+         2OwK8Wlg/TbiRa60Ui3doZDl3I26T2qN33TCr8Gf34fbjyU98IxkbzVoZlyzV2MlmEgM
+         aDZ4bXcapBzVjasmBk/igAldpNXBK/1ELPodvZtTT3mxXPzO7GK2P1+PU9gqxaEzwSt4
+         JHJcXW5fkAbqSqQ8COF9XHzAYtPNwA+bnTWnZcbzefzkdsk7StKdoMN9Rtq3mwyUN4/g
+         cxDMRKaiXc9xN1vGqzn0dZNWD3s9Qf+G4dpxvIlI0YE/HdOiAej6L+m0cuTiQEUXqjk3
+         ZG8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUwo+vQh1GT9UVk7hE2sRGJ8PBkGQUCRCwD0ygQhFSL3fUAc1RHLTC9LTtzP5TKTqhBMK+wj9JbYqAHZcE=@vger.kernel.org, AJvYcCXWr1hkNkA5vV9nkhZbF7+xxvV7Xiz/WFf47giXMwYusNG6iyLQ7Ws//OaQiltdgU01nN4dlCE/NnV4@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxT1oM3Bt3ULg8390YE+DLIFioELQ4FTjw7vTfek0CfjzgfjNi
+	s6zREHnAT8CqnXjdvaokuYgD6HwABgP8SrnZ6ef6WKRaW1+W+RbVSKLam10SePvJFQ==
+X-Gm-Gg: ASbGncunWZyWP0s8TavLX8xOIzGhdJZbwnpUWvj/nQ8JHctHtfDbjRpyo2BHn31c4eA
+	l/092iPrKi8jnYo49KBrOjVk06tj18pKfQyH8/lq0DPm8JZigkFYUsB3UZpSSwaJiIhQ3smi+6U
+	LBFObjoI4w4IiW5ZsXLz4Bag5wdU5Wx/vW9Jg0O6RG3sTF9mTX1Fn9lXEFr0oxpdtcjniHVUdjp
+	wnhBF0aSyZlunIUHM+6c4wOKGqfUFR2veRGD7/xgZUGCXC28KKT
+X-Google-Smtp-Source: AGHT+IHIBeSIkgzah4X8/DMcrST/Vu4XTiKeBjmK1CaaT4Xbdhtb+WmG+sDiueAMysqzRffOiRZvJA==
+X-Received: by 2002:a05:6902:70b:b0:e38:a637:7824 with SMTP id 3f1490d57ef6-e3d90230563mr1113451276.16.1733956405498;
+        Wed, 11 Dec 2024 14:33:25 -0800 (PST)
+Received: from x13 ([157.23.249.72])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e3c94b7b09asm508191276.60.2024.12.11.14.33.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 11 Dec 2024 14:33:24 -0800 (PST)
+Date: Wed, 11 Dec 2024 17:33:23 -0500
+From: Luis Felipe Hernandez <luis.hernandez093@gmail.com>
+To: Alan Stern <stern@rowland.harvard.edu>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, rbm@suse.com,
+	skhan@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel-mentees@lists.linuxfoundation.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] lib/math: Add int_sqrt test suite
+Message-ID: <Z1oTM-ZW7u0_TML7@x13>
+References: <20241211203425.26136-1-luis.hernandez093@gmail.com>
+ <ad95d09e-ddbe-4d43-bf22-00c2008823d8@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20241206153813.v4.5.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
-References: <20241206233830.2401638-1-abhishekpandit@chromium.org> <20241206153813.v4.5.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
-Subject: Re: [PATCH v4 5/7] platform/chrome: cros_ec_typec: Displayport support
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: akuchynski@google.com, pmalani@chromium.org, jthies@google.com, dmitry.baryshkov@linaro.org, badhri@google.com, rdbabiera@google.com, Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev, heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, tzungbi@kernel.org
-Date: Wed, 11 Dec 2024 13:58:30 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ad95d09e-ddbe-4d43-bf22-00c2008823d8@rowland.harvard.edu>
 
-Quoting Abhishek Pandit-Subedi (2024-12-06 15:38:16)
-> diff --git a/drivers/platform/chrome/cros_typec_altmode.c b/drivers/platf=
-orm/chrome/cros_typec_altmode.c
-> new file mode 100644
-> index 000000000000..bb7c7ad2ff6e
-> --- /dev/null
-> +++ b/drivers/platform/chrome/cros_typec_altmode.c
-> @@ -0,0 +1,281 @@
-[...]
-> +
-> +static const struct typec_altmode_ops cros_typec_altmode_ops =3D {
-> +       .enter =3D cros_typec_altmode_enter,
-> +       .exit =3D cros_typec_altmode_exit,
-> +       .vdm =3D cros_typec_altmode_vdm,
-> +};
-> +
-> +#if IS_ENABLED(CONFIG_TYPEC_DP_ALTMODE)
-> +int cros_typec_displayport_status_update(struct typec_altmode *altmode,
-> +                                        struct typec_displayport_data *d=
-ata)
-> +{
-> +       struct cros_typec_dp_data *dp_data =3D
-> +               typec_altmode_get_drvdata(altmode);
+On Wed, Dec 11, 2024 at 03:42:33PM -0500, Alan Stern wrote:
+Hi Alan,
 
-How does this work? I see that the type of the drvdata is struct
-cros_typec_altmode_data per the allocation in
-cros_typec_register_displayport(), but here we're treating it as the
-type struct cros_typec_dp_data, which has a struct
-cros_typec_altmode_data as the first member. The allocation is too small
-from what I can tell. The same problem looks to be there in
-cros_typec_displayport_vdm().
+Thank you for the review and feedback. I apologize about my previous
+patch, particularly CC'ing the linux-usb list unnecessarily and the
+spelling errors.
 
-> +       struct cros_typec_altmode_data *adata =3D &dp_data->adata;
-> +
-> +       if (!dp_data->pending_status_update) {
-> +               dev_dbg(&altmode->dev,
-> +                       "Got DPStatus without a pending request");
-> +               return 0;
-> +       }
-> +
-> +       if (dp_data->configured && dp_data->data.conf !=3D data->conf)
-> +               dev_dbg(&altmode->dev,
-> +                       "DP Conf doesn't match. Requested 0x%04x, Actual =
-0x%04x",
-> +                       dp_data->data.conf, data->conf);
-> +
-> +       mutex_lock(&adata->lock);
-> +
-> +       dp_data->data =3D *data;
-> +       dp_data->pending_status_update =3D false;
-> +       adata->header |=3D VDO_CMDT(CMDT_RSP_ACK);
-> +       adata->vdo_data =3D &dp_data->data.status;
-> +       adata->vdo_size =3D 2;
-> +       schedule_work(&adata->work);
-> +
-> +       mutex_unlock(&adata->lock);
-> +
-> +       return 0;
-> +}
-> +
-> +struct typec_altmode *
-> +cros_typec_register_displayport(struct cros_typec_port *port,
-> +                               struct typec_altmode_desc *desc,
-> +                               bool ap_mode_entry)
-> +{
-> +       struct typec_altmode *alt;
-> +       struct cros_typec_altmode_data *data;
-> +
-> +       alt =3D typec_port_register_altmode(port->port, desc);
-> +       if (IS_ERR(alt))
-> +               return alt;
-> +
-> +       data =3D devm_kzalloc(&alt->dev, sizeof(*data), GFP_KERNEL);
-> +       if (!data) {
-> +               typec_unregister_altmode(alt);
-> +               return ERR_PTR(-ENOMEM);
-> +       }
-> +
-> +       INIT_WORK(&data->work, cros_typec_altmode_work);
-> +       mutex_init(&data->lock);
-> +       data->alt =3D alt;
-> +       data->port =3D port;
-> +       data->ap_mode_entry =3D ap_mode_entry;
-> +       data->sid =3D desc->svid;
-> +       data->mode =3D desc->mode;
-> +
-> +       typec_altmode_set_ops(alt, &cros_typec_altmode_ops);
-> +       typec_altmode_set_drvdata(alt, data);
+I'll address your suggestions in a subsequent revision of this patch.
 
-'data' is of type struct cros_typec_altmode_data here
+> I don't know why you CC'ed linux-usb for this patch.  But as long as you 
+> did...
+This was mas my mistake, I must've pulled it from my bash history of a
+previous patch I created with git format-patch. I will be more thorough
+and ensure I use b4 in new patches to help generate the recipients list.
 
-> +
-> +       return alt;
-> +}
+>> +     { 3, 1, "non-perfect square: sqaure root of 3" },
+> s/sqau/squa/
+>> +     { 5, 2, "non-perfect square: square  root of 5" },
+> s/square  root/square root/
+I failed to run checkpatch with --strict --codespell, it could've
+easily caught this. I'll update my post-commit hook to prevent missing
+this step in the future.
+I'll update these accoridngly:
+{ 3, 1, "non-perfect square: square root of 3" },
+...
+{ 5, 2, "non-perfect square: square root of 5" },
+
+> For the higher numbers (16, 81, etc.), you should test N-1 (and maybe 
+> also N+1) as well as N.
+
+Good point, I'm assuming this will help ensure the test suite validates
+int_sqrt() behavior around the boundaries of a perfect square.
+
+I'll add the following test cases as per your suggestion:
+{ 15, 3, "non-perfect square: square root of 15 (N-1 from 16)" },
+{ 16, 4, "perfect square: square root of 16" },
+{ 17, 4, "non-perfect square: square root of 17 (N+1 from 16)" },
+{ 80, 8, "non-perfect square: square root of 80 (N-1 from 81)" },
+{ 81, 9, "perfect square: square root of 81" },
+{ 82, 9, "non-perfect square: square root of 82 (N+1 from 81)" },
+{ 255, 15, "non-perfect square: square root of 255 (N-1 from 256)" },
+{ 256, 16, "perfect square: square root of 256" },
+{ 257, 16, "non-perfect square: square root of 257 (N+1 from 256)" },
+
+Thank you for your time Alan, and again I apologize to you and the
+linux-usb mailing list.
+
+Best,
+
+Felipe
 
