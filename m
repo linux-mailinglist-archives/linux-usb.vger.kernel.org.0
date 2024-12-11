@@ -1,125 +1,156 @@
-Return-Path: <linux-usb+bounces-18411-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18412-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 090EA9ED87C
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 22:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B49E89ED929
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 22:58:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CE73168E44
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 21:22:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3025B1623DC
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 21:58:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B41441F0E3E;
-	Wed, 11 Dec 2024 21:22:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 019E51DDC29;
+	Wed, 11 Dec 2024 21:58:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="NrQKah9/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eB1LaUrL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1421EC4D3
-	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 21:21:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740751EC4D6;
+	Wed, 11 Dec 2024 21:58:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733952120; cv=none; b=qIUHi3XoPffXRR3hqJFitg5b6/dWnHBsFlL3kRm004AlpavzGdkyQEqUAorVqGYGLdQnvRhEF0DABEq4chH0qbdmhpDWL/+GGX4F+erP/JDTemolAnoEiOmAMO3fICmwg4Evf/Rt/y7yjUWjy9FrCAv+rvwjyHFOKfsNU96ykoM=
+	t=1733954313; cv=none; b=AIewNXfyXO+7NM34K1mEEwfPqJBDESdvXnuy5TM0R+2rPLnVWUwsY7Ug4o0oTu6rcinyLi5rG7JL9z/8EKioglZwHXaDMlO5irB2HTLrNdSXo3aNP5E/OJoc4tpYvFdKiUBGceN9lUBakeIfCVikUn/0DgvAJ9676ZujfAqZ/Jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733952120; c=relaxed/simple;
-	bh=n0KCyGqSL5oapRSBhlfukCbAuOyAuMPivoVisArJl+M=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tUZudF86ekBbsCK7kLRdV6hjCoxnpX1HQJ8Tf/x76HDGtkG9nrgWTV/Hq2SDPvFEEZLBaON7rYvuvoVLrLyl8eOVqXfKepzI/+eHY4BI5LTSn/RMS33072Ll9ZS9Vk8IvZ3NfxUmTNRLVhrd0hP1TDxUxVQfLqACx6SDJFjEV1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=NrQKah9/; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6ef4b6719d1so59735147b3.2
-        for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 13:21:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733952117; x=1734556917; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n0KCyGqSL5oapRSBhlfukCbAuOyAuMPivoVisArJl+M=;
-        b=NrQKah9/GtAbLk+n5naUtjdmTSXP5ciHHBxWB3bwlMO5fbiDJNXe0y7IQAIr1kYopx
-         FcXU2UH41S+qnx13K+ygG5ITJ5YsX332Yh8kqf90EtdduGvgm8/gtQtLxojfsK5w059w
-         +yZ3SL98Ac34K4Whtv8TWDrluiH6qeiRFww/g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733952117; x=1734556917;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=n0KCyGqSL5oapRSBhlfukCbAuOyAuMPivoVisArJl+M=;
-        b=XBsXqydZl60lkbE0AjdGOfoW9nUGxyOIbQIkov1KPTeFrcm9jiUFV9Mdg/PDumIr5u
-         CaLan8MD4rFe9WRlk+2khgQWl4t4eioGcvYsWiCRgMX0b7n43BJW7kd+f5VuhOp/YQAW
-         7NaVgJluyM7k4HTedVoU3viXbfb6VM00W8rj713nNxGzoowPwaAqjjjMBmnU7PuM6w9u
-         2EydW9vhz2vs2QbGGUgnAWsJ1G3qzSFpvPLT40SPxgmwu8xTKNN3oc4Cyc1k7fd9ph5Y
-         o9f0cpTSicJaO60uPKnc4g7m9HxEjd547PeNA0QrOEefVfPDSi2nU2zjvMMNMRbqrmLh
-         sOHA==
-X-Forwarded-Encrypted: i=1; AJvYcCU0PTHhnQlCOmr2sqCv1u8QJADtnEgqnDoP5yfPmiIreJeYxloO3n0eXN4g/fmk/TdxdPLjaM6PD3I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWmbJmJ80hCyt2kCIcWKHjWEdFETvrBIXXALZb0iBDNFIPyubH
-	h5hccc6s99UxVxVaH6OFg7a89lCbL3SwTuLWT+F91WAkoKHFoFQPpQWyUargVS4kmBRm7Jj0ODM
-	ZFf6RzzIFFzD8+Ekm1g9PcJFYygFF5v+0vKyL
-X-Gm-Gg: ASbGncv09oyrG6NZEmdtsXFNqJD0KypAQn9cqxGpqjtHhHdx4xRpJQT9szTCOa+/odL
-	4XfwjYLqTcUPAiqeoXKbrYzPckhf2rMuXkf+GlymlizGOwJcnE+46iOwmRUojTZs=
-X-Google-Smtp-Source: AGHT+IEOpRCkZGb0mjL6N5K1OyWZ7lwzUq/9xZP89m+PnB//8BwUpGSf7eNg+mNPOjGTasCVPWXdK3o+/j/FVah3RXc=
-X-Received: by 2002:a05:690c:ecc:b0:6ea:7afd:d901 with SMTP id
- 00721157ae682-6f19e4fe961mr11687997b3.18.1733952117669; Wed, 11 Dec 2024
- 13:21:57 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 11 Dec 2024 13:21:57 -0800
+	s=arc-20240116; t=1733954313; c=relaxed/simple;
+	bh=ecYaIqbhPkBRnuxvN6uDBKdB3dID8uXl1k/yBNk9WKk=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=DbNtHG22rsp0kE9w4EiJil+w72ZvD64CUy8leIRBwxdTzAXCwvIkMm1aWWZocitXcUmx4xQdHm/Y+j4vK+WkI/skdDP2byAkVKg8+gXW0CDaDEErKONKZcuQ75QN006RUmVxbCpYB/UArdZdmq5r8zSkn79AIqo6dBDHAlZg02Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eB1LaUrL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B62FC4CED3;
+	Wed, 11 Dec 2024 21:58:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733954313;
+	bh=ecYaIqbhPkBRnuxvN6uDBKdB3dID8uXl1k/yBNk9WKk=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=eB1LaUrLAjVkJMp0r+/TknFJUX3D9KF3mx5R0C0sSljyiM1ONcDQHQ8PchdwcoZJi
+	 yCyBZ9sgPOJs3EgNGPiz7cxqpxDp+F0sxkspQIcpVpy51kaMPcuVwxUn/+2vFUVgd8
+	 nw3FDuIv4ygJ7J2R+YckfrRdQzkS/S//26Ty23HyLsYPv+BfOTTNikeQ5fERTxspOK
+	 wyVys8PL+E/fBuVnPvbuAch84rEyHOOWwXwUTCqSWUjgS04VvtGlEUWnsyICjGkX0+
+	 +ZG3SFF0vTKfGr0sVH3alKbzBAWVGuArGawPhIfltTPPoe0Ww69Z4WwhLTYDnyirjg
+	 Vxv4xz7HSA5eA==
+Message-ID: <2bfe74d6a29ca13a7f89f116a2f0c6be.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <CAA8EJppVgw1Qb4kGY1Y-A3-KrinKfX2zGUuwMCY_-gG96fgocA@mail.gmail.com>
-References: <yk3xidaisbd56yndaucax7otijjauqmm7lqm6q4q633kdawlqo@qaq27lwxmvwd>
- <hqmx7jtkvrwvb27n56hw7rpefhp37lhr3a5fawz7gsl76uuj5s@h7m6wpdhibkk>
- <CAE-0n50y1O2C47zOGJPmMjKXK_m6a=jhpEAP4nW+RymZbo2xyg@mail.gmail.com>
- <5kisfv22tgqwzjpxqrbx56ywr7l4r7pny3pl2r7crv4rijqbwk@azricdasttg7>
- <CAE-0n50Bxi2GfnxOmMwe-F+k5jMSiyAVPDb6K8pYm-i6hpJTOA@mail.gmail.com>
- <cartdeijkv6z23dgm7uif4lti3lahfqmuyxcmruzqbefhsp6yk@m6ocjhncs2ko>
- <CAE-0n51-QLLje0f7T4p3xK6Q-FRk4K0NUrVVm4cxkKoevuzktw@mail.gmail.com>
- <kidsjzklpxvvamct3glvoawavoi5mjuyh3on5kbtfp6gavwxxn@eack224zuqa3>
- <CAE-0n52F+cvVyXm8g8idN2eMfx4bpaEpWQRchr8=AO87N7E3fg@mail.gmail.com> <CAA8EJppVgw1Qb4kGY1Y-A3-KrinKfX2zGUuwMCY_-gG96fgocA@mail.gmail.com>
-From: Stephen Boyd <swboyd@chromium.org>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241206153813.v4.5.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
+References: <20241206233830.2401638-1-abhishekpandit@chromium.org> <20241206153813.v4.5.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
+Subject: Re: [PATCH v4 5/7] platform/chrome: cros_ec_typec: Displayport support
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: akuchynski@google.com, pmalani@chromium.org, jthies@google.com, dmitry.baryshkov@linaro.org, badhri@google.com, rdbabiera@google.com, Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev, heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, tzungbi@kernel.org
+Date: Wed, 11 Dec 2024 13:58:30 -0800
 User-Agent: alot/0.12.dev1+gaa8c22fdeedb
-Date: Wed, 11 Dec 2024 13:21:56 -0800
-Message-ID: <CAE-0n50D40VWOsgnNqKzJR=GG44SKcps5mZb-HM=aix7XYn2hg@mail.gmail.com>
-Subject: Re: [PATCH v4 15/18] dt-bindings: usb: Add ports to
- google,cros-ec-typec for DP altmode
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	patches@lists.linux.dev, devicetree@vger.kernel.org, 
-	Douglas Anderson <dianders@chromium.org>, Pin-yen Lin <treapking@chromium.org>, 
-	Andrzej Hajda <andrzej.hajda@intel.com>, Benson Leung <bleung@chromium.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Daniel Vetter <daniel@ffwll.ch>, David Airlie <airlied@gmail.com>, 
-	dri-devel@lists.freedesktop.org, Guenter Roeck <groeck@chromium.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Lee Jones <lee@kernel.org>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Prashant Malani <pmalani@chromium.org>, 
-	Robert Foss <rfoss@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Daniel Scally <djrscally@gmail.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Ivan Orlov <ivan.orlov0322@gmail.com>, 
-	linux-acpi@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, 
-	"Rafael J . Wysocki" <rafael.j.wysocki@intel.com>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	Vinod Koul <vkoul@kernel.org>, Rob Herring <robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
 
-Quoting Dmitry Baryshkov (2024-12-11 13:16:56)
-> On Wed, 11 Dec 2024 at 23:11, Stephen Boyd <swboyd@chromium.org> wrote:
-> >
-> > It is pure DP. Maybe we can have a google,cros-ec-usbc-hdmi compatible
-> > string here because this is a weird design.
->
-> Just google,cros-ec-hdmi for the corresponding connector?
->
+Quoting Abhishek Pandit-Subedi (2024-12-06 15:38:16)
+> diff --git a/drivers/platform/chrome/cros_typec_altmode.c b/drivers/platf=
+orm/chrome/cros_typec_altmode.c
+> new file mode 100644
+> index 000000000000..bb7c7ad2ff6e
+> --- /dev/null
+> +++ b/drivers/platform/chrome/cros_typec_altmode.c
+> @@ -0,0 +1,281 @@
+[...]
+> +
+> +static const struct typec_altmode_ops cros_typec_altmode_ops =3D {
+> +       .enter =3D cros_typec_altmode_enter,
+> +       .exit =3D cros_typec_altmode_exit,
+> +       .vdm =3D cros_typec_altmode_vdm,
+> +};
+> +
+> +#if IS_ENABLED(CONFIG_TYPEC_DP_ALTMODE)
+> +int cros_typec_displayport_status_update(struct typec_altmode *altmode,
+> +                                        struct typec_displayport_data *d=
+ata)
+> +{
+> +       struct cros_typec_dp_data *dp_data =3D
+> +               typec_altmode_get_drvdata(altmode);
 
-Sure.
+How does this work? I see that the type of the drvdata is struct
+cros_typec_altmode_data per the allocation in
+cros_typec_register_displayport(), but here we're treating it as the
+type struct cros_typec_dp_data, which has a struct
+cros_typec_altmode_data as the first member. The allocation is too small
+from what I can tell. The same problem looks to be there in
+cros_typec_displayport_vdm().
+
+> +       struct cros_typec_altmode_data *adata =3D &dp_data->adata;
+> +
+> +       if (!dp_data->pending_status_update) {
+> +               dev_dbg(&altmode->dev,
+> +                       "Got DPStatus without a pending request");
+> +               return 0;
+> +       }
+> +
+> +       if (dp_data->configured && dp_data->data.conf !=3D data->conf)
+> +               dev_dbg(&altmode->dev,
+> +                       "DP Conf doesn't match. Requested 0x%04x, Actual =
+0x%04x",
+> +                       dp_data->data.conf, data->conf);
+> +
+> +       mutex_lock(&adata->lock);
+> +
+> +       dp_data->data =3D *data;
+> +       dp_data->pending_status_update =3D false;
+> +       adata->header |=3D VDO_CMDT(CMDT_RSP_ACK);
+> +       adata->vdo_data =3D &dp_data->data.status;
+> +       adata->vdo_size =3D 2;
+> +       schedule_work(&adata->work);
+> +
+> +       mutex_unlock(&adata->lock);
+> +
+> +       return 0;
+> +}
+> +
+> +struct typec_altmode *
+> +cros_typec_register_displayport(struct cros_typec_port *port,
+> +                               struct typec_altmode_desc *desc,
+> +                               bool ap_mode_entry)
+> +{
+> +       struct typec_altmode *alt;
+> +       struct cros_typec_altmode_data *data;
+> +
+> +       alt =3D typec_port_register_altmode(port->port, desc);
+> +       if (IS_ERR(alt))
+> +               return alt;
+> +
+> +       data =3D devm_kzalloc(&alt->dev, sizeof(*data), GFP_KERNEL);
+> +       if (!data) {
+> +               typec_unregister_altmode(alt);
+> +               return ERR_PTR(-ENOMEM);
+> +       }
+> +
+> +       INIT_WORK(&data->work, cros_typec_altmode_work);
+> +       mutex_init(&data->lock);
+> +       data->alt =3D alt;
+> +       data->port =3D port;
+> +       data->ap_mode_entry =3D ap_mode_entry;
+> +       data->sid =3D desc->svid;
+> +       data->mode =3D desc->mode;
+> +
+> +       typec_altmode_set_ops(alt, &cros_typec_altmode_ops);
+> +       typec_altmode_set_drvdata(alt, data);
+
+'data' is of type struct cros_typec_altmode_data here
+
+> +
+> +       return alt;
+> +}
 
