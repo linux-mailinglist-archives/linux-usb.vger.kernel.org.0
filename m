@@ -1,57 +1,59 @@
-Return-Path: <linux-usb+bounces-18382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18383-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B509EC937
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 10:35:48 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A67F39EC945
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 10:38:22 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3ECA188A8EC
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 09:35:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B325282597
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 09:38:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564251A83E9;
-	Wed, 11 Dec 2024 09:35:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 220EF1A8412;
+	Wed, 11 Dec 2024 09:38:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MIiEL4F1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KlC0ubis"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38DE236F8A
-	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 09:35:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3D01A83E9;
+	Wed, 11 Dec 2024 09:38:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733909741; cv=none; b=A05srMUbwVmdq7uekEouRXKhDYiNAC9QCrRLbHz1wQvHWoPUbyh6dR8c77JSk+LOpWWq82ANVHDhtrQmT59ElQNZqtKwNXe2htcufR1RoDFYbXces5BiwU2WeoK2Hx4oOVYzjZ21lgKa7l0I66JfzjeCzaUkYKdEz7kGRm1eATE=
+	t=1733909893; cv=none; b=UX9atzLaCzv7PiDbgViOl+EBEQrr2txyCKO/R3PeNFtoUz95yZZwYcW1qEYk+y18ZydoNenQbLYEj7WxyiETheRcE3tA3zn+lxgMM/Ws661OwMO9OcLzG1xjlfELz1fI0HYbnGsqOcYUCRIgzrGF81oBaAc80LwF2YO+8YjBNfs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733909741; c=relaxed/simple;
-	bh=z0t+YqdQEoXVm+5Ln2J39txKNGJEKw2+FIuE6GFg4zw=;
+	s=arc-20240116; t=1733909893; c=relaxed/simple;
+	bh=z+d+jdtirrJWeIw2nBKJdv8caau4JNAT5u37Dp6mTws=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tq0SbaXFIKO5OMsV0tCT8r28L4PSv7cxaUiijyC4QMXoeBic3Mk+qK7ICl9qEokfvn0OKVElf9NXWlwVI/RUYOuMvKMKaoHOAxdnH9BY0aGnKnAlkv4/lUNfWmVoznkbLGAl6gf0k3JwJ3EjBFMm/2hL+qnw866z+uZgXKMhtxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MIiEL4F1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 599F8C4CEDE;
-	Wed, 11 Dec 2024 09:35:41 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kz4hUFnPL7IVAz20O+HqNd9dokVwmRFrgB3HqEvFtXicsSdguRmIzDnlyjZpNj7cL7PEpl5Cro/U8dT68woDHrTnBXan7W/ycJ+wL92+PXUsGTwSrNbHKB84EgUs5pVUL5VKE5cghJA9MzcZcG1T1y4m9xDDttavf0tLmTZV7rY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KlC0ubis; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 391F4C4CED2;
+	Wed, 11 Dec 2024 09:38:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733909741;
-	bh=z0t+YqdQEoXVm+5Ln2J39txKNGJEKw2+FIuE6GFg4zw=;
+	s=k20201202; t=1733909893;
+	bh=z+d+jdtirrJWeIw2nBKJdv8caau4JNAT5u37Dp6mTws=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MIiEL4F1CGO0wwY1hd6moK6C6W6i2qedLzERQ/LIkiMK7IIGRbw+byrWE69ZMsX62
-	 Akt+fhxprs+UbXBE09JVNnb+QIJ5qVla6e/EyJrzczCuTNzn+Q1czca28M78O7TsOw
-	 QTFVLLYkqgeUbGDMUo9yPuLVvMIGZcSM5fztiITtGzXxxxYeoSk23dB7krtymeCbBD
-	 ATygiocO3DdZzAqUISahHfokAu1eQuItV3E8EnTFCVsk/Oh7sexxn6ks2dcJRwzkMG
-	 fJ8nKgonpdEcw2brT07XMt4eWVjyTt7MUoE7cHOXkX3KniKppBb3Wfr3TRElC+umU8
-	 8wQyxuay5zD1w==
+	b=KlC0ubis2o7JfJGDdNpnfGLsZ8V9WmPMvq6/xCP8JIxzrPIUDYPLUMMBScZaWbvh4
+	 PHK4gBUEwDWKbqNuoTOlErILD8Hkxzri/9p/z9Tn6IsjcYQZBkz/SP1y+/5SdVfZCh
+	 qZHpHIe053NwyMmXHIq0f7cc5uKX2y63e5VWsil2Wfa4neIqBIuMZit6iMmUJcqbZd
+	 gK9ieA54q49bgbX27/BJPoIZLbF4gvbmW8q3f3Vin9fS0TA1rQlx2BRbbOgvzJrfJQ
+	 ZHlfJPbSXiHBP2PlIhKt2ML7dXUHwe/n/zqNFLFQ1Vcq58YGpOaF/WonDmAWOP13B3
+	 0JyrBTljvPzIg==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1tLJ8C-000000004m1-2NHv;
-	Wed, 11 Dec 2024 10:35:44 +0100
-Date: Wed, 11 Dec 2024 10:35:44 +0100
+	id 1tLJAe-000000005Am-0pX3;
+	Wed, 11 Dec 2024 10:38:16 +0100
+Date: Wed, 11 Dec 2024 10:38:16 +0100
 From: Johan Hovold <johan@kernel.org>
-To: Blake LaFleur <blake.k.lafleur@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: ch341: Add product ID for CH9102
-Message-ID: <Z1lc8O22rnS_e9w0@hovoldconsulting.com>
-References: <20241208081115.4036852-1-blake.k.lafleur@gmail.com>
+To: Daniele Palmas <dnlplm@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH 1/1] USB: serial: option: add Telit FE910C04 rmnet
+ compositions
+Message-ID: <Z1ldiJcsjRxW682Y@hovoldconsulting.com>
+References: <20241209153254.3691495-1-dnlplm@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,48 +62,21 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241208081115.4036852-1-blake.k.lafleur@gmail.com>
+In-Reply-To: <20241209153254.3691495-1-dnlplm@gmail.com>
 
-On Sun, Dec 08, 2024 at 02:11:15AM -0600, Blake LaFleur wrote:
-> Adds a PID for the CH9102 chipset that can be found in some cheap ESP
-> development boards.
+On Mon, Dec 09, 2024 at 04:32:54PM +0100, Daniele Palmas wrote:
+> Add the following Telit FE910C04 compositions:
 > 
-> Example: LILYGO T-Display (and its S3 variant)
-> https://lilygo.cc/products/lilygo%C2%AE-ttgo-t-display-1-14-inch-lcd-esp32-control-board
-> 
-> After patching the driver to include idProduct=0x55d4 the devices work
-> as expected.
+> 0x10c0: rmnet + tty (AT/NMEA) + tty (AT) + tty (diag)
 
-Thanks for the patch. This is the first time I hear of CH9102.
+> 0x10c4: rmnet + tty (AT) + tty (AT) + tty (diag)
 
-Are there any errors or messages at all in the logs when you use this
-device or does it appear to be perfectly compatible with the older
-models?
+> 0x10c8: rmnet + tty (AT) + tty (diag) + DPL (data packet logging) + adb
 
-Could you post the output of lsusb -v (with masked serial numbers if you
-prefer) so we have a record of any type identifying information should
-it ever be needed?
- 
-> Signed-off-by: Blake LaFleur <blake.k.lafleur@gmail.com>
-> ---
->  drivers/usb/serial/ch341.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-> index d10e4c4848a0..302d8d8547cb 100644
-> --- a/drivers/usb/serial/ch341.c
-> +++ b/drivers/usb/serial/ch341.c
-> @@ -81,6 +81,7 @@
->  #define CH341_QUIRK_SIMULATE_BREAK	BIT(1)
->  
->  static const struct usb_device_id id_table[] = {
-> +	{ USB_DEVICE(0x1a86, 0x55d4) },
+> Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+> Cc: stable@vger.kernel.org
 
-nit: please try to keep the entries sorted by pid.
-
->  	{ USB_DEVICE(0x1a86, 0x5523) },
->  	{ USB_DEVICE(0x1a86, 0x7522) },
->  	{ USB_DEVICE(0x1a86, 0x7523) },
+Applied, thanks.
 
 Johan
 
