@@ -1,128 +1,192 @@
-Return-Path: <linux-usb+bounces-18321-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18323-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A0669EBF4B
-	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 00:32:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF0A59EBFD9
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 01:09:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A519188B10D
-	for <lists+linux-usb@lfdr.de>; Tue, 10 Dec 2024 23:32:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 952851885148
+	for <lists+linux-usb@lfdr.de>; Wed, 11 Dec 2024 00:09:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9335212D7F;
-	Tue, 10 Dec 2024 23:32:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36E79B65C;
+	Wed, 11 Dec 2024 00:09:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="MpIf3+fX"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="TRrI9jgP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pv50p00im-ztdg10011901.me.com (pv50p00im-ztdg10011901.me.com [17.58.6.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08E811A3056
-	for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 23:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81866EC4
+	for <linux-usb@vger.kernel.org>; Wed, 11 Dec 2024 00:09:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733873544; cv=none; b=TqPwCyZw1UqBpDFaIsF34UIg7aBsJNTBO1ymNLMlzWOkcblNnkJE1eufwSCjj5DN1sSSSKoE6gIoP9H7kn2sUOQA2kZx2O/CTCVBYklv6L1oS4aCY5cq9Rv10f1kndZY0kiw0YRXJJu4WiRlgFEKa0IlyyGi9b4Ux8epTv8m2Ew=
+	t=1733875749; cv=none; b=GwN7k8ysE25mlXZeJoS0WAodO3XCTS33/YI4WVIdRf9NjR4EdGO+XGchBPJR8MKx1OMxmk0aRnrp+L28MPkP15fTUdweayiHHLkmk8DfbeA4B4dmVpyd0ZEj17wcn5shkKrhuOjwWTO9OrSb+MzlwdjU97P2lPVjYTf1e/vz4Gg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733873544; c=relaxed/simple;
-	bh=vEmcpdD6utgxUgH1JFTnbgHAMBxNLl0W/XKJsZ7+bJY=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LgiGKPBiC5OIjCSCPcQU2pe/Np7SAUOKOhYK5wGMT9zZJbY8hWFpHe/xmmwb4c/W8sVLGI0CU5j/5RUZyW7T0Vsk36JNYDC6+hiq1AFkzC74Ue/tKh7ckMgqkhFCrPU8Ajp3jpNQQWHzyFNyOyjo1aT7FKGXVVSFR+srvDZtJRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=MpIf3+fX; arc=none smtp.client-ip=209.85.219.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-6d8878ec049so55999436d6.3
-        for <linux-usb@vger.kernel.org>; Tue, 10 Dec 2024 15:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1733873541; x=1734478341; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lNSsVv7KU155VhgXVtB8Aqx0lbO0HbiZIJczhBckudg=;
-        b=MpIf3+fXDgNsO2C5G8T2cIkPAogmtlPzATSVuHKxcM4mJqQb6xU7MlgzZdSVQY0YHI
-         mQUe73ZeZyAvBRX+2yipHA6xWhx8/FlfbDGd4PXBDqMPveijcwGnWyLIGtm1d3+Hdglb
-         Ts6ONYnKSsq+6AZ14JnoowBRsghu/9ADEmByU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733873541; x=1734478341;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lNSsVv7KU155VhgXVtB8Aqx0lbO0HbiZIJczhBckudg=;
-        b=OEej/ZmNulyuKxRAOQu6lFDipPfI6Qu7YIR+CaQf50vyCj6n52T9lCgBzRi7UpSjWD
-         sZsiVacxwOuZ5suOfv8dE9JTiEL6XywXwVNyUR6MeMz70Lq0DHHKkXYNto3LDaaVi9SK
-         q1/7KIjDvhCdKIUbLwM+LeSYVOmkRwzu1s5gPLfzINftyY8UpOSjOC8gRfnPHIasO4YO
-         jHyKoleDOaRgZ2FtNCaePuXhpYGzjwfGqNJWWqy2qB7hvK7pMWPAzg5qQpC+5+uQtRJ+
-         Ai7zzdBTwpbVnsFu1FB2/6L64A+DAdvIE/ZT6j0HlwZiJpDIVZA2QhPeISyMPUO5dY5w
-         G5Ag==
-X-Forwarded-Encrypted: i=1; AJvYcCVxHp0BeaT3fsDI53TqIYir2nUUw2Xgz1rzW8U8exg6hWUBHSL/ezDxPxC648y2sFgu+ujq0XM7UTQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz48VqkUCybLsPK66cOra8wzyjoEj2mjUD7nNXZqSAjt4DVSbYh
-	56EtjhC5kn+EvTuRvxA8Dl4OAMvbnWzzmKl/w42RoKRMBLSMnu33M26XevuN+xQuHtFmm3NWvIG
-	qta/QygxNWm0r5wsoT8p6d91t/RB9MPcWFDqS
-X-Gm-Gg: ASbGncvKablRdrt36KdUjOZk0j2feBLxW2M4vVJLp0WnhWI91NgFNlPg6JwZtC0KJM3
-	JsIbbetuQBJOEpb4GLy5SdylQL0Vk1o6hesuu65AqziTKwzn0azVRVKunGBTlRpg=
-X-Google-Smtp-Source: AGHT+IEGWmx7S4JBYGfWQOD65vmgEAAhQL6zFTlZ/dCNDZNEubtkbW5GNRN0pNFA0cDECucV/k/9y1lQVSBoFQBpEXM=
-X-Received: by 2002:a0c:c68f:0:b0:6d9:353b:a8e9 with SMTP id
- 6a1803df08f44-6d9353baa68mr9577246d6.15.1733873541103; Tue, 10 Dec 2024
- 15:32:21 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 10 Dec 2024 15:32:20 -0800
+	s=arc-20240116; t=1733875749; c=relaxed/simple;
+	bh=GU+BaWTDisXL7emfzpgBZTRnkPnQzCchAn1nV+GvzDA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Zo3rEfgcDeeHbq53tKP5J6l3eX2fJcQq5sA2aTrm/0UHUWCoSej/81vlrx6rEGI7nHrKVTfxluLxtLBWzOTVw4NE9YVOeRN1GEcJ64pXAlj8GXUuxpClSrttzMo0/uRVRGuzrKbO0CmdGv48GHsspkgqJXlnABIzC0bYOeZ97ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=TRrI9jgP; arc=none smtp.client-ip=17.58.6.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1733875747;
+	bh=CjAhm0T8eabtTbWzEl56h8D/MJjBFmQj5LVqz+i6m/0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:
+	 x-icloud-hme;
+	b=TRrI9jgPRZLkzXZqlbksM2a1UEkJXKYRysRTzr18jNqnNAL5LBmjgtrNTVCiQ7zM5
+	 Mr2u8dkC+/+V17h+FyPa5mlKV7wUr6+36AfbXqarAGf4pzonKnBDcjtswVv4N9TzEu
+	 zj5ECcV9nRkzuNfPL/dDBwg/EWD1j7SiDh8rWulypBf/N3+oAHcNlPloUBghQEHJ29
+	 DJ0mavrO6MBTMeMT18Qgv3sJSrvpQYFGODCOv5BBu9X06thbTc4kvlHYnvp8MXSfy0
+	 urWDJFk+fFZ3dsoxPSKspmSbHgZvo6d4uCMfCJ/6XfToj0I3LqrZahZBK2tmyKTGkV
+	 dkYj7xRMjP9uA==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10011901.me.com (Postfix) with ESMTPSA id D49D93A03BB;
+	Wed, 11 Dec 2024 00:08:55 +0000 (UTC)
+From: Zijun Hu <zijun_hu@icloud.com>
+Subject: [PATCH v4 00/11] driver core: Constify API device_find_child()
+Date: Wed, 11 Dec 2024 08:08:02 +0800
+Message-Id: <20241211-const_dfc_done-v4-0-583cc60329df@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20241206153813.v4.4.I083bf9188947be8cb7460211cfdf3233370a28f6@changeid>
-References: <20241206233830.2401638-1-abhishekpandit@chromium.org> <20241206153813.v4.4.I083bf9188947be8cb7460211cfdf3233370a28f6@changeid>
-From: Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
-Date: Tue, 10 Dec 2024 15:32:20 -0800
-Message-ID: <CAE-0n52AG8henLkzAyO112pBmNAskcC0SXKFNCyQQ3MG01xkGg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/7] platform/chrome: cros_ec_typec: Update partner
- altmode active
-To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev, 
-	heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
-	tzungbi@kernel.org
-Cc: akuchynski@google.com, pmalani@chromium.org, jthies@google.com, 
-	dmitry.baryshkov@linaro.org, badhri@google.com, rdbabiera@google.com, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAOLXWGcC/2XOzWoDIRQF4FcZXNfgHR2jWfU9Sgn+XJu7GE10O
+ rSEvHvMBAoly3PgfJwra1gJGzsMV1ZxpUYl96DeBhZOLn8hp9gzG8WoYBTAQ8ltOcYUjrFk5M5
+ h2ANK79GxPjpXTPSzgR+fPZ+oLaX+bv4Kj3ajhIEXagUuuI1mQpmsksG/X74pUA67UGb2wFb5B
+ /Qv0wsgOwAaIIEy2k/uP3B73qvY20bL8yPzrmGH5pmWwxBilAK9B2+T1DDZqHUSxngNDnHUCrW
+ yce86drsD+D+VdzsBAAA=
+X-Change-ID: 20241201-const_dfc_done-aaec71e3bbea
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ James Bottomley <James.Bottomley@HansenPartnership.com>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
+ Zijun Hu <zijun_hu@icloud.com>, linux-kernel@vger.kernel.org, 
+ nvdimm@lists.linux.dev, linux-sound@vger.kernel.org, 
+ sparclinux@vger.kernel.org, linux-block@vger.kernel.org, 
+ linux-cxl@vger.kernel.org, linux1394-devel@lists.sourceforge.net, 
+ arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-mediatek@lists.infradead.org, linux-hwmon@vger.kernel.org, 
+ linux-media@vger.kernel.org, linux-pwm@vger.kernel.org, 
+ linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org, 
+ linux-usb@vger.kernel.org, linux-serial@vger.kernel.org, 
+ netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>, 
+ Alison Schofield <alison.schofield@intel.com>, 
+ Takashi Sakamoto <o-takashi@sakamocchi.jp>
+X-Mailer: b4 0.14.2
+X-Proofpoint-ORIG-GUID: -alI-XRJ5CvcRnQBKSq5z98wt7DybGq1
+X-Proofpoint-GUID: -alI-XRJ5CvcRnQBKSq5z98wt7DybGq1
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-10_13,2024-12-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 bulkscore=0 phishscore=0
+ suspectscore=0 mlxscore=0 spamscore=0 mlxlogscore=999 clxscore=1015
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2412100174
+X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
 
-Quoting Abhishek Pandit-Subedi (2024-12-06 15:38:15)
-> diff --git a/drivers/platform/chrome/cros_ec_typec.c b/drivers/platform/chrome/cros_ec_typec.c
-> index c7781aea0b88..e3eabe5e42ac 100644
-> --- a/drivers/platform/chrome/cros_ec_typec.c
-> +++ b/drivers/platform/chrome/cros_ec_typec.c
-> @@ -676,6 +677,16 @@ static int cros_typec_configure_mux(struct cros_typec_data *typec, int port_num,
->                         port->mux_flags);
->         }
->
-> +       /* Iterate all partner alt-modes and set the active alternate mode. */
-> +       list_for_each_entry_safe(node, n, &port->partner_mode_list, list) {
+This patch series is to constify the following API:
+struct device *device_find_child(struct device *dev, void *data,
+		int (*match)(struct device *dev, void *data));
+To :
+struct device *device_find_child(struct device *dev, const void *data,
+				 device_match_t match);
+typedef int (*device_match_t)(struct device *dev, const void *data);
 
-This can just be list_for_each_entry() because the list isn't changing
-during iteration.
+Why to constify the API?
 
-> +               if (port->state.alt != NULL &&
-> +                   node->amode->svid == port->state.alt->svid) {
-> +                       typec_altmode_update_active(node->amode, true);
-> +               } else {
-> +                       typec_altmode_update_active(node->amode, false);
-> +               }
+- Protect caller's match data @*data which is for comparison and lookup
+  and the API does not actually need to modify @*data.
 
-It could also be shorter:
+- Make the API's parameters (@match)() and @data have the same type as
+  all of other device finding APIs (bus|class|driver)_find_device().
 
-	list_for_each_entry(node, &port->partner_mode_list, list) {
-		typec_altmode_update_active(node->amode,
-			port->state.alt && node->amode->svid == port->state.alt->svid);
-	}
+- All kinds of existing device matching functions can be directly taken
+  as the API's argument, they were exported by driver core.
 
-As far as I can tell, cros_typec_configure_mux() is called when the HPD
-state changes. We'll iterate through here unnecessarily in that case.
-Can that be avoided somehow?
+What to do?
 
-> +
->  mux_ack:
->         if (!typec->needs_mux_ack)
->                 return ret;
+- Patches [1/11, 3/11] prepare for constifying the API.
+
+- Patch 4/11 constifies the API and adapt for its various subsystem usages.
+
+- Remaining do cleanup for several usages with benefits brought above.
+
+---
+Changes in v4:
+- Correct title and commit messages according to review comments
+- Link to v3: https://lore.kernel.org/r/20241205-const_dfc_done-v3-0-1611f1486b5a@quicinc.com
+
+Changes in v3:
+- Solve build broken issue by squashing changes of various subsystem.
+- Reduce recipients to try to send out full patch serial.
+- Correct tiles and commit messages.
+- Link to v2: https://lore.kernel.org/all/20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com
+
+Changes in v2:
+- Series v1 have no code review comments and are posted a long time ago, so may ignore differences.
+- Link to v1: https://lore.kernel.org/r/20240811-const_dfc_done-v1-0-9d85e3f943cb@quicinc.com
+- Motivation link: https://lore.kernel.org/lkml/917359cc-a421-41dd-93f4-d28937fe2325@icloud.com
+
+---
+Zijun Hu (11):
+      libnvdimm: Replace namespace_match() with device_find_child_by_name()
+      slimbus: core: Constify slim_eaddr_equal()
+      bus: fsl-mc: Constify fsl_mc_device_match()
+      driver core: Constify API device_find_child() then adapt for various usages
+      driver core: Simplify API device_find_child_by_name() implementation
+      driver core: Remove match_any()
+      slimbus: core: Remove of_slim_match_dev()
+      gpio: sim: Remove gpio_sim_dev_match_fwnode()
+      driver core: Introduce an device matching API device_match_type()
+      cxl/pmem: Replace match_nvdimm_bridge() with API device_match_type()
+      usb: typec: class: Remove both cable_match() and partner_match()
+
+ arch/sparc/kernel/vio.c                |  6 +++---
+ drivers/base/core.c                    | 30 ++++++++++--------------------
+ drivers/block/sunvdc.c                 |  6 +++---
+ drivers/bus/fsl-mc/dprc-driver.c       |  8 ++++----
+ drivers/cxl/core/pci.c                 |  4 ++--
+ drivers/cxl/core/pmem.c                |  9 +++------
+ drivers/cxl/core/region.c              | 21 ++++++++++++---------
+ drivers/firewire/core-device.c         |  4 ++--
+ drivers/firmware/arm_scmi/bus.c        |  4 ++--
+ drivers/firmware/efi/dev-path-parser.c |  4 ++--
+ drivers/gpio/gpio-sim.c                |  7 +------
+ drivers/gpu/drm/mediatek/mtk_drm_drv.c |  2 +-
+ drivers/hwmon/hwmon.c                  |  2 +-
+ drivers/media/pci/mgb4/mgb4_core.c     |  4 ++--
+ drivers/nvdimm/bus.c                   |  2 +-
+ drivers/nvdimm/claim.c                 |  9 +--------
+ drivers/pwm/core.c                     |  2 +-
+ drivers/rpmsg/rpmsg_core.c             |  4 ++--
+ drivers/scsi/qla4xxx/ql4_os.c          |  3 ++-
+ drivers/scsi/scsi_transport_iscsi.c    | 10 +++++-----
+ drivers/slimbus/core.c                 | 17 +++++------------
+ drivers/thunderbolt/retimer.c          |  2 +-
+ drivers/thunderbolt/xdomain.c          |  2 +-
+ drivers/tty/serial/serial_core.c       |  4 ++--
+ drivers/usb/typec/class.c              | 31 ++++++++++++++-----------------
+ include/linux/device.h                 |  4 ++--
+ include/linux/device/bus.h             |  1 +
+ include/scsi/scsi_transport_iscsi.h    |  4 ++--
+ net/dsa/dsa.c                          |  2 +-
+ tools/testing/cxl/test/cxl.c           |  2 +-
+ 30 files changed, 90 insertions(+), 120 deletions(-)
+---
+base-commit: cdd30ebb1b9f36159d66f088b61aee264e649d7a
+change-id: 20241201-const_dfc_done-aaec71e3bbea
+
+Best regards,
+-- 
+Zijun Hu <quic_zijuhu@quicinc.com>
+
 
