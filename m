@@ -1,94 +1,82 @@
-Return-Path: <linux-usb+bounces-18419-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18420-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F28CA9EE4DA
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 12:15:55 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ABD59EE519
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 12:32:44 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2BF84280C20
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 11:15:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5CD7166CB3
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 11:32:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3910A20E02D;
-	Thu, 12 Dec 2024 11:15:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29173211A25;
+	Thu, 12 Dec 2024 11:32:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="snYy0gvB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bm.lauterbach.com (bm.lauterbach.com [62.154.241.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE691C5497
-	for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 11:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.154.241.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD6E290F
+	for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 11:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734002150; cv=none; b=RmR+G01mp6OsDvzbY7ujayJRpNOJb6GxHlW/VMnkXazmG7jKesCWkf+N8O5d4JxuX+AXdufmHxhf1H2Tl1rI8yT+4PaObFUwvD0ERa60S5VPnSOtDSSqnvEvOszcllwPy6gXkTa0Vk8m74Km4clVOTfOVsWGFqgaLaSOT2ytxgA=
+	t=1734003150; cv=none; b=PwNt4bb3rsmBfsqcxJtezItIHHWZRnMgKWrS446JYlY4R5ngokkMKMJyecppLMPchPgo4LYzWZcl7GOg/0iG52qwnCec0uDboFMDxSelzJnfbQwssom9Jo8KoqVBR0nA8aO1yOBbF3K7jU52YKQI+HTSBMMJHfUXzl4xfh2XgkU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734002150; c=relaxed/simple;
-	bh=msvDEelk8BK5mdnHG6ztH5vQz9qQ9wp90PjcB2UM7/4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rdq33ILMKrcPaNmlsWabQW27m2lfnCRh1ZGJYjxCwPmKizZ+/sTowqu3Fdg37/pnD7NRVnA7g6piKtZaOR2UO+XRpvcSsPpnMxvGKWoFFgyEyVmlcd5IT5ZGGnGOuMWI6n9ozTcg2DYZmKQuQtmH6xOi/kiuD4oYQpkdiE0RSBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com; spf=pass smtp.mailfrom=lauterbach.com; arc=none smtp.client-ip=62.154.241.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lauterbach.com
-Received: from ingpc2.intern.lauterbach.com (unknown [10.2.10.44])
-	(Authenticated sender: ingo.rohloff@lauterbach.com)
-	by bm.lauterbach.com (Postfix) with ESMTPSA id E9CA04270ECC;
-	Thu, 12 Dec 2024 12:10:14 +0100 (CET)
-From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	Ingo Rohloff <ingo.rohloff@lauterbach.com>
-Subject: [PATCH] usb: gadget: configfs: Ignore trailing LF for user strings to cdev
-Date: Thu, 12 Dec 2024 12:10:04 +0100
-Message-ID: <20241212111004.7901-1-ingo.rohloff@lauterbach.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1734003150; c=relaxed/simple;
+	bh=aHI53pK/rE6a5QcKEoq7G609QVOkHR0zW9UX8PHU2is=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=db9XuNjDn9Dif3pZmvQPBj1UJ8B78dPgstbGyp0N1OlFpb0p3VlMNSJnBpTyeTklhksjXnL94+4o7HTJ5VAhE49r2Y6yC1tk8maToT3YK6YX9ZdmUZSWNUmE701diPDoRohaiAPYmsq5nNIw9XMpcr6vUmdotjv5k1zjc4q7NBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=snYy0gvB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50291C4CED4;
+	Thu, 12 Dec 2024 11:32:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1734003149;
+	bh=aHI53pK/rE6a5QcKEoq7G609QVOkHR0zW9UX8PHU2is=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=snYy0gvBysbKXqha2U/pT5NTpmgaQO2Vg0GSn4EliVk/f7XXLNZ3IaHBWdnVeN70j
+	 9e3OEyETSq1QsCB52ifKeUJ4Xc0AEUBX7b57VAzrDgGIuASAoEoy+GEykEqzP9w9WW
+	 WCy2j00uIYzA94cZrQ6LLLK0pk8bYYDlCzSUCxgo=
+Date: Thu, 12 Dec 2024 12:32:25 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: configfs: Ignore trailing LF for user
+ strings to cdev
+Message-ID: <2024121213-alibi-jury-2ba4@gregkh>
+References: <20241212111004.7901-1-ingo.rohloff@lauterbach.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Bm-Milter-Handled: 166a2dfb-2e12-4590-8fa5-72e30323519f
-X-Bm-Transport-Timestamp: 1734001815004
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241212111004.7901-1-ingo.rohloff@lauterbach.com>
 
-Since commit c033563220e0f7a8
-("usb: gadget: configfs: Attach arbitrary strings to cdev")
-a user can provide extra string descriptors to a USB gadget via configfs.
+On Thu, Dec 12, 2024 at 12:10:04PM +0100, Ingo Rohloff wrote:
+> Since commit c033563220e0f7a8
+> ("usb: gadget: configfs: Attach arbitrary strings to cdev")
+> a user can provide extra string descriptors to a USB gadget via configfs.
+> 
+> For "manufacturer", "product", "serialnumber", setting the string via
+> configfs ignores a trailing LF.
+> 
+> For the arbitrary strings the LF was not ignored.
+> 
+> This patch ignores a trailing LF to make this consistent with the existing
+> behavior for "manufacturer", ...  string descriptors.
+> 
+> Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+> ---
+>  drivers/usb/gadget/configfs.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
 
-For "manufacturer", "product", "serialnumber", setting the string via
-configfs ignores a trailing LF.
+Shouldn't this get a Fixes: tag and cc: stable?
 
-For the arbitrary strings the LF was not ignored.
+thanks,
 
-This patch ignores a trailing LF to make this consistent with the existing
-behavior for "manufacturer", ...  string descriptors.
-
-Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
----
- drivers/usb/gadget/configfs.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
-index 6499a88d346c..fba2a56dae97 100644
---- a/drivers/usb/gadget/configfs.c
-+++ b/drivers/usb/gadget/configfs.c
-@@ -827,11 +827,15 @@ static ssize_t gadget_string_s_store(struct config_item *item, const char *page,
- {
- 	struct gadget_string *string = to_gadget_string(item);
- 	int size = min(sizeof(string->string), len + 1);
-+	ssize_t cpy_len;
- 
- 	if (len > USB_MAX_STRING_LEN)
- 		return -EINVAL;
- 
--	return strscpy(string->string, page, size);
-+	cpy_len = strscpy(string->string, page, size);
-+	if (cpy_len > 0 && string->string[cpy_len - 1] == '\n')
-+		string->string[cpy_len - 1] = 0;
-+	return len;
- }
- CONFIGFS_ATTR(gadget_string_, s);
- 
--- 
-2.47.1
-
+greg k-h
 
