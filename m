@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-18421-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18422-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 440979EE646
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 13:06:52 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE1BE9EE664
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 13:12:17 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 601322838D1
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 12:06:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16DF21883E0B
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 12:12:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4033212D89;
-	Thu, 12 Dec 2024 12:06:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B91D211A1E;
+	Thu, 12 Dec 2024 12:12:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hOPPW2lL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cdGhHk4+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64133212D66;
-	Thu, 12 Dec 2024 12:06:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9E120B806;
+	Thu, 12 Dec 2024 12:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734005195; cv=none; b=MbhtObSANxlqwcR0fGfNhT7qLvJvxrNZ7UnuABVGOvtpTLLoh6KdbEjC+OzYtgBdAsI2TfKoHtvJOn4LULE4z4N7cfL2SBQi8C3PrkySsBQWYWVRiZ2xIBWJ7gSWxhkJ4rRw3jhz+2n1n/1zvOH+OWS8pvhGMtVJJW87ntjrgIo=
+	t=1734005529; cv=none; b=UYRWLBpkFKF1Mkb6Bz4x+9puaVyDnuCkLiIsmoQd7Jkjtie0TTh7qw3wbWDs4E/xuCKbCt6HiOP8Be7RzY0NPyzFXaAqj8/U0Yz17/U4xokxnwQrVf89mIgvAAiekzd9z17eIpIntpoNrSqnvn8etFYVOGRczy+9X7tLxDlaRZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734005195; c=relaxed/simple;
-	bh=ZizdM55Ba4mlDI4F2QZatAUuD6hBE1ZGtByMBWaKgfY=;
+	s=arc-20240116; t=1734005529; c=relaxed/simple;
+	bh=gzhoLnlyhsisr8XXEOVHmn4Ak7Rcg0/vRo9X4jsRgx8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I+tqSg4s+SsfeQG5ggENfVhibwV0Mxa15nfRQxxWTJGJAdhVNAkoyGTfasq6UAOg/hzZ+A46Np6dwqrEvY1lSIWbuxTcPYRNmvidI2fzQx/z5vJTJE2Q21bJUAtf67iKF4HsJFv2UXQgyHyTqSHFFfwTk478kC6+0LN2Pj4UnZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hOPPW2lL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D83CC4CECE;
-	Thu, 12 Dec 2024 12:06:33 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=Idn+bso3K48hE3pjVLZkQiRp1mrhY+3kFmJpgwF6YB2gmWsbI3R4PpXnPREHpYHNwmpd+a74yJ2KkEn/bc26gje4vkHUNrR/nyuQU3t88tML8S84T5qFZ7dJA4a88WM/dPekzelKwL4/pYzW7i630KliO+iWGVrjgbsHwViCM3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cdGhHk4+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BBD6C4CECE;
+	Thu, 12 Dec 2024 12:12:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734005195;
-	bh=ZizdM55Ba4mlDI4F2QZatAUuD6hBE1ZGtByMBWaKgfY=;
+	s=k20201202; t=1734005528;
+	bh=gzhoLnlyhsisr8XXEOVHmn4Ak7Rcg0/vRo9X4jsRgx8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hOPPW2lLfbC6LfVCH41sdrAYtkuD1BXQnB/gKrJUTKKE0DOlJCJMS2iZSd9ZyNjHw
-	 bpN7fOagXrmFZ7LNXTFOlR9UzDeYmpX2lIvkZLM319JybnSb4XUZwZzxOpnm/CUaUz
-	 00gwPxKW9jnzN8mNCt6UImN+tYXEtvMdJPhEsLA1Kqxp5yQFSu4oEL/Vxvhvhh1+HS
-	 +h6biE55fdeESjX5MEGDX6a86bxswNDq21P0pBb7s//XrCYr44EuPasEcN0BaNO2iK
-	 B2AKhBemagN09zSAvSBWDegO4hT7BaKouMw5/Sv4iLiNh2Bb9DvdYAS66SG1RE7dyt
-	 iYk0Kr0OPvuzA==
-Message-ID: <6ccbf7a8-21d3-4de7-b60d-cc51de323712@kernel.org>
-Date: Thu, 12 Dec 2024 14:06:30 +0200
+	b=cdGhHk4+Z8uhoOyG4PSmBnMGT8hucNXHFHN7fB/otFY9h9Bcz1ozZO+5xXRDo0MXD
+	 C5rCP5xnP7h+ZHfvODMRXQZyx8xhWWtBYqA9TaVLjocIR23gLkwLjqPgn2xSK/qa60
+	 fmQu90Gki5BjZXvJwVmXcApOEOIaUsvAE5DFIW7ePqmX0Qd6h5H2v7TabTGKSSbUk1
+	 cKCS4LiScwYbPd1YBXhjRbQkXdGvuN2wUwDB5YYxYv7LdA02X2mXHibn3Wx73iWiWK
+	 w7XUniWUanZTetYIUm5dOuvljLhm4ISAg4ieary34SY1xx5FqqkQlwnGN+j/egBCsP
+	 R4mO4YOptruEA==
+Message-ID: <24a2c881-a322-4985-adb8-c424f08b3cd8@kernel.org>
+Date: Thu, 12 Dec 2024 14:12:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,73 +50,165 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: dwc3: dwc3-am62: Re-initialize controller if lost
- power in PM suspend
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Siddharth Vadapalli <s-vadapalli@ti.com>, "srk@ti.com" <srk@ti.com>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20241209-am62-dwc3-io-ddr-v2-1-da320392b509@kernel.org>
- <20241210225840.r22ds7g3rt4zelnq@synopsys.com>
+Subject: Re: [PATCH v6 1/5] usb: cdns3-ti: move reg writes to separate
+ function
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
+ <20241210-s2r-cdns-v6-1-28a17f9715a2@bootlin.com>
 Content-Language: en-US
 From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20241210225840.r22ds7g3rt4zelnq@synopsys.com>
+In-Reply-To: <20241210-s2r-cdns-v6-1-28a17f9715a2@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 11/12/2024 00:58, Thinh Nguyen wrote:
-> On Mon, Dec 09, 2024, Roger Quadros wrote:
->> If controller looses power during PM suspend then re-initialize
->> it. We use the DEBUG_CFG register to track if controller lost power
->> or was reset in PM suspend.
->>
->> Move all initialization code into dwc3_ti_init() so it can be re-used.
->>
->> Signed-off-by: Roger Quadros <rogerq@kernel.org>
->> ---
->> Changes in v2:
->> - fixed macro USBSS_DEBUG_CFG_OFF to 0
->> - Link to v1: https://urldefense.com/v3/__https://lore.kernel.org/r/20241122-am62-dwc3-io-ddr-v1-1-cc4956449420@kernel.org__;!!A4F2R9G_pg!fQlfE8tlmLW59YBhswZnfOSf_zypGRcqWV312B5A0NF0rLaOFPvTkWaPzCoKpz9E-2iihXpR87fFTrfubb-v$ 
->> ---
->>  drivers/usb/dwc3/dwc3-am62.c | 82 +++++++++++++++++++++++++++++---------------
->>  1 file changed, 55 insertions(+), 27 deletions(-)
->>
->> diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
->> index 5e3d1741701f..7eef945b1f89 100644
->> --- a/drivers/usb/dwc3/dwc3-am62.c
->> +++ b/drivers/usb/dwc3/dwc3-am62.c
->> @@ -108,6 +108,9 @@
->>  
->>  #define DWC3_AM62_AUTOSUSPEND_DELAY	100
->>  
->> +#define USBSS_DEBUG_CFG_OFF		0x0
->> +#define USBSS_DEBUG_CFG_DISABLED	0x7
->> +
->>  struct dwc3_am62 {
->>  	struct device *dev;
->>  	void __iomem *usbss;
->> @@ -117,6 +120,7 @@ struct dwc3_am62 {
->>  	unsigned int offset;
->>  	unsigned int vbus_divider;
->>  	u32 wakeup_stat;
->> +	void __iomem *phy;
+On 10/12/2024 19:13, Théo Lebrun wrote:
+> The device probe function mixes management code and hardware
+> initialisation code. Extract the latter into an explicitly named
+> cdns_ti_reset_and_init_hw() function to clarify intent. It also will
+> allow easier transition to using runtime PM for triggering HW init.
 > 
-> This is an odd way to name the iomem. I would associate "phy" to a
-> device more than an iomem. How about phy_regs?
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/usb/cdns3/cdns3-ti.c | 84 ++++++++++++++++++++++++--------------------
+>  1 file changed, 46 insertions(+), 38 deletions(-)
 > 
-> In any case, it's just minor nit. Regardless whether you want to rename
-> it or not:
+> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+> index 040bb91e9c017d8298a7e251fd0e192a336e8a52..d704eb39820ad08a8774be7f00aa473c3ff267c0 100644
+> --- a/drivers/usb/cdns3/cdns3-ti.c
+> +++ b/drivers/usb/cdns3/cdns3-ti.c
+> @@ -58,6 +58,7 @@ struct cdns_ti {
+>  	unsigned vbus_divider:1;
+>  	struct clk *usb2_refclk;
+>  	struct clk *lpm_clk;
+> +	int usb2_refclk_rate_code;
+>  };
+>  
+>  static const int cdns_ti_rate_table[] = {	/* in KHZ */
+> @@ -98,15 +99,52 @@ static const struct of_dev_auxdata cdns_ti_auxdata[] = {
+>  	{},
+>  };
+>  
+> +static void cdns_ti_reset_and_init_hw(struct cdns_ti *data)
+> +{
+> +	u32 reg;
+> +
+> +	/* assert RESET */
+> +	reg = cdns_ti_readl(data, USBSS_W1);
+> +	reg &= ~USBSS_W1_PWRUP_RST;
+> +	cdns_ti_writel(data, USBSS_W1, reg);
+> +
+> +	/* set static config */
+> +	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> +	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
+> +	reg |= data->usb2_refclk_rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
+> +
+> +	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
+> +
+new line not required?
 
-I agree with you that it is better to rename. I'll post a v3 soon.
+> +	if (data->vbus_divider)
+> +		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
+> +
+> +	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
+> +	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> +
+> +	/* set USB2_ONLY mode if requested */
+> +	reg = cdns_ti_readl(data, USBSS_W1);
+> +
+here too?
 
+> +	if (data->usb2_only)
+> +		reg |= USBSS_W1_USB2_ONLY;
+> +
+> +	/* set default modestrap */
+> +	reg |= USBSS_W1_MODESTRAP_SEL;
+> +	reg &= ~USBSS_W1_MODESTRAP_MASK;
+> +	reg |= USBSS_MODESTRAP_MODE_NONE << USBSS_W1_MODESTRAP_SHIFT;
+> +	cdns_ti_writel(data, USBSS_W1, reg);
+> +
+> +	/* de-assert RESET */
+> +	reg |= USBSS_W1_PWRUP_RST;
+> +	cdns_ti_writel(data, USBSS_W1, reg);
+> +}
+> +
+>  static int cdns_ti_probe(struct platform_device *pdev)
+>  {
+>  	struct device *dev = &pdev->dev;
+>  	struct device_node *node = pdev->dev.of_node;
+>  	struct cdns_ti *data;
+> -	int error;
+> -	u32 reg;
+> -	int rate_code, i;
+>  	unsigned long rate;
+> +	int error, i;
+>  
+>  	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
+>  	if (!data)
+> @@ -146,7 +184,11 @@ static int cdns_ti_probe(struct platform_device *pdev)
+>  		return -EINVAL;
+>  	}
+>  
+> -	rate_code = i;
+> +	data->usb2_refclk_rate_code = i;
+> +	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
+> +	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
+> +
+> +	cdns_ti_reset_and_init_hw(data);
+>  
+>  	pm_runtime_enable(dev);
+>  	error = pm_runtime_get_sync(dev);
+> @@ -155,40 +197,6 @@ static int cdns_ti_probe(struct platform_device *pdev)
+>  		goto err;
+>  	}
+>  
+> -	/* assert RESET */
+> -	reg = cdns_ti_readl(data, USBSS_W1);
+> -	reg &= ~USBSS_W1_PWRUP_RST;
+> -	cdns_ti_writel(data, USBSS_W1, reg);
+> -
+> -	/* set static config */
+> -	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> -	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
+> -	reg |= rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
+> -
+> -	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
+> -	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
+> -	if (data->vbus_divider)
+> -		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
+> -
+> -	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
+> -	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
+> -
+> -	/* set USB2_ONLY mode if requested */
+> -	reg = cdns_ti_readl(data, USBSS_W1);
+> -	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
+> -	if (data->usb2_only)
+> -		reg |= USBSS_W1_USB2_ONLY;
+> -
+> -	/* set default modestrap */
+> -	reg |= USBSS_W1_MODESTRAP_SEL;
+> -	reg &= ~USBSS_W1_MODESTRAP_MASK;
+> -	reg |= USBSS_MODESTRAP_MODE_NONE << USBSS_W1_MODESTRAP_SHIFT;
+> -	cdns_ti_writel(data, USBSS_W1, reg);
+> -
+> -	/* de-assert RESET */
+> -	reg |= USBSS_W1_PWRUP_RST;
+> -	cdns_ti_writel(data, USBSS_W1, reg);
+> -
+>  	error = of_platform_populate(node, NULL, cdns_ti_auxdata, dev);
+>  	if (error) {
+>  		dev_err(dev, "failed to create children: %d\n", error);
 > 
-> Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> 
-> BR,
-> Thinh
+
+Reviewed-by: Roger Quadros <rogerq@kernel.org>
 
 -- 
 cheers,
