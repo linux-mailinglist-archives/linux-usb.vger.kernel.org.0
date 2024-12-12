@@ -1,49 +1,79 @@
-Return-Path: <linux-usb+bounces-18428-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18429-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A5689EE71E
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 13:54:03 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BD15188639F
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 12:54:02 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963472139C4;
-	Thu, 12 Dec 2024 12:53:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NK/cACG2"
-X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 425039EE765
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 14:08:55 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E6E1714D7;
-	Thu, 12 Dec 2024 12:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40FEE2822FD
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 13:08:53 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B58D214236;
+	Thu, 12 Dec 2024 13:08:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kM3M//hA"
+X-Original-To: linux-usb@vger.kernel.org
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E32209F5F
+	for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 13:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734008035; cv=none; b=ZYGE/fLT77oo+KsjJrB6uzEne7r3cThKd0VKmaXDCNeCbMguELqddO5qouSs5YnjbM7xG/LgaCD7mOAWH4oC/tEc0o69YtLqrRURfhp6td4XbIyGhh9GJ9p13vtX0yDkDZ2Q2+bxY5+MCJnCdAxIlv3+yEfHS7xQsycSNm/7oXY=
+	t=1734008928; cv=none; b=a+YVSrdpuRNxCa8xT4AzEUc658/YqMJLhao9+jm5PHL+k3LOEfFCsW4TmWPjQ8LxyxR9qyGeUL8OOl6kPK+XBnDvOei53zrnPVjmQ0BO6vhdLpeH7pzDkAT2VnHziBXoYYCzgJ7+qX8ewtzArEM2nFw9jtMQr7id5X7MgtCbQew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734008035; c=relaxed/simple;
-	bh=9xK+bD2b7sbieZJy2qOzFPpKDsVao4fDuCk+++MxMe8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XoK97X6P/LedhVIKf83KRPN27rhyUbZlMJnDFgKwVB11jPryzySIIwGev/fNeaptb92dsiTTwYCmlEju5jyY4mQducRFMhc1QdnNGBM8OQWY4h2sw+jPS7JqLLT7jn5cN56uoarsyyV5bKj6ymGpCvraURzWrwc60ntUWeEOt8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NK/cACG2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04DD1C4CED0;
-	Thu, 12 Dec 2024 12:53:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734008034;
-	bh=9xK+bD2b7sbieZJy2qOzFPpKDsVao4fDuCk+++MxMe8=;
-	h=From:Date:Subject:To:Cc:From;
-	b=NK/cACG2Tl7aQTGSCTD6oRjmGhKgx+HLEPnOBJObSwW65cLk7aua4BQrWKPj5bYo0
-	 Al/+Bj3BPLdL3uSxM825THkprloIO89GF8UDrv3smxjmLEPDVPu4qZRjKpC3ugZuaq
-	 hADAkEG8ldFJwPbs8b21NXLEMEPeAWe8K1UhGvCBrRg+QVtu+/A/XZK/NZTIxuITaR
-	 eYr7MJ4m6TBgfbjRpcyaA1ehBnGN2eOWAJrvaf9POdxXKBXwn3v7+Dx7h2B1iusqZ4
-	 UVM2np7IhMODrl5WenAg1+Uhw7N4V4y9gN9lI7u8LsHmQSrBN/hG74F1bWLe3RWBeN
-	 Ih/coeBgkfUjg==
-From: Roger Quadros <rogerq@kernel.org>
-Date: Thu, 12 Dec 2024 14:53:45 +0200
-Subject: [PATCH v3] usb: dwc3: dwc3-am62: Re-initialize controller if lost
- power in PM suspend
+	s=arc-20240116; t=1734008928; c=relaxed/simple;
+	bh=UFD28TkJljZHWIG/COEi/QEH0/KPejNH2q0f4aHxkrs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=BrBKOd5eWNoPQwqw8Azt6IeRzGQ/4GVOZJ1v/MwYnDScmKoHoP8c8XnGiqS0eQtZxu7/kRH5NK0jbzRJH8Z4jSViC395DLXZ7aX4HnaTQ2M0eyFSrEsYjuNRrZBm4hbxW733Gqikll3sNGrB6SOCiwgHIuO7oj6mtNzYS48ZqVA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kM3M//hA; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-a9f1c590ecdso74066b.1
+        for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 05:08:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734008924; x=1734613724; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MSth3/irkWCqbGYvPdAI4UFQ10GoXyRIpHT4W2xQ1t8=;
+        b=kM3M//hAZlm2x44xX8xrpQ+oJ55csQ/ML6ZrH4Gaph9xYBLgKRUH1Tv5PGnotU5tSZ
+         bmTPu+mPwo8GId6PoVD5LQXE8B9oZxzFvshwpawfWNLOlzBk4A2x0T2QZ3EMhpfgk0FN
+         jV3PpsW+HuXcGX1gvsctpJb7v9YLIbyCJrGMty2TQJEa5lWwohtPt27AGH2azq/rR3wW
+         46+SI4dG+ehsP20oWIhFU5hR9QG5mBi9BNl6532VtfM5nyy/BVi7wdPobKwd56ydbTV9
+         bAtOXy5dPB3i8xp9nwAoiy87FtnzyOa+6kt+Wz+sXDyHKg0/oSJxDO9+yhAw5zf5NK7+
+         JSbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734008924; x=1734613724;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MSth3/irkWCqbGYvPdAI4UFQ10GoXyRIpHT4W2xQ1t8=;
+        b=K5pwoSQ+GqR/Fth/w2MBtWpfpSznJRK7WsHvqEyMaATMIPGXzlYlFZvNyo45peCCWx
+         5E6nSjmCEO26If3fdPxkcJa0KXKTRXiUHqZb9XNC+YFwf4P5hU+r/y4LncDzX0zY/xBl
+         ClN5QKbT8Q9YT3m0EFB5uiaQZVayigo9ycrdIgN2lpjzgPXKNaHAzzn8sFpADF4y0Rrp
+         OiPqhNFtJnZqXX2VB7kobJvnDrvGlOYgYBaKyYp9+YVdI+84lhBP0D9KmujMWlEjHQVE
+         qCNukw8tW8sPskpOlOOMBUGYyd87lG75Te/K0ajMWodUqGPh8tuO2rEgJw4cNuFI+HHN
+         u3vQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU+YyqURni2d3IgqffvRQLmO2u+F8APxkf6mlJIHrgaEVHKQCBOjOThW+oyEh+VTQLQkmy9a0qISoU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkAXYyuBDRanw3zIX3qj/YH/MlD6HdJyXWs4PduvuFqoA3lkUQ
+	HybMIEFAmYx6VjDabOph5D/z6Gy1phE6K5ZBmK3bLIFCVno9R8Zgbx2nfqdEnY4=
+X-Gm-Gg: ASbGncurw1BnKt2gx1Ft5u5gU2oYvcRlTEHAROZwJSlZz4jdLoHrO21qvtoR/UJqgIz
+	HyXWcodJeDotMTWzqgxTgn9vRsnAKYB+7WNK39kPq2fXCt2RflbLfEsDa7n/qMKfuSPwSNRGw6v
+	NiUsPuuU19dN9DbLeTFH6jILrg9ZSH6NZM8KH4f+V5SnuLbK8K8AsvCYn7E3nuwfwF1W8xLDx+c
+	Vgvx8CfEWHa4iiTZAktsrbitb8mGANpkOyOHzHx30v7Hps3n/Ko71MH2jJJYnBrdqdjTg==
+X-Google-Smtp-Source: AGHT+IH5HnspAa4JrCnVw3hwDOXAnn4yvcS0nZlULcM6v3q4z8daLlH1OPoEy+LFJrd9QTFOsOaImg==
+X-Received: by 2002:a17:907:3a57:b0:aa6:6331:936c with SMTP id a640c23a62f3a-aa6b13f8d18mr561440466b.59.1734008924498;
+        Thu, 12 Dec 2024 05:08:44 -0800 (PST)
+Received: from [127.0.0.2] ([2a02:2454:ff21:ef40:3c0e:7a2d:e7e3:9cf8])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa6845ab4absm605843366b.73.2024.12.12.05.08.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Dec 2024 05:08:44 -0800 (PST)
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+Subject: [PATCH 0/3] Add FSUSB42 USB switch and external DP for Qualcomm
+ X1E80100 QCP
+Date: Thu, 12 Dec 2024 14:08:22 +0100
+Message-Id: <20241212-x1e80100-qcp-dp-v1-0-37cb362a0dfe@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -52,216 +82,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20241212-am62-dwc3-io-ddr-v3-1-10b95cd7e9c0@kernel.org>
-X-B4-Tracking: v=1; b=H4sIANjcWmcC/33NQQrCMBCF4auUrB1JJmkxrryHuEiT2A5qUxKJS
- undTbsRQVz+D+abiSUfySe2ryYWfaZEYSghNxWzvRk6D+RKM+SohEAEc2sQ3MNKoADORZCtbZu
- dNFoYzsrZGP2Znit5PJXuKd1DfK0fsljWP1gWIMBapetGKa2QHy4+Dv66DbFji5bxIyDXPwQsg
- jMSudTY1lx/CfM8vwGPR9148wAAAA==
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Siddharth Vadapalli <s-vadapalli@ti.com>, srk@ti.com, 
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Roger Quadros <rogerq@kernel.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5647; i=rogerq@kernel.org;
- h=from:subject:message-id; bh=9xK+bD2b7sbieZJy2qOzFPpKDsVao4fDuCk+++MxMe8=;
- b=owEBbQKS/ZANAwAIAdJaa9O+djCTAcsmYgBnWtzg4Fwo7sKtT8PCFQGicSWwuJH+CA3VhsHID
- mFQnzugAleJAjMEAAEIAB0WIQRBIWXUTJ9SeA+rEFjSWmvTvnYwkwUCZ1rc4AAKCRDSWmvTvnYw
- k2g9EADX+CQijhz6bAMSh28+1f/90Mf9WYzRocahYT+S6gnacnc5WteZ9beMxD5N4U5/GyUNpAP
- CotBCK+VjiBnjDUhn56kaQ6hoB66vC/WZ1aqR3tdAoSrhNMkjsZEf9lKFhCf8osUzk+PNfOQbaQ
- o2+oBVTisktRtyx71ZKS/D9TK49t/9T8TAvGFYSMtPhHyT/PLTMcBI5XJyizs7T+rdoGcrN1QNI
- 80Fqy+D0b0IUAj/4MYWLTSrjSxIPBXD89KD0l1yuaxQPtsR1YgyLV8NW759LZ7qshp4cqKcMsN2
- LKmyeRssQSUJiIwBpimtLW0l5WoIkRXl/922B2HV0mMZznwW6NajAiAU5n3zLWeXc8roYy2E/EF
- 33WJ1dh/R3HXGdVgD2ZuNGahU0dW8Cy9+iWMIGUH2Yxm0a78qwJaRR2Y+aV8lTXCI/w4/YZAQ64
- jJzeyKxv5XQRGltZP2yIoCn1VaWpWGg27SejDbDUqJD5qmGWocYpsvTnsqV+HC54gc04AZDNhUP
- ilTpxk3GFEV/JsEMDacWkZ2aJ7XEeMlwZmdVvpUiXjVPXnrwbn1B86RkFZeFur4k1FXLH7lbA3K
- Zu5bQM4pir1HfrGsM98uhynfE2JtOjVnrJtGlFAUQxh4K+AR95QGQ42krICaRhbM3Pjelr4geJ+
- FYBFZlhOsJ0gxsw==
-X-Developer-Key: i=rogerq@kernel.org; a=openpgp;
- fpr=412165D44C9F52780FAB1058D25A6BD3BE763093
+X-B4-Tracking: v=1; b=H4sIAEbgWmcC/x2MQQqAIBAAvyJ7TnAlQ/pKdChday9mCiFIf0+Cu
+ cxhpkGhzFRgFg0yPVz4il1wEODOLR4k2XcHrfSIGlFWJKtQKXm7JH3HGY1k7OT2AL1KmQLX/7i
+ s7/sBgh0rN2EAAAA=
+X-Change-ID: 20241211-x1e80100-qcp-dp-dc521e586cbf
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>, 
+ Johan Hovold <johan@kernel.org>
+X-Mailer: b4 0.14.2
 
-If controller looses power during PM suspend then re-initialize
-it. We use the DEBUG_CFG register to track if controller lost power
-or was reset in PM suspend.
+The Qualcomm X1E80100 QCP has FSUSB42 USB switches on each of the USB-C
+ports that handle orientation switching for the SBU lines. This is needed
+to enable DisplayPort support for external displays.
 
-Move all initialization code into dwc3_ti_init() so it can be re-used.
+Add the onnn,fsusb42 compatible to the existing gpio-sbu-mux binding and
+then describe all the necessary components in the x1e80100-qcp device tree
+to make external DP work correctly.
 
-Signed-off-by: Roger Quadros <rogerq@kernel.org>
-Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Signed-off-by: Stephan Gerhold <stephan.gerhold@linaro.org>
 ---
-Changes in v3:
-- renamed member phy to phy_regs as it is PHY register space
-- Added Acked-by from Thinh Nguyen
-- Link to v2: https://lore.kernel.org/r/20241209-am62-dwc3-io-ddr-v2-1-da320392b509@kernel.org
+Stephan Gerhold (3):
+      dt-bindings: usb: gpio-sbu-mux: Add an entry for FSUSB42
+      arm64: dts: qcom: x1e80100-qcp: Add FSUSB42 USB switches
+      arm64: dts: qcom: x1e80100-qcp: Enable external DP support
 
-Changes in v2:
-- fixed macro USBSS_DEBUG_CFG_OFF to 0
-- Link to v1: https://lore.kernel.org/r/20241122-am62-dwc3-io-ddr-v1-1-cc4956449420@kernel.org
+ .../devicetree/bindings/usb/gpio-sbu-mux.yaml      |   1 +
+ arch/arm64/boot/dts/qcom/x1e80100-qcp.dts          | 178 +++++++++++++++++++++
+ 2 files changed, 179 insertions(+)
 ---
- drivers/usb/dwc3/dwc3-am62.c | 82 +++++++++++++++++++++++++++++---------------
- 1 file changed, 55 insertions(+), 27 deletions(-)
-
-diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
-index 5e3d1741701f..a740d3d70e87 100644
---- a/drivers/usb/dwc3/dwc3-am62.c
-+++ b/drivers/usb/dwc3/dwc3-am62.c
-@@ -108,6 +108,9 @@
- 
- #define DWC3_AM62_AUTOSUSPEND_DELAY	100
- 
-+#define USBSS_DEBUG_CFG_OFF		0x0
-+#define USBSS_DEBUG_CFG_DISABLED	0x7
-+
- struct dwc3_am62 {
- 	struct device *dev;
- 	void __iomem *usbss;
-@@ -117,6 +120,7 @@ struct dwc3_am62 {
- 	unsigned int offset;
- 	unsigned int vbus_divider;
- 	u32 wakeup_stat;
-+	void __iomem *phy_regs;
- };
- 
- static const int dwc3_ti_rate_table[] = {	/* in KHZ */
-@@ -184,15 +188,47 @@ static int phy_syscon_pll_refclk(struct dwc3_am62 *am62)
- 	return 0;
- }
- 
-+static int dwc3_ti_init(struct dwc3_am62 *am62)
-+{
-+	int ret;
-+	u32 reg;
-+
-+	/* Read the syscon property and set the rate code */
-+	ret = phy_syscon_pll_refclk(am62);
-+	if (ret)
-+		return ret;
-+
-+	/* Workaround Errata i2409 */
-+	if (am62->phy_regs) {
-+		reg = readl(am62->phy_regs + USB_PHY_PLL_REG12);
-+		reg |= USB_PHY_PLL_LDO_REF_EN | USB_PHY_PLL_LDO_REF_EN_EN;
-+		writel(reg, am62->phy_regs + USB_PHY_PLL_REG12);
-+	}
-+
-+	/* VBUS divider select */
-+	reg = dwc3_ti_readl(am62, USBSS_PHY_CONFIG);
-+	if (am62->vbus_divider)
-+		reg |= 1 << USBSS_PHY_VBUS_SEL_SHIFT;
-+
-+	dwc3_ti_writel(am62, USBSS_PHY_CONFIG, reg);
-+
-+	clk_prepare_enable(am62->usb2_refclk);
-+
-+	/* Set mode valid bit to indicate role is valid */
-+	reg = dwc3_ti_readl(am62, USBSS_MODE_CONTROL);
-+	reg |= USBSS_MODE_VALID;
-+	dwc3_ti_writel(am62, USBSS_MODE_CONTROL, reg);
-+
-+	return 0;
-+}
-+
- static int dwc3_ti_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct device_node *node = pdev->dev.of_node;
- 	struct dwc3_am62 *am62;
- 	unsigned long rate;
--	void __iomem *phy;
- 	int i, ret;
--	u32 reg;
- 
- 	am62 = devm_kzalloc(dev, sizeof(*am62), GFP_KERNEL);
- 	if (!am62)
-@@ -228,29 +264,17 @@ static int dwc3_ti_probe(struct platform_device *pdev)
- 
- 	am62->rate_code = i;
- 
--	/* Read the syscon property and set the rate code */
--	ret = phy_syscon_pll_refclk(am62);
--	if (ret)
--		return ret;
--
--	/* Workaround Errata i2409 */
--	phy = devm_platform_ioremap_resource(pdev, 1);
--	if (IS_ERR(phy)) {
-+	am62->phy_regs = devm_platform_ioremap_resource(pdev, 1);
-+	if (IS_ERR(am62->phy_regs)) {
- 		dev_err(dev, "can't map PHY IOMEM resource. Won't apply i2409 fix.\n");
--		phy = NULL;
--	} else {
--		reg = readl(phy + USB_PHY_PLL_REG12);
--		reg |= USB_PHY_PLL_LDO_REF_EN | USB_PHY_PLL_LDO_REF_EN_EN;
--		writel(reg, phy + USB_PHY_PLL_REG12);
-+		am62->phy_regs = NULL;
- 	}
- 
--	/* VBUS divider select */
- 	am62->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
--	reg = dwc3_ti_readl(am62, USBSS_PHY_CONFIG);
--	if (am62->vbus_divider)
--		reg |= 1 << USBSS_PHY_VBUS_SEL_SHIFT;
- 
--	dwc3_ti_writel(am62, USBSS_PHY_CONFIG, reg);
-+	ret = dwc3_ti_init(am62);
-+	if (ret)
-+		return ret;
- 
- 	pm_runtime_set_active(dev);
- 	pm_runtime_enable(dev);
-@@ -258,7 +282,6 @@ static int dwc3_ti_probe(struct platform_device *pdev)
- 	 * Don't ignore its dependencies with its children
- 	 */
- 	pm_suspend_ignore_children(dev, false);
--	clk_prepare_enable(am62->usb2_refclk);
- 	pm_runtime_get_noresume(dev);
- 
- 	ret = of_platform_populate(node, NULL, NULL, dev);
-@@ -267,11 +290,6 @@ static int dwc3_ti_probe(struct platform_device *pdev)
- 		goto err_pm_disable;
- 	}
- 
--	/* Set mode valid bit to indicate role is valid */
--	reg = dwc3_ti_readl(am62, USBSS_MODE_CONTROL);
--	reg |= USBSS_MODE_VALID;
--	dwc3_ti_writel(am62, USBSS_MODE_CONTROL, reg);
--
- 	/* Device has capability to wakeup system from sleep */
- 	device_set_wakeup_capable(dev, true);
- 	ret = device_wakeup_enable(dev);
-@@ -338,6 +356,9 @@ static int dwc3_ti_suspend_common(struct device *dev)
- 		dwc3_ti_writel(am62, USBSS_WAKEUP_STAT, USBSS_WAKEUP_STAT_CLR);
- 	}
- 
-+	/* just to track if module resets on suspend */
-+	dwc3_ti_writel(am62, USBSS_DEBUG_CFG, USBSS_DEBUG_CFG_DISABLED);
-+
- 	clk_disable_unprepare(am62->usb2_refclk);
- 
- 	return 0;
-@@ -348,7 +369,14 @@ static int dwc3_ti_resume_common(struct device *dev)
- 	struct dwc3_am62 *am62 = dev_get_drvdata(dev);
- 	u32 reg;
- 
--	clk_prepare_enable(am62->usb2_refclk);
-+	reg = dwc3_ti_readl(am62, USBSS_DEBUG_CFG);
-+	if (reg != USBSS_DEBUG_CFG_DISABLED) {
-+		/* lost power/context */
-+		dwc3_ti_init(am62);
-+	} else {
-+		dwc3_ti_writel(am62, USBSS_DEBUG_CFG, USBSS_DEBUG_CFG_OFF);
-+		clk_prepare_enable(am62->usb2_refclk);
-+	}
- 
- 	if (device_may_wakeup(dev)) {
- 		/* Clear wakeup config enable bits */
-
----
-base-commit: cdd30ebb1b9f36159d66f088b61aee264e649d7a
-change-id: 20241122-am62-dwc3-io-ddr-3bcb683a91a0
+base-commit: 3e42dc9229c5950e84b1ed705f94ed75ed208228
+change-id: 20241211-x1e80100-qcp-dp-dc521e586cbf
 
 Best regards,
 -- 
-Roger Quadros <rogerq@kernel.org>
+Stephan Gerhold <stephan.gerhold@linaro.org>
 
 
