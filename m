@@ -1,146 +1,267 @@
-Return-Path: <linux-usb+bounces-18427-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18428-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 614149EE6D9
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 13:37:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A5689EE71E
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 13:54:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DABE71884F9B
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 12:37:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BD15188639F
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 12:54:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8A0A212FBB;
-	Thu, 12 Dec 2024 12:37:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963472139C4;
+	Thu, 12 Dec 2024 12:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FlRhPL1E"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NK/cACG2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45842204F97;
-	Thu, 12 Dec 2024 12:37:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E6E1714D7;
+	Thu, 12 Dec 2024 12:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734007062; cv=none; b=fWMFQta1CnJzzu5oX8ToSDpC+1gJYBxlVK5B+bNU7lO7PtQpn5row5TnDMwz7FCLSBSomBHczf00lcgwP+XgJz5nxDKFjMuN3oyKnl3xqCdXOqitDAgUaicrMpvkzlmxZ0Bv7Fm9OxPCMqRKJofdoTMImZKuZwcPfam4UbmOx2c=
+	t=1734008035; cv=none; b=ZYGE/fLT77oo+KsjJrB6uzEne7r3cThKd0VKmaXDCNeCbMguELqddO5qouSs5YnjbM7xG/LgaCD7mOAWH4oC/tEc0o69YtLqrRURfhp6td4XbIyGhh9GJ9p13vtX0yDkDZ2Q2+bxY5+MCJnCdAxIlv3+yEfHS7xQsycSNm/7oXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734007062; c=relaxed/simple;
-	bh=3x4KC8UL/1Qd72jHooAzL+mZhJz7ddYHIBEY7oZJjS0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CRWHoVbKMhGAuuQNtxzxL5lNDn3WcKhJnnxUeogfTLOVhkLzk4AFdJw/B9Hij1Xit+p/cD4tn+E8GOEd1RoiBt+sL94lyzKZ0n+9RjK9BsA5J9G+LuF7GTlIuRFoXLQL+UrSwoTTBw4P1lA84uI611bJVFqOzQtJGGBhl/Y5Cwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FlRhPL1E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8284C4CECE;
-	Thu, 12 Dec 2024 12:37:38 +0000 (UTC)
+	s=arc-20240116; t=1734008035; c=relaxed/simple;
+	bh=9xK+bD2b7sbieZJy2qOzFPpKDsVao4fDuCk+++MxMe8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=XoK97X6P/LedhVIKf83KRPN27rhyUbZlMJnDFgKwVB11jPryzySIIwGev/fNeaptb92dsiTTwYCmlEju5jyY4mQducRFMhc1QdnNGBM8OQWY4h2sw+jPS7JqLLT7jn5cN56uoarsyyV5bKj6ymGpCvraURzWrwc60ntUWeEOt8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NK/cACG2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04DD1C4CED0;
+	Thu, 12 Dec 2024 12:53:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734007060;
-	bh=3x4KC8UL/1Qd72jHooAzL+mZhJz7ddYHIBEY7oZJjS0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FlRhPL1EmZcHWh2+2bb7jaHVg6DSfVWvj8N6LKE5AdgE7M7Mq2tUtVSHFo2sz2QaD
-	 x4kYTPO4cGCKWpoqIKkDfSTE6m00mSPMpV5rQohKYUjAE8nolFQR7G1iDR8qjYtNQR
-	 N+KPFkTr2UQKzudxrvI14P5ebL2jH6N54mTe9Mbpa//eLyzN29T77m710dmSSNjYkU
-	 NPeUoZW5Fsvw1Y9baGy6YENC+4G6C0gif3YMd7h8eS3Kr8yvEvOVxvoBf1pcsMIqkb
-	 qP5FqfG2ifsp7/Ow/bSwyVVlY1CGjZMuTTNmOlLvShn4CWYgT7BEYrAtX3VHfJu0SJ
-	 5D4DpI9nb6X5Q==
-Message-ID: <70aced7f-0311-43b9-96af-c8325c39ff2b@kernel.org>
-Date: Thu, 12 Dec 2024 14:37:36 +0200
+	s=k20201202; t=1734008034;
+	bh=9xK+bD2b7sbieZJy2qOzFPpKDsVao4fDuCk+++MxMe8=;
+	h=From:Date:Subject:To:Cc:From;
+	b=NK/cACG2Tl7aQTGSCTD6oRjmGhKgx+HLEPnOBJObSwW65cLk7aua4BQrWKPj5bYo0
+	 Al/+Bj3BPLdL3uSxM825THkprloIO89GF8UDrv3smxjmLEPDVPu4qZRjKpC3ugZuaq
+	 hADAkEG8ldFJwPbs8b21NXLEMEPeAWe8K1UhGvCBrRg+QVtu+/A/XZK/NZTIxuITaR
+	 eYr7MJ4m6TBgfbjRpcyaA1ehBnGN2eOWAJrvaf9POdxXKBXwn3v7+Dx7h2B1iusqZ4
+	 UVM2np7IhMODrl5WenAg1+Uhw7N4V4y9gN9lI7u8LsHmQSrBN/hG74F1bWLe3RWBeN
+	 Ih/coeBgkfUjg==
+From: Roger Quadros <rogerq@kernel.org>
+Date: Thu, 12 Dec 2024 14:53:45 +0200
+Subject: [PATCH v3] usb: dwc3: dwc3-am62: Re-initialize controller if lost
+ power in PM suspend
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 4/5] xhci: introduce xhci->lost_power flag
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Mathias Nyman <mathias.nyman@intel.com>
-Cc: =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
- <20241210-s2r-cdns-v6-4-28a17f9715a2@bootlin.com>
-Content-Language: en-US
-From: Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20241210-s2r-cdns-v6-4-28a17f9715a2@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20241212-am62-dwc3-io-ddr-v3-1-10b95cd7e9c0@kernel.org>
+X-B4-Tracking: v=1; b=H4sIANjcWmcC/33NQQrCMBCF4auUrB1JJmkxrryHuEiT2A5qUxKJS
+ undTbsRQVz+D+abiSUfySe2ryYWfaZEYSghNxWzvRk6D+RKM+SohEAEc2sQ3MNKoADORZCtbZu
+ dNFoYzsrZGP2Znit5PJXuKd1DfK0fsljWP1gWIMBapetGKa2QHy4+Dv66DbFji5bxIyDXPwQsg
+ jMSudTY1lx/CfM8vwGPR9148wAAAA==
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Siddharth Vadapalli <s-vadapalli@ti.com>, srk@ti.com, 
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Roger Quadros <rogerq@kernel.org>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5647; i=rogerq@kernel.org;
+ h=from:subject:message-id; bh=9xK+bD2b7sbieZJy2qOzFPpKDsVao4fDuCk+++MxMe8=;
+ b=owEBbQKS/ZANAwAIAdJaa9O+djCTAcsmYgBnWtzg4Fwo7sKtT8PCFQGicSWwuJH+CA3VhsHID
+ mFQnzugAleJAjMEAAEIAB0WIQRBIWXUTJ9SeA+rEFjSWmvTvnYwkwUCZ1rc4AAKCRDSWmvTvnYw
+ k2g9EADX+CQijhz6bAMSh28+1f/90Mf9WYzRocahYT+S6gnacnc5WteZ9beMxD5N4U5/GyUNpAP
+ CotBCK+VjiBnjDUhn56kaQ6hoB66vC/WZ1aqR3tdAoSrhNMkjsZEf9lKFhCf8osUzk+PNfOQbaQ
+ o2+oBVTisktRtyx71ZKS/D9TK49t/9T8TAvGFYSMtPhHyT/PLTMcBI5XJyizs7T+rdoGcrN1QNI
+ 80Fqy+D0b0IUAj/4MYWLTSrjSxIPBXD89KD0l1yuaxQPtsR1YgyLV8NW759LZ7qshp4cqKcMsN2
+ LKmyeRssQSUJiIwBpimtLW0l5WoIkRXl/922B2HV0mMZznwW6NajAiAU5n3zLWeXc8roYy2E/EF
+ 33WJ1dh/R3HXGdVgD2ZuNGahU0dW8Cy9+iWMIGUH2Yxm0a78qwJaRR2Y+aV8lTXCI/w4/YZAQ64
+ jJzeyKxv5XQRGltZP2yIoCn1VaWpWGg27SejDbDUqJD5qmGWocYpsvTnsqV+HC54gc04AZDNhUP
+ ilTpxk3GFEV/JsEMDacWkZ2aJ7XEeMlwZmdVvpUiXjVPXnrwbn1B86RkFZeFur4k1FXLH7lbA3K
+ Zu5bQM4pir1HfrGsM98uhynfE2JtOjVnrJtGlFAUQxh4K+AR95QGQ42krICaRhbM3Pjelr4geJ+
+ FYBFZlhOsJ0gxsw==
+X-Developer-Key: i=rogerq@kernel.org; a=openpgp;
+ fpr=412165D44C9F52780FAB1058D25A6BD3BE763093
 
+If controller looses power during PM suspend then re-initialize
+it. We use the DEBUG_CFG register to track if controller lost power
+or was reset in PM suspend.
 
+Move all initialization code into dwc3_ti_init() so it can be re-used.
 
-On 10/12/2024 19:13, Théo Lebrun wrote:
-> The XHCI_RESET_ON_RESUME quirk allows wrappers to signal that they
-> expect a reset after resume. It is also used by some to enforce a XHCI
-> reset on resume (see needs-reset-on-resume DT prop).
-> 
-> Some wrappers are unsure beforehands if they will reset. Add a mechanism
-> to signal *at resume* if power has been lost. Parent devices can set
-> this flag, that defaults to false.
-> 
-> The XHCI_RESET_ON_RESUME quirk still triggers a runtime_pm_get() on the
-> controller. This is required as we do not know if a suspend will
-> trigger a reset, so the best guess is to avoid runtime PM.
-> 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
->  drivers/usb/host/xhci.c | 3 ++-
->  drivers/usb/host/xhci.h | 6 ++++++
->  2 files changed, 8 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> index 5ebde8cae4fc44cdb997b0f61314e309bda56c0d..ae2c8daa206a87da24d58a62b0a0485ebf68cdd6 100644
-> --- a/drivers/usb/host/xhci.c
-> +++ b/drivers/usb/host/xhci.c
-> @@ -1017,7 +1017,8 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
->  
->  	spin_lock_irq(&xhci->lock);
->  
-> -	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
-> +	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME ||
-> +	    xhci->broken_suspend || xhci->lost_power)
->  		reinit_xhc = true;
->  
->  	if (!reinit_xhc) {
-> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> index 4914f0a10cff42dbc1448dcf7908534d582c848e..32526df75925989d40cbe7d59a187c945f498a30 100644
-> --- a/drivers/usb/host/xhci.h
-> +++ b/drivers/usb/host/xhci.h
-> @@ -1645,6 +1645,12 @@ struct xhci_hcd {
->  	unsigned		broken_suspend:1;
->  	/* Indicates that omitting hcd is supported if root hub has no ports */
->  	unsigned		allow_single_roothub:1;
-> +	/*
-> +	 * Signal from upper stacks that we lost power during system-wide
-> +	 * suspend. Its default value is based on XHCI_RESET_ON_RESUME, meaning
-> +	 * it is safe for wrappers to not modify lost_power at resume.
-> +	 */
-> +	unsigned                lost_power:1;
+Signed-off-by: Roger Quadros <rogerq@kernel.org>
+Acked-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+---
+Changes in v3:
+- renamed member phy to phy_regs as it is PHY register space
+- Added Acked-by from Thinh Nguyen
+- Link to v2: https://lore.kernel.org/r/20241209-am62-dwc3-io-ddr-v2-1-da320392b509@kernel.org
 
-I suppose this is private to XHCI driver and not legitimate to be accessed
-by another driver after HCD is instantiated?
-Doesn't access to xhci_hcd need to be serialized via xhci->lock?
+Changes in v2:
+- fixed macro USBSS_DEBUG_CFG_OFF to 0
+- Link to v1: https://lore.kernel.org/r/20241122-am62-dwc3-io-ddr-v1-1-cc4956449420@kernel.org
+---
+ drivers/usb/dwc3/dwc3-am62.c | 82 +++++++++++++++++++++++++++++---------------
+ 1 file changed, 55 insertions(+), 27 deletions(-)
 
-Just curious, what happens if you don't include patch 4 and 5?
-Is USB functionality still broken for you?
+diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
+index 5e3d1741701f..a740d3d70e87 100644
+--- a/drivers/usb/dwc3/dwc3-am62.c
++++ b/drivers/usb/dwc3/dwc3-am62.c
+@@ -108,6 +108,9 @@
+ 
+ #define DWC3_AM62_AUTOSUSPEND_DELAY	100
+ 
++#define USBSS_DEBUG_CFG_OFF		0x0
++#define USBSS_DEBUG_CFG_DISABLED	0x7
++
+ struct dwc3_am62 {
+ 	struct device *dev;
+ 	void __iomem *usbss;
+@@ -117,6 +120,7 @@ struct dwc3_am62 {
+ 	unsigned int offset;
+ 	unsigned int vbus_divider;
+ 	u32 wakeup_stat;
++	void __iomem *phy_regs;
+ };
+ 
+ static const int dwc3_ti_rate_table[] = {	/* in KHZ */
+@@ -184,15 +188,47 @@ static int phy_syscon_pll_refclk(struct dwc3_am62 *am62)
+ 	return 0;
+ }
+ 
++static int dwc3_ti_init(struct dwc3_am62 *am62)
++{
++	int ret;
++	u32 reg;
++
++	/* Read the syscon property and set the rate code */
++	ret = phy_syscon_pll_refclk(am62);
++	if (ret)
++		return ret;
++
++	/* Workaround Errata i2409 */
++	if (am62->phy_regs) {
++		reg = readl(am62->phy_regs + USB_PHY_PLL_REG12);
++		reg |= USB_PHY_PLL_LDO_REF_EN | USB_PHY_PLL_LDO_REF_EN_EN;
++		writel(reg, am62->phy_regs + USB_PHY_PLL_REG12);
++	}
++
++	/* VBUS divider select */
++	reg = dwc3_ti_readl(am62, USBSS_PHY_CONFIG);
++	if (am62->vbus_divider)
++		reg |= 1 << USBSS_PHY_VBUS_SEL_SHIFT;
++
++	dwc3_ti_writel(am62, USBSS_PHY_CONFIG, reg);
++
++	clk_prepare_enable(am62->usb2_refclk);
++
++	/* Set mode valid bit to indicate role is valid */
++	reg = dwc3_ti_readl(am62, USBSS_MODE_CONTROL);
++	reg |= USBSS_MODE_VALID;
++	dwc3_ti_writel(am62, USBSS_MODE_CONTROL, reg);
++
++	return 0;
++}
++
+ static int dwc3_ti_probe(struct platform_device *pdev)
+ {
+ 	struct device *dev = &pdev->dev;
+ 	struct device_node *node = pdev->dev.of_node;
+ 	struct dwc3_am62 *am62;
+ 	unsigned long rate;
+-	void __iomem *phy;
+ 	int i, ret;
+-	u32 reg;
+ 
+ 	am62 = devm_kzalloc(dev, sizeof(*am62), GFP_KERNEL);
+ 	if (!am62)
+@@ -228,29 +264,17 @@ static int dwc3_ti_probe(struct platform_device *pdev)
+ 
+ 	am62->rate_code = i;
+ 
+-	/* Read the syscon property and set the rate code */
+-	ret = phy_syscon_pll_refclk(am62);
+-	if (ret)
+-		return ret;
+-
+-	/* Workaround Errata i2409 */
+-	phy = devm_platform_ioremap_resource(pdev, 1);
+-	if (IS_ERR(phy)) {
++	am62->phy_regs = devm_platform_ioremap_resource(pdev, 1);
++	if (IS_ERR(am62->phy_regs)) {
+ 		dev_err(dev, "can't map PHY IOMEM resource. Won't apply i2409 fix.\n");
+-		phy = NULL;
+-	} else {
+-		reg = readl(phy + USB_PHY_PLL_REG12);
+-		reg |= USB_PHY_PLL_LDO_REF_EN | USB_PHY_PLL_LDO_REF_EN_EN;
+-		writel(reg, phy + USB_PHY_PLL_REG12);
++		am62->phy_regs = NULL;
+ 	}
+ 
+-	/* VBUS divider select */
+ 	am62->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
+-	reg = dwc3_ti_readl(am62, USBSS_PHY_CONFIG);
+-	if (am62->vbus_divider)
+-		reg |= 1 << USBSS_PHY_VBUS_SEL_SHIFT;
+ 
+-	dwc3_ti_writel(am62, USBSS_PHY_CONFIG, reg);
++	ret = dwc3_ti_init(am62);
++	if (ret)
++		return ret;
+ 
+ 	pm_runtime_set_active(dev);
+ 	pm_runtime_enable(dev);
+@@ -258,7 +282,6 @@ static int dwc3_ti_probe(struct platform_device *pdev)
+ 	 * Don't ignore its dependencies with its children
+ 	 */
+ 	pm_suspend_ignore_children(dev, false);
+-	clk_prepare_enable(am62->usb2_refclk);
+ 	pm_runtime_get_noresume(dev);
+ 
+ 	ret = of_platform_populate(node, NULL, NULL, dev);
+@@ -267,11 +290,6 @@ static int dwc3_ti_probe(struct platform_device *pdev)
+ 		goto err_pm_disable;
+ 	}
+ 
+-	/* Set mode valid bit to indicate role is valid */
+-	reg = dwc3_ti_readl(am62, USBSS_MODE_CONTROL);
+-	reg |= USBSS_MODE_VALID;
+-	dwc3_ti_writel(am62, USBSS_MODE_CONTROL, reg);
+-
+ 	/* Device has capability to wakeup system from sleep */
+ 	device_set_wakeup_capable(dev, true);
+ 	ret = device_wakeup_enable(dev);
+@@ -338,6 +356,9 @@ static int dwc3_ti_suspend_common(struct device *dev)
+ 		dwc3_ti_writel(am62, USBSS_WAKEUP_STAT, USBSS_WAKEUP_STAT_CLR);
+ 	}
+ 
++	/* just to track if module resets on suspend */
++	dwc3_ti_writel(am62, USBSS_DEBUG_CFG, USBSS_DEBUG_CFG_DISABLED);
++
+ 	clk_disable_unprepare(am62->usb2_refclk);
+ 
+ 	return 0;
+@@ -348,7 +369,14 @@ static int dwc3_ti_resume_common(struct device *dev)
+ 	struct dwc3_am62 *am62 = dev_get_drvdata(dev);
+ 	u32 reg;
+ 
+-	clk_prepare_enable(am62->usb2_refclk);
++	reg = dwc3_ti_readl(am62, USBSS_DEBUG_CFG);
++	if (reg != USBSS_DEBUG_CFG_DISABLED) {
++		/* lost power/context */
++		dwc3_ti_init(am62);
++	} else {
++		dwc3_ti_writel(am62, USBSS_DEBUG_CFG, USBSS_DEBUG_CFG_OFF);
++		clk_prepare_enable(am62->usb2_refclk);
++	}
+ 
+ 	if (device_may_wakeup(dev)) {
+ 		/* Clear wakeup config enable bits */
 
-Doesn't XHCI driver detect that power was lost and issue a reset in any case
-via the below code
+---
+base-commit: cdd30ebb1b9f36159d66f088b61aee264e649d7a
+change-id: 20241122-am62-dwc3-io-ddr-3bcb683a91a0
 
-        /* re-initialize the HC on Restore Error, or Host Controller Error */
-        if ((temp & (STS_SRE | STS_HCE)) &&
-            !(xhci->xhc_state & XHCI_STATE_REMOVING)) {
-                reinit_xhc = true;
-                if (!xhci->broken_suspend)
-                        xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
-        }
-
->  	/* cached extended protocol port capabilities */
->  	struct xhci_port_cap	*port_caps;
->  	unsigned int		num_port_caps;
-> 
-
+Best regards,
 -- 
-cheers,
--roger
+Roger Quadros <rogerq@kernel.org>
 
 
