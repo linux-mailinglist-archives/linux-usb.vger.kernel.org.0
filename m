@@ -1,111 +1,87 @@
-Return-Path: <linux-usb+bounces-18416-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18417-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 227BD9EDE7E
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 05:30:51 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7625D9EDEF3
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 06:33:01 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25C4C281E4A
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 04:30:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 732401889B87
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 05:33:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65AA218787A;
-	Thu, 12 Dec 2024 04:30:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kkCK66kf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58F4D154C1D;
+	Thu, 12 Dec 2024 05:32:56 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from arara2.ipen.br (arara2.ipen.br [200.136.52.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA47E185B4C;
-	Thu, 12 Dec 2024 04:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F056748A
+	for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 05:32:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=200.136.52.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733977818; cv=none; b=lWD92yev0MPBF5/Ij/dZlFyq4adSvjIzqrVZrPdRk9Lol77I9Bkbz15saZRwbrlDuz23P8TVTZ8kIm4cabflbyidq2lA4jx5i86G6IDOQRxX+QFIR/FEUYC/85KMmvDMjOJRt7W3p741vZPTZ81q/orxZBqqaP9FJ/99wQXa2xc=
+	t=1733981576; cv=none; b=hUJWYOXMsYO7/XrOQ+zRDjshovP3G4wnAJpdn8mAteLLes63ixO3j1BmVNDyATSjcC/YNhqELcfON97omxtuV7GIgwWOaxI4ybHdlxm2nw6nyldFP9G2yIvIRHUSd/Sb6x2nov0XOCQt8idG2uq8kFlqwMW7Cby1AySrATqlfw8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733977818; c=relaxed/simple;
-	bh=5VBjx/lX667bAnSiAtj+Oneow/Zgypuh0hePuWhqJGc=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=WSsP5k+j83fBRKqg1GUwSkXWLkdF+BJxLRYQP3TFjsKJYJaDaMjOS5OVGwGm+Y52FY54b2R2f/RMicC+8/Euo/Dp6KZ5hFRI7iNxM9Vyq9G22RehD3xGHSXAa5FGCe8hSbzRn5Y9ipeS6rTr7fxu+8AClTfG1TEZNF4UN45asAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kkCK66kf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59452C4CED0;
-	Thu, 12 Dec 2024 04:30:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733977817;
-	bh=5VBjx/lX667bAnSiAtj+Oneow/Zgypuh0hePuWhqJGc=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=kkCK66kfusKXcJfqOmGqyMgSL7TE2+l7F8dICM197UUnDwFLRYqjF8DhYj7BUfrS9
-	 4E3AGw3Xaz/BtsUW5DqcGIupex/T0tlvg0i/ZoKX3U84MXaA0F6sJM5tJ1CmkUNMhB
-	 Vknind/64gLI7hcaQhUqJR65L8lDhVBmdpIGM87IXrxZ3VuW6V14SkBlevKdQO7Eix
-	 yAt/kjvDtwRnHKKHjFA0thd9lcNhDEmgzs3aKatGtf1kTGYvDw/xhDWSXl/KqXsW1M
-	 y9MG53gXfkNgJJthA9rm/aff1mkqnqWMY0KyXoG6UgJjR5dKh/yFDOtsyN5cqAOjcu
-	 KOO1rWewN5klw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADF20380A959;
-	Thu, 12 Dec 2024 04:30:34 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1733981576; c=relaxed/simple;
+	bh=Cgr97JBiSX1QIcd2ZZZsKVChGTY1ZlWJ/4AhaVFA7Wc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HDAXW1eJHkHGJLY6ig6fxqMHoAxpvHsaDvz9aM2N4F9bfwPS8VnbuXgmIEuwaFbJpqp5QuZNCxFKtz9ef8RvtVio50GAOd71Lid2tg6BK4oy2DeqkC7bGXoRrekGObT8SND11u92rB4gu7onJsyqITG5SeIgulfSyiXfvZim2ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ipen.br; spf=pass smtp.mailfrom=ipen.br; arc=none smtp.client-ip=200.136.52.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ipen.br
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ipen.br
+X-ASG-Debug-ID: 1733981507-055fc729eb13bcf5000a-YVMibp
+Received: from arara.ipen.br (webmail.ip.ipen.br [10.0.10.11]) by arara2.ipen.br with ESMTP id Nu3XidUIRlqzrGvu for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 02:32:44 -0300 (BRT)
+X-Barracuda-Envelope-From: TCWM63761@ipen.br
+X-Barracuda-RBL-Trusted-Forwarder: 10.0.10.11
+Received: from ipen.br (unknown [102.129.145.245])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by arara.ipen.br (Postfix) with ESMTPSA id DC1F5FA11AA
+	for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 00:22:59 -0300 (-03)
+Reply-To: t.mazowieckie@mazowieckie.org
+X-Barracuda-Effective-Source-IP: UNKNOWN[102.129.145.245]
+X-Barracuda-Apparent-Source-IP: 102.129.145.245
+X-Barracuda-RBL-IP: 102.129.145.245
+From: <TCWM63761@ipen.br>
+To: linux-usb@vger.kernel.org
+Subject:  I urge you to understand my viewpoint accurately.
+Date: 12 Dec 2024 11:22:58 +0800
+X-ASG-Orig-Subj: I urge you to understand my viewpoint accurately.
+Message-ID: <20241212112258.955B01E95A5AFF70@ipen.br>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 1/1] net: usb: qmi_wwan: add Telit FE910C04 compositions
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <173397783326.1847197.13350019898244798941.git-patchwork-notify@kernel.org>
-Date: Thu, 12 Dec 2024 04:30:33 +0000
-References: <20241209151821.3688829-1-dnlplm@gmail.com>
-In-Reply-To: <20241209151821.3688829-1-dnlplm@gmail.com>
-To: Daniele Palmas <dnlplm@gmail.com>
-Cc: bjorn@mork.no, andrew+netdev@lunn.ch, davem@davemloft.net,
- kuba@kernel.org, pabeni@redhat.com, edumazet@google.com,
- netdev@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Barracuda-Connect: webmail.ip.ipen.br[10.0.10.11]
+X-Barracuda-Start-Time: 1733981564
+X-Barracuda-URL: https://10.40.40.18:443/cgi-mod/mark.cgi
+X-Barracuda-Scan-Msg-Size: 512
+X-Barracuda-BRTS-Status: 1
+X-Barracuda-BRTS-Evidence: 34fbb5788938ad5710ad28835fd12206-499-txt
+X-Virus-Scanned: by bsmtpd at ipen.br
+X-Barracuda-Spam-Score: 0.00
+X-Barracuda-Spam-Status: No, SCORE=0.00 using global scores of TAG_LEVEL=1000.0 QUARANTINE_LEVEL=1000.0 KILL_LEVEL=1000.0 tests=NO_REAL_NAME
+X-Barracuda-Spam-Report: Code version 3.2, rules version 3.2.3.45577
+	Rule breakdown below
+	 pts rule name              description
+	---- ---------------------- --------------------------------------------------
+	0.00 NO_REAL_NAME           From: does not include a real name
 
-Hello:
+I am Tomasz Chmielewski, a Portfolio Manager and Chartered=20
+Financial Analyst affiliated with Iwoca Poland Sp. Z OO in=20
+Poland. I have the privilege of working with distinguished=20
+investors who are eager to support your company's current=20
+initiatives, thereby broadening their investment portfolios. If=20
+this proposal aligns with your interests, I invite you to=20
+respond, and I will gladly share more information to assist you.
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Mon,  9 Dec 2024 16:18:21 +0100 you wrote:
-> Add the following Telit FE910C04 compositions:
-> 
-> 0x10c0: rmnet + tty (AT/NMEA) + tty (AT) + tty (diag)
-> T:  Bus=02 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 13 Spd=480  MxCh= 0
-> D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=1bc7 ProdID=10c0 Rev=05.15
-> S:  Manufacturer=Telit Cinterion
-> S:  Product=FE910
-> S:  SerialNumber=f71b8b32
-> C:  #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
-> I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> 
-> [...]
-
-Here is the summary with links:
-  - [net,1/1] net: usb: qmi_wwan: add Telit FE910C04 compositions
-    https://git.kernel.org/netdev/net/c/3b58b53a2659
-
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+=20
+Yours sincerely,=20
+Tomasz Chmielewski Warsaw, Mazowieckie,
+=20
+Poland.
 
