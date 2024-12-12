@@ -1,123 +1,97 @@
-Return-Path: <linux-usb+bounces-18439-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18440-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78ABF9EEC3A
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 16:32:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDE299EED5F
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 16:45:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C15D188C6A1
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 15:31:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55B571884E88
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 15:42:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1529121CFE2;
-	Thu, 12 Dec 2024 15:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="Xe+22TEh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D785F217F34;
+	Thu, 12 Dec 2024 15:41:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mr85p00im-zteg06021601.me.com (mr85p00im-zteg06021601.me.com [17.58.23.187])
+Received: from bm.lauterbach.com (bm.lauterbach.com [62.154.241.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DF1E217F46
-	for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 15:30:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 741F6215799;
+	Thu, 12 Dec 2024 15:41:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.154.241.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734017426; cv=none; b=EkhHSOw/oxC+PCiejl2/OH6hjpi3yD0mLefq2ilKamuN2pXH6shvln4+KmjRgPxb2crL8eKje5NMe3AXH+rxm5Y4aaegQkQEEHVM6mHaQ/JkLYW7kqwkYKzwaY7txhlEwjXLMWkoNAJP4KP9suLfCH9pg1lgUpk+8UMI4cDXK5I=
+	t=1734018092; cv=none; b=OH5IywKBMZTQXPbOnknmXnXyCJ38CSn1EoYL4GgIBe4WRxo6QiGszt/cD0FtGqRYi3lb3dsSFT+h0ObwOwpW42VnW09sSv0VNhMem5Fg+tIrqEnvaJBHsRAmyR2S/13h/UkiGgqNINpASRRvowU+7Q95ZKwtN/yPBY9rj8CnUt4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734017426; c=relaxed/simple;
-	bh=HVk0QKjL62NPOUjJQrE9JQALgT+9aa0UmJ3UcU7Wy70=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Fxss0D2s2SIQhd+ir/nk/lAijB5V5Jq+dL/gcQXUwV7Ujk7ecosD2qfIQJ034cobTenwDt8efJMrPpPjLmq+y6+7d0XUzWcd4p32eXn4ItqNk3KB6z/2RtvZAlgYb3eFEhVMBNZZzOosaZe4uxKv7RCOsd7aNx2lnLBuwSDuOm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=Xe+22TEh; arc=none smtp.client-ip=17.58.23.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1734017424;
-	bh=Cctk2qAtwnvI3xFZ/EVdw7MBeOFHAX5H/Kag2fyVKw0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:
-	 x-icloud-hme;
-	b=Xe+22TEhSI8uDO5pfVRBMl3ASKjYouXoOjudrw5iyZMZh4VcNHhZ2qdTQ/t1X9zCO
-	 SIrhl61qzq5UHFdSoOJFBtnIU6lkkzw/QP+xZ9Rxn04P79xGJVvg6wy0y2hZq5yxZv
-	 7+A5H3Q7g5AJtAmrXluXQ2WRYCN13PZcY+86dOqJS6i+HmlgtbQunCm8/w6tZN5yR0
-	 69bDmwTBso0HRutqQ8O+W80flV6Wi2ZanUDGGIGi1FNG34pVBDmM2CcaeRHuXRoItq
-	 FtKcEtXS6bgVn5lfT1tFi8E++KRLQZRuY+a1P0Mn1T+RmTn2jxMkyrV4eLydo4WRDf
-	 UjTBuE6OcFQug==
-Received: from [192.168.29.172] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-	by mr85p00im-zteg06021601.me.com (Postfix) with ESMTPSA id AB15F305885E;
-	Thu, 12 Dec 2024 15:30:20 +0000 (UTC)
-From: Zijun Hu <zijun_hu@icloud.com>
-Date: Thu, 12 Dec 2024 23:30:05 +0800
-Subject: [PATCH] USB: Optimize goto logic in API usb_register_driver()
+	s=arc-20240116; t=1734018092; c=relaxed/simple;
+	bh=4niNNU3UJmwI8sRI+2DvCo+K56fl99MNZJH1e6dbsnQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nNmXQohpS7kecCPp0tAUx01vL5NkPs55HCG4P0riHiyvtjRFgISZ4MliS7gPxUWPaDqxXj2FcaeMAf02zXgX83HaJZEc3lPe/WdXWVgXhhmmCm+RNU23hoQ5XKPBEcKpUDJ7Cz0C2GCF9zn8TBtryt1bI3XpOuCMV8j8txFT4Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com; spf=pass smtp.mailfrom=lauterbach.com; arc=none smtp.client-ip=62.154.241.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=lauterbach.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lauterbach.com
+Received: from ingpc2.intern.lauterbach.com (unknown [10.2.10.44])
+	(Authenticated sender: ingo.rohloff@lauterbach.com)
+	by bm.lauterbach.com (Postfix) with ESMTPSA id 02A46D349880;
+	Thu, 12 Dec 2024 16:41:25 +0100 (CET)
+From: Ingo Rohloff <ingo.rohloff@lauterbach.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	Ingo Rohloff <ingo.rohloff@lauterbach.com>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] usb: gadget: configfs: Ignore trailing LF for user strings to cdev
+Date: Thu, 12 Dec 2024 16:41:14 +0100
+Message-ID: <20241212154114.29295-1-ingo.rohloff@lauterbach.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241212-fix_usb-v1-1-300eb440c753@quicinc.com>
-X-B4-Tracking: v=1; b=H4sIAHwBW2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxNDQyNL3bTMivjS4iRd0yRj81TDFCNzY4MUJaDqgqJUoBTYpOjY2loAAqD
- KJ1kAAAA=
-X-Change-ID: 20241129-fix_usb-5b37e1d2730d
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Zijun Hu <zijun_hu@icloud.com>, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-X-Mailer: b4 0.14.2
-X-Proofpoint-GUID: cIdlUipoE5S9mFvj87-bnH82c39O8T4o
-X-Proofpoint-ORIG-GUID: cIdlUipoE5S9mFvj87-bnH82c39O8T4o
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-12_09,2024-12-12_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxscore=0 phishscore=0 mlxlogscore=851
- malwarescore=0 spamscore=0 bulkscore=0 suspectscore=0 clxscore=1015
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2412120112
-X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Bm-Milter-Handled: 166a2dfb-2e12-4590-8fa5-72e30323519f
+X-Bm-Transport-Timestamp: 1734018085056
 
-From: Zijun Hu <quic_zijuhu@quicinc.com>
+Since commit c033563220e0f7a8
+("usb: gadget: configfs: Attach arbitrary strings to cdev")
+a user can provide extra string descriptors to a USB gadget via configfs.
 
-usb_register_driver() uses complex goto statements to handle simple error
-cases, move down the goto label 'out' a bit to
+For "manufacturer", "product", "serialnumber", setting the string via
+configfs ignores a trailing LF.
 
-- Simplify goto logic
-- Leverage pr_err() prompt for driver registering failure.
+For the arbitrary strings the LF was not ignored.
 
-Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+This patch ignores a trailing LF to make this consistent with the existing
+behavior for "manufacturer", ...  string descriptors.
+
+Fixes: c033563220e0 ("usb: gadget: configfs: Attach arbitrary strings to cdev")
+Cc: stable@vger.kernel.org
+Signed-off-by: Ingo Rohloff <ingo.rohloff@lauterbach.com>
 ---
- drivers/usb/core/driver.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/usb/gadget/configfs.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/usb/core/driver.c b/drivers/usb/core/driver.c
-index f203fdbfb6f68e6cf52feb077f042045cb9bf3a8..460d4dde5994e783bdcad08b2abb6bb85ab3258f 100644
---- a/drivers/usb/core/driver.c
-+++ b/drivers/usb/core/driver.c
-@@ -1086,15 +1086,14 @@ int usb_register_driver(struct usb_driver *new_driver, struct module *owner,
- 	pr_info("%s: registered new interface driver %s\n",
- 			usbcore_name, new_driver->name);
+diff --git a/drivers/usb/gadget/configfs.c b/drivers/usb/gadget/configfs.c
+index 6499a88d346c..fba2a56dae97 100644
+--- a/drivers/usb/gadget/configfs.c
++++ b/drivers/usb/gadget/configfs.c
+@@ -827,11 +827,15 @@ static ssize_t gadget_string_s_store(struct config_item *item, const char *page,
+ {
+ 	struct gadget_string *string = to_gadget_string(item);
+ 	int size = min(sizeof(string->string), len + 1);
++	ssize_t cpy_len;
  
--out:
--	return retval;
-+	return 0;
+ 	if (len > USB_MAX_STRING_LEN)
+ 		return -EINVAL;
  
- out_newid:
- 	driver_unregister(&new_driver->driver);
--
-+out:
- 	pr_err("%s: error %d registering interface driver %s\n",
- 		usbcore_name, retval, new_driver->name);
--	goto out;
-+	return retval;
+-	return strscpy(string->string, page, size);
++	cpy_len = strscpy(string->string, page, size);
++	if (cpy_len > 0 && string->string[cpy_len - 1] == '\n')
++		string->string[cpy_len - 1] = 0;
++	return len;
  }
- EXPORT_SYMBOL_GPL(usb_register_driver);
+ CONFIGFS_ATTR(gadget_string_, s);
  
-
----
-base-commit: d8d936c51388442f769a81e512b505dcf87c6a51
-change-id: 20241129-fix_usb-5b37e1d2730d
-
-Best regards,
 -- 
-Zijun Hu <quic_zijuhu@quicinc.com>
+2.47.1
 
 
