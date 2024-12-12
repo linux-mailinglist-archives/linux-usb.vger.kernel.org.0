@@ -1,150 +1,120 @@
-Return-Path: <linux-usb+bounces-18432-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18433-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE56A9EE772
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 14:09:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86F739EE7F9
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 14:43:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49952188758C
-	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 13:09:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C4F6188918F
+	for <lists+linux-usb@lfdr.de>; Thu, 12 Dec 2024 13:42:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55DF72153E4;
-	Thu, 12 Dec 2024 13:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA917211A0E;
+	Thu, 12 Dec 2024 13:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FBygXNsa"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="lcRkd8TJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE072144B1
-	for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 13:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E31F62101A0
+	for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 13:42:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734008930; cv=none; b=IrhYwoSBmJOCtJl6CgDXRhzXa0IvBgUVi5n+3aq2X82iBx74TI4skZfAHaoxyQrcDIortJKtZyf3bq8OF2hieYBbWUZdp41ANAWHre98PR92mjVMYYLApjy1rHPWtMIZm3aohvenR9wQN24wMIAhU8r/fSZYmXo4kV6gc9WSWGE=
+	t=1734010970; cv=none; b=PHAham4I1iUFnrzC3taif9dgofc1IEVKXIP0x7/ma15fhhwIKri1SpbQG75HeUAGVWvmXytL7gI6zEhlJkehkLe988b5vApwEeTeyxmZKRiOqoa1J/vnaEnCjaQyMVT0poR3gRjr7C23Nn19lwIyFemANZTcGOX3cJC5Bz21mIk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734008930; c=relaxed/simple;
-	bh=uXl2hEmCTQKufHaw3qRwm8b6rrSxvV0DnO8x+QbHetM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oYzLPQE5qxjSHLBBhzv3xOvNe/U5lBeaCpC0Rfe/tCza9seLxB6zXvaahFfpaVrqbiypZ1KVcX0kK4tDblDnMNkiFpfZ/q5v24ko4dC7G9FmSUJWxTnzoyKu9EWzbN5ssaxr/aGf/4uH7yoZSZUmP1BSje1q6S2NuAWukWSa5Us=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FBygXNsa; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-38633b5dbcfso583629f8f.2
-        for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 05:08:48 -0800 (PST)
+	s=arc-20240116; t=1734010970; c=relaxed/simple;
+	bh=TJaPEhN5dPL7qghbv4Shmz5FEwWiDm5qF51LO8/zbYw=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=gFHWerZ92Qex6endXVZLlKKPJE0p+xWQ/IacUdoj8rgWNm9qrG0ChTFRZpo3ZfLl+HwwzwL2+MUR1XTM8W88Vqo8u9FaupBCs7SiMaLhaIwMlWEAA5abe7wVlRiSX4Ilqrqa+rWrVxAkUQncjy8S9SQyQjrIqa1Xbuq1M+Nk9u8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=lcRkd8TJ; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2166022c5caso5235245ad.2
+        for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 05:42:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734008927; x=1734613727; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Laarec9Gcg77CSK8knsrpRMAwU44ByomzCcpHvi92jc=;
-        b=FBygXNsayRPSRtU8g2upnjxMiyH7vY7IQVm3GFfMVtImtv7do/4mV/DaxwxeGbczid
-         BuMVQ2XKVlT6ZRQmb0ED11sQYGt3pi10M26G+RVJpmqX87CGYBIYqGVJSChwVC3MmNX/
-         GGh/69V4TduLFfg6AhIcsh33ET+rKS0VqyUJI3ovfv0CJF5HpAq1rmFju12423VQhvBu
-         1ERlx9q8k0IjKTr/U327U6BZhXX3Th9HYLaSyy/nYvoY0J3CVGeAjCKDX11QEgnLs3wV
-         y6178naeU4eH8gi3ihzRbyWo14xgX72qLF1Dk8E7l6KIdphOUY+csbxCYwRmDoUtlTOp
-         GoNg==
+        d=chromium.org; s=google; t=1734010967; x=1734615767; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=ioEgptBGStQecowb8hsxs0yHbIexmBpWuNeY3q3dqBE=;
+        b=lcRkd8TJIFEFCwxZI6oshFcrJnWNW8PHlYsmtzA2P10fzNWW7tzdx9v/FqvndeEWDF
+         Wv503adS42ZvC2aqo+S1nvHdpLux2fJO1kNmp+3WVg9JPuayOeR6RDiaD2utPhFsypYj
+         mCJpa456+weR2xDKAzxwqeWqWVCRkUphRV+ug=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734008927; x=1734613727;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Laarec9Gcg77CSK8knsrpRMAwU44ByomzCcpHvi92jc=;
-        b=Ir1GEh3SyRzcdqbc2h+CQejEOyt163d9ONquUTO+PazzMAhUH/dx0j8hzqRKdDI12H
-         HqMr8pci2icQnP7NGVWBREamK33mrsR1u0CDpJK1SulexVk7+rrjuzwmHHEh6/AuSmmN
-         d0W3KGb+5V7cl0nhS0DwZN5+8IigDKIHHWJYX1vQzUGYGjOLswzeumjS2ZT92cjPolCw
-         pjnXUgPXitv+aedfwffsC/5klMTnO7vgEcYzq06yCocEoDtU0tFyNv9ritSx879yyPQV
-         560LWdz1cbL9C3mq06iCMBlizJsTFnl4v5JVZYGeMng0RoVW2zfUteYBdt6QhLoikrUn
-         b/ZA==
-X-Forwarded-Encrypted: i=1; AJvYcCWr2j12tN6mKUZT32a3OPddJbVGJ40fl+biInUQH1p7E71zX8nftEGud7p/6VraEUB4aLFwOMvgGh4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzlvYLY0pr3Tbun8yx1gxYCXlGD0tsQAgiJjleZcxOiX9EcqYiF
-	tntwrf+G0/P10hbzndkUNlO+duQgZvMpXNA4mcGdGMAsWVLhCiqp0Aksn1kLoMw=
-X-Gm-Gg: ASbGncso8I79ONFw8GDh0kpM42Dq9k4aaZvBDw+fBEayc/1nytZIsbOBDXrZxw0laDz
-	oISwUliX3EOL3uNFWOkCvBG/oCQs8Y8AytA1PsgbJ2u3XIUkjpcXbPIM5DcyYGJO5BWZlcFVGmN
-	Veigbnhgw9v0ok1Iy1xuI4M5rK0+aMTQpHhTSYJIxkQmv6lgEIPema39xdc49WReXFqo+0vfz5A
-	0fYCppXRCsU3va3rSQNN6OIj9Yg8Z+VX1XnsTb+sp0MYfApAB8HB67T95J4YKTlaP2eSA==
-X-Google-Smtp-Source: AGHT+IE278mQiSqfLuj53e2L8BLf2OCaH8QWc+w2KN9nQLaegzE1t3lgp9B26uV3jFUsqIGi89QwRg==
-X-Received: by 2002:a5d:59ae:0:b0:385:ee3f:5cbf with SMTP id ffacd0b85a97d-3864ce96d73mr5779300f8f.20.1734008927226;
-        Thu, 12 Dec 2024 05:08:47 -0800 (PST)
-Received: from [127.0.0.2] ([2a02:2454:ff21:ef40:3c0e:7a2d:e7e3:9cf8])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aa6845ab4absm605843366b.73.2024.12.12.05.08.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Dec 2024 05:08:46 -0800 (PST)
-From: Stephan Gerhold <stephan.gerhold@linaro.org>
-Date: Thu, 12 Dec 2024 14:08:25 +0100
-Subject: [PATCH 3/3] arm64: dts: qcom: x1e80100-qcp: Enable external DP
- support
+        d=1e100.net; s=20230601; t=1734010967; x=1734615767;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ioEgptBGStQecowb8hsxs0yHbIexmBpWuNeY3q3dqBE=;
+        b=pD0ykJ2SjrjYuLs8daNhKzB5ymhWgTA/ST3shrYjv7FWzrqPjP1OvCZ5/LOiboGf7O
+         h3x+6ydSYfRjQEYN0cpJ+QyKoSPTLsS6z2NK1ptWTAnMUt1nnLEIpQ88gM/mk9w0p5Ll
+         ltKvrums+syS0beBioyxXCmeGWKaFoVjPq4Sa6ild40xaH6N0FX96rSLUj0O3PtliZev
+         ant297yX9Pf7t1EIE0HVEtWn2mgsouYbkeXLh4noL51TziqmJUk9P91/SHVMo3XhD+6O
+         jmd/RqOSCR5NCDA0IhsxhocynTmoemfUZwtntG8y2cZN/RrpKZ8C9n+P+qdZmkn4UX8F
+         rzJg==
+X-Gm-Message-State: AOJu0YwmLA0U79CA4XvOF/Wq3NJudy07paGq38kllhHuWRSb10hY/KMG
+	ts655BvqqsQw3XJZIriVQkMlZJ8V0iFLORqLG9AO22/ehBLLaGlNJFao4ea13s/pmJ2DNzMfiTE
+	=
+X-Gm-Gg: ASbGncs6VZkzfH99yXF2dBoqd37FL+Fuk3Cdb+NqU/9GHSPBZoR/WD2s9wrMzm4kXi/
+	2JWFS6W7uSMW/6M+8l9A2srquijoKtf5anXguCx1ix8fkz7YfSyWDSNGHbKuMP+PmuXghNnK3+q
+	DyTJM1u/C0nQg/44gB/Pb71BNIzH+tWClNmGKFSzr1pKy65Re9G/cMd3Lc/VEqbwaHpreGGvQ+A
+	7b8E6YOEp+hamzMrlGBFr3HzCOFiKuUXNz2TtuImB+3UHicBkYDmLc8uf2Age3LY7edul+MoSLX
+	x5XhTlaIbs04VrsIifQ=
+X-Google-Smtp-Source: AGHT+IEZzFpHh2AGoGJNBxL77LIQ2f1SFJKNe1mtBrmIwnN7d9Gpm81wODJIxR2lHuY42s/VMzFQ3Q==
+X-Received: by 2002:a17:902:d4c9:b0:216:3c2b:a5d0 with SMTP id d9443c01a7336-2178aee7588mr47368175ad.51.1734010967449;
+        Thu, 12 Dec 2024 05:42:47 -0800 (PST)
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com. [209.85.216.42])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21632aaf054sm86995415ad.252.2024.12.12.05.42.46
+        for <linux-usb@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 12 Dec 2024 05:42:46 -0800 (PST)
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2efa856e4a4so424430a91.0
+        for <linux-usb@vger.kernel.org>; Thu, 12 Dec 2024 05:42:46 -0800 (PST)
+X-Received: by 2002:a17:90b:38cd:b0:2ee:b2e6:4275 with SMTP id
+ 98e67ed59e1d1-2f13930a5bemr5226158a91.26.1734010965932; Thu, 12 Dec 2024
+ 05:42:45 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241212-x1e80100-qcp-dp-v1-3-37cb362a0dfe@linaro.org>
-References: <20241212-x1e80100-qcp-dp-v1-0-37cb362a0dfe@linaro.org>
-In-Reply-To: <20241212-x1e80100-qcp-dp-v1-0-37cb362a0dfe@linaro.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>, 
- Johan Hovold <johan@kernel.org>
-X-Mailer: b4 0.14.2
+From: Ricardo Ribalda <ribalda@chromium.org>
+Date: Thu, 12 Dec 2024 14:42:34 +0100
+X-Gmail-Original-Message-ID: <CANiDSCtZrWAbH14fqoSq9OKv8oV30Df6AnvWGCw3gdWHT3RBrw@mail.gmail.com>
+X-Gm-Features: AZHOrDkkeUSv68uFDsthNPVdPT9M9vwSK5vDMlQCWhio0xwm_BfaQRgAl7Py914
+Message-ID: <CANiDSCtZrWAbH14fqoSq9OKv8oV30Df6AnvWGCw3gdWHT3RBrw@mail.gmail.com>
+Subject: Annotating USB device Location in DT
+To: linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+Cc: Yunke Cao <yunkec@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Now that the FSUSB42 USB switches are described, enable support for DP on
-the three USB-C ports of the X1E80100 QCP. It supports up to 4 lanes, but
-for now we need to limit this to 2 lanes due to limitations in the USB/DP
-combo PHY driver. The same limitation also exists on other boards upstream.
+Hi all,
 
-Co-developed-by: Abel Vesa <abel.vesa@linaro.org>
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-Signed-off-by: Stephan Gerhold <stephan.gerhold@linaro.org>
----
- arch/arm64/boot/dts/qcom/x1e80100-qcp.dts | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+I'm working on a way to annotate the location of a USB device within a
+system, specifically whether it's "user-facing" or "world-facing."
 
-diff --git a/arch/arm64/boot/dts/qcom/x1e80100-qcp.dts b/arch/arm64/boot/dts/qcom/x1e80100-qcp.dts
-index cc0561debdb0b5c89f5d7f298d34f1feaf183b61..f45df1396eae55896a66e140b7db96c6089fbe38 100644
---- a/arch/arm64/boot/dts/qcom/x1e80100-qcp.dts
-+++ b/arch/arm64/boot/dts/qcom/x1e80100-qcp.dts
-@@ -711,6 +711,30 @@ &mdss {
- 	status = "okay";
- };
- 
-+&mdss_dp0 {
-+	status = "okay";
-+};
-+
-+&mdss_dp0_out {
-+	data-lanes = <0 1>;
-+};
-+
-+&mdss_dp1 {
-+	status = "okay";
-+};
-+
-+&mdss_dp1_out {
-+	data-lanes = <0 1>;
-+};
-+
-+&mdss_dp2 {
-+	status = "okay";
-+};
-+
-+&mdss_dp2_out {
-+	data-lanes = <0 1>;
-+};
-+
- &mdss_dp3 {
- 	compatible = "qcom,x1e80100-dp";
- 	/delete-property/ #sound-dai-cells;
+There's precedent for this type of annotation:
+
+- ACPI: Uses the '_PLD' property for this purpose
+(https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#pld-physical-location-of-device).
+We already leverage this for MIPI camera sensors
+(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/pci/intel/ipu-bridge.c#n265).
+
+- Device Tree : Has a property for this within
+video-interface-devices.yaml
+(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/media/video-interface-devices.yaml#n386).
+
+I propose adding a similar property to usb-device.yaml
+(https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/usb/usb-device.yaml).
+
+The ultimate goal is to have this information consumed by the video
+driver and exposed to userspace via the V4L2_CID_CAMERA_ORIENTATION
+control (https://www.kernel.org/doc/html/latest/userspace-api/media/v4l/ext-ctrls-camera.html).
+
+What do you think about this?
+
+Thanks,
 
 -- 
-2.47.0
-
+Ricardo Ribalda
 
