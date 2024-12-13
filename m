@@ -1,177 +1,292 @@
-Return-Path: <linux-usb+bounces-18454-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18455-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68C209F11B8
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2024 17:03:56 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEEC99F146D
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2024 18:55:26 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28F80282557
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2024 16:03:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0214E16A2D7
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2024 17:55:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 732D01E3786;
-	Fri, 13 Dec 2024 16:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7781E4106;
+	Fri, 13 Dec 2024 17:55:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MKOQFssY"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="gI/DUdxO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D46B31E0B75;
-	Fri, 13 Dec 2024 16:03:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F601187FFA
+	for <linux-usb@vger.kernel.org>; Fri, 13 Dec 2024 17:55:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734105830; cv=none; b=IFMkbSnKh9E0hkYsY1lBPBQvToRooDD+9AluSzADDmvZ1M9InG+HmCRUr2sEInPlrZcnxOhpzhxtcB9rkTD5r86laiNtBEG2Jm2z9dMWBKe0YmzzmCX/O2XhJCeSE3T8mQiW1AP9ZczwCMJSZU2sfnIzUTaGCUnLixxWrYyz3Q8=
+	t=1734112520; cv=none; b=tz8DUH/zHh7ZwcDmtXZz7uLIYa+jsWaYoFbIGXVzfwgH6KoX177707t84paxz/gNFRfyJCJeM5Zq5Q1+PUHztpuVQUC6TR4ssfNa592uDk/Ega3JJ8xKX3cZnEd8NLHcIAHHZ789mcy2lNPSpIN5FcnL+IjyOHfrR2hJnz/a+BE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734105830; c=relaxed/simple;
-	bh=9CUyDLEEMV5qyxKzXcyDb9Bk0pHXrY+UG4VcLupdXmI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
-	 References:In-Reply-To; b=Drcgl5B6SD1OWW9lZP7XrqIi7BnjV2hxtND+feFWAvJzb4KuOnqINyalskhHnh9Q6xAGw+HMO4q4UWRytOlntbKpfwtQIDLz5iKw0ISTQAC26nrVjF6HVAI9oLJqPh8HstLIDEwt+aq6XUoCAArm9Y7nCw+sOvKxCYJnkUZ/CIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MKOQFssY; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DB21024000F;
-	Fri, 13 Dec 2024 16:03:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1734105819;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H9vZk0DTsI/bg+ANJhh1zU7eKOQQ40nhMEZ4aKgjFCA=;
-	b=MKOQFssY1ZmRAEmIhvcApp8YueSah6mdUcNLSYxoBuMs9ZXqFGLOgfT7uso+rgcQ8OAMUg
-	HmcJJW/qIeJGSqTLr/R49qSxhRrrLr5aMUx8dshXdXNc/WJSBGriQdEr6nAbblXcnBAyji
-	w1zIZMS+kCvLUmFKrZ3FdRxcZNLM7Ioz4jscCgNlw9eMN40PYlmfEN1J/Du4L6A07WinzJ
-	1U5HV1B3K/7uDzCJBQ/4EWs96vLLTwFCiQVqrwR+vCelah3VaGZ7NF//6arj8Eb+sQ8Hmz
-	7X66HdHTLXqrP6n5is3838mDEg+PxzmTSzahvzJeDE3A3U3BP9soBqMke8pXCQ==
+	s=arc-20240116; t=1734112520; c=relaxed/simple;
+	bh=EXMl1VjQUQGEWOFRwkpxn2GPtLeQmxpmZUabvDA8kC4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nmdKQTnZEY+l6i/IqJNi/9XwHIb4zQjid5tB5P7X65tS61Dr04dYfdcwD7z0RMeQoxSjLLZn5qJZEM85O0Ghaerg47eqEWdRiaQ3quWWrfQOVvFJXqNsugEX30wsN9YKxBqAeCPfpjwbIArWHRZ87KGUtYliZTwr0k2QSHZAWUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=gI/DUdxO; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e387ad7abdaso1522784276.0
+        for <linux-usb@vger.kernel.org>; Fri, 13 Dec 2024 09:55:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1734112518; x=1734717318; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SNAl3pYsAdok6wmTwstpNCbMSVKtC0nPPGJ5z8X86Jk=;
+        b=gI/DUdxOMIL/6Ku0VqQC8a9zaKQzhHPFSBOBbizp4T4zO++nXv0wj2ifLKRvgHBnvs
+         VM0eA7A1tOqod19jlPv+IpdPR+5YUuBhVi0Mhzop2T8P3BJ7YCOIymv6Y9ACrkUxOok1
+         Hf14XTqZ2NsG7nJV70K/ahPzqfQZ8JwDSbeX4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734112518; x=1734717318;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SNAl3pYsAdok6wmTwstpNCbMSVKtC0nPPGJ5z8X86Jk=;
+        b=nkg7SgS4/HoKv+wPTQm6ZzJXM6q6vnYURFjMY5emU4n0PsrWawkOXqHWhxl6iWVX4n
+         78U2pPfIkACir0Cn47AtYHIccC4hWLL/bZ0JtlRn3kYrKpzdsvw8WkllbRENIWEy2GZ7
+         vzvwOSRZzbcx6X7Z99tOUN1/FXflBHMxxDNe5PxWpPy2WpRoiupCdH7lskeheMVou7+a
+         0RujXQRS3OY/E/0TydXr7EjFfJgwKFzGHNeSlFq6YwLGGYWFDuiZNr8YJ/WccVaZ6O7F
+         18/JSVXOQd6e4Dfy13Jv3ZY6Kd9uJMqXmw6G1XAICx33mQZZwpWHv0LqYuZrpuXpkqlJ
+         xYNA==
+X-Forwarded-Encrypted: i=1; AJvYcCUFHR/rQhHreMfYludsb3tsSo9+2ZxM7X00bm/pC67VOC6FPt2FhwKTDZDsmk3W+k93GUpu9/gtZIY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8+s4UAxYUeQ1PiKomQr5X/4xmkla8FT9MEEs4K9MKvQ1QlZ1p
+	y2DJJeWmfGWy/YoGVPJ7ygrEGgnx5MZqAtI5vMrMB6NIhvOCCID1gEOZWQTuURucUIRcCVTOVTS
+	ytTajegnAqC5QZYf8vIWpkmt5xn7XNM45tQKv
+X-Gm-Gg: ASbGncv9d45tDUf+t3hd9y+y0woFDpP8GVL87UrUMiUS7qYjYjwf/zbc+tgGE/9GFpp
+	sQIO/5/e6QNmlBBn+dUIF2vSPWT1mgqlx6vjKOg==
+X-Google-Smtp-Source: AGHT+IHKj2DJBifjxgnaueO2xSRR3Bbz5xWR0O8owRadJHa6UFQcidPK/tlY3CyGB4z7uua1HkTtXclZdEar54N9Twg=
+X-Received: by 2002:a05:6902:248f:b0:e39:9291:7bd9 with SMTP id
+ 3f1490d57ef6-e434ac01361mr2519259276.31.1734112518070; Fri, 13 Dec 2024
+ 09:55:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20241206233830.2401638-1-abhishekpandit@chromium.org>
+ <20241206153813.v4.2.I3080b036e8de0b9957c57c1c3059db7149c5e549@changeid> <CAE-0n52KWd5twmXk5fHf=kfdNm27QTJMPLrU3CRb9SnrtAF_UA@mail.gmail.com>
+In-Reply-To: <CAE-0n52KWd5twmXk5fHf=kfdNm27QTJMPLrU3CRb9SnrtAF_UA@mail.gmail.com>
+From: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+Date: Fri, 13 Dec 2024 09:55:06 -0800
+Message-ID: <CANFp7mUOxyYfkr6Ce93aLzJXRopbvfEjq52tsa+DhKi-Y90Uvw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/7] usb: typec: Add driver for Thunderbolt 3 Alternate Mode
+To: Stephen Boyd <swboyd@chromium.org>
+Cc: chrome-platform@lists.linux.dev, heikki.krogerus@linux.intel.com, 
+	linux-usb@vger.kernel.org, tzungbi@kernel.org, akuchynski@google.com, 
+	pmalani@chromium.org, jthies@google.com, dmitry.baryshkov@linaro.org, 
+	badhri@google.com, rdbabiera@google.com, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 13 Dec 2024 17:03:38 +0100
-Message-Id: <D6AP7JCNSME9.3FS7XCZJ37GM8@bootlin.com>
-Subject: Re: [PATCH v6 4/5] xhci: introduce xhci->lost_power flag
-Cc: =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Thomas
- Petazzoni" <thomas.petazzoni@bootlin.com>, <linux-usb@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-To: "Roger Quadros" <rogerq@kernel.org>, "Peter Chen"
- <peter.chen@kernel.org>, "Pawel Laszczak" <pawell@cadence.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, "Mathias Nyman"
- <mathias.nyman@intel.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: aerc 0.18.2-0-ge037c095a049
-References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
- <20241210-s2r-cdns-v6-4-28a17f9715a2@bootlin.com>
- <70aced7f-0311-43b9-96af-c8325c39ff2b@kernel.org>
-In-Reply-To: <70aced7f-0311-43b9-96af-c8325c39ff2b@kernel.org>
-X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Thu Dec 12, 2024 at 1:37 PM CET, Roger Quadros wrote:
-> On 10/12/2024 19:13, Th=C3=A9o Lebrun wrote:
-> > The XHCI_RESET_ON_RESUME quirk allows wrappers to signal that they
-> > expect a reset after resume. It is also used by some to enforce a XHCI
-> > reset on resume (see needs-reset-on-resume DT prop).
-> >=20
-> > Some wrappers are unsure beforehands if they will reset. Add a mechanis=
-m
-> > to signal *at resume* if power has been lost. Parent devices can set
-> > this flag, that defaults to false.
-> >=20
-> > The XHCI_RESET_ON_RESUME quirk still triggers a runtime_pm_get() on the
-> > controller. This is required as we do not know if a suspend will
-> > trigger a reset, so the best guess is to avoid runtime PM.
-> >=20
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > ---
-> >  drivers/usb/host/xhci.c | 3 ++-
-> >  drivers/usb/host/xhci.h | 6 ++++++
-> >  2 files changed, 8 insertions(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
-> > index 5ebde8cae4fc44cdb997b0f61314e309bda56c0d..ae2c8daa206a87da24d58a6=
-2b0a0485ebf68cdd6 100644
-> > --- a/drivers/usb/host/xhci.c
-> > +++ b/drivers/usb/host/xhci.c
-> > @@ -1017,7 +1017,8 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message=
-_t msg)
-> > =20
-> >  	spin_lock_irq(&xhci->lock);
-> > =20
-> > -	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken=
-_suspend)
-> > +	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME ||
-> > +	    xhci->broken_suspend || xhci->lost_power)
-> >  		reinit_xhc =3D true;
-> > =20
-> >  	if (!reinit_xhc) {
-> > diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-> > index 4914f0a10cff42dbc1448dcf7908534d582c848e..32526df75925989d40cbe7d=
-59a187c945f498a30 100644
-> > --- a/drivers/usb/host/xhci.h
-> > +++ b/drivers/usb/host/xhci.h
-> > @@ -1645,6 +1645,12 @@ struct xhci_hcd {
-> >  	unsigned		broken_suspend:1;
-> >  	/* Indicates that omitting hcd is supported if root hub has no ports =
-*/
-> >  	unsigned		allow_single_roothub:1;
-> > +	/*
-> > +	 * Signal from upper stacks that we lost power during system-wide
-> > +	 * suspend. Its default value is based on XHCI_RESET_ON_RESUME, meani=
-ng
-> > +	 * it is safe for wrappers to not modify lost_power at resume.
-> > +	 */
-> > +	unsigned                lost_power:1;
+On Tue, Dec 10, 2024 at 4:21=E2=80=AFPM Stephen Boyd <swboyd@chromium.org> =
+wrote:
 >
-> I suppose this is private to XHCI driver and not legitimate to be accesse=
-d
-> by another driver after HCD is instantiated?
-
-Yes it is private.
-
-> Doesn't access to xhci_hcd need to be serialized via xhci->lock?
-
-Good question. In theory maybe. In practice I don't see how
-cdns_host_resume(), called by cdns_resume(), could clash with anything
-else. I'll add that to be safe.
-
-> Just curious, what happens if you don't include patch 4 and 5?
-> Is USB functionality still broken for you?
-
-No it works fine. Patches 4+5 are only there to avoid the below warning.
-Logging "xHC error in resume" is a lie, so I want to avoid it.
-
-> Doesn't XHCI driver detect that power was lost and issue a reset in any c=
-ase
-> via the below code
+> Quoting Abhishek Pandit-Subedi (2024-12-06 15:38:13)
+> > diff --git a/drivers/usb/typec/altmodes/thunderbolt.c b/drivers/usb/typ=
+ec/altmodes/thunderbolt.c
+> > new file mode 100644
+> > index 000000000000..14e89e9a7691
+> > --- /dev/null
+> > +++ b/drivers/usb/typec/altmodes/thunderbolt.c
+> > @@ -0,0 +1,387 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/**
 >
->         /* re-initialize the HC on Restore Error, or Host Controller Erro=
-r */
->         if ((temp & (STS_SRE | STS_HCE)) &&
->             !(xhci->xhc_state & XHCI_STATE_REMOVING)) {
->                 reinit_xhc =3D true;
->                 if (!xhci->broken_suspend)
->                         xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x=
-, Reinit\n", temp);
->         }
+> Remove extra *, this isn't kerneldoc.
+Done
+
 >
-> >  	/* cached extended protocol port capabilities */
-> >  	struct xhci_port_cap	*port_caps;
-> >  	unsigned int		num_port_caps;
-> >=20
+> > + * USB Typec-C Thuderbolt3 Alternate Mode driver
+> > + *
+> > + * Copyright (C) 2019 Intel Corporation
+> > + * Author: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+> > + */
+> > +
+> > +#include <linux/delay.h>
+>
+> Is this include used?
 
-I'll wait for your opinion on the [PATCH v6 2/5] email thread before
-sending a new revision.
+Compiles without it so I'm guessing no.
 
-Thanks,
+>
+> > +#include <linux/mutex.h>
+> > +#include <linux/module.h>
+> > +#include <linux/usb/pd_vdo.h>
+> > +#include <linux/usb/typec_altmode.h>
+> > +#include <linux/usb/typec_tbt.h>
+>
+> Please include workqueue.h
+Done
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+>
+> > +
+> > +enum tbt_state {
+> > +       TBT_STATE_IDLE,
+> > +       TBT_STATE_SOP_P_ENTER,
+> > +       TBT_STATE_SOP_PP_ENTER,
+> > +       TBT_STATE_ENTER,
+> > +       TBT_STATE_EXIT,
+> > +       TBT_STATE_SOP_PP_EXIT,
+> > +       TBT_STATE_SOP_P_EXIT
+> > +};
+> > +
+> > +struct tbt_altmode {
+> > +       enum tbt_state state;
+> > +       struct typec_cable *cable;
+> > +       struct typec_altmode *alt;
+> > +       struct typec_altmode *plug[2];
+> > +       u32 enter_vdo;
+> > +
+> > +       struct work_struct work;
+> > +       struct mutex lock; /* device lock */
+>
+> What does it protect? The whole struct tbt_altmode?
 
+This looks like it's protecting control flow (enter/exit/vdm can all
+be triggered on probe, via .activate or potentially autonomously via
+port driver triggering the alt-mode).
+
+>
+> > +};
+> [...]
+> > +
+> > +/* MUST HOLD tbt->lock.
+>
+> Use lockdep_assert_held(tbt->lock) and remove the comment?
+Done.
+
+>
+> > + *
+> > + * If SOP' is available, enter that first (which will trigger a VDM re=
+sponse
+> > + * that will enter SOP" if available and then the port). If entering S=
+OP' fails,
+> > + * stop attempting to enter either cable altmode (probably not support=
+ed) and
+> > + * directly enter the port altmode.
+> > + */
+> > +static int tbt_enter_modes_ordered(struct typec_altmode *alt)
+> > +{
+> > +       struct tbt_altmode *tbt =3D typec_altmode_get_drvdata(alt);
+> > +       int ret =3D 0;
+> > +
+> > +       if (!tbt_ready(tbt->alt))
+> > +               return -ENODEV;
+> > +
+> > +       if (tbt->plug[TYPEC_PLUG_SOP_P]) {
+> > +               ret =3D typec_cable_altmode_enter(alt, TYPEC_PLUG_SOP_P=
+, NULL);
+> > +               if (ret < 0) {
+> > +                       for (int i =3D TYPEC_PLUG_SOP_PP; i > 0; --i) {
+> > +                               if (tbt->plug[i])
+> > +                                       typec_altmode_put_plug(tbt->plu=
+g[i]);
+> > +
+> > +                               tbt->plug[i] =3D NULL;
+> > +                       }
+> > +               } else {
+> > +                       return ret;
+> > +               }
+> > +       }
+> > +
+> > +       return tbt_enter_mode(tbt);
+> > +}
+> > +
+> > +static int tbt_cable_altmode_vdm(struct typec_altmode *alt,
+> > +                                enum typec_plug_index sop, const u32 h=
+dr,
+> > +                                const u32 *vdo, int count)
+> > +{
+> [...]
+> > +               case CMD_EXIT_MODE:
+> > +                       /* Exit in opposite order: Port, SOP", then SOP=
+'. */
+> > +                       if (sop =3D=3D TYPEC_PLUG_SOP_PP)
+> > +                               tbt->state =3D TBT_STATE_SOP_P_EXIT;
+> > +                       break;
+> > +               }
+> > +               break;
+> > +       default:
+> > +               break;
+> > +       }
+> > +
+> > +       if (tbt->state !=3D TBT_STATE_IDLE)
+> > +               schedule_work(&tbt->work);
+> > +
+> > +
+>
+> Nitpick: Why two newlines?
+Clang format missed it :(
+
+>
+> > +       mutex_unlock(&tbt->lock);
+> > +       return 0;
+> > +}
+> > +
+> [...]
+> > diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+> > index febe453b96be..b5e67a57762c 100644
+> > --- a/drivers/usb/typec/class.c
+> > +++ b/drivers/usb/typec/class.c
+> > @@ -458,7 +458,8 @@ static umode_t typec_altmode_attr_is_visible(struct=
+ kobject *kobj,
+> >         struct typec_altmode *adev =3D to_typec_altmode(kobj_to_dev(kob=
+j));
+> >
+> >         if (attr =3D=3D &dev_attr_active.attr)
+> > -               if (!adev->ops || !adev->ops->activate)
+> > +               if (!is_typec_port(adev->dev.parent) &&
+> > +                   (!adev->ops || !adev->ops->activate))
+> >                         return 0444;
+> >
+> >         return attr->mode;
+> > @@ -563,7 +564,7 @@ typec_register_altmode(struct device *parent,
+> >
+> >         if (is_port) {
+> >                 alt->attrs[3] =3D &dev_attr_supported_roles.attr;
+> > -               alt->adev.active =3D true; /* Enabled by default */
+> > +               alt->adev.active =3D !desc->inactive; /* Enabled by def=
+ault */
+> >         }
+> >
+> >         sprintf(alt->group_name, "mode%d", desc->mode);
+> > diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+> > index d616b8807000..252af3f77039 100644
+> > --- a/include/linux/usb/typec.h
+> > +++ b/include/linux/usb/typec.h
+> > @@ -140,6 +140,7 @@ int typec_cable_set_identity(struct typec_cable *ca=
+ble);
+> >   * @mode: Index of the Mode
+> >   * @vdo: VDO returned by Discover Modes USB PD command
+> >   * @roles: Only for ports. DRP if the mode is available in both roles
+> > + * @inactive: Only for ports. Make this port inactive (default is acti=
+ve).
+> >   *
+> >   * Description of an Alternate Mode which a connector, cable plug or p=
+artner
+> >   * supports.
+> > @@ -150,6 +151,7 @@ struct typec_altmode_desc {
+> >         u32                     vdo;
+> >         /* Only used with ports */
+> >         enum typec_port_data    roles;
+> > +       bool                    inactive;
+> >  };
+> >
+> >  void typec_partner_set_pd_revision(struct typec_partner *partner, u16 =
+pd_revision);
+>
+> These two files look like they can be a different patch? Or the commit
+> text can describe these changes.
+
+I think earlier in the series, they were its own patch -- got merged
+down into this over several refactors. I'll pull it out into its own
+patch.
 
