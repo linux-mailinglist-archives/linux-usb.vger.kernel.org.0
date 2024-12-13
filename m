@@ -1,114 +1,119 @@
-Return-Path: <linux-usb+bounces-18452-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18453-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B206B9F0FAA
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2024 15:54:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3B5F9F1103
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2024 16:29:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87C561889730
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2024 14:53:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 614A8162849
+	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2024 15:28:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43C5E1E22FD;
-	Fri, 13 Dec 2024 14:53:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A97051E2843;
+	Fri, 13 Dec 2024 15:28:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PS5Ws4GE"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RCfPk2I9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C1BA1E1C3F;
-	Fri, 13 Dec 2024 14:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7342E1E25EA;
+	Fri, 13 Dec 2024 15:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734101614; cv=none; b=qtCzwZFbYxOs8BsPXscAAnSIdH8iydaL3qeKzx+bMsFeq3cl6Xy81YRAJ1OdP89YOIgP0bmk8S3OcNDvIs3T7asJkfXJc/1zQ4KuPYr8+7Kd63Kq795LeeUEOYI8nd6Pyxf06GIOo7Myf6tkozUa/UaNq3lRHxSPzSRVqZzLJIU=
+	t=1734103736; cv=none; b=n2CkRgUzkPkaWZ8Id1JDmIzNJ4Lr76SSqcnLBJiYImsStHU/ZzhNyEX3RoIpOiy9TIGPBtFycnUfIASO+3XNoDPQ98wbYgludu8cIue3/OM4/6LDuQjJi0zjku7MZZ1+R5axPDtXNR7/IwwpHrcLkWhCS7f8g+7p+IJa5i6D26I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734101614; c=relaxed/simple;
-	bh=FAgGAyUsAb8uwbMlCep8Nds8XOm7ZF3gyqO+MrgJyCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=T3AsJIaxzeJimBvboSm0vcD9rpRS0x5elCVOznDt6gnUo4n2yj82gVc66ONp0iAOvEK06OXYBgIX448rZHFGCFbJlL3CT7OmQ1ErEIM262z3gh5kjZsDQRJCugJ+QTgGcnkx+2vLBePyE2Y439tyHMR3YY7Npu2X8r3QKunODEk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PS5Ws4GE; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-725f4623df7so1562797b3a.2;
-        Fri, 13 Dec 2024 06:53:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734101613; x=1734706413; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=5ffDh4cPP1MjSOsq6XwoiROkk/23YNkcWtvcfwJIn5M=;
-        b=PS5Ws4GEXukf9fP13NiXu008GxK3wOQ8C4KKv4NCT1hTtbKeaNPxbo7A3ZieBx/p+D
-         N3eCVgzUCsvQX7fiWUJk135SuhCJFoEUT+egUYP6QF356SJdVREVCr8/bFYICJLWSOOa
-         Is3rvEs5EPqHIMuQqiO1nax3a6RO6oE5gS0AWZIakhO365hfQeyv+oQfCzy1dfpUIIK8
-         zlpEWxCzbJYTPwxK+IebFQ5v1QzjEJQfX6rHiloqfB9PVwBCp8aM3EGmo6J5o2/3GxSd
-         iAUNJ+4nlWx97q5x8FcnAeGacFtyNboJWraEO1RyDj/y+Y6mjSso4d206tzDEKdIKEk6
-         Edkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734101613; x=1734706413;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5ffDh4cPP1MjSOsq6XwoiROkk/23YNkcWtvcfwJIn5M=;
-        b=ABMEPffYfw4onnBcQWNPq2W983GWvVVYwYi0w0dd6TjjRRBsBY5kBGt20njj+2qzwx
-         j70Y/jP7BcqGPqOhbXW6DMNCY7pBYbDFtn0bY8/obiKGdck9ikIYTbrRQXYJhQlXDW5x
-         3bA/Vx6BVSwHkjgLe5vE5aXMwTTorNbFcXcEuM1h8McLOqJeMUA8/7EAmtUJobV3Risl
-         ywysrYtIBgVoStmVqD9rfoF4sopgvMX372kxb3301Q6/LUvjke2iOe7NiS31JqPMb2li
-         7ax0l0dQoPiKbmSJOHaA4UiJV5XvbtXkNGooEQp3PlSQOOK3t5A3kUCm/FEKYmmCm5Ed
-         AGMw==
-X-Forwarded-Encrypted: i=1; AJvYcCXbq7RgAyLWvrVQMhY+EZypa5bFhhM7tw5aajiR9ZwYhggutilnVyqFKaDFmxvV+Wbq65/z/d1Pq50hDK4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yze2ukgwx/bp4BaouJWm7Tt5KTOZPY9noAh657sPCJPQa/Nmgof
-	Y5qDgN1esuShfkivljKocZsY2RJFzHaHMOamLIJzyVsB/eU+poOG
-X-Gm-Gg: ASbGncsi1UqxKOlVtlkpXkeOA626gf2lilb40Gy5KmPI+w00CNslFrlr0p33lVSat4G
-	C07DqOpfwAJUc0GU9NXiIiS6W32c2f+n5t8DUjIMjACuEvVlqChDXdYdeBRVT1hBuciSVS34ndX
-	//C36KhusP5ZkipvP+oJ4n398WKjkZpn0CuIpUjbbFCgAu7mCTmyjT9J6H9HVUMqoPRH2sLqowv
-	1xv0wVSjJ6Yz1MI026NAq6XFfRML3zC0LWQWvob8JIfpCoObjS4YmhhOQ==
-X-Google-Smtp-Source: AGHT+IFQEzAQerjKuoSPL7Cy27yH+eoooujwqnA2dD4Hpr2w8zBOWQ0KFCmDZvR+4MRXGb0Lmht2yw==
-X-Received: by 2002:a05:6a20:12c1:b0:1e1:ccfb:240 with SMTP id adf61e73a8af0-1e1dfdfe075mr5041951637.41.1734101612631;
-        Fri, 13 Dec 2024 06:53:32 -0800 (PST)
-Received: from arch.localdomain ([2a09:bac5:d58c:1682::23e:23])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-725d30e6959sm11251327b3a.88.2024.12.13.06.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Dec 2024 06:53:32 -0800 (PST)
-From: Jun Yan <jerrysteve1101@gmail.com>
-To: gregkh@linuxfoundation.org,
-	zaitcev@redhat.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jun Yan <jerrysteve1101@gmail.com>
-Subject: [PATCH] USB: usblp: remove redundant semicolon
-Date: Fri, 13 Dec 2024 22:53:14 +0800
-Message-ID: <20241213145314.785616-1-jerrysteve1101@gmail.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1734103736; c=relaxed/simple;
+	bh=hqRZ6dn+eREKBjKhUZdWiXvrYAwInb1fPmI75e/MYx0=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=JcAIHcBjLGT9PdpK2FCxeRcwvGyipNDvaAzh7HVa6RaCl8E8ojR274PPOEkRFGJ07OBZ3Ak4KPLxy8ucBwswsvGJ3U/6KhVT3/us6mhUZc8xan7+UiseIVTV0Hq/FVPSIIaEP3USxc/yyfftWtsQv1J5TSH67duN5ByfNUsVyc8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RCfPk2I9; arc=none smtp.client-ip=217.70.183.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 143C94000D;
+	Fri, 13 Dec 2024 15:28:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1734103731;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=hqRZ6dn+eREKBjKhUZdWiXvrYAwInb1fPmI75e/MYx0=;
+	b=RCfPk2I9+5mLLiIe9f/HJsOEZW2WsldFsV8snRVTTH/oObO1X+rZPmHIywEyoUv15XYtYI
+	RBlsXK3Zz0s3Vp9RAiMvK5c6kqQXsOgCpA6LhgVtnfLOfycWfuVz8aQ9THRyz4FKjv5Jr5
+	EAI1OwSi0am6SBXDkRZu6mSzZSsx4sBnbufRLMVAXF4Y8U3x5bqJlFB2GLjn1JrZGI2hRe
+	0xxYLknhy7x/PrdtgboW0MxCBFrDtPQV4PvwYvm/RCEeYG5akuu51hneiO3eWzbf/LtlC6
+	85NA7SEzjL4rE1kAIFvxj8fQO0IhYyyye0pO5VvcHFMMpTKMfLpWZAJN0ZqsLQ==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 13 Dec 2024 16:28:50 +0100
+Message-Id: <D6AOGW7IXUEK.1AKKZZT0LAF0Q@bootlin.com>
+Subject: Re: [PATCH v6 2/5] usb: cdns3-ti: run HW init at resume() if HW was
+ reset
+Cc: =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, <linux-usb@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+To: "Roger Quadros" <rogerq@kernel.org>, "Peter Chen"
+ <peter.chen@kernel.org>, "Pawel Laszczak" <pawell@cadence.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Mathias Nyman"
+ <mathias.nyman@intel.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
+ <20241210-s2r-cdns-v6-2-28a17f9715a2@bootlin.com>
+ <4e1eb8d2-c725-4572-8419-3027cac10c92@kernel.org>
+In-Reply-To: <4e1eb8d2-c725-4572-8419-3027cac10c92@kernel.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-remove redundant semicolon in LPIOC_SOFT_RESET to
-fix the incorrect macro expansion syntax.
+On Thu Dec 12, 2024 at 1:18 PM CET, Roger Quadros wrote:
+> On 10/12/2024 19:13, Th=C3=A9o Lebrun wrote:
+> > At runtime_resume(), read the W1 (Wrapper Register 1) register to detec=
+t
+> > if an hardware reset occurred. If it did, run the hardware init sequenc=
+e.
+> >=20
+> > This callback will be called at system-wide resume. Previously, if a
+> > reset occurred during suspend, we would crash. The wrapper config had
+> > not been written, leading to invalid register accesses inside cdns3.
+> >=20
+>
+> Did I understand right that the Controller reset can happen only at
+> system suspend and never at runtime suspend?
 
-Signed-off-by: Jun Yan <jerrysteve1101@gmail.com>
----
- drivers/usb/class/usblp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+J7200 + upstream kernel =3D> if the power domain is cut off (it is
+implicitly at runtime PM) then it resets. This is 100% board dependent.
+We just never let it go into runtime suspend, for the moment.
 
-diff --git a/drivers/usb/class/usblp.c b/drivers/usb/class/usblp.c
-index 5a2e43331064..0f422f6c28e9 100644
---- a/drivers/usb/class/usblp.c
-+++ b/drivers/usb/class/usblp.c
-@@ -87,7 +87,7 @@
- /* Get two-int array: [0]=vendor ID, [1]=product ID: */
- #define LPIOC_GET_VID_PID(len) _IOC(_IOC_READ, 'P', IOCNR_GET_VID_PID, len)
- /* Perform class specific soft reset */
--#define LPIOC_SOFT_RESET _IOC(_IOC_NONE, 'P', IOCNR_SOFT_RESET, 0);
-+#define LPIOC_SOFT_RESET _IOC(_IOC_NONE, 'P', IOCNR_SOFT_RESET, 0)
- 
- /*
-  * A DEVICE_ID string may include the printer's serial number.
--- 
-2.47.1
+> If so do you really need the runtime suspend/resume hooks?
+> you should have different system suspend/resume hooks than runtime suspen=
+d/resume
+> hooks and deal with the re-initialization in system resume hook.
+
+The patch series works in the current setup with the wrapper that is
+never shut off. But it would also work if someone decides to use RPM on
+the wrapper.
+
+Overall, the current kernel-wide strategy is to minimise
+suspend/resume-specific code. Having only the concept of "runtime PM"
+and triggering that at system-wide suspend/resume is easier to reason
+about. It unifies concepts and reduces the states a device can be in.
+
+We could even imagine a future where ->suspend|resume() callbacks
+are pm_runtime_force_suspend|resume() by default.
+That'd be the dream, at least.
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
