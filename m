@@ -1,122 +1,122 @@
-Return-Path: <linux-usb+bounces-18482-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18501-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDA9F9F1AB1
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2024 00:58:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA18D9F1D95
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2024 09:49:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B729163D21
-	for <lists+linux-usb@lfdr.de>; Fri, 13 Dec 2024 23:58:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 411A718852DF
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2024 08:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9264715C14B;
-	Fri, 13 Dec 2024 23:54:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72A83158DD9;
+	Sat, 14 Dec 2024 08:49:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="poAbWf/t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SLIYGXj1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9F6B1F4288;
-	Fri, 13 Dec 2024 23:54:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA65411712;
+	Sat, 14 Dec 2024 08:49:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734134080; cv=none; b=kmXo6ZhIwZmp1v1qxVpUeDs+55+Yu7Ddi7aGTOqwmZ2OdIdA95DripoeH95EPqnNrZHjhewha3V6sklLv6On73/a6WbLXtrwaVdUal2prsOc4ueTllrT1ttC4YXSLdNnhYNxvAjG6INusd2uV9qgMHif2IqTPLjDjTGS4sbR9nA=
+	t=1734166189; cv=none; b=PonQuI/h5lW3f2okqUA53bm8rjQdGYC8KzVZuo9sNBV2+WktLOzm2/maC55ugvQUkk7b6s/FV57vzbnNicqPSlySXn61WzJ0RzSFIXsja78fhHKPqi5B3Edj+NvujolXn0vQR6wUuc5HQ54nuqz1fhcjGizJrTj+4FsnjSnErBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734134080; c=relaxed/simple;
-	bh=FdcNret76wwuxs2K4Ssm9WRLfZvc8OI4p79sJ4/bjj0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=XYCUFM1ecygMYBGU1SfnCDYXBJPPpfQsTPT05VOKFI5LrHDZU7RL3N6arlfaAA2I9uwQKjWAqXuR0czJM4LST2IeWXdbTHRdbyWZK4Aaq75Sh6aAxE7gOuiDMurIuInHCaU0sCR2diuZ0i+2ISXRS7I/VMtJJjntzaG9b8KiWww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=poAbWf/t; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BDBTqqx001422;
-	Fri, 13 Dec 2024 23:54:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	5vkWtM2vRo+e/JMzMahFKMWez35ZrsbEXT1RxAlT0mM=; b=poAbWf/tvsPAYJCT
-	4BfbSj/yYF+D7ryNXczPKMs/7xWDM25tV1Hh+UwvJiTy15Aex6jIct8aWogsXalj
-	l12Mxw9ABLpngh+pZb9p2825E1qwZPmCLkdopfEhIkXmLJD9ZK15m3Vnt/yA7IjP
-	apciIshIicbx8sXOy15fbZVXkBT1fWiCZSre9slFQgFxetCs172ynN6UTG4aRdCe
-	kuMViqLM6cBqc+97HtQtO3dDTT7l/pBrSDE4fFzlccPtO1wjqBHSczxc2+lhojtT
-	IYElaIqyhIUio9WjfTlg5Zh83jy/z7+m7WgliCV5RfsdTVmdGPg4Z0w/zLoZonJ2
-	xpn4Vg==
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43gm3s1kw3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Dec 2024 23:54:23 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BDNsNnP007270
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Dec 2024 23:54:23 GMT
-Received: from hu-wcheng-lv.qualcomm.com (10.49.16.6) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Fri, 13 Dec 2024 15:54:22 -0800
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-To: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <tiwai@suse.com>, <krzk+dt@kernel.org>,
-        <pierre-louis.bossart@linux.dev>, <Thinh.Nguyen@synopsys.com>,
-        <robh@kernel.org>, <gregkh@linuxfoundation.org>
-CC: <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-sound@vger.kernel.org>, <linux-input@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>
-Subject: [PATCH v31 32/32] ALSA: usb-audio: qcom: Notify USB audio devices on USB offload probing
-Date: Fri, 13 Dec 2024 15:54:03 -0800
-Message-ID: <20241213235403.4109199-33-quic_wcheng@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241213235403.4109199-1-quic_wcheng@quicinc.com>
-References: <20241213235403.4109199-1-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1734166189; c=relaxed/simple;
+	bh=4grMQMw6rtH/ZKhgxDacEbqLbGv2ReJBu1YFLbC15og=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=beiZE9hjh3SX9GboebIirAgfuVjD9EyiVpU4NxPfda7RTBUIQ8ARJeMbfi0TOrAaeetRWGW2ZOT2UNYuwK0yQiNtCglfHkYuwgnxhwliGSAYAqaHlE9LFlsrIy4j+iJ8U3n9H5mgHGRqS8XI+5ZdBoUWEWnc/Ib4e4buHvzDw2w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SLIYGXj1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0032FC4CED1;
+	Sat, 14 Dec 2024 08:49:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734166188;
+	bh=4grMQMw6rtH/ZKhgxDacEbqLbGv2ReJBu1YFLbC15og=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=SLIYGXj1G8hndfmtTPJSZq6u/mOWI+3A+zOkQwJPSutwXfClqOUdOT3EMlAsvAiju
+	 Yu4PmGxedHoo4JR8ddDYIyAupsfSc4GXnU7osZoh4Jx0T15veHktRIFHlhl8ZzVG61
+	 eYwZ/IZ+a/tU1foTMUDv39AyFD4Bo6i9/0zTJT78L5MUFpZV5NfhU7GbWuPDQUkZMe
+	 52CyJDacoSUPT0vJjJHA5Vj3aHsoesltZU1okQZ5xkZfVqm2+7SZXZHKYXmZHUpT+i
+	 oG/23H2DDtIg4lcU+YvyaMFEMTMcTsHV5hDx5LMmuhoEYKe3ScWQK+8mwSiojQPB7/
+	 Gw8yG1T9dw+4A==
+Date: Sat, 14 Dec 2024 16:49:40 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Mathias Nyman <mathias.nyman@intel.com>,
+	=?iso-8859-1?Q?Gr=E9gory?= Clement <gregory.clement@bootlin.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 2/5] usb: cdns3-ti: run HW init at resume() if HW was
+ reset
+Message-ID: <20241214084940.GA4102926@nchen-desktop>
+References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
+ <20241210-s2r-cdns-v6-2-28a17f9715a2@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gUunsEwxa5aeU-V8Qg6v5xBssH_yJDXR
-X-Proofpoint-GUID: gUunsEwxa5aeU-V8Qg6v5xBssH_yJDXR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 impostorscore=0 phishscore=0 mlxscore=0 bulkscore=0
- spamscore=0 clxscore=1015 suspectscore=0 priorityscore=1501 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412130170
+In-Reply-To: <20241210-s2r-cdns-v6-2-28a17f9715a2@bootlin.com>
 
-If the vendor USB offload class driver is not ready/initialized before USB
-SND discovers attached devices, utilize snd_usb_rediscover_devices() to
-find all currently attached devices, so that the ASoC entities are notified
-on available USB audio devices.
+On 24-12-10 18:13:36, Théo Lebrun wrote:
+> At runtime_resume(), read the W1 (Wrapper Register 1) register to detect
+> if an hardware reset occurred. If it did, run the hardware init sequence.
+> 
+> This callback will be called at system-wide resume. Previously, if a
+> reset occurred during suspend, we would crash. The wrapper config had
+> not been written, leading to invalid register accesses inside cdns3.
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/usb/cdns3/cdns3-ti.c | 25 +++++++++++++++++++++++++
+>  1 file changed, 25 insertions(+)
+> 
+> diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
+> index d704eb39820ad08a8774be7f00aa473c3ff267c0..d35be7db7616ef5e5bed7dbd53b78a094809f7cc 100644
+> --- a/drivers/usb/cdns3/cdns3-ti.c
+> +++ b/drivers/usb/cdns3/cdns3-ti.c
+> @@ -188,6 +188,12 @@ static int cdns_ti_probe(struct platform_device *pdev)
+>  	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
+>  	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
+>  
+> +	/*
+> +	 * The call below to pm_runtime_get_sync() MIGHT reset hardware, if it
+> +	 * detects it as uninitialised. We want to enforce a reset at probe,
+> +	 * and so do it manually here. This means the first runtime_resume()
+> +	 * will be a no-op.
+> +	 */
+>  	cdns_ti_reset_and_init_hw(data);
+>  
+>  	pm_runtime_enable(dev);
+> @@ -232,6 +238,24 @@ static void cdns_ti_remove(struct platform_device *pdev)
+>  	platform_set_drvdata(pdev, NULL);
+>  }
+>  
+> +static int cdns_ti_runtime_resume(struct device *dev)
+> +{
+> +	const u32 mask = USBSS_W1_PWRUP_RST | USBSS_W1_MODESTRAP_SEL;
+> +	struct cdns_ti *data = dev_get_drvdata(dev);
+> +	u32 w1;
+> +
+> +	w1 = cdns_ti_readl(data, USBSS_W1);
+> +	if ((w1 & mask) != mask)
+> +		cdns_ti_reset_and_init_hw(data);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct dev_pm_ops cdns_ti_pm_ops = {
+> +	RUNTIME_PM_OPS(NULL, cdns_ti_runtime_resume, NULL)
 
-Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
----
- sound/usb/qcom/qc_audio_offload.c | 2 ++
- 1 file changed, 2 insertions(+)
+Why only runtime resume, but without runtime suspend?
 
-diff --git a/sound/usb/qcom/qc_audio_offload.c b/sound/usb/qcom/qc_audio_offload.c
-index 285f05a5e16b..7dd7e51109df 100644
---- a/sound/usb/qcom/qc_audio_offload.c
-+++ b/sound/usb/qcom/qc_audio_offload.c
-@@ -1972,6 +1972,8 @@ static int __init qc_usb_audio_offload_init(void)
- 	if (ret < 0)
- 		goto release_qmi;
- 
-+	snd_usb_rediscover_devices();
-+
- 	return 0;
- 
- release_qmi:
+Peter
 
