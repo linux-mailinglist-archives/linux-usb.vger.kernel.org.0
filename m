@@ -1,172 +1,79 @@
-Return-Path: <linux-usb+bounces-18505-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18506-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E38B29F200D
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2024 18:21:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B9B79F2025
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2024 18:39:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14B19166A46
-	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2024 17:21:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDE92188810A
+	for <lists+linux-usb@lfdr.de>; Sat, 14 Dec 2024 17:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7AB119580F;
-	Sat, 14 Dec 2024 17:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48EC61AB52F;
+	Sat, 14 Dec 2024 17:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ofncVW8m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EM0yazMF"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5BB2033A;
-	Sat, 14 Dec 2024 17:21:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF9B21AAE09;
+	Sat, 14 Dec 2024 17:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734196864; cv=none; b=sK1Py9CRVZLaCxzsQP5jrATEjI4PNJ8Wuu9OGyAUa8y3amwLZ9uaU9ht66+VeubFee7NC9RxAc5pIiqm6BLMqSbKirCumQvNPc2jOv6ajyinzu4Oi8S3v3vmHJgd4G2cRoDUF6SHXo/F7GvE5NfimN/5saxyT7T4Qlti8TviBzc=
+	t=1734197954; cv=none; b=sbLogWo6PYi0LPy/eQVAXVwdLWvdkv4R/M2h4PTQHsIBAgMBrKUJSaNj7qwS8GTT6uX2UMbqRTbHk+1XKzP0u9IBGB6ynz5sAgaaa4jeid9gH4O/d2ZlDB+co14PSUGXzSU/72ie0J1IZsYAUb9prhLUkWpZs2KEydj5jMwkw3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734196864; c=relaxed/simple;
-	bh=ezvO/MjsOFV8uZE5WolYahI6SlHzY/UYkTp7ZCJjJzs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Bpfg6xD9tGtiCYsw3+kKuLJKPXrtePSsV30KilLAs0A0RRaVDT0a3ouyLWVE2zvC7+9x6Hfw9STwGedQEYlEiVp6umer2U1tXTmQrZ0S1ZTD/qVAH0r3lE36NY0+3BNrD62yn9Kg/uPr5OfHsmR2x9ibZKnY6AjaJDSjRBcbzGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ofncVW8m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F3D4CC4CED1;
-	Sat, 14 Dec 2024 17:21:03 +0000 (UTC)
+	s=arc-20240116; t=1734197954; c=relaxed/simple;
+	bh=YlKdGFCuxkTKEznSyOnTXhse/BA5r8x2BxfKABvGqkA=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=nG8CRcjgcn5xGGB0jA52xNsnGrlFFt+rtEkNPLRX20A19/RpeQ4NZW0nsTjrWujm0gE/+O60c7N+DWHsifb04z2qOnAHHp0ML7kwTOre1yQr8paiVmvdktt9NNO6wv6wAE6x1b7adJLD0APdzJVqQEnjdd9qH77SB2YVYsJ+LWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EM0yazMF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5359AC4CEDD;
+	Sat, 14 Dec 2024 17:39:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734196864;
-	bh=ezvO/MjsOFV8uZE5WolYahI6SlHzY/UYkTp7ZCJjJzs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ofncVW8ml90hf9qQ6TxI8LLCua/Q1FQgWwW2KW+OuE5Fk2MLnwJrhtPvl4sXcjJ3f
-	 QpPzmNhf+oQyBh9xhPgWXWF2Xp0eZ3BxinP2XXdRRuLtNHK2FQozeppu9B4fjq1OwS
-	 mzUlGUB5dMRZwP2Ab1VfLEAE7G1C1ZnNI72qMF8U3WKPUH517T+et/whWiSoi3SUGS
-	 o4S7eO8eEBT4hUdzQ+F98FvIwFxfBRmHwFGISbB+74Q0p4+2BxFgln3n2Hr4OrOE4n
-	 hE9oiEkXb+ySzad9ifO9iTcWSEAPGaH3ioM69vcfP6kIgs0oFBmO9Jd9OawBpYoXX6
-	 MBo0kme65XI8w==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tMVpF-000000002lV-08Zw;
-	Sat, 14 Dec 2024 18:21:09 +0100
-Date: Sat, 14 Dec 2024 18:21:09 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Lode Willems <me@lodewillems.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] USB: serial: CH341: add hardware flow control
- RTS/CTS
-Message-ID: <Z12-hZKS83WQ5bYd@hovoldconsulting.com>
-References: <20241113180930.3741-1-me@lodewillems.com>
+	s=k20201202; t=1734197954;
+	bh=YlKdGFCuxkTKEznSyOnTXhse/BA5r8x2BxfKABvGqkA=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=EM0yazMFfub0q5ec0v7ePVkXmUfcpNI3ToqktZDf2iQr5HAft3GaEY8vznHvgwEw+
+	 aYG5lnfMdhVFQ5j+fKsV2H3Jy7bSxpyifi/dT+LoijfGglgJmx99yW1Vscgl2j911k
+	 HkiLrOThTuQu89pktDX3Je9W9OJdg1yEXkAEmJiwgm9wTNzv01DkMt821wi24Bf1UX
+	 kpPQ++v2So594Z/SXXMyxmqYljLMAF1f8Ins7BWyXcldoTE1w5h3XA2bcI9R/0YjKn
+	 7l1bKij/UJvFw0rTY+3N22kNGrUMIFCxyOd5azmaqyQuQVzmDIOwjz5tZhrQZMJICy
+	 HeJ85pApBKvVA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33C7E380A959;
+	Sat, 14 Dec 2024 17:39:32 +0000 (UTC)
+Subject: Re: [GIT PULL] USB fixes for 6.13-rc3
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <Z12X4vb79DECg-w2@kroah.com>
+References: <Z12X4vb79DECg-w2@kroah.com>
+X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Z12X4vb79DECg-w2@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.13-rc3
+X-PR-Tracked-Commit-Id: 33ead7e538183b1348ba60af90027240a10de751
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a0e3919a2df29b373b19a8fbd6e4c4c38fc10d87
+Message-Id: <173419797087.3365831.3743055221898422166.pr-tracker-bot@kernel.org>
+Date: Sat, 14 Dec 2024 17:39:30 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241113180930.3741-1-me@lodewillems.com>
 
-On Wed, Nov 13, 2024 at 07:08:27PM +0100, Lode Willems wrote:
-> This adds support for enabling and disabling
-> RTS/CTS hardware flow control.
-> Tested using a CH340E in combination with a CP2102.
-> 
-> Fixes part of the following bug report:
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=197109
-> 
-> Signed-off-by: Lode Willems <me@lodewillems.com>
+The pull request you sent on Sat, 14 Dec 2024 15:36:18 +0100:
 
-Thanks for the patch and sorry about the late feedback on this one. I
-wanted to give it a spin with the devices I have here (ch340g and
-ch341a).
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.13-rc3
 
-Appears to the modem control lines are not wired up on the ch341a
-evaluation board I have, but the device accepts the request and stops
-transmitting with hardware flow control enabled.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a0e3919a2df29b373b19a8fbd6e4c4c38fc10d87
 
-With ch340g in loopback, I also see it refuse to transmit unless cts is
-asserted. I was not able to get the device to deassert rts when
-attempting to fill its receive buffers, however. Perhaps the hardware
-does not support this, but is this something you tried?
+Thank you!
 
-> ---
->  drivers/usb/serial/ch341.c | 41 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 41 insertions(+)
-> 
-> diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-> index d10e4c4848a0..62237f657320 100644
-> --- a/drivers/usb/serial/ch341.c
-> +++ b/drivers/usb/serial/ch341.c
-> @@ -63,6 +63,7 @@
->  #define CH341_REG_DIVISOR      0x13
->  #define CH341_REG_LCR          0x18
->  #define CH341_REG_LCR2         0x25
-> +#define CH341_REG_FLOW_CTL     0x27
->  
->  #define CH341_NBREAK_BITS      0x01
->  
-> @@ -77,6 +78,9 @@
->  #define CH341_LCR_CS6          0x01
->  #define CH341_LCR_CS5          0x00
->  
-> +#define CH341_FLOW_CTL_NONE    0x000
-> +#define CH341_FLOW_CTL_RTSCTS  0x101
-
-The registers are eight bits wide, but the driver writes two at a time.
-So this should just be 0x00 and 0x01.
-
-> +
->  #define CH341_QUIRK_LIMITED_PRESCALER	BIT(0)
->  #define CH341_QUIRK_SIMULATE_BREAK	BIT(1)
->  
-> @@ -478,6 +482,41 @@ static int ch341_open(struct tty_struct *tty, struct usb_serial_port *port)
->  	return r;
->  }
->  
-> +static void ch341_set_flow_control(struct tty_struct *tty,
-> +				   struct usb_serial_port *port,
-> +				   const struct ktermios *old_termios)
-> +{
-> +	int r;
-> +
-> +	if (old_termios &&
-> +	    C_CRTSCTS(tty) == (old_termios->c_cflag & CRTSCTS))
-> +		return;
-
-Just drop this and set the requested setting unconditionally.
-
-> +
-> +	if (C_CRTSCTS(tty)) {
-> +		r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
-> +				      CH341_REG_FLOW_CTL |
-> +				      ((u16)CH341_REG_FLOW_CTL << 8),
-> +				      CH341_FLOW_CTL_RTSCTS);
-> +		if (r < 0) {
-> +			dev_err(&port->dev,
-> +				"%s - failed to enable flow control: %d\n",
-> +				__func__, r);
-> +			tty->termios.c_cflag &= ~CRTSCTS;
-> +		}
-> +	} else {
-> +		r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
-> +				      CH341_REG_FLOW_CTL |
-> +				      ((u16)CH341_REG_FLOW_CTL << 8),
-> +				      CH341_FLOW_CTL_NONE);
-> +		if (r < 0) {
-> +			dev_err(&port->dev,
-> +				"%s - failed to disable flow control: %d\n",
-> +				__func__, r);
-> +			tty->termios.c_cflag |= CRTSCTS;
-> +		}
-> +	}
-
-Please rewrite this so that you prepare the value and index parameters
-based on the termios settings and then do one control request. If it
-fails you can restore the old setting (if old_termios is non-NULL).
-
-And please drop the redundant __func__ from the error message (even if
-the driver still uses it in some other functions still).
-
-> +}
-> +
-
-Johan
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
