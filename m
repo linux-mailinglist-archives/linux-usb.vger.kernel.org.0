@@ -1,315 +1,207 @@
-Return-Path: <linux-usb+bounces-18510-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18511-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADA919F23EA
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Dec 2024 13:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CA01C9F24A9
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Dec 2024 16:38:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4A43164D83
-	for <lists+linux-usb@lfdr.de>; Sun, 15 Dec 2024 12:50:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F211C16501B
+	for <lists+linux-usb@lfdr.de>; Sun, 15 Dec 2024 15:38:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47792187876;
-	Sun, 15 Dec 2024 12:50:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C178191F6D;
+	Sun, 15 Dec 2024 15:38:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IPwvp0AV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tk6Qengc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2705D1E871;
-	Sun, 15 Dec 2024 12:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170A317A5BD;
+	Sun, 15 Dec 2024 15:38:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734267021; cv=none; b=U9xENAwmfwtn4vXuD0HO0BJ0DbB//FecwG58IA+NKLY2Hxshb/arRLxYIHDizBlJMS19B+r7ctHyU0fjs+ICUyZ6xDXYonQu1Xf+IV7cTuFaT9i3nWFqX18lH4lwnrOsO7G7cJZo4NFSee9ELriOQQ5wdEvixb1ie64sUClno4o=
+	t=1734277084; cv=none; b=V7Pix0+c8K2fyuXvHCpO1D8Mem9opJT7zwIbXz8QyJGeAGVNDuhOSSqJDK12Du04YxLSmPNJdkJpsg/WIuS6sVuzjZEwvY1t8BecULO3m9XL2faVQc+lBxMufCtUHWZyc+ISvZl3srMQSsErhICeE7UMEpoZ6qV11eunsiEeJLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734267021; c=relaxed/simple;
-	bh=WL8JmY7eey5z+pZwcZYZY+j5cIJM/sVgyqonCznAo8A=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=AiomBBTPT1fbXVAikvl7yLuA8K0eWtE5xenTJ/OuiV0ib4aDQB0bD6iQ0CfmGtEqseaHbDkiG814JF98ZJSI9G4cSqZymAtqVWeRdeU34Resh24ExVkeZsAg9nXSTO+J7H9DmsI4sapozr2YG6lYj7oFb5RSF3S7C/SDSa/RBtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IPwvp0AV; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-7292a83264eso212671b3a.0;
-        Sun, 15 Dec 2024 04:50:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734267018; x=1734871818; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HzaRb0xQAUQDs2LIcgxPnaAOwKV79xllc7FmZgiqoCw=;
-        b=IPwvp0AVWjthMSqOTvTQvZJXaczV4GKiWeeKzWFGiSXM74kCE3C6vCA47sPFVbmqCX
-         olHhB6Wdzeeh+f41q/XvAa/D3jttjfuLhF1J6PwbavMlC4aSbiK3uqwEpQh+zCNtk1I5
-         8RUIxFrIRXYPChMpy8IOThDuHF+o4afJDb6dhHUUf7i+iYzonj786Tj+oFm1cyb76sLa
-         l4JUv/YqrOWUZYvhyYWwze7m4FxCE1R1Y8hjYdNytc6P4JtYtks2LoSqedGELDf9SJQy
-         tXG3gtyjfAuCQ8kiRyID89znaNCbzvP7zVFUQI7DOLDIG/MbJkLnAduyQwEH28VVx4c4
-         CMUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734267018; x=1734871818;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HzaRb0xQAUQDs2LIcgxPnaAOwKV79xllc7FmZgiqoCw=;
-        b=tO9UqcVMQuHdUusuj+YDQEFGuO/dXC95xb/ReU5XPbgDX5Meb2ua2Vnb7YUrdJi1B5
-         P4rl+e5ix4nHH+B5xRMOM5lKIb8o0uwBSAPjC4qRSkkLl9Wdiv1Rqj6Ohy8oPwhVoteK
-         FKSvioCdQ3fcldbWG83VJz/9txVcPq9UCP7ADAr+rIe2gTGfvC7AMIZ/fUw6kVfiJGkH
-         DpFLoqTtm8mJi5afgGgkcsazUYsmOvvMvQrJbuyf9MqZmKlWkxubE5Q/PojGTfgmrR9S
-         Jc5+Y28seqeqTf0f0SobzIJOASpGaJZgJndjjR1Hc2IqQQhfx6e/CyL4rjCadN52BfjJ
-         hSpg==
-X-Forwarded-Encrypted: i=1; AJvYcCUeczLglQOkKeBW7RtbK392k8XVJJqRHTuO/PX9qF7xy/h3lkDXB5dzZ/ZBKTXMg1cDyI6htjBnHCE3@vger.kernel.org, AJvYcCV/99lZATSaDznnLTKsxdx9ACI7U8Yk8dH/sZtpuni3IC+Ip1YbDrbnV4cBClgaRFmaGMF4GDUO@vger.kernel.org, AJvYcCXBKQBw6z5Uj0w6IbgmyFNnJ1mYGKxAZWSdM/Hw2fgC+r6YHHOLZdsPs9aw78LkncHAkQYqU6CciJUUhp4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWXVwgDJUZ1DKf3kCvEGmkOfSgpSMojSszdQxrb4B5pQD0vmgq
-	RMJQ5Edv3jUCtKrSVe989PRmVmIWzGyavEbwfF7iY82Nh2fSOEz1
-X-Gm-Gg: ASbGncttNy9y84HMeisxY9XLINp5ZLqRNJWhE5tlU29i+M6Wq1xxMY5ot8qSd60axYl
-	3VT1iuExKR9rwSeV3CcQKywqdSGICbLJpS9xxAx7eWmJ87TWG7hbc8WxO+LZAUemTQus9B2RLAv
-	rwiFssk9J7AI8ajTzqBMfwMM57X2I6S6ynjadDSYf6vdUTdJ4odnhRoyV6nbgb9TRA/dvCuZ4Qe
-	WisuXW+0OTDmK/orMVEmNhFwAccoEN3C4jOe3ovdNelzow210JLMkl6XXoSMMV6yw==
-X-Google-Smtp-Source: AGHT+IH4JQoks6jbtt4JfsD3TvpP621d7NP/w6FqbLqDGESvvUM/s6XdZD6JlIXW+fmTHi7v6jWgBg==
-X-Received: by 2002:a05:6a00:4295:b0:726:41e:b310 with SMTP id d2e1a72fcca58-7290c17bb87mr11598057b3a.12.1734267018297;
-        Sun, 15 Dec 2024 04:50:18 -0800 (PST)
-Received: from localhost ([36.45.249.146])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918bad8b7sm2862350b3a.161.2024.12.15.04.50.17
-        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
-        Sun, 15 Dec 2024 04:50:17 -0800 (PST)
-From: joswang <joswang1221@gmail.com>
-To: heikki.krogerus@linux.intel.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jos Wang <joswang@lenovo.com>,
-	stable@vger.kernel.org
-Subject: [PATCH 2/2] usb: typec: tcpm: fix the sender response time issue
-Date: Sun, 15 Dec 2024 20:50:13 +0800
-Message-Id: <20241215125013.70671-1-joswang1221@gmail.com>
-X-Mailer: git-send-email 2.17.1
+	s=arc-20240116; t=1734277084; c=relaxed/simple;
+	bh=2W2SoC3Nq3QLI2t/piJWvaObAI3cgUGGfwurTfGoCgg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cKD2hBKWcuao3Ni1Bdiui7trsC9ehzINt+xXme9+rJQ6/iAfMo6Ds+MK6VeQGHXsOrojRybSd2aCchCt4IPHRNHlhewPJe5hCijdTXIu0D7FqHja7llYHo+cuzQDCpH9CcT8Ag6veZyK4vSZBl3JOkcz7VlG8vqmsnLJIbwkFkU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tk6Qengc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F1BCC4CECE;
+	Sun, 15 Dec 2024 15:38:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734277083;
+	bh=2W2SoC3Nq3QLI2t/piJWvaObAI3cgUGGfwurTfGoCgg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Tk6Qengc6DMAIRbf0Hq4AFplTGfpDTP/Lb1uEgESFZmMyNtcDP9rXH/1b3WXrBxR3
+	 vDZYNerpWtShblO6t6JBEtBCO6IFfwT1Kxy/pCudaOjGC2+Og/cvj7VLtJ0fZ7yC/K
+	 9Qu2qQNIZuZdwDDRQdQcvbLa3urGGVdJLGDRQGBUySOUTHUIKjpyNRJgRTm+oI5g7S
+	 fAmDKxpsjcWfaF+/Eokd0I+/Y2tuhcBvrubdXViPTbu5NowLF8XfX5802vuI8Q7zUA
+	 JxfDW6pefzO6LXFQ4ff6ABd8MQpPHdpwZeuw7Tq1v44vwRo5yHCY95usEZFAX+jJbr
+	 LBdbPAKvmIm5g==
+Date: Sun, 15 Dec 2024 15:37:58 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Amit Sunil Dhamne <amitsd@google.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Badhri Jagan Sridharan <badhri@google.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Kyle Tso <kyletso@google.com>, RD Babiera <rdbabiera@google.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 1/3] dt-bindings: connector: Add pd-revision property
+Message-ID: <20241215-spectacle-jailhouse-b0d3110076fa@spud>
+References: <20241205-get_rev_upstream-v1-0-90158ee7d75f@google.com>
+ <20241205-get_rev_upstream-v1-1-90158ee7d75f@google.com>
+ <20241206-perch-elliptic-4e8a8170426e@spud>
+ <e8b2501a-0808-4e14-960b-7355fa52e8ea@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="PTjNqyidzZNOXYaQ"
+Content-Disposition: inline
+In-Reply-To: <e8b2501a-0808-4e14-960b-7355fa52e8ea@google.com>
 
-From: Jos Wang <joswang@lenovo.com>
 
-According to the USB PD3 CTS specification, the requirements
-for tSenderResponse are different in PD2 and PD3 modes, see
-Table 19 Timing Table & Calculations. For PD2 mode, the
-tSenderResponse min 24ms and max 30ms; for PD3 mode, the
-tSenderResponse min 27ms and max 33ms.
+--PTjNqyidzZNOXYaQ
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-For the "TEST.PD.PROT.SRC.2 Get_Source_Cap No Request" test
-item, after receiving the Source_Capabilities Message sent by
-the UUT, the tester deliberately does not send a Request Message
-in order to force the SenderResponse timer on the Source UUT to
-timeout. The Tester checks that a Hard Reset is detected between
-tSenderResponse min and max，the delay is between the last bit of
-the GoodCRC Message EOP has been sent and the first bit of Hard
-Reset SOP has been received. The current code does not distinguish
-between PD2 and PD3 modes, and tSenderResponse defaults to 60ms.
-This will cause this test item and the following tests to fail:
-TEST.PD.PROT.SRC3.2 SenderResponseTimer Timeout
-TEST.PD.PROT.SNK.6 SenderResponseTimer Timeout
+On Fri, Dec 06, 2024 at 04:43:44PM -0800, Amit Sunil Dhamne wrote:
+> Hi Conor,
+>=20
+> On 12/6/24 8:52 AM, Conor Dooley wrote:
+> > On Thu, Dec 05, 2024 at 11:46:08PM -0800, Amit Sunil Dhamne via B4 Rela=
+y wrote:
+> > > From: Amit Sunil Dhamne<amitsd@google.com>
+> > >=20
+> > > Add pd-revision property definition, to specify the maximum Power
+> > > Delivery Revision and Version supported by the connector.
+> > >=20
+> > > Signed-off-by: Amit Sunil Dhamne<amitsd@google.com>
+> > > ---
+> > >   Documentation/devicetree/bindings/connector/usb-connector.yaml | 6 =
+++++++
+> > >   Documentation/devicetree/bindings/usb/maxim,max33359.yaml      | 1 +
+> > >   2 files changed, 7 insertions(+)
+> > >=20
+> > > diff --git a/Documentation/devicetree/bindings/connector/usb-connecto=
+r.yaml b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > > index 67700440e23b5b7ca0db2c395c8a455bcf650864..341d2872e8d43450d219b=
+7b72d48790051dc4e2b 100644
+> > > --- a/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > > +++ b/Documentation/devicetree/bindings/connector/usb-connector.yaml
+> > > @@ -293,6 +293,12 @@ properties:
+> > >         PD negotiation till BC1.2 detection completes.
+> > >       default: 0
+> > > +  pd-revision:
+> > > +    description: Specifies the maximum USB PD revision and version s=
+upported by
+> > > +      the connector. This property is specified in the following ord=
+er;
+> > > +      <revision_major, revision_minor, version_major, version_minor>.
+> > > +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> > > +
+> > >   dependencies:
+> > >     sink-vdos-v1: [ sink-vdos ]
+> > >     sink-vdos: [ sink-vdos-v1 ]
+> > > diff --git a/Documentation/devicetree/bindings/usb/maxim,max33359.yam=
+l b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> > > index 20b62228371bdedf2fe92767ffe443bec87babc5..350d39fbf2dcd4d99db07=
+cb8f099467e6fc653ee 100644
+> > > --- a/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> > > +++ b/Documentation/devicetree/bindings/usb/maxim,max33359.yaml
+> > > @@ -70,6 +70,7 @@ examples:
+> > >                                          PDO_FIXED_DUAL_ROLE)
+> > >                                          PDO_FIXED(9000, 2000, 0)>;
+> > >                   sink-bc12-completion-time-ms =3D <500>;
+> > > +                pd-revision =3D /bits/ 8 <0x03 0x01 0x01 0x08>;
+> > Why do you need this?
+>=20
+> This DT property helps Type-C Port Manager (TCPM, consumer of the connect=
+or
+> class properties) fetch the exact Power Delivery (PD) revision &=A0version
+> information of the Type-C port controller (TCPC)'s connector. In turn, we
+> require it to be able to support "Revision_Information" Atomic Message
+> Sequence (AMS) in TCPM to be USB PD spec compliant for all revision &
+> versions after PD3.1 v1.x.
 
-Considering factors such as SOC performance, i2c rate, and the speed
-of PD chip sending data, "pd2-sender-response-time-ms" and
-"pd3-sender-response-time-ms" DT time properties are added to allow
-users to define platform timing. For values that have not been
-explicitly defined in DT using this property, a default value of 27ms
-for PD2 tSenderResponse and 30ms for PD3 tSenderResponse is set.
+This information should be in hte commit message.
 
-Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
-Cc: stable@vger.kernel.org
-Signed-off-by: Jos Wang <joswang@lenovo.com>
----
- drivers/usb/typec/tcpm/tcpm.c | 50 +++++++++++++++++++++++------------
- include/linux/usb/pd.h        |  3 ++-
- 2 files changed, 35 insertions(+), 18 deletions(-)
+>=20
+> > Doesn't the compatible already give you this
+> > information?
+>=20
+> Compatible property does not give information regarding the PD revision &
+> version but only gives info on the type of connector (usb a, b or c). Als=
+o,
+> connector class is used by several TCPCs like maxim,max33359, ptn5110, et=
+c.
+> and each of them may be compliant to=A0 different combinations of revisio=
+n &
+> version. This feature would help users set these values based on the
+> revision/versions their TCPC supports.
 
-diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-index 6021eeb903fe..3a159bfcf382 100644
---- a/drivers/usb/typec/tcpm/tcpm.c
-+++ b/drivers/usb/typec/tcpm/tcpm.c
-@@ -314,12 +314,16 @@ struct pd_data {
-  * @sink_wait_cap_time: Deadline (in ms) for tTypeCSinkWaitCap timer
-  * @ps_src_wait_off_time: Deadline (in ms) for tPSSourceOff timer
-  * @cc_debounce_time: Deadline (in ms) for tCCDebounce timer
-+ * @pd2_sender_response_time: Deadline (in ms) for pd20 tSenderResponse timer
-+ * @pd3_sender_response_time: Deadline (in ms) for pd30 tSenderResponse timer
-  */
- struct pd_timings {
- 	u32 sink_wait_cap_time;
- 	u32 ps_src_off_time;
- 	u32 cc_debounce_time;
- 	u32 snk_bc12_cmpletion_time;
-+	u32 pd2_sender_response_time;
-+	u32 pd3_sender_response_time;
- };
- 
- struct tcpm_port {
-@@ -3776,7 +3780,9 @@ static bool tcpm_send_queued_message(struct tcpm_port *port)
- 			} else if (port->pwr_role == TYPEC_SOURCE) {
- 				tcpm_ams_finish(port);
- 				tcpm_set_state(port, HARD_RESET_SEND,
--					       PD_T_SENDER_RESPONSE);
-+					       port->negotiated_rev >= PD_REV30 ?
-+					       port->timings.pd3_sender_response_time :
-+					       port->timings.pd2_sender_response_time);
- 			} else {
- 				tcpm_ams_finish(port);
- 			}
-@@ -4619,6 +4625,9 @@ static void run_state_machine(struct tcpm_port *port)
- 	enum typec_pwr_opmode opmode;
- 	unsigned int msecs;
- 	enum tcpm_state upcoming_state;
-+	u32 sender_response_time = port->negotiated_rev >= PD_REV30 ?
-+				   port->timings.pd3_sender_response_time :
-+				   port->timings.pd2_sender_response_time;
- 
- 	if (port->tcpc->check_contaminant && port->state != CHECK_CONTAMINANT)
- 		port->potential_contaminant = ((port->enter_state == SRC_ATTACH_WAIT &&
-@@ -5113,7 +5122,7 @@ static void run_state_machine(struct tcpm_port *port)
- 			tcpm_set_state(port, SNK_WAIT_CAPABILITIES, 0);
- 		} else {
- 			tcpm_set_state_cond(port, hard_reset_state(port),
--					    PD_T_SENDER_RESPONSE);
-+					    sender_response_time);
- 		}
- 		break;
- 	case SNK_NEGOTIATE_PPS_CAPABILITIES:
-@@ -5135,7 +5144,7 @@ static void run_state_machine(struct tcpm_port *port)
- 				tcpm_set_state(port, SNK_READY, 0);
- 		} else {
- 			tcpm_set_state_cond(port, hard_reset_state(port),
--					    PD_T_SENDER_RESPONSE);
-+					    sender_response_time);
- 		}
- 		break;
- 	case SNK_TRANSITION_SINK:
-@@ -5387,7 +5396,7 @@ static void run_state_machine(struct tcpm_port *port)
- 			port->message_id_prime = 0;
- 			port->rx_msgid_prime = -1;
- 			tcpm_pd_send_control(port, PD_CTRL_SOFT_RESET, TCPC_TX_SOP_PRIME);
--			tcpm_set_state_cond(port, ready_state(port), PD_T_SENDER_RESPONSE);
-+			tcpm_set_state_cond(port, ready_state(port), sender_response_time);
- 		} else {
- 			port->message_id = 0;
- 			port->rx_msgid = -1;
-@@ -5398,7 +5407,7 @@ static void run_state_machine(struct tcpm_port *port)
- 				tcpm_set_state_cond(port, hard_reset_state(port), 0);
- 			else
- 				tcpm_set_state_cond(port, hard_reset_state(port),
--						    PD_T_SENDER_RESPONSE);
-+						    sender_response_time);
- 		}
- 		break;
- 
-@@ -5409,8 +5418,7 @@ static void run_state_machine(struct tcpm_port *port)
- 			port->send_discover = true;
- 			port->send_discover_prime = false;
- 		}
--		tcpm_set_state_cond(port, DR_SWAP_SEND_TIMEOUT,
--				    PD_T_SENDER_RESPONSE);
-+		tcpm_set_state_cond(port, DR_SWAP_SEND_TIMEOUT, sender_response_time);
- 		break;
- 	case DR_SWAP_ACCEPT:
- 		tcpm_pd_send_control(port, PD_CTRL_ACCEPT, TCPC_TX_SOP);
-@@ -5444,7 +5452,7 @@ static void run_state_machine(struct tcpm_port *port)
- 			tcpm_set_state(port, ERROR_RECOVERY, 0);
- 			break;
- 		}
--		tcpm_set_state_cond(port, FR_SWAP_SEND_TIMEOUT, PD_T_SENDER_RESPONSE);
-+		tcpm_set_state_cond(port, FR_SWAP_SEND_TIMEOUT, sender_response_time);
- 		break;
- 	case FR_SWAP_SEND_TIMEOUT:
- 		tcpm_set_state(port, ERROR_RECOVERY, 0);
-@@ -5475,8 +5483,7 @@ static void run_state_machine(struct tcpm_port *port)
- 		break;
- 	case PR_SWAP_SEND:
- 		tcpm_pd_send_control(port, PD_CTRL_PR_SWAP, TCPC_TX_SOP);
--		tcpm_set_state_cond(port, PR_SWAP_SEND_TIMEOUT,
--				    PD_T_SENDER_RESPONSE);
-+		tcpm_set_state_cond(port, PR_SWAP_SEND_TIMEOUT, sender_response_time);
- 		break;
- 	case PR_SWAP_SEND_TIMEOUT:
- 		tcpm_swap_complete(port, -ETIMEDOUT);
-@@ -5574,8 +5581,7 @@ static void run_state_machine(struct tcpm_port *port)
- 		break;
- 	case VCONN_SWAP_SEND:
- 		tcpm_pd_send_control(port, PD_CTRL_VCONN_SWAP, TCPC_TX_SOP);
--		tcpm_set_state(port, VCONN_SWAP_SEND_TIMEOUT,
--			       PD_T_SENDER_RESPONSE);
-+		tcpm_set_state(port, VCONN_SWAP_SEND_TIMEOUT, sender_response_time);
- 		break;
- 	case VCONN_SWAP_SEND_TIMEOUT:
- 		tcpm_swap_complete(port, -ETIMEDOUT);
-@@ -5656,23 +5662,21 @@ static void run_state_machine(struct tcpm_port *port)
- 		break;
- 	case GET_STATUS_SEND:
- 		tcpm_pd_send_control(port, PD_CTRL_GET_STATUS, TCPC_TX_SOP);
--		tcpm_set_state(port, GET_STATUS_SEND_TIMEOUT,
--			       PD_T_SENDER_RESPONSE);
-+		tcpm_set_state(port, GET_STATUS_SEND_TIMEOUT, sender_response_time);
- 		break;
- 	case GET_STATUS_SEND_TIMEOUT:
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
- 	case GET_PPS_STATUS_SEND:
- 		tcpm_pd_send_control(port, PD_CTRL_GET_PPS_STATUS, TCPC_TX_SOP);
--		tcpm_set_state(port, GET_PPS_STATUS_SEND_TIMEOUT,
--			       PD_T_SENDER_RESPONSE);
-+		tcpm_set_state(port, GET_PPS_STATUS_SEND_TIMEOUT, sender_response_time);
- 		break;
- 	case GET_PPS_STATUS_SEND_TIMEOUT:
- 		tcpm_set_state(port, ready_state(port), 0);
- 		break;
- 	case GET_SINK_CAP:
- 		tcpm_pd_send_control(port, PD_CTRL_GET_SINK_CAP, TCPC_TX_SOP);
--		tcpm_set_state(port, GET_SINK_CAP_TIMEOUT, PD_T_SENDER_RESPONSE);
-+		tcpm_set_state(port, GET_SINK_CAP_TIMEOUT, sender_response_time);
- 		break;
- 	case GET_SINK_CAP_TIMEOUT:
- 		port->sink_cap_done = true;
-@@ -7109,6 +7113,18 @@ static void tcpm_fw_get_timings(struct tcpm_port *port, struct fwnode_handle *fw
- 	ret = fwnode_property_read_u32(fwnode, "sink-bc12-completion-time-ms", &val);
- 	if (!ret)
- 		port->timings.snk_bc12_cmpletion_time = val;
-+
-+	ret = fwnode_property_read_u32(fwnode, "pd2-sender-response-time-ms", &val);
-+	if (!ret)
-+		port->timings.pd2_sender_response_time = val;
-+	else
-+		port->timings.pd2_sender_response_time = PD_T_PD2_SENDER_RESPONSE;
-+
-+	ret = fwnode_property_read_u32(fwnode, "pd3-sender-response-time-ms", &val);
-+	if (!ret)
-+		port->timings.pd3_sender_response_time = val;
-+	else
-+		port->timings.pd3_sender_response_time = PD_T_PD3_SENDER_RESPONSE;
- }
- 
- static int tcpm_fw_get_caps(struct tcpm_port *port, struct fwnode_handle *fwnode)
-diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-index d50098fb16b5..9c599e851b9a 100644
---- a/include/linux/usb/pd.h
-+++ b/include/linux/usb/pd.h
-@@ -457,7 +457,6 @@ static inline unsigned int rdo_max_power(u32 rdo)
- #define PD_T_NO_RESPONSE	5000	/* 4.5 - 5.5 seconds */
- #define PD_T_DB_DETECT		10000	/* 10 - 15 seconds */
- #define PD_T_SEND_SOURCE_CAP	150	/* 100 - 200 ms */
--#define PD_T_SENDER_RESPONSE	60	/* 24 - 30 ms, relaxed */
- #define PD_T_RECEIVER_RESPONSE	15	/* 15ms max */
- #define PD_T_SOURCE_ACTIVITY	45
- #define PD_T_SINK_ACTIVITY	135
-@@ -491,6 +490,8 @@ static inline unsigned int rdo_max_power(u32 rdo)
- #define PD_T_CC_DEBOUNCE	200	/* 100 - 200 ms */
- #define PD_T_PD_DEBOUNCE	20	/* 10 - 20 ms */
- #define PD_T_TRY_CC_DEBOUNCE	15	/* 10 - 20 ms */
-+#define PD_T_PD2_SENDER_RESPONSE	27	/* PD20 spec 24 - 30 ms */
-+#define PD_T_PD3_SENDER_RESPONSE	30	/* PD30 spec 27 - 33 ms */
- 
- #define PD_N_CAPS_COUNT		(PD_T_NO_RESPONSE / PD_T_SEND_SOURCE_CAP)
- #define PD_N_HARD_RESET_COUNT	2
--- 
-2.17.1
+Is the version fixed for a given TCPC? If so, the driver would be able
+to determine the correct revision based on the compatible. If not, then
+you commit message needs to mention that this is variable.
 
+> Currently=A0 TCPM driver hardcodes the Revision value to 3.0 and doesn't
+> provide any info on version (undesirable).
+>=20
+> It should be noted that:
+>=20
+> 1. There are multiple versions & revisions of the USB PD spec and they ke=
+ep
+> evolving frequently. A certain connector hardware may only be spec compli=
+ant
+> for up to a certain version + version. Thus, this is the only way for TCPM
+> to know what ver + rev the connector hardware supports. This will enable =
+the
+> TCPC system to present the exact rev & ver values when requested for
+> revision info by the port partner.
+>=20
+> 2. I also considered incrementing the revision & version information valu=
+es
+> in the TCPM code. However, that won't be backward compatible for connecto=
+rs
+> whose hardware doesn't support features in the latest spec. In this case =
+we
+> would be presenting incorrect revision & version values (higher than what=
+ is
+> actually supported by the hardware).
+>=20
+> Regards,
+>=20
+> Amit
+>=20
+> > >               };
+> > >           };
+> > >       };
+> > >=20
+> > > --=20
+> > > 2.47.0.338.g60cca15819-goog
+> > >=20
+> > >=20
+
+--PTjNqyidzZNOXYaQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ1731gAKCRB4tDGHoIJi
+0uvwAPwKfYXkPVbf+76Hv2f+mA1b5G6k9RDNgxsHzsQZQYmBFwD/dnKl3Jpx03tD
+bvWiHLEL+/jwNyab+KvKeVuNVf/wvAg=
+=/0RX
+-----END PGP SIGNATURE-----
+
+--PTjNqyidzZNOXYaQ--
 
