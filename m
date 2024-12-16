@@ -1,107 +1,155 @@
-Return-Path: <linux-usb+bounces-18534-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18535-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 84D449F324C
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 15:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CFBD9F3327
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 15:26:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C4277167D4D
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 14:09:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEDC2164DB4
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 14:25:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 672D5205E12;
-	Mon, 16 Dec 2024 14:09:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E0EC205AC0;
+	Mon, 16 Dec 2024 14:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JXyJASOx"
+	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="ASG6K8Ln"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E619450F2;
-	Mon, 16 Dec 2024 14:09:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B22AF1E87B;
+	Mon, 16 Dec 2024 14:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734358146; cv=none; b=SvQMU1kX74yOWUIMgFyf7tIZJ2Osfa3VKwkrLUiWiLoPzKJxlIrk/OCDHn/wSohy2H1KIYTj+sn2s7Bxng/rF6PYjKm2D2Hu+eRMeVp/F2a3k9GU8/r4Dkj6aLWZzMhDflAB/EVBlhm91pbeo/AfonB45EiK/NTt0DKjM9TsuSc=
+	t=1734359100; cv=none; b=Y76/+/bx+tPBCWfDJFSuGAO+6ZtElPjoIhrMYpU+c7dHue/IWy2QDTv0dZdYznqa7zS1JNk2m2xM6mHEQXATBoiQC10Lcx+RdE9QLJdhdJt+E6IWcpI7pR+SAVNjnQethyi9c78tCwXf+DB9sp5bADvZrJy/CpugnaBp8QKsycI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734358146; c=relaxed/simple;
-	bh=paLbp9RfBbKkCSoXP3vDG8K4zoqyW2jvOQTbgUcQ4YA=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=pw3WIW1qBwGWl2NZpYJt0Efx8Np7RKdO6WEF+MJZB54+RlG4EUxFAXEHh6Hdb2axkDfpwqtMWw/mTKkCuc87oJB5Fn3wM2+Ohf1KqBANxCfd8781w8F1on+5kCUN81j+j2jTFp94IUIeyO6TVZf7fQg50OPgCb06lT3GF8TShXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JXyJASOx; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3103B240006;
-	Mon, 16 Dec 2024 14:09:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1734358141;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=S333XljZz3m69lQgQE3vRV7nPUXa4XWgNintvZWfBmM=;
-	b=JXyJASOxOBa6VISM4fv/8IEJSPiGQzRJWw4G8SzTfKuyzBDTmLv5wn6jiXgS3hHc7GjLBT
-	kPw6XLPmm/0/WB/o02TRdB36N2pfoWQq/xRUuaQ2eVX6aAKVYk6DykXPXay/lxbmhvYb7Z
-	Tv5uw4zKdZasalFL5/a13xsZFs1+UofXEoaiaf/JSZG5zylH/XV2ePGWVuFegW+L9/7NqY
-	+JIPB6o7ExwXM+X2jw56RMIZF3r9NhycT8XCDae9mMEEBasbNle6G38aWhh++Dmcf3guvV
-	P6gArbBQsZFUYob09rrYdOuhiR3thW89CUqIViN4PiDpRE9VmV881i9quyt6Dg==
+	s=arc-20240116; t=1734359100; c=relaxed/simple;
+	bh=hl1NZL68ZB5FnrnEybP69KYMS4J1xDdmM+P/exug8jE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZrMsT9Jc41bftuJv046OKBwfTXCM+hkd1ObmAhk/JSeSvp/DCV+C/KBbBdiP4b5kQM+KalxOHFU/hmYvSodn7zpYS+QS87cf98qK4EykgxxQAST0jofIAum2zSM3518XJVM44NUEHCLAHsJn8/wzfv8cZ7bl52ArJNaizO656/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=ASG6K8Ln; arc=none smtp.client-ip=83.149.199.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
+Received: from ldvnode.intra.ispras.ru (unknown [10.10.2.153])
+	by mail.ispras.ru (Postfix) with ESMTPSA id A15184076735;
+	Mon, 16 Dec 2024 14:24:56 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru A15184076735
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+	s=default; t=1734359096;
+	bh=LlvSfZAo1SMRkgfgawBITp8XZZSbyWqpruAeVRVltmg=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ASG6K8Ln7DEr7G1zGsf9hwUQgGp1QBFpDOTmIP9tdmKYD0C1KEYCZFTO0R1SBknAM
+	 cn7yoQWcvUWmEmLfGalwiv0aZkgzNjlGRE7chCJ6pJhTIvWf8kdqP3c4OLDTsvFNMi
+	 l2vxKg/TFwjIlGuOqLDQ5jFX+kRV5i6LQhojcycM=
+From: Vitalii Mordan <mordan@ispras.ru>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Vitalii Mordan <mordan@ispras.ru>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Fedor Pchelkin <pchelkin@ispras.ru>,
+	Alexey Khoroshilov <khoroshilov@ispras.ru>,
+	Vadim Mutilin <mutilin@ispras.ru>,
+	stable@vger.kernel.org
+Subject: [PATCH] usb: phy-tahvo: fix call balance for tu->ick handling routines
+Date: Mon, 16 Dec 2024 17:24:39 +0300
+Message-Id: <20241216142439.3682719-1-mordan@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 16 Dec 2024 15:09:00 +0100
-Message-Id: <D6D6NEMYVOBV.3OVBJ77E11A2@bootlin.com>
-Cc: "Pawel Laszczak" <pawell@cadence.com>, "Roger Quadros"
- <rogerq@kernel.org>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Mathias Nyman" <mathias.nyman@intel.com>, =?utf-8?q?Gr=C3=A9gory_Clement?=
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <linux-usb@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-To: "Peter Chen" <peter.chen@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v6 0/5] Fix USB suspend on TI J7200 (cdns3-ti, cdns3,
- xhci)
-X-Mailer: aerc 0.18.2-0-ge037c095a049
-References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
- <20241214090604.GC4102926@nchen-desktop>
-In-Reply-To: <20241214090604.GC4102926@nchen-desktop>
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hello Peter,
+If the clock tu->ick was not enabled in tahvo_usb_probe,
+it may still hold a non-error pointer, potentially causing
+the clock to be incorrectly disabled later in the function.
 
-On Sat Dec 14, 2024 at 10:06 AM CET, Peter Chen wrote:
-> On 24-12-10 18:13:34, Th=C3=A9o Lebrun wrote:
-> > Currently, system-wide suspend is broken on J7200 because of a
-> > controller reset. The TI wrapper does not get re-initialised at resume
-> > and the first register access from cdns core fails.
-> >=20
-> > We address that in two ways:
-> >=20
-> >  - In the cdns3-ti wrapper, if a reset has occured at resume,
-> >    we reconfigure the hardware.
-> >=20
-> >  - We add a xhci->lost_power flag. Identical to the XHCI_RESET_ON_RESUM=
-E
-> >    quirk, expect that it can be set at runtime.
-> >=20
-> >    At resume, to summarise, we do:
-> >       xhci->lost_power =3D cdns_power_is_lost(cdns);
->
-> Is it possible you go to change xhci quirks runtime?
+Use the devm_clk_get_enabled helper function to ensure proper call balance
+for tu->ick.
 
-I always assumed quirks were read-only once probe was finished.
-If I was wrong then we can remove xhci->lost_power and edit
-xhci->quirks instead.
+Found by Linux Verification Center (linuxtesting.org) with Klever.
 
-Thanks,
+Fixes: 9ba96ae5074c ("usb: omap1: Tahvo USB transceiver driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+---
+v2: Corrected a typo in the error handling of the devm_clk_get_enabled
+call. This issue was reported by Dan Carpenter <dan.carpenter@linaro.org>.
+ drivers/usb/phy/phy-tahvo.c | 20 ++++++++------------
+ 1 file changed, 8 insertions(+), 12 deletions(-)
 
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+diff --git a/drivers/usb/phy/phy-tahvo.c b/drivers/usb/phy/phy-tahvo.c
+index ae7bf3ff89ee..4182e86dc450 100644
+--- a/drivers/usb/phy/phy-tahvo.c
++++ b/drivers/usb/phy/phy-tahvo.c
+@@ -341,9 +341,11 @@ static int tahvo_usb_probe(struct platform_device *pdev)
+ 
+ 	mutex_init(&tu->serialize);
+ 
+-	tu->ick = devm_clk_get(&pdev->dev, "usb_l4_ick");
+-	if (!IS_ERR(tu->ick))
+-		clk_enable(tu->ick);
++	tu->ick = devm_clk_get_enabled(&pdev->dev, "usb_l4_ick");
++	if (IS_ERR(tu->ick)) {
++		dev_err(&pdev->dev, "failed to get and enable clock\n");
++		return PTR_ERR(tu->ick);
++	}
+ 
+ 	/*
+ 	 * Set initial state, so that we generate kevents only on state changes.
+@@ -353,15 +355,14 @@ static int tahvo_usb_probe(struct platform_device *pdev)
+ 	tu->extcon = devm_extcon_dev_allocate(&pdev->dev, tahvo_cable);
+ 	if (IS_ERR(tu->extcon)) {
+ 		dev_err(&pdev->dev, "failed to allocate memory for extcon\n");
+-		ret = PTR_ERR(tu->extcon);
+-		goto err_disable_clk;
++		return PTR_ERR(tu->extcon);
+ 	}
+ 
+ 	ret = devm_extcon_dev_register(&pdev->dev, tu->extcon);
+ 	if (ret) {
+ 		dev_err(&pdev->dev, "could not register extcon device: %d\n",
+ 			ret);
+-		goto err_disable_clk;
++		return ret;
+ 	}
+ 
+ 	/* Set the initial cable state. */
+@@ -384,7 +385,7 @@ static int tahvo_usb_probe(struct platform_device *pdev)
+ 	if (ret < 0) {
+ 		dev_err(&pdev->dev, "cannot register USB transceiver: %d\n",
+ 			ret);
+-		goto err_disable_clk;
++		return ret;
+ 	}
+ 
+ 	dev_set_drvdata(&pdev->dev, tu);
+@@ -405,9 +406,6 @@ static int tahvo_usb_probe(struct platform_device *pdev)
+ 
+ err_remove_phy:
+ 	usb_remove_phy(&tu->phy);
+-err_disable_clk:
+-	if (!IS_ERR(tu->ick))
+-		clk_disable(tu->ick);
+ 
+ 	return ret;
+ }
+@@ -418,8 +416,6 @@ static void tahvo_usb_remove(struct platform_device *pdev)
+ 
+ 	free_irq(tu->irq, tu);
+ 	usb_remove_phy(&tu->phy);
+-	if (!IS_ERR(tu->ick))
+-		clk_disable(tu->ick);
+ }
+ 
+ static struct platform_driver tahvo_usb_driver = {
+-- 
+2.25.1
 
 
