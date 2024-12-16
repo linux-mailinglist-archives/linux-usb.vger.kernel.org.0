@@ -1,129 +1,146 @@
-Return-Path: <linux-usb+bounces-18519-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18520-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC649F2898
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 04:12:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABCAD9F29C4
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 06:54:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C1207A1262
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 03:11:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B67661884EEB
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 05:54:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 475D4153565;
-	Mon, 16 Dec 2024 03:11:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3278C1C54A2;
+	Mon, 16 Dec 2024 05:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="pHWEo56G"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cXRPzalh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out203-205-221-242.mail.qq.com (out203-205-221-242.mail.qq.com [203.205.221.242])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 551F4847B;
-	Mon, 16 Dec 2024 03:11:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.242
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8B1A1C54B0
+	for <linux-usb@vger.kernel.org>; Mon, 16 Dec 2024 05:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734318709; cv=none; b=RdvGLxsLHB7nmZ9FF/qxOiJWw9vTCxXVKhcW+VjpEDBgwtnGlRYOCLzTPcY1E1+b5sUHzcC9W31U0aOMi1JVIW7+mvAN5t9+JqdiGjdRXh3IjVe3/6MM6rhkns0LHVyf+JTjMYBbu6uq23zIhuZz3UiPA3j9dEF5J7CoDb+vDd4=
+	t=1734328446; cv=none; b=B1NDUZJsWlG2oLPoVk6pYn0q3rOvUKi4C/G6rwiVR/gvoFtuOcC9yblYEUaS25N4IrK+fOLBEsFBcWbU6t+yzDIfW8Pqoop8/16wP2/YkEh1prjvOKDBAUjqi5R1ye0V5aH90SHE4t8NYJHs2udmn7OZ5+hmZLumcC4K6Re4I3M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734318709; c=relaxed/simple;
-	bh=feZqFl3Z2fXoahyyv8inhP0iVemVBJb+Irhr0KxoyL0=;
-	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version; b=ZCYTKMn3IDXPZnQ3BlcGsYzPBzFd31poQ+ixhDYI0nhE7H6J8xBjM0VrURu7/e2hh0rhs5nkCS8K8rajqVQ0LXtzoeA8GPREnIux/YzFVBWteEweeqF39gA0t5656XwlXFELaCGXc8I9HXqD8DQB3+shrSIjUgwYf5b1WXLXUWc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=pHWEo56G; arc=none smtp.client-ip=203.205.221.242
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1734318394;
-	bh=Kc3CUwedDdXj45/Mbsftuq+CcH5kq+gS1YhoUSKMdBM=;
-	h=From:To:Cc:Subject:Date;
-	b=pHWEo56GJg+6nw3W+PmlYkkY8Ui8qw2NViHQ2vjsS995K8mM5almzngj8MNpARBP0
-	 x4lKP8icXcqQ0ueDjLhN9VzdiprdgYqcoEaYdAqVFZPz9j+KMeyxIU7LZirUTU0xjK
-	 wF80mSWNmc3kMrYtd4aAiB57R4mH5RDdlYMUxJ08=
-Received: from q-OptiPlex-7000.QUECTEL.COM ([203.93.254.82])
-	by newxmesmtplogicsvrsza36-0.qq.com (NewEsmtp) with SMTP
-	id 19427482; Mon, 16 Dec 2024 11:06:20 +0800
-X-QQ-mid: xmsmtpt1734318380tkxxbae7w
-Message-ID: <tencent_17DDD787B48E8A5AB8379ED69E23A0CD9309@qq.com>
-X-QQ-XMAILINFO: OATpkVjS499uQq0ifGKy4F7GQl3t+SPov80Pn6eQHF7hnugAjnJ8XcWvLZ2dsw
-	 1qLPBOs1OpNvtaD2Yhc7HP0xYIZnv5EyfLVbuPt19Y11q20ZkcxFBa7+9CwIYDZiqKnzp0FpbF9W
-	 pwdpRix+RH53j0HwXs9qJ8wFHT2OBHabxuY3hy1yimMoaB58VVdSVI6dFejocs/iNf1GDSCFoZE2
-	 mVbDTLIzFdtFaXnDtg95HEqowum1ANVR6vPjkqJ+JCCJu3gv0Rfp4QsWxvg9eGejI+6tnQR+8l7z
-	 5TC/MI+I9DowAKhe2YgQxbp+UuXBnHPkgRWamxPY3YlfMh5cVo8B6InBOBe72U0g5ySzgIz5Sr1q
-	 f+f+rJkbqIBZcLYajj0B/iQkhPRvRqsEWkgLrgQuyOj/N72yv2OlzUmKO86c2+acW3/Lodd0FqVU
-	 cqgLDw6MxPgqF80LpAQmZoU8xRgN33qeq/DGwQ35UctHNJ3xvAhBtAr3XkLy0N384Q1vYs77xwpW
-	 7f/cL9/kd5glNDFvUJiRXHZ5llSvKD3AXE3cthYjDJz1ERKTXXcAieHKP9E63JetjLdMkFN77nqw
-	 vRwyEhAVTCoIpIhc7I82XK+VqCheoeO0PtUMoCJAZSNmIwlM8YPsK/gq2R4b84c3nKwnaoXcgawp
-	 L79GoSm+cqhUedmLpvFHBCDcThWjWtSdvhAesj3V5CLXFLKBmw0vmy60fUQcBOAIo7zMy+sxQ3Hx
-	 hDEXD1tcX1jp9tbYgCkJRzXDbFJfFJOXfqsrutqdmyOQc+esb9STp83tMPmi/40X6JmneIZPCgOG
-	 fKsaoldFxYSoNVBbV5F3Aut059HzH+InEhOqYwAKDLAy9mmVt1Wa03xXTOrqYaq1fIHytDMMuLeR
-	 prBS1kV4jWPtMk3FJCBxHtdqWkcwHMwPTQAsOQZB0/QBeb92h/zLYIWJglvpQiIh20F7jcg8FVPI
-	 azmJGnsfUk2ivD9eduNt9Wyhqk7cjDjna54T6hUYRIt8BV1q8KDAIAm74rfR2SH8hlizRhnpjf0i
-	 yYt6dzA1SuI1p05bRYdfN8tZXi5elK7RtRG0DVEWbi2MQGsFadf7kuWtzoEL0=
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-From: Martin Hou <martin.hou@foxmail.com>
-To: bjorn@mork.no,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Cc: netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Martin Hou <martin.hou@foxmail.com>
-Subject: [PATCH] net: usb: qmi_wwan: add Quectel RG255C
-Date: Mon, 16 Dec 2024 11:06:18 +0800
-X-OQ-MSGID: <20241216030618.70729-1-martin.hou@foxmail.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1734328446; c=relaxed/simple;
+	bh=ZNP0v3/4BomZoAEvLGEv2cgm7ao+GyUKQDkAYpR1azM=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=O+tUJEwn/EuuzY/da4rUfucPkQdYhvSKMolcY2goKte0m0N8/+H0LlzCc6qUpEbZ3c1MqVDBRQDkotOfd01jkHeeaY1PZAB7jfRy5B9S13neVGn7YeeaL4apJevlYGbM8H907n4D9yY1N0zXkJf3UwDmcjJuVgJKpcpYhWXMUnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cXRPzalh; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aa69107179cso700844466b.0
+        for <linux-usb@vger.kernel.org>; Sun, 15 Dec 2024 21:54:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734328443; x=1734933243; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=w+dFO3Ui/sEdU+d4tBQlNTeaAHc3ObDp+PAoFFR+kSQ=;
+        b=cXRPzalhrzVQbg4p208Qo/iCamDAmiRORkhlNuTK2WsdFgrc3WFUxq4sVSQAWfnv12
+         RD5tOMZchdnE6g+9EdRbA3dtOlWRQvtKkEPULAU0/J5uGXjLu3Zy+XBaQNPDRYo+bkMd
+         PC38nJZ8wCnchHRMcg0noF/hFxpVyIJbnAAcYGYnnQA2MKdP/b1NeZVsCxlAbaoPS2jP
+         nsnuC0wCOjH0cONf+HAdfUesp96AIxXrJoqCpE1e5IqAANj1ZGW582oIMqlK3/r+dgjs
+         V4fbugV33XHmQJ6eBw1EP4KDuZUqAJC/RFJZxFT2ZnRDDswnCmQJehVUyWLNiKIyXvoc
+         e7pA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734328443; x=1734933243;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=w+dFO3Ui/sEdU+d4tBQlNTeaAHc3ObDp+PAoFFR+kSQ=;
+        b=r7ziiIqJQ0oQl/HKcGNM40MX4+HNoePS9Xf//PLEeBNVYKox1FhTgJMKj3U/2XseFR
+         WvafrAK6vEJ5REVKwuSv3wPB4QcgXBw83uP77a684IGDq/5GHKhfN882fkXWprEt5O8y
+         s56NZWiUSiWPeGe0tEdffW/y1m5oADmLdu8jBHFzsz7Yg3PyiFStHbfzVlgGizufwIub
+         YISzdsPWzbKupclBqbsIZLQqzQmQDoUvWHER9R5qy+8s65K69UcR1XERgMuW0k3xypPZ
+         WvanxIaME/uQGTMdC/1Djaz5LL5MP24iWLpytREQpTcrbyukUCAEnmHqjAPZAWZsM1Na
+         QYiA==
+X-Forwarded-Encrypted: i=1; AJvYcCWbzHop+eJzR2wOsdArOyoqnCiL3hzFz5+6V32XowfXQKBWuXNgDoqtwcAA7/SlPbdIM5UbAmtjLBs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwroCDAUg+sm6nrryghGGMO8JSa9cs7lnxpHonNG0xcaIUZixeZ
+	FvSfuFnBfp57xzJYmWgGh2cqnj6cKuQa07YS/C6B+jfeI05CjgrpgodYWcTmN1Y=
+X-Gm-Gg: ASbGncvtEzeZ4D/WHNJ3NwuBBujDGOP56AAj/VWkvAwwD5FJ5uuv6cc+0LmnZKUxBrM
+	QXYiWqEPtXz4V2ABo7nJq1FbNYexiXSfW7wUWB7RfF2/jqOsUYsQRdrYoBQAXATuIeiDxGgKhjn
+	0MuT7T7wYvCi3lijanNmDW8aUD2QuPh13TBO5iWSy1NpuhwlYVrp+09g5tXjvKUJjFV4nZ+vvE9
+	JywfU4lQGOOzkgSFDHnjEvCXmtTmKRmHENFiPt5CqyRnr+uQ9Uy+guE0lx2jQ==
+X-Google-Smtp-Source: AGHT+IFoSvWSFfIldErFNpAMajYw9cB5vCOVjo6HVzQrtAlbPuyC5xoikuxSZeInpDkydeS20+n9Qg==
+X-Received: by 2002:a17:907:7216:b0:aab:76bd:5f8e with SMTP id a640c23a62f3a-aab77ed35d6mr1120600366b.53.1734328443208;
+        Sun, 15 Dec 2024 21:54:03 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab96006c2fsm286466466b.9.2024.12.15.21.54.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 15 Dec 2024 21:54:02 -0800 (PST)
+Date: Mon, 16 Dec 2024 08:53:59 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Vitalii Mordan <mordan@ispras.ru>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+	Vitalii Mordan <mordan@ispras.ru>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Felipe Balbi <felipe.balbi@linux.intel.com>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Fedor Pchelkin <pchelkin@ispras.ru>,
+	Alexey Khoroshilov <khoroshilov@ispras.ru>,
+	Vadim Mutilin <mutilin@ispras.ru>, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: phy-tahvo: fix call balance for tu->ick handling
+ routines
+Message-ID: <f60184a1-fe12-4a7f-bbbb-e6191f673df4@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241209152604.1918882-1-mordan@ispras.ru>
 
-Add support for Quectel RG255C which is based on Qualcomm SDX35 chip.
-The composition is DM / NMEA / AT / QMI.
+Hi Vitalii,
 
-T:  Bus=01 Lev=01 Prnt=01 Port=04 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
-D:  Ver= 2.01 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2c7c ProdID=0316 Rev= 5.15
-S:  Manufacturer=Quectel
-S:  Product=RG255C-CN
-S:  SerialNumber=c68192c1
-C:* #Ifs= 4 Cfg#= 1 Atr=a0 MxPwr=500mA
-I:* If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 1 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
-E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:* If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
-E:  Ad=86(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Martin Hou <martin.hou@foxmail.com>
----
- drivers/net/usb/qmi_wwan.c | 1 +
- 1 file changed, 1 insertion(+)
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index 9fe7f704a2f7..e9208a8d2bfa 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -1429,6 +1429,7 @@ static const struct usb_device_id products[] = {
- 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0195, 4)},	/* Quectel EG95 */
- 	{QMI_FIXED_INTF(0x2c7c, 0x0296, 4)},	/* Quectel BG96 */
- 	{QMI_QUIRK_SET_DTR(0x2c7c, 0x030e, 4)},	/* Quectel EM05GV2 */
-+	{QMI_QUIRK_SET_DTR(0x2c7c, 0x0316, 3)},	/* Quectel RG255C */
- 	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0104, 4)},	/* Fibocom NL678 series */
- 	{QMI_QUIRK_SET_DTR(0x2cb7, 0x0112, 0)},	/* Fibocom FG132 */
- 	{QMI_FIXED_INTF(0x0489, 0xe0b4, 0)},	/* Foxconn T77W968 LTE */
+url:    https://github.com/intel-lab-lkp/linux/commits/Vitalii-Mordan/usb-phy-tahvo-fix-call-balance-for-tu-ick-handling-routines/20241209-232934
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20241209152604.1918882-1-mordan%40ispras.ru
+patch subject: [PATCH] usb: phy-tahvo: fix call balance for tu->ick handling routines
+config: alpha-randconfig-r072-20241215 (https://download.01.org/0day-ci/archive/20241215/202412150530.f03D8q1a-lkp@intel.com/config)
+compiler: alpha-linux-gcc (GCC) 14.2.0
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202412150530.f03D8q1a-lkp@intel.com/
+
+smatch warnings:
+drivers/usb/phy/phy-tahvo.c:347 tahvo_usb_probe() warn: passing zero to 'PTR_ERR'
+
+vim +/PTR_ERR +347 drivers/usb/phy/phy-tahvo.c
+
+9ba96ae5074c9f Aaro Koskinen   2013-12-06  341  
+9ba96ae5074c9f Aaro Koskinen   2013-12-06  342  	mutex_init(&tu->serialize);
+9ba96ae5074c9f Aaro Koskinen   2013-12-06  343  
+125b175df62ecc Vitalii Mordan  2024-12-09  344  	tu->ick = devm_clk_get_enabled(&pdev->dev, "usb_l4_ick");
+125b175df62ecc Vitalii Mordan  2024-12-09  345  	if (!IS_ERR(tu->ick)) {
+                                                            ^
+This typo breaks the driver.
+
+125b175df62ecc Vitalii Mordan  2024-12-09  346  		dev_err(&pdev->dev, "failed to get and enable clock\n");
+125b175df62ecc Vitalii Mordan  2024-12-09 @347  		return PTR_ERR(tu->ick);
+125b175df62ecc Vitalii Mordan  2024-12-09  348  	}
+9ba96ae5074c9f Aaro Koskinen   2013-12-06  349  
+9ba96ae5074c9f Aaro Koskinen   2013-12-06  350  	/*
+9ba96ae5074c9f Aaro Koskinen   2013-12-06  351  	 * Set initial state, so that we generate kevents only on state changes.
+9ba96ae5074c9f Aaro Koskinen   2013-12-06  352  	 */
+9ba96ae5074c9f Aaro Koskinen   2013-12-06  353  	tu->vbus_state = retu_read(rdev, TAHVO_REG_IDSR) & TAHVO_STAT_VBUS;
+9ba96ae5074c9f Aaro Koskinen   2013-12-06  354  
+860d2686fda7e4 Chanwoo Choi    2015-07-01  355  	tu->extcon = devm_extcon_dev_allocate(&pdev->dev, tahvo_cable);
+
 -- 
-2.25.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
