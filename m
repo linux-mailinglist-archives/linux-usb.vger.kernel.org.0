@@ -1,154 +1,109 @@
-Return-Path: <linux-usb+bounces-18532-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18533-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53F2A9F3225
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 15:02:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 765AA9F3241
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 15:07:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 930D21674DA
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 14:02:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FBF61888D10
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 14:07:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58ED205AA5;
-	Mon, 16 Dec 2024 14:02:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8EA4205E1A;
+	Mon, 16 Dec 2024 14:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kIiEfrtf"
+	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="q5XFQIzS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA11FF9DA;
-	Mon, 16 Dec 2024 14:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17CED1C8FD7;
+	Mon, 16 Dec 2024 14:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734357769; cv=none; b=urC1XqntdE/ESgsJJ6bHliBHu2TZyTiSy3neeNhFJVZTdQi5LLRY154Dk6CfWCcjF4tmilBtDmga9Q6gephvLns+5/3uzvKxOKgs9MiWfj+rUAgbSKEZrUlxaNxr0FaH5TD3KzL8w1T5SNuhnP4GCVOf2fIzKI+mqh/w1Kd64RI=
+	t=1734358035; cv=none; b=c3AJPJZn6mhw5MRlIts/Ik2bpw2/xHu41AW01tkN2rIgmG+GWk2gTpzCBOk1aX8Si0NOLdfHKPckrV9z7mDbEqpJEFHIAEJ3d7lHG/Aqy0zZ08rie+DbT/YsDAVF//dU+wU58B25nfC58yVEq2ngLjEk2nB9dsMcb8u8LeXVIFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734357769; c=relaxed/simple;
-	bh=UpednncarOQ8uK9wD0CLma7myJeHPhCom6wqghlcoQ8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=ZR0NF6AnTNWx/FbrZn9uGM5OUWNkSWnEUEAPTD3yfbfR8p+SI56jaT+c6no7Y1dcvqUdB3+qcFl8KwHOEfZVREN6+RpFsWdn2OJeRURDfooX3PB7emM4ZpYYeUQkDjF8BefYt/69TmP/A0vOyZbkAhATi3xE4zsTjgi6izLgPfA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kIiEfrtf; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 55484C0008;
-	Mon, 16 Dec 2024 14:02:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1734357764;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nsC82Wd9lmhMc2NXzvbxJLGnofV5wKYtTRbR551/o5c=;
-	b=kIiEfrtfzMWUuA0roxlDj4ymfnC3HZWYW3Wmn26dipReYS+XJ8NMS0mG+ibMjXcta0D+cI
-	ZfDipGxIEY6C9LRlMI47/F79h9n5KOKRa+HUOieiUFx1E4m3UqMcRaWYRosjO+zu3dDoqv
-	SyI28SdB4oI3/uurYKFAj6zBd6oSJBpNipheV12EjL3ZbayGBC+AAk5Y5s4g216BXjyn7a
-	IC2s+QcBG8RXg0AScGTeeQQn1cnIDrZfHWFUMNRhghEc11mKx/AfUwbgGpLZgWF5JeVa6s
-	mprOI3LEG8ZyRZ5PXvpSZd7oavPsGxo6nTmYr93iduJOp9IvWAfq8vTBsSl11Q==
+	s=arc-20240116; t=1734358035; c=relaxed/simple;
+	bh=sIxqEiFmEYrpgSwxi1Bzxd/FniKoAgSBJy7igxpN6gs=;
+	h=MIME-Version:Date:Content-Type:From:Message-ID:Subject:To:Cc:
+	 In-Reply-To:References; b=OHhce2MMYH5LfNxQ8+5t+e5Fad6qCOlFnZgrOg5uWQaBt8S6FVFjFmBQQqPv8wxjs8vHcdkx1p+DYUgo3/N+N588APIiX31ptclrrgyuS/+l+rH7DKBsnqHUcDM2faQQoXZbZ5XqTS/g/aNXTOJ9F4SUXYgVHL8NU+g9Vft4RrU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=q5XFQIzS; arc=none smtp.client-ip=83.149.199.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
+Received: from rainloop.ispras.ru (unknown [83.149.199.84])
+	by mail.ispras.ru (Postfix) with ESMTPSA id D49F44076735;
+	Mon, 16 Dec 2024 14:07:03 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru D49F44076735
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+	s=default; t=1734358023;
+	bh=sIxqEiFmEYrpgSwxi1Bzxd/FniKoAgSBJy7igxpN6gs=;
+	h=Date:From:Subject:To:Cc:In-Reply-To:References:From;
+	b=q5XFQIzSRKUl8W+q16i50PxBo/6YR/y1h5hHzEulk3VW9UfOT1mDWgSXL3fZQGdhX
+	 ujq32HCkFvhYYxdsiv3DwZ4Tk+0J7IUVw6b1mgKTD1w4zZzfhAu/gXqbgDYBww8P2i
+	 x5cKEnDYTtR80NiSIP8xpMwI9G2YI0Gi3fnN4+jU=
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Date: Mon, 16 Dec 2024 14:07:03 +0000
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 16 Dec 2024 15:02:43 +0100
-Message-Id: <D6D6IL1RNGA8.3U3GIJQJX2L3J@bootlin.com>
-Cc: "Pawel Laszczak" <pawell@cadence.com>, "Roger Quadros"
- <rogerq@kernel.org>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Mathias Nyman" <mathias.nyman@intel.com>, =?utf-8?q?Gr=C3=A9gory_Clement?=
- <gregory.clement@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <linux-usb@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-To: "Peter Chen" <peter.chen@kernel.org>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v6 2/5] usb: cdns3-ti: run HW init at resume() if HW was
- reset
-X-Mailer: aerc 0.18.2-0-ge037c095a049
-References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
- <20241210-s2r-cdns-v6-2-28a17f9715a2@bootlin.com>
- <20241214084940.GA4102926@nchen-desktop>
-In-Reply-To: <20241214084940.GA4102926@nchen-desktop>
-X-GND-Sasl: theo.lebrun@bootlin.com
+X-Mailer: RainLoop/1.14.0
+From: mordan@ispras.ru
+Message-ID: <0a4227dd3582ddd4da13d152ab20854e@ispras.ru>
+Subject: Re: [PATCH] usb: phy-tahvo: fix call balance for tu->ick handling
+ routines
+To: "Dan Carpenter" <dan.carpenter@linaro.org>, oe-kbuild@lists.linux.dev,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+ "=?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?=" <u.kleine-koenig@baylibre.com>,
+ "Aaro Koskinen" <aaro.koskinen@iki.fi>, "Felipe Balbi"
+ <felipe.balbi@linux.intel.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, "Fedor Pchelkin" <pchelkin@ispras.ru>,
+ "Alexey Khoroshilov" <khoroshilov@ispras.ru>, "Vadim Mutilin"
+ <mutilin@ispras.ru>, stable@vger.kernel.org
+In-Reply-To: <f60184a1-fe12-4a7f-bbbb-e6191f673df4@stanley.mountain>
+References: <f60184a1-fe12-4a7f-bbbb-e6191f673df4@stanley.mountain>
 
-On Sat Dec 14, 2024 at 9:49 AM CET, Peter Chen wrote:
-> On 24-12-10 18:13:36, Th=C3=A9o Lebrun wrote:
-> > At runtime_resume(), read the W1 (Wrapper Register 1) register to detec=
-t
-> > if an hardware reset occurred. If it did, run the hardware init sequenc=
-e.
-> >=20
-> > This callback will be called at system-wide resume. Previously, if a
-> > reset occurred during suspend, we would crash. The wrapper config had
-> > not been written, leading to invalid register accesses inside cdns3.
-> >=20
-> > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> > ---
-> >  drivers/usb/cdns3/cdns3-ti.c | 25 +++++++++++++++++++++++++
-> >  1 file changed, 25 insertions(+)
-> >=20
-> > diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.=
-c
-> > index d704eb39820ad08a8774be7f00aa473c3ff267c0..d35be7db7616ef5e5bed7db=
-d53b78a094809f7cc 100644
-> > --- a/drivers/usb/cdns3/cdns3-ti.c
-> > +++ b/drivers/usb/cdns3/cdns3-ti.c
-> > @@ -188,6 +188,12 @@ static int cdns_ti_probe(struct platform_device *p=
-dev)
-> >  	data->vbus_divider =3D device_property_read_bool(dev, "ti,vbus-divide=
-r");
-> >  	data->usb2_only =3D device_property_read_bool(dev, "ti,usb2-only");
-> > =20
-> > +	/*
-> > +	 * The call below to pm_runtime_get_sync() MIGHT reset hardware, if i=
-t
-> > +	 * detects it as uninitialised. We want to enforce a reset at probe,
-> > +	 * and so do it manually here. This means the first runtime_resume()
-> > +	 * will be a no-op.
-> > +	 */
-> >  	cdns_ti_reset_and_init_hw(data);
-> > =20
-> >  	pm_runtime_enable(dev);
-> > @@ -232,6 +238,24 @@ static void cdns_ti_remove(struct platform_device =
-*pdev)
-> >  	platform_set_drvdata(pdev, NULL);
-> >  }
-> > =20
-> > +static int cdns_ti_runtime_resume(struct device *dev)
-> > +{
-> > +	const u32 mask =3D USBSS_W1_PWRUP_RST | USBSS_W1_MODESTRAP_SEL;
-> > +	struct cdns_ti *data =3D dev_get_drvdata(dev);
-> > +	u32 w1;
-> > +
-> > +	w1 =3D cdns_ti_readl(data, USBSS_W1);
-> > +	if ((w1 & mask) !=3D mask)
-> > +		cdns_ti_reset_and_init_hw(data);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static const struct dev_pm_ops cdns_ti_pm_ops =3D {
-> > +	RUNTIME_PM_OPS(NULL, cdns_ti_runtime_resume, NULL)
->
-> Why only runtime resume, but without runtime suspend?
-
-I don't see any situation where we would want "runtime suspend" be
-equivalent to "reset the cdns3 wrapper". It implies losing child
-states, triggering rediscovery of all USB devices at resume. Is that a
-desired property of runtime suspend on any discoverable bus?
-
-Sidenote: also, in our implementation, we do the standard thing of using
-pm_runtime_force_suspend|resume() as suspend callback implementations.
-With that, if we did reset the wrapper at suspend, we would:
- - always have to rediscover USB devices at resume and,
- - break wakeup sources.
-
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Thank you very much for reporting this issue. I will fix it in patch v2.=
+=0AThanks, Vitalii=0A=0A=0ADecember 16, 2024 2:53 AM, "Dan Carpenter" <da=
+n.carpenter@linaro.org> wrote:=0A=0A> Hi Vitalii,=0A> =0A> kernel test ro=
+bot noticed the following build warnings:=0A> =0A> https://git-scm.com/do=
+cs/git-format-patch#_base_tree_information]=0A> =0A> url:=0A> https://git=
+hub.com/intel-lab-lkp/linux/commits/Vitalii-Mordan/usb-phy-tahvo-fix-call=
+-balance-for-tu-=0A> ck-handling-routines/20241209-232934=0A> base: https=
+://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing=0A>=
+ patch link: https://lore.kernel.org/r/20241209152604.1918882-1-mordan@is=
+pras.ru=0A> patch subject: [PATCH] usb: phy-tahvo: fix call balance for t=
+u->ick handling routines=0A> config: alpha-randconfig-r072-20241215=0A> (=
+https://download.01.org/0day-ci/archive/20241215/202412150530.f03D8q1a-lk=
+p@intel.com/config)=0A> compiler: alpha-linux-gcc (GCC) 14.2.0=0A> =0A> I=
+f you fix the issue in a separate patch/commit (i.e. not just a new versi=
+on of=0A> the same patch/commit), kindly add following tags=0A> | Reporte=
+d-by: kernel test robot <lkp@intel.com>=0A> | Reported-by: Dan Carpenter =
+<dan.carpenter@linaro.org>=0A> | Closes: https://lore.kernel.org/r/202412=
+150530.f03D8q1a-lkp@intel.com=0A> =0A> smatch warnings:=0A> drivers/usb/p=
+hy/phy-tahvo.c:347 tahvo_usb_probe() warn: passing zero to 'PTR_ERR'=0A> =
+=0A> vim +/PTR_ERR +347 drivers/usb/phy/phy-tahvo.c=0A> =0A> 9ba96ae5074c=
+9f Aaro Koskinen 2013-12-06 341=0A> 9ba96ae5074c9f Aaro Koskinen 2013-12-=
+06 342 mutex_init(&tu->serialize);=0A> 9ba96ae5074c9f Aaro Koskinen 2013-=
+12-06 343=0A> 125b175df62ecc Vitalii Mordan 2024-12-09 344 tu->ick =3D de=
+vm_clk_get_enabled(&pdev->dev,=0A> "usb_l4_ick");=0A> 125b175df62ecc Vita=
+lii Mordan 2024-12-09 345 if (!IS_ERR(tu->ick)) {=0A> ^=0A> This typo bre=
+aks the driver.=0A> =0A> 125b175df62ecc Vitalii Mordan 2024-12-09 346 dev=
+_err(&pdev->dev, "failed to get and enable=0A> clock\n");=0A> 125b175df62=
+ecc Vitalii Mordan 2024-12-09 @347 return PTR_ERR(tu->ick);=0A> 125b175df=
+62ecc Vitalii Mordan 2024-12-09 348 }=0A> 9ba96ae5074c9f Aaro Koskinen 20=
+13-12-06 349=0A> 9ba96ae5074c9f Aaro Koskinen 2013-12-06 350 /*=0A> 9ba96=
+ae5074c9f Aaro Koskinen 2013-12-06 351 * Set initial state, so that we ge=
+nerate kevents only=0A> on state changes.=0A> 9ba96ae5074c9f Aaro Koskine=
+n 2013-12-06 352 */=0A> 9ba96ae5074c9f Aaro Koskinen 2013-12-06 353 tu->v=
+bus_state =3D retu_read(rdev, TAHVO_REG_IDSR) &=0A> TAHVO_STAT_VBUS;=0A> =
+9ba96ae5074c9f Aaro Koskinen 2013-12-06 354=0A> 860d2686fda7e4 Chanwoo Ch=
+oi 2015-07-01 355 tu->extcon =3D devm_extcon_dev_allocate(&pdev->dev,=0A>=
+ tahvo_cable);=0A> =0A> --=0A> 0-DAY CI Kernel Test Service=0A> https://g=
+ithub.com/intel/lkp-tests/wiki
 
