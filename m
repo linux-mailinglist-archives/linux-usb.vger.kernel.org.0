@@ -1,198 +1,203 @@
-Return-Path: <linux-usb+bounces-18517-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18518-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82B769F2842
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 02:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 90A629F2849
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 02:57:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 041F91881692
-	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 01:55:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1542518816D2
+	for <lists+linux-usb@lfdr.de>; Mon, 16 Dec 2024 01:57:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74FCD17991;
-	Mon, 16 Dec 2024 01:55:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EBDF1804E;
+	Mon, 16 Dec 2024 01:57:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="i6PiGfpb"
+	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="TxL5dtrl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B40F7EAD5
-	for <linux-usb@vger.kernel.org>; Mon, 16 Dec 2024 01:55:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A7FA17591
+	for <linux-usb@vger.kernel.org>; Mon, 16 Dec 2024 01:57:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734314149; cv=none; b=eZHWO1xVpgO1S+J2UgYfdDi65gjzzgjOFdhtqxoSG/L9beCp0z26txr2Ey0RM/h6XtJK7CZrOpmPR8e7Xni6F9I6MlqEamot2soNMJ2CihylOMFoFdmcTt3nX2XuPpykg2+YEyZjSZo9yNzfjC+JaIlOirwi3lBaJc/wDutk5Rc=
+	t=1734314256; cv=none; b=nFXRBq5W32Lqm15u1SM1STvT3Ii2ywU2ZKMu/mqXywN80GoEnvhErPLio8yUH00sPmcIqdu+/l1qbfSYzzfpHuG/6Jjm2KRuYEla6jIaec5MFx3b/4MeFp5A6Ggkcp5+O4GMB/dG3rmG082HXZAPfgAV72KqiYPuNF2gb6ryDqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734314149; c=relaxed/simple;
-	bh=TCpfm9gNYyeEAUajZEJgeVz3y+h4GZWeBYqd24ez5ZY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VufL6zpseG+vVHU7Bhn+T8GxEb3MeqR5yF4T3xqwK/piM2/1lNAkFHcAfvmhMbC3BO/hIsjyXfWep/aGEN281FxhjOqRGbtG+gQQzQF5ph7IsxnxfCdPvZyt0Aawe+9VqkcfCzHWKpMI5SUS6PA0/YxfjU1MQmGIb72R5DQa/Js=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=i6PiGfpb; arc=none smtp.client-ip=209.85.214.182
+	s=arc-20240116; t=1734314256; c=relaxed/simple;
+	bh=qhKwh3PIj1IPIEZGzZs/3km8En3UVpUizGUn0uCN11g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Dy8NPutI9pW68uRuBqT+BWcnV6UqEvVOxFhr/GYaEPXolgKTO7x3WyIIZVdeYPDVexiXuBNbVkcYa8r9e9tX0w3js5OXoxvU3QcjJA8+uV2OPlpN6tPe3ON3DXf0y5IkwF4PjobPNonRGa0frNJU4/Jc/9j9HM9HKYGlMNyKcVc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=TxL5dtrl; arc=none smtp.client-ip=209.85.210.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2166f1e589cso36698865ad.3
-        for <linux-usb@vger.kernel.org>; Sun, 15 Dec 2024 17:55:46 -0800 (PST)
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-728e81257bfso2623628b3a.2
+        for <linux-usb@vger.kernel.org>; Sun, 15 Dec 2024 17:57:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1734314146; x=1734918946; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fzM676k1DKJkU9oLGeHVpaSFbuH7S+Pq9zqIC4eZblU=;
-        b=i6PiGfpbwEOSRz09i8/AabCnQljjRyKL2vAu0RapgBj6r4VksBHjIy+TY/7UDtHMfr
-         CMBW+KdM5FhkUV4+XZ2pImqntdzFQY2HRUC6NCmbk+4JEbYPbu4RVbrmVjKLvwYWN7J8
-         NssmJR2VmYhTrIukY4Y6GleiemL+ctORR2zirvPPx516qNZRRJQrFUqXo04ZenZsM+XI
-         OZRT5U8nBhaL3MHwMd6r3t9QUjRbYO6D4bzx2hYhLs1ozfZpqxoXaJdC8vhuVyfY8Mxb
-         tq/Klm9RPMyIZF6GFY3nRpfXIz173Iu5Ma2JUkW75Lx38LE3MG9NDBOdc8t2LOtxYzO2
-         +zjg==
+        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1734314253; x=1734919053; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Gm4kP5ZtpspMu3Kddf1CeW1Vs0wfn4Kb67Zu1TIf4DM=;
+        b=TxL5dtrlQJwdaEReNgVPpJX9XzD8PGVF6B8ehcwRcUgmlOEhugxCIs5JqxvQ2YoKcl
+         vrJ4exm7VcxtdYhn03dDfrZ7jSGAy3x546b5lxsVbdPga/9JVsYG/IOWLtEdUoWf971j
+         qvA7CjIiXJ0JNPsGBncklVCBBkG+59KdCXGrEOFpWasQF2GGHQ6eSV2eJDdZw6ePG5J9
+         Qn7tXAiDOi1dOBHD8eDXvffhradgNtBqacHidok5qwT+1LNEXGEa2gpZlcwuuLoc42OC
+         TazypGVyymV9ltvPjJao4cwX+3BZLADmsTVgAJt06sfAxbq+KVTVAuSs8fDKVwVZ8EJf
+         z4Ww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734314146; x=1734918946;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fzM676k1DKJkU9oLGeHVpaSFbuH7S+Pq9zqIC4eZblU=;
-        b=rwZT9jry2OSYy91VA/Oz2rCmrc4my7SzW5I9pSAqN9cG/VmTY0NZqDOuDIuKtSX19f
-         fzVr9zII7ICo1hlpYAZdwmuKurnGIXVUy8fbFv9BCXuiKlkOfHwyAx2aezn9bdGg5c0m
-         9o4kyAS0nuSBEWQkHAVviLjcAmBeDyDc2WoDWfyFOSfH6RxYvGMhHJuCsaURRPI7reDO
-         G5OyP08R04/7KmvH0SX37CoybgJYx4DDQ2BcwOu+PEN5AjAsI9CRXHIMOs4zY2Hvvam3
-         uSe4fil1OsmXVIsBpSru0lneF73aT9+RuvFt36DzQqsvJUbhj6KTO98C8E2GrwvHcTfw
-         AEkQ==
-X-Gm-Message-State: AOJu0YwfrjOXCI1usyxaOt1IiRRCSLLLQcih9upqxz8/4WsTQ8FMpq11
-	CBb0nGJkUk0TyFPiDgFP/ERbQpfJDvSskBcYsd4NIC9sXO1pKDwtQ1ECuZeTDSo=
-X-Gm-Gg: ASbGncs9hvvmGRf/hawDKH/EFrTUkEtm1/TB8u5GyYCqrF65G/YDqpdwHLNm5oRo5ew
-	3yhFbq2LqFwJG7mIVMoAFpgBUsCmZQFcqE30Sj9N4u6uzptIRdRu28pkG6sxUWenxhTUSLEIals
-	T6HY+sQmOXCWjWPYAjRoHkW0IvHsaOl0hsYdxEhNybmza6YMI+ZKegBsx4uvFma4OaWO1FcNRAI
-	khphpYx4DJ3F1th0B50ZgSAMZPi3sgN22L77PGOoJ2vqpM4I/r4/bAHVhY4gufzDfmcI+vZiIKJ
-	yja2n32fK++6visp2P2Ecj6/cbE4UjskEF19GWxc8Kk=
-X-Google-Smtp-Source: AGHT+IGgoCQ13pdlOw67VoMMX5O+6nchdoRA43p02Rv1YfssUVhyWfB3j/Sbk45VYRYFXB2PqhZjpw==
-X-Received: by 2002:a17:902:da8b:b0:215:6f9b:e447 with SMTP id d9443c01a7336-21892a5d814mr132437185ad.30.1734314146034;
-        Sun, 15 Dec 2024 17:55:46 -0800 (PST)
-Received: from localhost.localdomain (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e5c9c8sm32137365ad.193.2024.12.15.17.55.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 15 Dec 2024 17:55:45 -0800 (PST)
-From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-To: peter.chen@kernel.org,
-	gregkh@linuxfoundation.org,
-	shawnguo@kernel.org,
-	s.hauer@pengutronix.de,
-	kernel@pengutronix.de,
-	festevam@gmail.com
-Cc: linux-usb@vger.kernel.org,
-	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] usb: chipidea: ci_hdrc_imx: decrement device's refcount in .remove() and in the error path of .probe()
-Date: Mon, 16 Dec 2024 10:55:39 +0900
-Message-Id: <20241216015539.352579-1-joe@pf.is.s.u-tokyo.ac.jp>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1734314253; x=1734919053;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Gm4kP5ZtpspMu3Kddf1CeW1Vs0wfn4Kb67Zu1TIf4DM=;
+        b=eUYRsbMHAHfLzRHgeZYp1XfzBbik5vHRDF5vOboJPeyOsL7XGVxZfzvdgvauteaijs
+         cLqLHkbNR9O/+YJWcydOnDKqmJOBM8oSzMzUG41fW2MT5YSw6/kcxZ3grIUZSNJagEOr
+         p9rJ9zRQdbt3A9OaJcOjzxErJStLmqPgz+SLT5B6eNBkVjpTBuRz33SiagC1wwR2Hglc
+         Rz2MXAGmwAMitX3/HQ6JIcaPDoR0jXF+CRuZEXeZzWxLFOT9vhyLPJ3iKJIZIiTaU0Pw
+         e/7rL4k13X7dpyeKV7pD8hyXF+eDxP+9rBIoLAjYk58IKs06brf4VxOfjfQHEQcMKUcU
+         DaZg==
+X-Forwarded-Encrypted: i=1; AJvYcCUR1JdanOOHZe3tmubcn+nOkqyMGnwDow+TOwrJXVWhKHwTxNU7rog19emxsalbMKNH1UV6BmLKfZI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlNbSt5PMnGhvEDhq57weUSdeQfiXOfKR7CluI3vVDLQmr5cT1
+	nibriMGbohSi9Eli9+K4Exu51ifFkBjTV2tlR6aVdZXpalo8a25UTxE+9e4axyU=
+X-Gm-Gg: ASbGncuiCOrc0NBJJzhY/g9R1S9cv4qXd0g0zyF3GsVqBvkCpAZmDNLr3PqY9w4YM8o
+	cvPfO3Sj82kIiuh04cZhIn5UJMzeuusaXu5qErl7b+YlMdD7eGaWEimol7X/egKVMOuFHUmoNhB
+	axFaWK7Stn0Zdr47cFepUCH3MBhM+8TH4qQfc1OoPX0QAvFAxSMYrgnoRIQu7M+RZ/JVlnxAIW4
+	2Twip6gBXjNYS1OOqQrUt2FFycBIr5rHrusJ54IxDs4xQBlSs9nO7k9Rs26clcRBOYWE/nd6Fs6
+	I16a0Aq1mzGizxeS8R6bACiUIxj1KMvBUQ==
+X-Google-Smtp-Source: AGHT+IFBpSnCgBLl/f9/kZ1vy5+3BGTminuLI4aQdjneNm8IObmn/lVL65mFHvdlZbYUCY6woGxs5Q==
+X-Received: by 2002:a05:6a20:734b:b0:1e0:d837:c929 with SMTP id adf61e73a8af0-1e1dfc1193emr17449538637.9.1734314253497;
+        Sun, 15 Dec 2024 17:57:33 -0800 (PST)
+Received: from [192.168.0.78] (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918bc058bsm3569227b3a.175.2024.12.15.17.57.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 15 Dec 2024 17:57:33 -0800 (PST)
+Message-ID: <bfd4895e-16e4-42dd-a84f-e129b70aaff6@pf.is.s.u-tokyo.ac.jp>
+Date: Mon, 16 Dec 2024 10:57:29 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: chipidea: ci_hdrc_imx: decrement device's refcount
+ on the error path of .probe()
+To: Peter Chen <peter.chen@kernel.org>
+Cc: gregkh@linuxfoundation.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+ kernel@pengutronix.de, festevam@gmail.com, linux-usb@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20241212094945.3784866-1-joe@pf.is.s.u-tokyo.ac.jp>
+ <20241216012921.GA4105602@nchen-desktop>
+Content-Language: en-US
+From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+In-Reply-To: <20241216012921.GA4105602@nchen-desktop>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Current implementation of ci_hdrc_imx_driver does not decrement the
-refcount of the device obtained in usbmisc_get_init_data(). Add a
-put_device() call in .remove() and in .probe() before returning an
-error.
+Hi Peter,
 
-This bug was found by an experimental static analysis tool that I am
-developing.
+Thank you for your review.
 
-Cc: stable@vger.kernel.org
-Fixes: f40017e0f332 ("chipidea: usbmisc_imx: Add USB support for VF610 SoCs")
-Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
----
-Changes in v2:
-- Put the device in .remove() as well.
----
- drivers/usb/chipidea/ci_hdrc_imx.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+On 12/16/24 10:29, Peter Chen wrote:
+> On 24-12-12 18:49:45, Joe Hattori wrote:
+>> Current implementation of ci_hdrc_imx_probe() does not decrement the
+>> refcount of the device obtained in usbmisc_get_init_data(). Add a
+>> put_device() call before returning an error after the call.
+>>
+>> This bug was found by an experimental static analysis tool that I am
+>> developing.
+>>
+>> Cc: stable@vger.kernel.org
+>> Fixes: f40017e0f332 ("chipidea: usbmisc_imx: Add USB support for VF610 SoCs")
+>> Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+>> ---
+>>   drivers/usb/chipidea/ci_hdrc_imx.c | 24 ++++++++++++++++--------
+>>   1 file changed, 16 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+>> index f2801700be8e..6418052264f2 100644
+>> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+>> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+>> @@ -370,25 +370,29 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>>   		data->pinctrl = devm_pinctrl_get(dev);
+>>   		if (PTR_ERR(data->pinctrl) == -ENODEV)
+>>   			data->pinctrl = NULL;
+>> -		else if (IS_ERR(data->pinctrl))
+>> -			return dev_err_probe(dev, PTR_ERR(data->pinctrl),
+>> +		else if (IS_ERR(data->pinctrl)) {
+>> +			ret = dev_err_probe(dev, PTR_ERR(data->pinctrl),
+>>   					     "pinctrl get failed\n");
+>> +			goto err_put;
+>> +		}
+>>   
+>>   		data->hsic_pad_regulator =
+>>   				devm_regulator_get_optional(dev, "hsic");
+>>   		if (PTR_ERR(data->hsic_pad_regulator) == -ENODEV) {
+>>   			/* no pad regulator is needed */
+>>   			data->hsic_pad_regulator = NULL;
+>> -		} else if (IS_ERR(data->hsic_pad_regulator))
+>> -			return dev_err_probe(dev, PTR_ERR(data->hsic_pad_regulator),
+>> +		} else if (IS_ERR(data->hsic_pad_regulator)) {
+>> +			ret = dev_err_probe(dev, PTR_ERR(data->hsic_pad_regulator),
+>>   					     "Get HSIC pad regulator error\n");
+>> +			goto err_put;
+>> +		}
+>>   
+>>   		if (data->hsic_pad_regulator) {
+>>   			ret = regulator_enable(data->hsic_pad_regulator);
+>>   			if (ret) {
+>>   				dev_err(dev,
+>>   					"Failed to enable HSIC pad regulator\n");
+>> -				return ret;
+>> +				goto err_put;
+>>   			}
+>>   		}
+>>   	}
+>> @@ -402,13 +406,14 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>>   			dev_err(dev,
+>>   				"pinctrl_hsic_idle lookup failed, err=%ld\n",
+>>   					PTR_ERR(pinctrl_hsic_idle));
+>> -			return PTR_ERR(pinctrl_hsic_idle);
+>> +			ret = PTR_ERR(pinctrl_hsic_idle);
+>> +			goto err_put;
+>>   		}
+>>   
+>>   		ret = pinctrl_select_state(data->pinctrl, pinctrl_hsic_idle);
+>>   		if (ret) {
+>>   			dev_err(dev, "hsic_idle select failed, err=%d\n", ret);
+>> -			return ret;
+>> +			goto err_put;
+>>   		}
+>>   
+>>   		data->pinctrl_hsic_active = pinctrl_lookup_state(data->pinctrl,
+>> @@ -417,7 +422,8 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>>   			dev_err(dev,
+>>   				"pinctrl_hsic_active lookup failed, err=%ld\n",
+>>   					PTR_ERR(data->pinctrl_hsic_active));
+>> -			return PTR_ERR(data->pinctrl_hsic_active);
+>> +			ret = PTR_ERR(data->pinctrl_hsic_active);
+>> +			goto err_put;
+>>   		}
+>>   	}
+>>   
+>> @@ -527,6 +533,8 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>>   	if (pdata.flags & CI_HDRC_PMQOS)
+>>   		cpu_latency_qos_remove_request(&data->pm_qos_req);
+>>   	data->ci_pdev = NULL;
+>> +err_put:
+>> +	put_device(data->usbmisc_data->dev);
+>>   	return ret;
+>>   }
+>>   
+> 
+> Thanks for your fix, would you mind also add put_device at the end of
+> ci_hdrc_imx_remove?
 
-diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
-index f2801700be8e..1a7fc638213e 100644
---- a/drivers/usb/chipidea/ci_hdrc_imx.c
-+++ b/drivers/usb/chipidea/ci_hdrc_imx.c
-@@ -370,25 +370,29 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
- 		data->pinctrl = devm_pinctrl_get(dev);
- 		if (PTR_ERR(data->pinctrl) == -ENODEV)
- 			data->pinctrl = NULL;
--		else if (IS_ERR(data->pinctrl))
--			return dev_err_probe(dev, PTR_ERR(data->pinctrl),
-+		else if (IS_ERR(data->pinctrl)) {
-+			ret = dev_err_probe(dev, PTR_ERR(data->pinctrl),
- 					     "pinctrl get failed\n");
-+			goto err_put;
-+		}
- 
- 		data->hsic_pad_regulator =
- 				devm_regulator_get_optional(dev, "hsic");
- 		if (PTR_ERR(data->hsic_pad_regulator) == -ENODEV) {
- 			/* no pad regulator is needed */
- 			data->hsic_pad_regulator = NULL;
--		} else if (IS_ERR(data->hsic_pad_regulator))
--			return dev_err_probe(dev, PTR_ERR(data->hsic_pad_regulator),
-+		} else if (IS_ERR(data->hsic_pad_regulator)) {
-+			ret = dev_err_probe(dev, PTR_ERR(data->hsic_pad_regulator),
- 					     "Get HSIC pad regulator error\n");
-+			goto err_put;
-+		}
- 
- 		if (data->hsic_pad_regulator) {
- 			ret = regulator_enable(data->hsic_pad_regulator);
- 			if (ret) {
- 				dev_err(dev,
- 					"Failed to enable HSIC pad regulator\n");
--				return ret;
-+				goto err_put;
- 			}
- 		}
- 	}
-@@ -402,13 +406,14 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
- 			dev_err(dev,
- 				"pinctrl_hsic_idle lookup failed, err=%ld\n",
- 					PTR_ERR(pinctrl_hsic_idle));
--			return PTR_ERR(pinctrl_hsic_idle);
-+			ret = PTR_ERR(pinctrl_hsic_idle);
-+			goto err_put;
- 		}
- 
- 		ret = pinctrl_select_state(data->pinctrl, pinctrl_hsic_idle);
- 		if (ret) {
- 			dev_err(dev, "hsic_idle select failed, err=%d\n", ret);
--			return ret;
-+			goto err_put;
- 		}
- 
- 		data->pinctrl_hsic_active = pinctrl_lookup_state(data->pinctrl,
-@@ -417,7 +422,8 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
- 			dev_err(dev,
- 				"pinctrl_hsic_active lookup failed, err=%ld\n",
- 					PTR_ERR(data->pinctrl_hsic_active));
--			return PTR_ERR(data->pinctrl_hsic_active);
-+			ret = PTR_ERR(data->pinctrl_hsic_active);
-+			goto err_put;
- 		}
- 	}
- 
-@@ -527,6 +533,8 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
- 	if (pdata.flags & CI_HDRC_PMQOS)
- 		cpu_latency_qos_remove_request(&data->pm_qos_req);
- 	data->ci_pdev = NULL;
-+err_put:
-+	put_device(data->usbmisc_data->dev);
- 	return ret;
- }
- 
-@@ -551,6 +559,7 @@ static void ci_hdrc_imx_remove(struct platform_device *pdev)
- 		if (data->hsic_pad_regulator)
- 			regulator_disable(data->hsic_pad_regulator);
- 	}
-+	put_device(data->usbmisc_data->dev);
- }
- 
- static void ci_hdrc_imx_shutdown(struct platform_device *pdev)
--- 
-2.34.1
+Thank you for pointing out. Fixed in the v2 patch.
+> 
+> Peter
 
+Best,
+joe
 
