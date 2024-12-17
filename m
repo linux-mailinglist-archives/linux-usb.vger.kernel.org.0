@@ -1,70 +1,74 @@
-Return-Path: <linux-usb+bounces-18582-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18583-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E1519F48B9
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 11:19:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 082769F48BB
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 11:19:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E0851695CD
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 10:19:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6D7CB188FC87
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 10:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BC091E47B7;
-	Tue, 17 Dec 2024 10:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97EFE1E573F;
+	Tue, 17 Dec 2024 10:19:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dX+ainty"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dtEZIcP+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328101E3DEC
-	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 10:19:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8018B14600F;
+	Tue, 17 Dec 2024 10:19:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734430744; cv=none; b=BSokTxsjUsmlfs1IslG2rNV4D76X3UO8gHvWMJbYmmWbKHkwXqe+jrq406bzd2xjWukPbwXOff4gVu4XBAcZ7qys2yI+oHuCdp8YvnBUY9z33QAZiT2koQVe6eiW64K+j/CM2WHgQpkoTguKKkK4R5sQ3dM9Yr1saQaRn55kpZg=
+	t=1734430745; cv=none; b=ewrkXeHX5ahf9JvAmL4YNh9nuRxiJucmgJvDvmgUTEt8HDzY7+Lk7rmYIYJYNn6MWkC232c0BiWjuUNjqUdyB5KdqEIPGyxMnNdLrOkSrTVjYGj/gFOI+2t3A5aBYAlI1L1NSdEZWn8QI+Ae++D1JlN4A/zN9wMV8CjIUO0wiBU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734430744; c=relaxed/simple;
-	bh=tz+8Au9UoDZmhjl3s7IwGDHM6jLEmR2liwfrZIW4hsU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tkUOEfdrHwyLxuOA+2m2vBO9RLoqsuzDOY+5Fqr1GoY4ar0vmW+RuVoBmmWXj1k4EGITNrZXPB/E2+kFJnO0HhKUAVY1aUsBWhVfStmBUpPAdqknhY5qjvHONvt++hC+F4MRLuxCcIxO0o243eiQ8sC/FGRur05nJEp94xsiqGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dX+ainty; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1734430745; c=relaxed/simple;
+	bh=fHl+kamM7IjINNoBRd9ryZ9U1hUBjEjhaqNSFRkE0gE=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=krCAGsZBO/Ws1jIW6fYesXFTUN9atSMaoV4hKmkrYkIQbrYkLxFvjMWOeL/xHaGqoDG09gze8lXlfavSV6VkoO/pUhVmzPkHeji6nMxNr7sV49KYnDtUr/rYWQ+L6HFIaIiOizkySzISU71CbEJG801BVP4USc4101kJGlS3ofk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dtEZIcP+; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734430742; x=1765966742;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=tz+8Au9UoDZmhjl3s7IwGDHM6jLEmR2liwfrZIW4hsU=;
-  b=dX+aintyfznUwNsXo6NBQvnYZjUORdYQrekNeolnG5Sxiv+zPthyDqWU
-   pvYBnl9lEyzQZxDU0fK2V4aRPImTfdPT/qhQvqATO8OVREKw/briCd9cd
-   txSQKGujQjCw4qOIYLB4FnUoer8NJgRM6mO9VgVRJ34YiwyKw4RPzYAgN
-   YOzBFSo7yxexwdYZhMAJnoaqrRGKfyBcTyJBm2dV1yOaEo3ysicEJv19q
-   D7iPpowqSZiRqHTmbqwUgeUbmouWht9onC3arl1vn7GpkYAAKEBKG4ply
-   aJak6ZH129FT56dtgWDlkeQoY0Hr0DHeEJDjDzY2tivrc4CkKNwGdY0+p
-   w==;
-X-CSE-ConnectionGUID: cm7847H1SqaWhiMz5VJ7fg==
-X-CSE-MsgGUID: 1op3/r83TAKYIufEt8UjHw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="60236807"
+  t=1734430744; x=1765966744;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=fHl+kamM7IjINNoBRd9ryZ9U1hUBjEjhaqNSFRkE0gE=;
+  b=dtEZIcP+tb6XsIQkW1FAahQdQKZWWyot2rVSED55WKFJznLOsYPyuPVB
+   JKSFpF8bwF72oSZB6nDhb4qM4HB+TWZ9tuvGc45PMiS4fYNygfhz6aaVk
+   8mYwr1MWDsPTNJQpAeX6DOmWndcFstLheqXMSAYLYLDlMnFeLZ3WfwEST
+   SJZ29NVuqJyV9PwxjFh27X06jMnWJqGL8/g1r1hAh9QmKHnGLnl2/DK0R
+   DPfcx+Oe7e+mVBf/rIoPsnlvfUCTERQGvvUiJaQdzqma6qylsmjzIeTO2
+   G5xBeoQDfsvhvFuH9VjBuLG03GbSdlcKKnmS5UdCRmD8BQx3slNsEaWXb
+   Q==;
+X-CSE-ConnectionGUID: OFxjnW/xTMiwJG6HoJ1Dgw==
+X-CSE-MsgGUID: ++Y+S0drTxywrVaT62xr5g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="60236810"
 X-IronPort-AV: E=Sophos;i="6.12,241,1728975600"; 
-   d="scan'208";a="60236807"
+   d="scan'208";a="60236810"
 Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 02:19:01 -0800
-X-CSE-ConnectionGUID: EXEudbEbSQecQ9zgd+hIyg==
-X-CSE-MsgGUID: b1gnjTbTQISeEXyCb/5OiQ==
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 02:19:03 -0800
+X-CSE-ConnectionGUID: oE/p5hrbQ0iC4QDeXr23dA==
+X-CSE-MsgGUID: MOKugVZPSbSnm2gaZfKBhA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="97335956"
+   d="scan'208";a="97335958"
 Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
-  by orviesa010.jf.intel.com with ESMTP; 17 Dec 2024 02:19:00 -0800
+  by orviesa010.jf.intel.com with ESMTP; 17 Dec 2024 02:19:01 -0800
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
 To: <gregkh@linuxfoundation.org>
 Cc: <linux-usb@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>
-Subject: [PATCH 0/2] xhci fixes for usb-linus
-Date: Tue, 17 Dec 2024 12:21:20 +0200
-Message-Id: <20241217102122.2316814-1-mathias.nyman@linux.intel.com>
+	Mathias Nyman <mathias.nyman@linux.intel.com>,
+	stable@vger.kernel.org
+Subject: [PATCH 1/2] xhci: Turn NEC specific quirk for handling Stop Endpoint errors generic
+Date: Tue, 17 Dec 2024 12:21:21 +0200
+Message-Id: <20241217102122.2316814-2-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20241217102122.2316814-1-mathias.nyman@linux.intel.com>
+References: <20241217102122.2316814-1-mathias.nyman@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,26 +77,35 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Greg
+xHC hosts from several vendors have the same issue where endpoints start
+so slowly that a later queued 'Stop Endpoint' command may complete before
+endpoint is up and running.
 
-A couple fixes for usb-linus 6.13-rc, resolves a ring expansion regression that
-snuck into 6.13-rc1, and turns a NEC specific workaround generic as it seen on
-other vendors xHC as well.
+The 'Stop Endpoint' command fails with context state error as the endpoint
+still appears as  stopped.
 
-Thanks
-Mathias
+See commit 42b758137601 ("usb: xhci: Limit Stop Endpoint retries") for
+details
 
-Mathias Nyman (1):
-  xhci: Turn NEC specific quirk for handling Stop Endpoint errors
-    generic
-
-Niklas Neronin (1):
-  usb: xhci: fix ring expansion regression in 6.13-rc1
-
- drivers/usb/host/xhci-mem.c  | 2 +-
+CC: stable@vger.kernel.org
+Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+---
  drivers/usb/host/xhci-ring.c | 2 --
- 2 files changed, 1 insertion(+), 3 deletions(-)
+ 1 file changed, 2 deletions(-)
 
+diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+index 4cf5363875c7..09b05a62375e 100644
+--- a/drivers/usb/host/xhci-ring.c
++++ b/drivers/usb/host/xhci-ring.c
+@@ -1199,8 +1199,6 @@ static void xhci_handle_cmd_stop_ep(struct xhci_hcd *xhci, int slot_id,
+ 			 * Keep retrying until the EP starts and stops again, on
+ 			 * chips where this is known to help. Wait for 100ms.
+ 			 */
+-			if (!(xhci->quirks & XHCI_NEC_HOST))
+-				break;
+ 			if (time_is_before_jiffies(ep->stop_time + msecs_to_jiffies(100)))
+ 				break;
+ 			fallthrough;
 -- 
 2.25.1
 
