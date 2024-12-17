@@ -1,79 +1,48 @@
-Return-Path: <linux-usb+bounces-18598-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18599-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A98D9F57BD
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 21:29:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A12A9F5846
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 22:00:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7144516F067
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 20:29:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BF8E188DD8F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 21:00:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5238E18DF62;
-	Tue, 17 Dec 2024 20:29:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A1C81F2395;
+	Tue, 17 Dec 2024 21:00:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m1zH3Pi5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g50/Vin1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5A31F9426
-	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 20:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0C1208CA;
+	Tue, 17 Dec 2024 21:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734467383; cv=none; b=gdlNVNui2sXipBag6QVSSG3iUK4h7pbEsbHa7DRG01F3twaKhn9Q3H191JrCdtmHapBVJ8+UtK4y37iOGlPQrxnuca26sUKr8bV9fu8m1UevyRGQNHs3w2Mzoc6pCMGL5gYtkjZQjJZqCerhWfruqhtrDP2tbTNxif7cDfL1gUs=
+	t=1734469241; cv=none; b=R6Fvy06eOmxMPVN0ABBGOqkN/b3rfpX0HsvgRl5Cy9lNfkgbVqkloOhcv7OGt77SkeeBVjNfp8WGb7g6PG4/sEt13lstpaY9oZV0QcrScWDUC2hfZ60D0uzV3v4odjDvtRrlASqLJaGOLVe1Otreq7JfXTqaXJNQcSULcRccBDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734467383; c=relaxed/simple;
-	bh=wjtVSp5e/gtP2bPB0gVaig8Ytq2WZDbCWtlVs+teKRM=;
+	s=arc-20240116; t=1734469241; c=relaxed/simple;
+	bh=gT7SGZ+RgZjr4sjaS4D5vIpdgF1oyCiZb1851h8AvmI=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eU3+ykNdRtJ7/yECIhqq026w/ylf29c+NSbXvKBpg/giIGGKBxn3LLwNv50mlS5krAMW4/VT49+YIPE3PEWOTOTuHQmxXxM+WRWG7dfuE3QdYk59Vo4JAqxNwoQxQGmI9RuWS8oelcSK3UFKmMIErNDzMcVhzIG3kNK3q/uNqf8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m1zH3Pi5; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3862a921123so4315211f8f.3
-        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 12:29:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734467379; x=1735072179; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=riuJ6VXEH1r2xq2adD8Hh5Js5iv32b824b2rOzdDs1o=;
-        b=m1zH3Pi53cox3tfNL9HcV53BLx2yR2Lg7SzOAVlCf2YmjsMVv7OG+3vMrbCCgSe0t4
-         De/81QFevkVI51CkfUZa+mOKaJxJ/3TNqsdvGHCy4ABGaUmt8d75XEyiOnj0ATjdnR7t
-         H9Oxg11IIyO3FYvUXSCnWRhV0mnKzjQ5RY2vQ7T29u+EzzfOEp0AHgWF4Ddbmk1IBhlU
-         JkVGzGecI0j7qFQLxyH4ye+hUBXrYz0nFatIHEjGWDcPYqN5nYkSDfrUtjIw2/erlhVn
-         H3CqF5e1zHe26eGzsY2SuQRtRzJZ1+wz9HbvZ4eYoITRxMiv7VL4YecX7ZMpYgT09UxU
-         9BMw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734467379; x=1735072179;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=riuJ6VXEH1r2xq2adD8Hh5Js5iv32b824b2rOzdDs1o=;
-        b=NeO+bckWV6mpFTxL+sA607t0y4oyJ0xtBzhDVrKMJRvJ15Ua0WOrsq9yTVnhX31OHW
-         JV+ty8PqaREfz47DO5W5JmcsT9tCcQN6kNkSHDNZDruDqgLLGiaHUd3ZHbDPywV/G61i
-         zQkMuRpd4he6hzhUChNBCOTfevCzRHHRVp/X/cbzsiDkqLg6TRWBuIo7MeFHbDpnMGGA
-         bl+J96gqSZlYtc5oczQwmnBgr+PXuTmZFC3g7g6kDx1sx5ntWEbqRVjB7n/SA3EbsDCp
-         tK0l6v8X6VozOy9IVyKMu/Lj+eiLLWlWEDeCDIsStqUIJ6RtcJYk8CqnK+WpVG0NRL/r
-         cfZQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUtl1lQHDCBCu/kLUSOve7Ja/OZeR577PZHF9VqOKB5cC3c9+ELCQbI6OZnQFkAlyFBk0YoViovNyA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxA6ArAEc9pV6Dw1iqLBwADIri7cY2LyjzXA+RgV49/0tg3OJD/
-	Obmgh8spUNGHCaqUzBKn+B8WelKAfdyX8u3oGRJR3iDkqAiZtUw1g4ts38qPCkM=
-X-Gm-Gg: ASbGncullXY9G4DqsK4b0o10N4cdqhkUJRaE7jrgeYvISK4RtNs9DnkOuN7uoMmR5Y5
-	RLkFbAu+dApE7u/vE/7BVONkLksBlfhB6F8UfyS26EqWFZ82WrC27QxSEBbc850F/PwvFPcFrf7
-	qMJOXjCmkM01FQjR49nM76swBB9xaK+fiyzxsp7tLLOJN3KepoRnW/nNXFUZiK6lkDthpNGUJuG
-	eGPViv0WVL54fWajBXepehU+zeS5p4F37VXHdkXWcYbIl4CoOB7eG7ML5CW+s8wDeFGeIM1Xchd
-	CVuXd4NTZSw8kdjgSsEoJr211hVtYKQXFg==
-X-Google-Smtp-Source: AGHT+IH/Wtjlwcy/lm0MF5OCpgkb7cKII6hjVT2qz0bgw5fzVp/w5I5vtqsgR9DhW8S+zU/HcCbehQ==
-X-Received: by 2002:a5d:6d09:0:b0:387:8604:5023 with SMTP id ffacd0b85a97d-388e4d8edf2mr206319f8f.44.1734467378883;
-        Tue, 17 Dec 2024 12:29:38 -0800 (PST)
-Received: from ?IPV6:2001:b07:aac:705d:5605:668a:52f3:a096? ([2001:b07:aac:705d:5605:668a:52f3:a096])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-388c8016bdfsm12153714f8f.43.2024.12.17.12.29.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Dec 2024 12:29:38 -0800 (PST)
-Message-ID: <b378e1ab-5699-4369-8fed-fa6973d5aed7@gmail.com>
-Date: Tue, 17 Dec 2024 21:29:36 +0100
+	 In-Reply-To:Content-Type; b=Kc9D20jExEmWGTbyiCFZss0hhLl38+2Cl6fLei+Wyq0jOPc+hGAJ6nWktAXo0ZJJUQTLLH2SAR7BHTo2GL10jAaET14rUZcGE4s4fBMYRUkmuQdoTxj029Vh5mpJaXRYjhnAG3N8/S5P8aJYEbUcn/gJYuYPyAUl5salPtDPui8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g50/Vin1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 748EAC4CED3;
+	Tue, 17 Dec 2024 21:00:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734469240;
+	bh=gT7SGZ+RgZjr4sjaS4D5vIpdgF1oyCiZb1851h8AvmI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=g50/Vin1NMs21PVMw5jM8YUVvpZ8d1U3+GXgcQKbRuW36vV52pR70iCtjvcVDKDW+
+	 DLidMVudZGsMaHwZXQcYRVQw5r6fX+rRDOQw9xG+mgt8HYsn+s5UrNNywyNwQG3yPv
+	 Vb6IYog2J7Z7S7MsfLGHYn+kc050dFvj2IvP9TVouN31G9DFRT9hWJi65A9Qk7UFDD
+	 LviM9kB/cP704mawxAKgkuT7NDhvMJk7qdlX7hXQ1Cd3+nJ/GnY2a8Pij6TYjGAtdW
+	 KTt4i3kEtN56Lahc/Qmti+FKoEnmwcPkuR1faGn7nr0xQ7MDG9TLoGGk7S+WEaYYc8
+	 pUy8Z9lA8AVtw==
+Message-ID: <ed77988a-ba26-4a71-a8cf-b1e5a6425a2e@kernel.org>
+Date: Tue, 17 Dec 2024 23:00:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,61 +50,131 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] usb: typec: tcpci: set ALERT_MASK register after
- devm_request_threaded_irq()
-To: Francesco Dolcini <francesco@dolcini.it>, Xu Yang <xu.yang_2@nxp.com>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
- andre.draszik@linaro.org, rdbabiera@google.com, m.felsch@pengutronix.de,
- dan.carpenter@linaro.org, emanuele.ghidoli@toradex.com,
- parth.pancholi@toradex.com, francesco.dolcini@toradex.com,
- u.kleine-koenig@baylibre.com, linux-usb@vger.kernel.org,
- imx@lists.linux.dev, jun.li@nxp.com
-References: <20241217091208.2416971-1-xu.yang_2@nxp.com>
- <20241217091208.2416971-2-xu.yang_2@nxp.com>
- <20241217163506.GA80703@francesco-nb>
+Subject: Re: [PATCH v6 4/5] xhci: introduce xhci->lost_power flag
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
+ <20241210-s2r-cdns-v6-4-28a17f9715a2@bootlin.com>
+ <70aced7f-0311-43b9-96af-c8325c39ff2b@kernel.org>
+ <D6AP7JCNSME9.3FS7XCZJ37GM8@bootlin.com>
 Content-Language: en-US
-From: Emanuele Ghidoli <ghidoliemanuele@gmail.com>
-In-Reply-To: <20241217163506.GA80703@francesco-nb>
+From: Roger Quadros <rogerq@kernel.org>
+In-Reply-To: <D6AP7JCNSME9.3FS7XCZJ37GM8@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
 
 
-On 17/12/2024 17:35, Francesco Dolcini wrote:
-> On Tue, Dec 17, 2024 at 05:12:08PM +0800, Xu Yang wrote:
->> With edge irq support, the ALERT event may be missed currently. The reason
->> is that ALERT_MASK register is written before devm_request_threaded_irq().
->> If ALERT event happens in this time gap, it will be missed and ALERT line
->> will not recover to high level. However, we don't meet this issue with
->> level irq. To avoid the issue, this will set ALERT_MASK register after
->> devm_request_threaded_irq() return.
+On 13/12/2024 18:03, Théo Lebrun wrote:
+> On Thu Dec 12, 2024 at 1:37 PM CET, Roger Quadros wrote:
+>> On 10/12/2024 19:13, Théo Lebrun wrote:
+>>> The XHCI_RESET_ON_RESUME quirk allows wrappers to signal that they
+>>> expect a reset after resume. It is also used by some to enforce a XHCI
+>>> reset on resume (see needs-reset-on-resume DT prop).
+>>>
+>>> Some wrappers are unsure beforehands if they will reset. Add a mechanism
+>>> to signal *at resume* if power has been lost. Parent devices can set
+>>> this flag, that defaults to false.
+>>>
+>>> The XHCI_RESET_ON_RESUME quirk still triggers a runtime_pm_get() on the
+>>> controller. This is required as we do not know if a suspend will
+>>> trigger a reset, so the best guess is to avoid runtime PM.
+>>>
+>>> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+>>> ---
+>>>  drivers/usb/host/xhci.c | 3 ++-
+>>>  drivers/usb/host/xhci.h | 6 ++++++
+>>>  2 files changed, 8 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>> index 5ebde8cae4fc44cdb997b0f61314e309bda56c0d..ae2c8daa206a87da24d58a62b0a0485ebf68cdd6 100644
+>>> --- a/drivers/usb/host/xhci.c
+>>> +++ b/drivers/usb/host/xhci.c
+>>> @@ -1017,7 +1017,8 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
+>>>  
+>>>  	spin_lock_irq(&xhci->lock);
+>>>  
+>>> -	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
+>>> +	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME ||
+>>> +	    xhci->broken_suspend || xhci->lost_power)
+>>>  		reinit_xhc = true;
+>>>  
+>>>  	if (!reinit_xhc) {
+>>> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+>>> index 4914f0a10cff42dbc1448dcf7908534d582c848e..32526df75925989d40cbe7d59a187c945f498a30 100644
+>>> --- a/drivers/usb/host/xhci.h
+>>> +++ b/drivers/usb/host/xhci.h
+>>> @@ -1645,6 +1645,12 @@ struct xhci_hcd {
+>>>  	unsigned		broken_suspend:1;
+>>>  	/* Indicates that omitting hcd is supported if root hub has no ports */
+>>>  	unsigned		allow_single_roothub:1;
+>>> +	/*
+>>> +	 * Signal from upper stacks that we lost power during system-wide
+>>> +	 * suspend. Its default value is based on XHCI_RESET_ON_RESUME, meaning
+>>> +	 * it is safe for wrappers to not modify lost_power at resume.
+>>> +	 */
+>>> +	unsigned                lost_power:1;
 >>
->> Fixes: 77e85107a771 ("usb: typec: tcpci: support edge irq")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+>> I suppose this is private to XHCI driver and not legitimate to be accessed
+>> by another driver after HCD is instantiated?
 > 
-> I had an offline chat with a Emanuele (in Cc:) that worked on this a few
-> weeks ago and he remember that he already tried a similar approach, but
-> for some reason he did not work.
+> Yes it is private.
 > 
-> He should be able to try this patch in a few days, but with the upcoming
-> winter holidays he might not be super responsive.
+>> Doesn't access to xhci_hcd need to be serialized via xhci->lock?
 > 
-> I wonder if we could wait a little before merging this to allow this
-> testing to happen. Or maybe you can just test if this is working on your
-> setup using edge interrupts (you would need to use only one TCPCI, for
-> the test).
+> Good question. In theory maybe. In practice I don't see how
+> cdns_host_resume(), called by cdns_resume(), could clash with anything
+> else. I'll add that to be safe.
 > 
-> Francesco
+>> Just curious, what happens if you don't include patch 4 and 5?
+>> Is USB functionality still broken for you?
+> 
+> No it works fine. Patches 4+5 are only there to avoid the below warning.
+> Logging "xHC error in resume" is a lie, so I want to avoid it.
+
+How is it a lie?
+The XHCI controller did loose its save/restore state during a PM operation.
+As far as XHCI is concerned this is an error. no?
+
+> 
+>> Doesn't XHCI driver detect that power was lost and issue a reset in any case
+>> via the below code
+>>
+>>         /* re-initialize the HC on Restore Error, or Host Controller Error */
+>>         if ((temp & (STS_SRE | STS_HCE)) &&
+>>             !(xhci->xhc_state & XHCI_STATE_REMOVING)) {
+>>                 reinit_xhc = true;
+>>                 if (!xhci->broken_suspend)
+>>                         xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
+>>         }
+>>
+>>>  	/* cached extended protocol port capabilities */
+>>>  	struct xhci_port_cap	*port_caps;
+>>>  	unsigned int		num_port_caps;
+>>>
+> 
+> I'll wait for your opinion on the [PATCH v6 2/5] email thread before
+> sending a new revision.
+
+Sorry for the delay. I'm not an expert in PM but will give my opinion there anyways.
+
+> 
+> Thanks,
+> 
+> --
+> Théo Lebrun, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+> 
 > 
 
-Hi all,
+-- 
+cheers,
+-roger
 
-I was curious, so I tested the two patches. I can confirm that if both are applied, 
-edge interrupts still work correctly.
-However, with only the first patch applied, it does not work.
-
-I hope this helps.
-
-Emanuele
 
