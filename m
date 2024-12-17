@@ -1,227 +1,172 @@
-Return-Path: <linux-usb+bounces-18580-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18581-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88D1A9F4806
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 10:52:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A42B49F4826
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 10:56:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 860407A35CD
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 09:52:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1618216EFE8
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 09:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A60CB1DDA33;
-	Tue, 17 Dec 2024 09:52:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 138CB1DF969;
+	Tue, 17 Dec 2024 09:56:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="XEUQpZon"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B9vUcwB+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11012037.outbound.protection.outlook.com [52.101.66.37])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 384B712C80C
-	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 09:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734429129; cv=fail; b=As2jJ/sudMkRl2YaWPMHxGzjPztJGmYBTgBP2pLpdiFZCEBMXif6qLgNHeEsX8rMFIMZ16YBNBHiTwkyAAW00SlLR0AyySmg2WYeWBYf2yqbLV7XeQK98odqqvXqeLrYSwr9E4BFzW4s/gxgWw4SliRzDQmFgy2gnkIsiAg7xMc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734429129; c=relaxed/simple;
-	bh=FSBIxuThruGaqqSl06V14vOl9uJtN3rypeZ0IjWrRmM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=O+b94QcF6GrlEv+YbbV7HjuZ3UJr4o8oow38Lab9dodyDoNF4C0utcvY5I5Ye+PyOjGomaOvicH0d6csC2Th69lcaKRiIu102ZqoDglg1zrvuOJSMBbNWtr+XcZgb1ZTiMSF76xNoY+ajtYM8ZdiYy7nWkCdbRJ67Xel2poQhEU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=XEUQpZon; arc=fail smtp.client-ip=52.101.66.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RbDCBjPMfOdbp95E3TkJeKBaxeLiHBDdC7xEYTjE+PN8CEGMVp4xQSo9d1XN9D4Rsz4G8/GDQNOB/Ei84bOdwfLNHC6CRGy8B3Q03Dw5lq1uorYV7CeySqou7zdFFIk7JQZjVtVU8emK824YnTX6+q34VNXh+sEece87B/TpYe6clbXXWpepi/npjwKsXbUGUrwqUaCEpP3ManzC1R06md6SC7FA8jx2KcppJpDF6uVJBKaagYAbqjReo2qlbxmxX9nlv6FEZCq7IW6DdgNT8URBRUDIfL+SfGdG130oHOqeDxbe8vhlPpWaumSDe2fI3LPz5K1p8wWiwCvf7DWl9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jZ+sjrqMu9D7AVvnHUpxNQD8W/2zbLzKFXcGsWm52RQ=;
- b=Jwf0qaFCwcC1LDS3eU7qLHovNZuVNzRcvk85tUGuyEkgczy06q4hIJhJDCrnmcyWi7HorUd5U/9GfDTTXIVGtc72+jF6xEtb1TEAfaPfbzh95SbCOoFE99lLD3fQASDCJKdGk0slUHwhuLf/99b9WoGwm06GGTQwqx3k7tuHDNH+GxZsMmsZxL5Fs+HTnaT9EZDbbiAVlt8U9DiU1/s1eQlhkZ1fqqIGgvXMbJQy05f3MbaervwiiWETIx/WuEAoyktN0iHmL5Et1PHwPQis5OMLYemfFx+qhnNaPhKsncwvv0ZjkZnHkyocXZd4lM6jWSwVToDX/9dT/4b1hi+WhA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jZ+sjrqMu9D7AVvnHUpxNQD8W/2zbLzKFXcGsWm52RQ=;
- b=XEUQpZonz3pfwqFPa4wbgNYI5bcsy3uSkiAmKRYZ+IhUCEqJvsgcv563PpxSn6eDrAmILMD8D3a0+ez/YNvxUPyB1vSIyp7HB3kM5y6XREu/vpyWFEa/MPDnXryEHWvse7AbRa0+07RHdLLUjzjJaaAYIOphPWJwgySB/pTxxaYNMs4oMG/Vy3VorfTvHncwsn9Q4gr2L/eBkU1QHu5M9tr/At5PVs/2qYHng6719xQunzjUDu+QaYfGjr5OE4n1vS+un7KdbM/MObimr2sO525hiH79YBCVndXmdq9pc9gWskLzfil9xv9vui8UzVaU+2cO6ljfcG3Y3CdLreoxjQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com (2603:10a6:10:2e1::11)
- by DU2PR04MB8631.eurprd04.prod.outlook.com (2603:10a6:10:2de::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.19; Tue, 17 Dec
- 2024 09:52:04 +0000
-Received: from DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7]) by DU2PR04MB8822.eurprd04.prod.outlook.com
- ([fe80::4e24:c2c7:bd58:c5c7%6]) with mapi id 15.20.8251.015; Tue, 17 Dec 2024
- 09:52:04 +0000
-Date: Tue, 17 Dec 2024 17:49:17 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: Francesco Dolcini <francesco@dolcini.it>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81E361DE3D7
+	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 09:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734429370; cv=none; b=fXvgBCwfVwuaLeHYsb9G8U9vunz4CKKH9Hn4Iu0R9VD/go4fkdFhXNlKjsUKMy6PoqMObE9PEDFA+WZXzVSfoiA0lYbnlgnrOl/TIF6qM3qk8HYlvYiO6HgVe4tST9FJxjs82XRn3WC0ljRhPaxNEN+GuyyBHcayEQ4Ek57xKuw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734429370; c=relaxed/simple;
+	bh=ge4negb55PbWDmYEPobjfL1powU8dYvYbF4dLTRqwHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IJ3cC94TlgDyQFE0QygXMhu4NOyVFAcWm/mgKHwPn/xKvhneMFE6gLv2uj3iBhON3ydaHISgf9DHoipTGSV8ASqGEdDYYZK6yytyz0T/VRlH3QW7/lOFi94p730OXp7zwR9Oh3jCcL8UPKhO/1H5D+sGa84dGG4HLy9wgUMqJpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=B9vUcwB+; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-aab925654d9so665565166b.2
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 01:56:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734429367; x=1735034167; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ktBWOmm5eWNSvVVaKZtk+5y5SA891nVyn6hrHeCUqLg=;
+        b=B9vUcwB+BscXzuhyhEjAXtTDAad+yUI4KT4rpJslpg+Tv1rH0DajE8Liqisu8e0IPG
+         Sn4xhBfrdvObVaczs+6OZLlwK069wd+96vecrD0EWejtDYEBCqACi0ZcLfIu31SjyakT
+         phRukN2BCXIKm6GuolwJnboJY5nUBTdT3+kCnexElrNSSygzvQ+YBN4ahH+jF5p+AhxM
+         Vd9oRhTUCbIyRsfkfBUSL6EHRVZuP/D3IXG1P1rYSCD2R8ypEAyPQ7dZCguVLpV2aJ4n
+         QSWOSqJWSiQAAwgfB08H0tglOPHYavV7jeJo2TD9rQEDO13CZK+hw3iFnBU5+a0UD3ro
+         dubw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734429367; x=1735034167;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ktBWOmm5eWNSvVVaKZtk+5y5SA891nVyn6hrHeCUqLg=;
+        b=wSztKOGz7Pof2Z+nPf/KQtVnKTM7ibo0kPQzJ4jIXE5FO/J/m/OF1oP6QGl35KKXCR
+         adOsjmz2QkHG2zIFkkRQq2FBnEBQfrmioJgyPpMTX6lW/iCzdc6i0aOVRwonmR9hpIzf
+         ccjCR9CmrYnhFIoZ2SdLa9+wpGuSSpkrE3K8nUuEZS0PSjjn1H5BVqZWg0ZtyTFayCv4
+         bo8srDxQKIO5zxyE7JVpdk5lrnx1DVxmXyqJg+UDi7BT/5idHEZQTFdAz/42snASd5r8
+         yQMiO4Ncn35XQtDfUPmBbHCtsSRSDBjmXJXu4T1ioFgnOI4luvYk4J4w+YWWKaBMQw29
+         5tlw==
+X-Forwarded-Encrypted: i=1; AJvYcCXvk8CJzlG/5gnA+Av31VvuAmPvBvck/S5hjq+QKAd2ixrKXNDLJYml1N6zxurX2qNEYkui83P7cDY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3OCjOpytrXhROtPguBeirHK4IsM+sKG5RjuXoNCzDkW3Uajmz
+	OHq+jV6c/PFyx5D/urTv6Xfn920yizD5vFbV23KSIseyR88SWbQpBcZocp8hosM=
+X-Gm-Gg: ASbGncuEMPUgtrny2qLWMDET/+xXnR+IsmxXKSa86FtCO5yoWSuWrmEBcvWMZlE2rNc
+	cmv1GvR/Xzsi5QGl/pX0o723zJ5IQ8ACi7+Vwx1MPomf5lgyy3C6V0MClVE9QsMC7Zu01Chb41W
+	o8u1GEr92UqEFrunvS8MmlhVEEOOMltWBJDx4C5u5NwSyxi6d5tZf1sZwC18cBmRyLpu8XlTYbN
+	16BO+6/nXqrJgA3CNBAxLWYWy2295UfH4Nhx/7oisVRxEjvuIRBv11hMMhM8w==
+X-Google-Smtp-Source: AGHT+IEUZaU0/Awym606N8/wdYVyY/wGpsM9GjraBbgN4fSUr2PSr3dAz2t2Z4ZbqmuJeOxA0y9Q8Q==
+X-Received: by 2002:a17:907:7743:b0:aa6:acd6:b30d with SMTP id a640c23a62f3a-aabdb885391mr312516766b.48.1734429366822;
+        Tue, 17 Dec 2024 01:56:06 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab960663ebsm426005766b.43.2024.12.17.01.56.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2024 01:56:06 -0800 (PST)
+Date: Tue, 17 Dec 2024 12:56:03 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Xu Yang <xu.yang_2@nxp.com>
 Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
 	andre.draszik@linaro.org, rdbabiera@google.com,
-	m.felsch@pengutronix.de, dan.carpenter@linaro.org,
-	emanuele.ghidoli@toradex.com, parth.pancholi@toradex.com,
-	francesco.dolcini@toradex.com, u.kleine-koenig@baylibre.com,
-	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v3 2/2] usb: typec: tcpci: set ALERT_MASK register after
- devm_request_threaded_irq()
-Message-ID: <20241217094917.qwbguhm7woz4mo4g@hippo>
+	m.felsch@pengutronix.de, emanuele.ghidoli@toradex.com,
+	parth.pancholi@toradex.com, francesco.dolcini@toradex.com,
+	u.kleine-koenig@baylibre.com, linux-usb@vger.kernel.org,
+	imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH v3 1/2] usb: typec: tcpci: fix NULL pointer issue on
+ shared irq case
+Message-ID: <5260fafb-0b1f-43d5-83af-a61b3b179a1c@stanley.mountain>
 References: <20241217091208.2416971-1-xu.yang_2@nxp.com>
- <20241217091208.2416971-2-xu.yang_2@nxp.com>
- <20241217092905.GA27489@francesco-nb>
- <20241217094117.xb27iww4dmq2ehvl@hippo>
- <20241217094553.GB25802@francesco-nb>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241217094553.GB25802@francesco-nb>
-X-ClientProxiedBy: SI2PR01CA0054.apcprd01.prod.exchangelabs.com
- (2603:1096:4:193::22) To DU2PR04MB8822.eurprd04.prod.outlook.com
- (2603:10a6:10:2e1::11)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DU2PR04MB8822:EE_|DU2PR04MB8631:EE_
-X-MS-Office365-Filtering-Correlation-Id: 41f0c8dd-6dec-404e-9cb4-08dd1e807637
-X-LD-Processed: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
- BCL:0;ARA:13230040|7416014|376014|1800799024|366016|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
- =?us-ascii?Q?jSSDrIfUvERbnZZColloSzKA7rDAegMRWXvRoR11MBiN//ttXO7OpDbvK38N?=
- =?us-ascii?Q?vnIRzJS5PNc5+Smo4HAnygTOfgnG5SXKjsSMAx2wAHmHRdj+pTwsiwFbA5AP?=
- =?us-ascii?Q?7r0ZF1Pu9l/m5J1MXWMsBEccFHefOSCAi5tQSx/i7EzYpkxbcc6Y5Ysy23GT?=
- =?us-ascii?Q?fMlYsVBm9hwZllot6z0L9gYi8u+tnuF0QmorD7N4197XEmIntLkL20NyGoYB?=
- =?us-ascii?Q?jsxyp+VHkUN3jjAbtAT0mmRhFZhumRr47NTEZJ6nxCld5VfhNlBzObeiKM/X?=
- =?us-ascii?Q?84TwVHumiI4y0O1wBqYdpi0Md4SEA8YwMntN1tJKO/YFA96uAigdcNm50FJ0?=
- =?us-ascii?Q?2jTJPbH+QpE/QYQ02B3Yvv0NlXyf87IppHnl/yqzQSPkNPDvLM963BXaNVMI?=
- =?us-ascii?Q?M6mmLyrjB+RzTgMIGpu+tBra6K5WpLjaJS5HztYfACR1pXn26yI8N2FABOca?=
- =?us-ascii?Q?5hoIveI49wHaCqjcKjeOyioQIkhbMilNcBz/F0fGiwr32O1QKdbXIqZi4SRl?=
- =?us-ascii?Q?IIi0HxExaubm8aoPa1kNrYCAEuuV8fXKtnUIA16u096+fY4pGxVMelWpoYs9?=
- =?us-ascii?Q?tXTTDUHsJ0ghl4HdtGJ9sDB03e4CV5H8xAe+eXUTNLX/XzfLbKqPGfju+zSn?=
- =?us-ascii?Q?2pS2tOCPRXFzbqvzzcm1MmrisjTl1xCkAgcUa5a2nxXdEw4kbJtG2khX7304?=
- =?us-ascii?Q?h3eNuauWUxZN4bk0PeJcqa4SuClUTL/K7BFml78zb+2SAZJpMvkIY0SG9NIk?=
- =?us-ascii?Q?2Vqck3DDYHoUfyZIEjNo0hx8jLVHn0eqzkgyx595numHN6/2+cvFhtdVem/n?=
- =?us-ascii?Q?VuA5ME09WwQ0JBkv6Jy1vOyHyeYtnflA4ybR2eyLzYLciu22kpHYo9QyOKVr?=
- =?us-ascii?Q?wENyh5z9xZmaeETtE+AMHbDacBouCDqZbNFd2bRVHnQSeXVwIcl6hCe7iLBF?=
- =?us-ascii?Q?1iNWKWezzjtCm9R54+9BP1OU7hHnJxpWAyb9jZtknZlpVPGCiSrmhLvxuMvm?=
- =?us-ascii?Q?BRoQCirXwJd9oDsOjBw0V2ObIf80JRhBbp5z8956JRvGNJdAB+awSXBkzK4u?=
- =?us-ascii?Q?tDFbbdQ8p+uvCSiXPwy1gA0ax5ZIWc7qJXNjBlP3sR5ZbgDpeWBtgdA8zzLO?=
- =?us-ascii?Q?ZDcyklqj1HaeK8E185gT1n1tqwQbjLngFeSr5AQnFb0DrHx6sJmRng+BKcbo?=
- =?us-ascii?Q?G12N/ebsWJTn7/1dMlBTeS/JycZuFLoJIcOqYWzU7xwZEBJVtn2rOVeSxR4+?=
- =?us-ascii?Q?S2UDo+PROusydkbf3cAdi9Hv9RcTkxCarq4XWJwCv2NyM1UJWhPRL1IY/bWg?=
- =?us-ascii?Q?kEGMbnc2lG3JQS3J2jSFQVCbm/Y5d7F+dP6Sn2P52yKhy8p5hv7rjEtU+d71?=
- =?us-ascii?Q?uYY3NtlmOnMuYfimYGEoFCKXDrgC1w7gppUNaj8dugkMHD7sfa5kemeNjVZ5?=
- =?us-ascii?Q?FhtEEAMOZhjDM725wqPmhMseCA6OWzAU?=
-X-Forefront-Antispam-Report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU2PR04MB8822.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(52116014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
- =?us-ascii?Q?Yy0+Do4v6af4Vt8/pfpz7XAKSpOSWBfcpYQhFm6DsTLKxxNL8qY6php1aO/4?=
- =?us-ascii?Q?a8qVMCeUeS6GaGWqzWFiBmeIA4tRocEYZxxgS8RF2DyekkI8cvQggyyISxiC?=
- =?us-ascii?Q?BhCPVe2AJa1yBQyj85NgMgR1+2ifWyOCP7dQFYe8BLsE4fx/Bl3fWJtL/COH?=
- =?us-ascii?Q?w0KImulSC4GuI5e7T/oC3pxBKHBvjd/5KQI/ynmS+edFMhvNxiQO62Lmve4Q?=
- =?us-ascii?Q?Snnemf82+L7eAVgNfH0Il85oln/Y4eJa4lhzaMHD8C2HULvm4LOYvpSnsdLO?=
- =?us-ascii?Q?g5cdlP2p2cXYbhirWF18tTBE0UBxiCGkw6F3PG7f4AIGpz0nEg5ieCeAfXqO?=
- =?us-ascii?Q?qc5FyB15jFL8rv9LVgG7ZUZ4yyeVexYOHFzLTFu5hQjpOLbEwK5eCPlK3fMl?=
- =?us-ascii?Q?zJjlgyX2wPblas8DRTqvgf7WORyTenmlyjAHKLx+PJm7e9oZ7YFn1feovmLJ?=
- =?us-ascii?Q?bKMvZI1PDWVygMS134vS4+rulVrwfEZ3DDhwPB09a9ZP/Igl9MoHpcf/tKC0?=
- =?us-ascii?Q?BUtkcFZ4b1bAoGj3fmjDQQxUPcxmgut1gQcsWb1nKWOCvBxmjjIyUzlt2EG8?=
- =?us-ascii?Q?WCw+U2Mw7jI8Oaj2jlt9JtjAONRL/tJH1obnhlaVq8ost24YxjuEcB1xpg20?=
- =?us-ascii?Q?AAZVfJAa8+biLqvjn8YCTtQzCSG3AURaYfGnhN/i8PHcV0v9Zvg+fkYiD9Z0?=
- =?us-ascii?Q?3dzon4nci0gtpFLus+tY55g8YR7C2fVb0LCXDfuPRnso36WYWc1lBOGKk91J?=
- =?us-ascii?Q?pLwS6qdPipIaLAv4AEEuJtlHpvmAwuA8Y+6ClgvJczrBd+3zdh9UUs/nkkVO?=
- =?us-ascii?Q?8OheyjQkRbN49XWTfunzYnT4w8KN0Rcj8I/Y7GuFFpJLJxZ7ovXeE+UeQ4NM?=
- =?us-ascii?Q?pK3fjIbD3FTSSpGOgCAn6TvGErEtT5iyC+Q5suaKcDqeZaj91NObpfgRQATh?=
- =?us-ascii?Q?W4AnG6Ap+Agdk1lHV/QT8BTSkWd4WcZAhaV7gWhSOs+otp0G4dazKa/zP+24?=
- =?us-ascii?Q?yEw+8Ine+VvSATJ6Yab4Co5gXRyoDhxrKhCJSVrTLvhYVkRXjr5c8Jkuqmj6?=
- =?us-ascii?Q?dBZLiGL9oipoUEI3XUmhEf0MPvt08UKREEES2i5v3xD+yEHl9THkznOD1ceW?=
- =?us-ascii?Q?fto7LT+uNmYwiDcs34ZnFIOhFOZ2aKRjXr9qcrHvdBoA/8jfXWYnHipOYXrf?=
- =?us-ascii?Q?C13OKPhAsPx/THhS0ohuE5mu3M5akfjon4hWTqdkGx/yPrhUTACxvQNJdJko?=
- =?us-ascii?Q?CE4POae4ng2VfF4SdDVi7dYb9QGcyoS4acBE83sErUkv/eZjYwvVfDvW1Nfe?=
- =?us-ascii?Q?x+dCdNkD1LDjoIxpLBbEkwxgxf3/IvO10ZcjfNnTY4NBSsiKVGkuwUZNS0N8?=
- =?us-ascii?Q?iLq1xnZuAbsBDnkT6JsLQNeKK5/DueZLf7p/DrFK9ecbRKq3xpMN6Xbn1CF0?=
- =?us-ascii?Q?P+Gt28QEkGdcesXnmAM5JknmeiBEFM8AHM1pfNYHcajJK7l3ZMWtlnXZnBD7?=
- =?us-ascii?Q?feL9jUM9LcOFYRtB6TqXInLyea3YPUlDQfUHnq1j11b0fjHfJPPTSFagP2aA?=
- =?us-ascii?Q?8dzMBbQ9bQMKMFlMP+dYkwpN4MS4DNjuo6S/WzYj?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 41f0c8dd-6dec-404e-9cb4-08dd1e807637
-X-MS-Exchange-CrossTenant-AuthSource: DU2PR04MB8822.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Dec 2024 09:52:04.5766
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Au8Q6V3us7J3Y55baHHUTLFhPZJioiSJhkuN3ThEg4P/lyFaa1FsM6c/1FKXLf0zaU2VI+5J6E0/vyChZLQ6ZQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8631
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241217091208.2416971-1-xu.yang_2@nxp.com>
 
-On Tue, Dec 17, 2024 at 10:45:53AM +0100, Francesco Dolcini wrote:
-> On Tue, Dec 17, 2024 at 05:41:17PM +0800, Xu Yang wrote:
-> > On Tue, Dec 17, 2024 at 10:29:05AM +0100, Francesco Dolcini wrote:
-> > > On Tue, Dec 17, 2024 at 05:12:08PM +0800, Xu Yang wrote:
-> > > > With edge irq support, the ALERT event may be missed currently. The reason
-> > > > is that ALERT_MASK register is written before devm_request_threaded_irq().
-> > > > If ALERT event happens in this time gap, it will be missed and ALERT line
-> > > > will not recover to high level. However, we don't meet this issue with
-> > > > level irq. To avoid the issue, this will set ALERT_MASK register after
-> > > > devm_request_threaded_irq() return.
-> > > > 
-> > > > Fixes: 77e85107a771 ("usb: typec: tcpci: support edge irq")
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > > > 
-> > > > ---
-> > > > Changes in v3:
-> > > >  - remove set_alert_mask flag
-> > > > Changes in v2:
-> > > >  - new patch
-> > > > ---
-> > > >  drivers/usb/typec/tcpm/tcpci.c | 17 ++++++++++++-----
-> > > >  1 file changed, 12 insertions(+), 5 deletions(-)
-> > > > 
-> > > > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> > > > index db42f4bf3632..48762508cc86 100644
-> > > > --- a/drivers/usb/typec/tcpm/tcpci.c
-> > > > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> > > > @@ -700,7 +700,7 @@ static int tcpci_init(struct tcpc_dev *tcpc)
-> > > >  
-> > > >  	tcpci->alert_mask = reg;
-> > > >  
-> > > > -	return tcpci_write16(tcpci, TCPC_ALERT_MASK, reg);
-> > > > +	return 0;
-> > > 
-> > > Should we set the alert mask to 0 at the beginning of tcpci_init() ?
-> > > 
-> > > Just wondering if some bind/unbind or module reload use case would need
-> > > it.
-> > 
-> > Maybe not needed.
-> > 
-> > tcpci = devm_kzalloc(dev, sizeof(*tcpci), GFP_KERNEL);
-> > 
-> > tcpci will be reset to all 0 when allocate the memory. So alert_mask is 0
-> > by default.
+On Tue, Dec 17, 2024 at 05:12:07PM +0800, Xu Yang wrote:
+> The tcpci_irq() may meet below NULL pointer dereference issue:
 > 
-> I meant
+> [    2.641851] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000010
+> [    2.641951] status 0x1, 0x37f
+> [    2.650659] Mem abort info:
+> [    2.656490]   ESR = 0x0000000096000004
+> [    2.660230]   EC = 0x25: DABT (current EL), IL = 32 bits
+> [    2.665532]   SET = 0, FnV = 0
+> [    2.668579]   EA = 0, S1PTW = 0
+> [    2.671715]   FSC = 0x04: level 0 translation fault
+> [    2.676584] Data abort info:
+> [    2.679459]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
+> [    2.684936]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
+> [    2.689980]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
+> [    2.695284] [0000000000000010] user address but active_mm is swapper
+> [    2.701632] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+> [    2.707883] Modules linked in:
+> [    2.710936] CPU: 1 UID: 0 PID: 87 Comm: irq/111-2-0051 Not tainted 6.12.0-rc6-06316-g7f63786ad3d1-dirty #4
+> [    2.720570] Hardware name: NXP i.MX93 11X11 EVK board (DT)
+> [    2.726040] pstate: 60400009 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [    2.732989] pc : tcpci_irq+0x38/0x318
+> [    2.736647] lr : _tcpci_irq+0x14/0x20
+> [    2.740295] sp : ffff80008324bd30
+> [    2.743597] x29: ffff80008324bd70 x28: ffff800080107894 x27: ffff800082198f70
+> [    2.750721] x26: ffff0000050e6680 x25: ffff000004d172ac x24: ffff0000050f0000
+> [    2.757845] x23: ffff000004d17200 x22: 0000000000000001 x21: ffff0000050f0000
+> [    2.764969] x20: ffff000004d17200 x19: 0000000000000000 x18: 0000000000000001
+> [    2.772093] x17: 0000000000000000 x16: ffff80008183d8a0 x15: ffff00007fbab040
+> [    2.779217] x14: ffff00007fb918c0 x13: 0000000000000000 x12: 000000000000017a
+> [    2.786341] x11: 0000000000000001 x10: 0000000000000a90 x9 : ffff80008324bd00
+> [    2.793465] x8 : ffff0000050f0af0 x7 : ffff00007fbaa840 x6 : 0000000000000031
+> [    2.800589] x5 : 000000000000017a x4 : 0000000000000002 x3 : 0000000000000002
+> [    2.807713] x2 : ffff80008324bd3a x1 : 0000000000000010 x0 : 0000000000000000
+> [    2.814838] Call trace:
+> [    2.817273]  tcpci_irq+0x38/0x318
+> [    2.820583]  _tcpci_irq+0x14/0x20
+> [    2.823885]  irq_thread_fn+0x2c/0xa8
+> [    2.827456]  irq_thread+0x16c/0x2f4
+> [    2.830940]  kthread+0x110/0x114
+> [    2.834164]  ret_from_fork+0x10/0x20
+> [    2.837738] Code: f9426420 f9001fe0 d2800000 52800201 (f9400a60)
 > 
->   tcpci_write16(tcpci, TCPC_ALERT_MASK, 0);
+> This may happen on shared irq case. Such as two Type-C ports share one
+> irq. After the first port finished tcpci_register_port(), it may trigger
+> interrupt. However, if the interrupt comes by chance the 2nd port finishes
+> devm_request_threaded_irq(), the 2nd port interrupt handler may be run at
+> first. Then the above issue may happen.
 > 
-> in tcpci_init().
+>   devm_request_threaded_irq()
+> 				<-- port1 irq comes
+>   disable_irq(client->irq);
+>   tcpci_register_port()
+> 
+> This will restore the logic to the state before commit (77e85107a771 "usb:
+> typec: tcpci: support edge irq").
+> 
+> Fixes: 77e85107a771 ("usb: typec: tcpci: support edge irq")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 > 
 
-Still seems not needed.
+This commit message was not super clear to me.  It didn't mention that
+it's tcpci->regmap which is the NULL pointer.  (Obviously there are a
+lot of other NULL pointers, but that's the one which will crash).
 
-  err = regmap_raw_write(chip->data.regmap, TCPC_ALERT_MASK, &val, sizeof(u16));
+Here is something you could add to the commit message:
 
-ALERT_MASK will be set to 0 at the start of tcpci_probe()
+   We cannot register the IRQ handler until after
+   tcpci_register_port() is called.  Otherwise tcpci->regmap and
+   so many other tcpci pointers are not set up and it leads to
+   a NULL dereference in tcpci_irq().
 
-Thanks,
-Xu Yang
+regards,
+dan carpenter
+
 
