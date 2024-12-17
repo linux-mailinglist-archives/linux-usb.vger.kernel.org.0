@@ -1,61 +1,60 @@
-Return-Path: <linux-usb+bounces-18590-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18591-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 823259F4CB6
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 14:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 64FA09F4EB4
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 16:02:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ADFC7188B063
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 13:44:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 387FE188228C
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 14:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709041F4292;
-	Tue, 17 Dec 2024 13:44:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E6701F7077;
+	Tue, 17 Dec 2024 14:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Var43+tn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J/KRZSxP"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6DFE1E0490;
-	Tue, 17 Dec 2024 13:44:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 830571F3D55;
+	Tue, 17 Dec 2024 14:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734443052; cv=none; b=h2pfTPQTA92AlVP6P0tAoSGRJQtyamjj3swwSGMF6mm6KxQ6c8XehlFK90mlKkvDxsEwmXJM8ZCJOgpdaeVi1cTVPlXi1Ng84SfnFEtfgDJyyh7Et2NHnZaLuR5ir2YuxSwg+1dVTzH+CETp+DcIo70qEsb7jcdAcWvCAI3y8bI=
+	t=1734447376; cv=none; b=SXkZvr0oF6U5gpPhejtWheg8N9Wt9QpFwJHjYjgrGfZs87pCE7FhjrbJvW5RziLGym95LfbZRPbLxmFe4k4fr7lRsy6+YI1KUM3MrviJ4WLerSqxEk+EEK11auMC4MXil0YMaZxpFbNp+pD64ZW/rnSJjUI2NFK/ncBaJLo8HvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734443052; c=relaxed/simple;
-	bh=ZyO0SjUbWcS9x/Ck+ggRPJzy7ukxZ1/hZXs4pGbFUDw=;
+	s=arc-20240116; t=1734447376; c=relaxed/simple;
+	bh=+1b0giH4mQ1kvRKRXAuU3ppu2XOaN20hSE8ekmup+Qc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AYTE7lbJcDcgpNIXxWfyj0sWA/uspuGFdatsuI6sYYnAhWU946YPZp0ajuStcQL3xfi9Pse4gwJABSJbcMBRfZAtFtVt4PZi0yfQ2nI5hDxSnIvqYndEvsYbgDlfSyo04JrXVWbrIcVdU9Q+9NX7Q+Omqv60WFmX7HSCYRclVMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Var43+tn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BB65C4CED3;
-	Tue, 17 Dec 2024 13:44:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=BVezM7cyjI5svcT3DD4WgkdDHa+hunApwXTMCbB9IZc6UQ11WrMacKNr90Hfr7SThX7XUDVCi2l54oYPDa7/N8+FUV+cSPJ3eSjyL2Mg9x9njgZCHC7XvBmdTf95Q2sSPZc2U4YnyzGv8u2ktrfdb2DmhJUyzNKR7u176E2lXUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J/KRZSxP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEA06C4CED3;
+	Tue, 17 Dec 2024 14:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734443051;
-	bh=ZyO0SjUbWcS9x/Ck+ggRPJzy7ukxZ1/hZXs4pGbFUDw=;
+	s=k20201202; t=1734447374;
+	bh=+1b0giH4mQ1kvRKRXAuU3ppu2XOaN20hSE8ekmup+Qc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Var43+tnLal33Ve78U/eyWkFUO2dXNxSpc35tFHNDtX8PWqmpXj9MlYXbITf0etl8
-	 7CCKJNKlPOk8tT7GwVRHbk4BVjqpq/AIrI09Wwc1W/aI0WCj2ckhGayRjo7sMxDns3
-	 AB+Htirthjdo490IFxwOSSfS2f4muBNeUwVwW3bXW/+dQfaY2aCQnTpLp+ZnwOPcfw
-	 P1gD3GKRXrMMErbN5bZwBaGC2ofjetu2v8MQ5rTCwfVmbcQDjP2ICNAI730zyFWE3v
-	 TV1B5V+ff5wqmLHmYgz1e2CVo9PhSKBGtTMv4lynCiYMghuyskJXIdhDwwbsbKQrDB
-	 DctIsPx9uQNSQ==
-Date: Tue, 17 Dec 2024 07:44:09 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	b=J/KRZSxPyJd5lkQr5mOFplcvFFPr18dYSP+hoYVVE+U7Kgp0/Gv28d7TRTF6geQyD
+	 uQaPkk52VHV1Bdh5wrqW7TE0Ra+v3iZ63LlDl6fOF6e//Ks9bokRixdXzJD3xQ1KL1
+	 XQYTwxbdFl6/42Yqm0d5SQad/j7b5YZmCWxFYeoOQH9QFajt5xhxKLk+84Gs3W4bmL
+	 KvHI3n5c2AbGe7XB/u4eFjYPdyriWuBsMhWp0H9qmdoIhdGjwcwZasM1ZglIdd/bxx
+	 YQer23792ncULPt6A3LqtGwBYjJCWvJzBrisfAR1jVVn917ajRVNZ/q8AKbJUZhuia
+	 1Z2Ve2ZErSFsg==
+Date: Tue, 17 Dec 2024 08:56:12 -0600
+From: Rob Herring <robh@kernel.org>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kyle Tso <kyletso@google.com>,
-	Badhri Jagan Sridharan <badhri@google.com>,
-	linux-kernel@vger.kernel.org, RD Babiera <rdbabiera@google.com>,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/3] dt-bindings: connector: Add pd-revision property
-Message-ID: <173444304922.1440983.3295876849064154968.robh@kernel.org>
-References: <20241210-get_rev_upstream-v2-0-d0094e52d48f@google.com>
- <20241210-get_rev_upstream-v2-1-d0094e52d48f@google.com>
+	Conor Dooley <conor+dt@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Jacopo Mondi <jacopo@jmondi.org>,
+	Sakari Ailus <sakari.ailus@linux.intel.com>,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: usb-device: Add panel-location
+Message-ID: <20241217145612.GA1652259-robh@kernel.org>
+References: <20241212-usb-orientation-v1-1-0b69adf05f37@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,20 +63,64 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241210-get_rev_upstream-v2-1-d0094e52d48f@google.com>
+In-Reply-To: <20241212-usb-orientation-v1-1-0b69adf05f37@chromium.org>
 
+On Thu, Dec 12, 2024 at 09:44:37PM +0000, Ricardo Ribalda wrote:
+> For some devices like cameras the system needs to know where they are
+> mounted.
 
-On Tue, 10 Dec 2024 19:07:07 -0800, Amit Sunil Dhamne wrote:
-> Add pd-revision property definition, to specify the maximum Power
-> Delivery Revision and Version supported by the connector.
+Why do you need this and why only this property and not the dozens 
+others ACPI has?
+
 > 
-> Signed-off-by: Amit Sunil Dhamne <amitsd@google.com>
+> ACPI has a property for this purpose, which is parsed by
+> acpi_get_physical_device_location():
+> https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#pld-physical-location-of-device
+> 
+> In DT we have similar property for video-interface-devices called
+> orientation, but it is limited to the requirements of video devices:
+> Documentation/devicetree/bindings/media/video-interface-devices.yaml
+> 
+> Add a new property for usb-devices that matches the behavior of
+> ACPI's _PLD.
+> 
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 > ---
->  Documentation/devicetree/bindings/connector/usb-connector.yaml | 7 +++++++
->  Documentation/devicetree/bindings/usb/maxim,max33359.yaml      | 1 +
->  2 files changed, 8 insertions(+)
+>  Documentation/devicetree/bindings/usb/usb-device.yaml | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
 > 
-
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-
+> diff --git a/Documentation/devicetree/bindings/usb/usb-device.yaml b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> index da890ee60ce6..1ce79c1c3b31 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-device.yaml
+> +++ b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> @@ -42,6 +42,20 @@ properties:
+>        port to which this device is attached. The range is 1-255.
+>      maxItems: 1
+>  
+> +  panel-location:
+> +    description: Describes which panel surface of the system's housing the USB
+> +      device resides on. It has the same meaning as the `ACPI`'s `_PLD` Panel
+> +      object.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum:
+> +      - 0 # Top.
+> +      - 1 # Bottom.
+> +      - 2 # Left.
+> +      - 3 # Right.
+> +      - 4 # Front (aka as User Facing).
+> +      - 5 # Back (aka as World Facing).
+> +      - 6 # Unknown.
+> +
+>    "#address-cells":
+>      description: should be 1 for hub nodes with device nodes,
+>        should be 2 for device nodes with interface nodes.
+> 
+> ---
+> base-commit: eefa7a9c069908412f8f5d15833901d1b46ae1b2
+> change-id: 20241212-usb-orientation-8e3717ebb02a
+> 
+> Best regards,
+> -- 
+> Ricardo Ribalda <ribalda@chromium.org>
+> 
 
