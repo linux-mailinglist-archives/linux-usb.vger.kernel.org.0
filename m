@@ -1,101 +1,172 @@
-Return-Path: <linux-usb+bounces-18552-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18553-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD3F89F4367
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 07:17:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DEE99F4369
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 07:18:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0EB471690A9
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 06:17:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72F2D16910B
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 06:18:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 285A214B07A;
-	Tue, 17 Dec 2024 06:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7EA14F135;
+	Tue, 17 Dec 2024 06:18:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NB1FUitn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YY9oz9/n"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FD988BF8;
-	Tue, 17 Dec 2024 06:17:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68018BF8;
+	Tue, 17 Dec 2024 06:18:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734416262; cv=none; b=r91jXVCa0fA7i6WEHVg7zjsrqQn8RiNcE9uXy8nl8MSeRvOwPBGNiVAoDSHbnLlX8zjEoffzt8EjTqLKyM08AMQHN/ak/X/iSPPZ9onIChNUPgjjFpveRrEa+yGjvh01t3+iQzdnNoyOq6tEhcW9oeiyJCF3luUW9pgxH+CM5N4=
+	t=1734416327; cv=none; b=erFtUfpCXFWU7nnocJtdbyjrVq95M2aeNkLG0C87AWd4xs87NBTNVNl3VTiF/VxiBFOc9KRCSRgyGy6ER5xWOH5VaSn5D26YSzlZ/EE+eZAW3Ur0xVPX7HLFAvFDpVvoIWOYOeBEYeeyAQ+EMvKkMm2++NlJpA1j4qlK+L0EsIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734416262; c=relaxed/simple;
-	bh=bqFlx/NtHYpQLVM2poqHADeVOl1mENwQMtm+Kjkw+DI=;
+	s=arc-20240116; t=1734416327; c=relaxed/simple;
+	bh=tdc+cyJu1FKUnRHoM2wya2+WStBzz1cra54EZ9pwlB4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ez60EQ2w1ggVme+t3GW/l6amqK1AG91amN7oRbHCCvtcDBxRlj0rZNO5S2y0jnnl+GOdlMJgMOpQNb2/urRYcau8VyRrRICly7SBp2ByWQciyP8q64GUXDs4gdQvu+Ltj5HTvUEGANthZD246mOlGoDM3VU4Jkhvm4aVbV5VPOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NB1FUitn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8675CC4CED3;
-	Tue, 17 Dec 2024 06:17:40 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=L4IUKxBM4GxScnGsjCqbW4koBs5HanJ0VPA7oSdmwdhSmM6X8riGW2SqAy2Z65DmX79eAdHew1bSem+Lc8vu918OXf5PTrcqcqlIfAneP+Yv6w2X5Xfd807uFSbG25nOyAZ1RWLb2Wl9J+mM+Gw7XQDfE7O50+6Br0RvDsK8BbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YY9oz9/n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7654C4CED3;
+	Tue, 17 Dec 2024 06:18:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734416262;
-	bh=bqFlx/NtHYpQLVM2poqHADeVOl1mENwQMtm+Kjkw+DI=;
+	s=k20201202; t=1734416327;
+	bh=tdc+cyJu1FKUnRHoM2wya2+WStBzz1cra54EZ9pwlB4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NB1FUitnRk7zy1AL5nnyddNjDQLekbod9lDP1xpOUI0IJ4xDypjzINITJHpt0TIFp
-	 RVMUQFP/3ESJwiTflvN0P76lq52uFPANrh9UNIijAnxqnbQ7kxIUMFuT/BYzbzHzbo
-	 ibY4iTW8OK7dA+2zY5kW3/knJEN+RzO6jzghP8cuL0B7VUOBJupyrJBvjpePo7DPj3
-	 zr6QLGzqRY3BTFhTY9t3EQSsmlTiVAoTIuHqQzTOU133bQI5BPvHk3bgcjOMSdfcAm
-	 s7dzgIaCThPMYkXJ2J4z36DPGvUgybNGnD3sXQJPiGWE/kXSuTK1v8S5H4lxTThtqf
-	 Tk/Y/jPLUG3HQ==
-Date: Tue, 17 Dec 2024 14:17:34 +0800
+	b=YY9oz9/nb1QyteKTn15smQYNRVRNYbHZETDkPbC0rZhGexDZYXtHbMH0XPOFQ2Lhe
+	 MF1RJjkbLDd3kS+K+6YLSgfbXWphIArzYAxq34gOGAwsuIWkf5/lRmFUUwaWrNqsvC
+	 tezRmXzzFeIKi7Qktg8wSPer5wbK930NVrtNtiKAUMo5pUm+sTdtS841c8JECm7hik
+	 xR++L2GxST/+UBEPt2xNAbUBOSpPENe31ndffU67trgEZR2MNDX81vH77MW561fQ6A
+	 aoThUjVGYJCbRkqFpfVvR/0l3LEU/FzGFVquazQZV9k9MMneHrYSVV3/wlJoxnPXhV
+	 JZzMCkgWUi1Mg==
+Date: Tue, 17 Dec 2024 14:18:39 +0800
 From: Peter Chen <peter.chen@kernel.org>
-To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Pawel Laszczak <pawell@cadence.com>, Roger Quadros <rogerq@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Mathias Nyman <mathias.nyman@intel.com>,
-	=?iso-8859-1?Q?Gr=E9gory?= Clement <gregory.clement@bootlin.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/5] Fix USB suspend on TI J7200 (cdns3-ti, cdns3,
- xhci)
-Message-ID: <20241217061734.GB13482@nchen-desktop>
-References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
- <20241214090604.GC4102926@nchen-desktop>
- <D6D6NEMYVOBV.3OVBJ77E11A2@bootlin.com>
+To: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+Cc: gregkh@linuxfoundation.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+	kernel@pengutronix.de, festevam@gmail.com,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: chipidea: ci_hdrc_imx: decrement device's
+ refcount in .remove() and in the error path of .probe()
+Message-ID: <20241217061839.GC13482@nchen-desktop>
+References: <20241216015539.352579-1-joe@pf.is.s.u-tokyo.ac.jp>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <D6D6NEMYVOBV.3OVBJ77E11A2@bootlin.com>
+In-Reply-To: <20241216015539.352579-1-joe@pf.is.s.u-tokyo.ac.jp>
 
-On 24-12-16 15:09:00, Théo Lebrun wrote:
-> Hello Peter,
+On 24-12-16 10:55:39, Joe Hattori wrote:
+> Current implementation of ci_hdrc_imx_driver does not decrement the
+> refcount of the device obtained in usbmisc_get_init_data(). Add a
+> put_device() call in .remove() and in .probe() before returning an
+> error.
 > 
-> On Sat Dec 14, 2024 at 10:06 AM CET, Peter Chen wrote:
-> > On 24-12-10 18:13:34, Théo Lebrun wrote:
-> > > Currently, system-wide suspend is broken on J7200 because of a
-> > > controller reset. The TI wrapper does not get re-initialised at resume
-> > > and the first register access from cdns core fails.
-> > > 
-> > > We address that in two ways:
-> > > 
-> > >  - In the cdns3-ti wrapper, if a reset has occured at resume,
-> > >    we reconfigure the hardware.
-> > > 
-> > >  - We add a xhci->lost_power flag. Identical to the XHCI_RESET_ON_RESUME
-> > >    quirk, expect that it can be set at runtime.
-> > > 
-> > >    At resume, to summarise, we do:
-> > >       xhci->lost_power = cdns_power_is_lost(cdns);
-> >
-> > Is it possible you go to change xhci quirks runtime?
+> This bug was found by an experimental static analysis tool that I am
+> developing.
 > 
-> I always assumed quirks were read-only once probe was finished.
-> If I was wrong then we can remove xhci->lost_power and edit
-> xhci->quirks instead.
-> 
+> Cc: stable@vger.kernel.org
+> Fixes: f40017e0f332 ("chipidea: usbmisc_imx: Add USB support for VF610 SoCs")
+> Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
 
-I just want to see if we could avoid change common code, would you
-please confirm with xHCI maintainer Mathias Nyman?
+Acked-by: Peter Chen <peter.chen@kernel.org>
 
-Peter
+> ---
+> Changes in v2:
+> - Put the device in .remove() as well.
+> ---
+>  drivers/usb/chipidea/ci_hdrc_imx.c | 25 +++++++++++++++++--------
+>  1 file changed, 17 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/ci_hdrc_imx.c b/drivers/usb/chipidea/ci_hdrc_imx.c
+> index f2801700be8e..1a7fc638213e 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_imx.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_imx.c
+> @@ -370,25 +370,29 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>  		data->pinctrl = devm_pinctrl_get(dev);
+>  		if (PTR_ERR(data->pinctrl) == -ENODEV)
+>  			data->pinctrl = NULL;
+> -		else if (IS_ERR(data->pinctrl))
+> -			return dev_err_probe(dev, PTR_ERR(data->pinctrl),
+> +		else if (IS_ERR(data->pinctrl)) {
+> +			ret = dev_err_probe(dev, PTR_ERR(data->pinctrl),
+>  					     "pinctrl get failed\n");
+> +			goto err_put;
+> +		}
+>  
+>  		data->hsic_pad_regulator =
+>  				devm_regulator_get_optional(dev, "hsic");
+>  		if (PTR_ERR(data->hsic_pad_regulator) == -ENODEV) {
+>  			/* no pad regulator is needed */
+>  			data->hsic_pad_regulator = NULL;
+> -		} else if (IS_ERR(data->hsic_pad_regulator))
+> -			return dev_err_probe(dev, PTR_ERR(data->hsic_pad_regulator),
+> +		} else if (IS_ERR(data->hsic_pad_regulator)) {
+> +			ret = dev_err_probe(dev, PTR_ERR(data->hsic_pad_regulator),
+>  					     "Get HSIC pad regulator error\n");
+> +			goto err_put;
+> +		}
+>  
+>  		if (data->hsic_pad_regulator) {
+>  			ret = regulator_enable(data->hsic_pad_regulator);
+>  			if (ret) {
+>  				dev_err(dev,
+>  					"Failed to enable HSIC pad regulator\n");
+> -				return ret;
+> +				goto err_put;
+>  			}
+>  		}
+>  	}
+> @@ -402,13 +406,14 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>  			dev_err(dev,
+>  				"pinctrl_hsic_idle lookup failed, err=%ld\n",
+>  					PTR_ERR(pinctrl_hsic_idle));
+> -			return PTR_ERR(pinctrl_hsic_idle);
+> +			ret = PTR_ERR(pinctrl_hsic_idle);
+> +			goto err_put;
+>  		}
+>  
+>  		ret = pinctrl_select_state(data->pinctrl, pinctrl_hsic_idle);
+>  		if (ret) {
+>  			dev_err(dev, "hsic_idle select failed, err=%d\n", ret);
+> -			return ret;
+> +			goto err_put;
+>  		}
+>  
+>  		data->pinctrl_hsic_active = pinctrl_lookup_state(data->pinctrl,
+> @@ -417,7 +422,8 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>  			dev_err(dev,
+>  				"pinctrl_hsic_active lookup failed, err=%ld\n",
+>  					PTR_ERR(data->pinctrl_hsic_active));
+> -			return PTR_ERR(data->pinctrl_hsic_active);
+> +			ret = PTR_ERR(data->pinctrl_hsic_active);
+> +			goto err_put;
+>  		}
+>  	}
+>  
+> @@ -527,6 +533,8 @@ static int ci_hdrc_imx_probe(struct platform_device *pdev)
+>  	if (pdata.flags & CI_HDRC_PMQOS)
+>  		cpu_latency_qos_remove_request(&data->pm_qos_req);
+>  	data->ci_pdev = NULL;
+> +err_put:
+> +	put_device(data->usbmisc_data->dev);
+>  	return ret;
+>  }
+>  
+> @@ -551,6 +559,7 @@ static void ci_hdrc_imx_remove(struct platform_device *pdev)
+>  		if (data->hsic_pad_regulator)
+>  			regulator_disable(data->hsic_pad_regulator);
+>  	}
+> +	put_device(data->usbmisc_data->dev);
+>  }
+>  
+>  static void ci_hdrc_imx_shutdown(struct platform_device *pdev)
+> -- 
+> 2.34.1
+> 
 
