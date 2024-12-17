@@ -1,83 +1,86 @@
-Return-Path: <linux-usb+bounces-18593-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18594-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D8E79F50A3
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 17:15:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C7EB9F50CD
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 17:22:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C52318908FD
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 16:14:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 38E351892F1F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 16:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB271F76D5;
-	Tue, 17 Dec 2024 16:04:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67E941FBCBE;
+	Tue, 17 Dec 2024 16:14:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="b7VdfIIy"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="alRyg0p0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8311F7545
-	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 16:04:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4911FBCAF
+	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 16:14:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734451454; cv=none; b=jDO4LQ3XkufhL5PtJZ4TNhxi9cgbCe+xdtN9X+/aa62zJ6S3W9lkS5nD1xj7gc+BbQk0X2Ahb7vYHBRFLtxjGyk0dQzo1zQPHN+Ong+3rT8UW5uL5hM4wUDCirzBX0z49FSomxQ5x27kRAJlNuhz0DBfJiW5jZIzSayvZyFHcgs=
+	t=1734452057; cv=none; b=J5aQIZFBrAxC07OpFkzBJwecktttgMDVleUO2fkdcGrN0Ke5g1k3hmfSMFAlWD9IoJlcYWofvndWS+ITrjlSsUcHOAMQZdNcDsHxufVjQJHpnkwiJ0SnBSF8OKOrzjmX91d63Q2/GNeI9WLNn5dd2wv/l+r9OYpbGYZTrqfPUP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734451454; c=relaxed/simple;
-	bh=sz4UHzE58a62cxCyjMCcMny04PWq/ObaI70WeR1H6fc=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=apdX0HXu59aoMmS+8PJVt/zwhU8LYCTnxfhgA3RYsC1GQNMWBWpV8jEJWEMdDns63SHadbmuV2XajRM1J3mEwqlpJROFwh13189gxzYldGgtq9Y+8pZCTaHMhLq+HFwSW3MDdF4TMVOR42AYJweYYST8ZyFhf+KgchhUGI4ryys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=b7VdfIIy; arc=none smtp.client-ip=209.85.160.182
+	s=arc-20240116; t=1734452057; c=relaxed/simple;
+	bh=J6QwD7x+lm5XadIBl1uLohp69xgLjMMyXU1tNM/lWUM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=DM8WM/n8KqSjMTGJ0tdJCd/R8LiTG2HYH98owlHJy6ybFrySG/dEfm0xxxZX/4C2qEyB3BzHBKp4pVqo/2Y+X4TCCcxpCOiXLdKrXFnz9725BvwuO9Go2zALGLks6n5ob8qY6MKvk+BHt9/82tw+GcbQ7KNuhlxkotCwGQnfpaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=alRyg0p0; arc=none smtp.client-ip=209.85.160.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-468f6b3a439so13222281cf.1
-        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 08:04:12 -0800 (PST)
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-467b955e288so30938111cf.1
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 08:14:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1734451451; x=1735056251; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=slfmR4f6JEMR7P5krJ3/zU7vcEz2d/jhP/t5zje24Qg=;
-        b=b7VdfIIyGfVu9RGKdU1dpES3+JTPoQSJpPkxfFtzyIwpPKIrRY3GGKhD26byiqtTfD
-         uksa+t1BPoXFHS2O9M/mVeXMwLnTXITDDX1bCOU7zq+zQ/a1X/FtSyI8ruMYzYitnO/r
-         9EkEHVKBHnC7sx1euH2Vkp2PV+/zRKDnmhUdcKyt8Prn3gmGzNTOF60QLXV/nifEkm/0
-         NWdWbu1RthVB0LlCPqDQ3KOnBN0Lwyv+y09QR0RFqWuEfePvbagdGY2iExvYBdbV/x++
-         yNW1AYwZrqrauod3M/x502iiCFMgeTDywnCoFVvfDZy6iGZd5zpE2kXOZ59vzdRVv4JZ
-         Zdzg==
+        d=rowland.harvard.edu; s=google; t=1734452055; x=1735056855; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+3Rccgquk3pMB0e8JLxIrtXCYyTNacSqTIXQ+I+xU6k=;
+        b=alRyg0p0eHkzRig8i/llDqD5OHw4O0W9NCPLdS58FsCVY5l8WPkKQVcUHowOt8Lqvv
+         ckxpSQNtc/Si53S84tmV/mQ4zSnGiVi+pn1aeMYkqZmOUeitXCtacuAxQ4mPivZelgwJ
+         iRbKDZcsRZSeZ7PoZf3WWUBxulwQy+rz48VuGRH0LEUO0Mnli+xYBYu00/cy4EwvaR5w
+         zPbaxlFceemxWvlISPIMWyyt2fr7sSYYPhkt8pcO8u7p+oq4lpCELX6QWOGdJXO/Vwpj
+         yJ1MyIxYNPlhRACjG9G/YGzrU7TThO/ZMVJcQYtGLmh5xKdU4l6prlMHrj9i9MZ9YZx2
+         dO7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734451451; x=1735056251;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=slfmR4f6JEMR7P5krJ3/zU7vcEz2d/jhP/t5zje24Qg=;
-        b=NViyI+X+BG/tAXf+m7YzNjbZ2zcDlx/JII9sxsvrPZ7bxiRfY8U4H7Gx0OStffYweM
-         7q5eib/Mh3h9gd2Cm4DCIVQKU4nsjAfwLConGK6gU8KssknifodxUfrEs6gKw8mccEJl
-         l3BxziQrQitACv0XyoC/+/axVns8ZZ15Od07Zw0v7o8OBYsD2Y6fzh7Wr3QXneM0B6V2
-         oifguUws31WTOsinHSf2yXs9hYKf99lNMYbbRGC6i90ihKaDIu7PA03Jm2bu8X79IIKV
-         61MtL2YSa+MKrRS0y3LAbU+eFoPY3qX8LxQp1axwZxKbWYh3Lzba0XTd546PqnBYRUfT
-         AZIg==
-X-Forwarded-Encrypted: i=1; AJvYcCXKioaFOxKLT2E4QDNd5yPklAJjLehY6qUgSs+7m/Yo3qaSjQnXtGqdWzlqs9sxmZpiBK8pmg39m4g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKhD7NN60g3wvpGCCkTlQZNm/6DTqTKVE5OKpDxH2U9hS9BFjC
-	QigkQ/zuP0pWl8Mcp2Wx62odBz9nHDEugtkr32v2MHGXPLQVSsYDXhMFsQOj1g==
-X-Gm-Gg: ASbGnctAeEPEoJC+AJKMnZD4V+4rRlNErhcsUEavf32lgotn/NMTJBzaE31ifIwdBnQ
-	Pi5ToX1tkZRywLW/gk9fXmAWzrwjYja+ddLbUUM/3VODTyQpyQzonGzGhr5GVK4N8Y3rxF0CQRF
-	SM1E60sRif1XN3vhcnEA622s5SCJkN14fOmttElDf5kRjvj0Z2EMn8VH+YN2D9yaoKulEFYOUxu
-	d3wftk0Az5UpwJTatNe4/AZNZ0IhaNGffB2DSQGpSnTNl3rM2Nkfti4fw==
-X-Google-Smtp-Source: AGHT+IEDstIjPRnOTwY4eR6F8+qvzX9ZxamWJPa3FMKvSfy9PlDwYuMe0lIQPgYqXx+DYILoZ5yE9Q==
-X-Received: by 2002:a05:622a:1a8a:b0:466:ab8f:8972 with SMTP id d75a77b69052e-467a5718bb3mr342033971cf.3.1734451451159;
-        Tue, 17 Dec 2024 08:04:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1734452055; x=1735056855;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+3Rccgquk3pMB0e8JLxIrtXCYyTNacSqTIXQ+I+xU6k=;
+        b=j4vGzKobv2z8eJf9AcAzUT9DcraCj4OjoBqLEtAZn37U1bBM043UVxxQUWY0mVWFCk
+         S8EYETgxzif/VMKPBs0ASD5C/IBLnrGig7JJLjKp6NeowwPZMRN6EZSjJxZgw6L2Pr4U
+         WttZXa9qJKRcjso7haGjFynYP+v9rgLP/Z8Eb7lCt96n8cDlQm4bkJZRcitLPktmUipk
+         mwS3HOPs4l4S33gIJL3jwsGFVApyJPqa4HMoVMof0c/73sHBKVXP8lfkLHtGYnQrKd0q
+         fHnae/DNbrE75cE85UnWWBn9dzzvhi11Ik+har9RnJravUAEl4BAkgDsrKBPEO8YGse8
+         lONA==
+X-Forwarded-Encrypted: i=1; AJvYcCXynYcA2Txg6fZxBABtXX65X4ppthoEQAzCKN2oqJRTvO+gGd/oJwVAbqHrQoV1Pche8avhylEJfa8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6fgsFlntfnO7XxZmdlp3RTRc/kX4AXK6P1Y4qd+bpxxQutM2O
+	/PcdeVXrXDEi01DpYigxb7VmEC37r1nyjpPVtWZmIbXMue/gGdmU+TRCssDuaA==
+X-Gm-Gg: ASbGncsqt6e138dzO7AD3t2xwcrnhAqt1eIkNUrgseDg5K3BfrcAGduMkyTCiRNh4TB
+	b2NFHWVXGxlaBJedfDwXiSNgGKQT+Em+2vwvfrdj/1uipKTvkzESAOv+nyvNjm8tjIIxP3C9ivY
+	vXDn1F9F2ONeRB8AMqe0S6FNVV6UdXMBUjGSaaohmwpRDdfia6UjN+b2k10bdwGoG6RJ1rJpIBy
+	C5zRiQn59Lbsh9ingct91HfRQsHlcbeSqdfAnf77vW0JGVRqZzH9KBfww==
+X-Google-Smtp-Source: AGHT+IFoPz5nV0F70qkjNPbX4NA7B77WNReqNOXg8KtZoNW+iEe5zl1EB6kQNtekItrIEdv6nU0pbQ==
+X-Received: by 2002:ac8:5741:0:b0:467:6cd9:3093 with SMTP id d75a77b69052e-467a582a976mr334266611cf.46.1734452054891;
+        Tue, 17 Dec 2024 08:14:14 -0800 (PST)
 Received: from rowland.harvard.edu ([2601:19b:681:fd10::ba54])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467b2e8195csm40552301cf.57.2024.12.17.08.04.10
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467b2e84db6sm40614951cf.54.2024.12.17.08.14.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Dec 2024 08:04:10 -0800 (PST)
-Date: Tue, 17 Dec 2024 11:04:07 -0500
+        Tue, 17 Dec 2024 08:14:14 -0800 (PST)
+Date: Tue, 17 Dec 2024 11:14:11 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Cc: linux-input@vger.kernel.org,
-	USB mailing list <linux-usb@vger.kernel.org>
-Subject: Re: INFO: rcu detected stall in hub_event
-Message-ID: <fdefac3a-fa4b-4102-9c8a-4ba711beefe3@rowland.harvard.edu>
+To: Ma Ke <make_ruc2021@163.com>
+Cc: gregkh@linuxfoundation.org, mka@chromium.org,
+	christophe.jaillet@wanadoo.fr, quic_ugoswami@quicinc.com,
+	oneukum@suse.com, stanley_chang@realtek.com,
+	javier.carrasco@wolfvision.net, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] usb: fix reference leak in usb_new_device()
+Message-ID: <ccc1083b-5ae8-490b-b357-52e162ba0a1f@rowland.harvard.edu>
+References: <20241217035353.2891942-1-make_ruc2021@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,107 +89,57 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ade3bb13-e612-49a6-ace2-bf6eeca93f8e@rowland.harvard.edu>
+In-Reply-To: <20241217035353.2891942-1-make_ruc2021@163.com>
 
-Jiri and Benjamin:
+On Tue, Dec 17, 2024 at 11:53:52AM +0800, Ma Ke wrote:
+> When device_add(&udev->dev) failed, calling put_device() to explicitly
+> release udev->dev. Otherwise, it could cause double free problem.
 
-The syzbot monthly USB report led to this old email message, which was 
-never answered.  The full bug report and email thread are here:
+If you're worried that the same object might be freed more than once 
+(double free), how can calling put_device() help?  Won't that cause 
+udev->dev to be freed a third time?
 
-https://lore.kernel.org/all/000000000000109c040597dc5843@google.com/T/
+> Found by code review.
 
-The bug still has not been fixed, according to syzbot.  Please review 
-this material and let me know whether the patch should be changed or 
-submitted.
+In your code review, did you check to see whether the routine which 
+calls usb_new_device() will do the put_device() when an error occurs?
 
-Thanks,
+> Cc: stable@vger.kernel.org
+> Fixes: 9f8b17e643fe ("USB: make usbdevices export their device nodes instead of using a separate class")
+> Signed-off-by: Ma Ke <make_ruc2021@163.com>
+> ---
+>  drivers/usb/core/hub.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 4b93c0bd1d4b..05b778d2ad63 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -2651,6 +2651,7 @@ int usb_new_device(struct usb_device *udev)
+>  	err = device_add(&udev->dev);
+>  	if (err) {
+>  		dev_err(&udev->dev, "can't device_add, error %d\n", err);
+> +		put_device(&udev->dev);
+>  		goto fail;
+>  	}
+>  
+> @@ -2683,6 +2684,9 @@ int usb_new_device(struct usb_device *udev)
+>  	pm_runtime_put_sync_autosuspend(&udev->dev);
+>  	return err;
+>  
+> +out_del_dev:
+> +	device_del(&udev->dev);
+> +	put_device(&udev->dev);
+
+You added a new statement label but you did not add any jumps to that 
+label.  As a result, these two lines will never be executed.
 
 Alan Stern
 
-On Mon, Apr 08, 2024 at 12:55:13PM -0400, Alan Stern wrote:
-> Jiri and Benjamin:
+>  fail:
+>  	usb_set_device_state(udev, USB_STATE_NOTATTACHED);
+>  	pm_runtime_disable(&udev->dev);
+> -- 
+> 2.25.1
 > 
-> Tracking down an old syzbot report from over four years ago (but still 
-> not closed out!) led me to this email thread.  It turned out there were 
-> two separate bugs involved, one of which has since been fixed.  I don't 
-> remember the issues very well, so here's a copy of what I wrote back 
-> then:
-> 
-> On Mon, 09 Dec 2019, Alan Stern wrote:
-> 
-> >  The big problem is that the parser assumes all usages will
-> > belong to a collection.
-> > 
-> > There's also a second, smaller bug: hid_apply_multipler() assumes every
-> > Resolution Multiplier control is associated with a Logical Collection
-> > (i.e., there's no way the routine can ever set multiplier_collection to
-> > NULL) even though there's a big quotation from the HID Usage Table
-> > manual at the start of the function saying that they don't have to be.  
-> > This bug can be fixed easily, though.
-> > 
-> > The first bug is more troublesome.  hid_add_usage() explicitly sets the 
-> > parser->local.collection_index[] entry to 0 if the current collection 
-> > stack is empty.  But there's no way to distinguish this 0 from a 
-> > genuine index value that happens to point to the first collection!
-> > 
-> > So what should happen when a usage appears outside of all collections?  
-> > Is it a bug in the report descriptor (the current code suggests that it 
-> > is not)?
-> > 
-> > Or should we use a different sentinel value for the collection_index[]
-> > entry, one that cannot be confused with a genuine value, such as
-> > UINT_MAX?
-> 
-> Syzbot tested a proposed patch:
-> 
-> On Tue, 26 Nov 2019, syzbot wrote:
-> 
-> > Hello,
-> >
-> > syzbot has tested the proposed patch and the reproducer did not trigger
-> > crash:
-> >
-> > Reported-and-tested-by:
-> > syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
-> 
-> Here is the patch that syzbot tested:
-> 
->  drivers/hid/hid-core.c |    5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> Index: usb-devel/drivers/hid/hid-core.c
-> ===================================================================
-> --- usb-devel.orig/drivers/hid/hid-core.c
-> +++ usb-devel/drivers/hid/hid-core.c
-> @@ -1057,6 +1057,8 @@ static void hid_apply_multiplier(struct
->  	while (multiplier_collection->parent_idx != -1 &&
->  	       multiplier_collection->type != HID_COLLECTION_LOGICAL)
->  		multiplier_collection = &hid->collection[multiplier_collection->parent_idx];
-> +	if (multiplier_collection->type != HID_COLLECTION_LOGICAL)
-> +		multiplier_collection = NULL;
->  
->  	effective_multiplier = hid_calculate_multiplier(hid, multiplier);
->  
-> @@ -1191,6 +1193,9 @@ int hid_open_report(struct hid_device *d
->  	}
->  	device->collection_size = HID_DEFAULT_NUM_COLLECTIONS;
->  
-> +	/* Needed for usages before the first collection */
-> +	device->collection[0].parent_idx = -1;
-> +
->  	ret = -EINVAL;
->  	while ((start = fetch_item(start, end, &item)) != NULL) {
->  
-> 
-> The second hunk, addressing the first bug described above, was 
-> implemented in commit ea427a222d8b ("HID: core: Fix deadloop in 
-> hid_apply_multiplier.") in 2023.  But the first hunk, addressing the 
-> second bug, is still outstanding.
-> 
-> You guys undoubtedly understand this code much better than I do.  Is the 
-> first hunk in this patch still required?  Is it a correct fix for 
-> handling Resolution Multiplier controls not associated with any Logical 
-> Collection?
-> 
-> Alan Stern
 
