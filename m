@@ -1,125 +1,113 @@
-Return-Path: <linux-usb+bounces-18578-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18579-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 620009F47EA
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 10:47:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 029509F47F4
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 10:48:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A5F6189321C
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 09:46:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80AF6188F858
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 09:48:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59AFE1DF975;
-	Tue, 17 Dec 2024 09:46:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="ygHza7a7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA601E0DD8;
+	Tue, 17 Dec 2024 09:47:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D59721DEFC2
-	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 09:45:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7381DED7B
+	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 09:47:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734428759; cv=none; b=rMreRkO8wwkLsZbaGouTcpQ1JSRCkOVZLgQzP2f/S/DzQnP1YQOuwmAxKXNwdRVUsGnYyp8vkCOnW3EiymUo67kRJ3r3drLvCBvbqfMXe5ItMaRsuSYaZ2umMeUtHxq+28ThXCmL3o+01m39wkRL+wgxkw5DQqw9iqbfm9SWFsI=
+	t=1734428847; cv=none; b=n2W3F9BRNMHKzN6PSNnw/H1TjYMjSY9R99QwvYbKaAJZeEUT7NoBZWu8SxFW7SK6mDiMeaxHDXigqYks67MuRGQnNYLfSfpSXkOLga6gN4YcPdP9cSpBq7zaW/pEu5AOMSpaAeFwJ4UuHZvVa5Y42HNwuyplpAaPsvPJwo1XXFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734428759; c=relaxed/simple;
-	bh=yWGdHIYeW/qGqkS3mGGDdmrdIyQKM1Z2hHYlmKN0Tik=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KTCzHmbF+Wn9g5rM7p5n798nXxT6eYg0BG3VQrQaVUDLVcN2MSGia6PtG4EmJzylNUKDfeN9f2rXkfYgqoPOjIH5eu5iszxm6xPPtBdpEJU7v6ty1IpIIbtRdGWcny+SniuoBitYQcwy7L1QL0UyVgL2XlQYUDnjzAP5EAo+I6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=ygHza7a7; arc=none smtp.client-ip=217.194.8.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
-Received: from francesco-nb (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-	by mail11.truemail.it (Postfix) with ESMTPA id 58FCA20667;
-	Tue, 17 Dec 2024 10:45:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
-	s=default; t=1734428756;
-	bh=xUfq5+t4yTvAeS+XVM4QO2QwLt0mcLy8TKIMnb/O/K0=; h=From:To:Subject;
-	b=ygHza7a7pxaxdKl3pRPwBMqmeFtad/Y7kLgAU/T8+SfS3uRXD8w72F0VjF84FOVh+
-	 8hd7C/rO1OzRVq5YJLAkgd7yFmprlmDsX+9u2GcSHss9sXaYuuNYhhruEoMrSANB3S
-	 M0/UX5Hpj9b7KoRrnFYOz0OeGjlevMWqPKVSiAIWT5+G+YRarWTS86MD7hjWI6qznQ
-	 PXqKU0jIv4gSStrT475S/dcdXI0+HirbHumoDVQHnNOXl997LkomSeGJHOR6LG7s+H
-	 UmXY7GMp99ap1tfTKRxGBWcGSDk39X8UO1HgZabPdbcchanOt1y2WSgMhZZx+qdn0O
-	 Y3uXE5jJ93XbQ==
-Date: Tue, 17 Dec 2024 10:45:53 +0100
-From: Francesco Dolcini <francesco@dolcini.it>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: Francesco Dolcini <francesco@dolcini.it>,
-	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	andre.draszik@linaro.org, rdbabiera@google.com,
-	m.felsch@pengutronix.de, dan.carpenter@linaro.org,
-	emanuele.ghidoli@toradex.com, parth.pancholi@toradex.com,
-	francesco.dolcini@toradex.com, u.kleine-koenig@baylibre.com,
-	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v3 2/2] usb: typec: tcpci: set ALERT_MASK register after
- devm_request_threaded_irq()
-Message-ID: <20241217094553.GB25802@francesco-nb>
-References: <20241217091208.2416971-1-xu.yang_2@nxp.com>
- <20241217091208.2416971-2-xu.yang_2@nxp.com>
- <20241217092905.GA27489@francesco-nb>
- <20241217094117.xb27iww4dmq2ehvl@hippo>
+	s=arc-20240116; t=1734428847; c=relaxed/simple;
+	bh=yMOynOmGlEzrJ3tGyPHlnpYCP7nvDB8xmB4PMbtHQuA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=MsPG/0An5Ac8JCd5eKERe471fgXmjWtiEj1XhtfEDFb429Tbp+gb9y+cMsUvbOMPeXLdSn2CnNIzu5YGcFAAUYJ6zA+2eWJinylc9lXZo4lcaRpByOZeZD/HrE1OYdljrr9//9Nxsaq16CzQYKQgaS3CzegVty3ebuYz8YRsu40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a7cf41b54eso87028395ab.2
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 01:47:25 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734428845; x=1735033645;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8NniguLOEVteCvNXzlckkOEnDVjSHE/QG1QlwVmzpkY=;
+        b=G7CBC2UxBQwLYs9fH5HLbsbvFRU3Y+C26QNo4xKu9bokQ8dyRYuGwexEHWor2PJMZW
+         dqS7Cq4+xR31WEHWS3yyGMMLgJeaivYGeMyx5QADkJuEprZItlICZZCf/EYQWSrMa2WF
+         VXTQxAKPsLIxaP6f1Sb7h2UqeE1KlIr7DvX/prXVna7LdC4N3xFsKT31yJOzZNBJhz56
+         O10IAFAVXSfCzTiuLRznsGVcInfg9Ke4tZOL7Qew79I5mL+u+4hHvVQIPqWBDQXHwxV/
+         vGhHyi9UN93gJjI549DPAxvsQgAQAJvljp1F2NCy9clyYmCtgL9pAa8xrICgeWGX93Qe
+         KlOA==
+X-Forwarded-Encrypted: i=1; AJvYcCUU8sasWEas3eFeNV4RqMfDarY9/79PIUDkH/16MzHeFcjxvpBtlz5wZqt9upV9YFVtTLFpqje6yGk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbbP9gGOft8Jk2+aC3ChLRD9eamDa848Nce5bFQaq+mBlgksdL
+	vRt76pf+fwkQkcd0dpS1wHtobz0iZy18SjfyqA5dxjH95JBeBj9hsP5oaOcBZ0DvAJlmF5eeL7t
+	D3VadOQbn1n3o0th09q72bDkxPLAXJzjUeU7S2FB/QQJNR+oZ7XmUKfE=
+X-Google-Smtp-Source: AGHT+IHRUZZUUqogXDRMcw0lst1lGtqW8tk+9yGLp7n2tyZIJ5sVoYt60q22anoZZvA/7cPx9k999AzS0onnztWYdejzMML00GXT
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241217094117.xb27iww4dmq2ehvl@hippo>
+X-Received: by 2002:a92:cdaa:0:b0:3a7:9670:7abb with SMTP id
+ e9e14a558f8ab-3bad59f4686mr29187555ab.15.1734428845183; Tue, 17 Dec 2024
+ 01:47:25 -0800 (PST)
+Date: Tue, 17 Dec 2024 01:47:25 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <676148ad.050a0220.37aaf.0157.GAE@google.com>
+Subject: [syzbot] Monthly usb report (Dec 2024)
+From: syzbot <syzbot+listed4c6d2dd7d8184007da@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Dec 17, 2024 at 05:41:17PM +0800, Xu Yang wrote:
-> On Tue, Dec 17, 2024 at 10:29:05AM +0100, Francesco Dolcini wrote:
-> > On Tue, Dec 17, 2024 at 05:12:08PM +0800, Xu Yang wrote:
-> > > With edge irq support, the ALERT event may be missed currently. The reason
-> > > is that ALERT_MASK register is written before devm_request_threaded_irq().
-> > > If ALERT event happens in this time gap, it will be missed and ALERT line
-> > > will not recover to high level. However, we don't meet this issue with
-> > > level irq. To avoid the issue, this will set ALERT_MASK register after
-> > > devm_request_threaded_irq() return.
-> > > 
-> > > Fixes: 77e85107a771 ("usb: typec: tcpci: support edge irq")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > > 
-> > > ---
-> > > Changes in v3:
-> > >  - remove set_alert_mask flag
-> > > Changes in v2:
-> > >  - new patch
-> > > ---
-> > >  drivers/usb/typec/tcpm/tcpci.c | 17 ++++++++++++-----
-> > >  1 file changed, 12 insertions(+), 5 deletions(-)
-> > > 
-> > > diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
-> > > index db42f4bf3632..48762508cc86 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpci.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpci.c
-> > > @@ -700,7 +700,7 @@ static int tcpci_init(struct tcpc_dev *tcpc)
-> > >  
-> > >  	tcpci->alert_mask = reg;
-> > >  
-> > > -	return tcpci_write16(tcpci, TCPC_ALERT_MASK, reg);
-> > > +	return 0;
-> > 
-> > Should we set the alert mask to 0 at the beginning of tcpci_init() ?
-> > 
-> > Just wondering if some bind/unbind or module reload use case would need
-> > it.
-> 
-> Maybe not needed.
-> 
-> tcpci = devm_kzalloc(dev, sizeof(*tcpci), GFP_KERNEL);
-> 
-> tcpci will be reset to all 0 when allocate the memory. So alert_mask is 0
-> by default.
+Hello usb maintainers/developers,
 
-I meant
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
 
-  tcpci_write16(tcpci, TCPC_ALERT_MASK, 0);
+During the period, 1 new issues were detected and 1 were fixed.
+In total, 96 issues are still open and 365 have already been fixed.
 
-in tcpci_init().
+Some of the still happening issues:
 
+Ref  Crashes Repro Title
+<1>  25194   Yes   WARNING in uvc_status_unregister
+                   https://syzkaller.appspot.com/bug?extid=9446d5e0d25571e6a212
+<2>  10156   Yes   KASAN: slab-use-after-free Read in hdm_disconnect
+                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
+<3>  4839    Yes   KMSAN: uninit-value in dib3000mb_attach (2)
+                   https://syzkaller.appspot.com/bug?extid=c88fc0ebe0d5935c70da
+<4>  1754    Yes   INFO: task hung in jbd2_journal_commit_transaction (5)
+                   https://syzkaller.appspot.com/bug?extid=3071bdd0a9953bc0d177
+<5>  1573    Yes   KASAN: use-after-free Read in v4l2_fh_init
+                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
+<6>  1352    Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
+                   https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
+<7>  1209    Yes   INFO: rcu detected stall in hub_event
+                   https://syzkaller.appspot.com/bug?extid=ec5f884c4a135aa0dbb9
+<8>  1011    Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<9>  879     Yes   general protection fault in ir_raw_event_store_with_filter
+                   https://syzkaller.appspot.com/bug?extid=34008406ee9a31b13c73
+<10> 862     Yes   INFO: task hung in usb_get_descriptor (2)
+                   https://syzkaller.appspot.com/bug?extid=e8db9d9e65feff8fa471
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
 
