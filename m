@@ -1,245 +1,211 @@
-Return-Path: <linux-usb+bounces-18554-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18555-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A8549F4500
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 08:22:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83A199F451F
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 08:29:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3978C18837B2
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 07:22:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB436167929
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 07:29:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0908618A935;
-	Tue, 17 Dec 2024 07:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1CC4192D69;
+	Tue, 17 Dec 2024 07:29:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="raql7gm5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OfG+c6LD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78CC214600D;
-	Tue, 17 Dec 2024 07:22:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C4518B46E
+	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 07:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734420134; cv=none; b=oiChA5OdQccDaohmunawzdUM7pcykhutuJJ0mFWZQdhExTHzEbKa1xPs35j/tjilklhIr5OLLPHj9ZQFTuHtPmbzR4hHnNlJpBACUQvOCMrdvE3wW67eXmWxgcAFm5z241xNsV8ID7QboNgVOTMA85uEsM/sBwelmuddUYJqXos=
+	t=1734420586; cv=none; b=fX9AhyHt1GPr5LE5kc5l8P5XdhI1D8SeSxEspK61m7UzqWGQVlXvgQUnTxSjoIjnwOSH37Om623jiNYA0bLCziktym1Ev5A8rrXaPtb/kkfiugg000AcRYWRBkYej8mxgjr1RAjiiZxcgHjG0VQjf3tuFChwndrCBSc1GWthSv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734420134; c=relaxed/simple;
-	bh=NcOfgRFZrInx2wut2TWlz7O9nf0wpgq17dcJDM1ha5Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t5NJsTVMY9RPymw42CkldQAquzc7ZdTt/5zLF5yDVl7z4p4WW1p2vYW6OcLBskGKb8H8ttKY8FeQ0jDS/1RI7QHet3IyTWObmDUwFdYZMqCwGv3PhDAvE3yNZOIVWfwt0yvet4GqZOQ9+4SFBTEutTPGk9C6nBlW1EG7v1vr2fU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=raql7gm5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BCCDC4CED3;
-	Tue, 17 Dec 2024 07:22:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734420134;
-	bh=NcOfgRFZrInx2wut2TWlz7O9nf0wpgq17dcJDM1ha5Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=raql7gm5PHGc+0eiM5wxwyAVl/RN+fN0VyAydoNJtDtVu/65KerdPEWdja/liWbQ8
-	 a+fIv8ycUByOzlGl0LKY9cy4uz+bzznXQGjfRlIFB619r8f8V1rfP4w8xxulPJ8pzB
-	 btN9mkvP3nnRa0Qznk6L2so1OIoPC08COOfdC9HSd04XCpmKRxEIWh9TRDVFC1bsNh
-	 JZlc6XbswNijpRiR9H9k2MaoQjQx4SYrf6jSz+cApoIJ7S+31NHcpr8g+98zgZZpVu
-	 zWh032t6EQkTsaNHdt/oZid4z7eXbvUjhhXDYWVhPKMm6z0KrwSXgr4h/3ETWgkSiy
-	 jJ0HP58yB4xcQ==
-Date: Tue, 17 Dec 2024 08:22:10 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Kanak Shilledar <kanakshilledar@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Carvalho Chehab <mchehab@kernel.org>, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: dwc3-st: convert to dt schema
-Message-ID: <4drvnvgitdqyokwm7vcpmeiepd47czvfsssclnvbx76bsz2iwe@532ojratwr4j>
-References: <20241213051559.6066-1-kanakshilledar@gmail.com>
+	s=arc-20240116; t=1734420586; c=relaxed/simple;
+	bh=OeoYmIJuEghz7P5CIVKoVv1LI/Yjo9tjTBpXxSvr0Ug=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=D/3IaLXGwffgRLP+3kq66+kx2PadllXog8m68SJLAwIfdtvhv65gZK3ChyFa7QeaezQndjd99eJL1josilJNt41BeT80DciPcm0dCqoWWKKsS5AaIVUzyQBm5maxbIBAv34wuSzTsI6cPEjk+T5ZJUfi7vhnhJ8GEheqSOVNFKo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OfG+c6LD; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734420584; x=1765956584;
+  h=date:from:to:cc:subject:message-id;
+  bh=OeoYmIJuEghz7P5CIVKoVv1LI/Yjo9tjTBpXxSvr0Ug=;
+  b=OfG+c6LDdqhjdFR8l0nInpPzHU3IAMT/QzZczkau3gEU9Y+oeKt59OZt
+   l6kRrZ6C8lgkLxvEBO8G3oMe7fGbIlCf1A674vy+OpkGOvRiCSqv45XXw
+   X29wF5YEP1kUYxVARvtcQKf2Z7u2IxKJGJyxz9XgBmH5+T+I00cBmcI+A
+   2rKnJcvZUAYP/lWPOip21WLNm0F+rY8z8agwRHszRmsV0KgnnnsPiKEXq
+   Wkv8dPRSx232ojmUkdxhhSFRL7gfKK5L6iS+wM4M4TNH+WG3jFWf1KUqi
+   IQcoipbB5GfztYEFFinE30hiVvY0+2u6rPc7FDLeayzfi+qwHdCy7VQw7
+   w==;
+X-CSE-ConnectionGUID: GwuONxSNSIqV9ZT+lWPt7Q==
+X-CSE-MsgGUID: ucJAnDsXQE6loDqxOEUnlA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="46226622"
+X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
+   d="scan'208";a="46226622"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Dec 2024 23:29:44 -0800
+X-CSE-ConnectionGUID: +6YgpQNwT1G0XlzHMP9bbw==
+X-CSE-MsgGUID: cD6Lao44QV2bQFmBxppnsA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="97906577"
+Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
+  by orviesa007.jf.intel.com with ESMTP; 16 Dec 2024 23:29:43 -0800
+Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tNS1U-000En2-1B;
+	Tue, 17 Dec 2024 07:29:40 +0000
+Date: Tue, 17 Dec 2024 15:29:15 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [westeri-thunderbolt:next] BUILD SUCCESS
+ b5d175beb4d31bfe7dec6fb140623ad91ee50e96
+Message-ID: <202412171509.7rRIU8lU-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241213051559.6066-1-kanakshilledar@gmail.com>
 
-On Fri, Dec 13, 2024 at 10:45:55AM +0530, Kanak Shilledar wrote:
-> removed st,syscon from the required property, added st,syscfg
-> property.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt.git next
+branch HEAD: b5d175beb4d31bfe7dec6fb140623ad91ee50e96  thunderbolt: debugfs: Add write capability to path config space
 
-Please say in the commit msg why.
+elapsed time: 1351m
 
-> 
-> Signed-off-by: Kanak Shilledar <kanakshilledar@gmail.com>
-> ---
->  .../devicetree/bindings/usb/dwc3-st.txt       |  66 ----------
->  .../bindings/usb/st,stih407-dwc3.yaml         | 123 ++++++++++++++++++
->  2 files changed, 123 insertions(+), 66 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/usb/dwc3-st.txt
->  create mode 100644 Documentation/devicetree/bindings/usb/st,stih407-dwc3.yaml
+configs tested: 118
+configs skipped: 4
 
-...
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> diff --git a/Documentation/devicetree/bindings/usb/st,stih407-dwc3.yaml b/Documentation/devicetree/bindings/usb/st,stih407-dwc3.yaml
-> new file mode 100644
-> index 000000000000..709cdb17f28d
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/usb/st,stih407-dwc3.yaml
-> @@ -0,0 +1,123 @@
-> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/usb/st,stih407-dwc3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ST DWC3 glue logic
-> +
-> +description:
-> +  This binding describes the parameters for the dwc3-st driver,
-> +  which controls the glue logic used to configure the DWC3 core on
-> +  STiH407-based platforms.
-> +
-> +maintainers:
-> +  - Mauro Carvalho Chehab <mchehab@kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: st,stih407-dwc3
-> +
-> +  reg:
-> +    # minItems: 2
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20241216    gcc-13.2.0
+arc                   randconfig-002-20241216    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                              allyesconfig    gcc-14.2.0
+arm                         nhk8815_defconfig    clang-20
+arm                          pxa3xx_defconfig    clang-20
+arm                   randconfig-001-20241216    clang-15
+arm                   randconfig-002-20241216    gcc-14.2.0
+arm                   randconfig-003-20241216    clang-20
+arm                   randconfig-004-20241216    clang-17
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20241216    gcc-14.2.0
+arm64                 randconfig-002-20241216    clang-20
+arm64                 randconfig-003-20241216    gcc-14.2.0
+arm64                 randconfig-004-20241216    clang-15
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20241216    gcc-14.2.0
+csky                  randconfig-002-20241216    gcc-14.2.0
+hexagon                          alldefconfig    clang-15
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon               randconfig-001-20241216    clang-20
+hexagon               randconfig-002-20241216    clang-20
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20241216    clang-19
+i386        buildonly-randconfig-002-20241216    clang-19
+i386        buildonly-randconfig-003-20241216    clang-19
+i386        buildonly-randconfig-004-20241216    clang-19
+i386        buildonly-randconfig-005-20241216    clang-19
+i386        buildonly-randconfig-006-20241216    clang-19
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20241216    gcc-14.2.0
+loongarch             randconfig-002-20241216    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                       m5208evb_defconfig    gcc-14.2.0
+m68k                          multi_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                  cavium_octeon_defconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20241216    gcc-14.2.0
+nios2                 randconfig-002-20241216    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                randconfig-001-20241216    gcc-14.2.0
+parisc                randconfig-002-20241216    gcc-14.2.0
+powerpc                     akebono_defconfig    clang-20
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                      katmai_defconfig    clang-18
+powerpc                   motionpro_defconfig    clang-17
+powerpc               randconfig-001-20241216    clang-20
+powerpc               randconfig-002-20241216    clang-20
+powerpc               randconfig-003-20241216    gcc-14.2.0
+powerpc64             randconfig-001-20241216    clang-20
+powerpc64             randconfig-002-20241216    clang-15
+powerpc64             randconfig-003-20241216    gcc-14.2.0
+riscv                            allmodconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-20
+riscv                 randconfig-001-20241216    clang-20
+riscv                 randconfig-002-20241216    clang-15
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20241216    gcc-14.2.0
+s390                  randconfig-002-20241216    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                         ap325rxa_defconfig    gcc-14.2.0
+sh                 kfr2r09-romimage_defconfig    gcc-14.2.0
+sh                    randconfig-001-20241216    gcc-14.2.0
+sh                    randconfig-002-20241216    gcc-14.2.0
+sh                          rsk7264_defconfig    gcc-14.2.0
+sh                           sh2007_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20241216    gcc-14.2.0
+sparc                 randconfig-002-20241216    gcc-14.2.0
+sparc                       sparc32_defconfig    gcc-14.2.0
+sparc64               randconfig-001-20241216    gcc-14.2.0
+sparc64               randconfig-002-20241216    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20241216    gcc-12
+um                    randconfig-002-20241216    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20241216    gcc-12
+x86_64      buildonly-randconfig-002-20241216    gcc-12
+x86_64      buildonly-randconfig-003-20241216    clang-19
+x86_64      buildonly-randconfig-004-20241216    clang-19
+x86_64      buildonly-randconfig-005-20241216    clang-19
+x86_64      buildonly-randconfig-006-20241216    clang-19
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20241216    gcc-14.2.0
+xtensa                randconfig-002-20241216    gcc-14.2.0
 
-Drop line
-
-> +    items:
-> +      - description: Glue logic base address.
-> +      - description: USB syscfg ctrl register offset.
-> +
-> +  reg-names:
-> +    # minItems: 2
-
-Drop line
-
-> +    items:
-> +      - const: reg-glue
-> +      - const: syscfg-reg
-> +
-> +  st,syscon:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Phandle to system configuration node which.
-
-which?
-
-> +
-> +  resets:
-> +    maxItems: 2
-> +
-> +  reset-names:
-> +    items:
-> +      - const: powerdown
-> +      - const: softreset
-> +
-> +  st,syscfg:
-
-What's this? Missing type, description.
-
-> +    maxItems: 1
-> +
-> +  '#address-cells':
-
-Keep consistent quotes, either ' or "
-
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 1
-> +
-> +  pinctrl-names:
-> +    items:
-> +      - const: default
-
-Drop property
-
-> +
-> +  pinctrl-0:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description: |
-> +      Pin control group
-> +      See: Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
-> +
-
-Drop property
-
-> +  ranges:
-> +    description: Valid 1:1 translation between child's and parent's address space.
-
-Drop description, just :true
-
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - reg-names
-> +  - resets
-> +  - reset-names
-> +  - pinctrl-names
-> +  - pinctrl-0
-
-
-address/size cells should be required. This device makes no sense
-without actual DWC3 core.
-
-
-> +  - ranges
-> +
-> +additionalProperties: false
-> +
-> +patternProperties:
-
-patternProperties follow immediately "properties:" block.
-
-> +  "^usb@[0-9a-f]+$":
-> +    type: object
-> +    description: DWC3 core sub-node
-> +    $ref: snps,dwc3.yaml#
-> +    unevaluatedProperties: false
-> +    properties:
-> +      dr_mode:
-> +        enum:
-> +          - host
-> +          - device
-
-That's odd, device is not a valid value. I guess you took it from the
-old binding, but it was not correct. I don't think you tested this part
-with different values.
-
-> +        description: |
-> +          Specifies the operating mode. The default value "otg" is not
-> +          supported by this SoC. Valid values are "host" or "device".
-> +          See: Documentation/devicetree/bindings/usb/usb-drd.yaml
-
-Drop description, redundant.
-
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/phy/phy.h>
-> +    #include <dt-bindings/reset/stih407-resets.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    st_dwc3: dwc3@8f94000 {
-> +        compatible	= "st,stih407-dwc3";
-
-Only one space before '='
-
-> +        reg		= <0x08f94000 0x1000>, <0x110 0x4>;
-> +        reg-names	= "reg-glue", "syscfg-reg";
-> +        st,syscfg	= <&syscfg_core>;
-> +        resets		= <&powerdown STIH407_USB3_POWERDOWN>,
-> +              <&softreset STIH407_MIPHY2_SOFTRESET>;
-
-Some total misalignment.
-
-Best regards,
-Krzysztof
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
