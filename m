@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-18567-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18571-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F7939F45F8
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 09:23:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71E019F45FC
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 09:23:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D5177A365A
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 08:23:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C934188F741
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 08:23:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC48E1DDC1E;
-	Tue, 17 Dec 2024 08:22:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6FD61DDC3C;
+	Tue, 17 Dec 2024 08:22:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="btxWqCHi"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="apja7WK9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C41F1DD54C
-	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 08:22:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFBF91DB92A
+	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 08:22:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734423752; cv=none; b=lFzrvQbRMUYCOV50lvtP1NE64BoRd2RC7qM3Sd1tjhTJ7J7PMi2Kt5XG9lknVSPYYBJAyb6XROKKD0nfHnAoyyH44yg6tHA+cQhBiFs6pAfTxQetEARWw8Oq1We7t7ehwxk2yJ1L/BSh+mUH3XWekuZ5ydeS5NGjC0J9ZJJd2pU=
+	t=1734423767; cv=none; b=t3yiJriQleWp8t3dRU5yZ/PyKCNxItN2zGZOmI7rTf9+B3ezOgmR9N+32AThgtlBA4fBqzYARI3jaw8wnDO51T1Mbv6eHo77DOrfizaL6et1yXmIUntw643uwVd4kGOyobjd7RUTUKUFc2TIlLdf/OkC3sBGzDPk/C0cPUfEVTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734423752; c=relaxed/simple;
-	bh=OPaH7A4OdQ6wb6rrpdbQJ/9+xdqU/8OvlKDuvaN2t8Q=;
+	s=arc-20240116; t=1734423767; c=relaxed/simple;
+	bh=Wu5RyFCpoQ9OOQp49JRuL/Q0pjWi7Zqp605zVnz3x6g=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HoCKLJppDrETWGS/DMDUoG0nA/Q0c49x9rwjeQ1G24C2SUqoN+xTNX9ufEEYJyDn2cVc/6ogxqptZtipiXkVIVnmXE9fdngtj7lHMHUc6V8KmcXmowalSKKG50qF30dK/DSUAYXyAHTMjwhP1JI0E1NfmyyHvCViv98RbVzQN1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=btxWqCHi; arc=none smtp.client-ip=198.175.65.15
+	 MIME-Version; b=ieK4nU/+R+iM5bdaaLOt4T2ztYI+DztJ3t6uZUhNmuIfYQBwhPtjXwHzwwGUTcWzZelZV6LUXHIfbIU4LlFPXjIlV+IVq3xxkkNjdAjZtJQrxcERxrkiswFFHQ6+ReKJc4NXhumaN+6wJ+LEhSEbUDqVAbLvP51o304iOkxTyQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=apja7WK9; arc=none smtp.client-ip=192.198.163.15
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734423751; x=1765959751;
+  t=1734423765; x=1765959765;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=OPaH7A4OdQ6wb6rrpdbQJ/9+xdqU/8OvlKDuvaN2t8Q=;
-  b=btxWqCHi22hJEYvRL9qzDwNIuYKpmfOjbULs/UxUuLpymLG4xh81o23A
-   17EVtVXMDPpctpjAh+dxdgpCD+a1WphD+QxGVlKTlCIaYp3GSHWoc3o8C
-   aMqc4swSNbEerMuKSayuO17cPEMMCuuGf2J8CfIAjnwpO11FyeEA019oc
-   oHz2bjtk3LbV6AMZDk0Ufh8P1oVLRpQhQc+m4Hfc5EPIloOb2Fd6KCIIW
-   c1Pyw1FCP/DiQr0xKpIPbTY3ki0fNBlVacnZx3Gu15uip6PNJqWgg1yAw
-   NdKdeLE9F5H0F9cZCvSS224vVauLqCnlAen6QwB5cYh3d8VIX+SWFEoaN
-   g==;
-X-CSE-ConnectionGUID: h7Dyyr2DTputA0JMBPWD6A==
-X-CSE-MsgGUID: AvstdKMoSFSXd+tbdyDlTQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="38511454"
+  bh=Wu5RyFCpoQ9OOQp49JRuL/Q0pjWi7Zqp605zVnz3x6g=;
+  b=apja7WK9AVCvmzZp64VkGUvFrrlFLPQ1P4qvRK561KIo2bLsbMA5DUm1
+   bJlvy6F2ZhnMFvkaoIyPoTICvf2WJ1esumWA0nSjBGgGTBSH7xhDZt0Jw
+   M13rHSCx7x9e0zZQPK6mDP7WdWRfKgslD++q/nVjQOP9j+rgzCNpYTY4/
+   EaiKEhPNZbUKl+EcWWx+ILp8rZxBPzczE2ltISZKDuTYgh/UTRjlAJZx/
+   G5LyxysFf2yc6/5sLGoBOGpRtdjfryfAcTFG4WN6X0bvkZxBXP8VfkOBJ
+   T2phkncLZFR35KmkGrWYISI2s1l3SOfjMdvxpoJgNw1wQBAiFdYWnl1VA
+   w==;
+X-CSE-ConnectionGUID: UekSacz8RV6jFPE1EzhSwQ==
+X-CSE-MsgGUID: TdCrk2sPQxS2Yl4vJ7r74A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11288"; a="34992611"
 X-IronPort-AV: E=Sophos;i="6.12,241,1728975600"; 
-   d="scan'208";a="38511454"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 00:22:28 -0800
-X-CSE-ConnectionGUID: 1NIAO6SYTWu3TBGaT4A30g==
-X-CSE-MsgGUID: lnuQS7KfRTi7OGy3wPiubg==
+   d="scan'208";a="34992611"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 00:22:37 -0800
+X-CSE-ConnectionGUID: 8UCIO5DdTH6CvQ2kEf3DZA==
+X-CSE-MsgGUID: jdhv8WsCSB+qMlKnYGfY5w==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="102063251"
+X-IronPort-AV: E=Sophos;i="6.12,241,1728975600"; 
+   d="scan'208";a="98037690"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa005.fm.intel.com with ESMTP; 17 Dec 2024 00:22:27 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 17 Dec 2024 00:22:26 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 3292082E; Tue, 17 Dec 2024 10:22:23 +0200 (EET)
+	id 38DE5902; Tue, 17 Dec 2024 10:22:23 +0200 (EET)
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: linux-usb@vger.kernel.org
 Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
@@ -67,9 +67,9 @@ Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
 	Lukas Wunner <lukas@wunner.de>,
 	Andreas Noever <andreas.noever@gmail.com>,
 	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH 07/12] thunderbolt: Rework how tunnel->[init|deinit] hooks are called
-Date: Tue, 17 Dec 2024 10:22:17 +0200
-Message-ID: <20241217082222.528602-8-mika.westerberg@linux.intel.com>
+Subject: [PATCH 08/12] thunderbolt: Drop tb_tunnel_restart()
+Date: Tue, 17 Dec 2024 10:22:18 +0200
+Message-ID: <20241217082222.528602-9-mika.westerberg@linux.intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20241217082222.528602-1-mika.westerberg@linux.intel.com>
 References: <20241217082222.528602-1-mika.westerberg@linux.intel.com>
@@ -81,198 +81,100 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The way these are called is not exactly symmetric as it is supposed to
-be: the former is called when tunnel is being activated and the latter
-is called when it is being released (not when it is being de-activated).
-
-Furthermore host-to-host (DMA) tunnels are abusing the ->deinit hook to
-clear out the credits. This makes it quite hard to follow what is being
-called and when.
-
-For these reasons rework the two "init" hooks to be called symmetrically
-and rename them accordingly. For the DMA one, add a new hook that is
-specifically used to run clean up for the tunnel when its memory is
-being released.
+It is pretty much the same as tb_tunnel_activate() excepts does check
+for already activated paths. This is not needed anymore and makes it
+more streamlined so drop tb_tunnel_restart() in favour of
+tb_tunnel_activate().
 
 Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- drivers/thunderbolt/tunnel.c | 37 +++++++++++++++++++-----------------
- drivers/thunderbolt/tunnel.h | 13 +++++++++----
- 2 files changed, 29 insertions(+), 21 deletions(-)
+ drivers/thunderbolt/tb.c     |  4 ++--
+ drivers/thunderbolt/tunnel.c | 27 +++------------------------
+ drivers/thunderbolt/tunnel.h |  1 -
+ 3 files changed, 5 insertions(+), 27 deletions(-)
 
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index 7595ca00b6b8..53e4890e3198 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -3037,7 +3037,7 @@ static int tb_resume_noirq(struct tb *tb)
+ 			/* Only need to do it once */
+ 			usb3_delay = 0;
+ 		}
+-		tb_tunnel_restart(tunnel);
++		tb_tunnel_activate(tunnel);
+ 	}
+ 	if (!list_empty(&tcm->tunnel_list)) {
+ 		/*
+@@ -3147,7 +3147,7 @@ static int tb_runtime_resume(struct tb *tb)
+ 	tb_free_invalid_tunnels(tb);
+ 	tb_restore_children(tb->root_switch);
+ 	list_for_each_entry_safe(tunnel, n, &tcm->tunnel_list, list)
+-		tb_tunnel_restart(tunnel);
++		tb_tunnel_activate(tunnel);
+ 	tb_switch_enter_redrive(tb->root_switch);
+ 	tcm->hotplug_active = true;
+ 	mutex_unlock(&tb->lock);
 diff --git a/drivers/thunderbolt/tunnel.c b/drivers/thunderbolt/tunnel.c
-index f9e75c221fef..83bd2043bab2 100644
+index 83bd2043bab2..09619190c34a 100644
 --- a/drivers/thunderbolt/tunnel.c
 +++ b/drivers/thunderbolt/tunnel.c
-@@ -851,7 +851,7 @@ static int tb_dp_bandwidth_alloc_mode_enable(struct tb_tunnel *tunnel)
- 	return 0;
- }
- 
--static int tb_dp_init(struct tb_tunnel *tunnel)
-+static int tb_dp_pre_activate(struct tb_tunnel *tunnel)
- {
- 	struct tb_port *in = tunnel->src_port;
- 	struct tb_switch *sw = in->sw;
-@@ -877,7 +877,7 @@ static int tb_dp_init(struct tb_tunnel *tunnel)
- 	return tb_dp_bandwidth_alloc_mode_enable(tunnel);
- }
- 
--static void tb_dp_deinit(struct tb_tunnel *tunnel)
-+static void tb_dp_post_deactivate(struct tb_tunnel *tunnel)
- {
- 	struct tb_port *in = tunnel->src_port;
- 
-@@ -1368,9 +1368,9 @@ struct tb_tunnel *tb_tunnel_discover_dp(struct tb *tb, struct tb_port *in,
- 	if (!tunnel)
- 		return NULL;
- 
--	tunnel->init = tb_dp_init;
--	tunnel->deinit = tb_dp_deinit;
-+	tunnel->pre_activate = tb_dp_pre_activate;
- 	tunnel->activate = tb_dp_activate;
-+	tunnel->post_deactivate = tb_dp_post_deactivate;
- 	tunnel->maximum_bandwidth = tb_dp_maximum_bandwidth;
- 	tunnel->allocated_bandwidth = tb_dp_allocated_bandwidth;
- 	tunnel->alloc_bandwidth = tb_dp_alloc_bandwidth;
-@@ -1464,9 +1464,9 @@ struct tb_tunnel *tb_tunnel_alloc_dp(struct tb *tb, struct tb_port *in,
- 	if (!tunnel)
- 		return NULL;
- 
--	tunnel->init = tb_dp_init;
--	tunnel->deinit = tb_dp_deinit;
-+	tunnel->pre_activate = tb_dp_pre_activate;
- 	tunnel->activate = tb_dp_activate;
-+	tunnel->post_deactivate = tb_dp_post_deactivate;
- 	tunnel->maximum_bandwidth = tb_dp_maximum_bandwidth;
- 	tunnel->allocated_bandwidth = tb_dp_allocated_bandwidth;
- 	tunnel->alloc_bandwidth = tb_dp_alloc_bandwidth;
-@@ -1623,7 +1623,7 @@ static void tb_dma_release_credits(struct tb_path_hop *hop)
- 	}
- }
- 
--static void tb_dma_deinit_path(struct tb_path *path)
-+static void tb_dma_destroy_path(struct tb_path *path)
- {
- 	struct tb_path_hop *hop;
- 
-@@ -1631,14 +1631,14 @@ static void tb_dma_deinit_path(struct tb_path *path)
- 		tb_dma_release_credits(hop);
- }
- 
--static void tb_dma_deinit(struct tb_tunnel *tunnel)
-+static void tb_dma_destroy(struct tb_tunnel *tunnel)
- {
- 	int i;
- 
- 	for (i = 0; i < tunnel->npaths; i++) {
- 		if (!tunnel->paths[i])
- 			continue;
--		tb_dma_deinit_path(tunnel->paths[i]);
-+		tb_dma_destroy_path(tunnel->paths[i]);
- 	}
- }
- 
-@@ -1684,7 +1684,7 @@ struct tb_tunnel *tb_tunnel_alloc_dma(struct tb *tb, struct tb_port *nhi,
- 
- 	tunnel->src_port = nhi;
- 	tunnel->dst_port = dst;
--	tunnel->deinit = tb_dma_deinit;
-+	tunnel->destroy = tb_dma_destroy;
- 
- 	credits = min_not_zero(dma_credits, nhi->sw->max_dma_credits);
- 
-@@ -1796,7 +1796,7 @@ static int tb_usb3_max_link_rate(struct tb_port *up, struct tb_port *down)
- 	return min(up_max_rate, down_max_rate);
- }
- 
--static int tb_usb3_init(struct tb_tunnel *tunnel)
-+static int tb_usb3_pre_activate(struct tb_tunnel *tunnel)
- {
- 	tb_tunnel_dbg(tunnel, "allocating initial bandwidth %d/%d Mb/s\n",
- 		      tunnel->allocated_up, tunnel->allocated_down);
-@@ -2027,7 +2027,7 @@ struct tb_tunnel *tb_tunnel_discover_usb3(struct tb *tb, struct tb_port *down,
- 		tb_tunnel_dbg(tunnel, "currently allocated bandwidth %d/%d Mb/s\n",
- 			      tunnel->allocated_up, tunnel->allocated_down);
- 
--		tunnel->init = tb_usb3_init;
-+		tunnel->pre_activate = tb_usb3_pre_activate;
- 		tunnel->consumed_bandwidth = tb_usb3_consumed_bandwidth;
- 		tunnel->release_unused_bandwidth =
- 			tb_usb3_release_unused_bandwidth;
-@@ -2116,7 +2116,7 @@ struct tb_tunnel *tb_tunnel_alloc_usb3(struct tb *tb, struct tb_port *up,
- 		tunnel->allocated_up = min(max_rate, max_up);
- 		tunnel->allocated_down = min(max_rate, max_down);
- 
--		tunnel->init = tb_usb3_init;
-+		tunnel->pre_activate = tb_usb3_pre_activate;
- 		tunnel->consumed_bandwidth = tb_usb3_consumed_bandwidth;
- 		tunnel->release_unused_bandwidth =
- 			tb_usb3_release_unused_bandwidth;
-@@ -2140,8 +2140,8 @@ void tb_tunnel_free(struct tb_tunnel *tunnel)
- 	if (!tunnel)
- 		return;
- 
--	if (tunnel->deinit)
--		tunnel->deinit(tunnel);
-+	if (tunnel->destroy)
-+		tunnel->destroy(tunnel);
- 
- 	for (i = 0; i < tunnel->npaths; i++) {
- 		if (tunnel->paths[i])
-@@ -2192,8 +2192,8 @@ int tb_tunnel_restart(struct tb_tunnel *tunnel)
- 		}
- 	}
- 
--	if (tunnel->init) {
--		res = tunnel->init(tunnel);
-+	if (tunnel->pre_activate) {
-+		res = tunnel->pre_activate(tunnel);
- 		if (res)
- 			return res;
- 	}
-@@ -2256,6 +2256,9 @@ void tb_tunnel_deactivate(struct tb_tunnel *tunnel)
- 		if (tunnel->paths[i] && tunnel->paths[i]->activated)
- 			tb_path_deactivate(tunnel->paths[i]);
- 	}
-+
-+	if (tunnel->post_deactivate)
-+		tunnel->post_deactivate(tunnel);
+@@ -2170,12 +2170,12 @@ bool tb_tunnel_is_invalid(struct tb_tunnel *tunnel)
  }
  
  /**
+- * tb_tunnel_restart() - activate a tunnel after a hardware reset
+- * @tunnel: Tunnel to restart
++ * tb_tunnel_activate() - activate a tunnel
++ * @tunnel: Tunnel to activate
+  *
+  * Return: 0 on success and negative errno in case if failure
+  */
+-int tb_tunnel_restart(struct tb_tunnel *tunnel)
++int tb_tunnel_activate(struct tb_tunnel *tunnel)
+ {
+ 	int res, i;
+ 
+@@ -2218,27 +2218,6 @@ int tb_tunnel_restart(struct tb_tunnel *tunnel)
+ 	return res;
+ }
+ 
+-/**
+- * tb_tunnel_activate() - activate a tunnel
+- * @tunnel: Tunnel to activate
+- *
+- * Return: Returns 0 on success or an error code on failure.
+- */
+-int tb_tunnel_activate(struct tb_tunnel *tunnel)
+-{
+-	int i;
+-
+-	for (i = 0; i < tunnel->npaths; i++) {
+-		if (tunnel->paths[i]->activated) {
+-			tb_tunnel_WARN(tunnel,
+-				       "trying to activate an already activated tunnel\n");
+-			return -EINVAL;
+-		}
+-	}
+-
+-	return tb_tunnel_restart(tunnel);
+-}
+-
+ /**
+  * tb_tunnel_deactivate() - deactivate a tunnel
+  * @tunnel: Tunnel to deactivate
 diff --git a/drivers/thunderbolt/tunnel.h b/drivers/thunderbolt/tunnel.h
-index 1a27ccd08b86..30c079fd121e 100644
+index 30c079fd121e..3d3ab180cb9b 100644
 --- a/drivers/thunderbolt/tunnel.h
 +++ b/drivers/thunderbolt/tunnel.h
-@@ -26,9 +26,13 @@ enum tb_tunnel_type {
-  *	      tunnels may be %NULL or null adapter port instead.
-  * @paths: All paths required by the tunnel
-  * @npaths: Number of paths in @paths
-- * @init: Optional tunnel specific initialization
-- * @deinit: Optional tunnel specific de-initialization
-+ * @pre_activate: Optional tunnel specific initialization called before
-+ *		  activation. Can touch hardware.
-  * @activate: Optional tunnel specific activation/deactivation
-+ * @post_deactivate: Optional tunnel specific de-initialization called
-+ *		     after deactivation. Can touch hardware.
-+ * @destroy: Optional tunnel specific callback called when the tunnel
-+ *	     memory is being released. Should not touch hardware.
-  * @maximum_bandwidth: Returns maximum possible bandwidth for this tunnel
-  * @allocated_bandwidth: Return how much bandwidth is allocated for the tunnel
-  * @alloc_bandwidth: Change tunnel bandwidth allocation
-@@ -52,9 +56,10 @@ struct tb_tunnel {
- 	struct tb_port *dst_port;
- 	struct tb_path **paths;
- 	size_t npaths;
--	int (*init)(struct tb_tunnel *tunnel);
--	void (*deinit)(struct tb_tunnel *tunnel);
-+	int (*pre_activate)(struct tb_tunnel *tunnel);
- 	int (*activate)(struct tb_tunnel *tunnel, bool activate);
-+	void (*post_deactivate)(struct tb_tunnel *tunnel);
-+	void (*destroy)(struct tb_tunnel *tunnel);
- 	int (*maximum_bandwidth)(struct tb_tunnel *tunnel, int *max_up,
- 				 int *max_down);
- 	int (*allocated_bandwidth)(struct tb_tunnel *tunnel, int *allocated_up,
+@@ -106,7 +106,6 @@ struct tb_tunnel *tb_tunnel_alloc_usb3(struct tb *tb, struct tb_port *up,
+ 
+ void tb_tunnel_free(struct tb_tunnel *tunnel);
+ int tb_tunnel_activate(struct tb_tunnel *tunnel);
+-int tb_tunnel_restart(struct tb_tunnel *tunnel);
+ void tb_tunnel_deactivate(struct tb_tunnel *tunnel);
+ bool tb_tunnel_is_invalid(struct tb_tunnel *tunnel);
+ bool tb_tunnel_port_on_path(const struct tb_tunnel *tunnel,
 -- 
 2.45.2
 
