@@ -1,186 +1,192 @@
-Return-Path: <linux-usb+bounces-18592-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18593-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F4469F4F5B
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 16:25:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D8E79F50A3
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 17:15:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 05D881881567
-	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 15:24:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C52318908FD
+	for <lists+linux-usb@lfdr.de>; Tue, 17 Dec 2024 16:14:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9901B1F707F;
-	Tue, 17 Dec 2024 15:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB271F76D5;
+	Tue, 17 Dec 2024 16:04:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="OneTmK/y"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="b7VdfIIy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F5A148850
-	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 15:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A8311F7545
+	for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 16:04:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734449084; cv=none; b=mknuYv+pVpiIVztKeARXt0boFbm3A/8p1UylcEAUWq+y0De+4v9mnO4IPbjdFX3qdMLgV6YHj/41PSSEoQU5N6WUsqNsbswiZXbD0sipcXr6Tu1HLeJz24WQ/DbxZw/hwFBNzA/1QB6qlIdc4uSKtWDRoOhC3Usd92oML9wFJFk=
+	t=1734451454; cv=none; b=jDO4LQ3XkufhL5PtJZ4TNhxi9cgbCe+xdtN9X+/aa62zJ6S3W9lkS5nD1xj7gc+BbQk0X2Ahb7vYHBRFLtxjGyk0dQzo1zQPHN+Ong+3rT8UW5uL5hM4wUDCirzBX0z49FSomxQ5x27kRAJlNuhz0DBfJiW5jZIzSayvZyFHcgs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734449084; c=relaxed/simple;
-	bh=tJcj122iz7Jx3wrPNt7YdMvOP8Z5lwK8MmU44L9IfCc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SGfZrczDjQinQzf00/NCWKFJfea+7eC34z7h5oenAR9r2GYU2oz27ZZoKn8OAfv7bjw4Y+A4zY0o7ftbjm/Wt+d/wOGBOK0Y++udqJ47stJ5yYemnMbEgRgw1CHHziwWbAQFerLBqQeN4vTO5/+duONiWpWlX9GQVAWI4KeL4/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=OneTmK/y; arc=none smtp.client-ip=209.85.210.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-725ee6f56b4so4768671b3a.3
-        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 07:24:42 -0800 (PST)
+	s=arc-20240116; t=1734451454; c=relaxed/simple;
+	bh=sz4UHzE58a62cxCyjMCcMny04PWq/ObaI70WeR1H6fc=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=apdX0HXu59aoMmS+8PJVt/zwhU8LYCTnxfhgA3RYsC1GQNMWBWpV8jEJWEMdDns63SHadbmuV2XajRM1J3mEwqlpJROFwh13189gxzYldGgtq9Y+8pZCTaHMhLq+HFwSW3MDdF4TMVOR42AYJweYYST8ZyFhf+KgchhUGI4ryys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=b7VdfIIy; arc=none smtp.client-ip=209.85.160.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-468f6b3a439so13222281cf.1
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 08:04:12 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1734449082; x=1735053882; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0H8dpphBiU338zp26XHA6XldVzXKyZfnCcMSHEK5Qec=;
-        b=OneTmK/y2K6ddMDDlHySUYcAaGRDEAP0SRXLvOZttKrlIqYX7pC7iJyEetdm6x0UjK
-         WZcrn0LsbG/h0dbqTJVUC3Dk9DFhg2ZP1hy3IHM+zFwXyxRBIFM7f4RPJoKqLGLKcbdI
-         0OaTgl+4ivxjKr4AfvGo8PRpDgoiHt8NmGlWQ=
+        d=rowland.harvard.edu; s=google; t=1734451451; x=1735056251; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=slfmR4f6JEMR7P5krJ3/zU7vcEz2d/jhP/t5zje24Qg=;
+        b=b7VdfIIyGfVu9RGKdU1dpES3+JTPoQSJpPkxfFtzyIwpPKIrRY3GGKhD26byiqtTfD
+         uksa+t1BPoXFHS2O9M/mVeXMwLnTXITDDX1bCOU7zq+zQ/a1X/FtSyI8ruMYzYitnO/r
+         9EkEHVKBHnC7sx1euH2Vkp2PV+/zRKDnmhUdcKyt8Prn3gmGzNTOF60QLXV/nifEkm/0
+         NWdWbu1RthVB0LlCPqDQ3KOnBN0Lwyv+y09QR0RFqWuEfePvbagdGY2iExvYBdbV/x++
+         yNW1AYwZrqrauod3M/x502iiCFMgeTDywnCoFVvfDZy6iGZd5zpE2kXOZ59vzdRVv4JZ
+         Zdzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734449082; x=1735053882;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1734451451; x=1735056251;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0H8dpphBiU338zp26XHA6XldVzXKyZfnCcMSHEK5Qec=;
-        b=C4Z3ycJb8YWeGGzPQo6JanTefHXnGVJhms5Sd4+n/bjC6ChKDaVVhLLLsznn8yP6qX
-         d++97kYIoMoBOwyv7X4nN49gF47ZArJ2l4wzeihDYi973HMjQVVuEg4zwZDbV9XNUPCl
-         oPf8ehHLwB8ETJXUZxIkmuUhshQicyi1LOhuh5NZufGE+TaY8d0nibPtu7U0z5Kn/WAY
-         aqeW6k0Iv6ASUxPfF2Ms1kdTZttxZqrnvawsNDocfCGRfDO2SJzGFJkjL0p53YrvWr7g
-         3QFU5JQ3RhgEz3+KOJi+TrNUBRXyZ8gfIJuw1jvqkZbTaGMu0qsZ1M84+5a69WV4XsuF
-         F5Dg==
-X-Forwarded-Encrypted: i=1; AJvYcCVdbsUbWXvtgL6GfsFLJtDkbrtlHC2gchD5n6X4onnEcmT9yhNPrbH9PVnKYfJspxsRd+TjlWaJ23Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFGnUCo3tup0XQgh19zycNgZx6FBaL8Jvy2DEjZJ/PAT1JNw7s
-	z8idq7yNEwrJo/DSjo59OcRofLuPrQEnaX6nilct/I113aL7n7DdIsu7acVdzDzQLQPeP2emQsA
-	=
-X-Gm-Gg: ASbGncuJbHmNIOQ7KdFoS8UfdQuhNJYbP1Aa/kIn12tIk6PBj5/5TuesOuchq03kwi1
-	mUO48NixJ/FjyOtAuPuyiOIfIs2Ib+MooZRAlWjt9gugugQZeHB8aqxtn1HBx9yZaJxrI76n0Ya
-	5LVUY5+HRtxfHoj6/zKOkr41tJNJH/GDRhd3SLgMTYlZZaHMvoguhb0ZfytesJkJGGzBWHe1Zir
-	O/ORZw9RIAI0mEuPGmk8jjC3XI83J3Dfoh+UP+dsBmCOcTAr1MEH2qsBp7lKtP6ylyh3EusgsLd
-	w08E/yfdj8ZcBAfkswVmDdo=
-X-Google-Smtp-Source: AGHT+IEZOwvePpLOtKdmg+Z5Wzv84/O7aZ1rZWBJJd8/nX9ESZmTXK8XFvddBVB8auKApw5lEMDzyA==
-X-Received: by 2002:a05:6a21:c92:b0:1e3:e6f3:6372 with SMTP id adf61e73a8af0-1e3e6f36413mr7847093637.27.1734449081671;
-        Tue, 17 Dec 2024 07:24:41 -0800 (PST)
-Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com. [209.85.215.171])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72918bce8d9sm6797368b3a.200.2024.12.17.07.24.39
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Dec 2024 07:24:40 -0800 (PST)
-Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-7fd51285746so3199310a12.3
-        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 07:24:39 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUBC6R+Vb0URkToe+nhgG5MQekGAL9skOy1wMIaJiTDAazpJNNugw6jaBgL8ZEf+GGqXHkxkvQ1EsM=@vger.kernel.org
-X-Received: by 2002:a17:90b:3d4e:b0:2ef:67c2:4030 with SMTP id
- 98e67ed59e1d1-2f28ffa7efamr22923781a91.27.1734449079297; Tue, 17 Dec 2024
- 07:24:39 -0800 (PST)
+        bh=slfmR4f6JEMR7P5krJ3/zU7vcEz2d/jhP/t5zje24Qg=;
+        b=NViyI+X+BG/tAXf+m7YzNjbZ2zcDlx/JII9sxsvrPZ7bxiRfY8U4H7Gx0OStffYweM
+         7q5eib/Mh3h9gd2Cm4DCIVQKU4nsjAfwLConGK6gU8KssknifodxUfrEs6gKw8mccEJl
+         l3BxziQrQitACv0XyoC/+/axVns8ZZ15Od07Zw0v7o8OBYsD2Y6fzh7Wr3QXneM0B6V2
+         oifguUws31WTOsinHSf2yXs9hYKf99lNMYbbRGC6i90ihKaDIu7PA03Jm2bu8X79IIKV
+         61MtL2YSa+MKrRS0y3LAbU+eFoPY3qX8LxQp1axwZxKbWYh3Lzba0XTd546PqnBYRUfT
+         AZIg==
+X-Forwarded-Encrypted: i=1; AJvYcCXKioaFOxKLT2E4QDNd5yPklAJjLehY6qUgSs+7m/Yo3qaSjQnXtGqdWzlqs9sxmZpiBK8pmg39m4g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKhD7NN60g3wvpGCCkTlQZNm/6DTqTKVE5OKpDxH2U9hS9BFjC
+	QigkQ/zuP0pWl8Mcp2Wx62odBz9nHDEugtkr32v2MHGXPLQVSsYDXhMFsQOj1g==
+X-Gm-Gg: ASbGnctAeEPEoJC+AJKMnZD4V+4rRlNErhcsUEavf32lgotn/NMTJBzaE31ifIwdBnQ
+	Pi5ToX1tkZRywLW/gk9fXmAWzrwjYja+ddLbUUM/3VODTyQpyQzonGzGhr5GVK4N8Y3rxF0CQRF
+	SM1E60sRif1XN3vhcnEA622s5SCJkN14fOmttElDf5kRjvj0Z2EMn8VH+YN2D9yaoKulEFYOUxu
+	d3wftk0Az5UpwJTatNe4/AZNZ0IhaNGffB2DSQGpSnTNl3rM2Nkfti4fw==
+X-Google-Smtp-Source: AGHT+IEDstIjPRnOTwY4eR6F8+qvzX9ZxamWJPa3FMKvSfy9PlDwYuMe0lIQPgYqXx+DYILoZ5yE9Q==
+X-Received: by 2002:a05:622a:1a8a:b0:466:ab8f:8972 with SMTP id d75a77b69052e-467a5718bb3mr342033971cf.3.1734451451159;
+        Tue, 17 Dec 2024 08:04:11 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::ba54])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-467b2e8195csm40552301cf.57.2024.12.17.08.04.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2024 08:04:10 -0800 (PST)
+Date: Tue, 17 Dec 2024 11:04:07 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Cc: linux-input@vger.kernel.org,
+	USB mailing list <linux-usb@vger.kernel.org>
+Subject: Re: INFO: rcu detected stall in hub_event
+Message-ID: <fdefac3a-fa4b-4102-9c8a-4ba711beefe3@rowland.harvard.edu>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241212-usb-orientation-v1-1-0b69adf05f37@chromium.org> <20241217145612.GA1652259-robh@kernel.org>
-In-Reply-To: <20241217145612.GA1652259-robh@kernel.org>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Tue, 17 Dec 2024 16:24:27 +0100
-X-Gmail-Original-Message-ID: <CANiDSCu_mFQQVkDb_gSyXeb1_Tu+DxSeHYvGsGp6XVDuOdPyjQ@mail.gmail.com>
-X-Gm-Features: AbW1kvbl1RIFIvxrMQUN76wEj-BZmkCHKRl0SbByJH78c9Yqx7sfn6vg0uVQdIU
-Message-ID: <CANiDSCu_mFQQVkDb_gSyXeb1_Tu+DxSeHYvGsGp6XVDuOdPyjQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: usb-device: Add panel-location
-To: Rob Herring <robh@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Jacopo Mondi <jacopo@jmondi.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ade3bb13-e612-49a6-ace2-bf6eeca93f8e@rowland.harvard.edu>
 
-Hi Rob
+Jiri and Benjamin:
 
-On Tue, 17 Dec 2024 at 16:02, Rob Herring <robh@kernel.org> wrote:
->
-> On Thu, Dec 12, 2024 at 09:44:37PM +0000, Ricardo Ribalda wrote:
-> > For some devices like cameras the system needs to know where they are
-> > mounted.
->
-> Why do you need this and why only this property and not the dozens
-> others ACPI has?
+The syzbot monthly USB report led to this old email message, which was 
+never answered.  The full bug report and email thread are here:
 
-Userspace needs that information to correctly show it in the UI. Eg;
+https://lore.kernel.org/all/000000000000109c040597dc5843@google.com/T/
 
-- User facing camera needs to be mirrored during preview.
-- The user facing camera is selected by default during videoconferences
-- The world facing camera is selected by default when taking a photo
-- User facing camera have different parameter defaults than world facing.
+The bug still has not been fixed, according to syzbot.  Please review 
+this material and let me know whether the patch should be changed or 
+submitted.
 
-Right now, the only camera driver that expose the ACPI location
-information is the IPU from intel
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/pci/intel/ipu-bridge.c#n258
+Thanks,
 
-And they are only using the panel.
+Alan Stern
 
-If we need more information we can consider adding more parameters in
-the future.
-
-
->
+On Mon, Apr 08, 2024 at 12:55:13PM -0400, Alan Stern wrote:
+> Jiri and Benjamin:
+> 
+> Tracking down an old syzbot report from over four years ago (but still 
+> not closed out!) led me to this email thread.  It turned out there were 
+> two separate bugs involved, one of which has since been fixed.  I don't 
+> remember the issues very well, so here's a copy of what I wrote back 
+> then:
+> 
+> On Mon, 09 Dec 2019, Alan Stern wrote:
+> 
+> >  The big problem is that the parser assumes all usages will
+> > belong to a collection.
+> > 
+> > There's also a second, smaller bug: hid_apply_multipler() assumes every
+> > Resolution Multiplier control is associated with a Logical Collection
+> > (i.e., there's no way the routine can ever set multiplier_collection to
+> > NULL) even though there's a big quotation from the HID Usage Table
+> > manual at the start of the function saying that they don't have to be.  
+> > This bug can be fixed easily, though.
+> > 
+> > The first bug is more troublesome.  hid_add_usage() explicitly sets the 
+> > parser->local.collection_index[] entry to 0 if the current collection 
+> > stack is empty.  But there's no way to distinguish this 0 from a 
+> > genuine index value that happens to point to the first collection!
+> > 
+> > So what should happen when a usage appears outside of all collections?  
+> > Is it a bug in the report descriptor (the current code suggests that it 
+> > is not)?
+> > 
+> > Or should we use a different sentinel value for the collection_index[]
+> > entry, one that cannot be confused with a genuine value, such as
+> > UINT_MAX?
+> 
+> Syzbot tested a proposed patch:
+> 
+> On Tue, 26 Nov 2019, syzbot wrote:
+> 
+> > Hello,
 > >
-> > ACPI has a property for this purpose, which is parsed by
-> > acpi_get_physical_device_location():
-> > https://uefi.org/htmlspecs/ACPI_Spec_6_4_html/06_Device_Configuration/Device_Configuration.html#pld-physical-location-of-device
+> > syzbot has tested the proposed patch and the reproducer did not trigger
+> > crash:
 > >
-> > In DT we have similar property for video-interface-devices called
-> > orientation, but it is limited to the requirements of video devices:
-> > Documentation/devicetree/bindings/media/video-interface-devices.yaml
-> >
-> > Add a new property for usb-devices that matches the behavior of
-> > ACPI's _PLD.
-> >
-> > Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
-> > ---
-> >  Documentation/devicetree/bindings/usb/usb-device.yaml | 14 ++++++++++++++
-> >  1 file changed, 14 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/usb-device.yaml b/Documentation/devicetree/bindings/usb/usb-device.yaml
-> > index da890ee60ce6..1ce79c1c3b31 100644
-> > --- a/Documentation/devicetree/bindings/usb/usb-device.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/usb-device.yaml
-> > @@ -42,6 +42,20 @@ properties:
-> >        port to which this device is attached. The range is 1-255.
-> >      maxItems: 1
-> >
-> > +  panel-location:
-> > +    description: Describes which panel surface of the system's housing the USB
-> > +      device resides on. It has the same meaning as the `ACPI`'s `_PLD` Panel
-> > +      object.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum:
-> > +      - 0 # Top.
-> > +      - 1 # Bottom.
-> > +      - 2 # Left.
-> > +      - 3 # Right.
-> > +      - 4 # Front (aka as User Facing).
-> > +      - 5 # Back (aka as World Facing).
-> > +      - 6 # Unknown.
-> > +
-> >    "#address-cells":
-> >      description: should be 1 for hub nodes with device nodes,
-> >        should be 2 for device nodes with interface nodes.
-> >
-> > ---
-> > base-commit: eefa7a9c069908412f8f5d15833901d1b46ae1b2
-> > change-id: 20241212-usb-orientation-8e3717ebb02a
-> >
-> > Best regards,
-> > --
-> > Ricardo Ribalda <ribalda@chromium.org>
-> >
-
-
-
--- 
-Ricardo Ribalda
+> > Reported-and-tested-by:
+> > syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
+> 
+> Here is the patch that syzbot tested:
+> 
+>  drivers/hid/hid-core.c |    5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> Index: usb-devel/drivers/hid/hid-core.c
+> ===================================================================
+> --- usb-devel.orig/drivers/hid/hid-core.c
+> +++ usb-devel/drivers/hid/hid-core.c
+> @@ -1057,6 +1057,8 @@ static void hid_apply_multiplier(struct
+>  	while (multiplier_collection->parent_idx != -1 &&
+>  	       multiplier_collection->type != HID_COLLECTION_LOGICAL)
+>  		multiplier_collection = &hid->collection[multiplier_collection->parent_idx];
+> +	if (multiplier_collection->type != HID_COLLECTION_LOGICAL)
+> +		multiplier_collection = NULL;
+>  
+>  	effective_multiplier = hid_calculate_multiplier(hid, multiplier);
+>  
+> @@ -1191,6 +1193,9 @@ int hid_open_report(struct hid_device *d
+>  	}
+>  	device->collection_size = HID_DEFAULT_NUM_COLLECTIONS;
+>  
+> +	/* Needed for usages before the first collection */
+> +	device->collection[0].parent_idx = -1;
+> +
+>  	ret = -EINVAL;
+>  	while ((start = fetch_item(start, end, &item)) != NULL) {
+>  
+> 
+> The second hunk, addressing the first bug described above, was 
+> implemented in commit ea427a222d8b ("HID: core: Fix deadloop in 
+> hid_apply_multiplier.") in 2023.  But the first hunk, addressing the 
+> second bug, is still outstanding.
+> 
+> You guys undoubtedly understand this code much better than I do.  Is the 
+> first hunk in this patch still required?  Is it a correct fix for 
+> handling Resolution Multiplier controls not associated with any Logical 
+> Collection?
+> 
+> Alan Stern
 
