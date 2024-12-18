@@ -1,132 +1,158 @@
-Return-Path: <linux-usb+bounces-18612-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18613-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E9259F5D61
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 04:24:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2492B9F5E43
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 06:23:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA10716F222
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 03:24:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 03DE4188F946
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 05:23:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB53B14831D;
-	Wed, 18 Dec 2024 03:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A131547FF;
+	Wed, 18 Dec 2024 05:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="iG3Q0RSp"
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="JmVgy3y7";
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="JGATRaXl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79AAE487A5;
-	Wed, 18 Dec 2024 03:24:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AD927726;
+	Wed, 18 Dec 2024 05:23:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734492247; cv=none; b=Iy/L/hc2wi0Tv6JpfWkAsuPcAX6OSxKsjT5Oa4g2WEnjR6LiQ42r8U0l076bf57aaJoA0j6CWXn/P38nL/8+bQcMkWiGBrdqiTIA3zKbcXN9/Bqya/kid2VY0f8h+rcfCGjEJR6mA55eGASuJCj5lEnEPEJKDXw655vUMbywoRI=
+	t=1734499397; cv=none; b=aj9WcUNdZ/sEZEzLEXkt8COJbHfMl2M0tyZ/RhhfMnXX6XXQBO10hS3WsGhVTNwiwB08pqSND2edyVWSpQvGQzlko1qpSlzZVJI85H1ScTDaMR/r1Uy/T0/T7JM7ABzHLl2SVlY5qoPfBmemOO9CZ20P4NH+KDIASGJhKdAuQKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734492247; c=relaxed/simple;
-	bh=AvRPSSADwBzEm4yBmxLiAi1B4o237htlWPyMHKVkTjQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Kjf+r+63BEsEiyKDauuYLnDSnncKb2Rkh+YQ5ayJVnrpOesAa8B5lp/OFze9zh6zsKKWEzOPBzprH8Sk/E5d1RuzpiUo+STehxoOV/pArI+o1FYgGdCL6Gt10X/jx2s1asO59y8PBnM4/ZUJSuK/XcATasPz4z5ZMES+bouWhlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=iG3Q0RSp; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=0lwtQ
-	cBdlxCHdBdfdBkXyYY4Y1WI4OYcIeX78yKZP5c=; b=iG3Q0RSpwxJh9Mb0+ZImJ
-	wFQJ9BUB1PN8mgWC2Pqsr7///+O9Y6Izo7hWoMh1cM3ZGGD71rG+AXb8uu+WuWyp
-	UlGmgxIz5Bcx/6BM3BErNgusevgTap6sn7cYG+tvv3/+n+zVhvnWnSJIM+9k2222
-	zuwcaJIk6MI6dTGAumT6Cc=
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [183.174.60.14])
-	by gzsmtp3 (Coremail) with SMTP id PigvCgDHEp0CQGJnA60VGA--.48780S4;
-	Wed, 18 Dec 2024 11:23:00 +0800 (CST)
-From: Ma Ke <make_ruc2021@163.com>
-To: stern@rowland.harvard.edu
-Cc: christophe.jaillet@wanadoo.fr,
-	gregkh@linuxfoundation.org,
-	javier.carrasco@wolfvision.net,
-	kay.sievers@vrfy.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	make_ruc2021@163.com,
-	mka@chromium.org,
-	oneukum@suse.com,
-	quic_ugoswami@quicinc.com,
-	stable@vger.kernel.org,
-	stanley_chang@realtek.com
-Subject: Re: Re: [PATCH v2] usb: fix reference leak in usb_new_device()
-Date: Wed, 18 Dec 2024 11:22:42 +0800
-Message-Id: <20241218032242.2969330-1-make_ruc2021@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2aae349c-dd80-44da-9715-a214f6946b75@rowland.harvard.edu>
-References: <2aae349c-dd80-44da-9715-a214f6946b75@rowland.harvard.edu>
+	s=arc-20240116; t=1734499397; c=relaxed/simple;
+	bh=JB94LtXCVzGjKZHgG6vWdxASXrY4u4kAZCcTqfbV87Q=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=hAP/AGKqdOMAXvyfFGgeJz6GqwjHaxGJsdObGuGlJaMPOTGtYYvSQGE1+7U1kbGuPb+L/c7Jf202hDJ7MWnxg2qKifQQ7aABNc/D9k8vt5DUyEv9hyefA+LFs+PXSEf9IeUZigdK9Xt2wZDpywNJHJAyIFYa/zfn84EEof7feKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=JmVgy3y7; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=JGATRaXl; arc=none smtp.client-ip=148.163.158.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
+Received: from pps.filterd (m0297265.ppops.net [127.0.0.1])
+	by mx0a-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BHNsmGK026157;
+	Tue, 17 Dec 2024 21:22:45 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
+	cc:date:from:in-reply-to:message-id:references:subject:to; s=
+	pfptdkimsnps; bh=gzleMx6NAEIz9mMvFvK+VMmSCxl4zYzuSRVj+w9d6to=; b=
+	JmVgy3y77+2Trash5ho4xpe6iXODwfatKvSw+fBMCngtdoPI9VL5W0leIiL+rVFL
+	4gE1y6SRfPlkceB58IMFeW22t3kh1wkFhNxXYldZBXfOPRLaOfiYeEdtw3VoZVf8
+	WMqbRCct7Fs2v0VpPE0KlQpSLK60PO5Vp/qQbmnjDDWvcCcDzg6ldkIvNInG3Z6J
+	RD2JYmiptylRJZfs9mdCRAZleYzuX9/dO6gbjaJy9tB/Vhq9nRtmNPBxZDvfJDy0
+	5PXy1nycwxbYccHs10bF8gwY/wVgmiabFqdvPISXtkPuwuLjXRfT6smlIrKDN/GL
+	vd86gi8RTU8hO/ITpCF2kw==
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 43kkcy96ee-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Dec 2024 21:22:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+	t=1734499364; bh=JB94LtXCVzGjKZHgG6vWdxASXrY4u4kAZCcTqfbV87Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=JGATRaXltsB0uFaiI6QF84FGDJeDqLX29/PSPOUJErSCBLeA4euelMXBCZHgFwL4y
+	 H5LAOtQD6MX3J0wRbvEr8SUsKwFH4n9Vn+i0g2gfo1pihy/UOGlPxUTC5F4YU5Ox8G
+	 lIj6P5PX4w2VgYdbpWPlZToIqTMV0XM2tE8VMsJddaQqtzA03prcqsl50eyJbNzitj
+	 jEn59rqg8jvY05d/fFb8NXE2pyvzh5LT1PQ6OZOH0cDQoHb+CzTEYTAA8+O6BhuPat
+	 oLeu56jbT8Ccbpj6Q3D4dVAcHi3VNVyVSELV1uqzGPRc1zKiCgQd8cfurzCcdJJThb
+	 rAq6vLjsVkSAA==
+Received: from mailhost.synopsys.com (eudc-mailhost1.synopsys.com [10.213.161.16])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
+	 client-signature RSA-PSS (2048 bits))
+	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id EB4114024D;
+	Wed, 18 Dec 2024 05:22:42 +0000 (UTC)
+Received: from stormcs515.internal.synopsys.com (stormcs515.eudc.maas.synopsys.com [10.212.40.42])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mailhost.synopsys.com (Postfix) with ESMTPSA id 1950AC1435;
+	Wed, 18 Dec 2024 05:22:41 +0000 (UTC)
+X-SNPS-Relay: synopsys.com
+From: "Miao.Zhu" <Miao.Zhu@synopsys.com>
+To: robh@kernel.org
+Cc: James.Li1@synopsys.com, Jianheng.Zhang@synopsys.com,
+        Martin.McKenny@synopsys.com, Miao.Zhu@synopsys.com,
+        andre.draszik@linaro.org, conor+dt@kernel.org,
+        dan.carpenter@linaro.org, devicetree@vger.kernel.org,
+        emanuele.ghidoli@toradex.com, gregkh@linuxfoundation.org,
+        heikki.krogerus@linux.intel.com, jun.li@nxp.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        m.felsch@pengutronix.de, rdbabiera@google.com,
+        u.kleine-koenig@baylibre.com, xu.yang_2@nxp.com,
+        Miao Zhu <Miao.Zhu@synopsys.com>
+Subject: [PATCH v3 2/2] dt-bindings: usb: ptn5110: add TCPC properties
+Date: Wed, 18 Dec 2024 06:22:14 +0100
+Message-Id: <20241218052214.1808006-1-miao@synopsys.com>
+X-Mailer: git-send-email 2.9.3
+In-Reply-To: <173448855676.4113446.18228420092453259118.robh@kernel.org>
+References: <173448855676.4113446.18228420092453259118.robh@kernel.org>
+X-Proofpoint-ORIG-GUID: qpDN9B0Pd5lHYzkck4ojE3mvdPTZVNe0
+X-Proofpoint-GUID: qpDN9B0Pd5lHYzkck4ojE3mvdPTZVNe0
+X-Authority-Analysis: v=2.4 cv=bt62BFai c=1 sm=1 tr=0 ts=67625c25 cx=c_pps a=t4gDRyhI9k+KZ5gXRQysFQ==:117 a=t4gDRyhI9k+KZ5gXRQysFQ==:17 a=RZcAm9yDv7YA:10 a=qPHU084jO2kA:10 a=jIQo8A4GAAAA:8 a=fJV_grPypyEusMyLlfIA:9 a=Lf5xNeLK5dgiOs8hzIjU:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ bulkscore=0 mlxlogscore=999 adultscore=0 lowpriorityscore=0 spamscore=0
+ mlxscore=0 phishscore=0 suspectscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1015 impostorscore=0 classifier=spam authscore=0 adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412180041
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PigvCgDHEp0CQGJnA60VGA--.48780S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tr4fJrWxArWxCrWxtFy7Wrg_yoW8XF4kpw
-	4Utas5KrWqgr1kKw1DZFy0vryUCw42y34fAr1rC34Y93Zxu34SqFZ5trZ8W34rZrZ3Ca1U
-	tr47Ga95Xr1UXaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUItC7UUUUU=
-X-CM-SenderInfo: 5pdnvshuxfjiisr6il2tof0z/xtbBFR25C2diNgT7+AAAsO
 
-Alan Stern<stern@rowland.harvard.edu> wrote:
-> Ma Ke <make_ruc2021@163.com> writes:
-> > When device_add(&udev->dev) failed, calling put_device() to explicitly
-> > release udev->dev. And the routine which calls usb_new_device() does
-> > not call put_device() when an error occurs.
-> 
-> That is wrong.
-> 
-> usb_new_device() is called by hub_port_connect().  The code does:
-> 
-> 			status = usb_new_device(udev);
-> 			...
-> 
-> 		if (status)
-> 			goto loop_disable;
-> 		...
-> 
-> loop_disable:
-> 		hub_port_disable(hub, port1, 1);
-> loop:
-> 		usb_ep0_reinit(udev);
-> 		release_devnum(udev);
-> 		hub_free_dev(udev);
-> 		if (retry_locked) {
-> 			mutex_unlock(hcd->address0_mutex);
-> 			usb_unlock_port(port_dev);
-> 		}
-> 		usb_put_dev(udev);
-> 
-> And usb_put_dev() is defined in usb.c as:
-> 
-> void usb_put_dev(struct usb_device *dev)
-> {
-> 	if (dev)
-> 		put_device(&dev->dev);
-> }
-> 
-> So you see, if usb_new_device() returns a nonzero value then 
-> put_device() _is_ called.
-> 
-> >  As comment of device_add()
-> > says, 'if device_add() succeeds, you should call device_del() when you
-> > want to get rid of it. If device_add() has not succeeded, use only
-> > put_device() to drop the reference count'.
-> 
-> You are correct that if device_add() succeeds and a later call fails, 
-> then usb_new_device() does not properly call device_del().  Please 
-> rewrite your patch to fix only that problem.
-> 
-> Alan Stern
-Thank you for guiding me on the vulnerability I submitted. I will 
-resubmit the patch based on your guidance and suggestions.
---
-Regards,
+From: Miao Zhu <miao@synopsys.com>
 
-Ma Ke
+The TCPCI driver has flags to configure its protperties but
+no way to enable these flags yet. Add these flags into DT
+so that the driver can be compatible with TCPCI  Spec R2 V1.0.
+
+Signed-off-by: Miao.Zhu <miao@synopsys.com>
+---
+V2 -> V3: Add description and type for new properties:
+---
+ .../devicetree/bindings/usb/nxp,ptn5110.yaml       | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+index 65a8632..29d6aed 100644
+--- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
++++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
+@@ -21,6 +21,28 @@ properties:
+   interrupts:
+     maxItems: 1
+ 
++  TX_BUF_BYTE_x_hidden:
++    description:
++      When set, TX_BUF_BYTE_x can only be accessed through
++      I2C_WRITE_BYTE_COUNT.
++    type: boolean
++
++  RX_BUF_BYTE_x_hidden:
++    description:
++      When set, RX_BUF_BYTE_x can only be accessed through
++      READABLE_BYTE_COUNT.
++    type: boolean
++
++  auto_discharge_disconnect:
++    description:
++      When set, TCPC autonomously discharges vbus on disconnect.
++    type: boolean
++
++  vbus_vsafe0v:
++    description:
++      When set, TCPC can detect whether vbus is at VSAFE0V.
++    type: boolean
++
+   connector:
+     type: object
+     $ref: /schemas/connector/usb-connector.yaml#
+-- 
+2.9.3
 
 
