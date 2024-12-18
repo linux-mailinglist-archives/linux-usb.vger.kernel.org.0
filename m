@@ -1,61 +1,92 @@
-Return-Path: <linux-usb+bounces-18646-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18647-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F77C9F681B
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 15:20:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 39F449F6A41
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 16:42:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D07CD16C77C
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 14:20:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5F841881F2C
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 15:42:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7141A23B6;
-	Wed, 18 Dec 2024 14:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26A61DFD9C;
+	Wed, 18 Dec 2024 15:42:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QCUYdCub"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s6otvW7a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39F635948;
-	Wed, 18 Dec 2024 14:20:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C87119B5B1
+	for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 15:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734531602; cv=none; b=Z+6HuPoYUaRfi84qWT85zCPrsgivGd3GblOmA2t+dtTDIEMg8onBn5yV/dHRIqLrzkVtCNlctW1G6oz3Tmv8+dIi9KuUrA+zyF8klVWPPZ5kSm7FXKlJtmOZpaybe8F8FMf3KG/5LkP0X7GbEadDj1wQTlaSCKsO8BbOjUt803o=
+	t=1734536524; cv=none; b=qK3dWkaFjJt4IhneGDOFGXeVYFIoUK/hLu7Zsz7qMXgxml4U2mMNqKva4RpbH+6C4pN9FmEk/aEV33UDFdLCbhtGqDdvuiShdu6KSV/FXret1Mw3hG5mGm/36JASD8cRtmxxPj6J23+jwOWJhlWRgzBE+6vsXKgcRFUwqnyCNQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734531602; c=relaxed/simple;
-	bh=UsSVhquvmKegmwVZsJ6ZmS/tYmCX/L5FwMWIqR/HyDQ=;
+	s=arc-20240116; t=1734536524; c=relaxed/simple;
+	bh=h+XeExBDgd5gL6dlbTSl87Rvr5eBKUV+3bhND4e9Wto=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aYC26qn2+JuIUbuGbF3SwmMjwYAGuN5/gVvLELw4kfHZu1FDNpFVTp8+oxhnJy2HRxHVohx3EogZalHE/7FRNWZt67CoJ+IfaqZtWD8Rj+RW9hKKZ+J6U1Vbz8ppq1+tXha32+elUGBuUyF33vHcg+mWn+WDzlX/5VmOqij3DEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QCUYdCub; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65B48C4CECD;
-	Wed, 18 Dec 2024 14:20:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734531602;
-	bh=UsSVhquvmKegmwVZsJ6ZmS/tYmCX/L5FwMWIqR/HyDQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QCUYdCubwH3fOyAdR7iYwx3XGYguu2Ecq5LnAJgyKEclrhnETkkZJcc4qlEN5zfDQ
-	 its92BxAIS7RCp0vXA/TLvJJK/7I48kx0zvmjByngHwo+iWb17q7lqJHtZdebBxgWm
-	 6IQDA6PvQVxmIzmZXNjjFzdi0548HcV7IKFsbPA7MAkhm32oceR5yrUp2NyM14eJsG
-	 WPBfJ6JLiEfRGMdAE1VkWsjWNVN7UTX6GiFTYEUoMhHdBdigfhQg7MR4VYRyG+PWor
-	 9hQ3UabjAXKla6LHen4NXjNxieL47uUJYWzr8Ax04KTEviP7J0VyoxuqSgY4GbClFK
-	 xrBTS9QnBLOmg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tNuuE-000000002cf-1fKK;
-	Wed, 18 Dec 2024 15:20:06 +0100
-Date: Wed, 18 Dec 2024 15:20:06 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Lode Willems <me@lodewillems.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] USB: serial: CH341: add hardware flow control
- RTS/CTS
-Message-ID: <Z2LaFv_ZQIikbp6_@hovoldconsulting.com>
-References: <20241113180930.3741-1-me@lodewillems.com>
- <Z12-hZKS83WQ5bYd@hovoldconsulting.com>
- <55c078d2-80de-4eaf-afc3-d470a712bd49@lodewillems.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=LZmxryc66WLtAZ885zg7N5CN7SF8FRkb3Xl5R94VkBGEzGJ4hNsZcuD9iZXLoabG0SxdAqfNq88NX8QSofadSBdfckaSLN0ZjFr6uV7050H+E3HiyegYVqi5lfflEkvGAL0so9R66PcuhGywk/9LazLYegj0cBJcVzKEQjcePS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s6otvW7a; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aa68b513abcso1118728266b.0
+        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 07:42:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734536521; x=1735141321; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=wuPxDvTX7vw6Ikag7mefG62YIQDwW9qirQPmBJpybBg=;
+        b=s6otvW7ajEMZvqOm8Wbm1DtMfm1HmyPqWLKMLh6M6fcjMzB/N8VLp1JVPlwfh7Ku1h
+         /vZgvMC3m33EDT1TQ21KqJ3Q68qNcC9C6TNyWsvooGkoysqkCOUgbqBExVBdvuOiPs8y
+         bhEbYlsJdeb8iMn50dFUmrVSgf950aOGPQ+nK6mss+9ThhxzCawvonLyYxD/eHrZhh+o
+         hwSSoPtTrUSOPAn/5eXt2C6A6j4qHXd+WXKnjV7TMcCwFXi0yMvXRgrmIIdg+OuYWgQj
+         Btm3CMjzrUwwN6e35uz6zeLjoPhbkpbefBKydcLqxun7PcIyKrn73S4az2azTMG0SBj6
+         7S6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734536521; x=1735141321;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wuPxDvTX7vw6Ikag7mefG62YIQDwW9qirQPmBJpybBg=;
+        b=HkoZwVu5omsHwjmfAXzIlrLDWQi8UsrfWdwQ+IJK52SzQuXIUV5RrAeiopWrcz9yks
+         lJdsy+BgAw1Ne2CloeckzzJXS9MStWjEo/d8aV1pel8Ll8sx6n+r9+9IVy/DywnLG5VX
+         WXkniBBX2cpncN/QeZn2Fa/AGDeu85FtX1FOzmjz4SgEWt9B2875mnu8Tozpg/7zVKm3
+         dGWmbq4XbbdtECQZsOddRcD/ATmcKpDSIxYRhXARmfoXmdQNtuq4byJLua+TA/g5FQjn
+         0tVj+t4WkV6v8ase1HRLOhByeJ+yjuGpkbSbJDN0EgOskq2IRVVVcX8jRgfmcjJeMEpN
+         tmWA==
+X-Forwarded-Encrypted: i=1; AJvYcCX1JrwO6t2BWNr7bpLxY4oWdWW4OoZnaQ1T61yJXuJJrzskEROqroinIkroPqV4zXvQAPSIXQVYEWI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfUh7Lm3r1LWG//1gZWEV3fYG/5h1GGHiilSs8ZVmoT4KMOirN
+	VRQTlO1Qb9aqL0uDdJ6wW1jMkKKItiIcrPKezs7BwBpzby2vreiKjwU+ANw6QZk=
+X-Gm-Gg: ASbGnctji8p4+1IQ4RVKqm+fxa/F+zfmHxjAaUp2csChmfGW3wQZLS1xDxuUTMN1BEG
+	XIGYK936JYnsuM2ZZKDo/o2ByTkZXPJHIa94TN5oDJ/ln3SccRUtnc4RIjoJbsYhyZpxOkUgxei
+	KLn0ddbc2+yzjNjQcc6i2vMm7mfJjqFo9+p7Hcyz084x7j9gI4srzUIrDlfQL61ytZXFbvB3wHw
+	AA6GKWz05aPOIwYT72YRspEH4Ay0wJBx0A7GCJ2xJCukoVuxRG8uOkFKCrBRA==
+X-Google-Smtp-Source: AGHT+IGarXmwMkeMqU2NZRVbUAa61OHGnCxtHAVf/FFcAIMSBvhxQ1z7QNQ2Pk8ItpKNlg/4dPjA1Q==
+X-Received: by 2002:a17:907:6e93:b0:aa6:9599:a9af with SMTP id a640c23a62f3a-aabf4907633mr283425566b.53.1734536520682;
+        Wed, 18 Dec 2024 07:42:00 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab9635998csm578833166b.108.2024.12.18.07.41.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2024 07:42:00 -0800 (PST)
+Date: Wed, 18 Dec 2024 18:41:56 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: "Miao.Zhu" <Miao.Zhu@synopsys.com>
+Cc: gregkh@linuxfoundation.org, robh@kernel.org, xu.yang_2@nxp.com,
+	andre.draszik@linaro.org, emanuele.ghidoli@toradex.com,
+	heikki.krogerus@linux.intel.com, m.felsch@pengutronix.de,
+	rdbabiera@google.com, u.kleine-koenig@baylibre.com,
+	conor+dt@kernel.org, jun.li@nxp.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+	Jianheng.Zhang@synopsys.com, James.Li1@synopsys.com,
+	Martin.McKenny@synopsys.com
+Subject: Re: [PATCH v4 1/2] usb: typec: tcpm: tcpci: Make the driver be
+ compatible with the TCPCI spec [Rev 2.0 Ver 1.0, October 2017]
+Message-ID: <9d3ab6fe-f875-493e-935a-976ff1a9cdf1@stanley.mountain>
+References: <20241218085933.2790127-1-miao@synopsys.com>
+ <20241218085933.2790127-2-miao@synopsys.com>
+ <b5e5cd33-2b59-4e93-8acd-379290917e42@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -64,137 +95,74 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <55c078d2-80de-4eaf-afc3-d470a712bd49@lodewillems.com>
+In-Reply-To: <b5e5cd33-2b59-4e93-8acd-379290917e42@stanley.mountain>
 
-On Tue, Dec 17, 2024 at 09:08:23PM +0100, Lode Willems wrote:
-> On 14/12/2024 18:21, Johan Hovold wrote:
-> > On Wed, Nov 13, 2024 at 07:08:27PM +0100, Lode Willems wrote:
-> >> This adds support for enabling and disabling
-> >> RTS/CTS hardware flow control.
-> >> Tested using a CH340E in combination with a CP2102.
-> >>
-> >> Fixes part of the following bug report:
-> >> Link: https://bugzilla.kernel.org/show_bug.cgi?id=197109
-> >>
-> >> Signed-off-by: Lode Willems <me@lodewillems.com>
-> > 
-> > Thanks for the patch and sorry about the late feedback on this one. I
-> > wanted to give it a spin with the devices I have here (ch340g and
-> > ch341a).
+On Wed, Dec 18, 2024 at 12:33:42PM +0300, Dan Carpenter wrote:
+> The subject is too long.  You've sent v2, v3, and v4 today.  Please, wait
+> for a day between resends.
 > 
-> Thanks for the review. Sorry in advance if this e-mail is formatted
-> incorrectly, this is my first time replaying to a review.
-
-Looks all good.
-
-> > Appears to the modem control lines are not wired up on the ch341a
-> > evaluation board I have, but the device accepts the request and stops
-> > transmitting with hardware flow control enabled.
+> On Wed, Dec 18, 2024 at 09:59:32AM +0100, Miao.Zhu wrote:
+> >  static int tcpci_set_pd_rx(struct tcpc_dev *tcpc, bool enable)
+> > @@ -741,33 +748,86 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
+> >  		struct pd_message msg;
+> >  		unsigned int cnt, payload_cnt;
+> >  		u16 header;
+> > +		unsigned int frame_type;
+> > +		enum tcpm_transmit_type rx_type;
+> >  
+> >  		regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
+> >  		/*
+> >  		 * 'cnt' corresponds to READABLE_BYTE_COUNT in section 4.4.14
+> >  		 * of the TCPCI spec [Rev 2.0 Ver 1.0 October 2017] and is
+> >  		 * defined in table 4-36 as one greater than the number of
+> > -		 * bytes received. And that number includes the header. So:
+> > +		 * bytes received. And that number includes the header.
+> > +		 * In Section 4.4.14 of the TCPCI spec [Rev 2.0 Ver 1.0 October, 2017],
+> > +		 * the RECEIVE_BUFFER comprises of three sets of registers:
+> > +		 * READABLE_BYTE_COUNT, RX_BUF_FRAME_TYPE and RX_BUF_BYTE_x.
+> > +		 * These registers can only be accessed by reading at a common
+> > +		 * register address 0x30h.
+> >  		 */
+> > -		if (cnt > 3)
+> > -			payload_cnt = cnt - (1 + sizeof(msg.header));
+> > -		else
+> > -			payload_cnt = 0;
+> > +		if (tcpci->data->RX_BUF_BYTE_x_hidden) {
+> > +			u8 buf[TCPC_RECEIVE_BUFFER_MAX_LEN] = {0,};
+> > +			u8 pos = 0;
+> > +
+> > +			/* Read the count and frame type in RECEIVE_BUFFER */
+> > +			regmap_raw_read(tcpci->regmap, TCPC_RX_BYTE_CNT, buf, 2);
+> > +			/* READABLE_BYTE_COUNT */
+> > +			cnt = buf[0];
+> > +			/* RX_BUF_FRAME_TYPE */
+> > +			frame_type = buf[1];
+> > +
+> > +			/* Read the content of the USB PD message in RECEIVE_BUFFER */
+> > +			regmap_raw_read(tcpci->regmap, TCPC_RX_BYTE_CNT, buf, cnt + 1);
+>                                                                          ^^^
+> buffer overflow?
 > 
-> Since creating this patch I've acquired a ch341a breakout board and can
-> confirm that it transmits with hardware flow control enabled and CTS
-> asserted.
-
-Thanks for checking.
-
-> > With ch340g in loopback, I also see it refuse to transmit unless cts is
-> > asserted. I was not able to get the device to deassert rts when
-> > attempting to fill its receive buffers, however. Perhaps the hardware
-> > does not support this, but is this something you tried?
+> > +
+> > +			pos += 2;
+> > +			memcpy(&msg.header, &buf[pos], sizeof(msg.header));
+> > +
+> > +			if (cnt > 3) {
+> > +				pos += sizeof(msg.header);
+> > +				payload_cnt = cnt - (1 + sizeof(msg.header));
+> > +				if (WARN_ON(payload_cnt > sizeof(msg.payload)))
+> > +					payload_cnt = sizeof(msg.payload);
+> > +				memcpy(&msg.payload, &buf[pos], payload_cnt);
 > 
-> I didn't try this before. Just trying a couple of things now I also
-> couldn't seem to make it deassert RTS, but this may be a failure of
-> how I'm testing this.
-
-Or it's a limitation of the hardware (e.g. it really only support
-auto-cts). I patched the driver to not submit any read urbs, which
-should eventually fill up the receive buffers.
-
-> >> +#define CH341_FLOW_CTL_NONE    0x000
-> >> +#define CH341_FLOW_CTL_RTSCTS  0x101
-> > 
-> > The registers are eight bits wide, but the driver writes two at a time.
-> > So this should just be 0x00 and 0x01.
+> There is existing code later which does bounds checking on payload_cnt,
+> but it's too late.  We would have already overflowed buf[] and
+> msg.payload here.
 > 
-> Ok. I'm guessing I don't have to send the same request twice and can
-> just leave the top eight bits of the value and index empty?
-> It seems to work in the quick testing I've done.
 
-Possibly, but writing the same register twice is what the vendor driver
-is doing here (e.g. otherwise you may actually write to offset 0 as
-well).
- 
-> >> +static void ch341_set_flow_control(struct tty_struct *tty,
-> >> +				   struct usb_serial_port *port,
-> >> +				   const struct ktermios *old_termios)
-> >> +{
-> >> +	int r;
-> >> +
-> >> +	if (old_termios &&
-> >> +	    C_CRTSCTS(tty) == (old_termios->c_cflag & CRTSCTS))
-> >> +		return;
-> > 
-> > Just drop this and set the requested setting unconditionally.
-> 
-> Ok
-> 
-> > 
-> >> +
-> >> +	if (C_CRTSCTS(tty)) {
-> >> +		r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
-> >> +				      CH341_REG_FLOW_CTL |
-> >> +				      ((u16)CH341_REG_FLOW_CTL << 8),
-> >> +				      CH341_FLOW_CTL_RTSCTS);
-> >> +		if (r < 0) {
-> >> +			dev_err(&port->dev,
-> >> +				"%s - failed to enable flow control: %d\n",
-> >> +				__func__, r);
-> >> +			tty->termios.c_cflag &= ~CRTSCTS;
-> >> +		}
-> >> +	} else {
-> >> +		r = ch341_control_out(port->serial->dev, CH341_REQ_WRITE_REG,
-> >> +				      CH341_REG_FLOW_CTL |
-> >> +				      ((u16)CH341_REG_FLOW_CTL << 8),
-> >> +				      CH341_FLOW_CTL_NONE);
-> >> +		if (r < 0) {
-> >> +			dev_err(&port->dev,
-> >> +				"%s - failed to disable flow control: %d\n",
-> >> +				__func__, r);
-> >> +			tty->termios.c_cflag |= CRTSCTS;
-> >> +		}
-> >> +	}
-> > 
-> > Please rewrite this so that you prepare the value and index parameters
-> > based on the termios settings and then do one control request. If it
-> > fails you can restore the old setting (if old_termios is non-NULL).
-> 
-> Ok, I haven't seen any other driver restore the old setting on request
-> failure, now I'm questioning if it's actually necessary?
+This line is obviously fine.  It's only buf[] earlier from regmap_raw_read()
+I'm worried about.
 
-Not all drivers do, but it is the right thing to do as that's the only
-way we have to report failure to change a setting.
+regards,
+dan carpenter
 
-> If it is, I'll change it to the following:
-> 	tty->termios.c_cflag = (tty->termios.c_cflag & !CRTSCTS)
-
-You meant bitwise negation here (~) as you used above.
-
-> 		| (old_termios->c_cflag & CRTSCTS);
-
-But remember to only do this if old_termios is non-NULL.
-
-Might be cleaner as two separate statements (&= and |=).
-
-> > And please drop the redundant __func__ from the error message (even if
-> > the driver still uses it in some other functions still).
-> 
-> Ok. Looking at the code again, the error already gets logged in
-> ch341_control_out on failure. Maybe this log line shouldn't be added?
-
-Yeah, I guess that's more in line with what the driver is currently
-doing. We could always amend those printk to include index and value to
-make it easier to figure out which call is failing if this becomes an
-issue.
-
-Johan
 
