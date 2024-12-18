@@ -1,138 +1,159 @@
-Return-Path: <linux-usb+bounces-18604-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18606-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD1219F5C12
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 02:08:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 031889F5C25
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 02:17:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 782B01885F0E
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 01:08:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FB6016586D
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 01:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47F7535970;
-	Wed, 18 Dec 2024 01:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97233595E;
+	Wed, 18 Dec 2024 01:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="lqIzR60r";
-	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="MwV86SjJ"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Y0cVCCjy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-00230701.pphosted.com (mx0a-00230701.pphosted.com [148.163.156.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD441442F;
-	Wed, 18 Dec 2024 01:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95DFF35952
+	for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 01:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734484094; cv=none; b=Alzrvd0Ps4bBxl1CdwrKNzn4OWQ3DRtdxDqJDcMWYTb4ezZqCYUG7d6Nb73cMFcSFGWzjueSKPCJUBrHeHH1b4dI+McNjBAMy9l4kScXEp2GK/zFOphulmH3t2umQ/Ge1mbW99kjHjMeNpJ0YVC0hRa29yxrVbmXEGiIUZ/yabs=
+	t=1734484615; cv=none; b=E/0VjpoKJUtinM1J3F5VLnH4sX2UkvtIA6OV/CvWrWVnp4f1BjJUkQo3MBKvPRpFZq8hsazswdtwOa5+bt7O7ZkTz+Qxq4kmXPezhoXLIbtnka6SA0STm4Hyfr3HDuAAE+ah8EJs1q4hPmr0aq1nRiMOI9Io3GB/w1otdutlHW4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734484094; c=relaxed/simple;
-	bh=YV2GDi6HJB/xXpGXbNKMNNL+e4m9QAPcbZ/DUUOjOp8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=g1dlNhoVVuRWtB8I9xYSGNciWEnTqxbnfNqh7VF/nAboQVY8mcnERn7TYp+8NY9jsxDHvz0NeM2aCEabNx7pSYbnXlFY/1lcQ8zRR4lwwBfeN+MVs8xQ0S/QFnTwO2JCGqhDSvxpZrGJQyeAUDH13QvQ193bGqOql8mcqRfHz9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=lqIzR60r; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=MwV86SjJ; arc=none smtp.client-ip=148.163.156.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
-Received: from pps.filterd (m0098571.ppops.net [127.0.0.1])
-	by mx0a-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BHNKqaO029637;
-	Tue, 17 Dec 2024 17:07:56 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
-	cc:date:from:in-reply-to:message-id:references:subject:to; s=
-	pfptdkimsnps; bh=2OvxhAx6uTU0jpi85RJHOBV3hyVzEH7LFoXF3t1oIAs=; b=
-	lqIzR60rsBwd7Q4G2Nyq/LEtciUbNicG9eeL3/c/sBAEKkXO343D+aJ9oSAAVHoU
-	jPU9FbGUizwJDwzf5ZVhPftqd9tVSgcJWBIm/UsF0B9kC50FSBAb6iVfagpxJLEC
-	U8xG6Sx/rPkl2+r9CJeWjmlthzgPnK25S41GTWD+PMJ6MNZqtk+E9zetDgV6WEb1
-	V+lPolwhqhs+pXmIwhe2aDjVUFMEWzaPYtECQhBWcoJwfnnJDXq9HO4nuMAoMxDm
-	MSiTasYwtnF7Cz24iRaW37yxTYIJqFVegoQ/L/jCb1sBCNBMVixzZfLDbRzB5WdE
-	zY0qf9D2tGJ+nrEMIA2C3w==
-Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.73.133])
-	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 43kjw20bwm-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 17 Dec 2024 17:07:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
-	t=1734484075; bh=YV2GDi6HJB/xXpGXbNKMNNL+e4m9QAPcbZ/DUUOjOp8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MwV86SjJJoxlb05CGZYwbQYUG0xBByUhx28pvEBHcNo4G1UlpRKB5BXoPRbBkQHY/
-	 17JzL+GxTGD9yJxRiWXMz3hT7HMatviHL7KuthU2twY7UfwcoC+2I9uQOMr+KcyRiG
-	 DXRROjX5C9DPgaZb0qzGhKxtZ3W44oTsRAxuFQNUOqibKowZuQOk7KcjwhBSLrsLXm
-	 0O/me2rd3OEqvpmU3Q/13lcW83HZqFhDhryA8rknkPq5yv1wtxR4ughezlMlNr8URo
-	 fbqxZWGvbWjs3a++OlgF0E+/ge1eUHd8GYXKktQXoBxBg2HXoSlzJkkwFAz+38cyeB
-	 fY0QSJ/2DwS5w==
-Received: from mailhost.synopsys.com (eudc-mailhost2.synopsys.com [10.213.161.17])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
-	 client-signature RSA-PSS (2048 bits))
-	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
-	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 07F69401F2;
-	Wed, 18 Dec 2024 01:07:53 +0000 (UTC)
-Received: from stormcs515.internal.synopsys.com (stormcs515.eudc.maas.synopsys.com [10.212.40.42])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by mailhost.synopsys.com (Postfix) with ESMTPSA id 5C7FCC0F8E;
-	Wed, 18 Dec 2024 01:07:52 +0000 (UTC)
-X-SNPS-Relay: synopsys.com
-From: "Miao.Zhu" <Miao.Zhu@synopsys.com>
-To: gregkh@linuxfoundation.org, robh@kernel.org, xu.yang_2@nxp.com,
-        andre.draszik@linaro.org, dan.carpenter@linaro.org,
-        emanuele.ghidoli@toradex.com, heikki.krogerus@linux.intel.com,
-        m.felsch@pengutronix.de, rdbabiera@google.com,
-        u.kleine-koenig@baylibre.com, conor+dt@kernel.org, jun.li@nxp.com
-Cc: "Miao.Zhu" <Miao.Zhu@synopsys.com>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-        Jianheng.Zhang@synopsys.com, James.Li1@synopsys.com,
-        Martin.McKenny@synopsys.com
-Subject: [PATCH v2 2/2] dt-bindings: usb: ptn5110: add TCPC properties
-Date: Wed, 18 Dec 2024 02:07:18 +0100
-Message-Id: <20241218010718.224530-3-miao@synopsys.com>
-X-Mailer: git-send-email 2.9.3
-In-Reply-To: <20241218010718.224530-1-miao@synopsys.com>
-References: <20241202054314.k6dt7uhnv2kavea4@hippo>
- <20241218010718.224530-1-miao@synopsys.com>
-X-Proofpoint-GUID: 5z2rQroU2U8VVCPzUiqKbvjhj5k2h7BY
-X-Authority-Analysis: v=2.4 cv=HYHuTjE8 c=1 sm=1 tr=0 ts=6762206b cx=c_pps a=8EbXvwLXkpGsT4ql/pYRAw==:117 a=8EbXvwLXkpGsT4ql/pYRAw==:17 a=RZcAm9yDv7YA:10 a=qPHU084jO2kA:10 a=jIQo8A4GAAAA:8 a=Vg_MG39u6yjrUJLUqe0A:9 a=Lf5xNeLK5dgiOs8hzIjU:22
-X-Proofpoint-ORIG-GUID: 5z2rQroU2U8VVCPzUiqKbvjhj5k2h7BY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
- mlxlogscore=989 malwarescore=0 spamscore=0 mlxscore=0 suspectscore=0
- bulkscore=0 adultscore=0 impostorscore=0 clxscore=1011 phishscore=0
- lowpriorityscore=0 priorityscore=1501 classifier=spam authscore=0 adjust=0
- reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412180005
+	s=arc-20240116; t=1734484615; c=relaxed/simple;
+	bh=aJ+jKfs8vOkx5Gsw61RenhEFgwAHCYAz6byzGMuMsmg=;
+	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=e5enVoLU604RF+Xu6uzR+wAVA4lkd5/ouJdLj3zvYQb5n6ZWc7YD7DGe7IuBLwWugqsLYDKeSPwlw1KDizb913VTZNSZNsL4fafGUp70DBUepR36ZXKiKmfY4DLf7pXYYA4oj/J29xI0gJAEZCQyKNn3JblgbzMZnZq4ZI8JFd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Y0cVCCjy; arc=none smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-46772a0f85bso52058101cf.3
+        for <linux-usb@vger.kernel.org>; Tue, 17 Dec 2024 17:16:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1734484612; x=1735089412; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pceT12MgPX5LYeNYoGKuH+9kRM2/umAtaQqiUzTvSW0=;
+        b=Y0cVCCjyI0Er8qVyWY9Uvv42kEWVuOKElmqtq3ao7qfx21d7RvCCq6FT27Jnx3eOZA
+         t1Pbx9zyXcx4HrcHusPQoInIpA7SypJ8u09OswM+zdk3jHhTSJoYNnTh8pYxPHbdwfu8
+         MsC7fbQfrAwn+5x4kzOaiLjY+HF6nC9htPrqI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734484612; x=1735089412;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pceT12MgPX5LYeNYoGKuH+9kRM2/umAtaQqiUzTvSW0=;
+        b=Ldt7o2WHauXGLoCzRGrEQ0syYacK1jKJgoVpuDYYtxIYc+lsM76LMbhDFyxcAP99z6
+         Omo00mlR7fSG4pkwqSZTK2/e5jDgA8KMu3eFqDsvkKEwlG8BlqTGwF1m9gBzgpywO/Cj
+         vd7t4Enuq0NEcXjbORrKkYyFhkW0c/TVUQQB3EzbwdpeWKKjGfF3yWA9/20kn1gN8Cuw
+         GdrsNTNEuYyd0QVzVQbOsrIhsdi/Mk5eZ8v53BlCUSIRlKNXJeVQMTJFBDdgd6wTRC1n
+         Qo3nNeoUG32h+/UC6KwRAEBUTgbO7g1rGaX4s5Fp0U8pg2FDiEfYjtPioYk3jS2amMmj
+         quOw==
+X-Forwarded-Encrypted: i=1; AJvYcCWpgS6HljFWGe2rgy3dP8gY50F/n+sK7e3wersP/lWNponMNlx/eBCkxMCmVnhoRFi7aFWEYbZJ2fE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxW2ucXRd2dUA0WvK3LbLZUxgK7le+vlOetJiSAhbTfCJPXHOMj
+	/f7X3oatE8hdvamznB4hf9oXSzBI+p9Eee+lz7KC/IudM6rWIwUSuiGjr0NzThAwNX55rWFh969
+	4kitfmQqkLmdclTMkJA5Q1Jdh7GLp8/SfTgQH
+X-Gm-Gg: ASbGnctt/dQjgUHNShp/7klCOhX105f579BojOPfzH74Enbgwtdf1h/4WgSjWdjL6OC
+	LPmkEjFNvEnVxp6dgo26X/ZTQgSzkWYLGIgr3Of8Pz+IHHXTGXf9DTQIk1nsfsH44aw==
+X-Google-Smtp-Source: AGHT+IH0sag0Q8DdRb4YIYS5LquPPnmmZcz9FS1OqVkQ8B6udk4bdQhF22/vJ82rq6mCziYWZgvqWq+BtlhyvIOSsmY=
+X-Received: by 2002:ac8:7c4d:0:b0:467:8378:9e8 with SMTP id
+ d75a77b69052e-46908de32d9mr17129991cf.17.1734484612535; Tue, 17 Dec 2024
+ 17:16:52 -0800 (PST)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 17 Dec 2024 20:16:52 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+In-Reply-To: <20241213153543.v5.6.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
+References: <20241213233552.451927-1-abhishekpandit@chromium.org> <20241213153543.v5.6.I142fc0c09df58689b98f0cebf1c5e48b9d4fa800@changeid>
+From: Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Date: Tue, 17 Dec 2024 20:16:52 -0500
+Message-ID: <CAE-0n52Y-t0TEuGS25GQsctCLC8FTm6A5tfQb3XLbwh2G5W_MA@mail.gmail.com>
+Subject: Re: [PATCH v5 6/8] platform/chrome: cros_ec_typec: Displayport support
+To: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, chrome-platform@lists.linux.dev, 
+	heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org, 
+	tzungbi@kernel.org
+Cc: akuchynski@google.com, pmalani@chromium.org, badhri@google.com, 
+	rdbabiera@google.com, dmitry.baryshkov@linaro.org, jthies@google.com, 
+	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-The TCPCI driver has flags to configure its protperties but
-no way to enable these flags yet. Add these flags into DT
-so that the driver can be compatible with TCPCI  Spec R2 V1.0.
+Quoting Abhishek Pandit-Subedi (2024-12-13 15:35:47)
+> diff --git a/drivers/platform/chrome/Makefile b/drivers/platform/chrome/Makefile
+> index fb8335458a22..1a5a484563cc 100644
+> --- a/drivers/platform/chrome/Makefile
+> +++ b/drivers/platform/chrome/Makefile
+> @@ -19,7 +19,11 @@ obj-$(CONFIG_CROS_EC_SPI)            += cros_ec_spi.o
+>  obj-$(CONFIG_CROS_EC_UART)             += cros_ec_uart.o
+>  cros_ec_lpcs-objs                      := cros_ec_lpc.o cros_ec_lpc_mec.o
+>  cros-ec-typec-objs                     := cros_ec_typec.o cros_typec_vdm.o
+> +ifneq ($(CONFIG_CROS_EC_TYPEC_ALTMODES),)
+> +       cros-ec-typec-objs              += cros_typec_altmode.o
+> +endif
 
-Signed-off-by: Miao.Zhu <miao@synopsys.com>
----
-V1 -> V2: no changes
----
- Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+Can this be simplified by collapsing the config in because it is a bool?
 
-diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-index 65a8632..c31ec7e 100644
---- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-+++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-@@ -21,6 +21,11 @@ properties:
-   interrupts:
-     maxItems: 1
- 
-+  TX_BUF_BYTE_x_hidden: true
-+  RX_BUF_BYTE_x_hidden: true
-+  auto_discharge_disconnect: true
-+  vbus_vsafe0v: true
-+
-   connector:
-     type: object
-     $ref: /schemas/connector/usb-connector.yaml#
--- 
-2.9.3
+	cros-ec-typec-y					:= cros_ec_typec.o cros_typec_vdm.o
+	cros-ec-typec-$(CONFIG_CROS_EC_TYPEC_ALTMODES)	+= cros_typec_altmode.o
 
+>  obj-$(CONFIG_CROS_EC_TYPEC)            += cros-ec-typec.o
+> +
+>  obj-$(CONFIG_CROS_EC_LPC)              += cros_ec_lpcs.o
+>  obj-$(CONFIG_CROS_EC_PROTO)            += cros_ec_proto.o cros_ec_trace.o
+>  obj-$(CONFIG_CROS_KBD_LED_BACKLIGHT)   += cros_kbd_led_backlight.o
+> diff --git a/drivers/platform/chrome/cros_typec_altmode.c b/drivers/platform/chrome/cros_typec_altmode.c
+> new file mode 100644
+> index 000000000000..6e736168ccc3
+> --- /dev/null
+> +++ b/drivers/platform/chrome/cros_typec_altmode.c
+> @@ -0,0 +1,285 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Alt-mode implementation on ChromeOS EC.
+> + *
+> + * Copyright 2024 Google LLC
+> + * Author: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> + */
+> +#include "cros_ec_typec.h"
+
+Please include this after linux headers.
+
+> +
+> +#include <linux/mutex.h>
+> +#include <linux/workqueue.h>
+> +#include <linux/usb/typec_dp.h>
+> +#include <linux/usb/pd_vdo.h>
+> +
+> +#include "cros_typec_altmode.h"
+> +
+
+[...]
+> +
+> +static int cros_typec_displayport_vdm(struct typec_altmode *alt, u32 header,
+> +                                     const u32 *data, int count)
+> +{
+> +       struct cros_typec_dp_data *dp_data = typec_altmode_get_drvdata(alt);
+> +       struct cros_typec_altmode_data *adata = &dp_data->adata;
+> +
+> +
+
+Nitpick: Remove extra newlines.
+
+> +       int cmd_type = PD_VDO_CMDT(header);
+> +       int cmd = PD_VDO_CMD(header);
+> +       int svdm_version;
+> +
+> +       svdm_version = typec_altmode_get_svdm_version(alt);
+> +       if (svdm_version < 0)
+> +               return svdm_version;
+> +
 
