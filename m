@@ -1,150 +1,201 @@
-Return-Path: <linux-usb+bounces-18656-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18657-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E2369F6C64
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 18:37:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 08A549F6CA9
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 18:50:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE017169060
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 17:37:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6986170C9F
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 17:49:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E8311FA8D8;
-	Wed, 18 Dec 2024 17:36:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED081FA82B;
+	Wed, 18 Dec 2024 17:49:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lodewillems.com header.i=@lodewillems.com header.b="MSBI0u/V"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GLHJYPU1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CCBC153BF7;
-	Wed, 18 Dec 2024 17:36:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD192142624;
+	Wed, 18 Dec 2024 17:49:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734543417; cv=none; b=PE8T49ExXnLHDoGaTOqCO8M14Ehc+q04oCaHXHYZBQ51O1m//mO82oXqY/KD7KM8qldvMJ5Apbp9I/7cx18tJEXszaoQ+uaqIksFZRxDvX5MLNkXCT9zdsoVs36jlFKnzko6THskilM6nHiefDZv+iKfarh2KGqo8tOaZoWdGlI=
+	t=1734544173; cv=none; b=lerEairuMBEem6lFuao9CYPVpeoyVNMO9cFtMpfLrF+Eg74OpP86/Eof38SKEIRHTFVvO4bZb6Nrqy9Xsb/KtiC71YO3gEcZEidK4IvmZUjet3Sp5vSDDyu3uq7dyjpGKQl6HBhNd33NBZ0eI0AqqG9I4yVREI+oImqr0Y7VT/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734543417; c=relaxed/simple;
-	bh=+xdIeD+NVU++6kXkYUXE6kSZEzB3OKK/7vpuCq3ViU8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RmjrOUZ4gzejaRXAa1QWDD7YFhe2aH0EyAs0FWgtXbpK1/Z6mJPhlSWRuh2Ru4V8sDYD3zhPJGOFRtPeLi778nmNcE0TCGhGSn+kuFG5Vbktmd26R0rrVbAASSnV7GIabQt2/HPGrYfcLFMFgweEmDmGiPpyY1Gl8HwMHhNL+M8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lodewillems.com; spf=pass smtp.mailfrom=lodewillems.com; dkim=pass (2048-bit key) header.d=lodewillems.com header.i=@lodewillems.com header.b=MSBI0u/V; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lodewillems.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lodewillems.com
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [IPv6:2001:67c:2050:b231:465::102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4YD17x0qlCz9t00;
-	Wed, 18 Dec 2024 18:36:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lodewillems.com;
-	s=MBO0001; t=1734543405;
+	s=arc-20240116; t=1734544173; c=relaxed/simple;
+	bh=3h4Ad1zi9pBnCC+DUbnbrCJ+TPvXSJ2baWPf5dKb5pw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
+	 References:In-Reply-To; b=dYFJr9y877gWscaUICPwodODuil+VDMowl8DBIfhpZ5J0L3qBjy1etw15JD5b23ZkUMzYQNqyAKmts966S/smibbhdVRa9EzwlDhWrUaDKUlxpUs+WduHgG68TEUWhj0p8J6JD3Xwrx7CjaRuEmYI/yGs+nkU89AljuNGAsJjhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GLHJYPU1; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 82DD2E0002;
+	Wed, 18 Dec 2024 17:49:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1734544152;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=6TZboJLzCLEyQkE1qCAlqpx+rXuN+caXrOTcAeOcuPY=;
-	b=MSBI0u/Vdtr/U1VgyFw9/NERcpRZNMuOSU1JdvjHqKYx3zcLe6gLDHHXFYU9CXSrNEN05o
-	hY1BZsPi3p0wjZSa2vHpwg6oIXpkvLcWZJTa6rHUziCGVKwXQrFpuhGCOGCmYBgn0O6vOh
-	9szBBWFd/DMy2A3gVIEbUQ3InPx3ZwPbnN976LkqB0Dw5im6pGnywpT4+7eWG8rFOqUCU9
-	6dz/DwY3T8c8zuh9jtSCBKqZzZ80H1eIwU9ZQ/THEjwOwe2AOEPEgi2ioF6p/Awnwui/is
-	v/oubLtYiRsu6Ttvf45UjUX1iuYWqn4caukfjKBlD3hOiNa4dAMIpGW1ZdX80Q==
-From: Lode Willems <me@lodewillems.com>
-To: Johan Hovold <johan@kernel.org>
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lode Willems <me@lodewillems.com>
-Subject: [PATCH v2] USB: serial: CH341: add hardware flow control RTS/CTS
-Date: Wed, 18 Dec 2024 18:25:05 +0100
-Message-ID: <20241218173611.10307-1-me@lodewillems.com>
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bFgH0z7MZ2T4yjGhodRY50UP6dCNtWf6TRL9SJPWYrQ=;
+	b=GLHJYPU12KCDAXahwPpMXLPJA+SzouR/uXILlEEUGZixqWUGens426k1N76CezX3YQsYmz
+	GLKRfk6s54GVNGSlHxDryu3TZ6ygcDF/wzF/1QdmC2lBBYIugoyj8FJ7EVQmuDpbHPC2rD
+	ZPlXRdNSmNEteWrYgWv1CK5v23tW2FD0hoSqfIr6Hd0KwButVT0lLSBvmUtWSYdPGYrpBK
+	DBPJ065WWDsUsEOJ11MLfObvwLgDZ5Fpu7dH9zSj5hTwoKcqmZ0gRA5Jjz9lEKXN8Gt2S+
+	myLG4ZIrKrQFIClVL1HgWnfKGEL9ZRE0SUhi6zH0EaDF+OELyIY5qgwBto39oA==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 4YD17x0qlCz9t00
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 18 Dec 2024 18:49:11 +0100
+Message-Id: <D6F0L2L02YIS.3D2DW1P7691L4@bootlin.com>
+To: "Roger Quadros" <rogerq@kernel.org>, "Peter Chen"
+ <peter.chen@kernel.org>, "Pawel Laszczak" <pawell@cadence.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Mathias Nyman"
+ <mathias.nyman@intel.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v6 4/5] xhci: introduce xhci->lost_power flag
+Cc: =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, <linux-usb@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
+ <20241210-s2r-cdns-v6-4-28a17f9715a2@bootlin.com>
+ <70aced7f-0311-43b9-96af-c8325c39ff2b@kernel.org>
+ <D6AP7JCNSME9.3FS7XCZJ37GM8@bootlin.com>
+ <ed77988a-ba26-4a71-a8cf-b1e5a6425a2e@kernel.org>
+In-Reply-To: <ed77988a-ba26-4a71-a8cf-b1e5a6425a2e@kernel.org>
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-This adds support for enabling and disabling
-RTS/CTS hardware flow control.
-Tested using CH341A and CH340E.
+Hello Roger, Peter, Pawel, Greg, Mathias,
 
-Fixes part of the following bug report:
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=197109
+On Tue Dec 17, 2024 at 10:00 PM CET, Roger Quadros wrote:
+>
+>
+> On 13/12/2024 18:03, Th=C3=A9o Lebrun wrote:
+> > On Thu Dec 12, 2024 at 1:37 PM CET, Roger Quadros wrote:
+> >> On 10/12/2024 19:13, Th=C3=A9o Lebrun wrote:
+> >>> The XHCI_RESET_ON_RESUME quirk allows wrappers to signal that they
+> >>> expect a reset after resume. It is also used by some to enforce a XHC=
+I
+> >>> reset on resume (see needs-reset-on-resume DT prop).
+> >>>
+> >>> Some wrappers are unsure beforehands if they will reset. Add a mechan=
+ism
+> >>> to signal *at resume* if power has been lost. Parent devices can set
+> >>> this flag, that defaults to false.
+> >>>
+> >>> The XHCI_RESET_ON_RESUME quirk still triggers a runtime_pm_get() on t=
+he
+> >>> controller. This is required as we do not know if a suspend will
+> >>> trigger a reset, so the best guess is to avoid runtime PM.
+> >>>
+> >>> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> >>> ---
+> >>>  drivers/usb/host/xhci.c | 3 ++-
+> >>>  drivers/usb/host/xhci.h | 6 ++++++
+> >>>  2 files changed, 8 insertions(+), 1 deletion(-)
+> >>>
+> >>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+> >>> index 5ebde8cae4fc44cdb997b0f61314e309bda56c0d..ae2c8daa206a87da24d58=
+a62b0a0485ebf68cdd6 100644
+> >>> --- a/drivers/usb/host/xhci.c
+> >>> +++ b/drivers/usb/host/xhci.c
+> >>> @@ -1017,7 +1017,8 @@ int xhci_resume(struct xhci_hcd *xhci, pm_messa=
+ge_t msg)
+> >>> =20
+> >>>  	spin_lock_irq(&xhci->lock);
+> >>> =20
+> >>> -	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->brok=
+en_suspend)
+> >>> +	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME ||
+> >>> +	    xhci->broken_suspend || xhci->lost_power)
+> >>>  		reinit_xhc =3D true;
+> >>> =20
+> >>>  	if (!reinit_xhc) {
+> >>> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+> >>> index 4914f0a10cff42dbc1448dcf7908534d582c848e..32526df75925989d40cbe=
+7d59a187c945f498a30 100644
+> >>> --- a/drivers/usb/host/xhci.h
+> >>> +++ b/drivers/usb/host/xhci.h
+> >>> @@ -1645,6 +1645,12 @@ struct xhci_hcd {
+> >>>  	unsigned		broken_suspend:1;
+> >>>  	/* Indicates that omitting hcd is supported if root hub has no port=
+s */
+> >>>  	unsigned		allow_single_roothub:1;
+> >>> +	/*
+> >>> +	 * Signal from upper stacks that we lost power during system-wide
+> >>> +	 * suspend. Its default value is based on XHCI_RESET_ON_RESUME, mea=
+ning
+> >>> +	 * it is safe for wrappers to not modify lost_power at resume.
+> >>> +	 */
+> >>> +	unsigned                lost_power:1;
+> >>
+> >> I suppose this is private to XHCI driver and not legitimate to be acce=
+ssed
+> >> by another driver after HCD is instantiated?
+> >=20
+> > Yes it is private.
+> >=20
+> >> Doesn't access to xhci_hcd need to be serialized via xhci->lock?
+> >=20
+> > Good question. In theory maybe. In practice I don't see how
+> > cdns_host_resume(), called by cdns_resume(), could clash with anything
+> > else. I'll add that to be safe.
+> >=20
+> >> Just curious, what happens if you don't include patch 4 and 5?
+> >> Is USB functionality still broken for you?
+> >=20
+> > No it works fine. Patches 4+5 are only there to avoid the below warning=
+.
+> > Logging "xHC error in resume" is a lie, so I want to avoid it.
+>
+> How is it a lie?
+> The XHCI controller did loose its save/restore state during a PM operatio=
+n.
+> As far as XHCI is concerned this is an error. no?
 
-Signed-off-by: Lode Willems <me@lodewillems.com>
----
+The `xhci->quirks & XHCI_RESET_ON_RESUME` is exactly the same thing;
+both the quirk and the flag we add have for purpose:
 
-Changes in v2:
- - Change the CH341_FLOW_CTL_* values to be 8 bits wide
- - Set flow control setting unconditionally
- - Prepare parameters and do one control request
- - Drop the error message
+1. skipping this block
 
- drivers/usb/serial/ch341.c | 28 ++++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+	if (!reinit_xhc) {
+		retval =3D xhci_handshake(&xhci->op_regs->status,
+					STS_CNR, 0, 10 * 1000 * 1000);
+		// ...
+		xhci_restore_registers(xhci);
+		xhci_set_cmd_ring_deq(xhci);
+		command =3D readl(&xhci->op_regs->command);
+		command |=3D CMD_CRS;
+		writel(command, &xhci->op_regs->command);
+		if (xhci_handshake(&xhci->op_regs->status,
+			      STS_RESTORE, 0, 100 * 1000)) {
+			// ...
+		}
+	}
 
-diff --git a/drivers/usb/serial/ch341.c b/drivers/usb/serial/ch341.c
-index d10e4c4848a0..c255a8437e4a 100644
---- a/drivers/usb/serial/ch341.c
-+++ b/drivers/usb/serial/ch341.c
-@@ -63,6 +63,7 @@
- #define CH341_REG_DIVISOR      0x13
- #define CH341_REG_LCR          0x18
- #define CH341_REG_LCR2         0x25
-+#define CH341_REG_FLOW_CTL     0x27
- 
- #define CH341_NBREAK_BITS      0x01
- 
-@@ -77,6 +78,9 @@
- #define CH341_LCR_CS6          0x01
- #define CH341_LCR_CS5          0x00
- 
-+#define CH341_FLOW_CTL_NONE    0x00
-+#define CH341_FLOW_CTL_RTSCTS  0x01
-+
- #define CH341_QUIRK_LIMITED_PRESCALER	BIT(0)
- #define CH341_QUIRK_SIMULATE_BREAK	BIT(1)
- 
-@@ -478,6 +482,28 @@ static int ch341_open(struct tty_struct *tty, struct usb_serial_port *port)
- 	return r;
- }
- 
-+static void ch341_set_flow_control(struct tty_struct *tty,
-+				   struct usb_serial_port *port,
-+				   const struct ktermios *old_termios)
-+{
-+	int r;
-+	u16 flow_ctl;
-+
-+	if (C_CRTSCTS(tty))
-+		flow_ctl = ((u16)CH341_FLOW_CTL_RTSCTS << 8) | CH341_FLOW_CTL_RTSCTS;
-+	else
-+		flow_ctl = ((u16)CH341_FLOW_CTL_NONE << 8) | CH341_FLOW_CTL_NONE;
-+
-+	r = ch341_control_out(port->serial->dev,
-+			      CH341_REQ_WRITE_REG,
-+			      ((u16)CH341_REG_FLOW_CTL << 8) | CH341_REG_FLOW_CTL,
-+			      flow_ctl);
-+	if (r < 0 && old_termios) {
-+		tty->termios.c_cflag &= ~CRTSCTS;
-+		tty->termios.c_cflag |= (old_termios->c_cflag & CRTSCTS);
-+	}
-+}
-+
- /* Old_termios contains the original termios settings and
-  * tty->termios contains the new setting to be used.
-  */
-@@ -546,6 +572,8 @@ static void ch341_set_termios(struct tty_struct *tty,
- 	spin_unlock_irqrestore(&priv->lock, flags);
- 
- 	ch341_set_handshake(port->serial->dev, priv->mcr);
-+
-+	ch341_set_flow_control(tty, port, old_termios);
- }
- 
- /*
--- 
-2.47.1
+2. avoiding this warning:
+
+	xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
+
+I don't think the block skipped is important in resume duration (to be
+confirmed). But the xhci_warn() is not desired: we do not want to log
+warnings if we know it is expected.
+
+I'll think some more about it.
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
