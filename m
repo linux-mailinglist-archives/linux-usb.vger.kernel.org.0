@@ -1,117 +1,107 @@
-Return-Path: <linux-usb+bounces-18633-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18634-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 850B99F61E0
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 10:36:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F40789F61FF
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 10:43:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CC881881801
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 09:36:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30C9D1626E5
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 09:43:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7269418858A;
-	Wed, 18 Dec 2024 09:35:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E6E19B5AC;
+	Wed, 18 Dec 2024 09:42:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="M7nTJv6Q"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="djiPW3D4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342D3156669
-	for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 09:35:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5CA19993B;
+	Wed, 18 Dec 2024 09:42:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734514559; cv=none; b=c07cohFYUPWkJd0bHxPvTe3RoPHUmaa4rR+HuF47v4i/BicfP0mV2mMRXJKrTA3sK6x9Nwl47eLen+wRpFMQT5xjsPNauHWE7FyQgl/2A1H58QxL0pAaOmPt1vKIwaVH4e4OSOGtpM+6EV+VxXynR5PZHgSJ3ErOH0x9JaXgHNY=
+	t=1734514934; cv=none; b=dLO4x27SJChsSgyZ+A/5vtH6oBM1Z+v02lw5J2W+G2ClO1galmMMAmi/Mf4wj2cbQ3iLKl43lla9ERm5EyZOWdSxSEBssl+0PlN1fW4ne+hZ8bCo+YEXq+Gmy/fEPCguoqf0i7mQmUWu9e1VhINQr0tN3LO5fCiInO6pFQQxdn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734514559; c=relaxed/simple;
-	bh=FJq1pYapoccia/BgWigddIl2gQuB1ofXOmvP/EMzZEs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UmwtSbFWG7zyA90mtkz1J45U2u1RsbKA+GgVNtTkJXhq1+i5tH4QL1ZDPV1Eg3Y1WJIjQlneWH6OBX2Pjbu7G/JXln9Rk7I2keJ058/68T+l4BRaaxtO/CqGAxFvAEXw8ino/CGMor3Ljqh36sK+pZteyj1H+TgQTLGLsCBtrTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=M7nTJv6Q; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aab6fa3e20eso912351566b.2
-        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 01:35:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734514555; x=1735119355; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3N9Pq3W0yA6vyS5UgH7SSPLqSJKsQrk0GFj7xmOShmA=;
-        b=M7nTJv6Qb3iqETkPf4KivlUNm8joSDRsKxUbd5z94Uoh9Na8yoHr3jXE8v9m8t0LD7
-         D9n0LW9d4flka62SOtftChLgPgMCxKDKfkC0mi3IELjhqktuJMcd51dacBW5vz+jqo4h
-         2sMq3FdiK6F0QJijm8bDLYskfoeFxpAJWjP88zfMT1K70oe7EV/MsXunQWKnpSNUpE1L
-         nit4BxecQTUjzAvq2dgjK4htCtB+Gj9f5+6acNSjm0dzJSlu/K1vI+F3+oBr8vCmEt6c
-         EN0xnI/HwB8JGdFXj/N5WvSNrp3QbWj10VDWSyiY2OuF6mD7BoVFbyTeVAKk64/Q7d91
-         KO8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734514555; x=1735119355;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3N9Pq3W0yA6vyS5UgH7SSPLqSJKsQrk0GFj7xmOShmA=;
-        b=YXJiqEGZ6DYvbqHXVltg0k5jvtxP0HZ45B0srIDGLZQAxj8DkX+wpQUOyJQS4IHBTw
-         hHt2e7+crUBQv8DiTw4aqV2VGUjwiXCoNmNTH0+HWn97cfKcuC/W3NVVbLqiC88jcuXF
-         Jy/+3PM+9OWe8zEq7grivx8NP+qYqcuVmp/t8S5B9GAqyd0cMLHBEpWXF6n7MOGslxl0
-         nJA5y8aVzM5YW3DGU53BACcyRF7jCrxzgSNPKMNBpjog4t9P3Xls0FBynREdRO2QWT1X
-         jClPzjHo1BiQ19+XdUzhYERZpB5SzfFWkDbGGLVZza5AbvDSOnBTYbxPKu6MPgUqMqQR
-         YJ2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCU3ksQ/2APwKGVcdzOSrTaY/4kqpos3HjRLt4Ixa+4hGX+slqtMjW2AwDm8r5wMPg8Hsyj8Pe4InYg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUREPoQifDNc1D1xZxt6mWvbYeeEcn0ON2fnW+175Sst9WJ4sh
-	I7riUnP9rVYUX05+yMyYbowJ7Qa6/zOWxWrf8MKqT3b0lNCnv0kLn50uV+5l/b8=
-X-Gm-Gg: ASbGncv1XM7gRbO6s3BTlgmtxQjg+jjq86OeKIlVYljx65whvfZqpdG0292qy1ifRTZ
-	lysko2iyAHHvyPQA0KswvxagDFxjxl8MPbUS8yMG6Kcrlp7TfX2Lv2dKpTS3KExf8kDGm87YEP4
-	Turq4Pwh/GND8qzSYn4ASwtpb6AHpMPSDq30p8sNsu+bRx8jn3L1jxhjj5PZY41tOIqJaM15xMl
-	HCRjLeLAF6kYI1GHPBa4/+c7Hv/gUT16hAsySG4bDx7F+3bHU6e2peMVkGP7w==
-X-Google-Smtp-Source: AGHT+IFaGu0nRcRN0hBkf3tpYx1H1DRFGLVAT0p94ikyhVxYr1CI3Q0jpFhyrnZ85QBDos4sy3/DvA==
-X-Received: by 2002:a17:906:3b10:b0:aab:daf9:972 with SMTP id a640c23a62f3a-aabf4787284mr163782066b.28.1734514555568;
-        Wed, 18 Dec 2024 01:35:55 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab96068928sm538861966b.70.2024.12.18.01.35.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2024 01:35:54 -0800 (PST)
-Date: Wed, 18 Dec 2024 12:35:52 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	andre.draszik@linaro.org, rdbabiera@google.com,
-	m.felsch@pengutronix.de, emanuele.ghidoli@toradex.com,
-	parth.pancholi@toradex.com, francesco.dolcini@toradex.com,
-	u.kleine-koenig@baylibre.com, linux-usb@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH v3 1/2] usb: typec: tcpci: fix NULL pointer issue on
- shared irq case
-Message-ID: <3f6167b6-f3b1-46d9-b436-ac4e7b42a7d0@stanley.mountain>
-References: <20241217091208.2416971-1-xu.yang_2@nxp.com>
- <5260fafb-0b1f-43d5-83af-a61b3b179a1c@stanley.mountain>
- <20241218054547.bbbpvqledrul343f@hippo>
+	s=arc-20240116; t=1734514934; c=relaxed/simple;
+	bh=ch8Kt9NE4qfwEY75oCn7lPZBEB0EG5D1Ri9UdcSlKco=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=oDzS0ZG2kUYcziA8IVz2vlYbbDpEtPkSwTRM2vBPHDQzZr3zoAZjKMU5UTBMXfeaf/riq+b8ALYzf+jSMDdy5tVdF4ziLumqD9jzPymzTxv0qZS8ouzJFH2qkXwGeERwbfD8UDDB94mGwBrioKrXUixo9vO/m0jRnA8C9plUI7g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=djiPW3D4; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734514933; x=1766050933;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ch8Kt9NE4qfwEY75oCn7lPZBEB0EG5D1Ri9UdcSlKco=;
+  b=djiPW3D4C23f/z2EVAR9N0aS5Q/YGA49doxQtRWtEJK7jvwZfKZM1v6F
+   PTKpK0jQsAMrIDqPrdVWlXeTNv5ZbRFqMQC/ak9ccqHur16LuuRmM/wI7
+   Ymbc6aZK5xR1eLMelZd1o3V3VTojOR/m1STsHTIc14cd1XmO90lCnfvj6
+   XyGs1tTqGy7S5XryUQSfvo+5kIWS8F9o6tXEFYmzBVY2T63cALArMgNdo
+   Ia+vWyZMJff83MBxYbx9V4U8Tid7lD7WDhPtU/I42hcVvZ58fZho5REOY
+   9K7M445o5J8kdQTuv8esi3tJmPEM+6c3Su0U/h9DEiRQqgGubM8e0dND+
+   A==;
+X-CSE-ConnectionGUID: diPdOGdLQH6SOCjwJpFSLA==
+X-CSE-MsgGUID: kth/EtZNQ6OuxJXc0SGJrQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11289"; a="34863182"
+X-IronPort-AV: E=Sophos;i="6.12,244,1728975600"; 
+   d="scan'208";a="34863182"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 01:42:12 -0800
+X-CSE-ConnectionGUID: 8m5i32fTSy69kZkdng6/dA==
+X-CSE-MsgGUID: YCqRDT3TRUm9QPcYTO2h4Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,244,1728975600"; 
+   d="scan'208";a="102644161"
+Received: from mattu-haswell.fi.intel.com (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa004.fm.intel.com with ESMTP; 18 Dec 2024 01:42:10 -0800
+Message-ID: <6f057db9-b27a-45ee-98b5-08e979de0b26@linux.intel.com>
+Date: Wed, 18 Dec 2024 11:43:06 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241218054547.bbbpvqledrul343f@hippo>
+User-Agent: Mozilla Thunderbird
+Subject: Re: RIP: 0010:xhci_ring_expansion+0xbd/0x380 [xhci_hcd]
+To: Paul Menzel <pmenzel@molgen.mpg.de>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: linux-usb@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ Niklas Neronin <niklas.neronin@linux.intel.com>
+References: <68e02165-e5a3-4751-bdf1-5b6671d42790@molgen.mpg.de>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <68e02165-e5a3-4751-bdf1-5b6671d42790@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Dec 18, 2024 at 01:45:47PM +0800, Xu Yang wrote:
-> > > Fixes: 77e85107a771 ("usb: typec: tcpci: support edge irq")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > > 
-> > 
-> > This commit message was not super clear to me.  It didn't mention that
-> > it's tcpci->regmap which is the NULL pointer.  (Obviously there are a
-> > lot of other NULL pointers, but that's the one which will crash).
+On 17.12.2024 23.57, Paul Menzel wrote:
+> Dear Linux folks,
 > 
-> Ahh, actually tcpci itself is the NULL pointer and kernel will crash when
-> get regmap. Because if tcpci is a valid pointer, all of its members will
-> be valid too. Anyway, I will add such info to commit message.
+> 
+> Attaching a 2 TB external disk to the right port of the Dell XPS 13 9360 and running `sudo mkfs.ext4 -L "Verbatim HD" /dev/sda1` the command does not complete and the system finally locks up and has to be hard reset:
+> 
+> ```
+> [    0.000000] Linux version 6.13.0-rc3-00017-gf44d154d6e3d (build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 14.2.0-8) 14.2.0, GNU ld (GNU Binutils for Debian) 2.43.50.20241210) #42 SMP PREEMPT_DYNAMIC Tue Dec 17 11:17:55 CET 2024
+> […]
+> [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022
 
-Thanks!
+There was a regression in 6.13-rc1 xhci ring expansion.
+Fix is now in Greg's usb tree on its way to 6.13.
 
-regards,
-dan carpenter
+Patch:
+https://lore.kernel.org/linux-usb/20241217102122.2316814-3-mathias.nyman@linux.intel.com/
+
+Gregs usb-linus branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git/commit/?h=usb-linus&id=b9252f80b807801056e67e3a672fb1be0ecb81d
+
+Does this patch solve your mkfs case as well?
+
+Thanks
+Mathias
 
 
