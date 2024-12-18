@@ -1,133 +1,111 @@
-Return-Path: <linux-usb+bounces-18607-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18608-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F5479F5CC1
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 03:21:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D46809F5CC7
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 03:22:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67F551647B1
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 02:21:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B1A281891099
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 02:22:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D8B87C6E6;
-	Wed, 18 Dec 2024 02:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8078D12F59C;
+	Wed, 18 Dec 2024 02:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="eML1yHbc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NubPVAK8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977CC1F931;
-	Wed, 18 Dec 2024 02:20:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC7BB182C5;
+	Wed, 18 Dec 2024 02:22:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734488460; cv=none; b=UlUq+9a7FfxzLuRYel6MUsAAS5sABoVz2B8pzz82oxtB4pLs3x9BE2ThAYLevT2RzOyHpUtMqOIbbhFI3Vcg4XCKZELZaAvWIldOQCypowWsEdVrQWzGywtg1iDJSvuJpldorVOvFHRA24pMGaCmQx/AEbiRV11DgT9+C/f0ARg=
+	t=1734488559; cv=none; b=NHx57ZitchdF7vZtayA/T1uYFEe4ZMDs/MK3cFpC7ZizDvu9PWKc5l7FKdd17OdAN22PnkLey1lLB/jHElzEtzS9xIl2PCJJC3G2UGCvtovSkblKPGipKxjxW/v8DXqsJY8Ou7DyA4bgA+6PHU68ziLFu04QchSKSH0+dVI+zp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734488460; c=relaxed/simple;
-	bh=S/nQy4ffuHxy7nkVeDLL5cjXYB5farjfjoBQdaPlIF8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=T6mJ8t16LtFT/iAsJjjVI/KHmkyd4h9+eRYHAW7ImA8vzMnNpUkUmC++MoycfRihvLZKANQhtJBV4IdLSv2AfB1tlW0Inb0m0N5wgVtrmNHMNfNCiU6cxPfqua/fSwq9v3HaPGx2s9ljgb9fZlJ/jzO564RPCeDYEUQcpKnMOc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=eML1yHbc; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=/stuI
-	+j8ZgzgZ+HBFL0EjbA7t6ovZboYZ2POviazR8U=; b=eML1yHbcGbHfw8jcxpSq9
-	bk7pMowd9cugBotP/egQ0HLtEeT55EJg1DPI4ZWzxuBlsHE+h0SeGrtKkyg9us/L
-	I97VHwbh7UJObBxuoBLQ6slT/WbajOsjONBfgK4IRbeoFilvbg9UJEzjwhln4OMa
-	nQi8ttvgLpH2MLeKLp08vI=
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wDn78c9MWJnoYImBQ--.25881S4;
-	Wed, 18 Dec 2024 10:19:51 +0800 (CST)
-From: Ma Ke <make_ruc2021@163.com>
-To: gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu,
-	christophe.jaillet@wanadoo.fr,
-	stanley_chang@realtek.com,
-	mka@chromium.org,
-	oneukum@suse.com,
-	quic_ugoswami@quicinc.com,
-	make_ruc2021@163.com,
-	javier.carrasco@wolfvision.net,
-	kay.sievers@vrfy.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v2] usb: fix reference leak in usb_new_device()
-Date: Wed, 18 Dec 2024 10:19:40 +0800
-Message-Id: <20241218021940.2967550-1-make_ruc2021@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1734488559; c=relaxed/simple;
+	bh=heI1OUOEP9bs0UP79AWiCn+zld9HCpic8/hFKnUWZdM=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=aBfCoKBRZRjcTBe3fKCK6go5AdqDQDPjW0r6X4lJDXEtk+oIxdrrP0R6SwY4XM+8RH9iXf+/QkxLUFKVnVSQbV7g1kiU8my0n+4hR6v9rwlwH84HLCBSOX0TMwCF/hsW96kkeCU6IMJs3lq42sakQyXZ3LoxJL55wLxA4+cuuXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NubPVAK8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A4B1C4CED3;
+	Wed, 18 Dec 2024 02:22:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734488558;
+	bh=heI1OUOEP9bs0UP79AWiCn+zld9HCpic8/hFKnUWZdM=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=NubPVAK8R5kV2IaxTagxZWS3SC2lT48uu5dklkL/nrIyJFzGokghh2AD8c0PhtK+3
+	 Z9qZ538szVDA8qcbl+LfbjhDDXG89o37wM2ByaM413OHiPgz5oMkdh8ynb3HbIW6mU
+	 KQFUmDN/Mf5Q8+1Zjhw7TyLCIDPYRFnLAKCvuK1WCUE0qnM18PCiHwwqQ8h8Y4C2Sc
+	 7/qA1przGDa2vkffgcVMem+w2Gz4TTIJppWyswBRh48sK2/jCYgFpZg0OP6ppPnrV/
+	 7UQE/G0oC/I0UI6e42tZNC83kfi4A42/4b5GdcIiqUnalyHt6Ba9d6QsKYNAY52oKD
+	 b3fFg4L61q9tA==
+Date: Tue, 17 Dec 2024 20:22:36 -0600
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDn78c9MWJnoYImBQ--.25881S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww45uw4DXF4UtF18Jw1xAFb_yoW8ZryrpF
-	W8Jas8trWDWr17Cw1jvFy8Xa45Gw40ya4rGrySv3y29wnxXw4rKryrtryFqa48A393AF45
-	Xa43Wa1FqryUWFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pimhF7UUUUU=
-X-CM-SenderInfo: 5pdnvshuxfjiisr6il2tof0z/1tbizRK4C2dhnply6gACs3
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: conor+dt@kernel.org, James.Li1@synopsys.com, m.felsch@pengutronix.de, 
+ Jianheng.Zhang@synopsys.com, linux-kernel@vger.kernel.org, 
+ andre.draszik@linaro.org, emanuele.ghidoli@toradex.com, 
+ rdbabiera@google.com, devicetree@vger.kernel.org, 
+ u.kleine-koenig@baylibre.com, xu.yang_2@nxp.com, 
+ Martin.McKenny@synopsys.com, heikki.krogerus@linux.intel.com, 
+ linux-usb@vger.kernel.org, jun.li@nxp.com, gregkh@linuxfoundation.org, 
+ dan.carpenter@linaro.org
+To: "Miao.Zhu" <Miao.Zhu@synopsys.com>
+In-Reply-To: <20241218010718.224530-3-miao@synopsys.com>
+References: <20241202054314.k6dt7uhnv2kavea4@hippo>
+ <20241218010718.224530-1-miao@synopsys.com>
+ <20241218010718.224530-3-miao@synopsys.com>
+Message-Id: <173448855676.4113446.18228420092453259118.robh@kernel.org>
+Subject: Re: [PATCH v2 2/2] dt-bindings: usb: ptn5110: add TCPC properties
 
-When device_add(&udev->dev) failed, calling put_device() to explicitly
-release udev->dev. And the routine which calls usb_new_device() does
-not call put_device() when an error occurs. As comment of device_add()
-says, 'if device_add() succeeds, you should call device_del() when you
-want to get rid of it. If device_add() has not succeeded, use only
-put_device() to drop the reference count'.
 
-Found by code review.
+On Wed, 18 Dec 2024 02:07:18 +0100, Miao.Zhu wrote:
+> The TCPCI driver has flags to configure its protperties but
+> no way to enable these flags yet. Add these flags into DT
+> so that the driver can be compatible with TCPCI  Spec R2 V1.0.
+> 
+> Signed-off-by: Miao.Zhu <miao@synopsys.com>
+> ---
+> V1 -> V2: no changes
+> ---
+>  Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
 
-Cc: stable@vger.kernel.org
-Fixes: 9f8b17e643fe ("USB: make usbdevices export their device nodes instead of using a separate class")
-Signed-off-by: Ma Ke <make_ruc2021@163.com>
----
-Changes in v2:
-- modified the bug description to make it more clear;
-- added the missed part of the patch.
----
- drivers/usb/core/hub.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+My bot found errors running 'make dt_binding_check' on your patch:
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 4b93c0bd1d4b..ddd572312296 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2651,6 +2651,7 @@ int usb_new_device(struct usb_device *udev)
- 	err = device_add(&udev->dev);
- 	if (err) {
- 		dev_err(&udev->dev, "can't device_add, error %d\n", err);
-+		put_device(&udev->dev);
- 		goto fail;
- 	}
- 
-@@ -2663,13 +2664,13 @@ int usb_new_device(struct usb_device *udev)
- 		err = sysfs_create_link(&udev->dev.kobj,
- 				&port_dev->dev.kobj, "port");
- 		if (err)
--			goto fail;
-+			goto out_del_dev;
- 
- 		err = sysfs_create_link(&port_dev->dev.kobj,
- 				&udev->dev.kobj, "device");
- 		if (err) {
- 			sysfs_remove_link(&udev->dev.kobj, "port");
--			goto fail;
-+			goto out_del_dev;
- 		}
- 
- 		if (!test_and_set_bit(port1, hub->child_usage_bits))
-@@ -2683,6 +2684,9 @@ int usb_new_device(struct usb_device *udev)
- 	pm_runtime_put_sync_autosuspend(&udev->dev);
- 	return err;
- 
-+out_del_dev:
-+	device_del(&udev->dev);
-+	put_device(&udev->dev);
- fail:
- 	usb_set_device_state(udev, USB_STATE_NOTATTACHED);
- 	pm_runtime_disable(&udev->dev);
--- 
-2.25.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml: TX_BUF_BYTE_x_hidden: missing type definition
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml: RX_BUF_BYTE_x_hidden: missing type definition
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml: auto_discharge_disconnect: missing type definition
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml: vbus_vsafe0v: missing type definition
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241218010718.224530-3-miao@synopsys.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
