@@ -1,92 +1,94 @@
-Return-Path: <linux-usb+bounces-18647-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18648-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39F449F6A41
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 16:42:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCFEB9F6A6D
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 16:52:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5F841881F2C
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 15:42:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C661818880AE
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 15:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26A61DFD9C;
-	Wed, 18 Dec 2024 15:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C970A1F0E33;
+	Wed, 18 Dec 2024 15:51:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s6otvW7a"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="BsVe/Zc6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C87119B5B1
-	for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 15:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8545213D518
+	for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 15:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734536524; cv=none; b=qK3dWkaFjJt4IhneGDOFGXeVYFIoUK/hLu7Zsz7qMXgxml4U2mMNqKva4RpbH+6C4pN9FmEk/aEV33UDFdLCbhtGqDdvuiShdu6KSV/FXret1Mw3hG5mGm/36JASD8cRtmxxPj6J23+jwOWJhlWRgzBE+6vsXKgcRFUwqnyCNQw=
+	t=1734537117; cv=none; b=kRobik/QZW7dNtUANQNi75P1xzB4saJjBaAb7FNSKLDI0hMFCVbsTq1uoAVXN4Mczd40QibzVGcDfA9HA2PxPXPYJomdsi8klRVDO3FX62zdgTfYaK6h9SkvZp+ROPS+4rhhj4JiDIQcY/arQS4rji9hV0h7sGbIaq2viTbfVCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734536524; c=relaxed/simple;
-	bh=h+XeExBDgd5gL6dlbTSl87Rvr5eBKUV+3bhND4e9Wto=;
+	s=arc-20240116; t=1734537117; c=relaxed/simple;
+	bh=01My02vUg66FtKUMzjhDA/6I+cAw7h1WXAjdi947LXU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LZmxryc66WLtAZ885zg7N5CN7SF8FRkb3Xl5R94VkBGEzGJ4hNsZcuD9iZXLoabG0SxdAqfNq88NX8QSofadSBdfckaSLN0ZjFr6uV7050H+E3HiyegYVqi5lfflEkvGAL0so9R66PcuhGywk/9LazLYegj0cBJcVzKEQjcePS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s6otvW7a; arc=none smtp.client-ip=209.85.218.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aa68b513abcso1118728266b.0
-        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 07:42:02 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=V2lNpQT2zn4uZcpReAeyNdaE85sliG67JSRx17Sec7j8TGMnwSl3EinHZ8U2ufqdGz8POkqrGVGfg/lQU2tVOBmnTuzvyrF4w/fP5/q0fanVk9WsYgoAF0J+qFNEBDca1rQBvD4qHalD0oAX7qlwOxMdivvIQ4W5fO7VA5/ZhXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=BsVe/Zc6; arc=none smtp.client-ip=209.85.219.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f47.google.com with SMTP id 6a1803df08f44-6dcf62a3768so17306436d6.0
+        for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 07:51:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734536521; x=1735141321; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1734537114; x=1735141914; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wuPxDvTX7vw6Ikag7mefG62YIQDwW9qirQPmBJpybBg=;
-        b=s6otvW7ajEMZvqOm8Wbm1DtMfm1HmyPqWLKMLh6M6fcjMzB/N8VLp1JVPlwfh7Ku1h
-         /vZgvMC3m33EDT1TQ21KqJ3Q68qNcC9C6TNyWsvooGkoysqkCOUgbqBExVBdvuOiPs8y
-         bhEbYlsJdeb8iMn50dFUmrVSgf950aOGPQ+nK6mss+9ThhxzCawvonLyYxD/eHrZhh+o
-         hwSSoPtTrUSOPAn/5eXt2C6A6j4qHXd+WXKnjV7TMcCwFXi0yMvXRgrmIIdg+OuYWgQj
-         Btm3CMjzrUwwN6e35uz6zeLjoPhbkpbefBKydcLqxun7PcIyKrn73S4az2azTMG0SBj6
-         7S6Q==
+        bh=4whGDZV+puG0fV38p1mWf5yb5JAddh1OIYmWwZJ4M54=;
+        b=BsVe/Zc60hIRbBS1hAELDUeqvREO4V/G/Ki24hMmwQrkl/cWKht9Hlg3Q8wJG/vva5
+         i3M3T6IpN/XApudzME1juTst1DJyVvPXtOYQ0cwwLcvY1QEv5mMdns1VgYywUCkvVtjL
+         3XO8aoAzdiFL8OqC1grBGtIK8214pgPwyYwbQFz1FAhIObZUDM15I8C6IaxP+2OfyJeO
+         ejURswdg8+P5AfKWD1PGBn6tuROezlkB5lBcWDNLjw7HmHq8ZJAzcnxXjiasdARCPXb0
+         CNS1V8EHaVvdtobVzk/evtaRCPtSClZUb+mxdBYSTEYTaPSW2W2SdSvamTIu7ziU5v8S
+         Do0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734536521; x=1735141321;
+        d=1e100.net; s=20230601; t=1734537114; x=1735141914;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wuPxDvTX7vw6Ikag7mefG62YIQDwW9qirQPmBJpybBg=;
-        b=HkoZwVu5omsHwjmfAXzIlrLDWQi8UsrfWdwQ+IJK52SzQuXIUV5RrAeiopWrcz9yks
-         lJdsy+BgAw1Ne2CloeckzzJXS9MStWjEo/d8aV1pel8Ll8sx6n+r9+9IVy/DywnLG5VX
-         WXkniBBX2cpncN/QeZn2Fa/AGDeu85FtX1FOzmjz4SgEWt9B2875mnu8Tozpg/7zVKm3
-         dGWmbq4XbbdtECQZsOddRcD/ATmcKpDSIxYRhXARmfoXmdQNtuq4byJLua+TA/g5FQjn
-         0tVj+t4WkV6v8ase1HRLOhByeJ+yjuGpkbSbJDN0EgOskq2IRVVVcX8jRgfmcjJeMEpN
-         tmWA==
-X-Forwarded-Encrypted: i=1; AJvYcCX1JrwO6t2BWNr7bpLxY4oWdWW4OoZnaQ1T61yJXuJJrzskEROqroinIkroPqV4zXvQAPSIXQVYEWI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyfUh7Lm3r1LWG//1gZWEV3fYG/5h1GGHiilSs8ZVmoT4KMOirN
-	VRQTlO1Qb9aqL0uDdJ6wW1jMkKKItiIcrPKezs7BwBpzby2vreiKjwU+ANw6QZk=
-X-Gm-Gg: ASbGnctji8p4+1IQ4RVKqm+fxa/F+zfmHxjAaUp2csChmfGW3wQZLS1xDxuUTMN1BEG
-	XIGYK936JYnsuM2ZZKDo/o2ByTkZXPJHIa94TN5oDJ/ln3SccRUtnc4RIjoJbsYhyZpxOkUgxei
-	KLn0ddbc2+yzjNjQcc6i2vMm7mfJjqFo9+p7Hcyz084x7j9gI4srzUIrDlfQL61ytZXFbvB3wHw
-	AA6GKWz05aPOIwYT72YRspEH4Ay0wJBx0A7GCJ2xJCukoVuxRG8uOkFKCrBRA==
-X-Google-Smtp-Source: AGHT+IGarXmwMkeMqU2NZRVbUAa61OHGnCxtHAVf/FFcAIMSBvhxQ1z7QNQ2Pk8ItpKNlg/4dPjA1Q==
-X-Received: by 2002:a17:907:6e93:b0:aa6:9599:a9af with SMTP id a640c23a62f3a-aabf4907633mr283425566b.53.1734536520682;
-        Wed, 18 Dec 2024 07:42:00 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aab9635998csm578833166b.108.2024.12.18.07.41.59
+        bh=4whGDZV+puG0fV38p1mWf5yb5JAddh1OIYmWwZJ4M54=;
+        b=dG+yhYR9nQ/StyDFlrG3MwhkJc4UC7mw4A3zqERUHEHUhw3VSs84sKgkBjOG0p41yb
+         ID8hrWMbjnKQCycXNNTu30AKE+qfPdiclbhdMRfYwvUKSKJ4nVpW7z311ASRItdaKTkx
+         PHc7PErDREllw0Cb1UuggoYqoe95AyocXb3fRKIIXnLKhTzDcep6OISqa6RiYe9iXzbZ
+         /rb7Fq/wsQBPGKCiB/tsbLQaX57QE9ZGK1lSQmXRQwA9dDSVPu9ZORYkePUBMrXlmAJO
+         b/JIVXWjDQN4TKpJkz0VK+5ldmYkA3eD4cgUBqM6QXLj7apvmfy0p1AeYXJC8TshIY85
+         TMfw==
+X-Forwarded-Encrypted: i=1; AJvYcCXV+NEshQyxgaci01j67zgkIricRnngKMKbdGwBoA2kCymydb8vNniZwxMNOQafvq1lDEXFA4rTBzg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxk3hpRQfMTAA+dyW1Oc6qH3hcAKJFnrdqPOFP3yEq3Lw89fy33
+	c63TeGSacrHQYIf4XJxD+5TzxSI3TFz/V3bORm2yw6oSu8R7bjWxYpExaPt9Lw==
+X-Gm-Gg: ASbGncuR9YG53fAH20zyARCoFBKUkEF0Rrz2PXp2zLPnKL6FlQ4D/4NWWZJKNAKqZCL
+	aIBwgGCAH2SYqYansiZTyco1j5G7B7ZLM2D/ULdB56TPeB5MhbSWCul3xdo8qkdhh/IGzviSC4w
+	q6dKD4ac5rT7CcfltQQqB9TDVJDEqLGv/SgTpIbUxyrIGlAP5xbboaYNhNZlPT+ExTE1x9at0yv
+	GFds1v8kphBKcrsJ0NL+Vr13UF2tlSFcEh+PV1KUhyo8wNlzcpnnhLA/CbCxW1LokvRDdAEYYo=
+X-Google-Smtp-Source: AGHT+IEJk78hnxsyKnXbPQoanGIsRf0N5bA35Q8LGZ05dCUcZQlkeUQ7pZumcNCfZHjUcVagmkur0A==
+X-Received: by 2002:a05:6214:1d0d:b0:6d8:b3a7:75a5 with SMTP id 6a1803df08f44-6dd092598b3mr55798746d6.42.1734537114549;
+        Wed, 18 Dec 2024 07:51:54 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dccd26e5a9sm50785616d6.56.2024.12.18.07.51.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2024 07:42:00 -0800 (PST)
-Date: Wed, 18 Dec 2024 18:41:56 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: "Miao.Zhu" <Miao.Zhu@synopsys.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, xu.yang_2@nxp.com,
-	andre.draszik@linaro.org, emanuele.ghidoli@toradex.com,
-	heikki.krogerus@linux.intel.com, m.felsch@pengutronix.de,
-	rdbabiera@google.com, u.kleine-koenig@baylibre.com,
-	conor+dt@kernel.org, jun.li@nxp.com, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	Jianheng.Zhang@synopsys.com, James.Li1@synopsys.com,
-	Martin.McKenny@synopsys.com
-Subject: Re: [PATCH v4 1/2] usb: typec: tcpm: tcpci: Make the driver be
- compatible with the TCPCI spec [Rev 2.0 Ver 1.0, October 2017]
-Message-ID: <9d3ab6fe-f875-493e-935a-976ff1a9cdf1@stanley.mountain>
-References: <20241218085933.2790127-1-miao@synopsys.com>
- <20241218085933.2790127-2-miao@synopsys.com>
- <b5e5cd33-2b59-4e93-8acd-379290917e42@stanley.mountain>
+        Wed, 18 Dec 2024 07:51:53 -0800 (PST)
+Date: Wed, 18 Dec 2024 10:51:49 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Cc: Greg KH <gregkh@linuxfoundation.org>, quic_jjohnson@quicinc.com,
+	kees@kernel.org, abdul.rahim@myyahoo.com,
+	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com,
+	shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+Message-ID: <eaa330e8-0510-445d-8aef-b39164169cb1@rowland.harvard.edu>
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+ <20241208152322.1653-1-selvarasu.g@samsung.com>
+ <2024121845-cactus-geology-8df3@gregkh>
+ <9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -95,74 +97,21 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <b5e5cd33-2b59-4e93-8acd-379290917e42@stanley.mountain>
+In-Reply-To: <9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
 
-On Wed, Dec 18, 2024 at 12:33:42PM +0300, Dan Carpenter wrote:
-> The subject is too long.  You've sent v2, v3, and v4 today.  Please, wait
-> for a day between resends.
-> 
-> On Wed, Dec 18, 2024 at 09:59:32AM +0100, Miao.Zhu wrote:
-> >  static int tcpci_set_pd_rx(struct tcpc_dev *tcpc, bool enable)
-> > @@ -741,33 +748,86 @@ irqreturn_t tcpci_irq(struct tcpci *tcpci)
-> >  		struct pd_message msg;
-> >  		unsigned int cnt, payload_cnt;
-> >  		u16 header;
-> > +		unsigned int frame_type;
-> > +		enum tcpm_transmit_type rx_type;
-> >  
-> >  		regmap_read(tcpci->regmap, TCPC_RX_BYTE_CNT, &cnt);
-> >  		/*
-> >  		 * 'cnt' corresponds to READABLE_BYTE_COUNT in section 4.4.14
-> >  		 * of the TCPCI spec [Rev 2.0 Ver 1.0 October 2017] and is
-> >  		 * defined in table 4-36 as one greater than the number of
-> > -		 * bytes received. And that number includes the header. So:
-> > +		 * bytes received. And that number includes the header.
-> > +		 * In Section 4.4.14 of the TCPCI spec [Rev 2.0 Ver 1.0 October, 2017],
-> > +		 * the RECEIVE_BUFFER comprises of three sets of registers:
-> > +		 * READABLE_BYTE_COUNT, RX_BUF_FRAME_TYPE and RX_BUF_BYTE_x.
-> > +		 * These registers can only be accessed by reading at a common
-> > +		 * register address 0x30h.
-> >  		 */
-> > -		if (cnt > 3)
-> > -			payload_cnt = cnt - (1 + sizeof(msg.header));
-> > -		else
-> > -			payload_cnt = 0;
-> > +		if (tcpci->data->RX_BUF_BYTE_x_hidden) {
-> > +			u8 buf[TCPC_RECEIVE_BUFFER_MAX_LEN] = {0,};
-> > +			u8 pos = 0;
-> > +
-> > +			/* Read the count and frame type in RECEIVE_BUFFER */
-> > +			regmap_raw_read(tcpci->regmap, TCPC_RX_BYTE_CNT, buf, 2);
-> > +			/* READABLE_BYTE_COUNT */
-> > +			cnt = buf[0];
-> > +			/* RX_BUF_FRAME_TYPE */
-> > +			frame_type = buf[1];
-> > +
-> > +			/* Read the content of the USB PD message in RECEIVE_BUFFER */
-> > +			regmap_raw_read(tcpci->regmap, TCPC_RX_BYTE_CNT, buf, cnt + 1);
->                                                                          ^^^
-> buffer overflow?
-> 
-> > +
-> > +			pos += 2;
-> > +			memcpy(&msg.header, &buf[pos], sizeof(msg.header));
-> > +
-> > +			if (cnt > 3) {
-> > +				pos += sizeof(msg.header);
-> > +				payload_cnt = cnt - (1 + sizeof(msg.header));
-> > +				if (WARN_ON(payload_cnt > sizeof(msg.payload)))
-> > +					payload_cnt = sizeof(msg.payload);
-> > +				memcpy(&msg.payload, &buf[pos], payload_cnt);
-> 
-> There is existing code later which does bounds checking on payload_cnt,
-> but it's too late.  We would have already overflowed buf[] and
-> msg.payload here.
-> 
+On Wed, Dec 18, 2024 at 03:51:50PM +0530, Selvarasu Ganesan wrote:
+> The issue arises during the second time the "f_midi_bind" function is 
+> called. The problem lies in the fact that the size of 
+> "bulk_in_desc.wMaxPacketSize" is set to 1024 during the first call, 
+> which exceeds the hardware capability of the dwc3 TX/RX FIFO 
+> (ep->maxpacket_limit = 512).
 
-This line is obviously fine.  It's only buf[] earlier from regmap_raw_read()
-I'm worried about.
+Is this gadget supposed to be able to run at SuperSpeed?  I thought the 
+dwc3 controller supported SuperSpeed operation.
 
-regards,
-dan carpenter
+The USB-3 spec requires that all SuperSpeed bulk endpoints must have a 
+wMaxPacketSize of 1024 (see Table 9-24 on p.9-25 of the USB-3.1 
+specification).
 
+Alan Stern
 
