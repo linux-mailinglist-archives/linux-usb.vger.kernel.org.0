@@ -1,48 +1,43 @@
-Return-Path: <linux-usb+bounces-18625-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18626-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB2D89F5FE1
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 09:07:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F5869F607D
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 09:51:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 363A116126E
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 08:07:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41BD91881EAD
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 08:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECCE61917E9;
-	Wed, 18 Dec 2024 08:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMhM9K1k"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49B618872D;
+	Wed, 18 Dec 2024 08:51:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66BFA35949;
-	Wed, 18 Dec 2024 08:04:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12744A3C;
+	Wed, 18 Dec 2024 08:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734509050; cv=none; b=l71CZo/MvDLdtwpshD1PQeXZl+rjRxfs0bo9bmHur0gostaLXE3bIO6nwrM/tIjQ2wmoA/K90MYjyQAvLUOlheHznFIFGFB9KG2riq3uXQxH+m0qfGFweOblJci9slmGHikz5QDOXqJm1W7Ug6XTvNhFdykUfB/+i6j8e47BV2s=
+	t=1734511880; cv=none; b=DiLJVpdeJSHoZf66f0sVpj4OCm9HiMn9hBskW96v6r/HEir4KN/meuxBnB537CLAbM2Y4wlPL0nkmm8rpjCq/lMqxBiPUSZITK8+5WMEs7ag5ZN1kpNAcbW8zEW7RObCKj6BHt7MUbXJxwg2lRWcZiQJ5g510UiHz22ADiFvImI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734509050; c=relaxed/simple;
-	bh=PUNqib2U0+do/Jf2BA0uZGKEidlsy9Q5b29C7z/bs+Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SO/ZTnfoUSjNnmOdw17Ph2nxqj3Lvx4RjsQPdv+S+FA6IyzJQ7gqbDCQ+iOM+jZsKga229ky+9UCvqfU3veKtMxp5O/9jW3LGoNa+Xfbs/qwr+KmFi7N+QaLWznmF15fkCvNijoBJRHuHQzclNT/wBZo5YFTGWmPGiAqp2Kii1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMhM9K1k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3660C4CECE;
-	Wed, 18 Dec 2024 08:04:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734509049;
-	bh=PUNqib2U0+do/Jf2BA0uZGKEidlsy9Q5b29C7z/bs+Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=SMhM9K1kXtydnpmu3Uatbw5eh4mFZ54Aohoo5xInubLpV8e8lCbacMIoM9Y/FzBei
-	 2VrgiHfpOw/sZj28RP7OaX8n+ctZ5uRUcKVWZNb7zEmIpCLl/kF12D2zN6so9EhxtQ
-	 B+dMEhfX7nMQOsdXGrSSnNLthLPOvQIz3kpeKVRBe9X3nhi/9SHI4sCuUQDMBYh05P
-	 yEp8RDDLasGu0cVs1JzMM06zkdRNezTC8dLxEUxyRqTAzO8FuYDkneWnMrHcFpN7Cm
-	 fLqctxv6meho8ID5zANnUksBsqK+ixW9eLDJnCEEN596c3HsJwXiASPMT3QHCfvx1O
-	 W8FFTBchmprmA==
-Message-ID: <fbad3631-1efe-4d9b-b163-e635452b0b73@kernel.org>
-Date: Wed, 18 Dec 2024 09:04:01 +0100
+	s=arc-20240116; t=1734511880; c=relaxed/simple;
+	bh=HjmZvcW1WNN7Zq3tJnGh91BxfGRNpv++Zq+rLeRk+GM=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=iVM0/Q/B9gHl6Zg0DuN07DtmAGMGU/TBWcYHpBGNWgsojJX3uD4l0AMsbes1spkVwWPnwkGZG90p4X1yzWE19+yXyLYPBQiyxnBkPxd2tZPm/q+K3G8gh9r7bgt/85UnL4gbdzwXHT2b/DcqXFD7xsMcy+GOebXJK/lpBRSdaLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [10.16.2.74] (hh-wlan-02.rz-berlin.mpg.de [141.14.51.18])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 8424A61E6477D;
+	Wed, 18 Dec 2024 09:50:49 +0100 (CET)
+Message-ID: <6d4e7456-0363-4145-a10a-5c1d15bb108c@molgen.mpg.de>
+Date: Wed, 18 Dec 2024 09:50:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,124 +45,99 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] dt-bindings: usb: ptn5110: add TCPC properties
-To: "Miao.Zhu" <Miao.Zhu@synopsys.com>, robh@kernel.org
-Cc: James.Li1@synopsys.com, Jianheng.Zhang@synopsys.com,
- Martin.McKenny@synopsys.com, andre.draszik@linaro.org, conor+dt@kernel.org,
- dan.carpenter@linaro.org, devicetree@vger.kernel.org,
- emanuele.ghidoli@toradex.com, gregkh@linuxfoundation.org,
- heikki.krogerus@linux.intel.com, jun.li@nxp.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- m.felsch@pengutronix.de, rdbabiera@google.com, u.kleine-koenig@baylibre.com,
- xu.yang_2@nxp.com
-References: <173448855676.4113446.18228420092453259118.robh@kernel.org>
- <20241218052214.1808006-1-miao@synopsys.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: RIP: 0010:xhci_ring_expansion+0xbd/0x380 [xhci_hcd]
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+To: Mathias Nyman <mathias.nyman@intel.com>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ Jeff Chua <jeff.chua.linux@gmail.com>, linux-usb@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>
+References: <68e02165-e5a3-4751-bdf1-5b6671d42790@molgen.mpg.de>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20241218052214.1808006-1-miao@synopsys.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <68e02165-e5a3-4751-bdf1-5b6671d42790@molgen.mpg.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 18/12/2024 06:22, Miao.Zhu wrote:
-> From: Miao Zhu <miao@synopsys.com>
+[Cc: +Niklas, +Jeff]
+
+
+Dear Linux folks,
+
+
+Am 17.12.24 um 22:57 schrieb Paul Menzel:
+
+> Attaching a 2 TB external disk to the right port of the Dell XPS 13 9360 
+> and running `sudo mkfs.ext4 -L "Verbatim HD" /dev/sda1` the command does 
+> not complete and the system finally locks up and has to be hard reset:
 > 
-> The TCPCI driver has flags to configure its protperties but
-> no way to enable these flags yet. Add these flags into DT
-> so that the driver can be compatible with TCPCI  Spec R2 V1.0.
+> ```
+> [    0.000000] Linux version 6.13.0-rc3-00017-gf44d154d6e3d (build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 14.2.0-8) 14.2.0, GNU ld (GNU Binutils for Debian) 2.43.50.20241210) #42 SMP PREEMPT_DYNAMIC Tue Dec 17 11:17:55 CET 2024
+> […]
+> [    0.000000] DMI: Dell Inc. XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022
+> […]
+> [  124.234690] RIP: 0010:xhci_ring_expansion+0xbd/0x380 [xhci_hcd]
+> [  124.234806] Code: ff ff 83 7d 54 04 0f 84 fa 01 00 00 48 85 ed 0f 84 2e 01 00 00 8b 44 24 40 85 c0 0f 84 82 01 00 00 48 8b 54 24 18 48 8b 45 08 <48> 8b 52 08 48 89 50 08 48 8b 55 00 48 8b 44 24 18 48 89 50 08 8b
+> [  124.234819] RSP: 0018:ffffbc1a4093ba08 EFLAGS: 00010046
+> [  124.234833] RAX: ffff9421ee1b1880 RBX: ffff9421c1aae240 RCX: ffff9421ee1b1d80
+> [  124.234842] RDX: 0000000000000000 RSI: ffffbc1a4093ba08 RDI: 0000000000001800
+> [  124.234852] RBP: ffff942213a41880 R08: 0000000000000000 R09: 0000000000000000
+> [  124.234861] R10: 0000000000000000 R11: 0000000000000400 R12: 0000000000000820
+> [  124.234869] R13: 0000000000000820 R14: 0000000000000000 R15: ffff9421ff86c000
+> [  124.234879] FS:  0000000000000000(0000) GS:ffff94252f080000(0000) knlGS:0000000000000000
+> [  124.234889] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [  124.234899] CR2: 0000000000000008 CR3: 00000001bb621002 CR4: 00000000003726f0
+> [  124.234909] Call Trace:
+> [  124.234920]  <TASK>
+> [  124.234930]  ? __die_body.cold+0x19/0x2b
+> [  124.234950]  ? page_fault_oops+0x156/0x2d0
+> [  124.234971]  ? dma_direct_alloc+0xc0/0x270
+> [  124.234992]  ? exc_page_fault+0x81/0x190
+> [  124.235009]  ? asm_exc_page_fault+0x26/0x30
+> [  124.235028]  ? xhci_ring_expansion+0xbd/0x380 [xhci_hcd]
+> [  124.235111]  ? xhci_ring_expansion+0x95/0x380 [xhci_hcd]
+> [  124.235184]  prepare_ring+0x22e/0x2b0 [xhci_hcd]
+> [  124.235272]  prepare_transfer+0x83/0x190 [xhci_hcd]
+> [  124.235351]  xhci_queue_bulk_tx+0x12e/0xa30 [xhci_hcd]
+> [  124.235440]  ? __kmalloc_noprof+0x26a/0x500
+> [  124.235457]  ? xhci_urb_enqueue+0x82/0x390 [xhci_hcd]
+> [  124.235547]  xhci_urb_enqueue+0x36b/0x390 [xhci_hcd]
+> [  124.235623]  usb_hcd_submit_urb+0x98/0xc20 [usbcore]
+> [  124.235754]  ? usb_alloc_urb+0x41/0x70 [usbcore]
+> [  124.235861]  ? usb_alloc_urb+0x41/0x70 [usbcore]
+> [  124.235950]  ? usb_alloc_urb+0x55/0x70 [usbcore]
+> [  124.236039]  usb_sg_wait+0x7e/0x190 [usbcore]
+> [  124.236149]  usb_stor_bulk_transfer_sglist+0x74/0x120 [usb_storage]
+> [  124.236178]  usb_stor_Bulk_transport+0x1ab/0x4a0 [usb_storage]
+> [  124.236200]  ? __schedule+0x4e0/0xb80
+> [  124.236222]  ? release_everything+0xa0/0xa0 [usb_storage]
+> [  124.236243]  usb_stor_invoke_transport+0x3b/0x510 [usb_storage]
+> [  124.236265]  ? release_everything+0xa0/0xa0 [usb_storage]
+> [  124.236285]  ? __cond_resched+0x31/0x50
+> [  124.236303]  ? __wait_for_common+0x18f/0x1c0
+> [  124.236321]  ? hrtimer_nanosleep_restart+0xe0/0xe0
+> [  124.236337]  ? scsi_io_completion+0x43/0x5f0 [scsi_mod]
+> [  124.236416]  ? release_everything+0xa0/0xa0 [usb_storage]
+> [  124.236436]  usb_stor_control_thread+0x1d1/0x290 [usb_storage]
+> [  124.236461]  kthread+0xcf/0x100
+> [  124.236480]  ? kthread_park+0x80/0x80
+> [  124.236496]  ret_from_fork+0x31/0x50
+> [  124.236515]  ? kthread_park+0x80/0x80
+> [  124.236530]  ret_from_fork_asm+0x11/0x20
+> [  124.236552]  </TASK>
 
-Do not attach (thread) your patchsets to some other threads (unrelated
-or older versions). This buries them deep in the mailbox and might
-interfere with applying entire sets.
+[…]
 
-
-<form letter>
-Please use scripts/get_maintainers.pl to get a list of necessary people
-and lists to CC (and consider --no-git-fallback argument, so you will
-not CC people just because they made one commit years ago). It might
-happen, that command when run on an older kernel, gives you outdated
-entries. Therefore please be sure you base your patches on recent Linux
-kernel.
-
-Tools like b4 or scripts/get_maintainer.pl provide you proper list of
-people, so fix your workflow. Tools might also fail if you work on some
-ancient tree (don't, instead use mainline) or work on fork of kernel
-(don't, instead use mainline). Just use b4 and everything should be
-fine, although remember about `b4 prep --auto-to-cc` if you added new
-patches to the patchset.
-</form letter>
-
-
+> ```
 > 
-> Signed-off-by: Miao.Zhu <miao@synopsys.com>
-> ---
-> V2 -> V3: Add description and type for new properties:
-> ---
->  .../devicetree/bindings/usb/nxp,ptn5110.yaml       | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> index 65a8632..29d6aed 100644
-> --- a/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> +++ b/Documentation/devicetree/bindings/usb/nxp,ptn5110.yaml
-> @@ -21,6 +21,28 @@ properties:
->    interrupts:
->      maxItems: 1
->  
-> +  TX_BUF_BYTE_x_hidden:
+> Please find the full log attached.
 
-Follow DTS coding style.
+I found the fixes, Mathias posted yesterday [1].
 
-> +    description:
-> +      When set, TX_BUF_BYTE_x can only be accessed through
-> +      I2C_WRITE_BYTE_COUNT.
-You described the desired Linux feature or behavior, not the actual
-hardware. The bindings are about the latter, so instead you need to
-rephrase the property and its description to match actual hardware
-capabilities/features/configuration etc.
 
-Best regards,
-Krzysztof
+Kind regards,
+
+Paul
+
+
+[1]: 
+https://lore.kernel.org/all/20241217102122.2316814-3-mathias.nyman@linux.intel.com/
 
