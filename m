@@ -1,125 +1,78 @@
-Return-Path: <linux-usb+bounces-18623-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18624-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F06209F5F16
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 08:15:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5BFB9F5F52
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 08:31:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4473A1618D8
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 07:15:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A08118862B8
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 07:31:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30B091586DB;
-	Wed, 18 Dec 2024 07:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7373161311;
+	Wed, 18 Dec 2024 07:31:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="MKvrA/Bm"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="V2H8OQCM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 507E315666B;
-	Wed, 18 Dec 2024 07:15:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642F48488;
+	Wed, 18 Dec 2024 07:31:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734506131; cv=none; b=HmwMSZjDInYpi6Phsdx9FKWWYUYE33MfIp9bfjAOnwElV2kSi/oJ1LSUExR32yVt1RrV5/D6KVuoqt+4jIJLIc3Zi+m0CBNNbduoXVq2cM21D3YClMUr52JTWN73snhqS+uvnn/hKbETdpMBAaENihI4HKRsdfsruIBRprFmVLE=
+	t=1734507063; cv=none; b=LHij9ZjmpvHQRv/eRL32LnO2mdfYVZsN/DKCHSFebydmLcbtKXpu8JFVKZNn2CtEUFmwL+PndEPhNlDeb5o+MshSDLdYNf2xZtJgsGsYpZPLxGGQE7uPa4o/XvNNnhcyi9FisJVA0I84NZMIlMnmmbU0/V7w7O7JfFRy90srJO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734506131; c=relaxed/simple;
-	bh=aluugiqXTkoRRG7seS29rNH3yJ+36BBE06UAvdhrWtw=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=TuGQbK2k0+QzXZ/kHweX6zXzT8Alrd7KjzcRyGownEPPEaH/j2j46ou5qSLzY3D9Anb75S69NhX+VZePy6gXhrM4CHAmddcDJPZRTXSTNVa4ParXPrpQQZ1kVHj23oNyu+9i7eKInDOFtCCj2+6R+mhV+8dttTy+UFBJJzH2xFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=MKvrA/Bm; arc=none smtp.client-ip=117.135.210.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=YUJkv
-	boH8N2TDLKwm+M/QlVsztm9TDQx3DITEazuH1s=; b=MKvrA/Bm5R3alckiT0QZg
-	unJAREDkhdN0pOW2aWh5Iz1Jq7wNx8MGLbC47w+iMK+4GpUzkC4lSRHD73q697fW
-	j8ppxUC6N9oN2A29K6l9+1beggeRVYjg7YX453fmXB2cU+4hAlzv4Z/0FufxpzWJ
-	g3mcvLq5v1Hd+X5uzCM79U=
-Received: from icess-ProLiant-DL380-Gen10.. (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDH5gMsdmJnY9NlBQ--.19120S4;
-	Wed, 18 Dec 2024 15:13:57 +0800 (CST)
-From: Ma Ke <make_ruc2021@163.com>
-To: gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu,
-	quic_ugoswami@quicinc.com,
-	stanley_chang@realtek.com,
-	make_ruc2021@163.com,
-	christophe.jaillet@wanadoo.fr,
-	oneukum@suse.com,
-	javier.carrasco@wolfvision.net,
-	kay.sievers@vrfy.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Subject: [PATCH v3] usb: fix reference leak in usb_new_device()
-Date: Wed, 18 Dec 2024 15:13:46 +0800
-Message-Id: <20241218071346.2973980-1-make_ruc2021@163.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1734507063; c=relaxed/simple;
+	bh=UpFSLQPO96lykop+vvLXd2Bkubb8lGnsKqB3CKAFECI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oim96Yj1sJHmDP4+fJmUNSaWZm5rh92Tt67Jr6Ar6+Tefd+WS9lTaqvn5bqnwIy3hlGce02iJvA5g3wMSb8whYYLk89fz9ChBE0gWKP/F+ECqse5Hne8nG5BWobnjKgbJUA0SICrZiZyFdkF81mhVRkt3QK7oX4eiJOTZifPRD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=V2H8OQCM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5AEB5C4CECE;
+	Wed, 18 Dec 2024 07:31:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1734507062;
+	bh=UpFSLQPO96lykop+vvLXd2Bkubb8lGnsKqB3CKAFECI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V2H8OQCMjc18mYRWRPLyw4KDgpnzAhA0Wl5opru2xNOPaXLo9H8cVw2zITxylgmgS
+	 5AGHqU1TCwiNM/CCrBOlXr6UQKrMCCrK4GZhcnfyJB1Zg4ccQI7PZMNMwkW/HYwR1c
+	 Gh1WVP9aYYMmiIUn1QGWikDe9g2A6TRoQeMlHZ9I=
+Date: Wed, 18 Dec 2024 08:30:22 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: =?utf-8?B?5rGf5LiW5piK?= <sh.jiang@zju.edu.cn>
+Cc: security@kernel.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, syzkaller@googlegroups.com
+Subject: Re: [bug report] usb: WARNING in usb_free_urb
+Message-ID: <2024121824-twine-ageless-5c7c@gregkh>
+References: <ee535ac.6def.193d8967e04.Coremail.sh.jiang@zju.edu.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wDH5gMsdmJnY9NlBQ--.19120S4
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KF1DKrW8WFyDXr18CrWrAFb_yoW8Aw1Upr
-	W8Ga98KrWDGr17Cw1jvFy8Xa45Ga10ya4rWFyfZw129w13X3yrKryrtry5ta48ArZ3AF4U
-	XFW7WF4SqryUCFJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pimhF7UUUUU=
-X-CM-SenderInfo: 5pdnvshuxfjiisr6il2tof0z/xtbBXwG5C2diPlkwfAABsD
+In-Reply-To: <ee535ac.6def.193d8967e04.Coremail.sh.jiang@zju.edu.cn>
 
-When device_add(&udev->dev) succeeds and a later call fails,
-usb_new_device() does not properly call device_del(). As comment of
-device_add() says, 'if device_add() succeeds, you should call
-device_del() when you want to get rid of it. If device_add() has not
-succeeded, use only put_device() to drop the reference count'.
+On Wed, Dec 18, 2024 at 03:06:01PM +0800, 江世昊 wrote:
+> Hello developers,
+> 
+> We hit this issue when fuzzing the usb module with Syzkaller.
 
-Found by code review.
+Great!  But why are you using an old kernel version:
 
-Cc: stable@vger.kernel.org
-Fixes: 9f8b17e643fe ("USB: make usbdevices export their device nodes instead of using a separate class")
-Signed-off-by: Ma Ke <make_ruc2021@163.com>
----
-Changes in v3:
-- modified the bug description according to the changes of the patch;
-- removed redundant put_device() in patch v2 as suggestions.
-Changes in v2:
-- modified the bug description to make it more clear;
-- added the missed part of the patch.
----
- drivers/usb/core/hub.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> HEAD commit: 819837584309 6.12.0-rc5
 
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index 4b93c0bd1d4b..21ac9b464696 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -2663,13 +2663,13 @@ int usb_new_device(struct usb_device *udev)
- 		err = sysfs_create_link(&udev->dev.kobj,
- 				&port_dev->dev.kobj, "port");
- 		if (err)
--			goto fail;
-+			goto out_del_dev;
- 
- 		err = sysfs_create_link(&port_dev->dev.kobj,
- 				&udev->dev.kobj, "device");
- 		if (err) {
- 			sysfs_remove_link(&udev->dev.kobj, "port");
--			goto fail;
-+			goto out_del_dev;
- 		}
- 
- 		if (!test_and_set_bit(port1, hub->child_usage_bits))
-@@ -2683,6 +2683,8 @@ int usb_new_device(struct usb_device *udev)
- 	pm_runtime_put_sync_autosuspend(&udev->dev);
- 	return err;
- 
-+out_del_dev:
-+	device_del(&udev->dev);
- fail:
- 	usb_set_device_state(udev, USB_STATE_NOTATTACHED);
- 	pm_runtime_disable(&udev->dev);
--- 
-2.25.1
+If you come up with a fix for this, please submit it as you have a
+reproducer.
 
+Also, no need to cc: the security alias if you also send it to public
+lists like this.
+
+thanks,
+
+greg k-h
 
