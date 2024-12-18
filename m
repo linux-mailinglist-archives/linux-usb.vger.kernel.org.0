@@ -1,127 +1,352 @@
-Return-Path: <linux-usb+bounces-18641-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18639-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F6D89F6374
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 11:39:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 283309F62B4
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 11:22:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 27B5B7A7AA0
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 10:39:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17AEF7A5EF4
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 10:22:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80366198A07;
-	Wed, 18 Dec 2024 10:39:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C63119ABA3;
+	Wed, 18 Dec 2024 10:22:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sundtek.de header.i=@sundtek.de header.b="ezATlpL9"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="tO5xC67j"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sundtek.de (sundtek.de [85.10.198.106])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A62D250276
-	for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 10:39:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.10.198.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DEBC199EB0
+	for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 10:21:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734518374; cv=none; b=u7FZBNiYseeLRSol8yv1MieR30pt/ddX/FId7fKcIWvaKh/IVEB+fxG6LPU2v6MvfKicTrHrWFr1O+oEvbn7KjD2tuCdhzHnm+QCdM5oV2T16Jva5fogWNaMJiRErytX5uj3y/CUWHWeIw2gIjH5kn6IAv1/PXcemD0I/+0mFmw=
+	t=1734517320; cv=none; b=UfuA13h3g58tnRyjxWRAC2YI8g6w9LaiIyVySk102LKTWpNBhuiKOrIgrNOnN5IPdA6XA9ctgG4NBGzOF1HRKK71Hm9tyCxbOO8wfGhNHd6VNMZEQx+CXOJMJi3wQnUaIFzbQsy0q1Jf6FS8Zc/AtxQHevwL5P7XgRsEmJdvsrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734518374; c=relaxed/simple;
-	bh=kNJvys9W98HEREJbPMgM5B1ukuBf4BHqwc+4NXI5sPI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=fZ1ZmzaOkv8TYxoCebviq1cDDFuxFkH+R8j6r9KzUFDKx6JlXWGwe77QELTRZxXTfFdJIfE85078p1/TOMv/ajWNRjztVbKaqoYHl676OmQduUSDSZWFjCKRGaYN286PsOAHg2WIpqhX9QXnIwlwAuZOwyq9cDfGZEz9TZr14gw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de; spf=pass smtp.mailfrom=sundtek.de; dkim=pass (2048-bit key) header.d=sundtek.de header.i=@sundtek.de header.b=ezATlpL9; arc=none smtp.client-ip=85.10.198.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sundtek.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sundtek.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sundtek.de;
-	s=202411; h=MIME-Version:Content-Transfer-Encoding:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=kNJvys9W98HEREJbPMgM5B1ukuBf4BHqwc+4NXI5sPI=; b=ezATlpL9KhHOs8Gglqr6Gx8RZ9
-	TFC2vFyIIcPdTvzH5RM1AtDKQkuUlwQ9+kz1L+6/Gh/RbBcKB5sh/VFN7s8Sm86wfuBtKKIz07ds6
-	YpUYObTa6ViJKXQNRVoqg8w99DEIrdHi+Raq8yrqH+A3v/NTNMlEurmrD5EgPvUCjRCAW4A/mRaOS
-	aeXNY3608NrkNs4aICE5U6OXaIq3KaWyZIgULSwvIzS3TyJqlg2G9cT6av9cOMwtQlMVZ6ldsfTLZ
-	sjMJ7OvS2tez6NHdM9NPYRD3FiYC7TcTJ2QCPPgA3eEDN16cmTi0PVE8lEFaQgVAtYCHpKFndUx3Z
-	vS/JdD4Q==;
-Received: from Debian-exim by sundtek.de with spam-scanned (Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tNr3o-00DNj4-Om
-	for linux-usb@vger.kernel.org;
-	Wed, 18 Dec 2024 11:13:44 +0100
-X-Spam-Report: =?ISO-8859-1?Q?
-	* -1.0 ALL_TRUSTED Nachricht wurde nur =fcber vertrauensw=fcrdige Rechner
-	*      weitergeleitet
-	* -1.9 BAYES_00 BODY: Spamwahrscheinlichkeit nach Bayes-Test: 0-1%
-	*      [score: 0.0000]
-	*  0.0 TVD_RCVD_IP Message was received from an IP address?=
-X-Spam-Level: 
-Received: from 111-254-20-73.dynamic-ip.hinet.net ([111.254.20.73] helo=[192.168.2.197])
-	by sundtek.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <linuxusb.ml@sundtek.de>)
-	id 1tNr3k-00DNir-6s;
-	Wed, 18 Dec 2024 11:13:40 +0100
-Message-ID: <4e5403bfeaa656a42f145c217ccc7e58c993bca6.camel@sundtek.de>
-Subject: Re: USB Autosuspend
-From: Markus Rechberger <linuxusb.ml@sundtek.de>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: linux-usb@vger.kernel.org
-Date: Wed, 18 Dec 2024 18:13:35 +0800
-In-Reply-To: <3e9d6d03-eed7-4f46-9926-4d395c0bc46d@rowland.harvard.edu>
-References: <77b79e95c092511a695ac0b6a8eade57b12ff3db.camel@sundtek.de>
-	 <3e9d6d03-eed7-4f46-9926-4d395c0bc46d@rowland.harvard.edu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1734517320; c=relaxed/simple;
+	bh=gIRlSuRZXCVhEj1cANdYWbnMlczEkhjziydB+7h0vBM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=e7wuUlSQb+P4RN/lmYm3CX03TpqODwWICahzgR5BBKMDFgMXNdIWnRAWdBQZpFqRjq0nTHdozm+N5fEhXyQ3aJXrAgUpuwMhhuF2hVzK3qxsjvCODowtbUiCu674S251tNd0+eOyibLv7VAwesECZxeF2geU0Uy33HC2YGsuJzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=tO5xC67j; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20241218102156epoutp01dd40347f4035e8dd5f33ed0e38caf216~SPk80pNkd2032220322epoutp01S
+	for <linux-usb@vger.kernel.org>; Wed, 18 Dec 2024 10:21:56 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20241218102156epoutp01dd40347f4035e8dd5f33ed0e38caf216~SPk80pNkd2032220322epoutp01S
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1734517316;
+	bh=c5Hrh1CqgGRGngQYGz3bW4B3kn4R23TwdKn6OhVmBlM=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=tO5xC67jRvmmny9C4onzkKEFoIB8LHl6E50vMPV44HvkP6Ty8g7mjFGKPcJCubmGx
+	 I2uLky0Z9wgYByFsw74eeXl/dnHHVXOBvic5VRaQq7xB3KeLFesrxdpF/p2n+29hoe
+	 xZMGqAYnNRfEESk4wtbdRAa83pibIEATEibjO2ZU=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20241218102155epcas5p2a693d9b8f80efdb8ea683623acfabea1~SPk8WJTLi3048730487epcas5p2s;
+	Wed, 18 Dec 2024 10:21:55 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.176]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4YCqVB4VM8z4x9Q2; Wed, 18 Dec
+	2024 10:21:54 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	78.BF.19710.242A2676; Wed, 18 Dec 2024 19:21:54 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTPA id
+	20241218102154epcas5p28e40b033d2bb3315847890044b0ae1d5~SPk6sJn-93048730487epcas5p2p;
+	Wed, 18 Dec 2024 10:21:54 +0000 (GMT)
+Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20241218102154epsmtrp2f6d28633267a267a6911c73c4ea03958~SPk6rKZRN3238332383epsmtrp2d;
+	Wed, 18 Dec 2024 10:21:54 +0000 (GMT)
+X-AuditID: b6c32a44-36bdd70000004cfe-96-6762a2421a19
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	73.01.18949.142A2676; Wed, 18 Dec 2024 19:21:53 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20241218102151epsmtip21447dda6633480e51d250d30fb0fb357~SPk4J6rJm2783627836epsmtip2I;
+	Wed, 18 Dec 2024 10:21:51 +0000 (GMT)
+Message-ID: <9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
+Date: Wed, 18 Dec 2024 15:51:50 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: <locally generated>
-X-SA-Exim-Mail-From: linuxusb.ml@sundtek.de
-X-SA-Exim-Scanned: No (on sundtek.de); SAEximRunCond expanded to false
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
+	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	stable@vger.kernel.org
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <2024121845-cactus-geology-8df3@gregkh>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrBJsWRmVeSWpSXmKPExsWy7bCmhq7ToqR0g6cf5CymT9vIavHm6ipW
+	iwfztrFZ3Fkwjcni1PKFTBbNi9ezWUzas5XF4u7DHywW696eZ7W4vGsOm8WiZa3MFlvarjBZ
+	fDr6n9WicctdVotVnXNYLC5/38lssWDjI0aLSQdFHYQ8Nq3qZPPYP3cNu8exF8fZPfr/GnhM
+	3FPn0bdlFaPH501yAexR2TYZqYkpqUUKqXnJ+SmZeem2St7B8c7xpmYGhrqGlhbmSgp5ibmp
+	tkouPgG6bpk5QE8oKZQl5pQChQISi4uV9O1sivJLS1IVMvKLS2yVUgtScgpMCvSKE3OLS/PS
+	9fJSS6wMDQyMTIEKE7IzLv4+xFZwXrfi2p7nLA2MD5S7GDk5JARMJFb9aGLrYuTiEBLYzSix
+	d9FcVgjnE6PE+onfoZxvjBKnNz9nhGl5dOAbVMteRonP63qYIJy3jBJ9636wglTxCthJbFow
+	lQ3EZhFQlfj9bCMTRFxQ4uTMJywgtqiAvMT9WzPYQWxhgUyJr9O7wDaICGhIvDx6iwVkKLPA
+	GmaJm196wQYxC4hL3HoyH2gQBwebgKHEsxM2ICYn0EWda8wgKuQlmrfOZgZplRB4wSHRcfYv
+	C8TVLhJTzhxng7CFJV4d38IOYUtJfH63FyqeLLFn0heoeIbEoVWHmCFse4nVC86wguxiFtCU
+	WL9LH2IXn0Tv7ydg10gI8Ep0tAlBVKtKnGq8DDVRWuLekmusELaHxKm272DThQR2Mkp8fG49
+	gVFhFlKgzELy4ywk38xCWLyAkWUVo2RqQXFuemqyaYFhXmo5PL6T83M3MYKTuJbLDsYb8//p
+	HWJk4mA8xCjBwawkwuummZguxJuSWFmVWpQfX1Sak1p8iNEUGDsTmaVEk/OBeSSvJN7QxNLA
+	xMzMzMTS2MxQSZz3devcFCGB9MSS1OzU1ILUIpg+Jg5OqQamDimpquoog7cv+o/8nSi3P/mp
+	ynvHjGqr4M7MJM1F96vKroU4H3vq6nhF7duUcv0J4ar7OL4ZKkxoVPHadD/t48EX+vOnxVrL
+	y249EV1+bXPcrO2cWnt2vn4TNeHvZPEVedHsElkZ83RXlYe+epzpkWf4YgpLltOpKUymDB4c
+	W7ZwvG7/n2+bZibk41sxNev9xeMZv7l3TrjAvDlE8ROffae9cdvhDYfMuE6YZq0u/zezTpo7
+	PSm7oOXpeee8wvnbbPLWe2887nv89HrHWVNcsq9o/7kwm9W6fIvirZk159XiXlu/enPzl87P
+	Av+j65/WR/NfXmJfGMj37TDTovkSF7ku85kcX1m181TqKud8JZbijERDLeai4kQAFsvlNGsE
+	AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrKIsWRmVeSWpSXmKPExsWy7bCSvK7joqR0g/M3LSymT9vIavHm6ipW
+	iwfztrFZ3Fkwjcni1PKFTBbNi9ezWUzas5XF4u7DHywW696eZ7W4vGsOm8WiZa3MFlvarjBZ
+	fDr6n9WicctdVotVnXNYLC5/38lssWDjI0aLSQdFHYQ8Nq3qZPPYP3cNu8exF8fZPfr/GnhM
+	3FPn0bdlFaPH501yAexRXDYpqTmZZalF+nYJXBkXfx9iKzivW3Ftz3OWBsYHyl2MnBwSAiYS
+	jw58Y+ti5OIQEtjNKNG3fScTREJa4vWsLkYIW1hi5b/n7BBFrxkldq9aywyS4BWwk9i0YCob
+	iM0ioCrx+9lGJoi4oMTJmU9YQGxRAXmJ+7dmsIPYwgKZEvdOzQSrFxHQkHh59BYLyFBmgTXM
+	Er9mdDBCbNjJKHFu/i2wDcwC4hK3nswHmsrBwSZgKPHshA2IyQl0ducaM4gKM4murRCHMgPt
+	at46m3kCo9AsJGfMQjJoFpKWWUhaFjCyrGKUTC0ozk3PLTYsMMpLLdcrTswtLs1L10vOz93E
+	CI5ZLa0djHtWfdA7xMjEwXiIUYKDWUmE100zMV2INyWxsiq1KD++qDQntfgQozQHi5I477fX
+	vSlCAumJJanZqakFqUUwWSYOTqkGpiM7ZZpLny4w+2C6qNBvtdHV9R4nuY1Mps9zWJgWcLP6
+	1LtZN/7lLL+QIXj3SUCTqVDqsUf9ghUbT50VPynKkZDLlM0tFL7EgCP7Vs3JqsoqXdv1zH1H
+	fX55JViKX1h3WXh7WzirKcsDdUZZD2l3KUMety0XrO54yzdPTVhutXdL4sbls5Ss5ZeWhcq8
+	uqsqNE3YcJdZAIMSJ2tkvqTHfuWMKnuBwqZNmWbR9p92fPYrlLs1Yf1ESWOmVzxzzjC0fEuc
+	vezfMQluU4t5svfCY26rT7ecc3TT3/aaqYqa0rOkskzEoq41hx7p98pUvsSl/3lV5n6jjO1O
+	ZYuTH0Tb7NPtkUqO3ebT6StVPFuJpTgj0VCLuag4EQClJj7gSAMAAA==
+X-CMS-MailID: 20241218102154epcas5p28e40b033d2bb3315847890044b0ae1d5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241208152338epcas5p4fde427bb4467414417083221067ac7ab
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+	<20241208152322.1653-1-selvarasu.g@samsung.com>
+	<2024121845-cactus-geology-8df3@gregkh>
 
-On Mon, 2024-11-18 at 22:11 -0500, Alan Stern wrote:
-> On Mon, Nov 18, 2024 at 04:13:29PM +0800, Markus Rechberger wrote:
-> > Hi,
-> >=20
-> > we repeatedly received issues from customers with usb autosuspend,
-> > our
-> > devices are randomly disconnected on some systems, it did not
-> > happen
-> > many times but if more than 4-5 customers report this there's
-> > usually
-> > some real issue behind that.
-> >=20
-> > I'm asking here because the Libreelec distribution recently got my
-> > attention that they seem to set usb autosuspend to -1 during boot
-> > time
-> > so they probably figured that out much earlier with other devices.
-> > I have never experienced that issue on an Ivy or Haswell based
-> > system.
-> >=20
-> > Were there some issues with particular kernel versions in the past
-> > or
-> > are there any issues known in general with USB autosuspend?
->=20
-> I'm not aware of any such issues.
->=20
-> Do you think you can get kernel debugging logs from your customers=20
-> showing examples of these disconnections?
->=20
 
-one customer just replied his problem is gone since he disabled auto
-suspend (that was the latest one). He tested it since the last mail to
-the mailing list.
+On 12/18/2024 11:01 AM, Greg KH wrote:
+> On Sun, Dec 08, 2024 at 08:53:20PM +0530, Selvarasu Ganesan wrote:
+>> The current implementation sets the wMaxPacketSize of bulk in/out
+>> endpoints to 1024 bytes at the end of the f_midi_bind function. However,
+>> in cases where there is a failure in the first midi bind attempt,
+>> consider rebinding.
+> What considers rebinding?  Your change does not modify that.
 
-Do you want any particular logfiles / logging from him?
+Hi Greg,
+Thanks for your review comments.
 
-Best Regards,
-Markus
 
-> Alan Stern
->=20
+Here the term "rebind" in this context refers to attempting to bind the 
+MIDI function a second time in certain scenarios.
+The situations where rebinding is considered include:
 
+  * When there is a failure in the first UDC write attempt, which may be
+    caused by other functions bind along with MIDI
+  * Runtime composition change : Example : MIDI,ADB to MIDI. Or MIDI to
+    MIDI,ADB
+
+The issue arises during the second time the "f_midi_bind" function is 
+called. The problem lies in the fact that the size of 
+"bulk_in_desc.wMaxPacketSize" is set to 1024 during the first call, 
+which exceeds the hardware capability of the dwc3 TX/RX FIFO 
+(ep->maxpacket_limit = 512).
+Let consider the below sequence,
+
+
+_1. First time f_midi_bind:_
+
+  * As per the current codethe size of bulk_in_desc.wMaxPacketSize is 0
+    in first time call.
+  * Call usb_ep_autoconfig to match EP and got success as no failure in
+    the below code as part of usb_ep_autoconfig.
+
+    usb_gadget_ep_match_desc()
+        {
+        ..
+        ..
+        if (max > ep->maxpacket_limit)// (64 > 512)
+            return 0;
+
+        return 1;// Found Maching EP
+
+        } 
+
+  * EP claim got success and set bulk_in_desc.wMaxPacketSize =1024 at
+    end of f_midi_bind.
+
+
+_2. Second time enter into f_midi_bind _
+
+  * The size of bulk_in_desc.wMaxPacketSize become 1024 because of above
+    code.
+  * Call usb_ep_autoconfig for EP claim and has a failure now in the
+    below code as part of usb_ep_autoconfig
+
+    usb_gadget_ep_match_desc()
+
+    {
+    ..
+    ..
+    if (max > ep->maxpacket_limit)// (1024 > 512)
+    return 0; // Not found any matchingEP
+
+    }
+
+
+To resolve this issue, our patch sets the default value of 
+"bulk_in_desc.wMaxPacketSize" to 64 before endpoint claim. This ensures 
+that the endpoint claim is successful during the second time 
+"f_midi_bind" is called.
+
+
+>
+>> This scenario may encounter an f_midi_bind issue due
+>> to the previous bind setting the bulk endpoint's wMaxPacketSize to 1024
+>> bytes, which exceeds the ep->maxpacket_limit where configured TX/RX
+>> FIFO's maxpacket size of 512 bytes for IN/OUT endpoints in support HS
+>> speed only.
+>> This commit addresses this issue by resetting the wMaxPacketSize before
+>> endpoint claim.
+> resets it to what?  Where did the magic numbers come from?  How do we
+> know this is now full speed and not high speed?
+
+
+It’s a generic way of setwMaxPacketSize before endpoint claim. Its 
+because of the usb_ep_autoconfig treats endpoint descriptors as if they 
+were full speed. This approach follows the same pattern as other 
+function drivers, which also set the wMaxPacketSize to 64 before 
+endpoint claim.
+
+The following are the example of how other functions drivers EP claim.
+
+_1. drivers/usb/gadget/function/f_eem.c_
+
+
+eem_bind ()
+
+{
+
+…
+
+..
+
+/* allocate instance-specific endpoints */
+
+ep = usb_ep_autoconfig(cdev->gadget, &eem_fs_in_desc); 
+//eem_fs_in_desc.wMaxPacketSize=64
+
+if (!ep)
+
+goto fail;
+
+}
+
+_2. drivers/usb/gadget/function/f_rndis.c_
+
+
+rndis_bind()
+
+{
+
+...
+
+...
+
+/* allocate instance-specific endpoints */
+
+ep = usb_ep_autoconfig(cdev->gadget, &fs_in_desc); 
+//fs_in_desc.wMaxPacketSize=64
+
+if (!ep)
+
+goto fail;
+
+rndis->port.in_ep = ep;
+
+  }
+
+Anyway the wMaxPacketSize set with 64 byte after complete 
+usb_ep_autoconfig() as part of below this function ifep->maxpacket_limit 
+is grater then 64. It's means treats endpoint descriptors as if they 
+were full speed by default.
+
+struct usb_ep *usb_ep_autoconfig()
+
+{
+
+..
+
+…
+
+if (type == USB_ENDPOINT_XFER_BULK) {
+
+int size = ep->maxpacket_limit;
+
+/* min() doesn't work on bitfields with gcc-3.5 */
+
+if (size > 64)
+
+size = 64;
+
+desc->wMaxPacketSize = cpu_to_le16(size);
+
+}
+
+..
+
+..
+
+}
+
+>> Fixes: 46decc82ffd5 ("usb: gadget: unconditionally allocate hs/ss descriptor in bind operation")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
+>> ---
+>>   drivers/usb/gadget/function/f_midi.c | 9 +++++++++
+>>   1 file changed, 9 insertions(+)
+>>
+>> diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+>> index 837fcdfa3840..5caa0e4eb07e 100644
+>> --- a/drivers/usb/gadget/function/f_midi.c
+>> +++ b/drivers/usb/gadget/function/f_midi.c
+>> @@ -907,6 +907,15 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
+>>   
+>>   	status = -ENODEV;
+>>   
+>> +	/*
+>> +	 * Reset wMaxPacketSize with maximum packet size of FS bulk transfer before
+>> +	 * endpoint claim. This ensures that the wMaxPacketSize does not exceed the
+>> +	 * limit during bind retries where configured TX/RX FIFO's maxpacket size
+>> +	 * of 512 bytes for IN/OUT endpoints in support HS speed only.
+>> +	 */
+>> +	bulk_in_desc.wMaxPacketSize = cpu_to_le16(64);
+>> +	bulk_out_desc.wMaxPacketSize = cpu_to_le16(64);
+> Where did "64" come from?  How do we know this is full speed?  Later
+> on in this function the endpoint sizes are set, why set them here to
+> these small values when you do not know the speed?
+>
+> Or, if it had failed before, reset the values on the failure, not here
+> before you start anything up, right?
+
+Explained as part of above ask.
+
+>
+> thanks,
+>
+> greg k-h
+>
 
