@@ -1,136 +1,179 @@
-Return-Path: <linux-usb+bounces-18630-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18631-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE8589F60BE
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 10:05:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E8B9F6110
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 10:11:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C266B7A22C0
-	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 09:05:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 55A04188ADF6
+	for <lists+linux-usb@lfdr.de>; Wed, 18 Dec 2024 09:11:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA03118D656;
-	Wed, 18 Dec 2024 09:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9737198A07;
+	Wed, 18 Dec 2024 09:09:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e7eTCiNJ"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="QROwKhxg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 263F61922C0;
-	Wed, 18 Dec 2024 09:04:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAD2D187862;
+	Wed, 18 Dec 2024 09:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734512682; cv=none; b=QTDgBfvWommQcXZuxFe4KLGVSptmqWnevXRBITwH9MAAvPZqUP72IUYTQXHxARE3F5Fpx7DIZSixP/QTrnihmNofkxwlHrhcuerxuI2K+nVfOpDUdLoRHP1wAT+zsvZ8AE2BscjXCUkC1Bn1tcIUJ7Rv4e22v6COKLBpB2v0DQE=
+	t=1734512985; cv=none; b=XgzoACZ5U7OmA4piIsyOWNqo5xtg85omNr4jAZOocE8I7bROjHPsUmhznT6aMgVAq2AkA/NSpJc0yTPdRHHH+zgmwBW6pLOSusVz7NgYayFgXcWRf/S3YVgNSmSniaRkyhQuZRGiCUbd55KMd0uePB6lCFUYtQS4X3euAqfCoFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734512682; c=relaxed/simple;
-	bh=gKG0fB3auB6IBRUp3/qQBiqIUkRQoBf77uEk/3OKbDE=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=S7b8VFuj3kskuPXLuef9KHSt1jC7oVOr97durAidIpApT3ULcQzlMq6LAp5NCffq/Lf7gA2lo0pa3tDQVT6dV+PTGecYqeRaTq6LCEULjW2Itn0mbi00n34+hvRSyke/eL2DByHrta8teN9D6s8x8rMITm+nijOPxxAVKLavxaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e7eTCiNJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8711DC4CED4;
-	Wed, 18 Dec 2024 09:04:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734512682;
-	bh=gKG0fB3auB6IBRUp3/qQBiqIUkRQoBf77uEk/3OKbDE=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=e7eTCiNJJCWnFPsycCN3SQMbINkhHC912GFhSPcUckXb8iVVB8+dt+C8jVJi8TURp
-	 pskNyDKxnCKTIaE4Iz6ewWNdgTGNRol0hwumiSjmr0orq6fBFTfJF6xBX+YCrzJccT
-	 tCw323wfibVtDsGC0+fAcZe03BfGHWt3OT1+6+4y4OJkQdexja28+TsvzBOc9hzG5O
-	 sTHB2VH+xc87Ltgk+CagTMco85jab10Xcf0bvnGRI2LFbrKRmOsI1dJFGZn5uvo9Gg
-	 WNFgI3rJSM7p9lmwLRIWBq1x8aCeJqeQTjZTYYT1zUDSr+SDN1iqr44HON81A5H/7S
-	 I/6sSXQspM+TQ==
-Message-ID: <bdbff25d-fe9d-4602-add5-aa2f9d4806d1@kernel.org>
-Date: Wed, 18 Dec 2024 10:04:31 +0100
+	s=arc-20240116; t=1734512985; c=relaxed/simple;
+	bh=m1nH9k1mfGAKPFfwMW45ncE2Y8cDxmK05/T/+o2NdFY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LIfyld5MWgNY7Mh4GBDxvnizQlS8HfIKQLELaHZXq+TCc7eRnrNWYK8edK8UIJaK9IWUZ1gsDaw4aW5+I2eRfDgKr09tvahFpj2u60wku3jm45n71FoWIXVgCHAmjWk7Ocu2JxxMwKGfoD+Mxp8nq/Fi0k4pkRrue25zyHeF1Zc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=QROwKhxg; arc=none smtp.client-ip=52.59.177.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1734512971;
+	bh=oSmadU8r0m/jAstE7lBKy2o54FyM5MvoTj7czqiYO4Y=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=QROwKhxgJK7Xz8nedrLMVJlwKeGEVEwIBBWbwm2uXgatamG0XY41DA5t78FYx1cRt
+	 RgC8lIOIdpX8d5q3Ga/V9N/ft4zyG1Mh1Ov3XV1D9zI3b/blUuI3/2QHlpETUEvRrD
+	 eQJi5NaKo8jBEu5wzNFa0ut+KMVvgj/d/k8z98W0=
+X-QQ-mid: bizesmtpip4t1734512924ta12gj3
+X-QQ-Originating-IP: dKoav+z8nrulxgB/v6xyTXVff+GrvYyc2HS0hpJYez8=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 18 Dec 2024 17:08:37 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 8655085733377736607
+From: WangYuli <wangyuli@uniontech.com>
+To: nbd@nbd.name,
+	lorenzo@kernel.org,
+	ryder.lee@mediatek.com,
+	shayne.chen@mediatek.com,
+	sean.wang@mediatek.com,
+	kvalo@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	alexander.deucher@amd.com,
+	gregkh@linuxfoundation.org,
+	rodrigo.vivi@intel.com
+Cc: linux-wireless@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	raoxu@uniontech.com,
+	guanwentao@uniontech.com,
+	zhanjun@uniontech.com,
+	cug_yangyuancong@hotmail.com,
+	lorenzo.bianconi@redhat.com,
+	kvalo@codeaurora.org,
+	sidhayn@gmail.com,
+	lorenzo.bianconi83@gmail.com,
+	sgruszka@redhat.com,
+	keescook@chromium.org,
+	markus.theil@tu-ilmenau.de,
+	gustavoars@kernel.org,
+	stf_xl@wp.pl,
+	romain.perier@gmail.com,
+	apais@linux.microsoft.com,
+	mrkiko.rs@gmail.com,
+	oliver@neukum.org,
+	woojung.huh@microchip.com,
+	helmut.schaa@googlemail.com,
+	mailhol.vincent@wanadoo.fr,
+	dokyungs@yonsei.ac.kr,
+	deren.wu@mediatek.com,
+	daniel@makrotopia.org,
+	sujuan.chen@mediatek.com,
+	mikhail.v.gavrilov@gmail.com,
+	stern@rowland.harvard.edu,
+	linux-usb@vger.kernel.org,
+	leitao@debian.org,
+	dsahern@kernel.org,
+	weiwan@google.com,
+	netdev@vger.kernel.org,
+	horms@kernel.org,
+	andrew@lunn.ch,
+	leit@fb.com,
+	wang.zhao@mediatek.com,
+	chui-hao.chiu@mediatek.com,
+	lynxis@fe80.eu,
+	mingyen.hsieh@mediatek.com,
+	yn.chen@mediatek.com,
+	quan.zhou@mediatek.com,
+	dzm91@hust.edu.cn,
+	gch981213@gmail.com,
+	git@qrsnap.io,
+	jiefeng_li@hust.edu.cn,
+	nelson.yu@mediatek.com,
+	rong.yan@mediatek.com,
+	Bo.Jiao@mediatek.com,
+	StanleyYP.Wang@mediatek.com,
+	WangYuli <wangyuli@uniontech.com>
+Subject: [RESEND. PATCH] mt76: mt76u_vendor_request: Do not print error messages when -EPROTO
+Date: Wed, 18 Dec 2024 17:08:33 +0800
+Message-ID: <1E6ABDEA91ADAB1A+20241218090833.140045-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] dt-bindings: usb: ptn5110: add TCPC properties
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: "Miao.Zhu" <Miao.Zhu@synopsys.com>, robh@kernel.org
-Cc: James.Li1@synopsys.com, Jianheng.Zhang@synopsys.com,
- Martin.McKenny@synopsys.com, andre.draszik@linaro.org, conor+dt@kernel.org,
- dan.carpenter@linaro.org, devicetree@vger.kernel.org,
- emanuele.ghidoli@toradex.com, gregkh@linuxfoundation.org,
- heikki.krogerus@linux.intel.com, jun.li@nxp.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- m.felsch@pengutronix.de, rdbabiera@google.com, u.kleine-koenig@baylibre.com,
- xu.yang_2@nxp.com
-References: <173448855676.4113446.18228420092453259118.robh@kernel.org>
- <20241218052214.1808006-1-miao@synopsys.com>
- <fbad3631-1efe-4d9b-b163-e635452b0b73@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <fbad3631-1efe-4d9b-b163-e635452b0b73@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: OI/LFjtEDwi4Vo0vNIAyQokbaIb0AkSbUOmPxF0xFYmWicvIAmxpr/T4
+	FY4/ck+n6512RRdD8C9siBnVw0TEg8+/VxRm6dD1A0gM+g1IeP1HIhQbtxJaqGBK5xNd1Mo
+	m10b9VlNQu3TpzWK+MIW7xq6EdFSkDr60JHZz/ER1DPMZ0U0ighcZG6y3BrCmpYPYZP3Xx+
+	V6gwdXFTlf7ZPfpYq0XfCdV0NUPZtjL6oPQeV+C/+MA73CA9jPpsVIFyym3P6aZ/lAsjxVB
+	jDJ035YewjubEbnckzngM/MzMrjM9+V9WmOxrn8l285IO6oLc2AHBG623OpKz0p9eJXwtZX
+	Dh5WQEfoddqfGCtdvaZhsZ+j0uV+O358O3yQKANfwj0rKZWrJ9fzFMgMi8unopJIEbmY4MH
+	brNNg8xmgIxMqSB2tbmTCFIe+/JKZ3XT1vPv2q20M452wx38wg0N0ofa9QoMDtDHQVOeFFA
+	uTJlsK8ePDyS/okZcOlfKx0ag/fqq6i3rpxebywdaL99rxtN3x08eIBHF3pcwOdlZ/0LgTS
+	E2T5wrO1J8iOKuGvCesOO5Cg66nEbLB3X/xhM8MZ9HYRyLonMHlX7p+TBcE2J18eE+enr1X
+	JZvtJInrqdgtXHCED5Khg4GenSkjfOalvKkHm7d+J8x6bTn1cGTEXBhV3IerSY7HE+Lj4mh
+	tF+bSY159nFLc2P6gTsRp3LSQW4b7SH89aucP9gns3l1dkNG5VR13l03lLYHpzm3PEVd+Yz
+	9/IQGLZbIDX3E1qpWx/65ouuiSr/E9ikL5wDttIU0Ms7rJoFtash1KNkFsvQu6Gk1c/Vv1B
+	7SzAWhvToV3De310vPr5rIQWSKZNs5dDoKnw0/AXoDt8o+0RcCKOf7DeLwDtRtCBhPz6kzs
+	tWazD3PxvTKzegvjo90hiWdtazBDLCChU4Sj/H8PhcUoPZIwa/2M0kAXyfMA3vR9Jl3oyhX
+	hVitXUT+bJBpxomDH1zbd6oG8aGi9X/k/R3UXVFVYOm5U4w==
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+X-QQ-RECHKSPAM: 0
 
-On 18/12/2024 09:04, Krzysztof Kozlowski wrote:
->>    interrupts:
->>      maxItems: 1
->>  
->> +  TX_BUF_BYTE_x_hidden:
-> 
-> Follow DTS coding style.
-> 
->> +    description:
->> +      When set, TX_BUF_BYTE_x can only be accessed through
->> +      I2C_WRITE_BYTE_COUNT.
-> You described the desired Linux feature or behavior, not the actual
-> hardware. The bindings are about the latter, so instead you need to
-> rephrase the property and its description to match actual hardware
-> capabilities/features/configuration etc.
+When initializing the network card, unplugging the device will
+trigger an -EPROTO error, resulting in a flood of error messages
+being printed frantically.
 
-I forgot: missing vendor prefix, missing type. Please see how other
-bindings are written. example-schema is also good to start with.
+Co-developed-by: Xu Rao <raoxu@uniontech.com>
+Signed-off-by: Xu Rao <raoxu@uniontech.com>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+ drivers/net/wireless/mediatek/mt76/usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/net/wireless/mediatek/mt76/usb.c b/drivers/net/wireless/mediatek/mt76/usb.c
+index 58ff06823389..f9e67b8c3b3c 100644
+--- a/drivers/net/wireless/mediatek/mt76/usb.c
++++ b/drivers/net/wireless/mediatek/mt76/usb.c
+@@ -33,9 +33,9 @@ int __mt76u_vendor_request(struct mt76_dev *dev, u8 req, u8 req_type,
+ 
+ 		ret = usb_control_msg(udev, pipe, req, req_type, val,
+ 				      offset, buf, len, MT_VEND_REQ_TOUT_MS);
+-		if (ret == -ENODEV)
++		if (ret == -ENODEV || ret == -EPROTO)
+ 			set_bit(MT76_REMOVED, &dev->phy.state);
+-		if (ret >= 0 || ret == -ENODEV)
++		if (ret >= 0 || ret == -ENODEV || ret == -EPROTO)
+ 			return ret;
+ 		usleep_range(5000, 10000);
+ 	}
+-- 
+2.45.2
+
 
