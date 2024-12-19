@@ -1,111 +1,147 @@
-Return-Path: <linux-usb+bounces-18684-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18685-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACE1B9F81E1
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 18:32:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AEB09F8569
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 21:08:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA7A6161EA4
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 17:30:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E76671896F34
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 20:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A475A19CD13;
-	Thu, 19 Dec 2024 17:29:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BB341D356E;
+	Thu, 19 Dec 2024 20:01:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k2SQfQT2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LVqcUsyP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A357D19AD5C
-	for <linux-usb@vger.kernel.org>; Thu, 19 Dec 2024 17:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941FA1BAED6;
+	Thu, 19 Dec 2024 20:01:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734629395; cv=none; b=d545T/t6I/F4HmMCvEN2DtBxoJzRvqwX4ryyaRvGrpRzpLbkk+AFyZ+joJ25e7YBtoxIwjC3Gsz03KFpGpHa9kp9TPoPWfhp/Hn5lzw/Ki+bk54UMv1qNijPowA2YXbqXuzyN6WWdqxKGE0lcDe/uFCMEGPvfV7theUd1U8l8z8=
+	t=1734638491; cv=none; b=qF20LY8fM5r8y6azg0wNVA5kp/AwYthlplxU7S7TFd6r3rewAHNiEbmijDplStApTBo8nt2uFH+7ptcS5HNX5f59TTn8iV+3ZO/3nbhpUAvxz7fpMtaBIovusMUJy1U4AJwsSGAf5tStgs1q3prg5SBXO2e6WTzysTUPPryXtk8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734629395; c=relaxed/simple;
-	bh=2R+srKn1py0I1RkZfdAjchPVCuA8e1u+h4iX3Valv00=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OCqJ3Fr+lil603UWhWdd+L0giEzL0zvdF0wFe2XCPQ59tqk5XIg77BV1/KsKbjbyEusNVr0HkaA4EcM1U9fSePaPctqLZYwOsqs8Py7NLN/bzQlE1Gp2oyYhPqXZLDsyW0hnv/whRKD6WDYtIDNFSVxB7k2BD8EVkqcJfZgOfoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k2SQfQT2; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734629393; x=1766165393;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2R+srKn1py0I1RkZfdAjchPVCuA8e1u+h4iX3Valv00=;
-  b=k2SQfQT2cfO8dXW2QmM+hkE+zXWByRjGpSpQbLOmtnD/WV3tH/aSttYB
-   5dEmFsCP91tWyowGVMRqXPAou3Ug2qV0f4B6F1m+hgE2rWTdeB5lr9hWf
-   e6iggWt4XXp2X81pB8eMm1PVZNmwFtMmSr16JAk++aEcUtaEL943tl3bV
-   X5sk8FZhiQBZbq7GW2HJnRimdhZCp8wNiy9xOb5dnD0fTkYOYAh76DNdg
-   kZHrhvqs/94NH19fEFUh7f1kGjfUEuZflme4YVGXc8zlIyJKjFoKtpdLK
-   K++UfD0J2rsY/xYYvCAe1pR1Q9BaewgDreuW7L6KQQdbmqV2SjEYKrBk1
-   A==;
-X-CSE-ConnectionGUID: o8BdrWpsTz6J6WVR1Yi92g==
-X-CSE-MsgGUID: ievVsgbyTgiue0lcNg+Q9w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="35285114"
-X-IronPort-AV: E=Sophos;i="6.12,248,1728975600"; 
-   d="scan'208";a="35285114"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 09:29:53 -0800
-X-CSE-ConnectionGUID: 8I+RUd6VTamPhievbdb/fQ==
-X-CSE-MsgGUID: eyXJ9iYESriE8dr46fFrJQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="121527945"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa002.fm.intel.com with ESMTP; 19 Dec 2024 09:29:51 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 69B05165; Thu, 19 Dec 2024 19:29:50 +0200 (EET)
-Date: Thu, 19 Dec 2024 19:29:50 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Lukas Wunner <lukas@wunner.de>
-Cc: linux-usb@vger.kernel.org, Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: [PATCH 12/12] thunderbolt: Handle DisplayPort tunnel activation
- asynchronously
-Message-ID: <20241219172950.GI3713119@black.fi.intel.com>
-References: <20241217082222.528602-1-mika.westerberg@linux.intel.com>
- <20241217082222.528602-13-mika.westerberg@linux.intel.com>
- <Z2RR_r_AjyluYNwW@wunner.de>
+	s=arc-20240116; t=1734638491; c=relaxed/simple;
+	bh=f2Hlnq9e1EB5di7doAZcDX5ZS33Kbs1dN/4tWjTAktI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GAz//cZfb1GxP0qlnlWDHa9KaKXvX7CaGG5GEmU76Rjvam8fGSl8JUfqnYl5DaumSHEu+DB5O2YpPHafcZa5GolnUsVB2+bfm7gg2DredLx15wYyI2kV6fkH5RtBS6DWsf6Nvn1v5AhagkeBqZ7n6r1iBG5PP9Az8YufH8j/GbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LVqcUsyP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 172E0C4CEDE;
+	Thu, 19 Dec 2024 20:01:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734638491;
+	bh=f2Hlnq9e1EB5di7doAZcDX5ZS33Kbs1dN/4tWjTAktI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=LVqcUsyPVmTKKn98AMAqD/YviR0i8jwPFml94YkNyH/Y8iEpADCA+qOiJdHowYxur
+	 GIOoHiD6JPMNqSLLYO8NUyMSl8izIOo5iFWqpIKKxsSG6cV/bCs+qwhNQozBKQbite
+	 07VeaC/q7nFQtf0lSvxRnj/DhbrmXozc2bktZNZgH0l+LutGd0PXYb6j/g86LwEXcp
+	 pKD8kx7J/BqBmAjN0hJsMWZ8w40W+/lytWUdCZpJsSQ5hMrwSpiYB/bk+E435oqEGX
+	 mg4L9CXAsjupAWvmkhcbRO3cnSfKvnSALfqG3u+pUcVeMtaqVBxK1ypzoTnUlFVSLa
+	 JQlo6s6qG0OqQ==
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3eba50d6da7so298309b6e.2;
+        Thu, 19 Dec 2024 12:01:31 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUbOMzFwkr9etNilcgIaoa8fLygviiS93tGGdZClGuN9EWgVs2g3qSaIf9jjxcZZKTXWRihByyHO6+UqTal@vger.kernel.org, AJvYcCVzdT0hGcd6aTT9EzUA1tKPX61nwJ+wRLY0ghcoZRKH9UUhrR0QIh34w5enWE9gheLGjYQa9vGSwAVoHBk=@vger.kernel.org, AJvYcCWFHtLL/0Oa/RtW2VZAWzlpPB4/mdfmUaRqWbs4JXYcpxKmoeObFrqqBNhMnZN6CjkzKDtrUB/Omew+@vger.kernel.org, AJvYcCWGZDttarA/G55jXwkm/7wpqcxhucKjEWcFqExXAsx+SD4snmTeNqL7DQbx2KyekLSDtUPEFMePyOJg@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbrMPtkC9jH00MiP3A0EwxXQXu1bRxgsIey20BvvTRMdJME8XR
+	Nm8GMzxDhID3HP4XBj22hCYcN7/Nde4Gk+dBajd9N0Scjp1TMtxEj5US27nrsLkz0ffQAiG4mVv
+	wxtYqVzZGvckziP0ts2/dTI8X0qc=
+X-Google-Smtp-Source: AGHT+IG+XCrWxF4+D1PsFPOvKXa6qscgdzNXDN+M+vXcJicaKSEjGqWJwu1mYEfkqI43fGH7eDXlon7lWUHfoVI8t1c=
+X-Received: by 2002:a05:6871:6308:b0:29e:57ec:34c3 with SMTP id
+ 586e51a60fabf-2a7fb431b82mr118496fac.32.1734638490258; Thu, 19 Dec 2024
+ 12:01:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Z2RR_r_AjyluYNwW@wunner.de>
+References: <20241216-fix-ipu-v5-0-3d6b35ddce7b@chromium.org>
+In-Reply-To: <20241216-fix-ipu-v5-0-3d6b35ddce7b@chromium.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 19 Dec 2024 21:01:19 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hE6-QDOE7PcCAfSU78mjmQqo2mjXf+nBeaZ8eD6rffzg@mail.gmail.com>
+Message-ID: <CAJZ5v0hE6-QDOE7PcCAfSU78mjmQqo2mjXf+nBeaZ8eD6rffzg@mail.gmail.com>
+Subject: Re: [PATCH v5 0/7] ipu6: get rid of all the IS_ENABLED(CONFIG_ACPI)
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Robert Moore <robert.moore@intel.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org, 
+	linux-usb@vger.kernel.org, acpica-devel@lists.linux.dev, 
+	Sakari Ailus <sakari.ailus@linux.intel.com>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Dec 19, 2024 at 06:03:58PM +0100, Lukas Wunner wrote:
-> On Tue, Dec 17, 2024 at 10:22:22AM +0200, Mika Westerberg wrote:
-> > In typical cases there is always graphics driver loaded, and also all
-> > the cables are connected but for instance in Intel graphics CI they only
-> > load the graphics driver after the system is fully booted up. This
-> > makes the driver to tear down the DisplayPort tunnel. To help this case
-> > we allow passing bigger or indefinite timeout through a new module
-> > parameter (dprx_timeout). To keep the driver bit more responsive during
-> > that time we change the way DisplayPort tunnels get activated. We first
-> > do the normal tunnel setup and then run the polling of DPRX capabilities
-> > read completion in a separate worker. This also makes the driver to
-> > accept bandwidth requests to already established DisplayPort tunnels
-> > more responsive.
-> 
-> Does this mean one has to add that command line option unless i915
-> is already loaded on boot (or built-in)?  I can easily see i915
-> not being in the initrd for some reason but being loaded only
-> after the root filesystem is mounted.  And that in turn may
-> take a while if the user has to enter a password for disk encryption.
-> If the user has to add a command line option in such cases I think
-> that would be very inconvenient.
+On Mon, Dec 16, 2024 at 10:17=E2=80=AFPM Ricardo Ribalda <ribalda@chromium.=
+org> wrote:
+>
+> We want to be able to compile_test the ipu6 driver in situations with
+> !ACPI.
+>
+> In order to do this we had to add some conditional #ifs, which lead to
+> false positives on the static analysers.
+>
+> Let's implement some helpers when !ACPI in the acpi headers to make the
+> code more easier to maintain.
+>
+> To: Rafael J. Wysocki <rafael@kernel.org>
+> To: Len Brown <lenb@kernel.org>
+> To: Robert Moore <robert.moore@intel.com>
+> To: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Cc: Dan Carpenter <dan.carpenter@linaro.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-acpi@vger.kernel.org
+> Cc: acpica-devel@lists.linux.dev
+> Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
+>
+> Changes in v5:
+> - Remove Fixes tag
+> - redefine acpi_get_physical_device_location() to return bool
+> - Link to v4: https://lore.kernel.org/r/20241211-fix-ipu-v4-0-4102e97aceb=
+6@chromium.org
+>
+> Changes in v4 (Thanks Sakari & Mauro):
+> - Squash the two ipu changes and merge everything via ACPI
+> - Space after ;
+> - move acpi_device_handle to avoid fwd declaration.
+> - Link to v3: https://lore.kernel.org/r/20241210-fix-ipu-v3-0-00e409c84a6=
+c@chromium.org
+>
+> Changes in v3:
+> - Prefer static inlines to macros (Thanks Rafael).
+> - Link to v2: https://lore.kernel.org/r/20241122-fix-ipu-v2-0-bba65856e9f=
+f@chromium.org
+>
+> Changes in v2:
+> - Add helpers in acpi to avoid conditional compilation
+> - Link to v1: https://lore.kernel.org/r/20241122-fix-ipu-v1-1-246e254cb77=
+c@chromium.org
+>
+> ---
+> Ricardo Ribalda (7):
+>       ACPI: bus: change the prototype for acpi_get_physical_device_locati=
+on
+>       ACPI: bus: implement for_each_acpi_dev_match when !ACPI
+>       ACPI: bus: implement acpi_get_physical_device_location when !ACPI
+>       ACPI: header: implement acpi_device_handle when !ACPI
+>       ACPI: bus: implement for_each_acpi_consumer_dev when !ACPI
+>       ACPI: bus: implement acpi_device_hid when !ACPI
+>       media: ipu-bridge: Remove unneeded conditional compilations
+>
+>  drivers/acpi/mipi-disco-img.c        |  3 +--
+>  drivers/acpi/scan.c                  |  4 +---
+>  drivers/acpi/utils.c                 |  7 +++----
+>  drivers/base/physical_location.c     |  4 +---
+>  drivers/media/pci/intel/ipu-bridge.c | 29 ++++-------------------------
+>  drivers/usb/core/usb-acpi.c          |  3 +--
+>  include/acpi/acpi_bus.h              | 23 ++++++++++++++++++++---
+>  include/linux/acpi.h                 |  5 +++++
+>  8 files changed, 36 insertions(+), 42 deletions(-)
+> ---
 
-Typically no. We wait for the 12s now before tearing down the tunnel and
-that should be enough for i915 to kick in and read the capabilities. At
-least we did not see any problems during testing. But the command line
-option is there as "escape hatch" if defaults don't work.
+Series applied as 6.14 material, thanks!
 
