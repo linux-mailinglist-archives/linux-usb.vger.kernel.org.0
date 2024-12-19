@@ -1,159 +1,200 @@
-Return-Path: <linux-usb+bounces-18678-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18679-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF8249F7BAE
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 13:43:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DC11D9F7BD6
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 13:53:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E05AB188EC14
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 12:43:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B29DE1888027
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 12:53:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C77C224B1E;
-	Thu, 19 Dec 2024 12:42:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF3E7224B08;
+	Thu, 19 Dec 2024 12:53:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Xml4wwKF"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="guORhkVa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33EEA224899
-	for <linux-usb@vger.kernel.org>; Thu, 19 Dec 2024 12:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC98E224AE2
+	for <linux-usb@vger.kernel.org>; Thu, 19 Dec 2024 12:52:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734612145; cv=none; b=t5Mh7IqK3tkEYsRIM8aPph6x3lMN2Wexkocp78/GrTb95ZHRNWp0S351XhKBaSMBVlZtRyCXAJv+mAlEFPqi0P9ER0CIL/U4S9Y3iIZ2Xt7MNdqEGfpatUmy9/Zn4gS4/c0vJGXl4QmKWCtEpTi5/uLEjvoBQcvoiRSrArR4ypc=
+	t=1734612781; cv=none; b=nSt5dQn3VOI/YwbZGt269Y9sVubfGKcd4GmUUaP6dfJftrypi9l/NXgDxgATiHccWDpg8omS75gAqzfF/bK6IF4O2hqGzd0Cph+Eu8YbSXdLfsgTSLAyyRPFVpo8X1tewYCV+JYougxWxrvwRluF1HYO2cfPnuB8+NpR5NTAo+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734612145; c=relaxed/simple;
-	bh=X8UXNqv5ecPdSw+vYKNV5ThJqewH+b1pj2AskuWolZg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ku4IC9WN0+clZAByqrGGDbY7v7NpQ3Oc9Lvu4efiGiIyDRHnC3A1Zi2XnY0lYv9Nkq2ruEDMQjgd5hCnG12sHdBh73DWMWBSdpshjH29JgR1Nl/406JFFtYNbEbWVlh+f/MfLBMkJYEiZXUZqzuEp6sJBvZ8aiTwxjF46H1qTyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Xml4wwKF; arc=none smtp.client-ip=209.85.210.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-725c86bbae7so641771b3a.3
-        for <linux-usb@vger.kernel.org>; Thu, 19 Dec 2024 04:42:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1734612143; x=1735216943; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TnCAe9p4yEP5QmywCOysVpvHxzqj8A8f5GBf4MjEUXo=;
-        b=Xml4wwKFLGXJKD3hcQl0DdpmpyaoEwyRa/y/0+rK1Rw2tGH/WG5sFzbri+yKjZw6Kd
-         kv6ltOjbD7twwviwM0ueChHVUQZkkCyJVljBrA/19HpdmeviQ4hfGRl3ShU/pNNDQNkK
-         HUJ92T5CxV3wI01CJj7FEQ6qspVhcYmS9uPvc=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734612143; x=1735216943;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TnCAe9p4yEP5QmywCOysVpvHxzqj8A8f5GBf4MjEUXo=;
-        b=hloTEo7jY492+2t4HpVfI0rfkw3oRVkTrvEHLIFV0NCKOf5J0QEuF2R6VAYHq1NGtU
-         AMuoiVdodmup1u9Hl1ilxI3MJjs0bcK+wOKY8dVmFFW65DHYaikx4QzMGxKS53zvyqbi
-         r8bZtBpca2CniHHSKB8uRJJ7rBrrIwYQunfjG3csqRiVjWGQLVS6oU3eyJoO6AVPZz1F
-         3k0StTuyfQSUp+BoOW5WzfGdVYc3Hcp81Ibdpy3Wy+Oh7Io/Cs5vJqa8j6QAUxXXAvep
-         E4iNXbwXaMWXERlLorMxf0ZY0RHRmL7uI1Khqb8LY2Y8DQsBvE3W90l4Yd5EOuX/1Xpi
-         UjsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXYXsttTevxsF/NikfH88YlU4wXX6e+xLphBIgLoAlQ0yt3je7pkpkPM5Pi37Orh+AExMerytLuLRU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeRrJwKnd3KAhWiC2Q0akz7bLpXV/Tbcffv5raHpuakVkEhBcI
-	/Sf4sN85HqMuHSmIJdb1ikXQXBuWEzhEfaZKI3/pmf6x8VeeK0YSzPDSL9gtO75GhKlletxOwC0
-	=
-X-Gm-Gg: ASbGnctjHBzvuKc6/5v9Y/MS3Src9f9i+cxRoSoG8ZVIuMop1WRGr5Drmt55VswiB9P
-	Q44MJ8Nao7KvpI/fID6SsfbA2Uay6Wp5+HslceQ26yDgzZpsQfjwdARQSa5Bg2K1V+MA1fhbyyW
-	cIt3hyQ8Br6a4xy/IFvpmASeJVT6G7Aya5ENH3FOjmkKzZ3y8HPNec8HrhRmh28nhIWyCimj/qa
-	ViaUBkO9BToQpMnaFVMizKgXapUYHnX9vFDPDwYnb2cQIzne0f9yiYWsQmd8y/wccxrpEVMFPXt
-	zb6aXOdxBTKxOMAStpT9+Iw=
-X-Google-Smtp-Source: AGHT+IFrpdnkAUg4aTkpfOwdrKd6eAwhFlc5+eSl1wnZecwo2bx/Lj44Wy1Zgd/p16jG/KohhNhSnw==
-X-Received: by 2002:a05:6a20:d806:b0:1e1:afa9:d38b with SMTP id adf61e73a8af0-1e5b46fc24cmr12282318637.8.1734612143373;
-        Thu, 19 Dec 2024 04:42:23 -0800 (PST)
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com. [209.85.214.171])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842b84fb8ddsm1092261a12.42.2024.12.19.04.42.21
-        for <linux-usb@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Dec 2024 04:42:21 -0800 (PST)
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21649a7bcdcso5471665ad.1
-        for <linux-usb@vger.kernel.org>; Thu, 19 Dec 2024 04:42:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUmplmq2Wv4k74QnGZWcRUO8NBgj0NsyRErZIHxIhVSPnVVRNR+dMu4RQYg/mI7VaovxI+LxlO8T0k=@vger.kernel.org
-X-Received: by 2002:a17:90b:51c7:b0:2ee:f80c:688d with SMTP id
- 98e67ed59e1d1-2f2e9378675mr9284447a91.25.1734612140544; Thu, 19 Dec 2024
- 04:42:20 -0800 (PST)
+	s=arc-20240116; t=1734612781; c=relaxed/simple;
+	bh=B97Llbf0YREjqIyQt5vPG9mxDBeer5PpFc5dHxjfnIU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=lrdo2Giq/DwuPXw4dLWRfNmGFGmyMaR7S0v2f+kHXdeo1z1CgEm13miY7FLnFTJXk+HBK+cUtZkelqShYFOzz4dSkZk/EIBUHqXTllS7dJe48u1S7YhEosfc3lYZMUlVvVkwCJiXZCKUpVw5chAwhfuwxtow5SsSayzVnqFg6AM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=guORhkVa; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20241219125251epoutp011f03d1231f70caf36c7472b2cb823986~SlSAHOhrt0213402134epoutp01-
+	for <linux-usb@vger.kernel.org>; Thu, 19 Dec 2024 12:52:51 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20241219125251epoutp011f03d1231f70caf36c7472b2cb823986~SlSAHOhrt0213402134epoutp01-
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1734612771;
+	bh=sKFhPF8oggiXR9rwfVQ+SiG0Bh6p6hc1OP+VypPhxH0=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=guORhkVa/iUGpuyz3HhKqlVtYXbJeCp5GTiva2UnlEZ1U8MyucjS6L7TZGAgueJaQ
+	 8IBOGgVRCsUsqVvoPR8F/WhbjHtfu2UjD3UI/zK22C9GTzdiRGfpl3T9L3mJXk7v9N
+	 GJcJFswBvfBOdJpqupC4Cg+F8Bu0Ai3lBV+94W7w=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+	20241219125250epcas5p1a75755930a7962bc29049e9e0bb5c190~SlR-N-SV01606816068epcas5p17;
+	Thu, 19 Dec 2024 12:52:50 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.178]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4YDVns0Ql1z4x9Pv; Thu, 19 Dec
+	2024 12:52:49 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	FD.B9.19710.02714676; Thu, 19 Dec 2024 21:52:48 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20241219125248epcas5p3887188e4df29b7b580cce9cfe6fed79f~SlR9YqXDB1112611126epcas5p38;
+	Thu, 19 Dec 2024 12:52:48 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20241219125248epsmtrp13e551a8fb58ff228bdded55e244e8fcf~SlR9XikME1714617146epsmtrp1U;
+	Thu, 19 Dec 2024 12:52:48 +0000 (GMT)
+X-AuditID: b6c32a44-363dc70000004cfe-fd-6764172032b0
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	B3.87.33707.02714676; Thu, 19 Dec 2024 21:52:48 +0900 (KST)
+Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20241219125245epsmtip1d6bc9c94517ed39a0b607421663d72eb~SlR6nhplK0310303103epsmtip14;
+	Thu, 19 Dec 2024 12:52:45 +0000 (GMT)
+From: Akash M <akash.m5@samsung.com>
+To: gregkh@linuxfoundation.org, paul@crapouillou.net, Chris.Wulff@biamp.com,
+	tudor.ambarus@linaro.org, m.grzeschik@pengutronix.de,
+	viro@zeniv.linux.org.uk, quic_jjohnson@quicinc.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
+	akash.m5@samsung.com, rc93.raju@samsung.com, taehyun.cho@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com, shijie.cai@samsung.com,
+	alim.akhtar@samsung.com, selvarasu.g@samsung.com, stable@vger.kernel.org
+Subject: [PATCH] usb: gadget: f_fs: Remove WARN_ON in functionfs_bind
+Date: Thu, 19 Dec 2024 18:22:19 +0530
+Message-ID: <20241219125221.1679-1-akash.m5@samsung.com>
+X-Mailer: git-send-email 2.46.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241212-usb-orientation-v1-1-0b69adf05f37@chromium.org>
- <20241217145612.GA1652259-robh@kernel.org> <CANiDSCu_mFQQVkDb_gSyXeb1_Tu+DxSeHYvGsGp6XVDuOdPyjQ@mail.gmail.com>
- <20241219122453.GA4008177-robh@kernel.org>
-In-Reply-To: <20241219122453.GA4008177-robh@kernel.org>
-From: Ricardo Ribalda <ribalda@chromium.org>
-Date: Thu, 19 Dec 2024 13:42:07 +0100
-X-Gmail-Original-Message-ID: <CANiDSCt+LAE-LzCDZgrWP_V-Jc-ywTF1-PuQtyDJMfV9v_ZzGA@mail.gmail.com>
-X-Gm-Features: AbW1kvb_GsNPrAWElm71yNhuDp3lbxsP7Rss3OTpjLvIYa7x_Sh-ce4PUixVmvc
-Message-ID: <CANiDSCt+LAE-LzCDZgrWP_V-Jc-ywTF1-PuQtyDJMfV9v_ZzGA@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: usb-device: Add panel-location
-To: Rob Herring <robh@kernel.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
-	Jacopo Mondi <jacopo@jmondi.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrNJsWRmVeSWpSXmKPExsWy7bCmlq6CeEq6QdMNa4s3V1exWjyYt43N
+	YubH20wWdxZMY7I4tXwhk0Xz4vVsFpP2bGWxuPvwB4vF5V1z2CwWLWtlttjSdoXJ4tPR/6wW
+	/YsvsVg0brnLarGqcw6LxZHlH5ksLn/fyWyxYOMjRotJB0UtPt2Kszj/9zirg6jHw+4L7B6r
+	L7Wzedy5tofNY//cNewe/X8NPCbuqfPo27KK0ePzJjmPTU/eMgVwRmXbZKQmpqQWKaTmJeen
+	ZOal2yp5B8c7x5uaGRjqGlpamCsp5CXmptoqufgE6Lpl5gA9p6RQlphTChQKSCwuVtK3synK
+	Ly1JVcjILy6xVUotSMkpMCnQK07MLS7NS9fLSy2xMjQwMDIFKkzIzrj+oJG5YJ94xbQz21gb
+	GN8IdjFyckgImEisXHOcpYuRi0NIYDejxNr7txkhnE+MEhNXLWeGc35O6WOBabm9/yU7RGIn
+	o8SZa8+YIJzvjBIXF11nA6liE1CRuL17DytIQkTgC6PE4x8/wBxmgaVMEsfezWEGqRIWcJXY
+	0tYFZHNwsAioStza5Q8S5hWwkDi/bwMjxDpNibV79zBBxAUlTs58AnYGs4C8RPPW2WD3SQic
+	4ZBYd/gkE8gcCQEXie7JOhC9whKvjm9hh7ClJF72t0HZPhIrdq1lhShPkfg9tRoibC+xesEZ
+	sDAz0Nr1u/QhNvFJ9P5+AjWcV6KjTQiiWlXiVONlNghbWuLekmtQAz0kZp8pBAkLCcRK/Dy/
+	gGUCo9wsJOfPQnL+LIRdCxiZVzFKphYU56anJpsWGOallsOjMjk/dxMjOFVruexgvDH/n94h
+	RiYOxkOMEhzMSiK8bpqJ6UK8KYmVValF+fFFpTmpxYcYTYFBOpFZSjQ5H5gt8kriDU0sDUzM
+	zMxMLI3NDJXEeV+3zk0REkhPLEnNTk0tSC2C6WPi4JRqYFqR8vHy3EkWvKqifol583rnl2mu
+	nhVhp36iyEjmekzKdw51xlzTvlMhF/LM9A68nX9bb/e0rfv0q1jKpX0/O542Zdwo/ETzgW75
+	Spsj1icS3wbmlOTK1bbVXFIReaCk4LZFM0Bmi88CPV9ppzSRaQVnfuhM7i+cqdihZvS3ULWg
+	LX3V1/q8yWwmHxas3Dq1d8HOxN8ZXfo+bev72zNs8jZ5/+lJPxqdHMP73n39rp9ORxYoVIse
+	4e5YZCkhUcHVftdR68LJQv1XpgoJs57rP7v71eFe36s4hqdd/y8fCs9kb1655c3/BROvqwS2
+	TVnNuKbqB1d76fZob+3oDw4n9gQ779ZtYb0mN/Hf428LlViKMxINtZiLihMBEThArV4EAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpikeLIzCtJLcpLzFFi42LZdlhJTldBPCXdYP1Rfos3V1exWjyYt43N
+	YubH20wWdxZMY7I4tXwhk0Xz4vVsFpP2bGWxuPvwB4vF5V1z2CwWLWtlttjSdoXJ4tPR/6wW
+	/YsvsVg0brnLarGqcw6LxZHlH5ksLn/fyWyxYOMjRotJB0UtPt2Kszj/9zirg6jHw+4L7B6r
+	L7Wzedy5tofNY//cNewe/X8NPCbuqfPo27KK0ePzJjmPTU/eMgVwRnHZpKTmZJalFunbJXBl
+	XH/QyFywT7xi2pltrA2MbwS7GDk5JARMJG7vf8nexcjFISSwnVHi26spjBAJaYnXs7qgbGGJ
+	lf+eQxV9ZZSYvbiDCSTBJqAicXv3HlaQhIjAP0aJRZ0fmEAcZoGtTBK3n65lAakSFnCV2NLW
+	xdzFyMHBIqAqcWuXP0iYV8BC4vy+DVAbNCXW7t3DBBEXlDg58wlYK7OAvETz1tnMExj5ZiFJ
+	zUKSWsDItIpRNLWgODc9N7nAUK84Mbe4NC9dLzk/dxMjOJq0gnYwLlv/V+8QIxMH4yFGCQ5m
+	JRFeN83EdCHelMTKqtSi/Pii0pzU4kOM0hwsSuK8yjmdKUIC6YklqdmpqQWpRTBZJg5OqQYm
+	aWvOJcea7Z0fPvBZVXJdulJBRW1DJZPd39pVJX+8n99u13rdsvrVY+dMw0dXn1UssRKf0227
+	cUuqr7sh6+Rzz3nzz0ieySuUKzu7JMUk9ZVNSfAJ/ldlix4ELvU4xPzZ572F2/yMYzUvG7ZL
+	7mZ/+dn6fKvH0q5PnQ8ePZONEzhfGnJfKe78/pALVw4lJt/9vzVUqnaf6gEx356mbvmYkz7K
+	ZWcOVTfcXHZy0oHdhtvmJV9oYu0X//nMKnGeyFGZLbHrvaUadnjZT1t1RFRxQei6RkMhLrnT
+	r1TVA31fVzppMJ617W5R27jDSeFwX1nhuhX1wdoeO/dJBflx21w9tNPrmU3Uz7urjthcveiu
+	xFKckWioxVxUnAgAn7qIoBUDAAA=
+X-CMS-MailID: 20241219125248epcas5p3887188e4df29b7b580cce9cfe6fed79f
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241219125248epcas5p3887188e4df29b7b580cce9cfe6fed79f
+References: <CGME20241219125248epcas5p3887188e4df29b7b580cce9cfe6fed79f@epcas5p3.samsung.com>
 
-On Thu, 19 Dec 2024 at 13:24, Rob Herring <robh@kernel.org> wrote:
->
-> On Tue, Dec 17, 2024 at 04:24:27PM +0100, Ricardo Ribalda wrote:
-> > Hi Rob
-> >
-> > On Tue, 17 Dec 2024 at 16:02, Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Thu, Dec 12, 2024 at 09:44:37PM +0000, Ricardo Ribalda wrote:
-> > > > For some devices like cameras the system needs to know where they are
-> > > > mounted.
-> > >
-> > > Why do you need this and why only this property and not the dozens
-> > > others ACPI has?
-> >
-> > Userspace needs that information to correctly show it in the UI. Eg;
-> >
-> > - User facing camera needs to be mirrored during preview.
-> > - The user facing camera is selected by default during videoconferences
-> > - The world facing camera is selected by default when taking a photo
-> > - User facing camera have different parameter defaults than world facing.
->
-> We already have "orientation" defined for this purpose.
+This commit addresses an issue related to below kernel panic where
+panic_on_warn is enabled. It is caused by the unnecessary use of WARN_ON
+in functionsfs_bind, which easily leads to the following scenarios.
 
-Do you mean orientation from
-bindings/media/video-interface-devices.yaml ?
+1.adb_write in adbd               2. UDC write via configfs
+  =================	             =====================
 
-I see a couple of issues:
-- Orientation has a very specific meaning for USB typeC. I'd prefer if
-we could avoid using that word.
-- For other applications different than cameras it might be useful to
-know the positions top, bottom, left, right, which are not available
-in video-interface-devices
-- The value "external" does not makes too much sense for listed usb devices
-- It makes our lives easier if dt and acpi have the same meaning (less
-conversion)
+->usb_ffs_open_thread()           ->UDC write
+ ->open_functionfs()               ->configfs_write_iter()
+  ->adb_open()                      ->gadget_dev_desc_UDC_store()
+   ->adb_write()                     ->usb_gadget_register_driver_owner
+                                      ->driver_register()
+->StartMonitor()                       ->bus_add_driver()
+ ->adb_read()                           ->gadget_bind_driver()
+<times-out without BIND event>           ->configfs_composite_bind()
+                                          ->usb_add_function()
+->open_functionfs()                        ->ffs_func_bind()
+ ->adb_open()                               ->functionfs_bind()
+                                       <ffs->state !=FFS_ACTIVE>
 
-All that said, for my specific usecase, reusing orientation from
-bindings/media/video-interface-devices.yaml works... So if that is
-what you all prefer I can send a v2 with that.
-Let me know what you think
+The adb_open, adb_read, and adb_write operations are invoked from the
+daemon, but trying to bind the function is a process that is invoked by
+UDC write through configfs, which opens up the possibility of a race
+condition between the two paths. In this race scenario, the kernel panic
+occurs due to the WARN_ON from functionfs_bind when panic_on_warn is
+enabled. This commit fixes the kernel panic by removing the unnecessary
+WARN_ON.
 
->
-> >
-> > Right now, the only camera driver that expose the ACPI location
-> > information is the IPU from intel
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/pci/intel/ipu-bridge.c#n258
-> >
-> > And they are only using the panel.
-> >
-> > If we need more information we can consider adding more parameters in
-> > the future.
+Kernel panic - not syncing: kernel: panic_on_warn set ...
+[   14.542395] Call trace:
+[   14.542464]  ffs_func_bind+0x1c8/0x14a8
+[   14.542468]  usb_add_function+0xcc/0x1f0
+[   14.542473]  configfs_composite_bind+0x468/0x588
+[   14.542478]  gadget_bind_driver+0x108/0x27c
+[   14.542483]  really_probe+0x190/0x374
+[   14.542488]  __driver_probe_device+0xa0/0x12c
+[   14.542492]  driver_probe_device+0x3c/0x220
+[   14.542498]  __driver_attach+0x11c/0x1fc
+[   14.542502]  bus_for_each_dev+0x104/0x160
+[   14.542506]  driver_attach+0x24/0x34
+[   14.542510]  bus_add_driver+0x154/0x270
+[   14.542514]  driver_register+0x68/0x104
+[   14.542518]  usb_gadget_register_driver_owner+0x48/0xf4
+[   14.542523]  gadget_dev_desc_UDC_store+0xf8/0x144
+[   14.542526]  configfs_write_iter+0xf0/0x138
 
+Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Akash M <akash.m5@samsung.com>
 
-
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 2920f8000bbd..92c883440e02 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -2285,7 +2285,7 @@ static int functionfs_bind(struct ffs_data *ffs, struct usb_composite_dev *cdev)
+ 	struct usb_gadget_strings **lang;
+ 	int first_id;
+ 
+-	if (WARN_ON(ffs->state != FFS_ACTIVE
++	if ((ffs->state != FFS_ACTIVE
+ 		 || test_and_set_bit(FFS_FL_BOUND, &ffs->flags)))
+ 		return -EBADFD;
+ 
 -- 
-Ricardo Ribalda
+2.17.1
+
 
