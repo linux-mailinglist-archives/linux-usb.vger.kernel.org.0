@@ -1,62 +1,84 @@
-Return-Path: <linux-usb+bounces-18676-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18677-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99A7D9F7B39
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 13:26:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AAC919F7B52
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 13:30:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B8B218840F7
-	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 12:26:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AE08A7A48E5
+	for <lists+linux-usb@lfdr.de>; Thu, 19 Dec 2024 12:29:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD01622578D;
-	Thu, 19 Dec 2024 12:24:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A84E82248B0;
+	Thu, 19 Dec 2024 12:29:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X10gqgRn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UjRCHDmz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D34224881;
-	Thu, 19 Dec 2024 12:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 506FA223328;
+	Thu, 19 Dec 2024 12:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734611096; cv=none; b=DI6+1e2VwVUeNhty76ArxJ+IoVHZpUzdWyjNCLWzJO+fGwTBWHWmhXg/LpluWASOYh16kIyM5RQe5+CPLK5l0bjOXu5ajBZF0jZQkx0o4RCZtRFTUKgkc4MLNjAFuak9ay5hrl7fk+qjwmx4G8VNQpMfT9bPlo0S78h86EgJF3E=
+	t=1734611385; cv=none; b=QK2Czl6XqGkGa7vJXEIgaj86woS7x0HZ427Sl9PCSAjGHzsS+mgj/IagwM/nRpfJbHsV7DGQKJebrXKZBDtDBMM4nc9HTYOEdMMmekB59OUjrDnnSGfpiKHQJekupWo6xOgXA+WA9cqkz6oJatkRkyg4wIpLQSk4yJQJUAZ+JiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734611096; c=relaxed/simple;
-	bh=W66uQ06JXfuTI+hSUqmp/PVh8y1BiHPk75mdJ/3WEYU=;
+	s=arc-20240116; t=1734611385; c=relaxed/simple;
+	bh=5P/2JAAHnuR/NFk/T659gT2W+QO6cDCXm/CHY/7gssU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DHzRiBGcf+1+dOOaZ2xCAacBH3z0X+lPiBV1W/i6OaGGopAwfOFp80xZlhnU8DwzFD6KtbTlg45eknOpEcz6B/0Dn6mEshQDL5nP4KrCFPoL700ETVcPY6VahPeWmDrHLMBVnWZPopqJLG6hmCMkE9iVjKWe2i4Q6y7jdDTuLB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X10gqgRn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7662EC4CECE;
-	Thu, 19 Dec 2024 12:24:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734611095;
-	bh=W66uQ06JXfuTI+hSUqmp/PVh8y1BiHPk75mdJ/3WEYU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X10gqgRn4AcJ8Qt1JPs9GHvKGmCDzi/ngPNRjQiaUgQ1DDvPOGp8Apg2gxcL+Ly9j
-	 RjbXBVmI2UIGeQGnvebrdY4z9YSTsB9vp57mq2kAxmNYUp1ENaHxVhazPErgo5mjPi
-	 iUXbqxeNcqUAqwva4gUPAUYBBWz9paMOvQF3McpPjCwvEj6u4V1M4AYlxP/qqJryE7
-	 B1Bm+6Ma2EjrcxSJnPRJYEUQECYbK5LnbS948P/cem2q42YrY+6uVxPmDlqijxAsPI
-	 ODGNV0Zrc+uPG+i8z84zcoqkwh17+DF4IWkRQP6oWJlU4NTk8Vr68KMT99bc91UgI8
-	 8MWlqsOUChXjw==
-Date: Thu, 19 Dec 2024 06:24:53 -0600
-From: Rob Herring <robh@kernel.org>
-To: Ricardo Ribalda <ribalda@chromium.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=pzuO/uAoNKdEXJR9ot3H5lIdKTkuLhaf3ReajleB08TdaEEajiTzBkT1TdF1x/NeT+t9eGTIiZG+0Y4O+ZhA9ZGM/Hu3d5VF0PMitdKzFP76IJ2dYGa/aB3g58EW4xbkG3t4pTSdeKgAZm+OuANKMnF3iCDS/MiQgkh59B6ijps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UjRCHDmz; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734611384; x=1766147384;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5P/2JAAHnuR/NFk/T659gT2W+QO6cDCXm/CHY/7gssU=;
+  b=UjRCHDmzU1GxJGgMxUVxWTTripBH89FFcjErzWYmnTbdaL6tFqD7mqeP
+   kGe9K/kmVx/EAPxO3Mtf+S8oPl0ckX3BtgwMXb4FX/k1b0cHi6xKURMEN
+   IYcpOxKO0Hd3qXqfHGG84LARjzVUG1NEDvLq5KvCgaEj0gH3Va+hLBrKh
+   HlhyNIakb87+FcQJtZiAkH8pQiCIinbFIcMsu42gOrEp2wHwjwiy1UOlE
+   bLjUyZRhoojjvfjS8ieIwKGd9JPxiuqzwvtxbWhwralOo82USMmsQGVpd
+   gSp1IhRjv2ei/aj6SiBlWVbWcmpZWhPZO+W5zquIXdSU7rZUmBP4XXovt
+   w==;
+X-CSE-ConnectionGUID: mlgkGvVnRj+T/VGc6XiLxg==
+X-CSE-MsgGUID: wRD1ZObmR+qd+N20uJSYRQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="52523744"
+X-IronPort-AV: E=Sophos;i="6.12,247,1728975600"; 
+   d="scan'208";a="52523744"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 04:29:43 -0800
+X-CSE-ConnectionGUID: JA2EFHDFQASrsAsMh2QYpA==
+X-CSE-MsgGUID: K9iNSASxTjSsKivY0bz1oQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="135494197"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 04:29:40 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id F11AB11FA41;
+	Thu, 19 Dec 2024 14:29:36 +0200 (EET)
+Date: Thu, 19 Dec 2024 12:29:36 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Ricardo Ribalda <ribalda@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Jacopo Mondi <jacopo@jmondi.org>,
-	Sakari Ailus <sakari.ailus@linux.intel.com>,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+	Jacopo Mondi <jacopo@jmondi.org>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org
 Subject: Re: [PATCH] dt-bindings: usb: usb-device: Add panel-location
-Message-ID: <20241219122453.GA4008177-robh@kernel.org>
+Message-ID: <Z2QRsMWX-f6Ya74j@kekkonen.localdomain>
 References: <20241212-usb-orientation-v1-1-0b69adf05f37@chromium.org>
  <20241217145612.GA1652259-robh@kernel.org>
  <CANiDSCu_mFQQVkDb_gSyXeb1_Tu+DxSeHYvGsGp6XVDuOdPyjQ@mail.gmail.com>
+ <20241219122453.GA4008177-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,36 +87,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CANiDSCu_mFQQVkDb_gSyXeb1_Tu+DxSeHYvGsGp6XVDuOdPyjQ@mail.gmail.com>
+In-Reply-To: <20241219122453.GA4008177-robh@kernel.org>
 
-On Tue, Dec 17, 2024 at 04:24:27PM +0100, Ricardo Ribalda wrote:
-> Hi Rob
-> 
-> On Tue, 17 Dec 2024 at 16:02, Rob Herring <robh@kernel.org> wrote:
-> >
-> > On Thu, Dec 12, 2024 at 09:44:37PM +0000, Ricardo Ribalda wrote:
-> > > For some devices like cameras the system needs to know where they are
-> > > mounted.
-> >
-> > Why do you need this and why only this property and not the dozens
-> > others ACPI has?
-> 
-> Userspace needs that information to correctly show it in the UI. Eg;
-> 
-> - User facing camera needs to be mirrored during preview.
-> - The user facing camera is selected by default during videoconferences
-> - The world facing camera is selected by default when taking a photo
-> - User facing camera have different parameter defaults than world facing.
+Hello,
 
-We already have "orientation" defined for this purpose.
+On Thu, Dec 19, 2024 at 06:24:53AM -0600, Rob Herring wrote:
+> On Tue, Dec 17, 2024 at 04:24:27PM +0100, Ricardo Ribalda wrote:
+> > Hi Rob
+> > 
+> > On Tue, 17 Dec 2024 at 16:02, Rob Herring <robh@kernel.org> wrote:
+> > >
+> > > On Thu, Dec 12, 2024 at 09:44:37PM +0000, Ricardo Ribalda wrote:
+> > > > For some devices like cameras the system needs to know where they are
+> > > > mounted.
+> > >
+> > > Why do you need this and why only this property and not the dozens
+> > > others ACPI has?
+> > 
+> > Userspace needs that information to correctly show it in the UI. Eg;
+> > 
+> > - User facing camera needs to be mirrored during preview.
+> > - The user facing camera is selected by default during videoconferences
+> > - The world facing camera is selected by default when taking a photo
+> > - User facing camera have different parameter defaults than world facing.
+> 
+> We already have "orientation" defined for this purpose.
+
+I was thinking of the same. It's defined (for cameras) in
+Documentation/devicetree/bindings/media/video-interface-devices.yaml .
 
 > 
-> Right now, the only camera driver that expose the ACPI location
-> information is the IPU from intel
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/pci/intel/ipu-bridge.c#n258
-> 
-> And they are only using the panel.
-> 
-> If we need more information we can consider adding more parameters in
-> the future.
+> > 
+> > Right now, the only camera driver that expose the ACPI location
+> > information is the IPU from intel
+> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/media/pci/intel/ipu-bridge.c#n258
+> > 
+> > And they are only using the panel.
+> > 
+> > If we need more information we can consider adding more parameters in
+> > the future.
+
+-- 
+Regards,
+
+Sakari Ailus
 
