@@ -1,125 +1,178 @@
-Return-Path: <linux-usb+bounces-18704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D4F89F958B
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 16:36:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A37D9F97F5
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 18:29:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3403E16C05D
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 15:36:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 555CE189E055
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 17:19:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB431219A79;
-	Fri, 20 Dec 2024 15:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9CE6229140;
+	Fri, 20 Dec 2024 17:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pYrDUaET"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ds3rm6Vl"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60210219A63;
-	Fri, 20 Dec 2024 15:36:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6561A227575;
+	Fri, 20 Dec 2024 17:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734708967; cv=none; b=lfuFN6Gm4cg3LIDJx5Xh27EUyZQcOxvHA0T8w/OzFb9IdDkMQOdEVUWbaWltztz8osV4IP/wjfhjiEZWEK3AJKTZu54b9TWJiAku6bRCcqGa/bNVOlq56ybxbamDF0wl+u25QE5EoAK7BGFNNjXqM/W4tZ1Fij1a+72jIPhhPE0=
+	t=1734714745; cv=none; b=OLYzxjoAA7IPA13gEgoohbVAR79WuVUK7XWamRRhXwNeGIEozVw0p51I36YJ9K8xivYY1tcWkcsyBSjsNCBW+bsfQPG8wgMgQyAFNXv+eiKPSFmCa5tCCfEtwiGre3iN1ZLWa2gf3E5sclS884QvzbgFI70gmAaSprg5DW52BrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734708967; c=relaxed/simple;
-	bh=fI2l8wjxgTL6CBJ4jSRjLWuA3M+8hNZ068W95H/+hlU=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=BWzlW3qZAp0GiQxNEpLUBPcG4tVMp0/8bm9PqHnYikSpc00eWOCIFrT2h4aOHbJtHPPq0XataRO1NsR7lzepjfFKRtD9ED0FsRxtN/KqNEUgMuvCi2r01y+Ut/nSETuvtbdVSlh2Zdkz3pFOgqLqz8gcKnM+m7Ca4yqpCsaYnYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pYrDUaET; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C04C4CECD;
-	Fri, 20 Dec 2024 15:36:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1734708967;
-	bh=fI2l8wjxgTL6CBJ4jSRjLWuA3M+8hNZ068W95H/+hlU=;
-	h=Date:From:To:Cc:Subject:From;
-	b=pYrDUaETp1mZkJ1YAH5fP637TiSdv9qlUIzZ2izNjnF90hViFmylkTkjLZJWVTpgu
-	 KpptjnI6X04q4dkBCNkgvunSj7jg4kpNlovSHlDVIlZifXnXNDsIOeuV6gHdImkKml
-	 mLjhP13oz0AfQt514ZC/k8bvklIgBWW5DGCuufRI=
-Date: Fri, 20 Dec 2024 16:36:03 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1734714745; c=relaxed/simple;
+	bh=weqdi9M3ibXM2P6TX1FkJMBTUDWaZmyGU2K6jFRFvFk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=TQ5GdGvKUKXbtxxcjmje6jwWp0ccopIm+ibA3H0eKtJJ20wlVcNph6up01DCEq3V2I7v3X/758hGWQaaP24MjS8oKhwgUCGgdu4UumRKZ1qqBw8HXFmKyyA4p6k0uG7JjBnKJ8KnRZ8Khr+2GmtpuunH1FEUJV9Ke6sn7DrWsJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ds3rm6Vl; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2B4AC4CECD;
+	Fri, 20 Dec 2024 17:12:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734714745;
+	bh=weqdi9M3ibXM2P6TX1FkJMBTUDWaZmyGU2K6jFRFvFk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=ds3rm6VlaVhTlUTF+AslpAx84XdgJjSMjjffpSBbc+kA8JkToyPdhFUyl7bUCouKn
+	 w+gn7nJoGPMZzXy2HKzQtCGfQNxBPwODvLz3e34wR/NObq3gdRxyMQLTTLVbmYTyPq
+	 1uKQE45jQjxsIShWIFlwdNBzmLiFINC7t/Ksld8ffOApMc2CMqfspBjXmFVedr2LMN
+	 SPd8TIopMLZF92JUj91ePUDXMcCnx6vTQuQFptotelfi4F3YIIamuu3PzCPpiI+Cmb
+	 fkoJfuo8wueHhP5Qwu/H0Sb416giX1dDhcCPIYvDi1HGj5rPNvno9LHPkWCM5t4hvG
+	 pYSJXasBiKhzg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Daniele Palmas <dnlplm@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Sasha Levin <sashal@kernel.org>,
+	bjorn@mork.no,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	netdev@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [GIT PULL] USB / Thunderbolt fixes for 6.13-rc4
-Message-ID: <Z2WO42XdnBrYmdmN@kroah.com>
+Subject: [PATCH AUTOSEL 6.12 24/29] net: usb: qmi_wwan: add Telit FE910C04 compositions
+Date: Fri, 20 Dec 2024 12:11:25 -0500
+Message-Id: <20241220171130.511389-24-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241220171130.511389-1-sashal@kernel.org>
+References: <20241220171130.511389-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.12.6
+Content-Transfer-Encoding: 8bit
 
-The following changes since commit 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8:
+From: Daniele Palmas <dnlplm@gmail.com>
 
-  Linux 6.13-rc3 (2024-12-15 15:58:23 -0800)
+[ Upstream commit 3b58b53a26598209a7ad8259a5114ce71f7c3d64 ]
 
-are available in the Git repository at:
+Add the following Telit FE910C04 compositions:
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.13-rc4
+0x10c0: rmnet + tty (AT/NMEA) + tty (AT) + tty (diag)
+T:  Bus=02 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 13 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10c0 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FE910
+S:  SerialNumber=f71b8b32
+C:  #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=60 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-for you to fetch changes up to 1b62f3cb74d2965e8f96f20241b1fe85017aa3e8:
+0x10c4: rmnet + tty (AT) + tty (AT) + tty (diag)
+T:  Bus=02 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 14 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10c4 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FE910
+S:  SerialNumber=f71b8b32
+C:  #Ifs= 4 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-  Merge tag 'thunderbolt-for-v6.13-rc4' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus (2024-12-19 12:35:02 +0100)
+0x10c8: rmnet + tty (AT) + tty (diag) + DPL (data packet logging) + adb
+T:  Bus=02 Lev=01 Prnt=03 Port=06 Cnt=01 Dev#= 17 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=1bc7 ProdID=10c8 Rev=05.15
+S:  Manufacturer=Telit Cinterion
+S:  Product=FE910
+S:  SerialNumber=f71b8b32
+C:  #Ifs= 5 Cfg#= 1 Atr=e0 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=50 Driver=qmi_wwan
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=ff Prot=40 Driver=option
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=ff Prot=30 Driver=option
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 3 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=80 Driver=(none)
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 4 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=42 Prot=01 Driver=(none)
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-----------------------------------------------------------------
-USB / Thunderbolt fixes for 6.13-rc4
+Signed-off-by: Daniele Palmas <dnlplm@gmail.com>
+Link: https://patch.msgid.link/20241209151821.3688829-1-dnlplm@gmail.com
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/net/usb/qmi_wwan.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Here are some important, and small, fixes for USB and Thunderbolt issues
-that have come up in the -rc releases.  And some new device ids for good
-measure.  Included in here are:
-  - Much reported xhci bugfix for usb-storage devices (and other devices
-    as well, tripped me up on a video camera)
-  - thunderbolt fixes for some small reported issues
-  - new usb-serial device ids
+diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
+index 0c011d8f5d4d..9fe7f704a2f7 100644
+--- a/drivers/net/usb/qmi_wwan.c
++++ b/drivers/net/usb/qmi_wwan.c
+@@ -1365,6 +1365,9 @@ static const struct usb_device_id products[] = {
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a0, 0)}, /* Telit FN920C04 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a4, 0)}, /* Telit FN920C04 */
+ 	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10a9, 0)}, /* Telit FN920C04 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10c0, 0)}, /* Telit FE910C04 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10c4, 0)}, /* Telit FE910C04 */
++	{QMI_QUIRK_SET_DTR(0x1bc7, 0x10c8, 0)}, /* Telit FE910C04 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1100, 3)},	/* Telit ME910 */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1101, 3)},	/* Telit ME910 dual modem */
+ 	{QMI_FIXED_INTF(0x1bc7, 0x1200, 5)},	/* Telit LE920 */
+-- 
+2.39.5
 
-All of these have been in linux-next this week with no reported issues.
-
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-
-----------------------------------------------------------------
-Daniel Swanemar (1):
-      USB: serial: option: add TCL IK512 MBIM & ECM
-
-Daniele Palmas (1):
-      USB: serial: option: add Telit FE910C04 rmnet compositions
-
-Greg Kroah-Hartman (2):
-      Merge tag 'usb-serial-6.13-rc3' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
-      Merge tag 'thunderbolt-for-v6.13-rc4' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
-
-Jack Wu (1):
-      USB: serial: option: add MediaTek T7XX compositions
-
-Mank Wang (1):
-      USB: serial: option: add Netprisma LCUK54 modules for WWAN Ready
-
-Mario Limonciello (1):
-      thunderbolt: Don't display nvm_version unless upgrade supported
-
-Mathias Nyman (1):
-      xhci: Turn NEC specific quirk for handling Stop Endpoint errors generic
-
-Michal Hrusecky (1):
-      USB: serial: option: add MeiG Smart SLM770A
-
-Mika Westerberg (2):
-      thunderbolt: Add support for Intel Panther Lake-M/P
-      thunderbolt: Improve redrive mode handling
-
-Niklas Neronin (1):
-      usb: xhci: fix ring expansion regression in 6.13-rc1
-
- drivers/thunderbolt/nhi.c     |  8 ++++++++
- drivers/thunderbolt/nhi.h     |  4 ++++
- drivers/thunderbolt/retimer.c | 19 +++++++++++++++----
- drivers/thunderbolt/tb.c      | 41 +++++++++++++++++++++++++++++++++++++++++
- drivers/usb/host/xhci-mem.c   |  2 +-
- drivers/usb/host/xhci-ring.c  |  2 --
- drivers/usb/serial/option.c   | 27 +++++++++++++++++++++++++++
- 7 files changed, 96 insertions(+), 7 deletions(-)
 
