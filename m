@@ -1,157 +1,269 @@
-Return-Path: <linux-usb+bounces-18693-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18694-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C4169F8F80
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 10:58:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC5A89F908A
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 11:44:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 72E1D16A5A5
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 09:58:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0B081897CBC
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 10:44:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA10A1BD9FF;
-	Fri, 20 Dec 2024 09:58:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F290F1C549C;
+	Fri, 20 Dec 2024 10:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="UBUBKu+E"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="LXQtSCOj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout2.samsung.com (mailout2.samsung.com [203.254.224.25])
+Received: from mail-m127157.xmail.ntesmail.com (mail-m127157.xmail.ntesmail.com [115.236.127.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8595D1BD9D8
-	for <linux-usb@vger.kernel.org>; Fri, 20 Dec 2024 09:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.25
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB0919C56D;
+	Fri, 20 Dec 2024 10:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734688685; cv=none; b=NErCb2go3mZnpif2xjiL7kQvPcnrq9eN89KRp0CbhfzxLG+H1jxK+Vu1ECPoMDY2BhLmgk9RBCsc+EFnV0dF+JZTkJZcTMA8ADe/e7xyQreJwbSEK4s9DbKk760zLbbS6SCk6JDAloHmcfYWBakVEk+MPaThFAyc9fTbEGY+tM4=
+	t=1734691437; cv=none; b=PZRUu5qXmLzX5l79DboK37HahVqH1k8xAABbgeA81aJqpeAXMRmh22JFuWdGhfYX+2lg7nGYRt3uoLuCBFFxFX/q2q0DL8n3xYsMXr9BKq5koCQQDEROKZPsiK6cLcaH3gl/Qg3vYSRBd6rx0eQrytIqlQ+OTn4TBj9/qzSRX0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734688685; c=relaxed/simple;
-	bh=JV7zcf533trn9aE6JGdSSrLa7RjfdxV3RmQ9FF4JIYw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=Evgsn1eytgHaqgp2ngrtvnJA0j2X+Q2egm687wDjtqCLWufdOHETMly5ONru8F8SIp4T5StWEr0BTAPdZIenEwPRI31oX+S+VCMMfhd3CeSpoEdgiSEfTE5Xv6Wq4zx0v1ajHadxporC8USoVlP7ZbHQ6Hro535IvlTz2rsQy+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=UBUBKu+E; arc=none smtp.client-ip=203.254.224.25
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
-	by mailout2.samsung.com (KnoxPortal) with ESMTP id 20241220095754epoutp02d9b7211ff553357d794849063ead00fa~S2ii2cEyz1740017400epoutp02r
-	for <linux-usb@vger.kernel.org>; Fri, 20 Dec 2024 09:57:54 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.samsung.com 20241220095754epoutp02d9b7211ff553357d794849063ead00fa~S2ii2cEyz1740017400epoutp02r
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1734688674;
-	bh=mpuXmsNt6GgjKLVFSm8EoniE8s4eCfUeK50MGi/llMI=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=UBUBKu+E3HGh8vl2TgRB5Xglw59HAyaHNGf50U1OD/TNmrK1r0i5FFPFd/eOfZo8O
-	 5w3MdTkT6TKF259YgT16nQdg8Y6//9TUbtegVyPpaNvy4vDQl9a5KWVKsspDpFN7Py
-	 I0DLt3ZARwxr0QBPqEMlAVssVoXFi9NBoH2y/ALM=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-	20241220095754epcas5p2e6d2b4849f41347cf2e3656bafa86fc9~S2iimbvcF2259022590epcas5p20;
-	Fri, 20 Dec 2024 09:57:54 +0000 (GMT)
-Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.175]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4YF2sX6q83z4x9Pv; Fri, 20 Dec
-	2024 09:57:52 +0000 (GMT)
-Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
-	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	22.45.19710.D9F35676; Fri, 20 Dec 2024 18:57:49 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
-	20241220095748epcas5p13f052ca970cf1e2793b80a75b7a284f8~S2idWbUTr0172601726epcas5p1M;
-	Fri, 20 Dec 2024 09:57:48 +0000 (GMT)
-Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
-	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20241220095748epsmtrp29df40a76ff34a80ad33ff5c3ca72db07~S2idVxLHq2010820108epsmtrp2V;
-	Fri, 20 Dec 2024 09:57:48 +0000 (GMT)
-X-AuditID: b6c32a44-36bdd70000004cfe-38-67653f9d1f10
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	F5.DC.33707.C9F35676; Fri, 20 Dec 2024 18:57:48 +0900 (KST)
-Received: from [107.122.5.126] (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241220095748epsmtip2fa7a1ea551503cc89701587a88d82be9~S2icf1bkB0620806208epsmtip2-;
-	Fri, 20 Dec 2024 09:57:47 +0000 (GMT)
-Message-ID: <ce3f239a-c8bd-428f-a8f2-71f0b5a943cd@samsung.com>
-Date: Fri, 20 Dec 2024 15:27:46 +0530
+	s=arc-20240116; t=1734691437; c=relaxed/simple;
+	bh=FLotb8PO7pUbOoGoa3ZcA+IJLn2SEtUGvEV7uvVVTkk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kbln7y/CCeYJY3S9PlwwCdobmOpsBOraPpxJpouwpuGplkxgSESnNkpTn090B/kdHBqxXc2u8p+GLR8k9jPCPAcgbcXdmVGHGw60XNJkwku5wI6zdCunKuGeLKIwIWibwqrXS2c6O1FkrGFO6PM8eUS9WzTk5N0PGR9e7uX1zj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=LXQtSCOj; arc=none smtp.client-ip=115.236.127.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 656820ed;
+	Fri, 20 Dec 2024 18:38:26 +0800 (GMT+08:00)
+From: Kever Yang <kever.yang@rock-chips.com>
+To: heiko@sntech.de
+Cc: linux-rockchip@lists.infradead.org,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Simon Xue <xxm@rock-chips.com>,
+	Lee Jones <lee@kernel.org>,
+	dri-devel@lists.freedesktop.org,
+	Zhang Rui <rui.zhang@intel.com>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	linux-clk@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	FUKAUMI Naoki <naoki@radxa.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Andy Yan <andyshrk@163.com>,
+	Michael Riesch <michael.riesch@wolfvision.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-pm@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Jamie Iles <jamie@jamieiles.com>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	linux-mmc@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-i2c@vger.kernel.org,
+	Simona Vetter <simona@ffwll.ch>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-watchdog@vger.kernel.org,
+	David Wu <david.wu@rock-chips.com>,
+	Shresth Prasad <shresthprasad7@gmail.com>,
+	linux-gpio@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-iio@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	David Airlie <airlied@gmail.com>,
+	linux-phy@lists.infradead.org,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Maxime Ripard <mripard@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	linux-pwm@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Mark Brown <broonie@kernel.org>,
+	Dragan Simic <dsimic@manjaro.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Johan Jonker <jbx6244@gmail.com>,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-serial@vger.kernel.org,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	devicetree@vger.kernel.org,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Tim Lunn <tim@feathertop.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+	netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Subject: [PATCH 00/38] rockchip: Add rk3562 support
+Date: Fri, 20 Dec 2024 18:37:46 +0800
+Message-Id: <20241220103825.3509421-1-kever.yang@rock-chips.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: dwc3: gadget: remove not used field
- dwc3_request.sg
-To: Renjun Wang <renjunw0@foxmail.com>, Thinh.Nguyen@synopsys.com
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Content-Language: en-US
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-In-Reply-To: <tencent_0BEB55520D6C9419EC1AC6647AF19BF34E06@qq.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupik+LIzCtJLcpLzFFi42LZdlhTQ3eufWq6wYJ/PBbNi9ezWVzeNYfN
-	YtGyVmaLHf3z2SxWLTjA7sDqsaDnPLPH/rlr2D227P/M6PF5k1wAS1S2TUZqYkpqkUJqXnJ+
-	SmZeuq2Sd3C8c7ypmYGhrqGlhbmSQl5ibqqtkotPgK5bZg7QXiWFssScUqBQQGJxsZK+nU1R
-	fmlJqkJGfnGJrVJqQUpOgUmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsaZGe1MBTPZKzoPXWZq
-	YHzB2sXIySEhYCJx/t0a9i5GLg4hgd2MEpf7HjNDOJ8YJd4c+8wI57Tf72CHafm7ACaxk1Hi
-	+ZGbTBDOW0aJiX/uAg3m4OAVsJPYsS4ZpIFFQFVi/7EWZhCbV0BQ4uTMJywgtqiAvMT9WzPA
-	hgoL+Ev8+HScCcQWEXCUePh5AzvIGGaBSIm7rwRAwswC4hK3nsxnAgmzCRhKPDthAxLmFHCS
-	OLVmBQtEibzE9rdzwB6QEPjKLtHdtogR4mYXiVkbvkO9LCzx6vgWqF+kJD6/28sGYSdL7Jn0
-	BSqeIXFo1SFmCNteYvWCM6wQ52hKrN+lD7GLT6L39xOwcyQEeCU62oQgqlUlTjVehpooLXFv
-	yTWorR4Sa5e8YIME1FRGiS931zNNYFSYhRQos5B8OQvJO7MQNi9gZFnFKJlaUJybnppsWmCY
-	l1oOj+7k/NxNjOBEqeWyg/HG/H96hxiZOBgPMUpwMCuJ8PLIpaYL8aYkVlalFuXHF5XmpBYf
-	YjQFxs5EZinR5Hxgqs4riTc0sTQwMTMzM7E0NjNUEud93To3RUggPbEkNTs1tSC1CKaPiYNT
-	qoHJZf8T7kNfhd8Er9y89PCrVpG8Z3VK7GcELt239GBOTndRZyv8PTvb65TrEQ7jbc43057s
-	T/F2nX+rPOuQDGv5TaEXLgfMtCufz2R2l3syJ0OpdcaXuJ95ucoTasQ4Zx4wV3l1W9F6q6Ju
-	u0OoUtrmnXZzFmeUsr/zbG0+XWJpX/Vo7n/hrr+nVlV52Vy5I/6+QGfP8r01c4ruch+5KZJ+
-	xyPl4tyspQUd3gwBayxS7+gWaQhwuL452bFb8vZ+7eNnmr6LiFzUe2zv0tr2RJ8rXekEj1dO
-	afb6iAfBh27PmJv7wmTj/OisvMuH17+Ici7l0Vh57EbBF44Ggful1j3v37pmPdY+LPRx1858
-	YRUlluKMREMt5qLiRAB//J9RHQQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrELMWRmVeSWpSXmKPExsWy7bCSvO4c+9R0g2fzzS2aF69ns7i8aw6b
-	xaJlrcwWO/rns1msWnCA3YHVY0HPeWaP/XPXsHts2f+Z0ePzJrkAligum5TUnMyy1CJ9uwSu
-	jDMz2pkKZrJXdB66zNTA+IK1i5GTQ0LAROLvgs+MXYxcHEIC2xklJjx5yQ6RkJZ4PauLEcIW
-	llj57zk7RNFrRok/k74xdTFycPAK2EnsWJcMUsMioCqx/1gLM4jNKyAocXLmExYQW1RAXuL+
-	rRlgM4UFfCWuX9oEFhcRcJR4+HkDO8gYZoFIiS0NohDjpzJKPL37nA2khllAXOLWk/lgq9gE
-	DCWenbABCXMKOEmcWrOCBaLETKJrK8SZzECrtr+dwzyBUWgWkitmIZk0C0nLLCQtCxhZVjGK
-	phYU56bnJhcY6hUn5haX5qXrJefnbmIER4NW0A7GZev/6h1iZOJgPMQowcGsJMLLI5eaLsSb
-	klhZlVqUH19UmpNafIhRmoNFSZxXOaczRUggPbEkNTs1tSC1CCbLxMEp1cAU++GFuvnRVj/X
-	owvuKbX51+7Wqr/29jDb+YobP5Rmp5wQ5Zf/ema1xaxgtt/qisWzbMUu2e0LW3Hbydet2ZP7
-	S7mri3/Qca6a/S4n/zBrd+trSfzv/vk2srHU62zIy2OJi9NuSC2/cJeRreNvj/Qrp2mJ28tP
-	Fxts8z2wamI7Q/iHU1GnTxUcMF3AeLtGRGuG6X1dRpuGaUcyXizSCNt240bVTaPwXOHvS5+H
-	s+47prTSkn3r3Q1iEpN4pvnGFj/T7/Zfrqveni3zpGzaRP1chbRXTmWTm2Y28LOcqF/y6Hmp
-	rt86q3OvL8yfzr+wRG2ZaqThM4PajHlW537Gla+X8jJIiWlWaWbaZzFv50MlluKMREMt5qLi
-	RABpNrFa9QIAAA==
-X-CMS-MailID: 20241220095748epcas5p13f052ca970cf1e2793b80a75b7a284f8
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-CMS-TYPE: 105P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20241219151351epcas5p14f6be94bf65085f86d0163615bb81ae7
-References: <CGME20241219151351epcas5p14f6be94bf65085f86d0163615bb81ae7@epcas5p1.samsung.com>
-	<tencent_0BEB55520D6C9419EC1AC6647AF19BF34E06@qq.com>
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQh9LT1ZJGktPSElKGk8fQxhWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEtNQk
+	tVSktLVUpCWQY+
+X-HM-Tid: 0a93e3a5af4003afkunm656820ed
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nwg6Kxw6GTIRKggeThEUMR4h
+	P0gaCyxVSlVKTEhPTUJKSkpKTElJVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFOTUpJNwY+
+DKIM-Signature:a=rsa-sha256;
+	b=LXQtSCOj5PQ5rmMQS8JUHg+aVmzux+tnR5NnlpILS50US/QWv5VBCTHDsqEiVs5WhSa9UqWxWgKBEnSg0vucKhE8FyZdsUwbc5ZsdiUz76LZqHiim02ORqBuKb413jRYfReSUFy7jfbzAaPEA5wGkuukfoQqA957T+ZIIQC0lqE=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=RUJ3VBWN4hJZF+kjNTXL1lSb1odrwauQvfHGVuJDe90=;
+	h=date:mime-version:subject:message-id:from;
 
 
-On 12/19/2024 8:42 PM, Renjun Wang wrote:
-> Based on commit 61440628a4ff ("usb: dwc3: gadget: Cleanup SG handling"),
-> the field dwc3_request.sg is no longer needed and not used in any
-> other files, remove it.
->
-> Signed-off-by: Renjun Wang <renjunw0@foxmail.com>
-> ---
->   drivers/usb/dwc3/core.h | 1 -
->   1 file changed, 1 deletion(-)
->
-> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> index ee73789326bc..3be069c4520e 100644
-> --- a/drivers/usb/dwc3/core.h
-> +++ b/drivers/usb/dwc3/core.h
-> @@ -956,7 +956,6 @@ struct dwc3_request {
->   	struct usb_request	request;
->   	struct list_head	list;
->   	struct dwc3_ep		*dep;
-> -	struct scatterlist	*sg;
->   	struct scatterlist	*start_sg;
->   
->   	unsigned int		num_pending_sgs;
-The same change has already been incorporated as part of the following 
-commit.
-commit: 686d4a2c26b49 ("usb: dwc3: remove unused sg struct member")
+This patch set adds rk3562 SoC and its evb support.
+
+The patch number is a little bit too big, some of them may need to split
+out for different maintainers, please let me know which patch need to
+split out.
+
+Test with GMAC, USB, PCIe, EMMC, SD Card.
+
+This patch set is base on the patche set for rk3576 evb1 support.
+
+
+David Wu (2):
+  ethernet: stmmac: dwmac-rk: Add gmac support for rk3562
+  ethernet: stmmac: dwmac-rk: Make the phy clock could be used for
+    external phy
+
+Finley Xiao (7):
+  clk: rockchip: add dt-binding header for rk3562
+  clk: rockchip: Add clock controller for the RK3562
+  dt-bindings: add power-domain header for RK3562 SoC
+  nvmem: rockchip-otp: Add support for rk3568-otp
+  nvmem: rockchip-otp: Add support for rk3562
+  arm64: dts: rockchip: add core dtsi for RK3562 Soc
+  arm64: dts: rockchip: Add RK3562 evb2 devicetree
+
+Frank Wang (1):
+  phy: rockchip: inno-usb2: add usb2 phy support for rk3562
+
+Jon Lin (1):
+  phy: rockchip-naneng-combo: Support rk3562
+
+Kever Yang (24):
+  dt-bindings: clock: add rk3562 cru bindings
+  dt-bindings: pinctrl: Add rk3562 pinctrl support
+  soc: rockchip: power-domain: add power domain support for rk3562
+  dt-bindings: rockchip-thermal: Support the RK3562 SoC compatible
+  dt-bindings: iio: adc: Add rockchip,rk3562-saradc string
+  dt-bindings: net: Add support for rk3562 dwmac
+  dt-bindings: nvmem: rockchip,otp: Add support for rk3562 and rk3568
+  dt-bindings: phy: rockchip: Add rk3562 naneng-combophy compatible
+  dt-bindings: phy: rockchip,inno-usb2phy: add rk3562
+  dt-bindings: PCI: dwc: rockchip: Add rk3562 support
+  dt-bindings: mmc: Add support for rk3562 eMMC
+  dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
+  dt-bindings: power: rockchip: Add bindings for rk3562
+  dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
+  dt-bindings: gpu: Add rockchip,rk3562-mali compatible
+  dt-bindings: watchdog: Add rk3562 compatible
+  dt-bindings: spi: Add rockchip,rk3562-spi compatible
+  dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
+  dt-bindings: usb: dwc3: add compatible for rk3562
+  dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
+  dt-bindings: rockchip: pmu: Add rk3562 compatible
+  dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
+  dt-bindings: arm: rockchip: Add rk3562 evb2 board
+  dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
+
+Shaohan Yao (1):
+  thermal: rockchip: Support the rk3562 SoC in thermal driver
+
+Simon Xue (1):
+  iio: adc: rockchip_saradc: add rk3562
+
+Steven Liu (1):
+  pinctrl: rockchip: add rk3562 support
+
+ .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+ .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
+ .../bindings/clock/rockchip,rk3562-cru.yaml   |   62 +
+ .../bindings/gpu/arm,mali-bifrost.yaml        |    3 +-
+ .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
+ .../bindings/iio/adc/rockchip-saradc.yaml     |    2 +
+ .../devicetree/bindings/mfd/syscon.yaml       |    2 +
+ .../bindings/mmc/rockchip-dw-mshc.yaml        |    1 +
+ .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |    9 +-
+ .../bindings/net/rockchip-dwmac.yaml          |    5 +-
+ .../bindings/nvmem/rockchip,otp.yaml          |   49 +-
+ .../bindings/pci/rockchip-dw-pcie.yaml        |    1 +
+ .../phy/phy-rockchip-naneng-combphy.yaml      |    1 +
+ .../bindings/phy/rockchip,inno-usb2phy.yaml   |    3 +-
+ .../bindings/pinctrl/rockchip,pinctrl.yaml    |    1 +
+ .../power/rockchip,power-controller.yaml      |    1 +
+ .../devicetree/bindings/pwm/pwm-rockchip.yaml |    1 +
+ .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
+ .../devicetree/bindings/soc/rockchip/grf.yaml |    7 +
+ .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
+ .../bindings/thermal/rockchip-thermal.yaml    |    1 +
+ .../bindings/usb/rockchip,dwc3.yaml           |    3 +
+ .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+ .../boot/dts/rockchip/rk3562-evb2-v10.dts     |  520 ++++
+ .../boot/dts/rockchip/rk3562-pinctrl.dtsi     | 2352 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3562.dtsi      | 1432 ++++++++++
+ drivers/clk/rockchip/Kconfig                  |    7 +
+ drivers/clk/rockchip/Makefile                 |    1 +
+ drivers/clk/rockchip/clk-rk3562.c             | 1111 ++++++++
+ drivers/clk/rockchip/clk.h                    |   39 +
+ drivers/iio/adc/rockchip_saradc.c             |   24 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-rk.c    |  213 +-
+ drivers/nvmem/rockchip-otp.c                  |   97 +
+ drivers/phy/rockchip/phy-rockchip-inno-usb2.c |   49 +
+ .../rockchip/phy-rockchip-naneng-combphy.c    |  152 ++
+ drivers/pinctrl/pinctrl-rockchip.c            |  199 +-
+ drivers/pinctrl/pinctrl-rockchip.h            |    3 +-
+ drivers/pmdomain/rockchip/pm-domains.c        |   48 +-
+ drivers/thermal/rockchip_thermal.c            |  112 +-
+ include/dt-bindings/clock/rk3562-cru.h        |  733 +++++
+ include/dt-bindings/power/rk3562-power.h      |   35 +
+ 42 files changed, 7269 insertions(+), 22 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3562-cru.yaml
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562.dtsi
+ create mode 100644 drivers/clk/rockchip/clk-rk3562.c
+ create mode 100644 include/dt-bindings/clock/rk3562-cru.h
+ create mode 100644 include/dt-bindings/power/rk3562-power.h
+
+-- 
+2.25.1
+
 
