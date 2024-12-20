@@ -1,102 +1,143 @@
-Return-Path: <linux-usb+bounces-18718-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18719-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 048229F9C48
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 22:46:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C03A9F9C81
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 23:00:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8E55188E38C
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 21:45:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AECC6167707
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 22:00:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6A3C226186;
-	Fri, 20 Dec 2024 21:45:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA1811A9B27;
+	Fri, 20 Dec 2024 22:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gkM3Xky2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sUVrP8ak"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3042F21D59E
-	for <linux-usb@vger.kernel.org>; Fri, 20 Dec 2024 21:45:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49AD71A840E;
+	Fri, 20 Dec 2024 22:00:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734731146; cv=none; b=CoqTNecehVRQk2XwBjR0SwywKE5pwHO0yqdO67lmR7gv/S/OaCw9MXZAMWbrMxWd3oO93mSW+pbl4+trZyTYs1qr0+QlV0p8YTnP3E+1AbyGrWlFmSMFPQobmp3JN5Aijct8w+K3xGNk+RgaehLbbnlPkixeIOytJljLcKtWEYk=
+	t=1734732046; cv=none; b=dj/Bd539JPsZThTgLKAajdQh6Xf9kCFZfHJc1YEl5dtxweXuB1/Z733kVGirjmRjDZV/tnC+tes1wWcVcatPpZ/K9j/kaJigDRGoAaejeyWugwg8v0+QXZBDygl/SFMXCHhWsQUovNSBCE0YuZb/Y4oEWiuCTrctwpdQRiixcr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734731146; c=relaxed/simple;
-	bh=HC9CGEiitV76c3hrg7b0BwCjz+on7uGmRCH+MNQW1d8=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tL6ugDkMVRQeCQfUggOtwvajFPzgg54MJ/dvbcxlFQ6Rc/WZYpl8SM5+pzftZ0uxIdQQi2Lpz/4y7lyIeTXOsf7o2yi0VzLrL5BSGHB4sa3XFWFCt7uQcUBhMmcM3S5H0oPBHEqF76p4VQZLJ5OsnQdXOmffvXZ1N6nmS5YBeRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gkM3Xky2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD76AC4CED4
-	for <linux-usb@vger.kernel.org>; Fri, 20 Dec 2024 21:45:45 +0000 (UTC)
+	s=arc-20240116; t=1734732046; c=relaxed/simple;
+	bh=l+VkQkyF3IIP/DkDeyyk2LDIGDQYOMIoQmWdd9a7Cyo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cGGmX3bFBNoT1GBpqmJl7rmcnw6HRTZ8x+H87NgPMoxjS8cXKMPCVB1Y8CWWaDhBkJmTpFb6b28fLCI4v7eV80r+/zPrddwiDlAhPQD7hZJuhXQD56NjJokdNfGznZO5lEd76fepaE9KRr3J5KuWyYPqcQXFUoB1JNBQseXWtRE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sUVrP8ak; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6D43C4AF09;
+	Fri, 20 Dec 2024 22:00:45 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734731145;
-	bh=HC9CGEiitV76c3hrg7b0BwCjz+on7uGmRCH+MNQW1d8=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=gkM3Xky2WCLo66rnoyVqtHJ48AvteVJaPEb/NeFskcBc8d0mfaNbEoTSdftxwLKPl
-	 bRjx+aQAMNc4D7o2VvMkuYMBl2NVfQaAnj1KxOSlIbKse8ySyYxaSM2rgZ2tfmjU9h
-	 Pm7z5Tap0j3dL1HV6GScUXf2DFghp24Pv6Ty3vKTENTUDFddVZRMFCWP8pxwoygsVM
-	 GmpcyisfZw8bqLsFyVuF6LXtYxVlN4G+Zz2cogYQdkejE6IWX4eWLFsBJooUOOy4RM
-	 4xAgOK1p3ztyivZ/kKFzFBxdq2LAikVbtYYXxLfG6P3nTyj4/vkrtvCHH++lw8P0/3
-	 v0rLMgAGp/1cQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id A2201C3279F; Fri, 20 Dec 2024 21:45:45 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219616] xhci_pci does not activate uPD720202
-Date: Fri, 20 Dec 2024 21:45:45 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: michal.pecio@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-219616-208809-Xk7S4JqdMF@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219616-208809@https.bugzilla.kernel.org/>
-References: <bug-219616-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1734732045;
+	bh=l+VkQkyF3IIP/DkDeyyk2LDIGDQYOMIoQmWdd9a7Cyo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sUVrP8akTvgHKS+vMzpOLca0Lw6fomgKVk1f4cWk6kzFobVksA3MnoOABwBqtVhKd
+	 nOLa6eTZHsZh1Bc9QUlPWwHtcyupRJCwPDqlOCmSUkb0wE3Lsgq2qfSI9pKlVDrq0O
+	 S+K8uTkDxYVy9tzUoXKnf+xVmjYHiOz74vRMjCENulsMUi3SRYGqOIVv2Ivi6R3CL6
+	 cKL2zJei0Tz9JzrDhRY1uny+xEVjkHUUt+f8WJON9mYS4gSravN4cVTAAGjduMGtzg
+	 tsMTgQ4U9imFdgXCGb07EYg1f9Ipzut1dO0ko1f+72w4ed/JZUJFADTelwoMYfP/k2
+	 HWRk6VKNj5j8g==
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6ef4b6719d1so21314337b3.2;
+        Fri, 20 Dec 2024 14:00:45 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWhqyxhvXY/C5EqudG1J++wLlO/gnXcnrLARSiG/dYNWsH/IAdktS/p3Krrrmy64f8MF6VkmjIJUJXxFFw=@vger.kernel.org, AJvYcCWlCg7kmfN5hmlpULokLUI4435f75Xd0kM5/w+pXDit3IbRnihXRKg+u7pt6wdG86FCXyZw5WepxCdW@vger.kernel.org, AJvYcCWvHeiwi/drphMjfSKBmxvXTMmbj5xhAa29dZtkhhxds4qcFkBQbUUkqaYqlWK8zvJ1FDTL3AHTCiWC@vger.kernel.org, AJvYcCX7zEDnjZ9shOJMl0SxyePaCMbkfBh0r2XuZtMCM0lH9DKjeIjjYuBLo6JRQY3Rn13h9r58y9HyDvVjmErz@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8/97r/v5EKZbR6VfJf7iR0DwmHVS0QkhFoGN00uUzzDpeetwD
+	B1Ii9bnvGxs0ggM/YH87URmuA1kuzd04zx7eLtTTD7/sDjzkzKf7msm1fkEPaxxNklhxSylLhRa
+	lnyZnfQ2dGpghudRk8X+Fzmb+Cw==
+X-Google-Smtp-Source: AGHT+IHa9m2dBS1rVJp2vWGrKyHOr+BVmsYWGYuP9AqSkL4NyRF559gCdMbhGLGzsDAEHN6VWgZnPLmZGDvMEpaejOM=
+X-Received: by 2002:a05:690c:6e8c:b0:6e7:e340:cd36 with SMTP id
+ 00721157ae682-6f3f824f97fmr37942517b3.40.1734732044884; Fri, 20 Dec 2024
+ 14:00:44 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20241212-usb-orientation-v1-1-0b69adf05f37@chromium.org>
+ <20241217145612.GA1652259-robh@kernel.org> <CANiDSCu_mFQQVkDb_gSyXeb1_Tu+DxSeHYvGsGp6XVDuOdPyjQ@mail.gmail.com>
+ <20241219122453.GA4008177-robh@kernel.org> <CANiDSCt+LAE-LzCDZgrWP_V-Jc-ywTF1-PuQtyDJMfV9v_ZzGA@mail.gmail.com>
+In-Reply-To: <CANiDSCt+LAE-LzCDZgrWP_V-Jc-ywTF1-PuQtyDJMfV9v_ZzGA@mail.gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Fri, 20 Dec 2024 16:00:34 -0600
+X-Gmail-Original-Message-ID: <CAL_JsqLON5xKoYtowKdk49s-YHbk9bq9akZSH1kHdQ_9vxKSQQ@mail.gmail.com>
+Message-ID: <CAL_JsqLON5xKoYtowKdk49s-YHbk9bq9akZSH1kHdQ_9vxKSQQ@mail.gmail.com>
+Subject: Re: [PATCH] dt-bindings: usb: usb-device: Add panel-location
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
+	Jacopo Mondi <jacopo@jmondi.org>, Sakari Ailus <sakari.ailus@linux.intel.com>, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219616
+On Thu, Dec 19, 2024 at 6:42=E2=80=AFAM Ricardo Ribalda <ribalda@chromium.o=
+rg> wrote:
+>
+> On Thu, 19 Dec 2024 at 13:24, Rob Herring <robh@kernel.org> wrote:
+> >
+> > On Tue, Dec 17, 2024 at 04:24:27PM +0100, Ricardo Ribalda wrote:
+> > > Hi Rob
+> > >
+> > > On Tue, 17 Dec 2024 at 16:02, Rob Herring <robh@kernel.org> wrote:
+> > > >
+> > > > On Thu, Dec 12, 2024 at 09:44:37PM +0000, Ricardo Ribalda wrote:
+> > > > > For some devices like cameras the system needs to know where they=
+ are
+> > > > > mounted.
+> > > >
+> > > > Why do you need this and why only this property and not the dozens
+> > > > others ACPI has?
+> > >
+> > > Userspace needs that information to correctly show it in the UI. Eg;
+> > >
+> > > - User facing camera needs to be mirrored during preview.
+> > > - The user facing camera is selected by default during videoconferenc=
+es
+> > > - The world facing camera is selected by default when taking a photo
+> > > - User facing camera have different parameter defaults than world fac=
+ing.
+> >
+> > We already have "orientation" defined for this purpose.
+>
+> Do you mean orientation from
+> bindings/media/video-interface-devices.yaml ?
+>
+> I see a couple of issues:
+> - Orientation has a very specific meaning for USB typeC. I'd prefer if
+> we could avoid using that word.
 
-Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
+Yes, but this is tied to the class of the device, not the bus. I find
+defining the position for USB devices confusing.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |michal.pecio@gmail.com
+> - For other applications different than cameras it might be useful to
+> know the positions top, bottom, left, right, which are not available
+> in video-interface-devices
 
---- Comment #1 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-Is this lspci output from the working 6.11 system?
+Other devices may need some of the 20 other properties in the ACPI
+table as well.
 
-On 6.12 you should see
-        Kernel driver in use: xhci-pci-renesas
-        Kernel modules: xhci_pci, xhci_pci_renesas
+> - The value "external" does not makes too much sense for listed usb devic=
+es
 
-and you need CONFIG_USB_XHCI_PCI_RENESAS to have this module if you are
-building your own kernel, see commit 25f51b76f90f.
+Then don't use it.
 
---=20
-You may reply to this email to add a comment.
+> - It makes our lives easier if dt and acpi have the same meaning (less
+> conversion)
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+We have little to no input into what ACPI does. If we're just going to
+copy ACPI, then just use ACPI instead.
+
+> All that said, for my specific usecase, reusing orientation from
+> bindings/media/video-interface-devices.yaml works... So if that is
+> what you all prefer I can send a v2 with that.
+> Let me know what you think
+
+We already have something for cameras. Use it.
+
+Rob
 
