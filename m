@@ -1,115 +1,125 @@
-Return-Path: <linux-usb+bounces-18703-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18704-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 355C29F9552
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 16:23:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D4F89F958B
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 16:36:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01FB718984D3
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 15:21:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3403E16C05D
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 15:36:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E81821A444;
-	Fri, 20 Dec 2024 15:18:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB431219A79;
+	Fri, 20 Dec 2024 15:36:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GsbtMyvH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pYrDUaET"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91B0D21A422
-	for <linux-usb@vger.kernel.org>; Fri, 20 Dec 2024 15:18:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60210219A63;
+	Fri, 20 Dec 2024 15:36:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734707936; cv=none; b=q60iQrhpdHola/wGb6QdkkvB2Ltq1+8cz8YGywOY8eGlUXDbfRWhEEtoRRMOaqN3/9Mj8bV2YT/lZxuP/O9wN/gMNzTfWTHD99QLIl/WPSshZjQpcMhXkJaNeDwz0bRNoxOFTy8BuhOV76kXhW1t31I0/2048e3r7Msny3wKYEw=
+	t=1734708967; cv=none; b=lfuFN6Gm4cg3LIDJx5Xh27EUyZQcOxvHA0T8w/OzFb9IdDkMQOdEVUWbaWltztz8osV4IP/wjfhjiEZWEK3AJKTZu54b9TWJiAku6bRCcqGa/bNVOlq56ybxbamDF0wl+u25QE5EoAK7BGFNNjXqM/W4tZ1Fij1a+72jIPhhPE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734707936; c=relaxed/simple;
-	bh=RmWpj6/pWtczLsMxxeN0Ba29p7w/+cvK8Zp+xejFksw=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=YEFO4ficq61s6iMKSREmnQJBX7R8CBznyQ13c0zqYhx86Yd2mun7Wtrd9VMct2gx8rNLTf3/pCnlAn+GgANrdE9HMTsmicSrenzGU8j9f8WGPazUn2EibNm91h33WeHzfwaDHXlNmajOyNCbkgM4RNv1JEx7pdXlZeyXNINyfik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GsbtMyvH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 04C03C4CECD
-	for <linux-usb@vger.kernel.org>; Fri, 20 Dec 2024 15:18:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734707936;
-	bh=RmWpj6/pWtczLsMxxeN0Ba29p7w/+cvK8Zp+xejFksw=;
-	h=From:To:Subject:Date:From;
-	b=GsbtMyvHCn0nJCYdBpR71/W2yS7eN02+90bQ3hMy2sfpqG3xbALLLG2MnqTh4+GU4
-	 Qm04rjyfydSRcoGN98VllxwWN4OqEfkEGx9jSu1RzCRDvLSlQMrThRbPfLnPmZb+7P
-	 cdT1P/CgwcfQ3KfJTiPq51GpzmfOOCi2DtjuVWuv9jMnhoAJTjAb/SWCGTGIxR5Lbo
-	 M3wFqcWS/G4ffK1HHk/4/AP4mBgVMTxDTwspRjRE61yvN+yRmxLxC5cQ4MfoNfI0pl
-	 N4Hw9WqZtgb+FYnIAx/ShTRkAgxEXxNChLRtG3sYFj5FiPWD/jLI8OB5FJQ73/YLlT
-	 bpuliX7mvBDWQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E1027C3279F; Fri, 20 Dec 2024 15:18:55 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219616] New: xhci_pci does not activate uPD720202
-Date: Fri, 20 Dec 2024 15:18:55 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: z.b@arcor.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version
- cf_kernel_version rep_platform op_sys bug_status bug_severity priority
- component assigned_to reporter cc cf_regression
-Message-ID: <bug-219616-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1734708967; c=relaxed/simple;
+	bh=fI2l8wjxgTL6CBJ4jSRjLWuA3M+8hNZ068W95H/+hlU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BWzlW3qZAp0GiQxNEpLUBPcG4tVMp0/8bm9PqHnYikSpc00eWOCIFrT2h4aOHbJtHPPq0XataRO1NsR7lzepjfFKRtD9ED0FsRxtN/KqNEUgMuvCi2r01y+Ut/nSETuvtbdVSlh2Zdkz3pFOgqLqz8gcKnM+m7Ca4yqpCsaYnYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pYrDUaET; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80C04C4CECD;
+	Fri, 20 Dec 2024 15:36:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1734708967;
+	bh=fI2l8wjxgTL6CBJ4jSRjLWuA3M+8hNZ068W95H/+hlU=;
+	h=Date:From:To:Cc:Subject:From;
+	b=pYrDUaETp1mZkJ1YAH5fP637TiSdv9qlUIzZ2izNjnF90hViFmylkTkjLZJWVTpgu
+	 KpptjnI6X04q4dkBCNkgvunSj7jg4kpNlovSHlDVIlZifXnXNDsIOeuV6gHdImkKml
+	 mLjhP13oz0AfQt514ZC/k8bvklIgBWW5DGCuufRI=
+Date: Fri, 20 Dec 2024 16:36:03 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [GIT PULL] USB / Thunderbolt fixes for 6.13-rc4
+Message-ID: <Z2WO42XdnBrYmdmN@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219616
+The following changes since commit 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8:
 
-            Bug ID: 219616
-           Summary: xhci_pci does not activate uPD720202
-           Product: Drivers
-           Version: 2.5
-    Kernel Version: 6.12.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: blocking
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: z.b@arcor.de
-                CC: linux-usb@vger.kernel.org
-        Regression: Yes
+  Linux 6.13-rc3 (2024-12-15 15:58:23 -0800)
 
-Concerning:
-04:00.0 USB controller: Renesas Technology Corp. uPD720202 USB 3.0 Host
-Controller (rev 02) (prog-if 30 [XHCI])
-        Flags: bus master, fast devsel, latency 0, IRQ 19
-        Memory at fe6fe000 (64-bit, non-prefetchable) [size=3D8K]
-        Capabilities: <access denied>
-        Kernel driver in use: xhci_hcd
-        Kernel modules: xhci_pci
+are available in the Git repository at:
 
-Although xhci_pci is loaded, lsusb does not show any Linux Foundation 3.0 r=
-oot
-hub.
-Device is detected and works properly, when computer is booted with 6.11.0.
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.13-rc4
 
---=20
-You may reply to this email to add a comment.
+for you to fetch changes up to 1b62f3cb74d2965e8f96f20241b1fe85017aa3e8:
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+  Merge tag 'thunderbolt-for-v6.13-rc4' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus (2024-12-19 12:35:02 +0100)
+
+----------------------------------------------------------------
+USB / Thunderbolt fixes for 6.13-rc4
+
+Here are some important, and small, fixes for USB and Thunderbolt issues
+that have come up in the -rc releases.  And some new device ids for good
+measure.  Included in here are:
+  - Much reported xhci bugfix for usb-storage devices (and other devices
+    as well, tripped me up on a video camera)
+  - thunderbolt fixes for some small reported issues
+  - new usb-serial device ids
+
+All of these have been in linux-next this week with no reported issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Daniel Swanemar (1):
+      USB: serial: option: add TCL IK512 MBIM & ECM
+
+Daniele Palmas (1):
+      USB: serial: option: add Telit FE910C04 rmnet compositions
+
+Greg Kroah-Hartman (2):
+      Merge tag 'usb-serial-6.13-rc3' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/johan/usb-serial into usb-linus
+      Merge tag 'thunderbolt-for-v6.13-rc4' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
+
+Jack Wu (1):
+      USB: serial: option: add MediaTek T7XX compositions
+
+Mank Wang (1):
+      USB: serial: option: add Netprisma LCUK54 modules for WWAN Ready
+
+Mario Limonciello (1):
+      thunderbolt: Don't display nvm_version unless upgrade supported
+
+Mathias Nyman (1):
+      xhci: Turn NEC specific quirk for handling Stop Endpoint errors generic
+
+Michal Hrusecky (1):
+      USB: serial: option: add MeiG Smart SLM770A
+
+Mika Westerberg (2):
+      thunderbolt: Add support for Intel Panther Lake-M/P
+      thunderbolt: Improve redrive mode handling
+
+Niklas Neronin (1):
+      usb: xhci: fix ring expansion regression in 6.13-rc1
+
+ drivers/thunderbolt/nhi.c     |  8 ++++++++
+ drivers/thunderbolt/nhi.h     |  4 ++++
+ drivers/thunderbolt/retimer.c | 19 +++++++++++++++----
+ drivers/thunderbolt/tb.c      | 41 +++++++++++++++++++++++++++++++++++++++++
+ drivers/usb/host/xhci-mem.c   |  2 +-
+ drivers/usb/host/xhci-ring.c  |  2 --
+ drivers/usb/serial/option.c   | 27 +++++++++++++++++++++++++++
+ 7 files changed, 96 insertions(+), 7 deletions(-)
 
