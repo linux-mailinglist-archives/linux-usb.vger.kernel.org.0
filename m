@@ -1,111 +1,61 @@
-Return-Path: <linux-usb+bounces-18696-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18697-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 113D29F9216
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 13:22:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 128589F9224
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 13:24:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4E681897B03
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 12:22:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6F567A3569
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 12:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AA8A2046B9;
-	Fri, 20 Dec 2024 12:21:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 708AA204693;
+	Fri, 20 Dec 2024 12:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Yq+tb1ps"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Xjuuh4Ev"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFA31A7AE3;
-	Fri, 20 Dec 2024 12:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2B5013C914;
+	Fri, 20 Dec 2024 12:24:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734697316; cv=none; b=TDIiwUUrEtm6twyomjSCct5MRfRt/tgfmLYP7tyGJs4zp4xeEktFTHJOdvfE01lI03uCkzQFBbROcerheaD7e1Pu7nDazQAmuoNnEMzaWZzeP63emPIcJxjJSyZmaBXCOh+SizanyH5ZATwo+XqSJFMZREv9avFiCAWnI/EZYp8=
+	t=1734697457; cv=none; b=Zl1U7QLKQ203uqJCmN92g3SGfPB7R9D2wOJv3N8Moo0aN1okxflyC9V1rFRteOOeo9llAcx9hBnQ/ad1V+4+2qd18ckoJQf9zztBoQKGkJAatNweZMMRVgNzUl8+wP4yTkqh/BxUl/6535AMGbANcVQcE+fZsBgOT1YEc0/3pjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734697316; c=relaxed/simple;
-	bh=JduFaswRmxN5tGLStvzwUiaywMEIItZVTSmKsVx9nOI=;
+	s=arc-20240116; t=1734697457; c=relaxed/simple;
+	bh=J8GTeuksbYDtKPfiOanv+yBIDvmxFpdIQ6kc3B9nfN0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rm4jRIh61FDTqFa4Wqoho1YpUA8bygGHav7a9cstSMKlhSuVDC+bbPGXdAGx77au9BuXy6CUCYnYD8s6iLuqXiGA0AboG0Jzab3zzVyaGpoHQxF9Cz88n2PtJg4pJpREJiF49Btjh0DQYiAwCcpna2SOfS5Lr4jX7ZEmu8z7lBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Yq+tb1ps; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B3BC4CECD;
-	Fri, 20 Dec 2024 12:21:55 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=S62M8h1I4NtuVaY5+exFYr7TRBykx1LEYMSHSVjtACZ4DsiwHt0RbP7FMgTtbMqeU1eUPwSHV2stTWtytQZ9R4hFago/zJlMluUPulRAF7ALIhIcT7HYZpw9yy+dZpzLf+ORDxjqEdv9EaydU3zoq+ioQVH7pzvWzxy+jz7l1pU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Xjuuh4Ev; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E185CC4CECD;
+	Fri, 20 Dec 2024 12:24:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1734697316;
-	bh=JduFaswRmxN5tGLStvzwUiaywMEIItZVTSmKsVx9nOI=;
+	s=korg; t=1734697456;
+	bh=J8GTeuksbYDtKPfiOanv+yBIDvmxFpdIQ6kc3B9nfN0=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yq+tb1psbAD0EEaGVo62BeRkwh9Xj1zwGjU1RnX9bPc3zuKVZ+vFaKjzZirLF0O5Q
-	 cWqZTrj/8oUOashMDH0in9idt9Jf9pCN3xfKSbuna7zWsHJDYmyLi1Jgqy+04F5+b+
-	 WkFCtRLWZn13uCsuIFDP/5NAmVeHVQ3OLBfdEu0A=
-Date: Fri, 20 Dec 2024 13:21:51 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Kever Yang <kever.yang@rock-chips.com>
-Cc: heiko@sntech.de, linux-rockchip@lists.infradead.org,
-	Simon Xue <xxm@rock-chips.com>, Lee Jones <lee@kernel.org>,
-	dri-devel@lists.freedesktop.org, Zhang Rui <rui.zhang@intel.com>,
-	Elaine Zhang <zhangqing@rock-chips.com>, linux-clk@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, FUKAUMI Naoki <naoki@radxa.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Andy Yan <andyshrk@163.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jose Abreu <joabreu@synopsys.com>, Jamie Iles <jamie@jamieiles.com>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Frank Wang <frank.wang@rock-chips.com>, linux-mmc@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
-	Simona Vetter <simona@ffwll.ch>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-watchdog@vger.kernel.org, David Wu <david.wu@rock-chips.com>,
-	Shresth Prasad <shresthprasad7@gmail.com>,
-	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
-	linux-pci@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	linux-phy@lists.infradead.org, Jonas Karlman <jonas@kwiboo.se>,
-	Maxime Ripard <mripard@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Vinod Koul <vkoul@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-pwm@vger.kernel.org,
-	Rob Herring <robh@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Mark Brown <broonie@kernel.org>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>, Johan Jonker <jbx6244@gmail.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-serial@vger.kernel.org,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	devicetree@vger.kernel.org,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Tim Lunn <tim@feathertop.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-	netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Subject: Re: [PATCH 00/38] rockchip: Add rk3562 support
-Message-ID: <2024122018-groove-glitzy-f3bc@gregkh>
-References: <20241220103825.3509421-1-kever.yang@rock-chips.com>
+	b=Xjuuh4EvkkVvjgr+QjOxzUEg/JC72OF9GMebkwk5B5jdlg3jbKwhQcEEcmY4u6Tz4
+	 OvokcLd6aOId+LJUJ6OYaghzJpFOHOhPILlclMkBbVCN4XsxiTWFF+yekQm/QiZf0V
+	 mP7zSIdyX0pT55du5SA2Dyh80K9MAlmyswZE8C9I=
+Date: Fri, 20 Dec 2024 13:24:12 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
+	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com,
+	shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+Message-ID: <2024122013-scary-paver-fcff@gregkh>
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+ <20241208152322.1653-1-selvarasu.g@samsung.com>
+ <2024121845-cactus-geology-8df3@gregkh>
+ <9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -114,19 +64,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241220103825.3509421-1-kever.yang@rock-chips.com>
+In-Reply-To: <9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
 
-On Fri, Dec 20, 2024 at 06:37:46PM +0800, Kever Yang wrote:
+On Wed, Dec 18, 2024 at 03:51:50PM +0530, Selvarasu Ganesan wrote:
 > 
-> This patch set adds rk3562 SoC and its evb support.
+> On 12/18/2024 11:01 AM, Greg KH wrote:
+> > On Sun, Dec 08, 2024 at 08:53:20PM +0530, Selvarasu Ganesan wrote:
+> >> The current implementation sets the wMaxPacketSize of bulk in/out
+> >> endpoints to 1024 bytes at the end of the f_midi_bind function. However,
+> >> in cases where there is a failure in the first midi bind attempt,
+> >> consider rebinding.
+> > What considers rebinding?  Your change does not modify that.
 > 
-> The patch number is a little bit too big, some of them may need to split
-> out for different maintainers, please let me know which patch need to
-> split out.
+> Hi Greg,
+> Thanks for your review comments.
+> 
+> 
+> Here the term "rebind" in this context refers to attempting to bind the 
+> MIDI function a second time in certain scenarios.
+> The situations where rebinding is considered include:
+> 
+>   * When there is a failure in the first UDC write attempt, which may be
+>     caused by other functions bind along with MIDI
+>   * Runtime composition change : Example : MIDI,ADB to MIDI. Or MIDI to
+>     MIDI,ADB
+> 
+> The issue arises during the second time the "f_midi_bind" function is 
+> called. The problem lies in the fact that the size of 
+> "bulk_in_desc.wMaxPacketSize" is set to 1024 during the first call, 
+> which exceeds the hardware capability of the dwc3 TX/RX FIFO 
+> (ep->maxpacket_limit = 512).
 
-I recommend you doing the split-apart as you know the dependencies here
-the best, right?  Otherwise we all will just probably ignore them
-assuming someone else is going to review/accept them...
+Ok, but then why not properly reset ALL of the options/values when a
+failure happens, not just this one when the initialization happens
+again?  Odds are you might be missing the change of something else here
+as well, right?
+
+Also, cleaning up from an error is a better thing to do than forcing
+something to be set all the time when you don't have anything gone
+wrong.
 
 thanks,
 
