@@ -1,269 +1,206 @@
-Return-Path: <linux-usb+bounces-18694-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18695-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC5A89F908A
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 11:44:34 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED4269F9206
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 13:21:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0B081897CBC
-	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 10:44:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9873B7A31D4
+	for <lists+linux-usb@lfdr.de>; Fri, 20 Dec 2024 12:21:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F290F1C549C;
-	Fri, 20 Dec 2024 10:43:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470631DC9A2;
+	Fri, 20 Dec 2024 12:21:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="LXQtSCOj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lPFpGIZY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-m127157.xmail.ntesmail.com (mail-m127157.xmail.ntesmail.com [115.236.127.157])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB0919C56D;
-	Fri, 20 Dec 2024 10:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB4B1D63FF
+	for <linux-usb@vger.kernel.org>; Fri, 20 Dec 2024 12:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734691437; cv=none; b=PZRUu5qXmLzX5l79DboK37HahVqH1k8xAABbgeA81aJqpeAXMRmh22JFuWdGhfYX+2lg7nGYRt3uoLuCBFFxFX/q2q0DL8n3xYsMXr9BKq5koCQQDEROKZPsiK6cLcaH3gl/Qg3vYSRBd6rx0eQrytIqlQ+OTn4TBj9/qzSRX0Q=
+	t=1734697281; cv=none; b=CVeBrElMSw9GTSH3VTE80U90/jjkJpHM4yH/WOIt57sf5FPJciL1FD3U+6ljyGecBcTIgB5XT3zbIhXMZxEsTfh2dR8rpVss1zzK7IQH/GV+8ZyWo4vugoW800Su0GP/QqaBOd7Ua7ZoZj708F5M2Sv+caqRuUEbTs0OK6tbhEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734691437; c=relaxed/simple;
-	bh=FLotb8PO7pUbOoGoa3ZcA+IJLn2SEtUGvEV7uvVVTkk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kbln7y/CCeYJY3S9PlwwCdobmOpsBOraPpxJpouwpuGplkxgSESnNkpTn090B/kdHBqxXc2u8p+GLR8k9jPCPAcgbcXdmVGHGw60XNJkwku5wI6zdCunKuGeLKIwIWibwqrXS2c6O1FkrGFO6PM8eUS9WzTk5N0PGR9e7uX1zj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=LXQtSCOj; arc=none smtp.client-ip=115.236.127.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 656820ed;
-	Fri, 20 Dec 2024 18:38:26 +0800 (GMT+08:00)
-From: Kever Yang <kever.yang@rock-chips.com>
-To: heiko@sntech.de
-Cc: linux-rockchip@lists.infradead.org,
-	Kever Yang <kever.yang@rock-chips.com>,
-	Simon Xue <xxm@rock-chips.com>,
-	Lee Jones <lee@kernel.org>,
-	dri-devel@lists.freedesktop.org,
-	Zhang Rui <rui.zhang@intel.com>,
-	Elaine Zhang <zhangqing@rock-chips.com>,
-	linux-clk@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>,
-	FUKAUMI Naoki <naoki@radxa.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Andy Yan <andyshrk@163.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-pm@vger.kernel.org,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Jamie Iles <jamie@jamieiles.com>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	linux-mmc@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-i2c@vger.kernel.org,
-	Simona Vetter <simona@ffwll.ch>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-watchdog@vger.kernel.org,
-	David Wu <david.wu@rock-chips.com>,
-	Shresth Prasad <shresthprasad7@gmail.com>,
-	linux-gpio@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-iio@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	David Airlie <airlied@gmail.com>,
-	linux-phy@lists.infradead.org,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Maxime Ripard <mripard@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	linux-pwm@vger.kernel.org,
-	Rob Herring <robh@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Mark Brown <broonie@kernel.org>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Johan Jonker <jbx6244@gmail.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-serial@vger.kernel.org,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	devicetree@vger.kernel.org,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Tim Lunn <tim@feathertop.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-	netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-Subject: [PATCH 00/38] rockchip: Add rk3562 support
-Date: Fri, 20 Dec 2024 18:37:46 +0800
-Message-Id: <20241220103825.3509421-1-kever.yang@rock-chips.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1734697281; c=relaxed/simple;
+	bh=8d4Q0C2znU8MHzQ4BGUXioJMfRxy19Shq1g1fs4tACA=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=bUXXqbC5dkYrgKDFV6b3yvTggsG6wX/uuxNL9mh3llahHj6kUa4JNcVWZ9ck1C033QtklgmI3Sz0LOkQESxY4F800f6OH6XKt5bOdUeJbEBJyDSDlavYDuBjRDfLcfqxr7Ho5/caK0Uco9bApIBdqvURzvG/g5yVxFGa78kC4oI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lPFpGIZY; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734697280; x=1766233280;
+  h=date:from:to:cc:subject:message-id;
+  bh=8d4Q0C2znU8MHzQ4BGUXioJMfRxy19Shq1g1fs4tACA=;
+  b=lPFpGIZYAWuJ0ct1f/muf/veMKXPLSrPigfQn8Xt5JMg5bHHSyqDRknM
+   LhTNBKFtnsLcNEAE3IBvQc0k+1dc59JPDplmlUQf+9Zij02oAb7xyug9U
+   QZnX2Ji0otlQSLkGgoY/Z4nrP9wGnrkkmtQTzGR9eL2hV0Wp5lODZC54f
+   UmhccbrtQxnIJHCPNG6fVsEknc2c0fbJp5LkRfe5ZdLLes6OrEXyReVMA
+   c2ARcpYKcg8SC/PKJqEk3O7WQ1q+i47XiU1r8h+u7trzkgQiJRPPIaR/T
+   OVV52Z+CIkADGjsyh7J2dMz3tp/N3Ffr8FArzwkeDPq5ungKWt+K6Rfio
+   A==;
+X-CSE-ConnectionGUID: NeIiA26LR3CcLTTJgoutrQ==
+X-CSE-MsgGUID: nNyfkuo7QN6fgsQUQA9eoA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="57716327"
+X-IronPort-AV: E=Sophos;i="6.12,250,1728975600"; 
+   d="scan'208";a="57716327"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2024 04:21:20 -0800
+X-CSE-ConnectionGUID: KkWHYuQtTtyNmtYBORfgWw==
+X-CSE-MsgGUID: lecIgrAHRXyB6zO7zmlz6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="129464690"
+Received: from lkp-server01.sh.intel.com (HELO a46f226878e0) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 20 Dec 2024 04:21:18 -0800
+Received: from kbuild by a46f226878e0 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tOc0K-00018P-0C;
+	Fri, 20 Dec 2024 12:21:16 +0000
+Date: Fri, 20 Dec 2024 20:21:01 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ 1b62f3cb74d2965e8f96f20241b1fe85017aa3e8
+Message-ID: <202412202055.Ia0fsahw-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQh9LT1ZJGktPSElKGk8fQxhWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEtNQk
-	tVSktLVUpCWQY+
-X-HM-Tid: 0a93e3a5af4003afkunm656820ed
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nwg6Kxw6GTIRKggeThEUMR4h
-	P0gaCyxVSlVKTEhPTUJKSkpKTElJVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFOTUpJNwY+
-DKIM-Signature:a=rsa-sha256;
-	b=LXQtSCOj5PQ5rmMQS8JUHg+aVmzux+tnR5NnlpILS50US/QWv5VBCTHDsqEiVs5WhSa9UqWxWgKBEnSg0vucKhE8FyZdsUwbc5ZsdiUz76LZqHiim02ORqBuKb413jRYfReSUFy7jfbzAaPEA5wGkuukfoQqA957T+ZIIQC0lqE=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=RUJ3VBWN4hJZF+kjNTXL1lSb1odrwauQvfHGVuJDe90=;
-	h=date:mime-version:subject:message-id:from;
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: 1b62f3cb74d2965e8f96f20241b1fe85017aa3e8  Merge tag 'thunderbolt-for-v6.13-rc4' of ssh://gitolite.kernel.org/pub/scm/linux/kernel/git/westeri/thunderbolt into usb-linus
 
-This patch set adds rk3562 SoC and its evb support.
+elapsed time: 1449m
 
-The patch number is a little bit too big, some of them may need to split
-out for different maintainers, please let me know which patch need to
-split out.
+configs tested: 113
+configs skipped: 2
 
-Test with GMAC, USB, PCIe, EMMC, SD Card.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-This patch set is base on the patche set for rk3576 evb1 support.
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20241219    gcc-13.2.0
+arc                   randconfig-002-20241219    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                              allyesconfig    gcc-14.2.0
+arm                   randconfig-001-20241219    clang-18
+arm                   randconfig-002-20241219    gcc-14.2.0
+arm                   randconfig-003-20241219    clang-18
+arm                   randconfig-004-20241219    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20241219    clang-16
+arm64                 randconfig-002-20241219    clang-18
+arm64                 randconfig-003-20241219    gcc-14.2.0
+arm64                 randconfig-004-20241219    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20241219    gcc-14.2.0
+csky                  randconfig-002-20241219    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon               randconfig-001-20241219    clang-19
+hexagon               randconfig-002-20241219    clang-20
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20241219    gcc-12
+i386        buildonly-randconfig-002-20241219    gcc-12
+i386        buildonly-randconfig-003-20241219    clang-19
+i386        buildonly-randconfig-004-20241219    clang-19
+i386        buildonly-randconfig-005-20241219    gcc-12
+i386        buildonly-randconfig-006-20241219    gcc-12
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20241219    gcc-14.2.0
+loongarch             randconfig-002-20241219    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                          atari_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                           gcw0_defconfig    clang-15
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20241219    gcc-14.2.0
+nios2                 randconfig-002-20241219    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                randconfig-001-20241219    gcc-14.2.0
+parisc                randconfig-002-20241219    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                     ep8248e_defconfig    gcc-14.2.0
+powerpc                          g5_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20241219    clang-18
+powerpc               randconfig-002-20241219    clang-16
+powerpc               randconfig-003-20241219    clang-20
+powerpc                     tqm8541_defconfig    clang-15
+powerpc64             randconfig-001-20241219    gcc-14.2.0
+powerpc64             randconfig-002-20241219    clang-18
+powerpc64             randconfig-003-20241219    clang-16
+riscv                            allmodconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-20
+riscv                 randconfig-001-20241219    clang-16
+riscv                 randconfig-002-20241219    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20241219    gcc-14.2.0
+s390                  randconfig-002-20241219    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20241219    gcc-14.2.0
+sh                    randconfig-002-20241219    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20241219    gcc-14.2.0
+sparc                 randconfig-002-20241219    gcc-14.2.0
+sparc64               randconfig-001-20241219    gcc-14.2.0
+sparc64               randconfig-002-20241219    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20241219    gcc-12
+um                    randconfig-002-20241219    clang-20
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20241220    clang-19
+x86_64      buildonly-randconfig-001-20241220    gcc-12
+x86_64      buildonly-randconfig-002-20241220    clang-19
+x86_64      buildonly-randconfig-003-20241220    clang-19
+x86_64      buildonly-randconfig-003-20241220    gcc-12
+x86_64      buildonly-randconfig-004-20241220    clang-19
+x86_64      buildonly-randconfig-004-20241220    gcc-12
+x86_64      buildonly-randconfig-005-20241220    clang-19
+x86_64      buildonly-randconfig-006-20241220    clang-19
+x86_64      buildonly-randconfig-006-20241220    gcc-12
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20241219    gcc-14.2.0
+xtensa                randconfig-002-20241219    gcc-14.2.0
+xtensa                    xip_kc705_defconfig    gcc-14.2.0
 
-
-David Wu (2):
-  ethernet: stmmac: dwmac-rk: Add gmac support for rk3562
-  ethernet: stmmac: dwmac-rk: Make the phy clock could be used for
-    external phy
-
-Finley Xiao (7):
-  clk: rockchip: add dt-binding header for rk3562
-  clk: rockchip: Add clock controller for the RK3562
-  dt-bindings: add power-domain header for RK3562 SoC
-  nvmem: rockchip-otp: Add support for rk3568-otp
-  nvmem: rockchip-otp: Add support for rk3562
-  arm64: dts: rockchip: add core dtsi for RK3562 Soc
-  arm64: dts: rockchip: Add RK3562 evb2 devicetree
-
-Frank Wang (1):
-  phy: rockchip: inno-usb2: add usb2 phy support for rk3562
-
-Jon Lin (1):
-  phy: rockchip-naneng-combo: Support rk3562
-
-Kever Yang (24):
-  dt-bindings: clock: add rk3562 cru bindings
-  dt-bindings: pinctrl: Add rk3562 pinctrl support
-  soc: rockchip: power-domain: add power domain support for rk3562
-  dt-bindings: rockchip-thermal: Support the RK3562 SoC compatible
-  dt-bindings: iio: adc: Add rockchip,rk3562-saradc string
-  dt-bindings: net: Add support for rk3562 dwmac
-  dt-bindings: nvmem: rockchip,otp: Add support for rk3562 and rk3568
-  dt-bindings: phy: rockchip: Add rk3562 naneng-combophy compatible
-  dt-bindings: phy: rockchip,inno-usb2phy: add rk3562
-  dt-bindings: PCI: dwc: rockchip: Add rk3562 support
-  dt-bindings: mmc: Add support for rk3562 eMMC
-  dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
-  dt-bindings: power: rockchip: Add bindings for rk3562
-  dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
-  dt-bindings: gpu: Add rockchip,rk3562-mali compatible
-  dt-bindings: watchdog: Add rk3562 compatible
-  dt-bindings: spi: Add rockchip,rk3562-spi compatible
-  dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
-  dt-bindings: usb: dwc3: add compatible for rk3562
-  dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
-  dt-bindings: rockchip: pmu: Add rk3562 compatible
-  dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
-  dt-bindings: arm: rockchip: Add rk3562 evb2 board
-  dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
-
-Shaohan Yao (1):
-  thermal: rockchip: Support the rk3562 SoC in thermal driver
-
-Simon Xue (1):
-  iio: adc: rockchip_saradc: add rk3562
-
-Steven Liu (1):
-  pinctrl: rockchip: add rk3562 support
-
- .../devicetree/bindings/arm/rockchip.yaml     |    5 +
- .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
- .../bindings/clock/rockchip,rk3562-cru.yaml   |   62 +
- .../bindings/gpu/arm,mali-bifrost.yaml        |    3 +-
- .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
- .../bindings/iio/adc/rockchip-saradc.yaml     |    2 +
- .../devicetree/bindings/mfd/syscon.yaml       |    2 +
- .../bindings/mmc/rockchip-dw-mshc.yaml        |    1 +
- .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |    9 +-
- .../bindings/net/rockchip-dwmac.yaml          |    5 +-
- .../bindings/nvmem/rockchip,otp.yaml          |   49 +-
- .../bindings/pci/rockchip-dw-pcie.yaml        |    1 +
- .../phy/phy-rockchip-naneng-combphy.yaml      |    1 +
- .../bindings/phy/rockchip,inno-usb2phy.yaml   |    3 +-
- .../bindings/pinctrl/rockchip,pinctrl.yaml    |    1 +
- .../power/rockchip,power-controller.yaml      |    1 +
- .../devicetree/bindings/pwm/pwm-rockchip.yaml |    1 +
- .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
- .../devicetree/bindings/soc/rockchip/grf.yaml |    7 +
- .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
- .../bindings/thermal/rockchip-thermal.yaml    |    1 +
- .../bindings/usb/rockchip,dwc3.yaml           |    3 +
- .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
- arch/arm64/boot/dts/rockchip/Makefile         |    1 +
- .../boot/dts/rockchip/rk3562-evb2-v10.dts     |  520 ++++
- .../boot/dts/rockchip/rk3562-pinctrl.dtsi     | 2352 +++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3562.dtsi      | 1432 ++++++++++
- drivers/clk/rockchip/Kconfig                  |    7 +
- drivers/clk/rockchip/Makefile                 |    1 +
- drivers/clk/rockchip/clk-rk3562.c             | 1111 ++++++++
- drivers/clk/rockchip/clk.h                    |   39 +
- drivers/iio/adc/rockchip_saradc.c             |   24 +-
- .../net/ethernet/stmicro/stmmac/dwmac-rk.c    |  213 +-
- drivers/nvmem/rockchip-otp.c                  |   97 +
- drivers/phy/rockchip/phy-rockchip-inno-usb2.c |   49 +
- .../rockchip/phy-rockchip-naneng-combphy.c    |  152 ++
- drivers/pinctrl/pinctrl-rockchip.c            |  199 +-
- drivers/pinctrl/pinctrl-rockchip.h            |    3 +-
- drivers/pmdomain/rockchip/pm-domains.c        |   48 +-
- drivers/thermal/rockchip_thermal.c            |  112 +-
- include/dt-bindings/clock/rk3562-cru.h        |  733 +++++
- include/dt-bindings/power/rk3562-power.h      |   35 +
- 42 files changed, 7269 insertions(+), 22 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3562-cru.yaml
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3562.dtsi
- create mode 100644 drivers/clk/rockchip/clk-rk3562.c
- create mode 100644 include/dt-bindings/clock/rk3562-cru.h
- create mode 100644 include/dt-bindings/power/rk3562-power.h
-
--- 
-2.25.1
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
