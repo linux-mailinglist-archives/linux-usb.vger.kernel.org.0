@@ -1,115 +1,103 @@
-Return-Path: <linux-usb+bounces-18741-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18742-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5DB29FB3AD
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2024 18:47:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CE9C9FB3E3
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2024 19:15:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9F1D166639
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2024 17:47:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F6D7166857
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2024 18:14:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EF701B87C6;
-	Mon, 23 Dec 2024 17:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2091C07C3;
+	Mon, 23 Dec 2024 18:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="PYfcoiIn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CEMdfd2l"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3270170A13;
-	Mon, 23 Dec 2024 17:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 222671BBBEE
+	for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2024 18:14:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734976018; cv=none; b=aVH+JHROxR9JTj/hiVJnmayecXpJzHEvl1dQlZEc81iqFUz6Ol6J6C0IDXtzUwFw/nqWrZNveBmRy5cA7UoyCFwOHAFiYrCoVG1QgS03DaCNzfSiHoV+T8rEOvdt603zadzIZzoPxsxW2XAcExY++Gt2kyf3EidiuTWrSjLKhBw=
+	t=1734977690; cv=none; b=VyVzpxH+lqEeoZveB3epMGe3Ggdut2IbpefXllSRuW/wh722tpv6kWg3KmQ1ZyXCH6/pFmzg5Y/bR3h514mBTkBUOfxKxquQv0NUqIrDl8hOxRGk7DMC2kv4VOAOspRLuMHkgYt6MPmaXBZ60+ElHytmo++WtfAJ3URFWgIKl6o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734976018; c=relaxed/simple;
-	bh=B9zCJUqpoc3vvBjDEOXyj2me1DRRugPlKmGTbz0b8zw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e83d6yligUEvwkNVKZXyH1x4PlZNnwlHTZo9SK+avVO3hxpWbrAkAoDTrQMtlJPskEbC2JhU7JYMAY/3h9Hrl2eIQ+vbbcICOqI0hg5+KwYTx156lJZko5vXmjmghL8nnrIwej3sSDhLO2Fuj0FZKBoYsaVC9dwPlVn5G07FgQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=PYfcoiIn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06D86C4CED3;
-	Mon, 23 Dec 2024 17:46:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1734976017;
-	bh=B9zCJUqpoc3vvBjDEOXyj2me1DRRugPlKmGTbz0b8zw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PYfcoiInuRvOBJYP/msr9wj0WGgPaZWT+LF3hzhM11EYMMEU9Y7FTKd3s2i9wFV2O
-	 vKS6z6/db+WjE/jB+0pxRABrIC6XI4K6NZJu7gH/knSd/PZ3FipR6ZjtxQABAffkeG
-	 DiBn6hCh9AAV7qHhh/YiJPHeeL0Ztd6+LdkkYlro=
-Date: Mon, 23 Dec 2024 18:30:36 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Mingwei Zheng <zmw12306@gmail.com>
-Cc: u.kleine-koenig@baylibre.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jiasheng Jiang <jiashengjiangcool@gmail.com>
-Subject: Re: [PATCH] usb: gadget: m66592-udc: Add check for clk_enable()
-Message-ID: <2024122307-thaw-payback-b175@gregkh>
-References: <20241215205358.4100142-1-zmw12306@gmail.com>
- <2024121606-preflight-lure-e02c@gregkh>
- <CAN4iqtQGJw+Nyt_K+uMSfpqXhfzGN4nLmFTPdEydyAf_wsWMog@mail.gmail.com>
+	s=arc-20240116; t=1734977690; c=relaxed/simple;
+	bh=FMvzkv1nnYX3mSdAdDxVLx/mM6QDaQ5zJ9cHuNJKArw=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=rYMdwISKrI4iTNym83u2qj0thDCD5IMq3i+lpd9NromMhZz8mnkY1s407fTDG6OFtIFz1yNljHAPdchtUHrXCxOSYNbeqyg84W0pezR0dU442MtiVuuToSwAnyfwoQKfL1ttGX7gJuMU4tKVQY4yzHdxNHQk3sEZqRpuqgqs0cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CEMdfd2l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F143FC4CED4
+	for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2024 18:14:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734977690;
+	bh=FMvzkv1nnYX3mSdAdDxVLx/mM6QDaQ5zJ9cHuNJKArw=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=CEMdfd2loIj6lhqRPOtDNVX29nRxJHU1ZjgEiSUIoLmWbYDuA+n2UI2UfIpTTl6Bp
+	 TqXCnK4++Cqc3VLipfdO6J5vIwYhtJmiiikjD1BgmiZLzMlHhVfydjM9mbrsXNL9aM
+	 qROZMi4OZ81G278i+y4RU10M3FRWgDB5my/ftKsOx8y/TQn0sBgLIygALBSIOvX68i
+	 su8ftMGII4PqhQxxWtMH96uTSh9XICdo8qMKJgcE+m8FtIxI/DS0/UAlyJRuJRP4Rq
+	 qnur3MGCWUB5if6daWO/1zc1qUW7nC+xddO+1o0zeu2tZTjh6BcnJIJkIKptV+subi
+	 w2rKrXngV8qMQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id E5E9FC41606; Mon, 23 Dec 2024 18:14:49 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215906] DMAR fault when connected usb hub (xhci_hcd)
+Date: Mon, 23 Dec 2024 18:14:49 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215906-208809-TpPuEG1pft@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215906-208809@https.bugzilla.kernel.org/>
+References: <bug-215906-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAN4iqtQGJw+Nyt_K+uMSfpqXhfzGN4nLmFTPdEydyAf_wsWMog@mail.gmail.com>
 
-On Tue, Dec 17, 2024 at 10:06:26PM -0500, Mingwei Zheng wrote:
-> Hi Greg,
-> 
-> On Mon, Dec 16, 2024 at 2:56 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Sun, Dec 15, 2024 at 03:53:58PM -0500, Mingwei Zheng wrote:
-> > > Add check for the return value of clk_enable() to catch the potential
-> > > error.
-> > >
-> > > Fixes: b4822e2317e8 ("usb: gadget: m66592-udc: Convert to use module_platform_driver()")
-> > > Signed-off-by: Mingwei Zheng <zmw12306@gmail.com>
-> > > Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
-> >
-> > Why this order of signed-off-by lines?  Shouldn't yours be last?  Who
-> > wrote this patch?
-> >
-> 
-> I listed two names because both of us co-authored this patch.
-> 
-> > > ---
-> > >  drivers/usb/gadget/udc/m66592-udc.c | 6 +++++-
-> > >  1 file changed, 5 insertions(+), 1 deletion(-)
-> > >
-> > > diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
-> > > index a938b2af0944..bf408476a24c 100644
-> > > --- a/drivers/usb/gadget/udc/m66592-udc.c
-> > > +++ b/drivers/usb/gadget/udc/m66592-udc.c
-> > > @@ -1606,7 +1606,11 @@ static int m66592_probe(struct platform_device *pdev)
-> > >                       ret = PTR_ERR(m66592->clk);
-> > >                       goto clean_up2;
-> > >               }
-> > > -             clk_enable(m66592->clk);
-> > > +             ret = clk_enable(m66592->clk);
-> > > +             if (ret) {
-> > > +                     clk_put(m66592->clk);
-> > > +                     goto clean_up2;
-> > > +             }
-> >
-> > How did you find this and how was it tested?
-> >
-> > thanks,
-> >
-> > greg k-h
-> 
-> We found it through a static analysis tool.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215906
 
-Then you need to properly document that as our documentation says it is
-required, right?
+--- Comment #26 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+Honestly, I don't know what's the problem. Maybe as a last ditch effort try
+dynamic debug, if your kernel supports it:
 
-thanks,
+echo 'func xhci_dbg_trace +p' >/proc/dynamic_debug/control
+rmmod xhci-pci
+modprobe xhci-pci
+echo 'func xhci_dbg_trace -p' >/proc/dynamic_debug/control
+dmesg |grep 'page size'
+[  262.117753] xhci_hcd 0000:08:00.0: Supported page size register =3D 0x1
+[  262.117755] xhci_hcd 0000:08:00.0: Supported page size of 8K
+[  262.117756] xhci_hcd 0000:08:00.0: HCD page size set to 4K
 
-greg k-h
+BTW, don't worry about that 8K, this value is incorrectly calculated and th=
+en
+completely ignored.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
