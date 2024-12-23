@@ -1,132 +1,123 @@
-Return-Path: <linux-usb+bounces-18734-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18735-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66FE89FACE2
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2024 10:54:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9BCE9FACE5
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2024 10:57:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00B9B1884B63
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2024 09:54:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24C0C1884BC8
+	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2024 09:57:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A8B1922DC;
-	Mon, 23 Dec 2024 09:54:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4ACD191F6F;
+	Mon, 23 Dec 2024 09:57:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="b9s9TBca"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WYLujYux"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45D982AF1D;
-	Mon, 23 Dec 2024 09:54:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 604722AF1D
+	for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2024 09:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734947665; cv=none; b=PQ2YhoAfVZuJ4bGfDBOl8W4XVGszIKSwLr9Ucz0WWmukto4Q2jh0u+hboNAxW9ufrJ7o5DfHjUjhhnJu26GaszrPHeoPwLlEGQ/GXXs/1IlJtX+SFYm3KBKTVTptZzY8DrwU6NYJUBvybkVLHEYxTk00ce4sBMr0PqY+5ZJEx9w=
+	t=1734947828; cv=none; b=KW/v1xzfX4VrPWUpSwYJY0SERYIdCVG7hc4uB4S7cJmoSAk0Dn+U/UQruyRRGx+PJxSpYQC4xVVOKTRPahhyz/plX1voLcBt1LDM1OCxBjB9Ck/H/2UCfQMBLaM9NqQCZq/XwttVhz0uGDv82YFUd/vl94l2npiK+msjUy4JQG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734947665; c=relaxed/simple;
-	bh=IsiyxwM42tVsYFhlspfcZgQsVXrZHw6SodvmuEjxBLc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FJfOPRHEmcIhOqcr27DzMzbZZ7YiSzz7xDbBN8NbDAwAosOmcbBYyJofJDY+vNa2Yd/Xk4TtjfmwmmCtrJ4TTuyejoianwu7VyU83zd3Mj/0psSmyBAFyjOAfYRcVXybUYatyBRnF06oroV3+9OnhCsYEUFlq2DMfZV3mHYrhNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=b9s9TBca; arc=none smtp.client-ip=83.149.199.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
-Received: from fpc (unknown [10.10.165.5])
-	by mail.ispras.ru (Postfix) with ESMTPSA id 6F754518E778;
-	Mon, 23 Dec 2024 09:46:34 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 6F754518E778
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1734947194;
-	bh=8L3X9ortj8P6VyUjEWVqaUBaQArAdK3FFtCIpQGVo3A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b9s9TBca1nob+/SS1NPqRJ911IbT+AxZ+f32Zt7h8Wx5hOLvwQtqNn3ca04HeDI1e
-	 djwE+WhDGx0pGqacl1HG+KBEfo+m4SvmJp551EaAKof044O8NOYNkaeGWXBZfsGOkt
-	 4nViSKXOfCXYRZ8xaktdVvnxTUUglSZHKcZV/dpI=
-Date: Mon, 23 Dec 2024 12:46:30 +0300
-From: Fedor Pchelkin <pchelkin@ispras.ru>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, stable@vger.kernel.org
-Cc: Alan Stern <stern@rowland.harvard.edu>,
-	Vitalii Mordan <mordan@ispras.ru>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	linux-sh@vger.kernel.org,
-	Alexey Khoroshilov <khoroshilov@ispras.ru>,
-	Vadim Mutilin <mutilin@ispras.ru>, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: ehci-hcd: fix call balance of clocks handling
- routines
-Message-ID: <20241223-7a6c874adb4a809293a4dca6-pchelkin@ispras.ru>
-References: <20241121114700.2100520-1-mordan@ispras.ru>
+	s=arc-20240116; t=1734947828; c=relaxed/simple;
+	bh=re+WCYQwfNFB8Z2ROlTvp1IDsgwiuftxyABALC1wEmE=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=b+VuuYjJ2E7oP7AiPuhtkDt0zHI4KeFydO9uVoYG1tekNNBifaByI4TOTRS75l+NfpTe9BPjNBl9yjuVZBNie4ADcJInMaKfy2xzKpMjc3PVGNH56lvg0iPyRH2zIeP4hvewiyB4xldGCQ6vUZnKg/LHeQKzy0sXU7V1OCl0m1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WYLujYux; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E0A75C4CEDF
+	for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2024 09:57:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734947827;
+	bh=re+WCYQwfNFB8Z2ROlTvp1IDsgwiuftxyABALC1wEmE=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=WYLujYuxYhMKUYfm1xUNy7jVAbXGF9l0bXxnrzcZKH6JFsIbH+RCpWQXOBRHdI53r
+	 oimhVrDyCKoGvcljF6X1aTQ1IVl0Y7qhCJqovUHQGvB5IYRkjvJ3GP4zRxdPvnMJzr
+	 8oRVgcv5T348c9Lf5IV5TrHELldHxhzFtn8caCBdYO4+bsFykV2F5FMILRqjaPez5F
+	 OVbJ+Fh/Hjszfz5fcx29wGTC5/A59CfhL3RIKJS5Y/kA/BuK8UlIELn267MIVvzTzJ
+	 2ELaA2Hwhr0GeOUnV7PmgtDVs5WkxUSfrgBziKuC9M39Pkb8Khc8QJdvYbYe+4A5wx
+	 BoGBFK8UyLhBQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id D5861C41613; Mon, 23 Dec 2024 09:57:07 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 215906] DMAR fault when connected usb hub (xhci_hcd)
+Date: Mon, 23 Dec 2024 09:57:07 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: lists.rolf@reintjes.nrw
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P1
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-215906-208809-FWFfaEOHJv@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-215906-208809@https.bugzilla.kernel.org/>
+References: <bug-215906-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241121114700.2100520-1-mordan@ispras.ru>
 
-On Thu, 21. Nov 14:47, Vitalii Mordan wrote:
-> If the clocks priv->iclk and priv->fclk were not enabled in ehci_hcd_sh_probe,
-> they should not be disabled in any path.
-> 
-> Conversely, if they was enabled in ehci_hcd_sh_probe, they must be disabled
-> in all error paths to ensure proper cleanup.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with Klever.
-> 
-> Fixes: 63c845522263 ("usb: ehci-hcd: Add support for SuperH EHCI.")
-> Cc: stable@vger.kernel.org # ff30bd6a6618: sh: clk: Fix clk_enable() to return 0 on NULL clk
-> Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
-> ---
+https://bugzilla.kernel.org/show_bug.cgi?id=3D215906
 
-The current patch was added to stable kernels lacking the necessary
-prerequisite ff30bd6a6618 ("sh: clk: Fix clk_enable() to return 0 on
-NULL clk") which is specified in Cc:stable tag of the commit description
-per stable kernels documentation [1].
+--- Comment #21 from Rolf Reintjes (lists.rolf@reintjes.nrw) ---
+(In reply to Micha=C5=82 Pecio from comment #20)
+> By a complete accident I found that VL805 has a known bug where it
+> overfetches transfer rings:
+> https://github.com/raspberrypi/linux/issues/4685
+>=20
+> Rolf, there is a workaround for similar bug in Zhaoxin hardware which may
+> solve your IOMMU faults.
+>=20
+> Update to at least v6.6, or the latest v6.12 series if it's not a problem.
+>=20
+> Run the following (if using a USB keyboard put it all in a script):
+> rmmod xhci_pci
+> rmmod xhci_hcd
+> modprobe xhci_hcd quirks=3D0x200000000000
+> modprobe xhci_pci
+>=20
+> Verify that it worked:
+> dmesg |grep quirks
+> [122123.422469] xhci_hcd 0000:08:00.0: hcc params 0x002841eb hci version
+> 0x100 quirks 0x0000200000000890
+>=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=20=
+=20=20=20
+> ^-- here
+> And see if it helps.
 
-[1]: https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html#option-1
+Thank you very much.
 
-Could you please cherry-pick ff30bd6a6618 ("sh: clk: Fix clk_enable() to
-return 0 on NULL clk") to 6.1.y, 5.15.y, 5.10.y and 5.4.y ? It applies
-cleanly.
+I just tried it and it works. The USB port runs fine.
 
-Thanks!
+But what is actually done here?
+modprobe xhci_hcd quirks=3D0x200000000000
+A setting is given to the driver when starting, but what does this setting
+mean?
 
->  drivers/usb/host/ehci-sh.c | 9 +++++++--
->  1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/ehci-sh.c b/drivers/usb/host/ehci-sh.c
-> index d31d9506e41a..77460aac6dbd 100644
-> --- a/drivers/usb/host/ehci-sh.c
-> +++ b/drivers/usb/host/ehci-sh.c
-> @@ -119,8 +119,12 @@ static int ehci_hcd_sh_probe(struct platform_device *pdev)
->  	if (IS_ERR(priv->iclk))
->  		priv->iclk = NULL;
->  
-> -	clk_enable(priv->fclk);
-> -	clk_enable(priv->iclk);
-> +	ret = clk_enable(priv->fclk);
-> +	if (ret)
-> +		goto fail_request_resource;
-> +	ret = clk_enable(priv->iclk);
-> +	if (ret)
-> +		goto fail_iclk;
->  
->  	ret = usb_add_hcd(hcd, irq, IRQF_SHARED);
->  	if (ret != 0) {
-> @@ -136,6 +140,7 @@ static int ehci_hcd_sh_probe(struct platform_device *pdev)
->  
->  fail_add_hcd:
->  	clk_disable(priv->iclk);
-> +fail_iclk:
->  	clk_disable(priv->fclk);
->  
->  fail_request_resource:
-> -- 
-> 2.25.1
-> 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
