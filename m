@@ -1,117 +1,122 @@
-Return-Path: <linux-usb+bounces-18804-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18805-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F34A9FC1C2
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 20:42:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C4BA9FC22A
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 21:19:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D4CB1885508
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 19:42:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1B86163473
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 20:19:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30BC6212F91;
-	Tue, 24 Dec 2024 19:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B381922C6;
+	Tue, 24 Dec 2024 20:19:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R1Niv7LR"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TyrYBHWi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3213EA76;
-	Tue, 24 Dec 2024 19:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F1717996;
+	Tue, 24 Dec 2024 20:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735069339; cv=none; b=We5qCIfqHMMIEyXbihvdzhWMKtvrvIYO5DRo63z3xduxo3WylKktGx998ueo9Fb9cdnnTl4/BO+jrMKqvgpA+cVx8SD6S4CTb+RG64UmyryvoLW+mJa8P0sqejyc1rR7os43PeF/PUYQdw+GUBlb0LfbjPlsbcfulHshe75hJi0=
+	t=1735071554; cv=none; b=GNz8trG7IxombYbnCcWPtIAwUviPWPfYInLMhX0kAgK41bN1gqIbGQ26+j/IQn9d99ahEav6OVBYNlvnW/uL6CADD6JvcjU5JAqlyfOfULTEmE4aev0AYGcWtuEMSUr5BkWxYatZDfqhehEshIryI05912nSwsYXAzg0nIeoXN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735069339; c=relaxed/simple;
-	bh=JrZT6Hk1aPlHYydr+/4h5NOAxAcjwjSCgl97/aJtbwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b1vs1Kil239CYi6q//NQZTxTh718jG8jcnqJELv86EITobhoGWlvnHL1f2axTbWVQW4M4negCTOKiG3fJdqAfNjmB0Cp2EZeeVIKYZA6EVdsFnJf+DdGG91csZcyDm60q7ZY6bGlZbUmj7FxIFAtWHgfh60ck/b2fK9GuZAPt7g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R1Niv7LR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DB85C4CED0;
-	Tue, 24 Dec 2024 19:42:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735069339;
-	bh=JrZT6Hk1aPlHYydr+/4h5NOAxAcjwjSCgl97/aJtbwg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R1Niv7LRgpX1zrJavq1++z7ooV05u6dnjP/6+41g/K27CvwJgzUan3LHDP4U7jVWP
-	 jwXDa6TZQAIIHaqJOezU9lW1vnUg6VMLQfgSbF0R7OtcmwLdpXmk5UA2GgJs0mI2l/
-	 k1buHJMS7rUtwppUmgBLinf0Tss0ayTpYZumoXkKMaq74NKzQwtBrM0xZJ1EHFahuy
-	 H4kgwzLCdcrmVFi99U7R+1esQ/4PjHQSGMgBF9p99kmj+z5+7PJRchGPqevtfC0QHO
-	 qS50yzuj30km8q8Zhw/V8xyKlOrQrK82+hSlnrrPrToPl+uS2ueDMAfzsgsFAi7aD2
-	 TUulHmhpqQZWA==
-Date: Wed, 25 Dec 2024 01:12:15 +0530
-From: Vinod Koul <vkoul@kernel.org>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Johan Hovold <johan+linaro@kernel.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Varadarajan Narayanan <quic_varada@quicinc.com>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
-	quic_jackp@quicinc.com
-Subject: Re: (subset) [PATCH v3 0/3] Add support for USB controllers on QCS615
-Message-ID: <Z2sOl9ltv0ug4d82@vaman>
-References: <20241224084621.4139021-1-krishna.kurapati@oss.qualcomm.com>
- <173505391861.950293.11120368190852109172.b4-ty@kernel.org>
- <anfqf3jvh7timbvbfqfidylb4iro47cdinbb2y64fdalbiszum@2s3n7axnxixb>
- <Z2sJK9g7hiHnPwYA@vaman>
- <i7gptvn2fitpqypycjhsyjnp63s2w5omx4jtpubylfc3hx3m5l@jbuin5uvxuoc>
+	s=arc-20240116; t=1735071554; c=relaxed/simple;
+	bh=TuNIVl3PXoIT50eNKZBueCyhHY6okHZaiRGLZf+kYlM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HsnbDuDR2M3EnFb+mTz9gX5zUmgT4mIAbj2UwXfUt6wE72WCUxYI8ASF0bA1UeiOHpcgLv9GUR6JVWIS2BrutbNLpyC+Z1MSEH2yisyaYPtJxVy7pcD284uACgHfTbygcPCW6qUm1EAnpzFn3OfoYaD7/nH7nyBsY66KuuNpbYI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TyrYBHWi; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-844e55a981dso203753239f.3;
+        Tue, 24 Dec 2024 12:19:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735071552; x=1735676352; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NLxiW6uttosq2tj8RPhDlF4NgCbj4+ZM2CMaAqMzkcU=;
+        b=TyrYBHWiDlW73JY5RT1qVgDs3Io2i3qKFpFzRahdUh3caVWjIF4hEXVZ4xtQ6EznUw
+         QLgf7PT5ZhCdhy0+gLYJxnfEJu42q8oW5wpoWqmcKPO/WMk0UU9b/Bfz3TfE7Mfmjqez
+         K8ZqZZwla+zU1QJGc78WX1gOYtwLLMEE7YK4yLClWc1BEFDdDsVkNVV80JgxIlCYF08E
+         LtRiDMPAArnI8WopHgqL16wrbeTlh20X5IWCS86IYVpcgbee+0w27mJV/NhTrV2/+nNW
+         AR0s+FpkHCGCigG6LRhReF7Saz5iy0/J5pFQT2GnBSEGesZJq/XUT4XpwX177LuMPX5a
+         GtVg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735071552; x=1735676352;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NLxiW6uttosq2tj8RPhDlF4NgCbj4+ZM2CMaAqMzkcU=;
+        b=VDWDeJOartE0PlXaYPNLXAYtPuZ2X2AVn0b1SVTveH/BQ9Ll7nw6triytbem+cTXKW
+         FPAnkWCUjbYe4hQX8pubDa+q5kKv/djMqWlevRWX4D6k756f4Ng/xYV+IL8NqlVvLwal
+         s9EeQ9Gn/b5YdKDnicflRfm3YpN1bAUu26rvJWkzzLY80infL+lmk85aUhE+5a4+UG1v
+         6RUDVy+cOVh0WJmKvrs6th5PJ0oIdEfCEVQepm43hd3MhZ6o/O3tzg0v852G/1ELZWEk
+         TyyZJeQAT+h9YpQ/JL4LBgCfS14xCM5+Wvfco1jrONOR8u3JD+rr+7ldmEAM1sf2ytjW
+         d4FA==
+X-Forwarded-Encrypted: i=1; AJvYcCUiD9cK3eROstnCM1iEyPMad3/aL9xx1TXnAsu7zS3EOzzoZOK4UabzA4qfcFm4oejS8MDDqK1hAylNy1g=@vger.kernel.org, AJvYcCXurFIQ+ZGF0EnXhaShC9pDY7prD21cS3m8pu0Hu5lU1esT7bo4AUNDVUM/6lGi8Itnr6fOUkedhhAZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAECLMk9/IQkyLeSFvPa+1bbEDRTvOoDS9Z1AlEygymmCKdqnE
+	cFkedlLL6rMRPWQ9zZ7deByVJfE0isx52DVREvQxvBVLPbP1W/EmACg8kGa5
+X-Gm-Gg: ASbGncvAM58UqOXsM8g5yK3D9Wu57qxC9fUWfnBuOwSWpMjxpBtsrwM4iAYhBNgKjzj
+	qEIic+OlcBxzBSUH5LisRJDQ9w+dWxoNrqqZ5cvK8EfLuBa26zXGwKuYu0BNiOaMFGiBAjEhCHk
+	oubaSp0T6Nl0moF3YjWTb4IxhYB8xq4b+i5lv7M+UfVRk1qHLinIWA6WglBVBRq8go0p8FWhLOd
+	1lcf9a6bDothZOti4pbLJUhJIO/Kp/AV2k/AM25iI2KhFeMpIApfJP1pyA8MAxZCdq/
+X-Google-Smtp-Source: AGHT+IGjICabh7lvLFvsvUHqqv6lPmmrIAgzZpddmkw0PFxP8ioAeEqRRfIUoqWXokfom3iheu+iyg==
+X-Received: by 2002:a05:6602:1409:b0:83a:ab63:20b with SMTP id ca18e2360f4ac-8499e6070a7mr1889328739f.4.1735071551953;
+        Tue, 24 Dec 2024 12:19:11 -0800 (PST)
+Received: from localhost.localdomain ([128.10.127.250])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8498d8aae0esm273702139f.33.2024.12.24.12.19.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Dec 2024 12:19:10 -0800 (PST)
+From: Mingwei Zheng <zmw12306@gmail.com>
+To: gregkh@linuxfoundation.org
+Cc: u.kleine-koenig@baylibre.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mingwei Zheng <zmw12306@gmail.com>,
+	Jiasheng Jiang <jiashengjiangcool@gmail.com>
+Subject: [PATCH] usb: gadget: m66592-udc: Add check for clk_enable()
+Date: Tue, 24 Dec 2024 15:22:17 -0500
+Message-Id: <20241224202217.114436-1-zmw12306@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <i7gptvn2fitpqypycjhsyjnp63s2w5omx4jtpubylfc3hx3m5l@jbuin5uvxuoc>
+Content-Transfer-Encoding: 8bit
 
-On 24-12-24, 21:33, Dmitry Baryshkov wrote:
-> On Wed, Dec 25, 2024 at 12:49:07AM +0530, Vinod Koul wrote:
-> > On 24-12-24, 17:38, Dmitry Baryshkov wrote:
-> > > On Tue, Dec 24, 2024 at 08:55:18PM +0530, Vinod Koul wrote:
-> > > > 
-> > > > On Tue, 24 Dec 2024 14:16:18 +0530, Krishna Kurapati wrote:
-> > > > > This series aims at enabling USB on QCS615 which has 2 USB controllers.
-> > > > > The primary controller is SuperSpeed capable and secondary one is
-> > > > > High Speed only capable. The High Speed Phy is a QUSB2 phy and the
-> > > > > SuperSpeed Phy is a QMP Uni Phy which supports non-concurrent DP.
-> > > > > 
-> > > > > Link to v1:
-> > > > > https://lore.kernel.org/all/20241014084432.3310114-1-quic_kriskura@quicinc.com/
-> > > > > 
-> > > > > [...]
-> > > > 
-> > > > Applied, thanks!
-> > > > 
-> > > > [2/3] phy: qcom-qusb2: Add support for QCS615
-> > > >       commit: 8adbf20e05025f588d68fb5b0fbbdab4e9a6f97e
-> > > 
-> > > Is there any issue with the two remaining patches?
-> > 
-> > Something wrong with b4... I have applied 2 & 3
-> > Patch 1 should go thru USB tree
-> 
-> Hmm, strange. But then, please excuse my ignorance, do we have bindings
-> for these two patches?
+The APP-Miner reported the missing check.
+Add check for the return value of clk_enable() to catch the potential
+error.
 
-I see to have missed one!
+Fixes: b4822e2317e8 ("usb: gadget: m66592-udc: Convert to use module_platform_driver()")
+Signed-off-by: Mingwei Zheng <zmw12306@gmail.com>
+Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
+---
+ drivers/usb/gadget/udc/m66592-udc.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-This one is documented see:
-d146d384222e dt-bindings: phy: qcom,qusb2: Add bindings for QCS615
-
-but, the third patch is sadly not... I am dropping the third patch
-
+diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
+index a938b2af0944..bf408476a24c 100644
+--- a/drivers/usb/gadget/udc/m66592-udc.c
++++ b/drivers/usb/gadget/udc/m66592-udc.c
+@@ -1606,7 +1606,11 @@ static int m66592_probe(struct platform_device *pdev)
+ 			ret = PTR_ERR(m66592->clk);
+ 			goto clean_up2;
+ 		}
+-		clk_enable(m66592->clk);
++		ret = clk_enable(m66592->clk);
++		if (ret) {
++			clk_put(m66592->clk);
++			goto clean_up2;
++		}
+ 	}
+ 
+ 	INIT_LIST_HEAD(&m66592->gadget.ep_list);
 -- 
-~Vinod
+2.34.1
+
 
