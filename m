@@ -1,86 +1,103 @@
-Return-Path: <linux-usb+bounces-18801-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18802-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3FFC9FC04F
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 17:26:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D1B69FC1A3
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 20:19:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 483FF1885299
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 16:26:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3642165B26
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 19:19:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7999A200BB7;
-	Tue, 24 Dec 2024 16:25:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A3C51D935C;
+	Tue, 24 Dec 2024 19:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YfjQ3GKh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9334B1FF1CC;
-	Tue, 24 Dec 2024 16:25:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8191D18AE2;
+	Tue, 24 Dec 2024 19:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735057540; cv=none; b=BweODugcFkmCUdTIeIGPPkl39Vi/+Z1UQbi2ZZ8Am0bIsB5VOeXa3btGbuVV7TgU3wonU45ymCEOpfzSqNa6s/9didq/OfgYQaIBsvfVQEk7KJyq3FCDSwB+Rlmrkv57OjAMYFErUcwz250llVI2AfYGpM/USpR1bFD7V1G18R8=
+	t=1735067951; cv=none; b=d9qMSYgHSm/86Lm06B4FZWBRDpfqgACT2BzqbQFDUwttOqvBTRFFC90LLH5vr1dKGVUDikXmpv11F9a3JI600nyw9Pre/lLjnKAh1a4/E9hJlKTrdcKEoucABkMT7KxSpVxO/5ROLMFyb6ktnT3HF80xx42X+xvKmTy51Yer/2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735057540; c=relaxed/simple;
-	bh=m5GRbh5lFzes3khbJ1WlrKqbj8nXi86NW1GKdESWHCY=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pVoRpv66bsd5CGAFZ1jllF9luVFd7dPIQF+tNkjldvM8U3wftLtjEfR5Az9xT49czs+pN5hIRKrShUQgvtEZ1Y75vuPmfRnVKFF8smgMi1sMwzUY9AWU5k83zb8X3aE1QZV/LcVZKeHatizjYecyaclpOrDO2iV0OvQE/YmOwPs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YHgBb2yNYz6K5rR;
-	Wed, 25 Dec 2024 00:21:43 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id B7502140391;
-	Wed, 25 Dec 2024 00:25:36 +0800 (CST)
-Received: from localhost (10.48.156.150) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 24 Dec
- 2024 17:25:35 +0100
-Date: Tue, 24 Dec 2024 16:25:32 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Zijun Hu <zijun_hu@icloud.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linus Walleij
-	<linus.walleij@linaro.org>, Bartosz Golaszewski <brgl@bgdev.pl>, Uwe
- =?ISO-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>, James Bottomley
-	<James.Bottomley@HansenPartnership.com>, Thomas =?ISO-8859-1?Q?Wei=DFschu?=
- =?ISO-8859-1?Q?h?= <thomas@t-8ch.de>, <linux-kernel@vger.kernel.org>,
-	<nvdimm@lists.linux.dev>, <linux-sound@vger.kernel.org>,
-	<sparclinux@vger.kernel.org>, <linux-block@vger.kernel.org>,
-	<linux-cxl@vger.kernel.org>, <linux1394-devel@lists.sourceforge.net>,
-	<arm-scmi@vger.kernel.org>, <linux-efi@vger.kernel.org>,
-	<linux-gpio@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-	<linux-mediatek@lists.infradead.org>, <linux-hwmon@vger.kernel.org>,
-	<linux-media@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-	<linux-remoteproc@vger.kernel.org>, <linux-scsi@vger.kernel.org>,
-	<linux-usb@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-	<netdev@vger.kernel.org>, Zijun Hu <quic_zijuhu@quicinc.com>
-Subject: Re: [PATCH v5 11/12] cxl/pmem: Remove is_cxl_nvdimm_bridge()
-Message-ID: <20241224162532.0000103f@huawei.com>
-In-Reply-To: <20241224-const_dfc_done-v5-11-6623037414d4@quicinc.com>
-References: <20241224-const_dfc_done-v5-0-6623037414d4@quicinc.com>
-	<20241224-const_dfc_done-v5-11-6623037414d4@quicinc.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1735067951; c=relaxed/simple;
+	bh=/S6xr0AyVMFjE/yJ1Flixxto4mjlZUmMMHGYCrP+lLM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dyQAe/aODBNU5EesxlYBWtT79iGycCCRUHsQAfzpsLLadtVLUwPaFMkyqLP9E17KsDcwhAIf9r9zZt8mwIaC7C0u9vbkwpnRCX5r7HbfKZDI6CzlMtMYyylwBaj56zLO9yEZV5/GlE3zqE0LA5XaoaEK8IWfNGkE5l/LjHp/ohs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YfjQ3GKh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C4D4C4CED0;
+	Tue, 24 Dec 2024 19:19:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735067951;
+	bh=/S6xr0AyVMFjE/yJ1Flixxto4mjlZUmMMHGYCrP+lLM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YfjQ3GKhGZVLE3UR5HFV+NpvXj5HPnKhJylH9pJtVmu1zTV9qU/AZesuc9qlzyFIX
+	 QbaM4VMwFXxSRQwQOBzkG9PTofdyI8NkXGx+2CXC9qp6OQaXoD53CqlF10FCc1fRT6
+	 4gF3u6Kx285+EQ1VPoxat4Awpsi08an+78nmthff0p2sRhqyWiXhuPYHUvFoMrysAp
+	 Ewd/HVvDLaJQp3d7g5sLvz3HHFkylcR2PlE87kI2yFP41MWxbht7yh6w4n1x+GqIFk
+	 i2UO72TOzM3WgwDn4ORdgw55GMNOla3OtypvnXZXV0nAvadHR1NcEYt2YhrO2a/5jB
+	 vEY1App0k8+Ew==
+Date: Wed, 25 Dec 2024 00:49:07 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Varadarajan Narayanan <quic_varada@quicinc.com>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
+	quic_jackp@quicinc.com
+Subject: Re: (subset) [PATCH v3 0/3] Add support for USB controllers on QCS615
+Message-ID: <Z2sJK9g7hiHnPwYA@vaman>
+References: <20241224084621.4139021-1-krishna.kurapati@oss.qualcomm.com>
+ <173505391861.950293.11120368190852109172.b4-ty@kernel.org>
+ <anfqf3jvh7timbvbfqfidylb4iro47cdinbb2y64fdalbiszum@2s3n7axnxixb>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500012.china.huawei.com (7.191.174.4) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <anfqf3jvh7timbvbfqfidylb4iro47cdinbb2y64fdalbiszum@2s3n7axnxixb>
 
-On Tue, 24 Dec 2024 21:05:10 +0800
-Zijun Hu <zijun_hu@icloud.com> wrote:
+On 24-12-24, 17:38, Dmitry Baryshkov wrote:
+> On Tue, Dec 24, 2024 at 08:55:18PM +0530, Vinod Koul wrote:
+> > 
+> > On Tue, 24 Dec 2024 14:16:18 +0530, Krishna Kurapati wrote:
+> > > This series aims at enabling USB on QCS615 which has 2 USB controllers.
+> > > The primary controller is SuperSpeed capable and secondary one is
+> > > High Speed only capable. The High Speed Phy is a QUSB2 phy and the
+> > > SuperSpeed Phy is a QMP Uni Phy which supports non-concurrent DP.
+> > > 
+> > > Link to v1:
+> > > https://lore.kernel.org/all/20241014084432.3310114-1-quic_kriskura@quicinc.com/
+> > > 
+> > > [...]
+> > 
+> > Applied, thanks!
+> > 
+> > [2/3] phy: qcom-qusb2: Add support for QCS615
+> >       commit: 8adbf20e05025f588d68fb5b0fbbdab4e9a6f97e
+> 
+> Is there any issue with the two remaining patches?
 
-> From: Zijun Hu <quic_zijuhu@quicinc.com>
-> 
-> Remove is_cxl_nvdimm_bridge() which has no caller now.
-> 
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Something wrong with b4... I have applied 2 & 3
+Patch 1 should go thru USB tree
+
+-- 
+~Vinod
 
