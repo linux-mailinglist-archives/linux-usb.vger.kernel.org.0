@@ -1,189 +1,285 @@
-Return-Path: <linux-usb+bounces-18795-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18796-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD3519FBE74
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 14:25:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB6949FBEA6
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 14:33:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E60B4163782
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 13:16:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5D50188472C
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 13:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A622D1DDA3C;
-	Tue, 24 Dec 2024 13:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E334312C499;
+	Tue, 24 Dec 2024 13:26:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="AxVPJ8xE"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hud5moEA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pv50p00im-tydg10011801.me.com (pv50p00im-tydg10011801.me.com [17.58.6.52])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 603F91D89E5
-	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 13:10:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3CF5D299
+	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 13:26:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735045812; cv=none; b=kAw2bRhsvVpAWME0FAIfpt+YgdMyfrWsaY1Jl8Jax3Tc9fHapMYQ+QURbgZUSAcID7WdUhBoEo3EpDvW0lsb+G1OagBYYuZw05dqeZoCbpqyb8/ckiCdEkp7dgVz/OzHldb+RRkAUg+mNQPkGIcLOzOGS30a/zzikqyXcA82PW4=
+	t=1735046774; cv=none; b=AUxtDDsw1qxkBvBuOBhmxAhrkw9rmL6pknVH4peWhGoS2ax0b3MupG0XOTu1OGVLqXERuPPYECJZ5y3Hu4EcRaAYlMXl54wDx0YzdqjdySd/2OrXBBMOGq1v6SDA/K5YX0eGerAuYLNyLTpQ7Up5bgeGLyy90vHBwdKNYuawdnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735045812; c=relaxed/simple;
-	bh=d3RWbfmtjm10GAZA1NaOSKX3f3hNp1vr+fuyWoNuJcw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AD+b5bEpcO5zi/LQ2Cf3cwOlHFMzQu1GYtVxN4hI58VirEp2bW59wg2GSnu/RFlsEPqn9pAhDj3YxW4vI/YG7cb+zpqbD097ElbVXxa8GRM1Cs/1T5eYK5/g4p0lTWDm4Z7i9FKEirjLJhCvboFmLOQFly1ndEGg3T3GowFY1zE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=AxVPJ8xE; arc=none smtp.client-ip=17.58.6.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1735045809;
-	bh=+P6kTmCwDbC0RwMmjYjZfzPZ5o9SCTkxH8bGJ/DVcdQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:
-	 x-icloud-hme;
-	b=AxVPJ8xE7IiWw6cbo3S5ZKZH3z7Hi9BUCVDPv3Qac/bUNw+Uy7la0cfvpXstl+R4k
-	 d3OR2kxsnE9TSpGo7hvUmbo4QD9z8W53buY16wxOWexw8kdAhCGZVYEdCZpZubHHBV
-	 FY/SiAYUWqLyNhjNdzpmG1NQAJtyxSptm6XdXCGRH5Z+qqIzZuu8our/KH95GMqI+4
-	 XrQBTucyWATdZwbvxuwF251RmjTy3jciENN89GtSSAxwZNLsAzmepoHHTKruasMtEb
-	 OZHtDY4ufCWqDFkuZR/Iwudf2DFvbXwAEBZQhombPvvzSSH6bbnpLli7EPmNjXwGmD
-	 2UufvwkDZOHLw==
-Received: from [192.168.1.25] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-tydg10011801.me.com (Postfix) with ESMTPSA id C8CD58001A5;
-	Tue, 24 Dec 2024 13:09:34 +0000 (UTC)
-From: Zijun Hu <zijun_hu@icloud.com>
-Date: Tue, 24 Dec 2024 21:05:11 +0800
-Subject: [PATCH v5 12/12] usb: typec: class: Remove both cable_match() and
- partner_match()
+	s=arc-20240116; t=1735046774; c=relaxed/simple;
+	bh=ZFJf1xlkzX/FgwuJ1GWH8T6pn4P3AufQ6ho6MEYjD4E=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Yy6QdZoCXQp6a5bpwxNRZTPfwnO9uZt/1MjbuEoFnW4tpL2rlri7vpXj3FXQh6ONXe9BtGo+K7rWKk5x26XIsIbUng1lKfHh5Z78ROXrwi77rOBJiqLzWqa6QmjxzDd89XTJQ6YzEhKjQW8VKCGlM2PrMb+6UKVIySQtLm7Ehdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hud5moEA; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735046768; x=1766582768;
+  h=date:from:to:cc:subject:message-id;
+  bh=ZFJf1xlkzX/FgwuJ1GWH8T6pn4P3AufQ6ho6MEYjD4E=;
+  b=Hud5moEAVyWdYoidViwzfiahWThpoxjGstgL8drUw0VUAkAVEsEVv3fH
+   uDTdjeUJ6q5v74890wzStMEmoNx0G9vj/CU9cevh0XoofX9iEUCiwHkPG
+   aZhF/uIKKMtyOrZ02LxGeYiuJXTuqsMN2SvZD5N+TUnGu4x0gIlLzKYf5
+   wAjEedJfs7C0Tb6Csy09aDUy1XgLWz0AdDM0Px+It28WOkiH6PMXcfeNu
+   raQMnbzG3VkpyXwZO0Rvef13Gx4dLdrWw5JZZvZkuSU/wUc82wqt/PAw1
+   GN2vFvoD1F8rpa1esYabkYtlkrIvNFTHcnbzcHrltv3zqUf90wQgGf7fA
+   A==;
+X-CSE-ConnectionGUID: DM2FXfgLQqaJlI6eri5cAQ==
+X-CSE-MsgGUID: oW7QZatUR9etXhCWGZ1h6Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11296"; a="35678098"
+X-IronPort-AV: E=Sophos;i="6.12,260,1728975600"; 
+   d="scan'208";a="35678098"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Dec 2024 05:26:07 -0800
+X-CSE-ConnectionGUID: G75xrxMkSaCCyvmHY0nFbw==
+X-CSE-MsgGUID: JV6VIihrQyKKChLvqv3f2A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="103583601"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa003.fm.intel.com with ESMTP; 24 Dec 2024 05:26:06 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tQ4vE-00019U-0g;
+	Tue, 24 Dec 2024 13:26:04 +0000
+Date: Tue, 24 Dec 2024 21:26:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:usb-linus] BUILD SUCCESS
+ dfc51e48bca475bbee984e90f33fdc537ce09699
+Message-ID: <202412242157.83uSAy4u-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241224-const_dfc_done-v5-12-6623037414d4@quicinc.com>
-References: <20241224-const_dfc_done-v5-0-6623037414d4@quicinc.com>
-In-Reply-To: <20241224-const_dfc_done-v5-0-6623037414d4@quicinc.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, 
- =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
- James Bottomley <James.Bottomley@HansenPartnership.com>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>, 
- Zijun Hu <zijun_hu@icloud.com>, linux-kernel@vger.kernel.org, 
- nvdimm@lists.linux.dev, linux-sound@vger.kernel.org, 
- sparclinux@vger.kernel.org, linux-block@vger.kernel.org, 
- linux-cxl@vger.kernel.org, linux1394-devel@lists.sourceforge.net, 
- arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org, 
- linux-gpio@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-mediatek@lists.infradead.org, linux-hwmon@vger.kernel.org, 
- linux-media@vger.kernel.org, linux-pwm@vger.kernel.org, 
- linux-remoteproc@vger.kernel.org, linux-scsi@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-serial@vger.kernel.org, 
- netdev@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
-X-Mailer: b4 0.14.2
-X-Proofpoint-GUID: eTLCtiKK8Fgfs3nYwpfa688b2JqfTn65
-X-Proofpoint-ORIG-GUID: eTLCtiKK8Fgfs3nYwpfa688b2JqfTn65
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-24_05,2024-12-24_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 clxscore=1015 mlxscore=0
- spamscore=0 mlxlogscore=999 malwarescore=0 suspectscore=0 phishscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2412240114
-X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
 
-From: Zijun Hu <quic_zijuhu@quicinc.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-linus
+branch HEAD: dfc51e48bca475bbee984e90f33fdc537ce09699  usb: gadget: f_fs: Remove WARN_ON in functionfs_bind
 
-cable_match(), as matching function of device_find_child(), matches
-a device with device type @typec_cable_dev_type, and its task can be
-simplified by the recently introduced API device_match_type().
+elapsed time: 1119m
 
-partner_match() is similar with cable_match() but with a different
-device type @typec_partner_dev_type.
+configs tested: 192
+configs skipped: 6
 
-Remove both functions and use the API plus respective device type instead.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
----
- drivers/usb/typec/class.c | 27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    clang-20
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    clang-18
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    clang-18
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20241224    gcc-13.2.0
+arc                   randconfig-002-20241224    gcc-13.2.0
+arm                              allmodconfig    clang-18
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                               allnoconfig    gcc-14.2.0
+arm                              allyesconfig    clang-18
+arm                              allyesconfig    gcc-14.2.0
+arm                            mps2_defconfig    clang-15
+arm                        mvebu_v7_defconfig    gcc-14.2.0
+arm                   randconfig-001-20241224    gcc-14.2.0
+arm                   randconfig-002-20241224    gcc-14.2.0
+arm                   randconfig-003-20241224    clang-19
+arm                   randconfig-004-20241224    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20241224    gcc-14.2.0
+arm64                 randconfig-002-20241224    clang-20
+arm64                 randconfig-003-20241224    gcc-14.2.0
+arm64                 randconfig-004-20241224    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20241224    gcc-14.2.0
+csky                  randconfig-002-20241224    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                           allnoconfig    gcc-14.2.0
+hexagon                          allyesconfig    clang-18
+hexagon                          allyesconfig    clang-20
+hexagon               randconfig-001-20241224    clang-20
+hexagon               randconfig-002-20241224    clang-20
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20241224    clang-19
+i386        buildonly-randconfig-002-20241224    gcc-12
+i386        buildonly-randconfig-003-20241224    clang-19
+i386        buildonly-randconfig-004-20241224    clang-19
+i386        buildonly-randconfig-005-20241224    clang-19
+i386        buildonly-randconfig-006-20241224    clang-19
+i386                                defconfig    clang-19
+i386                  randconfig-001-20241224    clang-19
+i386                  randconfig-002-20241224    clang-19
+i386                  randconfig-003-20241224    clang-19
+i386                  randconfig-004-20241224    clang-19
+i386                  randconfig-005-20241224    clang-19
+i386                  randconfig-006-20241224    clang-19
+i386                  randconfig-007-20241224    clang-19
+i386                  randconfig-011-20241224    gcc-12
+i386                  randconfig-012-20241224    gcc-12
+i386                  randconfig-013-20241224    gcc-12
+i386                  randconfig-014-20241224    gcc-12
+i386                  randconfig-015-20241224    gcc-12
+i386                  randconfig-016-20241224    gcc-12
+i386                  randconfig-017-20241224    gcc-12
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20241224    gcc-14.2.0
+loongarch             randconfig-002-20241224    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                         apollo_defconfig    gcc-14.2.0
+m68k                        mvme147_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                           jazz_defconfig    clang-15
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20241224    gcc-14.2.0
+nios2                 randconfig-002-20241224    gcc-14.2.0
+openrisc                          allnoconfig    clang-20
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    clang-20
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-12
+parisc                randconfig-001-20241224    gcc-14.2.0
+parisc                randconfig-002-20241224    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    clang-20
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                          allyesconfig    gcc-14.2.0
+powerpc                     kmeter1_defconfig    gcc-14.2.0
+powerpc                      ppc64e_defconfig    clang-15
+powerpc               randconfig-001-20241224    clang-15
+powerpc               randconfig-002-20241224    clang-20
+powerpc               randconfig-003-20241224    gcc-14.2.0
+powerpc64             randconfig-001-20241224    clang-20
+powerpc64             randconfig-002-20241224    clang-20
+powerpc64             randconfig-003-20241224    clang-20
+riscv                            allmodconfig    clang-20
+riscv                            allmodconfig    gcc-14.2.0
+riscv                             allnoconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-20
+riscv                            allyesconfig    gcc-14.2.0
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20241224    clang-17
+riscv                 randconfig-001-20241224    gcc-12
+riscv                 randconfig-002-20241224    gcc-12
+riscv                 randconfig-002-20241224    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    gcc-12
+s390                  randconfig-001-20241224    gcc-12
+s390                  randconfig-001-20241224    gcc-14.2.0
+s390                  randconfig-002-20241224    gcc-12
+s390                  randconfig-002-20241224    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-12
+sh                          polaris_defconfig    gcc-14.2.0
+sh                          r7780mp_defconfig    gcc-14.2.0
+sh                    randconfig-001-20241224    gcc-12
+sh                    randconfig-001-20241224    gcc-14.2.0
+sh                    randconfig-002-20241224    gcc-12
+sh                    randconfig-002-20241224    gcc-14.2.0
+sh                           se7705_defconfig    clang-15
+sh                        sh7785lcr_defconfig    clang-15
+sh                          urquell_defconfig    clang-15
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20241224    gcc-12
+sparc                 randconfig-001-20241224    gcc-14.2.0
+sparc                 randconfig-002-20241224    gcc-12
+sparc                 randconfig-002-20241224    gcc-14.2.0
+sparc64                          alldefconfig    clang-15
+sparc64                             defconfig    gcc-12
+sparc64               randconfig-001-20241224    gcc-12
+sparc64               randconfig-001-20241224    gcc-14.2.0
+sparc64               randconfig-002-20241224    gcc-12
+sparc64               randconfig-002-20241224    gcc-14.2.0
+um                               alldefconfig    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-18
+um                                allnoconfig    clang-20
+um                               allyesconfig    clang-20
+um                               allyesconfig    gcc-12
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20241224    gcc-12
+um                    randconfig-002-20241224    clang-15
+um                    randconfig-002-20241224    gcc-12
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20241224    clang-19
+x86_64      buildonly-randconfig-002-20241224    gcc-12
+x86_64      buildonly-randconfig-003-20241224    gcc-12
+x86_64      buildonly-randconfig-004-20241224    clang-19
+x86_64      buildonly-randconfig-005-20241224    gcc-11
+x86_64      buildonly-randconfig-006-20241224    gcc-11
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                randconfig-001-20241224    clang-19
+x86_64                randconfig-002-20241224    clang-19
+x86_64                randconfig-003-20241224    clang-19
+x86_64                randconfig-004-20241224    clang-19
+x86_64                randconfig-005-20241224    clang-19
+x86_64                randconfig-006-20241224    clang-19
+x86_64                randconfig-007-20241224    clang-19
+x86_64                randconfig-008-20241224    clang-19
+x86_64                randconfig-071-20241224    clang-19
+x86_64                randconfig-072-20241224    clang-19
+x86_64                randconfig-073-20241224    clang-19
+x86_64                randconfig-074-20241224    clang-19
+x86_64                randconfig-075-20241224    clang-19
+x86_64                randconfig-076-20241224    clang-19
+x86_64                randconfig-077-20241224    clang-19
+x86_64                randconfig-078-20241224    clang-19
+x86_64                               rhel-9.4    clang-19
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                          iss_defconfig    clang-15
+xtensa                randconfig-001-20241224    gcc-12
+xtensa                randconfig-001-20241224    gcc-14.2.0
+xtensa                randconfig-002-20241224    gcc-12
+xtensa                randconfig-002-20241224    gcc-14.2.0
 
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 601a81aa1e1024265f2359393dee531a7779c6ea..3a4e0bd0131774afd0d746d2f0a306190219feec 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -1282,11 +1282,6 @@ const struct device_type typec_cable_dev_type = {
- 	.release = typec_cable_release,
- };
- 
--static int cable_match(struct device *dev, const void *data)
--{
--	return is_typec_cable(dev);
--}
--
- /**
-  * typec_cable_get - Get a reference to the USB Type-C cable
-  * @port: The USB Type-C Port the cable is connected to
-@@ -1298,7 +1293,8 @@ struct typec_cable *typec_cable_get(struct typec_port *port)
- {
- 	struct device *dev;
- 
--	dev = device_find_child(&port->dev, NULL, cable_match);
-+	dev = device_find_child(&port->dev, &typec_cable_dev_type,
-+				device_match_type);
- 	if (!dev)
- 		return NULL;
- 
-@@ -2028,16 +2024,12 @@ const struct device_type typec_port_dev_type = {
- /* --------------------------------------- */
- /* Driver callbacks to report role updates */
- 
--static int partner_match(struct device *dev, const void *data)
--{
--	return is_typec_partner(dev);
--}
--
- static struct typec_partner *typec_get_partner(struct typec_port *port)
- {
- 	struct device *dev;
- 
--	dev = device_find_child(&port->dev, NULL, partner_match);
-+	dev = device_find_child(&port->dev, &typec_partner_dev_type,
-+				device_match_type);
- 	if (!dev)
- 		return NULL;
- 
-@@ -2170,7 +2162,9 @@ void typec_set_pwr_opmode(struct typec_port *port,
- 	sysfs_notify(&port->dev.kobj, NULL, "power_operation_mode");
- 	kobject_uevent(&port->dev.kobj, KOBJ_CHANGE);
- 
--	partner_dev = device_find_child(&port->dev, NULL, partner_match);
-+	partner_dev = device_find_child(&port->dev,
-+					&typec_partner_dev_type,
-+					device_match_type);
- 	if (partner_dev) {
- 		struct typec_partner *partner = to_typec_partner(partner_dev);
- 
-@@ -2334,7 +2328,9 @@ int typec_get_negotiated_svdm_version(struct typec_port *port)
- 	enum usb_pd_svdm_ver svdm_version;
- 	struct device *partner_dev;
- 
--	partner_dev = device_find_child(&port->dev, NULL, partner_match);
-+	partner_dev = device_find_child(&port->dev,
-+					&typec_partner_dev_type,
-+					device_match_type);
- 	if (!partner_dev)
- 		return -ENODEV;
- 
-@@ -2361,7 +2357,8 @@ int typec_get_cable_svdm_version(struct typec_port *port)
- 	enum usb_pd_svdm_ver svdm_version;
- 	struct device *cable_dev;
- 
--	cable_dev = device_find_child(&port->dev, NULL, cable_match);
-+	cable_dev = device_find_child(&port->dev, &typec_cable_dev_type,
-+				      device_match_type);
- 	if (!cable_dev)
- 		return -ENODEV;
- 
-
--- 
-2.34.1
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
