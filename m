@@ -1,122 +1,92 @@
-Return-Path: <linux-usb+bounces-18805-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18806-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4C4BA9FC22A
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 21:19:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B909E9FC293
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 22:52:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1B86163473
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 20:19:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 296471883E29
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 21:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0B381922C6;
-	Tue, 24 Dec 2024 20:19:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TyrYBHWi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8793212D7F;
+	Tue, 24 Dec 2024 21:52:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7F1717996;
-	Tue, 24 Dec 2024 20:19:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8B4014901B
+	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 21:52:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735071554; cv=none; b=GNz8trG7IxombYbnCcWPtIAwUviPWPfYInLMhX0kAgK41bN1gqIbGQ26+j/IQn9d99ahEav6OVBYNlvnW/uL6CADD6JvcjU5JAqlyfOfULTEmE4aev0AYGcWtuEMSUr5BkWxYatZDfqhehEshIryI05912nSwsYXAzg0nIeoXN0=
+	t=1735077125; cv=none; b=uNfL5e6/Rm+XeSZo9zOJ6d5zhG7V6f95k/vOwARxmWgjsDYVaFm4TYbzE98HV6TxEpXY2xL0zUxt0FHhxuPDMcsxYeYOKJFe0g1BcUEYXtuozNYGRj5DTsQY5ye8+cUJsV47amkvq/qtuDJS8CRSp3Hzx91BxOHkcJpCeAe7JmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735071554; c=relaxed/simple;
-	bh=TuNIVl3PXoIT50eNKZBueCyhHY6okHZaiRGLZf+kYlM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HsnbDuDR2M3EnFb+mTz9gX5zUmgT4mIAbj2UwXfUt6wE72WCUxYI8ASF0bA1UeiOHpcgLv9GUR6JVWIS2BrutbNLpyC+Z1MSEH2yisyaYPtJxVy7pcD284uACgHfTbygcPCW6qUm1EAnpzFn3OfoYaD7/nH7nyBsY66KuuNpbYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TyrYBHWi; arc=none smtp.client-ip=209.85.166.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-844e55a981dso203753239f.3;
-        Tue, 24 Dec 2024 12:19:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735071552; x=1735676352; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NLxiW6uttosq2tj8RPhDlF4NgCbj4+ZM2CMaAqMzkcU=;
-        b=TyrYBHWiDlW73JY5RT1qVgDs3Io2i3qKFpFzRahdUh3caVWjIF4hEXVZ4xtQ6EznUw
-         QLgf7PT5ZhCdhy0+gLYJxnfEJu42q8oW5wpoWqmcKPO/WMk0UU9b/Bfz3TfE7Mfmjqez
-         K8ZqZZwla+zU1QJGc78WX1gOYtwLLMEE7YK4yLClWc1BEFDdDsVkNVV80JgxIlCYF08E
-         LtRiDMPAArnI8WopHgqL16wrbeTlh20X5IWCS86IYVpcgbee+0w27mJV/NhTrV2/+nNW
-         AR0s+FpkHCGCigG6LRhReF7Saz5iy0/J5pFQT2GnBSEGesZJq/XUT4XpwX177LuMPX5a
-         GtVg==
+	s=arc-20240116; t=1735077125; c=relaxed/simple;
+	bh=1SccR7/85Ev+zmlVFYTm8gst8PE56/LLci2h9RzErFQ=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=thbvzo0wWvemi2M/gOGa2oU7/sQSlCbb7f2lhVsMdPdUSe+Jc/PpGhdFZE2gKRoaCT9GPN+BkwnHMYn1ThNlAHafxULyGIFsY6cV4jhO3gpnRf/8Dya4ox2Bi3zdPuXg8AA/ARU/8ID5AWWySPUEMxjVr+aGINC2HNDBXXoZrbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.69
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-844dfe8dad5so919514139f.1
+        for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 13:52:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735071552; x=1735676352;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NLxiW6uttosq2tj8RPhDlF4NgCbj4+ZM2CMaAqMzkcU=;
-        b=VDWDeJOartE0PlXaYPNLXAYtPuZ2X2AVn0b1SVTveH/BQ9Ll7nw6triytbem+cTXKW
-         FPAnkWCUjbYe4hQX8pubDa+q5kKv/djMqWlevRWX4D6k756f4Ng/xYV+IL8NqlVvLwal
-         s9EeQ9Gn/b5YdKDnicflRfm3YpN1bAUu26rvJWkzzLY80infL+lmk85aUhE+5a4+UG1v
-         6RUDVy+cOVh0WJmKvrs6th5PJ0oIdEfCEVQepm43hd3MhZ6o/O3tzg0v852G/1ELZWEk
-         TyyZJeQAT+h9YpQ/JL4LBgCfS14xCM5+Wvfco1jrONOR8u3JD+rr+7ldmEAM1sf2ytjW
-         d4FA==
-X-Forwarded-Encrypted: i=1; AJvYcCUiD9cK3eROstnCM1iEyPMad3/aL9xx1TXnAsu7zS3EOzzoZOK4UabzA4qfcFm4oejS8MDDqK1hAylNy1g=@vger.kernel.org, AJvYcCXurFIQ+ZGF0EnXhaShC9pDY7prD21cS3m8pu0Hu5lU1esT7bo4AUNDVUM/6lGi8Itnr6fOUkedhhAZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxAECLMk9/IQkyLeSFvPa+1bbEDRTvOoDS9Z1AlEygymmCKdqnE
-	cFkedlLL6rMRPWQ9zZ7deByVJfE0isx52DVREvQxvBVLPbP1W/EmACg8kGa5
-X-Gm-Gg: ASbGncvAM58UqOXsM8g5yK3D9Wu57qxC9fUWfnBuOwSWpMjxpBtsrwM4iAYhBNgKjzj
-	qEIic+OlcBxzBSUH5LisRJDQ9w+dWxoNrqqZ5cvK8EfLuBa26zXGwKuYu0BNiOaMFGiBAjEhCHk
-	oubaSp0T6Nl0moF3YjWTb4IxhYB8xq4b+i5lv7M+UfVRk1qHLinIWA6WglBVBRq8go0p8FWhLOd
-	1lcf9a6bDothZOti4pbLJUhJIO/Kp/AV2k/AM25iI2KhFeMpIApfJP1pyA8MAxZCdq/
-X-Google-Smtp-Source: AGHT+IGjICabh7lvLFvsvUHqqv6lPmmrIAgzZpddmkw0PFxP8ioAeEqRRfIUoqWXokfom3iheu+iyg==
-X-Received: by 2002:a05:6602:1409:b0:83a:ab63:20b with SMTP id ca18e2360f4ac-8499e6070a7mr1889328739f.4.1735071551953;
-        Tue, 24 Dec 2024 12:19:11 -0800 (PST)
-Received: from localhost.localdomain ([128.10.127.250])
-        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-8498d8aae0esm273702139f.33.2024.12.24.12.19.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Dec 2024 12:19:10 -0800 (PST)
-From: Mingwei Zheng <zmw12306@gmail.com>
-To: gregkh@linuxfoundation.org
-Cc: u.kleine-koenig@baylibre.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mingwei Zheng <zmw12306@gmail.com>,
-	Jiasheng Jiang <jiashengjiangcool@gmail.com>
-Subject: [PATCH] usb: gadget: m66592-udc: Add check for clk_enable()
-Date: Tue, 24 Dec 2024 15:22:17 -0500
-Message-Id: <20241224202217.114436-1-zmw12306@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1735077123; x=1735681923;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=76899iIyLRwwAHILxLbSYak/Z4CiuYUYRiqZJ99fGDw=;
+        b=GYTctwV4ABO2qiItziAUZqbG+KTBa9baEHhrdk+PItt8ZvWITmsAcSxpURb1ejMx3b
+         ozWgmcp0iRTkNLG4BNKWE/sq1CnzPuaOCoFfoZFkiNOpwGHppYOuFhg1HMKEZvMS7Ig9
+         CkEbcAT0WJ06GaR94LGvWldKIhTGgqUtiT6GA3jEQT39Kge9lm/hJSX8Ws0ymYfXXGgj
+         HEd/fXDu/bS8enSTss5kg6BwGnDvlSq6DDfDYWJUpIXKPKEaxXnezIqXm5LWKP6gvw9h
+         IcWyck6RieqffYgN/rA7LCE70rwAKEdsdYb+S+V3ae1yhZzmcfOP2f/O3dfc3Xyn4UDG
+         RrCw==
+X-Forwarded-Encrypted: i=1; AJvYcCUHhWFyyMWER7yM+OofKUXPo66yDUR+gacVk0CHOUkt5WwadQ+XElVIMvFsmP7joMwKMtso6yAyL0o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzQdLFe/NnQtVzACENiLSBHoc/wtr2ZKni7JEm4llrf6kDaNq9M
+	WmfARyfaIAcZz3DETZtmlcW8/+wm+C+MOwGOwC5M8a30EkV9FzxAWnrPks+9zPMHief3XDjmjYs
+	0yOgxWj+ySohRDw+ebmfcD74DwxknC7JEiezxzpOq8Nqw9iPEGDwhG3Y=
+X-Google-Smtp-Source: AGHT+IELSaY2yi5q69i55hpMIsdydyqjVz5Tv2kPSL6Z/IX0juRIHGLCcQNGIr1aG/W0dl6aCjEVM/jS5ksRpa6973mBK4SA3qoP
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:20e8:b0:3a7:78a8:1fb4 with SMTP id
+ e9e14a558f8ab-3c2d2f47732mr141838765ab.13.1735077123166; Tue, 24 Dec 2024
+ 13:52:03 -0800 (PST)
+Date: Tue, 24 Dec 2024 13:52:03 -0800
+In-Reply-To: <672ad483.050a0220.2edce.1518.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <676b2d03.050a0220.2f3838.0229.GAE@google.com>
+Subject: Re: [syzbot] [usb?] [block?] WARNING: bad unlock balance in blk_mq_update_tag_set_shared
+From: syzbot <syzbot+5007209c85ecdb50b5da@syzkaller.appspotmail.com>
+To: axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, ming.lei@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The APP-Miner reported the missing check.
-Add check for the return value of clk_enable() to catch the potential
-error.
+syzbot has bisected this issue to:
 
-Fixes: b4822e2317e8 ("usb: gadget: m66592-udc: Convert to use module_platform_driver()")
-Signed-off-by: Mingwei Zheng <zmw12306@gmail.com>
-Signed-off-by: Jiasheng Jiang <jiashengjiangcool@gmail.com>
----
- drivers/usb/gadget/udc/m66592-udc.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
+commit f1be1788a32e8fa63416ad4518bbd1a85a825c9d
+Author: Ming Lei <ming.lei@redhat.com>
+Date:   Fri Oct 25 00:37:20 2024 +0000
 
-diff --git a/drivers/usb/gadget/udc/m66592-udc.c b/drivers/usb/gadget/udc/m66592-udc.c
-index a938b2af0944..bf408476a24c 100644
---- a/drivers/usb/gadget/udc/m66592-udc.c
-+++ b/drivers/usb/gadget/udc/m66592-udc.c
-@@ -1606,7 +1606,11 @@ static int m66592_probe(struct platform_device *pdev)
- 			ret = PTR_ERR(m66592->clk);
- 			goto clean_up2;
- 		}
--		clk_enable(m66592->clk);
-+		ret = clk_enable(m66592->clk);
-+		if (ret) {
-+			clk_put(m66592->clk);
-+			goto clean_up2;
-+		}
- 	}
- 
- 	INIT_LIST_HEAD(&m66592->gadget.ep_list);
--- 
-2.34.1
+    block: model freeze & enter queue as lock for supporting lockdep
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1064ffe8580000
+start commit:   c88416ba074a Add linux-next specific files for 20241101
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1264ffe8580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1464ffe8580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=704b6be2ac2f205f
+dashboard link: https://syzkaller.appspot.com/bug?extid=5007209c85ecdb50b5da
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16d34740580000
+
+Reported-by: syzbot+5007209c85ecdb50b5da@syzkaller.appspotmail.com
+Fixes: f1be1788a32e ("block: model freeze & enter queue as lock for supporting lockdep")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
