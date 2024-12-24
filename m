@@ -1,139 +1,94 @@
-Return-Path: <linux-usb+bounces-18765-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18764-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF30D9FB9D3
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 07:25:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACC8C9FB9CD
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 07:24:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98852188571A
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 06:24:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 288E916471E
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 06:24:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 253B516DEB1;
-	Tue, 24 Dec 2024 06:24:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fl2ENnXv"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B41A17BB16;
+	Tue, 24 Dec 2024 06:24:05 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f196.google.com (mail-pl1-f196.google.com [209.85.214.196])
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 428E92C6A3;
-	Tue, 24 Dec 2024 06:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5DE13774D
+	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 06:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735021459; cv=none; b=cw/ICj22c/KjkioHKdgyDPFljzGnAxjrjqKkKl1sS+aWvodUlExOg8gW95VE8nGmtPoZYwxCNHtCe14ZTVCvBViWHfwuzQpcuc0NbUPkGQXdKRhwAiepxGnmjfVXz9GTDZd22ObbFewjKgKIjUHdRrEDg9ys13D7RUelzOvxR1Y=
+	t=1735021444; cv=none; b=hK8aXQHNluVn4MDb7sKXy5wMnLdw5Rb3h7D6uwFFZvDiTu7iEcL0Hp9LtH5Ke0ggBTiaPHc2ROhGu5TPZdcvNsrJ/g37aV+tgXKQ9TqxpgdBABOrslljpCxV5v7nXu5plIXtaZJ4CCLLRSlpOHQLih0KnvPcthfkud/RW5arduE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735021459; c=relaxed/simple;
-	bh=qSkJWadDUiDLrKL/3yuiJFbOfZQZMWdhWrHtt9J57pY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=XjLKSyhc55/kqv66+362xU9aVqBpVXDToJ/bAKKVdm2y5J8+S8GrntY5f94iGMX7vXCZY3z/MTTPMnw6horSH7mUR/ch+KigtajVRKfM4Dp3X4UbgZGO3/RyOHOg4D9NFKljePuLN2s0E8FY/3keOaOKpGu3gTQlT1XH74RseqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fl2ENnXv; arc=none smtp.client-ip=209.85.214.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f196.google.com with SMTP id d9443c01a7336-21683192bf9so53098615ad.3;
-        Mon, 23 Dec 2024 22:24:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735021457; x=1735626257; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8KtqAQPZ4xCZhOpU5OqhoD91xYH86Y/t4bILjE4H96Y=;
-        b=fl2ENnXvEpmK/HazEqA4zCiCpvDo0cj8n8KeuJQepAcAZKk63ohuh2JubspLWBHdMU
-         MFCUM8DEXhi65726FIas8K61wCU9P/fj2pGOQvRA9RzWFZ4gxMFOWGWTrFZPSdoh+GVl
-         I5YGcBFUZzyq7WMCbHW//FweF4yunPwxJqJqvEVwCnHgxrm4Ffv2dAp+8GZ1dbGlv16F
-         rVI0Zzbpony3XfvOOVUx8PafTNN71R3XTNm72CmUMH4LDni/gY9EG2rnK4EOSKD1Pcly
-         ZG5SpsT6LQMsNL85jfoM0kQcoWJ0hOC8TDnLRLmmcvyP+on7FvhEM3bAB8t1gZoW5Woj
-         XgjA==
+	s=arc-20240116; t=1735021444; c=relaxed/simple;
+	bh=MXzlKSwOGCI1XXQ61VjEYAgCn6j6p10k4UqY5qMglZw=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=PbXIHlQVaqc1HmbJ7gb3W4aHHs5V8TB2Psk2O1Rv50pEKGj3zQWdP4MkvTBXbfLtlciADmdyNR/JI7t372+xLwDzL8FOa563OrLG/Hcr4xWlHWlgRrtD+KTgVCVIAroPu1twPlTObNqmddz5zy0mtzDCDNP/5575xct3BhJHrCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a7e0d5899bso107099965ab.0
+        for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2024 22:24:03 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735021457; x=1735626257;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8KtqAQPZ4xCZhOpU5OqhoD91xYH86Y/t4bILjE4H96Y=;
-        b=FENdGWPZ+cswOOBF6vFkkVRIJ8iEUEDHTivz5v8RNhLs78yDGG0WVdQy0JbcKzJkNQ
-         KuE+PpXvHnLmdjAG6HVFf+DDgbkY3vJ/RI8ff+9GJCldILQofqFvAce/JEx3hRwBWQpl
-         FM4dLk2jHZyEbuuQA2CblsOk1yYfmdlHebwOt7dPRRA3qv3ui1Uumudr1uWeNtfBH8aT
-         kYJebKie+MzK4b4/K50MIMk6SHYjGsZQzqjkA+bViSURTVmuYCI59Da9+ON+neJcO76x
-         +lpaFBz0SOvy/2rKr9H5KPjBxIOdEKwgdGxT89/ytw1SKOyE96SG8vWUK1hBmeFdwj8C
-         T29A==
-X-Forwarded-Encrypted: i=1; AJvYcCWGPh7qWE3Gb0ciY/XjtlrMoahN+L3dC9Wzx5ZwzDw03DSGHsPSc2s9F1FD/YPFw0mRUj+4bkJCYJI=@vger.kernel.org, AJvYcCWq2N3JLZlMPkXLNMyd6HnIB3omOH8pvUYDJ1Vm1vtNULxPeLJAkxiXw8T+Ld7945zpg8tjelU5+uBxCpnU@vger.kernel.org, AJvYcCXZ9OKnY+MBy1qo1Kr/ySTqnuTlNv3DVFwKAw29EjmXdR9jS1l0GM124jOgeeRcXZJtAeasZGrG8q1N@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwzimjQesk4BGEnKB073RzM5/B9q1Vw1tPrv9hiIEhct1JfVMq
-	4g9jEyRwdSzvqUqFJz1Ft8vV3YDBHJsjtAB+ojAMgX2wz0RH3MvhtjS4bhyY
-X-Gm-Gg: ASbGncvaH339S2GgjOrGWt9gnhyTfCCJmhgQG1w8MOyKbt7w9LD7I6CcTy7xwtHTzmx
-	5XOOxwbEfRiwOADZ1dDILvkTNNZzIaJFV3xJB37QSXQawxWnVi08JO73YcUOsx7Qpek9P5sBlGs
-	G2MsPyAD8M0F/fAZLNZCfoe4fhddtucAjSrOyD7FayltoBzy849zNdyPMZXmOolK0f/ZfIYvgHM
-	D8222jcJSkQ5wwidVlhF5ku4aW4wY7l+nWsDCHtdRZ9s1seq0qgvTVmt7mEKEIbuYjgKw==
-X-Google-Smtp-Source: AGHT+IF/l6LkKzl73/GZbXhxDN41bVDC2HqazM1ZEy8CJoxAJ/FNK2cspCx44TSwQDDv8mclfQYmBg==
-X-Received: by 2002:a05:6a21:e96:b0:1e0:f390:f300 with SMTP id adf61e73a8af0-1e5e082f951mr20987619637.44.1735021457457;
-        Mon, 23 Dec 2024 22:24:17 -0800 (PST)
-Received: from localhost.localdomain ([39.109.141.41])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842aba72f4fsm8170948a12.11.2024.12.23.22.24.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Dec 2024 22:24:17 -0800 (PST)
-From: Gordon Ou <gordon.xwj@gmail.com>
-To: Valentina Manea <valentina.manea.m@gmail.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Hongren Zheng <i@zenithal.me>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	linux-usb@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	trivial@kernel.org,
-	Gordon Ou <gordon.xwj@gmail.com>
-Subject: [PATCH v2] Update USB/IP OP_REP_IMPORT documentation.
-Date: Tue, 24 Dec 2024 14:23:36 +0800
-Message-Id: <20241224062336.63215-1-gordon.xwj@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1735021442; x=1735626242;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SblzuJBesHFVjaNJKKW8WutChPVdT51mxhglVDJXNiE=;
+        b=TiCmLRA8XM6XVMkQ3cJKAPLGltPLNLn7h5NFBs3XYg6xnyx7u/OBVjVyDTKLZuIL0i
+         s4WT4LrNfTzL2gm3wzhO3hrlJiIc7e9pfe70fvpC5kGRGawme5z9C/rRtIwvXstOmlP4
+         d4v4H9SoVMfUVYO/1lgR760DNn4fotVFc7FB0UK74TLyAsJzNIVBXfTDmaG5LWDPAVih
+         NvIc2+B0yreT3KS8DeeCyp8ivjmNa8H4INEJg/d08d08uYw4SkmP/xwXRLhZG8XuOUiu
+         2vqiBN32MIAArKHyuILX/5rK12a4RfTtNJ7mkJdFNqgCFH5aneT3EvaPr5utbn6KyxOJ
+         B8CQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWjDO5tUWCtM7G3GZB5OtS1nfWmwW50vYmiQhBndNo5FDhWrJrfrZO2OVTi4fUP5FTohlAR4MEjo9Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSqi6yMn1S3RSDPAeo6983FaOZe3hNYD0dC2Hixmof0YT2rpkw
+	h5BbQy9NRzfr9zRIyEklu4Y8RNT6MwEni54XVP5P4PtEVF3lcH8qtsBM7oFAsVCFaTVs+KYZ7oI
+	eeq8tSbfnnPiffw5KZtU5YomdSodS2MGRWACXsBS/2D3vbBGIVGnWOVg=
+X-Google-Smtp-Source: AGHT+IH5Hx62rRepnJelJtQJ8sdAWuFF5a3JpWmRIfv6/1eGAfZAGB/MKANmjkpA7PjVg1BABMu96SJYY0CPLJHJNwgC8idATgJ/
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:34a0:b0:3a7:21ad:72a9 with SMTP id
+ e9e14a558f8ab-3c2d5152acfmr130327635ab.17.1735021442596; Mon, 23 Dec 2024
+ 22:24:02 -0800 (PST)
+Date: Mon, 23 Dec 2024 22:24:02 -0800
+In-Reply-To: <672ad9a8.050a0220.2a847.1aac.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <676a5382.050a0220.2f3838.015e.GAE@google.com>
+Subject: Re: [syzbot] [scsi?] [usb?] WARNING: bad unlock balance in sd_revalidate_disk
+From: syzbot <syzbot+331e232a5d7a69fa7c81@syzkaller.appspotmail.com>
+To: James.Bottomley@HansenPartnership.com, axboe@kernel.dk, hch@lst.de, 
+	james.bottomley@hansenpartnership.com, linux-block@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
+	linux-usb@vger.kernel.org, martin.petersen@oracle.com, ming.lei@redhat.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-This is to correct the mistaken byte offset of the field bDeviceClass in
-OP_REP_IMPORT documentation. The previous field bcdDevice has length 2 and
-the offset for bDeviceClass should be 0x138 + 2 = 0x13A instead of 0x139.
-Offsets for subsequent fields are also affected and fixed in this patch.
+syzbot has bisected this issue to:
 
-Signed-off-by: Gordon Ou <gordon.xwj@gmail.com>
----
-Changes in v2:
- - Updated patch description.
----
- Documentation/usb/usbip_protocol.rst | 12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
+commit f1be1788a32e8fa63416ad4518bbd1a85a825c9d
+Author: Ming Lei <ming.lei@redhat.com>
+Date:   Fri Oct 25 00:37:20 2024 +0000
 
-diff --git a/Documentation/usb/usbip_protocol.rst b/Documentation/usb/usbip_protocol.rst
-index adc158967cc6..3da1df3d94f5 100644
---- a/Documentation/usb/usbip_protocol.rst
-+++ b/Documentation/usb/usbip_protocol.rst
-@@ -285,17 +285,17 @@ OP_REP_IMPORT:
- +-----------+--------+------------+---------------------------------------------------+
- | 0x138     | 2      |            | bcdDevice                                         |
- +-----------+--------+------------+---------------------------------------------------+
--| 0x139     | 1      |            | bDeviceClass                                      |
-+| 0x13A     | 1      |            | bDeviceClass                                      |
- +-----------+--------+------------+---------------------------------------------------+
--| 0x13A     | 1      |            | bDeviceSubClass                                   |
-+| 0x13B     | 1      |            | bDeviceSubClass                                   |
- +-----------+--------+------------+---------------------------------------------------+
--| 0x13B     | 1      |            | bDeviceProtocol                                   |
-+| 0x13C     | 1      |            | bDeviceProtocol                                   |
- +-----------+--------+------------+---------------------------------------------------+
--| 0x13C     | 1      |            | bConfigurationValue                               |
-+| 0x13D     | 1      |            | bConfigurationValue                               |
- +-----------+--------+------------+---------------------------------------------------+
--| 0x13D     | 1      |            | bNumConfigurations                                |
-+| 0x13E     | 1      |            | bNumConfigurations                                |
- +-----------+--------+------------+---------------------------------------------------+
--| 0x13E     | 1      |            | bNumInterfaces                                    |
-+| 0x13F     | 1      |            | bNumInterfaces                                    |
- +-----------+--------+------------+---------------------------------------------------+
- 
- The following four commands have a common basic header called
--- 
-2.34.1
+    block: model freeze & enter queue as lock for supporting lockdep
 
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=117bbf30580000
+start commit:   c88416ba074a Add linux-next specific files for 20241101
+git tree:       linux-next
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=137bbf30580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=157bbf30580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=704b6be2ac2f205f
+dashboard link: https://syzkaller.appspot.com/bug?extid=331e232a5d7a69fa7c81
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16952b40580000
+
+Reported-by: syzbot+331e232a5d7a69fa7c81@syzkaller.appspotmail.com
+Fixes: f1be1788a32e ("block: model freeze & enter queue as lock for supporting lockdep")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
