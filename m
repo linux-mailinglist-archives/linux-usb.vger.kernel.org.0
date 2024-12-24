@@ -1,169 +1,166 @@
-Return-Path: <linux-usb+bounces-18760-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18761-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 478689FB8CB
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 04:01:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 932079FB8F8
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 04:23:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9D0C16544B
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 03:01:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14B151638FD
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 03:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C855199BC;
-	Tue, 24 Dec 2024 03:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81D66145B24;
+	Tue, 24 Dec 2024 03:23:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LEKeka4r"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jqDAnSrV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f66.google.com (mail-lf1-f66.google.com [209.85.167.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEED28EB;
-	Tue, 24 Dec 2024 03:00:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B701A55
+	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 03:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735009254; cv=none; b=bhC7U3hYDe6efqH52oHtC8zFBPeuWkyJgE0LK+kV601QeQuyqC+DwLDyk3tongWR1bYY6Ia9ZceH6yCjpa64Ra20DAKogXqTAVdMl/cjb3jCSO+zrxr75vg44fUW5eiMhp+Liq/21YyQs8xb79fLYM5W5zdPCyyadHNJ0xEjiNU=
+	t=1735010605; cv=none; b=qtoDe9CgXG2qiCy00Me+wdvPKKFHU/XsatJcrSclbGuLgIW2iaHVwNu2fP9rx4cQOR358d+S9Vq4L2jU9NsmjbMrMTDwkeUMlqVVdo7LamsJNDLRs7AdLW1LmCPpKE5r0jKtww+Ny4HiOes0+g1wrQqUZWXh9bTQgOF+K6ogmCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735009254; c=relaxed/simple;
-	bh=XZTCB4Wdc4Ss4KxrEhg9k4wCQGze9SU2On0n3Tjz51A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m06DJGSNwo8WxN5Gcod20gi9DNe79R3mp+oCmvQ60YNxvZNCgEnA5bS9qI+HWFQfbw5YYu5DyqLIHg2FBX3VgpEB/QN6HcX6bwNc2HfVsnCFo7dBMQL9c9SyoBS9cAPI5yEDrH+QCOMVKmgtrkfqgrNU64I25ZUYMRz4umfGtfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LEKeka4r; arc=none smtp.client-ip=209.85.167.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f66.google.com with SMTP id 2adb3069b0e04-5401bd6cdb7so5338828e87.2;
-        Mon, 23 Dec 2024 19:00:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735009251; x=1735614051; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3etr5a2NKKoJs2XI648yETx7pgNFNVIlsJZGrzN1Bc8=;
-        b=LEKeka4rTv0z5XK2+gIZnqfhSmDBwakcPc069+hLmto3RUyl+g12OIND7n/moXlbGU
-         Ae6pyRu1PdyqTC9NES9NmaOSAMlSbwGahGwUW2WQtDjRdPvw/k4CWeD4t8snMy91+JgT
-         S1YTi1jwDii/xeSEgDH5BhpzSqm2891+V3SHALAy1ZKz4Gvjyl0VLCexi/UiLkvBPpLN
-         VwDomMs/3rcOn4eaj3Pw3zrf8pNWfB/LUePqN7ITL81e1H+WyODRLeXbSvNZkm3icAzT
-         iXkBleCAD8FWA62JK44IvZicZ+BTmwdm7fPUVEEDpr46VnfVybANAWVNm4F5ylHDI8Jw
-         klQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735009251; x=1735614051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3etr5a2NKKoJs2XI648yETx7pgNFNVIlsJZGrzN1Bc8=;
-        b=Yv/NSF85gq1EGz9eB030oaBWyhX/i+COURID7mGjaTHdekK1mQop7oJZnEH5DKHfuV
-         cU4zKbjmXDYu3Mp0Deum7TUdX1tY1DnZbl19kOgfsf+oRjykjJJwVkCQ7Mpa48RrW1aN
-         x7cxTAWaRIYzn6o6SZDZa/9Xdcv/fPoI6/UQytNMI5H9eMUSu4Be1FfTPIEFbWAtbjFx
-         S7M46Bc/O4W+y7oq9+RED4S+GRfzyxhHpsECW3uvMwdHt/cxKph0l1TQep6XrVYeGqWM
-         RmW2WTNpX+3viAthRxf9iEFSOLnZHbjZp4wnLH+Tbthzsj/U9VhjD9P3Kpu9JzwfM1DV
-         YV7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVeswg3IvtaBuG0NstEnjli4Gazn89eX9aNMwqKnwv5sDTqpm3gvcULxYAECALShGyHO/ZWeI30Lss7eADR@vger.kernel.org, AJvYcCWY8UCizklkpU5VRwHzFoqJR7dDpNCJYuTdds0TYatjTmoEsmRQPv/+CJeNUDR5wbhlywyH+eGmAyKl@vger.kernel.org, AJvYcCWqXAnsQJr7Y1QZ2rpgCWyVIT1DKxCZY+LFFqEBNM7f/UNTE4EorEX7ZADJ8B0Ip9f/fdvxpNYYVR0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxObt9fqaA5T5SRYn0Cdh+mq6ctDTM1Q/rPhSVFwkiHIIQWmbM5
-	TI9t3nKa4VFKSfOv5WqG6ChRFBVIxAlL+S+2pjvJInRAgpc7mton30nTRyJSO1OWNgmHSpTTTsh
-	yfu6sbJT4KxUCp8PzrckNPniDbXU=
-X-Gm-Gg: ASbGncvFFLQbzuRR6w79lpJp5hEaDQQLKJOPes462fknosxLXQvl3y5np/fEZC75CMx
-	gpaGCQqXOnv+F/PVl8I/nU0y1LeqIQhqVpY2LLE8QCM9k05Qmynmdh+iIAphi6r2fbBfPE3RB
-X-Google-Smtp-Source: AGHT+IGurwCBtLbeqw4NtU9On+vb8/Bsltm0tt9U92P6ct5qJ7tLDjpZ9N562XiKiFZd8rxtcrrdYE+hctY/GSO484U=
-X-Received: by 2002:a05:6512:114d:b0:53e:391c:e983 with SMTP id
- 2adb3069b0e04-542295229d3mr5701612e87.3.1735009250757; Mon, 23 Dec 2024
- 19:00:50 -0800 (PST)
+	s=arc-20240116; t=1735010605; c=relaxed/simple;
+	bh=6nKl9Hlo5gjfcV9HkxdXHRIZSSmK1Vzx6Y9vqTPYbFw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=rXqCaHGwLX37gXOZVZ9PASchLhcrp7DfO8ooZcWnUw7OESITccLpJXUdrX6TTMvZiPaDCTwzFYbnnHCk9qQZuXOaJIAlXUksN1eovajBqhSWEplcczaihIQ9/S/2/OKowsA8UdaqI/IFtJbIHNv8l/E1eEHeM6y1UbfVbCFfvbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jqDAnSrV; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735010602; x=1766546602;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=6nKl9Hlo5gjfcV9HkxdXHRIZSSmK1Vzx6Y9vqTPYbFw=;
+  b=jqDAnSrViep1C1hkbU6vGsZDesw/zyYQex8vKKiE+ZafEWLzk5QI0Gye
+   kxJNU+G/CLMO5Qdq0D1Ups6APjeAg1BJ22ffmfPM2ScZ6A/Qkw1lL7C0i
+   m9Snqi7ykHd48qL5JLe2fMiGERY7sJW/2elbt9wUfbCFuyhWVhk1Nns6U
+   pvfvZsUM2y/SlDChh3XSWvQKQyJ1Z8ttuiN7jR41nD9KflnEwcLaKNS5r
+   xPwa2REsbBtFnWStk3BBpsrToy7Z7TgWJrHw5sVp7reUB/DqDoPARvgmP
+   Z8NI3XHjFOkY16E6Ox7R5kIzMsZEE0/1tuXMhzrKbP0RM6RUaOD7KylUq
+   A==;
+X-CSE-ConnectionGUID: NcJHbBSsRrKfnoKsn2CGkg==
+X-CSE-MsgGUID: u+NGMEnBTR2oqeOJNffdUA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11295"; a="60861814"
+X-IronPort-AV: E=Sophos;i="6.12,259,1728975600"; 
+   d="scan'208";a="60861814"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 19:23:22 -0800
+X-CSE-ConnectionGUID: 2Wr2KS48TmyCszA1Nyh0ZQ==
+X-CSE-MsgGUID: 9R9aAfg/Ta+4MTpARXsnHg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="104447161"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 23 Dec 2024 19:23:19 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tPvVt-0000mw-15;
+	Tue, 24 Dec 2024 03:23:17 +0000
+Date: Tue, 24 Dec 2024 11:22:45 +0800
+From: kernel test robot <lkp@intel.com>
+To: Pavan Holla <pholla@chromium.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: [usb:usb-testing 9/58] drivers/usb/typec/ucsi/cros_ec_ucsi.c:187:54:
+ warning: passing argument 2 of 'cros_ucsi_async_control' makes integer from
+ pointer without a cast
+Message-ID: <202412241137.ld79A9Iq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241223090417.12614-1-gordon.xwj@gmail.com> <42623280-d7da-4bc9-98a5-65de33d4f6dc@linuxfoundation.org>
-In-Reply-To: <42623280-d7da-4bc9-98a5-65de33d4f6dc@linuxfoundation.org>
-From: Gordon - <gordon.xwj@gmail.com>
-Date: Tue, 24 Dec 2024 11:00:38 +0800
-Message-ID: <CAD2T5m-kZAqeR3fSXHVDtevLkU0FynriwM+tb==eYaNXvVhb=g@mail.gmail.com>
-Subject: Re: [PATCH] Update USB/IP OP_REP_IMPORT documentation.
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Hongren Zheng <i@zenithal.me>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, linux-usb@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, trivial@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Tue, Dec 24, 2024 at 1:11=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.o=
-rg> wrote:
->
-> On 12/23/24 02:04, Gordon Ou wrote:
-> > Corrects byte offsets for OP_REP_IMPORT.
->
-> Add more information on why this change is needed.
->
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+head:   b1d7c2a8a364695a5dca2bb18ebcf2c10ad61172
+commit: 475db78842851d9efd7888154a80af697946de1e [9/58] usb: typec: ucsi: Implement ChromeOS UCSI driver
+config: um-allyesconfig (https://download.01.org/0day-ci/archive/20241224/202412241137.ld79A9Iq-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241224/202412241137.ld79A9Iq-lkp@intel.com/reproduce)
 
-The change is needed to correct the mistaken byte offset of the field
-bDeviceClass in OP_REP_IMPORT documentation. The previous field bcdDevice
-has length 2 and the offset for bDeviceClass should be 0x138 + 2 =3D 0x13A
-instead of 0x139. Offsets for subsequent fields are also affected and fixed
-in this patch.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412241137.ld79A9Iq-lkp@intel.com/
 
-> >
-> > Signed-off-by: Gordon Ou <gordon.xwj@gmail.com>
-> > ---
-> >   Documentation/usb/usbip_protocol.rst | 12 ++++++------
-> >   1 file changed, 6 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/Documentation/usb/usbip_protocol.rst b/Documentation/usb/u=
-sbip_protocol.rst
-> > index adc158967cc6..3da1df3d94f5 100644
-> > --- a/Documentation/usb/usbip_protocol.rst
-> > +++ b/Documentation/usb/usbip_protocol.rst
-> > @@ -285,17 +285,17 @@ OP_REP_IMPORT:
-> >   +-----------+--------+------------+----------------------------------=
------------------+
-> >   | 0x138     | 2      |            | bcdDevice                        =
-                 |
-> >   +-----------+--------+------------+----------------------------------=
------------------+
-> > -| 0x139     | 1      |            | bDeviceClass                      =
-                |
-> > +| 0x13A     | 1      |            | bDeviceClass                      =
-                |
-> >   +-----------+--------+------------+----------------------------------=
------------------+
-> > -| 0x13A     | 1      |            | bDeviceSubClass                   =
-                |
-> > +| 0x13B     | 1      |            | bDeviceSubClass                   =
-                |
-> >   +-----------+--------+------------+----------------------------------=
------------------+
-> > -| 0x13B     | 1      |            | bDeviceProtocol                   =
-                |
-> > +| 0x13C     | 1      |            | bDeviceProtocol                   =
-                |
-> >   +-----------+--------+------------+----------------------------------=
------------------+
-> > -| 0x13C     | 1      |            | bConfigurationValue               =
-                |
-> > +| 0x13D     | 1      |            | bConfigurationValue               =
-                |
-> >   +-----------+--------+------------+----------------------------------=
------------------+
-> > -| 0x13D     | 1      |            | bNumConfigurations                =
-                |
-> > +| 0x13E     | 1      |            | bNumConfigurations                =
-                |
-> >   +-----------+--------+------------+----------------------------------=
------------------+
-> > -| 0x13E     | 1      |            | bNumInterfaces                    =
-                |
-> > +| 0x13F     | 1      |            | bNumInterfaces                    =
-                |
-> >   +-----------+--------+------------+----------------------------------=
------------------+
-> >
-> >   The following four commands have a common basic header called
->
-> thanks,
-> -- Shuah
+All warnings (new ones prefixed by >>):
 
-Thanks for the reply, please find my update inline, and let me know if an
-updated patch is needed.
+   drivers/usb/typec/ucsi/cros_ec_ucsi.c: In function 'cros_ucsi_write_timeout':
+>> drivers/usb/typec/ucsi/cros_ec_ucsi.c:187:54: warning: passing argument 2 of 'cros_ucsi_async_control' makes integer from pointer without a cast [-Wint-conversion]
+     187 |                 cros_ucsi_async_control(udata->ucsi, &cmd);
+         |                                                      ^~~~
+         |                                                      |
+         |                                                      u64 * {aka long long unsigned int *}
+   drivers/usb/typec/ucsi/cros_ec_ucsi.c:90:59: note: expected 'u64' {aka 'long long unsigned int'} but argument is of type 'u64 *' {aka 'long long unsigned int *'}
+      90 | static int cros_ucsi_async_control(struct ucsi *ucsi, u64 cmd)
+         |                                                       ~~~~^~~
 
-Gordon
+
+vim +/cros_ucsi_async_control +187 drivers/usb/typec/ucsi/cros_ec_ucsi.c
+
+   154	
+   155	static void cros_ucsi_write_timeout(struct work_struct *work)
+   156	{
+   157		struct cros_ucsi_data *udata =
+   158			container_of(work, struct cros_ucsi_data, write_tmo.work);
+   159		u32 cci;
+   160		u64 cmd;
+   161	
+   162		if (cros_ucsi_read(udata->ucsi, UCSI_CCI, &cci, sizeof(cci))) {
+   163			dev_err(udata->dev,
+   164				"Reading CCI failed; no write timeout recovery possible.");
+   165			return;
+   166		}
+   167	
+   168		if (cci & UCSI_CCI_BUSY) {
+   169			udata->tmo_counter++;
+   170	
+   171			if (udata->tmo_counter <= WRITE_TMO_CTR_MAX)
+   172				schedule_delayed_work(&udata->write_tmo,
+   173						      msecs_to_jiffies(WRITE_TMO_MS));
+   174			else
+   175				dev_err(udata->dev,
+   176					"PPM unresponsive - too many write timeouts.");
+   177	
+   178			return;
+   179		}
+   180	
+   181		/* No longer busy means we can reset our timeout counter. */
+   182		udata->tmo_counter = 0;
+   183	
+   184		/* Need to ack previous command which may have timed out. */
+   185		if (cci & UCSI_CCI_COMMAND_COMPLETE) {
+   186			cmd = UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE;
+ > 187			cros_ucsi_async_control(udata->ucsi, &cmd);
+   188	
+   189			/* Check again after a few seconds that the system has
+   190			 * recovered to make sure our async write above was successful.
+   191			 */
+   192			schedule_delayed_work(&udata->write_tmo,
+   193					      msecs_to_jiffies(WRITE_TMO_MS));
+   194			return;
+   195		}
+   196	
+   197		/* We recovered from a previous timeout. Treat this as a recovery from
+   198		 * suspend and call resume.
+   199		 */
+   200		ucsi_resume(udata->ucsi);
+   201	}
+   202	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
