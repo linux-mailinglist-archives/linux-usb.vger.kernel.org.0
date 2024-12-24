@@ -1,149 +1,205 @@
-Return-Path: <linux-usb+bounces-18772-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18773-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91D029FBAA4
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 09:47:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB3D29FBAC9
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 09:54:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 284C57A1B97
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 08:47:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4F5816587E
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 08:54:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF4641B393C;
-	Tue, 24 Dec 2024 08:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6FDA192B69;
+	Tue, 24 Dec 2024 08:53:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="gs7VcH9c"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="HMz6jI+6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96A41AFB36
-	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 08:46:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7F001A8F7A;
+	Tue, 24 Dec 2024 08:53:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735030015; cv=none; b=UQ/xoB0Btzb6JJPdlr2Dw7vPwM+NclAWSxh19kNyTrSdcCawmuP0TAyOpWDpjHkWPsZZdbGq1SkQ138IYC83IGfrC6YGL/+OIL7oLYpcacOgb61NhafhuabHbC8TFrpB/SSQv0uAglwE5qcN3aJLqm0+Ki5ndM7URlF4oa/OyLk=
+	t=1735030435; cv=none; b=I2g9BT7rUlWErLh0nZvbIx6m/HhzJXxFHwGYdDDoD7+YL0ShCmfEePHbXhL+hRdXhrLr5E1qMgfoX34Elx1CsPtbYRXxho66JzJPR3kEQv+7Yb+cfDLK5U2tE37t7y6SGyImUfPU6zTPUpQ7XaSmSkIcZRgs6qM6hL21lAtulRQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735030015; c=relaxed/simple;
-	bh=qGpWgIXL47YBUsbnUQeWjPLqABrak3lVm1Q6K257iLo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=k3DNWCjHqn/ILB7TrtCoOzPY8mTmCUKvDIvMgbuf1MFbD/PFWKs76p/CpXna7z8z1dUwd/gxC6t5Z1LrzdbkY06zOLYmQf/wYJtqJAH7hE3mvpp8euL0L6wy21M5impJxR0c92OvEJaUP/2i5pt7BvscqEpcSCsXSFnkx45juUc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=gs7VcH9c; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BO5lZxj006798
-	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 08:46:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=suI55uQNzGC
-	SiQih4YuTNalcRhTRpBC18Rzl3f7fUjE=; b=gs7VcH9cb0WKlxVuEkk6YPCR+th
-	7pgopASOK2rGRLaX3o+HJqmIiptGf/hxMHYvNK8ZMfLw1IjDBtGVO29BAc/MO2Gq
-	w3TAJlQ569k0F2WsNrk96ZpGFgu0VnJfQvEbxKnoR2hFoz01m86HR3AP3ZBTWJ75
-	0R3EWaaJQ5TU9qVwFNLQwo4m9OWnSv6UbE7GdxMiTBfNtYtSiyPTUo5s/X1cPYOv
-	VekT2DG0y9cv+NNGHvPxteJoS7O+Z6iGHxAsG6JHvVclYycP0Vvp9QuVB84fD32q
-	2MPL0GLymdNNcISV37olrTqVUZLY/CXnOfbWUHo/bSh4q+YwnvEbgZKsLYw==
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43qq4b0q7h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 08:46:52 +0000 (GMT)
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2ef91d5c863so5250138a91.2
-        for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 00:46:52 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735030011; x=1735634811;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=suI55uQNzGCSiQih4YuTNalcRhTRpBC18Rzl3f7fUjE=;
-        b=lbVfAVMU5VBzowY+VRoa/hhbF1/+iVuuyjpa3AtIzL3jWvUqZ1yWQj6yP4iHA6k8d+
-         DtHfmYThDMD6ZWqcOqcmFHe+ERDna6aXFSavdyy8irmeYJ8o+X0P1xMFycGykxxFdtcu
-         Nw4FStEVBOiRe8v20Cz9BYNYnqIKuMARptyi71eZek/4BwJ6q2pLXIpkMhKvQzOQCx8I
-         +NIyIRUSCOV/OmUkxa2kM2mTYxmXDi+05YoyceiN+XtHLftpiiiIuYcThYXvX94wKdU8
-         iph1lI8yILjRQxA1cqPp6QHxzffzAQmF0iKsvaKEBP3rr2T9e3S2WBdJ8MYdh+xfN8Qb
-         Gulw==
-X-Forwarded-Encrypted: i=1; AJvYcCWiKxOVLGIRYwKvJYxgkfrrgj8h2umNfiLa6I6+SRn+5aDdib9zPsOFtyNKHh9pS1bN6PCif9XdsW4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbLtz1F8FzvisQ+6AnuGT7D+pskWmAjZHTpWyleNcHyjs2ovLz
-	73aq3nqqHtkEB1uNdhYPsEJOcCT2fAGlgoMRiHC/B/3RedZGECm4+IBwX2ktJSocJU/IPZe39sK
-	HrLhMFRTNj/MZf9+ce5LzTltYqkeruH1nWhvOu55XJUrEn9WiKj9K6GDlT9w=
-X-Gm-Gg: ASbGnctKq9mxoVlNE0ocfMSckvJWeDLnrgiPR6QKVEmMwayGQFXVH2F5hzKm6E7ecjU
-	fnGZYGAnGzZn0y3X7zmal5NjaGJzH/yc3aabKjt/pOFzv+w4t3ZZaROY/Z8c+06cGPE6QvtOFgF
-	nxGfrQVnJCjVa1IPeLKDbdAsPPZAm0AMx3tqhI3ykWPLEoTO8BNs0BClH+8p1tu1txeEt9i/pAa
-	vfqHHOBtT627eL17EqZ9idAWi/R0Hcz4vKiTxcmeorbB0cggS2rwHbr8iS/PNuZttSRp0VGJGHN
-	4WHjP2S5pk2tU5lTrSo=
-X-Received: by 2002:a17:90b:5202:b0:2ee:d186:fe48 with SMTP id 98e67ed59e1d1-2f452ec6a53mr22070966a91.28.1735030011254;
-        Tue, 24 Dec 2024 00:46:51 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IH0+3qD4z7RnyTP4+sb8Ve+3MnRYVWj8h/D611r2RH3W4G7mum8I0Hgbn+yFyukzggbMv9nwA==
-X-Received: by 2002:a17:90b:5202:b0:2ee:d186:fe48 with SMTP id 98e67ed59e1d1-2f452ec6a53mr22070941a91.28.1735030010895;
-        Tue, 24 Dec 2024 00:46:50 -0800 (PST)
-Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f692fsm85471195ad.216.2024.12.24.00.46.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Dec 2024 00:46:50 -0800 (PST)
-From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Varadarajan Narayanan <quic_varada@quicinc.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
-        quic_jackp@quicinc.com, Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v3 3/3] phy: qcom: qmp-usbc: Add qmp configuration for QCS615
-Date: Tue, 24 Dec 2024 14:16:21 +0530
-Message-Id: <20241224084621.4139021-4-krishna.kurapati@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20241224084621.4139021-1-krishna.kurapati@oss.qualcomm.com>
-References: <20241224084621.4139021-1-krishna.kurapati@oss.qualcomm.com>
+	s=arc-20240116; t=1735030435; c=relaxed/simple;
+	bh=90+x2RjiN0d1WTwTmBN4pZjkDM0LElpAVBWh3nmtQAE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=R1yWR2cGbq+nEbiC8VeC/zD66zG7EEiBVoLJdiOP9jNaQHY4IKEDi8Wkbhi1+oQbcETtbTKvDHyiX4Rz32eX8DbVR0Ls0BK+rjNjSM3pOnYt3CWmw5kKzBZgVHREpRT6gjW6B+/ZAFMQd9HAit7zcqz+QNuIwVnez6cOD+6xdf0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=HMz6jI+6; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1735030420;
+	bh=hlFS13odVb55GccO5hmoQYgmewqIs0Q10x0eG5VUCq8=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=HMz6jI+68USinBDRehCevynXCNOCOTX080YUQtq6Cc62PJ2xzXaiiZbhXGuwf3b+R
+	 /Au6Y4iUF1ezFMnQZtca0rsw9PfN81w4EOu8jskmJ6BhUTgPhqddUx9uzPgDzm38J2
+	 L+oSFez+j5ZuE/t1q54R6rOfQWPucDwfJbwrVFrk=
+X-QQ-mid: bizesmtpip3t1735030374tjbdwos
+X-QQ-Originating-IP: +Rx9ITqM/H7d062Vb3FxXVe37HRvYxsU2EFSjD4Gbak=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 24 Dec 2024 16:52:48 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 11559618080003878219
+From: WangYuli <wangyuli@uniontech.com>
+To: nbd@nbd.name,
+	lorenzo@kernel.org,
+	ryder.lee@mediatek.com,
+	shayne.chen@mediatek.com,
+	sean.wang@mediatek.com,
+	kvalo@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	alexander.deucher@amd.com,
+	gregkh@linuxfoundation.org,
+	rodrigo.vivi@intel.com
+Cc: linux-wireless@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	raoxu@uniontech.com,
+	guanwentao@uniontech.com,
+	zhanjun@uniontech.com,
+	cug_yangyuancong@hotmail.com,
+	lorenzo.bianconi@redhat.com,
+	kvalo@codeaurora.org,
+	sidhayn@gmail.com,
+	lorenzo.bianconi83@gmail.com,
+	sgruszka@redhat.com,
+	keescook@chromium.org,
+	markus.theil@tu-ilmenau.de,
+	gustavoars@kernel.org,
+	stf_xl@wp.pl,
+	romain.perier@gmail.com,
+	apais@linux.microsoft.com,
+	mrkiko.rs@gmail.com,
+	oliver@neukum.org,
+	woojung.huh@microchip.com,
+	helmut.schaa@googlemail.com,
+	mailhol.vincent@wanadoo.fr,
+	dokyungs@yonsei.ac.kr,
+	deren.wu@mediatek.com,
+	daniel@makrotopia.org,
+	sujuan.chen@mediatek.com,
+	mikhail.v.gavrilov@gmail.com,
+	stern@rowland.harvard.edu,
+	linux-usb@vger.kernel.org,
+	leitao@debian.org,
+	dsahern@kernel.org,
+	weiwan@google.com,
+	netdev@vger.kernel.org,
+	horms@kernel.org,
+	andrew@lunn.ch,
+	leit@fb.com,
+	wang.zhao@mediatek.com,
+	chui-hao.chiu@mediatek.com,
+	lynxis@fe80.eu,
+	mingyen.hsieh@mediatek.com,
+	yn.chen@mediatek.com,
+	quan.zhou@mediatek.com,
+	dzm91@hust.edu.cn,
+	gch981213@gmail.com,
+	git@qrsnap.io,
+	jiefeng_li@hust.edu.cn,
+	nelson.yu@mediatek.com,
+	rong.yan@mediatek.com,
+	Bo.Jiao@mediatek.com,
+	StanleyYP.Wang@mediatek.com,
+	WangYuli <wangyuli@uniontech.com>
+Subject: [PATCH] wifi: mt76: mt76u_vendor_request: Do not print error messages when -EPROTO
+Date: Tue, 24 Dec 2024 16:52:44 +0800
+Message-ID: <BA065B146422EE5B+20241224085244.629015-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: 9dNimc6pN0QMph-7BLftNgpO-aFRTvix
-X-Proofpoint-GUID: 9dNimc6pN0QMph-7BLftNgpO-aFRTvix
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- malwarescore=0 lowpriorityscore=0 bulkscore=0 phishscore=0 mlxscore=0
- suspectscore=0 priorityscore=1501 impostorscore=0 mlxlogscore=999
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412240072
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: OLiMdF5B5RXDJytSIdNkLPg4VLy/8JjsIsAyXULI5rSTjbEuJ6qkmpmf
+	Y2102JG3kABXjhPzV0koXwIIuptHcL/qXEKhhz8W78vuzfV0LPT7WP/6TlSqk4bzyoDIl0W
+	2n5YnOMSMWtCU9BOJGPPYwwPhkuMp1+kwfGbLn47qKpph1tNfqsidlB59ETvbCTBPPfXv9V
+	egTGqEmc/MD0wdlUwR4Dsqel3VME/PE65veBrpncrboHzNweZPdo1qBsRRvfwElxUdXLxul
+	oSF9x6Rf/F1O/KTJjmi+NYaQDCnnfpsK7hop1iMbR5waB2uCv1AT4qJyQ9KcLN24SUjJfS7
+	p0PzjTdjFzmT61iPanwikCHrRIT3mhIG+3PbHM5HV/EsQMGA346/L9LBo1IzbpJiTFEG9gh
+	Eb3dRmf9Mq7tEkQ99HSjiR4MfPzkKqHWHSNA7Q5ZwGE9uNfryvdlKM7tXL1PKbX//Pkghuv
+	X82L59tDKWWyAwbOKr+UC8cY/bWv8kb+qs02B8D7js0XlVUrt9fO9ZnPSiHXl1xAlZthWjI
+	aoRSFg3rLJHXCO8xzSBmqwsKxo174O5I5GGfyad8+MgWVe4ovQrayGXYKtkSWkRM+A5Z7xb
+	Oqm5wWo7X/z+tawdVdG3b7UaKzqrf95GL2PevMC44Di3ih00YxRw1r99dx4x5ClC684AAQY
+	9F7RKp/DiQc4e2qhp0YYTJcXxsYYFVPdyrmipR+ETqbbh/cfy47UZf2FXrKD5qTlmBZShJS
+	pSJxxvF5+4hEnw2Puxm+criKg2IUTx0vrLiv23OtwGmwrldwwH2zjOBxHKwH3No6rvaWb4G
+	Gmpbx5Bx5uZQc4BskUFYp9Ia+xLlrj0+jbhN1mktzcTzDL/AeITYedCmJdjE8z0bRmF9kNV
+	kKaN/5wv5cdxTg0wRhIQvanfEr6RHI9lDY8ulQf/Zo+RIiYulKOa2NlKi+Dls4+cKJu1v5B
+	DQOXpXI6Y+JXGYmYIML8OOF0CcXkCMhgIAQwFdDxX7rdM4y8DR6GjwfVuHxDtQdmyAlM=
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+X-QQ-RECHKSPAM: 0
 
-From: Krishna Kurapati <quic_kriskura@quicinc.com>
+When initializing the network card, unplugging the device will
+trigger an -EPROTO error, resulting in a flood of error messages
+being printed frantically.
 
-Provide PHY configuration for the USB QMP PHY for QCS615 Platform.
+The exception is printed as follows：
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+         mt76x2u 2-2.4:1.0: vendor request req:47 off:9018 failed:-71
+         mt76x2u 2-2.4:1.0: vendor request req:47 off:9018 failed:-71
+         ...
+
+It will continue to print more than 2000 times for about 5 minutes,
+causing the usb device to be unable to be disconnected. During this
+period, the usb port cannot recognize the new device because the old
+device has not disconnected.
+
+There may be other operating methods that cause -EPROTO, but -EPROTO is
+a low-level hardware error. It is unwise to repeat vendor requests
+expecting to read correct data. It is a better choice to treat -EPROTO
+and -ENODEV the same way。
+
+Similar to commit 9b0f100c1970 ("mt76: usb: process URBs with status
+EPROTO properly") do no schedule rx_worker for urb marked with status
+set  -EPROTO. I also reproduced this situation when plugging and
+unplugging the device, and this patch is effective.
+
+Just do not vendor request again for urb marked with status set -EPROTO.
+
+Link: https://lore.kernel.org/all/531681bd-30f5-4a70-a156-bf8754b8e072@intel.com/
+Fixes: b40b15e1521f ("mt76: add usb support to mt76 layer")
+Co-developed-by: Xu Rao <raoxu@uniontech.com>
+Signed-off-by: Xu Rao <raoxu@uniontech.com>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
 ---
- drivers/phy/qualcomm/phy-qcom-qmp-usbc.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/net/wireless/mediatek/mt76/usb.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c b/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c
-index cf12a6f12134..5e7fcb26744a 100644
---- a/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c
-+++ b/drivers/phy/qualcomm/phy-qcom-qmp-usbc.c
-@@ -1124,6 +1124,9 @@ static const struct of_device_id qmp_usbc_of_match_table[] = {
- 	}, {
- 		.compatible = "qcom,qcm2290-qmp-usb3-phy",
- 		.data = &qcm2290_usb3phy_cfg,
-+	}, {
-+		.compatible = "qcom,qcs615-qmp-usb3-phy",
-+		.data = &qcm2290_usb3phy_cfg,
- 	}, {
- 		.compatible = "qcom,sdm660-qmp-usb3-phy",
- 		.data = &sdm660_usb3phy_cfg,
+diff --git a/drivers/net/wireless/mediatek/mt76/usb.c b/drivers/net/wireless/mediatek/mt76/usb.c
+index 58ff06823389..f9e67b8c3b3c 100644
+--- a/drivers/net/wireless/mediatek/mt76/usb.c
++++ b/drivers/net/wireless/mediatek/mt76/usb.c
+@@ -33,9 +33,9 @@ int __mt76u_vendor_request(struct mt76_dev *dev, u8 req, u8 req_type,
+ 
+ 		ret = usb_control_msg(udev, pipe, req, req_type, val,
+ 				      offset, buf, len, MT_VEND_REQ_TOUT_MS);
+-		if (ret == -ENODEV)
++		if (ret == -ENODEV || ret == -EPROTO)
+ 			set_bit(MT76_REMOVED, &dev->phy.state);
+-		if (ret >= 0 || ret == -ENODEV)
++		if (ret >= 0 || ret == -ENODEV || ret == -EPROTO)
+ 			return ret;
+ 		usleep_range(5000, 10000);
+ 	}
 -- 
-2.34.1
+2.45.2
 
 
