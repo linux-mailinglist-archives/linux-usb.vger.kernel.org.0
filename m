@@ -1,94 +1,92 @@
-Return-Path: <linux-usb+bounces-18764-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18766-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACC8C9FB9CD
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 07:24:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FBC99FBA00
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 07:57:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 288E916471E
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 06:24:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 775F718832F5
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 06:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B41A17BB16;
-	Tue, 24 Dec 2024 06:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0094B183CD1;
+	Tue, 24 Dec 2024 06:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xbdqtSQe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A5DE13774D
-	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 06:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC1727702;
+	Tue, 24 Dec 2024 06:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735021444; cv=none; b=hK8aXQHNluVn4MDb7sKXy5wMnLdw5Rb3h7D6uwFFZvDiTu7iEcL0Hp9LtH5Ke0ggBTiaPHc2ROhGu5TPZdcvNsrJ/g37aV+tgXKQ9TqxpgdBABOrslljpCxV5v7nXu5plIXtaZJ4CCLLRSlpOHQLih0KnvPcthfkud/RW5arduE=
+	t=1735023444; cv=none; b=jUrl+FnOzUkg8+XMH6GEdJ0JzHZSjO81kf2Eqs/nXqsQRNbDGwiVDasoPbfB5H+kQfLqDmZJXSXMqDHVp/sKQcUpq2Yv3Jv3hn4fVngZwbtmJ7w6jqCqiysEzmtQjeJjkKtm30S8kbUJDyY5XueBxs9Pr4NdN+zKQu4EEWlfcLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735021444; c=relaxed/simple;
-	bh=MXzlKSwOGCI1XXQ61VjEYAgCn6j6p10k4UqY5qMglZw=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=PbXIHlQVaqc1HmbJ7gb3W4aHHs5V8TB2Psk2O1Rv50pEKGj3zQWdP4MkvTBXbfLtlciADmdyNR/JI7t372+xLwDzL8FOa563OrLG/Hcr4xWlHWlgRrtD+KTgVCVIAroPu1twPlTObNqmddz5zy0mtzDCDNP/5575xct3BhJHrCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3a7e0d5899bso107099965ab.0
-        for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2024 22:24:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735021442; x=1735626242;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SblzuJBesHFVjaNJKKW8WutChPVdT51mxhglVDJXNiE=;
-        b=TiCmLRA8XM6XVMkQ3cJKAPLGltPLNLn7h5NFBs3XYg6xnyx7u/OBVjVyDTKLZuIL0i
-         s4WT4LrNfTzL2gm3wzhO3hrlJiIc7e9pfe70fvpC5kGRGawme5z9C/rRtIwvXstOmlP4
-         d4v4H9SoVMfUVYO/1lgR760DNn4fotVFc7FB0UK74TLyAsJzNIVBXfTDmaG5LWDPAVih
-         NvIc2+B0yreT3KS8DeeCyp8ivjmNa8H4INEJg/d08d08uYw4SkmP/xwXRLhZG8XuOUiu
-         2vqiBN32MIAArKHyuILX/5rK12a4RfTtNJ7mkJdFNqgCFH5aneT3EvaPr5utbn6KyxOJ
-         B8CQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjDO5tUWCtM7G3GZB5OtS1nfWmwW50vYmiQhBndNo5FDhWrJrfrZO2OVTi4fUP5FTohlAR4MEjo9Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwSqi6yMn1S3RSDPAeo6983FaOZe3hNYD0dC2Hixmof0YT2rpkw
-	h5BbQy9NRzfr9zRIyEklu4Y8RNT6MwEni54XVP5P4PtEVF3lcH8qtsBM7oFAsVCFaTVs+KYZ7oI
-	eeq8tSbfnnPiffw5KZtU5YomdSodS2MGRWACXsBS/2D3vbBGIVGnWOVg=
-X-Google-Smtp-Source: AGHT+IH5Hx62rRepnJelJtQJ8sdAWuFF5a3JpWmRIfv6/1eGAfZAGB/MKANmjkpA7PjVg1BABMu96SJYY0CPLJHJNwgC8idATgJ/
+	s=arc-20240116; t=1735023444; c=relaxed/simple;
+	bh=SNH4I1aYLVRvyxMIWpO8H+OiNsIEteJedPisSBmZ4qI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uFmNbXicnqOn5BHGSDIwv3bq/ViAJ5lD1eI2kjbOIveykVCXEwfdyVqD9RiRVgLGUjbQ268ebXLb5/gIMgAOagIzJMt+d8obl6IqjI4Kv6aMAK/tGxlt2734GxMmKaorNy7nCph3GyxaKd2Ing0tUmkXfTgcJSI0Jd9lKpWIBvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xbdqtSQe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4348BC4CED0;
+	Tue, 24 Dec 2024 06:57:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1735023443;
+	bh=SNH4I1aYLVRvyxMIWpO8H+OiNsIEteJedPisSBmZ4qI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=xbdqtSQePNPK01pFOeTP5xjDpIhH64jEV4vHedCaccttIzMtddIbZPu06ozSNnBIv
+	 mbbZhUcuPntaFYqSYKEKqvWqQz8mIGmsK9cHis9eCU6XFXQ1DstaSdhi+eGTlT8bgv
+	 aC681Z/sM5iMN/qx1l/r+PPP9s7/t+TlMGOclzpc=
+Date: Tue, 24 Dec 2024 07:56:38 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Benson Leung <bleung@chromium.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Pavan Holla <pholla@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, linux-usb@vger.kernel.org,
+	chrome-platform@lists.linux.dev
+Subject: Re: [PATCH v11 2/2] usb: typec: ucsi: Implement ChromeOS UCSI driver
+Message-ID: <2024122433-aids-varnish-8a5b@gregkh>
+References: <20241210144527.1657888-1-ukaszb@chromium.org>
+ <20241210144527.1657888-3-ukaszb@chromium.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:34a0:b0:3a7:21ad:72a9 with SMTP id
- e9e14a558f8ab-3c2d5152acfmr130327635ab.17.1735021442596; Mon, 23 Dec 2024
- 22:24:02 -0800 (PST)
-Date: Mon, 23 Dec 2024 22:24:02 -0800
-In-Reply-To: <672ad9a8.050a0220.2a847.1aac.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <676a5382.050a0220.2f3838.015e.GAE@google.com>
-Subject: Re: [syzbot] [scsi?] [usb?] WARNING: bad unlock balance in sd_revalidate_disk
-From: syzbot <syzbot+331e232a5d7a69fa7c81@syzkaller.appspotmail.com>
-To: James.Bottomley@HansenPartnership.com, axboe@kernel.dk, hch@lst.de, 
-	james.bottomley@hansenpartnership.com, linux-block@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org, 
-	linux-usb@vger.kernel.org, martin.petersen@oracle.com, ming.lei@redhat.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241210144527.1657888-3-ukaszb@chromium.org>
 
-syzbot has bisected this issue to:
+On Tue, Dec 10, 2024 at 02:45:27PM +0000, Łukasz Bartosik wrote:
+> From: Pavan Holla <pholla@chromium.org>
+> 
+> Implementation of a UCSI transport driver for ChromeOS.
+> This driver will be loaded if the ChromeOS EC implements a PPM.
+> 
+> Signed-off-by: Pavan Holla <pholla@chromium.org>
+> Co-developed-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> Signed-off-by: Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
+> Co-developed-by: Łukasz Bartosik <ukaszb@chromium.org>
+> Signed-off-by: Łukasz Bartosik <ukaszb@chromium.org>
+> ---
+>  MAINTAINERS                           |   7 +
+>  drivers/usb/typec/ucsi/Kconfig        |  13 +
+>  drivers/usb/typec/ucsi/Makefile       |   1 +
+>  drivers/usb/typec/ucsi/cros_ec_ucsi.c | 337 ++++++++++++++++++++++++++
 
-commit f1be1788a32e8fa63416ad4518bbd1a85a825c9d
-Author: Ming Lei <ming.lei@redhat.com>
-Date:   Fri Oct 25 00:37:20 2024 +0000
+Given all of the 0-day reports I now have in my inbox for this driver,
+I'm going to drop this series from my tree.  Chromium developers, please
+do better testing, these are simple build issues that you all should
+have caught way before version 11 of the driver :(
 
-    block: model freeze & enter queue as lock for supporting lockdep
+thanks,
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=117bbf30580000
-start commit:   c88416ba074a Add linux-next specific files for 20241101
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=137bbf30580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=157bbf30580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=704b6be2ac2f205f
-dashboard link: https://syzkaller.appspot.com/bug?extid=331e232a5d7a69fa7c81
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16952b40580000
-
-Reported-by: syzbot+331e232a5d7a69fa7c81@syzkaller.appspotmail.com
-Fixes: f1be1788a32e ("block: model freeze & enter queue as lock for supporting lockdep")
-
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+greg k-h
 
