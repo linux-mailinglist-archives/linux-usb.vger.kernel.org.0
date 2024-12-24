@@ -1,149 +1,166 @@
-Return-Path: <linux-usb+bounces-18768-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18769-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 099F59FBA44
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 08:39:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 832799FBA9F
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 09:46:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59E441637B4
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 07:39:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98DFD160F39
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 08:46:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB5818DF93;
-	Tue, 24 Dec 2024 07:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE58318FDDA;
+	Tue, 24 Dec 2024 08:46:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TqZclh3B"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="YqM9bkAp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A286224EA;
-	Tue, 24 Dec 2024 07:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF47317DE2D
+	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 08:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735025962; cv=none; b=r2GA50IphMUSp8w+VzpwhZnPP8vf6CBmErDPQS0hprjhN6MVRCbCEF88HDqI9eIlW67ni0e8lbTPLyL9oRpzc5JyYBCJsle7LvJ0EVeT8SQScYrIuGUP4RzrJ7bhCHzugkmmlRyBQkQ/MJjmr5g2UqoTO0b+bWT7lS90O7Cv7vc=
+	t=1735029995; cv=none; b=lbpdQlNe+2c+VWvbVWEDcJbjRPtJA++1Bt/UIvGrxW2GzWCRcc4viIHlZZg6Qji2Dn3EgXA+paWlYSHGGpnQj11iVQNxiRzkk3ePWrrJELqAswr4KSpjUEpe+CzfGYbHVQ1fdEU8i83lPp6cC6BS7y5+e6iou2nnIyoCW5FXXxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735025962; c=relaxed/simple;
-	bh=cCQtsKCeEZog/LrYCxk88omHx4Ew2PH39UDmDC7uwBc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TqXmQFybQR0i/TudBR38vOlMgOe3NypBvf602b+pj0e6KV0yVb8b8e9RWYGroh4pPesmHubZpxt/nL8k9alpygiV/LvXivM6NL3UcXStxaHXDd7spb8GNeRqoCbD72r2HEPO8/sFoEH4hQXW5FRE8WVYidIkDtp3GO8EUe2Jk9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TqZclh3B; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F308AC4CED0;
-	Tue, 24 Dec 2024 07:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1735025961;
-	bh=cCQtsKCeEZog/LrYCxk88omHx4Ew2PH39UDmDC7uwBc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TqZclh3BaWFHEbQKMzD9fEyl0NYD8ZDGj2qPafWujR3koUujZls63KurKoBDAofjM
-	 0mziwBwF1YNAXh/0kSRS6yHRVY3/NhEuUVlyTe/DeMamzQsQcLacO4g4ss2/X9UGNz
-	 XGBxEZOfulwiC+GP5QkLEM6NPZiT79eODYOhr5ss=
-Date: Tue, 24 Dec 2024 08:38:37 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Akash M/Akash M <akash.m5@samsung.com>
-Cc: paul@crapouillou.net, Chris.Wulff@biamp.com, tudor.ambarus@linaro.org,
-	m.grzeschik@pengutronix.de, viro@zeniv.linux.org.uk,
-	quic_jjohnson@quicinc.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
-	dh10.jung@samsung.com, naushad@samsung.com, rc93.raju@samsung.com,
-	taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
-	eomji.oh@samsung.com, shijie.cai@samsung.com,
-	alim.akhtar@samsung.com, selvarasu.g@samsung.com,
-	stable@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_fs: Remove WARN_ON in functionfs_bind
-Message-ID: <2024122413-jersey-dimmer-b01a@gregkh>
-References: <CGME20241219125248epcas5p3887188e4df29b7b580cce9cfe6fed79f@epcas5p3.samsung.com>
- <20241219125221.1679-1-akash.m5@samsung.com>
- <0375d572-4c88-40ce-af24-62a8b38fb7bf@samsung.com>
+	s=arc-20240116; t=1735029995; c=relaxed/simple;
+	bh=6m3t0Q+ee8LpnU5pwY7dC/s+jt8r2vlpmVm/8YgvW3o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=JcpCO72Hje1MmR8zH4K33LSrWHRiomfKytRXnjqzkC7mNGGT4d05SDKOU/EBAm8zOLooI1bzxg8KAHex4QCBfEhXd5f9teRq5WDMP5QkwshOI2bEy9KjrNIpotYo9vhcEFkQX0pjhpWinpyVs9ZFdEsDMd+Hq+3vywezzl0Jwj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=YqM9bkAp; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BO195fK016237
+	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 08:46:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=/dFp7/inuZ2ik3aChnKC4Hn4A+aJ5IKNhmJ
+	4jwh2274=; b=YqM9bkAp0N/XzURdMolOT3S28pZZssHslkXEiR52EjCm8EzHhXV
+	BOWDtePHVVPiZI4oUheSNC29xHTV8t1rHH4xIGkuLxBjOfVi6T0LEEG+g6PVA+ZA
+	F8RGiV+nFxfLmm5U5Wv6Yobc/wpBORuloD0Nk6AyQPtAeGtqMj2fhAx8XR0T2Nbr
+	VgHkO/FuEojVQC3ThrVFf/HirKLBLTJL8fVG+jcwlb8EbhoTI8ib3ZH/xkJroD8t
+	BSGYpjIMR9m0CqtDDI02/r7vG53ouzutNzbqtthIMZZ+jZi4cEXDCw+jym6Tj0hn
+	c44P5ABvtHxN5FT0Kr4XgusJPdjrEBg1r1w==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43qk1n1q99-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 08:46:32 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2161d5b3eb5so45541125ad.3
+        for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 00:46:32 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735029991; x=1735634791;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/dFp7/inuZ2ik3aChnKC4Hn4A+aJ5IKNhmJ4jwh2274=;
+        b=axIbb2MlIZ7cQJ3qkPU0k8GDqCpruzTY7Fq0husWH0PqNERW6sdZF9wJ7TtDgOm3Wf
+         pX4C353k34F1lXW87yevLjidVl01DlzRsLD1rmSfWG8uHewJptkAq7y2bWAg6SYFf7rM
+         olzgwIxX2BQNBrg0R7thEXgeTo50vE8NWQn1AXwm87Zk8J/FiPLdUiTfHujGSWqcNf/U
+         zjPGAO7z6yCC5bMbzuBAVRnyn3nhagtVwc0WkCkgzCEBGwDreaAAOTYTyQjib03uBf4n
+         Nsv5iSzxoZ6MnGLGVkdhcMv63jNn4LSKsJ5zDfEcoUIhpq2cW94YnmDpbAxLnUcPo5Ak
+         gTjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXPbzpY6q3jzSkWB9z5dzSeRFPgRwnBkSjE1YDSAh9xCZmgtEnKy6ag2IFNGtwn+OZjfTkaNnMgT2U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz0fMJWkZmO7Y3/AOxK7JN/6v5JUuozlr9hEdrnWmdOIvWwRaSt
+	wXzrF3YJvcpdRdV7kZK3MXto+dQDSmL/asl33ErbqNiu4FgUo0ienLK9ygKMRg+BTV0rcT39wpj
+	iAIYqGyoOggfBavcNvo7lNFsHmtZUtiO5BdZkGYYu7ByGzUD4boqz3Y6KkXI=
+X-Gm-Gg: ASbGnctdJ+qXbTqsXEdDiEc1+XqpNN0VlyWWE8v1zYqx+zAdF/DchShedADVXjsgXyA
+	Ys0OckAEUi354RiBnRx8tjSXuHfQR1Hc2HWZZYqG1PktZVxp9GkAtA5fA9wDPeQrBgW84QI5jmo
+	2j64J9K65flF7/qYIZf3vULx4OtGZwMM8u9P+Uftz40U7ZNVKFmGTCqPVjtRJvV2400VhW0XGvR
+	u4LYUbGQXU8a6Xk2SawbEIfYwjNGIpTeyumgx8fnKkJzWkq8yUvs5iX3Q1CfZXmE9r5phEPRf2F
+	Hv8BJROUsHRdubxcNTM=
+X-Received: by 2002:a17:903:2306:b0:205:4721:19c with SMTP id d9443c01a7336-219e6f1448cmr197392635ad.37.1735029991379;
+        Tue, 24 Dec 2024 00:46:31 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFx6N+BNVCJnCmEfHaE8WX8Zsoe41fiC374QBtCvPlMKHKhsQSSjWcfjL9+FH+eBLnuvq+wjg==
+X-Received: by 2002:a17:903:2306:b0:205:4721:19c with SMTP id d9443c01a7336-219e6f1448cmr197392315ad.37.1735029990976;
+        Tue, 24 Dec 2024 00:46:30 -0800 (PST)
+Received: from hu-kriskura-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f692fsm85471195ad.216.2024.12.24.00.46.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 24 Dec 2024 00:46:30 -0800 (PST)
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, quic_ppratap@quicinc.com,
+        quic_jackp@quicinc.com,
+        Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+Subject: [PATCH v3 0/3] Add support for USB controllers on QCS615
+Date: Tue, 24 Dec 2024 14:16:18 +0530
+Message-Id: <20241224084621.4139021-1-krishna.kurapati@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0375d572-4c88-40ce-af24-62a8b38fb7bf@samsung.com>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: CU09UM3OmaZpEcWccKk5IASJmeNjFY6f
+X-Proofpoint-GUID: CU09UM3OmaZpEcWccKk5IASJmeNjFY6f
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ phishscore=0 lowpriorityscore=0 mlxlogscore=999 clxscore=1011 spamscore=0
+ impostorscore=0 mlxscore=0 suspectscore=0 priorityscore=1501 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2412240073
 
-On Tue, Dec 24, 2024 at 12:12:49PM +0530, Akash M/Akash M wrote:
-> 
-> On 12/19/2024 6:22 PM, Akash M wrote:
-> > This commit addresses an issue related to below kernel panic where
-> > panic_on_warn is enabled. It is caused by the unnecessary use of WARN_ON
-> > in functionsfs_bind, which easily leads to the following scenarios.
-> >
-> > 1.adb_write in adbd               2. UDC write via configfs
-> >    =================	             =====================
-> >
-> > ->usb_ffs_open_thread()           ->UDC write
-> >   ->open_functionfs()               ->configfs_write_iter()
-> >    ->adb_open()                      ->gadget_dev_desc_UDC_store()
-> >     ->adb_write()                     ->usb_gadget_register_driver_owner
-> >                                        ->driver_register()
-> > ->StartMonitor()                       ->bus_add_driver()
-> >   ->adb_read()                           ->gadget_bind_driver()
-> > <times-out without BIND event>           ->configfs_composite_bind()
-> >                                            ->usb_add_function()
-> > ->open_functionfs()                        ->ffs_func_bind()
-> >   ->adb_open()                               ->functionfs_bind()
-> >                                         <ffs->state !=FFS_ACTIVE>
-> >
-> > The adb_open, adb_read, and adb_write operations are invoked from the
-> > daemon, but trying to bind the function is a process that is invoked by
-> > UDC write through configfs, which opens up the possibility of a race
-> > condition between the two paths. In this race scenario, the kernel panic
-> > occurs due to the WARN_ON from functionfs_bind when panic_on_warn is
-> > enabled. This commit fixes the kernel panic by removing the unnecessary
-> > WARN_ON.
-> >
-> > Kernel panic - not syncing: kernel: panic_on_warn set ...
-> > [   14.542395] Call trace:
-> > [   14.542464]  ffs_func_bind+0x1c8/0x14a8
-> > [   14.542468]  usb_add_function+0xcc/0x1f0
-> > [   14.542473]  configfs_composite_bind+0x468/0x588
-> > [   14.542478]  gadget_bind_driver+0x108/0x27c
-> > [   14.542483]  really_probe+0x190/0x374
-> > [   14.542488]  __driver_probe_device+0xa0/0x12c
-> > [   14.542492]  driver_probe_device+0x3c/0x220
-> > [   14.542498]  __driver_attach+0x11c/0x1fc
-> > [   14.542502]  bus_for_each_dev+0x104/0x160
-> > [   14.542506]  driver_attach+0x24/0x34
-> > [   14.542510]  bus_add_driver+0x154/0x270
-> > [   14.542514]  driver_register+0x68/0x104
-> > [   14.542518]  usb_gadget_register_driver_owner+0x48/0xf4
-> > [   14.542523]  gadget_dev_desc_UDC_store+0xf8/0x144
-> > [   14.542526]  configfs_write_iter+0xf0/0x138
-> >
-> > Fixes: ddf8abd25994 ("USB: f_fs: the FunctionFS driver")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Akash M <akash.m5@samsung.com>
-> >
-> > diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> > index 2920f8000bbd..92c883440e02 100644
-> > --- a/drivers/usb/gadget/function/f_fs.c
-> > +++ b/drivers/usb/gadget/function/f_fs.c
-> > @@ -2285,7 +2285,7 @@ static int functionfs_bind(struct ffs_data *ffs, struct usb_composite_dev *cdev)
-> >   	struct usb_gadget_strings **lang;
-> >   	int first_id;
-> >   
-> > -	if (WARN_ON(ffs->state != FFS_ACTIVE
-> > +	if ((ffs->state != FFS_ACTIVE
-> >   		 || test_and_set_bit(FFS_FL_BOUND, &ffs->flags)))
-> >   		return -EBADFD;
-> >   
-> Hi Greg,
-> 
-> I realized there's a minor nitpick with the patch I submitted - 
-> specifically a pair of extra brackets not removed.
-> 
-> Do you want me to proceed with sending a v2 to address this, or is this 
-> something you can take care while applying this patch?
+This series aims at enabling USB on QCS615 which has 2 USB controllers.
+The primary controller is SuperSpeed capable and secondary one is
+High Speed only capable. The High Speed Phy is a QUSB2 phy and the
+SuperSpeed Phy is a QMP Uni Phy which supports non-concurrent DP.
 
-It's already in my tree, as you should have gotten an email about that.
+Link to v1:
+https://lore.kernel.org/all/20241014084432.3310114-1-quic_kriskura@quicinc.com/
 
-Just send a cleanup patch for later, it's not a big deal.
+Link to v2:
+https://lore.kernel.org/all/20241017130701.3301785-1-quic_kriskura@quicinc.com/
 
-thanks,
+All the patches are acked. But some are merged and some don't apply clean.
 
-greg k-h
+Phy bindings have been acked on v1 and have been merged from v1.
+
+The v2 DWC3 binding patch has been acked but conflicts with sar2130 code
+and hence v2-patch-1 doesn't apply cleanly.
+
+The QUSB2 phy driver changes in v2 conflict with IPQ changes that went in
+recently and hence v2-patch-4 doesn't apply cleanly.
+
+Changes in v3:
+Rebase on top of latest linux next to avoid conflicts.
+Updated mail ID from quicinc to OSS. So changed the SOBs and retained the
+ACKs since the author is still the same.
+Updated cover letter heading since the changes are for both ports and DT
+for first port is merged and second port is ACKed.
+
+Changes in v2:
+Addressed comments in v1 by using lowercase for reg values.
+Removed explicitly setting of struct params to false (as they are
+already false).
+
+Krishna Kurapati (3):
+  dt-bindings: usb: qcom,dwc3: Add QCS615 to USB DWC3 bindings
+  phy: qcom-qusb2: Add support for QCS615
+  phy: qcom: qmp-usbc: Add qmp configuration for QCS615
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |  3 +++
+ drivers/phy/qualcomm/phy-qcom-qmp-usbc.c      |  3 +++
+ drivers/phy/qualcomm/phy-qcom-qusb2.c         | 27 +++++++++++++++++++
+ 3 files changed, 33 insertions(+)
+
+-- 
+2.34.1
+
 
