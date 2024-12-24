@@ -1,150 +1,180 @@
-Return-Path: <linux-usb+bounces-18774-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18775-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1B269FBADC
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 10:02:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D2199FBBBD
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 10:59:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B61F41884B51
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 09:02:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F4A316A40A
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 09:53:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99E8819DF98;
-	Tue, 24 Dec 2024 09:02:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE9E51C5CB8;
+	Tue, 24 Dec 2024 09:49:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Vwqmvhr2"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="B4O+M/Zw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
+Received: from mail-m32123.qiye.163.com (mail-m32123.qiye.163.com [220.197.32.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86FA5EC0;
-	Tue, 24 Dec 2024 09:02:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36D241B3926;
+	Tue, 24 Dec 2024 09:49:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735030944; cv=none; b=qA2QlvKr44nYal7032GMmNdvdUtC/xyP7qIfcl7m9ubfqrE2WBQ+/X7B1WCqgxlvCx2USEnETUEK4sQ1Ns0Hy1HKNvK7HHXwZE6quLmPX9QemuKCMH21QTZFGY3QgJ8SyTLlvjRaFGtBALpMD36S2Eqcp3cDA/P9Lh9hTbtl4aw=
+	t=1735033777; cv=none; b=CUhpAF/zrPS5rmhXRysRd4mDjC8LDRs99XvSb8CnQbqdbP/zVN6sVaU78ZdIX7yE7/AtAFSxAeI4W1FKVlyCLCrbeDIHtkMSTKrE+Eyjd1Sv5Rsh0buymwP5QqkjjbVMR6aTTaQ0Dc1Qv/4NmjjakIn7NuqYbEXaeng7kYBG2CA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735030944; c=relaxed/simple;
-	bh=dR3J2AO7c6sZEVZYUFLwld1S6Z3ZBTYtkfqqtrwEmb8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LnMG2cKD0YDZQKxoOFe5cABu72UUebcsMuuab18v+7b2rcsMA/Uu9nzVJLu1apwKjxJ+hfxdoZCRWP0KMn7qIZOJIYgU7r2Qa4bM1S2ycpaTOw3M17unbL/tmHO64x+W4t6zt0G/Vf/JOTlFAlpm4aZJPW2CEbekrplbP0d51Wo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Vwqmvhr2; arc=none smtp.client-ip=52.59.177.22
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1735030934;
-	bh=pnRVptCir55iRN6tACq8biJmBmLFjYWt0eJCtl4slZk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=Vwqmvhr2xJPpcZU+S+2LqoGEXFXXs34MMbBfN+BaJCSZtV/9S4wuJu7cvE4MfQnby
-	 e3MHrGw/7j3aAPuUOkJpIkCdTYPTTicwc4ZZ509oxpyI6HL1Migu1aq2FLGxS4zxW0
-	 y0zLab5wFQFP6KEUUSJoAsmHWpLVVJPhWTe7yL/A=
-X-QQ-mid: bizesmtpip4t1735030894tk5g8f5
-X-QQ-Originating-IP: 96GmDbkbkKRgISxbB+698YkwYAo3Wyh+yJTBMgPP/c4=
-Received: from [IPV6:240e:668:120a::253:10f] ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 24 Dec 2024 17:01:28 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 9337975073141793265
-Message-ID: <EA91BB1E8AC92ED0+6715c92f-3b3b-4a86-82bf-4704c3b9f36a@uniontech.com>
-Date: Tue, 24 Dec 2024 17:01:28 +0800
+	s=arc-20240116; t=1735033777; c=relaxed/simple;
+	bh=FyoNrvG944raOlEcqGIAFdzTG2vSx7b14uZG3/FwDOs=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=i+47Ithy00snwT4bOIIazkWcKuIPZWnCYXtAwkKuCar0gE0ar8bzyXgnD8z8e9ZUfKd3+j/DmHrRFZOU7oqdVy0mO8sMVBaPwMTuVB6l1L5S7udNzoXHUw4Lu6dNQEEYyBeZXtZ9kKrmNGHE2g23Puou4U4BfklnA1yAZN0Q4VA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=B4O+M/Zw; arc=none smtp.client-ip=220.197.32.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 6aad4ed7;
+	Tue, 24 Dec 2024 17:49:21 +0800 (GMT+08:00)
+From: Kever Yang <kever.yang@rock-chips.com>
+To: heiko@sntech.de
+Cc: linux-rockchip@lists.infradead.org,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Simon Xue <xxm@rock-chips.com>,
+	Guenter Roeck <linux@roeck-us.net>,
+	Mark Brown <broonie@kernel.org>,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	Jamie Iles <jamie@jamieiles.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	linux-pci@vger.kernel.org,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Johan Jonker <jbx6244@gmail.com>,
+	David Airlie <airlied@gmail.com>,
+	dri-devel@lists.freedesktop.org,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	linux-i2c@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	FUKAUMI Naoki <naoki@radxa.com>,
+	linux-pwm@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Andy Yan <andyshrk@163.com>,
+	linux-serial@vger.kernel.org,
+	Michael Riesch <michael.riesch@wolfvision.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	devicetree@vger.kernel.org,
+	Diederik de Haas <didi.debian@cknow.org>,
+	linux-watchdog@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Lee Jones <lee@kernel.org>,
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	Shresth Prasad <shresthprasad7@gmail.com>,
+	Tim Lunn <tim@feathertop.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Dragan Simic <dsimic@manjaro.org>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	linux-mmc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Subject: [PATCH v2 00/17] rockchip: Add rk3562 support
+Date: Tue, 24 Dec 2024 17:49:03 +0800
+Message-Id: <20241224094920.3821861-1-kever.yang@rock-chips.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RESEND. PATCH] mt76: mt76u_vendor_request: Do not print error
- messages when -EPROTO
-To: Alexander Lobakin <aleksander.lobakin@intel.com>,
- Kalle Valo <kvalo@kernel.org>
-Cc: nbd@nbd.name, lorenzo@kernel.org, ryder.lee@mediatek.com,
- shayne.chen@mediatek.com, sean.wang@mediatek.com, kvalo@kernel.org,
- matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
- davem@davemloft.net, andrew+netdev@lunn.ch, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, alexander.deucher@amd.com,
- gregkh@linuxfoundation.org, rodrigo.vivi@intel.com,
- linux-wireless@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- raoxu@uniontech.com, guanwentao@uniontech.com, zhanjun@uniontech.com,
- cug_yangyuancong@hotmail.com, lorenzo.bianconi@redhat.com,
- kvalo@codeaurora.org, sidhayn@gmail.com, lorenzo.bianconi83@gmail.com,
- sgruszka@redhat.com, keescook@chromium.org, markus.theil@tu-ilmenau.de,
- gustavoars@kernel.org, stf_xl@wp.pl, romain.perier@gmail.com,
- apais@linux.microsoft.com, mrkiko.rs@gmail.com, oliver@neukum.org,
- woojung.huh@microchip.com, helmut.schaa@googlemail.com,
- mailhol.vincent@wanadoo.fr, dokyungs@yonsei.ac.kr, deren.wu@mediatek.com,
- daniel@makrotopia.org, sujuan.chen@mediatek.com,
- mikhail.v.gavrilov@gmail.com, stern@rowland.harvard.edu,
- linux-usb@vger.kernel.org, leitao@debian.org, dsahern@kernel.org,
- weiwan@google.com, netdev@vger.kernel.org, horms@kernel.org, andrew@lunn.ch,
- leit@fb.com, wang.zhao@mediatek.com, chui-hao.chiu@mediatek.com,
- lynxis@fe80.eu, mingyen.hsieh@mediatek.com, yn.chen@mediatek.com,
- quan.zhou@mediatek.com, dzm91@hust.edu.cn, gch981213@gmail.com,
- git@qrsnap.io, jiefeng_li@hust.edu.cn, nelson.yu@mediatek.com,
- rong.yan@mediatek.com, Bo.Jiao@mediatek.com, StanleyYP.Wang@mediatek.com
-References: <1E6ABDEA91ADAB1A+20241218090833.140045-1-wangyuli@uniontech.com>
- <a2bbdfb4-19ed-461e-a14b-e91a5636cc77@intel.com>
- <5DB5DA2260D540B9+359f8cbf-e560-495d-8afe-392573f1171b@uniontech.com>
- <531681bd-30f5-4a70-a156-bf8754b8e072@intel.com>
-Content-Language: en-US
-From: WangYuli <wangyuli@uniontech.com>
-Autocrypt: addr=wangyuli@uniontech.com; keydata=
- xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSKP+nX39DN
- IVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAxFiEEa1GMzYeuKPkg
- qDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMBAAAKCRDF2h8wRvQL7g0UAQCH
- 3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfPbwD/SrncJwwPAL4GiLPEC4XssV6FPUAY
- 0rA68eNNI9cJLArOOARmgSyJEgorBgEEAZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7
- VTL0dvPDofBTjFYDAQgHwngEGBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIb
- DAAKCRDF2h8wRvQL7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkU
- o9ERi7qS/hbUdUgtitI89efbY0TVetgDsyeQiwU=
-In-Reply-To: <531681bd-30f5-4a70-a156-bf8754b8e072@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: Occa2ms7+ZuO0HEd1vEbG4OctzQaQAfe3yX6dEKSmJTPJowQRzS7t3ti
-	7eaoxLRI5OFll0inSCKEwb4aH8FTxUr5tjk9S6QEyqOJLJiqydLZn0enWM17zFo9r/gvQ1t
-	7+mCNk3H3GKDBmYnlR02VjxiR5hCBIyZe+eCEr/fOKOw4rv84zYEkKqdu6MDXNi/7xgZtH5
-	IiwcdQkdbiDrgzUIistUq3RW6BI8/n0hNZI9cJrPe/MMSsuw5EUyviEMfGNjPJFOcAK3BkY
-	BvshkB6WGv3L5+SAfR9wiWYDMXwAJxSzs6jwWIp+BGaTLkQYJUyPcO8TOOFr+zBLEHdQoNT
-	XBmrGZgUqiXBeyE7XJVFdBbS9vnNzNIQtYu/jK/VuowfxMsX5HrctHJiJ/v998jEv2stn/l
-	fXtmkUFCqP9ijxrSykj74/LyBuCftGzid6XvUCisk7ovg9fiHmxJnQ12phkRCmgRocI+/Ao
-	4/ofH/MHGLbA73ajPSJy/vGKM7zLbcYMNoFX4ADgDIr/E/zcqn9gquY314tbEqFD9hGuakU
-	6G5r3/3aDouGCiFhYnKb6EbwQUVYtqKUv4IHP8DR5xrdhyH99NJrq2d0hiPz7vzHYYXVrb4
-	g9TgUCOSb2e5ZA/pSov17JrsPkXHEY7Q/Pplk/lT+igq/n5YbFCGLgNLOIEnpE7iaU68gPg
-	JE5D1FWSSDPBLiA838ugWDqUbxEyV990BYIUT1vvh81tLayniw0ArgaYszcLNEXK63RTNK0
-	Gd9lv4dZAvJapxynwWu+fakm8QAAJ+NzM7J7Q2QwynxwxQ0c1jFZWlvOCWFNgeFQWV22nP/
-	Jsk8SSVWu3nkEiPCH0LSWa3N7r5sfYjPXX/UfQD1VAWrRkehSjg+tTEK6o8Dy9ZPSY2burG
-	2H63BK1mp7tb0rhNWRu04g55TC6gKD9RCDUHWgz4m4IbdySipLVm7np4mKCB+dA5bJk3U1o
-	LWz1hCOqK/zSynwqoTKOf4RBM0+C2QJwHva4cfdjUde//vyvdTsCYyx4cJYtNLnhoFFnqe3
-	ZBaDA2PMoYiUm2NPdv
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
-X-QQ-RECHKSPAM: 0
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQx1OGFZCHUlLSB0dSx5OTE9WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEpKQk
+	1VSktLVUpCWQY+
+X-HM-Tid: 0a93f8122e8303afkunm6aad4ed7
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PxA6ODo6AjIJHEoJS1EdLD8s
+	DxEKCU5VSlVKTEhOS0hITE1PQ0xDVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFJTUJDNwY+
+DKIM-Signature:a=rsa-sha256;
+	b=B4O+M/Zw24LyURNcEw+WhDYJK29iAHTi0p4dShi0/NhEClO4QvsLlaGzwjfu6wmFcSn5fN5xHurXqhfa05Z/V+HFtpARvcipLUAtfEvn/JVqKw3D5bl5WacGOSbQ9WTLN3PzdpWIg/Xxm3+foqpbqwx3bhj89Wvq4UKSq85Zlys=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=oAXD/EvvyZpJMisxlK2FCVt8jBq9aehKbViTNvrjWK8=;
+	h=date:mime-version:subject:message-id:from;
 
 
-On 2024/12/19 23:23, Alexander Lobakin wrote:
-> So you need to add the correct tree and/or subject prefix and specify
-> "Fixes:" tag with the commit this change fixes.
->
->> ...
-> I'm not a wireless expert, from my PoV sounds good. Just describe
-> everything in details in the commit message, so that it will be clear
-> for everyone.
+This patch set adds rk3562 SoC and its evb support.
 
-Hi, I have attached the new patch as requested for your review.
+Split out patches belong to different subsystem.
 
-Link: 
-https://lore.kernel.org/all/BA065B146422EE5B+20241224085244.629015-1-wangyuli@uniontech.com/ 
+Test with GMAC, USB, PCIe, EMMC, SD Card.
 
+This patch set is base on the patche set for rk3576 evb1 support.
 
-Please let me know if you have any questions.
+Changes in v2:
+- Update in sort order
+- remove grf in cru
+- Update some properties order
 
+Finley Xiao (2):
+  arm64: dts: rockchip: add core dtsi for RK3562 Soc
+  arm64: dts: rockchip: Add RK3562 evb2 devicetree
 
-Thanks,
+Kever Yang (15):
+  dt-bindings: PCI: dwc: rockchip: Add rk3562 support
+  dt-bindings: mmc: Add support for rk3562 eMMC
+  dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
+  dt-bindings: power: rockchip: Add bindings for rk3562
+  dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
+  dt-bindings: gpu: Add rockchip,rk3562-mali compatible
+  dt-bindings: watchdog: Add rk3562 compatible
+  dt-bindings: spi: Add rockchip,rk3562-spi compatible
+  dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
+  dt-bindings: usb: dwc3: add compatible for rk3562
+  dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
+  dt-bindings: rockchip: pmu: Add rk3562 compatible
+  dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
+  dt-bindings: arm: rockchip: Add rk3562 evb2 board
+  dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
+
+ .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+ .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
+ .../bindings/gpu/arm,mali-bifrost.yaml        |    3 +-
+ .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
+ .../devicetree/bindings/mfd/syscon.yaml       |    2 +
+ .../bindings/mmc/rockchip-dw-mshc.yaml        |    1 +
+ .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |    9 +-
+ .../bindings/pci/rockchip-dw-pcie.yaml        |    1 +
+ .../power/rockchip,power-controller.yaml      |    1 +
+ .../devicetree/bindings/pwm/pwm-rockchip.yaml |    1 +
+ .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
+ .../devicetree/bindings/soc/rockchip/grf.yaml |    7 +
+ .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
+ .../bindings/usb/rockchip,dwc3.yaml           |    3 +
+ .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+ .../boot/dts/rockchip/rk3562-evb2-v10.dts     |  520 ++++
+ .../boot/dts/rockchip/rk3562-pinctrl.dtsi     | 2352 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3562.dtsi      | 1432 ++++++++++
+ 19 files changed, 4340 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562.dtsi
 
 -- 
+2.25.1
 
-WangYuli
 
