@@ -1,92 +1,111 @@
-Return-Path: <linux-usb+bounces-18780-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18781-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE8AE9FBD95
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 13:54:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AC159FBDA2
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 13:56:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 346487A1E59
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 12:54:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DFF0C188468B
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 12:56:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1572A1C5F25;
-	Tue, 24 Dec 2024 12:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B2111D6DA3;
+	Tue, 24 Dec 2024 12:55:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="EG3/2JQq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pv50p00im-ztdg10012001.me.com (pv50p00im-ztdg10012001.me.com [17.58.6.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB1781BDAAE
-	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 12:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8F241C1F20
+	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 12:55:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735044846; cv=none; b=LxmjzX1UsuWYI4HXjBqxSpWEWasNkEivviMeVMkTNX4xxsCN+27k0CLlBocpT6TB0sJoFmdl9JpsVI5DcyrXcwvAROSRl2269k9XRmsgjkXUCoeMkPTL+jU2Z529ELlvz5ALbX2CsLinhBnibhzfdAv3ye85ToWWk0ik0MQHsqE=
+	t=1735044953; cv=none; b=VZY/5ZzI6wRIFYaVY+lq1mds6hEoqrle5uRXGTC8VlgsBDC1Jy6WoEzW2kkj4wtyEU9bqn5xSDmA+cPyTRpw+MKP+KwSjbupAlmtIQECOawAne/Pjysh0bM+/magfO+0RakSug5ACSdcrTIB/rINmWLsCiaicqrKi87EPjVexvQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735044846; c=relaxed/simple;
-	bh=evKkQ6HRgFCs4qvyPiGUzDaLav0G3Y1QWg/On8rwMgs=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=ImRkK/VY2o2RQSLxIfzyclNAP61S09kKSeRZWoPFUBNW670RSmMQlrRs04FIeiXQvpMbj5fKr6JO+m+swZ1yQ+gaSMb3F7DZLKoyw/OvMHEG8hzvVjNOMuTrmCoABgTpUdx/aoUHULS2F4mFltg8yRPXG7YAjzmDxd7pQoiSFac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3a7de3ab182so96876955ab.1
-        for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 04:54:04 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735044844; x=1735649644;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1AXNF3HG5kzxLMUq/sCEuz5IDc2syA6hOB1XtzvB2IU=;
-        b=h6MgXA/0df3EIsEIDrPX12wvjaswsSHEN/WaxWL1TYLGBoCZPS96EIAyBmPpAa0BVF
-         o/ATtEJceqnQvAjeCtkYuVIx2z2MSK6R/fxvb1zfOIvo9rDm38+yrxUVh+t3s21uv4xl
-         V0xdBfq+JiA5jOv0WON/voPcN5G4pzW1vYBaE5nVl6/4hxdOLIKj/CVnz72Jv9ciV/l4
-         3mzKR8dD8IUk0jGposYiOcr3ihs0KttKrfzutBfmcQN34+wvls0blheJ5dBSYoo8rcSD
-         ejCE2gvo1hDRs0ULj62m6sZ21cSxuF4wx7rHwoROo+qjxnhAH0fb35GduD1wPL94NWGt
-         relQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWgQm2k8LVU9BN0Miynrar2LyQod6RxgceMNfSHFYh8vmrGhjV2/AoLo2/QkBqWO0Gyj09SenwvuAI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YybxPXlX6hVHugh7LoG55Buk1sQjnyh9Ch/wek/BLK9U1wTxXMI
-	bCE9fSmHE8yaEgc9pWvB69K0CvXzPnd1sxInLzGtx6iaXLOPIFpPs2y5SXsthO28ao9nzcgioun
-	KbuCBAKo9Ov3hdNYxIYP0/GT7PkY8S9vSclRR4zWPuMOpKpA6ysDjPuA=
-X-Google-Smtp-Source: AGHT+IFjNd65RorbDiw7iPiMhcltosJUGUn7EAB+95J5DOXJQ45jC/wCOMvdSBeDexbbzglCBhMkkC+Z1x7VGvejquji3l3KC5+/
+	s=arc-20240116; t=1735044953; c=relaxed/simple;
+	bh=wJNmse+U2BcREgt6jHP5mffCCar/iqKYYB3PO3YxYco=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tCrK10FMurY21He3GTEBKE8XbovkLea658mh5RbErGPfxU/yEzeC6z5J5Ns0f5aEvVDPT/T+A8DB0ThQwZcGbaka/roQfhyYl9yPQZaK59AoOt1qu4uGrDqaEnXCxRxA4CcQh6Nb3n5dG4dVmKX/N1bgei1lV/hBGDph9MSKSG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=EG3/2JQq; arc=none smtp.client-ip=17.58.6.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1735044950;
+	bh=qcfWDpvVWNhEetxodKQbf9RhUrYXCg1pOSV/TOgjh8E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
+	 x-icloud-hme;
+	b=EG3/2JQqEx9JwRea3li9dBqaxu0my5/071veaECaERiiL2HaxnutzGeLfRCkdliQ+
+	 l940chB1rDnqfX/zgUAMjMfCU9KCfBl50dd3AYHL+BCjR/LpEszClrwiiaaocUKdO0
+	 Dl2mV4JdKdh/0YgEJ9BJeUrYbnqeEK32HyBu1kdqSpd48WyUj+xOOrG2TPE3uWXjqg
+	 r0ghBcmj98blLsL7LbynIl9mcuoDXs3AWmbkxfj5bUUIay9lmZdqN/eU6kd0SaVrTM
+	 GRnywuJAX30KYKqxhMDjwHXII0rz8Gc6kAVu3/J0Bdy+37cstoObgEcm810pSSyaY/
+	 iCj0P90MAhf9w==
+Received: from [192.168.1.25] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10012001.me.com (Postfix) with ESMTPSA id 7FC60A027E;
+	Tue, 24 Dec 2024 12:55:41 +0000 (UTC)
+Message-ID: <16a5d190-29b0-46f5-9845-a1d875211729@icloud.com>
+Date: Tue, 24 Dec 2024 20:55:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:3b85:b0:3a7:8c3f:edce with SMTP id
- e9e14a558f8ab-3c2d14d21a9mr179594035ab.3.1735044843942; Tue, 24 Dec 2024
- 04:54:03 -0800 (PST)
-Date: Tue, 24 Dec 2024 04:54:03 -0800
-In-Reply-To: <672ad716.050a0220.2a847.1a9e.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <676aaeeb.050a0220.2f3838.01aa.GAE@google.com>
-Subject: Re: [syzbot] [usb?] [block?] possible deadlock in blk_mq_alloc_request
-From: syzbot <syzbot+ca7d7c797fee31d2b474@syzkaller.appspotmail.com>
-To: axboe@kernel.dk, hch@lst.de, linux-block@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, ming.lei@redhat.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 05/11] driver core: Simplify API
+ device_find_child_by_name() implementation
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ James Bottomley <James.Bottomley@HansenPartnership.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+ linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+ linux-sound@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+ linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-serial@vger.kernel.org, netdev@vger.kernel.org,
+ Zijun Hu <quic_zijuhu@quicinc.com>
+References: <20241211-const_dfc_done-v4-0-583cc60329df@quicinc.com>
+ <20241211-const_dfc_done-v4-5-583cc60329df@quicinc.com>
+ <20241223203935.00003de0@huawei.com>
+Content-Language: en-US
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <20241223203935.00003de0@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: TfHq9KcTAjJLJHGN7Cnpr8airBeAqUiz
+X-Proofpoint-GUID: TfHq9KcTAjJLJHGN7Cnpr8airBeAqUiz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-24_05,2024-12-24_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 suspectscore=0
+ malwarescore=0 mlxlogscore=846 phishscore=0 mlxscore=0 spamscore=0
+ clxscore=1015 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2412240112
 
-syzbot has bisected this issue to:
+On 2024/12/24 04:39, Jonathan Cameron wrote:
+> There is a subtle difference.  In theory old code could dereference a NULL
+> if parent->p == NULL, now it can't.  Sounds at most like a harmless change but
+> maybe you should mention it.
+> 
 
-commit f1be1788a32e8fa63416ad4518bbd1a85a825c9d
-Author: Ming Lei <ming.lei@redhat.com>
-Date:   Fri Oct 25 00:37:20 2024 +0000
+i did not correct parameter checking for device_find_child_by_name() in
+below commit
 
-    block: model freeze & enter queue as lock for supporting lockdep
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/base/core.c?id=903c44939abc02e2f3d6f2ad65fa090f7e5df5b6
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=15fd34c4580000
-start commit:   c88416ba074a Add linux-next specific files for 20241101
-git tree:       linux-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=17fd34c4580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=13fd34c4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=704b6be2ac2f205f
-dashboard link: https://syzkaller.appspot.com/bug?extid=ca7d7c797fee31d2b474
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1250b630580000
+since this commit will come finally, actually, this commit is the
+original motivation of this whole patch series.
 
-Reported-by: syzbot+ca7d7c797fee31d2b474@syzkaller.appspotmail.com
-Fixes: f1be1788a32e ("block: model freeze & enter queue as lock for supporting lockdep")
+> Otherwise LGTM
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
