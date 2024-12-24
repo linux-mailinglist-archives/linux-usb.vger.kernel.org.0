@@ -1,79 +1,81 @@
-Return-Path: <linux-usb+bounces-18758-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18759-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5584D9FB7E6
-	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 00:34:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C54609FB84F
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 02:41:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D9291884B4A
-	for <lists+linux-usb@lfdr.de>; Mon, 23 Dec 2024 23:35:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4558F1658CB
+	for <lists+linux-usb@lfdr.de>; Tue, 24 Dec 2024 01:41:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20D931CCEE0;
-	Mon, 23 Dec 2024 23:34:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D1E22F19;
+	Tue, 24 Dec 2024 01:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bz2Ws1JQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IzeVsB48"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F7F3398E
-	for <linux-usb@vger.kernel.org>; Mon, 23 Dec 2024 23:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D013B139D
+	for <linux-usb@vger.kernel.org>; Tue, 24 Dec 2024 01:41:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734996887; cv=none; b=OU2IqmzQ1f0Poq+L+aEes9FXt0XTMaJTm0BX6z02z1cg/0cbQoYgSCyzzWDrDVI5K1x+tTRNK4iuuiYtDl+JELDzenMXr+OalEKVC+LTGNs4LYUDrVQkw4j8RowXGekH7EWo2Bo9cgrGyvL1MMk7hyp23z/w2q/aBO+b++X5NdA=
+	t=1735004492; cv=none; b=KUYYd2HmdInDvC3tB2JQJw2OCxe88RMyCPCPEKxwHmGpBM6J8yWOa/5PC3dLpM0TDFeZfR1gxzVToulF1wekeoJY74+Nh1Bkk5JDuAHXjvwlwJPcMOd9hgy8wWbve9mC1BNycq7oyPy9lYroY3wpYLf/o7VqDShKK6JUIDTd7Eo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734996887; c=relaxed/simple;
-	bh=+0jixxcc3JTpt4Kg5KFB7KP2WW4k+M68cpA5CLLJoSs=;
+	s=arc-20240116; t=1735004492; c=relaxed/simple;
+	bh=ntAdJ39PK3EGoanprL+FLMeQD7O7Yi1AZjE3z5QrdBI=;
 	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=fXlSNz9rTv8zj0erqI3Zgj8tIrg2+bzRGeM4DYSPMQr8E4kc7XcEEEJtHn8rwuIs9Qb7SetSsn364SP1BwvCV2/tWCccASADr2ktmcHTo9c4yNRnjPAOAHwVOI3HqJ61fWjDOWZZkhMDMHbIVu+/gyAt8ukRhI7E0clfTVWHyiA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bz2Ws1JQ; arc=none smtp.client-ip=192.198.163.19
+	 Content-Disposition; b=Z/slcrwFkBka+94flu8/neB0LUSANutclr6RRE3YDVeZItJcNRSpvNQBhcDjtv2uDQDkmju2xHR2SKD5EB6W/2BVpuV+KxE4R/PjsInIl7IYvRPlMxERJrzJJmly8N40acxVdAOUOcpa3VAfAseABlcDufsa/xdxnpoIzZAAFkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IzeVsB48; arc=none smtp.client-ip=192.198.163.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734996885; x=1766532885;
+  t=1735004491; x=1766540491;
   h=date:from:to:cc:subject:message-id:mime-version;
-  bh=+0jixxcc3JTpt4Kg5KFB7KP2WW4k+M68cpA5CLLJoSs=;
-  b=bz2Ws1JQfB4lSRYGlKBdz6AhbbTuAgH4Z0RR9lMZYtI31ctb2BGeaR/O
-   uZVTJKaoqWUX/n6SAxMIml0GXqAaZTLCO5eLR0ZZ4ywcJMdJjmd18r65v
-   T4rAqxInM5j2I1VL9x18wkp1mgibpYSbsSy57kHmCNjbIWxmgqoOmnBek
-   aGgTmuvukM8xThrZy7d5TeEK2FkNQDf5dVKYcwXRaQVUxqqgLt92HjA1U
-   agGxrGQiE60e1TRgzDU1fpgq0qV4tVrptADSm44PdZNZKqQmdKeSn6ic8
-   mMUmkxoZyyHFAvxxOHOqdHbJ0t66DxzkkcxF7LggeqrnhpWSleP1o2mK9
-   g==;
-X-CSE-ConnectionGUID: ezBdDl3VTnOlaMCIkFH39w==
-X-CSE-MsgGUID: GcwJZ2QURWeWfIJQmVA+pw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11295"; a="34740750"
+  bh=ntAdJ39PK3EGoanprL+FLMeQD7O7Yi1AZjE3z5QrdBI=;
+  b=IzeVsB48SqRiHWFQb/F3+74gjOTECq98FCbt0yRYLMA/nRFr63G6e+m5
+   xg72n7NcZC8UDmI6Mk3n3uaK9AN9HKNqCPuuzbH7O5Wyt6IYf8ooNj+Li
+   jP2VYW+1oHb4WqVuGmQ7TWJWMeWE2NFcG8f3QfgGHS1SW9Ghu54Ry92hU
+   +QwxdqPjvKlV4tCq3CbWm/b8DiUlyOP1LfVJz+qDkbMsqKELUpfztVm9e
+   UgE3y93c10YCdB/Vuvi9sMODGzvg8ciUzVXiCluQxiqTsBLYWixr8Yob9
+   Rh96o5dF68pNkDlh9dOLdw9G+GOW4QXmfkkMyH4ORmEQidb0eN4mGhVHL
+   Q==;
+X-CSE-ConnectionGUID: upjtcHF9R/+3Kw5I7T6dow==
+X-CSE-MsgGUID: IH4Nfp/EStunHuaoIJdjTg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11295"; a="35694632"
 X-IronPort-AV: E=Sophos;i="6.12,258,1728975600"; 
-   d="scan'208";a="34740750"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 15:34:45 -0800
-X-CSE-ConnectionGUID: SO+xm4xDR3KXb4xWF79ucA==
-X-CSE-MsgGUID: oKqdQBGfTSGRnP4DVUOCIw==
+   d="scan'208";a="35694632"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 17:41:30 -0800
+X-CSE-ConnectionGUID: v9ZLPoE+TjastWvu8oqcFA==
+X-CSE-MsgGUID: 29HRz9vnSsaHb+s/Af/CYA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,258,1728975600"; 
-   d="scan'208";a="130183798"
+   d="scan'208";a="99719925"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa002.jf.intel.com with ESMTP; 23 Dec 2024 15:34:43 -0800
+  by fmviesa010.fm.intel.com with ESMTP; 23 Dec 2024 17:41:28 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tPrwe-0000hD-2D;
-	Mon, 23 Dec 2024 23:34:40 +0000
-Date: Tue, 24 Dec 2024 07:33:31 +0800
+	id 1tPtvJ-0000kN-2w;
+	Tue, 24 Dec 2024 01:41:25 +0000
+Date: Tue, 24 Dec 2024 09:40:31 +0800
 From: kernel test robot <lkp@intel.com>
 To: Pavan Holla <pholla@chromium.org>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-usb@vger.kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
 	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
 	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [usb:usb-testing 9/58] drivers/usb/typec/ucsi/cros_ec_ucsi.c:187:54:
- error: passing argument 2 of 'cros_ucsi_async_control' makes integer from
- pointer without a cast
-Message-ID: <202412240743.tzTftk4H-lkp@intel.com>
+Subject: [usb:usb-testing 9/58] drivers/usb/typec/ucsi/cros_ec_ucsi.c:187:40:
+ error: incompatible pointer to integer conversion passing 'u64 *' (aka
+ 'unsigned long long *') to parameter of type 'u64' (aka 'unsigned long
+ long'); remove &
+Message-ID: <202412240903.xAqTOQpa-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -86,29 +88,27 @@ Content-Disposition: inline
 tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 head:   b1d7c2a8a364695a5dca2bb18ebcf2c10ad61172
 commit: 475db78842851d9efd7888154a80af697946de1e [9/58] usb: typec: ucsi: Implement ChromeOS UCSI driver
-config: sh-allyesconfig (https://download.01.org/0day-ci/archive/20241224/202412240743.tzTftk4H-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241224/202412240743.tzTftk4H-lkp@intel.com/reproduce)
+config: hexagon-allmodconfig (https://download.01.org/0day-ci/archive/20241224/202412240903.xAqTOQpa-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 9daf10ff8f29ba3a88a105aaa9d2379c21b77d35)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241224/202412240903.xAqTOQpa-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412240743.tzTftk4H-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412240903.xAqTOQpa-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/usb/typec/ucsi/cros_ec_ucsi.c: In function 'cros_ucsi_write_timeout':
->> drivers/usb/typec/ucsi/cros_ec_ucsi.c:187:54: error: passing argument 2 of 'cros_ucsi_async_control' makes integer from pointer without a cast [-Wint-conversion]
+>> drivers/usb/typec/ucsi/cros_ec_ucsi.c:187:40: error: incompatible pointer to integer conversion passing 'u64 *' (aka 'unsigned long long *') to parameter of type 'u64' (aka 'unsigned long long'); remove & [-Wint-conversion]
      187 |                 cros_ucsi_async_control(udata->ucsi, &cmd);
          |                                                      ^~~~
-         |                                                      |
-         |                                                      u64 * {aka long long unsigned int *}
-   drivers/usb/typec/ucsi/cros_ec_ucsi.c:90:59: note: expected 'u64' {aka 'long long unsigned int'} but argument is of type 'u64 *' {aka 'long long unsigned int *'}
+   drivers/usb/typec/ucsi/cros_ec_ucsi.c:90:59: note: passing argument to parameter 'cmd' here
       90 | static int cros_ucsi_async_control(struct ucsi *ucsi, u64 cmd)
-         |                                                       ~~~~^~~
+         |                                                           ^
+   1 error generated.
 
 
-vim +/cros_ucsi_async_control +187 drivers/usb/typec/ucsi/cros_ec_ucsi.c
+vim +187 drivers/usb/typec/ucsi/cros_ec_ucsi.c
 
    154	
    155	static void cros_ucsi_write_timeout(struct work_struct *work)
