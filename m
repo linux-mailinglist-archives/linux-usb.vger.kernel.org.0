@@ -1,209 +1,191 @@
-Return-Path: <linux-usb+bounces-18808-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18809-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 187A29FC3E4
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Dec 2024 08:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9A54E9FC437
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Dec 2024 09:32:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC3B8164A10
-	for <lists+linux-usb@lfdr.de>; Wed, 25 Dec 2024 07:03:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 235FB1642D5
+	for <lists+linux-usb@lfdr.de>; Wed, 25 Dec 2024 08:32:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A9814831F;
-	Wed, 25 Dec 2024 07:03:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A48C213FD86;
+	Wed, 25 Dec 2024 08:31:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="E2+BobQn"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TGnoOGiN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01on2055.outbound.protection.outlook.com [40.107.117.55])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4ED285A7B8;
-	Wed, 25 Dec 2024 07:03:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.117.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735110216; cv=fail; b=HennQxKpud+dpJ3LkGjv8xmw1/qBtNlnhaoBB0m+Rrm9pjfoXKdq2PIpz6z4JEuVCWMEoMHjm1uUGEsd2wC4ocZLzQi64jdAtcv3DDcR/bEmEN0qU0Rlj2osa8Xv/kDbB6z5+tt9LsBfnuQAMc/9oKada2NoxAL5hJxgi47NSKk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735110216; c=relaxed/simple;
-	bh=hMcelrkrzq2BEsjKJ7sT9YUkAifdQjxWsKknVduIDpg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=iO3YRm3Pfhf3CtaHE6NBHjmEVpFGN6VDVuhpywdmhaFx82ZXBNX3/BcHLPr///tL9nZXE2csUvLjtKcWQKhEk6w2bNZvdTGaXEEu6I3lxOr37axQchqydaBlLokIcey4J3LzwqeeDDDLH353oRSd06t7FxqDG7vbeqS6i543sdA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=E2+BobQn; arc=fail smtp.client-ip=40.107.117.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=c2JaT7zFhxiE3HoaJPAerk3vVIJmskmEbCL0brh5pxLIDfwKHNDVzaHEa/s2fhWVlvxkcxP9OFtdZt0ysn6Zq/p3qMH9XBZNwfAMtQ1JcwE58JDRb/eAMeaUZKgqLN8s0SOR2dfucNb0iHObIcnyqlZPVjTGALgFz50xhy6QAIlyrWaOARL71RFr2SCvofb6DagHYKVnlIHv5wVpTXp/EMwCw1f5NDMR1wzPGSYv3ee68OP7DhtrVRSFzq9iNqQcCD1XFfTkWpwmU0iHpoLI/h4J37UhhdPFAID6e+cFSlnsk/InmSCLbifWH919rSQGVao50AEfAgRvahzTnhNLdA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hMcelrkrzq2BEsjKJ7sT9YUkAifdQjxWsKknVduIDpg=;
- b=xCpkzyDp5ypuXTdURBgIXgodEDXIS+o9egrS9ljoZoVJCsVHDBW2TeGChLT3nEAfeLciugk9LtQ9eg1C7lt33yD+VVyvkDIlGawoblHT9Jbwd7k61BKPxCk7aeBKje9WaKJYQ1msdAfMJtEcv9aZ0s62v6Vgj5lOqjeD6pyQBDkNYXlnH3cCiByHkIA5UlkW0OzEsaaqSuM1l1Mq3dhMROODc4+4Cgif0wTCIvG0N8SHFgcR6iZbyCQln8k4COtcxW5/UKRtbpd7AYzsZim21mxS2MrRDQ5IjNR2e4r6KTB+yXxzMWyjq3kyiHLMsXKejm5JnR7vZAs2KvZ3YEZE2g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hMcelrkrzq2BEsjKJ7sT9YUkAifdQjxWsKknVduIDpg=;
- b=E2+BobQnSldMBHyddrVFJ9Fx5TMD0+DjtZ0FIysO/Jn4rxsfbFKyGjsBWHXJr4tQM3CnChsQ+RxwFAdjj7QYo7zuLpnknF/x8lL1wlutvJZTmV+2j4ogfZmD0X1JaxxpTUFijwcZy2xucqER2jntKadmLwS5OuOd3P1OguUishHLIfeeqOBucP0rRq3/K4YZLezaB4oeenRVT0ECbUDoRFy+/95SLVclyDBQc4Y9M/KfB05jwhsqasCtPO6pG2cXlHOlP/DLwEfSu52zOsBUF7qqjc9CFXUMKJfKHRHuzwfxc/t70XEVE8betHr1NmlcUlfTKxuDq/pj8LuCe3Esew==
-Received: from TYUPR06MB6217.apcprd06.prod.outlook.com (2603:1096:400:358::7)
- by KL1PR0601MB5773.apcprd06.prod.outlook.com (2603:1096:820:b1::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8293.13; Wed, 25 Dec
- 2024 07:03:23 +0000
-Received: from TYUPR06MB6217.apcprd06.prod.outlook.com
- ([fe80::c18d:f7c6:7590:64fe]) by TYUPR06MB6217.apcprd06.prod.outlook.com
- ([fe80::c18d:f7c6:7590:64fe%6]) with mapi id 15.20.8293.000; Wed, 25 Dec 2024
- 07:03:22 +0000
-From: =?utf-8?B?6IOh6L+e5Yuk?= <hulianqin@vivo.com>
-To: Prashanth K <quic_prashk@quicinc.com>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>, "mwalle@kernel.org" <mwalle@kernel.org>,
-	"quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>, David Brownell
-	<dbrownell@users.sourceforge.net>
-CC: "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	opensource.kernel <opensource.kernel@vivo.com>
-Subject:
- =?utf-8?B?562U5aSNOiBbUEFUQ0ggdjNdIHVzYjogZ2FkZ2V0OiB1X3NlcmlhbDogRGlz?=
- =?utf-8?B?YWJsZSBlcCBiZWZvcmUgc2V0dGluZyBwb3J0IHRvIG51bGwgdG8gZml4IHRo?=
- =?utf-8?Q?e_crash_caused_by_port_being_null?=
-Thread-Topic: [PATCH v3] usb: gadget: u_serial: Disable ep before setting port
- to null to fix the crash caused by port being null
-Thread-Index: AdtQVu3p636G49OMSa2yDMmE+bdUDgFaMxeAADaXS/A=
-Date: Wed, 25 Dec 2024 07:03:22 +0000
-Message-ID:
- <TYUPR06MB6217705570D07BCEE6D7F771D20C2@TYUPR06MB6217.apcprd06.prod.outlook.com>
-References:
- <TYUPR06MB621733B5AC690DBDF80A0DCCD2042@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <b511a84b-62d9-43cf-9a16-f365832873cb@quicinc.com>
-In-Reply-To: <b511a84b-62d9-43cf-9a16-f365832873cb@quicinc.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYUPR06MB6217:EE_|KL1PR0601MB5773:EE_
-x-ms-office365-filtering-correlation-id: 3334792d-2ca1-419b-a8d3-08dd24b23891
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?L1FRM09WYVo4T0FYa2tyNGlMTWZ2dk5nNW9mQUFKSEVQUVVzMFlEdDltb0dZ?=
- =?utf-8?B?Z0RESkc1UXdwamFsNlEyVEVYYWFnQUlYekVxSlRRWnoweWEwQ1BJVCtVcGVw?=
- =?utf-8?B?dzJHTWdOODBTdnZ3L1kzeFdpTFF4MXRWLzhsNGdDWHBBS3IvWUFrN0t4bDJ1?=
- =?utf-8?B?b0xsczc1b29UUm9tbHE5WngzZ0o1UHFWdjNvb2pFbVY4dU1FK25tNVZqRWtQ?=
- =?utf-8?B?dTlSS08yZEIxOEFvYkV4K3U2VlU1eDdtY0pWN0pNZCtWVGE5T1YweFgxdElK?=
- =?utf-8?B?WEJmWDh4RGx5OE9UVTAvNlIxMWVCYXZEMkR5L2hXQ1Q4VTB5anNQMlUwT1By?=
- =?utf-8?B?YlhMcjRybk14bFRoa3UrRjJ6Y0hvZGFYNjhDd0pTZkdhRFZZbGdvMm5pc0Y5?=
- =?utf-8?B?Y1g3d0Q2Qm9pODlWcm1yRWRiTE5weXB0emc2VFFjYWF1U0RTYk42VDZoTG92?=
- =?utf-8?B?TTVFeGlLQUFXRTc2THExZ1pvYjltSFNVQUY2NUo1MHQvcXZVZnBySnBBYTdH?=
- =?utf-8?B?VFkxTTJrMkQ1cXRtc0NiOUhESTRHTHo1bTBmcmtzWHkrd29tdlNSYkFYdGZH?=
- =?utf-8?B?SFFFOG5uaENWTDhDaVZncGN4cENWNVBra0lOZHI2K3JPNW00bW5qN2RlSzY4?=
- =?utf-8?B?a0wweW91clBFbHAwbkcvYXdoQmFYZGI5bnVBWnhBTzJIdElnNUdJUHpDUS9u?=
- =?utf-8?B?c3UzZjN1bkJyNVBhVThnV0dVZG5pWXpYMGJ2ZmUrMDh5Y0ttMHhDOHYvZ3FF?=
- =?utf-8?B?bSsxM2wzQmFJY0NMbTRnUHk5SlhkWmtLUFFDUkZld0VzZEZtQjJIY1lXZkQx?=
- =?utf-8?B?bGZZbHRsRTJYejVVWW9ORk1kaXE3eHprQlg1UU1UZ1pZMUx0SGdhTEQ4VGk3?=
- =?utf-8?B?cnhhL3VOZVA3Zytudmg4ZU9Jb0pMSXlobisyakIzb1R2VjhzT0hmaUpZUmtS?=
- =?utf-8?B?amh6c3RlblhMc1BCM2E5ZWZ3cUY2Q3psMVBueFdXTE5BN0MzMC9LOFBGekR6?=
- =?utf-8?B?ajE1aW1jZDhJTU9aN2VLRmtpTEJ0K1RtcXIrQ1NmSFZ5MVhFZjlkZEdWQi9B?=
- =?utf-8?B?U0xIMG8xTXVEWkM3NVFYQVJyOVhjcnhqd0xTMVczQnp2WnQxb2s0eUlod3NJ?=
- =?utf-8?B?dEtYejBzZHlhR1ZtSVFRNVB3andSMCtibk1FNEV0d3VDQmZhelllei9tZVoz?=
- =?utf-8?B?Q0xNcUp2RXpiSWxQR2ZXUnFvVU5jQkM0T0UxaCtUeTRnYzhrbmg5MkRtQkNB?=
- =?utf-8?B?YWo2OXhaako2WnJ5bU5meW5kemdGSnpyWERrMUpqdGVaVmdhRjNxSlNKNkhq?=
- =?utf-8?B?RFp4czUyczN3UTdnVUhLOE03TDZkR2pxRzcvdzg0R3lXTEFSZ2ZCVUk1L1M4?=
- =?utf-8?B?cllpcyt3dXZubU1XeE12NzJNWUw3THJrTXdqalluRjlTcTgyUWJmcVJIMklo?=
- =?utf-8?B?RVpnbXFPQUdQQngwVjdkcWFRSkkwUzN5U0gvNGxnc2ErWUZzNmR4TjlldU9L?=
- =?utf-8?B?NEgzVHZNVXh2a1ZlekVrVnJTMWlxTVIxbzBDcHVxbGlJU0tBNlpibUJ1eTlE?=
- =?utf-8?B?NnYvL3llUDh0Z2xHaGQ3bmRqM3RiMERKQWljeTNSMFh2dHIrWGpsb2pFcEc2?=
- =?utf-8?B?NnE0bW10Q2pUck9NWWRSSUw2VUN5dGlQSVJCbkNHeHRxZlBKRkhSbTdqT2hQ?=
- =?utf-8?B?MXR4TFRUQzA1ME1vRFJzSE5JZ0hYRXRQWk1OWjQxcUx5cVpJSU5jRHBNMHZz?=
- =?utf-8?B?Sk9NRDdoT2s1eDhVUlNsUE1ubjJ4dkxIZHlHNGhTUkwrckYyL0dnRk9VUEFQ?=
- =?utf-8?B?cnZtLytwTVN5cEUrNjZ0YUxwd0hKVWZQYmtjZi9rMU90OTUvbnBjZWdObzFu?=
- =?utf-8?B?MXI4b2pzdVBwcmRWa0VvNnhuekVqeVNCYmlHTVlSQWZQbXdFUFQ3SGYzblV2?=
- =?utf-8?Q?Jc35pRGdUn2UuFQObaFhaAuCKNkM7OyG?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYUPR06MB6217.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?aDlMakgzQWRNcmNyWmJQZXVRYnRTcmROOXJLT2JvTk5VQ0tzeG5rdHoxN3BB?=
- =?utf-8?B?bnVrMU5oSVB5a3RBL0puOHZCSk9LWUl3STkzbWtmR2xSbjJ1ZitsRUZ6MUZ5?=
- =?utf-8?B?cHk3TlhlVVJwQk8vOVhEdExBWDFQNHlHb256MHZ3Y0JBNWtEb01wUVp1QVhK?=
- =?utf-8?B?QUwwcklCQUlKc3hQS3NBZmVTSEFpcUNuR1R1S0tROHp3OHFYVEtqbENic0lz?=
- =?utf-8?B?bVMxcDVDbjZwN2hKdUswbUlyeExYTGVJazJDWVBsUldpU1B4OWtKaW9Kd1Vw?=
- =?utf-8?B?U3hETGhvZHdlU3MvY3h6NmF0TFNOK0lGZERNaGNpOTBBM2JsNWxNZnZYVnV5?=
- =?utf-8?B?TEJFYTdsUXdtMTMzcUdjOXFybTlpTFRqNVRSL2d5OGt2S0RQS2pQYjAvL1ZV?=
- =?utf-8?B?TTcyNHdBcUJlVlBIb3JjQm5SUDZTVi9CZFpCQlpob1FNaXZkclFLeVBPWUVZ?=
- =?utf-8?B?QnpyOTllZm5ZYUJvT3FNVXRoallaV3UwZVhiYm5RS0U3RFNwZHZGMURKUDJp?=
- =?utf-8?B?akFaK1ljU1B4Nmh2SDRZR04xMWJLVVh6Q1V4YUdCblNteUZTZW90TWxrUEo5?=
- =?utf-8?B?N1MrWHVzZFZ6QTUvdVIyclBFdHFhMFJlakdIMFRzYjhlY0JPRVpoOWQydThs?=
- =?utf-8?B?R29MYkdscjh1d05GQ0pNMVZ3N2tUcEEwVTk2K1FsenJITmNBb2F2UFJTOW83?=
- =?utf-8?B?M3dWcmlSa3JJNlViOFZMb3V5bENvYXVjZUtGYXVrbitJNldycWl1Vks1Wk9t?=
- =?utf-8?B?YXVGbEh6Z1JjbFBFNGgxQWJxUzlIR0FvaGE4UW5wbmlTc1htaXF2M08xZXRk?=
- =?utf-8?B?WUxSRVhtd0Uyc2VRUGU1TWxnNU9PNFNBU2JqUFl4L2YzVzlhTjhvRlRSNGpn?=
- =?utf-8?B?ZVdMWDZwc0h1bEc5MjJGNGh1WDlVUVZtcWp0aEliT1BmSUZibjVYNHdBWWY5?=
- =?utf-8?B?OENSKzc4VFl4QjVTQ0h4YzlhNEU1cHBPajZ5OUJkNEVhY2NjRzlYc01XbVdR?=
- =?utf-8?B?b2tGdzZIcXFLVHlXMVF0a3hCb2hjNUFNQTRIYnFwalBRZXA5S3g2V2VncFJO?=
- =?utf-8?B?RXFLRHU0Z0dUVnpSeExZbDI1VEtSb2FxbmhETk9LbHJ0bWRxWXBjL1ZGeGVE?=
- =?utf-8?B?dVdpaVBKWGlBTmRBZ3lFRVBIRE4reThaTTl2OEd1Nmx5SjZIdDlVT2ZzQnZl?=
- =?utf-8?B?dllPYmd1c3ZEM1VvaXlFdHNReERVSE9ma1pRREQrMGRTbVhzaUFOaDN2M1hv?=
- =?utf-8?B?NklwQTBKVENOdFg2UStQZmdmMkZPN3pTSngvcXpOZ0Q4Y3lzTGx0MGtGcWY3?=
- =?utf-8?B?OFYyYUhkZnVGelJseEZjdDQxKzdCLzhqNDFSL21IckQ4YXVGOGJneHpjeFE4?=
- =?utf-8?B?d0lkcHR1YjM1U21zUm1rZXVMQm5PSG1oTWh1aUNzTHhVMzAxOHZmODRGMUpY?=
- =?utf-8?B?TTFlQ05ZZTZjR3ZEZ3RlR0NWR1ZXejBCbCtKMnBBT1RNTU1pNXNyMG0vdmVV?=
- =?utf-8?B?SnJQZnR4RExtNWtmWTQ3MVoyZGxwL0tDcXpUTmV6YnRHZFBnYUZXVStEVGVY?=
- =?utf-8?B?SW5HQVhoT0t2NXVjOHdwRmRuNE1QN3pWRkNSTGZWOHN6djlLalFzNXlwc0x6?=
- =?utf-8?B?VmZIOVZDckk1MWdURVZqbzZSL1FoaS82UVpHWm8yVk9pWVh3TWs1UFdpV0F1?=
- =?utf-8?B?UzJsb08xemowSllwaVhaNTFIZFA2aldpVGFaalRLRFdoemhaQldRT3RjanVN?=
- =?utf-8?B?L2dHUFhjMDdRdStEcGJqWWg2MkR0SGUvWVFzNkFHbnVpSU1mN09Vcm5LUnZy?=
- =?utf-8?B?UFVYUm50V05oVmJWUHp1N2V4bzhSRFBxUEsvQm52d0UzaWowN3VRUVFKV2Nu?=
- =?utf-8?B?Sjd1eVdBRmZ4NUZ2Z3pPZjJrU2w0QTJjcm45cEh1cVNTQk12M1hjZEppNlNM?=
- =?utf-8?B?bXQzOVJUWjA4Qk1uVWpPVS83a3Q4UloxQ08vM1JScGhqZTVJN09zaE1UNU1j?=
- =?utf-8?B?NnlBQVN2M1NMdXF1WVFGQitBUXJGVFByam9QQnJjdDlGVEREMEVoL21zQXlT?=
- =?utf-8?B?dXo0eVhDaWc1VEsrWDVseHRlZlBsVlAvQXppM2Q1V2huMTRydCtyNVN6Q1M2?=
- =?utf-8?Q?FPSk=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811F613B7BC
+	for <linux-usb@vger.kernel.org>; Wed, 25 Dec 2024 08:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1735115509; cv=none; b=FVdR6YAnXUX9cRLSTmw1/V4lwW+9NNZhhOn+fHkme3mrPvuSaB2IDhix+RUDT0Mj7AILGvvzkgaGxEt1P/AMAtAGkYTKYk8ukFr51ZfW1wRkFhVvKD+LFfIelKM/5VX0drVoqZajY7y1ZUXivoOXRq8I4RM6ivrNY0gk+JJUq5o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1735115509; c=relaxed/simple;
+	bh=o2sc6pQ+XIlW+l7Chdoxra1zaFDgcsLWDZ1mZjoxgxk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B25el8A6HxAOJmslkcAzccoZpUYlGg29h+0WrwaRK2e4+mSNgfCnEuKsHNwj9e96/AnZ9fCGyZCdyGm3ncvPf3/S+oEduKWqVpZcBqQNOPrpHljfmHyzrZRKoSc5N+mPaG2EXrrKi+q7I+lgcRvulk0B3pTIOGksxN1b417eu+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TGnoOGiN; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BOMMSvS008690
+	for <linux-usb@vger.kernel.org>; Wed, 25 Dec 2024 08:31:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	6Gqvd2emlMkTHneG8Hl7t95bMNl6maEOsj1Ec4P8BRw=; b=TGnoOGiN+M+VfTP6
+	nehLTRWyrjTWwq9oWwPYfRCqi86LWPPmV9ynmw38nXLNgroS+EUipPtTNOmqo2GW
+	sxod1gK+jLlMdDp2TGBmQCJv0gcyJCyR6CL0n+b6+Qf8VXMP9jQVT5bZNRJ/xu0D
+	KZ+ot65P8x2V9yPylkJf/ohVaAIzhNL4u/oeyyK5PNnnTJAoO0UagMK69HArYQPl
+	mqzN9Hm9ELitfDcg3asc5p52PWzv63/Pj8Ryk/fCElwv7P9Q91/eV8TaWbMZwaA8
+	5WO081gQzDeQ+bc3DnCTnpe+V5IFSNZl5z+1xrPpZbpoIOuIGSSWcDmx4vsn8FZR
+	UHfFHA==
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43qvngmp8c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Wed, 25 Dec 2024 08:31:46 +0000 (GMT)
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2166a1a5cc4so61137295ad.3
+        for <linux-usb@vger.kernel.org>; Wed, 25 Dec 2024 00:31:46 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735115506; x=1735720306;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6Gqvd2emlMkTHneG8Hl7t95bMNl6maEOsj1Ec4P8BRw=;
+        b=tWMhYZWzzrM1ZGT7Q/EXwIA0ia/5kr9hzDF7Q446wKBiDFblocbFdYSahM5ECjBHNQ
+         fM6cd37ThEVhr96wfCoUVDo4bgcDeMlFOpktJ9K9dLa30t0GnGMR9HfmtXl31YkQ3nbG
+         TnbMbAutyAJ0ZP2tCTTOtUrIarn0GL+zT4MpxBuidQ3hf6Sy3c0TIcvbT87xQyVcdQDP
+         qx55y/qB7AV8P2fusz7Cto53H8GlYwIX+QWM3VREAPzbpVr2fR7DBedahO48SbIAA8kM
+         zeIfOvYD33HVJ9YpnIyC9OzWF5i5hUmXO4obuDWsiTxoPCOu4YJvkB05JurIOjkwQKeO
+         tYQw==
+X-Forwarded-Encrypted: i=1; AJvYcCU8M3rtFEjtmDDaSJQ6XoevQ+LnxytT4UU4wgV+u/Neq3T8i28GTuqiAdQSptOU5PciDWotn0wB+7M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxGVMMHXI2EIPAOW9zVYJB6054IZiX825ewifl6J5wiflEpadLN
+	o6V3UXPtsnCHgN4hjDzxBsBnjf4XJnXsbqUe6FoWhZVjNrTqOhIyQXMu+JycE5GZl8BDlBBPxQP
+	6qjjLyBBhg2VLyJ0XxTSipwhYTx2hIM5765ke4noEEWR1jfNoTWV0YWlF2eY=
+X-Gm-Gg: ASbGncvTvC8pYmGCgs0x8TIxFmGt4P9ND9UuM/PZTLfG3yAXebRJzv/M+lgjxiWZ/IU
+	A5ZM3quRrsbI7tp1ARLl8ojIfz6i6p/hnaDrs1cGJbMKNBbGdHiXyTSuIx38kymaXVE3wFwVxQY
+	Z9kAT69c7DimaT+xj2iO+SnpxqsHgIIplRA5nUWwuurDsNkdBchHGJcZVH8m7z/IwMwCjYvxFDu
+	eluF/Q0eP5y7fM1XiX1E1fB23J+EYxo1lXfqY/0fVYOVbD7Wj4/vQK+xaQS7XOjly4WjGlRbTKW
+	uLlFM9esJgr9Wmdyhqc=
+X-Received: by 2002:a05:6a20:c705:b0:1e0:f495:1bd9 with SMTP id adf61e73a8af0-1e5e04503e8mr33789943637.8.1735115505782;
+        Wed, 25 Dec 2024 00:31:45 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IH/QzaLzF/fcbrHVZfxi3rRanW8WezvFhBWt0qWNZBvJfsBYIxgdw2reovgSkrqXear14rCtQ==
+X-Received: by 2002:a05:6a20:c705:b0:1e0:f495:1bd9 with SMTP id adf61e73a8af0-1e5e04503e8mr33789917637.8.1735115505392;
+        Wed, 25 Dec 2024 00:31:45 -0800 (PST)
+Received: from [192.168.31.128] ([152.59.237.95])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad90b949sm10835600b3a.176.2024.12.25.00.31.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 25 Dec 2024 00:31:45 -0800 (PST)
+Message-ID: <318620fc-e174-4ef3-808a-69fe1d4e1df5@oss.qualcomm.com>
+Date: Wed, 25 Dec 2024 14:01:13 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYUPR06MB6217.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3334792d-2ca1-419b-a8d3-08dd24b23891
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Dec 2024 07:03:22.8274
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: z6YCqg4lvL6j6kRiWqdT81C2qavUdmEkYlNg/8DbHktbnDHdVD7ZX6xNRMb+IQAsR1hClZqwxlf3O0P/WCU20g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR0601MB5773
+User-Agent: Mozilla Thunderbird
+Subject: Re: (subset) [PATCH v3 0/3] Add support for USB controllers on QCS615
+To: Vinod Koul <vkoul@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Varadarajan Narayanan <quic_varada@quicinc.com>,
+        Wesley Cheng <quic_wcheng@quicinc.com>, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_jackp@quicinc.com
+References: <20241224084621.4139021-1-krishna.kurapati@oss.qualcomm.com>
+ <173505391861.950293.11120368190852109172.b4-ty@kernel.org>
+ <anfqf3jvh7timbvbfqfidylb4iro47cdinbb2y64fdalbiszum@2s3n7axnxixb>
+ <Z2sJK9g7hiHnPwYA@vaman>
+ <i7gptvn2fitpqypycjhsyjnp63s2w5omx4jtpubylfc3hx3m5l@jbuin5uvxuoc>
+ <Z2sOl9ltv0ug4d82@vaman>
+Content-Language: en-US
+From: Krishna Kurapati <krishna.kurapati@oss.qualcomm.com>
+In-Reply-To: <Z2sOl9ltv0ug4d82@vaman>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: Z8MnoPbxVBLDpMTJpztQscgHYmapTxIa
+X-Proofpoint-ORIG-GUID: Z8MnoPbxVBLDpMTJpztQscgHYmapTxIa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ suspectscore=0 adultscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0
+ bulkscore=0 phishscore=0 spamscore=0 clxscore=1015 malwarescore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412250074
 
-SGVsbG8gIFByYXNoYW50aCBLOg0KDQo+ID4gQ29uc2lkZXJpbmcgdGhhdCBpbiBzb21lIGV4dHJl
-bWUgY2FzZXMsIHdoZW4gcGVyZm9ybWluZyB0aGUgdW5iaW5kaW5nDQo+ID4gb3BlcmF0aW9uLCBn
-c2VyaWFsX2Rpc2Nvbm5lY3QgaGFzIGNsZWFyZWQgZ3Nlci0+aW9wb3J0LCB3aGljaCB0cmlnZ2Vy
-cw0KPiA+IGdhZGdldCByZWNvbmZpZ3VyYXRpb24sIGFuZCB0aGVuIGNhbGxzIGdzX3JlYWRfY29t
-cGxldGUsIHJlc3VsdGluZyBpbg0KPiA+IGFjY2VzcyB0byBhIG51bGwgcG9pbnRlci4gVGhlcmVm
-b3JlLCBlcCBpcyBkaXNhYmxlZCBiZWZvcmUNCj4gPiBnc2VyaWFsX2Rpc2Nvbm5lY3Qgc2V0cyBw
-b3J0IHRvIG51bGwgdG8gcHJldmVudCB0aGlzIGZyb20gaGFwcGVuaW5nLg0KPiANCj4gZ3NfcmVh
-ZF9jb21wbGV0ZSgpIGdldHMgcG9ydCBmcm9tIGVwLT5kcml2ZXJfZGF0YSwgYW5kIGl0IHNob3Vs
-ZG4ndCBnZXQNCj4gYWZmZWN0ZWQgaWYgZ3Nlci0+aW9wb3J0IGlzIG51bGwgYXMgbG9uZyBhcyBw
-b3J0W3BvcnRfbnVtXS5wb3J0IGlzIHZhbGlkLiBBbSBJDQo+IG1pc3Npbmcgc29tZXRoaW5nIGhl
-cmU/DQoNClRoaXMgZGVzY3JpcHRpb24gaXMgbm90IHZlcnkgYXBwcm9wcmlhdGUsIHRoYW5rIHlv
-dSB2ZXJ5IG11Y2ggZm9yIHlvdXIgc3VnZ2VzdGlvbiwgSSB3aWxsIG1vZGlmeSBpdC4NCg0KPiA+
-DQo+ID4gQ2FsbCB0cmFjZToNCj4gPiAgZ3NfcmVhZF9jb21wbGV0ZSsweDU4LzB4MjQwDQo+ID4g
-IHVzYl9nYWRnZXRfZ2l2ZWJhY2tfcmVxdWVzdCsweDQwLzB4MTYwDQo+ID4gIGR3YzNfcmVtb3Zl
-X3JlcXVlc3RzKzB4MTcwLzB4NDg0DQo+ID4gIGR3YzNfZXAwX291dF9zdGFydCsweGIwLzB4MWQ0
-DQo+ID4gIF9fZHdjM19nYWRnZXRfc3RhcnQrMHgyNWMvMHg3MjANCj4gPiAga3JldHByb2JlX3Ry
-YW1wb2xpbmUuY2ZpX2p0KzB4MC8weDgNCj4gPiAga3JldHByb2JlX3RyYW1wb2xpbmUuY2ZpX2p0
-KzB4MC8weDgNCj4gPiAgdWRjX2JpbmRfdG9fZHJpdmVyKzB4MWQ4LzB4MzAwDQo+ID4gIHVzYl9n
-YWRnZXRfcHJvYmVfZHJpdmVyKzB4YTgvMHgxZGMNCj4gPiAgZ2FkZ2V0X2Rldl9kZXNjX1VEQ19z
-dG9yZSsweDEzYy8weDE4OA0KPiA+ICBjb25maWdmc193cml0ZV9pdGVyKzB4MTYwLzB4MWY0DQo+
-ID4gIHZmc193cml0ZSsweDJkMC8weDQwYw0KPiA+ICBrc3lzX3dyaXRlKzB4N2MvMHhmMA0KPiA+
-ICBfX2FybTY0X3N5c193cml0ZSsweDIwLzB4MzANCj4gPiAgaW52b2tlX3N5c2NhbGwrMHg2MC8w
-eDE1MA0KPiA+ICBlbDBfc3ZjX2NvbW1vbisweDhjLzB4ZjgNCj4gPiAgZG9fZWwwX3N2YysweDI4
-LzB4YTANCj4gPiAgZWwwX3N2YysweDI0LzB4ODQNCj4gPg0KDQpUaGFua3MNCg==
+
+
+On 12/25/2024 1:12 AM, Vinod Koul wrote:
+> On 24-12-24, 21:33, Dmitry Baryshkov wrote:
+>> On Wed, Dec 25, 2024 at 12:49:07AM +0530, Vinod Koul wrote:
+>>> On 24-12-24, 17:38, Dmitry Baryshkov wrote:
+>>>> On Tue, Dec 24, 2024 at 08:55:18PM +0530, Vinod Koul wrote:
+>>>>>
+>>>>> On Tue, 24 Dec 2024 14:16:18 +0530, Krishna Kurapati wrote:
+>>>>>> This series aims at enabling USB on QCS615 which has 2 USB controllers.
+>>>>>> The primary controller is SuperSpeed capable and secondary one is
+>>>>>> High Speed only capable. The High Speed Phy is a QUSB2 phy and the
+>>>>>> SuperSpeed Phy is a QMP Uni Phy which supports non-concurrent DP.
+>>>>>>
+>>>>>> Link to v1:
+>>>>>> https://lore.kernel.org/all/20241014084432.3310114-1-quic_kriskura@quicinc.com/
+>>>>>>
+>>>>>> [...]
+>>>>>
+>>>>> Applied, thanks!
+>>>>>
+>>>>> [2/3] phy: qcom-qusb2: Add support for QCS615
+>>>>>        commit: 8adbf20e05025f588d68fb5b0fbbdab4e9a6f97ecommit e1b2772ea957c91694aa91b90e4c0a1d7b0fb144
+Author: Krishna Kurapati <quic_kriskura@quicinc.com>
+Date:   Mon Oct 14 14:14:30 2024 +0530
+
+     dt-bindings: phy: qcom,msm8998-qmp-usb3-phy: Add support for QCS615
+
+
+>>>>
+>>>> Is there any issue with the two remaining patches?
+>>>
+>>> Something wrong with b4... I have applied 2 & 3
+>>> Patch 1 should go thru USB tree
+>>
+>> Hmm, strange. But then, please excuse my ignorance, do we have bindings
+>> for these two patches?
+> 
+> I see to have missed one!
+> 
+> This one is documented see:
+> d146d384222e dt-bindings: phy: qcom,qusb2: Add bindings for QCS615
+> 
+> but, the third patch is sadly not... I am dropping the third patch
+> 
+
+Hi Dmitry, Vinod,
+
+  I see the bindings for QMP PHY in linux next as follows:
+
+commit e1b2772ea957c91694aa91b90e4c0a1d7b0fb144
+Author: Krishna Kurapati <quic_kriskura@quicinc.com>
+Date:   Mon Oct 14 14:14:30 2024 +0530
+
+     dt-bindings: phy: qcom,msm8998-qmp-usb3-phy: Add support for QCS615
+
+As mentioned in the cover letter, the bindings of phy have been merged 
+from v1.
+
+Regards,
+Krishna,
 
