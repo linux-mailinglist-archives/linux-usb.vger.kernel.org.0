@@ -1,116 +1,109 @@
-Return-Path: <linux-usb+bounces-18825-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18826-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C16739FD246
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 09:55:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A9899FD407
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 13:00:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7575F3A06A2
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 08:55:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B5777A10EA
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 12:00:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B8315530C;
-	Fri, 27 Dec 2024 08:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 670D3156C79;
+	Fri, 27 Dec 2024 12:00:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FgoCmfTe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FFB51876;
-	Fri, 27 Dec 2024 08:55:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D60271805A
+	for <linux-usb@vger.kernel.org>; Fri, 27 Dec 2024 12:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735289709; cv=none; b=eZwvtHY8tZNWEyzmwUrC1mvIzwYTnbOjorPA4idGa3nrAu+cCClAOuGpdMYdLi1STy7sgPCIQWOhmwFEAYjMxLeJsQVsnvKbn84C4xd5D114VKk7raQtini9421UwYGEiEOnmzY0N3P8w3zuQmTvMbjTADWba5QqPzSvMqytTRM=
+	t=1735300851; cv=none; b=mzjUUdHtg4kxGG1tzW55ctLSREneofDZdxf/PR/eMccdS4JzYZ47mhZWjY0tdwPL+3zxN1md+hogGQ8j6brzdn/TsFlxyy+fR2sIowYtd5cQgFbBghcHX3eSAAKzwWmfdZZ7jnyZReQuhq8RGtuk3P5XEBvsiFLvs/BH1bqbMZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735289709; c=relaxed/simple;
-	bh=s7tklrhxLnDAXttBYT02EiYWxHC/vCmy60I8wzvKKLc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cfiRm1iBOEf0W4bVvllc11L0o9mY8bGbLiSIPiiZ+fIU1ecRycUh/SaB2EHXYLwHNH8APZMVPsge5iDy/5qywXGrRJ8YpHgiEoELp/nRNLnZtevFRA4/OH9yllZ5HjFypEgiTLcSGszRiY22IoGhGWxQ6GxtKFq9Z5ukQ+Y2R6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3f044a28c43011efa216b1d71e6e1362-20241227
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI
-	GTI_FG_IT, GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD
-	AMN_C_TI, AMN_C_BU
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:0207db05-19c2-45ba-b9f3-3af87459ff68,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:15
-X-CID-INFO: VERSION:1.1.41,REQID:0207db05-19c2-45ba-b9f3-3af87459ff68,IP:0,URL
-	:0,TC:0,Content:-5,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:15
-X-CID-META: VersionHash:6dc6a47,CLOUDID:f1da6731e5d3f6ebbf57cb80e5fe7cbd,BulkI
-	D:2412271654570PC843US,BulkQuantity:0,Recheck:0,SF:17|19|66|78|81|82|102,T
-	C:nil,Content:0|50,EDM:5,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:
-	nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS
-X-UUID: 3f044a28c43011efa216b1d71e6e1362-20241227
-X-User: xiaopei01@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <xiaopei01@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1635217203; Fri, 27 Dec 2024 16:54:56 +0800
-From: Pei Xiao <xiaopei01@kylinos.cn>
-To: gregkh@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	lkp@intel.com,
-	xiaopei01@kylinos.cn
-Subject: [PATCH V2] usb: typec: ucsi: make yoga_c630_ucsi_ops be static
-Date: Fri, 27 Dec 2024 16:54:50 +0800
-Message-Id: <cefe3bc20b2ddaee2a0924ba32243f035e92a025.1735289530.git.xiaopei01@kylinos.cn>
+	s=arc-20240116; t=1735300851; c=relaxed/simple;
+	bh=MFYHJ/bqOlku6QgboDZcNIJJYZy6Rlk6CxB3tBQH+ZA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=cWnOam8KEQ20VmGRS7JpXQYDxD9lvuhXd6A4if3s6q1fWdgN+ArUQAsrrLRocQGRg+JA9I8a1POoebixB8EWmv7Wi7CEq1ltYjOA4dOJP0VRoo+Y3RvPLbCMVz9U/+kHQVx69apcCt5UecWOM98QxSet7+PWvsOo4Jzaheai3/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FgoCmfTe; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735300850; x=1766836850;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=MFYHJ/bqOlku6QgboDZcNIJJYZy6Rlk6CxB3tBQH+ZA=;
+  b=FgoCmfTe98DhLh0nNS9PlIxRT7AnZXbgrGc0Gr080kKvwZHSpnWNuZZo
+   dQf97RndFZ9rqeaSjN+vSv5OdIxbT/Qr7VyLE2mHi4bGsWII4iezi+vQ1
+   IFTzKmhCQtm5iZeHdMURgzUPT/FmI32gajLcwKE0GNvMyI1OnlUAHal+E
+   Hwk+xhor4LQLjTjHpTFfVWxLtdfrJ3YuhXO2GyReAgxXAP+LmkM08CS/a
+   OWMA8voBs3BIN5cUzzCGogHhz4ONrBkGpsM6cnb0lkMbE69Z8YtdTA1Vf
+   OOCUYX31iw9n8yCte6t4PZom+5gbqRlfZVBxnuLBwHZHhsE1JB9mk8rKS
+   Q==;
+X-CSE-ConnectionGUID: C7rwZa/PSKaiNtC3bSFxpQ==
+X-CSE-MsgGUID: d/MIzrWRTYel+GsFxTYM4g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11298"; a="35932512"
+X-IronPort-AV: E=Sophos;i="6.12,269,1728975600"; 
+   d="scan'208";a="35932512"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Dec 2024 04:00:49 -0800
+X-CSE-ConnectionGUID: dpdsiufcSNmErhwwMtLopA==
+X-CSE-MsgGUID: u8CdSJfiQte6SupIYfZvCg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="104772430"
+Received: from mattu-haswell.fi.intel.com ([10.237.72.199])
+  by fmviesa005.fm.intel.com with ESMTP; 27 Dec 2024 04:00:48 -0800
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: <gregkh@linuxfoundation.org>
+Cc: <linux-usb@vger.kernel.org>,
+	Mathias Nyman <mathias.nyman@linux.intel.com>
+Subject: [PATCH 0/5] xhci features for usb-next
+Date: Fri, 27 Dec 2024 14:01:37 +0200
+Message-Id: <20241227120142.1035206-1-mathias.nyman@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
-In-Reply-To: <2024122743-operable-treading-aa03@gregkh>
-References: <2024122743-operable-treading-aa03@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-sparse warnings:
-    drivers/usb/typec/ucsi/ucsi_yoga_c630.c:101:30: sparse: sparse:
-    symbol 'yoga_c630_ucsi_ops' was not declared. Should it be static?
+Hi Greg
 
-Add static to fix sparse warnings.
+Some xhci features and a fix for usb-next, improving DbC performance and
+defining a few missing bits in xhci spec
 
-Fixes: 2ea6d07efe53 ("usb: typec: ucsi: add Lenovo Yoga C630 glue driver")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202412102033.J4vZNaaR-lkp@intel.com/
-Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
+The NULL pointer fix by Michal solves a rare, 10 year old issue.
+I don't want to force it into 6.13/usb-linus at this stage over the
+holidays. Adding it to 6.14/usb-next and stable should be fine.
 
----
-Changes for V2:
-- Add information on how to fix
----
- drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks
+Mathias
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-index f3a5e24ea84d..4cae85c0dc12 100644
---- a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-+++ b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-@@ -71,7 +71,7 @@ static int yoga_c630_ucsi_async_control(struct ucsi *ucsi, u64 command)
- 	return yoga_c630_ec_ucsi_write(uec->ec, (u8*)&command);
- }
- 
--const struct ucsi_operations yoga_c630_ucsi_ops = {
-+static const struct ucsi_operations yoga_c630_ucsi_ops = {
- 	.read_version = yoga_c630_ucsi_read_version,
- 	.read_cci = yoga_c630_ucsi_read_cci,
- 	.read_message_in = yoga_c630_ucsi_read_message_in,
+Mathias Nyman (4):
+  xhci: dbc: Improve performance by removing delay in transfer event
+    polling.
+  xhci: dbgtty: Improve performance by handling received data
+    immediately.
+  xhci: Add command completion parameter support
+  xhci: Add missing capability definition bits
+
+Michal Pecio (1):
+  usb: xhci: Fix NULL pointer dereference on certain command aborts
+
+ drivers/usb/host/xhci-caps.h   |  6 +++
+ drivers/usb/host/xhci-dbgcap.c |  2 +-
+ drivers/usb/host/xhci-dbgtty.c | 98 ++++++++++++++++++++++------------
+ drivers/usb/host/xhci-ring.c   | 13 +++--
+ drivers/usb/host/xhci.h        |  4 ++
+ 5 files changed, 84 insertions(+), 39 deletions(-)
+
 -- 
 2.25.1
 
