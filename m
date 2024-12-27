@@ -1,100 +1,109 @@
-Return-Path: <linux-usb+bounces-18819-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18820-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EF4C9FCEA3
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2024 23:40:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D09B69FD079
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 06:52:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23A4A163477
-	for <lists+linux-usb@lfdr.de>; Thu, 26 Dec 2024 22:40:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63C1B160B6F
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 05:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E04BF1D5CD7;
-	Thu, 26 Dec 2024 22:39:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nWLojLEF"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE8A12C7FD;
+	Fri, 27 Dec 2024 05:52:08 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57AF11B21AB;
-	Thu, 26 Dec 2024 22:39:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71783335D3;
+	Fri, 27 Dec 2024 05:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735252747; cv=none; b=Bj+WmZAfoE9JYEz8UPwvfeq4nIm5o5/WDhUBvDxOdCR4hDCNKuxGXP6td/SsCmrgWueR8wEefK2JufOJnfcVcmheM0CztzPoOMeHHRjlvnUQyjJzIFqBieybougIlSXTyrUplEch0ouBRXSDM9jDgZkcanrqA97xnzSibEG5jGA=
+	t=1735278728; cv=none; b=TpHNQqqhcMEgX4s6m+ClZA8EL5R4qqGjvFkD2k/dzc6F+4JQWk9+vwlaTSqYKVxajmU/Mg4GnxpozGZzysCOWwYOKfwMHtA4qacui7oCqMwG/U0WfFo4FW9z1cYFTpCu8d6HUBxv6b5MOzgegO2AdTp9bzlYRMkKHlKpf/NsFqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735252747; c=relaxed/simple;
-	bh=sgN/I8NAvChJySX/9fgdtVSSjB1bwkDhwzRlRrtVlfk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tTp+dgMykCMg+1VSkr7B/fidKe26US8xksRGR7WdwWnJFNS7WDTFbVzA+zO3QD9B1ambS3iwVU05b8Mq+n2XJcQSp0nOdMlkShLmkSE37yTJQlTY6O5+Ee5aoYbaCHLYbXi6bjynyyZty51lE5MBnYEnpiZv6SWrGMVBIE3fe/s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nWLojLEF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA60C4CED3;
-	Thu, 26 Dec 2024 22:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735252746;
-	bh=sgN/I8NAvChJySX/9fgdtVSSjB1bwkDhwzRlRrtVlfk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nWLojLEFRsUA2hzyZxAxkPI0TEiUqZa06kVh1J/1JoLvF2o1mzBiLVzjSzSuYdfye
-	 S3ZqdfLqCS7p+qVpv/+mwg2Fp9K27UOZ/rQJukmlJojGZTZiL1FzpiJAR+LYH6cyJy
-	 c9Ed3mkWxFKRO4Skfu9tr1HNzq/7/O6nOPgt1bpiEL2ovEqBZTj3WL7XPKNCBkJG1H
-	 vnV2fpMc0OqN+qfRTQJYwBoHJF6Xglx/S808ExivSb9C4OFJmwGxosvDgG2s8HtEUs
-	 94LTUDnbGtlNdah804Awhmwp8DZqPskgAITap8THpOSX1XzR4pRlRR92Lszn/XlqCV
-	 6zHkB1Giy+zpA==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Yassine Oudjana <y.oudjana@protonmail.com>,
-	Konrad Dybcio <konradybcio@kernel.org>
-Cc: Marijn Suijten <marijn.suijten@somainline.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
+	s=arc-20240116; t=1735278728; c=relaxed/simple;
+	bh=2sYX6apPyS9ECaPEZBrbaR2A3zZgjOWTSTPunL61i84=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GebHucDZgKcf3ad03A+vpm5IFQQ0IdKMp0xTNkXWnY+fbMOknWGvIxp8mweKusHhsZJ7NoSZZ5IztMGGHheQfUVODEmXUNJhqhmcMohqzViW6USpxSa6J/2KQYW9CKkPZc+RgFP+h0J0HSoj3Qz9QomCdBp2MJESIXml/Zp+9Hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: ae063338c41611efa216b1d71e6e1362-20241227
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI
+	GTI_FG_IT, GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD
+	AMN_C_TI, AMN_C_BU
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.41,REQID:b39391fe-335f-4ded-bc6c-1ebf156c1fe2,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+	ON:release,TS:15
+X-CID-INFO: VERSION:1.1.41,REQID:b39391fe-335f-4ded-bc6c-1ebf156c1fe2,IP:0,URL
+	:0,TC:0,Content:-5,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:15
+X-CID-META: VersionHash:6dc6a47,CLOUDID:d310fac398136bafbd1cd2075b7bd4b6,BulkI
+	D:241227135157WJMKPA00,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102,TC:n
+	il,Content:0|50,EDM:5,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil
+	,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
+X-UUID: ae063338c41611efa216b1d71e6e1362-20241227
+X-User: xiaopei01@kylinos.cn
+Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <xiaopei01@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1209052973; Fri, 27 Dec 2024 13:51:55 +0800
+From: Pei Xiao <xiaopei01@kylinos.cn>
+To: linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Konrad Dybcio <konradybcio@gmail.com>,
-	Petr Vorel <pvorel@suse.cz>,
-	=?UTF-8?q?Kry=C5=A1tof=20=C4=8Cern=C3=BD?= <cleverline1mc@gmail.com>,
-	Alexander Reimelt <alexander.reimelt@posteo.de>,
-	Dominik Kobinski <dominikkobinski314@gmail.com>,
-	Harry Austen <hpausten@protonmail.com>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: (subset) [RFT PATCH 0/4] More QC DWC3 fixups
-Date: Thu, 26 Dec 2024 16:38:36 -0600
-Message-ID: <173525273248.1449028.5463368821621810712.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241129-topic-qcom_usb_dtb_fixup-v1-0-cba24120c058@oss.qualcomm.com>
-References: <20241129-topic-qcom_usb_dtb_fixup-v1-0-cba24120c058@oss.qualcomm.com>
+	heikki.krogerus@linux.intel.com,
+	dmitry.baryshkov@linaro.org
+Cc: Pei Xiao <xiaopei01@kylinos.cn>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] usb: typec: ucsi: make yoga_c630_ucsi_ops be static
+Date: Fri, 27 Dec 2024 13:51:51 +0800
+Message-Id: <2ffd08092fabaed0bea8b7a5e19e5c9464e76077.1735278513.git.xiaopei01@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
+sparse warnings:
+    drivers/usb/typec/ucsi/ucsi_yoga_c630.c:101:30: sparse: sparse:
+    symbol 'yoga_c630_ucsi_ops' was not declared. Should it be static?
 
-On Fri, 29 Nov 2024 23:12:44 +0100, Konrad Dybcio wrote:
-> Squashed a couple more warnings, the remaining ones I'll try to figure
-> out soon.
-> 
-> This is all based on what I was able to make out from docs. Couldn't get
-> any 8994 or 8996 boards I have access to booting reliably :(
-> Ccing some folks that I'm hoping could help out testing this
-> 
-> [...]
+Fixes: 2ea6d07efe53 ("usb: typec: ucsi: add Lenovo Yoga C630 glue driver")
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202412102033.J4vZNaaR-lkp@intel.com/
+Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
+---
+ drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Applied, thanks!
-
-[3/4] arm64: dts: qcom: msm8996: Fix up USB3 interrupts
-      commit: 9cb9c9f4e1380da317a056afd26d66a835c5796c
-[4/4] arm64: dts: qcom: msm8994: Describe USB interrupts
-      commit: c910544d2234709660d60f80345c285616e73b1c
-
-Best regards,
+diff --git a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+index f3a5e24ea84d..4cae85c0dc12 100644
+--- a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
++++ b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+@@ -71,7 +71,7 @@ static int yoga_c630_ucsi_async_control(struct ucsi *ucsi, u64 command)
+ 	return yoga_c630_ec_ucsi_write(uec->ec, (u8*)&command);
+ }
+ 
+-const struct ucsi_operations yoga_c630_ucsi_ops = {
++static const struct ucsi_operations yoga_c630_ucsi_ops = {
+ 	.read_version = yoga_c630_ucsi_read_version,
+ 	.read_cci = yoga_c630_ucsi_read_cci,
+ 	.read_message_in = yoga_c630_ucsi_read_message_in,
 -- 
-Bjorn Andersson <andersson@kernel.org>
+2.25.1
+
 
