@@ -1,109 +1,132 @@
-Return-Path: <linux-usb+bounces-18820-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18821-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D09B69FD079
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 06:52:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04C4E9FD170
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 08:39:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63C1B160B6F
-	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 05:52:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AEFC03A062C
+	for <lists+linux-usb@lfdr.de>; Fri, 27 Dec 2024 07:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE8A12C7FD;
-	Fri, 27 Dec 2024 05:52:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C4EA14B97E;
+	Fri, 27 Dec 2024 07:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aTuE13RY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71783335D3;
-	Fri, 27 Dec 2024 05:52:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B37781474A7;
+	Fri, 27 Dec 2024 07:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735278728; cv=none; b=TpHNQqqhcMEgX4s6m+ClZA8EL5R4qqGjvFkD2k/dzc6F+4JQWk9+vwlaTSqYKVxajmU/Mg4GnxpozGZzysCOWwYOKfwMHtA4qacui7oCqMwG/U0WfFo4FW9z1cYFTpCu8d6HUBxv6b5MOzgegO2AdTp9bzlYRMkKHlKpf/NsFqw=
+	t=1735285136; cv=none; b=DCKxCx0RTFPYUF7PQk1TXhRFgLfE63TmGGWWd/zu+vvYnl9moU06xP1TcEgsvtPytS3cqvt5FDkqviPvQlYkxM782t9kqK072cSfpYyQvlTvTkFWzXgZvBd8Z8vtc6B+SKpOgn147726k6f9ouCO3Ukd4066QqM5fRF33OjrH3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735278728; c=relaxed/simple;
-	bh=2sYX6apPyS9ECaPEZBrbaR2A3zZgjOWTSTPunL61i84=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GebHucDZgKcf3ad03A+vpm5IFQQ0IdKMp0xTNkXWnY+fbMOknWGvIxp8mweKusHhsZJ7NoSZZ5IztMGGHheQfUVODEmXUNJhqhmcMohqzViW6USpxSa6J/2KQYW9CKkPZc+RgFP+h0J0HSoj3Qz9QomCdBp2MJESIXml/Zp+9Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: ae063338c41611efa216b1d71e6e1362-20241227
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD_SPF, GTI_FG_BS, GTI_C_CI
-	GTI_FG_IT, GTI_RG_INFO, GTI_C_BU, AMN_T1, AMN_GOOD
-	AMN_C_TI, AMN_C_BU
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.41,REQID:b39391fe-335f-4ded-bc6c-1ebf156c1fe2,IP:0,U
-	RL:0,TC:0,Content:-5,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:15
-X-CID-INFO: VERSION:1.1.41,REQID:b39391fe-335f-4ded-bc6c-1ebf156c1fe2,IP:0,URL
-	:0,TC:0,Content:-5,EDM:25,RT:0,SF:-5,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:15
-X-CID-META: VersionHash:6dc6a47,CLOUDID:d310fac398136bafbd1cd2075b7bd4b6,BulkI
-	D:241227135157WJMKPA00,BulkQuantity:0,Recheck:0,SF:17|19|38|66|78|102,TC:n
-	il,Content:0|50,EDM:5,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil
-	,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-UUID: ae063338c41611efa216b1d71e6e1362-20241227
-X-User: xiaopei01@kylinos.cn
-Received: from localhost.localdomain [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <xiaopei01@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1209052973; Fri, 27 Dec 2024 13:51:55 +0800
-From: Pei Xiao <xiaopei01@kylinos.cn>
-To: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	heikki.krogerus@linux.intel.com,
-	dmitry.baryshkov@linaro.org
-Cc: Pei Xiao <xiaopei01@kylinos.cn>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH] usb: typec: ucsi: make yoga_c630_ucsi_ops be static
-Date: Fri, 27 Dec 2024 13:51:51 +0800
-Message-Id: <2ffd08092fabaed0bea8b7a5e19e5c9464e76077.1735278513.git.xiaopei01@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1735285136; c=relaxed/simple;
+	bh=Wf+SvqNi6slsfwtp9CR+b3C0cjM1BKcBVm093pQ2syc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pRrxx5VDFIoJzyeI7JA/eqOOdRGnFP4Fx24UF9/GEWn6uMRrVkU1RtSCgO7Btb/E69kTlCVdD5thKswR53WAj810f1glIgzLvQeYUERE49JMpipzEGIcWSXGHqj2QX67wM7t6LbuQ3ITH4wbN/5jBjScwJU0n1RSSAb9Q+q61RA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aTuE13RY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E6D2C4CED3;
+	Fri, 27 Dec 2024 07:38:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735285136;
+	bh=Wf+SvqNi6slsfwtp9CR+b3C0cjM1BKcBVm093pQ2syc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=aTuE13RYXpFbp4ATHOcud1qoWz6gazgLh6G7+g6K+m+MYZPlTmlVRioMn0km9mkEE
+	 nnTTjnBXZJevN4SHX8nPschH5OjNfKocnRCSFM9T8KfGnWGkIXoZljNeczyVXhfrx1
+	 4BNhx+ANKF+gAznsdRteWmHrJJHiGVK6UDkVMsbK3RCzUiOLDiC6akwNed3GJjIbe/
+	 0ik79J2Z8Ye9WlYsQNJfZ0hF9PF84uZjnNMtpTuI4RgbKUM0h6TZ6SgiULSqNfU7tX
+	 IS5ZupcP/HvUDTuTG6HDZbZoFJSnMfh91qi+HIUmZhi6NOdjhwR245l5M6wLVCG3nM
+	 iZrIdyQYy8NzQ==
+Date: Fri, 27 Dec 2024 08:38:53 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Kever Yang <kever.yang@rock-chips.com>
+Cc: heiko@sntech.de, linux-rockchip@lists.infradead.org, 
+	Simon Xue <xxm@rock-chips.com>, Guenter Roeck <linux@roeck-us.net>, 
+	Mark Brown <broonie@kernel.org>, Chris Morgan <macromorgan@hotmail.com>, 
+	Frank Wang <frank.wang@rock-chips.com>, Jamie Iles <jamie@jamieiles.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org, Jonas Karlman <jonas@kwiboo.se>, 
+	Johan Jonker <jbx6244@gmail.com>, David Airlie <airlied@gmail.com>, 
+	dri-devel@lists.freedesktop.org, Sebastian Reichel <sebastian.reichel@collabora.com>, 
+	linux-i2c@vger.kernel.org, Shawn Lin <shawn.lin@rock-chips.com>, 
+	Simona Vetter <simona@ffwll.ch>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Finley Xiao <finley.xiao@rock-chips.com>, 
+	Maxime Ripard <mripard@kernel.org>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>, 
+	FUKAUMI Naoki <naoki@radxa.com>, linux-pwm@vger.kernel.org, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Andy Yan <andyshrk@163.com>, linux-serial@vger.kernel.org, 
+	Michael Riesch <michael.riesch@wolfvision.net>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Andi Shyti <andi.shyti@kernel.org>, devicetree@vger.kernel.org, 
+	Diederik de Haas <didi.debian@cknow.org>, linux-watchdog@vger.kernel.org, Rob Herring <robh@kernel.org>, 
+	Lee Jones <lee@kernel.org>, Cristian Ciocaltea <cristian.ciocaltea@collabora.com>, 
+	Wim Van Sebroeck <wim@linux-watchdog.org>, Shresth Prasad <shresthprasad7@gmail.com>, 
+	Tim Lunn <tim@feathertop.org>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, linux-arm-kernel@lists.infradead.org, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Jisheng Zhang <jszhang@kernel.org>, 
+	Dragan Simic <dsimic@manjaro.org>, Detlev Casanova <detlev.casanova@collabora.com>, 
+	linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org, linux-spi@vger.kernel.org, 
+	linux-usb@vger.kernel.org, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Thomas Zimmermann <tzimmermann@suse.de>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Subject: Re: [PATCH v2 00/17] rockchip: Add rk3562 support
+Message-ID: <sasnc2ocxnlfp4kprsobu5gkajjb5wdxhld73bg6xocgb3foah@yjmphtvpmyff>
+References: <20241224094920.3821861-1-kever.yang@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241224094920.3821861-1-kever.yang@rock-chips.com>
 
-sparse warnings:
-    drivers/usb/typec/ucsi/ucsi_yoga_c630.c:101:30: sparse: sparse:
-    symbol 'yoga_c630_ucsi_ops' was not declared. Should it be static?
+On Tue, Dec 24, 2024 at 05:49:03PM +0800, Kever Yang wrote:
+> 
+> This patch set adds rk3562 SoC and its evb support.
+> 
+> Split out patches belong to different subsystem.
+> 
+> Test with GMAC, USB, PCIe, EMMC, SD Card.
+> 
+> This patch set is base on the patche set for rk3576 evb1 support.
+> 
+> Changes in v2:
+> - Update in sort order
+> - remove grf in cru
+> - Update some properties order
+> 
+> Finley Xiao (2):
+>   arm64: dts: rockchip: add core dtsi for RK3562 Soc
+>   arm64: dts: rockchip: Add RK3562 evb2 devicetree
+> 
+> Kever Yang (15):
+>   dt-bindings: PCI: dwc: rockchip: Add rk3562 support
+>   dt-bindings: mmc: Add support for rk3562 eMMC
+>   dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
+>   dt-bindings: power: rockchip: Add bindings for rk3562
+>   dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
+>   dt-bindings: gpu: Add rockchip,rk3562-mali compatible
+>   dt-bindings: watchdog: Add rk3562 compatible
+>   dt-bindings: spi: Add rockchip,rk3562-spi compatible
+>   dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
+>   dt-bindings: usb: dwc3: add compatible for rk3562
+>   dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
+>   dt-bindings: rockchip: pmu: Add rk3562 compatible
+>   dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
+>   dt-bindings: arm: rockchip: Add rk3562 evb2 board
+>   dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
 
-Fixes: 2ea6d07efe53 ("usb: typec: ucsi: add Lenovo Yoga C630 glue driver")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202412102033.J4vZNaaR-lkp@intel.com/
-Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
----
- drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+You squezzed here like 12 different subsystems. Some of these changes
+suggest missing drivers.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-index f3a5e24ea84d..4cae85c0dc12 100644
---- a/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-+++ b/drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-@@ -71,7 +71,7 @@ static int yoga_c630_ucsi_async_control(struct ucsi *ucsi, u64 command)
- 	return yoga_c630_ec_ucsi_write(uec->ec, (u8*)&command);
- }
- 
--const struct ucsi_operations yoga_c630_ucsi_ops = {
-+static const struct ucsi_operations yoga_c630_ucsi_ops = {
- 	.read_version = yoga_c630_ucsi_read_version,
- 	.read_cci = yoga_c630_ucsi_read_cci,
- 	.read_message_in = yoga_c630_ucsi_read_message_in,
--- 
-2.25.1
+Please read basic upstreaming guide, some previous discussions and get
+internal rock-chips help so we want repeat basics over and over.
+
+Bindings are with drivers. Send them to respective subsystems.
+
+Best regards,
+Krzysztof
 
 
