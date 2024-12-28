@@ -1,101 +1,81 @@
-Return-Path: <linux-usb+bounces-18855-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18856-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED4EF9FDC41
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Dec 2024 21:58:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F6D89FDC43
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Dec 2024 21:58:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21EBE7A137E
-	for <lists+linux-usb@lfdr.de>; Sat, 28 Dec 2024 20:57:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 79EFA7A1493
+	for <lists+linux-usb@lfdr.de>; Sat, 28 Dec 2024 20:58:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D37BE1990AF;
-	Sat, 28 Dec 2024 20:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="Am/PDj42"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FCD61991B4;
+	Sat, 28 Dec 2024 20:57:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FEDA197A6C
-	for <linux-usb@vger.kernel.org>; Sat, 28 Dec 2024 20:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7732E198853
+	for <linux-usb@vger.kernel.org>; Sat, 28 Dec 2024 20:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735419474; cv=none; b=PMLpQdBXHWV+5MUPimNIggbqKYiVCtRJV5PLlmt8JV1pdZb73JzIKpqU5WMDnJeEZRLPuu4CTN2L1YCpwwWOMM0zucQFsu4tcbbmqkneo0eKdZFNyKjm8FFnLyXz1e42PI3Ggcb74vYKqPqV18jyOdzX5sQCCrfp3mYavp4GPOc=
+	t=1735419474; cv=none; b=UcrvK5RKib9Wq305Ee+XLdfqgf+nxf77rwUTz5RY6wxABqctaFoKTlvWzfm9A/a0iUto8ovFWo+RH/X+9ce98qpnwQ3k3PbzxwYzd9ABcRHT76tMcwCd+mF7NamAgayY9PEFGXKOe639feDEkvuAJ9lMyGk6kCjPH00IAenIkuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1735419474; c=relaxed/simple;
-	bh=e303w4tcLm5YyCF2TwZA3O59xcExz7hXhcGR8ejMpw8=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=uxvzYwN4fP4NuhN8PIdLcR62EhrZsYc3uGItR9vTD0Vrxe0JZS422Pk76OiW3zM8LmWBtyhHD5Fpcmxj6bkENkqHBFua3ny/3YcvIfxxVtKgoHh13aVUZ1loych/K+l9PnIYMCTnd9eUYAoP0s6hygOLiF9/jcujDm4AL7d0hSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=Am/PDj42; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21619108a6bso95105675ad.3
-        for <linux-usb@vger.kernel.org>; Sat, 28 Dec 2024 12:57:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1735419471; x=1736024271; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=k2DOIcwAfGwnYzcdiIszZ+Rc+WkbTYCmxZzTdwLguZk=;
-        b=Am/PDj42R5Q0k3picO6Gnd2arP9LIZaApLZXpktrTR3wuyGWhgyuzeuSA/6vYxxQ5h
-         gjipy0vUTH9pVl6z5DS5cBWIC2h8H/rZ96FKxsywWcFqBUGB7QkvElMFh5g1XBMZ1qyO
-         g8a0J/SMG3ImpyQ/n9IeSFtnFpxo57eBtMnll0IY/rfToxysckOy7x9+UlFrfbOi2+IN
-         pCaWbnPDNwDKk7VhxLSzJeVxMyQlH+raCVHXzQ9z47YWpzg29NmVdrdTBgti1XSQ49+l
-         Rud009lKFFxwbXjRZc5ZIoxJ+d07c7+pmdLfH48il4M3siBCk4m7qxOznUf6HkxDS+dN
-         sdpg==
+	bh=zJdD/Hlgm0Mo0Jn/353hQ1sZGVhsqxgZKb0UmG/2gxM=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:Cc:
+	 Content-Type; b=QGIW0CqbTJi6LmhJBvXhaMM9lTNB5t79jl/Dc2NJBN96U0Cc8tOQnZexWeQm9EF0SIKUsaLfnU0zLGr1WTVj3+Do/qCtXEe7lnVOhD02v+atBSXqomDDGK9FFTfn53KZE/bZnAM/RTriZluLJv6w9tXuvu3kwMGs9pgdv9ml6Qk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3cca581135dso5680415ab.3
+        for <linux-usb@vger.kernel.org>; Sat, 28 Dec 2024 12:57:53 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735419471; x=1736024271;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:subject:from:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1735419472; x=1736024272;
+        h=cc:to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=k2DOIcwAfGwnYzcdiIszZ+Rc+WkbTYCmxZzTdwLguZk=;
-        b=Tpuu6HjMNUvHwBeSu+nOBTOaoe6Dyo9sj/Y3XypaYuZ9QG4s6+7V46Tdxsu61F/d22
-         Cda19b7gxs9MRR4Prq7FX7AUsof982HwbIPIx6SyBrN7S4nXcitdPy/7N6SHNyM30dEY
-         FWWO6xGARgOoYhni4m0VvmDdU0ztRkERp4TzSDWpxzfCc/DeQCPP0GdcslzbBGHZjBzK
-         VjJML+8bcbTBYPZ6k1aaCnC75G6F1kroM0qOmbhq0FlohZyxzfbiZHOuHjdkddzeBbEU
-         DB0ntUB78B2XyQVrfEu1wHzVmNs9W0MfOjTvcgEECImgzclStTDzdnVJcPwwAaxvZKXL
-         NLeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVIDy6BU2Yg8A5XhseZ+cvJsKmJpE9Q7I7Jne1Yxxe0lN/rvyCg/K6aamh0uflfRYpgy0CTwerR5AI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlxTU5Sphsj1gR6RY6VgjsBWwKDGsvHgq/uxXKCoDhHDUat+np
-	WaSkHsxSu73pq/IzW8M3PLQ02sI/eGr9baLObSgkvyYLb7GDI1n7oyT8Uo7kI7Y=
-X-Gm-Gg: ASbGncvGKhsExDdqAVqCqAOsPaoFLKaYJAZ41Rpfk8KYfO+u5ju3hZ2jkL9MT+XT2Rz
-	yXQmKnWz7VXJPojB+NaQiqAB9zrIrF6D08+S1lixQ0A0WDk3OoDFinxM+VnYnr+S/MrFZEh7qzM
-	B4yhJkNJ9sq7E0wVOQYFOMyxTJnmjW3PyoGX4l0zkTgJFwhk53ByvtRUl+YPjpJv6FbtI9CILH4
-	DTXwTn4mA6sGpM/2bBLjYON3hovCQ/FBlBSvlnJDyKPn6NbQN2fhw==
-X-Google-Smtp-Source: AGHT+IFTUgCxF6uzXRRagS1HIXJ5TfNGwvMPXQ5hx7BAQzX3/gQ1fZgofRedLgDih/Y7lwP8VC9cvA==
-X-Received: by 2002:a17:902:d502:b0:216:4348:149d with SMTP id d9443c01a7336-219e6f25d60mr484722485ad.53.1735419471375;
-        Sat, 28 Dec 2024 12:57:51 -0800 (PST)
-Received: from [192.168.1.150] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f51c2sm153174585ad.190.2024.12.28.12.57.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 28 Dec 2024 12:57:50 -0800 (PST)
-Message-ID: <0ffbbde1-b5d8-4a53-91e3-80e16da18e28@kernel.dk>
-Date: Sat, 28 Dec 2024 13:57:49 -0700
+        bh=m/dbaQWcTz64med4ZDxAOY2XdL0mP5cmgRkLcZzXkQA=;
+        b=YecBB2AMXQ/afG+NUqeSR05NLBDuPd/S0FTaFEhieV45JaKx8Cew4ZqBNvDgtxe5nP
+         zZyckwp52gUdfemXqZW/dln92/W+7tJBoNSsLlq36ElbYMSJ6EgC6Fwfv65ROuJ2FdBN
+         Y4xiY/Y7jJJ2Z4r4ZCsEnQgyPOjN+LpreSHPTv9Dle638LedRDN8tfraC2q8eEXVKdzF
+         M7Gn0a34iKjlqw/kla4OmlK0v43yoh7bhYGtxvn759S1d86TK8P4ZXGsefRw0aipzRlV
+         1xt18+Tz6WjaElexIb0FDEA49IkB+LiSRK7+FKAQH4i7EGSqxl6owKiZTO8ookZIJZ3p
+         YRqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWl66bUuq5DMwNPbdcqmrVdoT+sX4pDHoj5ReeML9gyhOwdHV+kotZdwzqG3TP7khDOfKS2VbiGslA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyu/sCLhOk99Fr4Xfr+fTcydIsBne/2a6Beoaf3fexXCpjD3wOC
+	yEwvhJ3AVPVyX0Ub9KDRIxQgtpSshbyWxnuq3Psa83Kh2iHkHcd7PHZSxYq3kgfjzkgIDglNHeC
+	fsUxqv9BoO9kSB+ZFEh5uHbj82xF9AWFWktO2eN6W/hYmFR0eebF9Gs8=
+X-Google-Smtp-Source: AGHT+IHEwI8M2TnSsOC7e/5GzWkjMmwdkSKcGRp2HVkzZfIo+Tp8Ma7zB7VA+O0YYEsyT/XZZ+IKwPfuU4sySCU4nJtqcPd7yL4q
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Jens Axboe <axboe@kernel.dk>
+X-Received: by 2002:a05:6e02:20e9:b0:3a3:4175:79da with SMTP id
+ e9e14a558f8ab-3c2d2d5164bmr257871345ab.13.1735419472675; Sat, 28 Dec 2024
+ 12:57:52 -0800 (PST)
+Date: Sat, 28 Dec 2024 12:57:52 -0800
+In-Reply-To: <0ffbbde1-b5d8-4a53-91e3-80e16da18e28@kernel.dk>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67706650.050a0220.226966.00b3.GAE@google.com>
 Subject: Re: [syzbot] [io-uring?] [usb?] WARNING in io_get_cqe_overflow (2)
-To: syzbot <syzbot+e333341d3d985e5173b2@syzkaller.appspotmail.com>
-Cc: asml.silence@gmail.com, io-uring@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- syzkaller-bugs@googlegroups.com
-References: <6728a3a7.050a0220.35b515.01b9.GAE@google.com>
-Content-Language: en-US
-In-Reply-To: <6728a3a7.050a0220.35b515.01b9.GAE@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: syzbot <syzbot+e333341d3d985e5173b2@syzkaller.appspotmail.com>
+To: axboe@kernel.dk
+Cc: asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Should be fixed in upstream for quite a while:
+> Should be fixed in upstream for quite a while:
+>
+> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
 
-#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+This crash does not have a reproducer. I cannot test it.
 
--- 
-Jens Axboe
+>
+> -- 
+> Jens Axboe
 
