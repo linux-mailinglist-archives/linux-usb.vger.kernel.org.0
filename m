@@ -1,93 +1,97 @@
-Return-Path: <linux-usb+bounces-18868-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18869-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B8DD9FDD42
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 05:41:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2BEEB9FDD68
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 06:39:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03C1816070F
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 04:40:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D77571881EB1
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 05:39:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12F0F208D0;
-	Sun, 29 Dec 2024 04:40:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F26028E37;
+	Sun, 29 Dec 2024 05:39:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IwpjntC6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n9tqMR9z"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com [209.85.208.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18734EEBA
-	for <linux-usb@vger.kernel.org>; Sun, 29 Dec 2024 04:40:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F4F18EAB;
+	Sun, 29 Dec 2024 05:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735447252; cv=none; b=aMEw8EdisQYUV9ilf4iIPuQkWn+cbFwf5u4BfZz6pCjXz0ulnl52SPaNmJahFVMd+UByYEVV7CCP5NbEexUC8iCWVZ1+QKA/C9O9G5gO9iTAd+11gSK4vmo5rrqgTNf1WH6taFqhozjr8KGokikyv6cdixaEQ7KmPmuLdPjXhJs=
+	t=1735450739; cv=none; b=LtIyS0esmveNWF3bdsHR5D3Fm50nPxXGyzQL33ckk7zFlbmVcYoQRDpPITwJhsiL7o8hXoBTB51fn+n2l4xWcB7KkxN+Ja7lzk0ufLiGE0ZuGkFR5M6AjFHOL37Gu4UXuGo+wuqqxxBMmQUX0ap1TiBxEddiFWWMbgddMUskcm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735447252; c=relaxed/simple;
-	bh=9cpjEZlasFn/TF0MzeQebIDuDwsv2UCmV166crUP2EU=;
+	s=arc-20240116; t=1735450739; c=relaxed/simple;
+	bh=2ZAfvEapeqlQxdPGabGekF/vOEsQwkH6pIqCbZL1qVs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ivqvb8TfZdSFzTlU3rXCe8SXfTg0iPGyo2INI2ZMfU9m7JclqrUWCh+DALr8vmawADLRqQDb1ulxieo80vEFVKQc7wX3LSujEAetnsgb0C6sLU1an1Eri4GAX96zcLrxbRaQnQiHVjtk14TKc7iyd1JYzLhRL5ZGtaOFN8Rid0k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IwpjntC6; arc=none smtp.client-ip=209.85.208.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-30229d5b229so87590161fa.0
-        for <linux-usb@vger.kernel.org>; Sat, 28 Dec 2024 20:40:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1735447248; x=1736052048; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uDdnbpGz27IMGtr0XBnMjdIcSkl18CTA4qHRA0qOCBY=;
-        b=IwpjntC69nvqdVtxNa5A8sMMHKuWuAN+F9dO6RT5EnvN7V+rQXliDdY8pZOLQ42X2w
-         Ojn/vCrHwu8kRcPXPi1Tes5gS/B1/WYibcSHb0ZxWunOP6hkwNRJgdK32gq29XEeth3P
-         nb2AGxCp9iMKGcViKlSyHjlnExyYkyOx6PUCNCVbSarDjWNiiKL4BjvKqf1vFTNu6zC/
-         mP2QtCrnW3FEw4eQz1RORwVHluXL0q2bjMpFdof+G91rRBj2tGEDseQ817N/lBkR8Y3d
-         hp/R+c4SQb75uCJ/mbNeyAbGXyGYpGmYsNLQiy4ONQWkWTt0bsq6pkXhmt746KoNmPde
-         tQIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735447248; x=1736052048;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uDdnbpGz27IMGtr0XBnMjdIcSkl18CTA4qHRA0qOCBY=;
-        b=qB7bMNk5RKOgI6T/BQE3alRTuaFW4+6+bGsee3dyFWSeC69sZFDQZmojk5UyRXDsHW
-         p589tIvM8L8UumjwbK3qdmLJpNyD65NX/ySWNHiFUxJQX29Mb1axjbzlOM0lC90rqLbR
-         ni6ufIJxy/METYzbDtAXPfKuygIcIAp245c9xLZE1P9UC0K/RFaBO6KdjrRpecwXqnGj
-         At/WcTl9fd2cq3gnRltMyY9Uyg/kqSU1ZnpNQJSOwF5dlzOwcUEcZk2XzYjRzjx5tuVH
-         clTfGXJXZLa39htUldebM3gAeADMmtsRYbfck+4AT82kvS9ufrOsV/GnVqPasJMTbUHG
-         CVhw==
-X-Forwarded-Encrypted: i=1; AJvYcCUKqbjHT/X9waPbrZO2rVov7nG6zRBG59OpAJrX0rGD4qSj+xK/iwWAHbS7Hflx3YfqWlHO119YkQo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yza9ZM2YOikonQyE7/ApQleEXIXnMk8DAhMIsVLXVWoUnXAEKGu
-	AqD8SjRM1WH6qCR9IsOADjEcTWNXDUGDaokWznpmhHcmfAanwyXeSLuwWoB9vH0=
-X-Gm-Gg: ASbGnctn7Fk58VzYWq7XBNTxIDjab/xBmQK3ODNLqguUj8EfPZNUZjC8OjkQbFcmJfZ
-	pcngsTiAfpT1MyhJIqTHrJuENL1m+tG443RZUGxSsmMeio0rGWG3ZUzLNYBHTiIhbmRCUn75kye
-	GfMIHu5GjziFsvsluq8ZYScnHtJ+M5kYMhDQTxY4E3fryLJslMH8IllLpoIsa2u+MnVav6qupyp
-	aUIZSws5zrROlPTxqqA9ZkpHSs4vczP3KTP/BuxdHZ4S3aRooqw4ggw71OHsixKwuPRjWj0p7Sy
-	peG1T9EpGvr/pA2HyCmbuhyUfaMk+8RFbViJ
-X-Google-Smtp-Source: AGHT+IGGaKqiA/FGtyOHCdm2G1rxvM2xozCqYZUAz6DJ6S6VsdQuEiZmmqFkBoAN1EajUtQVGaB0lA==
-X-Received: by 2002:a05:6512:3b90:b0:53e:36c8:6e54 with SMTP id 2adb3069b0e04-54229582067mr9408860e87.42.1735447248134;
-        Sat, 28 Dec 2024 20:40:48 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-542238215e7sm2766765e87.196.2024.12.28.20.40.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Dec 2024 20:40:46 -0800 (PST)
-Date: Sun, 29 Dec 2024 06:40:45 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Sebastian Reichel <sre@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	Nikita Travkin <nikita@trvn.ru>
-Subject: Re: [PATCH 3/5] usb: typec: ucsi: add Huawei Matebook E Go
- (sc8280xp) ucsi driver
-Message-ID: <3q4xpa6gyw5sam4qr7glg2b25bzwgunxwhfqjogqw3wqocphph@5jdbkh6pkxic>
-References: <20241227171353.404432-1-mitltlatltl@gmail.com>
- <20241227171353.404432-4-mitltlatltl@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lmHCD8dRmLlgUG3cqbo1cgXYDV0rWEssWICKDuGadS9CQw1Jl+7FbQL2757Ip0wtJXaG1621qT4dHQMiMoy78TieRtDrH/36oToAHN62MKmec07ll+k11KU2rYqaCpRsYcqGuyLOCSzf9K3hw7STWeuWlVYie6QxZyDWJqhj5QU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n9tqMR9z; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735450738; x=1766986738;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=2ZAfvEapeqlQxdPGabGekF/vOEsQwkH6pIqCbZL1qVs=;
+  b=n9tqMR9z65SDvgBk67Yml2rqA0jqtv34tMJ/pxiET9Q6wIbvv9CNHN2w
+   sA3ens+hoH1gutDQ2Atq8V4L8ds/j8kRPF0HhpAbzlyW2+ltXYfQSebIA
+   gIizEbTbJMdYyxE1xMmvb0Ozy9jWC+w8fYgQ5I2L4rFAN37nwMmDf9pXB
+   RGEHD8xEU34X+UVQok/ikXAWlndZWLlQjxpnDQFrSVZGcdPSExo27xkdr
+   LyvdzGfzCby5lDwq4x5EOCTySPAc+XMsxzoScGFU53qWto+WJ1fpkAMNs
+   tJmPbJNuoiEMcdD9vJOZ9G4M65DzgzLwCStKlWF6elNC72Gk48BhSCO59
+   w==;
+X-CSE-ConnectionGUID: Z3eEAt7QR5+b8f2DHYTqIA==
+X-CSE-MsgGUID: Lbl1mTXqQx23UUWKPr6I2g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="39714084"
+X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
+   d="scan'208";a="39714084"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 21:38:57 -0800
+X-CSE-ConnectionGUID: 3s/MFmMNTKGc/r/0Xdc6Eg==
+X-CSE-MsgGUID: pWJT/xodQjqlIGcz6VIFSA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
+   d="scan'208";a="100868774"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa010.fm.intel.com with ESMTP; 28 Dec 2024 21:38:51 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tRm0m-0004V6-2X;
+	Sun, 29 Dec 2024 05:38:48 +0000
+Date: Sun, 29 Dec 2024 13:38:40 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Mark Brown <broonie@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com, linux-spi@vger.kernel.org
+Subject: Re: [PATCH 2/6] mmc: sdhci-st: Switch from CONFIG_PM_SLEEP guards to
+ pm_sleep_ptr()
+Message-ID: <202412291320.lZkWz3Yv-lkp@intel.com>
+References: <20241229-update_pm_macro-v1-2-c7d4c4856336@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -96,557 +100,93 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241227171353.404432-4-mitltlatltl@gmail.com>
+In-Reply-To: <20241229-update_pm_macro-v1-2-c7d4c4856336@gmail.com>
 
-On Sat, Dec 28, 2024 at 01:13:51AM +0800, Pengyu Luo wrote:
-> The Huawei Matebook E Go (sc8280xp) tablet provides implements UCSI
-> interface in the onboard EC. Add the glue driver to interface the
-> platform's UCSI implementation.
-> 
-> Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-> ---
->  drivers/usb/typec/ucsi/Kconfig              |   9 +
->  drivers/usb/typec/ucsi/Makefile             |   1 +
->  drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 481 ++++++++++++++++++++
->  3 files changed, 491 insertions(+)
->  create mode 100644 drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> 
-> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-> index 680e1b87b..0d0f07488 100644
-> --- a/drivers/usb/typec/ucsi/Kconfig
-> +++ b/drivers/usb/typec/ucsi/Kconfig
-> @@ -78,4 +78,13 @@ config UCSI_LENOVO_YOGA_C630
->  	  To compile the driver as a module, choose M here: the module will be
->  	  called ucsi_yoga_c630.
->  
-> +config UCSI_HUAWEI_GAOKUN
-> +	tristate "UCSI Interface Driver for Huawei Matebook E Go (sc8280xp)"
-> +	depends on EC_HUAWEI_GAOKUN
-> +	help
-> +	  This driver enables UCSI support on the Huawei Matebook E Go tablet.
-> +
-> +	  To compile the driver as a module, choose M here: the module will be
-> +	  called ucsi_huawei_gaokun.
-> +
->  endif
-> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
-> index aed41d238..0b400122b 100644
-> --- a/drivers/usb/typec/ucsi/Makefile
-> +++ b/drivers/usb/typec/ucsi/Makefile
-> @@ -22,3 +22,4 @@ obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
->  obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
->  obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
->  obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)	+= ucsi_yoga_c630.o
-> +obj-$(CONFIG_UCSI_HUAWEI_GAOKUN)	+= ucsi_huawei_gaokun.o
-> diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> new file mode 100644
-> index 000000000..84ed0407d
-> --- /dev/null
-> +++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> @@ -0,0 +1,481 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * ucsi-huawei-gaokun - A UCSI driver for HUAWEI Matebook E Go (sc8280xp)
-> + *
-> + * reference: drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-> + *            drivers/usb/typec/ucsi/ucsi_glink.c
-> + *            drivers/soc/qcom/pmic_glink_altmode.c
-> + *
-> + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
-> + */
-> +
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/bitops.h>
-> +#include <linux/completion.h>
-> +#include <linux/container_of.h>
-> +#include <linux/delay.h>
-> +#include <linux/module.h>
-> +#include <linux/notifier.h>
-> +#include <linux/of.h>
-> +#include <linux/string.h>
-> +#include <linux/workqueue_types.h>
-> +
-> +#include <linux/usb/pd_vdo.h>
-> +#include <drm/bridge/aux-bridge.h>
-> +
-> +#include "ucsi.h"
-> +#include <linux/platform_data/huawei-gaokun-ec.h>
-> +
-> +
-> +#define EC_EVENT_UCSI	0x21
-> +#define EC_EVENT_USB	0x22
-> +
-> +#define GAOKUN_CCX_MASK		GENMASK(1, 0)
-> +#define GAOKUN_MUX_MASK		GENMASK(3, 2)
-> +
-> +#define GAOKUN_DPAM_MASK	GENMASK(3, 0)
-> +#define GAOKUN_HPD_STATE_MASK	BIT(4)
-> +#define GAOKUN_HPD_IRQ_MASK	BIT(5)
-> +
-> +#define CCX_TO_ORI(ccx) (++ccx % 3)
-> +
-> +#define GET_IDX(updt) (ffs(updt) - 1)
-> +
-> +/* Configuration Channel Extension */
-> +enum gaokun_ucsi_ccx {
-> +	USBC_CCX_NORMAL,
-> +	USBC_CCX_REVERSE,
-> +	USBC_CCX_NONE,
-> +};
-> +
-> +enum gaokun_ucsi_mux {
-> +	USBC_MUX_NONE,
-> +	USBC_MUX_USB_2L,
-> +	USBC_MUX_DP_4L,
-> +	USBC_MUX_USB_DP,
-> +};
-> +
-> +struct gaokun_ucsi_reg {
-> +	u8 port_num;
-> +	u8 port_updt;
-> +	u8 port_data[4];
-> +	u8 checksum;
-> +	u8 reserved;
-> +} __packed;
-> +
-> +struct gaokun_ucsi_port {
-> +	struct completion usb_ack;
-> +	spinlock_t lock;
-> +
-> +	struct gaokun_ucsi *ucsi;
-> +	struct auxiliary_device *bridge;
-> +
-> +	int idx;
-> +	enum gaokun_ucsi_ccx ccx;
-> +	enum gaokun_ucsi_mux mux;
-> +	u8 mode;
-> +	u16 svid;
-> +	u8 hpd_state;
-> +	u8 hpd_irq;
-> +};
-> +
-> +struct gaokun_ucsi {
-> +	struct gaokun_ec *ec;
-> +	struct ucsi *ucsi;
-> +	struct gaokun_ucsi_port *ports;
-> +	struct device *dev;
-> +	struct work_struct work;
-> +	struct notifier_block nb;
-> +	u16 version;
-> +	u8 port_num;
-> +};
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* For UCSI */
-> +
-> +static int gaokun_ucsi_read_version(struct ucsi *ucsi, u16 *version)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> +
-> +	*version = uec->version;
-> +
-> +	return 0;
-> +}
-> +
-> +static int gaokun_ucsi_read_cci(struct ucsi *ucsi, u32 *cci)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> +	u8 buf[GAOKUN_UCSI_READ_SIZE];
-> +	int ret;
-> +
-> +	ret = gaokun_ec_ucsi_read(uec->ec, buf);
-> +	if (ret)
-> +		return ret;
-> +
-> +	memcpy(cci, buf, sizeof(*cci));
-> +
-> +	return 0;
-> +}
-> +
-> +static int gaokun_ucsi_read_message_in(struct ucsi *ucsi,
-> +				       void *val, size_t val_len)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> +	u8 buf[GAOKUN_UCSI_READ_SIZE];
-> +	int ret;
-> +
-> +	ret = gaokun_ec_ucsi_read(uec->ec, buf);
-> +	if (ret)
-> +		return ret;
-> +
-> +	memcpy(val, buf + GAOKUN_UCSI_CCI_SIZE,
-> +	       min(val_len, GAOKUN_UCSI_DATA_SIZE));
-> +
-> +	return 0;
-> +}
-> +
-> +static int gaokun_ucsi_async_control(struct ucsi *ucsi, u64 command)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> +	u8 buf[GAOKUN_UCSI_WRITE_SIZE] = {};
-> +
-> +	memcpy(buf, &command, sizeof(command));
-> +
-> +	return gaokun_ec_ucsi_write(uec->ec, buf);
-> +}
-> +
-> +static void gaokun_ucsi_update_connector(struct ucsi_connector *con)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
-> +
-> +	if (con->num > uec->port_num)
-> +		return;
-> +
-> +	con->typec_cap.orientation_aware = true;
-> +}
-> +
-> +static void gaokun_set_orientation(struct ucsi_connector *con,
-> +				   struct gaokun_ucsi_port *port)
-> +{
-> +	enum gaokun_ucsi_ccx ccx;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&port->lock, flags);
-> +	ccx = port->ccx;
-> +	spin_unlock_irqrestore(&port->lock, flags);
-> +
-> +	typec_set_orientation(con->port, CCX_TO_ORI(ccx));
-> +}
-> +
-> +static void gaokun_ucsi_connector_status(struct ucsi_connector *con)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
-> +	int idx;
-> +
-> +	idx = con->num - 1;
-> +	if (con->num > uec->port_num) {
-> +		dev_warn(uec->ucsi->dev, "set orientation out of range: con%d\n", idx);
-> +		return;
-> +	}
-> +
-> +	gaokun_set_orientation(con, &uec->ports[idx]);
-> +}
-> +
-> +const struct ucsi_operations gaokun_ucsi_ops = {
-> +	.read_version = gaokun_ucsi_read_version,
-> +	.read_cci = gaokun_ucsi_read_cci,
-> +	.read_message_in = gaokun_ucsi_read_message_in,
-> +	.sync_control = ucsi_sync_control_common,
-> +	.async_control = gaokun_ucsi_async_control,
-> +	.update_connector = gaokun_ucsi_update_connector,
-> +	.connector_status = gaokun_ucsi_connector_status,
-> +};
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* For Altmode */
-> +
-> +static void gaokun_ucsi_port_update(struct gaokun_ucsi_port *port,
-> +				    const u8 *port_data)
-> +{
-> +	unsigned long flags;
-> +	u8 dcc, ddi;
-> +	int offset = port->idx * 2; /* every port has 2 Bytes data */
-> +
-> +	dcc = port_data[offset];
-> +	ddi = port_data[offset + 1];
+Hi Raphael,
 
-What is dcc and ddi? Are those just names from the DSDT?
+kernel test robot noticed the following build errors:
 
-> +
-> +	spin_lock_irqsave(&port->lock, flags);
-> +
-> +	port->ccx = FIELD_GET(GAOKUN_CCX_MASK, dcc);
-> +	port->mux = FIELD_GET(GAOKUN_MUX_MASK, dcc);
-> +	port->mode = FIELD_GET(GAOKUN_DPAM_MASK, ddi);
-> +	port->hpd_state = FIELD_GET(GAOKUN_HPD_STATE_MASK, ddi);
-> +	port->hpd_irq = FIELD_GET(GAOKUN_HPD_IRQ_MASK, ddi);
-> +
-> +	switch (port->mux) {
-> +	case USBC_MUX_NONE:
-> +		port->svid = 0;
-> +		break;
-> +	case USBC_MUX_USB_2L:
-> +		port->svid = USB_SID_PD;
-> +		break;
-> +	case USBC_MUX_DP_4L:
-> +	case USBC_MUX_USB_DP:
-> +		port->svid = USB_SID_DISPLAYPORT;
-> +		if (port->ccx == USBC_CCX_REVERSE)
-> +			port->mode -= 6;
+[auto build test ERROR on 8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2]
 
-I'd prefer it this were more explicit about what is happening.
+url:    https://github.com/intel-lab-lkp/linux/commits/Raphael-Gallais-Pou/usb-dwc3-st-Switch-from-CONFIG_PM_SLEEP-guards-to-pm_sleep_ptr/20241229-073700
+base:   8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2
+patch link:    https://lore.kernel.org/r/20241229-update_pm_macro-v1-2-c7d4c4856336%40gmail.com
+patch subject: [PATCH 2/6] mmc: sdhci-st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20241229/202412291320.lZkWz3Yv-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241229/202412291320.lZkWz3Yv-lkp@intel.com/reproduce)
 
-> +		break;
-> +	default:
-> +		break;
-> +	}
-> +
-> +	spin_unlock_irqrestore(&port->lock, flags);
-> +}
-> +
-> +static int gaokun_ucsi_refresh(struct gaokun_ucsi *uec)
-> +{
-> +	struct gaokun_ucsi_reg ureg;
-> +	int ret, idx;
-> +
-> +	ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
-> +	if (ret)
-> +		return -EIO;
-> +
-> +	uec->port_num = ureg.port_num;
-> +	idx = GET_IDX(ureg.port_updt);
-> +
-> +	if (idx >= 0 && idx < ureg.port_num)
-> +		gaokun_ucsi_port_update(&uec->ports[idx], ureg.port_data);
-> +
-> +	return idx;
-> +}
-> +
-> +static void gaokun_ucsi_handle_altmode(struct gaokun_ucsi_port *port)
-> +{
-> +	struct gaokun_ucsi *uec = port->ucsi;
-> +	int idx = port->idx;
-> +
-> +	if (idx >= uec->ucsi->cap.num_connectors || !uec->ucsi->connector) {
-> +		dev_warn(uec->ucsi->dev, "altmode port out of range: %d\n", idx);
-> +		return;
-> +	}
-> +
-> +	/* UCSI callback .connector_status() have set orientation */
-> +	if (port->bridge)
-> +		drm_aux_hpd_bridge_notify(&port->bridge->dev,
-> +					  port->hpd_state ?
-> +					  connector_status_connected :
-> +					  connector_status_disconnected);
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412291320.lZkWz3Yv-lkp@intel.com/
 
-Does your platform report any altmodes? What do you see in
-/sys/class/typec/port0/port0.*/ ?
+All errors (new ones prefixed by >>):
 
-> +
-> +	gaokun_ec_ucsi_pan_ack(uec->ec, port->idx);
-> +}
-> +
-> +static void gaokun_ucsi_altmode_notify_ind(struct gaokun_ucsi *uec)
-> +{
-> +	int idx;
-> +
-> +	idx = gaokun_ucsi_refresh(uec);
-> +	if (idx < 0)
-> +		gaokun_ec_ucsi_pan_ack(uec->ec, idx);
-> +	else
-> +		gaokun_ucsi_handle_altmode(&uec->ports[idx]);
-> +}
-> +
-> +/*
-> + * USB event is necessary for enabling altmode, the event should follow
-> + * UCSI event, if not after timeout(this notify may be disabled somehow),
-> + * then force to enable altmode.
-> + */
-> +static void gaokun_ucsi_handle_no_usb_event(struct gaokun_ucsi *uec, int idx)
-> +{
-> +	struct gaokun_ucsi_port *port;
-> +
-> +	port = &uec->ports[idx];
-> +	if (!wait_for_completion_timeout(&port->usb_ack, 2 * HZ)) {
-> +		dev_warn(uec->dev, "No USB EVENT, triggered by UCSI EVENT");
-> +		gaokun_ucsi_altmode_notify_ind(uec);
-> +	}
-> +}
-> +
-> +static int gaokun_ucsi_notify(struct notifier_block *nb,
-> +			      unsigned long action, void *data)
-> +{
-> +	u32 cci;
-> +	struct gaokun_ucsi *uec = container_of(nb, struct gaokun_ucsi, nb);
-> +
-> +	switch (action) {
-> +	case EC_EVENT_USB:
-> +		gaokun_ucsi_altmode_notify_ind(uec);
-> +		return NOTIFY_OK;
-> +
-> +	case EC_EVENT_UCSI:
-> +		uec->ucsi->ops->read_cci(uec->ucsi, &cci);
-> +		ucsi_notify_common(uec->ucsi, cci);
-> +		if (UCSI_CCI_CONNECTOR(cci))
-> +			gaokun_ucsi_handle_no_usb_event(uec, UCSI_CCI_CONNECTOR(cci) - 1);
-> +
-> +		return NOTIFY_OK;
-> +
-> +	default:
-> +		return NOTIFY_DONE;
-> +	}
-> +}
-> +
-> +static int gaokun_ucsi_get_port_num(struct gaokun_ucsi *uec)
-> +{
-> +	struct gaokun_ucsi_reg ureg;
-> +	int ret;
-> +
-> +	ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
-> +
-> +	return ret ? 0 : ureg.port_num;
-> +}
-> +
-> +static int gaokun_ucsi_ports_init(struct gaokun_ucsi *uec)
-> +{
-> +	u32 port;
-> +	int i, ret, port_num;
-> +	struct device *dev = uec->dev;
-> +	struct gaokun_ucsi_port *ucsi_port;
-> +	struct fwnode_handle *fwnode;
-> +
-> +	port_num = gaokun_ucsi_get_port_num(uec);
-> +	uec->port_num = port_num;
-> +
-> +	uec->ports = devm_kzalloc(dev, port_num * sizeof(*(uec->ports)),
-> +				  GFP_KERNEL);
-> +	if (!uec->ports)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < port_num; ++i) {
-> +		ucsi_port = &uec->ports[i];
-> +		ucsi_port->ccx = USBC_CCX_NONE;
-> +		ucsi_port->idx = i;
-> +		ucsi_port->ucsi = uec;
-> +		init_completion(&ucsi_port->usb_ack);
-> +		spin_lock_init(&ucsi_port->lock);
-> +	}
-> +
-> +	device_for_each_child_node(dev, fwnode) {
-> +		ret = fwnode_property_read_u32(fwnode, "reg", &port);
-> +		if (ret < 0) {
-> +			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
-> +			fwnode_handle_put(fwnode);
-> +			return ret;
-> +		}
-> +
-> +		if (port >= port_num) {
-> +			dev_warn(dev, "invalid connector number %d, ignoring\n", port);
-> +			continue;
-> +		}
-> +
-> +		ucsi_port = &uec->ports[port];
-> +		ucsi_port->bridge = devm_drm_dp_hpd_bridge_alloc(dev, to_of_node(fwnode));
-> +		if (IS_ERR(ucsi_port->bridge)) {
-> +			fwnode_handle_put(fwnode);
-> +			return PTR_ERR(ucsi_port->bridge);
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < port_num; i++) {
-> +		if (!uec->ports[i].bridge)
-> +			continue;
-> +
-> +		ret = devm_drm_dp_hpd_bridge_add(dev, uec->ports[i].bridge);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void gaokun_ucsi_register_worker(struct work_struct *work)
-> +{
-> +	struct gaokun_ucsi *uec;
-> +	struct ucsi *ucsi;
-> +	int ret;
-> +
-> +	uec = container_of(work, struct gaokun_ucsi, work);
-> +	ucsi = uec->ucsi;
-> +
-> +	ucsi->quirks = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_PDOS;
+   drivers/mmc/host/sdhci-st.c: In function 'sdhci_st_suspend':
+>> drivers/mmc/host/sdhci-st.c:460:15: error: implicit declaration of function 'sdhci_suspend_host'; did you mean 'sdhci_add_host'? [-Wimplicit-function-declaration]
+     460 |         ret = sdhci_suspend_host(host);
+         |               ^~~~~~~~~~~~~~~~~~
+         |               sdhci_add_host
+   drivers/mmc/host/sdhci-st.c: In function 'sdhci_st_resume':
+>> drivers/mmc/host/sdhci-st.c:494:16: error: implicit declaration of function 'sdhci_resume_host'; did you mean 'sdhci_remove_host'? [-Wimplicit-function-declaration]
+     494 |         return sdhci_resume_host(host);
+         |                ^~~~~~~~~~~~~~~~~
+         |                sdhci_remove_host
 
-Does it crash in the same way as GLINK crashes (as you've set
-UCSI_NO_PARTNER_PDOS)?
 
-> +
-> +	ssleep(3); /* EC can't handle UCSI properly in the early stage */
-> +
-> +	ret = gaokun_ec_register_notify(uec->ec, &uec->nb);
-> +	if (ret) {
-> +		dev_err_probe(ucsi->dev, ret, "notifier register failed\n");
-> +		return;
-> +	}
-> +
-> +	ret = ucsi_register(ucsi);
-> +	if (ret)
-> +		dev_err_probe(ucsi->dev, ret, "ucsi register failed\n");
-> +}
-> +
-> +static int gaokun_ucsi_register(struct gaokun_ucsi *uec)
+vim +460 drivers/mmc/host/sdhci-st.c
 
-Please inline
-
-> +{
-> +	schedule_work(&uec->work);
-> +
-> +	return 0;
-> +}
-> +
-> +static int gaokun_ucsi_probe(struct auxiliary_device *adev,
-> +			     const struct auxiliary_device_id *id)
-> +{
-> +	struct gaokun_ec *ec = adev->dev.platform_data;
-> +	struct device *dev = &adev->dev;
-> +	struct gaokun_ucsi *uec;
-> +	int ret;
-> +
-> +	uec = devm_kzalloc(dev, sizeof(*uec), GFP_KERNEL);
-> +	if (!uec)
-> +		return -ENOMEM;
-> +
-> +	uec->ec = ec;
-> +	uec->dev = dev;
-> +	uec->version = 0x0100;
-> +	uec->nb.notifier_call = gaokun_ucsi_notify;
-> +
-> +	INIT_WORK(&uec->work, gaokun_ucsi_register_worker);
-> +
-> +	ret = gaokun_ucsi_ports_init(uec);
-> +	if (ret)
-> +		return ret;
-> +
-> +	uec->ucsi = ucsi_create(dev, &gaokun_ucsi_ops);
-> +	if (IS_ERR(uec->ucsi))
-> +		return PTR_ERR(uec->ucsi);
-> +
-> +	ucsi_set_drvdata(uec->ucsi, uec);
-> +	auxiliary_set_drvdata(adev, uec);
-> +
-> +	return gaokun_ucsi_register(uec);
-> +}
-> +
-> +static void gaokun_ucsi_remove(struct auxiliary_device *adev)
-> +{
-> +	struct gaokun_ucsi *uec = auxiliary_get_drvdata(adev);
-> +
-> +	gaokun_ec_unregister_notify(uec->ec, &uec->nb);
-> +	ucsi_unregister(uec->ucsi);
-> +	ucsi_destroy(uec->ucsi);
-> +}
-> +
-> +static const struct auxiliary_device_id gaokun_ucsi_id_table[] = {
-> +	{ .name = GAOKUN_MOD_NAME "." GAOKUN_DEV_UCSI, },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, gaokun_ucsi_id_table);
-> +
-> +static struct auxiliary_driver gaokun_ucsi_driver = {
-> +	.name = GAOKUN_DEV_UCSI,
-> +	.id_table = gaokun_ucsi_id_table,
-> +	.probe = gaokun_ucsi_probe,
-> +	.remove = gaokun_ucsi_remove,
-> +};
-> +
-> +module_auxiliary_driver(gaokun_ucsi_driver);
-> +
-> +MODULE_DESCRIPTION("HUAWEI Matebook E Go UCSI driver");
-> +MODULE_LICENSE("GPL");
-> -- 
-> 2.47.1
-> 
+f52d9c4f459bda Peter Griffin 2014-07-09  449  
+f52d9c4f459bda Peter Griffin 2014-07-09  450  static int sdhci_st_suspend(struct device *dev)
+f52d9c4f459bda Peter Griffin 2014-07-09  451  {
+f52d9c4f459bda Peter Griffin 2014-07-09  452  	struct sdhci_host *host = dev_get_drvdata(dev);
+f52d9c4f459bda Peter Griffin 2014-07-09  453  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+1531675269c833 Jisheng Zhang 2016-02-16  454  	struct st_mmc_platform_data *pdata = sdhci_pltfm_priv(pltfm_host);
+d38dcad4e7b48f Adrian Hunter 2017-03-20  455  	int ret;
+d38dcad4e7b48f Adrian Hunter 2017-03-20  456  
+d38dcad4e7b48f Adrian Hunter 2017-03-20  457  	if (host->tuning_mode != SDHCI_TUNING_MODE_3)
+d38dcad4e7b48f Adrian Hunter 2017-03-20  458  		mmc_retune_needed(host->mmc);
+f52d9c4f459bda Peter Griffin 2014-07-09  459  
+d38dcad4e7b48f Adrian Hunter 2017-03-20 @460  	ret = sdhci_suspend_host(host);
+f52d9c4f459bda Peter Griffin 2014-07-09  461  	if (ret)
+f52d9c4f459bda Peter Griffin 2014-07-09  462  		goto out;
+f52d9c4f459bda Peter Griffin 2014-07-09  463  
+406c24310a7bd7 Peter Griffin 2015-04-10  464  	reset_control_assert(pdata->rstc);
+406c24310a7bd7 Peter Griffin 2015-04-10  465  
+3ae50f4512ce83 Lee Jones     2016-09-08  466  	clk_disable_unprepare(pdata->icnclk);
+f52d9c4f459bda Peter Griffin 2014-07-09  467  	clk_disable_unprepare(pltfm_host->clk);
+f52d9c4f459bda Peter Griffin 2014-07-09  468  out:
+f52d9c4f459bda Peter Griffin 2014-07-09  469  	return ret;
+f52d9c4f459bda Peter Griffin 2014-07-09  470  }
+f52d9c4f459bda Peter Griffin 2014-07-09  471  
+f52d9c4f459bda Peter Griffin 2014-07-09  472  static int sdhci_st_resume(struct device *dev)
+f52d9c4f459bda Peter Griffin 2014-07-09  473  {
+f52d9c4f459bda Peter Griffin 2014-07-09  474  	struct sdhci_host *host = dev_get_drvdata(dev);
+f52d9c4f459bda Peter Griffin 2014-07-09  475  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
+1531675269c833 Jisheng Zhang 2016-02-16  476  	struct st_mmc_platform_data *pdata = sdhci_pltfm_priv(pltfm_host);
+2053812f6e1af0 Peter Griffin 2015-04-10  477  	struct device_node *np = dev->of_node;
+7f55eb101d4a75 Arvind Yadav  2017-06-20  478  	int ret;
+f52d9c4f459bda Peter Griffin 2014-07-09  479  
+7f55eb101d4a75 Arvind Yadav  2017-06-20  480  	ret = clk_prepare_enable(pltfm_host->clk);
+7f55eb101d4a75 Arvind Yadav  2017-06-20  481  	if (ret)
+7f55eb101d4a75 Arvind Yadav  2017-06-20  482  		return ret;
+7f55eb101d4a75 Arvind Yadav  2017-06-20  483  
+7f55eb101d4a75 Arvind Yadav  2017-06-20  484  	ret = clk_prepare_enable(pdata->icnclk);
+7f55eb101d4a75 Arvind Yadav  2017-06-20  485  	if (ret) {
+7f55eb101d4a75 Arvind Yadav  2017-06-20  486  		clk_disable_unprepare(pltfm_host->clk);
+7f55eb101d4a75 Arvind Yadav  2017-06-20  487  		return ret;
+7f55eb101d4a75 Arvind Yadav  2017-06-20  488  	}
+f52d9c4f459bda Peter Griffin 2014-07-09  489  
+406c24310a7bd7 Peter Griffin 2015-04-10  490  	reset_control_deassert(pdata->rstc);
+406c24310a7bd7 Peter Griffin 2015-04-10  491  
+2053812f6e1af0 Peter Griffin 2015-04-10  492  	st_mmcss_cconfig(np, host);
+2053812f6e1af0 Peter Griffin 2015-04-10  493  
+f52d9c4f459bda Peter Griffin 2014-07-09 @494  	return sdhci_resume_host(host);
+f52d9c4f459bda Peter Griffin 2014-07-09  495  }
+f52d9c4f459bda Peter Griffin 2014-07-09  496  
 
 -- 
-With best wishes
-Dmitry
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
