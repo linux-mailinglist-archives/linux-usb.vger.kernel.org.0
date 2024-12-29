@@ -1,194 +1,234 @@
-Return-Path: <linux-usb+bounces-18866-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18867-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 680EA9FDD17
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 02:39:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 751FD9FDD37
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 05:08:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08A6F188290B
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 01:39:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC6E77A0581
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 04:08:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4EB0CA4E;
-	Sun, 29 Dec 2024 01:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937FD1CD0C;
+	Sun, 29 Dec 2024 04:08:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YrHqigEN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gUp4gJTr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B419C17C2;
-	Sun, 29 Dec 2024 01:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDE7B10A3E
+	for <linux-usb@vger.kernel.org>; Sun, 29 Dec 2024 04:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735436379; cv=none; b=T9nIdeubL7KnY9R4CUmvfTFcIEUNtWcMBtkjUCUaG2BT5QVi4OFvu/DvBqd7s+MnBbWRGNUqCj7V/XKDXlY7jcjvp6VLzy1d4lRXo+AVmIhUP5ouqyxbZP+S3ZmVMJByZxAKz59nvba6QOcPqMRwyLjgwL3Bjsz5IRN2Or7TDCY=
+	t=1735445290; cv=none; b=RqwIsiYthXXNwpkm6yMfQI/aRqs9F86bfUckwB/dqN7OmXtXuWxAHkvZTgSVkVmL2QFA0dEu3ZTZuR1tKkAVJGNFmy0sDr114sAsSBPWII1a2eNbCjBZwCZQ8CWYIHJ4HAsuyDxLIA4/UQpw3pxL34EIexnN6JHaFEB0OAeikTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735436379; c=relaxed/simple;
-	bh=rFQfnH8g9qnvAm/orX7H7+JRj5OpvCxqGxR6Qhq2ETY=;
+	s=arc-20240116; t=1735445290; c=relaxed/simple;
+	bh=/quudPiktVZqE9WjTumurLTNm6H8nKE+1TLqFdezSjk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=igJ0osIVB9/iEbLsbv9GFkPfLYx62cgZHkZXCiaxWOr4kDrLPpxwLKLELKhyv2DsysyTstegy89WIvYrQCn3+XOY8u2uFFqw84QxDyxLGUopHTcoZS818KHunVwyelCjOw15M3dme9aLT706I2ILTTWb4z3+v3Xlnl2AeG50bwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YrHqigEN; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735436378; x=1766972378;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rFQfnH8g9qnvAm/orX7H7+JRj5OpvCxqGxR6Qhq2ETY=;
-  b=YrHqigENiRZFKFNdf/eyVKM6sZLYSgeadY5sfAlQL2fs9T9/XmOpLaKd
-   ywgM/fVAo8a3bGNGuGdDZLjG6OSJRe9wQ8bdnvskoIh7id9Gd2e+Pu/Jh
-   mOdhNYOfiv3iaBnb9uVVCtP3DG9B78oLa0Gm/RGRSL5TjImxTnONG5JjB
-   VVlsinm/4ed/XkRy7qm5Qnh23nI0Ovq+XI/L8yfzHb+2QAZY0eMrGXDX/
-   x4J/WykliuqVrIbB8q6l6dsWCT7eLL9qAsuR3tobDcCEfxt84AT/xweKu
-   9Bx/M2Y/7502cShz4K4QGYKqVMBVK+MNIQ2wFsK6wj9a9zScdBuyHY708
-   Q==;
-X-CSE-ConnectionGUID: yz7TVx8yQEKuOVt1PxUB4A==
-X-CSE-MsgGUID: eoOjtTqZQImoffjpcVE2Wg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="35802053"
-X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
-   d="scan'208";a="35802053"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 17:39:37 -0800
-X-CSE-ConnectionGUID: Oy4svG45T4qIdA2Vlwx06g==
-X-CSE-MsgGUID: xNOqO8z6T+WhcD2uqXjGIg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="100302592"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa010.jf.intel.com with ESMTP; 28 Dec 2024 17:39:31 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tRiHA-0004QO-0J;
-	Sun, 29 Dec 2024 01:39:28 +0000
-Date: Sun, 29 Dec 2024 09:39:05 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Mark Brown <broonie@kernel.org>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mmc@vger.kernel.org, linux-mtd@lists.infradead.org,
-	linux-ide@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/6] mmc: sdhci-st: Switch from CONFIG_PM_SLEEP guards to
- pm_sleep_ptr()
-Message-ID: <202412290939.43oNt9t6-lkp@intel.com>
-References: <20241229-update_pm_macro-v1-2-c7d4c4856336@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZDrq5DZD8gek/2Fw01EUzOm6y+i/RFmBrPcMs5GuqFc8g99iY8TjmRLHP4/PE885LVUunmZxt5G3hb6gEfay+lnNJ6KBdsmJslejp/Bjr25eR0McdxoXLz5JMYQ1xSuN9V8jiRwI3U8AQExEf5BFulLAdH1TqoY0RshklK3rmIs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gUp4gJTr; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-54020b0dcd2so10038095e87.1
+        for <linux-usb@vger.kernel.org>; Sat, 28 Dec 2024 20:08:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1735445285; x=1736050085; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dBYyXD4A7od+Hr4TN2s40+nz0C8Q9NU/oHkDiqfb3QY=;
+        b=gUp4gJTrqt7tweU/u38PQzO+s2KE8d2UGokiI3sWerMyVWDyXw+hcpT2dUX5Zz2F68
+         nm2Kz0Yq6WMUi5Ki/PPh9/gtPWV3IWoEwJc5Nc5gED2K7wACic4xRiB/5tb6LLqygasR
+         adfpyJCZlSSJ+DUYLTJLsRGtvVMlZz5YaJhmw7unDMIAVlqVc7bcJZR1lgrPvyIxZ/7J
+         Qdw7oipnUyoWKQbW+upJCF3b2UaIISg+i/PJfVaHV1hJ2DWaou9BX6KVc/i6iTZ0hpkA
+         Z4kT+48q6Il/hlV+dP9IKh1BNOoBqhpAQfpXpjenr+dQjcDbOurBLExBur5iF5QvVpPX
+         caeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735445285; x=1736050085;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dBYyXD4A7od+Hr4TN2s40+nz0C8Q9NU/oHkDiqfb3QY=;
+        b=QMVMMgwCxoaeGIYQ676yj5hx8YWCMnk6XcF8zSmwCF/J+risSKrCukh2Isck0R2Q9o
+         Gv475dNRh3APUjgA6mTRnq9dZjdQ4S8L7nFkuANIOIydaXb+pzviSnMLAq9LOH8elkH7
+         4lEwmkrYGA3R6QRdDdYiKVNM/kB4pr2oI/TAb6G94hetSXgshHHdaz9ORSI18uTPkAwi
+         Pbi922FeDVG6X0MtJkesdtw/l3zAwm53wmJULJnVubZb5dIm2aap8KcdKxN+71CI2Ti/
+         NnxYm/A4w0MQyrkytx9Z10hBNKA86rDJTJIQcow4Ic/YTgqy7HGXs62FDSR1bekwdNs3
+         fBXQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWTq5QTMxiCbcKyPL6L5of1AYjz3V9Vj6m9l7QclrztZ7Md/m1YyHi/NosmpZ0RrvvLrx9TvORK2E8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJXNbghgniKsTcj6yOAQxcgPnjB0OivtHRnZCpQLjVG7XVqm9T
+	Bqjo5ZfhnBP3TWeWMPv7H1wqyvCsIFGqThSWSOdi04Lg55b4OBI+ze9I1lzyUow=
+X-Gm-Gg: ASbGnctMNmwk8BQorw+dhQwO8CW7umEjiLXpisT3CmDjwwPC91vKhLNYNiW52GcWje1
+	AVevD2BuMrqfdjx4Z9910SiOSZ1iebNiMFoAa1S36X4wLLuGOH/r/vtylN6EFkJhK55nnTZkgku
+	RyZRECHlE8Qx4wWgo4eBLd3c8Xyr5wue/O+gw7PU63ZyCwCA0NUNdnFn2M7VtyVT0j6uROanlyt
+	U6d2cLRHBP7S03bXirUM7lxTaRU6m4YTdYFa4dU1wVsdXQj3KHfrtJ9+fk02/TIbsaQcDDbCfyd
+	BeTjMvkXrrvzT6Qa1ycxDuqkAbOJCIJYUJ7C
+X-Google-Smtp-Source: AGHT+IEmnQonNnCtCNCxnF10T/nU4V0yXQZtHkXo8ONEqj/q42yAyh+ZqfgVXb/gaGmlvzPHgq3v7w==
+X-Received: by 2002:a05:6512:318e:b0:540:1db4:3c72 with SMTP id 2adb3069b0e04-542294434abmr9788309e87.10.1735445284611;
+        Sat, 28 Dec 2024 20:08:04 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-542235f6790sm2760827e87.2.2024.12.28.20.08.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 28 Dec 2024 20:08:03 -0800 (PST)
+Date: Sun, 29 Dec 2024 06:08:00 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Pengyu Luo <mitltlatltl@gmail.com>
+Cc: krzk@kernel.org, andersson@kernel.org, bryan.odonoghue@linaro.org, 
+	conor+dt@kernel.org, devicetree@vger.kernel.org, gregkh@linuxfoundation.org, 
+	hdegoede@redhat.com, heikki.krogerus@linux.intel.com, ilpo.jarvinen@linux.intel.com, 
+	konradybcio@kernel.org, krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, 
+	nikita@trvn.ru, platform-driver-x86@vger.kernel.org, robh@kernel.org, 
+	sre@kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
+Message-ID: <xiwaq7fapkkmohg743v36uzpxv4ib4o6upibh7fgvmfjiupy2k@zqxw53prsith>
+References: <53da6468-501c-4c0f-a73b-4eac99c72b8c@kernel.org>
+ <20241228113438.591254-1-mitltlatltl@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20241229-update_pm_macro-v1-2-c7d4c4856336@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241228113438.591254-1-mitltlatltl@gmail.com>
 
-Hi Raphael,
+On Sat, Dec 28, 2024 at 07:34:37PM +0800, Pengyu Luo wrote:
+> > On Sat, Dec 28, 2024 at 5:58 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > On 27/12/2024 18:13, Pengyu Luo wrote:
+> > > +
+> > > +#include <linux/platform_data/huawei-gaokun-ec.h>
+> > > +
+> > > +#define EC_EVENT             0x06
+> > > +
+> > > +/* Also can be found in ACPI specification 12.3 */
+> > > +#define EC_READ                      0x80
+> > > +#define EC_WRITE             0x81
+> > > +#define EC_BURST             0x82
+> > > +#define EC_QUERY             0x84
+> > > +
+> > > +
+> > > +#define EC_EVENT_LID         0x81
+> > > +
+> > > +#define EC_LID_STATE         0x80
+> > > +#define EC_LID_OPEN          BIT(1)
+> > > +
+> > > +#define UCSI_REG_SIZE                7
+> > > +
+> > > +/* for tx, command sequences are arranged as
+> >
+> > Use Linux style comments, see coding style.
+> >
+> 
+> Agree
+> 
+> > > + * {master_cmd, slave_cmd, data_len, data_seq}
+> > > + */
+> > > +#define REQ_HDR_SIZE         3
+> > > +#define INPUT_SIZE_OFFSET    2
+> > > +#define INPUT_DATA_OFFSET    3
+> > > +
+> > > +/* for rx, data sequences are arranged as
+> > > + * {status, data_len(unreliable), data_seq}
+> > > + */
+> > > +#define RESP_HDR_SIZE                2
+> > > +#define DATA_OFFSET          2
+> > > +
+> > > +
+> > > +struct gaokun_ec {
+> > > +     struct i2c_client *client;
+> > > +     struct mutex lock;
+> >
+> > Missing doc. Run Checkpatch --strict, so you will know what is missing here.
+> >
+> 
+> I see. A comment for mutex lock.
+> 
+> > > +     struct blocking_notifier_head notifier_list;
+> > > +     struct input_dev *idev;
+> > > +     bool suspended;
+> > > +};
+> > > +
+> >
+> >
+> >
+> > ...
+> >
+> > > +
+> > > +static DEVICE_ATTR_RO(temperature);
+> > > +
+> > > +static struct attribute *gaokun_wmi_features_attrs[] = {
+> > > +     &dev_attr_charge_control_thresholds.attr,
+> > > +     &dev_attr_smart_charge_param.attr,
+> > > +     &dev_attr_smart_charge.attr,
+> > > +     &dev_attr_fn_lock_state.attr,
+> > > +     &dev_attr_temperature.attr,
+> > > +     NULL,
+> > > +};
+> >
+> >
+> > No, don't expose your own interface. Charging is already exposed by
+> > power supply framework. Temperature by hwmon sensors. Drop all these and
+> > never re-implement existing kernel user-space interfaces.
+> >
+> 
+> I don't quite understand what you mean. You mean I should use hwmon
+> interface like hwmon_device_register_with_groups to register it, right?
+> As for battery, get/set_propery allow us to handle charging thresholds
+> things, but there are smart_charge_param, smart_charge and fn_lock to handle.
 
-kernel test robot noticed the following build errors:
+Please push the smart_* to the PSY driver. At least it makes sense to
+move those. I'm not sure about the fn_lock one. If you have a separate
+EC-based input device, it should go to it. If not, let's keep it in the
+base device.
 
-[auto build test ERROR on 8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2]
+> 
+> >
+> > > diff --git a/include/linux/platform_data/huawei-gaokun-ec.h b/include/linux/platform_data/huawei-gaokun-ec.h
+> > > new file mode 100644
+> > > index 000000000..a649e9ecf
+> > > --- /dev/null
+> > > +++ b/include/linux/platform_data/huawei-gaokun-ec.h
+> > > @@ -0,0 +1,90 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/* Huawei Matebook E Go (sc8280xp) Embedded Controller
+> > > + *
+> > > + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
+> > > + *
+> > > + */
+> > > +
+> > > +#ifndef __HUAWEI_GAOKUN_EC_H__
+> > > +#define __HUAWEI_GAOKUN_EC_H__
+> > > +
+> > > +#define GAOKUN_UCSI_CCI_SIZE 4
+> > > +#define GAOKUN_UCSI_DATA_SIZE        16
+> > > +#define GAOKUN_UCSI_READ_SIZE        (GAOKUN_UCSI_CCI_SIZE + GAOKUN_UCSI_DATA_SIZE)
+> > > +#define GAOKUN_UCSI_WRITE_SIZE       0x18
+> > > +
+> > > +#define GAOKUN_TZ_REG_NUM    20
+> > > +#define GAOKUN_SMART_CHARGE_DATA_SIZE        4 /* mode, delay, start, end */
+> > > +
+> > > +/* -------------------------------------------------------------------------- */
+> > > +
+> > > +struct gaokun_ec;
+> > > +struct notifier_block;
+> >
+> > Drop, include proper header instead.
+> >
+> 
+> I agree, I copy 'struct notifier_block;' from
+> include/linux/platform_data/lenovo-yoga-c630.h
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Raphael-Gallais-Pou/usb-dwc3-st-Switch-from-CONFIG_PM_SLEEP-guards-to-pm_sleep_ptr/20241229-073700
-base:   8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2
-patch link:    https://lore.kernel.org/r/20241229-update_pm_macro-v1-2-c7d4c4856336%40gmail.com
-patch subject: [PATCH 2/6] mmc: sdhci-st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
-config: hexagon-randconfig-001-20241229 (https://download.01.org/0day-ci/archive/20241229/202412290939.43oNt9t6-lkp@intel.com/config)
-compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 319b89197348b7cad1215e235bdc7b5ec8f9b72c)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241229/202412290939.43oNt9t6-lkp@intel.com/reproduce)
+Please don't pollute header files with extra dependencies. It's usually
+better to just forware-declare the struct instead of adding unnecessary
+include.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412290939.43oNt9t6-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/mmc/host/sdhci-st.c:460:8: error: call to undeclared function 'sdhci_suspend_host'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     460 |         ret = sdhci_suspend_host(host);
-         |               ^
->> drivers/mmc/host/sdhci-st.c:494:9: error: call to undeclared function 'sdhci_resume_host'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-     494 |         return sdhci_resume_host(host);
-         |                ^
-   drivers/mmc/host/sdhci-st.c:494:9: note: did you mean 'sdhci_remove_host'?
-   drivers/mmc/host/sdhci.h:827:6: note: 'sdhci_remove_host' declared here
-     827 | void sdhci_remove_host(struct sdhci_host *host, int dead);
-         |      ^
-   2 errors generated.
-
-
-vim +/sdhci_suspend_host +460 drivers/mmc/host/sdhci-st.c
-
-f52d9c4f459bda Peter Griffin 2014-07-09  449  
-f52d9c4f459bda Peter Griffin 2014-07-09  450  static int sdhci_st_suspend(struct device *dev)
-f52d9c4f459bda Peter Griffin 2014-07-09  451  {
-f52d9c4f459bda Peter Griffin 2014-07-09  452  	struct sdhci_host *host = dev_get_drvdata(dev);
-f52d9c4f459bda Peter Griffin 2014-07-09  453  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-1531675269c833 Jisheng Zhang 2016-02-16  454  	struct st_mmc_platform_data *pdata = sdhci_pltfm_priv(pltfm_host);
-d38dcad4e7b48f Adrian Hunter 2017-03-20  455  	int ret;
-d38dcad4e7b48f Adrian Hunter 2017-03-20  456  
-d38dcad4e7b48f Adrian Hunter 2017-03-20  457  	if (host->tuning_mode != SDHCI_TUNING_MODE_3)
-d38dcad4e7b48f Adrian Hunter 2017-03-20  458  		mmc_retune_needed(host->mmc);
-f52d9c4f459bda Peter Griffin 2014-07-09  459  
-d38dcad4e7b48f Adrian Hunter 2017-03-20 @460  	ret = sdhci_suspend_host(host);
-f52d9c4f459bda Peter Griffin 2014-07-09  461  	if (ret)
-f52d9c4f459bda Peter Griffin 2014-07-09  462  		goto out;
-f52d9c4f459bda Peter Griffin 2014-07-09  463  
-406c24310a7bd7 Peter Griffin 2015-04-10  464  	reset_control_assert(pdata->rstc);
-406c24310a7bd7 Peter Griffin 2015-04-10  465  
-3ae50f4512ce83 Lee Jones     2016-09-08  466  	clk_disable_unprepare(pdata->icnclk);
-f52d9c4f459bda Peter Griffin 2014-07-09  467  	clk_disable_unprepare(pltfm_host->clk);
-f52d9c4f459bda Peter Griffin 2014-07-09  468  out:
-f52d9c4f459bda Peter Griffin 2014-07-09  469  	return ret;
-f52d9c4f459bda Peter Griffin 2014-07-09  470  }
-f52d9c4f459bda Peter Griffin 2014-07-09  471  
-f52d9c4f459bda Peter Griffin 2014-07-09  472  static int sdhci_st_resume(struct device *dev)
-f52d9c4f459bda Peter Griffin 2014-07-09  473  {
-f52d9c4f459bda Peter Griffin 2014-07-09  474  	struct sdhci_host *host = dev_get_drvdata(dev);
-f52d9c4f459bda Peter Griffin 2014-07-09  475  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-1531675269c833 Jisheng Zhang 2016-02-16  476  	struct st_mmc_platform_data *pdata = sdhci_pltfm_priv(pltfm_host);
-2053812f6e1af0 Peter Griffin 2015-04-10  477  	struct device_node *np = dev->of_node;
-7f55eb101d4a75 Arvind Yadav  2017-06-20  478  	int ret;
-f52d9c4f459bda Peter Griffin 2014-07-09  479  
-7f55eb101d4a75 Arvind Yadav  2017-06-20  480  	ret = clk_prepare_enable(pltfm_host->clk);
-7f55eb101d4a75 Arvind Yadav  2017-06-20  481  	if (ret)
-7f55eb101d4a75 Arvind Yadav  2017-06-20  482  		return ret;
-7f55eb101d4a75 Arvind Yadav  2017-06-20  483  
-7f55eb101d4a75 Arvind Yadav  2017-06-20  484  	ret = clk_prepare_enable(pdata->icnclk);
-7f55eb101d4a75 Arvind Yadav  2017-06-20  485  	if (ret) {
-7f55eb101d4a75 Arvind Yadav  2017-06-20  486  		clk_disable_unprepare(pltfm_host->clk);
-7f55eb101d4a75 Arvind Yadav  2017-06-20  487  		return ret;
-7f55eb101d4a75 Arvind Yadav  2017-06-20  488  	}
-f52d9c4f459bda Peter Griffin 2014-07-09  489  
-406c24310a7bd7 Peter Griffin 2015-04-10  490  	reset_control_deassert(pdata->rstc);
-406c24310a7bd7 Peter Griffin 2015-04-10  491  
-2053812f6e1af0 Peter Griffin 2015-04-10  492  	st_mmcss_cconfig(np, host);
-2053812f6e1af0 Peter Griffin 2015-04-10  493  
-f52d9c4f459bda Peter Griffin 2014-07-09 @494  	return sdhci_resume_host(host);
-f52d9c4f459bda Peter Griffin 2014-07-09  495  }
-f52d9c4f459bda Peter Griffin 2014-07-09  496  
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+With best wishes
+Dmitry
 
