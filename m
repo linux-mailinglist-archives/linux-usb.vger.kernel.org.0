@@ -1,192 +1,147 @@
-Return-Path: <linux-usb+bounces-18869-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18870-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BEEB9FDD68
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 06:39:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37AA59FDE15
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 10:01:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D77571881EB1
-	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 05:39:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04F951882711
+	for <lists+linux-usb@lfdr.de>; Sun, 29 Dec 2024 09:01:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F26028E37;
-	Sun, 29 Dec 2024 05:39:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n9tqMR9z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C784E78F38;
+	Sun, 29 Dec 2024 09:01:23 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f77.google.com (mail-io1-f77.google.com [209.85.166.77])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F4F18EAB;
-	Sun, 29 Dec 2024 05:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAD1141C72
+	for <linux-usb@vger.kernel.org>; Sun, 29 Dec 2024 09:01:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.77
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735450739; cv=none; b=LtIyS0esmveNWF3bdsHR5D3Fm50nPxXGyzQL33ckk7zFlbmVcYoQRDpPITwJhsiL7o8hXoBTB51fn+n2l4xWcB7KkxN+Ja7lzk0ufLiGE0ZuGkFR5M6AjFHOL37Gu4UXuGo+wuqqxxBMmQUX0ap1TiBxEddiFWWMbgddMUskcm8=
+	t=1735462883; cv=none; b=iwd3BBqFv9CHRHBvgkAs6fIrNccSf9a67hZMdO2o6YSEm+kV0KDWMmfTBKZ7E+l9QoVcGrh5E1CIc9eiTeQhvc9uJZTQGsAaBqfIwV8jC8/HbnyZgHagoS869Q/4YErT9TKTZqU6noZtxqyY5wXRDN2l7yA8UMeK0ONjVhRQRtI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735450739; c=relaxed/simple;
-	bh=2ZAfvEapeqlQxdPGabGekF/vOEsQwkH6pIqCbZL1qVs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lmHCD8dRmLlgUG3cqbo1cgXYDV0rWEssWICKDuGadS9CQw1Jl+7FbQL2757Ip0wtJXaG1621qT4dHQMiMoy78TieRtDrH/36oToAHN62MKmec07ll+k11KU2rYqaCpRsYcqGuyLOCSzf9K3hw7STWeuWlVYie6QxZyDWJqhj5QU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n9tqMR9z; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1735450738; x=1766986738;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2ZAfvEapeqlQxdPGabGekF/vOEsQwkH6pIqCbZL1qVs=;
-  b=n9tqMR9z65SDvgBk67Yml2rqA0jqtv34tMJ/pxiET9Q6wIbvv9CNHN2w
-   sA3ens+hoH1gutDQ2Atq8V4L8ds/j8kRPF0HhpAbzlyW2+ltXYfQSebIA
-   gIizEbTbJMdYyxE1xMmvb0Ozy9jWC+w8fYgQ5I2L4rFAN37nwMmDf9pXB
-   RGEHD8xEU34X+UVQok/ikXAWlndZWLlQjxpnDQFrSVZGcdPSExo27xkdr
-   LyvdzGfzCby5lDwq4x5EOCTySPAc+XMsxzoScGFU53qWto+WJ1fpkAMNs
-   tJmPbJNuoiEMcdD9vJOZ9G4M65DzgzLwCStKlWF6elNC72Gk48BhSCO59
-   w==;
-X-CSE-ConnectionGUID: Z3eEAt7QR5+b8f2DHYTqIA==
-X-CSE-MsgGUID: Lbl1mTXqQx23UUWKPr6I2g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="39714084"
-X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
-   d="scan'208";a="39714084"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Dec 2024 21:38:57 -0800
-X-CSE-ConnectionGUID: 3s/MFmMNTKGc/r/0Xdc6Eg==
-X-CSE-MsgGUID: pWJT/xodQjqlIGcz6VIFSA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,273,1728975600"; 
-   d="scan'208";a="100868774"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 28 Dec 2024 21:38:51 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tRm0m-0004V6-2X;
-	Sun, 29 Dec 2024 05:38:48 +0000
-Date: Sun, 29 Dec 2024 13:38:40 +0800
-From: kernel test robot <lkp@intel.com>
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Mark Brown <broonie@kernel.org>
-Cc: oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com, linux-spi@vger.kernel.org
-Subject: Re: [PATCH 2/6] mmc: sdhci-st: Switch from CONFIG_PM_SLEEP guards to
- pm_sleep_ptr()
-Message-ID: <202412291320.lZkWz3Yv-lkp@intel.com>
-References: <20241229-update_pm_macro-v1-2-c7d4c4856336@gmail.com>
+	s=arc-20240116; t=1735462883; c=relaxed/simple;
+	bh=7ANbV8ojWJJRa0n7PXfQrkdNCFVIIq8uSdjJQwpoNPE=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=AkpnICSxzvnavq+D9lZC8qsrhLVW+qPTVhmDT2kYjOEAI0Dl8F4JRiLBoVVmNGTg9qQ4DYWg1LuumCsCv02vt0tkTnR0aPOIICEq/DqjDQCVWsR1VZKNeth3rf7/O/leitjQe6VSh8d0/G8J6yxDTlR9oyulmt5VSMedI7L47CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f77.google.com with SMTP id ca18e2360f4ac-8498a21afc2so637515439f.1
+        for <linux-usb@vger.kernel.org>; Sun, 29 Dec 2024 01:01:21 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735462881; x=1736067681;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nXc1lFx82qGnJwsxsA/KUZNzRqzwCOmC8BjpY0CbMd8=;
+        b=sFVEkyZunvFGWUpk9EDwaFo5WNR3H/lIpMMs58e1x+H6kzSPx8wRS9SknTN2h83cO+
+         xAzowTIpeGRSrQ/hjYC2QXGqUqcETmmNBVqxcZykhuyMDxTuRSrnGPPE4xCQ+IEd+F8C
+         wLE9Zla4oZfX4lvnCiEpucO39rmx+PaV764j/3a8ml1bJvzroQofuCG443EzQbmGjJgg
+         bRWjsKVwqsKMpjnXffsF5GTL8wZyUMvM22E/CNQlMZVrpx4Wn2UrU8uZcFbGHFzjmyVP
+         voRQZnP/r9hPO5AP3YdGwzqyW+HNpzT8SgBFWQMNZOyFwCoU/3W/tz0v3zqgaF8+EBZJ
+         Ytkg==
+X-Forwarded-Encrypted: i=1; AJvYcCU/MVeh0atJkbZ6MPkr+AnhQzCg0lrJzv7lCbCkrFywJX07KRtWCW1MFAMZvTBawV7c2pOeWYKFIds=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzviRhqtVsFXi9W/wHoSChy5QxY6SYsUV0EGr6zjEVuRfVghwCN
+	YdNza2K128AiowW0t7cPlvTaRiAmtfQxSZzmYCT2Rzm9Ds8QrpsOmyJ7JKKZufWeUgguSYbeAJN
+	Wmh4Vldu8wpOC/5Iev7NYR3Qf796XryzrielynjNe+THtgoGEg0Z6234=
+X-Google-Smtp-Source: AGHT+IF4Gz7iy6kMbqgR13RxJVpDWricUtI1hB3s9Z2knBRxe/GGRwsqKjSo7gFoWqo22aHsHmMHvh7vK0+tGgzYqKYj4Ezocr9J
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241229-update_pm_macro-v1-2-c7d4c4856336@gmail.com>
+X-Received: by 2002:a05:6e02:16cd:b0:3a7:8720:9de8 with SMTP id
+ e9e14a558f8ab-3c2d14d182emr243894335ab.5.1735462881085; Sun, 29 Dec 2024
+ 01:01:21 -0800 (PST)
+Date: Sun, 29 Dec 2024 01:01:21 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67710fe1.050a0220.226966.00be.GAE@google.com>
+Subject: [syzbot] [usb-storage?] WARNING in usb_stor_msg_common/usb_submit_urb
+From: syzbot <syzbot+73c662df6e55838c6ac6@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
+	syzkaller-bugs@googlegroups.com, usb-storage@lists.one-eyed-alien.net
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Raphael,
+Hello,
 
-kernel test robot noticed the following build errors:
+syzbot found the following issue on:
 
-[auto build test ERROR on 8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2]
+HEAD commit:    d7123c77dc60 usb: gadget: f_tcm: Refactor goto check_condi..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=171080b0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=c7df994a0b7c30a9
+dashboard link: https://syzkaller.appspot.com/bug?extid=73c662df6e55838c6ac6
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1558f4c4580000
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Raphael-Gallais-Pou/usb-dwc3-st-Switch-from-CONFIG_PM_SLEEP-guards-to-pm_sleep_ptr/20241229-073700
-base:   8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2
-patch link:    https://lore.kernel.org/r/20241229-update_pm_macro-v1-2-c7d4c4856336%40gmail.com
-patch subject: [PATCH 2/6] mmc: sdhci-st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
-config: s390-allyesconfig (https://download.01.org/0day-ci/archive/20241229/202412291320.lZkWz3Yv-lkp@intel.com/config)
-compiler: s390-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241229/202412291320.lZkWz3Yv-lkp@intel.com/reproduce)
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ccb59f24626e/disk-d7123c77.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b51b5c87b9dc/vmlinux-d7123c77.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/f66bf96bc8cc/bzImage-d7123c77.xz
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412291320.lZkWz3Yv-lkp@intel.com/
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+73c662df6e55838c6ac6@syzkaller.appspotmail.com
 
-All errors (new ones prefixed by >>):
+------------[ cut here ]------------
+URB ffff888112d14800 submitted while active
+WARNING: CPU: 1 PID: 3987 at drivers/usb/core/urb.c:379 usb_submit_urb+0x14da/0x1730 drivers/usb/core/urb.c:379
+Modules linked in:
+CPU: 1 UID: 0 PID: 3987 Comm: usb-storage Not tainted 6.13.0-rc4-syzkaller-00068-gd7123c77dc60 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+RIP: 0010:usb_submit_urb+0x14da/0x1730 drivers/usb/core/urb.c:379
+Code: fe eb cb bb fe ff ff ff e9 c1 f3 ff ff e8 8e e1 f1 fc c6 05 c9 fa de 05 01 90 48 c7 c7 e0 c6 a1 87 48 89 de e8 27 dc b5 fc 90 <0f> 0b 90 90 e9 b6 fe ff ff bb f8 ff ff ff e9 91 f3 ff ff 48 89 ef
+RSP: 0018:ffffc90001fff758 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888112d14800 RCX: ffffffff811f67f9
+RDX: ffff8881115bd7c0 RSI: ffffffff811f6806 RDI: 0000000000000001
+RBP: 0000000000000000 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: ffff888112d14800
+R13: ffff88812ec3cd50 R14: ffffc90001fff808 R15: ffff88812ec3cdd8
+FS:  0000000000000000(0000) GS:ffff8881f5900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555d1dbc3838 CR3: 0000000113b3e000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ usb_stor_msg_common+0x248/0x570 drivers/usb/storage/transport.c:143
+ usb_stor_bulk_transfer_buf+0x17c/0x410 drivers/usb/storage/transport.c:395
+ ene_send_scsi_cmd+0x131/0x610 drivers/usb/storage/ene_ub6250.c:502
+ ene_init drivers/usb/storage/ene_ub6250.c:2197 [inline]
+ ene_transport+0x13f6/0x37e0 drivers/usb/storage/ene_ub6250.c:2310
+ usb_stor_invoke_transport+0xef/0x1580 drivers/usb/storage/transport.c:611
+ usb_stor_control_thread+0x5e9/0xac0 drivers/usb/storage/usb.c:462
+ kthread+0x2c1/0x3a0 kernel/kthread.c:389
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
 
-   drivers/mmc/host/sdhci-st.c: In function 'sdhci_st_suspend':
->> drivers/mmc/host/sdhci-st.c:460:15: error: implicit declaration of function 'sdhci_suspend_host'; did you mean 'sdhci_add_host'? [-Wimplicit-function-declaration]
-     460 |         ret = sdhci_suspend_host(host);
-         |               ^~~~~~~~~~~~~~~~~~
-         |               sdhci_add_host
-   drivers/mmc/host/sdhci-st.c: In function 'sdhci_st_resume':
->> drivers/mmc/host/sdhci-st.c:494:16: error: implicit declaration of function 'sdhci_resume_host'; did you mean 'sdhci_remove_host'? [-Wimplicit-function-declaration]
-     494 |         return sdhci_resume_host(host);
-         |                ^~~~~~~~~~~~~~~~~
-         |                sdhci_remove_host
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-vim +460 drivers/mmc/host/sdhci-st.c
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-f52d9c4f459bda Peter Griffin 2014-07-09  449  
-f52d9c4f459bda Peter Griffin 2014-07-09  450  static int sdhci_st_suspend(struct device *dev)
-f52d9c4f459bda Peter Griffin 2014-07-09  451  {
-f52d9c4f459bda Peter Griffin 2014-07-09  452  	struct sdhci_host *host = dev_get_drvdata(dev);
-f52d9c4f459bda Peter Griffin 2014-07-09  453  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-1531675269c833 Jisheng Zhang 2016-02-16  454  	struct st_mmc_platform_data *pdata = sdhci_pltfm_priv(pltfm_host);
-d38dcad4e7b48f Adrian Hunter 2017-03-20  455  	int ret;
-d38dcad4e7b48f Adrian Hunter 2017-03-20  456  
-d38dcad4e7b48f Adrian Hunter 2017-03-20  457  	if (host->tuning_mode != SDHCI_TUNING_MODE_3)
-d38dcad4e7b48f Adrian Hunter 2017-03-20  458  		mmc_retune_needed(host->mmc);
-f52d9c4f459bda Peter Griffin 2014-07-09  459  
-d38dcad4e7b48f Adrian Hunter 2017-03-20 @460  	ret = sdhci_suspend_host(host);
-f52d9c4f459bda Peter Griffin 2014-07-09  461  	if (ret)
-f52d9c4f459bda Peter Griffin 2014-07-09  462  		goto out;
-f52d9c4f459bda Peter Griffin 2014-07-09  463  
-406c24310a7bd7 Peter Griffin 2015-04-10  464  	reset_control_assert(pdata->rstc);
-406c24310a7bd7 Peter Griffin 2015-04-10  465  
-3ae50f4512ce83 Lee Jones     2016-09-08  466  	clk_disable_unprepare(pdata->icnclk);
-f52d9c4f459bda Peter Griffin 2014-07-09  467  	clk_disable_unprepare(pltfm_host->clk);
-f52d9c4f459bda Peter Griffin 2014-07-09  468  out:
-f52d9c4f459bda Peter Griffin 2014-07-09  469  	return ret;
-f52d9c4f459bda Peter Griffin 2014-07-09  470  }
-f52d9c4f459bda Peter Griffin 2014-07-09  471  
-f52d9c4f459bda Peter Griffin 2014-07-09  472  static int sdhci_st_resume(struct device *dev)
-f52d9c4f459bda Peter Griffin 2014-07-09  473  {
-f52d9c4f459bda Peter Griffin 2014-07-09  474  	struct sdhci_host *host = dev_get_drvdata(dev);
-f52d9c4f459bda Peter Griffin 2014-07-09  475  	struct sdhci_pltfm_host *pltfm_host = sdhci_priv(host);
-1531675269c833 Jisheng Zhang 2016-02-16  476  	struct st_mmc_platform_data *pdata = sdhci_pltfm_priv(pltfm_host);
-2053812f6e1af0 Peter Griffin 2015-04-10  477  	struct device_node *np = dev->of_node;
-7f55eb101d4a75 Arvind Yadav  2017-06-20  478  	int ret;
-f52d9c4f459bda Peter Griffin 2014-07-09  479  
-7f55eb101d4a75 Arvind Yadav  2017-06-20  480  	ret = clk_prepare_enable(pltfm_host->clk);
-7f55eb101d4a75 Arvind Yadav  2017-06-20  481  	if (ret)
-7f55eb101d4a75 Arvind Yadav  2017-06-20  482  		return ret;
-7f55eb101d4a75 Arvind Yadav  2017-06-20  483  
-7f55eb101d4a75 Arvind Yadav  2017-06-20  484  	ret = clk_prepare_enable(pdata->icnclk);
-7f55eb101d4a75 Arvind Yadav  2017-06-20  485  	if (ret) {
-7f55eb101d4a75 Arvind Yadav  2017-06-20  486  		clk_disable_unprepare(pltfm_host->clk);
-7f55eb101d4a75 Arvind Yadav  2017-06-20  487  		return ret;
-7f55eb101d4a75 Arvind Yadav  2017-06-20  488  	}
-f52d9c4f459bda Peter Griffin 2014-07-09  489  
-406c24310a7bd7 Peter Griffin 2015-04-10  490  	reset_control_deassert(pdata->rstc);
-406c24310a7bd7 Peter Griffin 2015-04-10  491  
-2053812f6e1af0 Peter Griffin 2015-04-10  492  	st_mmcss_cconfig(np, host);
-2053812f6e1af0 Peter Griffin 2015-04-10  493  
-f52d9c4f459bda Peter Griffin 2014-07-09 @494  	return sdhci_resume_host(host);
-f52d9c4f459bda Peter Griffin 2014-07-09  495  }
-f52d9c4f459bda Peter Griffin 2014-07-09  496  
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
