@@ -1,98 +1,191 @@
-Return-Path: <linux-usb+bounces-18895-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18896-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5782C9FE4C9
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2024 10:25:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD0A89FE4EF
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2024 10:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 145C016231F
-	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2024 09:25:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 809551882A00
+	for <lists+linux-usb@lfdr.de>; Mon, 30 Dec 2024 09:39:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73BC01A2541;
-	Mon, 30 Dec 2024 09:25:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F6A21A3A8A;
+	Mon, 30 Dec 2024 09:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="n+u5XGI1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-72.smtpout.orange.fr [193.252.22.72])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906B213A88A;
-	Mon, 30 Dec 2024 09:25:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A645B1A08A4;
+	Mon, 30 Dec 2024 09:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735550744; cv=none; b=IFABLMIbKCpc8vbDT0ZNWgncIUheUQ2+MhyOy7NC/8qZLArr1T//RRlmFF7w1eMtgPoSXYcQ1CsVVCzIBEcvemse3kBvDsDIE0ZgSMkmBClaCF83iaKmMXJg6GFGbDfRazeOoU/L7Rg/WGWWwms/rlx1DJJIK8GfSXD3Hqo0Obs=
+	t=1735551582; cv=none; b=usCcNp8PZgK+l+4nouymgMrcirzCdpAz7dtrPp/ZPVRpXjejatNDAd4mtc1l9PMd8JHqEFEM3ciW2UJX/IXLcTkZArACzW+1dffBWHEFaWpVo2Upzu+u9vwX51Po540nomuVpLnvVdlihgXApDDhwKe49Lu5jO2xGwo8RUbF89U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735550744; c=relaxed/simple;
-	bh=yDagBD6eVFacKmXpRjzhO7c6g8gFjBvHSmeU5D2YD2U=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=o+DZdeJ+fZ7LAdxanq1cHlnheGhGMVkQ9GaQLld/MSR1frx9VeNxWYOcUlTAb1I0KdngwBdE3WJLB8QWSCfftn6fxUwB5CJ/NIEEL8bHLHUlQXcXzqd0bbU6pKYK2sewZyR2oSr2Umf8a5jaagD25ymCA2E3vjxhxpZ4kjJC5y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4YM9cL40qMz2DjdW;
-	Mon, 30 Dec 2024 17:22:42 +0800 (CST)
-Received: from kwepemg100016.china.huawei.com (unknown [7.202.181.57])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6F3F51A016C;
-	Mon, 30 Dec 2024 17:25:32 +0800 (CST)
-Received: from huawei.com (10.67.174.33) by kwepemg100016.china.huawei.com
- (7.202.181.57) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 30 Dec
- 2024 17:25:31 +0800
-From: GONG Ruiqi <gongruiqi1@huawei.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Dan Carpenter <dan.carpenter@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<gongruiqi1@huawei.com>
-Subject: [PATCH] usb: typec: fix pm usage counter imbalance in ucsi_ccg_sync_control()
-Date: Mon, 30 Dec 2024 17:35:23 +0800
-Message-ID: <20241230093523.1237231-1-gongruiqi1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1735551582; c=relaxed/simple;
+	bh=qFLzivAgo+gv5KhYxSbQTxD1GJWG3Jz2bPq+FffWXSs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OU449J6/mMIzvU23uSI1QIhvCxKuprZB3gJ82NlSvGIzGnJXtDsb1zI9ixg+BgivC5e8p2Ixtmi7nnBPr8vBy1RTh+fIATEEtsOCiUbupH/czwzLnl2yhcTgFhf98vTUC6f5PoASEhmASlYBdizDAKgah2YthoESzGGvpjbGkZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=n+u5XGI1; arc=none smtp.client-ip=193.252.22.72
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id SCDxtg4BsC9fHSCE1tX54Z; Mon, 30 Dec 2024 10:38:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1735551506;
+	bh=E5G7KokFX82282RicoYhoIWj26f913hNI71JtzbbktQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=n+u5XGI1uI5xs+f6C50AVQMEdfGtSjuUgMWY6t2lj8Osx327J9WxOlOAzu4QWQCPZ
+	 ovpezTaTEjfXlaldwcrmGiG6EP2T/fEQ2KHRoFr8abxMfMXEzVQSn4+RJDiVVydYRV
+	 vkdNbYzR4r/mLvQ36MvwdU1EPkjsFWUOCTsH9nL6++OxZuIWwTbh4ehpRYHOEARuQb
+	 NChdEvk1cs6EMcG0A9sldAEZIkwo49dHyNeXovdF0wqZW0hMA9qLrCCrYtZM6Tn34l
+	 RS3Rr9DjAQ13P4QXkRVUNYtt8h0fHcD07m7ehRa5yJOQpQVOoGEQma6PVBgA+zPTY+
+	 fYrEpQylNtpnA==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 30 Dec 2024 10:38:26 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <994bc47c-7d9e-4519-be30-cab5be4f7bb4@wanadoo.fr>
+Date: Mon, 30 Dec 2024 18:38:08 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/7] mfd: Add core driver for Nuvoton NCT6694
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, tmyu0@nuvoton.com,
+ lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl,
+ andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+ jdelvare@suse.com, alexandre.belloni@bootlin.com, linux-usb@vger.kernel.org
+References: <20241227095727.2401257-1-a0282524688@gmail.com>
+ <20241227095727.2401257-2-a0282524688@gmail.com>
+ <b1c5b18d-efe1-41f8-9825-2a3e090c47f5@wanadoo.fr>
+ <CAOoeyxU5nM4BZhgqcRxVHVVDxzLFzVS0+z7Yi_YGpvWc87mAbQ@mail.gmail.com>
+ <d52fbacd-cd07-4ccd-9a46-9e8ca650fc26@wanadoo.fr>
+ <CAOoeyxXOa-JK1-wRn0hsD1nuTOLs-5NBv5-YswOSS1JJbGmU_A@mail.gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+In-Reply-To: <CAOoeyxXOa-JK1-wRn0hsD1nuTOLs-5NBv5-YswOSS1JJbGmU_A@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemg100016.china.huawei.com (7.202.181.57)
 
-The error handling for the case `con_index == 0` should involve dropping
-the pm usage counter, as ucsi_ccg_sync_control() gets it at the
-beginning. Fix it.
+On 30/12/2024 at 17:47, Ming Yu wrote:
+> Vincent Mailhol <mailhol.vincent@wanadoo.fr> 於 2024年12月30日 週一 下午3:34寫道：
 
-Fixes: e56aac6e5a25 ("usb: typec: fix potential array underflow in ucsi_ccg_sync_control()")
-Signed-off-by: GONG Ruiqi <gongruiqi1@huawei.com>
----
- drivers/usb/typec/ucsi/ucsi_ccg.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+(...)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index fcb8e61136cf..740171f24ef9 100644
---- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-+++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -646,7 +646,7 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
- 			UCSI_CMD_CONNECTOR_MASK;
- 		if (con_index == 0) {
- 			ret = -EINVAL;
--			goto unlock;
-+			goto err_put;
- 		}
- 		con = &uc->ucsi->connector[con_index - 1];
- 		ucsi_ccg_update_set_new_cam_cmd(uc, con, &command);
-@@ -654,8 +654,8 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
- 
- 	ret = ucsi_sync_control_common(ucsi, command);
- 
-+err_put:
- 	pm_runtime_put_sync(uc->dev);
--unlock:
- 	mutex_unlock(&uc->lock);
- 
- 	return ret;
--- 
-2.25.1
+>> If the two bytes may be used separately or in combination, then I think
+>> it is better to describe this in your structure. Something like this:
+>>
+>>   struct nct6694_cmd_header {
+>>         u8 rsv1;
+>>         u8 mod;
+>>         union {
+>>                 __le16 offset;
+>>                 struct {
+>>                         u8 cmd;
+>>                         u8 sel;
+>>                 }; __packed
+>>         } __packed;
+>>         u8 hctrl;
+>>         u8 rsv2;
+>>         __le16 len;
+>>   } __packed;
+>>
+> 
+> Sorry for forgetting to list the structure in last mail, but the
+> revised structure is same as yours.
+> 
+>> Then, your prototype becomes:
+>>
+>>   int nct6694_read_msg(struct nct6694 *nct6694,
+>>                        struct nct6694_cmd_header *cmd_hd,
+>>                        void *buf)
+>>
+>> If the caller needs to pass an offset:
+>>
+>>   void foo(struct nct6694 *nct6694, u8 mod, u16 offset, u16 length)
+>>   {
+>>         struct nct6694_cmd_header cmd_hd = { 0 };
+>>
+>>         cmd_hd.mod = mod;
+>>         cmd_hd.offset = cpu_to_le16(offset);
+>>         cmd_hd.len = cpu_to_le16(length);
+>>
+>>         nct6694_read_msg(nct6694, &cmd_hd, NULL);
+>>   }
+>>
+>> If the caller needs to pass a cmd and sel pair:
+>>
+>>   void foo(struct nct6694 *nct6694, u8 mod, u8 cmd, u8 sel, u16 length)
+>>   {
+>>         struct nct6694_cmd_header cmd_hd = { 0 };
+>>
+>>         cmd_hd.mod = mod;
+>>         cmd_hd.cmd = cmd;
+>>         cmd_hd.sel = sel;
+>>         cmd_hd.len = cpu_to_le16(length);
+>>
+>>         nct6694_read_msg(nct6694, &cmd_hd, NULL);
+>>   }
+>>
+>> This way, no more cmd and sel concatenation/deconcatenation and no
+>> conditional if/else logic.
+>>
+>> cmd_hd.hctrl (and other similar fields which are common to everyone) may
+>> be set in nct6694_read_msg().
+>>
+> 
+> Understood, that means I need to export these four function, right?
+>   - int nct6694_read_msg(struct nct6694 *nct6694, u8 mod, u8 cmd,
+>                          u8 sel, u16 length, void *buf);
+>   - int nct6694_read_rpt(struct nct6694 *nct6694, u8 mod, u16 offset,
+>                          u16 length, void *buf);
+>   - int nct6694_write_msg(struct nct6694 *nct6694, u8 mod, u8 cmd,
+>                           u8 sel, u16 length, void *buf);
+>   - int nct6694_write_rpt(struct nct6694 *nct6694, u8 mod, u16 offset,
+>                           u16 length, void *buf);
+> 
+> Both nct6694_read_msg() and nct6694_read_rpt() call
+> nct6694_read(struct nct6694 *nct6694, struct nct6694_cmd_header
+> cmd_hd, void *buf),
+> then nct6694_write_msg() and nct6694_write_rpt() call
+> nct6694_write(struct nct6694 *nct6694, struct nct6694_cmd_header
+> cmd_hd, void *buf).
+> (nct6694_read/nct6694_write is origin nct6694_read_msg/nct6694_write_msg)
 
+I was more thinking of exposing:
+
+  int nct6694_read_msg(struct nct6694 *nct6694,
+  		       struct nct6694_cmd_header *cmd_hd,
+  		       void *buf);
+
+and:
+
+  int nct6694_write_msg(struct nct6694 *nct6694,
+  			struct nct6694_cmd_header *cmd_hd,
+  			void *buf);
+
+and then the different modules fill the cmd_hd argument themselves and
+directly call one of those two functions with no intermediaries.
+
+But your solution is also acceptable. The core issue is the artificial
+packing and depacking of the cmd and sel pair. As long as this core
+issue is resolved and as long as the ugly concatenation macro can be
+removed, I think it is OK. Choose the approach you prefer :)
+
+
+Yours sincerely,
+Vincent Mailhol
 
