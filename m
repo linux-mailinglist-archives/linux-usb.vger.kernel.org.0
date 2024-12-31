@@ -1,131 +1,110 @@
-Return-Path: <linux-usb+bounces-18903-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18904-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B34519FEC29
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 02:37:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC1879FEC6B
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 03:39:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2EEC1882AFA
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 01:37:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15A893A29E3
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 02:39:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9777E381C4;
-	Tue, 31 Dec 2024 01:37:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B21E81474A9;
+	Tue, 31 Dec 2024 02:38:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Xx+2MN/9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AF4286A1;
-	Tue, 31 Dec 2024 01:36:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675E92A1D7
+	for <linux-usb@vger.kernel.org>; Tue, 31 Dec 2024 02:38:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735609021; cv=none; b=VnQIvKi0/SBiviMg0ClMoMjvavRqdmJHzINRdPJZHm2m0dKnM/l1HXo+pV1CWX++vezq101dkPq8mh2feFcO0IkeaNRDzMUSw/Yqyw4haYy7MDZ00ylB2M7MN1QWt65CmInPIJag0zmPjT0pQSSPOtpzpx2fc8Hj4sW8tB4llaw=
+	t=1735612739; cv=none; b=M6SeqzCobzWM7VsLpOZlUH2TbNsMIIwLaUNAjv9QOHDrI5fLSIDbGDuwwcwQ4l27ywNlhGDQ6I3BVp6jW08ymkBrCI+tT8+KaSCSgLUsgvWsSKlyu5eJpML56H6B4p1OP1FVuDyYRqWS0lfBxlfldjzbfQJflQ+7CE+NfHrFudg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735609021; c=relaxed/simple;
-	bh=Xzqbcc1s3aOVATyNmhK0TQsBsfoQBV9GYPkwKQ8Qkes=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cWU+3kteLejw5v/F1rhO7kyXGW8RTJEfV6qvJif1h55v3QiTYtLUKpU9krtQ8kofPjmt+xGyNRB9C9g2Ly9qmrCA0jWVX9/eafNrI087kVm1epOPk39uNbdeoqGxKUsrjiklKRu2FeH9maKUgq7ksgmL+oWxmuQ04q2eAHYqtiI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21631789fcdso95966785ad.1;
-        Mon, 30 Dec 2024 17:36:58 -0800 (PST)
+	s=arc-20240116; t=1735612739; c=relaxed/simple;
+	bh=+rSQgcXxg362jfMf0t1TOwvCHLaTIkfkK0zfIzueFoA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=npDRmbIG0hMcopHFonZriwIi0+uxK4zpKEFI0VZuzGW37hLuiuREv7vOpNlAwhNr8FxwfT9EdV7/8oBf6fwNjgQazuVEQlfrGu5za3gG8Vqlol+ZWoXrF/TkH9KiCKRgkP39lLrJOxhZiqPe0M8u0xsOo5dZyHdBeq+TIDII9gY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Xx+2MN/9; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-30039432861so110755601fa.2
+        for <linux-usb@vger.kernel.org>; Mon, 30 Dec 2024 18:38:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1735612735; x=1736217535; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tH2aIEf8o48ClMgo1fjIlcUrMY2a908zC0Elg2J1T0U=;
+        b=Xx+2MN/9q7hNcguKG9IkblFLeZpxfKlWShXhpsP8hW9gURzGr8Ca4Tni2nF5htKbZ7
+         3firG440coMGL5cEqzEjrpoNaIaPR36ZToM1ZjmeiQUap7XqfFJqAKfpgXyAb+M3Px4s
+         zYLnrrVjtMJ646Bl+Wqt6yPO43qMfhXQYOAHF2KGqsvo44Lg7thziL4YWyZveUoHEAu6
+         7k9kicxegz0fz0El2AlvCdlVPH2tyE/G4VCGR90eUWi5G9UfOzJFWH65N8wagl7fRrhD
+         A5XTp/hAE57C6A42wEfusB/ygZaU0GL9n4Nwzx5a/ke9Ne5LoRPPxmzgR0qQYPeOFZ62
+         zAow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735609018; x=1736213818;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=oTPwzQjkio3K8sn3MAmfdbUGqjfENbj2QxlyALzuC54=;
-        b=jMkFXynd06ROzDevfBlRI8XIlT9cKzE5kiAIJcZMkkpvkmNimt2bXUCOI2mXVbhzCf
-         BlJtYTMoV34dQaA//zg/MkCpaMKSHpNDmC9XR2cTP07Y4KAIIA4tPpyVXzou8x6i3Spc
-         FF/0Iqupj0A7HQTyAIfv4JvdWjpJ/z6oK5OqzEogBgBMnoRWbXZQeAnZL8PWYKQJIGVP
-         B8vRFpgMDi1Hk+zP9NpmYC3Ok4z/f+ptdjE0TU7+5Nq29YAbMskt/fmPTlEqUb+F5kco
-         Z8m+ioQiHJZCa/wy9i23bnl1BXm5UxY88xKH9wlWvybFH6CbsFGOLjFBraA9iVNAp3Gy
-         fc4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV/D/F4kUS/m+mrfvoiBM8y/DLHGURzn1rRsgdP7g4eIyaQrNfLQYcTLz2UAVpai87H2fIy0Fl11yaAuB0=@vger.kernel.org, AJvYcCVvko6uBn0lMNWsP3gzLNZni5xP2Ixca00QM0JPazPyYRyiq2v7WuAMxBjI+T/17LbPmruTe87CtZPL@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEwowi7AakV4O367Ugy8mDARVy4xHjL0mZB3ErIqB5dfKEyz7R
-	fsljeoKukw+Bhuf/yCQuSd4QYgSAYX9H5lgVitTvjq0bHL0297kB
-X-Gm-Gg: ASbGncuwhjJG3ZhWsHPvx+6UiqM/UUgtDtAh26naHT9Z4G/IyMQgxRmQS0F5iFk8hc3
-	4Ox0R0ueeG9pUp2uLi4xHFTDBmE/gd4rGZzvASAlBmbhfox+nKiRrw61k25txSpb6We1Fr/sfhB
-	p3jbDOk7O68CI8CC6M3kT8b9ZPK1yVzubEfE5SkoPHJIFUIRcl/ExsZYSxWBEHCz7tZafv/kgqs
-	PUHRJgOghiWBJoFLW4rilLZgVqaXy8e6u86osnurai+m3JzOrvpPK8JMaFvcfDDrwkmhomGqg==
-X-Google-Smtp-Source: AGHT+IF1aydhk/tdMRSfGCu9t08z07nzYlKLu6pu/0HN60iMKK3pC8SD1qQAG4PctG6GWKSYjxUkMw==
-X-Received: by 2002:a05:6a00:8009:b0:728:f266:cb09 with SMTP id d2e1a72fcca58-72aa9b03a0bmr66909978b3a.13.1735609017713;
-        Mon, 30 Dec 2024 17:36:57 -0800 (PST)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842b31eeff3sm15260722a12.33.2024.12.30.17.36.54
+        d=1e100.net; s=20230601; t=1735612735; x=1736217535;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tH2aIEf8o48ClMgo1fjIlcUrMY2a908zC0Elg2J1T0U=;
+        b=tCyBBodlNFkEIDSh0/z7Vgb7vdw0B1mqf44uUf6zMEWnnayWvAMo2tfZWnyMzlQu79
+         kz1i8UNgifF14Puie4U8cq6Qr5YTm8bxJ/q45h5TI+r1geJWHQFilAf4Suh7F+VGKA/W
+         D5Ttj7ELLC2oc+SlmybDkMSHyaWXrnAYMjqESQ1TJ5WgAHD1gESS1y33Xr9YDJhfdsMt
+         hCSpWDxgy9D5fqGtd5QHhI7qnyhWYPHiJatS8JUv+H10c+YSiUWI9ZzaJH6Pi5XTXxJx
+         yMttrODDBBgBvjcplakfPjFhT7HF6vGZMSbZ0/9OGo/r4nWtqvQMlaX4el2A2ZzK7cR4
+         HuoQ==
+X-Gm-Message-State: AOJu0YxQ67Usa5Y+wjRTdqXAZyJPtw80rxWEd7bbVCnxXm3vv1jRpu7V
+	d9h/mtgeW/N160282xP5EkoB/mcJkFcOm4PcVo+EmG6WwrVzZI4drJ/jJmVhUv4=
+X-Gm-Gg: ASbGncsddgSLE+xga6E/9BpAWY51Dm3Qfm3SrtDYNbJF3fnD4RZoMUa2u8Ny8rsC/k9
+	OS0X1irsWbDcfbx0TsB5Kop7TDuNL4tophQzgPQGL1mznrl/TbYfLh3938gFuoCKSvdFupYAJ7B
+	jqMT9SN8PigeAoZ6ZSMfciwZRYCZzzui9RPhBZakd7+L1X54BPjmaIEdW79BBVZ2TNXInVNY5cO
+	444rUl4cAA0hAs7jqtymUi7bjgWj6G0ECjVFRL+jLwG8mVfL0fVkAC6lfN9UqQOBndP5fkomRTj
+	JDWLYE8olD/8cjtp/hQ9gJbWrsWlQ/zV+1Sx
+X-Google-Smtp-Source: AGHT+IEq+Pw2uMB5B+ch/gtOb1YNr5SJKw2fRRQxr9fk5g+riokJmhhoLrsUyITerTJFOWFyFyEeEw==
+X-Received: by 2002:a2e:b8c6:0:b0:300:7f87:a4f with SMTP id 38308e7fff4ca-30468557147mr138080891fa.19.1735612735440;
+        Mon, 30 Dec 2024 18:38:55 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3045ad6ca8fsm35624391fa.14.2024.12.30.18.38.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2024 17:36:57 -0800 (PST)
-From: xiehongyu1@kylinos.cn
-To: pawell@cadence.com
-Cc: peter.chen@kernel.org,
-	rogerq@kernel.org,
-	frank.li@nxp.com,
-	gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: [PATCH v3] usb: cdns3: remove redundant if branch
-Date: Tue, 31 Dec 2024 09:36:41 +0800
-Message-Id: <20241231013641.23908-1-xiehongyu1@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 30 Dec 2024 18:38:54 -0800 (PST)
+Date: Tue, 31 Dec 2024 04:38:51 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Pei Xiao <xiaopei01@kylinos.cn>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	heikki.krogerus@linux.intel.com, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] usb: typec: ucsi: make yoga_c630_ucsi_ops be static
+Message-ID: <lzlugui4ogy7k54vceyntbwl4pykxnx7we5b3y3cqhklf5ogpb@cm3jflfje3gk>
+References: <2ffd08092fabaed0bea8b7a5e19e5c9464e76077.1735278513.git.xiaopei01@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2ffd08092fabaed0bea8b7a5e19e5c9464e76077.1735278513.git.xiaopei01@kylinos.cn>
 
-From: Hongyu Xie <xiehongyu1@kylinos.cn>
+On Fri, Dec 27, 2024 at 01:51:51PM +0800, Pei Xiao wrote:
+> sparse warnings:
+>     drivers/usb/typec/ucsi/ucsi_yoga_c630.c:101:30: sparse: sparse:
+>     symbol 'yoga_c630_ucsi_ops' was not declared. Should it be static?
+> 
+> Fixes: 2ea6d07efe53 ("usb: typec: ucsi: add Lenovo Yoga C630 glue driver")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202412102033.J4vZNaaR-lkp@intel.com/
+> Signed-off-by: Pei Xiao <xiaopei01@kylinos.cn>
+> ---
+>  drivers/usb/typec/ucsi/ucsi_yoga_c630.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-cdns->role_sw->dev->driver_data gets set in routines showing below,
-cdns_init
-  sw_desc.driver_data = cdns;
-  cdns->role_sw = usb_role_switch_register(dev, &sw_desc);
-    dev_set_drvdata(&sw->dev, desc->driver_data);
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-In cdns_resume,
-cdns->role = cdns_role_get(cdns->role_sw); //line redundant
-  struct cdns *cdns = usb_role_switch_get_drvdata(sw);
-    dev_get_drvdata(&sw->dev)
-      return dev->driver_data
-return cdns->role;
-
-"line redundant" equals to,
-	cdns->role = cdns->role;
-
-So fix this if branch.
-
-Fixes: 2cf2581cd229 ("usb: cdns3: add power lost support for system resume")
-Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
-Acked-by: Peter Chen <peter.chen@kernel.org>
----
-v2 to v3:
--add Acked-by
-
-v1 to v2:
--replace bellow with below
-
- drivers/usb/cdns3/core.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
-index 465e9267b49c..98980a23e1c2 100644
---- a/drivers/usb/cdns3/core.c
-+++ b/drivers/usb/cdns3/core.c
-@@ -529,9 +529,7 @@ int cdns_resume(struct cdns *cdns)
- 	int ret = 0;
- 
- 	if (cdns_power_is_lost(cdns)) {
--		if (cdns->role_sw) {
--			cdns->role = cdns_role_get(cdns->role_sw);
--		} else {
-+		if (!cdns->role_sw) {
- 			real_role = cdns_hw_role_state_machine(cdns);
- 			if (real_role != cdns->role) {
- 				ret = cdns_hw_role_switch(cdns);
 -- 
-2.25.1
-
+With best wishes
+Dmitry
 
