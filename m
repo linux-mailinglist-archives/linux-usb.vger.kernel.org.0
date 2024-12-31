@@ -1,245 +1,194 @@
-Return-Path: <linux-usb+bounces-18906-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18907-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EBA39FED85
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 08:46:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F1789FEE61
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 10:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1CA13A2B77
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 07:46:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0407188314A
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 09:34:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE73418C03F;
-	Tue, 31 Dec 2024 07:45:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAF411925B6;
+	Tue, 31 Dec 2024 09:34:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gral3VnP"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="oqUlmEkS"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2088.outbound.protection.outlook.com [40.92.62.88])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C2A2A1D7;
-	Tue, 31 Dec 2024 07:45:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735631158; cv=none; b=uAygSjvii8Ur+xA8iwuoAou9sPy1AnzMrOVb8/Ocwsn6q3CryvrdBgoICdv8wpXOooghXt9UjaIn5EaoiK4hvu41Fzc1lY14ib8IBEsD8uYIfPy0M5jPwHRGoviU9ArThdx0KccFZWQGOZZq14eDdoxi2FX0EN98atwZ7e5ocYo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735631158; c=relaxed/simple;
-	bh=ne8KKd1Ox77CuqbmX1HxrqiMYFGXITGbKeXrfPempyc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m5AnYZttueqouBS/BVxlgLbzKhGo/v9DAsgQhHE2d5CR8Xc+9Zz497Wba2AXrrmS0myYXuLOyqJjz108xgYQFylyrP6YeCXuC8UwaOArGfbf3apqFdODCc0wPeCJmAeI8hA/JShadlitpRq8HuUZbPWYX6QF65hmGcrOa61AuVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gral3VnP; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21669fd5c7cso131898885ad.3;
-        Mon, 30 Dec 2024 23:45:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735631155; x=1736235955; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8pzS8juRQYh7y1FbB7XhfHYOtzhl/kNPmT3ZX9KxQL8=;
-        b=gral3VnPPS34tMpmNdUOQH+2s3ke4Ux1CJMKxER2ZLrbbSePx2OHTQGSvqxWiLSL/z
-         WkuxZO8fD2GeyDeoaj4n1+T39x+3LcmATNGn0dzDJ7mzzf88XOY0gqdImbZti3wB+jT6
-         7MzUCsKGG6gZzIGINJUf7J+saBTyTzFpyBX442HTxMjk+ntwhVdo5mf07JMuTZaDU8nz
-         reLPdtpiBNp76wqxj1BldKE7z2tYiM5JQnR3NSszS0/+GMxfiO3Y1BbS4nb35+v3uuPG
-         lZjB05+H3xsmCwNfTDumvGBZ5fKHFQC4pD0Md6BdAAwEOyj8ZSnfDz9p5gXw5OQoT/Rj
-         6Lvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735631155; x=1736235955;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8pzS8juRQYh7y1FbB7XhfHYOtzhl/kNPmT3ZX9KxQL8=;
-        b=lQ0Wv6xHIUVZ+NJcTCLP/BKSkdPjyXwV3QhZxtMWGRR2iw3n0vRb4pdIxrA856cUiv
-         Ht9aWBH1A4dyT/6sSYM6eYJJgXrcuhS9kr6T20xT8e6OeUHAMQhZHASVrppFU4QuLSRM
-         vYD4+qyCQdqyPwJgXCpf8HI/vcxSBog5jCUKsW1/ogUK2sHLl3UGLyA67n8KHki62F/+
-         Zl4d3r1G0DS1Apydf7ZvXtwbyHEARuCfycpFXFBPhsnkS6VUXjXYdnRjtiAymGC9311Z
-         SPxPt+2XxPEUQa4vF2TVLttGxDB7G7iUp2PDzyVHanyxGAHzmKN2vPVGUrPTQ9R4QDWM
-         TmeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUe9tsR7fq6CIDThfBvTdiBkWi0FoGnla4hIeFLUcjDV/BR49FMbLuj2RULvmVB9MdPHr2KE1PJPGM0@vger.kernel.org, AJvYcCUePZ+LUQFz7xJ/fR2oc8CHR1fCrmE4rzumx4LgP+2OQPmXEkdKcALxbkmOHpraDGVcwKpYHnwWGRvd0FJJ@vger.kernel.org, AJvYcCUhFl7v+QuUm3PTocIomGm4fNBc4QsCnUnal6RHJwyP/Hei+HF1Xlbi92yLBPIRU0So3oEVU2MXhHgbX37zKg==@vger.kernel.org, AJvYcCWl4D/5XxZoyoonttBkGp3PNCIV3rYf84+C/samZUgynVul8o1a+5mt7R8ksa0ywx89wwTHBO4Clrt/@vger.kernel.org, AJvYcCWr62/DjbF0MIzwazW8PZHbOWofU6cQV36lFcK3OO8KaxmOAAysA3Bcw5tiLY35WOjcaw6wLUcG5oaKuSIXG2ykqpUfVQ==@vger.kernel.org, AJvYcCXzIEN2uu+sUrTJGGwBxSjswpURbigUEZMRZ6LjQmOPcLsFe32c63GNhM66p9H+kQUPoYQQY41yxN8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqwEGss9g0x8GxWMWeOof5zSv5QiQiL7fV6Rq9rpwwn6KLK2eJ
-	waSNWAyAhWk/7p9ClwR5W/8Umrhx9HjFWqHbUEsl6hyladaFXOCR
-X-Gm-Gg: ASbGncv1II6gjIe38hmhDvh9MnxnxmVNreQ3rrKIvvb4+AKZJiT5v6q3nZ0DFqy7qxA
-	ieditE0a29H0nc+kl+kMeu6M8IlW6mlbQkHwugnKgafUTJvlDFkxKql7wNMrYs0KeorGFwjApZT
-	8BqJZJZCUpGsGiC7A/IkiuGahRQsD2OQk8GAHTuzwhcOnaBYGkAvSvAs8ktpLEul/0S33sQHA/g
-	1bZz+fNtynIDZOjdLEXkoqnGgoJWOn9kcwvBr+z90k=
-X-Google-Smtp-Source: AGHT+IHgiEOvR/+eBYeESBUMbYmnH2cck7IbpwCPE5DLcxeC+vKdjNFF1+pfeKCXg/VxNRHos0A0Dw==
-X-Received: by 2002:a17:902:d588:b0:216:239e:f90f with SMTP id d9443c01a7336-219e6f2f01dmr635340735ad.37.1735631155425;
-        Mon, 30 Dec 2024 23:45:55 -0800 (PST)
-Received: from nuvole.. ([2a09:bac1:76a0:dd10::2e9:e5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dca02b27sm188270185ad.276.2024.12.30.23.45.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2024 23:45:54 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: quic_aiquny@quicinc.com
-Cc: andersson@kernel.org,
-	bryan.odonoghue@linaro.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	dmitry.baryshkov@linaro.org,
-	gregkh@linuxfoundation.org,
-	hdegoede@redhat.com,
-	heikki.krogerus@linux.intel.com,
-	ilpo.jarvinen@linux.intel.com,
-	konradybcio@kernel.org,
-	krzk+dt@kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	mitltlatltl@gmail.com,
-	nikita@trvn.ru,
-	platform-driver-x86@vger.kernel.org,
-	robh@kernel.org,
-	sre@kernel.org
-Subject: Re: [PATCH 2/5] platform: arm64: add Huawei Matebook E Go (sc8280xp) EC driver
-Date: Tue, 31 Dec 2024 15:44:36 +0800
-Message-ID: <20241231074437.239979-1-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <1dff7a78-1693-45d7-8ee3-357b33848595@quicinc.com>
-References: <1dff7a78-1693-45d7-8ee3-357b33848595@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 996A618B482;
+	Tue, 31 Dec 2024 09:34:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.62.88
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1735637661; cv=fail; b=cwX3Uv7WYCJuyrhQtOyASHpNgxkvGLqqxxMOrByjhHKdBu/qNw4O27jZngZfHGHUoSdqk+uKphZpGrenOtZsiPurD1MdKJ/2ZHntN1i8YsiHHFGPyqFU3Yo8cuofjcQfQM8/Jl4e6f97f8igol1JljxyoHwUQFpnjp+gzD5sf5c=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1735637661; c=relaxed/simple;
+	bh=0LVhbMByucJjEjpGF3aCtEmB/Fyecv0tJlZpegXAD6w=;
+	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=uxCdmwgnfDk+At4mZnyDkzwgSKfg9pYOhDvH7AMhx3r1jz7V3Kv9vGN39H7lhtrLPOi3yrViCW3OIqwHq5HuZn8CbxMXK6My3ehZOSEv+p2qjMfbV/N2unJ6hS0yPUquQtSG1tKRpilzhEiqol7Vby3FWaKNDQ10gTG5kg49fok=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=oqUlmEkS; arc=fail smtp.client-ip=40.92.62.88
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=EzCeY2+rnhn9qbcspt2RuuFNk7bGc3mvVtUTdKYC/It+cb5dbPfGXzZ1ViaW/l8H5GyQya+yglHaMCeOozE4JyRVN6NOG2ycarcuCGRHPcPgvkGG6qGc+h34I/lZCsqnMsH2SC0N3DdeK3Y9V+rOGMctZGpTOY7TA45fe4DGvcFTuliyy42KZ9Y6K7HoMgDV02MF3Q5UUpXRbURV5y152iW0+c+9e2d5MZ+25lQL5RD/zrAeBFpDH2leKAE6UhEAxqLoc8CGOh28I/hj88nTLfs76IwDyjNHFH6LY2SbD2dxV4GF1NsxjePbQpjNT2p/Nfb/RE05d6jTuZlM/yTgDQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0LVhbMByucJjEjpGF3aCtEmB/Fyecv0tJlZpegXAD6w=;
+ b=bvj3yuD5y0GLVEV0rIE/znJOYCCkq5xmDhdkT1nK5D6uN7//SMvsGWVGhbiaUF932+SZx3BfLcHe/pwawG+Ki+68k4WgGUPWBdYdz1pCO1WY/X9jafyECBdN8UUpT7gruKwfa9zRTMaUmDopURRkDmO7H6HzCZu1dWxBFh3YOpkl4QrMB2ZfyaaVt6AQnpjnsOFPSpipxiBXE4HRAMIWOes6o1E84Mh88qEbg/Dm3B0N6T8EokCwT1G1GaPOmlZQOr8DGaR8vU4XmGrgLkBlljo16RSET9NUgZIaSJuCSNtNqH375oVRhtqww+SBclfGY83Kuh9u1skgR6FKkxsN2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0LVhbMByucJjEjpGF3aCtEmB/Fyecv0tJlZpegXAD6w=;
+ b=oqUlmEkSJpkw8oE+j/mqF5HfSmurntIpGi+QncMM9te3p5torKllzpECplKXafhBUD5QWWfQc0Z/q1IWSQ14UDrN43OeAR/4b2AYzvq3TqRI7XkfTcx0sgLEFHp1nytL/w8jcohsnJZIi4Rv6INWZAn2JvXhyS+hkpqqjztjqZyUfX1kZVFkmtHO1iLdWS8eB3n31QxxyTOHiOoMVB11gkUJghRDGiZGq1XV4GOLCjdIi0tRf1JTeQw558fjFtuoA7MyJ/npLSTYwPNdzeW/8TMRugP3rrxaROJsMJ+BiQyVplEmmPG0Is6K0RfY4IqgXS6CIlVS1K8cS/xdvccnKA==
+Received: from ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM (2603:10c6:220:22a::15)
+ by SY0P300MB0309.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:24b::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.17; Tue, 31 Dec
+ 2024 09:34:13 +0000
+Received: from ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::fee9:23d3:17b0:d2d3]) by ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::fee9:23d3:17b0:d2d3%4]) with mapi id 15.20.8293.000; Tue, 31 Dec 2024
+ 09:34:13 +0000
+Message-ID:
+ <ME0P300MB055370E97AB98D221B2E0782A60A2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+Date: Tue, 31 Dec 2024 17:34:02 +0800
+User-Agent: Mozilla Thunderbird
+From: Junzhong Pan <panjunzhong@outlook.com>
+Subject: Re: [PATCH 1/3] usb: hub: add infrastructure to pass onboard_dev port
+ features
+To: m.felsch@pengutronix.de
+Cc: broonie@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+ festevam@gmail.com, gregkh@linuxfoundation.org, kernel@pengutronix.de,
+ krzk@kernel.org, lgirdwood@gmail.com, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, lkp@intel.com, matthias@kaehlcke.net,
+ mka@chromium.org, oe-kbuild-all@lists.linux.dev, robh@kernel.org
+References: <20241028214956.gmefpvcvm3zrfout@pengutronix.de>
+Content-Language: en-US
+In-Reply-To: <20241028214956.gmefpvcvm3zrfout@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR03CA0105.namprd03.prod.outlook.com
+ (2603:10b6:a03:333::20) To ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+ (2603:10c6:220:22a::15)
+X-Microsoft-Original-Message-ID:
+ <4faf8cb4-5b6f-4fcd-a2e0-ae32056c5736@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ME0P300MB0553:EE_|SY0P300MB0309:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0ed1b98e-828d-4e8c-7e18-08dd297e4920
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|7092599003|15080799006|19110799003|461199028|6090799003|8060799006|5072599009|440099028|3412199025;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?T3RVTXkxV3NxbUNTRmhKQ1FRQ0hzRHkrM0g1VWZyZGFoVU8vTXNBOExHTTkx?=
+ =?utf-8?B?T1NBVTRQSVFuTWZOMzNpZi83bE5meDhoN2IycEN2T2ZVN1p3cnpxSzkzaFIr?=
+ =?utf-8?B?Ynp0ZmVuSXVmWlcyeTZKNVh1cXR0U21pUzVuMjZpbldhVkR4bEgrbEhhS21s?=
+ =?utf-8?B?NG5XQUd2UW5paVc4QXlhVDVzUUJjRVZzSzc0b0J5K0pQbTI0NG9iY0xxOEZH?=
+ =?utf-8?B?d0ZQUHR0dld5SFBMMDJkQXJFYVFBNk9jMC9CWDl2ak1sKzZ4Y0lEcUFLa0Zq?=
+ =?utf-8?B?T2cycVJZQ2ZwL2d2Y0NCZm1XcDBCS3hFalFXN1hwc3JSQ0ZqaXhJTUV0MHdK?=
+ =?utf-8?B?bytPZ0oxVWJGL0R0bFZEOFRwM1pzR2FCWjlxOVRVeUhPWGZyMnRMeWE5WVVK?=
+ =?utf-8?B?cnlhTUtlQ240ck8rQXh1T21HK2kwc1orMStMZXNlb2ZQZ2J1Q285dyszcHho?=
+ =?utf-8?B?ajhHK3RLWGJydU16d0dpc2U5dENEWTB0SUxmbjFYQ1A3QXJvNmJFZkp0VUNx?=
+ =?utf-8?B?aDAwQnpwRCtNMFYvdHpmbmhFQUwyeU5kWGppM2U5b0ExdFpXcWpjVmxHQzNs?=
+ =?utf-8?B?eDNIZEphRlozazUvSzVnbjJDWTAwY1FKa0RrZHprbVNLWDdtVGpmQ1dQcUF4?=
+ =?utf-8?B?M3RBbG82MFlnbWs2Ulp3NERlZllWdk5Dcldnbit0dVNwUlBWWTc3NXpVSnRj?=
+ =?utf-8?B?SVFMMy8zUDhWempLNTdYci9tMDc0R2t3d29tcXZFQXV6NXNkSUpRb1RLRm1o?=
+ =?utf-8?B?U2tGSDVOOS9wWmpWSzJhcnd0bUxGd21BbVAwTndCQjcwaHhOdXJ2MWJwNDg0?=
+ =?utf-8?B?VU1LMkQyS1Q0N0dubzFhTEdxSDRTNklCU2NmNFVmdDE4VjM5SnRiSXVaZHRn?=
+ =?utf-8?B?NnVHVTEyWjN6blg0cUlFY3Zic01NalFTVXk4bVhmOXIrWjNINkxFQ0d1Skxr?=
+ =?utf-8?B?WTJwSkdEWHpJaUJITGNWeU8xNHBMbng0Rk9lb3diUHkwUDgzYnFQNUVGQTdN?=
+ =?utf-8?B?VmE5SjA0ZkVNaGJIWEFjMEgvYWNkeXhRQlhnbFh4MlJsZGtjU1cxNldMVjFM?=
+ =?utf-8?B?dHNZWEFCS0FSbUt4eDRIMndHcXBYaDRKcDJaN2VXcGNWT05HWUFkeEYyYW9s?=
+ =?utf-8?B?ZVNnbjhYUHMzZlhOY25UZWdOeVZaSEE2SGJlblE0KzFCU2pXaVZycTJ5Znk0?=
+ =?utf-8?B?bWRjV2NlSzZuZG9pTXAyanBoYWlKK0dQTlc1T0lzcHFKWGk4aTRkZzVOS0pS?=
+ =?utf-8?B?MEdpSWp1dzk4UStvVlVKY3BUTmxnS2lhMk5NdnFSanY0clBEWjZpaWlQcTVJ?=
+ =?utf-8?B?MEF1YmZFdjlyMHV2UWRsNlBBcWEzWkV6eDlzQTBwTHFSZ2tHdmFvUk03U3Zv?=
+ =?utf-8?B?OG0ydEJBcjMvYngrY0w4VjU4NHJkOVFvWDF0WGwwRjdEb3BwdWFDZk5jNVRC?=
+ =?utf-8?B?M1E1SDNhK0FqQkFkRlVKMk9sdWJqb2c5cE9SYnk1bVMvbWN4NkVkZ3AwMlBn?=
+ =?utf-8?Q?dnx7I8=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?VnNLME80RnIwSjNkbm9BL3RoN2tNajlORWJDL3paQlY0NGViejN2aEZGUkl4?=
+ =?utf-8?B?TXZRL0pCekdJWHRWQ0VpOEY3NWJwYUhsYVJYSTJSRmwzRzV6LzJWeDZwQit1?=
+ =?utf-8?B?OUNuWE9Jem55N0RkY1N5MzBiNXhaUUJkdS8xeXQwUWJFUUlGRGx5NDlyYk10?=
+ =?utf-8?B?TTlQdkJ1bmZMc2ljNGFNNlAzVXg1STA5bnpYbkFwajMycWtwNm1jUll5KzJM?=
+ =?utf-8?B?ZDNQSENHUWJmTVd6YURPSmM0alY0K2F0bWhna0VnaFYzV0V1TUZ0aVVCKzRH?=
+ =?utf-8?B?b0x1cG1NS1g3aXBXWFg5Rjh1dFhtNTlRcjVkNk1iNnlRcXZSMHRYUU4vd0cx?=
+ =?utf-8?B?OCs0NWJWM1VDcVhDdjhodngvZVFZb2dUSFZlb3lieEZUN0VtbWszTmdRYW5h?=
+ =?utf-8?B?YVh1UTFUWCtaRjM0V0J6RFN6VDVoQ25oWG1ZaWlsUHZFNFI4TjJ2M2VHWGFO?=
+ =?utf-8?B?U2c2N0lSS2d3NUZOY1lJQlllZ1FoMzBTRWRnbkdJMENXODNldFVIVXRlQ3E2?=
+ =?utf-8?B?Wm5GazFjQmFnSzZDOEUybUQ4MDN4Mzl2M0hLV2ErR0xreXlSTWVhc3NBL2xR?=
+ =?utf-8?B?QnRMd0RPUEVybk5VRlRrL0FwZjMrRXVDbkRCSWNiQVZIbVlrNGpibnIzYTc1?=
+ =?utf-8?B?bXFUZy91WFBLS3k0VDJ0RWpBL0FaUlhGWjl3akxmUG9yT256NXFFclloZm12?=
+ =?utf-8?B?aVpSZU1BejNKVDNKam9SZ1V5RkVVUGNZbXFrcDdXa0llajdQZUtwRlUrS3M2?=
+ =?utf-8?B?NVEvUFliSHp5Qk9JbmdsTW1sMllLUDZhVlBMdmR0aVdrU1ptYzArcHNnZWY4?=
+ =?utf-8?B?bTJwcjZ5aE1EYXdpZHVnSjlyaU9sejdyd1hqamxPVC9LMXRFMVljTERGZXpD?=
+ =?utf-8?B?bEdJT285SkhEeGpIOW52WUVnczJLQWVFK3BwNS9WYnphL0loenBXYjZBbzVq?=
+ =?utf-8?B?YSs0VVBuUjUvcnBMK1JEVnc5QitWc0ZLbGdsbHNTekVDSWhpRTJUcFdrQlRO?=
+ =?utf-8?B?TVY2TnhvTmc1d01pRmlRcDkxb0pPOUhhV3VpT0tzd1BNdUxSaWZJUmJEa2lQ?=
+ =?utf-8?B?bmk2YWlQTzI1eFFHQllpSzgvVEwyQjF4b21GK0d3cHJQUUtiMytUajREZm9u?=
+ =?utf-8?B?Z1YvcmtkcEZuZUpxQkJCRnpLVWI0RHh6bHpsSWwzSkFLeFhoOWduQW1YRkdh?=
+ =?utf-8?B?K05TcmVhMm9qR09yN29YVDB2T01tT1BLNStCWFF5ajN1akVrcTJJZXdhK2VL?=
+ =?utf-8?B?NjFaZnBxc21MOFEvcXNiVW1zRlo3THJQa1crYXFoV1diVlkxbmFHSVJpRnVL?=
+ =?utf-8?B?cmdabjZlSm9vUklSTm5XK0lXUVVZOG5aSTMwSWc3MEVyQ2l0WXRLQkgvOWlI?=
+ =?utf-8?B?ZjV1UTRXOXRmcytqdFRzYndlQ0NjQ3VsWkgyNUNHUzFxMnBxV0FLOTdBVGdy?=
+ =?utf-8?B?dDFaK2tSaUNoTjY5cFJOWEZyU3U4Y05PTlJyZWVMNjRrbXZobytPV09SQ0dX?=
+ =?utf-8?B?bzJtek9qZ2FTN1FWeTNITUZaUXdTRWNscFdQZ2ZPSkVVUlduVlA1dW90VWUr?=
+ =?utf-8?B?RTd0ZzA1ZzhsTGZOTlB2VzhITDlSaSsrMWJWMG5oVTNxS0Zoc1V6OE9Gc0xl?=
+ =?utf-8?B?YmNRbHk5UUZJQmkwVVpyMzRWYUc5NUlxSUREemw5dnM3dlhsQkl0blVPTWtm?=
+ =?utf-8?Q?OAshgpum0sxzsaPDUlJK?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0ed1b98e-828d-4e8c-7e18-08dd297e4920
+X-MS-Exchange-CrossTenant-AuthSource: ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Dec 2024 09:34:12.9056
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY0P300MB0309
 
-On Tue, Dec 31, 2024 at 1:00 PM Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
-> On 12/30/2024 6:44 PM, Pengyu Luo wrote:
-> > On Mon, Dec 30, 2024 at 5:04 PM Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
-> >> On 12/28/2024 1:13 AM, Pengyu Luo wrote:
-> [...]
-> >>> +     i2c_transfer(client->adapter, msgs, 2);
-> >>
-> >> ARRAY_SIZE(msgs) is suggested instead of pure 2.
-> >>
+Hi Marco,
+
+On Mon, 28 Oct 2024 22:49:56 +0100 Marco Felsch wrote:
+> I found two mistakes I made in my v1. I would send a v2 if this series
+> is interesting for upstream. The remaining open question is how the
+> driver dependencies should be handled (see idea-1,2,3).
+
+How's everything going? I wish you all good!
+It's a very useful series for various hubs, gentle ping on it.
+
+On Mon, 28 Oct 2024 22:49:56 +0100 Marco Felsch wrote:
+> > > Idea-3:
+> > > -------
+> > >
+> > > Adding a function to the hub.c usbcore which can be used by the
+> > > usb-onboard-dev driver to register this function as hook. This removes> > > the dependency from the core and the usb-onboard-dev module is only
+> > > pulled if really required. Of course this require that the hub.c usbcore> > > driver allows custom hooks.
 > >
-> > Agree
-> >
-> >>> +     usleep_range(2000, 2500);
-> >>
-> >> Why is a sleep needed here? Is this information specified in any datasheet?
-> >>
-> >
-> > Have a break between 2 transaction. This sleep happens in acpi code, also
-> > inside a critical region. I rearranged it.
-> >
-> > Local7 = Acquire (\_SB.IC16.MUEC, 0x03E8)
-> > ...
-> > write ops
-> > ...
-> > Sleep (0x02)
-> > ...
-> > read ops
-> > ...
-> > Release (\_SB.IC16.MUEC)
->
-> Could you please share the exact code snippet that is being referenced?
-> I'm a bit confused because it doesn't seem to align with the current
-> logic, which doesn't have read operations within the same mutex lock. I
-> also want to understand the background and necessity of the sleep function.
->
+> > This seems like the best approach IMO, if USB maintainers are onboard with> > it.
+Use the existing onboard_hub.h header to do the hooks looks fine.
 
-I mentioned I rearranged it to optimize it. In a EC transaction,
-write sleep read => write read sleep, in this way, we sleep once a
-transaction.
+I recently encountered some kind of platforms using an existing onboard
+hub yet their HW don't utilize the USBPE port power control feature
+while the hub support it.
+Instead, we have another GPIO for controlling the vbus of those ports
+to cut the cost.
 
-Please search
-'device name + acpi table' on the internet, someone dumped it and uploaded
-it, in SSDT, check ECCD. I am not sure if huawei allows users to dump it.
-So I don't provide it here.
+Wonder any idea could use this driver considering the limitation of
+the usb compatible set the properties of onboard_dev_pdata hard coded?
 
-> >
-> >>> +
-> >>> +     mutex_unlock(&ec->lock);
-> >>> +
-> >>> +     return *resp;
-> >>> +}
-> >>> +
-> >>> +/* -------------------------------------------------------------------------- */
-> >>> +/* Common API */
-> [...]
-> >>> +     int i, ret;
-> >>> +     u8 _resp[RESP_HDR_SIZE + 1];
-> >>> +     u8 req[REQ_HDR_SIZE + 1] = {0x02, EC_READ, 1, };
-> >>
-> >> Could it be made more readable by specifying the macro names for 0x02
-> >> and 1? This would help in understanding the meaning of these numbers.
-> >>
-> >
-> > I really don't know the meaning of master command 0x02, 1 is the size for
-> > the data_seq behind of it. There are many possible sizes. It is not a good
-> > idea to define a macro name for everyone.
-> >
->
-> Perhaps you didn't get the "arg..." magic here. A single definition is
-> sufficient for all sizes.
->
-
-You were talking using a macro to inline the varadic magic sequences, I was
-talking defining macro for every constant number. If so, I got you now.
-
-> >> Also, please ensure the actual size of the request buffer is handled
-> >> properly. In gaokun_ec_request(), the req is passed down directly, and
-> >> the i2c_msg.len is used dynamically with req[INPUT_SIZE_OFFSET] +
-> >> REQ_HDR_SIZE. This requires the caller to carefully manage the contents
-> >> to avoid memory over-read, making the code difficult to read.
-> >>
-> >> Creating a defined macro can help you avoid manually defining the size.
-> >> For example:
-> >> #define REQ(size, data_0, data_1, args...) \
-> >> u8 req[REQ_HDR_SIZE + size] = {data_0, data_1, size, args};
-> >>
-> >
-> > I think wrapping like this is not recommended, see '5)' in [1]
-> >
-> > Best wishes,
-> > Pengyu
-> >
-> > [1] https://www.kernel.org/doc/html/v4.10/process/coding-style.html#macros-enums-and-rtl
->
-> I believe that the consideration of namespace collisions is a valid concern.
->
-> Some examples can be like have a naming pattern as well:
-> /*To have a name pattern to reflect the size like reg0/reg1/reg2*/
-> #define REQ(variable_name, size, data_0, data_1, args...) \
-> u8 ##variable_name[REQ_HDR_SIZE + size] = {data_0, data_1, size, args};
->
-> /*u8 req1[REQ_HDR_SIZE + 1] = {0x02, EC_READ, 1, };*/
-> REQ(req, 1, 0x02, EC_READ);
->
-> /*u8 req2[REQ_HDR_SIZE + 2] = {0x02, 0x68, 2, 3, 0x5a}; */
-> REQ(req, 2, 0x02, 0x68, 3, 0x5a);
->
-> Please note that this is just an example and a suggestion to avoid the
-> current manual variable pattern setting. The final decision still
-> requires the current maintainers' agreement.
->
-
-The main point I am against is hiding the data type, in some functions,
-later we assign req[some_offset] = val; That makes things really weird.
-
-I prefer to define all magic sequences, like
-#define MAGIC_SEQ_1 {0x02, EC_READ, 1, 0} /* padding with 0 */
-#define MAGIC_SEQ_2 {0x02, 0x68, 2, 3, 0x5a}
-
-Gathering them makes things easy to manage, but I doubt if any source
-file in Linux kernel doing it like this.
-
-Another one alternative,
-#define INLINE(REG0, REG1, SIZE) \
-	{ REG0, REG1, SIZE, [3 ... 2 + SIZE] = 0} /* GCC extension */
-/* or just */
-	{ REG0, REG1, SIZE, [2 + SIZE] = 0}
-
-u8 req[] = INLINE(0x02, 0x68, 2); /* Creating it */
-/* not sure if we can make tricks to initial this in macro */
-initial(req, 3, 0x5a); /* initial it */
-
-Best wishes,
-Pengyu
+Best Regards,
+Pan
 
