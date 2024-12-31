@@ -1,92 +1,129 @@
-Return-Path: <linux-usb+bounces-18914-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18915-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F6F29FF00D
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 16:00:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 500E49FF04B
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 16:47:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6DDBA3A2E90
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 15:00:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E0113A2CC2
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 15:47:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D74B84039;
-	Tue, 31 Dec 2024 14:59:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E25A1993A3;
+	Tue, 31 Dec 2024 15:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hNlT2ben"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BhodzjRd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AD7F2F4A
-	for <linux-usb@vger.kernel.org>; Tue, 31 Dec 2024 14:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1589D2C181;
+	Tue, 31 Dec 2024 15:47:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735657199; cv=none; b=D1eSJGG5XzJsQkxFBowTZWRumFLlaXKaQRdOmArIH4nopweCb5LVAj78eJe2CnrArXKEWDplXRm7rwqrsUpS8EZ+XNfWDAAVFIdx5sazNDTBUN1m1eyyDNgRTWr5whH2NgV65X6UAtnYmfjEEyXR/42v/cf8UafZLcz+7NyLT/k=
+	t=1735660060; cv=none; b=IeMJjoRDJM8QNZnnG6srCvq5QwfpskV4KjmqmmhhvRhpAg7Qb0g7FRCmGSLCoV4kwlEAIJDoxbRWZ+i1zAgspX92JFuxRj9hlnVC7klwWQAVndE6+qgaYTd4ZNHuHCXV/VLkRdPpSOb5isZCuBty0Jz+YoawnBebJfch/cfsbKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735657199; c=relaxed/simple;
-	bh=vx7dQgBaD5aaDPWhSedXPsAF7+in5W5KUg5nc1Zcbro=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=AT+VuKd5xmy6jtu2Vlzvj6luKbrC26aB/Fz7HlelpEVkGvdnSgCCwroyrMFPMq4jW9F50HQZywC/k5/BOBlpmotCAdSP76qLsCX+aorwOT3n9hJ/Xmar0ClVmlMrPXUz+Bgrn6Oe7cX7kMoXtOMJA5Oa1gyatwZP4txcTeanBBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hNlT2ben; arc=none smtp.client-ip=209.85.219.170
+	s=arc-20240116; t=1735660060; c=relaxed/simple;
+	bh=5GU22BzPVa79FllcNoXKQHm4qdvw6X8M8Ts0ZhNqBuM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dHawMoUqqsnmoDjbZIavYB4n2r2WH2rKoiX77s9X5mc/mghoIF0pNeWM+ECphSdqC4x65hveh0IWjFuNOXuTwa/hUhMsHItXBzFteUhhMKR4rmsa5l9ol/esuRNL3t3SMVpUZQ9nG1OleCs8Z/R9aYQ5znuja4fVkmBjSOfVAWo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BhodzjRd; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e3c8ae3a3b2so11129043276.0
-        for <linux-usb@vger.kernel.org>; Tue, 31 Dec 2024 06:59:57 -0800 (PST)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-53e38838026so1362985e87.3;
+        Tue, 31 Dec 2024 07:47:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735657196; x=1736261996; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=vx7dQgBaD5aaDPWhSedXPsAF7+in5W5KUg5nc1Zcbro=;
-        b=hNlT2benIVobPj7UuQbIUvb7yK8UT8XLorX3uRw9Xg7I88vEkgG8G9eYYn/1wR1r1w
-         iaevQFnZ/Vf91drNfEOiHVtPPGWKjUG87SPbm3Pk+GcEQcwsGGfPWcH8wldGbRCCdqUU
-         fl63vSplQLfnhkCWdV98Lvd5foCaercy8vHX7ZB6KyW8N75CB1/4z7P3DDds8UH64WrB
-         HhnyiWzgToAfnSb7X2WHGmhaaXigJvLvChTI3FBiAKSZc3mK24aa8E3gdCwUN+Timwhc
-         WBTcQx7F0JtS2GlGvzvQjDPorDfld0Lj1t1IEh6bjZvz/8s4+siVALQeMxfG7heX2ujU
-         m67Q==
+        d=gmail.com; s=20230601; t=1735660057; x=1736264857; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZThhPwxWWM2D9EOoeuPpgHmBmk8eVzgCglm0QlDZfLo=;
+        b=BhodzjRdH4ymCfQfvYy8Cfag7UnhaBDYjV3YnkHwIZ+mZvWGWch9TojIo7AzZ78IyR
+         +KktIUDtLv66dXYZtXkyUZsnUY0B04geg6cA5L2lrCKT8DduOhiVF08Wyi8E7WAUrfOT
+         RQb/GFo7aAb9P+f4EqT1WJ0s28t77VRXIAi+gJh4bPJylhJ9wLXhuRUjMJX2xUPu0EzA
+         Lez6FUvDDjFYPl8VH0iY6xWHvg3lad2iPsUTTe+dNq5++fH2vQy3JjtgdWBXQ7b+lrph
+         tOyau4wWjudfXL15eZCdRbxNxGz2XAYKePDx3VB9DnLV9gwGZwwJm506OgaczyT4NCUb
+         J+8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735657196; x=1736261996;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vx7dQgBaD5aaDPWhSedXPsAF7+in5W5KUg5nc1Zcbro=;
-        b=CP1CnO7dEEcwQhZKBYP+6wihBqYYu+o6Vxxcf6+F5qvlqNJMZVYUPpoY2CM9PJROwe
-         bn1b7Szhl0Kj1TvsDcesz+q9FYnM2MVk4pdctUtSWztP4FtIgQA8Ld7yv6LTOhj3KHg4
-         7jcl9Tbf4z5FBzFVh6ZaiJgfuLYwVhEo3vFabaHSa7NAh0NCqfVLGFj6oTwpkxMGcuE5
-         DqPlParI1XrIDwj4LOrHI78JTeXDWAgDXcG72cKlfW8N0G8VEehVIpW1+zdwi2xpY42c
-         yFSYih4A19wvllZIDWYpN1udtbQ0u17rLsGlGXVYY98cOgFntAG1FSw0upUZEQ/oyni5
-         0hWg==
-X-Gm-Message-State: AOJu0YzbpEKBx6eCrqUglx+0x52VaKRo2A8fe45gDw0llhDlQvNQJ6v4
-	6ohxjx4dz+NCci9zgY5fZmN30tVezL7XCc6SQWvGI0tld2Ei4knqmJD/2FFxcsG6HdlI4f28gDY
-	Zh3URrsTeK6pK9yIR0O6Tdty28cSuKiEP
-X-Gm-Gg: ASbGncuJEWIiYEbmCVSmQy5aYIDmOwMTPb08Wb6oJC9exrGHHCPvgvEAVTDtg/TViQf
-	FgMIqnsisQNP3VRUh8nektjQibA2KB+NBWRphQA==
-X-Google-Smtp-Source: AGHT+IFyZJBPqMEftoH8+LR6T5ghRcGTUjryFkC2W5AOvD2dyHiB2ONn74hF5pDapcS3kxfaG/BrTSLO0Gw55SyBgyI=
-X-Received: by 2002:a25:21d7:0:b0:e4a:130:45b with SMTP id 3f1490d57ef6-e538c3a166cmr21358418276.35.1735657196458;
- Tue, 31 Dec 2024 06:59:56 -0800 (PST)
+        d=1e100.net; s=20230601; t=1735660057; x=1736264857;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZThhPwxWWM2D9EOoeuPpgHmBmk8eVzgCglm0QlDZfLo=;
+        b=MkqinHZQSAsGj9DxOLYGsQUil9uy8143LdCx0im7NEwLc1KgU0SuLeBAgXOKdAYbtk
+         BpGhgrueMn7L1Root6JKwSloxuUY5MN65MUv07lTPHIPH/6WVFxUqb/dn5QLUV4BAtDz
+         kQJ6LiPPnJ4t76vK8Xb4LwWf3LOXkg4YO7pbXtNXYBA3QE9HfaIJBRQfqOuBTa/xj7jd
+         fCvE7lv0iUOIIZWz8KbQWggPXiYm/tlExksTcyXh4msR+fTF/UEy+tunXheR9YVjpq0U
+         9rhT/2POBQXYkHf2/R9gHIyfXZ4BCRTfQPfyDy/9a1wQtIEU7GOsJfdHgi4a3ut0ylPV
+         mb/w==
+X-Forwarded-Encrypted: i=1; AJvYcCV2xx1chWu6LoAt6QXZ+AgGyyVF2e/TZeFYO3Gkj/lqEtHYgSEA8RvNCvtNJr5tse7DpBKebQlX1yQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGddmZEGsZf9fw9gAZ73nVwBSh8K1jU2tsmoxCqMvv6RS3bE77
+	4kZozQa5AcjTmz43qD1MRiH5SkQV4Bdd0WVUYX5mwBZuv/o02BYN
+X-Gm-Gg: ASbGncuMPuCSXI4trDjhPECNuGIBVvQVt987KXPJokiOukEAb7Y94+vYIWpVG8TZEfO
+	rXYE5Bk/nWbAxFrSI5YOPJ4kfuRhSauOq2P7N9oZc6bDWq3v+pe2FbhVQuWHprbRZa5lg674s9H
+	hqxosNKBN15W0s4wmGFJK0v1+opewxmTKCctt3pykss4ZC/0ykgCBQbsIEWt9jJzS0ry2qa9c+9
+	tpy2oTCaWES0ONwyadtw3Cjq0zjsFQuAzVBgrEzWS7+kJ2CYXweL1AeJAlGs9TBIpgUAYFqm+WG
+	e7g9LpvOtsmwxf/k1hdN3asxEio=
+X-Google-Smtp-Source: AGHT+IGUBDpGpBWWIhuGCdrfsoOjSCIsMwdhGA9gEitD2MvIJrHhcVvMO+Pmux0dl6EXua43+pfY3Q==
+X-Received: by 2002:a05:6512:3054:b0:53e:3a8c:e9ee with SMTP id 2adb3069b0e04-5422955e163mr4411565e87.10.1735660056979;
+        Tue, 31 Dec 2024 07:47:36 -0800 (PST)
+Received: from laptok.lan (89-64-31-140.dynamic.chello.pl. [89.64.31.140])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-542235ffe48sm3448869e87.73.2024.12.31.07.47.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Dec 2024 07:47:36 -0800 (PST)
+From: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
+To: jikos@kernel.org,
+	bentiss@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	oleg@makarenk.ooo,
+	paul@spacefreak18.xyz,
+	f.kardame@manjaro.org,
+	jules.noirant@orange.fr
+Subject: [PATCH 00/10] HID: Upgrade the generic pidff driver and add hid-universal-pidff
+Date: Tue, 31 Dec 2024 16:47:21 +0100
+Message-ID: <20241231154731.1719919-1-tomasz.pakula.oficjalny@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Jate Sujjavanich <jatedev@gmail.com>
-Date: Tue, 31 Dec 2024 09:59:45 -0500
-Message-ID: <CAPphmgY-bj6KzdEgKMg3JXyaSHNn643Th8wBoJjApQUx1F1pUQ@mail.gmail.com>
-Subject: USB and EOL LTS Kernel Advice
-To: linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-I have a device running the 4.19 LTS kernel which just went end of
-life. It has some USB signal integrity issues which result in "clear
-tt" loops until the bus can recover (if it can). This can result in
-system hangs including with lsusb.
+This patch series is focused on improving the compatibility and usability of the
+hid-pidff force feedback driver. Last patch introduces a new, universal driver
+for PID devices that need some special handling like report fixups, remapping the
+button range, managing new pidff quirks and setting desirable fuzz/flat values.
 
-Management would like for me to patch our Linux kernel to work around
-the problem thinking that a kernel fix is much less costly than
-deploying a hardware fix. There are some USB fixes in the upstream
-which might help. But I think I will be without community support.
+This work has been done in the span of the past months with the help of the great
+Linux simracing community, with a little input from sim flight fans from FFBeast.
 
-What advice do you have?
+No changes interfere with compliant and currently working PID devices.
 
+Tomasz Pakuła (10):
+  HID: pidff: Convert infinite length from Linux API to PID standard
+  HID: pidff: Do not send effect envelope if it's empty
+  HID: pidff: Clamp PERIODIC effect period to device's logical range
+  HID: pidff: Add MISSING_DELAY quirk and its detection
+  HID: pidff: Add MISSING_PBO quirk and its detection
+  HID: pidff: Add MISSING_DEVICE_CONTROL quirk
+  HID: pidff: Add hid_pidff_init_with_quirks and export as GPL symbol
+  HID: pidff: Add FIX_WHEEL_DIRECTION quirk
+  HID: pidff: Stop all effects before enabling actuators
+  HID: Add hid-universal-pidff driver
 
-- Jate S.
+ drivers/hid/Kconfig               |  14 +++
+ drivers/hid/Makefile              |   1 +
+ drivers/hid/hid-ids.h             |  24 ++++
+ drivers/hid/hid-universal-pidff.c | 177 ++++++++++++++++++++++++++
+ drivers/hid/usbhid/hid-pidff.c    | 200 ++++++++++++++++++++++--------
+ include/linux/hid.h               |   8 ++
+ 6 files changed, 375 insertions(+), 49 deletions(-)
+ create mode 100644 drivers/hid/hid-universal-pidff.c
+
+-- 
+2.47.1
+
 
