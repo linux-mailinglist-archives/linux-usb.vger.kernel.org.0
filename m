@@ -1,61 +1,61 @@
-Return-Path: <linux-usb+bounces-18902-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18903-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 889029FEC27
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 02:34:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B34519FEC29
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 02:37:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A880161339
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 01:34:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2EEC1882AFA
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 01:37:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E9E2AD02;
-	Tue, 31 Dec 2024 01:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9777E381C4;
+	Tue, 31 Dec 2024 01:37:01 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D461BA2D;
-	Tue, 31 Dec 2024 01:34:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88AF4286A1;
+	Tue, 31 Dec 2024 01:36:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735608883; cv=none; b=YKAIBuBr+DH1PNZgR8FCgftNs8Eh0G64nLSvuUxxQiTqhHVJaIZEDLjvSMFgutggKQ4bzXekO37JNCoLFi2VQjt1S3XRH3+c60gLGN5y/S1dJObvhC40zPlVAE45vJaEo2rZtDkySMmlUcQCfTrgV9axo3vD+JTQaWpfRb2YDsQ=
+	t=1735609021; cv=none; b=VnQIvKi0/SBiviMg0ClMoMjvavRqdmJHzINRdPJZHm2m0dKnM/l1HXo+pV1CWX++vezq101dkPq8mh2feFcO0IkeaNRDzMUSw/Yqyw4haYy7MDZ00ylB2M7MN1QWt65CmInPIJag0zmPjT0pQSSPOtpzpx2fc8Hj4sW8tB4llaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735608883; c=relaxed/simple;
-	bh=03BmZDFlHVPf8aG+3EBnl2rR8fuht4xFVcCsna53hco=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hSe99U5GmTx7XD+QEWDn2OVBDFBFhUuLQE9mo1mAT3Fy5aLeACtFgXPVQE80ucE+aXCLnIfq/gH0Ppq2egpCXu/TogB/xbpeg8J/hOoj6nv06V8hr0Z892ZeZCqKYfkVABsmZoNqCVldglQvj2CG4G7N86FQwAbJ4pAz6IRytQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.216.47
+	s=arc-20240116; t=1735609021; c=relaxed/simple;
+	bh=Xzqbcc1s3aOVATyNmhK0TQsBsfoQBV9GYPkwKQ8Qkes=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cWU+3kteLejw5v/F1rhO7kyXGW8RTJEfV6qvJif1h55v3QiTYtLUKpU9krtQ8kofPjmt+xGyNRB9C9g2Ly9qmrCA0jWVX9/eafNrI087kVm1epOPk39uNbdeoqGxKUsrjiklKRu2FeH9maKUgq7ksgmL+oWxmuQ04q2eAHYqtiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2ee76befe58so12914391a91.2;
-        Mon, 30 Dec 2024 17:34:38 -0800 (PST)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21631789fcdso95966785ad.1;
+        Mon, 30 Dec 2024 17:36:58 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735608878; x=1736213678;
+        d=1e100.net; s=20230601; t=1735609018; x=1736213818;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=596wxlyWrBHUHAHbY6qH2LEMtmJsuKM1rfFEH81XSqM=;
-        b=BpLWpHEV9MHJyf2BiFmSx7N+cDR5WWI0OdCwbU2/3dURngqaCgqXAAq2J2fEHtnQj4
-         CVmMzzqOPcqYriaeFHtVSJZmNQjR+EAHPT71HMqaBUxLLAyseX+WxtanheoL/rPz3fZX
-         13x1s+BWtdFa8WJ+g47WQeOaWCQwvGYRFQu21MWzEE2bHSu1t8hNpfHwavJIsooz6SWu
-         patcN5y8KhP2obFzO8NDHLfA49jjMZgKngSarVwhi6ki++8+GroRrc8ezkT/zhpGROrz
-         Gqe8xxA/xQEJzooMimSSocuGDRaW2w5p+/LM9b88M7lMqq6oIYd3lxn/iLP1olb/rbew
-         ARrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUqcdpzJyJraWSwz1TNvuSBnInje/vKJHcN82ZGhyEancElZyuV+qt4+lQX/UrhGF38w24Bc+wvddPo@vger.kernel.org, AJvYcCV88DojLLaxd0z6y6QFA1ZUKUibhCtpOuDr6yohw6U7nW3mwdWy14cjDGgYzfQjVrSu/aJmD2//pHMiN1Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVLvyOH20THZG+Z4C3KwCcqC0Fu6xoU9nPUdp3fR4ZYanSXWdE
-	wK10CKpmaCZfAN19EpfS+fnvuTp0xIC1rqK1kW768meDJ9P9B0Lu
-X-Gm-Gg: ASbGncuS2oi57J4p5z+jvi9NFr9H8johsFc8t5LkV5aR1o6i5ppChQhZO/X6WsaN8uv
-	5lFgeIVe9iuBo44tRMIOoC2lNusayg6m085eEikcHz2qB1CaVCXqbfrd/+UiCk1GdPz35JWA/25
-	ZwqUFFDJYUxm9vKpuSTkXyapV7l5QqBrJ1dX8VT4OAoVDs0jGP3G+brAFIL72Uf1pJybmxt0/0q
-	3A8fTtABdr3HRrhjMJYlgWjUSecBkf71lqRucWDiPfN/N2t+CppsrXziiL0NdGaMtDfFleFwA==
-X-Google-Smtp-Source: AGHT+IFrsKYNNVPYxkOMp3328XbXbtX3mfC2L5B4+ZUkaxv/aqUT4RpiMHB0WxMG7z+hI1qF461gNQ==
-X-Received: by 2002:a17:90b:5208:b0:2ee:dcf6:1c8f with SMTP id 98e67ed59e1d1-2f452e1814bmr58771833a91.16.1735608878450;
-        Mon, 30 Dec 2024 17:34:38 -0800 (PST)
+        bh=oTPwzQjkio3K8sn3MAmfdbUGqjfENbj2QxlyALzuC54=;
+        b=jMkFXynd06ROzDevfBlRI8XIlT9cKzE5kiAIJcZMkkpvkmNimt2bXUCOI2mXVbhzCf
+         BlJtYTMoV34dQaA//zg/MkCpaMKSHpNDmC9XR2cTP07Y4KAIIA4tPpyVXzou8x6i3Spc
+         FF/0Iqupj0A7HQTyAIfv4JvdWjpJ/z6oK5OqzEogBgBMnoRWbXZQeAnZL8PWYKQJIGVP
+         B8vRFpgMDi1Hk+zP9NpmYC3Ok4z/f+ptdjE0TU7+5Nq29YAbMskt/fmPTlEqUb+F5kco
+         Z8m+ioQiHJZCa/wy9i23bnl1BXm5UxY88xKH9wlWvybFH6CbsFGOLjFBraA9iVNAp3Gy
+         fc4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV/D/F4kUS/m+mrfvoiBM8y/DLHGURzn1rRsgdP7g4eIyaQrNfLQYcTLz2UAVpai87H2fIy0Fl11yaAuB0=@vger.kernel.org, AJvYcCVvko6uBn0lMNWsP3gzLNZni5xP2Ixca00QM0JPazPyYRyiq2v7WuAMxBjI+T/17LbPmruTe87CtZPL@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEwowi7AakV4O367Ugy8mDARVy4xHjL0mZB3ErIqB5dfKEyz7R
+	fsljeoKukw+Bhuf/yCQuSd4QYgSAYX9H5lgVitTvjq0bHL0297kB
+X-Gm-Gg: ASbGncuwhjJG3ZhWsHPvx+6UiqM/UUgtDtAh26naHT9Z4G/IyMQgxRmQS0F5iFk8hc3
+	4Ox0R0ueeG9pUp2uLi4xHFTDBmE/gd4rGZzvASAlBmbhfox+nKiRrw61k25txSpb6We1Fr/sfhB
+	p3jbDOk7O68CI8CC6M3kT8b9ZPK1yVzubEfE5SkoPHJIFUIRcl/ExsZYSxWBEHCz7tZafv/kgqs
+	PUHRJgOghiWBJoFLW4rilLZgVqaXy8e6u86osnurai+m3JzOrvpPK8JMaFvcfDDrwkmhomGqg==
+X-Google-Smtp-Source: AGHT+IF1aydhk/tdMRSfGCu9t08z07nzYlKLu6pu/0HN60iMKK3pC8SD1qQAG4PctG6GWKSYjxUkMw==
+X-Received: by 2002:a05:6a00:8009:b0:728:f266:cb09 with SMTP id d2e1a72fcca58-72aa9b03a0bmr66909978b3a.13.1735609017713;
+        Mon, 30 Dec 2024 17:36:57 -0800 (PST)
 Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f2ed62e385sm23364742a91.22.2024.12.30.17.34.34
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842b31eeff3sm15260722a12.33.2024.12.30.17.36.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2024 17:34:38 -0800 (PST)
+        Mon, 30 Dec 2024 17:36:57 -0800 (PST)
 From: xiehongyu1@kylinos.cn
 To: pawell@cadence.com
 Cc: peter.chen@kernel.org,
@@ -65,9 +65,9 @@ Cc: peter.chen@kernel.org,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Hongyu Xie <xiehongyu1@kylinos.cn>
-Subject: [PATCH v2] usb: cdns3: remove redundant if branch
-Date: Tue, 31 Dec 2024 09:34:30 +0800
-Message-Id: <20241231013430.23117-1-xiehongyu1@kylinos.cn>
+Subject: [PATCH v3] usb: cdns3: remove redundant if branch
+Date: Tue, 31 Dec 2024 09:36:41 +0800
+Message-Id: <20241231013641.23908-1-xiehongyu1@kylinos.cn>
 X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -99,7 +99,11 @@ So fix this if branch.
 
 Fixes: 2cf2581cd229 ("usb: cdns3: add power lost support for system resume")
 Signed-off-by: Hongyu Xie <xiehongyu1@kylinos.cn>
+Acked-by: Peter Chen <peter.chen@kernel.org>
 ---
+v2 to v3:
+-add Acked-by
+
 v1 to v2:
 -replace bellow with below
 
