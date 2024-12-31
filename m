@@ -1,404 +1,104 @@
-Return-Path: <linux-usb+bounces-18925-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18926-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2A51A9FF060
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 16:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D547A9FF094
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 17:15:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 016471881951
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 15:50:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D443E1882F3E
+	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 16:16:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABDD71B4258;
-	Tue, 31 Dec 2024 15:47:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC2441991A1;
+	Tue, 31 Dec 2024 16:15:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UsmTTMyg"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IbWlbdTn"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4259A1B4122;
-	Tue, 31 Dec 2024 15:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C0183F9D2;
+	Tue, 31 Dec 2024 16:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735660074; cv=none; b=VZ8uT7J8EVo/Zwe0i0ohnFQtXy0DY1iVQNgoyumd0yp+UHz4yayiSOd5sZn/NSdwVGG7dcMIxjqDQKjGt/3j1qQUB/s7XDadVpAKcSYb3qBNonIFcjEa5JQoHUu8V+dGwcl8ommLDE8PTP++xNkFx2luQcusilwzieemPBBvtBo=
+	t=1735661752; cv=none; b=oJJBuNjILIEg2fOV3+iHuLs2g5dTx2HOwlOIhrMS7NJvuHo1WTcfDJ93CPauj/41YS7DZYP1LyaXHgPrpPgZtqRKWrn/TSjTtR4o8DU4ugxRKzrbstY8yFQcUzLMONcUXo1Zs94Osxzl5SjTjOixc3MJYaeuLQ7rOHCBeuZ3Hkw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735660074; c=relaxed/simple;
-	bh=xWpqaEsIadXF6Ky6qS49CmIFJPJmERZIHvExjcXMAjo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HfRZfpkxoVb2m2AkBvhGvw1beCuKWZ1qf+rhhb02vV1ed8wSv2Gvz1W7SMX8g89MIjTyqb6l8kcXbma/A/hv0wyo3kLSOfq49Gj8KLllk836kwRKhyC+8/kn1gy3GgaClVOdQRNK3MB/lnUvwXTR7I02GDWrMgIq1HpDZ+mvR60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UsmTTMyg; arc=none smtp.client-ip=209.85.167.49
+	s=arc-20240116; t=1735661752; c=relaxed/simple;
+	bh=F2roWu3LQyMjlrnbo8uxzkFdTeeT/hfp/QkLdJerWwE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=prUK0s0RlUACQIuM2hiVaF6sTQI8TF58UHuCg4nl2Q/5sVBoxeA/rfHNKKQZ8BiURrkF9WADQ4kFbtr4qy6KFO6Z/MBRm/Uia3CZho4jr08fb7+IH8hc07e5TLfqmN5k1g90ORpm4pZV52XaoShzjQMFw8bvEaG5VRHxj7HgfTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IbWlbdTn; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-54019dfd6f1so1561727e87.0;
-        Tue, 31 Dec 2024 07:47:52 -0800 (PST)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2163b0c09afso132130475ad.0;
+        Tue, 31 Dec 2024 08:15:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735660070; x=1736264870; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pqVwfloagYUm482MBInF8FR7ZXiywE0EMC7FeAdQz/0=;
-        b=UsmTTMygFZDUEcHPrBwgjpbsh+Q2PpP5nCmKyU3bo+s1O6M9C3Xz2nskZIAliFTlRb
-         U/lsU3oy0NvpzhgDtIJ2TB2oF/X9CKePz/aMQTy7/5AxzoIm55U3a/0LZ6hpmECqDLYq
-         sJVSZ6WJtbQcHqGd5weu4fJUaNcpeErx0LsIBDYXMsdTe58WGDhUzS7zrDhXe+QhnOC1
-         XiiVYaq5Gsy6CtYC47WaAxxn4+xtfEcoyeOzAJBp4NrR/9Tw6hLsD4z35ifcMhYdexxv
-         XlJMx0Xp9NLu5Z+bk2K+/j22fCinyzlk47SdtHZSFmpTdHY4daDtriizIJxuR6z5MbI5
-         3SzA==
+        d=gmail.com; s=20230601; t=1735661750; x=1736266550; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RsPu+N/CmWOe/b3bw4QasHMvJvrFsYF2ara739b4EgM=;
+        b=IbWlbdTnqsMgm4AfOeZzqEqLhxXghLJI34kpaij8F1MjrU4SmNLoLRldVJeHr9O3Uk
+         LT3ku/hdM2vJUHardaPH2khfFVBnc+HIuQA4MvL52kzHH3K8UxGWYvRuAlJg9y6PzeSq
+         aQQLAFaHh5zzH6bcsQ/YzdfX2npGJkwdOKLXE+tAMOn+i1dsHu4+Z09oup2N0XKbq2y6
+         pVbSlWlymACfbbj2Q3bVsNFj1Nt9TM8JJLt+AuIPb5XZM0AfDzxdAXGjsDiw0FEAb042
+         m0UJVPF7NWVfsugUghrLsECrmodPyrSp8Kd56trmgjjOL9hS/nT8C3zKzazdqI4edLFo
+         dmBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735660070; x=1736264870;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pqVwfloagYUm482MBInF8FR7ZXiywE0EMC7FeAdQz/0=;
-        b=dTtbZ0p2I7zoQ14xkMSQYgz0hWfPRb+k/D3zrrfqt456zAA3xgP2BGq/RT2qi0RBmy
-         rgKH9KLc9xfCwQLBiEUTOT5U487rjTLO+UgwWeyUnSFpRjjQSZ14cwUZo7+urHKT2Q6v
-         Ol0/7DiJv3mApXKucvb1PwcoWeGoAIyLC59q3sbFPBOFdgvK5Oal3P4ejxHcQE062vZR
-         kbVLy3ll19j3b4CgzcFnV6nrU4tnnLWI9zkLo6lE0i9SABeWvqbyJ/Jt8xUOQaqaNpxE
-         mLXlhSa+zPlnHFpy/6M7DpAWSsMgd9hz5sbwjHt7cVnr5BvE5YB05LRAPnyBLXOaP6MJ
-         /7HQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV6ksU5yYXOkeb31XHtbfiJRwl/L/jHY+7VCSV3hWuNQB0+cWV81KXqjeJ9GSVtaG126Nip3F5YerU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzuqOUmlWeY4AphLOgOFYttoTBwlcnXIBl+yb4H5ggo4eXLhCAV
-	WS7uEg70u+PjBwaqG8b4ap1QQQiatLewez4pWPcmrD9iGPAgHIu6r8vJQ1gd
-X-Gm-Gg: ASbGncsBOqu1pjxgDmXJQZmFakHNSnQhWhmCU0lNLYT7JRlwY8TNqkunixQhQg2E6sB
-	YrFpDc0cxcY0YwWyiYgS68C/68a+oYjzpzDyF/Y4IIXDBMEIWaXr7oF0OUGzpPCo1QgdgCmwXmt
-	sGN3X3yhoK3PoXV3RbDMvMhyoOm66DZjesL3XLtr1FxgkSC5cij5aexCWHoGQJkMoD4EibRjXNG
-	wfoR6OlFHDAdrY1RnKPtJbXq68gStGwp9hPD5QkZOBOH5nw50k1uSoSC9U8ntJkFbyLterIBq4E
-	cWwRrHGLZYZGGFfAdWVpOy12pPs=
-X-Google-Smtp-Source: AGHT+IEbbq8uiMzc1SZgt1ccUzAKvIwDqaOoTjiA+x1KR5YCptgbvwljh3GpqZDcXXwQ4lyd8Zy57g==
-X-Received: by 2002:a05:6512:1391:b0:53e:3756:80ba with SMTP id 2adb3069b0e04-5422955e090mr4855233e87.9.1735660070269;
-        Tue, 31 Dec 2024 07:47:50 -0800 (PST)
-Received: from laptok.lan (89-64-31-140.dynamic.chello.pl. [89.64.31.140])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-542235ffe48sm3448869e87.73.2024.12.31.07.47.49
+        d=1e100.net; s=20230601; t=1735661750; x=1736266550;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RsPu+N/CmWOe/b3bw4QasHMvJvrFsYF2ara739b4EgM=;
+        b=wFbFZOubmIUwOjRQzFdD6jEDrYMaKh4IxetRmhGMy5hwRAMVXbAWV3H5oqMwvYpNXR
+         9kFEecSz84jrRi85HRa2wwTcpPnYtgKoxm7tUXDmziE/ipvSOwa8QYpkfy+avMvhVpBi
+         pnKSoao2YJ7MjEXmlTxWoxNlls4emNAPOzLY26OkRtellRoOYza6RkDHZCYpQCLwljZV
+         7dRO30JV3J0Rn5jYDBGUrcJR4ymVQB6ICjqPz++NP7U9nkUULoaZwad1sx9HpzEZyVKZ
+         NJsnMN0qxET/BelpKmAnVBXYbPpnraQOPXxSTMWx2C2JDe69J1RfDo5EVwjHSYxMizcy
+         F76A==
+X-Forwarded-Encrypted: i=1; AJvYcCW9Mo52reHQkYc9zNQCbcjLnH6tkgSmaSQAxZZRqTkCwhHv/ymOIok2T8H+ot7lpqkTvpPlfnJr7a5jvTY=@vger.kernel.org, AJvYcCX+iNnVvkBT0WSQn/gFxOp54Ni6xwc4/BwkjoTBoWHLbFOd75W4Tit0X63gVwxbHtNG9Gq+5w4lRRBY@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN5pqFjNsIZGnguW5A8pqEKHDZFMfMOiT0FMFY4UCQD078e8fe
+	w/a6WsEm7w77sEFNUAiAQ7qY8kY+VkHup2UAJ5yQlHKyYGt6eVm9VoXQBw==
+X-Gm-Gg: ASbGncsglszXw52r7Et9G11DHOOrx7xKaW8qEB3dD6O8KQgoDZJOLPY5oyJom7/f3VC
+	bJtBKJcMaTFyBmZgZG8VEmQimrwKuwRE+u72bgbiGGoKxpdKcohlybwqEFjQOfg783xIPwgA4uH
+	0qKA1zTB/mC+m+uMu3/GSQybxncpmBBeBGbgRIE61SFkN4KeuRmlUiEx517/CSmGjPeIA2LyrK/
+	naHrVOWTWZi2VhsmcI8jl0/ri/QxRRotZFwMYajG0HLD+S9VGniKTnOT9qdHR/1ig==
+X-Google-Smtp-Source: AGHT+IF56wi7UWJgG1vgPYX7E4aCHDdoBy7+46E6OSrBB/ZwiHteKJEtuhrwUCFg2HmWz320Eku40Q==
+X-Received: by 2002:a05:6a20:431d:b0:1e1:bf3d:a190 with SMTP id adf61e73a8af0-1e5e080c83fmr60157119637.30.1735661750339;
+        Tue, 31 Dec 2024 08:15:50 -0800 (PST)
+Received: from localhost.localdomain ([221.218.161.56])
+        by smtp.googlemail.com with ESMTPSA id d2e1a72fcca58-72aad90c2e9sm21791083b3a.180.2024.12.31.08.15.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Dec 2024 07:47:49 -0800 (PST)
-From: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
-To: jikos@kernel.org,
-	bentiss@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	oleg@makarenk.ooo,
-	paul@spacefreak18.xyz,
-	f.kardame@manjaro.org,
-	jules.noirant@orange.fr
-Subject: [PATCH 10/10] HID: Add hid-universal-pidff driver
-Date: Tue, 31 Dec 2024 16:47:31 +0100
-Message-ID: <20241231154731.1719919-11-tomasz.pakula.oficjalny@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20241231154731.1719919-1-tomasz.pakula.oficjalny@gmail.com>
-References: <20241231154731.1719919-1-tomasz.pakula.oficjalny@gmail.com>
+        Tue, 31 Dec 2024 08:15:49 -0800 (PST)
+From: Xiong Nandi <xndchn@gmail.com>
+To: 
+Cc: Xiong Nandi <xndchn@gmail.com>,
+	Hongren Zheng <i@zenithal.me>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-usb@vger.kernel.org (open list:USB OVER IP DRIVER)
+Subject: [PATCH 0/2] usbip: Fix seqnum sign extension and format specifier issues
+Date: Wed,  1 Jan 2025 00:15:36 +0800
+Message-Id: <20241231161539.20192-1-xndchn@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Extend pidff compatibility, usable button range, fix
-device descriptors, manage pidff quirks and set improved
-fuzz/flat default for high precision devices.
+Xiong Nandi (2):
+  usbip: Fix seqnum sign extension issue in vhci_tx_urb
+  usbip: Correct format specifier for seqnum from %d to %u
 
-As many of PID devices are quite similar and not dependent on
-custom drivers, this one can handle all of PID devices which
-need special care.
+ drivers/usb/usbip/stub_rx.c  | 2 +-
+ drivers/usb/usbip/stub_tx.c  | 2 +-
+ drivers/usb/usbip/vhci_hcd.c | 2 +-
+ drivers/usb/usbip/vhci_rx.c  | 6 +++---
+ drivers/usb/usbip/vudc_tx.c  | 2 +-
+ 5 files changed, 7 insertions(+), 7 deletions(-)
 
-Numerous sim racing/sim flight bases report a lot of buttons
-in excess of 100. Moza Racing exposes 128 of them and thus
-the need to extend the available range.
-
-All the included devices were tested and confirmed working
-with the help of the sim racing community.
-
-Co-developed-by: Makarenko Oleg <oleg@makarenk.ooo>
-Signed-off-by: Makarenko Oleg <oleg@makarenk.ooo>
-Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
----
- drivers/hid/Kconfig               |  14 +++
- drivers/hid/Makefile              |   1 +
- drivers/hid/hid-ids.h             |  24 ++++
- drivers/hid/hid-universal-pidff.c | 177 ++++++++++++++++++++++++++++++
- 4 files changed, 216 insertions(+)
- create mode 100644 drivers/hid/hid-universal-pidff.c
-
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 4d2a89d65b65..ef03d80fe1b3 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -1217,6 +1217,20 @@ config HID_U2FZERO
- 	  allow setting the brightness to anything but 1, which will
- 	  trigger a single blink and immediately reset back to 0.
- 
-+config HID_UNIVERSAL_PIDFF
-+	tristate "Extend USB PID driver compatibility and usage"
-+	depends on USB_HID
-+	depends on HID_PID
-+	help
-+	  Say Y here to enable extended PID support for selected devices.
-+
-+	  Contains report fixups, extended usable button range and
-+	  pidff quirk management to extend compatibility with slightly
-+	  non-compliant USB PID devices and better fuzz/flat values for
-+	  high precision direct drive devices.
-+
-+	  Supports Moza Racing, Cammus, VRS, FFBeast and more.
-+
- config HID_WACOM
- 	tristate "Wacom Intuos/Graphire tablet support (USB)"
- 	depends on USB_HID
-diff --git a/drivers/hid/Makefile b/drivers/hid/Makefile
-index 24de45f3677d..919d6a146077 100644
---- a/drivers/hid/Makefile
-+++ b/drivers/hid/Makefile
-@@ -140,6 +140,7 @@ hid-uclogic-objs		:= hid-uclogic-core.o \
- 				   hid-uclogic-params.o
- obj-$(CONFIG_HID_UCLOGIC)	+= hid-uclogic.o
- obj-$(CONFIG_HID_UDRAW_PS3)	+= hid-udraw-ps3.o
-+obj-$(CONFIG_HID_UNIVERSAL_PIDFF)	+= hid-universal-pidff.o
- obj-$(CONFIG_HID_LED)		+= hid-led.o
- obj-$(CONFIG_HID_XIAOMI)	+= hid-xiaomi.o
- obj-$(CONFIG_HID_XINMO)		+= hid-xinmo.o
-diff --git a/drivers/hid/hid-ids.h b/drivers/hid/hid-ids.h
-index 1f47fda809b9..b1dbe2bbe29a 100644
---- a/drivers/hid/hid-ids.h
-+++ b/drivers/hid/hid-ids.h
-@@ -261,6 +261,10 @@
- #define USB_DEVICE_ID_BTC_EMPREX_REMOTE	0x5578
- #define USB_DEVICE_ID_BTC_EMPREX_REMOTE_2	0x5577
- 
-+#define USB_VENDOR_ID_CAMMUS		0x3416
-+#define USB_DEVICE_ID_CAMMUS_C5		0x0301
-+#define USB_DEVICE_ID_CAMMUS_C12	0x0302
-+
- #define USB_VENDOR_ID_CANDO		0x2087
- #define USB_DEVICE_ID_CANDO_PIXCIR_MULTI_TOUCH 0x0703
- #define USB_DEVICE_ID_CANDO_MULTI_TOUCH	0x0a01
-@@ -452,6 +456,11 @@
- #define USB_VENDOR_ID_EVISION           0x320f
- #define USB_DEVICE_ID_EVISION_ICL01     0x5041
- 
-+#define USB_VENDOR_ID_FFBEAST           0x045b
-+#define USB_DEVICE_ID_FFBEAST_JOYSTICK	0x58f9
-+#define USB_DEVICE_ID_FFBEAST_RUDDER    0x5968
-+#define USB_DEVICE_ID_FFBEAST_WHEEL     0x59d7
-+
- #define USB_VENDOR_ID_FLATFROG		0x25b5
- #define USB_DEVICE_ID_MULTITOUCH_3200	0x0002
- 
-@@ -964,6 +973,18 @@
- #define USB_VENDOR_ID_MONTEREY		0x0566
- #define USB_DEVICE_ID_GENIUS_KB29E	0x3004
- 
-+#define USB_VENDOR_ID_MOZA		        0x346e
-+#define USB_DEVICE_ID_MOZA_R3		    0x0005
-+#define USB_DEVICE_ID_MOZA_R5		    0x0004
-+#define USB_DEVICE_ID_MOZA_R9		    0x0002
-+#define USB_DEVICE_ID_MOZA_R12		    0x0006
-+#define USB_DEVICE_ID_MOZA_R16_R21	    0x0000
-+#define USB_DEVICE_ID_MOZA_R3_ALT	    0x0015
-+#define USB_DEVICE_ID_MOZA_R5_ALT	    0x0014
-+#define USB_DEVICE_ID_MOZA_R9_ALT	    0x0012
-+#define USB_DEVICE_ID_MOZA_R12_ALT	    0x0016
-+#define USB_DEVICE_ID_MOZA_R16_R21_ALT	0x0010
-+
- #define USB_VENDOR_ID_MSI		0x1770
- #define USB_DEVICE_ID_MSI_GT683R_LED_PANEL 0xff00
- 
-@@ -1373,6 +1394,9 @@
- #define USB_DEVICE_ID_VELLEMAN_K8061_FIRST	0x8061
- #define USB_DEVICE_ID_VELLEMAN_K8061_LAST	0x8068
- 
-+#define USB_VENDOR_ID_VRS       0x0483
-+#define USB_DEVICE_ID_VRS_DFP	0xa355
-+
- #define USB_VENDOR_ID_VTL		0x0306
- #define USB_DEVICE_ID_VTL_MULTITOUCH_FF3F	0xff3f
- 
-diff --git a/drivers/hid/hid-universal-pidff.c b/drivers/hid/hid-universal-pidff.c
-new file mode 100644
-index 000000000000..6906cfe4ef39
---- /dev/null
-+++ b/drivers/hid/hid-universal-pidff.c
-@@ -0,0 +1,177 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * HID UNIVERSAL PIDFF
-+ * hid-pidff wrapper for PID-enabled devices
-+ * Handles device reports, quirks and extends usable button range
-+ *
-+ * Copyright (c) 2024 Makarenko Oleg
-+ * Copyright (c) 2024 Tomasz Pakuła
-+ */
-+
-+#include <linux/device.h>
-+#include <linux/hid.h>
-+#include <linux/module.h>
-+#include <linux/input-event-codes.h>
-+#include "hid-ids.h"
-+
-+#define JOY_RANGE (BTN_DEAD - BTN_JOYSTICK + 1)
-+
-+static const u8 *moza_report_fixup(struct hid_device *hdev, __u8 *rdesc, unsigned int *rsize)
-+{
-+	// Fix data type on PID Device Control
-+	if (rdesc[1002] == 0x91 && rdesc[1003] == 0x02) {
-+		rdesc[1003] = 0x00; // Fix header, it needs to be Array.
-+	}
-+	return rdesc;
-+}
-+
-+
-+static const u8 *universal_pidff_report_fixup(struct hid_device *hdev, __u8 *rdesc,
-+					      unsigned int *rsize)
-+{
-+	if (hdev->vendor == USB_VENDOR_ID_MOZA) {
-+		return moza_report_fixup(hdev, rdesc, rsize);
-+	}
-+	return rdesc;
-+}
-+
-+/*
-+ * Map buttons manually to extend the default joystick buttn limit
-+ */
-+static int universal_pidff_input_mapping(struct hid_device *hdev,
-+	struct hid_input *hi, struct hid_field *field, struct hid_usage *usage,
-+	unsigned long **bit, int *max)
-+{
-+	// Let the default behavior handle mapping if usage is not a button
-+	if ((usage->hid & HID_USAGE_PAGE) != HID_UP_BUTTON)
-+		return 0;
-+
-+	int button = ((usage->hid - 1) & HID_USAGE);
-+	int code = button + BTN_JOYSTICK;
-+
-+	// Detect the end of JOYSTICK buttons range
-+	// KEY_NEXT_FAVORITE = 0x270
-+	if (code > BTN_DEAD)
-+		code = button + KEY_NEXT_FAVORITE - JOY_RANGE;
-+
-+	// Map overflowing buttons to KEY_RESERVED to not ignore
-+	// them and let them still trigger MSC_SCAN
-+	if (code > KEY_MAX)
-+		code = KEY_RESERVED;
-+
-+	hid_map_usage(hi, usage, bit, max, EV_KEY, code);
-+	hid_dbg(hdev, "Button %d: usage %d", button, code);
-+	return 1;
-+}
-+
-+
-+/*
-+ * Check if the device is PID and initialize it
-+ * Add quirks after initialisation
-+ */
-+static int universal_pidff_probe(struct hid_device *hdev,
-+				 const struct hid_device_id *id)
-+{
-+	int error;
-+	error = hid_parse(hdev);
-+	if (error) {
-+		hid_err(hdev, "HID parse failed\n");
-+		goto err;
-+	}
-+
-+	error = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
-+	if (error) {
-+		hid_err(hdev, "HID hw start failed\n");
-+		goto err;
-+	}
-+
-+	u32 quirks = id->driver_data;
-+	error = hid_pidff_init_with_quirks(hdev, quirks);
-+	if (error) {
-+		hid_warn(hdev, "Force Feedback initialization failed\n");
-+		goto err;
-+	}
-+
-+	hid_info(hdev, "Universal pidff driver loaded sucesfully!");
-+
-+	return 0;
-+err:
-+	return error;
-+}
-+
-+static int universal_pidff_input_configured(struct hid_device *hdev,
-+					    struct hid_input *hidinput)
-+{
-+	// Remove fuzz and deadzone from the wheel/joystick axis
-+	struct input_dev *input = hidinput->input;
-+	input_set_abs_params(input, ABS_X,
-+		input->absinfo[ABS_X].minimum, input->absinfo[ABS_X].maximum, 0, 0);
-+
-+	// Decrease fuzz and deadzone on additional axes
-+	// Default Linux values are 255 for fuzz and 4096 for flat (deadzone)
-+	int axis;
-+	for (axis = ABS_Y; axis <= ABS_BRAKE; axis++) {
-+		if (!test_bit(axis, input->absbit))
-+			continue;
-+
-+		input_set_abs_params(input, axis,
-+			input->absinfo[axis].minimum,
-+			input->absinfo[axis].maximum, 8, 0);
-+	}
-+
-+	// Remove fuzz and deadzone from the second joystick axis
-+	if (hdev->vendor == USB_VENDOR_ID_FFBEAST &&
-+	    hdev->product == USB_DEVICE_ID_FFBEAST_JOYSTICK)
-+		input_set_abs_params(input, ABS_X,
-+			input->absinfo[ABS_X].minimum,
-+			input->absinfo[ABS_X].maximum, 0, 0);
-+
-+	return 0;
-+}
-+
-+static const struct hid_device_id universal_pidff_devices[] = {
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R3),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R5),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R9),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R12),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R16_R21),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R3_ALT),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R5_ALT),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R9_ALT),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R12_ALT),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_MOZA, USB_DEVICE_ID_MOZA_R16_R21_ALT),
-+		.driver_data = HID_PIDFF_QUIRK_FIX_WHEEL_DIRECTION },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_CAMMUS, USB_DEVICE_ID_CAMMUS_C5) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_CAMMUS, USB_DEVICE_ID_CAMMUS_C12) },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_VRS, USB_DEVICE_ID_VRS_DFP),
-+		.driver_data = HID_PIDFF_QUIRK_MISSING_DEVICE_CONTROL },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_FFBEAST, USB_DEVICE_ID_FFBEAST_JOYSTICK), },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_FFBEAST, USB_DEVICE_ID_FFBEAST_RUDDER), },
-+	{ HID_USB_DEVICE(USB_VENDOR_ID_FFBEAST, USB_DEVICE_ID_FFBEAST_WHEEL) },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(hid, universal_pidff_devices);
-+
-+static struct hid_driver universal_pidff = {
-+	.name = "hid-universal-pidff",
-+	.id_table = universal_pidff_devices,
-+	.input_mapping = universal_pidff_input_mapping,
-+	.probe = universal_pidff_probe,
-+	.input_configured = universal_pidff_input_configured,
-+	.report_fixup = universal_pidff_report_fixup
-+};
-+module_hid_driver(universal_pidff);
-+
-+MODULE_DESCRIPTION("Universal driver for PID Force Feedback devices");
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Makarenko Oleg <oleg@makarenk.ooo>");
-+MODULE_AUTHOR("Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>");
 -- 
-2.47.1
+2.25.1
 
 
