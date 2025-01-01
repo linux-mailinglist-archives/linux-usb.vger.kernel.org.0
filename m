@@ -1,148 +1,102 @@
-Return-Path: <linux-usb+bounces-18930-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18931-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A41CC9FF182
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 20:23:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E3989FF2C5
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jan 2025 04:54:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64DFE16262C
-	for <lists+linux-usb@lfdr.de>; Tue, 31 Dec 2024 19:23:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CFB267A13E2
+	for <lists+linux-usb@lfdr.de>; Wed,  1 Jan 2025 03:54:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 817091AF0B6;
-	Tue, 31 Dec 2024 19:23:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98A5CDDCD;
+	Wed,  1 Jan 2025 03:54:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="fUjzPtHb"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=moonlit-rail.com header.i=@moonlit-rail.com header.b="OKQriKoh";
+	dkim=permerror (0-bit key) header.d=moonlit-rail.com header.i=@moonlit-rail.com header.b="V1QAoF25"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com [209.85.219.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from hua.moonlit-rail.com (hua.moonlit-rail.com [45.79.167.250])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18743188734
-	for <linux-usb@vger.kernel.org>; Tue, 31 Dec 2024 19:23:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9B2BA33
+	for <linux-usb@vger.kernel.org>; Wed,  1 Jan 2025 03:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.167.250
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735673000; cv=none; b=JHzGc953uq1u0OI8L+LJMbtbd7JMev8I8Jd5GPrx+1admq2am09vJozGdokyayh1JMNSmWpvI1Q/qxihG2nvVLIMuiRXDC3AK3JPN/ykmAA3kSAQwoEKWiYkPOJKs/00UHMlJfc/4+0cd4L3UvEX+mI+hlkox3a5F5BOLlBJVYs=
+	t=1735703663; cv=none; b=rzAYzPbQzFRB1xoRXmIxBo3nlpjTyZq8ZaWSv1Q4/KUAQHvj57Mvr75raSqp8N3ToqiMKRxGMz3prdnhtwfCp0DFteOjU7ZG7SVzwXA86ISdQT/z5tgOyfB8UOoi4bAPS6jSbH0stgHa+xHNYc6e0Sc8pkhbV2wCs0RUK1CDJCE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735673000; c=relaxed/simple;
-	bh=rsOxmJpdatCthUGLimpEWcrq1+9OzR2oFFsh8TVgFNg=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=mB4bZdgVWMpe+TL+ovEgvekaD+JAQN/rplZhW/tqf72KgLgi+753rlokRhj9YsK43nS7JQKd3jN+Knn/gf1MN2PtKzLyKzkkVaDs+jjaSZDzeIMxMAOEyYcNijWBG9ikI6rk4S9d+EI8iTiyFLd//uDCY3ERVQldvc4AK3RHMZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=fUjzPtHb; arc=none smtp.client-ip=209.85.219.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f54.google.com with SMTP id 6a1803df08f44-6d8f916b40bso136525036d6.3
-        for <linux-usb@vger.kernel.org>; Tue, 31 Dec 2024 11:23:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1735672996; x=1736277796; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OVtWwkvClnJLuthMxoLYyXn9zqoBPZ6choexSddj33c=;
-        b=fUjzPtHb9VxYiLaEaZ+xM1LD8Dc4rm+i5zWY9EWgh2F+cSfnz7lIrlWnbg0k+ywjwl
-         chADiKgyL+b8BASNgOb0K6Fn7Hu5AIPzaQK9ffBQ5tCTHpXZEfkM/G7VN7m9WPG81bMx
-         9wi4fpI6Cp3/tTm87vXR8JDhWQQEVGSJY+pWUCmWSR1Mf2ajJWI/nUaj0YwILAyadX2M
-         lXYFv39MoousHSdOIp5uHxFspnVd0VryrYyhQ5sDr459eCOwcHI9s2XB2UYJsQzbxN2Z
-         jzBfYcOzbAmCQNsGTZLnEKg27TTfI7ldhE81qLBT8mGqfoaxBEmvtHvd/sCX+peh6YaD
-         vvdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735672996; x=1736277796;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OVtWwkvClnJLuthMxoLYyXn9zqoBPZ6choexSddj33c=;
-        b=ulCyT3EeQgAXULECJIU9x6iKKEBx4hjb5frkCXRRn4B2xKvy943IaWnl5Ayh/rZMJ3
-         bCqB3TDbUGMYTmJdcOGD+sp3N7tRabVz2AqtyogppLC3bWp56PiW2mrmL2onlFtlNtL1
-         l4JtyJJWYYuhkHNzi91WrdKUaaQt60nTD25CoQlK3HfnO1Fm6p4V0+mDYCo/YXNBwsTp
-         Wiy7upO7Ah89T4GbTIGEQwuDe2u/eAU2sYyk38+zKnjKVvl3MyEB9WncpV4aBA7H+byB
-         fkEk0+vlXDK/5801oeHNiB/t+niMuGxH+Bb1+khg34XT6Oqr5zzxdggZlVcCDQu41Jwf
-         EGuA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGKmL2uw6i2VjS9Rxkp2o9Hzt+NojrdoyzNNZIGi5QeHoCkVlv51gpz2jOhXNBBIyouR1mvMJspnI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1N2Xrz9o6qKUGR0X2HU/0v+ZfiJz7PxDEw/yF7fjXfPc8LPeR
-	d02KKzRQJy5WNDEptl4mPpw9OmrtJlptWp+swnWORqRz4I5QQh9rICgjv4FuYw==
-X-Gm-Gg: ASbGncusKfw9vpz69gMYB7mfTZV2OsGikP9l/tQlFSwas0Il4VYQXhiSsd2sNVIK1HE
-	+r+I1ZH7LzeYEzQP/bR1xGwZ+7dN8wL4n0kpHFcoXbiw46QLtx1jXrbFncB3yOT/lzCfHRMLTsN
-	LZPZs97sHRwcLGP3NPZr4Y544UfVNwlKE8v1WLNP1YAaY+U5cAPWr/5Tl3H4boY2r0l+ca2t7CF
-	+qIpzggsRZyqwcXPb2Qn3olzr7Plu1IOoWb2cpHBPDLuhGLg/WxdMPhMA==
-X-Google-Smtp-Source: AGHT+IHgRXHGRDnfjjLWpHmhj/S7J5dFTRI2Keph+F5H7Gn5xqU0fF6cjKr5iJ2MNMuhU+ba4S0PSA==
-X-Received: by 2002:a05:6214:2a82:b0:6d8:aba8:8393 with SMTP id 6a1803df08f44-6dd233a2b38mr699727346d6.44.1735672996001;
-        Tue, 31 Dec 2024 11:23:16 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::5653])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dd598e8f26sm60654536d6.119.2024.12.31.11.23.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 31 Dec 2024 11:23:15 -0800 (PST)
-Date: Tue, 31 Dec 2024 14:23:12 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Benjamin Tissoires <bentiss@kernel.org>
-Cc: Jiri Kosina <jikos@kernel.org>,
-	Peter Hutterer <peter.hutterer@who-t.net>,
-	linux-input@vger.kernel.org,
-	USB mailing list <linux-usb@vger.kernel.org>,
-	syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH] HID: core: Fix assumption that Resolution Multipliers must
- be in Logical Collections
-Message-ID: <18b853f8-9da5-4a28-a845-111d42299478@rowland.harvard.edu>
+	s=arc-20240116; t=1735703663; c=relaxed/simple;
+	bh=CJkbEH8P9aqZrjBPjoT0d05pFH1jNDDq73r/6KmddfM=;
+	h=Message-ID:Date:MIME-Version:From:To:Subject:Content-Type; b=qh7PUYqvvGBjF7w2C1smv/BuPfFP1ofyrCmMh2FG7nN4KFeIXdSYQBtf/kZbN5vSUMomSzHisb5qAsOpWf3p0dWbxMC0Sp3XsXa538d7CHuHJyYQzNSCJF7rngJTk7eU4Uhszt03evcIb8M3nre/3Ndjza+1Z9/E7BThhONIqU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=moonlit-rail.com; spf=pass smtp.mailfrom=moonlit-rail.com; dkim=pass (2048-bit key) header.d=moonlit-rail.com header.i=@moonlit-rail.com header.b=OKQriKoh; dkim=permerror (0-bit key) header.d=moonlit-rail.com header.i=@moonlit-rail.com header.b=V1QAoF25; arc=none smtp.client-ip=45.79.167.250
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=moonlit-rail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=moonlit-rail.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=moonlit-rail.com; s=rsa2021a; h=Content-Transfer-Encoding:Content-Type:
+	Subject:To:From:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=nm1gR0HNVOEx6oMUfE1HkGLXPtUDnRQAnGgi2dYR9T4=; t=1735702566; x=1738294566; 
+	b=OKQriKohmkF+pj04WHzg7uH0aztOAFuV4vG4CaL6sFAZ4HWPQQ20zxv7nzPJeA+Fex2Hsm613NC
+	3M2Pv4cvmXHps+GVpCw1x7iASFB6GUlV1DXfNt2XkTS0BMWC1HUwGaRR8Be6OkbePT0IXzqGt2/r2
+	voU3BNINCLx2LTRg6yfa4FgsLCMYa9IxJFDJW/x9xWFPTQBK1gcSVA9gbIWsip08pKKrsfk6NDMRx
+	qqAOFzxt5HL9c88v1z8G15qdtOjZvaZNeA4AWtHQMWHIqUHel2oT7KfJeQtTSY/tBTxUKJ1IzU2wl
+	cB+qlq67Ho3jJfXG8hzq+j9w7N8Mu3YwyLfQ==;
+DKIM-Signature: v=1; a=ed25519-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=moonlit-rail.com; s=edd2021a; h=Content-Transfer-Encoding:Content-Type:
+	Subject:To:From:MIME-Version:Date:Message-ID:Sender:Reply-To:Cc:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=nm1gR0HNVOEx6oMUfE1HkGLXPtUDnRQAnGgi2dYR9T4=; t=1735702566; x=1738294566; 
+	b=V1QAoF25tFuOTw4Qk1FwKWuylrFp7hicgkrho4X2g1/gp4nu5PWFf/IQ8edrXWvnlKhulOWuQF3
+	q5cphBh+fBQ==;
+Message-ID: <889a576d-60d5-4602-8b10-f11af5bc2107@moonlit-rail.com>
+Date: Tue, 31 Dec 2024 22:36:06 -0500
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <42fb8b1d-16bc-4948-a214-2892405db258@rowland.harvard.edu>
+User-Agent: Mozilla Thunderbird
+From: "Kris Karas (Bug Reporting)" <bugs-a21@moonlit-rail.com>
+Content-Language: en-US, en-GB
+To: linux-usb@vger.kernel.org
+Subject: [Regression] 3TB USB storage shows as 2TB under kernel 6.12
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-A report in 2019 by the syzbot fuzzer was found to be connected to two
-errors in the HID core associated with Resolution Multipliers.  One of
-the errors was fixed by commit ea427a222d8b ("HID: core: Fix deadloop
-in hid_apply_multiplier."), but the other has not been fixed.
+Greetings, happy new year,
 
-This error arises because hid_apply_multipler() assumes that every
-Resolution Multiplier control is contained in a Logical Collection,
-i.e., there's no way the routine can ever set multiplier_collection to
-NULL.  This is in spite of the fact that the function starts with a
-big comment saying:
+I have a 3TB (2.7 TiB) drive attached via an Initio USB-to-SATA bridge 
+to a server that has been running mainline kernel 6.6.  As the next LTS 
+kernel is now out, 6.12, I upgraded; here's how it went:
 
-	 * "The Resolution Multiplier control must be contained in the same
-	 * Logical Collection as the control(s) to which it is to be applied.
-	   ...
-	 *  If no Logical Collection is
-	 * defined, the Resolution Multiplier is associated with all
-	 * controls in the report."
-	 * HID Usage Table, v1.12, Section 4.3.1, p30
-	 *
-	 * Thus, search from the current collection upwards until we find a
-	 * logical collection...
+*  Booting into 6.6, drive shows normally as 3TB.
+*  Rebooting into 6.12, drive now shows as 2TB.
+*  Rebooting back into 6.6, drive continues to show as 2TB.
+*  Yank USB cable and re-plug, drive once again shows as 3TB.
 
-The comment and the code overlook the possibility that none of the
-collections found may be a Logical Collection.
+As the errant drive size = 512 byte sectors * 2^32, it appears as though 
+the USB-to-SATA initialization code in the more recent kernel is putting 
+the adapter into some sort of 32-bit mode.  Resetting it via a 
+disconnected cable (or power cycling) is required to get the normal 
+behavior back.
 
-The fix is to set the multiplier_collection pointer to NULL if the
-collection found isn't a Logical Collection.
+The USB-to-SATA adapter lists itself (lsusb) as:
+     ID 13fd:1e40 Initio Corporation INIC-1610P SATA bridge
+It comes bundled inside a "Vantec NexStar CX" external drive enclosure.
 
-Reported-by: syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/all/000000000000109c040597dc5843@google.com/
-Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-Cc: Peter Hutterer <peter.hutterer@who-t.net>
-Fixes: 5a4abb36f312 ("HID: core: process the Resolution Multiplier")
-Cc: stable@vger.kernel.org
+There are no error messages in the dmesg output as the kernel boots. 
+The output is the same between 6.6 and 6.12, except for the capacity 
+reported, and the failure to properly read the GPT partition table under 
+the truncated disk size.
 
----
+Anybody have any suggestions for something to try?  An hdparm setting 
+perhaps?  I could always bisect, but that would take awhile as the 
+kernel versions are considerably distant.
 
- drivers/hid/hid-core.c |    2 ++
- 1 file changed, 2 insertions(+)
-
-Index: usb-devel/drivers/hid/hid-core.c
-===================================================================
---- usb-devel.orig/drivers/hid/hid-core.c
-+++ usb-devel/drivers/hid/hid-core.c
-@@ -1163,6 +1163,8 @@ static void hid_apply_multiplier(struct
- 	while (multiplier_collection->parent_idx != -1 &&
- 	       multiplier_collection->type != HID_COLLECTION_LOGICAL)
- 		multiplier_collection = &hid->collection[multiplier_collection->parent_idx];
-+	if (multiplier_collection->type != HID_COLLECTION_LOGICAL)
-+		multiplier_collection = NULL;
- 
- 	effective_multiplier = hid_calculate_multiplier(hid, multiplier);
- 
+Kris
 
