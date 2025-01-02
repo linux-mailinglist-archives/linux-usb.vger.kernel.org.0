@@ -1,98 +1,99 @@
-Return-Path: <linux-usb+bounces-18941-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18942-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CFCF9FF722
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 09:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 738969FF7AA
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 10:49:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA0811881A15
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 08:54:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA1D21881AFF
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 09:49:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC3EA197A8F;
-	Thu,  2 Jan 2025 08:54:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83ADD19D898;
+	Thu,  2 Jan 2025 09:48:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gd8cfPTm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VRsQd5bf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAD8192B82;
-	Thu,  2 Jan 2025 08:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23F019580F
+	for <linux-usb@vger.kernel.org>; Thu,  2 Jan 2025 09:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735808046; cv=none; b=GYTMTduVNoh+zQLa/vumyE4ke6uvdtWxwfHAkDoSMTGHYD88KcgrMYV8vv+G0j5IPW4wH3gE2FiK2DhSZRQjgJI0ZbiCspLgwEmTxwhz40v4GovpvJDTXG22Y5YBUKLQLPdxvvTIcTXHCn1vS1KmoHPes3RaeslzPBlwAwijQ/k=
+	t=1735811324; cv=none; b=JOar2orS4Klewr7DI0wr6C+PhrPi5CsqJKbf7EK5n0sczkk6ZtgtbKoFdr7r39brQDefr6fQi6PtGjNN1UaK7pmANItdgqVe0PILQbt7/Cu7UpH611GwUP/OhN7FtH71xN0u2dLYi/uFhleNYMl6SrqzZKMWRgNEKX6/0h/Zduk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735808046; c=relaxed/simple;
-	bh=o2Gz6rmDPb4T0x04hcNbyOKC2M1HyK1ggBaq4cPVzBc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AS0phFdp+4EBqzaxue7p5fCTC058GVgsAcWkjsV0v55G/DwTGJAXa81WE+ZgGGxMAbiqsjvE7RCt6DjuflYiP8qkcU8gbZSHAfsikQ/z5P4jjWR5FyA7sMgxZTpjq4EbFY0dk0nxdMTcr1lV8CTdeaHlhxApmMpuvlXS/Sfotzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gd8cfPTm; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5d0d6087ca3so2296697a12.2;
-        Thu, 02 Jan 2025 00:54:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735808042; x=1736412842; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o2Gz6rmDPb4T0x04hcNbyOKC2M1HyK1ggBaq4cPVzBc=;
-        b=Gd8cfPTm5btojc/fR0U//r6vfCvVfwJplnmPP7lNJJ3A9OK5qZqNZA/SeZ/xss3ZR6
-         mJaR5Q8IGKEgpKuW2U5CesLkLCancFRMCFvU0xfTze8b8RYev2mjvuNjjS3neInVSEJU
-         3YWwE7c4VNBoOdWaKYfo/zARDMSe5Gjk8bygeJZlPGFMpXx4Irm0MXjRjAboC9+wLJQY
-         yOZgPsO/qEy0rJYyP16+IKO7ah61aSCIhwobc5cTHoEAfuafMeyWtfBGUodRGk8TWoco
-         hOeqzQotWlcl49YTgHoj0eWaECjvJIf/hHwCSw6F6lOwSP82K3shBbFg8iYlptMPq6Nw
-         joYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735808042; x=1736412842;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o2Gz6rmDPb4T0x04hcNbyOKC2M1HyK1ggBaq4cPVzBc=;
-        b=BbjsS3X0eQt3d73GAhZ6GMm9mZoH/C3TnH60570I3iE+9A6FFNntF7MAhytPbTui8J
-         FebKsWoGVhnYuVpghUT6aKLDt3B4sc96e2xiQNHtDLg4q9xn/N01F6piHv7WwpuLmOBy
-         27WJgwVik7An86ZyW+aDjTSTaQ2u86yLzwT2ywe49lYrTye3Y0TliXtfmAwZuphBdzcE
-         FDNWSpmQtCnh46ghI3fzilsVxxA+SkmILzkuCnZmga/9yCAgkbPw36wE5x7v/mmrzv64
-         0TVsVFRHJ/yZKC43BxS+sQJjb4pqSspYfinEGjRtKT/d6uA3y9u7NzaWI31DpZmI+Sh8
-         6UIA==
-X-Forwarded-Encrypted: i=1; AJvYcCVM1sycG4Uozca5tHzCNdq/C/J7PFIJezA5GBXOv3U/hrwME/GwdDhzRhImhTRfLIWSgVB/+C9QVLo3@vger.kernel.org, AJvYcCXS3dWOfDRQKlSGE8dSFtCl8LUNEJoPmRwGNNlD7hz0W+6V6QpWu1pFDKjRO2ljR5q3dyZ+UX+uNTU6NzU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZCFwDWksb6kBMh8LiRxX5BQLVSLM1IEp/1yZAWW16GJwPgxF5
-	v6EKc1XR/LsfL5ldutKY0plgqaz9LArGkI7gTkACJCgiEGx4mNvof8kohGqb+0bq6uib2lBKe/2
-	lGKoiJzxsHMLjHj/n/XSqAbbTQFM=
-X-Gm-Gg: ASbGncvcqb0WrkYFhqegcHS2JGgMJPbPOLE+h93IA22nq6pdnnT7lyu2rbubdEZMn1u
-	joc7jK3C/DlCW5qUNusiXRtcE1RDrP151UDBo
-X-Google-Smtp-Source: AGHT+IGP2mGzJPYIfaK4iqYui7GxTr3U4wXEHQ6cCUnVn1JczwAKCSUU1yoAzAku1AWMpCNbIPhxkFtwY68CYvGQLtM=
-X-Received: by 2002:a05:6402:254b:b0:5d3:ba42:e9f6 with SMTP id
- 4fb4d7f45d1cf-5d81dd9029amr13621388a12.4.1735808042425; Thu, 02 Jan 2025
- 00:54:02 -0800 (PST)
+	s=arc-20240116; t=1735811324; c=relaxed/simple;
+	bh=24FF+Ct2XChavdEHqsen3RVxVSJz5nYLHvyHR+H69Po=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=H3G809l12S/q8IiSpLb6QA7TAmpCcm/6yaCQsQDVm1BiED0d2ElPsc6ZTq7xyb5Zu4QXKNccwH9OMbnWfybHHGx6aKUzK3kDLPSVPAWgS62LuYYAAruKjshRAIX56k/Nr5+KgvrplNyWBcBAs58e+nLJrCnG/x6re6rossr+YcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VRsQd5bf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 79E25C4CEDF
+	for <linux-usb@vger.kernel.org>; Thu,  2 Jan 2025 09:48:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735811323;
+	bh=24FF+Ct2XChavdEHqsen3RVxVSJz5nYLHvyHR+H69Po=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=VRsQd5bfweTdFtAN74uQbiyZySGs+aIW2EIZfQjYpjseoS1kuSxczOV8ZlZxkPTgn
+	 lpaOmq04qjizIk37/eaHBTPYr9D3ICg13l3sojRzeb3HBGd3EVVYxYrGPd7SfuIDYr
+	 YesH42/Mp4J+TsNraCTtTOLctdJhrfLSyDrNjkmhhSwLvhVKmrWAHrQkm+YUhZQ4to
+	 +5axNhCwo0DEu4WoxV/VwjXpWqSBOIcBePQGd97o9JNF4ZOyY3mFN3BfCU69IjE1Iy
+	 QCwaRoZr5ZvRTxhYmkaeKOU1LQzawvbZjvtb6HXdsztjSfca5ZTkuXZgFdtPLz06xq
+	 bQkeUA/OGW0TQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 70FBCC3279E; Thu,  2 Jan 2025 09:48:43 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 217501] Apple USB-C 3.5mm dongle cannot output 41000hz
+Date: Thu, 02 Jan 2025 09:48:43 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: tiwai@suse.de
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: component assigned_to
+Message-ID: <bug-217501-208809-IP1sPEiKoz@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217501-208809@https.bugzilla.kernel.org/>
+References: <bug-217501-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241231154731.1719919-1-tomasz.pakula.oficjalny@gmail.com>
- <20241231154731.1719919-2-tomasz.pakula.oficjalny@gmail.com> <OSZPR01MB8434C2B2997FBE6B0DD7E53298142@OSZPR01MB8434.jpnprd01.prod.outlook.com>
-In-Reply-To: <OSZPR01MB8434C2B2997FBE6B0DD7E53298142@OSZPR01MB8434.jpnprd01.prod.outlook.com>
-From: =?UTF-8?Q?Tomasz_Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
-Date: Thu, 2 Jan 2025 09:53:47 +0100
-Message-ID: <CAFqprmzhH00gjnWkSFq7utYTsQ+1Q4x+qD__Bhsafdq9v6i2dA@mail.gmail.com>
-Subject: Re: [PATCH 01/10] HID: pidff: Convert infinite length from Linux API
- to PID standard
-To: Shengyu Qu <wiagn233@outlook.com>
-Cc: jikos@kernel.org, bentiss@kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, oleg@makarenk.ooo, paul@spacefreak18.xyz, 
-	f.kardame@manjaro.org, jules.noirant@orange.fr
-Content-Type: text/plain; charset="UTF-8"
 
-On Thu, 2 Jan 2025 at 05:37, Shengyu Qu <wiagn233@outlook.com> wrote:
-> Typo, lenght -> length
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217501
 
-Thanks!
+Takashi Iwai (tiwai@suse.de) changed:
 
-This, along with indentation fixes in hid-ids.h, will be included in
-v2 that will
-happen 100% after Jiri and Benjamin add their input. I'm especially open to
-better name suggestions for hid-universal-pidff.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+          Component|Sound(ALSA)                 |USB
+           Assignee|perex@perex.cz              |drivers_usb@kernel-bugs.ker
+                   |                            |nel.org
+
+--- Comment #15 from Takashi Iwai (tiwai@suse.de) ---
+A good spot after long time!
+
+As it seems like an issue in the USB core side, let's toss to USB devs.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
