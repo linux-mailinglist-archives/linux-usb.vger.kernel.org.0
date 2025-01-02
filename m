@@ -1,99 +1,135 @@
-Return-Path: <linux-usb+bounces-18942-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18943-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 738969FF7AA
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 10:49:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B7BC9FFA46
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 15:13:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA1D21881AFF
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 09:49:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8347D3A072E
+	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 14:13:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83ADD19D898;
-	Thu,  2 Jan 2025 09:48:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1EC71B0430;
+	Thu,  2 Jan 2025 14:12:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VRsQd5bf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HkcAXPpL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F23F019580F
-	for <linux-usb@vger.kernel.org>; Thu,  2 Jan 2025 09:48:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8E51AF0CB;
+	Thu,  2 Jan 2025 14:12:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735811324; cv=none; b=JOar2orS4Klewr7DI0wr6C+PhrPi5CsqJKbf7EK5n0sczkk6ZtgtbKoFdr7r39brQDefr6fQi6PtGjNN1UaK7pmANItdgqVe0PILQbt7/Cu7UpH611GwUP/OhN7FtH71xN0u2dLYi/uFhleNYMl6SrqzZKMWRgNEKX6/0h/Zduk=
+	t=1735827163; cv=none; b=oevptllAUx7DmvvbypJvSPNZzMIltEjpq0FQBd8mTIKDVqGN8iVxCcV5VENDUO+ijguMG/STfo20Q9/d2ovC2fZHZ9QZLTaVtXn6EjI6ubJVWDsaI8ND1lLepbB4kaUMnM818DfqqVQjAa837C4IJVDH2MnA1lwl4GDExdYr+G8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735811324; c=relaxed/simple;
-	bh=24FF+Ct2XChavdEHqsen3RVxVSJz5nYLHvyHR+H69Po=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=H3G809l12S/q8IiSpLb6QA7TAmpCcm/6yaCQsQDVm1BiED0d2ElPsc6ZTq7xyb5Zu4QXKNccwH9OMbnWfybHHGx6aKUzK3kDLPSVPAWgS62LuYYAAruKjshRAIX56k/Nr5+KgvrplNyWBcBAs58e+nLJrCnG/x6re6rossr+YcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VRsQd5bf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 79E25C4CEDF
-	for <linux-usb@vger.kernel.org>; Thu,  2 Jan 2025 09:48:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735811323;
-	bh=24FF+Ct2XChavdEHqsen3RVxVSJz5nYLHvyHR+H69Po=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=VRsQd5bfweTdFtAN74uQbiyZySGs+aIW2EIZfQjYpjseoS1kuSxczOV8ZlZxkPTgn
-	 lpaOmq04qjizIk37/eaHBTPYr9D3ICg13l3sojRzeb3HBGd3EVVYxYrGPd7SfuIDYr
-	 YesH42/Mp4J+TsNraCTtTOLctdJhrfLSyDrNjkmhhSwLvhVKmrWAHrQkm+YUhZQ4to
-	 +5axNhCwo0DEu4WoxV/VwjXpWqSBOIcBePQGd97o9JNF4ZOyY3mFN3BfCU69IjE1Iy
-	 QCwaRoZr5ZvRTxhYmkaeKOU1LQzawvbZjvtb6HXdsztjSfca5ZTkuXZgFdtPLz06xq
-	 bQkeUA/OGW0TQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 70FBCC3279E; Thu,  2 Jan 2025 09:48:43 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 217501] Apple USB-C 3.5mm dongle cannot output 41000hz
-Date: Thu, 02 Jan 2025 09:48:43 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: tiwai@suse.de
-X-Bugzilla-Status: NEEDINFO
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: component assigned_to
-Message-ID: <bug-217501-208809-IP1sPEiKoz@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217501-208809@https.bugzilla.kernel.org/>
-References: <bug-217501-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1735827163; c=relaxed/simple;
+	bh=OVHKWKqhT6GNOOLRLFZpB0wvxkRFdS/qQP80q6FshX4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hnOdpPSQUdqvfMBVl7ufCrQWcI9w7QKBqR4n0ZW0F85QtDEQrPo0MX4RxDJzGMaqd6mmsx+LeELVHOO5n6v1VaYhQStaKbuNe/bCJAOBwjY1Kn4+BMLT8mQS3+FGzKoHFbA+ysS5w8nAmaRRQ2rERex963K7/xXFeTu/fBQkxtY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HkcAXPpL; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735827162; x=1767363162;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=OVHKWKqhT6GNOOLRLFZpB0wvxkRFdS/qQP80q6FshX4=;
+  b=HkcAXPpL1M6eA+4FBpMMhbE0moj5b08fMdtmEKpfhyklwdMv4rF7+kIz
+   FiQnAA7mEafoVafW0JypunejiKt7H1KUjQ6V0n++vsMYWYECrAbSF72aC
+   VnVRPPi3gpRvnIqLLPCWG4g9jACttQYkaht6kSms/cxj/KU5ERfgzweat
+   vE9rMxTDuLcY/ewKdeNAT0vB3ZzaUrs7AYIZc/tERdUMjnHWBDX9YeZSb
+   YMGZU2iWgXMHCTCrHkv8hkOAtIdQv3XYyz5bvOZpTFJKn2d6vhUZZJEsj
+   00/d9d1ByitnIGO3hx/y2xYortACeVdhw6PWl7HWEM70B4GqFIoHfsCRj
+   A==;
+X-CSE-ConnectionGUID: K0K9zxHJT66oTpW/f7vbzg==
+X-CSE-MsgGUID: Cfjg3LgaQ/WdMWdun1wfkA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11302"; a="35940210"
+X-IronPort-AV: E=Sophos;i="6.12,285,1728975600"; 
+   d="scan'208";a="35940210"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 06:12:42 -0800
+X-CSE-ConnectionGUID: wCF5exS/SSGCBe8VcgXFjQ==
+X-CSE-MsgGUID: /lSz7rZIQWK2/i5Ed3duBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,285,1728975600"; 
+   d="scan'208";a="101299585"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa006.fm.intel.com with ESMTP; 02 Jan 2025 06:12:39 -0800
+Message-ID: <2c35ff52-78aa-4fa1-a61c-f53d1af4284d@linux.intel.com>
+Date: Thu, 2 Jan 2025 16:13:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] usb: xhci port capability storage change broke
+ fastboot android bootloader utility
+To: Forest <forestix@nom.one>
+Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+ stable@vger.kernel.org
+References: <hk8umj9lv4l4qguftdq1luqtdrpa1gks5l@sonic.net>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <hk8umj9lv4l4qguftdq1luqtdrpa1gks5l@sonic.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217501
+Hi
 
-Takashi Iwai (tiwai@suse.de) changed:
+On 27.12.2024 23.59, Forest wrote:
+> #regzbot introduced: 63a1f8454962
+> 
+> Dear maintainer,
+> 
+> I think I have found a regression in kernels version 6.10 and newer,
+> including the latest mainline v6.13-rc4:
+> 
+> fastboot (the tool for communicating with Android bootloaders) now fails to
+> perform various operations over USB.
+> 
+> The problem manifests as an error when attempting to 'fastboot flash' an
+> image (e.g. a new kernel containing security updates) to a LineageOS phone.
+> It also manifests with simpler operations like reading a variable from the
+> bootloader. For example:
+> 
+>    fastboot getvar kernel
+> 
+> A typical error message when the failure occurs:
+> 
+>    getvar:kernel  FAILED (remote: 'GetVar Variable Not found')
+> 
+> I can reproduce this at will. It happens about 50% of the time when I
+> run the above getvar command, and almost all the time when I try to push
+> a new kernel to a device.
+> 
+> A git bisect reveals this:
+> 
+> 63a1f8454962a64746a59441687dc2401290326c is the first bad commit
+> commit 63a1f8454962a64746a59441687dc2401290326c
+> Author: Mathias Nyman <mathias.nyman@linux.intel.com>
+> Date:   Mon Apr 29 17:02:28 2024 +0300
+>      xhci: stored cached port capability values in one place
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-          Component|Sound(ALSA)                 |USB
-           Assignee|perex@perex.cz              |drivers_usb@kernel-bugs.ker
-                   |                            |nel.org
+It's not clear to me why this patch would cause regression.
 
---- Comment #15 from Takashi Iwai (tiwai@suse.de) ---
-A good spot after long time!
+Could you enable xhci and usb core dynamic debug before connecting the
+device, and then share dmesg after the issue is triggered.
 
-As it seems like an issue in the USB core side, let's toss to USB devs.
+dmesg of a working case would also be good to have for comparison.
 
---=20
-You may reply to this email to add a comment.
+mount -t debugfs none /sys/kernel/debug
+echo 'module xhci_hcd =p' >/sys/kernel/debug/dynamic_debug/control
+echo 'module usbcore =p' >/sys/kernel/debug/dynamic_debug/control
+< Reproduce issue >
+Send output of dmesg
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks
+Mathias
+
+
 
