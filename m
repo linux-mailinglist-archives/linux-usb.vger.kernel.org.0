@@ -1,74 +1,52 @@
-Return-Path: <linux-usb+bounces-18950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 156C3A00114
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 23:09:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20EE1A00206
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2025 01:30:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F41EA3A39E2
-	for <lists+linux-usb@lfdr.de>; Thu,  2 Jan 2025 22:09:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF461162E87
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2025 00:30:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510151B982E;
-	Thu,  2 Jan 2025 22:09:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDBBD839F4;
+	Fri,  3 Jan 2025 00:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JCHLAivQ"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="mOkTDaQ/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f51.google.com (mail-io1-f51.google.com [209.85.166.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mr85p00im-ztdg06011101.me.com (mr85p00im-ztdg06011101.me.com [17.58.23.185])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3368E1487E1
-	for <linux-usb@vger.kernel.org>; Thu,  2 Jan 2025 22:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B1381E526
+	for <linux-usb@vger.kernel.org>; Fri,  3 Jan 2025 00:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735855770; cv=none; b=OkxHeBiIpnDf3tMhPWKBfK22YXgQAFxcqtt3/BTPCROOTXnJFOqt6Hunht6elDEsu6RcuydTpV38sw/ookzjdMaX5IG0aJNEN1DwKrdCxuHl8rRNJgcVJXIdZeTPdFSJj2vTGnGN91KqSBYTnMlUkqUewKoqo799fS1717EiRdc=
+	t=1735864202; cv=none; b=ADgvDhehur3pUW4dN8LJ4Nd2eng+fterWb1hmSfmlo23M0Ijh7ANlh3d3et0au9D2yOIuUQ4O/yPy/JZ5m9EIy41ciPlCuRMJdRYsHdISW++UbDk5N/IxK7oYHAbb/lF03n9cB9ArNxB+geIKsCWldh7tv/FgCkBymlJy4+XQzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735855770; c=relaxed/simple;
-	bh=LjeVe7p+Aum9VOt2LVWt2THAoUqbgpaQMPKY9qP06hI=;
+	s=arc-20240116; t=1735864202; c=relaxed/simple;
+	bh=9OKtjR1OqVgdyYo7PBAJ2n+E+ZuEA9Qci0SNdsRT6zM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rccQqVmVwIXsF9GCxDyOWjVmD+ix4JG95xoCV8Ktvv6WoO3ot4RwSO4t5TfKcr/cmWB3H7cepJ7nC59s1Z32FlaEuL1fvbgXNX4VKuPdNAPcAmyxHxGs0OtfcnmIAp1s/FHXL4rBH/GaXm+ooXj6sEMaL7WPqicqMvjLEPJ3oRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JCHLAivQ; arc=none smtp.client-ip=209.85.166.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f51.google.com with SMTP id ca18e2360f4ac-844e9b7e50dso1086144939f.3
-        for <linux-usb@vger.kernel.org>; Thu, 02 Jan 2025 14:09:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1735855768; x=1736460568; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=v8inhkGj25yUPyodyeM2Xw/fibo1Q0W+G8xd1drkkE8=;
-        b=JCHLAivQEW+4DZNmrtmMD+4mFAynw0OuU91TVE4lvqR/sPh7WDpvNox8rcKF2H+NL9
-         kxCklpQ9SvQ1+YoLEEKuC1ZH+rMpZQJonjRiDtePBlHWsW3VO22aHFUpPImF3RCXgplp
-         vu3gAQ6+469WceqfTqNxZ/9Cjs7qQobhwtxLs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735855768; x=1736460568;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=v8inhkGj25yUPyodyeM2Xw/fibo1Q0W+G8xd1drkkE8=;
-        b=qsLfERLaMblVUrKlQbx2vosLSofc2rRcveqG09zoIecHjHRgtrcWpetKRL7scD759s
-         Eo4lOyR3FNM4r9+d80WzHth/hE8cLkH0r6WxFTkOmx3EDVFmtRH5NxK8AsU7gQtv/O1n
-         9MIkECAHdVkVX+71chadTANmC86hxnXvEOUM9A4cJZwnbosaBtp2OZxsUP7oHNYOfCrE
-         lhw0ha8F0ddlyYlj7ovF9CewpV06Ji8ps2/MJAWCaG1/gI5TWidNpcSosUoGBhTBYYjW
-         Oj6ZqCdDBujycdkT+SMoPXfhwTnUrsXk5TQRtILPZA7YqCYsRL/fqMduGykBkr+oOUVm
-         w9lg==
-X-Gm-Message-State: AOJu0Yzodsn4XLQI/GLVNdqD5lxkfejV0m7DHXOjrAF/GTkWqccyWzx6
-	ZREcAt3kEeEvF9aUqCrAith6rcHfGai88RikdtJRoenNwIdZxV28qtGZ6j/urn0=
-X-Gm-Gg: ASbGncs3kb3JV8VX2245CcfEAJPLlrsLHH/tZrRBd7sxxIWRsMUn0X22ZZ3dXfhsqSn
-	NKTuk2hG4js1iOb3qrpQ7IEHUMibOfPc5rGK4JfG6s673xgHf3goOlvidnlWGqhhhqQd+7U5yls
-	FFhv2kbre7JCh2UaPnzp9saUCSHH5y6nCGrVYtpWJYHykyW+oP7NuJ7enOZh3uYelLK0lQIyu45
-	Jpls6bD/CvZZS7JpMh1VJe0D9TDY37CZhQ/vPgxDbCSx3i4XxE70i9reqIhj4OcMr4V
-X-Google-Smtp-Source: AGHT+IEpBPhutBtDX832fBzi0z0kuArKz06fve9d1rbkpO2l1JjgOG1TkdzWraNna74uUmIjZQaNXw==
-X-Received: by 2002:a05:6602:6c10:b0:841:a9d3:3b39 with SMTP id ca18e2360f4ac-8499e60dc31mr4768249139f.5.1735855768312;
-        Thu, 02 Jan 2025 14:09:28 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e68c22176fsm7055056173.153.2025.01.02.14.09.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jan 2025 14:09:28 -0800 (PST)
-Message-ID: <da4b2710-f36e-40ad-addb-6b114e60b187@linuxfoundation.org>
-Date: Thu, 2 Jan 2025 15:09:27 -0700
+	 In-Reply-To:Content-Type; b=YSyMt2y0hB3sBPI6HZXcCUPV7TPSbEYDzDY6EIgu6OyLO7v5aJNXlmlfKyKXF0f9Z+HHHcDx3mmrcJxFa3WmXPgs5du4gkZBhxgWHGbWh+EyWGlXiQHDjhH0Kqse3R4n1+QVulcKaKl3BD1KU7wwx+hlLCD4GiubXSbDjQEAwCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=mOkTDaQ/; arc=none smtp.client-ip=17.58.23.185
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1735864198;
+	bh=sX00kjdMMkpbEo7t/2MEjZFR57bisypxfIJ+Q9mKzxY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
+	 x-icloud-hme;
+	b=mOkTDaQ/GuVii6DBvUjnFzJIAdLAeaaL2tmFlRCZ4P+A6TYAVQrRWp9Er4PXba69V
+	 7uSsUCLtOa63r9/3gMumkZmwFIEJtfG9H7DrHOBn8VlVz1XIhdLGUpypXWFkWu6bB8
+	 12Lwz3XHfyn//c8VkfZ/5/nckvSnkCoTO1R/fPwDGARAEbrdQkb/xTRlQjO1qZxC/z
+	 RJBK/KTEi6Bfsh1R4xlfoaQqy05mCIS0oWki+dsxYfz4DoTRws4M1be+zF4Ihp8ZaV
+	 YgKVNniBsmJEp1/jlXOCVacxKat31ZnCxX15TS4W0gpYAvwSUtQIuTLSHGpxBZ/hrZ
+	 LrwcTpexf4FRQ==
+Received: from [192.168.1.25] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+	by mr85p00im-ztdg06011101.me.com (Postfix) with ESMTPSA id 0B02FDA0388;
+	Fri,  3 Jan 2025 00:29:47 +0000 (UTC)
+Message-ID: <2f8abbad-a70c-4ff0-94c7-8a8a37ad0845@icloud.com>
+Date: Fri, 3 Jan 2025 08:29:43 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,107 +54,73 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usbip: Correct format specifier for seqnum from %d to
- %u
-To: Xiong Nandi <xndchn@gmail.com>,
- Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan
- <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "open list:USB OVER IP DRIVER" <linux-usb@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241231161539.20192-1-xndchn@gmail.com>
- <20241231161539.20192-3-xndchn@gmail.com>
+Subject: Re: [PATCH v4 01/11] libnvdimm: Replace namespace_match() with
+ device_find_child_by_name()
+To: Fan Ni <nifan.cxl@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ James Bottomley <James.Bottomley@hansenpartnership.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+ linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+ linux-sound@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+ linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-serial@vger.kernel.org, netdev@vger.kernel.org,
+ Zijun Hu <quic_zijuhu@quicinc.com>,
+ Alison Schofield <alison.schofield@intel.com>
+References: <20241211-const_dfc_done-v4-0-583cc60329df@quicinc.com>
+ <20241211-const_dfc_done-v4-1-583cc60329df@quicinc.com>
+ <Z3bYMiOG0u3Jtv3h@smc-140338-bm01>
 Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241231161539.20192-3-xndchn@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <Z3bYMiOG0u3Jtv3h@smc-140338-bm01>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: ybkBbilc0XTCT_YEDgTjyLJ9DRFrwcwH
+X-Proofpoint-ORIG-GUID: ybkBbilc0XTCT_YEDgTjyLJ9DRFrwcwH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-02_03,2025-01-02_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 malwarescore=0 bulkscore=0
+ mlxlogscore=738 mlxscore=0 suspectscore=0 adultscore=0 phishscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2501030002
 
-On 12/31/24 09:15, Xiong Nandi wrote:
-> The seqnum field in USBIP protocol is an unsigned value.
-> So we fix the format specifier from %d to %u to correctly
-> display the value.
+On 2025/1/3 02:17, Fan Ni wrote:
+>> -
+>>  static bool is_idle(struct device *dev, struct nd_namespace_common *ndns)
+>>  {
+>>  	struct nd_region *nd_region = to_nd_region(dev->parent);
+>> @@ -168,7 +161,7 @@ ssize_t nd_namespace_store(struct device *dev,
+>>  		goto out;
+>>  	}
+>>  
+>> -	found = device_find_child(dev->parent, name, namespace_match);
+>> +	found = device_find_child_by_name(dev->parent, name);
+> Looks good to me.
+> Just one general question.
+> The function device_find_child checks parent and parent->p, but
+> device_find_child_by_name only checks parent although they share the
+> code except the match function. Why that?
 > 
 
-How did you find the problem? Include log from the tool
-or compiler output.
+Thank you Fan for code review.
 
-> Signed-off-by: Xiong Nandi <xndchn@gmail.com>
-> ---
->   drivers/usb/usbip/stub_rx.c | 2 +-
->   drivers/usb/usbip/stub_tx.c | 2 +-
->   drivers/usb/usbip/vhci_rx.c | 6 +++---
->   drivers/usb/usbip/vudc_tx.c | 2 +-
->   4 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/usb/usbip/stub_rx.c b/drivers/usb/usbip/stub_rx.c
-> index 6338d818bc8b..9aa30ef76f3b 100644
-> --- a/drivers/usb/usbip/stub_rx.c
-> +++ b/drivers/usb/usbip/stub_rx.c
-> @@ -269,7 +269,7 @@ static int stub_recv_cmd_unlink(struct stub_device *sdev,
->   		return 0;
->   	}
->   
-> -	usbip_dbg_stub_rx("seqnum %d is not pending\n",
-> +	usbip_dbg_stub_rx("seqnum %u is not pending\n",
->   			  pdu->u.cmd_unlink.seqnum);
+I did not touch device_find_child_by_name() parameter checking at
+that time.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=903c44939abc02e2f3d6f2ad65fa090f7e5df5b6
 
-seqnum is unsigned long - don't you have to use %ul?
->   
->   	/*
-> diff --git a/drivers/usb/usbip/stub_tx.c b/drivers/usb/usbip/stub_tx.c
-> index b1c2f6781cb3..7eb2e074012a 100644
-> --- a/drivers/usb/usbip/stub_tx.c
-> +++ b/drivers/usb/usbip/stub_tx.c
-> @@ -201,7 +201,7 @@ static int stub_send_ret_submit(struct stub_device *sdev)
->   
->   		/* 1. setup usbip_header */
->   		setup_ret_submit_pdu(&pdu_header, urb);
-> -		usbip_dbg_stub_tx("setup txdata seqnum: %d\n",
-> +		usbip_dbg_stub_tx("setup txdata seqnum: %u\n",
->   				  pdu_header.base.seqnum);
->   
->   		if (priv->sgl) {
-> diff --git a/drivers/usb/usbip/vhci_rx.c b/drivers/usb/usbip/vhci_rx.c
-> index 7f2d1c241559..a75f4a898a41 100644
-> --- a/drivers/usb/usbip/vhci_rx.c
-> +++ b/drivers/usb/usbip/vhci_rx.c
-> @@ -66,7 +66,7 @@ static void vhci_recv_ret_submit(struct vhci_device *vdev,
->   	spin_unlock_irqrestore(&vdev->priv_lock, flags);
->   
->   	if (!urb) {
-> -		pr_err("cannot find a urb of seqnum %u max seqnum %d\n",
-> +		pr_err("cannot find a urb of seqnum %u max seqnum %u\n",
->   			pdu->base.seqnum,
->   			atomic_read(&vhci_hcd->seqnum));
->   		usbip_event_add(ud, VDEV_EVENT_ERROR_TCP);
-> @@ -162,10 +162,10 @@ static void vhci_recv_ret_unlink(struct vhci_device *vdev,
->   		 * already received the result of its submit result and gave
->   		 * back the URB.
->   		 */
-> -		pr_info("the urb (seqnum %d) was already given back\n",
-> +		pr_info("the urb (seqnum %u) was already given back\n",
->   			pdu->base.seqnum);
->   	} else {
-> -		usbip_dbg_vhci_rx("now giveback urb %d\n", pdu->base.seqnum);
-> +		usbip_dbg_vhci_rx("now giveback urb %u\n", pdu->base.seqnum);
->   
->   		/* If unlink is successful, status is -ECONNRESET */
->   		urb->status = pdu->u.ret_unlink.status;
-> diff --git a/drivers/usb/usbip/vudc_tx.c b/drivers/usb/usbip/vudc_tx.c
-> index 3ccb17c3e840..30c11bf9f4e7 100644
-> --- a/drivers/usb/usbip/vudc_tx.c
-> +++ b/drivers/usb/usbip/vudc_tx.c
-> @@ -107,7 +107,7 @@ static int v_send_ret_submit(struct vudc *udc, struct urbp *urb_p)
->   
->   	/* 1. setup usbip_header */
->   	setup_ret_submit_pdu(&pdu_header, urb_p);
-> -	usbip_dbg_stub_tx("setup txdata seqnum: %d\n",
-> +	usbip_dbg_stub_tx("setup txdata seqnum: %u\n",
->   			  pdu_header.base.seqnum);
->   	usbip_header_correct_endian(&pdu_header, 1);
->   
-thanks,
--- Shuah
+since
+[PATCH v5 05/12] will come finally.
+https://lore.kernel.org/all/20241224-const_dfc_done-v5-5-6623037414d4@quicinc.com/
+
+
+> Fan
+
 
