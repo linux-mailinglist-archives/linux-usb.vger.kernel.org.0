@@ -1,130 +1,225 @@
-Return-Path: <linux-usb+bounces-18955-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18956-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE6F5A004CE
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2025 08:11:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8181A004E1
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2025 08:21:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 720301883F6D
-	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2025 07:11:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDE953A3666
+	for <lists+linux-usb@lfdr.de>; Fri,  3 Jan 2025 07:21:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5E151C0DED;
-	Fri,  3 Jan 2025 07:11:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1B441C8FB4;
+	Fri,  3 Jan 2025 07:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DTo9pNPz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aXrp7FRZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24752101E6;
-	Fri,  3 Jan 2025 07:11:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD0E51C1F10;
+	Fri,  3 Jan 2025 07:21:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735888298; cv=none; b=CikI1tAqSH3lxq84E07WzZV+Z+ybLjY7HeSQ94AKaveItjMjdApTmMT9iw8ZUYYJuptxZGu7JNapTvbfBxMHslTt8aQMD+YLWmyGwOfk2Z+uoi+BxQLXsNlwfXBcCheOlP7FiiiXcTk4FI6p5VSweDJGMktUoBtXStszjih0EOQ=
+	t=1735888879; cv=none; b=jPxTyGcfWq9BYHKa9QpqaTJakvE7QGvPurvKFmNSS0Ki5tPn19WJ7ko11nnJ0dvzFPYpdG4rvlVAMONzcPoTz3K6BDbpWj69OcCjTTbAQy4pFXv8iiuux8Sg6YHqHmix6pP4zNjhqgV3AulBN7WZIRscTQT+IVcOLdkdsFbTLAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735888298; c=relaxed/simple;
-	bh=Y+DRKa9AqnfYH+FArcmZBCPXdJdGp9azW6bPmuNF+k8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oQaQRNy0/H+FuzS3V0w88B+l9v9AdNuYj98n77zZ3oNiva1tjt4NVaHaiynqrvj0aG9Fpeu4a1SlDKeJrFi7VO2vfu2pcahjxlWHdyGm+tsoDzMM5aO5P+aDVjrUJuMVKj2bEPNL2YpJQzBsVnAmonAO3V38x+0qWkeSFgxKMBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DTo9pNPz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56D7AC4CECE;
-	Fri,  3 Jan 2025 07:11:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1735888297;
-	bh=Y+DRKa9AqnfYH+FArcmZBCPXdJdGp9azW6bPmuNF+k8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DTo9pNPzRMHAl4A0qmHPPpGXygOvm4jYYfkWbRln7nM+guHg+NwKDzFu9z4nRTD/a
-	 rLOzw75UbzeW6xszxvg/2cqUpbhl3KFt/VvRd1OmC+z5r6puij/iX4bXU/vrah7ZpV
-	 DRdKWSk/GO9vq2E0fSdDX51iPzWhEDm1fbv44P4w=
-Date: Fri, 3 Jan 2025 08:11:34 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: GONG Ruiqi <gongruiqi1@huawei.com>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: typec: fix pm usage counter imbalance in
- ucsi_ccg_sync_control()
-Message-ID: <2025010313-trickery-agreeable-0157@gregkh>
-References: <20241230093523.1237231-1-gongruiqi1@huawei.com>
+	s=arc-20240116; t=1735888879; c=relaxed/simple;
+	bh=/NmonZhyt7UVVnL8+8kkFlyh3f/SgH6LULJdQvWrieA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BbT9eaivLsCHFOUS4k4JadC+z7oxsuwNZLMByAAyY9jsTow8GGko6WmEWNN9fliqkhteBpe+/8vB003QSmOcMn67TjJ3sEPT6e+kl8OZMOiBN2+TgXt6codECau4zkEebwBPHyOfN0e1+5A+IsiUexsdQ53alpSsj4wYYgpf0Yc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aXrp7FRZ; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2f4409fc8fdso14223119a91.1;
+        Thu, 02 Jan 2025 23:21:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735888877; x=1736493677; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=W+KaalP+04lAEk1y2vF3gclhFqz2aflk9l3bmJgO7Bs=;
+        b=aXrp7FRZ3+zng2fKMow9STvjjiC/G+MO7PVRL+CoDW802MV+gXI64l6YKyIHt+DIkZ
+         el34ISwVlCwLQpy/yWGscLy7oxqsfLUuBFg4RHAC0N3tt8zuEQWV+S7h/pYYWdtfIIye
+         ywzDpWRgePncJjdGHVKfr1Ou5TEMoka1hcaaRwR5lII8sy0PuEbq7izs3MGgSUv0L5QN
+         vHCaEFiqr9ZvST7HHVzBrS3g/zZJIRriJvjkZfGrauwm6UgMcaeP3RXtpZ2ByfI+9ZZy
+         jpO+vFOCGHX/Hwr1ZUflHpXxpJwAGTARBD2tcI6bsRgeyrN/eCL26s5PFztdGA+yur1j
+         Wkvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735888877; x=1736493677;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=W+KaalP+04lAEk1y2vF3gclhFqz2aflk9l3bmJgO7Bs=;
+        b=PgzyPWgfxi2PBxtnHtiK6wX+SX8CoM7lbhHYrlPHqoJj/p+Gw4lRucnT5zjie4JDYN
+         1cws1brDSCLJkuoEnKKqJZk+C9pUYw42cfUUyNl3QJEHKDEpzMD0LgU4SEI0xcHhWxFw
+         wGg94ZLFqkqVH/zgXepouRQsXGetjfcgo7Gmir1y2a9JRx61kMVUFzBboNiqr5sx1fzM
+         Eivmbb4ZyfdlSENX+ndbES67USJEi1QbnccdxNGouaeZAu+eiPDZt1rU4UFceK4arWop
+         HLFObZEDM6U8v3damw+1rMrfzFAYvStubbNOXFMx0gBr98Zi5ZcbS8rBNcflon6uD9L6
+         Pv1g==
+X-Forwarded-Encrypted: i=1; AJvYcCU4Gi1c3rowOfEsyo9ayA2sGs5d63TOuIHJ1JjMRXIc3g1lMxkWvSDxJYz5mH53YTYRAYQZ09aoZ7jl@vger.kernel.org, AJvYcCUH3RJ1KAE3t0RCB98QCevGCFNtzk7roK7JgrNGe9ZUwND9freDq8dmsq6zbXpvljzftlqYYOvgpIE=@vger.kernel.org, AJvYcCUfvNqNeHQtzXG/2qn1b+Uvp0gC8E6ePtOHvfmnMayFMlLWKL4qwtHDvEEBljHBRGp+ZDESh5ZLYGgp0jIMeg==@vger.kernel.org, AJvYcCVW3rVGEq1xzX4D0zR6AG3V0STbXaySD0FgnLAukyJW38V9nMk5S/1Zpuhhp59/EKgIA/jIvClkHBXIumuvhEyx7UG9tg==@vger.kernel.org, AJvYcCVsv1GTC7cjw1vJmzEbWd2BK1ERJjHOY3fkpfAZfgU7QUfqozYD2Pfzqzu7wKwORFnrEps+mf198oYh@vger.kernel.org, AJvYcCWm4sn9wEuBdY1Zz+zqNEipm4O1VkQNT+1F9p7SQjY6sqtxuvZNuacbx4vhfbP8n8p7rivAkKZ4EZuw/ByO@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTA+ebHTAl9+LN+DL1OVhdR6XLgJzBc7/K2Y951ommPkbZrlXE
+	5qeNdvuLBu6eSyVY9JWjKwSbK7ZL1fcDGf9fsyyFLC8DNHxdxSjA
+X-Gm-Gg: ASbGnct59gyopmYRT/nHbBF8+Vth0q2+wQ1OXupUO1X1vaDbeDSPQho37VKvG42lP0d
+	BhnGt4pXqVTUp8Ichpnmzq7pMbUCfGbJUF1R/NTo/Ad2gNtFkStR5O0hWNOPTuhsnlFJz9cHGLz
+	ta+n0yo2XS1Hspjd5jeuF02E8dyigIqkS4udjdcNQzGJdJkC2+J5iUysD+g9Xp1UdGMMLcH3B1h
+	KACtcILU+x4hGyCk8Ij1QmkydAhWOuI0B+oE2qkWS5iPThnLK42Dck=
+X-Google-Smtp-Source: AGHT+IHN7UyNPHpNz34kofvC3GSyrLGzQQf861IVEqMXrcuN8G3Q5hI0XBf/hCJBFI4nYQoJXVrjoQ==
+X-Received: by 2002:a17:90b:548c:b0:2ef:e063:b3f8 with SMTP id 98e67ed59e1d1-2f4435abac6mr86849666a91.7.1735888876862;
+        Thu, 02 Jan 2025 23:21:16 -0800 (PST)
+Received: from nuvole.. ([144.202.86.13])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc971800sm238382575ad.66.2025.01.02.23.21.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 02 Jan 2025 23:21:16 -0800 (PST)
+From: Pengyu Luo <mitltlatltl@gmail.com>
+To: dmitry.baryshkov@linaro.org
+Cc: andersson@kernel.org,
+	bryan.odonoghue@linaro.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	hdegoede@redhat.com,
+	heikki.krogerus@linux.intel.com,
+	ilpo.jarvinen@linux.intel.com,
+	konradybcio@kernel.org,
+	krzk+dt@kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	mitltlatltl@gmail.com,
+	nikita@trvn.ru,
+	platform-driver-x86@vger.kernel.org,
+	quic_aiquny@quicinc.com,
+	robh@kernel.org,
+	sre@kernel.org
+Subject: Re: [PATCH 2/5] platform: arm64: add Huawei Matebook E Go (sc8280xp) EC driver
+Date: Fri,  3 Jan 2025 15:19:57 +0800
+Message-ID: <20250103071957.7902-1-mitltlatltl@gmail.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <uqr2hibbl4krkseeal6shmcifctrppimk4tr3y4i64luqpslsq@q3mz2ppencwl>
+References: <uqr2hibbl4krkseeal6shmcifctrppimk4tr3y4i64luqpslsq@q3mz2ppencwl>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241230093523.1237231-1-gongruiqi1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 30, 2024 at 05:35:23PM +0800, GONG Ruiqi wrote:
-> The error handling for the case `con_index == 0` should involve dropping
-> the pm usage counter, as ucsi_ccg_sync_control() gets it at the
-> beginning. Fix it.
-> 
-> Fixes: e56aac6e5a25 ("usb: typec: fix potential array underflow in ucsi_ccg_sync_control()")
-> Signed-off-by: GONG Ruiqi <gongruiqi1@huawei.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi_ccg.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> index fcb8e61136cf..740171f24ef9 100644
-> --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
-> +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-> @@ -646,7 +646,7 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
->  			UCSI_CMD_CONNECTOR_MASK;
->  		if (con_index == 0) {
->  			ret = -EINVAL;
-> -			goto unlock;
-> +			goto err_put;
->  		}
->  		con = &uc->ucsi->connector[con_index - 1];
->  		ucsi_ccg_update_set_new_cam_cmd(uc, con, &command);
-> @@ -654,8 +654,8 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
->  
->  	ret = ucsi_sync_control_common(ucsi, command);
->  
-> +err_put:
->  	pm_runtime_put_sync(uc->dev);
-> -unlock:
->  	mutex_unlock(&uc->lock);
->  
->  	return ret;
-> -- 
-> 2.25.1
-> 
-> 
+On Fri, Jan 3, 2025 at 1:38 PM Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
+> On Tue, Dec 31, 2024 at 03:44:36PM +0800, Pengyu Luo wrote:
+> > On Tue, Dec 31, 2024 at 1:00 PM Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+> > > On 12/30/2024 6:44 PM, Pengyu Luo wrote:
+> > > > On Mon, Dec 30, 2024 at 5:04 PM Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+> > > >> On 12/28/2024 1:13 AM, Pengyu Luo wrote:
+> > > [...]
+> > > >>> +     i2c_transfer(client->adapter, msgs, 2);
+> > > >>
+> > > >> ARRAY_SIZE(msgs) is suggested instead of pure 2.
+> > > >>
+> > > >
+> > > > Agree
+> > > >
+> > > >>> +     usleep_range(2000, 2500);
+> > > >>
+> > > >> Why is a sleep needed here? Is this information specified in any datasheet?
+> > > >>
+> > > >
+> > > > Have a break between 2 transaction. This sleep happens in acpi code, also
+> > > > inside a critical region. I rearranged it.
+> > > >
+> > > > Local7 = Acquire (\_SB.IC16.MUEC, 0x03E8)
+> > > > ...
+> > > > write ops
+> > > > ...
+> > > > Sleep (0x02)
+> > > > ...
+> > > > read ops
+> > > > ...
+> > > > Release (\_SB.IC16.MUEC)
+> > >
+> > > Could you please share the exact code snippet that is being referenced?
+> > > I'm a bit confused because it doesn't seem to align with the current
+> > > logic, which doesn't have read operations within the same mutex lock. I
+> > > also want to understand the background and necessity of the sleep function.
+> > >
+> >
+> > I mentioned I rearranged it to optimize it. In a EC transaction,
+> > write sleep read => write read sleep, in this way, we sleep once a
+> > transaction.
+>
+> Sleeping between write and read is logical: it provides EC some time to
+> respond. Sleeping after read is complete doesn't seem to have any
+> reason.
+>
 
-Hi,
+OK, if you are interested, I explain this in details
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+First, EC transaction in acpi on this device is doing like
+======== this transaction =========
+lock
+...
+write
+...
+sleep
+...
+read
+...
+release
+======== this transaction =========
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+When there are intensive transactions, another sleep is added in
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+======== this transaction =========
+...
+======== this transaction =========
+...
+sleep
+...
+======== next transaction =========
+...
+======== next transaction =========
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Can we eliminate this? I am not sure, I have not tested it.
 
-thanks,
+Generally, the code in acpi is terrible, it can just do the jobs, so I did
+some changes and tested.
 
-greg k-h's patch email bot
+The process(reading after writing) and data structure(cmd, count, data...)
+are very similar to I2C_FUNC_SMBUS_BLOCK_PROC_CALL(see [1]), see also ACPI
+Specification 13.3.7. (It like this in acpi, BUFF = VREG = BUFF)
+
+So I tried to send two messages in one shot without a break. Why not using
+a smbus API? Qualcomm I2C driver in kernel does not support it
+(Fall back to i2c_smbus_xfer_emulated).
+
+Why not using a I2C Block Read/Write API?
+One transaction with this api would send 3 messages, and return the wrong
+status in return buffer.
+
+Write:
+i2c_smbus_write_i2c_block_data(mcmd, ilen+2, {scmd, ilen, ibuf})
+
+i2c_msg = {
+	.len = ilen + 3,
+	.buf = {mcmd, scmd, ilen, ibuf}
+}
+
+Read:
+i2c_smbus_read_i2c_block_data(mcmd, olen)
+
+i2c_msg[0] = {
+	.len = 1,
+	.buf = {mcmd},
+};
+i2c_msg[1] = {
+	.flags = I2C_M_RD,
+	.len = olen,
+	.buf = {}, /* the first byte return is wrong */
+};
+
+Best wishes,
+Pengyu
 
