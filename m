@@ -1,204 +1,216 @@
-Return-Path: <linux-usb+bounces-18965-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18966-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96645A01284
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2025 06:24:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1FF7FA01308
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2025 08:46:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 67AF1164148
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2025 05:24:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4CC4C1884B88
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2025 07:46:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B538114A0B7;
-	Sat,  4 Jan 2025 05:24:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15E8D155312;
+	Sat,  4 Jan 2025 07:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="al7PgydM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eVxBTj+6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93410168DA;
-	Sat,  4 Jan 2025 05:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37061161328;
+	Sat,  4 Jan 2025 07:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735968245; cv=none; b=TF9Zuk1KsIPA5PODKU+/ewRxF7RJdtqitPnlmEbupdfTKg1ka5RlEWrbq9z1NOtpQuVZSTC6ULusNNmgyMAV+VgWc+e2NKtZbXCTtXg9qtq5Ruita61iYMDMwfhhiIIN91FgwTd77mjq+LvCwlooKfS4dW2vRbJU84gKtYvORfo=
+	t=1735976757; cv=none; b=TT4nFAqtozYA8HNfxolII8wlOdBfSwkyGGsrtdgRFg3+q8l9RYILujbDRDF1yHtYDj0trwXeub4y0QHwOBjh5jaqXMYaZn9DTHyNVeFxmoxrTz8Brx4WtLDnCnu+mozb7PKBl3Qs7xR+2GfPfmEx8VB1fSi9fqj2QYL4G94kIqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735968245; c=relaxed/simple;
-	bh=y3bxbAnBlKC1hENCikUB+10x7gYzgjtwbzOlqpoIyss=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pM+f+Ot6GuKysKxE/PhGxhpckY1ZGjMEwXGuaNxKz91sYZAVaFCksItPjug5Js8IJShwQFVy1V392FuEqCP9A+ppnzQmp9W693Bwltq7vYwwrwzY4p2qcigilnDIixHUbxkPuUqNn34K0H3Nyw6nFbSuH8fS+uh9KFexLFw2yIU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=al7PgydM; arc=none smtp.client-ip=209.85.210.46
+	s=arc-20240116; t=1735976757; c=relaxed/simple;
+	bh=7J1nakfZUjmPIi/nDZD/Mu/WZ2OYanNl18J3MsOH3E0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=pzrxtWQ8UIw0aHnu8avkxkd7goYI1fh/+WtSA27Q7sJn3z63oqCeZyrp6HZogGKZpP8MyEUBHsjuZNRrJbljox5+nBXav379gKG+n6pBIZaxNfIjqu2W24VfrVatxKYBmrP9aRVDNJS7yJJJvLWehkPjn0q6DQ7R+fBfuhB6Nn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eVxBTj+6; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-71ded02b779so6942988a34.2;
-        Fri, 03 Jan 2025 21:24:03 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2161eb95317so186602415ad.1;
+        Fri, 03 Jan 2025 23:45:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735968242; x=1736573042; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=acA1TDb0UrJFKrVaZCv/YccfOjk9TfQSmkM3PcsZWBI=;
-        b=al7PgydMqI41IrYcUuoJrKFhta+nOJ6O8zs6qX907UuISCXB7ch6p7sqswQMq8Lyrw
-         PL06ddfHh6xS2M7b6FYkRxnw5ml09eamBYjaNzG672ni89DDAirtKjlL9dPNlxNSIQYE
-         w3XpxPaMosW62dWZinIbx5SU0wj9qd+TjyGQFsQdN1OVKmet3FeQ07+ISL4WYnY7Xd+E
-         3QnhOHEpJbWoSXyIm3IYu+D43+b2Oz4rXm99o1C5ceVpp7jCR/f6+31Q0ZRBww90t97K
-         AybEfmvfFCBpexhAURAPGj7oa+sE53vJ4WtV9UxGXSvawSuS8lu4tPMzmyhO34qS5Iag
-         0kiA==
+        d=gmail.com; s=20230601; t=1735976754; x=1736581554; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xhn9xYieMOsUUU47I3y91/WiyKl9O+sYxEUZf3Ldqqo=;
+        b=eVxBTj+6kNtCwWkoJ/ZKe3jBClXehyf3yyq+aW3a+mFSQ081qVslYlEB8XmgjaXlMs
+         ZXta5ZBQttZIlZ6MClh7doxj5Wb4P6kc7pVoW52v/k4XXLTihjQ2Ivo1rS5nIbdu9/cJ
+         crAGnGxE7Z3J3GfR1XEum72Ug015jjWqovJTYAZBtaOJpi21Uoh7aXQW8mV35qU+P31g
+         b1zZ5HWvUpTkb7cuIQzXDTdaVfkmBiMeBWdUsTTIDZAeWhT90Awgs4VBJPKWRMDJ660x
+         WTHkNeCjLQFkjrzLi67IuPANiF1oprEUTJZoqxk9KykqFClwBZpOUlauOsOLNaJIte5h
+         WYQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735968242; x=1736573042;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=acA1TDb0UrJFKrVaZCv/YccfOjk9TfQSmkM3PcsZWBI=;
-        b=Cpvq0cJyj6LYk3aDpbRm8//2NShLuumOHYxQqt/gXKoWxjac6cMeHFfKP1CGMhHMun
-         mc6ydnLYkNKiF9c3xibCedO0uE41M2FY69gTKYsqAVlTqtmfxnzSGrgFkCK/oPQ0lZ4j
-         lVMgvfR9JOIrfIyR/UcWCWLc7c4mmEYhQY/ANHLDMeJE3QvYGIyb5lf52gtPy0pmjgb7
-         HBD+mVDe+hXqKHDc68p6AoU4Po/QQ94glIx9sW2axAJlC+dV1cn49CBlXoohhp1WLz+J
-         dnR0wzcpBGje9lHE8n1Kcx6bda1oyCG37o/jLICTNCnX5QvOG+gueUyI2N2P/NG96rXK
-         vS5w==
-X-Forwarded-Encrypted: i=1; AJvYcCUG+vayWjQGSARCbTfasNs1oLeHkUFl5EBx2v8KzvMsFqU/jpxqb3dDGXC+R+lcdkvJ8WNcfrFrxF45@vger.kernel.org, AJvYcCUa6i9fvkoy0nf5SqxsPkfWs6OqpuGvvqp7RJ7KMFkT/dqNpCULbHVH9QHeZplRPaBScPnbdfd7MPr1fkib@vger.kernel.org, AJvYcCVGCUrpoe1eJx5CMux5VBh6ou6wNHg9Gjj/CV0Hx0JDDXipP+D76tvdjf98yLgxCrNybHAUik71Rw/v@vger.kernel.org, AJvYcCWFfZnmFmu2cBemM5gRrsi3A0lrQuv1Df+VHZbOZ8IwaodZ9qWqvf6gH5pUKSAHGwIHXDJzpq5+@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaaziAuj7ma77E2YY5kqJIuEYGR7ZutGYlKcM0GPDd0BZV/cXm
-	KFpnPO3lNzF6o/fkMNF4c2UduhHnZoYbT6GCwvK/AM3t3AthTO/Nb8D0vHWpuxZl8mn3NFJJRCC
-	6hLkVj2p/6nanUQPJNRSJieBnXdSJyQ==
-X-Gm-Gg: ASbGnctieEqEMNM1IE9mi3d5LtiFswaldfUN/e/gytZcs/fwm3GcidnDGfmYvaph6cU
-	5BnDUjn4SZzL3VfmVT9DVW+rUaoxdx698cXKKEe0=
-X-Google-Smtp-Source: AGHT+IGDHHiShh2/RbztpLYfVEGR6eidVfvZztjSDJRPjbFLFEwSFq5vmkUnRgElcfTZadwZIwy8KqWQGeAYki9omSA=
-X-Received: by 2002:a05:6830:d86:b0:71d:5bfd:8537 with SMTP id
- 46e09a7af769-720ff867237mr32877210a34.14.1735968242581; Fri, 03 Jan 2025
- 21:24:02 -0800 (PST)
+        d=1e100.net; s=20230601; t=1735976754; x=1736581554;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xhn9xYieMOsUUU47I3y91/WiyKl9O+sYxEUZf3Ldqqo=;
+        b=tFJR6QSkPKpH+gVjYZUU+OJwZNKW0JmB5m7EUJPu48VG/KZQs0+4LEjtxyyAyPKQWA
+         W4FGY/pM03yk02IQzRzb84vHcPar8LkeRetCsDRQhN6a+wcKaGL4S1gpBKH8k7jJ7zMj
+         dMwimUD8dgpD+Q/ZSVg1eFGjp94INfyg+8pUJGG3vfXO27OLqOWMhP4HWp10nsxU4iDh
+         AHQGU4m/+hxTihAdwAf3O+LaF0zGPbOM45uupyOp/6JWdkXmo0e+fgApOhVQPXUnoO8m
+         YkOaPTr7qYQe+KluofjV+eV7acfXEh1vR/3pz5uChgZaFfuTY5NoPFWC7YVaFDKO3Bx+
+         xB2A==
+X-Forwarded-Encrypted: i=1; AJvYcCU76tpJazvggUc3Qo3xU3Hqyc3vh++Luq9Vs3cqgroHuyp0fZLPU6XqQqRaYwt7w0ndZOVKxJxyQgcuyVo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDKePFRtxnmqLpMK2lc2Mnf9/bkiYs5bKvISuUAfccZ0O8vvYd
+	Ui2Hh8sWilpxK1ns2eT2YhIBI8j0s1QGS4ogbBN+HJ+9ct83NwrI
+X-Gm-Gg: ASbGnctFC+IEr37SpKOtbcNHI6SGkJFs+5d3o0IpBb4gKgAFe5j1X+qgU1vyX4uvFBb
+	vyQS6Iu3Mu8GxzyiWuobRpDchLMkqL4ZuksyrJeXHDyxktEZyQ8JH0YN0UfvZwoyObjjmc/zfxu
+	/0ST7r8x7HfO/AG4su8h3q8PE2dch4HdN+Zce4RNYlb7hPRRX8j0FPmXxeFV/UJaSYbwVpXYQup
+	PmWrwHVJcJRvQP4snRjtchvV7NxEhmtYWQULn8m8D9lXdeCqRQoYYMbrP5vow==
+X-Google-Smtp-Source: AGHT+IEs+KG43EG4CAG8CgPNpLh0tyKgc3kgd3TG6HJCjyGW9UCGgHP/PPNuYBaah5h1YIN4Ac4EyQ==
+X-Received: by 2002:a17:902:ec82:b0:215:827e:3a6 with SMTP id d9443c01a7336-219e6f1447fmr737183805ad.40.1735976754409;
+        Fri, 03 Jan 2025 23:45:54 -0800 (PST)
+Received: from [127.0.1.1] ([152.44.247.64])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9f51c2sm254604105ad.190.2025.01.03.23.45.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 03 Jan 2025 23:45:53 -0800 (PST)
+From: Will Mortensen <willmo@gmail.com>
+Date: Sat, 04 Jan 2025 07:45:29 +0000
+Subject: [PATCH] usb: core: prefer only full UAC3 config, not BADD
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241222105239.2618-1-joswang1221@gmail.com> <20241222105239.2618-2-joswang1221@gmail.com>
- <exu4kkmysquqfygz4gk26kfzediyqmq3wsxvu5ro454mi4fgyp@gr44ymyyxmng>
- <CAMtoTm0nCL7jL=Wno7Cv5upyPnF0wTOXbY+WNG+y1P94513Pgg@mail.gmail.com> <j2icjry36lnmhhe2jskh4jpdxmogv4xy3mnbjasechbg5gf76u@wlakfperuk7q>
-In-Reply-To: <j2icjry36lnmhhe2jskh4jpdxmogv4xy3mnbjasechbg5gf76u@wlakfperuk7q>
-From: Jos Wang <joswang1221@gmail.com>
-Date: Sat, 4 Jan 2025 13:23:53 +0800
-Message-ID: <CAMtoTm2ScJGwhMtr=KryxFaG16WeM22jqGY1PBvSC+92pLX5iw@mail.gmail.com>
-Subject: Re: [PATCH v2, 2/2] usb: typec: tcpm: fix the sender response time issue
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: heikki.krogerus@linux.intel.com, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	rdbabiera@google.com, Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250104-usb-choose-config-full-uac3-v1-1-f8bf8760ae90@gmail.com>
+X-B4-Tracking: v=1; b=H4sIABjneGcC/x3MwQqDMAwA0F+RnBdotRX0V8YOGtMakHY0VAbiv
+ 694fJd3gXIRVpi7CwqfopJTg311QPuSIqNszdCb3htrHFZdkfaclZFyChIx1OPAutCA5LfJ2SG
+ sozfQhm/hIL9nf3/u+w8jwN5bbQAAAA==
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Nikolay Yakimov <root@livid.pp.ru>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ AT <kernel@twinhelix.com>, Ruslan Bilovol <ruslan.bilovol@gmail.com>, 
+ Takashi Iwai <tiwai@suse.com>, Tatsuyuki Ishi <ishitatsuyuki@gmail.com>, 
+ Saranya Gopal <saranya.gopal@intel.com>, 
+ Felipe Balbi <felipe.balbi@linux.intel.com>, 
+ Will Mortensen <willmo@gmail.com>
+X-Mailer: b4 0.14.1
 
-On Fri, Jan 3, 2025 at 1:39=E2=80=AFPM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On Wed, Jan 01, 2025 at 09:00:01PM +0800, Jos Wang wrote:
-> > Hi, thanks for your help in reviewing the code, and happy new year to
-> > you and your family!
-> >
-> > For the first commit you mentioned (modification time is 27ms), I
-> > understand that just modify the include/linux/usb/pd.h file:
->
-> In future please respond under the comment, not at the top of the
-> message. Thank you.
->
-OK
+Previously, usb_choose_configuration() chose the first config whose
+first interface was UAC3 (if there was such a config), which could mean
+choosing UAC3 BADD over full UAC3, potentially losing most of the
+device's functionality. With this patch, we check the config's first IAD
+and only prefer the config if it's full UAC3, not BADD.
 
-> > diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-> > index d50098fb16b5..cd2cc535d21d 100644
-> > --- a/include/linux/usb/pd.h
-> > +++ b/include/linux/usb/pd.h
-> > @@ -457,7 +457,7 @@ static inline unsigned int rdo_max_power(u32 rdo)
-> >  #define PD_T_NO_RESPONSE       5000    /* 4.5 - 5.5 seconds */
-> >  #define PD_T_DB_DETECT         10000   /* 10 - 15 seconds */
-> >  #define PD_T_SEND_SOURCE_CAP   150     /* 100 - 200 ms */
-> > -#define PD_T_SENDER_RESPONSE   60      /* 24 - 30 ms, relaxed */
-> > +#define PD_T_SENDER_RESPONSE   27      /* 24 - 30 ms, relaxed */
-> >  #define PD_T_RECEIVER_RESPONSE 15      /* 15ms max */
-> >  #define PD_T_SOURCE_ACTIVITY   45
-> >  #define PD_T_SINK_ACTIVITY     135
-> >
-> > Is my understanding correct?
->
-> Yes.
->
-Thanks you
+Note that if the device complies with the UAC3 spec, then the device's
+first config is UAC1/2. With this patch, if the device also has a UAC3
+BADD config but no full UAC3 config (which is allowed by the spec),
+then we'll select the first, UAC1/2 config, *not* the BADD config.
 
-> >
-> >
-> > Thanks
-> > Jos Wang
-> >
-> > On Sun, Dec 22, 2024 at 9:14=E2=80=AFPM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> > >
-> > > On Sun, Dec 22, 2024 at 06:52:39PM +0800, joswang wrote:
-> > > > From: Jos Wang <joswang@lenovo.com>
-> > > >
-> > > > According to the USB PD3 CTS specification
-> > > > (https://usb.org/document-library/
-> > > > usb-power-delivery-compliance-test-specification-0/
-> > > > USB_PD3_CTS_Q4_2024_OR.zip), the requirements for
-> > > > tSenderResponse are different in PD2 and PD3 modes, see
-> > > > Table 19 Timing Table & Calculations. For PD2 mode, the
-> > > > tSenderResponse min 24ms and max 30ms; for PD3 mode, the
-> > > > tSenderResponse min 27ms and max 33ms.
-> > > >
-> > > > For the "TEST.PD.PROT.SRC.2 Get_Source_Cap No Request" test
-> > > > item, after receiving the Source_Capabilities Message sent by
-> > > > the UUT, the tester deliberately does not send a Request Message
-> > > > in order to force the SenderResponse timer on the Source UUT to
-> > > > timeout. The Tester checks that a Hard Reset is detected between
-> > > > tSenderResponse min and max=EF=BC=8Cthe delay is between the last b=
-it of
-> > > > the GoodCRC Message EOP has been sent and the first bit of Hard
-> > > > Reset SOP has been received. The current code does not distinguish
-> > > > between PD2 and PD3 modes, and tSenderResponse defaults to 60ms.
-> > > > This will cause this test item and the following tests to fail:
-> > > > TEST.PD.PROT.SRC3.2 SenderResponseTimer Timeout
-> > > > TEST.PD.PROT.SNK.6 SenderResponseTimer Timeout
-> > > >
-> > > > Considering factors such as SOC performance, i2c rate, and the spee=
-d
-> > > > of PD chip sending data, "pd2-sender-response-time-ms" and
-> > > > "pd3-sender-response-time-ms" DT time properties are added to allow
-> > > > users to define platform timing. For values that have not been
-> > > > explicitly defined in DT using this property, a default value of 27=
-ms
-> > > > for PD2 tSenderResponse and 30ms for PD3 tSenderResponse is set.
-> > >
-> > > You have several different changes squashed into the same commit:
-> > > - Change the timeout from 60 ms to 27-30 ms (I'd recommend using 27 m=
-s
-> > >   as it fits both 24-30 ms and 27-33 ms ranges,
-> > > - Make timeout depend on the PD version,
-> > > - Make timeouts configurable via DT.
-> > >
-> > > Only the first item is a fix per se and only that change should be
-> > > considered for backporting. Please unsquash your changes into logical
-> > > commits.  Theoretically the second change can be thought about as a p=
-art
-> > > of the third change (making timeouts configurable) or of the fist cha=
-nge
-> > > (fix the timeout to follow the standard), but I'd suggest having thre=
-e
-> > > separate commits.
-> > >
-> > > >
-> > > > Fixes: 2eadc33f40d4 ("typec: tcpm: Add core support for sink side P=
-PS")
-> > > > Cc: stable@vger.kernel.org
-> > > > Signed-off-by: Jos Wang <joswang@lenovo.com>
-> > > > ---
-> > > > v1 -> v2:
-> > > > - modify the commit message
-> > > > - patch 1/2 and patch 2/2 are placed in the same thread
-> > >
-> > > --
-> > > With best wishes
-> > > Dmitry
->
-> --
-> With best wishes
-> Dmitry
+That might be undesirable (?), so we could instead try to implement a
+priority scheme like: full UAC3 > UAC3 BADD > UAC1/2. But unless we also
+enhance this function to look at more than one IAD and interface per
+config, we could incorrectly select the BADD config over more fully-
+featured UAC1/2/3 configs if the full UAC3 IAD is not first in its
+config(s). I don't know enough about UAC3 devices to know what's
+preferable, and I'm not sure how simple vs. correct the heuristics in
+this function should be. :-) This patch errs on the side of simple.
+
+For some history, the preference for the first UAC3 config (instead of
+the first config, which should be UAC1/2) originated a bit before the
+Fixes commit, in commit f13912d3f014 ("usbcore: Select UAC3
+configuration for audio if present") and commit ff2a8c532c14 ("usbcore:
+Select only first configuration for non-UAC3 compliant devices"). Also,
+the Fixes commit's message is a bit wrong in one place since the UAC3
+spec prohibits a device's first configuration from being UAC3.
+
+I tested only with an Apple USB-C headphone adapter (as in the linked
+bug), which has three configs in the following order: UAC2, UAC3 BADD,
+full UAC3. Previously the UAC3 BADD config was selected; with this patch
+the full UAC3 config is selected.
+
+Reported-by: AT <kernel@twinhelix.com>
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217501
+Fixes: 25b016145036 ("USB: Fix configuration selection issues introduced in v4.20.0")
+Cc: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+Cc: Takashi Iwai <tiwai@suse.com>
+Cc: Tatsuyuki Ishi <ishitatsuyuki@gmail.com>
+Cc: Saranya Gopal <saranya.gopal@intel.com>
+Cc: Felipe Balbi <felipe.balbi@linux.intel.com>
+Cc: Nikolay Yakimov <root@livid.pp.ru>
+Signed-off-by: Will Mortensen <willmo@gmail.com>
+---
+ drivers/usb/core/generic.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/usb/core/generic.c b/drivers/usb/core/generic.c
+index b134bff5c3fe..ce9c86967922 100644
+--- a/drivers/usb/core/generic.c
++++ b/drivers/usb/core/generic.c
+@@ -20,6 +20,7 @@
+  */
+ 
+ #include <linux/usb.h>
++#include <linux/usb/audio-v3.h>
+ #include <linux/usb/hcd.h>
+ #include <uapi/linux/usb/audio.h>
+ #include "usb.h"
+@@ -48,9 +49,11 @@ static bool is_audio(struct usb_interface_descriptor *desc)
+ 	return desc->bInterfaceClass == USB_CLASS_AUDIO;
+ }
+ 
+-static bool is_uac3_config(struct usb_interface_descriptor *desc)
++static bool is_full_uac3(struct usb_interface_assoc_descriptor *assoc)
+ {
+-	return desc->bInterfaceProtocol == UAC_VERSION_3;
++	return assoc->bFunctionClass == USB_CLASS_AUDIO
++		&& assoc->bFunctionSubClass == UAC3_FUNCTION_SUBCLASS_FULL_ADC_3_0
++		&& assoc->bFunctionProtocol == UAC_VERSION_3;
+ }
+ 
+ int usb_choose_configuration(struct usb_device *udev)
+@@ -84,6 +87,8 @@ int usb_choose_configuration(struct usb_device *udev)
+ 	num_configs = udev->descriptor.bNumConfigurations;
+ 	for (i = 0; i < num_configs; (i++, c++)) {
+ 		struct usb_interface_descriptor	*desc = NULL;
++		/* first IAD if present, else NULL */
++		struct usb_interface_assoc_descriptor *assoc = c->intf_assoc[0];
+ 
+ 		/* It's possible that a config has no interfaces! */
+ 		if (c->desc.bNumInterfaces > 0)
+@@ -137,17 +142,21 @@ int usb_choose_configuration(struct usb_device *udev)
+ 		/*
+ 		 * Select first configuration as default for audio so that
+ 		 * devices that don't comply with UAC3 protocol are supported.
+-		 * But, still iterate through other configurations and
+-		 * select UAC3 compliant config if present.
++		 * But, still iterate through other configurations and select
++		 * full UAC3 compliant config if present. (If the only UAC3
++		 * config is a BADD, we will instead select the first config,
++		 * which should be UAC1/2.)
+ 		 */
+ 		if (desc && is_audio(desc)) {
+-			/* Always prefer the first found UAC3 config */
+-			if (is_uac3_config(desc)) {
++			/* Always prefer the first found full UAC3 config */
++			if (assoc != NULL && is_full_uac3(assoc)) {
+ 				best = c;
+ 				break;
+ 			}
+-
+-			/* If there is no UAC3 config, prefer the first config */
++			/*
++			 * If there is no full UAC3 config, prefer the first
++			 * config.
++			 */
+ 			else if (i == 0)
+ 				best = c;
+ 
+
+---
+base-commit: fc033cf25e612e840e545f8d5ad2edd6ba613ed5
+change-id: 20250104-usb-choose-config-full-uac3-c5d9413fb650
+
+Best regards,
+-- 
+Will Mortensen <willmo@gmail.com>
+
 
