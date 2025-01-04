@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-18971-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18972-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60494A0159C
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2025 16:44:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6120CA015AA
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2025 16:51:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CF4B18834CB
-	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2025 15:44:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B317E1884282
+	for <lists+linux-usb@lfdr.de>; Sat,  4 Jan 2025 15:52:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1A0C1C3C04;
-	Sat,  4 Jan 2025 15:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED2E8A932;
+	Sat,  4 Jan 2025 15:51:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="dLyvLMoO"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="ej3sXfnq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68DE11C1F23
-	for <linux-usb@vger.kernel.org>; Sat,  4 Jan 2025 15:44:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4EFE1922E6;
+	Sat,  4 Jan 2025 15:51:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736005476; cv=none; b=o5arU/YBfIAl1HEe1CqCjXJzbn87gMrRlidX/gXlNBClcouNxBkwvAVktkjDDRT0cx8gxMpl8vr3428VAWq+9Qb/MJErel1j8w3xxcFllkw/0PFKiHx4fhJZQb8cKWRfC9dDvPygRe3vR6KveqYyxrNB+ElEoL4h2leuHbACHnc=
+	t=1736005911; cv=none; b=XSfpGEHW/vBowf+2cIueDL8U3Z75LJRsKD26k0XPP7RFP32Hh/7ApwIuNW3uZlbY9i0Mhj93FSq+F1L5vP7o+SmIx7k+wTGw20UshlhJP/1y6slPeUWSWmA70I5V4otsqlUyva9k4iakFlfgVP/bNNg1M8NUxTefaoq7fUdyHUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736005476; c=relaxed/simple;
-	bh=kFeqrAqXccBgLLqwQbFf4kM9CWXzXJ2FCtfoIE8oAeI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=e+XqZPuvdHhWEzjw/YpREXAbqwH1CvpLHG+fXD5gn+FLR1S8Uv3lnc+rR9xaQjBsX3kZQFvsJ15gaLkYqYG/nn0zto/YaKLSkH7Gb8DqnSslDd/5rvWAn+9mSEb0/ZbkAEOAkoRR2gP6SsIoZIsDAWMWWZZi23GbcG/Ageu7uPw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=dLyvLMoO; arc=none smtp.client-ip=18.169.211.239
+	s=arc-20240116; t=1736005911; c=relaxed/simple;
+	bh=6K5dR5nOUprM1DvrCky9/PSJUU1/CGijKZhz26qS8PE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ap4ZWiSbRIqaBMryQiveKoJgbyPs7Jsd6hmkY7uz8UYzrOobPJylvbqE3J5a8QCnfIH6so5wG+68cmQRwnPU8LHgdUkNXyPnSYvVguZqLrWTUJnY0BIFiFVPca8qXJT2B7ceSUQEpDl44K+xVDEBdd0a7KyCFJoW8CJrJuLIPdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=ej3sXfnq; arc=none smtp.client-ip=54.206.34.216
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1736005456;
-	bh=s/Zi94DxekvcQ0+OqbLAnT4W07KfhdhwNJ+YjfK9Pbs=;
+	s=onoh2408; t=1736005898;
+	bh=7APZL8RDq4kaB9p03uGgj3jtf6vZKn9R4E1Oxpe29mM=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=dLyvLMoOEFrK15seWSn5JXQ6rg6OuT1bxapt0wylVNfQUXlZsVrts7zU53RGHUq6m
-	 QVlTpjuiJAydkyY0tKCB1CQRKps9JDWjh7FuwctRWC4+U9T/F58G609UH6u/ZZ48+k
-	 3X8IudtG7nH53Qtc2fqDwaMQhFrOW/x64D8HtbDs=
-X-QQ-mid: bizesmtpip4t1736005446ts6qc7b
-X-QQ-Originating-IP: PAL671qYWvWGxJZO4YSzNxJE8sPV9AU9fj56G+mev4Q=
+	b=ej3sXfnqV/WKEfydTF1FcG2bCvM8+cEvhDQBkyVG5FrOSM7EVwMv51x0fDxcnrqq5
+	 OBu0oMf+YqH7lcPPoFh3eqeb560l62AUjg8QUhRsJlQcwFbYJ09ZbXvvhjm/UQBtHM
+	 LvFe2QmoKTAJhLJLUEWk8Z4PfdTbJnTNlR2POW+M=
+X-QQ-mid: bizesmtpip2t1736005888tiwbf2j
+X-QQ-Originating-IP: 46IlzuVfXhEaPVJD3XEB8DfCtzPpjpLIOoZzFv2UrDQ=
 Received: from avenger-OMEN-by-HP-Gaming-Lapto ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Sat, 04 Jan 2025 23:44:04 +0800 (CST)
+	id ; Sat, 04 Jan 2025 23:51:26 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 442894868819710046
+X-BIZMAIL-ID: 6075248717850738852
 From: WangYuli <wangyuli@uniontech.com>
 To: mathias.nyman@intel.com,
 	gregkh@linuxfoundation.org
@@ -59,11 +59,12 @@ Cc: linux-usb@vger.kernel.org,
 	bigeasy@linutronix.de,
 	balbi@ti.com,
 	sarah.a.sharp@linux.intel.com,
+	hkallweit1@gmail.com,
 	WangYuli <wangyuli@uniontech.com>,
 	Xu Rao <raoxu@uniontech.com>
-Subject: [PATCH] usb: host: xhci-plat: Assign shared_hcd->rsrc_start
-Date: Sat,  4 Jan 2025 23:43:53 +0800
-Message-ID: <8AC53C0500C2C839+20250104154353.93075-1-wangyuli@uniontech.com>
+Subject: [PATCH v2] usb: host: xhci-plat: Assign shared_hcd->rsrc_start
+Date: Sat,  4 Jan 2025 23:51:11 +0800
+Message-ID: <7ECE325975663D2D+20250104155111.100597-1-wangyuli@uniontech.com>
 X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,22 +75,23 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: MGjb3fpSAlbposCPlAHZfhfpfYTOL/R6W5CX49hcHc1140ll5787iQz+
-	M0oEiEkcpNrLX22c8AlCEEecB4+S1s6cr5b+fl0CizWf+Q13iHEd/JAezZgsoxRkAoP2VbT
-	mtwOPndZb5pARWfTEl83VEiNui1tcB2M4cRhMtiD3Ab8LWxmlIC1kNHGWEVYc11W1FzE5pe
-	KE3tTs92KBKdfp/p2zguE53MlNT/5XiOhI3NvNbD41W0ShGfyiw3k5jGGg/Ck5fH1zWJZKK
-	9SKAzGn7gfboXYk7yJtGZwYibLOOr4MKavV5R1BnXcVCTytrpjICeHzW02iUncdYIiHp60S
-	5EJL0B+bEiXDE+SYdoW0Ivg0qMgXpxTdyInCRM9kEAXqSqyzVhfXzfUie7HiKRlGOYpM03j
-	+zXQw0Ge+ZzoJBZqMIRKWjIgp8xU7ESp+nOo8ejtSgOurrDY/fx9getyFWTSAL6HuVmbe18
-	/7dttN/hZYSBHKkarV/o5HeAm9hypRCipshRbPUM/a+9gHHx4+902RbI+H0BwlAwHLy6Vdv
-	ovqh1CdABRS+9C5Wt9nzR2BIwLVXL2RM0YQyIy4Ek0FJFAfqCORdNbnb2lK3eriwdZDZg1E
-	gE8RdPgVIsjYbr7XB0nUtprdtjVgXmZhX5FO0JeXZehcBuOaHuGJ/dSXwDpW38UyUiBEs/T
-	dSZJ8HhRqEQDQj7QWMEfeEvgjJKhp2AHr1mjvEwNSQxhNzJjm49uvk/Cu4ItSsqOUAvR3hI
-	zUw9ABH3Q9gA+x/4t4K3WFCVRbue0AdFpttElQ6gSxbnSjnYV5p4FX4f2ojw498x1x9W1SG
-	jcM1bEDrR2F42V09OuBbjl6jEjkTVvj62TwKF9ZJHXGOsDpAIl7/iv/ZDKNcJQhzpE2g4ct
-	UJVYI+BpLUQDKsuTK8UGQe6gVJkTQ2G8ZFeZOq7pwACwDS60DbZgxU5KAgR/Cwra8VrcHWy
-	+TIHteORm5k21sSGUR0mGCIjngrOozeMb8/l93m+zaL8mTJrwVwagyRBbHGE/8ASOOeICIr
-	LWkpAvn7gam5LxAq8oYWobNHf0WcYUEAE1JeyLIA==
+X-QQ-XMAILINFO: MsthqgywqSPpubSNCOXx9PA0yVFs/fvlc49iLpUUycMDz6PHbbsN68Qa
+	svb5tep/WlEQlmg5TKs4COr+88oYo0mmBnQpLAxGdZjdo82g9fasCa9zs8muEIJyAzmy8j7
+	ZmiERhAJUfCGRFUs94JAfzzgMtF5sTgWh8ziaIQh5bp88kd0sL+yoYxYAN/2ssz1m2pfcBF
+	q7H6jDl+dNytBkB+ucv3UxI8Y6H4sMDam6f2wFM1NW3aOi2auw3/KqqJO1+0k9JyA/O8/kj
+	pSZqsVsCJ7MUGkEsAXMCoqucqDMDZqNbwD/dt4eCHiuUAppEh6EE/bYbH+K2nmdldlincHh
+	KPSQbyQtRAUKoprw6JYW+MHGsGUFcFSaxI/P//Loj8diJZh6TaVXeNB6LQBKa+4w5f4EgNK
+	p2JtXJ4h+uOBDdEFUFaTfx0h2EkifyyUx9/Q+jojl9nPnU+8qdRHXaxFgUDSMMYSVxgd9xh
+	4m4ql+XknIFYBfDLi0f9oey2Voss/M4zNkRuJnUhLlSWGaZr24O5/gSqbi08pjX1FMIU26e
+	gUfO9sqgrf5R4fDfUTWqYS25ZfGyjNyjCxXhFPpw7FixOQifDL9NDP7D3htqlcZWfWr5Gui
+	ALOWFeikZgD8eHbSUe/jfVCXGtTKXUWKmiTKntN4lllzjQ46ZqC6zWyc2Jll+Bs6qf8lCfd
+	jQ6bMFzr+4M3FD07Mis/5Kq3YIt2oc4V49AjWrmPA0daK723UXuWmVv/MaR/smVw8lZ9Prb
+	8Qway1v6t6I09T51LzSqGWi4DQZsZQI+l3VFpSgLV0cUjto5/+8yz84QfRuSlTN8klpLAgm
+	ATT9K9c6yy2TA6T5XJDbqubgskqNhHd7kyjrOX5wjCGLry0702oz/JHbfXUeGUSHJFuPpfd
+	V6RkGBtkxFuoaZpze7/pKb+Bu/Oa91z5tIC1k4d4nZwzkIPv2yjftdE9eKGKkooK4cnAcjp
+	9JzaPihjVJv0yR+JsuronIE+hsKy7w+FpO8VopPQMRScZ6kmmCRA/8JSKZ/Xhr9y8tGPmQl
+	NQ0Qnf/crwVUlpkur871P0mKzI8OekD1rE8xy34Q9ZDBidpTCi8RV8dMaQBU2LzNZa6LJPX
+	+481DK1cu7uFK6JzUhIIUHMuD46agyWVHIW2e8xl8GQ
 X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
 X-QQ-RECHKSPAM: 0
 
@@ -113,24 +115,27 @@ in certain scenarios.
 Co-developed-by: Xu Rao <raoxu@uniontech.com>
 Signed-off-by: Xu Rao <raoxu@uniontech.com>
 Signed-off-by: WangYuli <wangyuli@uniontech.com>
+--
+Changlog:
+  v1 -> v2: Move code changes for commit e0fe986972f5 ("usb: host:
+xhci-plat: prepare operation w/o shared hcd").
 ---
- drivers/usb/host/xhci-plat.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/usb/host/xhci-plat.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
 diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index e6c9006bd568..56a65ddb7e4c 100644
+index e6c9006bd568..457e839b9b53 100644
 --- a/drivers/usb/host/xhci-plat.c
 +++ b/drivers/usb/host/xhci-plat.c
-@@ -328,6 +328,9 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 	if (usb3_hcd && HCC_MAX_PSA(xhci->hcc_params) >= 4)
+@@ -329,6 +329,8 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
  		usb3_hcd->can_do_streams = 1;
  
-+	xhci->shared_hcd->rsrc_start = hcd->rsrc_start;
-+	xhci->shared_hcd->rsrc_len = hcd->rsrc_len;
-+
  	if (xhci->shared_hcd) {
++		xhci->shared_hcd->rsrc_start = hcd->rsrc_start;
++		xhci->shared_hcd->rsrc_len = hcd->rsrc_len;
  		ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
  		if (ret)
+ 			goto put_usb3_hcd;
 -- 
 2.45.2
 
