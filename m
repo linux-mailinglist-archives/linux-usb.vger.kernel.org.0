@@ -1,94 +1,143 @@
-Return-Path: <linux-usb+bounces-18987-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18988-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE6D3A018A5
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2025 09:37:19 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D567DA0197D
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2025 13:53:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 823F33A38C6
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2025 08:37:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 387961883606
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2025 12:53:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FA8C14AD19;
-	Sun,  5 Jan 2025 08:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93BE114F9EE;
+	Sun,  5 Jan 2025 12:53:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SXKP6aDC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KlvikKcJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08ED414A4D6
-	for <linux-usb@vger.kernel.org>; Sun,  5 Jan 2025 08:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2601369BB;
+	Sun,  5 Jan 2025 12:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736066183; cv=none; b=Nm4fbUmYHVlWCBggGnFNmS3ldSG7M6OnHXKF95JrIr+oU52j3XqkK7lH4sTUaPfZ9FQB2c5gmEp65DN/ATMzIO4Mv/TAGgoICmiPgfvMrN7yAf8fticGRmfBtNvwQYFnHHASN0DnE7p2281TgIbv5XIzOiD+Z6A6SbaLcujFJWU=
+	t=1736081597; cv=none; b=QisdaV3MfnMDpYXw/gzN1cImpjKSffcEjz4qnZ0RGV7Nh7ogiEu1GO0T3PgUGX8lhqclckX3nhca5TfhBWY3TUM4QqILOUVOLbq3q6a0JMC+hVyWJpFtyIHyo8Mhq2x+Ymm4XSDv5WLTzK2Tina0qGn4/PjimgUSiyqwzrCkPIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736066183; c=relaxed/simple;
-	bh=qwiIf2EbmBUROXDXMuUlRxzozr7+87V2XN8I4izh2lM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=deDPIHSzvJGvIURNrhuiYnrgP5pjM0okvY6utA/J/eJbmG3J4t66XRAq8PxQRI5sgov0+jA5LxnhNcIDkKgniR3Zm0NVGDj4hY3IsVa5AOcAy4L+k4ecvAtOtzsssQaBE38znlFecFGt2rU4KXkBfNfQXZiXJimzg4Le86pgKGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SXKP6aDC; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736066181; x=1767602181;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=qwiIf2EbmBUROXDXMuUlRxzozr7+87V2XN8I4izh2lM=;
-  b=SXKP6aDCvoXAN3OBDW8DmMy7KTV8EKFdWWYv5ojhJNzpESDZwVjbt57z
-   NuxyKrbyUhZf+x16mhbqMLjBO64NJGR8lj8Wo10pu/AfuL7eb/zI3AFOP
-   NUQFdqexwbDzp9xlD57FVByd4W/nKct8j6A9pBqyqmJZifRSJTby5WZwX
-   adr4sSFNM7xMMLE/aPtD63kmUMwjZWaiRO+NhKj23k0ssfA6NBxZ9UTOX
-   9pEEh3b/ov7Wt370GaB4GxU6633jc37uavGMqak2SapgNsUPPTLzbCDTa
-   zjThq6JTUqpRk3GThwQbMudOTbvF1OwfmitRcQ4rnvsKv13J/DUU9UUWy
-   g==;
-X-CSE-ConnectionGUID: Z4seSIREQ4qPIOgd3k9HOw==
-X-CSE-MsgGUID: +inXkMx9QYibG/c7w2TSwQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11305"; a="36119636"
-X-IronPort-AV: E=Sophos;i="6.12,290,1728975600"; 
-   d="scan'208";a="36119636"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2025 00:36:20 -0800
-X-CSE-ConnectionGUID: VdBJ4QDIRLa4Z0rn5xxEKA==
-X-CSE-MsgGUID: qaT/7/DqTPyoZwcc8OYiWA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,290,1728975600"; 
-   d="scan'208";a="107131754"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 05 Jan 2025 00:36:18 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id D623826A; Sun, 05 Jan 2025 10:36:16 +0200 (EET)
-Date: Sun, 5 Jan 2025 10:36:16 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: linux-usb@vger.kernel.org
-Cc: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Subject: Re: [PATCH] thunderbolt: Expose router DROM through debugfs
-Message-ID: <20250105083616.GV3713119@black.fi.intel.com>
-References: <20241227133030.3401991-1-mika.westerberg@linux.intel.com>
+	s=arc-20240116; t=1736081597; c=relaxed/simple;
+	bh=+3JsqT2PT5LDLTSdsDhEQ3hAaOsBooERDeB7M6zX/ys=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=LdQilsyOoT22Jhzmcu2pQe7yWpEcpvJh53TeHVr+JTMj+oFVC6hVIarKBh/hakkK7t8pWKynnvhE5KNK4sSUtqPrS2Ba8ZK3vFcquexRIYvDwY5QtilgN3udXFz9ECTZ07m40JyOA2xRsQQhhXT8mGdCGNj+72z5Zg7czmdHnvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KlvikKcJ; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-216281bc30fso222189725ad.0;
+        Sun, 05 Jan 2025 04:53:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736081595; x=1736686395; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QRbjaJEp8cV3Ft2gL1ts0IV/EAIwviozX8YLzCpkvz0=;
+        b=KlvikKcJFm7A8M1gdz5tmHFGyApBTrsYxGQ6+3GSHsDlPNBI+1ND3PmsxsDnA8+XSq
+         uOZfYi+yPSSnS/x28mVngCrYVtquaaWyZYB6+NVwTpI6JpLyLZggSNvHc+WEt9gJ3IFl
+         G/G/7CNxa6RIOtjL+Pr0/kyvvW+/0vL0Zq2P6DEMI2j60eAQ2vLYRxLvRiWMelfjQEAb
+         x2sBthATSV9hOrBZULYWifZQXAGKpdhlyDSKxVsDZuruyUgjvaZXA9fsAmMlHz1PpDfI
+         nPCSFAhjNjuuokRL5opEJxE2I0pdwBJwbSRZlJ56m7CaNvFoWECHvgKL6s2X7McOkoOU
+         2T8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736081595; x=1736686395;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QRbjaJEp8cV3Ft2gL1ts0IV/EAIwviozX8YLzCpkvz0=;
+        b=TbI0WuwAIKgZdRhmEYpYntCbSgb9PH5YoU7Wa/pMcKWhtKAgeDUy2HSPranCPTBNzf
+         mZvrZvYyoKLhspIGUvOs17uxKxHy2ZAuovj7Cl6Mo9OS0YYZYB8RmTLCKaSBSoYwf2jS
+         in5xq4o5PJjubbBPyG5TsW4hLIvzJgDn118z6z3sJPiPCz4QiP/71YhX6lRAySX1ohKx
+         OLrPKXwcP73ChzNdomDHRHlh+GKeilN8ZfNE+sXelVD65IVA0G4FE5o7oNQX1hzc7MY0
+         OiXL9RumZEYNNPIhrnLrbwvKxzcPGwHRLZkpfIgS6vE0HgW57wZD9Fzd8p8lf6ntS7Hr
+         NNow==
+X-Forwarded-Encrypted: i=1; AJvYcCVCRiwEPcKUtuM69B6rUU9E9PO40sYeNyidGA2dsBXV/QOe/Mx75zeMZX9p67iL2tZXI6uo5Rybb2XHhI0=@vger.kernel.org, AJvYcCX8XiPz2HBaU23ebNQyPmkC5RvAaD/2ZnMle6Gn6+dj7Nfw9SEl/6HTJyULKSN0OcL7yFhJHHak@vger.kernel.org, AJvYcCXOfzHW/IUfPrmw7PCbgxBVYd7+idiku9qZQnOI0nv+8FP+VQdRvlZ7IE3CK3sZ6xDkq5tel7WYkok/@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdYd9PnO7ulH+xym6u1ZvdMCpxkLj53h2JZZMvDqRfFjzdOpnh
+	W314QEeeDEh2T/ZhngQfwGiPdlLIVIl/34iFqU8D97zwARhPyO78feMXUsci6Uk=
+X-Gm-Gg: ASbGncsL6sc+H5zegJKCIElH5/0RcM+fgeY5gcU5mPLBI1zFjrDuDcDzb3w70cly8vn
+	rLRd6DfMSKYj0+L3f5aFAZqsAk+1fOIeOGgarbi5aAAS9waErLJIWA/0EUEqkVqXcieSG98yxBW
+	M1b0Rfrrqt36PwBh0JjRodRzAfJ4fKaVY95kv0zlJHF1wvwsVvhTekZ6AbDE0IwiLhfOpgoZRS2
+	Uf+D88tuTdzIRLjM9JjI2ywkiy9UPBOtaRBVLkYZErkK0Ay6Zf0BdcIl/Q5Nw2rWg==
+X-Google-Smtp-Source: AGHT+IFeGXTW44QkXwlyHFMl5hMhOcCiMPa75peNPRVKIOjO+aFFROoveEk0E1JTUgIaNPmOnRSV3A==
+X-Received: by 2002:a05:6a20:7f8b:b0:1e0:be48:177d with SMTP id adf61e73a8af0-1e5e043f2eemr85244616637.3.1736081594703;
+        Sun, 05 Jan 2025 04:53:14 -0800 (PST)
+Received: from localhost ([36.40.184.212])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842ddb09b2asm26999258a12.57.2025.01.05.04.53.12
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Sun, 05 Jan 2025 04:53:13 -0800 (PST)
+From: joswang <joswang1221@gmail.com>
+To: heikki.krogerus@linux.intel.com,
+	dmitry.baryshkov@linaro.org
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jos Wang <joswang@lenovo.com>,
+	stable@vger.kernel.org
+Subject: [PATCH 1/1] usb: pd: fix the SenderResponseTimer conform to specification
+Date: Sun,  5 Jan 2025 20:52:51 +0800
+Message-Id: <20250105125251.5190-1-joswang1221@gmail.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241227133030.3401991-1-mika.westerberg@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 27, 2024 at 03:30:30PM +0200, Mika Westerberg wrote:
-> Router DROM contains information that might be usable for development
-> and debugging purposes. For example when new entries are added to the
-> USB4 spec it is useful to be able to look for them without need to
-> change the kernel.
-> 
-> For this reason expose the DROM through debugfs.
-> 
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+From: Jos Wang <joswang@lenovo.com>
 
-Applied to thunderbolt.git/next.
+According to the USB PD3 CTS specification
+(https://usb.org/document-library/
+usb-power-delivery-compliance-test-specification-0/
+USB_PD3_CTS_Q4_2024_OR.zip), the requirements for
+tSenderResponse are different in PD2 and PD3 modes, see
+Table 19 Timing Table & Calculations. For PD2 mode, the
+tSenderResponse min 24ms and max 30ms; for PD3 mode, the
+tSenderResponse min 27ms and max 33ms.
+
+For the "TEST.PD.PROT.SRC.2 Get_Source_Cap No Request" test
+item, after receiving the Source_Capabilities Message sent by
+the UUT, the tester deliberately does not send a Request Message
+in order to force the SenderResponse timer on the Source UUT to
+timeout. The Tester checks that a Hard Reset is detected between
+tSenderResponse min and max，the delay is between the last bit of
+the GoodCRC Message EOP has been sent and the first bit of Hard
+Reset SOP has been received. The current code does not distinguish
+between PD2 and PD3 modes, and tSenderResponse defaults to 60ms.
+This will cause this test item and the following tests to fail:
+TEST.PD.PROT.SRC3.2 SenderResponseTimer Timeout
+TEST.PD.PROT.SNK.6 SenderResponseTimer Timeout
+
+Set the SenderResponseTimer timeout to 27ms to meet the PD2
+and PD3 mode requirements.
+
+Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+Cc: stable@vger.kernel.org
+Signed-off-by: Jos Wang <joswang@lenovo.com>
+---
+ include/linux/usb/pd.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+index 3068c3084eb6..99ca49bbf376 100644
+--- a/include/linux/usb/pd.h
++++ b/include/linux/usb/pd.h
+@@ -475,7 +475,7 @@ static inline unsigned int rdo_max_power(u32 rdo)
+ #define PD_T_NO_RESPONSE	5000	/* 4.5 - 5.5 seconds */
+ #define PD_T_DB_DETECT		10000	/* 10 - 15 seconds */
+ #define PD_T_SEND_SOURCE_CAP	150	/* 100 - 200 ms */
+-#define PD_T_SENDER_RESPONSE	60	/* 24 - 30 ms, relaxed */
++#define PD_T_SENDER_RESPONSE	27	/* 24 - 30 ms */
+ #define PD_T_RECEIVER_RESPONSE	15	/* 15ms max */
+ #define PD_T_SOURCE_ACTIVITY	45
+ #define PD_T_SINK_ACTIVITY	135
+-- 
+2.17.1
+
 
