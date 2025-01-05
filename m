@@ -1,173 +1,115 @@
-Return-Path: <linux-usb+bounces-18983-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-18984-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1BFCA0184C
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2025 07:32:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFD59A01876
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2025 08:46:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21B8C3A315F
-	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2025 06:32:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77B043A265A
+	for <lists+linux-usb@lfdr.de>; Sun,  5 Jan 2025 07:46:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27BA8824A0;
-	Sun,  5 Jan 2025 06:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D30F513CA97;
+	Sun,  5 Jan 2025 07:46:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NNqDAfoh"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="zVgiNUKv"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f179.google.com (mail-yb1-f179.google.com [209.85.219.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 070951D6AA
-	for <linux-usb@vger.kernel.org>; Sun,  5 Jan 2025 06:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A3C80027;
+	Sun,  5 Jan 2025 07:46:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736058730; cv=none; b=R6ydJlGX9y41GPin4slIetxmWO1T8xKkV7S67OGrMXxfzOKePUI5exDslvIGwfovYzEygfwOfEOsGKaA2BoIFeLulB+8OhcU6Jr4qh2UMsZKraBunSNpNf+iiC+50jIp/wOKplMW8blubTvpvXz6vljCA7hpVCQbRS5X+WLrk2g=
+	t=1736063178; cv=none; b=hcFnjvQ9+g7w+q2dtUgNVhh+wIMnl/NoeJJsPWQ+ZOKM3PQRJYtzNmEDzJYCZjPvJqnVmcOrwAw9cuPbZhMlP3i+zoz9biCubsHYpxgOmPvXnWn0Av+HAui3v/mEBKtxQDKSosCwm+YVkW7/BAsxmGuz6qIDuWcGsJ6Ez8+QJAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736058730; c=relaxed/simple;
-	bh=inqwIYNvE/bDvKYCQtclKIDsFywu/mNS/rlq7MiWh60=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N/VJW2fu5OxuM16I/4xiD1wphsH5Ebgs1lierdJkETBHBN0YL/a7Fx7E0yh7SEoQ1t8Fc8yqgyjOCdJ8QRKmhkVlot8nmL5XR2ozpOzV5jdp+FAO9UuqSskwoXHz5OvvX0UYf6I2LIWLihcZtccNZHRbFg4GpB9/BojEFDZa8I4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NNqDAfoh; arc=none smtp.client-ip=209.85.219.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f179.google.com with SMTP id 3f1490d57ef6-e4419a47887so16601955276.0
-        for <linux-usb@vger.kernel.org>; Sat, 04 Jan 2025 22:32:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736058727; x=1736663527; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zHDoOfC1VmfF2pR3RKucTthjGLxFK5Dzv+J7tjqfC7Q=;
-        b=NNqDAfohH2UnuRalUhVcADupl8e9mtkBKA3mmOkqPnq/gNd5UXx4CkSI186gUjQkcQ
-         Z0EECK/oMeiamVlPBmJRK7FESuUUmuGod6onuTVRXAKS/VOhmEm6PrhDjqgFlJ5w5yM2
-         o6Hsm70O8qtohj6+SPEsm0YDxLpusl3TKgYPw/FJP5r4YB5idmi4Q5F4SeFUUnu+xtXe
-         QHxgGrqCl4rP5lHd2sAYhnyxrN0DX4yjjbjeQ2HZu+ChBzkwUFqjGTc59r3jRPSXSk9o
-         tu/Myx1ZB3MW5Uu/lHOQmXrRjM+NBR6sG3HZgdiX8nnq3cAGXTarJrZ24mM6VPLHpTQz
-         SdsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736058727; x=1736663527;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zHDoOfC1VmfF2pR3RKucTthjGLxFK5Dzv+J7tjqfC7Q=;
-        b=bnd4rN+BXOygiOYR2hisRquRatuKRIj8nB9/8nCMPAeXsdZUna731WqjQa+kpEvkfz
-         2EVU6DSm/v+cvWV5xL79B45BMj9hA8u3RQBr61kV6lt/PRqJ0K7uexfKpdJhpsEEISKr
-         m3iY5tmxgPl6NU3FEOvnesGsPt4GKDgIHraq2E0xFvFOOmj0P9RGzmK3Tfcet35GaBUs
-         w8tUz+8JSGjrztM0s3vxZonUkwfun7Zf6T15AaMDaV4jYCn3hWcsjMhHUMwUcvTXGVW6
-         N/rRIZSJRduvnVMbEcY4Lf46/mBFHmFCDfnP8FTp375jF9KZ/rvnQ4edwXRyqiqOrN4T
-         IiQw==
-X-Forwarded-Encrypted: i=1; AJvYcCXbs/tc2Kv6c+ZVkGEtop5aEbSgP3t/xj1jy07oEAOBGEI+EiBszvXCk1BQLgIP7ca9yN06LQf4Z+s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPP+R9zKO+rtIMs7anar3AmHQVfDc/v/EbrpppUOaEoau9dST6
-	dtK5+do7FESjKORQiBd7xbUrOggcbjC5QRCF+xXtbpoxS+fL+nomd6oekzAVJf+yUBKxJ/sgLc/
-	2YmH1gfdVw9H8xJDDWrDe0bywKbZIX7EZe0Y20A==
-X-Gm-Gg: ASbGncvH8TlXCWjU5hX+3zfjTdY6SQ76jk5EVKrRQwhJsUpG8SPnHodH0WJkgWvYv8x
-	C0gMNZ5b9+/YKSfqSwZ1wzcS4rttLsnQ7qGQRmA==
-X-Google-Smtp-Source: AGHT+IFqMbMAD7FjoPpN7HVTLNJ9M41VkwOZpEwD0bw24qHdqdqsb5AFPaDX4n5Nj7PFsGgD9miYfAAoIrdB+bzcDRM=
-X-Received: by 2002:a05:690c:6e05:b0:6ef:7d51:ebb9 with SMTP id
- 00721157ae682-6f3f8201373mr423076607b3.34.1736058726997; Sat, 04 Jan 2025
- 22:32:06 -0800 (PST)
+	s=arc-20240116; t=1736063178; c=relaxed/simple;
+	bh=x2AKfZF9mrKKNFRFVOUAHFWR0s/hhv0GEwZQqQfLOqY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cT5nK0EdfELiISghCX1V/SmwoixHMO6gPafzlw2ybI36Xte7qd3Swy6SU2+pG2lNETRm/tkVuAteNFLwBMm3s69xKvT+pT85cLhaLFYKjt6LrST9+BfO07FroDEpZqNaEL3F6NV6YRHhjiRwhWEMGQI8QTxjChaWtJaZqDqzB88=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=zVgiNUKv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B775FC4CED0;
+	Sun,  5 Jan 2025 07:46:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1736063177;
+	bh=x2AKfZF9mrKKNFRFVOUAHFWR0s/hhv0GEwZQqQfLOqY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=zVgiNUKvJMR+r/EtkmnaHaUM6FnIXm8uAb7Y2C+/VmQVO4x+AXaWVa5EPVIFJ7+OQ
+	 E7tIVKKiW6uh/xyJDP8qGVvFUhoe+Dk4aGG3ItswzpzRFAGeIQGeRTwNEhWUB6yrPh
+	 dPKvECiXerAuTsR63Uyp3gaHqpvkUbs1dEZyYpSA=
+Date: Sun, 5 Jan 2025 08:46:13 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Foster Snowhill <forst@pen.gy>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Georgi Valkov <gvalkov@gmail.com>, Simon Horman <horms@kernel.org>,
+	Oliver Neukum <oneukum@suse.com>, netdev@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH net v4 6/7] usbnet: ipheth: fix DPE OoB read
+Message-ID: <2025010558-lining-paralysis-e618@gregkh>
+References: <20250105010121.12546-1-forst@pen.gy>
+ <20250105010121.12546-7-forst@pen.gy>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241222105239.2618-1-joswang1221@gmail.com> <20241222105239.2618-2-joswang1221@gmail.com>
- <exu4kkmysquqfygz4gk26kfzediyqmq3wsxvu5ro454mi4fgyp@gr44ymyyxmng> <CAMtoTm2X+aQRpSbNPjw+b+TsYfYT3h6yx2ycXYwfQbcinrwyPQ@mail.gmail.com>
-In-Reply-To: <CAMtoTm2X+aQRpSbNPjw+b+TsYfYT3h6yx2ycXYwfQbcinrwyPQ@mail.gmail.com>
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Sun, 5 Jan 2025 08:31:56 +0200
-Message-ID: <CAA8EJpp06-r9ODvk1dDoH2LwT32BW_uhnkDU9SEeaC35V8Wx1A@mail.gmail.com>
-Subject: Re: [PATCH v2, 2/2] usb: typec: tcpm: fix the sender response time issue
-To: Jos Wang <joswang1221@gmail.com>
-Cc: heikki.krogerus@linux.intel.com, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	rdbabiera@google.com, Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250105010121.12546-7-forst@pen.gy>
 
-On Sun, 5 Jan 2025 at 04:51, Jos Wang <joswang1221@gmail.com> wrote:
->
-> On Sun, Dec 22, 2024 at 9:14=E2=80=AFPM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
-> >
-> > On Sun, Dec 22, 2024 at 06:52:39PM +0800, joswang wrote:
-> > > From: Jos Wang <joswang@lenovo.com>
-> > >
-> > > According to the USB PD3 CTS specification
-> > > (https://usb.org/document-library/
-> > > usb-power-delivery-compliance-test-specification-0/
-> > > USB_PD3_CTS_Q4_2024_OR.zip), the requirements for
-> > > tSenderResponse are different in PD2 and PD3 modes, see
-> > > Table 19 Timing Table & Calculations. For PD2 mode, the
-> > > tSenderResponse min 24ms and max 30ms; for PD3 mode, the
-> > > tSenderResponse min 27ms and max 33ms.
-> > >
-> > > For the "TEST.PD.PROT.SRC.2 Get_Source_Cap No Request" test
-> > > item, after receiving the Source_Capabilities Message sent by
-> > > the UUT, the tester deliberately does not send a Request Message
-> > > in order to force the SenderResponse timer on the Source UUT to
-> > > timeout. The Tester checks that a Hard Reset is detected between
-> > > tSenderResponse min and max=EF=BC=8Cthe delay is between the last bit=
- of
-> > > the GoodCRC Message EOP has been sent and the first bit of Hard
-> > > Reset SOP has been received. The current code does not distinguish
-> > > between PD2 and PD3 modes, and tSenderResponse defaults to 60ms.
-> > > This will cause this test item and the following tests to fail:
-> > > TEST.PD.PROT.SRC3.2 SenderResponseTimer Timeout
-> > > TEST.PD.PROT.SNK.6 SenderResponseTimer Timeout
-> > >
-> > > Considering factors such as SOC performance, i2c rate, and the speed
-> > > of PD chip sending data, "pd2-sender-response-time-ms" and
-> > > "pd3-sender-response-time-ms" DT time properties are added to allow
-> > > users to define platform timing. For values that have not been
-> > > explicitly defined in DT using this property, a default value of 27ms
-> > > for PD2 tSenderResponse and 30ms for PD3 tSenderResponse is set.
-> >
-> > You have several different changes squashed into the same commit:
-> > - Change the timeout from 60 ms to 27-30 ms (I'd recommend using 27 ms
-> >   as it fits both 24-30 ms and 27-33 ms ranges,
-> > - Make timeout depend on the PD version,
-> > - Make timeouts configurable via DT.
-> >
-> > Only the first item is a fix per se and only that change should be
-> > considered for backporting. Please unsquash your changes into logical
-> > commits.  Theoretically the second change can be thought about as a par=
-t
-> > of the third change (making timeouts configurable) or of the fist chang=
-e
-> > (fix the timeout to follow the standard), but I'd suggest having three
-> > separate commits.
-> >
-> The patch is divided into patch1 (fix the timeout to follow the
-> standard), patch2 (Make timeout depend on the PD version)
-> and patch3 (Make timeouts configurable via DT). Do you suggest that
-> these three patches should be submitted as
-> V3 version, or patch1 and patch2 should be submitted separately?
-> Please help to confirm, thank you.
+On Sun, Jan 05, 2025 at 02:01:20AM +0100, Foster Snowhill wrote:
+> Fix an out-of-bounds DPE read, limit the number of processed DPEs to
+> the amount that fits into the fixed-size NDP16 header.
+> 
+> Fixes: a2d274c62e44 ("usbnet: ipheth: add CDC NCM support")
+> Signed-off-by: Foster Snowhill <forst@pen.gy>
+> ---
+> v4:
+>     Split from "usbnet: ipheth: refactor NCM datagram loop, fix DPE OoB
+>     read" in v3. This commit is responsible for addressing the potential
+>     OoB read.
+> v3: https://lore.kernel.org/netdev/20241123235432.821220-5-forst@pen.gy/
+>     Split out from a monolithic patch in v2 as an atomic change.
+> v2: https://lore.kernel.org/netdev/20240912211817.1707844-1-forst@pen.gy/
+>     No code changes. Update commit message to further clarify that
+>     `ipheth` is not and does not aim to be a complete or spec-compliant
+>     CDC NCM implementation.
+> v1: https://lore.kernel.org/netdev/20240907230108.978355-1-forst@pen.gy/
+> ---
+>  drivers/net/usb/ipheth.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 
-Single series should be fine.
+Hi,
 
->
-> > >
-> > > Fixes: 2eadc33f40d4 ("typec: tcpm: Add core support for sink side PPS=
-")
-> > > Cc: stable@vger.kernel.org
-> > > Signed-off-by: Jos Wang <joswang@lenovo.com>
-> > > ---
-> > > v1 -> v2:
-> > > - modify the commit message
-> > > - patch 1/2 and patch 2/2 are placed in the same thread
-> >
-> > --
-> > With best wishes
-> > Dmitry
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
+You are receiving this message because of the following common error(s)
+as indicated below:
 
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
 
---=20
-With best wishes
-Dmitry
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
