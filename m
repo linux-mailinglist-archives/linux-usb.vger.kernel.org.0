@@ -1,196 +1,120 @@
-Return-Path: <linux-usb+bounces-19034-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19035-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3ED9A02FBE
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 19:27:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84296A02FE5
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 19:43:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FF4C1885D0D
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 18:27:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1673F1885F7A
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 18:43:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F066C1DEFF4;
-	Mon,  6 Jan 2025 18:27:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0940E1DEFFE;
+	Mon,  6 Jan 2025 18:43:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nivM7HUu"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="az/Qf2yh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f175.google.com (mail-vk1-f175.google.com [209.85.221.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791051DED79;
-	Mon,  6 Jan 2025 18:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F008A78F4F
+	for <linux-usb@vger.kernel.org>; Mon,  6 Jan 2025 18:43:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736188042; cv=none; b=KRv9xQXxU9ISuukXn4TFyzkkmcGN6MfnOCVgG+dtsRAA+Bj29xwN+3nWqhPK4F3kSeNrjBQn6i5U0fHei51D2BvVdHAjC8rRIN/U9kFb2osVImx0eZPjek647SecwSfAU+qd+7GTwINYrf4Ww2DMZKxLBUuEVE+Ng1uC/g3XC2M=
+	t=1736189014; cv=none; b=iGVy7tf7H4MZ+8MXtAa/8S5zkVkF9aROKhHtCJd0hrgstUQ7RyZ3QIBTZTH5TGyG7FBLGG7J3Qq4iZj0nJNPpqpFDqFs7kJgbAo/jB10YWi4UHUVO/EWFzl1/pYjRayWKhWYckBqO07lNaw7qg3puR7NuXy5SXqvuqAmeOpHim0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736188042; c=relaxed/simple;
-	bh=9NvDwZvFg7r1qwT4ypIYBEKI5qLP+aP69YwjZJZLQgs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BJbEEXOOjO2DjvFOr+Yz+8p8RsIVEKdf6c0AFaDIDsAyzSUQxn7OSkcySYN47ZW9N702fN0sho5zTbg5iqdqSY1NlnN6EqN4csuctbY7gc3aMnJA0z/xhO8zHZpYhMi6oChKEB5Wc+xq18ipiHqDiTI0ckPMiC2dmo1SB67xMDI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nivM7HUu; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736188041; x=1767724041;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9NvDwZvFg7r1qwT4ypIYBEKI5qLP+aP69YwjZJZLQgs=;
-  b=nivM7HUuYfpQxv8Z0FZ0ZibFb5VDHEDvn6gJPH3AlJR6hmMo7bG0BUEh
-   1cTo4WGegJW5RuXGLojP8MnIg32A9vbv4S9mXUYJbeGM8zObMK4i7j0Fs
-   +WeTgzX9rN8s+AVj223NLEfn9I2xvGbCOOEePfGnsjFyqlUuczwT1bRDo
-   OTIF57lC8SV8+0tau+iolgVam8IoDfJjeIupr0V+YgiBgnb5CSzhS1iH9
-   PJnpoMDLslNEoaYXa/x49txZ+dXAeypdUAmQQenKOklRc1P+SUmPijIEv
-   +adn7IjaOtl73//0mKRyOg5zGoqlUxJMVl4CH43mFIZzuez9HWX+bhgyH
-   w==;
-X-CSE-ConnectionGUID: fFD7MZ2xQkC2v4x0PfB0OQ==
-X-CSE-MsgGUID: rxf3VZcKTzqlOjx8mhjOBQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11307"; a="47337762"
-X-IronPort-AV: E=Sophos;i="6.12,293,1728975600"; 
-   d="scan'208";a="47337762"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Jan 2025 10:27:20 -0800
-X-CSE-ConnectionGUID: H4cNptL1RQa/uJfpJZqLsQ==
-X-CSE-MsgGUID: htWPl3GMRWeJn3SLA/Lyqg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,293,1728975600"; 
-   d="scan'208";a="102317803"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 06 Jan 2025 10:27:18 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tUroq-000Dod-0L;
-	Mon, 06 Jan 2025 18:27:16 +0000
-Date: Tue, 7 Jan 2025 02:26:54 +0800
-From: kernel test robot <lkp@intel.com>
-To: Tomasz =?utf-8?Q?Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>,
-	jikos@kernel.org, bentiss@kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-input@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 10/10] HID: Add hid-universal-pidff driver and
- supported device ids
-Message-ID: <202501070200.pA9ifqd5-lkp@intel.com>
-References: <20250105193628.296350-11-tomasz.pakula.oficjalny@gmail.com>
+	s=arc-20240116; t=1736189014; c=relaxed/simple;
+	bh=7aN90AR7PqYNg8bBc3NK4O2h76WvLMYAbDuqAU8+OWI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OapJc6rdSS+YkipH0vLzT46zEgFCH0w/iEAsTxuqxVOrC24ksexmUljXGiMFGnNS6AaHvP8lQewCa8kfJCXgFibNlPsWJTn9OGdJuBmL0t4G6x/1aDjxW5/k6nGIXxImMuc4KI49ySRAMmB+4m7m6hkywsLhMzK38Fk6Rb9SItU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=az/Qf2yh; arc=none smtp.client-ip=209.85.221.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-vk1-f175.google.com with SMTP id 71dfb90a1353d-51878d9511bso4290505e0c.0
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jan 2025 10:43:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1736189012; x=1736793812; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=81ZFvMgCvonNvOa7sNa0pgwWruFLmxxFAQesD1YVwY4=;
+        b=az/Qf2yhRq2DuFbOqB+SFa3/OV9pnqaDp8KOoiQc0PzgJhMUFwhTXrjc0OgYNs5dC6
+         lgJ1TsFj9Xiw5RxhSiinks7oiX5uAYf6cW6iRD54zCbF4R6O0WbxyFyHhXxvsrKwzpnw
+         nVB4uJCpqR5womPQ7P/foO0GZEPEAPG/+N2vg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736189012; x=1736793812;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=81ZFvMgCvonNvOa7sNa0pgwWruFLmxxFAQesD1YVwY4=;
+        b=bA9X1Y65LUPXwKRecIQp0z4ce5yFHsPSakmDiBXuF6KhadDb7wrxl3DihdgQtmnBl1
+         hkK6VItzjOX3O1WwuvGc6p/dP4mQBaTZQmXBcQ0+qLg3+4I/B4XCqXd9L640sV6/EGLk
+         A8q1k87v8auBOe6VJtCN5u4Ahq6ngl2AMDleRYo0Zqw4Mw4SP4ZQHpErNOxTpWiJdaGS
+         XBHG3G7Hfs05/TEFPItcXWtVGG89KwlkLLTj9MEhQVLzaMZwj3zvbSVqHxMKX1TtWrx4
+         v7aXctLqIhGkBpsWdkW1OYpg9jIGRQ/qN/N6pq9rSTFPjw4Sq44ckA+rBU/o8WAGVI1c
+         IWMg==
+X-Forwarded-Encrypted: i=1; AJvYcCVIthuSkCtVYdwlIaRmdo4FnapNHEmCz9uxEEn/yeDYnH+EmUbGbwvR2vbfwL73z81aDbTPbKAQCnA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyH78hsfOsbS2UnmpMMCyYzK/Ss2hy0NTohpIcH/oK/ttIeD3z1
+	wh+GbPa9sKaEKaIctIvDeOJFohjjQD0Zwz1Wcqd+vWczJVas8v2slSkXxxmRVbVvT3HMpllMKiy
+	udYXshzxMjIkJYH3t8UqKqj/sRXglSWEHt6DL056G6hr1n2BQOg==
+X-Gm-Gg: ASbGncvKqkC34zcN0+aSOEnsx75+JLHVGfzhc/UojfTMBF6iCuNMvBMANm8THl+kwhb
+	T71mGHI8F/xfH3V5Ov3MP1WRpGi0D5zgMwfDBxSJjdxHuWx3PFZte3/jVOAfqalyZdgOQyJw=
+X-Google-Smtp-Source: AGHT+IHk98Kf7OM+ZBtDPuup4OOy0upl2rnDixUREr43ZTUaabOIIjtlaFd/yhcsCMWeQUv7LYZQFV7Kq2SJw9Avw3o=
+X-Received: by 2002:a05:6122:4891:b0:518:7ab7:afbc with SMTP id
+ 71dfb90a1353d-51b75d3f1a1mr41957018e0c.7.1736189011943; Mon, 06 Jan 2025
+ 10:43:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250105193628.296350-11-tomasz.pakula.oficjalny@gmail.com>
+References: <20241231131047.1757434-2-ukaszb@chromium.org> <20250103233407.4001046-1-gwendal@chromium.org>
+ <2025010438-canopener-renounce-4a28@gregkh>
+In-Reply-To: <2025010438-canopener-renounce-4a28@gregkh>
+From: Gwendal Grignou <gwendal@chromium.org>
+Date: Mon, 6 Jan 2025 10:43:20 -0800
+Message-ID: <CAPUE2usEN1OZ-=A19PH2yx3tCM1aNnXqNZt3stvgWZod7GxW=w@mail.gmail.com>
+Subject: Re: [PATCH] driver/platform/chrome: Update cros_ec_trace with new
+ USCI commands
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: ukaszb@chromium.org, abhishekpandit@chromium.org, bleung@chromium.org, 
+	chrome-platform@lists.linux.dev, dmitry.baryshkov@linaro.org, 
+	heikki.krogerus@linux.intel.com, jthies@google.com, linux-usb@vger.kernel.org, 
+	pholla@chromium.org, tzungbi@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Tomasz,
+On Sat, Jan 4, 2025 at 12:13=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org=
+> wrote:
+>
+> On Fri, Jan 03, 2025 at 03:34:07PM -0800, Gwendal Grignou wrote:
+> > Add this patch to "platform/chrome: Update ChromeOS EC header for UCSI"
+>
+> I do not understand this changelog text, sorry.  How can you "add"
+> something to an existing change?
+>
+> > to add the new commands form cros_ec_commands.h in the tracer so that
+> > they are nicely decoded. Enable the tracer with:
+> > cd /sys/kernel/debug/tracing
+> > echo 1 > events/cros_ec/enable
+> > echo 1 > tracing_on
+> > cat trace_pipe
+>
+> We don't need to document how to enable a tracepoint here in the
+> changelog, right?  That's going to get lost and why is this new one
+> somehow special?
+>
+> confused,
+Sorry, I did not use `git send-email` appropriately: the code snippet
+inside the email was not meant to be a standalone patch, but to be
+added to patch v12 1/2 "platform/chrome: Update ChromeOS EC header for
+UCSI".
+If this is too late, that's fine; I will send a proper kernel patch
+through the chrome-platform@lists.linux.dev mailing list.
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on hid/for-next]
-[also build test ERROR on linus/master v6.13-rc6 next-20241220]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Tomasz-Paku-a/HID-pidff-Convert-infinite-length-from-Linux-API-to-PID-standard/20250106-033931
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git for-next
-patch link:    https://lore.kernel.org/r/20250105193628.296350-11-tomasz.pakula.oficjalny%40gmail.com
-patch subject: [PATCH v2 10/10] HID: Add hid-universal-pidff driver and supported device ids
-config: s390-allmodconfig (https://download.01.org/0day-ci/archive/20250107/202501070200.pA9ifqd5-lkp@intel.com/config)
-compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250107/202501070200.pA9ifqd5-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501070200.pA9ifqd5-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/hid/hid-universal-pidff.c:11:
-   In file included from include/linux/device.h:32:
-   In file included from include/linux/device/driver.h:21:
-   In file included from include/linux/module.h:19:
-   In file included from include/linux/elf.h:6:
-   In file included from arch/s390/include/asm/elf.h:181:
-   In file included from arch/s390/include/asm/mmu_context.h:11:
-   In file included from arch/s390/include/asm/pgalloc.h:18:
-   In file included from include/linux/mm.h:2223:
-   include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     505 |                            item];
-         |                            ~~~~
-   include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     512 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/vmstat.h:518:36: warning: arithmetic between different enumeration types ('enum node_stat_item' and 'enum lru_list') [-Wenum-enum-conversion]
-     518 |         return node_stat_name(NR_LRU_BASE + lru) + 3; // skip "nr_"
-         |                               ~~~~~~~~~~~ ^ ~~~
-   include/linux/vmstat.h:524:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
-     524 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~ ^
-     525 |                            NR_VM_NUMA_EVENT_ITEMS +
-         |                            ~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/hid-universal-pidff.c:90:16: error: incompatible function pointer types assigning to 'void (*)(struct hid_device *, __u32)' (aka 'void (*)(struct hid_device *, unsigned int)') from 'int (struct hid_device *, __u32)' (aka 'int (struct hid_device *, unsigned int)') [-Wincompatible-function-pointer-types]
-      90 |         init_function = hid_pidff_init_with_quirks;
-         |                       ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/hid/hid-universal-pidff.c:97:8: error: assigning to 'int' from incompatible type 'void'
-      97 |         error = init_function(hdev, id->driver_data);
-         |               ^ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   4 warnings and 2 errors generated.
-
-
-vim +90 drivers/hid/hid-universal-pidff.c
-
-    66	
-    67	
-    68	/*
-    69	 * Check if the device is PID and initialize it
-    70	 * Add quirks after initialisation
-    71	 */
-    72	static int universal_pidff_probe(struct hid_device *hdev,
-    73					 const struct hid_device_id *id)
-    74	{
-    75		int error;
-    76		error = hid_parse(hdev);
-    77		if (error) {
-    78			hid_err(hdev, "HID parse failed\n");
-    79			goto err;
-    80		}
-    81	
-    82		error = hid_hw_start(hdev, HID_CONNECT_DEFAULT & ~HID_CONNECT_FF);
-    83		if (error) {
-    84			hid_err(hdev, "HID hw start failed\n");
-    85			goto err;
-    86		}
-    87	
-    88		// Check if HID_PID support is enabled
-    89		void (*init_function)(struct hid_device *, __u32);
-  > 90		init_function = hid_pidff_init_with_quirks;
-    91	
-    92		if (!init_function) {
-    93			hid_warn(hdev, "HID_PID support not enabled!\n");
-    94			return 0;
-    95		}
-    96	
-  > 97		error = init_function(hdev, id->driver_data);
-    98		if (error) {
-    99			hid_warn(hdev, "Force Feedback initialization failed\n");
-   100			goto err;
-   101		}
-   102	
-   103		hid_info(hdev, "Universal pidff driver loaded sucesfully!");
-   104	
-   105		return 0;
-   106	err:
-   107		return error;
-   108	}
-   109	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Gwendal.
+>
+> greg k-h
 
