@@ -1,118 +1,179 @@
-Return-Path: <linux-usb+bounces-19027-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19028-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E7E0A02629
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 14:08:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9948A02681
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 14:25:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AFBA1885515
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 13:08:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C942164A9E
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 13:25:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA751DDA32;
-	Mon,  6 Jan 2025 13:08:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D6071DD885;
+	Mon,  6 Jan 2025 13:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUDeXyN1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LHmUlm+e"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BA827726;
-	Mon,  6 Jan 2025 13:08:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29581D90C5;
+	Mon,  6 Jan 2025 13:25:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736168899; cv=none; b=KUy1X2zf3QMINTwHUfi9h77hi664qKnHXqYEKkHx05TErijOZkWhv1BxHUefPNGIHfdYH0C1wAjlxqmzz193kGRtDaLiXtLqO64htc1vGS48dhf0DkWMpFBysollnHxdan7KbwJCwWCL40XCQw4EJvvvPeD+GSnxC5dKfuRkHH8=
+	t=1736169926; cv=none; b=Uw4L1szVo9umkUplV2/W4zU9n8oXQzsmFwhCPrIdFyOaJWt9U1oPNNOrYYRDc/2ra5xDP/5syrYE9a0TWNb58jimWlh6MHxDNfmin/+CCNORDleqDEshX7dBq2xelf1SWIoL/Kytlhld9b2st6qBlUHHL927ukcQceOxWM8zJYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736168899; c=relaxed/simple;
-	bh=Odx9Mi78CnBl/areN0tvg+kryNXSjlbRYjIftgM5H8c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BWhRb14iTNUKnpkNl3cCTgzHEFOXOhiIilvx9GZZ0Hx2rcIFjUT0q4E7VteadJO2b1fEos5e4qNwHlXdodw/899ZWWpJNHT6HLOqvrqgCW2Cr0mGCIhtDAjApLBKvNvORTQ7v6TRLkXn5De2cCeCrTAr00cPJzT/5k86QUJC/0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUDeXyN1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997E8C4CED2;
-	Mon,  6 Jan 2025 13:08:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736168897;
-	bh=Odx9Mi78CnBl/areN0tvg+kryNXSjlbRYjIftgM5H8c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RUDeXyN1Jlhl/AxkbRlfAf2u8WA31or+eOCr5Y7MMHiOuy80W6WA+gJjc14yb/dAR
-	 jI8DFjz03bz/c3f6SivfQuByjI3oOnbsG8TTlZc0nyos/TjyLu57qMMbs35e/mdor2
-	 EU2DaplKu0ygrgNvJw4wXAfqU8teWx7y6WapfRtfU8vSQ9duGGrjTTZPc/6b1v5/+B
-	 mQjBpjmqRR99R1DWkCZhtnyDrJfO9TMRHSCDdUy/ANsEZym7aOAlBbDIMZxWcsMl44
-	 oDjFCT6tfN169qJdVEJu0ezMiXe0E/Wdgh01/WAieVnqtUh2OilVLu7egU3i1RnXN9
-	 4/nBKZmMrd5TQ==
-Date: Mon, 6 Jan 2025 13:08:09 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Raphael Gallais-Pou <rgallaispou@gmail.com>
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Niklas Cassel <cassel@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-spi@vger.kernel.org
-Subject: Re: [PATCH 0/6] Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
-Message-ID: <eec9caa0-0029-4774-842e-af1d1290ad97@sirena.org.uk>
-References: <20241229-update_pm_macro-v1-0-c7d4c4856336@gmail.com>
+	s=arc-20240116; t=1736169926; c=relaxed/simple;
+	bh=uBl5512cVeNFZuefqmHVTx+H9akHlDhOzIPkLzw5fdA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EDAy4ZDTf2+AQrXDSmfoRuvDWjD0irUoVyOmDC+Zwn6awURNsQ/p5VW0yxlggfL/bEfFyKw3zYk33Boe7Wa1klLIn/V3Nnaptx8juM1/yy2zVnONoCglt9dXB+0kcdvw9Ez2NqoDdzw77H21mYcu7gkkG6WVwlQgWo4W/hqL4S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LHmUlm+e; arc=none smtp.client-ip=209.85.210.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-71e19fee3b3so7524196a34.0;
+        Mon, 06 Jan 2025 05:25:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736169924; x=1736774724; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NCtxy8VnWn6v00HOQGhDAdAFl5aL18QqotBUE88uI+0=;
+        b=LHmUlm+eXCmnWi0aAFnHhVBE6A/xcnNb+R9kH5GMwvL6kMtZoMdzVr6Kd3sB8JK/rH
+         i+ltRqp9iLKxbIepNB8IMFINPouy+GBw2jGYNIbtvK8bFaiqzw531d02AM6M6VYX55pA
+         2AZXCKslhvepp8m03FF1x3OLYaGRwj/U0biEFojRrRQElP5P2oZM+JIUeqfEhswMUgtR
+         iTf2ctJMvH9ra2EDMa1a6EuorKufrfzlsqoklnv82xt/OppCQIIW6k/lDL/EMykPzWpF
+         +vJidmZUA22k00OONb07D+NlVaNDLowTqZuaFYID1C+4qQaqcIxEDLUcsDc8gKZcOlNz
+         d4TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736169924; x=1736774724;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NCtxy8VnWn6v00HOQGhDAdAFl5aL18QqotBUE88uI+0=;
+        b=kPOYCNeg9l6hdXwBNxiwhEuO6SoiVFUH4vPQKHc8n8nwXvOkjfC5Mu9Zckw6ZCMqkY
+         O2/Qsy39qsYe2UdKGv7WcVDrt1MrK1qjhtBm/P0jV2EwOIiuANylljfUVkOe5mge0CLW
+         Y3UBrwjJUHDRG1QilNQ+jTWqPIkv8e4dOzOJloRSk5Y+mK3TaRRkI5KQ7QnqWPwH3E3W
+         dLADMwsXcNazgosxV40fPFQ9zb0eSavOU7JVwvNiUtrxX/GEe/ooxf4bnHxWP6uhbQH/
+         c6jAyYKoUPEJkxYIE29BYkiX4o5zBXT+/DKBbCHk1hBaT/9VIpFiEAl0NoHJttlbu8FN
+         E12Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUetiuJzYjnboyvfPomWBEAPt8R3+5cEOyJ7/iTKKYqYJ3OWYwaXscd12/dyBQn4QbTdRmNAJxc@vger.kernel.org, AJvYcCWrAF+n+UsuZirwPKWHSY3s2NykDGVeyYonPKZ96CIvZbSzU6dPBQEPGELbWO8mOv0683rSuVRJDJtFoYU=@vger.kernel.org, AJvYcCXdewFbQNUmPJoibMAj/TvZ1prrS5q//XZ3ZbPvnq5fxfr4yofpOkB6uXICalwkfTfIyL6uZMRcZgVM@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx56SvF5erpmMveqiS3H/fjfad0LzXscKsRapbTAB53CG/99ab1
+	+Cby0HETcx8R+7ojaOtEbgubNZPX847aXcizZUtF52g1Kt6739rUYcrLxXwzPd2GIh8m4tBFZxt
+	CbtIFtf/LiUPQFW6MfCL9kzs+vW5WqF/VBE4=
+X-Gm-Gg: ASbGncuo+msWT48Iy1HcM9Ii8ZA/Nda5188EbF4IN2Mrj3HmAgCltOJZhbvx5+khjot
+	8VpX397utuFDaW4uxuOXvVr8QHKgXCLe12HDnS00=
+X-Google-Smtp-Source: AGHT+IHOBhu54wxIGAl4fimYKtLxwEtXtnkoANezwFKobTUkMnwxwy29o8BMhrGuwekMa5FoxE+i1RuqAGcTToJTUuA=
+X-Received: by 2002:a05:6870:55c6:b0:2a7:8c73:be33 with SMTP id
+ 586e51a60fabf-2a7fccc2847mr28932067fac.16.1736169923750; Mon, 06 Jan 2025
+ 05:25:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="emAp2yveWLVSOdEe"
-Content-Disposition: inline
-In-Reply-To: <20241229-update_pm_macro-v1-0-c7d4c4856336@gmail.com>
-X-Cookie: Do not pick the flowers.
-
-
---emAp2yveWLVSOdEe
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20250105125251.5190-1-joswang1221@gmail.com> <2025010520-pod-material-75c4@gregkh>
+In-Reply-To: <2025010520-pod-material-75c4@gregkh>
+From: Jos Wang <joswang1221@gmail.com>
+Date: Mon, 6 Jan 2025 21:25:17 +0800
+Message-ID: <CAMtoTm2jEWQHKp2hOO7ngG1KosqH4sxgG=fg7qoHqe7Ei5DuHQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] usb: pd: fix the SenderResponseTimer conform to specification
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: heikki.krogerus@linux.intel.com, dmitry.baryshkov@linaro.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Dec 29, 2024 at 12:32:39AM +0100, Raphael Gallais-Pou wrote:
-> Prevent the use of macros, and rely instead on kernel configuration for
-> power management.
->=20
-> This series makes the same change over six different drivers:
-> usb-st-dwc3, sdhci-st, st-spi-fsm, ahci_st, sti-dwmac, spi-st.
+On Sun, Jan 5, 2025 at 9:00=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org>=
+ wrote:
+>
+> On Sun, Jan 05, 2025 at 08:52:51PM +0800, joswang wrote:
+> > From: Jos Wang <joswang@lenovo.com>
+> >
+> > According to the USB PD3 CTS specification
+> > (https://usb.org/document-library/
+> > usb-power-delivery-compliance-test-specification-0/
+> > USB_PD3_CTS_Q4_2024_OR.zip), the requirements for
+>
+> Please put urls on one line so that they can be linked to correctly.
+>
 
-Is there any actual interaction between these changes?  In general you
-shouldn't combine patches for multiple subsystems into a single series
-unless there's some dependency or other interaction since it just
-complicates management of the patches.
+OK=EF=BC=8CThanks
 
---emAp2yveWLVSOdEe
-Content-Type: application/pgp-signature; name="signature.asc"
+> > tSenderResponse are different in PD2 and PD3 modes, see
+> > Table 19 Timing Table & Calculations. For PD2 mode, the
+> > tSenderResponse min 24ms and max 30ms; for PD3 mode, the
+> > tSenderResponse min 27ms and max 33ms.
+> >
+> > For the "TEST.PD.PROT.SRC.2 Get_Source_Cap No Request" test
+> > item, after receiving the Source_Capabilities Message sent by
+> > the UUT, the tester deliberately does not send a Request Message
+> > in order to force the SenderResponse timer on the Source UUT to
+> > timeout. The Tester checks that a Hard Reset is detected between
+> > tSenderResponse min and max=EF=BC=8Cthe delay is between the last bit o=
+f
+> > the GoodCRC Message EOP has been sent and the first bit of Hard
+> > Reset SOP has been received. The current code does not distinguish
+> > between PD2 and PD3 modes, and tSenderResponse defaults to 60ms.
+> > This will cause this test item and the following tests to fail:
+> > TEST.PD.PROT.SRC3.2 SenderResponseTimer Timeout
+> > TEST.PD.PROT.SNK.6 SenderResponseTimer Timeout
+> >
+> > Set the SenderResponseTimer timeout to 27ms to meet the PD2
+> > and PD3 mode requirements.
+> >
+> > Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Jos Wang <joswang@lenovo.com>
+> > ---
+> >  include/linux/usb/pd.h | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> > diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
+> > index 3068c3084eb6..99ca49bbf376 100644
+> > --- a/include/linux/usb/pd.h
+> > +++ b/include/linux/usb/pd.h
+> > @@ -475,7 +475,7 @@ static inline unsigned int rdo_max_power(u32 rdo)
+> >  #define PD_T_NO_RESPONSE     5000    /* 4.5 - 5.5 seconds */
+> >  #define PD_T_DB_DETECT               10000   /* 10 - 15 seconds */
+> >  #define PD_T_SEND_SOURCE_CAP 150     /* 100 - 200 ms */
+> > -#define PD_T_SENDER_RESPONSE 60      /* 24 - 30 ms, relaxed */
+> > +#define PD_T_SENDER_RESPONSE 27      /* 24 - 30 ms */
+>
+> Why 27 and not 30?  The comment seems odd here, right?
+>
 
------BEGIN PGP SIGNATURE-----
+1=E3=80=81As mentioned in the commit message, "TEST.PD.PROT.SRC.2
+Get_Source_Cap No Request" test item, after receiving the
+Source_Capabilities Message sent by the UUT, the tester deliberately
+does not send a Request Message in order to force the SenderResponse
+timer on the Source UUT to timeout. The Tester checks that a Hard
+Reset is detected between tSenderResponse min and max. Since it takes
+time for the tcpm framework layer to initiate a Hard Reset (writing
+the PD PHY register through I2C operation), setting tSenderResponse to
+30ms (PD2.0 spec max) will cause this test item to fail in PD2.0 mode.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmd71bkACgkQJNaLcl1U
-h9AGHwf/V/ekmXWwVL15xDEBbZZ+uqPpz0aLMa1v6gvSRA3S9ugHT9vW0elxEGf0
-2+0EU7GuIo88DOYxKpOYDd1XHk6xkBI7Whic7ijl1+LK8Kq6Rec0zpzlsv7Rcja1
-TmoHi68uCDrHguH5BH94YBKZVfT2U0gSc20ljleO66MKEJQEYob46c3649Gbpxwl
-UPiwHVuWa6eMXfzJsS+vZgMEE58Q57GLiVmbZcN0u0FC1QM83kVDExYTCXuTtwx0
-g5fiTrBVg4O93cd003jWflIlqao9U/nMREgX5M9/CytGX32MeXIPLlt73A15itVF
-DQJXk1CapG8Sm0o+2Y/tH5c6IVJqFA==
-=p10y
------END PGP SIGNATURE-----
+2=E3=80=81The comments here are indeed unreasonable, how about modifying it=
+ like this?
++#define PD_T_SENDER_RESPONSE 27 /* PD2.0 spec 24ms -30ms, PD3.1 spec
+27ms - 33ms, setting 27ms meets the requirements of PD2.0 and PD3.1.
+*/
 
---emAp2yveWLVSOdEe--
+3=E3=80=81This patch was originally discussed here
+(https://patchwork.kernel.org/project/linux-usb/patch/20241222105239.2618-2=
+-joswang1221@gmail.com/)
+Dmitry Baryshkov suggested splitting the "[v2,2/2] usb: typec: tcpm:
+fix the sender response time issue" patch and submitting it
+separately.
+(1) Set SenderResponse timer timeout to 27ms
+(2) Make timeout depend on the PD version
+(3) Make timeouts configurable via DT
+Actually, I would prefer to merge (1) and (2) and submit them. Do you
+have any better suggestions?
+
+> thanks,
+>
+> greg k-h
 
