@@ -1,56 +1,74 @@
-Return-Path: <linux-usb+bounces-19026-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19027-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D297A025FE
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 13:51:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E7E0A02629
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 14:08:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D57511881C33
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 12:51:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AFBA1885515
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 13:08:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAB071D95A2;
-	Mon,  6 Jan 2025 12:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA751DDA32;
+	Mon,  6 Jan 2025 13:08:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mUrR1IPa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUDeXyN1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D07B8F6D;
-	Mon,  6 Jan 2025 12:49:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44BA827726;
+	Mon,  6 Jan 2025 13:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736167751; cv=none; b=TGl+2zJ9WHSQkeTHwr3L3akI+gDxWTGY3rizCfbvQGpOMzUvXg4/Gs5U6GY1E5gAzj8GkQ+6YYqPredddT11cDmhbezBTIFJmLrFjactJCcL//y+AZMiDPEc6I1OkoImQTgGcywQHywI4tCKZHo3zWz8qPfLVmbceT5LeOk97oA=
+	t=1736168899; cv=none; b=KUy1X2zf3QMINTwHUfi9h77hi664qKnHXqYEKkHx05TErijOZkWhv1BxHUefPNGIHfdYH0C1wAjlxqmzz193kGRtDaLiXtLqO64htc1vGS48dhf0DkWMpFBysollnHxdan7KbwJCwWCL40XCQw4EJvvvPeD+GSnxC5dKfuRkHH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736167751; c=relaxed/simple;
-	bh=L/DmcaY6fYi9UmqR02I9I25wq9RHQzwUz9qs+0Bb64Y=;
+	s=arc-20240116; t=1736168899; c=relaxed/simple;
+	bh=Odx9Mi78CnBl/areN0tvg+kryNXSjlbRYjIftgM5H8c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CWTlFSbg/r1wuThQlkW+aMBnzsTHolkF4cMQv9KPdFO5yIUWnDUUpBIcqd6gB47p9KX/oMXJmx/K5l4p1c8Ct83CB4v05EGaTu/VsJ2w4tu9/XXTirj/xsxFSE0mVp4hK03E1jJOuEcJ6bXDwLavYHC6fYtMVHb/f3NgR3bfB1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mUrR1IPa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EC0DC4CED2;
-	Mon,  6 Jan 2025 12:49:09 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=BWhRb14iTNUKnpkNl3cCTgzHEFOXOhiIilvx9GZZ0Hx2rcIFjUT0q4E7VteadJO2b1fEos5e4qNwHlXdodw/899ZWWpJNHT6HLOqvrqgCW2Cr0mGCIhtDAjApLBKvNvORTQ7v6TRLkXn5De2cCeCrTAr00cPJzT/5k86QUJC/0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUDeXyN1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997E8C4CED2;
+	Mon,  6 Jan 2025 13:08:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736167750;
-	bh=L/DmcaY6fYi9UmqR02I9I25wq9RHQzwUz9qs+0Bb64Y=;
+	s=k20201202; t=1736168897;
+	bh=Odx9Mi78CnBl/areN0tvg+kryNXSjlbRYjIftgM5H8c=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mUrR1IPaY3QK09AhdUhGMX8BKGFpdQLOuKDIandMJRKfeXwAQPIwXro7L3QSobMEu
-	 KX80zMdDw9wQc+MdtvidqaPKkCt807hGkvhDYabb+iLT+cAo8aVsXy+7WZ0DKnQkt2
-	 446kO42f3hLd8Tk+Z3HB3KYojbXPW2tNcdSaTXhOnwKBdVBkcauVzvspzyro1pe6Tb
-	 ien027DHaxZ3grFBNAZTpWcCo4aJvPMJ3DetPryYuOaeoKqHr+Zo6mmFt9wmnCTI9M
-	 WZ76wPia+u61S+XkB3nLmKPajGrFsQCbaE8GHWnnYMisPeMBbF+TnJYW4FUkf0FhnG
-	 FB4DDU71DX5QQ==
-Date: Mon, 6 Jan 2025 12:49:06 +0000
+	b=RUDeXyN1Jlhl/AxkbRlfAf2u8WA31or+eOCr5Y7MMHiOuy80W6WA+gJjc14yb/dAR
+	 jI8DFjz03bz/c3f6SivfQuByjI3oOnbsG8TTlZc0nyos/TjyLu57qMMbs35e/mdor2
+	 EU2DaplKu0ygrgNvJw4wXAfqU8teWx7y6WapfRtfU8vSQ9duGGrjTTZPc/6b1v5/+B
+	 mQjBpjmqRR99R1DWkCZhtnyDrJfO9TMRHSCDdUy/ANsEZym7aOAlBbDIMZxWcsMl44
+	 oDjFCT6tfN169qJdVEJu0ezMiXe0E/Wdgh01/WAieVnqtUh2OilVLu7egU3i1RnXN9
+	 4/nBKZmMrd5TQ==
+Date: Mon, 6 Jan 2025 13:08:09 +0000
 From: Mark Brown <broonie@kernel.org>
-To: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+To: Raphael Gallais-Pou <rgallaispou@gmail.com>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Liam Girdwood <lgirdwood@gmail.com>, linux-usb@vger.kernel.org,
-	linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: omap: Use devm_regulator_get_optional()
-Message-ID: <c6925d52-d662-42b3-8ca6-f238c77736a4@sirena.org.uk>
-References: <20241231164456.262581-1-robh@kernel.org>
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+	linux-mtd@lists.infradead.org, linux-ide@vger.kernel.org,
+	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-spi@vger.kernel.org
+Subject: Re: [PATCH 0/6] Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
+Message-ID: <eec9caa0-0029-4774-842e-af1d1290ad97@sirena.org.uk>
+References: <20241229-update_pm_macro-v1-0-c7d4c4856336@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -58,38 +76,43 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="fmIUCIpewOZyBBpT"
+	protocol="application/pgp-signature"; boundary="emAp2yveWLVSOdEe"
 Content-Disposition: inline
-In-Reply-To: <20241231164456.262581-1-robh@kernel.org>
+In-Reply-To: <20241229-update_pm_macro-v1-0-c7d4c4856336@gmail.com>
 X-Cookie: Do not pick the flowers.
 
 
---fmIUCIpewOZyBBpT
+--emAp2yveWLVSOdEe
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Dec 31, 2024 at 10:44:56AM -0600, Rob Herring (Arm) wrote:
-> The 'vbus-supply' regulator is optional, so use
-> devm_regulator_get_optional() instead of checking for property presence
-> first.
+On Sun, Dec 29, 2024 at 12:32:39AM +0100, Raphael Gallais-Pou wrote:
+> Prevent the use of macros, and rely instead on kernel configuration for
+> power management.
+>=20
+> This series makes the same change over six different drivers:
+> usb-st-dwc3, sdhci-st, st-spi-fsm, ahci_st, sti-dwmac, spi-st.
 
-Is it actually optional?  The name suggests it's likely to be
-required...
+Is there any actual interaction between these changes?  In general you
+shouldn't combine patches for multiple subsystems into a single series
+unless there's some dependency or other interaction since it just
+complicates management of the patches.
 
---fmIUCIpewOZyBBpT
+--emAp2yveWLVSOdEe
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmd70UEACgkQJNaLcl1U
-h9D+Owf+N8G6o2AjREzuYioYppfaN7F6nLhmZbtrbSqov24LoaSSFrO4LaoJNnOP
-rEtz5ct7hBj/c8dvMGI7IsLr1oiU1Mk3WpCmoc3WImNKrC5P3lP0u+wxz7WBkjsa
-9KEIg9j0hT2JoWnQOt8rhGEvUopEYPrkMRrDNjtGPe0Vi63BGTmQFZ6Q+bZ3fUsA
-Hv0aRWbkmBYU1kdNnMbM1p5z6AOpra3EG6yDthRZWyF/gYZKh4KI9jQWFLmcJoak
-0Fscck5k0hPJuShSOSIJM8lCAjrd9xAgNXVN0gahnXXH4ce39BAjrrdTfyEU6Vhm
-BKqJ7mocdBTWVnXs02Bh8UrNsz+Xyg==
-=oUfN
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmd71bkACgkQJNaLcl1U
+h9AGHwf/V/ekmXWwVL15xDEBbZZ+uqPpz0aLMa1v6gvSRA3S9ugHT9vW0elxEGf0
+2+0EU7GuIo88DOYxKpOYDd1XHk6xkBI7Whic7ijl1+LK8Kq6Rec0zpzlsv7Rcja1
+TmoHi68uCDrHguH5BH94YBKZVfT2U0gSc20ljleO66MKEJQEYob46c3649Gbpxwl
+UPiwHVuWa6eMXfzJsS+vZgMEE58Q57GLiVmbZcN0u0FC1QM83kVDExYTCXuTtwx0
+g5fiTrBVg4O93cd003jWflIlqao9U/nMREgX5M9/CytGX32MeXIPLlt73A15itVF
+DQJXk1CapG8Sm0o+2Y/tH5c6IVJqFA==
+=p10y
 -----END PGP SIGNATURE-----
 
---fmIUCIpewOZyBBpT--
+--emAp2yveWLVSOdEe--
 
