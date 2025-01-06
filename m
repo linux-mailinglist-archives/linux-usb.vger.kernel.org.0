@@ -1,665 +1,250 @@
-Return-Path: <linux-usb+bounces-19012-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19013-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C728DA01E3A
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 04:34:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 77C37A01EC3
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 06:17:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3459A3A1A36
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 03:34:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F2F2B3A37A1
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 05:17:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93751917E9;
-	Mon,  6 Jan 2025 03:34:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1F001940A2;
+	Mon,  6 Jan 2025 05:17:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AudNEtMu"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="rFgfgq4+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4773F7080B
-	for <linux-usb@vger.kernel.org>; Mon,  6 Jan 2025 03:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C324171D2
+	for <linux-usb@vger.kernel.org>; Mon,  6 Jan 2025 05:17:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736134440; cv=none; b=QKvqoVL6zgf4SjQKXdX1kjRzxgyrIqTjg0Ahmqx4WUPCEg8136YnpCKHCLNxQW2b2TG3YL91zQLTixSzgOVsatoONMQLqBZDe3Ndl4GomhBiSvPU7FiiM6Yy/y9zr2horL7ofwmwKmRKd2s0rkXnJI7ygGjnsVorWsAyr5YTLJw=
+	t=1736140643; cv=none; b=f2ny9c9+xO6HEKuRh2iplUKrn3EgsV2Ky3yBhkhY/PMYdAE1UCVaW3oRFGfnx0lMWEwr1xZAMbWw93tlBgUf3ufDkVlnLCzzij2My5kykbAZ1+i3Ry5fe+t4aARguIsWAL8IFMy8+F+bVlhSica+V0jFyMet42QNZUH8nAzUD/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736134440; c=relaxed/simple;
-	bh=X7BNCRu5UAROhoOwa5ppwFMHFfL5H8jnMYKPP5bBnpA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u5V+gZE5BrGkOtcFVBwziQpRGNfPlTypZvv1J2A2IBjFs12CYr8TFkml1wOHebIwCGUC3Ilw8TeP7gk+u1t3klwb6HUQYJx63tELrJ9CHdPuPHWWYiHxxuhZ9jRqaEO6TlJS5Wc76bxWfpX4gXxxmPBctgwUmZh8ovYFhzW1WdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AudNEtMu; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-300479ca5c6so144427061fa.3
-        for <linux-usb@vger.kernel.org>; Sun, 05 Jan 2025 19:33:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736134434; x=1736739234; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kzwm9/S2LDeM74xbsL4nFsqFRfr/0gBz/oeeZ/g9Uyw=;
-        b=AudNEtMulrvA1v7v/Y+CPKwpBbGxTUxxCD6NxAvKJfyN5pgmb8ma6jBGoRCGGY/+H4
-         O0d0ONms7bQKnp5R9qEvQwQT/Duj/Kn25tIIdKw7rSGdtURbQS4lDQmiVb72jNTPjsgB
-         a0Dl8t/Pax2y2WHr7gB/ptRQEHn8ziPy1Y4Y3NbNMdzp7OKi3RfncuoMZ1R7Zx2keBmv
-         MA1tnPGbRohugveGsrpn5na2RgxJBcuNe9CrOdoYJP+SKTEor59tJXJEsyaF1B+VCzcL
-         gQAB2RxZa360Fd24f59WJxhqXjByD+xhggKom2rQhxkKkPzP2oZOCpfdtSsBUOL5u08E
-         LoFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736134434; x=1736739234;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kzwm9/S2LDeM74xbsL4nFsqFRfr/0gBz/oeeZ/g9Uyw=;
-        b=ABVTnjCK+0Gm/rMWQyHlawZkcFmfDnEFdr4+WvbIGXU1tRCdSiJS/qeUiN7ygiuNQ5
-         bqrYTyDtTHHt7r/d620JvAb/mHjDwC2HmupgryHJfmZ94K1owpWRtKXqXD8/6k9w2wiq
-         9Sc8n+hqctp32BMzWTr5lenPzKSj1dVgcrTxgEL8/kSzX79a1bqN/a0l7cJJ6pFVko0m
-         T47NoYNAOc7HWl6Hbw9YG9ed7DvLQuYmVD7FNExCF33ILe59BnVvAlaf75AnMgK2+2uK
-         xii14fXbGzlqENuOK/goAcDl2EHX0XMGfFha+Bju+UO+NosBU1ZjyfTpXzyRabcnWm5U
-         iBGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGuNs1U8siS5kjll9gQvrqHfOz7chplelOqVYpDSyE3PAURyD8jO9SFQiJqm4JXw06dgag9KIlIq8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMxdNEwXXrXRkdPWQje9dh9xkEM0vQqkSjSM2qhSPNY1hmV5L7
-	1o+6W6RhpJaC8dPq092CKNuwuOKbEJIER3GHV/jCQ9SiY5LY5YdCbKxin9Hqczs=
-X-Gm-Gg: ASbGncsRkBoSUTUpySgOf4dxdTCa4zHdvXH01ym8qEYFH4Ymxs4bgpILUZOEb72lm83
-	VJNsnhKDDjoCfy7mwNm20/FujbjnjWLFJLI+BCnM2eF+YDeZC5aNn4K0oU21vtn/a+FIPdmR/8+
-	qcKsz6W0OXwaeAShNCWvwB6Vv9YDJHyGYdEx75JN7nPb+137wRc/9J1ZK2cRu/HyJI6vAkoF79u
-	YZRT7Zol37lNRvdkgbWfKNNyaf8lAs21O/5ndsbLrpwyBb9h6tCHjGArJHvFGbGT/SCYSzUoU1I
-	hr86gvZJ+0rLWU3DJ2W/5zKTrvYcBhof57lh
-X-Google-Smtp-Source: AGHT+IH3+zXH7aD7s8gniirv1TrhLdqMwayzdv9SoFpoAUeNYMvGHxbNhXT4ZMdyv365Ver5B4pCQA==
-X-Received: by 2002:a2e:a991:0:b0:300:33b1:f0e1 with SMTP id 38308e7fff4ca-304684190bemr183566181fa.0.1736134434250;
-        Sun, 05 Jan 2025 19:33:54 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3045ad9bb7asm59277751fa.46.2025.01.05.19.33.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2025 19:33:52 -0800 (PST)
-Date: Mon, 6 Jan 2025 05:33:50 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: andersson@kernel.org, bryan.odonoghue@linaro.org, conor+dt@kernel.org, 
-	devicetree@vger.kernel.org, gregkh@linuxfoundation.org, hdegoede@redhat.com, 
-	heikki.krogerus@linux.intel.com, ilpo.jarvinen@linux.intel.com, konradybcio@kernel.org, 
-	krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, nikita@trvn.ru, 
-	platform-driver-x86@vger.kernel.org, robh@kernel.org, sre@kernel.org
-Subject: Re: [PATCH 3/5] usb: typec: ucsi: add Huawei Matebook E Go
- (sc8280xp) ucsi driver
-Message-ID: <h4icxzxk5fzgkdhhk6disrervqmb4dqe3xlc432k7pgyzsk77u@pyfrrtyjslpo>
-References: <3q4xpa6gyw5sam4qr7glg2b25bzwgunxwhfqjogqw3wqocphph@5jdbkh6pkxic>
- <20241229090547.51958-1-mitltlatltl@gmail.com>
+	s=arc-20240116; t=1736140643; c=relaxed/simple;
+	bh=smFa+R0lA0eglsmslLQWaGINza0VEKTPSSydYLeReMY=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:In-Reply-To:
+	 Content-Type:References; b=BTH26oSvrL+maP3RHZGxr2gEbEaO5vAZi+S4SIs/fCFqUYJXBfCwg4l2UMyyeQljoy7jEPtuLfE8gPhH0/bouDXpHl085jcYc9D53ipexXCvS+m08KN7GDADzna/aHhmtZ/MhWocYcwXnkkQlQMroDRrXEPNOA7lu4w2zG6ZVL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=rFgfgq4+; arc=none smtp.client-ip=203.254.224.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250106051714epoutp032c1a5775ecb9bd4051faffd78c15547c~YArVOFP-m0851808518epoutp03M
+	for <linux-usb@vger.kernel.org>; Mon,  6 Jan 2025 05:17:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250106051714epoutp032c1a5775ecb9bd4051faffd78c15547c~YArVOFP-m0851808518epoutp03M
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1736140634;
+	bh=GcjVrca95vrRUMZ3UEOSA4Z1WO2Iw5OjVo3XFBaamwU=;
+	h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
+	b=rFgfgq4+V9bhu/6K2gtarUEKtHza7d8W13/EIMUkA3IezWkUO2vSnrvAp/VLZwgPQ
+	 LyvByNoLRNYapk1g5fV0YF5XUutdG73+xb/YoqomYL92WP8KhLXP8gUPds0k1D05dK
+	 DABxWoLfBEVu3ZP5IxqBqV8HPwhuqg9Nuk8mk2dg=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+	20250106051713epcas5p4e1cdb81bb424e7a55358ef59223c3c27~YArUTWoIx0222402224epcas5p4D;
+	Mon,  6 Jan 2025 05:17:13 +0000 (GMT)
+Received: from epsmges5p1new.samsung.com (unknown [182.195.38.179]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4YRMqq35ftz4x9QF; Mon,  6 Jan
+	2025 05:17:11 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmges5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	AD.45.20052.7576B776; Mon,  6 Jan 2025 14:17:11 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250106051710epcas5p169a6504f572020de576d233594361d86~YArR9MnqV1192111921epcas5p1K;
+	Mon,  6 Jan 2025 05:17:10 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20250106051710epsmtrp1e5c3a5da5e4263267fa45b9986be6c03~YArR8BxiT0116101161epsmtrp11;
+	Mon,  6 Jan 2025 05:17:10 +0000 (GMT)
+X-AuditID: b6c32a49-3fffd70000004e54-80-677b6757b54d
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	EA.64.18729.6576B776; Mon,  6 Jan 2025 14:17:10 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250106051707epsmtip1c27e429c4d721a4a24fa0a6ef70aa526~YArPcNGE42552925529epsmtip1C;
+	Mon,  6 Jan 2025 05:17:07 +0000 (GMT)
+Message-ID: <ad54dc65-5ad5-4122-8105-da8f578fc30c@samsung.com>
+Date: Mon, 6 Jan 2025 10:47:06 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
+	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	stable@vger.kernel.org
+Content-Language: en-US
+In-Reply-To: <6629115f-5208-42fe-8bf4-25d808129741@samsung.com>
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241229090547.51958-1-mitltlatltl@gmail.com>
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrFJsWRmVeSWpSXmKPExsWy7bCmlm54enW6wdbnohbTp21ktXhzdRWr
+	xYN529gs7iyYxmRxavlCJovmxevZLCbt2cpicffhDxaLdW/Ps1pc3jWHzWLRslZmiy1tV5gs
+	Ph39z2rRuOUuq8WqzjksFpe/72S2WLDxEaPFpIOiDkIem1Z1snnsn7uG3ePYi+PsHv1/DTwm
+	7qnz6NuyitHj8ya5APaobJuM1MSU1CKF1Lzk/JTMvHRbJe/geOd4UzMDQ11DSwtzJYW8xNxU
+	WyUXnwBdt8wcoCeUFMoSc0qBQgGJxcVK+nY2RfmlJakKGfnFJbZKqQUpOQUmBXrFibnFpXnp
+	enmpJVaGBgZGpkCFCdkZKw7OZS3oUq343drG2sC4QK6LkZNDQsBE4unlXrYuRi4OIYHdjBJP
+	br9kgXA+MUp83/WHGcL5xiixZ/8EdpiW6f+boVr2Mkp86F/BCOG8ZZRoeNjCCFLFK2An8Wnf
+	SjCbRUBFomdXMzNEXFDi5MwnLCC2qIC8xP1bM8CmCgtkSnyd3gVUz8HBJmAo8eyEDUhYREBD
+	4uXRW2AnMQusYZa4+QXkWE4gR1zi1pP5TCA2p4C9xMa5mxgh4vISzVtng50tIfCCQ6Jj11IW
+	iLNdJC5fuM8EYQtLvDq+BeodKYmX/W1QdrLEnklfoOwMiUOrDjFD2PYSqxecYQU5jllAU2L9
+	Ln2IXXwSvb+fMIGEJQR4JTrahCCqVSVONV5mg7ClJe4tucYKYXtInGr7zg4Jq5XMErfWLmab
+	wKgwCylYZiF5bRaSd2YhbF7AyLKKUTK1oDg3PbXYtMAwL7UcHuPJ+bmbGMGJXMtzB+PdBx/0
+	DjEycTAeYpTgYFYS4c3SqEwX4k1JrKxKLcqPLyrNSS0+xGgKjJ+JzFKiyfnAXJJXEm9oYmlg
+	YmZmZmJpbGaoJM77unVuipBAemJJanZqakFqEUwfEwenVAPT7MbGS++9JKU9gwR8j58xeJ17
+	4gGvZ19God3DmYkmGwpzOv4eyJOZdLnQoNnKMG/tZzv54FeiTu+ezHz+9qv7cr03opvuMrj1
+	m3ZcrtzDGvF3pW2FCH9GftDJj+Wi/z6c4qpMerZn2jORH4bBnTcqWy8k+7cbNDR7XFh2Idvd
+	/d5dlrtXd2SFyiYZ7Wl7tS3DPPjzi3nV2fM/OvfJVK54uvTB1s58jthDGpwxSak1YdHMr5Yp
+	TPq2b67aL9maSIGtLxkOLb2idJ7R55/WZrWPVnsaZznxJsjVSX+Z+8cx6vHtbC3BFc//7BVf
+	MuGc1Imbe49IiNtdnb9owi6ZHPYXR8tmbOaX5rKV3Pfv2JXZSizFGYmGWsxFxYkAaYViNG0E
+	AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGIsWRmVeSWpSXmKPExsWy7bCSnG5YenW6weT54hbTp21ktXhzdRWr
+	xYN529gs7iyYxmRxavlCJovmxevZLCbt2cpicffhDxaLdW/Ps1pc3jWHzWLRslZmiy1tV5gs
+	Ph39z2rRuOUuq8WqzjksFpe/72S2WLDxEaPFpIOiDkIem1Z1snnsn7uG3ePYi+PsHv1/DTwm
+	7qnz6NuyitHj8ya5APYoLpuU1JzMstQifbsErowVB+eyFnSpVvxubWNtYFwg18XIySEhYCIx
+	/X8zWxcjF4eQwG5Giaa9G5khEtISr2d1MULYwhIr/z1nhyh6zSjx+dA2FpAEr4CdxKd9K8GK
+	WARUJHp2NTNDxAUlTs58AlYjKiAvcf/WDHYQW1ggU+LeqZlA2zg42AQMJZ6dsAEJiwhoSLw8
+	eosFZD6zwBpmiV8zOhghlq1klrjc1QI2iFlAXOLWk/lMIDangL3ExrmbGCHiZhJdW7ugbHmJ
+	5q2zmScwCs1CcscsJO2zkLTMQtKygJFlFaNkakFxbnpusWGBYV5quV5xYm5xaV66XnJ+7iZG
+	cNRqae5g3L7qg94hRiYOxkOMEhzMSiK8WRqV6UK8KYmVValF+fFFpTmpxYcYpTlYlMR5xV/0
+	pggJpCeWpGanphakFsFkmTg4pRqY0nLqjyy95vOkes8Z5rQur+WZm94w5LJ0sG9QP/vAXF4k
+	rGbZqbut2p9YPN4fmVxWJn55yhKGsH3Ba26mc67+GbtzmtGVh7JueZx7tl+V+7XUY9pxjaNy
+	nbmXXnwx0betv//uSmhl4zZN9b3N9Q+PCHUztObqn2eNSBF3ntxfPCdS/a1TbWSrkWfM5Nem
+	fv9179xV4VJZUfY346l+v673Ufu1zh8UV76rX9Vl4f54b+m9VdemGFcdfx7Aua7LyeufY/vl
+	bk8hvi+todPX9vzZVTpzJ1vcj2PvZ26rOXjTLLjxGhdvp6XjTs/iDb6Ot/dFb/IsFYp5/Jdt
+	W3xuT8kC3p3nGk1nRG4yMz5movFTiaU4I9FQi7moOBEA7W9S50kDAAA=
+X-CMS-MailID: 20250106051710epcas5p169a6504f572020de576d233594361d86
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241208152338epcas5p4fde427bb4467414417083221067ac7ab
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+	<20241208152322.1653-1-selvarasu.g@samsung.com>
+	<2024121845-cactus-geology-8df3@gregkh>
+	<9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
+	<2024122013-scary-paver-fcff@gregkh>
+	<a1dedf06-e804-4580-a690-25e55312eab8@samsung.com>
+	<2024122007-flail-traverse-b7b8@gregkh>
+	<6629115f-5208-42fe-8bf4-25d808129741@samsung.com>
 
-On Sun, Dec 29, 2024 at 05:05:47PM +0800, Pengyu Luo wrote:
-> On Sun, Dec 29, 2024 at 12:40 PM Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
-> > On Sat, Dec 28, 2024 at 01:13:51AM +0800, Pengyu Luo wrote:
-> > > The Huawei Matebook E Go (sc8280xp) tablet provides implements UCSI
-> > > interface in the onboard EC. Add the glue driver to interface the
-> > > platform's UCSI implementation.
-> > >
-> > > Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-> > > ---
-> > >  drivers/usb/typec/ucsi/Kconfig              |   9 +
-> > >  drivers/usb/typec/ucsi/Makefile             |   1 +
-> > >  drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 481 ++++++++++++++++++++
-> > >  3 files changed, 491 insertions(+)
-> > >  create mode 100644 drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> > >
-> > > diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-> > > index 680e1b87b..0d0f07488 100644
-> > > --- a/drivers/usb/typec/ucsi/Kconfig
-> > > +++ b/drivers/usb/typec/ucsi/Kconfig
-> > > @@ -78,4 +78,13 @@ config UCSI_LENOVO_YOGA_C630
-> > >         To compile the driver as a module, choose M here: the module will be
-> > >         called ucsi_yoga_c630.
-> > >
-> > > +config UCSI_HUAWEI_GAOKUN
-> > > +     tristate "UCSI Interface Driver for Huawei Matebook E Go (sc8280xp)"
-> > > +     depends on EC_HUAWEI_GAOKUN
-> > > +     help
-> > > +       This driver enables UCSI support on the Huawei Matebook E Go tablet.
-> > > +
-> > > +       To compile the driver as a module, choose M here: the module will be
-> > > +       called ucsi_huawei_gaokun.
-> > > +
-> > >  endif
-> > > diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
-> > > index aed41d238..0b400122b 100644
-> > > --- a/drivers/usb/typec/ucsi/Makefile
-> > > +++ b/drivers/usb/typec/ucsi/Makefile
-> > > @@ -22,3 +22,4 @@ obj-$(CONFIG_UCSI_CCG)                      += ucsi_ccg.o
-> > >  obj-$(CONFIG_UCSI_STM32G0)           += ucsi_stm32g0.o
-> > >  obj-$(CONFIG_UCSI_PMIC_GLINK)                += ucsi_glink.o
-> > >  obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)  += ucsi_yoga_c630.o
-> > > +obj-$(CONFIG_UCSI_HUAWEI_GAOKUN)     += ucsi_huawei_gaokun.o
-> > > diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> > > new file mode 100644
-> > > index 000000000..84ed0407d
-> > > --- /dev/null
-> > > +++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> > > @@ -0,0 +1,481 @@
-> > > +// SPDX-License-Identifier: GPL-2.0-only
-> > > +/*
-> > > + * ucsi-huawei-gaokun - A UCSI driver for HUAWEI Matebook E Go (sc8280xp)
-> > > + *
-> > > + * reference: drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-> > > + *            drivers/usb/typec/ucsi/ucsi_glink.c
-> > > + *            drivers/soc/qcom/pmic_glink_altmode.c
-> > > + *
-> > > + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
-> > > + */
-> > > +
-> > > +#include <linux/auxiliary_bus.h>
-> > > +#include <linux/bitops.h>
-> > > +#include <linux/completion.h>
-> > > +#include <linux/container_of.h>
-> > > +#include <linux/delay.h>
-> > > +#include <linux/module.h>
-> > > +#include <linux/notifier.h>
-> > > +#include <linux/of.h>
-> > > +#include <linux/string.h>
-> > > +#include <linux/workqueue_types.h>
-> > > +
-> > > +#include <linux/usb/pd_vdo.h>
-> > > +#include <drm/bridge/aux-bridge.h>
-> > > +
-> > > +#include "ucsi.h"
-> > > +#include <linux/platform_data/huawei-gaokun-ec.h>
-> > > +
-> > > +
-> > > +#define EC_EVENT_UCSI        0x21
-> > > +#define EC_EVENT_USB 0x22
-> > > +
-> > > +#define GAOKUN_CCX_MASK              GENMASK(1, 0)
-> > > +#define GAOKUN_MUX_MASK              GENMASK(3, 2)
-> > > +
-> > > +#define GAOKUN_DPAM_MASK     GENMASK(3, 0)
-> > > +#define GAOKUN_HPD_STATE_MASK        BIT(4)
-> > > +#define GAOKUN_HPD_IRQ_MASK  BIT(5)
-> > > +
-> > > +#define CCX_TO_ORI(ccx) (++ccx % 3)
-> > > +
-> > > +#define GET_IDX(updt) (ffs(updt) - 1)
-> > > +
-> > > +/* Configuration Channel Extension */
-> > > +enum gaokun_ucsi_ccx {
-> > > +     USBC_CCX_NORMAL,
-> > > +     USBC_CCX_REVERSE,
-> > > +     USBC_CCX_NONE,
-> > > +};
-> > > +
-> > > +enum gaokun_ucsi_mux {
-> > > +     USBC_MUX_NONE,
-> > > +     USBC_MUX_USB_2L,
-> > > +     USBC_MUX_DP_4L,
-> > > +     USBC_MUX_USB_DP,
-> > > +};
-> > > +
-> > > +struct gaokun_ucsi_reg {
-> > > +     u8 port_num;
-> > > +     u8 port_updt;
-> > > +     u8 port_data[4];
-> > > +     u8 checksum;
-> > > +     u8 reserved;
-> > > +} __packed;
-> > > +
-> > > +struct gaokun_ucsi_port {
-> > > +     struct completion usb_ack;
-> > > +     spinlock_t lock;
-> > > +
-> > > +     struct gaokun_ucsi *ucsi;
-> > > +     struct auxiliary_device *bridge;
-> > > +
-> > > +     int idx;
-> > > +     enum gaokun_ucsi_ccx ccx;
-> > > +     enum gaokun_ucsi_mux mux;
-> > > +     u8 mode;
-> > > +     u16 svid;
-> > > +     u8 hpd_state;
-> > > +     u8 hpd_irq;
-> > > +};
-> > > +
-> > > +struct gaokun_ucsi {
-> > > +     struct gaokun_ec *ec;
-> > > +     struct ucsi *ucsi;
-> > > +     struct gaokun_ucsi_port *ports;
-> > > +     struct device *dev;
-> > > +     struct work_struct work;
-> > > +     struct notifier_block nb;
-> > > +     u16 version;
-> > > +     u8 port_num;
-> > > +};
-> > > +
-> > > +/* -------------------------------------------------------------------------- */
-> > > +/* For UCSI */
-> > > +
-> > > +static int gaokun_ucsi_read_version(struct ucsi *ucsi, u16 *version)
-> > > +{
-> > > +     struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> > > +
-> > > +     *version = uec->version;
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int gaokun_ucsi_read_cci(struct ucsi *ucsi, u32 *cci)
-> > > +{
-> > > +     struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> > > +     u8 buf[GAOKUN_UCSI_READ_SIZE];
-> > > +     int ret;
-> > > +
-> > > +     ret = gaokun_ec_ucsi_read(uec->ec, buf);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     memcpy(cci, buf, sizeof(*cci));
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int gaokun_ucsi_read_message_in(struct ucsi *ucsi,
-> > > +                                    void *val, size_t val_len)
-> > > +{
-> > > +     struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> > > +     u8 buf[GAOKUN_UCSI_READ_SIZE];
-> > > +     int ret;
-> > > +
-> > > +     ret = gaokun_ec_ucsi_read(uec->ec, buf);
-> > > +     if (ret)
-> > > +             return ret;
-> > > +
-> > > +     memcpy(val, buf + GAOKUN_UCSI_CCI_SIZE,
-> > > +            min(val_len, GAOKUN_UCSI_DATA_SIZE));
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static int gaokun_ucsi_async_control(struct ucsi *ucsi, u64 command)
-> > > +{
-> > > +     struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> > > +     u8 buf[GAOKUN_UCSI_WRITE_SIZE] = {};
-> > > +
-> > > +     memcpy(buf, &command, sizeof(command));
-> > > +
-> > > +     return gaokun_ec_ucsi_write(uec->ec, buf);
-> > > +}
-> > > +
-> > > +static void gaokun_ucsi_update_connector(struct ucsi_connector *con)
-> > > +{
-> > > +     struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
-> > > +
-> > > +     if (con->num > uec->port_num)
-> > > +             return;
-> > > +
-> > > +     con->typec_cap.orientation_aware = true;
-> > > +}
-> > > +
-> > > +static void gaokun_set_orientation(struct ucsi_connector *con,
-> > > +                                struct gaokun_ucsi_port *port)
-> > > +{
-> > > +     enum gaokun_ucsi_ccx ccx;
-> > > +     unsigned long flags;
-> > > +
-> > > +     spin_lock_irqsave(&port->lock, flags);
-> > > +     ccx = port->ccx;
-> > > +     spin_unlock_irqrestore(&port->lock, flags);
-> > > +
-> > > +     typec_set_orientation(con->port, CCX_TO_ORI(ccx));
-> > > +}
-> > > +
-> > > +static void gaokun_ucsi_connector_status(struct ucsi_connector *con)
-> > > +{
-> > > +     struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
-> > > +     int idx;
-> > > +
-> > > +     idx = con->num - 1;
-> > > +     if (con->num > uec->port_num) {
-> > > +             dev_warn(uec->ucsi->dev, "set orientation out of range: con%d\n", idx);
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     gaokun_set_orientation(con, &uec->ports[idx]);
-> > > +}
-> > > +
-> > > +const struct ucsi_operations gaokun_ucsi_ops = {
-> > > +     .read_version = gaokun_ucsi_read_version,
-> > > +     .read_cci = gaokun_ucsi_read_cci,
-> > > +     .read_message_in = gaokun_ucsi_read_message_in,
-> > > +     .sync_control = ucsi_sync_control_common,
-> > > +     .async_control = gaokun_ucsi_async_control,
-> > > +     .update_connector = gaokun_ucsi_update_connector,
-> > > +     .connector_status = gaokun_ucsi_connector_status,
-> > > +};
-> > > +
-> > > +/* -------------------------------------------------------------------------- */
-> > > +/* For Altmode */
-> > > +
-> > > +static void gaokun_ucsi_port_update(struct gaokun_ucsi_port *port,
-> > > +                                 const u8 *port_data)
-> > > +{
-> > > +     unsigned long flags;
-> > > +     u8 dcc, ddi;
-> > > +     int offset = port->idx * 2; /* every port has 2 Bytes data */
-> > > +
-> > > +     dcc = port_data[offset];
-> > > +     ddi = port_data[offset + 1];
-> >
-> > What is dcc and ddi? Are those just names from the DSDT?
-> >
-> 
-> Yes, DSDT's inventions. Huawei one uses that.
-> 
-> Some additional information, you can check the following in sc8280xp or
-> xelite based dsdt.
-> 
-> In UPAN(usbc pinassignment notification), PBUF carries a pan info, which
-> is a 8B data, {BPID, BORI, BMUX, BVID(2B), BSID(2B), BSSD} which stands for
-> port_id, orientation of port, mux state, USB-IF vendor id, USB-IF standard id,
-> I don't know the BSSD, (if linaro know something?)
-> but according to drivers/soc/qcom/pmic_glink_altmode.c
-> BSSD is related to pin assignment(mode field), hpd_state, hpd_irq, ddi is
-> something equivalent to BSSD. dcc is something equivalent to BORI and BMUX.
 
-Ack
+On 12/21/2024 11:37 PM, Selvarasu Ganesan wrote:
+>
+> On 12/20/2024 8:45 PM, Greg KH wrote:
+>> On Fri, Dec 20, 2024 at 07:02:06PM +0530, Selvarasu Ganesan wrote:
+>>> On 12/20/2024 5:54 PM, Greg KH wrote:
+>>>> On Wed, Dec 18, 2024 at 03:51:50PM +0530, Selvarasu Ganesan wrote:
+>>>>> On 12/18/2024 11:01 AM, Greg KH wrote:
+>>>>>> On Sun, Dec 08, 2024 at 08:53:20PM +0530, Selvarasu Ganesan wrote:
+>>>>>>> The current implementation sets the wMaxPacketSize of bulk in/out
+>>>>>>> endpoints to 1024 bytes at the end of the f_midi_bind function. 
+>>>>>>> However,
+>>>>>>> in cases where there is a failure in the first midi bind attempt,
+>>>>>>> consider rebinding.
+>>>>>> What considers rebinding?  Your change does not modify that.
+>>>>> Hi Greg,
+>>>>> Thanks for your review comments.
+>>>>>
+>>>>>
+>>>>> Here the term "rebind" in this context refers to attempting to 
+>>>>> bind the
+>>>>> MIDI function a second time in certain scenarios.
+>>>>> The situations where rebinding is considered include:
+>>>>>
+>>>>>     * When there is a failure in the first UDC write attempt, 
+>>>>> which may be
+>>>>>       caused by other functions bind along with MIDI
+>>>>>     * Runtime composition change : Example : MIDI,ADB to MIDI. Or 
+>>>>> MIDI to
+>>>>>       MIDI,ADB
+>>>>>
+>>>>> The issue arises during the second time the "f_midi_bind" function is
+>>>>> called. The problem lies in the fact that the size of
+>>>>> "bulk_in_desc.wMaxPacketSize" is set to 1024 during the first call,
+>>>>> which exceeds the hardware capability of the dwc3 TX/RX FIFO
+>>>>> (ep->maxpacket_limit = 512).
+>>>> Ok, but then why not properly reset ALL of the options/values when a
+>>>> failure happens, not just this one when the initialization happens
+>>>> again?  Odds are you might be missing the change of something else 
+>>>> here
+>>>> as well, right?
+>>> Are you suggesting that we reset the entire value of
+>>> usb_endpoint_descriptor before call usb_ep_autoconfig? If so, Sorry 
+>>> I am
+>>> not clear on your reasoning for wanting to reset all options/values.
+>>> After all, all values will be overwritten
+>>> afterusb_ep_autoconfig.Additionally, the wMaxPacketSize is the only
+>>> value being checked during the EP claim process (usb_ep_autoconfig), 
+>>> and
+>>> it has caused issues where claiming wMaxPacketSize is grater than
+>>> ep->maxpacket_limit.
+>> Then fix up that value on failure, if things fail you should reset it
+>> back to a "known good state", right?  And what's wrong with resetting
+>> all of the values anyway, wouldn't that be the correct thing to do?
+>
+> Yes, It's back to known good state if we reset wMaxPacketSize. There 
+> is no point to reset all values in the usb endpoint descriptor 
+> structure as all the member of this structure are predefined value 
+> except wMaxPacketSize and bEndpointAddress. The bEndpointAddress is 
+> obtain as part of usb_ep_autoconfig.
+>
+> static struct usb_endpoint_descriptor bulk_out_desc = {
+>         .bLength =              USB_DT_ENDPOINT_AUDIO_SIZE,
+>         .bDescriptorType =      USB_DT_ENDPOINT,
+>         .bEndpointAddress =     USB_DIR_OUT,
+>         .bmAttributes =         USB_ENDPOINT_XFER_BULK,
+> };
+>
+>>>> Also, cleaning up from an error is a better thing to do than forcing
+>>>> something to be set all the time when you don't have anything gone
+>>>> wrong.
+>>> As I previously mentioned, this is a general approach to set
+>>> wMaxPacketSize before claiming the endpoint. This is because the
+>>> usb_ep_autoconfig treats endpoint descriptors as if they were full
+>>> speed. Following the same pattern as other function drivers, that
+>>> approach allows us to claim the EP with using a full-speed descriptor.
+>>> We can use the same approach here instead of resetting wMaxPacketSize
+>>> every time.
+>>>
+>>> The following provided code is used to claim an EP with a full-speed
+>>> bulk descriptor in MIDI. Its also working solution.  But, We thinking
+>>> that it may unnecessarily complicate the code as it only utilizes the
+>>> full descriptor for obtaining the EP address here. What you think shall
+>>> we go with below approach instead of rest wMaxPacketSize before call
+>>> usb_ep_autoconfig?
+>> I don't know, what do you think is best to do?  You are the one having
+>> problems and will need to fix any bugs that your changes will cause :)
+>>
+>> thanks,
+>>
+>> greg k-h
+>
+> We agree. Restting wMaxPacketSize is the best solution for this issue, 
+> as concluded from our internal review meeting as well.
+>
+> Thanks,
+> Selva
 
-> 
-> 
-> > > +
-> > > +     spin_lock_irqsave(&port->lock, flags);
-> > > +
-> > > +     port->ccx = FIELD_GET(GAOKUN_CCX_MASK, dcc);
-> > > +     port->mux = FIELD_GET(GAOKUN_MUX_MASK, dcc);
-> > > +     port->mode = FIELD_GET(GAOKUN_DPAM_MASK, ddi);
-> > > +     port->hpd_state = FIELD_GET(GAOKUN_HPD_STATE_MASK, ddi);
-> > > +     port->hpd_irq = FIELD_GET(GAOKUN_HPD_IRQ_MASK, ddi);
-> > > +
-> > > +     switch (port->mux) {
-> > > +     case USBC_MUX_NONE:
-> > > +             port->svid = 0;
-> > > +             break;
-> > > +     case USBC_MUX_USB_2L:
-> > > +             port->svid = USB_SID_PD;
-> > > +             break;
-> > > +     case USBC_MUX_DP_4L:
-> > > +     case USBC_MUX_USB_DP:
-> > > +             port->svid = USB_SID_DISPLAYPORT;
-> > > +             if (port->ccx == USBC_CCX_REVERSE)
-> > > +                     port->mode -= 6;
-> >
-> > I'd prefer it this were more explicit about what is happening.
-> >
-> 
-> If orientation is reverse, then we should minus 6, EC's logic.
-> I will add a comment for it. Actually, this field is unused, I don't
-> find the mux yet, so I cannot set it with this field. But I don't want
-> to make things imcomplete, so keep it.
 
-Which values are you expecting / getting there? The -6 is a pure magic.
-Please replace this with a switch-case or something more obvious.
+Hi Greg,
 
-> Let me go off the topic, on my device, I can just use drm_aux_hpd_bridge_notify
-> to enable altmode, usb functions well after I pluged out, I don't need set mode
-> switch(orientation switch is required if orientation is reverse), which is quiet
-> similar to Acer aspire 1. Is mux controlled also by QMP combo phy(see [1])?
-> 
-> > > +             break;
-> > > +     default:
-> > > +             break;
-> > > +     }
-> > > +
-> > > +     spin_unlock_irqrestore(&port->lock, flags);
-> > > +}
-> > > +
-> > > +static int gaokun_ucsi_refresh(struct gaokun_ucsi *uec)
-> > > +{
-> > > +     struct gaokun_ucsi_reg ureg;
-> > > +     int ret, idx;
-> > > +
-> > > +     ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
-> > > +     if (ret)
-> > > +             return -EIO;
-> > > +
-> > > +     uec->port_num = ureg.port_num;
-> > > +     idx = GET_IDX(ureg.port_updt);
-> > > +
-> > > +     if (idx >= 0 && idx < ureg.port_num)
-> > > +             gaokun_ucsi_port_update(&uec->ports[idx], ureg.port_data);
-> > > +
-> > > +     return idx;
-> > > +}
-> > > +
-> > > +static void gaokun_ucsi_handle_altmode(struct gaokun_ucsi_port *port)
-> > > +{
-> > > +     struct gaokun_ucsi *uec = port->ucsi;
-> > > +     int idx = port->idx;
-> > > +
-> > > +     if (idx >= uec->ucsi->cap.num_connectors || !uec->ucsi->connector) {
-> > > +             dev_warn(uec->ucsi->dev, "altmode port out of range: %d\n", idx);
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     /* UCSI callback .connector_status() have set orientation */
-> > > +     if (port->bridge)
-> > > +             drm_aux_hpd_bridge_notify(&port->bridge->dev,
-> > > +                                       port->hpd_state ?
-> > > +                                       connector_status_connected :
-> > > +                                       connector_status_disconnected);
-> >
-> > Does your platform report any altmodes? What do you see in
-> > /sys/class/typec/port0/port0.*/ ?
-> >
-> 
-> /sys/class/typec/port0/port0.0:
-> active  mode  mode1  power  svid  uevent  vdo
-> 
-> /sys/class/typec/port0/port0.1:
-> active  mode  mode1  power  svid  uevent  vdo
-> 
-> /sys/class/typec/port0/port0.2:
-> active  mode  mode1  power  svid  uevent  vdo
-> 
-> /sys/class/typec/port0/port0.3:
-> active  mode  mode2  power  svid  uevent  vdo
-> 
-> /sys/class/typec/port0/port0.4:
-> active  mode  mode3  power  svid  uevent  vdo
+Do you have any suggestions or further comments on this?.
 
-please:
-
-cat /sys/class/typec/port0/port0*/svid
-cat /sys/class/typec/port0/port0*/vdo
-
-If DP is reported as one the altmodes, then it should be using the
-DisplayPort AltMode driver, as suggested by Heikki.
-
-> > > +
-> > > +     gaokun_ec_ucsi_pan_ack(uec->ec, port->idx);
-> > > +}
-> > > +
-> > > +static void gaokun_ucsi_altmode_notify_ind(struct gaokun_ucsi *uec)
-> > > +{
-> > > +     int idx;
-> > > +
-> > > +     idx = gaokun_ucsi_refresh(uec);
-> > > +     if (idx < 0)
-> > > +             gaokun_ec_ucsi_pan_ack(uec->ec, idx);
-> > > +     else
-> > > +             gaokun_ucsi_handle_altmode(&uec->ports[idx]);
-> > > +}
-> > > +
-> > > +/*
-> > > + * USB event is necessary for enabling altmode, the event should follow
-> > > + * UCSI event, if not after timeout(this notify may be disabled somehow),
-> > > + * then force to enable altmode.
-> > > + */
-> > > +static void gaokun_ucsi_handle_no_usb_event(struct gaokun_ucsi *uec, int idx)
-> > > +{
-> > > +     struct gaokun_ucsi_port *port;
-> > > +
-> > > +     port = &uec->ports[idx];
-> > > +     if (!wait_for_completion_timeout(&port->usb_ack, 2 * HZ)) {
-> > > +             dev_warn(uec->dev, "No USB EVENT, triggered by UCSI EVENT");
-> > > +             gaokun_ucsi_altmode_notify_ind(uec);
-> > > +     }
-> > > +}
-> > > +
-> > > +static int gaokun_ucsi_notify(struct notifier_block *nb,
-> > > +                           unsigned long action, void *data)
-> > > +{
-> > > +     u32 cci;
-> > > +     struct gaokun_ucsi *uec = container_of(nb, struct gaokun_ucsi, nb);
-> > > +
-> > > +     switch (action) {
-> > > +     case EC_EVENT_USB:
-> > > +             gaokun_ucsi_altmode_notify_ind(uec);
-> > > +             return NOTIFY_OK;
-> > > +
-> > > +     case EC_EVENT_UCSI:
-> > > +             uec->ucsi->ops->read_cci(uec->ucsi, &cci);
-> > > +             ucsi_notify_common(uec->ucsi, cci);
-> > > +             if (UCSI_CCI_CONNECTOR(cci))
-> > > +                     gaokun_ucsi_handle_no_usb_event(uec, UCSI_CCI_CONNECTOR(cci) - 1);
-> > > +
-> > > +             return NOTIFY_OK;
-> > > +
-> > > +     default:
-> > > +             return NOTIFY_DONE;
-> > > +     }
-> > > +}
-> > > +
-> > > +static int gaokun_ucsi_get_port_num(struct gaokun_ucsi *uec)
-> > > +{
-> > > +     struct gaokun_ucsi_reg ureg;
-> > > +     int ret;
-> > > +
-> > > +     ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
-> > > +
-> > > +     return ret ? 0 : ureg.port_num;
-> > > +}
-> > > +
-> > > +static int gaokun_ucsi_ports_init(struct gaokun_ucsi *uec)
-> > > +{
-> > > +     u32 port;
-> > > +     int i, ret, port_num;
-> > > +     struct device *dev = uec->dev;
-> > > +     struct gaokun_ucsi_port *ucsi_port;
-> > > +     struct fwnode_handle *fwnode;
-> > > +
-> > > +     port_num = gaokun_ucsi_get_port_num(uec);
-> > > +     uec->port_num = port_num;
-> > > +
-> > > +     uec->ports = devm_kzalloc(dev, port_num * sizeof(*(uec->ports)),
-> > > +                               GFP_KERNEL);
-> > > +     if (!uec->ports)
-> > > +             return -ENOMEM;
-> > > +
-> > > +     for (i = 0; i < port_num; ++i) {
-> > > +             ucsi_port = &uec->ports[i];
-> > > +             ucsi_port->ccx = USBC_CCX_NONE;
-> > > +             ucsi_port->idx = i;
-> > > +             ucsi_port->ucsi = uec;
-> > > +             init_completion(&ucsi_port->usb_ack);
-> > > +             spin_lock_init(&ucsi_port->lock);
-> > > +     }
-> > > +
-> > > +     device_for_each_child_node(dev, fwnode) {
-> > > +             ret = fwnode_property_read_u32(fwnode, "reg", &port);
-> > > +             if (ret < 0) {
-> > > +                     dev_err(dev, "missing reg property of %pOFn\n", fwnode);
-> > > +                     fwnode_handle_put(fwnode);
-> > > +                     return ret;
-> > > +             }
-> > > +
-> > > +             if (port >= port_num) {
-> > > +                     dev_warn(dev, "invalid connector number %d, ignoring\n", port);
-> > > +                     continue;
-> > > +             }
-> > > +
-> > > +             ucsi_port = &uec->ports[port];
-> > > +             ucsi_port->bridge = devm_drm_dp_hpd_bridge_alloc(dev, to_of_node(fwnode));
-> > > +             if (IS_ERR(ucsi_port->bridge)) {
-> > > +                     fwnode_handle_put(fwnode);
-> > > +                     return PTR_ERR(ucsi_port->bridge);
-> > > +             }
-> > > +     }
-> > > +
-> > > +     for (i = 0; i < port_num; i++) {
-> > > +             if (!uec->ports[i].bridge)
-> > > +                     continue;
-> > > +
-> > > +             ret = devm_drm_dp_hpd_bridge_add(dev, uec->ports[i].bridge);
-> > > +             if (ret)
-> > > +                     return ret;
-> > > +     }
-> > > +
-> > > +     return 0;
-> > > +}
-> > > +
-> > > +static void gaokun_ucsi_register_worker(struct work_struct *work)
-> > > +{
-> > > +     struct gaokun_ucsi *uec;
-> > > +     struct ucsi *ucsi;
-> > > +     int ret;
-> > > +
-> > > +     uec = container_of(work, struct gaokun_ucsi, work);
-> > > +     ucsi = uec->ucsi;
-> > > +
-> > > +     ucsi->quirks = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_PDOS;
-> >
-> > Does it crash in the same way as GLINK crashes (as you've set
-> > UCSI_NO_PARTNER_PDOS)?
-> >
-> 
-> Yes, no partner can be detected, I checked. I think it is also handled by
-> the firmware As you said in [2]
-> > In some obscure cases (Qualcomm PMIC Glink) altmode is completely
-> > handled by the firmware. Linux does not get proper partner altmode info.
-
-This is a separate topic. Those two flags were added for a very
-particular reason:
-
-- To workaround firmware crash on requesting PDOs for a partner
-- To delay requeting PDOs for the device because in the unconnected
-  state the GET_PDOS returns incorrect information
-
-Are you sure that those two flags are necessary for your platform?
-
-> 
-> > > +
-> > > +     ssleep(3); /* EC can't handle UCSI properly in the early stage */
-> > > +
-> > > +     ret = gaokun_ec_register_notify(uec->ec, &uec->nb);
-> > > +     if (ret) {
-> > > +             dev_err_probe(ucsi->dev, ret, "notifier register failed\n");
-> > > +             return;
-> > > +     }
-> > > +
-> > > +     ret = ucsi_register(ucsi);
-> > > +     if (ret)
-> > > +             dev_err_probe(ucsi->dev, ret, "ucsi register failed\n");
-> > > +}
-> > > +
-> > > +static int gaokun_ucsi_register(struct gaokun_ucsi *uec)
-> >
-> > Please inline
-> >
-> 
-> I see.
-> 
-> Best wishes
-> Pengyu
-> 
-> [1] https://elixir.bootlin.com/linux/v6.12.5/source/drivers/phy/qualcomm/phy-qcom-qmp-combo.c#L2679
-> [2] https://lore.kernel.org/lkml/20240416-ucsi-glink-altmode-v1-0-890db00877ac@linaro.org
-
--- 
-With best wishes
-Dmitry
+Thanks,
+Selva
 
