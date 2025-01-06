@@ -1,80 +1,79 @@
-Return-Path: <linux-usb+bounces-19031-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19032-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BA5AA0279A
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 15:14:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06488A027DF
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 15:24:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CDC071882D08
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 14:14:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA499165E69
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 14:24:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A88591DE4CC;
-	Mon,  6 Jan 2025 14:14:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BCDD1DE3C7;
+	Mon,  6 Jan 2025 14:24:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kVWw2PeL"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EI3iFYAM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B44F1DE2CC
-	for <linux-usb@vger.kernel.org>; Mon,  6 Jan 2025 14:14:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFFCD1DE2D7
+	for <linux-usb@vger.kernel.org>; Mon,  6 Jan 2025 14:24:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736172885; cv=none; b=iPfkDy0mhxWqdg8qq8rE16la4/01cr3i1mySQrwbBweK332iUv7R576hfxOsqdOrjuFu12w7GpuQJkvuSbxj2Xr7dB43Xtw4Am3i832+PB+8i5mgCWvQX7dKw5eTeN17iQvUVfJwFwJyyGAV6BFNP0ILUGgP99WFKqRnGNMLIIA=
+	t=1736173453; cv=none; b=hx2L++svvuUirsLh178HKULZv/xESd1oNF5yD5Vq8rDkNR01IAcQ0WQqwf+UxB5nB/kjZO6jsI9F2DeBS836qUoMvn8I/RWbeDEe8c4wKStkFszajgKcuBkodoO1wesWp4OcsPjUOUyOR86FpDc61bXtcVhmJUrboOv3975xtKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736172885; c=relaxed/simple;
-	bh=TUtPflRKWF30yJCi1G+kKLaczEO4BFYu8k7vyW74Zqw=;
+	s=arc-20240116; t=1736173453; c=relaxed/simple;
+	bh=3QY2uoS0w9qo6V3kkieOs3n2GA1/sB3obmGRLcrLb/Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aXThPZoh9wHAG0nm5jx+qZB7INxCx0DK6Pr4RDnS8uPOrp/oA6DQETeKVBpk6CCXKgFddR1iFmEt3pEewLWmYZHDdVYGut34CI2AAzzxEThzjGXhRtgrtXxrYvMyZ8JAxNfZ7bKcLriAK271No1SyaKujCTgSGTmkeSh9M4zHNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kVWw2PeL; arc=none smtp.client-ip=209.85.128.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=XnaeGytWtGd3R3NokrhK4mFT2730DkcI47a7Gy4rODhBAYIHeAzLpekuoLQ+B/AEhe9Ssx/kAYKlxNV4APQyYLX9E/VPoDp38NiqRG+WvOds50GvzLgRH+PJzwvSVNR1fO1Z3R+8At0JuqWaZLQjXLrr5rxLmjy3gWgLGMxAnbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EI3iFYAM; arc=none smtp.client-ip=209.85.221.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43626213fffso89571995e9.1
-        for <linux-usb@vger.kernel.org>; Mon, 06 Jan 2025 06:14:43 -0800 (PST)
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-385d7b4da2bso12235574f8f.1
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jan 2025 06:24:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736172882; x=1736777682; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1736173450; x=1736778250; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ljs3TAheiI7fZcTHcfAS10Y5s50U6nKPyrVNj2wcXRo=;
-        b=kVWw2PeLAsV2DMVtZ1/m9M/RCeiw6mSvqwYcY/4dW2vxhkyTArK0MUb8OYyZnYkdeC
-         IYmMMiOMPYQ5lrs/bpWXlbv+HnF/0ljWBCm3fdz7AcebH4CyvUyhSC8Rrwf/AJkt8ote
-         XptSigfmZcHjIe1AwuzX8ySUHD1xzEOy/Wazq9lHEpTWIQFqpG+Dqsp5nX3yvYJrLAem
-         VL3KlAajQ3xYWYo5BPhci0QKJj9p/x2k0GutSOx4uLLBguciYQVhY8fhlwmmf5Ikfgig
-         Ug/N+QJiOpj2zLUD0+kHuKrbUr5WWvGm5sK7bZvACqdbrwx6gy1/IkDAfZhS68DpkJ9a
-         VAqQ==
+        bh=pd6df62WwHwD+vu9tEl8fPUc4jb543mAbr3HwaooOnY=;
+        b=EI3iFYAMRhy3Q0YBvij2tQrebVKvMVPOw8VYFBDHy7NykbdBdYS8FhUlR09KyjakbA
+         9X8doRtliFtc/SKpNqf6gIituxv8kVrrS3giTuOGit4sKlK0KilPmS/l/mkg1JIcUQLT
+         +6aXdfyL+VJSnkY22eWPDyjimDr9f0+l3ly/caYyzvXoGUtzm7Ul+NbNKvclCon7j/AB
+         ReCHRSIkw48m3314OinHFsbzAQS+/LJ6gtilUIRb7sFNcGgGNRBeXD+WXpXp6jPMD1bv
+         NeVmsIMxrUCmsCBlr6UEFr36nLxzrtLtdTcUlyOYQJpkX1H3yKg+H531FphVPwbiIm66
+         gbOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736172882; x=1736777682;
+        d=1e100.net; s=20230601; t=1736173450; x=1736778250;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ljs3TAheiI7fZcTHcfAS10Y5s50U6nKPyrVNj2wcXRo=;
-        b=fuW1PqzPbIEoExxfVHFAhMcQ4KsflkiooAlaLKs5rR0bHf/vw1FFswC6qzHY5boY2g
-         syBoVRqSODAMH4vzdpwhPcFjsxGwnYlRld6EGw1MSamsH4vtk5ETxTefS96ounz8m7ak
-         Ud8bCNzpZG7h7OuA0l4m4f6PsqPgsFtlCNBdaHVTRhfz7da3eo80n+/8+z8GJLzA83l/
-         J1Fx3cSEiPLJbeVP98gvKJ7U2tJrJLVIdwdSvnlAHoH9WVoCB+A0NkB4LWDQ75slfydY
-         Vtw82nqgw7k11m7fnaQb48s9tqH+Sp4POAWaw1gjPKsYQw8IIfzgmM5Av+Fh7w+kXz7R
-         27vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXW1nQvVQi8NBYznHYXOKU+zkG5vqeFDLk1cumyql7xkEKTY8BHDctRJpvMKLbgx+sGeN5DEDgH0qU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyFrme/i7PmANHXQc9krDTPWEnXOF5wsff2SrN/RDB1BnQyUmbC
-	feW2dPs5fSSpMEaxgInAL2eydx8bPTeiOQKVy6y9kZU5lcfDRyKiReYW/mmaC6w=
-X-Gm-Gg: ASbGncttvjFfXXl7PLyK9klPyvOjpSJycSPLxiVi7EZF/jw2x1MwX6MonY10pLbCQal
-	u9LLmvpWfV8alJX3loVj6/8SgDeLv9Vss+a9dCWrFhPA1eJp1CKJyZ+DFW1o+f1ku+SRK0R9n/W
-	Z2d4qx8X9qZW7ixhZyS5Sh2/Bu5BRSl1+LpbMz14oN024mCBh/W3qJoPdGAnaNepZ/1iwZSWNJf
-	BkZ67zYJbcWJhVi9hzlVd2qsyUmaGWioEfhX8pZ+agEqeZUejVGvbM=
-X-Google-Smtp-Source: AGHT+IGn2BLUu3Fate+BU8M/4vy70ObmtbN73h6kEZXhmFVir51bPhEC8HP6KWO3x/10tUGbAR3A4A==
-X-Received: by 2002:a05:6000:18a5:b0:386:3672:73e4 with SMTP id ffacd0b85a97d-38a1a2746a3mr53318010f8f.26.1736172881634;
-        Mon, 06 Jan 2025 06:14:41 -0800 (PST)
+        bh=pd6df62WwHwD+vu9tEl8fPUc4jb543mAbr3HwaooOnY=;
+        b=J9Z1EeZHQJxwU/Mc3kQ+dUALjSFqJpPjwYygjoOopKiLqX59GgsSZocDpxLay9OXG3
+         V7oKKII+mFO+wqgY3JO1kVP1fyvtn83rAcW/p2V7qO7EKlye4R/QcDdx/z+I2tavB2qk
+         fK0W8odYdf/EGuE3fjF4p9Gj/F4MVEbc362h5cjOcyCD/X2w3W4CMcBTKRCbFPM3Liky
+         tARvAulEcF7Fxx4PiupVPmrmT7gwVgeNi56mgyYfK27iYzh8Pzp5XI5VRqOMWUCiWX+H
+         CBi5JuR0XmicAzxFOEvm2DleDtEPjMq8qIgRH6CmxnAevC9a2SvmZsjzRSI6a+jnoSOw
+         BnRw==
+X-Forwarded-Encrypted: i=1; AJvYcCWsm6WKhiHmDupXI7y/11gQmmQlsMeTbki9fBvXHD3ola5cQML8465eNJG7pU4/iJ2U0ApWk/cK8Aw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yymt/PXTEKu3tecI4i5Gf5TqtQwJe0gV+tOGXmPF5AjeXoJySWv
+	86mAHsgP4aTM4d/oTck6QI9pruKmYM7T7j1o/PcTUwnA7PHHtauuUcADJBnmI10=
+X-Gm-Gg: ASbGnctluikaiayN0+dIfGlKZn+7sIYEjDTj1lyZzs57Ba02kz7Wok5obuvauYUiUSi
+	Qa5LcP48Xi0AdkLzm9DWeFqAfAicuAEuSHUgTbD6zo/ntreJBhpYQUtb9/iaX+R41JNN1ZXzpIc
+	f789D0X5Fr0YdVk3WrbhJ68iNgwIkMi+xiP5ZwatXVhIGttFa3GUeLba9Bcp0Ulx6f2U8tHsFkK
+	3T5T0eQs9n7VtptbstVkjXfS+pO+QiuAR3SLpyCkdllZ/Sq7zLzX+4=
+X-Google-Smtp-Source: AGHT+IFyA2cQ10QBXurgm+EzR87lUbaz02Gbz7Wpu8Hy8EEKJWLGVQzbD4hUWxuZKDFzGj91ZDa9sQ==
+X-Received: by 2002:a05:6000:4023:b0:385:e5dc:e285 with SMTP id ffacd0b85a97d-38a22406d4emr51330517f8f.58.1736173450246;
+        Mon, 06 Jan 2025 06:24:10 -0800 (PST)
 Received: from linaro.org ([86.121.162.10])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4364b053e91sm631916445e9.1.2025.01.06.06.14.40
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b1646esm599419505e9.26.2025.01.06.06.24.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2025 06:14:41 -0800 (PST)
-Date: Mon, 6 Jan 2025 16:14:39 +0200
+        Mon, 06 Jan 2025 06:24:09 -0800 (PST)
+Date: Mon, 6 Jan 2025 16:24:08 +0200
 From: Abel Vesa <abel.vesa@linaro.org>
-To: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
@@ -82,17 +81,19 @@ Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 	Konrad Dybcio <konradybcio@kernel.org>,
 	Rajendra Nayak <quic_rjendra@quicinc.com>,
 	Sibi Sankar <quic_sibis@quicinc.com>,
+	Johan Hovold <johan@kernel.org>,
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	Trilok Soni <quic_tsoni@quicinc.com>,
 	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
 	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 2/6] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-Message-ID: <Z3vlTwR+SiZQWVh7@linaro.org>
+Subject: Re: [PATCH v5 4/6] arm64: dts: qcom: x1e80100-crd: Enable external
+ DisplayPort support
+Message-ID: <Z3vniJSY154rznQh@linaro.org>
 References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
- <20241112-x1e80100-ps8830-v5-2-4ad83af4d162@linaro.org>
- <Z1CCVjEZMQ6hJ-wK@hovoldconsulting.com>
+ <20241112-x1e80100-ps8830-v5-4-4ad83af4d162@linaro.org>
+ <ZzOK2Xz1QQvugGnG@linaro.org>
+ <2024111341-platter-disk-8238@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -101,293 +102,42 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z1CCVjEZMQ6hJ-wK@hovoldconsulting.com>
+In-Reply-To: <2024111341-platter-disk-8238@gregkh>
 
-On 24-12-04 17:24:54, Johan Hovold wrote:
-> On Tue, Nov 12, 2024 at 07:01:11PM +0200, Abel Vesa wrote:
-> > The Parade PS8830 is a USB4, DisplayPort and Thunderbolt 4 retimer,
-> > controlled over I2C. It usually sits between a USB/DisplayPort PHY
-> > and the Type-C connector, and provides orientation and altmode handling.
+On 24-11-13 07:03:38, Greg Kroah-Hartman wrote:
+> On Tue, Nov 12, 2024 at 07:05:29PM +0200, Abel Vesa wrote:
+> > On 24-11-12 19:01:13, Abel Vesa wrote:
+> > > The X Elite CRD provides external DisplayPort on all 3 USB Type-C ports.
+> > > Each one of this ports is connected to a dedicated DisplayPort
+> > > controller.
+> > > 
+> > > Due to support missing in the USB/DisplayPort combo PHY driver,
+> > > the external DisplayPort is limited to 2 lanes.
+> > > 
+> > > So enable all 3 remaining DisplayPort controllers and limit their data
+> > > lanes number to 2.
+> > > 
+> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
 > > 
-> > The boards that use this retimer are the ones featuring the Qualcomm
-> > Snapdragon X Elite SoCs.
+> > Please do not merge this specific patch.
 > 
-> > +static int ps883x_sw_set(struct typec_switch_dev *sw,
-> > +			 enum typec_orientation orientation)
-> > +{
-> > +	struct ps883x_retimer *retimer = typec_switch_get_drvdata(sw);
-> > +	int ret = 0;
-> > +
-> > +	ret = typec_switch_set(retimer->typec_switch, orientation);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	mutex_lock(&retimer->lock);
-> > +
-> > +	if (retimer->orientation != orientation) {
-> > +		retimer->orientation = orientation;
-> > +
-> > +		ret = ps883x_set(retimer);
-> > +	}
-> > +
-> > +	mutex_unlock(&retimer->lock);
-> > +
-> > +	return ret;
-> > +}
-> 
-> This seems to indicate a bigger problem, but I see this function called
-> during early resume while the i2c controller is suspended:
-> 
-> [   54.213900] ------------[ cut here ]------------
-> [   54.213942] i2c i2c-2: Transfer while suspended
-> [   54.214125] WARNING: CPU: 0 PID: 126 at drivers/i2c/i2c-core.h:56 __i2c_transfer+0x874/0x968 [i2c_core]
-> ...
-> [   54.214833] CPU: 0 UID: 0 PID: 126 Comm: kworker/0:2 Not tainted 6.13.0-rc1 #11
-> [   54.214844] Hardware name: Qualcomm CRD, BIOS 6.0.231221.BOOT.MXF.2.4-00348.1-HAMOA-1 12/21/2023
-> [   54.214852] Workqueue: events pmic_glink_altmode_worker [pmic_glink_altmode]
-> ...
-> [   54.215090] Call trace:
-> [   54.215097]  __i2c_transfer+0x874/0x968 [i2c_core] (P)
-> [   54.215112]  __i2c_transfer+0x874/0x968 [i2c_core] (L)
-> [   54.215126]  i2c_transfer+0x94/0xf0 [i2c_core]
-> [   54.215140]  i2c_transfer_buffer_flags+0x5c/0x90 [i2c_core]
-> [   54.215153]  regmap_i2c_write+0x20/0x58 [regmap_i2c]
-> [   54.215166]  _regmap_raw_write_impl+0x740/0x894
-> [   54.215184]  _regmap_bus_raw_write+0x60/0x7c
-> [   54.215192]  _regmap_write+0x60/0x1b4
-> [   54.215200]  regmap_write+0x4c/0x78
-> [   54.215207]  ps883x_set+0xb0/0x10c [ps883x]
-> [   54.215219]  ps883x_sw_set+0x74/0x98 [ps883x]
-> [   54.215227]  typec_switch_set+0x58/0x90 [typec]
-> [   54.215248]  pmic_glink_altmode_worker+0x3c/0x23c [pmic_glink_altmode]
-> [   54.215257]  process_one_work+0x20c/0x610
-> [   54.215274]  worker_thread+0x23c/0x378
-> [   54.215283]  kthread+0x124/0x128
-> [   54.215291]  ret_from_fork+0x10/0x20
-> [   54.215303] irq event stamp: 28140
-> [   54.215309] hardirqs last  enabled at (28139): [<ffffd15e3bc2a434>] __up_console_sem+0x6c/0x80
-> [   54.215325] hardirqs last disabled at (28140): [<ffffd15e3c596aa4>] el1_dbg+0x24/0x8c
-> [   54.215341] softirqs last  enabled at (28120): [<ffffd15e3bb9b82c>] handle_softirqs+0x4c4/0x4dc
-> [   54.215355] softirqs last disabled at (27961): [<ffffd15e3bb501ec>] __do_softirq+0x14/0x20
-> [   54.215363] ---[ end trace 0000000000000000 ]---
-> [   54.216889] Enabling non-boot CPUs ...
-> 
-> This can be reproduced on the CRD (or T14s) by disconnecting, for
-> example, a mass storage device while the laptop is suspended.
+> Please do not mix patches that should, and should not, be applied in the
+> same series as that plays havoc with our tools that want to take a whole
+> series at once.  Stuff like this just makes me delete the whole series
+> from my review queue, and if you got sent something like this, I imagine
+> you would do the same :(
 
-Sorry for the late reply. 
+Sorry about that and for the late reply.
 
-According to Bjorn's reply, this needs to be fixed in qcom-glink-smem
-driver due to the IRQF_NO_SUSPEND flag for the glink-smem interrupt.
-
-TBF, this whole series is going to be delayed by that fix being needed anyway. 
+Will send the patches that are for testing purposes only as a separate
+patchset.
 
 > 
-> > +static int ps883x_retimer_set(struct typec_retimer *rtmr,
-> > +			      struct typec_retimer_state *state)
-> > +{
-> > +	struct ps883x_retimer *retimer = typec_retimer_get_drvdata(rtmr);
-> > +	struct typec_mux_state mux_state;
-> > +	int ret = 0;
-> > +
-> > +	mutex_lock(&retimer->lock);
-> > +
-> > +	if (state->mode != retimer->mode) {
-> > +		retimer->mode = state->mode;
-> > +
-> > +		if (state->alt)
-> > +			retimer->svid = state->alt->svid;
-> > +		else
-> > +			retimer->svid = 0; // No SVID
+> thanks,
 > 
-> Nit: I'd prefer if you avoid c99 comments for consistency.
-
-Yes, will drop.
-
-> 
-> > +		ret = ps883x_set(retimer);
-> > +	}
-> > +
-> > +	mutex_unlock(&retimer->lock);
-> > +
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	mux_state.alt = state->alt;
-> > +	mux_state.data = state->data;
-> > +	mux_state.mode = state->mode;
-> > +
-> > +	return typec_mux_set(retimer->typec_mux, &mux_state);
-> > +}
-> 
-> > +static int ps883x_retimer_probe(struct i2c_client *client)
-> > +{
-> > +	struct device *dev = &client->dev;
-> > +	struct typec_switch_desc sw_desc = { };
-> > +	struct typec_retimer_desc rtmr_desc = { };
-> > +	struct ps883x_retimer *retimer;
-> > +	int ret;
-> > +
-> > +	retimer = devm_kzalloc(dev, sizeof(*retimer), GFP_KERNEL);
-> > +	if (!retimer)
-> > +		return -ENOMEM;
-> > +
-> > +	retimer->client = client;
-> > +
-> > +	mutex_init(&retimer->lock);
-> > +
-> > +	retimer->regmap = devm_regmap_init_i2c(client, &ps883x_retimer_regmap);
-> > +	if (IS_ERR(retimer->regmap))
-> > +		return dev_err_probe(dev, PTR_ERR(retimer->regmap),
-> > +				     "failed to allocate register map\n");
-> > +
-> > +	ret = ps883x_get_vregs(retimer);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	retimer->xo_clk = devm_clk_get(dev, NULL);
-> > +	if (IS_ERR(retimer->xo_clk))
-> > +		return dev_err_probe(dev, PTR_ERR(retimer->xo_clk),
-> > +				     "failed to get xo clock\n");
-> > +
-> > +	retimer->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_ASIS);
-> 
-> GPIOD_ASIS is documented as requiring you to later set the direction,
-> but this does not happen unconditionally below.
-
-Yes. Will do that after the read that figures out if the retimer is
-already left configured or not.
-
-> 
-> > +	if (IS_ERR(retimer->reset_gpio))
-> > +		return dev_err_probe(dev, PTR_ERR(retimer->reset_gpio),
-> > +				     "failed to get reset gpio\n");
-> > +
-> > +	retimer->typec_switch = typec_switch_get(dev);
-> > +	if (IS_ERR(retimer->typec_switch))
-> > +		return dev_err_probe(dev, PTR_ERR(retimer->typec_switch),
-> > +				     "failed to acquire orientation-switch\n");
-> > +
-> > +	retimer->typec_mux = typec_mux_get(dev);
-> > +	if (IS_ERR(retimer->typec_mux)) {
-> > +		ret = dev_err_probe(dev, PTR_ERR(retimer->typec_mux),
-> > +				    "failed to acquire mode-mux\n");
-> > +		goto err_switch_put;
-> > +	}
-> > +
-> > +	ret = drm_aux_bridge_register(dev);
-> > +	if (ret)
-> > +		goto err_mux_put;
-> > +
-> > +	ret = ps883x_enable_vregs(retimer);
-> > +	if (ret)
-> > +		goto err_mux_put;
-> > +
-> > +	ret = clk_prepare_enable(retimer->xo_clk);
-> > +	if (ret) {
-> > +		dev_err(dev, "failed to enable XO: %d\n", ret);
-> > +		goto err_vregs_disable;
-> > +	}
-> > +
-> > +	sw_desc.drvdata = retimer;
-> > +	sw_desc.fwnode = dev_fwnode(dev);
-> > +	sw_desc.set = ps883x_sw_set;
-> > +
-> > +	retimer->sw = typec_switch_register(dev, &sw_desc);
-> > +	if (IS_ERR(retimer->sw)) {
-> > +		ret = dev_err_probe(dev, PTR_ERR(retimer->sw),
-> > +				    "failed to register typec switch\n");
-> > +		goto err_clk_disable;
-> > +	}
-> > +
-> > +	rtmr_desc.drvdata = retimer;
-> > +	rtmr_desc.fwnode = dev_fwnode(dev);
-> > +	rtmr_desc.set = ps883x_retimer_set;
-> > +
-> > +	retimer->retimer = typec_retimer_register(dev, &rtmr_desc);
-> > +	if (IS_ERR(retimer->retimer)) {
-> > +		ret = dev_err_probe(dev, PTR_ERR(retimer->sw),
-> > +				    "failed to register typec retimer\n");
-> > +		goto err_switch_unregister;
-> > +	}
-> 
-> The registration functions do not return -EPROBE_DEFER so I'd prefer if
-> you switch back to dev_err() here as we already discussed. A driver must
-> not probe defer after having registered child devices so it's important
-> to document which functions can actually trigger a probe deferral. 
-> 
-> I know there's been a recent change to the dev_err_probe() suggesting
-> that it could be used anyway, but I think that's a really bad idea and
-> I'm considering sending a revert for that.
-
-Makes sense to me. Will switch back to dev_err().
-
-> 
-> > +
-> > +	/* skip resetting if already configured */
-> > +	if (regmap_test_bits(retimer->regmap, REG_USB_PORT_CONN_STATUS_0,
-> > +			     CONN_STATUS_0_CONNECTION_PRESENT))
-> > +		return 0;
-> 
-> What if the device is held in reset? This looks like it only works if
-> the boot firmware has already enabled the retimer. Otherwise you may
-> return success from probe here with the retimer still in reset.
-
-Please correct me if I'm wrong, but if the read above fails or reads
-anything else than "connection present", then below we go through the
-resetting sequence. If it reads "connection present", then retimer can't
-be in reset.
-
-And here is where the direction setting mentioned above would have to
-happen if the "connection is present" as well, not just for when the
-repeater is in reset, which is handled below. 
-
-> 
-> > +	gpiod_direction_output(retimer->reset_gpio, 1);
-> > +
-> > +	/* VDD IO supply enable to reset release delay */
-> > +	usleep_range(4000, 14000);
-> > +
-> > +	gpiod_set_value(retimer->reset_gpio, 0);
-> > +
-> > +	/* firmware initialization delay */
-> > +	msleep(60);
-> > +
-> > +	return 0;
-> > +
-> > +err_switch_unregister:
-> > +	typec_switch_unregister(retimer->sw);
-> > +err_vregs_disable:
-> > +	ps883x_disable_vregs(retimer);
-> > +err_clk_disable:
-> > +	clk_disable_unprepare(retimer->xo_clk);
-> > +err_mux_put:
-> > +	typec_mux_put(retimer->typec_mux);
-> > +err_switch_put:
-> > +	typec_switch_put(retimer->typec_switch);
-> > +
-> > +	return ret;
-> > +}
-> > +
-> > +static void ps883x_retimer_remove(struct i2c_client *client)
-> > +{
-> > +	struct ps883x_retimer *retimer = i2c_get_clientdata(client);
-> > +
-> > +	typec_retimer_unregister(retimer->retimer);
-> > +	typec_switch_unregister(retimer->sw);
-> > +
-> > +	gpiod_set_value(retimer->reset_gpio, 1);
-> > +
-> > +	clk_disable_unprepare(retimer->xo_clk);
-> > +
-> > +	ps883x_disable_vregs(retimer);
-> > +
-> > +	typec_mux_put(retimer->typec_mux);
-> > +	typec_switch_put(retimer->typec_switch);
-> > +}
-> 
-> Johan
+> greg k-h
 
 Thanks for reviewing,
+
 Abel
 
