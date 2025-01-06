@@ -1,144 +1,249 @@
-Return-Path: <linux-usb+bounces-19017-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19018-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B4AEA01FA9
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 08:13:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C5A5A02029
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 09:01:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07CC13A208F
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 07:13:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C0B433A2876
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 08:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B511D7998;
-	Mon,  6 Jan 2025 07:11:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A61D1D6DDC;
+	Mon,  6 Jan 2025 08:01:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HBUmDX/Z"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nLyX2PfX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BAAB1D6193;
-	Mon,  6 Jan 2025 07:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749831D79A9
+	for <linux-usb@vger.kernel.org>; Mon,  6 Jan 2025 08:01:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736147518; cv=none; b=PPRW77ElapkokDSroR2mrm8L1PN401loEiKr8sFqfcruITqelOL3GREbvBdc6ljo7ely9Nr4bOWAssqyq71q81AdyVWG28sO7GiTbCSt39Oiba7knrgBa98uKMfooIO2Fr/e5aFkPq/wxMT/p6BDn1WZ3AXSv+0IRGGX1bxdI0Q=
+	t=1736150498; cv=none; b=U04PtDjPdpa5obM3Hf3bfkFEime2xqOJ90TFYwgZ2f3jGn2J4AkiH8cFmi4qyyFTRfSfISbuzuwjzvncKCAJXHKXo6lTHS77KFcaCKTUIJn84WPJ6RWeyIasEEwjAsF96ReIrkBnYMH0kjQKuA6A3TWiAK8nrSjDh5MuZd8rL1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736147518; c=relaxed/simple;
-	bh=oLCXSmrVBBsLo0CzHgC7aJIZWv4lFAGFHcrnLUBjFTM=;
+	s=arc-20240116; t=1736150498; c=relaxed/simple;
+	bh=v/5G+PFWEZbU8pDIm5FxvSrH5OEu2vahwkXFvzXmIzw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ahlh04Dj2kqwgaZHxvLYkgF+w0IkPXzReeaD7d3S50YscvVFuRp9NXFFlQ44MbKiZGin+kZcXqVwvQ3pGfKKgQQbnt7x8Vt9bXfPDZD8fgOc//hrERdTEV75SqT5/fToOjeqaOw41TUuDYXTQlGU+52CydmP6WMvvVYGTSuT+l8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HBUmDX/Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA48CC4CED6;
-	Mon,  6 Jan 2025 07:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736147517;
-	bh=oLCXSmrVBBsLo0CzHgC7aJIZWv4lFAGFHcrnLUBjFTM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HBUmDX/ZNH3ng9jNNgpjkne5Azv0/mD0yUnO8Xtjsqh9sfUogukNwxkVHgYXTq99T
-	 AFabrXUxdUnIWDcKrqvdrtJvu6CMpycSYezrajtvbSiDDBv92MgYOLkuxWgy/KumcC
-	 DKldYh8Lcm+4DzxhmYTVbFKw3PS/sfl7eU5BLLpUzDPXAyhAzBOBzeCdV+1LdBF0Zv
-	 eR9LC9Bti5XV2xES3XdLDWPAz2J/neJ54usqCt9QSro1GFigHL7xOgmY8cjgSQVIuv
-	 C5J90lBwbvS5ud8bfQnbyScDK2lh1hxpVIWY3p9K3Cpv6XBEMkByz3k4exYxnl/nsL
-	 6zLbwcXRUXVnw==
-Date: Mon, 6 Jan 2025 08:11:54 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Sebastian Reichel <sre@kernel.org>, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-hwmon@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
-Message-ID: <md45rp2dmv7aibez2sxwzyjayfi4wbujshlc46hxi6v4jzlhfr@tpbtqv46hrlh>
-References: <20250105174159.227831-1-mitltlatltl@gmail.com>
- <20250105174159.227831-2-mitltlatltl@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nPRdz5a8kbs/6wPo1v6dKpaOHLodO/VXxjbbUi/OPcUf7t8YODeHXwGh1pJAelyZs5fpt1IG4yRr3K45T5RzkiY36HQ+b0zYO2y6VbD3H1CxC/qvnjfomZn8strqzUCEZxOgsSWLYbg3itGVDw97gvs//Q7QqxBFLGmwRIwcOWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nLyX2PfX; arc=none smtp.client-ip=209.85.221.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-3862f32a33eso6343089f8f.3
+        for <linux-usb@vger.kernel.org>; Mon, 06 Jan 2025 00:01:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736150493; x=1736755293; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=NA4fve8hGhqXSVITorcQfMkQAMnFkhT3ze3kgb2upiQ=;
+        b=nLyX2PfXDJJHpnq1CBKmYSjT4z3gbObVDf5wQjaeRZz26SgBq4Z1jl0zxCblr5q/zz
+         +S9QcQgQ75zI34HTId9Q4FviihPImk0KF1TdWthhtz/c6/ZiMf5lMjMRNSrif91Tv/ME
+         t/IKZjJD6rrlGVx1hEcsfTo2wSvjkfqxKqEmom7+w0uKPMY1swojLj4Txt5bUpuN0GYT
+         sIIOqiy4+jEGwldOX4eikI4Ysr2CtZGfT1qfR2tVTbVROGaC0NryrQRGyGDMxN6JTnyK
+         wuK04HZSw9F/1ATq5gvKbnPt0o6kdbvOMt2b2qMTDHOP8KjE40VKMRr/FWzoXJjaimtP
+         +6mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736150493; x=1736755293;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NA4fve8hGhqXSVITorcQfMkQAMnFkhT3ze3kgb2upiQ=;
+        b=WYvdzEBfQtR7jEENSDCSdyj7McC+2hxHbwa151Wnf2Cg2kpUHVAAxojmy05hTCgZcg
+         7UD0rsn8whfjQcTCgBRvqavuXIWsgr0zTskGJSu+ZYuuQbQ1tEp0uG+1srRq/6r+wMwt
+         Vp+HuYTvzU+cIyw41PaUNzmM2gFBWLV3i/ZYH+KuxLqZ23cyhtrEIiBN56Fg7gd+ASok
+         1j6SH9ZqashZMKrC3FyGQ5YMpUEaodOVMBpnzOW7TNlXdibz72QCF7S18nVv9uvW/wUa
+         achtC45INeYfciKZjgmM+BdiGNrOadMITk9fV8COB0Gz9QkmQIMX8t9Yu8cdWm6UFyfs
+         ZTBA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSM5dcBegCiwcdhoI2npEJZto+Wk8O7A5PntZ46vQfTa5EDypj9SJMGIaqV3hzX4iBunzz25tpt74=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxk76TDtYXkcgPKEMrhWjThLWwsmU29Gf3nWPQdz1THwEbF4I32
+	E8t5cAcJvSVQCgQNogCBvHZcFMok4Ix8TizgnvBtDOhNm1AgSgCsb4X/3nAqTyYwE49/7TN44QY
+	j
+X-Gm-Gg: ASbGnctP7jMazfGXNtHFog8QIsDyEQk66Po06MRfV1r33CBZsCaYuFtIfpiHac3QwRd
+	1MJBDcy9ICsNJs1XmWu9yVRJoUp5IabK68SHe4EFr2cV22So6fbJ4Gspu3WSK5uHzICxOizIMW8
+	y3dvuuB1wgoVt0o4GCixN4h8KBrh3768oBs2S58tzdd/YfffEAf2oAxVO+TZlqE47B2D2qPfocd
+	EoeMKZJJl0iaV8TGAxmGVq7WwNDTwJk2Y7836cczI0934uZM9/3KKviS2Qeag==
+X-Google-Smtp-Source: AGHT+IHLwJ8zk7mruC75rk0jPcosc1BH3yQdl73ZRyrEh7sIcStX9d22zAj8/rPTATVQ7OjADv+obw==
+X-Received: by 2002:a05:6000:4007:b0:382:4926:98fa with SMTP id ffacd0b85a97d-38a223f5c46mr52412943f8f.40.1736150491587;
+        Mon, 06 Jan 2025 00:01:31 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4364b0532a6sm573987775e9.1.2025.01.06.00.01.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 06 Jan 2025 00:01:31 -0800 (PST)
+Date: Mon, 6 Jan 2025 11:01:27 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "oe-kbuild@lists.linux.dev" <oe-kbuild@lists.linux.dev>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	"lkp@intel.com" <lkp@intel.com>,
+	"oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	Homura Akemi <a1134123566@gmail.com>
+Subject: Re: [PATCH v3 24/28] usb: gadget: f_tcm: Check overlapped command
+Message-ID: <4279c951-592d-422b-b8b1-0596752b4030@stanley.mountain>
+References: <6bffc2903d0cd1e7c7afca837053a48e883d8903.1733876548.git.Thinh.Nguyen@synopsys.com>
+ <d9f6af01-7a20-45aa-b6f1-380711aaec92@stanley.mountain>
+ <20241220023105.ruvvhqbzd3m37ce4@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250105174159.227831-2-mitltlatltl@gmail.com>
+In-Reply-To: <20241220023105.ruvvhqbzd3m37ce4@synopsys.com>
 
-On Mon, Jan 06, 2025 at 01:41:55AM +0800, Pengyu Luo wrote:
-> +maintainers:
-> +  - Pengyu Luo <mitltlatltl@gmail.com>
-> +
-> +description:
-> +  Different from other Qualcomm Snapdragon sc8180x and sc8280xp-based
-> +  machines, the Huawei Matebook E Go tablets use embedded controllers
-> +  while others use a system called PMIC GLink which handles battery,
-> +  UCSI, USB Type-C DP Alt Mode. In addition, Huawei's implementation
-> +  also handles additional features, such as charging thresholds, FN
-> +  lock, smart charging, tablet lid status, thermal sensors, and more.
-> +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - huawei,gaokun2
-> +          - huawei,gaokun3
+Sorry for the delayed response.  I was on vacation.
 
-Missing "-ec", because gaokun2/3 is the name of the board, apparently. You cannot
-duplicate compatibles with different meanings and if you tested this you
-would see errors.
+On Fri, Dec 20, 2024 at 02:31:20AM +0000, Thinh Nguyen wrote:
+> On Thu, Dec 19, 2024, Dan Carpenter wrote:
+> > Hi Thinh,
+> > 
+> > kernel test robot noticed the following build warnings:
+> > 
+> > url:    https://github.com/intel-lab-lkp/linux/commits/Thinh-Nguyen/usb-gadget-f_tcm-Don-t-free-command-immediately/20241211-092317 
+> > base:   d8d936c51388442f769a81e512b505dcf87c6a51
+> > patch link:    https://lore.kernel.org/r/6bffc2903d0cd1e7c7afca837053a48e883d8903.1733876548.git.Thinh.Nguyen%40synopsys.com 
+> > patch subject: [PATCH v3 24/28] usb: gadget: f_tcm: Check overlapped command
+> > config: nios2-randconfig-r071-20241219 (https://download.01.org/0day-ci/archive/20241219/202412192132.XB16SilM-lkp@intel.com/config )
+> > compiler: nios2-linux-gcc (GCC) 14.2.0
+> > 
+> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+> > | Closes: https://lore.kernel.org/r/202412192132.XB16SilM-lkp@intel.com/ 
+> > 
+> > smatch warnings:
+> > drivers/usb/gadget/function/f_tcm.c:1308 usbg_cmd_work() error: we previously assumed 'active_cmd' could be null (see line 1265)
+> > 
+> > vim +/active_cmd +1308 drivers/usb/gadget/function/f_tcm.c
+> > 
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1227  static void usbg_cmd_work(struct work_struct *work)
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1228  {
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1229  	struct usbg_cmd *cmd = container_of(work, struct usbg_cmd, work);
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1230  
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1231  	/*
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1232  	 * Failure is detected by f_tcm here. Skip submitting the command to the
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1233  	 * target core if we already know the failing response and send the usb
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1234  	 * response to the host directly.
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1235  	 */
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1236  	if (cmd->tmr_rsp != RC_RESPONSE_UNKNOWN)
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1237  		goto skip;
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1238  
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1239  	if (cmd->tmr_func)
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1240  		usbg_submit_tmr(cmd);
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1241  	else
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1242  		usbg_submit_cmd(cmd);
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1243  
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1244  	return;
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1245  
+> > 287b3d115e5351 Thinh Nguyen          2024-12-11  1246  skip:
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1247  	if (cmd->tmr_rsp == RC_OVERLAPPED_TAG) {
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1248  		struct f_uas *fu = cmd->fu;
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1249  		struct se_session *se_sess;
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1250  		struct uas_stream *stream = NULL;
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1251  		struct hlist_node *tmp;
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1252  		struct usbg_cmd *active_cmd = NULL;
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1253  
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1254  		se_sess = cmd->fu->tpg->tpg_nexus->tvn_se_sess;
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1255  
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1256  		hash_for_each_possible_safe(fu->stream_hash, stream, tmp, node, cmd->tag) {
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1257  			int i = stream - &fu->stream[0];
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1258  
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1259  			active_cmd = &((struct usbg_cmd *)se_sess->sess_cmd_map)[i];
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1260  			if (active_cmd->tag == cmd->tag)
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1261  				break;
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1262  		}
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1263  
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1264  		/* Sanity check */
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11 @1265  		if (!stream || (active_cmd && active_cmd->tag != cmd->tag)) {
+> > 
+> > Testing for !stream is sufficient.  Another option would be to write this
+> 
+> Just testing for !stream is sufficient to know whether active_cmd is
+> NULL, but we still need to check for matching tag also.
 
-I think I might mislead you during last talk, where I questioned what is
-"gen2" etc.
+Yes.  Sorry, I was unclear.  That's what I meant.  We could write it
+as:
 
-> +      - const: huawei,gaokun-ec
+	if (!stream || active_cmd->tag != cmd->tag) {
 
-There is no support for gaokun2 here, so I assume you checked and you
-know these are compatible. What's more, you claim there is a generic
-piece of hardware called gaokun-ec and everything in this family will be
-compatible with it. Well, that's my standard disclaimer and disapproval
-of using generic compatibles.
+There is no need to check if active_cmd is non-NULL since we know that
+stream is non-NULL.  However, if we DO check it, then we should check
+it consistently everywhere.
 
-So in general what you want here is *only one* compatible called
-huawei,gaokun3-ec
+> 
+> > as:
+> > 	if (!stream || !active_cmd || active_cmd->tag != cmd->tag)) {
+> 
+> Perhaps we can just do this:
+> 
+> 	if (!active_cmd || active_cmd->tag != cmd->tag)) {
+> 
+> If active_cmd is NULL, then the stream variable must also be NULL. This
+> may not be obvious.
+> 
+> > 
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1266  			usbg_submit_command(cmd->fu, cmd->req);
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1267  			return;
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1268  		}
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1269  
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1270  		reinit_completion(&stream->cmd_completion);
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1271  
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1272  		/*
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1273  		 * A UASP command consists of the command, data, and status
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1274  		 * stages, each operating sequentially from different endpoints.
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1275  		 *
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1276  		 * Each USB endpoint operates independently, and depending on
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1277  		 * hardware implementation, a completion callback for a transfer
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1278  		 * from one endpoint may not reflect the order of completion on
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1279  		 * the wire. This is particularly true for devices with
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1280  		 * endpoints that have independent interrupts and event buffers.
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1281  		 *
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1282  		 * The driver must still detect misbehaving hosts and respond
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1283  		 * with an overlap status. To reduce false overlap failures,
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1284  		 * allow the active and matching stream ID a brief 1ms to
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1285  		 * complete before responding with an overlap command failure.
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1286  		 * Overlap failure should be rare.
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1287  		 */
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1288  		wait_for_completion_timeout(&stream->cmd_completion, msecs_to_jiffies(1));
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1289  
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1290  		/* If the previous stream is completed, retry the command. */
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1291  		if (!hash_hashed(&stream->node)) {
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1292  			usbg_submit_command(cmd->fu, cmd->req);
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1293  			return;
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1294  		}
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1295  
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1296  		/*
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1297  		 * The command isn't submitted to the target core, so we're safe
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1298  		 * to remove the bitmap index from the session tag pool.
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1299  		 */
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1300  		sbitmap_queue_clear(&se_sess->sess_tag_pool,
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1301  				    cmd->se_cmd.map_tag,
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1302  				    cmd->se_cmd.map_cpu);
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1303  
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1304  		/*
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1305  		 * Overlap command tag detected. Cancel any pending transfer of
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1306  		 * the command submitted to target core.
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11  1307  		 */
+> > 7735c10c74d903 Thinh Nguyen          2024-12-11 @1308  		active_cmd->tmr_rsp = RC_OVERLAPPED_TAG;
+> > 
+> > The inconsistent NULL check triggers a warning here.
+> > 
+> 
+> We already check for !stream prior, so I didn't check for active_cmd
+> here. This is more of a consistency issue. If possible and if needed, we
+> can make this more consistent after the merge?
 
-> +
-> +  reg:
-> +    const: 0x38
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +patternProperties:
-> +  '^connector@[01]$':
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |+
+This is not a run time bug, yes.  It's just an inconsistent NULL check,
+but the NULL check is not necessary so that's not a problem.  I don't
+have a vote on how you merge it.  ;)  You can do that however you want.
 
-Drop +
-
-Best regards,
-Krzysztof
+regards,
+dan carpenter
 
 
