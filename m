@@ -1,91 +1,100 @@
-Return-Path: <linux-usb+bounces-19048-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19049-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 694C1A03231
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 22:37:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C02A6A03278
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 23:13:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BC97160BC2
-	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 21:37:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 492B418858F9
+	for <lists+linux-usb@lfdr.de>; Mon,  6 Jan 2025 22:13:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF951E0489;
-	Mon,  6 Jan 2025 21:37:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E23611DFE3A;
+	Mon,  6 Jan 2025 22:13:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ny8lA3DK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ux4fXKZH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D9FF14037F;
-	Mon,  6 Jan 2025 21:37:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64479132103
+	for <linux-usb@vger.kernel.org>; Mon,  6 Jan 2025 22:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736199462; cv=none; b=qwh0NDi5+d7g539emkrfZpDBoPuBv05sfHr3YwU4JXKEA9/hmtZY+M93O2lXEgOVaS1ACHthpeNA/MTzY7Fz7jgOk1e+PETyWupPXM9pxM6kbWkYjNGHDR5KkCNwJazENnRwZh0I1nsABYEHLd+uVGVijBlzZHvVUiLUia6XHW0=
+	t=1736201580; cv=none; b=n2+j61KVYn5PIumM8NFjk687lfyiOpvQoAj4YDwHIR0lvgv++wZOVvBbXpSm0bVSaiiLfxdJKcEjgMTN7hg2x5ZdRv5br7aP4MYFqjXykeq7QqncOgTmMeYrProdSZLa0+rX+jT6GGCT0jJ3HM9+Bz+IkGXk8iuz4/EGE086QqA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736199462; c=relaxed/simple;
-	bh=9m5H7kHPonfyhNQR1nj0UWrPDbjY8rdBq281JPurRt8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OH44ozZYsqTDBrmIsBQ8RNJfmJP+ANVXYNmpaVtu+VOGmySkcPNxu39GpkyYqkMs5FlBVkQbYFXmZNEiGxwj6G7juSoPcDS6RelKfTXjnwU4QX/Vym9Iy4iUuyJ1tA65pHNN9ESRMcsIXackrnrCo9BfU/k3qLVvjDD/3SXwZe4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ny8lA3DK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37908C4CEE2;
-	Mon,  6 Jan 2025 21:37:42 +0000 (UTC)
+	s=arc-20240116; t=1736201580; c=relaxed/simple;
+	bh=0Gs3jutc0Ih18PMs9M/Uu4+DUOOF6euN9Fq0WMVxdOU=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Z9dNckynb8ZIOm/DC7YuVZDTxCwTLX/J82c474CpTih9B1vsSCATbz1nECiNNxj41PCbp+ChW4Sppp2RHkuPLlGbCKRPCbGCZJmekYJB4PxlsO0asgE/84pGoJRTEeXwG9yfhKE3bmVm2Bn41kBaFg1PpRh/sU/jt8fQ5mJ/+So=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ux4fXKZH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D3F48C4CEE0
+	for <linux-usb@vger.kernel.org>; Mon,  6 Jan 2025 22:12:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736199462;
-	bh=9m5H7kHPonfyhNQR1nj0UWrPDbjY8rdBq281JPurRt8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Ny8lA3DKLz5m/sfuvW1s4T5bpt968r6fBu8DuZu+CenDyfjY+tuysThVPphKwF2WP
-	 OuDvOkbWSmw1bowLu4LrNMUHfpKZGRXfCSOhGVErUxdQZPzkGhHMnyQwLQfzbkYTc7
-	 3ezvYsXOHNAAOHGC2hqunyXMuDFDr2Oeb4nVCscVJMrmOJZLeZFJMU5rwn2knMBClu
-	 d0pcnZomqO6jN9vdX5kJriLfPaHgZeJ3ESCBhUkNeHAg9JlBXLrnB9FosyDzut9vba
-	 e9Waw0JusEB35+kk5UKN5tgeFFoj1KrDIi/9bO8XRpizwYTCk0ESZOcrJC+Lbu22O4
-	 bjHsZ64nbh4hg==
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e479e529ebcso19400276276.3;
-        Mon, 06 Jan 2025 13:37:42 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU2G6Y/PhQd0yigx8IbBH15idoXNlYpbyDQDI9mu87D0VDFqoJGXSZHScKT46VMn18s/T5/enXXHPuq@vger.kernel.org, AJvYcCVQU5jp+4H27GlY0KrafL8IA83H/vfrA8tEF6NslxczLHQZOEQJ1FjsZyjwIfNzXcImVAdQ5NwszTjYlA==@vger.kernel.org, AJvYcCXW0mM3Aoxv7LPqFg+WPbLLn9LwPTgpXOcf7tDiBHK+ARsov7Kc5LeYcPCxVwx6nS6R23+xb5PWKplowco=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzieyA8tarSUt8E6JLKxs0p9RtGIFJbjpqwkW2g/dabpFC7JmwU
-	26VQFPGHqgHgFKw73mfvMoIinFDAV95YplaOxmZ9lqHgQtvN82HoRxceCUFN/XdkkPPmPXtzNdp
-	rGZmZ4YJqM7TtoJsVTjej+X9xdw==
-X-Google-Smtp-Source: AGHT+IHyfDhHyQI1uWGW6OOcFTI1AZDalabc00kYdV2rtjVeVq48AsaKNzKuxGmzfdpyrPWISkI4n3ztkPVzMi6Btec=
-X-Received: by 2002:a05:690c:6107:b0:6ef:97a2:49e6 with SMTP id
- 00721157ae682-6f3f820cd0cmr484407147b3.31.1736199461441; Mon, 06 Jan 2025
- 13:37:41 -0800 (PST)
+	s=k20201202; t=1736201579;
+	bh=0Gs3jutc0Ih18PMs9M/Uu4+DUOOF6euN9Fq0WMVxdOU=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Ux4fXKZHbg70TzUksxHztfrasuF3yaRnn99zyIMD2CFf75fn2CS/1zHjPHjSvoD+S
+	 dZlO3kVylZeGHWatjy8aakwBvWOvl5OrqONZY7G8nZecOL+AwObAIw0T7JxFjdlm/r
+	 tL3A0k92OaM2gDXWil62+CPcYlkODGg0UMnTdvtY8uKx1L10OT/6R0PIEx+W3zLWxy
+	 /xSH4quIDAgyB/G0zU8E3b55+kSXtpgYgJbOtcx3QHA6IDCnuf4eyrSj5I12F6aNAD
+	 PejkSFqJIT2yFphe0jgekEDAnLVU92SE4ppgRFg0ShsCUdBzESn3DYBvdqlPrsygJv
+	 XLUha3/iWqzaA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id C3531C41613; Mon,  6 Jan 2025 22:12:59 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 218525] Thunderbolt eGPU bad performance
+Date: Mon, 06 Jan 2025 22:12:59 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: kaukov.peter@pm.me
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-218525-208809-5gQ5xisuau@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-218525-208809@https.bugzilla.kernel.org/>
+References: <bug-218525-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241231164456.262581-1-robh@kernel.org> <c6925d52-d662-42b3-8ca6-f238c77736a4@sirena.org.uk>
-In-Reply-To: <c6925d52-d662-42b3-8ca6-f238c77736a4@sirena.org.uk>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 6 Jan 2025 15:37:30 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKXJEVQuDqp1amkYHDrfKdx0w25bonKLhZh9UPjA97-3Q@mail.gmail.com>
-Message-ID: <CAL_JsqKXJEVQuDqp1amkYHDrfKdx0w25bonKLhZh9UPjA97-3Q@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: omap: Use devm_regulator_get_optional()
-To: Mark Brown <broonie@kernel.org>
-Cc: Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	linux-usb@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 6, 2025 at 6:49=E2=80=AFAM Mark Brown <broonie@kernel.org> wrot=
-e:
->
-> On Tue, Dec 31, 2024 at 10:44:56AM -0600, Rob Herring (Arm) wrote:
-> > The 'vbus-supply' regulator is optional, so use
-> > devm_regulator_get_optional() instead of checking for property presence
-> > first.
->
-> Is it actually optional?  The name suggests it's likely to be
-> required...
+https://bugzilla.kernel.org/show_bug.cgi?id=3D218525
 
-That's what the binding says. From a quick scan, I only see this used
-for OMAP5. The preference is for this to be in the connector node as
-that is where Vbus is hooked up to typically.
+--- Comment #18 from Kaukov (kaukov.peter@pm.me) ---
+After a lot of discussion on https://github.com/doitsujin/dxvk/issues/3694,=
+ a
+user suggested we try out a DXVK config option. Lo and behold, all the FPS
+issues were fixed.
 
-Rob
+Turns out the issue comes from DXVK itself and isn't related to the kernel.
+
+You can close this bug because it's not a bug with the kernel and is in no =
+way
+related to it.
+
+Thank you for keeping it open for so long!
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
