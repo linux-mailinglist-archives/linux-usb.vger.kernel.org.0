@@ -1,194 +1,172 @@
-Return-Path: <linux-usb+bounces-19065-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19066-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02F33A03E2A
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 12:46:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77176A03F0C
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:25:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF508166037
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 11:46:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E14083A43EF
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 12:25:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 824291EE00C;
-	Tue,  7 Jan 2025 11:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E441EE7B6;
+	Tue,  7 Jan 2025 12:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HtgkNi01"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HwR6yB3t"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 461231DFE3D;
-	Tue,  7 Jan 2025 11:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D75F1E0DD1;
+	Tue,  7 Jan 2025 12:25:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736250388; cv=none; b=pQSvXJ8HA81ms8fJD9rC5l5r3sG693VpBZ/lsQqPZpMOajhTLDWTTNfrD2Vi1OItMpJAxwSeo8Bv2+izPNZHqet5HzNrqCp36W2gl39VIsHGzSnFAGv7HnJDsNQZgA60EtxyrwEpNL73kPS/RAd0qHOC0cBElkswpNPi6Dg4sVQ=
+	t=1736252714; cv=none; b=Om0sK8+fR8U6b9E076ZtlSg0pPopbtPjn0U1wWFFP8ClWlGCgOr3XnpqN/JM98/Zz9p/044t6XRc0TqTVW2oRSmHi0d+dmUfrN5LLcaH85AzBDW8k0bQgXVqYrBS9jdIdfLMNw+Qxbjhq6xZA3uuPJj561ViXxhE88zGRXB/BBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736250388; c=relaxed/simple;
-	bh=df0LOEnngCjfFj2PvwptpBWdY3nEK+O/wLcKL6OCdMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DBf97wj+pwpMne4yvD180HeqzhBUjqRcqBcJoMJ3wI6pPgcmA2nkQv7aYZppKADduIY/2eqn7CUIX7U0TFR9tGe3w5KcEy67k1QwoCY7aK4eUI+NLuL6DBe/uJSKUUF4bJ671uYSsG4teO++WAK7/Sos7gYBDered6cSz/7wiI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HtgkNi01; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1736250380;
-	bh=df0LOEnngCjfFj2PvwptpBWdY3nEK+O/wLcKL6OCdMQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HtgkNi01/LC2j6dqsG6SUSw9HHQbXsj7H/SdfXh0AocYFpR8qrA/CxTlluiY9Kec0
-	 zEgIPvTMfcZOdAWf9o2x1VYypg/Dx9sUDiifzz524qqVYzsgHW2GMuJ3wCHwksN2zo
-	 QBn6/BM/TKk2f7PRM8r3E8UkHtt1zkLajqNOiZrYHnFRcaSgIzObHNlBloafdeROly
-	 SwwrqtW5nIVH2zyZJMhDMhO5xViOJhqGfkMHj5/bkSwCCM2huPfst5n+EIUbxWmugs
-	 mk46A4oVQaQwJHVN/KKBmJmHqbIa6LCFY6I8DD+C2dpT92bwLgka5Cz9xHjAnSsmiW
-	 k1Fa6eCcSp9IA==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id BDB2A17E1562;
-	Tue,  7 Jan 2025 12:46:19 +0100 (CET)
-Message-ID: <b23d4240-f520-4840-844f-adf712ca2aff@collabora.com>
-Date: Tue, 7 Jan 2025 12:46:19 +0100
+	s=arc-20240116; t=1736252714; c=relaxed/simple;
+	bh=uKpuN0WZd9vVEiVj4SEyuarv69NHmOZ8lL7reHm2oTY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kq9EdqKnELP7KEloxS0f/tSwlcnLAe97uh62tpDA+qSD7MHAER2TwSK4cjf2Rlns6JRPEtXT0+A+lUHYCPcpclVm4W6gNFCdqA9e9tRKbaXjVH9OvqC3k8l47zlHnzCSy5PH6PMJARDTidLsnfSplk9a1M4Z2pUJwXZ8X/6THc4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HwR6yB3t; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736252712; x=1767788712;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uKpuN0WZd9vVEiVj4SEyuarv69NHmOZ8lL7reHm2oTY=;
+  b=HwR6yB3tga+ve/HVD6XO53mayDz/owyTh84N3LnALMMbxevNq9i8Vnhp
+   OqrN401bTSgH6cW8HGW7u1wk+cD47XFyHIS86jBPkgkVeEypjjdu/e6Kz
+   /FdWaKexbe+yu4a/MB1XIQCXSPxxcJiglwcJhczT1Wx7zW6UYcUToi062
+   hsUjpZN7oDzMlgou262qF7mafyX+NNYGpz5HPBKZdgaRu3+1Y3ShAJ4Yj
+   L4PHU9/Y5xHyiHVUJN4DL3ZSt3eDg5zyvzoEkrlHFDfiCKr5LSXPf/ooM
+   8ZHp+1Ds7IkYShhLCTPa43k42HZaG4HbWK79VMjGoMrpiIBzx5XxJxVOR
+   w==;
+X-CSE-ConnectionGUID: MFX+1PnaS2W5RQtAXPTCkA==
+X-CSE-MsgGUID: pnF3xunoQYSR6HwQJgbCbg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="40378866"
+X-IronPort-AV: E=Sophos;i="6.12,295,1728975600"; 
+   d="scan'208";a="40378866"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 04:25:11 -0800
+X-CSE-ConnectionGUID: +hXV3ZX9RpuUg18GG0ZvkQ==
+X-CSE-MsgGUID: oVObbeAYRLGujom+byUEaw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="133645683"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa001.fm.intel.com with SMTP; 07 Jan 2025 04:25:06 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 07 Jan 2025 14:25:05 +0200
+Date: Tue, 7 Jan 2025 14:25:05 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Pengyu Luo <mitltlatltl@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-hwmon@vger.kernel.org,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Subject: Re: [PATCH v2 2/5] platform: arm64: add Huawei Matebook E Go EC
+ driver
+Message-ID: <Z30dIRA4MdtCp63q@kuha.fi.intel.com>
+References: <20250105174159.227831-1-mitltlatltl@gmail.com>
+ <20250105174159.227831-3-mitltlatltl@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] usb: mtk-xhci: add support remote wakeup of mt8196
-To: Chen-Yu Tsai <wenst@chromium.org>,
- =?UTF-8?B?Q2h1bmZlbmcgWXVuICjkupHmmKXls7Ap?= <Chunfeng.Yun@mediatek.com>
-Cc: "robh@kernel.org" <robh@kernel.org>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "linux-mediatek@lists.infradead.org" <linux-mediatek@lists.infradead.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
- "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "mathias.nyman@intel.com" <mathias.nyman@intel.com>,
- "conor+dt@kernel.org" <conor+dt@kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
- "krzk+dt@kernel.org" <krzk+dt@kernel.org>
-References: <20241126025507.29605-1-chunfeng.yun@mediatek.com>
- <20241126025507.29605-2-chunfeng.yun@mediatek.com>
- <207f9e96-3165-440d-8576-545bf2bc9dee@collabora.com>
- <0820cf224ae9022fc34fb31d97d4c6f8f6e2eec1.camel@mediatek.com>
- <CAGXv+5FUuqDbVRQdkkdM9SRV6N3H8Gx_rMpx6rw-hNu45SKVNA@mail.gmail.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <CAGXv+5FUuqDbVRQdkkdM9SRV6N3H8Gx_rMpx6rw-hNu45SKVNA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250105174159.227831-3-mitltlatltl@gmail.com>
 
-Il 07/01/25 06:07, Chen-Yu Tsai ha scritto:
-> On Mon, Jan 6, 2025 at 10:58 PM Chunfeng Yun (云春峰)
-> <Chunfeng.Yun@mediatek.com> wrote:
->>
->> On Tue, 2024-11-26 at 09:50 +0100, AngeloGioacchino Del Regno wrote:
->>> External email : Please do not click links or open attachments until
->>> you have verified the sender or the content.
->>>
->>>
->>> Il 26/11/24 03:55, Chunfeng Yun ha scritto:
->>>> There are 2 USB controllers on mt8196, each controller's wakeup
->>>> control is
->>>> different, add some specific versions for them.
->>>>
->>>
->>> Is there any MTU3 controller in MT8196, like all other MediaTek SoCs?
->> Yes.
->>>
->>> If so, then please just add the wakeup control to the MTU3 driver,
->>> otherwise
->>> we are going to duplicate this for yet another SoC, like we've done
->>> for MT8192,
->>> MT8195, MT8188 and MT8186 already...
->> Even I add it in MTU3 driver, I still need add it in xhci-mtk driver,
->> some projects only use host mode;
->>
->> I can also add it in MTU3 driver and send out new patches.
->>
->> But it's not a good idea to duplicate it into MTU3 driver directly for
->> some SoC which has limitation on dual-role switch when using upstream
->> driver.
-> 
-> I think the idea behind Angelo's point is that MTU3 should be used for
-> all projects, regardless whether they are host mode only or not.
-> The hardware is there. Don't hide it.
-> 
+Hi,
 
-Yes, I confirm that's exactly my point.
+> +/* -------------------------------------------------------------------------- */
+> +/* API For UCSI */
+> +
+> +int gaokun_ec_ucsi_read(struct gaokun_ec *ec,
+> +			u8 resp[GAOKUN_UCSI_READ_SIZE])
+> +{
+> +	u8 req[] = MKREQ(0x03, 0xD5, 0);
+> +	u8 _resp[] = MKRESP(GAOKUN_UCSI_READ_SIZE);
+> +	int ret;
+> +
+> +	ret = gaokun_ec_read(ec, req, sizeof(_resp), _resp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	extr_resp(resp, _resp, GAOKUN_UCSI_READ_SIZE);
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_read);
+> +
+> +int gaokun_ec_ucsi_write(struct gaokun_ec *ec,
+> +			 const u8 req[GAOKUN_UCSI_WRITE_SIZE])
+> +{
+> +	u8 _req[] = MKREQ(0x03, 0xD4, GAOKUN_UCSI_WRITE_SIZE);
+> +
+> +
+> +	refill_req(_req, req, GAOKUN_UCSI_WRITE_SIZE);
+> +
+> +	return gaokun_ec_write(ec, _req);
+> +}
+> +EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_write);
+> +
+> +int gaokun_ec_ucsi_get_reg(struct gaokun_ec *ec, u8 *ureg)
+> +{
+> +	u8 req[] = MKREQ(0x03, 0xD3, 0);
+> +	u8 _resp[] = MKRESP(UCSI_REG_SIZE);
+> +	int ret;
+> +
+> +	ret = gaokun_ec_read(ec, req, sizeof(_resp), _resp);
+> +	if (ret)
+> +		return ret;
+> +
+> +	extr_resp(ureg, _resp, UCSI_REG_SIZE);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_get_reg);
 
-Thanks for clarifying, Chen-Yu.
+Why not just take struct gaokun_ucsi_reg as parameter? I did not see
+this (or any of these) being used anywhere else except in your UCSI
+glue driver. So the prototype would be:
 
-Cheers!
+        int gaokun_ec_ucsi_get_reg(struct gaokun_ec *ec,
+                                   struct gaokun_ucsi_reg *reg);
 
-> ChenYu
-> 
->> Thanks
->>
->>>
->>> Cheers,
->>> Angelo
->>>
->>>> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
->>>> ---
->>>>    drivers/usb/host/xhci-mtk.c | 18 ++++++++++++++++++
->>>>    1 file changed, 18 insertions(+)
->>>>
->>>> diff --git a/drivers/usb/host/xhci-mtk.c b/drivers/usb/host/xhci-
->>>> mtk.c
->>>> index 3252e3d2d79c..31223912b0b4 100644
->>>> --- a/drivers/usb/host/xhci-mtk.c
->>>> +++ b/drivers/usb/host/xhci-mtk.c
->>>> @@ -113,6 +113,12 @@
->>>>    #define WC1_IS_P_95         BIT(12)
->>>>    #define WC1_IS_EN_P0_95             BIT(6)
->>>>
->>>> +/* mt8196 */
->>>> +#define PERI_WK_CTRL0_8196   0x08
->>>> +#define UWK_V1_7_CTRL2_MASK  0x5
->>>> +
->>>> +#define WCP1_IS_EN           BIT(7) /* port1 en bit */
->>>> +
->>>>    /* mt2712 etc */
->>>>    #define PERI_SSUSB_SPM_CTRL 0x0
->>>>    #define SSC_IP_SLEEP_EN     BIT(4)
->>>> @@ -129,6 +135,8 @@ enum ssusb_uwk_vers {
->>>>        SSUSB_UWK_V1_4,         /* mt8195 IP1 */
->>>>        SSUSB_UWK_V1_5,         /* mt8195 IP2 */
->>>>        SSUSB_UWK_V1_6,         /* mt8195 IP3 */
->>>> +     SSUSB_UWK_V1_7,         /* mt8196 IP0 */
->>>> +     SSUSB_UWK_V1_8,         /* mt8196 IP1 */
->>>>    };
->>>>
->>>>    /*
->>>> @@ -381,6 +389,16 @@ static void usb_wakeup_ip_sleep_set(struct
->>>> xhci_hcd_mtk *mtk, bool enable)
->>>>                msk = WC0_IS_EN_P3_95 | WC0_IS_C_95(0x7) |
->>>> WC0_IS_P_95;
->>>>                val = enable ? (WC0_IS_EN_P3_95 | WC0_IS_C_95(0x1)) :
->>>> 0;
->>>>                break;
->>>> +     case SSUSB_UWK_V1_7:
->>>> +             reg = mtk->uwk_reg_base + PERI_WK_CTRL0_8196;
->>>> +             msk = UWK_V1_7_CTRL2_MASK;
->>>> +             val = enable ? msk : 0;
->>>> +             break;
->>>> +     case SSUSB_UWK_V1_8:
->>>> +             reg = mtk->uwk_reg_base + PERI_WK_CTRL0_8196;
->>>> +             msk = WCP1_IS_EN;
->>>> +             val = enable ? msk : 0;
->>>> +             break;
->>>>        case SSUSB_UWK_V2:
->>>>                reg = mtk->uwk_reg_base + PERI_SSUSB_SPM_CTRL;
->>>>                msk = SSC_IP_SLEEP_EN | SSC_SPM_INT_EN;
->>>
->>>
->>>
+> +int gaokun_ec_ucsi_pan_ack(struct gaokun_ec *ec, int port_id)
+> +{
+> +	u8 req[] = MKREQ(0x03, 0xD2, 1);
+> +	u8 data = 1 << port_id;
+> +
+> +	if (port_id == GAOKUN_UCSI_NO_PORT_UPDATE)
+> +		data = 0;
+> +
+> +	refill_req(req, &data, 1);
+> +
+> +	return gaokun_ec_write(ec, req);
+> +}
+> +EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_pan_ack);
 
+I think you should add proper kernel doc comments to these exported
+functions.
 
+thanks,
+
+-- 
+heikki
 
