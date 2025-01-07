@@ -1,656 +1,227 @@
-Return-Path: <linux-usb+bounces-19069-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19070-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F155A04068
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:10:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8EE1A040B1
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:19:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 755167A1D2C
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:10:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8D5B162AAB
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27A41E0DE2;
-	Tue,  7 Jan 2025 13:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C881E1023;
+	Tue,  7 Jan 2025 13:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EiJomx2/"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="cfGCeR2q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68081A4F09
-	for <linux-usb@vger.kernel.org>; Tue,  7 Jan 2025 13:10:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1D7A154BE2;
+	Tue,  7 Jan 2025 13:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736255424; cv=none; b=WD/oCc2R8Oyr0H5PJkahL573oiY0uaQKOl0UufpH84ql/lAKydI2vYMai+9wqpYsYh7PqBzQ9hiA7O5BgyCjrVN3BTB15Yo7cNSp3PukUymKCAlh3FYKKoNfXy6RV8v8kFJnXUWnmAwddth/RmDcCuLUGPkcp5IoJ01qBlaGc08=
+	t=1736255954; cv=none; b=G147fPEOiVG62QMbpaaLNbQQHyYfB4IiG6Zl+UgrO9grIJZIQ1xHEHfrE4ii/bCrK4G6PFuzIKkFl9YmMnj6/+dE1fA+qiO9BE+zQZesQrJr+5AL3UbI3PZz9/AMHoI0U8Wo2bTocl4RkV1Gk+CT57oBXIc5/wi68S+/qhRaZOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736255424; c=relaxed/simple;
-	bh=udN/b6nY7D2r/o7CT7Hlaklu3XkuaW6yWZkOE7X5v0Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rru0jh2Nf/+xof8I8rIdT1JjlLFc5rYrkXP190fuIrOzVz0XVDrb8fagqe/jm2IxzHeV+p7Kapu1umNtw6HuZCP+bgDia2I0DGgqDHGhjl6mlRlj19eSNE/G2DkjkUNMv1Fk1h2WT0MZQphcive55fWXxcgvN572HMR0lvDFu0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EiJomx2/; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43616bf3358so23973935e9.3
-        for <linux-usb@vger.kernel.org>; Tue, 07 Jan 2025 05:10:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736255419; x=1736860219; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=foGSh8Qx+tHz2jBBjTQp3yHR2idqHu77k8B9vJZUK4U=;
-        b=EiJomx2/TtuyiLSmoPm+h7He5WFuD/71901+KJ7H7zL+GZYsDikAotJ33BlKWCtZ1M
-         7kXurRaQnj3kVFnZKGOy8J+weggMYM+xbt0gBySuhqbwFoGEuFCEVZOlI0inOrznfqR3
-         6aYQ5w+bS6i9PdurL/T7MHtu2KnGdIgs4I4dHvtOagJ8vIfrTZhgOoFLjtsfK9nd2lIy
-         QfENHJEoLTccFtVkNU6Q+dJOKwgXnKS2qi+/Bv5Zd/7+REfPb8if6WUtmSP+ZriEG/Od
-         E5FCT1Cctns56Qr1E/MmieES/qdaabqKszvSNRFFNfglPQpuF2NEeeYeLF2QAF1tnqF1
-         uQ7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736255419; x=1736860219;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=foGSh8Qx+tHz2jBBjTQp3yHR2idqHu77k8B9vJZUK4U=;
-        b=rN0DYWkSxtk41B1GL4zPzLijXXdyTornDWsHiiZ2Nk4Qb8w/x7XQnA507uk/3g+yPW
-         hyvxUCwneRMtzHxMQG1W+ZVc7SooPiz8OaBiCGypsAY8ihht9g/flf/T3qAiXfTVM3O3
-         t2Pg9U2yBhhn2fRgb2ipnVsxyeij4cOOStqJEHixo5mU6ilcg2GL9cSUU/Te11f8sz80
-         ePHdJC9gk6HkAgP77Yoh2XtuBEjWINWl3mf6kSMWDFgknncek+2dC3qLlhwwLLRE/jtI
-         K6FlRfGrmoBZDjtoGraDOcsOhmrQ20PuQfRyhrMTiRruqP3OdbI++phASGslfq46QTrm
-         C+2Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUKd58J1f9Dcx17A2bVqPIASCdabzVrxtYfxM08oJvg3QZiAkoGOH741XLU4+vDEu5AhR2UEGyN71Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPJxD5LWAI3KgWqBXUVvvKHlUTBg4rfWW3AT1QA5EMmtXXaE05
-	fxoECQv7BYCpIPYjw9Ut3lRFq8+YXBs5iJ2hwt5yImMpgTjQtB4arFPB6q21dEk=
-X-Gm-Gg: ASbGncuv2CmPrhIau0tuZuVsnhWQW5h/OFQrwiZjP7ziQ+5WtT15vy9eXVtK3aKbyCN
-	l6GE/WEY6it5Yl50JZOzL8Xf+2NZFD3v4RGTR59GApytZ3g8T2tgDBuRjELFgavqY6WnpjD6C2C
-	0RV7pWhhb4vBx0SsugUi4K6m59dXz3QaJ5JUYJUvhKc7bbhGVtdpeTg80uUMV5UQTmOcDwLXEUy
-	ixHtTOULpt+aRIxagl2A315o5n/nuyECy7v9lRD7lFibpHsOhHuEHi82eO0Y6VvRX6QGzE=
-X-Google-Smtp-Source: AGHT+IH39DkPJVWh8PafMTPXRemOXm/34TIro/3P9lD0JdYV/DGP9CY4oekqiAbO683Y/GqNrRLsmw==
-X-Received: by 2002:a05:600c:1d1f:b0:436:17f4:9b3d with SMTP id 5b1f17b1804b1-43668b602c1mr206813905e9.4.1736255418875;
-        Tue, 07 Jan 2025 05:10:18 -0800 (PST)
-Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656af6c42sm631416065e9.9.2025.01.07.05.10.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 05:10:18 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Justin Chen <justin.chen@broadcom.com>,
-	Al Cooper <alcooperx@gmail.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Benjamin Bara <benjamin.bara@skidata.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
-	Del Regno <angelogioacchino.delregno@collabora.com>,
-	Tianping Fang <tianping.fang@mediatek.com>,
-	Jassi Brar <jaswinder.singh@linaro.org>,
-	Biju Das <biju.das.jz@bp.renesas.com>,
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-	Francesco Dolcini <francesco.dolcini@toradex.com>,
-	Macpaul Lin <macpaul.lin@mediatek.com>,
-	Alexander Stein <alexander.stein@ew.tq-group.com>,
-	linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org,
-	linux-tegra@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: usb: Correct indentation and style in DTS example
-Date: Tue,  7 Jan 2025 14:10:13 +0100
-Message-ID: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1736255954; c=relaxed/simple;
+	bh=VvjttN+uPkkaCBzkl+JMFKvWE3btI/Y+exqEYiCVP+Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FWEXXMj8oGcpg3sG17WFvIKF6yI1jycgKlPf2wyd02+o76l5g14Koj1goBzSxO3xBTyLwYGqjERmDbDXQY/zLgsdZ3OC6G17n9K6j/mmSQn3gXvyDzuvl1LkcwikI0shrCYXzxd6qM6B25TForEzzH3c3Db/6hO2rQPvIpUndFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=cfGCeR2q; arc=none smtp.client-ip=18.132.163.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1736255940;
+	bh=2IV4Si2XU16Vu1XyRUqSVjxDhzSs9ppJoEGs4vnWTio=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=cfGCeR2qHlX+GqqUNLmACvn8YikhocEwZFJaXXWEshk+qBi3o7rtcqOYedgusl56P
+	 SIMT7MWqgNRQtE1B68X5KsY8UX3nux4RaRftn34nBs1Fuh2o94VKdoXnHzzUAl/1Ft
+	 oexyCReoBn46w5AZ3awa6Ck7OC7KSnlTr0Em3lZw=
+X-QQ-mid: bizesmtpip3t1736255906tuj3s6p
+X-QQ-Originating-IP: 5GkzA44go2Y0yns5Lh5Uo3Fk0MbVqRNEzie+zhy+pEw=
+Received: from [IPV6:240e:668:120a::253:10f] ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 07 Jan 2025 21:18:23 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 12878274302829736638
+Message-ID: <7892C96AE88F09DE+4c76f75f-6a6c-4144-98db-4a212114d506@uniontech.com>
+Date: Tue, 7 Jan 2025 21:18:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: host: xhci-plat: Assign shared_hcd->rsrc_start
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, niklas.neronin@linux.intel.com,
+ quic_wcheng@quicinc.com, andriy.shevchenko@linux.intel.com,
+ michal.pecio@gmail.com, guanwentao@uniontech.com, zhanjun@uniontech.com,
+ bigeasy@linutronix.de, balbi@ti.com, sarah.a.sharp@linux.intel.com,
+ hkallweit1@gmail.com, Xu Rao <raoxu@uniontech.com>
+References: <7ECE325975663D2D+20250104155111.100597-1-wangyuli@uniontech.com>
+ <2025010711-blush-glamorous-9498@gregkh>
+Content-Language: en-US
+From: WangYuli <wangyuli@uniontech.com>
+Autocrypt: addr=wangyuli@uniontech.com; keydata=
+ xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSKP+nX39DN
+ IVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAxFiEEa1GMzYeuKPkg
+ qDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMBAAAKCRDF2h8wRvQL7g0UAQCH
+ 3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfPbwD/SrncJwwPAL4GiLPEC4XssV6FPUAY
+ 0rA68eNNI9cJLArOOARmgSyJEgorBgEEAZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7
+ VTL0dvPDofBTjFYDAQgHwngEGBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIb
+ DAAKCRDF2h8wRvQL7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkU
+ o9ERi7qS/hbUdUgtitI89efbY0TVetgDsyeQiwU=
+In-Reply-To: <2025010711-blush-glamorous-9498@gregkh>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------1zlTR9pA91E0Ki0fBpWKLazV"
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: M3VXLdcTyjkzKTq13kaT1wQTpJSSX0j7UUSFKVqKJuIwqnnbvbpi2iHV
+	Ozgj2caEi21Mk6zyRp0rO655C0dzhwP8iNnjA24G+ki8C2rneMvSwxGksGcKkDMEdGfIqjE
+	m5VKnAfXic6NBjocuVL3P/EP0Z+t88u5iX2YX0kwCkp6Lhf1MmIFOXnVE+vDJDf3zuDXfNf
+	l4ZZBt5/LfiSWKJ4H/apT02DhD1FXhnROOWYblz2Jx1yV+3KtVTBMzcqrLpAe4kEXy5b9wW
+	j6qpU6CV50kymxU4QBRybwhmQN1UedGwpWOd2jT+HpRmbsYJVb5heLjnYgchY+wPo3qbo3I
+	NB53kT+yHXgWFrs33vPD7mVz436XtvwfBYIADaWnua9f0Zkuz+xXEgmlctzYA8BSiqkbLU5
+	egoXXXgI3cDgOsETMmDIsTv1r0GjcJHBg+9yOBfASV89JDMs87CjFJe/sfAKE510YWcJcHn
+	9GfjgEGpdCSNEEQpBs0GzENhPdJfuIKKkuReEM/jM8mzQRhcq5oSYbuTXHMGqInNAYPMYQX
+	CAkN2Sp3zTO6gMuGJTiPMrTwjUTjKVjYPEksE++prqcqMR4u/KqpN8s1Pm6WaFMx6d39dAc
+	KIHgX9l2uC1iBv1Ga4VWk3fAzUE47owMf0A8uaul6L8RjAdQLpt4+vtDgB8UuVhlB3tg1F4
+	Ry7VGAVULxi9J3jJlLbUIO+4Y6+NWp4qLJG4beZNhTZrJJc37a6l9nG3ZgxeojdzZizLNe0
+	cQ9m8kK42qMXO+0l2J405IkykVCUbuc5nkJx3nwOwrcHlpzoHGstl/W99YgDUWmddLRvYPU
+	Vy0hzHojKj0edwD4lUluDwbOWD3NaUtAFtYYmkRY9WsFMCBVBE2vbSZy2z+QrNwT9p3Gjzm
+	QtJGacsNzXy4TAyRsbLKhpNFurMyUSLw1nDPZ/pe5HhyPP5c4RpMmktjG0KV1OPrlW+xcvm
+	Nlj1bfK7b2ltoCtOrFQu09GeNS8ANSN9D5X3XM2VX6iq+ziOF+UgzZTzPv6Jyx0VCAJg1H/
+	BUO5+rzwxfmR8NzVBTS/e3OBpQd+m7yQesXE9afvN3Do76B/fT7g8MZCzWS/r7OnQc++Noz
+	g==
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-RECHKSPAM: 0
 
-DTS example in the bindings should be indented with 2- or 4-spaces and
-aligned with opening '- |', so correct any differences like 3-spaces or
-mixtures 2- and 4-spaces in one binding.
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------1zlTR9pA91E0Ki0fBpWKLazV
+Content-Type: multipart/mixed; boundary="------------SWFzn0qj00Gp7LUWGQoNNk00";
+ protected-headers="v1"
+From: WangYuli <wangyuli@uniontech.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: mathias.nyman@intel.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, niklas.neronin@linux.intel.com,
+ quic_wcheng@quicinc.com, andriy.shevchenko@linux.intel.com,
+ michal.pecio@gmail.com, guanwentao@uniontech.com, zhanjun@uniontech.com,
+ bigeasy@linutronix.de, balbi@ti.com, sarah.a.sharp@linux.intel.com,
+ hkallweit1@gmail.com, Xu Rao <raoxu@uniontech.com>
+Message-ID: <4c76f75f-6a6c-4144-98db-4a212114d506@uniontech.com>
+Subject: Re: [PATCH v2] usb: host: xhci-plat: Assign shared_hcd->rsrc_start
+References: <7ECE325975663D2D+20250104155111.100597-1-wangyuli@uniontech.com>
+ <2025010711-blush-glamorous-9498@gregkh>
+In-Reply-To: <2025010711-blush-glamorous-9498@gregkh>
 
-No functional changes here, but saves some comments during reviews of
-new patches built on existing code.
+--------------SWFzn0qj00Gp7LUWGQoNNk00
+Content-Type: multipart/mixed; boundary="------------bC0SMj0qBqNdbTA8I0Mnj0KT"
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/usb/aspeed,usb-vhub.yaml         | 40 +++++++++----------
- .../devicetree/bindings/usb/brcm,bdc.yaml     | 14 +++----
- .../devicetree/bindings/usb/cypress,hx3.yaml  | 24 +++++------
- .../devicetree/bindings/usb/dwc2.yaml         |  4 +-
- .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 20 +++++-----
- .../bindings/usb/intel,keembay-dwc3.yaml      | 30 +++++++-------
- .../devicetree/bindings/usb/ite,it5205.yaml   | 18 ++++-----
- .../bindings/usb/maxim,max3420-udc.yaml       | 28 ++++++-------
- .../bindings/usb/nvidia,tegra210-xusb.yaml    |  4 +-
- .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 36 ++++++++---------
- .../bindings/usb/renesas,usb3-peri.yaml       | 24 +++++------
- .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 38 +++++++++---------
- .../bindings/usb/ti,tusb73x0-pci.yaml         |  6 +--
- .../devicetree/bindings/usb/ti,usb8020b.yaml  | 20 +++++-----
- .../devicetree/bindings/usb/ti,usb8041.yaml   | 16 ++++----
- 15 files changed, 161 insertions(+), 161 deletions(-)
+--------------bC0SMj0qBqNdbTA8I0Mnj0KT
+Content-Type: multipart/alternative;
+ boundary="------------18m8ROhoINlxZ71cqVYXAj1J"
 
-diff --git a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-index a86bcd95100e..7f22f9c031b2 100644
---- a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-+++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
-@@ -113,27 +113,27 @@ examples:
-   - |
-     #include <dt-bindings/clock/aspeed-clock.h>
-     vhub: usb-vhub@1e6a0000 {
--            compatible = "aspeed,ast2500-usb-vhub";
--            reg = <0x1e6a0000 0x300>;
--            interrupts = <5>;
--            clocks = <&syscon ASPEED_CLK_GATE_USBPORT1CLK>;
--            aspeed,vhub-downstream-ports = <5>;
--            aspeed,vhub-generic-endpoints = <15>;
--            pinctrl-names = "default";
--            pinctrl-0 = <&pinctrl_usb2ad_default>;
-+        compatible = "aspeed,ast2500-usb-vhub";
-+        reg = <0x1e6a0000 0x300>;
-+        interrupts = <5>;
-+        clocks = <&syscon ASPEED_CLK_GATE_USBPORT1CLK>;
-+        aspeed,vhub-downstream-ports = <5>;
-+        aspeed,vhub-generic-endpoints = <15>;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_usb2ad_default>;
- 
--            vhub-vendor-id = <0x1d6b>;
--            vhub-product-id = <0x0107>;
--            vhub-device-revision = <0x0100>;
--            vhub-strings {
--                #address-cells = <1>;
--                #size-cells = <0>;
-+        vhub-vendor-id = <0x1d6b>;
-+        vhub-product-id = <0x0107>;
-+        vhub-device-revision = <0x0100>;
-+        vhub-strings {
-+            #address-cells = <1>;
-+            #size-cells = <0>;
- 
--                string@409 {
--                        reg = <0x409>;
--                        manufacturer = "ASPEED";
--                        product = "USB Virtual Hub";
--                        serial-number = "0000";
--                };
-+            string@409 {
-+                reg = <0x409>;
-+                manufacturer = "ASPEED";
-+                product = "USB Virtual Hub";
-+                serial-number = "0000";
-             };
-+        };
-     };
-diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.yaml b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-index 9e561fee98f1..f9375c69e86b 100644
---- a/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-+++ b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
-@@ -41,10 +41,10 @@ additionalProperties: false
- 
- examples:
-   - |
--        usb@f0b02000 {
--                compatible = "brcm,bdc-udc-v2";
--                reg = <0xf0b02000 0xfc4>;
--                interrupts = <0x0 0x60 0x0>;
--                phys = <&usbphy_0 0x0>;
--                clocks = <&sw_usbd>;
--        };
-+    usb@f0b02000 {
-+        compatible = "brcm,bdc-udc-v2";
-+        reg = <0xf0b02000 0xfc4>;
-+        interrupts = <0x0 0x60 0x0>;
-+        phys = <&usbphy_0 0x0>;
-+        clocks = <&sw_usbd>;
-+    };
-diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-index e44e88d993d0..1033b7a4b8f9 100644
---- a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-+++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
-@@ -56,21 +56,21 @@ examples:
- 
-         /* 2.0 hub on port 1 */
-         hub_2_0: hub@1 {
--          compatible = "usb4b4,6504";
--          reg = <1>;
--          peer-hub = <&hub_3_0>;
--          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
--          vdd-supply = <&reg_1v2_usb>;
--          vdd2-supply = <&reg_3v3_usb>;
-+            compatible = "usb4b4,6504";
-+            reg = <1>;
-+            peer-hub = <&hub_3_0>;
-+            reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+            vdd-supply = <&reg_1v2_usb>;
-+            vdd2-supply = <&reg_3v3_usb>;
-         };
- 
-         /* 3.0 hub on port 2 */
-         hub_3_0: hub@2 {
--          compatible = "usb4b4,6506";
--          reg = <2>;
--          peer-hub = <&hub_2_0>;
--          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
--          vdd-supply = <&reg_1v2_usb>;
--          vdd2-supply = <&reg_3v3_usb>;
-+            compatible = "usb4b4,6506";
-+            reg = <2>;
-+            peer-hub = <&hub_2_0>;
-+            reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+            vdd-supply = <&reg_1v2_usb>;
-+            vdd2-supply = <&reg_3v3_usb>;
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
-index a5f2e3442a0e..e83d30a91b88 100644
---- a/Documentation/devicetree/bindings/usb/dwc2.yaml
-+++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
-@@ -192,7 +192,7 @@ unevaluatedProperties: false
- 
- examples:
-   - |
--      usb@101c0000 {
-+    usb@101c0000 {
-         compatible = "rockchip,rk3066-usb", "snps,dwc2";
-         reg = <0x10180000 0x40000>;
-         interrupts = <18>;
-@@ -200,6 +200,6 @@ examples:
-         clock-names = "otg";
-         phys = <&usbphy>;
-         phy-names = "usb2-phy";
--      };
-+    };
- 
- ...
-diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-index 8b25b9a01ced..e3a7df91f7f1 100644
---- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-+++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
-@@ -87,21 +87,21 @@ examples:
-         #size-cells = <0>;
- 
-         typec-mux@42 {
--          compatible = "fcs,fsa4480";
--          reg = <0x42>;
-+            compatible = "fcs,fsa4480";
-+            reg = <0x42>;
- 
--          interrupts-extended = <&tlmm 2 IRQ_TYPE_LEVEL_LOW>;
-+            interrupts-extended = <&tlmm 2 IRQ_TYPE_LEVEL_LOW>;
- 
--          vcc-supply = <&vreg_bob>;
-+            vcc-supply = <&vreg_bob>;
- 
--          mode-switch;
--          orientation-switch;
-+            mode-switch;
-+            orientation-switch;
- 
--          port {
--            fsa4480_ept: endpoint {
--              remote-endpoint = <&typec_controller>;
-+            port {
-+                fsa4480_ept: endpoint {
-+                    remote-endpoint = <&typec_controller>;
-+                };
-             };
--          };
-         };
-     };
- ...
-diff --git a/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml b/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml
-index d3511f48cd55..1a75544a8c31 100644
---- a/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml
-@@ -58,20 +58,20 @@ examples:
-     #define KEEM_BAY_A53_AUX_USB_SUSPEND
- 
-     usb {
--          compatible = "intel,keembay-dwc3";
--          clocks = <&scmi_clk KEEM_BAY_A53_AUX_USB>,
--                   <&scmi_clk KEEM_BAY_A53_AUX_USB_REF>,
--                   <&scmi_clk KEEM_BAY_A53_AUX_USB_ALT_REF>,
--                   <&scmi_clk KEEM_BAY_A53_AUX_USB_SUSPEND>;
--          clock-names = "async_master", "ref", "alt_ref", "suspend";
--          ranges;
--          #address-cells = <1>;
--          #size-cells = <1>;
-+        compatible = "intel,keembay-dwc3";
-+        clocks = <&scmi_clk KEEM_BAY_A53_AUX_USB>,
-+                 <&scmi_clk KEEM_BAY_A53_AUX_USB_REF>,
-+                 <&scmi_clk KEEM_BAY_A53_AUX_USB_ALT_REF>,
-+                 <&scmi_clk KEEM_BAY_A53_AUX_USB_SUSPEND>;
-+        clock-names = "async_master", "ref", "alt_ref", "suspend";
-+        ranges;
-+        #address-cells = <1>;
-+        #size-cells = <1>;
- 
--          usb@34000000 {
--                compatible = "snps,dwc3";
--                reg = <0x34000000 0x10000>;
--                interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
--                dr_mode = "peripheral";
--          };
-+        usb@34000000 {
-+            compatible = "snps,dwc3";
-+            reg = <0x34000000 0x10000>;
-+            interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
-+            dr_mode = "peripheral";
-+        };
-     };
-diff --git a/Documentation/devicetree/bindings/usb/ite,it5205.yaml b/Documentation/devicetree/bindings/usb/ite,it5205.yaml
-index 36ec4251b5f2..889710733de5 100644
---- a/Documentation/devicetree/bindings/usb/ite,it5205.yaml
-+++ b/Documentation/devicetree/bindings/usb/ite,it5205.yaml
-@@ -54,19 +54,19 @@ examples:
-         #size-cells = <0>;
- 
-         typec-mux@48 {
--          compatible = "ite,it5205";
--          reg = <0x48>;
-+            compatible = "ite,it5205";
-+            reg = <0x48>;
- 
--          mode-switch;
--          orientation-switch;
-+            mode-switch;
-+            orientation-switch;
- 
--          vcc-supply = <&mt6359_vibr_ldo_reg>;
-+            vcc-supply = <&mt6359_vibr_ldo_reg>;
- 
--          port {
--            it5205_usbss_sbu: endpoint {
--              remote-endpoint = <&typec_controller>;
-+            port {
-+                it5205_usbss_sbu: endpoint {
-+                    remote-endpoint = <&typec_controller>;
-+                };
-             };
--          };
-         };
-     };
- ...
-diff --git a/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
-index 8e0f4ecc010d..6edb1fc5044e 100644
---- a/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
-+++ b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
-@@ -50,18 +50,18 @@ additionalProperties: false
- 
- examples:
-   - |
--      #include <dt-bindings/gpio/gpio.h>
--      #include <dt-bindings/interrupt-controller/irq.h>
--      spi {
--            #address-cells = <1>;
--            #size-cells = <0>;
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    spi {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
- 
--            udc@0 {
--                  compatible = "maxim,max3420-udc";
--                  reg = <0>;
--                  interrupt-parent = <&gpio>;
--                  interrupts = <0 IRQ_TYPE_EDGE_FALLING>, <10 IRQ_TYPE_EDGE_BOTH>;
--                  interrupt-names = "udc", "vbus";
--                  spi-max-frequency = <12500000>;
--            };
--      };
-+        udc@0 {
-+            compatible = "maxim,max3420-udc";
-+            reg = <0>;
-+            interrupt-parent = <&gpio>;
-+            interrupts = <0 IRQ_TYPE_EDGE_FALLING>, <10 IRQ_TYPE_EDGE_BOTH>;
-+            interrupt-names = "udc", "vbus";
-+            spi-max-frequency = <12500000>;
-+        };
-+    };
-diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.yaml
-index 90296613b3a5..c0e313c70bba 100644
---- a/Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.yaml
-+++ b/Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.yaml
-@@ -189,7 +189,7 @@ examples:
-         #size-cells = <0>;
- 
-         ethernet@1 {
--                compatible = "usb955,9ff";
--                reg = <1>;
-+            compatible = "usb955,9ff";
-+            reg = <1>;
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml b/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-index ff625600d9af..b87e139c29e5 100644
---- a/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-+++ b/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
-@@ -104,26 +104,26 @@ examples:
-         #size-cells = <1>;
- 
-         usb3host: usb@85060000 {
--           compatible = "renesas,r9a09g011-xhci",
--                        "renesas,rzv2m-xhci";
--           reg = <0x85060000 0x2000>;
--           interrupts = <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>;
--           clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_H>,
--                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
--           clock-names = "axi", "reg";
--           power-domains = <&cpg>;
--           resets = <&cpg R9A09G011_USB_ARESETN_H>;
-+            compatible = "renesas,r9a09g011-xhci",
-+                         "renesas,rzv2m-xhci";
-+            reg = <0x85060000 0x2000>;
-+            interrupts = <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_H>,
-+                     <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-+            clock-names = "axi", "reg";
-+            power-domains = <&cpg>;
-+            resets = <&cpg R9A09G011_USB_ARESETN_H>;
-         };
- 
-         usb3peri: usb3peri@85070000 {
--           compatible = "renesas,r9a09g011-usb3-peri",
--                        "renesas,rzv2m-usb3-peri";
--           reg = <0x85070000 0x400>;
--           interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
--           clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
--                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
--           clock-names = "axi", "reg";
--           power-domains = <&cpg>;
--           resets = <&cpg R9A09G011_USB_ARESETN_P>;
-+            compatible = "renesas,r9a09g011-usb3-peri",
-+                         "renesas,rzv2m-usb3-peri";
-+            reg = <0x85070000 0x400>;
-+            interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
-+                     <&cpg CPG_MOD R9A09G011_USB_PCLK>;
-+            clock-names = "axi", "reg";
-+            power-domains = <&cpg>;
-+            resets = <&cpg R9A09G011_USB_ARESETN_P>;
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-index b2b811a0ade8..4e56e4ffeaf2 100644
---- a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-+++ b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
-@@ -132,19 +132,19 @@ examples:
-         usb-role-switch;
- 
-         ports {
--                #address-cells = <1>;
--                #size-cells = <0>;
--                port@0 {
--                        reg = <0>;
--                        usb3_hs_ep: endpoint {
--                                remote-endpoint = <&hs_ep>;
--                        };
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+            port@0 {
-+                reg = <0>;
-+                usb3_hs_ep: endpoint {
-+                    remote-endpoint = <&hs_ep>;
-                 };
--                port@1 {
--                        reg = <1>;
--                        usb3_role_switch: endpoint {
--                                remote-endpoint = <&hd3ss3220_out_ep>;
--                        };
-+            };
-+            port@1 {
-+                reg = <1>;
-+                usb3_role_switch: endpoint {
-+                    remote-endpoint = <&hd3ss3220_out_ep>;
-                 };
-+            };
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
-index 54c6586cb56d..bec1c8047bc0 100644
---- a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
-@@ -56,26 +56,26 @@ examples:
-         #size-cells = <0>;
- 
-         hd3ss3220@47 {
--                compatible = "ti,hd3ss3220";
--                reg = <0x47>;
--                interrupt-parent = <&gpio6>;
--                interrupts = <3>;
-+            compatible = "ti,hd3ss3220";
-+            reg = <0x47>;
-+            interrupt-parent = <&gpio6>;
-+            interrupts = <3>;
- 
--                ports {
--                        #address-cells = <1>;
--                        #size-cells = <0>;
--                        port@0 {
--                                reg = <0>;
--                                hd3ss3220_in_ep: endpoint {
--                                        remote-endpoint = <&ss_ep>;
--                                };
--                        };
--                        port@1 {
--                                reg = <1>;
--                                hd3ss3220_out_ep: endpoint {
--                                        remote-endpoint = <&usb3_role_switch>;
--                                };
--                        };
-+            ports {
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+                port@0 {
-+                    reg = <0>;
-+                    hd3ss3220_in_ep: endpoint {
-+                        remote-endpoint = <&ss_ep>;
-+                    };
-                 };
-+                port@1 {
-+                    reg = <1>;
-+                    hd3ss3220_out_ep: endpoint {
-+                        remote-endpoint = <&usb3_role_switch>;
-+                    };
-+                };
-+            };
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml b/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
-index ddda734f36fb..c4a91b3d6612 100644
---- a/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
-@@ -48,8 +48,8 @@ examples:
-         device_type = "pci";
- 
-         usb@0 {
--              compatible = "pci104c,8241";
--              reg = <0x0 0x0 0x0 0x0 0x0>;
--              ti,pwron-active-high;
-+            compatible = "pci104c,8241";
-+            reg = <0x0 0x0 0x0 0x0 0x0>;
-+            ti,pwron-active-high;
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/usb/ti,usb8020b.yaml b/Documentation/devicetree/bindings/usb/ti,usb8020b.yaml
-index 8ef117793e11..61217da8b2f3 100644
---- a/Documentation/devicetree/bindings/usb/ti,usb8020b.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,usb8020b.yaml
-@@ -51,19 +51,19 @@ examples:
- 
-         /* 2.0 hub on port 1 */
-         hub_2_0: hub@1 {
--          compatible = "usb451,8027";
--          reg = <1>;
--          peer-hub = <&hub_3_0>;
--          reset-gpios = <&pio 7 GPIO_ACTIVE_HIGH>;
--          vdd-supply = <&usb_hub_fixed_3v3>;
-+            compatible = "usb451,8027";
-+            reg = <1>;
-+            peer-hub = <&hub_3_0>;
-+            reset-gpios = <&pio 7 GPIO_ACTIVE_HIGH>;
-+            vdd-supply = <&usb_hub_fixed_3v3>;
-         };
- 
-         /* 3.0 hub on port 2 */
-         hub_3_0: hub@2 {
--          compatible = "usb451,8025";
--          reg = <2>;
--          peer-hub = <&hub_2_0>;
--          reset-gpios = <&pio 7 GPIO_ACTIVE_HIGH>;
--          vdd-supply = <&usb_hub_fixed_3v3>;
-+            compatible = "usb451,8025";
-+            reg = <2>;
-+            peer-hub = <&hub_2_0>;
-+            reset-gpios = <&pio 7 GPIO_ACTIVE_HIGH>;
-+            vdd-supply = <&usb_hub_fixed_3v3>;
-         };
-     };
-diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-index c2e29bd61e11..bce730a5e237 100644
---- a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-+++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-@@ -51,17 +51,17 @@ examples:
- 
-         /* 2.0 hub on port 1 */
-         hub_2_0: hub@1 {
--          compatible = "usb451,8142";
--          reg = <1>;
--          peer-hub = <&hub_3_0>;
--          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+            compatible = "usb451,8142";
-+            reg = <1>;
-+            peer-hub = <&hub_3_0>;
-+            reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-         };
- 
-         /* 3.0 hub on port 2 */
-         hub_3_0: hub@2 {
--          compatible = "usb451,8140";
--          reg = <2>;
--          peer-hub = <&hub_2_0>;
--          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-+            compatible = "usb451,8140";
-+            reg = <2>;
-+            peer-hub = <&hub_2_0>;
-+            reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
-         };
-     };
--- 
-2.43.0
+--------------18m8ROhoINlxZ71cqVYXAj1J
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
+DQpPbiAyMDI1LzEvNyAxODozNiwgR3JlZyBLSCB3cm90ZToNCj4gV2hhdCBjb21taXQgaWQg
+ZG9lcyB0aGlzIGZpeD8NCg0KSGkgR3JlZywNCg0KSSdtIG5vdCBzdXJlIGlmIHRoaXMgY2Fu
+IGJlIGNvbnNpZGVyZWQgYSBidWdmaXggZm9yIGEgc3BlY2lmaWMgY29tbWl0Lg0KDQpQbGVh
+c2Ugc2VlIHRoZSBjb21taXQgbWVzc2FnZSBmb3IgbW9yZSBkZXRhaWxzLg0KDQpJZiBpdCBp
+cywgdGhlbiBpdCBkb2VzIGZpeCAzNDI5ZTkxYTY2MWUxICgidXNiOiBob3N0OiB4aGNpOiBh
+ZGQgcGxhdGZvcm0gDQpkcml2ZXIgc3VwcG9ydCIpLg0KDQo+IHRoYW5rcywNCj4NCj4gZ3Jl
+ZyBrLWgNCj4NCi0tIA0KV2FuZ1l1bGkNCg==
+--------------18m8ROhoINlxZ71cqVYXAj1J
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF=
+-8">
+  </head>
+  <body>
+    <p><br>
+    </p>
+    <div class=3D"moz-cite-prefix">On 2025/1/7 18:36, Greg KH wrote:<span=
+
+      style=3D"white-space: pre-wrap">
+</span></div>
+    <blockquote type=3D"cite"
+      cite=3D"mid:2025010711-blush-glamorous-9498@gregkh">
+      <pre wrap=3D"" class=3D"moz-quote-pre">What commit id does this fix=
+?
+</pre>
+    </blockquote>
+    <p>Hi Greg,</p>
+    <p>I'm not sure if this can be considered a bugfix for a specific
+      commit.</p>
+    <p>Please see the commit message for more details.</p>
+    <p>If it is, then it does fix 3429e91a661e1 ("usb: host: xhci: add
+      platform driver support").<br>
+    </p>
+    <blockquote type=3D"cite"
+      cite=3D"mid:2025010711-blush-glamorous-9498@gregkh">
+      <pre wrap=3D"" class=3D"moz-quote-pre">
+thanks,
+
+greg k-h
+
+</pre>
+    </blockquote>
+    <div class=3D"moz-signature">-- <br>
+      <meta http-equiv=3D"content-type" content=3D"text/html; charset=3DU=
+TF-8">
+      WangYuli</div>
+  </body>
+</html>
+
+--------------18m8ROhoINlxZ71cqVYXAj1J--
+
+--------------bC0SMj0qBqNdbTA8I0Mnj0KT
+Content-Type: application/pgp-keys; name="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSK
+P+nX39DNIVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAx
+FiEEa1GMzYeuKPkgqDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMB
+AAAKCRDF2h8wRvQL7g0UAQCH3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfP
+bwD/SrncJwwPAL4GiLPEC4XssV6FPUAY0rA68eNNI9cJLArOOARmgSyJEgorBgEE
+AZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7VTL0dvPDofBTjFYDAQgHwngE
+GBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIbDAAKCRDF2h8wRvQL
+7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkUo9ERi7qS
+/hbUdUgtitI89efbY0TVetgDsyeQiwU=3D
+=3DBlkq
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------bC0SMj0qBqNdbTA8I0Mnj0KT--
+
+--------------SWFzn0qj00Gp7LUWGQoNNk00--
+
+--------------1zlTR9pA91E0Ki0fBpWKLazV
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wnsEABYIACMWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZ30pngUDAAAAAAAKCRDF2h8wRvQL7g0b
+AQDHw0MqvEHntR2v47IoJ06LKcbQfzcsLYaJAgqyXtiOfgEAmNipnPip7zKZo0opHANvyPlX1M0F
+Y75lcnmo1Pt5lQc=
+=D0JX
+-----END PGP SIGNATURE-----
+
+--------------1zlTR9pA91E0Ki0fBpWKLazV--
 
