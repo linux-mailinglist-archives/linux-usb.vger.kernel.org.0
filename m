@@ -1,162 +1,165 @@
-Return-Path: <linux-usb+bounces-19072-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19073-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91F5CA04123
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:47:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87EF1A04231
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 15:23:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 013731887099
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:48:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EACCB168DEE
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D23281F0E35;
-	Tue,  7 Jan 2025 13:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88F2D1F63E0;
+	Tue,  7 Jan 2025 14:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="CAuHcqGN";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="Gp8ECD2a"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jE3F2i7f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A1B1E0DED;
-	Tue,  7 Jan 2025 13:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B7BA1F6663
+	for <linux-usb@vger.kernel.org>; Tue,  7 Jan 2025 14:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736257671; cv=none; b=Hdw33S3QojFMSjDhizcpdYp9C+tRYViMS2yPzzCSJaxe2VQxeusOy1atSzsszcqGZzHotO/VUi9GDfITF1+5jBVTYm6ecf6Tqm2lXNccXz1Vmum8CJgoXz6146Ukbq94BmsMbqBI+7n7hvqj3CJytgdxgFfE5ZSM/0y2yMUfaeU=
+	t=1736259411; cv=none; b=LtUM7f7+HhqJkqbCZXRqRQX2i81qN1vVPTH+AOmCfU8aHPHHyhq2FzeWlbFOv+S7QmuMCgqcroz240SH3LTpQnr9MghMOZahWs6S2/4zKSyphBZLbsHW0rnU5SpkR/QADDqImuuAKEhXAFhRW0Nm+1nxwgv8iM+1B6B3UqgGYW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736257671; c=relaxed/simple;
-	bh=bCMttcWQirNicytx6ykU0QZpRRftXACwB5o3zdvB5x8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UGD10H9o5Yp66T8Eoe/5tjQvEdKwoWi/h5UHsxXBZ5Sp0qNMCoq7bR+qVxNZ/eR7aceq9/eavPGr28tmu9WTenN3sFctucJXsnZcuC+3zRlFNxChPKmUGKxOTt3VYzxkF5D4J5l1Bj4kVGf03GJ5WCm8b+bDowSCAGdqforo5U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=CAuHcqGN; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=Gp8ECD2a reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	s=arc-20240116; t=1736259411; c=relaxed/simple;
+	bh=GN1ru0II5d0jNYS3bWU+385MWPgbklQtaykGkLBL+II=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sd9mB3FoZVhTFS1vufueSuZ7aJH384A7fnL5eC74qxnD4i1w/2rkpiVUnVWTZFDMSDw8vObncXTw/EB4jmT9bC11OUftQiSEl6SulBYv8HrFYruqEjCgMfE+P33dt93OAneSPUDxpqsRMh/dIfxC/k5/bw6sP4HX4bSqhegQHro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jE3F2i7f; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-385d7f19f20so6898310f8f.1
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jan 2025 06:16:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1736257666; x=1767793666;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=H2JiFyCh/Tl5YOwhVHC+9/o2zm1iU1FIoUS3LVDCVQM=;
-  b=CAuHcqGNaufqPWJp7fGS5bsTGqRC6pb794W+/8MZkaL4uQn4ahO/wePn
-   01mgAosms7/ZUOmDZc/ERincOyBSOjdWKUkOxj5LnogmDG1mUVk+3B1XX
-   BYtZr2E1Ab19/sZnGhznkJczMBek3d5bqAi4nmxgCyWPusMbPpEPxRu3h
-   koDUZg0L1EQKMdiA8un2Z9BMpE79iq45Av0wRaYuNEuShC+yDH3HBrBtY
-   WKvJ+5+H6PIyjzJPHDwckFPUbGZzJ1hJh8NihF87savy7co0jdrYx6L2Y
-   1BBe9RC4nz3+yaZel5x/ha4mjhXNucttajc4sQIVuNJTOh81aHr2FTNsv
-   A==;
-X-CSE-ConnectionGUID: OVZasUpRQum1PZsDd73xFw==
-X-CSE-MsgGUID: mYpmTubRRzSDooSbu505XQ==
-X-IronPort-AV: E=Sophos;i="6.12,295,1728943200"; 
-   d="scan'208";a="40895891"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 07 Jan 2025 14:47:43 +0100
-X-CheckPoint: {677D307F-16-3C670366-E45AD810}
-X-MAIL-CPID: D9326B8D606E51C9C554D2FC41D37A2A_4
-X-Control-Analysis: str=0001.0A682F28.677D307F.00A7,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 12BB0164990;
-	Tue,  7 Jan 2025 14:47:28 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1736257658;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=H2JiFyCh/Tl5YOwhVHC+9/o2zm1iU1FIoUS3LVDCVQM=;
-	b=Gp8ECD2aEaJ2EoPlQW15Ikeq6rQoBFt/xYZHffSmoaiTRcEt3DyE1007ghx7QUsh6rWleF
-	lVKVhAGrvYWx+CEhDIzb+u3GFfHUIrNePQeY7nizrT961wk3aoCy86jbq9k1WGCr1X2RnA
-	ooMJ7bMSMZAzRbH4f4WwI+NhT3Gr9T1Q7ZZihIWPpiYe4ojX3SOqQh+a2FQ3vSheOrwhcX
-	F5L14kcteB5aHapjOda7uYt6BTq6MW8VaLetOMmY5he1vQAsX4D0qjLcLXWBDFl5WpEvRR
-	JInTk5xg/jzac1LcmHiQQC7oyqGly+SMY4vt8KxMP12YKK3wIRlQbd7PMldfJg==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, Justin Chen <justin.chen@broadcom.com>, Al Cooper <alcooperx@gmail.com>, Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, Florian Fainelli <f.fainelli@gmail.com>, Benjamin Bara <benjamin.bara@skidata.com>, Bjorn Andersson <andersson@kernel.org>, Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>, Del Regno <angelogioacchino.delregno@collabora.com>, Tianping Fang <tianping.fang@mediatek.com>, Jassi Brar <jaswinder.singh@linaro.org>, Biju Das <biju.das.jz@bp.renesas.com>, Yoshihiro Shimoda <yoshihiro.shimod
- a.uh@renesas.com>, Francesco Dolcini <francesco.dolcini@toradex.com>, Macpaul Lin <macpaul.lin@mediatek.com>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, linux-renesas-soc@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: Re: [PATCH] dt-bindings: usb: Correct indentation and style in DTS example
-Date: Tue, 07 Jan 2025 14:47:27 +0100
-Message-ID: <10618962.nUPlyArG6x@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
-References: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
+        d=linaro.org; s=google; t=1736259408; x=1736864208; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ho49yMjD3d/Wa48bZW4qUo+OmXMw93FJHm2TNy6f/iw=;
+        b=jE3F2i7fs1MWWTlREYdfwtR+P8c1JJpLbjKwNjlU5ec4axM9YBMJwCeGK4pFNjazHR
+         aI2kTBeisM0ZZN4EG48sX3FfZOYxmCzoYK3K4fuBsIdjjA9GU6R5ed5O9mEM03j2ix17
+         zvL7W1v/QG2YIPdY/lkHyLLlaHpbIC5SYe+bUSuoc5dEipKYZKgZuHWoJ0eABhGxYBQx
+         KuP8jUyBUlQiOo74cdc10XFlrUfsnwuMhumWYIQ6h9FMQJ5OTEf5f1kqqUOb/5cRW9jW
+         6gHivlU/JWUVgZMF8FjN4gvAoLyMHASSEkQbCKKjwt2PxGy0hrSc7M83QJB3v7guVUf3
+         EJMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736259408; x=1736864208;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ho49yMjD3d/Wa48bZW4qUo+OmXMw93FJHm2TNy6f/iw=;
+        b=NT5akq60eNWzJ6hkwn+oxJBw4oLoTU0ad7M+rE1/4WnQjhNSuMj+1UF4sJ7v3BP5y+
+         OiZF5F8ta4kswjdnnuA/ljtmaaD90ZK1wtBCAqnPD8Bzawl+mzLDwNdNC58tO4YT+WNc
+         tMm3FkBsWcezMSv37qeQGcaxOyP+jXSf3O5m8aF0B9eCnCTtHNeJFknuCmTn0LRf4oWq
+         KfZjpVAk0g/ofDfY5ksL2FMIgLRonPOMQwGIM4QL+XFLMi/r7x0R8Ppsx5D99k82qLGn
+         hJURwcmVSN+9z3nVd7jttObQGjcgYv/RjK6EVQA9KNyVktMvZ6f57DLF0U8uUDzeavoL
+         4TOQ==
+X-Gm-Message-State: AOJu0YxquInBiKdXsL0dEYXcoYWIdfFCw5V4RpPOvDhvYC/2VYLIyTpd
+	ffpd7g+ls9f8RMmpnTvZNRY5qKLXojAOqYSo9onrAIlnQy22l3g46QvwahsZokk=
+X-Gm-Gg: ASbGncuMvRtrhasAlQNqBnjF9LreQkgZcvPVYnJB43ZGVXluJOJIPhFuCau2ZiGJ/mk
+	R7CdlhT5v2/sC2sTMY+ZcutSg5yL7Edpa41uZ3GEPJhlNfMmPkiJIz7nMGue2W8n+vWb9hzPxY8
+	fgNaVFPyIHqvNDg5PBsyHu8oI7RLPHl6+hmZXy+uo7qYptGItRcrk4kwrfko5OpykHGBqiAVIq6
+	B/QKYHF9RNwFJFV/gInBahh/9c/OkMARDwkk6U07NWqCW5DnCLWZzKZhf9Vjw==
+X-Google-Smtp-Source: AGHT+IG6DOo85g9AuG/GuaHr73Xv4lzPMRjhKlTBOZTsK3UtN71QOOX4JzCR9PjfRKpFQxNueViuKQ==
+X-Received: by 2002:a05:6000:184e:b0:385:dd10:215d with SMTP id ffacd0b85a97d-38a223fd770mr48424401f8f.44.1736259407860;
+        Tue, 07 Jan 2025 06:16:47 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c89e26csm51304982f8f.78.2025.01.07.06.16.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jan 2025 06:16:47 -0800 (PST)
+Date: Tue, 7 Jan 2025 17:16:43 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Cc: linux-usb@vger.kernel.org
+Subject: [bug report] usb: typec: Add driver for Thunderbolt 3 Alternate Mode
+Message-ID: <48dbbbab-3d09-4162-9d76-74c9baca6603@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Am Dienstag, 7. Januar 2025, 14:10:13 CET schrieb Krzysztof Kozlowski:
+Hello Heikki Krogerus,
 
-> DTS example in the bindings should be indented with 2- or 4-spaces and
-> aligned with opening '- |', so correct any differences like 3-spaces or
-> mixtures 2- and 4-spaces in one binding.
->=20
-> No functional changes here, but saves some comments during reviews of
-> new patches built on existing code.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/usb/aspeed,usb-vhub.yaml         | 40 +++++++++----------
->  .../devicetree/bindings/usb/brcm,bdc.yaml     | 14 +++----
->  .../devicetree/bindings/usb/cypress,hx3.yaml  | 24 +++++------
->  .../devicetree/bindings/usb/dwc2.yaml         |  4 +-
->  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 20 +++++-----
->  .../bindings/usb/intel,keembay-dwc3.yaml      | 30 +++++++-------
->  .../devicetree/bindings/usb/ite,it5205.yaml   | 18 ++++-----
->  .../bindings/usb/maxim,max3420-udc.yaml       | 28 ++++++-------
->  .../bindings/usb/nvidia,tegra210-xusb.yaml    |  4 +-
->  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 36 ++++++++---------
->  .../bindings/usb/renesas,usb3-peri.yaml       | 24 +++++------
->  .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 38 +++++++++---------
->  .../bindings/usb/ti,tusb73x0-pci.yaml         |  6 +--
->  .../devicetree/bindings/usb/ti,usb8020b.yaml  | 20 +++++-----
->  .../devicetree/bindings/usb/ti,usb8041.yaml   | 16 ++++----
->  15 files changed, 161 insertions(+), 161 deletions(-)
->=20
-> [snip]
-> diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Docu=
-mentation/devicetree/bindings/usb/ti,usb8041.yaml
-> index c2e29bd61e11..bce730a5e237 100644
-> --- a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-> +++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
-> @@ -51,17 +51,17 @@ examples:
-> =20
->          /* 2.0 hub on port 1 */
->          hub_2_0: hub@1 {
-> -          compatible =3D "usb451,8142";
-> -          reg =3D <1>;
-> -          peer-hub =3D <&hub_3_0>;
-> -          reset-gpios =3D <&gpio1 11 GPIO_ACTIVE_LOW>;
-> +            compatible =3D "usb451,8142";
-> +            reg =3D <1>;
-> +            peer-hub =3D <&hub_3_0>;
-> +            reset-gpios =3D <&gpio1 11 GPIO_ACTIVE_LOW>;
->          };
-> =20
->          /* 3.0 hub on port 2 */
->          hub_3_0: hub@2 {
-> -          compatible =3D "usb451,8140";
-> -          reg =3D <2>;
-> -          peer-hub =3D <&hub_2_0>;
-> -          reset-gpios =3D <&gpio1 11 GPIO_ACTIVE_LOW>;
-> +            compatible =3D "usb451,8140";
-> +            reg =3D <2>;
-> +            peer-hub =3D <&hub_2_0>;
-> +            reset-gpios =3D <&gpio1 11 GPIO_ACTIVE_LOW>;
->          };
->      };
->=20
+Commit 100e25738659 ("usb: typec: Add driver for Thunderbolt 3
+Alternate Mode") from Dec 13, 2024 (linux-next), leads to the
+following (unpublished) Smatch static checker warnings:
 
-=46or ti,usb8041.yaml:
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+drivers/usb/typec/altmodes/thunderbolt.c:116 tbt_altmode_work() warn: why is zero skipped 'i'
+drivers/usb/typec/altmodes/thunderbolt.c:147 tbt_enter_modes_ordered() warn: why is zero skipped 'i'
+drivers/usb/typec/altmodes/thunderbolt.c:153 tbt_enter_modes_ordered() info: return a literal instead of 'ret'
+drivers/usb/typec/altmodes/thunderbolt.c:328 tbt_altmode_remove() warn: why is zero skipped 'i'
+drivers/usb/typec/altmodes/thunderbolt.c:354 tbt_ready() warn: 'plug' is not an error pointer
 
+drivers/usb/typec/altmodes/thunderbolt.c
+    66 static void tbt_altmode_work(struct work_struct *work)
+    67 {
+    68         struct tbt_altmode *tbt = container_of(work, struct tbt_altmode, work);
+    69         int ret;
+    70 
+    71         mutex_lock(&tbt->lock);
+    72 
+    73         switch (tbt->state) {
+    74         case TBT_STATE_SOP_P_ENTER:
+    75                 ret = typec_cable_altmode_enter(tbt->alt, TYPEC_PLUG_SOP_P, NULL);
+    76                 if (ret) {
+    77                         dev_dbg(&tbt->plug[TYPEC_PLUG_SOP_P]->dev,
+    78                                 "failed to enter mode (%d)\n", ret);
+    79                         goto disable_plugs;
+    80                 }
+    81                 break;
+    82         case TBT_STATE_SOP_PP_ENTER:
+    83                 ret = typec_cable_altmode_enter(tbt->alt, TYPEC_PLUG_SOP_PP,  NULL);
+    84                 if (ret) {
+    85                         dev_dbg(&tbt->plug[TYPEC_PLUG_SOP_PP]->dev,
+    86                                 "failed to enter mode (%d)\n", ret);
+    87                         goto disable_plugs;
+    88                 }
+    89                 break;
+    90         case TBT_STATE_ENTER:
+    91                 ret = tbt_enter_mode(tbt);
+    92                 if (ret)
+    93                         dev_dbg(&tbt->alt->dev, "failed to enter mode (%d)\n",
+    94                                 ret);
+    95                 break;
+    96         case TBT_STATE_EXIT:
+    97                 typec_altmode_exit(tbt->alt);
+    98                 break;
+    99         case TBT_STATE_SOP_PP_EXIT:
+    100                 typec_cable_altmode_exit(tbt->alt, TYPEC_PLUG_SOP_PP);
+    101                 break;
+    102         case TBT_STATE_SOP_P_EXIT:
+    103                 typec_cable_altmode_exit(tbt->alt, TYPEC_PLUG_SOP_P);
+    104                 break;
+    105         default:
+    106                 break;
+    107         }
+    108 
+    109         tbt->state = TBT_STATE_IDLE;
+    110 
+    111         mutex_unlock(&tbt->lock);
+    112         return;
+    113 
+    114 disable_plugs:
+    115         for (int i = TYPEC_PLUG_SOP_PP; i > 0; --i) {
+                                                ^^^^^
+These should be >= 0.  Humans are bad at counting backwards.
 
+--> 116                 if (tbt->plug[i])
+    117                         typec_altmode_put_plug(tbt->plug[i]);
+    118 
+    119                 tbt->plug[i] = NULL;
+    120         }
+    121 
+    122         tbt->state = TBT_STATE_ENTER;
+    123         schedule_work(&tbt->work);
+    124         mutex_unlock(&tbt->lock);
+    125 }
+
+regards,
+dan carpenter
 
