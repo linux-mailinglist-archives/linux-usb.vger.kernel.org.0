@@ -1,74 +1,75 @@
-Return-Path: <linux-usb+bounces-19055-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19056-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C262A03B78
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 10:49:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5FE77A03BED
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 11:11:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED0B1165A44
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 09:49:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C74516456C
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 10:11:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B1EF1E5710;
-	Tue,  7 Jan 2025 09:46:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F7F81E2007;
+	Tue,  7 Jan 2025 10:11:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cPSbZn55"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I+6N6C3/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2EAB1DE895;
-	Tue,  7 Jan 2025 09:46:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22BCD1E2859;
+	Tue,  7 Jan 2025 10:11:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736243192; cv=none; b=nunsz5fLUo2OW8PT3CKnGRyNOUkZbbL0Lulwq+rFFoH8wWdEifxOTmWHXBiIvp1/+jGGZwfi7ctKk6wVcH9PeFcbBzdyVl/4cGYoPj8ZrubplDxcuT+YunashZuSx0sS2xi0gezSa2lY5+cVJXEoPqcv+Y5nJIIUJMLtbIHQYow=
+	t=1736244708; cv=none; b=Z1pbNY+Gwe1hSAnWEovbQJLhOobO8m+lWCSwSaBPmgJ9xgCjCKTDSLoLpfLjIHGEcaoaQ+TvRINt0+0n0c0Swt6FNueWplrCiHAxpod0Uh4gDI6/UkKjpYT2/GwaNCJXtdDcGZFtaE8OuAcaONLdjM4PSlXBycwybVY3CJ6CPBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736243192; c=relaxed/simple;
-	bh=yJqSbQ10V+vjR/1E36mOd8qVjRYd+V2tSgmwlu5jPjc=;
+	s=arc-20240116; t=1736244708; c=relaxed/simple;
+	bh=U8nJTewkDyyYy5u5lCfEQFdF5V6Q9fjiIvWY8TDclPw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gELIJmTnlUUuZXEX3FKy5ZBYnEguHl4aWUPr/9f07Tyqf4b7Cz3+Ujay373JOS2dcn22hcnafhUYJu1L2B22/n+52OIysAWnLmXV7TyARt6L8AcpM6MhV8EjNoj9YIu4Tifb+5Cu2e9Yq50jeCD16+297j9ey6/PxinnzB3Q7fA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cPSbZn55; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19CB5C4CEDD;
-	Tue,  7 Jan 2025 09:46:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736243192;
-	bh=yJqSbQ10V+vjR/1E36mOd8qVjRYd+V2tSgmwlu5jPjc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cPSbZn557jZZukwH+EYcIO0DOy+1TXnANWWjibatDnEn/cOYP/A3ZAPjz5MT4xn0N
-	 8m29RtBF9PjK+WdA9ZQfrJJMqCxhoeYnxfBcQFMkBq8Kv32N07XHuVzVk1MG4QzcnX
-	 MvFhQgUeA8tV6AANanlom9Z1yz6AiCAGeiaHnZXOIFYambziwhJYpnPG1ViTvjgGI1
-	 kesRpE5dE+hJp/kYs6ZroocC8r5h83BWdXCdzILsTyx8vFPb4WFDFdtXZBGhDl0IYi
-	 xOTeb8Fk8X4yIW0CqlBpAfVh3HUrgizEetENleMiiuHWy5UPWphkBqWtP9FAEJXLF0
-	 QqRNX386Lc9Gw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tV6AP-000000007B1-3Ny5;
-	Tue, 07 Jan 2025 10:46:29 +0100
-Date: Tue, 7 Jan 2025 10:46:29 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Abel Vesa <abel.vesa@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v5 2/6] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-Message-ID: <Z3z39Z_BH1stsO0c@hovoldconsulting.com>
-References: <20241112-x1e80100-ps8830-v5-0-4ad83af4d162@linaro.org>
- <20241112-x1e80100-ps8830-v5-2-4ad83af4d162@linaro.org>
- <Z1CCVjEZMQ6hJ-wK@hovoldconsulting.com>
- <Z3vlTwR+SiZQWVh7@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=th8fFtFKxALdgtyk/WzmTUUK37mVyKV+eZW4vTdJSM1hRWLenNWvwn3fvwDUFHEVPhjyNZiVO662fyhnw82LAEZYBCrD1MP/xI9PjH0qq4IU+JehJE1iVo+rmsBUGW34AtmonR1sObC86F67wg06+HRG7E/W4EANE8rrjJA3M4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I+6N6C3/; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736244705; x=1767780705;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U8nJTewkDyyYy5u5lCfEQFdF5V6Q9fjiIvWY8TDclPw=;
+  b=I+6N6C3/V9oI0UKOtsXNCA44ZqNjrn7CZuhoSVWI3kyU7d/gnbVg67mJ
+   d9ZivhZS0vcC7t2uy1SNkc4LiPC2jfmZdBampLvUlwK3mvo3Mqz0rXOea
+   6rcny3Rsc30rKH889hMqGfPf4P9PRehRSR/D+EODwEkVRXI1rRHd2tqgJ
+   v4BlfztTKbtW9m69yqVw3j5X2O+e7hM2brA2HW7ZQnL7ZucSF4wUBkpLk
+   j3D0uA2h4+rgWzmA924aTVtIqABKqqkU55h52I2wIFHspuKQdIiGoYh5j
+   NtYS6Xfc42136p/8up37iAfbRv1woqplG7QM9saXN+dpEV1vMTF2Ou8JT
+   Q==;
+X-CSE-ConnectionGUID: IQNOwXIRRGC2biXMtFWCzQ==
+X-CSE-MsgGUID: wiAnwkCpRw2mDSvblydBcA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11307"; a="40365223"
+X-IronPort-AV: E=Sophos;i="6.12,295,1728975600"; 
+   d="scan'208";a="40365223"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 02:11:43 -0800
+X-CSE-ConnectionGUID: 2Wi28eQ+RryDKL4VApcqMw==
+X-CSE-MsgGUID: 91LuMaFZQ2y63nqpwoDRaA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="107783107"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa003.jf.intel.com with SMTP; 07 Jan 2025 02:11:40 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 07 Jan 2025 12:11:38 +0200
+Date: Tue, 7 Jan 2025 12:11:38 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: joswang <joswang1221@gmail.com>,
+	Badhri Jagan Sridharan <badhri@google.com>
+Cc: dmitry.baryshkov@linaro.org, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: typec: tcpm: set SRC_SEND_CAPABILITIES timeout
+ to PD_T_SENDER_RESPONSE
+Message-ID: <Z3z92o0XlaqXLwrb@kuha.fi.intel.com>
+References: <20250105135245.7493-1-joswang1221@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,29 +78,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z3vlTwR+SiZQWVh7@linaro.org>
+In-Reply-To: <20250105135245.7493-1-joswang1221@gmail.com>
 
-On Mon, Jan 06, 2025 at 04:14:39PM +0200, Abel Vesa wrote:
-> On 24-12-04 17:24:54, Johan Hovold wrote:
-> > On Tue, Nov 12, 2024 at 07:01:11PM +0200, Abel Vesa wrote:
++Badhri
 
-> > > +	/* skip resetting if already configured */
-> > > +	if (regmap_test_bits(retimer->regmap, REG_USB_PORT_CONN_STATUS_0,
-> > > +			     CONN_STATUS_0_CONNECTION_PRESENT))
-> > > +		return 0;
-> > 
-> > What if the device is held in reset? This looks like it only works if
-> > the boot firmware has already enabled the retimer. Otherwise you may
-> > return success from probe here with the retimer still in reset.
+On Sun, Jan 05, 2025 at 09:52:45PM +0800, joswang wrote:
+> From: Jos Wang <joswang@lenovo.com>
 > 
-> Please correct me if I'm wrong, but if the read above fails or reads
-> anything else than "connection present", then below we go through the
-> resetting sequence. If it reads "connection present", then retimer can't
-> be in reset.
+> As PD2.0 spec ("8.3.3.2.3 PE_SRC_Send_Capabilities state"), after the
+> Source receives the GoodCRC Message from the Sink in response to the
+> Source_Capabilities message, it should start the SenderResponseTimer,
+> after the timer times out, the state machine transitions to the
+> HARD_RESET state.
+> 
+> Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jos Wang <joswang@lenovo.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 460dbde9fe22..57fae1118ac9 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4821,7 +4821,7 @@ static void run_state_machine(struct tcpm_port *port)
+>  			port->caps_count = 0;
+>  			port->pd_capable = true;
+>  			tcpm_set_state_cond(port, SRC_SEND_CAPABILITIES_TIMEOUT,
+> -					    PD_T_SEND_SOURCE_CAP);
+> +					    PD_T_SENDER_RESPONSE);
+>  		}
+>  		break;
+>  	case SRC_SEND_CAPABILITIES_TIMEOUT:
 
-regmap_test_bits() returns a negative errno if the read fails, so you
-need to check that the return value is 1 here to avoid returning success
-from probe on failure.
+This looks okay to me, but let's get comments from Badhri, just in
+case.
 
-Johan
+thanks,
+
+-- 
+heikki
 
