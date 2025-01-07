@@ -1,172 +1,130 @@
-Return-Path: <linux-usb+bounces-19066-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19067-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77176A03F0C
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:25:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37814A03F18
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:29:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E14083A43EF
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 12:25:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A178F3A200D
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 12:28:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E441EE7B6;
-	Tue,  7 Jan 2025 12:25:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20BA41EE001;
+	Tue,  7 Jan 2025 12:28:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HwR6yB3t"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="abvcRWwj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D75F1E0DD1;
-	Tue,  7 Jan 2025 12:25:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F811E5734;
+	Tue,  7 Jan 2025 12:28:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736252714; cv=none; b=Om0sK8+fR8U6b9E076ZtlSg0pPopbtPjn0U1wWFFP8ClWlGCgOr3XnpqN/JM98/Zz9p/044t6XRc0TqTVW2oRSmHi0d+dmUfrN5LLcaH85AzBDW8k0bQgXVqYrBS9jdIdfLMNw+Qxbjhq6xZA3uuPJj561ViXxhE88zGRXB/BBo=
+	t=1736252933; cv=none; b=qQp67Up/8noMqd3HO37K/WQROTSPXU6dHR8mArO25CAm00+ma7MvZzT7kiFQoZE0kup8e8lsHmOSBqub4p/v5IIlSvOw6RMeF/HmKeLbjtdCHZVtfRkS6YmBIKBOL8/Vr3ePbYoNDHVlSpAkFtQycfk31q6bjk3dOnFfUhjApGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736252714; c=relaxed/simple;
-	bh=uKpuN0WZd9vVEiVj4SEyuarv69NHmOZ8lL7reHm2oTY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kq9EdqKnELP7KEloxS0f/tSwlcnLAe97uh62tpDA+qSD7MHAER2TwSK4cjf2Rlns6JRPEtXT0+A+lUHYCPcpclVm4W6gNFCdqA9e9tRKbaXjVH9OvqC3k8l47zlHnzCSy5PH6PMJARDTidLsnfSplk9a1M4Z2pUJwXZ8X/6THc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HwR6yB3t; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1736252933; c=relaxed/simple;
+	bh=QojtHw8LGUnm3rpVHZvfd9J5sm2jpmcnC6VJnQLY43w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lkqVocoswXgbasoyl6oAg36JvTKjyFv/Q9ndvDN7EBPFlfHhqC5sPoUX9FSPupCie+kwM87pGg2DmJLZchCWz0gA2Tq4bMwsl0zz+eEfQbwASSNp8wPasbvlGR9RntDeDsopbkhBinywXPOOeArXvmQtu3Hj+w/B82yViBsyAUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=abvcRWwj; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736252712; x=1767788712;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=uKpuN0WZd9vVEiVj4SEyuarv69NHmOZ8lL7reHm2oTY=;
-  b=HwR6yB3tga+ve/HVD6XO53mayDz/owyTh84N3LnALMMbxevNq9i8Vnhp
-   OqrN401bTSgH6cW8HGW7u1wk+cD47XFyHIS86jBPkgkVeEypjjdu/e6Kz
-   /FdWaKexbe+yu4a/MB1XIQCXSPxxcJiglwcJhczT1Wx7zW6UYcUToi062
-   hsUjpZN7oDzMlgou262qF7mafyX+NNYGpz5HPBKZdgaRu3+1Y3ShAJ4Yj
-   L4PHU9/Y5xHyiHVUJN4DL3ZSt3eDg5zyvzoEkrlHFDfiCKr5LSXPf/ooM
-   8ZHp+1Ds7IkYShhLCTPa43k42HZaG4HbWK79VMjGoMrpiIBzx5XxJxVOR
-   w==;
-X-CSE-ConnectionGUID: MFX+1PnaS2W5RQtAXPTCkA==
-X-CSE-MsgGUID: pnF3xunoQYSR6HwQJgbCbg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="40378866"
+  t=1736252932; x=1767788932;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=QojtHw8LGUnm3rpVHZvfd9J5sm2jpmcnC6VJnQLY43w=;
+  b=abvcRWwjHh+G0LyVkdHTvAIXNW1hUnMIXwP6wQtDV/EZrxXjDz/xdgbm
+   ZEC8S9CzXKufRZcNsOh8cR4M4PB7om9QkOr2zs+AvibNF2uMALdiwa9/G
+   aZTSZyE9hY2ACVlnVEo9dd8W2CAGab2TG1dHuj078jGhFF/XvuQs+keqw
+   rKF1x9lMkSqCUMtW8pN494khLt/KtNZWvHkdxg42wdsUhfPE86Sxs4yin
+   jpcEhFdMdyxJdPze7/zS48rwdOlR5DHrWfP0iyxwhbxoZus5ycPIDHHQ0
+   VDyLRYi7VcBvLCZXyhMKMWMZt/J+3oQQmkmBPKTiTDb6D/YFqvbS0WlY1
+   g==;
+X-CSE-ConnectionGUID: AUOkPpy4RcemIcr3hvn7rw==
+X-CSE-MsgGUID: s89j8rEST6iAxrM0nW547w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="61812285"
 X-IronPort-AV: E=Sophos;i="6.12,295,1728975600"; 
-   d="scan'208";a="40378866"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 04:25:11 -0800
-X-CSE-ConnectionGUID: +hXV3ZX9RpuUg18GG0ZvkQ==
-X-CSE-MsgGUID: oVObbeAYRLGujom+byUEaw==
+   d="scan'208";a="61812285"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 04:28:52 -0800
+X-CSE-ConnectionGUID: hhglC8DaS+C5uTVkKsSkPg==
+X-CSE-MsgGUID: /GyccoMoS+Sl2SiIElHSBw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="133645683"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa001.fm.intel.com with SMTP; 07 Jan 2025 04:25:06 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 07 Jan 2025 14:25:05 +0200
-Date: Tue, 7 Jan 2025 14:25:05 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 2/5] platform: arm64: add Huawei Matebook E Go EC
- driver
-Message-ID: <Z30dIRA4MdtCp63q@kuha.fi.intel.com>
-References: <20250105174159.227831-1-mitltlatltl@gmail.com>
- <20250105174159.227831-3-mitltlatltl@gmail.com>
+X-IronPort-AV: E=Sophos;i="6.12,295,1728975600"; 
+   d="scan'208";a="102941846"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa008.fm.intel.com with ESMTP; 07 Jan 2025 04:28:50 -0800
+Message-ID: <3bd0e058-1aeb-4fc9-8b76-f0475eebbfe4@linux.intel.com>
+Date: Tue, 7 Jan 2025 14:29:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250105174159.227831-3-mitltlatltl@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] usb: xhci port capability storage change broke
+ fastboot android bootloader utility
+To: Forest <forestix@nom.one>
+Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+ stable@vger.kernel.org
+References: <hk8umj9lv4l4qguftdq1luqtdrpa1gks5l@sonic.net>
+ <2c35ff52-78aa-4fa1-a61c-f53d1af4284d@linux.intel.com>
+ <0l5mnj5hcmh2ev7818b3m0m7pokk73jfur@sonic.net>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <0l5mnj5hcmh2ev7818b3m0m7pokk73jfur@sonic.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On 6.1.2025 1.42, Forest wrote:
+> On Thu, 2 Jan 2025 16:13:34 +0200, Mathias Nyman wrote:
+> 
+>> It's not clear to me why this patch would cause regression.
+>>
+>> Could you enable xhci and usb core dynamic debug before connecting the
+>> device, and then share dmesg after the issue is triggered.
+>>
+>> dmesg of a working case would also be good to have for comparison.
+> 
+> I booted kernel 9b780c845fb6 (the last good one), logged in to my desktop,
+> waited a couple of minutes to let things settle, and then ran 'fastboot
+> getvar kernel' twice with the android device in bootloader mode.
+> Here's the dmesg output:
 
-> +/* -------------------------------------------------------------------------- */
-> +/* API For UCSI */
-> +
-> +int gaokun_ec_ucsi_read(struct gaokun_ec *ec,
-> +			u8 resp[GAOKUN_UCSI_READ_SIZE])
-> +{
-> +	u8 req[] = MKREQ(0x03, 0xD5, 0);
-> +	u8 _resp[] = MKRESP(GAOKUN_UCSI_READ_SIZE);
-> +	int ret;
-> +
-> +	ret = gaokun_ec_read(ec, req, sizeof(_resp), _resp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	extr_resp(resp, _resp, GAOKUN_UCSI_READ_SIZE);
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_read);
-> +
-> +int gaokun_ec_ucsi_write(struct gaokun_ec *ec,
-> +			 const u8 req[GAOKUN_UCSI_WRITE_SIZE])
-> +{
-> +	u8 _req[] = MKREQ(0x03, 0xD4, GAOKUN_UCSI_WRITE_SIZE);
-> +
-> +
-> +	refill_req(_req, req, GAOKUN_UCSI_WRITE_SIZE);
-> +
-> +	return gaokun_ec_write(ec, _req);
-> +}
-> +EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_write);
-> +
-> +int gaokun_ec_ucsi_get_reg(struct gaokun_ec *ec, u8 *ureg)
-> +{
-> +	u8 req[] = MKREQ(0x03, 0xD3, 0);
-> +	u8 _resp[] = MKRESP(UCSI_REG_SIZE);
-> +	int ret;
-> +
-> +	ret = gaokun_ec_read(ec, req, sizeof(_resp), _resp);
-> +	if (ret)
-> +		return ret;
-> +
-> +	extr_resp(ureg, _resp, UCSI_REG_SIZE);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_get_reg);
+Thanks for the logs.
+  
+Looks like we enable USB2 Link Power Management (LPM) in the failing case
+> 
+> [  226.002756] xhci_hcd 0000:0c:00.0: enable port 3 USB2 hardware LPM
+> [  226.002765] xhci_hcd 0000:0c:00.0: Set up evaluate context for LPM MEL change.
 
-Why not just take struct gaokun_ucsi_reg as parameter? I did not see
-this (or any of these) being used anywhere else except in your UCSI
-glue driver. So the prototype would be:
+Does disabling USB2 hardware LPM for the device make it work again?
 
-        int gaokun_ec_ucsi_get_reg(struct gaokun_ec *ec,
-                                   struct gaokun_ucsi_reg *reg);
+Adding USB_QUIRK_NO_LPM quirk "k" for your device vid:pid should do it.
+i.e. add "usbcore.quirks=0fce:0dde:k" parameter to your kernel cmdline.
 
-> +int gaokun_ec_ucsi_pan_ack(struct gaokun_ec *ec, int port_id)
-> +{
-> +	u8 req[] = MKREQ(0x03, 0xD2, 1);
-> +	u8 data = 1 << port_id;
-> +
-> +	if (port_id == GAOKUN_UCSI_NO_PORT_UPDATE)
-> +		data = 0;
-> +
-> +	refill_req(req, &data, 1);
-> +
-> +	return gaokun_ec_write(ec, req);
-> +}
-> +EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_pan_ack);
+Or alternatively disable usb2 lpm  during runtime via sysfs
+(after enumeration, assuming device is "1-3" as in the log):
+# echo 0 > /sys/bus/usb/devices/1-3/power/usb2_hardware_lpm
 
-I think you should add proper kernel doc comments to these exported
-functions.
+If those work then we need to figure out if we incorrectly try to enable
+USB2 hardware LPM, or if device just can't handle LPM even if it claims
+to be LPM capable.
 
-thanks,
+Host hardware LPM capability can be checked from xhci reg-ext-protocol
+fields from debugfs.
+cat /sys/kernel/debug/usb/xhci/0000:0c:00.0/reg-ext-protocol:*
+(please print content of _all_ reg_ext_protocol* files, LPM capability is
+bit 19 of EXTCAP_PORTINFO)
 
--- 
-heikki
+Device USB2 LPM capability can be checked from the devices BOS descriptor,
+visible (as sudo/root) with lsusb -v -d 0fce:0dde
+
+Thanks
+Mathias
 
