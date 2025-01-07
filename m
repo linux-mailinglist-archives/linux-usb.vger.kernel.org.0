@@ -1,168 +1,185 @@
-Return-Path: <linux-usb+bounces-19074-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19075-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28945A0426B
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 15:27:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77926A042A9
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 15:35:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 236991889A7C
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:24:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE70C1881F07
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:35:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D68621F2360;
-	Tue,  7 Jan 2025 14:24:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF75F1F0E25;
+	Tue,  7 Jan 2025 14:35:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fBggmnlE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TIj8IvgT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 617891F1917
-	for <linux-usb@vger.kernel.org>; Tue,  7 Jan 2025 14:24:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FFC1E9B00;
+	Tue,  7 Jan 2025 14:35:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736259847; cv=none; b=qBJamXbdt6/ONlsJWWPvcfRWaXM3BxsSyEOV4Ho4jl70LuGg9caUx7x4pKDdVK+1HO4A8OZ59bjZJ3sYRJWhm3uXeCUbpRatCpMoeHfll7kGUGaxhnErR94OUvDZnYpOioOetqXvb48MwP1GXXdcZNoz+OMqbzhcm4dAs6EUc3c=
+	t=1736260517; cv=none; b=et2XTzlAF7OHrZnpyiSDtGdu3WSOuzj12szLGbSbbDppNZIWnCboPGM6wSjjT9iS+AT+fm4eFvHMCafK1ZBj5f1JJhcUpn+rH4+XyGCZ9qHpw1OkZ1JZlCxILo+IPAqxPv6oiwq4Qijfz6IzwW66DmUEk8k3FjyOxwA0dF98v+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736259847; c=relaxed/simple;
-	bh=DKUB5N6zBRnsUz40+1DfTxbA9feQPoygT1xKXdZu1gk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LLS2s6XFWM8P/6Mi1DQROBqlgdeoCT7EzYHyx3zq9qUXwCXDXahjX/x/HcymYHj1c6egsp5mN3+Y5mIpxSrnZ14YL3BL4IrDs5EdoL+zvcgD/vhNFlkuBCYFew++PkrNGJYkr8wWQhQXk5eT5QgMO24FpFY7RyTmq+63Okr1NPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fBggmnlE; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736259846; x=1767795846;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=DKUB5N6zBRnsUz40+1DfTxbA9feQPoygT1xKXdZu1gk=;
-  b=fBggmnlEFolKbcmdqtoXhAdzjEyjzGNl++ykRj+TbCFFZnlwv4x9F1mW
-   sD3i5nbTbMSpJ9ipqRouNYsj62JJ4a39+3r/9R+ovzpheNdhZ8mFZKL5d
-   0g2DfpS0DH4w8MgVUIWdMDphPmPEfUJ61/zQPSR22G2sO7kLi1DR5NqB0
-   AKCC7zbWkvD1F/B+0zjVeXtUyeI0L/hIDk5y6cjecIF2a6nKfuSrmWw+u
-   mWmlbC1Q7kwSzXtOPvbTY5JNAA+0CG6CwOX3WCLdGdgQhPwZYXJbveiBC
-   k5sCTivYMYhQ6qvOE04gXA7IG8muhr1Pp5SedDl7nUbcbPcEo9qbECQ/9
-   A==;
-X-CSE-ConnectionGUID: 3hzWiFnHRmCexNChfLQFTg==
-X-CSE-MsgGUID: g0xso2nqRKaE0sT27J9tUw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="47435853"
-X-IronPort-AV: E=Sophos;i="6.12,295,1728975600"; 
-   d="scan'208";a="47435853"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 06:24:05 -0800
-X-CSE-ConnectionGUID: ZXGBPImtQyiSb5bG1+q/Pw==
-X-CSE-MsgGUID: 36RdC2GzSlKpX4rrigxShg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="102654212"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa010.jf.intel.com with SMTP; 07 Jan 2025 06:24:03 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 07 Jan 2025 16:24:01 +0200
-Date: Tue, 7 Jan 2025 16:24:01 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [bug report] usb: typec: Add driver for Thunderbolt 3 Alternate
- Mode
-Message-ID: <Z305AQk4awMzPycL@kuha.fi.intel.com>
-References: <48dbbbab-3d09-4162-9d76-74c9baca6603@stanley.mountain>
+	s=arc-20240116; t=1736260517; c=relaxed/simple;
+	bh=dSMnbKj3IQK21zIOXSnry0WxBKfF0CMQmQkmmNOaI/Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SOAJl7zDr05XRD44Kjk2wHjdD1dKp5mwNHiijtC9esf9ekNLHg1vSRdt603OFw/UwEiStmAILTDPSyZ6oOPJEtwZlKxwws69AfjoHVZT9SGYk1iZx3VLTIwZ0vloMxx/6JNAs+r9O5JIJRriSqEXb3lKyvg9vQWywezH1jpjzQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TIj8IvgT; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5d4e2aa7ea9so29461173a12.2;
+        Tue, 07 Jan 2025 06:35:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736260514; x=1736865314; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Nf/M7+eGzGRIoOADh8G+Ng72NoYSTxX1IpGIejx6WEg=;
+        b=TIj8IvgTNzg5BWPU+6UWj0k4MmmG/L3nncHatVoHUlRjaZOTsriizxEIgDKNJmrwVB
+         qryJx8qX3d6OMt8w5w8+aY0HAvndQYYiS9zLPmtOO7+2ebsojRJ1LthMg18TPZrRMwyU
+         7pJl/1xCvEnnNoRQ6hM9wzagXjyjTz1o6a7Ur5lpZkNI5VkJDylJ45PmCbIxjY7roSyK
+         ncuuDlmRJYHEX8z5uxcakdCDOfOUb/8F3EAt5o+Fh8KTXNh4qtlpzupK0B+X1EOAkdLV
+         Ate2tcQC0rUl8ahOKLM7JcDfDqiSTQtFILUL7US0l51JeRAckW2ApDTd7gZxbi0VEbc/
+         Kq9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736260514; x=1736865314;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Nf/M7+eGzGRIoOADh8G+Ng72NoYSTxX1IpGIejx6WEg=;
+        b=qK/qabOZx4DZKWBTJgilMBo9WDYmpGugGS1QbFDHVI0UI+S+oXptQNFxi4itNTg5fN
+         RyukOArSW4Gxtx6v05bz97pi1nlToEnCwSTEtGOIyqT5tDgJ+QIp6vT5JZ1xTNT/8LuR
+         Qk34g56O6H0uaI/Z8I2M4/2TITAwjuP7JVtL9Yg3cHkFSl4B/gnSbTBJrsAYGp4rFxDh
+         +7cdKtxFbpGW9qz+CBKnRvl6AXD5r02d2teW3JosIOBHpwZFFCuzpDFNaxJ9cOm3fez1
+         5GyiwLQSJlHhPmIweVdPEFXN+31lhrI2vZiI7EQKEB0U/CH/Z40EIaAf+/1zerlmQPiU
+         J8+g==
+X-Forwarded-Encrypted: i=1; AJvYcCVC1mj05eDavLvXdvJFhwO/cq9A9fbdbE9DKyVbFxuTkHE/bBdZSrQHcBhSzIPVopPmzYeKmq2bjalz@vger.kernel.org, AJvYcCXJjKu16tZ14NxfAgtnw73tyNOxV32MK1TwJKuryu2EjzxjUrGl15XEQBqtmpzAxH8ARramMNYzJ3IDM34=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeWZY60C93C8Zz3i6gXLMfAtuLxzNjqJ/i7dCSgwqqcdTIk5OH
+	7vJOVvn/ZIYSEpLY7+mjJcK/fJcQHxxXrX5lGwBPjLsZvHKmiuAG
+X-Gm-Gg: ASbGncu1u8U4ug3rkoB1qw+nDC1Ekx9N35ua4o4Bxop/ad5s9xWDLLxbZuQgqKR+j45
+	99LQqtaf1NydO/qJwI84g6J3Rdp3bJW0TKzSPYfIOL6LrfxvzsDqm0YftfJOuxD7qtUlS19GuWE
+	Eddwel/ZIVABo/knLNo04rnh8aQDGT/dF6rPoxOylpyIlVILDqwWow3bKabMi3kC0esWetGWSsp
+	HbM2Eh3o29rXWqXYeLsIPGHEK/PsQVfL0FA0xJPVGRR16MtcsaeMlu1UtZTS9JQy8mtJb8=
+X-Google-Smtp-Source: AGHT+IEdJmNJcRxGutzFUa/NXQMg2BXp/vpVFWEaTxX4oWx1Q4O4r0pfG7zfNc6/2/sW7mO2oV8hAg==
+X-Received: by 2002:a05:6402:321a:b0:5d2:7270:6124 with SMTP id 4fb4d7f45d1cf-5d81de2311dmr56648671a12.23.1736260513729;
+        Tue, 07 Jan 2025 06:35:13 -0800 (PST)
+Received: from foxbook (adth42.neoplus.adsl.tpnet.pl. [79.185.219.42])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d807616bc1sm25057422a12.29.2025.01.07.06.35.12
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 07 Jan 2025 06:35:13 -0800 (PST)
+Date: Tue, 7 Jan 2025 15:35:09 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, Niklas Neronin
+ <niklas.neronin@linux.intel.com>
+Subject: [PATCH] usb: xhci: Enable the TRB overfetch quirk on VIA VL805
+Message-ID: <20250107153509.727b981e@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <48dbbbab-3d09-4162-9d76-74c9baca6603@stanley.mountain>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-+Abhishek
+Raspberry Pi is a major user of those chips and they discovered a bug -
+when the end of a transfer ring segment is reached, up to four TRBs can
+be prefetched from the next page even if the segment ends with link TRB
+and on page boundary (the chip claims to support standard 4KB pages).
 
-On Tue, Jan 07, 2025 at 05:16:43PM +0300, Dan Carpenter wrote:
-> Hello Heikki Krogerus,
-> 
-> Commit 100e25738659 ("usb: typec: Add driver for Thunderbolt 3
-> Alternate Mode") from Dec 13, 2024 (linux-next), leads to the
-> following (unpublished) Smatch static checker warnings:
-> 
-> drivers/usb/typec/altmodes/thunderbolt.c:116 tbt_altmode_work() warn: why is zero skipped 'i'
-> drivers/usb/typec/altmodes/thunderbolt.c:147 tbt_enter_modes_ordered() warn: why is zero skipped 'i'
-> drivers/usb/typec/altmodes/thunderbolt.c:153 tbt_enter_modes_ordered() info: return a literal instead of 'ret'
-> drivers/usb/typec/altmodes/thunderbolt.c:328 tbt_altmode_remove() warn: why is zero skipped 'i'
-> drivers/usb/typec/altmodes/thunderbolt.c:354 tbt_ready() warn: 'plug' is not an error pointer
-> 
-> drivers/usb/typec/altmodes/thunderbolt.c
->     66 static void tbt_altmode_work(struct work_struct *work)
->     67 {
->     68         struct tbt_altmode *tbt = container_of(work, struct tbt_altmode, work);
->     69         int ret;
->     70 
->     71         mutex_lock(&tbt->lock);
->     72 
->     73         switch (tbt->state) {
->     74         case TBT_STATE_SOP_P_ENTER:
->     75                 ret = typec_cable_altmode_enter(tbt->alt, TYPEC_PLUG_SOP_P, NULL);
->     76                 if (ret) {
->     77                         dev_dbg(&tbt->plug[TYPEC_PLUG_SOP_P]->dev,
->     78                                 "failed to enter mode (%d)\n", ret);
->     79                         goto disable_plugs;
->     80                 }
->     81                 break;
->     82         case TBT_STATE_SOP_PP_ENTER:
->     83                 ret = typec_cable_altmode_enter(tbt->alt, TYPEC_PLUG_SOP_PP,  NULL);
->     84                 if (ret) {
->     85                         dev_dbg(&tbt->plug[TYPEC_PLUG_SOP_PP]->dev,
->     86                                 "failed to enter mode (%d)\n", ret);
->     87                         goto disable_plugs;
->     88                 }
->     89                 break;
->     90         case TBT_STATE_ENTER:
->     91                 ret = tbt_enter_mode(tbt);
->     92                 if (ret)
->     93                         dev_dbg(&tbt->alt->dev, "failed to enter mode (%d)\n",
->     94                                 ret);
->     95                 break;
->     96         case TBT_STATE_EXIT:
->     97                 typec_altmode_exit(tbt->alt);
->     98                 break;
->     99         case TBT_STATE_SOP_PP_EXIT:
->     100                 typec_cable_altmode_exit(tbt->alt, TYPEC_PLUG_SOP_PP);
->     101                 break;
->     102         case TBT_STATE_SOP_P_EXIT:
->     103                 typec_cable_altmode_exit(tbt->alt, TYPEC_PLUG_SOP_P);
->     104                 break;
->     105         default:
->     106                 break;
->     107         }
->     108 
->     109         tbt->state = TBT_STATE_IDLE;
->     110 
->     111         mutex_unlock(&tbt->lock);
->     112         return;
->     113 
->     114 disable_plugs:
->     115         for (int i = TYPEC_PLUG_SOP_PP; i > 0; --i) {
->                                                 ^^^^^
-> These should be >= 0.  Humans are bad at counting backwards.
-> 
-> --> 116                 if (tbt->plug[i])
->     117                         typec_altmode_put_plug(tbt->plug[i]);
->     118 
->     119                 tbt->plug[i] = NULL;
->     120         }
->     121 
->     122         tbt->state = TBT_STATE_ENTER;
->     123         schedule_work(&tbt->work);
->     124         mutex_unlock(&tbt->lock);
->     125 }
+It also appears that if the prefetched TRBs belong to a different ring
+whose doorbell is later rung, they may be used without refreshing from
+system RAM and the endpoint will stay idle if their cycle bit is stale.
 
-Abhishek, this looks straighforward, but just in case, can you take
-look?
+Other users complain about IOMMU faults on x86 systems, unsurprisingly.
 
-thanks,
+Deal with it by using existing quirk which allocates a dummy page after
+each transfer ring segment. This was seen to resolve both problems. RPi
+came up with a more efficient solution, shortening each segment by four
+TRBs, but it complicated the driver and they ditched it for this quirk.
 
+Also rename the quirk and add VL805 device ID macro.
+
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+Link: https://github.com/raspberrypi/linux/issues/4685
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=215906
+CC: stable@vger.kernel.org
+---
+ drivers/usb/host/xhci-mem.c |  3 ++-
+ drivers/usb/host/xhci-pci.c | 10 +++++++---
+ drivers/usb/host/xhci.h     |  2 +-
+ 3 files changed, 10 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 92703efda1f7..fdf0c1008225 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -2437,7 +2437,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 	 * and our use of dma addresses in the trb_address_map radix tree needs
+ 	 * TRB_SEGMENT_SIZE alignment, so we pick the greater alignment need.
+ 	 */
+-	if (xhci->quirks & XHCI_ZHAOXIN_TRB_FETCH)
++	if (xhci->quirks & XHCI_TRB_OVERFETCH)
++		/* Buggy HC prefetches beyond segment bounds - allocate dummy space at the end */
+ 		xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
+ 				TRB_SEGMENT_SIZE * 2, TRB_SEGMENT_SIZE * 2, xhci->page_size * 2);
+ 	else
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 2d1e205c14c6..5a5f0b2dba4d 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -38,6 +38,8 @@
+ #define PCI_DEVICE_ID_ETRON_EJ168		0x7023
+ #define PCI_DEVICE_ID_ETRON_EJ188		0x7052
+ 
++#define PCI_DEVICE_ID_VIA_VL805			0x3483
++
+ #define PCI_DEVICE_ID_INTEL_LYNXPOINT_XHCI		0x8c31
+ #define PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_XHCI		0x9c31
+ #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_LP_XHCI	0x9cb1
+@@ -418,8 +420,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 			pdev->device == 0x3432)
+ 		xhci->quirks |= XHCI_BROKEN_STREAMS;
+ 
+-	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483)
++	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == PCI_DEVICE_ID_VIA_VL805) {
+ 		xhci->quirks |= XHCI_LPM_SUPPORT;
++		xhci->quirks |= XHCI_TRB_OVERFETCH;
++	}
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
+ 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
+@@ -467,11 +471,11 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
+ 
+ 		if (pdev->device == 0x9202) {
+ 			xhci->quirks |= XHCI_RESET_ON_RESUME;
+-			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
++			xhci->quirks |= XHCI_TRB_OVERFETCH;
+ 		}
+ 
+ 		if (pdev->device == 0x9203)
+-			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
++			xhci->quirks |= XHCI_TRB_OVERFETCH;
+ 	}
+ 
+ 	if (pdev->vendor == PCI_VENDOR_ID_CDNS &&
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 4914f0a10cff..dba1db259cd3 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -1628,7 +1628,7 @@ struct xhci_hcd {
+ #define XHCI_EP_CTX_BROKEN_DCS	BIT_ULL(42)
+ #define XHCI_SUSPEND_RESUME_CLKS	BIT_ULL(43)
+ #define XHCI_RESET_TO_DEFAULT	BIT_ULL(44)
+-#define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
++#define XHCI_TRB_OVERFETCH	BIT_ULL(45)
+ #define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
+ #define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
+ #define XHCI_CDNS_SCTX_QUIRK	BIT_ULL(48)
 -- 
-heikki
+2.47.1
 
