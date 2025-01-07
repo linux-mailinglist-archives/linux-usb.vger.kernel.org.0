@@ -1,83 +1,98 @@
-Return-Path: <linux-usb+bounces-19059-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19060-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EE68A03C7E
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 11:34:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3B8BA03C84
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 11:35:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92AA118813E6
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 10:34:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF9A47A2BF3
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 10:35:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E8851E9B03;
-	Tue,  7 Jan 2025 10:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B2771EBA19;
+	Tue,  7 Jan 2025 10:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NxuL0Xj4"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="C6THdhJZ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D001E9B23;
-	Tue,  7 Jan 2025 10:32:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7EB51E5739;
+	Tue,  7 Jan 2025 10:33:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736245961; cv=none; b=Vt325zCTU6eayv8J+QBIbmgio63eI9mXaXIKY3TCzMjfuTr3VGHkrkahuAGkZCT5C/aoCsTmoUAdr7YE1TxEe1TZ4UdoS36netmy6kCb5Xj5SavbztU6wE2QRZ175KSsh9umj3tqy23oGJoJO0AcZvvaeYjTkVVcTtgr4BO9Lwk=
+	t=1736246019; cv=none; b=lh4e+5eJ0srJb27bUDRJT1KtSmU741HDEeSbDLtQMdeSGoz3Z6xunNldjlMeTf6bG8uwRHgiYrFnED4VM34LuElUL7FJ3LERYPRonOQpTN8uN9GFo1P8FEqeuTNf5TXuC7X52NAJRT0LHmhGvCkAnOzqYfWoU711n9+Vgp3wxlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736245961; c=relaxed/simple;
-	bh=y945zRPZXxqbC7qoxwS2DYQ82kDuB7aeeU7AIfBejhk=;
+	s=arc-20240116; t=1736246019; c=relaxed/simple;
+	bh=uyNKrCYG3UHxHM6BfgAb/U3GfzjI1gKcojlVGhqLd4w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xd4n6sFe8GjuRY5/Iy0hx2gONnRfdiZSxRH/Re3LRwc6p/QBJemCbGcy6djYeCQPakYDuIVP4X3OjFy484yJ/geUj8ncA8c/PMhxqmhlH5DdBpoNLqaovpMGM9HcPoPT93S1SVlOdujXI7roWOv7hKDjEY+wWAn/hy6LyNeJlbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NxuL0Xj4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A87E2C4CEDF;
-	Tue,  7 Jan 2025 10:32:39 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=NuH2zleRHJYmGW0oJiTNLkG11OBUntbsnDwKXWnuxMaMLJKGGDBhPUl8BQEAkRBLQSqoilLej8Q3GfLgD/BXExTO6HbfToEJ7OnFciSH72fTSrsQ+Sovh1KbaHOAWHVl/eWLMdNoyngeyLoRhP8o5gLAM4QRM1voYcKKglN4t6Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=C6THdhJZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D9AC4CED6;
+	Tue,  7 Jan 2025 10:33:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1736245960;
-	bh=y945zRPZXxqbC7qoxwS2DYQ82kDuB7aeeU7AIfBejhk=;
+	s=korg; t=1736246019;
+	bh=uyNKrCYG3UHxHM6BfgAb/U3GfzjI1gKcojlVGhqLd4w=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NxuL0Xj4ZkKdlnRI3lbKwuLCj8qFaLv1VWLOoCMKdWYfFr4aXhWl4GPs0M/T6gWfv
-	 ccu2PevwtNzXdKCVDGr9+JeP/+RX8Dz9OZwyuHcri/e146QuD9Ju/OgwEUBKt311vr
-	 55YrrRcW2xx0sWy+etgEAJXv0kCyOEKByTfj/yUo=
-Date: Tue, 7 Jan 2025 11:32:37 +0100
+	b=C6THdhJZkl32cH+wN87vnidicI9ssPUN6Qqx+n5GvvBEBiy68RA9zZF1ZhwC1doxa
+	 tftgslg0C5rSsbct4yzZzdv/UnTrnDovFyyi4b857y6DYBjL0KjyJXKttPxt1otRuK
+	 dfrZes/zZUnbEYS78n0vYEaeHYFXcom044hRrKnU=
+Date: Tue, 7 Jan 2025 11:33:36 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: srinivas.kandagatla@linaro.org, mathias.nyman@intel.com, perex@perex.cz,
-	conor+dt@kernel.org, dmitry.torokhov@gmail.com, corbet@lwn.net,
-	broonie@kernel.org, lgirdwood@gmail.com, tiwai@suse.com,
-	krzk+dt@kernel.org, pierre-louis.bossart@linux.dev,
-	Thinh.Nguyen@synopsys.com, robh@kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v31 00/32] Introduce QC USB SND audio offloading support
-Message-ID: <2025010713-stack-recycler-7f05@gregkh>
-References: <20241213235403.4109199-1-quic_wcheng@quicinc.com>
- <f5e5ef90-f9b2-4d0d-b127-b3f2490fbdc4@quicinc.com>
+To: Gwendal Grignou <gwendal@chromium.org>
+Cc: ukaszb@chromium.org, abhishekpandit@chromium.org, bleung@chromium.org,
+	chrome-platform@lists.linux.dev, dmitry.baryshkov@linaro.org,
+	heikki.krogerus@linux.intel.com, jthies@google.com,
+	linux-usb@vger.kernel.org, pholla@chromium.org, tzungbi@kernel.org
+Subject: Re: [PATCH] driver/platform/chrome: Update cros_ec_trace with new
+ USCI commands
+Message-ID: <2025010717-antsy-watch-491f@gregkh>
+References: <20241231131047.1757434-2-ukaszb@chromium.org>
+ <20250103233407.4001046-1-gwendal@chromium.org>
+ <2025010438-canopener-renounce-4a28@gregkh>
+ <CAPUE2usEN1OZ-=A19PH2yx3tCM1aNnXqNZt3stvgWZod7GxW=w@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <f5e5ef90-f9b2-4d0d-b127-b3f2490fbdc4@quicinc.com>
+In-Reply-To: <CAPUE2usEN1OZ-=A19PH2yx3tCM1aNnXqNZt3stvgWZod7GxW=w@mail.gmail.com>
 
-On Mon, Jan 06, 2025 at 03:02:37PM -0800, Wesley Cheng wrote:
-> Hi,
-> 
-> On 12/13/2024 3:53 PM, Wesley Cheng wrote:
-> > Requesting to see if we can get some Acked-By tags, and merge on usb-next.
-> 
-> 
-> Happy new years to everyone.  Before sending out another revision to
-> update the year for the license, did anyone have any feedback yet for
-> the current revision?
+On Mon, Jan 06, 2025 at 10:43:20AM -0800, Gwendal Grignou wrote:
+> On Sat, Jan 4, 2025 at 12:13â€¯AM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Fri, Jan 03, 2025 at 03:34:07PM -0800, Gwendal Grignou wrote:
+> > > Add this patch to "platform/chrome: Update ChromeOS EC header for UCSI"
+> >
+> > I do not understand this changelog text, sorry.  How can you "add"
+> > something to an existing change?
+> >
+> > > to add the new commands form cros_ec_commands.h in the tracer so that
+> > > they are nicely decoded. Enable the tracer with:
+> > > cd /sys/kernel/debug/tracing
+> > > echo 1 > events/cros_ec/enable
+> > > echo 1 > tracing_on
+> > > cat trace_pipe
+> >
+> > We don't need to document how to enable a tracepoint here in the
+> > changelog, right?  That's going to get lost and why is this new one
+> > somehow special?
+> >
+> > confused,
+> Sorry, I did not use `git send-email` appropriately: the code snippet
+> inside the email was not meant to be a standalone patch, but to be
+> added to patch v12 1/2 "platform/chrome: Update ChromeOS EC header for
+> UCSI".
+> If this is too late, that's fine; I will send a proper kernel patch
+> through the chrome-platform@lists.linux.dev mailing list.
 
-Let's just send a new version and if no one complains, I'll queue it up,
-I feel like this has gone on too long...
+Please send a proper fix as obviously we can not merge commits, you know
+this :(
 
 thanks,
 
