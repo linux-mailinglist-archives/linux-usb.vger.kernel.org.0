@@ -1,185 +1,132 @@
-Return-Path: <linux-usb+bounces-19075-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19076-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 77926A042A9
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 15:35:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF416A045CA
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 17:16:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE70C1881F07
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:35:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D17AE7A324B
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 16:16:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF75F1F0E25;
-	Tue,  7 Jan 2025 14:35:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B4511F4E30;
+	Tue,  7 Jan 2025 16:16:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TIj8IvgT"
+	dkim=pass (1024-bit key) header.d=turris.com header.i=@turris.com header.b="rpdrZI8C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.nic.cz (mail.nic.cz [217.31.204.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0FFC1E9B00;
-	Tue,  7 Jan 2025 14:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9021F4710;
+	Tue,  7 Jan 2025 16:16:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.31.204.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736260517; cv=none; b=et2XTzlAF7OHrZnpyiSDtGdu3WSOuzj12szLGbSbbDppNZIWnCboPGM6wSjjT9iS+AT+fm4eFvHMCafK1ZBj5f1JJhcUpn+rH4+XyGCZ9qHpw1OkZ1JZlCxILo+IPAqxPv6oiwq4Qijfz6IzwW66DmUEk8k3FjyOxwA0dF98v+o=
+	t=1736266598; cv=none; b=LLDH3DiNaG8HOrQub/Rxq+RMo1WWd4LqKKizVZscQZZ63j2BZc4wVDRsRMaDq/yWNHevqCQIXZSNVoY/aCIFbBfAZbFrD04f1VPPI8hPWrfwC4xh27t9JRdRLQ1IOsFENdG6u9h1qtUSd7mKCoFP5noGXEGhSmgcdz+QSauKXrQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736260517; c=relaxed/simple;
-	bh=dSMnbKj3IQK21zIOXSnry0WxBKfF0CMQmQkmmNOaI/Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=SOAJl7zDr05XRD44Kjk2wHjdD1dKp5mwNHiijtC9esf9ekNLHg1vSRdt603OFw/UwEiStmAILTDPSyZ6oOPJEtwZlKxwws69AfjoHVZT9SGYk1iZx3VLTIwZ0vloMxx/6JNAs+r9O5JIJRriSqEXb3lKyvg9vQWywezH1jpjzQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TIj8IvgT; arc=none smtp.client-ip=209.85.208.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5d4e2aa7ea9so29461173a12.2;
-        Tue, 07 Jan 2025 06:35:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736260514; x=1736865314; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nf/M7+eGzGRIoOADh8G+Ng72NoYSTxX1IpGIejx6WEg=;
-        b=TIj8IvgTNzg5BWPU+6UWj0k4MmmG/L3nncHatVoHUlRjaZOTsriizxEIgDKNJmrwVB
-         qryJx8qX3d6OMt8w5w8+aY0HAvndQYYiS9zLPmtOO7+2ebsojRJ1LthMg18TPZrRMwyU
-         7pJl/1xCvEnnNoRQ6hM9wzagXjyjTz1o6a7Ur5lpZkNI5VkJDylJ45PmCbIxjY7roSyK
-         ncuuDlmRJYHEX8z5uxcakdCDOfOUb/8F3EAt5o+Fh8KTXNh4qtlpzupK0B+X1EOAkdLV
-         Ate2tcQC0rUl8ahOKLM7JcDfDqiSTQtFILUL7US0l51JeRAckW2ApDTd7gZxbi0VEbc/
-         Kq9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736260514; x=1736865314;
-        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nf/M7+eGzGRIoOADh8G+Ng72NoYSTxX1IpGIejx6WEg=;
-        b=qK/qabOZx4DZKWBTJgilMBo9WDYmpGugGS1QbFDHVI0UI+S+oXptQNFxi4itNTg5fN
-         RyukOArSW4Gxtx6v05bz97pi1nlToEnCwSTEtGOIyqT5tDgJ+QIp6vT5JZ1xTNT/8LuR
-         Qk34g56O6H0uaI/Z8I2M4/2TITAwjuP7JVtL9Yg3cHkFSl4B/gnSbTBJrsAYGp4rFxDh
-         +7cdKtxFbpGW9qz+CBKnRvl6AXD5r02d2teW3JosIOBHpwZFFCuzpDFNaxJ9cOm3fez1
-         5GyiwLQSJlHhPmIweVdPEFXN+31lhrI2vZiI7EQKEB0U/CH/Z40EIaAf+/1zerlmQPiU
-         J8+g==
-X-Forwarded-Encrypted: i=1; AJvYcCVC1mj05eDavLvXdvJFhwO/cq9A9fbdbE9DKyVbFxuTkHE/bBdZSrQHcBhSzIPVopPmzYeKmq2bjalz@vger.kernel.org, AJvYcCXJjKu16tZ14NxfAgtnw73tyNOxV32MK1TwJKuryu2EjzxjUrGl15XEQBqtmpzAxH8ARramMNYzJ3IDM34=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyeWZY60C93C8Zz3i6gXLMfAtuLxzNjqJ/i7dCSgwqqcdTIk5OH
-	7vJOVvn/ZIYSEpLY7+mjJcK/fJcQHxxXrX5lGwBPjLsZvHKmiuAG
-X-Gm-Gg: ASbGncu1u8U4ug3rkoB1qw+nDC1Ekx9N35ua4o4Bxop/ad5s9xWDLLxbZuQgqKR+j45
-	99LQqtaf1NydO/qJwI84g6J3Rdp3bJW0TKzSPYfIOL6LrfxvzsDqm0YftfJOuxD7qtUlS19GuWE
-	Eddwel/ZIVABo/knLNo04rnh8aQDGT/dF6rPoxOylpyIlVILDqwWow3bKabMi3kC0esWetGWSsp
-	HbM2Eh3o29rXWqXYeLsIPGHEK/PsQVfL0FA0xJPVGRR16MtcsaeMlu1UtZTS9JQy8mtJb8=
-X-Google-Smtp-Source: AGHT+IEdJmNJcRxGutzFUa/NXQMg2BXp/vpVFWEaTxX4oWx1Q4O4r0pfG7zfNc6/2/sW7mO2oV8hAg==
-X-Received: by 2002:a05:6402:321a:b0:5d2:7270:6124 with SMTP id 4fb4d7f45d1cf-5d81de2311dmr56648671a12.23.1736260513729;
-        Tue, 07 Jan 2025 06:35:13 -0800 (PST)
-Received: from foxbook (adth42.neoplus.adsl.tpnet.pl. [79.185.219.42])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d807616bc1sm25057422a12.29.2025.01.07.06.35.12
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 07 Jan 2025 06:35:13 -0800 (PST)
-Date: Tue, 7 Jan 2025 15:35:09 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, Niklas Neronin
- <niklas.neronin@linux.intel.com>
-Subject: [PATCH] usb: xhci: Enable the TRB overfetch quirk on VIA VL805
-Message-ID: <20250107153509.727b981e@foxbook>
+	s=arc-20240116; t=1736266598; c=relaxed/simple;
+	bh=9JsarrC4F+wToYPsN9sg4QYg8GM2RYtdHLdT9Gc69jw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=i8nF8SDPa6PiKAMoOz672/0naP03giQeCKx3IwvApfYR1O0eYLUW29T7uYeJkEGMeXgwYCIyuGB7ZBcZSXoWgN5v4LQwaGiG/rxkNhFsflMzMdYZG2p1Ddi2AWuCsE2RM5A2YtMc461ormEc5UKaVkAe4EsVAKplHXBnETGPxbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=turris.com; spf=pass smtp.mailfrom=turris.com; dkim=pass (1024-bit key) header.d=turris.com header.i=@turris.com header.b=rpdrZI8C; arc=none smtp.client-ip=217.31.204.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=turris.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=turris.com
+Received: from localhost (unknown [IPv6:2001:1488:fffe:6:1695:51de:f3c4:a72a])
+	by mail.nic.cz (Postfix) with ESMTPSA id 983451C130C;
+	Tue,  7 Jan 2025 17:08:29 +0100 (CET)
+Authentication-Results: mail.nic.cz;
+	auth=pass smtp.auth=michal.hrusecky@nic.cz smtp.mailfrom=michal.hrusecky@turris.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=turris.com;
+	s=default; t=1736266109;
+	bh=9JsarrC4F+wToYPsN9sg4QYg8GM2RYtdHLdT9Gc69jw=;
+	h=Date:From:To:Cc:Subject:From:Reply-To:Subject:To:Cc;
+	b=rpdrZI8CCZeVRNF/GTgXeoXIY5vD9oDzD5EQndsHdsg0lmxQ8G4izlAHcX4nb3aD6
+	 gGF1NVHMvaEcItEWisbT5tSojHQWBOujKR5ilmce8KS8oiqYONR79AJIYrmYWSjB6q
+	 YGwtRKyiDg6U5xV35FIoVuI0bfqPq1pn1ivlBLPc=
+Date: Tue, 7 Jan 2025 17:08:29 +0100
+From: Michal Hrusecky <michal.hrusecky@turris.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] USB: serial: option: add Neoway N723-EA support
+Message-ID: <csxkrj4qclw3yzijwr57zqqd737kk47zpwjvy6t2oxnobmvswp@o5gt4k7vtwql>
+X-Operating-System: Linux
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spamd-Bar: /
+X-Rspamd-Queue-Id: 983451C130C
+X-Spamd-Result: default: False [-0.10 / 16.00];
+	MIME_GOOD(-0.10)[text/plain];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:25192, ipnet:2001:1488::/32, country:CZ];
+	WHITELISTED_IP(0.00)[2001:1488:fffe:6:1695:51de:f3c4:a72a];
+	ARC_NA(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	MIME_TRACE(0.00)[0:+]
+X-Rspamd-Action: no action
+X-Rspamd-Pre-Result: action=no action;
+	module=multimap;
+	Matched map: WHITELISTED_IP
+X-Rspamd-Server: mail
 
-Raspberry Pi is a major user of those chips and they discovered a bug -
-when the end of a transfer ring segment is reached, up to four TRBs can
-be prefetched from the next page even if the segment ends with link TRB
-and on page boundary (the chip claims to support standard 4KB pages).
+Update the USB serial option driver to support Neoway N723-EA.
 
-It also appears that if the prefetched TRBs belong to a different ring
-whose doorbell is later rung, they may be used without refreshing from
-system RAM and the endpoint will stay idle if their cycle bit is stale.
+ID 2949:8700 Marvell Mobile Composite Device Bus
 
-Other users complain about IOMMU faults on x86 systems, unsurprisingly.
+T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2949 ProdID=8700 Rev= 1.00
+S:  Manufacturer=Marvell
+S:  Product=Mobile Composite Device Bus
+S:  SerialNumber=200806006809080000
+C:* #Ifs= 5 Cfg#= 1 Atr=c0 MxPwr=500mA
+A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
+I:* If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0c(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0b(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0e(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-Deal with it by using existing quirk which allocates a dummy page after
-each transfer ring segment. This was seen to resolve both problems. RPi
-came up with a more efficient solution, shortening each segment by four
-TRBs, but it complicated the driver and they ditched it for this quirk.
+Tested successfully connecting to the Internet via rndis interface after
+dialing via AT commands on If#=4 or If#=6.
 
-Also rename the quirk and add VL805 device ID macro.
+Not sure of the purpose of the other serial interface.
 
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-Link: https://github.com/raspberrypi/linux/issues/4685
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=215906
-CC: stable@vger.kernel.org
+Signed-off-by: Michal Hrusecky <michal.hrusecky@turris.com>
 ---
- drivers/usb/host/xhci-mem.c |  3 ++-
- drivers/usb/host/xhci-pci.c | 10 +++++++---
- drivers/usb/host/xhci.h     |  2 +-
- 3 files changed, 10 insertions(+), 5 deletions(-)
+ drivers/usb/serial/option.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 92703efda1f7..fdf0c1008225 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -2437,7 +2437,8 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	 * and our use of dma addresses in the trb_address_map radix tree needs
- 	 * TRB_SEGMENT_SIZE alignment, so we pick the greater alignment need.
- 	 */
--	if (xhci->quirks & XHCI_ZHAOXIN_TRB_FETCH)
-+	if (xhci->quirks & XHCI_TRB_OVERFETCH)
-+		/* Buggy HC prefetches beyond segment bounds - allocate dummy space at the end */
- 		xhci->segment_pool = dma_pool_create("xHCI ring segments", dev,
- 				TRB_SEGMENT_SIZE * 2, TRB_SEGMENT_SIZE * 2, xhci->page_size * 2);
- 	else
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 2d1e205c14c6..5a5f0b2dba4d 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -38,6 +38,8 @@
- #define PCI_DEVICE_ID_ETRON_EJ168		0x7023
- #define PCI_DEVICE_ID_ETRON_EJ188		0x7052
- 
-+#define PCI_DEVICE_ID_VIA_VL805			0x3483
-+
- #define PCI_DEVICE_ID_INTEL_LYNXPOINT_XHCI		0x8c31
- #define PCI_DEVICE_ID_INTEL_LYNXPOINT_LP_XHCI		0x9c31
- #define PCI_DEVICE_ID_INTEL_WILDCATPOINT_LP_XHCI	0x9cb1
-@@ -418,8 +420,10 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 			pdev->device == 0x3432)
- 		xhci->quirks |= XHCI_BROKEN_STREAMS;
- 
--	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == 0x3483)
-+	if (pdev->vendor == PCI_VENDOR_ID_VIA && pdev->device == PCI_DEVICE_ID_VIA_VL805) {
- 		xhci->quirks |= XHCI_LPM_SUPPORT;
-+		xhci->quirks |= XHCI_TRB_OVERFETCH;
-+	}
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_ASMEDIA &&
- 		pdev->device == PCI_DEVICE_ID_ASMEDIA_1042_XHCI) {
-@@ -467,11 +471,11 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 
- 		if (pdev->device == 0x9202) {
- 			xhci->quirks |= XHCI_RESET_ON_RESUME;
--			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
-+			xhci->quirks |= XHCI_TRB_OVERFETCH;
- 		}
- 
- 		if (pdev->device == 0x9203)
--			xhci->quirks |= XHCI_ZHAOXIN_TRB_FETCH;
-+			xhci->quirks |= XHCI_TRB_OVERFETCH;
- 	}
- 
- 	if (pdev->vendor == PCI_VENDOR_ID_CDNS &&
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 4914f0a10cff..dba1db259cd3 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1628,7 +1628,7 @@ struct xhci_hcd {
- #define XHCI_EP_CTX_BROKEN_DCS	BIT_ULL(42)
- #define XHCI_SUSPEND_RESUME_CLKS	BIT_ULL(43)
- #define XHCI_RESET_TO_DEFAULT	BIT_ULL(44)
--#define XHCI_ZHAOXIN_TRB_FETCH	BIT_ULL(45)
-+#define XHCI_TRB_OVERFETCH	BIT_ULL(45)
- #define XHCI_ZHAOXIN_HOST	BIT_ULL(46)
- #define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
- #define XHCI_CDNS_SCTX_QUIRK	BIT_ULL(48)
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 64317b390d22..758f02f0d2b9 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -2412,6 +2412,7 @@ static const struct usb_device_id option_ids[] = {
+ 	  .driver_info = NCTRL(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0640, 0xff),			/* TCL IK512 ECM */
+ 	  .driver_info = NCTRL(3) },
++	{ USB_DEVICE(0x2949, 0x8700) },						/* Neoway N723-EA */
+ 	{ } /* Terminating entry */
+ };
+ MODULE_DEVICE_TABLE(usb, option_ids);
 -- 
 2.47.1
+
 
