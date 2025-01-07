@@ -1,142 +1,162 @@
-Return-Path: <linux-usb+bounces-19071-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19072-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D49A8A040FD
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:39:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91F5CA04123
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:47:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04AC97A05AF
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:39:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 013731887099
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:48:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E04541F0E2E;
-	Tue,  7 Jan 2025 13:39:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D23281F0E35;
+	Tue,  7 Jan 2025 13:47:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="GoCmkDYV"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="CAuHcqGN";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="Gp8ECD2a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DCBB273FD
-	for <linux-usb@vger.kernel.org>; Tue,  7 Jan 2025 13:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2A1B1E0DED;
+	Tue,  7 Jan 2025 13:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736257167; cv=none; b=tdH2c8wV8iDtGSGAOx5H01hn2hGWMFA9+O/WntNywlq4GiXqHb7nY/CJdzI8njM9Lt0nqGAxnelDWAJf2G4ICsyN+42NY5ZoPJcLAffoCJxlTZpeQMrqq+LM3h1FUfdk7z21zXC30O24HGdr7SQ+6GqYdTzRUj5+92DQAJuApbg=
+	t=1736257671; cv=none; b=Hdw33S3QojFMSjDhizcpdYp9C+tRYViMS2yPzzCSJaxe2VQxeusOy1atSzsszcqGZzHotO/VUi9GDfITF1+5jBVTYm6ecf6Tqm2lXNccXz1Vmum8CJgoXz6146Ukbq94BmsMbqBI+7n7hvqj3CJytgdxgFfE5ZSM/0y2yMUfaeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736257167; c=relaxed/simple;
-	bh=anR295dsYLaPZMGJqRadGXRXwUp8EaI7n9P8OHjUspA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SwKaFx9WgjDOQpfFCS10bHMMvbsECYuedQh3Trr4L6A2QbOhv2IOk7OcW50iGfJBqb+1PLM5YJaTArlE2hy13BxwG78+N64kLwKt7iDOeRp6EVU/rlulDEtNo4V5+vW/WF01+/6tOUqrOPiqGk0sG/SeeN7ajf49GWLxerhJEKY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=GoCmkDYV; arc=none smtp.client-ip=54.207.19.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1736257152;
-	bh=Jwz9VBmRlX+Is2NqzUvb2PX5ziUNiqVFpfw8i6EXWf0=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=GoCmkDYVVMcjpA4dAfT0V0Jo/1FooaYOAo1gd5gD7doN8xy+yinRreK7vT1KCogWU
-	 ruTH/njcAqopOAhY73ejoo331/l03YwwIvqXa45ixhurU6iFjAcssDUxCXnLXoKmPe
-	 SI8cAbanon2SUVA73I7YtysptHKMsT6bO2YOsN/k=
-X-QQ-mid: bizesmtpip4t1736257142tuu34xk
-X-QQ-Originating-IP: v4T783SAuQhS+1f6RBJR3A4D2pB/VYrLfcMPIalcI6c=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 07 Jan 2025 21:38:58 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 7022212570655544969
-From: WangYuli <wangyuli@uniontech.com>
-To: mathias.nyman@intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	niklas.neronin@linux.intel.com,
-	quic_wcheng@quicinc.com,
-	andriy.shevchenko@linux.intel.com,
-	michal.pecio@gmail.com,
-	guanwentao@uniontech.com,
-	zhanjun@uniontech.com,
-	bigeasy@linutronix.de,
-	balbi@ti.com,
-	hkallweit1@gmail.com,
-	wangyuli@uniontech.com,
-	raoxu@uniontech.com
-Subject: [PATCH v3] usb: host: xhci-plat: Assign shared_hcd->rsrc_start
-Date: Tue,  7 Jan 2025 21:38:54 +0800
-Message-ID: <186B9F56972457B4+20250107133854.172309-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.47.1
+	s=arc-20240116; t=1736257671; c=relaxed/simple;
+	bh=bCMttcWQirNicytx6ykU0QZpRRftXACwB5o3zdvB5x8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UGD10H9o5Yp66T8Eoe/5tjQvEdKwoWi/h5UHsxXBZ5Sp0qNMCoq7bR+qVxNZ/eR7aceq9/eavPGr28tmu9WTenN3sFctucJXsnZcuC+3zRlFNxChPKmUGKxOTt3VYzxkF5D4J5l1Bj4kVGf03GJ5WCm8b+bDowSCAGdqforo5U0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=CAuHcqGN; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=Gp8ECD2a reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1736257666; x=1767793666;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=H2JiFyCh/Tl5YOwhVHC+9/o2zm1iU1FIoUS3LVDCVQM=;
+  b=CAuHcqGNaufqPWJp7fGS5bsTGqRC6pb794W+/8MZkaL4uQn4ahO/wePn
+   01mgAosms7/ZUOmDZc/ERincOyBSOjdWKUkOxj5LnogmDG1mUVk+3B1XX
+   BYtZr2E1Ab19/sZnGhznkJczMBek3d5bqAi4nmxgCyWPusMbPpEPxRu3h
+   koDUZg0L1EQKMdiA8un2Z9BMpE79iq45Av0wRaYuNEuShC+yDH3HBrBtY
+   WKvJ+5+H6PIyjzJPHDwckFPUbGZzJ1hJh8NihF87savy7co0jdrYx6L2Y
+   1BBe9RC4nz3+yaZel5x/ha4mjhXNucttajc4sQIVuNJTOh81aHr2FTNsv
+   A==;
+X-CSE-ConnectionGUID: OVZasUpRQum1PZsDd73xFw==
+X-CSE-MsgGUID: mYpmTubRRzSDooSbu505XQ==
+X-IronPort-AV: E=Sophos;i="6.12,295,1728943200"; 
+   d="scan'208";a="40895891"
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 07 Jan 2025 14:47:43 +0100
+X-CheckPoint: {677D307F-16-3C670366-E45AD810}
+X-MAIL-CPID: D9326B8D606E51C9C554D2FC41D37A2A_4
+X-Control-Analysis: str=0001.0A682F28.677D307F.00A7,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 12BB0164990;
+	Tue,  7 Jan 2025 14:47:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1736257658;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=H2JiFyCh/Tl5YOwhVHC+9/o2zm1iU1FIoUS3LVDCVQM=;
+	b=Gp8ECD2aEaJ2EoPlQW15Ikeq6rQoBFt/xYZHffSmoaiTRcEt3DyE1007ghx7QUsh6rWleF
+	lVKVhAGrvYWx+CEhDIzb+u3GFfHUIrNePQeY7nizrT961wk3aoCy86jbq9k1WGCr1X2RnA
+	ooMJ7bMSMZAzRbH4f4WwI+NhT3Gr9T1Q7ZZihIWPpiYe4ojX3SOqQh+a2FQ3vSheOrwhcX
+	F5L14kcteB5aHapjOda7uYt6BTq6MW8VaLetOMmY5he1vQAsX4D0qjLcLXWBDFl5WpEvRR
+	JInTk5xg/jzac1LcmHiQQC7oyqGly+SMY4vt8KxMP12YKK3wIRlQbd7PMldfJg==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, Andrew Jeffery <andrew@codeconstruct.com.au>, Justin Chen <justin.chen@broadcom.com>, Al Cooper <alcooperx@gmail.com>, Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, Benjamin Herrenschmidt <benh@kernel.crashing.org>, Florian Fainelli <f.fainelli@gmail.com>, Benjamin Bara <benjamin.bara@skidata.com>, Bjorn Andersson <andersson@kernel.org>, Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>, Del Regno <angelogioacchino.delregno@collabora.com>, Tianping Fang <tianping.fang@mediatek.com>, Jassi Brar <jaswinder.singh@linaro.org>, Biju Das <biju.das.jz@bp.renesas.com>, Yoshihiro Shimoda <yoshihiro.shimod
+ a.uh@renesas.com>, Francesco Dolcini <francesco.dolcini@toradex.com>, Macpaul Lin <macpaul.lin@mediatek.com>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org, linux-renesas-soc@vger.kernel.org, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] dt-bindings: usb: Correct indentation and style in DTS example
+Date: Tue, 07 Jan 2025 14:47:27 +0100
+Message-ID: <10618962.nUPlyArG6x@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
+References: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: Mf2c2cXG8XEiFrWxhKZiynLnbajFCeRwtnYpPGOYtxNzUOB6iP25z1jm
-	/BAWuAJ227Ow1Zzbekyj5Vhw9JpIL4X6SXSuj8LpPxD8oAsrtj0mqiBvQj/ucghhKtxhWu7
-	vcRoJ/gKCFluIYSRDMvvo8OB5/EIsBwZPsxiXHwf1H0C9Sjh1Lf76j10SfOPMNZ+hHs80Ww
-	Si7s4TTKwJpNWpBEKlK06tgM1DddrcnweQLsP9WJZBlgK6AueoSGa2z65ChpFw9LDIvrlWG
-	lTbGYJJk1OFmFY/LsDV2yWUIkjcqHvSGpcOqDD6UYEJ4sBro6uefBJp1CoFhrzhslqZVOrI
-	uJvCsOXatognVBbkDti4IurYOdZEjxMfX8iFya3oXnRxg9vue5IJ7ul7Hgs5s6G6nftJLmX
-	lvDkarlvcaKGWuyzoYylX9DX34sLTEkuYsS7ULf2GhE1nAwpqb/weGuzeqieOhMjtduZ7TD
-	5hRBGOeHFdoB+YqFzoHK6WlISjmyRTUQN3GSUgzmO52k7pZPyXOfRkjMWVhWPHLpZe6mdF5
-	nEzTLEEhX8JW9TqNAS5Hw8m1GtDV9SfReYp5cnYZU0nSYXNz6DInXpxTjsDQmSOns2HB3ic
-	HYlBSXJYPkUHzg/meRdmz+aXeJDtzUp7sbXMwJ2Q3ag1Azd4WvyHRRLUekapW/tRYPsg9eM
-	jnvPnuqlzg/MfNoszm09TB3qEN48kzf5P+qCxLOg2WtKDiBrIVVQmV3iPzolO3s+ST4SFFT
-	7tqcX4twVt9V7G5gvND8i0Fq9RMJKnnwJOa+qWp0L+xBpqA2k6veegxs8iMich5wDlF4lZz
-	pLF6vtv17kDqsdbwaJ0kBzn1Fv0MI/3ZmeHO8TdpbZN/6D6zltojGyVboo9EDdfWUfUk+9f
-	IjVt8gNjGfPhpufiwjV87/7h1Or/JvROV48NTqcpqrcA4/zz/o/7yvFqHC1XtYKRrz980Kb
-	K+gmFH637R388bMPVHjTyu//i1aWgMdGpMKoSZTG8F9BTTb0thvTAZdaVizE13g3PVBGDW+
-	glup5LkahAgKSG8nmn+mM3IgLQ2ag=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
-X-QQ-RECHKSPAM: 0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Last-TLS-Session-Version: TLSv1.3
 
-When inserting a USB device, examining hcd->rsrc_start can be
-helpful in identifying which hcd is mounted, as the physical
-address represented here is typically unique.
+Am Dienstag, 7. Januar 2025, 14:10:13 CET schrieb Krzysztof Kozlowski:
 
-The following code snippet demonstrates this:
-  struct usb_hcd *hcd = bus_to_hcd(udev->bus);
-  unsigned long long usb_hcd_addr = (unsigned long long)hcd->rsrc_start;
+> DTS example in the bindings should be indented with 2- or 4-spaces and
+> aligned with opening '- |', so correct any differences like 3-spaces or
+> mixtures 2- and 4-spaces in one binding.
+>=20
+> No functional changes here, but saves some comments during reviews of
+> new patches built on existing code.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/usb/aspeed,usb-vhub.yaml         | 40 +++++++++----------
+>  .../devicetree/bindings/usb/brcm,bdc.yaml     | 14 +++----
+>  .../devicetree/bindings/usb/cypress,hx3.yaml  | 24 +++++------
+>  .../devicetree/bindings/usb/dwc2.yaml         |  4 +-
+>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 20 +++++-----
+>  .../bindings/usb/intel,keembay-dwc3.yaml      | 30 +++++++-------
+>  .../devicetree/bindings/usb/ite,it5205.yaml   | 18 ++++-----
+>  .../bindings/usb/maxim,max3420-udc.yaml       | 28 ++++++-------
+>  .../bindings/usb/nvidia,tegra210-xusb.yaml    |  4 +-
+>  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 36 ++++++++---------
+>  .../bindings/usb/renesas,usb3-peri.yaml       | 24 +++++------
+>  .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 38 +++++++++---------
+>  .../bindings/usb/ti,tusb73x0-pci.yaml         |  6 +--
+>  .../devicetree/bindings/usb/ti,usb8020b.yaml  | 20 +++++-----
+>  .../devicetree/bindings/usb/ti,usb8041.yaml   | 16 ++++----
+>  15 files changed, 161 insertions(+), 161 deletions(-)
+>=20
+> [snip]
+> diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Docu=
+mentation/devicetree/bindings/usb/ti,usb8041.yaml
+> index c2e29bd61e11..bce730a5e237 100644
+> --- a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> +++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+> @@ -51,17 +51,17 @@ examples:
+> =20
+>          /* 2.0 hub on port 1 */
+>          hub_2_0: hub@1 {
+> -          compatible =3D "usb451,8142";
+> -          reg =3D <1>;
+> -          peer-hub =3D <&hub_3_0>;
+> -          reset-gpios =3D <&gpio1 11 GPIO_ACTIVE_LOW>;
+> +            compatible =3D "usb451,8142";
+> +            reg =3D <1>;
+> +            peer-hub =3D <&hub_3_0>;
+> +            reset-gpios =3D <&gpio1 11 GPIO_ACTIVE_LOW>;
+>          };
+> =20
+>          /* 3.0 hub on port 2 */
+>          hub_3_0: hub@2 {
+> -          compatible =3D "usb451,8140";
+> -          reg =3D <2>;
+> -          peer-hub =3D <&hub_2_0>;
+> -          reset-gpios =3D <&gpio1 11 GPIO_ACTIVE_LOW>;
+> +            compatible =3D "usb451,8140";
+> +            reg =3D <2>;
+> +            peer-hub =3D <&hub_2_0>;
+> +            reset-gpios =3D <&gpio1 11 GPIO_ACTIVE_LOW>;
+>          };
+>      };
+>=20
 
-However, this approach has limitations now. For USB hosts with an
-MMIO interface, the effectiveness of this method is restricted to
-USB 2.0.
+=46or ti,usb8041.yaml:
+Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
 
-Because commit 3429e91a661e ("usb: host: xhci: add platform driver
-support") assigned res->start to hcd->rsrc_start. But
-shared_hcd->rsrc_start remains unassigned, which is also necessary
-in certain scenarios.
-
-Fixes: 3429e91a661e ("usb: host: xhci: add platform driver support")
-Co-developed-by: Xu Rao <raoxu@uniontech.com>
-Signed-off-by: Xu Rao <raoxu@uniontech.com>
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
---
-Changlog:
- *v1 -> v2: Move code changes for commit e0fe986972f5 ("usb: host:
-xhci-plat: prepare operation w/o shared hcd").
-  v2 -> v3: Add the "Fixes" tag and fix a typo in commit message.
----
- drivers/usb/host/xhci-plat.c | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
-index e6c9006bd568..457e839b9b53 100644
---- a/drivers/usb/host/xhci-plat.c
-+++ b/drivers/usb/host/xhci-plat.c
-@@ -329,6 +329,8 @@ int xhci_plat_probe(struct platform_device *pdev, struct device *sysdev, const s
- 		usb3_hcd->can_do_streams = 1;
- 
- 	if (xhci->shared_hcd) {
-+		xhci->shared_hcd->rsrc_start = hcd->rsrc_start;
-+		xhci->shared_hcd->rsrc_len = hcd->rsrc_len;
- 		ret = usb_add_hcd(xhci->shared_hcd, irq, IRQF_SHARED);
- 		if (ret)
- 			goto put_usb3_hcd;
--- 
-2.47.1
 
 
