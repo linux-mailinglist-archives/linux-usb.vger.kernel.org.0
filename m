@@ -1,696 +1,656 @@
-Return-Path: <linux-usb+bounces-19068-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19069-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B9BCA03F25
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:30:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F155A04068
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 14:10:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8CDE165527
-	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 12:30:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 755167A1D2C
+	for <lists+linux-usb@lfdr.de>; Tue,  7 Jan 2025 13:10:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4EEE1E9B18;
-	Tue,  7 Jan 2025 12:30:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27A41E0DE2;
+	Tue,  7 Jan 2025 13:10:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ftXJPCq7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EiJomx2/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75FDF1E9B39;
-	Tue,  7 Jan 2025 12:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68081A4F09
+	for <linux-usb@vger.kernel.org>; Tue,  7 Jan 2025 13:10:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736253038; cv=none; b=RCB1msi6VEK/QY/2tomA42XEVG9wHAFwPZidosH081YjLWBKNeoZv+SoNDvYYHpbAogAg4LGWy9Y6Vp6sC57MDpHa3nZ/EsEcLGxuNFU1sgalBEJGx1iccQXjUvOUz08gx7b7LsYa0d0hJam9FnRQY/OgaYeNQOXvutJcZUuaS0=
+	t=1736255424; cv=none; b=WD/oCc2R8Oyr0H5PJkahL573oiY0uaQKOl0UufpH84ql/lAKydI2vYMai+9wqpYsYh7PqBzQ9hiA7O5BgyCjrVN3BTB15Yo7cNSp3PukUymKCAlh3FYKKoNfXy6RV8v8kFJnXUWnmAwddth/RmDcCuLUGPkcp5IoJ01qBlaGc08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736253038; c=relaxed/simple;
-	bh=EFqSCzd5v2Gld3g1FW1U/UHjDj5HxerwE3IJ+FqZM2g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CCODsCOvOyHo9rNwFwy8YFdBt2GlxTD+w0PCWGPhPXraCX4/3QUfYNOMf+FUA2K4EtuQb9d1Y/YZFwow/nE6wwVfOjdnyRuMFBfz/cH9Az7Y9aTVG2+ZsQG+AmsDMEgRTM6UVcBwmDzLOHXFQzg32h+aoaUebvFFEsO9jRHODlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ftXJPCq7; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736253034; x=1767789034;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EFqSCzd5v2Gld3g1FW1U/UHjDj5HxerwE3IJ+FqZM2g=;
-  b=ftXJPCq7Y5NGXH37+GpFanRe2Fhd5d/x2JGK/rX64fFncTNkdQj+TuDU
-   zH+KL7hIzcOZc8FAAsgqRmxtah3ZKweVrlUw0/BT+M9KZ4KIMlRRNrXaP
-   7x7QEii5hXOuSPq/lk8ZxfnY3Abqt5QBcN2GOAqnn8ujTpg1TNJWFf2eO
-   UPbSKtkQHSI7mCwge9pUVUIdV8jSxdckAZ6f/FINUMJ9J94GjiZ/WPREE
-   Ch8JOuxas3vTvZ7jBM+shGPrUj+TJn4QdunIAaJt9UWFMlY7Ee44Hwj0q
-   9KaVsdUv24i5BqIfnxtB0MmXgn5qy5JuZQguPThbBdZgKGiem9XycBcAJ
-   Q==;
-X-CSE-ConnectionGUID: 6D8uDw8LSc+2fzzX/jFARA==
-X-CSE-MsgGUID: +cPjFAEPTGa0PMtunsagWQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11308"; a="40104615"
-X-IronPort-AV: E=Sophos;i="6.12,295,1728975600"; 
-   d="scan'208";a="40104615"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Jan 2025 04:30:30 -0800
-X-CSE-ConnectionGUID: i18lxXtXSlCTxbaY8oKubA==
-X-CSE-MsgGUID: SQqy/uwbQOWfJL+/vu8YDg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="107375946"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa005.fm.intel.com with SMTP; 07 Jan 2025 04:30:24 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 07 Jan 2025 14:30:23 +0200
-Date: Tue, 7 Jan 2025 14:30:23 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	s=arc-20240116; t=1736255424; c=relaxed/simple;
+	bh=udN/b6nY7D2r/o7CT7Hlaklu3XkuaW6yWZkOE7X5v0Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rru0jh2Nf/+xof8I8rIdT1JjlLFc5rYrkXP190fuIrOzVz0XVDrb8fagqe/jm2IxzHeV+p7Kapu1umNtw6HuZCP+bgDia2I0DGgqDHGhjl6mlRlj19eSNE/G2DkjkUNMv1Fk1h2WT0MZQphcive55fWXxcgvN572HMR0lvDFu0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EiJomx2/; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43616bf3358so23973935e9.3
+        for <linux-usb@vger.kernel.org>; Tue, 07 Jan 2025 05:10:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736255419; x=1736860219; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=foGSh8Qx+tHz2jBBjTQp3yHR2idqHu77k8B9vJZUK4U=;
+        b=EiJomx2/TtuyiLSmoPm+h7He5WFuD/71901+KJ7H7zL+GZYsDikAotJ33BlKWCtZ1M
+         7kXurRaQnj3kVFnZKGOy8J+weggMYM+xbt0gBySuhqbwFoGEuFCEVZOlI0inOrznfqR3
+         6aYQ5w+bS6i9PdurL/T7MHtu2KnGdIgs4I4dHvtOagJ8vIfrTZhgOoFLjtsfK9nd2lIy
+         QfENHJEoLTccFtVkNU6Q+dJOKwgXnKS2qi+/Bv5Zd/7+REfPb8if6WUtmSP+ZriEG/Od
+         E5FCT1Cctns56Qr1E/MmieES/qdaabqKszvSNRFFNfglPQpuF2NEeeYeLF2QAF1tnqF1
+         uQ7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736255419; x=1736860219;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=foGSh8Qx+tHz2jBBjTQp3yHR2idqHu77k8B9vJZUK4U=;
+        b=rN0DYWkSxtk41B1GL4zPzLijXXdyTornDWsHiiZ2Nk4Qb8w/x7XQnA507uk/3g+yPW
+         hyvxUCwneRMtzHxMQG1W+ZVc7SooPiz8OaBiCGypsAY8ihht9g/flf/T3qAiXfTVM3O3
+         t2Pg9U2yBhhn2fRgb2ipnVsxyeij4cOOStqJEHixo5mU6ilcg2GL9cSUU/Te11f8sz80
+         ePHdJC9gk6HkAgP77Yoh2XtuBEjWINWl3mf6kSMWDFgknncek+2dC3qLlhwwLLRE/jtI
+         K6FlRfGrmoBZDjtoGraDOcsOhmrQ20PuQfRyhrMTiRruqP3OdbI++phASGslfq46QTrm
+         C+2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUKd58J1f9Dcx17A2bVqPIASCdabzVrxtYfxM08oJvg3QZiAkoGOH741XLU4+vDEu5AhR2UEGyN71Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPJxD5LWAI3KgWqBXUVvvKHlUTBg4rfWW3AT1QA5EMmtXXaE05
+	fxoECQv7BYCpIPYjw9Ut3lRFq8+YXBs5iJ2hwt5yImMpgTjQtB4arFPB6q21dEk=
+X-Gm-Gg: ASbGncuv2CmPrhIau0tuZuVsnhWQW5h/OFQrwiZjP7ziQ+5WtT15vy9eXVtK3aKbyCN
+	l6GE/WEY6it5Yl50JZOzL8Xf+2NZFD3v4RGTR59GApytZ3g8T2tgDBuRjELFgavqY6WnpjD6C2C
+	0RV7pWhhb4vBx0SsugUi4K6m59dXz3QaJ5JUYJUvhKc7bbhGVtdpeTg80uUMV5UQTmOcDwLXEUy
+	ixHtTOULpt+aRIxagl2A315o5n/nuyECy7v9lRD7lFibpHsOhHuEHi82eO0Y6VvRX6QGzE=
+X-Google-Smtp-Source: AGHT+IH39DkPJVWh8PafMTPXRemOXm/34TIro/3P9lD0JdYV/DGP9CY4oekqiAbO683Y/GqNrRLsmw==
+X-Received: by 2002:a05:600c:1d1f:b0:436:17f4:9b3d with SMTP id 5b1f17b1804b1-43668b602c1mr206813905e9.4.1736255418875;
+        Tue, 07 Jan 2025 05:10:18 -0800 (PST)
+Received: from krzk-bin.. ([178.197.223.165])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656af6c42sm631416065e9.9.2025.01.07.05.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 07 Jan 2025 05:10:18 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Justin Chen <justin.chen@broadcom.com>,
+	Al Cooper <alcooperx@gmail.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Benjamin Bara <benjamin.bara@skidata.com>,
 	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: Re: [PATCH v2 3/5] usb: typec: ucsi: add Huawei Matebook E Go ucsi
- driver
-Message-ID: <Z30eX_s9p5ql-9cx@kuha.fi.intel.com>
-References: <20250105174159.227831-1-mitltlatltl@gmail.com>
- <20250105174159.227831-4-mitltlatltl@gmail.com>
+	Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+	Del Regno <angelogioacchino.delregno@collabora.com>,
+	Tianping Fang <tianping.fang@mediatek.com>,
+	Jassi Brar <jaswinder.singh@linaro.org>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-aspeed@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] dt-bindings: usb: Correct indentation and style in DTS example
+Date: Tue,  7 Jan 2025 14:10:13 +0100
+Message-ID: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250105174159.227831-4-mitltlatltl@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi,
+DTS example in the bindings should be indented with 2- or 4-spaces and
+aligned with opening '- |', so correct any differences like 3-spaces or
+mixtures 2- and 4-spaces in one binding.
 
-On Mon, Jan 06, 2025 at 01:41:57AM +0800, Pengyu Luo wrote:
-> The Huawei Matebook E Go tablet implements the UCSI interface in the
-> onboard EC. Add the glue driver to interface with the platform's UCSI
-> implementation.
-> 
-> Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-> ---
->  drivers/usb/typec/ucsi/Kconfig              |  10 +
->  drivers/usb/typec/ucsi/Makefile             |   1 +
->  drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 524 ++++++++++++++++++++
->  3 files changed, 535 insertions(+)
->  create mode 100644 drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+No functional changes here, but saves some comments during reviews of
+new patches built on existing code.
 
-This did not apply cleanly anymore, but I guess you'll be rebasing in
-any case. A few nitpicks below.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ .../bindings/usb/aspeed,usb-vhub.yaml         | 40 +++++++++----------
+ .../devicetree/bindings/usb/brcm,bdc.yaml     | 14 +++----
+ .../devicetree/bindings/usb/cypress,hx3.yaml  | 24 +++++------
+ .../devicetree/bindings/usb/dwc2.yaml         |  4 +-
+ .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 20 +++++-----
+ .../bindings/usb/intel,keembay-dwc3.yaml      | 30 +++++++-------
+ .../devicetree/bindings/usb/ite,it5205.yaml   | 18 ++++-----
+ .../bindings/usb/maxim,max3420-udc.yaml       | 28 ++++++-------
+ .../bindings/usb/nvidia,tegra210-xusb.yaml    |  4 +-
+ .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 36 ++++++++---------
+ .../bindings/usb/renesas,usb3-peri.yaml       | 24 +++++------
+ .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 38 +++++++++---------
+ .../bindings/usb/ti,tusb73x0-pci.yaml         |  6 +--
+ .../devicetree/bindings/usb/ti,usb8020b.yaml  | 20 +++++-----
+ .../devicetree/bindings/usb/ti,usb8041.yaml   | 16 ++++----
+ 15 files changed, 161 insertions(+), 161 deletions(-)
 
-> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-> index 680e1b87b..8a73df84a 100644
-> --- a/drivers/usb/typec/ucsi/Kconfig
-> +++ b/drivers/usb/typec/ucsi/Kconfig
-> @@ -78,4 +78,14 @@ config UCSI_LENOVO_YOGA_C630
->  	  To compile the driver as a module, choose M here: the module will be
->  	  called ucsi_yoga_c630.
->  
-> +config UCSI_HUAWEI_GAOKUN
-> +	tristate "UCSI Interface Driver for Huawei Matebook E Go"
-> +	depends on EC_HUAWEI_GAOKUN
-> +	help
-> +	  This driver enables UCSI support on the Huawei Matebook E Go tablet,
-> +	  which is a sc8280xp-based 2-in-1 tablet.
-> +
-> +	  To compile the driver as a module, choose M here: the module will be
-> +	  called ucsi_huawei_gaokun.
-> +
->  endif
-> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
-> index aed41d238..0b400122b 100644
-> --- a/drivers/usb/typec/ucsi/Makefile
-> +++ b/drivers/usb/typec/ucsi/Makefile
-> @@ -22,3 +22,4 @@ obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
->  obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
->  obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
->  obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)	+= ucsi_yoga_c630.o
-> +obj-$(CONFIG_UCSI_HUAWEI_GAOKUN)	+= ucsi_huawei_gaokun.o
-> diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> new file mode 100644
-> index 000000000..044545b44
-> --- /dev/null
-> +++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> @@ -0,0 +1,524 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * ucsi-huawei-gaokun - A UCSI driver for HUAWEI Matebook E Go
-> + *
-> + * reference: drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-> + *            drivers/usb/typec/ucsi/ucsi_glink.c
-> + *            drivers/soc/qcom/pmic_glink_altmode.c
-> + *
-> + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
-> + */
-> +
-> +#include <drm/bridge/aux-bridge.h>
-> +#include <linux/auxiliary_bus.h>
-> +#include <linux/bitops.h>
-> +#include <linux/completion.h>
-> +#include <linux/container_of.h>
-> +#include <linux/module.h>
-> +#include <linux/notifier.h>
-> +#include <linux/of.h>
-> +#include <linux/platform_data/huawei-gaokun-ec.h>
-> +#include <linux/string.h>
-> +#include <linux/usb/pd_vdo.h>
-> +#include <linux/usb/typec_altmode.h>
-> +#include <linux/usb/typec_dp.h>
-> +#include <linux/workqueue_types.h>
-> +
-> +#include "ucsi.h"
-> +
-> +#define EC_EVENT_UCSI	0x21
-> +#define EC_EVENT_USB	0x22
-> +
-> +#define GAOKUN_CCX_MASK		GENMASK(1, 0)
-> +#define GAOKUN_MUX_MASK		GENMASK(3, 2)
-> +
-> +#define GAOKUN_DPAM_MASK	GENMASK(3, 0)
-> +#define GAOKUN_HPD_STATE_MASK	BIT(4)
-> +#define GAOKUN_HPD_IRQ_MASK	BIT(5)
-> +
-> +#define GET_IDX(updt) (ffs(updt) - 1)
-> +
-> +#define CCX_TO_ORI(ccx) (++ccx % 3) /* convert ccx to enum typec_orientation */
-> +
-> +/* Configuration Channel Extension */
-> +enum gaokun_ucsi_ccx {
-> +	USBC_CCX_NORMAL,
-> +	USBC_CCX_REVERSE,
-> +	USBC_CCX_NONE,
-> +};
-> +
-> +enum gaokun_ucsi_mux {
-> +	USBC_MUX_NONE,
-> +	USBC_MUX_USB_2L,
-> +	USBC_MUX_DP_4L,
-> +	USBC_MUX_USB_DP,
-> +};
-> +/* based on pmic_glink_altmode_pin_assignment */
-> +enum gaokun_ucsi_dpam_pan {	/* DP Alt Mode Pin Assignments */
-> +	USBC_DPAM_PAN_NONE,
-> +	USBC_DPAM_PAN_A,	/* Not supported after USB Type-C Standard v1.0b */
-> +	USBC_DPAM_PAN_B,	/* Not supported after USB Type-C Standard v1.0b */
-> +	USBC_DPAM_PAN_C,	/* USBC_DPAM_PAN_C_REVERSE - 6 */
-> +	USBC_DPAM_PAN_D,
-> +	USBC_DPAM_PAN_E,
-> +	USBC_DPAM_PAN_F,	/* Not supported after USB Type-C Standard v1.0b */
-> +	USBC_DPAM_PAN_A_REVERSE,/* Not supported after USB Type-C Standard v1.0b */
-> +	USBC_DPAM_PAN_B_REVERSE,/* Not supported after USB Type-C Standard v1.0b */
-> +	USBC_DPAM_PAN_C_REVERSE,
-> +	USBC_DPAM_PAN_D_REVERSE,
-> +	USBC_DPAM_PAN_E_REVERSE,
-> +	USBC_DPAM_PAN_F_REVERSE,/* Not supported after USB Type-C Standard v1.0b */
-> +};
-> +
-> +struct gaokun_ucsi_reg {
-> +	u8 port_num;
-> +	u8 port_updt;
-> +	u8 port_data[4];
-> +	u8 checksum;
-> +	u8 reserved;
-> +} __packed;
-> +
-> +struct gaokun_ucsi_port {
-> +	struct completion usb_ack;
-> +	spinlock_t lock;
-> +
-> +	struct gaokun_ucsi *ucsi;
-> +	struct auxiliary_device *bridge;
-> +
-> +	int idx;
-> +	enum gaokun_ucsi_ccx ccx;
-> +	enum gaokun_ucsi_mux mux;
-> +	u8 mode;
-> +	u16 svid;
-> +	u8 hpd_state;
-> +	u8 hpd_irq;
-> +};
-> +
-> +struct gaokun_ucsi {
-> +	struct gaokun_ec *ec;
-> +	struct ucsi *ucsi;
-> +	struct gaokun_ucsi_port *ports;
-> +	struct device *dev;
-> +	struct delayed_work work;
-> +	struct notifier_block nb;
-> +	u16 version;
-> +	u8 port_num;
-> +};
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* For UCSI */
-> +
-> +static int gaokun_ucsi_read_version(struct ucsi *ucsi, u16 *version)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> +
-> +	*version = uec->version;
-> +
-> +	return 0;
-> +}
-> +
-> +static int gaokun_ucsi_read_cci(struct ucsi *ucsi, u32 *cci)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> +	u8 buf[GAOKUN_UCSI_READ_SIZE];
-> +	int ret;
-> +
-> +	ret = gaokun_ec_ucsi_read(uec->ec, buf);
-> +	if (ret)
-> +		return ret;
-> +
-> +	memcpy(cci, buf, sizeof(*cci));
-> +
-> +	return 0;
-> +}
-> +
-> +static int gaokun_ucsi_read_message_in(struct ucsi *ucsi,
-> +				       void *val, size_t val_len)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> +	u8 buf[GAOKUN_UCSI_READ_SIZE];
-> +	int ret;
-> +
-> +	ret = gaokun_ec_ucsi_read(uec->ec, buf);
-> +	if (ret)
-> +		return ret;
-> +
-> +	memcpy(val, buf + GAOKUN_UCSI_CCI_SIZE,
-> +	       min(val_len, GAOKUN_UCSI_DATA_SIZE));
-> +
-> +	return 0;
-> +}
-> +
-> +static int gaokun_ucsi_async_control(struct ucsi *ucsi, u64 command)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-> +	u8 buf[GAOKUN_UCSI_WRITE_SIZE] = {};
-> +
-> +	memcpy(buf, &command, sizeof(command));
-> +
-> +	return gaokun_ec_ucsi_write(uec->ec, buf);
-> +}
-> +
-> +static void gaokun_ucsi_update_connector(struct ucsi_connector *con)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
-> +
-> +	if (con->num > uec->port_num)
-> +		return;
-> +
-> +	con->typec_cap.orientation_aware = true;
-> +}
-> +
-> +static void gaokun_set_orientation(struct ucsi_connector *con,
-> +				   struct gaokun_ucsi_port *port)
-> +{
-> +	enum gaokun_ucsi_ccx ccx;
-> +	unsigned long flags;
-> +
-> +	spin_lock_irqsave(&port->lock, flags);
-> +	ccx = port->ccx;
-> +	spin_unlock_irqrestore(&port->lock, flags);
-> +
-> +	typec_set_orientation(con->port, CCX_TO_ORI(ccx));
-> +}
-> +
-> +static void gaokun_ucsi_connector_status(struct ucsi_connector *con)
-> +{
-> +	struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
-> +	int idx;
-> +
-> +	idx = con->num - 1;
-> +	if (con->num > uec->port_num) {
-> +		dev_warn(uec->dev, "set orientation out of range: con%d\n", idx);
-> +		return;
-> +	}
-> +
-> +	gaokun_set_orientation(con, &uec->ports[idx]);
-> +}
-> +
-> +const struct ucsi_operations gaokun_ucsi_ops = {
-> +	.read_version = gaokun_ucsi_read_version,
-> +	.read_cci = gaokun_ucsi_read_cci,
-> +	.read_message_in = gaokun_ucsi_read_message_in,
-> +	.sync_control = ucsi_sync_control_common,
-> +	.async_control = gaokun_ucsi_async_control,
-> +	.update_connector = gaokun_ucsi_update_connector,
-> +	.connector_status = gaokun_ucsi_connector_status,
-> +};
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* For Altmode */
-> +
-> +static void gaokun_ucsi_port_update(struct gaokun_ucsi_port *port,
-> +				    const u8 *port_data)
-> +{
-> +	struct gaokun_ucsi *uec = port->ucsi;
-> +	int offset = port->idx * 2; /* every port has 2 Bytes data */
-> +	unsigned long flags;
-> +	u8 dcc, ddi;
-> +
-> +	dcc = port_data[offset];
-> +	ddi = port_data[offset + 1];
-> +
-> +	spin_lock_irqsave(&port->lock, flags);
-> +
-> +	port->ccx = FIELD_GET(GAOKUN_CCX_MASK, dcc);
-> +	port->mux = FIELD_GET(GAOKUN_MUX_MASK, dcc);
-> +	port->mode = FIELD_GET(GAOKUN_DPAM_MASK, ddi);
-> +	port->hpd_state = FIELD_GET(GAOKUN_HPD_STATE_MASK, ddi);
-> +	port->hpd_irq = FIELD_GET(GAOKUN_HPD_IRQ_MASK, ddi);
-> +
-> +	/* Mode and SVID are unused; keeping them to make things clearer */
-> +	switch (port->mode) {
-> +	case USBC_DPAM_PAN_C:
-> +	case USBC_DPAM_PAN_C_REVERSE:
-> +		port->mode = DP_PIN_ASSIGN_C; /* correct it for usb later */
-> +		break;
-> +	case USBC_DPAM_PAN_D:
-> +	case USBC_DPAM_PAN_D_REVERSE:
-> +		port->mode = DP_PIN_ASSIGN_D;
-> +		break;
-> +	case USBC_DPAM_PAN_E:
-> +	case USBC_DPAM_PAN_E_REVERSE:
-> +		port->mode = DP_PIN_ASSIGN_E;
-> +		break;
-> +	case USBC_DPAM_PAN_NONE:
-> +		port->mode = TYPEC_STATE_SAFE;
-> +		break;
-> +	default:
-> +		dev_warn(uec->dev, "unknow mode %d\n", port->mode);
-> +		break;
-> +	}
-> +
-> +	switch (port->mux) {
-> +	case USBC_MUX_NONE:
-> +		port->svid = 0;
-> +		break;
-> +	case USBC_MUX_USB_2L:
-> +		port->svid = USB_SID_PD;
-> +		port->mode = TYPEC_STATE_USB; /* same as PAN_C, correct it */
-> +		break;
-> +	case USBC_MUX_DP_4L:
-> +	case USBC_MUX_USB_DP:
-> +		port->svid = USB_SID_DISPLAYPORT;
-> +		break;
-> +	default:
-> +		dev_warn(uec->dev, "unknow mux state %d\n", port->mux);
-> +		break;
-> +	}
-> +
-> +	spin_unlock_irqrestore(&port->lock, flags);
-> +}
-> +
-> +static int gaokun_ucsi_refresh(struct gaokun_ucsi *uec)
-> +{
-> +	struct gaokun_ucsi_reg ureg;
-> +	int ret, idx;
-> +
-> +	ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
-> +	if (ret)
-> +		return GAOKUN_UCSI_NO_PORT_UPDATE;
-> +
-> +	uec->port_num = ureg.port_num;
-> +	idx = GET_IDX(ureg.port_updt);
-> +
-> +	if (idx < 0 || idx >= ureg.port_num)
-> +		return GAOKUN_UCSI_NO_PORT_UPDATE;
-> +
-> +	gaokun_ucsi_port_update(&uec->ports[idx], ureg.port_data);
-> +	return idx;
-> +}
-> +
-> +static void gaokun_ucsi_handle_altmode(struct gaokun_ucsi_port *port)
-> +{
-> +	struct gaokun_ucsi *uec = port->ucsi;
-> +	int idx = port->idx;
-> +
-> +	if (idx >= uec->ucsi->cap.num_connectors) {
-> +		dev_warn(uec->dev, "altmode port out of range: %d\n", idx);
-> +		return;
-> +	}
-> +
-> +	/* UCSI callback .connector_status() have set orientation */
-> +	if (port->bridge)
-> +		drm_aux_hpd_bridge_notify(&port->bridge->dev,
-> +					  port->hpd_state ?
-> +					  connector_status_connected :
-> +					  connector_status_disconnected);
-> +
-> +	gaokun_ec_ucsi_pan_ack(uec->ec, port->idx);
-> +}
-> +
-> +static void gaokun_ucsi_altmode_notify_ind(struct gaokun_ucsi *uec)
-> +{
-> +	int idx;
-> +
-> +	 if (!uec->ucsi->connector) { /* slow to register */
-> +		 dev_err(uec->dev, "ucsi connector is not initialized yet\n");
-> +		 return;
-> +	 }
-> +
-> +	idx = gaokun_ucsi_refresh(uec);
-> +	if (idx == GAOKUN_UCSI_NO_PORT_UPDATE)
-> +		gaokun_ec_ucsi_pan_ack(uec->ec, idx); /* ack directly if no update */
-> +	else
-> +		gaokun_ucsi_handle_altmode(&uec->ports[idx]);
-> +}
-> +
-> +/*
-> + * USB event is necessary for enabling altmode, the event should follow
-> + * UCSI event, if not after timeout(this notify may be disabled somehow),
-> + * then force to enable altmode.
-> + */
-> +static void gaokun_ucsi_handle_no_usb_event(struct gaokun_ucsi *uec, int idx)
-> +{
-> +	struct gaokun_ucsi_port *port;
-> +
-> +	port = &uec->ports[idx];
-> +	if (!wait_for_completion_timeout(&port->usb_ack, 2 * HZ)) {
-> +		dev_warn(uec->dev, "No USB EVENT, triggered by UCSI EVENT");
-> +		gaokun_ucsi_altmode_notify_ind(uec);
-> +	}
-> +}
-> +
-> +static int gaokun_ucsi_notify(struct notifier_block *nb,
-> +			      unsigned long action, void *data)
-> +{
-> +	u32 cci;
-> +	struct gaokun_ucsi *uec = container_of(nb, struct gaokun_ucsi, nb);
-> +
-> +	switch (action) {
-> +	case EC_EVENT_USB:
-> +		gaokun_ucsi_altmode_notify_ind(uec);
-> +		return NOTIFY_OK;
-> +
-> +	case EC_EVENT_UCSI:
-> +		uec->ucsi->ops->read_cci(uec->ucsi, &cci);
-
-I think it would be more clear here to just call
-gaokun_ucsi_read_cci() directly here.
-
-> +		ucsi_notify_common(uec->ucsi, cci);
-> +		if (UCSI_CCI_CONNECTOR(cci))
-> +			gaokun_ucsi_handle_no_usb_event(uec, UCSI_CCI_CONNECTOR(cci) - 1);
-> +
-> +		return NOTIFY_OK;
-> +
-> +	default:
-> +		return NOTIFY_DONE;
-> +	}
-> +}
-> +
-> +static inline int gaokun_ucsi_get_port_num(struct gaokun_ucsi *uec)
-> +{
-> +	struct gaokun_ucsi_reg ureg;
-> +	int ret;
-> +
-> +	ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
-> +
-> +	return ret ? 0 : ureg.port_num;
-> +}
-
-This function does not look like it's necessary to me.
-
-> +static int gaokun_ucsi_ports_init(struct gaokun_ucsi *uec)
-> +{
-> +	u32 port;
-> +	int i, ret, port_num;
-> +	struct device *dev = uec->dev;
-> +	struct gaokun_ucsi_port *ucsi_port;
-> +	struct fwnode_handle *fwnode;
-> +
-> +	port_num = gaokun_ucsi_get_port_num(uec);
-> +	uec->port_num = port_num;
-
-struct gaokun_ucsi_reg ureg = { };
-
-gaokun_ec_ucsi_get_reg(uec->ec, &ureg);
-port_num = ureg->port_num;
-
-(Btw. port_num here is confusing IMO, because you are not talking
-about the number of a port, but instead number of all ports. So
-something like num_ports or nports would be better).
-
-> +	uec->ports = devm_kcalloc(dev, port_num, sizeof(*(uec->ports)),
-> +				  GFP_KERNEL);
-> +	if (!uec->ports)
-> +		return -ENOMEM;
-> +
-> +	for (i = 0; i < port_num; ++i) {
-> +		ucsi_port = &uec->ports[i];
-> +		ucsi_port->ccx = USBC_CCX_NONE;
-> +		ucsi_port->idx = i;
-> +		ucsi_port->ucsi = uec;
-> +		init_completion(&ucsi_port->usb_ack);
-> +		spin_lock_init(&ucsi_port->lock);
-> +	}
-> +
-> +	device_for_each_child_node(dev, fwnode) {
-> +		ret = fwnode_property_read_u32(fwnode, "reg", &port);
-> +		if (ret < 0) {
-> +			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
-> +			fwnode_handle_put(fwnode);
-> +			return ret;
-> +		}
-> +
-> +		if (port >= port_num) {
-> +			dev_warn(dev, "invalid connector number %d, ignoring\n", port);
-> +			continue;
-> +		}
-> +
-> +		ucsi_port = &uec->ports[port];
-> +		ucsi_port->bridge = devm_drm_dp_hpd_bridge_alloc(dev, to_of_node(fwnode));
-> +		if (IS_ERR(ucsi_port->bridge)) {
-> +			fwnode_handle_put(fwnode);
-> +			return PTR_ERR(ucsi_port->bridge);
-> +		}
-> +	}
-> +
-> +	for (i = 0; i < port_num; i++) {
-> +		if (!uec->ports[i].bridge)
-> +			continue;
-> +
-> +		ret = devm_drm_dp_hpd_bridge_add(dev, uec->ports[i].bridge);
-> +		if (ret)
-> +			return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void gaokun_ucsi_register_worker(struct work_struct *work)
-> +{
-> +	struct gaokun_ucsi *uec;
-> +	struct ucsi *ucsi;
-> +	int ret;
-> +
-> +	uec = container_of(work, struct gaokun_ucsi, work.work);
-> +	ucsi = uec->ucsi;
-> +	/* This may be a problem specific to sc8280xp-based machines */
-> +	ucsi->quirks = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_PDOS;
-> +
-> +	ret = gaokun_ec_register_notify(uec->ec, &uec->nb);
-> +	if (ret) {
-> +		dev_err_probe(ucsi->dev, ret, "notifier register failed\n");
-> +		return;
-> +	}
-> +
-> +	ret = ucsi_register(ucsi);
-> +	if (ret)
-> +		dev_err_probe(ucsi->dev, ret, "ucsi register failed\n");
-> +}
-> +
-> +static inline int gaokun_ucsi_register(struct gaokun_ucsi *uec)
-> +{
-> +	/* EC can't handle UCSI properly in the early stage */
-> +	schedule_delayed_work(&uec->work, 3 * HZ);
-> +
-> +	return 0;
-> +}
-
-This whole function is unnecessary.
-
-> +static int gaokun_ucsi_probe(struct auxiliary_device *adev,
-> +			     const struct auxiliary_device_id *id)
-> +{
-> +	struct gaokun_ec *ec = adev->dev.platform_data;
-> +	struct device *dev = &adev->dev;
-> +	struct gaokun_ucsi *uec;
-> +	int ret;
-> +
-> +	uec = devm_kzalloc(dev, sizeof(*uec), GFP_KERNEL);
-> +	if (!uec)
-> +		return -ENOMEM;
-> +
-> +	uec->ec = ec;
-> +	uec->dev = dev;
-> +	uec->version = 0x0100;
-
-Please add a definition for UCSI v1.0 to ucsi.h (separate patch).
-
-> +	uec->nb.notifier_call = gaokun_ucsi_notify;
-> +
-> +	INIT_DELAYED_WORK(&uec->work, gaokun_ucsi_register_worker);
-> +
-> +	ret = gaokun_ucsi_ports_init(uec);
-> +	if (ret)
-> +		return ret;
-> +
-> +	uec->ucsi = ucsi_create(dev, &gaokun_ucsi_ops);
-> +	if (IS_ERR(uec->ucsi))
-> +		return PTR_ERR(uec->ucsi);
-> +
-> +	ucsi_set_drvdata(uec->ucsi, uec);
-> +	auxiliary_set_drvdata(adev, uec);
-> +
-> +	return gaokun_ucsi_register(uec);
-> +}
-> +
-> +static void gaokun_ucsi_remove(struct auxiliary_device *adev)
-> +{
-> +	struct gaokun_ucsi *uec = auxiliary_get_drvdata(adev);
-> +
-> +	gaokun_ec_unregister_notify(uec->ec, &uec->nb);
-> +	ucsi_unregister(uec->ucsi);
-> +	ucsi_destroy(uec->ucsi);
-> +}
-> +
-> +static const struct auxiliary_device_id gaokun_ucsi_id_table[] = {
-> +	{ .name = GAOKUN_MOD_NAME "." GAOKUN_DEV_UCSI, },
-> +	{}
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, gaokun_ucsi_id_table);
-> +
-> +static struct auxiliary_driver gaokun_ucsi_driver = {
-> +	.name = GAOKUN_DEV_UCSI,
-> +	.id_table = gaokun_ucsi_id_table,
-> +	.probe = gaokun_ucsi_probe,
-> +	.remove = gaokun_ucsi_remove,
-> +};
-> +
-> +module_auxiliary_driver(gaokun_ucsi_driver);
-> +
-> +MODULE_DESCRIPTION("HUAWEI Matebook E Go UCSI driver");
-> +MODULE_LICENSE("GPL");
-
-thanks,
-
+diff --git a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+index a86bcd95100e..7f22f9c031b2 100644
+--- a/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
++++ b/Documentation/devicetree/bindings/usb/aspeed,usb-vhub.yaml
+@@ -113,27 +113,27 @@ examples:
+   - |
+     #include <dt-bindings/clock/aspeed-clock.h>
+     vhub: usb-vhub@1e6a0000 {
+-            compatible = "aspeed,ast2500-usb-vhub";
+-            reg = <0x1e6a0000 0x300>;
+-            interrupts = <5>;
+-            clocks = <&syscon ASPEED_CLK_GATE_USBPORT1CLK>;
+-            aspeed,vhub-downstream-ports = <5>;
+-            aspeed,vhub-generic-endpoints = <15>;
+-            pinctrl-names = "default";
+-            pinctrl-0 = <&pinctrl_usb2ad_default>;
++        compatible = "aspeed,ast2500-usb-vhub";
++        reg = <0x1e6a0000 0x300>;
++        interrupts = <5>;
++        clocks = <&syscon ASPEED_CLK_GATE_USBPORT1CLK>;
++        aspeed,vhub-downstream-ports = <5>;
++        aspeed,vhub-generic-endpoints = <15>;
++        pinctrl-names = "default";
++        pinctrl-0 = <&pinctrl_usb2ad_default>;
+ 
+-            vhub-vendor-id = <0x1d6b>;
+-            vhub-product-id = <0x0107>;
+-            vhub-device-revision = <0x0100>;
+-            vhub-strings {
+-                #address-cells = <1>;
+-                #size-cells = <0>;
++        vhub-vendor-id = <0x1d6b>;
++        vhub-product-id = <0x0107>;
++        vhub-device-revision = <0x0100>;
++        vhub-strings {
++            #address-cells = <1>;
++            #size-cells = <0>;
+ 
+-                string@409 {
+-                        reg = <0x409>;
+-                        manufacturer = "ASPEED";
+-                        product = "USB Virtual Hub";
+-                        serial-number = "0000";
+-                };
++            string@409 {
++                reg = <0x409>;
++                manufacturer = "ASPEED";
++                product = "USB Virtual Hub";
++                serial-number = "0000";
+             };
++        };
+     };
+diff --git a/Documentation/devicetree/bindings/usb/brcm,bdc.yaml b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
+index 9e561fee98f1..f9375c69e86b 100644
+--- a/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
++++ b/Documentation/devicetree/bindings/usb/brcm,bdc.yaml
+@@ -41,10 +41,10 @@ additionalProperties: false
+ 
+ examples:
+   - |
+-        usb@f0b02000 {
+-                compatible = "brcm,bdc-udc-v2";
+-                reg = <0xf0b02000 0xfc4>;
+-                interrupts = <0x0 0x60 0x0>;
+-                phys = <&usbphy_0 0x0>;
+-                clocks = <&sw_usbd>;
+-        };
++    usb@f0b02000 {
++        compatible = "brcm,bdc-udc-v2";
++        reg = <0xf0b02000 0xfc4>;
++        interrupts = <0x0 0x60 0x0>;
++        phys = <&usbphy_0 0x0>;
++        clocks = <&sw_usbd>;
++    };
+diff --git a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+index e44e88d993d0..1033b7a4b8f9 100644
+--- a/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
++++ b/Documentation/devicetree/bindings/usb/cypress,hx3.yaml
+@@ -56,21 +56,21 @@ examples:
+ 
+         /* 2.0 hub on port 1 */
+         hub_2_0: hub@1 {
+-          compatible = "usb4b4,6504";
+-          reg = <1>;
+-          peer-hub = <&hub_3_0>;
+-          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+-          vdd-supply = <&reg_1v2_usb>;
+-          vdd2-supply = <&reg_3v3_usb>;
++            compatible = "usb4b4,6504";
++            reg = <1>;
++            peer-hub = <&hub_3_0>;
++            reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++            vdd-supply = <&reg_1v2_usb>;
++            vdd2-supply = <&reg_3v3_usb>;
+         };
+ 
+         /* 3.0 hub on port 2 */
+         hub_3_0: hub@2 {
+-          compatible = "usb4b4,6506";
+-          reg = <2>;
+-          peer-hub = <&hub_2_0>;
+-          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+-          vdd-supply = <&reg_1v2_usb>;
+-          vdd2-supply = <&reg_3v3_usb>;
++            compatible = "usb4b4,6506";
++            reg = <2>;
++            peer-hub = <&hub_2_0>;
++            reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++            vdd-supply = <&reg_1v2_usb>;
++            vdd2-supply = <&reg_3v3_usb>;
+         };
+     };
+diff --git a/Documentation/devicetree/bindings/usb/dwc2.yaml b/Documentation/devicetree/bindings/usb/dwc2.yaml
+index a5f2e3442a0e..e83d30a91b88 100644
+--- a/Documentation/devicetree/bindings/usb/dwc2.yaml
++++ b/Documentation/devicetree/bindings/usb/dwc2.yaml
+@@ -192,7 +192,7 @@ unevaluatedProperties: false
+ 
+ examples:
+   - |
+-      usb@101c0000 {
++    usb@101c0000 {
+         compatible = "rockchip,rk3066-usb", "snps,dwc2";
+         reg = <0x10180000 0x40000>;
+         interrupts = <18>;
+@@ -200,6 +200,6 @@ examples:
+         clock-names = "otg";
+         phys = <&usbphy>;
+         phy-names = "usb2-phy";
+-      };
++    };
+ 
+ ...
+diff --git a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+index 8b25b9a01ced..e3a7df91f7f1 100644
+--- a/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
++++ b/Documentation/devicetree/bindings/usb/fcs,fsa4480.yaml
+@@ -87,21 +87,21 @@ examples:
+         #size-cells = <0>;
+ 
+         typec-mux@42 {
+-          compatible = "fcs,fsa4480";
+-          reg = <0x42>;
++            compatible = "fcs,fsa4480";
++            reg = <0x42>;
+ 
+-          interrupts-extended = <&tlmm 2 IRQ_TYPE_LEVEL_LOW>;
++            interrupts-extended = <&tlmm 2 IRQ_TYPE_LEVEL_LOW>;
+ 
+-          vcc-supply = <&vreg_bob>;
++            vcc-supply = <&vreg_bob>;
+ 
+-          mode-switch;
+-          orientation-switch;
++            mode-switch;
++            orientation-switch;
+ 
+-          port {
+-            fsa4480_ept: endpoint {
+-              remote-endpoint = <&typec_controller>;
++            port {
++                fsa4480_ept: endpoint {
++                    remote-endpoint = <&typec_controller>;
++                };
+             };
+-          };
+         };
+     };
+ ...
+diff --git a/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml b/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml
+index d3511f48cd55..1a75544a8c31 100644
+--- a/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml
++++ b/Documentation/devicetree/bindings/usb/intel,keembay-dwc3.yaml
+@@ -58,20 +58,20 @@ examples:
+     #define KEEM_BAY_A53_AUX_USB_SUSPEND
+ 
+     usb {
+-          compatible = "intel,keembay-dwc3";
+-          clocks = <&scmi_clk KEEM_BAY_A53_AUX_USB>,
+-                   <&scmi_clk KEEM_BAY_A53_AUX_USB_REF>,
+-                   <&scmi_clk KEEM_BAY_A53_AUX_USB_ALT_REF>,
+-                   <&scmi_clk KEEM_BAY_A53_AUX_USB_SUSPEND>;
+-          clock-names = "async_master", "ref", "alt_ref", "suspend";
+-          ranges;
+-          #address-cells = <1>;
+-          #size-cells = <1>;
++        compatible = "intel,keembay-dwc3";
++        clocks = <&scmi_clk KEEM_BAY_A53_AUX_USB>,
++                 <&scmi_clk KEEM_BAY_A53_AUX_USB_REF>,
++                 <&scmi_clk KEEM_BAY_A53_AUX_USB_ALT_REF>,
++                 <&scmi_clk KEEM_BAY_A53_AUX_USB_SUSPEND>;
++        clock-names = "async_master", "ref", "alt_ref", "suspend";
++        ranges;
++        #address-cells = <1>;
++        #size-cells = <1>;
+ 
+-          usb@34000000 {
+-                compatible = "snps,dwc3";
+-                reg = <0x34000000 0x10000>;
+-                interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
+-                dr_mode = "peripheral";
+-          };
++        usb@34000000 {
++            compatible = "snps,dwc3";
++            reg = <0x34000000 0x10000>;
++            interrupts = <GIC_SPI 91 IRQ_TYPE_LEVEL_HIGH>;
++            dr_mode = "peripheral";
++        };
+     };
+diff --git a/Documentation/devicetree/bindings/usb/ite,it5205.yaml b/Documentation/devicetree/bindings/usb/ite,it5205.yaml
+index 36ec4251b5f2..889710733de5 100644
+--- a/Documentation/devicetree/bindings/usb/ite,it5205.yaml
++++ b/Documentation/devicetree/bindings/usb/ite,it5205.yaml
+@@ -54,19 +54,19 @@ examples:
+         #size-cells = <0>;
+ 
+         typec-mux@48 {
+-          compatible = "ite,it5205";
+-          reg = <0x48>;
++            compatible = "ite,it5205";
++            reg = <0x48>;
+ 
+-          mode-switch;
+-          orientation-switch;
++            mode-switch;
++            orientation-switch;
+ 
+-          vcc-supply = <&mt6359_vibr_ldo_reg>;
++            vcc-supply = <&mt6359_vibr_ldo_reg>;
+ 
+-          port {
+-            it5205_usbss_sbu: endpoint {
+-              remote-endpoint = <&typec_controller>;
++            port {
++                it5205_usbss_sbu: endpoint {
++                    remote-endpoint = <&typec_controller>;
++                };
+             };
+-          };
+         };
+     };
+ ...
+diff --git a/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
+index 8e0f4ecc010d..6edb1fc5044e 100644
+--- a/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
++++ b/Documentation/devicetree/bindings/usb/maxim,max3420-udc.yaml
+@@ -50,18 +50,18 @@ additionalProperties: false
+ 
+ examples:
+   - |
+-      #include <dt-bindings/gpio/gpio.h>
+-      #include <dt-bindings/interrupt-controller/irq.h>
+-      spi {
+-            #address-cells = <1>;
+-            #size-cells = <0>;
++    #include <dt-bindings/gpio/gpio.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
+ 
+-            udc@0 {
+-                  compatible = "maxim,max3420-udc";
+-                  reg = <0>;
+-                  interrupt-parent = <&gpio>;
+-                  interrupts = <0 IRQ_TYPE_EDGE_FALLING>, <10 IRQ_TYPE_EDGE_BOTH>;
+-                  interrupt-names = "udc", "vbus";
+-                  spi-max-frequency = <12500000>;
+-            };
+-      };
++        udc@0 {
++            compatible = "maxim,max3420-udc";
++            reg = <0>;
++            interrupt-parent = <&gpio>;
++            interrupts = <0 IRQ_TYPE_EDGE_FALLING>, <10 IRQ_TYPE_EDGE_BOTH>;
++            interrupt-names = "udc", "vbus";
++            spi-max-frequency = <12500000>;
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.yaml b/Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.yaml
+index 90296613b3a5..c0e313c70bba 100644
+--- a/Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.yaml
++++ b/Documentation/devicetree/bindings/usb/nvidia,tegra210-xusb.yaml
+@@ -189,7 +189,7 @@ examples:
+         #size-cells = <0>;
+ 
+         ethernet@1 {
+-                compatible = "usb955,9ff";
+-                reg = <1>;
++            compatible = "usb955,9ff";
++            reg = <1>;
+         };
+     };
+diff --git a/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml b/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
+index ff625600d9af..b87e139c29e5 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,rzv2m-usb3drd.yaml
+@@ -104,26 +104,26 @@ examples:
+         #size-cells = <1>;
+ 
+         usb3host: usb@85060000 {
+-           compatible = "renesas,r9a09g011-xhci",
+-                        "renesas,rzv2m-xhci";
+-           reg = <0x85060000 0x2000>;
+-           interrupts = <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>;
+-           clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_H>,
+-                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
+-           clock-names = "axi", "reg";
+-           power-domains = <&cpg>;
+-           resets = <&cpg R9A09G011_USB_ARESETN_H>;
++            compatible = "renesas,r9a09g011-xhci",
++                         "renesas,rzv2m-xhci";
++            reg = <0x85060000 0x2000>;
++            interrupts = <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>;
++            clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_H>,
++                     <&cpg CPG_MOD R9A09G011_USB_PCLK>;
++            clock-names = "axi", "reg";
++            power-domains = <&cpg>;
++            resets = <&cpg R9A09G011_USB_ARESETN_H>;
+         };
+ 
+         usb3peri: usb3peri@85070000 {
+-           compatible = "renesas,r9a09g011-usb3-peri",
+-                        "renesas,rzv2m-usb3-peri";
+-           reg = <0x85070000 0x400>;
+-           interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
+-           clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
+-                    <&cpg CPG_MOD R9A09G011_USB_PCLK>;
+-           clock-names = "axi", "reg";
+-           power-domains = <&cpg>;
+-           resets = <&cpg R9A09G011_USB_ARESETN_P>;
++            compatible = "renesas,r9a09g011-usb3-peri",
++                         "renesas,rzv2m-usb3-peri";
++            reg = <0x85070000 0x400>;
++            interrupts = <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>;
++            clocks = <&cpg CPG_MOD R9A09G011_USB_ACLK_P>,
++                     <&cpg CPG_MOD R9A09G011_USB_PCLK>;
++            clock-names = "axi", "reg";
++            power-domains = <&cpg>;
++            resets = <&cpg R9A09G011_USB_ARESETN_P>;
+         };
+     };
+diff --git a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+index b2b811a0ade8..4e56e4ffeaf2 100644
+--- a/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
++++ b/Documentation/devicetree/bindings/usb/renesas,usb3-peri.yaml
+@@ -132,19 +132,19 @@ examples:
+         usb-role-switch;
+ 
+         ports {
+-                #address-cells = <1>;
+-                #size-cells = <0>;
+-                port@0 {
+-                        reg = <0>;
+-                        usb3_hs_ep: endpoint {
+-                                remote-endpoint = <&hs_ep>;
+-                        };
++            #address-cells = <1>;
++            #size-cells = <0>;
++            port@0 {
++                reg = <0>;
++                usb3_hs_ep: endpoint {
++                    remote-endpoint = <&hs_ep>;
+                 };
+-                port@1 {
+-                        reg = <1>;
+-                        usb3_role_switch: endpoint {
+-                                remote-endpoint = <&hd3ss3220_out_ep>;
+-                        };
++            };
++            port@1 {
++                reg = <1>;
++                usb3_role_switch: endpoint {
++                    remote-endpoint = <&hd3ss3220_out_ep>;
+                 };
++            };
+         };
+     };
+diff --git a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+index 54c6586cb56d..bec1c8047bc0 100644
+--- a/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
++++ b/Documentation/devicetree/bindings/usb/ti,hd3ss3220.yaml
+@@ -56,26 +56,26 @@ examples:
+         #size-cells = <0>;
+ 
+         hd3ss3220@47 {
+-                compatible = "ti,hd3ss3220";
+-                reg = <0x47>;
+-                interrupt-parent = <&gpio6>;
+-                interrupts = <3>;
++            compatible = "ti,hd3ss3220";
++            reg = <0x47>;
++            interrupt-parent = <&gpio6>;
++            interrupts = <3>;
+ 
+-                ports {
+-                        #address-cells = <1>;
+-                        #size-cells = <0>;
+-                        port@0 {
+-                                reg = <0>;
+-                                hd3ss3220_in_ep: endpoint {
+-                                        remote-endpoint = <&ss_ep>;
+-                                };
+-                        };
+-                        port@1 {
+-                                reg = <1>;
+-                                hd3ss3220_out_ep: endpoint {
+-                                        remote-endpoint = <&usb3_role_switch>;
+-                                };
+-                        };
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++                port@0 {
++                    reg = <0>;
++                    hd3ss3220_in_ep: endpoint {
++                        remote-endpoint = <&ss_ep>;
++                    };
+                 };
++                port@1 {
++                    reg = <1>;
++                    hd3ss3220_out_ep: endpoint {
++                        remote-endpoint = <&usb3_role_switch>;
++                    };
++                };
++            };
+         };
+     };
+diff --git a/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml b/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
+index ddda734f36fb..c4a91b3d6612 100644
+--- a/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
++++ b/Documentation/devicetree/bindings/usb/ti,tusb73x0-pci.yaml
+@@ -48,8 +48,8 @@ examples:
+         device_type = "pci";
+ 
+         usb@0 {
+-              compatible = "pci104c,8241";
+-              reg = <0x0 0x0 0x0 0x0 0x0>;
+-              ti,pwron-active-high;
++            compatible = "pci104c,8241";
++            reg = <0x0 0x0 0x0 0x0 0x0>;
++            ti,pwron-active-high;
+         };
+     };
+diff --git a/Documentation/devicetree/bindings/usb/ti,usb8020b.yaml b/Documentation/devicetree/bindings/usb/ti,usb8020b.yaml
+index 8ef117793e11..61217da8b2f3 100644
+--- a/Documentation/devicetree/bindings/usb/ti,usb8020b.yaml
++++ b/Documentation/devicetree/bindings/usb/ti,usb8020b.yaml
+@@ -51,19 +51,19 @@ examples:
+ 
+         /* 2.0 hub on port 1 */
+         hub_2_0: hub@1 {
+-          compatible = "usb451,8027";
+-          reg = <1>;
+-          peer-hub = <&hub_3_0>;
+-          reset-gpios = <&pio 7 GPIO_ACTIVE_HIGH>;
+-          vdd-supply = <&usb_hub_fixed_3v3>;
++            compatible = "usb451,8027";
++            reg = <1>;
++            peer-hub = <&hub_3_0>;
++            reset-gpios = <&pio 7 GPIO_ACTIVE_HIGH>;
++            vdd-supply = <&usb_hub_fixed_3v3>;
+         };
+ 
+         /* 3.0 hub on port 2 */
+         hub_3_0: hub@2 {
+-          compatible = "usb451,8025";
+-          reg = <2>;
+-          peer-hub = <&hub_2_0>;
+-          reset-gpios = <&pio 7 GPIO_ACTIVE_HIGH>;
+-          vdd-supply = <&usb_hub_fixed_3v3>;
++            compatible = "usb451,8025";
++            reg = <2>;
++            peer-hub = <&hub_2_0>;
++            reset-gpios = <&pio 7 GPIO_ACTIVE_HIGH>;
++            vdd-supply = <&usb_hub_fixed_3v3>;
+         };
+     };
+diff --git a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+index c2e29bd61e11..bce730a5e237 100644
+--- a/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
++++ b/Documentation/devicetree/bindings/usb/ti,usb8041.yaml
+@@ -51,17 +51,17 @@ examples:
+ 
+         /* 2.0 hub on port 1 */
+         hub_2_0: hub@1 {
+-          compatible = "usb451,8142";
+-          reg = <1>;
+-          peer-hub = <&hub_3_0>;
+-          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++            compatible = "usb451,8142";
++            reg = <1>;
++            peer-hub = <&hub_3_0>;
++            reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+         };
+ 
+         /* 3.0 hub on port 2 */
+         hub_3_0: hub@2 {
+-          compatible = "usb451,8140";
+-          reg = <2>;
+-          peer-hub = <&hub_2_0>;
+-          reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
++            compatible = "usb451,8140";
++            reg = <2>;
++            peer-hub = <&hub_2_0>;
++            reset-gpios = <&gpio1 11 GPIO_ACTIVE_LOW>;
+         };
+     };
 -- 
-heikki
+2.43.0
+
 
