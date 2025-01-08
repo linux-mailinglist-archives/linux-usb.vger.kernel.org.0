@@ -1,183 +1,167 @@
-Return-Path: <linux-usb+bounces-19146-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19147-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39DFBA05F51
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 15:50:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 685A7A06235
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 17:41:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 049F97A04A1
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 14:50:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EDBB3A131D
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 16:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 333D01FCCED;
-	Wed,  8 Jan 2025 14:49:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C0E1FF7D9;
+	Wed,  8 Jan 2025 16:38:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S9ln5Fyx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yye6XYiL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C21A15B99E;
-	Wed,  8 Jan 2025 14:49:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4022594BC;
+	Wed,  8 Jan 2025 16:38:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736347798; cv=none; b=jw5+M3tiNMxpjHCxqLlAJsf51X5bBwjQIDoPeZfdivca7UbzEfiLHXiqWTovRcDCjB1gbco4FYlsjq8T+yPQqKqW2xjUTELCA0qIaIJQPzhm7vtXDQy0pipmaz659ZpEyC9mVgxBfVSCHT1CEVPLx2pqG7KjaFuKrVey3TCFBAo=
+	t=1736354309; cv=none; b=bW39zTzNupHO1QnTJMTOyz/O5tFpgbOecwM50V9ObXpam3AlWxdOpHAkZ9hGoNaSk1YSfxPbjukJbILY3IW/ErXSmq3QYgjR/H0ynTyE3h2c/12CyFrZZRja36aL5nSv/srcCey1KCVFZNDsTay64GNShvYtoW46pct1Uz5LT+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736347798; c=relaxed/simple;
-	bh=bkQ/hDH6HPgRZUkyQtoui3t/iThIuKsMrAqTFCrlRu0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RxupE6UQ5ICRjm0zh/Hx27vTp8zqT3PHllwuCE/aPKo7CLCI5NsMmuT5sJpDqErH83ZTwNvCZHNC9A/z81xU5xaKKydS5sk6f28KGv58QhzEhP4zFsUgRApa/F0GTdufRS0A8zqoXPDhPqG06txKKNtH7kMppSdg3TEEn/vXB18=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S9ln5Fyx; arc=none smtp.client-ip=209.85.210.49
+	s=arc-20240116; t=1736354309; c=relaxed/simple;
+	bh=1PTvZkB7v2l5pzhBkf42/i+DDfV/d369bK2eZRiNNuU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QiSUQSkAUe7oSJeLZL4tyIcme8sK0HJSCsE33DX7IUwtI3XT3LPqM1+dLroDRl7rWnoyxiaoAc8JVwomqWX1Wmv6Y/SpSSDih7evnwjHgJ3dcX1afFwZOLOX03l8i5y4CE9X3IFT66XDcbmOaBaJBVn3It8Jyt1Kntx/hxV4mr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yye6XYiL; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-71e2851de95so3842662a34.0;
-        Wed, 08 Jan 2025 06:49:57 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-436249df846so113015e9.3;
+        Wed, 08 Jan 2025 08:38:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736347796; x=1736952596; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AvoTYYDkb2KCKKkR7iPqN33SRmeBP/rGexYGylWWHgU=;
-        b=S9ln5Fyxhdh5DDRm9A1jUvXRaAsBkyahbB9BENw9BjEIhxhwomrxOWb/LuyNYeZ9yU
-         3/bimJweQ7KWIdtZL89k9EcncycbDT9R6fIwPi/bSOfY5KcWXfQBc72vwP/CEvrQfQPJ
-         g1iisMCOGLG3zuYm2NvD1k+7rwkNnONiu7Z/FJFUw2UZB7aL9IdppbtusFu36Fi2RvEV
-         88RO9qsXTPpnnt5pKq96SXSA8rfJRm/E3ihFsgCzXbtaTal+R8JUt++1Nfj1+aCGyfYA
-         xX+t8awRweUhL4Mo3GLc3SblOY3mZRW5qFRyiQx2c3wUU0HBqx2iBEq4X3mdZEyAzvjM
-         F33g==
+        d=gmail.com; s=20230601; t=1736354304; x=1736959104; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4cuSrltjvkzxAoQOtMu4WRHfXq6bp8x92iDHnihbR3k=;
+        b=Yye6XYiLoPl2jU5/AvsRFLfNGPBqA9P6JtTJw7Gfv9kQ+o9W2NlZa+4WpWqD9qVFoo
+         G0vTq4FXSVfOFTpLQouSlimPjAPi5o2Tfc7b6/k6h4sz5E4DbnZEZMFKFSbkceigfJn1
+         QEOMnT8vq5vu3ozDrxSXWaCRvHJW5wp9sDs1dOqway1G5sOPtJZAhQiwMpRCzyKXTscU
+         o20j4LqN1QhCq52NwxRbMuw0nvdjyIKAhtH0yobJ1xvTyDsNOM608jEDshJL7zB52FvO
+         QyQRv9iHj2tzLruhfcI9GvhlhAEExioCWQI9J7oYvHf4uWeS/DQOIeXMrzRTO442OAmu
+         49SA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736347796; x=1736952596;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AvoTYYDkb2KCKKkR7iPqN33SRmeBP/rGexYGylWWHgU=;
-        b=TERvVd/dTcZNNKV39t7b6v+/O1wp/9PrQj9Nu/ZSH7JsG/ojrV4OktUlZdslT27VFX
-         ufMTrrCqYeDEfRbbBjbi9Yu72SbfFp3Ex7uUBFmmmgwIOQsFHjMCOCx/4VakboT/CT2D
-         pUvWGYHYDebk8xoaIsQI2YONRTZIA+42kvBQgSPjets1xuhT+eik6IS/b107FLBNgwKP
-         Tc9Zo4qwJG11nnT1iAE8DCvW1D8FTIj3MEGyF3AeicjAXeiCm8jF59LSGQNvJ5b/eFyA
-         OicIeux1kPtYWVoNyM97GClZwgZT8XSqXos5rHf/lFEYhWO5R8BmvnwE5rsZhlXITDXK
-         FYQA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+c0Uy1UOtlaygPGpFH2lpy9Y0I9qkdUOZUfbvPc6FK1pmwGDzDUlIrZ3ouNViTvN8gShrHROH@vger.kernel.org, AJvYcCWOPjaKiOaRTVW0EZHTIjZ6c8NVkixgBGh/CJpOxRJl3UaE95+6umAHxJemzSPpWuAxTuS/6Ui/c0Dp@vger.kernel.org, AJvYcCXe0FKbmOT+vqyDdjQWe5PBjkAINGC5xtR6M3YdEAOsJk7tNacv1apabFOu+0F041MpziIn3/Rm04sw0uY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzG3Lpka/6QC0+trkIOBjC4RzjOe1Q2pFP7xhRVf+afgCSIAojl
-	axI/lPJ0c17RkJp/T/acJxTtb/DTjbgiJBZYsCejVspZPXGgb1weWzWZq2f2sW5ZDRYq+GIwEWB
-	TsDJf3/hFbVipUzLHdPV/3pf0DyU=
-X-Gm-Gg: ASbGncvbCghlOzAlv7yuYiq5lKpQYdy3EDG0a8bU8WZc5BHYQ/CD+fpcBPxahZKgHI3
-	+MzKy801j4RldiUSr6InqJNjCZLujGI1DVkhZBm4=
-X-Google-Smtp-Source: AGHT+IFt6L+Sit8O470wDgrNHgLPUamOgaKfeQ+UVtFu4QAGEk7wW+QqcUJvCt7OD7rosybkHaULmh73CVfZBdPu+yg=
-X-Received: by 2002:a05:6870:1585:b0:297:27b5:4d30 with SMTP id
- 586e51a60fabf-2aa066479a8mr1430458fac.2.1736347796238; Wed, 08 Jan 2025
- 06:49:56 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736354304; x=1736959104;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4cuSrltjvkzxAoQOtMu4WRHfXq6bp8x92iDHnihbR3k=;
+        b=PYLzYEyBnZP67nkFpfjdG7kgoBmgwSHQtD3auCRkDFV/ieG35y7dWiBw5SV+lI+2q6
+         jxdSbmJuX21+yFGEjkWAFbjYXVIqheuI/q3NxEyw3g0mUoHaSxQzCfcQ4cMsK850fE4H
+         gH7S9sNJ60XpgYdpIUSESzqFW+UJJmZoACxReW0pZXcmN6fg9u4gtpuFkH9ZCoMIYBc7
+         ZYAL0D/mR0JpiWGntBK3CJvoGN+xgBvPHkLGIFLguCg2xZAEA1ov+2C2R5NAJdXWH926
+         FqS0SSFerTug8SJ4+wwohEYc1w9/Gw2PROoMbnpFPFeasJr8ve8Bcqkso3lqNw9i0/6y
+         BTUA==
+X-Forwarded-Encrypted: i=1; AJvYcCVh2PW40r0bJDCPqqczgvbtNI3bsOBz0eNMM04TmJyIwLMiqO0Hf1TdiQqZVXd3mcg9YjsFFj0pzU0Vkj4=@vger.kernel.org, AJvYcCWHLmoTZQYVgQZyZ0KsmCSnnkL4NUKuoMtD5geUqbQd+hS1wQguw1igCXtMlbnST0YOBiS5+xyjTSaJDWHPLsjzD7o=@vger.kernel.org, AJvYcCX937NuJKwI4+TpK0yl2ElvuV+U+nw5xe8bpx/Q7p9C3Gu9zFOh3XWhW9Pt1uEhcrqZutufiXYHkEGmo2lP@vger.kernel.org, AJvYcCXWz263V2MI1BNVOrp2NhHTCTlLGj2l99yv002dtOX4I7UV/vSPuUWZgq/lgrxluRGznPd+e6IuxxPM@vger.kernel.org, AJvYcCXrDvzTLLNN0Q4x0yaBP5Skf8OKgpFqiAlL7WTxSa/ynTQTmxxG3TCU1QdSl9zIyLD01QlVeTEqBBiF@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzE9jx6dKg6qCzXQbNzwNVfiM+9pUXyyWv2Gq/5f5oFjnakVJF
+	o9Ov3AtTTtvwNdj+Pyp01edVCn586tSNSrNwWwwK3RiD20u87mwZ
+X-Gm-Gg: ASbGncveqgEUcH6pXxTUggLeWe2ss7tbtJg8m1Vup1Sd1F4UVNgoImoIcL3GVuWCfDR
+	xcH/ulgApJlmO4G5E2JcCsU4/vLnyLCA/03gLaSsCb8JIULzFdO4PKUuoIfSfz+TLMjywnoL588
+	Ek3frgh8wlV1dh52BKVXqm6MOLoLw+TWAA7jZwVwHVRZ6q3FHFLBV8gb43zOIxLgPeFDRol5fBt
+	QcAOzQkPPUQafD6zd+IvaF4Ld4TszByDdf91jescP0t2HlA/DcguARUqsIi4WZCrzOy996RZQjt
+	8DKLS8NOq5EvDXRAX8SqNQapnKN/EnC2MzBnspm12SA=
+X-Google-Smtp-Source: AGHT+IGp1cgCy8Xm3K9YW0ye3mjPWJQZ9C81gUBXymA3f6FFEe37p3slvzHvRuRGSFy39baH4a7Gig==
+X-Received: by 2002:a05:6000:184e:b0:385:f560:7911 with SMTP id ffacd0b85a97d-38a872c93e3mr2679293f8f.10.1736354303999;
+        Wed, 08 Jan 2025 08:38:23 -0800 (PST)
+Received: from orome (p200300e41f281900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:1900:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2e22767sm25890945e9.39.2025.01.08.08.38.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jan 2025 08:38:23 -0800 (PST)
+Date: Wed, 8 Jan 2025 17:38:20 +0100
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, 
+	Andrew Jeffery <andrew@codeconstruct.com.au>, Justin Chen <justin.chen@broadcom.com>, 
+	Al Cooper <alcooperx@gmail.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>, Florian Fainelli <f.fainelli@gmail.com>, 
+	Benjamin Bara <benjamin.bara@skidata.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>, Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Tianping Fang <tianping.fang@mediatek.com>, Jassi Brar <jaswinder.singh@linaro.org>, 
+	Biju Das <biju.das.jz@bp.renesas.com>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
+	Francesco Dolcini <francesco.dolcini@toradex.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
+	Alexander Stein <alexander.stein@ew.tq-group.com>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
+	linux-tegra@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: Correct indentation and style in DTS
+ example
+Message-ID: <uyld4j6frger6oe332c4i32lkk5ue7ifrhu3565lrcn2xwc5xc@hgfyaryobqz2>
+References: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250105125251.5190-1-joswang1221@gmail.com>
-In-Reply-To: <20250105125251.5190-1-joswang1221@gmail.com>
-From: Jos Wang <joswang1221@gmail.com>
-Date: Wed, 8 Jan 2025 22:49:44 +0800
-X-Gm-Features: AbW1kvYDb0GIJFPHTSyus0vpLVgszdDZH0Vs3sd3gRWSxRoBSjNZZ_vlpFoaZjk
-Message-ID: <CAMtoTm1xeviEXJGCAECF65RidexGTG9pjKhU8OyW17rOq7evfA@mail.gmail.com>
-Subject: Re: [PATCH 1/1] usb: pd: fix the SenderResponseTimer conform to specification
-To: dmitry.baryshkov@linaro.org
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org, 
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="5borij4dhzmoodud"
+Content-Disposition: inline
+In-Reply-To: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
+
+
+--5borij4dhzmoodud
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH] dt-bindings: usb: Correct indentation and style in DTS
+ example
+MIME-Version: 1.0
 
-On Sun, Jan 5, 2025 at 8:53=E2=80=AFPM joswang <joswang1221@gmail.com> wrot=
-e:
->
-> From: Jos Wang <joswang@lenovo.com>
->
-> According to the USB PD3 CTS specification
-> (https://usb.org/document-library/
-> usb-power-delivery-compliance-test-specification-0/
-> USB_PD3_CTS_Q4_2024_OR.zip), the requirements for
-> tSenderResponse are different in PD2 and PD3 modes, see
-> Table 19 Timing Table & Calculations. For PD2 mode, the
-> tSenderResponse min 24ms and max 30ms; for PD3 mode, the
-> tSenderResponse min 27ms and max 33ms.
->
-> For the "TEST.PD.PROT.SRC.2 Get_Source_Cap No Request" test
-> item, after receiving the Source_Capabilities Message sent by
-> the UUT, the tester deliberately does not send a Request Message
-> in order to force the SenderResponse timer on the Source UUT to
-> timeout. The Tester checks that a Hard Reset is detected between
-> tSenderResponse min and max=EF=BC=8Cthe delay is between the last bit of
-> the GoodCRC Message EOP has been sent and the first bit of Hard
-> Reset SOP has been received. The current code does not distinguish
-> between PD2 and PD3 modes, and tSenderResponse defaults to 60ms.
-> This will cause this test item and the following tests to fail:
-> TEST.PD.PROT.SRC3.2 SenderResponseTimer Timeout
-> TEST.PD.PROT.SNK.6 SenderResponseTimer Timeout
->
-> Set the SenderResponseTimer timeout to 27ms to meet the PD2
-> and PD3 mode requirements.
->
-> Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jos Wang <joswang@lenovo.com>
+On Tue, Jan 07, 2025 at 02:10:13PM +0100, Krzysztof Kozlowski wrote:
+> DTS example in the bindings should be indented with 2- or 4-spaces and
+> aligned with opening '- |', so correct any differences like 3-spaces or
+> mixtures 2- and 4-spaces in one binding.
+>=20
+> No functional changes here, but saves some comments during reviews of
+> new patches built on existing code.
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  include/linux/usb/pd.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/include/linux/usb/pd.h b/include/linux/usb/pd.h
-> index 3068c3084eb6..99ca49bbf376 100644
-> --- a/include/linux/usb/pd.h
-> +++ b/include/linux/usb/pd.h
-> @@ -475,7 +475,7 @@ static inline unsigned int rdo_max_power(u32 rdo)
->  #define PD_T_NO_RESPONSE       5000    /* 4.5 - 5.5 seconds */
->  #define PD_T_DB_DETECT         10000   /* 10 - 15 seconds */
->  #define PD_T_SEND_SOURCE_CAP   150     /* 100 - 200 ms */
-> -#define PD_T_SENDER_RESPONSE   60      /* 24 - 30 ms, relaxed */
-> +#define PD_T_SENDER_RESPONSE   27      /* 24 - 30 ms */
->  #define PD_T_RECEIVER_RESPONSE 15      /* 15ms max */
->  #define PD_T_SOURCE_ACTIVITY   45
->  #define PD_T_SINK_ACTIVITY     135
-> --
-> 2.17.1
->
+>  .../bindings/usb/aspeed,usb-vhub.yaml         | 40 +++++++++----------
+>  .../devicetree/bindings/usb/brcm,bdc.yaml     | 14 +++----
+>  .../devicetree/bindings/usb/cypress,hx3.yaml  | 24 +++++------
+>  .../devicetree/bindings/usb/dwc2.yaml         |  4 +-
+>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 20 +++++-----
+>  .../bindings/usb/intel,keembay-dwc3.yaml      | 30 +++++++-------
+>  .../devicetree/bindings/usb/ite,it5205.yaml   | 18 ++++-----
+>  .../bindings/usb/maxim,max3420-udc.yaml       | 28 ++++++-------
+>  .../bindings/usb/nvidia,tegra210-xusb.yaml    |  4 +-
+>  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 36 ++++++++---------
+>  .../bindings/usb/renesas,usb3-peri.yaml       | 24 +++++------
+>  .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 38 +++++++++---------
+>  .../bindings/usb/ti,tusb73x0-pci.yaml         |  6 +--
+>  .../devicetree/bindings/usb/ti,usb8020b.yaml  | 20 +++++-----
+>  .../devicetree/bindings/usb/ti,usb8041.yaml   | 16 ++++----
+>  15 files changed, 161 insertions(+), 161 deletions(-)
 
-Hi Dmitry
+Acked-by: Thierry Reding <treding@nvidia.com>
 
-Discuss here "https://patchwork.kernel.org/project/linux-usb/patch/20241222=
-105239.2618-2-joswang1221@gmail.com/",
-you suggest setting PD_T_SENDER_RESPONSE to 27ms.
-1=E3=80=81In actual testing, setting the timeout to 27ms can solve the CTS
-problem in PD2 mode. For PD3 mode, since 27ms is at the boundary, it
-cannot solve the CTS problem well.
-For example, in the test item =E2=80=9CTEST.PD.PROT.SRC.3 SenderResponseTim=
-er
-Deadline (As a Sink, the Tester checks that the UUT accepts a Request
-Message sent at the deadline limit of tSenderResponse min in reply to
-a Source_Capabilities Message.)=E2=80=9D, after the Tester (sink) receives =
-the
-Source_cap message, it will send a Request message 25.26 ms later. The
-tcpm framework layer on the source side should take more than 2
-seconds to receive and process the Request message=EF=BC=8Cwhich means that=
- a
-Hard Reset may be sent before the Request message is fully processed.
-2=E3=80=81The current modification is as follows:
-#define PD_T_SENDER_RESPONSE 27 /* I am confused by the comments here,
-such as 24ms - 30ms or 24ms - 33 ms or others */
-There is no suitable comment here. In the next patch "Make timeout
-depend on the PD version", this line of code may need to be modified
-again.
-In summary, I might consider including the following changes in one commit:
-(1) include/linux/usb/pd.h
-+#define PD_T_PD2_SENDER_RESPONSE 27 /* PD20 spec 24 - 30 ms */
-+#define PD_T_PD3_SENDER_RESPONSE 30 /* PD30 spec 27 - 33 ms */
-(2) drivers/usb/typec/tcpm/tcpm.c
-Make timeout depend on the PD version
-In fact, it is to patch "[v2,2/2] usb: typec: tcpm: fix the sender
-response time issue", remove "Make timeouts configurable via DT"
+--5borij4dhzmoodud
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Do you have a better idea?
+-----BEGIN PGP SIGNATURE-----
 
-Thanks
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmd+qfwACgkQ3SOs138+
+s6Er4Q//VZl8qzubU2vGD+vYdws9AIeAPkYgq0YF3ngrrr5mGTubUKQ7Zz8JK///
+i/3WJevwDy2USeH86kJMNE9iNo4IreDdz2QsYaZzAb8lArTFezDCTHJrqyBDniQM
+OCCNB7QNsWqaUe9H6g4NpfD75Bwmhe114ywlB7hj3WzOVa/KTYF3TtE/Ktp4JdQg
+MSVpkv9wmN3RIY09OVtpmgIjbJ+te1tQHALu405trlrtG6HtjSmcVGAdrA1U+A8Q
+x+miGhfUBdnoXQehPW7PVLzMCqo92ToQPmsjhRgKVMNixRqDJlLHhTICIuaNgtFB
+KnO3meD4Z9Tz5H+ZXdRwIL6/HkCr5ofoqKll8Q0ihoDsq02auv7O50m078coyQv5
+kyLOjhVr8e1BxNv/gQ1msux6UH3R7oOeB2Dz+tkzgheVbE4sbgsrxc0qA9smcB7X
+G57z8Kau0/nZiUEKKsnleEhEtyNMfOFE+Jw1evYNp24D4OzykGpuaJfzOlG1Lse2
+jGaqgnw5EqRNF85hVVOHXqVzZVVFQzw5gRoBBbbcsXnC9iYXdvmRWSMZzdBUEVto
+vwTMpeMD4fFfQbxub/u81Q8800zwF8jow8+ivNd8cPJrzWznKDQRubvPOoTl+HZU
+ODkzlPRv8vnNYUHt+Ug3/L00O6fTOdZ/+MtCX7hFZNA4Rde2Ewk=
+=DdZu
+-----END PGP SIGNATURE-----
 
-Jos Wang
+--5borij4dhzmoodud--
 
