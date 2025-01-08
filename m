@@ -1,104 +1,105 @@
-Return-Path: <linux-usb+bounces-19142-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19143-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21DC0A05E11
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 15:10:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBD37A05E8F
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 15:29:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE8113A5554
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 14:09:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7FCC91886D94
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 14:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B3C1FDE2A;
-	Wed,  8 Jan 2025 14:09:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B87B1F8F0A;
+	Wed,  8 Jan 2025 14:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SCtxyL65"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GuWINkgh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45DA21FDE09;
-	Wed,  8 Jan 2025 14:09:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B844D1514F8
+	for <linux-usb@vger.kernel.org>; Wed,  8 Jan 2025 14:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736345366; cv=none; b=qOIhguOcS1VXDxFlZ9Z6NB1FrZUilk/Wyq7WdzwdxAugEPJqGMhTEhI31n2ABsfgH6QJ7PhWcbTVZL1OJVe7JCYlTlh9HXn9egGAkzspREV2zWfNbhJzbPRuoYJ4Y9f87z8h8MovzHHfoinFspMGL6gsdC/imev3lHb/X2nO7is=
+	t=1736346540; cv=none; b=d/aN8y2Y+044F/LTKQAgDx3A/dYEGnyN85xvF4zIl2Um1lGouQEacLBU2jED62eM1B3EOLXOOBz94afqksqjzJdQSBxC8QFT6VlN5mDErBiYxAqMt/A1YX898BT+ellqyaZQ4mNgNBCdR861RAkut1BGVhgtV5bE4PAJgHmDtHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736345366; c=relaxed/simple;
-	bh=PuHFyvQcUpNFXvyiurlAF4absPlp7FXEo06xZZ4fOyY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EK0eKsMUScRMkBfLXzZqFkmHPsede/qOJg1P+rFCQLa37qt1kSh5ypGjxGkdMEIiBeQscUw5GhpAw6h9ihCA1bYCNFESRkUoxjKOLvlkp6jPW4NiLt2qyDTFJlORtAoArmTSVhvMJghTcnzyUWgXAwsut41mPYOfzOzTA97Ymj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SCtxyL65; arc=none smtp.client-ip=198.175.65.20
+	s=arc-20240116; t=1736346540; c=relaxed/simple;
+	bh=PT160OPkiYppesjYZuHTD1xw5WXdPulLd4bw4HOEZYM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=js2iDeAHhInLpkkbdCVJwJrs1eQLDputRWjMsSftcRbElP5GQKf8WG61M6sYQBQjA0c72+u8fPPj5uIAlsNvnGvGGuw6impq7oPYGz1+eOEMJnn1FUs3oWZrStRSbpzYNhO7TLodx/DG7nEXAEL/LJcQwZQG3PAbwRzEvonW2q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GuWINkgh; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736345364; x=1767881364;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=PuHFyvQcUpNFXvyiurlAF4absPlp7FXEo06xZZ4fOyY=;
-  b=SCtxyL65pT1jJukT8JbBK0SsD8ZqiwPPABTYCSYIiQYg28BfjVLrju4i
-   GEvkVMbuMhZwLTIQPbegNNfFB35Va1YZUo9oV0b8wseqJ7ofyqfcngNMf
-   5DzM4mExHvW1HxqOlCG/7Fl4SjNW8gRnRF3MQIpeNpRC7Q9LpEIvkH3E3
-   Tq7RgSr4uf3wGHwwTmE+lgi+ycGJE/AzpEMOnc7nOTUXRf7o5xDOD+X7P
-   JxhdTo08EE6QPjeuCiGuyskbR2qol1qW90hwA/FOJfqpr0zoRVWY369Je
-   rxcCxet/HWx96P/P7Cydnk3AQ2lIeWmKwNTW55+1NGU5m566Z/o2bzsNB
+  t=1736346538; x=1767882538;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=PT160OPkiYppesjYZuHTD1xw5WXdPulLd4bw4HOEZYM=;
+  b=GuWINkghRDsTDbgthiKzQP2vEMaDgu2XfcU/WcXtHGlJoZSrUZdJM2yr
+   inVtcSt+2iUDfirOWbnwEZFNjwoixqDPA6Za7aEtAPwtXElYuvYOEPSKQ
+   0weFU2m4UxRJx+PM/tIs670vWl77bTxzXbg5TRX8n2B8JGPFpAbJWwcfq
+   Oc4Ha318MnC6QoN+dAmhM/0/EsTmXN8WZep7VFRchDwYKBwHuOBnSfIXG
+   pWMUKu75AMhfhrxY3Q/8Uo1XnIpcERw4ngQwZ9Q7RUY/mXAk0rXLfqjSF
+   QBus1fOCLytVWtOQTuxcd8Z71hDDaDmrzZYX/qr+JY0mKd90GaQWw7x7P
    g==;
-X-CSE-ConnectionGUID: XQR70E4hQi6ejIEi9Dzb9A==
-X-CSE-MsgGUID: G5cLkamWTuq0d3a7y+8fwQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36266773"
+X-CSE-ConnectionGUID: W/QhS285QuqTCx1GJGuoqA==
+X-CSE-MsgGUID: tSfdOOJURem5xXEpUJS7QA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="47565134"
 X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="36266773"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 06:09:23 -0800
-X-CSE-ConnectionGUID: 5MuKVUQjTz6NCWioya/ZbQ==
-X-CSE-MsgGUID: ten+V83oQxySAdeEDBFw7w==
+   d="scan'208";a="47565134"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 06:28:57 -0800
+X-CSE-ConnectionGUID: JERwv2ClT3KA/GAv8XcM1A==
+X-CSE-MsgGUID: W5MKmh0oTW+SI2zjVI5heg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="102903221"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa006.fm.intel.com with ESMTP; 08 Jan 2025 06:09:17 -0800
-Message-ID: <b029c775-a0cf-4991-95b7-a02187c0863b@linux.intel.com>
-Date: Wed, 8 Jan 2025 16:10:12 +0200
+   d="scan'208";a="102928925"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa009.jf.intel.com with ESMTP; 08 Jan 2025 06:28:56 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1058)
+	id CE17E3C3; Wed, 08 Jan 2025 16:28:54 +0200 (EET)
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
+To: mathias.nyman@linux.intel.com
+Cc: linux-usb@vger.kernel.org,
+	michal.pecio@gmail.com,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: [PATCH 0/2] usb: xhci: page size improvements
+Date: Wed,  8 Jan 2025 16:28:20 +0200
+Message-ID: <20250108142822.649862-1-niklas.neronin@linux.intel.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v32 02/32] xhci: sideband: add initial api to register a
- secondary interrupter entity
-To: Wesley Cheng <quic_wcheng@quicinc.com>, srinivas.kandagatla@linaro.org,
- mathias.nyman@intel.com, perex@perex.cz, conor+dt@kernel.org,
- dmitry.torokhov@gmail.com, corbet@lwn.net, broonie@kernel.org,
- lgirdwood@gmail.com, krzk+dt@kernel.org,
- pierre-louis.bossart@linux.intel.com, Thinh.Nguyen@synopsys.com,
- tiwai@suse.com, robh@kernel.org, gregkh@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-doc@vger.kernel.org
-References: <20250108012213.1659364-1-quic_wcheng@quicinc.com>
- <20250108012213.1659364-3-quic_wcheng@quicinc.com>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250108012213.1659364-3-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8.1.2025 3.21, Wesley Cheng wrote:
-> From: Mathias Nyman <mathias.nyman@linux.intel.com>
-> 
-> Introduce XHCI sec intr, which manages the USB endpoints being requested by
-> a client driver.  This is used for when client drivers are attempting to
-> offload USB endpoints to another entity for handling USB transfers.  XHCI
-> sec intr will allow for drivers to fetch the required information about the
-> transfer ring, so the user can submit transfers independently.  Expose the
-> required APIs for drivers to register and request for a USB endpoint and to
-> manage XHCI secondary interrupters.
+Correct off-by-one page size debug message.
+Set page size to the xHCI-supported size, instead of 4KB.
 
-The "sec intr" above should also be renamed back to "sideband"
+Clarified the interpretation of the xHCI spec 1.9 regarding page size.
+The correct interpretation is that only one bit is set, indicating the
+only supported page size. This is supported by the following sources:
 
--Mathias
+Section 6.6.1, PSZ:
+  The PSZ calculation uses the page size bit and would not work with
+  multiple bits set.
+
+Section 7.7, Implementation Notes:
+  "This version of the xHCI spec only allows an implementation to support
+   a single page size, as reported by the PAGESIZE register."
+
+Niklas Neronin (2):
+  usb: xhci: correct debug message page size calculation
+  usb: xhci: set page size to the xHCI-supported size
+
+ drivers/usb/host/xhci-mem.c | 28 ++++++++++++----------------
+ drivers/usb/host/xhci.h     |  8 ++++----
+ 2 files changed, 16 insertions(+), 20 deletions(-)
+
+-- 
+2.45.2
+
 
