@@ -1,73 +1,73 @@
-Return-Path: <linux-usb+bounces-19144-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19145-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72F01A05E90
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 15:29:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95EA9A05E91
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 15:29:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2B5DB1886D65
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 14:29:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42B3D1886B94
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 14:29:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3A2D1FA8F7;
-	Wed,  8 Jan 2025 14:29:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 151E91FC7DD;
+	Wed,  8 Jan 2025 14:29:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lVaZSAD8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ya3PpK60"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D2D1514F8
-	for <linux-usb@vger.kernel.org>; Wed,  8 Jan 2025 14:29:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9B81DB37B
+	for <linux-usb@vger.kernel.org>; Wed,  8 Jan 2025 14:29:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736346565; cv=none; b=KwjiFpUEp14tTehl6ZNjx/9NRj42kbFUyCUn9irBfZCzCtoxt5UmQ92UYKgZgYki1m+0p4SKU6S3h56FjB/uCVGCAl4UOu87tUExlem5E/aHEyE96svy8agbEQ9axOAc1yk0LfmEKWdGyVUrHbXcZutIaW6VNUt28lsGmNH8KRI=
+	t=1736346566; cv=none; b=BPk5hKUwBoOFN6/dh5uPXZacDqvMfbogLyBFjusHDpc96PwGnQNlCHCzxxD6IT16Q5I6QhibOYTLrtIhTXB+ViOnMJ/Eije0vVh8mx6Gc6vgkUwkYwqRHlmJeQ53PoCXgsRYL718wHap9zMXRxSYVuoR3dfgIVkpAYF04bMjgFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736346565; c=relaxed/simple;
-	bh=unxYMcic/mlfgbSYHnbEOsywxW/MECaf4+XNFT+EEwQ=;
+	s=arc-20240116; t=1736346566; c=relaxed/simple;
+	bh=eTJ4t0d12NXjuy0E+MNGs/s220tlheJjlHyIduLFwdc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IVJ4WQMdKKB1ctiHcfrndlasi+JQJS8Rk647oJKhp2kf+ZjzenwijM+00aVWpMtWmvq4eue9KqyXfuIJFyDV8WngQkzSsQVPjqVm1oK2cc5J1pCcbiWtwROT1vcUuqb2BIJ60nebGkF/vTvPgSrSf8+d2gLGeMGdjCoaYbUPsXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lVaZSAD8; arc=none smtp.client-ip=192.198.163.15
+	 MIME-Version; b=q7eVWc+vpB8OTJB1LKMeqWBvPfwtdF5XN80PmyhPe6S8bH1KbzMFz9pLomR/VjSTBRWLHH95dhqtdbQNPSCO2KQF06+VA1oJrvVOwsSA51Tu3b3qJ6cq0QyXfKiLJ1X1Z6ml9XUcBt4UoLPexvTTolMeNhHWW6mK8XKNnOPwbMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ya3PpK60; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736346563; x=1767882563;
+  t=1736346565; x=1767882565;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=unxYMcic/mlfgbSYHnbEOsywxW/MECaf4+XNFT+EEwQ=;
-  b=lVaZSAD8ekdkB7yPM4cj//rj8tYpbNxUKIQqD1v3cCfVgax0aoVOgf6x
-   sqstB2bxaIS0pLFq/40cGsOY63i/1W3zVD4xop5i2d4Eper8I/pLEs/6d
-   MQKTgDdjqgeupiljG88mfXxjWhNl68QFy6+rg+hicvg5rfYJBRRZR+/p9
-   Ywo4wOuQHCsqjGe9x+UCZfI5svJ2Punqse1N+0iwBYE8YGMhQ1Ink/kFw
-   4SBYVBROXdMCTcdvL3p6EKENir7vUmtrTudMxl0pEmFYVVvWDHoL878Qp
-   yEFib4z0ojpf3oaAF+zWihDGZKN8vO6LbYXBQOuG7gWgIdTNDhybq15Ad
-   A==;
-X-CSE-ConnectionGUID: 5lV+xNHuSHCM18MZnmZg6A==
-X-CSE-MsgGUID: OMTSZIG1RzKVJVGO30Pusw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36735027"
+  bh=eTJ4t0d12NXjuy0E+MNGs/s220tlheJjlHyIduLFwdc=;
+  b=Ya3PpK60+y9QP2D7f0oeeLHfgi7SHmmPuvGpkvyqWwytAVtmKV7h9ZjJ
+   Gnd/MSRJAfY5S4kRvnU6eo36ugEugtkTAE0jmDjowzJgiGQSLws035bCa
+   Uylg/mDaMiSWNUTa5t8hNnugqSG/TVLXGe1KYFLSYS3mp7j7PSLQ5wvS0
+   9WH6ODe+sljTzEAk8HHo1XOJBmnWOICml9JBWRPi43odX7EnefW45AW3K
+   Fij0TppDcmxNqsv6OvvGF1G8dlzb/NhoWgnwIHqpL+2N2Ut/dKzdmxrgk
+   ImescYOUfAG9+WE938wF3GNFFIuxwe8iZzvQ7wye4LEOPwHdA0k24TT+E
+   g==;
+X-CSE-ConnectionGUID: NrsjfcutQge0/7UKPfmPZw==
+X-CSE-MsgGUID: vCA+FN1eRCa4te1Tm/PBtA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="35801037"
 X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="36735027"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 06:29:22 -0800
-X-CSE-ConnectionGUID: cpstPT2NTu+uflTa75R0LQ==
-X-CSE-MsgGUID: FlKV+fN6Re+BUkYl45NhFw==
+   d="scan'208";a="35801037"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 06:29:24 -0800
+X-CSE-ConnectionGUID: Vsfr8kNMSTKhD1hAADM5gA==
+X-CSE-MsgGUID: 1J8Qu62SQXWD0gzzyslcUw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="107730632"
+   d="scan'208";a="108207992"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa005.fm.intel.com with ESMTP; 08 Jan 2025 06:29:21 -0800
+  by orviesa005.jf.intel.com with ESMTP; 08 Jan 2025 06:29:23 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1058)
-	id 476CC3C3; Wed, 08 Jan 2025 16:29:20 +0200 (EET)
+	id 15AA13EF; Wed, 08 Jan 2025 16:29:21 +0200 (EET)
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 To: mathias.nyman@linux.intel.com
 Cc: linux-usb@vger.kernel.org,
 	michal.pecio@gmail.com,
 	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 1/2] usb: xhci: correct debug message page size calculation
-Date: Wed,  8 Jan 2025 16:28:21 +0200
-Message-ID: <20250108142822.649862-2-niklas.neronin@linux.intel.com>
+Subject: [PATCH 2/2] usb: xhci: set page size to the xHCI-supported size
+Date: Wed,  8 Jan 2025 16:28:22 +0200
+Message-ID: <20250108142822.649862-3-niklas.neronin@linux.intel.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250108142822.649862-1-niklas.neronin@linux.intel.com>
 References: <20250108142822.649862-1-niklas.neronin@linux.intel.com>
@@ -79,37 +79,110 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ffs() function returns the index of the first set bit, starting from 1.
-If no bits are set, it returns zero. This behavior causes an off-by-one
-page size in the debug message, as the page size calculation [1]
-is zero-based, while ffs() is one-based.
+The current xHCI driver does not validate whether a page size of 4096
+bytes is supported. Address the issue by setting the page size to the
+value supported by the xHCI controller, as read from the Page Size
+register.
 
-Fix this by subtracting one from the result of ffs(). Note that since
-variable 'i' is unsigned, subtracting one from zero will result in the
-maximum unsigned integer value. Consequently, the condition 'if (i < 16)'
-will still function correctly.
+Additionally, this commit removes unnecessary debug messages and instead
+prints the supported and used page size once.
 
-[1], Page size: (2^(n+12)), where 'n' is the set page size bit.
+The xHCI controller supports page sizes of (2^{(n+12)}) bytes, where 'n'
+is the Page Size Bit. Only one page size is supported, with a maximum
+page size of 128 KB.
 
-Fixes: 81720ec5320c ("usb: host: xhci: use ffs() in xhci_mem_init()")
 Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 ---
- drivers/usb/host/xhci-mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/usb/host/xhci-mem.c | 28 ++++++++++++----------------
+ drivers/usb/host/xhci.h     |  8 ++++----
+ 2 files changed, 16 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 92703efda1f7..66584aafc513 100644
+index 66584aafc513..6828b75ad77b 100644
 --- a/drivers/usb/host/xhci-mem.c
 +++ b/drivers/usb/host/xhci-mem.c
-@@ -2391,7 +2391,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
- 	page_size = readl(&xhci->op_regs->page_size);
- 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"Supported page size register = 0x%x", page_size);
--	i = ffs(page_size);
-+	i = ffs(page_size) - 1;
- 	if (i < 16)
- 		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
- 			"Supported page size of %iK", (1 << (i+12)) / 1024);
+@@ -1953,7 +1953,6 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
+ 	xhci->interrupters = NULL;
+ 
+ 	xhci->page_size = 0;
+-	xhci->page_shift = 0;
+ 	xhci->usb2_rhub.bus_state.bus_suspended = 0;
+ 	xhci->usb3_rhub.bus_state.bus_suspended = 0;
+ }
+@@ -2372,6 +2371,16 @@ xhci_create_secondary_interrupter(struct usb_hcd *hcd, unsigned int segs,
+ }
+ EXPORT_SYMBOL_GPL(xhci_create_secondary_interrupter);
+ 
++static void xhci_hcd_page_size(struct xhci_hcd *xhci)
++{
++	u32 page_shift;
++
++	page_shift = readl(&xhci->op_regs->page_size) & XHCI_PAGE_SIZE_MASK;
++	xhci->page_size = page_shift << 12;
++	xhci_dbg_trace(xhci, trace_xhci_dbg_init, "HCD page size set to %iK",
++		       xhci->page_size >> 10);
++}
++
+ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ {
+ 	struct xhci_interrupter *ir;
+@@ -2379,7 +2388,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 	dma_addr_t	dma;
+ 	unsigned int	val, val2;
+ 	u64		val_64;
+-	u32		page_size, temp;
++	u32		temp;
+ 	int		i;
+ 
+ 	INIT_LIST_HEAD(&xhci->cmd_list);
+@@ -2388,20 +2397,7 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
+ 	INIT_DELAYED_WORK(&xhci->cmd_timer, xhci_handle_command_timeout);
+ 	init_completion(&xhci->cmd_ring_stop_completion);
+ 
+-	page_size = readl(&xhci->op_regs->page_size);
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"Supported page size register = 0x%x", page_size);
+-	i = ffs(page_size) - 1;
+-	if (i < 16)
+-		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"Supported page size of %iK", (1 << (i+12)) / 1024);
+-	else
+-		xhci_warn(xhci, "WARN: no supported page size\n");
+-	/* Use 4K pages, since that's common and the minimum the HC supports */
+-	xhci->page_shift = 12;
+-	xhci->page_size = 1 << xhci->page_shift;
+-	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"HCD page size set to %iK", xhci->page_size / 1024);
++	xhci_hcd_page_size(xhci);
+ 
+ 	/*
+ 	 * Program the Number of Device Slots Enabled field in the CONFIG
+diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+index 4914f0a10cff..238cf54ac59f 100644
+--- a/drivers/usb/host/xhci.h
++++ b/drivers/usb/host/xhci.h
+@@ -211,6 +211,9 @@ struct xhci_op_regs {
+ #define CONFIG_CIE		(1 << 9)
+ /* bits 10:31 - reserved and should be preserved */
+ 
++/* bits 15:0 - HCD page shift bit */
++#define XHCI_PAGE_SIZE_MASK     0xffff
++
+ /**
+  * struct xhci_intr_reg - Interrupt Register Set
+  * @irq_pending:	IMAN - Interrupt Management Register.  Used to enable
+@@ -1510,10 +1513,7 @@ struct xhci_hcd {
+ 	u16		max_interrupters;
+ 	/* imod_interval in ns (I * 250ns) */
+ 	u32		imod_interval;
+-	/* 4KB min, 128MB max */
+-	int		page_size;
+-	/* Valid values are 12 to 20, inclusive */
+-	int		page_shift;
++	u32		page_size;
+ 	/* MSI-X/MSI vectors */
+ 	int		nvecs;
+ 	/* optional clocks */
 -- 
 2.45.2
 
