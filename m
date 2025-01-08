@@ -1,167 +1,264 @@
-Return-Path: <linux-usb+bounces-19147-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19148-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 685A7A06235
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 17:41:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B46CA064C9
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 19:43:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EDBB3A131D
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 16:40:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B65067A21FB
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 18:43:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18C0E1FF7D9;
-	Wed,  8 Jan 2025 16:38:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E93C9201258;
+	Wed,  8 Jan 2025 18:43:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yye6XYiL"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dw1M5rr4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA4022594BC;
-	Wed,  8 Jan 2025 16:38:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B30AC2594BE;
+	Wed,  8 Jan 2025 18:43:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736354309; cv=none; b=bW39zTzNupHO1QnTJMTOyz/O5tFpgbOecwM50V9ObXpam3AlWxdOpHAkZ9hGoNaSk1YSfxPbjukJbILY3IW/ErXSmq3QYgjR/H0ynTyE3h2c/12CyFrZZRja36aL5nSv/srcCey1KCVFZNDsTay64GNShvYtoW46pct1Uz5LT+s=
+	t=1736361784; cv=none; b=Ep5z8oSjE2JZOmLZrAbqY5D/sKXHMKjQ4nQKdH2a3zmh81PH4KRTHtM2VPvL4K2J8+eLF7ATxH+MEFYFzqiJBPpWRBFoD7Kup+rJmUJuarah+9FMvX1zTOz+b9142zUYFGALdu9eRw4yeis5F6ytsWPI/oFJr0Bq+F04+RVMHEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736354309; c=relaxed/simple;
-	bh=1PTvZkB7v2l5pzhBkf42/i+DDfV/d369bK2eZRiNNuU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QiSUQSkAUe7oSJeLZL4tyIcme8sK0HJSCsE33DX7IUwtI3XT3LPqM1+dLroDRl7rWnoyxiaoAc8JVwomqWX1Wmv6Y/SpSSDih7evnwjHgJ3dcX1afFwZOLOX03l8i5y4CE9X3IFT66XDcbmOaBaJBVn3It8Jyt1Kntx/hxV4mr0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yye6XYiL; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-436249df846so113015e9.3;
-        Wed, 08 Jan 2025 08:38:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736354304; x=1736959104; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cuSrltjvkzxAoQOtMu4WRHfXq6bp8x92iDHnihbR3k=;
-        b=Yye6XYiLoPl2jU5/AvsRFLfNGPBqA9P6JtTJw7Gfv9kQ+o9W2NlZa+4WpWqD9qVFoo
-         G0vTq4FXSVfOFTpLQouSlimPjAPi5o2Tfc7b6/k6h4sz5E4DbnZEZMFKFSbkceigfJn1
-         QEOMnT8vq5vu3ozDrxSXWaCRvHJW5wp9sDs1dOqway1G5sOPtJZAhQiwMpRCzyKXTscU
-         o20j4LqN1QhCq52NwxRbMuw0nvdjyIKAhtH0yobJ1xvTyDsNOM608jEDshJL7zB52FvO
-         QyQRv9iHj2tzLruhfcI9GvhlhAEExioCWQI9J7oYvHf4uWeS/DQOIeXMrzRTO442OAmu
-         49SA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736354304; x=1736959104;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4cuSrltjvkzxAoQOtMu4WRHfXq6bp8x92iDHnihbR3k=;
-        b=PYLzYEyBnZP67nkFpfjdG7kgoBmgwSHQtD3auCRkDFV/ieG35y7dWiBw5SV+lI+2q6
-         jxdSbmJuX21+yFGEjkWAFbjYXVIqheuI/q3NxEyw3g0mUoHaSxQzCfcQ4cMsK850fE4H
-         gH7S9sNJ60XpgYdpIUSESzqFW+UJJmZoACxReW0pZXcmN6fg9u4gtpuFkH9ZCoMIYBc7
-         ZYAL0D/mR0JpiWGntBK3CJvoGN+xgBvPHkLGIFLguCg2xZAEA1ov+2C2R5NAJdXWH926
-         FqS0SSFerTug8SJ4+wwohEYc1w9/Gw2PROoMbnpFPFeasJr8ve8Bcqkso3lqNw9i0/6y
-         BTUA==
-X-Forwarded-Encrypted: i=1; AJvYcCVh2PW40r0bJDCPqqczgvbtNI3bsOBz0eNMM04TmJyIwLMiqO0Hf1TdiQqZVXd3mcg9YjsFFj0pzU0Vkj4=@vger.kernel.org, AJvYcCWHLmoTZQYVgQZyZ0KsmCSnnkL4NUKuoMtD5geUqbQd+hS1wQguw1igCXtMlbnST0YOBiS5+xyjTSaJDWHPLsjzD7o=@vger.kernel.org, AJvYcCX937NuJKwI4+TpK0yl2ElvuV+U+nw5xe8bpx/Q7p9C3Gu9zFOh3XWhW9Pt1uEhcrqZutufiXYHkEGmo2lP@vger.kernel.org, AJvYcCXWz263V2MI1BNVOrp2NhHTCTlLGj2l99yv002dtOX4I7UV/vSPuUWZgq/lgrxluRGznPd+e6IuxxPM@vger.kernel.org, AJvYcCXrDvzTLLNN0Q4x0yaBP5Skf8OKgpFqiAlL7WTxSa/ynTQTmxxG3TCU1QdSl9zIyLD01QlVeTEqBBiF@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzE9jx6dKg6qCzXQbNzwNVfiM+9pUXyyWv2Gq/5f5oFjnakVJF
-	o9Ov3AtTTtvwNdj+Pyp01edVCn586tSNSrNwWwwK3RiD20u87mwZ
-X-Gm-Gg: ASbGncveqgEUcH6pXxTUggLeWe2ss7tbtJg8m1Vup1Sd1F4UVNgoImoIcL3GVuWCfDR
-	xcH/ulgApJlmO4G5E2JcCsU4/vLnyLCA/03gLaSsCb8JIULzFdO4PKUuoIfSfz+TLMjywnoL588
-	Ek3frgh8wlV1dh52BKVXqm6MOLoLw+TWAA7jZwVwHVRZ6q3FHFLBV8gb43zOIxLgPeFDRol5fBt
-	QcAOzQkPPUQafD6zd+IvaF4Ld4TszByDdf91jescP0t2HlA/DcguARUqsIi4WZCrzOy996RZQjt
-	8DKLS8NOq5EvDXRAX8SqNQapnKN/EnC2MzBnspm12SA=
-X-Google-Smtp-Source: AGHT+IGp1cgCy8Xm3K9YW0ye3mjPWJQZ9C81gUBXymA3f6FFEe37p3slvzHvRuRGSFy39baH4a7Gig==
-X-Received: by 2002:a05:6000:184e:b0:385:f560:7911 with SMTP id ffacd0b85a97d-38a872c93e3mr2679293f8f.10.1736354303999;
-        Wed, 08 Jan 2025 08:38:23 -0800 (PST)
-Received: from orome (p200300e41f281900f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f28:1900:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2e22767sm25890945e9.39.2025.01.08.08.38.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2025 08:38:23 -0800 (PST)
-Date: Wed, 8 Jan 2025 17:38:20 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Justin Chen <justin.chen@broadcom.com>, 
-	Al Cooper <alcooperx@gmail.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>, Florian Fainelli <f.fainelli@gmail.com>, 
-	Benjamin Bara <benjamin.bara@skidata.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>, Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Tianping Fang <tianping.fang@mediatek.com>, Jassi Brar <jaswinder.singh@linaro.org>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Francesco Dolcini <francesco.dolcini@toradex.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Subject: Re: [PATCH] dt-bindings: usb: Correct indentation and style in DTS
- example
-Message-ID: <uyld4j6frger6oe332c4i32lkk5ue7ifrhu3565lrcn2xwc5xc@hgfyaryobqz2>
-References: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
+	s=arc-20240116; t=1736361784; c=relaxed/simple;
+	bh=t8gzJbEH1XH2UQd2mYTu6BgnZBGFdzqJfZ0f8Bbo8CA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jV7SB8+GHrDv12fl9uYYt/OdaTJLZhkEU6TEHjBa6I/d0bjWuMpvzqwmrCWVxCPI4b/IYDbBVJqfUwXCpEL2k0m6LpSmkJ5WwRx/7Hi7ju9zCB3t8t2PDpZYUuegcjqN0oQoaGmzshc9l801hBVWzN7plvJRJAHbXMHAYMXJ4/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dw1M5rr4; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736361782; x=1767897782;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=t8gzJbEH1XH2UQd2mYTu6BgnZBGFdzqJfZ0f8Bbo8CA=;
+  b=dw1M5rr4WJNHGUQwB/6ipeL/w3F8l8sgEhbSQYqYpVDy02ILxfcpjZot
+   /AKz3kBmpmHPrM05ina+JvXAoLG8K1XnVAG2C+WX+nnVbtF8saelWaZEv
+   SMOCGsT5HgAk9IfgnMg9D5jLsBzijCVUCp2Dga4e3Qq3lCBnDvcNShJSZ
+   vxhW+pf25rGtLOF8GDrMdT51bguDLS8KqjYn+NM/w94ebvux2fHW9F0fS
+   PzIY220baFMkBHgjOSWRVtbuYZjWsOliGokBpR2ZA0OqmYnrD7zBGnB/s
+   +nDfIsawKjtvp32XW+1DcMyPxa5AUYAncQY3UmIjM9PuuYMKJo0swtEJ9
+   A==;
+X-CSE-ConnectionGUID: 8OGy0dBlQ7Kxtq1CMuSfUg==
+X-CSE-MsgGUID: 7jASvwhiTgSYD5TJnVTQ0Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="36299871"
+X-IronPort-AV: E=Sophos;i="6.12,299,1728975600"; 
+   d="scan'208";a="36299871"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 10:43:02 -0800
+X-CSE-ConnectionGUID: Y1waHYzKQb6RdyFD0dZK4w==
+X-CSE-MsgGUID: 3Pr9bHMRQV+9q6XVFIcx5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,299,1728975600"; 
+   d="scan'208";a="103677851"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa010.fm.intel.com with ESMTP; 08 Jan 2025 10:42:59 -0800
+Message-ID: <e181717a-8b3f-4ad4-b075-95c95888ce5c@linux.intel.com>
+Date: Wed, 8 Jan 2025 20:43:55 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="5borij4dhzmoodud"
-Content-Disposition: inline
-In-Reply-To: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/5] xhci: introduce xhci->lost_power flag
+To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Roger Quadros <rogerq@kernel.org>, Peter Chen <peter.chen@kernel.org>,
+ Pawel Laszczak <pawell@cadence.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Mathias Nyman <mathias.nyman@intel.com>
+Cc: =?UTF-8?Q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
+ <20241210-s2r-cdns-v6-4-28a17f9715a2@bootlin.com>
+ <70aced7f-0311-43b9-96af-c8325c39ff2b@kernel.org>
+ <D6AP7JCNSME9.3FS7XCZJ37GM8@bootlin.com>
+ <ed77988a-ba26-4a71-a8cf-b1e5a6425a2e@kernel.org>
+ <D6F0L2L02YIS.3D2DW1P7691L4@bootlin.com>
+ <D6WN0T0DLMFJ.30GP099520IHT@bootlin.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <D6WN0T0DLMFJ.30GP099520IHT@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+
+On 8.1.2025 12.59, Théo Lebrun wrote:
+> On Wed Dec 18, 2024 at 6:49 PM CET, Théo Lebrun wrote:
+>> On Tue Dec 17, 2024 at 10:00 PM CET, Roger Quadros wrote:
+>>> On 13/12/2024 18:03, Théo Lebrun wrote:
+>>>> On Thu Dec 12, 2024 at 1:37 PM CET, Roger Quadros wrote:
+>>>>> On 10/12/2024 19:13, Théo Lebrun wrote:
+>>>>>> The XHCI_RESET_ON_RESUME quirk allows wrappers to signal that they
+>>>>>> expect a reset after resume. It is also used by some to enforce a XHCI
+>>>>>> reset on resume (see needs-reset-on-resume DT prop).
+>>>>>>
+>>>>>> Some wrappers are unsure beforehands if they will reset. Add a mechanism
+>>>>>> to signal *at resume* if power has been lost. Parent devices can set
+>>>>>> this flag, that defaults to false.
+>>>>>>
+>>>>>> The XHCI_RESET_ON_RESUME quirk still triggers a runtime_pm_get() on the
+>>>>>> controller. This is required as we do not know if a suspend will
+>>>>>> trigger a reset, so the best guess is to avoid runtime PM.
+>>>>>>
+>>>>>> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+>>>>>> ---
+>>>>>>   drivers/usb/host/xhci.c | 3 ++-
+>>>>>>   drivers/usb/host/xhci.h | 6 ++++++
+>>>>>>   2 files changed, 8 insertions(+), 1 deletion(-)
+>>>>>>
+>>>>>> diff --git a/drivers/usb/host/xhci.c b/drivers/usb/host/xhci.c
+>>>>>> index 5ebde8cae4fc44cdb997b0f61314e309bda56c0d..ae2c8daa206a87da24d58a62b0a0485ebf68cdd6 100644
+>>>>>> --- a/drivers/usb/host/xhci.c
+>>>>>> +++ b/drivers/usb/host/xhci.c
+>>>>>> @@ -1017,7 +1017,8 @@ int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg)
+>>>>>>   
+>>>>>>   	spin_lock_irq(&xhci->lock);
+>>>>>>   
+>>>>>> -	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME || xhci->broken_suspend)
+>>>>>> +	if (hibernated || xhci->quirks & XHCI_RESET_ON_RESUME ||
+>>>>>> +	    xhci->broken_suspend || xhci->lost_power)
+>>>>>>   		reinit_xhc = true;
+>>>>>>   
+>>>>>>   	if (!reinit_xhc) {
+>>>>>> diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
+>>>>>> index 4914f0a10cff42dbc1448dcf7908534d582c848e..32526df75925989d40cbe7d59a187c945f498a30 100644
+>>>>>> --- a/drivers/usb/host/xhci.h
+>>>>>> +++ b/drivers/usb/host/xhci.h
+>>>>>> @@ -1645,6 +1645,12 @@ struct xhci_hcd {
+>>>>>>   	unsigned		broken_suspend:1;
+>>>>>>   	/* Indicates that omitting hcd is supported if root hub has no ports */
+>>>>>>   	unsigned		allow_single_roothub:1;
+>>>>>> +	/*
+>>>>>> +	 * Signal from upper stacks that we lost power during system-wide
+>>>>>> +	 * suspend. Its default value is based on XHCI_RESET_ON_RESUME, meaning
+>>>>>> +	 * it is safe for wrappers to not modify lost_power at resume.
+>>>>>> +	 */
+>>>>>> +	unsigned                lost_power:1;
+>>>>>
+>>>>> I suppose this is private to XHCI driver and not legitimate to be accessed
+>>>>> by another driver after HCD is instantiated?
+>>>>
+>>>> Yes it is private.
+>>>>
+>>>>> Doesn't access to xhci_hcd need to be serialized via xhci->lock?
+>>>>
+>>>> Good question. In theory maybe. In practice I don't see how
+>>>> cdns_host_resume(), called by cdns_resume(), could clash with anything
+>>>> else. I'll add that to be safe.
+>>>>
+>>>>> Just curious, what happens if you don't include patch 4 and 5?
+>>>>> Is USB functionality still broken for you?
+>>>>
+>>>> No it works fine. Patches 4+5 are only there to avoid the below warning.
+>>>> Logging "xHC error in resume" is a lie, so I want to avoid it.
+>>>
+>>> How is it a lie?
+>>> The XHCI controller did loose its save/restore state during a PM operation.
+>>> As far as XHCI is concerned this is an error. no?
+>>
+>> The `xhci->quirks & XHCI_RESET_ON_RESUME` is exactly the same thing;
+>> both the quirk and the flag we add have for purpose:
+>>
+>> 1. skipping this block
+>>
+>> 	if (!reinit_xhc) {
+>> 		retval = xhci_handshake(&xhci->op_regs->status,
+>> 					STS_CNR, 0, 10 * 1000 * 1000);
+>> 		// ...
+>> 		xhci_restore_registers(xhci);
+>> 		xhci_set_cmd_ring_deq(xhci);
+>> 		command = readl(&xhci->op_regs->command);
+>> 		command |= CMD_CRS;
+>> 		writel(command, &xhci->op_regs->command);
+>> 		if (xhci_handshake(&xhci->op_regs->status,
+>> 			      STS_RESTORE, 0, 100 * 1000)) {
+>> 			// ...
+>> 		}
+>> 	}
+>>
+>> 2. avoiding this warning:
+>>
+>> 	xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
+>>
+>> I don't think the block skipped is important in resume duration (to be
+>> confirmed). But the xhci_warn() is not desired: we do not want to log
+>> warnings if we know it is expected.
+>>
+>> I'll think some more about it.
+> 
+> About this series, there were two discussions:
+> 
+>   - The desire to avoid putting the hardware init sequence of cdns3-ti
+>     inside  runtime_resume() as we don't do runtime PM.
+>     *That is fine and will be fixed for the next revision.*
+>     See [PATCH V6 2/5]: https://lore.kernel.org/lkml/8a1ed4be-c41c-46b6-ae25-33a6035b8c8d@kernel.org/
+> 
+>   - [PATCH V6 4/5] and [PATCH V6 5/5] are dedicated to avoiding a warning
+>     at XHCI resume on J7200:
+> 
+>        xhci_warn(xhci, "xHC error in resume, USBSTS 0x%x, Reinit\n", temp);
+> 
+
+Adding a new quirk or private xhci_cd meme
 
 
---5borij4dhzmoodud
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] dt-bindings: usb: Correct indentation and style in DTS
- example
-MIME-Version: 1.0
+>     https://lore.kernel.org/lkml/20241210-s2r-cdns-v6-4-28a17f9715a2@bootlin.com/
+>     https://lore.kernel.org/lkml/20241210-s2r-cdns-v6-5-28a17f9715a2@bootlin.com/
+> 
+>     Roger Quadros asked if we should not instead keep it, as there is
+>     indeed a reinit of the xHC block. I don't think we do: we don't want
+>     a warning at resume; IMO it would imply the reinit was unexpected.
+> 
+>     Proof is there is already a platform with a ->broken_suspend boolean
+>     that disables the warning even though there is a reinit. It doesn't
+>     log a warning as the reinit was expected.
+> 
+>     So we currently have:
+>      - xhci->broken_suspend: set at probe & implies the resume sequence
+>        won't work.
+>      - xhci->quirks & XHCI_RESET_ON_RESUME: set at probe & implies the
+>        controller reset during suspend.
+> 
+>     IIUC xhci->broken_suspend is NOT equivalent to "the controller reset
+>     during suspend". Else we wouldn't have both the broken_suspend flag
+>     and the XHCI_RESET_ON_RESUME quirk.
+> 
+>     In our case we want exactly the same thing as the
+>     XHCI_RESET_ON_RESUME quirk but updated at resume depending on what
+>     the wrapper driver detects.
+> 
+>     We could either:
+>     1. Update xhci->quirks at resume from upper layers.
+>     2. Introduce a xhci->lost_power flag. It would be strictly equivalent
+>        to the XHCI_RESET_ON_RESUME quirk BUT updated at resume from
+>        upper layers.
+> 
+>     @Mathias Nyman: what is your thought on the matter? Option (2) was
+>     the one taken in this series. Is there another option I am missing?
 
-On Tue, Jan 07, 2025 at 02:10:13PM +0100, Krzysztof Kozlowski wrote:
-> DTS example in the bindings should be indented with 2- or 4-spaces and
-> aligned with opening '- |', so correct any differences like 3-spaces or
-> mixtures 2- and 4-spaces in one binding.
->=20
-> No functional changes here, but saves some comments during reviews of
-> new patches built on existing code.
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
->  .../bindings/usb/aspeed,usb-vhub.yaml         | 40 +++++++++----------
->  .../devicetree/bindings/usb/brcm,bdc.yaml     | 14 +++----
->  .../devicetree/bindings/usb/cypress,hx3.yaml  | 24 +++++------
->  .../devicetree/bindings/usb/dwc2.yaml         |  4 +-
->  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 20 +++++-----
->  .../bindings/usb/intel,keembay-dwc3.yaml      | 30 +++++++-------
->  .../devicetree/bindings/usb/ite,it5205.yaml   | 18 ++++-----
->  .../bindings/usb/maxim,max3420-udc.yaml       | 28 ++++++-------
->  .../bindings/usb/nvidia,tegra210-xusb.yaml    |  4 +-
->  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 36 ++++++++---------
->  .../bindings/usb/renesas,usb3-peri.yaml       | 24 +++++------
->  .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 38 +++++++++---------
->  .../bindings/usb/ti,tusb73x0-pci.yaml         |  6 +--
->  .../devicetree/bindings/usb/ti,usb8020b.yaml  | 20 +++++-----
->  .../devicetree/bindings/usb/ti,usb8041.yaml   | 16 ++++----
->  15 files changed, 161 insertions(+), 161 deletions(-)
+This would be a fourth way the upper layers inform xhci_resume() that the
+xHC host should be reset instead of restoring the registers.
 
-Acked-by: Thierry Reding <treding@nvidia.com>
+option 1 creates the first dynamic xhci->quirk flag,
+option 2 adds a xhci->lost_power flag that is touched outside of xhci driver.
 
---5borij4dhzmoodud
-Content-Type: application/pgp-signature; name="signature.asc"
+Neither seem like a good idea just to get rid of a dev_warn() message.
 
------BEGIN PGP SIGNATURE-----
+Maybe its time to split xhci_resume() into xhci_reset_resume()
+and xhci_restore_resume(), and let those upper layers decide what they need.
 
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmd+qfwACgkQ3SOs138+
-s6Er4Q//VZl8qzubU2vGD+vYdws9AIeAPkYgq0YF3ngrrr5mGTubUKQ7Zz8JK///
-i/3WJevwDy2USeH86kJMNE9iNo4IreDdz2QsYaZzAb8lArTFezDCTHJrqyBDniQM
-OCCNB7QNsWqaUe9H6g4NpfD75Bwmhe114ywlB7hj3WzOVa/KTYF3TtE/Ktp4JdQg
-MSVpkv9wmN3RIY09OVtpmgIjbJ+te1tQHALu405trlrtG6HtjSmcVGAdrA1U+A8Q
-x+miGhfUBdnoXQehPW7PVLzMCqo92ToQPmsjhRgKVMNixRqDJlLHhTICIuaNgtFB
-KnO3meD4Z9Tz5H+ZXdRwIL6/HkCr5ofoqKll8Q0ihoDsq02auv7O50m078coyQv5
-kyLOjhVr8e1BxNv/gQ1msux6UH3R7oOeB2Dz+tkzgheVbE4sbgsrxc0qA9smcB7X
-G57z8Kau0/nZiUEKKsnleEhEtyNMfOFE+Jw1evYNp24D4OzykGpuaJfzOlG1Lse2
-jGaqgnw5EqRNF85hVVOHXqVzZVVFQzw5gRoBBbbcsXnC9iYXdvmRWSMZzdBUEVto
-vwTMpeMD4fFfQbxub/u81Q8800zwF8jow8+ivNd8cPJrzWznKDQRubvPOoTl+HZU
-ODkzlPRv8vnNYUHt+Ug3/L00O6fTOdZ/+MtCX7hFZNA4Rde2Ewk=
-=DdZu
------END PGP SIGNATURE-----
+Doesn't cdns driver already have a xhci_plat_priv resume_quirk() function
+called  during xhci_plat_resume(), before xhci_resume()?
+Can that be used?
 
---5borij4dhzmoodud--
+Thanks
+Mathias
+
 
