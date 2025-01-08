@@ -1,150 +1,91 @@
-Return-Path: <linux-usb+bounces-19131-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19132-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0544A05813
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 11:24:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 84400A0582C
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 11:34:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 058237A04A5
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 10:24:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AAA61885D92
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 10:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 09A091F76CD;
-	Wed,  8 Jan 2025 10:24:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 172D41F76CD;
+	Wed,  8 Jan 2025 10:34:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C66O9fGk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uhj7ubTz"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C52A1CEAD6;
-	Wed,  8 Jan 2025 10:24:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2A21DFE0F
+	for <linux-usb@vger.kernel.org>; Wed,  8 Jan 2025 10:34:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736331887; cv=none; b=mx5YlV3997cIFm3lw7FKi6kM1gWivUXmfjlnVUmu+RnG4s5qIwBBAwStGip460fUIVeT7MGWYdFE56/LsBOYsSYBe4jgau0XbqX9PE/X8qHnLg/TO+WIvFGJ6NGxOZO9wsiFxuR6ETWvXWHXOhPGjVVZyPYDsEG1+LeTxU6LXAE=
+	t=1736332442; cv=none; b=Bfy8q9Z8U3FUidZjouv/Y7kBCUCBl7Hv/qrdc2nPhoCU/FT8BL7vOCW4LEx964r2IDVIC4ALIIm7nyFjeEPOBVlOJRNnSrI2gUQIlOYRqk8N/xV/MAPFbpIXfbm/3jnzll/IQTq0f/bDe+EBTH1CBXB/hniUaZpzEonwnfu3wbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736331887; c=relaxed/simple;
-	bh=dIvIKEgaV2quHkVp9B49gKPvI3m7KtT5nA+lZz81J40=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tsan21t3nghQabj1/wHpQBSLKnr/+lu9Aml5XJ275o0UKMC3gLxGEOr2TSES7gPe+AxtTdoWDALovFR2Led/alzgpvAqVk+5hdDpw+wOTb9AOVChTvqeW/FYSAtMGj7eAUG3KPf2IGl9alcQkIH9bLWpSb9YVa85kVRE1/RxLT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C66O9fGk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04990C4CEDF;
-	Wed,  8 Jan 2025 10:24:46 +0000 (UTC)
+	s=arc-20240116; t=1736332442; c=relaxed/simple;
+	bh=qMSXuYjlaTCclN1BxgRXGLsJhLzgs7rO6/bShlWyHIc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=k3tc0Gf/XLxCmzoJKZEUhRcOeeO2Dll4hVHPXOmp5E68QOAFytlj5XS+XoJxMuerpUkns2V2Teou1pse8U09UmZe+8+5vO59S5KzJfJmFuUqnOuzhkTQgePrERqBY3Bsv4yWyoU9ucYouoCxt1QxvQgef7M7yP89XxPC0DtWToI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uhj7ubTz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2172FC4CEDF;
+	Wed,  8 Jan 2025 10:34:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736331887;
-	bh=dIvIKEgaV2quHkVp9B49gKPvI3m7KtT5nA+lZz81J40=;
-	h=From:To:Cc:Subject:Date:From;
-	b=C66O9fGk8VdyB/mf8FpOd5aH+X/NnaLmb3S+iA5/K2ZuvC6cemXB82d3MlvAU9qRE
-	 JokPrsZxZiaa4K5qeAg4W0y1d+jirNK8j8iQmcBkU9dU+MJGxlSFoOzoqfxcD/9Jaq
-	 5ws01KxPWqAFdBV/5Ymr1FVuQ3vak+dT3bQdg5gaTmZ7AHWx3xQhBdJunIrqg2GO65
-	 JStRq6MKiim91DnZtq9I3XdwACQjjhTsFcqfIJEEbDlAxZETy+NLOGgK9tWUePurdq
-	 Gi3/r/ZQpCBVw1fmCimnghSkyAFlj3naNIzjhaSRKBwVgh4A/pBAO4XVYVq14eVpWz
-	 u4UhQqelINTAg==
+	s=k20201202; t=1736332442;
+	bh=qMSXuYjlaTCclN1BxgRXGLsJhLzgs7rO6/bShlWyHIc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uhj7ubTzD+4BmFnn9Jp/e9jak02A8IyUvbLLbfokBU6i2LoLe3K3TUT7/mZhuXn+7
+	 RPIFLq++bRDO6keIx+rYK2zR0NnjAVKL7vde9ev3PdX5yo+wSP5CM/mpDfkIhBkbxA
+	 BtqFhCf+7WMQ9TzO+8ybF498RviSyjJNFdi9k2XVIweGMLh/e0qB6h6Uxw3D3GtHnq
+	 DTzpmW/3GaPjUQHyOGLtBzGLLwFRVqUI8tNzssOYDjL3e+MJssbpS63VpA7vUD67/9
+	 w7BreZNLNsAqBaOGYKb9ICBg1cDWseCn+8IuIKZN3vc7C9spF2xOLnk0deLVwQWLUh
+	 jIMx/QGE+QeqQ==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1tVTF0-000000008IY-0FOq;
-	Wed, 08 Jan 2025 11:24:46 +0100
+	id 1tVTNy-000000000ED-0Rmi;
+	Wed, 08 Jan 2025 11:34:02 +0100
+Date: Wed, 8 Jan 2025 11:34:02 +0100
 From: Johan Hovold <johan@kernel.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Giuseppe Corbelli <giuseppe.corbelli@antaresvision.com>,
-	stable@vger.kernel.org
-Subject: [PATCH] USB: serial: cp210x: add Phoenix Contact UPS Device
-Date: Wed,  8 Jan 2025 11:24:36 +0100
-Message-ID: <20250108102436.31884-1-johan@kernel.org>
-X-Mailer: git-send-email 2.45.2
+To: linux-usb@vger.kernel.org
+Cc: gregkh@linuxfoundation.org, Blake LaFleur <blake.k.lafleur@gmail.com>
+Subject: Re: [PATCH] USB: serial: ch341: Add product ID for CH9102
+Message-ID: <Z35Umg4mgUd-9SPY@hovoldconsulting.com>
+References: <20241208081115.4036852-1-blake.k.lafleur@gmail.com>
+ <Z1lc8O22rnS_e9w0@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z1lc8O22rnS_e9w0@hovoldconsulting.com>
 
-Phoenix Contact sells UPS Quint devices [1] with a custom datacable [2]
-that embeds a Silicon Labs converter:
+On Wed, Dec 11, 2024 at 10:35:44AM +0100, Johan Hovold wrote:
+> On Sun, Dec 08, 2024 at 02:11:15AM -0600, Blake LaFleur wrote:
+> > Adds a PID for the CH9102 chipset that can be found in some cheap ESP
+> > development boards.
+> > 
+> > Example: LILYGO T-Display (and its S3 variant)
+> > https://lilygo.cc/products/lilygo%C2%AE-ttgo-t-display-1-14-inch-lcd-esp32-control-board
+> > 
+> > After patching the driver to include idProduct=0x55d4 the devices work
+> > as expected.
+> 
+> Thanks for the patch. This is the first time I hear of CH9102.
+> 
+> Are there any errors or messages at all in the logs when you use this
+> device or does it appear to be perfectly compatible with the older
+> models?
 
-Bus 001 Device 003: ID 1b93:1013 Silicon Labs Phoenix Contact UPS Device
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.00
-  bDeviceClass            0
-  bDeviceSubClass         0
-  bDeviceProtocol         0
-  bMaxPacketSize0        64
-  idVendor           0x1b93
-  idProduct          0x1013
-  bcdDevice            1.00
-  iManufacturer           1 Silicon Labs
-  iProduct                2 Phoenix Contact UPS Device
-  iSerial                 3 <redacted>
-  bNumConfigurations	 1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x0020
-    bNumInterfaces          1
-    bConfigurationValue     1
-    iConfiguration          0
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower              100mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass      0
-      bInterfaceProtocol      0
-      iInterface              2 Phoenix Contact UPS Device
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               0
+For the record, Blake reported off list that this device is in fact a
+CDC-ACM device.
 
-[1] https://www.phoenixcontact.com/en-pc/products/power-supply-unit-quint-ps-1ac-24dc-10-2866763
-[2] https://www.phoenixcontact.com/en-il/products/data-cable-preassembled-ifs-usb-datacable-2320500
+There is a vendor driver here:
 
-Reported-by: Giuseppe Corbelli <giuseppe.corbelli@antaresvision.com>
-Cc: stable@vger.kernel.org
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/usb/serial/cp210x.c | 1 +
- 1 file changed, 1 insertion(+)
+	https://github.com/WCHSoftGroup/ch343ser_linux
 
-diff --git a/drivers/usb/serial/cp210x.c b/drivers/usb/serial/cp210x.c
-index c24101f0a07a..9960ac2b10b7 100644
---- a/drivers/usb/serial/cp210x.c
-+++ b/drivers/usb/serial/cp210x.c
-@@ -223,6 +223,7 @@ static const struct usb_device_id id_table[] = {
- 	{ USB_DEVICE(0x19CF, 0x3000) }, /* Parrot NMEA GPS Flight Recorder */
- 	{ USB_DEVICE(0x1ADB, 0x0001) }, /* Schweitzer Engineering C662 Cable */
- 	{ USB_DEVICE(0x1B1C, 0x1C00) }, /* Corsair USB Dongle */
-+	{ USB_DEVICE(0x1B93, 0x1013) }, /* Phoenix Contact UPS Device */
- 	{ USB_DEVICE(0x1BA4, 0x0002) },	/* Silicon Labs 358x factory default */
- 	{ USB_DEVICE(0x1BE3, 0x07A6) }, /* WAGO 750-923 USB Service Cable */
- 	{ USB_DEVICE(0x1D6F, 0x0010) }, /* Seluxit ApS RF Dongle */
--- 
-2.45.2
-
+Johan
 
