@@ -1,133 +1,141 @@
-Return-Path: <linux-usb+bounces-19138-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19139-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09FC2A05BFC
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 13:49:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC767A05C21
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 13:53:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55E9E3A3692
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 12:49:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3D0A165DB2
+	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 12:53:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12621FA166;
-	Wed,  8 Jan 2025 12:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 979791F9F7D;
+	Wed,  8 Jan 2025 12:53:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=nic.cz header.i=@nic.cz header.b="iH69hbGd"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.nic.cz (mail.nic.cz [217.31.204.67])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626711F8F14;
-	Wed,  8 Jan 2025 12:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D4BA59;
+	Wed,  8 Jan 2025 12:53:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.31.204.67
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736340582; cv=none; b=E6xAWCkvnHp6rVrdcsW75/F9O3j8hWDrvm+/w80WW95pfqgfdZUdEG3u4H9Y0AYZ9YudT02wFZolTNTFky2g7XXVu9nHrLIcAKN32B1hAHyzGDYu1l/uUPyEvq5nr89iS2WOVagTODrrTwtggRPju7iyxwReqW+brq53i8d7p9k=
+	t=1736340832; cv=none; b=h9HUDd9Ur7rz3wKRqpTnFdCvVQzBMeLgfBgAKUePfKQbBPZSH23QyPGCU7Mw2QyF2izhjez3+8MHZXzgYGkgyguaUMPcPnayD5JJWLIo0QyMZXxcFLI71wqzRSjWDqS7PQLvgqwo1uBlHl0icuHF1TkCWFFi58TeEjNEeaor7Tk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736340582; c=relaxed/simple;
-	bh=fNRAprGW+H8OfhZpQEkJ/jIpXFQkdunMCWk4Ny7EQkY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Li+hXxxFfcaKXQLb3XYshH1XCv6fJ9EBRrItoq30jOsw4DP4F14372xjidtFDSnjfA+pzFSdyieZXKLxNcgL5cYFrFdFkbNGnMiHlJP/I6VoxDQL+8Ki0yEqfpkIr8QhVRsvy4tzOR8YSUBqvhv90FCuykcvLKgXp7cC7o8bDK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-51bb020339fso3642480e0c.0;
-        Wed, 08 Jan 2025 04:49:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736340577; x=1736945377;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HUpdZqfO185onp0pw74RHuTZBmHqg9gIbSRVhApYVuI=;
-        b=NyehqO04AGaBK63dyKFhZnl1A2DkDiKyoxoZjKpNG9shEbMTmo6RVcdjtqz1+dGD2T
-         0DVNII8VB5lh+Nx9ktiij86CUi/4AlD0uuK5yFxgRg6NrjKZqgJK1206eRpwGaOr2aqm
-         C9YAf7ALvp/qCLdD7qomAibnWwn0g0G7RROhCunRs5IFGkpvMuhDpKlvQ2c+wQsP1Yyw
-         +eb+/bfqBEMYwb5nJmoGrWUcG7PDD/tjZ75oHSJ0YxO8AH47dY8KyCU45aPd3/FEvGrD
-         zjmPHw+jGLZ4uwrfw4H+EopTsvYPTOj6DdiL4AAlVt51nI/9mR/BT2hbgVbRq9fOMPKx
-         8Hxg==
-X-Forwarded-Encrypted: i=1; AJvYcCUHO7OH6QW+Z8JMHOJPNC/hJNLwKCkRpCdL6I6d3bK/SnT+QdKzjnoBihiDsmD+DrbHZP21M5+RtPcXMx7MkCg/vhQ=@vger.kernel.org, AJvYcCUXS1SUg8jlUQYc1Z+a4nTKHJmR/U3oe6WBV3saPN2bcmodAfYhlcTnTttG+8Ol761mAkmDbF2/FGF/kjw=@vger.kernel.org, AJvYcCVSlhxmoeRsn3FTVT4GLJlnDjkT56xE2PyzvA6qTAJPuXZ2GMlSwMowRZ5Swgrprnz6nEaZ7+2f70LE@vger.kernel.org, AJvYcCVW88dSU5OjS8zJdhNUBMJSqR1cSDwxnrMWsU/uStFKB/1jb5MCUG8iF4+6eU25UJLoDCMNau7AYYe4gUM8@vger.kernel.org, AJvYcCVwUkb/nNOD7rc1MhGnydRvwHSR8JcL9Tt4ewNLpNLkyMAl+isA3C87jCUMMZOUDfDX7hNSDU1F3wy1@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDQzm2VYYZwXooV/7jMnzEi26krgiBmrCOyTX4jqGWhdtqVGyO
-	c5u1yU2feyyck4p823e8RpP2o+vm8SKjAgoAehpn5lOFXwIeKTzTu03/z7lF
-X-Gm-Gg: ASbGncs5aG0Sx7UqcwIA0QBI1MzLP1PUMpRbIIStnG7Ux3RUa0CeeYOxxZ5KJi8xD5j
-	diaIACfCG3kkweJ9um9B7DR3sX6CinUbzcK19Ub6atXAxGq73hF7POx1NRPIu3xhYCP79EBqddO
-	EaNXIzddGzHKGrOkTJ5GWR8QuCNh6RVblUcIfDRrfGVdPpXGDI8aAnRfJO2JdoQR/5ioVPXmC2V
-	yH3GoNPg1dJ/Gj74aZhpfXuXLD0kjJSDV5/hXEmfxkBqIkholS8MJAei2oZpLcGy0r3ItyH8oos
-	Vh858eWedHLLTpifRpo=
-X-Google-Smtp-Source: AGHT+IEITTgdXM1Fmq4pTWXfT2OwdddiU47j7yiS46a72/fPuaqNJ21obuAS+stFzHcPtVq3LEKn/g==
-X-Received: by 2002:a05:6122:4b11:b0:518:a261:adca with SMTP id 71dfb90a1353d-51c6c50dacfmr1689281e0c.8.1736340576717;
-        Wed, 08 Jan 2025 04:49:36 -0800 (PST)
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-51b68bae007sm5098806e0c.14.2025.01.08.04.49.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jan 2025 04:49:35 -0800 (PST)
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-85c4b057596so2963758241.3;
-        Wed, 08 Jan 2025 04:49:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUG/C+Uj8nZw6HRmxdWWSqEkAmY1Uh/1cSDhW2UuuO/JX29w5DgfvYDkrCg9NTOyCJPmHTGCWvxFukzk7z4@vger.kernel.org, AJvYcCUbJ4Aawyy5JlmrNy29xfK28MK19bciHzKXni4xEPvgpPbJXAJyZdBQn/H9DOmUBEjCqXE+vWLGCTD5Hgb75B+/ig4=@vger.kernel.org, AJvYcCVP+MHpsRORxwSgfU3FmlG9Y8eWVjqzY5UZcozRE8cjVkOFiwiORCY8fYgBaglagQ5l0mvJ1y0Lp4W4d+Y=@vger.kernel.org, AJvYcCVRTmGO9NAYQI9/C2Moha3o4JNtmoMNsmTwzbPrB9RKgg2pru3wMumALO4eLzHmVpOMbNGb6CrkxcVg@vger.kernel.org, AJvYcCVt2aecBP5u3FMzCFeyTmM1evGnAgfyVAyNxsB4254DYnfIS4x+AxL10qQ7sBKb1alAQL0AxiDoCc1n@vger.kernel.org
-X-Received: by 2002:a05:6102:e10:b0:4af:c519:4e7f with SMTP id
- ada2fe7eead31-4b3d10485b5mr1502790137.18.1736340575232; Wed, 08 Jan 2025
- 04:49:35 -0800 (PST)
+	s=arc-20240116; t=1736340832; c=relaxed/simple;
+	bh=+4DH9RUDrM3naZIg1di80JpaZvocc403S9FVS/DV5pg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BHAJneyJ9YmF4byszD/3o8iHH2FxEgZTcHHxT8mYUBvaV/iefJlkFontxnn/Yvie56krsUBRxhrPSJUMmr9c6l86B08dak0JHPuNoWwW1lLKnB8UH8ZmLa3G/Hor5iO0hLFg1YBx/VeaRWl7IX68HjhqsqmCWkw74j3nar606ds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nic.cz; spf=pass smtp.mailfrom=nic.cz; dkim=pass (1024-bit key) header.d=nic.cz header.i=@nic.cz header.b=iH69hbGd; arc=none smtp.client-ip=217.31.204.67
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nic.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nic.cz
+Received: from localhost (unknown [IPv6:2001:1488:fffe:6:1695:51de:f3c4:a72a])
+	by mail.nic.cz (Postfix) with ESMTPSA id 4FB421C11E9;
+	Wed,  8 Jan 2025 13:53:47 +0100 (CET)
+Authentication-Results: mail.nic.cz;
+	auth=pass smtp.auth=michal.hrusecky@nic.cz smtp.mailfrom=Michal.Hrusecky@nic.cz
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=nic.cz; s=default;
+	t=1736340827; bh=+4DH9RUDrM3naZIg1di80JpaZvocc403S9FVS/DV5pg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From:Reply-To:
+	 Subject:To:Cc;
+	b=iH69hbGdgl61yI/dS3T0WfHqetFItFQJ5gUzzGLK90YCuiAPxajkEzIg+1fEa7OjD
+	 yQwcpCCSSUXDj1CwTEcLOkiKrLOcQZnuJR70yZmWgN7BNjTR3reF+b2dBU4HaZf91N
+	 e9jOChv2gasRpfDLe9HbxAAmIO2qWuL9we+7+1p8=
+Date: Wed, 8 Jan 2025 13:53:46 +0100
+From: Michal Hrusecky <Michal.Hrusecky@nic.cz>
+To: Johan Hovold <johan@kernel.org>
+Cc: Michal Hrusecky <michal.hrusecky@turris.com>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: serial: option: add Neoway N723-EA support
+Message-ID: <7kcoujzqccjnegcngm56qjph37ksdhp6meubdjp7iwf6wtruoo@qxbwx2b32iry>
+X-Operating-System: Linux
+References: <csxkrj4qclw3yzijwr57zqqd737kk47zpwjvy6t2oxnobmvswp@o5gt4k7vtwql>
+ <Z35YL54e1eBPslEv@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Wed, 8 Jan 2025 13:49:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVpDWFt+3EBeiGfia3DXDL+LNg976FBm32vNEnJdSx4uQ@mail.gmail.com>
-X-Gm-Features: AbW1kvaX9wLk6edIIBJWmWkhpdJHnfaq_7CxFB_flrYoOUJ_oqU6wmphd1LCLQ4
-Message-ID: <CAMuHMdVpDWFt+3EBeiGfia3DXDL+LNg976FBm32vNEnJdSx4uQ@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: usb: Correct indentation and style in DTS example
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>, 
-	Andrew Jeffery <andrew@codeconstruct.com.au>, Justin Chen <justin.chen@broadcom.com>, 
-	Al Cooper <alcooperx@gmail.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Thierry Reding <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Benjamin Herrenschmidt <benh@kernel.crashing.org>, Florian Fainelli <f.fainelli@gmail.com>, 
-	Benjamin Bara <benjamin.bara@skidata.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>, 
-	Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Tianping Fang <tianping.fang@mediatek.com>, Jassi Brar <jaswinder.singh@linaro.org>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>, 
-	Francesco Dolcini <francesco.dolcini@toradex.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
-	Alexander Stein <alexander.stein@ew.tq-group.com>, linux-usb@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org, 
-	linux-tegra@vger.kernel.org, linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z35YL54e1eBPslEv@hovoldconsulting.com>
+X-Spamd-Bar: /
+X-Rspamd-Queue-Id: 4FB421C11E9
+X-Spamd-Result: default: False [-0.10 / 16.00];
+	MIME_GOOD(-0.10)[text/plain];
+	WHITELISTED_IP(0.00)[2001:1488:fffe:6:1695:51de:f3c4:a72a];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:25192, ipnet:2001:1488::/32, country:CZ];
+	FROM_EQ_ENVFROM(0.00)[];
+	ARC_NA(0.00)[];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Action: no action
+X-Rspamd-Pre-Result: action=no action;
+	module=multimap;
+	Matched map: WHITELISTED_IP
+X-Rspamd-Server: mail
 
-On Tue, Jan 7, 2025 at 2:10=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> DTS example in the bindings should be indented with 2- or 4-spaces and
-> aligned with opening '- |', so correct any differences like 3-spaces or
-> mixtures 2- and 4-spaces in one binding.
->
-> No functional changes here, but saves some comments during reviews of
-> new patches built on existing code.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Johan Hovold - 11:49  8.01.25 wrote:
+> On Tue, Jan 07, 2025 at 05:08:29PM +0100, Michal Hrusecky wrote:
+> > Update the USB serial option driver to support Neoway N723-EA.
+> > 
+> > ID 2949:8700 Marvell Mobile Composite Device Bus
+> > 
+> > T:  Bus=02 Lev=01 Prnt=01 Port=00 Cnt=01 Dev#=  2 Spd=480  MxCh= 0
+> > D:  Ver= 2.00 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+> > P:  Vendor=2949 ProdID=8700 Rev= 1.00
+> > S:  Manufacturer=Marvell
+> > S:  Product=Mobile Composite Device Bus
+> > S:  SerialNumber=200806006809080000
+> > C:* #Ifs= 5 Cfg#= 1 Atr=c0 MxPwr=500mA
+> > A:  FirstIf#= 0 IfCount= 2 Cls=e0(wlcon) Sub=01 Prot=03
+> > I:* If#= 0 Alt= 0 #EPs= 1 Cls=e0(wlcon) Sub=01 Prot=03 Driver=rndis_host
+> > E:  Ad=87(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+> > I:* If#= 1 Alt= 0 #EPs= 2 Cls=0a(data ) Sub=00 Prot=00 Driver=rndis_host
+> > E:  Ad=83(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > E:  Ad=0c(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > I:* If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> > E:  Ad=89(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+> > E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > E:  Ad=0b(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > I:* If#= 4 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> > E:  Ad=86(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+> > E:  Ad=85(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > E:  Ad=0e(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > I:* If#= 6 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=00 Prot=00 Driver=option
+> > E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=4096ms
+> > E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > E:  Ad=0a(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > 
+> > Tested successfully connecting to the Internet via rndis interface after
+> > dialing via AT commands on If#=4 or If#=6.
+> > 
+> > Not sure of the purpose of the other serial interface.
+> > 
+> > Signed-off-by: Michal Hrusecky <michal.hrusecky@turris.com>
+> > ---
+> >  drivers/usb/serial/option.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> > index 64317b390d22..758f02f0d2b9 100644
+> > --- a/drivers/usb/serial/option.c
+> > +++ b/drivers/usb/serial/option.c
+> > @@ -2412,6 +2412,7 @@ static const struct usb_device_id option_ids[] = {
+> >  	  .driver_info = NCTRL(1) },
+> >  	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0640, 0xff),			/* TCL IK512 ECM */
+> >  	  .driver_info = NCTRL(3) },
+> > +	{ USB_DEVICE(0x2949, 0x8700) },						/* Neoway N723-EA */
+> 
+> This should be USB_DEVICE_INTERFACE_CLASS() to avoid trying to bind to
+> the rndis interfaces.
+> 
+> I fixed this up when applying.
 
->  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 36 ++++++++---------
->  .../bindings/usb/renesas,usb3-peri.yaml       | 24 +++++------
+Ah, sorry for the inconvenience and thank you very much!
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be> # renesas
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Michal
 
