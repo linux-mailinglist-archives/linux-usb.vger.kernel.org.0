@@ -1,65 +1,55 @@
-Return-Path: <linux-usb+bounces-19160-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19161-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21AE1A0725D
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 11:04:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABA42A07482
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 12:20:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C4A1318883F1
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 10:04:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B00FA16595A
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 11:19:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AAC5215786;
-	Thu,  9 Jan 2025 10:04:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD21F216616;
+	Thu,  9 Jan 2025 11:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Y7uPyV6W"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="iWroFgmD"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1B30201020;
-	Thu,  9 Jan 2025 10:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DDB7216381;
+	Thu,  9 Jan 2025 11:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736417049; cv=none; b=hVgtQoTBchg/5cdu7jtqfiAD7Q/gsO2aIE2x3AhWWvIv/LeZmfeqGhTJAWc9JUboivrcntlfrJP/2+Eq4fIvkLmc15E5Vuh74eyUolF06jVjnl4TryBhWEu5axVCb/9sbRJLaKS+esuw2o0R3LR9oeMTjMutoIR0+dDcvsnRmhU=
+	t=1736421592; cv=none; b=VhPiJ04cCYPRTyHC8pqtKhZVHrfzGZFqm2Evr+RPUNX8ahuLZYaZK5jQ9n0p7B66uMONoYomfm+UtlE61MgxAi+JELscG0uFJgMJxT0MV9Mas4GCsEw7REQJKzB8edRbV6ywIym2w/QxMcznLXuPef2e8jWFe1KmTWCQH8PGIPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736417049; c=relaxed/simple;
-	bh=J0WAdkHGxdmkeyVlguVeBoFAZDtuSpc6c6lenN9MOZE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=INrt4FHtTKzoqkwfxwiQ5ETLeKJEtFgrQpqyRMZx7U+0cSnZbNyFs/ul8oipllK3ko+pf+Xk9GOCvp6GvLAGJSt+F9o5zis50nS4VuN2dN0I2huTfEwxyVmS2UhAGGPJspagUeLpL5EJ70TOFqie0ABs/0pCdr3IakTYQ2UPhmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Y7uPyV6W; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736417048; x=1767953048;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=J0WAdkHGxdmkeyVlguVeBoFAZDtuSpc6c6lenN9MOZE=;
-  b=Y7uPyV6W33Aaaj5RV5w/Cb2HR5w6pe7BKksojVVfHsYltstWtsYVAnuf
-   5x7xF12NtAPun0yFQXXxGooYfVzpKeJJnILatzLn0VB9P4xV63/nS0EJy
-   lrOricjLv1JGE9XREquJ86kUKl40nUPtCNtWk+HSbXzjk5UVlJLnq5R6Q
-   kYcM7bvHixRJMHTrHdZUpsEkizgt1z1cWqjsdt7dSSSp/xCQyeMDsbb0A
-   oOdKCUjKwfieUU6+zSImMMengbsHOqEKytNpqpy9ScwYNNBGx9BGX8ZTb
-   lEg8OCIbPGGKQuJg6L6353ESSCnHWhnNpPJhQv5I5G7JAcFiE5CtsrRJ2
-   A==;
-X-CSE-ConnectionGUID: CqRCAyLpRNSic1ux6BSqpg==
-X-CSE-MsgGUID: wBT+KBpuSNWjDO4gFlcmnw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="54088286"
-X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
-   d="scan'208";a="54088286"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 02:04:06 -0800
-X-CSE-ConnectionGUID: PWJz2EvHRAW+q6qBg0fttA==
-X-CSE-MsgGUID: jl8qy/TvSNWW3VEFSHaZVA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="108466228"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa005.jf.intel.com with ESMTP; 09 Jan 2025 02:04:02 -0800
-Message-ID: <1f8f3630-e96a-4929-b95f-46002c8d0143@linux.intel.com>
-Date: Thu, 9 Jan 2025 12:04:58 +0200
+	s=arc-20240116; t=1736421592; c=relaxed/simple;
+	bh=MYB0yAjxoyhbDi50XtUpsGNrWVikNTnxxJs1VA0CsbI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=IWkPmLYaNF7PTIfSA6G+37hbezfhtBZpltJ4uURT5MIU2QQfhTH0XRDrRBaIi6AUHxqYGQRrVF4UStHrEw8On0wOAjV4zdjH7VHoC2ID7hmRimGqsvs3u3IRBMQYTn6cqz4H5gphlpvFdWhHmLmPYR/WM6i4zox8Wu6mQq4k/pU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=iWroFgmD; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1736421588;
+	bh=MYB0yAjxoyhbDi50XtUpsGNrWVikNTnxxJs1VA0CsbI=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=iWroFgmDaUTpLUd/8EIbk7IAg3CIGCAnaZsv3NRCD2+VrnXKIHLbosH5aqXEeg/V4
+	 yNHSOKSWXGqYFCCWhbMN0eZxPnY5zChZnn0zqfM3+IATOdJtsZizNWaQ4n39DTvm99
+	 /CJd9kPdfpxcl21X70waImqyrCXSNCqU2Wo0nam5Lfde3eVl5K8+oGZkGcctX+Pwej
+	 ndy+AF9omDIwmBdKM3UBdV6kjg6pMpUaMbUeLte6MN8VzlrV3ChckLSvjfKLNjyrHn
+	 sdmVt41fdGmTLwovY5X6D5TxKeVN//bqIgE9QRKqV0u55jZtEhSqh2sEv/o3LnbXiE
+	 MqyM3xsDLnwFg==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id E98C317E1569;
+	Thu,  9 Jan 2025 12:19:46 +0100 (CET)
+Message-ID: <1e442fd4-1361-40d5-a152-adb16704a982@collabora.com>
+Date: Thu, 9 Jan 2025 12:19:46 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,53 +57,56 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: host: xhci-plat: Assign shared_hcd->rsrc_start
-To: WangYuli <wangyuli@uniontech.com>, mathias.nyman@intel.com,
- gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- niklas.neronin@linux.intel.com, quic_wcheng@quicinc.com,
- andriy.shevchenko@linux.intel.com, michal.pecio@gmail.com,
- guanwentao@uniontech.com, zhanjun@uniontech.com, bigeasy@linutronix.de,
- balbi@ti.com, hkallweit1@gmail.com, Xu Rao <raoxu@uniontech.com>
-References: <7ECE325975663D2D+20250104155111.100597-1-wangyuli@uniontech.com>
+Subject: Re: [PATCH] dt-bindings: usb: Correct indentation and style in DTS
+ example
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Joel Stanley <joel@jms.id.au>,
+ Andrew Jeffery <andrew@codeconstruct.com.au>,
+ Justin Chen <justin.chen@broadcom.com>, Al Cooper <alcooperx@gmail.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ Thierry Reding <thierry.reding@gmail.com>,
+ Jonathan Hunter <jonathanh@nvidia.com>,
+ Geert Uytterhoeven <geert+renesas@glider.be>,
+ Magnus Damm <magnus.damm@gmail.com>,
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+ Florian Fainelli <f.fainelli@gmail.com>,
+ Benjamin Bara <benjamin.bara@skidata.com>,
+ Bjorn Andersson <andersson@kernel.org>,
+ Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+ Tianping Fang <tianping.fang@mediatek.com>,
+ Jassi Brar <jaswinder.singh@linaro.org>,
+ Biju Das <biju.das.jz@bp.renesas.com>,
+ Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+ Francesco Dolcini <francesco.dolcini@toradex.com>,
+ Macpaul Lin <macpaul.lin@mediatek.com>,
+ Alexander Stein <alexander.stein@ew.tq-group.com>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-aspeed@lists.ozlabs.org,
+ linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org
+References: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <7ECE325975663D2D+20250104155111.100597-1-wangyuli@uniontech.com>
+In-Reply-To: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 4.1.2025 17.51, WangYuli wrote:
-> When inserting a USB device, examining hcd->rsrc_start can be
-> helpful in identifying which hcd is mounted, as the physical
-> address represented here is typically unique.
+Il 07/01/25 14:10, Krzysztof Kozlowski ha scritto:
+> DTS example in the bindings should be indented with 2- or 4-spaces and
+> aligned with opening '- |', so correct any differences like 3-spaces or
+> mixtures 2- and 4-spaces in one binding.
 > 
-> The following code snippet demonstrates this:
->    struct usb_hcd *hcd = bus_to_hcd(udev->bus);
->    unsigned long long usb_hcd_addr = (unsigned long long)hcd->rsrc_start;
+> No functional changes here, but saves some comments during reviews of
+> new patches built on existing code.
 > 
-> However, this approach has limitations now. For USB hosts with an
-> MMIO interface, the effectiveness of this method is restricted to
-> USB 2.0.
-> 
-> Becase commit 3429e91a661e ("usb: host: xhci: add platform driver
-> support") assigned res->start to hcd->rsrc_start. But
-> shared_hcd->rsrc_start remains unassigned, which is also necessary
-> in certain scenarios.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Could you expand on those scenarios?
+For iTE IT5205:
 
-Is it possible those could be solved with something like:
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-unsigned long long usb_hcd_addr;
-struct usb_hcd *hcd = bus_to_hcd(udev->bus);
-
-if (!usb_hcd_is_primary_hcd(hcd))
-	hcd = hcd->primary_hcd;
-usb_hcd_addr = (unsigned long long)hcd->rsrc_start;
-
-That should work for all hcds.
-
-Thanks
-Mathias
 
 
