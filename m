@@ -1,140 +1,168 @@
-Return-Path: <linux-usb+bounces-19168-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19169-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5FD6A07BC0
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 16:22:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95C93A07C13
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 16:34:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A17F16B92A
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 15:21:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A1BE1889359
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 15:34:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BA7A21D595;
-	Thu,  9 Jan 2025 15:21:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 105E821CFE2;
+	Thu,  9 Jan 2025 15:34:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dDAM/xyK"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="dSZiXVeP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29FB4218ADA;
-	Thu,  9 Jan 2025 15:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E962021CA1F
+	for <linux-usb@vger.kernel.org>; Thu,  9 Jan 2025 15:34:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736436061; cv=none; b=Q1JSJ3BkIaiuhDqTZRonAfHZ9o3w2KSuEgy0OxDadX+97vnJAPIJ+YTYlUUTNaTPXOT8pQ/Gefd3NqCn39LZ6gPEH5LpBPb6+e+Ew47ZTgTZty5ae2wElJFr96pOkSFkOQRUvoQppQMux5itbYm3hfX0vWh6bw7VvFg5990JFf0=
+	t=1736436874; cv=none; b=VlubalFKLx3yTtUypUTaEF/DZd16lpMZUOF31be5HtpDzsDL+uu9i6AsVIkYAlDiEf/DL4ZiJ04v0BB9/Iu5iy7nOTjOdAxy0lDL+3rgswsxBaRvje5Ki7DH19e8XfMnBml5HnYSnUBgdKVN+1m3EPuYiIebAekzhVZPNnDBp70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736436061; c=relaxed/simple;
-	bh=NOtZyGCLeNE/Zgs95mmAoaaEd6u8LxZrHSpQimkw30Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z2FUWFL/n15D9inbUNGlN3xg+Ajfu7QoYBIKYxNFGZX+i9MaDqihlw95gNBWGc95DPs7/zSWWkJIC8zI4MahOTIfi+FNHgT/nycDoIlcYuyX1EgRjiz8vMJcnF1xQgZgS+B96A2Y1lOUPfYc3WH+AT7vQWhSGutcDM9NkhQ8gLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dDAM/xyK; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4363ae65100so11966125e9.0;
-        Thu, 09 Jan 2025 07:20:59 -0800 (PST)
+	s=arc-20240116; t=1736436874; c=relaxed/simple;
+	bh=DT9CIAnVRiN2PnqrJuhSJoh7qfkKM7j/ZnVYY3aqjGA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r+2nLPJMda1xOCoov99JxYB75IhOu1PIc8CAsEf9LVNM52xOlgom99QgB907G9i5XRwRLoK4q/6wXk7/QDKBFK9JPUBj6BFZf8VeDJAJSG6H07bkyMKXywbhicZxh5V/ovy7JXOFr7UWBqP3IqwSnoeQO8IhHtIUTw2Oe7L9nzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=dSZiXVeP; arc=none smtp.client-ip=209.85.222.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7b6f0afda3fso106016385a.2
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jan 2025 07:34:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736436058; x=1737040858; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=exTdB6THt0qb0+Zib3wip/J1v0gX7t6NiMKROI4GdwU=;
-        b=dDAM/xyKofD+/96zX37BU4RSYKWCfwqmllY1b5kVJpn7NejC7/vNp9EPFpFXGP+rFB
-         RGuMufkJBSo4ZO27fu2Zp8vppmZVhf1StgwV3bTAnl6ATy3rjriY3eMJNJ3cKXurodxl
-         fH8HE7Jvc0l3kcL7W4gcPpYUxOVC+vpwdik1yLjDbnJf1vvJea69rv9vyJNGjLwkLU/r
-         L4Reiw9L0UAwUWCvULBO6Pzcbw27JIff+SRupWiMJ40NvjbjoW67xXPnQftGJnzBb8rK
-         9MmjxKhorn/5q1/1QvwLvgSLUjVFRg8DUMSKJXmxf4NxNjNykCx/VEhyGoXLlq4h834d
-         kwVw==
+        d=rowland.harvard.edu; s=google; t=1736436872; x=1737041672; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jbUVZ9XRJFi5euaz9QC5eJqXsL1tEwWDbYO8wlBC7bI=;
+        b=dSZiXVePg/gMwYZ6uErPICYmrcFt214nbulDbrB9i+92sqxQZtMT53lv1FdAHgW8k/
+         sSEzpk6mZbITTd+DK8jKN0Joouhwx0d0OkwLlJspKG8oPa2yZhzoq/GXrJOrb5fVs/b0
+         x7ody1m/QfexTG4Lgw16w1yNhlTQC89tK28acvYdp+zb+xILQhXksMBqrI1/7S55UuR4
+         1LhU/Kk291tYRrJ5nOi4fXJ45O5L+zytVGAkAHslJyBaE/9Wd3XO2TsAKHdus0utL/bH
+         E/Z/wcY7bP0/6YC0DeEL1ZdC4mWzEFxclPYSRcat+WRY+CXHwncAm2/Rla7rZfayCgjx
+         G+3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736436058; x=1737040858;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=exTdB6THt0qb0+Zib3wip/J1v0gX7t6NiMKROI4GdwU=;
-        b=dfcOEriyEk38W10S3dWfe3rqGkPbYRRGm21WsTSHSdOT/cXXluMlPdUxdNjcwbOwec
-         dgzSTsFUFxdLrBufumA8GlqJkEa+1xCHD4BFfumOhCU2uFrbro1MwBl/S/3s6z+2RfBB
-         llnDqU3vsXetOCXXd3lq5c6Nkx5o7KTc/qFZ5k9ZgJLVCFapBW6qMoEFjhuFlPcOOJ3X
-         TNZYfPrymQfqherrbvCj/D3iz8G5IrtGQ6k9SedsxWv9ApK9hWGPzSwdet1wOOtaHr6z
-         F4fTVXGRKuf79F7/Zt+H9O3dVOAUNracnYU/QwKGEC6DaY209E/6rrNfb6tFXtKTe+re
-         T0PA==
-X-Forwarded-Encrypted: i=1; AJvYcCUKM/0deiwckOrPycQLklfKKYlFbpUwYf5S1y1FWTIkTb32uBg+hYJiHjj6xmOtJUsV8kNoLIvO4uNE@vger.kernel.org, AJvYcCVvTMO+5kC0JIlSP5OWuDB4QY31ukjG3eZK/OYkIB8DNZyrddVBPILAi13dn9QH/ZQ1LTiyIcHWUvqu3aA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyzc1dk4fR56i1I9vFM4VyWjS/sCI7zIuSW/3/yDiPDy4dc1mhs
-	u2zdiAy5YIvl2jUuByZUba1RQ4Succg/NZkjbmOtVLQlu4gq+mVeotjJxQ==
-X-Gm-Gg: ASbGncsr0BP6z45SePmveuq5ZRkYwRcPjN2+mKYU4rGs2I+1k4PU1Teo1yweAc0gio1
-	yEFX1NIOiL9xvi6u/5/E+YW0CRkKRhfcy1DIcKAMHYFexqjZ1OfGlYy3VnSA1V0wyCy3ewnk2WJ
-	tm48Je1NtPCEOAO37bUJP77qbXYu0/99HWaII6rttKFLPF29f4p58aZCC1HCqOpo3y6UVdvJTvJ
-	WS2SgSErQps63cKmSwvYKW4lEaJTerEX++KCNOW45Y9vc/s1FCZu1W+
-X-Google-Smtp-Source: AGHT+IGVtF5OB2FrTFOAf2dgKuYZpm4SblUZ4Y9JRiHfrY6DtVzVJDDxyLSFvVtEBlD/IUlZuJUiiQ==
-X-Received: by 2002:a05:600c:6b6f:b0:436:e86e:e4ab with SMTP id 5b1f17b1804b1-436e86ee529mr43113535e9.30.1736436058223;
-        Thu, 09 Jan 2025 07:20:58 -0800 (PST)
-Received: from localhost ([2001:861:3385:e20:6384:4cf:52c5:3194])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2e89df1sm57766015e9.27.2025.01.09.07.20.57
+        d=1e100.net; s=20230601; t=1736436872; x=1737041672;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jbUVZ9XRJFi5euaz9QC5eJqXsL1tEwWDbYO8wlBC7bI=;
+        b=apWw2nuwHUU1r3H5vL3qyLxdFY7ooteFWpMiISXDuL40cDevT0SkDm7zJKgeOesP8i
+         QuoR03yBE5hIOtAM//of8bA0cNdTVL3ASwhCPCGZVmt+9v4WXrwZ6mYNyPe5l8D0EQa6
+         P/eLU1Za2kP2cFEBnc5f/xb/8cmmZg2lvGlGYFJtSB5lK7srjNkZGsB9mLBu++KjcLQw
+         Gkawe1pqC1CVKKqWhW+cYRtRFVRNWsyqy7Z8jlKUrdSIGDc1tmVjLIc0xivUjezCxwv7
+         83eQzxS/xbN0hIAEXS3sG8yLKNReEhK+MQkYhoUZM2N0xKmhphtJPXbvE8Z+XC68gXHi
+         LCqg==
+X-Gm-Message-State: AOJu0YxUCKrVD/rDYs2e+SIYP7qKtCocm4KdssMV5C1wslaNCgVwI0mH
+	SlJL7Hoy2FYfngd/0DqVD0HF+yQ82NIEOoCPIoxV9zNjpJLxYMvjKOrIDDWXz4TZoRhbhEaUlVA
+	=
+X-Gm-Gg: ASbGncvwUVz5iHtHhu3gCIE2O9Co9x9LWRa/9YDLa4zQtyKZFa/7xhaDuPWDti+GfLG
+	7SNK91YBquvtBkNhAmXiTPTWdiNrTQqu6JgKqmjtIU+2c1OWRBmXPnQjK0h7JIOPuWDTqsoH6Rz
+	w2tNjJ/O1lR84IV/rKl2vLwd/m2d9EClcUrkaKm87ScZC2u8BpGUc5p5Rn20iSv0/Jsm08GI+yF
+	h5NJjLpjEYCn81atmd5bKgs2MI7sfUMD9/5cb5CODqA1dOiHTeH0xC0hOp0l/j7m5uTiYjkhX0=
+X-Google-Smtp-Source: AGHT+IFw04lVskRd/60WClL12cwgI20idzrAYG52Ch8vLGb3JQJXHSDMRfNwt6Vr54j2CbbtTIdiLQ==
+X-Received: by 2002:a05:620a:40d2:b0:7b6:d7d8:7348 with SMTP id af79cd13be357-7bcd97165d3mr1141349585a.31.1736436871811;
+        Thu, 09 Jan 2025 07:34:31 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7bce3503178sm76847485a.90.2025.01.09.07.34.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 07:20:57 -0800 (PST)
-From: Raphael Gallais-Pou <rgallaispou@gmail.com>
-To: Patrice Chotard <patrice.chotard@foss.st.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-arm-kernel@lists.infradead.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: dwc3: st: Switch from CONFIG_PM_SLEEP guards to pm_sleep_ptr()
-Date: Thu,  9 Jan 2025 16:20:55 +0100
-Message-ID: <20250109152055.52931-1-rgallaispou@gmail.com>
-X-Mailer: git-send-email 2.47.1
+        Thu, 09 Jan 2025 07:34:31 -0800 (PST)
+Date: Thu, 9 Jan 2025 10:34:28 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Bitterblue Smith <rtl8821cerfe2@gmail.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: MT7601U with on-board storage reports incorrect capacity
+Message-ID: <2be45061-034f-4cbb-8ed1-f028bbb35936@rowland.harvard.edu>
+References: <060301fe-17e2-4061-bb01-f5660b5d10a3@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <060301fe-17e2-4061-bb01-f5660b5d10a3@gmail.com>
 
-Letting the compiler remove these functions when the kernel is built
-without CONFIG_PM_SLEEP support is simpler and less error prone than the
-use of #ifdef based kernel configuration guards.
+On Thu, Jan 09, 2025 at 04:02:58PM +0200, Bitterblue Smith wrote:
+> Hi,
+> 
+> I have this wifi device with on-board storage for the Windows driver:
+> 
+> New USB device found, idVendor=148f, idProduct=2878, bcdDevice= 0.01
+> 
+> After switching to wifi mode, we can see it's a MT7601U:
+> 
+> New USB device found, idVendor=148f, idProduct=7601, bcdDevice= 0.00
+> 
+> The problem with this one is that it can't be mounted, nothing happens
+> for a long time. I'm testing with kernel 6.12.8-arch1-1 but it's been
+> like this for at least two years. 
+> 
+> The problem seems to be that reading from the "end" of the device
+> takes 17 seconds. I assume the reason for that is the fake capacity:
+> 
+> SCSI Payload (Read Capacity(10) Response Data)
+>     [LUN: 0x0000]
+>     [Command Set:CD-ROM (0x05) ]
+>     [MMC Opcode: Read Capacity(10) (0x25)]
+>     [Request in: 212]
+>     [Response in: 217]
+>     LBA: 65280 
+>     Block size in bytes: 2048
+>     Read capacity: 133693440 bytes (127.50 MiB)
+> 
+> The real capacity is probably just 8 MiB. The driver files stored in
+> it are ~7 MiB total.
+> 
+> This takes 17 seconds and returns 4096 bytes filled with 0xff:
+> 
+> SCSI CDB Read(10)
+>     [LUN: 0x0000]
+>     [Command Set:CD-ROM (0x05) ]
+>     [Response in: 565]
+>     Opcode: Read(10) (0x28)
+>     Flags: 0x00
+>     Logical Block Address (LBA): 0x0000fefc (65276)
+>     ...0 0000 = Group: 0x00
+>     Transfer Length: 2
+>     Control: 0x00
+> 
+> Windows never tries to read that far. (The device works in Windows.)
+> 
+> How can this be fixed?
 
-Signed-off-by: Raphael Gallais-Pou <rgallaispou@gmail.com>
----
-Changes in v2:
-  - Split serie in single patches
-  - Remove irrelevant 'Link:' from commit log
-  - Link to v1: https://lore.kernel.org/r/20241229-update_pm_macro-v1-1-c7d4c4856336@gmail.com
----
- drivers/usb/dwc3/dwc3-st.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Upgrade the WiFi device's firmware.  If you can convince the vendor to 
+fix the bug, which seems unlikely because it works okay with Windows.
 
-diff --git a/drivers/usb/dwc3/dwc3-st.c b/drivers/usb/dwc3/dwc3-st.c
-index e16c3237180e..ef7c43008946 100644
---- a/drivers/usb/dwc3/dwc3-st.c
-+++ b/drivers/usb/dwc3/dwc3-st.c
-@@ -309,7 +309,6 @@ static void st_dwc3_remove(struct platform_device *pdev)
- 	reset_control_assert(dwc3_data->rstc_rst);
- }
- 
--#ifdef CONFIG_PM_SLEEP
- static int st_dwc3_suspend(struct device *dev)
- {
- 	struct st_dwc3 *dwc3_data = dev_get_drvdata(dev);
-@@ -343,9 +342,8 @@ static int st_dwc3_resume(struct device *dev)
- 
- 	return 0;
- }
--#endif /* CONFIG_PM_SLEEP */
- 
--static SIMPLE_DEV_PM_OPS(st_dwc3_dev_pm_ops, st_dwc3_suspend, st_dwc3_resume);
-+static DEFINE_SIMPLE_DEV_PM_OPS(st_dwc3_dev_pm_ops, st_dwc3_suspend, st_dwc3_resume);
- 
- static const struct of_device_id st_dwc3_match[] = {
- 	{ .compatible = "st,stih407-dwc3" },
-@@ -360,7 +358,7 @@ static struct platform_driver st_dwc3_driver = {
- 	.driver = {
- 		.name = "usb-st-dwc3",
- 		.of_match_table = st_dwc3_match,
--		.pm = &st_dwc3_dev_pm_ops,
-+		.pm = pm_sleep_ptr(&st_dwc3_dev_pm_ops),
- 	},
- };
- 
--- 
-2.47.1
+Part of the partition probing (which tries to read the device's last 
+sector) is done by various userspace programs.  But I think some of it 
+is also done by the kernel, and as far as I know the only way to prevent 
+it is to build a kernel without support for the partition schemes which 
+store some of their data near the end of the device.
 
+Probably your best approach is to tell usb-storage to ignore the device 
+completely.  You can do this with a suitable module parameter for the 
+usb-storage driver.  For example, add:
+
+	usb-storage.quirks=148f:7601:i
+
+on the kernel's boot command line (or put a similar entry in an 
+/etc/modprobe.d/*.conf file if usb-storage is a loadable kernel module 
+on your system).  Of course, then you wouldn't be able to mount the 
+device or access the Windows driver files on it, but I imagine you don't 
+care about them very much while you're running Linux.
+
+> usb_modeswitch can switch it to wifi mode, so it's not a huge problem.
+> I'm just curious.
+
+If you really wanted, you could create a custom kernel which which 
+adjust the storage capacity of this particular device down to 8 MB.  But 
+you would never be able to convince anyone to include such a workaround 
+in the main kernel.
+
+Alan Stern
 
