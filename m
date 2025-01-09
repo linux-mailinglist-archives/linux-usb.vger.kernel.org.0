@@ -1,168 +1,126 @@
-Return-Path: <linux-usb+bounces-19169-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19170-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 95C93A07C13
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 16:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 53896A07CC2
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 17:02:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A1BE1889359
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 15:34:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CA8F188C616
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 16:02:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 105E821CFE2;
-	Thu,  9 Jan 2025 15:34:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42D8021D5B3;
+	Thu,  9 Jan 2025 16:02:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="dSZiXVeP"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OQQhbGUw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f176.google.com (mail-qk1-f176.google.com [209.85.222.176])
+Received: from mail-io1-f43.google.com (mail-io1-f43.google.com [209.85.166.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E962021CA1F
-	for <linux-usb@vger.kernel.org>; Thu,  9 Jan 2025 15:34:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20DAC218EB8
+	for <linux-usb@vger.kernel.org>; Thu,  9 Jan 2025 16:02:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736436874; cv=none; b=VlubalFKLx3yTtUypUTaEF/DZd16lpMZUOF31be5HtpDzsDL+uu9i6AsVIkYAlDiEf/DL4ZiJ04v0BB9/Iu5iy7nOTjOdAxy0lDL+3rgswsxBaRvje5Ki7DH19e8XfMnBml5HnYSnUBgdKVN+1m3EPuYiIebAekzhVZPNnDBp70=
+	t=1736438560; cv=none; b=mzJC9hLqiEcF1/ytzDUQNs9MagK+e1K2BX/u26mHDAjUHbgYytvQbVkTfhw61C30VVNCTCS6O6M9PskcChSFMD2AfMbi1GPu9jJ43Iw83mw2Bu9lHI/Bwnqz9QVSi6TLMtSuaJAbH5XMKLCyFe6m8iY4i12/zV8qPXgj8Bkhsio=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736436874; c=relaxed/simple;
-	bh=DT9CIAnVRiN2PnqrJuhSJoh7qfkKM7j/ZnVYY3aqjGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=r+2nLPJMda1xOCoov99JxYB75IhOu1PIc8CAsEf9LVNM52xOlgom99QgB907G9i5XRwRLoK4q/6wXk7/QDKBFK9JPUBj6BFZf8VeDJAJSG6H07bkyMKXywbhicZxh5V/ovy7JXOFr7UWBqP3IqwSnoeQO8IhHtIUTw2Oe7L9nzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=dSZiXVeP; arc=none smtp.client-ip=209.85.222.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f176.google.com with SMTP id af79cd13be357-7b6f0afda3fso106016385a.2
-        for <linux-usb@vger.kernel.org>; Thu, 09 Jan 2025 07:34:32 -0800 (PST)
+	s=arc-20240116; t=1736438560; c=relaxed/simple;
+	bh=75H6/0ajZvCmTXVSmpfAEKGoLWsp9W/9/mBv1iVOGf4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QARvdkzHHJSen20Pn12VUatpx6MRhqcTfy5lPPVRJmmeAKcJ2IFUr8NXYU+C0FScRgHSeAuAUNJPU6znp8lhLH0WCFww2lQd2QwDS84d9sCrlJNaUTJDe8Ufcqtvjui/qAucowdSq/z9XmheeZ5F7Gy07LT7x+CHuKv85dXx1fo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OQQhbGUw; arc=none smtp.client-ip=209.85.166.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f43.google.com with SMTP id ca18e2360f4ac-844ef6275c5so32616039f.0
+        for <linux-usb@vger.kernel.org>; Thu, 09 Jan 2025 08:02:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1736436872; x=1737041672; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jbUVZ9XRJFi5euaz9QC5eJqXsL1tEwWDbYO8wlBC7bI=;
-        b=dSZiXVePg/gMwYZ6uErPICYmrcFt214nbulDbrB9i+92sqxQZtMT53lv1FdAHgW8k/
-         sSEzpk6mZbITTd+DK8jKN0Joouhwx0d0OkwLlJspKG8oPa2yZhzoq/GXrJOrb5fVs/b0
-         x7ody1m/QfexTG4Lgw16w1yNhlTQC89tK28acvYdp+zb+xILQhXksMBqrI1/7S55UuR4
-         1LhU/Kk291tYRrJ5nOi4fXJ45O5L+zytVGAkAHslJyBaE/9Wd3XO2TsAKHdus0utL/bH
-         E/Z/wcY7bP0/6YC0DeEL1ZdC4mWzEFxclPYSRcat+WRY+CXHwncAm2/Rla7rZfayCgjx
-         G+3A==
+        d=linuxfoundation.org; s=google; t=1736438558; x=1737043358; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MDjh9QDKm25asxr19ZyL90eABxD3gHuiz1JVJyq7sVU=;
+        b=OQQhbGUwEDBaV8PwUNrlkBvkptkco3fiL4MzJPZfEdnOpj3OvB+OPg/4hJ65z91aZF
+         EmMOQt6GIN1DBv8eKDCUbZjxqdBP7uNeFQ4DB+m9pSYZklKaAel19HumjNJoKkDon4NN
+         O60Ay9p56/bQslnPSKHdWHGSwsfv8b3yHyHkQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736436872; x=1737041672;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jbUVZ9XRJFi5euaz9QC5eJqXsL1tEwWDbYO8wlBC7bI=;
-        b=apWw2nuwHUU1r3H5vL3qyLxdFY7ooteFWpMiISXDuL40cDevT0SkDm7zJKgeOesP8i
-         QuoR03yBE5hIOtAM//of8bA0cNdTVL3ASwhCPCGZVmt+9v4WXrwZ6mYNyPe5l8D0EQa6
-         P/eLU1Za2kP2cFEBnc5f/xb/8cmmZg2lvGlGYFJtSB5lK7srjNkZGsB9mLBu++KjcLQw
-         Gkawe1pqC1CVKKqWhW+cYRtRFVRNWsyqy7Z8jlKUrdSIGDc1tmVjLIc0xivUjezCxwv7
-         83eQzxS/xbN0hIAEXS3sG8yLKNReEhK+MQkYhoUZM2N0xKmhphtJPXbvE8Z+XC68gXHi
-         LCqg==
-X-Gm-Message-State: AOJu0YxUCKrVD/rDYs2e+SIYP7qKtCocm4KdssMV5C1wslaNCgVwI0mH
-	SlJL7Hoy2FYfngd/0DqVD0HF+yQ82NIEOoCPIoxV9zNjpJLxYMvjKOrIDDWXz4TZoRhbhEaUlVA
-	=
-X-Gm-Gg: ASbGncvwUVz5iHtHhu3gCIE2O9Co9x9LWRa/9YDLa4zQtyKZFa/7xhaDuPWDti+GfLG
-	7SNK91YBquvtBkNhAmXiTPTWdiNrTQqu6JgKqmjtIU+2c1OWRBmXPnQjK0h7JIOPuWDTqsoH6Rz
-	w2tNjJ/O1lR84IV/rKl2vLwd/m2d9EClcUrkaKm87ScZC2u8BpGUc5p5Rn20iSv0/Jsm08GI+yF
-	h5NJjLpjEYCn81atmd5bKgs2MI7sfUMD9/5cb5CODqA1dOiHTeH0xC0hOp0l/j7m5uTiYjkhX0=
-X-Google-Smtp-Source: AGHT+IFw04lVskRd/60WClL12cwgI20idzrAYG52Ch8vLGb3JQJXHSDMRfNwt6Vr54j2CbbtTIdiLQ==
-X-Received: by 2002:a05:620a:40d2:b0:7b6:d7d8:7348 with SMTP id af79cd13be357-7bcd97165d3mr1141349585a.31.1736436871811;
-        Thu, 09 Jan 2025 07:34:31 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7bce3503178sm76847485a.90.2025.01.09.07.34.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 07:34:31 -0800 (PST)
-Date: Thu, 9 Jan 2025 10:34:28 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Bitterblue Smith <rtl8821cerfe2@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: MT7601U with on-board storage reports incorrect capacity
-Message-ID: <2be45061-034f-4cbb-8ed1-f028bbb35936@rowland.harvard.edu>
-References: <060301fe-17e2-4061-bb01-f5660b5d10a3@gmail.com>
+        d=1e100.net; s=20230601; t=1736438558; x=1737043358;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MDjh9QDKm25asxr19ZyL90eABxD3gHuiz1JVJyq7sVU=;
+        b=LX6B+Suqp6/FARocW8heIgNeZgfERYlhgjL14dk45CRFXHN1bMbCS4mNokOG1KqBiE
+         9qcFMO84KFDr+wmLoIpLg9YgBPF6g9jDpzJJDVOxXwfpEPturTJzVXpSYEFt/lFSYpzQ
+         PTSb/x5U94bdZsc7e6XzNLcG/wkr1aR0m1SwoSLgSS8yvevDrmKPKQH0kZVg8qT6SFG/
+         ipxCFvp0muEvhwkGZect2cK4Wx1I97UAP04tPigvRGJrub/Oq3Cxbz/bS+nXS3XnJr0m
+         pz66TTp/l0qQcGzp5ADFVVgat59ou7PisdKu1qsYQft5zGv95xF/61vQgnnvndV+jDk7
+         K9Aw==
+X-Forwarded-Encrypted: i=1; AJvYcCWvEFInS0ur3i5xCuiGPYQsCNAz1pxukD7Z6uY1sNA6Gi2iV2JaSVi7wdDBkU09SCh6+/9UYOAu9xg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwntD8bsYBJkUML7GA65qmLKvVER/Qpa1EezUuZfnAQZenKXfDH
+	tSat4w7reL9Ogj5GigN2Dc/AZn5fCZLJZYf48L29z4H7RKZqipj4Pbu/IG/oeMg=
+X-Gm-Gg: ASbGncv+L7Oahcr69aJnrseS4rEu6KOrfMpA0Q3oUEAWBYsnbDC8ASkrpR4ONP17kCc
+	PXin61JzYbdK9YoAdAMj7gdzMr1iy2Ppg5AcKPijzo+Mn0/EBmWtEhF4/8Kgxl4YWgSkog9YykB
+	8xBwWzbLVG1FBVjRg9zbGW1MLiUIwbv4a56q8DtIhN9nds7Houniimvx8OVNzjbb4y9c5LSDFBd
+	JJsM6lySC0UOYdYJs9zlfwAVz7kniGKA4L+xOHgIXqHM+nuDCCMOJvxW+APm1604uMn
+X-Google-Smtp-Source: AGHT+IFJqIqZ9WchDZrl47kNdp0lcVFTFz3959SNA5TmVUyH/Y+O6Qgy5Sn7l/Fp9bRSzYscS50J0g==
+X-Received: by 2002:a05:6602:4a05:b0:844:e06e:53c6 with SMTP id ca18e2360f4ac-84ce0166661mr554190839f.11.1736438558084;
+        Thu, 09 Jan 2025 08:02:38 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id ca18e2360f4ac-84d61fa3d8asm38255439f.31.2025.01.09.08.02.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jan 2025 08:02:37 -0800 (PST)
+Message-ID: <2ff39cff-af3c-4020-81b3-4238efe6c2e3@linuxfoundation.org>
+Date: Thu, 9 Jan 2025 09:02:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <060301fe-17e2-4061-bb01-f5660b5d10a3@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] usbip: Fix seqnum sign extension issue in vhci_tx_urb
+To: xndcn <xndchn@gmail.com>
+Cc: Valentina Manea <valentina.manea.m@gmail.com>,
+ Shuah Khan <shuah@kernel.org>, Hongren Zheng <i@zenithal.me>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "open list:USB OVER IP DRIVER" <linux-usb@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241231161539.20192-1-xndchn@gmail.com>
+ <20241231161539.20192-2-xndchn@gmail.com>
+ <5ad65964-dcf7-47d2-8e5f-bf82066e55f4@linuxfoundation.org>
+ <CAJ=gGT3pAnKUCve1OV5SXVArz6HUdizu9wjM5tPJ_CrQ=sF=nw@mail.gmail.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <CAJ=gGT3pAnKUCve1OV5SXVArz6HUdizu9wjM5tPJ_CrQ=sF=nw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 09, 2025 at 04:02:58PM +0200, Bitterblue Smith wrote:
-> Hi,
+On 1/3/25 08:18, xndcn wrote:
+> Thanks.
 > 
-> I have this wifi device with on-board storage for the Windows driver:
+>> How did you find the problem?
+>> Why does it make sense to cast it to u32?
 > 
-> New USB device found, idVendor=148f, idProduct=2878, bcdDevice= 0.01
+> After running with usbip enough time, I happened to see logs like this:
+>> [ 293.863125] vhci_hcd vhci_hcd.0: Device attached
+>> [ 294.081110] usb 1-1: new high-speed USB device number 2 using vhci_hcd
+>> [ 294.193163] usb 1-1: SetAddress Request (2) to port 0
+>> [ 294.204334] vhci_hcd: cannot find a urb of seqnum 2147483648 max seqnum -2147483648
+>> [ 294.204850] vhci_hcd: stop threads
+>> [ 294.204851] vhci_hcd: release socket
+>> [ 294.204853] vhci_hcd: disconnect device
 > 
-> After switching to wifi mode, we can see it's a MT7601U:
+> Then I notice that on 64bit platform, when
+> atomic_inc_return(&vhci_hcd->seqnum) returns (2147483647 + 1, or
+> 0x80000000),
+> priv->seqnum (which is unsigned long, i.e. u64 on 64bit) will be
+> extends to 0xffffffff80000000
+> So we can fix the issue by cast it to u32.
 > 
-> New USB device found, idVendor=148f, idProduct=7601, bcdDevice= 0.00
-> 
-> The problem with this one is that it can't be mounted, nothing happens
-> for a long time. I'm testing with kernel 6.12.8-arch1-1 but it's been
-> like this for at least two years. 
-> 
-> The problem seems to be that reading from the "end" of the device
-> takes 17 seconds. I assume the reason for that is the fake capacity:
-> 
-> SCSI Payload (Read Capacity(10) Response Data)
->     [LUN: 0x0000]
->     [Command Set:CD-ROM (0x05) ]
->     [MMC Opcode: Read Capacity(10) (0x25)]
->     [Request in: 212]
->     [Response in: 217]
->     LBA: 65280 
->     Block size in bytes: 2048
->     Read capacity: 133693440 bytes (127.50 MiB)
-> 
-> The real capacity is probably just 8 MiB. The driver files stored in
-> it are ~7 MiB total.
-> 
-> This takes 17 seconds and returns 4096 bytes filled with 0xff:
-> 
-> SCSI CDB Read(10)
->     [LUN: 0x0000]
->     [Command Set:CD-ROM (0x05) ]
->     [Response in: 565]
->     Opcode: Read(10) (0x28)
->     Flags: 0x00
->     Logical Block Address (LBA): 0x0000fefc (65276)
->     ...0 0000 = Group: 0x00
->     Transfer Length: 2
->     Control: 0x00
-> 
-> Windows never tries to read that far. (The device works in Windows.)
-> 
-> How can this be fixed?
 
-Upgrade the WiFi device's firmware.  If you can convince the vendor to 
-fix the bug, which seems unlikely because it works okay with Windows.
+Can you send me the dmesg without and with your patch?
 
-Part of the partition probing (which tries to read the device's last 
-sector) is done by various userspace programs.  But I think some of it 
-is also done by the kernel, and as far as I know the only way to prevent 
-it is to build a kernel without support for the partition schemes which 
-store some of their data near the end of the device.
+thanks,
+-- Shuah
 
-Probably your best approach is to tell usb-storage to ignore the device 
-completely.  You can do this with a suitable module parameter for the 
-usb-storage driver.  For example, add:
-
-	usb-storage.quirks=148f:7601:i
-
-on the kernel's boot command line (or put a similar entry in an 
-/etc/modprobe.d/*.conf file if usb-storage is a loadable kernel module 
-on your system).  Of course, then you wouldn't be able to mount the 
-device or access the Windows driver files on it, but I imagine you don't 
-care about them very much while you're running Linux.
-
-> usb_modeswitch can switch it to wifi mode, so it's not a huge problem.
-> I'm just curious.
-
-If you really wanted, you could create a custom kernel which which 
-adjust the storage capacity of this particular device down to 8 MB.  But 
-you would never be able to convince anyone to include such a workaround 
-in the main kernel.
-
-Alan Stern
 
