@@ -1,108 +1,83 @@
-Return-Path: <linux-usb+bounces-19158-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19159-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7815AA070ED
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 10:08:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 164B4A07156
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 10:20:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C4301639F1
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 09:08:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93D4A3A2CB5
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 09:20:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5542215175;
-	Thu,  9 Jan 2025 09:07:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E80362153C0;
+	Thu,  9 Jan 2025 09:20:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="no/udivF"
+	dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b="WLGJFLJH"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28D6B2144DD;
-	Thu,  9 Jan 2025 09:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B1721518B;
+	Thu,  9 Jan 2025 09:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.194.8.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736413667; cv=none; b=tWnr398PzL5sKSNxEZHjf+Xt5Vf/2NUw+4vb+t1nu0WhjasfSu0QmRoGq/VjN+6ThcnLnsWGeMffWwRjh1wMoOXOWo1ob+0CnXVivPfM7BepDOvkD99SVbRmYi7BNXv3XOE3PSSrZao5rcQiWwJZPl+8lD+mQJgk5RwPpk/JQmk=
+	t=1736414433; cv=none; b=Ij6mNpP//fAklBvvFJlO7H9wPi28bEw/EJHDX5X+xKIS99IwL0tUUsptKetBX84VfCIfGkCJUY3w5LJi9MhLjx11l1X8ayzmA8oG17s9Tbqm2nxs2jovIaz2bC4SGoCoT290uOOHeeIGrhW0t+zZEO6S49sDFvac7NL82BPrDzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736413667; c=relaxed/simple;
-	bh=kCZJHYkTZ6PcjphRjEJz1QzfE8zO9hjqpcA0cSXxM78=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=UDVjfh+U3a9WHddW5UMLh0qOTFblzkGCo3uBLOD7zWYybZakNQ/Rv0Qw/hjq8CPV8q2oISgRbhJ1dkzcC+DKErtYGtqzq1jsqW8f54zX6VF1k26n+Q/Nd86c4+QPjPh7orIgQ1jkgUIom9SS2P/MrdT2CELE6zBBLu00LMJiJXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=no/udivF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D99C4CED2;
-	Thu,  9 Jan 2025 09:07:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736413667;
-	bh=kCZJHYkTZ6PcjphRjEJz1QzfE8zO9hjqpcA0cSXxM78=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=no/udivFXMpIbvTe6AY1lkQIn9nDq5/yrBR9adzt2Nq3nGgyCR3Ag5RObc7hXJn+h
-	 pwwo10okQqc15pkOk1iOkURRyn0atDWXFRS2q/MFmY+/Pkw8wB/LW0Vm+CFGncvkok
-	 ku5/6rJQcpmiEwGNv/XkUdUrQg58yeExRSnu8cY8rkzHma8lGyEfJ+fIaa6zAPEPeb
-	 8Z2IfNnit9JRzNifRiTdrBPPm0hZ6eksOi3zi5//TxOP8S68lZotNRSqlQqTiylUaH
-	 2N6eyWaotxhHd2lejA1qFyoIiwiYccanQ+31QNZEM00uGdNtq7auvHkFa6JnA6EsoQ
-	 bax2wdoXIZQ3w==
-Date: Thu, 9 Jan 2025 10:07:44 +0100 (CET)
-From: Jiri Kosina <jikos@kernel.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-cc: Benjamin Tissoires <bentiss@kernel.org>, 
-    Peter Hutterer <peter.hutterer@who-t.net>, linux-input@vger.kernel.org, 
-    USB mailing list <linux-usb@vger.kernel.org>, 
-    syzbot <syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com>, 
-    syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] HID: core: Fix assumption that Resolution Multipliers
- must be in Logical Collections
-In-Reply-To: <18b853f8-9da5-4a28-a845-111d42299478@rowland.harvard.edu>
-Message-ID: <69n008o0-42s0-o955-o9np-6r1rp0nq4on8@xreary.bet>
-References: <18b853f8-9da5-4a28-a845-111d42299478@rowland.harvard.edu>
+	s=arc-20240116; t=1736414433; c=relaxed/simple;
+	bh=5Uuo7GIQi6l554vNb26zWhXM2+4wEaja8beiy5977Dg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VfqY6wCNgttmIasMR7jsqxZjTcUXRHS4OL955tkBVbWxgPx01anYG19E942uKr4rnZuYHt4Kb6Bec5OA3G291Nov6WqpN8hP68a/94c4yLrHTlvkHq2dAlZLNVvoV4UtJB58fTz6ydOPi8M9Q/ESYJHDb+lMU2u+ViD6FuCvuqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it; spf=pass smtp.mailfrom=dolcini.it; dkim=pass (2048-bit key) header.d=dolcini.it header.i=@dolcini.it header.b=WLGJFLJH; arc=none smtp.client-ip=217.194.8.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dolcini.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dolcini.it
+Received: from gaggiata.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
+	by mail11.truemail.it (Postfix) with ESMTPA id 396981F932;
+	Thu,  9 Jan 2025 10:20:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dolcini.it;
+	s=default; t=1736414421;
+	bh=vcT5GsPR03/Mu+ViF50B2oZhu6Q+cj9VsPPi5wONoC8=;
+	h=Received:From:To:Subject;
+	b=WLGJFLJHtV1p/BHFjx0eCT8p7b6zvhtvAQBWNr5qP1MJFqxn6GwQFPW8AsOUP7bbx
+	 c4HL3C2RioB6D6QwVjlUnKwRhC31G5zdHkNaiQG5k2UW5DTaUh2TiBW78MyRA/OPFn
+	 v38lf1XviMS+qrWyY6ljTs0TTQ0V/CZdWp6nVkIn973iF+dDOzWPi7jS64HBDuyOLg
+	 JmR1Z0fleCDIajFa4K3Gs4YyiytMdNCvQe3lrb1DGfyeAM2HUq6n4c6CracIt3Ua0R
+	 vW7poUUyHYcTG7tPpWzQUTzkuuKH5L0WP4TW3EQ+xGHCZpt7GqIv84dOemZODy/QQf
+	 vud2BeclTbW0Q==
+Received: by gaggiata.pivistrello.it (Postfix, from userid 1000)
+	id D67237F84B; Thu,  9 Jan 2025 10:20:20 +0100 (CET)
+Date: Thu, 9 Jan 2025 10:20:20 +0100
+From: Francesco Dolcini <francesco@dolcini.it>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Francesco Dolcini <francesco@dolcini.it>, linux-usb@vger.kernel.org,
+	Peter Chen <peter.chen@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, ritesh.kumar@toradex.com
+Subject: Re: USB EHCI chipidea regression on NXP i.MX7
+Message-ID: <Z3-U1DXdMQ0eZaW2@gaggiata.pivistrello.it>
+References: <20250108093101.GA22448@francesco-nb>
+ <20250109073500.45gge4abb4h6mmay@hippo>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250109073500.45gge4abb4h6mmay@hippo>
 
-On Tue, 31 Dec 2024, Alan Stern wrote:
+On Thu, Jan 09, 2025 at 03:35:00PM +0800, Xu Yang wrote:
+> > If the USB port is connected to a USB HUB, and a device is connected at
+> > boot time to such a hub, the following errors are printed and the USB
+> > port is not functional.
+> 
+> Does this happen 100%?
+> I tried many time on i.MX7ULP-EVK board, but I can't reproduce this issue.
 
-> A report in 2019 by the syzbot fuzzer was found to be connected to two
-> errors in the HID core associated with Resolution Multipliers.  One of
-> the errors was fixed by commit ea427a222d8b ("HID: core: Fix deadloop
-> in hid_apply_multiplier."), but the other has not been fixed.
-> 
-> This error arises because hid_apply_multipler() assumes that every
-> Resolution Multiplier control is contained in a Logical Collection,
-> i.e., there's no way the routine can ever set multiplier_collection to
-> NULL.  This is in spite of the fact that the function starts with a
-> big comment saying:
-> 
-> 	 * "The Resolution Multiplier control must be contained in the same
-> 	 * Logical Collection as the control(s) to which it is to be applied.
-> 	   ...
-> 	 *  If no Logical Collection is
-> 	 * defined, the Resolution Multiplier is associated with all
-> 	 * controls in the report."
-> 	 * HID Usage Table, v1.12, Section 4.3.1, p30
-> 	 *
-> 	 * Thus, search from the current collection upwards until we find a
-> 	 * logical collection...
-> 
-> The comment and the code overlook the possibility that none of the
-> collections found may be a Logical Collection.
-> 
-> The fix is to set the multiplier_collection pointer to NULL if the
-> collection found isn't a Logical Collection.
-> 
-> Reported-by: syzbot+ec5f884c4a135aa0dbb9@syzkaller.appspotmail.com
-> Closes: https://lore.kernel.org/all/000000000000109c040597dc5843@google.com/
-> Signed-off-by: Alan Stern <stern@rowland.harvard.edu>
-> Cc: Peter Hutterer <peter.hutterer@who-t.net>
-> Fixes: 5a4abb36f312 ("HID: core: process the Resolution Multiplier")
-> Cc: stable@vger.kernel.org
+The issue happens with i.MX7D.
 
-Thanks a lot for hunting this down, Alan! Applied.
-
--- 
-Jiri Kosina
-SUSE Labs
+Francesco
 
 
