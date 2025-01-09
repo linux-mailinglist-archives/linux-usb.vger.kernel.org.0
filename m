@@ -1,124 +1,119 @@
-Return-Path: <linux-usb+bounces-19149-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19150-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE753A0663A
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 21:35:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6F84A069D6
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 01:17:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCF087A2E1C
-	for <lists+linux-usb@lfdr.de>; Wed,  8 Jan 2025 20:34:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAAEB165ED4
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 00:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D295E2036FD;
-	Wed,  8 Jan 2025 20:33:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA2AD1373;
+	Thu,  9 Jan 2025 00:16:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KY33ogob"
+	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="0QVZAGxA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86F1320126A;
-	Wed,  8 Jan 2025 20:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBCE623
+	for <linux-usb@vger.kernel.org>; Thu,  9 Jan 2025 00:16:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736368425; cv=none; b=CL0As6fAk8kk6Z4BHPMv478DVb9cfxr/WzIrPrNZgDBWXiZNAwzo1M2j0K5FCBmr00LvQgb0SWs92w6Vw1Uy5pQYO5wwlEIO67JNkRNmg2eA18OBakHta6KElRkjPwOcy+JEWOjvIOYe48rUvJ5NOru+GfOLR/D0IqiWYC/5xpY=
+	t=1736381815; cv=none; b=qIp4+DCW+esvphTBqJDkJ+SEIqwQA171ssjLGq2sGyim5emxJJdZQYJB+ipVoV1PMFrbGg/gAoPW6DaEh2ADmxUnfU71egyWQ9RUP2bC8s8D2tGzAyzCe2QSnmiN6Sq7gdHMNwjCkL8PBEPgpR8mR+5vJwU0BcPsxl4Ivl4adCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736368425; c=relaxed/simple;
-	bh=8lLqropqEcU0FdGW/MRNj8mjGkDzyxZe+T1gGsw1v2Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=oU4L83ChXxDbjo6pjpPoRc8OrYfL5VzrmREPMb54twNZH8hWXUGjpNR2vXVk84Vkgg6pWBwawty0ro6s+fIDPRnaomKgGRDTbSqT8jNzIxM8GSRwQPP+126piJd0s7Y83yVmFpXC/IFcfA5+XGZ+xRve6/YVX2sT9VHZZqEcXVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KY33ogob; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 508EmENC028206;
-	Wed, 8 Jan 2025 20:33:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	8lLqropqEcU0FdGW/MRNj8mjGkDzyxZe+T1gGsw1v2Y=; b=KY33ogoboEb81TD3
-	e5T3gaIDmGuhY9HCW/RjaDIAShLEActXm+o1zcoZQHqMdmkY7JAztyBag4e2u7W/
-	GhGqgkRsR5twyaUKpU5iRh2bFBstw/bMoyi0IG8JTGtIQvJk4ruTMpOwBwIFiTG7
-	lpuYbq2EPT+Qt2aQgDlIkt4FtshLcCNafrZMRjpejG1NA35/2NziU9ZTzpkLm+jd
-	I3+Wy5HumR7s3pwnv/djSL+8hcBtRDog/069/sAPbjtEiyOSpzIooYiEv6ml+eXp
-	UJxrcIt/HXp2zO+NXD8i393k+j6AhohfYI9C8dNlmhyi8rSJ1BrQI8ERzRKiSyxT
-	lldtzA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 441uefru2h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jan 2025 20:33:17 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 508KXGDK010892
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 8 Jan 2025 20:33:16 GMT
-Received: from [10.71.114.255] (10.80.80.8) by nalasex01b.na.qualcomm.com
- (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 8 Jan 2025
- 12:33:15 -0800
-Message-ID: <90f16650-933b-4ad8-8ee9-9d1b4aebecbf@quicinc.com>
-Date: Wed, 8 Jan 2025 12:33:15 -0800
+	s=arc-20240116; t=1736381815; c=relaxed/simple;
+	bh=l8h45rmrtu5TvOosJ+jBSKrsJDAFrXBcjCm8awQi+3Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fMaoYaQSMIl1fjEOkFwiiaZh0DWYXZRloTYca9fkXDH61+IZhwZJpcjnKjj3z1nNqE/9dZKhMmrQq275IW87WOePdD8fu3cSmonP6P7YsfBgNd23xasv3hsuhPo1n49KPMkOWctlv0tkzATHutl1/qkxvjxvT7pjBTd23n7662E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=0QVZAGxA; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2f4448bf96fso508952a91.0
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jan 2025 16:16:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1736381812; x=1736986612; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qwpegug0/ePQOD528Wsj7E18rEd/oQ+Z8n4jyxehuHw=;
+        b=0QVZAGxAdWY9AfADKMWoRLFBhP/PKFXSaWZtl0NnhqqA0WQAAox7jFliilee2wbWPW
+         PUVdFsbqhsJNXASiDmjW85FEGFDQ1ktcFiW5VitQo+6i0PQFs0Z71yld67e4F77XA/qt
+         NXkOFnNOQ+Tk+RgnysEf1p1cuLJo8V1jOwNZwOng297IM0+yicSamvGXgufzAYTj0wro
+         +WfmGXUVHy9HHDHgJMUg9qGJ1aDv8ikBogjb/CP5F1tTzPpP1sF1K8udRdWGJz5gfzjW
+         9ftqq03ybGWffciUnFQpHAAc8Y0U2KPxJzj2v7dSBlqqj9eh6rVhVUmLHpou/nt3oNRo
+         iaHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736381812; x=1736986612;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qwpegug0/ePQOD528Wsj7E18rEd/oQ+Z8n4jyxehuHw=;
+        b=WVPAHBxg0pRZu0fkJ4qr3LfUe3WrzzUxc1Ks/dZQRqOXLG3weZtnJBc3oWPWvqXZuP
+         5Az+d7rWPY6Gm2pjcoESr66K4CWzrlfnk1/OJCXrTcYeE95YqlZjmbSChBQIEWAajT8f
+         2W5XVSO63nNF2pGHrVCQBakRulAGfJJq9pphzHtXjERMh07cLTOzPS+7D3LxKAQSriM/
+         C+8t/FaLUI4nfMPlkjN5/Nq6Cqx9fpliwr6MPUQ5ON9sQdtfS8cnFxfXti2EyZ5TYrwT
+         Bn3jV8C/pHpvBUNxa+Zihh17eX2PiuoJWhgghItTxNTM4pgGu2C76MQFtRwCLH1FZx9+
+         DPDA==
+X-Gm-Message-State: AOJu0Yxt636Ew3uB0KiOx87trpHGX8LfiUXTjJGv7sK0C1LnvCnaPL9W
+	mYAUkYq6oh/oI2KuEV8KDIbjw3aGmFS1xIvFgmnXbB1ycH/mkAS4n3mdHGhhlMjaoAy71cwRVQW
+	+
+X-Gm-Gg: ASbGncs6izBxeeRZRRIdjQwclFgvpwj6kOOluGIz9PeqCNR+rZLO3zl1EtnAQVe4Xwt
+	DI3jArQgP2hUHIt5O7keV0MPwp+qLFVuJ0LIVOymTsp3TckNWP4Z2eJ3MgM2t/hCs9wSdA3Ltzm
+	sgDS3hSkgZyWBgvGgG30Xtdc+ZP1KzxydUdcjeMamsinMUxLHbFf7OFBOfoSd5iYLqGuyWjBcGY
+	TZpd4xPRjbFPAqTNvfJEfSAebW2QcBetwo6rPJkPf2776HlupYhOPWFECHsMGmBfXE3NCnSxqvq
+	E/KydmhzpSnXvhhHjPwttN+OWJ56Bic0MGtYh/6L4ss=
+X-Google-Smtp-Source: AGHT+IGm+c4+1Rj8kwJa+sIZHZv9T8WSe92h8qrUfrK/Fnn/yEU9dRXJxodONZB6tsn6FYu1qYDM0Q==
+X-Received: by 2002:a17:90b:2e0b:b0:2ee:7698:e565 with SMTP id 98e67ed59e1d1-2f548e9a4bemr7789748a91.8.1736381812500;
+        Wed, 08 Jan 2025 16:16:52 -0800 (PST)
+Received: from localhost.localdomain (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f54a2891e7sm2419859a91.21.2025.01.08.16.16.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 08 Jan 2025 16:16:52 -0800 (PST)
+From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+To: Thinh.Nguyen@synopsys.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>,
+	stable@vger.kernel.org
+Subject: [PATCH v2] usb: dwc3-am62: Fix an OF node leak in phy_syscon_pll_refclk()
+Date: Thu,  9 Jan 2025 09:16:38 +0900
+Message-Id: <20250109001638.70033-1-joe@pf.is.s.u-tokyo.ac.jp>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v31 00/32] Introduce QC USB SND audio offloading support
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
-        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
-        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
-        <tiwai@suse.com>, <krzk+dt@kernel.org>,
-        <pierre-louis.bossart@linux.dev>, <Thinh.Nguyen@synopsys.com>,
-        <robh@kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
-        <linux-input@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>
-References: <20241213235403.4109199-1-quic_wcheng@quicinc.com>
- <f5e5ef90-f9b2-4d0d-b127-b3f2490fbdc4@quicinc.com>
- <2025010713-stack-recycler-7f05@gregkh>
-Content-Language: en-US
-From: Wesley Cheng <quic_wcheng@quicinc.com>
-In-Reply-To: <2025010713-stack-recycler-7f05@gregkh>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: XlEgttEZsXkM4jDaYJ-XUa9i8SmVuv6H
-X-Proofpoint-GUID: XlEgttEZsXkM4jDaYJ-XUa9i8SmVuv6H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 phishscore=0 bulkscore=0 spamscore=0 malwarescore=0
- clxscore=1015 adultscore=0 suspectscore=0 mlxlogscore=609
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501080167
 
+phy_syscon_pll_refclk() leaks an OF node obtained by
+of_parse_phandle_with_fixed_args(), thus add an of_node_put() call.
 
-On 1/7/2025 2:32 AM, Greg KH wrote:
-> On Mon, Jan 06, 2025 at 03:02:37PM -0800, Wesley Cheng wrote:
->> Hi,
->>
->> On 12/13/2024 3:53 PM, Wesley Cheng wrote:
->>> Requesting to see if we can get some Acked-By tags, and merge on usb-next.
->>
->> Happy new years to everyone.  Before sending out another revision to
->> update the year for the license, did anyone have any feedback yet for
->> the current revision?
-> Let's just send a new version and if no one complains, I'll queue it up,
-> I feel like this has gone on too long...
->
+Cc: stable@vger.kernel.org
+Fixes: e8784c0aec03 ("drivers: usb: dwc3: Add AM62 USB wrapper driver")
+Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+---
+Changes in v2:
+- Add the stable tag.
+---
+ drivers/usb/dwc3/dwc3-am62.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Sounds good.  Thanks, Greg.  Submitted v32 with the updated year.
-
-
-Thanks
-
-Wesley Cheng
+diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
+index 5e3d1741701f..0a33ed958ebb 100644
+--- a/drivers/usb/dwc3/dwc3-am62.c
++++ b/drivers/usb/dwc3/dwc3-am62.c
+@@ -166,6 +166,7 @@ static int phy_syscon_pll_refclk(struct dwc3_am62 *am62)
+ 	if (ret)
+ 		return ret;
+ 
++	of_node_put(args.np);
+ 	am62->offset = args.args[0];
+ 
+ 	/* Core voltage. PHY_CORE_VOLTAGE bit Recommended to be 0 always */
+-- 
+2.34.1
 
 
