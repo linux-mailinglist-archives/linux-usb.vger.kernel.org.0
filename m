@@ -1,119 +1,165 @@
-Return-Path: <linux-usb+bounces-19150-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19151-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6F84A069D6
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 01:17:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7015DA06C88
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 04:56:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AAAEB165ED4
-	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 00:16:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B12713A59D8
+	for <lists+linux-usb@lfdr.de>; Thu,  9 Jan 2025 03:56:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA2AD1373;
-	Thu,  9 Jan 2025 00:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0980C154C05;
+	Thu,  9 Jan 2025 03:56:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="0QVZAGxA"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="zjMCLNvV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CBCE623
-	for <linux-usb@vger.kernel.org>; Thu,  9 Jan 2025 00:16:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C30B487BF
+	for <linux-usb@vger.kernel.org>; Thu,  9 Jan 2025 03:56:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736381815; cv=none; b=qIp4+DCW+esvphTBqJDkJ+SEIqwQA171ssjLGq2sGyim5emxJJdZQYJB+ipVoV1PMFrbGg/gAoPW6DaEh2ADmxUnfU71egyWQ9RUP2bC8s8D2tGzAyzCe2QSnmiN6Sq7gdHMNwjCkL8PBEPgpR8mR+5vJwU0BcPsxl4Ivl4adCU=
+	t=1736394992; cv=none; b=I5RZ9cRGkIVlOi2CwgHFAFD97JudGcJGInMGsfzRovjyDE1WEqzyyD8172To+iemKmRRDvqfdIIhrtfxOUIvgQltxQ3TQSBnYhlHmDUjwe8098uWyaSzWhlzvvLKrE825snnl3PaCwe67yHXIdhsOHxZs3bB+eIt43xCHRqhBFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736381815; c=relaxed/simple;
-	bh=l8h45rmrtu5TvOosJ+jBSKrsJDAFrXBcjCm8awQi+3Y=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=fMaoYaQSMIl1fjEOkFwiiaZh0DWYXZRloTYca9fkXDH61+IZhwZJpcjnKjj3z1nNqE/9dZKhMmrQq275IW87WOePdD8fu3cSmonP6P7YsfBgNd23xasv3hsuhPo1n49KPMkOWctlv0tkzATHutl1/qkxvjxvT7pjBTd23n7662E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=0QVZAGxA; arc=none smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2f4448bf96fso508952a91.0
-        for <linux-usb@vger.kernel.org>; Wed, 08 Jan 2025 16:16:52 -0800 (PST)
+	s=arc-20240116; t=1736394992; c=relaxed/simple;
+	bh=nnYbxItNV3grYE1ZD7AAO6D4lFOTFugIRpVse3vCnhk=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Mmn5EK6g8rCMNr69flfrOPFQJPEVcz+N+bQsW5xBEEyTYHI53ztF4caAt3zaa9aZZHZFMyd+Hup/MHbVrBkLMxt8VC4T1XFVtkY2CS8D0z8FAZue5K9s5xXrXqBgRITVvmo40w1zOsqO3Bdz4g70yePzIkBNuczQa4wXl9H5Tfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=zjMCLNvV; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-21632eacb31so5969925ad.0
+        for <linux-usb@vger.kernel.org>; Wed, 08 Jan 2025 19:56:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1736381812; x=1736986612; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=qwpegug0/ePQOD528Wsj7E18rEd/oQ+Z8n4jyxehuHw=;
-        b=0QVZAGxAdWY9AfADKMWoRLFBhP/PKFXSaWZtl0NnhqqA0WQAAox7jFliilee2wbWPW
-         PUVdFsbqhsJNXASiDmjW85FEGFDQ1ktcFiW5VitQo+6i0PQFs0Z71yld67e4F77XA/qt
-         NXkOFnNOQ+Tk+RgnysEf1p1cuLJo8V1jOwNZwOng297IM0+yicSamvGXgufzAYTj0wro
-         +WfmGXUVHy9HHDHgJMUg9qGJ1aDv8ikBogjb/CP5F1tTzPpP1sF1K8udRdWGJz5gfzjW
-         9ftqq03ybGWffciUnFQpHAAc8Y0U2KPxJzj2v7dSBlqqj9eh6rVhVUmLHpou/nt3oNRo
-         iaHA==
+        d=google.com; s=20230601; t=1736394990; x=1736999790; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=EQevtosOZdLWnoQGZ8KDWWGERMcs6wRsxcX07h50iCs=;
+        b=zjMCLNvVdVTJw5Hu+wKIAzLUB7Xbu2T+NQ3HaG4y+I6eVMsQnUqV6BWj/uNND8JDmZ
+         tgoS/J/iAm6cBGh6SeNxNtQsuJkxYTVsuusCWa0UfQB6C/r/Wrb+T6qdzp9/CZj9HxT9
+         cYmnqdSN3iCZrsrifPC4q9DEcCOBTltGoEvEeU6SxniMtF46ZfX9mZ2sc5G5aU/StvJs
+         Ydu4hPpNdEQAGSOyMapiblkJ1kFDGa/sZ6jM5DfkxO3ny/H20D7hC45+5689sYe7Ie7N
+         SsszDSjRH3bHBzqaSdJexxtCdlzdZ6rerqqn2FTzkCdlSo8VZa32rrCyLxwDVmlS5Wtz
+         SsEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736381812; x=1736986612;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qwpegug0/ePQOD528Wsj7E18rEd/oQ+Z8n4jyxehuHw=;
-        b=WVPAHBxg0pRZu0fkJ4qr3LfUe3WrzzUxc1Ks/dZQRqOXLG3weZtnJBc3oWPWvqXZuP
-         5Az+d7rWPY6Gm2pjcoESr66K4CWzrlfnk1/OJCXrTcYeE95YqlZjmbSChBQIEWAajT8f
-         2W5XVSO63nNF2pGHrVCQBakRulAGfJJq9pphzHtXjERMh07cLTOzPS+7D3LxKAQSriM/
-         C+8t/FaLUI4nfMPlkjN5/Nq6Cqx9fpliwr6MPUQ5ON9sQdtfS8cnFxfXti2EyZ5TYrwT
-         Bn3jV8C/pHpvBUNxa+Zihh17eX2PiuoJWhgghItTxNTM4pgGu2C76MQFtRwCLH1FZx9+
-         DPDA==
-X-Gm-Message-State: AOJu0Yxt636Ew3uB0KiOx87trpHGX8LfiUXTjJGv7sK0C1LnvCnaPL9W
-	mYAUkYq6oh/oI2KuEV8KDIbjw3aGmFS1xIvFgmnXbB1ycH/mkAS4n3mdHGhhlMjaoAy71cwRVQW
-	+
-X-Gm-Gg: ASbGncs6izBxeeRZRRIdjQwclFgvpwj6kOOluGIz9PeqCNR+rZLO3zl1EtnAQVe4Xwt
-	DI3jArQgP2hUHIt5O7keV0MPwp+qLFVuJ0LIVOymTsp3TckNWP4Z2eJ3MgM2t/hCs9wSdA3Ltzm
-	sgDS3hSkgZyWBgvGgG30Xtdc+ZP1KzxydUdcjeMamsinMUxLHbFf7OFBOfoSd5iYLqGuyWjBcGY
-	TZpd4xPRjbFPAqTNvfJEfSAebW2QcBetwo6rPJkPf2776HlupYhOPWFECHsMGmBfXE3NCnSxqvq
-	E/KydmhzpSnXvhhHjPwttN+OWJ56Bic0MGtYh/6L4ss=
-X-Google-Smtp-Source: AGHT+IGm+c4+1Rj8kwJa+sIZHZv9T8WSe92h8qrUfrK/Fnn/yEU9dRXJxodONZB6tsn6FYu1qYDM0Q==
-X-Received: by 2002:a17:90b:2e0b:b0:2ee:7698:e565 with SMTP id 98e67ed59e1d1-2f548e9a4bemr7789748a91.8.1736381812500;
-        Wed, 08 Jan 2025 16:16:52 -0800 (PST)
-Received: from localhost.localdomain (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f54a2891e7sm2419859a91.21.2025.01.08.16.16.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2025 16:16:52 -0800 (PST)
-From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-To: Thinh.Nguyen@synopsys.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] usb: dwc3-am62: Fix an OF node leak in phy_syscon_pll_refclk()
-Date: Thu,  9 Jan 2025 09:16:38 +0900
-Message-Id: <20250109001638.70033-1-joe@pf.is.s.u-tokyo.ac.jp>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1736394990; x=1736999790;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EQevtosOZdLWnoQGZ8KDWWGERMcs6wRsxcX07h50iCs=;
+        b=MC/XeS48L8PNsi3THT1JniLBdavydEgpiLj0XOplJhNCF+yz50awb4Nhfhuh68Dxg6
+         UvI1aX/ltvg9P7VJkOAoAKHFJyAThJeU+1UvwXVKjblFt23hsWFafV1mONzFcKAmWavi
+         A3h7Qq63Di56hyHWHAx+mJMWMcngLcbHb/XGlDjvXnkkn32qRSgW0UqkGjwQchq2tD/R
+         ijoXZa1oxFiIZzU/sz/eQim5QYtGVvQXL5Msw0nWDdn/vXh3jMCQHpS7h8AkJbxt7XqB
+         YQYlYNhyA2QFRQnXaSIf6NPMDcL1rG4LhiFaYcYoD4NaXuHSZ5/4JREgspea1KaRSuSs
+         /HXA==
+X-Gm-Message-State: AOJu0YxKmiXuw5ictq7HhDa+uAKdiEupPOSciVIn/q93cd+0PZX8vwyD
+	qF4FCuL+q+qq4yl44RSwnydlhHn3vzeqvRNyJ7U5A/y2wOa4vUduzDVLC72R4tPQI+z0UK2wUff
+	sGrJk6xmsnZSZUQ==
+X-Google-Smtp-Source: AGHT+IEU1x7PpwbS47PBemW1WDcvS8xcqLpfy6S+7l6RoeL5PwIgcDc/SqYTo1ldAAnjY4llyKX3t79pKjkbrEQ=
+X-Received: from pfbbd43.prod.google.com ([2002:a05:6a00:27ab:b0:728:aad0:33a4])
+ (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:3a83:b0:1e1:afd3:bbfc with SMTP id adf61e73a8af0-1e88cf7846fmr9180792637.3.1736394990134;
+ Wed, 08 Jan 2025 19:56:30 -0800 (PST)
+Date: Thu,  9 Jan 2025 03:55:04 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
+Message-ID: <20250109035605.1486717-1-guanyulin@google.com>
+Subject: [PATCH v7 0/5] Support system sleep with offloaded usb transfers
+From: Guan-Yu Lin <guanyulin@google.com>
+To: gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com, 
+	mathias.nyman@intel.com, stern@rowland.harvard.edu, perex@perex.cz, 
+	tiwai@suse.com, sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com, 
+	ricardo@marliere.net, lijiayi@kylinos.cn, quic_jjohnson@quicinc.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-sound@vger.kernel.org, Guan-Yu Lin <guanyulin@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-phy_syscon_pll_refclk() leaks an OF node obtained by
-of_parse_phandle_with_fixed_args(), thus add an of_node_put() call.
+Wesley Cheng and Mathias Nyman's USB offload design enables a co-processor
+to handle some USB transfers, potentially allowing the main system to
+sleep and save power. However, Linux's power management system halts the
+USB host controller when the main system isn't managing any USB transfers.
+To address this, the proposal modifies the system to recognize offloaded
+USB transfers and manage power accordingly.
 
-Cc: stable@vger.kernel.org
-Fixes: e8784c0aec03 ("drivers: usb: dwc3: Add AM62 USB wrapper driver")
-Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
----
+This involves two key steps:
+1. Transfer Status Tracking: Propose xhci_sideband_get and
+xhci_sideband_put to track USB transfers on the co-processor, ensuring the
+system is aware of any ongoing activity.
+2. Power Management Adjustment:  Modifications to the USB driver stack
+(dwc3 controller driver, xhci host controller driver, and USB device
+drivers) allow the system to sleep without disrupting co-processor managed
+USB transfers. This involves adding conditional checks to bypass some
+power management operations.
+
+patches depends on series "Introduce QC USB SND audio offloading support" 
+https://lore.kernel.org/lkml/20241213235403.4109199-1-quic_wcheng@quicinc.com/T/
+
+changelog
+----------
+Changes in v7:
+- Remove counting mechanism in struct usb_hcd. The USB device's offload
+  status will be solely recorded in each related struct usb_device.
+- Utilizes `needs_remote_wakeup` attribute in struct usb_interface to
+  control the suspend flow of USB interfaces and associated USB endpoints.
+  This addresses the need to support interrupt transfers generated by
+  offloaded USB devices while the system is suspended.
+- Block any offload_usage change during USB device suspend period.
+
+Changes in v6:
+- Fix build errors when CONFIG_USB_XHCI_SIDEBAND is disabled.
+- Explicitly specify the data structure of the drvdata refereced in
+  dwc3_suspend(), dwc3_resume().
+- Move the initialization of counters to the patches introducing them.
+
+Changes in v5:
+- Walk through the USB children in usb_sideband_check() to determine the
+  sideband activity under the specific USB device. 
+- Replace atomic_t by refcount_t.
+- Reduce logs by using dev_dbg & remove __func__.
+
+Changes in v4:
+- Isolate the feature into USB driver stack.
+- Integrate with series "Introduce QC USB SND audio offloading support"
+
+Changes in v3:
+- Integrate the feature with the pm core framework.
+
 Changes in v2:
-- Add the stable tag.
----
- drivers/usb/dwc3/dwc3-am62.c | 1 +
- 1 file changed, 1 insertion(+)
+- Cosmetics changes on coding style.
 
-diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
-index 5e3d1741701f..0a33ed958ebb 100644
---- a/drivers/usb/dwc3/dwc3-am62.c
-+++ b/drivers/usb/dwc3/dwc3-am62.c
-@@ -166,6 +166,7 @@ static int phy_syscon_pll_refclk(struct dwc3_am62 *am62)
- 	if (ret)
- 		return ret;
- 
-+	of_node_put(args.np);
- 	am62->offset = args.args[0];
- 
- 	/* Core voltage. PHY_CORE_VOLTAGE bit Recommended to be 0 always */
+[v3] PM / core: conditionally skip system pm in device/driver model
+[v2] usb: host: enable suspend-to-RAM control in userspace
+[v1] [RFC] usb: host: Allow userspace to control usb suspend flows
+---
+
+Guan-Yu Lin (5):
+  usb: dwc3: separate dev_pm_ops for each pm_event
+  usb: xhci-plat: separate dev_pm_ops for each pm_event
+  usb: add apis for offload usage tracking
+  xhci: sideband: add api to trace sideband usage
+  usb: host: enable USB offload during system sleep
+
+ drivers/usb/core/driver.c         | 145 ++++++++++++++++++++++++++++--
+ drivers/usb/core/endpoint.c       |   8 --
+ drivers/usb/core/usb.c            |   4 +
+ drivers/usb/dwc3/core.c           | 105 +++++++++++++++++++++-
+ drivers/usb/dwc3/core.h           |   1 +
+ drivers/usb/host/xhci-plat.c      |  42 ++++++++-
+ drivers/usb/host/xhci-sideband.c  |  82 +++++++++++++++++
+ include/linux/usb.h               |  27 +++++-
+ include/linux/usb/hcd.h           |   7 ++
+ include/linux/usb/xhci-sideband.h |   6 ++
+ sound/usb/qcom/qc_audio_offload.c |   3 +
+ 11 files changed, 410 insertions(+), 20 deletions(-)
+
 -- 
-2.34.1
+2.47.1.613.gc27f4b7a9f-goog
 
 
