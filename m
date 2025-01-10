@@ -1,87 +1,82 @@
-Return-Path: <linux-usb+bounces-19200-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19201-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D662A09630
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2025 16:45:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A524A09635
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2025 16:45:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5CD697A3A06
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2025 15:45:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 319FD3A9F81
+	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2025 15:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96CB3211A03;
-	Fri, 10 Jan 2025 15:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57F59212B34;
+	Fri, 10 Jan 2025 15:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="USXoiDRm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCQa0pdg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f52.google.com (mail-qv1-f52.google.com [209.85.219.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91D5520E035
-	for <linux-usb@vger.kernel.org>; Fri, 10 Jan 2025 15:44:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AAC211A3E;
+	Fri, 10 Jan 2025 15:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736523899; cv=none; b=dseM7We20vW8iEtqX8pQ+ZS7gD/zN0MIx8keI/Qe8qVlNuiMl6WmzeUBZUd2Pco+PvN5oU9fbyfo20jkbOni9sPxZy/PEUysedmzelO2MPfKeJwN6GLqq7rr0ZsvgsfsBlMtZlN4m8pLQFROfJpxqJG1KU2Cwt2xHHE5hC4vaVQ=
+	t=1736523903; cv=none; b=IiMSg7SPxnPRpXiDWPw/Waplq8rzXIGlZuD+RTJJLY/xI7mGDeMyFG2BzyI0jWHm0+c2m5JVrK01osnfwkTiQIrB6qo5BKKQ5KZoAZz3d7xM3Tgb2h4mKWSVGa2hTecgx3TYEDmfAHqoonAF/YXl0BgHegb/t5E85aJ4JvhLy2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736523899; c=relaxed/simple;
-	bh=2YHd/xEIXsTeUXVN4rOdVMuCXbGDJ+OJX04WA75eC3c=;
+	s=arc-20240116; t=1736523903; c=relaxed/simple;
+	bh=OTGkN3XvR9yS3XjEo4HOuIC3KncL4iFmKtSsBY8wwy8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pj6rYfQ7sXsCvBDF05ea/Ztmh7TdSIL2+U9ZalOWpWh7NuCD/wriUL9j6q//Mv++25Zfoj3C9JS468Jsw6idC9RQRtA/eDTbnVA8vab26MWjMIgreTY3znMZcUq4/XtuMasuvwF5Aj3deJH0iBphu3jLFTO1WUi3lBx5IKAwXW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=USXoiDRm; arc=none smtp.client-ip=209.85.219.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f52.google.com with SMTP id 6a1803df08f44-6dd1962a75bso16396126d6.3
-        for <linux-usb@vger.kernel.org>; Fri, 10 Jan 2025 07:44:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1736523896; x=1737128696; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MapozRkTPgyA0rzoSDPzN8c9CZKYG/kmmqSvGjXwZIQ=;
-        b=USXoiDRmptalGBa7n528wpp7kR+qvYGu1qwHdHAuThRpZGFKbEpGZplyrTE1IQ783t
-         4l7Y/Bd/UuVvPz6zoE7STbp3MXoMVmD+ZnxQH/CDn6AaOuJw01WBWeNSmMUmMQwgw4OG
-         YEm1lWKRy0AaCcI0JUMe+V3wxEM/ITElHA6Kcctw3JlK3slGX9lnsTBz70FFL0vWRuQE
-         R1o3sq34VqkmD7e0wmWiOBBZftJE9MqP/htu1DK9qv/ac2lZziNVqG88trRkTpplVo26
-         z7R17dm99GIrQlgnMuu7PVeiX8WygYBWzS5Hf7jfUzw+TV3oQdWa2o+Yu8NRr7WT2y+U
-         Ul7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736523896; x=1737128696;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MapozRkTPgyA0rzoSDPzN8c9CZKYG/kmmqSvGjXwZIQ=;
-        b=HqVJ1x6giE3bxMpc1NXwu4c3FHGXvZMY0yO7yG1Atja8L2cwP/O+Lu5ZUhEiIQO55M
-         gANEip1skiRLfkGYY8MDzp0mAHozcBy9gG0KrL9gV0aw62Eau0QUPvKW8ZTjWKt977sH
-         6Rpuy2BXkB8iuJqsFizPGpxNKEWmqs0o32/H2F8KkA9W7jsuc25EBxuQBW48Uz1IYaub
-         PIayMsB+YbTJqG9EQ2mi5216Ch1DCyP7Gz0vgwiEAAw3aF7XNMzOKZyZexc6PZgEFv8x
-         fP4kARtRj6PBFpQzsEqbPSOuvDqyzuDkcgxwWQJw+qYT+MrAgpxHTP8g2Hl1QVgic0rA
-         Iwyw==
-X-Forwarded-Encrypted: i=1; AJvYcCXTDY2FYj4NduFP7RA31xO0lOWFmcEyPiWvlHZqQs6Wdjubs3IL3fYlqKYDcJGzWqfUjrIiaj5+Npc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhWdTlIURvIRuoUhvctMMMa1SUJODLyBEdJyY5fdHR96dmtOFF
-	OIuYB7Kg5AzF89s0qqHy5sQCg8HH8io29MvVDd8K4VQCrJqSJpt8B3BcsK/ugg==
-X-Gm-Gg: ASbGncv1tSrZ5Vixg2wO4kk0vf9Ii1x3T49qWCz3piGnVOiWTerKohqrvVBDmtdqThA
-	ohif1QdwhA2s6neov/fNbz/xEi4x2+HRGgMFhk7m4XZ4uZ6vHj8juQLPuqx+BHgaz2MEYyMaCXS
-	3KudAID6dxNqDwCZ7yrSaMXTjOKnRRPbAuQMnufkX2ik6HdXlCqe7Nr4FandIl94NQdUKTOiWNH
-	C2PKoIAeyv5UTuDufPbwnmckedL9pvSZ+VA6f3YrClp8msDAYQ4CR3dkQ==
-X-Google-Smtp-Source: AGHT+IF0RpZocJNE1ArqvKlBEjytgNfQVhmD91xG/c7hrqqcIVnudSSTZQaw6Jur8F228MQhz3Qpqg==
-X-Received: by 2002:a05:6214:3c8f:b0:6cd:ec00:205e with SMTP id 6a1803df08f44-6df9b0eda40mr178930136d6.0.1736523896606;
-        Fri, 10 Jan 2025 07:44:56 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::bde5])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6dfade73245sm10216446d6.76.2025.01.10.07.44.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Jan 2025 07:44:56 -0800 (PST)
-Date: Fri, 10 Jan 2025 10:44:52 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: "Yo-Jung (Leo) Lin" <leo.lin@canonical.com>
-Cc: gregkh@linuxfoundation.org, rafael@kernel.org, pavel@ucw.cz,
-	len.brown@intel.com, bhelgaas@google.com, duanchenghao@kylinos.cn,
-	dlemoal@kernel.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	hdegoede@redhat.com
-Subject: Re: [PATCH] USB: Prevent xhci from resuming root hub during suspend
- entrance
-Message-ID: <b16e2b38-e9f8-43af-9df0-0510895c02ee@rowland.harvard.edu>
-References: <20250110084413.80981-1-leo.lin@canonical.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Rx+fN8UMor4qlSqjaMVjHPGuxCRdx2KPXWsr2oFf4VaLKPX2PDI195xu6jxb8JdYPpHMjIpz5eEg5Uelzz30dORT5kQzAemoOYt5fHsBaT6aKuEzYbWrzA1U4tgpl5SgGPO2iJbMYXYiCi9ivfd+3CMIBN9bh0sika3FnBZI4cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCQa0pdg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 143C8C4CED6;
+	Fri, 10 Jan 2025 15:45:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736523903;
+	bh=OTGkN3XvR9yS3XjEo4HOuIC3KncL4iFmKtSsBY8wwy8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XCQa0pdg2qxKVtHtTkJ4SGoINH4HtU7FC0jf6BspFQquH/vW75BYx+9A5FEStYCBQ
+	 E9JxXVi5iN71mutTaOOXYnQOT2oRUN9f4IAA8zQnPkTUAT+IFiIsoDMc75hRAe3/mQ
+	 RJ3i+SA0ugZ/4I04jr7lzzWM6IjPSfwYfS+ZvVkKMRCtfu6bMvkaK6DgBZhUH428gN
+	 6+8cSmkG63Gu95c4is8beF+nx5sMV1NKT30rMOnUyX48jfAQ/wCXNVVUtdo7lb/+dH
+	 FiwoRnp9ge/xuuiuc1Ihc3S8ozZWKgatnci64pA03MaKC9qvewi3Wz78cjpP6E4KfP
+	 gquUU5DOldO0A==
+Date: Fri, 10 Jan 2025 09:45:02 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: Jassi Brar <jaswinder.singh@linaro.org>,
+	Andrew Jeffery <andrew@codeconstruct.com.au>,
+	Tianping Fang <tianping.fang@mediatek.com>,
+	Biju Das <biju.das.jz@bp.renesas.com>,
+	Benjamin Bara <benjamin.bara@skidata.com>,
+	linux-aspeed@lists.ozlabs.org,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	linux-kernel@vger.kernel.org, Al Cooper <alcooperx@gmail.com>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Justin Chen <justin.chen@broadcom.com>,
+	linux-renesas-soc@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	Benjamin Herrenschmidt <benh@kernel.crashing.org>,
+	linux-tegra@vger.kernel.org, Bjorn Andersson <andersson@kernel.org>,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	Ahmad Zainie <wan.ahmad.zainie.wan.mohamad@intel.com>,
+	Del Regno <angelogioacchino.delregno@collabora.com>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Joel Stanley <joel@jms.id.au>,
+	Macpaul Lin <macpaul.lin@mediatek.com>
+Subject: Re: [PATCH] dt-bindings: usb: Correct indentation and style in DTS
+ example
+Message-ID: <173652390194.2924780.6221015444062586872.robh@kernel.org>
+References: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -90,32 +85,37 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250110084413.80981-1-leo.lin@canonical.com>
+In-Reply-To: <20250107131015.246461-1-krzysztof.kozlowski@linaro.org>
 
-On Fri, Jan 10, 2025 at 04:44:10PM +0800, Yo-Jung (Leo) Lin wrote:
-> The commit d9b4067aef50 ("USB: Fix the issue of task recovery failure
-> caused by USB status when S4 wakes up") fixed an issue where if an USB
-> port change happens during the entering steps of hibernation, xhci driver
-> would attempt to resume the root hub, making the hibernation fail.
+
+On Tue, 07 Jan 2025 14:10:13 +0100, Krzysztof Kozlowski wrote:
+> DTS example in the bindings should be indented with 2- or 4-spaces and
+> aligned with opening '- |', so correct any differences like 3-spaces or
+> mixtures 2- and 4-spaces in one binding.
 > 
-> System-wide suspend may fail due to the same reason, but this hasn't been
-> addressed yet. This has been found on HP ProOne 440[1], as well as on
-> some newer Dell all-in-one models. When suspend fails due to this reason,
-> the kernel would show the following messages:
+> No functional changes here, but saves some comments during reviews of
+> new patches built on existing code.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  .../bindings/usb/aspeed,usb-vhub.yaml         | 40 +++++++++----------
+>  .../devicetree/bindings/usb/brcm,bdc.yaml     | 14 +++----
+>  .../devicetree/bindings/usb/cypress,hx3.yaml  | 24 +++++------
+>  .../devicetree/bindings/usb/dwc2.yaml         |  4 +-
+>  .../devicetree/bindings/usb/fcs,fsa4480.yaml  | 20 +++++-----
+>  .../bindings/usb/intel,keembay-dwc3.yaml      | 30 +++++++-------
+>  .../devicetree/bindings/usb/ite,it5205.yaml   | 18 ++++-----
+>  .../bindings/usb/maxim,max3420-udc.yaml       | 28 ++++++-------
+>  .../bindings/usb/nvidia,tegra210-xusb.yaml    |  4 +-
+>  .../bindings/usb/renesas,rzv2m-usb3drd.yaml   | 36 ++++++++---------
+>  .../bindings/usb/renesas,usb3-peri.yaml       | 24 +++++------
+>  .../devicetree/bindings/usb/ti,hd3ss3220.yaml | 38 +++++++++---------
+>  .../bindings/usb/ti,tusb73x0-pci.yaml         |  6 +--
+>  .../devicetree/bindings/usb/ti,usb8020b.yaml  | 20 +++++-----
+>  .../devicetree/bindings/usb/ti,usb8041.yaml   | 16 ++++----
+>  15 files changed, 161 insertions(+), 161 deletions(-)
+> 
 
-I believe this problem was discussed on the mailing list before, and it 
-turned out that the issue was caused by a bug in the xhci-hcd driver, 
-not a bug in the USB core.
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-Basically, suspend is _supposed_ to fail if a wakeup event occurs while 
-the suspend is in progress.  As I recall, the bug in xhci-hcd was that 
-it treats some non-wakeup events as if they were wakeup events.
-
-In particular, a port change on the root hub should be treated as a 
-wakeup event if and only if the root hub is enabled for wakeup.  Does 
-xhci-hcd check for this before failing the suspend?
-
-This reasoning shows that your proposed fix is incorrect.
-
-Alan Stern
 
