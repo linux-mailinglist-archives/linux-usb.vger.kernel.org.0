@@ -1,135 +1,139 @@
-Return-Path: <linux-usb+bounces-19211-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19212-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEEC7A0A572
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 19:55:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 021B9A0A5C6
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 21:09:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7A5F169274
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 18:55:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F39D73A3A78
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 20:09:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 279D11B81C1;
-	Sat, 11 Jan 2025 18:54:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1121B85CB;
+	Sat, 11 Jan 2025 20:09:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Yycgr1Eo"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cOmFDntc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03DB11BD027
-	for <linux-usb@vger.kernel.org>; Sat, 11 Jan 2025 18:54:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73C8817C68;
+	Sat, 11 Jan 2025 20:09:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736621657; cv=none; b=qosP4yl4jyiDWnt4fNhLn7Cr5k9Y+x9JEF4G2027PHT//YAuz9yaTyeGE6RC3bPaZ7VCX2XtVqh/EuikcmlQf6Rpts+sxPDycc4zES2/Ldn4fmu5QkUQO7NH4PD6+DdNWVXFcnJHyVyMXFP26tLYgvUg4BhFjJBwFsYFi1cDH70=
+	t=1736626157; cv=none; b=jXLoE7Y+VEQilW2F+li3vcRfuUVFup3Hw5G6X5/xhMDZWImhgvFVAM8ttBMq2p8mNyG150C/NyF9lIsCN2rQY1dsmb+G/5w6ouZgZHGUOyBBj8HDiUKs6PoGG7rrDu9RFtGahKJJ9166SoiXM5+ar3nqzO5539E5XnJvq786idE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736621657; c=relaxed/simple;
-	bh=Tyjms/Yti/UvFb8+9BSbIe16lMX+RInIq2Aum6XvGnA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JSQjkXa+CLjwe0JAfyJBA83L7AVgwMCZll2hNeF04X6M9IjdMHRDZl6vovt+g7bfRVRsy88z+0rihtr8c98lid2SIeaNpD6fgOwZR1P+nMSd1nCGsyC6OB9exZwJVp4l7MkZZZW90q2eFWX4uZy3YWhInh60DwURA2l53mnzw40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Yycgr1Eo; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-436246b1f9bso4370405e9.1
-        for <linux-usb@vger.kernel.org>; Sat, 11 Jan 2025 10:54:15 -0800 (PST)
+	s=arc-20240116; t=1736626157; c=relaxed/simple;
+	bh=ulQ0vpACgRJnm6O1Q9Y6F7irckY33aVn5G++FNwQmg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=NCW5d+/yShdcH8T6hEQe4eqr8y8sxrJ3+mNwwEyPa7q9nml4OaLV30mGoLx7lJtmQUn0m3H5Efd2fpMWEt7w/J/HkLNZ770Q/JUXGNx26NGiHxz2kCSfbHiUH2g3dEWRln6Y3zwW3egeNHMLLcyTkOk24VSTMtoZTrtA14VW7tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cOmFDntc; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43675b1155bso35631415e9.2;
+        Sat, 11 Jan 2025 12:09:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736621654; x=1737226454; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HPN0ghv4POmAX7O/LF6CWcXvpxXfP5ryfl6t+1HzMDw=;
-        b=Yycgr1EoXbKLETgLN6Dpq7aC7Yl7+Gq8f+79o5eOPBvso3sYucJnC0UE1Ug25FpoVx
-         EVIuYtD/yStb1OZJpc2D7ZYGqPQqgf9F1gE2C2zzIV3BfBbGS0H8Xlnk3jUCwGLddaA2
-         0oPPHsmXcTucsyJBjNylMQoBHgPFWy1elvDemHm39+uFEG6ZcQFebxnbQje2rO4YWXwB
-         7HwDdYcHbx202eCtBMi7yQPUkW/Qp9dOTJYxaUceMv/GGv15MFTo9iUecvcDmqg99DJ/
-         TTQUH/TtAP7MmHApaJTZb4WbKrtGPPWJ8FjPPKpfWrRkFivg6TC80hZhsgEvz1M4H29+
-         Pddg==
+        d=gmail.com; s=20230601; t=1736626154; x=1737230954; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/1V1Gr47SLXD7h4Qx7pGEm9MFBBRsQqFOq79aNqbb0A=;
+        b=cOmFDntcbDQD3vfUwWrDJhiYoDuzuyaVNPTYx8lUCn2pUT8UOiwBdgQrKtKKOMufLe
+         5Kd7epkA/WwSljPv5kZT4y+v8LE7MBBNy7QjZzbaO1HQVDiCHQ/1tIpyYDPEXO5x1jNE
+         Jq9Q74C8FtyGZHrgc9VUu8TvrrYEAn5vHhv/VOWSRFeaL+1II5WI5hZ6xIRyqBTlcRIP
+         zy0UBIdFlABxkE4gopG27cei6Um82Ww7Vh3zKO6n0Tqqa+LzPf/7zVi27hIet6tTpOJ2
+         hYHj2YucKUgE0RzQuCTw0nVDdi98doysp06kRflPx7RJEhEzzuaLeR97kyZXJ0e/hOHV
+         F1KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736621654; x=1737226454;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HPN0ghv4POmAX7O/LF6CWcXvpxXfP5ryfl6t+1HzMDw=;
-        b=nY/Ki8V177VWNUGItSqWXh+Cw+gHom1U9wTvwGU+8hO0TWQvNI2LjIWUfOznDrXlHy
-         oE3Fe3+UPA7XaTE/O4jiOciZmlDtWu041IRGOLfEmOqjqMGR9jSD1ZazzdnI58eqoA/k
-         W55BAFHSKLhMoW5kd1z+9kTwThvjh0DtOztKDnJazZNLq+SzLcpZVS7QPs+o1V+Ve//v
-         5gSz0VEudLWJSKsa3Kz0TsTZJZYDKzYyXrO4Nv4YqFqFe138JVchW33laTZDYE2wmwlG
-         d680MjO/4dNqT6IL8CC3Gbhhtpdhfz3o74WpZy5vgflgnb2ja0VUh2+AfTa3SMIVax7n
-         KS0A==
-X-Forwarded-Encrypted: i=1; AJvYcCXLsJ/Ip7Vo8mAMF0cTGYOx07hcdQr6zKwe84LXyeizyiTZXNx8CJ/1QD88c/yib3R6XROvLSv+168=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtK6SzmSHh8gqz0oymorEBq6a3gns0H1SlfMPYVAXIUnZVeKGX
-	r2N5hDz/+he7dLM+ri2wL/0fhlzNb4A7X/ANmITxw5pbp6vEMARcd0sFphoS0CQ=
-X-Gm-Gg: ASbGnctQ9TMfMcV1S9CjmMRxjSvMNXH/5Gb4JshRm8vedG0uoTbgYxuEMsA3CZSIE+z
-	HYTU2doqhOPdTPZ018wkWQJp2r1QLW/gCxgDkNbj4CnA2C+khIHIlztl6IVgYKUZ9fVHVu/MaOB
-	0fhDE3KmGn666681H05zp+YIXcwU2PF/42VOUyP5PuNE23rCaB6Khy4hNSUoeDhQy1ppkxhTyfY
-	VXiPKs/DgiARcbhCOA8EYgC4JCr4mR0/T1TKfOG80Cz1pcVwgMh/KA2y/MxnTNAepQ0XdU=
-X-Google-Smtp-Source: AGHT+IHhmrhqUMId1efQpMotsMGAGOrlDrN6qJOCzg7EtCNkjNnkg5SoD9IRhcQsDqNMz+QidSuVFA==
-X-Received: by 2002:a05:600c:154a:b0:42c:aeee:e603 with SMTP id 5b1f17b1804b1-436e27076d2mr58324595e9.7.1736621654153;
-        Sat, 11 Jan 2025 10:54:14 -0800 (PST)
-Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436f9bc6b9bsm449205e9.22.2025.01.11.10.54.12
+        d=1e100.net; s=20230601; t=1736626154; x=1737230954;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/1V1Gr47SLXD7h4Qx7pGEm9MFBBRsQqFOq79aNqbb0A=;
+        b=NFWfx6xIHQm1Xcy4oSHtiuxI8UGJ1SZbfr57EnAB0Gl3q0ntE4DiTIkm6eWTFCz9Zc
+         9LjFgVxlQ8rFoJABPJcfho6nXD2Pu5MRZ+eWe32AyoXgIec/fTUTb9oRWt+ZsuY4radA
+         dKEE6oLUCJvGxOyAHk1ufadeTZZfayEx2YU6YpOWpA4mdYsuxPp3mIFxOwtkEN2vLDet
+         kxL1UfHY9IlpGiF+GDAS0sYd3H9YCBIeAOyZBShbja4pey7dNytctcl0C/83Vn8ar65T
+         OcZsHrcxKP2MqsIbaS4aYtCd9D22g5oi8n3VKN7/XllwU5RTsCKpk8c125xRqgT9tcO0
+         VVWw==
+X-Forwarded-Encrypted: i=1; AJvYcCXgkvSHGknxwit8KYG/jDbPiCZUmeR1lSSATqQRS+aJE6qTdF+Oy0j1iPhOWfbihJnxx5mrb/iuuv/8/ns=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwomzosJXhEI2nght/tIhMH0GwaYqTIG5lUdr1vOJY8ub/sL8uV
+	/qnlI28LX5V0BmTj52gNnD8NL8KhZeCcfy22xlnqQObixKXXEvPW1vHQ1g==
+X-Gm-Gg: ASbGnctASJgxgao+qGBMSji6OnRMRogPmuqKbpowTUqU8NTDhWyHCMRCwhMyQGHvAhQ
+	Kc4QbXq4Jk/gMsxPJY9mJO/bY9oGokL6K5ygu41btqynPHOuZQDEYvL+NZGAKEYaA/wcHXI44kQ
+	h6GXE3wd1Rud3OWi/DkwC1X6ZBDXkXVbrrICrG1zSHSmarNuiqmrIBYQGHczXtqubZxzcn7NzoC
+	hCAk/4lOMIpPxHLF99S8tKAnH5aOakNhu4Whwlx/9vwdhvg/5hqp8cRAzTX
+X-Google-Smtp-Source: AGHT+IGtiiXXu0hIIHdCAUUQ6EONlMwpxpPv+d62+7r24SNAjfl6kSZS0/0ATQdufEwEUChIYExc7g==
+X-Received: by 2002:a05:600c:1ca5:b0:436:1971:2a4 with SMTP id 5b1f17b1804b1-436e26c3efamr151505815e9.17.1736626153394;
+        Sat, 11 Jan 2025 12:09:13 -0800 (PST)
+Received: from qasdev.system ([2a02:c7c:6696:8300:9f39:d006:679c:adf0])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e9dd1de9sm91550345e9.15.2025.01.11.12.09.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jan 2025 10:54:13 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] USB: dwc3: Use syscon_regmap_lookup_by_phandle_args
-Date: Sat, 11 Jan 2025 19:54:11 +0100
-Message-ID: <20250111185412.183939-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+        Sat, 11 Jan 2025 12:09:13 -0800 (PST)
+Date: Sat, 11 Jan 2025 20:08:49 +0000
+From: qasdev <qasdev00@gmail.com>
+To: Johan Hovold <johan@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: Fix null-ptr-deref in qt2_process_read_urb()
+Message-ID: <Z4LP0VsyOkaRBQL9@qasdev.system>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Use syscon_regmap_lookup_by_phandle_args() which is a wrapper over
-syscon_regmap_lookup_by_phandle() combined with getting the syscon
-argument.  Except simpler code this annotates within one line that given
-phandle has arguments, so grepping for code would be easier.
+This patch addresses a null-ptr-deref in qt2_process_read_urb() due to
+an incorrect bounds check in the following:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+""
+       if (newport > serial->num_ports) {
+	       dev_err(&port->dev,
+		       "%s - port change to invalid port: %i\n",
+		       __func__, newport);
+	       break;
+       }
+""
+
+The condition doesn't account for the valid range of the serial->port
+buffer, which is from 0 to serial->num_ports - 1. When newport is equal
+to serial->num_ports, the assignment of "port" in the
+following code is out-of-bounds and NULL:
+
+""
+       serial_priv->current_port = newport;
+       port = serial->port[serial_priv->current_port];
+
+""
+
+The fix checks if newport is greater than or equal to serial->num_ports
+indicating it is out-of-bounds.
+
+Reported-by: syzbot <syzbot+506479ebf12fe435d01a@syzkaller.appspotmail.com>
+Closes: https://syzkaller.appspot.com/bug?extid=506479ebf12fe435d01a
+Tested-by: syzbot <syzbot+506479ebf12fe435d01a@syzkaller.appspotmail.com>
+Tested-by: Qasim Ijaz <qasdev00@gmail.com>
+Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
 ---
- drivers/usb/dwc3/dwc3-am62.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
+ drivers/usb/serial/quatech2.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/dwc3/dwc3-am62.c b/drivers/usb/dwc3/dwc3-am62.c
-index fa2c4c08711c..9db8f3ca493d 100644
---- a/drivers/usb/dwc3/dwc3-am62.c
-+++ b/drivers/usb/dwc3/dwc3-am62.c
-@@ -153,11 +153,11 @@ static int phy_syscon_pll_refclk(struct dwc3_am62 *am62)
- {
- 	struct device *dev = am62->dev;
- 	struct device_node *node = dev->of_node;
--	struct of_phandle_args args;
- 	struct regmap *syscon;
- 	int ret;
+diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
+index a317bdbd00ad..72fe83a6c978 100644
+--- a/drivers/usb/serial/quatech2.c
++++ b/drivers/usb/serial/quatech2.c
+@@ -503,7 +503,7 @@ static void qt2_process_read_urb(struct urb *urb)
  
--	syscon = syscon_regmap_lookup_by_phandle(node, "ti,syscon-phy-pll-refclk");
-+	syscon = syscon_regmap_lookup_by_phandle_args(node, "ti,syscon-phy-pll-refclk",
-+						      1, &am62->offset);
- 	if (IS_ERR(syscon)) {
- 		dev_err(dev, "unable to get ti,syscon-phy-pll-refclk regmap\n");
- 		return PTR_ERR(syscon);
-@@ -165,13 +165,6 @@ static int phy_syscon_pll_refclk(struct dwc3_am62 *am62)
+ 				newport = *(ch + 3);
  
- 	am62->syscon = syscon;
- 
--	ret = of_parse_phandle_with_fixed_args(node, "ti,syscon-phy-pll-refclk", 1,
--					       0, &args);
--	if (ret)
--		return ret;
--
--	am62->offset = args.args[0];
--
- 	/* Core voltage. PHY_CORE_VOLTAGE bit Recommended to be 0 always */
- 	ret = regmap_update_bits(am62->syscon, am62->offset, PHY_CORE_VOLTAGE_MASK, 0);
- 	if (ret) {
+-				if (newport > serial->num_ports) {
++				if (newport >= serial->num_ports) {
+ 					dev_err(&port->dev,
+ 						"%s - port change to invalid port: %i\n",
+ 						__func__, newport);
 -- 
-2.43.0
+2.39.5
 
 
