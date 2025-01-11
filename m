@@ -1,186 +1,135 @@
-Return-Path: <linux-usb+bounces-19203-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19204-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82931A09B8F
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2025 20:06:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F855A09F17
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 01:13:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1869A3AAF5C
-	for <lists+linux-usb@lfdr.de>; Fri, 10 Jan 2025 19:05:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA0D23A14FC
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 00:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E6722332A;
-	Fri, 10 Jan 2025 19:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Ho6oUBmQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E616FA55;
+	Sat, 11 Jan 2025 00:13:47 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+Received: from d.mail.sonic.net (d.mail.sonic.net [64.142.111.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D202721C9FA
-	for <linux-usb@vger.kernel.org>; Fri, 10 Jan 2025 19:00:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5137A634;
+	Sat, 11 Jan 2025 00:13:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.142.111.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736535634; cv=none; b=GXaxF8Cu2G/kM6cTyMIqEwXaOLftbLlhsG2EbJuP8K7HdFP9D+xtZxPF31N2QRt7Eusq324E5ex6jreSDmvAkTeBm0Yfc+05uDbeJB/g7ZOs9+OvwYOyO95C/FMuk+KCqw8UxZMenYVTBpfS2q0IRricdnf9J7SKO9rg5LOKuyQ=
+	t=1736554427; cv=none; b=L4GuppSJfO+hJuPBJMnCQFnPfVzz6GK3xruM9kcWm3v+8TI9ncH6/UXgc0Rlm5u8sROwnTGpvXDN02/KUYaoIZ8p6zfIUP9B9PdCE12npZ9C7BjyUof6yf22ZvyB3dFsBRUrohpd8bCO9fIkPQLZbuo1g99kUx3D0fG5X8k6IAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736535634; c=relaxed/simple;
-	bh=6Au0Ozm6N5d57b/PR5dTyRZOgC8Z6B28G8m6+acGRg4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E++4yH6D36kLLmifePa/o78Pmdk9t2hTQZbffxGofi/8wASR1wTvB1AIwHFIMhwDVORakvWiKFF0tGh2cAoDtVehvIA6jAaWeCXz0sKB7JRNl0NQL1cwcRlta5PjNnHx6S1sYg+hCHr52S2zVuWxBkIXq922BxHdklP31JreomY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Ho6oUBmQ; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5d442f9d285so821a12.1
-        for <linux-usb@vger.kernel.org>; Fri, 10 Jan 2025 11:00:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736535631; x=1737140431; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uFssL5Eg7HFqhUYjNlx6I1dZGICzmvI+AYnPPZIVuNw=;
-        b=Ho6oUBmQjfEOOwb/sEr3S4qdf9sIkt0SbTfMvQcv4gc1rpxK0S9O3so43pI3ZpoSUs
-         HGxhrkX2HEs/gA0LF6uq1sWNtR3rQDuzAMXvz/0cau0Mi/l/jF27bvF+Ga0Gp9JyT5ct
-         2L6fOYELh8iwF2dSQHBRCzlpB5EwEJWqfg6WSZe5of2LL6u00JT2YOOZeFHrp/afujxa
-         OnqOVJaOANVY+ey8p3q/PqPrfBSnwXD+SDgYdPN3NuVDgY9UmBINLDifkA+p5hiTH860
-         5xXQsPIo3CXHIJVNBhYDYVVdY2XFYnEYj/s41QIS/GeXcLD0l42ZRkbqsO2yHjxgq/bt
-         V/QA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736535631; x=1737140431;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uFssL5Eg7HFqhUYjNlx6I1dZGICzmvI+AYnPPZIVuNw=;
-        b=KTQna3EsuTn3AFxOlTzDB6hAH4sRm3JT1vdrCMcAEjvzJyhpGEvflhSuqYyRKsPhXa
-         GNQg444yACfC0OeeZjftb4rXSe2sk2PeQuyPR25PtUxBykYMl9UH5DUoScFzVqalceza
-         aD9CQU+AR5Jqj6sVWBz6aqZdNOnO7C/uEz2KACd9tZ7kNcDi0/PXbiKd/uosHzyB2cmF
-         4mKyZZnptlyqQ7g8hN6AcQy2LZgNKuzQwVHcMk5IoREd4iuo9PdpTRlcCbnbjkoeX2X5
-         R1REOu2KgBNCS17AV2RoQjccLR5B19QRK/i4UhTuNKWlBYo4v4pB2EA2RZSxLL2ue2rR
-         7Gig==
-X-Forwarded-Encrypted: i=1; AJvYcCVVXP6x+a0kSCdfBQNirU2jx9K4kMRHe1yNja308AhOLnt5xTuZR1rmCdgtz7f6bcYM6hGu4qwnhaE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHsfEHgdIXYyFPT6C4st3qIsK1H/eQHDoX6fNeVULXvVhtaFsi
-	xa9WCLv7sxPaKlizJyYSZEW4L12Zv3EgacRycVcfXH7gxphmIsnjZPtcO2Ikt08y/isingYQUWG
-	mVAbENcmQLrfotqz/Jr+PwtK8n0rX4lODjrLw
-X-Gm-Gg: ASbGncuDPzG3/P5PaqXBkH6wxqTgv8K7t1+92y1tT1zFf9BVL6Ura91zhg/gUWHweby
-	3uCRu+W9amE6RVL0hCX22zecr8EuorsjMKXuln+IlyO9X9Z4DlMTxIKVesExFuC5peZBYSj43
-X-Google-Smtp-Source: AGHT+IHSWR/fLldKuhFK4nM6Z9UZ1cOBbz/G2YKf+HVMwPAfqpp8yxek2i0bKSnj9xyXsrAoMv9jT7CozNmY70WUNsg=
-X-Received: by 2002:a05:6402:1045:b0:5d9:693e:346 with SMTP id
- 4fb4d7f45d1cf-5d99fbd7470mr123173a12.4.1736535630936; Fri, 10 Jan 2025
- 11:00:30 -0800 (PST)
+	s=arc-20240116; t=1736554427; c=relaxed/simple;
+	bh=kclRYrzwiJTudSJ7PWmOn5xrtuuT/jLmOYfxjO14luw=;
+	h=From:To:Cc:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=b/YnQXvDOJUeziuFiqFspoMm0v+x//yWjzOyakwL5ibSof+5FO4STmljpfOCdQXPZYoUhSyBtJGiJN5Ag8zWf0pqSP4UIXEMzeJCeJWQ0xmBYk01u7/ARJU+zLfXmY5B9PPqwrx78KZEQgIy+6h8mEtRd4vKZfaRhpoC5gRY58Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nom.one; spf=pass smtp.mailfrom=nom.one; arc=none smtp.client-ip=64.142.111.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nom.one
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nom.one
+Received: from 192-184-189-209.static.sonic.net (192-184-189-209.static.sonic.net [192.184.189.209])
+	(authenticated bits=0)
+	by d.mail.sonic.net (8.16.1/8.16.1) with ESMTPA id 50B00EEu029325;
+	Fri, 10 Jan 2025 16:00:15 -0800
+From: Forest <forestix@nom.one>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+        stable@vger.kernel.org
+Subject: Re: [REGRESSION] usb: xhci port capability storage change broke fastboot android bootloader utility
+Date: Fri, 10 Jan 2025 16:00:14 -0800
+Message-ID: <4kb3ojp4t59rm79ui8kj3t8irsp6shlinq@sonic.net>
+References: <hk8umj9lv4l4qguftdq1luqtdrpa1gks5l@sonic.net> <2c35ff52-78aa-4fa1-a61c-f53d1af4284d@linux.intel.com> <0l5mnj5hcmh2ev7818b3m0m7pokk73jfur@sonic.net> <3bd0e058-1aeb-4fc9-8b76-f0475eebbfe4@linux.intel.com>
+In-Reply-To: <3bd0e058-1aeb-4fc9-8b76-f0475eebbfe4@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240205074650.200304-1-quic_kriskura@quicinc.com> <ME0P300MB05534EDF5293054B53061567A61C2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
-In-Reply-To: <ME0P300MB05534EDF5293054B53061567A61C2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
-From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Date: Fri, 10 Jan 2025 11:00:19 -0800
-X-Gm-Features: AbW1kvY1g459ZajTF-rK_C7M7pE-C-FOcoJ1XnQW3-zhuHIftgHB_3pA-qmjWNY
-Message-ID: <CANP3RGc_SBROWVA2GMaN41mzCU28wGtQzT5qmSKcYsYDY03G5g@mail.gmail.com>
-Subject: Re: [PATCH v3] usb: gadget: ncm: Avoid dropping datagrams of properly
- parsed NTBs
-To: Junzhong Pan <panjunzhong@outlook.com>
-Cc: quic_kriskura@quicinc.com, gregkh@linuxfoundation.org, 
-	hgajjar@de.adit-jv.com, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, quic_jackp@quicinc.com, quic_ppratap@quicinc.com, 
-	quic_wcheng@quicinc.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Sonic-CAuth: UmFuZG9tSVaSU/DEmVq8Q9sjepS3hiIcO0KswngLP56zoXBeZaDHVok+yHcCGfiAyfG35PHV8XW6+QXh85FxDgqCuSXsTchD
+X-Sonic-ID: C;Jv0ICa/P7xGmAIGchs+snA== M;oEccCa/P7xGmAIGchs+snA==
+X-Spam-Flag: No
+X-Sonic-Spam-Details: 0.0/5.0 by cerberusd
 
-On Thu, Jan 9, 2025 at 11:37=E2=80=AFPM Junzhong Pan <panjunzhong@outlook.c=
-om> wrote:
->
-> Hi everyone,
->
-> I recently switch to f_ncm with Windows 10 since rndis 's safety issue.
-> (the Windows 10 driver version is 10.0.19041.1 2009/4/21)
->
-> It seems Windows 10 ncm driver won't send ZLP to let udc properly
-> separate the skbs.
->
-> On Mon, 5 Feb 2024 13:16:50 +0530 Krishna Kurapati wrote:
-> > According to Windows driver, no ZLP is needed if wBlockLength is
-> non-zero,
-> > because the non-zero wBlockLength has already told the function side th=
-e
-> > size of transfer to be expected. However, there are in-market NCM devic=
-es
-> > that rely on ZLP as long as the wBlockLength is multiple of
-> wMaxPacketSize.
-> > To deal with such devices, it pads an extra 0 at end so the transfer
-> is no
-> > longer multiple of wMaxPacketSize.
->
-> I do the iperf3 testing cause gadget constantly report similar error afte=
-r
-> a litle modification to get more concrete info:
->
-> [  174] configfs-gadget.0: to process=3D512, so go to find second NTH
-> from: 15872
-> [  174] FIND NEXT NTH HEAD:000000006c26a12c: 6e 63 6d 68 10 00 86 16 b0
-> 3b 00 00 48 3b 00 00 00 00 52 34 fc 5f 90 fd ca 40 c1 f4 f4 6e 08 00
-> [  174] configfs-gadget.0: Wrong NDP SIGN of this ndp index: 15176, skb
-> len: 16384, ureq_len: 16384, this wSeq: 5766
-> [  174] NDP HEAD:00000000298f3cab: 2b 12 48 8f 12 ce 3c c8 d7 39 c0 0d
-> 15 cf 86 14 17 4a 91 85 db df ad 87 f0 35 0d 76 ad 4d 4d 74
-> [  174] NTH of this NDP HEAD:00000000af9fbfc9: 6e 63 6d 68 10 00 85 16
-> 00 3e 00 00 90 3d 00 00 00 00 52 34 fc 5f 90 fd ca 40 c1 f4 f4 6e 08 00
-> [  174] configfs-gadget.0: Wrong NTH SIGN, skblen 14768, last wSequence:
-> 5766, last dgram_num: 11, ureqlen: 16384
-> [  174] HEAD:00000000b1a72bfc: 3f 98 a6 8e 17 f8 bb 29 07 b8 da 13 7f 20
-> 80 8e 77 ca 32 07 ac 71 b8 8d 84 03 d7 1b 96 9b c4 fa
->
->
-> Lecroy shows the wSequence=3D5765 have 10 Datagram consisting a 31*512
-> bytes=3D15872 bytes OUT Transfer but have no ZLP:
->
-> OUT Transfer wSequence=3D5765
->         NTH32 Datagrams: 1514B * 8 + 580B NDP32
->         Transfer length: 512B * 31
->         NO ZLP
-> OUT Transfer wSequence=3D5766
->         NTH32 Datagrams: 1514B * 8 NDP32
->         Transfer length: 512B * 29  + 432
->
-> This lead to a result that the first givebacked 16K skb correponding to
-> a usb_request contains two NTH but not complete:
->
-> USB Request 1 SKB 16384B
->         (NTH32) (Datagrams) (NDP32) | (NTH32) (Datagrams piece of wSequen=
-ce=3D5766)
-> USB Request 2 SKB 14768B
->         (Datagrams piece of wSequence=3D5766) (NDP32)
->
->  From the context, it seems the first report of Wrong NDP SIGN is caused
-> by out-of-bound accessing, the second report of Wrong NTH SIGN is caused
-> by a wrong beginning of NTB parsing.
->
-> Do you have any idea how can this be fixed so that the ncm compatibility
-> is better for windows users.
->
-> Best Regards,
-> Pan
+On Tue, 7 Jan 2025 14:29:35 +0200, Mathias Nyman wrote:
 
-Could you clarify which Linux Kernel you're testing against?
-Either X.Y.Z version or some git kernel sha1 (not including your debug
-code of course).
+>Does disabling USB2 hardware LPM for the device make it work again?
+>
+>Adding USB_QUIRK_NO_LPM quirk "k" for your device vid:pid should do it.
+>i.e. add "usbcore.quirks=0fce:0dde:k" parameter to your kernel cmdline.
 
-Could you provide some pcap of the actual usb frames?
-Or perhaps describe better the problem, because I'm not quite
-following from your email.
-(I'm not sure if the problem is what windows is sending, or how Linux
-is parsing it)
+That fixed my test case on Debian kernel 6.12.8-amd64, which is among those
+that have been failing.
 
-I *think* what you're saying is that wSequence=3D5765 & 5766 are being
-treated as a single ncm message due to their being a multiple of 512
-in the former, not followed by a ZLP?  I thought that was precisely
-when microsoft ncm added an extra zero byte...
+>Or alternatively disable usb2 lpm  during runtime via sysfs
+>(after enumeration, assuming device is "1-3" as in the log):
+># echo 0 > /sys/bus/usb/devices/1-3/power/usb2_hardware_lpm
 
-What's at the end of 5755?  Padding? No padding?
-Is there an NTH32 header in 5766?  Should there be?
+That did not fix it. Maybe it's too late once the device is connected and
+enumerated?
 
---
-Maciej =C5=BBenczykowski, Kernel Networking Developer @ Google
+>If those work then we need to figure out if we incorrectly try to enable
+>USB2 hardware LPM, or if device just can't handle LPM even if it claims
+>to be LPM capable.
+>
+>Host hardware LPM capability can be checked from xhci reg-ext-protocol
+>fields from debugfs.
+>cat /sys/kernel/debug/usb/xhci/0000:0c:00.0/reg-ext-protocol:*
+>(please print content of _all_ reg_ext_protocol* files, LPM capability is
+>bit 19 of EXTCAP_PORTINFO)
+
+# cd /sys/kernel/debug/usb/xhci/0000:0c:00.0/
+# grep . reg-ext-protocol:*
+reg-ext-protocol:00:EXTCAP_REVISION = 0x03200802
+reg-ext-protocol:00:EXTCAP_NAME = 0x20425355
+reg-ext-protocol:00:EXTCAP_PORTINFO = 0x40000101
+reg-ext-protocol:00:EXTCAP_PORTTYPE = 0x00000000
+reg-ext-protocol:00:EXTCAP_MANTISSA1 = 0x00050134
+reg-ext-protocol:00:EXTCAP_MANTISSA2 = 0x000a4135
+reg-ext-protocol:00:EXTCAP_MANTISSA3 = 0x000a4136
+reg-ext-protocol:00:EXTCAP_MANTISSA4 = 0x00144137
+reg-ext-protocol:01:EXTCAP_REVISION = 0x03100802
+reg-ext-protocol:01:EXTCAP_NAME = 0x20425355
+reg-ext-protocol:01:EXTCAP_PORTINFO = 0x20000402
+reg-ext-protocol:01:EXTCAP_PORTTYPE = 0x00000000
+reg-ext-protocol:01:EXTCAP_MANTISSA1 = 0x00050134
+reg-ext-protocol:01:EXTCAP_MANTISSA2 = 0x000a4135
+reg-ext-protocol:02:EXTCAP_REVISION = 0x02000802
+reg-ext-protocol:02:EXTCAP_NAME = 0x20425355
+reg-ext-protocol:02:EXTCAP_PORTINFO = 0x00190c06
+reg-ext-protocol:02:EXTCAP_PORTTYPE = 0x00000000
+
+# grep EXTCAP_PORTINFO reg-ext-protocol:*
+reg-ext-protocol:00:EXTCAP_PORTINFO = 0x40000101
+reg-ext-protocol:01:EXTCAP_PORTINFO = 0x20000402
+reg-ext-protocol:02:EXTCAP_PORTINFO = 0x00190c06
+
+>>> bool(0x40000101 & 1 << 19)
+False
+>>> bool(0x20000402 & 1 << 19)
+False
+>>> bool(0x00190c06 & 1 << 19)
+True
+
+>Device USB2 LPM capability can be checked from the devices BOS descriptor,
+>visible (as sudo/root) with lsusb -v -d 0fce:0dde
+
+# lsusb -v -d 0fce:0dde |grep -B 5 LPM
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x00000006
+      BESL Link Power Management (LPM) Supported
+
+I think that says the device claims support for LPM, yes?
+
+Maybe relevant: The failing test and lsusb were both run with the device in
+fastboot mode, which allows talking to the bootloader. Is it possible that a
+device would support LPM in normal operating modes, but not in bootloader
+mode, yet present the same capabilities data structure in both modes?
 
