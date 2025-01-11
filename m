@@ -1,135 +1,201 @@
-Return-Path: <linux-usb+bounces-19204-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19205-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F855A09F17
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 01:13:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F14BA09F8C
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 01:40:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AA0D23A14FC
-	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 00:13:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE9967A2668
+	for <lists+linux-usb@lfdr.de>; Sat, 11 Jan 2025 00:40:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E616FA55;
-	Sat, 11 Jan 2025 00:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CC198F5C;
+	Sat, 11 Jan 2025 00:40:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from d.mail.sonic.net (d.mail.sonic.net [64.142.111.50])
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5137A634;
-	Sat, 11 Jan 2025 00:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.142.111.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6813C1FDD
+	for <linux-usb@vger.kernel.org>; Sat, 11 Jan 2025 00:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736554427; cv=none; b=L4GuppSJfO+hJuPBJMnCQFnPfVzz6GK3xruM9kcWm3v+8TI9ncH6/UXgc0Rlm5u8sROwnTGpvXDN02/KUYaoIZ8p6zfIUP9B9PdCE12npZ9C7BjyUof6yf22ZvyB3dFsBRUrohpd8bCO9fIkPQLZbuo1g99kUx3D0fG5X8k6IAw=
+	t=1736556030; cv=none; b=Bbi4sG+6iVbMVhw1RzjJuNz7aKRpd+U9sQIWDUn1+oakp8a6ACO+PLv11lQkFz36po9dNAIAx6blXZDNc2yvmyFOo8Uq/8vCFnSxXh0QlhKMBrME0NJ9sQriB7hqTTGHUigTbh8xa/gosP62wsJ5SJ1D3SaEAwUN3IFAU3JJryE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736554427; c=relaxed/simple;
-	bh=kclRYrzwiJTudSJ7PWmOn5xrtuuT/jLmOYfxjO14luw=;
-	h=From:To:Cc:Subject:Date:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type; b=b/YnQXvDOJUeziuFiqFspoMm0v+x//yWjzOyakwL5ibSof+5FO4STmljpfOCdQXPZYoUhSyBtJGiJN5Ag8zWf0pqSP4UIXEMzeJCeJWQ0xmBYk01u7/ARJU+zLfXmY5B9PPqwrx78KZEQgIy+6h8mEtRd4vKZfaRhpoC5gRY58Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nom.one; spf=pass smtp.mailfrom=nom.one; arc=none smtp.client-ip=64.142.111.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nom.one
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nom.one
-Received: from 192-184-189-209.static.sonic.net (192-184-189-209.static.sonic.net [192.184.189.209])
-	(authenticated bits=0)
-	by d.mail.sonic.net (8.16.1/8.16.1) with ESMTPA id 50B00EEu029325;
-	Fri, 10 Jan 2025 16:00:15 -0800
-From: Forest <forestix@nom.one>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
-        stable@vger.kernel.org
-Subject: Re: [REGRESSION] usb: xhci port capability storage change broke fastboot android bootloader utility
-Date: Fri, 10 Jan 2025 16:00:14 -0800
-Message-ID: <4kb3ojp4t59rm79ui8kj3t8irsp6shlinq@sonic.net>
-References: <hk8umj9lv4l4qguftdq1luqtdrpa1gks5l@sonic.net> <2c35ff52-78aa-4fa1-a61c-f53d1af4284d@linux.intel.com> <0l5mnj5hcmh2ev7818b3m0m7pokk73jfur@sonic.net> <3bd0e058-1aeb-4fc9-8b76-f0475eebbfe4@linux.intel.com>
-In-Reply-To: <3bd0e058-1aeb-4fc9-8b76-f0475eebbfe4@linux.intel.com>
+	s=arc-20240116; t=1736556030; c=relaxed/simple;
+	bh=tPNU/mC/kxxCYJK1mEEtwCHM0JugZTdFyKq3SwcQ+dM=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=SBdENMwxLooXQysREVp3+lwhDbY6vZvMHDvxDEC5HBAr97IWGlpg2rKbUEPDNLM1GlBYvOrZQDuJ9hJepFV00pMmYxplgqQQi8Vaon2MZ0b0wRPsyiXAD6g3QvPXh1Z4tvfINMf5YVLS0ng06ojgGNSvtzF+egppMh0PFGBgjKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3a78421a2e1so38273855ab.2
+        for <linux-usb@vger.kernel.org>; Fri, 10 Jan 2025 16:40:28 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736556027; x=1737160827;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3xUtxMyCEbFsPMOoJr0tb7qnmzB7ylulLK4hv1N9cr0=;
+        b=oX691PGdtnJ0gEJpaTIlFYuQ+xiZ7/w94cGVYnN+XouGlyHautf+gMSK+zBHKhhckI
+         wvR8rxP4tBCDRfv8acH42iHS6DhXsbv/EDqvMhyl7d9/yNegYSOZKrC3pXfiXR1B4njS
+         EttiPKIIt+yLBCE+q7fhxfjfQ2voFFzAFyR5ucG/pGWpVDp4lcbQm9dNfRSFJBqFApvA
+         t1USNDcSmnL/c6fNGvD/ZiBUb2nl/jJnEhkuuWdrbYx/pWlRtl0WNV/s23zWs21DbFQp
+         YSyChTUmDuAT4hnF60zrYpFe0ziH9NpouN+5whs7To28GzSjsAEIJ1jIhwmb96gknd9n
+         Q4SA==
+X-Forwarded-Encrypted: i=1; AJvYcCWCrBANrqvN4KhPc6c92csQBZtpRJU856WzLdgboVfcZeZ3ksJ3cPYlNXbERzkv97l4nRYwHHG3mOk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7R/CRWRo0rYo+lGlnHnxKLJ2tOSjh3x4EYfOC3ErKe7dATYP9
+	FuPRS/f6JUPtFT295Ll3JkthjLV+X9QdiiHYWKcuLrSKQYEwod5Z4HYS0iXMXVmAZG00xoJBzyv
+	ezY98E+RP4hryt+Ujx+mAq4RhFyz/lmZTWOZe+2WRtGfZ3aJrOvFx4fQ=
+X-Google-Smtp-Source: AGHT+IE/Wk8FnJf1K3CpOpbL44yJ8FUTxQxu0nBwy8IKHJ1A3rNqWrEMUk3oDGkUhXvqcRwtyreF76Nn9bunWDh/HVsW/qDpLJKr
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Transfer-Encoding: 7bit
-X-Sonic-CAuth: UmFuZG9tSVaSU/DEmVq8Q9sjepS3hiIcO0KswngLP56zoXBeZaDHVok+yHcCGfiAyfG35PHV8XW6+QXh85FxDgqCuSXsTchD
-X-Sonic-ID: C;Jv0ICa/P7xGmAIGchs+snA== M;oEccCa/P7xGmAIGchs+snA==
-X-Spam-Flag: No
-X-Sonic-Spam-Details: 0.0/5.0 by cerberusd
+X-Received: by 2002:a92:c26d:0:b0:3a7:87f2:b00e with SMTP id
+ e9e14a558f8ab-3ce3a8bb3cbmr96886065ab.19.1736556027559; Fri, 10 Jan 2025
+ 16:40:27 -0800 (PST)
+Date: Fri, 10 Jan 2025 16:40:27 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <6781bdfb.050a0220.216c54.0018.GAE@google.com>
+Subject: [syzbot] [usb?] general protection fault in qt2_read_bulk_callback
+From: syzbot <syzbot+506479ebf12fe435d01a@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, johan@kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 7 Jan 2025 14:29:35 +0200, Mathias Nyman wrote:
+Hello,
 
->Does disabling USB2 hardware LPM for the device make it work again?
->
->Adding USB_QUIRK_NO_LPM quirk "k" for your device vid:pid should do it.
->i.e. add "usbcore.quirks=0fce:0dde:k" parameter to your kernel cmdline.
+syzbot found the following issue on:
 
-That fixed my test case on Debian kernel 6.12.8-amd64, which is among those
-that have been failing.
+HEAD commit:    5428dc1906dd Merge tag 'exfat-for-6.13-rc7' of git://git.k..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1469f9c4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=4ef22c4fce5135b4
+dashboard link: https://syzkaller.appspot.com/bug?extid=506479ebf12fe435d01a
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17597418580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1269f9c4580000
 
->Or alternatively disable usb2 lpm  during runtime via sysfs
->(after enumeration, assuming device is "1-3" as in the log):
-># echo 0 > /sys/bus/usb/devices/1-3/power/usb2_hardware_lpm
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/02ab71af0937/disk-5428dc19.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/55b33cfb5bd7/vmlinux-5428dc19.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/a3aa8c69a577/bzImage-5428dc19.xz
 
-That did not fix it. Maybe it's too late once the device is connected and
-enumerated?
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+506479ebf12fe435d01a@syzkaller.appspotmail.com
 
->If those work then we need to figure out if we incorrectly try to enable
->USB2 hardware LPM, or if device just can't handle LPM even if it claims
->to be LPM capable.
->
->Host hardware LPM capability can be checked from xhci reg-ext-protocol
->fields from debugfs.
->cat /sys/kernel/debug/usb/xhci/0000:0c:00.0/reg-ext-protocol:*
->(please print content of _all_ reg_ext_protocol* files, LPM capability is
->bit 19 of EXTCAP_PORTINFO)
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000024: 0000 [#1] PREEMPT SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x0000000000000120-0x0000000000000127]
+CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted 6.13.0-rc6-syzkaller-00006-g5428dc1906dd #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+RIP: 0010:tty_insert_flip_char include/linux/tty_flip.h:67 [inline]
+RIP: 0010:qt2_process_read_urb drivers/usb/serial/quatech2.c:538 [inline]
+RIP: 0010:qt2_read_bulk_callback+0x3b2/0x1160 drivers/usb/serial/quatech2.c:574
+Code: 00 00 42 0f b6 04 28 84 c0 0f 85 e0 08 00 00 c6 84 24 d0 00 00 00 00 48 8b 44 24 08 48 8d 98 20 01 00 00 48 89 d8 48 c1 e8 03 <42> 80 3c 28 00 74 08 48 89 df e8 0f 1b 81 fa 4c 8b 3b 4d 8d 67 08
+RSP: 0018:ffffc90000a18720 EFLAGS: 00010006
+RAX: 0000000000000024 RBX: 0000000000000120 RCX: ffffc90000a18700
+RDX: 0000000000000100 RSI: 0000000000000000 RDI: 000000000000001b
+RBP: ffffc90000a18870 R08: ffffffff8784cba6 R09: 1ffffffff203303e
+R10: dffffc0000000000 R11: fffffbfff203303f R12: ffff888032352c13
+R13: dffffc0000000000 R14: 00000000000000a5 R15: ffff888033680800
+FS:  0000000000000000(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000556bc64d0d60 CR3: 0000000035e4e000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ __usb_hcd_giveback_urb+0x42c/0x6e0 drivers/usb/core/hcd.c:1650
+ dummy_timer+0x856/0x4620 drivers/usb/gadget/udc/dummy_hcd.c:1993
+ __run_hrtimer kernel/time/hrtimer.c:1739 [inline]
+ __hrtimer_run_queues+0x59b/0xd30 kernel/time/hrtimer.c:1803
+ hrtimer_run_softirq+0x19a/0x2c0 kernel/time/hrtimer.c:1820
+ handle_softirqs+0x2d4/0x9b0 kernel/softirq.c:561
+ __do_softirq kernel/softirq.c:595 [inline]
+ invoke_softirq kernel/softirq.c:435 [inline]
+ __irq_exit_rcu+0xf7/0x220 kernel/softirq.c:662
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:678
+ common_interrupt+0xb9/0xd0 arch/x86/kernel/irq.c:278
+ </IRQ>
+ <TASK>
+ asm_common_interrupt+0x26/0x40 arch/x86/include/asm/idtentry.h:693
+RIP: 0010:finish_task_switch+0x1ea/0x870 kernel/sched/core.c:5243
+Code: c9 50 e8 49 0c 0c 00 48 83 c4 08 4c 89 f7 e8 ed 39 00 00 0f 1f 44 00 00 4c 89 f7 e8 e0 d9 5c 0a e8 0b 8c 38 00 fb 48 8b 5d c0 <48> 8d bb f8 15 00 00 48 89 f8 48 c1 e8 03 49 be 00 00 00 00 00 fc
+RSP: 0018:ffffc900001a7b48 EFLAGS: 00000286
+RAX: 1d3ab2024a67fb00 RBX: ffff88801d2e8000 RCX: ffffffff9a3ab903
+RDX: dffffc0000000000 RSI: ffffffff8c0a98e0 RDI: ffffffff8c5fb020
+RBP: ffffc900001a7b90 R08: ffffffff901981f7 R09: 1ffffffff203303e
+R10: dffffc0000000000 R11: fffffbfff203303f R12: 1ffff110170e7edc
+R13: dffffc0000000000 R14: ffff8880b873e8c0 R15: ffff8880b873f6e0
+ context_switch kernel/sched/core.c:5372 [inline]
+ __schedule+0x1858/0x4c30 kernel/sched/core.c:6756
+ schedule_idle+0x56/0x90 kernel/sched/core.c:6874
+ do_idle+0x567/0x5c0 kernel/sched/idle.c:353
+ cpu_startup_entry+0x42/0x60 kernel/sched/idle.c:423
+ start_secondary+0x102/0x110 arch/x86/kernel/smpboot.c:314
+ common_startup_64+0x13e/0x147
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:tty_insert_flip_char include/linux/tty_flip.h:67 [inline]
+RIP: 0010:qt2_process_read_urb drivers/usb/serial/quatech2.c:538 [inline]
+RIP: 0010:qt2_read_bulk_callback+0x3b2/0x1160 drivers/usb/serial/quatech2.c:574
+Code: 00 00 42 0f b6 04 28 84 c0 0f 85 e0 08 00 00 c6 84 24 d0 00 00 00 00 48 8b 44 24 08 48 8d 98 20 01 00 00 48 89 d8 48 c1 e8 03 <42> 80 3c 28 00 74 08 48 89 df e8 0f 1b 81 fa 4c 8b 3b 4d 8d 67 08
+RSP: 0018:ffffc90000a18720 EFLAGS: 00010006
+RAX: 0000000000000024 RBX: 0000000000000120 RCX: ffffc90000a18700
+RDX: 0000000000000100 RSI: 0000000000000000 RDI: 000000000000001b
+RBP: ffffc90000a18870 R08: ffffffff8784cba6 R09: 1ffffffff203303e
+R10: dffffc0000000000 R11: fffffbfff203303f R12: ffff888032352c13
+R13: dffffc0000000000 R14: 00000000000000a5 R15: ffff888033680800
+FS:  0000000000000000(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000556bc64d0d60 CR3: 0000000035e4e000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess):
+   0:	00 00                	add    %al,(%rax)
+   2:	42 0f b6 04 28       	movzbl (%rax,%r13,1),%eax
+   7:	84 c0                	test   %al,%al
+   9:	0f 85 e0 08 00 00    	jne    0x8ef
+   f:	c6 84 24 d0 00 00 00 	movb   $0x0,0xd0(%rsp)
+  16:	00
+  17:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+  1c:	48 8d 98 20 01 00 00 	lea    0x120(%rax),%rbx
+  23:	48 89 d8             	mov    %rbx,%rax
+  26:	48 c1 e8 03          	shr    $0x3,%rax
+* 2a:	42 80 3c 28 00       	cmpb   $0x0,(%rax,%r13,1) <-- trapping instruction
+  2f:	74 08                	je     0x39
+  31:	48 89 df             	mov    %rbx,%rdi
+  34:	e8 0f 1b 81 fa       	call   0xfa811b48
+  39:	4c 8b 3b             	mov    (%rbx),%r15
+  3c:	4d 8d 67 08          	lea    0x8(%r15),%r12
 
-# cd /sys/kernel/debug/usb/xhci/0000:0c:00.0/
-# grep . reg-ext-protocol:*
-reg-ext-protocol:00:EXTCAP_REVISION = 0x03200802
-reg-ext-protocol:00:EXTCAP_NAME = 0x20425355
-reg-ext-protocol:00:EXTCAP_PORTINFO = 0x40000101
-reg-ext-protocol:00:EXTCAP_PORTTYPE = 0x00000000
-reg-ext-protocol:00:EXTCAP_MANTISSA1 = 0x00050134
-reg-ext-protocol:00:EXTCAP_MANTISSA2 = 0x000a4135
-reg-ext-protocol:00:EXTCAP_MANTISSA3 = 0x000a4136
-reg-ext-protocol:00:EXTCAP_MANTISSA4 = 0x00144137
-reg-ext-protocol:01:EXTCAP_REVISION = 0x03100802
-reg-ext-protocol:01:EXTCAP_NAME = 0x20425355
-reg-ext-protocol:01:EXTCAP_PORTINFO = 0x20000402
-reg-ext-protocol:01:EXTCAP_PORTTYPE = 0x00000000
-reg-ext-protocol:01:EXTCAP_MANTISSA1 = 0x00050134
-reg-ext-protocol:01:EXTCAP_MANTISSA2 = 0x000a4135
-reg-ext-protocol:02:EXTCAP_REVISION = 0x02000802
-reg-ext-protocol:02:EXTCAP_NAME = 0x20425355
-reg-ext-protocol:02:EXTCAP_PORTINFO = 0x00190c06
-reg-ext-protocol:02:EXTCAP_PORTTYPE = 0x00000000
 
-# grep EXTCAP_PORTINFO reg-ext-protocol:*
-reg-ext-protocol:00:EXTCAP_PORTINFO = 0x40000101
-reg-ext-protocol:01:EXTCAP_PORTINFO = 0x20000402
-reg-ext-protocol:02:EXTCAP_PORTINFO = 0x00190c06
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
->>> bool(0x40000101 & 1 << 19)
-False
->>> bool(0x20000402 & 1 << 19)
-False
->>> bool(0x00190c06 & 1 << 19)
-True
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
->Device USB2 LPM capability can be checked from the devices BOS descriptor,
->visible (as sudo/root) with lsusb -v -d 0fce:0dde
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-# lsusb -v -d 0fce:0dde |grep -B 5 LPM
-  USB 2.0 Extension Device Capability:
-    bLength                 7
-    bDescriptorType        16
-    bDevCapabilityType      2
-    bmAttributes   0x00000006
-      BESL Link Power Management (LPM) Supported
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-I think that says the device claims support for LPM, yes?
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
 
-Maybe relevant: The failing test and lsusb were both run with the device in
-fastboot mode, which allows talking to the bootloader. Is it possible that a
-device would support LPM in normal operating modes, but not in bootloader
-mode, yet present the same capabilities data structure in both modes?
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
