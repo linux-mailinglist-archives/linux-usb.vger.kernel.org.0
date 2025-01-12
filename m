@@ -1,143 +1,182 @@
-Return-Path: <linux-usb+bounces-19216-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19217-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88228A0A830
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2025 11:14:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97784A0A835
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2025 11:34:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47B2418879AE
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2025 10:14:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A30516501E
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2025 10:34:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D00AD19D06E;
-	Sun, 12 Jan 2025 10:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E58D19DF99;
+	Sun, 12 Jan 2025 10:34:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="C9gPwLcj"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="iWPBCl59"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pv50p00im-ztdg10012101.me.com (pv50p00im-ztdg10012101.me.com [17.58.6.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3DA04315A;
-	Sun, 12 Jan 2025 10:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABCF73E499
+	for <linux-usb@vger.kernel.org>; Sun, 12 Jan 2025 10:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736676863; cv=none; b=YbdViIjSdhvqEZn6rvXujhY9J9kuui8vEKAwkTVIkZkOoDx9PDk52T+BupF8n2grOC9f6fJxH60poM66401k6LfpOsht9uuUW6l5lXp5i2iTpBoXndouhBfx8DrXI6SBNi8XpA57NVIB8vOb8vKjoSaihtEeAKqyHFdkSvPjb3M=
+	t=1736678063; cv=none; b=ilvj5JOJsfnaT5xisxLrT9PCAYkoqEtod55rMyhxwQt+27hnPqODAfeKN1geblA/epbhrzzOaenaoh+Jj8IBmeMS7NkswPsVCC8frPLwJBDfNbR08B5cIorCgncQYdmTQ5N7YLQ4L7BwfhqICOF+qIT1UekM/8B4to2Ba+pKm/k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736676863; c=relaxed/simple;
-	bh=ziRgbsJZSnYarvVsDVdaeaUnWeXssTT3cjbPbWfOVeE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a29rm1yqwbO8wm54sjw2rdcR5T6cH0pwW9FB+pVUMrFGpli64fxzf8znPaNRn0MNhADwwp5/Chm2BC8Rh1X2zqOXOcGec2WKQEzwcsiFSVusJYcuc68W0CWDuB0gWMEGcnf4rQN5PH/lPzq+I8PgQsWd7sCecYyk1ZlBUeXIQ+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=C9gPwLcj; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-385e27c75f4so2404612f8f.2;
-        Sun, 12 Jan 2025 02:14:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736676860; x=1737281660; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:reply-to:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CXHzcs8Q4TI7qKACrdk+Z4wasVtXyQLh8H/sgYhKew8=;
-        b=C9gPwLcj3h+CTYUQCHRI4/2Ql4RJqb9rH3LvR7Dlq/M07ja8x1FMeRR0ucNN8Jcv83
-         MsCcwEILTZQn35w5+UGOQYiPw99kQlXpAsAfTjTorhB91Rh7MH3C28/T8ULg62GJxqIj
-         udTr1/epGkwnSZECZJ9x6tFN96xVptvfKmlaYdIbGnXgeKnpNb1kWLtb6y9DOFT4J2DN
-         48ctATy06XCTtRDJfdNoB594E7DSg94tfdh52CGXyS54TLDPuUB7bzH79GRJOT2PAipL
-         RzEJ+R8ttVR0OUvSPaVl7v3+LX5JAr41VqyRgj5FazIvWfj0Ui1/YoT8hmQ6qL9RSRrK
-         Wo8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736676860; x=1737281660;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:reply-to:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CXHzcs8Q4TI7qKACrdk+Z4wasVtXyQLh8H/sgYhKew8=;
-        b=HNPZdRNVihaLek8kTHLUzcRj0pAyJdGw9WgJ5HouRCLRLUEBslfvMVjDM9Ewm0Cgwl
-         LvwcjYRjjsXVE6Z3OFRWtGHdFTy2sw3ydHyOB5/xZTFr2ZmB0MltXMCNI376poB1gg2o
-         n38r/SgGPMQ+Vp10cWQ6BX9T/n43DGEVloLi0YDmHiJKtdCv5JPcEp0p27cibhkKgb4f
-         rTvbDjA3CAmQk8Ihud1laDOuJWHgD+XObh18zSiWrOQKX2rCkr3uj75zlETBMhUbyFAb
-         exoHX3n8DI6xHWujaq2Ja1cvFzfRNmiz5h8rbPehXzlVw87PDzZu+o5LbdnBkllY3ziY
-         ye3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVf1XFNEcZ9iMHMr5g9ARFtVIjRMZhus+rHMdxelzYoNNdVT9exe2PaBp20eRqoVogTYirj6d0Ofa0vJAM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx9o1IBB8DAWn4l3qbMfaWADOQwP4Ktaz1hZtQMwLKvCpL9zwPX
-	A0M/zPIjAT1InlxHcJPq0TEDdK8MYlp39MZmaL5owhuxtHapQ5Z4WFxXTQ==
-X-Gm-Gg: ASbGncsvypCB96R/8fMCCgRkgOzhmq1G0/b2HmY/CKPlGUsE6VCbWqMVp+aM2aK+wje
-	EyHY3oanKGB1u4+kQJuoee6tmlImoR1hftoX3zhPavz+dLUQcWqfkG809oEj4qKVK8E5hMlyKlx
-	jxv1p8CaIyAWTLyzj11wLYWL1OznQaceBVi5L+dVamACNxvocC37UcVqbUQhYatM7jk4jPSQFiv
-	sI9e4r8JuWHp1BXyNt9GGtLbGh4bB4Ci/JcfeyOSf/suvmVDHkexJuZ8ZE=
-X-Google-Smtp-Source: AGHT+IEk13AgAOLTij7jpouZjoCozs4Oijc2g/8cOLKVl9GLXydlorUrfaAcdECSUxdrojk9vjV8rw==
-X-Received: by 2002:a05:6000:4011:b0:386:3835:9fec with SMTP id ffacd0b85a97d-38a873306cemr16822177f8f.44.1736676859947;
-        Sun, 12 Jan 2025 02:14:19 -0800 (PST)
-Received: from qasdev.system ([2a02:c7c:6696:8300:6dc4:51b5:3556:88f])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2ddccf4sm142555455e9.19.2025.01.12.02.14.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Jan 2025 02:14:19 -0800 (PST)
-Date: Sun, 12 Jan 2025 10:14:07 +0000
-From: Qasim Ijaz <qasdev00@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: Fix null-ptr-deref in qt2_process_read_urb()
-Message-ID: <Z4OV7184kahqhzBl@qasdev.system>
-Reply-To: 2025011206-starboard-dexterity-a740@gregkh.smtp.subspace.kernel.org
-References: <Z4LP0VsyOkaRBQL9@qasdev.system>
- <2025011206-starboard-dexterity-a740@gregkh>
+	s=arc-20240116; t=1736678063; c=relaxed/simple;
+	bh=3FHViZNhsnIGyl1B07yO21MkDv2x1odcdNhOic7TRxU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=or3HnZXybYokZ4nIhh9U6pIq4yO3+V51/n8g+V6pkvbn7YUQezPyVJpY7EtHgsNj0TB60dutaBKydILAOGoP834Y8a6NJe4zLiLqrg5VG0THS6e9FyqHV5+WKM5P+Lmclne3DIkgz3P9+25yEDF2+8VD1Y7xX0QcIXyuMEcoVi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=iWPBCl59; arc=none smtp.client-ip=17.58.6.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1736678061;
+	bh=8jMXg0idzjhO9yKUsQVdQUgEnwemCWgYliWqvHMBjlc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:
+	 x-icloud-hme;
+	b=iWPBCl59XMzTpNRbCNQ3Br6g2eU5eIt2Ne7+2ZWSJ+VIwLWocW0nxIE98HizKyfwN
+	 Pg0GHPsFlGGUiQFXcDfj6VIGGNkT8esQ1SDKpr2Xuz9EPTKc3NYYSGPeoUmjGijw2O
+	 /duPK1lWMtsYqxI6YYk+Ut/HrVuQzk589KO1oGyBbW7r9KHJ6yhcPaeb8jY05RNCvx
+	 E4IYrJ9r0ZQZ4JzChRvyzk9kOAd+G/DaOCFDmvNAvne0gNEBh4NF6Gubl4zrO95HQ6
+	 B5JAbGfbjP+s6Y9dY0hEIsg4IgKx96QBU/AXoIDm7rpwvt35qz2Nko7CWGJzK1CJnx
+	 Dfk4ItnZQQDVw==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10012101.me.com (Postfix) with ESMTPSA id 130417402EF;
+	Sun, 12 Jan 2025 10:34:14 +0000 (UTC)
+From: Zijun Hu <zijun_hu@icloud.com>
+Date: Sun, 12 Jan 2025 18:33:52 +0800
+Subject: [PATCH] usb: phy: Remove API devm_usb_put_phy()
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2025011206-starboard-dexterity-a740@gregkh>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250112-remove_api-v1-1-49cc8f792ac9@quicinc.com>
+X-B4-Tracking: v=1; b=H4sIAI+ag2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDQ0Mj3aLU3Pyy1PjEgkxdiyRTw8TENDNLU9MkJaCGgqLUtMwKsGHRsbW
+ 1AEv/tfFcAAAA
+X-Change-ID: 20250112-remove_api-8b51aaf6955b
+To: Jonathan Corbet <corbet@lwn.net>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Zijun Hu <zijun_hu@icloud.com>, linux-doc@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+ Zijun Hu <quic_zijuhu@quicinc.com>
+X-Mailer: b4 0.14.2
+X-Proofpoint-ORIG-GUID: yabnjCFcLoJiaOwQ4gLPzDE9uhHMGQk0
+X-Proofpoint-GUID: yabnjCFcLoJiaOwQ4gLPzDE9uhHMGQk0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-12_04,2025-01-10_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=828 spamscore=0
+ clxscore=1011 adultscore=0 malwarescore=0 bulkscore=0 mlxscore=0
+ suspectscore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2308100000 definitions=main-2501120094
+X-Apple-Remote-Links: v=1;h=KCk=;charset=UTF-8
 
-On Sun, Jan 12, 2025 at 09:42:45AM +0100, Greg Kroah-Hartman wrote:
-> On Sat, Jan 11, 2025 at 08:08:49PM +0000, qasdev wrote:
-> > This patch addresses a null-ptr-deref in qt2_process_read_urb() due to
-> > an incorrect bounds check in the following:
-> > 
-> > ""
-> >        if (newport > serial->num_ports) {
-> > 	       dev_err(&port->dev,
-> > 		       "%s - port change to invalid port: %i\n",
-> > 		       __func__, newport);
-> > 	       break;
-> >        }
-> > ""
-> > 
-> > The condition doesn't account for the valid range of the serial->port
-> > buffer, which is from 0 to serial->num_ports - 1. When newport is equal
-> > to serial->num_ports, the assignment of "port" in the
-> > following code is out-of-bounds and NULL:
-> > 
-> > ""
-> >        serial_priv->current_port = newport;
-> >        port = serial->port[serial_priv->current_port];
-> > 
-> > ""
-> > 
-> > The fix checks if newport is greater than or equal to serial->num_ports
-> > indicating it is out-of-bounds.
-> > 
-> > Reported-by: syzbot <syzbot+506479ebf12fe435d01a@syzkaller.appspotmail.com>
-> > Closes: https://syzkaller.appspot.com/bug?extid=506479ebf12fe435d01a
-> > Tested-by: syzbot <syzbot+506479ebf12fe435d01a@syzkaller.appspotmail.com>
-> > Tested-by: Qasim Ijaz <qasdev00@gmail.com>
-> > Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
-> 
-> Your signed-off-by does not match your "From:" line :(
-> 
-> Also, no need to add a tested-by when you sign off on your own patch,
-> that is usually implied.
-> 
-> thanks,
-> 
-> greg k-h
+From: Zijun Hu <quic_zijuhu@quicinc.com>
 
-Hi Greg,
+Static devm_usb_phy_match() is only called by API devm_usb_put_phy(), and
+the API has no caller now.
 
-Thank you for your feedback on my patch. I’ve sent a v2 patch in a new thread, addressing the issues with the From: line and removing the redundant Tested-by tag.
+Remove the API and the static function.
+
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+---
+ Documentation/driver-api/driver-model/devres.rst |  1 -
+ drivers/usb/phy/phy.c                            | 26 ------------------------
+ include/linux/usb/phy.h                          |  5 -----
+ 3 files changed, 32 deletions(-)
+
+diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
+index d594d0ea0e9dfaf30f9ef805b0a0272763a4601e..d75728eb05f85eca4e0fbf7961bfa8181106a778 100644
+--- a/Documentation/driver-api/driver-model/devres.rst
++++ b/Documentation/driver-api/driver-model/devres.rst
+@@ -404,7 +404,6 @@ PHY
+   devm_usb_get_phy()
+   devm_usb_get_phy_by_node()
+   devm_usb_get_phy_by_phandle()
+-  devm_usb_put_phy()
+ 
+ PINCTRL
+   devm_pinctrl_get()
+diff --git a/drivers/usb/phy/phy.c b/drivers/usb/phy/phy.c
+index 1ce134505cee86102eb2d93ca1d09a52b684d3bb..e1435bc596622ce40f64355573f82f57bc8282bf 100644
+--- a/drivers/usb/phy/phy.c
++++ b/drivers/usb/phy/phy.c
+@@ -346,13 +346,6 @@ static void devm_usb_phy_release2(struct device *dev, void *_res)
+ 	usb_put_phy(res->phy);
+ }
+ 
+-static int devm_usb_phy_match(struct device *dev, void *res, void *match_data)
+-{
+-	struct usb_phy **phy = res;
+-
+-	return *phy == match_data;
+-}
+-
+ static void usb_charger_init(struct usb_phy *usb_phy)
+ {
+ 	usb_phy->chg_type = UNKNOWN_TYPE;
+@@ -614,25 +607,6 @@ struct usb_phy *devm_usb_get_phy_by_phandle(struct device *dev,
+ }
+ EXPORT_SYMBOL_GPL(devm_usb_get_phy_by_phandle);
+ 
+-/**
+- * devm_usb_put_phy - release the USB PHY
+- * @dev: device that wants to release this phy
+- * @phy: the phy returned by devm_usb_get_phy()
+- *
+- * destroys the devres associated with this phy and invokes usb_put_phy
+- * to release the phy.
+- *
+- * For use by USB host and peripheral drivers.
+- */
+-void devm_usb_put_phy(struct device *dev, struct usb_phy *phy)
+-{
+-	int r;
+-
+-	r = devres_release(dev, devm_usb_phy_release, devm_usb_phy_match, phy);
+-	dev_WARN_ONCE(dev, r, "couldn't find PHY resource\n");
+-}
+-EXPORT_SYMBOL_GPL(devm_usb_put_phy);
+-
+ /**
+  * usb_put_phy - release the USB PHY
+  * @x: the phy returned by usb_get_phy()
+diff --git a/include/linux/usb/phy.h b/include/linux/usb/phy.h
+index e4de6bc1f69b6287cb49882c3235b824bb474d13..0fa9885a1038bf747fe462982b4097a3fb1a8ec5 100644
+--- a/include/linux/usb/phy.h
++++ b/include/linux/usb/phy.h
+@@ -223,7 +223,6 @@ extern struct usb_phy *devm_usb_get_phy_by_phandle(struct device *dev,
+ extern struct usb_phy *devm_usb_get_phy_by_node(struct device *dev,
+ 	struct device_node *node, struct notifier_block *nb);
+ extern void usb_put_phy(struct usb_phy *);
+-extern void devm_usb_put_phy(struct device *dev, struct usb_phy *x);
+ extern void usb_phy_set_event(struct usb_phy *x, unsigned long event);
+ extern void usb_phy_set_charger_current(struct usb_phy *usb_phy,
+ 					unsigned int mA);
+@@ -259,10 +258,6 @@ static inline void usb_put_phy(struct usb_phy *x)
+ {
+ }
+ 
+-static inline void devm_usb_put_phy(struct device *dev, struct usb_phy *x)
+-{
+-}
+-
+ static inline void usb_phy_set_event(struct usb_phy *x, unsigned long event)
+ {
+ }
+
+---
+base-commit: 594c82329eef335ad90f5276ae0d2dff4d6d2668
+change-id: 20250112-remove_api-8b51aaf6955b
 
 Best regards,
-Qasim
+-- 
+Zijun Hu <quic_zijuhu@quicinc.com>
+
 
