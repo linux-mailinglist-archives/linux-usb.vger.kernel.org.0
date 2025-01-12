@@ -1,114 +1,113 @@
-Return-Path: <linux-usb+bounces-19219-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19220-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CEABA0A970
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2025 14:10:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26C75A0A9DC
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2025 14:51:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E2617A0524
-	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2025 13:10:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2ABA61887368
+	for <lists+linux-usb@lfdr.de>; Sun, 12 Jan 2025 13:51:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 237DB1B424F;
-	Sun, 12 Jan 2025 13:10:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A99791B6CF9;
+	Sun, 12 Jan 2025 13:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="f38LmPKo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PVxUuw3x"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 931CC1B393D;
-	Sun, 12 Jan 2025 13:10:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 312631DFCB
+	for <linux-usb@vger.kernel.org>; Sun, 12 Jan 2025 13:51:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736687446; cv=none; b=I7FI7J2KcAMJgymHq/3jEBnjpiO8NB6HrS8yj2uZa5Y5E41R64NXzH8wZOJ4LCRRsLarg5LTzBQGHKa3N7Ui8AiYnyrh3CvHZO4sazBiykCVQJUhabaGOGbwczAWq7gd57sCetB0tQboVOQie4baobEP91DSOf2FURBKN2/Yutk=
+	t=1736689909; cv=none; b=pzWT0JDHkMrVeTkI9DXIHFCOJzhCFZ+UaeK4+ZhjppA+9gnAFyeUqZAtLMG5nsBv/jBpEJTRe8FUENXD+UcecbaveZTLjcsNsGqOdOeDld2vjq5Agjrxq1eEXyQZsBCsQ1J8VWPj+OaIsngfK8D/57V1eU/Hv0sQWa38CGWo1dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736687446; c=relaxed/simple;
-	bh=o3kOfC7Hhnelb75OOr2nVYOujxJj1mf3dLDLH1urtYM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IZQG7u8lUb02PJWtHRwfmcVrS8Kr0EO4PBEYF2HaRtBVm4VZhja8HWuSR5vr8uCHUFO3R+QjK6b2pW9Bs/m3Dcxob68E7Q/Gm2f2boM8JFSsWc+Z/K9a5UOykAJFtHJXBDlf1g8Jz+VNdJwjlTZueV1FgxzdVw8q6PhVKTsFQyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=f38LmPKo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90465C4CEDF;
-	Sun, 12 Jan 2025 13:10:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1736687446;
-	bh=o3kOfC7Hhnelb75OOr2nVYOujxJj1mf3dLDLH1urtYM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=f38LmPKoQ+7n/C0moZiklr+Ah9CnNrArGaTAiHmx0vOd/XvSOEnAovwykOHt8nlKm
-	 18u3retHgwwbj/2leeLb6dPmybHqYfEzBaKdyJfz2gM4+cAak0OgGj1uk6shcyEB8Q
-	 atg8zcB1JDVZGRqK3M7OA6HxAnTo742dOGtMfM3Y=
-Date: Sun, 12 Jan 2025 14:08:40 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Qasim Ijaz <qasdev00@gmail.com>
-Cc: Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] usb: Fix null-ptr-deref in qt2_process_read_urb()
-Message-ID: <2025011258-shelving-entwine-ef76@gregkh>
-References: <Z4ORrl4sZBhPiu2p@qasdev.system>
+	s=arc-20240116; t=1736689909; c=relaxed/simple;
+	bh=DGn9iTy3WY6vxkZUqo7szJIpW8Hm/agneMOtVqyPuOs=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Pov222GMTHL5DRkp6XzplJn0yGrQxBBV3g2IEc9psWSC9fasJx68Wc7277Hs6lMQRTXv8KBNn+9wQ194AFx3iY3LqRNphWRI1Pz9UurLup6Coedfolgd9ltQorxx2Y8EQ61eedczqC6eAXlsz4tr8C7IFA3n6vLYmWRbz+5k/BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PVxUuw3x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A82ABC4CEDF
+	for <linux-usb@vger.kernel.org>; Sun, 12 Jan 2025 13:51:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736689908;
+	bh=DGn9iTy3WY6vxkZUqo7szJIpW8Hm/agneMOtVqyPuOs=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=PVxUuw3x2mEfwjobyLgAPy0FDFMqjEYFavbl7kmX6XMNGVerLHGunXf0dJ7AqoNXH
+	 8qoW8CP3HMxFP+J5BvX/xuUi8hhj5NS2J36S/A9gwBCsj88vbqkGpjHCW4KmpGVybY
+	 +e5ZXw/2L5Y5xvDYIomeKHWL7fgtMQk1Wk52ArYn28C5ErHMT2VkHgTQowTFlKvxy5
+	 8xZ9rb9NscP7qkOgv6FiOdj1meN+T1N6tbmy89VuWxz5GnDxrVluZE56lTVOmipzMS
+	 MhLIjj8BhPzfq+JBpKlEFCG3BJ6KmbkaXUDq2eJ0/nZA7cmFdJDVSuOS+uHYJEDfs1
+	 yV2eYn7nf6DQg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 964B8C3279E; Sun, 12 Jan 2025 13:51:48 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219683] Noname webcam used to work, but not anymore.
+Date: Sun, 12 Jan 2025 13:51:48 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: blocking
+X-Bugzilla-Who: pierre.juhen@orange.fr
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219683-208809-TAabGeYvSq@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219683-208809@https.bugzilla.kernel.org/>
+References: <bug-219683-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z4ORrl4sZBhPiu2p@qasdev.system>
 
-On Sun, Jan 12, 2025 at 09:55:58AM +0000, Qasim Ijaz wrote:
-> This patch addresses a null-ptr-deref in qt2_process_read_urb() due to
-> an incorrect bounds check in the following:
-> 
-> ""
->        if (newport > serial->num_ports) {
->                dev_err(&port->dev,
->                        "%s - port change to invalid port: %i\n",
->                        __func__, newport);
->                break;
->        }
-> ""
-> 
-> The condition doesn't account for the valid range of the serial->port
-> buffer, which is from 0 to serial->num_ports - 1. When newport is equal
-> to serial->num_ports, the assignment of "port" in the
-> following code is out-of-bounds and NULL:
-> 
-> ""
->        serial_priv->current_port = newport;
->        port = serial->port[serial_priv->current_port];
-> 
-> ""
-> 
-> The fix checks if newport is greater than or equal to serial->num_ports
-> indicating it is out-of-bounds.
-> 
-> Reported-by: syzbot <syzbot+506479ebf12fe435d01a@syzkaller.appspotmail.com>
-> Closes: https://syzkaller.appspot.com/bug?extid=506479ebf12fe435d01a
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219683
 
-Oh wow, syzbot is now starting to fuzz random USB devices?  And this is
-the only thing it found for this device?  That's not all that bad, I
-expected much worse.
+--- Comment #3 from Pierre Juhen (pierre.juhen@orange.fr) ---
+So the problem lies here in uvc_driver.
+
+struct uvc_entity *uvc_entity_by_id(struct uvc_device *dev, int id)
+{
+        struct uvc_entity *entity;
+
+        list_for_each_entry(entity, &dev->entities, list) {
+                if (entity->id =3D=3D id)
+                        return entity;
+        }
+
+        return NULL;
+}
 
 
-> Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
-> ---
->  drivers/usb/serial/quatech2.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/serial/quatech2.c b/drivers/usb/serial/quatech2.c
-> index a317bdbd00ad..72fe83a6c978 100644
-> --- a/drivers/usb/serial/quatech2.c
-> +++ b/drivers/usb/serial/quatech2.c
-> @@ -503,7 +503,7 @@ static void qt2_process_read_urb(struct urb *urb)
-> 
->                                 newport = *(ch + 3);
-> 
-> -                               if (newport > serial->num_ports) {
-> +                               if (newport >= serial->num_ports) {
->                                         dev_err(&port->dev,
->                                                 "%s - port change to invalid port: %i\n",
->                                                 __func__, newport);
+The UVC spec says :
 
-Reviewed-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Each Unit and Terminal WITHIN THE VIDEO FUNCTION function is assigned a uni=
+que
+identification number, the
+Unit ID (UID) or Terminal ID (TID), contained in the bUnitID or bTerminalID
+field of the
+descriptor, but the control includes also sound function, that explains why=
+ the
+issue occurs.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
