@@ -1,120 +1,142 @@
-Return-Path: <linux-usb+bounces-19251-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19252-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B22A1A0B77A
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 13:50:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 100FAA0B7AD
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 14:07:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D079E1881AA3
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 12:50:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8484E3A4A9D
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 13:07:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC5B823A577;
-	Mon, 13 Jan 2025 12:49:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7481233D92;
+	Mon, 13 Jan 2025 13:07:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mj9BrStD"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="tidfsf09"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pv50p00im-ztdg10011201.me.com (pv50p00im-ztdg10011201.me.com [17.58.6.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C400022A4D2;
-	Mon, 13 Jan 2025 12:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D5822F156
+	for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2025 13:07:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.39
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736772582; cv=none; b=eW3dSC8lhu9FSBn0SFuJeE4eryyUzrc22jLad1hogpKOFhDSv/YKJ1EvK9rLsc0HBNA9z32osFAKZaRo7K8WIceszeslv7SE2XHSYndPFaV5bqA0FUQlxXMNtqkIxj+OrOreu6ADgFclucDQ+QyDp+PcpG5YVkVd5yHbq0J9RMM=
+	t=1736773626; cv=none; b=Ns1eCrfU1Q/ATETNhAOlILfWWROjdooxfTyDZ5wWJUSr+IzFYDNksfxDYt6xGNo92r4/+r6aGYDjkI9VkASgAMEQQGJhk4X0+UEjHGNsgl2qcliquEIA6GMYKr2tdKHMN+xEEu7p2v6gv5SK+bZxyXnaA4EbXXOU/uoFfuh27q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736772582; c=relaxed/simple;
-	bh=AsqtBCn/763fag4qo+cCuu2010gu/LUWczGp21PxJdo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=F7XPM3VTwg/pPc7MaBojUcmb9XqHxmXVFpW9M+9vdM+BAoRWvTMvBnR9hZh0HK+PNQ72bN4qXaLUhqM2wjtGD6DZA+QNZQy8smMljYevygLqNeMVuQB+mWz+2Ru4VlPBanNU3UU6CXC4PmiWW3HzQpdthyxvCs2KD/XRq6CloZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mj9BrStD; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-30156c52c25so2416211fa.0;
-        Mon, 13 Jan 2025 04:49:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736772579; x=1737377379; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dZFzKdNYm2y3H3rB33WTR2xrLGfvEaCqZxtdd9rlq9E=;
-        b=Mj9BrStDYrNiCxr45d9caiQ9cugAiGR55rPT+UJcwvyYiRPlQqrtwKJxNE7+Yar6Ru
-         o0pJaacie+6CtkhTBANiLDrk8DFEvvtq1p/K1c6pYivUo2KVx2vjeheX6P09wVxj8Tic
-         NDqouuCC1gVUJDc5Cu7H0Z06GTWGr9ZHsuXAdxgC0EG5I8YAG4vedmwosLSMKWl/bNKg
-         RkyHO7qTLsqIkfA7L8so7gteSNsj/4A8kvMqrfSalCyoDqCc9nzXou/CNSwvp8ezBrz6
-         R6kOlqse5CVMExNNG864zj8+v18TmdncHeUZhmnHST2NcN4h6tS41iLZq9/M5RSWPzMT
-         bAzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736772579; x=1737377379;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dZFzKdNYm2y3H3rB33WTR2xrLGfvEaCqZxtdd9rlq9E=;
-        b=HJN7hh07NBBg7q3BS77h71rIGSVbuFNQCKMWM3123PacHDK4ofmVa8MP76XjTrtYiR
-         fFzhVNr2sO83qlpsvikQT0SEUDK5WSJNss1Lysg9FLIDNhdCOBDqpPbiodOOGCK1U5zz
-         CoXLagpkYnAud9WjDTOQzXBx5dWu845tZ6aFgorZAb9DNPU5z6LV7W4OPYjq/A/D06fV
-         CQBynx1inTAB4g8EtVVFE69x2B9FQKVvpaWA6W2iMzS8r7hjJiNjdfADHx1Rr5b600ge
-         1VnISQxay1aSpKHybyK7W7IdUYCHRLS7Qy6uMrFZlivrkYsrJdPO62TJWSdE5KOH4eND
-         TeyA==
-X-Forwarded-Encrypted: i=1; AJvYcCVorj7ofxR4S3/YtjBCDCA2RTt/exdBsmVUloZUVJeWL57mj47BPnEY47rIbWEF0PbpS7lu6UF+deyo@vger.kernel.org, AJvYcCWLavvtvDx92SKDQf9NauBeaKzK4YqG3IAC2qlyQCne+VIXSptMiwZggm/R7CSFxRn/kfA0J8m9zZrgcw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPvZFGcqdvT0HQrsgsWEZ/XHow3NrCblG+Q8WEMciYqCW1ItuA
-	LYq4d0AqSFzFXxleyQy384wAoBSDUUblkiG0psHSIQKSMvvAEFCH
-X-Gm-Gg: ASbGncvess+5Jv0iiTlJKjuE3QURJmNYTrTH4xPYGYgapM8iNDPTzvJE5Yd78xVQFkz
-	0mOs+mrGZhF1EV43fcD0tnal3e5k/mV2WQuq7WhcMql0MLEqZOi/ss1t7BybEk05QzOFbRBK5W9
-	6ds6ulSAT9F/185A+EKZeABY4M3YuH8OC3IDeoIXEraCD4d6K2qQYFBKnhlH/4/aXECMc3OgB/D
-	vqkHYGowpcAOh96A69bstF2l0Mn6EcVRKnPaKz5UDSyHDNnHSB2mHotYr8p7Y4KDU6NywWPnLJ4
-	k0qJJTt5vCQwOs1MvzEd0tIXvLU=
-X-Google-Smtp-Source: AGHT+IGYPxX6Ph06tSbiahG+i/xvxxzUSZjFXa2hgtW1G53OKDh3RUuU4CubkFsaL5doUpgWExA4bg==
-X-Received: by 2002:a2e:be21:0:b0:300:38ff:f8e1 with SMTP id 38308e7fff4ca-305f4543831mr23133101fa.2.1736772578824;
-        Mon, 13 Jan 2025 04:49:38 -0800 (PST)
-Received: from laptok.lan (89-64-31-140.dynamic.chello.pl. [89.64.31.140])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-305ff1ec162sm14256181fa.101.2025.01.13.04.49.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2025 04:49:38 -0800 (PST)
-From: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
-To: jikos@kernel.org,
-	bentiss@kernel.org
-Cc: anssi.hannula@gmail.com,
-	linux-input@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH v4 11/11] =?UTF-8?q?MAINTAINERS:=20Add=20Tomasz=20Paku?= =?UTF-8?q?=C5=82a=20as=20hid-universal-pidff=20maintainer?=
-Date: Mon, 13 Jan 2025 13:49:23 +0100
-Message-ID: <20250113124923.234060-12-tomasz.pakula.oficjalny@gmail.com>
-X-Mailer: git-send-email 2.48.0
-In-Reply-To: <20250113124923.234060-1-tomasz.pakula.oficjalny@gmail.com>
-References: <20250113124923.234060-1-tomasz.pakula.oficjalny@gmail.com>
+	s=arc-20240116; t=1736773626; c=relaxed/simple;
+	bh=vmkYl0MfndY9C/wzg8RrVEbRyrF2nuSAKLy9qNGUXKQ=;
+	h=Content-Type:From:Mime-Version:Subject:Message-Id:Date:Cc:To; b=AhAd6Fs3Lxd5G+abtDyjthGpL8KTRWb4SMalVzDAbytrAG0KQC4/pG//C63f7IxUmKtL7PbqMdyUnRdFmYiTya/tfrGk0RTjrBPKPsw7wpKfVm9tOdMmHOjPxY3ey2X+8XkoZXQMwtPdOw7Wrs7cWsdXU2W/zRfrfjyRel2SRRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=tidfsf09; arc=none smtp.client-ip=17.58.6.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1736773624;
+	bh=/VferRrDdpdfgDvmdmWN4ynbARe4+9nSWpj4+iwm8mE=;
+	h=Content-Type:From:Mime-Version:Subject:Message-Id:Date:To:
+	 x-icloud-hme;
+	b=tidfsf09IXU7qyaHO70tkz8ejUnvErGVjF0gINXEyBSIdNryh4LWbemP8oVLpbx8o
+	 0Dt3Pnjiw5soxNI09iUTXv2RfLXcdgG1gkfIC5BEKUWjmSWElIcc3+NX/t+kudJiA8
+	 FQASD03DVH5Ve+tFCbqobg9sdbR4dkWMqJxCh7qLp3pBN3LUrgcR66pBkD6cLvqb9y
+	 F9TEAzcONJz7Jebcq2TwhrO7ZGAFpYe1AzqRYMctFRHX6r8Ng4L0Az6rMyXt3wqtIT
+	 zpWjD35HNWZJ3tsqeA1zdjQxQ2JLcKqNXsxK2aCLGwTqDeGAafhYNMDCuJySWT/NXQ
+	 inB/q8TooaoMg==
+Received: from smtpclient.apple (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10011201.me.com (Postfix) with ESMTPSA id 60D7768043C;
+	Mon, 13 Jan 2025 13:06:57 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From: =?utf-8?B?5r2Y5L+K5Lit?= <a1134123566@icloud.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v3] usb: gadget: ncm: Avoid dropping datagrams of properly parsed NTBs
+Message-Id: <4C771A46-5372-488E-B31F-67262CDB95D6@icloud.com>
+Date: Mon, 13 Jan 2025 21:06:42 +0800
+Cc: quic_kriskura@quicinc.com, gregkh@linuxfoundation.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ quic_jackp@quicinc.com, quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+ stable@vger.kernel.org
+To: =?utf-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+X-Mailer: iPhone Mail (22C161)
+X-Proofpoint-ORIG-GUID: eCJBSQzVJomJyczsNROsasEWdAyYivYt
+X-Proofpoint-GUID: eCJBSQzVJomJyczsNROsasEWdAyYivYt
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-13_04,2025-01-13_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 adultscore=0
+ phishscore=0 spamscore=0 clxscore=1011 mlxlogscore=860 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2501130110
 
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+=EF=BB=BFHi Maciej,
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 910305c11e8a..0a6ee05b6467 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10212,6 +10212,12 @@ F:	drivers/hid/hid-sensor-*
- F:	drivers/iio/*/hid-*
- F:	include/linux/hid-sensor-*
- 
-+HID UNIVERSAL PIDFF DRIVER
-+M:	Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
-+L:	linux-input@vger.kernel.org
-+S:	Maintained
-+F:	drivers/hid/hid-universal-pidff.c
-+
- HID VRC-2 CAR CONTROLLER DRIVER
- M:	Marcus Folkesson <marcus.folkesson@gmail.com>
- L:	linux-input@vger.kernel.org
--- 
-2.48.0
+On 2025/1/13 1:49, Maciej =C5=BBenczykowski Wrote:
+> (a) I think this looks like a bug on the sending Win10 side, rather
+> than a parsing bug in Linux,
+> with there being no ZLP, and no short (<512) frame, there's simply no
+> way for the receiver to split at the right spot.
+>=20
+> Indeed, fixing this on the Linux/parsing side seems non-trivial...
+> I guess we could try to treat the connection as simply a serial
+> connection (ie. ignore frame boundaries), but then we might have
+> issues with other senders...
+>=20
+> I guess the most likely 'correct' hack/fix would be to hold on to the
+> extra 'N*512' bytes (it doesn't even have to be 1, though likely the N
+> is odd), if it starts with a NTH header...
+Make sence, it seems we only need to save the rest data beside
+dwBlockLength for next unwrap if a hack is acceptable, otherwise I may
+need to check if a custom host driver for Windows10 user feasible.
+
+I didn't look carefully into the 1byte and padding stuff with Windows11
+host yet, I will take a look then.
+
+> (b) I notice the '512' not '1024', I think this implies a USB2
+> connection instead of USB3
+> -- could you try replicating this with a USB3 capable data cable (and
+> USB3 ports), this should result in 1024 block size instead of 512.
+>=20
+> I'm wondering if the win10 stack is avoiding generating N*1024, but
+> then hitting N*512 with odd N...
+Yes, I am using USB2.0 connection to better capture the crime scene.
+
+Normally the OUT transfer on USB3.0 SuperSpeed connection comes with a bunch=
+
+of 1024B Data Pakcet along with a Short Packet less than 1024B in the end fr=
+om
+the Lecroy trace.
+
+It's also reproducible on USB3.0 SuperSpeed connection using dwc3 controller=
+,
+but it will cost more time and make it difficult to capture the online data
+(limited tracer HW buffer), I can try using software tracing or custom logs
+later:
+
+[  5]  26.00-27.00  sec   183 MBytes  1.54 Gbits/sec
+[  5]  27.00-28.00  sec   182 MBytes  1.53 Gbits/sec
+[  206.123935] configfs.gadget.2: Wrong NDP SIGN
+[  206.129785] configfs.gadget.2: Wrong NTH SIGN, skblen 12208
+[  206.136802] HEAD:0000000004f66a88: 80 06 bc f9 c0 a8 24 66 c0 a8 24 65 f7=
+ 24 14 51 aa 1a 30 d5 01 f8 01 26 50 10 20 14 27 3d 00 00
+[  5]  28.00-29.00  sec   128 MBytes  1.07 Gbits/sec
+[  5]  29.00-30.00  sec   191 MBytes  1.61 Gbits/sec
+>=20
+> Presumably '512' would be '64' with USB1.0/1.1, but I guess finding a
+> USB1.x port/host to test against is likely to be near impossible...
+>=20
+> I'll try to see if I can find the source of the bug in the Win
+> driver's sources (though based on it being Win10 only, may need to
+> search history)
+> It's great if you can analyze from the host driver.
+
+I didn't know if the NCM driver open-sourced on github by M$ is the correspo=
+nd
+version. They said that only Win 11 officially support NCM in the issue on g=
+ithub
+yet they do have a built-in driver in Win10 and 2004 tag there in the repo.
 
 
