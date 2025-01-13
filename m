@@ -1,147 +1,239 @@
-Return-Path: <linux-usb+bounces-19263-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19264-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B82AA0BD0F
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 17:15:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89107A0BF39
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 18:51:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 77990188806F
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 16:15:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1C623A8766
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 17:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B36D20AF91;
-	Mon, 13 Jan 2025 16:15:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 929B01BFE03;
+	Mon, 13 Jan 2025 17:51:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xfE+kLa9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jqcZYIdE"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 170591FBBEA
-	for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2025 16:15:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 872F424022F;
+	Mon, 13 Jan 2025 17:51:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736784902; cv=none; b=dBQ5hbBw2Jqaqw8r6u6sjkCa82YPGF+UhqSHkBVCEDuPlWVPOHKRizPas1IX4hNkCWTa2QwPJXsjEaMzX54GGuvh+EfYHHlEzuskRqUFlhfvgNtHH3MTYoW1lwOD2611bYS8Czz7GVD0pY20KoQT+ticXMNEZ5F5JBIkZOSuFIs=
+	t=1736790690; cv=none; b=UWyfie3hpO5vxXzcZbidQYHuQmmDyFwE7SSfKn4u13syer8sFtIlEi849RT2S0b/IYprjpJdqO1NuDIvYDgp1hY2BYFz8ZTV9IdRuqzyC7kY9ciL4HXwgokOPs/zoIaviFveCPvDVZlz7Z3Jy5ecPD72GSfXzkRCBIorhC4hNAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736784902; c=relaxed/simple;
-	bh=B9BBV050L1aecQPyYu7lAbyfZYdXk+T6yzMHGJUTUz0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QIOepjW33foyTobH8ufo/ovnqM07Y+2LcAfOAvNuYzuLm9U9mwo1J0fs6ZbIcQ7Dr6R6ByEXjhAT83Cojo9cwEBlElTL3/m+Pip8P+DGM3YNuuK1EiRXU2x8iTePSU1/zN4xxjY0GRkpo/ccy5mAT9Swfuqac10in2pRFuVVFIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xfE+kLa9; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5d442f9d285so8806a12.1
-        for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2025 08:15:00 -0800 (PST)
+	s=arc-20240116; t=1736790690; c=relaxed/simple;
+	bh=xvP2oas+PRLIaBT2sJfLandQgM2IRgkt3Cwls6mcoqI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ID8l6c8WsM73Loqzr6f8hhglDPIUfNrK0opPZzC8KOLdr//lJsCN8FWGrFUxKptK81U/2bvYFTQEIuFF1FKq0BwuQXHCQykFtVf7i5LhrJinvlXd/RcarLrEh6DjyfweUafOtvZPOVFViqTWec5JAPIUS6X1GvzxMK7uWy57aFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jqcZYIdE; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21661be2c2dso77889335ad.1;
+        Mon, 13 Jan 2025 09:51:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736784899; x=1737389699; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QShTnDTQ8IHjQQz+4aG3jXHA0yIDJFzr0SGW6gyyWZk=;
-        b=xfE+kLa9vg8qurJiAEFHy4/c/qLcFIdjrooh3WmfFdlX4smWhD6ova6QCV8aFtzYvH
-         DRIC0KbH5OOqO0+sB8DmbUfb8MznlOPSTt6c0AeIiFw0+DSecnCqJbCHEEWqoNLyVuzJ
-         bn5YTj9xCwVKM9H0uz8yX3OK6TXZ4nURgf0JnF2ETgocTyh4TTiXjyHQUtmjDLJ45gY/
-         /7ra5fyP22AMyC7duEbgAsYXtB6mx3zcC0fKwhzW0swwEM2fx5hZ6IM01NSsZVUS2RO7
-         s/1duC93JFqdgPeagEXtVNTTu+rfrxmv58j6UxhQZMNKo4zDVzoq9VX+qO6b1XZJZqjM
-         SjuQ==
+        d=gmail.com; s=20230601; t=1736790687; x=1737395487; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qKIcL6LoSOnLSn/JR07z8bmhz8BmbhyMN3yZvvfIdn8=;
+        b=jqcZYIdErHxE32Qy1EFn5IMOFMvrS+gi+qCdkQQcep6iLTf/TJ7STEgVSy2YW56yW2
+         aaV0fL2nOxdS3iLYUY9DzyYePvuYwETtZKT2Nq5KDeVq4INCt278wsO09uiQ9VPs5e7y
+         TDDg+YQQ/8cqKtAy+FPhGZxsgpn/0RAE6i8LlfViZACMng0rOyfoetWrMX86dVr8y1QN
+         H3gLQ1RG2mIYJZCAwUYIuDhcoPF7ywz//zd4a0TC8XY7jFhEETx+l8y0ngDAqfAtzlc0
+         1RUX5VyInZ1tLSMKJuBnDbQLe7rEPGW2s8bwqKNjQyrCx3UuSQr5lrLXq0aZyZNS0Xst
+         sk1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736784899; x=1737389699;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QShTnDTQ8IHjQQz+4aG3jXHA0yIDJFzr0SGW6gyyWZk=;
-        b=sK6lYnTWSSlaaHpu0Q2HVTMh/TQgeq3cpv+EdZEucOOjlfVmODrxogRmwjJeeQ99Uy
-         dNz9vfZSRyt4kYlSMJRvKnZExv8nukGPFo8aq8q3zCVOZkOHG2LvMiuFhkzNV7ytyum0
-         EGgOs2z4F/GqnbOzwc4tVal8pbNLMEL1cksKIy88dZWeMb4qschLoZQulkL8USEbyhv2
-         pQimlQ4bbhUDuCv7dsUY8TBQgjPX/uCNWCYkolsQd1PUlrnR/CV7w8u+cVUjdugMdw/T
-         lroxdQEno4mK6kTNJg11+MpKYQxs0Ve+bjJGbq38V4KCvuShM9bkRGhf8ifaTWCgYtE9
-         tNOQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU5MzWYe5aM73tUt065mOYEfMKIOZontnhU20Jr8K31gO7THY3CfeqkrlFJvDR/l6wZRmNbmmT2mZQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjkNYGIELmNdHbUntHju1l2SQcQq8iPwuY7CKSQRCB0XZXUSAM
-	Qa+6sLZwdiJ+z4cpltsYC3rC3Mijj7v/khbR8KN0XLKSqv71HQoFnPvSxBkymeL+frMNCPngQGc
-	OXR9i9NmGGBsrXPvYj6Xm/cFTsaOpgeEahqlT
-X-Gm-Gg: ASbGncsRX03KvsJit7qSyxkMCPIdgAHRvVAsNAmwv6v0rIaYD49WNF3m6U6hepk/CGU
-	g7a+wcaGWQw7VYyK7TeyoUcZW5x5Cfagmn/8R0xIx
-X-Google-Smtp-Source: AGHT+IEJmuDgymat/mpM2w1X1B9v8DJdUfMBCtBUnEyqa90eiWvc9ZY/XouqD+U+64QHR2U7Agi8HY3FQnq/fCx/tJQ=
-X-Received: by 2002:a50:934a:0:b0:5d0:8752:cecd with SMTP id
- 4fb4d7f45d1cf-5d9a0cca0a0mr219019a12.3.1736784899141; Mon, 13 Jan 2025
- 08:14:59 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736790687; x=1737395487;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qKIcL6LoSOnLSn/JR07z8bmhz8BmbhyMN3yZvvfIdn8=;
+        b=ZcIMgvosYqlcILz3y8NdIVGBEjbSDmkopRPgd6ehqJPLmxvAQ/0KrsVfJ8EBAAVPN6
+         9zOZjg/19m+u80fU6rNHe7lkBKmt5LTopCEdi7ZCVxfv0bITPz4gNRJn8oe9jxrLBNO6
+         wQsKMgcusRLl3ymg8pjDtVkwYeEXzCfcfA+FTNRoOQHw5yFbd24EQIibrdsi36rxozWS
+         JhyVeBGT8LIodvdq0SIMjtNp2clSWVOdKi3UKB2yzid5/lzf0vkfeWEPhpiWKUjdEXRC
+         vyPvLcf2+6sq4f9WAJJYWjO4abHBMqoUTN9Hj7mv3a3rysHFfwW+QnQzCcm7NkfGILso
+         voVQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUX3tSJ5s9numgLVrDIAPBH5hx/O5ryOosUySDkSHpIwvFGZTwPFIut+Oq6tVc9ADpfhDC7CW8b4wos@vger.kernel.org, AJvYcCUx66q7kMgmf4O7fR0rtkmHF/1iuLYLwP7+vJoQdjrbI1qm4WAMgFKTQ5Mpi4exAvbMZGGJLbx7HKo=@vger.kernel.org, AJvYcCVRur4v10CukLmejXTEkaLiogHlcViPGpP2mc8seC/aVFQ5217uODLzkaCYaUOjc+Sl2MCWCa65oTmtYxI=@vger.kernel.org, AJvYcCVzbLQH/RCQcZcfosIGozlMFYDUHRGqD4qgDT+saANDrSo3fP5ODUqgxu13bQpEl9D2JkwxYtXm52R5hJC6@vger.kernel.org, AJvYcCXCVj9KzSPG35r611GkXBu0unAwvg1a+/KPf/2Rl/ekP5423tJf4+WDOz6N/eJY9ciRGmEO/Cy9L/1vT6Mq@vger.kernel.org, AJvYcCXLkbBTjpq20oNx5sDOXr8vkpz1CsmUsYL9V62V1HKPQ7tJEz5pJu4ew+T8tjB0ADChhgJe/71bU2Is6AujxcSRZBdq/w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxi3CBE4qO+iJd8nX+Zz64XTLGG0JEcXmvNGQeXcuQJ5P0yf3kU
+	JvFQe7LHp7tr76/i8aHfb1Idqf6O9RtXjeqrtSUojwWbjti2WyTE
+X-Gm-Gg: ASbGnctstOa/xMBrsK9t4OPrpGGE3GTIS6e6cgiHEkvqGhRSaJCywJiNQXUaAnFKbA7
+	R/eC2k0cypE60fRANeKzX47Ls/1CX456l+yapsR9+/cn/R4lPKLj//DMEHb+WFuqWv+zFuvbqM5
+	XSf/XyDs1J1qKMjsGh83kPcPs6C5sAF6j3h9CkpnjSgVFR3G2i1J6o07sPg93bXk1IxXVjXyth0
+	V6Hn4v8OPQiH/DZlESG8XLlr4B3yBQvft92fWm291Ib3PUPRFrCKpA=
+X-Google-Smtp-Source: AGHT+IETV0NCUWP6YneaLkhvFR3Lh2s00aDZ8882w0N6P8RzmxA2eHRUCz1gfrlBR4KgYgzTeuAqrg==
+X-Received: by 2002:a17:902:ea09:b0:216:2a36:5b2e with SMTP id d9443c01a7336-21a83f76879mr320397085ad.32.1736790686632;
+        Mon, 13 Jan 2025 09:51:26 -0800 (PST)
+Received: from nuvole.. ([144.202.86.13])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f25a1cbsm55817985ad.241.2025.01.13.09.51.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2025 09:51:26 -0800 (PST)
+From: Pengyu Luo <mitltlatltl@gmail.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jean Delvare <jdelvare@suse.com>,
+	Guenter Roeck <linux@roeck-us.net>
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-hwmon@vger.kernel.org,
+	Pengyu Luo <mitltlatltl@gmail.com>
+Subject: [PATCH v3 0/6] platform: arm64: Huawei Matebook E Go embedded controller
+Date: Tue, 14 Jan 2025 01:49:45 +0800
+Message-ID: <20250113174945.590344-1-mitltlatltl@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250109035605.1486717-1-guanyulin@google.com>
- <20250109035605.1486717-6-guanyulin@google.com> <e8de4837-4c4a-4acd-bb33-6811d7381d20@rowland.harvard.edu>
-In-Reply-To: <e8de4837-4c4a-4acd-bb33-6811d7381d20@rowland.harvard.edu>
-From: Guan-Yu Lin <guanyulin@google.com>
-Date: Tue, 14 Jan 2025 00:14:00 +0800
-X-Gm-Features: AbW1kvYwXaUbFjPK9wIVT04AzGYANqAMNH3YYWmL8F7mYAvOMFgPmFNG0hcSTdA
-Message-ID: <CAOuDEK0jNn-nSb7Rk_0EYtFg+Mxybij6cGnOenq4FPJdTKyjng@mail.gmail.com>
-Subject: Re: [PATCH v7 5/5] usb: host: enable USB offload during system sleep
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com, 
-	mathias.nyman@intel.com, perex@perex.cz, tiwai@suse.com, 
-	sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com, 
-	ricardo@marliere.net, lijiayi@kylinos.cn, quic_jjohnson@quicinc.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-sound@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jan 9, 2025 at 11:08=E2=80=AFPM Alan Stern <stern@rowland.harvard.e=
-du> wrote:
->
-> On Thu, Jan 09, 2025 at 03:55:09AM +0000, Guan-Yu Lin wrote:
-> > Sharing a USB controller with another entity via xhci-sideband driver
-> > creates power management complexities. To prevent the USB controller
-> > from being inadvertently deactivated while in use by the other entity, =
-a
-> > usage-count based mechanism is implemented. This allows the system to
-> > manage power effectively, ensuring the controller remains available
-> > whenever needed.
-> > In order to maintain full functionality of an offloaded USB devices,
-> > several changes are made within the suspend flow of such devices:
-> > - skip usb_suspend_device() so that the port/hub are still active for
-> >   USB transfers via offloaded path.
-> > - not flushing the endpoints which are used by USB interfaces marked
-> >   with needs_remote_wakeup. Namely, skip usb_suspend_interface() and
-> >   usb_hcd_flush_endpoint() on associated USB interfaces. This reserves =
-a
-> >   pending interrupt urb during system suspend for handling the interrup=
-t
-> >   transfer, which is necessary since remote wakeup doesn't apply in the
-> >   offloaded USB devices when controller is still active.
->
-> Does this reasoning apply to interrupt-OUT as well as interrupt-IN?
->
+This adds binding, drivers and the DT support for the Huawei Matebook E Go
+(sc8280xp-based) Embedded Controller which is also found in Huawei Matebook
+E Go LTE (sc8180x-based), but I don't have the sc8180x one to perform tests,
+so this series enable support for sc8280xp variant only, this series provides
+the following features:
 
-Interrupt-OUT endpoints seem unnecessary in our current use cases. Our
-primary concern lies with interrupt-IN endpoints, specifically those
-associated with the remote wakeup feature.
-Remote wakeup presents a unique challenge within our audio offloading
-model during system suspend. Functions typically reliant on remote
-wakeup, such as key-events, bypass remote wakeup because the
-controller remains active during system suspend. Consequently, these
-functions are handled as if the system were active, with events
-received by a pending URB. Flushing the endpoint would remove this
-pending URB, leaving no mechanism to handle these interrupt events.
-Therefore, we should avoid flushing endpoints associated with remote
-wakeup to ensure continued functionality for audio offloading during
-system suspend.
+- battery and charger information report
+- charging thresholds control
+- FN lock (An alternative method)
+- LID switch detection
+- Temperature sensors
+- USB Type-C altmode
+- USB Type-C PD(high power)
 
->
-> Or looking at it another way: Since the device's endpoints are being
-> used by the coprocessor, should the system flush any of them at all?
->
-Our local experiments reveal issues when we flush interrupt endpoints.
-For other endpoints, we didn't see any problem. However, since
-usb_hcd_flush_endpoint() still modifies the endpoints, it'll be better
-to avoid flushing the endpoints associated with the offloaded USB
-devices. This could mitigate potential conflicts in the future.
+Thanks to the work of Bjorn and Dmitry([1]), the work of Nikita([2]), writing a
+EC driver won't be suffering. This work refers a lot to their work, also, many
+other works. I mentioned them in the source file.
 
-Regards,
-Guan-Yu
+Depends: https://lore.kernel.org/linux-arm-msm/20241220160530.444864-1-mitltlatltl@gmail.com
+
+[1] https://lore.kernel.org/all/20240614-yoga-ec-driver-v7-0-9f0b9b40ae76@linaro.org/
+[2] https://lore.kernel.org/all/20240315-aspire1-ec-v5-0-f93381deff39@trvn.ru/
+
+base-commit: 37136bf5c3a6f6b686d74f41837a6406bec6b7bc
+
+Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
+---
+Changes in v3:
+- Link to v2: https://lore.kernel.org/linux-arm-msm/20250105174159.227831-1-mitltlatltl@gmail.com
+
+dt-binding:
+- drop generic compatibles. (Krzysztof)
+- remove '+' to use literal block style. (Krzysztof)
+
+ec:
+- take struct gaokun_ucsi_reg as parameter (Heikki)
+- add almost all kernel doc comments (Krzysztof, Heikki)
+
+ucsi:
+- drop unnecessary ucsi quirks (Dmitry)
+- add UCSI v1.0 to ucsi.h (Heikki)
+- use gaokun_ucsi_read_cci() to read cci directly (Heikki)
+- drop unnecessary gaokun_ucsi_get_port_num (Heikki)
+- rename member port_num => num_ports (Heikki)
+- fix completion, forgot to signal threads in previous version
+
+dt:
+- fix indentation (Konrad)
+- add a link between role switch and connector
+
+Changes in v2:
+- Link to v1: https://lore.kernel.org/linux-arm-msm/20241227171353.404432-1-mitltlatltl@gmail.com
+
+global:
+- drop qcom's products(i.e. sc8180x, sx8280xp) everywhere, use 'product'-based instead(Krzysztof, Bryan)
+- drop Cc Nikita Travkin, we had discussed the device in PM.
+- add myself to MAINTAINERS
+
+dt-binding:
+- fix building (Rob Herring (Arm))
+- remove unnecessary code (Krzysztof)
+- add bugzilla documentation, insights of gaokun(see [1] or patch[1/5]) (Krzysztof, Aiqun(Maria))
+- explain the difference between PMIC GLink and gaokun EC (Aiqun(Maria))
+
+ec:
+- use Linux style comments (Krzysztof)
+- add a comment for mutex lock (Krzysztof)
+- add more kerneldoc for exported functions (Krzysztof)
+- eliminate unnecessary conditions (Bryan)
+- add a macro for check thresholds (Bryan)
+- improve English (Bryan)
+- use existing sysfs interface(hwmon, psy) whenever possible (Krzysztof)
+- use __le16 and related endianess conversion function for temp data (Ilpo)
+- drop alias for packet headers (Ilpo)
+- avoid hardcoding i2c msgs size (Aiqun(Maria))
+- add a comment for the sleep in critial region (Bryan, Aiqun(Maria))
+- use macro to construct packet (Bryan, Aiqun(Maria))
+
+wmi:
+- dropped
+
+ucsi:
+- reorder headers (Bryan)
+- a comment for the orientation map macro (Bryan)
+- make mux mode map more explicit(minus six is very clear now) (Bryan, Dmitry)
+- handle port update exceptions return (Bryan)
+- a comment for the UCSI quirks (Dmitry)
+- use the inline hint for the short register function (Dmitry)
+- use the API with delay to handle register instead of a direct sleep (Bryan)
+- handle unfinished initialization early
+
+psy:
+- add charging related sysfs to here (Krzysztof, Dmitry)
+- document ABI for power_supply sysfs (Krzysztof)
+- drop charging threshold, use smart charging instead
+
+dts:
+- correct indentation, properties' order. (Konrad)
+
+Pengyu Luo (6):
+  dt-bindings: platform: Add Huawei Matebook E Go EC
+  platform: arm64: add Huawei Matebook E Go EC driver
+  usb: typec: ucsi: Add a macro definition for UCSI v1.0
+  usb: typec: ucsi: add Huawei Matebook E Go ucsi driver
+  power: supply: add Huawei Matebook E Go psy driver
+  arm64: dts: qcom: gaokun3: Add Embedded Controller node
+
+ .../ABI/testing/sysfs-class-power-gaokun      |  47 +
+ .../bindings/platform/huawei,gaokun-ec.yaml   | 124 +++
+ MAINTAINERS                                   |   9 +
+ .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts | 163 ++++
+ drivers/platform/arm64/Kconfig                |  21 +
+ drivers/platform/arm64/Makefile               |   1 +
+ drivers/platform/arm64/huawei-gaokun-ec.c     | 841 ++++++++++++++++++
+ drivers/power/supply/Kconfig                  |  10 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/huawei-gaokun-battery.c  | 548 ++++++++++++
+ drivers/usb/typec/ucsi/Kconfig                |  11 +
+ drivers/usb/typec/ucsi/Makefile               |   1 +
+ drivers/usb/typec/ucsi/ucsi.h                 |   1 +
+ drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c   | 524 +++++++++++
+ .../linux/platform_data/huawei-gaokun-ec.h    |  80 ++
+ 15 files changed, 2382 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-gaokun
+ create mode 100644 Documentation/devicetree/bindings/platform/huawei,gaokun-ec.yaml
+ create mode 100644 drivers/platform/arm64/huawei-gaokun-ec.c
+ create mode 100644 drivers/power/supply/huawei-gaokun-battery.c
+ create mode 100644 drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+ create mode 100644 include/linux/platform_data/huawei-gaokun-ec.h
+
+-- 
+2.47.1
+
 
