@@ -1,192 +1,202 @@
-Return-Path: <linux-usb+bounces-19270-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19271-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECFD2A0BFE1
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 19:34:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FCA8A0C0D7
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 19:54:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 090AF169359
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 18:34:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB25D168FB2
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 18:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383B11C4A24;
-	Mon, 13 Jan 2025 18:34:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 848EF1C3F39;
+	Mon, 13 Jan 2025 18:54:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ig3xdhV4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a1uxsFlj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A5C71C5485;
-	Mon, 13 Jan 2025 18:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09EDD240251
+	for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2025 18:54:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736793262; cv=none; b=nBj8gTElLnsah0nzCtIKyO2QZB/Y8lMTdcYHQwbXFnAKbzHvo6jzh726MPLaLaWr4ZHRsIuvZ+ZGkRzVvdcnoXOZwSg9hAZd4UvPANssv991EyRYI6UPKspj3QPkSZt4ce07huNpN/1q5XjuAs2uerRX9AjwnnK8pgg/mMSRZ8U=
+	t=1736794460; cv=none; b=Q90UkTs2pSiC31S3K/n7haF+dtEIa35yaTLedJF91PccMpZl9ClajC5Q1dPgLQkpXlaywIogMmjL8EMwOJ3iwsN1BMNrEkRyRqyzelxaVuzZjm7rtYKa/4kDRJy2PR1dHOtDO76eauisgCcNaZ9npLUMsEDxAwXTO1SXtEGiuEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736793262; c=relaxed/simple;
-	bh=JW66LzXvkSldtcjOIAoWhfUsMT1RsmmpXnMrCnnL98M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SOcvV7f0KGnyvyR5wWQBZyj9bP5z6fRT5Fh/QcXKlBjuzxqhngZYJgiSEwUxmokGn5n6ejWGccyvxO9M1KPHa84eAh5MTt9znB5tGe/ZC+NsDWxYXP+bwWYhyKrnFAWd9Sj5VQYRPnTfJ9Q+Z+sVpi7tby6Cx/pSkQ+GtvtM33I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ig3xdhV4; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2ef748105deso5849458a91.1;
-        Mon, 13 Jan 2025 10:34:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736793260; x=1737398060; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=dUk9K/3v1fmRTIGpSlzyJ4xMMqx5o/nZbSm/00tBSUQ=;
-        b=Ig3xdhV4VrOpQO4CQ7srMkUZesZOs+vJlKusoVcUqA2uXwYZFYYBJjjYBO9yTUKTR0
-         ufF0zZZSYOqp+ad4NE36e7HVdrpNv8HFzF7dTvan6IGAAFKBPX/oodVq00XP7qZJl8yX
-         51T0+j5mgvPJcOtyL54IybCkbWgc+l7htUEeoCD4wi+GaN2y6JDCW0Av0ew6r1D6QLK1
-         rPSCU9Pbgd+iSj3mKdhGPre43o2Yo8Tx/Zxb2g3d2elYOKOhgYXYD0m1EZQvCq6nud9R
-         L16lYs0BXUAGdvEdPxCqSmdNjgZwfmXmY3aHAbX0zvEBSFodjyuSqIj24VqavBP2aFav
-         8aMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736793260; x=1737398060;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dUk9K/3v1fmRTIGpSlzyJ4xMMqx5o/nZbSm/00tBSUQ=;
-        b=WVTQX2oj6N9uatgjDwLIgjvDT7Dd+6pql4S+fo03uraZLkqO+PEN3IeHZSQ8iXR0Pt
-         aP9fRNT1qHqntxBaYTyChkZGCdqLhpEZsW19BNLuhVPbwQsrSpD+qYynuZXFQyiQ2kd5
-         ewAJVNUua6epOh95FcwY7NOuMyI/arzueuJ/kKTXILAPf5Hl36rwQa6t/oCMwyVZBqJZ
-         gwjZyZsKn8A21lnEovmbABASL/ZuZIBkc+sVzpi1NBq/dOFjA73jTBb8buEd74l9jxNY
-         aNdxrBuJ9q13Esf/uhOu2hkXkusHMKhbrgA+c4e+gyR8kuhszk0B+K6Kj4x3MdNz62vz
-         DZLA==
-X-Forwarded-Encrypted: i=1; AJvYcCUkphzOSwL44VhK/PxzI2vKqBEtInHln7ogQGlUwTmY/9rdJGcB7VkSOPPhBQMWi47OZAWjVBxSKFKcMPQ=@vger.kernel.org, AJvYcCVSeNyo+xe81SY4jDj7Ot0Qkc7e6/iPF/Vw1r3ELmbT+qZcUsDFMBcvYr2zrCkK0/hvsKlFpqdeZkLqvxqhyIo/bLxNBw==@vger.kernel.org, AJvYcCVSo1rbbU4bllLGTNIZVf8VW031vqe3MbTsLrTPPLvJyLB80OGqCScnXLwZ/YgxJ0K66tGDZrO9Kck=@vger.kernel.org, AJvYcCVmGVxAlCcJVd+FF/UFZIgkHA0Ckpn9iv1dN9AvIKHQvQGrX5NsmvWiznz7xHxYhnL3EDSagepUU0zIGMiP@vger.kernel.org, AJvYcCVvwf5a9tBRX+AuKWgfW2PbZR+PMqPY6uHb5uSE76So7AbFbutcM4Pl1fmPmnGpCzHWMbwqoPfgkMWgo1bJ@vger.kernel.org, AJvYcCXVm8lbZbcUEGZLKZ84ifdI3AhkGzTsTDo629yWhxYCY4N5LTIklje9/em/ZlsvZPVKCYcdNR3hwxZd@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMhSPxb6hfS9VLNT21MdoNLFID0cJSpZQMSAY37MZCcHKAM+HZ
-	83aceD64+ZyxMf8SQWzZ/HCqn+6ry7694YmHI3Bb8RVnObgdyb55
-X-Gm-Gg: ASbGncsWyb1qN9NDCGXSgIO5RpG9vofVq/AZFDHTUblXo5x//WAKG4LnJTtVM9BtHzu
-	FOQtoHkEiLOPZErWJVF8bWeHwIvZH5hWU1BreR+zcb+dZA/8qgi2AjzCU8U6QBVTUtk2iGafgbn
-	txJbWZnU6keDExEgmYw3kOufRRqaokMppfr4/9180cNEr/25ARGB8gJXKSniswqqYkCoE/c4P09
-	gYVPnhy2V+ldUdUzxHLbPL0XU0Tarhc2gmox67c0hOIzZhNnqhSEK2k4kNgm6iUj5BCZEkJeKKz
-	fjrKBX82dZGhUji/DqVKfkEaXY5ASg==
-X-Google-Smtp-Source: AGHT+IGffTqtldE+fbRRcZSQfUCPNUY9FZEm8W/f9587s75zCFU9ByP7Dahck4ocBkuv8JrlehJN8w==
-X-Received: by 2002:a17:90b:4a44:b0:2ea:61de:38f7 with SMTP id 98e67ed59e1d1-2f548f1d420mr31860946a91.29.1736793260365;
-        Mon, 13 Jan 2025 10:34:20 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f5593d07cbsm9069751a91.3.2025.01.13.10.34.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jan 2025 10:34:19 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dae486c3-8c3d-4b56-8022-4620fa638f82@roeck-us.net>
-Date: Mon, 13 Jan 2025 10:34:17 -0800
+	s=arc-20240116; t=1736794460; c=relaxed/simple;
+	bh=fdqmrgCXffI+guDd+EshJ/D6j3ex0HnosiYxqhB4LHY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Tk8DVZdwG01JM/4+6qSAyFH+qmy8kKdaz66ljVaUrNOiMeEJ8DcFjKWCHwOP3BM0gZ23RsZTxacRMkQOxqf/9GPbG7tFD1i344qOw160m8OMddjBcNF991He7sacQe/arZsjOmEKwgdI4IDtwsbT8BDyyqSbHLYOz+y1KGVjR4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a1uxsFlj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8D3DAC4CED6
+	for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2025 18:54:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736794459;
+	bh=fdqmrgCXffI+guDd+EshJ/D6j3ex0HnosiYxqhB4LHY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=a1uxsFljGutFLcqx2oNz0mYk4vS6m42WirgsgODMeONdF7Y9maUJmer2Va2cH5Ixc
+	 SWZZykjQCpbzbjxjnGd5IyHg2O8FfWT4cmHo8vRSY82ilL+p+7wuBzddvT68gftClO
+	 t+yCypwMoe/eYa8vwvurKHcHFacYRQ66SryPMDGph0oWcW9aJtnyYOSArfPGovlGve
+	 hvW9GT/9HY8FBD60rPwTMT0sv65gyQQaiMBqK5a5mhcj2jtwjOE3T3KxWXKFuRZZOX
+	 n7nl1aP+DjkKAePKZmJRpWWtLx2qa1W7r0/cA1qJ9BUgPuxyq29XeL9zOCvuUkA/SG
+	 PJePbEQGfcMsQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 79E57C3279F; Mon, 13 Jan 2025 18:54:19 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219590] Linux 6.13 ucsi driver error:
+ drivers/usb/typec/ucsi/ucsi.c:1374 ucsi_reset_ppm
+Date: Mon, 13 Jan 2025 18:54:19 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: guido.iodice@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219590-208809-v8OJInA5u9@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219590-208809@https.bugzilla.kernel.org/>
+References: <bug-219590-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/6] platform: arm64: add Huawei Matebook E Go EC
- driver
-To: Pengyu Luo <mitltlatltl@gmail.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Hans de Goede <hdegoede@redhat.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Sebastian Reichel <sre@kernel.org>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jean Delvare <jdelvare@suse.com>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20250113175049.590511-1-mitltlatltl@gmail.com>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250113175049.590511-1-mitltlatltl@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 1/13/25 09:50, Pengyu Luo wrote:
-> There are three variants of which Huawei released the first two
-> simultaneously.
-> 
-> Huawei Matebook E Go LTE(sc8180x), codename seems to be gaokun2.
-> Huawei Matebook E Go(sc8280xp@3.0GHz), codename must be gaokun3. (see [1])
-> Huawei Matebook E Go 2023(sc8280xp@2.69GHz), codename should be also gaokun3.
-> 
-> Adding support for the latter two variants for now, this driver should
-> also work for the sc8180x variant according to acpi table files, but I
-> don't have the device to test yet.
-> 
-> Different from other Qualcomm Snapdragon sc8280xp based machines, the
-> Huawei Matebook E Go uses an embedded controller while others use
-> a system called PMIC GLink. This embedded controller can be used to
-> perform a set of various functions, including, but not limited to:
-> 
-> - Battery and charger monitoring;
-> - Charge control and smart charge;
-> - Fn_lock settings;
-> - Tablet lid status;
-> - Temperature sensors;
-> - USB Type-C notifications (ports orientation,  DP alt mode HPD);
-> - USB Type-C PD (according to observation, up to 48w).
-> 
-> Add a driver for the EC which creates devices for UCSI and power supply
-> devices.
-> 
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=219645
-> 
-> Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-> ---
-...
-> +	ec->hwmon_dev = hwmon_device_register_with_groups(dev, "gaokun_ec_hwmon",
-> +							  ec, gaokun_ec_hwmon_groups);
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219590
 
-This API function is deprecated.
+--- Comment #5 from Guido (guido.iodice@gmail.com) ---
+sadly the problem is still there:
 
-Guenter
+13.01.2025 19:40:36:297 kernel  ------------[ cut here ]------------
+13.01.2025 19:40:36:297 kernel  WARNING: CPU: 2 PID: 229 at
+drivers/usb/typec/ucsi/ucsi.c:1377 ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi]
+13.01.2025 19:40:36:297 kernel  Modules linked in: cmac algif_hash
+algif_skcipher af_alg bnep snd_ctl_led snd_soc_skl_hda_dsp
+snd_soc_intel_sof_board_helpers snd_sof_probes snd_soc_intel_hda_dsp_common
+snd_hda_codec_hdmi snd_hda_codec_realtek snd_hda_codec_generic
+snd_hda_scodec_component snd_soc_dmic vfat fat snd_sof_pci_intel_tgl
+snd_sof_pci_intel_cnl snd_sof_intel_hda_generic soundwire_intel
+soundwire_cadence snd_sof_intel_hda_common intel_uncore_frequency
+snd_soc_hdac_hda intel_uncore_frequency_common snd_sof_intel_hda_mlink
+snd_sof_intel_hda snd_sof_pci hid_sensor_custom snd_sof_xtensa_dsp uvcvideo
+snd_sof videobuf2_vmalloc hid_sensor_hub uvc snd_sof_utils videobuf2_memops
+snd_soc_acpi_intel_match videobuf2_v4l2 snd_soc_acpi_intel_sdca_quirks
+intel_ishtp_hid soundwire_generic_allocation btusb videobuf2_common
+x86_pkg_temp_thermal snd_soc_acpi btrtl intel_powerclamp btintel soundwire_=
+bus
+videodev btbcm coretemp snd_soc_sdca btmtk mc snd_soc_avs bluetooth kvm_int=
+el
+snd_soc_hda_codec cdc_ether snd_hda_ext_core ath10k_pci usbnet kvm
+13.01.2025 19:40:36:297 kernel   snd_soc_core crct10dif_pclmul ath10k_core
+polyval_clmulni snd_compress polyval_generic hid_multitouch ac97_bus
+ghash_clmulni_intel sha512_ssse3 snd_pcm_dmaengine ath sha256_ssse3 sha1_ss=
+se3
+snd_hda_intel ee1004 aesni_intel dell_pc snd_intel_dspcfg intel_pmc_bxt
+gf128mul platform_profile iTCO_vendor_support mei_hdcp mei_pxp intel_rapl_m=
+sr
+snd_intel_sdw_acpi dell_laptop ext4 crypto_simd snd_hda_codec mac80211 cryp=
+td
+snd_hda_core crc32c_generic processor_thermal_device_pci_legacy rapl r8152
+processor_thermal_device crc32c_intel processor_thermal_wt_hint crc16
+intel_cstate processor_thermal_rfim mii snd_hwdep mbcache libarc4 mousedev
+libphy joydev jbd2 dell_smm_hwmon intel_uncore dell_wmi ucsi_acpi snd_pcm
+processor_thermal_rapl i2c_i801 dell_wmi_ddv cfg80211 snd_timer
+intel_rapl_common processor_thermal_wt_req spi_nor intel_lpss_pci psmouse
+typec_ucsi processor_thermal_power_floor dell_smbios pcspkr mei_me i2c_smbus
+i2c_hid_acpi snd intel_lpss intel_ish_ipc dell_wmi_sysman dcdbas
+processor_thermal_mbox typec
+13.01.2025 19:40:36:297 kernel   firmware_attributes_class dell_wmi_descrip=
+tor
+wmi_bmof intel_pmc_core mei soundcore mtd rfkill i2c_mux thunderbolt idma64
+intel_ishtp roles igen6_edac intel_soc_dts_iosf i2c_hid intel_vsec
+int3400_thermal pmt_telemetry int3403_thermal intel_hid int340x_thermal_zone
+acpi_pad acpi_tad acpi_thermal_rel pmt_class pinctrl_tigerlake sparse_keymap
+mac_hid tcp_bbr sch_fq uhid i2c_dev sg crypto_user dm_mod loop nfnetlink zr=
+am
+842_decompress 842_compress ip_tables x_tables hid_generic ums_realtek uas
+usbhid usb_storage f2fs crc32_generic lz4hc_compress lz4_compress intel_agp
+serio_raw atkbd nvme libps2 vivaldi_fmap nvme_core spi_intel_pci crc32_pclm=
+ul
+spi_intel nvme_auth i8042 serio i915 i2c_algo_bit drm_buddy video wmi ttm
+drm_display_helper cec intel_gtt
+13.01.2025 19:40:36:297 kernel  CPU: 2 UID: 0 PID: 229 Comm: kworker/2:2
+Tainted: G     U             6.13.0-rc7-1-MANJARO #1
+56395ce4eea9ed2b7ba363d4072cdedaa9dbb7e4
+13.01.2025 19:40:36:297 kernel  Tainted: [U]=3DUSER
+13.01.2025 19:40:36:297 kernel  Hardware name: Dell Inc. Inspiron 5502/0WNV=
+YK,
+BIOS 1.33.1 11/15/2024
+13.01.2025 19:40:36:297 kernel  Workqueue: events_long ucsi_init_work
+[typec_ucsi]
+13.01.2025 19:40:36:297 kernel  RIP: 0010:ucsi_reset_ppm+0x1b4/0x1c0
+[typec_ucsi]
+13.01.2025 19:40:36:297 kernel  Code: 8b 44 24 04 a9 00 00 00 08 0f 85 36 f=
+f ff
+ff 4c 89 74 24 10 48 8b 05 8b fe e0 f5 49 39 c5 79 8f bb 92 ff ff ff e9 1b =
+ff
+ff ff <0f> 0b e9 50 ff ff ff e8 f0 5d ad f4 90 90 90 90 90 90 90 90 90 90
+13.01.2025 19:40:36:297 kernel  RSP: 0018:ffffb816c05d7db0 EFLAGS: 00010206
+13.01.2025 19:40:36:297 kernel  RAX: 0000000008000000 RBX: 0000000000000000
+RCX: 0000000000000002
+13.01.2025 19:40:36:297 kernel  RDX: 00000000fffeab3c RSI: ffffb816c05d7db4
+RDI: ffff8b72c0d00a00
+13.01.2025 19:40:36:297 kernel  RBP: ffff8b72c0d00a00 R08: 0000000000000000
+R09: 0000000000000014
+13.01.2025 19:40:36:297 kernel  R10: 0000000000000001 R11: 0000000000000000
+R12: ffffb816c05d7db4
+13.01.2025 19:40:36:297 kernel  R13: 00000000fffeab35 R14: ffff8b72c0d00a60
+R15: ffff8b72c0d00ac0
+13.01.2025 19:40:36:298 kernel  FS:  0000000000000000(0000)
+GS:ffff8b763f500000(0000) knlGS:0000000000000000
+13.01.2025 19:40:36:298 kernel  CS:  0010 DS: 0000 ES: 0000 CR0:
+0000000080050033
+13.01.2025 19:40:36:298 kernel  CR2: 00005ce06429a4a0 CR3: 00000002b7222004
+CR4: 0000000000f72ef0
+13.01.2025 19:40:36:298 kernel  PKRU: 55555554
+13.01.2025 19:40:36:298 kernel  Call Trace:
+13.01.2025 19:40:36:298 kernel   <TASK>
+13.01.2025 19:40:36:298 kernel   ? ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi
+6a404df311e90ab27e191f01403d346931166551]
+13.01.2025 19:40:36:298 kernel   ? __warn.cold+0x93/0xf6
+13.01.2025 19:40:36:298 kernel   ? ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi
+6a404df311e90ab27e191f01403d346931166551]
+13.01.2025 19:40:36:298 kernel   ? report_bug+0xff/0x140
+13.01.2025 19:40:36:298 kernel   ? handle_bug+0x58/0x90
+13.01.2025 19:40:36:298 kernel   ? exc_invalid_op+0x17/0x70
+13.01.2025 19:40:36:298 kernel   ? asm_exc_invalid_op+0x1a/0x20
+13.01.2025 19:40:36:298 kernel   ? ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi
+6a404df311e90ab27e191f01403d346931166551]
+13.01.2025 19:40:36:298 kernel   ucsi_init_work+0x3c/0x9c0 [typec_ucsi
+6a404df311e90ab27e191f01403d346931166551]
+13.01.2025 19:40:36:298 kernel   process_one_work+0x17b/0x330
+13.01.2025 19:40:36:298 kernel   worker_thread+0x2ce/0x3f0
+13.01.2025 19:40:36:298 kernel   ? __pfx_worker_thread+0x10/0x10
+13.01.2025 19:40:36:298 kernel   kthread+0xcf/0x100
+13.01.2025 19:40:36:298 kernel   ? __pfx_kthread+0x10/0x10
+13.01.2025 19:40:36:298 kernel   ret_from_fork+0x31/0x50
+13.01.2025 19:40:36:298 kernel   ? __pfx_kthread+0x10/0x10
+13.01.2025 19:40:36:298 kernel   ret_from_fork_asm+0x1a/0x30
+13.01.2025 19:40:36:298 kernel   </TASK>
+13.01.2025 19:40:36:298 kernel  ---[ end trace 0000000000000000 ]---
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
