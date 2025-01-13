@@ -1,142 +1,229 @@
-Return-Path: <linux-usb+bounces-19252-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19253-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 100FAA0B7AD
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 14:07:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3535A0B828
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 14:29:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8484E3A4A9D
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 13:07:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEB9A1658A4
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 13:29:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7481233D92;
-	Mon, 13 Jan 2025 13:07:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE1C1CAA66;
+	Mon, 13 Jan 2025 13:29:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="tidfsf09"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nLceS+Kc"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from pv50p00im-ztdg10011201.me.com (pv50p00im-ztdg10011201.me.com [17.58.6.39])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30D5822F156
-	for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2025 13:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.39
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AC6BA4B;
+	Mon, 13 Jan 2025 13:29:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736773626; cv=none; b=Ns1eCrfU1Q/ATETNhAOlILfWWROjdooxfTyDZ5wWJUSr+IzFYDNksfxDYt6xGNo92r4/+r6aGYDjkI9VkASgAMEQQGJhk4X0+UEjHGNsgl2qcliquEIA6GMYKr2tdKHMN+xEEu7p2v6gv5SK+bZxyXnaA4EbXXOU/uoFfuh27q0=
+	t=1736774979; cv=none; b=oKbeGy4s/NGZUa+CWBs1cAGhpW2QRnE/XH7MrGiJJ+6bzKaEafYo0lGvrkruvkXevwPxsdpyAWfNNYO9OBPd3CRCC8Bc+iuAG+TVW9KH9VwOm3B/EHH5JUWDx3X2NHXLJdx+h73qbDdT+SsOzGb1ORbC9L3dYPSLMNnaJHCShfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736773626; c=relaxed/simple;
-	bh=vmkYl0MfndY9C/wzg8RrVEbRyrF2nuSAKLy9qNGUXKQ=;
-	h=Content-Type:From:Mime-Version:Subject:Message-Id:Date:Cc:To; b=AhAd6Fs3Lxd5G+abtDyjthGpL8KTRWb4SMalVzDAbytrAG0KQC4/pG//C63f7IxUmKtL7PbqMdyUnRdFmYiTya/tfrGk0RTjrBPKPsw7wpKfVm9tOdMmHOjPxY3ey2X+8XkoZXQMwtPdOw7Wrs7cWsdXU2W/zRfrfjyRel2SRRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=tidfsf09; arc=none smtp.client-ip=17.58.6.39
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; t=1736773624;
-	bh=/VferRrDdpdfgDvmdmWN4ynbARe4+9nSWpj4+iwm8mE=;
-	h=Content-Type:From:Mime-Version:Subject:Message-Id:Date:To:
-	 x-icloud-hme;
-	b=tidfsf09IXU7qyaHO70tkz8ejUnvErGVjF0gINXEyBSIdNryh4LWbemP8oVLpbx8o
-	 0Dt3Pnjiw5soxNI09iUTXv2RfLXcdgG1gkfIC5BEKUWjmSWElIcc3+NX/t+kudJiA8
-	 FQASD03DVH5Ve+tFCbqobg9sdbR4dkWMqJxCh7qLp3pBN3LUrgcR66pBkD6cLvqb9y
-	 F9TEAzcONJz7Jebcq2TwhrO7ZGAFpYe1AzqRYMctFRHX6r8Ng4L0Az6rMyXt3wqtIT
-	 zpWjD35HNWZJ3tsqeA1zdjQxQ2JLcKqNXsxK2aCLGwTqDeGAafhYNMDCuJySWT/NXQ
-	 inB/q8TooaoMg==
-Received: from smtpclient.apple (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-ztdg10011201.me.com (Postfix) with ESMTPSA id 60D7768043C;
-	Mon, 13 Jan 2025 13:06:57 +0000 (UTC)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From: =?utf-8?B?5r2Y5L+K5Lit?= <a1134123566@icloud.com>
+	s=arc-20240116; t=1736774979; c=relaxed/simple;
+	bh=71L+W0h5TdU6E8Avzu9ibQzFJplCEwz1FP2YjnTwvmc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=M3KP3nWlwjEku2EtbxA7pJLcDX/Pef9YH0GnO9b+NrLQjR0v8AwXMXyGuDeAT5uvLRGM6xjDyp6St8fjjlUoBixNay1t+tDP71pItvCqco2nh6RyvHT6RR8zvHC0ojiuffeJQ45yhHG+mhwBG3GINdmu4Y+VaGTMJkOEDoAyHfs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nLceS+Kc; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-385f06d0c8eso2277653f8f.0;
+        Mon, 13 Jan 2025 05:29:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736774975; x=1737379775; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2YT6gGaBfcX0S/XtfuSOyEOtTxo2D9TBTGAvaOd32fc=;
+        b=nLceS+KczwyXXUWtiQXJBdABmS6d8aKfQ/JjH2uozrs9SfUXMmSwkh3yWcfCl0QGU3
+         lkDy08MqHzjr+xAw8bFmxmUFFO6ezAEvNIHluio8G51AiD1OalORC3jSmhsH8qi45by/
+         M2nXPgObQOMvSxgbpjWK8K6NNfOAvj6KUQZFVWA8v3a9MhWNW2HUR9GwY34MfTj/72jC
+         juRJ+eMDaZhUn9iAdVrVIhOoWAaXFeBMnUGEbHwFP0M2FEmzgceDdJvyqWpRwRTvOWjC
+         xdbcADGGTu7SoYH2Ly65UPoxPsfhpkBoYOPynP1WN/sydRq9XR/ogTQjqgNqtemJQxjU
+         p6Dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736774975; x=1737379775;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2YT6gGaBfcX0S/XtfuSOyEOtTxo2D9TBTGAvaOd32fc=;
+        b=YvIL54wsE776KHmF+8J3525Znz7ApOfaCTBvLodW3tMpOGUODxHRQFkZkh1Ybc6GNo
+         O5rngz8Xwp9M7BeMYQlYkDd5lErNy+wmzAsAM/Te4DK0iZiBg2i6X4tzEBvwJeywVqZJ
+         O4Fi3neVFw22LUPrG7lfxMZjWqQRYX6l7txTYU+8HWHfuV5+5stRAfGhOAlmyFoZYTK9
+         5AQimkSwxNEIqNvb9X74KoYaakymAgSF4CwdZCjsdRKSr3OP9KxllvX4sbX2M5hm+pSI
+         liFHw01U/waU9OpNl4eZoDc6wIF+pU/C3LF2S0/RH/872vu+MdBVS8QF2KnCpxfbdTs4
+         g6xg==
+X-Forwarded-Encrypted: i=1; AJvYcCUBbXyQx8ktIYptreS1zgDQx3zGVtwNRVsG9SyKG6NeP90kowKhRrlrnP8pRA8onFDHYvJEHdrNIFd6@vger.kernel.org, AJvYcCVwPuf9VMbdYo1HD2tQkDAql92aBXQDt2LF90IwSv40SOLEsng4KPwcv21YY3Ic+Xu4gMgMA5JqsuyFN/c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwW/j5qblZn0QFftOy2r0KmIKX+AjRD/NMUr7fcqZwqgz6x7fsC
+	wakTma2G/90jZL+W8KIpEujiscwZDtpm6nVBlUpIjiU3VmfuaRMVpC5/Nk6D7WeMJf6iAdO9vUi
+	+xugCP/WDivrwPAAU/m0eSBXVH3WtHx3v
+X-Gm-Gg: ASbGncuda6F7AZ4pqT+qJ+V0bBpH2h9cRasLRCZkL0XY8qoMUiHPwyNaR1pE5DApbD1
+	cLS+rC77HzEl0H2yPn8nJsIwoARwt7bNSrVccMg==
+X-Google-Smtp-Source: AGHT+IHo+zbxCDb5KD4dwZiuf5dhaK5FlNNyB97WgmpCwZmmP6aB8SkL32msCHKm9YILO07OMpDMHdsOuIqRcEOdJrA=
+X-Received: by 2002:a05:6000:1fa8:b0:38a:a083:9200 with SMTP id
+ ffacd0b85a97d-38aa083947dmr6046440f8f.44.1736774975193; Mon, 13 Jan 2025
+ 05:29:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH v3] usb: gadget: ncm: Avoid dropping datagrams of properly parsed NTBs
-Message-Id: <4C771A46-5372-488E-B31F-67262CDB95D6@icloud.com>
-Date: Mon, 13 Jan 2025 21:06:42 +0800
-Cc: quic_kriskura@quicinc.com, gregkh@linuxfoundation.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- quic_jackp@quicinc.com, quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
- stable@vger.kernel.org
-To: =?utf-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-X-Mailer: iPhone Mail (22C161)
-X-Proofpoint-ORIG-GUID: eCJBSQzVJomJyczsNROsasEWdAyYivYt
-X-Proofpoint-GUID: eCJBSQzVJomJyczsNROsasEWdAyYivYt
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-13_04,2025-01-13_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 suspectscore=0 mlxscore=0 adultscore=0
- phishscore=0 spamscore=0 clxscore=1011 mlxlogscore=860 malwarescore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2501130110
+MIME-Version: 1.0
+References: <20241231161539.20192-1-xndchn@gmail.com> <20241231161539.20192-2-xndchn@gmail.com>
+ <5ad65964-dcf7-47d2-8e5f-bf82066e55f4@linuxfoundation.org>
+ <CAJ=gGT3pAnKUCve1OV5SXVArz6HUdizu9wjM5tPJ_CrQ=sF=nw@mail.gmail.com> <2ff39cff-af3c-4020-81b3-4238efe6c2e3@linuxfoundation.org>
+In-Reply-To: <2ff39cff-af3c-4020-81b3-4238efe6c2e3@linuxfoundation.org>
+From: xndcn <xndchn@gmail.com>
+Date: Mon, 13 Jan 2025 21:29:23 +0800
+X-Gm-Features: AbW1kvbvPFRAJAsO_mSweDy13kD00YuGPhi5dfdbYbL83gkclwLvrsT4Ey6Yw08
+Message-ID: <CAJ=gGT3Z85Hshfw5eb5JgM0CA-V_O1MW1hbfbdyp8Be0bG6SvA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] usbip: Fix seqnum sign extension issue in vhci_tx_urb
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+	Hongren Zheng <i@zenithal.me>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"open list:USB OVER IP DRIVER" <linux-usb@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-=EF=BB=BFHi Maciej,
+without the patch:
+> [ 384.276605] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+> [ 384.278487] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus n=
+umber 1
+> [ 384.278509] vhci_hcd: created sysfs vhci_hcd.0
+> [ 384.278532] usb usb1: New USB device found, idVendor=3D1d6b, idProduct=
+=3D0002, bcdDevice=3D 6.12
+> [ 384.278535] usb usb1: New USB device strings: Mfr=3D3, Product=3D2, Ser=
+ialNumber=3D1
+> [ 384.278536] usb usb1: Product: USB/IP Virtual Host Controller
+> [ 384.278538] usb usb1: Manufacturer: Linux 6.12.0-00971-g158f238aa69d-di=
+rty vhci_hcd
+> [ 384.278539] usb usb1: SerialNumber: vhci_hcd.0
+> [ 384.278630] hub 1-0:1.0: USB hub found
+> [ 384.278637] hub 1-0:1.0: 8 ports detected
+> [ 384.278740] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+> [ 384.278781] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus n=
+umber 2
+> [ 384.278788] usb usb2: We don't know the algorithms for LPM for this hos=
+t, disabling LPM.
+> [ 384.278801] usb usb2: New USB device found, idVendor=3D1d6b, idProduct=
+=3D0003, bcdDevice=3D 6.12
+> [ 384.278802] usb usb2: New USB device strings: Mfr=3D3, Product=3D2, Ser=
+ialNumber=3D1
+> [ 384.278803] usb usb2: Product: USB/IP Virtual Host Controller
+> [ 384.278804] usb usb2: Manufacturer: Linux 6.12.0-00971-g158f238aa69d-di=
+rty vhci_hcd
+> [ 384.278805] usb usb2: SerialNumber: vhci_hcd.0
+> [ 384.278866] hub 2-0:1.0: USB hub found
+> [ 384.278869] hub 2-0:1.0: 8 ports detected
+> [ 384.279071] insmod (400) used greatest stack depth: 11960 bytes left
+> [ 550.127351] vhci_hcd vhci_hcd.0: pdev(0) rhport(0) sockfd(3)
+> [ 550.127356] vhci_hcd vhci_hcd.0: devid(0) speed(3) speed_str(high-speed=
+)
+> [ 550.127359] vhci_hcd vhci_hcd.0: Device attached
+> [ 550.341007] usb 1-1: new high-speed USB device number 2 using vhci_hcd
+> [ 550.452995] usb 1-1: SetAddress Request (2) to port 0
+> [ 550.464332] vhci_hcd: cannot find a urb of seqnum 2147483648 max seqnum=
+ -2147483648
+> [ 550.464842] vhci_hcd: stop threads
+> [ 550.464843] vhci_hcd: release socket
+> [ 550.464845] vhci_hcd: disconnect device
 
-On 2025/1/13 1:49, Maciej =C5=BBenczykowski Wrote:
-> (a) I think this looks like a bug on the sending Win10 side, rather
-> than a parsing bug in Linux,
-> with there being no ZLP, and no short (<512) frame, there's simply no
-> way for the receiver to split at the right spot.
->=20
-> Indeed, fixing this on the Linux/parsing side seems non-trivial...
-> I guess we could try to treat the connection as simply a serial
-> connection (ie. ignore frame boundaries), but then we might have
-> issues with other senders...
->=20
-> I guess the most likely 'correct' hack/fix would be to hold on to the
-> extra 'N*512' bytes (it doesn't even have to be 1, though likely the N
-> is odd), if it starts with a NTH header...
-Make sence, it seems we only need to save the rest data beside
-dwBlockLength for next unwrap if a hack is acceptable, otherwise I may
-need to check if a custom host driver for Windows10 user feasible.
+and with this patch:
+> [ 746.253823] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+> [ 746.254660] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus n=
+umber 1
+> [ 746.254669] vhci_hcd: created sysfs vhci_hcd.0
+> [ 746.254895] usb usb1: New USB device found, idVendor=3D1d6b, idProduct=
+=3D0002, bcdDevice=3D 6.12
+> [ 746.254897] usb usb1: New USB device strings: Mfr=3D3, Product=3D2, Ser=
+ialNumber=3D1
+> [ 746.254898] usb usb1: Product: USB/IP Virtual Host Controller
+> [ 746.254899] usb usb1: Manufacturer: Linux 6.12.0-00971-g158f238aa69d-di=
+rty vhci_hcd
+> [ 746.254899] usb usb1: SerialNumber: vhci_hcd.0
+> [ 746.254964] hub 1-0:1.0: USB hub found
+> [ 746.254985] hub 1-0:1.0: 8 ports detected
+> [ 746.255042] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
+> [ 746.255066] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus n=
+umber 2
+> [ 746.255072] usb usb2: We don't know the algorithms for LPM for this hos=
+t, disabling LPM.
+> [ 746.255081] usb usb2: New USB device found, idVendor=3D1d6b, idProduct=
+=3D0003, bcdDevice=3D 6.12
+> [ 746.255082] usb usb2: New USB device strings: Mfr=3D3, Product=3D2, Ser=
+ialNumber=3D1
+> [ 746.255083] usb usb2: Product: USB/IP Virtual Host Controller
+> [ 746.255089] usb usb2: Manufacturer: Linux 6.12.0-00971-g158f238aa69d-di=
+rty vhci_hcd
+> [ 746.255089] usb usb2: SerialNumber: vhci_hcd.0
+> [ 746.255118] hub 2-0:1.0: USB hub found
+> [ 746.255120] hub 2-0:1.0: 8 ports detected
+> [ 756.967922] vhci_hcd vhci_hcd.0: pdev(0) rhport(0) sockfd(3)
+> [ 756.967928] vhci_hcd vhci_hcd.0: devid(0) speed(3) speed_str(high-speed=
+)
+> [ 756.967933] vhci_hcd vhci_hcd.0: Device attached
+> [ 757.184367] usb 1-1: new high-speed USB device number 2 using vhci_hcd
+> [ 757.296479] usb 1-1: SetAddress Request (2) to port 0
+> [ 757.309845] usb 1-1: New USB device found, idVendor=3D1234, idProduct=
+=3D1234, bcdDevice=3D 2.80
+> [ 757.309848] usb 1-1: New USB device strings: Mfr=3D1, Product=3D2, Seri=
+alNumber=3D3
+> [ 757.309849] usb 1-1: Product: foo
+> [ 757.309850] usb 1-1: Manufacturer: bar
+> [ 757.309851] usb 1-1: SerialNumber: 0
 
-I didn't look carefully into the 1byte and padding stuff with Windows11
-host yet, I will take a look then.
+to make the bug easier to reproduce ,I have changed the initial value of se=
+gnum:
 
-> (b) I notice the '512' not '1024', I think this implies a USB2
-> connection instead of USB3
-> -- could you try replicating this with a USB3 capable data cable (and
-> USB3 ports), this should result in 1024 block size instead of 512.
->=20
-> I'm wondering if the win10 stack is avoiding generating N*1024, but
-> then hitting N*512 with odd N...
-Yes, I am using USB2.0 connection to better capture the crime scene.
+diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
+index 8dac1edc74d4..92a60e89b459 100644
+--- a/drivers/usb/usbip/vhci_hcd.c
++++ b/drivers/usb/usbip/vhci_hcd.c
+@@ -1192,7 +1192,7 @@ static int vhci_start(struct usb_hcd *hcd)
+                vdev->rhport =3D rhport;
+        }
 
-Normally the OUT transfer on USB3.0 SuperSpeed connection comes with a bunch=
+- atomic_set(&vhci_hcd->seqnum, 0);
++ atomic_set(&vhci_hcd->seqnum, 2147483646);
 
-of 1024B Data Pakcet along with a Short Packet less than 1024B in the end fr=
-om
-the Lecroy trace.
+        hcd->power_budget =3D 0; /* no limit */
+        hcd->uses_new_polling =3D 1;
 
-It's also reproducible on USB3.0 SuperSpeed connection using dwc3 controller=
-,
-but it will cost more time and make it difficult to capture the online data
-(limited tracer HW buffer), I can try using software tracing or custom logs
-later:
-
-[  5]  26.00-27.00  sec   183 MBytes  1.54 Gbits/sec
-[  5]  27.00-28.00  sec   182 MBytes  1.53 Gbits/sec
-[  206.123935] configfs.gadget.2: Wrong NDP SIGN
-[  206.129785] configfs.gadget.2: Wrong NTH SIGN, skblen 12208
-[  206.136802] HEAD:0000000004f66a88: 80 06 bc f9 c0 a8 24 66 c0 a8 24 65 f7=
- 24 14 51 aa 1a 30 d5 01 f8 01 26 50 10 20 14 27 3d 00 00
-[  5]  28.00-29.00  sec   128 MBytes  1.07 Gbits/sec
-[  5]  29.00-30.00  sec   191 MBytes  1.61 Gbits/sec
->=20
-> Presumably '512' would be '64' with USB1.0/1.1, but I guess finding a
-> USB1.x port/host to test against is likely to be near impossible...
->=20
-> I'll try to see if I can find the source of the bug in the Win
-> driver's sources (though based on it being Win10 only, may need to
-> search history)
-> It's great if you can analyze from the host driver.
-
-I didn't know if the NCM driver open-sourced on github by M$ is the correspo=
-nd
-version. They said that only Win 11 officially support NCM in the issue on g=
-ithub
-yet they do have a built-in driver in Win10 and 2004 tag there in the repo.
-
+On Fri, Jan 10, 2025 at 12:02=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.=
+org> wrote:
+>
+> On 1/3/25 08:18, xndcn wrote:
+> > Thanks.
+> >
+> >> How did you find the problem?
+> >> Why does it make sense to cast it to u32?
+> >
+> > After running with usbip enough time, I happened to see logs like this:
+> >> [ 293.863125] vhci_hcd vhci_hcd.0: Device attached
+> >> [ 294.081110] usb 1-1: new high-speed USB device number 2 using vhci_h=
+cd
+> >> [ 294.193163] usb 1-1: SetAddress Request (2) to port 0
+> >> [ 294.204334] vhci_hcd: cannot find a urb of seqnum 2147483648 max seq=
+num -2147483648
+> >> [ 294.204850] vhci_hcd: stop threads
+> >> [ 294.204851] vhci_hcd: release socket
+> >> [ 294.204853] vhci_hcd: disconnect device
+> >
+> > Then I notice that on 64bit platform, when
+> > atomic_inc_return(&vhci_hcd->seqnum) returns (2147483647 + 1, or
+> > 0x80000000),
+> > priv->seqnum (which is unsigned long, i.e. u64 on 64bit) will be
+> > extends to 0xffffffff80000000
+> > So we can fix the issue by cast it to u32.
+> >
+>
+> Can you send me the dmesg without and with your patch?
+>
+> thanks,
+> -- Shuah
+>
 
