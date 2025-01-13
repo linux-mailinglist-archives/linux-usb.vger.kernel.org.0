@@ -1,141 +1,146 @@
-Return-Path: <linux-usb+bounces-19255-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19256-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2E90A0B850
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 14:37:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5EDAA0B93B
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 15:17:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 31B9F1886D06
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 13:37:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8EF523A1931
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 14:17:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FF4723A583;
-	Mon, 13 Jan 2025 13:36:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB2D554279;
+	Mon, 13 Jan 2025 14:17:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kcqc3TiQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FICuoIxI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com [209.85.208.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 645B31CAA8F;
-	Mon, 13 Jan 2025 13:36:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFBED22CF12
+	for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2025 14:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736775403; cv=none; b=lMhs1ZrnW3XSXN55zXkJ7cBWIVyHUTfXxmNjw5MY0O61mJPSuYYpyw3XNL+ftGttHFblPxfHbU+bSXijh1V3xPnGP5CLK10h5g+tj6ME3qzh8kI+MQQZuSSotVU1eq1c2Ebe7vO3sreOipKzXPR6w6EsFrBvG77qQ84r3omX+iw=
+	t=1736777845; cv=none; b=qNDlmntSzuk/HiMybFRS2zvciAHm15rg/TMaYhVG+XlQqEYsd3g9GYcTj7FZAus7dsxYzfCRSxVbh2tp1TQ5cyT53q0/DjjeVsttl9gTxXy55DSbHFU3k+OpUQjyGaNB0c6nHWky/MSRT3S2UZkxbLLGBWWO4ZXXybF3nlXDuZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736775403; c=relaxed/simple;
-	bh=dVOX1ct04XRB6HS4XCM9AuU0WW15SibfodTKj6OCrFA=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
-	 Content-Type; b=jnbwwk/yh1b+kbJKA91OkqIYvOAGaFVsSUp3Vq81U7tuS+2gzQJOXTk+vgNq9vKVrt8jnPl4Vr1eRc+RViTJ5jyxMY6F8iLyJg5AsQO8jhYj0pGuCXsckPpzgwaHesgka4HTkLtgJBSJgh6QAzY0AMTsp8KFTR+KvCyztQ6WHL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kcqc3TiQ; arc=none smtp.client-ip=209.85.208.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5d3e8f64d5dso8352006a12.3;
-        Mon, 13 Jan 2025 05:36:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736775400; x=1737380200; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BCOO3CeumWEhxRoRrsxtZPCsXRg2joLKXPxHQJ2qLzk=;
-        b=Kcqc3TiQpGsFgrhUgJ92ZQ09uZvFAXzPQmQYDX8qDFe71X3cqH6/9xVcZhdQ5G2RbA
-         SQIewa3Opy/75bKFpJgxIyESFVahGpkmhC61E7SNyVv9/rRu7vFjwOvDxOs4uBII30jt
-         9it2PQ/K4mkTEJyPpWLW7ri6CA705ASfVSHUU3iU+GB7HeE7imjecvIUptFXbCh9DWYM
-         1a4T/o0DrFVu/tqyiI689azMIMcKL9OB7fIT4fposP4Ox1BqekRpAiKLcJPrbZt7er5A
-         gR1HheFZpyZYN/IVVhqB1EHs9eItXhfIHEW3/lrmSsFZU8y0uAEqsl28WEu0QKE7sYGM
-         D4cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736775400; x=1737380200;
-        h=content-transfer-encoding:mime-version:in-reply-to:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BCOO3CeumWEhxRoRrsxtZPCsXRg2joLKXPxHQJ2qLzk=;
-        b=vqa6rUqLZ+iApwPyw0bfRRCMIdjQK+ExhPLnCI28kC1KREjJvUdui2AfoDbhYJ1stb
-         G3ibCtYoXRPw2nQKcBG7EK50qKwEBPHbqPBskP8yIDMcjv9s5rrJCdNh7Pe9A3ir8NQ6
-         xQGCzoddNOx5BcnEWA1b8xTnpub/nlL0KWBR72ynFQSY7Xm2pDyn67X8rPNtkW9PoI8A
-         jqptf+q9FYm8cTOFHxdnJVhgFh3ROTmAm5WjOW8d2xH1WX+cxXfpIcGeJxWcMis5TqZ4
-         Oci4vX5+giYqrJFy18/GU1KSFz8IUqfIo1AA1zKF48+EuwdSn1UrQmgC28XhUSS86wAh
-         P7jw==
-X-Forwarded-Encrypted: i=1; AJvYcCU/0hhyqO8d20+233YRUcvTbSx3WfgzubN3KMQLwsRSEUGd3P+RC2AvhQBwzryLfryr+sBOfv6ktSC1i7439Q==@vger.kernel.org, AJvYcCUi1bl7rxRS5jawmo4NxMOJ+n/kcac40zB00ZkOAt3qs132PkELMB/uhvIlFEsfXLtY8GjTE0cBmwOM@vger.kernel.org, AJvYcCUwB90i0dNke9AQh9mjtj4pnR7nm69ogt83SOXi1XytwoSx9J2KBAZPHr++xYbBdx8KNW4lQxFuvlyTaCU=@vger.kernel.org, AJvYcCVDJg3RqeELTA3KiM7sVgGqvsQu6GDHuCexhw/k58I2HGfBbtEfo3gH8DG3Rcom6A6EvQoihmXhoFREVNO2@vger.kernel.org, AJvYcCVb9HAc50U0FiwttFmAolviET7D3yZHuuvO6BI2fZ8ilwhx262XocQLgaN69+WYBOD1EPR1m0/Ooofi/3U=@vger.kernel.org, AJvYcCVntDS7PHYGkj/R+mWgWYixV1EfdPoxGC80qLOY/DLWM9I6tVmu2l1/iH/Wk/2h67ht+1+PgQUFxUG1@vger.kernel.org, AJvYcCXuBa336J4wJNbjbFT7fkfj5Z5uBEViZkvyjKmEVIcqnjIXsdpDnIZx1SgTC80OqjI3L+rRa+znmStg@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKlBI56hZDmUWMAPFaintn4KxgkRyMyB7Pc3zg31Fz8sKm00FN
-	zjBEzY67S44o0RLX88bc0851rEKMHQJ6CVMgsgOekQHRqwoZ04Ch
-X-Gm-Gg: ASbGncvObGdv2RbvdknOuhISnXPS5Szh65g5RuVRNB/4iju6ZO3Hj/pHcItCAVeMKMx
-	++m4+4ZJuISwjY9/wZuWcUX23fd3Wq/XmNT4I/GYRlTgn3m1zN+00beK0Q55meAI8lSOv0n0W8M
-	BnnL4YdLKAG/6P+BXqfbGTBN0JwV1LNXx1KEkC7EfSagmL0bXYsRVd6uVSePxn3O8Qemk+RkjIH
-	fEvgf1OvtaJhqbjF5JPll1r3z4QZYKMjqUbLXHmWQFJpUYTHQ2tq5Si585lSsK5nhLAefk=
-X-Google-Smtp-Source: AGHT+IFjst6wsdjTPwp6oiIf+Y1R9oxN/d9Kg2WINuDvWnvcQG61H8vLN/Y+6oQgF/w1Z8cqOc3BsA==
-X-Received: by 2002:a05:6402:4023:b0:5d0:e2c8:dc8d with SMTP id 4fb4d7f45d1cf-5d972e1b962mr18696919a12.20.1736775399331;
-        Mon, 13 Jan 2025 05:36:39 -0800 (PST)
-Received: from foxbook (adqh85.neoplus.adsl.tpnet.pl. [79.185.141.85])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d99008c2ccsm4986793a12.18.2025.01.13.05.36.37
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 13 Jan 2025 05:36:39 -0800 (PST)
-Date: Mon, 13 Jan 2025 14:36:32 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: quic_wcheng@quicinc.com
-Cc: Thinh.Nguyen@synopsys.com, broonie@kernel.org, conor+dt@kernel.org,
- corbet@lwn.net, devicetree@vger.kernel.org, dmitry.torokhov@gmail.com,
- gregkh@linuxfoundation.org, krzk+dt@kernel.org, lgirdwood@gmail.com,
- linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-usb@vger.kernel.org,
- mathias.nyman@intel.com, perex@perex.cz,
- pierre-louis.bossart@linux.intel.com, robh@kernel.org,
- srinivas.kandagatla@linaro.org, tiwai@suse.com
-Subject: Re: [PATCH v32 01/32] usb: host: xhci: Repurpose event handler for
- skipping interrupter events
-Message-ID: <20250113143632.63c52d74@foxbook>
-In-Reply-To: <20250108012213.1659364-2-quic_wcheng@quicinc.com>
+	s=arc-20240116; t=1736777845; c=relaxed/simple;
+	bh=G5Pt0Sn0y+fwk/C27M3CSjvZ0EDb6hxD1srwH94jkJQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uKKhTEun8c4uBUIckgo0kjT6EE4FQipwdCadvpl9Om+2FRo0hbgYYABLto05y0rDQpgdHL+PwcihDMvWd/17D206cVs3GbTEhVMw8ji5P75llaLXW6Pfn6qfk/fHrp6rkkeGv8TaMlTqNa7elLHZFFkxa6uexNwzdQWvQQZhO1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FICuoIxI; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736777844; x=1768313844;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=G5Pt0Sn0y+fwk/C27M3CSjvZ0EDb6hxD1srwH94jkJQ=;
+  b=FICuoIxIXLX/NFQW+gKUzQnZIL5LdRGMXkp+oeFNNO7U4+2Vbgjukv/O
+   uj4ItqpgJMCp6ggClstVrMmY7PXG+dUmWeU82GKrZuTbddep834sghscd
+   X+sbXcN41gJhwjt5Gb8SoDehd7gZA0ndGhd56Pf3ZxVb0/JO13urkhw+4
+   FkofFA6kIZAirhejUqqF++TQIX1AwnpCCxwMaGGMZK8GMG3jREai7qO/4
+   5CuCVWS9YVMV9SjJ+z+mh+2JGrtycG/5YhDxfo8Gm3y/ACqG31druR2v5
+   uRHIwQhXT70ypVRH2Po1jO4F2mHm3TYwgWkswMgcfyPaRbQRx9t3bnRes
+   A==;
+X-CSE-ConnectionGUID: BcvgjSgLRWGvwh9GdFRcew==
+X-CSE-MsgGUID: tCJM+E3OQMWN/L4L3CKY/Q==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="47618398"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="47618398"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2025 06:17:23 -0800
+X-CSE-ConnectionGUID: sVfbRnLlSweUqRZP6yGZ8w==
+X-CSE-MsgGUID: 9kH8JENDQtWQGOYwWy+R9g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="109520269"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa003.jf.intel.com with ESMTP; 13 Jan 2025 06:17:23 -0800
+Message-ID: <dfa2a5d1-9d23-425d-aef4-98e7c01622e2@linux.intel.com>
+Date: Mon, 13 Jan 2025 16:18:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] usb: xhci: set page size to the xHCI-supported size
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>, linux-usb@vger.kernel.org
+References: <20250108142822.649862-1-niklas.neronin@linux.intel.com>
+ <20250108142822.649862-3-niklas.neronin@linux.intel.com>
+ <0825d8a0-d2f7-49a1-b6a9-a65fc865e923@linux.intel.com>
+ <20250113111612.5726c3f6@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250113111612.5726c3f6@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
-
-> Depending on the interrupter use case, the OS may only be used to
-> handle the interrupter event ring clean up.
-
-What do you mean by "cleanup"? Because I see that this patch ends up
-acknowledging events to the xHC and I don't know why it would do so?
-
-> In these scenarios, event TRBs don't need to be handled by the OS,
-> so introduce an xhci interrupter flag to tag if the events from an
-> interrupter needs to be handled or not.
-
-Right, and if the OS isn't handling those events because they are owned
-by a coprocessor then it shouldn't be acknowledging them either, which
-has the effect that the xHC considers their memory free for reuse.
-
-Also, what happens when Linux goes to sleep and this IRQ stops running?
-I expected that the coprocessor itself should be updating the xHC about
-its own progress.
-
-Is it a bug? How is this stuff supposed to work?
-
-How are future developers supposed to know how it is supposed to work?
-I imagine that few of them will have Qualcomm hardware for testing.
-
-
-> static int xhci_handle_event_trb(struct xhci_hcd *xhci, struct xhci_interrupter *ir,
-> 				 union xhci_trb *event)
-> {
-> 	u32 trb_type;
+On 13.1.2025 12.16, Michał Pecio wrote:
+> Hi,
 > 
-> +	/*
-> +	 * Some interrupters do not need to handle event TRBs, as they may be
-> +	 * managed by another entity, but rely on the OS to clean up.
-> +	 */
-> +	if (ir->skip_events)
-> +		return 0;
+> On Fri, 10 Jan 2025 14:35:50 +0200, Mathias Nyman wrote:
+>> On 8.1.2025 16.28, Niklas Neronin wrote:
+>>> +	page_shift = readl(&xhci->op_regs->page_size) &
+>>> XHCI_PAGE_SIZE_MASK;
+>>
+>> Should we check that page_shift value makes sense here?
+> 
+> Maybe it would make sense to validate it. Interpreting PAGESIZE wrong
+> is potentially dangerous, because the xHC will assume that scratchpad
+> buffers are of this size and it can write to them whatever it wants.
+> 
+> Before the buggy ffs() patch 81720ec5320c, the driver used to pick the
+> lowest set bit or warn if all are zero, but then it still ignored the
+> calculated size and used 4K.
+> 
+> I would probably be safer to use the highest bit, or just reject the
+> xHC if it sets multiple bits (5.4.3 says: "the supported page size",
+> not "a bitmask of supported sizes").
 
-This function is only called from one place so the caller could perform
-this check and don't waste time calling it.
+Checking that one, and only one bit is set sounds good. If so then use
+that. Otherwise print a warning and use 4k page size.
 
-Regards,
-Michalal
+This to avoid regression. I don't know why the page size was hardcoded
+to 4k originally even if we first do all the gymnastics to read it from
+hardware. But it was done for some reason.
+
+> 
+> 0xffffffff looks like a brain dead chip and not going to work anyway.
+
+Reading 0xffffffff from a PCI device mmio registers is possible
+if host is suddenly PCI hotplug removed (some Intel Alpine Ridge xHC), or
+if I remember correctly also in PCI D3Cold power state.
+
+> 
+>> We used to hardcode page_size to 4k, and don't really know if all xHC
+>> vendors have a sane op_regs->page_size value.
+> 
+> FWIW, all of mine report 4K as per debugfs:
+> 
+> /sys/kernel/debug/usb/xhci/0000:00:10.0/reg-op:PAGESIZE = 0x00000001
+> /sys/kernel/debug/usb/xhci/0000:02:00.0/reg-op:PAGESIZE = 0x00000001
+> ...
+> 
+> 00:10.0 USB controller: Advanced Micro Devices, Inc. [AMD] FCH USB XHCI Controller (rev 20)
+> 02:00.0 USB controller: Advanced Micro Devices, Inc. [AMD] 300 Series Chipset USB 3.1 xHCI Controller (rev 02)
+> 06:00.0 USB controller: ASMedia Technology Inc. ASM1142 USB 3.1 Host Controller
+> 09:00.0 USB controller: Renesas Electronics Corp. uPD720202 USB 3.0 Host Controller (rev 02)
+> 0a:00.0 USB controller: Etron Technology, Inc. EJ168 USB 3.0 Host Controller (rev 01)
+> 0b:00.0 USB controller: NEC Corporation uPD720200 USB 3.0 Host Controller (rev 03)
+> 0c:00.0 USB controller: VIA Technologies, Inc. VL805/806 xHCI USB 3.0 Controller (rev 01)
+> 
+> Also ASM1042 and ASM3142.
+> 
+> And I have an NVIDIA Tegra board which runs some antique kernel and
+> doesn't warn, so PAGESIZE must at least be non-zero there.
+
+Thanks, good to know these hosts work fine.
+
+Thanks
+Mathias
 
