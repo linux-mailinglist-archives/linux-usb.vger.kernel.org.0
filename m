@@ -1,92 +1,75 @@
-Return-Path: <linux-usb+bounces-19230-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19231-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11A27A0B04C
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 08:51:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 22492A0B064
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 08:55:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21C6E1660CA
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 07:51:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A1B0166235
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 07:55:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5B7E23236C;
-	Mon, 13 Jan 2025 07:51:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A1C232386;
+	Mon, 13 Jan 2025 07:55:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="KGBC58TK"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="R98vN3FF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B33C28FD;
-	Mon, 13 Jan 2025 07:51:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C752722615;
+	Mon, 13 Jan 2025 07:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736754697; cv=none; b=sMxQ29MOhqHUyUeWY4PwsYAZu4gqo9Q/HxUYko8EsXRx9yvFYOO0tAdO8TuTPolA8DjLRSe9TTdcjW1x7KWd/cBgqn+Yd6CQGgR20yxOivUAWjdakybwBlquSWbC65Q1hTTLEuaXgdz8wV+15HUr2SKUgnlRJQN8loR082RQJg4=
+	t=1736754912; cv=none; b=c+FCz+gu4gtzNJJnqOEWW17GRFsfK3sgRvuVYHx1CXdcC1a32TCzTgE+iViVFWfEiLs4AN37jW9wKTQvh0gLY/ZJd+MioPxYsUAyaIYAgQ85tL2Oky/7ZyEJsbX2w2IQ+ikQrGBZx0A0FbRO/ViHYnEF073iLDiYxDJJUQ8D6KM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736754697; c=relaxed/simple;
-	bh=N0mCP+2ZFP9s1WPktJkkbwuEEoZnIYrp1Yx/J/pvDlk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z5vZ0RdDq/DZGmkMkXIw0gj6LGvzy8XAQPI3t8daF/ssMzXB+7SkNGGVJNXCgkcg39bIRlNaQ55eig35DHyBgH+kugpAKRbow7PsZcJDxJw8CCOIGD46mKhT3dPDhpLho91LlRXNJ0s72LHEQt//ZGH6c3pD43TjBH/gHbG2H8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=KGBC58TK; arc=none smtp.client-ip=117.135.210.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=FpoFc
-	K7G8rD8MXdXY6aAKIfhs5YiMLTt9E0lkQrKOvA=; b=KGBC58TKAUQClBooEGiAc
-	0bXJIUHepJamS73lwzOwi9qdFrFj/I8vuwwunbmgE5VNuOQCXRKc5zGhtGoD9Hy9
-	ONFXdnIV7vN3XmIzocrE5G4/JebFOIFPmzv5kUINDS/ktBJOyzqbaAjkPwFhtPSP
-	7FAeCb2b7HwG9GDhmQN+0M=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wD3_+v5xYRnCa+mFw--.2000S2;
-	Mon, 13 Jan 2025 15:51:22 +0800 (CST)
-From: limiao <limiao870622@163.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	limiao870622@163.com,
+	s=arc-20240116; t=1736754912; c=relaxed/simple;
+	bh=YrX2CesNE3eaYycK1LcaZAMZh/ciqH7X+WDa6Ua7F8g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CHgMZS7DHp67oVsh8pOljd4OpUGFLvICH4TBTHzPRbZv6525amAfpzkuLZg/XOQID/O0I9MpKPIXGx6Frg6LsjGwxu/YVybjWPLqYS5n8Yo7uljAIscKlkW88Q0fpnSqJgWkEGLd191mB6mz+b6IewvqTmUs/e9+ohJDeab2/Yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=R98vN3FF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFDEAC4CED6;
+	Mon, 13 Jan 2025 07:55:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1736754912;
+	bh=YrX2CesNE3eaYycK1LcaZAMZh/ciqH7X+WDa6Ua7F8g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R98vN3FF6TxYfDSd7fjWdJ35zW9gBJdlCf6HZvy5s5UI5ScJORaZ0MIWo4MiPdNvt
+	 a+kzc5jQXkdZPTOAYnGc+7aw1DXr6B8+N6LLZJ/MXuebGfHMIgNw/SUAf7K9TCt+rW
+	 LQqtwz7fI8QSV+2/sCI+Qe2Hg5qrUnm9n52SRA2s=
+Date: Mon, 13 Jan 2025 08:55:08 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: limiao <limiao870622@163.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 	limiao <limiao@kylinos.cn>
-Subject: [PATCH] usb: quirks: Add NO_LPM quirk for TOSHIBA TransMemory-Mx device
-Date: Mon, 13 Jan 2025 15:51:18 +0800
-Message-Id: <20250113075118.30007-1-limiao870622@163.com>
-X-Mailer: git-send-email 2.25.1
+Subject: Re: [PATCH] usb: quirks: Add NO_LPM quirk for TOSHIBA TransMemory-Mx
+ device
+Message-ID: <2025011334-fable-arrogance-b04b@gregkh>
+References: <20250113075118.30007-1-limiao870622@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3_+v5xYRnCa+mFw--.2000S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFW3AF1DuF1kJryxGw45KFg_yoWDWFg_ur
-	1UWa93u3W8CF9xJFnFv3WfZr48K3Wv9Fyvgas8ta4rJF4Uuw1rJa17JrWqvF1UJr1DtFnr
-	KrsrCw1kZrW8ujkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7sRimLv5UUUUU==
-X-CM-SenderInfo: 5olpxtbryxiliss6il2tof0z/1tbiRQvTzWeEsIUACQABsO
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250113075118.30007-1-limiao870622@163.com>
 
-From: limiao <limiao@kylinos.cn>
+On Mon, Jan 13, 2025 at 03:51:18PM +0800, limiao wrote:
+> From: limiao <limiao@kylinos.cn>
+> 
+> TOSHIBA TransMemory-Mx is a good performence flash device, but it
+> doesn't work well with LPM on Huawei hisi platform, so let's disable
+> LPM to resolve the issue.
+> 
+> Signed-off-by: limiao <limiao@kylinos.cn>
 
-TOSHIBA TransMemory-Mx is a good performence flash device, but it
-doesn't work well with LPM on Huawei hisi platform, so let's disable
-LPM to resolve the issue.
+Can we get a "full name" here?  If you want to use your native
+characters instead of ascii ones, that too will work quite well.
 
-Signed-off-by: limiao <limiao@kylinos.cn>
----
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
+thanks,
 
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 13171454f959..67732c791c93 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -394,6 +394,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	/* Kingston DataTraveler 3.0 */
- 	{ USB_DEVICE(0x0951, 0x1666), .driver_info = USB_QUIRK_NO_LPM },
- 
-+	/* TOSHIBA TransMemory-Mx */
-+	{ USB_DEVICE(0x0930, 0x1408), .driver_info = USB_QUIRK_NO_LPM },
-+
- 	/* NVIDIA Jetson devices in Force Recovery mode */
- 	{ USB_DEVICE(0x0955, 0x7018), .driver_info = USB_QUIRK_RESET_RESUME },
- 	{ USB_DEVICE(0x0955, 0x7019), .driver_info = USB_QUIRK_RESET_RESUME },
--- 
-2.25.1
-
+greg k-h
 
