@@ -1,229 +1,223 @@
-Return-Path: <linux-usb+bounces-19253-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19254-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3535A0B828
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 14:29:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8AABA0B831
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 14:31:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEB9A1658A4
-	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 13:29:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA69A16612D
+	for <lists+linux-usb@lfdr.de>; Mon, 13 Jan 2025 13:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE1C1CAA66;
-	Mon, 13 Jan 2025 13:29:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F82E2045AE;
+	Mon, 13 Jan 2025 13:31:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nLceS+Kc"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="fHx8MRMW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2039.outbound.protection.outlook.com [40.92.62.39])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25AC6BA4B;
-	Mon, 13 Jan 2025 13:29:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736774979; cv=none; b=oKbeGy4s/NGZUa+CWBs1cAGhpW2QRnE/XH7MrGiJJ+6bzKaEafYo0lGvrkruvkXevwPxsdpyAWfNNYO9OBPd3CRCC8Bc+iuAG+TVW9KH9VwOm3B/EHH5JUWDx3X2NHXLJdx+h73qbDdT+SsOzGb1ORbC9L3dYPSLMNnaJHCShfI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736774979; c=relaxed/simple;
-	bh=71L+W0h5TdU6E8Avzu9ibQzFJplCEwz1FP2YjnTwvmc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=M3KP3nWlwjEku2EtbxA7pJLcDX/Pef9YH0GnO9b+NrLQjR0v8AwXMXyGuDeAT5uvLRGM6xjDyp6St8fjjlUoBixNay1t+tDP71pItvCqco2nh6RyvHT6RR8zvHC0ojiuffeJQ45yhHG+mhwBG3GINdmu4Y+VaGTMJkOEDoAyHfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nLceS+Kc; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-385f06d0c8eso2277653f8f.0;
-        Mon, 13 Jan 2025 05:29:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736774975; x=1737379775; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2YT6gGaBfcX0S/XtfuSOyEOtTxo2D9TBTGAvaOd32fc=;
-        b=nLceS+KczwyXXUWtiQXJBdABmS6d8aKfQ/JjH2uozrs9SfUXMmSwkh3yWcfCl0QGU3
-         lkDy08MqHzjr+xAw8bFmxmUFFO6ezAEvNIHluio8G51AiD1OalORC3jSmhsH8qi45by/
-         M2nXPgObQOMvSxgbpjWK8K6NNfOAvj6KUQZFVWA8v3a9MhWNW2HUR9GwY34MfTj/72jC
-         juRJ+eMDaZhUn9iAdVrVIhOoWAaXFeBMnUGEbHwFP0M2FEmzgceDdJvyqWpRwRTvOWjC
-         xdbcADGGTu7SoYH2Ly65UPoxPsfhpkBoYOPynP1WN/sydRq9XR/ogTQjqgNqtemJQxjU
-         p6Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736774975; x=1737379775;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2YT6gGaBfcX0S/XtfuSOyEOtTxo2D9TBTGAvaOd32fc=;
-        b=YvIL54wsE776KHmF+8J3525Znz7ApOfaCTBvLodW3tMpOGUODxHRQFkZkh1Ybc6GNo
-         O5rngz8Xwp9M7BeMYQlYkDd5lErNy+wmzAsAM/Te4DK0iZiBg2i6X4tzEBvwJeywVqZJ
-         O4Fi3neVFw22LUPrG7lfxMZjWqQRYX6l7txTYU+8HWHfuV5+5stRAfGhOAlmyFoZYTK9
-         5AQimkSwxNEIqNvb9X74KoYaakymAgSF4CwdZCjsdRKSr3OP9KxllvX4sbX2M5hm+pSI
-         liFHw01U/waU9OpNl4eZoDc6wIF+pU/C3LF2S0/RH/872vu+MdBVS8QF2KnCpxfbdTs4
-         g6xg==
-X-Forwarded-Encrypted: i=1; AJvYcCUBbXyQx8ktIYptreS1zgDQx3zGVtwNRVsG9SyKG6NeP90kowKhRrlrnP8pRA8onFDHYvJEHdrNIFd6@vger.kernel.org, AJvYcCVwPuf9VMbdYo1HD2tQkDAql92aBXQDt2LF90IwSv40SOLEsng4KPwcv21YY3Ic+Xu4gMgMA5JqsuyFN/c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwW/j5qblZn0QFftOy2r0KmIKX+AjRD/NMUr7fcqZwqgz6x7fsC
-	wakTma2G/90jZL+W8KIpEujiscwZDtpm6nVBlUpIjiU3VmfuaRMVpC5/Nk6D7WeMJf6iAdO9vUi
-	+xugCP/WDivrwPAAU/m0eSBXVH3WtHx3v
-X-Gm-Gg: ASbGncuda6F7AZ4pqT+qJ+V0bBpH2h9cRasLRCZkL0XY8qoMUiHPwyNaR1pE5DApbD1
-	cLS+rC77HzEl0H2yPn8nJsIwoARwt7bNSrVccMg==
-X-Google-Smtp-Source: AGHT+IHo+zbxCDb5KD4dwZiuf5dhaK5FlNNyB97WgmpCwZmmP6aB8SkL32msCHKm9YILO07OMpDMHdsOuIqRcEOdJrA=
-X-Received: by 2002:a05:6000:1fa8:b0:38a:a083:9200 with SMTP id
- ffacd0b85a97d-38aa083947dmr6046440f8f.44.1736774975193; Mon, 13 Jan 2025
- 05:29:35 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2426622CF36;
+	Mon, 13 Jan 2025 13:31:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.62.39
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736775098; cv=fail; b=LI5Q2fsMUQIwrN71yIkV+/TdZkhSEgbjqEQi/5rr9eQa79KCIlcSyC6Wv9xVX5Bks8/NUngmd5qQwHBnejVuJyhuWZDVddMBI+sRsrl19ndEkOB64fn21qixvSEYfIPAK+kZ5oKf9RqdNYtycvN5oL5Z2tLV7xDJcV5iC+54n1U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736775098; c=relaxed/simple;
+	bh=kwHfXW+HKMEPtPDiczoKXVCKPvqn5z99ZosMyW6d84s=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=TrQSzEQxWgw1ZZOeAvubWeSRld1Hrvw4XzVX4wASj2RXw9LeROjlxVJRwHozCjkwebVfq6AGekKAoWLABPuxTWLBTj1jp0JMt6Q0bx6Lp5PVNSqF6WIWRC0MuK+QB4tG1XquMFYiqvEijxEoX6gbKS3FL4ihZvWSO/bGaovjCWM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=fHx8MRMW; arc=fail smtp.client-ip=40.92.62.39
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Ev5g32feHaioiCu3P0R5pswhcvNqpGYgxTXkLdq4qu8CadmmTfBn2qseQGWCkq0p5ZUp5lJ5aprCWIoY9PV/nfbZISCSLdhCuBWUVtHKDhWomVrgVytLGlq6XTYUaVN/8nQrNUvtRiZ5tMXdpIKQu04r/FXlldV4fiioT1YXIpQoq5N0GffWY141yq4lwYRtlN6Ids+5SXr3FriQ1WtvBK0aAxtQPkdsocCpSKoYmo47Gy1oOJ7zzMlGj82qVVByO9pPZTAIFY8FYIska4xPi2NbKgYxRENt9pBcgIL+SSTg6kw+xF+xGFYCTzWN2MZv7bj9fKJ/ZQdTu9X99Sp95g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wZtxLUcLhGFyIifoztrJvGcUweLv1X7EtPSMeaKF8WI=;
+ b=ROGEvTzA5n7V1KgJ6zC5bdUxQgSHdMZJQrIDOO77Z16Tt/dd5EROIiiB72qCumqZ3WeEQG3KvJsZEaF13OZdtk2TRJKnuwv2kbJUmhFcj/N/ax5dI9ts41apT2wZC8cyXokUPwG137JMR4OW4tGJT15SDER6aDdZRTyegCwQ0h/ONrunwDrRrbJgvc67iQSnUlQjn3qODGxjqQMkzZ270tnlgx7Uh0ZYM0SxLlGjfOdbZb1jwRo30fZFTghIEXM9V3EmH+H+uVqGEFWouTA6f+IAc46Xx6HLHXF+c5gU9SVVuY7Wfzw19g7Ybzi7olBgpD1iC9VIFDg1AUaAGx7TJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wZtxLUcLhGFyIifoztrJvGcUweLv1X7EtPSMeaKF8WI=;
+ b=fHx8MRMWS5uc+rem/dsU3L3mVMvXzr6n494ZHwfjgT7h2K/S8foGy4VI3aUzwa2qciws1vMPmYbnXsYYIOklttPJcdBbq0GFLeYsI9ga0+0I8iHQrrJLC8QIpHYHl12mDfYc4mwKjv6q7w9HqGNF8vvb2+2aDMFMPEsInNQtN9VDukubrwOgW8hYdtR0IkIiklDfPcJ3V7u0YISFkqGvxCzhslq/B7fuwlV8XQztHBneRt2HygpH7RASeoOhjhRk3+R5sNvzVIRAybLfzhAielZD6AhBchxhjjtsl9D5EDADqQtnvJFYiBJ3LXucg6dDzMeOvNlrlfqXz7+YWVUB0w==
+Received: from ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM (2603:10c6:220:22a::15)
+ by SY0P300MB0514.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:286::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.18; Mon, 13 Jan
+ 2025 13:31:32 +0000
+Received: from ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::fee9:23d3:17b0:d2d3]) by ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::fee9:23d3:17b0:d2d3%4]) with mapi id 15.20.8335.017; Mon, 13 Jan 2025
+ 13:31:32 +0000
+Message-ID:
+ <ME0P300MB05538EF3A86116EF73BE3BE9A61F2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+Date: Mon, 13 Jan 2025 21:31:26 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: gadget: ncm: Avoid dropping datagrams of properly
+ parsed NTBs
+To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Cc: quic_kriskura@quicinc.com, gregkh@linuxfoundation.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ quic_jackp@quicinc.com, quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+ stable@vger.kernel.org
+References: <20240205074650.200304-1-quic_kriskura@quicinc.com>
+ <ME0P300MB05534EDF5293054B53061567A61C2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+ <CANP3RGc_SBROWVA2GMaN41mzCU28wGtQzT5qmSKcYsYDY03G5g@mail.gmail.com>
+ <ME0P300MB0553900AF75E50947B011FF3A61D2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+ <CANP3RGc7n2vv6vGh7j0Y=7DNqfXnQxZaTcwdPD15kzoY1in08Q@mail.gmail.com>
+Content-Language: en-US
+From: Junzhong Pan <panjunzhong@outlook.com>
+In-Reply-To: <CANP3RGc7n2vv6vGh7j0Y=7DNqfXnQxZaTcwdPD15kzoY1in08Q@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI2PR01CA0002.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:191::21) To ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+ (2603:10c6:220:22a::15)
+X-Microsoft-Original-Message-ID:
+ <f3e34217-981a-421e-b288-3bfaad4562b7@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241231161539.20192-1-xndchn@gmail.com> <20241231161539.20192-2-xndchn@gmail.com>
- <5ad65964-dcf7-47d2-8e5f-bf82066e55f4@linuxfoundation.org>
- <CAJ=gGT3pAnKUCve1OV5SXVArz6HUdizu9wjM5tPJ_CrQ=sF=nw@mail.gmail.com> <2ff39cff-af3c-4020-81b3-4238efe6c2e3@linuxfoundation.org>
-In-Reply-To: <2ff39cff-af3c-4020-81b3-4238efe6c2e3@linuxfoundation.org>
-From: xndcn <xndchn@gmail.com>
-Date: Mon, 13 Jan 2025 21:29:23 +0800
-X-Gm-Features: AbW1kvbvPFRAJAsO_mSweDy13kD00YuGPhi5dfdbYbL83gkclwLvrsT4Ey6Yw08
-Message-ID: <CAJ=gGT3Z85Hshfw5eb5JgM0CA-V_O1MW1hbfbdyp8Be0bG6SvA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] usbip: Fix seqnum sign extension issue in vhci_tx_urb
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: Valentina Manea <valentina.manea.m@gmail.com>, Shuah Khan <shuah@kernel.org>, 
-	Hongren Zheng <i@zenithal.me>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"open list:USB OVER IP DRIVER" <linux-usb@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ME0P300MB0553:EE_|SY0P300MB0514:EE_
+X-MS-Office365-Filtering-Correlation-Id: 879d4570-f441-4fa3-09b8-08dd33d697e9
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|7092599003|19110799003|461199028|15080799006|6090799003|8060799006|5072599009|3412199025|440099028;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?RVhtRG1qK3BDK240NXBrWFBNMTM5QVZJNXVMZmphY1ZTNG1KMTVCYkVZUmtV?=
+ =?utf-8?B?L2s3UXN4SE55U0JlYUhBdlNFeFlOcy9NVEFIeDVLT1pZWVpUOTdWOERnVGFF?=
+ =?utf-8?B?VHk1ZG44bDMxaENHenhPaFlHRDJQNVhIUExwRFBIOVN3eHAzeXgvRVFHM2Y2?=
+ =?utf-8?B?VERSakgzOHF0MlZwaXhGbDYxMjdUVDBHK3RYcCtGaHNtYXRYd3lzOE04SHhT?=
+ =?utf-8?B?ZEFEdGhlN0dPN1Y0b2NycXNVR0crVlJHeG1MMS85MnA2bndWb2hBNjUwbGNP?=
+ =?utf-8?B?R3gxODBnRUVEV3c5ZHBNWG1PZTNtcEhvQWV0cUc0UG84MmNReWRveW1kbE5s?=
+ =?utf-8?B?VjhxTkNraEk1ZU02WHduNHlRRy84VWtkRzNyb25hNkFySmFoWU5BVndDVnZu?=
+ =?utf-8?B?OTA5bFZLMWplWm5jWGVJRjlCaFZ2cG9vZXFmM0hlRXNHbk1VaWxvQUVJK3JD?=
+ =?utf-8?B?cWJON09oWEJHMUZUdU5pUkdKYVVjUkd6Z2ZVYWJOLy9qbXBDdmVZYU9BZWl3?=
+ =?utf-8?B?cU9RL2ZLSzc1Wm5ZSk9zWkNLaGcxTjYvT09jWUFvb2VsQjdVdTUzb2tXV2cr?=
+ =?utf-8?B?U1hQa2FsaDUwYVVYTXd3SS9DTzk1UnEzWnlUK21yYTF5SHVudUQybURNc2ZR?=
+ =?utf-8?B?d3RvSjRjUkJyREIzZ2daM2YzbzdpMjVneWhtbTMzRnZvZDlzVTFGS0l1WUsy?=
+ =?utf-8?B?Z2hnUVJOelJNaVRtdVlMMlMrdEE3MzB3OWpsQmFxK2EzTGw3SmtzWlNONDZw?=
+ =?utf-8?B?UHNKeE9EMU1Qc1FXcXRlbFdnMkxpS3I5clZQZW8rOThGWU9SYzVKZy9mTGU2?=
+ =?utf-8?B?Z3pLc2ZqWHQ1MFlCY2x4dHdCSG1lQ3B0UWE4TTl3U0FvMGRZQjNKU1RWbGNI?=
+ =?utf-8?B?MlZ4VUc2bGRxb1hZMHpmZEpPWDg4ZVR4eEZ5bnpYck54YlZaV1RrSGVoRWxF?=
+ =?utf-8?B?VE43WFQ2ZjNDMHU2dk9JcTNiU0lLT2M1Y3IzblJteEFOeXJEWjNGWWo5bTBs?=
+ =?utf-8?B?QlNQdlJta3ZHc0R0VHZBVzFoYTQ0VkZEUmw0SDU0ZFVSQkMxdnZ0VXBzbWQz?=
+ =?utf-8?B?SFVPRktoRlZhdW1DbXRqWTNIdUd4a3RlR0RhUk9wZHNySWJYKzlEbTRaWEkv?=
+ =?utf-8?B?WUNjMnk5T0FZVUFpcnI0Z3hBSGNNR3hiM0ROdHYyYU5KS0g3RDNuL2hrVnRh?=
+ =?utf-8?B?K1RqTU92c2pIWGZBTzRQTWZpbG5UV1BrR25pbnFHUUNHc3F6Umg4Wk9uVDZt?=
+ =?utf-8?B?VHlldmIvTUVlZVJHK3FSMitNZHpZOWdmZ1praG1GQlU2UGZMaU9SNEZtb0My?=
+ =?utf-8?B?MzdUbEMyOG85WHJTZFNLak43SjFHYkFKaVlIRlYwYWFnbGZkWDZYeUdmWUwx?=
+ =?utf-8?B?MzFsUHoxRkpZWjBBakR0NDN5N2NpWUMvVHR6NG1ia2F2R1l6eXozNXZkY00r?=
+ =?utf-8?B?eS9HZE5CaWVLYlEyRzVGOGJ3cVpyVWY2R2NCVGhIM2VCMk5wdERFTmpSYlJO?=
+ =?utf-8?Q?MQKpYU=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?a01vZjFENEJnSTRRZUpYcExTUWdlYzA5S2Y4WGJFM0FjRFlBOTFUUUdZYjM4?=
+ =?utf-8?B?RFk0TnlhQzRxMEpSL2xlTDJyKzVnNEJqRG9jL0dBMGxCdXpka3htR2lsM3lw?=
+ =?utf-8?B?RjlMVlYwY2xYWWFXeUVXbW83Z1hsMTZ6VXBIV2twdk9FRktxbythRmRuS0E0?=
+ =?utf-8?B?UStKME5MM0x3R1RjYTB3QWpiOHBkL2dvQm1iLzZSMGVBZmRoaUNUeGN1SG9D?=
+ =?utf-8?B?bDFvL05aN285ZmpCV3dMemNWbFROUlZGcGxpN2txUUt3WmViTnFpTGRWVDFw?=
+ =?utf-8?B?NHBicHowK0pNK2k0bVdZWkdEa0taUTM2RkxYTURRc2pKN2NZYkV6V3BlbVpp?=
+ =?utf-8?B?VDJVVm5ZRzc3cytmRXAvM0ZiSHhFN1JTYk9Ea0hHTU5WRnJFdDdwcm9pV1ZF?=
+ =?utf-8?B?R1R4UmdCdXVaWjkzWnB1TmNNOE1hMElxUFFKQ3B0NXBhcnY0OUlPejVrYTBo?=
+ =?utf-8?B?WlZRY2RuTnJqZDdOdGVvYnhDVk9Pd1hnNEtOb1RnQ2MxRWY2cE95d29QT0lZ?=
+ =?utf-8?B?SXRlSXJlSTVzRVFaVk1BZmttTFIvOU01S0ZsN1FvUUM2LzVXdFdwN1lnWXVi?=
+ =?utf-8?B?a2VCRUZuVlUrd2RBSzZCUEhlTlVNY0d5Umd6ejdLZ2ZGYnUzU0RicDEwUUVS?=
+ =?utf-8?B?RHBySlBBUEhsM05XR2d6aEJtZW11YTV2a0doSEhCRHEwbTlFZ1U3WDlLS1E1?=
+ =?utf-8?B?eWloZ1AyVldjRXBnS1ZBaEQrYUNiSzZXeldXVVA1YzA0TWJWanR3Rk4ybTdz?=
+ =?utf-8?B?aFBERkpSM043dnhnaUpoTUFPdGh0bTJIM0pSTzNEZ05mV2NGUnVwNmxMRWY2?=
+ =?utf-8?B?S1lvcWlZd2NVQldkbFVIaGduaDZBcWphSVlvM0lOdHV5SjJDT0l6VkZIWHZp?=
+ =?utf-8?B?WnNab1JqU2dNTzR0cGsvOUJnVXBwWG95N1J6RTNlWlN2Z2V4MDlWV2ExUVB4?=
+ =?utf-8?B?YUdWcTlKRWc0WWhHRG5xOHluSzdMYkVaMFo5WEFFd2NzR0ZkeGduMUk4SWZG?=
+ =?utf-8?B?b3JuclVEK3g1ckFQV2lVaU50SnlLQkdhbWo4R2hkbHVsamJETDEybTNNL1pz?=
+ =?utf-8?B?ZkpTVjRBMTJLbjh1WUV1dkZQR0ZnYitUc3Y1dVhLUGlhYVBxQjRWTjhTOUp4?=
+ =?utf-8?B?N1RZRW92dS9WRGtsbTFWbDNSU05FNHFPM2ZXV0N4SkM0ejBFT01hTmFwalZu?=
+ =?utf-8?B?azg4VGQ5TFd6ak5kWWRrSlprUXR5U1NZYkNEbGhvRHBrbEhlanFxQWNJdTJu?=
+ =?utf-8?B?d0RvcmdybWZvR2dCakYwcUtybHp6ZHpKNzhvNWJOUDI2NzZBT1B4aFFDYTBn?=
+ =?utf-8?B?Z09TRGg1dlFNam1rWGw5SUdudDQyRWE4K3AyemlSV1RGRUxnOFVtQjBOZFRG?=
+ =?utf-8?B?TVREMFpIMDdYandodFhLK0dsRzhFNEhwVlFCcGhhZG0xZ0xBV3pMS3FzOWJk?=
+ =?utf-8?B?SXV4TVJpdGlQUmJaVGFqWnZ1eE8wWXNKbU5idFE0WWtRVkJEK3NBTUJ6YUxS?=
+ =?utf-8?B?RHJFaWdsV1dZRnZyd0gzRmtZMzZGVmNzaG9rc013aEhvMUxCOGMzV2VRZUIw?=
+ =?utf-8?B?NGtjWjlnUW9YL1dhN3JiajR2dGlHdFJic2ZWRVNoNDhPWDZ5VkMzYUdnc2ll?=
+ =?utf-8?B?YUVsVDFaOGtORlVESUk5ZUpINlYrbjlvWWhScElobEU4UmpsbUxUV21TcWdm?=
+ =?utf-8?B?cmo4eVpQRFpFNjd0cndIdk1uZzdyUHRUYitWZWhFUXBNbFk1RGxPeVRmamtK?=
+ =?utf-8?Q?tD5oT3iQ/1DswS5Z6AbMnh4TOhufAr85YLHUQkG?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 879d4570-f441-4fa3-09b8-08dd33d697e9
+X-MS-Exchange-CrossTenant-AuthSource: ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Jan 2025 13:31:32.2957
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY0P300MB0514
 
-without the patch:
-> [ 384.276605] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
-> [ 384.278487] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus n=
-umber 1
-> [ 384.278509] vhci_hcd: created sysfs vhci_hcd.0
-> [ 384.278532] usb usb1: New USB device found, idVendor=3D1d6b, idProduct=
-=3D0002, bcdDevice=3D 6.12
-> [ 384.278535] usb usb1: New USB device strings: Mfr=3D3, Product=3D2, Ser=
-ialNumber=3D1
-> [ 384.278536] usb usb1: Product: USB/IP Virtual Host Controller
-> [ 384.278538] usb usb1: Manufacturer: Linux 6.12.0-00971-g158f238aa69d-di=
-rty vhci_hcd
-> [ 384.278539] usb usb1: SerialNumber: vhci_hcd.0
-> [ 384.278630] hub 1-0:1.0: USB hub found
-> [ 384.278637] hub 1-0:1.0: 8 ports detected
-> [ 384.278740] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
-> [ 384.278781] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus n=
-umber 2
-> [ 384.278788] usb usb2: We don't know the algorithms for LPM for this hos=
-t, disabling LPM.
-> [ 384.278801] usb usb2: New USB device found, idVendor=3D1d6b, idProduct=
-=3D0003, bcdDevice=3D 6.12
-> [ 384.278802] usb usb2: New USB device strings: Mfr=3D3, Product=3D2, Ser=
-ialNumber=3D1
-> [ 384.278803] usb usb2: Product: USB/IP Virtual Host Controller
-> [ 384.278804] usb usb2: Manufacturer: Linux 6.12.0-00971-g158f238aa69d-di=
-rty vhci_hcd
-> [ 384.278805] usb usb2: SerialNumber: vhci_hcd.0
-> [ 384.278866] hub 2-0:1.0: USB hub found
-> [ 384.278869] hub 2-0:1.0: 8 ports detected
-> [ 384.279071] insmod (400) used greatest stack depth: 11960 bytes left
-> [ 550.127351] vhci_hcd vhci_hcd.0: pdev(0) rhport(0) sockfd(3)
-> [ 550.127356] vhci_hcd vhci_hcd.0: devid(0) speed(3) speed_str(high-speed=
-)
-> [ 550.127359] vhci_hcd vhci_hcd.0: Device attached
-> [ 550.341007] usb 1-1: new high-speed USB device number 2 using vhci_hcd
-> [ 550.452995] usb 1-1: SetAddress Request (2) to port 0
-> [ 550.464332] vhci_hcd: cannot find a urb of seqnum 2147483648 max seqnum=
- -2147483648
-> [ 550.464842] vhci_hcd: stop threads
-> [ 550.464843] vhci_hcd: release socket
-> [ 550.464845] vhci_hcd: disconnect device
+Hi Maciej,
 
-and with this patch:
-> [ 746.253823] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
-> [ 746.254660] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus n=
-umber 1
-> [ 746.254669] vhci_hcd: created sysfs vhci_hcd.0
-> [ 746.254895] usb usb1: New USB device found, idVendor=3D1d6b, idProduct=
-=3D0002, bcdDevice=3D 6.12
-> [ 746.254897] usb usb1: New USB device strings: Mfr=3D3, Product=3D2, Ser=
-ialNumber=3D1
-> [ 746.254898] usb usb1: Product: USB/IP Virtual Host Controller
-> [ 746.254899] usb usb1: Manufacturer: Linux 6.12.0-00971-g158f238aa69d-di=
-rty vhci_hcd
-> [ 746.254899] usb usb1: SerialNumber: vhci_hcd.0
-> [ 746.254964] hub 1-0:1.0: USB hub found
-> [ 746.254985] hub 1-0:1.0: 8 ports detected
-> [ 746.255042] vhci_hcd vhci_hcd.0: USB/IP Virtual Host Controller
-> [ 746.255066] vhci_hcd vhci_hcd.0: new USB bus registered, assigned bus n=
-umber 2
-> [ 746.255072] usb usb2: We don't know the algorithms for LPM for this hos=
-t, disabling LPM.
-> [ 746.255081] usb usb2: New USB device found, idVendor=3D1d6b, idProduct=
-=3D0003, bcdDevice=3D 6.12
-> [ 746.255082] usb usb2: New USB device strings: Mfr=3D3, Product=3D2, Ser=
-ialNumber=3D1
-> [ 746.255083] usb usb2: Product: USB/IP Virtual Host Controller
-> [ 746.255089] usb usb2: Manufacturer: Linux 6.12.0-00971-g158f238aa69d-di=
-rty vhci_hcd
-> [ 746.255089] usb usb2: SerialNumber: vhci_hcd.0
-> [ 746.255118] hub 2-0:1.0: USB hub found
-> [ 746.255120] hub 2-0:1.0: 8 ports detected
-> [ 756.967922] vhci_hcd vhci_hcd.0: pdev(0) rhport(0) sockfd(3)
-> [ 756.967928] vhci_hcd vhci_hcd.0: devid(0) speed(3) speed_str(high-speed=
-)
-> [ 756.967933] vhci_hcd vhci_hcd.0: Device attached
-> [ 757.184367] usb 1-1: new high-speed USB device number 2 using vhci_hcd
-> [ 757.296479] usb 1-1: SetAddress Request (2) to port 0
-> [ 757.309845] usb 1-1: New USB device found, idVendor=3D1234, idProduct=
-=3D1234, bcdDevice=3D 2.80
-> [ 757.309848] usb 1-1: New USB device strings: Mfr=3D1, Product=3D2, Seri=
-alNumber=3D3
-> [ 757.309849] usb 1-1: Product: foo
-> [ 757.309850] usb 1-1: Manufacturer: bar
-> [ 757.309851] usb 1-1: SerialNumber: 0
+On 2025/1/13 1:49, Maciej Żenczykowski Wrote:> (a) I think this looks like a bug on the sending Win10 side, rather
+> than a parsing bug in Linux,
+> with there being no ZLP, and no short (<512) frame, there's simply no
+> way for the receiver to split at the right spot.
+> 
+> Indeed, fixing this on the Linux/parsing side seems non-trivial...
+> I guess we could try to treat the connection as simply a serial
+> connection (ie. ignore frame boundaries), but then we might have
+> issues with other senders...
+> 
+> I guess the most likely 'correct' hack/fix would be to hold on to the
+> extra 'N*512' bytes (it doesn't even have to be 1, though likely the N
+> is odd), if it starts with a NTH header...Make sence, it seems we only need to save the rest data beside
+dwBlockLength for next unwrap if a hack is acceptable, otherwise I may
+need to check if a custom host driver for Windows10 user feasible.
 
-to make the bug easier to reproduce ,I have changed the initial value of se=
-gnum:
+I didn't look carefully into the 1byte and padding stuff with Windows11
+host yet, I will take a look then.
 
-diff --git a/drivers/usb/usbip/vhci_hcd.c b/drivers/usb/usbip/vhci_hcd.c
-index 8dac1edc74d4..92a60e89b459 100644
---- a/drivers/usb/usbip/vhci_hcd.c
-+++ b/drivers/usb/usbip/vhci_hcd.c
-@@ -1192,7 +1192,7 @@ static int vhci_start(struct usb_hcd *hcd)
-                vdev->rhport =3D rhport;
-        }
+> (b) I notice the '512' not '1024', I think this implies a USB2
+> connection instead of USB3
+> -- could you try replicating this with a USB3 capable data cable (and
+> USB3 ports), this should result in 1024 block size instead of 512.
+> 
+> I'm wondering if the win10 stack is avoiding generating N*1024, but
+> then hitting N*512 with odd N...Yes, I am using USB2.0 connection to better capture the crime scene.
 
-- atomic_set(&vhci_hcd->seqnum, 0);
-+ atomic_set(&vhci_hcd->seqnum, 2147483646);
+Normally the OUT transfer on USB3.0 SuperSpeed connection comes with a bunch
+of 1024B Data Pakcet along with a Short Packet less than 1024B in the end from
+the Lecroy trace.
 
-        hcd->power_budget =3D 0; /* no limit */
-        hcd->uses_new_polling =3D 1;
+It's also reproducible on USB3.0 SuperSpeed connection using dwc3 controller,
+but it will cost more time and make it difficult to capture the online data
+(limited tracer HW buffer), I can try using software tracing or custom logs
+later:
 
-On Fri, Jan 10, 2025 at 12:02=E2=80=AFAM Shuah Khan <skhan@linuxfoundation.=
-org> wrote:
->
-> On 1/3/25 08:18, xndcn wrote:
-> > Thanks.
-> >
-> >> How did you find the problem?
-> >> Why does it make sense to cast it to u32?
-> >
-> > After running with usbip enough time, I happened to see logs like this:
-> >> [ 293.863125] vhci_hcd vhci_hcd.0: Device attached
-> >> [ 294.081110] usb 1-1: new high-speed USB device number 2 using vhci_h=
-cd
-> >> [ 294.193163] usb 1-1: SetAddress Request (2) to port 0
-> >> [ 294.204334] vhci_hcd: cannot find a urb of seqnum 2147483648 max seq=
-num -2147483648
-> >> [ 294.204850] vhci_hcd: stop threads
-> >> [ 294.204851] vhci_hcd: release socket
-> >> [ 294.204853] vhci_hcd: disconnect device
-> >
-> > Then I notice that on 64bit platform, when
-> > atomic_inc_return(&vhci_hcd->seqnum) returns (2147483647 + 1, or
-> > 0x80000000),
-> > priv->seqnum (which is unsigned long, i.e. u64 on 64bit) will be
-> > extends to 0xffffffff80000000
-> > So we can fix the issue by cast it to u32.
-> >
->
-> Can you send me the dmesg without and with your patch?
->
-> thanks,
-> -- Shuah
->
+[  5]  26.00-27.00  sec   183 MBytes  1.54 Gbits/sec
+[  5]  27.00-28.00  sec   182 MBytes  1.53 Gbits/sec
+[  206.123935] configfs.gadget.2: Wrong NDP SIGN
+[  206.129785] configfs.gadget.2: Wrong NTH SIGN, skblen 12208
+[  206.136802] HEAD:0000000004f66a88: 80 06 bc f9 c0 a8 24 66 c0 a8 24 65 f7 24 14 51 aa 1a 30 d5 01 f8 01 26 50 10 20 14 27 3d 00 00
+[  5]  28.00-29.00  sec   128 MBytes  1.07 Gbits/sec
+[  5]  29.00-30.00  sec   191 MBytes  1.61 Gbits/sec> 
+> Presumably '512' would be '64' with USB1.0/1.1, but I guess finding a
+> USB1.x port/host to test against is likely to be near impossible...
+> 
+> I'll try to see if I can find the source of the bug in the Win
+> driver's sources (though based on it being Win10 only, may need to
+> search history)
+> It's great if you can analyze from the host driver.
+I didn't know if the NCM driver open-sourced on github by M$ is the correspond
+version. They said that only Win 11 officially support NCM in the issue on github
+yet they do have a built-in driver in Win10 and 2004 tag there in the repo.
+
+
 
