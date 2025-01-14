@@ -1,206 +1,140 @@
-Return-Path: <linux-usb+bounces-19334-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19335-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 324E6A107CE
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 14:30:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38929A108AF
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 15:10:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F05477A3221
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 13:30:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D42A41633FC
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 14:09:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4258923242A;
-	Tue, 14 Jan 2025 13:30:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF6C31474A2;
+	Tue, 14 Jan 2025 14:08:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="il1TxYV2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Jurpx9Tp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B443D1ADC7C
-	for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 13:30:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C4F13E02E;
+	Tue, 14 Jan 2025 14:08:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736861404; cv=none; b=muags0myVuKVj0Kt78CPXgQBZ0FdSI1NHpvbKk38Zj1sibtBxbUfJ0wm3vZ17wjYp+ZORVq7hyKZ+mR8+JRGi+F9z7q3v+MX9Yo6j2gkpeQ/460FadHQMCFnubqC7C5IM+BfiLykTWFeL8ZA6GqRJZpcv+griJMmLDet6VxfDKQ=
+	t=1736863738; cv=none; b=Wnux/iYS9a9a5Fabc47PQIqh1vK6sznglEI3lp/4uGdrlUJn6dihU/JZ63S41t8DfbsmVjJsf61CXU5Eo8H3Ff0aXouYMPmRnP6zAuiIHKy2Yi2xlZxNucfqa16Dk28fcybJtcXWqOeyie8lzdCg0GU1c7HYTCXH9FmRvLKySCQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736861404; c=relaxed/simple;
-	bh=l7YvIYktkFczhmbQwYUPJl68S6lqCmuelxvzAekPfV4=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=OnqMblJ+T/ok8FT+GSzROCcRlpS6Q24gRWFwp6UqfpeC3Zs0JPjfkTh1gQUrIq5mVahYeCEkNjglh8GvaJqf9MVyWcFMIWrPW9xR6UeeMSz2+wY70+D8ekwJ3qVJDZe/UoIJ/+JVQ4BoiezOceSlpW+A9QlwgNKNmpNdr+yG5Jw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=il1TxYV2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 468D7C4CEDD
-	for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 13:30:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736861404;
-	bh=l7YvIYktkFczhmbQwYUPJl68S6lqCmuelxvzAekPfV4=;
-	h=From:To:Subject:Date:From;
-	b=il1TxYV21RFudqaCtGzg8CxcmRxg5+OofCCPn5XY1NlG5WO6GtvDpAeS09fYDCyDz
-	 JtQpeCbbSxov+Df4XsOwZCDhXiO6k0GwCSdE5ETUEBCfPMaPINj+/YPPiUsnhwAPRP
-	 LEVFKfX7pOy2M/9tBLjJzl8v7QP0Zg9cuLXqPu5ex5KrU9ZRNLPR+mTazkaxLbe4Pg
-	 XcusN0qxuMcQ+4UU3sS29y6APBBKBQ+iRIECIAMlPYZUFJZ47x6OQ05uRV3fOX8QOJ
-	 MiEzSbjdctaKV2s/TjZEcwHfDrkEw4HnV5kJuB3NiUl6DLAvwQQXaPzpcliOs3GBTu
-	 nRN4mvIjm60+w==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 2E4AAC3279E; Tue, 14 Jan 2025 13:30:04 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219694] New: Perixx Ergo Keyboard 535 (04f2:2159) Menu and
- Window Start key press not processed
-Date: Tue, 14 Jan 2025 13:30:03 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: davrot@uni-bremen.de
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression attachments.created
-Message-ID: <bug-219694-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1736863738; c=relaxed/simple;
+	bh=LKLfIkczdAeAEqoQum/VH0YMDdlw2/4likL6Vp+GRnA=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=rdsezGjQj1Us9R7Pej6Cfq6LEZ903X4Tjj6NUjG6zj+shgqz4VHkwVwDjIHJsY8qhcDmLoWuRdo49b1hq9Z0S47ciNkMyliyxUHQxqwPX0Kgxf9esXHDN9PEzGbCVHf8dlz4OgFnrB9R2VDu1n5FCzX6v0RRSC4iBg6O29senDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Jurpx9Tp; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-aafc9d75f8bso1064019366b.2;
+        Tue, 14 Jan 2025 06:08:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736863735; x=1737468535; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gb1b/9RqdKd5KXtgNSScAQgWp7C/b3VuxIQL7OqFmG8=;
+        b=Jurpx9TpQNlRflh0YdEdXlLCXsZeje6G6OjTwLaMuIbDwFy25/uT8/mi0YZtIPpF58
+         vcy01Ps12qNMWRXDCvO0DXwaRNfD6NX7atlTohafdCceCmtLpmDdMGKgntAbvxMFZxuw
+         dGIJlptf3su5AdBDCJy3Vk679IBwKc6EHEVlZiESOyDr4BFr0FOnjtADxUun1kXEKkqe
+         g6fsgZfQrnWLsx29j2vCRXm5NKGRhY0+9bSf/1G/kVYlBSf15PdCP7rVqTCqhZJR4PvY
+         ig583Ce/vP0ljxu2qAshtj4+L2Jck+RlvN0p/whGzTDMbPF2DxMZEWYuXCoJUvliEoHJ
+         S0Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736863735; x=1737468535;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gb1b/9RqdKd5KXtgNSScAQgWp7C/b3VuxIQL7OqFmG8=;
+        b=g7QtVdmSsZX8v+L9tAEFSGafAHJ8ECZSOcMiDyXt9tR1NUlMEnKrTF45MVQCJJo9Q4
+         LsKFkyeG1vlQ31TSwZ0SM61v0DC0kUK9mR0QF4yVDzs2/aJBKQwR+ROhDCOy1Q4LUSLq
+         WiA5ZZ+byeUs5ChJe7H+W0KuMLZn1ukCn2BjzQK8kAyxKGvmcyYYSq+gJMSbfMZngXzZ
+         LByV94V4+xxtFMKggHwYRzkpetspaUN5+v0p4p1SGpPTLyMAKKCTwmJ5CetqO6bHDnSu
+         M/WWopCityNtsr+EaXptORXs/sGnI5a9rh27/lkHKxHO0++5yTUiEZ2Gzo9DYkK8AoXN
+         0SwA==
+X-Forwarded-Encrypted: i=1; AJvYcCU8Vf/rtmmq6AQ7Jx3h8s22hdReYqUNmFrZGSItbEgY8AwQK2DT+XrTG+q6/Z1t44Ftf6famE+yIIJHNy3v0w==@vger.kernel.org, AJvYcCUBrInkz870dzIJbzRQwJuYKG297QYQvPwXiWPyS2cfyv3+N1XFWDlf+PSD70THJKDRXHb+aCO0ps/cDvc=@vger.kernel.org, AJvYcCUniEMLj8i8+SMRWidsYyVEh0unfB/bgNNglIGDGTp/BG024/k2lQtYGnDIMYlbobV+phbsgwfmRtNSoXA=@vger.kernel.org, AJvYcCVEwDj1LxljVlo1s4qpDZs/olapNMudWRjjxdy8D5RX+zERj8Qt5rk9tq/tq6C+kL5R2NixjRunpfwQ@vger.kernel.org, AJvYcCVjNhr7D/6/HuPoQwrY35p7uld/pyIQ5qAZ1+7LmQNBoCGI6rFCPNy9Bj0EABTmo3uH1OXByA4/v0RF@vger.kernel.org, AJvYcCWIbo0gKRFx4/ssxv8RnE5b99MCAaadutgjVwoEMFDPLimjlYjPyW6Rdtbch3IVj/KwAczCPCBiGTNU@vger.kernel.org, AJvYcCWa9uBzll5iOTeYo5YDbs71Z+Hwh1WrihTuIuasPtvyyBpAI4N67v63wh/4wj4NEpQItjhyCksbAiPQQ+As@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxMR6fD/PUNUFUOseLKtOGE1VdEv8RgfR69j+SR6H3gaSb2HDl
+	S1hUv/IjRRW9LKUTVkPRi0jksAIBTkci9NwpaA0bPK6nlmaNVTsk
+X-Gm-Gg: ASbGncsp2zXKh1M3DhXB0+PgnAJ7SD/Evb4rxtZUS6wnASmJ9re3c+taDclQc/lhrGn
+	giPKbsLMziTQfui5rgEOacFRscluLUEmkMGwRyNta5F/EgDwBvLaFFXAGaHlKX+lrcGLHHisXTg
+	6M0YkGl8jBd+kl1t98pIxvtRD5fX5Hz2k6Im68XQkvbosjHRt50XF7P7M0A0xabHR8GiSo3AnyM
+	eh3tIYbIIe2XCr/bD0jZFZFkyc12TDAgYKjorMTo3x3v6f/jPw9XAmng/L1TZ/RjMgJjvbO6A==
+X-Google-Smtp-Source: AGHT+IHg+26ImkrnaHx4f06Z3uIYfL6CCoYkDwVz3k6+euEU7ujJitxiK1iLBauB18LY8tUFYwPmBw==
+X-Received: by 2002:a17:906:f59a:b0:aa6:9503:aa73 with SMTP id a640c23a62f3a-ab2abcb1135mr2473124266b.51.1736863734231;
+        Tue, 14 Jan 2025 06:08:54 -0800 (PST)
+Received: from foxbook (adqh124.neoplus.adsl.tpnet.pl. [79.185.141.124])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c9647299sm640635166b.177.2025.01.14.06.08.52
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 14 Jan 2025 06:08:53 -0800 (PST)
+Date: Tue, 14 Jan 2025 15:08:47 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: <Thinh.Nguyen@synopsys.com>, <broonie@kernel.org>,
+ <conor+dt@kernel.org>, <corbet@lwn.net>, <devicetree@vger.kernel.org>,
+ <dmitry.torokhov@gmail.com>, <gregkh@linuxfoundation.org>,
+ <krzk+dt@kernel.org>, <lgirdwood@gmail.com>,
+ <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+ <linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <linux-sound@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+ <mathias.nyman@intel.com>, <perex@perex.cz>,
+ <pierre-louis.bossart@linux.intel.com>, <robh@kernel.org>,
+ <srinivas.kandagatla@linaro.org>, <tiwai@suse.com>
+Subject: Re: [PATCH v32 01/32] usb: host: xhci: Repurpose event handler for
+ skipping interrupter events
+Message-ID: <20250114150847.1c3c9ebe@foxbook>
+In-Reply-To: <f8a9e454-72f4-4979-b29d-109700b2a204@quicinc.com>
+References: <20250113143632.63c52d74@foxbook>
+	<f8a9e454-72f4-4979-b29d-109700b2a204@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219694
-
-            Bug ID: 219694
-           Summary: Perixx Ergo Keyboard 535 (04f2:2159) Menu and Window
-                    Start key press not processed
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: davrot@uni-bremen.de
-        Regression: No
-
-Created attachment 307486
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307486&action=3Dedit
-All the debug information I could collect
-
-I have several Perixx Ergo Keyboard 535 here. And the Windows Start and the
-Menu key are not recognized as well as the FN keys (and it's relatives). :-=
-( I
-understand that the FN are out of reach but the Windows Start and the Menu =
-key
-would be nice to have.
-
-Only usbhid-dump sees the key-press events. libinput, evtest, and xev are b=
-lind
-to the key presses. /dev/hidraw is rather strange.=20
-
-usbhid-dump -d 04f2:2159 -es
-
-[FN-Key]
-001:015:000:STREAM             1736855499.770574
- 00 00 00 00 00 00 00 00
-
-001:015:001:STREAM             1736855499.774568
- 01 00 00 00 00 00 00 00
-
-[START - LEFT]=20
-001:015:000:STREAM             1736855867.659466
- 08 00 00 00 00 00 00 00
-
-001:015:000:STREAM             1736855867.752453
- 00 00 00 00 00 00 00 00
-
-001:015:000:STREAM             1736855867.924446
- 00 00 00 00 00 00 00 00
-
-001:015:001:STREAM             1736855867.928255
- 01 00 00 00 00 00 00 00
-
-[ALT - LEFT (works for reference)]
-001:015:000:STREAM             1736855906.096268
- 04 00 00 00 00 00 00 00
-
-001:015:000:STREAM             1736855906.151095
- 00 00 00 00 00 00 00 00
-
-001:015:000:STREAM             1736855906.323098
- 00 00 00 00 00 00 00 00
-
-001:015:001:STREAM             1736855906.327036
- 01 00 00 00 00 00 00 00
-
-[ALT - RIGHT (works for reference)]
-001:015:000:STREAM             1736855939.365016
- 40 00 00 00 00 00 00 00
-
-001:015:000:STREAM             1736855939.442837
- 00 00 00 00 00 00 00 00
-
-001:015:000:STREAM             1736855939.614006
- 00 00 00 00 00 00 00 00
-
-001:015:001:STREAM             1736855939.617903
- 01 00 00 00 00 00 00 00
-
-[START - RIGHT]
-001:015:000:STREAM             1736856090.786100
- 80 00 00 00 00 00 00 00
-
-001:015:000:STREAM             1736856090.891265
- 00 00 00 00 00 00 00 00
-
-001:015:000:STREAM             1736856091.063015
- 00 00 00 00 00 00 00 00
-
-001:015:001:STREAM             1736856091.067064
- 01 00 00 00 00 00 00 00
-
-[MENU - RIGHT]
-001:015:000:STREAM             1736858836.365940
- 00 00 65 00 00 00 00 00
-
-001:015:000:STREAM             1736858836.426900
- 00 00 00 00 00 00 00 00
-
-001:015:000:STREAM             1736858836.599084
- 00 00 00 00 00 00 00 00
-
-001:015:001:STREAM             1736858836.602959
- 01 00 00 00 00 00 00 00
+Thanks, I think I now see how this is meant to work.
 
 
-[WIN : Top right of the keyboard]
-001:015:000:STREAM             1736858871.055606
- 00 00 00 00 00 00 00 00
+Cover leter mostly discusses the ALSA side of things, but not low level
+details of xHCI operation, such as who will be ringing doorbells and
+how, handling IRQs, updating event ring dequeue, or handling halted EPs.
 
-001:015:001:STREAM             1736858871.060545
- 01 00 00 00 00 00 00 00
+So for the record, as far as I see:
+1. There is no API for ringing doorbells or even getting a pointer,
+   the coprocessor needs to have its own access. Fair enough.
+2. Same for event ring dequeue, but the driver must clean up leftover
+   unacknowledged events after sideband operation stops.
+3. Linux IRQ handler never needs to worry about sideband interrupts.
+4. Resetting halted endpoints is not implemented at all, I think?
+   So this code is currently mostly useful with isochronous.
 
-[Mac / FN lock : Top right of the keyboard]
 
-001:015:000:STREAM             1736858891.553101
- 00 00 00 00 00 00 00 00
+And the 'skip_events' flag only exists to enable ring cleanup when the
+interrupter is removed? In such case I think it's overkill.
 
-001:015:001:STREAM             1736858891.557042
- 01 00 00 00 00 00 00 00
+The code would be simpler and its intent more visible if 'skip_events'
+were a new parameter of xhci_handle_events(). Existing IRQ would call
+the function normally, while xhci_skip_sec_intr_events() would use the
+new parameter to suppress event handling in this one special case.
 
---=20
-You may reply to this email to add a comment.
+It would be immediately clear that skipping only applies on removal.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+You could completely get rid of PATCH 01/32 because 02/32 would no
+longer need to set this flag on the interrupter, and the 'if' branch
+adedd by 01/32 could go into 03/32 where it logically belongs.
+
+Just a suggestion. I simply don't see any need to have a flag which
+causes events on a ring to always be skipped as a matter of policy.
+Your code doesn't seem to require it. Probably nobody ever will.
+
+
+Regards,
+Michal
 
