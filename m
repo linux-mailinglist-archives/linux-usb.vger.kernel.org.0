@@ -1,69 +1,69 @@
-Return-Path: <linux-usb+bounces-19337-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19338-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9907BA10929
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 15:23:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7AE32A10932
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 15:25:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E8893A2629
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 14:23:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 88B0116098F
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 14:25:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80E1E13CA97;
-	Tue, 14 Jan 2025 14:23:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBB21494A7;
+	Tue, 14 Jan 2025 14:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ioYRyRHj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xuYlPV1s"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D070762F7
-	for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 14:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48A38762F7
+	for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 14:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736864633; cv=none; b=XwWwJMXm2Av+eQfSBH5h3NdG7UH0w3W3KResm7G0qdFmXqPnFMGKf+FJ4x+aodbJpvpjR7wZu1ICLpju80m0ybXATNNUaL7zhKIe5HuuhwoIcA+qJJCOz77Z1unQ9DtLgfsrBHqjL69w3mbBS+Ha5vCGOXcVsBTMEqD8A7SWKk0=
+	t=1736864722; cv=none; b=MxAUb411xXbPT1iINJ+fbDQntJ1sDhU8EzcqvJD7lUW9irKqvTk6CLUeKtNDlEcdZeQVw0Gf67pdo9DaCShBJZq3360kz2CXKjzJNToUltZTn3vB8T5q8eOKC+ClegMOre6Dn3VZT0HUV8wV77E2DI5mVLbTbtpUsjRKvxrHWWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736864633; c=relaxed/simple;
+	s=arc-20240116; t=1736864722; c=relaxed/simple;
 	bh=3mZhZEpsVXvbK8kRBz620qSwc7gVFgby48NhPbc9xTE=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=MsmWLFXj9lRiYkjWyg0FqjWOsWvLyaL8qsvYXubodrawV+oXd6xb07t3ZKD0etgNmmLEbUEKtP2pg3kh0Y21UfG7/VY2gxXp4XgbCBQQTYNFzA+uOLQrAXaDVHLSOXb4hWsB+/TcSaQoef761NMPsCsfqUFQ0VIzWx1HV75MDdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ioYRyRHj; arc=none smtp.client-ip=209.85.214.202
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=eUPm37R/gGWQYXBzj5URE2PM/pE3HY+OWzJIVq3+du4u/JAZbWEGwrzkdm4E+5skvUfz3bTh3rMEzDOehRoxzDUboPiQAaqTJyq9U+V+t8sNdkZ0HEQpUhewyR0YpwPUinHP+UyD6o9kGfEoAF2uNPrGy6L+gXKxJ1sgJUMqbZE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xuYlPV1s; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2165433e229so109947095ad.1
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 06:23:51 -0800 (PST)
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2162259a5dcso160979815ad.3
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 06:25:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1736864631; x=1737469431; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1736864720; x=1737469520; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
          :date:message-id:reply-to;
         bh=tSu4xp3Y6HOXZlKWn+sVDCe4JiYP/94emAGWE5skEzM=;
-        b=ioYRyRHj+T2OW6nUmDqzOD4h+ES+NaJcTUebGX2sykWQPciJ8BwVdiDMZwUDD4QoU2
-         tb4nbFsiDOMW1b7jOejdaMYO9KM1FaXh5GjXqoFAHYG42zDClQKXn809+j9tsuPlBYBM
-         8a88uiHrMRu/MF/icu11OcV2bom6+zGXedkSdERbP/PytOyInLTP6pfPEHpemAvwXmH+
-         N8z4Ft+rxOWlaMe89bSRdVjBFhuFNRrz57PoKTIKcUE+7v+dqr1BDD7ebgnBt/tz3FSD
-         Zztmm/mFfgpX4Fg1KZoV/tC6OIDEmeo58cqC3iVhwc7M+uVWyU5aV4rAvlzzfWi6Ftkg
-         tfnw==
+        b=xuYlPV1shoOzB2rJ0aWTP7Ve0u9ujyFpc0aDrCgvQ8H/3GTmO8eMil3/784WfOX8qD
+         yp3+j0JvnRfPt2EMNjBJ+CtOE2tDg4PzxCMrK6TCpJklwA8zqhLsJSFr5ekH8wt3//PW
+         46jMfbYdSaal+NXZv0qRDlfi0czaWKm92vTjBq2pmHxwGSSMZCk73C9VkVizwjq0t3Dt
+         SqvkVeWwgW9/dR60QmVyWR2fpL6Xk0VpC31iMPgqKXtoFdA7SQwHkqb+oFB3FbMvfy5X
+         DbWbuffLBvgdTPC460V+N962OrQBmK5xBmWGv/sUXtuhLRz/GlnxlxRFHyiMrYiYRCq5
+         LSgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736864631; x=1737469431;
+        d=1e100.net; s=20230601; t=1736864721; x=1737469521;
         h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
         bh=tSu4xp3Y6HOXZlKWn+sVDCe4JiYP/94emAGWE5skEzM=;
-        b=osLfN5uroW+JWY0/awKwE3K717tUBh+iS/Bn+iHT6Uv/FX+mRlG/RA5TaN9K7wAHqG
-         aKfXlGXuqS/VPu+tzY3MbHhrpYABnOUnKS84WztCpV1dzkZFgpkiIUXoRlVoaxNFopU6
-         fMd71wbvAlfz2SqgMRVwaXWQd/Cy8JD+F13X41cZK+Lvhp1yho7mBvVii073mhxw09l7
-         IzDODCCnLI1YljuFqwWu4Q79OKx9a0dYbH3tEp0paUz9BjiHl3geZr0J0oRZCxsjNoMR
-         Fjfyht8dRCIqp8h1Xazk0PX9AeA3MUn+3O0MNSxblbxpBVXE6xHJ216r0EKerqUaUQ4t
-         rzWA==
-X-Forwarded-Encrypted: i=1; AJvYcCVGDDjmItFti239BEgs/7KIDJvOmWYG0+acwG3i/2USURl7BuIDXWdrE4tg1xDWvXUvGaVlIezmp9I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbnttogcaNcs1xMozB0S0zkG6QjDEGwH6WcgxlO0QodxVdOVep
-	OQ033lTZ0O/8chaFPs1cnvrYsQDHU7siq8OgRktQa1MD9qlUUO47vpU5I7W4yLlEoL2nPPkX0CF
-	AkkPbhw==
-X-Google-Smtp-Source: AGHT+IHxhLIQFsKmIc6uIHglcMCVZJCSh0/6xS6b9sGYCM4heh8hBWJaOt/VQqM4nlAnjoGXCxNZMbBRcE3o
-X-Received: from pgba33.prod.google.com ([2002:a63:4d21:0:b0:7fd:40dd:869f])
- (user=kyletso job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d481:b0:212:6187:6a76
- with SMTP id d9443c01a7336-21a83f4d7c8mr402711895ad.14.1736864631009; Tue, 14
- Jan 2025 06:23:51 -0800 (PST)
-Date: Tue, 14 Jan 2025 22:23:39 +0800
+        b=G0SthXz6hxOvF/PihGyhy1UqfQY5vEm1jybvXWNuoTeF1E/ZWaFhIZLHQuqUwI2xLN
+         iTld+CUB7podQcSBvJLDvS1oowJKr3SdmOp0m7L5KjHn92zn6yhAoaJvZunK6KTG35Zq
+         OanTWraCTdZEZyRc+U5QOKjTyZeuviF7n8Yc5QnOv61ZnFISh4Tf7ZaowvSb2vCsOlou
+         KpZiJdsrH/Zc/G7uhpk1vufZQv2vdiHT/JqI9lxoUQW8pk5ZlD7MPy8L5mZSrTfiXBoN
+         ge7Hzjel2reJQarXfTPWGCslO1eID6oLB5LoW7sBq3x9ctVIJjjTxuY72SRulH3luH94
+         PoMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXWz9AwqbTxD72dV+oMMdF21VYAeY4wWymQ6Q1rZp9YmXB3gUVqHKPPwW2L0TYw5FgARuWd4NXQ+qg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB8TjvP3yEY/5XKA66KkKuBpE6K7R6Ob/N6U4oc30t68HZ91Ke
+	XsQCSFX6WTR7fVkVhGd5DJkEXzDJj0YvmeCu7hoMyFF39+2kkEZIGqr1pINI4MrGRUrZ5ouiix0
+	x39osMg==
+X-Google-Smtp-Source: AGHT+IGzEszmDZk4FhEWLOcRg1abwedqDueuOVK7MIK2k4wjynrs8GaVu9upTo3mx4cp9fIselYBFA62pIWo
+X-Received: from plbmo13.prod.google.com ([2002:a17:903:a8d:b0:216:31f0:27de])
+ (user=kyletso job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:c94f:b0:216:25a2:2ebe
+ with SMTP id d9443c01a7336-21a83f573d7mr374935705ad.19.1736864720690; Tue, 14
+ Jan 2025 06:25:20 -0800 (PST)
+Date: Tue, 14 Jan 2025 22:24:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -71,13 +71,14 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 X-Mailer: git-send-email 2.47.1.688.g23fc6f90ad-goog
-Message-ID: <20250114142339.2093399-1-kyletso@google.com>
+Message-ID: <20250114142435.2093857-1-kyletso@google.com>
 Subject: [PATCH v1] usb: typec: tcpci: Prevent Sink disconnection before
  vPpsShutdown in SPR PPS
 From: Kyle Tso <kyletso@google.com>
 To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org, 
 	andre.draszik@linaro.org, rdbabiera@google.com, m.felsch@pengutronix.de, 
-	xu.yang_2@nxp.com, u.kleine-koenig@baylibre.com, emanuele.ghidoli@toradex.com
+	xu.yang_2@nxp.com, u.kleine-koenig@baylibre.com, emanuele.ghidoli@toradex.com, 
+	badhri@google.com, amitsd@google.com
 Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
 	Kyle Tso <kyletso@google.com>, stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
