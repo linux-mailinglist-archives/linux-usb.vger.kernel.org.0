@@ -1,245 +1,338 @@
-Return-Path: <linux-usb+bounces-19300-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19301-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7FF4A0FFBA
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 04:46:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7077FA1000C
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 06:05:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD60C3A0805
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 03:46:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 350931642F8
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 05:05:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC643398A;
-	Tue, 14 Jan 2025 03:46:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A347E233548;
+	Tue, 14 Jan 2025 05:05:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="PoczwTrr"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="hsqJ44nR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2098.outbound.protection.outlook.com [40.92.63.98])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146DE849C;
-	Tue, 14 Jan 2025 03:46:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.63.98
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736826377; cv=fail; b=fX+9Cah+ppQFxQ0Q9r3a2yIYTRFuZFWXqZ4hPcDvRHAx5Zv+X2OFCP/IUHOSuyKJDtC8eCyTMW96AyTmY02ZgiLmRIGAhc1rnnHS4RsrbfvjAl9QXIFKZd3YsLGU0ieBaxy5LnNykSKmAJdHmnpvP9O1CaD45WAVbcR/5GvVdao=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736826377; c=relaxed/simple;
-	bh=4cLz/aEqB6qYQiPIB62Kbl3R9iWjUVQap67b70S5uDw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=fw1byhmnIyJlDjLRfAbRHY9rMrq/K/oA7qaxHeX3MW1Yo+j1daKHgKjX5RWwjOonbx3qFu8JwaDcSSxPwjdaFz/NmHxt02hLV7xIcguYPAdCvQATiCl4x2YqegtihRV4ZrRjzzg07OwE3CUM/QHXcWBpsKN3XBYNhQ1JtJpDfEY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=PoczwTrr; arc=fail smtp.client-ip=40.92.63.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=I5phY6Gr9zBnlDTxZoXGERZcqH888uBCUs2JJSFqyrWYjvHF4itboIGNaYNg+sefmlzEe56iHst+4OCmG7EojYEHxaOQXqvvW7FGCd3wOppJ7vLyHaWxL3+SDfMJ7dZ9rlWqRIAIKe7gJ7QpJw9K8aQk4B8v42o6UiAYCofoHVhGunKp+55e+anVw3wQzqooxo0+pEmU7xjYkC78K+jEQB9kHoK4i4+qIlQ0qHJzXCr5oc7Ecc8DZXqNcV81dBk59C3lLD1DYR0cIhUT3Bw8EAm6VXhK46l4vxmR8Bn+U1ThJaoXxjj9WKTiY9LKWknQCxUfKxGNB9cWXwM2E6tcmg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yLTE0jSpDvkwvWG5Go1pbwlrf3F/WM/PFPLce39v7U4=;
- b=mOQfnTdmVhuF9/MJ3xmxZOmA7SRMvdQ7bI4KdJhO+YbrAIkFF6Q7T4eB7Jsie/PiUPb6UWgWBf2GYfN3R3Y85gB/KEANSBeexp8APB0tPCGXVC9aNzMR+XZCkwFaOffMoUaJvrhfcvajNg6vTYo0M/zux26A/ZoxCocIfvmor5P4bq6c6Gz1pwNDtLLRxkJohQEydD9ieDNvrAymy+t+aFcJV4T+t9JxAp7keClXPtiwi1mKVoTwc3GUYmjn6MxwW4F21x/dmza69S7GEquuiR78VdHoCx5PoZDX+fAMRQCZTZUNY54exx27Y1zJm1DrywDo8vFpxmx+l6BHimhhHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yLTE0jSpDvkwvWG5Go1pbwlrf3F/WM/PFPLce39v7U4=;
- b=PoczwTrrfw0rf6lY1GbY6b1jjDfp3n0FYmpuZKl9+r0AFF/UkFPW7B7WJ8o2UVuIdBHWxROguDt2a2lu8OCxdL7EsGl19xRzzDc44xhqWsCHAgqSaXNdsj+AqRNG3VfveCKHU8Cim+lfv8WsSVnnMC6PCDqGWk/UFJYKEGUqrLXxkpV6r4r2IJifZE/ydPA7GhfxwK85W4zT/RDgb6VWI9iA909dIBadJjNY2MsYbXJinIFaAmPonjqwBL5urx7/nNIG81vZQmbMC8kQWb6JjEnluAG3Ikrdc2qGgOGCe2vdXn2/MCAdkuqJp17C1qwLUG/7LY/VFrTwdSu2h+XQwQ==
-Received: from ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM (2603:10c6:220:22a::15)
- by SY8P300MB0480.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:297::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.18; Tue, 14 Jan
- 2025 03:46:09 +0000
-Received: from ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
- ([fe80::fee9:23d3:17b0:d2d3]) by ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
- ([fe80::fee9:23d3:17b0:d2d3%4]) with mapi id 15.20.8335.017; Tue, 14 Jan 2025
- 03:46:09 +0000
-Message-ID:
- <ME0P300MB0553E15D02A52DB482496B2CA6182@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
-Date: Tue, 14 Jan 2025 11:46:02 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] usb: gadget: ncm: Avoid dropping datagrams of properly
- parsed NTBs
-To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
-Cc: quic_kriskura@quicinc.com, gregkh@linuxfoundation.org,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- quic_jackp@quicinc.com, quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
- stable@vger.kernel.org
-References: <20240205074650.200304-1-quic_kriskura@quicinc.com>
- <ME0P300MB05534EDF5293054B53061567A61C2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
- <CANP3RGc_SBROWVA2GMaN41mzCU28wGtQzT5qmSKcYsYDY03G5g@mail.gmail.com>
- <ME0P300MB0553900AF75E50947B011FF3A61D2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
- <CANP3RGc7n2vv6vGh7j0Y=7DNqfXnQxZaTcwdPD15kzoY1in08Q@mail.gmail.com>
- <ME0P300MB05538EF3A86116EF73BE3BE9A61F2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
- <CANP3RGdj0gRohsT=3GUZ84dYZxPDUhe3-Zz26bQrsavYnwtDmQ@mail.gmail.com>
-Content-Language: en-US
-From: Junzhong Pan <panjunzhong@outlook.com>
-In-Reply-To: <CANP3RGdj0gRohsT=3GUZ84dYZxPDUhe3-Zz26bQrsavYnwtDmQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SI1PR02CA0045.apcprd02.prod.outlook.com
- (2603:1096:4:1f6::16) To ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
- (2603:10c6:220:22a::15)
-X-Microsoft-Original-Message-ID:
- <cd604ded-25d8-43dc-a19d-987d11a04007@outlook.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 363A31B4159
+	for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 05:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736831148; cv=none; b=VqAIpEHIRR+alXK87IHowgShSxzXF4AnmQxrmJht/YjcMa7mgWkmzZgNlmdlLfz2Dm9rfbucQh/fdSNw2cevXZNB2uspXc/TXcLM+/wjYqG6cGDlDyWHVc7pTyvO9+ib8OTiKxkUH+tdaYW7wpncNhEwUTg4OtPmaVTrvkwvsh0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736831148; c=relaxed/simple;
+	bh=y85RoveN+CkGvlTwThOP8q+nyxhvG95+kpXnACiuUFc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TOKu3+D3YtP4ctbC6/QCZ3bXvyU2ynoMjH25d24GVOT2L3Z0paGbkC0XZ5yyKwMK4kZGDP3Auh4iSbYq2P3QRLd+PGu58jcNW2cc8WTnVVSComP8/spFxU1bDYDN8Hkc0Ktdz1nm4Hm/NUNmdd8IYdpNjpFeRIFSr5JOGNWEPBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=hsqJ44nR; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50E25EMR020349
+	for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 05:05:45 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=9v3nb8bCKLADEut/fYx1ig
+	Angj9NwOisvVHcd9E4C+g=; b=hsqJ44nR7I/8flD1W79fEYScb07aq3B2NoXXwy
+	GOdRPd9xw33DARst468amG32+DkgXX2Ix1ke9IPWiusFZxBnxOvT2OrEfETw/UT7
+	0Xi5A9pdBw1ISyM3OyCoH8LggWWaz/xjWZcrqyKsLr28PaNQn5gpRcQfojSf98z9
+	GvxDcOufJOJjWf1upVZ0Q5/sZ5QiFD+10cYoA+pZQxl5xxbH9n3SHWVFUV5U+vBb
+	XOpORN1End5j40j8USO4ZKcGU/VCEvxS/edMm4HOOy/Mp2Rmr2LvOCOmHuue4P0Z
+	K6EzuNb4S3AIjkmFygOnI3ygTc0KfzPSYb5owoM9DpdUhuKg==
+Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com [209.85.210.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 445eu48bdm-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 05:05:45 +0000 (GMT)
+Received: by mail-ot1-f69.google.com with SMTP id 46e09a7af769-71e32080036so3835187a34.0
+        for <linux-usb@vger.kernel.org>; Mon, 13 Jan 2025 21:05:45 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736831144; x=1737435944;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9v3nb8bCKLADEut/fYx1igAngj9NwOisvVHcd9E4C+g=;
+        b=bwpp5aGO6fEEU+EtAhd0k2Vg3XOXeZWkDCjmNvlAnthzud2/v96C14BdEqi/0rZt1P
+         eBFtsqn8Q8Pkt9CnWf1zeDaZrBpOyaOfdhTBblMnAwgTSCEazHyRwBRbcKme05MKzEKs
+         QFU1rLg+TJ5UNQXBlZ7EqqafaNAobtv8iS36wQ37wAUbg0tqqpqDLYTXAFaLjmInRIix
+         PpAizygyk8/QLtaalZliF/j/zw6W4kOl2Qajq7p0Ytmqb/jqTQNTgYIjy1SttG4xJ9c1
+         W4SP0M2jPkF5S0wvRlTz9ga7OPkmgvHX2BDQkKj2zBUPrgMhI9k2drG8qJecMr1dJtA5
+         1yRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUSuBZVQlPDmi5lZzMIyYTbBbhATFmPChL16JcThD18c5pAy74lWyw2w5+irY9fgKyh/Rh3le2uxF8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxS4ceHhlBiDpa95gznY0+T2653GdCO8nX1cJ6IPGgk/nkI8aAF
+	4tPiBPPAnVLGSAIaTkl4jBE1lVCYPmL/hq9RNq/6TX0H6NuwTsih2XYGT3Ph72Nnyi6/NwiT8kv
+	nItotEwrxzIUtaOoGMWkEH8UV1IbMSrDirH5NFW3nEBmwy+7RLu/Gb1GHXCM=
+X-Gm-Gg: ASbGncsI2pz2eg4E7v7KyhvI1kuA5qTw1OhaXm/G8rrxREzebyzKxdDUNZQ8713zdxR
+	7lghx+dpWahxJOtJ+GDI61GQXI8FmrnmwLYeGkk6iLymU6so/ZmH6yTKdMHBsgAt65kNIZ0Eb2L
+	whfnTd79zFLQvCNL0a2DtBeI0v/2SJiI7ZadVWysekjjM+S0TIrHtZB4IYTE73Z/RY2yM5W7TdJ
+	fx/91Cp89KrV4WuTB7WdJbWZD0tdieoZrDhR+gi8pNoP9FN95rM8CTR/s4IRxGEKr9jcdL8R0pX
+	viHQdyAWNSUwKlMPZW+6AGBBC8mbeyYjFJCPFMrKIv57Gpq6CpTgQ8qf
+X-Received: by 2002:a05:6830:d02:b0:71d:4086:6072 with SMTP id 46e09a7af769-721e2e38670mr14087600a34.7.1736831144113;
+        Mon, 13 Jan 2025 21:05:44 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHt5AZ0fj0UY9ddr5rLNg8AGLs5/ocvWbFkPQjRtuD9zABP2QbCQbyduWHZs40CV2KBNaNXVA==
+X-Received: by 2002:a05:6830:d02:b0:71d:4086:6072 with SMTP id 46e09a7af769-721e2e38670mr14087579a34.7.1736831143729;
+        Mon, 13 Jan 2025 21:05:43 -0800 (PST)
+Received: from [192.168.86.65] (104-57-184-186.lightspeed.austtx.sbcglobal.net. [104.57.184.186])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-5f882756603sm4001750eaf.29.2025.01.13.21.05.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Jan 2025 21:05:43 -0800 (PST)
+From: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+Subject: [PATCH v3 00/12] usb: dwc3: qcom: Flatten dwc3 structure
+Date: Mon, 13 Jan 2025 21:11:33 -0800
+Message-Id: <20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ME0P300MB0553:EE_|SY8P300MB0480:EE_
-X-MS-Office365-Filtering-Correlation-Id: 013d71dd-49fd-4ae3-a6d5-08dd344dfb84
-X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|6090799003|5072599009|8060799006|19110799003|461199028|7092599003|15080799006|56899033|10035399004|440099028|3412199025;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?eVhZV2p5dWRmRzh3RmxKeHdHNnVHTmN4azN0VnVQZ3ozdE92NTBGMDVSOUVV?=
- =?utf-8?B?cndtRjhLeWRrOVpOQjBxZWNIdUxidUhaZnlNMXh6cWhnZWg0ZnQ1aGdqa2VT?=
- =?utf-8?B?U21oV2UyU3VzOVVGM0M3TEFvZjVHa1hUL2tnZTVlbFZOUGlMOUkyaFpoRGlU?=
- =?utf-8?B?a3BEZUVVZzV3a0IwbDM5ZUZzMkZBTzV3UzJnV3JaR21RandNUkdPTjJFQjZX?=
- =?utf-8?B?dzVVSjZ6Rlh4eDFhZStGVlBIdzlkRzZBNnFjaEhJZTVVcFE0a1dxRE4yWEl0?=
- =?utf-8?B?WFcxSXFrQ1pNVUs0QXZZY3dGT2dqSXlQSWFnZmcxR1AyZW5BTWJGZE8rNW9v?=
- =?utf-8?B?dEpaV01QVnB5ZTRrSXZUL00xWDNBUDNUWkhIUVAvM0FsMGhQak5pQXRxWUpp?=
- =?utf-8?B?N2UwYVc5K2pzdGZQb0NYV0RjbzFTbDBYc0hUeWdITHRkRWdmVGlrM0lienFy?=
- =?utf-8?B?Ulpma013VVl5UGhCY0VGckJJNGdmbHBzaEFsTG12Z2F0R0VUc3g0dm1KNXNx?=
- =?utf-8?B?bXlSc3pPbUJWTy9WUEVNU0xjU0M1cWlOc1NHVWczdzIxUGRhOU9lMFRFWm9F?=
- =?utf-8?B?OUNUZWRvcVFhSm9jTW10RWRSdWp2bWZibkYwL2psRjJ1MXo4UDh0Ykd4WDZZ?=
- =?utf-8?B?b1BaT29mUktrRWJiSFhkNUNaK3Q4MW55d0srUjhRKzllMjFSOFluRFdaU1R1?=
- =?utf-8?B?cFI3cW45VFdONUpkWnR4Qjh4QU4zdVdMVzFPeldUVnJPVnppSzl1Q0VTTnR1?=
- =?utf-8?B?QzlHOWlScmhMR0xjTkw1bm1HVU1JbTRsaUdOOTBXSUhPMnVVQm1VQytBM0NC?=
- =?utf-8?B?T2tFMnJtazc1L2FXSFZVaDJwV29rQ0tpd1duZmtpL2ppZndYZXVidlJIbTJ1?=
- =?utf-8?B?UkNyL1VWMWo1REtFWFRMVUpLYmNBTlowWXRMRkVwQzAwRGJLWU9WQjRRMFg1?=
- =?utf-8?B?UlVETWsyQ3pXay9CSnJmcDVEekJBWDhNWFFuWkp1eDE3dFJzeWdEMWQ4MVJI?=
- =?utf-8?B?TmNRZFpvT0NTWG92WmNIQW11eTAzdzVndyt2d3lNSTFvNWpnWGZLWkI3VE40?=
- =?utf-8?B?NUpGeUNObTFYQi9kSDZhU0ZiYzBRYzRsOTlENEdyS3FOMmZKSGtrcnpZNnhV?=
- =?utf-8?B?RmV0NGI4TmRQa2UyMEwvVC9kZ2F6RWl3NVZVRHpjaFRDUnFNckNQNzMyU2FX?=
- =?utf-8?B?UHNnV1hZL1U5ZStQdDJJcXRzNEJyYjFzdHhqbEZjTlVGT2lrN1kxbmIzVU5r?=
- =?utf-8?B?YTJadnJEUHNxVjVJWldlSW1OZ2d3Z0dLRW9jelRsWkN2SWIyZ250U2M1Q0dk?=
- =?utf-8?B?bjAyc2RxdGwzaE96UjFpZENuRWIyYnRBTVVwakI0K3B5SkkzVXJsYkhqMTll?=
- =?utf-8?B?QVpZL2s2ZEJxQUs0SXUvOHZlMFluMmFEZHJHL2J1bE9Ta2daUXRNOFpvZkZX?=
- =?utf-8?B?eVB0MnF1QkZQMEp0YVJ6cllPM09uenBaL0ZMVlRzVzlOV2RVNEhNUVpBZnZ3?=
- =?utf-8?B?R09HT3QxRlRBWWRFb2NhZ3JLMHh1d2dreW5XNG16andhRHpBeHllQmVtTHFw?=
- =?utf-8?B?bkxsMFJnTFF3NW93UWcyMUxPY1ROaytGZUp5QlNwcWJUa2NNKzA3WXFvSnZm?=
- =?utf-8?B?ZzZNQXJad09HeWk0R1NQRXpkdlgrK2c9PQ==?=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?S3pMdUhzcGFoZ0pJeW8zRWx0cW5WVno1VjhvTm1WUmdINFVvR1Y2OEdwYWQv?=
- =?utf-8?B?aFMwZWVRRGVrakF3OTVPdXFhRUpWY0pYZ0hNbmFkR1dSejFNMXZUOTl0N0Ez?=
- =?utf-8?B?K3dqc0ZnYnd1bmovdnlZNHRmUGpkRkljTGJSd0IrS1MrL2FiRGNiWWhvbnB6?=
- =?utf-8?B?S3JyazZGYnhJWElUTGRGVm9DUXRLYnpYaEpYWi80V0JOdDNpbzlhaU82YkJi?=
- =?utf-8?B?aEJ2ZWRRYm9wYkswTlBGb2gzN0gwaTZDYURlQ3NHZFVrbGFlc3NlWUNRVnFi?=
- =?utf-8?B?UTdWSWIyMWNQQjk1UXU2K3dSQXgwMnFCSzhkVjlpazBFdUtZZ0dHcksvY3NC?=
- =?utf-8?B?aGFmaDM0UmRXMkFITU5sT0F4dmhOUVgwbXNIbU5GbEttaVNPbVE1bXJmSU02?=
- =?utf-8?B?QkpIbHQ4SjJkVUs5TzU2ekt2UGswenNYRmgvU1FpdzExS3lJb3R5MW9SZ0Nh?=
- =?utf-8?B?dmpjazU2WmJ0SXRnU2RXVGxFajVSQjdmaU90Y1NqOFFXWGdLZEFuRnpYTUtC?=
- =?utf-8?B?NXBlYXNoQmUySHhjUkhJeFQvbnRxYkxWNi95VnhSeko2bGRKa1pUQVZoVVZ6?=
- =?utf-8?B?UWloSUFqN3l0NHBucmphUDkyK2h1UHpDR3o3eFBENzBoaDVFY1BFZ2cybTlV?=
- =?utf-8?B?VlFBaFFkZUp0a3lLS3VOT3JwWDFsNm1odDMyVVpKTm1oaEFtVlpjalByR0Yx?=
- =?utf-8?B?WG9zRCswb0Q1MzlyamJDcGsrUWpLaXN2NTE4Y3lLM1ErQnU1WU9sL0ZmZW53?=
- =?utf-8?B?cWdFclJwNXlILzdNU3Q5Q3ExSHNEYjFVZjNmSGYxV3BuZDRTbmxROGMrcXhq?=
- =?utf-8?B?NGdiby9EN01GejVValFHd0ZVUVVrbk8vLzJNM3M4SFhHb2N3bFV6TmxvQXEr?=
- =?utf-8?B?S09INWtKdDl6Tng1eU5VTGRXSWFXU1BSajhhdyt6Tnp6K0NYdktqZ2QvNDNN?=
- =?utf-8?B?YVdyOVZ4Q0RHY0lydzgrMEVqN0RNSzNGbXoxbjJYY1BFNHk5amxUN3ZKaGlE?=
- =?utf-8?B?blFQMi92eFNabVBsWEFWVHhycmdjZVhwYXp0NFFpS0k0MEZYcDNhTzlhSjl4?=
- =?utf-8?B?SHVjdkY1QkNDT29HUjlWYVFIb1JYZTRJd3RxbDlkT0QwNHJaT3VhZ2lFVkt4?=
- =?utf-8?B?V01zZXBVZ2w4Z2Y5YlhIQUhUaU8xak4yMG15WXR1QUR0ZVJSS3dLZk5JL0lx?=
- =?utf-8?B?b1o3TzlJcXkvR2o0d09ZczBYbGdvZWNaN05HR2t6clJGakpsWDNiY1JpVFI1?=
- =?utf-8?B?ejdnRkZwWkVMY0FjZ1VJa1lUNlZLZ3hDVFBoV2FIUXJ3UXZTNEJtdXJ0N3Jn?=
- =?utf-8?B?MElsMENTNkZ4Lzh5VS94NEtJREJlaEVCU01tNVREN3Iwek1VNWZYSUhvQjZX?=
- =?utf-8?B?Wm1DT0pQUXNVSW5NdUNlZFAwVXZZZ3dTNWRwOWZJRGVMQk9vWlh0ZCtTalM3?=
- =?utf-8?B?bXhtMkVFZmlTbSttU1RVOEtjMnBLNEMwZnpsYk0xTnJVdHdEWmRpZFBFNG1y?=
- =?utf-8?B?VlF5YmFsdkFxT3VLR1djQWQ1eVZiUDhRRnJRSW5jcW5ZOEl2WE5SUXhqYm1s?=
- =?utf-8?B?ZTRPck1IYzZVWlB6UlZ5VW5pZkV3dnhValQvUnhtMXl5eUpjTVFwa0V3aTd3?=
- =?utf-8?B?ZkhEdWN4MVg1YklmZ0Z2bklKUEhrTVlsaEpxSXVCcVZCRlJ1TmZSZGY0VFRW?=
- =?utf-8?B?ZWhVSkNmOGY3a3h3YjZsZDg1MjRJUG42NWJheWk3b0Rnb2ZBRDlRbmg3b3VG?=
- =?utf-8?Q?9Sw5p6g267MlNttxZ4mWgpoACu5h+LZYZB0FCGs?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 013d71dd-49fd-4ae3-a6d5-08dd344dfb84
-X-MS-Exchange-CrossTenant-AuthSource: ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2025 03:46:09.5911
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
-	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY8P300MB0480
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAbyhWcC/12NzQ6CMBCEX4Xs2ZpuaxA8+R6GQ/+QTbBgK6ghv
+ LsLR4/fZL6ZBXJIFDJcigVSmCnTEBn0oQDXmXgPgjwzKKk0SiyFfzstUmiNew1J1BqDtrIyla2
+ BHWtyEDaZ6Dq24tT3HI5cp89+cmuYO8rsfvfPWW3pNn+SFeLf/KyEFDW2+ix9icar63MiR9Ed3
+ fCAZl3XHw8SWA7BAAAA
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        Saravana Kannan <saravanak@google.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=11300;
+ i=bjorn.andersson@oss.qualcomm.com; h=from:subject:message-id;
+ bh=y85RoveN+CkGvlTwThOP8q+nyxhvG95+kpXnACiuUFc=;
+ b=kA0DAAgBCx85Pw2ZrcUByyZiAGeF8hShax2/V7rKhVtQtZY9ma42sCyEwZbgIXadZI/ZD2O7x
+ 4kCSQQAAQgAMxYhBAXeA8xfNepPCWbVJQsfOT8Nma3FBQJnhfIUFRxhbmRlcnNzb25Aa2VybmVs
+ Lm9yZwAKCRALHzk/DZmtxWjcEACezs220XwA2IqrM3D3ikUH8qmiPSsrMLyBiuG3/ifxrF+khMb
+ XvOatlogd18/nlzpgnNy5dCRTYuWLVWmWJJA57vSDKbkk5VJpmRrIASwnklK1GLU7wiZMvFeeD8
+ EhK3zfGV0RzOug/zi58B9WmjUvyOxZvqvO7a2xOArJO3SDwR1ptMWVNRtsMpcKDJpfpwIPUc5s+
+ zsjotq+5N3HmMFvy9RUejORPrJOm1iFjF6l5uXJ8hlu0+N2eU1NUmbbPENWgFHiapw9Nr18Bu13
+ BLbt9TpqoTXnLFZdkgqbE/CM+9tdfsFd6JygjWERNREjedWEjT14/cDxaeK60hWJhmIw1BxwFb6
+ U5zJ2/93dvkN6QgSrTB02Hmh0aNS7iCg1smhp8xh46a/PdtoQWpsf+wtFIipCTT/Y1/0K3i1HC0
+ EAUFqiRXpI1pWx33EPVcR2J3EgnLScpLYnr30g4fRVIsfGRa0yjA/gpUvjmbGDL+6mIJXv4fq+n
+ dTp/yoKrz8kTJNm/nf1I9gmE/e2bX3P865fxZGqHEz0VnLvMeWXeVNeNjuKHyNArnwjCFQzzndS
+ yRlXTxxsCNkh7OOiu25Lzee7dkGaiP3uxQ8CaszCGmUXG6KHtxLJvTkmqdiPuaOBOR0SjGY2aOZ
+ poH2R7W5ksLidiOojSoj4FS4rHvdItZSroQ==
+X-Developer-Key: i=bjorn.andersson@oss.qualcomm.com; a=openpgp;
+ fpr=05DE03CC5F35EA4F0966D5250B1F393F0D99ADC5
+X-Proofpoint-GUID: 3qrZndM80soQ10_eW325cPdwYr2LD22w
+X-Proofpoint-ORIG-GUID: 3qrZndM80soQ10_eW325cPdwYr2LD22w
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 malwarescore=0 bulkscore=0 phishscore=0 adultscore=0
+ impostorscore=0 mlxscore=0 clxscore=1011 lowpriorityscore=0 spamscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501140039
 
-Hi Maciej,
+The USB IP-block found in most Qualcomm platforms is modelled in the
+Linux kernel as 3 different independent device drivers, but as shown by
+the already existing layering violations in the Qualcomm glue driver
+they can not be operated independently.
 
-Thanks for your quick reply.
+With the current implementation, the glue driver registers the core and
+has no way to know when this is done. As a result, e.g. the suspend
+callbacks needs to guard against NULL pointer dereferences when trying
+to peek into the struct dwc3 found in the drvdata of the child.
 
-On 2025/1/14 3:22, Maciej Żenczykowski Wrote:
-> Looking at https://github.com/microsoft/NCM-Driver-for-Windows
-> 
-> commit ded4839c5103ab91822bfde1932393bbb14afda3 (tag:
-> windows_10.0.22000, origin/master)
-> Author: Brandon Jiang <jiangyue@microsoft.com>
-> Date:   Mon Oct 4 14:30:44 2021 -0700
-> 
->     update NCM to Windows 11 (21H2) release, built with Windows 11
-> (22000) WDK and DMF v1.1.82
-> 
-> -- vs previous change to host/device.cpp
-> 
-> commit 40118f55a0843221f04c8036df8b97fa3512a007 (tag:
-> windows_10.0.19041, origin/release_2004)
-> Author: Brandon Jiang <jiangyue@microsoft.com>
-> Date:   Sun Feb 23 19:53:06 2020 -0800
-> 
->     update NCM to 20H1 Windows release, built with 20H1 WDK and DMF v1.1.20
-> 
-> it introduced
-> 
->     if (bufferRequest->TransferLength < bufferRequest->BufferLength &&
->         bufferRequest->TransferLength %
-> hostDevice->m_DataBulkOutPipeMaximumPacketSize == 0)
->     {
->         //NCM spec is not explicit if a ZLP shall be sent when
-> wBlockLength != 0 and it happens to be
->         //multiple of wMaxPacketSize. Our interpretation is that no
-> ZLP needed if wBlockLength is non-zero,
+Missing from the upstream Qualcomm USB support is proper handling of
+role switching, in which the glue needs to be notified upon DRD mode
+changes. Several attempts has been made through the years to register
+callbacks etc, but they always fall short when it comes to handling of
+the core's probe deferral on resources etc.
 
-In NCM10, 3.2.2 dwBlockLength description, it states:
-> If exactly dwNtbInMaxSize or dwNtbOutMaxSize bytes are sent, and the 
-> size is a multiple of wMaxPacketSize for the given pipe, then no ZLP
-> shall be sent.
-I don't know if its a Microsoft's problem or really **not explicit**.
-Maybe most of the device implementations treat the incoming data as a
-stream and do contiguous parsing on it.
+Furhtermore, the DeviceTree binding is a direct representation of the
+Linux driver model, and doesn't necessarily describe "the USB IP-block".
 
->         //because the non-zero wBlockLength has already told the
-> function side the size of transfer to be expected.
->         //
->         //However, there are in-market NCM devices rely on ZLP as long
-> as the wBlockLength is multiple of wMaxPacketSize.
->         //To deal with such devices, we pad an extra 0 at end so the
-> transfer is no longer multiple of wMaxPacketSize
-> 
->         bufferRequest->Buffer[bufferRequest->TransferLength] = 0;
->         bufferRequest->TransferLength++;
->     }
-> 
-> Which I think is literally the fix for this bug you're reporting.
-> That 'fix' is what then caused us to add the patch at the top of this thread.
-> 
-> So that fix was present in the very first official Win11 release
-> (build 22000), but is likely not present in any Win10 release...
+This series therefor attempts to flatten the driver split, and operate
+the glue and core out of the same platform_device instance. And in order
+to do this, the DeviceTree representation of the IP block is flattened.
 
-As you mentioned before to fix it in the gadget side, it seems very 
-complicated, maybe we need a extra skb with size=ntb_size as an intermediate
-buffer to move around those ntb data before parsing it, but may (or may not)
-lead to performance drop. Any other idea?
+To avoid littering the dwc3-qcom driver with the migration code - which
+we should be able to drop again in a LTS or two - this is now placed in
+drivers/of/overlays.
 
-Do you think hacking in the gadget side to fix this compatible issue is
-a good idea consider that there are still a large number of users using
-Win10?
+A patch to convert a single platform - sc8280xp - is included in the
+series. The broader conversion will be submitted in a follow up series.
 
-(Though Win10 will reach end of support on October 14, 2025, but people
-may still use it for a long time since many PCs in good condition cannot
-install win11.)
+---
+Changes in v3:
+- Replaced the handcoded migration logic of compatible, reg, interrupts,
+  phys with overlays.
+- Move the migration logic (and overlays) to a new drivers/of/overlays
+  directory and apply this at postcore, so that it takes effect prior to
+  the relevant platform_devices are created
+- struct dwc3 is embedded in the glue context, rather than having a
+  separate object allocated
+- The hack of using of_address_to_resource() to avoid platform_resource
+  being stale is removed (thanks to applying migration at postcore)
+- Link to v2: https://lore.kernel.org/r/20240811-dwc3-refactor-v2-0-91f370d61ad2@quicinc.com
 
-Best Regards
+Changes in v2:
+- Rewrite after ACPI removal, multiport support and interrupt fixes
+- Completely changed strategy for DeviceTree binding, as previous idea
+  of using snps,dwc3 as a generic fallback required unreasonable changes
+  to that binding.
+- Abandoned idea of supporting both flattened and unflattened device
+  model in the one driver. As Johan pointed out, it will leave the race
+  condition holes and will make the code harder to understand.
+  Furthermore, the role switching logic that we intend to introduce
+  following this would have depended on the user updating their
+  DeviceTree blobs.
+- Per above, introduced the dynamic DeviceTree rewrite
+- Link to v1: https://lore.kernel.org/all/20231016-dwc3-refactor-v1-0-ab4a84165470@quicinc.com/
+
+---
+Bjorn Andersson (12):
+      dt-bindings: usb: snps,dwc3: Split core description
+      dt-bindings: usb: Introduce qcom,snps-dwc3
+      of: dynamic: Add of_changeset_add_prop_copy()
+      of: overlays: Introduce dwc3 flattening overlay
+      of: overlays: dwc3-flattening: Add Qualcomm Arm32 overlays
+      of: overlays: dwc3-flattening: Add Qualcomm Arm64 board overlays
+      of: overlays: dwc3-flattening: Provide overlay symbols
+      usb: dwc3: core: Expose core driver as library
+      usb: dwc3: core: Don't touch resets and clocks
+      usb: dwc3: qcom: Don't rely on drvdata during probe
+      usb: dwc3: qcom: Transition to flattened model
+      arm64: dts: qcom: sc8280x: Flatten the USB nodes
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml         |   13 +-
+ .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    |  618 ++++++++
+ .../devicetree/bindings/usb/snps,dwc3-common.yaml  |  415 ++++++
+ .../devicetree/bindings/usb/snps,dwc3.yaml         |  391 +----
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts           |   12 +-
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts          |    5 +-
+ arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |   12 +-
+ .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts      |   10 +-
+ .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |   11 +-
+ .../boot/dts/qcom/sc8280xp-microsoft-arcata.dts    |   10 +-
+ .../boot/dts/qcom/sc8280xp-microsoft-blackrock.dts |   18 +-
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |  157 +-
+ drivers/of/Kconfig                                 |    2 +
+ drivers/of/Makefile                                |    2 +
+ drivers/of/dynamic.c                               |   20 +
+ drivers/of/overlays/Kconfig                        |   15 +
+ drivers/of/overlays/Makefile                       |    3 +
+ drivers/of/overlays/dwc3-flattening/Makefile       |   94 ++
+ .../of/overlays/dwc3-flattening/dwc3-flattening.c  | 1552 ++++++++++++++++++++
+ .../of/overlays/dwc3-flattening/dwc3-flattening.h  |  188 +++
+ .../overlays/dwc3-flattening/dwc3-qcom_apq8094.dts |   32 +
+ .../overlays/dwc3-flattening/dwc3-qcom_apq8096.dts |   60 +
+ .../dwc3-qcom_apq8096_inforce_ifc6640.dts          |   58 +
+ .../overlays/dwc3-flattening/dwc3-qcom_ipq4018.dts |   36 +
+ .../dwc3-qcom_ipq4018_8dev_jalapeno.dts            |   38 +
+ .../overlays/dwc3-flattening/dwc3-qcom_ipq4019.dts |   38 +
+ .../overlays/dwc3-flattening/dwc3-qcom_ipq5018.dts |   28 +
+ .../overlays/dwc3-flattening/dwc3-qcom_ipq5332.dts |   32 +
+ .../overlays/dwc3-flattening/dwc3-qcom_ipq5424.dts |   58 +
+ .../overlays/dwc3-flattening/dwc3-qcom_ipq6018.dts |   54 +
+ .../overlays/dwc3-flattening/dwc3-qcom_ipq8064.dts |   40 +
+ .../overlays/dwc3-flattening/dwc3-qcom_ipq8074.dts |   58 +
+ .../overlays/dwc3-flattening/dwc3-qcom_ipq9574.dts |   29 +
+ .../overlays/dwc3-flattening/dwc3-qcom_msm8953.dts |   32 +
+ .../overlays/dwc3-flattening/dwc3-qcom_msm8992.dts |   32 +
+ .../overlays/dwc3-flattening/dwc3-qcom_msm8994.dts |   32 +
+ .../overlays/dwc3-flattening/dwc3-qcom_msm8996.dts |   58 +
+ .../dwc3-qcom_msm8996_oneplus_oneplus3.dts         |   56 +
+ .../dwc3-qcom_msm8996_oneplus_oneplus3t.dts        |   56 +
+ .../dwc3-qcom_msm8996_sony_dora_row.dts            |   57 +
+ .../dwc3-qcom_msm8996_sony_kagura_row.dts          |   57 +
+ .../dwc3-qcom_msm8996_sony_keyaki_row.dts          |   57 +
+ .../dwc3-qcom_msm8996_xiaomi_gemini.dts            |   56 +
+ .../dwc3-qcom_msm8996_xiaomi_natrium.dts           |   56 +
+ .../dwc3-qcom_msm8996_xiaomi_scorpio.dts           |   56 +
+ .../overlays/dwc3-flattening/dwc3-qcom_msm8998.dts |   34 +
+ .../dwc3-qcom_msm8998_fxtec_pro1.dts               |   35 +
+ .../dwc3-qcom_msm8998_oneplus_cheeseburger.dts     |   32 +
+ .../dwc3-qcom_msm8998_oneplus_dumpling.dts         |   32 +
+ .../dwc3-qcom_msm8998_sony_xperia_lilac.dts        |   35 +
+ .../dwc3-qcom_msm8998_sony_xperia_maple.dts        |   35 +
+ .../dwc3-qcom_msm8998_sony_xperia_poplar.dts       |   35 +
+ .../dwc3-qcom_msm8998_xiaomi_sagit.dts             |   32 +
+ .../overlays/dwc3-flattening/dwc3-qcom_qcm2290.dts |   32 +
+ .../overlays/dwc3-flattening/dwc3-qcom_qcm6490.dts |   63 +
+ .../overlays/dwc3-flattening/dwc3-qcom_qcs404.dts  |   56 +
+ .../overlays/dwc3-flattening/dwc3-qcom_qcs615.dts  |   62 +
+ .../overlays/dwc3-flattening/dwc3-qcom_qcs8300.dts |   62 +
+ .../overlays/dwc3-flattening/dwc3-qcom_qdu1000.dts |   38 +
+ .../overlays/dwc3-flattening/dwc3-qcom_qru1000.dts |   38 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sa8155p.dts |   71 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sa8540p.dts |  129 ++
+ .../overlays/dwc3-flattening/dwc3-qcom_sa8775p.dts |   90 ++
+ .../dwc3-flattening/dwc3-qcom_sar2130p.dts         |   39 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sc7180.dts  |   39 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sc7280.dts  |   63 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sc8180x.dts |  109 ++
+ .../dwc3-flattening/dwc3-qcom_sc8280xp.dts         |  129 ++
+ .../dwc3-qcom_sc8280xp_microsoft_blackrock.dts     |  121 ++
+ .../overlays/dwc3-flattening/dwc3-qcom_sda660.dts  |   59 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdm450.dts  |   33 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdm630.dts  |   57 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdm632.dts  |   32 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdm636.dts  |   59 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdm660.dts  |   57 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdm670.dts  |   36 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdm845.dts  |   64 +
+ .../dwc3-qcom_sdm845_lenovo_yoga_c630.dts          |   67 +
+ .../dwc3-flattening/dwc3-qcom_sdm845_lg_judyln.dts |   67 +
+ .../dwc3-flattening/dwc3-qcom_sdm845_lg_judyp.dts  |   67 +
+ .../dwc3-qcom_sdm845_qcom_sdm845_mtp.dts           |   67 +
+ .../dwc3-qcom_sdm845_samsung_starqltechn.dts       |   67 +
+ .../dwc3-qcom_sdm845_samsung_w737.dts              |   67 +
+ .../dwc3-qcom_sdm845_shift_axolotl.dts             |   67 +
+ .../dwc3-qcom_sdm845_thundercomm_db845c.dts        |   67 +
+ .../dwc3-qcom_sdm845_xiaomi_beryllium.dts          |   67 +
+ .../dwc3-qcom_sdm845_xiaomi_beryllium_ebbg.dts     |   67 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdx55.dts   |   38 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdx65.dts   |   38 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sdx75.dts   |   36 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm4250.dts  |   37 +
+ .../dwc3-qcom_sm4250_oneplus_billie2.dts           |   35 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm6115.dts  |   37 +
+ .../dwc3-qcom_sm6115_lenovo_j606f.dts              |   35 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm6125.dts  |   36 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm6350.dts  |   39 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm6375.dts  |   36 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm7125.dts  |   39 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm7225.dts  |   39 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm7325.dts  |   60 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm8150.dts  |   67 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm8250.dts  |   67 +
+ .../dwc3-qcom_sm8250_xiaomi_elish.dts              |   64 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm8350.dts  |   67 +
+ .../dwc3-qcom_sm8350_microsoft_surface_duo2.dts    |   67 +
+ .../dwc3-qcom_sm8350_qcom_sm8350_hdk.dts           |   69 +
+ .../dwc3-qcom_sm8350_qcom_sm8350_mtp.dts           |   67 +
+ .../dwc3-qcom_sm8350_sony_pdx214_generic.dts       |   67 +
+ .../dwc3-qcom_sm8350_sony_pdx215_generic.dts       |   67 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm8450.dts  |   39 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm8550.dts  |   39 +
+ .../overlays/dwc3-flattening/dwc3-qcom_sm8650.dts  |   39 +
+ .../dwc3-flattening/dwc3-qcom_x1e80100.dts         |  153 ++
+ .../dwc3-qcom_x1e80100_hp_omnibook_x14.dts         |  149 ++
+ drivers/usb/dwc3/core.c                            |  167 ++-
+ drivers/usb/dwc3/dwc3-qcom.c                       |  149 +-
+ drivers/usb/dwc3/glue.h                            |   22 +
+ include/linux/of.h                                 |    3 +
+ 118 files changed, 8389 insertions(+), 670 deletions(-)
+---
+base-commit: 6ecd20965bdc21b265a0671ccf36d9ad8043f5ab
+change-id: 20231016-dwc3-refactor-931e3b08a8b9
+
+Best regards,
+-- 
+Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+
 
