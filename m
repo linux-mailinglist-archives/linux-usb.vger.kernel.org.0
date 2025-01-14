@@ -1,468 +1,245 @@
-Return-Path: <linux-usb+bounces-19299-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19300-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2CF9A0FF7D
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 04:34:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7FF4A0FFBA
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 04:46:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0795169639
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 03:34:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD60C3A0805
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 03:46:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79146246337;
-	Tue, 14 Jan 2025 03:30:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAC643398A;
+	Tue, 14 Jan 2025 03:46:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hn0peWGJ"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="PoczwTrr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2098.outbound.protection.outlook.com [40.92.63.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 254602451D6;
-	Tue, 14 Jan 2025 03:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736825459; cv=none; b=Kj6VbUi1XMEDdQhyyvWWX0Aq9dJc0Gw4Nn5ILzSA1ABjXx6sQG2axb4fnqmm3HVMhVK3uHerFP3J3aeIznUR5/z2HRMnnvPGz/ItxiUvHVrg5lQIQNAEVSZOpxvBf+3sFhGfcli7MoBx2aiGvFfxUvng/BrBV4P57j45FBohc1w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736825459; c=relaxed/simple;
-	bh=CvxrNe8e/4BaiSfOBSwCj1KQ5/77UOBBQdLZgL/RNoA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=P0wiJxx67Eitakd1AD/eLm2tGTVbuoKCfivuMuiIq0H+0NZtUMuKCXuf7+4ngNEX+jMyCfq4oMOLwWyF4oR72MXi+Jzvdjgk3rKm0jhJp9JTE+FfzreYuaBLInmaWIoFStJKmesI8n0J0fj6wjKMe5VCfHACyRgVN7uH96TRdNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hn0peWGJ; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2166022c5caso77535065ad.2;
-        Mon, 13 Jan 2025 19:30:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736825456; x=1737430256; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5FcdLdnPNCznIFI/wzOEmfhmBl5xfGYEDQL7X7E12xg=;
-        b=Hn0peWGJZ8r5BCMB423TitBf+1q+dJCPYDBb4pYYbjaTDF98agBhZrf1UbVF9bte+S
-         hlODKeDFENfQoFzRU5z7UgBoiqaCIvtY6uGNsr9hCJxfc9bYuSnCC5VtaiJm0B+VCtf4
-         6i6lm/7Z8tr44Ak3cGG+hBVH8cz0hoQ6FFPQXWM/fJE36g22x7pfO12AZ+1nHb+Z1buP
-         d/fFaTn4YIxEQ0O44UEOzPhoKzjxudecq+m1eF0NaxrljaODEz5e/fXJpoq6zgeWgo63
-         ER705fzXJYwv0noHrph6daX8QuAlcoRsxgqAhLxLE3OxxJzfVrcu7GRHNvcsZ7ATpjQ2
-         xMZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736825456; x=1737430256;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5FcdLdnPNCznIFI/wzOEmfhmBl5xfGYEDQL7X7E12xg=;
-        b=SOFyYJthNsOBF4WNGG7O7Z9nHgsaD1rxR2DrUeDrBVAFpnb0HtQWV7zZ3aLr2NUggn
-         omxWP4mIXuS08fGWY+gmXD40MJ1cOh/HSsKiYaa9W7ewXb4uS0OSP00sWu2N1SVwSIYJ
-         7kiL9Zg48Osoa+r4/y2AFYqqjMN+ezdefigHdOoBRXGOycl3qmMTLM4SbRfQo6ydiw68
-         ngapyi84FNtBHdm7wLhjkruY9jCtpNQ63JcTJ7NwMkmeps9JHVHR63u2wdSSAACUfhsV
-         vXznvTGpggpPxpDpfhK54ycJmJxWNO6KX2dI6JKlALuepMPSFmm6iZQBxyQdzBT5WvCx
-         e/AQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUGOqfQPlu50YsgZlpOtA2qxeyPCpaSkU4/+r2oXq40HtVQocM4/NWN3RD1L2D3ZY98rJPMlkRY@vger.kernel.org, AJvYcCURTaA/awANtLjuJXT021WCuwjCWxLxC6F5MwoUIb+WbnSqBYD3Jz3uuJiVQrC+BNmkjw/sOc0tDFog@vger.kernel.org, AJvYcCUmngvZLfdWopiqH2kmnO/5eFuqXlH2gLPFtqXwsqS291SoQ4lHCnNaXy/1Q+tOYIc8EYbe6FgfRfNw@vger.kernel.org, AJvYcCV14kSePTj4DcJsiVMsv13JvjUO36WA3Z/7XDlDgplFrsLigexdPDWPx93hdOff3VJlf//oJzm8EKc=@vger.kernel.org, AJvYcCV9ELSxsQTi1P/kYeEt4m3v+FcIyPuW+PpjgqURzRWXvE4PHkCDhjwX/BM/XIbsO84EQddza3G5qeIN3zA=@vger.kernel.org, AJvYcCVTucoMY8gv+aLiMu9R7e70Tu1pzquW3OqDY2gXpplnpgWA1HHmmsDebE98m1K5T5JbQFcmMsBmYzFW4YUY23o=@vger.kernel.org, AJvYcCVZMhoDQDD0LJz15dguHzw/bn4p/njzhVDCniqmnJQXNSQ2iWgcm7t6+nZU89rGyAELJEJzd6aCs1SzzQ==@vger.kernel.org, AJvYcCXTT098e6U9Rw681JDuY04i3Y9oz+qEcYUhMbcA8Ja9iiS/CGIv0N5iEBhCi90X+XrtI6LbYwAVdZqq@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdWIge+6AFuI8YWEmSqw8AiASyw5Rc7HGAfN3jhzM5nT+LBhzh
-	fZaqjh2ihEIUIQCPMqvX7uvlu3BO6u6xsXl7//h36Du5WETUVcTr
-X-Gm-Gg: ASbGncvC4J3iOG5WeaqApmkF2pckfxdSZcEJAwAQYwZg588Uz0xHnGUHk+91E6nYY3x
-	+gmDs24Ym7Ofbe2L+zyGQdyErT6e9vJRCotcK1ol0QAjlnhj7knU2LqcdVHCu/3ckQmJp2gaUsj
-	wAWJZt9SJAfmfrckohEXR242VpT6RsxDZB99Jaa6Ny5Fo4DnwfOPv134+WTbKfb70TgVFsfIWHR
-	01ULKGHCn6MZsNpDshBvDGFzv4RvOCua9kUgDAhaa/2nFh/i/lPIgN4nGNCBBn+fZt451v+QLBp
-	MyStQpHlSVZlJI7HSAvK8/EH
-X-Google-Smtp-Source: AGHT+IEun7RHtFjwYDJ96um2RN8ttGvuzqEME7zM4yWlHvNfi9JcwZNJ6bIjR85GG5h2n50BDbqi+g==
-X-Received: by 2002:a05:6a00:2908:b0:728:e745:23d8 with SMTP id d2e1a72fcca58-72d21ffab83mr36378554b3a.24.1736825456176;
-        Mon, 13 Jan 2025 19:30:56 -0800 (PST)
-Received: from hcdev-d520mt2.. (60-250-196-139.hinet-ip.hinet.net. [60.250.196.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40658b71sm6595400b3a.85.2025.01.13.19.30.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Jan 2025 19:30:55 -0800 (PST)
-From: Ming Yu <a0282524688@gmail.com>
-To: tmyu0@nuvoton.com,
-	lee@kernel.org,
-	linus.walleij@linaro.org,
-	brgl@bgdev.pl,
-	andi.shyti@kernel.org,
-	mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	wim@linux-watchdog.org,
-	linux@roeck-us.net,
-	jdelvare@suse.com,
-	alexandre.belloni@bootlin.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-can@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Ming Yu <a0282524688@gmail.com>
-Subject: [PATCH v5 7/7] rtc: Add Nuvoton NCT6694 RTC support
-Date: Tue, 14 Jan 2025 11:30:10 +0800
-Message-Id: <20250114033010.2445925-8-a0282524688@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250114033010.2445925-1-a0282524688@gmail.com>
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 146DE849C;
+	Tue, 14 Jan 2025 03:46:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.63.98
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736826377; cv=fail; b=fX+9Cah+ppQFxQ0Q9r3a2yIYTRFuZFWXqZ4hPcDvRHAx5Zv+X2OFCP/IUHOSuyKJDtC8eCyTMW96AyTmY02ZgiLmRIGAhc1rnnHS4RsrbfvjAl9QXIFKZd3YsLGU0ieBaxy5LnNykSKmAJdHmnpvP9O1CaD45WAVbcR/5GvVdao=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736826377; c=relaxed/simple;
+	bh=4cLz/aEqB6qYQiPIB62Kbl3R9iWjUVQap67b70S5uDw=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=fw1byhmnIyJlDjLRfAbRHY9rMrq/K/oA7qaxHeX3MW1Yo+j1daKHgKjX5RWwjOonbx3qFu8JwaDcSSxPwjdaFz/NmHxt02hLV7xIcguYPAdCvQATiCl4x2YqegtihRV4ZrRjzzg07OwE3CUM/QHXcWBpsKN3XBYNhQ1JtJpDfEY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=PoczwTrr; arc=fail smtp.client-ip=40.92.63.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=I5phY6Gr9zBnlDTxZoXGERZcqH888uBCUs2JJSFqyrWYjvHF4itboIGNaYNg+sefmlzEe56iHst+4OCmG7EojYEHxaOQXqvvW7FGCd3wOppJ7vLyHaWxL3+SDfMJ7dZ9rlWqRIAIKe7gJ7QpJw9K8aQk4B8v42o6UiAYCofoHVhGunKp+55e+anVw3wQzqooxo0+pEmU7xjYkC78K+jEQB9kHoK4i4+qIlQ0qHJzXCr5oc7Ecc8DZXqNcV81dBk59C3lLD1DYR0cIhUT3Bw8EAm6VXhK46l4vxmR8Bn+U1ThJaoXxjj9WKTiY9LKWknQCxUfKxGNB9cWXwM2E6tcmg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yLTE0jSpDvkwvWG5Go1pbwlrf3F/WM/PFPLce39v7U4=;
+ b=mOQfnTdmVhuF9/MJ3xmxZOmA7SRMvdQ7bI4KdJhO+YbrAIkFF6Q7T4eB7Jsie/PiUPb6UWgWBf2GYfN3R3Y85gB/KEANSBeexp8APB0tPCGXVC9aNzMR+XZCkwFaOffMoUaJvrhfcvajNg6vTYo0M/zux26A/ZoxCocIfvmor5P4bq6c6Gz1pwNDtLLRxkJohQEydD9ieDNvrAymy+t+aFcJV4T+t9JxAp7keClXPtiwi1mKVoTwc3GUYmjn6MxwW4F21x/dmza69S7GEquuiR78VdHoCx5PoZDX+fAMRQCZTZUNY54exx27Y1zJm1DrywDo8vFpxmx+l6BHimhhHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yLTE0jSpDvkwvWG5Go1pbwlrf3F/WM/PFPLce39v7U4=;
+ b=PoczwTrrfw0rf6lY1GbY6b1jjDfp3n0FYmpuZKl9+r0AFF/UkFPW7B7WJ8o2UVuIdBHWxROguDt2a2lu8OCxdL7EsGl19xRzzDc44xhqWsCHAgqSaXNdsj+AqRNG3VfveCKHU8Cim+lfv8WsSVnnMC6PCDqGWk/UFJYKEGUqrLXxkpV6r4r2IJifZE/ydPA7GhfxwK85W4zT/RDgb6VWI9iA909dIBadJjNY2MsYbXJinIFaAmPonjqwBL5urx7/nNIG81vZQmbMC8kQWb6JjEnluAG3Ikrdc2qGgOGCe2vdXn2/MCAdkuqJp17C1qwLUG/7LY/VFrTwdSu2h+XQwQ==
+Received: from ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM (2603:10c6:220:22a::15)
+ by SY8P300MB0480.AUSP300.PROD.OUTLOOK.COM (2603:10c6:10:297::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.18; Tue, 14 Jan
+ 2025 03:46:09 +0000
+Received: from ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::fee9:23d3:17b0:d2d3]) by ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+ ([fe80::fee9:23d3:17b0:d2d3%4]) with mapi id 15.20.8335.017; Tue, 14 Jan 2025
+ 03:46:09 +0000
+Message-ID:
+ <ME0P300MB0553E15D02A52DB482496B2CA6182@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+Date: Tue, 14 Jan 2025 11:46:02 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] usb: gadget: ncm: Avoid dropping datagrams of properly
+ parsed NTBs
+To: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Cc: quic_kriskura@quicinc.com, gregkh@linuxfoundation.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ quic_jackp@quicinc.com, quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+ stable@vger.kernel.org
+References: <20240205074650.200304-1-quic_kriskura@quicinc.com>
+ <ME0P300MB05534EDF5293054B53061567A61C2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+ <CANP3RGc_SBROWVA2GMaN41mzCU28wGtQzT5qmSKcYsYDY03G5g@mail.gmail.com>
+ <ME0P300MB0553900AF75E50947B011FF3A61D2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+ <CANP3RGc7n2vv6vGh7j0Y=7DNqfXnQxZaTcwdPD15kzoY1in08Q@mail.gmail.com>
+ <ME0P300MB05538EF3A86116EF73BE3BE9A61F2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+ <CANP3RGdj0gRohsT=3GUZ84dYZxPDUhe3-Zz26bQrsavYnwtDmQ@mail.gmail.com>
+Content-Language: en-US
+From: Junzhong Pan <panjunzhong@outlook.com>
+In-Reply-To: <CANP3RGdj0gRohsT=3GUZ84dYZxPDUhe3-Zz26bQrsavYnwtDmQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SI1PR02CA0045.apcprd02.prod.outlook.com
+ (2603:1096:4:1f6::16) To ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+ (2603:10c6:220:22a::15)
+X-Microsoft-Original-Message-ID:
+ <cd604ded-25d8-43dc-a19d-987d11a04007@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ME0P300MB0553:EE_|SY8P300MB0480:EE_
+X-MS-Office365-Filtering-Correlation-Id: 013d71dd-49fd-4ae3-a6d5-08dd344dfb84
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|6090799003|5072599009|8060799006|19110799003|461199028|7092599003|15080799006|56899033|10035399004|440099028|3412199025;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?eVhZV2p5dWRmRzh3RmxKeHdHNnVHTmN4azN0VnVQZ3ozdE92NTBGMDVSOUVV?=
+ =?utf-8?B?cndtRjhLeWRrOVpOQjBxZWNIdUxidUhaZnlNMXh6cWhnZWg0ZnQ1aGdqa2VT?=
+ =?utf-8?B?U21oV2UyU3VzOVVGM0M3TEFvZjVHa1hUL2tnZTVlbFZOUGlMOUkyaFpoRGlU?=
+ =?utf-8?B?a3BEZUVVZzV3a0IwbDM5ZUZzMkZBTzV3UzJnV3JaR21RandNUkdPTjJFQjZX?=
+ =?utf-8?B?dzVVSjZ6Rlh4eDFhZStGVlBIdzlkRzZBNnFjaEhJZTVVcFE0a1dxRE4yWEl0?=
+ =?utf-8?B?WFcxSXFrQ1pNVUs0QXZZY3dGT2dqSXlQSWFnZmcxR1AyZW5BTWJGZE8rNW9v?=
+ =?utf-8?B?dEpaV01QVnB5ZTRrSXZUL00xWDNBUDNUWkhIUVAvM0FsMGhQak5pQXRxWUpp?=
+ =?utf-8?B?N2UwYVc5K2pzdGZQb0NYV0RjbzFTbDBYc0hUeWdITHRkRWdmVGlrM0lienFy?=
+ =?utf-8?B?Ulpma013VVl5UGhCY0VGckJJNGdmbHBzaEFsTG12Z2F0R0VUc3g0dm1KNXNx?=
+ =?utf-8?B?bXlSc3pPbUJWTy9WUEVNU0xjU0M1cWlOc1NHVWczdzIxUGRhOU9lMFRFWm9F?=
+ =?utf-8?B?OUNUZWRvcVFhSm9jTW10RWRSdWp2bWZibkYwL2psRjJ1MXo4UDh0Ykd4WDZZ?=
+ =?utf-8?B?b1BaT29mUktrRWJiSFhkNUNaK3Q4MW55d0srUjhRKzllMjFSOFluRFdaU1R1?=
+ =?utf-8?B?cFI3cW45VFdONUpkWnR4Qjh4QU4zdVdMVzFPeldUVnJPVnppSzl1Q0VTTnR1?=
+ =?utf-8?B?QzlHOWlScmhMR0xjTkw1bm1HVU1JbTRsaUdOOTBXSUhPMnVVQm1VQytBM0NC?=
+ =?utf-8?B?T2tFMnJtazc1L2FXSFZVaDJwV29rQ0tpd1duZmtpL2ppZndYZXVidlJIbTJ1?=
+ =?utf-8?B?UkNyL1VWMWo1REtFWFRMVUpLYmNBTlowWXRMRkVwQzAwRGJLWU9WQjRRMFg1?=
+ =?utf-8?B?UlVETWsyQ3pXay9CSnJmcDVEekJBWDhNWFFuWkp1eDE3dFJzeWdEMWQ4MVJI?=
+ =?utf-8?B?TmNRZFpvT0NTWG92WmNIQW11eTAzdzVndyt2d3lNSTFvNWpnWGZLWkI3VE40?=
+ =?utf-8?B?NUpGeUNObTFYQi9kSDZhU0ZiYzBRYzRsOTlENEdyS3FOMmZKSGtrcnpZNnhV?=
+ =?utf-8?B?RmV0NGI4TmRQa2UyMEwvVC9kZ2F6RWl3NVZVRHpjaFRDUnFNckNQNzMyU2FX?=
+ =?utf-8?B?UHNnV1hZL1U5ZStQdDJJcXRzNEJyYjFzdHhqbEZjTlVGT2lrN1kxbmIzVU5r?=
+ =?utf-8?B?YTJadnJEUHNxVjVJWldlSW1OZ2d3Z0dLRW9jelRsWkN2SWIyZ250U2M1Q0dk?=
+ =?utf-8?B?bjAyc2RxdGwzaE96UjFpZENuRWIyYnRBTVVwakI0K3B5SkkzVXJsYkhqMTll?=
+ =?utf-8?B?QVpZL2s2ZEJxQUs0SXUvOHZlMFluMmFEZHJHL2J1bE9Ta2daUXRNOFpvZkZX?=
+ =?utf-8?B?eVB0MnF1QkZQMEp0YVJ6cllPM09uenBaL0ZMVlRzVzlOV2RVNEhNUVpBZnZ3?=
+ =?utf-8?B?R09HT3QxRlRBWWRFb2NhZ3JLMHh1d2dreW5XNG16andhRHpBeHllQmVtTHFw?=
+ =?utf-8?B?bkxsMFJnTFF3NW93UWcyMUxPY1ROaytGZUp5QlNwcWJUa2NNKzA3WXFvSnZm?=
+ =?utf-8?B?ZzZNQXJad09HeWk0R1NQRXpkdlgrK2c9PQ==?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?S3pMdUhzcGFoZ0pJeW8zRWx0cW5WVno1VjhvTm1WUmdINFVvR1Y2OEdwYWQv?=
+ =?utf-8?B?aFMwZWVRRGVrakF3OTVPdXFhRUpWY0pYZ0hNbmFkR1dSejFNMXZUOTl0N0Ez?=
+ =?utf-8?B?K3dqc0ZnYnd1bmovdnlZNHRmUGpkRkljTGJSd0IrS1MrL2FiRGNiWWhvbnB6?=
+ =?utf-8?B?S3JyazZGYnhJWElUTGRGVm9DUXRLYnpYaEpYWi80V0JOdDNpbzlhaU82YkJi?=
+ =?utf-8?B?aEJ2ZWRRYm9wYkswTlBGb2gzN0gwaTZDYURlQ3NHZFVrbGFlc3NlWUNRVnFi?=
+ =?utf-8?B?UTdWSWIyMWNQQjk1UXU2K3dSQXgwMnFCSzhkVjlpazBFdUtZZ0dHcksvY3NC?=
+ =?utf-8?B?aGFmaDM0UmRXMkFITU5sT0F4dmhOUVgwbXNIbU5GbEttaVNPbVE1bXJmSU02?=
+ =?utf-8?B?QkpIbHQ4SjJkVUs5TzU2ekt2UGswenNYRmgvU1FpdzExS3lJb3R5MW9SZ0Nh?=
+ =?utf-8?B?dmpjazU2WmJ0SXRnU2RXVGxFajVSQjdmaU90Y1NqOFFXWGdLZEFuRnpYTUtC?=
+ =?utf-8?B?NXBlYXNoQmUySHhjUkhJeFQvbnRxYkxWNi95VnhSeko2bGRKa1pUQVZoVVZ6?=
+ =?utf-8?B?UWloSUFqN3l0NHBucmphUDkyK2h1UHpDR3o3eFBENzBoaDVFY1BFZ2cybTlV?=
+ =?utf-8?B?VlFBaFFkZUp0a3lLS3VOT3JwWDFsNm1odDMyVVpKTm1oaEFtVlpjalByR0Yx?=
+ =?utf-8?B?WG9zRCswb0Q1MzlyamJDcGsrUWpLaXN2NTE4Y3lLM1ErQnU1WU9sL0ZmZW53?=
+ =?utf-8?B?cWdFclJwNXlILzdNU3Q5Q3ExSHNEYjFVZjNmSGYxV3BuZDRTbmxROGMrcXhq?=
+ =?utf-8?B?NGdiby9EN01GejVValFHd0ZVUVVrbk8vLzJNM3M4SFhHb2N3bFV6TmxvQXEr?=
+ =?utf-8?B?S09INWtKdDl6Tng1eU5VTGRXSWFXU1BSajhhdyt6Tnp6K0NYdktqZ2QvNDNN?=
+ =?utf-8?B?YVdyOVZ4Q0RHY0lydzgrMEVqN0RNSzNGbXoxbjJYY1BFNHk5amxUN3ZKaGlE?=
+ =?utf-8?B?blFQMi92eFNabVBsWEFWVHhycmdjZVhwYXp0NFFpS0k0MEZYcDNhTzlhSjl4?=
+ =?utf-8?B?SHVjdkY1QkNDT29HUjlWYVFIb1JYZTRJd3RxbDlkT0QwNHJaT3VhZ2lFVkt4?=
+ =?utf-8?B?V01zZXBVZ2w4Z2Y5YlhIQUhUaU8xak4yMG15WXR1QUR0ZVJSS3dLZk5JL0lx?=
+ =?utf-8?B?b1o3TzlJcXkvR2o0d09ZczBYbGdvZWNaN05HR2t6clJGakpsWDNiY1JpVFI1?=
+ =?utf-8?B?ejdnRkZwWkVMY0FjZ1VJa1lUNlZLZ3hDVFBoV2FIUXJ3UXZTNEJtdXJ0N3Jn?=
+ =?utf-8?B?MElsMENTNkZ4Lzh5VS94NEtJREJlaEVCU01tNVREN3Iwek1VNWZYSUhvQjZX?=
+ =?utf-8?B?Wm1DT0pQUXNVSW5NdUNlZFAwVXZZZ3dTNWRwOWZJRGVMQk9vWlh0ZCtTalM3?=
+ =?utf-8?B?bXhtMkVFZmlTbSttU1RVOEtjMnBLNEMwZnpsYk0xTnJVdHdEWmRpZFBFNG1y?=
+ =?utf-8?B?VlF5YmFsdkFxT3VLR1djQWQ1eVZiUDhRRnJRSW5jcW5ZOEl2WE5SUXhqYm1s?=
+ =?utf-8?B?ZTRPck1IYzZVWlB6UlZ5VW5pZkV3dnhValQvUnhtMXl5eUpjTVFwa0V3aTd3?=
+ =?utf-8?B?ZkhEdWN4MVg1YklmZ0Z2bklKUEhrTVlsaEpxSXVCcVZCRlJ1TmZSZGY0VFRW?=
+ =?utf-8?B?ZWhVSkNmOGY3a3h3YjZsZDg1MjRJUG42NWJheWk3b0Rnb2ZBRDlRbmg3b3VG?=
+ =?utf-8?Q?9Sw5p6g267MlNttxZ4mWgpoACu5h+LZYZB0FCGs?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 013d71dd-49fd-4ae3-a6d5-08dd344dfb84
+X-MS-Exchange-CrossTenant-AuthSource: ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Jan 2025 03:46:09.5911
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY8P300MB0480
 
-This driver supports RTC functionality for NCT6694 MFD device
-based on USB interface.
+Hi Maciej,
 
-Signed-off-by: Ming Yu <a0282524688@gmail.com>
----
- MAINTAINERS               |   1 +
- drivers/rtc/Kconfig       |  10 ++
- drivers/rtc/Makefile      |   1 +
- drivers/rtc/rtc-nct6694.c | 286 ++++++++++++++++++++++++++++++++++++++
- 4 files changed, 298 insertions(+)
- create mode 100644 drivers/rtc/rtc-nct6694.c
+Thanks for your quick reply.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a14a2d65b8a6..5275ff7a793c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16726,6 +16726,7 @@ F:	drivers/hwmon/nct6694-hwmon.c
- F:	drivers/i2c/busses/i2c-nct6694.c
- F:	drivers/mfd/nct6694.c
- F:	drivers/net/can/usb/nct6694_canfd.c
-+F:	drivers/rtc/rtc-nct6694.c
- F:	drivers/watchdog/nct6694_wdt.c
- F:	include/linux/mfd/nct6694.h
- 
-diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
-index a60bcc791a48..aeab67acbc84 100644
---- a/drivers/rtc/Kconfig
-+++ b/drivers/rtc/Kconfig
-@@ -416,6 +416,16 @@ config RTC_DRV_NCT3018Y
- 	   This driver can also be built as a module, if so, the module will be
- 	   called "rtc-nct3018y".
- 
-+config RTC_DRV_NCT6694
-+	tristate "Nuvoton NCT6694 RTC support"
-+	depends on MFD_NCT6694
-+	help
-+	  If you say yes to this option, support will be included for Nuvoton
-+	  NCT6694, a USB device to RTC.
-+
-+	  This driver can also be built as a module. If so, the module will
-+	  be called rtc-nct6694.
-+
- config RTC_DRV_RK808
- 	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 RTC"
- 	depends on MFD_RK8XX
-diff --git a/drivers/rtc/Makefile b/drivers/rtc/Makefile
-index 489b4ab07068..d0d6f4a4972e 100644
---- a/drivers/rtc/Makefile
-+++ b/drivers/rtc/Makefile
-@@ -118,6 +118,7 @@ obj-$(CONFIG_RTC_DRV_MXC)	+= rtc-mxc.o
- obj-$(CONFIG_RTC_DRV_MXC_V2)	+= rtc-mxc_v2.o
- obj-$(CONFIG_RTC_DRV_GAMECUBE)	+= rtc-gamecube.o
- obj-$(CONFIG_RTC_DRV_NCT3018Y)	+= rtc-nct3018y.o
-+obj-$(CONFIG_RTC_DRV_NCT6694)	+= rtc-nct6694.o
- obj-$(CONFIG_RTC_DRV_NTXEC)	+= rtc-ntxec.o
- obj-$(CONFIG_RTC_DRV_OMAP)	+= rtc-omap.o
- obj-$(CONFIG_RTC_DRV_OPAL)	+= rtc-opal.o
-diff --git a/drivers/rtc/rtc-nct6694.c b/drivers/rtc/rtc-nct6694.c
-new file mode 100644
-index 000000000000..dbb5ccae2796
---- /dev/null
-+++ b/drivers/rtc/rtc-nct6694.c
-@@ -0,0 +1,286 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton NCT6694 RTC driver based on USB interface.
-+ *
-+ * Copyright (C) 2024 Nuvoton Technology Corp.
-+ */
-+
-+#include <linux/bcd.h>
-+#include <linux/irqdomain.h>
-+#include <linux/kernel.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mfd/nct6694.h>
-+#include <linux/module.h>
-+#include <linux/platform_device.h>
-+#include <linux/rtc.h>
-+#include <linux/slab.h>
-+
-+/*
-+ * USB command module type for NCT6694 RTC controller.
-+ * This defines the module type used for communication with the NCT6694
-+ * RTC controller over the USB interface.
-+ */
-+#define NCT6694_RTC_MOD		0x08
-+
-+/* Command 00h - RTC Time */
-+#define NCT6694_RTC_TIME	0x0000
-+#define NCT6694_RTC_TIME_SEL	0x00
-+
-+/* Command 01h - RTC Alarm */
-+#define NCT6694_RTC_ALARM	0x01
-+#define NCT6694_RTC_ALARM_SEL	0x00
-+
-+/* Command 02h - RTC Status */
-+#define NCT6694_RTC_STATUS	0x02
-+#define NCT6694_RTC_STATUS_SEL	0x00
-+
-+#define NCT6694_RTC_IRQ_INT_EN	BIT(0)	/* Transmit a USB INT-in when RTC alarm */
-+#define NCT6694_RTC_IRQ_GPO_EN	BIT(5)	/* Trigger a GPO Low Pulse when RTC alarm */
-+
-+#define NCT6694_RTC_IRQ_EN	(NCT6694_RTC_IRQ_INT_EN | NCT6694_RTC_IRQ_GPO_EN)
-+#define NCT6694_RTC_IRQ_STS	BIT(0)	/* Write 1 clear IRQ status */
-+
-+struct __packed nct6694_rtc_time {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 week;
-+	u8 day;
-+	u8 month;
-+	u8 year;
-+};
-+
-+struct __packed nct6694_rtc_alarm {
-+	u8 sec;
-+	u8 min;
-+	u8 hour;
-+	u8 alarm_en;
-+	u8 alarm_pend;
-+};
-+
-+struct __packed nct6694_rtc_status {
-+	u8 irq_en;
-+	u8 irq_pend;
-+};
-+
-+union __packed nct6694_rtc_msg {
-+	struct nct6694_rtc_time time;
-+	struct nct6694_rtc_alarm alarm;
-+	struct nct6694_rtc_status sts;
-+};
-+
-+struct nct6694_rtc_data {
-+	struct nct6694 *nct6694;
-+	struct rtc_device *rtc;
-+	union nct6694_rtc_msg *msg;
-+};
-+
-+static int nct6694_rtc_read_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, time);
-+	if (ret)
-+		return ret;
-+
-+	tm->tm_sec = bcd2bin(time->sec);		/* tm_sec expect 0 ~ 59 */
-+	tm->tm_min = bcd2bin(time->min);		/* tm_min expect 0 ~ 59 */
-+	tm->tm_hour = bcd2bin(time->hour);		/* tm_hour expect 0 ~ 23 */
-+	tm->tm_wday = bcd2bin(time->week) - 1;		/* tm_wday expect 0 ~ 6 */
-+	tm->tm_mday = bcd2bin(time->day);		/* tm_mday expect 1 ~ 31 */
-+	tm->tm_mon = bcd2bin(time->month) - 1;		/* tm_month expect 0 ~ 11 */
-+	tm->tm_year = bcd2bin(time->year) + 100;	/* tm_year expect since 1900 */
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_time(struct device *dev, struct rtc_time *tm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_time *time = &data->msg->time;
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_TIME,
-+		.sel = NCT6694_RTC_TIME_SEL,
-+		.len = cpu_to_le16(sizeof(*time))
-+	};
-+
-+	time->sec = bin2bcd(tm->tm_sec);
-+	time->min = bin2bcd(tm->tm_min);
-+	time->hour = bin2bcd(tm->tm_hour);
-+	time->week = bin2bcd(tm->tm_wday + 1);
-+	time->day = bin2bcd(tm->tm_mday);
-+	time->month = bin2bcd(tm->tm_mon + 1);
-+	time->year = bin2bcd(tm->tm_year - 100);
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, time);
-+}
-+
-+static int nct6694_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+	int ret;
-+
-+	ret = nct6694_read_msg(data->nct6694, &cmd_hd, alarm);
-+	if (ret)
-+		return ret;
-+
-+	alrm->time.tm_sec = bcd2bin(alarm->sec);
-+	alrm->time.tm_min = bcd2bin(alarm->min);
-+	alrm->time.tm_hour = bcd2bin(alarm->hour);
-+	alrm->enabled = alarm->alarm_en;
-+	alrm->pending = alarm->alarm_pend;
-+
-+	return ret;
-+}
-+
-+static int nct6694_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_alarm *alarm = &data->msg->alarm;
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_ALARM,
-+		.sel = NCT6694_RTC_ALARM_SEL,
-+		.len = cpu_to_le16(sizeof(*alarm))
-+	};
-+
-+	alarm->sec = bin2bcd(alrm->time.tm_sec);
-+	alarm->min = bin2bcd(alrm->time.tm_min);
-+	alarm->hour = bin2bcd(alrm->time.tm_hour);
-+	alarm->alarm_en = alrm->enabled ? NCT6694_RTC_IRQ_EN : 0;
-+	alarm->alarm_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, alarm);
-+}
-+
-+static int nct6694_rtc_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct nct6694_rtc_data *data = dev_get_drvdata(dev);
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+
-+	if (enabled)
-+		sts->irq_en |= NCT6694_RTC_IRQ_EN;
-+	else
-+		sts->irq_en &= ~NCT6694_RTC_IRQ_EN;
-+
-+	sts->irq_pend = 0;
-+
-+	return nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+}
-+
-+static const struct rtc_class_ops nct6694_rtc_ops = {
-+	.read_time = nct6694_rtc_read_time,
-+	.set_time = nct6694_rtc_set_time,
-+	.read_alarm = nct6694_rtc_read_alarm,
-+	.set_alarm = nct6694_rtc_set_alarm,
-+	.alarm_irq_enable = nct6694_rtc_alarm_irq_enable,
-+};
-+
-+static irqreturn_t nct6694_irq(int irq, void *dev_id)
-+{
-+	struct nct6694_rtc_data *data = dev_id;
-+	struct nct6694_rtc_status *sts = &data->msg->sts;
-+	struct nct6694_cmd_header cmd_hd = {
-+		.mod = NCT6694_RTC_MOD,
-+		.cmd = NCT6694_RTC_STATUS,
-+		.sel = NCT6694_RTC_STATUS_SEL,
-+		.len = cpu_to_le16(sizeof(*sts))
-+	};
-+	int ret;
-+
-+	rtc_lock(data->rtc);
-+
-+	sts->irq_en = NCT6694_RTC_IRQ_EN;
-+	sts->irq_pend = NCT6694_RTC_IRQ_STS;
-+	ret = nct6694_write_msg(data->nct6694, &cmd_hd, sts);
-+	if (ret) {
-+		rtc_unlock(data->rtc);
-+		return IRQ_NONE;
-+	}
-+
-+	rtc_update_irq(data->rtc, 1, RTC_IRQF | RTC_AF);
-+
-+	rtc_unlock(data->rtc);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int nct6694_rtc_probe(struct platform_device *pdev)
-+{
-+	struct nct6694_rtc_data *data;
-+	struct nct6694 *nct6694 = dev_get_drvdata(pdev->dev.parent);
-+	int ret, irq;
-+
-+	irq = irq_create_mapping(nct6694->domain, NCT6694_IRQ_RTC);
-+	if (!irq)
-+		return -EINVAL;
-+
-+	data = devm_kzalloc(&pdev->dev, sizeof(*data), GFP_KERNEL);
-+	if (!data)
-+		return -ENOMEM;
-+
-+	data->msg = devm_kzalloc(&pdev->dev, sizeof(union nct6694_rtc_msg),
-+				 GFP_KERNEL);
-+	if (!data->msg)
-+		return -ENOMEM;
-+
-+	data->rtc = devm_rtc_allocate_device(&pdev->dev);
-+	if (IS_ERR(data->rtc))
-+		return PTR_ERR(data->rtc);
-+
-+	data->nct6694 = nct6694;
-+	data->rtc->ops = &nct6694_rtc_ops;
-+	data->rtc->range_min = RTC_TIMESTAMP_BEGIN_2000;
-+	data->rtc->range_max = RTC_TIMESTAMP_END_2099;
-+
-+	platform_set_drvdata(pdev, data);
-+
-+	ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-+					nct6694_irq, IRQF_ONESHOT,
-+					"nct6694-rtc", data);
-+	if (ret < 0)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to request irq\n");
-+
-+	ret = devm_rtc_register_device(data->rtc);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, ret, "Failed to register rtc\n");
-+
-+	device_init_wakeup(&pdev->dev, true);
-+	return 0;
-+}
-+
-+static struct platform_driver nct6694_rtc_driver = {
-+	.driver = {
-+		.name	= "nct6694-rtc",
-+	},
-+	.probe		= nct6694_rtc_probe,
-+};
-+
-+module_platform_driver(nct6694_rtc_driver);
-+
-+MODULE_DESCRIPTION("USB-RTC driver for NCT6694");
-+MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-+MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:nct6694-rtc");
--- 
-2.34.1
+On 2025/1/14 3:22, Maciej Żenczykowski Wrote:
+> Looking at https://github.com/microsoft/NCM-Driver-for-Windows
+> 
+> commit ded4839c5103ab91822bfde1932393bbb14afda3 (tag:
+> windows_10.0.22000, origin/master)
+> Author: Brandon Jiang <jiangyue@microsoft.com>
+> Date:   Mon Oct 4 14:30:44 2021 -0700
+> 
+>     update NCM to Windows 11 (21H2) release, built with Windows 11
+> (22000) WDK and DMF v1.1.82
+> 
+> -- vs previous change to host/device.cpp
+> 
+> commit 40118f55a0843221f04c8036df8b97fa3512a007 (tag:
+> windows_10.0.19041, origin/release_2004)
+> Author: Brandon Jiang <jiangyue@microsoft.com>
+> Date:   Sun Feb 23 19:53:06 2020 -0800
+> 
+>     update NCM to 20H1 Windows release, built with 20H1 WDK and DMF v1.1.20
+> 
+> it introduced
+> 
+>     if (bufferRequest->TransferLength < bufferRequest->BufferLength &&
+>         bufferRequest->TransferLength %
+> hostDevice->m_DataBulkOutPipeMaximumPacketSize == 0)
+>     {
+>         //NCM spec is not explicit if a ZLP shall be sent when
+> wBlockLength != 0 and it happens to be
+>         //multiple of wMaxPacketSize. Our interpretation is that no
+> ZLP needed if wBlockLength is non-zero,
 
+In NCM10, 3.2.2 dwBlockLength description, it states:
+> If exactly dwNtbInMaxSize or dwNtbOutMaxSize bytes are sent, and the 
+> size is a multiple of wMaxPacketSize for the given pipe, then no ZLP
+> shall be sent.
+I don't know if its a Microsoft's problem or really **not explicit**.
+Maybe most of the device implementations treat the incoming data as a
+stream and do contiguous parsing on it.
+
+>         //because the non-zero wBlockLength has already told the
+> function side the size of transfer to be expected.
+>         //
+>         //However, there are in-market NCM devices rely on ZLP as long
+> as the wBlockLength is multiple of wMaxPacketSize.
+>         //To deal with such devices, we pad an extra 0 at end so the
+> transfer is no longer multiple of wMaxPacketSize
+> 
+>         bufferRequest->Buffer[bufferRequest->TransferLength] = 0;
+>         bufferRequest->TransferLength++;
+>     }
+> 
+> Which I think is literally the fix for this bug you're reporting.
+> That 'fix' is what then caused us to add the patch at the top of this thread.
+> 
+> So that fix was present in the very first official Win11 release
+> (build 22000), but is likely not present in any Win10 release...
+
+As you mentioned before to fix it in the gadget side, it seems very 
+complicated, maybe we need a extra skb with size=ntb_size as an intermediate
+buffer to move around those ntb data before parsing it, but may (or may not)
+lead to performance drop. Any other idea?
+
+Do you think hacking in the gadget side to fix this compatible issue is
+a good idea consider that there are still a large number of users using
+Win10?
+
+(Though Win10 will reach end of support on October 14, 2025, but people
+may still use it for a long time since many PCs in good condition cannot
+install win11.)
+
+Best Regards
 
