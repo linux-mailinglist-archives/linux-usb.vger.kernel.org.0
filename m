@@ -1,94 +1,86 @@
-Return-Path: <linux-usb+bounces-19329-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19330-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5D1EA10468
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 11:38:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4AE0FA10486
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 11:45:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EDAF3A3F22
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 10:38:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 522271699EB
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 10:45:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD6E5246331;
-	Tue, 14 Jan 2025 10:38:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A24722DC3A;
+	Tue, 14 Jan 2025 10:44:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZVYngFy1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KnAkZ4mW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EA831ADC9C
-	for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 10:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 075ED1ADC70;
+	Tue, 14 Jan 2025 10:44:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736851109; cv=none; b=BGoU3KSj4KRuNn5D7b4Q7Kr70tVIgSj5N8vKN9ejazt7Z4Jm/NYz4UQxzt3lw3cUlHcJ8OM4EPFD3Ly0n4s0BAG+6nlB+QWgNLOaBZztbZ/UBvTJ31qkyGOsXbeAkuVVBeT81VXoeYvPcecuejBXI0k4/GJyil3uAPJC23zAUEQ=
+	t=1736851498; cv=none; b=DVfXyGJkZcXb00Uaasgwo4wWIzDgfVRpUgi7mDhTgR9J/AzBNyV22q+L3oLkP17lKtxtmGqsknWWa65W3kWpTi1jzq37xMN/uIAd131NSaI3ejIiR79LBnsq8vXTpllUoOg6riGzE3uBRchtsANhtl76dRy72498wC9Jmw0lp0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736851109; c=relaxed/simple;
-	bh=R1Tk783hfRtPKsihEFcpmlIEDLctCnv9KDLzdCmuyqc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i5eOTQIUUS66V2d42wjIQ/dYEh5EBi/Jb7ov+OlsxVRQ28p0gJh/qLIbm7ZzUrn8C96W0hWG4e5z33hKlnEMu67S7mq3NAqekK9L7bwylJRD4gx/wdd1YiXZngYx6LdFcdiVTFtCJqgS2W4mwugUzAZg7yrvoKCftExPx87uGVM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZVYngFy1; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-304d760f0dfso42241291fa.2
-        for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 02:38:27 -0800 (PST)
+	s=arc-20240116; t=1736851498; c=relaxed/simple;
+	bh=xdj6zI4VKabvlKxtwdq6nnIYS/avU/mTsaqNtJYzx60=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=f0IksXwLG22j13rxvmkIBJ0PAZiVewywkIueb6ibcDYNjl7gh84/IuEk5sxYaTJ/fK4srIpO9aQ2s/XYZYtcZJli4rlyADTzwEP56IuTkljqw7o8kIzc1gGQOxoae5sQMl16gcZgnJdfZ6NrbqFiwAQj9zYwzkz1JL8qgDbbs2s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KnAkZ4mW; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-43623f0c574so37905655e9.2;
+        Tue, 14 Jan 2025 02:44:56 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736851105; x=1737455905; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=uNN7B9q2J4hdcvsmifk7w5aJJJisTFxNMJ5KcojNYOk=;
-        b=ZVYngFy1Wrvl70mVNUFMgRPugW0F4B+zVfpT7SfOjyE3MQGSvgIGR5aeaYefIWDVkN
-         BuX9TBAa8jzoe4AFA4DAv8QtVzz3FDQjZi/8dZNal3JKxwimbuotSJdrrmZi7gPHcJ0I
-         tbIqGwhABLhtp30pW1sNv2ef/2Ibck4PSMszQ4c/zn3ceAemtUDSFtDvKZ79dNbZaohI
-         8WsnqHadCwShBrDb9Fkp+7b8Y999q15nX+SSR+bagdV32FDdH5m44XbD6rgbS4ln7VNe
-         7b9OcRWJxSY38HIulz07J8ps+Dwy7iSbcd1OqwlFMROKdOF5g+KBw2ENJYENQ8F/u0uc
-         OGkA==
+        d=gmail.com; s=20230601; t=1736851495; x=1737456295; darn=vger.kernel.org;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hYGccp81SSXOLJr+IMkLll7Z5iuGZ6H3Qba7nStY0Bo=;
+        b=KnAkZ4mWHVPoERg9XC5+xKoFjYOiuc6Pxl8EKvBqhRwvlUMKze+ZjFv7dCkG8khMHG
+         HV1L/vMUxrRYRtAIBgAwmSj2JxB3YQLDI4ya0ps0SmMN/H7Ca2iUSjlrZ1crrNOLuFd9
+         VApwcJ/U4jEE3HCjWuO6iZH+3DETuvCrXeMDEq4dZUcb+D2u5+NdkjSr/l1e9st5MgMp
+         ca/EnzpckFh7e6oEbsteqIbVnEF+lZEiwGzLALOezfHKwt8eKOU7Jt1IpPpnup4EO2YX
+         z1a2kxaKWsF7lpEw5S7yc1rCrNGO9rBalMAu4dv0IHAfM773Zdp4s1PjirXZDa1TZUI+
+         U2Fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736851105; x=1737455905;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uNN7B9q2J4hdcvsmifk7w5aJJJisTFxNMJ5KcojNYOk=;
-        b=cal2hlPrUW9KrZuRkf1Jx9S7iWpXNAGk6rYuuatH1y06vtpnVbpvcvFKE5g9ca6ash
-         qn4p2C6ZeSOJ39UB6Fz0vAZxk8TOJkIHwwPYIzju1Banmt4noorrm6L5879WQEvEJJD1
-         A93mnxQWIUbq2vr2BPoYHMABAvjUNTcoywN47/EjPmsFXUPYE7gGa3mHqhPOOqlvPkr3
-         7zMveRWBVkgyGhVisA+Vwu6Rodl62IIUg3yVoxrmYCYCIdBLxIT2d97HA1JA2b5pK1T8
-         jNsIvcEAq5wvt6heYADYKwhn3NLZ/aBqRnoMWXKRSdorTRMWHWFivaH0JrjveF3ayDkG
-         BC7w==
-X-Forwarded-Encrypted: i=1; AJvYcCWR8Kk/Uw7gJla1fs3wLvQuyWSvTRpRdckZ6JegFpGNfikTDs/Q2qjsW/yEBmPJQMKzggH4caOE144=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT3q8QB+8GXS/mP0hOALFJ0xjmfeF/9GMgBcY9mWml5zoK6z+a
-	XsTK1dVSXs7bRy32jtQjk4o0l362327fZ3AYsi41uDes1Fjw+i6uCYf19DTZ6rI=
-X-Gm-Gg: ASbGncuv20qf8pqlJpE43h3GMbrHWK6vZp/Gh46wvkgaT20NPtU1/Q7VEXW0V0NSVlO
-	YhQ5C94tGwOnT9wNW549bnxlbjNV3cYVkgzcI8qc+v8etw50PVIp7Ev5+S410UncBUJta+H276I
-	YZ9bsa9c/fxcMU8qmwP2psJX5/B0H3xeCrJN8dMyc34erDS71d9PazNjzCSIP7BFQHFu09j0DWk
-	KkaPD+N0QuG/tRqBqgYFg3fKf1XsQCYD1z4JxTczqkyAYmnaqxUJmWtOKVgWaV/s+xYvd7hwxNk
-	C8EKZFoPab8m6VeHtn/c3z/V6b1BLKcpmpQ+
-X-Google-Smtp-Source: AGHT+IH9mYReL6tlrIcgo5opzWGTvKgKAIdX/HKYiCEzoUfpZVvDTRHMg3q7JMHy6gADKHC6a95e6g==
-X-Received: by 2002:a05:651c:1a0b:b0:2ff:cc65:68aa with SMTP id 38308e7fff4ca-305f45ebec5mr63982821fa.31.1736851105153;
-        Tue, 14 Jan 2025 02:38:25 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-305ff1ec12bsm16951771fa.110.2025.01.14.02.38.23
+        d=1e100.net; s=20230601; t=1736851495; x=1737456295;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hYGccp81SSXOLJr+IMkLll7Z5iuGZ6H3Qba7nStY0Bo=;
+        b=gPfjIuQC4vVrobgJIyMqGzH5P8+xI2uLLcbBdP8P6+eGKiDsoRibKvOqJoNNsTALIS
+         nNi5fi8jqdKjJdmGkNA5nN4rOsnTdeGdo9GKYfTDfOab8KJ2hbfQkQkfa2PMRqR/SnRM
+         faEljJipNeUvfixNIQFuJCUdVplWolqN6bLOD9oez4Xx+NewbTGBJTx0cRq1u5qGggAR
+         PJxMDkmUjEXHdAE7sqyhkS4Z7Npsup2gz0eEkipe1GHX+ra0mMCThXwj0VcYrvlXJ5bM
+         85IvqMQ1doh+61iIzpnhCa7t9lhsgnGImjVOsCF1d8VrMOEF7yxVKAfcg8x416Sjru9I
+         scNA==
+X-Forwarded-Encrypted: i=1; AJvYcCVxm+jStM0zb04GpFpxeE7wRLl7Z0jRsoE5rlfjb1TnP5fRqOHe+jSleakQ2naB9YM57rBdgLjt@vger.kernel.org, AJvYcCW67d4T5lNbcaOLIDSNiaRSv3vbyEMat0LYRAXbxJJLuZDlatoPmAh0Alx/qyJmcem8LV3YPc7mtiJn@vger.kernel.org, AJvYcCWwdHZa003Wn82f1kz0/aJtV07L/4gtUU6UvrxgZHQnrARkYKMvpQYK9JzF8vS/n1Yworglo2y3LJEhwpQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyp5X5VaJux6k/5AB4UyC9yO1TvzsVHq5h1GPxlXC0t7mtOJm8D
+	S0sF1lIdkVdK+L0bJ/S5idTQHtsSsHl52ESmqYldgy9M+yFDtIMGpPqQJQ==
+X-Gm-Gg: ASbGncss1hyUB9tiqez5nq5SVY1fu/w+bb9bPooSZPwujc3UZCLpSGEZw4MsOiZzTX2
+	JKYSGajMkFkgbNNTeBs5efH8t/wcarNcoyp9KZ5mQH6xEBtNlvd38cKVgOtFI/hDUkTCw3809sl
+	Lxc6ptxxuZeoxooAwsvttaxafqilmrpnPyhH80mXMDFg4a1nSodiGyWrjoDIUsKks7xqpdqbTFg
+	7SZ1l9Qiln4gJUrta9B1vflOUgfYSCYIlSzHiNVHztorZzxChXYbYd6e7R4
+X-Google-Smtp-Source: AGHT+IEpomaSHHvATjwsHk8UVA+bwfL5HVjsRaMpF+eRPb/SFBEoFtFTRPLGC/F+YGyzLX4rxByipw==
+X-Received: by 2002:adf:a3c2:0:b0:38a:88bc:a8e3 with SMTP id ffacd0b85a97d-38a88bca90emr17470183f8f.33.1736851495155;
+        Tue, 14 Jan 2025 02:44:55 -0800 (PST)
+Received: from qasdev.system ([2a02:c7c:6696:8300:c2a6:1aec:4f91:f2db])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-437c0f03984sm12457695e9.0.2025.01.14.02.44.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2025 02:38:24 -0800 (PST)
-Date: Tue, 14 Jan 2025 12:38:22 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Melody Olvera <quic_molvera@quicinc.com>
-Cc: Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, 
-	Trilok Soni <quic_tsoni@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 7/7] arm64: dts: qcom: sm8750: Add USB support to SM8750
- platforms
-Message-ID: <lk26ltslmijj7tj2kst2wsvd6d2hyj3zjzcwavwl63evjhcgdh@ewqliiijispu>
-References: <20250113-sm8750_usb_master-v1-0-09afe1dc2524@quicinc.com>
- <20250113-sm8750_usb_master-v1-7-09afe1dc2524@quicinc.com>
+        Tue, 14 Jan 2025 02:44:54 -0800 (PST)
+Date: Tue, 14 Jan 2025 10:44:47 +0000
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: Johan Hovold <johan@kernel.org>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzbot <syzbot+506479ebf12fe435d01a@syzkaller.appspotmail.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3] USB: serial: quatech2: Fix null-ptr-deref in
+ qt2_process_read_urb()
+Message-ID: <Z4ZAH1JYXFdE6Z4d@qasdev.system>
+Reply-To: Z4YytXjBXBTk4G1a@hovoldconsulting.com
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -97,256 +89,62 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250113-sm8750_usb_master-v1-7-09afe1dc2524@quicinc.com>
 
-On Mon, Jan 13, 2025 at 01:52:13PM -0800, Melody Olvera wrote:
-> From: Wesley Cheng <quic_wcheng@quicinc.com>
+On Tue, Jan 14, 2025 at 10:47:33AM +0100, Johan Hovold wrote:
+> On Mon, Jan 13, 2025 at 06:00:34PM +0000, Qasim Ijaz wrote:
+> > This patch addresses a null-ptr-deref in qt2_process_read_urb() due to
+> > an incorrect bounds check in the following:
+> > 
+> >        if (newport > serial->num_ports) {
+> >                dev_err(&port->dev,
+> >                        "%s - port change to invalid port: %i\n",
+> >                        __func__, newport);
+> >                break;
+> >        }
+> > 
+> > The condition doesn't account for the valid range of the serial->port
+> > buffer, which is from 0 to serial->num_ports - 1. When newport is equal
+> > to serial->num_ports, the assignment of "port" in the
+> > following code is out-of-bounds and NULL:
+> > 
+> >        serial_priv->current_port = newport;
+> >        port = serial->port[serial_priv->current_port];
+> > 
+> > The fix checks if newport is greater than or equal to serial->num_ports
+> > indicating it is out-of-bounds.
+> > 
+> > Reported-by: syzbot <syzbot+506479ebf12fe435d01a@syzkaller.appspotmail.com>
+> > Closes: https://syzkaller.appspot.com/bug?extid=506479ebf12fe435d01a
+> > Fixes: f7a33e608d9a ("USB: serial: add quatech2 usb to serial driver")
+> > Cc: <stable@vger.kernel.org>      # 3.5
+> > Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
+> > ---
 > 
-> Enable USB support on SM8750 MTP and QRD variants. SM8750 has a QMP combo
-> PHY for the SSUSB path, and a M31 eUSB2 PHY for the HSUSB path.
+> Thanks for the update. I've applied the patch now after adding Greg's
+> Reviewed-by tag (for v2).
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
-> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sm8750-mtp.dts |  24 ++++++
->  arch/arm64/boot/dts/qcom/sm8750-qrd.dts |  24 ++++++
->  arch/arm64/boot/dts/qcom/sm8750.dtsi    | 134 ++++++++++++++++++++++++++++++++
-
-Separate SoC and board patches.
-
->  3 files changed, 182 insertions(+)
+> For your future contributions, try to remember to include any
+> Reviewed-by or Tested-by tags when updating the patch unless the changes
+> are non-trivial.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8750-mtp.dts b/arch/arm64/boot/dts/qcom/sm8750-mtp.dts
-> index 9e3aacad7bdab6848e86f8e45e04907e1c752a07..059eccbbc3fb05fc8806e36d35dc469d44443a26 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8750-mtp.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8750-mtp.dts
-> @@ -792,3 +792,27 @@ &tlmm {
->  &uart7 {
->  	status = "okay";
->  };
-> +
-> +&usb_1 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_1_dwc3 {
-> +	dr_mode = "peripheral";
-> +};
-> +
-> +&usb_1_hsphy {
-> +	vdd-supply = <&vreg_l2d_0p88>;
-> +	vdda12-supply = <&vreg_l3g_1p2>;
-> +
-> +	phys = <&pmih0108_eusb2_repeater>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_dp_qmpphy {
-> +	vdda-phy-supply = <&vreg_l3g_1p2>;
-> +	vdda-pll-supply = <&vreg_l2d_0p88>;
-> +
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sm8750-qrd.dts b/arch/arm64/boot/dts/qcom/sm8750-qrd.dts
-> index f77efab0aef9bab751a947173bcdcc27df7295a8..01c0af643626917614fbd68cf8962ef947ca6548 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8750-qrd.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm8750-qrd.dts
-> @@ -790,3 +790,27 @@ &tlmm {
->  &uart7 {
->  	status = "okay";
->  };
-> +
-> +&usb_1 {
-> +	status = "okay";
-> +};
-> +
-> +&usb_1_dwc3 {
-> +	dr_mode = "peripheral";
-> +};
-> +
-> +&usb_1_hsphy {
-> +	vdd-supply = <&vreg_l2d_0p88>;
-> +	vdda12-supply = <&vreg_l3g_1p2>;
-> +
-> +	phys = <&pmih0108_eusb2_repeater>;
-> +
-> +	status = "okay";
-> +};
-> +
-> +&usb_dp_qmpphy {
-> +	vdda-phy-supply = <&vreg_l3g_1p2>;
-> +	vdda-pll-supply = <&vreg_l2d_0p88>;
-> +
-> +	status = "okay";
-> +};
-> diff --git a/arch/arm64/boot/dts/qcom/sm8750.dtsi b/arch/arm64/boot/dts/qcom/sm8750.dtsi
-> index 3bbd7d18598ee0a3a0d5130c03a3166e1fc14d82..54522fd3d0e11c3cff02beaf1d249fe654cacc0f 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8750.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8750.dtsi
-> @@ -10,6 +10,7 @@
->  #include <dt-bindings/interconnect/qcom,icc.h>
->  #include <dt-bindings/interconnect/qcom,sm8750-rpmh.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/phy/phy-qcom-qmp.h>
->  #include <dt-bindings/power/qcom,rpmhpd.h>
->  #include <dt-bindings/power/qcom-rpmpd.h>
->  #include <dt-bindings/soc/qcom,rpmh-rsc.h>
-> @@ -1966,6 +1967,139 @@ lpass_lpicx_noc: interconnect@7420000 {
->  			#interconnect-cells = <2>;
->  		};
->  
-> +		usb_1_hsphy: phy@88e3000 {
-> +			compatible = "qcom,sm8750-m31-eusb2-phy";
-> +			reg = <0x0 0x88e3000 0x0 0x29c>;
-> +
-> +			clocks = <&tcsrcc TCSR_USB2_CLKREF_EN>;
-> +			clock-names = "ref";
-> +
-> +			resets = <&gcc GCC_QUSB2PHY_PRIM_BCR>;
-> +
-> +			#phy-cells = <0>;
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		usb_dp_qmpphy: phy@88e8000 {
-> +			compatible = "qcom,sm8750-qmp-usb3-dp-phy";
-> +			reg = <0x0 0x088e8000 0x0 0x3000>;
-> +
-> +			clocks = <&gcc GCC_USB3_PRIM_PHY_AUX_CLK>,
-> +				 <&rpmhcc RPMH_CXO_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_COM_AUX_CLK>,
-> +				 <&gcc GCC_USB3_PRIM_PHY_PIPE_CLK>;
-> +			clock-names = "aux",
-> +				      "ref",
-> +				      "com_aux",
-> +				      "usb3_pipe";
-> +
-> +			resets = <&gcc GCC_USB3_PHY_PRIM_BCR>,
-> +				 <&gcc GCC_USB3_DP_PHY_PRIM_BCR>;
-> +			reset-names = "phy",
-> +				      "common";
-> +
-> +			power-domains = <&gcc GCC_USB3_PHY_GDSC>;
-> +
-> +			#clock-cells = <1>;
-> +			#phy-cells = <1>;
-
-Missing orientation-switch and ports{} description.
-
-> +
-> +			status = "disabled";
-> +		};
-> +
-> +		usb_1: usb@a6f8800 {
-> +			compatible = "qcom,sm8750-dwc3", "qcom,dwc3";
-> +			reg = <0x0 0x0a6f8800 0x0 0x400>;
-> +			status = "disabled";
-> +			#address-cells = <2>;
-> +			#size-cells = <2>;
-> +			ranges;
-> +
-> +			clocks = <&gcc GCC_CFG_NOC_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MASTER_CLK>,
-> +				 <&gcc GCC_AGGRE_USB3_PRIM_AXI_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_SLEEP_CLK>,
-> +				 <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +				 <&tcsrcc TCSR_USB3_CLKREF_EN>;
-> +			clock-names = "cfg_noc",
-> +				      "core",
-> +				      "iface",
-> +				      "sleep",
-> +				      "mock_utmi",
-> +				      "xo";
-> +
-> +			assigned-clocks = <&gcc GCC_USB30_PRIM_MOCK_UTMI_CLK>,
-> +					  <&gcc GCC_USB30_PRIM_MASTER_CLK>;
-> +			assigned-clock-rates = <19200000>, <200000000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 130 IRQ_TYPE_LEVEL_HIGH>,
-> +						  <&intc GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
-> +					      <&pdc 14 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 15 IRQ_TYPE_EDGE_BOTH>,
-> +					      <&pdc 17 IRQ_TYPE_LEVEL_HIGH>;
-> +			interrupt-names = "pwr_event",
-> +					  "hs_phy_irq",
-> +					  "dp_hs_phy_irq",
-> +					  "dm_hs_phy_irq",
-> +					  "ss_phy_irq";
-> +
-> +			power-domains = <&gcc GCC_USB30_PRIM_GDSC>;
-> +			required-opps = <&rpmhpd_opp_nom>;
-> +
-> +			resets = <&gcc GCC_USB30_PRIM_BCR>;
-> +
-> +			interconnects = <&aggre1_noc MASTER_USB3_0 0 &mc_virt SLAVE_EBI1 0>,
-> +					<&gem_noc MASTER_APPSS_PROC 0 &config_noc SLAVE_USB3_0 0>;
-> +			interconnect-names = "usb-ddr", "apps-usb";
-> +
-> +			usb_1_dwc3: usb@a600000 {
-> +				compatible = "snps,dwc3";
-> +				reg = <0x0 0x0a600000 0x0 0xe000>;
-> +
-> +				interrupts = <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>;
-> +
-> +				iommus = <&apps_smmu 0x40 0x0>;
-> +
-> +				phys = <&usb_1_hsphy>, <&usb_dp_qmpphy QMP_USB43DP_USB3_PHY>;
-> +				phy-names = "usb2-phy", "usb3-phy";
-> +
-> +				snps,hird-threshold = /bits/ 8 <0x0>;
-> +				snps,usb2-gadget-lpm-disable;
-> +				snps,dis_u2_susphy_quirk;
-> +				snps,dis_enblslpm_quirk;
-> +				snps,dis-u1-entry-quirk;
-> +				snps,dis-u2-entry-quirk;
-> +				snps,is-utmi-l1-suspend;
-> +				snps,usb3_lpm_capable;
-> +				snps,usb2-lpm-disable;
-> +				snps,has-lpm-erratum;
-> +				tx-fifo-resize;
-> +
-> +				dr_mode = "peripheral";
-
-This goes to the board files.
-
-> +
-> +				dma-coherent;
-> +
-> +				ports {
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					port@0 {
-> +						reg = <0>;
-> +
-> +						usb_1_dwc3_hs: endpoint {
-> +						};
-> +					};
-> +
-> +					port@1 {
-> +						reg = <1>;
-> +
-> +						usb_1_dwc3_ss: endpoint {
-
-QMP endpoint.
-
-> +						};
-> +					};
-> +				};
-> +			};
-> +		};
-> +
->  		pdc: interrupt-controller@b220000 {
->  			compatible = "qcom,sm8750-pdc", "qcom,pdc";
->  			reg = <0x0 0x0b220000 0x0 0x10000>, <0x0 0x164400f0 0x0 0x64>;
+> There should typically also be a short change log here under the ---
+> line to indicate what changes from previous versions.
 > 
-> -- 
-> 2.46.1
+> It is also encouraged to write the commit message in imperative mood
+> (add, change, fix) and to avoid the phrase "this patch". There are some
+> more details in
 > 
+> 	Documentation/process/submitting-patches.rst
+> 
+> Something to keep in mind for the future, but this patch already looks
+> really good.
+> 
+> Johan
 
--- 
-With best wishes
-Dmitry
+Hi Johan,
+
+Thanks for reviewing and applying the patch. I appreciate the guidance on patch style and process, and I'll incorporate your suggestions in future submissions.
+
+Best regards,
+Qasim
 
