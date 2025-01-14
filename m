@@ -1,155 +1,287 @@
-Return-Path: <linux-usb+bounces-19354-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19355-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93804A1133F
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 22:41:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B17CAA11456
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 23:46:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE2933A6591
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 21:41:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3276167D80
+	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 22:46:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3910B212FB4;
-	Tue, 14 Jan 2025 21:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D93A2139DA;
+	Tue, 14 Jan 2025 22:46:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="C+saMi8m"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KOdmhHn2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48B0A2080DA;
-	Tue, 14 Jan 2025 21:41:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E84C71D47BD;
+	Tue, 14 Jan 2025 22:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736890869; cv=none; b=dttETmBeD9kcuuD/34Q73H0WleULVDbdu77UA2wUFPxsRZLvAXO9NTWhwgvepCcYijYj73lZvj1vl5jUcWTqv4MRk0lX9m0vA2h6JAjj9joHQJ/gzcLZKYo+5qLUqIqocbnTlzXSA8QZ2XmWfa7CrSfxkMXcso/1nu8iwv5xTc4=
+	t=1736894805; cv=none; b=W6/Q/kj3P9gyXqqVTkh4+hnoLB4271Tj+v9srWd05Zz6yt/MISvDRIYyIyqOmxyV3guOmvrPKIfAWBR+U1wBbYv8JJT0Nq6TSjFxgfjH7Re1s1qi/Syj2rBsdNlcCs0A+tZbsTfpLn6AwBOWhPjsD8bWV5555HcqIsQzf5BWWc0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736890869; c=relaxed/simple;
-	bh=YURU16VSFEZeGcNi74RyunrTDqIlklIsFkRCLxz86RY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g0DQ3FWuAgTwbyNUlNTbGvk5fnWKC/d2Q39cQ8atkmXPA0amOVVCBQd8ypAiEyBB2LcmOFbzV4XC18tXyL5f16EYfSwf7DKhwOgyThSm+K/CFSgOJOo/srZWDKe8yJ7LteQLQN2jGvTgQBhKCNV2MkKK+a4+zvir18M8K2tID0M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=C+saMi8m; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21670dce0a7so130397715ad.1;
-        Tue, 14 Jan 2025 13:41:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1736890867; x=1737495667; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YURU16VSFEZeGcNi74RyunrTDqIlklIsFkRCLxz86RY=;
-        b=C+saMi8m672YFhan0x/6dUfZxRdlCAfQyJgWcWEMvq4zbRverFTWiVgDAggHv5USY3
-         3cuTmIVOhAoiLR9ROEX0ZQ+U7q8Xc8BpNmpi8/hEIneceejd10+ht76a51jgO03RTA5A
-         xFPJDYaq9yAfKzttxsRCfrbjnkltHgCteXylSpcjMnEFH7B4mwN0hUfUvzb8QOHTjJml
-         0MFupL7yxAa28jVY6H04GwsP6CmZhMHDs5DzSos3kk2xYQLDMocNGeQkIJZLU0p1rPmj
-         1dIpjEy7QTSMiXJ3sjuQjrkct8pOri3qs5WV1GM0es3pJvso1Gx8lGcP6tk8N0MsRCkX
-         ssAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736890867; x=1737495667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YURU16VSFEZeGcNi74RyunrTDqIlklIsFkRCLxz86RY=;
-        b=fWxRkVZA4lS69VUL4p1Xl//t8H1DKBaTQvE40rnC2FCkL5bXEdvm1hmmEQOXNw0r6z
-         tZixUlFpJHglohDbfh2acFNcTt9ymbIxs7VnWd0le/xP0Uc5lz05SRYjF1gDL6FDED/4
-         /fpSMTxLTFrgFZ+XnaASVOlkxaimPnPDKfbMzPoB2+NxVxKEdHqe2W4RejPkN17iehtb
-         Ym0D+0xkcqKgDXpXMJvkJLbGNXNJ5qhzIQf9f70Pq8t+0E+UKEfbxUoRKHkAv32sJQD1
-         6UcoIaUB/kPjZgLuyKDOFl7r2P6cIlmQmXabCGWb71pBrLHDDZNxaLXzecdzbT0k4cyR
-         ixWA==
-X-Forwarded-Encrypted: i=1; AJvYcCWc6OUf2DV1NaqMMqrUdSOnlDOOEMjzkj2vdutksfa2c2cLtT6DsBlspuKK5/05gp4AZ5nceJVrtYcY@vger.kernel.org, AJvYcCXCBwTqBa+ukerlEiGpF2nKn1f+mJTGq2f9uVUfD7rDRZsTPjKlpaywTtsECOegyW0FujqMJAi7MKk+yC8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywk1h/XDM1HxW1GBFMIBsVJT68KKJqdpkLw2V1/CIMZbu2nNkQ3
-	77eGxzKyvXkGHVbv4kfF1kNX2EvSDGvQyuTcYPp6COQDTlm8ThUklZh+6B4iabV7qYAEiPr3NPV
-	UzzyABr8gSKT2eqO0q731k7DlKh0=
-X-Gm-Gg: ASbGncs51LHZvUQWHeVlw9IGRZR69bs71ZXplYowaBbIvX8oWJeuW9Y+bV5g90bJIGq
-	ZexzFb/F3vgYcWW+zZemRe1T7p6MTc5KPz+0wn2zEeD2Cjai+qvwt3YKlub/6JCVxoAmYZfE=
-X-Google-Smtp-Source: AGHT+IE1iI53otkORC5W5vNYVb7xxn4u7WYJCao9XVKd0MyRxzlT5Ih2KgnCVZCbrlM0QpJD5u/CjnF9g7U2hIHHoPY=
-X-Received: by 2002:a17:902:cccb:b0:216:4d1f:5c83 with SMTP id
- d9443c01a7336-21a84010cb0mr395655475ad.47.1736890867595; Tue, 14 Jan 2025
- 13:41:07 -0800 (PST)
+	s=arc-20240116; t=1736894805; c=relaxed/simple;
+	bh=wtRYAsEqANErYEMs5FdUR4HrHln+NmBeAq6yC2QeyFI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D6L1sPHwwo5G7V22cSl3CXjiQGRo4RYRQzuBA7DEcUhXpuPntGkhUs0Gvj+0kLG9IAhfDaYw8Sh+mO7BXkSs9DVxCTtFASCGl37qjHjNsuHM+JWtJ5l2spAaAOhvSM+Skpl2eRpVwbe1asgHnx1+EIRiw/UuGQuZ1RAVyB0Qwcc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KOdmhHn2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBD7C4CEDD;
+	Tue, 14 Jan 2025 22:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736894804;
+	bh=wtRYAsEqANErYEMs5FdUR4HrHln+NmBeAq6yC2QeyFI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=KOdmhHn2WV5PYB2Gre/O4QTnKp/sZOc+Dvkn0BmB068IWWzSsUTDC6RlzrFsmJI4S
+	 upozA5i4diLAN01F85FIM/y+jiVtr2PGK1Cv7KDPsyPQmgp/S25uDipjBtdEflO0C+
+	 5ELtLFXuyweCPTR1lfvELTYpm0MVre9okuVNH2/s4ZXyHaFuk2Xjk8/bzW6biv8izl
+	 unqlW1mdP0i520Er+K9l1IE3h4S++5TuRoFuq/vP+qgbiEnHGNJqhDzNfFduavq5g5
+	 R6PIxSJLugJrbLJwT5t85/A1QrRG4BsSjZjsgUOndqxRUwgEANGT0MSd4aBMOEU3fj
+	 4yUkNbM+bhB9g==
+Date: Tue, 14 Jan 2025 16:46:41 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Rob Herring <robh@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>, Saravana Kannan <saravanak@google.com>, 
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>, linux-arm-msm@vger.kernel.org, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 06/12] of: overlays: dwc3-flattening: Add Qualcomm
+ Arm64 board overlays
+Message-ID: <7krlwxqealxptxjx63fi7ne4j4felo2n2t4mkxmmimnrax4jxt@wiwrbgu53wmu>
+References: <20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com>
+ <20250113-dwc3-refactor-v3-6-d1722075df7b@oss.qualcomm.com>
+ <20250114174248.GA1414434-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240507131522.3546113-1-clabbe@baylibre.com> <20240507131522.3546113-2-clabbe@baylibre.com>
- <Zp5q5V_OnLAdvBrU@hovoldconsulting.com> <CAFBinCC9ftXxkyoiY=3ia6UubTeG-cHXa40ddd7WMNUhvVjr+g@mail.gmail.com>
- <Zp_WiocH4D14mEA7@hovoldconsulting.com> <CAFBinCATe+RXHz6Cy9cbo=vYL+qm_kz1qDTB8oL775xdgk=TYg@mail.gmail.com>
- <Z4aFSCnJTX2WHGY_@hovoldconsulting.com>
-In-Reply-To: <Z4aFSCnJTX2WHGY_@hovoldconsulting.com>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Tue, 14 Jan 2025 22:40:56 +0100
-X-Gm-Features: AbW1kvZxaqdfxhZ95SgadDJy_ToDUgvhtGndBU5FTJlcpQFcaA_M8wrA3s33OTU
-Message-ID: <CAFBinCB4pDOoE9QCH966uyP0yaVm3CkAi3uncMqEDh19VSmbQw@mail.gmail.com>
-Subject: Re: [PATCH 1/1 v7] usb: serial: add support for CH348
-To: Johan Hovold <johan@kernel.org>
-Cc: Corentin Labbe <clabbe@baylibre.com>, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, david@ixit.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114174248.GA1414434-robh@kernel.org>
 
-Hi Johan,
+On Tue, Jan 14, 2025 at 11:42:48AM -0600, Rob Herring wrote:
+> On Mon, Jan 13, 2025 at 09:11:39PM -0800, Bjorn Andersson wrote:
+[..]
+> > +dwc3-flattening-overlay-y += dwc3-qcom_sm8250_xiaomi_elish.dtb.o
+> > +dwc3-flattening-overlay-y += dwc3-qcom_sm8350.dtb.o
+> > +dwc3-flattening-overlay-y += dwc3-qcom_sm8350_qcom_sm8350_hdk.dtb.o
+> > +dwc3-flattening-overlay-y += dwc3-qcom_sm8450.dtb.o
+> > +dwc3-flattening-overlay-y += dwc3-qcom_sm8550.dtb.o
+> > +dwc3-flattening-overlay-y += dwc3-qcom_sm8650.dtb.o
+> > +dwc3-flattening-overlay-y += dwc3-qcom_x1e80100.dtb.o
+> > +dwc3-flattening-overlay-y += dwc3-qcom_x1e80100_hp_omnibook_x14.dtb.o
+> 
+> Some of these platforms are quite new. I think they could tolerate a 
+> flag day. It's your fault for knowing this is a problem and continuing 
+> to accept new users...
+> 
 
-On Tue, Jan 14, 2025 at 4:39=E2=80=AFPM Johan Hovold <johan@kernel.org> wro=
-te:
->
-> Hi Martin (and Corentin),
->
-> and sorry about the late reply here.
-Sometimes there's more important things in life than USB to serial adapters=
-.
+Yes, I agree. But as the timeline for bringing a solution to the table
+has been unknown I don't think it would make sense to keep thing hostage.
 
-[...]
-> > > You could try increasing the buffer size to 2k and see how much is
-> > > received on the other end if you submit one URB (e.g. does the hardwa=
-re
-> > > just drop the last 1k of data when the device fifo is full).
->
-> > I have not tried this yet but if still relevant (after the info about
-> > the THRE interrupt) then I can try it and share the results.
->
-> It would only be to really confirm that this is how the vendor protocol
-> and device works. Your call.
-I can give that a try in the next few days and will report back.
+> For the ones we do maintain compatibility, I would like to define some 
+> timeframe for doing so. This would be a lot of stuff to keep forever. I 
+> suspect the ABI gets broken anyways and/or there are new features 
+> enabled.
+> 
 
-[...]
-> > > I understand, but the generic implementation is not a good fit here a=
-s
-> > > it actively tries to make sure the device buffers are always full (e.=
-g.
-> > > by using two URBs back-to-back).
-> > >
-> > > If you can't find a way to make the hardware behave properly then a
-> > > custom implementation using a single URBs is preferable over trying
-> > > to limit the generic implementation like you did here. Perhaps bits c=
-an
-> > > be reused anyway (e.g. chars_in_buffer if you use the write fifo).
->
-> > I cannot find any other usb-serial driver which uses this pattern.
-> > Most devices seem to be happy to take more data once they trigger the
-> > write_bulk_callback but not ch348.
->
-> Right. I think the io_edgeport driver maintains some kind of TxCredits.
-> I guess that's related, but not sure how relevant that is here (and you
-> probably shouldn't based anything on that old driver directly anyway).
->
-> > If there's any other (even if it's not a usb-serial) driver that I can
-> > use as a reference implementation for your suggestion?
-> > I'm not sure whether to use a dedicated kthread, single threaded workqu=
-eue, ...
->
-> Not sure what Corentin has been preparing, but yeah, you need some kind
-> of deferred mechanism to make write() non-blocking and hold off sending
-> more data to the device until you're sure there's room in its buffers. I
-> guess a workqueue should do fine.
-We're currently testing an updated driver based on a workqueue
-(work_struct) and it's working fine.
-The issue that Corentin reported is unrelated to the workqueue part.
-At this point we're thinking it may be a regression in linux-next, but
-we're running more tests to verify this.
+Absolutely. The majority of the involved boards are booted off an
+Android bootimg, which mostly implies that the DTB would come with the
+kernel - so we don't need to keep things around for long.
+
+The exception that comes to mind is the WoS laptops, where people
+do have UEFI or DtbLoader EFI application load a DTB which isn't
+automatically upgraded by their Linux distro - so for those it makes
+sense to keep things around longer. That said, for most of these, things
+are still evolving, so users should want to upgrade anyways.
+
+The features that this will enable us to implement in the USB drivers
+are things like reliable USB role switch, for which I don't see there to
+be any DT impact...
 
 
-Best regards,
-Martin
+TL;DR I think we could start remove some of these after 1 or 2 releases,
+and perhaps keep the WoS ones around for another LTS. Doesn't that sound
+reasonable? Would you like this documented in some particular way?
+
+> > diff --git a/drivers/of/overlays/dwc3-flattening/dwc3-flattening.c b/drivers/of/overlays/dwc3-flattening/dwc3-flattening.c
+> > index 0a3a31c5088b..d33cdf6661c0 100644
+> > --- a/drivers/of/overlays/dwc3-flattening/dwc3-flattening.c
+> > +++ b/drivers/of/overlays/dwc3-flattening/dwc3-flattening.c
+> > @@ -21,6 +21,24 @@ struct dwc3_overlay_data {
+> >  	const char *migrate_match;
+> >  };
+> >  
+> > +static const struct dwc3_overlay_data dwc3_qcom_apq8094_overlay = {
+> 
+> Can't all these be init section? It's a lot of bloat for everyone else 
+> otherwise. Same issue for the overlays themselves. The one that you 
+> apply should be copied out of init.
+> 
+
+That we should be able to do.
+
+> > +	.fdt = __dtb_dwc3_qcom_apq8094_begin,
+> > +	.end = __dtb_dwc3_qcom_apq8094_end,
+> > +	.migrate_match = "qcom,dwc3",
+> 
+> This is the same everywhere AFAICT, so why do we need it?
+> 
+
+This was the only thing in the implementation that was
+Qualcomm-specific, and Frank expressed interest in trying this out for
+NXP as well. But we could certainly postpone this until the first
+non-qcom,dwc3 user comes along (if that happens).
+
+> > +};
+> > +
+[..]
+> > diff --git a/drivers/of/overlays/dwc3-flattening/dwc3-qcom_msm8992.dts b/drivers/of/overlays/dwc3-flattening/dwc3-qcom_msm8992.dts
+> > new file mode 100644
+> > index 000000000000..8ca699460ec3
+> > --- /dev/null
+> > +++ b/drivers/of/overlays/dwc3-flattening/dwc3-qcom_msm8992.dts
+> > @@ -0,0 +1,32 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause
+> > +/*
+> > + * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
+> > + */
+> > +/dts-v1/;
+> > +/plugin/;
+> > +
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +/ {
+> > +	fragment@0 {
+> > +		target-path = "/soc@0/usb@f92f8800";
+> > +		#address-cells = <1>;
+> > +		#size-cells = <1>;
+> > +		interrupt-parent = <&intc>;
+> > +
+> > +		__overlay__ {
+> > +			compatible = "qcom,msm8994-dwc3", "qcom,snps-dwc3";
+> 
+> Should be 8992? If not, this is the same as the next overlay.
+> 
+
+This follows the existing dtb, where msm8992.dtsi inherits msm8994 and
+overwrites a few properties.
+
+> > +			reg = <0xf9200000 0xd000>;
+> > +			interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 311 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 310 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "dwc_usb3",
+> > +					  "pwr_event",
+> > +					  "qusb2_phy",
+> > +					  "hs_phy_irq",
+> > +					  "ss_phy_irq";
+> > +		};
+> > +	};
+> > +};
+[..]
+> > diff --git a/drivers/of/overlays/dwc3-flattening/dwc3-qcom_msm8996_oneplus_oneplus3.dts b/drivers/of/overlays/dwc3-flattening/dwc3-qcom_msm8996_oneplus_oneplus3.dts
+> > new file mode 100644
+> > index 000000000000..7a583de320cf
+> > --- /dev/null
+> > +++ b/drivers/of/overlays/dwc3-flattening/dwc3-qcom_msm8996_oneplus_oneplus3.dts
+> > @@ -0,0 +1,56 @@
+> > +// SPDX-License-Identifier: BSD-3-Clause
+> > +/*
+> > + * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
+> > + */
+> > +/dts-v1/;
+> > +/plugin/;
+> > +
+> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
+> > +
+> > +/ {
+> > +	fragment@0 {
+> > +		target-path = "/soc@0/usb@6af8800";
+> > +		#address-cells = <1>;
+> > +		#size-cells = <1>;
+> > +		interrupt-parent = <&intc>;
+> > +
+> > +		__overlay__ {
+> > +			compatible = "qcom,msm8996-dwc3", "qcom,snps-dwc3";
+> > +			reg = <0x06a00000 0xd000>;
+> > +			interrupts = <GIC_SPI 131 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 180 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 347 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 133 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 243 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "dwc_usb3",
+> > +					  "pwr_event",
+> > +					  "qusb2_phy",
+> > +					  "hs_phy_irq",
+> > +					  "ss_phy_irq";
+> 
+> No SS phy, so should be dropped? OTOH, less variation if you keep it.
+> 
+
+It's msm8996 and that has a SuperSpeed PHY. As such, the "phys" below is
+wrong, and probably done so in order to disable SuperSpeed...
+
+I did reflect on a number of these and would like us to revisit them,
+but the overlay matches the current behavior.
+
+> You can utilize includes in overlays just like base .dts files. So this 
+> one really just needs to include the previous overlay and override phys 
+> and phy-names.
+> 
+
+Okay, will give that a try.
+
+> > +			phys = <&hsusb_phy1>;
+> > +			phy-names = "usb2-phy";
+> > +		};
+> > +	};
+> > +
+> > +	fragment@1 {
+> > +		target-path = "/soc@0/usb@76f8800";
+> > +		#address-cells = <1>;
+> > +		#size-cells = <1>;
+> > +		interrupt-parent = <&intc>;
+> > +
+> > +		__overlay__ {
+> > +			compatible = "qcom,msm8996-dwc3", "qcom,snps-dwc3";
+> > +			reg = <0x07600000 0xd000>;
+> > +			interrupts = <GIC_SPI 138 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 140 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 352 IRQ_TYPE_LEVEL_HIGH>,
+> > +				     <GIC_SPI 139 IRQ_TYPE_LEVEL_HIGH>;
+> > +			interrupt-names = "dwc_usb3",
+> > +					  "pwr_event",
+> > +					  "qusb2_phy",
+> > +					  "hs_phy_irq";
+> > +			phys = <&hsusb_phy2>;
+> > +			phy-names = "usb2-phy";
+> > +		};
+> > +	};
+> > +};
+> > diff --git a/drivers/of/overlays/dwc3-flattening/dwc3-qcom_msm8996_oneplus_oneplus3t.dts b/drivers/of/overlays/dwc3-flattening/dwc3-qcom_msm8996_oneplus_oneplus3t.dts
+> > new file mode 100644
+> > index 000000000000..7a583de320cf
+> > --- /dev/null
+> > +++ b/drivers/of/overlays/dwc3-flattening/dwc3-qcom_msm8996_oneplus_oneplus3t.dts
+> 
+> This looks pretty much like the prior one?
+> 
+
+Yes, I generated these to be 1:1 with the compatibles, which matches on
+the specific board compatible. If we're in agreement on the general
+approach I can go back and spend more time consolidating these.
+
+Regards,
+Bjorn
 
