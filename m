@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-19375-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19376-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC6E2A12681
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 15:50:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5B1BA1270B
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 16:16:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64DD3168F9F
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 14:50:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C13D07A21F2
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 15:16:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF02013D8A3;
-	Wed, 15 Jan 2025 14:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD31712AAE2;
+	Wed, 15 Jan 2025 15:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eOtbyG4L"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LG/0Gq10"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C85278F57
-	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 14:50:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1A413A250
+	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 15:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736952613; cv=none; b=PqSmykCuEf70KOqnasssXobnIXUzk3eJp+SfJeDyKUDPX3lXLOnHljY/53U5kzUFO77ELK6IwqLXt2xkj7CbQMbVOMKdgr8iQ8Grw7IhBhMboDi3gHccaR6M9sWGcopd0COqzAyRKHUEjCOOk1HrWkHYQ8tYasEItubNN72SyUs=
+	t=1736954196; cv=none; b=t4DJOSTz0kNgWqKFNOQ56UppUaFtsCwdlAHJcT1JwGAnEmvbbdayTua6tp4sd8Z/sES7bObW8BZ4AoCKP+aeeIKQuOjB1cj8R6ImLCNkL/7dkKul698whTrGRJagPapejlQzBnQePuomh90EQ65ZSmdjQtKALCTut9BnlGXnpFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736952613; c=relaxed/simple;
-	bh=7N6v39VwyoGSmPAAMHNMwrXqPSAYXTki/wviWXHQFI0=;
+	s=arc-20240116; t=1736954196; c=relaxed/simple;
+	bh=0IJVyuPx5YGhOlgyzra7tSTfr4Q0wdy9A1/M+v284QA=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=DXVJv9yYUodRXVsAlif3Uvd3IfPEz/hp+vr3glBA5RwZB2uziT+zpa+At9u7G27E3dGSrvOUmE3drJGhdybnD7tKmou7iVwhL7MxxiAxwQQHCe1QBTV/lQbico2+v0s/aT0i/N+yy6etHs7C/7roobSmVK0k+hBHNXZy6oT7P5k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eOtbyG4L; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 00AE7C4CEDF
-	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 14:50:12 +0000 (UTC)
+	 Content-Type:MIME-Version; b=UxhueAaB5K+Q0STtwsuPRdwqpcwYLYtSkf+VqgyGtS33t8YkGbATSVu1AA1IOYGyyZ6O61qpgiUu1OKqfnor/uvAC6ZZQMPozkoj9jTO4pqGBAidLiiQae4Y7ScAOtHdRaoOLXkyK3c25yntx8WovgYfhS2IVMiM094N/ddsJwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LG/0Gq10; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id AE42AC4CEDF
+	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 15:16:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736952613;
-	bh=7N6v39VwyoGSmPAAMHNMwrXqPSAYXTki/wviWXHQFI0=;
+	s=k20201202; t=1736954195;
+	bh=0IJVyuPx5YGhOlgyzra7tSTfr4Q0wdy9A1/M+v284QA=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=eOtbyG4Ltbz8ghsHxQ8RmPB68GKK6H37SRHRvvVgtr+NL5KgDFKqOEDYQl1xa0SZN
-	 oeJnyjn2MqQgPf27Ku9XSfoH3LZKiTLcNd9fxFrPAaaBy8xrOxMe4/E4M5D96iIaxO
-	 gq9oTX0WqcYi50h7n+LTmlosCEUlOe90uS9XJffBw0tuSWuSNiYuARKUNmOWkS3iBo
-	 krjglxWpcM1Rhwzt8HppplRR8nreaZZ8v4BRUeMX8bWh3qJZptfaVh6l96JIXzyaKN
-	 smD9u0DyRmClMgnwk7zVrjhEVvuF9BItCDYIjKjV4TCylVrRoOoxh/OQ9F/y12TzaW
-	 c1gqSnPn8Kzhg==
+	b=LG/0Gq10HPoQPmvTN5l7Vb+WeP2Olq6aYbuz0WpTcAKydAyDe2IiV68r6QNN+erWj
+	 39BHkKtA2lMTC2lcgzmz+uk/MEJtRPpZtNS96xnoU5QFCKXzCeLZ98tIHweiXfKw+B
+	 ID4UBYXQHM1I44UvY+C6687Uy0+NKzcvvugViltrqVeF1An0Hh1TVPQ/T/K3kXiXaD
+	 RykMUUqmPAkyQt8DSlyOJ/9/miQ8bnEve2GhQkHuoxOcvW8GSuUfHPHjPGtoHsYYZH
+	 P0XeGN1Sp4GIIU1zMdWqtsRYTM3q0fPlkK5JXKLWCSkELJh0TCMQ09NIRsAws8mpHC
+	 a5279XhGw5CkQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id E0ABDC3279F; Wed, 15 Jan 2025 14:50:12 +0000 (UTC)
+	id A1FCDC41612; Wed, 15 Jan 2025 15:16:35 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 219681] ASUS Zenbook S 14 UX5406SA: Unstable USB connection on
  USB-A port under certain condition
-Date: Wed, 15 Jan 2025 14:50:12 +0000
+Date: Wed, 15 Jan 2025 15:16:35 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -56,14 +56,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: normal
-X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Who: dantmnf2@gmail.com
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cc
-Message-ID: <bug-219681-208809-0Plbeipg2Z@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219681-208809-gHOO5l4VWd@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219681-208809@https.bugzilla.kernel.org/>
 References: <bug-219681-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,36 +79,40 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219681
 
-Micha=C5=82 Pecio (michal.pecio@gmail.com) changed:
+--- Comment #2 from dantmnf2@gmail.com ---
+> Are the working and not working ports on the same USB bus, or on different
+> ones? Perhaps two different types of USB controllers?
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
-                 CC|                            |michal.pecio@gmail.com
+They are on different controllers:
+    # readlink /sys/bus/usb/devices/usb*
+    ../../../devices/pci0000:00/0000:00:0d.0/usb1
+    ../../../devices/pci0000:00/0000:00:0d.0/usb2
+    ../../../devices/pci0000:00/0000:00:14.0/usb3
+    ../../../devices/pci0000:00/0000:00:14.0/usb4
+    # lspci
+    ...
+    00:0d.0 USB controller: Intel Corporation Lunar Lake-M Thunderbolt 4 USB
+Controller (rev 10)
+    ...
+    00:14.0 USB controller: Intel Corporation Lunar Lake-M USB 3.2 Gen 2x1 =
+xHCI
+Host Controller (rev 10)
+    ...
 
---- Comment #1 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
-Are the working and not working ports on the same USB bus, or on different
-ones? Perhaps two different types of USB controllers?
+> I wonder if any of that is preceded by low level USB errors? Maybe try ag=
+ain
+> with some dynamic debug:
 
-You can see the mapping between USB buses and PCI controllers with
-ls -l /sys/bus/usb/devices/usb*
+It do have some messages like "Stopped on Transfer TRB for slot 4 ep 6" and
+"Transfer error for slot 9 ep 0 on endpoint"
 
-udisks2 collects SMART data and this is known to cause problems with some
-combinations of USB controllers and disk enclosures in UAS mode. It usually
-recovers after the reset, so not sure why
-[  131.357007] sd 0:0:0:0: Device offlined - not ready after error recovery
+> I presume this is not a regression and there are no kernel versions where=
+ it
+> works correctly?
 
-The network issue is possibly unrelated, because in this case the hub simply
-reports complete disconnection of the device and it comes back a moment lat=
-er
-for unclear reasons.
-
-I wonder if any of that is preceded by low level USB errors? Maybe try again
-with some dynamic debug:
-echo 'func handle_tx_event +p' >/proc/dynamic_debug/control
-echo 'func handle_transferless_tx_event +p' >/proc/dynamic_debug/control
-
-I presume this is not a regression and there are no kernel versions where it
-works correctly?
+This is a relatively new platform and kernels before 6.12 cannot give a usa=
+ble
+system.
 
 --=20
 You may reply to this email to add a comment.
