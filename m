@@ -1,172 +1,167 @@
-Return-Path: <linux-usb+bounces-19364-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19365-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C721EA117DC
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 04:36:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11A95A11890
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 05:46:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D91461676F1
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 03:36:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7BA0C3A4EAE
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 04:45:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB00021C190;
-	Wed, 15 Jan 2025 03:36:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D603B22E407;
+	Wed, 15 Jan 2025 04:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="aJNrtlpj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="P5D7hgXe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-17.smtpout.orange.fr [193.252.22.17])
+Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66604C98;
-	Wed, 15 Jan 2025 03:36:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE40918952C
+	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 04:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736912196; cv=none; b=XOOQu1pE8Vi756xd1f10GjQcRDOJl7/JzAYiRyvujxPXbDXQ8HcEaLyFVLjr4iH8dTuB6GwSytPUf7G9zjZ499UPaeOdOn2zRoO5x6ErUpp2HjzuNxzSxx7yFKiK8emLtjLdNJnEnpZymQ7ObVzFsgYs5BCHu5i+kmxtcV4MC0c=
+	t=1736916357; cv=none; b=Ew0fRq/m08dpasoDDAvH3O2HFESmBLTzptMBAjSr0IwOjNXRTcGPlggc9Mws34alBp3LtHSRpyg4N12LBTQrng3+XVPqEBxuPtIwPofwz+ly193ZkeKQenaWo3YLk2c1czuy/7CbQSLyWFi+47L00gXojOzGAI05bVWSo/0CkoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736912196; c=relaxed/simple;
-	bh=6uouPwruT4T4lGCnNTZ+epyQ0LFUmA1s6AHNKGnDQZQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gGWN1HxoNut47d1MQzUfrFkZhjcovoGaaIXeRzsatyaSmQkiY5xDjJydEIK+V+nHxXtRVSxATMxF4Y9+ZaUQPMpVO8SZrgF2UABhKWUydE8Ns2vrUJ0BCIiS2G6LmvCoQvYGSRoXKKduzmuo/kKQa2Er6meQtqtY2xk8gpmzgac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=aJNrtlpj; arc=none smtp.client-ip=193.252.22.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id XuCUtxHwDebtjXuCYtxLu4; Wed, 15 Jan 2025 04:36:29 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1736912189;
-	bh=J8fFcIQP713EnSS7oTLmRNGq2KoaDAy7Nz8BtUjaVws=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=aJNrtlpjJhKr+eQJ83siupHLVsBtKjVbPIoFK4utf+mn/hnBPukU4a440qI+NeLzH
-	 W4mVuJ12DK8zH/ws9EZYzBmggNxwj6kE3MLVnA9Llw1ARiztpgY/3y/ZKku8kxPd6H
-	 9beVFFlw0wPv0SK6OXtW1pGXBMv3hwOBfnV/gfb9bUEmOg4SuYzTa9di2+wVUQh+Zs
-	 wzaBW9FOKAIlwhnHBVZevaTHvIutO+XDJVEbCTAuRlK/3iK2DT3HETY6v4pQgsFULF
-	 I6POim6Mlv5HRxBeYqS3abhvNDS5YH9Z5ZUJOAt9CCi61Dqvpv5tkNo3nSfAl//mGh
-	 VPXtwhfDSuDlA==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 15 Jan 2025 04:36:29 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <0ccedc84-d429-4d6f-bd21-7487e6a0fbf9@wanadoo.fr>
-Date: Wed, 15 Jan 2025 12:36:13 +0900
+	s=arc-20240116; t=1736916357; c=relaxed/simple;
+	bh=Rs3iU75BPjBxdbiw5HZnrXaDjajAgcAfQrjJFAg8Srg=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=okipt+eBuX1so3AycluYJJuW9i1sDA5M1WUFsoFfZQX1BLquljujdVRLLVJa3iBFH6cZFtXNBsCZH0YdpVZxLvcvYgggH7Gn+kusC90Triu7R9UPpK0GTetEoB7TE0hOppa6fyox1zug6+4/plla6/JR6hqp6DvvpqCdi6mstFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=P5D7hgXe; arc=none smtp.client-ip=209.85.214.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kyletso.bounces.google.com
+Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2163dc0f5dbso122850425ad.2
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 20:45:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736916355; x=1737521155; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uzJUS+TBGgIy8wVOHUCLoOBsCy49bT0VT2xYdEdiljY=;
+        b=P5D7hgXeaPQ3ppPuYRbJlJmJOIhid/GY3kOUfElhh0lx03Xs2oxOQTVwjS5UizkBlG
+         k9McnpK7YAU6oDHN+Clgvj2ouAAi/UqISy0onfHEtkLvP4hpo2JJgfYm53moEMwFcE+c
+         kZxglAVs48UPYh+jUDzcIA1i3CBC0da/iP2q1tvVycaG4R5PYF2PfWBQbiX5Pw+Hacsk
+         TSVSWEXpMuSVFbajVXqsAg47YFN81UBfEIAszxYXPXgRAIEn4kQ2YnJr0sdbL0htzGRa
+         auGxQ1AjdUCeXH8lGspWKSiH9sauJeINfcGa+5d3tjser613xrwn44BVRJCzXxJixKMh
+         rt8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736916355; x=1737521155;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uzJUS+TBGgIy8wVOHUCLoOBsCy49bT0VT2xYdEdiljY=;
+        b=YTlzLHBn7r3FltISZTG90ZnTnEx8DH9IXiqX/ZDua79ZUuXVNu+HpfipkRB30vaMyV
+         geDK4DqNG9iU0vupuHcTKmQqCYjsjlWTaB6dUNRzRFgEg0oG/N4CmTmP8/Q3h2M4S1ls
+         fGcgqxyUwJAQ5cDaM2KfoxIKkgnQoWEt6nF0upInTxDuzRReAm4dWdgcVcKPDDy8DiOs
+         7EriInE9KpB4bJe8tphGrFNmuwCCZcXzwcy2xsfLxYKKzBVjSkhqJSnWSYumixR09vDe
+         KBLvyjrT9IIwcwzvaiNmnoEJoUP0HK+0DEEDPnDjH8oTtWU0GmMUx0teYEXThTO8el7L
+         c3LA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZtNwhONugq/+KSYbnWUeuE0NqtXRuaOFFGrofHFktRDGj99g//FsZoLF5iVKs7Bn6fGL5o0jwj3U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5q7XJLjuzJcfntJUBuf0WPelG04JuODxszvqTcNF+BuPxW6O4
+	FylILQs6jj2QKdbKj8qXDXr7om1pgwWp5intC4kR/tYDdQj0TFUytsKkmIZt3wYve3BQqJ1YuSV
+	kdtaDyA==
+X-Google-Smtp-Source: AGHT+IH+6g5AYVxZ4+GIsTrLIh8vINC6goLc5AwIWvkIO0MYDuXuHUHdA5IzdZb0nDr+V2ZRBE4yDoW7REMO
+X-Received: from pgll188.prod.google.com ([2002:a63:25c5:0:b0:7fd:4c8f:e6a1])
+ (user=kyletso job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:12cc:b0:1e1:e2d8:fd1d
+ with SMTP id adf61e73a8af0-1e88d0a2b46mr41166358637.33.1736916355337; Tue, 14
+ Jan 2025 20:45:55 -0800 (PST)
+Date: Wed, 15 Jan 2025 12:45:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
- brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
- andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org,
- linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com,
- linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-5-a0282524688@gmail.com>
- <CAMZ6RqLHEoukxDfV33iDWXjM1baK922QnWSkOP01VzZ0S_9H8g@mail.gmail.com>
- <CAOoeyxW=k35-bkeqNmhyZwUxjy=g3irTBS5mbXLxqp1Stx-Zfg@mail.gmail.com>
- <6e349f0f-6509-4a3b-bb75-e2381e9205c6@wanadoo.fr>
- <CAOoeyxVST6rEqp65rU6ZgmM-rSkAdeUVM=0nTLZYrqiO4DbQOA@mail.gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <CAOoeyxVST6rEqp65rU6ZgmM-rSkAdeUVM=0nTLZYrqiO4DbQOA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.0.rc2.279.g1de40edade-goog
+Message-ID: <20250115044548.2701138-1-kyletso@google.com>
+Subject: [PATCH v2] usb: dwc3: core: Defer the probe until USB power supply ready
+From: Kyle Tso <kyletso@google.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, raychi@google.com
+Cc: badhri@google.com, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	royluo@google.com, bvanassche@acm.org, Kyle Tso <kyletso@google.com>, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 15/01/2025 at 11:11, Ming Yu wrote:
-> Vincent Mailhol <mailhol.vincent@wanadoo.fr> 於 2025年1月14日 週二 下午11:12寫道：
->>
-> ...
->>>>> +static int nct6694_can_get_berr_counter(const struct net_device *ndev,
->>>>> +                                       struct can_berr_counter *bec)
->>>>> +{
->>>>> +       struct nct6694_can_priv *priv = netdev_priv(ndev);
->>>>> +       struct nct6694_can_event *evt = priv->rx->event;
->>>>> +       struct nct6694_cmd_header cmd_hd;
->>>>> +       u8 mask = NCT6694_CAN_EVENT_REC | NCT6694_CAN_EVENT_TEC;
->>>>> +       int ret;
->>>>> +
->>>>> +       guard(mutex)(&priv->lock);
->>>>> +
->>>>> +       cmd_hd = (struct nct6694_cmd_header) {
->>>>> +               .mod = NCT6694_CAN_MOD,
->>>>> +               .cmd = NCT6694_CAN_EVENT,
->>>>> +               .sel = NCT6694_CAN_EVENT_SEL(priv->can_idx, mask),
->>>>> +               .len = cpu_to_le16(sizeof(priv->rx->event))
->>>>> +       };
->>>>> +
->>>>> +       ret = nct6694_read_msg(priv->nct6694, &cmd_hd, evt);
->>>>> +       if (ret < 0)
->>>>> +               return ret;
->>>>
->>>> You are holding the priv->lock mutex before calling
->>>> nct6694_read_msg(). But nct6694_read_msg() then holds the
->>>> nct6694->access_lock mutex. Why do you need a double mutex here? What
->>>> kind of race scenario are you trying to prevent here?
->>>>
->>>
->>> I think priv->lock need to be placed here to prevent priv->rx from
->>> being assigned by other functions, and nct6694->access_lock ensures
->>> that the nct6694_read_msg() transaction is completed.
->>> But in this case, cmd_hd does not need to be in priv->lock's scope.
->>
->> So, the only reason for holding priv->lock is because priv->rx is shared
->> between functions.
->>
->> struct nct6694_can_event is only 8 bytes. And you only need it for the
->> life time of the function so it can simply be declared on the stack:
->>
->>         struct nct6694_can_event evt;
->>
->> and with this, no more need to hold the lock. And the same thing also
->> applies to the other functions.
->>
->> Here, by trying to optimize the memory for only a few bytes, you are
->> getting a huge penalty on the performance by putting locks on all the
->> functions. This is not a good tradeoff.
->>
-> 
-> Since nct6694_read_msg()/nct6694_write_msg() process URBs via
-> usb_bulk_msg(), the transferred data must not be located on the stack.
-> For more details about allocating buffers for transmitting data,
-> please refer to the link:
-> https://lore.kernel.org/linux-can/20241028-observant-gentle-doberman-0a2baa-mkl@pengutronix.de/
+Currently, DWC3 driver attempts to acquire the USB power supply only
+once during the probe. If the USB power supply is not ready at that
+time, the driver simply ignores the failure and continues the probe,
+leading to permanent non-functioning of the gadget vbus_draw callback.
 
-Ack, I forgot that you can not use stack memory in usb_bulk_msg().
+Address this problem by delaying the dwc3 driver initialization until
+the USB power supply is registered.
 
-Then, instead, you can either:
+Fixes: 6f0764b5adea ("usb: dwc3: add a power supply for current control")
+Cc: stable@vger.kernel.org
+Signed-off-by: Kyle Tso <kyletso@google.com>
+---
+v1 -> v2:
+- get the power supply in a dedicated function
 
-  - do a dynamic memory allocation directly in the function (good for
-    when you are outside of the hot path, for example struct
-    nct6694_can_setting)
+---
+ drivers/usb/dwc3/core.c | 30 +++++++++++++++++++++---------
+ 1 file changed, 21 insertions(+), 9 deletions(-)
 
-  - and for the other structures which are part of the hot path
-    (typically struct nct6694_can_frame) continue to use a dynamically
-    allocated buffer stored in your priv but change the type of
-    nct6694_can_tx and nct6694_can_rx from union to structures.
-
-And no more overlaps, thus no more need for the mutex.
-
-
-Yours sincerely,
-Vincent Mailhol
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 7578c5133568..dfa1b5fe48dc 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1684,8 +1684,6 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+ 	u8			tx_thr_num_pkt_prd = 0;
+ 	u8			tx_max_burst_prd = 0;
+ 	u8			tx_fifo_resize_max_num;
+-	const char		*usb_psy_name;
+-	int			ret;
+ 
+ 	/* default to highest possible threshold */
+ 	lpm_nyet_threshold = 0xf;
+@@ -1720,13 +1718,6 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+ 
+ 	dwc->sys_wakeup = device_may_wakeup(dwc->sysdev);
+ 
+-	ret = device_property_read_string(dev, "usb-psy-name", &usb_psy_name);
+-	if (ret >= 0) {
+-		dwc->usb_psy = power_supply_get_by_name(usb_psy_name);
+-		if (!dwc->usb_psy)
+-			dev_err(dev, "couldn't get usb power supply\n");
+-	}
+-
+ 	dwc->has_lpm_erratum = device_property_read_bool(dev,
+ 				"snps,has-lpm-erratum");
+ 	device_property_read_u8(dev, "snps,lpm-nyet-threshold",
+@@ -2129,6 +2120,23 @@ static int dwc3_get_num_ports(struct dwc3 *dwc)
+ 	return 0;
+ }
+ 
++static struct power_supply *dwc3_get_usb_power_supply(struct dwc3 *dwc)
++{
++	struct power_supply *usb_psy;
++	const char *usb_psy_name;
++	int ret;
++
++	ret = device_property_read_string(dwc->dev, "usb-psy-name", &usb_psy_name);
++	if (ret < 0)
++		return NULL;
++
++	usb_psy = power_supply_get_by_name(usb_psy_name);
++	if (!usb_psy)
++		return ERR_PTR(-EPROBE_DEFER);
++
++	return usb_psy;
++}
++
+ static int dwc3_probe(struct platform_device *pdev)
+ {
+ 	struct device		*dev = &pdev->dev;
+@@ -2185,6 +2193,10 @@ static int dwc3_probe(struct platform_device *pdev)
+ 
+ 	dwc3_get_software_properties(dwc);
+ 
++	dwc->usb_psy = dwc3_get_usb_power_supply(dwc);
++	if (IS_ERR(dwc->usb_psy))
++		return dev_err_probe(dev, PTR_ERR(dwc->usb_psy), "couldn't get usb power supply\n");
++
+ 	dwc->reset = devm_reset_control_array_get_optional_shared(dev);
+ 	if (IS_ERR(dwc->reset)) {
+ 		ret = PTR_ERR(dwc->reset);
+-- 
+2.48.0.rc2.279.g1de40edade-goog
 
 
