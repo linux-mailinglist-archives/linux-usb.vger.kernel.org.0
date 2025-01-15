@@ -1,169 +1,99 @@
-Return-Path: <linux-usb+bounces-19380-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19381-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 596D4A12914
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 17:45:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94C21A129C7
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 18:25:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC53C7A34CD
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 16:45:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 297863A58BD
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 17:24:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41186198842;
-	Wed, 15 Jan 2025 16:45:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1796919922A;
+	Wed, 15 Jan 2025 17:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="VVjKTBR3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b2TNciag"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-16.smtpout.orange.fr [193.252.22.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF5951BBBC5;
-	Wed, 15 Jan 2025 16:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FBC71553BB
+	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 17:25:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736959533; cv=none; b=NLAPtHuImYotzoXfyDKinmI/DtNpj0XOgEJexBwZcTOJtD4ffd6hmgdZYmSNuloKsfZGCsdR/5p9bkBs0Cz1U8d/xkTu+CdFBlZodVKCKIjwxpuFj1tBBh4t1wyJKoJvCsBSBYDjR8i5grcIvUjVimHKLN4IEMf/8+yLNxiOaQU=
+	t=1736961900; cv=none; b=FyiKNbzAjK8+8KBsiVvAE8r8bMoOuIfynGUsBkUPTlBOtiHKONe3M11YhFM2B0H1G8H17LWJkNig7tOQHPQeuOxyW3eqv2TFod4WYIkZSsMCHPhc5yzYgTqGWiUqQoFrTHQSjw8s7mVkp6VMpw6j+eLfM4JpAW4jdcP1uuQUs9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736959533; c=relaxed/simple;
-	bh=FvS7/9I2GnMN906sdtqPLHpRpFYIqgyNF/PPN97ma84=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iQ4T6gRtgylSE2ZX1c8D5tN5cD81LNQxOHhiyFmjtXu0MFaYIGT7Jf+AWMXX7Xzv6TB0rCSdBfK/EUEVm7c13nP18o14YH3gC0Sj7av96Wn6HLuMNm9jE6b9+Jnty3io4/jwyGiCJcuQRchGKg2BOjVCHGGGBnMl+toJhuuxm3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=VVjKTBR3; arc=none smtp.client-ip=193.252.22.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id Y6VrtDFe4QUNRY6VwtCvLc; Wed, 15 Jan 2025 17:45:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1736959520;
-	bh=p50mlgWffUEX45aXIchC5f+eGOCl4aumziWGcWmIY94=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=VVjKTBR3UYceUdiNxKUVv5cm9EplKoT4EwGxOwTg/k8XmfEebeb4pjAIrHvSnLXVr
-	 gyjG3tM8eGKe4g7wECKnaackaaCzSxrXvd6ag3f2EtHFA9SCZ5tiYxtFNXwd1cmf27
-	 Gmb3A6pLlnsNRU2NznSAWQzXI86ZM7hruXaPn7NR4b4uNsuS1TgZxWhuZSsQ9MGBah
-	 h5+wpyLhmQ2+wn4vJ0KRa0NO15jjfayygMaHOl1DnxgSQJsQabAAqijlfvoJ54x0G8
-	 jfdJSteMXvFyrYB8y4Zqv6IqrKM6w8oZu/eoNUigDz1Wq7hBjcZ6Rz2+2TQL1VLoWB
-	 rvljtw20fSjew==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 15 Jan 2025 17:45:20 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
-Date: Thu, 16 Jan 2025 01:45:02 +0900
+	s=arc-20240116; t=1736961900; c=relaxed/simple;
+	bh=hQvu0Ic5EwC+x6UGo9AkLjBKdcklxsn7fPUIny8wLk0=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=i/Sm9cKbqeR4BnEIzy9oW4wtzap7Mz3wV+Uuck96jnYIOU3NWJaHEPE8VsNu8xUZPb1bKgKELOyQ/9PJ3Lnw7Zp6L4DkYu8/1x3oasDu00xR9mp8F7NUk1ttPqnC7QNeejlnruwpVuPVg4Dhvie8Zllv62NGeCnDw7jeWeuEK8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b2TNciag; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0CC47C4CED1
+	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 17:25:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736961900;
+	bh=hQvu0Ic5EwC+x6UGo9AkLjBKdcklxsn7fPUIny8wLk0=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=b2TNciagHmoWTeQojr81Fv0+odfguACuD9W7xcfFdOVFt/ngSZLPZDzHhxYM1OKsF
+	 /ygzRXPKTSALC7JSs7P0Z5RUEYbE3REK1ipkL2fwxX031vpNbBWMFI8NSsnJqVqSka
+	 APv88yTcAFBaGsp4Uhd1jQbI2uW2fPEoVS8tEijSMdbrdA+/0w+MfJUdoRgg+E7LzO
+	 s2619f5Mt/z7EpD8gbze7I2UUsfV4UuWmX1wlOQrV30iPSnNireJtzt1sVwVMo9TWH
+	 iu24XeSeAdoN6ywOSfpGbzbS554hML+8ttEP43GqWmnEo3nTrGpGPn1TkLLNP4X7hz
+	 WAhZtnCHq54Kg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id ECCB2C3279F; Wed, 15 Jan 2025 17:24:59 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219681] ASUS Zenbook S 14 UX5406SA: Unstable USB connection on
+ USB-A port under certain condition
+Date: Wed, 15 Jan 2025 17:24:59 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219681-208809-oEyEqPTAUL@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219681-208809@https.bugzilla.kernel.org/>
+References: <bug-219681-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
- alexandre.belloni@bootlin.com
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-5-a0282524688@gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <20250114033010.2445925-5-a0282524688@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 14/01/2025 at 12:30, Ming Yu wrote:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219681
 
-(...)
+--- Comment #4 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+Stopping is not suspicious, but "transfer errors" are. And disconnections s=
+eem
+to reliably happen 270ms later.
 
-> +static void nct6694_can_clean(struct net_device *ndev)
-> +{
-> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
-> +
-> +	if (priv->tx_skb || netif_queue_stopped(ndev))
-> +		ndev->stats.tx_errors++;
-> +	dev_kfree_skb(priv->tx_skb);
+Not sure why, the driver should issue a retry and then either get another e=
+rror
+or things should go back to normal.
 
-Use:
+What happens to the errors when it works (on USB-C or through a hub)?
+Are they still there but recovered from? Or not happening at all?
 
-  	can_flush_echo_skb(ndev);
+--=20
+You may reply to this email to add a comment.
 
-(related to the following comments).
-
-> +	priv->tx_skb = NULL;
-> +}
-
-(...)
-
-> +static void nct6694_can_tx_work(struct work_struct *work)
-> +{
-> +	struct nct6694_can_priv *priv = container_of(work,
-> +						     struct nct6694_can_priv,
-> +						     tx_work);
-> +	struct net_device *ndev = priv->ndev;
-> +
-> +	guard(mutex)(&priv->lock);
-> +
-> +	if (priv->tx_skb) {
-> +		if (priv->can.state == CAN_STATE_BUS_OFF) {
-
-Just stop the queue when the can bus is off so that you do not have do
-check the bus status each time a frame is sent.
-
-> +			nct6694_can_clean(ndev);
-> +		} else {
-> +			nct6694_can_tx(ndev);
-> +			can_put_echo_skb(priv->tx_skb, ndev, 0, 0);
-> +			priv->tx_skb = NULL;
-> +		}
-> +	}
-> +}
-> +
-> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
-> +					  struct net_device *ndev)
-> +{
-> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
-> +
-> +	if (can_dev_dropped_skb(ndev, skb))
-> +		return NETDEV_TX_OK;
-> +
-> +	if (priv->tx_skb) {
-> +		netdev_err(ndev, "hard_xmit called while tx busy\n");
-> +		return NETDEV_TX_BUSY;
-> +	}
-> +
-> +	netif_stop_queue(ndev);
-> +	priv->tx_skb = skb;
-
-Here, you can directly do:
-
-  	can_put_echo_skb(skb, ndev, 0, 0);
-
-The skb remains accessible under priv->can.echo_skb[0]. With this, you
-can remove the priv->tx_skb field.
-
-> +	queue_work(priv->wq, &priv->tx_work);
-> +
-> +	return NETDEV_TX_OK;
-> +}
-
-
-Yours sincerely,
-Vincent Mailhol
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
