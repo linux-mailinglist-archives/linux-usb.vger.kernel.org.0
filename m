@@ -1,95 +1,179 @@
-Return-Path: <linux-usb+bounces-19372-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19373-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86B17A11C30
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 09:39:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E262BA11ECF
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 11:03:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2936C3A874A
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 08:39:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A9E51884E7F
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 10:03:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E3CD1E7C1E;
-	Wed, 15 Jan 2025 08:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B6FB20C494;
+	Wed, 15 Jan 2025 10:02:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dlwMvqpA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6831D1DB150
-	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 08:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92D19248160;
+	Wed, 15 Jan 2025 10:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736930345; cv=none; b=RMYc56Fe3ZUBNbc3+Y6BNRbbOqWAlxh3josPf7sDXMvsJ2QHWAWR2+chfBDbyrD58HlYof7InlafmSlcf/5d5SOWaVHESou9/P1WI1ITNv/636EeltZ00wv/NWum4QJpdhb1j3pjx6R6275PhJW6J5WdrNHBXpGEsbP3qC8M0sM=
+	t=1736935376; cv=none; b=s7c0aj/jR32ieimNCmfDf4ubUYz0f+gcLYnDNJi6FxZzDzlauQZkAnA7mDRnRnfdDv9feWngoyiYQqefa6thngH28D+i1q6bODchnkajRvAE0KdZlgJjX+ypUO00hzzkimTL3Ps9mWFAjU1p5jhsM2CrVfULX5SKjfX9lpy/Lxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736930345; c=relaxed/simple;
-	bh=Y24pZPuFwPFR1VZHcEMQpqo7yKBdVDnnPlgKCXjs+iY=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=K/CVhGeBPUhQOiyrSM8DVfcLJWtJR4WbHYBVLuY0umMzUlUeCgwdoP7B0gNhq2K8B56BZ2AO4QvLBmc+QYdP5XC8D1DLf4q6KcxU/NkG/FUzn55CO1zY2fJq9AOnvnktw/E5VSKI48zI+UMj3j/CKLc3cxPBW4EWBOoOHX0V5C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-3ce81381737so18249445ab.2
-        for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 00:39:03 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736930342; x=1737535142;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ta5z2IK+7I07RU1ai/knZKO94BiSdaHRFL5TZfBCeEQ=;
-        b=Gl5HA8fyVuzrb6y9055orwxdPs7D/RqZlFosuivJR9O2tAAjMPEPckzuqrUhA/gw1Y
-         Mk69PFUzEx5SPN2r2p3cSb5bK21/0mqRYad3iDoojJghlv9pZavTZKz8ZSMpgpRKZYba
-         7QG1jUwDvkcYYcQNfb1+qi/BR2V41rJ7D0rJTUF/SvfUsc3cRz1I61aBTRdB01FGIa9v
-         LocS0vcvtYuuIzaVPdb3WhkpdDDsbpmana7+IRURea2NmRlqfFqdtP4jxpn2/DZzeeq8
-         iwAXXhtdmRMFyr0A/aVEnPtYXm3G88rW0M2Og1DWEWJ9PK2peGTuhThl1NIJ7gLipORf
-         m/Vg==
-X-Forwarded-Encrypted: i=1; AJvYcCXEPV30bVSheQTtowAzSXYlkKxF+p2VZoJI9fInHB11ipRRzzyj3Mw/V5xMPA0UBT4QMC4ZxB4VLX0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy8xzm7e/wGCmgvOM4ImipJjjwrcGbP0YrjkEAI7Rhnd2Mo9pzJ
-	I/A9DeFRWRvO7em5LWtynpQe+kPo/sdrfpWNOdXFQ59eZOnjHBSLCyIGWbYmtrQ5CUPn34rIfeN
-	BSyGmaX6Avg2BA/zExwuh/+khBUgXLVudmc6EsjfELVQYdBBk+CGyNCE=
-X-Google-Smtp-Source: AGHT+IGBUSwrbDRmXtiHaqIZSAmvQ3odCW/shzY20iSKtiAv92ooamYnIFaosuQJLlCINwHHbzf8lnxHnEoj9TfCiaVFm7wp6750
+	s=arc-20240116; t=1736935376; c=relaxed/simple;
+	bh=JoZEgsC26B+m7sk2PctIPwPPabGPfFf+j0coBGyXGVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LmmGCQHYv2ROTt5FE7AsxZQb5H7a835kHLNCh8dc9YPB+RMGkIMPzMruGFK2Mb7jowdZMfQmL3NFN/a/QZxD+2VQ6qUwXwHkpcvKrXVe/Ue1s/JP6lYNoQJCvWfg0NqJ5ViNIglTgTjSNDDksAPgH4atolbFzWWitRk7ZT71Ks8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dlwMvqpA; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736935372; x=1768471372;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JoZEgsC26B+m7sk2PctIPwPPabGPfFf+j0coBGyXGVs=;
+  b=dlwMvqpA+LFPMQTooG2FFX8dBKeTdCHtufLY6qFfDqV2P2KOU7b0R2+Y
+   YQXmDmzF0FsR71n0j9emDQTE9VUFZlFqBNHYql6B6ZJdTLT85yKlUs0Vq
+   zMo8N7pRFkxxGorAQa49DxzFNh7Ri1N8krE58svfSPP6KYeonwJ2npOTQ
+   PpX9ZRLq7eU8Ixm11d85gslas66GuPhxUFV6Px2/Yoc7HSHMmi5jIIAUP
+   y7xzg18bmoSwNQ7KQozNjn5RyDI57aGj5rl4opXJvcSs0efy60uSauur0
+   pKHh/sW6aQ1jgzx9JUrL5x4ZV77WtDXzpbm9MENOI+S6g/uTa2GFH01K8
+   w==;
+X-CSE-ConnectionGUID: xljbMPecQ3CV1dWQ8jcqiQ==
+X-CSE-MsgGUID: vqWdyVK/ToekrSSDbpmuTA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11315"; a="48264441"
+X-IronPort-AV: E=Sophos;i="6.12,316,1728975600"; 
+   d="scan'208";a="48264441"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 02:02:51 -0800
+X-CSE-ConnectionGUID: wo8lSug0RymJn/8J9m7osg==
+X-CSE-MsgGUID: 8vuEDfHkR7adKfLZDXc8zw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="135945796"
+Received: from turnipsi.fi.intel.com (HELO kekkonen.fi.intel.com) ([10.237.72.44])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 02:02:48 -0800
+Received: from kekkonen.localdomain (localhost [127.0.0.1])
+	by kekkonen.fi.intel.com (Postfix) with SMTP id E0E9D11F8B3;
+	Wed, 15 Jan 2025 12:02:45 +0200 (EET)
+Date: Wed, 15 Jan 2025 10:02:45 +0000
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+From: Sakari Ailus <sakari.ailus@linux.intel.com>
+To: Ricardo Ribalda <ribalda@chromium.org>
+Cc: Rob Herring <robh@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Mauro Carvalho Chehab <mchehab@kernel.org>,
+	Jacopo Mondi <jacopo@jmondi.org>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-media@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: usb: usb-device: Add panel-location
+Message-ID: <Z4eHxTzn1aUyUT7z@kekkonen.localdomain>
+References: <20241217145612.GA1652259-robh@kernel.org>
+ <CANiDSCu_mFQQVkDb_gSyXeb1_Tu+DxSeHYvGsGp6XVDuOdPyjQ@mail.gmail.com>
+ <20241219122453.GA4008177-robh@kernel.org>
+ <CANiDSCt+LAE-LzCDZgrWP_V-Jc-ywTF1-PuQtyDJMfV9v_ZzGA@mail.gmail.com>
+ <CAL_JsqLON5xKoYtowKdk49s-YHbk9bq9akZSH1kHdQ_9vxKSQQ@mail.gmail.com>
+ <CANiDSCvRfZiMafeJ6==oyduZCzJsv74pg9LbswnjoXFS2nTm=g@mail.gmail.com>
+ <Z347NA00DMiyl1VN@kekkonen.localdomain>
+ <CANiDSCs37N79MnFZxvBJn2Jw3062EdLRuVP4EkJVfJcfMMuPAg@mail.gmail.com>
+ <Z35BnplCOVyboSBs@kekkonen.localdomain>
+ <CANiDSCteoJ_Lk_G6KQKyK1MWikEHF36bYaSHwFEhJh0BFxb6Dw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c9c6:0:b0:3ce:64a4:4c32 with SMTP id
- e9e14a558f8ab-3ce64a44d95mr102162105ab.3.1736930342600; Wed, 15 Jan 2025
- 00:39:02 -0800 (PST)
-Date: Wed, 15 Jan 2025 00:39:02 -0800
-In-Reply-To: <6712465a.050a0220.1e4b4d.0012.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67877426.050a0220.20d369.0009.GAE@google.com>
-Subject: Re: [syzbot] [fs?] [mm?] INFO: rcu detected stall in sys_readlink (5)
-From: syzbot <syzbot+23e14ec82f3c8692eaa9@syzkaller.appspotmail.com>
-To: anna-maria@linutronix.de, davem@davemloft.net, frederic@kernel.org, 
-	gregkh@linuxfoundation.org, jhs@mojatatu.com, jiri@resnulli.us, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com, tglx@linutronix.de, tj@kernel.org, 
-	vinicius.gomes@intel.com, xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANiDSCteoJ_Lk_G6KQKyK1MWikEHF36bYaSHwFEhJh0BFxb6Dw@mail.gmail.com>
 
-syzbot has bisected this issue to:
+Hi Ricardo,
 
-commit 5a781ccbd19e4664babcbe4b4ead7aa2b9283d22
-Author: Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Date:   Sat Sep 29 00:59:43 2018 +0000
+On Wed, Jan 08, 2025 at 10:48:34AM +0100, Ricardo Ribalda wrote:
+> Hi Sakari
+> 
+> On Wed, 8 Jan 2025 at 10:13, Sakari Ailus <sakari.ailus@linux.intel.com> wrote:
+> >
+> > Hi Ricardo,
+> >
+> > On Wed, Jan 08, 2025 at 09:51:34AM +0100, Ricardo Ribalda wrote:
+> > > > > diff --git a/Documentation/devicetree/bindings/usb/usb-device.yaml
+> > > > > b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> > > > > index da890ee60ce6..5322772a4470 100644
+> > > > > --- a/Documentation/devicetree/bindings/usb/usb-device.yaml
+> > > > > +++ b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> > > > > @@ -37,6 +37,10 @@ properties:
+> > > > >        but a device adhering to this binding may leave out all except
+> > > > >        for "usbVID,PID".
+> > > > >
+> > > > > +  orientation:
+> > > > > +    description: If present, specifies the orientation of the usb device.
+> > > > > +    $ref: /schemas/media/video-interface-devices.yaml#/properties/orientation
+> > > >
+> > > > Do you need this for a camera or for other kinds of USB devices, too?
+> > > >
+> > > > What about e.g. the rotation property?
+> > >
+> > > I need it for cameras. I do not have a usecase for rotation now, but I
+> > > might have in the future.
+> >
+> > If it's specific for cameras (UVC kind I presume?), wouldn't it be
+> > reasonable to add specific bindings for it?
+> Yes, they are uvc cameras
+> 
+> Do you mean something like this:
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/usb-device.yaml
+> b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> index da890ee60ce6..bc80c1e7360f 100644
+> --- a/Documentation/devicetree/bindings/usb/usb-device.yaml
+> +++ b/Documentation/devicetree/bindings/usb/usb-device.yaml
+> @@ -75,6 +75,12 @@ patternProperties:
+>            configuration value.
+>          maxItems: 1
+> 
+> +      image-sensor:
+> +        description: Video interface properties associated to USB cameras,
+> +          typically UVC compliant.
+> +        allOf:
+> +          - $ref: /schemas/media/video-interface-devices.yaml#
+> +
 
-    tc: Add support for configuring the taprio scheduler
+I missed earlier the compatible string comes directly from the USB vendor
+and product IDs and this isn't the primary means of identifying a USB
+device anyway, IOW we couldn't have a compatible for UVC webcams for
+instance.
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=124487c4580000
-start commit:   7dc8f809b87d Merge tag 'linux-can-next-for-6.14-20250110' ..
-git tree:       net-next
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=114487c4580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=164487c4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=28dc37e0ec0dfc41
-dashboard link: https://syzkaller.appspot.com/bug?extid=23e14ec82f3c8692eaa9
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1634f218580000
+None of the alternatives here seem exactly great to me but all of them
+would likely just work.
 
-Reported-by: syzbot+23e14ec82f3c8692eaa9@syzkaller.appspotmail.com
-Fixes: 5a781ccbd19e ("tc: Add support for configuring the taprio scheduler")
+I think I prefer your earlier suggestion, the question I have though is
+whether or not it should be limited to certain VIDs/PIDs.
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+>  required:
+>    - reg
+> 
+> @@ -113,6 +119,9 @@ examples:
+>              interface@0 {
+>                  compatible = "usbif123,abcd.config1.0";
+>                  reg = <0 1>;
+> +                image-sensor {
+> +                  orientation: 0;
+> +                };
+>              };
+> 
+>              interface@0,2 {
+
+-- 
+Kind regards,
+
+Sakari Ailus
 
