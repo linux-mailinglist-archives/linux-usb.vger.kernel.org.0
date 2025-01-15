@@ -1,109 +1,258 @@
-Return-Path: <linux-usb+bounces-19357-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19358-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 298CEA114FD
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 00:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6D6B4A115CE
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 01:04:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DC323A952A
-	for <lists+linux-usb@lfdr.de>; Tue, 14 Jan 2025 23:07:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 15C403A5BF0
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 00:04:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84AD622578C;
-	Tue, 14 Jan 2025 23:04:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C88E23A0;
+	Wed, 15 Jan 2025 00:04:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JydcXOJc"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VMpH4nFA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB39A221DB1;
-	Tue, 14 Jan 2025 23:04:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3F3D17C
+	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 00:04:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736895892; cv=none; b=N3MscfKf3CDRq/I62LAoNpY8/XYWNh2xxy+/GkmBMS/BTDh+11u+gA8ramZxMATfQA9wPKqzwzATYT+nbN61aD2dChUXK7QpXgaHTD1NO0VU5PwCRh8zM2ZHGZ3bELqqL2zJcvZdfR9YV7Ca2CTDeYgb/Scs2tmeYUdBAip98co=
+	t=1736899469; cv=none; b=rCrR5FM3E5QCS6KwG5drynkprv2MUnL2Av7ACNVk8oLzpSjVvrA5USCjxScHlokN7c1ccdd6HJkVEdCZ/pf8BTCPXOCHlFyxDvywW8JMyyeS/Y9R1vxSkdlI72dEWkpaobVZDFBYPSlAxoSFdyw7Psl3VeCHMjcZ+XAFH8ILBcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736895892; c=relaxed/simple;
-	bh=BDTu/UGBHqvqR/oBOPzTd6pu0SwRgZfuzWa5ftsPDb8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XU0AERtZK9VJNEWuiBAHej2nhAfwRWxeVD0yp6L5xDJMceKcJEccekdpVSpMnwSqDyODlJjFt8PPnIXIu3zXNUAg32oAAdFZzS+rNL7LR4YH54OxqJXoeKV7LOuy+VzhPfhqPAO/VQ8J7ft81U+AIQ6Z5DOul0ZmuU2HLVhqdl4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JydcXOJc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 484FDC4CEDD;
-	Tue, 14 Jan 2025 23:04:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736895891;
-	bh=BDTu/UGBHqvqR/oBOPzTd6pu0SwRgZfuzWa5ftsPDb8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JydcXOJcDslTcyYsKUw5dZInb4/aigzSvXoXn0ipywY334Q8WZjrGi6eS1INQlU6g
-	 0JrNGPXW3Qz6el1ztm97ipap5RR9lSnsEIxzX1/mqHpHs8ZqKuoKkG+AlyzEj/Wp5B
-	 +E2p1JNRgdky+xOowakBypUv2QhC0ECsauKGlftYYDsNTuX/PNww8lY1Qw5tmhuytq
-	 qayPNld7CtkzhWllD2U3pIwzbElY7qiI+wZqPub3K/FSGFi9+/hpZfoWRHzF1LBhcA
-	 qP2N1WQcXCuv0oEV05XDoUDneE0u2p5lF4U/KvsUfH1k2FklstkySH4RPrbcJuW6cN
-	 S15NqcqQrv2ig==
-Date: Tue, 14 Jan 2025 17:04:48 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, Saravana Kannan <saravanak@google.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>, linux-arm-msm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/12] usb: dwc3: qcom: Flatten dwc3 structure
-Message-ID: <srhxu3r4sxy5ntx53nicf7l43sdjpiwavzd2qsgq2ovquzvt3u@cskcthmqznex>
-References: <20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com>
- <20250114174452.GB1414434-robh@kernel.org>
+	s=arc-20240116; t=1736899469; c=relaxed/simple;
+	bh=lGdT/qhz8wpBR/XYfbcNxkSB2Ngs3f4fPi729qGH1JE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YysEFBuBK9gO7IvefevY5pamIAa9TkRzthQCe7C9CadLANsxx16BSirXYqi95CRW5kS8UG0DZkJqFgWe70s3q0dkV0xndxBisbSgyN6dncQOqNL17kkUU+80fJZqHQzt0nLL73mngbuDi1w1Y25Voo+Q1hFAPMJScwmyBAdog4o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VMpH4nFA; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5d3e638e1b4so11441a12.1
+        for <linux-usb@vger.kernel.org>; Tue, 14 Jan 2025 16:04:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736899466; x=1737504266; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VqY5zzFkxq7jG4QINHaYD3F3aVB+A8QP+jnx+vp442o=;
+        b=VMpH4nFAnbIdWM1wtdzF9/KQim1H8qBad7u0cvJ8A546peS58DsrVBth/5ZczJTK9+
+         sb2QFfImz+dkKW+GF+6PoSlKGu3HKKfCRvjtzfq0A9g+xW8WybmKf9GC8upa+FfondGF
+         Jx+bBGdnexOchKGTF9lm/4v9QhO6r/7l/Xn6Lw3fbzgL6CgttV88ybHUlxIqTTGt0OTE
+         Ry5L/wKT3dhSSPePqGU5UR9fk8uD5Q5FlkrxnQiIRWTEpY9Raz5JE+lJDcbjHYdB7Z+m
+         nHGFt6rIXL9lrhwRRE3T/TSgsmbolHdvKH8uAbefUAq2R+yJSluxSJfGe4HrdxQwvHAx
+         3/7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736899466; x=1737504266;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VqY5zzFkxq7jG4QINHaYD3F3aVB+A8QP+jnx+vp442o=;
+        b=QW2hI6CnZhgPs5BhW3Y5N5woigAWdiw4I+HxOaWpGb6+k+iBwkxC84suyAfBt2Pdpc
+         mr0+h91Tj+IT5Ml1DnXdLP2mX1b+9P6uLp005FKYSt4cArysQ7d3/kbY5FPDbbj35YBy
+         MU6T/U5ymu4C++lI3tWS5WaeAr9/7f0Utc7sxA9+3d5mIM1CqhBF9L7FnQ+EenKh3pu1
+         s1bbUNnguLS698OxPaBe5fovzwqEbuN68KLCIxtWnazRx9UBPPaadxXfufucwsnnUN8i
+         up0HET4t0S4b9iYDP0zmFBUTCm/7NufyClxmUFSgQaTYMklFdkRX0C494Mm11rbLFToU
+         QlYw==
+X-Forwarded-Encrypted: i=1; AJvYcCX2n5ywG55CfKgpCy5zz80eu+JSOizdjIBH6DnLU/a5piaz2G0k/+fu7/v6wu2pqAqRRqO9CyCqFgU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7CldZ20rt/6lVfK7LiMyY6AOJrpfjMl85sFy9gZde4hO9a5Zn
+	M4RhU40Taj+YWlvFy2uIbNTiuJO09BBEmuuuR0tQky93kAuWy1XpSuFFTMiSfIlLqhPTTfWQIkJ
+	6iunpL+D5bDDWCbl06SRLgbLhnkpu0Smzd19O
+X-Gm-Gg: ASbGnctz0Hu0GY461xatwFD54s3D4b1AbaNMreBYJIietZ0sVSrwGmLZUDpGUzke6PC
+	X8J/tYAnORNyTCWgk7KtRjBKb8AOLvKYKiu3Q5Ouv+xoKoV8uHEnMyC7LF1D5XY6kR8svqwt8
+X-Google-Smtp-Source: AGHT+IEUEbQypVw1mRfmbnTIf4Ukyb7+76eD4I9b04vMNyyXvxqrWfo9orEAwoZLePsfoZJ4Qujt2DezTMRTHdgI43A=
+X-Received: by 2002:a50:8e14:0:b0:5d4:428e:e99f with SMTP id
+ 4fb4d7f45d1cf-5da0dd6825bmr16057a12.3.1736899465888; Tue, 14 Jan 2025
+ 16:04:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250114174452.GB1414434-robh@kernel.org>
+References: <20240205074650.200304-1-quic_kriskura@quicinc.com>
+ <ME0P300MB05534EDF5293054B53061567A61C2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+ <CANP3RGc_SBROWVA2GMaN41mzCU28wGtQzT5qmSKcYsYDY03G5g@mail.gmail.com>
+ <ME0P300MB0553900AF75E50947B011FF3A61D2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+ <CANP3RGc7n2vv6vGh7j0Y=7DNqfXnQxZaTcwdPD15kzoY1in08Q@mail.gmail.com>
+ <ME0P300MB05538EF3A86116EF73BE3BE9A61F2@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+ <CANP3RGdj0gRohsT=3GUZ84dYZxPDUhe3-Zz26bQrsavYnwtDmQ@mail.gmail.com> <ME0P300MB0553E15D02A52DB482496B2CA6182@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+In-Reply-To: <ME0P300MB0553E15D02A52DB482496B2CA6182@ME0P300MB0553.AUSP300.PROD.OUTLOOK.COM>
+From: =?UTF-8?Q?Maciej_=C5=BBenczykowski?= <maze@google.com>
+Date: Tue, 14 Jan 2025 16:04:13 -0800
+X-Gm-Features: AbW1kvZf6lbKucEi2XjVR3ji7JTiy35boIEgV6OwYyYsGuIHElBDcKBxGBxUAy8
+Message-ID: <CANP3RGczVx8qVG=joNJGtj2cFfh5hd0Ni2Xs2ZSA37s-jB1epA@mail.gmail.com>
+Subject: Re: [PATCH v3] usb: gadget: ncm: Avoid dropping datagrams of properly
+ parsed NTBs
+To: Junzhong Pan <panjunzhong@outlook.com>
+Cc: quic_kriskura@quicinc.com, gregkh@linuxfoundation.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	quic_jackp@quicinc.com, quic_ppratap@quicinc.com, quic_wcheng@quicinc.com, 
+	stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 14, 2025 at 11:44:52AM -0600, Rob Herring wrote:
-> On Mon, Jan 13, 2025 at 09:11:33PM -0800, Bjorn Andersson wrote:
-> > The USB IP-block found in most Qualcomm platforms is modelled in the
-> > Linux kernel as 3 different independent device drivers, but as shown by
-> > the already existing layering violations in the Qualcomm glue driver
-> > they can not be operated independently.
-> > 
-> > With the current implementation, the glue driver registers the core and
-> > has no way to know when this is done. As a result, e.g. the suspend
-> > callbacks needs to guard against NULL pointer dereferences when trying
-> > to peek into the struct dwc3 found in the drvdata of the child.
-> > 
-> > Missing from the upstream Qualcomm USB support is proper handling of
-> > role switching, in which the glue needs to be notified upon DRD mode
-> > changes. Several attempts has been made through the years to register
-> > callbacks etc, but they always fall short when it comes to handling of
-> > the core's probe deferral on resources etc.
-> > 
-> > Furhtermore, the DeviceTree binding is a direct representation of the
-> > Linux driver model, and doesn't necessarily describe "the USB IP-block".
-> > 
-> > This series therefor attempts to flatten the driver split, and operate
-> > the glue and core out of the same platform_device instance. And in order
-> > to do this, the DeviceTree representation of the IP block is flattened.
-> > 
-> > To avoid littering the dwc3-qcom driver with the migration code - which
-> > we should be able to drop again in a LTS or two - this is now placed in
-> > drivers/of/overlays.
-> > 
-> > A patch to convert a single platform - sc8280xp - is included in the
-> > series. The broader conversion will be submitted in a follow up series.
-> 
-> Is it not possible to use the same overlays also fixup the .dts files at 
-> build time?
-> 
+On Mon, Jan 13, 2025 at 7:46=E2=80=AFPM Junzhong Pan <panjunzhong@outlook.c=
+om> wrote:
+>
+> Hi Maciej,
+>
+> Thanks for your quick reply.
+>
+> On 2025/1/14 3:22, Maciej =C5=BBenczykowski Wrote:
+> > Looking at https://github.com/microsoft/NCM-Driver-for-Windows
+> >
+> > commit ded4839c5103ab91822bfde1932393bbb14afda3 (tag:
+> > windows_10.0.22000, origin/master)
+> > Author: Brandon Jiang <jiangyue@microsoft.com>
+> > Date:   Mon Oct 4 14:30:44 2021 -0700
+> >
+> >     update NCM to Windows 11 (21H2) release, built with Windows 11
+> > (22000) WDK and DMF v1.1.82
+> >
+> > -- vs previous change to host/device.cpp
+> >
+> > commit 40118f55a0843221f04c8036df8b97fa3512a007 (tag:
+> > windows_10.0.19041, origin/release_2004)
+> > Author: Brandon Jiang <jiangyue@microsoft.com>
+> > Date:   Sun Feb 23 19:53:06 2020 -0800
+> >
+> >     update NCM to 20H1 Windows release, built with 20H1 WDK and DMF v1.=
+1.20
+> >
+> > it introduced
+> >
+> >     if (bufferRequest->TransferLength < bufferRequest->BufferLength &&
+> >         bufferRequest->TransferLength %
+> > hostDevice->m_DataBulkOutPipeMaximumPacketSize =3D=3D 0)
+> >     {
+> >         //NCM spec is not explicit if a ZLP shall be sent when
+> > wBlockLength !=3D 0 and it happens to be
+> >         //multiple of wMaxPacketSize. Our interpretation is that no
+> > ZLP needed if wBlockLength is non-zero,
+>
+> In NCM10, 3.2.2 dwBlockLength description, it states:
+> > If exactly dwNtbInMaxSize or dwNtbOutMaxSize bytes are sent, and the
+> > size is a multiple of wMaxPacketSize for the given pipe, then no ZLP
+> > shall be sent.
 
-I presume so. What would the benefit of that be, over fixing up the
-source asap?
+But the Linux ncm gadget driver sets both of those
+(dwNtbIn/OutMaxSize) to 16 kiB (I can never remember which one is
+relevant to which direction, I think in this case it's 'In' cause it's
+relevant to the gadget/device and thus affects what is sent by Windows
+and parsed by Linux).
+So with 15.5 kiB this is not relevant, right?
+(Please correct me if I'm wrong)
 
-Regards,
-Bjorn
+Furthermore that 16 kiB is also the size of the preallocated receive
+buffer it passes to the usb stack, so there won't be a problem without
+ZLP (post 16 kiB xfer), because the buffer will naturally terminate.
+
+> I don't know if its a Microsoft's problem or really **not explicit**.
+
+I *think* (in this case) this is very much an MS problem (and the fix
+in the newer driver confirms it).
+Short packet / ZLP termination is simply how USB works to transfer packets.=
+..
+
+Unfortunately MS is not the only one with problems with ZLP.
+See Linux's drivers/net/usb/cdc_ncm.c 'NO ZLP' vs 'SEND ZLP' and the
+FLAG_SEND_ZLP.
+and note it's set on Apple tethering...
+[I think your quote up above is exactly why the standard requires 'NO
+ZLP' operation]
+
+So there's very clearly ample confusion here...
+
+> Maybe most of the device implementations treat the incoming data as a
+> stream and do contiguous parsing on it.
+>
+> >         //because the non-zero wBlockLength has already told the
+> > function side the size of transfer to be expected.
+> >         //
+> >         //However, there are in-market NCM devices rely on ZLP as long
+> > as the wBlockLength is multiple of wMaxPacketSize.
+> >         //To deal with such devices, we pad an extra 0 at end so the
+> > transfer is no longer multiple of wMaxPacketSize
+> >
+> >         bufferRequest->Buffer[bufferRequest->TransferLength] =3D 0;
+> >         bufferRequest->TransferLength++;
+> >     }
+> >
+> > Which I think is literally the fix for this bug you're reporting.
+> > That 'fix' is what then caused us to add the patch at the top of this t=
+hread.
+> >
+> > So that fix was present in the very first official Win11 release
+> > (build 22000), but is likely not present in any Win10 release...
+>
+> As you mentioned before to fix it in the gadget side, it seems very
+> complicated, maybe we need a extra skb with size=3Dntb_size as an interme=
+diate
+> buffer to move around those ntb data before parsing it, but may (or may n=
+ot)
+> lead to performance drop. Any other idea?
+
+It would definitely lead to a fair bit of code complication, and in
+the particular case of this happening it would involve (at least) an
+extra copy (to linearize), so definitely be a performance hit.
+
+I think we'd have to have a potential extra buffer/offset/length.
+Initially it would be null/0/0.
+
+Whenever we receive a frame and parsing it leaves us with leftover
+bytes, we'd have to allocate this buffer, and copy the leftover stuff
+into this temporary area.
+
+Try to parse it (note: potentially repeatedly, because we could have 8
+2kiB merged pkts...) and swallow the part that parsed, but if the
+buffer is too short, then hold on to it until we receive more data.
+If we ever manage to fully parse it - we could potentially deallocate
+it (or hold on to the memory to avoid multiple alloc/deallocs).
+
+When we receive a usb xfer, if the buffer already exists (or is non
+zero size), the new xfer needs to be appended to it, and parsing
+repeats.
+
+This btw. implies this needs to be a 32 kiB (2*16) buffer... vmalloc
+would be fine.
+
+I think we'd likely need to get rid of the way this stuff abuses skbs
+for usb anyway.
+I've wanted to do this anyway (note: not sure I've seen this in the
+gadget or host side ncm driver).
+
+Ugh...
+
+> Do you think hacking in the gadget side to fix this compatible issue is
+> a good idea consider that there are still a large number of users using
+> Win10?
+
+I'm still thinking about it, but I'd far prefer for MS to fix their
+Win10 driver.
+This just seems really hard to fix in the gadget.
+
+> (Though Win10 will reach end of support on October 14, 2025,
+
+Far longer than that.  Since there's (purchasable) extended support
+(+2 years), and non consumer Win10 EOL is further out as well
+(Enterprise is Jan 2027, business/school Oct 2028, IoT Jan 2032, etc).
+
+> but people may still use it for a long time
+
+Yeah, Win10 will be around for many many years to come...
+
+> since many PCs in good condition cannot install win11.)
+
+Or people don't want to, even when they could :-)
+I personally have a win11 capable PC that I'm refusing to upgrade...
+(and a pair that are too old)
+
+This is only the *second* time Win11 actually has something (beyond
+what's in Win10) I could potentially maybe actually want (the first
+being related to WSL, though I've since stopped using it).
+I miss XP with classic UI (maybe Win7 was better? not sure).
 
