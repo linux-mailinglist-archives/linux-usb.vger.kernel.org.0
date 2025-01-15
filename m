@@ -1,99 +1,141 @@
-Return-Path: <linux-usb+bounces-19382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19383-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AB38A12A28
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 18:52:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F83DA12B2D
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 19:52:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id ABD7E7A2ACD
-	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 17:52:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C22F51611C9
+	for <lists+linux-usb@lfdr.de>; Wed, 15 Jan 2025 18:52:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E330A1B5ECB;
-	Wed, 15 Jan 2025 17:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30A141D63F0;
+	Wed, 15 Jan 2025 18:51:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K4z79ptW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GNrB2jg+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69B31155C96
-	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 17:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A91124A7D5;
+	Wed, 15 Jan 2025 18:51:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736963547; cv=none; b=l66Z3hAsJToQG2ZT347ho4BKEMjvkrdpt8PGzaEmTj6W0zGL8bkVFeeJMqsN8pZ4Ax/Q9suwUU0F8TX++SZmrxO4jurkfa8oiE8HebCmDEr01wVdLOURoT8pBTV57Wufd8DLaUZD5r3FgdkZ9hBl5Q3QDskV+jKeHMTh/B1OH0I=
+	t=1736967116; cv=none; b=mAqDsdwQQ5Yr1Js5Fw18SZBkHumxJQZJVhAeGbExWrP1e3vN6bLfNUBkbB/Zy1hNcZscqNtYSm4AeUFnXFn8Dznjp7OTIuq2dAOydxHRtb46pZLlbzOfRL/vFLoeaMpGuKnhHigvBlFluLG2HvwNWGLVazyFr9SouOJP85ekB18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736963547; c=relaxed/simple;
-	bh=PN8O05u6dtIQZybJYaHWrFRYn4ocUY1Rj23F3/W6f80=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ucY/VaRm2CC9z2uQY/2gSyjlYqt5TzuDuKoS0oWMP3SEIRWUfwiqlJAtXLBiPa5a0CVPt2rygNyh4Igxhvc1HweOVcCKOgpaIFNIRqa6ptMQmyGW1Jx1m07qLAzg1+m1Tj229Y7Vw2+Bzt2Ut+LwQC7ctZRKyc7miq1iRXmSFuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K4z79ptW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C6C14C4CEE1
-	for <linux-usb@vger.kernel.org>; Wed, 15 Jan 2025 17:52:25 +0000 (UTC)
+	s=arc-20240116; t=1736967116; c=relaxed/simple;
+	bh=2CBjv23MYxOlJNmtgtBGaGKQyrEERUP2PeLxadtXFsw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hAODzcJRElH9hW7ytf9tx7IS1L6yZk6snFnQADhioa573LU+cjxBMiPjqIM2vMtM3p/ghSaqOoUdYH3UGnQVRobrSsAm5TSFfpDYT3bgF7ZYWinGdvkAtbBjPloGyCgOfZ9WHWnLuN/uC0C5arj/MA/+6DNllCeA+MU512xWfsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GNrB2jg+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74555C4CEE2;
+	Wed, 15 Jan 2025 18:51:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736963545;
-	bh=PN8O05u6dtIQZybJYaHWrFRYn4ocUY1Rj23F3/W6f80=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=K4z79ptWe1trzDS+xPi+G8MA4K+Hq/iPVlwmnNZXr8/n2rtyjXb/IwvsjV9maVZEH
-	 S15MU+dPwtXOI/YNtxYeuEr/wbmzViMXmRHIplx9CzOS2XLYErpJ73MW+EPvCs2BD8
-	 HfdgSM5fv9RXPXDFbxjnv0+fmJ4pfsH0NFiFuFEkDf0I2lgVRcOrB+0G0zmiSCQ5De
-	 7+eZAxTroquUCEJMItaavoR3Ai81drcrCYmjm4orM/26Q3YWktCV6U9tnFLRAg0I/3
-	 oquD7HUjiqg1aaAsh00ATzOoZNwZ0ROZqK1REuC6qlY9SUZI20lRUVxMo36VNbWwz9
-	 n4kKm6RZY/qlA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id BA097C41606; Wed, 15 Jan 2025 17:52:25 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219681] ASUS Zenbook S 14 UX5406SA: Unstable USB connection on
- USB-A port under certain condition
-Date: Wed, 15 Jan 2025 17:52:25 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: dantmnf2@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219681-208809-H4ZaOJ0sfR@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219681-208809@https.bugzilla.kernel.org/>
-References: <bug-219681-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1736967116;
+	bh=2CBjv23MYxOlJNmtgtBGaGKQyrEERUP2PeLxadtXFsw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GNrB2jg+Jh94dwKtpoyel4s9NjK0amgn1Ha1/pr6KqOnWPWDpAUmPHcBuguFdxuQe
+	 rZ37ZZUdVhI6G4Htd++5oDbPjlTWud3gSyqbi3qUSkVXWmr+bCxMw2wLJYppEmzupQ
+	 flCtGO6ZESgvFn7CHshi7623flzRbUqi52GuGUyEdM+pqAZFgxVloZoZfMNf2MJLMv
+	 v64jsZZZT18z4pZG3zScP5oac8TcRjFdKmBerCNqJMyJhJQxmQMciIyo7SpNQWlPN7
+	 bSRYbuNkxp93zggeaN8u7oTrE/BmlTJlp2emJfp5x3F8lKnz3VzdTyRSNiB7RtA1+c
+	 shFS/M9rpWg9A==
+Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5401c52000dso121843e87.3;
+        Wed, 15 Jan 2025 10:51:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUTZKJETxTsg3/v2AefiIDeNtUAgEBOW/ed26p1ceg24EvlrjqIiYxpJke+p8+5wsFUrkS0J+2FKB0qWGfxtw==@vger.kernel.org, AJvYcCV/mQzer1DNCsVvc4/MHyffPMYltxcyWyrtSEI3sYc8ZWI9XYdV7r5jE9wgdHSCn4okb3+H7EFPGOw5@vger.kernel.org, AJvYcCVHnPLRJenqqOFv74WtA9Wp4Gd+CVhSwc9IaRiQgvkW1LtrAllVyH0O9T4vOWY5edExGxXInJvdIsuanfmC@vger.kernel.org, AJvYcCWfIZSNyG/2aIHf8KB2I9rsQ4A7rqXwRYkdvA7IEGqev41R+jbdr/jjq79gd2jXjoPttkK2uwCjDT7H@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3dOzsOSEfjjEMmlCc7mP2l1DC83cVE919KvAiiF/GwMMfP2Sj
+	597cll4OpVirknR7kLw68kFmbFzJ36eGvlAFd/FppH0ozJMNrDtKyhjDEdEScWdtFuOq92bpr3/
+	4G3Z3Tq7NTHCXRfTkIG4zlQQ4AQ==
+X-Google-Smtp-Source: AGHT+IGn5tiZ7t+XFd36Cw2Pkn734Jaqmj8PMufsWNc0a8FX7/Lj0Hkdb/q3fJptQ+JtEzwCmDUA6XFIH9PQ3L3jDeI=
+X-Received: by 2002:a05:6512:ba5:b0:542:a73d:a39c with SMTP id
+ 2adb3069b0e04-542a73da516mr2896052e87.49.1736967114810; Wed, 15 Jan 2025
+ 10:51:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com>
+ <20250114174452.GB1414434-robh@kernel.org> <srhxu3r4sxy5ntx53nicf7l43sdjpiwavzd2qsgq2ovquzvt3u@cskcthmqznex>
+In-Reply-To: <srhxu3r4sxy5ntx53nicf7l43sdjpiwavzd2qsgq2ovquzvt3u@cskcthmqznex>
+From: Rob Herring <robh@kernel.org>
+Date: Wed, 15 Jan 2025 12:51:42 -0600
+X-Gmail-Original-Message-ID: <CAL_Jsq+4qzfy3kY+8LwPvGs4FkFKoregTAYu4-buJQZHkqJwyA@mail.gmail.com>
+X-Gm-Features: AbW1kvagAa1MHU2hwYLVdH5Erq1_6vjdjyUW_EytJ4YOICKeBk1eUQZ3mwJk4bo
+Message-ID: <CAL_Jsq+4qzfy3kY+8LwPvGs4FkFKoregTAYu4-buJQZHkqJwyA@mail.gmail.com>
+Subject: Re: [PATCH v3 00/12] usb: dwc3: qcom: Flatten dwc3 structure
+To: Bjorn Andersson <andersson@kernel.org>
+Cc: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
+	Wesley Cheng <quic_wcheng@quicinc.com>, Saravana Kannan <saravanak@google.com>, 
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>, linux-arm-msm@vger.kernel.org, 
+	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219681
+On Tue, Jan 14, 2025 at 5:04=E2=80=AFPM Bjorn Andersson <andersson@kernel.o=
+rg> wrote:
+>
+> On Tue, Jan 14, 2025 at 11:44:52AM -0600, Rob Herring wrote:
+> > On Mon, Jan 13, 2025 at 09:11:33PM -0800, Bjorn Andersson wrote:
+> > > The USB IP-block found in most Qualcomm platforms is modelled in the
+> > > Linux kernel as 3 different independent device drivers, but as shown =
+by
+> > > the already existing layering violations in the Qualcomm glue driver
+> > > they can not be operated independently.
+> > >
+> > > With the current implementation, the glue driver registers the core a=
+nd
+> > > has no way to know when this is done. As a result, e.g. the suspend
+> > > callbacks needs to guard against NULL pointer dereferences when tryin=
+g
+> > > to peek into the struct dwc3 found in the drvdata of the child.
+> > >
+> > > Missing from the upstream Qualcomm USB support is proper handling of
+> > > role switching, in which the glue needs to be notified upon DRD mode
+> > > changes. Several attempts has been made through the years to register
+> > > callbacks etc, but they always fall short when it comes to handling o=
+f
+> > > the core's probe deferral on resources etc.
+> > >
+> > > Furhtermore, the DeviceTree binding is a direct representation of the
+> > > Linux driver model, and doesn't necessarily describe "the USB IP-bloc=
+k".
+> > >
+> > > This series therefor attempts to flatten the driver split, and operat=
+e
+> > > the glue and core out of the same platform_device instance. And in or=
+der
+> > > to do this, the DeviceTree representation of the IP block is flattene=
+d.
+> > >
+> > > To avoid littering the dwc3-qcom driver with the migration code - whi=
+ch
+> > > we should be able to drop again in a LTS or two - this is now placed =
+in
+> > > drivers/of/overlays.
+> > >
+> > > A patch to convert a single platform - sc8280xp - is included in the
+> > > series. The broader conversion will be submitted in a follow up serie=
+s.
+> >
+> > Is it not possible to use the same overlays also fixup the .dts files a=
+t
+> > build time?
+> >
+>
+> I presume so. What would the benefit of that be, over fixing up the
+> source asap?
 
---- Comment #5 from dantmnf2@gmail.com ---
-> What happens to the errors when it works (on USB-C or through a hub)?
-> Are they still there but recovered from? Or not happening at all?
+The overlays would live with all the other dts files (I think kbuild
+can add built-in dtbs from arch/*/boot/dts/). We can test at build
+time they actually apply, and ensure the new dtb matches what the
+fixup overlay creates.
 
-Not happening at all on USB-C port.=20
-
-As for the hub case, with the network adapter as the only device on hub,
-transfer errors are still there and the entire hub appears disconnected aft=
-er
-it, but no more errors after another adapter (with same chip) comes to the =
-hub.
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Rob
 
