@@ -1,107 +1,188 @@
-Return-Path: <linux-usb+bounces-19397-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19398-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 366B2A138E3
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 12:24:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0588AA138E8
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 12:25:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA957163A61
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 11:24:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B1BB188272D
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 11:25:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 151631DE4E7;
-	Thu, 16 Jan 2025 11:23:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E9531DE3CB;
+	Thu, 16 Jan 2025 11:25:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="r+PA8e2H"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ci1Qpx7/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out.smtpout.orange.fr (out-17.smtpout.orange.fr [193.252.22.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4931DDC10;
-	Thu, 16 Jan 2025 11:23:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB3424A7C2;
+	Thu, 16 Jan 2025 11:25:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737026623; cv=none; b=amJ3WBvSZ0miuHiMi8wlKGbTrBKMySM9icY2izJVeqN4QrFtk93MUvAN9DTTSJoNkafo1M/fCZfWzQjc9c/B6/ymV0qOdQKICkTekZk8GPIp06QVmfEVT2wMj7vKbLcx5jC0PCeLLzdrmfZrkq26sJBbDNfBfPWqflAARlpV5wg=
+	t=1737026735; cv=none; b=hrBZzJ7Rp2865j69ETCFWCJIdq9Ekz48ZyqeCuRwLxlVA/6WOi4X7x5j4kBZp2xPK8niSEuymHuUBP7TV8wORcYSHW8U0NquC1O8nbXZ0yBILjaL682zUMsoGmTGXGHUd9T1LZDX77L6KXylTnRpjzSmio5nDZP1mc89DFKuxcg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737026623; c=relaxed/simple;
-	bh=eLlU4xsWGD+mHJN9rdcGWXT0y2PG9/3+22ofQ+9OFhQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=R+PecoWI0pgM/UFOfbcyVHGDsVN5AnwjataX0LNXP28sp0AdxsdvW0SYAQnAV3CQCPadmuEkFTeprxc7RszTnKJTs0ZvTvRw4qncz92bRN6eb9GpxHafJX4z2Wd7doxKjkQPRGjUXi/BMFxaxQEVotxAISyHFEjI92etRv1dc0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=r+PA8e2H; arc=none smtp.client-ip=193.252.22.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
-Received: from [172.16.82.72] ([124.33.176.97])
-	by smtp.orange.fr with ESMTPA
-	id YNxutnYQDyahuYNxztVNSW; Thu, 16 Jan 2025 12:23:33 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1737026613;
-	bh=KYSXBkxUAldmT4pYPhPuw4hrkQ16dgPfLzABFQ4aYjo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=r+PA8e2HPj0was0mFKVLZQQZlfkqZ9GExTlwcp6rhiMGzEQwKEnBrNopYyLOjzkjV
-	 Hfdax7NZsCpupQyoqdlwmQzjsvsG0DkF7oLJLVGhYaY6GGf3BXGE14jADr43wx5Gid
-	 DJx+plHJ8/0hBS3lmssIyYc3hqm6ufoIjKk3PvnjTuUy3sfoxcUYF3UwT8tL3MzyML
-	 6L31hUpUn+QiHtOyDswKNkoLHOaQoN8lSLBbtfpwtVwcb+h2lYFs97t7AIZvjzZDor
-	 g+mi7taF6wxdo1pmH5bedVLC5J3xEDvZGFPoMyS/JHqMeMEuSZy0xn/MN4HEzAijg4
-	 9POxQT1vi3S1Q==
-X-ME-Helo: [172.16.82.72]
-X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 16 Jan 2025 12:23:33 +0100
-X-ME-IP: 124.33.176.97
-Message-ID: <bdab6511-0e38-4932-a615-033d888364b1@wanadoo.fr>
-Date: Thu, 16 Jan 2025 20:23:09 +0900
+	s=arc-20240116; t=1737026735; c=relaxed/simple;
+	bh=HQn8hnOx0krH5GEg5JmI4lizNY21p9Dbh5oDRE/BXuA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IiLkpjZu4GYEf0qFP5a38hpL3GMgmGR4w2WR0riMjqce6GqNyyvOTpC22XgUACmoM6HLlAWMvfmtMQMXEJJrEwqCMDVbFaWfrZ+q53ftUEPSzJ+1EWdtRLeNnqgWFC0/9+XfeNTORU/4rrY9EMENOsNLLdsRMzG6OMEaDGYaRS4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ci1Qpx7/; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737026733; x=1768562733;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=HQn8hnOx0krH5GEg5JmI4lizNY21p9Dbh5oDRE/BXuA=;
+  b=ci1Qpx7/HyGXCWEBzEcp6bsU4o4G0io1zuikfNo5ftB0lY3AKHq4XFTv
+   zwIwGwMTOBfA/hS+cmR+NvCbXj42TJEk8N4aYIMKdJTO3YqUc8DoKJHPA
+   dfZmCox7irQht2dq+z9ycyyvuq2GnjvNfYmgREyvmZO7IJ6SE9MPWSoVl
+   eyk1kxWhzZnXUZy+aWfKeNxrA8W1MNAGQIyMU+z6nRx3t2ribyzx/9T1Y
+   jNiqsnRACI17X7gwVubTa/wVW5axIC50rbJe3Rq35aDOonA9cCHt1aEhA
+   TcDPzWnZ53A2dYLkFUJQTu6qYRfr7fZxuXW9pGIaDPCV8VKColRPJWdol
+   w==;
+X-CSE-ConnectionGUID: K60WKY0eQli4ZZIrIEA3Gg==
+X-CSE-MsgGUID: F7J9af10TGSRGuI2FBItWg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="47996306"
+X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
+   d="scan'208";a="47996306"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 03:25:32 -0800
+X-CSE-ConnectionGUID: E8S3DDXERcqehDA4vNllaw==
+X-CSE-MsgGUID: k8V5PRfPRTOns957dhhvbw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="110440442"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa003.jf.intel.com with SMTP; 16 Jan 2025 03:25:28 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 16 Jan 2025 13:25:27 +0200
+Date: Thu, 16 Jan 2025 13:25:27 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Kyle Tso <kyletso@google.com>
+Cc: gregkh@linuxfoundation.org, andre.draszik@linaro.org,
+	rdbabiera@google.com, m.felsch@pengutronix.de, xu.yang_2@nxp.com,
+	u.kleine-koenig@baylibre.com, emanuele.ghidoli@toradex.com,
+	badhri@google.com, amitsd@google.com, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v1] usb: typec: tcpci: Prevent Sink disconnection before
+ vPpsShutdown in SPR PPS
+Message-ID: <Z4jsp4J6AX0X-uwX@kuha.fi.intel.com>
+References: <20250114142435.2093857-1-kyletso@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Ming Yu <a0282524688@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
- netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
- linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org,
- linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
- mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
- alexandre.belloni@bootlin.com
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-5-a0282524688@gmail.com>
- <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
- <CAOoeyxVK=iBmj3BDX=D8a9=GFBkE158jbq3Rnq-RuoA5HxMi7g@mail.gmail.com>
-Content-Language: en-US
-From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
- xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
- LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
- GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
- bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
- BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
- 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
- yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
- CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
- ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
-In-Reply-To: <CAOoeyxVK=iBmj3BDX=D8a9=GFBkE158jbq3Rnq-RuoA5HxMi7g@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250114142435.2093857-1-kyletso@google.com>
 
-On 16/01/2025 at 15:34, Ming Yu wrote:
-> Hi Vincent,
+On Tue, Jan 14, 2025 at 10:24:35PM +0800, Kyle Tso wrote:
+> The Source can drop its output voltage to the minimum of the requested
+> PPS APDO voltage range when it is in Current Limit Mode. If this voltage
+> falls within the range of vPpsShutdown, the Source initiates a Hard
+> Reset and discharges Vbus. However, currently the Sink may disconnect
+> before the voltage reaches vPpsShutdown, leading to unexpected behavior.
 > 
-> I will remove priv->tx_skb in the next patch, but it seems that
-> can_flush_echo_skb() has not been EXPORT_SYMBOL_GPL().
+> Prevent premature disconnection by setting the Sink's disconnect
+> threshold to the minimum vPpsShutdown value. Additionally, consider the
+> voltage drop due to IR drop when calculating the appropriate threshold.
+> This ensures a robust and reliable interaction between the Source and
+> Sink during SPR PPS Current Limit Mode operation.
 > 
-> I would like to know if nct6694_can_clean() requires modification.
+> Fixes: 4288debeaa4e ("usb: typec: tcpci: Fix up sink disconnect thresholds for PD")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Kyle Tso <kyletso@google.com>
 
-Indeed, you can can_free_echo_skb(ndev, 0, NULL) instead of
-can_flush_echo_skb(ndev). That one is exported.
+You've resend this, right? So is this v2 (or v1)?
 
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
-Yours sincerely,
-Vincent Mailhol
+> ---
+>  drivers/usb/typec/tcpm/tcpci.c | 13 +++++++++----
+>  drivers/usb/typec/tcpm/tcpm.c  |  8 +++++---
+>  include/linux/usb/tcpm.h       |  3 ++-
+>  3 files changed, 16 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci.c b/drivers/usb/typec/tcpm/tcpci.c
+> index 48762508cc86..19ab6647af70 100644
+> --- a/drivers/usb/typec/tcpm/tcpci.c
+> +++ b/drivers/usb/typec/tcpm/tcpci.c
+> @@ -27,6 +27,7 @@
+>  #define	VPPS_NEW_MIN_PERCENT			95
+>  #define	VPPS_VALID_MIN_MV			100
+>  #define	VSINKDISCONNECT_PD_MIN_PERCENT		90
+> +#define	VPPS_SHUTDOWN_MIN_PERCENT		85
+>  
+>  struct tcpci {
+>  	struct device *dev;
+> @@ -366,7 +367,8 @@ static int tcpci_enable_auto_vbus_discharge(struct tcpc_dev *dev, bool enable)
+>  }
+>  
+>  static int tcpci_set_auto_vbus_discharge_threshold(struct tcpc_dev *dev, enum typec_pwr_opmode mode,
+> -						   bool pps_active, u32 requested_vbus_voltage_mv)
+> +						   bool pps_active, u32 requested_vbus_voltage_mv,
+> +						   u32 apdo_min_voltage_mv)
+>  {
+>  	struct tcpci *tcpci = tcpc_to_tcpci(dev);
+>  	unsigned int pwr_ctrl, threshold = 0;
+> @@ -388,9 +390,12 @@ static int tcpci_set_auto_vbus_discharge_threshold(struct tcpc_dev *dev, enum ty
+>  		threshold = AUTO_DISCHARGE_DEFAULT_THRESHOLD_MV;
+>  	} else if (mode == TYPEC_PWR_MODE_PD) {
+>  		if (pps_active)
+> -			threshold = ((VPPS_NEW_MIN_PERCENT * requested_vbus_voltage_mv / 100) -
+> -				     VSINKPD_MIN_IR_DROP_MV - VPPS_VALID_MIN_MV) *
+> -				     VSINKDISCONNECT_PD_MIN_PERCENT / 100;
+> +			/*
+> +			 * To prevent disconnect when the source is in Current Limit Mode.
+> +			 * Set the threshold to the lowest possible voltage vPpsShutdown (min)
+> +			 */
+> +			threshold = VPPS_SHUTDOWN_MIN_PERCENT * apdo_min_voltage_mv / 100 -
+> +				    VSINKPD_MIN_IR_DROP_MV;
+>  		else
+>  			threshold = ((VSRC_NEW_MIN_PERCENT * requested_vbus_voltage_mv / 100) -
+>  				     VSINKPD_MIN_IR_DROP_MV - VSRC_VALID_MIN_MV) *
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 460dbde9fe22..e4b85a09c3ae 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -2973,10 +2973,12 @@ static int tcpm_set_auto_vbus_discharge_threshold(struct tcpm_port *port,
+>  		return 0;
+>  
+>  	ret = port->tcpc->set_auto_vbus_discharge_threshold(port->tcpc, mode, pps_active,
+> -							    requested_vbus_voltage);
+> +							    requested_vbus_voltage,
+> +							    port->pps_data.min_volt);
+>  	tcpm_log_force(port,
+> -		       "set_auto_vbus_discharge_threshold mode:%d pps_active:%c vbus:%u ret:%d",
+> -		       mode, pps_active ? 'y' : 'n', requested_vbus_voltage, ret);
+> +		       "set_auto_vbus_discharge_threshold mode:%d pps_active:%c vbus:%u pps_apdo_min_volt:%u ret:%d",
+> +		       mode, pps_active ? 'y' : 'n', requested_vbus_voltage,
+> +		       port->pps_data.min_volt, ret);
+>  
+>  	return ret;
+>  }
+> diff --git a/include/linux/usb/tcpm.h b/include/linux/usb/tcpm.h
+> index 061da9546a81..b22e659f81ba 100644
+> --- a/include/linux/usb/tcpm.h
+> +++ b/include/linux/usb/tcpm.h
+> @@ -163,7 +163,8 @@ struct tcpc_dev {
+>  	void (*frs_sourcing_vbus)(struct tcpc_dev *dev);
+>  	int (*enable_auto_vbus_discharge)(struct tcpc_dev *dev, bool enable);
+>  	int (*set_auto_vbus_discharge_threshold)(struct tcpc_dev *dev, enum typec_pwr_opmode mode,
+> -						 bool pps_active, u32 requested_vbus_voltage);
+> +						 bool pps_active, u32 requested_vbus_voltage,
+> +						 u32 pps_apdo_min_voltage);
+>  	bool (*is_vbus_vsafe0v)(struct tcpc_dev *dev);
+>  	void (*set_partner_usb_comm_capable)(struct tcpc_dev *dev, bool enable);
+>  	void (*check_contaminant)(struct tcpc_dev *dev);
+> -- 
+> 2.47.1.688.g23fc6f90ad-goog
 
+-- 
+heikki
 
