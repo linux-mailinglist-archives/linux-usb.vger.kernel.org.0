@@ -1,810 +1,538 @@
-Return-Path: <linux-usb+bounces-19388-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19389-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0599A13165
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 03:29:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F7B4A131CF
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 04:50:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21B7F3A5129
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 02:29:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE1193A5D83
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 03:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49D6013635B;
-	Thu, 16 Jan 2025 02:29:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F69413635B;
+	Thu, 16 Jan 2025 03:50:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RijYDDtd"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="dSw6u2+I"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013027.outbound.protection.outlook.com [40.107.162.27])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AABC024A7EE;
-	Thu, 16 Jan 2025 02:29:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736994547; cv=none; b=bN47g9Vubl617TtCmBOOjFvKX/g5tvz+hNcisKICo+shRxdnGKblVL/A+uI73jyYBUy54/YZQRXuKo+5LMugM7kFAVkmATHNG2VE4CkeJ5Q8WNvFTwr0DlPeQpMjyShOoSaomhO8NBStjlznU5PCWQPwRmY6XPPOB5i7F+MTago=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736994547; c=relaxed/simple;
-	bh=WT0+dydykW/JxtikGPMFnEDS5xnaa0bePUsfbe5etr4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K88ksL04s14dV29OgfHfYnblHFN0zopTmKfqKiPodrB0UhBVOZ2KSPR6iUXJ/5GsGIV9VGQ15FV/ijpYkkt2423ZmxI9A0JjLq+r7W1LjGL+FJJtbKDrCNaaLwtBZaNo0BUCVq5P+zoPbZ9A7nxr99i5oTwig3ULqOkgotgMHCA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RijYDDtd; arc=none smtp.client-ip=209.85.219.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e4a6b978283so2845998276.0;
-        Wed, 15 Jan 2025 18:29:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736994544; x=1737599344; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+GIKsnvbzkRGvM2ntRhtRXwKVW3iyvrkQS53nqfJvuY=;
-        b=RijYDDtdvDRukqmIVCl6JLELqYPF3DRNzhipZfe7SSlInJIHZd2UZLCwLkI3CZa58H
-         w/CgLG/aGQJKZothmihIQN0WH71cKVO25NdtTGFfmKCuhqy1mA5UzebkIv+1nPqw940g
-         xQ666Ut8cWWlSr1VutZZJgY5dKgUJOEEIX4jpi7B+NOIqLMwEyQPhzqHEETnlHa6MhSu
-         AvGGJFoG87lGIQlgNrBPdp8blWkSmWzAgkIxgzHQQil2NdhA6SLAwRX+L8jv2RGRJ99G
-         bvg/qHNY4CbdpkwB1ObIqyh2BsUt1vpy3RimzqSduXhIiWgjSUySmGegqWvckaKrsOld
-         RAqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736994544; x=1737599344;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+GIKsnvbzkRGvM2ntRhtRXwKVW3iyvrkQS53nqfJvuY=;
-        b=ojIs2AhGlxxNrCkdrTG3R0TkdtMP0UhU0lMnzxjWEXArTicmV5HhJVGtRkm72+RxuP
-         h/zVnvobnPlNI3e03Dk+hvJf65u4cVJgr08od5Dq2nHXse3RQ/wBQHNagdR4LDjAw4sl
-         eGUVMGMguAXkRhsbBQwhdytnCAcIjJtQBbuIcbFiua5gi5RxNvJhZpNL7ifMhfVByxKW
-         f6REyL1TQ/pBvQXe8fNrdkgV/8PK7LmGnv6eTjCJwvNdRTWeoESG1vNElEke1uNVVHrK
-         AJ/tkmSyr/oKq60rPjU19C4Ax4TwDWu+cFiTQqzzi7Diy2O3zxuhHLaidjPeC61oEyS0
-         LfcA==
-X-Forwarded-Encrypted: i=1; AJvYcCUm3zeEBuWWcS6+LhD1SjbARFgbTmLbq3Ea0gBfquPibRsBDIqC5FiecXKtvUvQ4XbKMS4cw2kpQN2mQv50@vger.kernel.org, AJvYcCUveRYMDMD67uRsq6HQwDOYDAbeCo8zqUvVBF9CmumahFt0eZNWCK97rxDWiSrkL2KtGjvbaGmm/C/E@vger.kernel.org, AJvYcCUwu2aEZlJiWGbdcziFqGmZ5YgFdSLXU8l+QnI5Jx6ZYIvkF/qFDFQm3Kex72e0lDinKR2Ao9gkUYAO@vger.kernel.org, AJvYcCVCEScyr8RK6NTXL+bExrzfzjUZyrU9MOWuKfbu+MZc4kQXtvPDQe85qC50qf1pJ+zeKzD+32iZgZCrpg==@vger.kernel.org, AJvYcCVeqcLodN0hhtoI9MwBtlsGF2d3U+hh6lNRUjUXY2VIIVXtctxhbGK0BZsIoDaRRBs35QOF+8D9niw=@vger.kernel.org, AJvYcCWJNURevdnipstKYHrITOi4SfdB7MnFoPyv/+24PyExgwykZjTd3/3K+Fq/PoN9oUs6OOgyRaP7@vger.kernel.org, AJvYcCWMiJazvvvszXHVyP1ZTh8chUAhaZx5TfYozgnWq1YjQpNhXnWO0xtNlUVfmocifYZrydsKip0K+Ubh@vger.kernel.org, AJvYcCWhKEX/7q/PXKg4WWT7Rn9u3APXV5fE+iIAdsrYYsfO31J5zX1rbaZARDod/lpfFsWwGjaMEZ0236fewiq5QiQ=@vger.kernel.org, AJvYcCWruuhHOAoy4THXEZFVhavC8+YftqybT45KapfkVmWKUvb1DPq/n/ap4qMCaeRwhTdNAPB7rVPgyb3YFpo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3TZTrQ9shSvCOzjYBdbSPZ/sURyk5bwYUNe/c1KKsfOBOwjvL
-	nWM5iEqVdWW7x/ZwvjgN5wPx2qPQyM6VUCj/qpWJYAy9GeXLWV8bWAPIkMxPPInBiHL14Q6gC0e
-	B4bYOInjgDwsBv45YikUEFn+GEU4=
-X-Gm-Gg: ASbGnctVYgkM6YxI7ELE3PMpKOYVqz2Y9VYHzEZXTNF6l0/POVwQMHvRRxD3kLft2zQ
-	45mwiI9gZrQR5niV3VOwifuXngkkeIKBzJLwNvw==
-X-Google-Smtp-Source: AGHT+IEXEI4dBQcymfAC4IaxFxxb5qCy4f8kvxuST9nbCahb3NMNK4TdbJW3B8YiXQ7p3u5hvM7jseKvSXKy/pVV0ZI=
-X-Received: by 2002:a05:6902:260c:b0:e38:b399:590b with SMTP id
- 3f1490d57ef6-e578a1222dcmr4578245276.2.1736994543998; Wed, 15 Jan 2025
- 18:29:03 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705BD2AEE3;
+	Thu, 16 Jan 2025 03:50:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.27
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736999412; cv=fail; b=lic1Ozu4vpmHPMxfoYa46SXKObxpxr2xRMr9ZeX3B+bcYVWHc6mlEb8rPHU/b82UkxhjIQN8lqCxvx2lPWxHtzfwYB+o+700n7V+KtHyaPTXuMbMslTmx7kjesrDweFW7VFURPxTAkAJ76wAe2WZKepF2jqBMgvq6sVAAzNME+M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736999412; c=relaxed/simple;
+	bh=YMI9c8dPc0MwT4hn6eNZ8l1g0PX/D9zYSeJMA1q0rEE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ry9EOcMMF/AFMNTjLj2BeqsUZedGRNxRfiqulAvU06X062KLgV3WOUui4ft4ecioinqp9MoR5bvNiCqRJEzlFx+9uqOYtyL4wHgTcnSXjrOTgFeQGA4/fVYuiyCAGLHTB8kYM6pUqZ/pJIMJVOj/A+vVTcUXtaAuId7BhpcWMNs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=dSw6u2+I; arc=fail smtp.client-ip=40.107.162.27
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=H/KssnDUlJut04+MBXEvwQEga5NFRbJTJIVHvxwkc4ReyzO1hylQlMd0sNN6KQFJcdJ30IlxLRPwL5bNqRaY08F32TUTkd18X7pyWWy9Q34sWSW7z/0xf4JhyHF1ryANsJVpWWFVzbM82jOh4+QskeQRCibdkrhvMW0A8hcbp68SNMJ0h0TU5DNLoleveXFAyQTGo64yp1EDmWZ3MIYNxFpPAqItKBujcAkfIHzYtS7mxnMM9MZOuMwviXAhBO4LxbzjDxqXeiqX7WgiYkIA7cffpJe+EcIZvuWsfxHuLRcUP4KqWZ8lPEITXj+djvxx9LyzPLFN3jwrF3XMMj14oQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4vn5lguTBC1B/66JIydbCPUtENqIf/jI/RrzNIwe3lk=;
+ b=HjeoGBfJlmZkCyi8RW5NOc71KhWdK2qh28dU+nLC8WLfLGZofCQcPR+5nU+pQFJXQJQ6tak/2YHBzCXcpuOz+tpoxnfW9ktFqQInxjRi8476D5SJ4zzUFHMIDVtyT6mncJatVI3Xftb3Yh5WgfyUHY87vKYQGmqReGZLREcirwY6ToUtT4jkHv5ryAXd3LrwSZbdoKpGmS7+0/LmjdLmkvIRp4mbFbsyp+AkanN7A5J6CPCcsnlhRxeSggZpFuZs2e7NF6EWGs/SkI4QF6TujmyoSFffNE2RL9hrTyY9sEtfg1RFHKLIvAT8ljyQd9/J4YU1gbB71t+gd+sVCICdDg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4vn5lguTBC1B/66JIydbCPUtENqIf/jI/RrzNIwe3lk=;
+ b=dSw6u2+I7zG0lVBrWKRLfVklVgyC5VVf6PhzKWmJkFz5exKzarqxmDnyT2IybA7XHfag3vt2LeyPWwwZ168xNyaHA0+cUWx5khv31U39bLfozHX8InljnImVpHqCmTUJp5yL/VxFG4YfSV/cro6jrYOPH3Fg2fi5BTGroK/oozDo29aJpd4e9qsUHc+QRc6DEHXcwK7lhWKL9+SUOgzF9U1a+aZM9+c38bHzVwryR5Sn7YVOzM4IFPeOf3HAS4X2XhMIf/jFabWtRCYp1B+O9b7xtZXWCB+B8Ogg4MxGk3hlRxdhCavQrD3GwyPtteJQGpCp0KKbu0i48YdVq6lj4g==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17)
+ by GV1PR04MB10703.eurprd04.prod.outlook.com (2603:10a6:150:202::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.13; Thu, 16 Jan
+ 2025 03:50:05 +0000
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::cdc5:713a:9592:f7ad]) by PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::cdc5:713a:9592:f7ad%4]) with mapi id 15.20.8356.010; Thu, 16 Jan 2025
+ 03:50:05 +0000
+Date: Thu, 16 Jan 2025 11:46:23 +0800
+From: Xu Yang <xu.yang_2@nxp.com>
+To: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	gregkh@linuxfoundation.org, jun.li@nxp.com,
+	alexander.stein@ew.tq-group.com
+Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v11 1/3] phy: fsl-imx8mq-usb: add tca function driver for
+ imx95
+Message-ID: <20250116034623.ig44yqxzptujhwql@hippo>
+References: <20241204050907.1081781-1-xu.yang_2@nxp.com>
+ <20250106020303.xrpo2pfv4knqszx7@hippo>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250106020303.xrpo2pfv4knqszx7@hippo>
+X-ClientProxiedBy: AM0PR03CA0083.eurprd03.prod.outlook.com
+ (2603:10a6:208:69::24) To PAXPR04MB8829.eurprd04.prod.outlook.com
+ (2603:10a6:102:20c::17)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-2-a0282524688@gmail.com> <20250115160401.GL6763@google.com>
-In-Reply-To: <20250115160401.GL6763@google.com>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 16 Jan 2025 10:28:52 +0800
-X-Gm-Features: AbW1kvbGm6LzPwIFioqWJ7E3m4sciO9tqukVeoKIPgzARRTQGynoAHmnM5M95sI
-Message-ID: <CAOoeyxWUCOcxqovKP0cnnNOtdSc-8JMe0g9aE5W0JMEcTsG2pQ@mail.gmail.com>
-Subject: Re: [PATCH v5 1/7] mfd: Add core driver for Nuvoton NCT6694
-To: Lee Jones <lee@kernel.org>
-Cc: tmyu0@nuvoton.com, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, mailhol.vincent@wanadoo.fr, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, wim@linux-watchdog.org, 
-	linux@roeck-us.net, jdelvare@suse.com, alexandre.belloni@bootlin.com, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8829:EE_|GV1PR04MB10703:EE_
+X-MS-Office365-Filtering-Correlation-Id: f387432c-bbdd-4b8e-de87-08dd35e0dcdf
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|52116014|7416014|1800799024|366016|376014|38350700014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?7e3osrCNsK3fX9l69tRsmwD7KfYSohcNv3S1IrZMSqdI8m4rAycXCdId8fDN?=
+ =?us-ascii?Q?/m7X0gzXu3rrkbmH071Epx0cRAhGKK5MNHEIshbWbnLrhp4l1mMnUTBb5paJ?=
+ =?us-ascii?Q?AxXRdieWiDKUGduI9yDZDOTEItxR/5hSXLIDP1NUGMpelyVP6t16jE8nYKbc?=
+ =?us-ascii?Q?DJnoH3iDqOtpNSgJ5RUxPoH46BjWeJRKcnWRZzTY71KB0iVhNXL3722my0/i?=
+ =?us-ascii?Q?w3bK0f5vFMAq6VE8pU/i9byk6IfYdyOiNNPVFZPOF3D7XJlgzAVgp+2/V6MW?=
+ =?us-ascii?Q?ebbNdvKFO14NR+VreuUShJ0cY0+Ui6d4dTXxvC8VPui9jLd6HSP7H7P2sRtN?=
+ =?us-ascii?Q?FC65PO44P+Y/3sB239i7+MuKtw7VEi3NLbF9f1lEUch7M0t1TTZl+bLhAjVh?=
+ =?us-ascii?Q?YNTa5qauvW2ZtnPakb+FwhO75f1s3oKEgHJmTHf8cS1lu0mrP8nlS8aFllCA?=
+ =?us-ascii?Q?VVJjOkZSO+vo2KalZ1Pn3nWqbWxdauxVOhkRHoa0y/PBuZkKUGqITAKpsDj5?=
+ =?us-ascii?Q?k+rlKCPnUgPRFVvpyKsb51XduBAaOf4B6c8cGrlEX7OTFnvwUNqYlSD11d85?=
+ =?us-ascii?Q?Zep1g0TThj+1jpDFKD+1sXlLhcVihc4u2PuVXP5+HnHVo8bHKikZ5vC30w/4?=
+ =?us-ascii?Q?C2mxTfnWF7p+th31Vtkq5/9dr7H/XeVALB45q/cX8e/7ZErVSsJ+RghtVsWU?=
+ =?us-ascii?Q?42bztouKqXsx1j/wwF71KcEQu9GvatIvq6oM2J8J5RhBuvmO0i2nWiZkyW34?=
+ =?us-ascii?Q?sY8k6VB7kIlTGTNynPzTSOpMSlWqVEDj9hFiWGI/elZhvvJFAK+oIXW/hjEM?=
+ =?us-ascii?Q?SbTEfaSuHexNRo/PligctEBdcOLUj6Jn8P3cBFFxx8nHcU1/iq2ORtLaoeFQ?=
+ =?us-ascii?Q?rY8XDIcHzb6dIr2pppFwAQbuiOu8GoKqJaqSx05rn9eBEVv2Jw35WONGWIGU?=
+ =?us-ascii?Q?bCNR3qd5U4U9wxcTfaFo6FHRq1s43/cVoGK3BASlEhqhAzBna0oYB03RSc5B?=
+ =?us-ascii?Q?fvyD7m7FQfC6yR3tUvAxk13a1aJ5af9oTahgVZFIR8urDPgORqL6qLNTyiZq?=
+ =?us-ascii?Q?+YNB3coq6mOZ8Gctey/ScFEfEZ/nklNP0LaZV/yNe2pMmewB2wwailllXiOX?=
+ =?us-ascii?Q?6Dk1iYpdQPH66/8KCvdHEKGMRhsXZ+NYFiJ676DnufiKU/F9Pcz8GG1kOXfr?=
+ =?us-ascii?Q?YYi+bfUnOP/q+hXOIEkF2WTKIJ1tX48kOyutQoqnCmh8vSK9GVrH79MnHcyE?=
+ =?us-ascii?Q?rc2XfdrX+XRSJaxcVxRSESovzSZ/TjpOQE7G24aT5VPvpjnECVBodMo/fAEd?=
+ =?us-ascii?Q?UCqXMt6J70Oaraj7i+YU4IkTnH1XL3oGm43Fye92IAcIZvsbDeqcCH37AiwP?=
+ =?us-ascii?Q?5bsWvL1YermaFe63Z9D+XGGHQ558Nkq3B8r5GWXSgkJFD9+nDiVf6PXXJ9y7?=
+ =?us-ascii?Q?dIMfamTVnBv1bwj0/D1Cn75Jf8fNw1YVn/zM3FYdLZPGwk/XXMWAPw=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8829.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(7416014)(1800799024)(366016)(376014)(38350700014)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?PzvEc1aEyj6roZyIIRXZgFhUzJsuAKnazBT8iDQUx5hTavb+nOoBcT+Ttmm/?=
+ =?us-ascii?Q?naI6Z6vgSrqIbHoWfRn4OBARFJMfeJdjFyOpL48sxLRMgIzlKkEyXoLa3Ftt?=
+ =?us-ascii?Q?3uJI0zUpZYGE9RxP0VwZlgM8OisTUulhfnwADFBa9h73FotWYxcYdh5YHARH?=
+ =?us-ascii?Q?7RSsHb8VvuIMD1Fcj3gL+AxGMWmw5YwM7uVoZpuXEe2g6GPaGOxmKt0ke9h7?=
+ =?us-ascii?Q?TZJ/eUGUAGOZxWvC5DurevmgzTG1ij+MLldIGGgL83ZB/RKzSl1pRmTzPNPx?=
+ =?us-ascii?Q?VsxPfrgcWBKwVgoC3qhR9b2yXETf0Ghq7ttymVQFWxSucZAbGh1t9ex9rdyl?=
+ =?us-ascii?Q?Ed1WL5aFEe2xVDG59RVztUluC4cPmMJCFJijKXquH5REuVshDeNHb/ILuhkE?=
+ =?us-ascii?Q?SBeOgl1jTsseXrbMCqw3fVx7ZkSFxStUl93uAQYHTniY2u3CyWAeUGEOyiWk?=
+ =?us-ascii?Q?Sd6pOQYcABt36MwuSPb9Gsj/8ZksUO9iEahscP5eZdMpPcnsAccNIjkymkrH?=
+ =?us-ascii?Q?06SHgOPlCLLYtXVan7Fc7QQ0ZsxE7QOhl3wZhaNHUt3s8wBY3gWC9NqaON78?=
+ =?us-ascii?Q?AOX1EbQhzza/lwqLXQxqamwT3RtbG7qiap8i4RESExi0QKNxTV2NgCWLbJCn?=
+ =?us-ascii?Q?A1xKHnXMiNeddfUeTG4ETin9/oUPyD13KdIuMPdIWvM1AznM9yiGiUhhj6xx?=
+ =?us-ascii?Q?/CVyXgPzKefOq0F284KHseiwIX6MSGbZreIJyNQAtUDC3t5UU6znxkvOM6x/?=
+ =?us-ascii?Q?OKQzqkYybbVWbqDAHi0VBg5e4VhSHy6sXzFoVKQVvFKOk+5h/CTtmyoKjjvr?=
+ =?us-ascii?Q?b/CzjRk/yrPnEYZxof8aGcrR3Kz45UYuv3PgbunFT1ao30QPNXvVl5SBWCug?=
+ =?us-ascii?Q?7EH6EwIA7Svie1bCVrPIq5aJWRPqeFje/41sjQBx8fB8uuN9TCiSoLZIOSEn?=
+ =?us-ascii?Q?YNhudKPUASHtqy+7Y/eOsralmXUX3+FBNC4mWca5r03ZYibtgVMUtzKbagdR?=
+ =?us-ascii?Q?3u8Y51VpWuoNcCZ2q8K40iQGubHTFhl4oiU7UMcrxaAo7dEDoAxTtaR9QcLF?=
+ =?us-ascii?Q?LMcNnfjY8WEcIerDugY2MT3NS39xELsoZJ3SHhbRuR3vP/W/IBzQPZ8PXfHp?=
+ =?us-ascii?Q?wu53tQudRzL3LqbzfTXg8umCUaSCfTHudryi2XaWzawIlagGtiYlNNo5fjhY?=
+ =?us-ascii?Q?mWgVeNdTnoPPtlTO+Tx95VyQXlx6x1dyZlDmlNkx415Z8KOuvBHxjwnPBzW4?=
+ =?us-ascii?Q?oo9pvizb/A3Wat5l7IEPVj0Op5ulrOLJA4BjjUhows7C9rFD7OAhmWI+51v2?=
+ =?us-ascii?Q?ZuPsQ9QA/+BpcGvvvhCjETuCGbk1efTJIvDLrhse3SFGylL/TyCiX6QrGrkd?=
+ =?us-ascii?Q?VgToM8DDdfH04IN+yBo5Iegz2xvX2f3+NEbQWPs29lkiQPLHLfcr9tRVIn8f?=
+ =?us-ascii?Q?Rcwhausywr6jqTyPk42RCDyMymKNsyy3XMEg4DyQJSxtauM9M2iy6GMvOFXT?=
+ =?us-ascii?Q?EqkQQZQm4fKUkTDPz8K3D0wTjBLfJoGR9hT65obkgQNMqmMiHn53rjwV2kgJ?=
+ =?us-ascii?Q?gVuM7rj7LvWgQ4CVWClz7zDRP7tvxHEK1R5UTOz7?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f387432c-bbdd-4b8e-de87-08dd35e0dcdf
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8829.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2025 03:50:05.7489
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: OKoPp91YX8amPwxfZFrBPIXrHvUcrgxi8Pbv7/1l9wsKJP+uLDtSovOyXyg4yvOfD4+kGW1DKHkr7KSvL2lylA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10703
 
-Dear Lee,
+Hi Vinod,
 
-Thank you for your comments,
-
-Lee Jones <lee@kernel.org> =E6=96=BC 2025=E5=B9=B41=E6=9C=8816=E6=97=A5 =E9=
-=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8812:04=E5=AF=AB=E9=81=93=EF=BC=9A
-...
-> > +config MFD_NCT6694
-> > +     tristate "Nuvoton NCT6694 support"
-> > +     select MFD_CORE
-> > +     depends on USB
-> > +     help
-> > +       This adds support for Nuvoton USB device NCT6694 sharing periph=
-erals
->
-> Missing full stop.
->
-> > +       This includes the USB device driver and core APIs.
-> > +       Additional drivers must be enabled in order to use the function=
-ality
->
-> New sentences do not have to be on new lines.
->
-> > +       of the device.
->
-> Please explain what this functionality is.
->
-
-Okay! I will fix these in the next patch.
-
+On Mon, Jan 06, 2025 at 10:03:03AM +0800, Xu Yang wrote:
+> Hi,
+> 
+> On Wed, Dec 04, 2024 at 01:09:05PM +0800, Xu Yang wrote:
+> > The i.MX95 USB3 phy has a Type-C Assist block (TCA). This block consists
+> > two functional blocks (XBar assist and VBus assist) and one system
+> > access interface using APB.
+> > 
+> > The primary functionality of XBar assist is:
+> >  - switching lane for flip
+> >  - moving unused lanes into lower power states.
+> > 
+> > This info can be get from:
+> > i.MX95 RM Chapter 163.3.8 Type-C assist (TCA) block.
+> > 
+> > This will add support for TCA block to achieve lane switching and tca
+> > lower power functionality.
+> > 
+> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > Reviewed-by: Jun Li <jun.li@nxp.com>
+> > 
+> > ---
+> > Changes in v2:
+> >  - return the value of imx95_usb_phy_get_tca()
+> > Changes in v3:
+> >  - no changes
+> > Changes in v4:
+> >  - remove compatible check for imx95
+> >  - check whether tca register region exist or not, yes means has tca,
+> >    otherwise skip tca setup
+> > Changes in v5:
+> >  - no changes
+> > Changes in v6:
+> >  - no changes
+> > Changes in v7:
+> >  - fix sparse warnings in imx95_usb_phy_get_tca()
+> > Changes in v8:
+> >  - #define TCA_INFO 0xFC -> 0xfc
+> > Changes in v9:
+> >  - no changes
+> > Changes in v10:
+> >  - no changes
+> > Changes in v11:
+> >  - remove some unnecessary readl() as suggested by Amit Singh Tomar
+> > ---
+> >  drivers/phy/freescale/Kconfig              |   1 +
+> >  drivers/phy/freescale/phy-fsl-imx8mq-usb.c | 240 +++++++++++++++++++++
+> >  2 files changed, 241 insertions(+)
+> > 
+> > diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
+> > index dcd9acff6d01..81f53564ee15 100644
+> > --- a/drivers/phy/freescale/Kconfig
+> > +++ b/drivers/phy/freescale/Kconfig
+> > @@ -5,6 +5,7 @@ if (ARCH_MXC && ARM64) || COMPILE_TEST
+> >  config PHY_FSL_IMX8MQ_USB
+> >  	tristate "Freescale i.MX8M USB3 PHY"
+> >  	depends on OF && HAS_IOMEM
+> > +	depends on TYPEC || TYPEC=n
+> >  	select GENERIC_PHY
+> >  	default ARCH_MXC && ARM64
+> >  
+> > diff --git a/drivers/phy/freescale/phy-fsl-imx8mq-usb.c b/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
+> > index adc6394626ce..a974ef94de9a 100644
+> > --- a/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
+> > +++ b/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
+> > @@ -10,6 +10,7 @@
+> >  #include <linux/phy/phy.h>
+> >  #include <linux/platform_device.h>
+> >  #include <linux/regulator/consumer.h>
+> > +#include <linux/usb/typec_mux.h>
+> >  
+> >  #define PHY_CTRL0			0x0
+> >  #define PHY_CTRL0_REF_SSP_EN		BIT(2)
+> > @@ -50,11 +51,66 @@
+> >  
+> >  #define PHY_TUNE_DEFAULT		0xffffffff
+> >  
+> > +#define TCA_CLK_RST			0x00
+> > +#define TCA_CLK_RST_SW			BIT(9)
+> > +#define TCA_CLK_RST_REF_CLK_EN		BIT(1)
+> > +#define TCA_CLK_RST_SUSPEND_CLK_EN	BIT(0)
 > > +
-> >  config MFD_OCELOT
-> >       tristate "Microsemi Ocelot External Control Support"
-> >       depends on SPI_MASTER
-> > diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> > index e057d6d6faef..3c902d3704dc 100644
-> > --- a/drivers/mfd/Makefile
-> > +++ b/drivers/mfd/Makefile
-> > @@ -121,6 +121,8 @@ obj-$(CONFIG_MFD_MC13XXX) +=3D mc13xxx-core.o
-> >  obj-$(CONFIG_MFD_MC13XXX_SPI)        +=3D mc13xxx-spi.o
-> >  obj-$(CONFIG_MFD_MC13XXX_I2C)        +=3D mc13xxx-i2c.o
-> >
-> > +obj-$(CONFIG_MFD_NCT6694)    +=3D nct6694.o
+> > +#define TCA_INTR_EN			0x04
+> > +#define TCA_INTR_STS			0x08
 > > +
-> >  obj-$(CONFIG_MFD_CORE)               +=3D mfd-core.o
-> >
-> >  ocelot-soc-objs                      :=3D ocelot-core.o ocelot-spi.o
-> > diff --git a/drivers/mfd/nct6694.c b/drivers/mfd/nct6694.c
-> > new file mode 100644
-> > index 000000000000..294b6b7a902e
-> > --- /dev/null
-> > +++ b/drivers/mfd/nct6694.c
-> > @@ -0,0 +1,388 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Nuvoton NCT6694 MFD driver based on USB interface.
->
-> No such thing as an MFD driver.  What is this device?
->
-
-Fix it in the v6.
-
-> > + *
-> > + * Copyright (C) 2024 Nuvoton Technology Corp.
-> > + */
+> > +#define TCA_GCFG			0x10
+> > +#define TCA_GCFG_ROLE_HSTDEV		BIT(4)
+> > +#define TCA_GCFG_OP_MODE		GENMASK(1, 0)
+> > +#define TCA_GCFG_OP_MODE_SYSMODE	0
+> > +#define TCA_GCFG_OP_MODE_SYNCMODE	1
 > > +
-> > +#include <linux/bits.h>
-> > +#include <linux/interrupt.h>
-> > +#include <linux/irq.h>
-> > +#include <linux/irqdomain.h>
-> > +#include <linux/kernel.h>
-> > +#include <linux/mfd/core.h>
-> > +#include <linux/mfd/nct6694.h>
-> > +#include <linux/module.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/usb.h>
+> > +#define TCA_TCPC			0x14
+> > +#define TCA_TCPC_VALID			BIT(4)
+> > +#define TCA_TCPC_LOW_POWER_EN		BIT(3)
+> > +#define TCA_TCPC_ORIENTATION_NORMAL	BIT(2)
+> > +#define TCA_TCPC_MUX_CONTRL		GENMASK(1, 0)
+> > +#define TCA_TCPC_MUX_CONTRL_NO_CONN	0
+> > +#define TCA_TCPC_MUX_CONTRL_USB_CONN	1
 > > +
-> > +#define MFD_DEV_SIMPLE(_name)                                \
-> > +{                                                    \
-> > +     .name =3D NCT6694_DEV_##_name,                    \
->
-> Device names are usually lower case.
->
-> > +}                                                    \
->
-> MFD_CELL_NAME()
->
-
-Fix it in the v6.
-
-> > +#define MFD_DEV_WITH_ID(_name, _id)                  \
-> > +{                                                    \
-> > +     .name =3D NCT6694_DEV_##_name,                    \
-> > +     .id =3D _id,                                      \
-> > +}
->
-> MFD_CELL_BASIC()
->
-> Or add a new one to include/linux/mfd/core.h.
->
-
-Fix it in the v6.
-
-> > +/* MFD device resources */
->
-> This comment is superfluous.
->
-
-Drop it in the v6.
-
-> > +static const struct mfd_cell nct6694_dev[] =3D {
-> > +     MFD_DEV_WITH_ID(GPIO, 0x0),
->
-> Why doesn't PLATFORM_DEVID_AUTO work for you?
->
-
-I need to manage these IDs to ensure that child devices can be
-properly utilized within their respective modules.
-
-> > +     MFD_DEV_WITH_ID(GPIO, 0x1),
-> > +     MFD_DEV_WITH_ID(GPIO, 0x2),
-> > +     MFD_DEV_WITH_ID(GPIO, 0x3),
-> > +     MFD_DEV_WITH_ID(GPIO, 0x4),
-> > +     MFD_DEV_WITH_ID(GPIO, 0x5),
-> > +     MFD_DEV_WITH_ID(GPIO, 0x6),
-> > +     MFD_DEV_WITH_ID(GPIO, 0x7),
-> > +     MFD_DEV_WITH_ID(GPIO, 0x8),
-> > +     MFD_DEV_WITH_ID(GPIO, 0x9),
-> > +     MFD_DEV_WITH_ID(GPIO, 0xA),
-> > +     MFD_DEV_WITH_ID(GPIO, 0xB),
-> > +     MFD_DEV_WITH_ID(GPIO, 0xC),
-> > +     MFD_DEV_WITH_ID(GPIO, 0xD),
-> > +     MFD_DEV_WITH_ID(GPIO, 0xE),
-> > +     MFD_DEV_WITH_ID(GPIO, 0xF),
+> > +#define TCA_SYSMODE_CFG			0x18
+> > +#define TCA_SYSMODE_TCPC_DISABLE	BIT(3)
+> > +#define TCA_SYSMODE_TCPC_FLIP		BIT(2)
 > > +
-> > +     MFD_DEV_WITH_ID(I2C, 0x0),
-> > +     MFD_DEV_WITH_ID(I2C, 0x1),
-> > +     MFD_DEV_WITH_ID(I2C, 0x2),
-> > +     MFD_DEV_WITH_ID(I2C, 0x3),
-> > +     MFD_DEV_WITH_ID(I2C, 0x4),
-> > +     MFD_DEV_WITH_ID(I2C, 0x5),
+> > +#define TCA_CTRLSYNCMODE_CFG0		0x20
+> > +#define TCA_CTRLSYNCMODE_CFG1           0x20
 > > +
-> > +     MFD_DEV_WITH_ID(CAN, 0x0),
-> > +     MFD_DEV_WITH_ID(CAN, 0x1),
+> > +#define TCA_PSTATE			0x30
+> > +#define TCA_PSTATE_CM_STS		BIT(4)
+> > +#define TCA_PSTATE_TX_STS		BIT(3)
+> > +#define TCA_PSTATE_RX_PLL_STS		BIT(2)
+> > +#define TCA_PSTATE_PIPE0_POWER_DOWN	GENMASK(1, 0)
 > > +
-> > +     MFD_DEV_WITH_ID(WDT, 0x0),
-> > +     MFD_DEV_WITH_ID(WDT, 0x1),
+> > +#define TCA_GEN_STATUS			0x34
+> > +#define TCA_GEN_DEV_POR			BIT(12)
+> > +#define TCA_GEN_REF_CLK_SEL		BIT(8)
+> > +#define TCA_GEN_TYPEC_FLIP_INVERT	BIT(4)
+> > +#define TCA_GEN_PHY_TYPEC_DISABLE	BIT(3)
+> > +#define TCA_GEN_PHY_TYPEC_FLIP		BIT(2)
 > > +
-> > +     MFD_DEV_SIMPLE(HWMON),
-> > +     MFD_DEV_SIMPLE(RTC),
+> > +#define TCA_VBUS_CTRL			0x40
+> > +#define TCA_VBUS_STATUS			0x44
+> > +
+> > +#define TCA_INFO			0xfc
+> > +
+> > +struct tca_blk {
+> > +	struct typec_switch_dev *sw;
+> > +	void __iomem *base;
+> > +	struct mutex mutex;
+> > +	enum typec_orientation orientation;
 > > +};
 > > +
-> > +static int nct6694_response_err_handling(struct nct6694 *nct6694,
-> > +                                      unsigned char err_status)
+> >  struct imx8mq_usb_phy {
+> >  	struct phy *phy;
+> >  	struct clk *clk;
+> >  	void __iomem *base;
+> >  	struct regulator *vbus;
+> > +	struct tca_blk *tca;
+> >  	u32 pcs_tx_swing_full;
+> >  	u32 pcs_tx_deemph_3p5db;
+> >  	u32 tx_vref_tune;
+> > @@ -64,6 +120,172 @@ struct imx8mq_usb_phy {
+> >  	u32 comp_dis_tune;
+> >  };
+> >  
+> > +
+> > +static void tca_blk_orientation_set(struct tca_blk *tca,
+> > +				enum typec_orientation orientation);
+> > +
+> > +#ifdef CONFIG_TYPEC
+> > +
+> > +static int tca_blk_typec_switch_set(struct typec_switch_dev *sw,
+> > +				enum typec_orientation orientation)
 > > +{
-> > +     struct device *dev =3D &nct6694->udev->dev;
+> > +	struct imx8mq_usb_phy *imx_phy = typec_switch_get_drvdata(sw);
+> > +	struct tca_blk *tca = imx_phy->tca;
+> > +	int ret;
 > > +
-> > +     switch (err_status) {
-> > +     case NCT6694_NO_ERROR:
-> > +             return err_status;
-> > +     case NCT6694_NOT_SUPPORT_ERROR:
-> > +             dev_dbg(dev, "%s: Command is not supported!\n", __func__)=
-;
->
-> These should be dev_warns().
->
-> __func__ shouldn't be used in production code.
->
-> Users don't care about functions.
->
-
-Fix it in the v6.
-
-> > +             break;
-> > +     case NCT6694_NO_RESPONSE_ERROR:
-> > +             dev_dbg(dev, "%s: Command received no response!\n", __fun=
-c__);
-> > +             break;
-> > +     case NCT6694_TIMEOUT_ERROR:
-> > +             dev_dbg(dev, "%s: Command timed out!\n", __func__);
-> > +             break;
-> > +     case NCT6694_PENDING:
-> > +             dev_dbg(dev, "%s: Command is pending!\n", __func__);
-> > +             break;
-> > +     default:
-> > +             return -EINVAL;
-> > +     }
+> > +	if (tca->orientation == orientation)
+> > +		return 0;
 > > +
-> > +     return -EIO;
+> > +	ret = clk_prepare_enable(imx_phy->clk);
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	tca_blk_orientation_set(tca, orientation);
+> > +	clk_disable_unprepare(imx_phy->clk);
+> > +
+> > +	return 0;
 > > +}
 > > +
-> > +int nct6694_read_msg(struct nct6694 *nct6694,
-> > +                  struct nct6694_cmd_header *cmd_hd,
-> > +                  void *buf)
+> > +static struct typec_switch_dev *tca_blk_get_typec_switch(struct platform_device *pdev,
+> > +					struct imx8mq_usb_phy *imx_phy)
 > > +{
-> > +     union nct6694_usb_msg *msg =3D nct6694->usb_msg;
-> > +     int tx_len, rx_len, ret;
+> > +	struct device *dev = &pdev->dev;
+> > +	struct typec_switch_dev *sw;
+> > +	struct typec_switch_desc sw_desc = { };
 > > +
-> > +     guard(mutex)(&nct6694->access_lock);
+> > +	sw_desc.drvdata = imx_phy;
+> > +	sw_desc.fwnode = dev->fwnode;
+> > +	sw_desc.set = tca_blk_typec_switch_set;
+> > +	sw_desc.name = NULL;
 > > +
-> > +     /* Send command packet to USB device */
-> > +     memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
-> > +     msg->cmd_header.hctrl =3D NCT6694_HCTRL_GET;
+> > +	sw = typec_switch_register(dev, &sw_desc);
+> > +	if (IS_ERR(sw)) {
+> > +		dev_err(dev, "Error register tca orientation switch: %ld",
+> > +				PTR_ERR(sw));
+> > +		return NULL;
+> > +	}
 > > +
-> > +     ret =3D usb_bulk_msg(nct6694->udev,
-> > +                        usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OU=
-T_EP),
-> > +                        &msg->cmd_header, sizeof(*msg), &tx_len,
-> > +                        nct6694->timeout);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /* Receive response packet from USB device */
-> > +     ret =3D usb_bulk_msg(nct6694->udev,
-> > +                        usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN=
-_EP),
-> > +                        &msg->response_header, sizeof(*msg), &rx_len,
-> > +                        nct6694->timeout);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /* Receive data packet from USB device */
-> > +     ret =3D usb_bulk_msg(nct6694->udev,
-> > +                        usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN=
-_EP),
-> > +                        buf, le16_to_cpu(cmd_hd->len), &rx_len,
-> > +                        nct6694->timeout);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     if (rx_len !=3D le16_to_cpu(cmd_hd->len)) {
-> > +             dev_dbg(&nct6694->udev->dev, "%s: Received length is not =
-match!\n",
->
-> "does not match <something>"
->
-
-Fix it in the v6.
-
-> > +                     __func__);
->
-> This should be dev_err().
->
-
-Fix it in the v6.
-
-> > +             return -EIO;
-> > +     }
-> > +
-> > +     return nct6694_response_err_handling(nct6694, msg->response_heade=
-r.sts);
-> > +}
-> > +EXPORT_SYMBOL(nct6694_read_msg);
-> > +
-> > +int nct6694_write_msg(struct nct6694 *nct6694, struct nct6694_cmd_head=
-er *cmd_hd,
-> > +                   void *buf)
-> > +{
-> > +     union nct6694_usb_msg *msg =3D nct6694->usb_msg;
-> > +     int tx_len, rx_len, ret;
-> > +
-> > +     guard(mutex)(&nct6694->access_lock);
-> > +
-> > +     /* Send command packet to USB device */
-> > +     memcpy(&msg->cmd_header, cmd_hd, sizeof(*cmd_hd));
-> > +     msg->cmd_header.hctrl =3D NCT6694_HCTRL_SET;
-> > +
-> > +     ret =3D usb_bulk_msg(nct6694->udev,
-> > +                        usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OU=
-T_EP),
-> > +                        &msg->cmd_header, sizeof(*msg), &tx_len,
-> > +                        nct6694->timeout);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /* Send data packet to USB device */
-> > +     ret =3D usb_bulk_msg(nct6694->udev,
-> > +                        usb_sndbulkpipe(nct6694->udev, NCT6694_BULK_OU=
-T_EP),
-> > +                        buf, le16_to_cpu(cmd_hd->len), &tx_len,
-> > +                        nct6694->timeout);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /* Receive response packet from USB device */
-> > +     ret =3D usb_bulk_msg(nct6694->udev,
-> > +                        usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN=
-_EP),
-> > +                        &msg->response_header, sizeof(*msg), &rx_len,
-> > +                        nct6694->timeout);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     /* Receive data packet from USB device */
-> > +     ret =3D usb_bulk_msg(nct6694->udev,
-> > +                        usb_rcvbulkpipe(nct6694->udev, NCT6694_BULK_IN=
-_EP),
-> > +                        buf, le16_to_cpu(cmd_hd->len), &rx_len,
-> > +                        nct6694->timeout);
-> > +     if (ret)
-> > +             return ret;
-> > +
-> > +     if (rx_len !=3D le16_to_cpu(cmd_hd->len)) {
-> > +             dev_dbg(&nct6694->udev->dev, "%s: Sent length is not matc=
-h!\n",
-> > +                     __func__);
->
-> This should be dev_err().
->
-
-Fix it in the v6.
-
-> > +             return -EIO;
-> > +     }
-> > +
-> > +     return nct6694_response_err_handling(nct6694, msg->response_heade=
-r.sts);
-> > +}
-> > +EXPORT_SYMBOL(nct6694_write_msg);
-> > +
-> > +static void usb_int_callback(struct urb *urb)
-> > +{
-> > +     struct nct6694 *nct6694 =3D urb->context;
-> > +     struct device *dev =3D &nct6694->udev->dev;
-> > +     unsigned int *int_status =3D urb->transfer_buffer;
-> > +     int ret;
-> > +
-> > +     switch (urb->status) {
-> > +     case 0:
-> > +             break;
-> > +     case -ECONNRESET:
-> > +     case -ENOENT:
-> > +     case -ESHUTDOWN:
-> > +             return;
-> > +     default:
-> > +             goto resubmit;
-> > +     }
-> > +
-> > +     while (*int_status) {
-> > +             int irq =3D __ffs(*int_status);
-> > +
-> > +             generic_handle_irq_safe(irq_find_mapping(nct6694->domain,=
- irq));
-> > +             *int_status &=3D ~BIT(irq);
-> > +     }
-> > +
-> > +resubmit:
-> > +     ret =3D usb_submit_urb(urb, GFP_ATOMIC);
-> > +     if (ret)
-> > +             dev_dbg(dev, "%s: Failed to resubmit urb, status %pe",
-> > +                     __func__, ERR_PTR(ret));
+> > +	return sw;
 > > +}
 > > +
-> > +static void nct6694_irq_lock(struct irq_data *data)
+> > +static void tca_blk_put_typec_switch(struct typec_switch_dev *sw)
 > > +{
-> > +     struct nct6694 *nct6694 =3D irq_data_get_irq_chip_data(data);
-> > +
-> > +     mutex_lock(&nct6694->irq_lock);
+> > +	typec_switch_unregister(sw);
 > > +}
 > > +
-> > +static void nct6694_irq_sync_unlock(struct irq_data *data)
-> > +{
-> > +     struct nct6694 *nct6694 =3D irq_data_get_irq_chip_data(data);
+> > +#else
 > > +
-> > +     mutex_unlock(&nct6694->irq_lock);
+> > +static struct typec_switch_dev *tca_blk_get_typec_switch(struct platform_device *pdev,
+> > +			struct imx8mq_usb_phy *imx_phy)
+> > +{
+> > +	return NULL;
 > > +}
 > > +
-> > +static void nct6694_irq_enable(struct irq_data *data)
-> > +{
-> > +     struct nct6694 *nct6694 =3D irq_data_get_irq_chip_data(data);
-> > +     irq_hw_number_t hwirq =3D irqd_to_hwirq(data);
+> > +static void tca_blk_put_typec_switch(struct typec_switch_dev *sw) {}
 > > +
-> > +     nct6694->irq_enable |=3D BIT(hwirq);
->
-> Changing a bit mask doesn't actually {en,dis}able an IRQ, right?
->
-
-Yes, it's only used to record irq.
-
+> > +#endif /* CONFIG_TYPEC */
+> > +
+> > +static void tca_blk_orientation_set(struct tca_blk *tca,
+> > +				enum typec_orientation orientation)
+> > +{
+> > +	u32 val;
+> > +
+> > +	mutex_lock(&tca->mutex);
+> > +
+> > +	if (orientation == TYPEC_ORIENTATION_NONE) {
+> > +		/*
+> > +		 * use Controller Synced Mode for TCA low power enable and
+> > +		 * put PHY to USB safe state.
+> > +		 */
+> > +		val = FIELD_PREP(TCA_GCFG_OP_MODE, TCA_GCFG_OP_MODE_SYNCMODE);
+> > +		writel(val, tca->base + TCA_GCFG);
+> > +
+> > +		val = TCA_TCPC_VALID | TCA_TCPC_LOW_POWER_EN;
+> > +		writel(val, tca->base + TCA_TCPC);
+> > +
+> > +		goto out;
+> > +	}
+> > +
+> > +	/* use System Configuration Mode for TCA mux control. */
+> > +	val = FIELD_PREP(TCA_GCFG_OP_MODE, TCA_GCFG_OP_MODE_SYSMODE);
+> > +	writel(val, tca->base + TCA_GCFG);
+> > +
+> > +	/* Disable TCA module */
+> > +	val = readl(tca->base + TCA_SYSMODE_CFG);
+> > +	val |= TCA_SYSMODE_TCPC_DISABLE;
+> > +	writel(val, tca->base + TCA_SYSMODE_CFG);
+> > +
+> > +	if (orientation == TYPEC_ORIENTATION_REVERSE)
+> > +		val |= TCA_SYSMODE_TCPC_FLIP;
+> > +	else if (orientation == TYPEC_ORIENTATION_NORMAL)
+> > +		val &= ~TCA_SYSMODE_TCPC_FLIP;
+> > +
+> > +	writel(val, tca->base + TCA_SYSMODE_CFG);
+> > +
+> > +	/* Enable TCA module */
+> > +	val &= ~TCA_SYSMODE_TCPC_DISABLE;
+> > +	writel(val, tca->base + TCA_SYSMODE_CFG);
+> > +
+> > +out:
+> > +	tca->orientation = orientation;
+> > +	mutex_unlock(&tca->mutex);
 > > +}
 > > +
-> > +static void nct6694_irq_disable(struct irq_data *data)
+> > +static void tca_blk_init(struct tca_blk *tca)
 > > +{
-> > +     struct nct6694 *nct6694 =3D irq_data_get_irq_chip_data(data);
-> > +     irq_hw_number_t hwirq =3D irqd_to_hwirq(data);
+> > +	u32 val;
 > > +
-> > +     nct6694->irq_enable &=3D ~BIT(hwirq);
+> > +	/* reset XBar block */
+> > +	val = readl(tca->base + TCA_CLK_RST);
+> > +	val &= ~TCA_CLK_RST_SW;
+> > +	writel(val, tca->base + TCA_CLK_RST);
+> > +
+> > +	udelay(100);
+> > +
+> > +	/* clear reset */
+> > +	val |= TCA_CLK_RST_SW;
+> > +	writel(val, tca->base + TCA_CLK_RST);
+> > +
+> > +	tca_blk_orientation_set(tca, tca->orientation);
 > > +}
 > > +
-> > +static struct irq_chip nct6694_irq_chip =3D {
-> > +     .name =3D "nct6694-irq",
-> > +     .flags =3D IRQCHIP_SKIP_SET_WAKE,
-> > +     .irq_bus_lock =3D nct6694_irq_lock,
-> > +     .irq_bus_sync_unlock =3D nct6694_irq_sync_unlock,
-> > +     .irq_enable =3D nct6694_irq_enable,
-> > +     .irq_disable =3D nct6694_irq_disable,
-> > +};
-> > +
-> > +static int nct6694_irq_domain_map(struct irq_domain *d, unsigned int i=
-rq,
-> > +                               irq_hw_number_t hw)
+> > +static struct tca_blk *imx95_usb_phy_get_tca(struct platform_device *pdev,
+> > +				struct imx8mq_usb_phy *imx_phy)
 > > +{
-> > +     struct nct6694 *nct6694 =3D d->host_data;
+> > +	struct device *dev = &pdev->dev;
+> > +	struct resource *res;
+> > +	struct tca_blk *tca;
 > > +
-> > +     irq_set_chip_data(irq, nct6694);
-> > +     irq_set_chip_and_handler(irq, &nct6694_irq_chip, handle_simple_ir=
-q);
+> > +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
+> > +	if (!res)
+> > +		return NULL;
 > > +
-> > +     return 0;
+> > +	tca = devm_kzalloc(dev, sizeof(*tca), GFP_KERNEL);
+> > +	if (!tca)
+> > +		return ERR_PTR(-ENOMEM);
+> > +
+> > +	tca->base = devm_ioremap_resource(&pdev->dev, res);
+> > +	if (IS_ERR(tca->base))
+> > +		return ERR_CAST(tca->base);
+> > +
+> > +	mutex_init(&tca->mutex);
+> > +
+> > +	tca->orientation = TYPEC_ORIENTATION_NORMAL;
+> > +	tca->sw = tca_blk_get_typec_switch(pdev, imx_phy);
+> > +
+> > +	return tca;
 > > +}
 > > +
-> > +static void nct6694_irq_domain_unmap(struct irq_domain *d, unsigned in=
-t irq)
+> > +static void imx95_usb_phy_put_tca(struct imx8mq_usb_phy *imx_phy)
 > > +{
-> > +     irq_set_chip_and_handler(irq, NULL, NULL);
-> > +     irq_set_chip_data(irq, NULL);
+> > +	struct tca_blk *tca = imx_phy->tca;
+> > +
+> > +	if (!tca)
+> > +		return;
+> > +
+> > +	tca_blk_put_typec_switch(tca->sw);
 > > +}
 > > +
-> > +static const struct irq_domain_ops nct6694_irq_domain_ops =3D {
-> > +     .map    =3D nct6694_irq_domain_map,
-> > +     .unmap  =3D nct6694_irq_domain_unmap,
-> > +};
+> >  static u32 phy_tx_vref_tune_from_property(u32 percent)
+> >  {
+> >  	percent = clamp(percent, 94U, 124U);
+> > @@ -315,6 +537,9 @@ static int imx8mp_usb_phy_init(struct phy *phy)
+> >  
+> >  	imx8m_phy_tune(imx_phy);
+> >  
+> > +	if (imx_phy->tca)
+> > +		tca_blk_init(imx_phy->tca);
 > > +
-> > +static int nct6694_usb_probe(struct usb_interface *iface,
-> > +                          const struct usb_device_id *id)
+> >  	return 0;
+> >  }
+> >  
+> > @@ -359,6 +584,8 @@ static const struct of_device_id imx8mq_usb_phy_of_match[] = {
+> >  	 .data = &imx8mq_usb_phy_ops,},
+> >  	{.compatible = "fsl,imx8mp-usb-phy",
+> >  	 .data = &imx8mp_usb_phy_ops,},
+> > +	{.compatible = "fsl,imx95-usb-phy",
+> > +	 .data = &imx8mp_usb_phy_ops,},
+> >  	{ }
+> >  };
+> >  MODULE_DEVICE_TABLE(of, imx8mq_usb_phy_of_match);
+> > @@ -398,6 +625,11 @@ static int imx8mq_usb_phy_probe(struct platform_device *pdev)
+> >  
+> >  	phy_set_drvdata(imx_phy->phy, imx_phy);
+> >  
+> > +	imx_phy->tca = imx95_usb_phy_get_tca(pdev, imx_phy);
+> > +	if (IS_ERR(imx_phy->tca))
+> > +		return dev_err_probe(dev, PTR_ERR(imx_phy->tca),
+> > +					"failed to get tca\n");
+> > +
+> >  	imx8m_get_phy_tuning_data(imx_phy);
+> >  
+> >  	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> > @@ -405,8 +637,16 @@ static int imx8mq_usb_phy_probe(struct platform_device *pdev)
+> >  	return PTR_ERR_OR_ZERO(phy_provider);
+> >  }
+> >  
+> > +static void imx8mq_usb_phy_remove(struct platform_device *pdev)
 > > +{
-> > +     struct usb_device *udev =3D interface_to_usbdev(iface);
-> > +     struct usb_endpoint_descriptor *int_endpoint;
-> > +     struct usb_host_interface *interface;
-> > +     struct device *dev =3D &udev->dev;
-> > +     struct nct6694 *nct6694;
-> > +     int pipe, maxp;
-> > +     int ret;
+> > +	struct imx8mq_usb_phy *imx_phy = platform_get_drvdata(pdev);
 > > +
-> > +     interface =3D iface->cur_altsetting;
->
-> Initialise this during allocation.
->
-
-Should these be moved before usb_fill_int_urb()?
-
-> > +     int_endpoint =3D &interface->endpoint[0].desc;
-> > +     if (!usb_endpoint_is_int_in(int_endpoint))
-> > +             return -ENODEV;
-> > +
-> > +     nct6694 =3D devm_kzalloc(dev, sizeof(*nct6694), GFP_KERNEL);
-> > +     if (!nct6694)
-> > +             return -ENOMEM;
-> > +
-> > +     pipe =3D usb_rcvintpipe(udev, NCT6694_INT_IN_EP);
-> > +     maxp =3D usb_maxpacket(udev, pipe);
-> > +
-> > +     nct6694->usb_msg =3D devm_kzalloc(dev, sizeof(union nct6694_usb_m=
-sg),
-> > +                                     GFP_KERNEL);
->
-> Unwrap this - you can use up to 100-chars.
->
-
-Fix it in the v6.
-
-> > +     if (!nct6694->usb_msg)
-> > +             return -ENOMEM;
-> > +
-> > +     nct6694->int_buffer =3D devm_kzalloc(dev, maxp, GFP_KERNEL);
-> > +     if (!nct6694->int_buffer)
-> > +             return -ENOMEM;
-> > +
-> > +     nct6694->int_in_urb =3D usb_alloc_urb(0, GFP_KERNEL);
-> > +     if (!nct6694->int_in_urb)
-> > +             return -ENOMEM;
-> > +
-> > +     nct6694->domain =3D irq_domain_add_simple(NULL, NCT6694_NR_IRQS, =
-0,
-> > +                                             &nct6694_irq_domain_ops,
-> > +                                             nct6694);
-> > +     if (!nct6694->domain) {
-> > +             ret =3D -ENODEV;
-> > +             goto err_urb;
-> > +     }
-> > +
-> > +     nct6694->udev =3D udev;
-> > +     nct6694->timeout =3D NCT6694_URB_TIMEOUT; /* Wait until urb compl=
-ete */
->
-> "URB completes"?
->
-
-Fix it in the v6.
-
-> > +
-> > +     devm_mutex_init(dev, &nct6694->access_lock);
-> > +     devm_mutex_init(dev, &nct6694->irq_lock);
-> > +
-> > +     usb_fill_int_urb(nct6694->int_in_urb, udev, pipe,
-> > +                      nct6694->int_buffer, maxp, usb_int_callback,
-> > +                      nct6694, int_endpoint->bInterval);
-> > +     ret =3D usb_submit_urb(nct6694->int_in_urb, GFP_KERNEL);
-> > +     if (ret)
-> > +             goto err_urb;
-> > +
-> > +     dev_set_drvdata(dev, nct6694);
-> > +     usb_set_intfdata(iface, nct6694);
->
-> These two do the same thing.  You don't need both.
->
-
-Fix it in the v6.
-
-> > +     ret =3D mfd_add_hotplug_devices(dev, nct6694_dev, ARRAY_SIZE(nct6=
-694_dev));
-> > +     if (ret)
-> > +             goto err_mfd;
-> > +
-> > +     return 0;
-> > +
-> > +err_mfd:
-> > +     usb_kill_urb(nct6694->int_in_urb);
-> > +err_urb:
-> > +     usb_free_urb(nct6694->int_in_urb);
-> > +     return ret;
+> > +	imx95_usb_phy_put_tca(imx_phy);
 > > +}
 > > +
-> > +static void nct6694_usb_disconnect(struct usb_interface *iface)
-> > +{
-> > +     struct usb_device *udev =3D interface_to_usbdev(iface);
-> > +     struct nct6694 *nct6694 =3D usb_get_intfdata(iface);
-> > +
-> > +     mfd_remove_devices(&udev->dev);
->
-> Does devm_* work here?
->
-
-No, or do you think mfd_add_hotplug_devices() should be replaced with
-devm_mfd_add_devices()?
-
-> > +     usb_kill_urb(nct6694->int_in_urb);
-> > +     usb_free_urb(nct6694->int_in_urb);
-> > +}
-> > +
-> > +static const struct usb_device_id nct6694_ids[] =3D {
-> > +     { USB_DEVICE_AND_INTERFACE_INFO(NCT6694_VENDOR_ID,
-> > +                                     NCT6694_PRODUCT_ID,
-> > +                                     0xFF, 0x00, 0x00)},
-> > +     {}
-> > +};
-> > +MODULE_DEVICE_TABLE(usb, nct6694_ids);
-> > +
-> > +static struct usb_driver nct6694_usb_driver =3D {
-> > +     .name   =3D "nct6694",
-> > +     .id_table =3D nct6694_ids,
-> > +     .probe =3D nct6694_usb_probe,
-> > +     .disconnect =3D nct6694_usb_disconnect,
-> > +};
-> > +
-> > +module_usb_driver(nct6694_usb_driver);
-> > +
-> > +MODULE_DESCRIPTION("USB-MFD driver for NCT6694");
->
-> Remove all references to MFD.
->
-
-Fix it in the v6.
-
-> > +MODULE_AUTHOR("Ming Yu <tmyu0@nuvoton.com>");
-> > +MODULE_LICENSE("GPL");
-> > diff --git a/include/linux/mfd/nct6694.h b/include/linux/mfd/nct6694.h
-> > new file mode 100644
-> > index 000000000000..67ca835589ad
-> > --- /dev/null
-> > +++ b/include/linux/mfd/nct6694.h
-> > @@ -0,0 +1,109 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * Nuvoton NCT6694 USB transaction and data structure.
-> > + *
-> > + * Copyright (C) 2024 Nuvoton Technology Corp.
-> > + */
-> > +
-> > +#ifndef __MFD_NCT6694_H
-> > +#define __MFD_NCT6694_H
-> > +
-> > +#define NCT6694_DEV_GPIO     "nct6694-gpio"
-> > +#define NCT6694_DEV_I2C              "nct6694-i2c"
-> > +#define NCT6694_DEV_CAN              "nct6694-can"
-> > +#define NCT6694_DEV_WDT              "nct6694-wdt"
-> > +#define NCT6694_DEV_HWMON    "nct6694-hwmon"
-> > +#define NCT6694_DEV_RTC              "nct6694-rtc"
->
-> Use raw strings in place please.
->
-
-Fix it in the v6.
-
-> > +#define NCT6694_VENDOR_ID    0x0416
-> > +#define NCT6694_PRODUCT_ID   0x200B
-> > +#define NCT6694_INT_IN_EP    0x81
-> > +#define NCT6694_BULK_IN_EP   0x02
-> > +#define NCT6694_BULK_OUT_EP  0x03
-> > +
-> > +#define NCT6694_HCTRL_SET    0x40
-> > +#define NCT6694_HCTRL_GET    0x80
-> > +
-> > +#define NCT6694_URB_TIMEOUT  1000
-> > +
-> > +enum nct6694_irq_id {
->
-> These are never used.
->
-
-Some of these numbers ared used by child devices to map the irq_domain.
-(e.g. NCT6694_IRQ_CAN1, NCT6694_IRQ_RTC)
-
-> > +     NCT6694_IRQ_GPIO0 =3D 0,
-> > +     NCT6694_IRQ_GPIO1,
-> > +     NCT6694_IRQ_GPIO2,
-> > +     NCT6694_IRQ_GPIO3,
-> > +     NCT6694_IRQ_GPIO4,
-> > +     NCT6694_IRQ_GPIO5,
-> > +     NCT6694_IRQ_GPIO6,
-> > +     NCT6694_IRQ_GPIO7,
-> > +     NCT6694_IRQ_GPIO8,
-> > +     NCT6694_IRQ_GPIO9,
-> > +     NCT6694_IRQ_GPIOA,
-> > +     NCT6694_IRQ_GPIOB,
-> > +     NCT6694_IRQ_GPIOC,
-> > +     NCT6694_IRQ_GPIOD,
-> > +     NCT6694_IRQ_GPIOE,
-> > +     NCT6694_IRQ_GPIOF,
-> > +     NCT6694_IRQ_CAN1,
-> > +     NCT6694_IRQ_CAN2,
-> > +     NCT6694_IRQ_RTC,
-> > +     NCT6694_NR_IRQS,
-> > +};
-> > +
-> > +enum nct6694_response_err_status {
-> > +     NCT6694_NO_ERROR =3D 0,
-> > +     NCT6694_FORMAT_ERROR,
-> > +     NCT6694_RESERVED1,
-> > +     NCT6694_RESERVED2,
-> > +     NCT6694_NOT_SUPPORT_ERROR,
-> > +     NCT6694_NO_RESPONSE_ERROR,
-> > +     NCT6694_TIMEOUT_ERROR,
-> > +     NCT6694_PENDING,
-> > +};
-> > +
-> > +struct __packed nct6694_cmd_header {
-> > +     u8 rsv1;
-> > +     u8 mod;
-> > +     union __packed {
-> > +             __le16 offset;
-> > +             struct __packed {
-> > +                     u8 cmd;
-> > +                     u8 sel;
-> > +             };
-> > +     };
-> > +     u8 hctrl;
-> > +     u8 rsv2;
-> > +     __le16 len;
-> > +};
-> > +
-> > +struct __packed nct6694_response_header {
-> > +     u8 sequence_id;
-> > +     u8 sts;
-> > +     u8 reserved[4];
-> > +     __le16 len;
-> > +};
-> > +
-> > +union __packed nct6694_usb_msg {
-> > +     struct nct6694_cmd_header cmd_header;
-> > +     struct nct6694_response_header response_header;
-> > +};
-> > +
-> > +struct nct6694 {
->
-> Do all of these values need to be stored?
->
-
-I think that's right.
-
-> > +     struct usb_device *udev;
-> > +     struct urb *int_in_urb;
-> > +     struct irq_domain *domain;
-> > +     struct mutex access_lock;
-> > +     struct mutex irq_lock;
-> > +     union nct6694_usb_msg *usb_msg;
-> > +     unsigned char *int_buffer;
-> > +     unsigned int irq_enable;
-> > +     /* time in msec to wait for the urb to the complete */
->
-> "Time"  "URB"
-
-Fix it in the v6.
-
-> > +     long timeout;
-> > +};
-> > +
-> > +int nct6694_read_msg(struct nct6694 *nct6694, struct nct6694_cmd_heade=
-r *cmd_hd,
-> > +                  void *buf);
-> > +
-> > +int nct6694_write_msg(struct nct6694 *nct6694, struct nct6694_cmd_head=
-er *cmd_hd,
-> > +                   void *buf);
-> > +
-> > +#endif
-> > --
+> >  static struct platform_driver imx8mq_usb_phy_driver = {
+> >  	.probe	= imx8mq_usb_phy_probe,
+> > +	.remove = imx8mq_usb_phy_remove,
+> >  	.driver = {
+> >  		.name	= "imx8mq-usb-phy",
+> >  		.of_match_table	= imx8mq_usb_phy_of_match,
+> > -- 
 > > 2.34.1
-> >
->
+> > 
+> 
+> Happy New Year!
+> And a gentle ping.
 
-Best regards,
-Ming
+A gentle ping!
+If no other concerns, please help pick up them since many users are
+waiting for it. And v6.13 is almost coming.
+
+Thanks,
+Xu Yang
 
