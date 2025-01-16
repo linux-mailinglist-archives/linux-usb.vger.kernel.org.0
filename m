@@ -1,538 +1,249 @@
-Return-Path: <linux-usb+bounces-19389-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19390-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F7B4A131CF
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 04:50:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE1F9A1324A
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 06:20:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE1193A5D83
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 03:50:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 785503A4307
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 05:19:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F69413635B;
-	Thu, 16 Jan 2025 03:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21612156C72;
+	Thu, 16 Jan 2025 05:19:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="dSw6u2+I"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="R5YfXI29"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013027.outbound.protection.outlook.com [40.107.162.27])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 705BD2AEE3;
-	Thu, 16 Jan 2025 03:50:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.27
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736999412; cv=fail; b=lic1Ozu4vpmHPMxfoYa46SXKObxpxr2xRMr9ZeX3B+bcYVWHc6mlEb8rPHU/b82UkxhjIQN8lqCxvx2lPWxHtzfwYB+o+700n7V+KtHyaPTXuMbMslTmx7kjesrDweFW7VFURPxTAkAJ76wAe2WZKepF2jqBMgvq6sVAAzNME+M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736999412; c=relaxed/simple;
-	bh=YMI9c8dPc0MwT4hn6eNZ8l1g0PX/D9zYSeJMA1q0rEE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=ry9EOcMMF/AFMNTjLj2BeqsUZedGRNxRfiqulAvU06X062KLgV3WOUui4ft4ecioinqp9MoR5bvNiCqRJEzlFx+9uqOYtyL4wHgTcnSXjrOTgFeQGA4/fVYuiyCAGLHTB8kYM6pUqZ/pJIMJVOj/A+vVTcUXtaAuId7BhpcWMNs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=dSw6u2+I; arc=fail smtp.client-ip=40.107.162.27
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H/KssnDUlJut04+MBXEvwQEga5NFRbJTJIVHvxwkc4ReyzO1hylQlMd0sNN6KQFJcdJ30IlxLRPwL5bNqRaY08F32TUTkd18X7pyWWy9Q34sWSW7z/0xf4JhyHF1ryANsJVpWWFVzbM82jOh4+QskeQRCibdkrhvMW0A8hcbp68SNMJ0h0TU5DNLoleveXFAyQTGo64yp1EDmWZ3MIYNxFpPAqItKBujcAkfIHzYtS7mxnMM9MZOuMwviXAhBO4LxbzjDxqXeiqX7WgiYkIA7cffpJe+EcIZvuWsfxHuLRcUP4KqWZ8lPEITXj+djvxx9LyzPLFN3jwrF3XMMj14oQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4vn5lguTBC1B/66JIydbCPUtENqIf/jI/RrzNIwe3lk=;
- b=HjeoGBfJlmZkCyi8RW5NOc71KhWdK2qh28dU+nLC8WLfLGZofCQcPR+5nU+pQFJXQJQ6tak/2YHBzCXcpuOz+tpoxnfW9ktFqQInxjRi8476D5SJ4zzUFHMIDVtyT6mncJatVI3Xftb3Yh5WgfyUHY87vKYQGmqReGZLREcirwY6ToUtT4jkHv5ryAXd3LrwSZbdoKpGmS7+0/LmjdLmkvIRp4mbFbsyp+AkanN7A5J6CPCcsnlhRxeSggZpFuZs2e7NF6EWGs/SkI4QF6TujmyoSFffNE2RL9hrTyY9sEtfg1RFHKLIvAT8ljyQd9/J4YU1gbB71t+gd+sVCICdDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4vn5lguTBC1B/66JIydbCPUtENqIf/jI/RrzNIwe3lk=;
- b=dSw6u2+I7zG0lVBrWKRLfVklVgyC5VVf6PhzKWmJkFz5exKzarqxmDnyT2IybA7XHfag3vt2LeyPWwwZ168xNyaHA0+cUWx5khv31U39bLfozHX8InljnImVpHqCmTUJp5yL/VxFG4YfSV/cro6jrYOPH3Fg2fi5BTGroK/oozDo29aJpd4e9qsUHc+QRc6DEHXcwK7lhWKL9+SUOgzF9U1a+aZM9+c38bHzVwryR5Sn7YVOzM4IFPeOf3HAS4X2XhMIf/jFabWtRCYp1B+O9b7xtZXWCB+B8Ogg4MxGk3hlRxdhCavQrD3GwyPtteJQGpCp0KKbu0i48YdVq6lj4g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17)
- by GV1PR04MB10703.eurprd04.prod.outlook.com (2603:10a6:150:202::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8356.13; Thu, 16 Jan
- 2025 03:50:05 +0000
-Received: from PAXPR04MB8829.eurprd04.prod.outlook.com
- ([fe80::cdc5:713a:9592:f7ad]) by PAXPR04MB8829.eurprd04.prod.outlook.com
- ([fe80::cdc5:713a:9592:f7ad%4]) with mapi id 15.20.8356.010; Thu, 16 Jan 2025
- 03:50:05 +0000
-Date: Thu, 16 Jan 2025 11:46:23 +0800
-From: Xu Yang <xu.yang_2@nxp.com>
-To: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
-	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-	gregkh@linuxfoundation.org, jun.li@nxp.com,
-	alexander.stein@ew.tq-group.com
-Cc: linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v11 1/3] phy: fsl-imx8mq-usb: add tca function driver for
- imx95
-Message-ID: <20250116034623.ig44yqxzptujhwql@hippo>
-References: <20241204050907.1081781-1-xu.yang_2@nxp.com>
- <20250106020303.xrpo2pfv4knqszx7@hippo>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250106020303.xrpo2pfv4knqszx7@hippo>
-X-ClientProxiedBy: AM0PR03CA0083.eurprd03.prod.outlook.com
- (2603:10a6:208:69::24) To PAXPR04MB8829.eurprd04.prod.outlook.com
- (2603:10a6:102:20c::17)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E2FB1E505
+	for <linux-usb@vger.kernel.org>; Thu, 16 Jan 2025 05:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737004796; cv=none; b=iw+qeVxaWs1qYX4MvujPKdgHuckzNum7QXvoG4Cc3fyzMbzQMTphel6vtBhfFVmEFK1+TMZt5sVM9jBKpjDdjeNIAfOa5EGeniXWDfTggWK7QvJzBgeQ+W4uG62hOJh70V0iDMqoP/obK3LpdTwiZ10A5pHfMuuEN0BGSHv5Q4E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737004796; c=relaxed/simple;
+	bh=K1dIF/O/CK3E70GU0VXU/mKdPIJZLAMPpJ5Y0yDpVms=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:In-Reply-To:
+	 Content-Type:References; b=mLVpv9Nl8rLBXbyhB6wlcg8DzeKfANLxxVhec9otJqPrVGNR0gh+oFDLOfUcLavPoiky+9/I+3zikAjzQ+7/UUDLFga0Nw7N+gpjsLhYd/jZF7p9DaRJqP0Alj3iPTNUIbneSiQ3WGZzHxVY9hl915F4U7mTMQJzzEIpYR3fDC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=R5YfXI29; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250116051946epoutp015a984ca95f25512e21d4636df38490c9~bFKaDmlBX1195211952epoutp01e
+	for <linux-usb@vger.kernel.org>; Thu, 16 Jan 2025 05:19:46 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250116051946epoutp015a984ca95f25512e21d4636df38490c9~bFKaDmlBX1195211952epoutp01e
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1737004786;
+	bh=c5x98hRMUwcUXOzHdvTI4imhii0gD1HrPv3Rsx7msfU=;
+	h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
+	b=R5YfXI29p7gy/0kLGz0WgYvV7bsFQf5uCy8zW46RnYjyS2PxJKOHfz2zONEFzLMrN
+	 4BsSWpjGMLpMvJC/nUXkSYmmahGWV5WzEXOLLi6774BJ0yLJVjlbsJlFsrvvT6N0gT
+	 I83NJTbBjjdIi0gPCrWj2xwj08tY7HQeOziOZl4M=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
+	20250116051946epcas5p1d42b230ec3223a32bba14c5e2d7f060b~bFKZbTi-q2438724387epcas5p1S;
+	Thu, 16 Jan 2025 05:19:46 +0000 (GMT)
+Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.179]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4YYWQ84tBNz4x9Q6; Thu, 16 Jan
+	2025 05:19:44 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	85.5E.29212.0F698876; Thu, 16 Jan 2025 14:19:44 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
+	20250116051944epcas5p3bc5a84af3430983751f8ae8872e27e93~bFKXvVhjj0208902089epcas5p3J;
+	Thu, 16 Jan 2025 05:19:44 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20250116051944epsmtrp1d8b0c27b2bc22821d315d52a63a04baa~bFKXuSMEu0761307613epsmtrp1T;
+	Thu, 16 Jan 2025 05:19:44 +0000 (GMT)
+X-AuditID: b6c32a50-7ebff7000000721c-cb-678896f01292
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	EF.0E.23488.FE698876; Thu, 16 Jan 2025 14:19:43 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250116051941epsmtip2da7c68a95a0c186c527ee05a57a0795a~bFKVFMpIS1029610296epsmtip2P;
+	Thu, 16 Jan 2025 05:19:41 +0000 (GMT)
+Message-ID: <7d7a0d7a-76bb-49a8-82f8-07ee53893145@samsung.com>
+Date: Thu, 16 Jan 2025 10:49:24 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB8829:EE_|GV1PR04MB10703:EE_
-X-MS-Office365-Filtering-Correlation-Id: f387432c-bbdd-4b8e-de87-08dd35e0dcdf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|7416014|1800799024|366016|376014|38350700014|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?7e3osrCNsK3fX9l69tRsmwD7KfYSohcNv3S1IrZMSqdI8m4rAycXCdId8fDN?=
- =?us-ascii?Q?/m7X0gzXu3rrkbmH071Epx0cRAhGKK5MNHEIshbWbnLrhp4l1mMnUTBb5paJ?=
- =?us-ascii?Q?AxXRdieWiDKUGduI9yDZDOTEItxR/5hSXLIDP1NUGMpelyVP6t16jE8nYKbc?=
- =?us-ascii?Q?DJnoH3iDqOtpNSgJ5RUxPoH46BjWeJRKcnWRZzTY71KB0iVhNXL3722my0/i?=
- =?us-ascii?Q?w3bK0f5vFMAq6VE8pU/i9byk6IfYdyOiNNPVFZPOF3D7XJlgzAVgp+2/V6MW?=
- =?us-ascii?Q?ebbNdvKFO14NR+VreuUShJ0cY0+Ui6d4dTXxvC8VPui9jLd6HSP7H7P2sRtN?=
- =?us-ascii?Q?FC65PO44P+Y/3sB239i7+MuKtw7VEi3NLbF9f1lEUch7M0t1TTZl+bLhAjVh?=
- =?us-ascii?Q?YNTa5qauvW2ZtnPakb+FwhO75f1s3oKEgHJmTHf8cS1lu0mrP8nlS8aFllCA?=
- =?us-ascii?Q?VVJjOkZSO+vo2KalZ1Pn3nWqbWxdauxVOhkRHoa0y/PBuZkKUGqITAKpsDj5?=
- =?us-ascii?Q?k+rlKCPnUgPRFVvpyKsb51XduBAaOf4B6c8cGrlEX7OTFnvwUNqYlSD11d85?=
- =?us-ascii?Q?Zep1g0TThj+1jpDFKD+1sXlLhcVihc4u2PuVXP5+HnHVo8bHKikZ5vC30w/4?=
- =?us-ascii?Q?C2mxTfnWF7p+th31Vtkq5/9dr7H/XeVALB45q/cX8e/7ZErVSsJ+RghtVsWU?=
- =?us-ascii?Q?42bztouKqXsx1j/wwF71KcEQu9GvatIvq6oM2J8J5RhBuvmO0i2nWiZkyW34?=
- =?us-ascii?Q?sY8k6VB7kIlTGTNynPzTSOpMSlWqVEDj9hFiWGI/elZhvvJFAK+oIXW/hjEM?=
- =?us-ascii?Q?SbTEfaSuHexNRo/PligctEBdcOLUj6Jn8P3cBFFxx8nHcU1/iq2ORtLaoeFQ?=
- =?us-ascii?Q?rY8XDIcHzb6dIr2pppFwAQbuiOu8GoKqJaqSx05rn9eBEVv2Jw35WONGWIGU?=
- =?us-ascii?Q?bCNR3qd5U4U9wxcTfaFo6FHRq1s43/cVoGK3BASlEhqhAzBna0oYB03RSc5B?=
- =?us-ascii?Q?fvyD7m7FQfC6yR3tUvAxk13a1aJ5af9oTahgVZFIR8urDPgORqL6qLNTyiZq?=
- =?us-ascii?Q?+YNB3coq6mOZ8Gctey/ScFEfEZ/nklNP0LaZV/yNe2pMmewB2wwailllXiOX?=
- =?us-ascii?Q?6Dk1iYpdQPH66/8KCvdHEKGMRhsXZ+NYFiJ676DnufiKU/F9Pcz8GG1kOXfr?=
- =?us-ascii?Q?YYi+bfUnOP/q+hXOIEkF2WTKIJ1tX48kOyutQoqnCmh8vSK9GVrH79MnHcyE?=
- =?us-ascii?Q?rc2XfdrX+XRSJaxcVxRSESovzSZ/TjpOQE7G24aT5VPvpjnECVBodMo/fAEd?=
- =?us-ascii?Q?UCqXMt6J70Oaraj7i+YU4IkTnH1XL3oGm43Fye92IAcIZvsbDeqcCH37AiwP?=
- =?us-ascii?Q?5bsWvL1YermaFe63Z9D+XGGHQ558Nkq3B8r5GWXSgkJFD9+nDiVf6PXXJ9y7?=
- =?us-ascii?Q?dIMfamTVnBv1bwj0/D1Cn75Jf8fNw1YVn/zM3FYdLZPGwk/XXMWAPw=3D=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8829.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(7416014)(1800799024)(366016)(376014)(38350700014)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?PzvEc1aEyj6roZyIIRXZgFhUzJsuAKnazBT8iDQUx5hTavb+nOoBcT+Ttmm/?=
- =?us-ascii?Q?naI6Z6vgSrqIbHoWfRn4OBARFJMfeJdjFyOpL48sxLRMgIzlKkEyXoLa3Ftt?=
- =?us-ascii?Q?3uJI0zUpZYGE9RxP0VwZlgM8OisTUulhfnwADFBa9h73FotWYxcYdh5YHARH?=
- =?us-ascii?Q?7RSsHb8VvuIMD1Fcj3gL+AxGMWmw5YwM7uVoZpuXEe2g6GPaGOxmKt0ke9h7?=
- =?us-ascii?Q?TZJ/eUGUAGOZxWvC5DurevmgzTG1ij+MLldIGGgL83ZB/RKzSl1pRmTzPNPx?=
- =?us-ascii?Q?VsxPfrgcWBKwVgoC3qhR9b2yXETf0Ghq7ttymVQFWxSucZAbGh1t9ex9rdyl?=
- =?us-ascii?Q?Ed1WL5aFEe2xVDG59RVztUluC4cPmMJCFJijKXquH5REuVshDeNHb/ILuhkE?=
- =?us-ascii?Q?SBeOgl1jTsseXrbMCqw3fVx7ZkSFxStUl93uAQYHTniY2u3CyWAeUGEOyiWk?=
- =?us-ascii?Q?Sd6pOQYcABt36MwuSPb9Gsj/8ZksUO9iEahscP5eZdMpPcnsAccNIjkymkrH?=
- =?us-ascii?Q?06SHgOPlCLLYtXVan7Fc7QQ0ZsxE7QOhl3wZhaNHUt3s8wBY3gWC9NqaON78?=
- =?us-ascii?Q?AOX1EbQhzza/lwqLXQxqamwT3RtbG7qiap8i4RESExi0QKNxTV2NgCWLbJCn?=
- =?us-ascii?Q?A1xKHnXMiNeddfUeTG4ETin9/oUPyD13KdIuMPdIWvM1AznM9yiGiUhhj6xx?=
- =?us-ascii?Q?/CVyXgPzKefOq0F284KHseiwIX6MSGbZreIJyNQAtUDC3t5UU6znxkvOM6x/?=
- =?us-ascii?Q?OKQzqkYybbVWbqDAHi0VBg5e4VhSHy6sXzFoVKQVvFKOk+5h/CTtmyoKjjvr?=
- =?us-ascii?Q?b/CzjRk/yrPnEYZxof8aGcrR3Kz45UYuv3PgbunFT1ao30QPNXvVl5SBWCug?=
- =?us-ascii?Q?7EH6EwIA7Svie1bCVrPIq5aJWRPqeFje/41sjQBx8fB8uuN9TCiSoLZIOSEn?=
- =?us-ascii?Q?YNhudKPUASHtqy+7Y/eOsralmXUX3+FBNC4mWca5r03ZYibtgVMUtzKbagdR?=
- =?us-ascii?Q?3u8Y51VpWuoNcCZ2q8K40iQGubHTFhl4oiU7UMcrxaAo7dEDoAxTtaR9QcLF?=
- =?us-ascii?Q?LMcNnfjY8WEcIerDugY2MT3NS39xELsoZJ3SHhbRuR3vP/W/IBzQPZ8PXfHp?=
- =?us-ascii?Q?wu53tQudRzL3LqbzfTXg8umCUaSCfTHudryi2XaWzawIlagGtiYlNNo5fjhY?=
- =?us-ascii?Q?mWgVeNdTnoPPtlTO+Tx95VyQXlx6x1dyZlDmlNkx415Z8KOuvBHxjwnPBzW4?=
- =?us-ascii?Q?oo9pvizb/A3Wat5l7IEPVj0Op5ulrOLJA4BjjUhows7C9rFD7OAhmWI+51v2?=
- =?us-ascii?Q?ZuPsQ9QA/+BpcGvvvhCjETuCGbk1efTJIvDLrhse3SFGylL/TyCiX6QrGrkd?=
- =?us-ascii?Q?VgToM8DDdfH04IN+yBo5Iegz2xvX2f3+NEbQWPs29lkiQPLHLfcr9tRVIn8f?=
- =?us-ascii?Q?Rcwhausywr6jqTyPk42RCDyMymKNsyy3XMEg4DyQJSxtauM9M2iy6GMvOFXT?=
- =?us-ascii?Q?EqkQQZQm4fKUkTDPz8K3D0wTjBLfJoGR9hT65obkgQNMqmMiHn53rjwV2kgJ?=
- =?us-ascii?Q?gVuM7rj7LvWgQ4CVWClz7zDRP7tvxHEK1R5UTOz7?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f387432c-bbdd-4b8e-de87-08dd35e0dcdf
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8829.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Jan 2025 03:50:05.7489
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OKoPp91YX8amPwxfZFrBPIXrHvUcrgxi8Pbv7/1l9wsKJP+uLDtSovOyXyg4yvOfD4+kGW1DKHkr7KSvL2lylA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR04MB10703
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
+	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	stable@vger.kernel.org, thiagu.r@samsung.com
+Content-Language: en-US
+In-Reply-To: <6629115f-5208-42fe-8bf4-25d808129741@samsung.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xTVxzHc3pvLxe1y5WHntSIpAypbMWWFXbYimwZMd00WCX6B5lhN3DT
+	ltJHessAkxlYoVPGQMjCa6DlEYG6yaiVZ7eFMgWJyTIec5CJQHDqBowxHSgjru3Fjf8+v9/5
+	fc/vdQ6JBU0TQlJrsDBmA50tIrbhXYMHxJLlqnNq6fxQBKqu6uSjhQkHH81c7CLQL/YqHhpp
+	beQha3MHgSrd13F0d3YNR1cXf+Cjsb56AjVdLsaQyzbOQys3nvNRoesuHznO1+NobLUXQ/bO
+	OYAqB0JRm7UYeytY6XScJ5TfNXwZoLz5cChAWb4hVVa4zyrLXA6g/MsZpgpI0yk0DJ3JmMMZ
+	Q4YxU2tQJ4qOpKa/kx4XL5VJZAnodVG4gdYziaLkoyrJYW22txNR+Id0do7XpaJZVnTwkMJs
+	zLEw4Roja0kUMabMbJPcFMPSejbHoI4xMJY3ZFJpbJw38AOdZnRtlG+qiMxzfZtQANrDSkAg
+	CSk5nG9sIErANjKIcgM4U1WKc8YKgK7acowz/gaw6J494IXkk+EBPnfwDYCtpZUBnLEI4IXC
+	Xq+EJAXUITjgYn0CnIqE1ZcHMR8LqJ3wVu087uNQah+8N1XjvzSY0sIn1SXAJyUoGfx1WOFz
+	h1Bi+OjGlL8ijPJgsHDuqV+LUbvh1Pwlno8DqSTY2eAEnH8ftF7/wl81pJZJ2Lb4gMdVnQwH
+	e0dxjoPhb0OuzW6E8FG5bZMzoLvy8SZroMfhwThOglfst/m+4jDqAOzoO8jlegl+tj7P87kh
+	JYDnbEFcdCQcKRwjON4Dp1t+4nOshCO21c1RtWNw6qtm4gIIr9sylrotrdVtaafu/8x2gDuA
+	kDGxejWTEWeSSQxM7n8LzzDqncD/0KNVPeDK1xsxHsAjgQdAEhOFCFqIYnWQIJPOP8OYjenm
+	nGyG9YA474IqMGFohtH7UwyWdJk8QSqPj4+XJ7wWLxPtFlh7i9RBlJq2MDqGMTHmFzoeGSgs
+	4DUz1y6GrOApufT9tOGOVz41LvVMnXzozHsmm1koPbI96XHXg6xbGyuW+oqZxqX+hkZ1Wfeu
+	AvFHlrdb75yuqe/X5Sieucry7Ht3VA5Fn2yffb4/9ez2qGX153m2PSmoVijvwt6VTYvZXZNh
+	cyZ66c2ILvYP9zFLzPcKj0V/hrCqWiea7swmae/n9v6+ntkdtkM8bnbm81Y1jPHnU7ruo/mS
+	QEnyn6PiPCL1xKkC5mpKVOJsrO1pUU9W1bqqJfJ2VEjb6dhiAVmuX7q58LJquCl1b8zCk4ZF
+	T/9glvp9YrL/R0edzvxPWvO145c6onbWtB57z/oq6CuNmJiUnhifWftYhLMaWhaNmVn6X1pk
+	zIJxBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsWy7bCSvO77aR3pBs0/bCymT9vIavHm6ipW
+	iwfztrFZ3Fkwjcni1PKFTBbNi9ezWUzas5XF4u7DHywW696eZ7W4vGsOm8WiZa3MFlvarjBZ
+	fDr6n9WicctdVotVnXNYLC5/38lssWDjI0aLSQdFLVY0tzI7CHtsWtXJ5rF/7hp2j2MvjrN7
+	9P818Ji4p86jb8sqRo/Pm+QC2KO4bFJSczLLUov07RK4Mi79uMRaMFG1Yss+ywbGlXJdjJwc
+	EgImEu0nDrJ2MXJxCAnsZpTY/+EwO0RCWuL1rC5GCFtYYuW/5+wQRa8ZJT7P3czWxcjBwStg
+	J3FwSzFIDYuAqsT0ZYeZQWxeAUGJkzOfsIDYogLyEvdvzQCbKSyQKXHv1EywVjYBQ4lnJ2xA
+	wiICGhIvj95iARnPLHCIWeLHq6eMELtWMktc7moBG8QsIC5x68l8JhCbU8BeYuPcTYwQcTOJ
+	rq1dULa8RPPW2cwTGIVmIbljFpL2WUhaZiFpWcDIsopRMrWgODc9N9mwwDAvtVyvODG3uDQv
+	XS85P3cTIzh2tTR2ML771qR/iJGJg/EQowQHs5II7xK21nQh3pTEyqrUovz4otKc1OJDjNIc
+	LErivCsNI9KFBNITS1KzU1MLUotgskwcnFINTAnPPANipSJ83CrOTPTYczsuY7l3r5pq7n9m
+	hbc6ryXPbU+9Y8vUFhbxqK9tR9fBuL/e19qOJ55LNc8utYg/xKjTfKAmZL1VdODeklsxAt8E
+	V1ivmrVJym6J4jsnA/O3XUZXVW551/9PduzqNnl/LCqExdfUMj6/7crbe72bfTdMCls2qeih
+	6ta3PnmFHU9lv9Rrrq/5KbBV9UDjj07lFIeGT6GXGXxsjiuyL2y0DJmyykDJyH3yot+HJoje
+	ZRNwUb6ir8kxy37q6jWZAaxnTlpuO2C30m1RUn+SrNzNudv0X3n8LuKaJLutWnVpgeGkJcZf
+	3Ho7eANfa3cGGMnO4Qsx3f0mveFfaFZdVqISS3FGoqEWc1FxIgA7A/DTTAMAAA==
+X-CMS-MailID: 20250116051944epcas5p3bc5a84af3430983751f8ae8872e27e93
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20241208152338epcas5p4fde427bb4467414417083221067ac7ab
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+	<20241208152322.1653-1-selvarasu.g@samsung.com>
+	<2024121845-cactus-geology-8df3@gregkh>
+	<9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
+	<2024122013-scary-paver-fcff@gregkh>
+	<a1dedf06-e804-4580-a690-25e55312eab8@samsung.com>
+	<2024122007-flail-traverse-b7b8@gregkh>
+	<6629115f-5208-42fe-8bf4-25d808129741@samsung.com>
 
-Hi Vinod,
 
-On Mon, Jan 06, 2025 at 10:03:03AM +0800, Xu Yang wrote:
-> Hi,
-> 
-> On Wed, Dec 04, 2024 at 01:09:05PM +0800, Xu Yang wrote:
-> > The i.MX95 USB3 phy has a Type-C Assist block (TCA). This block consists
-> > two functional blocks (XBar assist and VBus assist) and one system
-> > access interface using APB.
-> > 
-> > The primary functionality of XBar assist is:
-> >  - switching lane for flip
-> >  - moving unused lanes into lower power states.
-> > 
-> > This info can be get from:
-> > i.MX95 RM Chapter 163.3.8 Type-C assist (TCA) block.
-> > 
-> > This will add support for TCA block to achieve lane switching and tca
-> > lower power functionality.
-> > 
-> > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> > Reviewed-by: Jun Li <jun.li@nxp.com>
-> > 
-> > ---
-> > Changes in v2:
-> >  - return the value of imx95_usb_phy_get_tca()
-> > Changes in v3:
-> >  - no changes
-> > Changes in v4:
-> >  - remove compatible check for imx95
-> >  - check whether tca register region exist or not, yes means has tca,
-> >    otherwise skip tca setup
-> > Changes in v5:
-> >  - no changes
-> > Changes in v6:
-> >  - no changes
-> > Changes in v7:
-> >  - fix sparse warnings in imx95_usb_phy_get_tca()
-> > Changes in v8:
-> >  - #define TCA_INFO 0xFC -> 0xfc
-> > Changes in v9:
-> >  - no changes
-> > Changes in v10:
-> >  - no changes
-> > Changes in v11:
-> >  - remove some unnecessary readl() as suggested by Amit Singh Tomar
-> > ---
-> >  drivers/phy/freescale/Kconfig              |   1 +
-> >  drivers/phy/freescale/phy-fsl-imx8mq-usb.c | 240 +++++++++++++++++++++
-> >  2 files changed, 241 insertions(+)
-> > 
-> > diff --git a/drivers/phy/freescale/Kconfig b/drivers/phy/freescale/Kconfig
-> > index dcd9acff6d01..81f53564ee15 100644
-> > --- a/drivers/phy/freescale/Kconfig
-> > +++ b/drivers/phy/freescale/Kconfig
-> > @@ -5,6 +5,7 @@ if (ARCH_MXC && ARM64) || COMPILE_TEST
-> >  config PHY_FSL_IMX8MQ_USB
-> >  	tristate "Freescale i.MX8M USB3 PHY"
-> >  	depends on OF && HAS_IOMEM
-> > +	depends on TYPEC || TYPEC=n
-> >  	select GENERIC_PHY
-> >  	default ARCH_MXC && ARM64
-> >  
-> > diff --git a/drivers/phy/freescale/phy-fsl-imx8mq-usb.c b/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
-> > index adc6394626ce..a974ef94de9a 100644
-> > --- a/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
-> > +++ b/drivers/phy/freescale/phy-fsl-imx8mq-usb.c
-> > @@ -10,6 +10,7 @@
-> >  #include <linux/phy/phy.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/regulator/consumer.h>
-> > +#include <linux/usb/typec_mux.h>
-> >  
-> >  #define PHY_CTRL0			0x0
-> >  #define PHY_CTRL0_REF_SSP_EN		BIT(2)
-> > @@ -50,11 +51,66 @@
-> >  
-> >  #define PHY_TUNE_DEFAULT		0xffffffff
-> >  
-> > +#define TCA_CLK_RST			0x00
-> > +#define TCA_CLK_RST_SW			BIT(9)
-> > +#define TCA_CLK_RST_REF_CLK_EN		BIT(1)
-> > +#define TCA_CLK_RST_SUSPEND_CLK_EN	BIT(0)
-> > +
-> > +#define TCA_INTR_EN			0x04
-> > +#define TCA_INTR_STS			0x08
-> > +
-> > +#define TCA_GCFG			0x10
-> > +#define TCA_GCFG_ROLE_HSTDEV		BIT(4)
-> > +#define TCA_GCFG_OP_MODE		GENMASK(1, 0)
-> > +#define TCA_GCFG_OP_MODE_SYSMODE	0
-> > +#define TCA_GCFG_OP_MODE_SYNCMODE	1
-> > +
-> > +#define TCA_TCPC			0x14
-> > +#define TCA_TCPC_VALID			BIT(4)
-> > +#define TCA_TCPC_LOW_POWER_EN		BIT(3)
-> > +#define TCA_TCPC_ORIENTATION_NORMAL	BIT(2)
-> > +#define TCA_TCPC_MUX_CONTRL		GENMASK(1, 0)
-> > +#define TCA_TCPC_MUX_CONTRL_NO_CONN	0
-> > +#define TCA_TCPC_MUX_CONTRL_USB_CONN	1
-> > +
-> > +#define TCA_SYSMODE_CFG			0x18
-> > +#define TCA_SYSMODE_TCPC_DISABLE	BIT(3)
-> > +#define TCA_SYSMODE_TCPC_FLIP		BIT(2)
-> > +
-> > +#define TCA_CTRLSYNCMODE_CFG0		0x20
-> > +#define TCA_CTRLSYNCMODE_CFG1           0x20
-> > +
-> > +#define TCA_PSTATE			0x30
-> > +#define TCA_PSTATE_CM_STS		BIT(4)
-> > +#define TCA_PSTATE_TX_STS		BIT(3)
-> > +#define TCA_PSTATE_RX_PLL_STS		BIT(2)
-> > +#define TCA_PSTATE_PIPE0_POWER_DOWN	GENMASK(1, 0)
-> > +
-> > +#define TCA_GEN_STATUS			0x34
-> > +#define TCA_GEN_DEV_POR			BIT(12)
-> > +#define TCA_GEN_REF_CLK_SEL		BIT(8)
-> > +#define TCA_GEN_TYPEC_FLIP_INVERT	BIT(4)
-> > +#define TCA_GEN_PHY_TYPEC_DISABLE	BIT(3)
-> > +#define TCA_GEN_PHY_TYPEC_FLIP		BIT(2)
-> > +
-> > +#define TCA_VBUS_CTRL			0x40
-> > +#define TCA_VBUS_STATUS			0x44
-> > +
-> > +#define TCA_INFO			0xfc
-> > +
-> > +struct tca_blk {
-> > +	struct typec_switch_dev *sw;
-> > +	void __iomem *base;
-> > +	struct mutex mutex;
-> > +	enum typec_orientation orientation;
-> > +};
-> > +
-> >  struct imx8mq_usb_phy {
-> >  	struct phy *phy;
-> >  	struct clk *clk;
-> >  	void __iomem *base;
-> >  	struct regulator *vbus;
-> > +	struct tca_blk *tca;
-> >  	u32 pcs_tx_swing_full;
-> >  	u32 pcs_tx_deemph_3p5db;
-> >  	u32 tx_vref_tune;
-> > @@ -64,6 +120,172 @@ struct imx8mq_usb_phy {
-> >  	u32 comp_dis_tune;
-> >  };
-> >  
-> > +
-> > +static void tca_blk_orientation_set(struct tca_blk *tca,
-> > +				enum typec_orientation orientation);
-> > +
-> > +#ifdef CONFIG_TYPEC
-> > +
-> > +static int tca_blk_typec_switch_set(struct typec_switch_dev *sw,
-> > +				enum typec_orientation orientation)
-> > +{
-> > +	struct imx8mq_usb_phy *imx_phy = typec_switch_get_drvdata(sw);
-> > +	struct tca_blk *tca = imx_phy->tca;
-> > +	int ret;
-> > +
-> > +	if (tca->orientation == orientation)
-> > +		return 0;
-> > +
-> > +	ret = clk_prepare_enable(imx_phy->clk);
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	tca_blk_orientation_set(tca, orientation);
-> > +	clk_disable_unprepare(imx_phy->clk);
-> > +
-> > +	return 0;
-> > +}
-> > +
-> > +static struct typec_switch_dev *tca_blk_get_typec_switch(struct platform_device *pdev,
-> > +					struct imx8mq_usb_phy *imx_phy)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct typec_switch_dev *sw;
-> > +	struct typec_switch_desc sw_desc = { };
-> > +
-> > +	sw_desc.drvdata = imx_phy;
-> > +	sw_desc.fwnode = dev->fwnode;
-> > +	sw_desc.set = tca_blk_typec_switch_set;
-> > +	sw_desc.name = NULL;
-> > +
-> > +	sw = typec_switch_register(dev, &sw_desc);
-> > +	if (IS_ERR(sw)) {
-> > +		dev_err(dev, "Error register tca orientation switch: %ld",
-> > +				PTR_ERR(sw));
-> > +		return NULL;
-> > +	}
-> > +
-> > +	return sw;
-> > +}
-> > +
-> > +static void tca_blk_put_typec_switch(struct typec_switch_dev *sw)
-> > +{
-> > +	typec_switch_unregister(sw);
-> > +}
-> > +
-> > +#else
-> > +
-> > +static struct typec_switch_dev *tca_blk_get_typec_switch(struct platform_device *pdev,
-> > +			struct imx8mq_usb_phy *imx_phy)
-> > +{
-> > +	return NULL;
-> > +}
-> > +
-> > +static void tca_blk_put_typec_switch(struct typec_switch_dev *sw) {}
-> > +
-> > +#endif /* CONFIG_TYPEC */
-> > +
-> > +static void tca_blk_orientation_set(struct tca_blk *tca,
-> > +				enum typec_orientation orientation)
-> > +{
-> > +	u32 val;
-> > +
-> > +	mutex_lock(&tca->mutex);
-> > +
-> > +	if (orientation == TYPEC_ORIENTATION_NONE) {
-> > +		/*
-> > +		 * use Controller Synced Mode for TCA low power enable and
-> > +		 * put PHY to USB safe state.
-> > +		 */
-> > +		val = FIELD_PREP(TCA_GCFG_OP_MODE, TCA_GCFG_OP_MODE_SYNCMODE);
-> > +		writel(val, tca->base + TCA_GCFG);
-> > +
-> > +		val = TCA_TCPC_VALID | TCA_TCPC_LOW_POWER_EN;
-> > +		writel(val, tca->base + TCA_TCPC);
-> > +
-> > +		goto out;
-> > +	}
-> > +
-> > +	/* use System Configuration Mode for TCA mux control. */
-> > +	val = FIELD_PREP(TCA_GCFG_OP_MODE, TCA_GCFG_OP_MODE_SYSMODE);
-> > +	writel(val, tca->base + TCA_GCFG);
-> > +
-> > +	/* Disable TCA module */
-> > +	val = readl(tca->base + TCA_SYSMODE_CFG);
-> > +	val |= TCA_SYSMODE_TCPC_DISABLE;
-> > +	writel(val, tca->base + TCA_SYSMODE_CFG);
-> > +
-> > +	if (orientation == TYPEC_ORIENTATION_REVERSE)
-> > +		val |= TCA_SYSMODE_TCPC_FLIP;
-> > +	else if (orientation == TYPEC_ORIENTATION_NORMAL)
-> > +		val &= ~TCA_SYSMODE_TCPC_FLIP;
-> > +
-> > +	writel(val, tca->base + TCA_SYSMODE_CFG);
-> > +
-> > +	/* Enable TCA module */
-> > +	val &= ~TCA_SYSMODE_TCPC_DISABLE;
-> > +	writel(val, tca->base + TCA_SYSMODE_CFG);
-> > +
-> > +out:
-> > +	tca->orientation = orientation;
-> > +	mutex_unlock(&tca->mutex);
-> > +}
-> > +
-> > +static void tca_blk_init(struct tca_blk *tca)
-> > +{
-> > +	u32 val;
-> > +
-> > +	/* reset XBar block */
-> > +	val = readl(tca->base + TCA_CLK_RST);
-> > +	val &= ~TCA_CLK_RST_SW;
-> > +	writel(val, tca->base + TCA_CLK_RST);
-> > +
-> > +	udelay(100);
-> > +
-> > +	/* clear reset */
-> > +	val |= TCA_CLK_RST_SW;
-> > +	writel(val, tca->base + TCA_CLK_RST);
-> > +
-> > +	tca_blk_orientation_set(tca, tca->orientation);
-> > +}
-> > +
-> > +static struct tca_blk *imx95_usb_phy_get_tca(struct platform_device *pdev,
-> > +				struct imx8mq_usb_phy *imx_phy)
-> > +{
-> > +	struct device *dev = &pdev->dev;
-> > +	struct resource *res;
-> > +	struct tca_blk *tca;
-> > +
-> > +	res = platform_get_resource(pdev, IORESOURCE_MEM, 1);
-> > +	if (!res)
-> > +		return NULL;
-> > +
-> > +	tca = devm_kzalloc(dev, sizeof(*tca), GFP_KERNEL);
-> > +	if (!tca)
-> > +		return ERR_PTR(-ENOMEM);
-> > +
-> > +	tca->base = devm_ioremap_resource(&pdev->dev, res);
-> > +	if (IS_ERR(tca->base))
-> > +		return ERR_CAST(tca->base);
-> > +
-> > +	mutex_init(&tca->mutex);
-> > +
-> > +	tca->orientation = TYPEC_ORIENTATION_NORMAL;
-> > +	tca->sw = tca_blk_get_typec_switch(pdev, imx_phy);
-> > +
-> > +	return tca;
-> > +}
-> > +
-> > +static void imx95_usb_phy_put_tca(struct imx8mq_usb_phy *imx_phy)
-> > +{
-> > +	struct tca_blk *tca = imx_phy->tca;
-> > +
-> > +	if (!tca)
-> > +		return;
-> > +
-> > +	tca_blk_put_typec_switch(tca->sw);
-> > +}
-> > +
-> >  static u32 phy_tx_vref_tune_from_property(u32 percent)
-> >  {
-> >  	percent = clamp(percent, 94U, 124U);
-> > @@ -315,6 +537,9 @@ static int imx8mp_usb_phy_init(struct phy *phy)
-> >  
-> >  	imx8m_phy_tune(imx_phy);
-> >  
-> > +	if (imx_phy->tca)
-> > +		tca_blk_init(imx_phy->tca);
-> > +
-> >  	return 0;
-> >  }
-> >  
-> > @@ -359,6 +584,8 @@ static const struct of_device_id imx8mq_usb_phy_of_match[] = {
-> >  	 .data = &imx8mq_usb_phy_ops,},
-> >  	{.compatible = "fsl,imx8mp-usb-phy",
-> >  	 .data = &imx8mp_usb_phy_ops,},
-> > +	{.compatible = "fsl,imx95-usb-phy",
-> > +	 .data = &imx8mp_usb_phy_ops,},
-> >  	{ }
-> >  };
-> >  MODULE_DEVICE_TABLE(of, imx8mq_usb_phy_of_match);
-> > @@ -398,6 +625,11 @@ static int imx8mq_usb_phy_probe(struct platform_device *pdev)
-> >  
-> >  	phy_set_drvdata(imx_phy->phy, imx_phy);
-> >  
-> > +	imx_phy->tca = imx95_usb_phy_get_tca(pdev, imx_phy);
-> > +	if (IS_ERR(imx_phy->tca))
-> > +		return dev_err_probe(dev, PTR_ERR(imx_phy->tca),
-> > +					"failed to get tca\n");
-> > +
-> >  	imx8m_get_phy_tuning_data(imx_phy);
-> >  
-> >  	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
-> > @@ -405,8 +637,16 @@ static int imx8mq_usb_phy_probe(struct platform_device *pdev)
-> >  	return PTR_ERR_OR_ZERO(phy_provider);
-> >  }
-> >  
-> > +static void imx8mq_usb_phy_remove(struct platform_device *pdev)
-> > +{
-> > +	struct imx8mq_usb_phy *imx_phy = platform_get_drvdata(pdev);
-> > +
-> > +	imx95_usb_phy_put_tca(imx_phy);
-> > +}
-> > +
-> >  static struct platform_driver imx8mq_usb_phy_driver = {
-> >  	.probe	= imx8mq_usb_phy_probe,
-> > +	.remove = imx8mq_usb_phy_remove,
-> >  	.driver = {
-> >  		.name	= "imx8mq-usb-phy",
-> >  		.of_match_table	= imx8mq_usb_phy_of_match,
-> > -- 
-> > 2.34.1
-> > 
-> 
-> Happy New Year!
-> And a gentle ping.
+On 12/21/2024 11:37 PM, Selvarasu Ganesan wrote:
+>
+> On 12/20/2024 8:45 PM, Greg KH wrote:
+>> On Fri, Dec 20, 2024 at 07:02:06PM +0530, Selvarasu Ganesan wrote:
+>>> On 12/20/2024 5:54 PM, Greg KH wrote:
+>>>> On Wed, Dec 18, 2024 at 03:51:50PM +0530, Selvarasu Ganesan wrote:
+>>>>> On 12/18/2024 11:01 AM, Greg KH wrote:
+>>>>>> On Sun, Dec 08, 2024 at 08:53:20PM +0530, Selvarasu Ganesan wrote:
+>>>>>>> The current implementation sets the wMaxPacketSize of bulk in/out
+>>>>>>> endpoints to 1024 bytes at the end of the f_midi_bind function. 
+>>>>>>> However,
+>>>>>>> in cases where there is a failure in the first midi bind attempt,
+>>>>>>> consider rebinding.
+>>>>>> What considers rebinding?  Your change does not modify that.
+>>>>> Hi Greg,
+>>>>> Thanks for your review comments.
+>>>>>
+>>>>>
+>>>>> Here the term "rebind" in this context refers to attempting to 
+>>>>> bind the
+>>>>> MIDI function a second time in certain scenarios.
+>>>>> The situations where rebinding is considered include:
+>>>>>
+>>>>>     * When there is a failure in the first UDC write attempt, 
+>>>>> which may be
+>>>>>       caused by other functions bind along with MIDI
+>>>>>     * Runtime composition change : Example : MIDI,ADB to MIDI. Or 
+>>>>> MIDI to
+>>>>>       MIDI,ADB
+>>>>>
+>>>>> The issue arises during the second time the "f_midi_bind" function is
+>>>>> called. The problem lies in the fact that the size of
+>>>>> "bulk_in_desc.wMaxPacketSize" is set to 1024 during the first call,
+>>>>> which exceeds the hardware capability of the dwc3 TX/RX FIFO
+>>>>> (ep->maxpacket_limit = 512).
+>>>> Ok, but then why not properly reset ALL of the options/values when a
+>>>> failure happens, not just this one when the initialization happens
+>>>> again?  Odds are you might be missing the change of something else 
+>>>> here
+>>>> as well, right?
+>>> Are you suggesting that we reset the entire value of
+>>> usb_endpoint_descriptor before call usb_ep_autoconfig? If so, Sorry 
+>>> I am
+>>> not clear on your reasoning for wanting to reset all options/values.
+>>> After all, all values will be overwritten
+>>> afterusb_ep_autoconfig.Additionally, the wMaxPacketSize is the only
+>>> value being checked during the EP claim process (usb_ep_autoconfig), 
+>>> and
+>>> it has caused issues where claiming wMaxPacketSize is grater than
+>>> ep->maxpacket_limit.
+>> Then fix up that value on failure, if things fail you should reset it
+>> back to a "known good state", right?  And what's wrong with resetting
+>> all of the values anyway, wouldn't that be the correct thing to do?
+>
+> Yes, It's back to known good state if we reset wMaxPacketSize. There 
+> is no point to reset all values in the usb endpoint descriptor 
+> structure as all the member of this structure are predefined value 
+> except wMaxPacketSize and bEndpointAddress. The bEndpointAddress is 
+> obtain as part of usb_ep_autoconfig.
+>
+> static struct usb_endpoint_descriptor bulk_out_desc = {
+>         .bLength =              USB_DT_ENDPOINT_AUDIO_SIZE,
+>         .bDescriptorType =      USB_DT_ENDPOINT,
+>         .bEndpointAddress =     USB_DIR_OUT,
+>         .bmAttributes =         USB_ENDPOINT_XFER_BULK,
+> };
+>
+HI Greg,
 
-A gentle ping!
-If no other concerns, please help pick up them since many users are
-waiting for it. And v6.13 is almost coming.
+Gentle remainder for your further comments or suggestions on this.
 
 Thanks,
-Xu Yang
+Selva
+
+>>>> Also, cleaning up from an error is a better thing to do than forcing
+>>>> something to be set all the time when you don't have anything gone
+>>>> wrong.
+>>> As I previously mentioned, this is a general approach to set
+>>> wMaxPacketSize before claiming the endpoint. This is because the
+>>> usb_ep_autoconfig treats endpoint descriptors as if they were full
+>>> speed. Following the same pattern as other function drivers, that
+>>> approach allows us to claim the EP with using a full-speed descriptor.
+>>> We can use the same approach here instead of resetting wMaxPacketSize
+>>> every time.
+>>>
+>>> The following provided code is used to claim an EP with a full-speed
+>>> bulk descriptor in MIDI. Its also working solution.  But, We thinking
+>>> that it may unnecessarily complicate the code as it only utilizes the
+>>> full descriptor for obtaining the EP address here. What you think shall
+>>> we go with below approach instead of rest wMaxPacketSize before call
+>>> usb_ep_autoconfig?
+>> I don't know, what do you think is best to do?  You are the one having
+>> problems and will need to fix any bugs that your changes will cause :)
+>>
+>> thanks,
+>>
+>> greg k-h
+>
+> We agree. Restting wMaxPacketSize is the best solution for this issue, 
+> as concluded from our internal review meeting as well.
+>
+> Thanks,
+> Selva
 
