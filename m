@@ -1,144 +1,135 @@
-Return-Path: <linux-usb+bounces-19392-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19393-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C003A133A2
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 08:16:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA2A2A135C9
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 09:46:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5D9C1886C0E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 07:16:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32D663A2AE2
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 08:46:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958A919258E;
-	Thu, 16 Jan 2025 07:16:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="dLMTC4zJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 939EF1D7E33;
+	Thu, 16 Jan 2025 08:46:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.9])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7588A15252D;
-	Thu, 16 Jan 2025 07:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.9
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9521CAA8A
+	for <linux-usb@vger.kernel.org>; Thu, 16 Jan 2025 08:46:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737011793; cv=none; b=KixFrdUa7K0WV/8Ak1TD+SBansS4x+vVC79imM5MR8d/dY1dMTK4CnqE2a6uBEKGGWApYfKFGnYgbQ3/QstMpeZdA3l5MVl2HfwjJawLz+i/Dy31RLGajPMkt5CgVVEKJq9cYXAkynf0GQiMOydjBKI2CGkuc6pEpO9VZr+r+uo=
+	t=1737017187; cv=none; b=ODY9+bbonZxQo+OBXqNKy6RAk/Y24ROpx+uBPiHcQJzEvpW4ybdfdzWblxK1XJNscKthghu6qdweaiDczBa7EjQxbGvwZ6hBAJF6zvYV5CofB9JY2vKMtFz1F+Z3dRxvk4JuTCe8qDFEpJZgSsTJKCSC9NkJWeqXRR1ACWZwrEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737011793; c=relaxed/simple;
-	bh=g1MJacTjjvZB6N9S5BECKd9wrxTFkwDcjMVUgc98RYg=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=O9B0TvoCFfpE/VYrxfyfuy31+jdRQ7qqIrnSH3g1dwVuoeUhwP6PKTSRpm4EHD3XsLX7iCqcIMpic0Ef+MGa4uLIbY89feKsEZSzOxCCr329OlXCE0XGWHNQ50sTEe4ryktUUWYfgzhwapOo0xvZYGeNseIFObFOr4wEiRH0Mig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=dLMTC4zJ; arc=none smtp.client-ip=117.135.210.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:Subject:Date:Message-Id; bh=/sveMCvQkQBFRJTfK+
-	RSjkPZDMickk7US9Vq5h96rIo=; b=dLMTC4zJVZT/EmV1+c0EN2BSY2QJL9UWlX
-	ateoj+OepQEQNiUH1IKotpUN02I6s2A6+MAfxLQQRTbSiJ9YQNaCEKCr9dp1zq5S
-	3v+SwhUVrBNTLvzRHYN3T4hzN7Ljr83UH6DcUlfaeV353awcHZBrbGJ7dkkDf4EO
-	BpjfO1LAA=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDHP8rgsYhnmWcvBQ--.17019S2;
-	Thu, 16 Jan 2025 15:14:40 +0800 (CST)
-From: "fengchunguo@126.com" <fengchunguo@126.com>
-To: heikki.krogerus@linux.intel.com
-Cc: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Gary <fengchunguo@126.com>
-Subject: [PATCH 1/1] usb: typec: Added power_operation_mode_show type check when usb slowly detect
-Date: Thu, 16 Jan 2025 15:14:31 +0800
-Message-Id: <1737011671-88288-1-git-send-email-fengchunguo@126.com>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID:_____wDHP8rgsYhnmWcvBQ--.17019S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXrW7KFyUWrWUJr13XrWDurg_yoW5Cry8pr
-	4DGr45GrWkJFy7AF1IyFnxZF1rtw1UCa4UGayxtryFyF12g3W5tr4UJF47Gr1DJr45Xr47
-	tF1qg3yrtw18Gw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Ux3ktUUUUU=
-X-CM-SenderInfo: 5ihqwu5kxqw3br6rjloofrz/1tbiOh3WOmeIpWnQ4gAAsa
+	s=arc-20240116; t=1737017187; c=relaxed/simple;
+	bh=SMS/WYXiS7wO6WMGkTraT9DMv2PEnR5eKZ+KSZvlOEs=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=W+Xs3cEO8Iq6UN7755aarYB1SbIDfkTOmLPM377TXe5NsJK1vPTTXH4HKfPmUqQADCe7KeC3vFwlZBqdQiCJ64J/7gLzzXT1DVqh5+E0OPMMiWr6JEtMnHF+yLslbupNU0/hSYYO2QwCdkaguRMfCN04VfkhBrM9Ya7veu9L40o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tYLVo-0002fo-Ts; Thu, 16 Jan 2025 09:46:00 +0100
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tYLVn-000DtB-0F;
+	Thu, 16 Jan 2025 09:45:59 +0100
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tYLVm-00029Z-3C;
+	Thu, 16 Jan 2025 09:45:58 +0100
+Message-ID: <9ea186e39afb4584f12758d2fa6a26a0b12389ec.camel@pengutronix.de>
+Subject: Re: [PATCH 5/7] phy: qcom: Add M31 based eUSB2 PHY driver
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Melody Olvera <quic_molvera@quicinc.com>, Vinod Koul <vkoul@kernel.org>,
+  Kishon Vijay Abraham I <kishon@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Wesley Cheng <quic_wcheng@quicinc.com>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>,  Catalin Marinas
+ <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Bjorn Andersson
+ <andersson@kernel.org>,  Konrad Dybcio <konradybcio@kernel.org>, Satya
+ Durga Srinivasu Prabhala <quic_satyap@quicinc.com>, Trilok Soni
+ <quic_tsoni@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Date: Thu, 16 Jan 2025 09:45:58 +0100
+In-Reply-To: <20250113-sm8750_usb_master-v1-5-09afe1dc2524@quicinc.com>
+References: <20250113-sm8750_usb_master-v1-0-09afe1dc2524@quicinc.com>
+	 <20250113-sm8750_usb_master-v1-5-09afe1dc2524@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-From: Gary <fengchunguo@126.com>
+On Mo, 2025-01-13 at 13:52 -0800, Melody Olvera wrote:
+> From: Wesley Cheng <quic_wcheng@quicinc.com>
+>=20
+> On SM8750, the eUSB2 PHY used is M31 based. Add the initialization
+> sequences to bring it out of reset, and to initialize the associated eUSB=
+2
+> repeater as well.
+>=20
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+> ---
+>  drivers/phy/qualcomm/Kconfig              |  12 +-
+>  drivers/phy/qualcomm/Makefile             |   1 +
+>  drivers/phy/qualcomm/phy-qcom-m31-eusb2.c | 269 ++++++++++++++++++++++++=
+++++++
+>  3 files changed, 281 insertions(+), 1 deletion(-)
+>=20
+[...]
+> diff --git a/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c b/drivers/phy/qual=
+comm/phy-qcom-m31-eusb2.c
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..e15529673e358db914936a60f=
+a605c872cd2511a
+> --- /dev/null
+> +++ b/drivers/phy/qualcomm/phy-qcom-m31-eusb2.c
+> @@ -0,0 +1,269 @@
+[...]
+> +static int m31eusb2_phy_probe(struct platform_device *pdev)
+> +{
+> +	struct phy_provider *phy_provider;
+> +	const struct m31_eusb2_priv_data *data;
+> +	struct device *dev =3D &pdev->dev;
+> +	struct m31eusb2_phy *phy;
+> +
+> +	phy =3D devm_kzalloc(dev, sizeof(*phy), GFP_KERNEL);
+> +	if (!phy)
+> +		return -ENOMEM;
+> +
+> +	data =3D of_device_get_match_data(dev);
+> +	if (IS_ERR(data))
+> +		return -EINVAL;
+> +	phy->data =3D data;
+> +
+> +	phy->base =3D devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(phy->base))
+> +		return PTR_ERR(phy->base);
+> +
+> +	phy->reset =3D devm_reset_control_get_exclusive_by_index(dev, 0);
 
-When the type of usb inserted one un-defined power mode, only 90mA
-voltage, system panic sometime.So added the one condition for avioding it.
+The dt-bindings only specify a single reset, so there is no need to
+request by index. Just use
+	phy->reset =3D devm_reset_control_get_exclusive(dev, NULL);
 
-Reproduced:
-1.Inserted usb cable for charging slowly.
-2.System panic sometimes. The log:
-Unexpected kernel BRK exception at EL1
-msm-dwc3 4e00000.ssusb: DWC3 exited from low power mode
-Internal error: BRK handler: 00000000f2005512 [#1] PREEMPT SMP
-Skip md ftrace buffer dump for: 0x1609e0
-Hardware name:Qualcomm Technologies, Inc. Blair QRD (DT)
-pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : power_operation_mode_show+0x48/0x50
-lr : dev_attr_show+0x38/0x74
-sp : ffffffc015d83c00
-x29: ffffffc015d83c00 x28: ffffff80517212c0 x27: 000000007ffff001
-x26: 0000000000000001 x25: 0000000000000000 x24: ffffff801b9274f0
-x23: ffffff805a9f1cc0 x22: ffffffda7b7a2608 x21: ffffff8050e99000
-x20: ffffffda7c5fb5b0 x19: ffffff801b9274c8 x18: ffffffc01568d070
-x17: 00000000df43c25c x16: 00000000df43c25c x15: 0000000000000000
-x14: 0000000000000000 x13: ffffffa77aadf000 x12: ffffffda7c4a1210
-x11: ffffff8050e99000 x10: 0000000000000000 x9 : ffffffda7ae948ac
-x8 : 00000000fffffffa x7 : 0000000000000000 x6 : 000000000000003f
-x5 : 0000000000000040 x4 : 0000000000000000 x3 : 0000000000000004
-x2 : ffffff8050e99000 x1 : ffffffda7c5fb5b0 x0 : ffffff80858ca008
-Call trace:
- power_operation_mode_show+0x48/0x50
- dev_attr_show+0x38/0x74
- sysfs_kf_seq_show+0xb4/0x130
- kernfs_seq_show+0x44/0x54
- seq_read_iter+0x158/0x4ec
- kernfs_fop_read_iter+0x68/0x1b0
- vfs_read+0x1d8/0x2b0
- ksys_read+0x78/0xe8
- __arm64_sys_read+0x1c/0x2c
- invoke_syscall+0x58/0x11c
- el0_svc_common+0xb4/0xf4
- do_el0_svc+0x2c/0xb0
- el0_svc+0x2c/0xa4
- el0t_64_sync_handler+0x68/0xb4
- el0t_64_sync+0x1a0/0x1a4
-Code: 93407c00 a8c17bfd f85f8e5e d65f03c0 (d42aa240)
----[ end trace 0000000000000000 ]---
-Kernel panic - not syncing: BRK handler: Fatal exception
-
-Signed-off-by: fengchunguo@126.com <fengchunguo@126.com>
----
- drivers/usb/typec/class.c | 3 ++-
- include/linux/usb/typec.h | 1 +
- 2 files changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 4b3047e..22d99ce 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -2163,7 +2163,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
- {
- 	struct device *partner_dev;
- 
--	if (port->pwr_opmode == opmode)
-+	if ((port->pwr_opmode == opmode) || (opmode < TYPEC_PWR_MODE_USB)
-+			|| (opmode > TYPEC_PWR_MODE_MAX))
- 		return;
- 
- 	port->pwr_opmode = opmode;
-diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-index d616b88..3b12c46 100644
---- a/include/linux/usb/typec.h
-+++ b/include/linux/usb/typec.h
-@@ -71,6 +71,7 @@ enum typec_pwr_opmode {
- 	TYPEC_PWR_MODE_1_5A,
- 	TYPEC_PWR_MODE_3_0A,
- 	TYPEC_PWR_MODE_PD,
-+	TYPEC_PWR_MODE_MAX,
- };
- 
- enum typec_accessory {
--- 
-2.7.4
-
+regards
+Philipp
 
