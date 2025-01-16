@@ -1,119 +1,107 @@
-Return-Path: <linux-usb+bounces-19396-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19397-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C666CA138D3
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 12:21:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 366B2A138E3
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 12:24:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4F70163A62
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 11:21:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EA957163A61
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 11:24:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E5F61DE3C8;
-	Thu, 16 Jan 2025 11:21:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 151631DE4E7;
+	Thu, 16 Jan 2025 11:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nlWusOUN"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="r+PA8e2H"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-17.smtpout.orange.fr [193.252.22.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85CED1A4F09;
-	Thu, 16 Jan 2025 11:21:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD4931DDC10;
+	Thu, 16 Jan 2025 11:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737026504; cv=none; b=HvhsPUD+bT9DghOMr4JOtJcQFrjjBK3ZlA7PmehK7sFnaQeO5Q2tcVb7fM4rem5s3S8mfCEeFGiSf0kj1MX9Uip3eet1aPkcOBcrZYk4xod6ZeatolQGdvpOeRJJvY54XWK7YmhMjLQ2Gc1cOP4lUR4tXSevdzZWvS21PvWs/+o=
+	t=1737026623; cv=none; b=amJ3WBvSZ0miuHiMi8wlKGbTrBKMySM9icY2izJVeqN4QrFtk93MUvAN9DTTSJoNkafo1M/fCZfWzQjc9c/B6/ymV0qOdQKICkTekZk8GPIp06QVmfEVT2wMj7vKbLcx5jC0PCeLLzdrmfZrkq26sJBbDNfBfPWqflAARlpV5wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737026504; c=relaxed/simple;
-	bh=R1lgrVf6NbLRGWPpc188JEmN0OukZASQpJVStCU3T3w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eT+h97xtiDMODN9d+Wk829kPWL7KuMx3ESuabYRzlM7SDoq5Zmtkp29qkHebiS/PjSkJsnWw54aah410LfrN6RFuPu6/Y00tUDNKoCj5gW7NXd5uvgnhFjKK7RdF6IKHdExc0ro55U2zqu80z/OqaG7WhLh/CE+dZhS9jCR/EOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nlWusOUN; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737026503; x=1768562503;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=R1lgrVf6NbLRGWPpc188JEmN0OukZASQpJVStCU3T3w=;
-  b=nlWusOUNrGF4RI/BD77ajGqBGEe/0XomtcERGUJj1nbERIM0sZv8YuIV
-   yv5B5vDW76vhCUe9Z/S36VEw/6JQ4m4dupPhMNgC1Dyq6oGAByoRzuF5s
-   V5vRb3Xy/020F8vaHlz6s8szV0J9VmQm+r3i73mOjcmeWAQPHaK/QUd5b
-   b1Qr22B6uzTXWZAZ0TSTMybiewje4RWqSd1MSCNfNH8Yeu4IdTqRp55Rv
-   dYpXBMU8JcgfqSimpj/8SC75uqDqnvBZ9jx/H6rbl1n+iLfaMh3HlJO3n
-   zE5x1sFZKL8hVHFrzOv+Pt54P5pVM2T8boNne1f+m1jDItcDhzQFzNUIR
-   g==;
-X-CSE-ConnectionGUID: 3RmRtJV6S92MRILSDSWYsg==
-X-CSE-MsgGUID: 4cRFjDsnTJCaxGS/SAszhw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="41172502"
-X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
-   d="scan'208";a="41172502"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 03:21:41 -0800
-X-CSE-ConnectionGUID: QFa8FCdnS5G8PMYxOvCVXQ==
-X-CSE-MsgGUID: XEBn2x/yTMKKt5NbfjZJQw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="128721524"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa002.fm.intel.com with SMTP; 16 Jan 2025 03:21:38 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 16 Jan 2025 13:21:37 +0200
-Date: Thu, 16 Jan 2025 13:21:37 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: joswang <joswang1221@gmail.com>
-Cc: dmitry.baryshkov@linaro.org, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: typec: tcpm: set SRC_SEND_CAPABILITIES timeout
- to PD_T_SENDER_RESPONSE
-Message-ID: <Z4jrwSOBSXrZakRy@kuha.fi.intel.com>
-References: <20250105135245.7493-1-joswang1221@gmail.com>
+	s=arc-20240116; t=1737026623; c=relaxed/simple;
+	bh=eLlU4xsWGD+mHJN9rdcGWXT0y2PG9/3+22ofQ+9OFhQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R+PecoWI0pgM/UFOfbcyVHGDsVN5AnwjataX0LNXP28sp0AdxsdvW0SYAQnAV3CQCPadmuEkFTeprxc7RszTnKJTs0ZvTvRw4qncz92bRN6eb9GpxHafJX4z2Wd7doxKjkQPRGjUXi/BMFxaxQEVotxAISyHFEjI92etRv1dc0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=r+PA8e2H; arc=none smtp.client-ip=193.252.22.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id YNxutnYQDyahuYNxztVNSW; Thu, 16 Jan 2025 12:23:33 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1737026613;
+	bh=KYSXBkxUAldmT4pYPhPuw4hrkQ16dgPfLzABFQ4aYjo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=r+PA8e2HPj0was0mFKVLZQQZlfkqZ9GExTlwcp6rhiMGzEQwKEnBrNopYyLOjzkjV
+	 Hfdax7NZsCpupQyoqdlwmQzjsvsG0DkF7oLJLVGhYaY6GGf3BXGE14jADr43wx5Gid
+	 DJx+plHJ8/0hBS3lmssIyYc3hqm6ufoIjKk3PvnjTuUy3sfoxcUYF3UwT8tL3MzyML
+	 6L31hUpUn+QiHtOyDswKNkoLHOaQoN8lSLBbtfpwtVwcb+h2lYFs97t7AIZvjzZDor
+	 g+mi7taF6wxdo1pmH5bedVLC5J3xEDvZGFPoMyS/JHqMeMEuSZy0xn/MN4HEzAijg4
+	 9POxQT1vi3S1Q==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 16 Jan 2025 12:23:33 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <bdab6511-0e38-4932-a615-033d888364b1@wanadoo.fr>
+Date: Thu, 16 Jan 2025 20:23:09 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250105135245.7493-1-joswang1221@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org,
+ linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+ mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
+ alexandre.belloni@bootlin.com
+References: <20250114033010.2445925-1-a0282524688@gmail.com>
+ <20250114033010.2445925-5-a0282524688@gmail.com>
+ <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
+ <CAOoeyxVK=iBmj3BDX=D8a9=GFBkE158jbq3Rnq-RuoA5HxMi7g@mail.gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CAOoeyxVK=iBmj3BDX=D8a9=GFBkE158jbq3Rnq-RuoA5HxMi7g@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jan 05, 2025 at 09:52:45PM +0800, joswang wrote:
-> From: Jos Wang <joswang@lenovo.com>
+On 16/01/2025 at 15:34, Ming Yu wrote:
+> Hi Vincent,
 > 
-> As PD2.0 spec ("8.3.3.2.3 PE_SRC_Send_Capabilities state"), after the
-> Source receives the GoodCRC Message from the Sink in response to the
-> Source_Capabilities message, it should start the SenderResponseTimer,
-> after the timer times out, the state machine transitions to the
-> HARD_RESET state.
+> I will remove priv->tx_skb in the next patch, but it seems that
+> can_flush_echo_skb() has not been EXPORT_SYMBOL_GPL().
 > 
-> Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jos Wang <joswang@lenovo.com>
+> I would like to know if nct6694_can_clean() requires modification.
 
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Indeed, you can can_free_echo_skb(ndev, 0, NULL) instead of
+can_flush_echo_skb(ndev). That one is exported.
 
-> ---
->  drivers/usb/typec/tcpm/tcpm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 460dbde9fe22..57fae1118ac9 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -4821,7 +4821,7 @@ static void run_state_machine(struct tcpm_port *port)
->  			port->caps_count = 0;
->  			port->pd_capable = true;
->  			tcpm_set_state_cond(port, SRC_SEND_CAPABILITIES_TIMEOUT,
-> -					    PD_T_SEND_SOURCE_CAP);
-> +					    PD_T_SENDER_RESPONSE);
->  		}
->  		break;
->  	case SRC_SEND_CAPABILITIES_TIMEOUT:
-> -- 
-> 2.17.1
 
--- 
-heikki
+Yours sincerely,
+Vincent Mailhol
+
 
