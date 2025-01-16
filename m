@@ -1,52 +1,74 @@
-Return-Path: <linux-usb+bounces-19395-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19396-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D2B9A1378E
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 11:13:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C666CA138D3
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 12:21:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC9FC3A8178
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 10:12:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4F70163A62
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 11:21:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A23461E86E;
-	Thu, 16 Jan 2025 10:12:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E5F61DE3C8;
+	Thu, 16 Jan 2025 11:21:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="pLSh52pl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nlWusOUN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 193EF1A0731;
-	Thu, 16 Jan 2025 10:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85CED1A4F09;
+	Thu, 16 Jan 2025 11:21:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737022375; cv=none; b=W6wyrdbYlAbKerJLhU6lZQKdv12zNlXEC35QYOyKKG/IuWy6iNt7GetjVuqLE06fOMka+i9UviGYwTRyEmGwAat4DNIfMDFVXk8BOXQeFDbMAqlnR/2wvbxDqd+AVF+4A8q5GFMTHcSfxqpvnEM8ZjzpDofm/r4hx+s6wr3x3Sk=
+	t=1737026504; cv=none; b=HvhsPUD+bT9DghOMr4JOtJcQFrjjBK3ZlA7PmehK7sFnaQeO5Q2tcVb7fM4rem5s3S8mfCEeFGiSf0kj1MX9Uip3eet1aPkcOBcrZYk4xod6ZeatolQGdvpOeRJJvY54XWK7YmhMjLQ2Gc1cOP4lUR4tXSevdzZWvS21PvWs/+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737022375; c=relaxed/simple;
-	bh=9/F2fzTv3GvyVaO1EkpYKWIhZ7mBJutyTAbFFb9oDEk=;
+	s=arc-20240116; t=1737026504; c=relaxed/simple;
+	bh=R1lgrVf6NbLRGWPpc188JEmN0OukZASQpJVStCU3T3w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RxYMqyOGNQiMQ2fDtksIopFW9hjTDqMl9VvSFZbSwhqp80t7n5g55vc6r4QcNallVTnG0D8dixYxNw8g2H2HjZzx44e+C68JlHCwyl0t7fLMH86q+5YSMzfg8y9CKXylJYTWag8t9gvrBI9Ev9eexUtfPnc3lRzbhPVpDT5btIc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=pLSh52pl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39954C4CEDF;
-	Thu, 16 Jan 2025 10:12:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1737022374;
-	bh=9/F2fzTv3GvyVaO1EkpYKWIhZ7mBJutyTAbFFb9oDEk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pLSh52pln9JeevzPds/rex3x9tTey/qa67nBg6R9+n1nqkmVCCPOO0GaQ/kALNYu0
-	 ZXcaoFkLK7k7CRrDRrgrA5NPudp+7Mg/gRkbnsclcoV6vjPg8ZquoaLDSfqBFIX40O
-	 SkORaVpphHfiLeaT3CwmxYLYPxwQkrm/ifT6Ie/0=
-Date: Thu, 16 Jan 2025 11:12:52 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: "fengchunguo@126.com" <fengchunguo@126.com>
-Cc: heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: typec: Added power_operation_mode_show type
- check when usb slowly detect
-Message-ID: <2025011634-lurch-goon-d135@gregkh>
-References: <1737011671-88288-1-git-send-email-fengchunguo@126.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=eT+h97xtiDMODN9d+Wk829kPWL7KuMx3ESuabYRzlM7SDoq5Zmtkp29qkHebiS/PjSkJsnWw54aah410LfrN6RFuPu6/Y00tUDNKoCj5gW7NXd5uvgnhFjKK7RdF6IKHdExc0ro55U2zqu80z/OqaG7WhLh/CE+dZhS9jCR/EOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nlWusOUN; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737026503; x=1768562503;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=R1lgrVf6NbLRGWPpc188JEmN0OukZASQpJVStCU3T3w=;
+  b=nlWusOUNrGF4RI/BD77ajGqBGEe/0XomtcERGUJj1nbERIM0sZv8YuIV
+   yv5B5vDW76vhCUe9Z/S36VEw/6JQ4m4dupPhMNgC1Dyq6oGAByoRzuF5s
+   V5vRb3Xy/020F8vaHlz6s8szV0J9VmQm+r3i73mOjcmeWAQPHaK/QUd5b
+   b1Qr22B6uzTXWZAZ0TSTMybiewje4RWqSd1MSCNfNH8Yeu4IdTqRp55Rv
+   dYpXBMU8JcgfqSimpj/8SC75uqDqnvBZ9jx/H6rbl1n+iLfaMh3HlJO3n
+   zE5x1sFZKL8hVHFrzOv+Pt54P5pVM2T8boNne1f+m1jDItcDhzQFzNUIR
+   g==;
+X-CSE-ConnectionGUID: 3RmRtJV6S92MRILSDSWYsg==
+X-CSE-MsgGUID: 4cRFjDsnTJCaxGS/SAszhw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="41172502"
+X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
+   d="scan'208";a="41172502"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 03:21:41 -0800
+X-CSE-ConnectionGUID: QFa8FCdnS5G8PMYxOvCVXQ==
+X-CSE-MsgGUID: XEBn2x/yTMKKt5NbfjZJQw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="128721524"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by fmviesa002.fm.intel.com with SMTP; 16 Jan 2025 03:21:38 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 16 Jan 2025 13:21:37 +0200
+Date: Thu, 16 Jan 2025 13:21:37 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: joswang <joswang1221@gmail.com>
+Cc: dmitry.baryshkov@linaro.org, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
+Subject: Re: [PATCH 1/1] usb: typec: tcpm: set SRC_SEND_CAPABILITIES timeout
+ to PD_T_SENDER_RESPONSE
+Message-ID: <Z4jrwSOBSXrZakRy@kuha.fi.intel.com>
+References: <20250105135245.7493-1-joswang1221@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -55,102 +77,43 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <1737011671-88288-1-git-send-email-fengchunguo@126.com>
+In-Reply-To: <20250105135245.7493-1-joswang1221@gmail.com>
 
-On Thu, Jan 16, 2025 at 03:14:31PM +0800, fengchunguo@126.com wrote:
-> From: Gary <fengchunguo@126.com>
-
-Full name please.
-
+On Sun, Jan 05, 2025 at 09:52:45PM +0800, joswang wrote:
+> From: Jos Wang <joswang@lenovo.com>
 > 
-> When the type of usb inserted one un-defined power mode, only 90mA
-> voltage, system panic sometime.So added the one condition for avioding it.
+> As PD2.0 spec ("8.3.3.2.3 PE_SRC_Send_Capabilities state"), after the
+> Source receives the GoodCRC Message from the Sink in response to the
+> Source_Capabilities message, it should start the SenderResponseTimer,
+> after the timer times out, the state machine transitions to the
+> HARD_RESET state.
 > 
-> Reproduced:
-> 1.Inserted usb cable for charging slowly.
-> 2.System panic sometimes. The log:
-> Unexpected kernel BRK exception at EL1
-> msm-dwc3 4e00000.ssusb: DWC3 exited from low power mode
-> Internal error: BRK handler: 00000000f2005512 [#1] PREEMPT SMP
-> Skip md ftrace buffer dump for: 0x1609e0
-> Hardware name:Qualcomm Technologies, Inc. Blair QRD (DT)
-> pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-> pc : power_operation_mode_show+0x48/0x50
-> lr : dev_attr_show+0x38/0x74
-> sp : ffffffc015d83c00
-> x29: ffffffc015d83c00 x28: ffffff80517212c0 x27: 000000007ffff001
-> x26: 0000000000000001 x25: 0000000000000000 x24: ffffff801b9274f0
-> x23: ffffff805a9f1cc0 x22: ffffffda7b7a2608 x21: ffffff8050e99000
-> x20: ffffffda7c5fb5b0 x19: ffffff801b9274c8 x18: ffffffc01568d070
-> x17: 00000000df43c25c x16: 00000000df43c25c x15: 0000000000000000
-> x14: 0000000000000000 x13: ffffffa77aadf000 x12: ffffffda7c4a1210
-> x11: ffffff8050e99000 x10: 0000000000000000 x9 : ffffffda7ae948ac
-> x8 : 00000000fffffffa x7 : 0000000000000000 x6 : 000000000000003f
-> x5 : 0000000000000040 x4 : 0000000000000000 x3 : 0000000000000004
-> x2 : ffffff8050e99000 x1 : ffffffda7c5fb5b0 x0 : ffffff80858ca008
-> Call trace:
->  power_operation_mode_show+0x48/0x50
->  dev_attr_show+0x38/0x74
->  sysfs_kf_seq_show+0xb4/0x130
->  kernfs_seq_show+0x44/0x54
->  seq_read_iter+0x158/0x4ec
->  kernfs_fop_read_iter+0x68/0x1b0
->  vfs_read+0x1d8/0x2b0
->  ksys_read+0x78/0xe8
->  __arm64_sys_read+0x1c/0x2c
->  invoke_syscall+0x58/0x11c
->  el0_svc_common+0xb4/0xf4
->  do_el0_svc+0x2c/0xb0
->  el0_svc+0x2c/0xa4
->  el0t_64_sync_handler+0x68/0xb4
->  el0t_64_sync+0x1a0/0x1a4
-> Code: 93407c00 a8c17bfd f85f8e5e d65f03c0 (d42aa240)
-> ---[ end trace 0000000000000000 ]---
-> Kernel panic - not syncing: BRK handler: Fatal exception
-> 
-> Signed-off-by: fengchunguo@126.com <fengchunguo@126.com>
+> Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jos Wang <joswang@lenovo.com>
 
-This does not match above :(
-
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/class.c | 3 ++-
->  include/linux/usb/typec.h | 1 +
->  2 files changed, 3 insertions(+), 1 deletion(-)
+>  drivers/usb/typec/tcpm/tcpm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-> index 4b3047e..22d99ce 100644
-> --- a/drivers/usb/typec/class.c
-> +++ b/drivers/usb/typec/class.c
-> @@ -2163,7 +2163,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
->  {
->  	struct device *partner_dev;
->  
-> -	if (port->pwr_opmode == opmode)
-> +	if ((port->pwr_opmode == opmode) || (opmode < TYPEC_PWR_MODE_USB)
-> +			|| (opmode > TYPEC_PWR_MODE_MAX))
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 460dbde9fe22..57fae1118ac9 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -4821,7 +4821,7 @@ static void run_state_machine(struct tcpm_port *port)
+>  			port->caps_count = 0;
+>  			port->pd_capable = true;
+>  			tcpm_set_state_cond(port, SRC_SEND_CAPABILITIES_TIMEOUT,
+> -					    PD_T_SEND_SOURCE_CAP);
+> +					    PD_T_SENDER_RESPONSE);
+>  		}
+>  		break;
+>  	case SRC_SEND_CAPABILITIES_TIMEOUT:
+> -- 
+> 2.17.1
 
-Please use the proper coding style :(
-
-
->  		return;
->  
->  	port->pwr_opmode = opmode;
-> diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
-> index d616b88..3b12c46 100644
-> --- a/include/linux/usb/typec.h
-> +++ b/include/linux/usb/typec.h
-> @@ -71,6 +71,7 @@ enum typec_pwr_opmode {
->  	TYPEC_PWR_MODE_1_5A,
->  	TYPEC_PWR_MODE_3_0A,
->  	TYPEC_PWR_MODE_PD,
-> +	TYPEC_PWR_MODE_MAX,
-
-This is odd, you are saying we are somehow running off the end of the
-list of enumerated types?  That means something else went wrong here,
-not that we need to have a MAX value in the list.
-
-thanks,
-
-greg k-h
+-- 
+heikki
 
