@@ -1,182 +1,144 @@
-Return-Path: <linux-usb+bounces-19391-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19392-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00443A1332A
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 07:35:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C003A133A2
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 08:16:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B63F16785F
-	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 06:35:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B5D9C1886C0E
+	for <lists+linux-usb@lfdr.de>; Thu, 16 Jan 2025 07:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BFFF1925A0;
-	Thu, 16 Jan 2025 06:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958A919258E;
+	Thu, 16 Jan 2025 07:16:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FhYcbo2/"
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="dLMTC4zJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1A3024A7E8;
-	Thu, 16 Jan 2025 06:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.9])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7588A15252D;
+	Thu, 16 Jan 2025 07:16:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737009294; cv=none; b=FPseENzbTnfZ9aTGihYUaNzWxGnpw0TKf3iqQPqzoQ6qwI0APwrkwbQ3ccG8ZViTx8zrMz9pB+i1y6onVqkt9ZzYML/MXsofDbG5CXK7mfiSS7cxBQiwx+LSaXOLFW7lFh35G0F3eFuCu1Q/QyAj2HWdGwR88cCqA/SkUiS6O5Q=
+	t=1737011793; cv=none; b=KixFrdUa7K0WV/8Ak1TD+SBansS4x+vVC79imM5MR8d/dY1dMTK4CnqE2a6uBEKGGWApYfKFGnYgbQ3/QstMpeZdA3l5MVl2HfwjJawLz+i/Dy31RLGajPMkt5CgVVEKJq9cYXAkynf0GQiMOydjBKI2CGkuc6pEpO9VZr+r+uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737009294; c=relaxed/simple;
-	bh=c4bb3EMGsgMUrTeDTt/1IawO6xWVcbipTrw2VtmyAng=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MPSSwH4W1U7Z4ir91fKJDY8D5scjvJlG0uSI0hSbh0PI446VQFTpmUZNcnhwmM4nXPULb1DiSnOHXZ81C6iocGG899kkiq2jZlBEthjEme4xGizqRBw3pF3vdoP7T9ppEGsh5VnCBjmgQqJeoKlyLz5aGoaqscY2SCE9D6eVeQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FhYcbo2/; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e54bd61e793so1095830276.2;
-        Wed, 15 Jan 2025 22:34:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737009292; x=1737614092; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hUMl2lV37NeEyUYQ+8hv4yRX1yZLm9fZeIJWVyQAT9A=;
-        b=FhYcbo2/BMbsjW7hmwyRbRc+edN+6c80zj7EVm+qPUuaziTQtJGz/jgbavNrg9qbXf
-         5Ku3U6+qStP21J2qr0DSG4hi7VkoLpAC3uY7Fi/A2NzdiE8xSF9IBuLxZ3prYQdj5a+R
-         QIy0f03tEBWLn1HEgQrQI+reAFruvukm5ryCXTsN4+qACkbPwAjkitxxHibjzGPmKBeC
-         hJiGSTGWaQDO4qgYIxKBi94Uy1YTPP//KM+OcQLrS7LlnpjP977+Jqd7xPzZJbLK8WzN
-         BYyvkSqZw69E6Ndu5YWe9gBm7uYs25yvkEHBiG4CUIg8yJ25B8IoB4C45rqEdBELo91a
-         TKEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737009292; x=1737614092;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hUMl2lV37NeEyUYQ+8hv4yRX1yZLm9fZeIJWVyQAT9A=;
-        b=NW0sY/CS6nzXrNicZg7T6Q2wsVWEISOADkywNqOl3WBuzm1PoTahXRZ0Dps25op8ou
-         eHD1UiB1cTHdnGeU8McFXDoBteDS0hrHCRdEfAFExwMGfCTAPJCzYJ4Q/5GJfdcHJCw1
-         emr15p0Ij/RjExyW7rhtJ9ye2YJiu/LwUvEBrXsawiWELYbkk9th47CWklWaA+GEGz0w
-         ftdxvFrjAEm6KBXG1ye3bb0HOB0wFWmpIYLGqbRqv0/7+dipaSoQBwUoIqgmFFSaELnd
-         495dgMOtzGE3ZOGO3Im/mqORobF+ZHY4n1gWUu6lvplOaJr/TKjprIdgTLMEa07pkdEY
-         K9jA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCQt2kY1urPyRk/h9tN70EUmBq7HYgpNY3lr5R6W+HLKlowYou3RrfvMDKgL02rHxyvVmPNLgqsGNG@vger.kernel.org, AJvYcCUEZsIHdopj7ddkKiKANjCKry2fv6NmmNEkW3nvvRfsT5uVEOF5gL1ZqOmkca1TjsOlPvMvRmEvPtwl@vger.kernel.org, AJvYcCUosTDjI7JCMZWoq+SPv0o1iRtZEmudsbp1ciylKAwa6S8TFnv9ePfIlvrK1ztVuH9JO65KHjQKrAiK@vger.kernel.org, AJvYcCUq0GBEvra3eaRi/vl2xbsLHK7dEDH5Tdw/QeuyC4iIpArzWWe2kIMDysgWFmkOAvVqvhI6wQK2ZqU=@vger.kernel.org, AJvYcCVCiVUNKukvLrhziF0x8PGJJSo9aEfbRxhQF8Nbhvr/sbZDoCuVih4830cqT8TKg/l/hjShAWEdRr0JAw==@vger.kernel.org, AJvYcCWEFNsrcwhFSVz+Mt26vlcLljmhnpLUT9OMeL/7YfZhIm1rgtz5y9V8MGICQcUGav9YTMXkIb4B@vger.kernel.org, AJvYcCWOx8hin3A5cMdedhNkFj/BrNdBHHNXRiSXw4pve0adFrradrnTtM8RC9jX4dm9WNfXxllPAVl3+rTjIbP7Qbo=@vger.kernel.org, AJvYcCXFL62vzL6qVxVzQntc5yJbzL5VXBuxysQzbHUs1YxWRqT/z1dIGTZebZgd8i+ft1K8vXivM8GOE0YFIj0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywo5kdDOdklx4LobLPhpxK8sHYyircAL0JFMdI6AmqXwRzJ86YY
-	qBmclXnxFSBtu4b8tU963WFTXQSm+zuJIc3auMAA5p/kkRrx2h4NHQlEgqD6W9k96jovi2qqe4C
-	i5pmgl1xqbu9A7GzS0NDin0Z7wj8=
-X-Gm-Gg: ASbGnctD8yoHXYqv8thkC4s6CRPB5tznyMNj9eKye+kThTNcLJQloh79iXWsj9PJIfy
-	SJOsgRExrNBKcQN98pFsk5CFC9/oNIfJS1npyRfVWb2qFvUxAQJFbP1/K0iqE5l5MLphjNgr8
-X-Google-Smtp-Source: AGHT+IEBjbrPYm9uZ4tkDJz8bKIImgmSbE3fPZUiZeCgys3yex7NZywUBcf/cb/InNa/yBzsGp+ThfaTGo+an3nLKdc=
-X-Received: by 2002:a05:6902:f84:b0:e38:8a2e:e3bc with SMTP id
- 3f1490d57ef6-e54fca4021cmr25184463276.5.1737009291859; Wed, 15 Jan 2025
- 22:34:51 -0800 (PST)
+	s=arc-20240116; t=1737011793; c=relaxed/simple;
+	bh=g1MJacTjjvZB6N9S5BECKd9wrxTFkwDcjMVUgc98RYg=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=O9B0TvoCFfpE/VYrxfyfuy31+jdRQ7qqIrnSH3g1dwVuoeUhwP6PKTSRpm4EHD3XsLX7iCqcIMpic0Ef+MGa4uLIbY89feKsEZSzOxCCr329OlXCE0XGWHNQ50sTEe4ryktUUWYfgzhwapOo0xvZYGeNseIFObFOr4wEiRH0Mig=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=dLMTC4zJ; arc=none smtp.client-ip=117.135.210.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=/sveMCvQkQBFRJTfK+
+	RSjkPZDMickk7US9Vq5h96rIo=; b=dLMTC4zJVZT/EmV1+c0EN2BSY2QJL9UWlX
+	ateoj+OepQEQNiUH1IKotpUN02I6s2A6+MAfxLQQRTbSiJ9YQNaCEKCr9dp1zq5S
+	3v+SwhUVrBNTLvzRHYN3T4hzN7Ljr83UH6DcUlfaeV353awcHZBrbGJ7dkkDf4EO
+	BpjfO1LAA=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDHP8rgsYhnmWcvBQ--.17019S2;
+	Thu, 16 Jan 2025 15:14:40 +0800 (CST)
+From: "fengchunguo@126.com" <fengchunguo@126.com>
+To: heikki.krogerus@linux.intel.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Gary <fengchunguo@126.com>
+Subject: [PATCH 1/1] usb: typec: Added power_operation_mode_show type check when usb slowly detect
+Date: Thu, 16 Jan 2025 15:14:31 +0800
+Message-Id: <1737011671-88288-1-git-send-email-fengchunguo@126.com>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID:_____wDHP8rgsYhnmWcvBQ--.17019S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXrW7KFyUWrWUJr13XrWDurg_yoW5Cry8pr
+	4DGr45GrWkJFy7AF1IyFnxZF1rtw1UCa4UGayxtryFyF12g3W5tr4UJF47Gr1DJr45Xr47
+	tF1qg3yrtw18Gw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07Ux3ktUUUUU=
+X-CM-SenderInfo: 5ihqwu5kxqw3br6rjloofrz/1tbiOh3WOmeIpWnQ4gAAsa
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250114033010.2445925-1-a0282524688@gmail.com>
- <20250114033010.2445925-5-a0282524688@gmail.com> <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
-In-Reply-To: <cef1b9bf-59f6-484d-861e-82b405653ca1@wanadoo.fr>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Thu, 16 Jan 2025 14:34:40 +0800
-X-Gm-Features: AbW1kvYJI-ZlyxfzNTVWRJivNQwAAI1rVA1G13z7pWoyr3_f28bZHldijS45J6Y
-Message-ID: <CAOoeyxVK=iBmj3BDX=D8a9=GFBkE158jbq3Rnq-RuoA5HxMi7g@mail.gmail.com>
-Subject: Re: [PATCH v5 4/7] can: Add Nuvoton NCT6694 CAN support
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org, tmyu0@nuvoton.com, 
-	lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mkl@pengutronix.de, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Vincent,
+From: Gary <fengchunguo@126.com>
 
-I will remove priv->tx_skb in the next patch, but it seems that
-can_flush_echo_skb() has not been EXPORT_SYMBOL_GPL().
+When the type of usb inserted one un-defined power mode, only 90mA
+voltage, system panic sometime.So added the one condition for avioding it.
 
-I would like to know if nct6694_can_clean() requires modification.
+Reproduced:
+1.Inserted usb cable for charging slowly.
+2.System panic sometimes. The log:
+Unexpected kernel BRK exception at EL1
+msm-dwc3 4e00000.ssusb: DWC3 exited from low power mode
+Internal error: BRK handler: 00000000f2005512 [#1] PREEMPT SMP
+Skip md ftrace buffer dump for: 0x1609e0
+Hardware name:Qualcomm Technologies, Inc. Blair QRD (DT)
+pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : power_operation_mode_show+0x48/0x50
+lr : dev_attr_show+0x38/0x74
+sp : ffffffc015d83c00
+x29: ffffffc015d83c00 x28: ffffff80517212c0 x27: 000000007ffff001
+x26: 0000000000000001 x25: 0000000000000000 x24: ffffff801b9274f0
+x23: ffffff805a9f1cc0 x22: ffffffda7b7a2608 x21: ffffff8050e99000
+x20: ffffffda7c5fb5b0 x19: ffffff801b9274c8 x18: ffffffc01568d070
+x17: 00000000df43c25c x16: 00000000df43c25c x15: 0000000000000000
+x14: 0000000000000000 x13: ffffffa77aadf000 x12: ffffffda7c4a1210
+x11: ffffff8050e99000 x10: 0000000000000000 x9 : ffffffda7ae948ac
+x8 : 00000000fffffffa x7 : 0000000000000000 x6 : 000000000000003f
+x5 : 0000000000000040 x4 : 0000000000000000 x3 : 0000000000000004
+x2 : ffffff8050e99000 x1 : ffffffda7c5fb5b0 x0 : ffffff80858ca008
+Call trace:
+ power_operation_mode_show+0x48/0x50
+ dev_attr_show+0x38/0x74
+ sysfs_kf_seq_show+0xb4/0x130
+ kernfs_seq_show+0x44/0x54
+ seq_read_iter+0x158/0x4ec
+ kernfs_fop_read_iter+0x68/0x1b0
+ vfs_read+0x1d8/0x2b0
+ ksys_read+0x78/0xe8
+ __arm64_sys_read+0x1c/0x2c
+ invoke_syscall+0x58/0x11c
+ el0_svc_common+0xb4/0xf4
+ do_el0_svc+0x2c/0xb0
+ el0_svc+0x2c/0xa4
+ el0t_64_sync_handler+0x68/0xb4
+ el0t_64_sync+0x1a0/0x1a4
+Code: 93407c00 a8c17bfd f85f8e5e d65f03c0 (d42aa240)
+---[ end trace 0000000000000000 ]---
+Kernel panic - not syncing: BRK handler: Fatal exception
 
-Vincent Mailhol <mailhol.vincent@wanadoo.fr> =E6=96=BC 2025=E5=B9=B41=E6=9C=
-=8816=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8A=E5=8D=8812:45=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > +static void nct6694_can_clean(struct net_device *ndev)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +
-> > +     if (priv->tx_skb || netif_queue_stopped(ndev))
-> > +             ndev->stats.tx_errors++;
-> > +     dev_kfree_skb(priv->tx_skb);
->
-> Use:
->
->         can_flush_echo_skb(ndev);
->
-> (related to the following comments).
->
-> > +     priv->tx_skb =3D NULL;
-> > +}
->
-> (...)
->
-> > +static void nct6694_can_tx_work(struct work_struct *work)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D container_of(work,
-> > +                                                  struct nct6694_can_p=
-riv,
-> > +                                                  tx_work);
-> > +     struct net_device *ndev =3D priv->ndev;
-> > +
-> > +     guard(mutex)(&priv->lock);
-> > +
-> > +     if (priv->tx_skb) {
-> > +             if (priv->can.state =3D=3D CAN_STATE_BUS_OFF) {
->
-> Just stop the queue when the can bus is off so that you do not have do
-> check the bus status each time a frame is sent.
->
-> > +                     nct6694_can_clean(ndev);
-> > +             } else {
-> > +                     nct6694_can_tx(ndev);
-> > +                     can_put_echo_skb(priv->tx_skb, ndev, 0, 0);
-> > +                     priv->tx_skb =3D NULL;
-> > +             }
-> > +     }
-> > +}
-> > +
-> > +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
-> > +                                       struct net_device *ndev)
-> > +{
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +
-> > +     if (can_dev_dropped_skb(ndev, skb))
-> > +             return NETDEV_TX_OK;
-> > +
-> > +     if (priv->tx_skb) {
-> > +             netdev_err(ndev, "hard_xmit called while tx busy\n");
-> > +             return NETDEV_TX_BUSY;
-> > +     }
-> > +
-> > +     netif_stop_queue(ndev);
-> > +     priv->tx_skb =3D skb;
->
-> Here, you can directly do:
->
->         can_put_echo_skb(skb, ndev, 0, 0);
->
-> The skb remains accessible under priv->can.echo_skb[0]. With this, you
-> can remove the priv->tx_skb field.
->
-> > +     queue_work(priv->wq, &priv->tx_work);
-> > +
-> > +     return NETDEV_TX_OK;
-> > +}
->
+Signed-off-by: fengchunguo@126.com <fengchunguo@126.com>
+---
+ drivers/usb/typec/class.c | 3 ++-
+ include/linux/usb/typec.h | 1 +
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-Thanks,
-Ming
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 4b3047e..22d99ce 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -2163,7 +2163,8 @@ void typec_set_pwr_opmode(struct typec_port *port,
+ {
+ 	struct device *partner_dev;
+ 
+-	if (port->pwr_opmode == opmode)
++	if ((port->pwr_opmode == opmode) || (opmode < TYPEC_PWR_MODE_USB)
++			|| (opmode > TYPEC_PWR_MODE_MAX))
+ 		return;
+ 
+ 	port->pwr_opmode = opmode;
+diff --git a/include/linux/usb/typec.h b/include/linux/usb/typec.h
+index d616b88..3b12c46 100644
+--- a/include/linux/usb/typec.h
++++ b/include/linux/usb/typec.h
+@@ -71,6 +71,7 @@ enum typec_pwr_opmode {
+ 	TYPEC_PWR_MODE_1_5A,
+ 	TYPEC_PWR_MODE_3_0A,
+ 	TYPEC_PWR_MODE_PD,
++	TYPEC_PWR_MODE_MAX,
+ };
+ 
+ enum typec_accessory {
+-- 
+2.7.4
+
 
