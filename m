@@ -1,156 +1,72 @@
-Return-Path: <linux-usb+bounces-19485-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19486-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1384AA14E28
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 12:05:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E348A14E31
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 12:09:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FE3F167D52
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 11:05:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8F9AA3A7536
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 11:09:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A50A1FDE09;
-	Fri, 17 Jan 2025 11:05:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AAA51FCFCA;
+	Fri, 17 Jan 2025 11:09:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hRYgREvp"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="0+8t3GRq"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FEB1F5611;
-	Fri, 17 Jan 2025 11:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE1D1FDE09;
+	Fri, 17 Jan 2025 11:09:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737111922; cv=none; b=L86yrH8F1VAHpc2KbYkOiBzRJVH51zt5kYQbMYtmgi9Ftw9vkWnFDDl8biwxdnONdZmnnKVhH9ad3XvFbA7MMk+EpKoHfw3j2Ca6+b0VjFW7YjGYF+HJugNhGlqCw2ovDh5NSy0pVPOFI0NCvrJVGue4hJ6sS7DqIa622R37CGs=
+	t=1737112173; cv=none; b=LYfnuXzmFJQOCoEYD8bxqmW+SB7l7w7Pv8qRNIyJcqSEVf9oukHpPDRir6/Q37QjEAjpdPcwNLMEh94er1BF0DU+HxXxb1HFpm9rjjncBDdDzwm1qndAP6GwB/zNW97kYXy2zRYZ/MwiKcvt2yLeqVSwB5Df3QAdeapXDmO01dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737111922; c=relaxed/simple;
-	bh=OhE8kwd0EtOOkH33HthBxwmzG/frOrK5izGyB/354Tw=;
+	s=arc-20240116; t=1737112173; c=relaxed/simple;
+	bh=qbwimB/A4jM6OjaRs+4TxywhDT7e2CFv5nGMchfEzhw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a9AOFV0t91EQLErK1h3xuyPSgTrKkjzBJoYDVcFVuPk7d5DGbcvlzaVtn8mRJwWBoq9EYRK/i+NtRziEip71aDlBFW/m7iE6IoY9XYdKMdSScrhHoyNv+IbMOMuCMLj54aHxahv6jBFU7oD9e1KBdBjqbdDgthC5Cgtwfemlu2Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hRYgREvp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D3CC4CEDD;
-	Fri, 17 Jan 2025 11:05:21 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=kkiHjWn735L8RsQJ9QPK4MmzOP3mH0ST1X5PMDxiwTC2Ue1h1EifVP/SId/JFK4nOzCoOISTZfoWgVGO6osORDu8DDeSVRCRbAsnwS0Wb9qDzu9CISkTJzJMTdIIPoBQO+x8qhMoSvLN1B2IblL6/odjycIsJM8Xz+NOuI4UXOg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=0+8t3GRq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB5BBC4CEDD;
+	Fri, 17 Jan 2025 11:09:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1737111922;
-	bh=OhE8kwd0EtOOkH33HthBxwmzG/frOrK5izGyB/354Tw=;
+	s=korg; t=1737112172;
+	bh=qbwimB/A4jM6OjaRs+4TxywhDT7e2CFv5nGMchfEzhw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hRYgREvpcJ5kDylPRNTu5jD+I00zDRsyCQnw8nMPCEZeJLhjPc5HkoWbf5ycitoKT
-	 KrC4Iuyq/FeihX4ZKt726d7BqUf/RuBsiD6ii2UfBLSe4FkBCWhJI/2FPbUNdPwdvM
-	 d2kAQARPV6rjKGq1/d3lom3kl0eMyRTVczbhPzrg=
-Date: Fri, 17 Jan 2025 12:05:19 +0100
+	b=0+8t3GRqzOyEoCIGTWEy/KPS1uW+1XumVcxxfb3Hq2Lrh9MoeXWtKo/j64n1IoSkU
+	 pCHfvI1SqvqvBS4ikwR2vgNS9G9yxFCMlHAGaDMDzAuUo4QUpKxd62jKZXo/Ifll5w
+	 c/ejrPsHuKbNihI/4FJCb8LRCCpUuGhzwoPlS2V8=
+Date: Fri, 17 Jan 2025 12:09:29 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Selvarasu Ganesan <selvarasu.g@samsung.com>
-Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
-	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
-	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
-	rc93.raju@samsung.com, taehyun.cho@samsung.com,
-	hongpooh.kim@samsung.com, eomji.oh@samsung.com,
-	shijie.cai@samsung.com, alim.akhtar@samsung.com,
-	stable@vger.kernel.org, thiagu.r@samsung.com
-Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
- issue during MIDI bind retries
-Message-ID: <2025011726-hydration-nephew-0d65@gregkh>
-References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
- <20241208152322.1653-1-selvarasu.g@samsung.com>
- <2024121845-cactus-geology-8df3@gregkh>
- <9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
- <2024122013-scary-paver-fcff@gregkh>
- <a1dedf06-e804-4580-a690-25e55312eab8@samsung.com>
- <2024122007-flail-traverse-b7b8@gregkh>
- <6629115f-5208-42fe-8bf4-25d808129741@samsung.com>
- <7d7a0d7a-76bb-49a8-82f8-07ee53893145@samsung.com>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: heikki.krogerus@linux.intel.com, peter.chen@kernel.org,
+	linux-usb@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH] usb: chipidea: udc: initialize bounced_size to avoid
+ coverity warning
+Message-ID: <2025011707-sample-unifier-9204@gregkh>
+References: <20250114102815.2311956-1-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7d7a0d7a-76bb-49a8-82f8-07ee53893145@samsung.com>
+In-Reply-To: <20250114102815.2311956-1-xu.yang_2@nxp.com>
 
-On Thu, Jan 16, 2025 at 10:49:24AM +0530, Selvarasu Ganesan wrote:
+On Tue, Jan 14, 2025 at 06:28:15PM +0800, Xu Yang wrote:
+> The synopsys covertiy tool complains "Using uninitialized value
+> bounced_size." at some condition.
 > 
-> On 12/21/2024 11:37 PM, Selvarasu Ganesan wrote:
-> >
-> > On 12/20/2024 8:45 PM, Greg KH wrote:
-> >> On Fri, Dec 20, 2024 at 07:02:06PM +0530, Selvarasu Ganesan wrote:
-> >>> On 12/20/2024 5:54 PM, Greg KH wrote:
-> >>>> On Wed, Dec 18, 2024 at 03:51:50PM +0530, Selvarasu Ganesan wrote:
-> >>>>> On 12/18/2024 11:01 AM, Greg KH wrote:
-> >>>>>> On Sun, Dec 08, 2024 at 08:53:20PM +0530, Selvarasu Ganesan wrote:
-> >>>>>>> The current implementation sets the wMaxPacketSize of bulk in/out
-> >>>>>>> endpoints to 1024 bytes at the end of the f_midi_bind function. 
-> >>>>>>> However,
-> >>>>>>> in cases where there is a failure in the first midi bind attempt,
-> >>>>>>> consider rebinding.
-> >>>>>> What considers rebinding?  Your change does not modify that.
-> >>>>> Hi Greg,
-> >>>>> Thanks for your review comments.
-> >>>>>
-> >>>>>
-> >>>>> Here the term "rebind" in this context refers to attempting to 
-> >>>>> bind the
-> >>>>> MIDI function a second time in certain scenarios.
-> >>>>> The situations where rebinding is considered include:
-> >>>>>
-> >>>>>     * When there is a failure in the first UDC write attempt, 
-> >>>>> which may be
-> >>>>>       caused by other functions bind along with MIDI
-> >>>>>     * Runtime composition change : Example : MIDI,ADB to MIDI. Or 
-> >>>>> MIDI to
-> >>>>>       MIDI,ADB
-> >>>>>
-> >>>>> The issue arises during the second time the "f_midi_bind" function is
-> >>>>> called. The problem lies in the fact that the size of
-> >>>>> "bulk_in_desc.wMaxPacketSize" is set to 1024 during the first call,
-> >>>>> which exceeds the hardware capability of the dwc3 TX/RX FIFO
-> >>>>> (ep->maxpacket_limit = 512).
-> >>>> Ok, but then why not properly reset ALL of the options/values when a
-> >>>> failure happens, not just this one when the initialization happens
-> >>>> again?  Odds are you might be missing the change of something else 
-> >>>> here
-> >>>> as well, right?
-> >>> Are you suggesting that we reset the entire value of
-> >>> usb_endpoint_descriptor before call usb_ep_autoconfig? If so, Sorry 
-> >>> I am
-> >>> not clear on your reasoning for wanting to reset all options/values.
-> >>> After all, all values will be overwritten
-> >>> afterusb_ep_autoconfig.Additionally, the wMaxPacketSize is the only
-> >>> value being checked during the EP claim process (usb_ep_autoconfig), 
-> >>> and
-> >>> it has caused issues where claiming wMaxPacketSize is grater than
-> >>> ep->maxpacket_limit.
-> >> Then fix up that value on failure, if things fail you should reset it
-> >> back to a "known good state", right?  And what's wrong with resetting
-> >> all of the values anyway, wouldn't that be the correct thing to do?
-> >
-> > Yes, It's back to known good state if we reset wMaxPacketSize. There 
-> > is no point to reset all values in the usb endpoint descriptor 
-> > structure as all the member of this structure are predefined value 
-> > except wMaxPacketSize and bEndpointAddress. The bEndpointAddress is 
-> > obtain as part of usb_ep_autoconfig.
-> >
-> > static struct usb_endpoint_descriptor bulk_out_desc = {
-> >         .bLength =              USB_DT_ENDPOINT_AUDIO_SIZE,
-> >         .bDescriptorType =      USB_DT_ENDPOINT,
-> >         .bEndpointAddress =     USB_DIR_OUT,
-> >         .bmAttributes =         USB_ENDPOINT_XFER_BULK,
-> > };
-> >
-> HI Greg,
-> 
-> Gentle remainder for your further comments or suggestions on this.
+>     sg_dma_len(sg) = min(sg_dma_len(sg), bounced_size);
+>                                          ^~~~~~~~~~~~
+> Although it can't happen, try remove the warning by initializing it.
 
-Sorry, I don't remember, it was thousands of patches reviewed ago.  If
-you feel your submission was correct, and no changes are needed, resend
-with an expanded changelog text to help explain things so I don't have
-the same questions again.
-
-thanks,
+No, we don't work around broken tools, fix the tool, don't abuse our
+code for that, sorry.
 
 greg k-h
 
