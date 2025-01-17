@@ -1,69 +1,69 @@
-Return-Path: <linux-usb+bounces-19498-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19499-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEC77A15233
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 15:53:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0B3DA15238
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 15:54:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 43C647A56D3
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 14:53:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E73D7A5894
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 14:53:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6F3A19885F;
-	Fri, 17 Jan 2025 14:52:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723BF18A92D;
+	Fri, 17 Jan 2025 14:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OFrJ+Ltf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="sB/QKbVX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CEC317BEB6
-	for <linux-usb@vger.kernel.org>; Fri, 17 Jan 2025 14:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D2F18A6D4
+	for <linux-usb@vger.kernel.org>; Fri, 17 Jan 2025 14:52:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737125567; cv=none; b=XxWdKBf0XVks+NxdNRXbGyA6kYjVmX5ZKMk78vDsa1S6KEt7frOnRaAwGDDUiRNWojO7jSOHYsk4HbemRlvRuYF58Mjeldl13pCKF/KV/SfgErPeQSXMPCVo0UJ/B5wAF+4j3U8/rJZwRvg/aM9A1VNP0n+clH4rZ2Wx+RvUyWc=
+	t=1737125576; cv=none; b=h2pZy7xU1bu+mz5RJe9DmHXRZJ5OfMqKknCAcIf7Etc4cwI7AIxGaR5HheL5TMq2FKbJa+69BgJQDkMY6B6tW77YvrhoxmdeIwJWGR9gyb5p9Pgk5dWoWbSXEg9JMTSClHtauWO/Yf8raw4wb97HMxQ3o1UjVXqkPu7KByzg3uA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737125567; c=relaxed/simple;
-	bh=FNJJD9zaL9tYqwWTeIV7vxHf0s0Y2Sf04iiJXfVPKQo=;
+	s=arc-20240116; t=1737125576; c=relaxed/simple;
+	bh=0NycYGu5HX5HIzAcJbBdr0cNDobK1Lk+gWnlktNiraE=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=BHEF+9mMouX/WaPz9SknNgTlJdlfszo3+EuQ7rxshjLIBDZS+YebbjJvu2yW6MpPoSDD+8ECOJ1GARlecQ2njSKR3RCg8k62odVcTciCeGYAmze9UwlXV/kBwTDNnnRD3VzwDShgsN8bTjUtsSN1tK2lkPkfnOZKINKQB5mdceo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OFrJ+Ltf; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=MArJKIvURFuvIz7zUQ9cbkCOkVEcOuJMa4xu8GYIC00y3ygb69puBuEg7ThKOB2Rcr1Uuv390MXGnwNzSwnfyce+j9UHCLgY3VPifm8DKEij8t/zPS5CXe0/m3TD2t0urmuqRXPwJK9tfptGnyXsE39WgXgYg40+uuo8ZvF4Hik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=sB/QKbVX; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--guanyulin.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-2164fad3792so37831595ad.0
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jan 2025 06:52:45 -0800 (PST)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2f2a9743093so4146239a91.3
+        for <linux-usb@vger.kernel.org>; Fri, 17 Jan 2025 06:52:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737125565; x=1737730365; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1737125574; x=1737730374; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LBcwJTu+fcJiwVaAq8fITjD7AnDF8kvfA86ysnCa1q4=;
-        b=OFrJ+LtfTzgZrjtMaAVZclJCBsi3EsDrrXojY+L5nFlKrIuDJ6spu8eCWkUN8DhNqH
-         kN7wWRGi4qYCRkaUiNBY3kHcOxW1snohWrXcckWU32X63kakAd5zWR5sbSrfFQfFBqPA
-         e8s2gWvUgFoEotnxX+DolR6hB1vV1Xuz65dhGFDMzr4pqaF4H7gFJTb/8LVhGcnmTyKy
-         WhIhCaqbLbFbYfFKaocbibIFwIHnwqLJZ8NtLa2oq/lOcA6KUIO5j6NgJhnPo2a8Tepn
-         lzp18wSrqre3RzswG0VBYC0N7PEfdGOrB/yzHgaz/TIKNaeJMVuNk55UV4IMVUPx9GiY
-         AzcQ==
+        bh=RCJkWTokxKqqVc3PnxwU+b4mjlCy0+MI0S9WquV+jXU=;
+        b=sB/QKbVXk4qjJwAcUE2Vvh0eYv1aYM8FriI5YVyUjTdlCBccJ1t0eB5buSl1fp+fnB
+         8rzvQnjm/zYenJ/a4TzeHB5Ml6pNGZ7CMdPJp59zOIRRv/8HATZ9SRo4cd2kAj10AtK2
+         7TIi4UT1DNlfkUV7krUg7X/M01lwWUliuHyjIa8XVUMMdHEi4kzzCTFOFLFnfchYxEfr
+         fvulf9okjcvpyAJmo9tlDtUFJh6jNpDZIMwRFHeG0B0A1K+vru66XXhjywsBQ2Nxw556
+         Q+LrCCMxHn+7RgUOHQwyy6PNUlN1Epn5x4SXuIal0vQuwic6MLO0zGikqdwpwS1f+ISx
+         k44Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737125565; x=1737730365;
+        d=1e100.net; s=20230601; t=1737125574; x=1737730374;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LBcwJTu+fcJiwVaAq8fITjD7AnDF8kvfA86ysnCa1q4=;
-        b=B5uBudMPJMqVIEFCqdgs7Q32WLXC/ipNS/rmq0jC5loEe5xOYp8esH3oLqnisWhWW5
-         6J5bu/9ox6wztasyVrXdwV1XfY6Uim0MIzjoikIYnB/Vyhoua8CXDZqQL7ghC0gFqWpg
-         gsDOoaBWLRmrv/qiKWW11G05i33ASEJfDvLspnkogeY5iYysXTWF70fd7JBLBQ0LUU0A
-         FO9hg0wRuto7nxFJPINvKy4bScoWR04tJX/khAlHh2sV/K6Uhhn/uo7xSsuko/CMsQb5
-         zfxcsWrWu9YHfUU1t3AX0ZHk7rLW3bFmPy+lUj6bqgODXz2hzcPIdx21uq6kSsTP/ZA4
-         QeNA==
-X-Gm-Message-State: AOJu0YxPl54J8J0zozfHGO4+mnbD7MRStI8umYpPL+bSjeKH96jP6KjJ
-	LUQNjHawkFper7pk5SERtqW+2vFr8EEr6KHgCqpZBTcmwpZ2s0PluNmj90gwgbZ7y+lZCC+YqyQ
-	ZE1MwnTM3FeDKZQ==
-X-Google-Smtp-Source: AGHT+IEoQgeczoM7fP36NuD2loQcNHOykfJKRvojEFPOft+QuArtSr1uer2ouUY/qHidSyvb/ZEyaw9Woj6DI6A=
-X-Received: from plu4.prod.google.com ([2002:a17:903:3684:b0:216:6463:1a1f])
+        bh=RCJkWTokxKqqVc3PnxwU+b4mjlCy0+MI0S9WquV+jXU=;
+        b=H5S2mmjHNbuOR/vdO7bAV4cqMmjp23+B5BcJruyw2eBM7PKb9LBDaLKBf6j5+g9FDZ
+         4bR1NScihnlJ01F+cLdasEHwnlPIwCCEvHDSmyNRo7aFuS4bZs/HVabntxhueYIds+wu
+         XGFW4ZFvS4qqnBCOGYkbBt695Y9tZdY6sE8vkjWHqtLMSCYJZxUlCPiguPO62AbuVo+t
+         wsMc7D4NU2IebfJWs/gi92UtWAF4W8T5gmP4+9H6XEhjfkRCLV7CpIMqMAlzWbyjoHGY
+         ZrQI2Md/GgWWYQvDT1STNn7gB7KpXvC16teJpr/HHtc/ncbl4tnH7TXPWvHF4nXY3G24
+         ybSw==
+X-Gm-Message-State: AOJu0YzJyhCkA1yaMQtdGouRiewXOnXJ/LACvygwX3+VdZdbMdRdCnUZ
+	N/RMpOtO66DbIQ4YJlzrILlOkUCAfWi6As80HNOKJIs487YJo69vZ+oiDGnvPke5V2oTNLGPXT/
+	C7wekNhSFS4I33A==
+X-Google-Smtp-Source: AGHT+IFuJ5ng71y+Dmn+KpRUE/OoajnStDmKGLDO/wmhPEz4Oiiu3kTjumYtiZyjjRbDNDd1+9iHmhUypVehviU=
+X-Received: from pjwx14.prod.google.com ([2002:a17:90a:c2ce:b0:2ef:d283:5089])
  (user=guanyulin job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:903:11c3:b0:215:af12:b61a with SMTP id d9443c01a7336-21c35629a68mr39854665ad.50.1737125565203;
- Fri, 17 Jan 2025 06:52:45 -0800 (PST)
-Date: Fri, 17 Jan 2025 14:48:01 +0000
+ 2002:a17:90b:2c84:b0:2ee:9a82:5a93 with SMTP id 98e67ed59e1d1-2f782c94021mr4783109a91.14.1737125573912;
+ Fri, 17 Jan 2025 06:52:53 -0800 (PST)
+Date: Fri, 17 Jan 2025 14:48:02 +0000
 In-Reply-To: <20250117145145.3093352-1-guanyulin@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -73,8 +73,8 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250117145145.3093352-1-guanyulin@google.com>
 X-Mailer: git-send-email 2.48.0.rc2.279.g1de40edade-goog
-Message-ID: <20250117145145.3093352-2-guanyulin@google.com>
-Subject: [PATCH v9 1/5] usb: dwc3: separate dev_pm_ops for each pm_event
+Message-ID: <20250117145145.3093352-3-guanyulin@google.com>
+Subject: [PATCH v9 2/5] usb: xhci-plat: separate dev_pm_ops for each pm_event
 From: Guan-Yu Lin <guanyulin@google.com>
 To: gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com, 
 	mathias.nyman@intel.com, stern@rowland.harvard.edu, perex@perex.cz, 
@@ -85,109 +85,74 @@ Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 
 Separate dev_pm_ops for different power events such as suspend, thaw,
-and hibernation. This is crucial when dwc3 driver needs to adapt its
-behavior based on different power state changes.
+and hibernation. This is crucial when xhci-plat driver needs to adapt
+its behavior based on different power state changes.
 
 Signed-off-by: Guan-Yu Lin <guanyulin@google.com>
 ---
- drivers/usb/dwc3/core.c | 77 ++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 76 insertions(+), 1 deletion(-)
+ drivers/usb/host/xhci-plat.c | 28 ++++++++++++++++++++++++----
+ 1 file changed, 24 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 6c960ff30c92..0735881d4650 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -2632,6 +2632,76 @@ static int dwc3_resume(struct device *dev)
- 	return ret;
+diff --git a/drivers/usb/host/xhci-plat.c b/drivers/usb/host/xhci-plat.c
+index 3acdbbd9aea3..b676d4dbcec1 100644
+--- a/drivers/usb/host/xhci-plat.c
++++ b/drivers/usb/host/xhci-plat.c
+@@ -450,7 +450,7 @@ void xhci_plat_remove(struct platform_device *dev)
+ }
+ EXPORT_SYMBOL_GPL(xhci_plat_remove);
+ 
+-static int xhci_plat_suspend(struct device *dev)
++static int xhci_plat_suspend_common(struct device *dev, struct pm_message pmsg)
+ {
+ 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+ 	struct xhci_hcd	*xhci = hcd_to_xhci(hcd);
+@@ -478,6 +478,21 @@ static int xhci_plat_suspend(struct device *dev)
+ 	return 0;
  }
  
-+static int dwc3_freeze(struct device *dev)
++static int xhci_plat_suspend(struct device *dev)
 +{
-+	struct dwc3	*dwc = dev_get_drvdata(dev);
-+	int		ret;
-+
-+	ret = dwc3_suspend_common(dwc, PMSG_FREEZE);
-+	if (ret)
-+		return ret;
-+
-+	pinctrl_pm_select_sleep_state(dev);
-+
-+	return 0;
++	return xhci_plat_suspend_common(dev, PMSG_SUSPEND);
 +}
 +
-+static int dwc3_thaw(struct device *dev)
++static int xhci_plat_freeze(struct device *dev)
 +{
-+	struct dwc3	*dwc = dev_get_drvdata(dev);
-+	int		ret;
-+
-+	pinctrl_pm_select_default_state(dev);
-+
-+	pm_runtime_disable(dev);
-+	pm_runtime_set_active(dev);
-+
-+	ret = dwc3_resume_common(dwc, PMSG_THAW);
-+	if (ret) {
-+		pm_runtime_set_suspended(dev);
-+		return ret;
-+	}
-+
-+	pm_runtime_enable(dev);
-+
-+	return 0;
++	return xhci_plat_suspend_common(dev, PMSG_FREEZE);
 +}
 +
-+static int dwc3_poweroff(struct device *dev)
++static int xhci_plat_poweroff(struct device *dev)
 +{
-+	struct dwc3	*dwc = dev_get_drvdata(dev);
-+	int		ret;
-+
-+	ret = dwc3_suspend_common(dwc, PMSG_HIBERNATE);
-+	if (ret)
-+		return ret;
-+
-+	pinctrl_pm_select_sleep_state(dev);
-+
-+	return 0;
++	return xhci_plat_suspend_common(dev, PMSG_HIBERNATE);
 +}
 +
-+static int dwc3_restore(struct device *dev)
-+{
-+	struct dwc3	*dwc = dev_get_drvdata(dev);
-+	int		ret;
-+
-+	pinctrl_pm_select_default_state(dev);
-+
-+	pm_runtime_disable(dev);
-+	pm_runtime_set_active(dev);
-+
-+	ret = dwc3_resume_common(dwc, PMSG_RESTORE);
-+	if (ret) {
-+		pm_runtime_set_suspended(dev);
-+		return ret;
-+	}
-+
-+	pm_runtime_enable(dev);
-+
-+	return 0;
-+}
-+
- static void dwc3_complete(struct device *dev)
+ static int xhci_plat_resume_common(struct device *dev, struct pm_message pmsg)
  {
- 	struct dwc3	*dwc = dev_get_drvdata(dev);
-@@ -2649,7 +2719,12 @@ static void dwc3_complete(struct device *dev)
- #endif /* CONFIG_PM_SLEEP */
+ 	struct usb_hcd	*hcd = dev_get_drvdata(dev);
+@@ -524,6 +539,11 @@ static int xhci_plat_resume(struct device *dev)
+ 	return xhci_plat_resume_common(dev, PMSG_RESUME);
+ }
  
- static const struct dev_pm_ops dwc3_dev_pm_ops = {
--	SET_SYSTEM_SLEEP_PM_OPS(dwc3_suspend, dwc3_resume)
-+	.suspend = pm_sleep_ptr(dwc3_suspend),
-+	.resume = pm_sleep_ptr(dwc3_resume),
-+	.freeze = pm_sleep_ptr(dwc3_freeze),
-+	.thaw = pm_sleep_ptr(dwc3_thaw),
-+	.poweroff = pm_sleep_ptr(dwc3_poweroff),
-+	.restore = pm_sleep_ptr(dwc3_restore),
- 	.complete = dwc3_complete,
++static int xhci_plat_thaw(struct device *dev)
++{
++	return xhci_plat_resume_common(dev, PMSG_THAW);
++}
++
+ static int xhci_plat_restore(struct device *dev)
+ {
+ 	return xhci_plat_resume_common(dev, PMSG_RESTORE);
+@@ -553,9 +573,9 @@ static int __maybe_unused xhci_plat_runtime_resume(struct device *dev)
+ const struct dev_pm_ops xhci_plat_pm_ops = {
+ 	.suspend = pm_sleep_ptr(xhci_plat_suspend),
+ 	.resume = pm_sleep_ptr(xhci_plat_resume),
+-	.freeze = pm_sleep_ptr(xhci_plat_suspend),
+-	.thaw = pm_sleep_ptr(xhci_plat_resume),
+-	.poweroff = pm_sleep_ptr(xhci_plat_suspend),
++	.freeze = pm_sleep_ptr(xhci_plat_freeze),
++	.thaw = pm_sleep_ptr(xhci_plat_thaw),
++	.poweroff = pm_sleep_ptr(xhci_plat_poweroff),
+ 	.restore = pm_sleep_ptr(xhci_plat_restore),
  
- 	/*
+ 	SET_RUNTIME_PM_OPS(xhci_plat_runtime_suspend,
 -- 
 2.48.0.rc2.279.g1de40edade-goog
 
