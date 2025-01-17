@@ -1,170 +1,145 @@
-Return-Path: <linux-usb+bounces-19503-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19504-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38B82A153F4
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 17:14:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8946A1585F
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 20:52:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDBF118822E1
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 16:14:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5248A3A9A0B
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 19:52:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B878D19AD93;
-	Fri, 17 Jan 2025 16:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC75D1AA1D1;
+	Fri, 17 Jan 2025 19:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="OZn7Qww1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IbKrzdeW"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-188.mta0.migadu.com (out-188.mta0.migadu.com [91.218.175.188])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B313E199249
-	for <linux-usb@vger.kernel.org>; Fri, 17 Jan 2025 16:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38E81A7AD0;
+	Fri, 17 Jan 2025 19:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737130466; cv=none; b=VzFjnrt6QNiWjSUfGQ89Jiu9iL5DKpOUpxBt9/sSE5KSDl6bzFDE10WK34IfqsJGxpPnTCLDCX5eOqwI/9T0OtOHkC31Y+E6/Gr0rgQBCO8dGU8LQ5IcuHz2MW+6v8aKFf4tdZ3Qge29Uewpu5sK8dIWv9f5Z7hDnsEjJHGX4qs=
+	t=1737143538; cv=none; b=RbqzEX7joAS4GOly+txnCWz40cFUvEr2NjGs0HtCzVCirhouVUDGFiILNt0vh3clQPzm5uEDJG+2Lyx9ETmtjNu41G65Ry/qpZevhxE5rrGejQ9MOIHZtCYYS5JlFtNwhp8g9N0eb7bR3C9U4zyWbvHhO5SPIPe4PYXZ2srvt4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737130466; c=relaxed/simple;
-	bh=4zQ50fHmDM5UQ+JgPuTXColKDwD9In18PeFQw+fRGN8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oqQzafA6YYMEywM6oL4UVFZ+ILHDRFT609GTBGEM122ziMGp+tanHICHtBjshg50c6VaZV2rCOFn0aTvNXGZbDNBYNltMJz1RlCsxos9xVnJLRxezIv4hCHWWfZi9ClA9qoZSX0FK9WADE0dGtPbX+BDq7OMqPoKtHeQfhuzN28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=OZn7Qww1; arc=none smtp.client-ip=91.218.175.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <943a7b09-8e77-4813-810a-18fea0e61482@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1737130456;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GM8x8MtsDcmopQN4jNDpNDZDXHTL/s/+R5gURRJe7Sc=;
-	b=OZn7Qww1QUnJhJE60jakeiFTXPqCau8KtQr8k/EY0BXSlmgxSeV2BikJUsP84Wo1LBay2O
-	kO6RTNygPqdqVsyyDgLQ+wJYE6sUXoaXM+rk7eV6pBBEOm7MIdjuHmhM+k2rZh2xWXsLnt
-	X3Z/Gjb2rzWqKY/a5PyQRwJCGgXqnjI=
-Date: Fri, 17 Jan 2025 09:55:00 -0600
+	s=arc-20240116; t=1737143538; c=relaxed/simple;
+	bh=6UIwvsNtfrIXWHp3YTeCspTPHoxCdCzif8AaBdMPW64=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=UgjvY69Oi08olV33loNXYx9n1Mg73xD4rRiWm5M2PxXRoLcvmW28Kk3QDG8RPoN29IEZN6lNHGeFev9x2K5FgkLdj5vBy1W/QyHZZzL072x9egQsuSt8xtApVlIE0SL6WMr9ysMEPb67m9jnk3OvHa6Kq3jYGiF7Ohsc17iyxPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IbKrzdeW; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-385deda28b3so1528878f8f.0;
+        Fri, 17 Jan 2025 11:52:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737143535; x=1737748335; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=s6igyJmYx3xfgNpg04tdCq16I8O1o28+DS8FiLEGbE8=;
+        b=IbKrzdeWFvg4Pq2b8tCWhUy54AbQUznCJgr8UvqZtTK6xXXCK05qkb5gRt5epu/d36
+         bCmuoy4FxOd6NYrzf+X4+iqeVV2rzqnhF6fZj2MO8ARev0n3dvwGkTaENHhA3ypixZYc
+         umHMcp1vqggtzEwCmZmYO7cwInLLG02wg9XPsU75GD0rcUz+OKvW0pjA3D16f2pRndEe
+         uVzsex+KM2D2LUIMyknAy3tzkxhOfr2f1Qyo1wSatVtXLWipZ2RVFSbRmckCgDEXvg32
+         tcVv2/N976+fkxwCLlEoLQ1pc3Z/QvgxdYmj8Fu5XzC62bdJhZ2WRlxRY2dB3+ts4+i0
+         RVxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737143535; x=1737748335;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=s6igyJmYx3xfgNpg04tdCq16I8O1o28+DS8FiLEGbE8=;
+        b=ghzpSFRgevdvh4MPD8dozbRG/cLnZUizlf47IRiHk7uUOXkp5BKix09dAqxpZCEPxv
+         rVm2IVqqW4PE+i1/d4wGvWF3BFu1Q2wZbZQoN4RDYf4IUHV4iCFXmrLjHFVUdOKZ7Alg
+         wfPDPJbETivKarH7Oy88VK7jUk5NLjrspXyksmG3DxVBO5JM3/7FwOvklOgWN+zqEIep
+         2ozFvT4RgGxOLHdJ7xKbT4OO49DLJFApmB2zlEYfs7fjSv1Rb4Yd5yuFq5v+i+mKp4Yp
+         GkGV4fzgUvQnCySgu94pfHLz44GfwKSgdtPgFkhd3iqDCbytuyQWotMNa/FEtUHt+2L1
+         QQJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWP7kX0uIt13Tc8bj4zAio0zN51/kVCAZ5PEYdnoDLW0SGY1mH5f234r+RxYl2qrjLZ9d4gPDlnGeGG@vger.kernel.org, AJvYcCXRnUVmVmKtLoKG46mwNwP++6IycJHMNb8cAHK9B4wnF/LfkX/nMpB93FlKK7AePuTkneMBksPBTMsTeTY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyPSUW+6LpEfBNtQUd9axCBvOivXScgO6uXMctdQm+PZzjJG2Tx
+	TFVROkQ9+CwzXlXbWBg3PBW8ubH35cfYq5H4aR37eDTLl8qn3u9k
+X-Gm-Gg: ASbGncvfVo6TH26HDtSEyOk81wqdg4TvuwGP0NfKK8XcBnTccGKSihTGxzfNb77PcOS
+	GCwkZocYzSd1tBlWNIOk55BL02UL4kCbE37qdAfgiG+fFdms6EIh+UAsd5yirB8bU6YhYWebMhU
+	YFl2BWhKRagu0v4AQn1cc+qUcmbqZqN92JSWv4+XjQdafputdA4Gxr2bvRYlYu55xIuuMmFo/ig
+	bMGbisG6Wweiov8lrxUIDo3TbnjFabBvxJRSPXiAEbikpoq0FwfGluR1lLr66hOuCGfy5b1GaBS
+	acPCkSYhIRzszR9IzAg=
+X-Google-Smtp-Source: AGHT+IESlgaczjO4UDRZutifN1rGgD8ccX66Njbo+S3yAMyHlNPasG8lcZXSpQX3Il85Kq7+k0CINw==
+X-Received: by 2002:adf:ce8e:0:b0:385:f638:c68a with SMTP id ffacd0b85a97d-38bf56745d2mr2750223f8f.30.1737143534806;
+        Fri, 17 Jan 2025 11:52:14 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf327e024sm3211018f8f.88.2025.01.17.11.52.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 Jan 2025 11:52:14 -0800 (PST)
+Date: Fri, 17 Jan 2025 19:52:13 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] usb: hcd: Bump local buffer size in rh_string()
+Message-ID: <20250117195213.651dc338@pumpkin>
+In-Reply-To: <20250116160543.216913-1-andriy.shevchenko@linux.intel.com>
+References: <20250116160543.216913-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v9 0/5] Support system sleep with offloaded usb transfers
-To: Guan-Yu Lin <guanyulin@google.com>, gregkh@linuxfoundation.org,
- Thinh.Nguyen@synopsys.com, mathias.nyman@intel.com,
- stern@rowland.harvard.edu, perex@perex.cz, tiwai@suse.com,
- sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com,
- ricardo@marliere.net, lijiayi@kylinos.cn, quic_jjohnson@quicinc.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-sound@vger.kernel.org
-References: <20250117145145.3093352-1-guanyulin@google.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
-In-Reply-To: <20250117145145.3093352-1-guanyulin@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: quoted-printable
 
-On 1/17/25 8:48 AM, Guan-Yu Lin wrote:
-> Wesley Cheng and Mathias Nyman's USB offload design enables a co-processor
-> to handle some USB transfers, potentially allowing the main system to
-> sleep and save power. However, Linux's power management system halts the
-> USB host controller when the main system isn't managing any USB transfers.
-> To address this, the proposal modifies the system to recognize offloaded
-> USB transfers and manage power accordingly.
+On Thu, 16 Jan 2025 18:05:43 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-You probably want to expand on the problem statement and clarify quite a few ambiguous statements.
-
-a) "allowing the main system to sleep and save power". What is the 'main system' and what sort of sleep are you referring to? 
-Traditionally when playing audio the audio devices remain in D0. Support for playback during 'S0 idle' is more complicated, I have yet to see a working solution even without USB offload in the picture.
-
-b) when referring to power management, you have to be specific on whether you mean 'runtime_pm' or regular power management. Not the same thing but there are related issues.
-
-c) for audio offload the transactions that go through the DSP or co-processor are only for audio endpoints. Control transactions rely on endpoint0 and are NOT offloaded to the best of my knowledge. Which means that you would need to track control transactions as well, even if there is no audio streaming. Otherwise you would have a risk of the XHCI controller transitioning in and out of sleep states.
- 
-> This involves two key steps:
-> 1. Transfer Status Tracking: Propose xhci_sideband_get and
-> xhci_sideband_put to track USB transfers on the co-processor, ensuring the
-> system is aware of any ongoing activity.
-
-
-> 2. Power Management Adjustment:  Modifications to the USB driver stack
-> (dwc3 controller driver, xhci host controller driver, and USB device
-> drivers) allow the system to sleep without disrupting co-processor managed
-> USB transfers. This involves adding conditional checks to bypass some
-> power management operations.
-
-This is even more confusing, initially the point was to prevent the controller from sleeping while there are offloaded transactions, but now the goal would be to allow the system to sleep while there are offloaded transactions. This isn't the same problem, is it?
- 
-> patches depends on series "Introduce QC USB SND audio offloading support" 
-> https://lore.kernel.org/lkml/20241213235403.4109199-1-quic_wcheng@quicinc.com/T/
-> 
-> changelog
-> ----------
-> Changes in v9:
-> - Remove unnecessary white space change.
-> 
-> Changes in v8:
-> - Change the runtime pm api to correct the error handling flow.
-> - Not flushing endpoints of actively offloaded USB devices to avoid
->   possible USB transfer conflicts.
-> 
-> Changes in v7:
-> - Remove counting mechanism in struct usb_hcd. The USB device's offload
->   status will be solely recorded in each related struct usb_device.
-> - Utilizes `needs_remote_wakeup` attribute in struct usb_interface to
->   control the suspend flow of USB interfaces and associated USB endpoints.
->   This addresses the need to support interrupt transfers generated by
->   offloaded USB devices while the system is suspended.
-> - Block any offload_usage change during USB device suspend period.
-> 
-> Changes in v6:
-> - Fix build errors when CONFIG_USB_XHCI_SIDEBAND is disabled.
-> - Explicitly specify the data structure of the drvdata refereced in
->   dwc3_suspend(), dwc3_resume().
-> - Move the initialization of counters to the patches introducing them.
-> 
-> Changes in v5:
-> - Walk through the USB children in usb_sideband_check() to determine the
->   sideband activity under the specific USB device. 
-> - Replace atomic_t by refcount_t.
-> - Reduce logs by using dev_dbg & remove __func__.
-> 
-> Changes in v4:
-> - Isolate the feature into USB driver stack.
-> - Integrate with series "Introduce QC USB SND audio offloading support"
-> 
-> Changes in v3:
-> - Integrate the feature with the pm core framework.
-> 
-> Changes in v2:
-> - Cosmetics changes on coding style.
-> 
-> [v3] PM / core: conditionally skip system pm in device/driver model
-> [v2] usb: host: enable suspend-to-RAM control in userspace
-> [v1] [RFC] usb: host: Allow userspace to control usb suspend flows
+> GCC is not happy about the buffer size:
+>=20
+> drivers/usb/core/hcd.c:441:48: error: =E2=80=98%s=E2=80=99 directive outp=
+ut may be truncated writing up to 64 bytes into a region of size between 35=
+ and 99 [-Werror=3Dformat-truncation=3D]
+>   441 |                 snprintf (buf, sizeof buf, "%s %s %s", init_utsna=
+me()->sysname,
+>       |                                                ^~
+>   442 |                         init_utsname()->release, hcd->driver->des=
+cription);
+>       |                         ~~~~~~~~~~~~~~~~~~~~~~~
+>=20
+> Bump the size to get it enough for the possible strings.
+>=20
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 > ---
-> 
-> Guan-Yu Lin (5):
->   usb: dwc3: separate dev_pm_ops for each pm_event
->   usb: xhci-plat: separate dev_pm_ops for each pm_event
->   usb: add apis for offload usage tracking
->   xhci: sideband: add api to trace sideband usage
->   usb: host: enable USB offload during system sleep
-> 
->  drivers/usb/core/driver.c         | 131 +++++++++++++++++++++++++++++-
->  drivers/usb/core/endpoint.c       |   8 --
->  drivers/usb/core/usb.c            |   4 +
->  drivers/usb/dwc3/core.c           | 105 +++++++++++++++++++++++-
->  drivers/usb/dwc3/core.h           |   1 +
->  drivers/usb/host/xhci-plat.c      |  42 +++++++++-
->  drivers/usb/host/xhci-sideband.c  |  82 +++++++++++++++++++
->  include/linux/usb.h               |  27 +++++-
->  include/linux/usb/hcd.h           |   7 ++
->  include/linux/usb/xhci-sideband.h |   6 ++
->  sound/usb/qcom/qc_audio_offload.c |   3 +
->  11 files changed, 398 insertions(+), 18 deletions(-)
-> 
+>  drivers/usb/core/hcd.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
+> index 0b2490347b9f..a75cf1f6d741 100644
+> --- a/drivers/usb/core/hcd.c
+> +++ b/drivers/usb/core/hcd.c
+> @@ -415,7 +415,7 @@ ascii2desc(char const *s, u8 *buf, unsigned len)
+>  static unsigned
+>  rh_string(int id, struct usb_hcd const *hcd, u8 *data, unsigned len)
+>  {
+> -	char buf[100];
+> +	char buf[160];
+
+Pretty pointless - look at ascii2desc() just above.
+(Converts to LE i6-bit chars with a leading type+length.)
+It gets truncated to 126 characters.
+Indeed the entire snprintf() is pretty pointless given what happens to the
+data given that it is all strings.
+
+Is the overall truncation even right?
+The outer length is bounded to 254, but there may be fewer characters in the
+buffer because the buffer length itself might be smaller.
+Seems a recipe for disaster.
+
+	David=20
+
+
+>  	char const *s;
+>  	static char const langids[4] =3D {4, USB_DT_STRING, 0x09, 0x04};
+> =20
 
 
