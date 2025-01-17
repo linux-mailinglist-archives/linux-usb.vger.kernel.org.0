@@ -1,145 +1,125 @@
-Return-Path: <linux-usb+bounces-19504-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19505-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8946A1585F
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 20:52:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BB9BA1594D
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 23:01:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5248A3A9A0B
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 19:52:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AD617A166A
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 22:01:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC75D1AA1D1;
-	Fri, 17 Jan 2025 19:52:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 346781DE2A6;
+	Fri, 17 Jan 2025 22:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IbKrzdeW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VUCNC5ne"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38E81A7AD0;
-	Fri, 17 Jan 2025 19:52:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02201AB51B;
+	Fri, 17 Jan 2025 22:00:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737143538; cv=none; b=RbqzEX7joAS4GOly+txnCWz40cFUvEr2NjGs0HtCzVCirhouVUDGFiILNt0vh3clQPzm5uEDJG+2Lyx9ETmtjNu41G65Ry/qpZevhxE5rrGejQ9MOIHZtCYYS5JlFtNwhp8g9N0eb7bR3C9U4zyWbvHhO5SPIPe4PYXZ2srvt4Q=
+	t=1737151238; cv=none; b=KLObIS9gDpKiLHGZ3XTnXlYguY9YKe4Tm6qGCcnInj7Ox60ZI0IfSV2Bb1v6ixLVuGQc/YB7kZ0HBoYExGt/WfyUB1LlvFlh2p0NigqVNrZMrgN0VPV4PuD1KmM1ABOSAk+p9rsiKGHXbSMVfXvvCrrLhDfAjE0RvW3vNBEP+h4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737143538; c=relaxed/simple;
-	bh=6UIwvsNtfrIXWHp3YTeCspTPHoxCdCzif8AaBdMPW64=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UgjvY69Oi08olV33loNXYx9n1Mg73xD4rRiWm5M2PxXRoLcvmW28Kk3QDG8RPoN29IEZN6lNHGeFev9x2K5FgkLdj5vBy1W/QyHZZzL072x9egQsuSt8xtApVlIE0SL6WMr9ysMEPb67m9jnk3OvHa6Kq3jYGiF7Ohsc17iyxPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IbKrzdeW; arc=none smtp.client-ip=209.85.221.53
+	s=arc-20240116; t=1737151238; c=relaxed/simple;
+	bh=OLpJw+nmoMHAjBQIB5gKtYutr4KSqMHspFULifMH8y8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SCTkgWuR/N0sBWBjZFNDgeFZTVI3kJNqblsLBM2w3y3k4NNHOV0+DovYPrlm2kEXUR5Y1f9JCRqEj66pPnss5QYCvafg1/sFxKmQBPweTbOSt+JWc3clspTFgmZHDl+1IzGAQRCKLJWCy3o5zidKd4YedC/tfmQ5Zson0zbF/i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VUCNC5ne; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-385deda28b3so1528878f8f.0;
-        Fri, 17 Jan 2025 11:52:16 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5d96944401dso4602894a12.0;
+        Fri, 17 Jan 2025 14:00:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737143535; x=1737748335; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s6igyJmYx3xfgNpg04tdCq16I8O1o28+DS8FiLEGbE8=;
-        b=IbKrzdeWFvg4Pq2b8tCWhUy54AbQUznCJgr8UvqZtTK6xXXCK05qkb5gRt5epu/d36
-         bCmuoy4FxOd6NYrzf+X4+iqeVV2rzqnhF6fZj2MO8ARev0n3dvwGkTaENHhA3ypixZYc
-         umHMcp1vqggtzEwCmZmYO7cwInLLG02wg9XPsU75GD0rcUz+OKvW0pjA3D16f2pRndEe
-         uVzsex+KM2D2LUIMyknAy3tzkxhOfr2f1Qyo1wSatVtXLWipZ2RVFSbRmckCgDEXvg32
-         tcVv2/N976+fkxwCLlEoLQ1pc3Z/QvgxdYmj8Fu5XzC62bdJhZ2WRlxRY2dB3+ts4+i0
-         RVxw==
+        d=gmail.com; s=20230601; t=1737151235; x=1737756035; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5WhVZdRTDkwUE2D/s6RcQm6tX0DVpX9GXKevi9aNV+0=;
+        b=VUCNC5ne5l8Go9N4sM1NKPIJaqbpfqys6mVJMySWoyd3ffueWUiQj6qTRYgiAvvUOc
+         7gDjugnGesdwpykJLNpcfGhoZgdz3AijM7xWocperpZvlbqMS5py44OqTdHj0zqo0hPN
+         bZJEnPUmYGNx//rSzAJxTTDCROn73sMIf/c80kGW32/XqxeR7WAu3cbyGstrGOY5rxBP
+         V4pGYKzSqJHArnsq1tqRVHNxhd18v3Ll2ou88c7ULUKop55DmFXa366sWIwjAZ0u0qtn
+         frsn3AiK2NhXGhgK6iHeh6HwT5mwaO22VYt9pPO+jF/SpO24b2LCO7i9NZTnWgXmB4f+
+         pKjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737143535; x=1737748335;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=s6igyJmYx3xfgNpg04tdCq16I8O1o28+DS8FiLEGbE8=;
-        b=ghzpSFRgevdvh4MPD8dozbRG/cLnZUizlf47IRiHk7uUOXkp5BKix09dAqxpZCEPxv
-         rVm2IVqqW4PE+i1/d4wGvWF3BFu1Q2wZbZQoN4RDYf4IUHV4iCFXmrLjHFVUdOKZ7Alg
-         wfPDPJbETivKarH7Oy88VK7jUk5NLjrspXyksmG3DxVBO5JM3/7FwOvklOgWN+zqEIep
-         2ozFvT4RgGxOLHdJ7xKbT4OO49DLJFApmB2zlEYfs7fjSv1Rb4Yd5yuFq5v+i+mKp4Yp
-         GkGV4fzgUvQnCySgu94pfHLz44GfwKSgdtPgFkhd3iqDCbytuyQWotMNa/FEtUHt+2L1
-         QQJQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWP7kX0uIt13Tc8bj4zAio0zN51/kVCAZ5PEYdnoDLW0SGY1mH5f234r+RxYl2qrjLZ9d4gPDlnGeGG@vger.kernel.org, AJvYcCXRnUVmVmKtLoKG46mwNwP++6IycJHMNb8cAHK9B4wnF/LfkX/nMpB93FlKK7AePuTkneMBksPBTMsTeTY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPSUW+6LpEfBNtQUd9axCBvOivXScgO6uXMctdQm+PZzjJG2Tx
-	TFVROkQ9+CwzXlXbWBg3PBW8ubH35cfYq5H4aR37eDTLl8qn3u9k
-X-Gm-Gg: ASbGncvfVo6TH26HDtSEyOk81wqdg4TvuwGP0NfKK8XcBnTccGKSihTGxzfNb77PcOS
-	GCwkZocYzSd1tBlWNIOk55BL02UL4kCbE37qdAfgiG+fFdms6EIh+UAsd5yirB8bU6YhYWebMhU
-	YFl2BWhKRagu0v4AQn1cc+qUcmbqZqN92JSWv4+XjQdafputdA4Gxr2bvRYlYu55xIuuMmFo/ig
-	bMGbisG6Wweiov8lrxUIDo3TbnjFabBvxJRSPXiAEbikpoq0FwfGluR1lLr66hOuCGfy5b1GaBS
-	acPCkSYhIRzszR9IzAg=
-X-Google-Smtp-Source: AGHT+IESlgaczjO4UDRZutifN1rGgD8ccX66Njbo+S3yAMyHlNPasG8lcZXSpQX3Il85Kq7+k0CINw==
-X-Received: by 2002:adf:ce8e:0:b0:385:f638:c68a with SMTP id ffacd0b85a97d-38bf56745d2mr2750223f8f.30.1737143534806;
-        Fri, 17 Jan 2025 11:52:14 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf327e024sm3211018f8f.88.2025.01.17.11.52.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2025 11:52:14 -0800 (PST)
-Date: Fri, 17 Jan 2025 19:52:13 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/1] usb: hcd: Bump local buffer size in rh_string()
-Message-ID: <20250117195213.651dc338@pumpkin>
-In-Reply-To: <20250116160543.216913-1-andriy.shevchenko@linux.intel.com>
-References: <20250116160543.216913-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+        d=1e100.net; s=20230601; t=1737151235; x=1737756035;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5WhVZdRTDkwUE2D/s6RcQm6tX0DVpX9GXKevi9aNV+0=;
+        b=mcpz7YQFhoTE0/LeUrC6rs4HEu0dnUn6OgWgISvLZf+wuWmPbU5Ji69MlD3wD4fe24
+         2G5uv0uBaZl9FGV54pRYIboy80/GH+s/6UObMW0Guvw6G31kt6mmgAR+MO26a+Knvxvp
+         QxF5C/5V/yQ0a1Pfn28+HobC9+hvbWj/7NJWNg9KS1nicKacEQLPBEx/wsAPFEgyvbNB
+         bnqdbajEbJ9BDZsWHyecVZjOPofoHVA4kqngLRjnsK4pnvFLot7h8RcfHhFAM7Ila7lC
+         ihV1UXXXzb7cU7VVSwpD2N9PAlFqWtEXBaxDONh5EeRUPKuanGxrq5vRggkyuAJMa0hM
+         kXfg==
+X-Forwarded-Encrypted: i=1; AJvYcCUGrLW8R+Jt499Rs9LPAcy4PE76LuOBY6Te53MA8P0fNHDCAzep8vtBFsdfZAcP0/hFX4hUTchuKv067gXU@vger.kernel.org, AJvYcCVS9Dj71a5mK2a43+NuHGD2w/ZOS5PCilWwJ3G3qYVf2IcoCygduTRulGLZYCR/bGR7813roXqGawbz@vger.kernel.org, AJvYcCVlD9w390OAJ8mFWe0eLGLOBoyE8Ja4+9cLFg8tZSe1lUCrWNfN3irV3VFWSTZlGV1JjXtZ5T00U06K@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJr7+C7HXp9s5YI5PVegZhj6ILx8k179/kQFHbbIWS4O3+7bNc
+	34LhnmftBfqiS2XQCbWWHRgRnWOldKi1ehz4Rnpfe0ijLe0vvAlR
+X-Gm-Gg: ASbGncsxFJZh+ANEVUX2qtEc8djzysq1/ACUpZ/ecvrEugYhj6d3fpV17jJ9IEv2Oal
+	zUH2iri7nZt9hredi1t8aaVEtPS3Vo+RUhRrqEd/ZJqj72x0NYMt68c+YvfKG4+AP1J7GPDAdaL
+	HQbT1PD6U9gOn9HMZZA8073Nw070VquFB6dux4YFtcDUDAa+iwCRrE0r3JfMZWEqq5EzDNMjzp0
+	ADKJkoX5aBFc7Exvm61IUKOeHUmp0ks6b4ZDLs/JG9TmV5vL0sMUiBds2u9zkFuvc6BGE3ksMxZ
+	TVxWW/qJ64omtQzoNtsGLKcK4CssLeMhExHq0J8TRMLtd2TlzSoiFyToEoCZb9okvPIs3FfCfB1
+	c6Cen6Sx85H+VmIY=
+X-Google-Smtp-Source: AGHT+IH7JKZn55TFqBMDvufGKFkUhHeC0/7cJePf4smhMMsHf5hncKtii9E+hcMcYjsmqwYjVoBl1w==
+X-Received: by 2002:a05:6402:2815:b0:5d2:7396:b0ca with SMTP id 4fb4d7f45d1cf-5db7d2f873cmr3905207a12.12.1737151234843;
+        Fri, 17 Jan 2025 14:00:34 -0800 (PST)
+Received: from ?IPV6:2a02:a466:68ed:1:20ec:3e8b:2297:e41f? (2a02-a466-68ed-1-20ec-3e8b-2297-e41f.fixed6.kpn.net. [2a02:a466:68ed:1:20ec:3e8b:2297:e41f])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5db736717dbsm2113188a12.30.2025.01.17.14.00.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 17 Jan 2025 14:00:33 -0800 (PST)
+Message-ID: <06851646-7d0b-4b30-9794-5a70a1431cab@gmail.com>
+Date: Fri, 17 Jan 2025 23:00:32 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 0/3] usb: dwc3: Avoid using reserved EPs
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Felipe Balbi <balbi@kernel.org>,
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>
+References: <20250116154117.148915-1-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US
+From: Ferry Toth <fntoth@gmail.com>
+In-Reply-To: <20250116154117.148915-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 16 Jan 2025 18:05:43 +0200
-Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+Op 16-01-2025 om 16:40 schreef Andy Shevchenko:
+> On some platforms (Intel-based and AFAIK ARM-based) the EPs in the gadget
+> (USB Device Controller mode) may be reserved for some special means, such as
+> tracing. This series extends DT schema and driver to avoid using those.
+> Without this the USB gadget mode won't work properly (those devices that
+> "luckily" allocated the reserved EPs).
+> 
+> Ferry already tested the privately sent PoC of this, but I ask him again to
+> re-test this version which is slightly different.
+> 
+> Andy Shevchenko (3):
+>    dt-bindings: usb: dwc3: Add a property to reserve endpoints
+>    usb: dwc3: gadget: Add support for snps,reserved-endpoints property
+>    usb: dwc3: gadget: Skip endpoints ep[18]{in,out} on Intel Merrifield
+> 
+>   .../devicetree/bindings/usb/snps,dwc3.yaml    | 10 +++++
+>   drivers/usb/dwc3/dwc3-pci.c                   |  9 +++++
+>   drivers/usb/dwc3/gadget.c                     | 38 ++++++++++++++++++-
+>   3 files changed, 56 insertions(+), 1 deletion(-)
+> 
+Yes I retested this now on v6.13.0-rc7 Intel Merrifield and found no 
+problems. Skipping the tracing end point has definitely always been 
+needed on this platform. Thanks!
 
-> GCC is not happy about the buffer size:
->=20
-> drivers/usb/core/hcd.c:441:48: error: =E2=80=98%s=E2=80=99 directive outp=
-ut may be truncated writing up to 64 bytes into a region of size between 35=
- and 99 [-Werror=3Dformat-truncation=3D]
->   441 |                 snprintf (buf, sizeof buf, "%s %s %s", init_utsna=
-me()->sysname,
->       |                                                ^~
->   442 |                         init_utsname()->release, hcd->driver->des=
-cription);
->       |                         ~~~~~~~~~~~~~~~~~~~~~~~
->=20
-> Bump the size to get it enough for the possible strings.
->=20
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  drivers/usb/core/hcd.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/usb/core/hcd.c b/drivers/usb/core/hcd.c
-> index 0b2490347b9f..a75cf1f6d741 100644
-> --- a/drivers/usb/core/hcd.c
-> +++ b/drivers/usb/core/hcd.c
-> @@ -415,7 +415,7 @@ ascii2desc(char const *s, u8 *buf, unsigned len)
->  static unsigned
->  rh_string(int id, struct usb_hcd const *hcd, u8 *data, unsigned len)
->  {
-> -	char buf[100];
-> +	char buf[160];
-
-Pretty pointless - look at ascii2desc() just above.
-(Converts to LE i6-bit chars with a leading type+length.)
-It gets truncated to 126 characters.
-Indeed the entire snprintf() is pretty pointless given what happens to the
-data given that it is all strings.
-
-Is the overall truncation even right?
-The outer length is bounded to 254, but there may be fewer characters in the
-buffer because the buffer length itself might be smaller.
-Seems a recipe for disaster.
-
-	David=20
-
-
->  	char const *s;
->  	static char const langids[4] =3D {4, USB_DT_STRING, 0x09, 0x04};
-> =20
-
+Tested-by: Ferry Toth <fntoth@gmail.com>
 
