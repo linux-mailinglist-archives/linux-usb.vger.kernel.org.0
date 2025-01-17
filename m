@@ -1,178 +1,156 @@
-Return-Path: <linux-usb+bounces-19484-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19485-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7251EA14DF6
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 11:50:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1384AA14E28
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 12:05:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4CAE3A80A6
-	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 10:50:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FE3F167D52
+	for <lists+linux-usb@lfdr.de>; Fri, 17 Jan 2025 11:05:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC2411FECA3;
-	Fri, 17 Jan 2025 10:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A50A1FDE09;
+	Fri, 17 Jan 2025 11:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eMKZEA25"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hRYgREvp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D7721FE456
-	for <linux-usb@vger.kernel.org>; Fri, 17 Jan 2025 10:49:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64FEB1F5611;
+	Fri, 17 Jan 2025 11:05:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737110995; cv=none; b=aXFBYinJvOZWDVwbZ6JXvY3luKVaetKKp2vjcTEgRsMY15jav7jHBHPX6XyEdjebiinqU8fD8XpuCpmDywsxW5i3RCKuX7pWIRj5NfxIsygU34iuH2alxAoHAlQOe9l4feb1CiH82xVXB56cmssLIR1Q0+ELvnNgCn7vbnGuwpE=
+	t=1737111922; cv=none; b=L86yrH8F1VAHpc2KbYkOiBzRJVH51zt5kYQbMYtmgi9Ftw9vkWnFDDl8biwxdnONdZmnnKVhH9ad3XvFbA7MMk+EpKoHfw3j2Ca6+b0VjFW7YjGYF+HJugNhGlqCw2ovDh5NSy0pVPOFI0NCvrJVGue4hJ6sS7DqIa622R37CGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737110995; c=relaxed/simple;
-	bh=HA9jbb7sf9FEcEGIypHqxSqTIh49BbritadiThhm0/8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=OaOYoQgEKE8sbXaJMbsqg0vJx4VaTNJOiSHsBRhI84UUZkzyB0Vt+rm1fb7JsWJAABpzrzVqijTHX4WI9z3xQM/AnlbYq+vnDIograz11KiYV0kfJa3K31X8DE/TSw7fq8e8zdWYkzDx83wILOYJ/3lGcbI3N24yAqJNNie3fQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eMKZEA25; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-54026562221so2000006e87.1
-        for <linux-usb@vger.kernel.org>; Fri, 17 Jan 2025 02:49:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737110992; x=1737715792; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5GKui2+m9IAjivOenJXop0/jshpzhAnhINNH8CjefO4=;
-        b=eMKZEA25eA4t8NMLmmJdwmzrfNmFS8zz1LL3kE7Q2+Uwy1dtjIFK6aBIW5USJinYbQ
-         wfk8IyTXWf2eycnDygf1A4TaIVGD8ipPWRE5cdcdLPkdarVG0YHhyActci1UgWGuifZW
-         JB3H488VxdtaEhUQqumfdVewwwzaSfHCqEzC67hIcZ7vYmA+SFfoUA8B38aNWxEEaBBq
-         UvAk5eSexGu76HkkxVrn3+piQx/GMpuCFXMy0J8E9cghL2513fQbwdQ26U0s+33JlpMH
-         KdhQ4zH4FbCRuuQxt8h58kCTAI6FYFcgoOGyOg7HcFOw328IbnI+UaR7RXTyazyOdEqe
-         uD+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737110992; x=1737715792;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5GKui2+m9IAjivOenJXop0/jshpzhAnhINNH8CjefO4=;
-        b=tFtNQuSsoEZcpvMnxWLydz1Epx148KJaAdsEatddvRZ4mvVwMEHtnxO31/HbRIo1Le
-         Dco2hKCQVyf8QNSJWBgmH0fevykliXNNDS/rOnR5BdtFfHxBxHnqpsvTYyXve2K6Ybk0
-         BAAglNqeS4HjsO/lUTZt7h3F2YY4bqav2MaaMWcK9LKoy5m+IXv4fIzZzvl6S2x94iul
-         BW/9q2AWF6emfolT7bPTgqyXEAlAogFXvyrs1GeKQrqsFdnS8AER+TLwe07AkLiOULaZ
-         ccrAMfdnX1nVJPdMMeguyp9x1J7WVYR+BwcWZPz1/gz2bSTiMxDPXGZs1RT7PHmAlw1B
-         oZnQ==
-X-Gm-Message-State: AOJu0YzR5jXjumi/OigXecogn0S4LHKzPVx9YF1PJ8hPggo/65+2s32O
-	FIWfp9upD8gGnBRACszJr8Mz9OuqPlV5geDNLJAtaRMB73BaXprP03i20W8POGg=
-X-Gm-Gg: ASbGncvV38K9ZQg1k1ojtKMYgP8FbKpKAwU/Qz70vCIHqF9XLxGEgg5qiKjQnwgdptd
-	UzVcQXhJ84nAygwE190R1TUIwQ4n+W0qOmR4LAz7s6FZW8duxwfa3ROf7KnxgeiA+G+u7mYpbhw
-	T61xV+6S6MXOKvPiP/7JFDln3D0IqdmEzGUFgKRN9Xgg7PdLAiJZ6YM3Nu+3YM6G34QKOkn/4LB
-	evzFwknxG5Q1JDlaDbqzddLoEduiQePn3KZ7cBzm4Kc1o7tRPKDtkaeioHXMMgJ
-X-Google-Smtp-Source: AGHT+IHIsU/u3tBigo6IljY3ksqOtejhOflhJneknqBt3azQrF7a0rP854priPpfPUa+G4NTHofa2w==
-X-Received: by 2002:a05:6512:3409:b0:542:250d:eefb with SMTP id 2adb3069b0e04-5439c281f66mr667438e87.41.1737110991596;
-        Fri, 17 Jan 2025 02:49:51 -0800 (PST)
-Received: from umbar.lan ([192.130.178.90])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3072a3446c8sm3803321fa.27.2025.01.17.02.49.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 17 Jan 2025 02:49:50 -0800 (PST)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Fri, 17 Jan 2025 12:49:43 +0200
-Subject: [PATCH 3/3] usb: typec: ucsi: acpi: move LG Gram quirk to
- ucsi_gram_sync_control()
+	s=arc-20240116; t=1737111922; c=relaxed/simple;
+	bh=OhE8kwd0EtOOkH33HthBxwmzG/frOrK5izGyB/354Tw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a9AOFV0t91EQLErK1h3xuyPSgTrKkjzBJoYDVcFVuPk7d5DGbcvlzaVtn8mRJwWBoq9EYRK/i+NtRziEip71aDlBFW/m7iE6IoY9XYdKMdSScrhHoyNv+IbMOMuCMLj54aHxahv6jBFU7oD9e1KBdBjqbdDgthC5Cgtwfemlu2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hRYgREvp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95D3CC4CEDD;
+	Fri, 17 Jan 2025 11:05:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1737111922;
+	bh=OhE8kwd0EtOOkH33HthBxwmzG/frOrK5izGyB/354Tw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hRYgREvpcJ5kDylPRNTu5jD+I00zDRsyCQnw8nMPCEZeJLhjPc5HkoWbf5ycitoKT
+	 KrC4Iuyq/FeihX4ZKt726d7BqUf/RuBsiD6ii2UfBLSe4FkBCWhJI/2FPbUNdPwdvM
+	 d2kAQARPV6rjKGq1/d3lom3kl0eMyRTVczbhPzrg=
+Date: Fri, 17 Jan 2025 12:05:19 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Selvarasu Ganesan <selvarasu.g@samsung.com>
+Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
+	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com,
+	hongpooh.kim@samsung.com, eomji.oh@samsung.com,
+	shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	stable@vger.kernel.org, thiagu.r@samsung.com
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+Message-ID: <2025011726-hydration-nephew-0d65@gregkh>
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+ <20241208152322.1653-1-selvarasu.g@samsung.com>
+ <2024121845-cactus-geology-8df3@gregkh>
+ <9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
+ <2024122013-scary-paver-fcff@gregkh>
+ <a1dedf06-e804-4580-a690-25e55312eab8@samsung.com>
+ <2024122007-flail-traverse-b7b8@gregkh>
+ <6629115f-5208-42fe-8bf4-25d808129741@samsung.com>
+ <7d7a0d7a-76bb-49a8-82f8-07ee53893145@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250117-ucsi-merge-commands-v1-3-e20c19934d59@linaro.org>
-References: <20250117-ucsi-merge-commands-v1-0-e20c19934d59@linaro.org>
-In-Reply-To: <20250117-ucsi-merge-commands-v1-0-e20c19934d59@linaro.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2515;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=HA9jbb7sf9FEcEGIypHqxSqTIh49BbritadiThhm0/8=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBnijXG3uwtzwYp9Y+1h0WsxIqT/JBER6AauTSMD
- QvMcplbOs6JATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZ4o1xgAKCRCLPIo+Aiko
- 1fWNB/9y4/CwN+TiuuFIuuGLLi6OOecOc8IM4nhdln3ahSo/r0f/iRuiv2BgDa3N0uqjsE+XKJb
- BNvkoJlft3sGt9QZQN2cJxkcahLO9v+SGcuhTHOLTzDhluZbXer0RMJtHjW7T0h/mwR2+qGpk3O
- 9iB5Dyeo+0CzJHRhwvYaM3clcKaYKWys8Dg8noovie/U4f1zQs4OMU6/gH1oQZkRrl/fNWcMYQq
- itzb4UVAdEbfU7pj/lobqj3YpOKX4s4WmfrbJo42VspQ3vKOXu3hb1dXodv5tclk5lV9x2oi6Vf
- wgHXOAm8arAa5ovC+PV42GwLiaizfaDshig54otthqWkEFJ/
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <7d7a0d7a-76bb-49a8-82f8-07ee53893145@samsung.com>
 
-It is easier to keep all command-specific quirks in a single place. Move
-them to ucsi_gram_sync_control() as the code now allows us to return
-modified messages data.
+On Thu, Jan 16, 2025 at 10:49:24AM +0530, Selvarasu Ganesan wrote:
+> 
+> On 12/21/2024 11:37 PM, Selvarasu Ganesan wrote:
+> >
+> > On 12/20/2024 8:45 PM, Greg KH wrote:
+> >> On Fri, Dec 20, 2024 at 07:02:06PM +0530, Selvarasu Ganesan wrote:
+> >>> On 12/20/2024 5:54 PM, Greg KH wrote:
+> >>>> On Wed, Dec 18, 2024 at 03:51:50PM +0530, Selvarasu Ganesan wrote:
+> >>>>> On 12/18/2024 11:01 AM, Greg KH wrote:
+> >>>>>> On Sun, Dec 08, 2024 at 08:53:20PM +0530, Selvarasu Ganesan wrote:
+> >>>>>>> The current implementation sets the wMaxPacketSize of bulk in/out
+> >>>>>>> endpoints to 1024 bytes at the end of the f_midi_bind function. 
+> >>>>>>> However,
+> >>>>>>> in cases where there is a failure in the first midi bind attempt,
+> >>>>>>> consider rebinding.
+> >>>>>> What considers rebinding?  Your change does not modify that.
+> >>>>> Hi Greg,
+> >>>>> Thanks for your review comments.
+> >>>>>
+> >>>>>
+> >>>>> Here the term "rebind" in this context refers to attempting to 
+> >>>>> bind the
+> >>>>> MIDI function a second time in certain scenarios.
+> >>>>> The situations where rebinding is considered include:
+> >>>>>
+> >>>>>     * When there is a failure in the first UDC write attempt, 
+> >>>>> which may be
+> >>>>>       caused by other functions bind along with MIDI
+> >>>>>     * Runtime composition change : Example : MIDI,ADB to MIDI. Or 
+> >>>>> MIDI to
+> >>>>>       MIDI,ADB
+> >>>>>
+> >>>>> The issue arises during the second time the "f_midi_bind" function is
+> >>>>> called. The problem lies in the fact that the size of
+> >>>>> "bulk_in_desc.wMaxPacketSize" is set to 1024 during the first call,
+> >>>>> which exceeds the hardware capability of the dwc3 TX/RX FIFO
+> >>>>> (ep->maxpacket_limit = 512).
+> >>>> Ok, but then why not properly reset ALL of the options/values when a
+> >>>> failure happens, not just this one when the initialization happens
+> >>>> again?  Odds are you might be missing the change of something else 
+> >>>> here
+> >>>> as well, right?
+> >>> Are you suggesting that we reset the entire value of
+> >>> usb_endpoint_descriptor before call usb_ep_autoconfig? If so, Sorry 
+> >>> I am
+> >>> not clear on your reasoning for wanting to reset all options/values.
+> >>> After all, all values will be overwritten
+> >>> afterusb_ep_autoconfig.Additionally, the wMaxPacketSize is the only
+> >>> value being checked during the EP claim process (usb_ep_autoconfig), 
+> >>> and
+> >>> it has caused issues where claiming wMaxPacketSize is grater than
+> >>> ep->maxpacket_limit.
+> >> Then fix up that value on failure, if things fail you should reset it
+> >> back to a "known good state", right?  And what's wrong with resetting
+> >> all of the values anyway, wouldn't that be the correct thing to do?
+> >
+> > Yes, It's back to known good state if we reset wMaxPacketSize. There 
+> > is no point to reset all values in the usb endpoint descriptor 
+> > structure as all the member of this structure are predefined value 
+> > except wMaxPacketSize and bEndpointAddress. The bEndpointAddress is 
+> > obtain as part of usb_ep_autoconfig.
+> >
+> > static struct usb_endpoint_descriptor bulk_out_desc = {
+> >         .bLength =              USB_DT_ENDPOINT_AUDIO_SIZE,
+> >         .bDescriptorType =      USB_DT_ENDPOINT,
+> >         .bEndpointAddress =     USB_DIR_OUT,
+> >         .bmAttributes =         USB_ENDPOINT_XFER_BULK,
+> > };
+> >
+> HI Greg,
+> 
+> Gentle remainder for your further comments or suggestions on this.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/usb/typec/ucsi/ucsi_acpi.c | 30 +++++++++---------------------
- 1 file changed, 9 insertions(+), 21 deletions(-)
+Sorry, I don't remember, it was thousands of patches reviewed ago.  If
+you feel your submission was correct, and no changes are needed, resend
+with an expanded changelog text to help explain things so I don't have
+the same questions again.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 8b02082201ec5b85031472563b8b8d1eea6134de..ada5d0d21ee6fb1f406b6a8b8466bc71ffdb5b46 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -99,17 +99,23 @@ static const struct ucsi_operations ucsi_acpi_ops = {
- 	.async_control = ucsi_acpi_async_control
- };
- 
--static int ucsi_gram_read_message_in(struct ucsi *ucsi, void *val, size_t val_len)
-+static int ucsi_gram_sync_control(struct ucsi *ucsi, u64 command, u32 *cci,
-+				  void *val, size_t len)
- {
- 	u16 bogus_change = UCSI_CONSTAT_POWER_LEVEL_CHANGE |
- 			   UCSI_CONSTAT_PDOS_CHANGE;
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
- 	int ret;
- 
--	ret = ucsi_acpi_read_message_in(ucsi, val, val_len);
-+	ret = ucsi_sync_control_common(ucsi, command, cci, val, len);
- 	if (ret < 0)
- 		return ret;
- 
-+	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_PDOS &&
-+	    ua->cmd & UCSI_GET_PDOS_PARTNER_PDO(1) &&
-+	    ua->cmd & UCSI_GET_PDOS_SRC_PDOS)
-+		ua->check_bogus_event = true;
-+
- 	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_CONNECTOR_STATUS &&
- 	    ua->check_bogus_event) {
- 		/* Clear the bogus change */
-@@ -122,28 +128,10 @@ static int ucsi_gram_read_message_in(struct ucsi *ucsi, void *val, size_t val_le
- 	return ret;
- }
- 
--static int ucsi_gram_sync_control(struct ucsi *ucsi, u64 command, u32 *cci,
--				  void *data, size_t size)
--{
--	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
--	int ret;
--
--	ret = ucsi_sync_control_common(ucsi, command, cci, data, size);
--	if (ret < 0)
--		return ret;
--
--	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_PDOS &&
--	    ua->cmd & UCSI_GET_PDOS_PARTNER_PDO(1) &&
--	    ua->cmd & UCSI_GET_PDOS_SRC_PDOS)
--		ua->check_bogus_event = true;
--
--	return ret;
--}
--
- static const struct ucsi_operations ucsi_gram_ops = {
- 	.read_version = ucsi_acpi_read_version,
- 	.read_cci = ucsi_acpi_read_cci,
--	.read_message_in = ucsi_gram_read_message_in,
-+	.read_message_in = ucsi_acpi_read_message_in,
- 	.sync_control = ucsi_gram_sync_control,
- 	.async_control = ucsi_acpi_async_control
- };
+thanks,
 
--- 
-2.39.5
-
+greg k-h
 
