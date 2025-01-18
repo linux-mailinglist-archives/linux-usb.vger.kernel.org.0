@@ -1,81 +1,78 @@
-Return-Path: <linux-usb+bounces-19512-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19513-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2007DA15E32
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2025 18:00:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00B7DA15EDC
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2025 22:11:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7F941886F32
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2025 17:00:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 688373A7865
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2025 21:11:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145D71A7ADD;
-	Sat, 18 Jan 2025 17:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EBD01D47A2;
+	Sat, 18 Jan 2025 21:11:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TIMPFMXb"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="uOFfkpFk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-66.smtpout.orange.fr [80.12.242.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A8D1A707A;
-	Sat, 18 Jan 2025 17:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6412126C13;
+	Sat, 18 Jan 2025 21:11:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737219630; cv=none; b=ug6HpXJpli0Au599RptK+cI6CJOhPP8PjTKjn7LMAmEWX1DfoevhSPNEABhPXROSkRqd68pesLu6nUKK/t2+ovRYVGiryyEStVKVzY+HRRN3hjHuJpamuaSeA+4ljlDCImE3lK6tRrrx7wAKc/42KyxMVyXreeK0QFMTI94Sc9I=
+	t=1737234707; cv=none; b=gKz49Qn1G3hLILkeSR1AhLiEz+2kG9tBqYPT/cc4FKUuBJpwTiJ7ecBi9tyz9TPeXKK/+RUeSaOHbOZLUMfZP1BSRrmEzulFTm8Ztc6zI0ELIMOXeHVl5yp3NbyCExcj/F2YuZz6TxsCJ431XZRrfjLwX4tLVSZOp4X/C4LKslc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737219630; c=relaxed/simple;
-	bh=b/ittUrK4jq+UtEgLTEJoPAwfa+7i/L18alMbFigEZ0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OsHpyeIrCb25aTXA3IBNhI4mn3kq+BgnYfnpU/TjeEoAq/wTNC33JPK3omvOMJm2KzF6qrQdSm1BhMRg3IcGB8aM5SbkdSNgAzMINO283dUn4qaAtBIYNVNrDGdUnO/wlwGH7H5Tdef3L3wBeXz/VCJ/LXOgp8X3nVxLahxcdgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TIMPFMXb; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737219628; x=1768755628;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=b/ittUrK4jq+UtEgLTEJoPAwfa+7i/L18alMbFigEZ0=;
-  b=TIMPFMXb9A299MS7Vs9RX3WVYcPPMQ5oMZgff+CtoKp5YjPZwBYlqFHt
-   FTLxzuhnNnYzid5wqSH3evEv4VTBM85j0ZXJYSizSpuPcwL4LEKqyYmbn
-   ynR/0Pv00YZ2BBxMNl1XfStBF5olGA36uTf5WrupFK8DRC61piEr7eumI
-   FBd1r2AaR0O+M7XHmbxSxdFZAhKrmq81XJnVzkqyBffaDorC0ycbYxAvW
-   fT2ybNunurQMDt9azXO3vetS8T+TBuQMXSThs550UUigxzXow+UsbVnrd
-   8DH+juBkd5nuVjz4Kx48z1ni9FeAnU7rcT/pcxWQ9h0e9Ky7vqPUdXgmn
-   A==;
-X-CSE-ConnectionGUID: gz/DNwFETlORDOlYsJ7Ylw==
-X-CSE-MsgGUID: 4FyzWRzUQxu8+G3OADOS6g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11319"; a="49031683"
-X-IronPort-AV: E=Sophos;i="6.13,215,1732608000"; 
-   d="scan'208";a="49031683"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jan 2025 09:00:28 -0800
-X-CSE-ConnectionGUID: HfvpDQRAQlqKDUXZuVdxIw==
-X-CSE-MsgGUID: lYrGn1mGQMONGbDH3WOStw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,215,1732608000"; 
-   d="scan'208";a="136924013"
-Received: from madhum.iind.intel.com ([10.223.167.64])
-  by orviesa002.jf.intel.com with ESMTP; 18 Jan 2025 09:00:25 -0800
-From: madhu.m@intel.com
-To: gregkh@linuxfoundation.org
-Cc: heikki.krogerus@linux.intel.com,
+	s=arc-20240116; t=1737234707; c=relaxed/simple;
+	bh=Kw/ivMQ+jFMNqe8BnRFbuarJ2BBJyE4wK0VUSKgGCB0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B6H1Dsi3m3ntzfa2Jf+RpCGdrgoVOlYIEP+MmmWOH2CsMtOnZAchFiVuMGlIslBPz9Wq+VH1Kq5Pq9HaviHBE2Tjd3/DpxHd6TtHe1DfgEhtktZAvzQS3sThP73rAU20fNmJZcy33VSmk97iklF/vqK8KqsvRY6Oczh8exjUftU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=uOFfkpFk; arc=none smtp.client-ip=80.12.242.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from fedora.home ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id ZG5KtqKB8C4UXZG5Ot28t8; Sat, 18 Jan 2025 22:10:34 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1737234634;
+	bh=AXmfmYFLgFLyYWM2a/Vc8EsNfX0u6O7RsuTm2Dc3z1k=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=uOFfkpFkxwNPtsJGkcqoB2K4XzoTM1t3j0oh6MM3Fibqkav3TI5rEHoEFJCv/x6vS
+	 RDTL00Cn8MDpokr1QGyIm8Js6tPKvrXhy2s9Lx5VznHEibWDvpAkyc2I6myxkth0tt
+	 EHWU4QY9fXV+5c9jhWyNy04fVsONk5yDy/XeKfOnpjGXhFkcxfDIrmZ25IZ9xMxmLQ
+	 loDdvQtvmgV6Rs36+AdYRTJQd1DeRKUWNKYQ9Gp3OPx+4dAfOvo2CcaS8ArENc6/td
+	 QAvKDbKZpbnSD2TtLuK7pKOCgW+IO2SIPeLygblto/wZSbXHE+3vAzSmd9Uxv0s832
+	 zqKmfowMx+6HA==
+X-ME-Helo: fedora.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sat, 18 Jan 2025 22:10:34 +0100
+X-ME-IP: 90.11.132.44
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Bin Liu <b-liu@ti.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Daire McNamara <daire.mcnamara@microchip.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-doc@vger.kernel.org,
+	linux-mips@vger.kernel.org,
 	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	abhishekpandit@chromium.org,
-	dmitry.baryshkov@linaro.org,
-	diogo.ivo@tecnico.ulisboa.pt,
-	jthies@google.com,
-	bleung@chromium.org,
-	pooja.katiyar@intel.com,
-	Madhu M <madhu.m@intel.com>
-Subject: [PATCH v3 2/2] usb: typec: ucsi: Enable UCSI commands in debugfs
-Date: Sat, 18 Jan 2025 22:54:55 +0530
-Message-Id: <20250118172455.701348-2-madhu.m@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250118172455.701348-1-madhu.m@intel.com>
-References: <20250118172455.701348-1-madhu.m@intel.com>
+	linux-riscv@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-mediatek@lists.infradead.org
+Subject: [PATCH] usb: musb: Constify struct musb_fifo_cfg
+Date: Sat, 18 Jan 2025 22:10:17 +0100
+Message-ID: <26e6f3e25dc8e785d0034dd7e59918e455563e60.1737234596.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -84,56 +81,199 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Madhu M <madhu.m@intel.com>
+'struct musb_fifo_cfg' are not modified in these drivers.
 
-Enable the UCSI commands UCSI_SET_NEW_CAM,
-UCSI_GET_ERROR_STATUS, UCSI_GET_CAM_CS, and UCSI_GET_LPM_PPM_INFO
-support in debugfs to enhance PD/TypeC debugging capability.
+Constifying these structures moves some data to a read-only section, so
+increase overall security.
 
-Signed-off-by: Madhu M <madhu.m@intel.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+On a x86_64, with allmodconfig, as an example:
+Before:
+======
+   text	   data	    bss	    dec	    hex	filename
+  64381	   5537	    202	  70120	  111e8	drivers/usb/musb/musb_core.o
+
+After:
+=====
+   text	   data	    bss	    dec	    hex	filename
+  64957	   4929	    202	  70088	  111c8	drivers/usb/musb/musb_core.o
+
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 ---
- drivers/usb/typec/ucsi/debugfs.c | 4 ++++
- drivers/usb/typec/ucsi/ucsi.h    | 2 ++
- 2 files changed, 6 insertions(+)
+Compile tested-only.
+---
+ .../driver-api/usb/writing_musb_glue_layer.rst     |  2 +-
+ drivers/usb/musb/jz4740.c                          |  4 ++--
+ drivers/usb/musb/mediatek.c                        |  2 +-
+ drivers/usb/musb/mpfs.c                            |  2 +-
+ drivers/usb/musb/musb_core.c                       | 14 +++++++-------
+ drivers/usb/musb/sunxi.c                           |  4 ++--
+ include/linux/usb/musb.h                           |  2 +-
+ 7 files changed, 15 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/debugfs.c b/drivers/usb/typec/ucsi/debugfs.c
-index 638ac41b4b01..eae2b18a2d8a 100644
---- a/drivers/usb/typec/ucsi/debugfs.c
-+++ b/drivers/usb/typec/ucsi/debugfs.c
-@@ -33,6 +33,7 @@ static int ucsi_cmd(void *data, u64 val)
- 	case UCSI_SET_PDR:
- 	case UCSI_CONNECTOR_RESET:
- 	case UCSI_SET_SINK_PATH:
-+	case UCSI_SET_NEW_CAM:
- 		ret = ucsi_send_command(ucsi, val, NULL, 0);
- 		break;
- 	case UCSI_GET_CAPABILITY:
-@@ -42,6 +43,9 @@ static int ucsi_cmd(void *data, u64 val)
- 	case UCSI_GET_PDOS:
- 	case UCSI_GET_CABLE_PROPERTY:
- 	case UCSI_GET_CONNECTOR_STATUS:
-+	case UCSI_GET_ERROR_STATUS:
-+	case UCSI_GET_CAM_CS:
-+	case UCSI_GET_LPM_PPM_INFO:
- 		ret = ucsi_send_command(ucsi, val,
- 					&ucsi->debugfs->response,
- 					sizeof(ucsi->debugfs->response));
-diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
-index 431ab4a7e8d8..9d59ad217f7d 100644
---- a/drivers/usb/typec/ucsi/ucsi.h
-+++ b/drivers/usb/typec/ucsi/ucsi.h
-@@ -120,7 +120,9 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num);
- #define UCSI_GET_CONNECTOR_STATUS_SIZE		152
- #define UCSI_GET_ERROR_STATUS			0x13
- #define UCSI_GET_PD_MESSAGE			0x15
-+#define UCSI_GET_CAM_CS			0x18
- #define UCSI_SET_SINK_PATH			0x1c
-+#define UCSI_GET_LPM_PPM_INFO			0x22
+diff --git a/Documentation/driver-api/usb/writing_musb_glue_layer.rst b/Documentation/driver-api/usb/writing_musb_glue_layer.rst
+index e755c8551bba..0bb96ecdf527 100644
+--- a/Documentation/driver-api/usb/writing_musb_glue_layer.rst
++++ b/Documentation/driver-api/usb/writing_musb_glue_layer.rst
+@@ -613,7 +613,7 @@ endpoints configuration from the hardware, so we use line 12 instruction
+ to bypass reading the configuration from silicon, and rely on a
+ hard-coded table that describes the endpoints configuration instead::
  
- #define UCSI_CONNECTOR_NUMBER(_num_)		((u64)(_num_) << 16)
- #define UCSI_COMMAND(_cmd_)			((_cmd_) & 0xff)
+-    static struct musb_fifo_cfg jz4740_musb_fifo_cfg[] = {
++    static const struct musb_fifo_cfg jz4740_musb_fifo_cfg[] = {
+ 	{ .hw_ep_num = 1, .style = FIFO_TX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 1, .style = FIFO_RX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 2, .style = FIFO_TX, .maxpacket = 64, },
+diff --git a/drivers/usb/musb/jz4740.c b/drivers/usb/musb/jz4740.c
+index acdeb1117cd3..df56c972986f 100644
+--- a/drivers/usb/musb/jz4740.c
++++ b/drivers/usb/musb/jz4740.c
+@@ -59,7 +59,7 @@ static irqreturn_t jz4740_musb_interrupt(int irq, void *__hci)
+ 	return IRQ_NONE;
+ }
+ 
+-static struct musb_fifo_cfg jz4740_musb_fifo_cfg[] = {
++static const struct musb_fifo_cfg jz4740_musb_fifo_cfg[] = {
+ 	{ .hw_ep_num = 1, .style = FIFO_TX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 1, .style = FIFO_RX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 2, .style = FIFO_TX, .maxpacket = 64, },
+@@ -205,7 +205,7 @@ static const struct musb_hdrc_platform_data jz4740_musb_pdata = {
+ 	.platform_ops	= &jz4740_musb_ops,
+ };
+ 
+-static struct musb_fifo_cfg jz4770_musb_fifo_cfg[] = {
++static const struct musb_fifo_cfg jz4770_musb_fifo_cfg[] = {
+ 	{ .hw_ep_num = 1, .style = FIFO_TX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 1, .style = FIFO_RX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 2, .style = FIFO_TX, .maxpacket = 512, },
+diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
+index aa988d74b58d..c6cbe718b1da 100644
+--- a/drivers/usb/musb/mediatek.c
++++ b/drivers/usb/musb/mediatek.c
+@@ -365,7 +365,7 @@ static const struct musb_platform_ops mtk_musb_ops = {
+ #define MTK_MUSB_MAX_EP_NUM	8
+ #define MTK_MUSB_RAM_BITS	11
+ 
+-static struct musb_fifo_cfg mtk_musb_mode_cfg[] = {
++static const struct musb_fifo_cfg mtk_musb_mode_cfg[] = {
+ 	{ .hw_ep_num = 1, .style = FIFO_TX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 1, .style = FIFO_RX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 2, .style = FIFO_TX, .maxpacket = 512, },
+diff --git a/drivers/usb/musb/mpfs.c b/drivers/usb/musb/mpfs.c
+index 7edc8429b274..71e4271cba75 100644
+--- a/drivers/usb/musb/mpfs.c
++++ b/drivers/usb/musb/mpfs.c
+@@ -29,7 +29,7 @@ struct mpfs_glue {
+ 	struct clk *clk;
+ };
+ 
+-static struct musb_fifo_cfg mpfs_musb_mode_cfg[] = {
++static const struct musb_fifo_cfg mpfs_musb_mode_cfg[] = {
+ 	{ .hw_ep_num = 1, .style = FIFO_TX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 1, .style = FIFO_RX, .maxpacket = 512, },
+ 	{ .hw_ep_num = 2, .style = FIFO_TX, .maxpacket = 512, },
+diff --git a/drivers/usb/musb/musb_core.c b/drivers/usb/musb/musb_core.c
+index 03b1154a6014..3f11bddfa18b 100644
+--- a/drivers/usb/musb/musb_core.c
++++ b/drivers/usb/musb/musb_core.c
+@@ -1270,7 +1270,7 @@ MODULE_PARM_DESC(fifo_mode, "initial endpoint configuration");
+  */
+ 
+ /* mode 0 - fits in 2KB */
+-static struct musb_fifo_cfg mode_0_cfg[] = {
++static const struct musb_fifo_cfg mode_0_cfg[] = {
+ { .hw_ep_num = 1, .style = FIFO_TX,   .maxpacket = 512, },
+ { .hw_ep_num = 1, .style = FIFO_RX,   .maxpacket = 512, },
+ { .hw_ep_num = 2, .style = FIFO_RXTX, .maxpacket = 512, },
+@@ -1279,7 +1279,7 @@ static struct musb_fifo_cfg mode_0_cfg[] = {
+ };
+ 
+ /* mode 1 - fits in 4KB */
+-static struct musb_fifo_cfg mode_1_cfg[] = {
++static const struct musb_fifo_cfg mode_1_cfg[] = {
+ { .hw_ep_num = 1, .style = FIFO_TX,   .maxpacket = 512, .mode = BUF_DOUBLE, },
+ { .hw_ep_num = 1, .style = FIFO_RX,   .maxpacket = 512, .mode = BUF_DOUBLE, },
+ { .hw_ep_num = 2, .style = FIFO_RXTX, .maxpacket = 512, .mode = BUF_DOUBLE, },
+@@ -1288,7 +1288,7 @@ static struct musb_fifo_cfg mode_1_cfg[] = {
+ };
+ 
+ /* mode 2 - fits in 4KB */
+-static struct musb_fifo_cfg mode_2_cfg[] = {
++static const struct musb_fifo_cfg mode_2_cfg[] = {
+ { .hw_ep_num = 1, .style = FIFO_TX,   .maxpacket = 512, },
+ { .hw_ep_num = 1, .style = FIFO_RX,   .maxpacket = 512, },
+ { .hw_ep_num = 2, .style = FIFO_TX,   .maxpacket = 512, },
+@@ -1298,7 +1298,7 @@ static struct musb_fifo_cfg mode_2_cfg[] = {
+ };
+ 
+ /* mode 3 - fits in 4KB */
+-static struct musb_fifo_cfg mode_3_cfg[] = {
++static const struct musb_fifo_cfg mode_3_cfg[] = {
+ { .hw_ep_num = 1, .style = FIFO_TX,   .maxpacket = 512, .mode = BUF_DOUBLE, },
+ { .hw_ep_num = 1, .style = FIFO_RX,   .maxpacket = 512, .mode = BUF_DOUBLE, },
+ { .hw_ep_num = 2, .style = FIFO_TX,   .maxpacket = 512, },
+@@ -1308,7 +1308,7 @@ static struct musb_fifo_cfg mode_3_cfg[] = {
+ };
+ 
+ /* mode 4 - fits in 16KB */
+-static struct musb_fifo_cfg mode_4_cfg[] = {
++static const struct musb_fifo_cfg mode_4_cfg[] = {
+ { .hw_ep_num =  1, .style = FIFO_TX,   .maxpacket = 512, },
+ { .hw_ep_num =  1, .style = FIFO_RX,   .maxpacket = 512, },
+ { .hw_ep_num =  2, .style = FIFO_TX,   .maxpacket = 512, },
+@@ -1339,7 +1339,7 @@ static struct musb_fifo_cfg mode_4_cfg[] = {
+ };
+ 
+ /* mode 5 - fits in 8KB */
+-static struct musb_fifo_cfg mode_5_cfg[] = {
++static const struct musb_fifo_cfg mode_5_cfg[] = {
+ { .hw_ep_num =  1, .style = FIFO_TX,   .maxpacket = 512, },
+ { .hw_ep_num =  1, .style = FIFO_RX,   .maxpacket = 512, },
+ { .hw_ep_num =  2, .style = FIFO_TX,   .maxpacket = 512, },
+@@ -1446,7 +1446,7 @@ fifo_setup(struct musb *musb, struct musb_hw_ep  *hw_ep,
+ 	return offset + (maxpacket << ((c_size & MUSB_FIFOSZ_DPB) ? 1 : 0));
+ }
+ 
+-static struct musb_fifo_cfg ep0_cfg = {
++static const struct musb_fifo_cfg ep0_cfg = {
+ 	.style = FIFO_RXTX, .maxpacket = 64,
+ };
+ 
+diff --git a/drivers/usb/musb/sunxi.c b/drivers/usb/musb/sunxi.c
+index eac1cde86be3..a6bd3e968cc7 100644
+--- a/drivers/usb/musb/sunxi.c
++++ b/drivers/usb/musb/sunxi.c
+@@ -629,7 +629,7 @@ static const struct musb_platform_ops sunxi_musb_ops = {
+ #define SUNXI_MUSB_RAM_BITS	11
+ 
+ /* Allwinner OTG supports up to 5 endpoints */
+-static struct musb_fifo_cfg sunxi_musb_mode_cfg_5eps[] = {
++static const struct musb_fifo_cfg sunxi_musb_mode_cfg_5eps[] = {
+ 	MUSB_EP_FIFO_SINGLE(1, FIFO_TX, 512),
+ 	MUSB_EP_FIFO_SINGLE(1, FIFO_RX, 512),
+ 	MUSB_EP_FIFO_SINGLE(2, FIFO_TX, 512),
+@@ -643,7 +643,7 @@ static struct musb_fifo_cfg sunxi_musb_mode_cfg_5eps[] = {
+ };
+ 
+ /* H3/V3s OTG supports only 4 endpoints */
+-static struct musb_fifo_cfg sunxi_musb_mode_cfg_4eps[] = {
++static const struct musb_fifo_cfg sunxi_musb_mode_cfg_4eps[] = {
+ 	MUSB_EP_FIFO_SINGLE(1, FIFO_TX, 512),
+ 	MUSB_EP_FIFO_SINGLE(1, FIFO_RX, 512),
+ 	MUSB_EP_FIFO_SINGLE(2, FIFO_TX, 512),
+diff --git a/include/linux/usb/musb.h b/include/linux/usb/musb.h
+index 3963e55e88a3..fbdef950f06c 100644
+--- a/include/linux/usb/musb.h
++++ b/include/linux/usb/musb.h
+@@ -61,7 +61,7 @@ struct musb_hdrc_eps_bits {
+ };
+ 
+ struct musb_hdrc_config {
+-	struct musb_fifo_cfg	*fifo_cfg;	/* board fifo configuration */
++	const struct musb_fifo_cfg	*fifo_cfg;	/* board fifo configuration */
+ 	unsigned		fifo_cfg_size;	/* size of the fifo configuration */
+ 
+ 	/* MUSB configuration-specific details */
 -- 
-2.34.1
+2.48.1
 
 
