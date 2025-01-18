@@ -1,199 +1,239 @@
-Return-Path: <linux-usb+bounces-19506-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19507-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B597A15B94
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2025 07:02:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3050A15B9B
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2025 07:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1044188764B
-	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2025 06:02:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F14D23A91C5
+	for <lists+linux-usb@lfdr.de>; Sat, 18 Jan 2025 06:10:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08F3E13B2A9;
-	Sat, 18 Jan 2025 06:02:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50FCB14F9FD;
+	Sat, 18 Jan 2025 06:10:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="jToTrW5I"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="uHGlGhW+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE1547DA62
-	for <linux-usb@vger.kernel.org>; Sat, 18 Jan 2025 06:02:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAB3613B5B6
+	for <linux-usb@vger.kernel.org>; Sat, 18 Jan 2025 06:10:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737180135; cv=none; b=nzcRP9Bzc72XqjbxXUDKhQE5a+dnpqQfu61QEFMFTwChSlArULwGG4Cg0+guBOhEIVPOHXD+ctbCD14uKKcaJW3RyiN4TBNuLemNhEGAKeSmjbRkYMWUC1SG8/3DTK2BI3mfuElBiLBozya/mSa6fjMd8ngbBWfA2z9oPgMP6rA=
+	t=1737180620; cv=none; b=uTjTBp7Cl4Azz5oBK9Jykb241HbIy5ROKesQJI2c0fr34GhqrGZuphPP3DThSxoif8dY0qGZJoNdI8cNkQrMna8t4YDYddxh0mibITLIYJx6r71G4qstLXY9VBhsUi3OAXTh909rYKX/ojHzXnPwUsTBkwOBxr0KEAeVa5VCV4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737180135; c=relaxed/simple;
-	bh=SHjHMgP0mEsYIiXZcNAWcXvwhAIZ6q5lhsEC5bjudAE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=XcJ+WpkxmQbM7Kn+AOijbxdcs1W926LrM4T6xJK5qjpPThPUADuObiWr3s6eiWcYO/E575rbSVcTRVJ/dZvOMy3LWmZnwt8bksIw067UnanPE+/koZW23ldcZvvhw11m9KRY23kXu2IPFtjzyBd7FbEklbWRx+eDDn/PO0bTOP4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=jToTrW5I; arc=none smtp.client-ip=203.254.224.24
+	s=arc-20240116; t=1737180620; c=relaxed/simple;
+	bh=qvp+vj9B9b/5QOQJQV8LzHBpf2GzxI5mxi+u+Q2cmDM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=hS9jH68kmZhCgPB06bsMe2FjC2jnZN2J/FW6a5TvBSl4aqid2g4XGuMEZleFti8LTVBu1HadbHFGMSVhFy+49bfu2fgxPNQrkZujjfF3yqotfWwfxKCpwsNBaISQl5463j3EqQMdOQrCZtnL9ragaUD/rfSsb7bISeXqfm3p3S0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=uHGlGhW+; arc=none smtp.client-ip=203.254.224.33
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250118060210epoutp01599f7393e13494ca3c499bd6c59d8b37~btB-5OON30189001890epoutp01C
-	for <linux-usb@vger.kernel.org>; Sat, 18 Jan 2025 06:02:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250118060210epoutp01599f7393e13494ca3c499bd6c59d8b37~btB-5OON30189001890epoutp01C
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout3.samsung.com (KnoxPortal) with ESMTP id 20250118061015epoutp037df1df0615a9da54e8193941ad832296~btJDoiVSr1864618646epoutp03g
+	for <linux-usb@vger.kernel.org>; Sat, 18 Jan 2025 06:10:15 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20250118061015epoutp037df1df0615a9da54e8193941ad832296~btJDoiVSr1864618646epoutp03g
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1737180130;
-	bh=aJIcZaF9gfjXZSD2suY3PLYZ3dh+c40cF1sIJyeeA5c=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=jToTrW5ILqb/3isRgjQpduAZeZr8JdHdDXDnfgrL+PuTNeTUhO23Hs+HFVfGs2GpB
-	 ym4VvT5CbrA/z8j/IOZmq+P1gqFnxDmN7spIq6oRbo5dM3nFVWZPTxqHFa+r03NTi6
-	 25URqnjXH+mTC4Uh6k5th2WD8OkfuPbHRBt7ogmw=
-Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
-	epcas5p1.samsung.com (KnoxPortal) with ESMTP id
-	20250118060210epcas5p1775e193d5ddb0b98afc9c6cbacf6fa1c~btB-UYnX60607106071epcas5p1I;
-	Sat, 18 Jan 2025 06:02:10 +0000 (GMT)
-Received: from epsmges5p2new.samsung.com (unknown [182.195.38.177]) by
-	epsnrtp2.localdomain (Postfix) with ESMTP id 4YZmG81w4Rz4x9Pv; Sat, 18 Jan
-	2025 06:02:08 +0000 (GMT)
-Received: from epcas5p1.samsung.com ( [182.195.41.39]) by
-	epsmges5p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	80.11.19933.0E34B876; Sat, 18 Jan 2025 15:02:08 +0900 (KST)
+	s=mail20170921; t=1737180615;
+	bh=SFjx4bqj1nep3JVl84W3D1/cwhpIa9Kam0/A9tc2sww=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=uHGlGhW+ZAoHZDa451qZCBj5QbJUlfGt0cqKKJXfRl4eo6uTLf8AKIWKfx5CAXQ2A
+	 DoHzxue2VIvLegnSsm+IeZYwv6jItVPSjUp+1sew760VavkuhZL3q87K8QM1HwTcAB
+	 CKPM9f0vTd/NP2nDmLn2inBi4Q9+rUAYDxT3W2as=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTP id
+	20250118061014epcas5p44dfdcad7a27416b95c2772e494fba194~btJC5kONt3104431044epcas5p4q;
+	Sat, 18 Jan 2025 06:10:14 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.178]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4YZmRT484yz4x9Ps; Sat, 18 Jan
+	2025 06:10:13 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	51.82.19710.5C54B876; Sat, 18 Jan 2025 15:10:13 +0900 (KST)
 Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
 	epcas5p3.samsung.com (KnoxPortal) with ESMTPA id
-	20250118060207epcas5p3913957a1c5ec9b029f1d4953f6b29751~btB8_9fbx1852418524epcas5p3c;
-	Sat, 18 Jan 2025 06:02:07 +0000 (GMT)
-Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	20250118061013epcas5p3d0d1d702ddbc5a8add31e23241a86e9e~btJBINuVh2330723307epcas5p3D;
+	Sat, 18 Jan 2025 06:10:13 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
 	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250118060207epsmtrp13403209dbcbc0695fc14804e2d77ede2~btB8_HYqk0555005550epsmtrp1-;
-	Sat, 18 Jan 2025 06:02:07 +0000 (GMT)
-X-AuditID: b6c32a4a-b87c770000004ddd-d0-678b43e0b514
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	98.C5.23488.FD34B876; Sat, 18 Jan 2025 15:02:07 +0900 (KST)
-Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250118060204epsmtip267f5c761e1fbcd9827168ee16b7b02d5~btB6PdFZw2169021690epsmtip2G;
-	Sat, 18 Jan 2025 06:02:04 +0000 (GMT)
-From: Selvarasu Ganesan <selvarasu.g@samsung.com>
-To: gregkh@linuxfoundation.org, m.grzeschik@pengutronix.de, kees@kernel.org,
-	abdul.rahim@myyahoo.com, quic_jjohnson@quicinc.com,
-	quic_linyyuan@quicinc.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: alim.akhtar@samsung.com, thiagu.r@samsung.com, jh0801.jung@samsung.com,
-	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
-	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
-	eomji.oh@samsung.com, shijie.cai@samsung.com, Selvarasu Ganesan
-	<selvarasu.g@samsung.com>, stable@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
- issue during MIDI bind retries
-Date: Sat, 18 Jan 2025 11:31:33 +0530
-Message-ID: <20250118060134.927-1-selvarasu.g@samsung.com>
-X-Mailer: git-send-email 2.46.0.windows.1
+	20250118061013epsmtrp19d7e34ee68682476d9be4ca996925e8f~btJBHVvY41109711097epsmtrp1S;
+	Sat, 18 Jan 2025 06:10:13 +0000 (GMT)
+X-AuditID: b6c32a44-363dc70000004cfe-dc-678b45c5b650
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	5C.C0.18729.4C54B876; Sat, 18 Jan 2025 15:10:12 +0900 (KST)
+Received: from [107.122.5.126] (unknown [107.122.5.126]) by
+	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250118061010epsmtip1147bac060724109b7678f9ad6eedcdf3~btI_j5YK01589915899epsmtip1Q;
+	Sat, 18 Jan 2025 06:10:10 +0000 (GMT)
+Message-ID: <52a0dd32-59be-4b41-859d-a8b4c8787792@samsung.com>
+Date: Sat, 18 Jan 2025 11:39:58 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: gadget: f_midi: Fixing wMaxPacketSize exceeded
+ issue during MIDI bind retries
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: quic_jjohnson@quicinc.com, kees@kernel.org, abdul.rahim@myyahoo.com,
+	m.grzeschik@pengutronix.de, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
+	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
+	rc93.raju@samsung.com, taehyun.cho@samsung.com, hongpooh.kim@samsung.com,
+	eomji.oh@samsung.com, shijie.cai@samsung.com, alim.akhtar@samsung.com,
+	stable@vger.kernel.org, thiagu.r@samsung.com
+Content-Language: en-US
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+In-Reply-To: <2025011726-hydration-nephew-0d65@gregkh>
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrEJsWRmVeSWpSXmKPExsWy7bCmuu4D5+50g/VPuC2mT9vIavHm6ipW
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrNJsWRmVeSWpSXmKPExsWy7bCmhu5R1+50g70npC2mT9vIavHm6ipW
 	iwfztrFZ3Fkwjcni1PKFTBbNi9ezWUzas5XF4u7DHywW696eZ7W4vGsOm8WiZa3MFlvarjBZ
-	fDr6n9WicctdVot11zcxWqzqnMNicWT5RyaLy993Mlss2PiI0WLSQVGLFc2tzA6iHptWdbJ5
-	7J+7ht3j2Ivj7B79fw08Ju6p8+jbsorR4/MmuQD2qGybjNTElNQihdS85PyUzLx0WyXv4Hjn
-	eFMzA0NdQ0sLcyWFvMTcVFslF58AXbfMHKCflBTKEnNKgUIBicXFSvp2NkX5pSWpChn5xSW2
-	SqkFKTkFJgV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGfcWLGYuaBOruHqym6WBca1QFyMnh4SA
-	icSKrn+MXYxcHEICuxkl1m/7xgzhfGKUeDJzJytIlZDAN0aJB2uzYTp2HznNBFG0l1Hi0Ozj
-	rBDOd0aJphkzgTIcHGwChhLPTtiANIgI3GSUmHZAGqSGWeAik0T3usdgNcICGRKdPQEgNSwC
-	qhLnVh9hBLF5Bawktm76xwyxTFNi7d49TBBxQYmTM5+wgNjMAvISzVtng10qIXCEQ2Ld+QlQ
-	DS4SD9e/ZoOwhSVeHd/CDmFLSbzsb4OykyX2TPoCZWdIHFp1CKrXXmL1gjOsILcxAy1ev0sf
-	YhefRO/vJ2AnSwjwSnS0QUNOVeJU42WoTdIS95ZcY4WwPSSOb+ligYRbrMSDQ3NYJzDKzULy
-	wSwkH8xCWLaAkXkVo2RqQXFuemqxaYFRXmo5PCqT83M3MYITs5bXDsaHDz7oHWJk4mA8xCjB
-	wawkwpv2uyNdiDclsbIqtSg/vqg0J7X4EKMpMFgnMkuJJucDc0NeSbyhiaWBiZmZmYmlsZmh
-	kjhv886WdCGB9MSS1OzU1ILUIpg+Jg5OqQamvmnL7a9s28EmcuuQqVPRL4Y9dYWFbpl/gsRv
-	P19nkdxolrRVtkHynYyeW7Ok2vInsQsfXT3x/m7Kkv9dD+4EyAYsM+j4URvjGPl99S2Ga94x
-	Z7tTjxes+u7EuXV9+bV9AaE2OW9/z/TdMLuw3p5jxu2cSVb7VVSFN3Ntcz62lCnTr3XTkqVP
-	l73IcGVdpFa/KC129jMGQVO/e0/LFYx19y7fuXxPkMHNl69dC/+fsai4WL7v1bQVLBus10nl
-	zngoYPxs/jvpwoa0rV4bp374FNghYLNGft+vj/u+pVn4L1m/J/lAoom6FL9DV7jmTi2DtGMh
-	IV2MN8XjfyS7x+U7+Z5vfP0wcKqg462D804XKrEUZyQaajEXFScCAHWdHV1VBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrLLMWRmVeSWpSXmKPExsWy7bCSvO595+50g387ZCymT9vIavHm6ipW
+	fDr6n9WicctdVotVnXNYLC5/38lssWDjI0aLSQdFLVY0tzI7CHtsWtXJ5rF/7hp2j2MvjrN7
+	9P818Ji4p86jb8sqRo/Pm+QC2KOybTJSE1NSixRS85LzUzLz0m2VvIPjneNNzQwMdQ0tLcyV
+	FPISc1NtlVx8AnTdMnOAPlFSKEvMKQUKBSQWFyvp29kU5ZeWpCpk5BeX2CqlFqTkFJgU6BUn
+	5haX5qXr5aWWWBkaGBiZAhUmZGds+BhXsFahYurF1ywNjLeluhg5OCQETCSObC3rYuTiEBLY
+	zSix4Pw8VgjnE6PExydH2SCcb4wSn1e+Y+xi5ATrWHx9HQtEYi+jRFvTIaiqt4wSb/9tYwKZ
+	yytgJzHjBw9IA4uAqsTrN1dZQWxeAUGJkzOfsIDYogLyEvdvzWAHsYUFMiW+Tu8CWyAioCHx
+	8ugtsAXMAoeYJRof/QRrYBYQl7j1ZD7YfDYBQ4lnJ2xAwpwCZhIX9nZDlchLNG+dzQzSKyHw
+	gUPiw7sGNoirXSROPf7PDmELS7w6vgXKlpJ42d8GZSdL7Jn0BcrOkDi06hAzhG0vsXrBGVaQ
+	vcwCmhLrd+lD7OKT6P39hAkSjLwSHW1CENWqEqcaL0NtlZa4t+QaK4TtIXGq7TvYdCGBLhaJ
+	d0f1JjAqzEIKlVlInpyF5JtZCIsXMLKsYpRMLSjOTU9NNi0wzEsth8d2cn7uJkZwKtdy2cF4
+	Y/4/vUOMTByMhxglOJiVRHjTfnekC/GmJFZWpRblxxeV5qQWH2I0BUbPRGYp0eR8YDbJK4k3
+	NLE0MDEzMzOxNDYzVBLnbd7Zki4kkJ5YkpqdmlqQWgTTx8TBKdXApCpZu+SOdUxQRBvfud7H
+	TQfq37KWNTxct6JiV+TMe/b+c1QmXvTZXHLW9AGP2dSM4hvun2s7FX2/WjnUH9p9pomX68sc
+	RRWu1dU92+Vmrsov/7larZnzuqPF2Vm/pEOCr0/2X1F6tkKceXPPyi0Mv8P7Zuxi2Pjq8ULP
+	+1Kfn8a29Ge5dezY9+rhpXhb5+XiGlXMJyJZNKvW7HayOc//r+dg71yGO0c6/F+/bnm+e/bM
+	93O2OT91D3/7+f2umSFXHaTnnE516y5udppQnxBzIL675lfh8773RyridFde1P60x+77VnkZ
+	lVX7NAOXsd+/JVu9+aV7j8P8Y4mMJ/IulCsdb/vOViYg0iSYcW6ZpBJLcUaioRZzUXEiAEnh
+	ssJuBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrJIsWRmVeSWpSXmKPExsWy7bCSnO4R1+50gw0PzC2mT9vIavHm6ipW
 	iwfztrFZ3Fkwjcni1PKFTBbNi9ezWUzas5XF4u7DHywW696eZ7W4vGsOm8WiZa3MFlvarjBZ
-	fDr6n9WicctdVot11zcxWqzqnMNicWT5RyaLy993Mlss2PiI0WLSQVGLFc2tzA6iHptWdbJ5
-	7J+7ht3j2Ivj7B79fw08Ju6p8+jbsorR4/MmuQD2KC6blNSczLLUIn27BK6MewsWMxe0iVVc
-	PdnN0sC4VqiLkZNDQsBEYveR00xdjFwcQgK7GSXm909ihEhIS7ye1QVlC0us/PecHaLoK6PE
-	kytzWboYOTjYBAwlnp2wAYmLCDxklHixpIcRxGEWeMgk0XhgLQtIt7BAmsTpp61MIDaLgKrE
-	udVHwKbyClhJbN30jxlig6bE2r17mCDighInZz4B62UWkJdo3jqbeQIj3ywkqVlIUgsYmVYx
-	SqYWFOem5yYbFhjmpZbrFSfmFpfmpesl5+duYgTHkJbGDsZ335r0DzEycTAeYpTgYFYS4U37
-	3ZEuxJuSWFmVWpQfX1Sak1p8iFGag0VJnHelYUS6kEB6YklqdmpqQWoRTJaJg1OqganT8tCs
-	bL+/ptHq6ufyrmkuSBJruPJrnk6r0LXV6xoneUz7Y2mwM2/LzfbLLFpp83IlU3f3+291OS0l
-	sWteBnN20YOAWzXJsQ+9EteXzX6w02l31Oo7q05dbvza5JGVwBVbXCq2w21D/pS/LxNmiOrP
-	unD9XfhDs53zdvyQdg366Kn2MN6we0WnId/24pJ3pry3JRjtd8y8ysC01sfwYfBh7RuGm+Mn
-	X+RiMZP3+y998sIWZx7rGT+lD3WuZHOfH+gdeFEvVYbRwyZO6txVf7XEAx47t5ZOTpW7P6Hn
-	y+Rg1SKXY8Vyr1hnLFbKYnoRvCXJeOdZ/0+GISF3ZNTunNpTEaCrdSS/4G5XS4SiuhJLcUai
-	oRZzUXEiAKiQcc0QAwAA
-X-CMS-MailID: 20250118060207epcas5p3913957a1c5ec9b029f1d4953f6b29751
+	fDr6n9WicctdVotVnXNYLC5/38lssWDjI0aLSQdFLVY0tzI7CHtsWtXJ5rF/7hp2j2MvjrN7
+	9P818Ji4p86jb8sqRo/Pm+QC2KO4bFJSczLLUov07RK4MjZ8jCtYq1Ax9eJrlgbG21JdjJwc
+	EgImEouvr2PpYuTiEBLYzSix//xmNoiEtMTrWV2MELawxMp/z9khil4zSux+tY6pi5GDg1fA
+	TmLGDx6QGhYBVYnXb66ygti8AoISJ2c+YQGxRQXkJe7fmsEOYgsLZErcOzUTbL6IgIbEy6O3
+	wBYzCxxilvjx6ikjxIIuFomN8+4zg1QxC4hL3HoyH2wZm4ChxLMTNiBhTgEziQt7u1kgSswk
+	urZCHMoMtKx562zmCYxCs5DcMQvJpFlIWmYhaVnAyLKKUTK1oDg3PbfYsMAwL7Vcrzgxt7g0
+	L10vOT93EyM4drU0dzBuX/VB7xAjEwfjIUYJDmYlEd603x3pQrwpiZVVqUX58UWlOanFhxil
+	OViUxHnFX/SmCAmkJ5akZqemFqQWwWSZODilGpj27LHsFOTpaGHPiVta4tcpJMh3tHj37u3Z
+	Bi9OLpW6IShxbL7tN4Hwx58Xxi9gYmA7XMTYaCC0mV3Dy0ZEvEUoLqG3utZ/vhirhtkPQ5OZ
+	P0/sqNw84VrPJZVzUl7TIpZtPZr4onOHXYxP9R+zV78WXJ+822jdhSrnYGnXkpeGQVJV154e
+	KL3bNaOJ52FZ69tM953ZAZw9bru9lvMtyz1TmHDg5Euh/1ceXlqip+WhwCjApLyVf/6m4/sT
+	PXQiIxqO/rMPvyVcd/TPJ64JM11aXrif7BZsiVjHdtZBblX1hQOSWcymvvcksq78Tf1Rojpz
+	qnFx2c4iJ7VJa88XPv3won6+kIuOZ3xB0qbrUkosxRmJhlrMRcWJABbGozhMAwAA
+X-CMS-MailID: 20250118061013epcas5p3d0d1d702ddbc5a8add31e23241a86e9e
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 DLP-Filter: Pass
 X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20250118060207epcas5p3913957a1c5ec9b029f1d4953f6b29751
-References: <CGME20250118060207epcas5p3913957a1c5ec9b029f1d4953f6b29751@epcas5p3.samsung.com>
+X-CMS-RootMailID: 20241208152338epcas5p4fde427bb4467414417083221067ac7ab
+References: <CGME20241208152338epcas5p4fde427bb4467414417083221067ac7ab@epcas5p4.samsung.com>
+	<20241208152322.1653-1-selvarasu.g@samsung.com>
+	<2024121845-cactus-geology-8df3@gregkh>
+	<9f16a8ac-1623-425e-a46e-41e4133218e5@samsung.com>
+	<2024122013-scary-paver-fcff@gregkh>
+	<a1dedf06-e804-4580-a690-25e55312eab8@samsung.com>
+	<2024122007-flail-traverse-b7b8@gregkh>
+	<6629115f-5208-42fe-8bf4-25d808129741@samsung.com>
+	<7d7a0d7a-76bb-49a8-82f8-07ee53893145@samsung.com>
+	<2025011726-hydration-nephew-0d65@gregkh>
 
-The current implementation sets the wMaxPacketSize of bulk in/out
-endpoints to 1024 bytes at the end of the f_midi_bind function. However,
-in cases where there is a failure in the first midi bind attempt,
-consider rebinding. This scenario may encounter an f_midi_bind issue due
-to the previous bind setting the bulk endpoint's wMaxPacketSize to 1024
-bytes, which exceeds the ep->maxpacket_limit where configured dwc3 TX/RX
-FIFO's maxpacket size of 512 bytes for IN/OUT endpoints in support HS
-speed only.
 
-Here the term "rebind" in this context refers to attempting to bind the
-MIDI function a second time in certain scenarios. The situations where
-rebinding is considered include:
+On 1/17/2025 4:35 PM, Greg KH wrote:
+> On Thu, Jan 16, 2025 at 10:49:24AM +0530, Selvarasu Ganesan wrote:
+>> On 12/21/2024 11:37 PM, Selvarasu Ganesan wrote:
+>>> On 12/20/2024 8:45 PM, Greg KH wrote:
+>>>> On Fri, Dec 20, 2024 at 07:02:06PM +0530, Selvarasu Ganesan wrote:
+>>>>> On 12/20/2024 5:54 PM, Greg KH wrote:
+>>>>>> On Wed, Dec 18, 2024 at 03:51:50PM +0530, Selvarasu Ganesan wrote:
+>>>>>>> On 12/18/2024 11:01 AM, Greg KH wrote:
+>>>>>>>> On Sun, Dec 08, 2024 at 08:53:20PM +0530, Selvarasu Ganesan wrote:
+>>>>>>>>> The current implementation sets the wMaxPacketSize of bulk in/out
+>>>>>>>>> endpoints to 1024 bytes at the end of the f_midi_bind function.
+>>>>>>>>> However,
+>>>>>>>>> in cases where there is a failure in the first midi bind attempt,
+>>>>>>>>> consider rebinding.
+>>>>>>>> What considers rebinding?  Your change does not modify that.
+>>>>>>> Hi Greg,
+>>>>>>> Thanks for your review comments.
+>>>>>>>
+>>>>>>>
+>>>>>>> Here the term "rebind" in this context refers to attempting to
+>>>>>>> bind the
+>>>>>>> MIDI function a second time in certain scenarios.
+>>>>>>> The situations where rebinding is considered include:
+>>>>>>>
+>>>>>>>      * When there is a failure in the first UDC write attempt,
+>>>>>>> which may be
+>>>>>>>        caused by other functions bind along with MIDI
+>>>>>>>      * Runtime composition change : Example : MIDI,ADB to MIDI. Or
+>>>>>>> MIDI to
+>>>>>>>        MIDI,ADB
+>>>>>>>
+>>>>>>> The issue arises during the second time the "f_midi_bind" function is
+>>>>>>> called. The problem lies in the fact that the size of
+>>>>>>> "bulk_in_desc.wMaxPacketSize" is set to 1024 during the first call,
+>>>>>>> which exceeds the hardware capability of the dwc3 TX/RX FIFO
+>>>>>>> (ep->maxpacket_limit = 512).
+>>>>>> Ok, but then why not properly reset ALL of the options/values when a
+>>>>>> failure happens, not just this one when the initialization happens
+>>>>>> again?  Odds are you might be missing the change of something else
+>>>>>> here
+>>>>>> as well, right?
+>>>>> Are you suggesting that we reset the entire value of
+>>>>> usb_endpoint_descriptor before call usb_ep_autoconfig? If so, Sorry
+>>>>> I am
+>>>>> not clear on your reasoning for wanting to reset all options/values.
+>>>>> After all, all values will be overwritten
+>>>>> afterusb_ep_autoconfig.Additionally, the wMaxPacketSize is the only
+>>>>> value being checked during the EP claim process (usb_ep_autoconfig),
+>>>>> and
+>>>>> it has caused issues where claiming wMaxPacketSize is grater than
+>>>>> ep->maxpacket_limit.
+>>>> Then fix up that value on failure, if things fail you should reset it
+>>>> back to a "known good state", right?  And what's wrong with resetting
+>>>> all of the values anyway, wouldn't that be the correct thing to do?
+>>> Yes, It's back to known good state if we reset wMaxPacketSize. There
+>>> is no point to reset all values in the usb endpoint descriptor
+>>> structure as all the member of this structure are predefined value
+>>> except wMaxPacketSize and bEndpointAddress. The bEndpointAddress is
+>>> obtain as part of usb_ep_autoconfig.
+>>>
+>>> static struct usb_endpoint_descriptor bulk_out_desc = {
+>>>          .bLength =              USB_DT_ENDPOINT_AUDIO_SIZE,
+>>>          .bDescriptorType =      USB_DT_ENDPOINT,
+>>>          .bEndpointAddress =     USB_DIR_OUT,
+>>>          .bmAttributes =         USB_ENDPOINT_XFER_BULK,
+>>> };
+>>>
+>> HI Greg,
+>>
+>> Gentle remainder for your further comments or suggestions on this.
+> Sorry, I don't remember, it was thousands of patches reviewed ago.  If
+> you feel your submission was correct, and no changes are needed, resend
+> with an expanded changelog text to help explain things so I don't have
+> the same questions again.
+>
+> thanks,
+>
+> greg k-h
 
- * When there is a failure in the first UDC write attempt, which may be
-   caused by other functions bind along with MIDI.
- * Runtime composition change : Example : MIDI,ADB to MIDI. Or MIDI to
-   MIDI,ADB.
+Hi Greg,
 
-This commit addresses this issue by resetting the wMaxPacketSize before
-endpoint claim. And here there is no need to reset all values in the usb
-endpoint descriptor structure, as all members except wMaxPacketSize and
-bEndpointAddress have predefined values.
+I understand. Thanks for your update.
 
-This ensures that restores the endpoint to its expected configuration,
-and preventing conflicts with value of ep->maxpacket_limit. It also
-aligns with the approach used in other function drivers, which treat
-endpoint descriptors as if they were full speed before endpoint claim.
+Yes, no changes are needed. I updated new version with expanded 
+changelog in below link.
 
-Fixes: 46decc82ffd5 ("usb: gadget: unconditionally allocate hs/ss descriptor in bind operation")
-Cc: stable@vger.kernel.org
-Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
----
+https://lore.kernel.org/all/20250118060134.927-1-selvarasu.g@samsung.com/
 
-Changes in v2:
- - Expanded changelog as per the comment from Greg KH.
- - Link to v1: https://lore.kernel.org/all/20241208152322.1653-1-selvarasu.g@samsung.com/
----
- drivers/usb/gadget/function/f_midi.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-index 837fcdfa3840..9b991cf5b0f8 100644
---- a/drivers/usb/gadget/function/f_midi.c
-+++ b/drivers/usb/gadget/function/f_midi.c
-@@ -907,6 +907,15 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
- 
- 	status = -ENODEV;
- 
-+	/*
-+	 * Reset wMaxPacketSize with maximum packet size of FS bulk transfer before
-+	 * endpoint claim. This ensures that the wMaxPacketSize does not exceed the
-+	 * limit during bind retries where configured dwc3 TX/RX FIFO's maxpacket
-+	 * size of 512 bytes for IN/OUT endpoints in support HS speed only.
-+	 */
-+	bulk_in_desc.wMaxPacketSize = cpu_to_le16(64);
-+	bulk_out_desc.wMaxPacketSize = cpu_to_le16(64);
-+
- 	/* allocate instance-specific endpoints */
- 	midi->in_ep = usb_ep_autoconfig(cdev->gadget, &bulk_in_desc);
- 	if (!midi->in_ep)
--- 
-2.17.1
-
+Thanks,
+Selva
+>
 
