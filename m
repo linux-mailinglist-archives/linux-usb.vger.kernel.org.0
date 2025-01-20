@@ -1,178 +1,168 @@
-Return-Path: <linux-usb+bounces-19546-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19547-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37CD6A17398
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 21:30:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B227AA173FB
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 22:12:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 748311651C9
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 20:30:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBC143A2425
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 21:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FDB1EF0B8;
-	Mon, 20 Jan 2025 20:30:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="gBqQ0lL7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B34601EF082;
+	Mon, 20 Jan 2025 21:12:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F23D1494D9
-	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 20:30:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9EA19882F
+	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 21:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737405035; cv=none; b=kl3Zd5zsW+CXqxXhpEzrl6VWfSd1YVpgyCzebLwYQ7hNYliliDvnrDAS+tiUvVv09b5lp1QbJ0s/aEH386FpbqjluFtD+lQyZx8HQq61zssUChi0LrpSI5Y7yBfyA2DBpAaxiwtD8GU6P9GkwrtNJYQt3Sj9RwMbkli7iAIzDNw=
+	t=1737407545; cv=none; b=fC2lpu8nY5IclUb3eAaeE4qk9twbV1dcDJfm7cDZx/+K+4OTD/md/Y44lW2N3x7CHA5O+DxRzodzgf5LI0cyOaPbg/0CEhXpVM6+qHoxKX1Fqg/H1S/gJrXhlT7QMZ7DMAZ7yg5RVr24aWv2jovyMSZWasoM6QCDedwpa01I5Xg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737405035; c=relaxed/simple;
-	bh=TWD3JGLyhz/e9thz/ZOcsZ7iaRrCaBko5F+YDyBI/W0=;
-	h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=O28C88pEYNXFUog+w/Y20ylDa1JWbTHr5xHhzxYvg9tEJTssUnsDlLFa4JJveLQK2aUta4lHSS7xxZ3os0yjq62X0SnXcwevz6h8OKE875pzjOO4rwzS2wDngk7F8PyNv4ffz/jkzXpFvlzqv9i/R7W69wUaWBR3KopwkMNl9mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=gBqQ0lL7; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4361f796586so53822415e9.3
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 12:30:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1737405030; x=1738009830; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:to:from:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TWD3JGLyhz/e9thz/ZOcsZ7iaRrCaBko5F+YDyBI/W0=;
-        b=gBqQ0lL7WaJ8ikpGiPFpTu7Gol2ogEAqqroy4WZ9TsgVR6UXJ7yYxagFxM7RcC+cAO
-         9Nl1y/fDszgBQ6qw9uvQkQ1J6Kr2qtZ6doY7gqOhO07JbL70RjOBXbXBWLX++bFM7aFA
-         wdAcz02KYU88y+mSiIO8nQ2TbRMlq7lBVL9Pif+rvy6y0/hrBhXnlPE7ewhI3wYPzXt5
-         gP/akHDILdXc4zpSnoxLaqvI36YNPbkt/XRyfTORJdL7TdMWlYpnsXm/XTJsmBwzD9ud
-         uaqw3AnZWROom0CDGDReoJJdS9eERcqyDSHNsH7XVrXGKBwcvRhg+J54woY5yT3RryK2
-         WzKw==
+	s=arc-20240116; t=1737407545; c=relaxed/simple;
+	bh=P1Ba1rcD0Nc4oilTFAtHhmWKWEDPBnaAN9C3zjtenps=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=d4YTUztT1uilMmGZiOVhDcaCpD2iBCp4mIOJbFHlayRimcR/ey9X+kZjPZHe3QcN//pubRhu2yl9CoAD7Z475RjW5eqhD014nkCkS+Mxj2Mh1ZHQUA6YvtnsiEPFFk5dqIUw+S4QCVFEMs0tpvcMOSvRvIWl+c6tX41DY4h04y4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-3a7e4bfae54so37596345ab.0
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 13:12:23 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737405030; x=1738009830;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TWD3JGLyhz/e9thz/ZOcsZ7iaRrCaBko5F+YDyBI/W0=;
-        b=OHriV767ufC1i8Xo8R6K1sAjvHbktPuH7Bd4YNhtGkVUOZCMbXYChcRzigmbmNX9zX
-         QxQYgHTqNnBPHooP7gGnxqu8T41WlDqIPH9Zqsr0E0tMk0EaIPdQZmnzv4WeCQYVqqtq
-         aI+Nd4XB/Cbu5XJRsqNAKjzTK2XpHISbS/kUsZg2cSTXkLUejF2sdu1bp4R5Vefn2TwW
-         wBT5GbBE1gBeFdV8SSiK5//8V0NDCsL7cLdIsBKwoAeTPu2btQ/UTfVye9qK2hSSNKeT
-         l7D5TNUh2FnHpAtheCGA4rO3IN0EotGXtK2lf1ul2Mp/ks+3dpwslwHg57BhMPk9ebHg
-         lI2Q==
-X-Gm-Message-State: AOJu0YwWcKhdwaXU65zGFWx3n5wippaZpFg7DHRFj/SermfvgX6PND4O
-	woK0E2lI2OcSl50tYDu5DXlpP1zenSLH8R7EW8rhmXi4bcoxJ+s77lYCQCTI5zWCLXuz/RIzGfu
-	l/0Q=
-X-Gm-Gg: ASbGncv+VVBgbJyyqdkjOp+y3nUN3HXaWApnpEqS3kKhYh6g72oNM+/BVp2K/s621F+
-	AHdEG3FQ7uKMPzDWuGs+CAFtACvjw7S3lhZR0G2sFlvIWlWxatzehMFXIyrs5PUKXrMjtLM8l9c
-	JDG+8jcQ+toWnjfU8n1cJXSLXgeuYAq6H2dNtRfwjVErJE8zLfkpfgO7xm7OOdGC7HHL8Zr+oCO
-	Q/ExU2IKHqckE6KmVnLfX/gBR70ua5Wo1tz3gc/02sMxEn6Iawn4ReC3m3zog==
-X-Google-Smtp-Source: AGHT+IHnr/uK/n+3dNVa0Iiqzv61MXFmENJe0An5eqc2kvhIuwOywSf80HE31iImwy2MPDlGaRSzGw==
-X-Received: by 2002:a05:600c:3548:b0:434:a1d3:a321 with SMTP id 5b1f17b1804b1-438913c6150mr134912855e9.3.1737405030187;
-        Mon, 20 Jan 2025 12:30:30 -0800 (PST)
-Received: from Red ([2a01:cb1d:894:1200:4a02:2aff:fe07:1efc])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43890413795sm149683015e9.14.2025.01.20.12.30.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 12:30:28 -0800 (PST)
-Date: Mon, 20 Jan 2025 21:30:27 +0100
-From: Corentin LABBE <clabbe@baylibre.com>
-To: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Subject: ch348 serial failling on linux-next
-Message-ID: <Z46yYyL1Aju_UNyo@Red>
+        d=1e100.net; s=20230601; t=1737407543; x=1738012343;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=L2f9MBw0BrU0HAHs2d59ovPdDH3GAqQCYo8W/BYALYc=;
+        b=eUUVtvmZ89Qlv+jx2mzAAC/Yib21h+aSF59t/lLSed0BRPLkK3GF5rLjyDVHn0D5Zt
+         DkCdrWRUxDITfh+zft55HWdrYootYDhNZqvOhVamhoxqwB0nCBFOlbYW/0darcM8vu6y
+         OKr13z+p9rK1LGPwF61wQ7jpakvoyri+3H8Vsvfhi/MXoQ/xi6fRalaYPEVOXue2koZr
+         1kIbsFBU7cSxIBmdFkSKf+gUh4iCFWiByT0R0wCL1lEQTHSs9/F1Z+Mgy5LIyfd2ePic
+         henPuDua7PQRMd1qN6Ji+y60NaWgXOfH2K72kmXEIBoBfCBPXMn7HOLX98GCoKHyq139
+         DzdA==
+X-Forwarded-Encrypted: i=1; AJvYcCUnA8yRnkFjsrsVevEglkPLyr17A9aPiOIlsxxrJ4TXD7pK9YOT6SIXfxfWFJAHcjbfkqLGnB+aSZ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4rNZZnX2sw0eMwzxL8MxGtXxTRA5aO5bo2pHUyROjTQJ6eORM
+	YfpM6JWz9+pO//TD3STRnLwpvEzktjD54VP6FLQYtXWRVPIB+/98UMOaWX7Pn4FD/ahzXBHsqny
+	cbyR4D6jUxzD+99qEvMM3VcPBIwJEvaHljyC03eLHtuEnDstGenpliJE=
+X-Google-Smtp-Source: AGHT+IGsd5mwdR0emO6VFTEq7pQ/GJ76f1fme2ovP7SDAfF+dErqevQi+SHBALXKsr4iktwSIJNi+5sZLmglqpKuh0DMJ6b9CLOI
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:1d11:b0:3ce:6a31:141e with SMTP id
+ e9e14a558f8ab-3cf743eb91dmr97669475ab.9.1737407542972; Mon, 20 Jan 2025
+ 13:12:22 -0800 (PST)
+Date: Mon, 20 Jan 2025 13:12:22 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <678ebc36.050a0220.15cac.0000.GAE@google.com>
+Subject: [syzbot] [kernel?] WARNING in really_probe
+From: syzbot <syzbot+da9bd8f1214e41d185a7@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, rafael@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hello
+Hello,
 
-I am working on mainlining ch348 driver and I have some CI test to verify it works.
-The ch348 is an octo port chip, and for testing it I did the following setup:
-port0 to a FTDI, port1 to a pl2303, port2 to another FTDI, port 6 and 7 linked together.
-For each couple, I send/recv data for a list of baudrate and compare results.
+syzbot found the following issue on:
 
-My test suite was okay on stable, 6.13-rc6, but when testing linux-next it fail since 20250110.
-And only on port0<->FTDI.
-I bisected the issue to: libfs: Use d_children list to iterate simple_offset directories
-This is totally unrelated, but the fail is not random and persistant.
-I tried also next-20250113, next-20250114, same fail
-In the mean time, 6.13-rc7 came out and works.
+HEAD commit:    ba39e420c0e9 usb: quirks: Add NO_LPM quirk for TOSHIBA Tra..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=102c5a18580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8e4b3bd94cc7cf2d
+dashboard link: https://syzkaller.appspot.com/bug?extid=da9bd8f1214e41d185a7
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
 
-What tool I use to detect it ?
-I use https://github.com/montjoie/lava-tests/blob/master/test2a2.py
-./test2a2 --port0 /dev/ttyUSB1 --port1 /dev/ttyUSB0
-serial test v0 for /dev/ttyUSB1 /dev/ttyUSB0
-DEBUG: serial test /dev/ttyUSB1 /dev/ttyUSB0
-TRY /dev/ttyUSB1 to /dev/ttyUSB0 baud=9600
-DEBUG: send_recv 32
-DEBUG: sent 4/32 sent=4 remains=28
-DEBUG: RECV 0
-DEBUG: sent 8/32 sent=12 remains=20
-DEBUG: RECV 0
-DEBUG: sent 14/32 sent=26 remains=6
-DEBUG: RECV 0
-DEBUG: sent 6/32 sent=32 remains=0
-DEBUG: RECV 0
-DEBUG: RECV 0
-DEBUG: RECV 0
-DEBUG: RECV 0
-DEBUG: RECV 0
-DEBUG: RECV 0
-DEBUG: RECV 0
-DEBUG: RECV 0
-DEBUG: string are different
+Unfortunately, I don't have any reproducer for this issue yet.
 
-So /dev/ttyUSB1 is sending data to /dev/ttyUSB0 and the latter never received it.
-Same problem for the opposite, /dev/ttyUSB0 to /dev/ttyUSB1
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/265a56250bdd/disk-ba39e420.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d32373296f78/vmlinux-ba39e420.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/36171e097d69/bzImage-ba39e420.xz
 
-Nothing could be found in dmesg, no clue.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+da9bd8f1214e41d185a7@syzkaller.appspotmail.com
 
-Okay now, I dont know how to go further, the bisect result is too unrelated to the problem.
+option 4-1:0.85: GSM modem (1-port) converter detected
+------------[ cut here ]------------
+DEBUG_LOCKS_WARN_ON(lock->magic != lock)
+WARNING: CPU: 0 PID: 5252 at kernel/locking/mutex.c:564 __mutex_lock_common kernel/locking/mutex.c:564 [inline]
+WARNING: CPU: 0 PID: 5252 at kernel/locking/mutex.c:564 __mutex_lock+0x369/0xa60 kernel/locking/mutex.c:735
+Modules linked in:
+CPU: 0 UID: 0 PID: 5252 Comm: kworker/0:4 Not tainted 6.13.0-rc7-syzkaller-gba39e420c0e9 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/13/2024
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:__mutex_lock_common kernel/locking/mutex.c:564 [inline]
+RIP: 0010:__mutex_lock+0x369/0xa60 kernel/locking/mutex.c:735
+Code: d0 7c 08 84 d2 0f 85 6d 06 00 00 8b 0d 40 b1 63 03 85 c9 75 19 90 48 c7 c6 40 ea 27 87 48 c7 c7 a0 e8 27 87 e8 58 ef 2c fa 90 <0f> 0b 90 90 90 e9 f2 fd ff ff 4c 8d b5 60 ff ff ff 48 89 df 4c 89
+RSP: 0018:ffffc9000202eeb0 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff88811986c518 RCX: ffffc90011138000
+RDX: 0000000000100000 RSI: ffffffff811f6866 RDI: 0000000000000001
+RBP: ffffc9000202eff0 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000001 R12: dffffc0000000000
+R13: 0000000000000002 R14: 0000000000000000 R15: ffffc9000202ef30
+FS:  0000000000000000(0000) GS:ffff8881f5800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b33d1fffc CR3: 0000000118308000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
+ bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:459
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:534
+ device_add+0x114b/0x1a70 drivers/base/core.c:3665
+ usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
+ usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:291
+ call_driver_probe drivers/base/dd.c:579 [inline]
+ really_probe+0x23e/0xa90 drivers/base/dd.c:658
+ __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
+ driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
+ __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
+ bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:459
+ __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
+ bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:534
+ usb_new_device+0xd09/0x1a20 drivers/usb/core/hub.c:2652
+ hub_port_connect drivers/usb/core/hub.c:5523 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
+ port_event drivers/usb/core/hub.c:5823 [inline]
+ hub_event+0x2e58/0x4f40 drivers/usb/core/hub.c:5905
+ process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
+ process_scheduled_works kernel/workqueue.c:3317 [inline]
+ worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
+ kthread+0x2c1/0x3a0 kernel/kthread.c:389
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:147
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
 
-I have retried a second bisect from a different start/end
-git bisect start
-# status : en attente d'un commit bon et d'un commit mauvais
-# bad: [0907e7fb35756464aa34c35d6abb02998418164b] Add linux-next specific files for 20250117
-git bisect bad 0907e7fb35756464aa34c35d6abb02998418164b
-# status : en attente de bon(s) commit(s), un mauvais commit connu
-# good: [5bc55a333a2f7316b58edc7573e8e893f7acb532] Linux 6.13-rc7
-git bisect good 5bc55a333a2f7316b58edc7573e8e893f7acb532
-# bad: [195cedf4deacf84167c32b866ceac1cf4a16df15] Merge branch 'main' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net-next.git
-git bisect bad 195cedf4deacf84167c32b866ceac1cf4a16df15
-# good: [e8c0711b153b0db806410d8b31ed23b590f4eab4] Merge branch 'xtensa-for-next' of git://github.com/jcmvbkbc/linux-xtensa.git
-git bisect good e8c0711b153b0db806410d8b31ed23b590f4eab4
-# bad: [be4d7a3e7815249ca857f618dee81549f745cdbc] Merge branch 'docs-next' of git://git.lwn.net/linux.git
-git bisect bad be4d7a3e7815249ca857f618dee81549f745cdbc
-# good: [19096ecb142b72cebf03d8316c1d96192620e23a] Merge branch 'master' of https://github.com/Paragon-Software-Group/linux-ntfs3.git
-git bisect good 19096ecb142b72cebf03d8316c1d96192620e23a
-# bad: [51af4bb6edb606a7d1160323d65e6715969124e1] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git
-git bisect bad 51af4bb6edb606a7d1160323d65e6715969124e1
-# bad: [9ce2f898c13763037516269044d4658a2eabde61] Merge branch 'vfs-6.14.libfs' into vfs.all
-git bisect bad 9ce2f898c13763037516269044d4658a2eabde61
-# good: [3be5a57e3e36d3c2b6532a2262472199da972407] Merge branch 'vfs-6.14.misc' into vfs.all
-git bisect good 3be5a57e3e36d3c2b6532a2262472199da972407
-# good: [fda429aeb9f70b1f4f3b63d80f40e442a24f985a] Merge branch 'kernel-6.14.cred' into vfs.all
-git bisect good fda429aeb9f70b1f4f3b63d80f40e442a24f985a
-# good: [3ab8a0b2a0ff1038412cd644b51714e35970f415] selftests: add listmount() iteration tests
-git bisect good 3ab8a0b2a0ff1038412cd644b51714e35970f415
-# good: [5f677209c2642cf289867ca86f65a04c47265109] Merge branch 'vfs-6.14.mount' into vfs.all
-git bisect good 5f677209c2642cf289867ca86f65a04c47265109
-# good: [b662d858131da9a8a14e68661656989b14dbf113] Revert "libfs: fix infinite directory reads for offset dir"
-git bisect good b662d858131da9a8a14e68661656989b14dbf113
-# bad: [b9b588f22a0c049a14885399e27625635ae6ef91] libfs: Use d_children list to iterate simple_offset directories
-git bisect bad b9b588f22a0c049a14885399e27625635ae6ef91
-# good: [68a3a65003145644efcbb651e91db249ccd96281] libfs: Replace simple_offset end-of-directory detection
-git bisect good 68a3a65003145644efcbb651e91db249ccd96281
-# first bad commit: [b9b588f22a0c049a14885399e27625635ae6ef91] libfs: Use d_children list to iterate simple_offset directories
 
-Since 2 different bisect point the same commit, and that the issue is not random, I am confident the bad commit is the real one, but why ?
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-I am trying to create a second setup to exclude hardware problem, but hardware will fail always and not only with some commit present.
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-I am a bit lost
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Regards
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
