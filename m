@@ -1,79 +1,80 @@
-Return-Path: <linux-usb+bounces-19531-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19532-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D55FA168FE
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 10:16:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90F5FA16900
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 10:17:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57E0816867D
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 09:16:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BDBB160371
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 09:17:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCD8019E833;
-	Mon, 20 Jan 2025 09:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECAA81AAA23;
+	Mon, 20 Jan 2025 09:16:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KrHiu/lC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TCC/enwz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E5C2179BC
-	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 09:16:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EB02198E6D
+	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 09:16:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737364610; cv=none; b=nnlgu5QEkimGNe9bC9dMCr9efdLWcx9PN/liwVFLIS/aLoN+xmDmwIFcU5Ol/og1u50jwIa1LXHoRB61tOu5CR1ROxyjwPyEk/8d8dwnFwfissnz+LcfEQzBaNv5yNTmBn2UQWGhcZoWTQsQ7f8HcxwNVOh0BVWlb67g0vy28+0=
+	t=1737364611; cv=none; b=kQ9zw+NZaNPaQMAYMminNuwmAG6iQO4UoCddgWynnwz6xOt8jEhWhmDDIhq0U7e7UPl4vdUGJY3whnG6bHIeMUeHy8jkHu5mYFYF9LND/RNfrQQcumVZS1iKYHFnhCrnJ20JXaHC1kRGoh4wD2AAWpVpClH8zJmA2d65hB3lm0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737364610; c=relaxed/simple;
-	bh=ls8SZUINCManUHZndVu8F2E7mshCWh4JB38M2H99A3M=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=o/T6QzbO1cJbtMwmQl35XWAAg0W8UFfL1Sjgl7parOGFdq3bHpxVE2bix0w5gek2U79TudkL5coU3DdnCtB8WTw8ag2Kq9PzFg4oiy7eN+rBCVXDNEbvNA2kdleTmy+sFyh7bhZF8FePOMv7ST7hpPR88tM1sIjPsE4W3IOT47M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KrHiu/lC; arc=none smtp.client-ip=209.85.208.173
+	s=arc-20240116; t=1737364611; c=relaxed/simple;
+	bh=sYOPK5n0Y8mPKJ42apx1GpzU8l3v2hgaZerBeQUeFAQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=X5HYk9Tes4U3z4Q4QbBy9U3Qea4arOK1/0Xmda4sC2PZaoIcjO32xTtKUukzaBWQ7uVLqVxAxVgAjwnydA9KULyfrjeozb8hiDzme1OgLQDAyeozJK73JBGiM0nb3rcA3lLCjevXjwCBqkv2FQlLdLv1msDY/nOLsUYAaNQ9Ye4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TCC/enwz; arc=none smtp.client-ip=209.85.167.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-30034ad2ca3so33629491fa.1
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 01:16:47 -0800 (PST)
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5401d3ea5a1so4016472e87.3
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 01:16:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737364606; x=1737969406; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=akYyYtu9ug+s+ErfadY7ZCYyf6Bi1pgbW2VJ6MzYjW4=;
-        b=KrHiu/lCL1YRt0ENl7CmwLipn2d3N4Fnbya8LCgcEoV6n1TQtlJ1PPm6E+3aKF6K13
-         FVoZYaPgojMLLWsuHaB4YNzmleEFc2N1gN6px9ImRwSFaDD5snwQdl9nJK2Uv9pC/Nq2
-         gcJp8iIrorf9aUwxohprCy+uW4uGgthIiwVtX4cfdvlb3k/HYuQr4F5nZGoqJhXVlxS2
-         Ouxn/QN25IUCIiZ0lPkVyIm+VFZOuI4YPegTrjpiEvhN8FKCiTn1v8Qs/xc9b3XQfXud
-         31FQIH00tZKfdsF/vneIHi7CmRe2jaIVDOfoW0FAxRDW50/veF2MjXomunCLM8HnOVaA
-         3X6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737364606; x=1737969406;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1737364607; x=1737969407; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=akYyYtu9ug+s+ErfadY7ZCYyf6Bi1pgbW2VJ6MzYjW4=;
-        b=NSS3NnuOaKbrPDA+ThiuZ5NLQa4SOS+rCCzMuw/aT6TZO9OF9L2FzUJKGaSfaMjuEj
-         r/8p/VIvUgye8n2haMQIZzQ2j+DIEdkih4ERFb4cYGAiAQtTb8KVkPF71cHtbBtUEL2e
-         WyNE6nifkFlHe5L0uBN94SNcWXJCmubY6lVy1g+ryyRgkJ2Ty2eMTUQ/5BQOoxh+9SIn
-         jFeIqqHfhgKSVLVqgBkAz9S/Xh/zcQjCH+Yl1svscCJQpYZHBtjupUw5mbaj+ZE6lr9p
-         ua6PQlPowk8WGQEIWijlvuuoRvFf3Ni0ptGglLnvWfE25DpQWqujC15uUxsphGikjUvf
-         SPQA==
-X-Gm-Message-State: AOJu0Yw1wNBvRdvO6KHpgEND5L8gZM4pSkVcj0rTeNAZ4if75sk9Bh9k
-	Ga7LI0GNNrqc7YN7E+RBdzw35tFAs5v9GQU8VTp6M3qbYFut2A8glbeUoLjc8DA=
-X-Gm-Gg: ASbGnctGfW3HQ5iFnVjMzAJrpn0nru2aYMI050imSXLVq1EUJ1a3w+JSz4J9D0ZGcnx
-	dswt+yqkWPgEX0C0YZy71CXWA3PH4plq+e01QrVLZT71x2POuFKpzLPPfrm1jFRFbvbf93KryUI
-	dmu/1a8erZiEs+pSPwQW2qVSIZ63YEtD8k/mLmoGHb6VaLA8pN1VNPufwni0cgGahpcesaZTjEO
-	B+TbiIOVDbNiCt8WTvb5WLNPQkivJRQk1WMSDzEZuxIqiXxZJD3G1FGz4g7uQQYi2y6rKEG9A9O
-	uA==
-X-Google-Smtp-Source: AGHT+IEIPac2D7jw7UzzKanZZDy5eKrPYwIrYNbWK/3d+EJb5mgyyAguCCFRO5zeoxDyhnvP0G2Flw==
-X-Received: by 2002:ac2:4570:0:b0:540:2542:d89a with SMTP id 2adb3069b0e04-5439c288152mr3515416e87.52.1737364605702;
-        Mon, 20 Jan 2025 01:16:45 -0800 (PST)
+        bh=0mGuVToP5GgJ7674F4ibSkeejzkyIQRftxnK/ZUBoic=;
+        b=TCC/enwzaUUEutSPQEG0DJwFT0yGz+sv+XFPVapLjPlWERy3sM9t8coN9izyHpBAYZ
+         q4K3iyolH2kdWjuRWn6E/1Yc95g9vabek5u0Vaz3evOiSR2v/S2qZ/BiTGLgt6ESLMQe
+         2IXSdxWBWKrARIa76D7giPLlqmR5e8SZkyNFuk0Tc7ZFF1UOGPkmHAdOmZbLbmb711gD
+         u6Nr2rswvgQkQiX4hDOp9tMeFHzCWDAamjQ//0zXlJhhYggq0oOE4EzXZZ2qAEfILfuL
+         o6q3TpXASmBhhFcfZQQWrNgFAQmseIXSfBmqIOXSxsxhkJK1AKlimy2S1mfPIu7G7Gn3
+         hi4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737364607; x=1737969407;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0mGuVToP5GgJ7674F4ibSkeejzkyIQRftxnK/ZUBoic=;
+        b=WwGntAYFEYBZlHb+8/dO6VNTxQmyxpF/Dr+66ZDg0VkHsBfGtlaFGVupo3ROfA0eaa
+         zr9/XkoGo7wjnqbH1gh/WmB9IjLT3yDLJC2fetpb1j8m4oeRc60z06u1TLDVHHZ+dF1t
+         +L38xSgLFb/KixyEvdOtZZsG1Ec/EtxVhB87eGI140alzfQvMkLFdYEG/cnm+C3lsUpZ
+         C/yOXYhlh5FJYnK+U9qxb1exeEPV9TLSs+lErIOeQ/wnEQXEpwF1/JV7Etp64qiUZp57
+         knSInxwiCUTT3bhhKKa9MrH3lYY+bMUZqZypmSAVpgsk3z58jClIZag6ju9YJaD5mJel
+         nDDw==
+X-Gm-Message-State: AOJu0YwT1Q/icezj3up9430CFnFY/LXprLTAJwqpjp44mr7N4D6m9kiq
+	9EBTBAmsKvFsrRrhKadvLJttNyR8ahZYVa7r1S69axtmfBLnvhyHnxFQrQ0TsSk=
+X-Gm-Gg: ASbGncs24cAE1cmkKiXxagKrbaV3v9XU6D+E+ZxHXL6CYb3ofY3vfCdZ5xkfU8YQSX+
+	0ayuZVi/PzeJwnnW02r2OHYAYXFyOrEhIZGX2F8ptdaeJKmUPGBFelXC4nZRmRXGLLSI1uh6BD2
+	2q26VeayVW3A8PKB0ogFHlr0VRjYP02Nu0BBOJ1CIqVB8cYgTGy3nNSuIcUGoWdz7BHhzOUrSEH
+	fW6ZY1TZxL+WSe43w4dlHq2N8wnWpBB4a6+qRzO+ZLi7Nq3CtmYS4OK/aT9JgOk+ie91ZoAfo6x
+	wA==
+X-Google-Smtp-Source: AGHT+IEPqjTMZr9kF5L4Q9EICOFU0VTJqKLJSHILO6JoUiQm8KOXLZzkt7cXnID/70dql3+8kTYIxg==
+X-Received: by 2002:ac2:528a:0:b0:53f:6c6a:f99f with SMTP id 2adb3069b0e04-5439c21f277mr3124071e87.8.1737364607280;
+        Mon, 20 Jan 2025 01:16:47 -0800 (PST)
 Received: from umbar.lan ([192.130.178.90])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5439af729ccsm1223639e87.188.2025.01.20.01.16.44
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5439af729ccsm1223639e87.188.2025.01.20.01.16.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 01:16:44 -0800 (PST)
+        Mon, 20 Jan 2025 01:16:45 -0800 (PST)
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Subject: [PATCH v2 0/3] usb: typec: ucsi: continue rework of command
- interface
-Date: Mon, 20 Jan 2025 11:16:42 +0200
-Message-Id: <20250120-ucsi-merge-commands-v2-0-462a1ec22ecc@linaro.org>
+Date: Mon, 20 Jan 2025 11:16:43 +0200
+Subject: [PATCH v2 1/3] usb: typec: ucsi: return CCI and message from
+ sync_control callback
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,11 +83,9 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHoUjmcC/22NwQrCMBBEf6Xs2UgSbaSe/A/poaSbdsEmstGgl
- Py7a8GbxzfDvFkhIxNmODcrMBbKlKKA3TXg5yFOqGgUBqttq41x6ukzqQVZGp+WZYhjVsEGF1r
- fHY7OgSzvjIFem/XaC8+UH4nf20kx3/TnO/31FaO0Qqu96cQ5tt3lRnHgtE88QV9r/QCZH90ot
- wAAAA==
-X-Change-ID: 20250116-ucsi-merge-commands-f2f6f5c93466
+Message-Id: <20250120-ucsi-merge-commands-v2-1-462a1ec22ecc@linaro.org>
+References: <20250120-ucsi-merge-commands-v2-0-462a1ec22ecc@linaro.org>
+In-Reply-To: <20250120-ucsi-merge-commands-v2-0-462a1ec22ecc@linaro.org>
 To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
  Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
@@ -95,56 +94,182 @@ To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
  chrome-platform@lists.linux.dev
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1780;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6611;
  i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=ls8SZUINCManUHZndVu8F2E7mshCWh4JB38M2H99A3M=;
- b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBnjhR7px+MnOLytv76/PU8Ok5cns2W3dcXvmzdV
- EXE9P27+ceJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZ44UewAKCRCLPIo+Aiko
- 1TN5CACTJGqEdbl9jzTjuuT6nQW9Y++fRQRzkKsSFCra9Tlk7iezm790SYqFGW0xFYyslpy6Rxb
- 0E6OVkoCTdVvuSeDxfuR4LmeLACB/+D0p00Q4Y1gVIm1twFYem3+3FIsIdQXJh5P8zsi/cCLfpm
- XNb6E+g/Ym6BlJND/216VllabgzpquP1MkIDvTtEIdnwHI4XxM7NlvThsmzJezggivVGNXZSNuA
- A15GSh++JoRjKpm2BwBunFrF+Jp6v3kYFJf6inQ9f7xHO6pIi6zjSOKUi5XHi4cMhVzd/gCbbPJ
- FgUmNJKezoiS8CeRwY46wvITuPT9IEoGgo3S+9dKyKPN3RG3
+ bh=sYOPK5n0Y8mPKJ42apx1GpzU8l3v2hgaZerBeQUeFAQ=;
+ b=owEBbQGS/pANAwAKAYs8ij4CKSjVAcsmYgBnjhR7CHqMGxYwPKr+Wqe3YuDg6fGoumP4Bin+y
+ 2+vSRsDLUOJATMEAAEKAB0WIQRMcISVXLJjVvC4lX+LPIo+Aiko1QUCZ44UewAKCRCLPIo+Aiko
+ 1dLVB/9C1mWAa1lMJAfYX8Ho/+mXiOg1gDWhkpLtqojW6w8lHhDkzh6ABJe1hRpTeGaeYzLB432
+ Y7+EGG8zcIMz/mWatzH2Bu+l/TLgeqtEFhRQKcqTuam6ItOTCerZmHp23e86bzmNOzKyDhxSKxo
+ WCU8pQmFoKWkGUQYCRrJ0PS0skrel3rYBW6ZlCRuhlWkfNKnURacAnceFA6xFjglc146yWnoUhp
+ cSjYCpayEnMBb8TKMyNteFhzPaGF3l0lTi65TxqxikvrYjyz2W5yWdyz3Gz+kx+GpLTWyU2khJO
+ tG1pG9pgJnSiUPh/Ye2+kscyCofC77sSobyc2Sn5dfMiymyY
 X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
  fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
 
-There are cases when UCSI drivers either want to mangle UCSI commands or
-its response or to completely emulate some of the commands in software.
-Currently code to handle such situations is split between sync_control(),
-read_cci() and read_message_in() callbacks.
+Some of the drivers emulate or handle some of the commands in the
+platform-specific way. The code ends up being split between several
+callbacks, which complicates emulation.
 
-Make sync_control() also return CCI and MESSAGE_IN data, simplifying
-this kind of handling. This series reworks CCG driver and LG Gram
-quirks. If the approach is considered to be acceptable, it will be used
-to emulate AltMode support in the GLINK and Yoga C630 drivers: on these
-platforms DisplayPort AltMode is handled via the non-UCSI messages,
-however in the past reviewers suggested reusing UCSI displayport driver
-and just emulate necessary commands (mostly GET_CURRENT_CAM).
+In preparation to reworking such drivers, move read_cci() and
+read_message_in() calls into ucsi_sync_control_common().
 
 Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 ---
-Changes in v2:
-- Fixed build error in CrOS UCSI driver.
-- Link to v1: https://lore.kernel.org/r/20250117-ucsi-merge-commands-v1-0-e20c19934d59@linaro.org
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c |  5 +++--
+ drivers/usb/typec/ucsi/ucsi.c         | 19 +++++++++++--------
+ drivers/usb/typec/ucsi/ucsi.h         |  6 ++++--
+ drivers/usb/typec/ucsi/ucsi_acpi.c    |  5 +++--
+ drivers/usb/typec/ucsi/ucsi_ccg.c     |  5 +++--
+ 5 files changed, 24 insertions(+), 16 deletions(-)
 
----
-Dmitry Baryshkov (3):
-      usb: typec: ucsi: return CCI and message from sync_control callback
-      usb: typec: ucsi: ccg: move command quirks to ucsi_ccg_sync_control()
-      usb: typec: ucsi: acpi: move LG Gram quirk to ucsi_gram_sync_control()
+diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+index c605c8616726874434d5812731420fbc6f12790e..744f0709a40eddeed17f23e986f60e9f985381fd 100644
+--- a/drivers/usb/typec/ucsi/cros_ec_ucsi.c
++++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+@@ -105,12 +105,13 @@ static int cros_ucsi_async_control(struct ucsi *ucsi, u64 cmd)
+ 	return 0;
+ }
+ 
+-static int cros_ucsi_sync_control(struct ucsi *ucsi, u64 cmd)
++static int cros_ucsi_sync_control(struct ucsi *ucsi, u64 cmd, u32 *cci,
++				  void *data, size_t size)
+ {
+ 	struct cros_ucsi_data *udata = ucsi_get_drvdata(ucsi);
+ 	int ret;
+ 
+-	ret = ucsi_sync_control_common(ucsi, cmd);
++	ret = ucsi_sync_control_common(ucsi, cmd, cci, data, size);
+ 	switch (ret) {
+ 	case -EBUSY:
+ 		/* EC may return -EBUSY if CCI.busy is set.
+diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
+index fcf499cc9458c0d12015a7e36e5f1ac448c3a431..559390a07a4e427c9b520dffaac905277d071638 100644
+--- a/drivers/usb/typec/ucsi/ucsi.c
++++ b/drivers/usb/typec/ucsi/ucsi.c
+@@ -55,7 +55,8 @@ void ucsi_notify_common(struct ucsi *ucsi, u32 cci)
+ }
+ EXPORT_SYMBOL_GPL(ucsi_notify_common);
+ 
+-int ucsi_sync_control_common(struct ucsi *ucsi, u64 command)
++int ucsi_sync_control_common(struct ucsi *ucsi, u64 command, u32 *cci,
++			     void *data, size_t size)
+ {
+ 	bool ack = UCSI_COMMAND(command) == UCSI_ACK_CC_CI;
+ 	int ret;
+@@ -80,6 +81,13 @@ int ucsi_sync_control_common(struct ucsi *ucsi, u64 command)
+ 	else
+ 		clear_bit(COMMAND_PENDING, &ucsi->flags);
+ 
++	if (!ret && cci)
++		ret = ucsi->ops->read_cci(ucsi, cci);
++
++	if (!ret && data &&
++	    (*cci & UCSI_CCI_COMMAND_COMPLETE))
++		ret = ucsi->ops->read_message_in(ucsi, data, size);
++
+ 	return ret;
+ }
+ EXPORT_SYMBOL_GPL(ucsi_sync_control_common);
+@@ -95,7 +103,7 @@ static int ucsi_acknowledge(struct ucsi *ucsi, bool conn_ack)
+ 		ctrl |= UCSI_ACK_CONNECTOR_CHANGE;
+ 	}
+ 
+-	return ucsi->ops->sync_control(ucsi, ctrl);
++	return ucsi->ops->sync_control(ucsi, ctrl, NULL, NULL, 0);
+ }
+ 
+ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
+@@ -108,9 +116,7 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
+ 	if (size > UCSI_MAX_DATA_LENGTH(ucsi))
+ 		return -EINVAL;
+ 
+-	ret = ucsi->ops->sync_control(ucsi, command);
+-	if (ucsi->ops->read_cci(ucsi, cci))
+-		return -EIO;
++	ret = ucsi->ops->sync_control(ucsi, command, cci, data, size);
+ 
+ 	if (*cci & UCSI_CCI_BUSY)
+ 		return ucsi_run_command(ucsi, UCSI_CANCEL, cci, NULL, 0, false) ?: -EBUSY;
+@@ -127,9 +133,6 @@ static int ucsi_run_command(struct ucsi *ucsi, u64 command, u32 *cci,
+ 	else
+ 		err = 0;
+ 
+-	if (!err && data && UCSI_CCI_LENGTH(*cci))
+-		err = ucsi->ops->read_message_in(ucsi, data, size);
+-
+ 	/*
+ 	 * Don't ACK connection change if there was an error.
+ 	 */
+diff --git a/drivers/usb/typec/ucsi/ucsi.h b/drivers/usb/typec/ucsi/ucsi.h
+index 5ff369c24a2fc445e8559201d563c31d83b2c876..9ffc8debd7d77d118db042f2749cf429a848f8df 100644
+--- a/drivers/usb/typec/ucsi/ucsi.h
++++ b/drivers/usb/typec/ucsi/ucsi.h
+@@ -76,7 +76,8 @@ struct ucsi_operations {
+ 	int (*read_version)(struct ucsi *ucsi, u16 *version);
+ 	int (*read_cci)(struct ucsi *ucsi, u32 *cci);
+ 	int (*read_message_in)(struct ucsi *ucsi, void *val, size_t val_len);
+-	int (*sync_control)(struct ucsi *ucsi, u64 command);
++	int (*sync_control)(struct ucsi *ucsi, u64 command, u32 *cci,
++			    void *data, size_t size);
+ 	int (*async_control)(struct ucsi *ucsi, u64 command);
+ 	bool (*update_altmodes)(struct ucsi *ucsi, struct ucsi_altmode *orig,
+ 				struct ucsi_altmode *updated);
+@@ -528,7 +529,8 @@ void ucsi_altmode_update_active(struct ucsi_connector *con);
+ int ucsi_resume(struct ucsi *ucsi);
+ 
+ void ucsi_notify_common(struct ucsi *ucsi, u32 cci);
+-int ucsi_sync_control_common(struct ucsi *ucsi, u64 command);
++int ucsi_sync_control_common(struct ucsi *ucsi, u64 command, u32 *cci,
++			     void *data, size_t size);
+ 
+ #if IS_ENABLED(CONFIG_POWER_SUPPLY)
+ int ucsi_register_port_psy(struct ucsi_connector *con);
+diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
+index 5c55155519634d95b6e544632f869c2867093617..8b02082201ec5b85031472563b8b8d1eea6134de 100644
+--- a/drivers/usb/typec/ucsi/ucsi_acpi.c
++++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
+@@ -122,12 +122,13 @@ static int ucsi_gram_read_message_in(struct ucsi *ucsi, void *val, size_t val_le
+ 	return ret;
+ }
+ 
+-static int ucsi_gram_sync_control(struct ucsi *ucsi, u64 command)
++static int ucsi_gram_sync_control(struct ucsi *ucsi, u64 command, u32 *cci,
++				  void *data, size_t size)
+ {
+ 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
+ 	int ret;
+ 
+-	ret = ucsi_sync_control_common(ucsi, command);
++	ret = ucsi_sync_control_common(ucsi, command, cci, data, size);
+ 	if (ret < 0)
+ 		return ret;
+ 
+diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
+index 740171f24ef9fae9abdb52d7995abe692e0a7623..02ac04a52239327475a3590734b77f3ac74bb589 100644
+--- a/drivers/usb/typec/ucsi/ucsi_ccg.c
++++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
+@@ -628,7 +628,8 @@ static int ucsi_ccg_async_control(struct ucsi *ucsi, u64 command)
+ 	return ccg_write(uc, reg, (u8 *)&command, sizeof(command));
+ }
+ 
+-static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
++static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command, u32 *cci,
++				 void *data, size_t size)
+ {
+ 	struct ucsi_ccg *uc = ucsi_get_drvdata(ucsi);
+ 	struct ucsi_connector *con;
+@@ -652,7 +653,7 @@ static int ucsi_ccg_sync_control(struct ucsi *ucsi, u64 command)
+ 		ucsi_ccg_update_set_new_cam_cmd(uc, con, &command);
+ 	}
+ 
+-	ret = ucsi_sync_control_common(ucsi, command);
++	ret = ucsi_sync_control_common(ucsi, command, cci, data, size);
+ 
+ err_put:
+ 	pm_runtime_put_sync(uc->dev);
 
- drivers/usb/typec/ucsi/cros_ec_ucsi.c |  5 +--
- drivers/usb/typec/ucsi/ucsi.c         | 19 +++++-----
- drivers/usb/typec/ucsi/ucsi.h         |  6 ++--
- drivers/usb/typec/ucsi/ucsi_acpi.c    | 29 +++++----------
- drivers/usb/typec/ucsi/ucsi_ccg.c     | 67 +++++++++++++++++------------------
- 5 files changed, 59 insertions(+), 67 deletions(-)
----
-base-commit: 0907e7fb35756464aa34c35d6abb02998418164b
-change-id: 20250116-ucsi-merge-commands-f2f6f5c93466
-
-Best regards,
 -- 
-Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+2.39.5
 
 
