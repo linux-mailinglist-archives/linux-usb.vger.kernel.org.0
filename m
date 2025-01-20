@@ -1,102 +1,92 @@
-Return-Path: <linux-usb+bounces-19540-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19541-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ED7EA170EF
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 18:01:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 30B53A1710F
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 18:13:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 494523A1614
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 17:01:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E18361887CD8
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 17:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14FC51E9B39;
-	Mon, 20 Jan 2025 17:01:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3B3B1EC00F;
+	Mon, 20 Jan 2025 17:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GPs9DWPV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D1351494CC;
-	Mon, 20 Jan 2025 17:00:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B35D1EE001
+	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 17:13:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737392460; cv=none; b=dr6gLe0SgBWHeTmVqHZ2TY4ApH3IwomdFfqeM/ktGjlKCbY5g1Jo5yq1f4cRNpEAwA2OJh9FCrSCth1G8UfTt1qD3pCgrPt38uWnkXIfkL8+jpwwM22tzJEEX/iI1e0s274DFVxLeq7QniuS68MF9iSUklLxb8YTwlB8kc7P2Bo=
+	t=1737393183; cv=none; b=DyiVixCsmqP2kGeBltpRFROIUx+G/sqUYnN9LRsK0/DwhoQ9cTnY1hfK9a15nyCPWk6o47nUFbcSScZ+iVvK+Tg8xw5y2cWxMvr4BfXUGUcS30ozN1RSY9+3+VCzErtHLg01UHKqFKNJiEqy8QXQtnbUOBDKGi8vxMXobwYbmEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737392460; c=relaxed/simple;
-	bh=1F0Ehs/r8JdKDfeHpnYmVhwcJ8E1h9i7owVErbWz3sY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=DnVMu52m4PG/QwyCaW49Z/KuHOmjakceRUW3PMGFZK105ZnOiOnTqP54ik7DX9BD/RQphPKPfUWO8+INejRmt7UeYd28ReU3v/2e8GcOj2Goiorf7a93d/z2WKmT6XHHl/f8JYfbKdTQvSiJ72Pqnl0LCxhuz6jFWOFtavX7ruY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from localhost.localdomain (unknown [220.197.236.33])
-	by APP-01 (Coremail) with SMTP id qwCowABXXtI6gY5n3d1qCA--.65459S2;
-	Tue, 21 Jan 2025 01:00:47 +0800 (CST)
-From: Wentao Liang <vulab@iscas.ac.cn>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: Daniele Palmas <dnlplm@gmail.com>,
-	Breno Leitao <leitao@debian.org>,
-	netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	Wentao Liang <vulab@iscas.ac.cn>
-Subject: [PATCH] net: usb: qmi_wwan: Add error handling for usbnet_get_ethernet_addr
-Date: Tue, 21 Jan 2025 01:00:26 +0800
-Message-ID: <20250120170026.1880-1-vulab@iscas.ac.cn>
-X-Mailer: git-send-email 2.42.0.windows.2
+	s=arc-20240116; t=1737393183; c=relaxed/simple;
+	bh=3uv0+GnqMa+CPWUug5ZpSbAMYM0WXuMuS5fBfZ5zyHY=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=EKHWe05Yd5zwm8BagvTh5S4/ZIN5IshY1xrPZ179iQnwExOr+s9fLBf+PMXBn+ZF9FOMcerQ18gl4b7IMSnc9MLTma3V9N1kVn/ByGuRpCAto2BeV868uWIB+Qv0A+nn0/Tyipc2PXK1c9U+kAlzOQVOf7mh5Ogsb1nubuzy+LA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GPs9DWPV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EEE76C4CEE2
+	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 17:13:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737393183;
+	bh=3uv0+GnqMa+CPWUug5ZpSbAMYM0WXuMuS5fBfZ5zyHY=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=GPs9DWPVdaxUxWthyGiXsumJLsmvyavd9OSEBTPFU3arRvHNALlAHrJ4l0JmNWBcw
+	 KxnzScohXFMEsM6u9eYVotlgDOTAXJF0J+UMgF+vCAqS7cgOhLe+KN1i89mnDjSoLo
+	 WJNlh5el+vq6snS8FsvzARDQBL/feTNe6lb6uwazDodIcdMgFDVeqKSIffYNcnI+tz
+	 249K4vXX9QW5qwnf7GnrIJoRltvb52yftSaz1CwtOzTJDFCuzrXbMqgugdFXOKagnS
+	 +RuMFiQCtExTh47/f+F6G/fp9SE+ZsLG9OO3H9B6fSnM4e6yktriYVyECrPHUqEQ21
+	 MyXEYGbaKSDHg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id E5501C41606; Mon, 20 Jan 2025 17:13:02 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219681] ASUS Zenbook S 14 UX5406SA: Unstable USB connection on
+ USB-A port under certain condition
+Date: Mon, 20 Jan 2025 17:13:02 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: dantmnf2@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-219681-208809-o1T7ezVE7m@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219681-208809@https.bugzilla.kernel.org/>
+References: <bug-219681-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qwCowABXXtI6gY5n3d1qCA--.65459S2
-X-Coremail-Antispam: 1UD129KBjvJXoWrKw4fAw1fGFy5uF1fuF1xXwb_yoW8Jr4DpF
-	WUGay8ZF97XrW5Ja4UA3y8Cay5Zw4vkryDCFy7Cws3ur9rA3W7GrWj9a4fKa4UKFW8G3W3
-	CF4DCrs8WFs8GrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUkG14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-	1l84ACjcxK6xIIjxv20xvE14v26r1j6r1xM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-	6F4UM28EF7xvwVC2z280aVAFwI0_Jr0_Gr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4j6r
-	4UJwAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-	I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-	4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCY1x0262kKe7AKxVWU
-	AVWUtwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-	v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-	c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
-	MIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUSNtxUUU
-	UU=
-X-CM-SenderInfo: pyxotu46lvutnvoduhdfq/1tbiDAYIA2eOJZ7AQQAAsS
 
-In qmi_wwan_bind(), usbnet_get_ethernet_addr() is called
-without error handling, risking unnoticed failures and
-inconsistent behavior compared to other parts of the code.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219681
 
-Fix this issue by adding an error handling for the
-usbnet_get_ethernet_addr(), improving code robustness.
+--- Comment #7 from dantmnf2@gmail.com ---
+Created attachment 307509
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307509&action=3Dedit
+dmesg with more dynamic debug
 
-Fixes: 423ce8caab7e ("net: usb: qmi_wwan: New driver for Huawei QMI based WWAN devices")
-Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
----
- drivers/net/usb/qmi_wwan.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+--=20
+You may reply to this email to add a comment.
 
-diff --git a/drivers/net/usb/qmi_wwan.c b/drivers/net/usb/qmi_wwan.c
-index e9208a8d2bfa..7aa576bfe76b 100644
---- a/drivers/net/usb/qmi_wwan.c
-+++ b/drivers/net/usb/qmi_wwan.c
-@@ -779,7 +779,9 @@ static int qmi_wwan_bind(struct usbnet *dev, struct usb_interface *intf)
- 	/* errors aren't fatal - we can live with the dynamic address */
- 	if (cdc_ether && cdc_ether->wMaxSegmentSize) {
- 		dev->hard_mtu = le16_to_cpu(cdc_ether->wMaxSegmentSize);
--		usbnet_get_ethernet_addr(dev, cdc_ether->iMACAddress);
-+		status = usbnet_get_ethernet_addr(dev, cdc_ether->iMACAddress);
-+		if (status < 0)
-+			goto err;
- 	}
- 
- 	/* claim data interface and set it up */
--- 
-2.42.0.windows.2
-
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
