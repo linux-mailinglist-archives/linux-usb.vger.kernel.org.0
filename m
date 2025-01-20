@@ -1,117 +1,145 @@
-Return-Path: <linux-usb+bounces-19536-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19537-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3300FA16EB0
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 15:44:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C600EA16EBA
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 15:48:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E15D1888668
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 14:44:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D05593A4F82
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 14:47:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B97311E379C;
-	Mon, 20 Jan 2025 14:43:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A41C1E3DE5;
+	Mon, 20 Jan 2025 14:48:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="p36Qlqlw";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="RlDIbnTk"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="uSeqt+j1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FBA1E377F;
-	Mon, 20 Jan 2025 14:43:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3584B1E3DC8
+	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 14:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737384187; cv=none; b=pec8vbP+NwT1MaQYa9A3H6JRcoJoJAulDnY7Du9qXqRjj9Jd8csq9ue9N+AMrTYQrg3f8ku8gxkJpO5jkCjmLWcRMqGZMEmmck0uHhBD8n00IA6DJ7DlkTyOu4yPxXDkDsffqx6zVKBNdx0Vs2UXsPkJzbmL511ivbs2Ng6KMdo=
+	t=1737384480; cv=none; b=kX/MX/QxbrqkYvloGn1D8/0VbL2MXutmEDHcwMKFAeF6mYvoXVcTii5pQ0ZJvq7ueN7pgLhvGi1C8j0Lu/Fvl+OnNhZElftyQiriT8CJJI93FyepdcNea1qBM7xo7DEVqJQOqWVBZ7Oe1FCyv/7N7Xy5L5IJmFSYX/zOGMJ83XY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737384187; c=relaxed/simple;
-	bh=BL/3nHHkaltzuM8onsU0UP0YMECEyrNU44ATpUvLxN0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WWp/DYXfLt4LCfiMtCqD8zBayqe9Q5LWifr1lMZSWRGRmn94Sp7j+1ZBM2XCyGES8h2K4Z/zXrv8tgjWKLPbYJ7P8owSY6CIvp+lXyJEfldDI9DD9QYRVnkSafdLpa/y9rHGtPGPsfTxTCjyzed/nK8w3yUXCH38oKfMJc25AFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=p36Qlqlw; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=RlDIbnTk reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	s=arc-20240116; t=1737384480; c=relaxed/simple;
+	bh=cQiC1VlinKMjiH6Hg7QzNEIlt8SoOZCTsm2ULnu9UEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LkozSgTC3iugkdmpmQAPGeqrV9HiZZGOfPBc2oKFPXVa6yR/Rzxc7YJ1X9frNpxNrCJRA2OxDh+tLxJlWcZJZZ3eodSsRzckGc2OB6iUNDqLZNVSWlyKj3kw6kOv7uU9cd+j+ZOl1c04gHqoR4DK5pdDwRHswu6FoMC9MaN0EiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=uSeqt+j1; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6d8fd060e27so37335166d6.1
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 06:47:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1737384183; x=1768920183;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=4RcBRyPmLx2S3cj6rJULA+PzUdZ+QeLNlxsIg6JLYi4=;
-  b=p36QlqlwOtilJzIsNdTXK3UkZc/G6/fdrseyk/Z5Ht3V2mjrvVsZU6VB
-   JKU6nbiS3/EQM78I4h0iaYIQsCwkRgi+Ic0usBjciBLF574ZuCTEsze8R
-   9ccyE9cZzYKp12bDIwCh6CsooUNdyulQQxYL4LF6GIfI9M4kRjAALeldK
-   0FtzJaSHIdESVStHlHTiW2Q4WMzrk1PfzTwySxFFf6qzMtS2zvQZmXOsz
-   YbjnEe+d0M1idCptqL4zEdrIA2hOE+mwI6bF9FwlF8HlOqIbe4OOKguBS
-   S3IrocAHslhVzpT9geisc42T0DvsSnlkLlsch0xn5utgeHumQYIBkCcwg
-   A==;
-X-CSE-ConnectionGUID: cDrS+BQ1R6aA0SDzzNZE1w==
-X-CSE-MsgGUID: U4XtvQSBRZih2K2oWzlpbA==
-X-IronPort-AV: E=Sophos;i="6.13,219,1732575600"; 
-   d="scan'208";a="41180112"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 20 Jan 2025 15:42:59 +0100
-X-CheckPoint: {678E60F3-32-31397509-E321C4C4}
-X-MAIL-CPID: 4EA9BE56B9C8C50BBF73605D2B595787_0
-X-Control-Analysis: str=0001.0A682F15.678E60F3.0098,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0004F160A68;
-	Mon, 20 Jan 2025 15:42:54 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1737384175;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=4RcBRyPmLx2S3cj6rJULA+PzUdZ+QeLNlxsIg6JLYi4=;
-	b=RlDIbnTk1lKgaDJQwAWsCz+5N88GTTj2ocDzj9KjKdU9gzhyC+9KUcAop1Ivd3K2X8KrVZ
-	Uu5I89tUXrMkaK9KL+Fn5HMV8aKjB92BPzoU8ebEfN5LCkRy8uauGAatY5MJ+WHbsai5kS
-	AmtR6A6qI5C/kb42WLrVutMGgEzcqn1zmskkYVP7UqvRDn6rmn8iYJd2dQ+IC14LTnXD8J
-	Ot4Hehh00kLGxCSjjvkOvk75ruTg0Jx2CYlWCq2+R+8gDNu+jOu8P4+ak0EOxrfv6BLp5Y
-	mTuxRkzF0KCh0mdrRIoQPBStdsnPXLByNMZZgFIc+S5qSYv1v/FKnt594ZVwLw==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>
-Subject: [PATCH 1/1] usb: phy: generic: Use proper helper for property detection
-Date: Mon, 20 Jan 2025 15:42:51 +0100
-Message-Id: <20250120144251.580981-1-alexander.stein@ew.tq-group.com>
-X-Mailer: git-send-email 2.34.1
+        d=rowland.harvard.edu; s=google; t=1737384477; x=1737989277; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cvJ4aFuh+9Vk2RHzmd33jWpA4HR+ynJYIEu3P+NRp/E=;
+        b=uSeqt+j1Mt1JQG+1KhmnFpaVkO8aAVUueNbmny6jRc+/rcz2+e8rLSgTHJpXnN5osq
+         Z+J/FWkKnL0nttwXbcknhz4SZEcMrYaYnw1ubMqnezNXhRu5MILXX0yHPUCfz/TMYyCV
+         hF1uhnDl7dTZfjyYX620tgBzJJHkjDFmvLKcTPNJ/aSGMVx7KrwMr5P0xsmoUOrjjeFx
+         BEJgPZAjdYsBDm8PAMT7nxM3gIHmqpN+ny0X+8UO//RxPd9iI/qMZ6/npW5ezihKBxHd
+         +4YXsU7a5D4u67iHIsDewyBOzVGkOEKc2Q6VIDkGzd/gLC/a6KgligfKhEDG5zzLT+o6
+         vrSw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737384477; x=1737989277;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cvJ4aFuh+9Vk2RHzmd33jWpA4HR+ynJYIEu3P+NRp/E=;
+        b=Y04EknSh7U0TGauV3u9XWM0eSNGetLGWaQSld+ppno7TY0H1auJGGA6R7mGjsuMbuE
+         +ssrjNgZgoArG08zkeNNguGYKrN/RCc4LkO6cfuCNnB9Vs0soZgEdCCeGtJtuDK445AH
+         EjXoiRd093NBvA2qD6d71biMlOooVV5zmKnKbjOzmE1V9Yi0ln7umWTz35DpQz68O6Op
+         HNrmExCqJbPJfFsypAiZn+/9WxOauqm5S2wLcD5Pmm1/tMPr3l1AqIlyBu7a/eQj+S4f
+         0d96nAnhBuep3ITc0FcC0XlrmaXPOBLLI6NKRBbfPIQ81+mW1Gex8d4/mYWBGqcGA0oZ
+         U0QQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXTeBhTgZ+cZ3K0hXtfvz+0fVg4vAIUt1vNNR6Si5Uw81//nA9QJM+ibRRCdzSYl/m0vgV6GTc37r4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWilrUK4z3mG4mHBRvJGk/bGeS43RiO8QJAb+IOtNCMSOds9I/
+	3WfY9Na3xULEIIs+F3oL7Aa/tmCSNYpFx1JF4QZinYVMex5vpVWKdD3F4AKtEg==
+X-Gm-Gg: ASbGnctoxe1/5FTcd3yJpFRnx16i/Aivxpcc0FGqo8dTJRkk2XZrkfHpTdgDK6eFZNv
+	dJMeMLC1EsqsIWxSQkkmnTha71aQHWbiEKQd5M/5KnQCZQbu0ZdX+GaXyn33BDCEbWLDG0bQf/d
+	Y+pCJGUGklCtLWwN1LWm9eJdZUY0BADZhnSHbKaLm7DH7GWqgjZPpK5AJiDNOkDUspP/DfORyal
+	CAP6UcrndOjezzDoYOf4PHhj4YU3Yko+c2ZRTIi/d17GZp8PFHNrj2hxbZDbOA5bFP2NDk=
+X-Google-Smtp-Source: AGHT+IGIZk+b5nCASQc3ZLeWNmTrkefis+nz6YWiyPzWRfgJQ/TaXNUglqTYnc2IvYfdWsmHE7XTJg==
+X-Received: by 2002:ad4:5c6a:0:b0:6d8:a4fd:d247 with SMTP id 6a1803df08f44-6e1b2170094mr229924336d6.7.1737384476942;
+        Mon, 20 Jan 2025 06:47:56 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::56b8])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e1afc24122sm41726806d6.60.2025.01.20.06.47.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jan 2025 06:47:56 -0800 (PST)
+Date: Mon, 20 Jan 2025 09:47:53 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Prashanth K <prashanth.k@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Takashi Iwai <tiwai@suse.de>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: Increase the limit of USB_GADGET_VBUS_DRAW
+ to 900mA
+Message-ID: <894f42a7-50a5-401e-a705-a06eafd6161d@rowland.harvard.edu>
+References: <20250120111702.3738161-1-prashanth.k@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250120111702.3738161-1-prashanth.k@oss.qualcomm.com>
 
-Since commit c141ecc3cecd7 ("of: Warn when of_property_read_bool() is
-used on non-boolean properties") a warning is raised if this function
-is used for property detection. of_property_present() is the correct
-helper for this.
+On Mon, Jan 20, 2025 at 04:47:02PM +0530, Prashanth K wrote:
+> Currently CONFIG_USB_GADGET_VBUS_DRAW limits the maximum current
+> drawn from Vbus to be up to 500mA. However USB gadget operating
+> in SuperSpeed or higher can draw up to 900mA. Also, MaxPower in
+> ConfigFS takes its default value from this config. Hence increase
+> the allowed range of CONFIG_USB_GADGET_VBUS_DRAW to 900mA.
 
-Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
----
-I opted for no Fixes tag as the warning is rather new.
+Is this the sort of thing that really needs to be a Kconfig option?  Why 
+not make the decision at runtime, based on the needs of the gadget or 
+function drivers and the connection speed?
 
- drivers/usb/phy/phy-generic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Alan Stern
 
-diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.c
-index 6c3ececf91375..8423be59ec0ff 100644
---- a/drivers/usb/phy/phy-generic.c
-+++ b/drivers/usb/phy/phy-generic.c
-@@ -212,7 +212,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
- 		if (of_property_read_u32(node, "clock-frequency", &clk_rate))
- 			clk_rate = 0;
- 
--		needs_clk = of_property_read_bool(node, "clocks");
-+		needs_clk = of_property_present(node, "clocks");
- 	}
- 	nop->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
- 						   GPIOD_ASIS);
--- 
-2.34.1
-
+> Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
+> ---
+>  drivers/usb/gadget/Kconfig | 11 +++++++----
+>  1 file changed, 7 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
+> index 76521555e3c1..904652c37385 100644
+> --- a/drivers/usb/gadget/Kconfig
+> +++ b/drivers/usb/gadget/Kconfig
+> @@ -97,8 +97,8 @@ config USB_GADGET_DEBUG_FS
+>  	   to conserve kernel memory, say "N".
+>  
+>  config USB_GADGET_VBUS_DRAW
+> -	int "Maximum VBUS Power usage (2-500 mA)"
+> -	range 2 500
+> +	int "Maximum VBUS Power usage (2-900 mA)"
+> +	range 2 900
+>  	default 2
+>  	help
+>  	   Some devices need to draw power from USB when they are
+> @@ -107,8 +107,11 @@ config USB_GADGET_VBUS_DRAW
+>  	   such as an AC adapter or batteries.
+>  
+>  	   Enter the maximum power your device draws through USB, in
+> -	   milliAmperes.  The permitted range of values is 2 - 500 mA;
+> -	   0 mA would be legal, but can make some hosts misbehave.
+> +	   milliAmperes. The permitted range of values depends on the
+> +	   connection speed, for SuperSpeed and higher it's 2 - 900 mA,
+> +	   but connections with High-Speed or slower can draw power
+> +	   ranging from 2 - 500 mA; 0 mA would be legal, but can make
+> +	   some hosts misbehave.
+>  
+>  	   This value will be used except for system-specific gadget
+>  	   drivers that have more specific information.
+> -- 
+> 2.25.1
+> 
+> 
 
