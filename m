@@ -1,183 +1,150 @@
-Return-Path: <linux-usb+bounces-19534-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19535-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78E35A16905
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 10:17:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B430A16B5D
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 12:17:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CAC13A66DF
-	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 09:17:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4642188461F
+	for <lists+linux-usb@lfdr.de>; Mon, 20 Jan 2025 11:17:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC8661B21BA;
-	Mon, 20 Jan 2025 09:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9501DEFD4;
+	Mon, 20 Jan 2025 11:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fW47E8gJ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Phy0+VyT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44F501AE005
-	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 09:16:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBAD61B4F02
+	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 11:17:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737364617; cv=none; b=RmdukdtGpJiSOMlzgHZdRyTFtty+RcDc7SlyFem7eTj/XXDpHoCpUjKodvOfkFt2dBRh0D2eOL6DloXpf/EUlii0H1DVyHTbWjGYTO1cedRaiMzn8IK1oGtigtmf6UYJ2YskYDk/M6C+RixGGLkjhp2UzyZLiZ/3JC5No83+C5c=
+	t=1737371832; cv=none; b=WVA44NKEWPBnaN3+6U4vIQMKWC3BX6/oLgw/n4CP2C0kAA4RfxgNiiFTcfrEUeAjw5vLO9i8ArnKfxBRp8lXoY23n2Xai3N8t/n04Cl7Ncc8udaSURHfoyspYMa6KYaQ+GDINpgxeG7MPzKMoB9ovW5fV+N8KHXVdT87ok/XUc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737364617; c=relaxed/simple;
-	bh=HA9jbb7sf9FEcEGIypHqxSqTIh49BbritadiThhm0/8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bpb7P9smn+WLR0zSzNDPbkmarOYpSSKYYkAas4rba3ETQm4XO39SPtzTXf0rWd+BFmJjMtI59eI0VWF+KiixdEPwK0hgnOcM1EmQ4mb76hWZv5lZY52rK6mvsyS+pNuixNDky989sbe9rdwd9cnr5dM6IAJTuDr3lI/POBtIMnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fW47E8gJ; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5439e331cceso2504926e87.1
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 01:16:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737364612; x=1737969412; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5GKui2+m9IAjivOenJXop0/jshpzhAnhINNH8CjefO4=;
-        b=fW47E8gJrbu75xEBc8eokaJvjYzQjUPKJuuZprGEFqoheYDv3pAwR+fWvNDUDHUfoC
-         FqtiVFe2gAhJgBp38Fv9nKVAWA8+UfCh98+6/UWFGgU3mTF7Y5Yvm1sxKXzAWuZaP0ot
-         SdAAPKkudqmadJxfnbYwiBmGOSu7jkRNQCtF5bwHFwPasFroG75p+P6IaAP+VMkrDh7g
-         9R5bzNWWHQ+kEH3wPHEIwqxdXw1j86xWX8owo4cdQwJrvgW1o/ZDd4qiid4YRl8i4Uhj
-         V83XgIFKqhblGfCvG0NgHZjBk0uykGLkWwlT2HOtl/mWIYGHtOrjIGPCgSjGCbJ/WgbV
-         mi9g==
+	s=arc-20240116; t=1737371832; c=relaxed/simple;
+	bh=oWuiLsuwyvgSF9DQroHWumglqEl7K2P9W7WXiEEOPgI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eCf02M7Rwa933OLlZbP0+BcxNWwiA/Xucj8xQKnHSyHGDG/3aHZdkEDD4WgKr1M94z3KFGAVsx8HuGl3z2tR4f+qqBUNPUH6RV2oGmvuPHPRyCFK2VjGAiCZPoGPEFOp05p8NU7ZsP4CkQEr1zIkH1/kByYjE1tvE6rz0347k3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Phy0+VyT; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50K6ZZgN016284
+	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 11:17:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=GCrdy22Zg6uJkDlw+8S8ZNs+PFquKK9bM1D
+	cBTHtlow=; b=Phy0+VyTD0aekcjmuXA5a6bdhTGIxFMczRAHFl/0MbRl1bYXcTq
+	hG5HoP64zwOQMBG2hIrfAbWd/V54Ym56FtVjlPEfUEV9nmUQk60SGwOUOR3qKU4M
+	sWuy2zUnfvGKesQskyZ/78eHPpL7MO3juSxA1PCWgCNBqgsYjNvb+HvmA+XK46cU
+	EpMZrcIulUuNWgfPD3n5CoTbXMQjQEeoUAILfFCQnd7IErppmM3cxBFt70YuSsB7
+	zdNaCo5yPAoy5oahkYENGpqB+t6A0P5kedQXY4TEiXvFqtvimjNivH4nvwTaz+i4
+	aJoLbkhKaPaJ+Fi6hUQAQ0JNcukT7YwQn8g==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 449hbw8q1t-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 11:17:09 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2166e907b5eso84683275ad.3
+        for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 03:17:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737364612; x=1737969412;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5GKui2+m9IAjivOenJXop0/jshpzhAnhINNH8CjefO4=;
-        b=QglUj7BUB2YirGOGLkzuMyg/eWZrr1/YLH88eGWLktmCpmtQ5ieW6aw9El4MPRdISv
-         zszZxi2zWryD+/uNeUGK3NX4SkenzfqsP4+V6lRb3wKqnRoQNrmhkGigSXbQLd3A+WRc
-         y/Gxv2/9QSvZ7qCKJzpP9WQVsP48xc7HNd7ckE0l4opeXgu9P74xzjPeKsPvLt7v1zwm
-         Yf7YzpYVpsQlSgECWUnsxXV0O4L4BVfRQ0BfREBTZEtJlk9mY3/v0UI8LhfXT9qmTqoG
-         hRPskSzoAmEMzcCwhG/Bj0Rbm/X93owCvtUgsBUlBghnrIpMnMGMp9KChpLfyIHP1K9h
-         bZww==
-X-Gm-Message-State: AOJu0YyEZauE+gOgksRaohzGMc3rc3dljzRDwiL9YfrsfzjhbTqcahX6
-	appy5GY7dfH6vrDf7sE1kY8lpUFnFBMAB7C1jHcNroF8ns3VHQqFCMpYmCdbLjQ=
-X-Gm-Gg: ASbGnctP30gt+EWa50gKpubbjmmjZhpW0w8aoWtAwY+zUXYp/G92XnsVxsf5ulJ1Cvc
-	mtHULAL5lwv8uIU2MFBVQt2PSOqvG+L5HJjxf0PGHeQBDz5ClEmCOURziceGVpz+juJEYVNMzNF
-	EVP9CoHeoMYmn14ukHJ9O/bWXWYL9qTR0FFj4EKXc1XWAo5frapp6m7OB1vT6CQ8g11F9DmUsGq
-	9/nWFTr7hu4A43LAczcw9lzP+CLfbK/fwh9j6zXKxMKVu9tyHIEWvOTQL/su1+5Vtw4/aEkqm93
-	3w==
-X-Google-Smtp-Source: AGHT+IEa+n48Uv8t7RWPHQjoPF7/uY9Me0OAnRXFnlzYDS/J3Z3bAwwUyNmzVAbCCcuLCA7BppNsgw==
-X-Received: by 2002:a05:6512:1292:b0:540:353a:df90 with SMTP id 2adb3069b0e04-5439c27b46fmr6101201e87.43.1737364612359;
-        Mon, 20 Jan 2025 01:16:52 -0800 (PST)
-Received: from umbar.lan ([192.130.178.90])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5439af729ccsm1223639e87.188.2025.01.20.01.16.49
+        d=1e100.net; s=20230601; t=1737371829; x=1737976629;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GCrdy22Zg6uJkDlw+8S8ZNs+PFquKK9bM1DcBTHtlow=;
+        b=M33JgrFDfoYDMU4gO576t2owf/r7WsRMKe1x7hwHKRkZLPtclObuT8ndAPZOLZwEcD
+         xbpagJd4N36sTyBHy4gHr+R83dI1XHoC/uCP5QW157YT+YAaPaiEGHWjMSHnzY+gtIpJ
+         pGov7Qc5q3haGueu0ZcH5i1Q+pJCaydLtA7i8TFZucloCL5NXPQhzJ9cKtP4cwEs7UVT
+         hARlxW2E0lW98WAvYrA62EmatWO6ui27n30Prxw6ufRTg17hDW1dpEJ6MPFCCFJYC07F
+         hayUkDHNH9G3G4puiOZDNCi2Vo8RirwSL7JF8Tl1wFdkOdLR4CWAg86Q3Chn5L8vpsuQ
+         TPtA==
+X-Gm-Message-State: AOJu0YwZovr+gsI8NvBi5NUC6Bj5R6hcpus0Shad0JwNGj5mMJ3BPpE8
+	KuRId1cQz8Wbfq4eXEnNkektdxc71PfUeU2qCFYwbj2AKpKmV8x0FtXfbV2uGYRUKuBo0q68GGd
+	vspnpJ7Z64+ROi8gNyJ/8QzE4XvPGZ2+1DVGxz54+HB6RnKTqbHah6skLjb8=
+X-Gm-Gg: ASbGnctknaGApFIDUMopRqrymfXJCZbB7KzoHkUXCAnXoCM17tToA/nhgYs0ifbJmqC
+	EuClOg6TuAg3lxeXR3Gtc6FI/w3RyLaBZwZd9V/t7GRTwjyDV2axRg4U6edu/Kdv3k3AfkpX3i0
+	tSS2cfO3098gmxItnrEi0VgMowkg9uUg+vU5Y3aehTgt9F5M6OhxYzo6ItoIbaJx+7/wAq9IHvJ
+	prP0c/D442T+GYOp48gqceCJZAB4kUCEu3CynHziDKhztbj9CE1EdyeeqJLNuuShlSI1aR1p1vv
+	0yZT+9lZlrNC2E4t3CIsGNA=
+X-Received: by 2002:a17:902:db10:b0:215:a2e2:53fe with SMTP id d9443c01a7336-21c355c7a3dmr199818155ad.40.1737371828696;
+        Mon, 20 Jan 2025 03:17:08 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGjF0nO0PvOPLALsi3OpuDXqxMJSQpWPjAbBdggfW/E9JxCzDENI5fYuantGViJvQRd6icTHg==
+X-Received: by 2002:a17:902:db10:b0:215:a2e2:53fe with SMTP id d9443c01a7336-21c355c7a3dmr199817865ad.40.1737371828290;
+        Mon, 20 Jan 2025 03:17:08 -0800 (PST)
+Received: from hu-prashk-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2d403310sm58802645ad.203.2025.01.20.03.17.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 01:16:51 -0800 (PST)
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date: Mon, 20 Jan 2025 11:16:45 +0200
-Subject: [PATCH v2 3/3] usb: typec: ucsi: acpi: move LG Gram quirk to
- ucsi_gram_sync_control()
+        Mon, 20 Jan 2025 03:17:08 -0800 (PST)
+From: Prashanth K <prashanth.k@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Simona Vetter <simona.vetter@ffwll.ch>, Takashi Iwai <tiwai@suse.de>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prashanth K <prashanth.k@oss.qualcomm.com>
+Subject: [PATCH] usb: gadget: Increase the limit of USB_GADGET_VBUS_DRAW to 900mA
+Date: Mon, 20 Jan 2025 16:47:02 +0530
+Message-Id: <20250120111702.3738161-1-prashanth.k@oss.qualcomm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250120-ucsi-merge-commands-v2-3-462a1ec22ecc@linaro.org>
-References: <20250120-ucsi-merge-commands-v2-0-462a1ec22ecc@linaro.org>
-In-Reply-To: <20250120-ucsi-merge-commands-v2-0-462a1ec22ecc@linaro.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Abhishek Pandit-Subedi <abhishekpandit@chromium.org>, 
- =?utf-8?q?=C5=81ukasz_Bartosik?= <ukaszb@chromium.org>, 
- Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- chrome-platform@lists.linux.dev
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2515;
- i=dmitry.baryshkov@linaro.org; h=from:subject:message-id;
- bh=HA9jbb7sf9FEcEGIypHqxSqTIh49BbritadiThhm0/8=;
- b=owGbwMvMwMXYbdNlx6SpcZXxtFoSQ3qfSI2su+Gqz+s52fYmVh9LvO5UFPbs+pmW6LpnHW/vJ
- s8PX/qwk9GYhYGRi0FWTJHFp6Blasym5LAPO6bWwwxiZQKZwsDFKQATKa5l/5/Cs59voqLUp+fy
- fdev7andLbhGevMP7dbef+y1F2wOVnXoxrP5JRzg3vZSgen1K9XvWl82Nj5TWyJbHsEckzE7sy6
- fNY+pY2JwwTzvpCVPqp2PHZlkv7cgIu+OTXy3g8FDrzrWp5PnVn8NqZo6yX1+1fuFd9nP6tTdSu
- 8M5006NyP8s3Rgz1+W1OmRnWl7l8RPuaCxztf62Z63LYV6V/1sY41l3Xnl5DQel1150NXf6fF/2
- 6sVDSscBGNnSUmtPmT1m7HiTGq8SMb39R/+tijxHHt+cat+fnr4kYj3cXue80cs2uGuIX8ijT3e
- tOJCUoDlwR2zQovrrbftcryhYv/ifoDdU25uK0a+k49jAA==
-X-Developer-Key: i=dmitry.baryshkov@linaro.org; a=openpgp;
- fpr=8F88381DD5C873E4AE487DA5199BF1243632046A
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: MA_9JxNHkzruARJacqKBaswJn-ec94fe
+X-Proofpoint-ORIG-GUID: MA_9JxNHkzruARJacqKBaswJn-ec94fe
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-20_02,2025-01-20_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 clxscore=1011 mlxlogscore=813
+ lowpriorityscore=4 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
+ adultscore=0 bulkscore=4 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501200094
 
-It is easier to keep all command-specific quirks in a single place. Move
-them to ucsi_gram_sync_control() as the code now allows us to return
-modified messages data.
+Currently CONFIG_USB_GADGET_VBUS_DRAW limits the maximum current
+drawn from Vbus to be up to 500mA. However USB gadget operating
+in SuperSpeed or higher can draw up to 900mA. Also, MaxPower in
+ConfigFS takes its default value from this config. Hence increase
+the allowed range of CONFIG_USB_GADGET_VBUS_DRAW to 900mA.
 
-Signed-off-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
 ---
- drivers/usb/typec/ucsi/ucsi_acpi.c | 30 +++++++++---------------------
- 1 file changed, 9 insertions(+), 21 deletions(-)
+ drivers/usb/gadget/Kconfig | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi_acpi.c b/drivers/usb/typec/ucsi/ucsi_acpi.c
-index 8b02082201ec5b85031472563b8b8d1eea6134de..ada5d0d21ee6fb1f406b6a8b8466bc71ffdb5b46 100644
---- a/drivers/usb/typec/ucsi/ucsi_acpi.c
-+++ b/drivers/usb/typec/ucsi/ucsi_acpi.c
-@@ -99,17 +99,23 @@ static const struct ucsi_operations ucsi_acpi_ops = {
- 	.async_control = ucsi_acpi_async_control
- };
+diff --git a/drivers/usb/gadget/Kconfig b/drivers/usb/gadget/Kconfig
+index 76521555e3c1..904652c37385 100644
+--- a/drivers/usb/gadget/Kconfig
++++ b/drivers/usb/gadget/Kconfig
+@@ -97,8 +97,8 @@ config USB_GADGET_DEBUG_FS
+ 	   to conserve kernel memory, say "N".
  
--static int ucsi_gram_read_message_in(struct ucsi *ucsi, void *val, size_t val_len)
-+static int ucsi_gram_sync_control(struct ucsi *ucsi, u64 command, u32 *cci,
-+				  void *val, size_t len)
- {
- 	u16 bogus_change = UCSI_CONSTAT_POWER_LEVEL_CHANGE |
- 			   UCSI_CONSTAT_PDOS_CHANGE;
- 	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
- 	int ret;
+ config USB_GADGET_VBUS_DRAW
+-	int "Maximum VBUS Power usage (2-500 mA)"
+-	range 2 500
++	int "Maximum VBUS Power usage (2-900 mA)"
++	range 2 900
+ 	default 2
+ 	help
+ 	   Some devices need to draw power from USB when they are
+@@ -107,8 +107,11 @@ config USB_GADGET_VBUS_DRAW
+ 	   such as an AC adapter or batteries.
  
--	ret = ucsi_acpi_read_message_in(ucsi, val, val_len);
-+	ret = ucsi_sync_control_common(ucsi, command, cci, val, len);
- 	if (ret < 0)
- 		return ret;
+ 	   Enter the maximum power your device draws through USB, in
+-	   milliAmperes.  The permitted range of values is 2 - 500 mA;
+-	   0 mA would be legal, but can make some hosts misbehave.
++	   milliAmperes. The permitted range of values depends on the
++	   connection speed, for SuperSpeed and higher it's 2 - 900 mA,
++	   but connections with High-Speed or slower can draw power
++	   ranging from 2 - 500 mA; 0 mA would be legal, but can make
++	   some hosts misbehave.
  
-+	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_PDOS &&
-+	    ua->cmd & UCSI_GET_PDOS_PARTNER_PDO(1) &&
-+	    ua->cmd & UCSI_GET_PDOS_SRC_PDOS)
-+		ua->check_bogus_event = true;
-+
- 	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_CONNECTOR_STATUS &&
- 	    ua->check_bogus_event) {
- 		/* Clear the bogus change */
-@@ -122,28 +128,10 @@ static int ucsi_gram_read_message_in(struct ucsi *ucsi, void *val, size_t val_le
- 	return ret;
- }
- 
--static int ucsi_gram_sync_control(struct ucsi *ucsi, u64 command, u32 *cci,
--				  void *data, size_t size)
--{
--	struct ucsi_acpi *ua = ucsi_get_drvdata(ucsi);
--	int ret;
--
--	ret = ucsi_sync_control_common(ucsi, command, cci, data, size);
--	if (ret < 0)
--		return ret;
--
--	if (UCSI_COMMAND(ua->cmd) == UCSI_GET_PDOS &&
--	    ua->cmd & UCSI_GET_PDOS_PARTNER_PDO(1) &&
--	    ua->cmd & UCSI_GET_PDOS_SRC_PDOS)
--		ua->check_bogus_event = true;
--
--	return ret;
--}
--
- static const struct ucsi_operations ucsi_gram_ops = {
- 	.read_version = ucsi_acpi_read_version,
- 	.read_cci = ucsi_acpi_read_cci,
--	.read_message_in = ucsi_gram_read_message_in,
-+	.read_message_in = ucsi_acpi_read_message_in,
- 	.sync_control = ucsi_gram_sync_control,
- 	.async_control = ucsi_acpi_async_control
- };
-
+ 	   This value will be used except for system-specific gadget
+ 	   drivers that have more specific information.
 -- 
-2.39.5
+2.25.1
 
 
