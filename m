@@ -1,146 +1,130 @@
-Return-Path: <linux-usb+bounces-19570-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19571-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C4C0A185A0
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 20:26:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 217A2A1862D
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 21:37:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6FD4416B249
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 19:26:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB835188B9D4
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 20:37:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D305219E7D3;
-	Tue, 21 Jan 2025 19:26:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE4761F76BE;
+	Tue, 21 Jan 2025 20:37:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="Suc8WV8p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dKuELO0u"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA82C1F55ED
-	for <linux-usb@vger.kernel.org>; Tue, 21 Jan 2025 19:26:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 927101B808;
+	Tue, 21 Jan 2025 20:37:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737487580; cv=none; b=bBqbiLJWc0cfGWlt/yVxADFXqIaiOabcltGi6DLZlnNOn/YF9Y60PLncF/h56sHr7t3yLKnrB3ndrbyAqFzo0dYQDK4pE9XicUs4FbsHvR4SuQpjP6wT13r3Xiq5TKGc8yo2iiNsloR4GCjIrVOy1DGWBE6Y/7ITPrtK15WTMr8=
+	t=1737491866; cv=none; b=rF99g3ms6SIxNR6G4qHEzepWq4/sTzDXk5SP1AioINyTO/16Y+iD+oORnt9VCK5lDsWez2SWjulUzhqAsjU9eYFn1/EJ8GgB9L2syv/pf9zTXpowUivwRn3e4kpBMnVj01218ljM4Wn1UU7CYoE3WASbHHWR/8vXIN3Ei4DrCrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737487580; c=relaxed/simple;
-	bh=sjC2mTWOvmLkV1BfFQM9OQWaicCAATfyj/dlGlTg2F8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F7Z/CMSdPJsuFUPmB3eMfnhiNwS0ViyAkNmtf3E5/+Y4DdpQ07Z1T7hkcHopQst3b7/bdU7a2UwDkYZHAPU8OeGvCz0NO53VRgMgEv1GCvuorUA8izygKvXNmubNUMCfgDnrFKVbZm6XbuG6DTqGWvUxrM9Y87rOxVWSs97ZUsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=Suc8WV8p; arc=none smtp.client-ip=209.85.160.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-4678cd314b6so58127711cf.3
-        for <linux-usb@vger.kernel.org>; Tue, 21 Jan 2025 11:26:14 -0800 (PST)
+	s=arc-20240116; t=1737491866; c=relaxed/simple;
+	bh=Kci+ZwSyEJwcQhwOyehiOWTnNjfk9CiAgjmwIsJF78c=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Q2ksIH1EcvGGUGnDWU2LHCJEo3Hyxj0r7eWiw928bLiPtn9zxVqEg6auY1On1trL5Y3m+ELO7FDUQDnxMLZaqwUom/z55aqNYlZ7kMZOhGd3Q+GoZ3ZCAaVwXke/IrJnL7so1WTW7vkAsozQWMGljEf/lm5G3bIaRmlj85e5Svw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dKuELO0u; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-436a39e4891so42319545e9.1;
+        Tue, 21 Jan 2025 12:37:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1737487573; x=1738092373; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xieAPLO+FNWI+mLPegHNse+KoqcDSArXL4Gd8PWxXMo=;
-        b=Suc8WV8pO5e3A5k5K1p8xLh0iIKRRG0cNDxdn/e92A5aJBOfZHue30+K1gCS04XefI
-         ibSkjQpZAgzBRkFMNEMS2Olq9Cw9/tAsBIVxroVPDRjY0czf0vzuedP6ZMkc8qJIBJ36
-         56rMXeRs3XGXHtnJsZ5hYOXokUm3bg6+vH1RFj/quifv3+c186eys9etEuEL9AiNxg8j
-         Bp7dKxarIqCo2ZXJz/9AOcZaYFfNwNrp3f/sYClN0moZqBMzGOqLPGNrUddRXOcOvWT6
-         t2HhgPjum/MDusMEoClODYQJheW22AWq4NwihceyZOmvqX7/GgCPjfxkoPa5DdHiYwJ9
-         zFRA==
+        d=gmail.com; s=20230601; t=1737491862; x=1738096662; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JzvzUE09AXFwz+IHhINfnCfbgl4tJuW366iEPG5+KsU=;
+        b=dKuELO0uoXUlzJEqMEbaQqxu2iSqaO+a6G7cCRsVEXl2X8RS748Lu+ZTdYDSg9sbem
+         omu/mhrcuEwm2dqIt4LPa3Azbj2QVODSrDC8Z2PoMiUaZo0z1j1CIeiScdyAIiFRlO08
+         Efcrik7uLAq9ykQ+ENq71nJnxPwjkNQ9BOpGSlNRLjIjmIAdVbHSXTqtvHtT+mkCBhJi
+         5HQj+WRHtJzdy9mhB+wLxRia367hHXutxY+As9XwNFnjGaz2JzpYOEQ4TZV+sM5VW+el
+         5eFgwN4TRzOVKQFDrDtyvGj+tt1VRVYpVUdm9vdQG6cHol/ENbLN0f/mili1iGPS/zsG
+         HXhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737487573; x=1738092373;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xieAPLO+FNWI+mLPegHNse+KoqcDSArXL4Gd8PWxXMo=;
-        b=PnNP6vxu+7lI30vlSRZ9DEdLWZRUUoULltwW8QTZopy/zSxg9e4P5JfGNIHuYvc7Te
-         LyIDFxXuQCBXZMOGMw90X9LQd9xBmFnOjk3GKWScd9qzZA/wXQBoyTIbnl+quXxN5DE4
-         1jqzWD0l+lCC+AkBfoxzGY7vIAulF5h5j3Ag4IrQAPfXe71aPW9F2B37gYTkVdYNWO3J
-         iEXnQyUTabcLc1In8vc8UaV4ttWRLImQOA78V6bwjte3D1HY9oUyWZ/iDneqCTIJDn74
-         z6SKr72uZQwcIXVgUX2Zv6bfmXntdKcvx6wwih01MFw6Bimt/XwrwsYLqVlhlWIp6GMS
-         b2FQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVBWZyJKFSw83+KcZGoUAr5lGKHcSnW74weWNDKPSTWogtBmWZDTxvKYmzudDvnKVaTZxP/OshrlNc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzHGw3Txd4IEhVJwOs3MA5BiqldxNT0LYeOAUMRrVQM6q2Ya6S4
-	GdUvKXfwB7okbHQa39y+Uj2ToIAMHzOUIREzcGBX0G21iKWb8otmzVeC+czOXw==
-X-Gm-Gg: ASbGncurhMbSL+X9SFV7b3XE3+FVwG4hcx1B6nIfInXQGJyMaQWbuFyRpItjGfBarKA
-	WYmoxRjncyKK6+NZ/B0wbTMnKEWTEYQFkSVCxNfnu/POhRai72Jy72oYo7gRB6jRnPF9Q216XeE
-	FmPzpdgC8JHsAThndG+tILuqaTGadVjpOPx8Hd4YhVB1qNEua93PADAIahVkboBX1cVjC6jVAD4
-	6KAgzesjUVG9vBNOzZQ10ef1u7YtKdzjUttBBwsOHP/XWSuycAB6Vv5yHqEvNhPhToKLxrFoSM8
-	SWfBaOvnpUcyeZBhTkJZq+t6KMKN2XK2Y6g0Q2StQQOWX8pT3ypWGRKh2CajLUY=
-X-Google-Smtp-Source: AGHT+IFq7S3vDhzoX4F0nnIc/Nzfks8g9QEQ7njKiBg89/lJA+gSl9yMwpUkPuqiNCD51JU33K8D3Q==
-X-Received: by 2002:ac8:5703:0:b0:467:5d5d:fabf with SMTP id d75a77b69052e-46e12b6f80emr259723551cf.25.1737487573538;
-        Tue, 21 Jan 2025 11:26:13 -0800 (PST)
-Received: from rowland.harvard.edu (nat-65-112-8-51.harvard-secure.wrls.harvard.edu. [65.112.8.51])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46e1030e930sm55765341cf.38.2025.01.21.11.26.12
+        d=1e100.net; s=20230601; t=1737491862; x=1738096662;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JzvzUE09AXFwz+IHhINfnCfbgl4tJuW366iEPG5+KsU=;
+        b=NGJcj3fJMEstoCy24AkysdP1upJ6cpzV20JbybRa0TA/JDN2luWp4V3l/ASp7VfMO1
+         dbPrPKMjDtk3QnYHfFPQvBHcp/KingpFaKDlK79h+Ro5BX4+742XEPqZgAqAXHalR10D
+         BG8BSq73YNptW4spBP+6Ci/A9CtFr934TeC+NK4iGGX0TbwdUK+frAmBYyMtDroLQ1dx
+         J9zKuKpoH/27bDXS8foSAPm9byO4Z0ntUPWJTbEMakA03QG2APchAUnC59apsUcohiII
+         18IBZv7okgD6smyNrIoXqpN2m/Lvgj53pAJVT659oyiVu+t3e2m3BoEevbiEgZ6j0FFn
+         9XmA==
+X-Forwarded-Encrypted: i=1; AJvYcCXT3eu5JURPe+IQ0tB1BJ2XGGMbcmDxV4ea0fVPBmXQSI8SgDdyesbFaUBxS8Do7iygDsdpcpm1gmHe74c=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEGjbPONeftPmzCA3PcHeBzb44NRNUo+U1dR6HkzOo3w9gu1UU
+	hxEgehHXHY/TPa74iQBItCugg13CupZeLhZLO60hdoUacLREV5Dy
+X-Gm-Gg: ASbGncuum64dRWgliiWrwMGYFaWE3EuGskdK9B7Ye6nyc34QNAkeaDHREanbCaebEba
+	klkPxCSmJfNy6B/Ys6aNKLsYFSaTZDsFGsJjgJtOa5saE93EByZyYo3WXihIuCCh7xPdKaIHP50
+	F8nBnSP/6VRuNXVse9l6JORSzvwAnUDA93nk8B9Ee5R5UtergX+LDTrLCns/RoCPiKpCa774kih
+	reXVLdIZJ8HEJUhCp0Ra29A0f26Txs87auX18DkzciyUu8HBEmLmYsHsJHWkj7UY3xtww==
+X-Google-Smtp-Source: AGHT+IFd77dmMb8gdrmkycK4EYNB5nQQ5SgMO6czKOez9oPHcCwt+y4jSDUssh8UyBI2fgLNIJljvQ==
+X-Received: by 2002:a05:600c:5101:b0:434:f925:f5c9 with SMTP id 5b1f17b1804b1-438913c85e0mr171315475e9.6.1737491861530;
+        Tue, 21 Jan 2025 12:37:41 -0800 (PST)
+Received: from qasdev.Home ([2a02:c7c:6696:8300:754:6af2:3b7a:7407])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438a1f07e1bsm145866655e9.7.2025.01.21.12.37.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jan 2025 11:26:12 -0800 (PST)
-Date: Tue, 21 Jan 2025 14:26:11 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Prashanth K <prashanth.k@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Takashi Iwai <tiwai@suse.de>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: Increase the limit of USB_GADGET_VBUS_DRAW
- to 900mA
-Message-ID: <e823a961-a0a1-46c3-84a9-7da3cd718f4c@rowland.harvard.edu>
-References: <20250120111702.3738161-1-prashanth.k@oss.qualcomm.com>
- <894f42a7-50a5-401e-a705-a06eafd6161d@rowland.harvard.edu>
- <1b1587e8-5c38-4138-a27a-1de71ff07ce3@oss.qualcomm.com>
- <e36303c0-9d1f-4c66-bc40-891958507275@rowland.harvard.edu>
- <d308300f-2559-4d13-8d15-5a2416ac00c9@oss.qualcomm.com>
+        Tue, 21 Jan 2025 12:37:41 -0800 (PST)
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: valentina.manea.m@gmail.com,
+	shuah@kernel.org,
+	i@zenithal.me,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	syzbot <syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com>
+Subject: [PATCH] USB: usbip: fix null-ptr-deref in status_show_vhci()
+Date: Tue, 21 Jan 2025 20:36:48 +0000
+Message-Id: <20250121203648.23775-1-qasdev00@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d308300f-2559-4d13-8d15-5a2416ac00c9@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Jan 21, 2025 at 10:19:08PM +0530, Prashanth K wrote:
-> 
-> 
-> On 21-01-25 08:36 pm, Alan Stern wrote:
-> > On Tue, Jan 21, 2025 at 09:50:08AM +0530, Prashanth K wrote:
-> >>
-> >>
-> >> On 20-01-25 08:17 pm, Alan Stern wrote:
-> >>> On Mon, Jan 20, 2025 at 04:47:02PM +0530, Prashanth K wrote:
-> >>>> Currently CONFIG_USB_GADGET_VBUS_DRAW limits the maximum current
-> >>>> drawn from Vbus to be up to 500mA. However USB gadget operating
-> >>>> in SuperSpeed or higher can draw up to 900mA. Also, MaxPower in
-> >>>> ConfigFS takes its default value from this config. Hence increase
-> >>>> the allowed range of CONFIG_USB_GADGET_VBUS_DRAW to 900mA.
-> >>>
-> >>> Is this the sort of thing that really needs to be a Kconfig option?  Why 
-> >>> not make the decision at runtime, based on the needs of the gadget or 
-> >>> function drivers and the connection speed?
-> >>>
-> >>> Alan Stern
-> >>>
-> >>
-> >> Right, set_config() in composite.c does this in runtime based on the
-> >> values of MaxPower (from configFS), VBUS_DRAW defconfig and speed.
-> >> If we don't set MaxPower from configFS, this config helps to set it
-> >> during compile time. In fact MaxPower in configFS takes its default
-> >> value from CONFIG_USB_GADGET_VBUS_DRAW . Sent this patch because Kconfig
-> >> has this limitation where it's only allowing values upto 500mA.
-> > 
-> > Why does MaxPower need to be set at compile time?  Why not set it at 
-> > runtime instead?
-> > 
-> > If MaxPower gets set at runtime then it can take its default value to be 
-> > 500 mA or 900 mA depending on the connection speed.  There will be no 
-> > need for CONFIG_USB_GAGDGET_VBUS_DRAW.
-> > 
-> 
-> Yes, agreed. Can we mark CONFIG_USB_GAGDGET_VBUS_DRAW as legacy and
-> maybe also avoid configfs/composite from using it?
+If usb_add_hcd() fails in vhci_hcd_probe() (i.e., a probe failure),
+the error path calls usb_remove_hcd() and also sets 
+pdev->dev.driver_data to NULL.
 
-Indeed, the whole idea is to avoid using CONFIG_USB_GADGET_VBUS_DRAW in 
-configfs and composite.
+Consequently, any subsequent call to platform_get_drvdata(pdev) 
+(which returns pdev->dev.driver_data) may yield NULL, causing a 
+crash if that pointer is dereferenced.
 
-If nothing will still be using it, just remove it entirely.  No need to 
-mark it as legacy.
+Fix this by adding a sanity check to ensure "hcd" is non-NULL
+before proceeding with further operations.
 
-Alan Stern
+Reported-by: syzbot <syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com>
+Closes: https://syzkaller.appspot.com/bug?extid=83976e47ec1ef91e66f1
+Tested-by: syzbot <syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com>
+Fixes: 03cd00d538a6 ("usbip: vhci-hcd: Set the vhci structure up to work")
+Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
+---
+ drivers/usb/usbip/vhci_sysfs.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+index d5865460e82d..a5e6c3c4af06 100644
+--- a/drivers/usb/usbip/vhci_sysfs.c
++++ b/drivers/usb/usbip/vhci_sysfs.c
+@@ -76,6 +76,10 @@ static ssize_t status_show_vhci(int pdev_nr, char *out)
+ 	}
+ 
+ 	hcd = platform_get_drvdata(pdev);
++
++	if (!hcd)
++		return 0;
++
+ 	vhci_hcd = hcd_to_vhci_hcd(hcd);
+ 	vhci = vhci_hcd->vhci;
+ 
+-- 
+2.39.5
+
 
