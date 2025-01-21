@@ -1,130 +1,122 @@
-Return-Path: <linux-usb+bounces-19550-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19549-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15A94A17848
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 08:07:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BBFD9A17849
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 08:07:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52B6116E0A7
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 07:07:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3FA7D188E540
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 07:07:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F9D1C1F02;
-	Tue, 21 Jan 2025 07:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C94691C07F3;
+	Tue, 21 Jan 2025 07:02:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="OxU7sNZR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eTz0Myg4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.7])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FF21C1741;
-	Tue, 21 Jan 2025 07:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.7
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29371166307
+	for <linux-usb@vger.kernel.org>; Tue, 21 Jan 2025 07:02:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737442996; cv=none; b=aZ+fR+NN5gj4hMH0zpHPAXOAhtvkGKwaQ9s3mi/gHByZDsZJx4oyKpeHwQoFpQ/z/ValFO15ZHrch+ZQTSmaXSFY1gcYFaWKdosFTmXJ5PRFBRRcOEVEJPeAa8t6T6n6rk6w7sEN7LKW/fIfypWsQ/Z1Edywuz2H0lDwZniG9Rs=
+	t=1737442938; cv=none; b=UQcynFxMxxAW5mVjkHSWAgS68HVhc7T598MCfP+EqmfBDDmDv8HFJRhRk1U70sRYJZU2KmfXbTEqeqx/+xvfelcsC7gdPrbkVoTBPY4pnR+kAeiY7doKbA4DcizrVuHM24H4MlElU1+/kEKTPYUtJLvY6ZWXmMiqME7DxvD9ocE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737442996; c=relaxed/simple;
-	bh=Pm5KxlEOrPsbMwb0aSTm9vJq7mr/0YfYgcyGy3X/SH4=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=IPsyHbl22IlWPczWQjlMCgoQ412aDjmHIAbNAFCg+DJUhxZTghwcjAzSYS+wGNE3Shs1nzFannqzSXFz3xX2yq/DDrfHZQLXUfSnwG9kwI3mZFwvyiqJ4GAc76Ft0msSLd3o9z7Ya5MluaF2bDLr84rOZRagEaz/JiAGMbQc0O4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=OxU7sNZR; arc=none smtp.client-ip=117.135.210.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:Subject:Date:Message-Id; bh=yzjQQQ42oypYe9np5j
-	fg/sNqJdboFDvNdQQH1/JMdWI=; b=OxU7sNZR2FipZyeOvYa++2Cp5uGBQ8yN4x
-	3iwIK7lgTYIhCcQy3RvhRhkaG5FPtjZIcZESHPEmCdykP3Ztg+kKV7jUA83g3yOw
-	fwEtWdIxMhZULi/b2JLVD+uetQ4QbZOtLaGvZNGh85t9GRjALBADYDPXPU0SDICc
-	qPR3nAPtU=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDX_9UNQ49nwkQhAA--.21312S2;
-	Tue, 21 Jan 2025 14:47:42 +0800 (CST)
-From: "fengchunguo@126.com" <fengchunguo@126.com>
-To: heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Gary Feng <fengchunguo@126.com>
-Subject: [PATCH] usb: typec: Added power_operation_mode_show type check when usb slowly detect
-Date: Tue, 21 Jan 2025 14:47:38 +0800
-Message-Id: <1737442058-240190-1-git-send-email-fengchunguo@126.com>
-X-Mailer: git-send-email 2.7.4
-X-CM-TRANSID:_____wDX_9UNQ49nwkQhAA--.21312S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxXrW7KFyUWrWUJr13XrWDurg_yoW5GFyDpr
-	4DGr45Gr4kJr17ZF1xAFn8AF1Fy3W8Ca4UGFyxtryFyF12g3WUKrWUJay7GryDJr45Xry7
-	tF1qq3yrt348GaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRvD7-UUUUU=
-X-CM-SenderInfo: 5ihqwu5kxqw3br6rjloofrz/1tbifgjaOmeOiHz2VwABsr
+	s=arc-20240116; t=1737442938; c=relaxed/simple;
+	bh=hqQWsuZCVnBf6dOEcI/6TAcX9yfUR1LOJecgInMOZ74=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uGykVYlqeDH78AVRD+QnMIRTk402hnpDCbOdqN4u5mcHD90UdLSMO2bw00HBcgEVWfw2CD+sRH6bKPfre3/x1Zspm6WrfokfA+k/juQCztZnPR3poeVq9AU0B6jx7SXClyGlyl+W2Vxgc/o4zCEM4uegOdBJmg67DoPpV6xlfuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eTz0Myg4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38AC9C4CEDF;
+	Tue, 21 Jan 2025 07:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1737442937;
+	bh=hqQWsuZCVnBf6dOEcI/6TAcX9yfUR1LOJecgInMOZ74=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eTz0Myg46obCb1XxU6WIJZmCr6dpMT/yEe93GEJhHmvwPp7s3TnQqBYTGXDCkFvRN
+	 aaIACTkmHlByIHCF3gXPEVjjrWtv+Mkl6e8wWZ80+xy5OiaOvwNJ1r0vkV9LGnhq1K
+	 gtE0oLW35emYM7eytSD8ZirOUwppe9MtvclKaomU=
+Date: Tue, 21 Jan 2025 08:01:22 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: rtm@csail.mit.edu
+Cc: linux-usb@vger.kernel.org
+Subject: Re: USB hub code can dereference NULL hub and hub->ports
+Message-ID: <2025012150-nervous-john-fb53@gregkh>
+References: <95564.1737394039@localhost>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <95564.1737394039@localhost>
 
-From: Gary Feng <fengchunguo@126.com>
+On Mon, Jan 20, 2025 at 12:27:19PM -0500, rtm@csail.mit.edu wrote:
+> The attached program, which acts via usbip as a USB device or hub,
+> causes my linux machines to dereference some NULL pointers in
+> drivers/usb/core/hub.c. These are places where udev->maxchild > 0, but
+> either usb_hub_to_struct_hub(udev) returns NULL, or the returned hub
+> has hub->ports == NULL.
+> 
+> This is one such place:
+> 
+> static void recursively_mark_NOTATTACHED(struct usb_device *udev)
+> {
+>         struct usb_hub *hub = usb_hub_to_struct_hub(udev);
+>         int i;
+> 
+>         for (i = 0; i < udev->maxchild; ++i) {
+>                 if (hub->ports[i]->child)
+> 
+> And this:
+> 
+> static void hub_disconnect_children(struct usb_device *udev)
+> {
+>         struct usb_hub *hub = usb_hub_to_struct_hub(udev);
+>         int i;
+> 
+>         /* Free up all the children before we remove this device */
+>         for (i = 0; i < udev->maxchild; i++) {
+>                 if (hub->ports[i]->child)
+> 
+> This can see NULL hub->ports:
+> 
+> void usb_hub_adjust_deviceremovable(struct usb_device *hdev,
+>                 struct usb_hub_descriptor *desc)
+> {
+>         struct usb_hub *hub = usb_hub_to_struct_hub(hdev);
+>         enum usb_port_connect_type connect_type;
+>         int i;
+> 
+>         if (!hub)
+>                 return;
+> 
+>         if (!hub_is_superspeed(hdev)) {
+>                 for (i = 1; i <= hdev->maxchild; i++) {
+>                         struct usb_port *port_dev = hub->ports[i - 1];
+> 
+> This can see a NULL hub:
+> 
+> static int hub_set_address(struct usb_device *udev, int devnum)
+> {
+>         int retval;
+>         unsigned int timeout_ms = USB_CTRL_SET_TIMEOUT;
+>         struct usb_hcd *hcd = bus_to_hcd(udev->bus);
+>         struct usb_hub *hub = usb_hub_to_struct_hub(udev->parent);
+> 
+>         if (hub->hdev->quirks & USB_QUIRK_SHORT_SET_ADDRESS_REQ_TIMEOUT)
+> 
+> I've attached a demo that runs into some of these NULL dereferences.
+> It depends on being able to run usbip (and modeprobe vhci-hcd).
 
-When the type of usb inserted one un-defined power mode, only 90mA
-voltage, system panic sometime.So added the one condition for avioding it.
+Great, can you submit patches to fix these issues now that you have a
+reliable test program to verify the problem?
 
-Reproduced:
-1.Inserted usb cable for charging slowly.
-2.System panic sometimes. The log:
-Unexpected kernel BRK exception at EL1
-msm-dwc3 4e00000.ssusb: DWC3 exited from low power mode
-Internal error: BRK handler: 00000000f2005512 [#1] PREEMPT SMP
-Skip md ftrace buffer dump for: 0x1609e0
-Hardware name:Qualcomm Technologies, Inc. Blair QRD (DT)
-pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : power_operation_mode_show+0x48/0x50
-lr : dev_attr_show+0x38/0x74
-sp : ffffffc015d83c00
-x29: ffffffc015d83c00 x28: ffffff80517212c0 x27: 000000007ffff001
-x26: 0000000000000001 x25: 0000000000000000 x24: ffffff801b9274f0
-x23: ffffff805a9f1cc0 x22: ffffffda7b7a2608 x21: ffffff8050e99000
-x20: ffffffda7c5fb5b0 x19: ffffff801b9274c8 x18: ffffffc01568d070
-x17: 00000000df43c25c x16: 00000000df43c25c x15: 0000000000000000
-x14: 0000000000000000 x13: ffffffa77aadf000 x12: ffffffda7c4a1210
-x11: ffffff8050e99000 x10: 0000000000000000 x9 : ffffffda7ae948ac
-x8 : 00000000fffffffa x7 : 0000000000000000 x6 : 000000000000003f
-x5 : 0000000000000040 x4 : 0000000000000000 x3 : 0000000000000004
-x2 : ffffff8050e99000 x1 : ffffffda7c5fb5b0 x0 : ffffff80858ca008
-Call trace:
- power_operation_mode_show+0x48/0x50
- dev_attr_show+0x38/0x74
- sysfs_kf_seq_show+0xb4/0x130
- kernfs_seq_show+0x44/0x54
- seq_read_iter+0x158/0x4ec
- kernfs_fop_read_iter+0x68/0x1b0
- vfs_read+0x1d8/0x2b0
- ksys_read+0x78/0xe8
- __arm64_sys_read+0x1c/0x2c
- invoke_syscall+0x58/0x11c
- el0_svc_common+0xb4/0xf4
- do_el0_svc+0x2c/0xb0
- el0_svc+0x2c/0xa4
- el0t_64_sync_handler+0x68/0xb4
- el0t_64_sync+0x1a0/0x1a4
-Code: 93407c00 a8c17bfd f85f8e5e d65f03c0 (d42aa240)
----[ end trace 0000000000000000 ]---
-Kernel panic - not syncing: BRK handler: Fatal exception
+thanks,
 
-Signed-off-by: Gary Feng <fengchunguo@126.com>
----
- drivers/usb/typec/class.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
-index 4b3047e..f2b0d5d 100644
---- a/drivers/usb/typec/class.c
-+++ b/drivers/usb/typec/class.c
-@@ -2163,7 +2163,7 @@ void typec_set_pwr_opmode(struct typec_port *port,
- {
- 	struct device *partner_dev;
- 
--	if (port->pwr_opmode == opmode)
-+	if ((port->pwr_opmode == opmode) || (opmode < TYPEC_PWR_MODE_USB))
- 		return;
- 
- 	port->pwr_opmode = opmode;
--- 
-2.7.4
-
+greg k-h
 
