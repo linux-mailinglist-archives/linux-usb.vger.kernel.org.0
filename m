@@ -1,148 +1,122 @@
-Return-Path: <linux-usb+bounces-19560-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19563-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 309F2A17EB7
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 14:18:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5673A18073
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 15:51:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDA0C3A2DF9
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 13:18:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 319E7164494
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 14:51:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D881F2396;
-	Tue, 21 Jan 2025 13:18:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242E91F4E47;
+	Tue, 21 Jan 2025 14:50:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BH3pmOlA"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="aG9mkTjb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A620C1E502;
-	Tue, 21 Jan 2025 13:18:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C3A1F37D1;
+	Tue, 21 Jan 2025 14:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737465505; cv=none; b=p3kHZsw84Qt02g2iupWGXGpxUgdmtWIArP3VkqEwXllSAl30c8Em/Iq5nIVX6Dep8iJzYbHkWCmdqVZfHwozSmdw9OFYxvQ/LK+c4GkmJxNl1tYMuBFzsccA9YttyGC5kW9EutU93FydWY4o5qEjJ8JCCNJqs+BFBZ7TZgq3Aa8=
+	t=1737471032; cv=none; b=Rdf9fy4Om8bBV1l34/A8H8n6X0B9H+T4/lyKSWMGI2csAnmmGq60raNDzT/zKOATHH2MKHlsj9CCKNpPJYFpfMEx/NmnBjqa+61s13pIcgIq1CA+nl0UJDGVt5AtGk764aMHwNZFGIDNaRvfGW+EVmsFEd27OeaetrteBGETNP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737465505; c=relaxed/simple;
-	bh=wasEGo/ru9owGNIy/X4YD3wZ9KExKy8oYScsF9XZuRU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mb3dCtbd5bBOO7IuDpCkWi8ysidoXrlidxTsXgmS2N4wqbUlJSjxMLE7PRqs2IASYCYHerPkItK1JubUPbh3RM6TBwyV+cg5h6Ujp0HmItx844PAZfPZ5c4r3XbQAtdu6GkBLhTnW5i+fehTaFvSsTl2dPX6t+7J9b40qHRwQBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BH3pmOlA; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5da0c79ff85so906690a12.1;
-        Tue, 21 Jan 2025 05:18:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737465502; x=1738070302; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ddWR/utTRGGEYrHHtFURjGFiLzq3Lu6rmS9hUEc8V4o=;
-        b=BH3pmOlAv/bguNa6d4SwMOPKm1XlQY6PR3C4iONLUwGq3koUk1YpJ0hZvmFWcMvMNs
-         SfVX6dD7ZhRpdzStn7aK2hEjTvvi5LV6UrM3WDxF/WQhahEfXqthKOKjRvRDd81KsFWG
-         D6jBhrRGHL51cXDZa/ko8Ivua8OBrrPC+RZjvx4RmbA3zEEfCaFGrL/lI1wX5CHCyVCs
-         lHVhPUuHqEpxquQ1F2IHApjklWmNUnICko7p8zViSn6FL3aGYIgNriaPSyHs9B728gJI
-         j2Zx0162Bub6RSkkts22nISI7tTbR5s4zxdkdV7SXRE/Qb1J/E2BygLRstiLds9qI8hV
-         hsRg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737465502; x=1738070302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ddWR/utTRGGEYrHHtFURjGFiLzq3Lu6rmS9hUEc8V4o=;
-        b=ixoFd3Vlz0vnN7jf/Ww7O3iq3MPxQdUTCTlJWPm8EDw43aGSqvC71t3MgCB8U6ZcRv
-         NXofN9sxuxlXfWnCCZpWZEgQpONafCUHAVvuSMMYc6aE0xv2P9O20nzVQrUxt62ZnnVM
-         oEX/Z7U2YWoggJcFpBV990Hb99K2imxr9PUBGtvun2N0pGqhhIZMhn9e2NVIu1MqPPut
-         gxdIy7L+P7dcCxP+znq7mRQ21dVKxo3P4h9/LlfvKLG55ci0SI6Gg/vK7S8QCsGcJ4b7
-         wvXyI6SGmwuCbb7PPsPJpc4chWJvo6RitlBi+d4RmTbbDX7pYc8ofbo4q9RDjcK8QJT0
-         y9vA==
-X-Forwarded-Encrypted: i=1; AJvYcCVAwFilfRCCKJQ5YVjPIoIvfWrxqH+2uKjSAGZeVmgPUkYPlSISf94kQJInh5WCFvL5xzT0Oc46VqNnsA==@vger.kernel.org, AJvYcCVhukD88839TO/xTbfe2yNR2U6SC9hP3K0Af2vFA7tfWE+LtXINw9ccDWQaeWBgv/o4TL8gzesAKfBm@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzt5LL9SBMWlZei3BTSBaFjxR0AMJ0Lu1dLAlCDdXF1WO1Wrrqy
-	YWKNxBtBXjF/LABOQPDEfzUyPPSC2JCT/ZDFKPaImiVcbmz3eh/R1YnKwi9k8YD7GirVwFqBorC
-	ZqtKZQlhqaW38fvCzpe28zWXxGTY=
-X-Gm-Gg: ASbGncvBEU89LKJ4X+j+H2mi8UXFDochK+5eU8xXLqyYmrUH/69nSlm8af+ATRhhCc/
-	EVICKLpz1yRDVSAezCeL8KUtMKZ1PdbNR9iwumINZGMMemuxC1A==
-X-Google-Smtp-Source: AGHT+IEJB73RC805UtPBGlFhoyKHQmRGWJ+3Lh8OqPEpxLLf2jjpMjQCsA1U2MLFQSqz8Mst3rVVYZ119mp+0PwISaI=
-X-Received: by 2002:a05:6402:40cd:b0:5d4:35c7:cd70 with SMTP id
- 4fb4d7f45d1cf-5db7d2f892cmr5534258a12.4.1737465501635; Tue, 21 Jan 2025
- 05:18:21 -0800 (PST)
+	s=arc-20240116; t=1737471032; c=relaxed/simple;
+	bh=ZLnMpdUl8NcY5kgzTuqtk8Z491b642rZj8JClq7C37k=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Et9klYzFDXfcX1Xn6ipw0kVrnchT7sjwx+yv9PZMlZe+siXnvFzZiJg6ffTcKiiWQnVaO4FjlEOjj3Dq34TKw8E6IlrGR3ZxGqBl0AuGVwuaevhRCM4OxVGoR3CprTdMbt30xGqSW4OdDsCgvAN6GJn5+vh6SEGQfdbPaxjQKgg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=aG9mkTjb; arc=none smtp.client-ip=210.61.82.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 09c1eb64d80711efbd192953cf12861f-20250121
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=ddRp4IKh0ObprFE1vqoDa9K2zIlik7OZ3G9EpYAp4ek=;
+	b=aG9mkTjbKrxDaaYIHW1tn5+BP1UszMbBuVMakXb16mMx7u/zx+JRGVX4sxLNnf2ZFlyMnuBiV/89ZQpvR7vQ2XnogAV5EqTtHEm82joE4UnupuxR3dF1pZ43LUJdo1rI+eEKJGoIraT3knRNpj4tlt5+D2ZwCr2eH9KhRbHyZhY=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.46,REQID:075a14ad-94d3-4264-9bef-a6a5051c8c30,IP:0,U
+	RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:-5
+X-CID-META: VersionHash:60aa074,CLOUDID:af543e0f-078a-483b-8929-714244d25c49,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:ni
+	l,URL:11|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,
+	LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULN
+X-UUID: 09c1eb64d80711efbd192953cf12861f-20250121
+Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw02.mediatek.com
+	(envelope-from <chunfeng.yun@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 909434500; Tue, 21 Jan 2025 22:50:21 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Tue, 21 Jan 2025 22:50:19 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.28 via Frontend Transport; Tue, 21 Jan 2025 22:50:19 +0800
+From: Chunfeng Yun <chunfeng.yun@mediatek.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
+	<robh@kernel.org>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>
+CC: Chunfeng Yun <chunfeng.yun@mediatek.com>, Krzysztof Kozlowski
+	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, Mathias Nyman <mathias.nyman@intel.com>,
+	<linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH v2 1/4] dt-bindings: usb: mtk-xhci: add support mt8196
+Date: Tue, 21 Jan 2025 22:50:05 +0800
+Message-ID: <20250121145008.22936-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250119131356.1006582-1-tomasz.pakula.oficjalny@gmail.com>
- <20250119131356.1006582-10-tomasz.pakula.oficjalny@gmail.com> <32945abd-060b-4da8-aa1b-1e45dbe2d4d2@suse.com>
-In-Reply-To: <32945abd-060b-4da8-aa1b-1e45dbe2d4d2@suse.com>
-From: =?UTF-8?Q?Tomasz_Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
-Date: Tue, 21 Jan 2025 14:18:08 +0100
-X-Gm-Features: AbW1kvbXlnBOuib3Ibx3O3MgeWA08fh9ZCuDR1tIGRx4hWF9uBffGC63gJ7SmPE
-Message-ID: <CAFqprmwfoBsLFsvG5NGWZ_jS6BHi8DnXRvbbbC+ZoxbExVSvRA@mail.gmail.com>
-Subject: Re: [PATCH v5 09/12] HID: pidff: Stop all effects before enabling actuators
-To: Oliver Neukum <oneukum@suse.com>
-Cc: jikos@kernel.org, bentiss@kernel.org, anssi.hannula@gmail.com, 
-	linux-input@vger.kernel.org, linux-usb@vger.kernel.org, oleg@makarenk.ooo
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-On Tue, 21 Jan 2025 at 11:10, Oliver Neukum <oneukum@suse.com> wrote:
->
-> On 19.01.25 14:13, Tomasz Paku=C5=82a wrote:
-> > Some PID compliant devices automatically play effects after boot (i.e.
-> > autocenter spring) that prevent the rendering of other effects since
-> > it is done outside the kernel driver.
-> >
-> > This makes sure all the effects currently played are stopped after
-> > resetting the device.
-> > It brings compatibility to the Brunner CLS-P joystick and others
->
-> Hi,
->
-> it seems to me that the same thing would happen upon resumption
-> from S4. Will this be handled?
->
->         Regards
->                 Oliver
->
+There are three USB controllers on mt8196, each controller's wakeup
+control is different, add some specific versions for them, and add
+a new compatilbe for mt8196.
 
-(Terribly sorry for double mailing, I mistakenly hit reply instead of reply=
- all)
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v2: no changes
+---
+ .../devicetree/bindings/usb/mediatek,mtk-xhci.yaml          | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
-I just tested this with my devices and it sadly doesn't handle sleep proper=
-ly.
-If a device is powered off then back on during sleep, the driver seems to b=
-e
-unaware of it and keeps on chugging along like nothing happened.
+diff --git a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+index ef3143f4b794..cacb3d3dc4ac 100644
+--- a/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
++++ b/Documentation/devicetree/bindings/usb/mediatek,mtk-xhci.yaml
+@@ -36,6 +36,7 @@ properties:
+           - mediatek,mt8188-xhci
+           - mediatek,mt8192-xhci
+           - mediatek,mt8195-xhci
++          - mediatek,mt8196-xhci
+           - mediatek,mt8365-xhci
+       - const: mediatek,mtk-xhci
+ 
+@@ -164,7 +165,10 @@ properties:
+             104 - used by mt8195, IP1, specific 1.04;
+             105 - used by mt8195, IP2, specific 1.05;
+             106 - used by mt8195, IP3, specific 1.06;
+-          enum: [1, 2, 101, 102, 103, 104, 105, 106]
++            107 - used by mt8196, IP0, specific 1.07;
++            108 - used by mt8196, IP1, specific 1.08;
++            109 - used by mt8196, IP2, specific 1.09;
++          enum: [1, 2, 101, 102, 103, 104, 105, 106, 107, 108, 109]
+ 
+   mediatek,u3p-dis-msk:
+     $ref: /schemas/types.yaml#/definitions/uint32
+-- 
+2.46.0
 
-This causes two things to happen:
-1. FFB breaks in programs that have been running when going to sleep
-2. Possible auto centering forces are back on and won't go away without a
-   power cycle or a disconnect/connect.
-
-Moreover, I noticed that the PID reset routine is only called upon during
-device initialisation, while most other PID driver implementations don't do=
- it
-during device init and only call:
-1. reset + enable actuators if an application initialises force feedback.
-2. reset + stop all effects + disable actuators if there aren't any more
-   effects left on the device after effect removal.
-
-I'll update the reset function and access it differently, to better manage
-device state and maybe hook up .suspend, .resume and .reset_resume
-in the universal driver.
-
-Managing this in the generic way will necessitate more extensive changes in=
- the
-hid-core but resetting every time when an application actually takes contro=
-l
-should be enough for now.
-
-This driver is very old and I plan on chipping away at it more in the futur=
-e
-to make it less strict and work even better with all sorts of USB PID devic=
-es.
-
-Tomasz
 
