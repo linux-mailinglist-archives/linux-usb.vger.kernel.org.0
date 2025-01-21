@@ -1,143 +1,130 @@
-Return-Path: <linux-usb+bounces-19548-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19550-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45391A17676
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 05:20:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15A94A17848
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 08:07:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D79011888112
-	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 04:20:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52B6116E0A7
+	for <lists+linux-usb@lfdr.de>; Tue, 21 Jan 2025 07:07:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DE441925BF;
-	Tue, 21 Jan 2025 04:20:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F9D1C1F02;
+	Tue, 21 Jan 2025 07:03:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="dbIGMZ+j"
+	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="OxU7sNZR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29E7A1487E1
-	for <linux-usb@vger.kernel.org>; Tue, 21 Jan 2025 04:20:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.7])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FF21C1741;
+	Tue, 21 Jan 2025 07:03:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737433217; cv=none; b=P3gLzBxowRGqjXvtLCkVOxxNThvXDx4iyS9NmhBMymZzJtrUd4KbdlRi2J+hWOCEfaUgmOqmdi5nLetq8yj4F3qVENBj1+LN+NzXkRWBYI6z1sD5YP641xHBggkqlMa6iZir7GiE+YYVLL4zNudIDrflD/VuhPmafBBUW81qPRM=
+	t=1737442996; cv=none; b=aZ+fR+NN5gj4hMH0zpHPAXOAhtvkGKwaQ9s3mi/gHByZDsZJx4oyKpeHwQoFpQ/z/ValFO15ZHrch+ZQTSmaXSFY1gcYFaWKdosFTmXJ5PRFBRRcOEVEJPeAa8t6T6n6rk6w7sEN7LKW/fIfypWsQ/Z1Edywuz2H0lDwZniG9Rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737433217; c=relaxed/simple;
-	bh=WtNseL/4ux+w4KqLgQWzWM6xsYjXs4B9v86pjNSLAVE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OJ0rw3wV+FXfJTXUGhYEIlmtJ2ojdzUY+pC7n+FhmTAeZ7O5fkLFLibRdKMnub3WRcTXRrASsSq0XHuA2wj7sWoostmBUWxMmq4hRVilwEe9NLwoGSI8FlmbKqehD2NuDvZ0KcFdLG0clgqOwpS/dkQYiJpva2qPhPsGs2kGFjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=dbIGMZ+j; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50KLwK1a000934
-	for <linux-usb@vger.kernel.org>; Tue, 21 Jan 2025 04:20:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	EnJ8550TGSZJxXunYDeoj9cQwxmwwmeTmd5HHzXnzus=; b=dbIGMZ+jaKY3f+g4
-	AjVoo6YSMwEWMsuMzmk1cRlHv+1CUER+OdiOJuhD+qdP/SYRYh+Wm/IMK6sK/0+A
-	MJM3mcZNjQKUecYZhSd/tWVxkkrB9bXJDyVQt6mZ3baJRE89qPvsqRvyV9PB6TNW
-	gqpTy61zuI47QpPe6ISkifJaZQO3exXJQhW8YdMWKH3jkiIABddyv3E0zReEujBH
-	6L/6vuuLPUy57RHJpSNaN73+YjxsnAjOaglr+92lm5Ye9JhqshDCDtnGGJ6h07GG
-	3xoM+Fs1Ws/KTKw/wL1ARfDStvf0f2ifL+8hG6NGaR92hdyPyIt2D8nug2uRFFr4
-	0u4sWg==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 449ruf97c2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Tue, 21 Jan 2025 04:20:14 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-2ef9864e006so14552888a91.2
-        for <linux-usb@vger.kernel.org>; Mon, 20 Jan 2025 20:20:14 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737433213; x=1738038013;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=EnJ8550TGSZJxXunYDeoj9cQwxmwwmeTmd5HHzXnzus=;
-        b=L/BKnxeyaVPOmaO6r9O6A+toH8ez3fFOQ3HuzSpJcL7FMAZChWLDymJDR0Dt6K6ASY
-         vNokwa6WVzi4Ui0RaM2IzuIU66wxTihmSDyHWuVKWNoQlsf9mKklfaaoLZ/RvPqktLSK
-         tzKUj40oUIksKoNKndYGDsPFlH/jVi0ne2k3LTk9nUnlrsOv3zN73Eb44BdPRGMHVJUD
-         q105llbxs6Ngyo0RZNopVV1jW2hX3+l203ahzbAzkJ7qsAHTuXTk7EJ1ToovXrNZ/ts7
-         QEiUCD2rANa7LREQejvN6OMdrHI4Ax/pY4dJ4iYNM/vVIAMthZrXdZYO0E4LImCLJBrc
-         iSkw==
-X-Forwarded-Encrypted: i=1; AJvYcCWQ8p9GpTaL+blmLvCyQkHZPS7vneKg/qoKooxgtoiYD8TqWxX8IvbLXTKHtzcKcV1rfXEE9IkeZb8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzotzjr+AAyXgDwrUPSeOoOUnUtVQak5n356My4bCk5/px2rLd+
-	E1Wfy6RmY5tXubSto94zwmfkKLRmdrIBjtb2y7ZgKDZbFd5yfwOH4phqLMdmdze4U+CopwuJ59Q
-	xCWMQ/Zr6S8l99pGLTI3+KbKYIYe8wCf7O0gcvb9nkWEoiy8+SXMIbFHbGAk=
-X-Gm-Gg: ASbGncuvuSKo10aSE85TzWxjhHKBt4qHeNZHDbfjD2Yfcf2WhsP0h9rbXYvsTecY/G8
-	832UMmHWG85Eon3yrA6LdmQNcP4DTjA4vDlijqXfGqnJd7KFGN2ug6yRDdVpO4E6vdoFcA8BFdm
-	nQB3i3Rf8af3pDKfSGn3VLVl2Nm/m23pJkfN9I5GPpsmU12K+eUpq+yR8a0jFMsu7CmUBiJImGT
-	ov/c8e7M6P2lIBfenfHgUXa2LeNp8qXoZD291Dezt40VhJ8UE03rQlRVSiWNcJLz1/pb8Jm1OYY
-	JaJRH466BRkK00ZkoH8=
-X-Received: by 2002:a17:90b:2e4b:b0:2ea:9ccb:d1f4 with SMTP id 98e67ed59e1d1-2f782afebd6mr28121779a91.0.1737433213484;
-        Mon, 20 Jan 2025 20:20:13 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHzuu+UMw6dxadVPS9Dl69yNaWc5EQ1KUib72aIqfm+b75fFvwCWDZZxholjsCWJKBU8jL8mw==
-X-Received: by 2002:a17:90b:2e4b:b0:2ea:9ccb:d1f4 with SMTP id 98e67ed59e1d1-2f782afebd6mr28121744a91.0.1737433213103;
-        Mon, 20 Jan 2025 20:20:13 -0800 (PST)
-Received: from [10.218.35.239] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f72c2bb2cdsm11901421a91.34.2025.01.20.20.20.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 20 Jan 2025 20:20:12 -0800 (PST)
-Message-ID: <1b1587e8-5c38-4138-a27a-1de71ff07ce3@oss.qualcomm.com>
-Date: Tue, 21 Jan 2025 09:50:08 +0530
+	s=arc-20240116; t=1737442996; c=relaxed/simple;
+	bh=Pm5KxlEOrPsbMwb0aSTm9vJq7mr/0YfYgcyGy3X/SH4=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=IPsyHbl22IlWPczWQjlMCgoQ412aDjmHIAbNAFCg+DJUhxZTghwcjAzSYS+wGNE3Shs1nzFannqzSXFz3xX2yq/DDrfHZQLXUfSnwG9kwI3mZFwvyiqJ4GAc76Ft0msSLd3o9z7Ya5MluaF2bDLr84rOZRagEaz/JiAGMbQc0O4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=OxU7sNZR; arc=none smtp.client-ip=117.135.210.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=yzjQQQ42oypYe9np5j
+	fg/sNqJdboFDvNdQQH1/JMdWI=; b=OxU7sNZR2FipZyeOvYa++2Cp5uGBQ8yN4x
+	3iwIK7lgTYIhCcQy3RvhRhkaG5FPtjZIcZESHPEmCdykP3Ztg+kKV7jUA83g3yOw
+	fwEtWdIxMhZULi/b2JLVD+uetQ4QbZOtLaGvZNGh85t9GRjALBADYDPXPU0SDICc
+	qPR3nAPtU=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-0 (Coremail) with SMTP id _____wDX_9UNQ49nwkQhAA--.21312S2;
+	Tue, 21 Jan 2025 14:47:42 +0800 (CST)
+From: "fengchunguo@126.com" <fengchunguo@126.com>
+To: heikki.krogerus@linux.intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Gary Feng <fengchunguo@126.com>
+Subject: [PATCH] usb: typec: Added power_operation_mode_show type check when usb slowly detect
+Date: Tue, 21 Jan 2025 14:47:38 +0800
+Message-Id: <1737442058-240190-1-git-send-email-fengchunguo@126.com>
+X-Mailer: git-send-email 2.7.4
+X-CM-TRANSID:_____wDX_9UNQ49nwkQhAA--.21312S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXrW7KFyUWrWUJr13XrWDurg_yoW5GFyDpr
+	4DGr45Gr4kJr17ZF1xAFn8AF1Fy3W8Ca4UGFyxtryFyF12g3WUKrWUJay7GryDJr45Xry7
+	tF1qq3yrt348GaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zRvD7-UUUUU=
+X-CM-SenderInfo: 5ihqwu5kxqw3br6rjloofrz/1tbifgjaOmeOiHz2VwABsr
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: Increase the limit of USB_GADGET_VBUS_DRAW
- to 900mA
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simona Vetter <simona.vetter@ffwll.ch>, Takashi Iwai <tiwai@suse.de>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250120111702.3738161-1-prashanth.k@oss.qualcomm.com>
- <894f42a7-50a5-401e-a705-a06eafd6161d@rowland.harvard.edu>
-Content-Language: en-US
-From: Prashanth K <prashanth.k@oss.qualcomm.com>
-In-Reply-To: <894f42a7-50a5-401e-a705-a06eafd6161d@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: OQwBiNlv714vNr-fEVM9QDIyk4tLiADK
-X-Proofpoint-ORIG-GUID: OQwBiNlv714vNr-fEVM9QDIyk4tLiADK
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-21_02,2025-01-20_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 spamscore=0
- adultscore=0 bulkscore=1 impostorscore=0 clxscore=1015 phishscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=539 malwarescore=0
- lowpriorityscore=1 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501210032
 
+From: Gary Feng <fengchunguo@126.com>
 
+When the type of usb inserted one un-defined power mode, only 90mA
+voltage, system panic sometime.So added the one condition for avioding it.
 
-On 20-01-25 08:17 pm, Alan Stern wrote:
-> On Mon, Jan 20, 2025 at 04:47:02PM +0530, Prashanth K wrote:
->> Currently CONFIG_USB_GADGET_VBUS_DRAW limits the maximum current
->> drawn from Vbus to be up to 500mA. However USB gadget operating
->> in SuperSpeed or higher can draw up to 900mA. Also, MaxPower in
->> ConfigFS takes its default value from this config. Hence increase
->> the allowed range of CONFIG_USB_GADGET_VBUS_DRAW to 900mA.
-> 
-> Is this the sort of thing that really needs to be a Kconfig option?  Why 
-> not make the decision at runtime, based on the needs of the gadget or 
-> function drivers and the connection speed?
-> 
-> Alan Stern
-> 
+Reproduced:
+1.Inserted usb cable for charging slowly.
+2.System panic sometimes. The log:
+Unexpected kernel BRK exception at EL1
+msm-dwc3 4e00000.ssusb: DWC3 exited from low power mode
+Internal error: BRK handler: 00000000f2005512 [#1] PREEMPT SMP
+Skip md ftrace buffer dump for: 0x1609e0
+Hardware name:Qualcomm Technologies, Inc. Blair QRD (DT)
+pstate: a0400005 (NzCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : power_operation_mode_show+0x48/0x50
+lr : dev_attr_show+0x38/0x74
+sp : ffffffc015d83c00
+x29: ffffffc015d83c00 x28: ffffff80517212c0 x27: 000000007ffff001
+x26: 0000000000000001 x25: 0000000000000000 x24: ffffff801b9274f0
+x23: ffffff805a9f1cc0 x22: ffffffda7b7a2608 x21: ffffff8050e99000
+x20: ffffffda7c5fb5b0 x19: ffffff801b9274c8 x18: ffffffc01568d070
+x17: 00000000df43c25c x16: 00000000df43c25c x15: 0000000000000000
+x14: 0000000000000000 x13: ffffffa77aadf000 x12: ffffffda7c4a1210
+x11: ffffff8050e99000 x10: 0000000000000000 x9 : ffffffda7ae948ac
+x8 : 00000000fffffffa x7 : 0000000000000000 x6 : 000000000000003f
+x5 : 0000000000000040 x4 : 0000000000000000 x3 : 0000000000000004
+x2 : ffffff8050e99000 x1 : ffffffda7c5fb5b0 x0 : ffffff80858ca008
+Call trace:
+ power_operation_mode_show+0x48/0x50
+ dev_attr_show+0x38/0x74
+ sysfs_kf_seq_show+0xb4/0x130
+ kernfs_seq_show+0x44/0x54
+ seq_read_iter+0x158/0x4ec
+ kernfs_fop_read_iter+0x68/0x1b0
+ vfs_read+0x1d8/0x2b0
+ ksys_read+0x78/0xe8
+ __arm64_sys_read+0x1c/0x2c
+ invoke_syscall+0x58/0x11c
+ el0_svc_common+0xb4/0xf4
+ do_el0_svc+0x2c/0xb0
+ el0_svc+0x2c/0xa4
+ el0t_64_sync_handler+0x68/0xb4
+ el0t_64_sync+0x1a0/0x1a4
+Code: 93407c00 a8c17bfd f85f8e5e d65f03c0 (d42aa240)
+---[ end trace 0000000000000000 ]---
+Kernel panic - not syncing: BRK handler: Fatal exception
 
-Right, set_config() in composite.c does this in runtime based on the
-values of MaxPower (from configFS), VBUS_DRAW defconfig and speed.
-If we don't set MaxPower from configFS, this config helps to set it
-during compile time. In fact MaxPower in configFS takes its default
-value from CONFIG_USB_GADGET_VBUS_DRAW . Sent this patch because Kconfig
-has this limitation where it's only allowing values upto 500mA.
+Signed-off-by: Gary Feng <fengchunguo@126.com>
+---
+ drivers/usb/typec/class.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Regards,
-Prashanth K
+diff --git a/drivers/usb/typec/class.c b/drivers/usb/typec/class.c
+index 4b3047e..f2b0d5d 100644
+--- a/drivers/usb/typec/class.c
++++ b/drivers/usb/typec/class.c
+@@ -2163,7 +2163,7 @@ void typec_set_pwr_opmode(struct typec_port *port,
+ {
+ 	struct device *partner_dev;
+ 
+-	if (port->pwr_opmode == opmode)
++	if ((port->pwr_opmode == opmode) || (opmode < TYPEC_PWR_MODE_USB))
+ 		return;
+ 
+ 	port->pwr_opmode = opmode;
+-- 
+2.7.4
 
 
