@@ -1,119 +1,134 @@
-Return-Path: <linux-usb+bounces-19633-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19634-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 736E0A19321
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 14:59:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 786A3A193B3
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 15:18:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C6E77A2ABA
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 13:59:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE15E16B4A3
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 14:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1680E213E69;
-	Wed, 22 Jan 2025 13:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB9A9213229;
+	Wed, 22 Jan 2025 14:18:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QDiRCXnf"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HaULgxuI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45B80212D6F
-	for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2025 13:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE00117C220
+	for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2025 14:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737554347; cv=none; b=uBkLh0exW95tXk9WfHqdTrS0mmpRWnYXwnzjelyDEkcE75AFWreiWwimLI4dFv+2hAejRShqIfgMSvxmpb8RB/MwUnk+yNjZVJI13MZdivNlqYVi7raztZszpiYpq6Hpi4KTXxyf7uVkusuxRg4r71Uc6GbprADoFTuMHXIcKvg=
+	t=1737555514; cv=none; b=YcR4czgMJVOILF9KinScVUkA1O779mSBTNhH3C+i/syc+AJhpLaX2HhUtE5DhrjDn59vUVnWcZx+cighRziutNVcDVjFCN1IMsmWefSFruGm+aWibCZGbT9WhuV1sL9RZN4pqDaGGd/ZooTB6qCdhYx1nI7eeMEIM1UQkecCUM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737554347; c=relaxed/simple;
-	bh=UdaHUzRvekvIphzsc9HNW8pK8qObaRCDFoLh2S8vrzU=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=awrBtUc2gRKahUznNx5gqAAlsFjATyhGgW8Je5vLHVGFkDlHMCQKH1tOA97PEOz+YdJYTWMS5zK/K7WnT/jTC6FzqkAWlssbriChlOddUhrp3FSWL5Tt2Oht1zvVWrFHQd/D0d3GPqZMyWF8YVrUQPPLmyJfsdS6JY0Qrv+RByM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QDiRCXnf; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21680814d42so113993655ad.2
-        for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2025 05:59:06 -0800 (PST)
+	s=arc-20240116; t=1737555514; c=relaxed/simple;
+	bh=DyGB2FTo+/QXKoSYTosuyCkVVB6mYCIZqQDRhFdFrQE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KIE51hDb9U8miP7/Ms0IhLdEgI0ulquxA2CkckxAv6gTNCYwTvSgm/61qnvpWweuKceps6Rh8KbVIidY+CV9auIjeZXVQmVhbAkhL7Z2M2E5sOenYnRt/j4uQDq5ctfLcjX9CF9RlDr4C62SVpTC6uuUaKcj+AtHk5+YqBaEFno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HaULgxuI; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-38789e5b6a7so4000174f8f.1
+        for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2025 06:18:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737554345; x=1738159145; darn=vger.kernel.org;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=oA+bRb+64BVeWTZDRgsQz3WBRZLLSEFUOCIrGA5jVAU=;
-        b=QDiRCXnfutyu7hRVT0TINvSCYGzqujnW+fmJrNfY9LFHD4uz6CuWleM3iufSMIHYqZ
-         TYobRhIJS1AZYJMWidWrKgAvqkj/UGZ9Nufdu6UIz9MTRTQXLsE9nDY9Ihkak1HGc26D
-         5iyJh8IrzNBi1Ue8Yy/mfrxCHyx3vB4+fdmQU79B6gpBfo6DiAHgJWLlrRsDuY9UhFst
-         1vMnggufX7wJ3bbz9zEfhpzEL/m6Ayp5quK6sgglN2jqYJGtgZ4rgGH67OkFh0blCVKh
-         FAEi5DluaNMo/i1FSCiT3jMiIBBFgtU2weERyfAAJeXtEzi/C9/XGrzYXLqWpAnXDVby
-         xpeg==
+        d=suse.com; s=google; t=1737555509; x=1738160309; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Vzq9btCKQuUUnDexKgDAcFBahXlm/FN07++3ZQ2HG3w=;
+        b=HaULgxuIDtXXO+vq4EkR8RxwO/N7fMgumLXCniBhW31oLBbgf+EaZr4M4QQvGs8knf
+         WUj1A4xy+oEE7UfnxczLZhUnKusoW9yG14QyXg8mebJEtJJbLqci/ZYWQWVVEQ2hpcS0
+         Yeu5iYVMvdaMHiE7WUU3yWu/CbQxN4vEiC5J+BpJTvQeM09IEyz8DPrFeVHTT7dchi2z
+         FPGS4gi8aghOe9woCqtX7kBOq7RIiEH2mfoE8eGcjd6LmmofbYq2XWeCwyQP+H5Ja0P/
+         soHHVPSAb8NN4ZJr8Tq08uPXsqoN3mfWl20PhawVD+4PfY9tDhSt+x+lJw1bnroRl9xN
+         XkUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737554345; x=1738159145;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:date
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=oA+bRb+64BVeWTZDRgsQz3WBRZLLSEFUOCIrGA5jVAU=;
-        b=gz6blvtdnIeoBm5fv637dYUsC7llZPiZ6x9TBjnlFDTTFinOWZZOb6iBkcr5N++U5+
-         hhdGl23B2hYpHbIGqbPhAts+Mk/1ZcGtxR+xiCdEMflRqZLaeJtEpt1kt9ZCSvkLahbJ
-         8hfcYYG+URFPaH+Sq9pOxd+60oniNe58UBA8l+g3lopvCQ4ZB4FM9f+tc6c18JfV/sIC
-         MVYU/aXBcNCuYGm2NKOrorRxxEVx2Ub3mi+ldPjOITkLQRaWO87ajgTmZOnTGaR2WYCo
-         AW6T4BUy9Ui8d06GHCsRa0Z70Pj4y3XfH4SPH4vNb74KVypIcHq/cmGzJeZUbLhG4LU4
-         xIhw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIxShartlEjJCDSZ/uhQlPr86oCp3BnmY5A3DCpGECT1nrerRqDj8kt33/oK1rUwYiTKXsWRcdV7I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzhzE/ShPZMUWXo9Xm96eb6lcI2KGmXGGm8JEwkSCaMoYeSef0R
-	6TQmOuio+ViwL5uqCfmE0bKd6DFHLeiQc58qbhrSKMSR7yEQLs4X6QUfGPeIPCE=
-X-Gm-Gg: ASbGncv1OjJYoOFdoZJNIV8A5VuKUAlmpEI5Fbg6TVmt2BKXqm4M2oXVZB2aqvLa3q9
-	9X4Y1E1pSou0yrbkTkCxCm0HVTr8kwAWEQI6yOWK3SBnFk+9t3R8pYsRm+B2jxirU7BchGT0MsA
-	C9FotcjyrPBllngp1nCgsRZgo8JuSGyg31hj9ZMCcNDGsVIsCy4LkDv2borzp8qP7FuZZStUain
-	LIe2j966I8Nd//p528PNEt49GlYuCMxPmMGlXz7bFvgTDjPcWwiYmUP3Gxszq6SIeOBv83r8i5j
-	aVVbMd3ej5IYXJlBA9gNRx8ruch9mG7mgyc=
-X-Google-Smtp-Source: AGHT+IG4ZkwkqMVDWiJAR/78vdRwdpr5FK9oWJI9lQukaCrsCfQ8OnDCAnOHrfDN7WUpsdHgthdWxA==
-X-Received: by 2002:a17:902:e743:b0:215:a039:738 with SMTP id d9443c01a7336-21c352de481mr354253815ad.5.1737554345230;
-        Wed, 22 Jan 2025 05:59:05 -0800 (PST)
-Received: from [192.168.17.127] ([152.230.224.149])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2cea0514sm96224965ad.21.2025.01.22.05.59.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2025 05:59:04 -0800 (PST)
-From: Camila Alvarez Inostroza <cam.alvarez.i@gmail.com>
-X-Google-Original-From: Camila Alvarez Inostroza <calvarez@macbook-pro-de-camila.local>
-Date: Wed, 22 Jan 2025 10:59:01 -0300 (-03)
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-cc: Oliver Neukum <oneukum@suse.com>, Camila Alvarez <cam.alvarez.i@gmail.com>, 
-    USB list <linux-usb@vger.kernel.org>
-Subject: Re: Your fix for most_usb.c::hdm_disconnect
-In-Reply-To: <2025012247-scrunch-nuptials-cf11@gregkh>
-Message-ID: <8fb2f3dd-99ef-b000-c5f5-44da149786a8@macbook-pro-de-camila.local>
-References: <e8310fd2-caa7-4a78-8ff1-2bc2d07d74c1@suse.com> <2025012247-scrunch-nuptials-cf11@gregkh>
+        d=1e100.net; s=20230601; t=1737555509; x=1738160309;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vzq9btCKQuUUnDexKgDAcFBahXlm/FN07++3ZQ2HG3w=;
+        b=ozg7gb16AiXApysGd+3Xp5VsSvNhweuyHmBhWHnHm4hN5DrBt1m/7+nMqvxX8LFHS+
+         t5c5Umi2/kVKiQPgwBWNI3IPT16yKr2ftD/CWjqQsuHwT2CnZnH9Snh3TCJIwpBOxTPk
+         yWCq8ZBZhf4bNqvuCU0ap9NUa/+a4MpoivfyDA+85YvxHw1DT7Zj3GAW84C6eIpu4a+7
+         ubfoYp0l0cAmvyRVRXKVNaG9aBlHrdgu1iKpGhD8BNVz+rzY34Aa09H55QYpC/VHbovY
+         IgLYQb3yKxQVSSuLak4k8NizsoyZqYJ91O+DwDR30NLyz8ZPwKEPm2RGJJ8o1Kdffd3N
+         D7aA==
+X-Forwarded-Encrypted: i=1; AJvYcCWfJqzA5gJ03jovXD/DoJYW3KUR9raeb/yHLSU7ySBRLrPJlOfuzZjhdOtJ/l7bn1lR0l8njo9ApA0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzye6MiiPerwfn5MuJaoZEkaW1sM3M9YOmEAoEZebR6Ed5gXSTy
+	H9rWHuSF8/faa+MwEEFKQpY61YcYncdfId4VocLxr6MRuZcm9AVtM1tRvWJZcsY=
+X-Gm-Gg: ASbGnctFyZlwqk+Af6gqRmHBCDX4akJm00xN3yQQIPuN50U41HqkUEi3L4CcTR7woW5
+	JsRRj4pm7C6qArBYXnllTyX7Gp8jmbSVBF0HTXwgMw0+JLjdt58OCsYcX22gnR9/4pUVNBhu1sc
+	xbOEzwxjWLeqm7lbKZ7zSNCSH1wsqKmaGRMUj2Rjb4Z4ZTcsGkGKe9nzKftumAcaBuz1e99L3UJ
+	cgKRDRO9EkmJ/G8t6fPRkwp8wNOCE2ZKDEEKwEejYFQJdVKyfpNQuZb1lnZnpbY6iCjroSBVAdj
+	RsM7uq1ODX1+3gfYx9dMXUFmDWciMUjOGEJlKw==
+X-Google-Smtp-Source: AGHT+IHFrsYR7uZZQF/wswTc5p2RYKpaOKvIqxGiA3gycD8kc241E+9uhC4GqTN7xJ9FtezWW7u7XQ==
+X-Received: by 2002:a05:6000:2a9:b0:385:dea3:6059 with SMTP id ffacd0b85a97d-38bf57b64d5mr20196320f8f.49.1737555509345;
+        Wed, 22 Jan 2025 06:18:29 -0800 (PST)
+Received: from ?IPV6:2001:a61:1385:4701:9b57:b1ba:9d42:46d0? ([2001:a61:1385:4701:9b57:b1ba:9d42:46d0])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf3214fbdsm16770890f8f.19.2025.01.22.06.18.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jan 2025 06:18:29 -0800 (PST)
+Message-ID: <2fa78a3f-ac17-4b52-9ec2-ed268361d2d5@suse.com>
+Date: Wed, 22 Jan 2025 15:18:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
+User-Agent: Mozilla Thunderbird
+Subject: Re: Your fix for most_usb.c::hdm_disconnect
+To: Camila Alvarez Inostroza <cam.alvarez.i@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Oliver Neukum <oneukum@suse.com>, USB list <linux-usb@vger.kernel.org>
+References: <e8310fd2-caa7-4a78-8ff1-2bc2d07d74c1@suse.com>
+ <2025012247-scrunch-nuptials-cf11@gregkh>
+ <8fb2f3dd-99ef-b000-c5f5-44da149786a8@macbook-pro-de-camila.local>
+Content-Language: en-US
+From: Oliver Neukum <oneukum@suse.com>
+In-Reply-To: <8fb2f3dd-99ef-b000-c5f5-44da149786a8@macbook-pro-de-camila.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-
-
-On Wed, 22 Jan 2025, Greg Kroah-Hartman wrote:
-
-> On Wed, Jan 22, 2025 at 02:44:59PM +0100, Oliver Neukum wrote:
->> Hi,
+On 22.01.25 14:59, Camila Alvarez Inostroza wrote:
+> 
+> 
+> On Wed, 22 Jan 2025, Greg Kroah-Hartman wrote:
+> 
+>> On Wed, Jan 22, 2025 at 02:44:59PM +0100, Oliver Neukum wrote:
+>>> Hi,
+>>>
+>>> I am going through syzbot's list of open issues.
+>>> It look like like the issue you posted a patch for
+>>>
+>>> https://lore.kernel.org/all/20240730035745.110637-1-cam.alvarez.i@gmail.com/T/
+>>>
+>>> is still open. Can something be done? Has the patch been lost?
+>>> Is there a remaining issue?
 >>
->> I am going through syzbot's list of open issues.
->> It look like like the issue you posted a patch for
+>> The subject line was totally wrong which is why it was probably ignored.
 >>
->> https://lore.kernel.org/all/20240730035745.110637-1-cam.alvarez.i@gmail.com/T/
+>> Also, are you sure it is right?  Grabbing a reference in a disconnect
+>> function feels very wrong...
 >>
->> is still open. Can something be done? Has the patch been lost?
->> Is there a remaining issue?
->
-> The subject line was totally wrong which is why it was probably ignored.
->
-> Also, are you sure it is right?  Grabbing a reference in a disconnect
-> function feels very wrong...
->
-Yes, I think so as well. I don't think my patch solves the issue at all.
+> Yes, I think so as well. I don't think my patch solves the issue at all.
 
-thanks,
-Camila
-> thanks,
->
-> greg k-h
->
+Hi Camila,
+
+thank you for the clarification. Frankly I don't understand the refcounting
+logic in this drive. Let's add the author.
+
+Hi Christian,
+
+there is an open issue with the musb driver. May I ask with respect to disconect
+handling where the get_device calls, which musb_disconnect() balances with put_device()
+are?
+
+	Regards
+		Oliver
+
 
