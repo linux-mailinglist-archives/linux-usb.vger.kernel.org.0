@@ -1,157 +1,161 @@
-Return-Path: <linux-usb+bounces-19618-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19619-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A50E8A18E5F
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 10:31:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0211EA19011
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 11:43:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E953C16868D
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 09:31:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD497168EEB
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 10:43:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C49E2101BD;
-	Wed, 22 Jan 2025 09:30:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="RxNnV5zi"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E174F211491;
+	Wed, 22 Jan 2025 10:43:02 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DB32046A1;
-	Wed, 22 Jan 2025 09:30:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0A921128F;
+	Wed, 22 Jan 2025 10:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.54.195.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737538257; cv=none; b=ODsJRNJhnB+zCVCLO2gXP5TLH+EiWsG5BZLr55Y0LGIVKEsrqREyWgGhlchpYiICop76jMfAtoDvapkvr2Kvwe6VHgSM85+2FcOK6eA9bvB+TE+xcz2hVSjbB9+NXvMlzs9cwW50suEFe/fKo9ke3qMki76G0cmv7Hu2kkqtwqc=
+	t=1737542582; cv=none; b=tFn8CQ62h1eBoq18ob/yLnLH3euh9FoQ0oCUFJE1c7ezOhL6TAkq2etLXqcQvJtS1fXsJ7uFQQQsFbT1rHNvwm32ntWdF6ErkdCbt5A8uSPXIi3n3qqRj8j3o/RKkXHGpcEtQm7A/ci10PQbGxkhlT9rm6a/wFWS//i0bZ1PGdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737538257; c=relaxed/simple;
-	bh=f3TdHQgZjQ8L5oODCWQZ/pftlSD3qAwzW9nADsGUQVg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rvFaXx2yJHMipzpcCRVkIKWeYxbLCZeFoC16Yl6Rf+EZOg2zsnbqGpVwgUCvmEVmMjKQgCui/QJ8/QrxqhFD48ZmxIFJHUsReqwhFcOL61H9SmnDN6vTPMbd2AsPQ7ok9lmfqqm0VBpNLUxOVA6Vni8Epn83lFZZLdX2xX5RDUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=RxNnV5zi; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1737538248;
-	bh=f3TdHQgZjQ8L5oODCWQZ/pftlSD3qAwzW9nADsGUQVg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=RxNnV5ziBxgSSQnhSyNRNjrYLI6njp5+IJWq6yBSmeYYFNucStibYGwUhAvnnS4y7
-	 tbfMVyI/OYnNeaD1R03M0JhBteCbY6ySLuU3rSJctlhbYQeZm8IWTn6DDPEopZQkvl
-	 Sea5zzgn5+y6KFplvayDOYF/fzhmJlyjrAVNlbMuURmRsAM53m6nnUutrY6OkTT/bk
-	 pjx4dSm96vBm44l06labARjeTvY5xvckP+r5KMVsGaC3U6VQOe2UCPCDbmFJ0NH3zb
-	 /jw2RWn+CXEfFHT2+nFUWMg0rox2NSZmhyu6jCC1hTSGxLFW/7XryRTKo4HzyoQopf
-	 Qw0vrW5+g+8Ig==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9AE6F17E09E9;
-	Wed, 22 Jan 2025 10:30:47 +0100 (CET)
-Message-ID: <e63fdeba-04dd-4b88-a6d6-ca8a64e28e36@collabora.com>
-Date: Wed, 22 Jan 2025 10:30:46 +0100
+	s=arc-20240116; t=1737542582; c=relaxed/simple;
+	bh=ut0EdhoGzUnuYfIGljNJhe85HW/3EcDM0L91zQuCv0s=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JjLWeJ8rh5qN2kWZHou0cpQq1khvhbSAr2AUtTibjapwhvzxmzTqaBa9ZmKJgtrksTf+cO00NLVZmOupa4AOv96/c4L9rXYNFKrWZda4ZcWFK3xDtnkhcaTihzRp7ducbrEM8K8Ufr9ye1pou22weMFHVvxB857Dgy0ro238KF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru; spf=pass smtp.mailfrom=fintech.ru; arc=none smtp.client-ip=195.54.195.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintech.ru
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Wed, 22 Jan
+ 2025 13:42:53 +0300
+Received: from localhost (10.0.253.138) by Ex16-01.fintech.ru (10.0.10.18)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Wed, 22 Jan
+ 2025 13:42:53 +0300
+From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+To: Petko Manolov <petkan@nucleusys.com>
+CC: Nikita Zhandarovich <n.zhandarovich@fintech.ru>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<syzbot+d7e968426f644b567e31@syzkaller.appspotmail.com>,
+	<syzkaller-bugs@googlegroups.com>, <linux-kernel@vger.kernel.org>,
+	<lvc-project@linuxtesting.org>
+Subject: [PATCH net] net: usb: rtl8150: enable basic endpoint checking
+Date: Wed, 22 Jan 2025 02:42:46 -0800
+Message-ID: <20250122104246.29172-1-n.zhandarovich@fintech.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] usb: mtu3: add support remote wakeup of mt8196
-To: Chunfeng Yun <chunfeng.yun@mediatek.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, Mathias Nyman <mathias.nyman@intel.com>,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250121145008.22936-1-chunfeng.yun@mediatek.com>
- <20250121145008.22936-4-chunfeng.yun@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250121145008.22936-4-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
+ (10.0.10.18)
 
-Il 21/01/25 15:50, Chunfeng Yun ha scritto:
-> There are three USB controllers on mt8196, each controller's wakeup
-> control is different, add some specific versions for them.
-> Here add only for dual-role controllers.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+Syzkaller reports [1] encountering a common issue of utilizing a wrong
+usb endpoint type during URB submitting stage. This, in turn, triggers
+a warning shown below.
 
- From the datasheets, I can read the following:
+For now, enable simple endpoint checking (specifically, bulk and
+interrupt eps, testing control one is not essential) to mitigate
+the issue with a view to do other related cosmetic changes later,
+if they are necessary.
 
-IP0: host -> 0x1670_0000  device(mtu3) -> 0x1670_1000
-IP1: host -> 0x1671_0000  device(mtu3) -> 0x1671_1000
-IP2: host -> 0x1672_0000  device(mtu3) -> 0x1672_1000
+[1] Syzkaller report:
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 1 PID: 2586 at drivers/usb/core/urb.c:503 usb_submit_urb+0xe4b/0x1730 driv>
+Modules linked in:
+CPU: 1 UID: 0 PID: 2586 Comm: dhcpcd Not tainted 6.11.0-rc4-syzkaller-00069-gfc88bb11617>
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
+RIP: 0010:usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
+Code: 84 3c 02 00 00 e8 05 e4 fc fc 4c 89 ef e8 fd 25 d7 fe 45 89 e0 89 e9 4c 89 f2 48 8>
+RSP: 0018:ffffc9000441f740 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888112487a00 RCX: ffffffff811a99a9
+RDX: ffff88810df6ba80 RSI: ffffffff811a99b6 RDI: 0000000000000001
+RBP: 0000000000000003 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000001
+R13: ffff8881023bf0a8 R14: ffff888112452a20 R15: ffff888112487a7c
+FS:  00007fc04eea5740(0000) GS:ffff8881f6300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0a1de9f870 CR3: 000000010dbd0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ rtl8150_open+0x300/0xe30 drivers/net/usb/rtl8150.c:733
+ __dev_open+0x2d4/0x4e0 net/core/dev.c:1474
+ __dev_change_flags+0x561/0x720 net/core/dev.c:8838
+ dev_change_flags+0x8f/0x160 net/core/dev.c:8910
+ devinet_ioctl+0x127a/0x1f10 net/ipv4/devinet.c:1177
+ inet_ioctl+0x3aa/0x3f0 net/ipv4/af_inet.c:1003
+ sock_do_ioctl+0x116/0x280 net/socket.c:1222
+ sock_ioctl+0x22e/0x6c0 net/socket.c:1341
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:907 [inline]
+ __se_sys_ioctl fs/ioctl.c:893 [inline]
+ __x64_sys_ioctl+0x193/0x220 fs/ioctl.c:893
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fc04ef73d49
+...
 
-...this means that you're missing the IP2 here, which you did not miss in the
-commit adding the wakeup control in mtk-xhci instead.
+This change has not been tested on real hardware.
 
-So, since I see that all of the USB IPs are behind MTU3, and that there is no
-USB IP that does *not* support gadget mode (so, there's no USB IP that does NOT
-support MTU3), you shall add all three here, and you shall drop the commit that
-adds the wakeup control in mtk-xhci entirely.
+Reported-and-tested-by: syzbot+d7e968426f644b567e31@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=d7e968426f644b567e31
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org
+Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+---
+ drivers/net/usb/rtl8150.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-This is because there will be no DT node declaring only XHCI.
-
-Since after the proposed change all controllers will be MTU3 -> XHCI, there's
-no need to add the same in the mtk-xhci driver.
-
-Cheers,
-Angelo
-
-> ---
-> v2: add wakeup for dual-role controllers
-> ---
->   drivers/usb/mtu3/mtu3_host.c | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
-> index 7c657ea2dabd..d65b0f318436 100644
-> --- a/drivers/usb/mtu3/mtu3_host.c
-> +++ b/drivers/usb/mtu3/mtu3_host.c
-> @@ -46,6 +46,11 @@
->   #define WC1_IS_P_95		BIT(12)
->   #define WC1_IS_EN_P0_95		BIT(6)
->   
-> +/* mt8196 */
-> +#define PERI_WK_CTRL0_8196	0x08
-> +#define WC0_IS_EN_P0_96		BIT(0)
-> +#define WC0_IS_EN_P1_96		BIT(7)
-> +
->   /* mt2712 etc */
->   #define PERI_SSUSB_SPM_CTRL	0x0
->   #define SSC_IP_SLEEP_EN	BIT(4)
-> @@ -59,6 +64,8 @@ enum ssusb_uwk_vers {
->   	SSUSB_UWK_V1_3,		/* mt8195 IP0 */
->   	SSUSB_UWK_V1_5 = 105,	/* mt8195 IP2 */
->   	SSUSB_UWK_V1_6,		/* mt8195 IP3 */
-> +	SSUSB_UWK_V1_7, 	/* mt8196 IP0 */
-> +	SSUSB_UWK_V1_8, 	/* mt8196 IP1 */
->   };
->   
->   /*
-> @@ -100,6 +107,16 @@ static void ssusb_wakeup_ip_sleep_set(struct ssusb_mtk *ssusb, bool enable)
->   		msk = WC0_IS_EN_P3_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
->   		val = enable ? (WC0_IS_EN_P3_95 | WC0_IS_C_95(0x1)) : 0;
->   		break;
-> +	case SSUSB_UWK_V1_7:
-> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8196;
-> +		msk = WC0_IS_EN_P0_96;
-> +		val = enable ? msk : 0;
-> +		break;
-> +	case SSUSB_UWK_V1_8:
-> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8196;
-> +		msk = WC0_IS_EN_P1_96;
-> +		val = enable ? msk : 0;
-> +		break;
->   	case SSUSB_UWK_V2:
->   		reg = ssusb->uwk_reg_base + PERI_SSUSB_SPM_CTRL;
->   		msk = SSC_IP_SLEEP_EN | SSC_SPM_INT_EN;
-
-
+diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+index 01a3b2417a54..f77af8cf543c 100644
+--- a/drivers/net/usb/rtl8150.c
++++ b/drivers/net/usb/rtl8150.c
+@@ -71,6 +71,14 @@
+ #define MSR_SPEED		(1<<3)
+ #define MSR_LINK		(1<<2)
+ 
++/* USB endpoints */
++enum rtl8150_usb_ep {
++	RTL8150_USB_EP_CONTROL = 0,
++	RTL8150_USB_EP_BULK_IN = 1,
++	RTL8150_USB_EP_BULK_OUT = 2,
++	RTL8150_USB_EP_INT_IN = 3,
++};
++
+ /* Interrupt pipe data */
+ #define INT_TSR			0x00
+ #define INT_RSR			0x01
+@@ -880,6 +888,20 @@ static int rtl8150_probe(struct usb_interface *intf,
+ 		return -ENOMEM;
+ 	}
+ 
++	/* Verify that all required endpoints are present */
++	static const u8 bulk_ep_addr[] = {
++		RTL8150_USB_EP_BULK_IN | USB_DIR_IN,
++		RTL8150_USB_EP_BULK_OUT | USB_DIR_OUT,
++		0};
++	static const u8 int_ep_addr[] = {
++		RTL8150_USB_EP_INT_IN | USB_DIR_IN,
++		0};
++	if (!usb_check_bulk_endpoints(intf, bulk_ep_addr) ||
++	    !usb_check_int_endpoints(intf, int_ep_addr)) {
++		dev_err(&intf->dev, "couldn't find required endpoints\n");
++		goto out;
++	}
++
+ 	tasklet_setup(&dev->tl, rx_fixup);
+ 	spin_lock_init(&dev->rx_pool_lock);
+ 
 
