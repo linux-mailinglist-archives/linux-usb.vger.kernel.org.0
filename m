@@ -1,130 +1,139 @@
-Return-Path: <linux-usb+bounces-19622-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19623-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F333BA19138
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 13:15:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D96EA19144
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 13:24:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42DE416633D
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 12:15:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 014283A7DC2
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 12:23:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56AB2212B1F;
-	Wed, 22 Jan 2025 12:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6BB3212D75;
+	Wed, 22 Jan 2025 12:23:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G1mcD2pH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F2lUzcPN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wm1-f48.google.com (mail-wm1-f48.google.com [209.85.128.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 471C3170A30;
-	Wed, 22 Jan 2025 12:15:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3EFF21171D;
+	Wed, 22 Jan 2025 12:23:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737548153; cv=none; b=ALplMikqZi88uDl4HPS+9ia0uYAJJdNWnHwNbBnqtcJyCovdNgeJnTOYJisF/TJnJosppVfe7BYkVTaCpdOqezTeFuUzmvlKtggczuiBf/fQyKowbvd9NYXOAyTysW18oS9mq+F2KbUzIPmBbFHyl9Ofq7KpcqYevw9nox7yjAM=
+	t=1737548633; cv=none; b=UbMeUTN8DlbE3i4P3uPxMJPh9KhIsVqFJJI28Z09Jja6998GwpZ/hc5gHE8whZ5V0PTlpPs1gs5I5rALCkNuZ50aWEfqaPKoHzRbD5CzxdHS0kpGy7ZPp8s6znRZOiz8qq7DY2h8IDceAbq8bqohHdM7V6iD3xcdJ0pVo/kj8z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737548153; c=relaxed/simple;
-	bh=Esu/gW3ljXU5RjT93ZpsyBmP5PPzP7mRMSmT1r/+V5Q=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=YUcQTE2gyijtTGw5Hf1qCTkQVX9/WMWDgnAC1lxrMWqOngVSYs4gq5cpv7UHQCzzjmUe6zq5XG78uDIn+0Psglr7x7E0eQNAE14x3ODuJnYo0uoqvLuGp15fqYA6New3/5nYsoQzf/6E51FGN2T8yyrLFoOw+WWp9GETK3bHBRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G1mcD2pH; arc=none smtp.client-ip=209.85.128.53
+	s=arc-20240116; t=1737548633; c=relaxed/simple;
+	bh=dTGyUEi/lyqxfOwcr7hSB30zjbeRXMw5OslBFxN0ouE=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=mJ5a0Odp2fta6mCeJGihIOtkes5GjGlvAMLNWQ14PAJmhE5GeZRotx4RSVhZXNu7ltqper9e1vUCPnwBYeDjqrNMpZu1TfFFgufWQiGuGddBN0uAuHJ+UN+mpoBK8T9qsDPuPakZ6NP4iqaK3kstIbC2rAjPHhGI6a9DrroZobA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F2lUzcPN; arc=none smtp.client-ip=209.85.128.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-438a39e659cso27665515e9.2;
-        Wed, 22 Jan 2025 04:15:51 -0800 (PST)
+Received: by mail-wm1-f48.google.com with SMTP id 5b1f17b1804b1-436a03197b2so47573685e9.2;
+        Wed, 22 Jan 2025 04:23:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737548150; x=1738152950; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=9YgVBuYheyP8aYKgbFBc2QfSvc7KqXacR7RJCCcVFRQ=;
-        b=G1mcD2pH4L5hpmbJUIepEMjAYT7QiGR894RjTpPxeGvAnGNRaL2mJAvxlAfc1m+QHB
-         8abUh/Fgsko8U1d/jpvltvj428SZZwL6xEJItlThKS78pmSz5QLVs9cb/iVq0g4Zilem
-         3kPJj+r93CNw3w+3PSV8Ln4hBXFKjgqQ+LwzRPsvXTEsw5G/NphKxTrP+Lgy3N2NB2x9
-         h+bd+UuCw9Xz7+o2OUCrVyfP7HEA163FWyfMb2lQzVVNm8J+PMzJQtEsmcxT1pJbqtdI
-         5okikfGA5rt5kp6wueIn5K6T8x+tpXY2p4k3wDLTgOOESDuURlFTCjD3qKUrRuA0ZSfb
-         SQ2w==
+        d=gmail.com; s=20230601; t=1737548630; x=1738153430; darn=vger.kernel.org;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=760Wn7zTTbD8yTsRqOvWWO2yZjHpBhgEkrkrnoW49To=;
+        b=F2lUzcPNe4Qj8y58/jLfSh1PWM5QPPtznFimOvDvcdzeeC63GcswJyHpUp0yiUOUqe
+         k+X4bLw+T+thv9zA0gFji99+qrixqnLhlkIPLVVamng14a9T83F7AYg6hngixhInoXHo
+         qW0jd3pPpYkcKDYPafyToVkFeWfvPGOZ0PMDNg7mKTFAa/UkQMBP90rKQxelvUtpbr3W
+         TlhTAWlg/JqrDyyCTX2n4tze8klIi5GK9ul8vLe/90J6C4GJkI/Xkyrcb+TscJRXm9Gw
+         SlG61otETuOQGeabGOlCLlq11L4dKfGcVTsMllRRBO80vYrNCrLfYTSaL4IdYUNJkQnN
+         jjBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737548150; x=1738152950;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1737548630; x=1738153430;
+        h=content-disposition:mime-version:reply-to:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9YgVBuYheyP8aYKgbFBc2QfSvc7KqXacR7RJCCcVFRQ=;
-        b=OTptSQ28qNArBzbri67/0U8Qe89gRwh6AXhQ0RK3iaYwr0MI4aske1to27K+Jbs9lT
-         5H+fvXi7l6qUjie9i/ACosn4r/KGOST7nj+DPkgkrl8XPzB+erOYQY6qPF3CHD2vxHfB
-         PIUYRW0kKRHTC7Jf2U8Z1Nb34jBNrEbPvjBZqyiO+kho13JlzAXaj9utqQNkfOFK15v9
-         U5Yqxco2jisBtK5RAxJOP7cCMYYCh5m52l2TbdiQJNse0Hz+4NfIZPHrCpUB8XaHCdMP
-         LfgEj7ddueIOFnSWgf6TNbvF6g/OjfJazPIunw//X6VJ5TBY9GQPn4hF86gDeuwgC7Pf
-         0cjg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKRua9OOnMSGsvWcEtzxXFfhNPDSLboIccVi/C9FOJ1g2gN9Q3CdNPdSuesUPXxZHwt8lTBT1Dc28KBb4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAmHvd3vnBF/6aHRVxWPQyYj3R9dgjyjxMlvY095nvP+891a8X
-	sFuLCAr+Pwwu3/CjPxC41deX4i9PUwp71y7DdPYXNaxNIljEiF3q
-X-Gm-Gg: ASbGnctq2LLsq6olGFfSzZcwr8smR4N2PQK1VNxO7g24a647kyYvxe58kmvi+oyL0Y4
-	D2Nb3WAXgOOfErf6E8CMfRXer7OQhceDHWLuEaX39aTqw2R4E1jv0XVStQH8nP86BF01uEjfc1w
-	ktFva57Bu9UiGgYIVTckaieSH5WvV7GHhRbUsTYFKUaUZfDJqM3J081QZVuBFvtVhqchuYqN8aT
-	v06fj9UdeFmtDXGF0N6BTRqyVtibBoJ2uNydtSZ1uYDL3AI4+4AvjEQ5WuTbrE0Pqw0lg==
-X-Google-Smtp-Source: AGHT+IEbxXH8SE7UPAEh3cMCYhzxh3y6HSR2HLtYKa9xOvpIbtqo30aSQGOMfzb0RhgfkeZPheqe6g==
-X-Received: by 2002:a05:600c:3b27:b0:434:a29d:6c71 with SMTP id 5b1f17b1804b1-43891438b58mr181858175e9.27.1737548150253;
-        Wed, 22 Jan 2025 04:15:50 -0800 (PST)
-Received: from qasdev.Home ([2a02:c7c:6696:8300:60ee:6158:3505:672])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438b31aefcbsm22226265e9.17.2025.01.22.04.15.49
+        bh=760Wn7zTTbD8yTsRqOvWWO2yZjHpBhgEkrkrnoW49To=;
+        b=R84xt563JRDB7mcL8qMutldA+e8N/iOIz4y2CiFWSRh4GgFKt6q466rxG4GUgW7b0s
+         yiaPpkjXoaobqwTwD/qrdjrIpHSGGe5DhmWIyAC4e+XHlQodDZ2dCmFoTospXYGGhd21
+         M9yL2DzfvbPpacOG6Tvovg86uM5E48Q0b9vLc56lOzjCyB3obd30peOuF3BwN48a6UoR
+         Ssmf9Ic/W+fojF+LvfczRwOJT89alwU2osuDlWP+VxEvI2Fhj/0sB78ye4+ol5maVtgd
+         qcp3hva1ty5a004mSoM4ZebQGrYdXrmGksJvqyTQ2MnzzBXIFNXfcDmU6sge2pLmIT6H
+         EMJQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVICCf8RefD8PU6oXif4eJOERruuJuaxIYYcEHa+R1wqI4fZsp2CsbitB5NUb/70roicFc4XbAtFVdD@vger.kernel.org, AJvYcCVVbSpu1cd7Kgf6vqZSt5solMA9jS2DI0weeXMN+hZjuOuYgx/aJXx/VfXTwBOzefHKJMqjtWc86f1zrs4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyn3YWrmBsDCNZTZrnQ+yZUW6BHhGiJushApsLjWJqvBKaC3UN4
+	ux37qw8Itl9xl76OCYRyuyKEtEh1Zx7StFeR3tXjRoft8jKY8cGN
+X-Gm-Gg: ASbGncuiOy5ecW3ANTNaEWVjHlLg80p2aO2Ug2qxKuiOPfhebj+EhAMHZXyswy+6Hjj
+	ajyFWB1O7/3JKv5/FR7l3rAupGccFVeNLao4zyZ3yaxjbQpVh/24tebK/u1HyRCxKeR49U9xgY4
+	/45FwSttohrqYiLIK1HP3NNIoAJ+R6jsrK9xK1p61ICoEh2LKYVgDFE0uZY8RE8wnw/mvz/MIiY
+	FNDpqyyptvZ4VT5bwPezuvBzVLt36Eqn7s3CoHhjPremcGFqlz8hbSmGULASm2D/y4ouygQ
+X-Google-Smtp-Source: AGHT+IHbfbCvJH7jPo6iObTUfCf74oGW/9NlqcCDsWh4Z88MQCqdirhUQ+3kUdePL++WFVybnvwm0w==
+X-Received: by 2002:a05:600c:5126:b0:436:1af4:5e07 with SMTP id 5b1f17b1804b1-438913bdcbcmr162128235e9.1.1737548629704;
+        Wed, 22 Jan 2025 04:23:49 -0800 (PST)
+Received: from qasdev.system ([2a02:c7c:6696:8300:60ee:6158:3505:672])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438b319fac7sm22250825e9.13.2025.01.22.04.23.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2025 04:15:49 -0800 (PST)
+        Wed, 22 Jan 2025 04:23:49 -0800 (PST)
+Date: Wed, 22 Jan 2025 12:23:39 +0000
 From: Qasim Ijaz <qasdev00@gmail.com>
-To: valentina.manea.m@gmail.com,
-	shuah@kernel.org,
-	i@zenithal.me,
-	gregkh@linuxfoundation.org,
-	sergei.shtylyov@gmail.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	syzbot <syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com>
-Subject: [PATCH v2] USB: usbip: fix null-ptr-deref in status_show_vhci()
-Date: Wed, 22 Jan 2025 12:15:29 +0000
-Message-Id: <20250122121529.15421-1-qasdev00@gmail.com>
-X-Mailer: git-send-email 2.39.5
+To: Sergey Shtylyov <sergei.shtylyov@gmail.com>
+Cc: valentina.manea.m@gmail.com, shuah@kernel.org, i@zenithal.me,
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] USB: usbip: fix null-ptr-deref in status_show_vhci()
+Message-ID: <Z5DjS7M6YQ7q-rBO@qasdev.system>
+Reply-To: 352b31e8-f8ef-4207-81a7-0aa22c984aeb@gmail.com
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-If usb_add_hcd() fails in vhci_hcd_probe() (i.e., a probe failure),
-the error path calls usb_remove_hcd() and also sets 
-pdev->dev.driver_data to NULL.
+On Wed, Jan 22, 2025 at 11:56:34AM +0300, Sergey Shtylyov wrote:
+> On 1/21/25 11:36 PM, Qasim Ijaz wrote:
+> 
+> > If usb_add_hcd() fails in vhci_hcd_probe() (i.e., a probe failure),
+> > the error path calls usb_remove_hcd() and also sets 
+> > pdev->dev.driver_data to NULL.
+> > 
+> > Consequently, any subsequent call to platform_get_drvdata(pdev) 
+> > (which returns pdev->dev.driver_data) may yield NULL, causing a 
+> > crash if that pointer is dereferenced.
+> > 
+> > Fix this by adding a sanity check to ensure "hcd" is non-NULL
+> > before proceeding with further operations.
+> > 
+> > Reported-by: syzbot <syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com>
+> > Closes: https://syzkaller.appspot.com/bug?extid=83976e47ec1ef91e66f1
+> > Tested-by: syzbot <syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com>
+> > Fixes: 03cd00d538a6 ("usbip: vhci-hcd: Set the vhci structure up to work")
+> > Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
+> > ---
+> >  drivers/usb/usbip/vhci_sysfs.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
+> > index d5865460e82d..a5e6c3c4af06 100644
+> > --- a/drivers/usb/usbip/vhci_sysfs.c
+> > +++ b/drivers/usb/usbip/vhci_sysfs.c
+> > @@ -76,6 +76,10 @@ static ssize_t status_show_vhci(int pdev_nr, char *out)
+> >  	}
+> >  
+> >  	hcd = platform_get_drvdata(pdev);
+> > +
+> 
+>    Empty line net really needed here...
 
-Consequently, any subsequent call to platform_get_drvdata(pdev) 
-(which returns pdev->dev.driver_data) may yield NULL, causing a 
-crash if that pointer is dereferenced.
+Thanks for spotting this Sergey. Just send out patch v2 which fixes
+this.
 
-Fix this by adding a sanity check to ensure "hcd" is non-NULL
-before proceeding with further operations.
-
-Reported-by: syzbot <syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com>
-Closes: https://syzkaller.appspot.com/bug?extid=83976e47ec1ef91e66f1
-Tested-by: syzbot <syzbot+83976e47ec1ef91e66f1@syzkaller.appspotmail.com>
-Fixes: 03cd00d538a6 ("usbip: vhci-hcd: Set the vhci structure up to work")
-Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
----
- drivers/usb/usbip/vhci_sysfs.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-index d5865460e82d..d4a1aa6d06b2 100644
---- a/drivers/usb/usbip/vhci_sysfs.c
-+++ b/drivers/usb/usbip/vhci_sysfs.c
-@@ -76,6 +76,9 @@ static ssize_t status_show_vhci(int pdev_nr, char *out)
- 	}
- 
- 	hcd = platform_get_drvdata(pdev);
-+	if (!hcd)
-+		return 0;
-+
- 	vhci_hcd = hcd_to_vhci_hcd(hcd);
- 	vhci = vhci_hcd->vhci;
- 
--- 
-2.39.5
-
+> 
+> > +	if (!hcd)
+> > +		return 0;
+> > +
+> >  	vhci_hcd = hcd_to_vhci_hcd(hcd);
+> >  	vhci = vhci_hcd->vhci;
+> >  
+> 
+> MBR, Sergey
+> 
 
