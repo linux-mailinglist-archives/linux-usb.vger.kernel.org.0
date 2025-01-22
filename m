@@ -1,104 +1,148 @@
-Return-Path: <linux-usb+bounces-19645-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19646-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 197E1A1988C
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 19:37:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02EBEA19920
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 20:21:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F16E3188B7DA
-	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 18:37:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41FFF167D28
+	for <lists+linux-usb@lfdr.de>; Wed, 22 Jan 2025 19:21:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1F52216382;
-	Wed, 22 Jan 2025 18:36:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DFD62153CB;
+	Wed, 22 Jan 2025 19:21:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="X0KjH2Q4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.b="k0XU/A7N"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from outgoing2021.csail.mit.edu (outgoing2021.csail.mit.edu [128.30.2.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56FD2215F54;
-	Wed, 22 Jan 2025 18:36:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E086AD4B
+	for <linux-usb@vger.kernel.org>; Wed, 22 Jan 2025 19:21:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=128.30.2.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737570990; cv=none; b=LEIIO8fOyRzszPHuIJJDYusrEFsdOeRbA2WshSvvT8uKUWtF69Yts/U1Z4f9po3pxWlTM8Zx5cQeDwpESJuTHAppsccN0/NEmTwfLvQHbO9D0+6d+8bBl06QZwb2a/tEaiN7m0lQQfIIdxkn5am17+okGHh+jDC7/UpUJcyvD9o=
+	t=1737573673; cv=none; b=OD+K3tNzc0oyVsp0XjV6csVOMHHc5iugX7uhgK5cPtHhRgKRjI3Hiv2bZ8hYkLZKTjK8AnijQXLteuLd1tf+xf06gtWr1JCSyNLmBHUqgBRXZhk1p4kbkB82N8HMRdyMg7PYq3PEdA/vKgLkjoQuXGZR8CV3A9yoDAe3iO8RpCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737570990; c=relaxed/simple;
-	bh=H3UAP0tMdC6eROvU6lzY+/rLYoXoebyATFhYnjsNMfc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XsQhJRbg1Dv8bVAIu/w7HX/oD2cvf3n8tBqqHZOfmn/Y8eZ2gLYVuuC93NmKVQbUFNf5GXvD4jYEkz44gyFP71UfI4UR2eyIZ6FphKfj6s9rOJY4hX7Hb5t6956h+gZis8ccR9X9USBJfG0OQe8yKaY6MEVe2YyEqjcZJTdeCdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=X0KjH2Q4; arc=none smtp.client-ip=83.149.199.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
-Received: from localhost (unknown [10.10.165.10])
-	by mail.ispras.ru (Postfix) with ESMTPSA id 2AF9040B1E9F;
-	Wed, 22 Jan 2025 18:36:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 2AF9040B1E9F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1737570983;
-	bh=/GmMe8EYcpgH3ug1uYbeUXLif8BHZqAVQnK7Lh/NinA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X0KjH2Q42sM/yX/mTxTOsNTJ4OEewcyYsYc3c+zFYQpmWmf2pYa461o0StKp+VP26
-	 OHls0ucL3DMPGcCYsTcnuIpKlw+ytvwL4QRKIDBvVchVXFIHhyHbQLUkpjz7stDeZU
-	 gTrLphgDcgCJ1w214xJby5jamlbLuCFRDAK68jP0=
-Date: Wed, 22 Jan 2025 21:36:23 +0300
-From: Fedor Pchelkin <pchelkin@ispras.ru>
-To: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc: Petko Manolov <petkan@nucleusys.com>, lvc-project@linuxtesting.org, 
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
-	syzbot+d7e968426f644b567e31@syzkaller.appspotmail.com, linux-kernel@vger.kernel.org, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	"David S. Miller" <davem@davemloft.net>, Alan Stern <stern@rowland.harvard.edu>
-Subject: Re: [PATCH net] net: usb: rtl8150: enable basic endpoint checking
-Message-ID: <sf5u53uyu7wjm5g67ecsqctqis3lq6hrjhzzwbfj7pzss2nsbn@bwljug5xrvx6>
-References: <20250122104246.29172-1-n.zhandarovich@fintech.ru>
+	s=arc-20240116; t=1737573673; c=relaxed/simple;
+	bh=DLveF4vi5FOwuyzxnHzSIDuww0ox5jtvY4ZuwermbTw=;
+	h=To:cc:From:Subject:In-reply-to:Date:Message-ID; b=WJCNHcly7+7m0oUMQqs+eWf5H64W21qvTSfIkIGme7JUBxLh4YIWHBpKap9/Bpi4y0wxUV9w//dgwW/Oz1+694DDpit9gDzDgcCOzHgKL7RI9k46h2ITLIO+v0e0A2aGOjY4esp/pzoynp2WUwS47DsGKkmcjMkd0jREub9e23o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu; spf=pass smtp.mailfrom=csail.mit.edu; dkim=pass (2048-bit key) header.d=outgoing.csail.mit.edu header.i=@outgoing.csail.mit.edu header.b=k0XU/A7N; arc=none smtp.client-ip=128.30.2.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=csail.mit.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csail.mit.edu
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=outgoing.csail.mit.edu; s=test20231205; h=Message-ID:Date:In-reply-to:
+	Subject:Reply-To:From:cc:To:Sender:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:References:
+	List-Id:List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:
+	List-Archive; bh=+i8m/n3yydNZLPykVqwQSwDxVqRO9TR81JAgWaejj6I=; t=1737573671;
+	x=1738437671; b=k0XU/A7NmoLOPC7+JMmfePgyobKVc1nR9JVR+NGVgDUd3gSZvcAPSk6PKnfq7
+	Med/tsSQImKN4FuderfQdmtnwvsrIqU3n6rqASWSW4a2SV/vMU5VjwNLPC2Fd5W3tKkIOjyzeH+zy
+	lHUnIiCrA0krYioj0ZMWyVUk7n127kNmJ1YG4go5la4tNhWfiN8RkWwkxmUuL1VzFHUGizaNR+KgW
+	ZGrHDlhwZdnELvD1N1BsIEf8E3W9xcZmM8QHjbmNiD49s/vEyMeW6owvqlNBCWBA5YKE83U0GfjVl
+	BcfNKmE9HCJFNwaVEoFkpMG2EtF2tGeb6jpy/i9WomRG3FloAw==;
+Received: from [73.149.18.137] (helo=crash.local)
+	by outgoing2021.csail.mit.edu with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <rtm@csail.mit.edu>)
+	id 1tagHl-004jdI-GA;
+	Wed, 22 Jan 2025 14:21:09 -0500
+Received: from localhost (localhost [127.0.0.1])
+	by crash.local (Postfix) with ESMTP id 8BBAE1A11D89;
+	Wed, 22 Jan 2025 14:21:08 -0500 (EST)
+To: Alan Stern <stern@rowland.harvard.edu>
+cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+From: rtm@csail.mit.edu
+Reply-To: rtm@csail.mit.edu
+Subject: Re: USB hub code can dereference NULL hub and hub->ports
+In-reply-to: Your message of "Wed, 22 Jan 2025 10:55:24 EST."
+             <d86313f9-e77b-47a5-9a84-01d71493b15c@rowland.harvard.edu>
+Date: Wed, 22 Jan 2025 14:21:08 -0500
+Message-ID: <96145.1737573668@localhost>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250122104246.29172-1-n.zhandarovich@fintech.ru>
 
-On Wed, 22. Jan 02:42, Nikita Zhandarovich wrote:
-> @@ -880,6 +888,20 @@ static int rtl8150_probe(struct usb_interface *intf,
->  		return -ENOMEM;
->  	}
+Alan,
+
+Yes, your patch makes the NULL hub and hub->ports crashes
+I've seen go away!
+
+Robert
+
+> Date: Wed, 22 Jan 2025 10:55:24 -0500
+> From: Alan Stern <stern@rowland.harvard.edu>
+> To: rtm@csail.mit.edu
+> Cc: Greg KH <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org
+> Subject: Re: USB hub code can dereference NULL hub and hub->ports
+> 
+> On Wed, Jan 22, 2025 at 06:37:45AM -0500, rtm@csail.mit.edu wrote:
+> > > Great, can you submit patches to fix these issues now that you have a
+> > > reliable test program to verify the problem?
+> > 
+> > I think the problem is (at least sometimes) not that hub->ports is
+> > legitimately NULL and there's a missing check, but that
+> > usb_hub_to_struct_hub() returns an object of the wrong type so that
+> > hub->ports is junk, and only accidentally NULL in the demo I
+> > previously submitted.
+> > 
+> > I've attached a new demo which crashes because hub->ports is
+> > 0xcccccccccccccccc (on a kernel with red zones). The demo presents a
+> > USB device whose DeviceClass is a hub (9), with two interfaces, but
+> > the Vendor and Product indicate an FTDI serial adaptor.
+> > 
+> > First, usb_serial_probe() sets the interface zero dev->driver_data to
+> > a struct usb_serial.
+> > 
+> > Later, when the hub code is trying to set up interface one, it calls
+> > usb_hub_to_struct_hub(hdev):
+> > 
+> > struct usb_hub *usb_hub_to_struct_hub(struct usb_device *hdev)
+> > {
+> >         if (!hdev || !hdev->actconfig || !hdev->maxchild)
+> >                 return NULL;
+> >         return usb_get_intfdata(hdev->actconfig->interface[0]);
+> > }
+> > 
+> > interface[0], however, has been set up by the serial port code, and
+> > its dev->driver_data is a struct usb_serial, not a struct usb_hub.
+> 
+> Okay, that explains the problem.  usb_hub_to_struct_hub() assumes that a 
+> hub device will never have more than one interface, because that 
+> requirement is in the USB spec.  But of course, a bogus or malicious 
+> device can violate the requirement.
+> 
+> I think the best way to deal with this issue is to prevent the hub 
+> driver from binding to non-compliant devices.  Does the patch below fix 
+> the problem for you?
+> 
+> Alan Stern
+> 
+> 
+> 
+> Index: usb-devel/drivers/usb/core/hub.c
+> ===================================================================
+> --- usb-devel.orig/drivers/usb/core/hub.c
+> +++ usb-devel/drivers/usb/core/hub.c
+> @@ -1848,6 +1848,17 @@ static int hub_probe(struct usb_interfac
+>  	hdev = interface_to_usbdev(intf);
 >  
-> +	/* Verify that all required endpoints are present */
-> +	static const u8 bulk_ep_addr[] = {
-> +		RTL8150_USB_EP_BULK_IN | USB_DIR_IN,
-> +		RTL8150_USB_EP_BULK_OUT | USB_DIR_OUT,
-> +		0};
-> +	static const u8 int_ep_addr[] = {
-> +		RTL8150_USB_EP_INT_IN | USB_DIR_IN,
-> +		0};
-
-nit: It's better to avoid using mixed declarations and code, especially
-if the patch is considered to be a material for stable branches.
-
-When building old kernels which lack b5ec6fd286df ("kbuild: Drop
--Wdeclaration-after-statement"), the following unnecessary warning
-occurs:
-
-  drivers/net/usb/rtl8150.c: In function ‘rtl8150_probe’:
-  drivers/net/usb/rtl8150.c:892:9: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-    892 |         static const u8 bulk_ep_addr[] = {
-        |         ^~~~~~
-
-
-> +	if (!usb_check_bulk_endpoints(intf, bulk_ep_addr) ||
-> +	    !usb_check_int_endpoints(intf, int_ep_addr)) {
-> +		dev_err(&intf->dev, "couldn't find required endpoints\n");
-> +		goto out;
+>  	/*
+> +	 * The USB 2.0 spec prohibits hubs from having more than one
+> +	 * configuration or interface, and we rely on this prohibition.
+> +	 * Refuse to accept a device that violates it.
+> +	 */
+> +	if (hdev->descriptor.bNumConfigurations > 1 ||
+> +			hdev->actconfig->desc.bNumInterfaces > 1) {
+> +		dev_err(&intf->dev, "Invalid hub with more than one config or interface\n");
+> +		return -EINVAL;
 > +	}
 > +
->  	tasklet_setup(&dev->tl, rx_fixup);
->  	spin_lock_init(&dev->rx_pool_lock);
->  
+> +	/*
+>  	 * Set default autosuspend delay as 0 to speedup bus suspend,
+>  	 * based on the below considerations:
+>  	 *
 
