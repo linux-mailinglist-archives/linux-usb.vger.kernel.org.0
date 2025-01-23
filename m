@@ -1,64 +1,59 @@
-Return-Path: <linux-usb+bounces-19663-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19664-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6BF4A1A299
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 12:09:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44D0BA1A2BA
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 12:15:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC581188F149
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 11:09:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A4DC16BC0D
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 11:15:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D89BD20E309;
-	Thu, 23 Jan 2025 11:09:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73FFC20E02F;
+	Thu, 23 Jan 2025 11:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iDy5a1SQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HmQPKs+2"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B89820C46B;
-	Thu, 23 Jan 2025 11:09:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E96D820DD75;
+	Thu, 23 Jan 2025 11:15:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737630577; cv=none; b=OqfYPwCFs+XMYrRJX38sBhCYBckBXWzqIGf3dd18VMOQtcCKqAhxJ+PdKNNgN2iDxiog5qgVdwWT+W7tY5O8yJ6QV4gf1ls//lUElHPkY1KKz3aDACb0CmIczKOR669NexwaK8DUNTGq59Tq7oHs5IKF/JcrYaRlge+SmP8tOZ8=
+	t=1737630932; cv=none; b=t9456/cpngaywr7oTGm6zIKvSL9CNJN2ofy46dpWU3WCySTHoOT9PDS8e+TqazRV0LJmQ2sawSE5S0WkWi8tii4V7HyIAkbj8oiXPJ8LxAW8sRZnpjE3yA3d2SzFoD2gTL5C6n2CSKZJVjDbd3nq1yltDGq8rq+QbfajXxXmK/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737630577; c=relaxed/simple;
-	bh=Qvy74JqKzVd1qj7fQJwVAQBLAKbjrWNDB+WUyydr2iM=;
+	s=arc-20240116; t=1737630932; c=relaxed/simple;
+	bh=3aValOwNaBeJdjq7wkipR2q+sjZZpJgUZBouDuF5gRw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vBTq7hHZxRq5XfeRu6ydnQPoF9cQA7PevU3XsZyvtDLYdy1Od5lSyOybpTCw4prU7a9KOZ2+JZL/kLSBflStApT4jNHz89snW1HiU0PqpidBxPEhIPZQ30mt2Vxl/QPrKUwoLdHE5tykLaYLWmHnX8wy8cimmB0uRJjuG1c5o5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iDy5a1SQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0F9FC4CED3;
-	Thu, 23 Jan 2025 11:09:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=rUU9sg2XOWDpE18QQXdc0a0ti/Atq7Ul8fuMaoGtrzj4TM0Xjlsn8oD25HENcOAzJHL+vc5j9qHH8WhmrN51wvtMnJJSHvhxLZwoqID/G/aRVjqJE38WKCAEKmK5TfSv7Aq/tS591dBhtHeJ7MBtDiLIJ1l9/G7rSwLvG+Qi0bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HmQPKs+2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C8EAC4CED3;
+	Thu, 23 Jan 2025 11:15:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737630576;
-	bh=Qvy74JqKzVd1qj7fQJwVAQBLAKbjrWNDB+WUyydr2iM=;
+	s=k20201202; t=1737630931;
+	bh=3aValOwNaBeJdjq7wkipR2q+sjZZpJgUZBouDuF5gRw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iDy5a1SQ2A9Bh43KXqO27rb4uTuw0SwEiZDMaJa76EmUfX4jD6520n31rfpOInsGF
-	 S7q4jkd7DJzi8EeyjMVHWNW1sfwNdjXGjxCB5ZDoqN37peHq4LsHXcqZFmttVYR9Mc
-	 C6wL/X6dHoVprL5dGGNsblsyc0Seabo27Oj8Yt1y1OQF3BPRmuhcfK6eeN/1sJrvA7
-	 8CbxKoTEE9PaqSt4322HjmcQ0Co5G1iHaKTrzlwjvW5Cf81ik4BsZRTpX63P6I1YnC
-	 OjRSGHufLwHNWMO/+gvkLGEHNOT+xrX3FUUgdZqBYDJ8vsTRIr5lzBzrOIVXPvi9f1
-	 QYr3XFZlj9UKg==
-Date: Thu, 23 Jan 2025 11:09:29 +0000
-From: Simon Horman <horms@kernel.org>
-To: Ming Yu <a0282524688@gmail.com>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
-	brgl@bgdev.pl, andi.shyti@kernel.org, mkl@pengutronix.de,
-	mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch,
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
-	jdelvare@suse.com, alexandre.belloni@bootlin.com,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
-	linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v6 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250123110929.GP395043@kernel.org>
-References: <20250123091115.2079802-1-a0282524688@gmail.com>
- <20250123091115.2079802-5-a0282524688@gmail.com>
+	b=HmQPKs+2bnNegdtw0JK554GmZrdrkt9co7xwCJZegg5xPxJsqAHQbrea320Fq1tPt
+	 Ki5qPAJ8VnN0OAvkDzNTJXl8BCNt5WrPTA6iLPiiYlzb0OBqvjCX+qaiclHM1hdIdD
+	 /u2TCoSpXfjqA+Asi7OM2LXEp+4hTJcHJywApqMB4+7N8lYwQKmKRaVL8pVOLuJuP2
+	 Dm5jz4mRHxFD3Fy+25jgusw51GaYKLfiiKvcclfHaloqCOQxNmyW0e/ZI19tQI7LAR
+	 lMHzW94Qa5L52DMo45cyIVQp55oHs52+ZBwpvGi+M1hP8Z0hcf17nbdtkUIXS2kp27
+	 dDcty73si03Gg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tavBQ-000000001yc-2TXo;
+	Thu, 23 Jan 2025 12:15:37 +0100
+Date: Thu, 23 Jan 2025 12:15:36 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Catalin Popescu <catalin.popescu@leica-geosystems.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, m.felsch@pengutronix.de,
+	bsp-development.geo@leica-geosystems.com
+Subject: Re: [PATCH] usb: core: support interface node for simple USB devices
+Message-ID: <Z5Ik2GoseMbZRe8i@hovoldconsulting.com>
+References: <20250122134732.2318554-1-catalin.popescu@leica-geosystems.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,53 +62,46 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250123091115.2079802-5-a0282524688@gmail.com>
+In-Reply-To: <20250122134732.2318554-1-catalin.popescu@leica-geosystems.com>
 
-On Thu, Jan 23, 2025 at 05:11:12PM +0800, Ming Yu wrote:
-> This driver supports Socket CANFD functionality for NCT6694 MFD
-> device based on USB interface.
+On Wed, Jan 22, 2025 at 02:47:32PM +0100, Catalin Popescu wrote:
+> A simple usb device has a single configuration and a single interface
+> and is considered as a "combined node" when defined in the devicetree.
+> If available, its interface node is simply ignored which is a problem
+> whenever the interface node has subnodes. To prevent that from happening
+> first check for any subnode and ignore the interface node only if no
+> subnode was found.
 > 
-> Signed-off-by: Ming Yu <a0282524688@gmail.com>
+> Example: FTDI chip FT234XD that has only one UART interface which is
+> being used as a serdev by other driver.
+> 
+> device@1 {
+> 	compatible = "usb403,6015";
+> 	reg = <1>;
+> 
+> 	#address-cells = <2>;
+> 	#size-cells = <0>;
+> 
+> 	interface@0 {
+> 		compatible = "usbif403,6015.config1.0";
 
-...
+Your example makes no sense since if this is the only interface then the
+interface node should not be here.
 
-> diff --git a/drivers/net/can/usb/nct6694_canfd.c b/drivers/net/can/usb/nct6694_canfd.c
+> 		reg = <0 1>;
+> 
+> 		bluetooth {
+> 			compatible = "nxp,88w8987-bt";
+> 		};
+> 	};
+> };
 
-...
+And as Greg said, serdev is not enabled for USB serial as serdev does
+not currently handle hotplugging (hangups).
 
-> +static int nct6694_can_get_clock(struct nct6694_can_priv *priv)
-> +{
-> +	struct nct6694_can_information *info;
-> +	struct nct6694_cmd_header cmd_hd = {
-> +		.mod = NCT6694_CAN_MOD,
-> +		.cmd = NCT6694_CAN_INFORMATION,
-> +		.sel = NCT6694_CAN_INFORMATION_SEL,
-> +		.len = cpu_to_le16(sizeof(*info))
-> +	};
-> +	int ret, can_clk;
-> +
-> +	info = kzalloc(sizeof(*info), GFP_KERNEL);
-> +	if (!info)
-> +		return -ENOMEM;
-> +
-> +	ret = nct6694_read_msg(priv->nct6694, &cmd_hd, info);
-> +	if (ret)
-> +		goto exit;
+The hotplug issue would need to be addressed first, and then we'd also
+need a DT binding for usb serial devices which can have multiple ports
+(per interface).
 
-Hi Ming Yu,
-
-This goto will result in the function returning can_clk.
-But can_clk is not initialised until the following line.
-
-Flagged by W=1 builds with clang-19, and by Smatch.
-
-> +
-> +	can_clk = le32_to_cpu(info->can_clk);
-> +
-> +exit:
-> +	kfree(info);
-> +	return can_clk;
-> +}
-
-...
+Johan
 
