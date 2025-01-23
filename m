@@ -1,133 +1,115 @@
-Return-Path: <linux-usb+bounces-19651-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19652-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D9F2A19D23
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 04:08:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3878A19F7F
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 09:01:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6CDE83A95AB
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 03:07:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A59B63AF351
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 08:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 849FF5588E;
-	Thu, 23 Jan 2025 03:07:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BAFB20B210;
+	Thu, 23 Jan 2025 08:01:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Voku3886"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TcOasCt1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA43136E21;
-	Thu, 23 Jan 2025 03:07:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3D412CDAE;
+	Thu, 23 Jan 2025 08:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737601668; cv=none; b=TpHLHRsTwDicG17sSK3dLL+s4yQA67BXMCPcT9wSOij6CZ5W19d+BjcuJvXFpXiYY3gqoVMVUWMnD+D69I0W76xgGwa8JlKjMH4f+VGo7HuyJMM58RKs0IyxWmNfb2sMsTA5D8a9/IeNkcv4O73Blzx3dXGyO6ZxVe3/olNfuDE=
+	t=1737619269; cv=none; b=fcRCDqpZJhM/TkuSH9onjNZDDKV8cw1BQ19A0h/1jNPb7Oyq7q2DbitGG8141qc18HIMABQULZIvDMNEsLelLccJOsZArovLMjgltOYjKNTfHKa8bu8tUtiZarcnXd2/GhLmH1AJECZ4xlJE1YatBQhh4rkmwbBAgkW5GThd2Ew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737601668; c=relaxed/simple;
-	bh=rgtIFMiDIGqDWDGfRmYETONKbMpImQPUu0l1rbUiXXA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t/TUcEQu4OAOycjhYJyzt4igczlUARX88f8JoYgR6yy2VEse84y4szzPYjfiuGv5+cD5vdjUzOmTuAKrgrz6sAcog9Dql8tDBrc/TkVdPH669mCXAaRZuygjikPtMSJuT46AU+4ss9H4sbFWngCxlNBK4zs2+zDcFvdEM1a9wlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Voku3886; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15589C4CED2;
-	Thu, 23 Jan 2025 03:07:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737601667;
-	bh=rgtIFMiDIGqDWDGfRmYETONKbMpImQPUu0l1rbUiXXA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Voku3886LdDgNvBgjrXcs+wowXM05eUmbfczA5ah9Kl42LgXhz1y2KcqlSzMujK3y
-	 hr1KJdWu0lDnTyTpntR/iHFvqyUGMV+kpnZFXaatouOrY+CofI099tuFkie8rSdyJw
-	 uZok8QaUUXPqf2Rb9pVdIhOxhdZcYaE7sV8MT6Uei1MXTdE2Efo7jSfLEZ1wxaq0hw
-	 X5MW7VGChFYP98hTTxDBjCRe+Clj4Xyr8gzMQoYCImS/85Xrpf/4DVqH1IYuAAnr08
-	 7yY/sbHjoRzERxryrj24kWYzUwkGIXQRw4JhBEixc3jVWH42Y70uk0SHwh790DXh9t
-	 vOxQ/VQC2EzoQ==
-Date: Wed, 22 Jan 2025 21:07:43 -0600
-From: Bjorn Andersson <andersson@kernel.org>
-To: Rob Herring <robh@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>, 
-	Wesley Cheng <quic_wcheng@quicinc.com>, Saravana Kannan <saravanak@google.com>, 
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>, linux-arm-msm@vger.kernel.org, 
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/12] usb: dwc3: qcom: Flatten dwc3 structure
-Message-ID: <3kuydb3b3ky4gczh5dyjjdcka2xlzgcv3ged4d432fgrprx7hr@byi7eg5fdvop>
-References: <20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com>
- <20250114174452.GB1414434-robh@kernel.org>
- <srhxu3r4sxy5ntx53nicf7l43sdjpiwavzd2qsgq2ovquzvt3u@cskcthmqznex>
- <CAL_Jsq+4qzfy3kY+8LwPvGs4FkFKoregTAYu4-buJQZHkqJwyA@mail.gmail.com>
+	s=arc-20240116; t=1737619269; c=relaxed/simple;
+	bh=dzXR6sHZfT6D58dHtCWjftkwAOuwZMXbb4rOzw7pLYQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rso+B1fwgBPNxT50C6Tirf5VtNhd7PHtFdx717yS7dRotPe4Mz1zBiq0eieb0u9YMIqaYD+4r9AzkKG5qQmxusvg+kFE2Ii/ZtjcCsNU6fn5mqGUDyZdxBJj9/iwpVW8lsgoHze5GqtslkefwXXK/Q+STKCnQaoObpxxYyMrowg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TcOasCt1; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2166f1e589cso13717455ad.3;
+        Thu, 23 Jan 2025 00:01:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737619268; x=1738224068; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=2i4xeAuV4/GQ5Fvf9EPTeiT/S+01JsInLwTJogo5J40=;
+        b=TcOasCt1LoFwQFtMEOo5ZGw9TPOA+vvnWrmDnZH9QLEJSkUjEjeUVIw3JhsfJiAzlR
+         iXKrBRq+7Gph9/aPC/Or2ck1wTo2AxicblfpsdsmXCJnKwU05PSLFBXbDJ6dmP1+j4TO
+         9/LBlqSUBdTvfAGSoHDc+Aefj+sgoQuU2KlQStQwWn54SWdCTpjhzHvv2C3IWhInGs2W
+         UThLlpprlqEzG8ty1CnC96ozYFzoSis/EGlmJOnFVZb806C+EOtmuRjJyJt8MjfSaHEl
+         QNFcAwfXu2iCwCYxmhN49IeSvhf7Fy4yzVWeMPEFztHygXGOzZuAiw91ZXrVxUBpwbD1
+         iCyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737619268; x=1738224068;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2i4xeAuV4/GQ5Fvf9EPTeiT/S+01JsInLwTJogo5J40=;
+        b=JNO6p6T6oJkM7rvd+CFTVPU4vXieAaweUoidmgw5niiMICfrZI3XZ0iVJer/84cY4i
+         LsA+hwKo7B4OKUQ8yYF+yHof4zeDSQ/BcbG70BVfDtzeQh/yP5BKF585DPy7ZwFJJ/gY
+         q/MVn/7RVqLc0R7bd0e9e2dFvIiXdKL1LYdxbE6N+b09lCE0syz+aRCX7VGC42R4+3jh
+         gxmUnlNmWfBeyvdecENuvjTgg2PXcnuwHme1ABPzS1BhlNGz9BTZemUu9MdXLCPu9uLp
+         gOrMbE4lPJhawD3DiU4ngtO4gSxLlWN/uUCiULy/2F9X3+p4l9zOzltZw7zyp49VG38j
+         FXgQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUGMctFb6vP6bLt/fSO/+03xvdiNCgMVfffRLgJHG+pWGLKeR2AbpLmjUViuV2WNeAmbii7c1SZyYHQ+fs=@vger.kernel.org, AJvYcCVTtnhhYTFcELtPxE47hhJxlxECcfXTamPOTNyizosih8HUrJoSGhOOfNEfPuxJleyltPM8e+Alzu4k@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkuS3Euf8+XryFyswOguLgi3SkIEkihDtOHchhIukkp4bvqWsQ
+	sujUIggL3D35R6Gqn81Mly8wJqOXzkxgitD8MVg/JtIASEWyoxCPdsIVkZQ/
+X-Gm-Gg: ASbGncv3fRmq7+V7QhuPA/Bg1u5B8FRc3uvMPmpjeMUTy51fJXrgXDtW04HsGV86hMh
+	hnZbWAyDXoglF7atvZzr+si1AY1a4E5GtE4NmeA5D0LHQom0kYXVcRaE/chYVXOZTxDCVtLQnlT
+	m602kE+/KPDZ/JoVNnBUbcDrFUzy/laywDqYNyPqHdRAw0NMSIXi4pbpTE1s/XK4uaF9XLDnrNF
+	rwPff4LC2j8XB0/qPupC+dX7ZSccjn0+p983E25vmpC1UJUOV0nnLfUPz9zilGGIgPxcHlv5Bo4
+	kKIlnFK+sikAPvd9BUU1opg+6yeyyg==
+X-Google-Smtp-Source: AGHT+IGLADfp4nxH9fNXg4OVe+eas4HyLTJtnd56Zm0PB09UDmwPXueViKkO+E4L9+LYkwiZ0KgJSg==
+X-Received: by 2002:a05:6a20:e615:b0:1eb:3623:59fd with SMTP id adf61e73a8af0-1eb36235ae1mr30207573637.4.1737619267732;
+        Thu, 23 Jan 2025 00:01:07 -0800 (PST)
+Received: from archlinux.plaksha.edu.in ([182.75.25.162])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-a9bcc32027dsm11999372a12.21.2025.01.23.00.01.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 00:01:07 -0800 (PST)
+From: Usman Akinyemi <usmanakinyemi202@gmail.com>
+To: Thinh.Nguyen@synopsys.com
+Cc: gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: dwc3: Fix documentation warning for sg member
+Date: Thu, 23 Jan 2025 13:31:02 +0530
+Message-ID: <20250123080102.1632517-1-usmanakinyemi202@gmail.com>
+X-Mailer: git-send-email 2.48.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAL_Jsq+4qzfy3kY+8LwPvGs4FkFKoregTAYu4-buJQZHkqJwyA@mail.gmail.com>
 
-On Wed, Jan 15, 2025 at 12:51:42PM -0600, Rob Herring wrote:
-> On Tue, Jan 14, 2025 at 5:04 PM Bjorn Andersson <andersson@kernel.org> wrote:
-> >
-> > On Tue, Jan 14, 2025 at 11:44:52AM -0600, Rob Herring wrote:
-> > > On Mon, Jan 13, 2025 at 09:11:33PM -0800, Bjorn Andersson wrote:
-> > > > The USB IP-block found in most Qualcomm platforms is modelled in the
-> > > > Linux kernel as 3 different independent device drivers, but as shown by
-> > > > the already existing layering violations in the Qualcomm glue driver
-> > > > they can not be operated independently.
-> > > >
-> > > > With the current implementation, the glue driver registers the core and
-> > > > has no way to know when this is done. As a result, e.g. the suspend
-> > > > callbacks needs to guard against NULL pointer dereferences when trying
-> > > > to peek into the struct dwc3 found in the drvdata of the child.
-> > > >
-> > > > Missing from the upstream Qualcomm USB support is proper handling of
-> > > > role switching, in which the glue needs to be notified upon DRD mode
-> > > > changes. Several attempts has been made through the years to register
-> > > > callbacks etc, but they always fall short when it comes to handling of
-> > > > the core's probe deferral on resources etc.
-> > > >
-> > > > Furhtermore, the DeviceTree binding is a direct representation of the
-> > > > Linux driver model, and doesn't necessarily describe "the USB IP-block".
-> > > >
-> > > > This series therefor attempts to flatten the driver split, and operate
-> > > > the glue and core out of the same platform_device instance. And in order
-> > > > to do this, the DeviceTree representation of the IP block is flattened.
-> > > >
-> > > > To avoid littering the dwc3-qcom driver with the migration code - which
-> > > > we should be able to drop again in a LTS or two - this is now placed in
-> > > > drivers/of/overlays.
-> > > >
-> > > > A patch to convert a single platform - sc8280xp - is included in the
-> > > > series. The broader conversion will be submitted in a follow up series.
-> > >
-> > > Is it not possible to use the same overlays also fixup the .dts files at
-> > > build time?
-> > >
-> >
-> > I presume so. What would the benefit of that be, over fixing up the
-> > source asap?
-> 
-> The overlays would live with all the other dts files (I think kbuild
-> can add built-in dtbs from arch/*/boot/dts/). We can test at build
-> time they actually apply, and ensure the new dtb matches what the
-> fixup overlay creates.
-> 
+The 'sg' member in struct dwc3_request was undocumented, causing a
+documentation warning when building the kernel docs.
 
-That does sounds tempting, in particular since it sounds like it would
-provide  us with dt-validation of the end result.
+This patch adds a description for the 'sg' field, resolving the warning.
 
-But, the build-time overlaid dtb files wouldn't be complete, as I
-programmatically transition some of the properties - to "fix" that I'd
-have to provide an overlay per board.
+Signed-off-by: Usman Akinyemi <usmanakinyemi202@gmail.com>
+---
+ drivers/usb/dwc3/core.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-Second, it was my intention to transition all the boards to the new
-binding as soon as possible, to avoid adding more overlays when new
-boards are added. So any support-system we build up for this, would be
-immediately obsoleted.
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index ee73789326bc..0c417a12e6f4 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -941,6 +941,7 @@ struct dwc3_hwparams {
+  * @request: struct usb_request to be transferred
+  * @list: a list_head used for request queueing
+  * @dep: struct dwc3_ep owning this request
++ * @sg: pointer to a scatterlist for DMA operations
+  * @start_sg: pointer to the sg which should be queued next
+  * @num_pending_sgs: counter to pending sgs
+  * @remaining: amount of data remaining
+-- 
+2.48.0
 
-Regards,
-Bjorn
 
