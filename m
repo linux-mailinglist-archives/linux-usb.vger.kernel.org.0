@@ -1,143 +1,106 @@
-Return-Path: <linux-usb+bounces-19687-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19688-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBCFBA1ABDA
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 22:23:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B549A1AC7A
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 23:09:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E30ED168225
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 21:23:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64810188CE39
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 22:10:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 222E11CAA84;
-	Thu, 23 Jan 2025 21:23:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEDF21CDFD3;
+	Thu, 23 Jan 2025 22:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fDU378yG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZwJwS82"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FABF1CAA63;
-	Thu, 23 Jan 2025 21:23:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CFB47A7E;
+	Thu, 23 Jan 2025 22:09:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737667381; cv=none; b=mryL1R4Y5ADyqC9dP+0BCEjZ4fBDmcin0OKkpsiLWdWaFG2fW0jrQPYYvkj3cSVrpnLtFyokHsiv8GjIRgGFN0xvZAlCmLmG9RDzrJrKQ2Og8oentkol/Klr/1RtM2Q6HSy5dLvBZf/mdcaH/LnV/cPMEqBOBZjQHCRDNv61V7o=
+	t=1737670188; cv=none; b=m5R3Ce2m6e+tDdcnk7gTmZzEvDWcLJPQyAnNt6upWx0WjUnsZ8CiMYU3eQQjenakI5PtbL7/ut5583RroLjclscbmq1Ik3HqIWZmmlGV0d4LVTaAdPGLcEFqQbeFKMVXw5OGH9rvBS1ETqtIuSEtYyvVF/jW25kB7b9FJusF68M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737667381; c=relaxed/simple;
-	bh=Pqn0b9u+oiewcWbHAYxeu1Vc50G/8MYxNovN2Y3irTQ=;
+	s=arc-20240116; t=1737670188; c=relaxed/simple;
+	bh=GnyZQ++mmddfCUBYwNZ3f5Vqkm3s2uA02jx7DMrwiCY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RJpeypFuTwq7uKqSzd0engaz8WzTeLJRh1pnaMaGJP3erKIAxeMdVSWBWEhhp5CztB46ZXfuurYML3EH+5eX/IpHpv5RvI9cfTQ8sTSx+cZezS5kGcIxoMxfsGW7/GFGm1QACDRRKpco+TzMDgVRDvDvt91DZkh6IEYKfIpBI/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fDU378yG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEE66C4CED3;
-	Thu, 23 Jan 2025 21:23:00 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=mwLZJQSDz3NY1NF0+XhdmGlBVrsKiwY3fA3NSeYQL2zhya20uZZe0VOb065KRouLDw4OF0WHVxzdTVAS+oXdT9GklTS4TwRcastzxKCy6TzUFvrtX0uvGJMIENWCeWF5SvQ9cy9r/tEq8riHNPWl6RHzs7IgRDmGlBvxq+0xI4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZwJwS82; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A03EDC4CED3;
+	Thu, 23 Jan 2025 22:09:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737667381;
-	bh=Pqn0b9u+oiewcWbHAYxeu1Vc50G/8MYxNovN2Y3irTQ=;
+	s=k20201202; t=1737670187;
+	bh=GnyZQ++mmddfCUBYwNZ3f5Vqkm3s2uA02jx7DMrwiCY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fDU378yGsz+RgFBSk/vYkjkT4hMhGrHx/t07ufKOX5hD0/lBUjUAhC224aip1PlJq
-	 aZmdhs+x95e3adyGo+K863swSuI0+Xrhz4Uu+wCzH8KjijV8SgC7raU01nMJuBJrDU
-	 Mmt/1oQI7DzcJqOuaeK2oVhulbE0iX/UWbUsCHtScvaF5Av5Tzd2xexKT4RD8CNzhK
-	 4SUUA4ubrEQ73hhzlNORFB3xfGgNihN9AGVj0BxRKPOQ/dOoVuCBgr276rG4Qb25aG
-	 FRvZ2F/dOqcW6k5TnRLDcQ3WrohkkoKmn8yC6zlJTZubiqaaCCd4njviaCxSwYDgyl
-	 ZZrl23MNP9NLg==
-Date: Thu, 23 Jan 2025 15:22:59 -0600
+	b=lZwJwS82OuxHjBF5AJ6GC6Xi/lYX1aBwTXGxQbisfkf0cqlugv4s6fFfeWjY2x7im
+	 if//OEZkGSp/WwEghHn8qcvJQuQPGWFsP6W1qHJKIU6fhWT2ulVO1dzFSAi5ZWxbBP
+	 lomwVySojpwvAH7Vd6HIYr8b32vwNFegqbuzItcCpBz//Of8AwKb8QhlQRudhUIShu
+	 9yC+Mica9DTZD/wdA+l6zcvKjmw9PTY5DZa3f9IIn0uxn1gVfz3jvqDG5sCXHUCquG
+	 g36ZFL27at0tnyZC/hEG9dh2humKhyUbsVEmGrdwb2JLbzRd/gmo4WicoXaCcR1oHt
+	 AviIOrQt623LA==
+Date: Thu, 23 Jan 2025 16:09:46 -0600
 From: Rob Herring <robh@kernel.org>
-To: Bjorn Andersson <andersson@kernel.org>
-Cc: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
-	Wesley Cheng <quic_wcheng@quicinc.com>,
-	Saravana Kannan <saravanak@google.com>,
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>,
-	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 00/12] usb: dwc3: qcom: Flatten dwc3 structure
-Message-ID: <20250123212259.GA381176-robh@kernel.org>
-References: <20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com>
- <20250114174452.GB1414434-robh@kernel.org>
- <srhxu3r4sxy5ntx53nicf7l43sdjpiwavzd2qsgq2ovquzvt3u@cskcthmqznex>
- <CAL_Jsq+4qzfy3kY+8LwPvGs4FkFKoregTAYu4-buJQZHkqJwyA@mail.gmail.com>
- <3kuydb3b3ky4gczh5dyjjdcka2xlzgcv3ged4d432fgrprx7hr@byi7eg5fdvop>
+	Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH v1 1/3] dt-bindings: usb: dwc3: Add a property to reserve
+ endpoints
+Message-ID: <20250123220946.GA407034-robh@kernel.org>
+References: <20250116154117.148915-1-andriy.shevchenko@linux.intel.com>
+ <20250116154117.148915-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <3kuydb3b3ky4gczh5dyjjdcka2xlzgcv3ged4d432fgrprx7hr@byi7eg5fdvop>
+In-Reply-To: <20250116154117.148915-2-andriy.shevchenko@linux.intel.com>
 
-On Wed, Jan 22, 2025 at 09:07:43PM -0600, Bjorn Andersson wrote:
-> On Wed, Jan 15, 2025 at 12:51:42PM -0600, Rob Herring wrote:
-> > On Tue, Jan 14, 2025 at 5:04 PM Bjorn Andersson <andersson@kernel.org> wrote:
-> > >
-> > > On Tue, Jan 14, 2025 at 11:44:52AM -0600, Rob Herring wrote:
-> > > > On Mon, Jan 13, 2025 at 09:11:33PM -0800, Bjorn Andersson wrote:
-> > > > > The USB IP-block found in most Qualcomm platforms is modelled in the
-> > > > > Linux kernel as 3 different independent device drivers, but as shown by
-> > > > > the already existing layering violations in the Qualcomm glue driver
-> > > > > they can not be operated independently.
-> > > > >
-> > > > > With the current implementation, the glue driver registers the core and
-> > > > > has no way to know when this is done. As a result, e.g. the suspend
-> > > > > callbacks needs to guard against NULL pointer dereferences when trying
-> > > > > to peek into the struct dwc3 found in the drvdata of the child.
-> > > > >
-> > > > > Missing from the upstream Qualcomm USB support is proper handling of
-> > > > > role switching, in which the glue needs to be notified upon DRD mode
-> > > > > changes. Several attempts has been made through the years to register
-> > > > > callbacks etc, but they always fall short when it comes to handling of
-> > > > > the core's probe deferral on resources etc.
-> > > > >
-> > > > > Furhtermore, the DeviceTree binding is a direct representation of the
-> > > > > Linux driver model, and doesn't necessarily describe "the USB IP-block".
-> > > > >
-> > > > > This series therefor attempts to flatten the driver split, and operate
-> > > > > the glue and core out of the same platform_device instance. And in order
-> > > > > to do this, the DeviceTree representation of the IP block is flattened.
-> > > > >
-> > > > > To avoid littering the dwc3-qcom driver with the migration code - which
-> > > > > we should be able to drop again in a LTS or two - this is now placed in
-> > > > > drivers/of/overlays.
-> > > > >
-> > > > > A patch to convert a single platform - sc8280xp - is included in the
-> > > > > series. The broader conversion will be submitted in a follow up series.
-> > > >
-> > > > Is it not possible to use the same overlays also fixup the .dts files at
-> > > > build time?
-> > > >
-> > >
-> > > I presume so. What would the benefit of that be, over fixing up the
-> > > source asap?
-> > 
-> > The overlays would live with all the other dts files (I think kbuild
-> > can add built-in dtbs from arch/*/boot/dts/). We can test at build
-> > time they actually apply, and ensure the new dtb matches what the
-> > fixup overlay creates.
-> > 
+On Thu, Jan 16, 2025 at 05:40:46PM +0200, Andy Shevchenko wrote:
+> Some of the endpoints may be reserved by hardware for different purposes,
+> e.g., tracing control and output. This is the case, for instance, on
+> Intel Merrifield and Moorefield platforms that reserve a few and USB driver
+> may not use them for the regular transfers. Add the respective bindings.
 > 
-> That does sounds tempting, in particular since it sounds like it would
-> provide  us with dt-validation of the end result.
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 > 
-> But, the build-time overlaid dtb files wouldn't be complete, as I
-> programmatically transition some of the properties - to "fix" that I'd
-> have to provide an overlay per board.
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index 1cd0ca90127d..2ae8e5e85f78 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -109,6 +109,16 @@ properties:
+>    resets:
+>      minItems: 1
+>  
+> +  snps,reserved-endpoints:
+> +    description:
+> +      Reserve endpoints for other needs, e.g, for tracing control and output.
+> +      When set, the driver will avoid using them for the regular USB transfers.
+> +    $ref: /schemas/types.yaml#/definitions/uint8-array
+> +    maxItems: 30
+
+Please make minItems explicit.
+
+> +    items:
+> +      minimum: 2
+> +      maximum: 31
+> +
+>    snps,usb2-lpm-disable:
+>      description: Indicate if we don't want to enable USB2 HW LPM for host
+>        mode.
+> -- 
+> 2.43.0.rc1.1336.g36b5255a03ac
 > 
-> Second, it was my intention to transition all the boards to the new
-> binding as soon as possible, to avoid adding more overlays when new
-> boards are added. So any support-system we build up for this, would be
-> immediately obsoleted.
-
-Ok, fair enough.
-
-I would still prefer the overlays live in arch/*/boot/dts/qcom/ even if 
-we don't do the rest.
-
-Rob
 
