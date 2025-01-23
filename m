@@ -1,243 +1,215 @@
-Return-Path: <linux-usb+bounces-19669-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19670-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E4DA1A536
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 14:49:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53E21A1A560
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 15:01:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E093E3A86C6
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 13:49:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9111A168D12
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 14:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D761C6F70;
-	Thu, 23 Jan 2025 13:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 732BB20F979;
+	Thu, 23 Jan 2025 14:01:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EPZeQvwj"
+	dkim=pass (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b="JEw3PQbN"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013036.outbound.protection.outlook.com [40.107.162.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8698C07;
-	Thu, 23 Jan 2025 13:49:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737640157; cv=none; b=O1zsfPzQZz8cG78fc6m0Xp4CUbQMJoFkS5P7kA8KCjPlalmTSMSLemPC3JUrv9k6Nsaon8eEBVey6spexNYQ93Pi5d5E5pmGsrmRTa1pB6TYhEjEs70APr1eFR5P9iYDK7E//jDGNGbeXjEm1zZSoG8EIm0WQyEn2Ht6elrLVGY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737640157; c=relaxed/simple;
-	bh=RFOZ2iCvzb/yzx0VqC1skGSN48jGaj2oiNOZblqoflg=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=iSOely2oS2Cbfzj5DJSClGJ+g5TiqBz6oma7R59liRTkTrJm0noJwiQwnMnpmHTsg200lsbcgoxGKQsbvNUwhd4HRgRBJe9HaHVoNBtdLOeyhit3DyQ5ZbZEYaGYeLQ68jyg39AmD2mhLkFfyZPRYD4OC6UCg/9kMeUbxg2rgPY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EPZeQvwj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDC24C4CED3;
-	Thu, 23 Jan 2025 13:49:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737640156;
-	bh=RFOZ2iCvzb/yzx0VqC1skGSN48jGaj2oiNOZblqoflg=;
-	h=From:To:Cc:Subject:Date:From;
-	b=EPZeQvwj9HgR4BT6b6p9XoayVKiQT6sfDC1fyuC5rsL7Sln1vlyBUj/iIsNmz+IpF
-	 UbePMjZpogFdrFew5X6FyfeT4o9TV3hhdVaQUkWGsch4HjFo0YhrFqYXHafD0c5hLy
-	 PFMnoJsDk6gykyp7dq4sDRQt+E6aCcKKSZUVSQrZOHfSIYP5Kk+Pqpgx5UHKFMUaPI
-	 F7hwy7QXEr4HHz4DGLZIDPB+EWe4bs5+fXpRw0MrAb1ejBNLyd5KEyWr133z8LYmr9
-	 HKDNp5MMBFyrYLFlr/a1uWAjVv7Mr3H6elqjqmirpvo13qSHoUZhRD8ywBCYK/x78G
-	 vum7eb0Aj7/bA==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Mark Pearson <mpearson-lenovo@squebb.ca>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Basavaraj Natikar <basavaraj.natikar@amd.com>,
-	Even Xu <even.xu@intel.com>,
-	Xinpeng Sun <xinpeng.sun@intel.com>,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Marcel Holtmann <marcel@holtmann.org>,
-	Johan Hedberg <johan.hedberg@gmail.com>,
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-bluetooth@vger.kernel.org
-Subject: [PATCH] hid: intel-thc: fix CONFIG_HID dependency
-Date: Thu, 23 Jan 2025 14:48:12 +0100
-Message-Id: <20250123134908.805346-1-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D8671E4A6;
+	Thu, 23 Jan 2025 14:01:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.36
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737640865; cv=fail; b=GE/Ddx4isiREFAtZ8d1hm1mLMQ2h+uLa3keHSCrEN8JzcEocpHTm2wL/tGTHPduTrFzNUPXn2ZqVXs0ze2H+SJeBnE2G2QRN2z6u98OmeqOuc0FTbcQzMsKK2shircghQ+GhPWQBIOTsTCpLLnGTXAUUJNj9GXXT1+S6XPJoptg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737640865; c=relaxed/simple;
+	bh=BAj1/bB1izDVVrSYTX8CXNuq1YFFp+KCQ8oCqREGRCk=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=cws4WDpMx5NR/wLuEf4S1/Zh2woZ2kPBTYuMKF6q97F67TxIEBrGDkqMJqfCeyB6lNdY5eUt6FuzjiFEmNNtuUy0ObUHltkbr6MHhpkzQ7093PCbRSVg48QFXGiOS5V372tDym7r96A7b5aDk0m0eeW+Zn2+0bZ9Bn2HDOk7akI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com; spf=fail smtp.mailfrom=leica-geosystems.com; dkim=pass (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b=JEw3PQbN; arc=fail smtp.client-ip=40.107.162.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=leica-geosystems.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rK6Wcwc/hllP6BFdAm4Uh/hItKQPj/9Fc/1xpk4BF0DYg5SDzVLrlHeYiCZWHD+Wx19eV0uuaM7+WUfmsnikTD99cV6fjj+PCTiOieLx2ABwQw/F9e46C0LYH/kcnyVoObufL/CmVO0GUD4yUG20BDY5qCiEsGUDfSRciIw39x1OmwQrBC5Qhnd3FBZE3DRvYvI50Ge9WqfyS1ERbFVeI2726a9IaNGCWj0J2tXL5mT/Y1WunlWrCDsQ2iqgoDck55OTM4U8uqIy2YuZCTy9JycJgorll+0WEvgmcaGOzkspjDzxphaJc6f+ENwZGa6FaL746hiJPe+T9OOgwPAZuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BAj1/bB1izDVVrSYTX8CXNuq1YFFp+KCQ8oCqREGRCk=;
+ b=GAgGdq2XlWF5MsjY54PHU4fbXb9iOSbGXIGItkiuitaUnJoQS8qlNYOVvKPHRh7o70XM8IMEKm1uPHnn+ptGvYCIAKyE7AEfbudOtZmkgeoBNcUJK7NfpkNBYqZPaTXHhMZ3E9dCJDhU7Z7w8WhHr7zclLCJu96y83zp/Saa90nYJgBgpH7bN3KCkYBxwS6ytIDBoFhcFRQkJY0bxi27OFGTxtuIYMINZnlV25maI5k5acZ+eNj3g7uMEnuI1AI8Ym6cwaPQkC7WcA/lXAhCCC00nsiMPUZFeRKfG32xQYRuEETQLP7li2n8Jwvav/yLRbboDQ3fmxUZ8xbgSnIMBQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
+ header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BAj1/bB1izDVVrSYTX8CXNuq1YFFp+KCQ8oCqREGRCk=;
+ b=JEw3PQbNOajrO/R3pbdyj8kvmxZeIq/NSPILAAmObfbOEHzEmqOf+KjBUsgpG9JcWmCEZho6k7ZS8dErm62ES560x6pzdcvEtY2bt3wQ4qE5cf/95tjMeT8ZoAM5tmjarKxwwCrdX8rpWte82y1xkqIbu5kT+P/Fp1NntFEAVos=
+Received: from DBAPR06MB6901.eurprd06.prod.outlook.com (2603:10a6:10:1a0::11)
+ by GV1PR06MB9668.eurprd06.prod.outlook.com (2603:10a6:150:1c9::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.17; Thu, 23 Jan
+ 2025 14:01:00 +0000
+Received: from DBAPR06MB6901.eurprd06.prod.outlook.com
+ ([fe80::3988:68ff:8fd1:7ea0]) by DBAPR06MB6901.eurprd06.prod.outlook.com
+ ([fe80::3988:68ff:8fd1:7ea0%7]) with mapi id 15.20.8356.020; Thu, 23 Jan 2025
+ 14:01:00 +0000
+From: POPESCU Catalin <catalin.popescu@leica-geosystems.com>
+To: Johan Hovold <johan@kernel.org>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"m.felsch@pengutronix.de" <m.felsch@pengutronix.de>,
+	GEO-CHHER-bsp-development <bsp-development.geo@leica-geosystems.com>
+Subject: Re: [PATCH] usb: core: support interface node for simple USB devices
+Thread-Topic: [PATCH] usb: core: support interface node for simple USB devices
+Thread-Index: AQHbbNQz5nuTuJgNwkO47mkrPRQBtLMkNpcAgAAuNoA=
+Date: Thu, 23 Jan 2025 14:01:00 +0000
+Message-ID: <ce5fe24e-e2b5-4e41-9dd3-164d688afe04@leica-geosystems.com>
+References: <20250122134732.2318554-1-catalin.popescu@leica-geosystems.com>
+ <Z5Ik2GoseMbZRe8i@hovoldconsulting.com>
+In-Reply-To: <Z5Ik2GoseMbZRe8i@hovoldconsulting.com>
+Accept-Language: en-CH, en-US
+Content-Language: aa
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=leica-geosystems.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DBAPR06MB6901:EE_|GV1PR06MB9668:EE_
+x-ms-office365-filtering-correlation-id: fc950932-8cd5-479b-044f-08dd3bb65dd2
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|38070700018;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?d0kxeVM1N2FSUWtOZjV6WWFCSDAvb0NFS0hnS0w3d2hDTmlMcWZENVZMbG5C?=
+ =?utf-8?B?bVIyVWFVRi9wSHNkMU9tWjFpVE56NlhEVHkxMHhmWmR5aHlrNzRzRmNpbDN0?=
+ =?utf-8?B?bklXVnNhMUM5enprb0xUdHJTUUN0UmZuTWRqUjZwTDN4TjZTbTlrbnp5YXRa?=
+ =?utf-8?B?L29aMDAvUUMraktrQUxUT2l6VmhxVUM3L3dJalRTekhwcGMwYllhTE5pYVJk?=
+ =?utf-8?B?T0hPWmJnaGZscmxGZS9Lb0NYdjdWeXdSMVo1N3BGS3JHeDFtSUVGb0tLNDNO?=
+ =?utf-8?B?ajVKMFJBOUVtZjl4SWZUM09EWTl4aHZGSjhqT3h1RFpXY1pFS0I2WmJJMnBh?=
+ =?utf-8?B?ak9vbUJVVUM0N3RLRW5UZ2ExQ1dBRERWT1J3bENjeFNOalR4U0xQMHVUOGcx?=
+ =?utf-8?B?clU2OXJxT0k1bEVQamJaYmRmSkhCMDRLS2pGRkVuenJUelZHV05jMkdOWTZM?=
+ =?utf-8?B?b0Q5ZDZsM1U3aDlnUWpabVZOZmljOWdJbHBwSFhENEdZUzREUnFRYjFnSzJW?=
+ =?utf-8?B?NUpaNXV6dU1EYUVDQi81RlByRDFSUExsREpFNTVlN2dkYXd1bGl2K2FvM3Jk?=
+ =?utf-8?B?VlczQ28zTkk0anhBeVVZZ3JNdmpHeGpmeEhzTndETUhmUDhzeW1pajZ6SWFu?=
+ =?utf-8?B?U0FPNkQ5WDVBa0trNW9mNDdJcEswZk9tRDJ4NStFakovK3V0by9xRkxuZU81?=
+ =?utf-8?B?RnByektSS3lTbkNoNXF6bkt3Yyt6dG04KytsdzlYR3ptd0ZJL09jQ3lBcFo2?=
+ =?utf-8?B?aEUvTWhXUWF3elBhcWtMTW9ZNnU3UG1QSUVReXNCbUtDRG94T2xQUXdubmlm?=
+ =?utf-8?B?V3FDT0Q0ZG9TdG9xME1nZFZmUWRDdTRFS2FLeE41cjBoc1dxbEJ3U2h1YzJS?=
+ =?utf-8?B?dEVSTFVSV2d3WWZZTGtWMzNsc0pHK1JUMlNtSFlLSitqM2FqVFVzUzV4QmhP?=
+ =?utf-8?B?dU4xWm03VUlQOEhmbGFoWUN4S0JYd2pWL2pZZDBuV1B1dmtxS0lTSlBwSU5q?=
+ =?utf-8?B?UFlmSXJpMS8xRzZ5R1dkaDdsSU5HWlY5M2lVdG5XaHo0RXcyZUlqNk5MaVR4?=
+ =?utf-8?B?TU1xOXU3Q1RlM0RlUDROV0RHZk1tTWVUWGswSHhEVjZSWHIrMDk1S201VkxV?=
+ =?utf-8?B?c0Q5WFQ4eStFdlRzVTdrT0N3MSsxekxvYUt5eVFBUHNmWWtybHlaUlFJWUJO?=
+ =?utf-8?B?MXdNNDMvSmhTVmVsdFV6UytxbnFrdW9jOFRmbVhaeGV6WVZsWHNvTXBSVEdJ?=
+ =?utf-8?B?WFVueUFqZE0zNDBpN2R5VEhZbUorVy8wdVhEbXVucS9LSGxFRVNUR1NLQ2M5?=
+ =?utf-8?B?UGhiMHIrVkI3SEtva05ROG1Va05lYjhmNDlmSDVzbENFZEQ1eStnZ0dHajZY?=
+ =?utf-8?B?eXhUaGpEd0dOV2M0WXp3OTRiSVlBeUt2K0xTeHR0NHlHOUhQc2lwYmJ5RnRi?=
+ =?utf-8?B?bUxhK1F6cVdBRmo5aGdIRklUQUtVMGgwU3BtTW94cGJISlkvT2FPeEo1Zmgr?=
+ =?utf-8?B?RXd1UHExRzUydTNtc1dPcnJxMHdvRVBIZHlacWgyZGwwTGJVZXpoNnNnREZm?=
+ =?utf-8?B?dDc4WFJWU3ptNElvKzJxeDVhVzZIZ0lvMlRsWUNydFNtOTRUb0d2eDUzWTJ1?=
+ =?utf-8?B?aGp1RlVOb29OV1duQVJVS3dLQ1JWelJyYXNaU0pqMytSSEMvY2xROUNFbVR5?=
+ =?utf-8?B?STZUNGxKNG4ya2NDZ2NOVzBzSktiMWV6cVFhTDVDTFljdDVia09paW1QdUQz?=
+ =?utf-8?B?b3ZYbjlBRjIvckQ2T3Vrcm56RmlUak5KNndCVVRaODdTR0hTeFNkWElIZTlK?=
+ =?utf-8?B?UWtLbjhYdm1QQytJM3duOWY4ekwzYTlGZFdvTWlWVG00dXdBTUQvZUwrdlF4?=
+ =?utf-8?B?R3ZvWjRRMjVEUFFUWWtrMG5yQ1hIZmkwMkFQSzlteXFnME85bFpFb0hRaWZi?=
+ =?utf-8?Q?vP04rOdewGtEwA0IEQC76Mjl/Uei6deT?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBAPR06MB6901.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?ZTZiSFdHUEkvRWs5SitmQ08wSi8zQlFLb3lVMkJLd2lERURiblUySnVRaHpO?=
+ =?utf-8?B?bE9ybnZSVFVYM1ppcWpsODZlQTNZWnA2T25ScU9FSTRvdm9KcWFYTFZnWmRU?=
+ =?utf-8?B?U1pDUDlmdkR1Ukg4dUlISGJ3Q1ZiL1YzTzJ1UTlDWlI0R3YrTlpsYmVrMzB5?=
+ =?utf-8?B?anN6MUZQNFk3T1lsRGFuakFucFZva0xtbDlVcTF5aDl4aTdXM0d6emRya0hE?=
+ =?utf-8?B?YWVJa2VHL3pEMkc3aEkzREsvQXZ3bGEwYkpBbGxPYnlNNUtHT2pZWXdWY3VS?=
+ =?utf-8?B?UEk0dUZsMi9yTW56NFFnZFNZUGMzb2RzQzJaR3JEZkdTdHd6YnVUZzNyRU9o?=
+ =?utf-8?B?NFk3UFVpdmJoa0JObWV5SFRSTHZ5dkcrb2RLekpyNnJxUW4zKzIrcFV4ZW5y?=
+ =?utf-8?B?UFVQbmtpR0JGOXRnaDdyWXZuMVFXZmtBOTg5eEdsZE84dnQwdUZpSVloQmg5?=
+ =?utf-8?B?dzI0UkV1QXNaQ3ExTUpYSU1ueFJCUUJNRXM5TmxQdUUrMFNTcUFVcklUcTJJ?=
+ =?utf-8?B?MGxBS1ppWVBhYXcyQlA0Rk5GRkhRS1dxdUlIVmVZR0d0QnFTUlBCRDlCN2tl?=
+ =?utf-8?B?dmNZUVBFMDRQdm1Ha29NNlBDNGlpNlJXZFI3UXgrV0J5aDJlTzNkdU11WXFo?=
+ =?utf-8?B?YzM0NHdNVmd1Z0dXellRaHF3RzhMcXJPVjlSVUpKemY1VjdLRGFDRUtKVWpQ?=
+ =?utf-8?B?Uk9HSHQ3bFdPN1k4Y0h1WUZ0NEZybVNycHkrdkR0akFjWlplOFJsbXZUMkRX?=
+ =?utf-8?B?RndKL0UyaUtPdDIrMUdDUU5HdGNSSnBsamNtVSsrdmo3TDVSQ053UjNISkxP?=
+ =?utf-8?B?YWVxNFNWMUk4SlUzdTNNM3NyUFNVdDhwUGhueURuU0IxSWNiUVdXT3NlWjlH?=
+ =?utf-8?B?dko1WDFXb3hQa2xNeHBjOW5jZThRNlhEY0xKYTdtT0tINTE0ZWNNM3hUUzk0?=
+ =?utf-8?B?ZUZ1c1FrYlJOam5oM2ZVVEVveWJEOHhEK2FtZHVvYmJvMXlWVE5PV3R4Q1h2?=
+ =?utf-8?B?eldTMGpIUEFoNTRyOUl5alZTN2JJTWo5OHQ5S2pTdWhNUTRWaktPN3dJRGc1?=
+ =?utf-8?B?N1Z1OUI5Q25HQkQxNzFaaHlUQXNka1pyNlpMeExVVWZiUFRMcjVUbHdVNFlC?=
+ =?utf-8?B?TnlmVVdKbENFYjJYWmxGalBTVWMyckt5dnpveWpxcW04anJQd0xHSUx4OTZN?=
+ =?utf-8?B?L0E5cExpREhhVW0wUldFM3hqSGZxaTFhU2tCSFptMkk3b1dJVTlOVytKeTZw?=
+ =?utf-8?B?N3RCS2tyWHdnU25tZTBiMDcyNTZ6N2NxQW1GTzEzd3N4a09POGx4dEQyTUg4?=
+ =?utf-8?B?VGpXdUpzYnBqSVB0bjBXOVhFbkJBWXNuVExDdC9FOTN0Vjloa1JHMUxUNTJt?=
+ =?utf-8?B?MHVCRktaRk8yK3lGY283NDBHbVlkNWl1QTZxSWZ0aGlWRUVESlE0bkdLRjV3?=
+ =?utf-8?B?RE1IT21nRmtiMUFQeHJ4RjhpZXMvaUUzWGd5MmtQMjErRzR3bkplalUvbGtn?=
+ =?utf-8?B?T0JHdkJDckp0Z2lWQ3UwM3h2dTZ5WnNvVm1EUVI0UWNLSmwxMTRHNVplOHNO?=
+ =?utf-8?B?RTFjVzFtR01IbUQwcnBrVURNL0lTVGJQeUhraEJUamhxdjlqV2VDM29mV21Y?=
+ =?utf-8?B?Z29OdDl5RS9hanE2TmZuNm9SdkNNQStFSy9uSk5WanY2dURFTStyYkllSm9p?=
+ =?utf-8?B?bFV4Um95N0lDcjR5QjlKS2dzMFVheXRtYlFLdXdqZFEwTlQ0OXZOWlZTUnRB?=
+ =?utf-8?B?bFlCVXpzajgvcjg4cTgzQytoOXJrYW1FYWg0UGt6Uyt4WnNWUTF1UWdKdks3?=
+ =?utf-8?B?N0ZaeDVpVjZoc3JlOHVIN1JVZEV4U0I4bUtuMTdmeXd6UDkxQkdNelJJdVJW?=
+ =?utf-8?B?Y1VUcTBHVHFDaStpZ1p0amVLdWxJbWQ1U3lxc2J3d25kTjZwZEhSR09XeFlD?=
+ =?utf-8?B?WnJoZ1F2K2hTMDhSSkVzSU16VFhhR2U4cER6aEx3OUlTK3gvbmg5bEczdlV3?=
+ =?utf-8?B?aW9veFdJSm5jRGxrZFhobVFyS3hUSjlxUnlLRUMrMDhlK0dLV3JtOFdiNkVm?=
+ =?utf-8?B?Ym00SjVXcXFTd0Q3bmZQWXVpUURCUlR3Y2IyaWJFVS9aMXdnQ2N5R0I0a2R4?=
+ =?utf-8?B?VUlhWHhuNmU2UDFRRWZEOWdUYXlxb1R0MmVjenlaa3AzTVBQV2lZdTBXZUVW?=
+ =?utf-8?B?T2c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <1BF808BB26BA4E439FA9CF8CC9B10D6F@eurprd06.prod.outlook.com>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: leica-geosystems.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DBAPR06MB6901.eurprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fc950932-8cd5-479b-044f-08dd3bb65dd2
+X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2025 14:01:00.0151
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: o+EuQlK1PSCEQ5SDsdmiifxKQrJW/7ixtdlD4GgvSkCv+2ejXvc7n68AcsjKeWP6ju4sGe1SoiKyvNZroOGjKvlWwJij6X8rJ+701QIKwaOvxaO9qVA+AaMQBZVCLLFG
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR06MB9668
 
-From: Arnd Bergmann <arnd@arndb.de>
-
-In drivers/hid/, most drivers depend on CONFIG_HID, while a couple of the
-drivers in subdirectories instead depend on CONFIG_HID_SUPPORT and use
-'select HID'. With the newly added INTEL_THC_HID, this causes a build
-warning for a circular dependency:
-
-WARNING: unmet direct dependencies detected for HID
-  Depends on [m]: HID_SUPPORT [=y] && INPUT [=m]
-  Selected by [y]:
-  - INTEL_THC_HID [=y] && HID_SUPPORT [=y] && X86_64 [=y] && PCI [=y] && ACPI [=y]
-
-WARNING: unmet direct dependencies detected for INPUT_FF_MEMLESS
-  Depends on [m]: INPUT [=m]
-  Selected by [y]:
-  - HID_MICROSOFT [=y] && HID_SUPPORT [=y] && HID [=y]
-  - GREENASIA_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_GREENASIA [=y]
-  - HID_WIIMOTE [=y] && HID_SUPPORT [=y] && HID [=y] && LEDS_CLASS [=y]
-  - ZEROPLUS_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_ZEROPLUS [=y]
-  Selected by [m]:
-  - HID_ACRUX_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_ACRUX [=m]
-  - HID_EMS_FF [=m] && HID_SUPPORT [=y] && HID [=y]
-  - HID_GOOGLE_STADIA_FF [=m] && HID_SUPPORT [=y] && HID [=y]
-  - PANTHERLORD_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_PANTHERLORD [=m]
-
-It's better to be consistent and always use 'depends on HID' for HID
-drivers. The notable exception here is USB_KBD/USB_MOUSE, which are
-alternative implementations that do not depend on the HID subsystem.
-
-Do this by extending the "if HID" section below, which means that a few
-of the duplicate "depends on HID" and "depends on INPUT" statements
-can be removed in the process.
-
-Fixes: 1b2d05384c29 ("HID: intel-thc-hid: Add basic THC driver skeleton")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- drivers/hid/Kconfig               | 10 ++++++----
- drivers/hid/amd-sfh-hid/Kconfig   |  1 -
- drivers/hid/i2c-hid/Kconfig       |  2 +-
- drivers/hid/intel-ish-hid/Kconfig |  1 -
- drivers/hid/intel-thc-hid/Kconfig |  1 -
- drivers/hid/surface-hid/Kconfig   |  2 --
- drivers/hid/usbhid/Kconfig        |  3 +--
- net/bluetooth/hidp/Kconfig        |  3 +--
- 8 files changed, 9 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-index 8adb745c5b28..ed657ef7281c 100644
---- a/drivers/hid/Kconfig
-+++ b/drivers/hid/Kconfig
-@@ -1376,10 +1376,6 @@ endmenu
- 
- source "drivers/hid/bpf/Kconfig"
- 
--endif # HID
--
--source "drivers/hid/usbhid/Kconfig"
--
- source "drivers/hid/i2c-hid/Kconfig"
- 
- source "drivers/hid/intel-ish-hid/Kconfig"
-@@ -1390,4 +1386,10 @@ source "drivers/hid/surface-hid/Kconfig"
- 
- source "drivers/hid/intel-thc-hid/Kconfig"
- 
-+endif # HID
-+
-+# USB support may be used with HID disabled
-+
-+source "drivers/hid/usbhid/Kconfig"
-+
- endif # HID_SUPPORT
-diff --git a/drivers/hid/amd-sfh-hid/Kconfig b/drivers/hid/amd-sfh-hid/Kconfig
-index 329de5e12c1a..3291786a5ee6 100644
---- a/drivers/hid/amd-sfh-hid/Kconfig
-+++ b/drivers/hid/amd-sfh-hid/Kconfig
-@@ -5,7 +5,6 @@ menu "AMD SFH HID Support"
- 
- config AMD_SFH_HID
- 	tristate "AMD Sensor Fusion Hub"
--	depends on HID
- 	depends on X86
- 	help
- 	  If you say yes to this option, support will be included for the
-diff --git a/drivers/hid/i2c-hid/Kconfig b/drivers/hid/i2c-hid/Kconfig
-index ef7c595c9403..e8d51f410cc1 100644
---- a/drivers/hid/i2c-hid/Kconfig
-+++ b/drivers/hid/i2c-hid/Kconfig
-@@ -2,7 +2,7 @@
- menuconfig I2C_HID
- 	tristate "I2C HID support"
- 	default y
--	depends on I2C && INPUT && HID
-+	depends on I2C
- 
- if I2C_HID
- 
-diff --git a/drivers/hid/intel-ish-hid/Kconfig b/drivers/hid/intel-ish-hid/Kconfig
-index 253dc10d35ef..568c8688784e 100644
---- a/drivers/hid/intel-ish-hid/Kconfig
-+++ b/drivers/hid/intel-ish-hid/Kconfig
-@@ -6,7 +6,6 @@ config INTEL_ISH_HID
- 	tristate "Intel Integrated Sensor Hub"
- 	default n
- 	depends on X86
--	depends on HID
- 	help
- 	  The Integrated Sensor Hub (ISH) enables the ability to offload
- 	  sensor polling and algorithm processing to a dedicated low power
-diff --git a/drivers/hid/intel-thc-hid/Kconfig b/drivers/hid/intel-thc-hid/Kconfig
-index 91ec84902db8..0351d1137607 100644
---- a/drivers/hid/intel-thc-hid/Kconfig
-+++ b/drivers/hid/intel-thc-hid/Kconfig
-@@ -7,7 +7,6 @@ menu "Intel THC HID Support"
- config INTEL_THC_HID
- 	tristate "Intel Touch Host Controller"
- 	depends on ACPI
--	select HID
- 	help
- 	  THC (Touch Host Controller) is the name of the IP block in PCH that
- 	  interfaces with Touch Devices (ex: touchscreen, touchpad etc.). It
-diff --git a/drivers/hid/surface-hid/Kconfig b/drivers/hid/surface-hid/Kconfig
-index 7ce9b5d641eb..d0cfd0d29926 100644
---- a/drivers/hid/surface-hid/Kconfig
-+++ b/drivers/hid/surface-hid/Kconfig
-@@ -1,7 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0+
- menu "Surface System Aggregator Module HID support"
- 	depends on SURFACE_AGGREGATOR
--	depends on INPUT
- 
- config SURFACE_HID
- 	tristate "HID transport driver for Surface System Aggregator Module"
-@@ -39,4 +38,3 @@ endmenu
- 
- config SURFACE_HID_CORE
- 	tristate
--	select HID
-diff --git a/drivers/hid/usbhid/Kconfig b/drivers/hid/usbhid/Kconfig
-index 7c2032f7f44d..f3194767a45e 100644
---- a/drivers/hid/usbhid/Kconfig
-+++ b/drivers/hid/usbhid/Kconfig
-@@ -5,8 +5,7 @@ menu "USB HID support"
- config USB_HID
- 	tristate "USB HID transport layer"
- 	default y
--	depends on USB && INPUT
--	select HID
-+	depends on HID
- 	help
- 	  Say Y here if you want to connect USB keyboards,
- 	  mice, joysticks, graphic tablets, or any other HID based devices
-diff --git a/net/bluetooth/hidp/Kconfig b/net/bluetooth/hidp/Kconfig
-index 6746be07e222..e08aae35351a 100644
---- a/net/bluetooth/hidp/Kconfig
-+++ b/net/bluetooth/hidp/Kconfig
-@@ -1,8 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0-only
- config BT_HIDP
- 	tristate "HIDP protocol support"
--	depends on BT_BREDR && INPUT && HID_SUPPORT
--	select HID
-+	depends on BT_BREDR && HID
- 	help
- 	  HIDP (Human Interface Device Protocol) is a transport layer
- 	  for HID reports.  HIDP is required for the Bluetooth Human
--- 
-2.39.5
-
+T24gMjMvMDEvMjAyNSAxMjoxNSwgSm9oYW4gSG92b2xkIHdyb3RlOg0KPiBUaGlzIGVtYWlsIGlz
+IG5vdCBmcm9tIEhleGFnb27igJlzIE9mZmljZSAzNjUgaW5zdGFuY2UuIFBsZWFzZSBiZSBjYXJl
+ZnVsIHdoaWxlIGNsaWNraW5nIGxpbmtzLCBvcGVuaW5nIGF0dGFjaG1lbnRzLCBvciByZXBseWlu
+ZyB0byB0aGlzIGVtYWlsLg0KPg0KPg0KPiBPbiBXZWQsIEphbiAyMiwgMjAyNSBhdCAwMjo0Nzoz
+MlBNICswMTAwLCBDYXRhbGluIFBvcGVzY3Ugd3JvdGU6DQo+PiBBIHNpbXBsZSB1c2IgZGV2aWNl
+IGhhcyBhIHNpbmdsZSBjb25maWd1cmF0aW9uIGFuZCBhIHNpbmdsZSBpbnRlcmZhY2UNCj4+IGFu
+ZCBpcyBjb25zaWRlcmVkIGFzIGEgImNvbWJpbmVkIG5vZGUiIHdoZW4gZGVmaW5lZCBpbiB0aGUg
+ZGV2aWNldHJlZS4NCj4+IElmIGF2YWlsYWJsZSwgaXRzIGludGVyZmFjZSBub2RlIGlzIHNpbXBs
+eSBpZ25vcmVkIHdoaWNoIGlzIGEgcHJvYmxlbQ0KPj4gd2hlbmV2ZXIgdGhlIGludGVyZmFjZSBu
+b2RlIGhhcyBzdWJub2Rlcy4gVG8gcHJldmVudCB0aGF0IGZyb20gaGFwcGVuaW5nDQo+PiBmaXJz
+dCBjaGVjayBmb3IgYW55IHN1Ym5vZGUgYW5kIGlnbm9yZSB0aGUgaW50ZXJmYWNlIG5vZGUgb25s
+eSBpZiBubw0KPj4gc3Vibm9kZSB3YXMgZm91bmQuDQo+Pg0KPj4gRXhhbXBsZTogRlRESSBjaGlw
+IEZUMjM0WEQgdGhhdCBoYXMgb25seSBvbmUgVUFSVCBpbnRlcmZhY2Ugd2hpY2ggaXMNCj4+IGJl
+aW5nIHVzZWQgYXMgYSBzZXJkZXYgYnkgb3RoZXIgZHJpdmVyLg0KPj4NCj4+IGRldmljZUAxIHsN
+Cj4+ICAgICAgICBjb21wYXRpYmxlID0gInVzYjQwMyw2MDE1IjsNCj4+ICAgICAgICByZWcgPSA8
+MT47DQo+Pg0KPj4gICAgICAgICNhZGRyZXNzLWNlbGxzID0gPDI+Ow0KPj4gICAgICAgICNzaXpl
+LWNlbGxzID0gPDA+Ow0KPj4NCj4+ICAgICAgICBpbnRlcmZhY2VAMCB7DQo+PiAgICAgICAgICAg
+ICAgICBjb21wYXRpYmxlID0gInVzYmlmNDAzLDYwMTUuY29uZmlnMS4wIjsNCj4gWW91ciBleGFt
+cGxlIG1ha2VzIG5vIHNlbnNlIHNpbmNlIGlmIHRoaXMgaXMgdGhlIG9ubHkgaW50ZXJmYWNlIHRo
+ZW4gdGhlDQo+IGludGVyZmFjZSBub2RlIHNob3VsZCBub3QgYmUgaGVyZS4NCg0KVGhhdCdzIHRo
+ZSBwcm9ibGVtIG15IHBhdGNoIGlzIHRyeWluZyB0byBhZGRyZXNzIC4uLg0KV2h5IGlzIGl0IE9L
+IHRvIGRlc2NyaWJlIG11bHRpcGxlIGludGVyZmFjZXMgYW5kIGl0IGlzIG5vdCBPSyB0byANCmRl
+c2NyaWJlIHRoZSBpbnRlcmZhY2Ugb2YgYSBzaW1wbGUgVVNCIGRldmljZSA/DQpJIGRvbid0IHJl
+YWxseSB1bmRlcnN0YW5kIHRoZSByZWFzb24gYmVoaW5kLCBmb3IgbWUgaXQgbG9va3MgY29tcGxl
+dGVseSANCmFyYml0cmFyeS4NCg0KPg0KPj4gICAgICAgICAgICAgICAgcmVnID0gPDAgMT47DQo+
+Pg0KPj4gICAgICAgICAgICAgICAgYmx1ZXRvb3RoIHsNCj4+ICAgICAgICAgICAgICAgICAgICAg
+ICAgY29tcGF0aWJsZSA9ICJueHAsODh3ODk4Ny1idCI7DQo+PiAgICAgICAgICAgICAgICB9Ow0K
+Pj4gICAgICAgIH07DQo+PiB9Ow0KPiBBbmQgYXMgR3JlZyBzYWlkLCBzZXJkZXYgaXMgbm90IGVu
+YWJsZWQgZm9yIFVTQiBzZXJpYWwgYXMgc2VyZGV2IGRvZXMNCj4gbm90IGN1cnJlbnRseSBoYW5k
+bGUgaG90cGx1Z2dpbmcgKGhhbmd1cHMpLg0KPg0KPiBUaGUgaG90cGx1ZyBpc3N1ZSB3b3VsZCBu
+ZWVkIHRvIGJlIGFkZHJlc3NlZCBmaXJzdCwgYW5kIHRoZW4gd2UnZCBhbHNvDQo+IG5lZWQgYSBE
+VCBiaW5kaW5nIGZvciB1c2Igc2VyaWFsIGRldmljZXMgd2hpY2ggY2FuIGhhdmUgbXVsdGlwbGUg
+cG9ydHMNCj4gKHBlciBpbnRlcmZhY2UpLg0KPg0KPiBKb2hhbg0KDQoNCg==
 
