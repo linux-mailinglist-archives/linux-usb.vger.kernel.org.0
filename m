@@ -1,106 +1,106 @@
-Return-Path: <linux-usb+bounces-19678-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19680-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B1C8A1A6E9
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 16:21:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8455FA1A712
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 16:27:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 522E13AB1E2
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 15:20:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B5151889FD8
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 15:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48163212B0E;
-	Thu, 23 Jan 2025 15:20:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0634E212D94;
+	Thu, 23 Jan 2025 15:27:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PgimfFyt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mWlnUGPJ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B26E821147C;
-	Thu, 23 Jan 2025 15:20:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81AE2212D66
+	for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2025 15:27:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737645653; cv=none; b=XNVf/Ax0Xg91lshHjLRL8bnKqtWnAyXnGjuFTccR92x/1hUFsgjU0OIwPfA4W93or2LgnPCsq7R4wSqgEgh+01hUo4dIYVcHLiApWxCOawq1ACITBWj/ix5RlMafexNtQcOqyw9LJZneDURnnOnFwpYWhApjSSUXbGlFxapzaZo=
+	t=1737646045; cv=none; b=B7PeJ4Dc3xaCQPZutzhnupc/o8WPluzFUA5hH2cvl0ACMTi93UfSf7l3DnfD+UhJefKbfY+YbG8o9uWP1oATXW6FYDNAV65p9d6ucbBtgw2SWCPYa8nJtiPfamTAUk0lX+2CV/9xLBOFzi8OPNc+EHzWfnfrDDCKaCd72TwD4dU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737645653; c=relaxed/simple;
-	bh=Y6U5gjXNgMYqM9FZVayD4htK8zE33+H9NQOTbLfgEpk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OLRfhjN4dkAQ1bmFegz6GcB9aF3gEM8Kx7IztXBpRjw76odrBmKFTLdLDdNfeXf3wkhX87jNWQ4JwnwmkSUUa6ZRIIIoB/Tt+K02NZf2cYsKXXeQELo1/56GUiueOeY/60Jil7Skio27NSGRFVAhqHTRX+gDOKcwmjPWPrY+70M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PgimfFyt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23661C4CED3;
-	Thu, 23 Jan 2025 15:20:53 +0000 (UTC)
+	s=arc-20240116; t=1737646045; c=relaxed/simple;
+	bh=pKfBnzT8NU9AC/uXgB4t1/Vl5SDxvy5l6KbTMPzBMtA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=eDkQzdgVkVe45nx3j4LMiNCC1RDm7XK77dRfH/k3+yyB1lh3gtt3G6DdGzGFnbC/OTtze0kiHJ6gVBYXSrF0VUvTuUQliQ8QSCv0VfNaBLXF85PLH4UW7WMX9b+Oo8c4oPv6J2/BPEcp9W99gu2UzthYL7fFxTZLttiyOEYz8zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mWlnUGPJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 03A8DC4CEE2
+	for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2025 15:27:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737645653;
-	bh=Y6U5gjXNgMYqM9FZVayD4htK8zE33+H9NQOTbLfgEpk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PgimfFyt1TQQb8qDZsiGNsO7AOq2zKar4pJfHCvG3KgX478dMZZkm7nPH1lIgbSkh
-	 ffRBFXrIqVXzbNSeR+SJLXryLEozyCA74t2al7hTLow4I58vVdQQEMlAOrWemuE4Me
-	 Nziy2VoaCzcQyXyCB9hAGgfkX2ZYCPIEAl+20arNnMB5ZxZI+vhmLV/JiYGbUzRDyN
-	 82p+wCesNsLbVDTy1D3QxZY5kure3tpZRUnIyH27vWug0Ytr/9Oz/Vh08LKWzLlwMb
-	 MRdNwgorbGA1r2sugrVO0stpICJ4VHyUf6W19Eo0PSzVFMegUYDyx9cs32rvymvC0V
-	 MQfd+JLaq745w==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1taz0t-000000006W9-3LqL;
-	Thu, 23 Jan 2025 16:20:59 +0100
-Date: Thu, 23 Jan 2025 16:20:59 +0100
-From: Johan Hovold <johan@kernel.org>
-To: POPESCU Catalin <catalin.popescu@leica-geosystems.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"m.felsch@pengutronix.de" <m.felsch@pengutronix.de>,
-	GEO-CHHER-bsp-development <bsp-development.geo@leica-geosystems.com>
-Subject: Re: [PATCH] usb: core: support interface node for simple USB devices
-Message-ID: <Z5JeW6kprsLgJJ_m@hovoldconsulting.com>
-References: <20250122134732.2318554-1-catalin.popescu@leica-geosystems.com>
- <Z5Ik2GoseMbZRe8i@hovoldconsulting.com>
- <ce5fe24e-e2b5-4e41-9dd3-164d688afe04@leica-geosystems.com>
+	s=k20201202; t=1737646045;
+	bh=pKfBnzT8NU9AC/uXgB4t1/Vl5SDxvy5l6KbTMPzBMtA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=mWlnUGPJZ9ZMlU2MtR4d/wewmgJjtZhWDBQNSpfgt/HEevYITfRVSxSX/Ca8nwcEX
+	 ts3ldj50wVUSGRaiq36uCUzjSXpaP7E0uPPuodFcjvzNCOk7k+hPeM7KhItijGWCmm
+	 gGaj7fifBlLG4CjRZugUTtCT7ZS65I3D2GT+Pgs2MSXxuyXXS3dQndCTFJWE/RskND
+	 xfjaJ0G+ImDjdxOG7ZUrKCS6ODphftB7Ieeontfw9oMT8nvbD3fRQCA7BP0ntQg1jN
+	 VzoSgOG/WAWEUTOS/q79jfv5uFnbUAWJNPf5l1iEEYW0V0MYlQ02pIsFcvpzBdklIJ
+	 LSEtnBne1ut7g==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id D7D89C3279F; Thu, 23 Jan 2025 15:27:24 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219681] ASUS Zenbook S 14 UX5406SA: Unstable USB connection on
+ USB-A port under certain condition
+Date: Thu, 23 Jan 2025 15:27:24 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: michal.pecio@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219681-208809-b2aMYiJvFf@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219681-208809@https.bugzilla.kernel.org/>
+References: <bug-219681-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ce5fe24e-e2b5-4e41-9dd3-164d688afe04@leica-geosystems.com>
 
-On Thu, Jan 23, 2025 at 02:01:00PM +0000, POPESCU Catalin wrote:
-> On 23/01/2025 12:15, Johan Hovold wrote:
-> >
-> > On Wed, Jan 22, 2025 at 02:47:32PM +0100, Catalin Popescu wrote:
-> >> A simple usb device has a single configuration and a single interface
-> >> and is considered as a "combined node" when defined in the devicetree.
-> >> If available, its interface node is simply ignored which is a problem
-> >> whenever the interface node has subnodes. To prevent that from happening
-> >> first check for any subnode and ignore the interface node only if no
-> >> subnode was found.
-> >>
-> >> Example: FTDI chip FT234XD that has only one UART interface which is
-> >> being used as a serdev by other driver.
-> >>
-> >> device@1 {
-> >>        compatible = "usb403,6015";
-> >>        reg = <1>;
-> >>
-> >>        #address-cells = <2>;
-> >>        #size-cells = <0>;
-> >>
-> >>        interface@0 {
-> >>                compatible = "usbif403,6015.config1.0";
-> > Your example makes no sense since if this is the only interface then the
-> > interface node should not be here.
-> 
-> That's the problem my patch is trying to address ...
-> Why is it OK to describe multiple interfaces and it is not OK to 
-> describe the interface of a simple USB device ?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219681
 
-It's part of the spec. See commit 1a7e3948cb9f ("USB: add device-tree
-support for interfaces") and its reference to "Open Firmware Recommended
-Practice: Universal Serial Bus Version 1".
+--- Comment #11 from Micha=C5=82 Pecio (michal.pecio@gmail.com) ---
+OK, so the UAS bug is on three different host controllers now. It's strange
+that the hub still makes a difference. Stupid question: is the enclosure
+running at SuperSpeed when it works correctly?
 
-Johan
+Can you trigger the issue instantly without udisks2 by running something li=
+ke
+'skdump', 'smartctl -a' or 'smartctl -x'? This may be a more reliable
+reproducer than starting udisks2 and waiting, if the problem is caused by S=
+MART
+queries.
+
+There is this patch from Raspberry Pi which you could try. It should be
+harmless and some Realtek chip was supposedly caught having bugs in this ar=
+ea,
+but I tried it on a different buggy UAS chip and it didn't help so YMMV.
+https://github.com/raspberrypi/linux/commit/66aef6ce3557edd9d58d794e4a800c5=
+be49ca0e7
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
