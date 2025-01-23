@@ -1,141 +1,91 @@
-Return-Path: <linux-usb+bounces-19661-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19662-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58C48A1A12C
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 10:50:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 883D2A1A209
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 11:43:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78A3C3AC00A
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 09:50:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7661E188E417
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 10:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB6420D512;
-	Thu, 23 Jan 2025 09:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82C9C20DD63;
+	Thu, 23 Jan 2025 10:43:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=nucleusys.com header.i=@nucleusys.com header.b="IkG0eniu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Am4QTias"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from lan.nucleusys.com (lan.nucleusys.com [92.247.61.126])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46CDA20D4F6;
-	Thu, 23 Jan 2025 09:49:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=92.247.61.126
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073DA20CCD6
+	for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2025 10:43:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737625804; cv=none; b=jfaXnZ0nkfAvUGf5VSwP/CcLSzTYCHGHxNHRM9ElhiaKSwyWvbC+n9HxDsNfHQ+gT5nS2r98upmrH/XzcHQYnf2qRtb/CmQer76bYOJMi76JdY9ORXLeOueYx0WG6wixZNpRRDy/oGqtcAPlJ/NMVGWf/SmlXsSJcda1iCEih68=
+	t=1737628987; cv=none; b=J3gUfo39mixVf1STBZHIRH3f3zkvRbtgsTfv4gw7UKNH9mafHnfGivHrsn1L7Z8PP8QEJyewYaDKIwfOmVd3w+Gugbxlsb8q0ZTgWOmSBlbQGYeWVZ8ZIR+PynG3U1gjAxZehaJ0Rxdu3eMubDL1UZx6anKYfgkeWf3YxA2PXWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737625804; c=relaxed/simple;
-	bh=Bbz0HQLEUv0H65DYzIZMwaLns+nw+QgTm9WO+iTQm5c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j26nwRuUyhXEEyHeX+2VvsLFll+8096mVOXwaI+wR1E9QJ/k2gG+Od/gPqUGxbZ56wbMtljqyKJuDIXYeiHo0nmkP9zJMeSpGMSZ48wD3ClR9FqrKZPc6jnaCUbIyoTWIfpbfXbsMuJIJJAHUdKTElMTF4TQF/49HuE4Xqfurdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nucleusys.com; spf=pass smtp.mailfrom=nucleusys.com; dkim=pass (1024-bit key) header.d=nucleusys.com header.i=@nucleusys.com header.b=IkG0eniu; arc=none smtp.client-ip=92.247.61.126
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=nucleusys.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nucleusys.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=nucleusys.com; s=xyz; h=In-Reply-To:Content-Type:MIME-Version:References:
-	Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=+2lqGpaf1hkITIxyqiO+GCWkT51go5Y5OtXzi3ZW6UM=; b=IkG0eniuKRNGFi/c98lwnTHnW0
-	qkWLnknHtFnw0L9bsO0g2Obt8xrKSUis5qrjJzM79AAxxDGw/hQ9LlzP1jF0zytMk3ccyAZEaozTQ
-	FNoGNy3wcOaaj/PlnFCM3/t9QU4rey2A+Te7oCsbpyci8nKG8FkMsK94/qcaSvzISw18=;
-Received: from [192.168.234.1] (helo=bender.k.g)
-	by lan.nucleusys.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <petkan@nucleusys.com>)
-	id 1tatq7-000Gmm-0D;
-	Thu, 23 Jan 2025 11:49:31 +0200
-Date: Thu, 23 Jan 2025 11:49:30 +0200
-From: Petko Manolov <petkan@nucleusys.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-	syzbot+d7e968426f644b567e31@syzkaller.appspotmail.com,
-	syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
-	lvc-project@linuxtesting.org
-Subject: Re: [PATCH net] net: usb: rtl8150: enable basic endpoint checking
-Message-ID: <20250123094930.GG4145@bender.k.g>
-References: <20250122104246.29172-1-n.zhandarovich@fintech.ru>
- <20250122124359.GA9183@bender.k.g>
- <f199387d-393b-4cb4-a215-7fd073ac32b8@fintech.ru>
- <f099be8f-0ae0-49c7-b0bc-02770d9c1210@rowland.harvard.edu>
+	s=arc-20240116; t=1737628987; c=relaxed/simple;
+	bh=9r03rLtRcvQs0r+B3acl2UJc0B9idl+1MUdqp3xLSqs=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lK2w16CYzoAyHfzdsPRzUyyjRn9w8IyV/ZL9NJIzD6uJgpJSGfOfHOvFk/5CJjKsTDo090ZLaJi+HgPoVCiG4Gj/GNi1VkmX9EEP8GOOF9CG72ywTVeKztVoLV5UzEC8P1aSoLs0bHG3rMQSqSHWG18ARKBE1nmFYCqD/su8OCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Am4QTias; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 702B5C4CEDF
+	for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2025 10:43:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737628986;
+	bh=9r03rLtRcvQs0r+B3acl2UJc0B9idl+1MUdqp3xLSqs=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Am4QTiask6beIkCr4QOTqLlZEPnXzj+VmHoP55XKzbe4YfqlafIZ47cWn03zJkcyy
+	 6ylnV8HDGfBaqxPQmK+StkOoFyRYCiIc5FGLDzERHnN2rjAbz1tZWjB1DddDvj1ZUa
+	 Cr2p+x4bRY8hSWMoGWrEatHbYUyltZk+7GryVkGOouqzZi79bD8eJFB4ogR3Ghxu10
+	 /qZihzopqmP+FaEJ1iaaH5STTUBnkMpnF164/tHXh8nOoAL2/s6ompXLY40WtfFgpb
+	 /cm6nwyBI9elWdQd8T/d4VHpF/ueAzCH4iWrPEPU7TgJLA0GFb7xjB/vzmafo+4MuR
+	 tW4TR6EPZgmDQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 61536C3279F; Thu, 23 Jan 2025 10:43:06 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219590] Linux 6.13 ucsi driver error:
+ drivers/usb/typec/ucsi/ucsi.c:1374 ucsi_reset_ppm
+Date: Thu, 23 Jan 2025 10:43:06 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: dominik@greysector.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219590-208809-T2izcCif7y@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219590-208809@https.bugzilla.kernel.org/>
+References: <bug-219590-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f099be8f-0ae0-49c7-b0bc-02770d9c1210@rowland.harvard.edu>
-X-Spam_score: -1.0
-X-Spam_bar: -
 
-On 25-01-22 10:59:33, Alan Stern wrote:
-> On Wed, Jan 22, 2025 at 05:20:12AM -0800, Nikita Zhandarovich wrote:
-> > Hi,
-> > 
-> > On 1/22/25 04:43, Petko Manolov wrote:
-> > > On 25-01-22 02:42:46, Nikita Zhandarovich wrote:
-> > >> Syzkaller reports [1] encountering a common issue of utilizing a wrong usb
-> > >> endpoint type during URB submitting stage. This, in turn, triggers a warning
-> > >> shown below.
-> > > 
-> > > If these endpoints were of the wrong type the driver simply wouldn't work.
-> 
-> Better not to bind at all than to bind in a non-working way.  Especially when
-> we can tell by a simple check that the device isn't what the driver expects.
-> 
-> > > The proposed change in the patch doesn't do much in terms of fixing the
-> > > issue (pipe 3 != type 1) and if usb_check_bulk_endpoints() fails, the
-> > > driver will just not probe successfully.  I don't see how this is an
-> > > improvement to the current situation.
-> 
-> It fixes the issue by preventing the driver from submitting an interrupt URB
-> to a bulk endpoint or vice versa.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219590
 
-I always thought that once DID/VID is verified, there's no much room for that to
-happen.
+--- Comment #6 from Dominik Mierzejewski (dominik@greysector.net) ---
+This was reported downstream in Fedora as well:
+https://bugzilla.redhat.com/show_bug.cgi?id=3D2323584 .
 
-> > > We should either spend some time fixing the "BOGUS urb xfer, pipe 3 !=
-> > > type 1" for real or not touch anything.
-> > > 
-> > > 
-> > > 		Petko
-> > > 
-> > > 
-> > 
-> > Thank you for your answer, I had a couple thoughts though.
-> > 
-> > If I understand correctly (which may not be the case, of course), since the
-> > driver currently does not have any sanity checks for endpoints and URBs'
-> > pipes are initialized essentially by fixed constants (as is often the case),
-> > once again without any testing, then a virtual, weirdly constructed device,
-> > like the one made up by Syzkaller, could provide endpoints with contents
-> > that may cause that exact warning.
-> > 
-> > Real-life devices (with appropriate eps) would still work well and are in no
-> > danger, with or without the patch. And even if that warning is triggered, I
-> > am not certain the consequences are that severe, maybe on kernels with
-> > 'panic_on_warn' set, and that's another conversation. However, it seems that
-> > the change won't hurt either. Failing probe() in such situations looks to be
-> > the standard.
-> > 
-> > If my approach is flawed, I'd really appreciate some hints on how you would
-> > address that issue and I'd like to tackle it. I'd also ask if other
-> > recipients could provide some of their views on the issue, even if just to
-> > prove me wrong.
-> 
-> I agree with this approach; it seems like the best way to address this issue.
+--=20
+You may reply to this email to add a comment.
 
-Alright then.  I'd recommend following Fedor Pchelkin's advise about moving
-those declarations to the beginning of probe(), though.
-
-
-		Petko
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
