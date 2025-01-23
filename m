@@ -1,119 +1,94 @@
-Return-Path: <linux-usb+bounces-19672-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19673-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AC54A1A59B
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 15:17:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B252BA1A5AD
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 15:22:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8B6B1638E9
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 14:17:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A39C71884355
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 14:23:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B98920F98A;
-	Thu, 23 Jan 2025 14:17:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74877211464;
+	Thu, 23 Jan 2025 14:22:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JwJM2eCw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GQKn7BP+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EE9B13212A;
-	Thu, 23 Jan 2025 14:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E565013212A;
+	Thu, 23 Jan 2025 14:22:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737641852; cv=none; b=IiaiXAYh1esjw+a58M9dFQxbwMGoaYKWaDkVwiL33XJPabDG2Y62DhlQa8U5Is6UviejP1w9j1qSUcJjhjO0IwUfz8p/T0eFEFI2uLkCpLfyQYBq/LnMIGm5yWK6DhAVUfdUBJDCfGLS1daBiNCfmiM1MNj1u28ji1Pg8p8VHSw=
+	t=1737642173; cv=none; b=I8gbgIOgV7ROFnFAsJL2gOw3ZJsWYsSByHi+/e4UUxv7VRKddTlhq4O5nqbtalX8FNt6zdVC9pWT0otPsbcRwQMw46X9yymIbh0KwW0ClCsRyDkI/340K/JNg9s1lG/I6LArxTVZpRe3v74Wh5Rlg/6Ms8a3gcoFnykQTDg88tA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737641852; c=relaxed/simple;
-	bh=3ba5Mapi/GhmrvtFCAf9OaKbTfUkj1osTlpgXiSy7f8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p5Uz760b5Ma00+FyeRkA2UPp3L+eW/B/AyYW6Z06M2I0ueweZyQxKMPwD6R7cjLY4GKp0TK5Q0GOW42864BnLL6/cVdC4pQgUZw1rtX8FJILVbI5w0gxnATEqBOgIsKaRcTvAXYAJSVruT6Blx9GVmD2mwijUDaxBdjKlN80Sek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JwJM2eCw; arc=none smtp.client-ip=209.85.217.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-4aff5b3845eso323991137.2;
-        Thu, 23 Jan 2025 06:17:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737641849; x=1738246649; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sbEHOc3RBX5HGNz7XCuMximIU2iFKtfG+O+9bzzIsGE=;
-        b=JwJM2eCwuBJmw5oS6lhbYGV9gQvFoVq3/Cbr/BTrKPVhIcEqlTebRjBqRZSPa8lO5P
-         3qKtbLBLfqyahGSzSoJjp4nKWPwYkrzECO9069mUevjgrKeuBGfYE6LChHJ3sg6FbcNb
-         cKJaaXzgHT2byTor1xPRDpFXAuUvzfFVPjG8cByzOrr2E3LE48kg3WualrBejCnfsg3e
-         JHvsQScnHzx7zUzUIqyzP9xWHYp5iD67kqwYk8ibR79td6Wxe8yFSl7n/psOmR+hh64V
-         lXWAG6dqJVt+sDQDQfdG4lXILHQmVoQh+xaywsuK1lEECKuarxnhFK/Im6szX/iT9+xN
-         RPVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737641849; x=1738246649;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sbEHOc3RBX5HGNz7XCuMximIU2iFKtfG+O+9bzzIsGE=;
-        b=DkXqfd+wjvxenGkN9HgSsZOH2iwHNc+Fh8XtYHyWjXXDZ3fmGL4NnK98gZtA4fUfS5
-         WpSj6MoLyMQTwX5cOVt60vV0hUdUoEP+ImheFqjweuzi9ePBuDnS07Zyd+CicOZwsXpj
-         RFZJJjzaaLTcrgYY1xDv9ufhKf95rPZs+3Rq2MhvoE3MCyS8HQiEW4hTkHILxllIit/5
-         QRff1vRI8VzjW7yhDQpaoQ2zmpwxqjxUuQFdM1EzM4A3MiI5nzhB+EfU5pYx2MZ6sil0
-         P3UwCyLaI9lPYIaOGNj+cs67ute3h3hNQ2iv310hvldNA6Xm3hwBqZiwAS2N6uds9U4h
-         sDCw==
-X-Forwarded-Encrypted: i=1; AJvYcCV1oYyauiY+63tRmYrx0QBETrnZ+FSPy+ft725lucUcFPhKcNS9wX4e7OXqSB/5Mqu2wEZ1+nFd11g4EgM=@vger.kernel.org, AJvYcCXI/JwSItfskeBJgeD0tu7Tu2Fi4MnduVQS02u/ngIU6em7zlHeg0MAp1/TEuFSA6OK2nuh7DBc75bf@vger.kernel.org
-X-Gm-Message-State: AOJu0YypvaLKwArje6R4CoYrfIifbD9bawO3lDcRrnfliKkxz3E259ky
-	HWy6w0vjFlCjyYSjtiF151PUWv7nRJS5mfNyCF3G6SrgU6TRaGTGr2Xj4M1moRzUwvr+lJNY/ji
-	EXUdn2j4tIfdcLcNQ0cWHBh2c0Bt4X7OH
-X-Gm-Gg: ASbGncv/pTp2oERSydaZV0XBKI7oLGfOyTrl1161tMNqYBeT9yxQ5piOqA7eT+Gt+kV
-	LKZdZPObeAp4xzQWvCVKYYHT50OY9YGqxyHKgZIWiETkLEm3urDNmbButSbwQ7w==
-X-Google-Smtp-Source: AGHT+IHtzjKmtaMzI261/r1zsEOu/itdeMQRoujzkyn/a3XugYSDHrHEk6cROAmH75IPAmgI/VadOfg4ZDmAQ5ET/O8=
-X-Received: by 2002:a05:6102:571b:b0:4b4:7cb0:ac54 with SMTP id
- ada2fe7eead31-4b690b97757mr20280778137.5.1737641849461; Thu, 23 Jan 2025
- 06:17:29 -0800 (PST)
+	s=arc-20240116; t=1737642173; c=relaxed/simple;
+	bh=0kFeA99w9bYSvFp8Sk1IUH4TZfp9C8cKbQus6xz21xM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c2iLLTc+7ai+MrG8ed0h8rQaKsc3Q9/jGrSEHSGdrWCpne6faBPOKDH198XN7mGirXEdfXHb2rDvnqgCcEJ7YPjBHodw5tyvspf3dqklQeT1uvbDyuHQgiUB3ofFKln1mlgZSmJJXfMD2I2XLkEF2pHM/7v4761BGaFNWhKTfo0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GQKn7BP+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE553C4CED3;
+	Thu, 23 Jan 2025 14:22:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1737642172;
+	bh=0kFeA99w9bYSvFp8Sk1IUH4TZfp9C8cKbQus6xz21xM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GQKn7BP+rExLCA02FTu9CeTX3yefpGsEwM+4pGYI3IVRNi+zIHLy5PL1JlNS0ljaX
+	 UD0Ta8ludtwK8zPQNAakraOu67ZBx5h5uJ+OTYdxEYBQp/jyCCqQ54EnQgne3HxWKw
+	 rXUCJ9ROjdvKBw0q0hmiNrfYQL1zdnAgviUbqo5g=
+Date: Thu, 23 Jan 2025 15:22:49 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Usman Akinyemi <usmanakinyemi202@gmail.com>
+Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: Fix documentation warning for sg member
+Message-ID: <2025012322-fit-flagship-381c@gregkh>
+References: <20250123080102.1632517-1-usmanakinyemi202@gmail.com>
+ <2025012315-feminine-spiny-b288@gregkh>
+ <CAPSxiM9vF0=fzOovxC2nj1t1Naxx9T=QJPaN-oi5U-h7s5OwLQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250123080102.1632517-1-usmanakinyemi202@gmail.com> <2025012315-feminine-spiny-b288@gregkh>
-In-Reply-To: <2025012315-feminine-spiny-b288@gregkh>
-From: Usman Akinyemi <usmanakinyemi202@gmail.com>
-Date: Thu, 23 Jan 2025 19:47:18 +0530
-X-Gm-Features: AWEUYZnK_R4zsT1JTN-VkN8WBGgu2oXg-NPTkjQ7f5evT_AtNBWBUKia8zJLdzU
-Message-ID: <CAPSxiM9vF0=fzOovxC2nj1t1Naxx9T=QJPaN-oi5U-h7s5OwLQ@mail.gmail.com>
-Subject: Re: [PATCH] usb: dwc3: Fix documentation warning for sg member
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPSxiM9vF0=fzOovxC2nj1t1Naxx9T=QJPaN-oi5U-h7s5OwLQ@mail.gmail.com>
 
-On Thu, Jan 23, 2025 at 7:37=E2=80=AFPM Greg KH <gregkh@linuxfoundation.org=
-> wrote:
->
-> On Thu, Jan 23, 2025 at 01:31:02PM +0530, Usman Akinyemi wrote:
-> > The 'sg' member in struct dwc3_request was undocumented, causing a
-> > documentation warning when building the kernel docs.
+On Thu, Jan 23, 2025 at 07:47:18PM +0530, Usman Akinyemi wrote:
+> On Thu, Jan 23, 2025 at 7:37 PM Greg KH <gregkh@linuxfoundation.org> wrote:
 > >
-> > This patch adds a description for the 'sg' field, resolving the warning=
-.
+> > On Thu, Jan 23, 2025 at 01:31:02PM +0530, Usman Akinyemi wrote:
+> > > The 'sg' member in struct dwc3_request was undocumented, causing a
+> > > documentation warning when building the kernel docs.
+> > >
+> > > This patch adds a description for the 'sg' field, resolving the warning.
+> > >
+> > > Signed-off-by: Usman Akinyemi <usmanakinyemi202@gmail.com>
 > >
-> > Signed-off-by: Usman Akinyemi <usmanakinyemi202@gmail.com>
->
-> What commit id does this fix?  And what about the reported-by: line?
->
-> thanks,
->
-Hi Greg,
+> > What commit id does this fix?  And what about the reported-by: line?
+> >
+> > thanks,
+> >
+> Hi Greg,
+> 
+> Thanks for replying.
+> 
+> I was applying to Linux Mentorship(LFX) for fixing the Linux Kernel Bugs.
+> One of the tasks was to look for documentation warnings and I saw this.
+> 
+> I created a patch for it and sent it also. So, it is not reported.
 
-Thanks for replying.
+It was, you might have missed it on the mailing list:
+	https://lore.kernel.org/r/20250120182219.30dcb3c6@canb.auug.org.au
 
-I was applying to Linux Mentorship(LFX) for fixing the Linux Kernel Bugs.
-One of the tasks was to look for documentation warnings and I saw this.
+Also it still needs a "Fixes:" tag.
 
-I created a patch for it and sent it also. So, it is not reported.
+thanks,
 
-I am not sure if I am missing something though.
-
-Thank you.
-Usman.
-> greg k-h
+greg k-h
 
