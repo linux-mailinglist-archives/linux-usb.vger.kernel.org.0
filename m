@@ -1,214 +1,186 @@
-Return-Path: <linux-usb+bounces-19666-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19667-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FF88A1A39B
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 12:52:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BF0FA1A49A
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 13:57:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B68A188D05F
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 11:52:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3D9C188B9A6
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 12:57:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF6520DD64;
-	Thu, 23 Jan 2025 11:52:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b="KWC2aYKj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E2720E6F0;
+	Thu, 23 Jan 2025 12:57:25 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2048.outbound.protection.outlook.com [40.107.21.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA87929B0;
-	Thu, 23 Jan 2025 11:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.21.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737633128; cv=fail; b=LHL2E4nRAT7/iKCGPk6Y/hlaJsesG6IOLHD9ipcq87qTygbUWv5IN+wrK2HNv/oKybqhTx+QCBCBY0nHO1xXoJi8UAf7/VxLm6BoZdztIHnvYwat70dTps9AFZ/6fm5SNH8rukNCmMnfOabKqgDb6hs/GqvK2NowbaGWluJ1xyQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737633128; c=relaxed/simple;
-	bh=DzWu11vaVnMDt+6RDFpsXiC5L8mFEdOxgSu37k9K8/E=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=QwVM37EWIk+i29SM64JxXRIDRLnVHtBriR2mSPAu1PQ+4L2h5eIqYil9RGOQh6ihj9wDldxT+dyPX0jHUCrGi/PFgbQB/RmgSI2gaO9KpMA3xlwc8cq9+qcbPLLa/xJ0Bg1SfFM/88xZevUxup9GemqKKQKw7sc1ETWWavNuDmU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com; spf=fail smtp.mailfrom=leica-geosystems.com; dkim=pass (1024-bit key) header.d=leica-geosystems.com header.i=@leica-geosystems.com header.b=KWC2aYKj; arc=fail smtp.client-ip=40.107.21.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=leica-geosystems.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=leica-geosystems.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SQeh9tPf37DMp0ugoZtOf049F/mPA/V/XICZtxhYOfKXITNOVURS7YUUB1cLThJfxSb6/ElJtay6LZLxq6loghn8e9hFrleKtaPk4Jenp4iW1TO14p/gJ3got5ulVKzn3yO2PkgoG2TvifL3+TW+mG4GU5cl7tQSi1NieAfK3YJy8WbrPVcAdqaib7QmNBMvplsZcopLOCtQv5AJLbKTvzZxgEL6lQBqcX4kfE9bejcG0Eg8cXkfsD9Fbrn0zlrC+WeWmJ+4VQB3YWEDPPuYCqJkeeCpJfJZDSgw/mxRywHPJ+ZayQCNNfm8nP1Jg9nSsyFaGA14+VIMNO1ykQ9d8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DzWu11vaVnMDt+6RDFpsXiC5L8mFEdOxgSu37k9K8/E=;
- b=XeyYoCpH3J67tgoHNJka/JYrU5DUIl5g4CEPQUQI2UyT75Ob3KLgxm84uba1uCPiSvY2GVKLuU/QMTeli63CFSulGUA94r/rHfwt5KTMgKkj9OxHrgTKhLslbH4h8WKQkMq6ylm25iSbMc1GFCjYzrxOLmZb0M0foeqJ18IecpLQD2K1+v/2SCzhOWEwVcc4qv/7aN7DoxtO0IFd06JgWFplKQLuqzHeNSCPn4XPkse5hLoeQWbccwJB6SvRcufzSuDagp/m0kyWZwude9CwZKa3vwBYeLd8pvES1j3134EMIqkZpMP+KcHeNeFsdHl8LSwlqsOT76QqZuFhcBlXuw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=leica-geosystems.com; dmarc=pass action=none
- header.from=leica-geosystems.com; dkim=pass header.d=leica-geosystems.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=leica-geosystems.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DzWu11vaVnMDt+6RDFpsXiC5L8mFEdOxgSu37k9K8/E=;
- b=KWC2aYKjak0TQFmF24kUz0obbiT7e5DaECC3tnQZwAJjeYOJDsNC2RES2rN0+sDDQIS6Tkfp8FEQ9oGqpPeNjwA1I3NVP422RU9xQBKNyqcvaV0rwfk06gFsW1HkoABSgh0QZDhHwEZsbsr+6pb828E1CBFLczyVOTkjqyFjBss=
-Received: from DBAPR06MB6901.eurprd06.prod.outlook.com (2603:10a6:10:1a0::11)
- by VI1PR06MB6445.eurprd06.prod.outlook.com (2603:10a6:800:125::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.17; Thu, 23 Jan
- 2025 11:52:03 +0000
-Received: from DBAPR06MB6901.eurprd06.prod.outlook.com
- ([fe80::3988:68ff:8fd1:7ea0]) by DBAPR06MB6901.eurprd06.prod.outlook.com
- ([fe80::3988:68ff:8fd1:7ea0%7]) with mapi id 15.20.8356.020; Thu, 23 Jan 2025
- 11:52:03 +0000
-From: POPESCU Catalin <catalin.popescu@leica-geosystems.com>
-To: Johan Hovold <johan@kernel.org>
-CC: Greg KH <gregkh@linuxfoundation.org>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "m.felsch@pengutronix.de"
-	<m.felsch@pengutronix.de>, GEO-CHHER-bsp-development
-	<bsp-development.geo@leica-geosystems.com>
-Subject: Re: [PATCH] usb: core: support interface node for simple USB devices
-Thread-Topic: [PATCH] usb: core: support interface node for simple USB devices
-Thread-Index: AQHbbNQz5nuTuJgNwkO47mkrPRQBtLMi0G8AgAA494CAAS4agIAACUUA
-Date: Thu, 23 Jan 2025 11:52:03 +0000
-Message-ID: <fb9225a0-0684-42d1-923e-61212ac3d3c9@leica-geosystems.com>
-References: <20250122134732.2318554-1-catalin.popescu@leica-geosystems.com>
- <2025012200-activist-disprove-808a@gregkh>
- <312dc0e4-a024-40e4-9aba-ae9074b58086@leica-geosystems.com>
- <Z5Ilm06wcuNsqtod@hovoldconsulting.com>
-In-Reply-To: <Z5Ilm06wcuNsqtod@hovoldconsulting.com>
-Accept-Language: en-CH, en-US
-Content-Language: aa
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=leica-geosystems.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DBAPR06MB6901:EE_|VI1PR06MB6445:EE_
-x-ms-office365-filtering-correlation-id: 5ccd6f1f-e7da-4552-a9de-08dd3ba45a55
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7053199007|38070700018;
-x-microsoft-antispam-message-info:
- =?utf-8?B?UWMrNnBVU1hXYTBmdGYraHpoMlp5ZitjNGpmZDJxUWsxNUFIeHdQWk13TFFn?=
- =?utf-8?B?bEJUbFFwQmd0ejZSSGUvZEJDUUM0NXBNQXNkKzBwOENXNVVLN2V0MHZFdHZM?=
- =?utf-8?B?RUhLbmFGVzVzaGxKZmc5MklWK0lpWGpxR1RJZ3BFL09xWFNtbGY0dHJmUGZ4?=
- =?utf-8?B?RHZ0V3pNVDFTU2tFRkdXbWZtaVQyU2VDUlhOMlhEQlNEWm9IN1ZYcWw4T1Ni?=
- =?utf-8?B?WjAvWTBWWURlSTVkdS9xb1QzUlFsZHVpWEZWb2d2elJkTk03VWx6SG53eVQv?=
- =?utf-8?B?ZldYLzNIcGdzMGxXZEhsTzFmVkg0ekZTQzJpYnNhNXhBZ0htRmVBeCs1VHBp?=
- =?utf-8?B?QTQ3d3JBb0ZWNE1kS0RvR1NVelJJZzNuc1ljMXF6ci9aVUpJWWdQV3pCVVNG?=
- =?utf-8?B?NmdGcFd1akV3WU1hR3lTMlhmT2t6MHdkcmQ1UWdkQ080ZElBcUNOdHVGU2Rr?=
- =?utf-8?B?bFdaTlgxaHZsdEtOMUdJYVpRM3RyZElJNDdhb0VablFIRTBTSitKcTZzVzN0?=
- =?utf-8?B?RXliZERNa0hubmhFLzk3UGt6T3dyL3prekljV3pHQ1EybDF0bXFQcHZBZEJy?=
- =?utf-8?B?SnZEQzZKelZmSlNoUUFrYnBNU2lTWjZMclVxbVlyNENOSVNIbWpXL0VWajZ2?=
- =?utf-8?B?STJGQzNwRDV2R3lwVllnM0NxUyszbjJyVDFpekhsYVhVeXZCVzhoSVkxME1Z?=
- =?utf-8?B?U2cySkZDb2N2STBpa2QxUk9BcmVGeWJ5QjFjRXoveVQrYStocitRYWNxRytj?=
- =?utf-8?B?YlUwVFNaRWFGWWVGVzkzRWFJOHBKZERBSXkwemI0cHp3VUFROEpqS0RicC8x?=
- =?utf-8?B?NjdobVNUcjFHZjd1akkxcVYzUXM2ZmhnRkpVTEdQeEFUTkhHdDJhVWNYdjd4?=
- =?utf-8?B?UmVXemZIMWZPc1ljeGNIOWxiUkV4RXBmcktsd215OGhDa2w0TE9nTTMvZmFs?=
- =?utf-8?B?YzFZT3FFUkJWSUc0RWZKU0xTeGJORmxhN0g1ZndiMVhGcW82ak4xWC9JQXdS?=
- =?utf-8?B?bUNWMmFKMXBzYzhoclJ3YWhlOXg3YlM0OTNKc3RJYXFENkZ3MlF1RStCTENO?=
- =?utf-8?B?elhOZzdJMHg1Q2ZRb24xRExOcGRuWVQwVnFaZmluVU1PbUJRM3BURXU0RzdB?=
- =?utf-8?B?eCtCWUZObEpsNDJ5MWhuTVYySSt0NjA3M1lOSFc2RjVoVnNHTjRCKzl2RFcx?=
- =?utf-8?B?cE1jdk9uRDBROEhyUDdFZHV2L3U5QmZCL21RSEpIMVpEMStVRHdXMGZzYjcx?=
- =?utf-8?B?cjFhMnRlY1lhcyt0cXA1eXpiTUtpWG9JU1N2V1g4ME1mVHNoeG5FWUlvTi9h?=
- =?utf-8?B?bis3NExqbWw5aE1heHoxN2RBREE3U2FHV3hlaXdWSHplVFZzeVVxK3liNXJh?=
- =?utf-8?B?bmZWN0dXZEtMbktOMk5QZlZKM3ZLOGxFbHBDYVBaZFhjNTdEL29EYTR1OUU1?=
- =?utf-8?B?dnRjeGJLNDV6ekhUWmpZTkVWQkFTVTMyMGNaMGlGVk1oMXlqa2tleWRvQkYz?=
- =?utf-8?B?MmZPUFlZWjdPN0VrVDN2a0FVM0YyWjdRVlFXdHNqZDdzSVNIa3ZIRGU5UWFD?=
- =?utf-8?B?Z0JReGJlT0R5alZMelBjUTZwRkdMODJQZkdNOEI5SWgzN2tUbFF1YVNSWXBw?=
- =?utf-8?B?VnNPVysybUhjQ1BnbTRFSFRWSWpacnNQYWtQTDhMdEtoNHBXbGdKVUZMbFRD?=
- =?utf-8?B?WGZIRWhrVDU5NXFycUVsY1hhOHNYQ0NqWDh5WFlnTTYyYmdJSks1b1JuU1pQ?=
- =?utf-8?B?MGhad1lPWW5GZHArd3RpWGNEcmZlcnJPT2ZMMUZGVkUwSjJnbndpSmxrcmdR?=
- =?utf-8?B?OWZCcjZaMkhzd3B3LzJUaG5LRE1PRkdDWDVGaVlmQU0wWDZIN1lZb3VjMFlr?=
- =?utf-8?B?eDNYb0cxZFgwR3pGd0w5ekFCVm1ZV0hpeG54Uko1bUJDQkpWaHBRSTFOck9M?=
- =?utf-8?Q?PkT1iHolLM2FoO1jBpj8gOnHfL/PE8fJ?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DBAPR06MB6901.eurprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7053199007)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?utf-8?B?bGhZOXRrVVRhN0JlMnlHeUxXelBQY09yeUovaFp2ckI2MnNNRHhXVE9wQVgv?=
- =?utf-8?B?ZFRWb1l3czNQaXFBUzhhU2pvZVpaczNsQXFJYlNLRzNGSHhjV2RsY0pPZlE5?=
- =?utf-8?B?Zk10dzlsc2RUSE5ZVGpENndqOWc2aHplYlVJZDJ6MXpUaTljTzFoMjcyaEx0?=
- =?utf-8?B?ZzNvNmZuQUxSSXJzUTV3RFVIVkhzV3RnWmYvc1pQUzExRkhYUGRUYy9hR2Rp?=
- =?utf-8?B?Um1tREQzWlhUZlUzdlNRekxJT1NKcWh4MVlMbWw4NkZob2RQa0hqUmEwUGNi?=
- =?utf-8?B?TldqWTNpcXViTmhSY2tlUlNreCtPUUFuM2M4WkZQRTVzZHc4QnllQ3NsWENr?=
- =?utf-8?B?WkV5N2FYUDB6T1plNGN4clRBM1hMRW11ZGFXRG1pOUJ6bnFyZ043WEFtUXZw?=
- =?utf-8?B?eWxwUkR6UHF6akx3MXFiR3BoRHZRWUp4dUdWM3QzQncrbVhSMDVCOTZNWHAr?=
- =?utf-8?B?Zm9HcU4xQXlZZ09yaUlUY29qQzgxTWkzdHVGUnVXaGR5V2ZEV2hzTFExMm5O?=
- =?utf-8?B?Q2swMHk3VDJyUHd6M0NnL2lZWmdmcVJBWTJELyswT3BLVkJPQWROamZwZ2s4?=
- =?utf-8?B?cDZqZk1zN1Z4V2x2TUtzTitPTGNZQ3ZlMTBzdjJvdE0zbHZsK1oxUGRML0tQ?=
- =?utf-8?B?eHk4Nm1NWnZvcW45S0Z6S2NSeGF2UDBCSFpVZXJCUWdNdVVrcjMwRDI4dWRD?=
- =?utf-8?B?K0xEdEJUQnlFUWtQUHdEQW43NWlFVytReGxSbDRBamlXcXlWd2Q1cXVIZ1JM?=
- =?utf-8?B?bC9uNXQ1amgzdTVJRGJpQ1NzdldDYmNoMDBQRE5FTml0UnFYUFdxa0l5eVdr?=
- =?utf-8?B?VE9oYnRFT0lNUWdQRms1dUgzWithcWFJMy9XMEMvcmtkUWd2YzBLdmdZNE9K?=
- =?utf-8?B?QlVyLzhjSUF4cjRkTVFoUUU3SkFKc3hIeW42SFlNSXQrWHZ3QXBLSmdGWVFj?=
- =?utf-8?B?dUJUYWVENXZoSjBmMkIwNWZTaFhOSCs4cVM0Vi9rVW1CWkxxZ284U1NNTDZh?=
- =?utf-8?B?TnRZZWZSV1E2MTl3NCtZVU1zSzUxTHhoNW80TFhzN0EvNnlqNzBEQ2RZVWl2?=
- =?utf-8?B?akswNkhVWTJsYmJNU3FoQ0JSTDNMTTRJOEVUMHhkckJzTFljN2kyWW94aENu?=
- =?utf-8?B?d01FZmVXd3VMMVJPTlA2L3ZiTlp2TzlDb0ZGeTYwZ0FxT2kwZW05T2I5UUU5?=
- =?utf-8?B?QktzVnBTY1EvT3dNR2pGOXFlOXg4bDZRMVk0cHJoYmtWOGpURVBDMWNTZitK?=
- =?utf-8?B?dFRZZXRWalA0dFhSb3pJbFFGZzBEUXlqMkZRK1pWM3JJUWZjS0Mwd2lVbWxh?=
- =?utf-8?B?bDdlOGdLbzViSE1ZdnVtQW9lY1R1MjIrVHNJZFh6NTRCbFBmeGRNMTdNUVBj?=
- =?utf-8?B?OSszL0l2VTVma2dlNFVGamhYeEJ0TjhRVUFjc3Y1dDJjOUYxKzhZN0E1anlD?=
- =?utf-8?B?SENKZG5XYTZWeXJObEdnYkJXN2laQnF6UkdQcnR0dGFEV29FVDFHN3NSazZU?=
- =?utf-8?B?UU9mTjRtS202Z1NEYUdkTFZDeEJObmpxN3BVQjNxUWJqcUUwOHVzdG8vR1V3?=
- =?utf-8?B?L3pQOWFMWjhrNStiNTU3ajRiZWlRSE1TV0lmSG9GcXF2OGlMY05zQVU3RkZw?=
- =?utf-8?B?V1hkSHNzTkxMaVgyVnErMkQzRUlZUDc4ZnlmZFRxVTl6cmlXMDdSMVBLMi9Z?=
- =?utf-8?B?U0ZxbnNMQVRsUVN4MHlFbGFkS09ZaDJYdEJEKy9LZFNsZmc0QkQ2cnNBYWth?=
- =?utf-8?B?WllQZEVFbXlMbjd2THdNcEV3UXhyb1Rwb2tXdWttS2JScXpqZE1XRzE4aFlr?=
- =?utf-8?B?ZVFLSnVVK29DSkRheG52ZlZ1S0FQQUZYWXRuNC9QUlBUNTZJYkZJUVhoM2tx?=
- =?utf-8?B?TUdMaUZsb21KdXFuTkVsbFk0b3A5ZXhVamNJMEpmZTZPeEIxSmFwWmE2eGhM?=
- =?utf-8?B?VUZyeHMwcU1TU2pPdUF6WU40bHYrMzRqMDY3ZFRIbVVOVnNDdXhWMDBFalpV?=
- =?utf-8?B?MkFJN0FDemMvNURqNjZGOU10THQweXE1d3VZOXNPK1hZZGlkekRqcXBNWFRH?=
- =?utf-8?B?czREWXNhazNjS05KRWJGMTluSmFWaDZyR2kxMmdkREVEaDkwaEYybDQrRlJN?=
- =?utf-8?B?NXZXaktlWFlhU2tqMDFNbHhCaVFzNGRveTl1aU1zd3hvL0pRemZnR09taGtK?=
- =?utf-8?B?dkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <9DBB0AC86EFA9E40BD144A9B8988ED72@eurprd06.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8685720E717
+	for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2025 12:57:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737637045; cv=none; b=ehpKRSGXXZqO5QU8iFlJknvDjjzqv3549ZfeyDF1xRTK30EK52x0Av15Mcr94RHgM+X9qTEkBjsATtEpAGryeg/EfFA2HAYTR85FeBwS8SzvUGQB68+LLFmRuLq4leiZiua9rPgXeqyWAIUP6PFh+m9G3xxhGbnVL6dZ3goFOxg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737637045; c=relaxed/simple;
+	bh=SfkTUfqccaZVf6d/CJzSczL3wj2DC5ZEZqg/AAVj1oE=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=idsGnG/jIeH51Txa/Zs2n8rgAKVGelvFLpYQYbkNqBoCNwyp2Uh6y6R27bG0MjESXXNoJGFoXbzJq07f422ewa0mgQeLNV6SNxqNh5e82vST3Jaw4+jyl84w4XHGSIqoyJomGl8uctkiAvZVYlqa7jm6v7gPxwPlvwPHVu1aI24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3cfba1ca53bso5555845ab.3
+        for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2025 04:57:23 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737637042; x=1738241842;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yOnhm+dzJp1QNGrRtlT9jWJZwF9Tk+o1YQ+snJlZUro=;
+        b=KJQCOHpBWwRO96w2nnY/RmyB+5GGkb3+9NHGhxaHddFWCensGKFU2bLQ3KqCGZ4AOy
+         KCMzE82PVoQdVdsPCpWvVikXeZuwM3+/spsOtmygT09MCMJHXC4we5cySiS/DkuVyCDB
+         Kdnf9NNjHqnC2Pxwawj+LJwwRUHHnGX1UHqP2Ln85yUqZ8y6RVIS3Jm8Ogl98iSCcIUD
+         +sR/S8R1q+CXawcBFIarsJwrAUIQ/jCM8oL5Lg0Bog6nbTIgI7gLjnGbBQrq/0/gaX4E
+         22v4NFee024Dlz+z/QDkdaVvVcO1Bou9wIe1vQE2pPbhyst8wJu2ye+oU6UtnrTFdVo+
+         JUsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXpJbvud+kxlC+EklOZMEQJar0bnLoChU+Aws1AWNgHt0oNN75c65hc6JoPPgshVg4p2KVw7LSVNrg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWP1Z7zWPWcdp9idcNJEg7Mqia73MhYGpi7boNczHINi9azLZF
+	aKsg75zfk4dQHdq5ebXvCez/Uy36cTlQHU4p35iK1snhotsqRzzH0ntrf9zgH2l7Eo60pmRagSS
+	6OtuUK0wUjHP0QhHXc+CKIQFvEQkv61IPIBysp/IZHlNnlyCjp4mYJNg=
+X-Google-Smtp-Source: AGHT+IHKRmYwtgBc3KoGLrzd0l0HJsIuTGk6kxSw0xDRrOivFpsN9973uzLhdON+DQIOMeJMb5GKaRLrB520ay66tkGynWztGNDA
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: leica-geosystems.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DBAPR06MB6901.eurprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ccd6f1f-e7da-4552-a9de-08dd3ba45a55
-X-MS-Exchange-CrossTenant-originalarrivaltime: 23 Jan 2025 11:52:03.2404
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 1b16ab3e-b8f6-4fe3-9f3e-2db7fe549f6a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: oTla0CEYvovD8zIaxd4IqEyJSPoV9TNBrdmrgtR075bdykXhGL/N8EXB0WZYd9RDtvLHBJlfiY5Hfm17XITt5ya2kG3nVsnkz1+OLBvITQrHwDKS9Ygh1bRDSkm69/yl
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR06MB6445
+X-Received: by 2002:a05:6e02:20e7:b0:3ce:7fc3:9f76 with SMTP id
+ e9e14a558f8ab-3cf743eae5amr198779245ab.6.1737637042609; Thu, 23 Jan 2025
+ 04:57:22 -0800 (PST)
+Date: Thu, 23 Jan 2025 04:57:22 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67923cb2.050a0220.2eae65.0006.GAE@google.com>
+Subject: [syzbot] [input?] [usb?] WARNING: ODEBUG bug in devres_release_group
+From: syzbot <syzbot+cf5f2dd02bbd4d2d411c@syzkaller.appspotmail.com>
+To: bentiss@kernel.org, gregkh@linuxfoundation.org, jikos@kernel.org, 
+	jkosina@suse.com, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, rafael@kernel.org, stuart.a.hayhurst@gmail.com, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-T24gMjMvMDEvMjAyNSAxMjoxOCwgSm9oYW4gSG92b2xkIHdyb3RlOg0KPiBbU29tZSBwZW9wbGUg
-d2hvIHJlY2VpdmVkIHRoaXMgbWVzc2FnZSBkb24ndCBvZnRlbiBnZXQgZW1haWwgZnJvbSBqb2hh
-bkBrZXJuZWwub3JnLiBMZWFybiB3aHkgdGhpcyBpcyBpbXBvcnRhbnQgYXQgaHR0cHM6Ly9ha2Eu
-bXMvTGVhcm5BYm91dFNlbmRlcklkZW50aWZpY2F0aW9uIF0NCj4NCj4gVGhpcyBlbWFpbCBpcyBu
-b3QgZnJvbSBIZXhhZ29u4oCZcyBPZmZpY2UgMzY1IGluc3RhbmNlLiBQbGVhc2UgYmUgY2FyZWZ1
-bCB3aGlsZSBjbGlja2luZyBsaW5rcywgb3BlbmluZyBhdHRhY2htZW50cywgb3IgcmVwbHlpbmcg
-dG8gdGhpcyBlbWFpbC4NCj4NCj4NCj4gT24gV2VkLCBKYW4gMjIsIDIwMjUgYXQgMDU6MTc6MzZQ
-TSArMDAwMCwgUE9QRVNDVSBDYXRhbGluIHdyb3RlOg0KPj4gT24gMjIvMDEvMjAyNSAxNDo1Mywg
-R3JlZyBLSCB3cm90ZToNCj4+PiBzZXJkZXYgY2FuIG5vdCB1c2UgdXNiLXNlcmlhbCBkZXZpY2Vz
-IGR1ZSB0byB0aGUgbGFjayBvZiBob3RwbHVnZ2luZywgc28NCj4+PiB3aHkgaXMgdGhpcyBhbiBp
-c3N1ZT8gIEkgdGhvdWdodCB0aGF0IGp1c3Qgd291bGQgbm90IHdvcmsuDQo+PiBXZWxsLCBJIGNh
-biBzYXkgdGhhdCBvbiA2LjEyLjAgaXQncyB3b3JraW5nIDoNCj4+DQo+PiBbwqDCoMKgIDAuOTI5
-NDkzXSB1c2IgMS0xOiBuZXcgZnVsbC1zcGVlZCBVU0IgZGV2aWNlIG51bWJlciAyIHVzaW5nIHho
-Y2ktaGNkDQo+PiBbwqDCoMKgIDUuOTA2NTc0XSB1c2Jjb3JlOiByZWdpc3RlcmVkIG5ldyBpbnRl
-cmZhY2UgZHJpdmVyIGZ0ZGlfc2lvDQo+PiBbwqDCoMKgIDUuOTA2NjMyXSB1c2JzZXJpYWw6IFVT
-QiBTZXJpYWwgc3VwcG9ydCByZWdpc3RlcmVkIGZvciBGVERJIFVTQg0KPj4gU2VyaWFsIERldmlj
-ZQ0KPj4gW8KgwqDCoCA1LjkwNjcyN10gZnRkaV9zaW8gMS0xOjEuMDogRlRESSBVU0IgU2VyaWFs
-IERldmljZSBjb252ZXJ0ZXIgZGV0ZWN0ZWQNCj4+IFvCoMKgwqAgNS45MDY4NDJdIHVzYiAxLTE6
-IERldGVjdGVkIEZULVgNCj4+IFvCoMKgwqAgNS45MDc4MDldIHNlcmlhbCBzZXJpYWwwOiB0dHkg
-cG9ydCB0dHlVU0IwIHJlZ2lzdGVyZWQNCj4gWW91J2QgbmVlZCB0byBwYXRjaCBVU0Igc2VyaWFs
-IHRvbyBmb3IgdGhpcyB0byBoYXBwZW4gc28gdGhpcyBpbiBub3QNCj4gbWFpbmxpbmUgNi4xMi4N
-Cj4NCj4gQW5kIGlmIHRoZSBwb3J0IGlzIG9wZW4gZHVyaW5nIGRpc2Nvbm5lY3QgeW91J2Qgc2Vl
-IGEgYnVuY2ggb2Ygd2FybmluZ3MNCj4gYmVjYXVzZSB0aGUgc2VyZGV2IHR0eSBwb3J0IGltcGxl
-bWVudGF0aW9uIGRvZXMgbm90IGhhbmRsZSBoYW5ndXBzLg0KPg0KPiBKb2hhbg0KDQpNeSBiYWQs
-IEkgZ290IGEgcmVtaW5kZXIgdGhhdCB3ZSdyZSB1c2luZyBhIHNldCBvZiBwYXRjaGVzIHRoYXQg
-YWRkIA0Kc3VwcG9ydCBmb3IgdGhlIG1pc3NpbmcgcGllY2VzIDoNCmh0dHBzOi8vbG9yZS5rZXJu
-ZWwub3JnL2FsbC8yMDI0MDgwNy12Ni0xMC10b3BpYy11c2Itc2VyaWFsLXNlcmRldi12MS0wLWVk
-MmNjNWRhNTkxZkBwZW5ndXRyb25peC5kZS8NCg0KU29ycnkgZm9yIHRoZSBjb25mdXNpb24uDQoN
-CkJSLA0KQ2F0YWxpbg0KDQo=
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    c4b9570cfb63 Merge tag 'audit-pr-20250121' of git://git.ke..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=14d2cab0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=5d46425e33fe266e
+dashboard link: https://syzkaller.appspot.com/bug?extid=cf5f2dd02bbd4d2d411c
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f89824580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1331c9f8580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e34aaf236292/disk-c4b9570c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/9fa1c2b70c0a/vmlinux-c4b9570c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/12feb0aae53d/bzImage-c4b9570c.xz
+
+The issue was bisected to:
+
+commit 6ea2a6fd3872e60a4d500b548ad65ed94e459ddd
+Author: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
+Date:   Tue Oct 8 23:30:29 2024 +0000
+
+    HID: corsair-void: Add Corsair Void headset family driver
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10afcab0580000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=12afcab0580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=14afcab0580000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+cf5f2dd02bbd4d2d411c@syzkaller.appspotmail.com
+Fixes: 6ea2a6fd3872 ("HID: corsair-void: Add Corsair Void headset family driver")
+
+WARNING: CPU: 0 PID: 1206 at lib/debugobjects.c:615 debug_print_object+0x17a/0x1f0 lib/debugobjects.c:612
+Modules linked in:
+CPU: 0 UID: 0 PID: 1206 Comm: kworker/0:2 Not tainted 6.13.0-syzkaller-02526-gc4b9570cfb63 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:debug_print_object+0x17a/0x1f0 lib/debugobjects.c:612
+Code: e8 4b 10 38 fd 4c 8b 0b 48 c7 c7 40 1e 60 8c 48 8b 74 24 08 48 89 ea 44 89 e1 4d 89 f8 ff 34 24 e8 bb 3e 92 fc 48 83 c4 08 90 <0f> 0b 90 90 ff 05 28 de 4c 0b 48 83 c4 10 5b 41 5c 41 5d 41 5e 41
+RSP: 0018:ffffc9000451eeb8 EFLAGS: 00010286
+RAX: 6e3a10eb39cc4d00 RBX: ffffffff8c0ca540 RCX: ffff8880279c8000
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffffffff8c601fc0 R08: ffffffff81603132 R09: fffffbfff1cfa638
+R10: dffffc0000000000 R11: fffffbfff1cfa638 R12: 0000000000000000
+R13: ffffffff8c601ed8 R14: dffffc0000000000 R15: ffff8880309f51a8
+FS:  0000000000000000(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555571005650 CR3: 0000000032228000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __debug_check_no_obj_freed lib/debugobjects.c:1099 [inline]
+ debug_check_no_obj_freed+0x45b/0x580 lib/debugobjects.c:1129
+ slab_free_hook mm/slub.c:2284 [inline]
+ slab_free mm/slub.c:4613 [inline]
+ kfree+0x115/0x430 mm/slub.c:4761
+ release_nodes drivers/base/devres.c:506 [inline]
+ devres_release_group+0x328/0x350 drivers/base/devres.c:689
+ hid_device_remove+0x250/0x370 drivers/hid/hid-core.c:2779
+ device_remove drivers/base/dd.c:567 [inline]
+ __device_release_driver drivers/base/dd.c:1273 [inline]
+ device_release_driver_internal+0x4a9/0x7c0 drivers/base/dd.c:1296
+ bus_remove_device+0x34f/0x420 drivers/base/bus.c:576
+ device_del+0x57a/0x9b0 drivers/base/core.c:3854
+ hid_remove_device drivers/hid/hid-core.c:2958 [inline]
+ hid_destroy_device+0x6a/0x1b0 drivers/hid/hid-core.c:2980
+ usbhid_disconnect+0x9e/0xc0 drivers/hid/usbhid/hid-core.c:1458
+ usb_unbind_interface+0x25b/0x940 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:569 [inline]
+ __device_release_driver drivers/base/dd.c:1273 [inline]
+ device_release_driver_internal+0x503/0x7c0 drivers/base/dd.c:1296
+ bus_remove_device+0x34f/0x420 drivers/base/bus.c:576
+ device_del+0x57a/0x9b0 drivers/base/core.c:3854
+ usb_disable_device+0x3bf/0x850 drivers/usb/core/message.c:1418
+ usb_disconnect+0x340/0x950 drivers/usb/core/hub.c:2304
+ hub_port_connect drivers/usb/core/hub.c:5363 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
+ port_event drivers/usb/core/hub.c:5823 [inline]
+ hub_event+0x1ebc/0x5150 drivers/usb/core/hub.c:5905
+ process_one_work kernel/workqueue.c:3236 [inline]
+ process_scheduled_works+0xa66/0x1840 kernel/workqueue.c:3317
+ worker_thread+0x870/0xd30 kernel/workqueue.c:3398
+ kthread+0x7a9/0x920 kernel/kthread.c:464
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
