@@ -1,186 +1,448 @@
-Return-Path: <linux-usb+bounces-19667-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19668-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BF0FA1A49A
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 13:57:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A1F4A1A4B7
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 14:13:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3D9C188B9A6
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 12:57:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6F823A8FD4
+	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 13:13:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E2720E6F0;
-	Thu, 23 Jan 2025 12:57:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BA920F965;
+	Thu, 23 Jan 2025 13:13:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HwDzWq6v"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8685720E717
-	for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2025 12:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.205
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7AE42F3B;
+	Thu, 23 Jan 2025 13:13:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737637045; cv=none; b=ehpKRSGXXZqO5QU8iFlJknvDjjzqv3549ZfeyDF1xRTK30EK52x0Av15Mcr94RHgM+X9qTEkBjsATtEpAGryeg/EfFA2HAYTR85FeBwS8SzvUGQB68+LLFmRuLq4leiZiua9rPgXeqyWAIUP6PFh+m9G3xxhGbnVL6dZ3goFOxg=
+	t=1737638009; cv=none; b=jTvMkGo6TQLum1BuYv58C3YXyR1jHeh/J6JndVMMSJ5o5STgRVb+NeR7tFoW/+CFsQG7teCaGTMizY89DiqeRuTR0mkbDusLf6NKgbSxuZeE45hcxa5lq4BbiIuXWyeaA/YNML49y0XPF19clO2TNWFwHwz0tBP7KW1GenUzaa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737637045; c=relaxed/simple;
-	bh=SfkTUfqccaZVf6d/CJzSczL3wj2DC5ZEZqg/AAVj1oE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=idsGnG/jIeH51Txa/Zs2n8rgAKVGelvFLpYQYbkNqBoCNwyp2Uh6y6R27bG0MjESXXNoJGFoXbzJq07f422ewa0mgQeLNV6SNxqNh5e82vST3Jaw4+jyl84w4XHGSIqoyJomGl8uctkiAvZVYlqa7jm6v7gPxwPlvwPHVu1aI24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.205
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-3cfba1ca53bso5555845ab.3
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2025 04:57:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737637042; x=1738241842;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yOnhm+dzJp1QNGrRtlT9jWJZwF9Tk+o1YQ+snJlZUro=;
-        b=KJQCOHpBWwRO96w2nnY/RmyB+5GGkb3+9NHGhxaHddFWCensGKFU2bLQ3KqCGZ4AOy
-         KCMzE82PVoQdVdsPCpWvVikXeZuwM3+/spsOtmygT09MCMJHXC4we5cySiS/DkuVyCDB
-         Kdnf9NNjHqnC2Pxwawj+LJwwRUHHnGX1UHqP2Ln85yUqZ8y6RVIS3Jm8Ogl98iSCcIUD
-         +sR/S8R1q+CXawcBFIarsJwrAUIQ/jCM8oL5Lg0Bog6nbTIgI7gLjnGbBQrq/0/gaX4E
-         22v4NFee024Dlz+z/QDkdaVvVcO1Bou9wIe1vQE2pPbhyst8wJu2ye+oU6UtnrTFdVo+
-         JUsA==
-X-Forwarded-Encrypted: i=1; AJvYcCXpJbvud+kxlC+EklOZMEQJar0bnLoChU+Aws1AWNgHt0oNN75c65hc6JoPPgshVg4p2KVw7LSVNrg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWP1Z7zWPWcdp9idcNJEg7Mqia73MhYGpi7boNczHINi9azLZF
-	aKsg75zfk4dQHdq5ebXvCez/Uy36cTlQHU4p35iK1snhotsqRzzH0ntrf9zgH2l7Eo60pmRagSS
-	6OtuUK0wUjHP0QhHXc+CKIQFvEQkv61IPIBysp/IZHlNnlyCjp4mYJNg=
-X-Google-Smtp-Source: AGHT+IHKRmYwtgBc3KoGLrzd0l0HJsIuTGk6kxSw0xDRrOivFpsN9973uzLhdON+DQIOMeJMb5GKaRLrB520ay66tkGynWztGNDA
+	s=arc-20240116; t=1737638009; c=relaxed/simple;
+	bh=pcI9DrNafsBdRz4vj0vWeXBvqHYZ/Qy4w1uroEYXHEM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=dRz8uvt5+uNxs8DkdSx1mlqW9rw0x5nipjFxIdPVw1oaqdaZ7Py9WvSyYoD5U03LR+L6HBnFnNdxbUUFD9/lmNxIVtAzoptjpwL1X2c7JQFQVBgsQCVrtpTPGcycioVccgrIzrRmyNJxH30oUPnhpr/ldbqgcULqxoYxEUP9yrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HwDzWq6v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4A4D5C4CED3;
+	Thu, 23 Jan 2025 13:13:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737638009;
+	bh=pcI9DrNafsBdRz4vj0vWeXBvqHYZ/Qy4w1uroEYXHEM=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=HwDzWq6vViviaTLVI+sXQ5ACB2qHU+riVp32HASgU7KyZCcOx7CARXXIy5d+efS6J
+	 hQi5eiVsnFQbvCYIZgCX+JcYURLnOLwOa+NxbqFBSgAOc5focvfNG4QxPbQm3PbFNJ
+	 XC7q86mzUX3Ou0lnhnJ2Nlt0tXLxT+hXgmBWvKYiGFYsPKIZtVXhPMu1guBYCZCs3x
+	 UE3g/HkFNORYB24GQulcYw2O8VPFRzFJIjld4YoP9+pQKme77JdCX3QMod3BsoLr3q
+	 Gxu5qGNiDeuc/NEdu07latxDE4a9q2dnjxSXG0xW3rkakBhsqu5rZmifQRAMo7R5so
+	 agJu8U3GZVsog==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 39A0AC02182;
+	Thu, 23 Jan 2025 13:13:29 +0000 (UTC)
+From: "Chester A. Unal via B4 Relay" <devnull+chester.a.unal.arinc9.com@kernel.org>
+Date: Thu, 23 Jan 2025 13:13:27 +0000
+Subject: [PATCH] USB: serial: option: add MeiG Smart SLM828
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:20e7:b0:3ce:7fc3:9f76 with SMTP id
- e9e14a558f8ab-3cf743eae5amr198779245ab.6.1737637042609; Thu, 23 Jan 2025
- 04:57:22 -0800 (PST)
-Date: Thu, 23 Jan 2025 04:57:22 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67923cb2.050a0220.2eae65.0006.GAE@google.com>
-Subject: [syzbot] [input?] [usb?] WARNING: ODEBUG bug in devres_release_group
-From: syzbot <syzbot+cf5f2dd02bbd4d2d411c@syzkaller.appspotmail.com>
-To: bentiss@kernel.org, gregkh@linuxfoundation.org, jikos@kernel.org, 
-	jkosina@suse.com, linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, rafael@kernel.org, stuart.a.hayhurst@gmail.com, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250123-for-johan-meig-slm828-v1-1-6456996e94a5@arinc9.com>
+X-B4-Tracking: v=1; b=H4sIAHZAkmcC/x2MQQqAIBAAvxJ7bqGUyvpKdEhbbaMyFCKQ/p50H
+ IaZBJECU4ShSBDo5sj+zFCXBZh1Ph0hL5lBVKKpaiHR+oCbzwoPYodxP5RQaLRUbdsvWnYGcns
+ Fsvz833F63w/aJ1lYZwAAAA==
+X-Change-ID: 20250123-for-johan-meig-slm828-cb38669db37c
+To: Johan Hovold <johan@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ dwayne Du Preez <dwayne.dupreez@xpedite-tech.com>, 
+ Alexander Scholten <alexander.scholten@xpedite-tech.com>, 
+ Zenon van Deventer <zenon@xpedite-tech.com>, 
+ "Chester A. Unal" <chester.a.unal@arinc9.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737638007; l=14951;
+ i=chester.a.unal@arinc9.com; s=arinc9; h=from:subject:message-id;
+ bh=OJ1c6yKXsZfgiGadirnJL+EvRISVd9cignDoZ6jPTD8=;
+ b=BZMD0MocLD7r38TTfia1qhZX+kSTBu5Y8Ci3NxaC9NArMHXwJyi4DBedvqypZksT4r+DUqQnf
+ mbIEma/fHUOAMkdq9le7q1IwXriiR7UrOSDmCBXYnKomEFs41aESVk/
+X-Developer-Key: i=chester.a.unal@arinc9.com; a=ed25519;
+ pk=/g3vBAV0YSvcIpSQ052xJbid7nrPXz8ExGKhTEuc6IY=
+X-Endpoint-Received: by B4 Relay for chester.a.unal@arinc9.com/arinc9 with
+ auth_id=306
+X-Original-From: "Chester A. Unal" <chester.a.unal@arinc9.com>
+Reply-To: chester.a.unal@arinc9.com
 
-Hello,
+From: "Chester A. Unal" <chester.a.unal@arinc9.com>
 
-syzbot found the following issue on:
+MeiG Smart SLM828 is an LTE-A CAT6 modem with the mPCIe form factor. The
+"Cls=ff(vend.) Sub=10 Prot=02" and "Cls=ff(vend.) Sub=10 Prot=03"
+interfaces respond to AT commands. Add these interfaces.
 
-HEAD commit:    c4b9570cfb63 Merge tag 'audit-pr-20250121' of git://git.ke..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14d2cab0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=5d46425e33fe266e
-dashboard link: https://syzkaller.appspot.com/bug?extid=cf5f2dd02bbd4d2d411c
-compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14f89824580000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1331c9f8580000
+The product ID the modem uses is shared across multiple modems. Therefore,
+add comments to describe which interface is used for which modem.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e34aaf236292/disk-c4b9570c.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/9fa1c2b70c0a/vmlinux-c4b9570c.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/12feb0aae53d/bzImage-c4b9570c.xz
+T:  Bus=01 Lev=01 Prnt=05 Port=01 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
+D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
+P:  Vendor=2dee ProdID=4d22 Rev=05.04
+S:  Manufacturer=MEIG
+S:  Product=LTE-A Module
+S:  SerialNumber=4da7ec42
+C:  #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
+I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=10 Prot=01 Driver=(none)
+E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=02 Driver=(none)
+E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=03 Driver=(none)
+E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=04 Driver=(none)
+E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
+I:  If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
+E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
+I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=05 Driver=qmi_wwan
+E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
+E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
 
-The issue was bisected to:
+Signed-off-by: Chester A. Unal <chester.a.unal@arinc9.com>
+---
+$ lsusb -v
 
-commit 6ea2a6fd3872e60a4d500b548ad65ed94e459ddd
-Author: Stuart Hayhurst <stuart.a.hayhurst@gmail.com>
-Date:   Tue Oct 8 23:30:29 2024 +0000
+Bus 001 Device 006: ID 2dee:4d22 MEIG LTE-A Module
+Negotiated speed: High Speed (480Mbps)
+Device Descriptor:
+  bLength                18
+  bDescriptorType         1
+  bcdUSB               2.10
+  bDeviceClass            0 [unknown]
+  bDeviceSubClass         0 [unknown]
+  bDeviceProtocol         0 
+  bMaxPacketSize0        64
+  idVendor           0x2dee MEIG
+  idProduct          0x4d22 LTE-A Module
+  bcdDevice            5.04
+  iManufacturer           1 MEIG
+  iProduct                2 LTE-A Module
+  iSerial                 3 4da7ec42
+  bNumConfigurations      1
+  Configuration Descriptor:
+    bLength                 9
+    bDescriptorType         2
+    wTotalLength       0x00e1
+    bNumInterfaces          6
+    bConfigurationValue     1
+    iConfiguration          4 DIAG_MODEM_AT_NMEA_ADB_RMNET
+    bmAttributes         0x80
+      (Bus Powered)
+    MaxPower              500mA
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        0
+      bAlternateSetting       0
+      bNumEndpoints           2
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass     16 [unknown]
+      bInterfaceProtocol      1 
+      iInterface              0 
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x01  EP 1 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x81  EP 1 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        1
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass     16 [unknown]
+      bInterfaceProtocol      2 
+      iInterface              0 
+      ** UNRECOGNIZED:  05 24 00 10 01
+      ** UNRECOGNIZED:  05 24 01 00 00
+      ** UNRECOGNIZED:  04 24 02 02
+      ** UNRECOGNIZED:  05 24 06 00 00
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x83  EP 3 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x000a  1x 10 bytes
+        bInterval               9
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x82  EP 2 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x02  EP 2 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        2
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass     16 [unknown]
+      bInterfaceProtocol      3 
+      iInterface              0 
+      ** UNRECOGNIZED:  05 24 00 10 01
+      ** UNRECOGNIZED:  05 24 01 00 00
+      ** UNRECOGNIZED:  04 24 02 02
+      ** UNRECOGNIZED:  05 24 06 00 00
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x85  EP 5 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x000a  1x 10 bytes
+        bInterval               9
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x84  EP 4 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x03  EP 3 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        3
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass     16 [unknown]
+      bInterfaceProtocol      4 
+      iInterface              0 
+      ** UNRECOGNIZED:  05 24 00 10 01
+      ** UNRECOGNIZED:  05 24 01 00 00
+      ** UNRECOGNIZED:  04 24 02 02
+      ** UNRECOGNIZED:  05 24 06 00 00
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x87  EP 7 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x000a  1x 10 bytes
+        bInterval               9
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x86  EP 6 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x04  EP 4 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        4
+      bAlternateSetting       0
+      bNumEndpoints           1
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass    255 Vendor Specific Subclass
+      bInterfaceProtocol    255 Vendor Specific Protocol
+      iInterface              6 GPS
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x88  EP 8 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0040  1x 64 bytes
+        bInterval               9
+    Interface Descriptor:
+      bLength                 9
+      bDescriptorType         4
+      bInterfaceNumber        5
+      bAlternateSetting       0
+      bNumEndpoints           3
+      bInterfaceClass       255 Vendor Specific Class
+      bInterfaceSubClass     16 [unknown]
+      bInterfaceProtocol      5 
+      iInterface              7 RmNet
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x89  EP 9 IN
+        bmAttributes            3
+          Transfer Type            Interrupt
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0008  1x 8 bytes
+        bInterval               9
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x8e  EP 14 IN
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+      Endpoint Descriptor:
+        bLength                 7
+        bDescriptorType         5
+        bEndpointAddress     0x0f  EP 15 OUT
+        bmAttributes            2
+          Transfer Type            Bulk
+          Synch Type               None
+          Usage Type               Data
+        wMaxPacketSize     0x0200  1x 512 bytes
+        bInterval               0
+Binary Object Store Descriptor:
+  bLength                 5
+  bDescriptorType        15
+  wTotalLength       0x0016
+  bNumDeviceCaps          2
+  USB 2.0 Extension Device Capability:
+    bLength                 7
+    bDescriptorType        16
+    bDevCapabilityType      2
+    bmAttributes   0x0000211e
+      BESL Link Power Management (LPM) Supported
+    BESL value      256 us 
+    Deep BESL value     8192 us 
+  SuperSpeed USB Device Capability:
+    bLength                10
+    bDescriptorType        16
+    bDevCapabilityType      3
+    bmAttributes         0x00
+    wSpeedsSupported   0x000f
+      Device can operate at Low Speed (1Mbps)
+      Device can operate at Full Speed (12Mbps)
+      Device can operate at High Speed (480Mbps)
+      Device can operate at SuperSpeed (5Gbps)
+    bFunctionalitySupport   1
+      Lowest fully-functional device speed is Full Speed (12Mbps)
+    bU1DevExitLat           0 micro seconds
+    bU2DevExitLat           0 micro seconds
+Device Status:     0x0000
+  (Bus Powered)
+---
+ drivers/usb/serial/option.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-    HID: corsair-void: Add Corsair Void headset family driver
-
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=10afcab0580000
-final oops:     https://syzkaller.appspot.com/x/report.txt?x=12afcab0580000
-console output: https://syzkaller.appspot.com/x/log.txt?x=14afcab0580000
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cf5f2dd02bbd4d2d411c@syzkaller.appspotmail.com
-Fixes: 6ea2a6fd3872 ("HID: corsair-void: Add Corsair Void headset family driver")
-
-WARNING: CPU: 0 PID: 1206 at lib/debugobjects.c:615 debug_print_object+0x17a/0x1f0 lib/debugobjects.c:612
-Modules linked in:
-CPU: 0 UID: 0 PID: 1206 Comm: kworker/0:2 Not tainted 6.13.0-syzkaller-02526-gc4b9570cfb63 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
-Workqueue: usb_hub_wq hub_event
-RIP: 0010:debug_print_object+0x17a/0x1f0 lib/debugobjects.c:612
-Code: e8 4b 10 38 fd 4c 8b 0b 48 c7 c7 40 1e 60 8c 48 8b 74 24 08 48 89 ea 44 89 e1 4d 89 f8 ff 34 24 e8 bb 3e 92 fc 48 83 c4 08 90 <0f> 0b 90 90 ff 05 28 de 4c 0b 48 83 c4 10 5b 41 5c 41 5d 41 5e 41
-RSP: 0018:ffffc9000451eeb8 EFLAGS: 00010286
-RAX: 6e3a10eb39cc4d00 RBX: ffffffff8c0ca540 RCX: ffff8880279c8000
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-RBP: ffffffff8c601fc0 R08: ffffffff81603132 R09: fffffbfff1cfa638
-R10: dffffc0000000000 R11: fffffbfff1cfa638 R12: 0000000000000000
-R13: ffffffff8c601ed8 R14: dffffc0000000000 R15: ffff8880309f51a8
-FS:  0000000000000000(0000) GS:ffff8880b8600000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000555571005650 CR3: 0000000032228000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __debug_check_no_obj_freed lib/debugobjects.c:1099 [inline]
- debug_check_no_obj_freed+0x45b/0x580 lib/debugobjects.c:1129
- slab_free_hook mm/slub.c:2284 [inline]
- slab_free mm/slub.c:4613 [inline]
- kfree+0x115/0x430 mm/slub.c:4761
- release_nodes drivers/base/devres.c:506 [inline]
- devres_release_group+0x328/0x350 drivers/base/devres.c:689
- hid_device_remove+0x250/0x370 drivers/hid/hid-core.c:2779
- device_remove drivers/base/dd.c:567 [inline]
- __device_release_driver drivers/base/dd.c:1273 [inline]
- device_release_driver_internal+0x4a9/0x7c0 drivers/base/dd.c:1296
- bus_remove_device+0x34f/0x420 drivers/base/bus.c:576
- device_del+0x57a/0x9b0 drivers/base/core.c:3854
- hid_remove_device drivers/hid/hid-core.c:2958 [inline]
- hid_destroy_device+0x6a/0x1b0 drivers/hid/hid-core.c:2980
- usbhid_disconnect+0x9e/0xc0 drivers/hid/usbhid/hid-core.c:1458
- usb_unbind_interface+0x25b/0x940 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:569 [inline]
- __device_release_driver drivers/base/dd.c:1273 [inline]
- device_release_driver_internal+0x503/0x7c0 drivers/base/dd.c:1296
- bus_remove_device+0x34f/0x420 drivers/base/bus.c:576
- device_del+0x57a/0x9b0 drivers/base/core.c:3854
- usb_disable_device+0x3bf/0x850 drivers/usb/core/message.c:1418
- usb_disconnect+0x340/0x950 drivers/usb/core/hub.c:2304
- hub_port_connect drivers/usb/core/hub.c:5363 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
- port_event drivers/usb/core/hub.c:5823 [inline]
- hub_event+0x1ebc/0x5150 drivers/usb/core/hub.c:5905
- process_one_work kernel/workqueue.c:3236 [inline]
- process_scheduled_works+0xa66/0x1840 kernel/workqueue.c:3317
- worker_thread+0x870/0xd30 kernel/workqueue.c:3398
- kthread+0x7a9/0x920 kernel/kthread.c:464
- ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
+diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+index 1e2ae0c6c41c79dd38f2c1d3a98e58ebf076050a..e25acac854cca38d2e0ace464be11337d3bbecee 100644
+--- a/drivers/usb/serial/option.c
++++ b/drivers/usb/serial/option.c
+@@ -621,7 +621,9 @@ static void option_instat_callback(struct urb *urb);
+ 
+ /* MeiG Smart Technology products */
+ #define MEIGSMART_VENDOR_ID			0x2dee
+-/* MeiG Smart SRM815/SRM825L based on Qualcomm 315 */
++/* MeiG Smart SLM828, SRM815, and SRM825L use the same product ID. SRM815 and
++ * SRM825L are based on Qualcomm 315.
++ */
+ #define MEIGSMART_PRODUCT_SRM825L		0x4d22
+ /* MeiG Smart SLM320 based on UNISOC UIS8910 */
+ #define MEIGSMART_PRODUCT_SLM320		0x4d41
+@@ -2405,10 +2407,12 @@ static const struct usb_device_id option_ids[] = {
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, LUAT_PRODUCT_AIR720U, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SLM320, 0xff, 0, 0) },
+ 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SLM770A, 0xff, 0, 0) },
+-	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0, 0) },
+-	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x30) },
+-	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x40) },
+-	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x60) },
++	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0, 0) },	/* MeiG Smart SRM815 */
++	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0x10, 0x02) },	/* MeiG Smart SLM828 */
++	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0x10, 0x03) },	/* MeiG Smart SLM828 */
++	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x30) },	/* MeiG Smart SRM825L */
++	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x40) },	/* MeiG Smart SRM825L */
++	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x60) },	/* MeiG Smart SRM825L */
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0530, 0xff),			/* TCL IK512 MBIM */
+ 	  .driver_info = NCTRL(1) },
+ 	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0640, 0xff),			/* TCL IK512 ECM */
 
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+base-commit: 5bc55a333a2f7316b58edc7573e8e893f7acb532
+change-id: 20250123-for-johan-meig-slm828-cb38669db37c
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+Best regards,
+-- 
+Chester A. Unal <chester.a.unal@arinc9.com>
 
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
 
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
