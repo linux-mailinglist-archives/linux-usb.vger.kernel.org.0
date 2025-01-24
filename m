@@ -1,86 +1,47 @@
-Return-Path: <linux-usb+bounces-19701-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19703-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3826A1BCEC
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 20:40:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AFB5A1BD12
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 20:56:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42A72188CEEE
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 19:41:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A60E188BA4A
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 19:57:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D73224B01;
-	Fri, 24 Jan 2025 19:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="r8iGu4Sr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBD3E224B0D;
+	Fri, 24 Jan 2025 19:56:51 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from d.mail.sonic.net (d.mail.sonic.net [64.142.111.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72ED9202C27
-	for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 19:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC2B14A630;
+	Fri, 24 Jan 2025 19:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=64.142.111.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737747647; cv=none; b=dhj8UX7pqSeo8S2R/yj1x+zE3xKeTnA6IgBfYaC1DE1jrvf0z85q8zvaI+4suDbSN8y4ue6lXJZfK7Nh3nzmLt7d/4xi7fjHa7gCq7WTuyJfKWni9WzY0jIBuhFlnQCP+tQqVPXwRKccezc08LdKndJvcN+vEvd8TvG4XjHMuNI=
+	t=1737748611; cv=none; b=XPaV2wdP40VtLpao7SQoOsAidiceJHjcR5QLFJdJQYEGNougF+l5K7Lhbw/7Jf1Ajb/6I1LKveLa/4/lEeqMeO2ht/JJ/xiVgGy7nwT8XcCM9hJSm3iB/79VguXzQrPpjFhT1GX1XAmJaFiooh8yU8gsVcAasQlJlBKKVpZf1uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737747647; c=relaxed/simple;
-	bh=QwYO9PZxCThzcCpITbcXVs1XiBBnSgAirneVfxCQzwQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=t+m0AqopEPNGgY3x64q1qbqjYS7AyBt2ww93uI9GuAjZKZiEGCbF81iZKgdCKKMVVHJTq0b+LsZnp+cbrYxCfLbPXvfZrl1mhJFRpdAauOoKGAxYETfMd/Toq1o6DIN+bsKFFWoIGFbvOOmjis3AIqg29/V/h/NmccimdqNN530=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=r8iGu4Sr; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2162c0f6a39so68008615ad.0
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 11:40:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737747643; x=1738352443; darn=vger.kernel.org;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=RsA2Td0GmZhvsNv3upCcErafZhW9TcZYUo0FDnBPQBg=;
-        b=r8iGu4Sr/GQUJmhf6uELTcKf7ZHAwBRsKre/QpKLe/GD0HXoS734flNQpnWs+mPWij
-         P40DE+OfMjTAryITZUPjQpMO3DH2S55rjTQMjT/TATItjNtMuNufQJqEA1jDjQ3BGBk4
-         3OKC2GKbcc+Ep6GoYE8n/V4EuI5TJMAk/aG5wcCiGtSS0MOgtGDme+Sr9Ic2oC8CnsUI
-         AygUPE/ROlUzzvzVhg5iUXO7uJjHDUi8RNUQWfGk7p+G4Aq9kOCQLjVFXBsd24ZPg8fU
-         HrR+H0j5/01kWltSBeQ9/zVR9dGJSRXpf1JXldFyzNxAHMnXFjfnW5GhXe2mPua2sIo6
-         5K5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737747643; x=1738352443;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RsA2Td0GmZhvsNv3upCcErafZhW9TcZYUo0FDnBPQBg=;
-        b=sjcyyo8BJKvB6akGrEdNPb8B9O5M+99rsW85h1nDybg9QLBl3XiuTz3IsqRXtpC2z1
-         QgPH90bhnsguWcEZiKfagBstak7b2VMs9Bi+F9X+VsyoXXSdLeTuucH6N6Xp1PaLtH/K
-         NG308nGpcHbdlLCt84hvWcM7oQeIwlXyelH4luai5arHMgIv/foO+e4TgdFDXrhEGSAF
-         nNCOtt0vrGPkev6nz1BDEuF3SapCyco0v9beiQobMq18mfBHcOOKX7UhzbHyKxM7NtrJ
-         o9pAvt9td4fzXjlJ7Snoc7xs4AQY1MBdZIEIuGl0Pk1Sv/Bn+IsUFrXPezTF/UgmJbW+
-         ho8w==
-X-Forwarded-Encrypted: i=1; AJvYcCUCLLv/5NEfUj70r6Um/Nlv1cty1nXYk4ygCtE96SwV6ECKdjkjuFvobihRAoTVanY4S9hNErBHoNo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEwg0G5OvMwm+q0RPVI1iuEIk/l1lRN9sGE1EKoTHtncLkBG7V
-	JnJw+VYtLPQk+3QE4orNwT+FyfbCjtOwwGJtqQohf6AssKO9z6CKS5AkurEVlw==
-X-Gm-Gg: ASbGnctNtl5OtJsi64ehobDItlosRCkms69J9S7z4KqMu5HEQJGbOhOX92mLStii8fz
-	ChWiUDSo4K1ZsY1Y74OT2Qc+K8e9ytt6Q1hCTYDKVCvL6+eiIemCxibh1uSpb7JNC6x/94JOFab
-	hw0tLKm9txAwRT1RFc9caLf4fpMKIdg30wYtuEKZr0UGJKEREW/DVE2Wgt3g6hS+t8SDAkswhg0
-	2+QYAif2p7kVgPvyPak5BFuWnjY3o3ekssBM9fUuT/PbaDzODGgn8WuccNsyFn1YJT1ts7RnmKv
-	f6/6GaXSJaTyM1J/hdHrtU68Ton2C9W5BtwPSSPr
-X-Google-Smtp-Source: AGHT+IHi8ugXNTLktZ75i6e/hZMghmmljaGGFz8gyT88jOcuSFXoV3Q30l2pcd5HlYB7doPvxH4tkQ==
-X-Received: by 2002:a05:6a21:6b17:b0:1e4:745c:4965 with SMTP id adf61e73a8af0-1eb696de77bmr13239928637.8.1737747643397;
-        Fri, 24 Jan 2025 11:40:43 -0800 (PST)
-Received: from google.com (28.67.125.34.bc.googleusercontent.com. [34.125.67.28])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72f8a78e351sm2298237b3a.180.2025.01.24.11.40.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 11:40:42 -0800 (PST)
-Sender: Benson Leung <bleung@google.com>
-Date: Fri, 24 Jan 2025 19:40:38 +0000
-From: Benson Leung <bleung@chromium.org>
-To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	abhishekpandit@chromium.org, dan.carpenter@linaro.org
-Cc: bleung@chromium.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, akuchynski@google.com,
-	ukaszb@chromium.org
-Subject: [PATCH 2/2] usb: typec: thunderbolt: Remove IS_ERR check for plug
-Message-ID: <Z5PstnlA52Z1F2SU@google.com>
+	s=arc-20240116; t=1737748611; c=relaxed/simple;
+	bh=+IZ7uBx+UfednXliwXguRQ78xVSJlBWi7wc9FtJOYLA=;
+	h=From:To:Cc:Subject:Date:Message-ID:References:In-Reply-To:
+	 MIME-Version:Content-Type; b=AshRPcimzxrPqS/7cgrUbimGI4WUB0PfCz4AZO771unTi+RGolvAeLtQGTjd1bvFuegKLJIR0MMMiyafLOTneoYgW/smDkWBocsOHiRMWEdVe1rtV0eSVMjsOrwPYsDHQnahYshG+UagxSm8TTcewRc+AXLKntuKEVzss4IFQg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nom.one; spf=pass smtp.mailfrom=nom.one; arc=none smtp.client-ip=64.142.111.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nom.one
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nom.one
+Received: from 192-184-190-252.static.sonic.net (192-184-190-252.static.sonic.net [192.184.190.252])
+	(authenticated bits=0)
+	by d.mail.sonic.net (8.16.1/8.16.1) with ESMTPA id 50OJiZJO022499;
+	Fri, 24 Jan 2025 11:44:36 -0800
+From: Forest <forestix@nom.one>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+        stable@vger.kernel.org
+Subject: Re: [REGRESSION] usb: xhci port capability storage change broke fastboot android bootloader utility
+Date: Fri, 24 Jan 2025 11:44:35 -0800
+Message-ID: <2tq7pj5g33d76j2uddbv5k8iiuakchso16@sonic.net>
+References: <hk8umj9lv4l4qguftdq1luqtdrpa1gks5l@sonic.net> <2c35ff52-78aa-4fa1-a61c-f53d1af4284d@linux.intel.com> <0l5mnj5hcmh2ev7818b3m0m7pokk73jfur@sonic.net> <3bd0e058-1aeb-4fc9-8b76-f0475eebbfe4@linux.intel.com> <4kb3ojp4t59rm79ui8kj3t8irsp6shlinq@sonic.net> <8a5bef2e-7cf9-4f5c-8281-c8043a090feb@linux.intel.com>
+In-Reply-To: <8a5bef2e-7cf9-4f5c-8281-c8043a090feb@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -88,36 +49,21 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 7bit
+X-Sonic-CAuth: UmFuZG9tSVYUNXZYVNL+twlhcDcM7O7ZGjbsZa7RKQ0pEf/BCTtrz6pBXmRZy4pU15G2goJU2b8kIFNOoceYgi2lh3kUS8yg
+X-Sonic-ID: C;YN0CpIva7xGUSYGchs+snA== M;nFwapIva7xGUSYGchs+snA==
+X-Spam-Flag: No
+X-Sonic-Spam-Details: -0.0/5.0 by cerberusd
 
-Fixes these Smatch static checker warnings:
-drivers/usb/typec/altmodes/thunderbolt.c:354 tbt_ready() warn: 'plug' is not an error pointer
+On Mon, 13 Jan 2025 17:05:09 +0200, Mathias Nyman wrote:
 
-Fixes: 100e25738659 ("usb: typec: Add driver for Thunderbolt 3 Alternate Mode")
+>I'd recommend a patch that permanently adds USB_QUIRK_NO_LPM for this device.
+>Let me know if you want to submit it yourself, otherwise I can do it.
 
-Signed-off-by: Benson Leung <bleung@chromium.org>
-Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
----
- drivers/usb/typec/altmodes/thunderbolt.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+It looks like I can't contribute a patch after all, due to an issue with my
+Signed-off-by signature.
 
-diff --git a/drivers/usb/typec/altmodes/thunderbolt.c b/drivers/usb/typec/altmodes/thunderbolt.c
-index 94e47d30e598..6eadf7835f8f 100644
---- a/drivers/usb/typec/altmodes/thunderbolt.c
-+++ b/drivers/usb/typec/altmodes/thunderbolt.c
-@@ -351,10 +351,10 @@ static bool tbt_ready(struct typec_altmode *alt)
- 	 */
- 	for (int i = 0; i < TYPEC_PLUG_SOP_PP + 1; i++) {
- 		plug = typec_altmode_get_plug(tbt->alt, i);
--		if (IS_ERR(plug))
-+		if (!plug)
- 			continue;
- 
--		if (!plug || plug->svid != USB_TYPEC_TBT_SID)
-+		if (plug->svid != USB_TYPEC_TBT_SID)
- 			break;
- 
- 		plug->desc = "Thunderbolt3";
--- 
-2.48.1.262.g85cc9f2d1e-goog
+So, can you take care of the quirk patch for this device?
+
+Thank you.
 
