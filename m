@@ -1,134 +1,164 @@
-Return-Path: <linux-usb+bounces-19690-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19691-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D465DA1B131
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 08:59:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 495FCA1B163
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 09:09:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8211C3A191F
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 07:59:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80A7C16BB0F
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 08:09:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EC41DB150;
-	Fri, 24 Jan 2025 07:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZbeLAsxW"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A1071DB375;
+	Fri, 24 Jan 2025 08:09:42 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FBEB1DB136
-	for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 07:59:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99F453C00;
+	Fri, 24 Jan 2025 08:09:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737705566; cv=none; b=hgCAm5sTwKyRQYJLnb1iutTL16WxpXFmInQAziIpNMPe1/B9p8I3+9Z2s3Jbhb+slzhSnkwmuaE/YYlU8M+PHKF6nHdyoqjE5CNplG27rUjswiAcMwPruDSi7LmCnu/f3SOP1kHBB02wVirIMt8FB6VwGZEtCRRg7dNX0W0eRRc=
+	t=1737706181; cv=none; b=cEIC24sL0RRbtIuYJc5gxx0LqvcyXzLKhdkzE+YTZdNK2ORutWVj1XWGBjeHdWc9jbZrW6bwsBLRotxpCeD7QMIv5Pb6pN679ddHNmSDY4Xt/oYqjXg5Bv+JsOFW3YHzasWuIfOGtD7AECoRUk04Wohf6080/Mj48F2Ds0niFRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737705566; c=relaxed/simple;
-	bh=SEAr4o2GPcY/VIxC0WU6recjoscaZQy6zHJEuMQywso=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=U/R6cwVbHOSjLkMt7JLp8WCZmp2rVd2Euuq4EKfS3EXQhj2Nju2b2JCvz6S8cFIo65ssi4Zh2wTUMkGEpO/fdSuLJ4yzHyKg1QqgmbShMxfKwNk8XP63WAVqP/kiJScnYp2VwJt7NdCWk8r5+Ai79DYjpVFrhZklIE36MuSNY9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZbeLAsxW; arc=none smtp.client-ip=209.85.214.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-21632eacb31so24350275ad.0
-        for <linux-usb@vger.kernel.org>; Thu, 23 Jan 2025 23:59:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737705564; x=1738310364; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=tvMIp44R3FtpENPY8qJDGodHaD57T8o35D4CEU3mG5w=;
-        b=ZbeLAsxWBpl4TwcettOqTZnVdS0PgAYnsZyLUaSTcbgrU1+FV3e2+ZUemDPkSTXux8
-         FZgVEkmIRd/+eEDWu3HrifCc6eeGcNH9yCbYpOlm/JNQRlaLjhsoalmqI6il6tUFp7ai
-         l22VHjSzLzOPBUEGJVqAnd4uW8syYzDGFyVcgjrKWF3I0JYZ4xFrjceKqWsQc3wLb9FC
-         FPwWRtQqUjeZUziHCsCw3jh4+jrQZkhSgwWZ2qNs/wAMwxFb8+DJPCIy9bdEIbXfrVze
-         6Q9abQyOvDq7Hq/eXPIbPpcYHixyAGOzmN7uSX3wd+g+9XtFarjjCx8+06ebpvh4t+53
-         jwww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737705564; x=1738310364;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tvMIp44R3FtpENPY8qJDGodHaD57T8o35D4CEU3mG5w=;
-        b=I3+IzF6uhS2w0WyqQdLXDWpa9cwOs+QSCs5qAP5bJKQ8JBQcAvQiPaDd/CkMOUmqAx
-         U7+8TWWpdvJsdxyX8WraxtATZQ/1u9XPsbDEv/lj+HC5oHgRasj6OzCwV+ORhqA4JWW0
-         t8U70/qx94Byhcmx0rBb6EFEweTACFLSO5t4v4aPOFlSQR3yD0LLiG9pOJKVJS9+gpPe
-         FatQsfpOG73Y5uP/IwILUPuReKIwF8kZanG3p458M3HVK5i2itP8KIolHl3y21G4L8ZL
-         AgESunjiVB8A7ja9PeL3IkuniFrztdXEJ7HZLcM5gzMMZRZM4HnH/+1y0+KlqesXm6CD
-         RCtg==
-X-Gm-Message-State: AOJu0YxjtfVtr8GaV3q2lDMAALLJn1UOYEOEfflpigNpKrivqbn0X4lK
-	TKJiSNobhOZyt5rql3nzE8hWkFV3ks/7NPRXRgZk1Q5iUfch0VGwumMSu0uIMEiJNO8e03ccrSy
-	BPA==
-X-Google-Smtp-Source: AGHT+IEx/v7k7nacKRbtPfWnK44BqfMKeMONJ12VeacG3MfZDZ51XHDmPYjzUrL/FZdGk6UIwsbdjTXWrDo=
-X-Received: from pfbcr10.prod.google.com ([2002:a05:6a00:f0a:b0:728:e76c:253f])
- (user=badhri job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:918b:b0:1e1:aba4:2095
- with SMTP id adf61e73a8af0-1eb21585e6fmr57281225637.32.1737705564412; Thu, 23
- Jan 2025 23:59:24 -0800 (PST)
-Date: Fri, 24 Jan 2025 07:59:10 +0000
+	s=arc-20240116; t=1737706181; c=relaxed/simple;
+	bh=U1XDyoWFFMO8bGJdH/EoKDoK3NF57vgCCkP3PuZMWlA=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=LB7ixxkq8Pq1WG7ypiIQHmznN/JVf1n/PDgZpe+FpZoZsDVrpeVGsUrlvp/QQibAOgHxn6euVfwrHqpqZgZkRI0L7+2p6Zzo0wgCiyh1cUVuu9dlkj307bwv16JJzJSR3IlD8keR3l3MDHi6e8cQLHMsUx6hAtejtG8OahCaOSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50O6gMWl029944;
+	Fri, 24 Jan 2025 00:09:20 -0800
+Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 44aqjgand8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Fri, 24 Jan 2025 00:09:19 -0800 (PST)
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.43; Fri, 24 Jan 2025 00:09:19 -0800
+Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2507.43 via Frontend Transport; Fri, 24 Jan 2025 00:09:16 -0800
+From: Lizhi Xu <lizhi.xu@windriver.com>
+To: <syzbot+cf5f2dd02bbd4d2d411c@syzkaller.appspotmail.com>
+CC: <bentiss@kernel.org>, <gregkh@linuxfoundation.org>, <jikos@kernel.org>,
+        <jkosina@suse.com>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <rafael@kernel.org>, <stuart.a.hayhurst@gmail.com>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: [PATCH] HID: corsair-void: cancel delayed status work if device removed
+Date: Fri, 24 Jan 2025 16:09:15 +0800
+Message-ID: <20250124080915.419680-1-lizhi.xu@windriver.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <67923cb2.050a0220.2eae65.0006.GAE@google.com>
+References: <67923cb2.050a0220.2eae65.0006.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.48.1.262.g85cc9f2d1e-goog
-Message-ID: <20250124075911.811594-1-badhri@google.com>
-Subject: [PATCH v1] usb: dwc3: gadget: Prevent irq storm when TH re-executes
-From: Badhri Jagan Sridharan <badhri@google.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
-	felipe.balbi@linux.intel.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	jameswei@google.com, Badhri Jagan Sridharan <badhri@google.com>, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: mCDX__YojqOROdevaLrI2rIAl02EA4Je
+X-Proofpoint-ORIG-GUID: mCDX__YojqOROdevaLrI2rIAl02EA4Je
+X-Authority-Analysis: v=2.4 cv=d7QPyQjE c=1 sm=1 tr=0 ts=67934aaf cx=c_pps a=K4BcnWQioVPsTJd46EJO2w==:117 a=K4BcnWQioVPsTJd46EJO2w==:17 a=VdSt8ZQiCzkA:10 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8 a=lCrHF3M8to3SV3RDAqMA:9 a=cQPPKAXgyycSBL8etih5:22
+ a=FdTzh2GWekK77mhwV6Dw:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-24_03,2025-01-23_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ malwarescore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ bulkscore=0 mlxlogscore=999 mlxscore=0 phishscore=0 clxscore=1011
+ suspectscore=0 classifier=spam authscore=0 adjust=0 reason=mlx scancount=1
+ engine=8.21.0-2411120000 definitions=main-2501240058
 
-While commit d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events
-in event cache") makes sure that top half(TH) does not end up overwriting
-the cached events before processing them when the TH gets invoked more
-than one time, returning IRQ_HANDLED results in occasional irq storm
-where the TH hogs the CPU. The irq storm can be prevented if
-IRQ_WAKE_THREAD is returned.
+syzbot reported a WARNING: ODEBUG bug in devres_release_group. [1]
 
-ftrace event stub during dwc3 irq storm:
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000866: irq_handler_exit: irq=14 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000872: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000874: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000881: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000883: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000889: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000892: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000898: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000901: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000907: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000909: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000915: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000918: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000924: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000927: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000933: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000935: irq_handler_exit: irq=504 ret=handled
-    ....
+Missing a cancel delayed work for the "delayed_status_work" in
+corsair_void_remove.
 
-Cc: stable@kernel.org
-Fixes: d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events in event cache")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+[1]
+ODEBUG: free active (active state 0) object: ffff8880286e09a8 object type: timer_list hint: corsair_void_status_work_handler+0x0/0x190
+WARNING: CPU: 1 PID: 5847 at lib/debugobjects.c:615 debug_print_object+0x17a/0x1f0 lib/debugobjects.c:612
+Modules linked in:
+CPU: 1 UID: 0 PID: 5847 Comm: kworker/1:4 Not tainted 6.13.0-syzkaller-02526-gc4b9570cfb63 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:debug_print_object+0x17a/0x1f0 lib/debugobjects.c:612
+Code: e8 4b 10 38 fd 4c 8b 0b 48 c7 c7 40 1e 60 8c 48 8b 74 24 08 48 89 ea 44 89 e1 4d 89 f8 ff 34 24 e8 bb 3e 92 fc 48 83 c4 08 90 <0f> 0b 90 90 ff 05 28 de 4c 0b 48 83 c4 10 5b 41 5c 41 5d 41 5e 41
+RSP: 0018:ffffc90003e3eeb8 EFLAGS: 00010286
+RAX: 3d29b0c77a543200 RBX: ffffffff8c0ca540 RCX: ffff88801213da00
+RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
+RBP: ffffffff8c601fc0 R08: ffffffff81603132 R09: fffffbfff1cfa638
+R10: dffffc0000000000 R11: fffffbfff1cfa638 R12: 0000000000000000
+R13: ffffffff8c601ed8 R14: dffffc0000000000 R15: ffff8880286e09a8
+FS:  0000000000000000(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007fff5312cda0 CR3: 0000000034840000 CR4: 00000000003526f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __debug_check_no_obj_freed lib/debugobjects.c:1099 [inline]
+ debug_check_no_obj_freed+0x45b/0x580 lib/debugobjects.c:1129
+ slab_free_hook mm/slub.c:2284 [inline]
+ slab_free mm/slub.c:4613 [inline]
+ kfree+0x115/0x430 mm/slub.c:4761
+ release_nodes drivers/base/devres.c:506 [inline]
+ devres_release_group+0x328/0x350 drivers/base/devres.c:689
+ hid_device_remove+0x250/0x370 drivers/hid/hid-core.c:2779
+ device_remove drivers/base/dd.c:567 [inline]
+ __device_release_driver drivers/base/dd.c:1273 [inline]
+ device_release_driver_internal+0x4a9/0x7c0 drivers/base/dd.c:1296
+ bus_remove_device+0x34f/0x420 drivers/base/bus.c:576
+ device_del+0x57a/0x9b0 drivers/base/core.c:3854
+ hid_remove_device drivers/hid/hid-core.c:2958 [inline]
+ hid_destroy_device+0x6a/0x1b0 drivers/hid/hid-core.c:2980
+ usbhid_disconnect+0x9e/0xc0 drivers/hid/usbhid/hid-core.c:1458
+ usb_unbind_interface+0x25b/0x940 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:569 [inline]
+ __device_release_driver drivers/base/dd.c:1273 [inline]
+ device_release_driver_internal+0x503/0x7c0 drivers/base/dd.c:1296
+ bus_remove_device+0x34f/0x420 drivers/base/bus.c:576
+ device_del+0x57a/0x9b0 drivers/base/core.c:3854
+ usb_disable_device+0x3bf/0x850 drivers/usb/core/message.c:1418
+ usb_disconnect+0x340/0x950 drivers/usb/core/hub.c:2304
+ hub_port_connect drivers/usb/core/hub.c:5363 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
+ port_event drivers/usb/core/hub.c:5823 [inline]
+ hub_event+0x1ebc/0x5150 drivers/usb/core/hub.c:5905
+ process_one_work kernel/workqueue.c:3236 [inline]
+ process_scheduled_works+0xa66/0x1840 kernel/workqueue.c:3317
+ worker_thread+0x870/0xd30 kernel/workqueue.c:3398
+ kthread+0x7a9/0x920 kernel/kthread.c:464
+ ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+Fixes: 6ea2a6fd3872 ("HID: corsair-void: Add Corsair Void headset family driver")
+Reported-by: syzbot+cf5f2dd02bbd4d2d411c@syzkaller.appspotmail.com
+Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
 ---
- drivers/usb/dwc3/gadget.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/hid/hid-corsair-void.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index d27af65eb08a..376ab75adc4e 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4519,7 +4519,7 @@ static irqreturn_t dwc3_check_event_buf(struct dwc3_event_buffer *evt)
- 	 * losing events.
- 	 */
- 	if (evt->flags & DWC3_EVENT_PENDING)
--		return IRQ_HANDLED;
-+		return IRQ_WAKE_THREAD;
+diff --git a/drivers/hid/hid-corsair-void.c b/drivers/hid/hid-corsair-void.c
+index 6ece56b850fc..bd8f3d849b58 100644
+--- a/drivers/hid/hid-corsair-void.c
++++ b/drivers/hid/hid-corsair-void.c
+@@ -726,6 +726,7 @@ static void corsair_void_remove(struct hid_device *hid_dev)
+ 	if (drvdata->battery)
+ 		power_supply_unregister(drvdata->battery);
  
- 	count = dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
- 	count &= DWC3_GEVNTCOUNT_MASK;
-
-base-commit: 70cd0576aa39c55aabd227851cba0c601e811fb6
++	cancel_delayed_work_sync(&drvdata->delayed_status_work);
+ 	cancel_delayed_work_sync(&drvdata->delayed_firmware_work);
+ 	sysfs_remove_group(&hid_dev->dev.kobj, &corsair_void_attr_group);
+ }
 -- 
-2.48.1.262.g85cc9f2d1e-goog
+2.43.0
 
 
