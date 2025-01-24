@@ -1,180 +1,172 @@
-Return-Path: <linux-usb+bounces-19692-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19693-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5232DA1B181
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 09:18:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DD33A1B2A0
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 10:30:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91B19161F23
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 08:18:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FD171884B47
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 09:30:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C687F218AD2;
-	Fri, 24 Jan 2025 08:18:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rpBFKDIB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF99A219E93;
+	Fri, 24 Jan 2025 09:30:36 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DAB14A0A3;
-	Fri, 24 Jan 2025 08:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B11D323A0;
+	Fri, 24 Jan 2025 09:30:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.54.195.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737706684; cv=none; b=JyqiaBppaaEEzpdDyJ+GWRPUJramhUyklMsPkUdCxDtEtXWt5TQiSxve+x1WNJ94zxuUp56qDSriV06A/Xfpffn33l/5yh31ixV2RURXDRUWzHRcz23hjdAFiBdYqCSDpjoIiK0A8Oig4/x3ldL41QqOX6Q6AJhAgQxwQ+vZ4g8=
+	t=1737711036; cv=none; b=Jd4sCUkBbPdoqannNBzGjJfVR/mHg1WLnO4mKhooD6C69BuxW/jUcXgSCclXyT3TqZtl9KFCn0CcZ+N1cE54YnINGwAk5lpmEABjMQrAzmm5TRGSIw/8YHLWj6O5N/fDJ8Glu877rc0lXRsiFNiBB+NsM1En3J+mGL1WiJNIVUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737706684; c=relaxed/simple;
-	bh=iWfiitNVzcylV3xWbBii5RBIe9brMghrSx4suq54Snc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LdEEo4mRg9RfyYew5pOcTX/0LZHs++kuVoBvr0dhhNcH4/mjTEevdYMXm5sFqPXQcOJZbzlIGVhU4IXTMIdQ/AudevKlodl8ECHqtshf818hD6/DwP0wilnJD8CFRNdAqsqbfg7Fu054P2sP95ne5bm0FuePDQWiYsjsRb978tA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rpBFKDIB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1FB23C4CED2;
-	Fri, 24 Jan 2025 08:18:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1737706683;
-	bh=iWfiitNVzcylV3xWbBii5RBIe9brMghrSx4suq54Snc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rpBFKDIBTx5mJaioFoLa/458s1jOZCuJahO9pq+YQVic7KnSKudtFJI7TYWEdlSEj
-	 NWtNGkMJMLFrokReAyDp0IhWVXqes6kBJ72in3yUueKW9YJGP71WHRLNZ8B5aF52FW
-	 KeWAuFIL7Ng6vLEcQClMNp/3z+GbNmSKrU9f3wUM=
-Date: Fri, 24 Jan 2025 09:18:00 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Lizhi Xu <lizhi.xu@windriver.com>
-Cc: syzbot+cf5f2dd02bbd4d2d411c@syzkaller.appspotmail.com,
-	bentiss@kernel.org, jikos@kernel.org, jkosina@suse.com,
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org, rafael@kernel.org,
-	stuart.a.hayhurst@gmail.com, syzkaller-bugs@googlegroups.com
-Subject: Re: [PATCH] HID: corsair-void: cancel delayed status work if device
- removed
-Message-ID: <2025012452-deceiving-ladybug-77ab@gregkh>
-References: <67923cb2.050a0220.2eae65.0006.GAE@google.com>
- <20250124080915.419680-1-lizhi.xu@windriver.com>
+	s=arc-20240116; t=1737711036; c=relaxed/simple;
+	bh=T+A/U+lN7rbSAiOboTaT7muuaZCzDU3jykkZJxXpyyA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rxuFVPgAy03tCDah6lK1wqpZDAz81yXP9O56XuHMz36WDeBmk5oJOFucMrt6BrHgKdkNXJkFKl3T04YxMAHawX9VkWpOT7jRCD9Vf9XNfK4kc+OEyjP+j2gouMedb6/HbSpI+cqA5l8uxIHwuwrrCXQCMXkCNwZejLmt5EM/iKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru; spf=pass smtp.mailfrom=fintech.ru; arc=none smtp.client-ip=195.54.195.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintech.ru
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 24 Jan
+ 2025 12:30:23 +0300
+Received: from localhost (10.0.253.138) by Ex16-01.fintech.ru (10.0.10.18)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Fri, 24 Jan
+ 2025 12:30:23 +0300
+From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+To: Petko Manolov <petkan@nucleusys.com>
+CC: Nikita Zhandarovich <n.zhandarovich@fintech.ru>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
+	<pabeni@redhat.com>, <linux-usb@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<syzbot+d7e968426f644b567e31@syzkaller.appspotmail.com>,
+	<syzkaller-bugs@googlegroups.com>, <linux-kernel@vger.kernel.org>,
+	<lvc-project@linuxtesting.org>
+Subject: [PATCH net v2] net: usb: rtl8150: enable basic endpoint checking
+Date: Fri, 24 Jan 2025 01:30:20 -0800
+Message-ID: <20250124093020.234642-1-n.zhandarovich@fintech.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250124080915.419680-1-lizhi.xu@windriver.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
+ (10.0.10.18)
 
-On Fri, Jan 24, 2025 at 04:09:15PM +0800, Lizhi Xu wrote:
-> syzbot reported a WARNING: ODEBUG bug in devres_release_group. [1]
-> 
-> Missing a cancel delayed work for the "delayed_status_work" in
-> corsair_void_remove.
-> 
-> [1]
-> ODEBUG: free active (active state 0) object: ffff8880286e09a8 object type: timer_list hint: corsair_void_status_work_handler+0x0/0x190
-> WARNING: CPU: 1 PID: 5847 at lib/debugobjects.c:615 debug_print_object+0x17a/0x1f0 lib/debugobjects.c:612
-> Modules linked in:
-> CPU: 1 UID: 0 PID: 5847 Comm: kworker/1:4 Not tainted 6.13.0-syzkaller-02526-gc4b9570cfb63 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
-> Workqueue: usb_hub_wq hub_event
-> RIP: 0010:debug_print_object+0x17a/0x1f0 lib/debugobjects.c:612
-> Code: e8 4b 10 38 fd 4c 8b 0b 48 c7 c7 40 1e 60 8c 48 8b 74 24 08 48 89 ea 44 89 e1 4d 89 f8 ff 34 24 e8 bb 3e 92 fc 48 83 c4 08 90 <0f> 0b 90 90 ff 05 28 de 4c 0b 48 83 c4 10 5b 41 5c 41 5d 41 5e 41
-> RSP: 0018:ffffc90003e3eeb8 EFLAGS: 00010286
-> RAX: 3d29b0c77a543200 RBX: ffffffff8c0ca540 RCX: ffff88801213da00
-> RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000000
-> RBP: ffffffff8c601fc0 R08: ffffffff81603132 R09: fffffbfff1cfa638
-> R10: dffffc0000000000 R11: fffffbfff1cfa638 R12: 0000000000000000
-> R13: ffffffff8c601ed8 R14: dffffc0000000000 R15: ffff8880286e09a8
-> FS:  0000000000000000(0000) GS:ffff8880b8700000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007fff5312cda0 CR3: 0000000034840000 CR4: 00000000003526f0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  __debug_check_no_obj_freed lib/debugobjects.c:1099 [inline]
->  debug_check_no_obj_freed+0x45b/0x580 lib/debugobjects.c:1129
->  slab_free_hook mm/slub.c:2284 [inline]
->  slab_free mm/slub.c:4613 [inline]
->  kfree+0x115/0x430 mm/slub.c:4761
->  release_nodes drivers/base/devres.c:506 [inline]
->  devres_release_group+0x328/0x350 drivers/base/devres.c:689
->  hid_device_remove+0x250/0x370 drivers/hid/hid-core.c:2779
->  device_remove drivers/base/dd.c:567 [inline]
->  __device_release_driver drivers/base/dd.c:1273 [inline]
->  device_release_driver_internal+0x4a9/0x7c0 drivers/base/dd.c:1296
->  bus_remove_device+0x34f/0x420 drivers/base/bus.c:576
->  device_del+0x57a/0x9b0 drivers/base/core.c:3854
->  hid_remove_device drivers/hid/hid-core.c:2958 [inline]
->  hid_destroy_device+0x6a/0x1b0 drivers/hid/hid-core.c:2980
->  usbhid_disconnect+0x9e/0xc0 drivers/hid/usbhid/hid-core.c:1458
->  usb_unbind_interface+0x25b/0x940 drivers/usb/core/driver.c:458
->  device_remove drivers/base/dd.c:569 [inline]
->  __device_release_driver drivers/base/dd.c:1273 [inline]
->  device_release_driver_internal+0x503/0x7c0 drivers/base/dd.c:1296
->  bus_remove_device+0x34f/0x420 drivers/base/bus.c:576
->  device_del+0x57a/0x9b0 drivers/base/core.c:3854
->  usb_disable_device+0x3bf/0x850 drivers/usb/core/message.c:1418
->  usb_disconnect+0x340/0x950 drivers/usb/core/hub.c:2304
->  hub_port_connect drivers/usb/core/hub.c:5363 [inline]
->  hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
->  port_event drivers/usb/core/hub.c:5823 [inline]
->  hub_event+0x1ebc/0x5150 drivers/usb/core/hub.c:5905
->  process_one_work kernel/workqueue.c:3236 [inline]
->  process_scheduled_works+0xa66/0x1840 kernel/workqueue.c:3317
->  worker_thread+0x870/0xd30 kernel/workqueue.c:3398
->  kthread+0x7a9/0x920 kernel/kthread.c:464
->  ret_from_fork+0x4b/0x80 arch/x86/kernel/process.c:148
->  ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-> 
-> Fixes: 6ea2a6fd3872 ("HID: corsair-void: Add Corsair Void headset family driver")
-> Reported-by: syzbot+cf5f2dd02bbd4d2d411c@syzkaller.appspotmail.com
-> Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
-> ---
->  drivers/hid/hid-corsair-void.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/hid/hid-corsair-void.c b/drivers/hid/hid-corsair-void.c
-> index 6ece56b850fc..bd8f3d849b58 100644
-> --- a/drivers/hid/hid-corsair-void.c
-> +++ b/drivers/hid/hid-corsair-void.c
-> @@ -726,6 +726,7 @@ static void corsair_void_remove(struct hid_device *hid_dev)
->  	if (drvdata->battery)
->  		power_supply_unregister(drvdata->battery);
->  
-> +	cancel_delayed_work_sync(&drvdata->delayed_status_work);
->  	cancel_delayed_work_sync(&drvdata->delayed_firmware_work);
->  	sysfs_remove_group(&hid_dev->dev.kobj, &corsair_void_attr_group);
->  }
-> -- 
-> 2.43.0
-> 
-> 
+Syzkaller reports [1] encountering a common issue of utilizing a wrong
+usb endpoint type during URB submitting stage. This, in turn, triggers
+a warning shown below.
 
-Hi,
+For now, enable simple endpoint checking (specifically, bulk and
+interrupt eps, testing control one is not essential) to mitigate
+the issue with a view to do other related cosmetic changes later,
+if they are necessary.
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+[1] Syzkaller report:
+usb 1-1: BOGUS urb xfer, pipe 3 != type 1
+WARNING: CPU: 1 PID: 2586 at drivers/usb/core/urb.c:503 usb_submit_urb+0xe4b/0x1730 driv>
+Modules linked in:
+CPU: 1 UID: 0 PID: 2586 Comm: dhcpcd Not tainted 6.11.0-rc4-syzkaller-00069-gfc88bb11617>
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 08/06/2024
+RIP: 0010:usb_submit_urb+0xe4b/0x1730 drivers/usb/core/urb.c:503
+Code: 84 3c 02 00 00 e8 05 e4 fc fc 4c 89 ef e8 fd 25 d7 fe 45 89 e0 89 e9 4c 89 f2 48 8>
+RSP: 0018:ffffc9000441f740 EFLAGS: 00010282
+RAX: 0000000000000000 RBX: ffff888112487a00 RCX: ffffffff811a99a9
+RDX: ffff88810df6ba80 RSI: ffffffff811a99b6 RDI: 0000000000000001
+RBP: 0000000000000003 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000001 R12: 0000000000000001
+R13: ffff8881023bf0a8 R14: ffff888112452a20 R15: ffff888112487a7c
+FS:  00007fc04eea5740(0000) GS:ffff8881f6300000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f0a1de9f870 CR3: 000000010dbd0000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ rtl8150_open+0x300/0xe30 drivers/net/usb/rtl8150.c:733
+ __dev_open+0x2d4/0x4e0 net/core/dev.c:1474
+ __dev_change_flags+0x561/0x720 net/core/dev.c:8838
+ dev_change_flags+0x8f/0x160 net/core/dev.c:8910
+ devinet_ioctl+0x127a/0x1f10 net/ipv4/devinet.c:1177
+ inet_ioctl+0x3aa/0x3f0 net/ipv4/af_inet.c:1003
+ sock_do_ioctl+0x116/0x280 net/socket.c:1222
+ sock_ioctl+0x22e/0x6c0 net/socket.c:1341
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:907 [inline]
+ __se_sys_ioctl fs/ioctl.c:893 [inline]
+ __x64_sys_ioctl+0x193/0x220 fs/ioctl.c:893
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fc04ef73d49
+...
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+This change has not been tested on real hardware.
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+Reported-and-tested-by: syzbot+d7e968426f644b567e31@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=d7e968426f644b567e31
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Cc: stable@vger.kernel.org
+Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+---
+v1 -> v2: move declarations of ep addresses to the beginning of
+rtl8150_probe() to remove a build warning in older branches
+(courtesy of -Wdeclaration-after-statement).
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+ drivers/net/usb/rtl8150.c | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-thanks,
-
-greg k-h's patch email bot
+diff --git a/drivers/net/usb/rtl8150.c b/drivers/net/usb/rtl8150.c
+index 01a3b2417a54..ddff6f19ff98 100644
+--- a/drivers/net/usb/rtl8150.c
++++ b/drivers/net/usb/rtl8150.c
+@@ -71,6 +71,14 @@
+ #define MSR_SPEED		(1<<3)
+ #define MSR_LINK		(1<<2)
+ 
++/* USB endpoints */
++enum rtl8150_usb_ep {
++	RTL8150_USB_EP_CONTROL = 0,
++	RTL8150_USB_EP_BULK_IN = 1,
++	RTL8150_USB_EP_BULK_OUT = 2,
++	RTL8150_USB_EP_INT_IN = 3,
++};
++
+ /* Interrupt pipe data */
+ #define INT_TSR			0x00
+ #define INT_RSR			0x01
+@@ -867,6 +875,13 @@ static int rtl8150_probe(struct usb_interface *intf,
+ 	struct usb_device *udev = interface_to_usbdev(intf);
+ 	rtl8150_t *dev;
+ 	struct net_device *netdev;
++	static const u8 bulk_ep_addr[] = {
++		RTL8150_USB_EP_BULK_IN | USB_DIR_IN,
++		RTL8150_USB_EP_BULK_OUT | USB_DIR_OUT,
++		0};
++	static const u8 int_ep_addr[] = {
++		RTL8150_USB_EP_INT_IN | USB_DIR_IN,
++		0};
+ 
+ 	netdev = alloc_etherdev(sizeof(rtl8150_t));
+ 	if (!netdev)
+@@ -880,6 +895,13 @@ static int rtl8150_probe(struct usb_interface *intf,
+ 		return -ENOMEM;
+ 	}
+ 
++	/* Verify that all required endpoints are present */
++	if (!usb_check_bulk_endpoints(intf, bulk_ep_addr) ||
++	    !usb_check_int_endpoints(intf, int_ep_addr)) {
++		dev_err(&intf->dev, "couldn't find required endpoints\n");
++		goto out;
++	}
++
+ 	tasklet_setup(&dev->tl, rx_fixup);
+ 	spin_lock_init(&dev->rx_pool_lock);
+ 
 
