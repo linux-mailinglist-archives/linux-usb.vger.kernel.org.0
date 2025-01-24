@@ -1,455 +1,285 @@
-Return-Path: <linux-usb+bounces-19694-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19695-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFB67A1B379
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 11:28:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C008A1B59E
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 13:20:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F212E167BAF
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 10:28:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C521B16D6E6
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 12:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5A7021A44A;
-	Fri, 24 Jan 2025 10:28:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6B1621ADD6;
+	Fri, 24 Jan 2025 12:20:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ECeoLbXQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XfAAm58a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF9F1B21AD;
-	Fri, 24 Jan 2025 10:28:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A9F62B9BC;
+	Fri, 24 Jan 2025 12:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737714486; cv=none; b=T37wybUCopH4OkTatEYkBm3bKusNBRakwFwtdSk/ZG8TU5m22Jskz4gRH12c/FjXn+/YFylI15b6oXB+uhDhhX1QXXZr19Vwty8+Emym5CejHjjs/x7p6ldlx1Mu6VVyJYiS5Sof6MUqiylkeiMH/eMohPrOxQQAwPK2naRFy4o=
+	t=1737721219; cv=none; b=XqHoaTyNfP7O8DKbsSirW9jM4wL242du8wM48hMdZsWIGzxwK115hT0G6J248zYxu6VL2YaLOXuURPgT8XHaVB8cEIqE4PN0iI6AmRSEunezaHxH9lmRJRunT+ig4RdU9LFpG2QsHLkN0qgs9V9+bvz8EB4i0vU7ECzmOu4Hhjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737714486; c=relaxed/simple;
-	bh=BxK+nDX1uuFpWcCre60u6CbZR7GFPeXgAjhqS9Xc9g4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=WZaav4UF6Z1g9De5gzTn5aWuDdjaWnaDHpdGXm1g5GkI1TIO3tO6DHKmo1rk3C+AbrQ2XRw8n0zueICOYA2QL8fvajY1PVMoiO5j1ByiEtL5Ce+f5w2/kGHOQH3f2kikgXcij2hp7jmbBILObnr5zbzjj9NNiDuwFd9ioCpeaD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ECeoLbXQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8E49AC4CED2;
-	Fri, 24 Jan 2025 10:28:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737714485;
-	bh=BxK+nDX1uuFpWcCre60u6CbZR7GFPeXgAjhqS9Xc9g4=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=ECeoLbXQMZSI7x1eZxwqLBmIVa2wLc5xFlRz7OFsVgOUJa6QxJ2keZJXVNkCqAbzt
-	 yMZivg5kocGxt0Yk5isLSGW2bkhpbbSZX2xbAZ1rY2+q3NRPWU6twFIG592ImSSRCu
-	 AerieH/rhPyxsdrx4aVl/qaIO3WYg/8ctBdafoDrZmV4wM7sL7DrXoHjLWeWhPfPXi
-	 QcNhbH0WMYOba5j8LS0RgQMW47dZIkMd6pQ4xEHyXzK4BRzAD0EGvb1UbagYnRTYUg
-	 WRFf/evF4SU2jRM1agL6I1PvYKzjDzHczfkFFlkVyW9f9F06p8u/hGxwLwuUD/Uota
-	 eQHbTraD39pSQ==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 75A70C02181;
-	Fri, 24 Jan 2025 10:28:05 +0000 (UTC)
-From: "Chester A. Unal via B4 Relay" <devnull+chester.a.unal.arinc9.com@kernel.org>
-Date: Fri, 24 Jan 2025 10:28:00 +0000
-Subject: [PATCH v2] USB: serial: option: add MeiG Smart SLM828
+	s=arc-20240116; t=1737721219; c=relaxed/simple;
+	bh=SWuJPNq3JrPJlSxhwEKtRkDSyIdGm+rAsiwd4vk/WVU=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Zlo4KxKfv7p8hkR2C2NvOa6L9wa4cmyMLrVkcSizgpwCJEhUxOC0AHlD2i7eHqYn99bho9lDUcDrBTpRiNcxskAmT6xVqvBp4+FLEfW4cZQChAWDxUT4ut5wqpcDNbHscAAwFrsbin6tOLihy/ONY3OX7CHNidGO/hVDYOHgQEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XfAAm58a; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737721218; x=1769257218;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=SWuJPNq3JrPJlSxhwEKtRkDSyIdGm+rAsiwd4vk/WVU=;
+  b=XfAAm58aF7KIoJAZ5Dq7cm8el0A2MupxX6/9IWlhP/PtzNuGBaqzKlGW
+   BZjh5fYJ1rEu/e/3mA/hb2Xlh23ElJafKEmtJD6gcZgs8xGSbZnTZrlE0
+   3KC2R99YbirKlyoOfZWVDpjU2uqb0JXT3LrLJasp8Yj6yJYlfZaYi5wjm
+   y9MCfWcCJP0SKyQlYVIz7RIl5g4PomKRZGhC2uFu1bJlQ/lGgCMFHvgcD
+   gGsrcP1IXM9BV2LwQsg+7BMP9je71f15Zv6blbclSymlfHtVGL6m01ucM
+   cSnlLwBMcibg9DFd2ch45ObdRDV4t7SYszdXKTSxWZTrbRio1pukDSDIi
+   A==;
+X-CSE-ConnectionGUID: blRQX3AgR/6Es85q9ZJB+A==
+X-CSE-MsgGUID: PpwiBamTSqaWy0CgvriGOQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11325"; a="38505538"
+X-IronPort-AV: E=Sophos;i="6.13,231,1732608000"; 
+   d="scan'208";a="38505538"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 04:20:16 -0800
+X-CSE-ConnectionGUID: 6ti8MN3KQdWE5LGh6bPfjQ==
+X-CSE-MsgGUID: r8S53VzvS5+KirvqNd4iQQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,231,1732608000"; 
+   d="scan'208";a="107556666"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.158])
+  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 04:20:09 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 24 Jan 2025 14:20:06 +0200 (EET)
+To: Arnd Bergmann <arnd@kernel.org>
+cc: Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+    Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+    Mark Pearson <mpearson-lenovo@squebb.ca>, Arnd Bergmann <arnd@arndb.de>, 
+    Basavaraj Natikar <basavaraj.natikar@amd.com>, Even Xu <even.xu@intel.com>, 
+    Xinpeng Sun <xinpeng.sun@intel.com>, 
+    Maximilian Luz <luzmaximilian@gmail.com>, 
+    Marcel Holtmann <marcel@holtmann.org>, 
+    Johan Hedberg <johan.hedberg@gmail.com>, 
+    Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+    Dmitry Torokhov <dmitry.torokhov@gmail.com>, linux-input@vger.kernel.org, 
+    LKML <linux-kernel@vger.kernel.org>, platform-driver-x86@vger.kernel.org, 
+    linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org
+Subject: Re: [PATCH] hid: intel-thc: fix CONFIG_HID dependency
+In-Reply-To: <20250123134908.805346-1-arnd@kernel.org>
+Message-ID: <3b4a1365-68cb-185d-6775-57051d4fb02a@linux.intel.com>
+References: <20250123134908.805346-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250124-for-johan-meig-slm828-v2-1-6b4cd3f6344f@arinc9.com>
-X-B4-Tracking: v=1; b=H4sIAC9rk2cC/4WNQQ6CMBBFr0Jm7RhaoLasvIdhAWWAMdKa1jQaw
- t2tXMDl+z///Q0iBaYIbbFBoMSRvcsgTwXYpXczIY+ZQZayKYWscPIB7z5XuBLPGB+rlhrtUGm
- lzDhUFwt5+ww08fvw3rrMC8eXD5/jJolf+s+YBApUdaOMUWTqvrn2gZ01Z+tX6PZ9/wIuhuoIu
- wAAAA==
-X-Change-ID: 20250123-for-johan-meig-slm828-cb38669db37c
-To: Johan Hovold <johan@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
- dwayne Du Preez <dwayne.dupreez@xpedite-tech.com>, 
- Alexander Scholten <alexander.scholten@xpedite-tech.com>, 
- Zenon van Deventer <zenon@xpedite-tech.com>, 
- "Chester A. Unal" <chester.a.unal@arinc9.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737714483; l=15307;
- i=chester.a.unal@arinc9.com; s=arinc9; h=from:subject:message-id;
- bh=NrJtcawaIXAsB1SL93FD4rJLQ5DKU+1m3xYFNzekJWA=;
- b=och4hLkQgXePQn58hRnQ1E2A+Jo5YQWIvD02eAjNU7tyXpNutkw7iGBSuQ7WPY/gw/HHfS7//
- /7NbHkxow76AOUXo+1GnZnOEGtzzpOzHO5wG66FSs0Phlz3+9woyliQ
-X-Developer-Key: i=chester.a.unal@arinc9.com; a=ed25519;
- pk=/g3vBAV0YSvcIpSQ052xJbid7nrPXz8ExGKhTEuc6IY=
-X-Endpoint-Received: by B4 Relay for chester.a.unal@arinc9.com/arinc9 with
- auth_id=306
-X-Original-From: "Chester A. Unal" <chester.a.unal@arinc9.com>
-Reply-To: chester.a.unal@arinc9.com
+Content-Type: multipart/mixed; boundary="8323328-470643312-1737721206=:931"
 
-From: "Chester A. Unal" <chester.a.unal@arinc9.com>
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-MeiG Smart SLM828 is an LTE-A CAT6 modem with the mPCIe form factor. The
-"Cls=ff(vend.) Sub=10 Prot=02" and "Cls=ff(vend.) Sub=10 Prot=03"
-interfaces respond to AT commands. Add these interfaces.
+--8323328-470643312-1737721206=:931
+Content-Type: text/plain; charset=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-The product ID the modem uses is shared across multiple modems. Therefore,
-add comments to describe which interface is used for which modem.
+On Thu, 23 Jan 2025, Arnd Bergmann wrote:
 
-T:  Bus=01 Lev=01 Prnt=05 Port=01 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
-D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-P:  Vendor=2dee ProdID=4d22 Rev=05.04
-S:  Manufacturer=MEIG
-S:  Product=LTE-A Module
-S:  SerialNumber=4da7ec42
-C:  #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
-I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=10 Prot=01 Driver=(none)
-E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=02 Driver=(none)
-E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=03 Driver=(none)
-E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=04 Driver=(none)
-E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-I:  If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=05 Driver=qmi_wwan
-E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> From: Arnd Bergmann <arnd@arndb.de>
+>=20
+> In drivers/hid/, most drivers depend on CONFIG_HID, while a couple of the
+> drivers in subdirectories instead depend on CONFIG_HID_SUPPORT and use
+> 'select HID'. With the newly added INTEL_THC_HID, this causes a build
+> warning for a circular dependency:
+>=20
+> WARNING: unmet direct dependencies detected for HID
+>   Depends on [m]: HID_SUPPORT [=3Dy] && INPUT [=3Dm]
+>   Selected by [y]:
+>   - INTEL_THC_HID [=3Dy] && HID_SUPPORT [=3Dy] && X86_64 [=3Dy] && PCI [=
+=3Dy] && ACPI [=3Dy]
+>=20
+> WARNING: unmet direct dependencies detected for INPUT_FF_MEMLESS
+>   Depends on [m]: INPUT [=3Dm]
+>   Selected by [y]:
+>   - HID_MICROSOFT [=3Dy] && HID_SUPPORT [=3Dy] && HID [=3Dy]
+>   - GREENASIA_FF [=3Dy] && HID_SUPPORT [=3Dy] && HID [=3Dy] && HID_GREENA=
+SIA [=3Dy]
+>   - HID_WIIMOTE [=3Dy] && HID_SUPPORT [=3Dy] && HID [=3Dy] && LEDS_CLASS =
+[=3Dy]
+>   - ZEROPLUS_FF [=3Dy] && HID_SUPPORT [=3Dy] && HID [=3Dy] && HID_ZEROPLU=
+S [=3Dy]
+>   Selected by [m]:
+>   - HID_ACRUX_FF [=3Dy] && HID_SUPPORT [=3Dy] && HID [=3Dy] && HID_ACRUX =
+[=3Dm]
+>   - HID_EMS_FF [=3Dm] && HID_SUPPORT [=3Dy] && HID [=3Dy]
+>   - HID_GOOGLE_STADIA_FF [=3Dm] && HID_SUPPORT [=3Dy] && HID [=3Dy]
+>   - PANTHERLORD_FF [=3Dy] && HID_SUPPORT [=3Dy] && HID [=3Dy] && HID_PANT=
+HERLORD [=3Dm]
+>=20
+> It's better to be consistent and always use 'depends on HID' for HID
+> drivers. The notable exception here is USB_KBD/USB_MOUSE, which are
+> alternative implementations that do not depend on the HID subsystem.
+>=20
+> Do this by extending the "if HID" section below, which means that a few
+> of the duplicate "depends on HID" and "depends on INPUT" statements
+> can be removed in the process.
+>=20
+> Fixes: 1b2d05384c29 ("HID: intel-thc-hid: Add basic THC driver skeleton")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  drivers/hid/Kconfig               | 10 ++++++----
+>  drivers/hid/amd-sfh-hid/Kconfig   |  1 -
+>  drivers/hid/i2c-hid/Kconfig       |  2 +-
+>  drivers/hid/intel-ish-hid/Kconfig |  1 -
+>  drivers/hid/intel-thc-hid/Kconfig |  1 -
+>  drivers/hid/surface-hid/Kconfig   |  2 --
+>  drivers/hid/usbhid/Kconfig        |  3 +--
+>  net/bluetooth/hidp/Kconfig        |  3 +--
+>  8 files changed, 9 insertions(+), 14 deletions(-)
+>=20
+> diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
+> index 8adb745c5b28..ed657ef7281c 100644
+> --- a/drivers/hid/Kconfig
+> +++ b/drivers/hid/Kconfig
+> @@ -1376,10 +1376,6 @@ endmenu
+> =20
+>  source "drivers/hid/bpf/Kconfig"
+> =20
+> -endif # HID
+> -
+> -source "drivers/hid/usbhid/Kconfig"
+> -
+>  source "drivers/hid/i2c-hid/Kconfig"
+> =20
+>  source "drivers/hid/intel-ish-hid/Kconfig"
+> @@ -1390,4 +1386,10 @@ source "drivers/hid/surface-hid/Kconfig"
+> =20
+>  source "drivers/hid/intel-thc-hid/Kconfig"
+> =20
+> +endif # HID
+> +
+> +# USB support may be used with HID disabled
+> +
+> +source "drivers/hid/usbhid/Kconfig"
+> +
+>  endif # HID_SUPPORT
+> diff --git a/drivers/hid/amd-sfh-hid/Kconfig b/drivers/hid/amd-sfh-hid/Kc=
+onfig
+> index 329de5e12c1a..3291786a5ee6 100644
+> --- a/drivers/hid/amd-sfh-hid/Kconfig
+> +++ b/drivers/hid/amd-sfh-hid/Kconfig
+> @@ -5,7 +5,6 @@ menu "AMD SFH HID Support"
+> =20
+>  config AMD_SFH_HID
+>  =09tristate "AMD Sensor Fusion Hub"
+> -=09depends on HID
+>  =09depends on X86
+>  =09help
+>  =09  If you say yes to this option, support will be included for the
+> diff --git a/drivers/hid/i2c-hid/Kconfig b/drivers/hid/i2c-hid/Kconfig
+> index ef7c595c9403..e8d51f410cc1 100644
+> --- a/drivers/hid/i2c-hid/Kconfig
+> +++ b/drivers/hid/i2c-hid/Kconfig
+> @@ -2,7 +2,7 @@
+>  menuconfig I2C_HID
+>  =09tristate "I2C HID support"
+>  =09default y
+> -=09depends on I2C && INPUT && HID
+> +=09depends on I2C
+> =20
+>  if I2C_HID
+> =20
+> diff --git a/drivers/hid/intel-ish-hid/Kconfig b/drivers/hid/intel-ish-hi=
+d/Kconfig
+> index 253dc10d35ef..568c8688784e 100644
+> --- a/drivers/hid/intel-ish-hid/Kconfig
+> +++ b/drivers/hid/intel-ish-hid/Kconfig
+> @@ -6,7 +6,6 @@ config INTEL_ISH_HID
+>  =09tristate "Intel Integrated Sensor Hub"
+>  =09default n
+>  =09depends on X86
+> -=09depends on HID
+>  =09help
+>  =09  The Integrated Sensor Hub (ISH) enables the ability to offload
+>  =09  sensor polling and algorithm processing to a dedicated low power
+> diff --git a/drivers/hid/intel-thc-hid/Kconfig b/drivers/hid/intel-thc-hi=
+d/Kconfig
+> index 91ec84902db8..0351d1137607 100644
+> --- a/drivers/hid/intel-thc-hid/Kconfig
+> +++ b/drivers/hid/intel-thc-hid/Kconfig
+> @@ -7,7 +7,6 @@ menu "Intel THC HID Support"
+>  config INTEL_THC_HID
+>  =09tristate "Intel Touch Host Controller"
+>  =09depends on ACPI
+> -=09select HID
+>  =09help
+>  =09  THC (Touch Host Controller) is the name of the IP block in PCH that
+>  =09  interfaces with Touch Devices (ex: touchscreen, touchpad etc.). It
+> diff --git a/drivers/hid/surface-hid/Kconfig b/drivers/hid/surface-hid/Kc=
+onfig
+> index 7ce9b5d641eb..d0cfd0d29926 100644
+> --- a/drivers/hid/surface-hid/Kconfig
+> +++ b/drivers/hid/surface-hid/Kconfig
+> @@ -1,7 +1,6 @@
+>  # SPDX-License-Identifier: GPL-2.0+
+>  menu "Surface System Aggregator Module HID support"
+>  =09depends on SURFACE_AGGREGATOR
+> -=09depends on INPUT
+> =20
+>  config SURFACE_HID
+>  =09tristate "HID transport driver for Surface System Aggregator Module"
+> @@ -39,4 +38,3 @@ endmenu
+> =20
+>  config SURFACE_HID_CORE
+>  =09tristate
+> -=09select HID
+> diff --git a/drivers/hid/usbhid/Kconfig b/drivers/hid/usbhid/Kconfig
+> index 7c2032f7f44d..f3194767a45e 100644
+> --- a/drivers/hid/usbhid/Kconfig
+> +++ b/drivers/hid/usbhid/Kconfig
+> @@ -5,8 +5,7 @@ menu "USB HID support"
+>  config USB_HID
+>  =09tristate "USB HID transport layer"
+>  =09default y
+> -=09depends on USB && INPUT
+> -=09select HID
+> +=09depends on HID
 
-Signed-off-by: Chester A. Unal <chester.a.unal@arinc9.com>
----
-$ lsusb -v
+I didn't exactly like the unrelated removal of USB totally without=20
+a prior warning. I suggest you at minimum mention in the commit message=20
+that menu covers it.
 
-Bus 001 Device 006: ID 2dee:4d22 MEIG LTE-A Module
-Negotiated speed: High Speed (480Mbps)
-Device Descriptor:
-  bLength                18
-  bDescriptorType         1
-  bcdUSB               2.10
-  bDeviceClass            0 [unknown]
-  bDeviceSubClass         0 [unknown]
-  bDeviceProtocol         0 
-  bMaxPacketSize0        64
-  idVendor           0x2dee MEIG
-  idProduct          0x4d22 LTE-A Module
-  bcdDevice            5.04
-  iManufacturer           1 MEIG
-  iProduct                2 LTE-A Module
-  iSerial                 3 4da7ec42
-  bNumConfigurations      1
-  Configuration Descriptor:
-    bLength                 9
-    bDescriptorType         2
-    wTotalLength       0x00e1
-    bNumInterfaces          6
-    bConfigurationValue     1
-    iConfiguration          4 DIAG_MODEM_AT_NMEA_ADB_RMNET
-    bmAttributes         0x80
-      (Bus Powered)
-    MaxPower              500mA
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        0
-      bAlternateSetting       0
-      bNumEndpoints           2
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass     16 [unknown]
-      bInterfaceProtocol      1 
-      iInterface              0 
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x01  EP 1 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x81  EP 1 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        1
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass     16 [unknown]
-      bInterfaceProtocol      2 
-      iInterface              0 
-      ** UNRECOGNIZED:  05 24 00 10 01
-      ** UNRECOGNIZED:  05 24 01 00 00
-      ** UNRECOGNIZED:  04 24 02 02
-      ** UNRECOGNIZED:  05 24 06 00 00
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x83  EP 3 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x82  EP 2 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x02  EP 2 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        2
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass     16 [unknown]
-      bInterfaceProtocol      3 
-      iInterface              0 
-      ** UNRECOGNIZED:  05 24 00 10 01
-      ** UNRECOGNIZED:  05 24 01 00 00
-      ** UNRECOGNIZED:  04 24 02 02
-      ** UNRECOGNIZED:  05 24 06 00 00
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x85  EP 5 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x84  EP 4 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x03  EP 3 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        3
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass     16 [unknown]
-      bInterfaceProtocol      4 
-      iInterface              0 
-      ** UNRECOGNIZED:  05 24 00 10 01
-      ** UNRECOGNIZED:  05 24 01 00 00
-      ** UNRECOGNIZED:  04 24 02 02
-      ** UNRECOGNIZED:  05 24 06 00 00
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x87  EP 7 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x000a  1x 10 bytes
-        bInterval               9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x86  EP 6 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x04  EP 4 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        4
-      bAlternateSetting       0
-      bNumEndpoints           1
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass    255 Vendor Specific Subclass
-      bInterfaceProtocol    255 Vendor Specific Protocol
-      iInterface              6 GPS
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x88  EP 8 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0040  1x 64 bytes
-        bInterval               9
-    Interface Descriptor:
-      bLength                 9
-      bDescriptorType         4
-      bInterfaceNumber        5
-      bAlternateSetting       0
-      bNumEndpoints           3
-      bInterfaceClass       255 Vendor Specific Class
-      bInterfaceSubClass     16 [unknown]
-      bInterfaceProtocol      5 
-      iInterface              7 RmNet
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x89  EP 9 IN
-        bmAttributes            3
-          Transfer Type            Interrupt
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0008  1x 8 bytes
-        bInterval               9
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x8e  EP 14 IN
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-      Endpoint Descriptor:
-        bLength                 7
-        bDescriptorType         5
-        bEndpointAddress     0x0f  EP 15 OUT
-        bmAttributes            2
-          Transfer Type            Bulk
-          Synch Type               None
-          Usage Type               Data
-        wMaxPacketSize     0x0200  1x 512 bytes
-        bInterval               0
-Binary Object Store Descriptor:
-  bLength                 5
-  bDescriptorType        15
-  wTotalLength       0x0016
-  bNumDeviceCaps          2
-  USB 2.0 Extension Device Capability:
-    bLength                 7
-    bDescriptorType        16
-    bDevCapabilityType      2
-    bmAttributes   0x0000211e
-      BESL Link Power Management (LPM) Supported
-    BESL value      256 us 
-    Deep BESL value     8192 us 
-  SuperSpeed USB Device Capability:
-    bLength                10
-    bDescriptorType        16
-    bDevCapabilityType      3
-    bmAttributes         0x00
-    wSpeedsSupported   0x000f
-      Device can operate at Low Speed (1Mbps)
-      Device can operate at Full Speed (12Mbps)
-      Device can operate at High Speed (480Mbps)
-      Device can operate at SuperSpeed (5Gbps)
-    bFunctionalitySupport   1
-      Lowest fully-functional device speed is Full Speed (12Mbps)
-    bU1DevExitLat           0 micro seconds
-    bU2DevExitLat           0 micro seconds
-Device Status:     0x0000
-  (Bus Powered)
----
-Changes in v2:
-- Add to the relevant comment that SLM828 is based on Qualcomm SDX12.
-- Add to the comment for certain interface specification that SRM815
-  uses that interface specificiation as well.
-- Link to v1: https://lore.kernel.org/r/20250123-for-johan-meig-slm828-v1-1-6456996e94a5@arinc9.com
----
- drivers/usb/serial/option.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
+Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
 
-diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
-index 1e2ae0c6c41c79dd38f2c1d3a98e58ebf076050a..1f324ef877722be246523d2f8a25b8550dc9bb97 100644
---- a/drivers/usb/serial/option.c
-+++ b/drivers/usb/serial/option.c
-@@ -621,7 +621,9 @@ static void option_instat_callback(struct urb *urb);
- 
- /* MeiG Smart Technology products */
- #define MEIGSMART_VENDOR_ID			0x2dee
--/* MeiG Smart SRM815/SRM825L based on Qualcomm 315 */
-+/* MeiG Smart SLM828, SRM815, and SRM825L use the same product ID. SLM828 is
-+ * based on Qualcomm SDX12. SRM815 and SRM825L are based on Qualcomm 315.
-+ */
- #define MEIGSMART_PRODUCT_SRM825L		0x4d22
- /* MeiG Smart SLM320 based on UNISOC UIS8910 */
- #define MEIGSMART_PRODUCT_SLM320		0x4d41
-@@ -2405,10 +2407,12 @@ static const struct usb_device_id option_ids[] = {
- 	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, LUAT_PRODUCT_AIR720U, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SLM320, 0xff, 0, 0) },
- 	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SLM770A, 0xff, 0, 0) },
--	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0, 0) },
--	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x30) },
--	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x40) },
--	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x60) },
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0, 0) },	/* MeiG Smart SRM815 */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0x10, 0x02) },	/* MeiG Smart SLM828 */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0x10, 0x03) },	/* MeiG Smart SLM828 */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x30) },	/* MeiG Smart SRM815 and SRM825L */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x40) },	/* MeiG Smart SRM825L */
-+	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x60) },	/* MeiG Smart SRM825L */
- 	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0530, 0xff),			/* TCL IK512 MBIM */
- 	  .driver_info = NCTRL(1) },
- 	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0640, 0xff),			/* TCL IK512 ECM */
+--=20
+ i.
 
----
-base-commit: 5bc55a333a2f7316b58edc7573e8e893f7acb532
-change-id: 20250123-for-johan-meig-slm828-cb38669db37c
-
-Best regards,
--- 
-Chester A. Unal <chester.a.unal@arinc9.com>
-
-
+>  =09help
+>  =09  Say Y here if you want to connect USB keyboards,
+>  =09  mice, joysticks, graphic tablets, or any other HID based devices
+> diff --git a/net/bluetooth/hidp/Kconfig b/net/bluetooth/hidp/Kconfig
+> index 6746be07e222..e08aae35351a 100644
+> --- a/net/bluetooth/hidp/Kconfig
+> +++ b/net/bluetooth/hidp/Kconfig
+> @@ -1,8 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  config BT_HIDP
+>  =09tristate "HIDP protocol support"
+> -=09depends on BT_BREDR && INPUT && HID_SUPPORT
+> -=09select HID
+> +=09depends on BT_BREDR && HID
+>  =09help
+>  =09  HIDP (Human Interface Device Protocol) is a transport layer
+>  =09  for HID reports.  HIDP is required for the Bluetooth Human
+>=20
+--8323328-470643312-1737721206=:931--
 
