@@ -1,137 +1,159 @@
-Return-Path: <linux-usb+bounces-19702-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19704-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9044A1BD10
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 20:56:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28EF5A1BEDE
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 00:05:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 790557A4A81
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 19:56:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C2B01686E0
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 23:05:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69572224AF2;
-	Fri, 24 Jan 2025 19:56:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 181251E7C0C;
+	Fri, 24 Jan 2025 23:05:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3HU9JLj7"
+	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="wG8OeHeB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 937F214A630
-	for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 19:56:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA411662E9
+	for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 23:05:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737748606; cv=none; b=AfxyD0YBCIAmgHjt17EdGXvBF+hX3ReW3f2WY/DdJeMopmDTrxzBOPbWEGM5ruTDeRdHC/4weWL6dTYkIpYVWBDGZwmkZCdiP3BqK7p9PNVbqgj+DkRwtw6d2AihCPIxvHHU1r5Geci5gHk1SriKk/tmZGW30BzN0leDKJJplaw=
+	t=1737759946; cv=none; b=GbuzRej+cK1v52Hg1ldB5VFHMo3WBcWvQTQsTSl+hGTrb8dzEWPBz0BYGH61d5kYXchNvbXnLpeYc5U91Wl+l5+FvNSkPCtpF98szKq5Qwx979eigpqGJMgFCKDiw798SqBV5IizEFmqHoYplFOPscTz/JsQU08urZVQWIEhPYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737748606; c=relaxed/simple;
-	bh=JEtiT+7vJXGht8hKXV8McZX28EtIfb0rwmpRAG4fVgU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kkO+lDKeHxmeE9PwQHKBbyDIjeOxTRmcMEyarRFAieTwdIXgmbd/htMMdDJT2xNWVJXZaA/hCfVZDyaVkkC2Hi9+hECh9HbUFV/uE5UrVx6BSQjZlpGetA/YYf+SQZWdX53MbyhyG6DJtzk9lae1uFMSjABjX0j9CaRTZoN+hLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3HU9JLj7; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21654fdd5daso44121095ad.1
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 11:56:44 -0800 (PST)
+	s=arc-20240116; t=1737759946; c=relaxed/simple;
+	bh=UuiCgonjwOZKiRYPHJN1KmfUutgqqJdCQBSTLPTYg3c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=E54rXB3w/LaEB9RoGy23QovZhfrWQ8t7m6+KwIUkGQNpQpJtLpKcHvM69KN2uHoY7OUDFbuXdxNfKeRDrr8sREd2BBlIJ7em7byjO5OhSI7hj6s5df6o2Rr/gUEvrEkugFhGlHnIv6U/cJFfRp5wdVj6N7912c7CGrm6vKDc4mM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=wG8OeHeB; arc=none smtp.client-ip=209.85.166.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
+Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-844cd85f5ebso178630139f.3
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 15:05:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737748604; x=1738353404; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JEtiT+7vJXGht8hKXV8McZX28EtIfb0rwmpRAG4fVgU=;
-        b=3HU9JLj7r7mhI/tX+CmNTvoCVT8F78H3jSi6tI8UXSgi5nLLsQA+nNHnM4gKY+RDEi
-         mxygp6FZaoVP1mzTtxw80bU2Fh1KjJcH507HWf2wbepc7abp8RiOi7htu3/d1fVYzKQy
-         OzrWQOiYJk6bpivqdT2Q12iwacOfDQYGYbQVaN8Bz0xkdGu0dKv6SVLTVWRzQhSsh5u6
-         2BQv9lMqOKOwpN+jCFfLnVD8M7BhIfWzRe3nPzx6TVhZopdGdXz7aDJv8RitJGzIZxj7
-         ClQk/BXCZQ4tw72AsxYcEyMUjE44uvk4dkZgINpO+rbU9gFvObNrDOlpO7/ZXeNPRyxe
-         lIYg==
+        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1737759944; x=1738364744; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e76FHdrNJrkeJY4Fzwi+yyd7EZVrP3M/34uCx232au8=;
+        b=wG8OeHeBHGZ8KmLgb5XarkTyv3s3OlH8dFcxB3CkSNauMm8qICqXVro7W6rPrYTlel
+         SRxOl4Bnm8QgFCqaKLpNargPfh3b+VAhfVye3OmylmooDTqcdv5gSxUCsMMYchPmxzvc
+         VT4MWOM9kc27AhtHo93rAfCoS6LAeaAGNxpVwyXTR5/8CzkAGyz8Cx72LfoxbRCeYmoI
+         mMNok7xbWBMc/IzKQr7mOg05pJPJwEv8rRPCo37QXQlvX/vvrFkAwfAR1qGUIaSjdYn5
+         m3cCkJ4o+VxY9qz2FcUfCPa3/VtFnH2jHDAldvqM8zdE1fW7Fbkcnflir5fzmLkprHEd
+         85lA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737748604; x=1738353404;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JEtiT+7vJXGht8hKXV8McZX28EtIfb0rwmpRAG4fVgU=;
-        b=jiGWG3dAi9MnKQbTIJTaD7t3HX8VxAA+jSh+fh0d9XurHQ6I//8mK8iExiSkc1pLW2
-         7Lcei9/zCATb+L0L65LZV1+0kE2+H6mGqRHMXzJNKBEp1/dLrftYsyQao1/Naze+N+mx
-         1eJvkak1w34pbxObrU78AZVuScpVi61O677+SptX9hEn+/AYM6StFYWoOwAWXmDk3KAp
-         ZOfEh34nuKhBjWb5Xot8OH09ycH1TI3AV6PpUoB5SvrY5LtGtoJHQgL3ZrLOh88Q2WpO
-         I59uVUl68wIT3RskJ338ObgqZkcvgzt/PCUD4pHI6AS6nyE4WnXymWgdsHgXgzQeMkbE
-         FkpA==
-X-Forwarded-Encrypted: i=1; AJvYcCXOpFzp3+vwxJmk8pD6vQ8QZY6dUzGEvKpqjlAc8pD3/GWyKiMZBItByYOqQLJthWciBOEqi6oS2RQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6Xqa+ePFhhEQCEo21TeGhKHr1y0lz4SfjXyHKPSYGrsKDIFVp
-	AKjxMkKybBUdAvjNwUek53uh5I4wkOPy2LOqTZA9lb3LiGc8qnCs3OHcgmnKqjqR1bc6hTDQpxV
-	w3w==
-X-Gm-Gg: ASbGncsKha1C1+iku+4/Z2+HEwOT8T2NOPblXsAotUwrdRxtWRW5X7gjRfn0myrTueF
-	g3X1LPjAW9CjWiG1j2LK+ffc+thwV511ECqSz7VEBLA2Yp7ZKnbF8pwYo8DD8gsx6SSPenuGkCo
-	OBwfQCQuHxSiH07i5nHvAML/FpFtgN6v4TOzTMEdy4yuCToyIaixUWe2U4TWSX6Fp2nCSy07YP0
-	VPGZIB+N24x/g2WyTfoZ2sXZktbZCe3HZE5Up/EpyOuhW9XbChOFtpHB5v8V8rKY+8kDcbDzaVJ
-	kf1Gm1Q7aBvLl6Me9LsCKFKqBeAxSM/0Fjcl5A==
-X-Google-Smtp-Source: AGHT+IF0Zuc0h38RSUf5lIqZ3moYkbSoWxqhLl5RsBPGEZgALVsoU3PnECgvW2T5zgJg5cajpmOzxA==
-X-Received: by 2002:a17:903:910:b0:216:282d:c69b with SMTP id d9443c01a7336-21c35607c11mr441348885ad.50.1737748603505;
-        Fri, 24 Jan 2025 11:56:43 -0800 (PST)
-Received: from google.com (28.67.125.34.bc.googleusercontent.com. [34.125.67.28])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da4141bf1sm20042865ad.151.2025.01.24.11.56.41
+        d=1e100.net; s=20230601; t=1737759944; x=1738364744;
+        h=content-transfer-encoding:mime-version:organization:references
+         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=e76FHdrNJrkeJY4Fzwi+yyd7EZVrP3M/34uCx232au8=;
+        b=PtI+nlTV/v0OP91qdOjU/kp3IKSo9joWedyka/ocjAOqB/NmgnFvefjb/OtwW1n9wq
+         z04AnvlRjCoyb2mouJsIrrymTq+Lfo06DZTeNsb/b1ytWeojbqZuiivIH3DUOir8u3iM
+         hSPsQHEOI0rB+iMCzP4TnccQT0+nmRod22Kbui7RdR9C0Y8BX+NlFheGkEdrLJrt6DOJ
+         QnS4eVCBthX+3JXPSQupCYkJVH0G83syippPwtyo+pYFzGMtGeqK6qjEY7g3mndz/kWS
+         n4/hBuy0HpKYWJPxXxlUm5dVUBAQYzLq2Imk/VWDXw8JVfmgcA0unzb5N94j8o8QOIDd
+         AEDw==
+X-Forwarded-Encrypted: i=1; AJvYcCVdlThmfluoB5u2GFew8PFk5o+CEqKR+Rh9wSIb26QEsNe2xYn9CcWlnQhCiEn/59oxiqq2F/JiFOs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBsyjnzXdShAsdxjK/Axr/+l+ad456IGH+XImnXsnPWRtuM8tn
+	H2X/zTXv2z1Bp5pjuHp2mjNnDaAbkN4u2zgAI0dljQRm7QC/IsEFvIV8loRNzeM=
+X-Gm-Gg: ASbGnct+jSB0cM1C40fPCb1maUHEpbtrbHquVvzNIfeZmJG8E0FtlEJ+yqcLB5EXuCf
+	e/4vVSfhQ5lpau8yq8IYVJfmhfSWrrXg/E8rqq2k6OSNRrOVTRHzmQ72PVE7mlJw6fv+lRKdo6q
+	5sD15xKIOG1WIz3+NhiunPSio5iA0TsPEdI4JingJmMSOsgQLUZLVOVJAGbzuoXkAeZMX3iUneR
+	GSzZvIDRtBl3rlyMy3gF6YhD8VdKvoWCXJdIae2rGB7jE8YdmyZC9tjRMveNTnVS0hzG51TrraX
+	G94=
+X-Google-Smtp-Source: AGHT+IG2Q7ALqV+VvfWn50mN594rqsPwSY5Iw4HwNaSS661Uo6uDVigsaMAIoCFI/wGrf+DXoNSYCw==
+X-Received: by 2002:a05:6e02:4918:b0:3cf:b2b0:5d35 with SMTP id e9e14a558f8ab-3cfb2b05ec7mr122695295ab.7.1737759943776;
+        Fri, 24 Jan 2025 15:05:43 -0800 (PST)
+Received: from kf-ir16 ([2607:fb90:bf13:4c16:eed6:e61f:44d8:5468])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ec1da3370fsm909953173.53.2025.01.24.15.05.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 11:56:42 -0800 (PST)
-Date: Fri, 24 Jan 2025 19:56:38 +0000
-From: Benson Leung <bleung@google.com>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	linux-usb@vger.kernel.org, abhishekpandit@chromium.org,
-	ukaszb@chromium.org, akuchynski@google.com, bleung@chromium.org
-Subject: Re: [bug report] usb: typec: Add driver for Thunderbolt 3 Alternate
- Mode
-Message-ID: <Z5PwdkpiQcGDCitI@google.com>
-References: <48dbbbab-3d09-4162-9d76-74c9baca6603@stanley.mountain>
+        Fri, 24 Jan 2025 15:05:43 -0800 (PST)
+Date: Fri, 24 Jan 2025 17:05:40 -0600
+From: Aaron Rainbolt <arainbolt@kfocus.org>
+To: Mika Westerberg <mika.westerberg@linux.intel.com>
+Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
+ andreas.noever@gmail.com, linux-usb@vger.kernel.org, mmikowski@kfocus.org,
+ linux-kernel@vger.kernel.org, Gil Fine <gil.fine@linux.intel.com>
+Subject: Re: USB-C DisplayPort display failing to stay active with Intel
+ Barlow Ridge USB4 controller, power-management related issue?
+Message-ID: <20250124170540.1572d5db@kf-ir16>
+In-Reply-To: <20241115132022.GC3187799@black.fi.intel.com>
+References: <20241101181334.25724aff@kf-ir16>
+	<20241104060159.GY275077@black.fi.intel.com>
+	<20241105141627.5e5199b3@kf-ir16>
+	<20241106060635.GJ275077@black.fi.intel.com>
+	<20241106110134.1871a7f6@kf-ir16>
+	<20241107094543.GL275077@black.fi.intel.com>
+	<20241111082223.GP275077@black.fi.intel.com>
+	<20241112164447.4d81dc3a@kfocus.org>
+	<20241114115136.GB3187799@black.fi.intel.com>
+	<20241114104125.00a02eb1@kf-ir16>
+	<20241115132022.GC3187799@black.fi.intel.com>
+Organization: Kubuntu Focus
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="SwQYnmi8AWjOv7aU"
-Content-Disposition: inline
-In-Reply-To: <48dbbbab-3d09-4162-9d76-74c9baca6603@stanley.mountain>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
+On Fri, 15 Nov 2024 15:20:22 +0200
+Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
 
---SwQYnmi8AWjOv7aU
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> Hi,
+> 
+> On Thu, Nov 14, 2024 at 10:41:25AM -0600, Aaron Rainbolt wrote:
+> > This is production hardware (specifically Clevo's X370SNW1-G and
+> > X370SNV1-G laptops), available for purchase from Sager, XOTICPC,
+> > Schenker, likely many other resellers, and our own website
+> > at https://kfocus.org/spec/spec-m2.html (with a tool that allows users
+> > to work around the bug). The firmware is baked into the hardware
+> > provided to us by our ODM, and for the sake of stability we do not
+> > modify any firmware on the machines with the exception of applying
+> > BIOS updates provided to us directly by the ODM. They appear to get
+> > their firmware directly from Clevo.  
+> 
+> Okay thanks.
+> 
+> > We have requested an updated BIOS from the ODM. If one is
+> > available, we will upgrade and run the tests again.  
+> 
+> Yes, I hope you can get the firmwares. The one you have now is not
+> "production quality" firmare so you should not really have that there
+> in the first place and Clevo should definitely provide you an
+> upgrade. Note this is separate from the BIOS. But your BIOS has issue
+> too regarding the USB4 power contract that is required by Microsoft
+> so I would expect that you should get that one upgraded too.
+> 
+> The patch I shared earlier should deal with all the other cases except
+> that weird one where we do not seem to get unplugs (and the resource
+> is available) which is not how the firmware is expected to work. I was
+> planning to submit it upstream after some more validation on our end,
+> probably afer v6.13-rc1 is released. I'll CC you.
+> 
+> If/when you get the new firmare I would definitely appreciate if your
+> folks could give it a try.
 
-Hi Dan,
+Hi Mika, sorry for the very late follow-up, been busy with other work
+stuff.
 
+We contacted the ODM to get newer firmware. They contacted Clevo, who
+told them that the Barlow Ridge chip in these machines is the B0
+revision. According to them, the latest firmware available for the B0
+revision is 14.6; they also state that the 56.x firmware is for the B1
+revision and is incompatible.
 
-On Tue, Jan 07, 2025 at 05:16:43PM +0300, Dan Carpenter wrote:
-> Hello Heikki Krogerus,
->=20
-> Commit 100e25738659 ("usb: typec: Add driver for Thunderbolt 3
-> Alternate Mode") from Dec 13, 2024 (linux-next), leads to the
-> following (unpublished) Smatch static checker warnings:
->=20
-> drivers/usb/typec/altmodes/thunderbolt.c:153 tbt_enter_modes_ordered() in=
-fo: return a literal instead of 'ret'
+Is it possible that the problem is that the driver is written
+specifically for the B1 revision and only partially works with the B0
+revision?
 
-I posted a couple of patches to fix the other warnings, but wasn't sure wha=
-t to
-with this one since by my reading, we're doing that intentionally. This see=
-ms
-like an informational message.
-
-Thanks,
-Benson
-=20
-
---SwQYnmi8AWjOv7aU
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQCtZK6p/AktxXfkOlzbaomhzOwwgUCZ5PwdQAKCRBzbaomhzOw
-wpZoAPsFY/9enrwkuw9RFxmZyWZEakH90/z9VeM+RAKGEI6YHAEApxj4UQe98wIe
-z9ojdU8zoqQUjLEdXA9J5xxyINf8fwU=
-=4UWk
------END PGP SIGNATURE-----
-
---SwQYnmi8AWjOv7aU--
+Thanks for your help!
+Aaron
 
