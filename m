@@ -1,141 +1,141 @@
-Return-Path: <linux-usb+bounces-19699-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19700-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07999A1BB82
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 18:35:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D5FA1BCE9
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 20:40:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0560F3A5935
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 17:34:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C8A9616DCE2
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 19:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A08121D0E27;
-	Fri, 24 Jan 2025 17:35:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DE692248AC;
+	Fri, 24 Jan 2025 19:40:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="t2L4rsVz"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tGCEBmVB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CF6A3224;
-	Fri, 24 Jan 2025 17:34:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.132.182.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE2035976
+	for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 19:40:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737740101; cv=none; b=KTXvPOiuMBxwDyzy5bo/pu6MOqwpw+Wy/VFoeY1E6RV26OKgQK5PcTjb18vvMPIC+F3qNXKM47FQHDOVm2E68bTbH8lgo9HTNlfNLxgYUEtfw27mLA6aoK+/84pF8ZGIFzLMdaMsKv5A87kpnP00zRfKNm2KvhqES2MMPGQorYM=
+	t=1737747630; cv=none; b=IdE/w0uL9wWjxrkZLR19K6Y863W4542cJCFEbSSNj8dts8xw76xL0GiWeY2HPEp2ISFpEsWKFlcmCBpSbQ1ZWibCVFi564tfNCloOai8d0J7hZQKDf/aBUWmHrjGzS9a60v/3hz3m1uotnkrBJZZoDtLaNBitXP0OJqS36kDAdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737740101; c=relaxed/simple;
-	bh=WT+ndHRi/mTF5D0kumOVueeFGXT1IyN1QkuRcQUs2oI=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RstqzHtO937BLxzWBfQvw9uwpo07GX2GBDNHeUyjzZiQ71ctb1ODK/OJBEwZ0IhPxvdxF+TTXGVpAiTJN0ISlhcsxAvbcHXVWhRiJJRz8orTA6Ncv4stVN/fK6wtobOOmQqEi/ZTkjK5JCoNzgRZL4oS0TBqG5BVFGSVOxD4eGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=t2L4rsVz; arc=none smtp.client-ip=185.132.182.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50OFIErk025669;
-	Fri, 24 Jan 2025 18:34:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	cc:content-transfer-encoding:content-type:date:from:message-id
-	:mime-version:subject:to; s=selector1; bh=yW8VFvYS8cKPfqSRBaa6hj
-	CONGocaVj1yRckhmQ2tJI=; b=t2L4rsVzxRXXxiFTuWSxgQkM7B7SMcQLX9qMPy
-	2VDdXYvS0x8Jfznu1wiUVGGiuyNBqZU5B+xpOYhgjKHGcI1pPeJGn+lqqa8umOvs
-	sVNqf55KARi6pfszNtSLAzwb6ek8uvzp6BjDZoKdDVYfRvfiks7s6rof65qaKDTa
-	wFVKC34biowRQC+jyqW57fNdK/kE8bSZw2nu2lB5tYL+j7XKzyVkeB8ZAoDZzrCa
-	gIu8203+aeQLwatsbBs/modIQanbATzAqzspjMpg8w5jrC7YTXISpFyDXb0WvnY4
-	jhLhc+PvOG9Iarv8WA6Dkm9UTTdx+qAgqzAdKysgJNjQr+0A==
-Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 44cdcw0g05-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 24 Jan 2025 18:34:45 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 05A7C40045;
-	Fri, 24 Jan 2025 18:33:55 +0100 (CET)
-Received: from Webmail-eu.st.com (eqndag1node5.st.com [10.75.129.134])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id A02852FB3C3;
-	Fri, 24 Jan 2025 18:33:33 +0100 (CET)
-Received: from SAFDAG1NODE1.st.com (10.75.90.17) by EQNDAG1NODE5.st.com
- (10.75.129.134) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 24 Jan
- 2025 18:33:33 +0100
-Received: from localhost (10.48.86.222) by SAFDAG1NODE1.st.com (10.75.90.17)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Fri, 24 Jan
- 2025 18:33:33 +0100
-From: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
-To: <hminas@synopsys.com>, <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <fabrice.gasnier@foss.st.com>
-Subject: [PATCH] usb: dwc2: gadget: remove of_node reference upon udc_stop
-Date: Fri, 24 Jan 2025 18:33:25 +0100
-Message-ID: <20250124173325.2747710-1-fabrice.gasnier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1737747630; c=relaxed/simple;
+	bh=7u/oXjBRZp/xICilidPMGfoO3yKFUNQrNcrjM+JLEOQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=A67Hb2ZAAXu4EfeknT42Jx5JqyQV3I7szD7DT4B/QvKSA8cVeP9QOLQ0QEwut7aJ6Kbi5EIpDiEGPQWlFr965oSYudIRNNthuwWguSD6/OQbPHODEGbjgG2bp7k0ufjIOynFa7N8pGkkCZQ2rVEh0+AMNcKyAkpeyzgEh8D0m10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tGCEBmVB; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21a7ed0155cso43558625ad.3
+        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 11:40:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1737747628; x=1738352428; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=XeTFUke24YztL2UFTa1EA42MEpaJFIIZjeHmRdx9I0M=;
+        b=tGCEBmVBW03gAbx7+KQlmgYSZMvK8u8SmYISov6WgHorPoEbbBNHZ0xaWmGm+HVjeX
+         GccmBZtA0oPkLdoSFdZPjqfcbVRcuAlOb42D0CqqK0HMCpAPMUPz8sjSfJP2U6Ee2i1/
+         PnvNHtUZl9zyPsJTeqarTq09Sc37B5nDW4y3DfwuxawW1c9NOtgLH7n/H3bomQyVts6j
+         E7R2uEDqR71HSrwtrg4TPUT1fGq9r44nEJ5WG+D65tWlN3k8V/gUJ9dqj5M/7ZX9M1Ty
+         VY5Z6jS/+5B/Ql+PELxs63tkuL+nlfxISRNRyTdvSsyAhKGN7G74c7fifH024aDuZSvq
+         3a4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737747628; x=1738352428;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XeTFUke24YztL2UFTa1EA42MEpaJFIIZjeHmRdx9I0M=;
+        b=KopK/c/7wZoMxl96msNeXvmydYhjm9Qot8Yt1XMgGIEgDZSEbWWP+Ec8vI4i/ggq+d
+         oGwBwZJ/PKmDyqbtRfqW1NPveGiM1xVsSv3L+b4KuC+PhIlrYRwyZoDC+ckBW825hw5J
+         AxegdeiHwIXKzHnmf3wktRlKTiGCZPUDFur6wbvY+H6jx3PMw3j5KcBrsBSglYdKrSxM
+         dZiZtk2HqxtbzYTZ7XFGeUMkfhflCaH7n6Cn779T/0IYDxzcqNj4UV0mrNHjBE957gNP
+         debWt391Oe+nt1d6TH3NftvZbKczT16DDs6OIXQybNGdKGOSo3oXeOT/QvAZx6M4y8BL
+         E/PA==
+X-Forwarded-Encrypted: i=1; AJvYcCV5uX7IOtbPv0QyCXlWXsjzIUxD/ADFWCvvVMCljj6mOscIFeTvTvhjK6kxGCXoRRzkkYu0RRZ387Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOaRU0//b9RX6W2jhPnbEQNm38Hqx1ErnXW9yfM7byK9QTJrFw
+	Za1uN+5+EfuGkbFrYnWnE0GjP0L+b9ApTfB94cOGP/LVWDYI7MNxrKgDnir0Bw==
+X-Gm-Gg: ASbGncuz9dyUzAXc5EiE5gjGC2xBRohGYCEx6LMyxBakYE9BgKN7h3LZS4KVxEC5Llx
+	KcglFDvcsN6k2tHMTIwCYQcPMcb7xw4DNoT1R8hDwYawWEuYXn70ff4+S0Se10Rnq89GUvLrEyI
+	pWfJlVr58p+ncdAbDH2JS/BhGaipY9dC/zVIOhFGFfrke3uf37QjC/5DA9DZ75KcCtDOuve8P0m
+	5TsAFuGU2IGa2PHyWKmvTRDuzmcldOnlXYd5aA3POrOVovw+YKCBhThE49hTB98y4WH7rBcEhyq
+	WEAzlq4YN0Ats1n27iWDitZewW7+QC8vGTKTzVu4ufvwre+TWDs=
+X-Google-Smtp-Source: AGHT+IED3i4wnCoiLFROaAx+kXZsYkw8NBVlPE2QiqDLo+oCmVgIvJn05HRKiZA5a7lTiHsXuu3C/w==
+X-Received: by 2002:a17:902:ce8a:b0:216:32c4:f7f5 with SMTP id d9443c01a7336-21c3540c7a1mr484270375ad.19.1737747628323;
+        Fri, 24 Jan 2025 11:40:28 -0800 (PST)
+Received: from google.com (28.67.125.34.bc.googleusercontent.com. [34.125.67.28])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da414db35sm20118915ad.195.2025.01.24.11.40.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jan 2025 11:40:26 -0800 (PST)
+Sender: Benson Leung <bleung@google.com>
+Date: Fri, 24 Jan 2025 19:40:23 +0000
+From: Benson Leung <bleung@chromium.org>
+To: heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
+	abhishekpandit@chromium.org, dan.carpenter@linaro.org
+Cc: bleung@chromium.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, akuchynski@google.com,
+	ukaszb@chromium.org
+Subject: [PATCH 1/2] usb: typec: thunderbolt: Fix loops that iterate
+ TYPEC_PLUG_SOP_P and TYPEC_PLUG_SOP_PP
+Message-ID: <Z5Psp615abaaId6J@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SHFCAS1NODE2.st.com (10.75.129.73) To SAFDAG1NODE1.st.com
- (10.75.90.17)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-24_07,2025-01-23_01,2024-11-22_01
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-In dwc2_hsotg_udc_start(), e.g. when binding composite driver, "of_node"
-is set to hsotg->dev->of_node.
+Fixes these Smatch static checker warnings:
+drivers/usb/typec/altmodes/thunderbolt.c:116 tbt_altmode_work() warn: why is zero skipped 'i'
+drivers/usb/typec/altmodes/thunderbolt.c:147 tbt_enter_modes_ordered() warn: why is zero skipped 'i'
+drivers/usb/typec/altmodes/thunderbolt.c:328 tbt_altmode_remove() warn: why is zero skipped 'i'
 
-It causes errors when binding the gadget driver several times, on
-stm32mp157c-ev1 board. Below error is seen:
-"pin PA10 already requested by 49000000.usb-otg; cannot claim for gadget.0"
+Fixes: 100e25738659 ("usb: typec: Add driver for Thunderbolt 3 Alternate Mode")
 
-The first time, no issue is seen as when registering the driver, of_node
-isn't NULL:
--> gadget_dev_desc_UDC_store
-  -> usb_gadget_register_driver_owner
-    -> driver_register
-    ...
-      -> really_probe -> pinctrl_bind_pins (no effect)
-
-Then dwc2_hsotg_udc_start() sets of_node.
-
-The second time (stop the gadget, reconfigure it, then start it again),
-of_node has been set, so the probing code tries to acquire pins for the
-gadget. These pins are hold by the controller, hence the error.
-
-So clear gadget.dev.of_node in udc_stop() routine to avoid the issue.
-
-Fixes: 7d7b22928b90 ("usb: gadget: s3c-hsotg: Propagate devicetree to gadget drivers")
-Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Signed-off-by: Benson Leung <bleung@chromium.org>
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
 ---
-Note: I'd have been tempted to remove of_node setting from udc_start:
- -	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
+ drivers/usb/typec/altmodes/thunderbolt.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-I can't find the original code that parses the device node [1] from
-composite_bind() routine, originally part of the series that introduces
-this.
-I'm not sure if setting the gadget of_node is really useful, but I chose
-safe approach to simply clear it in udc_stop().
-
-[1] http://lore.kernel.org/lkml/1340720833-781-6-git-send-email-aletes.xgr@gmail.com/
----
- drivers/usb/dwc2/gadget.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
-index e7bf9cc635be..bd4c788f03bc 100644
---- a/drivers/usb/dwc2/gadget.c
-+++ b/drivers/usb/dwc2/gadget.c
-@@ -4615,6 +4615,7 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
- 	spin_lock_irqsave(&hsotg->lock, flags);
+diff --git a/drivers/usb/typec/altmodes/thunderbolt.c b/drivers/usb/typec/altmodes/thunderbolt.c
+index 1b475b1d98e7..94e47d30e598 100644
+--- a/drivers/usb/typec/altmodes/thunderbolt.c
++++ b/drivers/usb/typec/altmodes/thunderbolt.c
+@@ -112,7 +112,7 @@ static void tbt_altmode_work(struct work_struct *work)
+ 	return;
  
- 	hsotg->driver = NULL;
-+	hsotg->gadget.dev.of_node = NULL;
- 	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
- 	hsotg->enabled = 0;
+ disable_plugs:
+-	for (int i = TYPEC_PLUG_SOP_PP; i > 0; --i) {
++	for (int i = TYPEC_PLUG_SOP_PP; i >= 0; --i) {
+ 		if (tbt->plug[i])
+ 			typec_altmode_put_plug(tbt->plug[i]);
  
+@@ -143,7 +143,7 @@ static int tbt_enter_modes_ordered(struct typec_altmode *alt)
+ 	if (tbt->plug[TYPEC_PLUG_SOP_P]) {
+ 		ret = typec_cable_altmode_enter(alt, TYPEC_PLUG_SOP_P, NULL);
+ 		if (ret < 0) {
+-			for (int i = TYPEC_PLUG_SOP_PP; i > 0; --i) {
++			for (int i = TYPEC_PLUG_SOP_PP; i >= 0; --i) {
+ 				if (tbt->plug[i])
+ 					typec_altmode_put_plug(tbt->plug[i]);
+ 
+@@ -324,7 +324,7 @@ static void tbt_altmode_remove(struct typec_altmode *alt)
+ {
+ 	struct tbt_altmode *tbt = typec_altmode_get_drvdata(alt);
+ 
+-	for (int i = TYPEC_PLUG_SOP_PP; i > 0; --i) {
++	for (int i = TYPEC_PLUG_SOP_PP; i >= 0; --i) {
+ 		if (tbt->plug[i])
+ 			typec_altmode_put_plug(tbt->plug[i]);
+ 	}
 -- 
-2.25.1
+2.48.1.262.g85cc9f2d1e-goog
 
 
