@@ -1,106 +1,119 @@
-Return-Path: <linux-usb+bounces-19688-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19689-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B549A1AC7A
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 23:09:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C033A1AE2F
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 02:29:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64810188CE39
-	for <lists+linux-usb@lfdr.de>; Thu, 23 Jan 2025 22:10:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 927FC188CA20
+	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 01:30:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEDF21CDFD3;
-	Thu, 23 Jan 2025 22:09:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3FC1CDFAC;
+	Fri, 24 Jan 2025 01:29:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZwJwS82"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wrxcqr7k"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64CFB47A7E;
-	Thu, 23 Jan 2025 22:09:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E36F26FB9
+	for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 01:29:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737670188; cv=none; b=m5R3Ce2m6e+tDdcnk7gTmZzEvDWcLJPQyAnNt6upWx0WjUnsZ8CiMYU3eQQjenakI5PtbL7/ut5583RroLjclscbmq1Ik3HqIWZmmlGV0d4LVTaAdPGLcEFqQbeFKMVXw5OGH9rvBS1ETqtIuSEtYyvVF/jW25kB7b9FJusF68M=
+	t=1737682191; cv=none; b=b7SCwLv5qOuu7IYViLh7NYD1Ej8dJx95tPYITNeKEmjRMSt32u7TewBg8Tg80L2RRR6LaKaRYi+z36xuA2i2//jZ0JaK8lOQu+uHwp9pXTLArot7uZJkg5IU67wAuwlPtIN6iHC1cYBzWXYFLWP1MsvmczFbzlgO8dc2nGUZeH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737670188; c=relaxed/simple;
-	bh=GnyZQ++mmddfCUBYwNZ3f5Vqkm3s2uA02jx7DMrwiCY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mwLZJQSDz3NY1NF0+XhdmGlBVrsKiwY3fA3NSeYQL2zhya20uZZe0VOb065KRouLDw4OF0WHVxzdTVAS+oXdT9GklTS4TwRcastzxKCy6TzUFvrtX0uvGJMIENWCeWF5SvQ9cy9r/tEq8riHNPWl6RHzs7IgRDmGlBvxq+0xI4Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZwJwS82; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A03EDC4CED3;
-	Thu, 23 Jan 2025 22:09:47 +0000 (UTC)
+	s=arc-20240116; t=1737682191; c=relaxed/simple;
+	bh=DKPy71lkFftwHQRi2SllzSEAnDCygWR7SZPuK5Wmce4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ZMDeGn2A9s0R4liKYpq3R+Lyvl19KIfdWpHLCOTHUgpGBhwdGxA+SbNyB+wAOVefAMNLuzh+5+OjA5i2WK02nY+Bt87KVBLgjEDOy9jrgFx4j/HlR5QvB2pCxe6ieH7kkqqQ2CVSYxaFRSKSoMVBgIuFeczt/6WC4tRPYqerHrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wrxcqr7k; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 64F96C4CEE0
+	for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 01:29:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737670187;
-	bh=GnyZQ++mmddfCUBYwNZ3f5Vqkm3s2uA02jx7DMrwiCY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lZwJwS82OuxHjBF5AJ6GC6Xi/lYX1aBwTXGxQbisfkf0cqlugv4s6fFfeWjY2x7im
-	 if//OEZkGSp/WwEghHn8qcvJQuQPGWFsP6W1qHJKIU6fhWT2ulVO1dzFSAi5ZWxbBP
-	 lomwVySojpwvAH7Vd6HIYr8b32vwNFegqbuzItcCpBz//Of8AwKb8QhlQRudhUIShu
-	 9yC+Mica9DTZD/wdA+l6zcvKjmw9PTY5DZa3f9IIn0uxn1gVfz3jvqDG5sCXHUCquG
-	 g36ZFL27at0tnyZC/hEG9dh2humKhyUbsVEmGrdwb2JLbzRd/gmo4WicoXaCcR1oHt
-	 AviIOrQt623LA==
-Date: Thu, 23 Jan 2025 16:09:46 -0600
-From: Rob Herring <robh@kernel.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Ferry Toth <fntoth@gmail.com>
-Subject: Re: [PATCH v1 1/3] dt-bindings: usb: dwc3: Add a property to reserve
- endpoints
-Message-ID: <20250123220946.GA407034-robh@kernel.org>
-References: <20250116154117.148915-1-andriy.shevchenko@linux.intel.com>
- <20250116154117.148915-2-andriy.shevchenko@linux.intel.com>
+	s=k20201202; t=1737682190;
+	bh=DKPy71lkFftwHQRi2SllzSEAnDCygWR7SZPuK5Wmce4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=Wrxcqr7khP65A7s+s/nrTRe/hQ3F1pu+9tViLN30CWidWGOzMxLrP31Huoco5SxJh
+	 hOH6qCKayCoSrlPKYiDFNcEFJuKhfyGS5XwXGtYYM4as+lsuczNS8jazApdfuKfOVu
+	 HKHmlLOB5CcLcw7ciM4KMTgkuz79hxtjIgiWnEklAADnKFXV1KypDmhcHVVNxqACK3
+	 PXurHYZ1Mk6LOuYSG90PaXWu5JBL/YhJT8Mf9rtZqwc+eetWVysnri+o1CIu5vZKn5
+	 prM3ZJeZZqxJGT84X++RO8BTV3DJPVmP0FlPW+ty17IyOagQgs9DGDLbRJ209E7xdh
+	 f/MiTPoZh+0dg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 5777AC41606; Fri, 24 Jan 2025 01:29:50 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219681] ASUS Zenbook S 14 UX5406SA: Unstable USB connection on
+ USB-A port under certain condition
+Date: Fri, 24 Jan 2025 01:29:50 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mastercatz@hotmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-219681-208809-MkwWHbzv04@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219681-208809@https.bugzilla.kernel.org/>
+References: <bug-219681-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250116154117.148915-2-andriy.shevchenko@linux.intel.com>
 
-On Thu, Jan 16, 2025 at 05:40:46PM +0200, Andy Shevchenko wrote:
-> Some of the endpoints may be reserved by hardware for different purposes,
-> e.g., tracing control and output. This is the case, for instance, on
-> Intel Merrifield and Moorefield platforms that reserve a few and USB driver
-> may not use them for the regular transfers. Add the respective bindings.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> index 1cd0ca90127d..2ae8e5e85f78 100644
-> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
-> @@ -109,6 +109,16 @@ properties:
->    resets:
->      minItems: 1
->  
-> +  snps,reserved-endpoints:
-> +    description:
-> +      Reserve endpoints for other needs, e.g, for tracing control and output.
-> +      When set, the driver will avoid using them for the regular USB transfers.
-> +    $ref: /schemas/types.yaml#/definitions/uint8-array
-> +    maxItems: 30
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219681
 
-Please make minItems explicit.
+MasterCATZ (mastercatz@hotmail.com) changed:
 
-> +    items:
-> +      minimum: 2
-> +      maximum: 31
-> +
->    snps,usb2-lpm-disable:
->      description: Indicate if we don't want to enable USB2 HW LPM for host
->        mode.
-> -- 
-> 2.43.0.rc1.1336.g36b5255a03ac
-> 
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |mastercatz@hotmail.com
+
+--- Comment #13 from MasterCATZ (mastercatz@hotmail.com) ---
+not entirely the same issue=20
+
+but I can no longer reload xhci_hcd because its now built into the kernel=20
+
+
+6.12.3-061203-generic
+
+sudo modprobe -r xhci_hcd
+modprobe: FATAL: Module xhci_hcd is builtin
+
+
+how can I now restart it ?=20
+and who the heck thought building in a xhci_hcd module was a good idea ?=20
+lose usb you loose keyboard / mouse =3D bricked system unless you can ssh i=
+n with
+a phone ..=20
+
+
+
+
+https://ibb.co/c8YFYhG
+
+even if I hibernate and do a full power off and resume when OS loads USB is
+dead again (works in bios etc just OS loads it up dead )
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
