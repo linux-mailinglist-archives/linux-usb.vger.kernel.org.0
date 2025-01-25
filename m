@@ -1,159 +1,147 @@
-Return-Path: <linux-usb+bounces-19704-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19705-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28EF5A1BEDE
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 00:05:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9286A1C207
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 08:14:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C2B01686E0
-	for <lists+linux-usb@lfdr.de>; Fri, 24 Jan 2025 23:05:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C10BA1887017
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 07:14:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 181251E7C0C;
-	Fri, 24 Jan 2025 23:05:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9176D207A0E;
+	Sat, 25 Jan 2025 07:13:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b="wG8OeHeB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fBywUHZT"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com [209.85.166.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDA411662E9
-	for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 23:05:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB8BC15A8;
+	Sat, 25 Jan 2025 07:13:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737759946; cv=none; b=GbuzRej+cK1v52Hg1ldB5VFHMo3WBcWvQTQsTSl+hGTrb8dzEWPBz0BYGH61d5kYXchNvbXnLpeYc5U91Wl+l5+FvNSkPCtpF98szKq5Qwx979eigpqGJMgFCKDiw798SqBV5IizEFmqHoYplFOPscTz/JsQU08urZVQWIEhPYs=
+	t=1737789236; cv=none; b=Suujf31NWjWao4syKLfQul+Ai3mOhWNNjwKi/T3H0woI3tZTrNogLa5vwwwGhRLw5LGcpuoIrVZSOvSZQbPTYOrGOyz+YVL9+yBwXGKImhWs0iAtNVz8ZnhjFc8gV2S7jXHuPie5fZWpl3wXpSeNKjhm+NIZ4YMlLtaNAeefhHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737759946; c=relaxed/simple;
-	bh=UuiCgonjwOZKiRYPHJN1KmfUutgqqJdCQBSTLPTYg3c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E54rXB3w/LaEB9RoGy23QovZhfrWQ8t7m6+KwIUkGQNpQpJtLpKcHvM69KN2uHoY7OUDFbuXdxNfKeRDrr8sREd2BBlIJ7em7byjO5OhSI7hj6s5df6o2Rr/gUEvrEkugFhGlHnIv6U/cJFfRp5wdVj6N7912c7CGrm6vKDc4mM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org; spf=pass smtp.mailfrom=kfocus.org; dkim=pass (2048-bit key) header.d=kfocus-org.20230601.gappssmtp.com header.i=@kfocus-org.20230601.gappssmtp.com header.b=wG8OeHeB; arc=none smtp.client-ip=209.85.166.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kfocus.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kfocus.org
-Received: by mail-io1-f45.google.com with SMTP id ca18e2360f4ac-844cd85f5ebso178630139f.3
-        for <linux-usb@vger.kernel.org>; Fri, 24 Jan 2025 15:05:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kfocus-org.20230601.gappssmtp.com; s=20230601; t=1737759944; x=1738364744; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e76FHdrNJrkeJY4Fzwi+yyd7EZVrP3M/34uCx232au8=;
-        b=wG8OeHeBHGZ8KmLgb5XarkTyv3s3OlH8dFcxB3CkSNauMm8qICqXVro7W6rPrYTlel
-         SRxOl4Bnm8QgFCqaKLpNargPfh3b+VAhfVye3OmylmooDTqcdv5gSxUCsMMYchPmxzvc
-         VT4MWOM9kc27AhtHo93rAfCoS6LAeaAGNxpVwyXTR5/8CzkAGyz8Cx72LfoxbRCeYmoI
-         mMNok7xbWBMc/IzKQr7mOg05pJPJwEv8rRPCo37QXQlvX/vvrFkAwfAR1qGUIaSjdYn5
-         m3cCkJ4o+VxY9qz2FcUfCPa3/VtFnH2jHDAldvqM8zdE1fW7Fbkcnflir5fzmLkprHEd
-         85lA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737759944; x=1738364744;
-        h=content-transfer-encoding:mime-version:organization:references
-         :in-reply-to:message-id:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e76FHdrNJrkeJY4Fzwi+yyd7EZVrP3M/34uCx232au8=;
-        b=PtI+nlTV/v0OP91qdOjU/kp3IKSo9joWedyka/ocjAOqB/NmgnFvefjb/OtwW1n9wq
-         z04AnvlRjCoyb2mouJsIrrymTq+Lfo06DZTeNsb/b1ytWeojbqZuiivIH3DUOir8u3iM
-         hSPsQHEOI0rB+iMCzP4TnccQT0+nmRod22Kbui7RdR9C0Y8BX+NlFheGkEdrLJrt6DOJ
-         QnS4eVCBthX+3JXPSQupCYkJVH0G83syippPwtyo+pYFzGMtGeqK6qjEY7g3mndz/kWS
-         n4/hBuy0HpKYWJPxXxlUm5dVUBAQYzLq2Imk/VWDXw8JVfmgcA0unzb5N94j8o8QOIDd
-         AEDw==
-X-Forwarded-Encrypted: i=1; AJvYcCVdlThmfluoB5u2GFew8PFk5o+CEqKR+Rh9wSIb26QEsNe2xYn9CcWlnQhCiEn/59oxiqq2F/JiFOs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBsyjnzXdShAsdxjK/Axr/+l+ad456IGH+XImnXsnPWRtuM8tn
-	H2X/zTXv2z1Bp5pjuHp2mjNnDaAbkN4u2zgAI0dljQRm7QC/IsEFvIV8loRNzeM=
-X-Gm-Gg: ASbGnct+jSB0cM1C40fPCb1maUHEpbtrbHquVvzNIfeZmJG8E0FtlEJ+yqcLB5EXuCf
-	e/4vVSfhQ5lpau8yq8IYVJfmhfSWrrXg/E8rqq2k6OSNRrOVTRHzmQ72PVE7mlJw6fv+lRKdo6q
-	5sD15xKIOG1WIz3+NhiunPSio5iA0TsPEdI4JingJmMSOsgQLUZLVOVJAGbzuoXkAeZMX3iUneR
-	GSzZvIDRtBl3rlyMy3gF6YhD8VdKvoWCXJdIae2rGB7jE8YdmyZC9tjRMveNTnVS0hzG51TrraX
-	G94=
-X-Google-Smtp-Source: AGHT+IG2Q7ALqV+VvfWn50mN594rqsPwSY5Iw4HwNaSS661Uo6uDVigsaMAIoCFI/wGrf+DXoNSYCw==
-X-Received: by 2002:a05:6e02:4918:b0:3cf:b2b0:5d35 with SMTP id e9e14a558f8ab-3cfb2b05ec7mr122695295ab.7.1737759943776;
-        Fri, 24 Jan 2025 15:05:43 -0800 (PST)
-Received: from kf-ir16 ([2607:fb90:bf13:4c16:eed6:e61f:44d8:5468])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4ec1da3370fsm909953173.53.2025.01.24.15.05.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 15:05:43 -0800 (PST)
-Date: Fri, 24 Jan 2025 17:05:40 -0600
-From: Aaron Rainbolt <arainbolt@kfocus.org>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: YehezkelShB@gmail.com, michael.jamet@intel.com,
- andreas.noever@gmail.com, linux-usb@vger.kernel.org, mmikowski@kfocus.org,
- linux-kernel@vger.kernel.org, Gil Fine <gil.fine@linux.intel.com>
-Subject: Re: USB-C DisplayPort display failing to stay active with Intel
- Barlow Ridge USB4 controller, power-management related issue?
-Message-ID: <20250124170540.1572d5db@kf-ir16>
-In-Reply-To: <20241115132022.GC3187799@black.fi.intel.com>
-References: <20241101181334.25724aff@kf-ir16>
-	<20241104060159.GY275077@black.fi.intel.com>
-	<20241105141627.5e5199b3@kf-ir16>
-	<20241106060635.GJ275077@black.fi.intel.com>
-	<20241106110134.1871a7f6@kf-ir16>
-	<20241107094543.GL275077@black.fi.intel.com>
-	<20241111082223.GP275077@black.fi.intel.com>
-	<20241112164447.4d81dc3a@kfocus.org>
-	<20241114115136.GB3187799@black.fi.intel.com>
-	<20241114104125.00a02eb1@kf-ir16>
-	<20241115132022.GC3187799@black.fi.intel.com>
-Organization: Kubuntu Focus
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.41; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1737789236; c=relaxed/simple;
+	bh=zQO/rI+Tx589OS8M0rrdAc9eToBiAckJZ3rbpXLpn1s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dvUWFvzPzHevWBpjihxD2LnFS9V5eMxIVz3FHIcEOlRpWzdk7a/Tq9ghzybNIBQo1ysZmcPqsEaHLiwS8ZojcGNLL+493hYsQFSwpZa1F46SJ/9umgPK8eQlAEZgKSeW0pBE64J2+FBKBtYUup1Wt+UZi4LMd9i81tMyUfBWguo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fBywUHZT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3BB8C4CED6;
+	Sat, 25 Jan 2025 07:13:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1737789235;
+	bh=zQO/rI+Tx589OS8M0rrdAc9eToBiAckJZ3rbpXLpn1s=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=fBywUHZTtC+wJUuhuEHCVHAipdm6rADLMPA0DWazeLQyGS8req6ZFLJ57ClkQ3VaR
+	 2G83XE8HKYq9NQwLfuF7iyqNx6IiLlDadzDN7+eCFT417rawl7SiIyD9eVvMVtqhEX
+	 2/x5zJINmqgGu6gvDrMutxYfnS8Zp0+T5tAexCcs=
+Date: Sat, 25 Jan 2025 08:13:52 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+Cc: hminas@synopsys.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH] usb: dwc2: gadget: remove of_node reference upon udc_stop
+Message-ID: <2025012543-unpaired-cartridge-c221@gregkh>
+References: <20250124173325.2747710-1-fabrice.gasnier@foss.st.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250124173325.2747710-1-fabrice.gasnier@foss.st.com>
 
-On Fri, 15 Nov 2024 15:20:22 +0200
-Mika Westerberg <mika.westerberg@linux.intel.com> wrote:
+On Fri, Jan 24, 2025 at 06:33:25PM +0100, Fabrice Gasnier wrote:
+> In dwc2_hsotg_udc_start(), e.g. when binding composite driver, "of_node"
+> is set to hsotg->dev->of_node.
+> 
+> It causes errors when binding the gadget driver several times, on
+> stm32mp157c-ev1 board. Below error is seen:
+> "pin PA10 already requested by 49000000.usb-otg; cannot claim for gadget.0"
+> 
+> The first time, no issue is seen as when registering the driver, of_node
+> isn't NULL:
+> -> gadget_dev_desc_UDC_store
+>   -> usb_gadget_register_driver_owner
+>     -> driver_register
+>     ...
+>       -> really_probe -> pinctrl_bind_pins (no effect)
+> 
+> Then dwc2_hsotg_udc_start() sets of_node.
+> 
+> The second time (stop the gadget, reconfigure it, then start it again),
+> of_node has been set, so the probing code tries to acquire pins for the
+> gadget. These pins are hold by the controller, hence the error.
+> 
+> So clear gadget.dev.of_node in udc_stop() routine to avoid the issue.
+> 
+> Fixes: 7d7b22928b90 ("usb: gadget: s3c-hsotg: Propagate devicetree to gadget drivers")
+> Signed-off-by: Fabrice Gasnier <fabrice.gasnier@foss.st.com>
+> ---
+> Note: I'd have been tempted to remove of_node setting from udc_start:
+>  -	hsotg->gadget.dev.of_node = hsotg->dev->of_node;
+> 
+> I can't find the original code that parses the device node [1] from
+> composite_bind() routine, originally part of the series that introduces
+> this.
+> I'm not sure if setting the gadget of_node is really useful, but I chose
+> safe approach to simply clear it in udc_stop().
+> 
+> [1] http://lore.kernel.org/lkml/1340720833-781-6-git-send-email-aletes.xgr@gmail.com/
+> ---
+>  drivers/usb/dwc2/gadget.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+> index e7bf9cc635be..bd4c788f03bc 100644
+> --- a/drivers/usb/dwc2/gadget.c
+> +++ b/drivers/usb/dwc2/gadget.c
+> @@ -4615,6 +4615,7 @@ static int dwc2_hsotg_udc_stop(struct usb_gadget *gadget)
+>  	spin_lock_irqsave(&hsotg->lock, flags);
+>  
+>  	hsotg->driver = NULL;
+> +	hsotg->gadget.dev.of_node = NULL;
+>  	hsotg->gadget.speed = USB_SPEED_UNKNOWN;
+>  	hsotg->enabled = 0;
+>  
+> -- 
+> 2.25.1
+> 
+> 
 
-> Hi,
-> 
-> On Thu, Nov 14, 2024 at 10:41:25AM -0600, Aaron Rainbolt wrote:
-> > This is production hardware (specifically Clevo's X370SNW1-G and
-> > X370SNV1-G laptops), available for purchase from Sager, XOTICPC,
-> > Schenker, likely many other resellers, and our own website
-> > at https://kfocus.org/spec/spec-m2.html (with a tool that allows users
-> > to work around the bug). The firmware is baked into the hardware
-> > provided to us by our ODM, and for the sake of stability we do not
-> > modify any firmware on the machines with the exception of applying
-> > BIOS updates provided to us directly by the ODM. They appear to get
-> > their firmware directly from Clevo.  
-> 
-> Okay thanks.
-> 
-> > We have requested an updated BIOS from the ODM. If one is
-> > available, we will upgrade and run the tests again.  
-> 
-> Yes, I hope you can get the firmwares. The one you have now is not
-> "production quality" firmare so you should not really have that there
-> in the first place and Clevo should definitely provide you an
-> upgrade. Note this is separate from the BIOS. But your BIOS has issue
-> too regarding the USB4 power contract that is required by Microsoft
-> so I would expect that you should get that one upgraded too.
-> 
-> The patch I shared earlier should deal with all the other cases except
-> that weird one where we do not seem to get unplugs (and the resource
-> is available) which is not how the firmware is expected to work. I was
-> planning to submit it upstream after some more validation on our end,
-> probably afer v6.13-rc1 is released. I'll CC you.
-> 
-> If/when you get the new firmare I would definitely appreciate if your
-> folks could give it a try.
+Hi,
 
-Hi Mika, sorry for the very late follow-up, been busy with other work
-stuff.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-We contacted the ODM to get newer firmware. They contacted Clevo, who
-told them that the Barlow Ridge chip in these machines is the B0
-revision. According to them, the latest firmware available for the B0
-revision is 14.6; they also state that the 56.x firmware is for the B1
-revision and is incompatible.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Is it possible that the problem is that the driver is written
-specifically for the B1 revision and only partially works with the B0
-revision?
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
 
-Thanks for your help!
-Aaron
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
