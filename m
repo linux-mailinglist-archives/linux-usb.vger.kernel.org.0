@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-19756-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19757-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FC39A1C5EA
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2025 00:55:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 781D0A1C5EC
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2025 00:55:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D4A23A8D38
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 23:55:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD80D167D05
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 23:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BD5720A5FD;
-	Sat, 25 Jan 2025 23:55:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EB8E20ADFD;
+	Sat, 25 Jan 2025 23:55:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="uZ7qRFSP"
+	dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b="Zp4qXN9e"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from ci74p00im-qukt09081901.me.com (ci74p00im-qukt09081901.me.com [17.57.156.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA6720A5F5
-	for <linux-usb@vger.kernel.org>; Sat, 25 Jan 2025 23:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB7A20ADC1
+	for <linux-usb@vger.kernel.org>; Sat, 25 Jan 2025 23:55:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.57.156.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737849306; cv=none; b=giJq9ozhvyu9vRJI84+n83dUWT7I0OfnXyUMjRo92hb68Yl5E82Pv+dyJzWjRlRutbDx1+Tf9SEKZPrrs4pyZXFL393Lmhbz7fNPU6k6t7uepEjud0BdvbbjFTlInQ+YRYNSZ56po13E66FusP64HjFVn6mTgXqWVJ71Xn51vE8=
+	t=1737849309; cv=none; b=fLzHETy83NpHl7egQoE/fHUh0UDcpSPR7AIIQ7XeO3puozReqnpVHuPww5Me/7G9MD1YtjwNVjkI0HVxxmiySDbwK/JL3y8W1nOy1aGzBMVpbzDHDxOC8gVP1LD0vsBjXRTXW0Hv9kjgM5UXFLkzgNuPVVjRcnkHDYRgRHgBTyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737849306; c=relaxed/simple;
-	bh=DGuO7TlKUa6pyOpfjBb+ApWsz3kZK2sk4PWVnQ94SeM=;
+	s=arc-20240116; t=1737849309; c=relaxed/simple;
+	bh=bJuWLljkVyoePxGrUFio0TJXY/etfCOcNW50W+svjBU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oANGIXqfoxLD18odF4ZzkdWR5e72sfwLUXXPxFTb/WxQig9YjNIFlxV6aBcMkoPVlR5YyU3erennzrgBAtPD3iGumO7QHEZUEM6+GQ3ZAyS3Ggbg6lkyHA0N/134GBe5Pkd+ovwHeGr7Fcbxy3lHvIegntXrwfHj2hpzpUl7YlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=uZ7qRFSP; arc=none smtp.client-ip=17.57.156.8
+	 MIME-Version; b=Q4RuRPFPB/7xZOGmN8xtpy43l2D0XY6OGia5SHDT1HASYhduDD2gIzSGRstE1J5qqWuARtEGVFyGzo6UO6vQHW5he1KJVaPmJpSh3EXIPjPwB+55SRg5ax0jaiT8zktIwPAnKoGmFdU8qm4fcG9a6hz1iFCOt5/V9gKkvzeSc9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy; spf=pass smtp.mailfrom=pen.gy; dkim=pass (2048-bit key) header.d=pen.gy header.i=@pen.gy header.b=Zp4qXN9e; arc=none smtp.client-ip=17.57.156.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=pen.gy
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pen.gy
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pen.gy; s=sig1;
-	bh=bl4FRmnikIquDofpR5WYLZVKN0mG3Op/eGbhERBKyiI=;
+	bh=x2y+Y+MmmvlF9GZ+lzwqAiszYOs2lA7NdwGFv67/xjQ=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version:x-icloud-hme;
-	b=uZ7qRFSPy+E6F8ae6ELwd+VciXOygjWmKiFnxCVe4JlQLtoUJ6K8ex4ajMrp4hJR1
-	 sG8qjJ/JsmJn1oFKZ3oo24/8FqR+zrSVvifH48obpbtnLlw6zsa5ntq454Gu+3MHf8
-	 YMCKNwDOqrZoEh4mPSn5T/VycYqxArJIPLkTBE4SQrmMdGI8TrAeLQpHEVkZjHd+1P
-	 nPFsP3Z/E8GoWuSluNwETwNnmDzVln3UcGoYFfSgyjPj6NfBO1I41iX9J6uh3vhyMM
-	 5ow1m3m7vkH0uXJpXjSLoGAnbFPF7W+dDAweglE0SiEZIR+eBlYVrhQ1qqWyK48Upe
-	 sbCy9Qbyeumfw==
+	b=Zp4qXN9eON5vMb9Qkv1DKYm3aVJTviSfambmJz+lv6QAuMzh9hQDTZXXL0pba/4t9
+	 ppN3+sh2MGN7rqwSELDAGhkrvId8CFmYn3YOtMi5pRnEJATxlmrt5PIdi6Y41WcZBe
+	 SRhOORTHLsmusAvV5bxTIa3vcHruQmnV6bBHtV0Q9Yi1cptSIy9ZFz2jOM5PI2RjI2
+	 f5e9b0uDUmROt2p/DM6ngtr0Ml3hthh9aiFGIMs1Y4pXU6Yq7q/ddEGBoP9xeQ1UBF
+	 /5gQ9OzcMXvsZJWZBoJMps320FHAH57Pxp7Qlg261Cw2Gkp40UsC4rwIdeKpTexjMG
+	 sBz7LXwbuBiug==
 Received: from fossa.se1.pen.gy (ci77p00im-dlb-asmtp-mailmevip.me.com [17.57.156.26])
-	by ci74p00im-qukt09081901.me.com (Postfix) with ESMTPSA id 428DD5AC01E7;
-	Sat, 25 Jan 2025 23:54:59 +0000 (UTC)
+	by ci74p00im-qukt09081901.me.com (Postfix) with ESMTPSA id 27E045AC01D8;
+	Sat, 25 Jan 2025 23:55:03 +0000 (UTC)
 From: Foster Snowhill <forst@pen.gy>
 To: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -53,9 +53,9 @@ Cc: Georgi Valkov <gvalkov@gmail.com>,
 	Oliver Neukum <oneukum@suse.com>,
 	netdev@vger.kernel.org,
 	linux-usb@vger.kernel.org
-Subject: [PATCH net v5 6/7] usbnet: ipheth: fix DPE OoB read
-Date: Sun, 26 Jan 2025 00:54:08 +0100
-Message-ID: <20250125235409.3106594-7-forst@pen.gy>
+Subject: [PATCH net v5 7/7] usbnet: ipheth: document scope of NCM implementation
+Date: Sun, 26 Jan 2025 00:54:09 +0100
+Message-ID: <20250125235409.3106594-8-forst@pen.gy>
 X-Mailer: git-send-email 2.45.1
 In-Reply-To: <20250125235409.3106594-1-forst@pen.gy>
 References: <20250125235409.3106594-1-forst@pen.gy>
@@ -66,63 +66,63 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: kt6AUo67MxJ0SkeWAqT_i0JtkgmaEmQt
-X-Proofpoint-GUID: kt6AUo67MxJ0SkeWAqT_i0JtkgmaEmQt
+X-Proofpoint-ORIG-GUID: P8TGLKtoKamGVk0qdEMVbjqCf3hMmMGI
+X-Proofpoint-GUID: P8TGLKtoKamGVk0qdEMVbjqCf3hMmMGI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-01-25_11,2025-01-23_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=734 spamscore=0
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=930 spamscore=0
  suspectscore=0 malwarescore=0 phishscore=0 mlxscore=0 clxscore=1030
  adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2308100000 definitions=main-2501250183
 
-Fix an out-of-bounds DPE read, limit the number of processed DPEs to
-the amount that fits into the fixed-size NDP16 header.
+Clarify that the "NCM" implementation in `ipheth` is very limited, as
+iOS devices aren't compatible with the CDC NCM specification in regular
+tethering mode.
 
-Fixes: a2d274c62e44 ("usbnet: ipheth: add CDC NCM support")
-Cc: stable@vger.kernel.org
+For a standards-compliant implementation, one shall turn to
+the `cdc_ncm` module.
+
+Cc: stable@vger.kernel.org # 6.5.x
 Signed-off-by: Foster Snowhill <forst@pen.gy>
 Reviewed-by: Jakub Kicinski <kuba@kernel.org>
 ---
 v5:
     No code changes. Added Cc to stable and Reviewed-by Jakub tags.
-v4: https://lore.kernel.org/netdev/20250105010121.12546-7-forst@pen.gy/
-    Split from "usbnet: ipheth: refactor NCM datagram loop, fix DPE OoB
-    read" in v3. This commit is responsible for addressing the potential
-    OoB read.
-v3: https://lore.kernel.org/netdev/20241123235432.821220-5-forst@pen.gy/
-    Split out from a monolithic patch in v2 as an atomic change.
+v4: https://lore.kernel.org/netdev/20250105010121.12546-8-forst@pen.gy/
+    No changes.
+v3: https://lore.kernel.org/netdev/20241123235432.821220-6-forst@pen.gy/
+    This comment was part of the commit message for v2. With v3, given
+    how the patches are split up, it makes more sense to add the comment
+    directly in code.
 v2: https://lore.kernel.org/netdev/20240912211817.1707844-1-forst@pen.gy/
     No code changes. Update commit message to further clarify that
     `ipheth` is not and does not aim to be a complete or spec-compliant
     CDC NCM implementation.
-v1: https://lore.kernel.org/netdev/20240907230108.978355-1-forst@pen.gy/
+v1: n/a
 ---
- drivers/net/usb/ipheth.c | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
+ drivers/net/usb/ipheth.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/drivers/net/usb/ipheth.c b/drivers/net/usb/ipheth.c
-index 03249208612e..5347cd7e295b 100644
+index 5347cd7e295b..a19789b57190 100644
 --- a/drivers/net/usb/ipheth.c
 +++ b/drivers/net/usb/ipheth.c
-@@ -246,7 +246,7 @@ static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
- 		goto rx_error;
+@@ -218,6 +218,14 @@ static int ipheth_rcvbulk_callback_legacy(struct urb *urb)
+ 	return ipheth_consume_skb(buf, len, dev);
+ }
  
- 	dpe = ncm0->dpe16;
--	while (true) {
-+	for (int dpe_i = 0; dpe_i < IPHETH_NDP16_MAX_DPE; ++dpe_i, ++dpe) {
- 		dg_idx = le16_to_cpu(dpe->wDatagramIndex);
- 		dg_len = le16_to_cpu(dpe->wDatagramLength);
- 
-@@ -268,8 +268,6 @@ static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
- 		retval = ipheth_consume_skb(buf, dg_len, dev);
- 		if (retval != 0)
- 			return retval;
--
--		dpe++;
- 	}
- 
- rx_error:
++/* In "NCM mode", the iOS device encapsulates RX (phone->computer) traffic
++ * in NCM Transfer Blocks (similarly to CDC NCM). However, unlike reverse
++ * tethering (handled by the `cdc_ncm` driver), regular tethering is not
++ * compliant with the CDC NCM spec, as the device is missing the necessary
++ * descriptors, and TX (computer->phone) traffic is not encapsulated
++ * at all. Thus `ipheth` implements a very limited subset of the spec with
++ * the sole purpose of parsing RX URBs.
++ */
+ static int ipheth_rcvbulk_callback_ncm(struct urb *urb)
+ {
+ 	struct usb_cdc_ncm_nth16 *ncmh;
 -- 
 2.45.1
 
