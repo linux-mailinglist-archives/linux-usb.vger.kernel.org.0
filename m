@@ -1,200 +1,185 @@
-Return-Path: <linux-usb+bounces-19709-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19710-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FCE5A1C2AB
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 11:16:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7317A1C360
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 13:54:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AF9916583E
-	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 10:16:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 440467A1C37
+	for <lists+linux-usb@lfdr.de>; Sat, 25 Jan 2025 12:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D101E98ED;
-	Sat, 25 Jan 2025 10:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D4272080E5;
+	Sat, 25 Jan 2025 12:54:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=enviteon.onmicrosoft.com header.i=@enviteon.onmicrosoft.com header.b="dhUSrRqy"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eC+RFP+G"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2119.outbound.protection.outlook.com [40.107.105.119])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9429D3C00;
-	Sat, 25 Jan 2025 10:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.119
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737800183; cv=fail; b=uYivRoputV0q32e9K85UzKg6zbO2EAOzR/9fR+tPRWweyhEhSGroAAYVR3IxpX94TNbAFVYynVgAB+sRz+HnJjp3kXDLRnuMxvzfhGFeOegNAkErJQOdnG2KpSTiGJLXoQ3YD2U2p4V+172sicRKUKijjfq3AG8BXpmclDa/ook=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737800183; c=relaxed/simple;
-	bh=XvL9HUiLEkaceZtbgZ38KigpWifOhT6tMiVOnpQXeLw=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=XpPD8SESKQrkgdrkoBcquMJV41j1dL1e0jJYBmzciCVhjsolb6xuYNIaVJ0ZZn4/LWA3Ejj8Z2cG2LiqKFskCPwGfrL3WTwhq5qPTntQN/c8AnwRHQZXL2XZgdZkqokI4Gm4X2HT8VoSagJzsOtF1otZDnfUEx9aYw1tGcbDdjE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=on2.de; spf=pass smtp.mailfrom=on2.de; dkim=pass (1024-bit key) header.d=enviteon.onmicrosoft.com header.i=@enviteon.onmicrosoft.com header.b=dhUSrRqy; arc=fail smtp.client-ip=40.107.105.119
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=on2.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=on2.de
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Cx/yKHyFoElmrDyojr61otzFTGXORDQhI992A4q5ul5WqzLbhpkqZU8YemLxTxgwM98Q5nL1PGq93XAxpO8hxLvJpYRqOC/iSbv253UTY147pDwUBiyiUUgty/1Xo4IH/ZWp9fHoXOvw0vq/nDwP4s/0p/H3zhFkoXHcshy9YtF+6Pekcs6kx8B3vfyzGl3+ZXPKbm3a+EUqoVpijfHIVlZyd3S9oohj3C71nW2g6pQsiyuEYIFPgJp1cQuD1RWFKGWmjyChPJZ5Bwlzx328l45Dikmyv45wGvGEh1JdM7w5PPFCjCtGF8y+0Tq8na5ctSXvRjjuUNTcDDA3O1qw9w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=XvL9HUiLEkaceZtbgZ38KigpWifOhT6tMiVOnpQXeLw=;
- b=hi01Ap5EbPrD5LOXbQpN0NnHvrihhfk9zPRdph+Qcoco4qYhb9YTVoRK9rK8y2Zj4sZE7ukbpRMIw3NzV2Ml8E5QqrLLYCQ2+XQfZxRZJ6W8J46zVByobtAIrp135X4ZU7KcI2wbg4Nh1gr7Me1CQk0u7k3TLlsBxxD1YcRVJvOIHGMqW1pf1lzEYomjWFQK6sXKmLBlf+xDSaBkA28hgM/aKky83QxeB6Llophowo7OVkShwpoCS3uqhFFwPIZ59Mh75jXn2Lvck0a4baFanK93PnYBeDJI/h+nywTZcwyDSBIZwdsuAttKSCkfoYky+1wSWyZdZ3ZTV9Iwk+6tVA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=on2.de; dmarc=pass action=none header.from=on2.de; dkim=pass
- header.d=on2.de; arc=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655201E505;
+	Sat, 25 Jan 2025 12:54:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737809688; cv=none; b=jizRXQocZdWQ/kZ6TndqUNLYIGMHDovOve2U0TF43Jc/F9NZnfPje3hcI7yoXXFF8M3QuipATzaCGCD7cALOGcmXs/Q1uEN3m+LKsux65QX5EZHRHH/7+2f48zKyoV9e0h/RsCeYxe++wy2SPQUeeFjVJdXYF697ExQHCB6S5gw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737809688; c=relaxed/simple;
+	bh=qvIcpSZCK/7kTs9gbjWD5vxgsgpXt1L2qZhiBydqcNo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=AS08rh2cnb+JAyniZfHrBZQ+zT63do4mpFg7tOT2i8AyCu3Tic3mM3vBkJO5SiZzR0wTGGWGOi1n1hO/WquP7tPAuES57yOinALpf/mjU4sKU6pXWPSJlJZofUd8sI/j3VtIXVPHJ4fe33j9bnLN1qf+Mfgc8fbGum3eR27jXkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eC+RFP+G; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-542678284e3so514732e87.1;
+        Sat, 25 Jan 2025 04:54:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=enviteon.onmicrosoft.com; s=selector2-enviteon-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=XvL9HUiLEkaceZtbgZ38KigpWifOhT6tMiVOnpQXeLw=;
- b=dhUSrRqyPwy9kqI1ujvIxuExKsSdmaORP6qsNr9autcX7rQ5yMDdlCTi14bVu64FtZz0CnZ5eh+0dd+JbyM31naeXPV1vrEkU0j0PT3M+IiD36NxEDX3tFhpw6QVGidCTodZfjiTykbwUaZESmcAm+XaBogrL3HZ4W7kWs4UmUE=
-Received: from AS2PR10MB7502.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:592::14)
- by DB9PR10MB5665.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:30d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.16; Sat, 25 Jan
- 2025 10:16:14 +0000
-Received: from AS2PR10MB7502.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::5cb8:ea20:b80c:7130]) by AS2PR10MB7502.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::5cb8:ea20:b80c:7130%6]) with mapi id 15.20.8398.005; Sat, 25 Jan 2025
- 10:16:14 +0000
-From: Ulv Michel <ulv@on2.de>
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: =?iso-8859-1?Q?Bj=F8rn_Mork?= <bjorn@mork.no>, Andrew Lunn
-	<andrew+netdev@lunn.ch>, "David S . Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni
-	<pabeni@redhat.com>, "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: AW: [PATCH 1/2] net: usb: qmi_wwan: fix init for Wistron NeWeb M18QW
-Thread-Topic: [PATCH 1/2] net: usb: qmi_wwan: fix init for Wistron NeWeb M18QW
-Thread-Index: AQHbbwzb8voVQOMnWEmw/QFzDfG75bMnQ3SAgAABp7A=
-Date: Sat, 25 Jan 2025 10:16:13 +0000
-Message-ID:
- <AS2PR10MB750228C3257C097E0F00156189E22@AS2PR10MB7502.EURPRD10.PROD.OUTLOOK.COM>
-References: <20250125093745.1132009-1-ulv@on2.de>
- <2025012501-pediatric-abide-b802@gregkh>
-In-Reply-To: <2025012501-pediatric-abide-b802@gregkh>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=on2.de;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS2PR10MB7502:EE_|DB9PR10MB5665:EE_
-x-ms-office365-filtering-correlation-id: 2ce26cbf-e730-4be0-1341-08dd3d294c4c
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|10070799003|366016|1800799024|376014|7416014|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?+732n+OhuxP/Do+iCxyaGT7rvUZMbhosc/e/5wmRiO8W+gPS028z2nZy1Q?=
- =?iso-8859-1?Q?PTRpiWZ/De8vfYCqaL3ozhDFCk+qxv5fJGdnvsxw7Sxx67cXBqMEapl6jB?=
- =?iso-8859-1?Q?6hxrTsqeHcbTrk1AMfze4UA0i5G4rz2fBLwo9AYVYWBu3ysTvxy2yVKgMQ?=
- =?iso-8859-1?Q?Xj6+5S/aNzzqZ4294FJcK9TCK3pIK2ExlYJDidHMXogAEmTft6tzZVXUNj?=
- =?iso-8859-1?Q?VadPekBVDIVgWgPH8TfJoVvzTuJV6lqC6QgCInqaGCiN0mJHoESwaxw8NU?=
- =?iso-8859-1?Q?y0OBmmAini6jMv4ILGw+7ReZyc99uM4KBEufoSKKDsPSevg9kuRPKAjXNB?=
- =?iso-8859-1?Q?EQFsbRbrzazDBOLTGZqQ4x3M3CkWUoq6wwrqSj4GLrWMDn2myi3A7z2BzG?=
- =?iso-8859-1?Q?Gr2XdySvvkBt8jy/oitguDQobTHpOJxLORydnjqwxCoM8Bh1r9TNOrSsw2?=
- =?iso-8859-1?Q?zyKCfBv89NIWgTQXSOcsXBN9lW/L3izDHxKoDzF31hf3NXnmeAdF7yRfFW?=
- =?iso-8859-1?Q?a1XMjXFLAnEVx42hEMb+Y9jW5hNGjl7ZeW3gDtueD+SvwKaU2tWISrwLfV?=
- =?iso-8859-1?Q?ixfcKzGDluK40r0M0StsuS/LqKtpa7UaxSLwUt8rIVPAUFVcZDDCZ1Qu6/?=
- =?iso-8859-1?Q?bFlGT94JaZTyoGej4xdLW7iHjPpNptiYaSrKI7cMHdh3Yg5+9GyIf+o5Yr?=
- =?iso-8859-1?Q?6xHEmb+Sz6yiIbvM9HkPYXcNVS7vS7oaKCSZMoth4s29lM7dWXW5UpUbi+?=
- =?iso-8859-1?Q?C5O3xXmzZaIR+yoCVB/fKtymmMU4mBQ0tuhouzGA3qfD3nH2WDeFA84kMI?=
- =?iso-8859-1?Q?ucdfLbZQqzupzNIg4rEuhZJ4HCvLIJlaXDyyHNNAjgOAH+fvvcXuPDXLBl?=
- =?iso-8859-1?Q?F+rHhrRfEuZwbK/GbQqnr1G9GRoje7H5UMAj78LBh7DtAz3tSo9tf/NS5i?=
- =?iso-8859-1?Q?TzUGC+Agw8BTkXi+9eUirSzy1O23WhJ4qD4y33CS+4PGqU0hB87WkfA1/+?=
- =?iso-8859-1?Q?iwaHCQKDrumIlMZmVDKPr5OMwz7Xr7QFxeuQFB3jEXVO+oXXlVpBcBdxeO?=
- =?iso-8859-1?Q?obufECQxxJ7jjccMvvk16ouGwYifHNGImGgF80W5dKVCqTeVlqVuDAaO4J?=
- =?iso-8859-1?Q?IAU9C5vqY90WyVp7nGaOw4YrDjibfCaHw4IGdlFRXHlZDFKg4QUVXxW1oe?=
- =?iso-8859-1?Q?8pcCccHxENML84TEQZQm305mkCLDiyZTcRvgXfS6isRZxOI7m6qyW1yNZX?=
- =?iso-8859-1?Q?rH/PTMdBJwLlpNl1EHruuqn7HkBrtNxAePVDQrULivrLzVM1YdxxJuISDB?=
- =?iso-8859-1?Q?W9mnlERU81epaaTaT89H9uby9SgzIUkB4b+bxW8AHoasB3SOhvs8t6gtnE?=
- =?iso-8859-1?Q?Ew9KG/Q8BbMP52BzkdxwaDWd4xN39xnYrxFpINoLCid1ItCy3KTOkFJVw/?=
- =?iso-8859-1?Q?gOKXjuKhSmiVtc3g8XBHmiRdltd8ekVWslI65Kzhp/m/i6LLFF+ixvd3F1?=
- =?iso-8859-1?Q?QQ6lcjXHZADYG0y0vN4Ajy?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR10MB7502.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(1800799024)(376014)(7416014)(38070700018);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?VfReJ1hWa3hvy0kxd+PVQFAx05sZHyzlRkANhpcKB4gyqs/4kEdq5vZQ44?=
- =?iso-8859-1?Q?sLDwE8Ykmzur4u1nJXecv81fVG5wZyL7yweOuxf12aeiDqnQFMp05uA15M?=
- =?iso-8859-1?Q?+F43MY4iQuWxcAyjLY61KsZ60OCFUZmEIER/aYbchpsvtsiLx3+Tn0f5De?=
- =?iso-8859-1?Q?UrIC28uxY+VINNvOoWZVcfYRgGEgsZmiOj87ZDYob8Z1Qvdi+aijeqaX6n?=
- =?iso-8859-1?Q?DigYleWSLLZOFwOZuRLO1pjtk7kkgDPA7JpSuLUbXndaDYcsO5DxTCXCWe?=
- =?iso-8859-1?Q?PQ1gHtpEEG4q/12M4zgUfEYZiz/J7vTqXSqCyUg3QEBdC2LEz1ykBZyxdu?=
- =?iso-8859-1?Q?he9v8BLjPTQgq5wTeviEIV1Dni2LQGPJfzGqk3Nll3I//G1vaMpra/2Aux?=
- =?iso-8859-1?Q?a8uG6XszZCkg52+EJQSGl5Y7HC8yqKaldfmnhp7r4NdwuHbmotqKfVeZ/k?=
- =?iso-8859-1?Q?Qzpc5ls3kL/p6YUB3oflBg2rdYfp+plTVFWG4vRouYUR03uAtRreF/1BVL?=
- =?iso-8859-1?Q?bgOgukkKBs9SXx5EVPp6KP2BjtwKElw83Vn0CxVz3HpPaLOiaY+k6YlGCG?=
- =?iso-8859-1?Q?kzLZh08GczHg8J8SMTHjHWh5QS/CXdHmwOM/HaSQjraWi0BVYGlyTF/I9y?=
- =?iso-8859-1?Q?E64lrVMVeIDUWpszZNE/bHCS6qXcn6DMz/nfOp4duHtbtR8mDFwFkKp+AS?=
- =?iso-8859-1?Q?7TwH9y7m9LVRbwpnMKnCcmLdsXW+PFsLQKc3syIMuM17RzNLTZ5QdDay6E?=
- =?iso-8859-1?Q?OzInYzXyOCpfy3VSaaae3+j0rCRtaLEZxWKsjw81phjkKkaMYGhAcp7y8n?=
- =?iso-8859-1?Q?lY1o/Evzg7vN/OeltRlihudgCai7IPWApsaM4Oi80E6f9LFzsclA1boAyQ?=
- =?iso-8859-1?Q?mIwV2AqXUSRjLg8sAlRjwYK04+8ShP0kzIvVjL2Z18+E9n2HG9hwFhKZ3R?=
- =?iso-8859-1?Q?+oZSNA+35Rjmytf5vgbmLY6tf7RMXOW6+zbFU1DgETXuSTJAm3rdNSvLQV?=
- =?iso-8859-1?Q?JUB62I6Z5WQMnFebwvthIjNnbOxUcdqCS/9VHdcFcoVWAo7FdtNynTUpH9?=
- =?iso-8859-1?Q?w3D3AWI3X8P0lgsVhHL+gsBh8vXKJ3Fed23W10490xYvKTgS5cBtaAEDzb?=
- =?iso-8859-1?Q?MsslCtXX98n1fU4YXbn6oa1fDbk48EzOTu0FGUP1ntAICPzWrO7fkvP97J?=
- =?iso-8859-1?Q?CEokDcp66upFkbalCvt+OAd9+PgKM80M1E79w4iZ4WRFInI2gRtOSsyxYD?=
- =?iso-8859-1?Q?iKUQcMOAY4DkTglVLwMLHK1O2H9uDt5TciRcuBiKuexlUTtdifMbe33NZv?=
- =?iso-8859-1?Q?u1+utDMoDNGgigG45iPA+IoDKqBnE4YDglIKoWOAmlwSAUu9JmDyaPv0D3?=
- =?iso-8859-1?Q?BkVJ4gzdtlL8GPuDK88Z9d8FrduHd2OXYRufKKaHjsbhoulsWodnJlIaaw?=
- =?iso-8859-1?Q?S8JzOaYmFE8FNT7Jk4XIavH31QL2tIDHV3Z5EpQiSdLNl5yvjHoOJ9Ovrl?=
- =?iso-8859-1?Q?/w0n96tJofSsQcSc6Xqep4nuvNwAk5i2CaMRTRYBZB2rrOGkP0I1dt411q?=
- =?iso-8859-1?Q?rtQe3KEix7kPZCnjgtbKg5O0kYCVGnvt+LAiHM2pGXA8U5FaAeVQiO+6NP?=
- =?iso-8859-1?Q?4Yyl4Gc9aeyq5wcDoSHE0d+fjydwjgT7BSsGjc2jw7ff+68y5H2mBqSxGB?=
- =?iso-8859-1?Q?hZr803OEuFgJ1h3b3d0=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+        d=gmail.com; s=20230601; t=1737809684; x=1738414484; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G20vl3c8SETzUmqacrHaTUIm6L6uW5BVaQx3USOqY4A=;
+        b=eC+RFP+G2ROiqo7eOCmUaGUF1ajxPDKAnWE+3HKrGAXlG7fGoYQgrTOEi11X/rSgOW
+         E+IG/ZVRFWFkPFBB1IE1WETBrkGamL1SUXdwn6piygY+hSlazItqm9u6jywGtSSIIDbj
+         NSpc82NOONr6B8gU4DQr5oyl4eNOrx6gSZbvSIHRqWGj6bblJs74+Q1NjR0Ez6S/Vbo0
+         2daXy21WHquXuK2owsG+DD4Gz+D7qWPPXmuvZeTXLjs9gp01JmKsJTfuxypttC8lAFyP
+         tzhTdh724qc3PwE0AaglRNlcu+r5thbM3qvDkKiD2uwnASJNsyZsegSKDDVqeY4zojmZ
+         bV3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737809684; x=1738414484;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G20vl3c8SETzUmqacrHaTUIm6L6uW5BVaQx3USOqY4A=;
+        b=uY9QRKDf/2txZvdOQIx2Bbn7oWswAIBHSP5QEZh9ZMeF5U3/pPO5nd5r8nVPOdzShF
+         2xdRXHE6xLmsXqXkMNjv7byANn/kgnn7svKpo/d4J2Ife5a+xFgrQ0nx8sLVhV7VbVVY
+         S1ePR/ErGF9Q32nGu/6MEICUw1QUELX1E/WmzpaYxe8toccBnAjdlIOLBihbCTlQI0Jg
+         KtWlcpfOU4xe2hlAgcX7p3+R6qKYe1qiw7ykdlRNLZR0c8MsU8gEHBAQVpxOii0g2Gg9
+         If940mt4uESaFq0lyFDvcegCvIOwffOj5+6DI74iaC01iFlCy/Y+Ctji/xsxclYZRREK
+         2Lzw==
+X-Forwarded-Encrypted: i=1; AJvYcCUEsfer4R6KWOpdISh75XPzhs3iuCxS02lPSbp+j2KmoZV2rbSQApYxqkhbKvxIGLAJu0H9jbSPGeH8iA==@vger.kernel.org, AJvYcCUNFw7Fx4UKwBLidMfWYFyWJ6FVMVQvu2IdlHil3kezn/OdgboprookoqllU66hkEi5dJ0By+Xkkn8v@vger.kernel.org
+X-Gm-Message-State: AOJu0YyCFvvJ5s5R8SoAJ100m42dz9TcKWeNfJRrlMNOAtnOoxJJO82v
+	FzoOmbxGY7eLkuM0tgWmmGAuy75sFiuu75mFkTUEYGfC7tU3qBVb
+X-Gm-Gg: ASbGncvdZMFNg3zh+WwnlhojHGaNyBGnbloteJHRjjCN0qBIZj7I0aTfD9sK8v3D9x3
+	8R5dD7aXffsK2eWw/ngL/q2JxYifzEzbsXN9XAckq9gH4FtV4VdEF+sAkYT0mp+jrq+wwfewewk
+	19aKJKs5Q2XjWTO4fXJwHkiwNBpBoy0seO/ZmgCjOL9reD7Txk6N2c1d+UuI7xUrB2qavQvo8H7
+	qOv+w3suPYaG7v6tPZb1XPr/kN9rqwA9nHnSFecZVBHfK3TOP8/yTEXLykyFlv1vQRqE5O1HOuM
+	/84aKn54cHH7RJzDBMm1ohPGHJAkioxQUxTDJo7nJlsZrbwdPhA=
+X-Google-Smtp-Source: AGHT+IGPz6B3d/WcJ6r8vZmuxppLOITSUYuQCFKuKbmMM9aq1eoWoGk10edEacwOrd2TO59eEnEcVA==
+X-Received: by 2002:a2e:be1b:0:b0:300:956:ccc9 with SMTP id 38308e7fff4ca-307587aa099mr20277711fa.6.1737809684175;
+        Sat, 25 Jan 2025 04:54:44 -0800 (PST)
+Received: from laptok.lan (89-64-31-140.dynamic.chello.pl. [89.64.31.140])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3076bc1981esm6960701fa.75.2025.01.25.04.54.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 25 Jan 2025 04:54:43 -0800 (PST)
+From: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
+To: jikos@kernel.org,
+	bentiss@kernel.org
+Cc: anssi.hannula@gmail.com,
+	oleg@makarenk.ooo,
+	linux-input@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v6 00/17] HID: Upgrade the generic pidff driver and add hid-universal-pidff
+Date: Sat, 25 Jan 2025 13:54:22 +0100
+Message-ID: <20250125125439.1428460-1-tomasz.pakula.oficjalny@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: on2.de
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS2PR10MB7502.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2ce26cbf-e730-4be0-1341-08dd3d294c4c
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Jan 2025 10:16:13.9222
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: d9ed1a1d-8109-4b86-a3f1-493fe8342a3e
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: NpQrsJeusxvpmVP1HPpznrKV7lFqln7BmWCMXfoJkrFCbJNew7QTyT4RFD+dtheJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR10MB5665
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Sorry Greg KH,
+This patch series is focused on improving the compatibility and usability of the
+hid-pidff force feedback driver. Last patch introduces a new, universal driver
+for PID devices that need some special handling like report fixups, remapping the
+button range, managing new pidff quirks and setting desirable fuzz/flat values.
 
-Sorry, there seems to be a misconfiguration on my build machine...
-The full name is Ulv Michel.
+This work has been done in the span of the past months with the help of the great
+Linux simracing community, with a little input from sim flight fans from FFBeast.
 
-Thanks,
-Ulv
+No changes interfere with compliant and currently working PID devices.
 
------Urspr=FCngliche Nachricht-----
-Von: Greg KH <gregkh@linuxfoundation.org>=20
-Gesendet: Samstag, 25. Januar 2025 11:06
-An: Ulv Michel <ulv@on2.de>
-Cc: Bj=F8rn Mork <bjorn@mork.no>; Andrew Lunn <andrew+netdev@lunn.ch>; Davi=
-d S . Miller <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jak=
-ub Kicinski <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; netdev@vger=
-.kernel.org; linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
-Betreff: Re: [PATCH 1/2] net: usb: qmi_wwan: fix init for Wistron NeWeb M18=
-QW
+I'm not married to the name. It's what we used previously, but if "universal" is
+confusing (pidff is already the generic driver), we can come up with something
+better like "hid-quirky-pidff" :)
 
-On Sat, Jan 25, 2025 at 10:37:45AM +0100, U Michel wrote:
-> From: U M <ulv@on2.de>
->=20
-> fixed the initialization of the Wistron NeWeb M18QW. Successfully=20
-> tested on a ZyXEL LTE3302 containing this modem.
->=20
-> Signed-off-by: U M <ulv@on2.de>
+Question about the header management. Maybe I should create a separate
+hid-pidff.h file and move all the HID_PID related definitions there?
 
-Sorry, but we need a bit more of a name here other than just 2 initials :(
+Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
 
-thanks,
+---
+Changes in v6:
+- Rebased on v6.13
+- Added missing SOBs
+- Reworked and fixed pidff_reset function
+- Simplified pidff_upload_effect function
+- Moved magic values into defines
+- Added PERIODIC effect period rescaling
+- Support "split" devices with a separate "input device" for buttons
+- Fixed comment styling
+- Improved set_gain handling
+- Fixed MISSING_PBO quirk
+- Fix possible null pointer dereference while calling
+  pidff_needs_set_envelope
+- Link to v5: https://lore.kernel.org/all/20250119131356.1006582-1-tomasz.pakula.oficjalny@gmail.com
 
-greg k-h
+Changes in v5:
+- Added PERIODIC_SINE_ONLY quirk
+- Link to v4: https://lore.kernel.org/all/20250113124923.234060-7-tomasz.pakula.oficjalny@gmail.com
+
+Changes in v4:
+- Added PXN devices and their hid ids
+- Added hid-universal-pidff entry in the MAINTAINERS file
+- Link to v3: https://lore.kernel.org/all/20250106213539.77709-2-tomasz.pakula.oficjalny@gmail.com
+
+Changes in v3:
+- Fixed a missed incompatible pointer type while assigning hid_pidff_init_with_quirks
+  to init_function pointer (void -> int)
+- Improved Kconfig entry name to adhere to the alphabetical order of special
+  HID drivers
+- Extended cover letter
+- Link to v2: https://lore.kernel.org/all/20250105193628.296350-1-tomasz.pakula.oficjalny@gmail.com
+
+Changes in v2:
+- Fix typo in a comment
+- Fix a possible null pointer dereference when calling hid_pidff_init_with_quirks
+  especially when compiling with HID_PID=n
+- Fix axis identifier when updating fuzz/flat for FFBeast Joystick
+- Link to v1: https://lore.kernel.org/all/20241231154731.1719919-1-tomasz.pakula.oficjalny@gmail.com
+---
+
+Tomasz Pakuła (17):
+  HID: pidff: Convert infinite length from Linux API to PID standard
+  HID: pidff: Do not send effect envelope if it's empty
+  HID: pidff: Clamp PERIODIC effect period to device's logical range
+  HID: pidff: Add MISSING_DELAY quirk and its detection
+  HID: pidff: Add MISSING_PBO quirk and its detection
+  HID: pidff: Add PERMISSIVE_CONTROL quirk
+  HID: pidff: Add hid_pidff_init_with_quirks and export as GPL symbol
+  HID: pidff: Add FIX_WHEEL_DIRECTION quirk
+  HID: pidff: Stop all effects before enabling actuators
+  HID: Add hid-universal-pidff driver and supported device ids
+  MAINTAINERS: Add entry for hid-universal-pidff driver
+  HID: pidff: Add PERIODIC_SINE_ONLY quirk
+  HID: pidff: Completely rework and fix pidff_reset function
+  HID: pidff: Simplify pidff_upload_effect function
+  HID: pidff: Define values used in pidff_find_special_fields
+  HID: pidff: Rescale period value to match device units
+  HID: pidff: Improve ff gain handling
+
+ MAINTAINERS                       |   7 +
+ drivers/hid/Kconfig               |  14 +
+ drivers/hid/Makefile              |   1 +
+ drivers/hid/hid-ids.h             |  31 +++
+ drivers/hid/hid-universal-pidff.c | 197 ++++++++++++++
+ drivers/hid/usbhid/hid-pidff.c    | 439 ++++++++++++++++++++----------
+ include/linux/hid.h               |   9 +
+ 7 files changed, 549 insertions(+), 149 deletions(-)
+ create mode 100644 drivers/hid/hid-universal-pidff.c
+
+-- 
+2.48.1
+
 
