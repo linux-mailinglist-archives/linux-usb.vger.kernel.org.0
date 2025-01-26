@@ -1,81 +1,100 @@
-Return-Path: <linux-usb+bounces-19773-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19774-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F131FA1CCA9
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2025 17:33:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB388A1CDF4
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2025 20:02:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E5F63A7AD5
-	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2025 16:33:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 606EF1884A12
+	for <lists+linux-usb@lfdr.de>; Sun, 26 Jan 2025 19:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E69B01553AA;
-	Sun, 26 Jan 2025 16:33:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 991C8155759;
+	Sun, 26 Jan 2025 19:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="rYHQlxH1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o+Z76jAt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6821A1EB3E;
-	Sun, 26 Jan 2025 16:33:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 115EE1714D0
+	for <linux-usb@vger.kernel.org>; Sun, 26 Jan 2025 19:02:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737909217; cv=none; b=qMQDvtc2/PEjNxoNbgWcQgITgcTu3pUIuc6sMMmg/6A2wfLX6Ojmr8hi1BSlkLE9E+hW3RjZBMqz25hLb8TIdmxLNWIimyLQmHnFGERhUtGj/Ry6KRGkOUH/NtXXKIIc31Aw3ySVZL37RBHdhya/DeWU5Q807iPN+7qC2Oe3EP4=
+	t=1737918135; cv=none; b=VOLT/Sg47BNHyd0sx7w7z3INL2XVFqzpCJhel0U6ocBsH/DiYfm308efWO7dbm7AhUYMq0Ojcsdxu7hm1tUE5j9VYko9G2U72LiKyiASoDiz0Bp/uqcADhiMnVnuq8vUjdIALut/wehd7++aQfHvRvL2yKPjLP/Yubq0STkMWNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737909217; c=relaxed/simple;
-	bh=E/kjeAaH+uR0Cn+oiAtRx9KVLJ55wKcf6CrmFXMN+a8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A7fKIX1EVnxXBFL1l6Nev4AN9+E53PrGQ4ACuFUKLaV9vof0j6r1qA7Cl56A5AHBLkgldLjXC8CQzBvMjS1SVd6zYGnoAJ1lygAIofMjAcoQYf8bmB4PRcMes/Xe8CsMz9r6Yvsm00FqschkKEBBfKtTOEsIQV3gNhfk5UD0YnY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=rYHQlxH1; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=kbedA//e6UwF+vhXZcC1JPwXFmuFy8J+z3JCyc/ZyP8=; b=rYHQlxH1vYT87pn57Vg/lhjg9P
-	gWofde/1QMv80yRQEwPD096dpaZA1CUlDdIVsoW2A2G04zwlLBy1QvkDmlZnHIYPtjfEigMcqsk7j
-	1Cn3Tj4Uo1tRs8mZZzmappMmVxID4o/B1q3zP3+CP6FNhMESTnPrFVfAbyZbiW1ciSLc=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tc5Za-008HC2-Ku; Sun, 26 Jan 2025 17:33:22 +0100
-Date: Sun, 26 Jan 2025 17:33:22 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Max Schulze <max.schulze@online.de>, netdev@vger.kernel.org,
-	linux-usb@vger.kernel.org, andrew+netdev@lunn.ch,
-	s.kreiensen@lyconsys.com, dhollis@davehollis.com
-Subject: Re: [PATCH v2] net: usb: asix: add FiberGecko DeviceID
-Message-ID: <584a635b-d3a8-4900-a134-3f57ddc0b01c@lunn.ch>
-References: <20250126114203.12940-1-max.schulze@online.de>
- <20250126121227.14781-1-max.schulze@online.de>
- <2025012646-unleaded-laboring-d81a@gregkh>
+	s=arc-20240116; t=1737918135; c=relaxed/simple;
+	bh=XCfjBt6IWuKuE8NX5k7Vn/p8BrqvXn2Zfw9OVGKW4Bs=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hR6eprIe9kppfw7pmBTMH5gdzHjlI+C6ktfNs9opHkCbfJLRgwNKFJDPl0rLM9tihJVxFwd+4Lr+wAyoWawvgKDFWn6LoXItCqs11mGeJLKGppl27LJ2+yJ1vrWvNrDrtsGGRZ2lIHT5Z5UMPJfjwlLyyWUzF97loDn1vF5+Syg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o+Z76jAt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 81CF6C4CEE8
+	for <linux-usb@vger.kernel.org>; Sun, 26 Jan 2025 19:02:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737918134;
+	bh=XCfjBt6IWuKuE8NX5k7Vn/p8BrqvXn2Zfw9OVGKW4Bs=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=o+Z76jAtpxNHdE2FJqyEFdfDRAVz2WozJzpNYe0B4fHLZc/aYUX56VNHcX5fP77wI
+	 0ufxytQcrXuEy4KPqM3LQgq87ZhmWCgGl5U4GJcOgqNyaz+5+4gtD63Vhh/xXdL2gJ
+	 w6kq9LchtUcq4EeHzariaAaJJ27yh1Mo2Lr5n6Do2xJL8jTgSBkGDsxPGTHlHHMHGo
+	 K3QKmPyT1vaWGrW5w9g2l4hn+skhhfJNfwTddSTj3qR7u/X61kq3YJZRZCONNAMMlm
+	 P8iXTJRSzNRJN2y2UKX6evGlM6Pn+eel4ak1PLLt1M0oERzqAg8wW4jBzfuMeOCJ75
+	 j0QQait8kGJGg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 77646C41606; Sun, 26 Jan 2025 19:02:14 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219726] USB devices fail to show up when upgrading to 6.12.11
+Date: Sun, 26 Jan 2025 19:02:14 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: aros@gmx.com
+X-Bugzilla-Status: NEEDINFO
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status cf_regression
+Message-ID: <bug-219726-208809-QIwjyRFLwQ@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219726-208809@https.bugzilla.kernel.org/>
+References: <bug-219726-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025012646-unleaded-laboring-d81a@gregkh>
 
-> For obvious reasons I can't take patches without any changelog messages,
-> but maybe other subsystems have more relaxed rules :(
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219726
 
-Same for netdev, we like to see a commit message.
+Artem S. Tashkinov (aros@gmx.com) changed:
 
-If the intention is this is to be merged via netdev, please read:
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |NEEDINFO
+         Regression|No                          |Yes
 
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+--- Comment #2 from Artem S. Tashkinov (aros@gmx.com) ---
+Please post=20
 
-Also not that netdev is closed at the moment due to the emerge window.
+sudo dmesg -t=20
 
-    Andrew
+for both kernels.
 
----
-pw-bot: cr
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
