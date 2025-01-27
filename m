@@ -1,257 +1,195 @@
-Return-Path: <linux-usb+bounces-19780-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19781-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2148A1D5C3
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 13:07:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A9ACA1D6B1
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 14:26:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F1AA1188663F
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 12:07:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8234A3A2419
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 13:25:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C83A71FECD3;
-	Mon, 27 Jan 2025 12:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40EF20010C;
+	Mon, 27 Jan 2025 13:25:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="S5FY3R3M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QSGUOvEZ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2040.outbound.protection.outlook.com [40.107.237.40])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 498B0C2D1;
-	Mon, 27 Jan 2025 12:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.237.40
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737979627; cv=fail; b=SOf6tKVMh4Cy//EERu31OQwOiWCUQaCKlJvlx+lBRe0rX4kADFMdDdiAYQcBJ63k8RHkvwXcl6On88rAibyNAAkRZSC5cRzfFrkxjvxQLd8EDn8NcRzEiQ17LncOqsiffpjUkBn60OWb3LZ/aQFWnxaIFH8gMny5u2qidEfDnoY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737979627; c=relaxed/simple;
-	bh=kXTKu7v8+TLXEPhge2I4bp3nMpxAyMH6wWqQoo13R80=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fkW6Zf++1qoOjuOv7pMQQlRh/mnlckLoEzDiHqJgJwJ/oq8znKaokp1J+CsMUvFFmj7oE4iCZ6DSOs8d8ah2QLmkEBaHviZ3kCqVHIv3WQGAVH4ujl51/UnUMWnD6c+rjAq7q+8CILBoBaeCfKptrCrYGWvFcgVWNXxjxNq4T6A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=S5FY3R3M; arc=fail smtp.client-ip=40.107.237.40
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lm9SH8iyZYdGBmhjfzFJ/fYpmUKKcoBhp5W823wYo9I/IyEek1G9oKfkCmug1g9binRnSUf+IkCPa1akwKe3IJJDNdyj+sXxA428oWA97o1HlDYRahaMQvwxYFhEUmapegCAbbGnVfKdMP4eP2EOI0k78pS3z91K0rbLpO0IRS4YEz9Hk8fVM4TsfNRIhEdGo8QVlGL/KfsSS3iR9fHpvCN8kEQtBtCnOhx2imtIcJGSZoMvUciWSac5CSKMScQo9L4smVY/vfDW8VC9l26olxMcMyAEndtBVAr9Q51odxTXGajVBfTLNSkp4Gdf+OcWtowqbeH70U80T0RlbUZqeA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BTplnKXt5TouAwNQULi25C6XWPEt494nMOWh84OZtqg=;
- b=iUVDQMp/M1U1rR+2eQgJVZjr/U3VP2M4CeJTv4IAdilKGUpF3KEJJ7Lk+tcYmsBnRb0kUksuFiZFA2H/AUVTghYcX81jhxvEuCDrqZteIqnZ7IBec12/rMfxq/7Ll29BbIRZ64gyG3ZfKGy1sHBdqNz70uqZllxNe5lfYYA2JbaMKCFYNxogM2RrpLZVkyjI/NJitecrP+wsyYj71KRLZuPwRiuegHMiOdiv3+042sAjYK/eWDDow9JNuBquGVmBNQoR5lNBMRUnNSnP6Hm54K8vhzAhPI3ScNTW6E3rrN4Rfnv/qJp5zfdY5LrsIl/oW3BO001oJra6KvHowou+Ag==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BTplnKXt5TouAwNQULi25C6XWPEt494nMOWh84OZtqg=;
- b=S5FY3R3MPKGoNaj2vI0DK2RR9ZaE/14OB6GAeBLV8Kj+6N1kAgDHtWyHia16gjHcwENxmobA5kuCnkVz7KXsRG7ZQTwGPkiH6LYwU/jsGe+0xe4QGa376JrS2hNZePaBdPRpo1jwuMae4uRgp9LorZ8ItCBYDeStnbFh/+yLXvE=
-Received: from BL1PR13CA0388.namprd13.prod.outlook.com (2603:10b6:208:2c0::33)
- by MW6PR12MB8760.namprd12.prod.outlook.com (2603:10b6:303:23a::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.22; Mon, 27 Jan
- 2025 12:07:01 +0000
-Received: from BN1PEPF00004686.namprd03.prod.outlook.com
- (2603:10b6:208:2c0:cafe::fb) by BL1PR13CA0388.outlook.office365.com
- (2603:10b6:208:2c0::33) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8377.13 via Frontend Transport; Mon,
- 27 Jan 2025 12:07:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BN1PEPF00004686.mail.protection.outlook.com (10.167.243.91) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8398.14 via Frontend Transport; Mon, 27 Jan 2025 12:07:00 +0000
-Received: from airavat.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 27 Jan
- 2025 06:06:58 -0600
-From: Raju Rangoju <Raju.Rangoju@amd.com>
-To: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: <mathias.nyman@intel.com>, <gregkh@linuxfoundation.org>,
-	<Raju.Rangoju@amd.com>, <stable@vger.kernel.org>
-Subject: [PATCH v4] usb: xhci: quirk for data loss in ISOC transfers
-Date: Mon, 27 Jan 2025 17:36:31 +0530
-Message-ID: <20250127120631.799287-1-Raju.Rangoju@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDFA1FF7B4;
+	Mon, 27 Jan 2025 13:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737984332; cv=none; b=odp24p0j+3utK+dhrDZp54Fqr5Vng5pVzNhMZP+6uWvNhaM5NdV3jnReXtHuLUHJ9+p6rObv2tN+KeceJ6ciDNuxculzSKgTCu3dOcTJhiFY4oV+ZkCrZ4Fo+Q3u7JVQz7ZaYMsyzG5qXlOrxlbJbWiuFkVQ7s7emVdSVz3ikUY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737984332; c=relaxed/simple;
+	bh=RjFj+btLOrA1I0c/0XDEPot6dd9rNyckywxmgkJzq3o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aEfhAR3RlQYiSsb42lAOvxkw+nUntoz6q6DHAY0pQYX9yAkuDsIcFi/ef/RPnfCGfMo6aaLv5F7HtRLQF2WK23ejmtY2BNY7EEaLm0JP2UncX78LDNu5Z20MP1wE0lxRljio5NohTrvoN6ZN1daJdMi5M+IsFEMnMgznBw9oovI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QSGUOvEZ; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737984330; x=1769520330;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RjFj+btLOrA1I0c/0XDEPot6dd9rNyckywxmgkJzq3o=;
+  b=QSGUOvEZzlCLg52m+Lkyf/+kcHVE68FvAFk33+V3UhwIx/K/THbEuyid
+   qJ438VnvterjDhGelKR5fP6BxrrxRkqifOI54cau6t1t8osjTRna9hBxM
+   No2vFYIs3XvcsO1WP4e5Biv+WmJTB68gdx3/u0mrAfgwMTVAD015W4iZ3
+   /IS6Kq3c9DS8MxtJuSPO9pAimIX5JPT9iSW8d4LmXW3YyQJxw6TCZ90TZ
+   /GjxSPzYFVZHfh4LDTMcdRhtiKIjHF1pelA8u+BGatnQUd04z2t7ouweY
+   lN5ljcLdmzwZ6ey8werqdArXQ+hfBfCOql1cBQHnUxfs2OPHqKl0LQjSz
+   w==;
+X-CSE-ConnectionGUID: WXPLNx9wSDWvyiA2ZoPUwA==
+X-CSE-MsgGUID: Ov3TekHxTxuVTp8Y/oIV5g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="42105354"
+X-IronPort-AV: E=Sophos;i="6.13,238,1732608000"; 
+   d="scan'208";a="42105354"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 05:25:22 -0800
+X-CSE-ConnectionGUID: oOw//HyuRH2sXbDiVD3/cA==
+X-CSE-MsgGUID: F7vXYkyrSx2N1gt4t3xT9A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="131730368"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 05:25:02 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1tcP6l-00000005jpm-3fIe;
+	Mon, 27 Jan 2025 15:24:55 +0200
+Date: Mon, 27 Jan 2025 15:24:55 +0200
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Damien Le Moal <dlemoal@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Corey Minyard <minyard@acm.org>, Peter Huewe <peterhuewe@gmx.de>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Tero Kristo <kristo@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
+	Ian Abbott <abbotti@mev.co.uk>,
+	H Hartley Sweeten <hsweeten@visionengravers.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	Len Brown <lenb@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	John Allen <john.allen@amd.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Vinod Koul <vkoul@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Moritz Fischer <mdf@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
+	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Michael Hennerich <michael.hennerich@analog.com>,
+	Peter Rosin <peda@axentia.se>, Lars-Peter Clausen <lars@metafoo.de>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Markuss Broks <markuss.broks@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Lee Jones <lee@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
+	Yisen Zhuang <yisen.zhuang@huawei.com>,
+	Stanislaw Gruszka <stf_xl@wp.pl>, Kalle Valo <kvalo@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Tony Lindgren <tony@atomide.com>, Mark Brown <broonie@kernel.org>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Xiang Chen <chenxiang66@hisilicon.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+	Alex Elder <elder@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+	Jacky Huang <ychuang3@nuvoton.com>, Helge Deller <deller@gmx.de>,
+	Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Kees Cook <keescook@chromium.org>,
+	Trond Myklebust <trond.myklebust@hammerspace.com>,
+	Anna Schumaker <anna@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Takashi Iwai <tiwai@suse.com>, linuxppc-dev@lists.ozlabs.org,
+	linux-ide@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
+	linux-integrity@vger.kernel.org, linux-omap@vger.kernel.org,
+	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-fpga@vger.kernel.org, dri-devel@lists.freedesktop.org,
+	linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
+	linux-leds@vger.kernel.org, linux-wireless@vger.kernel.org,
+	linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
+	linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, greybus-dev@lists.linaro.org,
+	linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
+	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
+	iommu@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
+	kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org,
+	linux-nfs@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
+Subject: Re: [PATCH 00/34] address all -Wunused-const warnings
+Message-ID: <Z5eJJ199QwL0HVJT@smile.fi.intel.com>
+References: <20240403080702.3509288-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN1PEPF00004686:EE_|MW6PR12MB8760:EE_
-X-MS-Office365-Filtering-Correlation-Id: f2f06481-f563-4470-48c3-08dd3ecb1ad7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?2YuK1SYjuqe6as6nBu6o9fWleyRdRw6IfhN8MdQuzb5CpPGB/j7a07o4pkEN?=
- =?us-ascii?Q?rkkzCIRW7qCyX3taMCHgu2uqzoenLiYpTEHSa+GREMLcMil68azobHYrJEh6?=
- =?us-ascii?Q?CKJqBGERJ6n9ZWy0tmAB3UP7Daq1WPEKKV6SCNgqxtohG9rHePSU/TMA5C6p?=
- =?us-ascii?Q?CMFNmeGalBl0HSNVYiXlbZbdgQy6kd4ImH5OIxoK7YO4/1/sEidTUoeujVIg?=
- =?us-ascii?Q?c+eRdZdyDErmJj1mt9Cm+vQIcnjJVV/nERIz+nxPxiQ82CF+jAq4ElXvSQM3?=
- =?us-ascii?Q?aEf3kcp6+btRHnmbl4xBZMJhprtOaTDq1Kf7tZmfpslXJvRRnqCG8v452LY2?=
- =?us-ascii?Q?6hTjlOOU7ETneOsd8+CP0C+HIh6rqJXJM77Q8WzD4At5ZzLtdcy6veRMC+xp?=
- =?us-ascii?Q?TJXC/ZKCVBHQS9dVbt95JefAPrp2/MSCs8uhJjwdeKHBiYmgjIEOM19Gxt00?=
- =?us-ascii?Q?DEh7+h4qSS7RV6Z1mBLK13iSi6szC4FWpGqEWrFnR3cnembUEZQNKQbd6fm1?=
- =?us-ascii?Q?r1xum+oqlYOGRdXS1THO1g1sNMBK92przi3xm7nrfRKWJqQAZ738Bj6kVkco?=
- =?us-ascii?Q?54TogkzLLNGAhrUeTmRZFp5kRXn5vnYmMeU1aRuh6+qmN8PvjO41ekjleebf?=
- =?us-ascii?Q?LBIFODdYMMaMKvbYraJZj8lGRtftXPCPszq6UGE/Y+pYNwJIB6TTS2SAqzLP?=
- =?us-ascii?Q?MHqk9GKi7Jom70/b6CYDVmKQ6gAH2fpzaRfYrpNlKku2H2aoUOHKaYlHtAX6?=
- =?us-ascii?Q?PFvToEYJAsGg8MJ4g9VNYA6yNPjChmnsFv67gD/9zBhLNbEh8AhD4PVhFc6k?=
- =?us-ascii?Q?mRGJ9dSY7IUSwEq0xo16b9Cj3g9qneeeJ3brESupRgje/XaBxz2VDwxLIAkN?=
- =?us-ascii?Q?KG0YYDwMZIbAkedXSC57kiZVPB+8oWiC5UzB6kOoykogmL4n3/iDr1rt3u6w?=
- =?us-ascii?Q?mSzvFcY/pFCjfuqpWZJK9F2Q814MCwUuAnqStffxWEHuwvcbNKdWnRJHBhq1?=
- =?us-ascii?Q?VikYXWzNwPBByqv5TVQR74D3GO630YLc3rqUrrmCs8iXXzbvNpUWLxnT4PV9?=
- =?us-ascii?Q?3UOVuyDnbwXnri1HBtbE4XkrQhGqd4+YDI4Ytm5cEcUnf6kQ1u5YPWKZyYJ+?=
- =?us-ascii?Q?JRc3+QySm/LNlIvraygRM4gXExVxr8NCpAIxqkA8EukD0bTB3v7ES6QYuIKB?=
- =?us-ascii?Q?QsPIgx3DNhbYyft2lTZmRe+cMt/a/7JVOwqf7dOtES0lLGnXVnMqb2ogqWn6?=
- =?us-ascii?Q?bJi8dMwoNfZ+Ghp9LdtaPCdJ0vgeIc2YCbfKP65xUa2RE7ReM/wXqeTz149a?=
- =?us-ascii?Q?zG94e6b93jlZsEEsWoc3N2OOQwWNYgjH3oykpRFSjxzyH3RwLeR+WkFYCOs8?=
- =?us-ascii?Q?c2pGQA6wITmuEkM/82diYQW3F2b96X1rtkClgB0Dpebem6KABSfjhoFOA9kE?=
- =?us-ascii?Q?NNYOEl1p2Cxm7Gz2vh5VKWsNLNlPJAk1ZwowwtXmDFW0UQ/81fmnKkCv/jO7?=
- =?us-ascii?Q?N50uRvqSpEGJRMM=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2025 12:07:00.5453
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: f2f06481-f563-4470-48c3-08dd3ecb1ad7
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BN1PEPF00004686.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8760
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-During the High-Speed Isochronous Audio transfers, xHCI
-controller on certain AMD platforms experiences momentary data
-loss. This results in Missed Service Errors (MSE) being
-generated by the xHCI.
+On Wed, Apr 03, 2024 at 10:06:18AM +0200, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> Compilers traditionally warn for unused 'static' variables, but not
+> if they are constant. The reason here is a custom for C++ programmers
+> to define named constants as 'static const' variables in header files
+> instead of using macros or enums.
+> 
+> In W=1 builds, we get warnings only static const variables in C
+> files, but not in headers, which is a good compromise, but this still
+> produces warning output in at least 30 files. These warnings are
+> almost all harmless, but also trivial to fix, and there is no
+> good reason to warn only about the non-const variables being unused.
+> 
+> I've gone through all the files that I found using randconfig and
+> allmodconfig builds and created patches to avoid these warnings,
+> with the goal of retaining a clean build once the option is enabled
+> by default.
+> 
+> Unfortunately, there is one fairly large patch ("drivers: remove
+> incorrect of_match_ptr/ACPI_PTR annotations") that touches
+> 34 individual drivers that all need the same one-line change.
+> If necessary, I can split it up by driver or by subsystem,
+> but at least for reviewing I would keep it as one piece for
+> the moment.
+> 
+> Please merge the individual patches through subsystem trees.
+> I expect that some of these will have to go through multiple
+> revisions before they are picked up, so anything that gets
+> applied early saves me from resending.
 
-The root cause of the MSE is attributed to the ISOC OUT endpoint
-being omitted from scheduling. This can happen either when an IN
-endpoint with a 64ms service interval is pre-scheduled prior to
-the ISOC OUT endpoint or when the interval of the ISOC OUT
-endpoint is shorter than that of the IN endpoint. Consequently,
-the OUT service is neglected when an IN endpoint with a service
-interval exceeding 32ms is scheduled concurrently (every 64ms in
-this scenario).
+Arnd, can you refresh this one? It seems some misses still...
+I have got 3+ 0-day reports against one of the mux drivers.
 
-This issue is particularly seen on certain older AMD platforms.
-To mitigate this problem, it is recommended to adjust the service
-interval of the IN endpoint to not exceed 32ms (interval 8). This
-adjustment ensures that the OUT endpoint will not be bypassed,
-even if a smaller interval value is utilized.
+https://lore.kernel.org/all/?q=adg792a.c
 
-Cc: stable@vger.kernel.org
-Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
----
-Changes since v3:
- - Bump up the enum number XHCI_LIMIT_ENDPOINT_INTERVAL_9
-
-Changes since v2:
- - added stable tag to backport to all stable kernels
-
-Changes since v1:
- - replaced hex values with pci device names
- - corrected the commit message
-
- drivers/usb/host/xhci-mem.c |  5 +++++
- drivers/usb/host/xhci-pci.c | 25 +++++++++++++++++++++++++
- drivers/usb/host/xhci.h     |  1 +
- 3 files changed, 31 insertions(+)
-
-diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
-index 92703efda1f7..d3182ba98788 100644
---- a/drivers/usb/host/xhci-mem.c
-+++ b/drivers/usb/host/xhci-mem.c
-@@ -1420,6 +1420,11 @@ int xhci_endpoint_init(struct xhci_hcd *xhci,
- 	/* Periodic endpoint bInterval limit quirk */
- 	if (usb_endpoint_xfer_int(&ep->desc) ||
- 	    usb_endpoint_xfer_isoc(&ep->desc)) {
-+		if ((xhci->quirks & XHCI_LIMIT_ENDPOINT_INTERVAL_9) &&
-+		    usb_endpoint_xfer_int(&ep->desc) &&
-+		    interval >= 9) {
-+			interval = 8;
-+		}
- 		if ((xhci->quirks & XHCI_LIMIT_ENDPOINT_INTERVAL_7) &&
- 		    udev->speed >= USB_SPEED_HIGH &&
- 		    interval >= 7) {
-diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-index 2d1e205c14c6..d23884afdf3f 100644
---- a/drivers/usb/host/xhci-pci.c
-+++ b/drivers/usb/host/xhci-pci.c
-@@ -69,12 +69,22 @@
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_4C_XHCI		0x15ec
- #define PCI_DEVICE_ID_INTEL_TITAN_RIDGE_DD_XHCI		0x15f0
- 
-+#define PCI_DEVICE_ID_AMD_ARIEL_TYPEC_XHCI		0x13ed
-+#define PCI_DEVICE_ID_AMD_ARIEL_TYPEA_XHCI		0x13ee
-+#define PCI_DEVICE_ID_AMD_STARSHIP_XHCI			0x148c
-+#define PCI_DEVICE_ID_AMD_FIREFLIGHT_15D4_XHCI		0x15d4
-+#define PCI_DEVICE_ID_AMD_FIREFLIGHT_15D5_XHCI		0x15d5
-+#define PCI_DEVICE_ID_AMD_RAVEN_15E0_XHCI		0x15e0
-+#define PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI		0x15e1
-+#define PCI_DEVICE_ID_AMD_RAVEN2_XHCI			0x15e5
- #define PCI_DEVICE_ID_AMD_RENOIR_XHCI			0x1639
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_4			0x43b9
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_3			0x43ba
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_2			0x43bb
- #define PCI_DEVICE_ID_AMD_PROMONTORYA_1			0x43bc
- 
-+#define PCI_DEVICE_ID_ATI_NAVI10_7316_XHCI		0x7316
-+
- #define PCI_DEVICE_ID_ASMEDIA_1042_XHCI			0x1042
- #define PCI_DEVICE_ID_ASMEDIA_1042A_XHCI		0x1142
- #define PCI_DEVICE_ID_ASMEDIA_1142_XHCI			0x1242
-@@ -278,6 +288,21 @@ static void xhci_pci_quirks(struct device *dev, struct xhci_hcd *xhci)
- 	if (pdev->vendor == PCI_VENDOR_ID_NEC)
- 		xhci->quirks |= XHCI_NEC_HOST;
- 
-+	if (pdev->vendor == PCI_VENDOR_ID_AMD &&
-+	    (pdev->device == PCI_DEVICE_ID_AMD_ARIEL_TYPEC_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_ARIEL_TYPEA_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_STARSHIP_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_FIREFLIGHT_15D4_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_FIREFLIGHT_15D5_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_RAVEN_15E0_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_RAVEN_15E1_XHCI ||
-+	     pdev->device == PCI_DEVICE_ID_AMD_RAVEN2_XHCI))
-+		xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_9;
-+
-+	if (pdev->vendor == PCI_VENDOR_ID_ATI &&
-+	    pdev->device == PCI_DEVICE_ID_ATI_NAVI10_7316_XHCI)
-+		xhci->quirks |= XHCI_LIMIT_ENDPOINT_INTERVAL_9;
-+
- 	if (pdev->vendor == PCI_VENDOR_ID_AMD && xhci->hci_version == 0x96)
- 		xhci->quirks |= XHCI_AMD_0x96_HOST;
- 
-diff --git a/drivers/usb/host/xhci.h b/drivers/usb/host/xhci.h
-index 4914f0a10cff..36b77d3c0e7b 100644
---- a/drivers/usb/host/xhci.h
-+++ b/drivers/usb/host/xhci.h
-@@ -1633,6 +1633,7 @@ struct xhci_hcd {
- #define XHCI_WRITE_64_HI_LO	BIT_ULL(47)
- #define XHCI_CDNS_SCTX_QUIRK	BIT_ULL(48)
- #define XHCI_ETRON_HOST	BIT_ULL(49)
-+#define XHCI_LIMIT_ENDPOINT_INTERVAL_9 BIT_ULL(50)
- 
- 	unsigned int		num_active_eps;
- 	unsigned int		limit_active_eps;
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
 
