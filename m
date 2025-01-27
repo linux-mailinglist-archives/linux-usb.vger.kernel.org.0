@@ -1,51 +1,94 @@
-Return-Path: <linux-usb+bounces-19788-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19789-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 790F4A1DB4D
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 18:30:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C587A1DBAC
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 18:58:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7A1A164FF4
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 17:30:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90AAB1885C9E
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 17:58:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7772218A943;
-	Mon, 27 Jan 2025 17:29:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5071118CC13;
+	Mon, 27 Jan 2025 17:57:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lY/+E4R3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Z2t69b/1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D000818A93C;
-	Mon, 27 Jan 2025 17:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C6718A6A1
+	for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2025 17:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737998997; cv=none; b=Tkwfj7kcaMrmaZsjCmensULvWubx+C39lrLteEtzIvN1V6qcTEYNcZz8lBHVJ0MNC/9TYs4mvUs4on0nLZ00izEwj1ANbaB1vNcm+n2XIP7E5PvSX8l+1Pih+HX4dNlTqW/zNn30uA3j3oAnRSQwZ9rlgV5EHt2iuuM68q7UpDQ=
+	t=1738000672; cv=none; b=d59mIQy/vVimIE0g6qc4wouLRXwgAhgYkMKjjD/DeM46NUgu9LxA6p7/ISJuJoab0bUX287vSrcUzXg+HIM3wh0OTtnzVXp942J9NMby9H3+7IIg+sOv6pZwQRhhY7RSFsZoInrpNszJbYSVvkLXCkBtMwWXQaA3Q5q8iBehs6A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737998997; c=relaxed/simple;
-	bh=D/uzRckSG3FpY+pjYKUb1NfTl3HB/hs/iH6Dq/8rsXg=;
+	s=arc-20240116; t=1738000672; c=relaxed/simple;
+	bh=LKzqPSmhEkUHLUqV7oQeSbbuEI+VGAc5+n4An93Ywks=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=K9W9nTaqx83ohWUWrSKmbd3qaDATD33FzRmtBS3OWmezpojEW4Br0ph1BXOg7JgNOqzdxnlC6KDsnOcvD/34J8Ue3KxJM5+Vohc5wYqeNMBM1HQIaGCJNiWotxgY+i3VBOz01DfUH8Alf9sqhzMwJdSfO9L1e6OOHt/8Ik0uiTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lY/+E4R3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDCE4C4CED2;
-	Mon, 27 Jan 2025 17:29:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1737998995;
-	bh=D/uzRckSG3FpY+pjYKUb1NfTl3HB/hs/iH6Dq/8rsXg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lY/+E4R31wo6JSNSHOA3l2jFfqjhXUNdXwVZA8Ps75+3i2BPEdbm0afdXBCuHvbaN
-	 iRRYFcAvJKwnhVr9ZYPDrZkH1K+ka0x6pmEscdBM3ZWoQuWUll5qxVXrLahqXfq8FA
-	 sxJMoCB0de2IXM9W2ZBHoOpCFdBEN+CKmXZdsr9c=
-Date: Mon, 27 Jan 2025 18:29:52 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Restore xhci_pci support for Renesas HCs
-Message-ID: <2025012701-citrus-omission-89b3@gregkh>
-References: <20250127151051.1a91bbe6@foxbook>
+	 Content-Type:Content-Disposition:In-Reply-To; b=EkUbRgUrt5cYqdOjYzReU92k6oRcilDU5ooYMNwDwBNutNxiRr/WnB0NPNgjQzME1uFeGoXZnPO7PARRgw6mk4vuuL4NCsKTOuxa0y/jKpUUKFV5YpqwQ8j2AKzYD0n6/vV0VWFoGJdYITlf0V2v9qPiZ+H9s/97E49PvZohrRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Z2t69b/1; arc=none smtp.client-ip=209.85.128.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43621d27adeso31906155e9.2
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2025 09:57:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1738000668; x=1738605468; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M77PcxvNpcs48QUZQw5/KaTcNduAiPl13GqlIh2dsls=;
+        b=Z2t69b/1S20BpayF6m/mSCiK5ZXqMAOOt7YObD6B/kMcm1zo8yRPYyCjxft/BUfl9F
+         LyeDOiEjRmF18Yl+lWApaEBvy9HdOAAEY38JMMqqadV67ncv6kk4Phs/IjacJIS/yVnW
+         Ereh2CTFEDCT2bdEKL3rvuo/lWdb91uZnmBE8XptP9Ri9Ebl8LPmqLmG7nCZViknRwJy
+         u8+BwuoUWm06KZMKC/s692tCbz6z5HX01mb42PMTnOAoljGzgYVWWDIXjtJryfVkTy9P
+         JtNeWEf1RlDKj0FCgO27Np3w0J7pNR7LZ6GihcoRiTHxL2Km5KTsudyaAeyQHYMhDD/f
+         8ruA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738000668; x=1738605468;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M77PcxvNpcs48QUZQw5/KaTcNduAiPl13GqlIh2dsls=;
+        b=Lv+CO3KFXn+kHV4TSF7isvnntiX/jFpexFQ2sBBqkEalOL5WBEdHdbeskSip71Wqve
+         YkMUpQEdoeCgxackBviJ8ubg/PGUGafa/VV+kuoNCspPyYfmRw7Fs7p9DareIvdvJnoh
+         cpYCOIhSVi2Ks7PIDgYgNoXjpUOexItwjLdm8nI0Eez0o20tzLpntw1PPHWR5GfafuAn
+         iIDmYUk+m3CeSuCP587OaDPbvCVVFIf85QRYRzs/xKxNsULFpi16kGA7M8xGsNPD0oi2
+         kqIX++ES/NWzrromg5e4fShg83mVLLwbobqV0eeXxw0Kw6h1co1RhC436XIVLP2aarPF
+         jvLg==
+X-Forwarded-Encrypted: i=1; AJvYcCWeb8Ms4ODwyRezu9ghEnx+rB0rc9YGGNC3bfZTmt3swhgTnoToOPqCKsd/mpEfLroPLINcdGYX9pg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqjIKe3DofrLB4fciOwaFq7hPltPxBdHKZ31kCYV+dfaYsn5TV
+	uITdoFlF9zY6pknyIObGPiEOnIUtqfQCfpLgZKU66XZWjiIWf11iamKhmZEtXHI=
+X-Gm-Gg: ASbGnct0rpv/JAWpmPWOk/L/dls422/rVexVdEI2+sfXP1iXyTb/+HYh+PbSIh/LL4y
+	HfrFohpEC6dKgXI1tvukHNc0SaSHKhkYq66OPOBGY+/KAklqRRPN1NM8Fpqu4CIz8x/nzspWCyy
+	ch0MKgyKxxRm/C4nmbDYUjIx4yTbKiEZrPwj8XCEuNBT8j7dG9uMQDs5VMhcgWaZnbUJqGhPpLA
+	CfqQqfbQE3jLNA30tYmaj9EZjIYs/MfhFX0ilW0+r/b9JlqJRRXQjyzOg/9HQgKtRyvYu6Izjvq
+	BdrvpyXJ4ZlEBg2O
+X-Google-Smtp-Source: AGHT+IGgQC/VZ4z0/ddu2PPeryPS8PgsDhSQ5DPW3/GEQZHDA32wG/2eJS1c8ZIEWKfIjZwD5N4E7Q==
+X-Received: by 2002:a05:600c:4f06:b0:436:e3ea:4447 with SMTP id 5b1f17b1804b1-4389144f00amr434896275e9.30.1738000667959;
+        Mon, 27 Jan 2025 09:57:47 -0800 (PST)
+Received: from linaro.org ([2a02:2454:ff21:ef30:4750:4bda:32ab:b090])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438bd4d2952sm141323345e9.34.2025.01.27.09.57.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2025 09:57:46 -0800 (PST)
+Date: Mon, 27 Jan 2025 18:57:41 +0100
+From: Stephan Gerhold <stephan.gerhold@linaro.org>
+To: Bjorn Andersson <bjorn.andersson@oss.qualcomm.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Felipe Balbi <balbi@kernel.org>,
+	Wesley Cheng <quic_wcheng@quicinc.com>,
+	Saravana Kannan <saravanak@google.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>, Frank Li <Frank.li@nxp.com>,
+	linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 00/12] usb: dwc3: qcom: Flatten dwc3 structure
+Message-ID: <Z5fJFRMHIvKoN4cE@linaro.org>
+References: <20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -54,64 +97,194 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250127151051.1a91bbe6@foxbook>
+In-Reply-To: <20250113-dwc3-refactor-v3-0-d1722075df7b@oss.qualcomm.com>
 
-On Mon, Jan 27, 2025 at 03:10:51PM +0100, Michal Pecio wrote:
-> Some Renesas HCs require firmware upload to work, this is handled by the
-> xhci_pci_renesas driver. Other variants of those chips load firmware from
-> onboard flash and can work with xhci_pci alone.
+On Mon, Jan 13, 2025 at 09:11:33PM -0800, Bjorn Andersson wrote:
+> The USB IP-block found in most Qualcomm platforms is modelled in the
+> Linux kernel as 3 different independent device drivers, but as shown by
+> the already existing layering violations in the Qualcomm glue driver
+> they can not be operated independently.
 > 
-> A refactor merged in v6.12 broke the latter configuration and users are
-> finding their hardware not working after upgrading and need to enable the
-> firmware loader which isn't really necessary on their systems.
-
-Why isn't it necessary?  Those chips want firmware to be uploaded, and
-if the driver doesn't need it, it should be able to handle it if it is
-not present.
-
-> Let xhci_pci work with those chips as before when the firmware loader is
-> disabled by kernel configuration.
+> With the current implementation, the glue driver registers the core and
+> has no way to know when this is done. As a result, e.g. the suspend
+> callbacks needs to guard against NULL pointer dereferences when trying
+> to peek into the struct dwc3 found in the drvdata of the child.
 > 
-> Fixes: 25f51b76f90f ("xhci-pci: Make xhci-pci-renesas a proper modular driver")
-> CC: stable@vger.kernel.org
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219616
-> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219726
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+> Missing from the upstream Qualcomm USB support is proper handling of
+> role switching, in which the glue needs to be notified upon DRD mode
+> changes. Several attempts has been made through the years to register
+> callbacks etc, but they always fall short when it comes to handling of
+> the core's probe deferral on resources etc.
+> 
+> Furhtermore, the DeviceTree binding is a direct representation of the
+> Linux driver model, and doesn't necessarily describe "the USB IP-block".
+> 
+> This series therefor attempts to flatten the driver split, and operate
+> the glue and core out of the same platform_device instance. And in order
+> to do this, the DeviceTree representation of the IP block is flattened.
+> 
+> To avoid littering the dwc3-qcom driver with the migration code - which
+> we should be able to drop again in a LTS or two - this is now placed in
+> drivers/of/overlays.
+> 
+> A patch to convert a single platform - sc8280xp - is included in the
+> series. The broader conversion will be submitted in a follow up series.
+> 
+> [...]
 > ---
->  drivers/usb/host/xhci-pci.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> Bjorn Andersson (12):
+>       dt-bindings: usb: snps,dwc3: Split core description
+>       dt-bindings: usb: Introduce qcom,snps-dwc3
+>       of: dynamic: Add of_changeset_add_prop_copy()
+>       of: overlays: Introduce dwc3 flattening overlay
+>       of: overlays: dwc3-flattening: Add Qualcomm Arm32 overlays
+>       of: overlays: dwc3-flattening: Add Qualcomm Arm64 board overlays
+>       of: overlays: dwc3-flattening: Provide overlay symbols
+>       usb: dwc3: core: Expose core driver as library
+>       usb: dwc3: core: Don't touch resets and clocks
+>       usb: dwc3: qcom: Don't rely on drvdata during probe
+>       usb: dwc3: qcom: Transition to flattened model
+>       arm64: dts: qcom: sc8280x: Flatten the USB nodes
 > 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 5a5f0b2dba4d..3d08d6527b1d 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -657,17 +657,21 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  }
->  EXPORT_SYMBOL_NS_GPL(xhci_pci_common_probe, "xhci");
->  
-> +#if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
->  static const struct pci_device_id pci_ids_reject[] = {
->  	/* handled by xhci-pci-renesas */
->  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0014) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0015) },
->  	{ /* end: all zeroes */ }
->  };
-> +#endif
->  
->  static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  {
-> +#if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
->  	if (pci_match_id(pci_ids_reject, dev))
->  		return -ENODEV;
-> +#endif
+>  .../devicetree/bindings/usb/qcom,dwc3.yaml         |   13 +-
+>  .../devicetree/bindings/usb/qcom,snps-dwc3.yaml    |  618 ++++++++
+>  .../devicetree/bindings/usb/snps,dwc3-common.yaml  |  415 ++++++
+>  .../devicetree/bindings/usb/snps,dwc3.yaml         |  391 +----
+>  arch/arm64/boot/dts/qcom/sa8295p-adp.dts           |   12 +-
+>  arch/arm64/boot/dts/qcom/sa8540p-ride.dts          |    5 +-
+>  arch/arm64/boot/dts/qcom/sc8280xp-crd.dts          |   12 +-
+>  .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts      |   10 +-
+>  .../dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts     |   11 +-
+>  .../boot/dts/qcom/sc8280xp-microsoft-arcata.dts    |   10 +-
+>  .../boot/dts/qcom/sc8280xp-microsoft-blackrock.dts |   18 +-
+>  arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |  157 +-
+>  drivers/of/Kconfig                                 |    2 +
+>  drivers/of/Makefile                                |    2 +
+>  drivers/of/dynamic.c                               |   20 +
+>  drivers/of/overlays/Kconfig                        |   15 +
+>  drivers/of/overlays/Makefile                       |    3 +
+>  drivers/of/overlays/dwc3-flattening/Makefile       |   94 ++
+>  .../of/overlays/dwc3-flattening/dwc3-flattening.c  | 1552 ++++++++++++++++++++
+>  .../of/overlays/dwc3-flattening/dwc3-flattening.h  |  188 +++
+>  .../overlays/dwc3-flattening/dwc3-qcom_apq8094.dts |   32 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_apq8096.dts |   60 +
+>  .../dwc3-qcom_apq8096_inforce_ifc6640.dts          |   58 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_ipq4018.dts |   36 +
+>  .../dwc3-qcom_ipq4018_8dev_jalapeno.dts            |   38 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_ipq4019.dts |   38 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_ipq5018.dts |   28 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_ipq5332.dts |   32 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_ipq5424.dts |   58 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_ipq6018.dts |   54 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_ipq8064.dts |   40 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_ipq8074.dts |   58 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_ipq9574.dts |   29 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_msm8953.dts |   32 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_msm8992.dts |   32 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_msm8994.dts |   32 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_msm8996.dts |   58 +
+>  .../dwc3-qcom_msm8996_oneplus_oneplus3.dts         |   56 +
+>  .../dwc3-qcom_msm8996_oneplus_oneplus3t.dts        |   56 +
+>  .../dwc3-qcom_msm8996_sony_dora_row.dts            |   57 +
+>  .../dwc3-qcom_msm8996_sony_kagura_row.dts          |   57 +
+>  .../dwc3-qcom_msm8996_sony_keyaki_row.dts          |   57 +
+>  .../dwc3-qcom_msm8996_xiaomi_gemini.dts            |   56 +
+>  .../dwc3-qcom_msm8996_xiaomi_natrium.dts           |   56 +
+>  .../dwc3-qcom_msm8996_xiaomi_scorpio.dts           |   56 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_msm8998.dts |   34 +
+>  .../dwc3-qcom_msm8998_fxtec_pro1.dts               |   35 +
+>  .../dwc3-qcom_msm8998_oneplus_cheeseburger.dts     |   32 +
+>  .../dwc3-qcom_msm8998_oneplus_dumpling.dts         |   32 +
+>  .../dwc3-qcom_msm8998_sony_xperia_lilac.dts        |   35 +
+>  .../dwc3-qcom_msm8998_sony_xperia_maple.dts        |   35 +
+>  .../dwc3-qcom_msm8998_sony_xperia_poplar.dts       |   35 +
+>  .../dwc3-qcom_msm8998_xiaomi_sagit.dts             |   32 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_qcm2290.dts |   32 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_qcm6490.dts |   63 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_qcs404.dts  |   56 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_qcs615.dts  |   62 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_qcs8300.dts |   62 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_qdu1000.dts |   38 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_qru1000.dts |   38 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sa8155p.dts |   71 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sa8540p.dts |  129 ++
+>  .../overlays/dwc3-flattening/dwc3-qcom_sa8775p.dts |   90 ++
+>  .../dwc3-flattening/dwc3-qcom_sar2130p.dts         |   39 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sc7180.dts  |   39 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sc7280.dts  |   63 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sc8180x.dts |  109 ++
+>  .../dwc3-flattening/dwc3-qcom_sc8280xp.dts         |  129 ++
+>  .../dwc3-qcom_sc8280xp_microsoft_blackrock.dts     |  121 ++
+>  .../overlays/dwc3-flattening/dwc3-qcom_sda660.dts  |   59 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdm450.dts  |   33 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdm630.dts  |   57 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdm632.dts  |   32 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdm636.dts  |   59 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdm660.dts  |   57 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdm670.dts  |   36 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdm845.dts  |   64 +
+>  .../dwc3-qcom_sdm845_lenovo_yoga_c630.dts          |   67 +
+>  .../dwc3-flattening/dwc3-qcom_sdm845_lg_judyln.dts |   67 +
+>  .../dwc3-flattening/dwc3-qcom_sdm845_lg_judyp.dts  |   67 +
+>  .../dwc3-qcom_sdm845_qcom_sdm845_mtp.dts           |   67 +
+>  .../dwc3-qcom_sdm845_samsung_starqltechn.dts       |   67 +
+>  .../dwc3-qcom_sdm845_samsung_w737.dts              |   67 +
+>  .../dwc3-qcom_sdm845_shift_axolotl.dts             |   67 +
+>  .../dwc3-qcom_sdm845_thundercomm_db845c.dts        |   67 +
+>  .../dwc3-qcom_sdm845_xiaomi_beryllium.dts          |   67 +
+>  .../dwc3-qcom_sdm845_xiaomi_beryllium_ebbg.dts     |   67 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdx55.dts   |   38 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdx65.dts   |   38 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sdx75.dts   |   36 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm4250.dts  |   37 +
+>  .../dwc3-qcom_sm4250_oneplus_billie2.dts           |   35 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm6115.dts  |   37 +
+>  .../dwc3-qcom_sm6115_lenovo_j606f.dts              |   35 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm6125.dts  |   36 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm6350.dts  |   39 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm6375.dts  |   36 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm7125.dts  |   39 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm7225.dts  |   39 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm7325.dts  |   60 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm8150.dts  |   67 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm8250.dts  |   67 +
+>  .../dwc3-qcom_sm8250_xiaomi_elish.dts              |   64 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm8350.dts  |   67 +
+>  .../dwc3-qcom_sm8350_microsoft_surface_duo2.dts    |   67 +
+>  .../dwc3-qcom_sm8350_qcom_sm8350_hdk.dts           |   69 +
+>  .../dwc3-qcom_sm8350_qcom_sm8350_mtp.dts           |   67 +
+>  .../dwc3-qcom_sm8350_sony_pdx214_generic.dts       |   67 +
+>  .../dwc3-qcom_sm8350_sony_pdx215_generic.dts       |   67 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm8450.dts  |   39 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm8550.dts  |   39 +
+>  .../overlays/dwc3-flattening/dwc3-qcom_sm8650.dts  |   39 +
+>  .../dwc3-flattening/dwc3-qcom_x1e80100.dts         |  153 ++
+>  .../dwc3-qcom_x1e80100_hp_omnibook_x14.dts         |  149 ++
+>  drivers/usb/dwc3/core.c                            |  167 ++-
+>  drivers/usb/dwc3/dwc3-qcom.c                       |  149 +-
+>  drivers/usb/dwc3/glue.h                            |   22 +
+>  include/linux/of.h                                 |    3 +
+>  118 files changed, 8389 insertions(+), 670 deletions(-)
+> ---
 
-No, please don't put #ifdef in .c files if at all preventable.
+This is quite a lot of code and new files for a temporary migration.
+It's also difficult to test these changes fully, since there are
+separate overlays for each SoC and sometimes even each board.
 
-If the firmware isn't there, then the driver should be fixed to keep on
-working if it determines loading it is not needed.  This type of check
-should not be needed in the xhci-pci.c file.
+Would it be easier to just duplicate the dwc3-qcom driver for now?
+Making a copy of the current dwc3-qcom.c would be just 1000 lines of
+extra code, compared to more than 7000 for the overlay approach.
 
-thanks,
+The copy (e.g. dwc3-qcom-legacy.c) would keep handling the old bindings
+with the existing code (that is known to work to some extent). We can
+then improve upon the main version without risk of breaking any old
+DTBs. If we decide to drop support for the old DTBs at some point, we
+can just drop dwc3-qcom-legacy.
 
-greg k-h
+This approach is also not pretty, but I think the risk and effort would
+be lower than making sure the overlay approach works on all the affected
+targets.
+
+Thanks,
+Stephan
 
