@@ -1,221 +1,165 @@
-Return-Path: <linux-usb+bounces-19785-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19786-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D30B3A1D8B5
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 15:50:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A79F5A1DA07
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 16:59:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 248B31644D6
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 14:50:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F00703A4ABF
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 15:59:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BFCE126C03;
-	Mon, 27 Jan 2025 14:50:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 260F71547F2;
+	Mon, 27 Jan 2025 15:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Qhdpboih"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="lyjvegeF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420626AAD
-	for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2025 14:50:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1173C14D6ED
+	for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2025 15:59:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737989446; cv=none; b=H4aMLieGoqXC8DcN/v8zyx8ZEZC3bIc8kPgn2G0aeZ7ODaYWnPw8MdEiz+H0rRwADPqhFMPOH4uvapUZHhRUIn6AR5B3tTqlz+f38tl5ASpmiKLTacdjGsTga916Z42OQX2Ubriaww4sU71FK+DUFOCQDIp60yuvGWswwlSVzOA=
+	t=1737993559; cv=none; b=JrwcJIRU/m/P8SHbndAjbnoS4fNJ0o03gCLuXDUhhioxEHPaTBpIZHpF+mYBz+h3yEudsCH5oDrv/sXdTOr8DY3KDWld1A5Vzw4aiHfOWMVTiuZbwrwH1+p6AbtY2y4bqUl6j424hdoXZElO0he74BijRu0d8H1PNeggLbtblZ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737989446; c=relaxed/simple;
-	bh=2+OpoyTfuWM3aBgSI4gWxEzpF5BlIEdZOaUYl/KX3pM=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=RmCnKPb+dyn3NBs4tT1TY4hv5ER3qVdPBg1R1Z16TXKNGJPf3z/L66GOHhN7Ox/yVD775RxhuvcXvYoWKUj6ekfzV/X5SLOwtNq5BuaGzwsXov8sohsjVOuWSLhxjY4IZ7dXeVXneHYmZZvaeVFgjkLqCMiP5xYthRxKtzDVnoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Qhdpboih; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50RD3VnW019452
-	for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2025 14:50:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	d/agJZlIjuRs2ho7DHlJuFBgOw0g4uTuFNeigGGmjjE=; b=QhdpboihpVpGwMoE
-	bFZ5FpViVT//73hnVDZwqEFibZ38DP2y65V87bENBXb0mU5Frr953EYRBbOac/pg
-	ogtIAam2yhAIrBGJhmz6q3PGIfHefs1kwzUNGsJTaOfxV6yxkRutneIDTAB4MO3B
-	FAOvA4Dve3m1T/n6bIztRRcLpLBIlURtRZ0rKLy+CxiobKjlsSZ4RFH6QvH7NXv8
-	OVf8LlAQZgzKezfN5NwN1D9ogiDowmZdygvogOy88sjp9fqG7wASWMqOo2QnPcNS
-	9P2hxBngdRu34HOekHCGUNfssm0L+pVOLZeWRSuwS4q1asS8xFMj52fCAOpu/9ga
-	6PG3Yw==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44eapq8714-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2025 14:50:44 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-4679fb949e8so9567701cf.1
-        for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2025 06:50:44 -0800 (PST)
+	s=arc-20240116; t=1737993559; c=relaxed/simple;
+	bh=KiZpbSe+YKq2dVtM9Hv+gkb12+2RcrmxiwO1F8vXcS4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EJrfDCKvAxUXRyD6SPfctJNixax2bzHqYCcLUysouVtN6KSMQV9YFL8pd3FxgjHmqcFyflO9Lc5ITcIiv761Ughkl4ECcHcxjVmJGfhfFt421snfEv3XT82ST237SZ49yp2UaUL8tSjU+IYXByNK1zEw7QxFcmEvstxg9R56PHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=lyjvegeF; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6d89a727a19so58488046d6.0
+        for <linux-usb@vger.kernel.org>; Mon, 27 Jan 2025 07:59:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1737993556; x=1738598356; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=AEc9c8A+QfAwPXoTPFk0q427bu8TxsL6y6XWG2ckD+4=;
+        b=lyjvegeF/pM/Nhf5RDjqmyb4fAchyna87PXwKVGJm3lrNhP9KMSaWr4AecDEpyjf+K
+         yyDAx3/VxUw04STWXTPtnwwJ/PyqCWx296AtqE8Wi2a7ovjWJJ8ggH+w3+R9xM3Am3hx
+         vqI66lgAbZyi9cuX5YCbMusAT0mx3aUBA0FFf8iw4hLVoZ2h0G71lPwCikZRJv3aMved
+         EjmEJtyORoqjv7L6NP1LS3vYA2kOzcQTrxcdAI3ahqG+8B+RgYwLirePmufk4BEn1JYr
+         wcnbwA8JkNFZzEw17zH5/kRoWzQPNnF9r2+abKgN1QZarF/064BS36vkYTs3ApzTiE7g
+         OSXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737989443; x=1738594243;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=d/agJZlIjuRs2ho7DHlJuFBgOw0g4uTuFNeigGGmjjE=;
-        b=Do6n9HSMw93LFJS6bGwRNHnMZHq4ZmkGY0+By2oThVoNdD2O02PhNr47qcvvuWxyuc
-         57UhrTutUDIda6volk00iEeS1MVo6lBLsGxa54r7621/ChoedURmR/bWg2kdUgcxmvU0
-         MsvEKAx8IjqAakBUT62uwJcyXoEVPEo1JgvlmgCfp+xlehlC8h1UFMHaJWAXVyEOsE4A
-         2VQGJGi/aRCGqLmbJvEc23ql66ivOhZyYM2JqcaLLYZZq7xZJfuqVzg+BY0Wlct2SH2F
-         rTso5xnlID4nQCz6ZcY8KG7ZY3x2L//9SjMUKil8xqLuKUuTCi7z9FDkRd5ojN8ry+Sh
-         0yrw==
-X-Forwarded-Encrypted: i=1; AJvYcCVg6Jb/04fmcm0uTEvxx1ik8ivNPIpl4dvUZhVWzya0LYNSH9tlGNY4JjiWRNEQROkQLBRfR/pt458=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw5d113SJg6lETUUIQKfvsiIBpvbi+TWW7vmWQxQc9sRo2eVeYN
-	Jihh84A0xgqt4YVoiMpp6XzgxRgnOfs/irITow6O8KByVMt9KLe+PsAVVPPdEG8dA9BBoeLp4mI
-	EPUYNOoyTRJVXBAkp/FxQ1kqt3gJvTrmuRUyoESiY0eEykmarL8iUuwNRvPc=
-X-Gm-Gg: ASbGnctsXCbZyodTTZUqEtXRLkuigcUTQ0kgObw/viHqySgyeAdIu39ZgOOu/NV4QiD
-	1mBcBDctn2e1YKtBdCMmds6DrrnpoqHenUv/9BPdQIqjlOa4Xg49Uq0+fJ1jGffUmuXIQxj8J1k
-	tH7GeNLNYtudXQPhnqJdMCU6pCtXoNOEEVtFNqH4pOBdMlUDIDIQezjmcq4STmjDOe2fFPZ0waz
-	9GNLivtkKJjRVXI4l6m3PKJpp7iIaQdzLZsMHhOdsP+YAuwRIanpi1CBphu2GBEpuFWnh8wa9V1
-	9hQTkfyjyjR2WNVDrUyAjuXGwoWWsBsMEA4WeHbR9cr3H57Rq9DP6CH5jrc=
-X-Received: by 2002:a05:622a:1b92:b0:460:3a41:a9e5 with SMTP id d75a77b69052e-46e12bb2ec9mr229573721cf.13.1737989442888;
-        Mon, 27 Jan 2025 06:50:42 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG972NadTHMppU+ZdSaWIEL/ykHsknEiqTzaOz68ev01rj004iSJzalbBdr4fe/KxT3t+p36Q==
-X-Received: by 2002:a05:622a:1b92:b0:460:3a41:a9e5 with SMTP id d75a77b69052e-46e12bb2ec9mr229573501cf.13.1737989442347;
-        Mon, 27 Jan 2025 06:50:42 -0800 (PST)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6760fbf38sm595855966b.143.2025.01.27.06.50.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 27 Jan 2025 06:50:41 -0800 (PST)
-Message-ID: <b125d1cf-8a17-4a3e-b662-5bdcca566f9c@oss.qualcomm.com>
-Date: Mon, 27 Jan 2025 15:50:39 +0100
+        d=1e100.net; s=20230601; t=1737993556; x=1738598356;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AEc9c8A+QfAwPXoTPFk0q427bu8TxsL6y6XWG2ckD+4=;
+        b=aJEfckOR9Y5Tcp5he4OkVFCTr+Llq4uZQRpYwYb8F3EDI4pcMot93qI8MfDNf4Mj+7
+         j4vt5U5Y2I6DF+Ieqs19PFqCDyW5gA8mfJfNFYmcpiEitXEXk8b40xyHO8pr9WmeS/qS
+         DISzCQBMyn7Wi/Xi0n7jf8cYbx8TiGmlLW+syoBSik5GKd3eeq60V+I7BFZMGPlPnyeq
+         f3S5n24lLMnY54DU5ggWm0nhou8npXGkyrv3556Wf+JYo5lBQG0n+fqB4yjs4aPm3EKS
+         qE2KYh88pkNgwuPoyhCzmJXQmkAvGwcb2t9P733sYqTEW1Vtn1dLAs3sxn6+QQ1CC52+
+         HiBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXDsG1aE/aUIvgb65+K1gRg8BPT1UQ/QTIy/wmOPL89re5NSVoNuWZFlzMoPvjJX5o6+TclSmBcssQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCAYi2I57P/zigDkSVI11SZKowf7uh4K6oiE59qU4Jc3eLt5TH
+	gQnLq9wm3f22Ed7SRNvSzOs/jC/hWeC5G0bK3vjc50D5C0bOscmFgc9p2jrRrw==
+X-Gm-Gg: ASbGncu3ZRpRMRZV9pccpdLGjFdxXum1yif3XajL32jM/iB3D6rpCFVa5yO6nQhvzUi
+	nkyQagrW68z8UNJbvc5Oh5J3ymjnToEwhr13jdWXd6zE5T5I8iU/NcgA0Dmj7otK8an+1vRaukO
+	p/Vec3zgR7sWkPIZWIomIk6olIKONLpvZ8HspiUNOGlbEz4z17iix/AeOY4APm5H/PRqutQZLXj
+	62IiQU5uM+MoFW5a01cNZP7B31FEQnDZIUt3pF1M+hVUU3a/MD+XniAyksfEmxCcvWQwqEHtjyY
+	W0KHbZMc6n/M+NU/tIcdY9s=
+X-Google-Smtp-Source: AGHT+IHfNmKPV5UeHojXIwHd4RsLYy0KAUidQvsHi84UnE3xrAaBh3HiFV5nZx+d7JLw1W8STgZ/DA==
+X-Received: by 2002:a05:6214:29c2:b0:6d4:1613:be3e with SMTP id 6a1803df08f44-6e20627c995mr231273476d6.22.1737993555613;
+        Mon, 27 Jan 2025 07:59:15 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e2051362b1sm35720756d6.19.2025.01.27.07.59.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2025 07:59:15 -0800 (PST)
+Date: Mon, 27 Jan 2025 10:59:12 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: syzbot <syzbot+9c9179ac46169c56c1ad@syzkaller.appspotmail.com>,
+	Karol Przybylski <karprzy7@gmail.com>,
+	Jiri Kosina <jikos@kernel.org>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	linux-input@vger.kernel.org
+Subject: Re: [syzbot] [usb?] KASAN: stack-out-of-bounds Read in
+ usb_check_int_endpoints
+Message-ID: <bc2fb22a-f759-4664-b06c-4c30a535419a@rowland.harvard.edu>
+References: <6797072e.050a0220.2eae65.003f.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/8] dt-bindings: soc: qcom: eud: Add phy related bindings
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>,
-        Elson Serrao <quic_eserrao@quicinc.com>, andersson@kernel.org,
-        robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        gregkh@linuxfoundation.org
-Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-References: <20240730222439.3469-1-quic_eserrao@quicinc.com>
- <20240730222439.3469-2-quic_eserrao@quicinc.com>
- <63cf3198-fb79-466f-b80a-024e970e400a@kernel.org>
- <5275651f-4075-4dac-bba0-da88f5836459@quicinc.com>
- <0b007a32-00be-40ae-9d96-d7a02b4534bf@kernel.org>
- <0e0d730d-66b9-4b00-a3ed-eb11ace9a79a@oss.qualcomm.com>
-Content-Language: en-US
-In-Reply-To: <0e0d730d-66b9-4b00-a3ed-eb11ace9a79a@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: SNOd450t7OCh-yhwJHLGgXRL0yo29ZIY
-X-Proofpoint-GUID: SNOd450t7OCh-yhwJHLGgXRL0yo29ZIY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-27_07,2025-01-27_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- malwarescore=0 spamscore=0 phishscore=0 adultscore=0 clxscore=1015
- mlxscore=0 bulkscore=0 suspectscore=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=999 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2411120000 definitions=main-2501270118
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6797072e.050a0220.2eae65.003f.GAE@google.com>
 
-On 27.01.2025 3:40 PM, Konrad Dybcio wrote:
-> On 1.08.2024 9:45 AM, Krzysztof Kozlowski wrote:
->> On 01/08/2024 00:23, Elson Serrao wrote:
->>>
->>>
->>> On 7/30/2024 10:33 PM, Krzysztof Kozlowski wrote:
->>>> On 31/07/2024 00:24, Elson Roy Serrao wrote:
->>>>> Embedded USB Debugger(EUD) being a High-Speed USB  hub needs
->>>>> HS-Phy support for it's operation. Hence document phy bindings
->>>>> to support this.
->>>>>
->>>>> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
->>>>
->>>> A nit, subject: drop second/last, redundant "bindings". The
->>>> "dt-bindings" prefix is already stating that these are bindings.
->>>> See also:
->>>> https://elixir.bootlin.com/linux/v6.7-rc8/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
->>>>
->>> Ack
->>>>> ---
->>>>>  .../devicetree/bindings/soc/qcom/qcom,eud.yaml       | 12 ++++++++++++
->>>>>  1 file changed, 12 insertions(+)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>>>> index f2c5ec7e6437..fca5b608ec63 100644
->>>>> --- a/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>>>> +++ b/Documentation/devicetree/bindings/soc/qcom/qcom,eud.yaml
->>>>> @@ -29,6 +29,14 @@ properties:
->>>>>      description: EUD interrupt
->>>>>      maxItems: 1
->>>>>  
->>>>> +  phys:
->>>>> +    items:
->>>>> +      - description: USB2/HS PHY needed for EUD functionality
->>>>> +
->>>>> +  phy-names:
->>>>> +    items:
->>>>> +      - const: usb2-phy
->>>>> +
->>>>>    ports:
->>>>>      $ref: /schemas/graph.yaml#/properties/ports
->>>>>      description:
->>>>> @@ -48,6 +56,8 @@ properties:
->>>>>  required:
->>>>>    - compatible
->>>>>    - reg
->>>>> +  - phys
->>>>> +  - phy-names
->>>>
->>>> That's an ABI break and nothing in commit msg justified it.
->>>>
->>>
->>> Hi Krzysztof
->>>
->>> Thank you for the review.
->>> I see that the only user for EUD as of now is QC sc7280 SoC where phy property
->>
->> Did you ask all customers and all users of Linux kernel?
+On Sun, Jan 26, 2025 at 08:10:22PM -0800, syzbot wrote:
+> Hello,
 > 
-> Unfortunately, the PDF agrees - the current description is inherently incomplete
-> and the driver seems to have been upstreamed in a rather "i need this specific
-> part of it for my usecase" manner..
+> syzbot found the following issue on:
 > 
-> The driver must be aware of all USB state changes (as EUD is essentially a mux+hub
-> sitting between the PHYs and the USB controllers).
+> HEAD commit:    21266b8df522 Merge tag 'AT_EXECVE_CHECK-v6.14-rc1' of git:..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14bd9c24580000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=f9e008bfc27b14db
+> dashboard link: https://syzkaller.appspot.com/bug?extid=9c9179ac46169c56c1ad
+> compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
 > 
-> Additionally, AFAICU, all device-mode-capable USB ports may potentially be used
-> for debug purposes (one at a time), so it's not just a matter of a single
-> controller here. Plug events / their suspend state must be monitored to program
-> the EUD (which again, sits in the middle of all this) in a specific manner.
+> Unfortunately, I don't have any reproducer for this issue yet.
 > 
-> EUD is present on all non-ancient SoCs and by default it's on in bypass mode, so
-> you can ignore its existence. That is, unless you want to use the features it
-> provides, which we absolutely do.
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/5249b29d55f2/disk-21266b8d.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/8413507597a1/vmlinux-21266b8d.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/9c84998b8cfb/bzImage-21266b8d.xz
 > 
->>> is missing and EUD node is disabled. As described in my cover letter, HS phy
->>> support is needed for EUD functionality and this is applicable to all SoCs
->>> where EUD is to be enabled. Hence phy would be a required property.
->>
->> Nothing in commit msg explained that, but I have a bit hard time to
->> believe that this never worked. If that's the case, say it explicitly in
->> commit msg - this was always broken.
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+9c9179ac46169c56c1ad@syzkaller.appspotmail.com
 > 
-> Even if it does work, it does so on a specific class of boards, relying on
-> specific setup from a previous stage bootloader.
+> hid-thrustmaster 0003:044F:B65D.0004: hidraw0: USB HID v0.00 Device [HID 044f:b65d] on usb-dummy_hcd.2-1/input0
+> ==================================================================
+> BUG: KASAN: stack-out-of-bounds in usb_check_int_endpoints+0x1fe/0x280 drivers/usb/core/usb.c:277
+> Read of size 1 at addr ffffc9000213e831 by task kworker/1:1/80
 > 
->>> Given that the changes in this series are directly applicable to sc7280 as well,
->>> I will re-enable/rectify EUD feature on sc7280 SoC first, by adhering it to this binding
->>> requirement. That would address the ABI break. 
->>
->> I don't understand what you are saying here.
->>
->>> Once the base framework is set I shall extend it to sm8450 SoC.
-> 
-> tldr, we should fix both the bindings and the 7280 dt for it
+> CPU: 1 UID: 0 PID: 80 Comm: kworker/1:1 Not tainted 6.13.0-syzkaller-04858-g21266b8df522 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
+> Workqueue: usb_hub_wq hub_event
+> Call Trace:
+>  <TASK>
+>  __dump_stack lib/dump_stack.c:94 [inline]
+>  dump_stack_lvl+0x241/0x360 lib/dump_stack.c:120
+>  print_address_description mm/kasan/report.c:378 [inline]
+>  print_report+0x169/0x550 mm/kasan/report.c:489
+>  kasan_report+0x143/0x180 mm/kasan/report.c:602
+>  usb_check_int_endpoints+0x1fe/0x280 drivers/usb/core/usb.c:277
+>  thrustmaster_interrupts drivers/hid/hid-thrustmaster.c:176 [inline]
+>  thrustmaster_probe+0x47d/0xcb0 drivers/hid/hid-thrustmaster.c:347
 
-On top of these comments, reg should be split up into three regions too,
-if we want to be docs-accurate..
+Karol:
 
-Konrad
+Your commit 50420d7c79c3 ("HID: hid-thrustmaster: Fix warning in 
+thrustmaster_probe by adding endpoint check") does this:
+
++	/* Are the expected endpoints present? */
++	u8 ep_addr[1] = {b_ep};
++
++	if (!usb_check_int_endpoints(usbif, ep_addr)) {
++		hid_err(hdev, "Unexpected non-int endpoint\n");
++		return;
++	}
+
+usb_check_int_endpoints() expects its second argument to be a 
+0-terminated byte array (see the kerneldoc).  Lack of the terminating 0 
+is what caused the syzbot error reported above.
+
+Also, usb_check_int_endpoints() is meant to be used by drivers in which 
+the endpoint number is a compile-time constant.  It's not appropriate 
+here.  You should have written the test as:
+
+	if (!usb_endpoint_is_int_out(&ep->desc)) {
+
+Alternatively, you could have called usb_find_common_endpoints().
+
+Would you like to submit a patch to fix this error?
+
+Alan Stern
 
