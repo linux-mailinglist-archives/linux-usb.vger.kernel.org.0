@@ -1,195 +1,138 @@
-Return-Path: <linux-usb+bounces-19781-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19782-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A9ACA1D6B1
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 14:26:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C1E1A1D7D7
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 15:11:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8234A3A2419
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 13:25:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A979A166413
+	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 14:11:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40EF20010C;
-	Mon, 27 Jan 2025 13:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F10511FF1D4;
+	Mon, 27 Jan 2025 14:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QSGUOvEZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XRP6cXgX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCDFA1FF7B4;
-	Mon, 27 Jan 2025 13:25:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE0583FC7;
+	Mon, 27 Jan 2025 14:10:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737984332; cv=none; b=odp24p0j+3utK+dhrDZp54Fqr5Vng5pVzNhMZP+6uWvNhaM5NdV3jnReXtHuLUHJ9+p6rObv2tN+KeceJ6ciDNuxculzSKgTCu3dOcTJhiFY4oV+ZkCrZ4Fo+Q3u7JVQz7ZaYMsyzG5qXlOrxlbJbWiuFkVQ7s7emVdSVz3ikUY=
+	t=1737987060; cv=none; b=siYlaA5p9B0G1mhXtxWXXtFD0sED928vZZrKVhH0VnL6EusM6v7lOLeXvrqi77YEP8QOdBrL/K7zCrhRTgPg2qLWtg1NmpCNKRm7W53Gi2EK9Fa59MwZgxevXFpDoU1RdkBrl61VROI7mJAt6DXN3Wmm74pLgBQBNokRrPRp5ak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737984332; c=relaxed/simple;
-	bh=RjFj+btLOrA1I0c/0XDEPot6dd9rNyckywxmgkJzq3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aEfhAR3RlQYiSsb42lAOvxkw+nUntoz6q6DHAY0pQYX9yAkuDsIcFi/ef/RPnfCGfMo6aaLv5F7HtRLQF2WK23ejmtY2BNY7EEaLm0JP2UncX78LDNu5Z20MP1wE0lxRljio5NohTrvoN6ZN1daJdMi5M+IsFEMnMgznBw9oovI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QSGUOvEZ; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737984330; x=1769520330;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RjFj+btLOrA1I0c/0XDEPot6dd9rNyckywxmgkJzq3o=;
-  b=QSGUOvEZzlCLg52m+Lkyf/+kcHVE68FvAFk33+V3UhwIx/K/THbEuyid
-   qJ438VnvterjDhGelKR5fP6BxrrxRkqifOI54cau6t1t8osjTRna9hBxM
-   No2vFYIs3XvcsO1WP4e5Biv+WmJTB68gdx3/u0mrAfgwMTVAD015W4iZ3
-   /IS6Kq3c9DS8MxtJuSPO9pAimIX5JPT9iSW8d4LmXW3YyQJxw6TCZ90TZ
-   /GjxSPzYFVZHfh4LDTMcdRhtiKIjHF1pelA8u+BGatnQUd04z2t7ouweY
-   lN5ljcLdmzwZ6ey8werqdArXQ+hfBfCOql1cBQHnUxfs2OPHqKl0LQjSz
-   w==;
-X-CSE-ConnectionGUID: WXPLNx9wSDWvyiA2ZoPUwA==
-X-CSE-MsgGUID: Ov3TekHxTxuVTp8Y/oIV5g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="42105354"
-X-IronPort-AV: E=Sophos;i="6.13,238,1732608000"; 
-   d="scan'208";a="42105354"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 05:25:22 -0800
-X-CSE-ConnectionGUID: oOw//HyuRH2sXbDiVD3/cA==
-X-CSE-MsgGUID: F7vXYkyrSx2N1gt4t3xT9A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="131730368"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 05:25:02 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1tcP6l-00000005jpm-3fIe;
-	Mon, 27 Jan 2025 15:24:55 +0200
-Date: Mon, 27 Jan 2025 15:24:55 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Damien Le Moal <dlemoal@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Corey Minyard <minyard@acm.org>, Peter Huewe <peterhuewe@gmx.de>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Tero Kristo <kristo@kernel.org>, Stephen Boyd <sboyd@kernel.org>,
-	Ian Abbott <abbotti@mev.co.uk>,
-	H Hartley Sweeten <hsweeten@visionengravers.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	Len Brown <lenb@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	John Allen <john.allen@amd.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Vinod Koul <vkoul@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Moritz Fischer <mdf@kernel.org>, Liviu Dudau <liviu.dudau@arm.com>,
-	Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Michael Hennerich <michael.hennerich@analog.com>,
-	Peter Rosin <peda@axentia.se>, Lars-Peter Clausen <lars@metafoo.de>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-	Markuss Broks <markuss.broks@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Lee Jones <lee@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
-	Iyappan Subramanian <iyappan@os.amperecomputing.com>,
-	Yisen Zhuang <yisen.zhuang@huawei.com>,
-	Stanislaw Gruszka <stf_xl@wp.pl>, Kalle Valo <kvalo@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Tony Lindgren <tony@atomide.com>, Mark Brown <broonie@kernel.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Xiang Chen <chenxiang66@hisilicon.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-	Alex Elder <elder@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-	Jacky Huang <ychuang3@nuvoton.com>, Helge Deller <deller@gmx.de>,
-	Christoph Hellwig <hch@lst.de>, Robin Murphy <robin.murphy@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Kees Cook <keescook@chromium.org>,
-	Trond Myklebust <trond.myklebust@hammerspace.com>,
-	Anna Schumaker <anna@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Takashi Iwai <tiwai@suse.com>, linuxppc-dev@lists.ozlabs.org,
-	linux-ide@vger.kernel.org, openipmi-developer@lists.sourceforge.net,
-	linux-integrity@vger.kernel.org, linux-omap@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-efi@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-fpga@vger.kernel.org, dri-devel@lists.freedesktop.org,
-	linux-input@vger.kernel.org, linux-i2c@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-	linux-leds@vger.kernel.org, linux-wireless@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-scsi@vger.kernel.org,
-	linux-spi@vger.kernel.org, linux-amlogic@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, greybus-dev@lists.linaro.org,
-	linux-staging@lists.linux.dev, linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-fbdev@vger.kernel.org,
-	iommu@lists.linux.dev, linux-trace-kernel@vger.kernel.org,
-	kasan-dev@googlegroups.com, linux-hardening@vger.kernel.org,
-	linux-nfs@vger.kernel.org, linux-kbuild@vger.kernel.org,
-	alsa-devel@alsa-project.org, linux-sound@vger.kernel.org
-Subject: Re: [PATCH 00/34] address all -Wunused-const warnings
-Message-ID: <Z5eJJ199QwL0HVJT@smile.fi.intel.com>
-References: <20240403080702.3509288-1-arnd@kernel.org>
+	s=arc-20240116; t=1737987060; c=relaxed/simple;
+	bh=iMW9Aa8fxgjENZyzXvp1yeoQVZnpx3V00QGC+RvF8Ug=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=pler7KkC7aclS68zrW5qmACtChYUfkXYdlgeCWr14f+E6Ee3tFy8Z52OdOKmU5ae25MNMltkvehLcajKk2xCLOmY+XPc4e3dSkeCi9zSOHR1pQwzU0AtYNYjSjxWGmwAueSuH0eZWDiytAVZev8nBDkHSzJCG1upGMfhnnOrdd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XRP6cXgX; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-54020b0dcd2so6364738e87.1;
+        Mon, 27 Jan 2025 06:10:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737987057; x=1738591857; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TGx6oloRgJbGdlcEo4C+R87dnmqGRB/eKfp5IrNMWJw=;
+        b=XRP6cXgX/SrjvJFUGxlLmwZeW9g/I3BgJDnEs6ZheaXFE9N+gPZhbeTzZHmzcy0f0X
+         rxGM32LoiSHciaqmI9tIpXZw7M2aVfOcjbGylib5l8PiUKZ3ffAm2G843nxcV75j+Jxk
+         9uW9Xvolheh8BwRlw58OzdYvOYcVNFnCYuD9MuVoB4gqhS3Hi6Ei4IpnJz5f3n4Rd+9z
+         gcyx7yCdzKKegOv/WjoXxqoYNi3BgxeP78imHsFr6wunmWgNzDL3aAT8Ytw4f98+2sa/
+         EL8+evIN9EE+WmUlaROyPNzX7OF+iRauZGH9gi18KVS8Vnl2dkjL6YRkreQz3xKbXB8A
+         jSvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737987057; x=1738591857;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TGx6oloRgJbGdlcEo4C+R87dnmqGRB/eKfp5IrNMWJw=;
+        b=qe750iwyPNdhqT0H2ifBaLgaLtEIxeedTCgX0pxqyMMUQ9rUQqbtU8Sg+Hv1DUhKY2
+         Co6h6xguKxijjArVtLlYi4E1tffIVizsLGAJZVvEvVvm/liPNCAKQCH1JEBDYbCp3akH
+         PL7zp8wUJPDhF1h3FoU4PguTHrKehztkgrGFIB4MY4bwZYRuxVkW3DtCECOL3pF28Y3r
+         NtxEjjXQBSlx+uu19S2BarH+VcUYJhI2U9TjDfEZ7SzCiyImrM0kSMGsjbnJGfdmbflu
+         kOBBU/AtQebGAaZtYdWkugq4YsVPXENl/688KTNWtcKDPpd8aV1bPDwIZIS/nGuYWbuP
+         bRsA==
+X-Forwarded-Encrypted: i=1; AJvYcCWwRf9ofuquxqbDrzieAiDpZLZIBQVtuvmVGu6hWXlcPpzOO8qtHl4AiXlz2VwGf2nYOZA5Lqm9tizU75w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzCRtrgzjHcEmDoKaDe0QSfcYH3+ct/Ve5fo9vKhFmaofJVAPgY
+	muMFvYnqIThUmF87AR6CmPeI4BltfV2ll6M6SgEA1eGEenFE38MiYDvdjw==
+X-Gm-Gg: ASbGncu4VDV9GxAbR5tcEZmOd/7I0KovLQnb0VKIFvPFc68Sn2CmctpyHDSU0xH2Dqn
+	Ro+RjKaMyxD6TCbIuXUjEQ+cYX/xmrvCtjofW4bi8pDxgTa6SgMOWJTSX6J2XZZNH3eDCM5RJl7
+	T7qfKotA5Ut0XmiLeNh4QDSyajR0xfViZIDgTKq4eUEnr8Dqe3+kdxwb8a5zRJlZ69ZTqYyHu1R
+	iuCGxk0nOzVpY5YFrUfGajkucEIEeiyQwWpLYtRO4VszjSYMgk0ylISXGpGo0mh4QTq0SXHVBiD
+	zt4NaJHbEFqPgj37pCcffw==
+X-Google-Smtp-Source: AGHT+IFBauQIs4y1Eo1ht95ecsGNe+uF1RgVEe2vShitNyIOhCEFvIyzvyFVrI0rzPRhKxhzFVGRqA==
+X-Received: by 2002:a05:6512:3d2:b0:542:297f:663d with SMTP id 2adb3069b0e04-543c224df09mr5216975e87.23.1737987056510;
+        Mon, 27 Jan 2025 06:10:56 -0800 (PST)
+Received: from foxbook (adtk111.neoplus.adsl.tpnet.pl. [79.185.222.111])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-543c836828bsm1289543e87.153.2025.01.27.06.10.55
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 27 Jan 2025 06:10:56 -0800 (PST)
+Date: Mon, 27 Jan 2025 15:10:51 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] usb: xhci: Restore xhci_pci support for Renesas HCs
+Message-ID: <20250127151051.1a91bbe6@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240403080702.3509288-1-arnd@kernel.org>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Apr 03, 2024 at 10:06:18AM +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> Compilers traditionally warn for unused 'static' variables, but not
-> if they are constant. The reason here is a custom for C++ programmers
-> to define named constants as 'static const' variables in header files
-> instead of using macros or enums.
-> 
-> In W=1 builds, we get warnings only static const variables in C
-> files, but not in headers, which is a good compromise, but this still
-> produces warning output in at least 30 files. These warnings are
-> almost all harmless, but also trivial to fix, and there is no
-> good reason to warn only about the non-const variables being unused.
-> 
-> I've gone through all the files that I found using randconfig and
-> allmodconfig builds and created patches to avoid these warnings,
-> with the goal of retaining a clean build once the option is enabled
-> by default.
-> 
-> Unfortunately, there is one fairly large patch ("drivers: remove
-> incorrect of_match_ptr/ACPI_PTR annotations") that touches
-> 34 individual drivers that all need the same one-line change.
-> If necessary, I can split it up by driver or by subsystem,
-> but at least for reviewing I would keep it as one piece for
-> the moment.
-> 
-> Please merge the individual patches through subsystem trees.
-> I expect that some of these will have to go through multiple
-> revisions before they are picked up, so anything that gets
-> applied early saves me from resending.
+Some Renesas HCs require firmware upload to work, this is handled by the
+xhci_pci_renesas driver. Other variants of those chips load firmware from
+onboard flash and can work with xhci_pci alone.
 
-Arnd, can you refresh this one? It seems some misses still...
-I have got 3+ 0-day reports against one of the mux drivers.
+A refactor merged in v6.12 broke the latter configuration and users are
+finding their hardware not working after upgrading and need to enable the
+firmware loader which isn't really necessary on their systems.
 
-https://lore.kernel.org/all/?q=adg792a.c
+Let xhci_pci work with those chips as before when the firmware loader is
+disabled by kernel configuration.
 
+Fixes: 25f51b76f90f ("xhci-pci: Make xhci-pci-renesas a proper modular driver")
+CC: stable@vger.kernel.org
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219616
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219726
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
+---
+ drivers/usb/host/xhci-pci.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 5a5f0b2dba4d..3d08d6527b1d 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -657,17 +657,21 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ }
+ EXPORT_SYMBOL_NS_GPL(xhci_pci_common_probe, "xhci");
+ 
++#if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
+ static const struct pci_device_id pci_ids_reject[] = {
+ 	/* handled by xhci-pci-renesas */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0014) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0015) },
+ 	{ /* end: all zeroes */ }
+ };
++#endif
+ 
+ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ {
++#if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
+ 	if (pci_match_id(pci_ids_reject, dev))
+ 		return -ENODEV;
++#endif
+ 
+ 	return xhci_pci_common_probe(dev, id);
+ }
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.48.1
 
 
