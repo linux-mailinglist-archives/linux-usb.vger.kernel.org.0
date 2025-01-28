@@ -1,101 +1,339 @@
-Return-Path: <linux-usb+bounces-19818-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19820-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03DD4A20CB7
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 16:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BC53EA20ED6
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 17:43:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6608E16745A
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 15:14:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D246162884
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 16:43:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 801DB1B425C;
-	Tue, 28 Jan 2025 15:14:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9A711DE3D6;
+	Tue, 28 Jan 2025 16:43:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nc6W5cuk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2237342AA3;
-	Tue, 28 Jan 2025 15:14:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB87E1DE3A4;
+	Tue, 28 Jan 2025 16:43:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738077256; cv=none; b=J6+N52GE3ocm8lflJZRvWLbJjcop5qzSrYcuxt9fAFS9Z/BBXCoMTWWZYEV2d4X3YUsDqYF85nQf8lCtaa8dTlatIBvLGK5v9ZwqPQr6QC1lXYMCG73+c71QMZzoU4R1H8ZM+5xyxkGZIK3oSPOhHRL00ZpwnOHEghlLoy2FxW0=
+	t=1738082585; cv=none; b=KtbjC3IKvAt9pPsp0OThWbb8Zjk0F5SgSflbAiRZfm3MF3h1/pfGzYHJGPlrUJsStzunx4VwpLXId30+AsR0EBEEdr9g9wt9G1kjwn3RuCMbSEUqt4pelZpo5JlEAFF3xlHaYbRSiH6NFaOTLfPnAez7m3Rg9gTmGQVkD2VLfnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738077256; c=relaxed/simple;
-	bh=W6yFCVARpS+3ojPzRWRmAjVT58mW7GMrK2b6KLA6EK0=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=V8INO1hOOysRxaT6Xw2TzlUIT9OdTSvSjmWZ7RcrOgiRdpgr4UIbiN0ripJaFp+EuSh4ry6p30EWlg/fw1cZJHJT9Mpa6vtlQdT0XG/Yp816cXbZ9U6PK1Yg4Hj9RsK7juK/5brrywhImZpsgtYqHTiOttqwsOYEs7Gl7t1OnF0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9A9AC4CED3;
-	Tue, 28 Jan 2025 15:14:14 +0000 (UTC)
-Message-ID: <d96432bd-dda0-4d26-9825-391206ebf6ab@xs4all.nl>
-Date: Tue, 28 Jan 2025 16:14:13 +0100
+	s=arc-20240116; t=1738082585; c=relaxed/simple;
+	bh=QfyTNN0QuRu5OhqcnxwpyHLKyNNbV/NcEXUbRq2E0e8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=E6zeaautV4eLmB7koMu2BuNw0Adau15IBdrn8kXzFxSuezQr6+IEQ47taArxwBdFxYTSyxZ+WiNryK2X6HRrIQAW5ldQoE9gTIEXrB/DL9e6NEPJo8XfELINp+y6p5Et7NmBmZYy5iSSBh1kwtQvmJQSJ5Wqtr89DgRoWsf2Ew0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nc6W5cuk; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21636268e43so128631615ad.2;
+        Tue, 28 Jan 2025 08:43:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738082583; x=1738687383; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zocPwhRR8BFDI1YPyREBrJhQBXZT2j2XFP2dHOYuLUA=;
+        b=Nc6W5cukLbJmxmHy18rlronwYwUILh+wx8L4IVsyqm07LfBCZ2mc/o82H2DLlXyLGL
+         IstwngMiN7r09B8iWiT7/o2rJ5AmHztU3tHdzjn2eNg8HHJHz1de8XRvZ0e1/bqoISMr
+         SaHOIExY2WMOYKm7edmZx9XKLyr9/GEH4ekLB6QiTcP1a3PnHxUhrzijLXq9r7jxZjZS
+         5jAswqM4D+jow67xIslY64GDRLJkjUjbf+tu/uo4lyt4IxImjrW/hZgtVgK1hQ4kbuIv
+         VQZzcH/mMX8Sj14I0HQ6jK4nmGd8HrJJFK65DjDD5lY3A+wbz4hYXLWB5jRhfeDEDrAe
+         Qqsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738082583; x=1738687383;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zocPwhRR8BFDI1YPyREBrJhQBXZT2j2XFP2dHOYuLUA=;
+        b=udgl4SIyjQ/dZdshT64+hLafKjVpT+rSCYfvFIU5lDvMgCv+4vkTDpHxAcCapza8Zm
+         R+hOw1mFkUG3Yo6GvksNIXp5acgsuVX+HaSe93yikrwv4NZlgQXNSTjPw893adDvwAb7
+         Farf7JF6FU4+Q2Gj87aYon+je945miGvN1sGFileyUT1QOuPbB4elZhhuenLHuvMXxHW
+         rGB9dxiAFeDtkjE/FlWP1/CHtc3bhaHr9UtpIyrMsZGKkwi/fg91vOADKzqFdOMtfkSM
+         tnqudGJpRziQAkEKDmYRB+vx607cbjCb5Wt51TROQaMOYFIQCaY1qeF1d1G99dJFwc+M
+         5Avg==
+X-Forwarded-Encrypted: i=1; AJvYcCV5DCUF9CfQJUjdCY4ahQLzqFSOMqMvtmapptZ/54YgiR4h0JiQbzhyedoCY/Vvt3ZUPIewBQoWoTyImtg=@vger.kernel.org, AJvYcCWo73o8YlSitwnUP+YBtJrhgrJC+d3wr+aoKoQl78xm46k6IBUuSm0UKXJ25wmF5FosK9u3vwaa8ejU@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZgshFEONtg8grmD98BQglC7tRD8ydk+Pvc47EtLW6OnT8h43E
+	nNJDZUas/QyiilTM2+w2vTEtSdhFLdz5ksvRKDAUbRNq7OR8bdhD3qG1a7qK
+X-Gm-Gg: ASbGncsjfcoHueJel/I/mBBSrwKfITVIXRXODxWnCtOW/vV5CgJx16qkpQoYKlODqB2
+	Xc7mWJ0BZigwpLUviMFsqACmfX7rWmqbBwBfisDjw5/mdc52whHmyeJKIS252vfhFQFETCj8Zvw
+	l+pIh7uAzilXf6t3aKiWJBe8JWKpi+XX3XIig63BMLhsvJ/Snw9MbpphIBbOWNvbCFmjaFdohCV
+	Le/FLGER+ICYU0AWVxi9B0Dox64YKWhID3FUxe//IKKH7k8lO/VQFQExlNa26YMeb4UwbT9/1Sr
+	7+QtQWMQ3JtrWlQ=
+X-Google-Smtp-Source: AGHT+IEOrBDUe2neSSS4CE3ylDaP09wtRXk0aOQnDoY+p5H7uDmCWiu/WfuhvsvZMyUaa+sKT/Pr7A==
+X-Received: by 2002:a17:903:41c3:b0:215:4f3b:cb20 with SMTP id d9443c01a7336-21c3554b37emr691124165ad.23.1738082582890;
+        Tue, 28 Jan 2025 08:43:02 -0800 (PST)
+Received: from ubuntu.. ([124.13.193.144])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da424eb96sm84295225ad.222.2025.01.28.08.43.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jan 2025 08:43:02 -0800 (PST)
+From: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+To: mika.westerberg@linux.intel.com
+Cc: andreas.noever@gmail.com,
+	michael.jamet@intel.com,
+	YehezkelShB@gmail.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+Subject: [PATCH] thunderbolt: Disable Gen 4 Recovery on Asymmetric Transitions
+Date: Tue, 28 Jan 2025 16:36:05 +0000
+Message-ID: <20250128163605.19222-1-rahimi.mhmmd@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/6]
-From: Hans Verkuil <hverkuil@xs4all.nl>
-To: linux-media@vger.kernel.org
-Cc: linux-input@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-staging@lists.linux.dev
-References: <cover.1738076484.git.hverkuil@xs4all.nl>
-Content-Language: en-US, nl
-Autocrypt: addr=hverkuil@xs4all.nl; keydata=
- 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
-In-Reply-To: <cover.1738076484.git.hverkuil@xs4all.nl>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 28/01/2025 16:01, Hans Verkuil wrote:
-> 
+Updates the Connection Manager to disable the Gen 4 Link Recovery
+flow before transitioning from a Symmetric Link to an Asymmetric
+Link, as specified in recent changes to the USB4 v2 specification.
 
-Sorry, email mishap. Just ignore.
+According to the "USB4 2.0 ENGINEERING CHANGE NOTICE FORM"
+published in September 2024, the rationale for this change is:
 
-	Hans
+  "Since the default value of the Target Asymmetric Link might be
+  different than Symmetric Link and Gen 4 Link Recovery flow checks
+  this field to make sure it matched the actual Negotiated Link Width,
+  we’re removing the condition for a Disconnect in the Gen 4 Link
+  Recovery flow when Target Asymmetric Link doesn’t match the actual
+  Link width and adding a Connection Manager note to Disable Gen 4 Link
+  Recovery flow before doing Asymmetric Transitions."
+
+Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+---
+ drivers/thunderbolt/tb.c      |  23 ++++---
+ drivers/thunderbolt/tb.h      |   3 +
+ drivers/thunderbolt/tb_regs.h |   1 +
+ drivers/thunderbolt/usb4.c    | 125 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 142 insertions(+), 10 deletions(-)
+
+diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
+index a7c6919fbf97..da53e4619eca 100644
+--- a/drivers/thunderbolt/tb.c
++++ b/drivers/thunderbolt/tb.c
+@@ -1013,7 +1013,7 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
+ 			     struct tb_port *dst_port, int requested_up,
+ 			     int requested_down)
+ {
+-	bool clx = false, clx_disabled = false, downstream;
++	bool clx_was_enable = false, lrf_was_enable = false, downstream;
+ 	struct tb_switch *sw;
+ 	struct tb_port *up;
+ 	int ret = 0;
+@@ -1075,14 +1075,12 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
+ 			continue;
+ 
+ 		/*
+-		 * Disable CL states before doing any transitions. We
+-		 * delayed it until now that we know there is a real
+-		 * transition taking place.
++		 * Disable CL states and Link Recovery flow before doing any
++		 * transitions. We delayed it until now that we know there is
++		 * a real transition taking place.
+ 		 */
+-		if (!clx_disabled) {
+-			clx = tb_disable_clx(sw);
+-			clx_disabled = true;
+-		}
++		clx_was_enable = tb_disable_clx(sw);
++		lrf_was_enable = usb4_disable_lrf(sw);
+ 
+ 		tb_sw_dbg(up->sw, "configuring asymmetric link\n");
+ 
+@@ -1097,9 +1095,14 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
+ 		}
+ 	}
+ 
+-	/* Re-enable CL states if they were previosly enabled */
+-	if (clx)
++	/*
++	 * Re-enable CL states and Link Recovery flow if
++	 * they were previosly enabled
++	 */
++	if (clx_was_enable)
+ 		tb_enable_clx(sw);
++	if (lrf_was_enable)
++		usb4_enable_lrf(sw);
+ 
+ 	return ret;
+ }
+diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
+index ddbf0cd78377..3bec35f78d51 100644
+--- a/drivers/thunderbolt/tb.h
++++ b/drivers/thunderbolt/tb.h
+@@ -1336,6 +1336,9 @@ bool usb4_port_asym_supported(struct tb_port *port);
+ int usb4_port_asym_set_link_width(struct tb_port *port, enum tb_link_width width);
+ int usb4_port_asym_start(struct tb_port *port);
+ 
++bool usb4_enable_lrf(struct tb_switch *sw);
++bool usb4_disable_lrf(struct tb_switch *sw);
++
+ /**
+  * enum tb_sb_target - Sideband transaction target
+  * @USB4_SB_TARGET_ROUTER: Target is the router itself
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index 4e43b47f9f11..085139e1a958 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -398,6 +398,7 @@ struct tb_regs_port_header {
+ #define PORT_CS_19_WOD				BIT(17)
+ #define PORT_CS_19_WOU4				BIT(18)
+ #define PORT_CS_19_START_ASYM			BIT(24)
++#define PORT_CS_19_ELR				BIT(31)
+ 
+ /* Display Port adapter registers */
+ #define ADP_DP_CS_0				0x00
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index e51d01671d8e..49dd3d201617 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -10,6 +10,7 @@
+ #include <linux/delay.h>
+ #include <linux/ktime.h>
+ #include <linux/units.h>
++#include <linux/string_helpers.h>
+ 
+ #include "sb_regs.h"
+ #include "tb.h"
+@@ -1518,6 +1519,130 @@ bool usb4_port_clx_supported(struct tb_port *port)
+ 	return !!(val & PORT_CS_18_CPS);
+ }
+ 
++static int __usb4_port_lrf_enable(struct tb_port *port,
++		       bool enable, bool *was_enable)
++{
++	int ret;
++	u32 val;
++
++	ret = tb_port_read(port, &val, TB_CFG_PORT,
++			   port->cap_usb4 + PORT_CS_19, 1);
++	if (ret)
++		return ret;
++
++	*was_enable |= !!(val & PORT_CS_19_ELR);
++
++	if (enable)
++		val |= PORT_CS_19_ELR;
++	else
++		val &= ~PORT_CS_19_ELR;
++
++	ret = tb_port_write(port, &val, TB_CFG_PORT,
++			    port->cap_usb4 + PORT_CS_19, 1);
++	if (ret)
++		return ret;
++
++	tb_port_dbg(port, "ELR %s\n", str_enabled_disabled(enable));
++	return 0;
++}
++
++static int usb4_switch_lrf_enable(struct tb_switch *sw)
++{
++	bool was_enable = false;
++	struct tb_port *up, *down;
++	int ret;
++
++	up = tb_upstream_port(sw);
++	down = tb_switch_downstream_port(sw);
++
++	ret = __usb4_port_lrf_enable(up, true, &was_enable);
++	if (ret)
++		return ret;
++
++	ret = __usb4_port_lrf_enable(down, true, &was_enable);
++	if (ret)
++		return ret;
++
++	tb_sw_dbg(sw, "ELR %s\n", str_enabled_disabled(true));
++
++	return 0;
++}
++
++static int usb4_switch_lrf_disable(struct tb_switch *sw)
++{
++	bool was_enable = false;
++	struct tb_port *up, *down;
++	int ret;
++
++	up = tb_upstream_port(sw);
++	down = tb_switch_downstream_port(sw);
++
++	ret = __usb4_port_lrf_enable(up, false, &was_enable);
++	if (ret)
++		return ret;
++
++	ret = __usb4_port_lrf_enable(down, false, &was_enable);
++	if (ret)
++		return ret;
++
++	tb_sw_dbg(sw, "ELR %s\n", str_enabled_disabled(false));
++
++	/* At least one ELR has been disabled */
++	return was_enable ? 1 : 0;
++}
++
++/**
++ * usb4_disable_lrf() - Enables Link Recovery flow up to host router
++ * @sw: Router to start
++ *
++ * Enables Link Recovery flow from @sw up to the host router.
++ * Returns true if every Link Recovery flow was successfully enabled.
++ */
++bool usb4_enable_lrf(struct tb_switch *sw)
++{
++	bool enabled = true;
++
++	do {
++		if (usb4_switch_lrf_enable(sw) < 0) {
++			tb_sw_warn(sw, "failed to enable Link Recovery flow\n");
++			enabled = false;
++		}
++
++		sw = tb_switch_parent(sw);
++	} while (sw);
++
++	return enabled;
++}
++
++/**
++ * usb4_disable_lrf() - Disable Link Recovery flow up to host router
++ * @sw: Router to start
++ *
++ * Disables Link Recovery flow from @sw up to the host router.
++ * Returns true if any Link Recovery flow was disabled. This
++ * can be used to figure out whether the link was setup by us
++ * or the boot firmware so we don't accidentally enable them if
++ * they were not enabled during discovery.
++ */
++bool usb4_disable_lrf(struct tb_switch *sw)
++{
++	bool disabled = false;
++
++	do {
++		int ret;
++
++		ret = usb4_switch_lrf_disable(sw);
++		if (ret > 0)
++			disabled = true;
++		else if (ret < 0)
++			tb_sw_warn(sw, "Link Recovery flow cannot be disabled\n");
++
++		sw = tb_switch_parent(sw);
++	} while (sw);
++
++	return disabled;
++}
++
+ /**
+  * usb4_port_asym_supported() - If the port supports asymmetric link
+  * @port: USB4 port
+-- 
+2.45.2
+
 
