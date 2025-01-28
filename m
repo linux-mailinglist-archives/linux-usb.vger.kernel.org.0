@@ -1,217 +1,263 @@
-Return-Path: <linux-usb+bounces-19793-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19795-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1624FA20160
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 00:08:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14FB3A2024D
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 01:08:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 616C73A4BD6
-	for <lists+linux-usb@lfdr.de>; Mon, 27 Jan 2025 23:08:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4079166206
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 00:08:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3371DD0E1;
-	Mon, 27 Jan 2025 23:08:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9A319E99A;
+	Tue, 28 Jan 2025 00:06:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="RlLGDcLc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVMdUUsP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1317482866;
-	Mon, 27 Jan 2025 23:08:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7623C33CFC;
+	Tue, 28 Jan 2025 00:06:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738019286; cv=none; b=k7MOpmp3Onh8ekSU86OPfkbfFfr9MKo8mcOtTAh/RAuizlvySY+i+EWJ5G0pBKY2Is0IcgoGiIOzrVmTioFiaHArmDJLnqyLAJDGyqKY7M++9sRLrDPat+0UFT8OLiSQYHRfXpz5o1q3+cPTDczYOvDbar7GVMnDMo9/yc+0fDI=
+	t=1738022797; cv=none; b=czQx09cJQyQSZBP1BGgcNSPDnT/33NLH458yGgYegrxzEkMlKIWHpoEiTAZ81pp0GgYXFyfn2bx+1M2nBKPqio9+O9McP1ALYdDeIrCoR2S9pBV33Hu9yjghdInZOAMNq5+aqlc8LYgOqjeumxcERC58NaqefZZ9Ri/y5OdRAMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738019286; c=relaxed/simple;
-	bh=tYq6+A5sQTyvjenjao+fCliHvqFv+GsCuSImP3A5ans=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=Yi62oOz8BgkNBx7x/nCADdZu+Eq/k/5CPxQcQZX2HA9s8HV49jlK2Q6Y0Bb6zgqLewKXoYat4TzAMmtc7bILSS75PdUnZ7pVvhR1YYZjP0usoBvp28D3CjMcG/kIn82E7Wlj+koZ3AD+AIgR/FIfiRcTA+Bkpnokl+/yqjgl1sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=RlLGDcLc; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50RFkclK009727;
-	Mon, 27 Jan 2025 23:07:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:date:from:message-id:subject:to; s=qcppdkim1; bh=zGE1qF72pGTw
-	FGj63Co+GJ//QrOw5gtUJQBbxMJC8r4=; b=RlLGDcLcN08QznUgVuJjgVpxQnOW
-	zjlut0Ddb1brK04A4LxVwTMxvaeDPXVRXi4QIEYRKf3MSKQNaP1XcEI9MQ0AlJle
-	JuztPU5CkihI7uOB3fYU1kq/hUFd398MPFGmG+XchIzsQZrGHSTNQoRMYy5BsW91
-	5ISCVJNIWp9fthrZhDh3CM2pkjJLVyys/pulTqnAvsHoT/2lGP3uOZUMZ4iaUhJR
-	WqFHtiZashpva8sqlSVi2zy6m0Ie6Cs27ra6s/oCvGwKbwQMWYi81fPQNUf7U4UT
-	IS7VyKVb8wgyXOgmh5c9qZ9/YBbqaJlJIinnw3Gcdnv0ND9cUPrN0W5wdg==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44ed36rv9a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 27 Jan 2025 23:07:51 +0000 (GMT)
-Received: from pps.filterd (NALASPPMTA03.qualcomm.com [127.0.0.1])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 50RN7oZl012066;
-	Mon, 27 Jan 2025 23:07:51 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by NALASPPMTA03.qualcomm.com (PPS) with ESMTPS id 44d9eh13sn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Mon, 27 Jan 2025 23:07:50 +0000
-Received: from NALASPPMTA03.qualcomm.com (NALASPPMTA03.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 50RN41KH007300;
-	Mon, 27 Jan 2025 23:07:50 GMT
-Received: from hu-devc-lv-u18-c.qualcomm.com (hu-eserrao-lv.qualcomm.com [10.47.235.27])
-	by NALASPPMTA03.qualcomm.com (PPS) with ESMTP id 50RN7o6n012058;
-	Mon, 27 Jan 2025 23:07:50 +0000
-Received: by hu-devc-lv-u18-c.qualcomm.com (Postfix, from userid 464172)
-	id 30E4250016B; Mon, 27 Jan 2025 15:07:50 -0800 (PST)
-From: Elson Roy Serrao <quic_eserrao@quicinc.com>
-To: gregkh@linuxfoundation.org, heikki.krogerus@linux.intel.com,
-        xu.yang_2@nxp.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Elson Roy Serrao <quic_eserrao@quicinc.com>, stable@vger.kernel.org
-Subject: [PATCH] usb: roles: cache usb roles received during switch registration
-Date: Mon, 27 Jan 2025 15:07:15 -0800
-Message-Id: <20250127230715.6142-1-quic_eserrao@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: o64W48O_qy_8fOQM-ZpIJKC4uRwa7b6y
-X-Proofpoint-ORIG-GUID: o64W48O_qy_8fOQM-ZpIJKC4uRwa7b6y
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-27_11,2025-01-27_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 suspectscore=0
- adultscore=0 mlxlogscore=999 impostorscore=0 clxscore=1011 malwarescore=0
- phishscore=0 lowpriorityscore=0 spamscore=0 priorityscore=1501 bulkscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2501270181
+	s=arc-20240116; t=1738022797; c=relaxed/simple;
+	bh=x0APBPBQWrivChaCg4k0Jly7N3L+drRwEE2afrYm3Ko=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pG7vhzPeB2x/+yDwbNhJFIvm2jB/JWVTv+koS8hxTDg5Z8vqsXUMFlVaWKj0c1vnGe3Ib5tI8WY+a0QWCU7JGNxXNd2ZOTeL6JU+kenOZTLGkalPyzF3gOL/8SADA4mtZH/PNqc1Qu9OOsNupeiDlZQVhQmePYu7Rk4kIqicx/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVMdUUsP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA0CDC4CEE7;
+	Tue, 28 Jan 2025 00:06:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738022796;
+	bh=x0APBPBQWrivChaCg4k0Jly7N3L+drRwEE2afrYm3Ko=;
+	h=From:To:Cc:Subject:Date:From;
+	b=YVMdUUsPMxPbkAk4qEzxydaiheiKgPq0V/bec3NjHqtsuNI4LbgEBDEej9+LgNza+
+	 ljIEnlJ8dOW66epiiZtLELOhM7CI9Xmfl04mwJsxOPi5DZqupGOzyLYI8OrEB0YMLK
+	 2aabCdo/efDt+1ketrNTclboOiYMqtBF3chVGB2EMC4yfr4ULHJGHphSkN/9c0uXJr
+	 2zeCibWgf8wkOz10yK0tDHg/2UyTNfnmjDli87oee4K3CFTkaD0PhvQA9VygWXf7kB
+	 Qo1Ry12uzmRsVIoEnhnI2jD01cboTneK2GBz8V4u2Zk1oJeS56JxjuAeS7Lo5BEMUu
+	 9jWWaNQP5ViKg==
+Received: from mchehab by mail.kernel.org with local (Exim 4.98)
+	(envelope-from <mchehab+huawei@kernel.org>)
+	id 1tcZ7h-0000000DRKO-2KyQ;
+	Tue, 28 Jan 2025 01:06:33 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	coresight@lists.linaro.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-block@vger.kernel.org,
+	linux-f2fs-devel@lists.sourceforge.net,
+	linux-hardening@vger.kernel.org,
+	linux-iio@vger.kernel.org,
+	linux-media@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	netdev@vger.kernel.org,
+	workflows@vger.kernel.org
+Subject: [RFC v2 00/38] Improve ABI documentation generation
+Date: Tue, 28 Jan 2025 01:05:49 +0100
+Message-ID: <cover.1738020236.git.mchehab+huawei@kernel.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
 
-The role switch registration and set_role() can happen in parallel as they
-are invoked independent of each other. There is a possibility that a driver
-might spend significant amount of time in usb_role_switch_register() API
-due to the presence of time intensive operations like component_add()
-which operate under common mutex. This leads to a time window after
-allocating the switch and before setting the registered flag where the set
-role notifications are dropped. Below timeline summarizes this behavior
+Hi Jon/Greg,
 
-Thread1				|	Thread2
-usb_role_switch_register()	|
-	|			|
-	---> allocate switch	|
-	|			|
-	---> component_add()	|	usb_role_switch_set_role()
-	|			|	|
-	|			|	--> Drop role notifications
-	|			|	    since sw->registered
-	|			|	    flag is not set.
-	|			|
-	--->Set registered flag.|
+That's the second version of my RFC patches meant to modenize the ABI
+parser that I wrote in Perl.
 
-To avoid this, cache the last role received and set it once the switch
-registration is complete. Since we are now caching the roles based on
-registered flag, protect this flag with the switch mutex.
+I originally started it due to some issues I noticed when searching for
+ABI symbols. While I could just go ahead and fix the already existing
+script, I noticed that the script maintainance didn't have much care over
+all those years, probably because it is easier to find Python programmers
+those days.
 
-Fixes: b787a3e78175 ("usb: roles: don't get/set_role() when usb_role_switch is unregistered")
-cc: stable@vger.kernel.org
-Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+Also, the code is complex and was not using modules or classes and
+were using lots of global variables.
+
+So, I decided to rewrite it in Python. I started with a manual conversion
+for each function. Yet, to avoid future maintainership issues, I opted to
+divide the code on three classes. One class for the ABI parser, another
+one for regex conversion (used when checking symbols from local hardware,
+and an extra class for undefined symbols check.
+
+I opted to change the Sphinx integration gradually using different
+patch sets on 4 phases:
+
+1. minimal integration: just execute the new script on a similar way as
+   the perl one;
+2. the kernel_abi module was changed to import the ABI parser class,
+   using it directly;
+3. the logic at kernel_abi were rewritten to better integrate. As a bonus,
+   Sphinx now imports ReST data symbol by symbol. That solves one of
+   the issues I was discomfortable with the original approach: when lots
+   of data is sent to Sphinx parser, it stops in the middle of processing.
+   This was addressed in the past on a hacky way, but it could cause
+   problems in the future as the number of symbols increase;
+4. the ABI parser part is now called either by automarkup and kernel_abi.
+   This allowed automarkup to solve ABI symbols.
+
+Together with this series, I added some patches fixing issues and warnings
+when generating documentation.
+
+Some notes about this new RFC:
+
+- despite being able to generate documentation cross-references with
+  auto-markup, the documentation build timt didn't increase on my machine
+  (it was actually 5 seconds faster);
+- I rewrote some algorithms at the undefined symbol detection code. With
+  that, it is now a lot faster than the previous version, at least on my desktop
+  (wich has 24 CPU threads). I didn't try it on a server yet;
+- the undefined parser can optionally use multiple CPUs. This sounds
+  fancier than it seems: Python (up to version 3.12) is really bad with
+  multi-CPU support and doesn't have real multi-thread support. Python
+  3.13 has now an optional way to address that (although I didn't test yet,
+  as it requires Python manual compilation). When such feature becomes
+  standard, maybe the undefined symbols detection will be faster.
+
+Btw, I'm opting to send this as an RFC because I'd like to have more
+people testing and checking it. In particular, the undefined ABI check
+is complex, as it requires lots of tricks to reduce the run time from hours
+to seconds.
+  
+On this series we have:
+
+patches 1 to 11: several bug fixes addressing issues at ABI symbols;
+patch 12: a fix for scripts/documentation-file-ref-check
+patches 13-15: create new script with rest and search logic and 
+  minimally integrate with kernel_abi Sphinx extension(phase 1);
+patches 16-19: implement phase 2: class integration (phase 2);
+patch 20: fix a bug at kernel_abi: the way it splits lines is buggy;
+patches  21-24: rewrite kernel_abi logic to make it simpler and more
+  robust;
+patches 25-27: add cross-reference support at automarkup;
+patches 28-36: several ABI cleanups to cope with the improvements;
+patch 37: implement undefined command;
+patch 38: get rid of the old Perl script.
+
+To make it easier to review/apply, I may end breaking the next version
+on a couple of different patchsets. Still it would be nice to have more
+people testing it and providing some feedback.
+
 ---
- drivers/usb/roles/class.c | 45 ++++++++++++++++++++++++++++++++-------
- 1 file changed, 37 insertions(+), 8 deletions(-)
+RFC v2:
+  - Dropped a patch touching the perl script;
+  - Implemented phases 2-4 of the script's logic;
+  - Added ABI cross-references via automarkup;
+  - Added support for undefined logic;
+  - Added more ABI and scripts' fixes;
+  - Added undefined logic;
+  - Added a patch to remove the old tool.
 
-diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
-index c58a12c147f4..c0149c31c01b 100644
---- a/drivers/usb/roles/class.c
-+++ b/drivers/usb/roles/class.c
-@@ -26,6 +26,8 @@ struct usb_role_switch {
- 	struct mutex lock; /* device lock*/
- 	struct module *module; /* the module this device depends on */
- 	enum usb_role role;
-+	enum usb_role cached_role;
-+	bool cached;
- 	bool registered;
- 
- 	/* From descriptor */
-@@ -65,6 +67,20 @@ static const struct component_ops connector_ops = {
- 	.unbind = connector_unbind,
- };
- 
-+static int __usb_role_switch_set_role(struct usb_role_switch *sw,
-+				      enum usb_role role)
-+{
-+	int ret;
-+
-+	ret = sw->set(sw, role);
-+	if (!ret) {
-+		sw->role = role;
-+		kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
-+	}
-+
-+	return ret;
-+}
-+
- /**
-  * usb_role_switch_set_role - Set USB role for a switch
-  * @sw: USB role switch
-@@ -79,17 +95,21 @@ int usb_role_switch_set_role(struct usb_role_switch *sw, enum usb_role role)
- 	if (IS_ERR_OR_NULL(sw))
- 		return 0;
- 
--	if (!sw->registered)
--		return -EOPNOTSUPP;
--
-+	/*
-+	 * Since we have a valid sw struct here, role switch registration might
-+	 * be in progress. Hence cache the role here and send it out once
-+	 * registration is complete.
-+	 */
- 	mutex_lock(&sw->lock);
--
--	ret = sw->set(sw, role);
--	if (!ret) {
--		sw->role = role;
--		kobject_uevent(&sw->dev.kobj, KOBJ_CHANGE);
-+	if (!sw->registered) {
-+		sw->cached = true;
-+		sw->cached_role = role;
-+		mutex_unlock(&sw->lock);
-+		return 0;
- 	}
- 
-+	ret = __usb_role_switch_set_role(sw, role);
-+
- 	mutex_unlock(&sw->lock);
- 
- 	return ret;
-@@ -399,8 +419,14 @@ usb_role_switch_register(struct device *parent,
- 			dev_warn(&sw->dev, "failed to add component\n");
- 	}
- 
-+	mutex_lock(&sw->lock);
- 	sw->registered = true;
- 
-+	if (sw->cached)
-+		__usb_role_switch_set_role(sw, sw->cached_role);
-+
-+	mutex_unlock(&sw->lock);
-+
- 	/* TODO: Symlinks for the host port and the device controller. */
- 
- 	return sw;
-@@ -417,7 +443,10 @@ void usb_role_switch_unregister(struct usb_role_switch *sw)
- {
- 	if (IS_ERR_OR_NULL(sw))
- 		return;
-+	mutex_lock(&sw->lock);
- 	sw->registered = false;
-+	sw->cached = false;
-+	mutex_unlock(&sw->lock);
- 	if (dev_fwnode(&sw->dev))
- 		component_del(&sw->dev, &connector_ops);
- 	device_unregister(&sw->dev);
+Mauro Carvalho Chehab (38):
+  docs: power: video.rst: fix a footnote reference
+  docs: media: ipu3: fix two footnote references
+  docs: block: ublk.rst: remove a reference from a dropped text
+  docs: sphinx: remove kernellog.py file
+  docs: sphinx/kernel_abi: adjust coding style
+  docs: admin-guide: abi: add SPDX tags to ABI files
+  ABI: sysfs-class-rfkill: fix kernelversion tags
+  ABI: sysfs-bus-coresight-*: fix kernelversion tags
+  ABI: sysfs-driver-dma-idxd: fix date tags
+  ABI: sysfs-fs-f2fs: fix date tags
+  ABI: sysfs-power: fix a what tag
+  scripts/documentation-file-ref-check: don't check perl/python scripts
+  scripts/get_abi.py: add a Python tool to generate ReST output
+  scripts/get_abi.py: add support for symbol search
+  docs: use get_abi.py for ABI generation
+  scripts/get_abi.py: optimize parse_abi() function
+  scripts/get_abi.py: use an interactor for ReST output
+  docs: sphinx/kernel_abi: use AbiParser directly
+  docs: sphinx/kernel_abi: reduce buffer usage for ABI messages
+  docs: sphinx/kernel_abi: properly split lines
+  scripts/get_abi.pl: Add filtering capabilities to rest output
+  scripts/get_abi.pl: add support to parse ABI README file
+  docs: sphinx/kernel_abi: parse ABI files only once
+  docs: admin-guide/abi: split files from symbols
+  docs: sphinx/automarkup: add cross-references for ABI
+  docs: sphinx/kernel_abi: avoid warnings during Sphinx module init
+  scripts/get_abi.py: Rename title name for ABI files
+  docs: media: Allow creating cross-references for RC ABI
+  docs: thunderbolt: Allow creating cross-references for ABI
+  docs: arm: asymmetric-32bit: Allow creating cross-references for ABI
+  docs: arm: generic-counter: Allow creating cross-references for ABI
+  docs: iio: Allow creating cross-references ABI
+  docs: networking: Allow creating cross-references statistics ABI
+  docs: submit-checklist: Allow creating cross-references for ABI README
+  docs: translations: Allow creating cross-references for ABI README
+  docs: ABI: drop two duplicate symbols
+  scripts/get_abi.py: add support for undefined ABIs
+  scripts/get_abi.pl: drop now obsoleted script
+
+ Documentation/ABI/removed/sysfs-class-rfkill  |    2 +-
+ Documentation/ABI/stable/sysfs-class-rfkill   |   12 +-
+ .../ABI/stable/sysfs-devices-system-cpu       |   10 -
+ .../ABI/stable/sysfs-driver-dma-idxd          |    4 +-
+ .../testing/sysfs-bus-coresight-devices-cti   |   78 +-
+ .../testing/sysfs-bus-coresight-devices-tpdm  |   52 +-
+ Documentation/ABI/testing/sysfs-fs-f2fs       |    4 +-
+ Documentation/ABI/testing/sysfs-power         |    2 +-
+ .../admin-guide/abi-obsolete-files.rst        |    7 +
+ Documentation/admin-guide/abi-obsolete.rst    |    6 +-
+ Documentation/admin-guide/abi-readme-file.rst |    6 +
+ .../admin-guide/abi-removed-files.rst         |    7 +
+ Documentation/admin-guide/abi-removed.rst     |    6 +-
+ .../admin-guide/abi-stable-files.rst          |    7 +
+ Documentation/admin-guide/abi-stable.rst      |    6 +-
+ .../admin-guide/abi-testing-files.rst         |    7 +
+ Documentation/admin-guide/abi-testing.rst     |    6 +-
+ Documentation/admin-guide/abi.rst             |   17 +
+ Documentation/admin-guide/media/ipu3.rst      |   12 +-
+ Documentation/admin-guide/thunderbolt.rst     |    2 +-
+ Documentation/arch/arm64/asymmetric-32bit.rst |    2 +-
+ Documentation/block/ublk.rst                  |    2 -
+ Documentation/driver-api/generic-counter.rst  |    4 +-
+ Documentation/driver-api/iio/core.rst         |    2 +-
+ Documentation/iio/iio_devbuf.rst              |    2 +-
+ Documentation/networking/statistics.rst       |    2 +-
+ Documentation/power/video.rst                 |    2 +-
+ Documentation/process/submit-checklist.rst    |    2 +-
+ Documentation/sphinx/automarkup.py            |   56 +
+ Documentation/sphinx/kernel_abi.py            |  162 +-
+ Documentation/sphinx/kerneldoc.py             |   14 +-
+ Documentation/sphinx/kernellog.py             |   22 -
+ Documentation/sphinx/kfigure.py               |   81 +-
+ .../it_IT/process/submit-checklist.rst        |    2 +-
+ .../sp_SP/process/submit-checklist.rst        |    2 +-
+ .../zh_CN/process/submit-checklist.rst        |    2 +-
+ .../zh_TW/process/submit-checklist.rst        |    2 +-
+ .../userspace-api/media/rc/rc-sysfs-nodes.rst |    2 +-
+ scripts/documentation-file-ref-check          |    2 +-
+ scripts/get_abi.pl                            | 1103 -------------
+ scripts/get_abi.py                            | 1437 +++++++++++++++++
+ 41 files changed, 1804 insertions(+), 1354 deletions(-)
+ create mode 100644 Documentation/admin-guide/abi-obsolete-files.rst
+ create mode 100644 Documentation/admin-guide/abi-readme-file.rst
+ create mode 100644 Documentation/admin-guide/abi-removed-files.rst
+ create mode 100644 Documentation/admin-guide/abi-stable-files.rst
+ create mode 100644 Documentation/admin-guide/abi-testing-files.rst
+ delete mode 100644 Documentation/sphinx/kernellog.py
+ delete mode 100755 scripts/get_abi.pl
+ create mode 100755 scripts/get_abi.py
+
 -- 
-2.17.1
+2.48.1
+
 
 
