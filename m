@@ -1,68 +1,68 @@
-Return-Path: <linux-usb+bounces-19821-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19822-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC6EAA20F34
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 17:52:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F220DA20F42
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 17:55:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9723E3A4895
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 16:51:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 398633A222F
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 16:55:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05361CB9EA;
-	Tue, 28 Jan 2025 16:51:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 832511BDA91;
+	Tue, 28 Jan 2025 16:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h1KOQIju"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YpsxJROw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5B11A23A2;
-	Tue, 28 Jan 2025 16:51:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EE627452;
+	Tue, 28 Jan 2025 16:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738083062; cv=none; b=IgqeG8gJQsOs2HGmmSm2JCGPdLfhBpv9tgZRLT7bAPNYGJ0HhSIzDWp4XoT1K/7EubCJ5XuElGPZorK4AA+QMmoits6HSeQKH5E72pxdDLYKU9CeKLHFygBxj6dL754RlwVnh1bUVUB7EBFHw68LEPWlc2SmsOznKrxP7X2Z4iM=
+	t=1738083335; cv=none; b=YBlhmRG2TWZMoxqNn45ZMIeouzRsiuoFs4VK4/Q3DOs6Lr1apibHJrBBVoSFvktsQH4ZPjb+62uB6HbIWWqyHFQ24Mb+rEnA5G+jjFeGBOdeyuZFz9dFfpSZD0qGMdyWqT+di/2bgOadEoo1ezsSz/WmGxKW75nggnxR5Wwdy1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738083062; c=relaxed/simple;
-	bh=Aan9fr1tdpl/w1qbzZhAh4nJ5CuKWrNcxaNMGIbPEys=;
+	s=arc-20240116; t=1738083335; c=relaxed/simple;
+	bh=JSnBUdPwoZTDwzjkjzbUqIRN8vSu1vxUkBa7U7XV2CQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g3z+oGkbbfNSpgxjphZxhmT1JLNCrh2Q7Sch3Ti2yTNt3WUmAbZ8I1uyVkV4Fx9T3kHaiIjt5ra7FfEnHAYhf48oxTD2XoJCFUtUt6nbpjjDRAdr+Ld3IJGlf3bRlGkNKuYmuprpk4n9A9J42x9pZZO5SwoKJS8uVhs/B8w1egQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h1KOQIju; arc=none smtp.client-ip=198.175.65.20
+	 Content-Type:Content-Disposition:In-Reply-To; b=YGuaSOWBVoYvPkJ7LxlWddf6l2EQNhxWa+peImclV/Ftmj6EzgcACwzSgNKmh2v+a+PVy8ZHZwF9aOFJYMFP6QzzUSq0vRglQLhjNAt4XIbx6nze8UsTox5COjz6Rzb+L1sKeiryFwd9FwFS+UTn8n8vB12uEdPtR/hEhib83AQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YpsxJROw; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738083061; x=1769619061;
+  t=1738083334; x=1769619334;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Aan9fr1tdpl/w1qbzZhAh4nJ5CuKWrNcxaNMGIbPEys=;
-  b=h1KOQIju/3fZf8cncRbTSaEYrZH5wStisMwGgJIv+j7itbHHzaOxNUYu
-   2m7+hEVHwefKJIsDV/ckcdkhwR0SGdXxhVMrfO77CjotBMuKv00GDwaHz
-   tU6TAO4yc9D4Dk+tz+WvicpO2EnltSCqohl3ZezfAqmI7HG8xXuAi7bp/
-   NGv9NyQ323tKXvV0nelu55KrvvWwYcbkraytcWs9fpGqSVxiSlKzP1DyB
-   MiAwLCVfhwtzBNbntc4XvS7MGyErIYg7YPKclaDNRUOU+Ymqf2/lATcFw
-   HgHotmSJr8plQwcdoKXA7S8vFH0jO2OL5VXZKiY+EaoqlfV6ik1DncIV5
-   g==;
-X-CSE-ConnectionGUID: F7JdSpE/TnCL5RsouGpEjA==
-X-CSE-MsgGUID: tUi2ewZrTZ6vP1StKZghnA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="38277623"
+   mime-version:in-reply-to;
+  bh=JSnBUdPwoZTDwzjkjzbUqIRN8vSu1vxUkBa7U7XV2CQ=;
+  b=YpsxJROwaXBu1a8hn1Gj8hxz0nqpeleuyYEllhHOTze4ICNWKgO2KkXS
+   MZOTmLfBp05REv7hFGRqck8ruSU2rmT0tOMAogAkY5pcxe6x1fzxzUJTp
+   16o1bJBls8/sP2clibfn6atA60LWUuJVMS0Y8w66bchaUW4uQZZcim/8h
+   k8q2kU+O7GzN1xLcrNm8ueubRBAUQ0VJfuRL6I8s23onLONlOAHiHfFzV
+   VBZerIGXd9zmSwl0KdfqtqLKrxEMcH8dzcQ2+aY1DsE8Sw6FNZHrnROZ7
+   fZ/YkkN8dGt9L782wkHReV0waPukWuHG67bHBVgyU4TDwxndReTrHSWma
+   Q==;
+X-CSE-ConnectionGUID: eae5Aj3jT5mRZWIEH6wumw==
+X-CSE-MsgGUID: Wmfan+m8SpS9uiJEVRt8fg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="49164612"
 X-IronPort-AV: E=Sophos;i="6.13,241,1732608000"; 
-   d="scan'208";a="38277623"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 08:51:00 -0800
-X-CSE-ConnectionGUID: MlQX91//S82s7U+6BW0vug==
-X-CSE-MsgGUID: 0PKzmbaESf614QUbRieP0Q==
+   d="scan'208";a="49164612"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 08:55:33 -0800
+X-CSE-ConnectionGUID: lyGgcRtSSX67/LLMdJMUeg==
+X-CSE-MsgGUID: Hvh79aeHTdWFAkhFvf65CQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,241,1732608000"; 
-   d="scan'208";a="108601274"
+   d="scan'208";a="113787900"
 Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 08:50:57 -0800
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 08:55:30 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.98)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tcone-000000067v1-2RyX;
-	Tue, 28 Jan 2025 18:50:54 +0200
-Date: Tue, 28 Jan 2025 18:50:54 +0200
+	id 1tcos4-000000067zM-0Kj1;
+	Tue, 28 Jan 2025 18:55:28 +0200
+Date: Tue, 28 Jan 2025 18:55:27 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -73,98 +73,96 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>, Ferry Toth <fntoth@gmail.com>
-Subject: Re: [PATCH v1 3/3] usb: dwc3: gadget: Skip endpoints ep[18]{in,out}
- on Intel Merrifield
-Message-ID: <Z5kK7mkrcrPE43sw@smile.fi.intel.com>
+Subject: Re: [PATCH v1 2/3] usb: dwc3: gadget: Add support for
+ snps,reserved-endpoints property
+Message-ID: <Z5kL_w0yqUHMRDzQ@smile.fi.intel.com>
 References: <20250116154117.148915-1-andriy.shevchenko@linux.intel.com>
- <20250116154117.148915-4-andriy.shevchenko@linux.intel.com>
- <20250116233937.s7mv5mu4tfuaexy2@synopsys.com>
- <Z4pcMUDsFZ8-deW_@smile.fi.intel.com>
- <20250121234616.eomj7r73o6ce3u2r@synopsys.com>
- <Z5EbnXy-BRmgFpVh@smile.fi.intel.com>
- <20250128022134.3xuw263bet5akoa4@synopsys.com>
+ <20250116154117.148915-3-andriy.shevchenko@linux.intel.com>
+ <20250116233507.sifqs5u3rixoz4lw@synopsys.com>
+ <Z4pb5CTS5n5wtJ7d@smile.fi.intel.com>
+ <20250122014347.fc3ntfkl7cismjxd@synopsys.com>
+ <Z5Em5bvAwu8QgRo8@smile.fi.intel.com>
+ <20250128023943.spxp7sv354iusrkt@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250128022134.3xuw263bet5akoa4@synopsys.com>
+In-Reply-To: <20250128023943.spxp7sv354iusrkt@synopsys.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Jan 28, 2025 at 02:21:40AM +0000, Thinh Nguyen wrote:
+On Tue, Jan 28, 2025 at 02:39:50AM +0000, Thinh Nguyen wrote:
 > On Wed, Jan 22, 2025, Andy Shevchenko wrote:
-> > On Tue, Jan 21, 2025 at 11:46:17PM +0000, Thinh Nguyen wrote:
+> > On Wed, Jan 22, 2025 at 01:44:02AM +0000, Thinh Nguyen wrote:
 > > > On Fri, Jan 17, 2025, Andy Shevchenko wrote:
-> > > > On Thu, Jan 16, 2025 at 11:39:42PM +0000, Thinh Nguyen wrote:
+> > > > On Thu, Jan 16, 2025 at 11:35:19PM +0000, Thinh Nguyen wrote:
 > > > > > On Thu, Jan 16, 2025, Andy Shevchenko wrote:
 
 ...
 
-> > > > > > + * Intel Merrifield uses these endpoints for tracing and they shouldn't be used
-> > > > > > + * for normal transfers, we need to skip them.
-> > > > > > + * • 1 High BW Bulk IN (IN#1) (RTIT)
-> > > > > > + * • 1 1KB BW Bulk IN (IN#8) + 1 1KB BW Bulk OUT (Run Control) (OUT#8)
+> > > > > >  	for (epnum = 0; epnum < total; epnum++) {
+> > > > > > -		int			ret;
+> > > > > > +		for (num = 0; num < count; num++) {
+> > > > > > +			if (epnum == eps[num])
+> > > > > > +				break;
+> > > > > > +		}
+> > > > > > +		if (num < count)
+> > > > > > +			continue;
 > > > > > 
-> > > > > Please use regular bullet character and list the endpoint per line.
+> > > > > You can probably rewrite this logic better.
 > > > > 
-> > > > Which is...?
+> > > > Any suggestions?
 > > > > 
-> > > > To my curiosity, what's wrong with the above?
+> > > > Thanks for the review!
 > > > 
-> > > Please use a character that we can find on the keyboard (- or * for
-> > > example).
+> > > From the first look, is the list sorted? If so, you don't need another
+> > > for-loop.
 > > 
-> > Hmm... We can find all characters on keyboard by using standard approach of
-> > typing Unicode ones. I'm not sure why this is a problem. Linux kernel is UTF-8
-> > ready project (from source tree point of view), at least I haven't found any
-> > limitations in the documentation.
-> > 
-> > Note, this is _not_ a kernel-doc style to which you may refer when pointing out
+> > Even if it's sorted it's not 1:1 mapped by indices. I do not understand how we
+> > can avoid the second loop. The only possibility is indeed to sort the list and
+> > sparse it in accordance to the endpoint numbers, but if we are going this way,
+> > it's much easier to switch to bitmap and the respective bitops.
 > 
-> I'm not requesting this out of any kernel-doc style. It's just a
-> personal preference and consistency in dwc3. If it's not too difficult,
-> please use "-".
-
-As I said...
-
-> But if you must insist, future lists would need to be
-> consistent to this new unicode style. Then I would need to ask others to
-> use the new Unicode one. Typically typing * doesn't automatically
-> convert to • unless you edit using Word, and so I prefer something I and
-> others can easily find on the keyboard.
+> If it's sorted, it can be something like this. Just a quick logic and not tested:
 > 
-> > to the how lists should be represented.
-> > 
-> > But it's not big deal for me to change the • character.
+> num = 0
+> for (epnum = 0; epnum < total; epnum++) {
+> 	if (num < count && epnum == eps[num]) {
+> 		num++;
+> 		continue;
+> 	}
+> 
+> 	...
+> }
 
-...not a big deal to me, I will change as requested.
+Ah, okay, I have got the idea. Let me try to mock up something working
+out of it.
 
-> > > And why would you want to list them like this:
+> > > Also, we loop over the number of endpoints throughout the driver, but
+> > > you only skip it here during init. Please double check for invalid
+> > > accessing of endpoints in other places.
 > > > 
-> > > 	* Endpoint A
-> > > 	* Endpoint B + Endpoint C
+> > > Perhaps set the dwc->eps[reserved_ep] to ERR_PTR(-EINVAL) or something
+> > > when you parse the reserved endpoints so you can skip them in your loop.
 > > 
-> > Because:
-> > 1) they are logically connected;
-> > 2) the above is the exact citation from the specification and I would like to
-> > keep it that way.
-> > 
-> > > As oppose to:
-> > > 
-> > > 	* Endpoint A
-> > > 	* Endpoint B
-> > > 	* Endpoint C
+> > Note, this is only for UDC, in USB host these are okay to be used.
+> > Does your suggestion imply that?
 > 
-> If you prefer to keep the snippet of your vendor specification intact,
-> we can instead document this fully in the commit message and note the
-> EBC feature. Remove these comments here.
+> No. We track the total num_eps in dwc->num_eps. Then we do for-loop to
+> dwc->eps[i] and access the endpoint. Often we check if the endpoint is
+> NULL before accessing dwc->eps[i]. However, we don't do it everywhere.
+> So I ask for you to review to make sure that this change doesn't break
+> elsewhere where we may try to access dwc->eps[i] to an uninit endpoint
+> (Note I see at least 1 place e.g. dwc3_gadget_clear_tx_fifos that may
+> break)
 
-I prefer to have a comment to explain magic numbers. I just want it to be
-as closer as possible to the specification wording.
+I see, so having my code as is also requiring to check all users of
+the eps array in the _gadget part_ of the driver to see if they won't
+crash due to NULL pointer dereference. Is it what you want?
+If so, definitely I will revisit that.
 
 -- 
 With Best Regards,
