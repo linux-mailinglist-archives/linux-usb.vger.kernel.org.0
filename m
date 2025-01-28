@@ -1,218 +1,146 @@
-Return-Path: <linux-usb+bounces-19807-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19808-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 341EBA206FE
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 10:17:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22DFCA2079D
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 10:45:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F002188A6A1
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 09:17:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CD6F1673B0
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 09:45:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBE5F1DFE3D;
-	Tue, 28 Jan 2025 09:16:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CCA61991B8;
+	Tue, 28 Jan 2025 09:45:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G3nvala+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f208.google.com (mail-il1-f208.google.com [209.85.166.208])
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12DB1DFE1D
-	for <linux-usb@vger.kernel.org>; Tue, 28 Jan 2025 09:16:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93B9748D;
+	Tue, 28 Jan 2025 09:45:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738055788; cv=none; b=It1BaND9Mjb7oszE3S5aLuJt8lU7jkWjhSrLtXCDTLoVZuiX8CpSTnhHkxrE8qpfpb0nPkamKaipvoLIaC4UJmgH7AEPqsCMwztj29tF4xD1/+/RTciakpR0LsbCenLqVMyo2YFNKQnCQIIsda+32O2YM5MNQ/AvSHN4NaeMLkU=
+	t=1738057540; cv=none; b=qIvHUzxyMP60uSDAnJQN4T76ECUcoL7T5SyBWkvhyMmDL73NtH4eXG6CXHRmhXazGravezr7slA02XZr40DGkxQFJbDWEzRy7OD19VH9oZiqIp3GhxRZY73o5s4iRxYtts/1AEdMWup+IQ/s8tGHPSt917d+qLbP1Yvg6mzJZsk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738055788; c=relaxed/simple;
-	bh=PCSwfZ0jw0Sj4fW/VOXF9WfiCFec2iRa4Yxx/5LVh+8=;
-	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
-	 Content-Type; b=nEBjUqrTs2KPmdqWDQolw+xeYlUSUMCWmu4faMw+5urL6DfqRybD09uUhQ7TZuy2T5lHC/PwB4DTMjRY2FuFsQWCSu6gmbZtG3d5L/jXW+uKLlwci+jouUjJnGoW8rx6rFjm0vhio29+p7tM4LzoMwSTtiZzMGEeqRuH4vdVGWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f208.google.com with SMTP id e9e14a558f8ab-3cfe6030df7so12318475ab.3
-        for <linux-usb@vger.kernel.org>; Tue, 28 Jan 2025 01:16:26 -0800 (PST)
+	s=arc-20240116; t=1738057540; c=relaxed/simple;
+	bh=LzTNlFBUoZyErs9VRbY7Hq0Vv+qJOCYMPgnRLrDnHUc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=p5ap1uXfWlBZYTSpe+ZE8W/RhOBhZ4hUUKot+feYunEF+zuZhBTz2r5nlByzPtCfK5NSOyAXqoPHZRE71kYarwamC6dhlFMqzHtyNqw9GxIQgpRde74VrUwZ5BKU1tTjvySFwr7D6HytRPXTsZMUue/w0JD6ljDz93iCO8HrHrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G3nvala+; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-30616d71bb0so55776071fa.3;
+        Tue, 28 Jan 2025 01:45:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738057537; x=1738662337; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bWZjaX6OmuRpph866S74kZjLXuQTRPDZaelIBN7N2tQ=;
+        b=G3nvala+iOdX9fnG3hoEzuy6lA1TQ7ZYKJ7ryky69QolBz9oEVqS381+9beODkBLLh
+         sBUr0u9J0cCVOg8idr6lHq0QxR9DB07cbIj6B1FpdmUmZCJDBbyKU7v91uwLFLGwMfvp
+         drE1j74BcXDZo9uVup/INPZmVmBuKJzVVI0kspIvGjElAmpsqcXKpzB3gn2BUg/OVivT
+         /NjV1j0d1lmPLaQAxNN/47e9/7R3nj+63U3yDeSKAtcrfUR18zY70dKhcll6Nla6LV+N
+         2cX1CcqQ0pqfl11yz2rVQkBrjzgWYUdDuXTEnL2mdr2chR0BANJgvzhV/8k8gucdj9q8
+         j4sw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738055786; x=1738660586;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YlF78NgqleC9guHEfdMN8eDkXX/Q3E2nIz2iQYILDMw=;
-        b=po4IYGUiEPdNL4z1HCUsfEoXlh2PrF9p1Ze0mktCDCej8RcgxFYT0/Cs+u1OMD4SjF
-         Au+P7Ti1jm46WqdFbR15bvFDEpAVhV+Cfg3YHDb55HGKlkyEwq3uDRyIWnWMxWxvokXw
-         zB4RFKBdz//NjSFBOn0QyWONaaJAoJ/TpX7AtbIcIRxubWAHvB5H2qU9eIs0W5Bf6abQ
-         kv88pQIgmUpRssk5Whi1UiJCRRx2bZau+8Tub8O2MFuDQqsO57uaqndNMUaM+2hNyMNL
-         jTGveqhpuIwtK9hnuU1aytysKC4uOuzWY39L7oGh6eDX83RQcFT1rSY94uzKyDfRW03v
-         Wo2g==
-X-Forwarded-Encrypted: i=1; AJvYcCV2+YAPKO5GkA+MXJ/vijjokQovWGUrR84Fewr4IYsnwU1I9ALKRvdkox7qQfkke2a9rEMJBaZ0auo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwuEBtaPpmID5QDkmAZZA6CNVCICUBGhtBn8KwBXNaQek355On
-	hweP+E5S5b0qeNj87xptVC0a5g91JLHxCtYJTNgeGiqolbR33hyF9Uc68YVGfujVho2nKNgpuob
-	X2DiIPbNSSGGojRaLnnVE7rhHxutLNdUluhisuhe5Zv5LrJZNiu7g68I=
-X-Google-Smtp-Source: AGHT+IEJnHKt2XdubAjXKHGZrNvM5u9TqwRDuiX8p1oaRzQRxp3W/QWY5dRXwuTniCV8rUOQ5sb+lA1zDFiO6s5znnfvWK74GBnO
+        d=1e100.net; s=20230601; t=1738057537; x=1738662337;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bWZjaX6OmuRpph866S74kZjLXuQTRPDZaelIBN7N2tQ=;
+        b=kvaG7zEos+6diAAUEjkMS16BlT9YgyN5jgaME8vrxTPetIP0C3Pv4Vidjw6eppYbEB
+         d6H6RQ1AYH5qwhcASok+sn1+NifCh6K7J7e9UO1RLiNqP60/bSuTROc3zZJIolFXyWwh
+         5eEfSVwSGa4qpJ4kLgJZNCuU4nZRZroMfXRJhYA9Ly79/Jh72CNNJG3SZzoTMi4/Wvnl
+         lSY9RlLlVRvXm694dFNr9zOr7HgNN98JlyyFfIaI0uEfFrw31EaeQwCVMtISiusU+CNh
+         kSq9cwPNfbeH2S1qXfPfEHHJKye2fkpaDk/s4E3njmOoSv+JkD0HBWoouFaywZyjyuVr
+         JSLg==
+X-Forwarded-Encrypted: i=1; AJvYcCWoP+7oW/O7WQWq7wlF3mOFtSMlF+Tqr3iA52CFPw7CEX5za3ZpKcnsNtBZ+bNtoeOR00ce7iNaK3sryWU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+dq/pkXhdCSIxeZpyJAEtc3bQTCmrqw9kyq9m2IXKYDm0Ojn6
+	SijkYdJ6OVZxR0yarVsv5uEIpFLxVEj7jcNaJzO0FDz9LC1b1D+sPejO1w==
+X-Gm-Gg: ASbGncvOSks6NQjhytUkEswpu/LPDsEdWTePSiBzMzaMo8bpXl+mdYdVV5MtPo9x1wk
+	ZXLBsfLdD0QY/TWoaGG0hrpWuvDKSW5arYHenDG6L3v1mWq2W+0QqgcJPAX8Qcyr+98x/upbPxF
+	mtF7ZKITp9/YKPcEkD6oYuShZkD2uifndegG3H6F5Ui+PkAF7erAUO3GC6wV5JYJ6+ovdmr8VUX
+	FGOMx4IoJ6nwGHJ6ZCptQpTZWWPwoMWhrCRzFsNJIUUJ9Dkc03Y/kxQeEKRdzrKRM1l31GiCCjh
+	k27MCJmfdEyqpZumB3VgESSdVq4MIZ4f
+X-Google-Smtp-Source: AGHT+IEKuFF/q7sy3cGduVrnlS3tzdjR849kj4RjhvQuvNHPWG1v9ToPm/rP+C2VpSl83iDfTDe4vA==
+X-Received: by 2002:a05:651c:897:b0:2ff:9b6f:23d9 with SMTP id 38308e7fff4ca-3072ca5cb5dmr166937501fa.7.1738057536700;
+        Tue, 28 Jan 2025 01:45:36 -0800 (PST)
+Received: from foxbook (adtk111.neoplus.adsl.tpnet.pl. [79.185.222.111])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3076bc4a4f1sm17992371fa.99.2025.01.28.01.45.33
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 28 Jan 2025 01:45:35 -0800 (PST)
+Date: Tue, 28 Jan 2025 10:45:29 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2] usb: xhci: Restore xhci_pci support for Renesas HCs
+Message-ID: <20250128104529.58a79bfc@foxbook>
+In-Reply-To: <20250127151051.1a91bbe6@foxbook>
+References: <20250127151051.1a91bbe6@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:310c:b0:3ce:61a3:8647 with SMTP id
- e9e14a558f8ab-3cf74419cefmr321778545ab.11.1738055785989; Tue, 28 Jan 2025
- 01:16:25 -0800 (PST)
-Date: Tue, 28 Jan 2025 01:16:25 -0800
-In-Reply-To: <6797072e.050a0220.2eae65.003f.GAE@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <6798a069.050a0220.ac840.0244.GAE@google.com>
-Subject: Re: [syzbot] [usb?] KASAN: stack-out-of-bounds Read in usb_check_int_endpoints
-From: syzbot <syzbot+9c9179ac46169c56c1ad@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, jikos@kernel.org, karprzy7@gmail.com, 
-	linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, stern@rowland.harvard.edu, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-syzbot has found a reproducer for the following issue on:
+Some Renesas HCs require firmware upload to work, this is handled by the
+xhci_pci_renesas driver. Other variants of those chips load firmware from
+a SPI flash and are ready to work with xhci_pci alone.
 
-HEAD commit:    6d61a53dd6f5 Merge tag 'f2fs-for-6.14-rc1' of git://git.ke..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=13786e24580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a4ddc212efe12f88
-dashboard link: https://syzkaller.appspot.com/bug?extid=9c9179ac46169c56c1ad
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1514cddf980000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=143c85f8580000
+A refactor merged in v6.12 broke the latter configuration so that users
+are finding their hardware ignored by the normal driver and are forced to
+enable the firmware loader which isn't really necessary on their systems.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/65684dc6d116/disk-6d61a53d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/aa2e2ce680d3/vmlinux-6d61a53d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/ebbf8bd929a6/bzImage-6d61a53d.xz
+Let xhci_pci work with those chips as before when the firmware loader is
+disabled by kernel configuration.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+9c9179ac46169c56c1ad@syzkaller.appspotmail.com
-
-usb 1-1: config 0 interface 0 has no altsetting 0
-usb 1-1: New USB device found, idVendor=044f, idProduct=b65d, bcdDevice= 0.00
-usb 1-1: New USB device strings: Mfr=0, Product=0, SerialNumber=0
-usb 1-1: config 0 descriptor??
-hid-thrustmaster 0003:044F:B65D.0001: hidraw0: USB HID v0.00 Device [HID 044f:b65d] on usb-dummy_hcd.0-1/input0
-==================================================================
-BUG: KASAN: stack-out-of-bounds in usb_check_int_endpoints+0x247/0x270 drivers/usb/core/usb.c:277
-Read of size 1 at addr ffffc9000009ebb9 by task kworker/0:1/9
-
-CPU: 0 UID: 0 PID: 9 Comm: kworker/0:1 Not tainted 6.13.0-syzkaller-09030-g6d61a53dd6f5 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
-Workqueue: usb_hub_wq hub_event
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:378 [inline]
- print_report+0xc3/0x620 mm/kasan/report.c:489
- kasan_report+0xd9/0x110 mm/kasan/report.c:602
- usb_check_int_endpoints+0x247/0x270 drivers/usb/core/usb.c:277
- thrustmaster_interrupts drivers/hid/hid-thrustmaster.c:176 [inline]
- thrustmaster_probe drivers/hid/hid-thrustmaster.c:347 [inline]
- thrustmaster_probe+0x499/0xe10 drivers/hid/hid-thrustmaster.c:289
- __hid_device_probe drivers/hid/hid-core.c:2713 [inline]
- hid_device_probe+0x349/0x700 drivers/hid/hid-core.c:2750
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:459
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:534
- device_add+0x114b/0x1a70 drivers/base/core.c:3665
- hid_add_device+0x374/0xa60 drivers/hid/hid-core.c:2896
- usbhid_probe+0xd32/0x1400 drivers/hid/usbhid/hid-core.c:1431
- usb_probe_interface+0x300/0x9c0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:459
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:534
- device_add+0x114b/0x1a70 drivers/base/core.c:3665
- usb_set_configuration+0x10cb/0x1c50 drivers/usb/core/message.c:2210
- usb_generic_driver_probe+0xb1/0x110 drivers/usb/core/generic.c:250
- usb_probe_device+0xec/0x3e0 drivers/usb/core/driver.c:291
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:459
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:534
- device_add+0x114b/0x1a70 drivers/base/core.c:3665
- usb_new_device+0xd09/0x1a20 drivers/usb/core/hub.c:2652
- hub_port_connect drivers/usb/core/hub.c:5523 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
- port_event drivers/usb/core/hub.c:5823 [inline]
- hub_event+0x2e58/0x4f40 drivers/usb/core/hub.c:5905
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
- process_scheduled_works kernel/workqueue.c:3317 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
- kthread+0x3af/0x750 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-The buggy address belongs to stack of task kworker/0:1/9
- and is located at offset 65 in frame:
- thrustmaster_probe+0x0/0xe10 drivers/hid/hid-thrustmaster.c:203
-
-This frame has 2 objects:
- [48, 52) 'trans'
- [64, 65) 'ep_addr'
-
-The buggy address belongs to the virtual mapping at
- [ffffc90000098000, ffffc900000a1000) created by:
- kernel_clone+0xfd/0x960 kernel/fork.c:2804
-
-The buggy address belongs to the physical page:
-page: refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x1016f1
-flags: 0x200000000000000(node=0|zone=2)
-raw: 0200000000000000 0000000000000000 dead000000000122 0000000000000000
-raw: 0000000000000000 0000000000000000 00000001ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x2dc2(GFP_KERNEL|__GFP_HIGHMEM|__GFP_NOWARN|__GFP_ZERO), pid 2, tgid 2 (kthreadd), ts 2826831682, free_ts 0
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x181/0x1b0 mm/page_alloc.c:1551
- prep_new_page mm/page_alloc.c:1559 [inline]
- get_page_from_freelist+0xe76/0x2b90 mm/page_alloc.c:3477
- __alloc_frozen_pages_noprof+0x21c/0x2290 mm/page_alloc.c:4739
- __alloc_pages_noprof+0xb/0x1b0 mm/page_alloc.c:4773
- __alloc_pages_node_noprof include/linux/gfp.h:265 [inline]
- alloc_pages_node_noprof include/linux/gfp.h:292 [inline]
- vm_area_alloc_pages mm/vmalloc.c:3593 [inline]
- __vmalloc_area_node mm/vmalloc.c:3669 [inline]
- __vmalloc_node_range_noprof+0x63d/0x1530 mm/vmalloc.c:3846
- alloc_thread_stack_node kernel/fork.c:314 [inline]
- dup_task_struct kernel/fork.c:1116 [inline]
- copy_process+0x2e42/0x8c60 kernel/fork.c:2222
- kernel_clone+0xfd/0x960 kernel/fork.c:2804
- kernel_thread+0xc0/0x100 kernel/fork.c:2866
- create_kthread kernel/kthread.c:487 [inline]
- kthreadd+0x4ef/0x7d0 kernel/kthread.c:847
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-page_owner free stack trace missing
-
-Memory state around the buggy address:
- ffffc9000009ea80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000009eb00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 f1
->ffffc9000009eb80: f1 f1 f1 f1 f1 04 f2 01 f3 f3 f3 00 00 00 00 00
-                                        ^
- ffffc9000009ec00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffffc9000009ec80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
-==================================================================
-
-
+Fixes: 25f51b76f90f ("xhci-pci: Make xhci-pci-renesas a proper modular driver")
+CC: stable@vger.kernel.org
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219616
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219726
+Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+
+new in v2:
+- changed #ifdef CONFIG_XXX to if (IS_ENABLED(CONFIG_XXX))
+- renamed the PCI IDs table to clarify code intent
+- small commit message improvements
+
+ drivers/usb/host/xhci-pci.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 5a5f0b2dba4d..54460d11f7ee 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -657,8 +657,8 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ }
+ EXPORT_SYMBOL_NS_GPL(xhci_pci_common_probe, "xhci");
+ 
+-static const struct pci_device_id pci_ids_reject[] = {
+-	/* handled by xhci-pci-renesas */
++/* handled by xhci-pci-renesas if enabled */
++static const struct pci_device_id pci_ids_renesas[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0014) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0015) },
+ 	{ /* end: all zeroes */ }
+@@ -666,7 +666,8 @@ static const struct pci_device_id pci_ids_reject[] = {
+ 
+ static int xhci_pci_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ {
+-	if (pci_match_id(pci_ids_reject, dev))
++	if (IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS) &&
++			pci_match_id(pci_ids_renesas, dev))
+ 		return -ENODEV;
+ 
+ 	return xhci_pci_common_probe(dev, id);
+-- 
+2.48.1
 
