@@ -1,339 +1,174 @@
-Return-Path: <linux-usb+bounces-19820-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19821-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC53EA20ED6
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 17:43:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC6EAA20F34
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 17:52:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D246162884
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 16:43:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9723E3A4895
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 16:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9A711DE3D6;
-	Tue, 28 Jan 2025 16:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E05361CB9EA;
+	Tue, 28 Jan 2025 16:51:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nc6W5cuk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h1KOQIju"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB87E1DE3A4;
-	Tue, 28 Jan 2025 16:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C5B11A23A2;
+	Tue, 28 Jan 2025 16:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738082585; cv=none; b=KtbjC3IKvAt9pPsp0OThWbb8Zjk0F5SgSflbAiRZfm3MF3h1/pfGzYHJGPlrUJsStzunx4VwpLXId30+AsR0EBEEdr9g9wt9G1kjwn3RuCMbSEUqt4pelZpo5JlEAFF3xlHaYbRSiH6NFaOTLfPnAez7m3Rg9gTmGQVkD2VLfnM=
+	t=1738083062; cv=none; b=IgqeG8gJQsOs2HGmmSm2JCGPdLfhBpv9tgZRLT7bAPNYGJ0HhSIzDWp4XoT1K/7EubCJ5XuElGPZorK4AA+QMmoits6HSeQKH5E72pxdDLYKU9CeKLHFygBxj6dL754RlwVnh1bUVUB7EBFHw68LEPWlc2SmsOznKrxP7X2Z4iM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738082585; c=relaxed/simple;
-	bh=QfyTNN0QuRu5OhqcnxwpyHLKyNNbV/NcEXUbRq2E0e8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=E6zeaautV4eLmB7koMu2BuNw0Adau15IBdrn8kXzFxSuezQr6+IEQ47taArxwBdFxYTSyxZ+WiNryK2X6HRrIQAW5ldQoE9gTIEXrB/DL9e6NEPJo8XfELINp+y6p5Et7NmBmZYy5iSSBh1kwtQvmJQSJ5Wqtr89DgRoWsf2Ew0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nc6W5cuk; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21636268e43so128631615ad.2;
-        Tue, 28 Jan 2025 08:43:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738082583; x=1738687383; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zocPwhRR8BFDI1YPyREBrJhQBXZT2j2XFP2dHOYuLUA=;
-        b=Nc6W5cukLbJmxmHy18rlronwYwUILh+wx8L4IVsyqm07LfBCZ2mc/o82H2DLlXyLGL
-         IstwngMiN7r09B8iWiT7/o2rJ5AmHztU3tHdzjn2eNg8HHJHz1de8XRvZ0e1/bqoISMr
-         SaHOIExY2WMOYKm7edmZx9XKLyr9/GEH4ekLB6QiTcP1a3PnHxUhrzijLXq9r7jxZjZS
-         5jAswqM4D+jow67xIslY64GDRLJkjUjbf+tu/uo4lyt4IxImjrW/hZgtVgK1hQ4kbuIv
-         VQZzcH/mMX8Sj14I0HQ6jK4nmGd8HrJJFK65DjDD5lY3A+wbz4hYXLWB5jRhfeDEDrAe
-         Qqsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738082583; x=1738687383;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zocPwhRR8BFDI1YPyREBrJhQBXZT2j2XFP2dHOYuLUA=;
-        b=udgl4SIyjQ/dZdshT64+hLafKjVpT+rSCYfvFIU5lDvMgCv+4vkTDpHxAcCapza8Zm
-         R+hOw1mFkUG3Yo6GvksNIXp5acgsuVX+HaSe93yikrwv4NZlgQXNSTjPw893adDvwAb7
-         Farf7JF6FU4+Q2Gj87aYon+je945miGvN1sGFileyUT1QOuPbB4elZhhuenLHuvMXxHW
-         rGB9dxiAFeDtkjE/FlWP1/CHtc3bhaHr9UtpIyrMsZGKkwi/fg91vOADKzqFdOMtfkSM
-         tnqudGJpRziQAkEKDmYRB+vx607cbjCb5Wt51TROQaMOYFIQCaY1qeF1d1G99dJFwc+M
-         5Avg==
-X-Forwarded-Encrypted: i=1; AJvYcCV5DCUF9CfQJUjdCY4ahQLzqFSOMqMvtmapptZ/54YgiR4h0JiQbzhyedoCY/Vvt3ZUPIewBQoWoTyImtg=@vger.kernel.org, AJvYcCWo73o8YlSitwnUP+YBtJrhgrJC+d3wr+aoKoQl78xm46k6IBUuSm0UKXJ25wmF5FosK9u3vwaa8ejU@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZgshFEONtg8grmD98BQglC7tRD8ydk+Pvc47EtLW6OnT8h43E
-	nNJDZUas/QyiilTM2+w2vTEtSdhFLdz5ksvRKDAUbRNq7OR8bdhD3qG1a7qK
-X-Gm-Gg: ASbGncsjfcoHueJel/I/mBBSrwKfITVIXRXODxWnCtOW/vV5CgJx16qkpQoYKlODqB2
-	Xc7mWJ0BZigwpLUviMFsqACmfX7rWmqbBwBfisDjw5/mdc52whHmyeJKIS252vfhFQFETCj8Zvw
-	l+pIh7uAzilXf6t3aKiWJBe8JWKpi+XX3XIig63BMLhsvJ/Snw9MbpphIBbOWNvbCFmjaFdohCV
-	Le/FLGER+ICYU0AWVxi9B0Dox64YKWhID3FUxe//IKKH7k8lO/VQFQExlNa26YMeb4UwbT9/1Sr
-	7+QtQWMQ3JtrWlQ=
-X-Google-Smtp-Source: AGHT+IEOrBDUe2neSSS4CE3ylDaP09wtRXk0aOQnDoY+p5H7uDmCWiu/WfuhvsvZMyUaa+sKT/Pr7A==
-X-Received: by 2002:a17:903:41c3:b0:215:4f3b:cb20 with SMTP id d9443c01a7336-21c3554b37emr691124165ad.23.1738082582890;
-        Tue, 28 Jan 2025 08:43:02 -0800 (PST)
-Received: from ubuntu.. ([124.13.193.144])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da424eb96sm84295225ad.222.2025.01.28.08.43.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jan 2025 08:43:02 -0800 (PST)
-From: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
-To: mika.westerberg@linux.intel.com
-Cc: andreas.noever@gmail.com,
-	michael.jamet@intel.com,
-	YehezkelShB@gmail.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mohammad Rahimi <rahimi.mhmmd@gmail.com>
-Subject: [PATCH] thunderbolt: Disable Gen 4 Recovery on Asymmetric Transitions
-Date: Tue, 28 Jan 2025 16:36:05 +0000
-Message-ID: <20250128163605.19222-1-rahimi.mhmmd@gmail.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1738083062; c=relaxed/simple;
+	bh=Aan9fr1tdpl/w1qbzZhAh4nJ5CuKWrNcxaNMGIbPEys=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=g3z+oGkbbfNSpgxjphZxhmT1JLNCrh2Q7Sch3Ti2yTNt3WUmAbZ8I1uyVkV4Fx9T3kHaiIjt5ra7FfEnHAYhf48oxTD2XoJCFUtUt6nbpjjDRAdr+Ld3IJGlf3bRlGkNKuYmuprpk4n9A9J42x9pZZO5SwoKJS8uVhs/B8w1egQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h1KOQIju; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738083061; x=1769619061;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Aan9fr1tdpl/w1qbzZhAh4nJ5CuKWrNcxaNMGIbPEys=;
+  b=h1KOQIju/3fZf8cncRbTSaEYrZH5wStisMwGgJIv+j7itbHHzaOxNUYu
+   2m7+hEVHwefKJIsDV/ckcdkhwR0SGdXxhVMrfO77CjotBMuKv00GDwaHz
+   tU6TAO4yc9D4Dk+tz+WvicpO2EnltSCqohl3ZezfAqmI7HG8xXuAi7bp/
+   NGv9NyQ323tKXvV0nelu55KrvvWwYcbkraytcWs9fpGqSVxiSlKzP1DyB
+   MiAwLCVfhwtzBNbntc4XvS7MGyErIYg7YPKclaDNRUOU+Ymqf2/lATcFw
+   HgHotmSJr8plQwcdoKXA7S8vFH0jO2OL5VXZKiY+EaoqlfV6ik1DncIV5
+   g==;
+X-CSE-ConnectionGUID: F7JdSpE/TnCL5RsouGpEjA==
+X-CSE-MsgGUID: tUi2ewZrTZ6vP1StKZghnA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="38277623"
+X-IronPort-AV: E=Sophos;i="6.13,241,1732608000"; 
+   d="scan'208";a="38277623"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 08:51:00 -0800
+X-CSE-ConnectionGUID: MlQX91//S82s7U+6BW0vug==
+X-CSE-MsgGUID: 0PKzmbaESf614QUbRieP0Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,241,1732608000"; 
+   d="scan'208";a="108601274"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 08:50:57 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tcone-000000067v1-2RyX;
+	Tue, 28 Jan 2025 18:50:54 +0200
+Date: Tue, 28 Jan 2025 18:50:54 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Felipe Balbi <balbi@kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH v1 3/3] usb: dwc3: gadget: Skip endpoints ep[18]{in,out}
+ on Intel Merrifield
+Message-ID: <Z5kK7mkrcrPE43sw@smile.fi.intel.com>
+References: <20250116154117.148915-1-andriy.shevchenko@linux.intel.com>
+ <20250116154117.148915-4-andriy.shevchenko@linux.intel.com>
+ <20250116233937.s7mv5mu4tfuaexy2@synopsys.com>
+ <Z4pcMUDsFZ8-deW_@smile.fi.intel.com>
+ <20250121234616.eomj7r73o6ce3u2r@synopsys.com>
+ <Z5EbnXy-BRmgFpVh@smile.fi.intel.com>
+ <20250128022134.3xuw263bet5akoa4@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250128022134.3xuw263bet5akoa4@synopsys.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Updates the Connection Manager to disable the Gen 4 Link Recovery
-flow before transitioning from a Symmetric Link to an Asymmetric
-Link, as specified in recent changes to the USB4 v2 specification.
+On Tue, Jan 28, 2025 at 02:21:40AM +0000, Thinh Nguyen wrote:
+> On Wed, Jan 22, 2025, Andy Shevchenko wrote:
+> > On Tue, Jan 21, 2025 at 11:46:17PM +0000, Thinh Nguyen wrote:
+> > > On Fri, Jan 17, 2025, Andy Shevchenko wrote:
+> > > > On Thu, Jan 16, 2025 at 11:39:42PM +0000, Thinh Nguyen wrote:
+> > > > > On Thu, Jan 16, 2025, Andy Shevchenko wrote:
 
-According to the "USB4 2.0 ENGINEERING CHANGE NOTICE FORM"
-published in September 2024, the rationale for this change is:
+...
 
-  "Since the default value of the Target Asymmetric Link might be
-  different than Symmetric Link and Gen 4 Link Recovery flow checks
-  this field to make sure it matched the actual Negotiated Link Width,
-  we’re removing the condition for a Disconnect in the Gen 4 Link
-  Recovery flow when Target Asymmetric Link doesn’t match the actual
-  Link width and adding a Connection Manager note to Disable Gen 4 Link
-  Recovery flow before doing Asymmetric Transitions."
+> > > > > > + * Intel Merrifield uses these endpoints for tracing and they shouldn't be used
+> > > > > > + * for normal transfers, we need to skip them.
+> > > > > > + * • 1 High BW Bulk IN (IN#1) (RTIT)
+> > > > > > + * • 1 1KB BW Bulk IN (IN#8) + 1 1KB BW Bulk OUT (Run Control) (OUT#8)
+> > > > > 
+> > > > > Please use regular bullet character and list the endpoint per line.
+> > > > 
+> > > > Which is...?
+> > > > 
+> > > > To my curiosity, what's wrong with the above?
+> > > 
+> > > Please use a character that we can find on the keyboard (- or * for
+> > > example).
+> > 
+> > Hmm... We can find all characters on keyboard by using standard approach of
+> > typing Unicode ones. I'm not sure why this is a problem. Linux kernel is UTF-8
+> > ready project (from source tree point of view), at least I haven't found any
+> > limitations in the documentation.
+> > 
+> > Note, this is _not_ a kernel-doc style to which you may refer when pointing out
+> 
+> I'm not requesting this out of any kernel-doc style. It's just a
+> personal preference and consistency in dwc3. If it's not too difficult,
+> please use "-".
 
-Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
----
- drivers/thunderbolt/tb.c      |  23 ++++---
- drivers/thunderbolt/tb.h      |   3 +
- drivers/thunderbolt/tb_regs.h |   1 +
- drivers/thunderbolt/usb4.c    | 125 ++++++++++++++++++++++++++++++++++
- 4 files changed, 142 insertions(+), 10 deletions(-)
+As I said...
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index a7c6919fbf97..da53e4619eca 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1013,7 +1013,7 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
- 			     struct tb_port *dst_port, int requested_up,
- 			     int requested_down)
- {
--	bool clx = false, clx_disabled = false, downstream;
-+	bool clx_was_enable = false, lrf_was_enable = false, downstream;
- 	struct tb_switch *sw;
- 	struct tb_port *up;
- 	int ret = 0;
-@@ -1075,14 +1075,12 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
- 			continue;
- 
- 		/*
--		 * Disable CL states before doing any transitions. We
--		 * delayed it until now that we know there is a real
--		 * transition taking place.
-+		 * Disable CL states and Link Recovery flow before doing any
-+		 * transitions. We delayed it until now that we know there is
-+		 * a real transition taking place.
- 		 */
--		if (!clx_disabled) {
--			clx = tb_disable_clx(sw);
--			clx_disabled = true;
--		}
-+		clx_was_enable = tb_disable_clx(sw);
-+		lrf_was_enable = usb4_disable_lrf(sw);
- 
- 		tb_sw_dbg(up->sw, "configuring asymmetric link\n");
- 
-@@ -1097,9 +1095,14 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
- 		}
- 	}
- 
--	/* Re-enable CL states if they were previosly enabled */
--	if (clx)
-+	/*
-+	 * Re-enable CL states and Link Recovery flow if
-+	 * they were previosly enabled
-+	 */
-+	if (clx_was_enable)
- 		tb_enable_clx(sw);
-+	if (lrf_was_enable)
-+		usb4_enable_lrf(sw);
- 
- 	return ret;
- }
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index ddbf0cd78377..3bec35f78d51 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1336,6 +1336,9 @@ bool usb4_port_asym_supported(struct tb_port *port);
- int usb4_port_asym_set_link_width(struct tb_port *port, enum tb_link_width width);
- int usb4_port_asym_start(struct tb_port *port);
- 
-+bool usb4_enable_lrf(struct tb_switch *sw);
-+bool usb4_disable_lrf(struct tb_switch *sw);
-+
- /**
-  * enum tb_sb_target - Sideband transaction target
-  * @USB4_SB_TARGET_ROUTER: Target is the router itself
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index 4e43b47f9f11..085139e1a958 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -398,6 +398,7 @@ struct tb_regs_port_header {
- #define PORT_CS_19_WOD				BIT(17)
- #define PORT_CS_19_WOU4				BIT(18)
- #define PORT_CS_19_START_ASYM			BIT(24)
-+#define PORT_CS_19_ELR				BIT(31)
- 
- /* Display Port adapter registers */
- #define ADP_DP_CS_0				0x00
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index e51d01671d8e..49dd3d201617 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -10,6 +10,7 @@
- #include <linux/delay.h>
- #include <linux/ktime.h>
- #include <linux/units.h>
-+#include <linux/string_helpers.h>
- 
- #include "sb_regs.h"
- #include "tb.h"
-@@ -1518,6 +1519,130 @@ bool usb4_port_clx_supported(struct tb_port *port)
- 	return !!(val & PORT_CS_18_CPS);
- }
- 
-+static int __usb4_port_lrf_enable(struct tb_port *port,
-+		       bool enable, bool *was_enable)
-+{
-+	int ret;
-+	u32 val;
-+
-+	ret = tb_port_read(port, &val, TB_CFG_PORT,
-+			   port->cap_usb4 + PORT_CS_19, 1);
-+	if (ret)
-+		return ret;
-+
-+	*was_enable |= !!(val & PORT_CS_19_ELR);
-+
-+	if (enable)
-+		val |= PORT_CS_19_ELR;
-+	else
-+		val &= ~PORT_CS_19_ELR;
-+
-+	ret = tb_port_write(port, &val, TB_CFG_PORT,
-+			    port->cap_usb4 + PORT_CS_19, 1);
-+	if (ret)
-+		return ret;
-+
-+	tb_port_dbg(port, "ELR %s\n", str_enabled_disabled(enable));
-+	return 0;
-+}
-+
-+static int usb4_switch_lrf_enable(struct tb_switch *sw)
-+{
-+	bool was_enable = false;
-+	struct tb_port *up, *down;
-+	int ret;
-+
-+	up = tb_upstream_port(sw);
-+	down = tb_switch_downstream_port(sw);
-+
-+	ret = __usb4_port_lrf_enable(up, true, &was_enable);
-+	if (ret)
-+		return ret;
-+
-+	ret = __usb4_port_lrf_enable(down, true, &was_enable);
-+	if (ret)
-+		return ret;
-+
-+	tb_sw_dbg(sw, "ELR %s\n", str_enabled_disabled(true));
-+
-+	return 0;
-+}
-+
-+static int usb4_switch_lrf_disable(struct tb_switch *sw)
-+{
-+	bool was_enable = false;
-+	struct tb_port *up, *down;
-+	int ret;
-+
-+	up = tb_upstream_port(sw);
-+	down = tb_switch_downstream_port(sw);
-+
-+	ret = __usb4_port_lrf_enable(up, false, &was_enable);
-+	if (ret)
-+		return ret;
-+
-+	ret = __usb4_port_lrf_enable(down, false, &was_enable);
-+	if (ret)
-+		return ret;
-+
-+	tb_sw_dbg(sw, "ELR %s\n", str_enabled_disabled(false));
-+
-+	/* At least one ELR has been disabled */
-+	return was_enable ? 1 : 0;
-+}
-+
-+/**
-+ * usb4_disable_lrf() - Enables Link Recovery flow up to host router
-+ * @sw: Router to start
-+ *
-+ * Enables Link Recovery flow from @sw up to the host router.
-+ * Returns true if every Link Recovery flow was successfully enabled.
-+ */
-+bool usb4_enable_lrf(struct tb_switch *sw)
-+{
-+	bool enabled = true;
-+
-+	do {
-+		if (usb4_switch_lrf_enable(sw) < 0) {
-+			tb_sw_warn(sw, "failed to enable Link Recovery flow\n");
-+			enabled = false;
-+		}
-+
-+		sw = tb_switch_parent(sw);
-+	} while (sw);
-+
-+	return enabled;
-+}
-+
-+/**
-+ * usb4_disable_lrf() - Disable Link Recovery flow up to host router
-+ * @sw: Router to start
-+ *
-+ * Disables Link Recovery flow from @sw up to the host router.
-+ * Returns true if any Link Recovery flow was disabled. This
-+ * can be used to figure out whether the link was setup by us
-+ * or the boot firmware so we don't accidentally enable them if
-+ * they were not enabled during discovery.
-+ */
-+bool usb4_disable_lrf(struct tb_switch *sw)
-+{
-+	bool disabled = false;
-+
-+	do {
-+		int ret;
-+
-+		ret = usb4_switch_lrf_disable(sw);
-+		if (ret > 0)
-+			disabled = true;
-+		else if (ret < 0)
-+			tb_sw_warn(sw, "Link Recovery flow cannot be disabled\n");
-+
-+		sw = tb_switch_parent(sw);
-+	} while (sw);
-+
-+	return disabled;
-+}
-+
- /**
-  * usb4_port_asym_supported() - If the port supports asymmetric link
-  * @port: USB4 port
+> But if you must insist, future lists would need to be
+> consistent to this new unicode style. Then I would need to ask others to
+> use the new Unicode one. Typically typing * doesn't automatically
+> convert to • unless you edit using Word, and so I prefer something I and
+> others can easily find on the keyboard.
+> 
+> > to the how lists should be represented.
+> > 
+> > But it's not big deal for me to change the • character.
+
+...not a big deal to me, I will change as requested.
+
+> > > And why would you want to list them like this:
+> > > 
+> > > 	* Endpoint A
+> > > 	* Endpoint B + Endpoint C
+> > 
+> > Because:
+> > 1) they are logically connected;
+> > 2) the above is the exact citation from the specification and I would like to
+> > keep it that way.
+> > 
+> > > As oppose to:
+> > > 
+> > > 	* Endpoint A
+> > > 	* Endpoint B
+> > > 	* Endpoint C
+> 
+> If you prefer to keep the snippet of your vendor specification intact,
+> we can instead document this fully in the commit message and note the
+> EBC feature. Remove these comments here.
+
+I prefer to have a comment to explain magic numbers. I just want it to be
+as closer as possible to the specification wording.
+
 -- 
-2.45.2
+With Best Regards,
+Andy Shevchenko
+
 
 
