@@ -1,77 +1,77 @@
-Return-Path: <linux-usb+bounces-19814-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19815-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF212A20BA5
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 14:58:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 285CEA20BAC
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 15:04:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EA2B167936
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 13:58:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 612713A62E9
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 14:04:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A719A1A9B27;
-	Tue, 28 Jan 2025 13:58:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81C541A841A;
+	Tue, 28 Jan 2025 14:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G/9SDYC8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bBZsSkM1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A2C199FAB;
-	Tue, 28 Jan 2025 13:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72A6F199FC9;
+	Tue, 28 Jan 2025 14:04:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738072705; cv=none; b=rCmJpaZL5/6roJY/4Gtie/AQBGqHRyNRbuuHJcpsyytUJxAmPTGh8eNXtXKslnz/ZucfSJUc6TfXuosHhYV/kDUO3zESWdQdE1rtdVSb+fp495kO07Iyp7qx5oEXpLWAPEO8CZo92GUrlDbt0oTysE6ZJhJ5tgjKrTogEuVICz0=
+	t=1738073062; cv=none; b=UnFLwNlO1I5ctVk1k5dccdnsMJN2g6lyp38/w6LHo4AD/4qME8ZWPYjSaTz0Ec1wNxEmFtqJySv8TUzMpjD3MgC1bOki430BVnXMf0TPH5gR3gU8bef/Yx4zB3l9u59GRtVyHLT2got69sRgRyRHmUW2Ivw0lkJguWo8qXgHqUY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738072705; c=relaxed/simple;
-	bh=L/N1UyMhJM8D1vSPpY3W9GtRsEmDz+Ur6m8k4hG6x70=;
+	s=arc-20240116; t=1738073062; c=relaxed/simple;
+	bh=gqfGWsNDBK87GRJ5/0UOnsbaSxjNHaAHFKuTMdjOLiM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DIDCs8htALplNaO3mPFYkU/14IYnWMKb5g26lVYqyaIPceH5v4s0QJRZbdq/MC0cNwnDV7uupeo9GGZF3Tr3DK44+DICLxxGmQ4QkXKO0Nz5r2ExSJIfI/sWQ7g9iVF18oGm6+0yR2fvgk8kfMjkiydP2/cjN7/y+0UYcsOXSHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G/9SDYC8; arc=none smtp.client-ip=209.85.167.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=ktZqht11Za77/bJjJ5LFdWl9odKsyMFcku22H1i/iHPabWHsEloR0mIisNmLouInf7Y+vqFodTu9ziejWbwwhX6HpjBxInIyf4lnS+y+8NZnnTsQ4Qdpbq6G7Y790xy5iUEuq7EEG4Lr1vzTz5cno49Whml7UYMZCsALRO6Ahw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bBZsSkM1; arc=none smtp.client-ip=209.85.208.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5401be44b58so6095881e87.0;
-        Tue, 28 Jan 2025 05:58:22 -0800 (PST)
+Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-30167f4c1e3so57261081fa.3;
+        Tue, 28 Jan 2025 06:04:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738072701; x=1738677501; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738073058; x=1738677858; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eQ90IBVG/ODxevEiX2M/CTWgY1R9RIJ2lmDuYGkT+dg=;
-        b=G/9SDYC8SI+U+FxQFltz2GqYop61MjSYbtSlOLZlRa+KbYjv/3IcHl770KA7v+xW4s
-         sz2M2FUkRzhzKU8eH3VcszRSa1ZhLhLgxQyYqmyeUY7s4CmlPK2LcTFti8/E9k3EDKua
-         Zaoub8rq05JlWs3MBHXkPEjF9gaB9BPvhqpwPJkzemj69n3hs5eSYykvMsw/78ZSKmRE
-         uiWkGmOfWqGrJJR2mltmbE9//pe7uqFIofc1LOVeT5qBv2qGfexI3CIESvSsBL0i0mQp
-         4AEgfVnGyawW8Ww7QEvCZsgdmpQri+ahYdmxj1taebXII2MCHVcKyWGP8HEKugda8ssm
-         DiVg==
+        bh=D3K4gEAr6qm5Q4qisPW4ZT4PDcCxenFWHW5Nb3nHY8o=;
+        b=bBZsSkM1wf+afNj/Q1S8oWxPG0EMQlGwBSWleTUKyO8IsdORdAARtQNaKki1AbQy2R
+         tzWqYVtk1g8YWZRLuTzrta8wrBz5mBrNDWrEJwJfjreqSu29lX0Hpca42/4AfariYB4T
+         U8x1UORi9+OaFXx71vjDVncHA3mrdQZaITewSRsI5XcM3flFbBzkw4wseyNNrK/nE36o
+         c95RT2xO+nHZ5mn/w5G2RoJ4gi843fJvJkjCo0Yza/B7Ld8kdMaDO+nBfRnvABTQzI6B
+         8yQV3wPhmrSZI5C/OpBTex5XXoTwSdzmNLFVFChAsrw/LX2K9zmTUuSB7EDv1zyimSzc
+         REPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738072701; x=1738677501;
+        d=1e100.net; s=20230601; t=1738073058; x=1738677858;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eQ90IBVG/ODxevEiX2M/CTWgY1R9RIJ2lmDuYGkT+dg=;
-        b=qy0vt98kU+1a52ozqDhhu9Ps2Qii0isaCj/ahwzE4ptRSde6b+4zRd9cnLK4hkDjgV
-         H3PQ5xR+KzoSoD3uHnOrNwlDm84usNWnmtKQmw2d8ibLpcI8fUj/rUim6h5zn8w9l8Dy
-         su/KisM5wsFWznr+VZcRhnbfHIzlQQqEjg4Fyiv/39ChuQLCsGwDnsOlRD3HRU7IWYyK
-         7ce9AAt0yoWwvZccTTap+zw7n8tC+TrzAL7p4RNJDKbx6gsyM+F+s8IJLnVMEPim5XfA
-         spTi5q8JcexvSQuqfOrSAIp0sD0hOIn4WYf5X5VlrD0lkdNoBpKybk9UI3frYOZCa+/S
-         xLYA==
-X-Forwarded-Encrypted: i=1; AJvYcCWEdstdaBdZjPxZ02bIFCGU1yEIqV3H6etOQmLTtjk5+Mczcz1qCF9uX5nVejV6HvJo2a6bFNEMtwNb1j8=@vger.kernel.org, AJvYcCXwAJ1GT6Epx9z8v6G6j2y1QV3rqGXnFI8LJuEYP54U17f4xyaKeZkNTNz0qi2FLXwqmM/Tc1Rf6OH1@vger.kernel.org
-X-Gm-Message-State: AOJu0YyivtaGKFMdGnf5gYgs+9K6amjHi1T6D4qgdMalxtqUuaQ0/a4X
-	r7LZ3AeFyLg7anyV/cCaXqytQV8goYBeToeA6Ta6vymnESUBQR0B
-X-Gm-Gg: ASbGnctAMS0yolLy5tD00a4Ash/b+/B5OMiK/A46W7ts3r5ZPZ9/gZZNyLvEAPBj7hT
-	eV9cLi4KfttBAloNTBDb/8nFPTU/M4Q32YJP3TphV3svEl0xR5D/UJVvuvIz72lqSsukmVG1ANt
-	dDHrcD755V4iak12ocxleC4CtwYshq+lUVR8WGcjiEG245YonZexrHmf3LxCD5autgH2W//RICi
-	/dfr4iIBBIbf7sCR0Wf+tii6zApzHrMr+nks+DiQV3w+eLFEzCVDraD3n1x5JpmGlvlynGoVnq9
-	LQN9eNJ53l0f11GYNgyJjabV
-X-Google-Smtp-Source: AGHT+IEeqiSR3eoaeBts+pZUrBzG3rB9GucZo3t+CAKJFWav7Spkh2V27cLieEyT7CnGf71nIwGSsw==
-X-Received: by 2002:ac2:4c05:0:b0:540:1d37:e6e with SMTP id 2adb3069b0e04-5439c26753fmr12614886e87.33.1738072700632;
-        Tue, 28 Jan 2025 05:58:20 -0800 (PST)
+        bh=D3K4gEAr6qm5Q4qisPW4ZT4PDcCxenFWHW5Nb3nHY8o=;
+        b=fOu41mK4Woi7ms/NcKsOIlCk1een7/RlOLM3537+mq9ZjxP4sDvcwb2qCIXIhJOVTM
+         6njomQ35beQD8bxpHAuoEqZdj34mG/5nMM1wImI+sCfpJQT0fR1HHSJUf8X4D8XbliBg
+         xisy8q3vLj2RM7xuQccsKVz+Irc2NxGamy9sYsMAboIRShBvXY6ZL8OGkAIZNe35Y8Iq
+         2UiJlT/vScVrtJwZTPbZFrO9kQNvGoxjMIGGNsGsbB1/jj8aobvdoMHf0yduYoMie1tm
+         k0+rEEuOsDPjKoaRu3df9ysn8Llu6wC/NVaWCxk5cgN0l8YBLg+ZHNM2TA0v3HxSelMi
+         +btg==
+X-Forwarded-Encrypted: i=1; AJvYcCUH0zvLTgKGy6N8G8szN2MPx7WWJAlb2G61QnnP6Bpfn+E+WYHC478esd6ZOwzPgq/iYSQd+oKctV07@vger.kernel.org, AJvYcCX3R3qEnqDvLV7aEdudExXY5/9navUg5EOsX/BfkC9LKHRVS8/4unac+8CXa7d2lAtXTtqpEZaoyvC5HwQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzvlKivENWs+AcY35lMz3O/NNPtWnECTyA3Q3ViO6vkd4Zd9fVb
+	MeIIECOFQeVSMrtuSrTbj5/Sq+vDsi4fSNLYx+CzVOQKPl4Oe7/I
+X-Gm-Gg: ASbGnctaAFajn3aMMJZkj6cbYNXT940lQwxH4KOffJHmW0M4+rrwyugZ9ZbrkT/BjzN
+	/So7ibtYVCNLti2PT3gXJ57/xocyQw8X5LxNXYF4VygPmvWKUsliZ3lAf4xNhpdpJRfBH65j9Jj
+	SGejBggAOtgyaTZjw1WgjWSvpuzPkPPj/psOb3ma8MJoXtC1dKwS5O/lj730jFpRIY+eA+MQoKC
+	FQAFIYEIL+QQS1fD4PwPLdJ1IZzNDdxrjrzHbl3Y4VNYj741uTvI1daZneLloGX2GVm0kHDaK2r
+	e3TpIansLYMhWuVHERLFnyIR
+X-Google-Smtp-Source: AGHT+IG6kx0zTXRZtZtKJY3JZpW6qk2SYhqLZo2vQGpug8cBQeudBlLJ+sNqB6+cD0IqLHkDP1GMUQ==
+X-Received: by 2002:a05:6512:3084:b0:542:2137:3a31 with SMTP id 2adb3069b0e04-5439c24126amr14734531e87.21.1738073058272;
+        Tue, 28 Jan 2025 06:04:18 -0800 (PST)
 Received: from localhost (morra.ispras.ru. [83.149.199.253])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-543c837993dsm1636624e87.162.2025.01.28.05.58.20
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-543c838171fsm1630863e87.247.2025.01.28.06.04.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jan 2025 05:58:20 -0800 (PST)
-Date: Tue, 28 Jan 2025 16:58:18 +0300
+        Tue, 28 Jan 2025 06:04:17 -0800 (PST)
+Date: Tue, 28 Jan 2025 17:04:17 +0300
 From: Fedor Pchelkin <boddah8794@gmail.com>
 To: "Christian A. Ehrhardt" <lk@c--e.de>
 Cc: Saranya Gopal <saranya.gopal@intel.com>, linux-kernel@vger.kernel.org, 
@@ -83,10 +83,11 @@ Cc: Saranya Gopal <saranya.gopal@intel.com>, linux-kernel@vger.kernel.org,
 	Sasha Levin <sashal@kernel.org>
 Subject: Re: [PATCH 5/5] usb: typec: ucsi: Clear UCSI_CCI_RESET_COMPLETE
  before reset
-Message-ID: <coagi34rszmagqfsixava2gkswmdbj5ezfkzbdxoo4yn6nzva3@3bb5a6egkpli>
+Message-ID: <377fw2gj3vvn7b5u7riwrhd7vwax3zgrtr3qun6tpsqkmqc5ck@ihayymezd5qa>
 References: <Z2Cf1AI8CXao5ZAn@cae.in-ulm.de>
  <ie6okmkyqr7qiydcrcepghs6aewgi7stipcydgcpaoedhgp2ef@ye7y43aceofl>
  <Z5FfE7ps0Cc25qIL@cae.in-ulm.de>
+ <coagi34rszmagqfsixava2gkswmdbj5ezfkzbdxoo4yn6nzva3@3bb5a6egkpli>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -95,125 +96,15 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Z5FfE7ps0Cc25qIL@cae.in-ulm.de>
+In-Reply-To: <coagi34rszmagqfsixava2gkswmdbj5ezfkzbdxoo4yn6nzva3@3bb5a6egkpli>
 
-On Wed, 22. Jan 22:11, Christian A. Ehrhardt wrote:
+On Tue, 28. Jan 16:58, Fedor Pchelkin wrote:
+> It appears like PPM is not ready yet for communication during the boot.
 > 
-> Hi Fedor,
-> 
-> On Sun, Jan 19, 2025 at 04:23:21PM +0300, Fedor Pchelkin wrote:
-> > Christian A. Ehrhardt wrote:
-> > > The (compile tested) diff below should fix it and I can turn this
-> > > into a proper patch but I lost access to test hardware with UCSI,
-> > > thus this would need a "Tested-by:" from someone else before it can
-> > > be included. Maybe Saranya can do this?
-> > > 
-> > >      Best regards   Christian
-> > > 
-> > > 
-> > > commit b44ba223cd840e6dbab6c7f69da6203c7a8ba570
-> > > Author: Christian A. Ehrhardt <lk@c--e.de>
-> > > Date:   Mon Dec 16 21:52:46 2024 +0100
-> > > 
-> > >     acpi: typec: ucsi: Introduce a ->poll_cci method
-> > 
-> > WARNING: CPU: 0 PID: 8 at drivers/usb/typec/ucsi/ucsi.c:1377 ucsi_reset_ppm+0x1af/0x1c0 [typec_ucsi]
-> > is triggered on my laptop on roughly every system boot. When it's not,
-> > there is a
-> >   ucsi_acpi USBC000:00: error -ETIMEDOUT: PPM init failed
-> > message observed in the log.
-> > 
-> > I've tried the above patch "acpi: typec: ucsi: Introduce a ->poll_cci
-> > method" but the issue is still triggered [1].
-> > 
-> > Is there any useful info/logs I can provide you for further
-> > investigation of the warning in question?
-> > 
-> > As the warning is quite reliably triggered on my system, I may help with
-> > the testing of other patches.
-> 
-> Hard to say what might be going on. Some obvious questions to
-> narrow it down, though:
-> - Is this something new and UCSI worked before or has UCSI been broken
->   with older kernels as well (maybe with different or no error
->   messages).
+> Increasing a timeout just to 2x eliminates the errors in my case:
 
-Thanks for the feedback and sorry for the delay!
+That said, if I manually load/unload ucsi_acpi module later, it also
+initializes perfectly without the need to increase the timeout.
 
-Yep, I've eventually checked this: as it stands, there's always been a
-"-ETIMEDOUT: PPM init failed" observed on starting ucsi_init_work during
-the boot. Back to v5.12 at least - the oldest kernel I've managed to boot
-on this laptop.
-
-On the other hand, the WARNING appears only after the commit fa48d7e81624
-("usb: typec: ucsi: Do not call ACPI _DSM method for UCSI read operations").
-
-> - If you get the warning but not the "PPM init failed" message,
->   does UCSI actually work? Try to plug something into the USB-C
->   ports and watch out for additional error messages (possibly after
->   a timeout). Do new files/devices show up in sysfs?
-
-Well, it's interesting. When there is a WARNING and no "PPM init failed"
-message, it works because ucsi_init() goes on. When there is a "PPM init
-failed", UCSI doesn't actually initialize successfully and it doesn't work.
-
-And I probably didn't pay attention to the "PPM init failed" messages
-earlier because I'm not an active UCSI user, utilize Type-C port only for
-the power supply (this always works and I guess the not working UCSI
-doesn't affect this directly). On the opposite, the big WARNING during the
-boot now became more visible :)
-
-
-It appears like PPM is not ready yet for communication during the boot.
-
-Increasing a timeout just to 2x eliminates the errors in my case:
-
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index fcf499cc9458..b1a4470214b6 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1362,7 +1362,7 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
-                if (ret < 0)
-                        goto out;
- 
--               tmo = jiffies + msecs_to_jiffies(UCSI_TIMEOUT_MS);
-+               tmo = jiffies + msecs_to_jiffies(UCSI_TIMEOUT_MS * 2);
-                do {
-                        ret = ucsi->ops->read_cci(ucsi, &cci);
-                        if (ret < 0)
-@@ -1382,7 +1382,7 @@ static int ucsi_reset_ppm(struct ucsi *ucsi)
-        if (ret < 0)
-                goto out;
- 
--       tmo = jiffies + msecs_to_jiffies(UCSI_TIMEOUT_MS);
-+       tmo = jiffies + msecs_to_jiffies(UCSI_TIMEOUT_MS * 2);
- 
-        do {
-                if (time_is_before_jiffies(tmo)) {
-
-
-Turning the laptop several times on and off, I'd say the average time
-taken for the initial reset takes around 8000ms:
-
-[    2.568534] ucsi_acpi USBC000:00: enter ucsi_reset_ppm()
-[   10.875710] ucsi_acpi USBC000:00: exit ucsi_reset_ppm(), ret 0
-
-I see that UCSI_TIMEOUT_MS is already chosen to be a rather significant
-value, much bigger than what the specs say. Maybe ucsi_init_work races
-with something? Could this ever happen here? Or just a firmware/hardware
-issue...
-
-> - Printing the value of CCI at various stages of the init process
->   might help us to understand what's going on.
-
-During ucsi_reset_ppm() in case of a timeout the reported value of CCI is
-always zero and doesn't change on read/poll attempts. In case of the
-WARNING it's always read as UCSI_CCI_RESET_COMPLETE thus it WARNs but
-ucsi_reset_ppm() returns zero and the further initialization goes on
-without any errors.
-
-Is the usage of WARN macros justifiable here if it may potentially be
-caused only by the firmware/hardware errors (well, at a quick glance) and
-not an issue which can fixed at the kernel level? E.g. the timeout
-situation here is not reported by WARN, but by simple printks..
+The significant delays are seen only during the boot phase..
 
