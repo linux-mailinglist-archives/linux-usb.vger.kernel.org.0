@@ -1,162 +1,197 @@
-Return-Path: <linux-usb+bounces-19823-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19824-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E14FA20F4A
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 17:57:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE149A20F56
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 18:00:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E732F188A294
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 16:57:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E48A1188A9CC
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 17:01:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 494861C32FF;
-	Tue, 28 Jan 2025 16:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C36A92A1BA;
+	Tue, 28 Jan 2025 17:00:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nooR/Cc8"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="nlFWbreo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57B512904;
-	Tue, 28 Jan 2025 16:57:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B759E19DF7D
+	for <linux-usb@vger.kernel.org>; Tue, 28 Jan 2025 17:00:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738083450; cv=none; b=tWrIN81PyLYvFIN06oMvAbmSkvkq/W9HS8KakUaYPTuFQcA6fVo23hzONBViOYkH8hJHnVayIVT7aoa4Zrz9p+ME6n/0+bcF6OW92xIfvC+DgoPUh4TpaVCkOSWEY3jamvmqkJn0O5ChSm71takeKAV1Ah7yoHQQnYk1EJNQ27s=
+	t=1738083647; cv=none; b=WVx7uhaLU4vx/wmeRrj+fLdWX24hPnjrdZTr+h7id56hq0leY9xbXBz9BD6Q36ZGaOYN9f5pgiQretBZvNh/qElbAJaHiechRaa05DqnUdavXPKTAzavUiUkfwz2hft7zF0OT8Vm+/IQpgNc5mGqbVxo5P6yUZ/lLDaJHmL8MiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738083450; c=relaxed/simple;
-	bh=ozY3QyLOS8El11j9pFD7qjcx/fpadRr+ykyYXLaoS00=;
+	s=arc-20240116; t=1738083647; c=relaxed/simple;
+	bh=iIybshDrGhTpu5fdQslefhHPNdOHP0cFoqox0S5u16s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VW1lxrA/ZyEKT187v9vbnJ6rG8xPORqakRNA51xmfgDF5uaYvFCvfCEIlo5E+i8svDcXuHmtng12Js3k3Z/GIG63tu6piYFT/+Tyg8XwDPzLVyeIyXqxVKS7Idkq32SNDxPo3/GJq3AnGzrrUfn21srzmVwS8KYa5HzyTkPBb+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nooR/Cc8; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738083450; x=1769619450;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=ozY3QyLOS8El11j9pFD7qjcx/fpadRr+ykyYXLaoS00=;
-  b=nooR/Cc8075CApFulJ5552jl6q8nGUYuQFTtbscme3K10f5UX9wc4inY
-   PmHCbv4zbQ65XZMWWE4R/S9asSjRpXaseKm7Tahx3CAjMQsGFW+yxEeHo
-   /k3m9HUOYzVq7K4WqFVM9S0PGa12b8hRKax8o7K66ekKwzcDHgCabmYZv
-   SxhMSNE7HzknwDOevMK5HjecsPDPr4eelvD0sCyhHOVlw/AFwMKd7q1vj
-   LgF/yO/bXzKBbZfy0s8nxMZLy8ALpio5CqnvURg3vx+AWiuRp1zWeicoD
-   J1tpyU36iXDJbIA60Md1JNSrOTVo36GlgilmGtX8riqDz++Ehf+w2GbaD
-   g==;
-X-CSE-ConnectionGUID: W9wgN6GTQvyY59LYmEIDbw==
-X-CSE-MsgGUID: X6YIRntlQqyTC9YUBq2mGQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="38717719"
-X-IronPort-AV: E=Sophos;i="6.13,241,1732608000"; 
-   d="scan'208";a="38717719"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 08:57:29 -0800
-X-CSE-ConnectionGUID: ECjLstAeRP2VZoFZlkiK7A==
-X-CSE-MsgGUID: GzUSOYdmSY++wQGj8ZWHKA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="139655705"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 08:57:26 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tcotv-0000000681G-4BAg;
-	Tue, 28 Jan 2025 18:57:23 +0200
-Date: Tue, 28 Jan 2025 18:57:23 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Ferry Toth <fntoth@gmail.com>
-Subject: Re: [PATCH v1 0/3] usb: dwc3: Avoid using reserved EPs
-Message-ID: <Z5kMc5-UA2jSiTaI@smile.fi.intel.com>
-References: <20250116154117.148915-1-andriy.shevchenko@linux.intel.com>
- <20250116231835.isbwmq5yz5issy3w@synopsys.com>
- <Z4pdZZhR6m1LB3yk@smile.fi.intel.com>
- <Z45lja5InqAXs3CQ@smile.fi.intel.com>
- <20250121234313.2xiixrqru5m35dyp@synopsys.com>
- <Z5EccvQh3IsOSDSa@smile.fi.intel.com>
- <20250128022520.6w2dovsb4rjh3qwh@synopsys.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=lgOsdDNrJXdIqbEmGvP2necWro7cmY1OdAfZ/gZKgInkfKEzPAEG6Uct3H/BcQao1TV2SnMvwu/5dTrRE2BD5PWc1y0PLReEf4pfH4WaBqG5Az6giQBof3UmnQHzEJGTF15fFuKPFVOSEHPlTAJIzlvcYUqGkhKAkYfPAd7IlqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=nlFWbreo; arc=none smtp.client-ip=209.85.160.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-467b955e288so63346301cf.1
+        for <linux-usb@vger.kernel.org>; Tue, 28 Jan 2025 09:00:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1738083644; x=1738688444; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rYQbyDpHC1ac+WOYHWsMxWbSZSl6a353d6NzBjJrrrg=;
+        b=nlFWbreobHnKp+6q6YGyOrscYnZvnkWMEBziBelYxjduted3YxY2cwYb5GUg+nZwAd
+         c2dD2dBJdjWh9NPDToSlEi1g5Djr0q5SsZiQVHL26qD8PQM5LFMXPdzeqWyhn4XNaKU1
+         sB0c6byqdoTl4kdlGoYvz3svZpcPwFcpDTF5rBZatz8/D9rN+85AKd+4ryUrCVCI2itR
+         GRT4DaiP1y/ut4oYTUdSG3BHYVkgo7e0mjeVp8XudAbX4DnLflZAf/c5cA1+jSk22xi3
+         JHXpac3WezJdlf5nCMh4WZqkzLsSiWNPsXbkKQfva9J3x4C9my3HufPZWcS5iJaXZHi7
+         hy4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738083644; x=1738688444;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rYQbyDpHC1ac+WOYHWsMxWbSZSl6a353d6NzBjJrrrg=;
+        b=OH6Fwv0KJ4ATz8IqJGiccbk3gi1piT8UCVciupk2PzZyymPfnDBEYO8A8TMZw7bCzR
+         Sock+4kiRs2QPh4OQ8fGWoKB/KvhHfQVADO7+ysU5jVXiolMuWtKxbvMFyGW6lGcXv2s
+         2r4a5jZrEL/z+NVD1ksnC8aE+qISHgNye1JmFH5eU8excYgtku6U3o7ZQK0DTjt6F/PU
+         0xWsXg8Yvzn7N9NYPgJ/iFI3j6Q72jMdWcOFwIGoLXnNUibgWNu1d8WeVDPBRL1NL2Iw
+         xjEb4uQk2L50qtQQYgCX8YkMmxBaUMOjRMYd1yva5BAEyLPFe+Tx1NImV1vuhCKHdRlC
+         t/Dg==
+X-Forwarded-Encrypted: i=1; AJvYcCWC8F7WjePaT7hRoP8S3Cw4fgorymDExNrmZceufLwMdv7pud6gAyoklgYqB2LepQ111Sv8QDAZTO4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTzHOEYcZCSYmWgAt7/WL8XE4e42LrbpZEQQuxYVuOjidjBnuz
+	BSVDRwoebteVitg1Xv+O2sRfHi+S7pXb8wSAqfk+vvHVGLPNnGXEwH0jv9OUsA==
+X-Gm-Gg: ASbGncsL2C8kuluk4wqRdC8K6eW/qWDArvy5tlbHtgs77SbPGtmNUlPqy8jHoznna1H
+	p9N3SgETErv556kU9DQh6Wd16jIjFDPE4RyLbjP88YwKEaeM2Ke2IxIl6pFjE/ejN2PcaiQR3wC
+	zwVCajumlSAOeolvHwrAE1ZRXwmuBGgPA4aFetU1Wr0jZcKYekGTGy50kOAsyya2NkoA6r4Djav
+	ETfdz9bEmmZV5o7drxQ2QrQppuVK97Mhd7a3cCj8zjUHqv+3YWihCxcfd1tzYyIToN1pAfyEw2h
+	E2TgVZaTWqlhA1tV9xEHyBXaqzjcrdEyQb7jn5e4WKsoR9STGh+Z3wHbVgZzowo64ac4N5gbR4u
+	+bUK79Q8L
+X-Google-Smtp-Source: AGHT+IFXtWLgYvf5afKDBq9IFcUR79Cv4+hTgX2p8X0VQsEnSg9GzqwrSx/uGsGZRVXzUnYEXoIRFw==
+X-Received: by 2002:a05:622a:190b:b0:467:4b8d:2eea with SMTP id d75a77b69052e-46e12b90d4emr687489221cf.34.1738083644545;
+        Tue, 28 Jan 2025 09:00:44 -0800 (PST)
+Received: from rowland.harvard.edu (nat-65-112-8-51.harvard-secure.wrls.harvard.edu. [65.112.8.51])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46e66b88e49sm52565771cf.68.2025.01.28.09.00.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 28 Jan 2025 09:00:44 -0800 (PST)
+Date: Tue, 28 Jan 2025 12:00:41 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Cc: Kees Cook <kees@kernel.org>, Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>, linux-usb@vger.kernel.org,
+	linux-input@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com,
+	linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] HID: usbhid: fix recurrent out-of-bounds bug in
+ usbhid_parse()
+Message-ID: <649f5c1c-f3a7-420d-b727-f904d58f491f@rowland.harvard.edu>
+References: <20240524120112.28076-1-n.zhandarovich@fintech.ru>
+ <nycvar.YFH.7.76.2406041015210.16865@cbobk.fhfr.pm>
+ <E62FA5CB-D7AE-4A11-9D2E-7D78D7C10ADA@kernel.org>
+ <nycvar.YFH.7.76.2406041614210.24940@cbobk.fhfr.pm>
+ <2a38e355-af5c-4b3d-81be-0cc97376c1f5@fintech.ru>
+ <202406041019.BCD0A93C@keescook>
+ <d1ad84e3-7da9-4dc8-a095-b9fbe191eb56@rowland.harvard.edu>
+ <807cfa6f-5863-4fe4-8294-76d5cdbc3aac@fintech.ru>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250128022520.6w2dovsb4rjh3qwh@synopsys.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+In-Reply-To: <807cfa6f-5863-4fe4-8294-76d5cdbc3aac@fintech.ru>
 
-On Tue, Jan 28, 2025 at 02:25:21AM +0000, Thinh Nguyen wrote:
-> On Wed, Jan 22, 2025, Andy Shevchenko wrote:
-> > On Tue, Jan 21, 2025 at 11:43:21PM +0000, Thinh Nguyen wrote:
-> > > On Mon, Jan 20, 2025, Andy Shevchenko wrote:
-> > > > On Fri, Jan 17, 2025 at 03:38:46PM +0200, Andy Shevchenko wrote:
-> > > > > On Thu, Jan 16, 2025 at 11:18:45PM +0000, Thinh Nguyen wrote:
-> > > > > > On Thu, Jan 16, 2025, Andy Shevchenko wrote:
-
-...
-
-> > > > > > I'm not entirely clear on the reason for this change yet.
-> > > > > > 
-> > > > > > How would this even work without dwc3 managing these endpoints (all the
-> > > > > > init/teardown/fifo allocation/start/stop flow).
-> > > > > 
-> > > > > You perhaps know much better how it can be done, I have access to a limited
-> > > > > documentation and in practice if those endpoints are not skipped any gadget
-> > > > > that allocates them simply won't work, and IIRC the entire USB transfers are
-> > > > > stuck.
-> > > > > 
-> > > > > > Can you provide more info on this hardware?
-> > > > > 
-> > > > > I am afraid I can't provide more, sorry. I can look for some specifics,
-> > > > > but I'm not that guy who know anything about in-SoC tracing.
-> > > > 
-> > > > So, here is what I found:
-> > > > 
-> > > > ---8<---
-> > > > 
-> > > > However the endpoints allocated for STM and EXI debug traffic cannot be re-allocated
-> > > > if being used because the sideband flow control signals are hard wired to certain
-> > > > endpoints:
-> > > > • 1 High BW Bulk IN (IN#1) (RTIT)
-> > > > • 1 1KB BW Bulk IN (IN#8) + 1 1KB BW Bulk OUT (Run Control) (OUT#8)
-> > > > 
-> > > > In device mode, since RTIT (EP#1) and EXI/RunControl (EP#8) uses External Buffer
-> > > > Control (EBC) mode, these endpoints are to be mapped to EBC mode (to be done by
-> > > > EXI target driver). Additionally TRB for RTIT and EXI are maintained in STM (System
-> > > > Trace Module) unit and the EXI target driver will as well configure the TRB location for
-> > > > EP #1 IN and EP#8 (IN and OUT). Since STM/PTI and EXI hardware blocks manage
-> > > > these endpoints and interface to OTG3 controller through EBC interface, there is no
-> > > > need to enable any events (such as XferComplete etc) for these end points.
-> > > > 
-> > > > ---8<---
-> > > > 
-> > > > Does it help you to understand the required quirk better?
-> > > 
-> > > Thanks for looking up the info. This makes more sense now. So these
-> > > endpoints use EBC. Can you also provide this info to the commit?
-> > 
-> > Sure, since I published it already it makes no difference if it appears in the
-> > Git log (from the publicity point of view).
+On Tue, Jan 28, 2025 at 05:45:21AM -0800, Nikita Zhandarovich wrote:
+> Hello,
 > 
-> It's more difficult to find this outside of git log, especially to a
-> link version of a git change that's not applied.
+> On 6/4/24 10:45, Alan Stern wrote:
+> > On Tue, Jun 04, 2024 at 10:21:15AM -0700, Kees Cook wrote:
+> >> On Tue, Jun 04, 2024 at 10:09:43AM -0700, Nikita Zhandarovich wrote:
+> >>> Hi,
+> >>>
+> >>> On 6/4/24 07:15, Jiri Kosina wrote:
+> >>>> On Tue, 4 Jun 2024, Kees Cook wrote:
+> >>>>
+> >>>>> This isn't the right solution. The problem is that hid_class_descriptor 
+> >>>>> is a flexible array but was sized as a single element fake flexible 
+> >>>>> array:
+> >>>>>
+> >>>>> struct hid_descriptor {
+> >>>>> 	   __u8  bLength;
+> >>>>> 	   __u8  bDescriptorType;
+> >>>>> 	   __le16 bcdHID;
+> >>>>> 	   __u8  bCountryCode;
+> >>>>> 	   __u8  bNumDescriptors;
+> >>>>>
+> >>>>> 	   struct hid_class_descriptor desc[1];
+> >>>>> } __attribute__ ((packed));
+> >>>>>
+> >>>>> This likely needs to be: 
+> >>>>>
+> >>>>> struct hid_class_descriptor desc[] __counted_by(bNumDescriptors);
+> >>>>>
+> >>>>> And then check for any sizeof() uses of the struct that might have changed.
+> 
+> Alan, I finally got around to preparing a revised version of the
+> required patch and encountered a few issues. I could use some advice in
+> this matter...
+> 
+> If we change 'struct hid_descriptor' as you suggested,
 
-I'm not objecting this, what I am telling is that information went public in
-this thread, so expanding a commit message in the next version of the series
-to include additional information is fine with me. I'll do that.
+I didn't make that suggestion.  Kees Cook did.
 
--- 
-With Best Regards,
-Andy Shevchenko
+>  which does make
+> sense, most occurrences of that type are easy enough to fix.
+> 
+> 1) usbhid_parse() starts working properly if there are more than 1
+> descriptors, sizeof(struct hid_descriptor) may be turned into something
+> crude but straightforward like sizeof(struct hid_descriptor) +
+> sizeof(struct hid_class_descriptor).
+> 
+> 2) 'hid_descriptor' in drivers/hid/hid-hyperv.c remains innocuous as
+> well as only 1 descriptor expected there. My impression is only some
+> small changes are needed there.
+> 
+> However, the issue that stumps me is the following: static struct
+> hid_descriptor hidg_desc in drivers/usb/gadget/function/f_hid.c relies
+> on a static nature of that one descriptor. hidg_desc ends up being used
+> elsewhere, in other static structures. Basically, using __counted_by
+> requires a lot of changes, as I see it, out of scope of merely closing
+> an UBSAN error.
 
+The hidg_desc structure needs to contain room for a single 
+hid_descriptor containing a single hid_class_descriptor.  I think you 
+can define it that way by doing something like this:
 
+static struct hid_descriptor hidg_desc = {
+	.bLength			= sizeof hidg_desc,
+	.bDescriptorType		= HID_DT_HID,
+	.bcdHID				= cpu_to_le16(0x0101),
+	.bCountryCode			= 0x00,
+	.bNumDescriptors		= 0x1,
+	.desc				= {
+		{
+			.bDescriptorType	= 0, /* DYNAMIC */
+			.wDescriptorLength	= 0, /* DYNAMIC */
+		}
+	}
+};
+
+Or maybe it needs to be:
+
+	.desc				= { {0, 0} } /* DYNAMIC */
+
+I'm not sure what is the correct syntax; you'll have to figure that out.  
+
+You'll have to be more careful about the definition of hidg_desc_copy in 
+hidg_setup(), however.  You might want to define hidg_desc_copy as an 
+alias to the start of a byte array of the right size.
+
+> Is this approach still worthy pursuing or should I look into some neater
+> solution?
+
+I think you should persist with this approach.
+
+Alan Stern
 
