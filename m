@@ -1,49 +1,49 @@
-Return-Path: <linux-usb+bounces-19810-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19811-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8ABB4A20942
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 12:10:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6E9EA20982
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 12:20:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB7457A1A5F
-	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 11:10:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 782AB3A8652
+	for <lists+linux-usb@lfdr.de>; Tue, 28 Jan 2025 11:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999DB19F464;
-	Tue, 28 Jan 2025 11:10:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E476C1A00D1;
+	Tue, 28 Jan 2025 11:20:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AYLR5pLk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oij6JUsR"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 162C519B3EE;
-	Tue, 28 Jan 2025 11:10:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C50919DFA5;
+	Tue, 28 Jan 2025 11:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738062605; cv=none; b=f4rPASBxy0Rb7jum09ZYUevBPP5ZQSbDbOdprd8RNB5GugnuE0Qr6BeS3lJWhBwrJGo9QjjmZ6Syn0ULlNlgzgiTm2ukr8/HFpCieL7SLUJ3J+CRp0uuR7pntwAP1ph5DP8kdH4xDuUeRSg7oqCuSFfpUaFqyx85xntJA/uQU9A=
+	t=1738063208; cv=none; b=KzqghjkBJC5hmCTlswd9+vju7CaJpglOrOx8JV6gwIMkMzGDs8pX/E175xl2XhGd8H9hjSh5KFRmTdOrSHVYDGW0nxtToePE5yF5MUN3dDrckRtavQLDaeixBtCRIqZ5DX+IcDGONNeUEWRgiX+cp2wqu8RVCocX5pXHqUh+Ew8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738062605; c=relaxed/simple;
-	bh=EBH7wpaN+rW1juwiRHGZVLDhgPBv2Sr97TKB2ghTtfs=;
+	s=arc-20240116; t=1738063208; c=relaxed/simple;
+	bh=+wN+xyHCWm7Mr05FKtb0eiMkKTeqnJP0gRwFVC0K7qs=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=lhnp8chmlbkL8r2cBdLBjuAp/HJTXDvdYpozm3LcETBTHR/hV81WTGEVU908Ljam3PP5YwGd19N5XajwYzU5VaS/hAFCNHu8KH/Eau7QjSH/okhzac/M4PZpuxSPow75ZZ+OVqt9NzLk3ubKc+HZduCIM5O9V77Fy6wXB0Lqm34=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AYLR5pLk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AED6C4CED3;
-	Tue, 28 Jan 2025 11:10:04 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=V6/vLGx+NFDjbFQZvYfYxMD3Gq/GQdwlwaaSUrCB6ZTHC51SPZ2eH93r/OrV+vmVqYlhN7FJuJBDhGTQF49Pw/345s4elBza5znydZXBZ0T+o72dHeZCmY0BIY5/3BuHL7gGntUSWc9Q6Pcae7vvPi3eXErZE8o7iqEGYKYaUGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oij6JUsR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1EACC4CED3;
+	Tue, 28 Jan 2025 11:20:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738062604;
-	bh=EBH7wpaN+rW1juwiRHGZVLDhgPBv2Sr97TKB2ghTtfs=;
+	s=k20201202; t=1738063207;
+	bh=+wN+xyHCWm7Mr05FKtb0eiMkKTeqnJP0gRwFVC0K7qs=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=AYLR5pLk58FoxssSxF/fEicy2oEyfg4NA3cNas9qZAU/nvYmfUew4ztdrMCJym6u4
-	 cmi8m9VqWO57dIHW+GN/b7L2XwgnZKF3j/XdmHg976KVOA5jajO3EVGH/lb1W/Y37/
-	 4kiB7dtMrmkVt1CwKmwEyJtOcYY5GI/WrVGjlHMa8H7gQwJxE77u/0CqLS51+VMPDO
-	 iMnOS9m3TrfhtWlCj1wQ3IlJju6+w9Hu9wnNE6h6nlJtDcLAj3A45lk3MqXe3t5KgU
-	 8n4G/omzVZKjrJe/IFsvrn7Z0zDkMC5wGWQtsswZva2s1YP1iM/VKMhfnooV332oKR
-	 ooHrraznTqbsw==
+	b=Oij6JUsRuxaWsHWMkScOZbhYm5JGcw3P4mNOQrn7EAfei6+jXDh6IaeXwF/Rrxujg
+	 123d4m7t7e4qr8kDi/jmPGPerSoQ2iZ22QgEFfCXIn7gPXIYLQE8h5ayGFzAucFJPI
+	 1unn5TOU/sCHd3v7FPGC7EAnAxVnJDP6rWpVpYbSIwgTBxLMq233TdJKJEGPfC215s
+	 etM7HHj8+mV/R3yRVnbxIEvlVmZSZWc0yU7a5p1R5PSShOJxerMTHvZdLwP4Hkjumx
+	 WcRT9vnwXZcmhHgMs+mYVWlmYQkDUzpj9J3JRv23DukZR/SBLDQSoUxaieK5Epi30l
+	 k0oUzJGf+mnNw==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70FAC380AA66;
-	Tue, 28 Jan 2025 11:10:31 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id AE521380AA66;
+	Tue, 28 Jan 2025 11:20:34 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -52,41 +52,50 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2] net: usb: rtl8150: enable basic endpoint checking
+Subject: Re: [PATCH net v5 0/7] usbnet: ipheth: prevent OoB reads of NDP16
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <173806263026.3755886.9954145283968687793.git-patchwork-notify@kernel.org>
-Date: Tue, 28 Jan 2025 11:10:30 +0000
-References: <20250124093020.234642-1-n.zhandarovich@fintech.ru>
-In-Reply-To: <20250124093020.234642-1-n.zhandarovich@fintech.ru>
-To: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc: petkan@nucleusys.com, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- syzbot+d7e968426f644b567e31@syzkaller.appspotmail.com,
- syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org,
- lvc-project@linuxtesting.org
+ <173806323350.3759067.5078692360425955195.git-patchwork-notify@kernel.org>
+Date: Tue, 28 Jan 2025 11:20:33 +0000
+References: <20250125235409.3106594-1-forst@pen.gy>
+In-Reply-To: <20250125235409.3106594-1-forst@pen.gy>
+To: Foster Snowhill <forst@pen.gy>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, gvalkov@gmail.com, horms@kernel.org, oneukum@suse.com,
+ netdev@vger.kernel.org, linux-usb@vger.kernel.org
 
 Hello:
 
-This patch was applied to netdev/net.git (main)
+This series was applied to netdev/net.git (main)
 by Paolo Abeni <pabeni@redhat.com>:
 
-On Fri, 24 Jan 2025 01:30:20 -0800 you wrote:
-> Syzkaller reports [1] encountering a common issue of utilizing a wrong
-> usb endpoint type during URB submitting stage. This, in turn, triggers
-> a warning shown below.
+On Sun, 26 Jan 2025 00:54:02 +0100 you wrote:
+> iOS devices support two types of tethering over USB: regular, where the
+> internet connection is shared from the phone to the attached computer,
+> and reverse, where the internet connection is shared from the attached
+> computer to the phone.
 > 
-> For now, enable simple endpoint checking (specifically, bulk and
-> interrupt eps, testing control one is not essential) to mitigate
-> the issue with a view to do other related cosmetic changes later,
-> if they are necessary.
+> The `ipheth` driver is responsible for regular tethering only. With this
+> tethering type, iOS devices support two encapsulation modes on RX:
+> legacy and NCM.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net,v2] net: usb: rtl8150: enable basic endpoint checking
-    https://git.kernel.org/netdev/net/c/90b7f2961798
+  - [net,v5,1/7] usbnet: ipheth: fix possible overflow in DPE length check
+    https://git.kernel.org/netdev/net/c/c219427ed296
+  - [net,v5,2/7] usbnet: ipheth: check that DPE points past NCM header
+    https://git.kernel.org/netdev/net/c/429fa68b58ce
+  - [net,v5,3/7] usbnet: ipheth: use static NDP16 location in URB
+    https://git.kernel.org/netdev/net/c/86586dcb75cb
+  - [net,v5,4/7] usbnet: ipheth: refactor NCM datagram loop
+    https://git.kernel.org/netdev/net/c/2a9a196429e9
+  - [net,v5,5/7] usbnet: ipheth: break up NCM header size computation
+    https://git.kernel.org/netdev/net/c/efcbc678a14b
+  - [net,v5,6/7] usbnet: ipheth: fix DPE OoB read
+    https://git.kernel.org/netdev/net/c/ee591f2b2817
+  - [net,v5,7/7] usbnet: ipheth: document scope of NCM implementation
+    https://git.kernel.org/netdev/net/c/be154b598fa5
 
 You are awesome, thank you!
 -- 
