@@ -1,50 +1,50 @@
-Return-Path: <linux-usb+bounces-19838-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19837-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20EA2A21B61
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 11:57:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68CC2A21B60
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 11:57:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F1EA1654E0
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 10:57:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 429BC1887FCB
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 10:57:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F4C81D9346;
-	Wed, 29 Jan 2025 10:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB3681D6DC5;
+	Wed, 29 Jan 2025 10:56:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="G2HF2J1x"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="agYTMqE1"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955831B6547;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 842B41B6525;
 	Wed, 29 Jan 2025 10:56:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738148187; cv=none; b=MCywaHeCooNnLcfzYJBWuwDozCjl/UWUnV6NTCigDIG3ADXBt+ntUoxQ9J2PkU9gcOc4uccLVfQVcGnCDYr3p3hCEPdzD5cUf+0h1vxICtdTZQhkpIMViQS6b1RlTHGljoVkxPlncN2z0+jw7vqyV/GGrFb5z6KEoY+gNJyz9ws=
+	t=1738148187; cv=none; b=SRuoA7qXKTpULiTUZkhxznFviewV2/POWMk7uw41H2/OTVOoFUG5PSDcWYq+JnzSzSxws3IYABNzYQ3c9JnqJRHJjlvGtm1uDjMzsg56iwiJRsp0AjEYzfFVjxjParGiwzd8R4UDBKzBdEOb8ub5uUjkrEUm2+1lrq3c6y9A8wY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738148187; c=relaxed/simple;
-	bh=CWdjP4aUsHF+7P6+eloiUKH9950Yvc0l5PM/y2Qolco=;
+	bh=ZbfDEAGGRcoowrUfu5EDqO266YEpTTycz1vMlF9U2TA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=eKEeR0OpQ61Yc9oq0JkFu3nkHqduGYFsQn6COK3Zdr+sTuQ07TjcQQstvA8ILS3kaomX4OUEzZ7d4TVWV5IVz1Y4CU0eBFQn0AUL6N2lRXNmtZGQ3jcncUpUGj98mFZchpMUq1sm5XozHBo1n8O9uUY3JhCxMJcSB1a0rwmeN4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=G2HF2J1x; arc=none smtp.client-ip=217.70.183.199
+	 MIME-Version:Content-Type; b=DsrsiS+1TA5Pxicu5zgIiWf/BnPWevL1gAZA+fNKMOq79PrB5MjcQ5ovxUBqiMXdU39R7kpNStQKpu7zjkDx8gbYwsk71C9XbTJ8cF1ZwryuvCMi9cOOyd1nVoUxLXEhkqKzf97xU4ysnxKQ5w6/2QCe97DfjdvdTbZ1rtJNXLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=agYTMqE1; arc=none smtp.client-ip=217.70.183.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 4A0C4FF809;
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D1FF7FF80A;
 	Wed, 29 Jan 2025 10:56:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738148177;
+	t=1738148178;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=v1e6nofxVdA9RtAytuEMyu+ZjGQH8z/fAVMV8muk7RU=;
-	b=G2HF2J1xfEOHD9801iHUNZRM/al04CV+2IOD57s6OLmJOm3IE7YMXEIb8GJkvyLNjDdnYu
-	ET4/Eao5FSycyS9dNfFat4zVC843SueRUGSWsXbWwk83KRM3pvey8vCxpXyMdJaYyYkn15
-	c6dkpXhfNlLlLtUcO45Ct17GhcOLlLjeTBg4EXKy0o3j1XpvfbihU54uJacJTrKg1ML/5q
-	3L1Z3+ZSLW8sUs7DpJ60/4zJGm5PvYgi9ekPw3Vb0QM2BIZGpMTKLgPB29FR4YD2ilTuPg
-	4Hv1P5SyAxj1+BLJ2bxnrZJ+UeGptvaBRI/h2whLCAMDAbK3Of4Uo1QS/ugkhA==
+	bh=eG2+4hA9d7BGbB5uoMrFvtObkrA1624sPDDaskGyR5A=;
+	b=agYTMqE1Rufvd0KeF9wN1a+JQqjozJXoQ9z3tFfN+gnkpASeB4jxUeDGOla9GGqqxKMk5T
+	1e+foz1U5PKKQPf24MjQa9oH0eGsfQLGqZXkg7fPOqQNhb3ZbqUlKf8lXu5rB3BosnT1sC
+	AdV5jUdhCaxd2TzMXGvivbZMZQFvS0b/JO3xfrXpwUHnnfT/d8umA6trHXKBO2lfnspbGi
+	3TXiAwWa/ZXAxN68utX6toA5k3WjhesO4WbGWyqNBl5/wttJmZ0xAfzqRZg1HZgWmXsA1K
+	/XYU97ptbytSGVNV0rPLwL2RgPDqcHt+ndSH3yTqWGHG6QNJ8HVmRHt1bVNSDw==
 From: =?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>
 To: theo.lebrun@bootlin.com,
 	mathias.nyman@linux.intel.com
@@ -57,9 +57,9 @@ Cc: rogerq@kernel.org,
 	thomas.petazzoni@bootlin.com,
 	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 5/9] usb: cdns3: rename hibernated argument of role->resume() to lost_power
-Date: Wed, 29 Jan 2025 11:56:09 +0100
-Message-ID: <20250129105613.403923-5-theo.lebrun@bootlin.com>
+Subject: [PATCH 6/9] usb: cdns3: call cdns_power_is_lost() only once in cdns_resume()
+Date: Wed, 29 Jan 2025 11:56:10 +0100
+Message-ID: <20250129105613.403923-6-theo.lebrun@bootlin.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <D7EHVKGXIFM4.3IDSI7TDG85AV@bootlin.com>
 References: <D7EHVKGXIFM4.3IDSI7TDG85AV@bootlin.com>
@@ -73,78 +73,41 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-The cdns_role_driver->resume() callback takes a second boolean argument
-named `hibernated` in its implementations. This is mistaken; the only
-potential caller is:
-
-int cdns_resume(struct cdns *cdns)
-{
-	/* ... */
-
-	if (cdns->roles[cdns->role]->resume)
-		cdns->roles[cdns->role]->resume(cdns, cdns_power_is_lost(cdns));
-
-	return 0;
-}
-
-The argument can be true in cases outside of return from hibernation.
-Reflect the true meaning by renaming both arguments to `lost_power`.
+cdns_power_is_lost() does a register read.
+Call it only once rather than twice.
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/usb/cdns3/cdns3-gadget.c | 4 ++--
- drivers/usb/cdns3/cdnsp-gadget.c | 2 +-
- drivers/usb/cdns3/core.h         | 2 +-
- 3 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/usb/cdns3/core.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-index fd1beb10bba7..694aa1457739 100644
---- a/drivers/usb/cdns3/cdns3-gadget.c
-+++ b/drivers/usb/cdns3/cdns3-gadget.c
-@@ -3468,7 +3468,7 @@ __must_hold(&cdns->lock)
+diff --git a/drivers/usb/cdns3/core.c b/drivers/usb/cdns3/core.c
+index 465e9267b49c..799987c88960 100644
+--- a/drivers/usb/cdns3/core.c
++++ b/drivers/usb/cdns3/core.c
+@@ -524,11 +524,12 @@ EXPORT_SYMBOL_GPL(cdns_suspend);
+ 
+ int cdns_resume(struct cdns *cdns)
+ {
++	bool power_lost = cdns_power_is_lost(cdns);
+ 	enum usb_role real_role;
+ 	bool role_changed = false;
+ 	int ret = 0;
+ 
+-	if (cdns_power_is_lost(cdns)) {
++	if (power_lost) {
+ 		if (cdns->role_sw) {
+ 			cdns->role = cdns_role_get(cdns->role_sw);
+ 		} else {
+@@ -553,7 +554,7 @@ int cdns_resume(struct cdns *cdns)
+ 	}
+ 
+ 	if (cdns->roles[cdns->role]->resume)
+-		cdns->roles[cdns->role]->resume(cdns, cdns_power_is_lost(cdns));
++		cdns->roles[cdns->role]->resume(cdns, power_lost);
+ 
  	return 0;
  }
- 
--static int cdns3_gadget_resume(struct cdns *cdns, bool hibernated)
-+static int cdns3_gadget_resume(struct cdns *cdns, bool lost_power)
- {
- 	struct cdns3_device *priv_dev = cdns->gadget_dev;
- 
-@@ -3476,7 +3476,7 @@ static int cdns3_gadget_resume(struct cdns *cdns, bool hibernated)
- 		return 0;
- 
- 	cdns3_gadget_config(priv_dev);
--	if (hibernated)
-+	if (lost_power)
- 		writel(USB_CONF_DEVEN, &priv_dev->regs->usb_conf);
- 
- 	return 0;
-diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
-index 4a3f0f958256..7d05180442fb 100644
---- a/drivers/usb/cdns3/cdnsp-gadget.c
-+++ b/drivers/usb/cdns3/cdnsp-gadget.c
-@@ -1973,7 +1973,7 @@ static int cdnsp_gadget_suspend(struct cdns *cdns, bool do_wakeup)
- 	return 0;
- }
- 
--static int cdnsp_gadget_resume(struct cdns *cdns, bool hibernated)
-+static int cdnsp_gadget_resume(struct cdns *cdns, bool lost_power)
- {
- 	struct cdnsp_device *pdev = cdns->gadget_dev;
- 	enum usb_device_speed max_speed;
-diff --git a/drivers/usb/cdns3/core.h b/drivers/usb/cdns3/core.h
-index 57d47348dc19..921cccf1ca9d 100644
---- a/drivers/usb/cdns3/core.h
-+++ b/drivers/usb/cdns3/core.h
-@@ -30,7 +30,7 @@ struct cdns_role_driver {
- 	int (*start)(struct cdns *cdns);
- 	void (*stop)(struct cdns *cdns);
- 	int (*suspend)(struct cdns *cdns, bool do_wakeup);
--	int (*resume)(struct cdns *cdns, bool hibernated);
-+	int (*resume)(struct cdns *cdns, bool lost_power);
- 	const char *name;
- #define CDNS_ROLE_STATE_INACTIVE	0
- #define CDNS_ROLE_STATE_ACTIVE		1
 -- 
 2.48.1
 
