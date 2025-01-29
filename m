@@ -1,122 +1,105 @@
-Return-Path: <linux-usb+bounces-19841-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19842-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92D1DA21B67
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 11:58:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3058BA21B83
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 12:01:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CE071888C91
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 10:57:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EC9AF7A2CB9
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 11:00:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B601DE3CB;
-	Wed, 29 Jan 2025 10:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B6861B4141;
+	Wed, 29 Jan 2025 11:01:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kYj2yifV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="naETcXE/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693221D0F5A;
-	Wed, 29 Jan 2025 10:56:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B4EC1A83E6;
+	Wed, 29 Jan 2025 11:00:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738148189; cv=none; b=ibpFEiPeqFbUBXNkPqGDZIoZy+BzyYO2MqGJfg5B2Oq30juxD1BlxpayG8jbW36iH+p/ZXtnnsbBkq+XiGVPskHserXbk3yM0AcODsWuwX2OvXB5E+5OtnWpT6gQCIzzRi0uwOENOKnZHXs1slkHgxR51Il83e9C+s4qCyCrL+s=
+	t=1738148461; cv=none; b=fm3Vwh05afv96HgicUcZPbe08jUy58CaG1ROnp+ncBgpbMl0GGktK6w5pZUmOoHXMsbs6MJP6vxgMcL+ZquRLtBW5zXbRnoRyMPO2NtLmenDKyizO83udsshCiu+P+/LDpBZVhc5Gmd1LINW0kMnso66hjZJGAmsu2kgyAMvsSo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738148189; c=relaxed/simple;
-	bh=eBy2wZc03fg5WLGtOI3rz810FtgqWGk5IdPSV5cMmfM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SBTyGkD4cJSwUvz3qul+qm/6dt9/wNFqFRJvfNEgRiEuigBnNiFI+i4ZSqwaFSNvaOvO90MiSrH8KdlTuBJBEzihvrZQ9gCXI2Nt1OrM1eAXbWkIomFjmmVvqLry9P1CvpElNA7yq/Ql9xarQ0vf/445RLx/nYO9BAlrYwbs5JQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kYj2yifV; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 56DC3FF80F;
-	Wed, 29 Jan 2025 10:56:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1738148179;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=gtY/ue4tP/7qgGhS7KR0RiR9xU44j3m0SPzMgH7vv6k=;
-	b=kYj2yifVjxgkvFuBDsmLSo1bstPtMfxsnN8kr+CMQ/xVeJ73ND9BqQBMKtckJ7XjBlRY5U
-	j9QrtZNLSIopVkadra7tYkTXfVMD39pinyUNLPOgo/EdkiHqUkCdw4jSk9oJIWouiD3H9E
-	8YLSnk7Lc8Y5OHqFEV509+upBri+dwcYB7ohxD0qcIfO2vYWWP2K5f0w1gN6+VBssRRAHU
-	EyuNhTBgnLWsr0NHKqogzbI+q4FdytI9a7+0nDQ5ZKqDkOsfA78EjLl3WOB9rVW0h16G4b
-	7teJlBwVNqeMD0Z7FZ2iFeGq68wlaTm/mMNL+Cb43wJgnqJu4xSHdDVcp8/r2Q==
-From: =?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>
-To: theo.lebrun@bootlin.com,
-	mathias.nyman@linux.intel.com
-Cc: rogerq@kernel.org,
-	peter.chen@kernel.org,
-	pawell@cadence.com,
-	gregkh@linuxfoundation.org,
-	mathias.nyman@intel.com,
-	gregory.clement@bootlin.com,
-	thomas.petazzoni@bootlin.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 9/9] usb: host: cdns3: forward lost power information to xhci
-Date: Wed, 29 Jan 2025 11:56:13 +0100
-Message-ID: <20250129105613.403923-9-theo.lebrun@bootlin.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <D7EHVKGXIFM4.3IDSI7TDG85AV@bootlin.com>
-References: <D7EHVKGXIFM4.3IDSI7TDG85AV@bootlin.com>
+	s=arc-20240116; t=1738148461; c=relaxed/simple;
+	bh=NLY9YZjD1ag07UaqOsQMc+/23yy2LzLeb1dAft7nyYE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=skwXw9xKqwAPkd1Gz4VTcszqHQDxiEjGTWRy24zs0DrRV5r1SES0ko7S6xFj3N2SpsTUD2qPQ/MeowFVsJo73kla52zR9v/I5NDjYFT/QDNK7bqecD+3aMQhz0SjwtpCKbQzTsgU3NvehRxtiDKvnEjV04lGIEhh5e/sZgZs5BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=naETcXE/; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738148460; x=1769684460;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NLY9YZjD1ag07UaqOsQMc+/23yy2LzLeb1dAft7nyYE=;
+  b=naETcXE/JZ/9a26TDI/QeXR7hVPtwMU+3QeUnS2MKF0vKJcv2nziCebD
+   vfBa+vJy2+nSl1T5LSKIQrLBYcYz/ot//s0wXkd43HY7kIA7p3+QiVwLn
+   VilmPNpUp3ubgirDj5HSpx7ndj72HZVmhhD+PvFKbHocD57Y39dJqHduR
+   KuWH6BQbrr3bJqZ94Cl6cBFG2SRJavamc1J8d0SndukaRcQ7NMCI2A59w
+   /o5mmptw67S3+2ZCPsMU4UhZcqB3ey5ioQy2GHVzXR0A+eIoN5khy1Gvq
+   /0Wl3bedAzCMq4a3VX36qLvdiNfsqhABhR6P62XQ0sjJ5f93TzQ/kLILf
+   w==;
+X-CSE-ConnectionGUID: s5Z2iChVRGeAWDtPCnoO/Q==
+X-CSE-MsgGUID: fQo9F98RQMmBS6jn7RiPqQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="38687012"
+X-IronPort-AV: E=Sophos;i="6.13,243,1732608000"; 
+   d="scan'208";a="38687012"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 03:00:59 -0800
+X-CSE-ConnectionGUID: dG+oDfcPRsK/YpJ5VLsn3A==
+X-CSE-MsgGUID: BpLnQVSHQDaN1B/CTQMVJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="114132173"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa005.jf.intel.com with ESMTP; 29 Jan 2025 03:00:57 -0800
+Message-ID: <ee229b33-2082-4e03-8f2b-df5b4a86a77d@linux.intel.com>
+Date: Wed, 29 Jan 2025 13:01:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: theo.lebrun@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [REGRESSION] usb: xhci port capability storage change broke
+ fastboot android bootloader utility
+To: Forest <forestix@nom.one>
+Cc: linux-usb@vger.kernel.org, regressions@lists.linux.dev,
+ stable@vger.kernel.org
+References: <hk8umj9lv4l4qguftdq1luqtdrpa1gks5l@sonic.net>
+ <2c35ff52-78aa-4fa1-a61c-f53d1af4284d@linux.intel.com>
+ <0l5mnj5hcmh2ev7818b3m0m7pokk73jfur@sonic.net>
+ <3bd0e058-1aeb-4fc9-8b76-f0475eebbfe4@linux.intel.com>
+ <4kb3ojp4t59rm79ui8kj3t8irsp6shlinq@sonic.net>
+ <8a5bef2e-7cf9-4f5c-8281-c8043a090feb@linux.intel.com>
+ <2tq7pj5g33d76j2uddbv5k8iiuakchso16@sonic.net>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <2tq7pj5g33d76j2uddbv5k8iiuakchso16@sonic.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-cdns3-plat can know if power was lost across system-wide suspend.
-Forward that information:
+On 24.1.2025 21.44, Forest wrote:
+> On Mon, 13 Jan 2025 17:05:09 +0200, Mathias Nyman wrote:
+> 
+>> I'd recommend a patch that permanently adds USB_QUIRK_NO_LPM for this device.
+>> Let me know if you want to submit it yourself, otherwise I can do it.
+> 
+> It looks like I can't contribute a patch after all, due to an issue with my
+> Signed-off-by signature.
+> 
+> So, can you take care of the quirk patch for this device?
+> 
+> Thank you.
 
- - Grab the lost_power bool from cdns_role_driver::resume(). Store it
-   into the power_lost field in struct xhci_plat_priv.
+Sure, I'll send it after rc1 is out next week
 
- - xhci-plat will call xhci_resume() with that value (ORed to whether we
-   are in a hibernation restore).
-
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- drivers/usb/cdns3/host.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
-
-diff --git a/drivers/usb/cdns3/host.c b/drivers/usb/cdns3/host.c
-index 7ba760ee62e3..f0df114c2b53 100644
---- a/drivers/usb/cdns3/host.c
-+++ b/drivers/usb/cdns3/host.c
-@@ -138,6 +138,16 @@ static void cdns_host_exit(struct cdns *cdns)
- 	cdns_drd_host_off(cdns);
- }
- 
-+static int cdns_host_resume(struct cdns *cdns, bool power_lost)
-+{
-+	struct usb_hcd *hcd = platform_get_drvdata(cdns->host_dev);
-+	struct xhci_plat_priv *priv = hcd_to_xhci_priv(hcd);
-+
-+	priv->power_lost = power_lost;
-+
-+	return 0;
-+}
-+
- int cdns_host_init(struct cdns *cdns)
- {
- 	struct cdns_role_driver *rdrv;
-@@ -148,6 +158,7 @@ int cdns_host_init(struct cdns *cdns)
- 
- 	rdrv->start	= __cdns_host_init;
- 	rdrv->stop	= cdns_host_exit;
-+	rdrv->resume	= cdns_host_resume;
- 	rdrv->state	= CDNS_ROLE_STATE_INACTIVE;
- 	rdrv->name	= "host";
- 
--- 
-2.48.1
-
+Thanks
+Mathias
 
