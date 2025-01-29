@@ -1,208 +1,189 @@
-Return-Path: <linux-usb+bounces-19831-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19832-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B82DAA21912
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 09:31:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 887F8A21B28
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 11:45:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 19C567A0820
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 08:30:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD120165156
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 10:45:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F7221991BF;
-	Wed, 29 Jan 2025 08:31:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 252E71B4121;
+	Wed, 29 Jan 2025 10:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CfGT+5sz"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dhiTEzjf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37BB12942A
-	for <linux-usb@vger.kernel.org>; Wed, 29 Jan 2025 08:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85FB3192D63;
+	Wed, 29 Jan 2025 10:45:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738139484; cv=none; b=Zzxw6XsgaIyng229QSQ4x9i6fgXnBFVtmqFzqq0RsPo5xIWLcT+XSGFgUs4O0hRNFPTHXXLxnRm/qKc2T4bz/WWlEqQMpoJ89uMpiuvdXxkL5GAUkeMf27HIV94VywB9otpGvLwho5s6VAmT/CprmAR5MgQtVjC6RCBnmiFVOqE=
+	t=1738147542; cv=none; b=bHmFhnAj98jXwY1ICaKyIDDFMRzDHgqEljuuQ5Bo54MLe4r3ziVZSIRkLtfmkg12U3CsbbIRFeS75sQ8UxagCKuQBScofX2ngRRe228+JSK6oDIwM4n68jB+Be3hRBO7W3U+MKDdUJvK38orNh+EtQ8QTo6AktldsR0QkbVJhTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738139484; c=relaxed/simple;
-	bh=X1Gy+qc6UqKiuqEeXpB4gGP6dR8/VSSAPvGoFtK0isE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TaSlHs2y5Z163U8COEH6BrrbAMi8SE3hHLglBn6lFvuYC7KHxW1eJEEJdXmU8CH8D1sRDdgLXzFWnWTZanrPxkc7BSsID614hLBV3fABS3pjGNs47VUVUctFIMJc6V/dxvEXNmBIrNlRUrFhCz/+jv/oRJrBVyyCILhyfrf4ORQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CfGT+5sz; arc=none smtp.client-ip=209.85.160.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-29fcbf3d709so2070965fac.2
-        for <linux-usb@vger.kernel.org>; Wed, 29 Jan 2025 00:31:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738139482; x=1738744282; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fjtWcY8pBfBrPcsQti8f5d/L1YSlF4JEUCk9XiM0TIk=;
-        b=CfGT+5szMKGf9S20kE1w3Cax9VclHUoGxFfLRFgn1WJwt/5jSBkpEPdoLJaqko6vAc
-         FBrUXjrquCmJuBMHVYpo8U1RqHTtv4VT9Y0rTm/gVNJqqWi2hOogsjFleDDNSlJuYEVF
-         L8QvrBWwF3PjNNUk8MEn5qYi61CW+bI4e851Xu9TsJr8KHVClK6vzrQv1/Ax7rzdGFr2
-         SqQSFlCsyrq094cTLsGcwjqOpuvT5H7UYUsqU1Tq2gAz02EzWt6xMPlj0ypDaEyC16y/
-         kk+x72tW0HoA8QwTQ21Fzs7h+424Gj5yeofjhShFUexlpDEJSaFZGI5TBxpB9UnkQn7s
-         ft8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738139482; x=1738744282;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fjtWcY8pBfBrPcsQti8f5d/L1YSlF4JEUCk9XiM0TIk=;
-        b=BvwrbU1kcDvDWSVLAUq64L5RrMcBogMeaqVl6ru5/ua7T/pU5/L5ipiHiDDrTbu6yN
-         wykZ+jjO2XX+9GRamQDd0+B3zCmJYudW3fgdEIu2Izv0ogmUFiVXiD6MdMQxgfQvFwLW
-         eZmW7W3JurnkGCm+gGBlZrZAEPi1rDngR4HjYXPCQz1aL3311QVE3g6mz1lzIgdzynJi
-         77JMBFVg5deKAUOkNud0skZMzeLEQSyl2Ah8E5vtD5JNkFlfn1y+lqrjszVYZFS/qRpZ
-         jaZQM7DPvftT3O+rCxFVvOJmqn627IWTMdbHJjtwtlwNWszILInzPzT7iOdKpypB/ehl
-         ngcA==
-X-Forwarded-Encrypted: i=1; AJvYcCXMcdwMrUVpFH6j3o1Pe3r25OfhY8fnYeNEvDWkBpRyzupUSa9VlF6+V2wF1omJnSTYNqM3SD8PFQk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbTcJ4QBcGnM0ftKnOg20Myj/WCZm8AgTWdWzuglfZ9i6RIP0a
-	b/nZFiheV/DBHQzhOf1p49Y+kG0pi8AX2B3T+6jOnjLPvO84T7+uwH4LQvmUX3XnluyQc+OkQVv
-	jlNRdAavBlDaiHxkBIi2uC7Ud167tAWvjQDZX
-X-Gm-Gg: ASbGnctgY5ahfetyCA4dEl4lZPzVum7bXJGwQcJom8ZoMGEwMtHYTyrifLYFXsS1LVN
-	NxkKZxmjhl4Zibbr5K47A8pfq5ETX1cy7uSdok8aPQ6kdt9kC3RQShifHqgA1MFiahG/fFpJrEU
-	R79TeSgjjqDCpBJinbmvIrfVr9gp7bTg==
-X-Google-Smtp-Source: AGHT+IH3tYc7tSCEvRaC0rVSY01F3ZJ0j8pButfw+vMxN7n0F5UFuVgALzSyfPEgVd3Ko0LxAfT8xHLPvCWpkFokiuA=
-X-Received: by 2002:a05:6871:7a84:b0:29e:6b6a:d6f4 with SMTP id
- 586e51a60fabf-2b32f355c37mr1167239fac.37.1738139481866; Wed, 29 Jan 2025
- 00:31:21 -0800 (PST)
+	s=arc-20240116; t=1738147542; c=relaxed/simple;
+	bh=fnZB+WHIeCVcb+2DB4NU8Zo9150QatZFoj/9+nCMf/o=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=CxjAYSHorxLdzjt/selfIMKAb9DcuvbpystkQJ5pImpy77pgxZ7YEkGBqaFE7Ml7zja3wQwRmqpCHR+04ywwgPQJiUvkvrCjXeEQtFDTqL2rJ+9LuKyz+oW7QbQn6h2HylwQzPzYcEjdjWs8zJBRpFHg0a8wR4izf0QRtXu8Ptg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dhiTEzjf; arc=none smtp.client-ip=217.70.183.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id BED2E43301;
+	Wed, 29 Jan 2025 10:45:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1738147532;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=0gWsT2QUtcIY6qzXcxBzojVwLzUzymdMjkB+76pdjF4=;
+	b=dhiTEzjfelUuJcSJBmmydfSW8+l/e7M62Q9nECqQqEm0G95IP+L+DqZhhiHC+GeTWTGzQo
+	dibUXuSrtCkPeFNpZFsMPgmm8xt5HObOa/4BD6aeR9mnZLS44Y/LjR28GvlnWyGwjc9p7g
+	MC5kBhOAUsvlAdec+mYMd4A7HGySZAbmDoUt9oqgvnq4YnpdQaIu0+MNKt2QiwEYcGU+gM
+	wGOgzlBe4r3U4qZyTQayU4qnzKYCwlp4LQ9tx/AcIbzggzPreh3h/HOOqZjnRAJyettq/+
+	I2Mk4T3eQgacZ79Ea8E5K74VO7WSR/Ut9Eqk2M1PuBfLSVSDNh89N5YT+Tp1Zg==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250124075911.811594-1-badhri@google.com> <20250128024416.7i3i2vmw2ioy5huf@synopsys.com>
-In-Reply-To: <20250128024416.7i3i2vmw2ioy5huf@synopsys.com>
-From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Wed, 29 Jan 2025 00:30:45 -0800
-X-Gm-Features: AWEUYZmu4STMU9PLyyq-46H_9oE-nEJON737q3Txbr79YsSRIhVy7qztgU-zCXc
-Message-ID: <CAPTae5L6Worr3WsuuV-SUNJh6SOVf+RnLWt2d1LNLDYvY6uRuA@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: dwc3: gadget: Prevent irq storm when TH re-executes
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "jameswei@google.com" <jameswei@google.com>, 
-	"stable@kernel.org" <stable@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 29 Jan 2025 11:45:31 +0100
+Message-Id: <D7EHVKGXIFM4.3IDSI7TDG85AV@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v6 4/5] xhci: introduce xhci->lost_power flag
+Cc: =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Thomas
+ Petazzoni" <thomas.petazzoni@bootlin.com>, <linux-usb@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+To: "Mathias Nyman" <mathias.nyman@linux.intel.com>, "Roger Quadros"
+ <rogerq@kernel.org>, "Peter Chen" <peter.chen@kernel.org>, "Pawel Laszczak"
+ <pawell@cadence.com>, "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Mathias Nyman" <mathias.nyman@intel.com>
+X-Mailer: aerc 0.18.2-0-ge037c095a049
+References: <20241210-s2r-cdns-v6-0-28a17f9715a2@bootlin.com>
+ <20241210-s2r-cdns-v6-4-28a17f9715a2@bootlin.com>
+ <70aced7f-0311-43b9-96af-c8325c39ff2b@kernel.org>
+ <D6AP7JCNSME9.3FS7XCZJ37GM8@bootlin.com>
+ <ed77988a-ba26-4a71-a8cf-b1e5a6425a2e@kernel.org>
+ <D6F0L2L02YIS.3D2DW1P7691L4@bootlin.com>
+ <D6WN0T0DLMFJ.30GP099520IHT@bootlin.com>
+ <e181717a-8b3f-4ad4-b075-95c95888ce5c@linux.intel.com>
+In-Reply-To: <e181717a-8b3f-4ad4-b075-95c95888ce5c@linux.intel.com>
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkhffuvefvofhfjgesthhqredtredtjeenucfhrhhomhepvfhhrohoucfnvggsrhhunhcuoehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeluefgiefgtdegfeehjeetteevveejkefgiedtkeefteejgfdvkeffgeejhfduieenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedutddprhgtphhtthhopehmrghthhhirghsrdhnhihmrghnsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhhoghgvrhhqsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghrrdgthhgvnheskhgvrhhnvghlr
+ dhorhhgpdhrtghpthhtohepphgrfigvlhhlsegtrgguvghntggvrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepmhgrthhhihgrshdrnhihmhgrnhesihhnthgvlhdrtghomhdprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mon, Jan 27, 2025 at 6:44=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
+Hello Mathias,
+
+On Wed Jan 8, 2025 at 7:43 PM CET, Mathias Nyman wrote:
+> This would be a fourth way the upper layers inform xhci_resume() that the
+> xHC host should be reset instead of restoring the registers.
 >
-> On Fri, Jan 24, 2025, Badhri Jagan Sridharan wrote:
-> > While commit d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events
-> > in event cache") makes sure that top half(TH) does not end up overwriti=
-ng
-> > the cached events before processing them when the TH gets invoked more
-> > than one time, returning IRQ_HANDLED results in occasional irq storm
-> > where the TH hogs the CPU. The irq storm can be prevented if
-> > IRQ_WAKE_THREAD is returned.
-> >
-> > ftrace event stub during dwc3 irq storm:
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000866: irq_handler_exit: =
-irq=3D14 ret=3Dhandled
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000872: irq_handler_entry:=
- irq=3D504 name=3Ddwc3
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000874: irq_handler_exit: =
-irq=3D504 ret=3Dhandled
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000881: irq_handler_entry:=
- irq=3D504 name=3Ddwc3
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000883: irq_handler_exit: =
-irq=3D504 ret=3Dhandled
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000889: irq_handler_entry:=
- irq=3D504 name=3Ddwc3
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000892: irq_handler_exit: =
-irq=3D504 ret=3Dhandled
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000898: irq_handler_entry:=
- irq=3D504 name=3Ddwc3
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000901: irq_handler_exit: =
-irq=3D504 ret=3Dhandled
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000907: irq_handler_entry:=
- irq=3D504 name=3Ddwc3
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000909: irq_handler_exit: =
-irq=3D504 ret=3Dhandled
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000915: irq_handler_entry:=
- irq=3D504 name=3Ddwc3
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000918: irq_handler_exit: =
-irq=3D504 ret=3Dhandled
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000924: irq_handler_entry:=
- irq=3D504 name=3Ddwc3
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000927: irq_handler_exit: =
-irq=3D504 ret=3Dhandled
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000933: irq_handler_entry:=
- irq=3D504 name=3Ddwc3
-> >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000935: irq_handler_exit: =
-irq=3D504 ret=3Dhandled
-> >     ....
-> >
-> > Cc: stable@kernel.org
-> > Fixes: d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events in event=
- cache")
+> option 1 creates the first dynamic xhci->quirk flag,
+> option 2 adds a xhci->lost_power flag that is touched outside of xhci dri=
+ver.
 >
-> I don't think this should be Cc to stable, at least not the way it is
-> right now.
+> Neither seem like a good idea just to get rid of a dev_warn() message.
 >
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> >  drivers/usb/dwc3/gadget.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> > index d27af65eb08a..376ab75adc4e 100644
-> > --- a/drivers/usb/dwc3/gadget.c
-> > +++ b/drivers/usb/dwc3/gadget.c
-> > @@ -4519,7 +4519,7 @@ static irqreturn_t dwc3_check_event_buf(struct dw=
-c3_event_buffer *evt)
-> >        * losing events.
-> >        */
-> >       if (evt->flags & DWC3_EVENT_PENDING)
-> > -             return IRQ_HANDLED;
-> > +             return IRQ_WAKE_THREAD;
+> Maybe its time to split xhci_resume() into xhci_reset_resume()
+> and xhci_restore_resume(), and let those upper layers decide what they ne=
+ed.
 >
-> This looks like a workaround to the issue we have. Have you tried to
-> enable imod instead? It's the feature to help avoid these kind of issue.
+> Doesn't cdns driver already have a xhci_plat_priv resume_quirk() function
+> called  during xhci_plat_resume(), before xhci_resume()?
+> Can that be used?
 
-Hi Thinh,
+I agree with your feeling: another solution is needed. Discussing the
+topic gave some new ideas and I have a new solution that feels much
+more appropriate.
 
-Thanks for the feedback ! Yes, we have been experimenting with the
-interrupt moderation interval as well.
-Have follow up questions though, please bear with me !
+### Opinion on splitting xhci_resume() into two implementations
 
-1. Given that when DWC3_EVENT_PENDING  is still set,
-dwc3_check_event_buf() is still waiting for the previous cached events
-to be processed by the dwc3_thread_interrupt(), what's the reasoning
-behind returning IRQ_HANDLED here ? Shouldn't we be returning
-IRQ_WAKE_THREAD anyways ?
+About splitting xhci_resume() into two different implementations that is
+picked by above layer: I am not convinced.
 
-2. When interrupt moderation is enabled, does DEVICE_IMODC start to
-decrement as soon as the interrupt is masked (where I expect that the
-interrupt line gets de-asserted by the controller) in
-dwc3_check_event_buf()  ?
+What would go into xhci_reset_resume() and xhci_restore_resume()? There
+isn't a clear cut inbetween the reset procedure and the normal restore
+procedure, as we might do a reset if the normal restore procedure
+fails (with some logging that reset was unexpected).
 
-/* Mask interrupt */
-dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
-   DWC3_GEVNTSIZ_INTMASK | DWC3_GEVNTSIZ_SIZE(evt->length));
+We would probably end up with many small functions called by either,
+which would blur the overall step sequence.
 
-Regards,
-Badhri
+### Proposal
 
+Instead, I propose we keep xhci_resume() as a single function but change
+its signature from the current:
 
+   int xhci_resume(struct xhci_hcd *xhci, pm_message_t msg);
 
+To this:
 
->
-> Thanks,
-> Thinh
->
-> >
-> >       count =3D dwc3_readl(dwc->regs, DWC3_GEVNTCOUNT(0));
-> >       count &=3D DWC3_GEVNTCOUNT_MASK;
-> >
-> > base-commit: 70cd0576aa39c55aabd227851cba0c601e811fb6
-> > --
-> > 2.48.1.262.g85cc9f2d1e-goog
-> >
+   int xhci_resume(struct xhci_hcd *xhci, bool power_lost,
+                   bool is_auto_resume);
+
+The key insight is that xhci_resume() extracts two information out of
+the message:
+ - whether we are after hibernation: msg.event =3D=3D PM_EVENT_RESTORE,
+ - whether this is an auto resume: msg.event =3D=3D PM_EVENT_AUTO_RESUME.
+
+First bulletpoint is somewhat wrong: driver wants to know if the device
+did lose power, it doesn't care about hibernation per se. It just
+happened to be that hibernation was the only case of power loss.
+Knowing that, we can refactor to ask upper layers the right questions:
+(1) "did we lose power?" and, (2) "is this an auto resume?".
+
+Then, each caller is responsible for handing those booleans. If they
+themselves receive pm_message_t messages (eg xhci-pci), then they do
+the simple conversion:
+
+      bool power_lost =3D msg.event =3D=3D PM_EVENT_RESTORE;
+      bool is_auto_resume =3D msg.event =3D=3D PM_EVENT_AUTO_RESUME;
+
+Others can do more more or less computation to pick a power_lost value.
+
+### About xhci-plat power_lost value
+
+In the case of xhci-plat, I think it will be:
+ - A new power_lost field in `struct xhci_plat_priv`.
+ - That gets set inside the cdns_role_driver::resume() callback of
+   drivers/usb/cdns3/host.c.
+ - Then xhci_plat_resume_common() computes power_lost being:
+      power_lost =3D is_restore || priv->power_lost;
+
+### About xhci_plat_priv::resume_quirk()
+
+It isn't really useful to use. drivers/usb/cdns3/host.c can know whether
+power was lost through its USB role resume() callback. From there to
+the resume_quirk(), the boolean must be stored somewhere. That
+somewhere can only be... inside xhci_plat_priv. So it is simpler if
+xhci-plat retrieves the boolean directly.
+
+xhci_plat_priv::resume_quirk() can change the power_lost value if it
+wants to, that is fine. But in our case, the info isn't available from
+there.
+
+###
+
+I am unsure if the above explanation is clear, so I'll be sending my
+current work-in-progress series as an answer to this. The goal being
+that you can give me your opinion on the proposal: ACK and we continue
+in this direction, NACK and we keep digging.
+
+I'll wait for the merge window to end before sending a proper revision.
+
+Thanks!
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
