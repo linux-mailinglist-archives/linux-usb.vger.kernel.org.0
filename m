@@ -1,210 +1,193 @@
-Return-Path: <linux-usb+bounces-19852-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19853-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C0ADA2219A
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 17:19:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A7583A221E5
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 17:40:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01147167F11
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 16:19:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF30618872B1
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 16:40:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928991DF998;
-	Wed, 29 Jan 2025 16:19:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5C8B1DEFC6;
+	Wed, 29 Jan 2025 16:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n/4WzsGK"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ztR+5l8G";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="br4DU8Kf";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ztR+5l8G";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="br4DU8Kf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE0228EB;
-	Wed, 29 Jan 2025 16:19:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE062FB6;
+	Wed, 29 Jan 2025 16:40:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738167569; cv=none; b=K6ZXkCa6FvrRRx45ew/+4I0fv2d90yQkbZmPmXXVXjduNPECCes6nqUrmppH3b8nSV8uMR4S47oMklJsWUD3sC6gIWyj97TeWH9SFYNyLT8HGE0v29a4xIT0BgC6gkj2ybibkgnLt7sNi+gVtxWMaeCAiD1T063PzfeFyjJAtLI=
+	t=1738168808; cv=none; b=pVQ0KKXwFF4tewopy8AMhc88SkB5mfeHCRk8G66gHCXLSbdHYeJLvpxk4jocEfQYglnIv/2aOOPHnREJmbl54chVMwOL9JM8wfPFY6jZWbWWzNG5GmauYc46OXiGqRjic+bRwpi1cp1Axozw6ohYo9FKhU9hF/z3WAfaJrewIA0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738167569; c=relaxed/simple;
-	bh=VQ1tE7auwykWHFaAWlmFtxRv+H5gTV+mb3VLluuo+bU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lqzadzTRERZY+E6SIv5+4fNfw0TM3HQpyCZ0D5wRZh29RYk6+9gxQ91aCn25YVkydcXJRbVoZwhcCOUT4Dlu6XLQRkJaDp5ImK5cFc8o2LT9/xJklj00KwyAE4bmHYDo79ZRlrH0Qa8MZZY0EaqOL0pA5w9aR2ooiaLe3HqL7bw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n/4WzsGK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB92C4CED1;
-	Wed, 29 Jan 2025 16:19:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738167568;
-	bh=VQ1tE7auwykWHFaAWlmFtxRv+H5gTV+mb3VLluuo+bU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=n/4WzsGK81F59SkkUMb+WMCMS5ZHaRbmeLw6ahJDhfCBABA4a6KVBCSwK9uQe2dCx
-	 x0mNRgNXoAzA3H2ahKHYKJqAKXXN8MREVyvIrV0GgJAcoI7h6gX9LHdjLTxtClMSx4
-	 EddIHSjyw6wAz2IS3Q+EeK4Ip3z4ZZbwoD7CtalDQ7OeIU8gJmPRFPLhFO6904UeOL
-	 pbOtP49em5EsHn7LjmGJCQd4vKS5POHzZdHn43fsshTYlLqDnGfVcMwX7Xp0QR2BJT
-	 vmSJuwnOZQMB3s3i2xEUR2Vvxazeak0N6s9PY8c7YRZAkNftTuLHW4TgGq2APSSIua
-	 GqdW/Bxq24vdQ==
-Date: Wed, 29 Jan 2025 17:19:22 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Jonathan Corbet <corbet@lwn.net>
-Cc: Linux Doc Mailing List <linux-doc@vger.kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, coresight@lists.linaro.org,
- linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
- linux-f2fs-devel@lists.sourceforge.net, linux-hardening@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- workflows@vger.kernel.org
-Subject: Re: [RFC v2 00/38] Improve ABI documentation generation
-Message-ID: <20250129171922.4322c338@foz.lan>
-In-Reply-To: <87a5b96296.fsf@trenco.lwn.net>
-References: <cover.1738020236.git.mchehab+huawei@kernel.org>
-	<87h65i7e87.fsf@trenco.lwn.net>
-	<20250129164157.3c7c072d@foz.lan>
-	<87a5b96296.fsf@trenco.lwn.net>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1738168808; c=relaxed/simple;
+	bh=MnUEOgegCz6U8wUuh36lSaq+5+tmtDZenlvefYwpL4A=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=C09iJfwinb30teeAL2jyXRdfEMWI0L8pKFoTFwD8gCS+Df5nzxvH/1/6c19hI8B5kFvqdoulCgitlFw/IW1z2juvlCkD0TzllV+Z9pIxdoEx4xvgIl9gzaakWzvwAD5LhB8d96Lb3RxAzusiBzI/eUPB9g483rnltXVZ40BmHP0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ztR+5l8G; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=br4DU8Kf; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ztR+5l8G; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=br4DU8Kf; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id B05621F383;
+	Wed, 29 Jan 2025 16:40:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1738168804; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z9rYHt8TLqvyqM2twnKirOe1ax3bJCcWtDx3u+1OAS8=;
+	b=ztR+5l8GkzH59tC0L/EHfmHu1aFHdw6f3gCGZtoOIxHPlwJ5SYC/PlNmKsoKMifnrvP+RS
+	Si3jQBR17SzBwPkW/dKD3zaYYq3L89kxIz/PRL4+IxAqjphwk2QUy8WE2uHFXZroGrC0HQ
+	dRqfMLhhacgVcebMVX7LsK2Znp4Nwk4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1738168804;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z9rYHt8TLqvyqM2twnKirOe1ax3bJCcWtDx3u+1OAS8=;
+	b=br4DU8KffG7YpZatMcZC3FBuJ6Q5BA86CnSqoincqRYS7jGloYDKXZ1oq6HahGmlWR2Pl/
+	PLrG/LjfBxR94iAQ==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1738168804; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z9rYHt8TLqvyqM2twnKirOe1ax3bJCcWtDx3u+1OAS8=;
+	b=ztR+5l8GkzH59tC0L/EHfmHu1aFHdw6f3gCGZtoOIxHPlwJ5SYC/PlNmKsoKMifnrvP+RS
+	Si3jQBR17SzBwPkW/dKD3zaYYq3L89kxIz/PRL4+IxAqjphwk2QUy8WE2uHFXZroGrC0HQ
+	dRqfMLhhacgVcebMVX7LsK2Znp4Nwk4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1738168804;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Z9rYHt8TLqvyqM2twnKirOe1ax3bJCcWtDx3u+1OAS8=;
+	b=br4DU8KffG7YpZatMcZC3FBuJ6Q5BA86CnSqoincqRYS7jGloYDKXZ1oq6HahGmlWR2Pl/
+	PLrG/LjfBxR94iAQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 663C2137D2;
+	Wed, 29 Jan 2025 16:40:04 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id VwnIF+RZmmcPGgAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Wed, 29 Jan 2025 16:40:04 +0000
+Date: Wed, 29 Jan 2025 17:40:04 +0100
+Message-ID: <871pwl7evv.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: John Keeping <jkeeping@inmusicbrands.com>
+Cc: linux-usb@vger.kernel.org,
+	stable@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kees Cook <kees@kernel.org>,
+	Abdul Rahim <abdul.rahim@myyahoo.com>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Jeff Johnson <quic_jjohnson@quicinc.com>,
+	Felipe Balbi <balbi@ti.com>,
+	Daniel Mack <zonque@gmail.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_midi: fix MIDI Streaming descriptor lengths
+In-Reply-To: <20250129160520.2485991-1-jkeeping@inmusicbrands.com>
+References: <20250129160520.2485991-1-jkeeping@inmusicbrands.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_ALL(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,linuxfoundation.org,kernel.org,myyahoo.com,pengutronix.de,quicinc.com,ti.com,gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid]
+X-Spam-Score: -3.30
+X-Spam-Flag: NO
 
-Em Wed, 29 Jan 2025 08:58:13 -0700
-Jonathan Corbet <corbet@lwn.net> escreveu:
-
-> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+On Wed, 29 Jan 2025 17:05:19 +0100,
+John Keeping wrote:
 > 
-> > So, I'm proposing to change the minimal requirements to:
-> > 	- Sphinx 3.4.3;
-> > 	- Python 3.9
-> >
-> > By setting Sphinx minimal version to 3.4.3, we can get rid of all
-> > Sphinx backward-compatible code.  
+> In the two loops before setting the MIDIStreaming descriptors,
+> ms_in_desc.baAssocJackID[] has entries written for "in_ports" values and
+> ms_out_desc.baAssocJackID[] has entries written for "out_ports" values.
+> But the counts and lengths are set the other way round in the
+> descriptors.
 > 
-> That's certainly a nice thought.
+> Fix the descriptors so that the bNumEmbMIDIJack values and the
+> descriptor lengths match the number of entries populated in the trailing
+> arrays.
+
+Are you sure that it's a correct change?
+
+IIUC, the in_ports and out_ports parameters are for external IN and
+OUT jacks, where an external OUT jack is connected to an embedded IN
+jack, and an external IN jack is connected to an embedded OUT jack.
+
+
+thanks,
+
+Takashi
+
 > 
-> With regard to Python ... are all reasonable distributions at 3.9 at
-> least?  CentOS 9 seems to be there, and Debian beyond it.  So probably
-> that is a reasonable floor to set?
-
-I didn't check, but those are the current minimal versions above 3.5 for
-what we have at the Kernel tree[1]:
-
-            !2, 3.10     tools/net/sunrpc/xdrgen/generators/__init__.py
-            !2, 3.10     tools/net/sunrpc/xdrgen/generators/program.py
-            !2, 3.10     tools/net/sunrpc/xdrgen/subcmds/source.py
-            !2, 3.10     tools/net/sunrpc/xdrgen/xdr_ast.py
-            !2, 3.10     tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
-            !2, 3.9      tools/testing/selftests/net/rds/test.py
-            !2, 3.9      tools/net/ynl/ethtool.py
-            !2, 3.9      tools/net/ynl/cli.py
-            !2, 3.9      scripts/checktransupdate.py
-            !2, 3.8      tools/testing/selftests/tc-testing/plugin-lib/nsPlugin.py
-            !2, 3.8      tools/testing/selftests/hid/tests/base.py
-            !2, 3.7      tools/testing/selftests/turbostat/smi_aperf_mperf.py
-            !2, 3.7      tools/testing/selftests/turbostat/defcolumns.py
-            !2, 3.7      tools/testing/selftests/turbostat/added_perf_counters.py
-            !2, 3.7      tools/testing/selftests/hid/tests/conftest.py
-            !2, 3.7      tools/testing/kunit/qemu_config.py
-            !2, 3.7      tools/testing/kunit/kunit_tool_test.py
-            !2, 3.7      tools/testing/kunit/kunit.py
-            !2, 3.7      tools/testing/kunit/kunit_parser.py
-            !2, 3.7      tools/testing/kunit/kunit_kernel.py
-            !2, 3.7      tools/testing/kunit/kunit_json.py
-            !2, 3.7      tools/testing/kunit/kunit_config.py
-            !2, 3.7      tools/perf/scripts/python/gecko.py
-            !2, 3.7      scripts/rust_is_available_test.py
-            !2, 3.7      scripts/bpf_doc.py
-            !2, 3.6      tools/writeback/wb_monitor.py
-            !2, 3.6      tools/workqueue/wq_monitor.py
-            !2, 3.6      tools/workqueue/wq_dump.py
-            !2, 3.6      tools/usb/p9_fwd.py
-            !2, 3.6      tools/tracing/rtla/sample/timerlat_load.py
-            !2, 3.6      tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-            !2, 3.6      tools/testing/selftests/net/nl_netdev.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/ynl.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/utils.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/nsim.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/netns.py
-            !2, 3.6      tools/testing/selftests/net/lib/py/ksft.py
-            !2, 3.6      tools/testing/selftests/kselftest/ksft.py
-            !2, 3.6      tools/testing/selftests/hid/tests/test_tablet.py
-            !2, 3.6      tools/testing/selftests/hid/tests/test_sony.py
-            !2, 3.6      tools/testing/selftests/hid/tests/test_multitouch.py
-            !2, 3.6      tools/testing/selftests/hid/tests/test_mouse.py
-            !2, 3.6      tools/testing/selftests/hid/tests/base_gamepad.py
-            !2, 3.6      tools/testing/selftests/hid/tests/base_device.py
-            !2, 3.6      tools/testing/selftests/drivers/net/stats.py
-            !2, 3.6      tools/testing/selftests/drivers/net/shaper.py
-            !2, 3.6      tools/testing/selftests/drivers/net/queues.py
-            !2, 3.6      tools/testing/selftests/drivers/net/ping.py
-            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
-            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/load.py
-            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/__init__.py
-            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/env.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/rss_ctx.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/nic_performance.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/nic_link_layer.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/lib/py/linkconfig.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/devmem.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/devlink_port_split.py
-            !2, 3.6      tools/testing/selftests/drivers/net/hw/csum.py
-            !2, 3.6      tools/testing/selftests/devices/probe/test_discoverable_devices.py
-            !2, 3.6      tools/testing/selftests/bpf/test_bpftool_synctypes.py
-            !2, 3.6      tools/testing/selftests/bpf/generate_udp_fragments.py
-            !2, 3.6      tools/testing/kunit/run_checks.py
-            !2, 3.6      tools/testing/kunit/kunit_printer.py
-            !2, 3.6      tools/sched_ext/scx_show_state.py
-            !2, 3.6      tools/perf/tests/shell/lib/perf_metric_validation.py
-            !2, 3.6      tools/perf/tests/shell/lib/perf_json_output_lint.py
-            !2, 3.6      tools/perf/scripts/python/parallel-perf.py
-            !2, 3.6      tools/perf/scripts/python/flamegraph.py
-            !2, 3.6      tools/perf/scripts/python/arm-cs-trace-disasm.py
-            !2, 3.6      tools/perf/pmu-events/models.py
-            !2, 3.6      tools/perf/pmu-events/metric_test.py
-            !2, 3.6      tools/perf/pmu-events/metric.py
-            !2, 3.6      tools/perf/pmu-events/jevents.py
-            !2, 3.6      tools/net/ynl/ynl-gen-rst.py
-            !2, 3.6      tools/net/ynl/ynl-gen-c.py
-            !2, 3.6      tools/net/ynl/lib/ynl.py
-            !2, 3.6      tools/net/ynl/lib/nlspec.py
-            !2, 3.6      tools/crypto/tcrypt/tcrypt_speed_compare.py
-            !2, 3.6      tools/cgroup/iocost_monitor.py
-            !2, 3.6      tools/cgroup/iocost_coef_gen.py
-            !2, 3.6      scripts/make_fit.py
-            !2, 3.6      scripts/macro_checker.py
-            !2, 3.6      scripts/get_abi.py
-            !2, 3.6      scripts/generate_rust_analyzer.py
-            !2, 3.6      scripts/gdb/linux/timerlist.py
-            !2, 3.6      scripts/gdb/linux/pgtable.py
-            !2, 3.6      scripts/clang-tools/run-clang-tools.py
-            !2, 3.6      Documentation/sphinx/automarkup.py
-
-[1] Checked with:
-	vermin -v $(git ls-files *.py)
-
-    Please notice that vermin is not perfect: my script passed as version 3.6
-    because the f-string check there didn't verify f-string improvements over
-    time. Still, it is a quick way to check that our current minimal version
-    is not aligned with reality.
- 
-Btw, vermin explains what is requiring more at the scripts. For instance:
-
-	$ vermin -vv scripts/checktransupdate.py
-	...
-	!2, 3.9      /new_devel/v4l/docs/scripts/checktransupdate.py
-	  'argparse' module requires 2.7, 3.2
-	  'argparse.BooleanOptionalAction' member requires !2, 3.9
-	  'datetime' module requires 2.3, 3.0
-	  'datetime.datetime.strptime' member requires 2.5, 3.0
-	  'logging' module requires 2.3, 3.0
-	  'logging.StreamHandler' member requires 2.6, 3.0
-	  'os.path.relpath' member requires 2.6, 3.0
-	  f-strings require !2, 3.6
-
-Thanks,
-Mauro
+> Cc: stable@vger.kernel.org
+> Fixes: c8933c3f79568 ("USB: gadget: f_midi: allow a dynamic number of input and output ports")
+> Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
+> ---
+>  drivers/usb/gadget/function/f_midi.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+> index 837fcdfa3840f..6cc3d86cb4774 100644
+> --- a/drivers/usb/gadget/function/f_midi.c
+> +++ b/drivers/usb/gadget/function/f_midi.c
+> @@ -1000,11 +1000,11 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
+>  	}
+>  
+>  	/* configure the endpoint descriptors ... */
+> -	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
+> -	ms_out_desc.bNumEmbMIDIJack = midi->in_ports;
+> +	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
+> +	ms_out_desc.bNumEmbMIDIJack = midi->out_ports;
+>  
+> -	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
+> -	ms_in_desc.bNumEmbMIDIJack = midi->out_ports;
+> +	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
+> +	ms_in_desc.bNumEmbMIDIJack = midi->in_ports;
+>  
+>  	/* ... and add them to the list */
+>  	endpoint_descriptor_index = i;
+> -- 
+> 2.48.1
+> 
+> 
 
