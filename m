@@ -1,203 +1,210 @@
-Return-Path: <linux-usb+bounces-19851-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19852-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEE2BA22131
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 17:05:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C0ADA2219A
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 17:19:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04270188430E
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 16:05:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01147167F11
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 16:19:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97EC71B0F18;
-	Wed, 29 Jan 2025 16:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928991DF998;
+	Wed, 29 Jan 2025 16:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="BLjESpUc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n/4WzsGK"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2113.outbound.protection.outlook.com [40.107.220.113])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740E928EB;
-	Wed, 29 Jan 2025 16:05:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.113
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738166741; cv=fail; b=gYfAMTodgni0YjG+/bRS5p7QCnhMC8iSJ53bSjxJ72pWQHsnTw41uS99KWCW90KVQ9flRafhz0wHXcZS419YVxEyGFmZq3+OIlZa7+hjnLGPSKNbMCbrXgnUsr2lor2W473+XJGXTXQO8pPKxYfQ56t7T8kDB+U7t+K1Pfdmjmg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738166741; c=relaxed/simple;
-	bh=flsBVqhWP+MJgRHK10mULlYiqJqDpEgr43wztSI6jxQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Fw+/snfce3rUWieAwDLY1p5onVZPEch9KGWIfNjHaHQcbTbt+fKbgkAiZtHji7QTwcAf2EOB9p9jdfX4xwj5KGPNep+jKWy5+y1BMZ734BeTIDnYHkqr0xePbscqks6bGpOwPsZDyfvsEnNjZQQ9DHqEp7OtK4EbtKDnIcuyrXg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=BLjESpUc; arc=fail smtp.client-ip=40.107.220.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=vNk/Tv17m1QMTXeFRPHfRBlHZUap3zBjzcJoK9rh6qhyyyM/iaxzdj1IlfkThn5bBjBV/iEEqhBlL1sbXnpbp1UhW3aFtCvpLwsBuEJ3fD7Kk6YfzbI1Ugts0vCwBft1NVQB6aYi09iHzI2UUjh3gp8H+g/K10wWM/hRKxvPWvSP0B5m1NjGmsVSGrvatUezEAwnzkhpM3Ezb08atgI8IyEquW1dfvAybMuokYR5+9JEEOcPs1adOkdu/nE8VxhYpINgxr7rYbPfIDYyKzdW2mnsyAZ1P4Bnr2djLlnMYfStIolUoF0v4Lx8QiRaywUY+N7EhvpQ47zv/Ye67p79qQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hh8CjVML/7FVRgdAG6230pBCFyu5tLEANDDUq+yle2o=;
- b=ClHbue20mo6ROhU0zgEKTXSaom2tCBG9WCclYT/QRd/jc++yb2Mc8AXzhJHOZpTTFODapu/Bg1Lwgrs7xfbRGbPEKEaGzPbXl/Ts86e51wDWK89xsMoYf4id/xTdgsW7LfqtHnTGh8PbL4tibqWEt2z3UDuCmFCCNknpuqQ7nXFa0wS3D2xKmh4SnmBZmNbtfPTyqFmOnLjNteMSUFSh6VXufZRUr9sTfLw5dvYgN7ho/uwjg8HmylbZjIgJWTjin8axO6tQ371Vx9QPDqvkr3qhHC+QhyZIOQbPypeHCWUb5/6Vd7wPHr9xmkvXCSA7xiLFCjg1hd7lUbEor8GSLQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
- header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hh8CjVML/7FVRgdAG6230pBCFyu5tLEANDDUq+yle2o=;
- b=BLjESpUcj5ZXfmealjuCwjrEFFLr9IHiECmoZVYSTPmVZP3Zo30GB3V4yLA6pkdM8lgBCgcnQxHdBWPZW4ltRxvK0rajlxUBa1JWqdc+SAStYQT3kA/4xijNjmJV1dHkb3nEZXx+KTATvGl1Sd2KY34wkO95DCpKzErIMAN+ZEs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by CH3PR08MB9346.namprd08.prod.outlook.com (2603:10b6:610:1c4::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.18; Wed, 29 Jan
- 2025 16:05:35 +0000
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401]) by MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401%3]) with mapi id 15.20.8398.017; Wed, 29 Jan 2025
- 16:05:35 +0000
-From: John Keeping <jkeeping@inmusicbrands.com>
-To: linux-usb@vger.kernel.org
-Cc: John Keeping <jkeeping@inmusicbrands.com>,
-	stable@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>,
-	Abdul Rahim <abdul.rahim@myyahoo.com>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Felipe Balbi <balbi@ti.com>,
-	Daniel Mack <zonque@gmail.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] usb: gadget: f_midi: fix MIDI Streaming descriptor lengths
-Date: Wed, 29 Jan 2025 16:05:19 +0000
-Message-ID: <20250129160520.2485991-1-jkeeping@inmusicbrands.com>
-X-Mailer: git-send-email 2.48.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0681.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:351::15) To MW4PR08MB8282.namprd08.prod.outlook.com
- (2603:10b6:303:1bd::18)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDE0228EB;
+	Wed, 29 Jan 2025 16:19:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738167569; cv=none; b=K6ZXkCa6FvrRRx45ew/+4I0fv2d90yQkbZmPmXXVXjduNPECCes6nqUrmppH3b8nSV8uMR4S47oMklJsWUD3sC6gIWyj97TeWH9SFYNyLT8HGE0v29a4xIT0BgC6gkj2ybibkgnLt7sNi+gVtxWMaeCAiD1T063PzfeFyjJAtLI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738167569; c=relaxed/simple;
+	bh=VQ1tE7auwykWHFaAWlmFtxRv+H5gTV+mb3VLluuo+bU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=lqzadzTRERZY+E6SIv5+4fNfw0TM3HQpyCZ0D5wRZh29RYk6+9gxQ91aCn25YVkydcXJRbVoZwhcCOUT4Dlu6XLQRkJaDp5ImK5cFc8o2LT9/xJklj00KwyAE4bmHYDo79ZRlrH0Qa8MZZY0EaqOL0pA5w9aR2ooiaLe3HqL7bw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n/4WzsGK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDB92C4CED1;
+	Wed, 29 Jan 2025 16:19:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738167568;
+	bh=VQ1tE7auwykWHFaAWlmFtxRv+H5gTV+mb3VLluuo+bU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=n/4WzsGK81F59SkkUMb+WMCMS5ZHaRbmeLw6ahJDhfCBABA4a6KVBCSwK9uQe2dCx
+	 x0mNRgNXoAzA3H2ahKHYKJqAKXXN8MREVyvIrV0GgJAcoI7h6gX9LHdjLTxtClMSx4
+	 EddIHSjyw6wAz2IS3Q+EeK4Ip3z4ZZbwoD7CtalDQ7OeIU8gJmPRFPLhFO6904UeOL
+	 pbOtP49em5EsHn7LjmGJCQd4vKS5POHzZdHn43fsshTYlLqDnGfVcMwX7Xp0QR2BJT
+	 vmSJuwnOZQMB3s3i2xEUR2Vvxazeak0N6s9PY8c7YRZAkNftTuLHW4TgGq2APSSIua
+	 GqdW/Bxq24vdQ==
+Date: Wed, 29 Jan 2025 17:19:22 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: Linux Doc Mailing List <linux-doc@vger.kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, coresight@lists.linaro.org,
+ linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+ linux-f2fs-devel@lists.sourceforge.net, linux-hardening@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ workflows@vger.kernel.org
+Subject: Re: [RFC v2 00/38] Improve ABI documentation generation
+Message-ID: <20250129171922.4322c338@foz.lan>
+In-Reply-To: <87a5b96296.fsf@trenco.lwn.net>
+References: <cover.1738020236.git.mchehab+huawei@kernel.org>
+	<87h65i7e87.fsf@trenco.lwn.net>
+	<20250129164157.3c7c072d@foz.lan>
+	<87a5b96296.fsf@trenco.lwn.net>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|CH3PR08MB9346:EE_
-X-MS-Office365-Filtering-Correlation-Id: 860fd170-5a50-41f6-ebe1-08dd407ec3a4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|52116014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?YVh8VMSeaSsXfM3522ep2KNfN4C5/c+UoNkFmlPb5ybzTCDvbFxAa5KpX4dk?=
- =?us-ascii?Q?SeTNlO9SBV8fHlzz2eAKciNDnMK4SbrBdZn1n8+jnOf0raFBtxpR5XYORG4L?=
- =?us-ascii?Q?Wj6D/6dbOhc0aNKGfFp6fvGo6mL+8NomkAl6goR9+3y8A8QgVTYd+a1b8xh4?=
- =?us-ascii?Q?hKmOgXTFZ4jMT/SpekTYFLD3lhIgmuQu3ic+6Rsvvy7fm9nGmu6GViRKVjJw?=
- =?us-ascii?Q?T7sFatzq3yVWXReKQDz4YvzEH2L4fI/ZPaCgjmNBFInCupFpUJwEXtq2V57a?=
- =?us-ascii?Q?GWDScm071Xx36+hTIdGtTnOTA/nEF45Ep5dNu8BaEBN8bARBWqiCx7+EcFOi?=
- =?us-ascii?Q?4eaWxad1wZFx79uVbIlpUqYMABkudjKIIW8QBFhHdlAMxLn8So9O89GSMCqz?=
- =?us-ascii?Q?0s6z3zA71f+XweKGqEmDkbGhXknacPjliZaW9IsOtIQlfbwBOFMt0a2yNRsH?=
- =?us-ascii?Q?mDAatFa55bHD5hAIc9jfxVXwiaElsyop6EFOcEYZD2lw2GjZPpuCohsBummI?=
- =?us-ascii?Q?V6KWZCPojZS0HwsCtIo2ooYGgTm14A+1S+CwpaMia6MRr4EVoI0/axVMxpnG?=
- =?us-ascii?Q?p19c4L8zYxHOKcxRp55t6NnHZBy1RGXVBL+2Zft+zR2mUJQJxzJmqWjsixPV?=
- =?us-ascii?Q?s2IwuU1wCPrNs4a/5O7lwr9u8KefBaBVltJZe6zvy6jEnORcwe3jO2Tc9s6i?=
- =?us-ascii?Q?m8lnl13juZmpzi7OYnWSMKCUlrg1z8y2KGiHHuNpgiAk9AQq16gAVDS3Gpma?=
- =?us-ascii?Q?TuU84fgOf7SuexpqUmBqwxwMLM55CeHVFj2fnGHaO9AnC2fdo7JyCStzFTHg?=
- =?us-ascii?Q?M7bO1VZSnU4C/iMGk2jFVt8rWSK1e/Dvol1h3V3BPRvMsTLjNn9NZj50GInk?=
- =?us-ascii?Q?fXxD4xKfp0d8oFmreLILxatRLTN9rcKtlu3ZoNh/D1mKVWlBBg9zetnkWQLP?=
- =?us-ascii?Q?0ZwcGkJbMA6JKrNRSb6E15C54Fah32s0ppV2+vaWkIb9omSQrwizdBcGNQ07?=
- =?us-ascii?Q?yDAL4X5+s3K1e30A5dxRizRMenm0k6WZ8CPIb4WllZ6sFnbFOZCSLWRrkMH2?=
- =?us-ascii?Q?k9icu+4BZko6P7JSMqPb0AGBRq6cRtlB1HHI0yvIP5QGEElIq+UuF0ebpvll?=
- =?us-ascii?Q?aI8nk+AECzXLwHebCPMDuAZ3KJGQ2jHDShgqSzH1H+K7E6Kf8wJpgqcpTtyT?=
- =?us-ascii?Q?oYv8Lpxp9IScIohOVCfXTHSk7nc6B7uyIu9yF7DNw//emZV5OeT2sDfyNNOT?=
- =?us-ascii?Q?/TtKlRUd7F5t2qMY3QEhwcl+irFNdfySKmNCCFdgcx8/Os7Heoj9E+1qr0Pt?=
- =?us-ascii?Q?DEvRAX6K+hcSneay4qLHfRhZK+KFkxNFHVJhNhxH1k3TyZp+rYIE20MRLzpa?=
- =?us-ascii?Q?BF6CE/K+yLFCD4IpPNIOuyP69AUF/lNidEGCPvgnFfnqhiDmsxx2BZ4qEJSS?=
- =?us-ascii?Q?94APi4dodou/ZW08aVf+JxMM8Z+VV2Oy?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(52116014)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?rbtlwIqGmnmzCtCJcBEYu6sr9nt+3pe2lcU8OseKRui2nTMZ20UmBDjOqZbY?=
- =?us-ascii?Q?lYJYzXgH5ghhYv7s1zZWqt9oUA0tSsaQL2+EkCwG6noFO+VlJRQHAQN8im54?=
- =?us-ascii?Q?M94IVIe+1EH6lCP8eB5s3wyOqLlyBLhmsz7gj2V3Cp1Tuc5xMekirTed37fW?=
- =?us-ascii?Q?sgSwcuTFaIjj0q6Encp03G4N5akqEBPX3Kfm98YjYdBndbSYW3bhETs361J3?=
- =?us-ascii?Q?d4F4k0+N+xNQLDhjVnU2OYr8mHA0arzwILYftBzDTzBmCtV2PCIi6pbS+NXd?=
- =?us-ascii?Q?zjTsQIcpoibk94UWwVin5jd1W2u0f5MzBc4fX5gKLkh5X7ulVIJxW1IErgvh?=
- =?us-ascii?Q?hRunISAOtaAxF6IR5KoH/nhkk74VVTUXiEQwX5Rd093x70ya2LbKXl8cy9e9?=
- =?us-ascii?Q?RZkADknXR0zZS3QuF3NxrrGLhMMiKDmhCnsRt5JYdN2fJRliEx5h3T/dWe9X?=
- =?us-ascii?Q?VhvCqKT0rDRCR1MrJnMG8j0uOrNfdnnd/ONXPqAAsQgG4bhzSUTSRm8QL/rc?=
- =?us-ascii?Q?0g1PA/y9UBYyAVWDFUzhkvqjRpNRdlO6+kE4ughsIamIYqYrVNfQZgTtaou6?=
- =?us-ascii?Q?k7NNwcmy7CYYjHNF/HgsrTF0hRrbzr9IqkHCo1nkvaQ5p3FThBag03w7X9I/?=
- =?us-ascii?Q?YWoCrNWNp/Lqz284VO7Og6G0sAhQyc6+HY9SrtCm8IZh7bDx3Azwk+TN7CJb?=
- =?us-ascii?Q?AKBDQr/wTqLytvDe6dvGp0+eOg2QA/v6PQl5l5PYMlJ+0HgzpK7L8IueaqNC?=
- =?us-ascii?Q?iItwscxl1ONf+8mA6nTDztt+4EElkiMY/prUoHjqm2lZYye3ifaPNb5HFbiA?=
- =?us-ascii?Q?QeHTvFsMDczlmxVgpxjaz173K2vbAB/m1zoLIA97hFqWpaBJK8W0MP0SCJ33?=
- =?us-ascii?Q?wSgJm76M06bPSoXDLOibHpEpG0EoGXJUuTfBYGrwtFxXv7k1d5bNFfWNFcjP?=
- =?us-ascii?Q?rybTLyhOgp+4W2E4E3ZRVsOZOo4RBgx4Lp9Nv0xkl2z+SrCpN4qSuuCdC+ER?=
- =?us-ascii?Q?IFlmo7kySWB0xkSiIzeuQzyeU+RuuB1m40ZkjsNPTq+xhsio67h/QooJbkuR?=
- =?us-ascii?Q?ULOf+qYkkyuQ3YNbGyna/kvptYZJM6smJrAc8qormLSrlA0DyvBz3fWlrRW/?=
- =?us-ascii?Q?jkiI7grHCGOaEXcyQkEcELxpoxmmUB0uyr0zbZX24YqBn72BsXbBvIuMFK1b?=
- =?us-ascii?Q?2gvhW34teRhEGaTZs/JL/SsZux3lNusr68jfDOfgVBxoNqagsAY1C25Bld+u?=
- =?us-ascii?Q?+auhbUeYheVgAw8RU3Adf84VZcFr+aNcy4QTfI/KIb2+D9239J42YAJ8KG15?=
- =?us-ascii?Q?t8LJrF3nKqp32ybrd3UsTG+P/nZ27+jYUfk3jwGMxvwLridOSPZ00CsF3NS2?=
- =?us-ascii?Q?6f5izpo6MdHis5cwhIyOtVKzOFkJxczJMPiE+VGzQjduC7yxnWiGK572aoj4?=
- =?us-ascii?Q?3qCGjPPNzRZ8Yutz4SYT8dENVaQCur6SjNfg76Y7P+IfQw+LkTQ8WkPE9EoT?=
- =?us-ascii?Q?bIuUJKi17XStqtxoAaxY6JsQ1EK7tTPgniQmHgkcBU+ucA6tjqRV2tq51TFk?=
- =?us-ascii?Q?4nCljYxU9dT4JZTM2U3CbOtC4GBIVdWD8VF1eDyLBrOFiOP0xKEFebkEez9R?=
- =?us-ascii?Q?cQ=3D=3D?=
-X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 860fd170-5a50-41f6-ebe1-08dd407ec3a4
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2025 16:05:35.0154
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vsUZqq4oPD1UMaNXC5figORQy8/S7GFapp4ur05gjFbT4WRKBql5kfuMnVaPcy0UZQDOQ9VnuoMq40h7CxMw/xkZbGAaWM+5ljF56EMa/4E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR08MB9346
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-In the two loops before setting the MIDIStreaming descriptors,
-ms_in_desc.baAssocJackID[] has entries written for "in_ports" values and
-ms_out_desc.baAssocJackID[] has entries written for "out_ports" values.
-But the counts and lengths are set the other way round in the
-descriptors.
+Em Wed, 29 Jan 2025 08:58:13 -0700
+Jonathan Corbet <corbet@lwn.net> escreveu:
 
-Fix the descriptors so that the bNumEmbMIDIJack values and the
-descriptor lengths match the number of entries populated in the trailing
-arrays.
+> Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+> 
+> > So, I'm proposing to change the minimal requirements to:
+> > 	- Sphinx 3.4.3;
+> > 	- Python 3.9
+> >
+> > By setting Sphinx minimal version to 3.4.3, we can get rid of all
+> > Sphinx backward-compatible code.  
+> 
+> That's certainly a nice thought.
+> 
+> With regard to Python ... are all reasonable distributions at 3.9 at
+> least?  CentOS 9 seems to be there, and Debian beyond it.  So probably
+> that is a reasonable floor to set?
 
-Cc: stable@vger.kernel.org
-Fixes: c8933c3f79568 ("USB: gadget: f_midi: allow a dynamic number of input and output ports")
-Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
----
- drivers/usb/gadget/function/f_midi.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I didn't check, but those are the current minimal versions above 3.5 for
+what we have at the Kernel tree[1]:
 
-diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-index 837fcdfa3840f..6cc3d86cb4774 100644
---- a/drivers/usb/gadget/function/f_midi.c
-+++ b/drivers/usb/gadget/function/f_midi.c
-@@ -1000,11 +1000,11 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
- 	}
+            !2, 3.10     tools/net/sunrpc/xdrgen/generators/__init__.py
+            !2, 3.10     tools/net/sunrpc/xdrgen/generators/program.py
+            !2, 3.10     tools/net/sunrpc/xdrgen/subcmds/source.py
+            !2, 3.10     tools/net/sunrpc/xdrgen/xdr_ast.py
+            !2, 3.10     tools/power/cpupower/bindings/python/test_raw_pylibcpupower.py
+            !2, 3.9      tools/testing/selftests/net/rds/test.py
+            !2, 3.9      tools/net/ynl/ethtool.py
+            !2, 3.9      tools/net/ynl/cli.py
+            !2, 3.9      scripts/checktransupdate.py
+            !2, 3.8      tools/testing/selftests/tc-testing/plugin-lib/nsPlugin.py
+            !2, 3.8      tools/testing/selftests/hid/tests/base.py
+            !2, 3.7      tools/testing/selftests/turbostat/smi_aperf_mperf.py
+            !2, 3.7      tools/testing/selftests/turbostat/defcolumns.py
+            !2, 3.7      tools/testing/selftests/turbostat/added_perf_counters.py
+            !2, 3.7      tools/testing/selftests/hid/tests/conftest.py
+            !2, 3.7      tools/testing/kunit/qemu_config.py
+            !2, 3.7      tools/testing/kunit/kunit_tool_test.py
+            !2, 3.7      tools/testing/kunit/kunit.py
+            !2, 3.7      tools/testing/kunit/kunit_parser.py
+            !2, 3.7      tools/testing/kunit/kunit_kernel.py
+            !2, 3.7      tools/testing/kunit/kunit_json.py
+            !2, 3.7      tools/testing/kunit/kunit_config.py
+            !2, 3.7      tools/perf/scripts/python/gecko.py
+            !2, 3.7      scripts/rust_is_available_test.py
+            !2, 3.7      scripts/bpf_doc.py
+            !2, 3.6      tools/writeback/wb_monitor.py
+            !2, 3.6      tools/workqueue/wq_monitor.py
+            !2, 3.6      tools/workqueue/wq_dump.py
+            !2, 3.6      tools/usb/p9_fwd.py
+            !2, 3.6      tools/tracing/rtla/sample/timerlat_load.py
+            !2, 3.6      tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+            !2, 3.6      tools/testing/selftests/net/nl_netdev.py
+            !2, 3.6      tools/testing/selftests/net/lib/py/ynl.py
+            !2, 3.6      tools/testing/selftests/net/lib/py/utils.py
+            !2, 3.6      tools/testing/selftests/net/lib/py/nsim.py
+            !2, 3.6      tools/testing/selftests/net/lib/py/netns.py
+            !2, 3.6      tools/testing/selftests/net/lib/py/ksft.py
+            !2, 3.6      tools/testing/selftests/kselftest/ksft.py
+            !2, 3.6      tools/testing/selftests/hid/tests/test_tablet.py
+            !2, 3.6      tools/testing/selftests/hid/tests/test_sony.py
+            !2, 3.6      tools/testing/selftests/hid/tests/test_multitouch.py
+            !2, 3.6      tools/testing/selftests/hid/tests/test_mouse.py
+            !2, 3.6      tools/testing/selftests/hid/tests/base_gamepad.py
+            !2, 3.6      tools/testing/selftests/hid/tests/base_device.py
+            !2, 3.6      tools/testing/selftests/drivers/net/stats.py
+            !2, 3.6      tools/testing/selftests/drivers/net/shaper.py
+            !2, 3.6      tools/testing/selftests/drivers/net/queues.py
+            !2, 3.6      tools/testing/selftests/drivers/net/ping.py
+            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/remote_ssh.py
+            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/load.py
+            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/__init__.py
+            !2, 3.6      tools/testing/selftests/drivers/net/lib/py/env.py
+            !2, 3.6      tools/testing/selftests/drivers/net/hw/rss_ctx.py
+            !2, 3.6      tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
+            !2, 3.6      tools/testing/selftests/drivers/net/hw/nic_performance.py
+            !2, 3.6      tools/testing/selftests/drivers/net/hw/nic_link_layer.py
+            !2, 3.6      tools/testing/selftests/drivers/net/hw/lib/py/linkconfig.py
+            !2, 3.6      tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+            !2, 3.6      tools/testing/selftests/drivers/net/hw/devmem.py
+            !2, 3.6      tools/testing/selftests/drivers/net/hw/devlink_port_split.py
+            !2, 3.6      tools/testing/selftests/drivers/net/hw/csum.py
+            !2, 3.6      tools/testing/selftests/devices/probe/test_discoverable_devices.py
+            !2, 3.6      tools/testing/selftests/bpf/test_bpftool_synctypes.py
+            !2, 3.6      tools/testing/selftests/bpf/generate_udp_fragments.py
+            !2, 3.6      tools/testing/kunit/run_checks.py
+            !2, 3.6      tools/testing/kunit/kunit_printer.py
+            !2, 3.6      tools/sched_ext/scx_show_state.py
+            !2, 3.6      tools/perf/tests/shell/lib/perf_metric_validation.py
+            !2, 3.6      tools/perf/tests/shell/lib/perf_json_output_lint.py
+            !2, 3.6      tools/perf/scripts/python/parallel-perf.py
+            !2, 3.6      tools/perf/scripts/python/flamegraph.py
+            !2, 3.6      tools/perf/scripts/python/arm-cs-trace-disasm.py
+            !2, 3.6      tools/perf/pmu-events/models.py
+            !2, 3.6      tools/perf/pmu-events/metric_test.py
+            !2, 3.6      tools/perf/pmu-events/metric.py
+            !2, 3.6      tools/perf/pmu-events/jevents.py
+            !2, 3.6      tools/net/ynl/ynl-gen-rst.py
+            !2, 3.6      tools/net/ynl/ynl-gen-c.py
+            !2, 3.6      tools/net/ynl/lib/ynl.py
+            !2, 3.6      tools/net/ynl/lib/nlspec.py
+            !2, 3.6      tools/crypto/tcrypt/tcrypt_speed_compare.py
+            !2, 3.6      tools/cgroup/iocost_monitor.py
+            !2, 3.6      tools/cgroup/iocost_coef_gen.py
+            !2, 3.6      scripts/make_fit.py
+            !2, 3.6      scripts/macro_checker.py
+            !2, 3.6      scripts/get_abi.py
+            !2, 3.6      scripts/generate_rust_analyzer.py
+            !2, 3.6      scripts/gdb/linux/timerlist.py
+            !2, 3.6      scripts/gdb/linux/pgtable.py
+            !2, 3.6      scripts/clang-tools/run-clang-tools.py
+            !2, 3.6      Documentation/sphinx/automarkup.py
+
+[1] Checked with:
+	vermin -v $(git ls-files *.py)
+
+    Please notice that vermin is not perfect: my script passed as version 3.6
+    because the f-string check there didn't verify f-string improvements over
+    time. Still, it is a quick way to check that our current minimal version
+    is not aligned with reality.
  
- 	/* configure the endpoint descriptors ... */
--	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
--	ms_out_desc.bNumEmbMIDIJack = midi->in_ports;
-+	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
-+	ms_out_desc.bNumEmbMIDIJack = midi->out_ports;
- 
--	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
--	ms_in_desc.bNumEmbMIDIJack = midi->out_ports;
-+	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
-+	ms_in_desc.bNumEmbMIDIJack = midi->in_ports;
- 
- 	/* ... and add them to the list */
- 	endpoint_descriptor_index = i;
--- 
-2.48.1
+Btw, vermin explains what is requiring more at the scripts. For instance:
 
+	$ vermin -vv scripts/checktransupdate.py
+	...
+	!2, 3.9      /new_devel/v4l/docs/scripts/checktransupdate.py
+	  'argparse' module requires 2.7, 3.2
+	  'argparse.BooleanOptionalAction' member requires !2, 3.9
+	  'datetime' module requires 2.3, 3.0
+	  'datetime.datetime.strptime' member requires 2.5, 3.0
+	  'logging' module requires 2.3, 3.0
+	  'logging.StreamHandler' member requires 2.6, 3.0
+	  'os.path.relpath' member requires 2.6, 3.0
+	  f-strings require !2, 3.6
+
+Thanks,
+Mauro
 
