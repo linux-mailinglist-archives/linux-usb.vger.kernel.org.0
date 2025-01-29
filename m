@@ -1,184 +1,254 @@
-Return-Path: <linux-usb+bounces-19828-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19829-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6CE8A21663
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 02:53:27 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE5C4A21692
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 03:56:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04F1F164B0B
-	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 01:53:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 248391886BDC
+	for <lists+linux-usb@lfdr.de>; Wed, 29 Jan 2025 02:56:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68A3418B499;
-	Wed, 29 Jan 2025 01:53:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83701187FFA;
+	Wed, 29 Jan 2025 02:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SWImoMZU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FrU3DLMq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC21E42A8B;
-	Wed, 29 Jan 2025 01:53:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7795733987
+	for <linux-usb@vger.kernel.org>; Wed, 29 Jan 2025 02:56:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738115599; cv=none; b=iBSRJ6RrhJhGlvey2eM6pdC8CR4DiceuEXybb2IftkBkrjkkaB6yAYGJN5JLf46vbHRsZL9rdEhF356iA1TEr//RyXqm6sL2rd+AuoPxbWePLNiUkhR+bB+S8pFkqzPml8m4C7SaTy2T7KrZZG8jA/nH/zH9JOVWXHh6htpqGkM=
+	t=1738119369; cv=none; b=msl4/DHgYAKMLUkMFiXRwpjXa3ldWSi7vuWtR3IGj7pgmH0N8yOlSdDE3OtGhf2ZRraHf5vULythOWnU3pnc1KUjFuq+ORIaqAmF6rz0eb4Zm4cCN6QTRZNQ+APnf9HGV1Ipqzz5VGXSzyKl0sRe8w35IpDPWW0Se5GHFJU4CZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738115599; c=relaxed/simple;
-	bh=0T839DzywJ26Cfrs9GWEAdkq8cMjMgdWjHzUsu7iSfw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vEQARenbAn51biKON/8Ka0Et/x74TdjvxkMANwXTn80lhhIjlTAPMp1w4+0TRNJ/KuUvClsh3XllDqsVXAiHgEaGbQ5nOKvmxe7ah9UwJAw73sxAgxojclZoxJKvoKiUmjZ6TOqzo3dKA94rAYAEHXXca9zSkER5wiC9ev29/SA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SWImoMZU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92A65C4CED3;
-	Wed, 29 Jan 2025 01:53:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738115598;
-	bh=0T839DzywJ26Cfrs9GWEAdkq8cMjMgdWjHzUsu7iSfw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SWImoMZUOCOrWwPau//NTYK2b4SjcVc/SJ39NnSdERoDZBs8+SbfHSmR2+AfWqyab
-	 aiOe0LC9oDa+jOg5svaMJfhW7WgH+/sINSKxkyJMZYO5SQ5mQcqh/1WRAJkWDVR3Ri
-	 pfGboLR/6hqjQ6JBG2kKzeFGnP2hdO3v/Uikyy6vNK7WRkAucDQahd2xQNJpc2k3Hy
-	 J7+SzmhVIQIvCweTC1HRWnSMjb0CmX2kmX8Rr/LE4Q/vNJ160AJhZ4jrpKoRcZWODW
-	 HIIAjs7u6+YreIwkk6+MOC8do01DHBcKmAvQIn70oNgx7pIcgDYghm8aYJE0m5KVxk
-	 m9wfbMVmPywPA==
-Date: Tue, 28 Jan 2025 17:53:14 -0800
-From: Kees Cook <kees@kernel.org>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>, linux-usb@vger.kernel.org,
-	linux-input@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] HID: usbhid: fix recurrent out-of-bounds bug in
- usbhid_parse()
-Message-ID: <202501281747.9690B3B@keescook>
-References: <20240524120112.28076-1-n.zhandarovich@fintech.ru>
- <nycvar.YFH.7.76.2406041015210.16865@cbobk.fhfr.pm>
- <E62FA5CB-D7AE-4A11-9D2E-7D78D7C10ADA@kernel.org>
- <nycvar.YFH.7.76.2406041614210.24940@cbobk.fhfr.pm>
- <2a38e355-af5c-4b3d-81be-0cc97376c1f5@fintech.ru>
- <202406041019.BCD0A93C@keescook>
- <d1ad84e3-7da9-4dc8-a095-b9fbe191eb56@rowland.harvard.edu>
- <807cfa6f-5863-4fe4-8294-76d5cdbc3aac@fintech.ru>
- <649f5c1c-f3a7-420d-b727-f904d58f491f@rowland.harvard.edu>
+	s=arc-20240116; t=1738119369; c=relaxed/simple;
+	bh=0mos7fQLG434fUGf1L2S/PXcraaJY22C9O7M3sh2o7A=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=gQN55VWRnlln15I8CH1PqmlOW21pxLUKm1uEinx2oE5B++Lv8xp6TJ+ksvQr/QBv84SvKaRcUMFWPXBM7QL9oLk7i7rvlinM9Ey9m8FXOZJbjyq5wLpbtD13nojo8jP2s/82v3trbLjMeQgKnOt5jeZISvlUCatqno1zZQYZbnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FrU3DLMq; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738119366; x=1769655366;
+  h=date:from:to:cc:subject:message-id;
+  bh=0mos7fQLG434fUGf1L2S/PXcraaJY22C9O7M3sh2o7A=;
+  b=FrU3DLMqHDXLBAnkbJaGR1Cp3vfPFqZ9dc5nV4LHwco8UUUwRzjYCh2P
+   oy4bhEhk7SIbOrzU0h3QP4bZcUADJOCLTdGbV/juH/kpPUnerb9BFoX1R
+   YR/i3SVmi36D2ZEd7JEb7Z4auXV45usxGu2KJIDAaN0HnkPwlaOIW+rMT
+   kTuBAD8C5tf032hCdS9mLVArmGnO1gLXY3+Ss2rkNwkAh5/nQrSve8rez
+   cGYcu0cNQ0BAq+REvo15I1teykMXVRX67Sqeq9LPDTDVuPVCP63CKbp/g
+   yyjSPH5k6dlxCSiK7Vazj/FDR8aGS9u1Emhh8hsp5TQjk8zg368eO1rhR
+   g==;
+X-CSE-ConnectionGUID: o4mfPcxBSp2vSfigTpxuiA==
+X-CSE-MsgGUID: gtwL3oBcTKaJa7//qS9OPw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="41463045"
+X-IronPort-AV: E=Sophos;i="6.13,242,1732608000"; 
+   d="scan'208";a="41463045"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2025 18:56:05 -0800
+X-CSE-ConnectionGUID: qT35ki1TThWyMSitCYWj5Q==
+X-CSE-MsgGUID: RchCiiL+T6WC0lmE5XUlhw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="114037857"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa005.jf.intel.com with ESMTP; 28 Jan 2025 18:56:03 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tcyFF-000iVv-0V;
+	Wed, 29 Jan 2025 02:56:01 +0000
+Date: Wed, 29 Jan 2025 10:55:11 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org
+Subject: [usb:rndis-removal] BUILD SUCCESS
+ c4a050c5c09ef30feac95a438aca7a8fbf6b47b6
+Message-ID: <202501291005.GEwa4aPr-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <649f5c1c-f3a7-420d-b727-f904d58f491f@rowland.harvard.edu>
 
-On Tue, Jan 28, 2025 at 12:00:41PM -0500, Alan Stern wrote:
-> On Tue, Jan 28, 2025 at 05:45:21AM -0800, Nikita Zhandarovich wrote:
-> > Hello,
-> > 
-> > On 6/4/24 10:45, Alan Stern wrote:
-> > > On Tue, Jun 04, 2024 at 10:21:15AM -0700, Kees Cook wrote:
-> > >> On Tue, Jun 04, 2024 at 10:09:43AM -0700, Nikita Zhandarovich wrote:
-> > >>> Hi,
-> > >>>
-> > >>> On 6/4/24 07:15, Jiri Kosina wrote:
-> > >>>> On Tue, 4 Jun 2024, Kees Cook wrote:
-> > >>>>
-> > >>>>> This isn't the right solution. The problem is that hid_class_descriptor 
-> > >>>>> is a flexible array but was sized as a single element fake flexible 
-> > >>>>> array:
-> > >>>>>
-> > >>>>> struct hid_descriptor {
-> > >>>>> 	   __u8  bLength;
-> > >>>>> 	   __u8  bDescriptorType;
-> > >>>>> 	   __le16 bcdHID;
-> > >>>>> 	   __u8  bCountryCode;
-> > >>>>> 	   __u8  bNumDescriptors;
-> > >>>>>
-> > >>>>> 	   struct hid_class_descriptor desc[1];
-> > >>>>> } __attribute__ ((packed));
-> > >>>>>
-> > >>>>> This likely needs to be: 
-> > >>>>>
-> > >>>>> struct hid_class_descriptor desc[] __counted_by(bNumDescriptors);
-> > >>>>>
-> > >>>>> And then check for any sizeof() uses of the struct that might have changed.
-> > 
-> > Alan, I finally got around to preparing a revised version of the
-> > required patch and encountered a few issues. I could use some advice in
-> > this matter...
-> > 
-> > If we change 'struct hid_descriptor' as you suggested,
-> 
-> I didn't make that suggestion.  Kees Cook did.
-> 
-> >  which does make
-> > sense, most occurrences of that type are easy enough to fix.
-> > 
-> > 1) usbhid_parse() starts working properly if there are more than 1
-> > descriptors, sizeof(struct hid_descriptor) may be turned into something
-> > crude but straightforward like sizeof(struct hid_descriptor) +
-> > sizeof(struct hid_class_descriptor).
-> > 
-> > 2) 'hid_descriptor' in drivers/hid/hid-hyperv.c remains innocuous as
-> > well as only 1 descriptor expected there. My impression is only some
-> > small changes are needed there.
-> > 
-> > However, the issue that stumps me is the following: static struct
-> > hid_descriptor hidg_desc in drivers/usb/gadget/function/f_hid.c relies
-> > on a static nature of that one descriptor. hidg_desc ends up being used
-> > elsewhere, in other static structures. Basically, using __counted_by
-> > requires a lot of changes, as I see it, out of scope of merely closing
-> > an UBSAN error.
-> 
-> The hidg_desc structure needs to contain room for a single 
-> hid_descriptor containing a single hid_class_descriptor.  I think you 
-> can define it that way by doing something like this:
-> 
-> static struct hid_descriptor hidg_desc = {
-> 	.bLength			= sizeof hidg_desc,
-> 	.bDescriptorType		= HID_DT_HID,
-> 	.bcdHID				= cpu_to_le16(0x0101),
-> 	.bCountryCode			= 0x00,
-> 	.bNumDescriptors		= 0x1,
-> 	.desc				= {
-> 		{
-> 			.bDescriptorType	= 0, /* DYNAMIC */
-> 			.wDescriptorLength	= 0, /* DYNAMIC */
-> 		}
-> 	}
-> };
-> 
-> Or maybe it needs to be:
-> 
-> 	.desc				= { {0, 0} } /* DYNAMIC */
-> 
-> I'm not sure what is the correct syntax; you'll have to figure that out.  
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git rndis-removal
+branch HEAD: c4a050c5c09ef30feac95a438aca7a8fbf6b47b6  USB: disable all RNDIS protocol drivers
 
-Either should work.
+elapsed time: 1175m
 
-> 
-> You'll have to be more careful about the definition of hidg_desc_copy in 
-> hidg_setup(), however.  You might want to define hidg_desc_copy as an 
-> alias to the start of a byte array of the right size.
+configs tested: 161
+configs skipped: 8
 
-For an on-stack fixed-size flex array structure, you can use:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-	DEFINE_FLEX(struct hid_descriptor, hidg_desc_copy,
-		    desc, bNumDescriptors, 1);
-	*hidg_desc_copy = hidg_desc;
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                     nsimosci_hs_defconfig    gcc-13.2.0
+arc                   randconfig-001-20250128    gcc-13.2.0
+arc                   randconfig-002-20250128    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                               allnoconfig    gcc-14.2.0
+arm                            hisi_defconfig    gcc-14.2.0
+arm                   milbeaut_m10v_defconfig    clang-18
+arm                   randconfig-001-20250128    gcc-14.2.0
+arm                   randconfig-002-20250128    clang-20
+arm                   randconfig-003-20250128    clang-20
+arm                   randconfig-004-20250128    clang-15
+arm                        vexpress_defconfig    clang-18
+arm                         vf610m4_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250128    gcc-14.2.0
+arm64                 randconfig-002-20250128    clang-17
+arm64                 randconfig-003-20250128    gcc-14.2.0
+arm64                 randconfig-004-20250128    clang-20
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250128    gcc-14.2.0
+csky                  randconfig-002-20250128    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                           allnoconfig    gcc-14.2.0
+hexagon                          allyesconfig    clang-18
+hexagon               randconfig-001-20250128    clang-20
+hexagon               randconfig-002-20250128    clang-14
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250128    clang-19
+i386        buildonly-randconfig-001-20250129    gcc-12
+i386        buildonly-randconfig-002-20250128    clang-19
+i386        buildonly-randconfig-002-20250129    gcc-12
+i386        buildonly-randconfig-003-20250128    gcc-12
+i386        buildonly-randconfig-003-20250129    gcc-12
+i386        buildonly-randconfig-004-20250128    clang-19
+i386        buildonly-randconfig-004-20250129    gcc-12
+i386        buildonly-randconfig-005-20250128    clang-19
+i386        buildonly-randconfig-005-20250129    gcc-12
+i386        buildonly-randconfig-006-20250128    clang-19
+i386        buildonly-randconfig-006-20250129    gcc-12
+i386                                defconfig    clang-19
+i386                  randconfig-011-20250129    gcc-12
+i386                  randconfig-012-20250129    gcc-12
+i386                  randconfig-013-20250129    gcc-12
+i386                  randconfig-014-20250129    gcc-12
+i386                  randconfig-015-20250129    gcc-12
+i386                  randconfig-016-20250129    gcc-12
+i386                  randconfig-017-20250129    gcc-12
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250128    gcc-14.2.0
+loongarch             randconfig-002-20250128    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                          atari_defconfig    clang-18
+m68k                          hp300_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                      bmips_stb_defconfig    clang-18
+mips                      maltaaprp_defconfig    clang-20
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250128    gcc-14.2.0
+nios2                 randconfig-002-20250128    gcc-14.2.0
+openrisc                          allnoconfig    clang-20
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    clang-20
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20250128    gcc-14.2.0
+parisc                randconfig-002-20250128    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    clang-20
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                     ep8248e_defconfig    clang-18
+powerpc                     ksi8560_defconfig    gcc-14.2.0
+powerpc                      pmac32_defconfig    clang-18
+powerpc                       ppc64_defconfig    clang-19
+powerpc               randconfig-001-20250128    clang-17
+powerpc               randconfig-002-20250128    gcc-14.2.0
+powerpc               randconfig-003-20250128    clang-20
+powerpc                     redwood_defconfig    clang-20
+powerpc                     tqm8541_defconfig    clang-18
+powerpc64             randconfig-001-20250128    clang-15
+powerpc64             randconfig-002-20250128    gcc-14.2.0
+powerpc64             randconfig-003-20250128    gcc-14.2.0
+riscv                            allmodconfig    clang-20
+riscv                             allnoconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-20
+riscv                               defconfig    clang-19
+riscv                    nommu_k210_defconfig    clang-18
+riscv                 randconfig-001-20250128    gcc-14.2.0
+riscv                 randconfig-002-20250128    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                  randconfig-001-20250128    gcc-14.2.0
+s390                  randconfig-002-20250128    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                        edosk7705_defconfig    gcc-14.2.0
+sh                    randconfig-001-20250128    gcc-14.2.0
+sh                    randconfig-002-20250128    gcc-14.2.0
+sh                          rsk7201_defconfig    gcc-14.2.0
+sh                           se7705_defconfig    gcc-14.2.0
+sh                     sh7710voipgw_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250128    gcc-14.2.0
+sparc                 randconfig-002-20250128    gcc-14.2.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20250128    gcc-14.2.0
+sparc64               randconfig-002-20250128    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-18
+um                                allnoconfig    clang-20
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-20
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250128    gcc-12
+um                    randconfig-002-20250128    gcc-12
+um                           x86_64_defconfig    clang-15
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250128    clang-19
+x86_64      buildonly-randconfig-001-20250129    clang-19
+x86_64      buildonly-randconfig-002-20250128    clang-19
+x86_64      buildonly-randconfig-002-20250129    clang-19
+x86_64      buildonly-randconfig-003-20250128    gcc-12
+x86_64      buildonly-randconfig-003-20250129    clang-19
+x86_64      buildonly-randconfig-004-20250128    clang-19
+x86_64      buildonly-randconfig-004-20250129    clang-19
+x86_64      buildonly-randconfig-005-20250128    clang-19
+x86_64      buildonly-randconfig-005-20250129    clang-19
+x86_64      buildonly-randconfig-006-20250128    gcc-12
+x86_64      buildonly-randconfig-006-20250129    clang-19
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                               rhel-9.4    clang-19
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250128    gcc-14.2.0
+xtensa                randconfig-002-20250128    gcc-14.2.0
 
-and then adjust the "hidg_desc_copy." instances to "hidg_desc_copy->"
-
-> 
-> > Is this approach still worthy pursuing or should I look into some neater
-> > solution?
-> 
-> I think you should persist with this approach.
-> 
-> Alan Stern
-
--- 
-Kees Cook
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
