@@ -1,213 +1,444 @@
-Return-Path: <linux-usb+bounces-19890-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19891-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73ED7A234D8
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 20:51:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DAB1A23816
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 00:50:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDAC87A241E
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 19:50:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 329121887FB4
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 23:49:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB4781F0E48;
-	Thu, 30 Jan 2025 19:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD371C302C;
+	Thu, 30 Jan 2025 23:49:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="Afii0yMX"
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="BVFCgXcX";
+	dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="etyKUIIn";
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b="N/Nbjmav"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2107.outbound.protection.outlook.com [40.107.223.107])
+Received: from mx0b-00230701.pphosted.com (mx0b-00230701.pphosted.com [148.163.158.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C748143888;
-	Thu, 30 Jan 2025 19:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF9FC1BD9DF;
+	Thu, 30 Jan 2025 23:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.158.9
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738266653; cv=fail; b=DzrToG7nMv7cgQzl0LdU+DL1C39YVBx/KnI1M0C7/te46nd5tgNTYKroHDbFvECggDrTyrrHP8mC5oGeGp2lNSOH9faAZJ7lydXopyt0BtvwVjhysgz/t2AAtfaZ7sfP6Et3IZcaR3J0iYY4JKB8g79Ikw60Feh+5P0+M/g7lIw=
+	t=1738280983; cv=fail; b=aP5kdonQzloALTWiDj52IfSpi5YwYFQkjXwdEWDjZaod8kgAzbISGMfwtEcvfms5mRV2JZiixSNSgO00ASANWvzguE/b4UE2Y1/xV66ofQGN/gSLHIlOQqmTr6VIU3504RHfQ5keRP3Fs/aHhvrSw5Ko4iz3hfWwDmvoKykIWZg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738266653; c=relaxed/simple;
-	bh=Zmu+xtiIwdeGYhT4BoxyfdOji2X1Ro3xI4CrbLJdxBA=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=GyQuTUiW4xnTMwy1/MHbsEfu5aj7esaEkRVNxrciXMCv05k1/kLsODSyEYtiwJ6htdjmcxBJEDdEbEg5c6fwXKTyrNyAY9WkFb++ObkTOscNO913PzH+esQyjLaqF/STt0PUPX8ZUHmKEQ5H5lQbtu9F5g8eZFd1swzGwk0Affc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=Afii0yMX; arc=fail smtp.client-ip=40.107.223.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
+	s=arc-20240116; t=1738280983; c=relaxed/simple;
+	bh=xiMawY3LHUoItCHmhb7QVjl8h/CUmZ3X388maut+SLg=;
+	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Z5+8osl4x62+fqab4N8M6zVTngTA9kKjy+xrTgkNl/6Z5ET2M1n/gdBaOh2cHyviXMkekyYN88p0NyBqAF76as81YeBWwf4of8Yo+lGKO3CdtiPeOahzAG2IRMzoEmv9K0YWHmzwRYMREJku1gRtq/tRAcd93yVaQyAPuoCuLWQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com; spf=pass smtp.mailfrom=synopsys.com; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=BVFCgXcX; dkim=pass (2048-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=etyKUIIn; dkim=fail (1024-bit key) header.d=synopsys.com header.i=@synopsys.com header.b=N/Nbjmav reason="signature verification failed"; arc=fail smtp.client-ip=148.163.158.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=synopsys.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=synopsys.com
+Received: from pps.filterd (m0297265.ppops.net [127.0.0.1])
+	by mx0a-00230701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50ULpAfQ025788;
+	Thu, 30 Jan 2025 15:49:38 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=pfptdkimsnps; bh=5mUBpIsKc0u1g/J2REt
+	mt1LtLYW9v6MCf+zrvAYvhXE=; b=BVFCgXcXWC+/vgO1BaYvJhgFKsAK2PPv09E
+	SUvP0P5+V5xE/TXFXeRKAhAy8rudBJ3Qu8FSdfdv0uNAPDvt0QnFFFVcGdusJgQ8
+	CCCnBfxVKkj/xd0SD2T2n/kCh8LR2ksOhp3Wk57YSh6wzgZol1y1vNw3D9DA5qam
+	jFNDNQ/jykDhZCVBQk++Dc088+zcPGb6u0KxQyRG9whQmjQavs2VVByArtuU/lN+
+	EDKxZ79XQmp1E9DGQoHQOs/Zquf10NmOw1bDnWFX/bhTJBeOx1oB/tzxlsyKdu2l
+	PmdGlSrqXgfIFM8QGTgzFQH4SOd0yS5o8/duOG4y9jGyEsNrS1g==
+Received: from smtprelay-out1.synopsys.com (smtprelay-out1.synopsys.com [149.117.87.133])
+	by mx0a-00230701.pphosted.com (PPS) with ESMTPS id 44ghq1ghj7-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Jan 2025 15:49:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synopsys.com; s=mail;
+	t=1738280977; bh=xiMawY3LHUoItCHmhb7QVjl8h/CUmZ3X388maut+SLg=;
+	h=From:To:CC:Subject:Date:From;
+	b=etyKUIInxLlw6C30mTLwVwjmUBep0arR1aUUcIrKA1FNaIpxNzjfaJ/kjiZX5+7lI
+	 H3JbumvFfU/mrIuEiGDD0E3Ns+VIXNtAz5YALDcmePwX1W77NVVITo/qQ8OHe61r+l
+	 Cwbz27pCO4RcBAGpQq9lF/uOL4omAHet8bfTyIMxAHnPBEqJ1WBeSaz+i5CYRDiAG4
+	 ODNWHJehIaEfQnYivYIms2RF+iVJdBFSoLlcRkhe/0mzfU5pU1fqgfitA2XV4a5oUp
+	 QGT6i3jplbMh0H3PBDQo+4ecNxEQSR8KvAeydJvT84TrqExf6eyDWlbXsAJDdWiB5c
+	 qKACnvdCZhepw==
+Received: from mailhost.synopsys.com (sv1-mailhost2.synopsys.com [10.205.2.132])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits)
+	 client-signature RSA-PSS (2048 bits))
+	(Client CN "mailhost.synopsys.com", Issuer "SNPSica2" (verified OK))
+	by smtprelay-out1.synopsys.com (Postfix) with ESMTPS id 717A940357;
+	Thu, 30 Jan 2025 23:49:36 +0000 (UTC)
+Received: from o365relay-in.synopsys.com (us03-o365relay1.synopsys.com [10.4.161.137])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+	(Client CN "o365relay-in.synopsys.com", Issuer "Entrust Certification Authority - L1K" (not verified))
+	by mailhost.synopsys.com (Postfix) with ESMTPS id D9494A0073;
+	Thu, 30 Jan 2025 23:49:35 +0000 (UTC)
+Authentication-Results: o365relay-in.synopsys.com; dmarc=pass (p=reject dis=none) header.from=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com; spf=pass smtp.mailfrom=synopsys.com
+Authentication-Results: o365relay-in.synopsys.com;
+	dkim=pass (1024-bit key; unprotected) header.d=synopsys.com header.i=@synopsys.com header.a=rsa-sha256 header.s=selector1 header.b=N/Nbjmav;
+	dkim-atps=neutral
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2168.outbound.protection.outlook.com [104.47.55.168])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-384) server-signature RSA-PSS (2048 bits) server-digest SHA256
+	 client-signature RSA-PSS (2048 bits) client-digest SHA256)
+	(Client CN "mail.protection.outlook.com", Issuer "DigiCert Cloud Services CA-1" (verified OK))
+	by o365relay-in.synopsys.com (Postfix) with ESMTPS id C5477405AD;
+	Thu, 30 Jan 2025 23:49:34 +0000 (UTC)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xQ+jRW45szhj9Em0Y8Tbv+hHrahLquqRuCWcFbuYHKkha6XrNWfx0OuMin9O9rnxB6jxN7DthoP8BcWBF7NNp0+ptEl635mwr1c0B3IFwtPcQ9wPMc3zd688dFCooPfIDJzTAtcNCrWBhZ6MOw5RDdy8J8P5atAQI31W4ZDrkVb5mrsh7KAdHSPdS9yAmaYGDTI390rG4gVAQ8WMAhYyHghblI9LT7dW9X7PAfGL8DOEJaS+5RWfBnN/lRQRQmm7bzOSwCmYIk6ZwjKKJBPB0wYWh/yIBj61wd3uY4IY7qwfZHW/fDzXx3fSIZ19/pmPKuO3RR7jbUYB41nZw525TA==
+ b=tZ8Wa9Dh5KivqIrIE3x2NGUjIuFIIasxPaeSEqLiWHQAOs6JpQNpMiRVGN7MuQW3ypyzoUP73MWLz20HZADXnrD6WiN8bxZpPqWW+07lFrAnsoqdLZ+VMcQKAGGMwfUzqJ2+8paxYB21fhZTRg49sgYVjLHD/Bslo6SdFBVp9AokEBicscFcPYo62UTN6DQt47UW64iTO+c+xd4geNQDUYs1dXpWdzP/Yto7acpmN/ySuPAeMYVTZ7XVOQ0hat63ebDqlC3i4KM6OMI1cMPh4kqTs+3m8yrF1iuLhhwdSvAcKEfoEMIoo1A6Sk1SPiutOXfhkq9sIC/Xeq3/jHlGIg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3ySsSMi75DNN8fgwWraqg7gD7WsihI+Mus0Mtz8HvS0=;
- b=tCbGFmcHSTyeYAv7hwMGpfyGoV3yuF3QMLEdg6c6S83kquH1TFAaVHlEV4nIZFnF6SJXkvv/iZbqIXDMyPMTRwxn7niJaBcJx4kPc9lbgRWfQLQzXNjzNh2LWQlKBtM8ZyeONJ5tXKNhkNFFBOqwk1bsQn/poOy2fA5NcJww/v7oiYV25JsyKYVjmUkCg+ZNkFvgPAQopQGKKczquRbGwSyBJcpBiFL6ccrdIHrNKT0lEQOg/eP6GtK/8iLjv4t50ZBUsxiXsPRqis4y6CuPrNPcwYbI0E84V0oa9ZfSMLG92ukp/P7ueWNVqekJY4pnMFQ5nUqeYqNQapzAUBMR5Q==
+ bh=5mUBpIsKc0u1g/J2REtmt1LtLYW9v6MCf+zrvAYvhXE=;
+ b=dG38GYOQjck5V8Fqd0DbhBs0W2Dm0+YEzcqSEIVM8AYfQEGsFeoK8ynjEiWjMUumkO7Bh3ePPS24X24B3voxunSlFS3/p831FAukeTQg03QMoomGLxWBz+dHrXF5RafuDYeaUoOmEvl7v+q3iC07it3iWF2IRmGmEKyfavH5BAvT05yrdJ/JE0lHz2J208yP0lPnYAOo4x9w0MO412m5ZDNGAArN6uzPZxC/Yqd35cWVyBKWkiK26MyUjyCOKlXu7JIR4HRfKSMOoWPYs5s6HWNKsDXakHHz2Pa6rFgM+Oz4Rjd8DTJob3JkkBKCKRHThsVpmTb4JYz8OvCFiDIT1w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
- header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
- s=selector2;
+ smtp.mailfrom=synopsys.com; dmarc=pass action=none header.from=synopsys.com;
+ dkim=pass header.d=synopsys.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=synopsys.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3ySsSMi75DNN8fgwWraqg7gD7WsihI+Mus0Mtz8HvS0=;
- b=Afii0yMXRSvD2pNXyE+rXji+RQuZZ3UIcKrSz7ZgaiRjrUjqnsaAwDKWbFOXAKcPZSxPcQmjYwxucF6CaomO474525KS/xpryAktJZUNZ6GRCFCoRGpbd2kcK0aKxfsM22iPp0v1Fv7cHBq7gwNfLtX/fMg0ioS9vePRyxqCC38=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by BN8PR08MB6241.namprd08.prod.outlook.com (2603:10b6:408:7e::18) with
+ bh=5mUBpIsKc0u1g/J2REtmt1LtLYW9v6MCf+zrvAYvhXE=;
+ b=N/NbjmavVVHg30eJVr0eAscZSxcCZJUP+EHjKtnYU8VdIypsDYIple6oC99t/AIjPvbzqXrLYMjlkS7yyMgyBm/CzpnfNhTt7Bp7rdC1iv8ZHqXjnn87cnRti6vuLpDrjt3AqkNzg2SDPZoc8aOhwlrq+Zw3EpHmn9uGIY6rqGs=
+Received: from LV2PR12MB5990.namprd12.prod.outlook.com (2603:10b6:408:170::16)
+ by PH0PR12MB8776.namprd12.prod.outlook.com (2603:10b6:510:26f::19) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.20; Thu, 30 Jan
- 2025 19:50:48 +0000
-Received: from MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401]) by MW4PR08MB8282.namprd08.prod.outlook.com
- ([fe80::55b3:31f1:11c0:4401%3]) with mapi id 15.20.8398.017; Thu, 30 Jan 2025
- 19:50:48 +0000
-From: John Keeping <jkeeping@inmusicbrands.com>
-To: linux-usb@vger.kernel.org
-Cc: Takashi Iwai <tiwai@suse.de>,
-	John Keeping <jkeeping@inmusicbrands.com>,
-	stable@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>,
-	Abdul Rahim <abdul.rahim@myyahoo.com>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
-	Daniel Mack <zonque@gmail.com>,
-	Felipe Balbi <balbi@ti.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: f_midi: fix MIDI Streaming descriptor lengths
-Date: Thu, 30 Jan 2025 19:50:34 +0000
-Message-ID: <20250130195035.3883857-1-jkeeping@inmusicbrands.com>
-X-Mailer: git-send-email 2.48.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: LO4P123CA0563.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:33b::11) To MW4PR08MB8282.namprd08.prod.outlook.com
- (2603:10b6:303:1bd::18)
+ 2025 23:49:31 +0000
+Received: from LV2PR12MB5990.namprd12.prod.outlook.com
+ ([fe80::3d09:f15f:d888:33a8]) by LV2PR12MB5990.namprd12.prod.outlook.com
+ ([fe80::3d09:f15f:d888:33a8%7]) with mapi id 15.20.8398.014; Thu, 30 Jan 2025
+ 23:49:31 +0000
+X-SNPS-Relay: synopsys.com
+From: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC: John Youn <John.Youn@synopsys.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: [PATCH] usb: dwc3: Set SUSPENDENABLE soon after phy init
+Thread-Topic: [PATCH] usb: dwc3: Set SUSPENDENABLE soon after phy init
+Thread-Index: AQHbc3Gb7tGfYjs2j0yp5RHjp5XhGA==
+Date: Thu, 30 Jan 2025 23:49:31 +0000
+Message-ID:
+ <633aef0afee7d56d2316f7cc3e1b2a6d518a8cc9.1738280911.git.Thinh.Nguyen@synopsys.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: LV2PR12MB5990:EE_|PH0PR12MB8776:EE_
+x-ms-office365-filtering-correlation-id: 6e5196b4-4ed2-492e-fd82-08dd4188bdbf
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?iso-8859-1?Q?5E/9VZDtOGBEHIM4EirnJE2yeRdmOjjjSYXYlzfXHYVVzR6VAhmahg+e/M?=
+ =?iso-8859-1?Q?ErbZnU29dSjD8aLyMjLAUU3Va+DKaLRaXVl3u8NU+5xmO8oEnzfDOht7pE?=
+ =?iso-8859-1?Q?z/lzGsGTLZZiVHrg3293H4wEigXU6L5j5lHX5Oc10+fzOE496NwKAvqb8F?=
+ =?iso-8859-1?Q?pE4epQNhU9sc9lw2FiTbQLLUjl4FQcDTO8Ubo6PQ6BImQx9ypmp+QjM57F?=
+ =?iso-8859-1?Q?VPskI+9FSEWVWEz/rrgomGOuWNvdDZ8AruRmKYA0R19IrMrSGAew3oEqbI?=
+ =?iso-8859-1?Q?1nSySepTOjfcnAMarhUOf2lyvmIeBtNrtSLmVxcKI25QqyxoIuZeB0ODQl?=
+ =?iso-8859-1?Q?5qYMmgrZXrVmPyNNMfD9Dx4XBO+2frMlx27ET/SYYpSt8XeRR4lTeotxY1?=
+ =?iso-8859-1?Q?5HYc21d/m4yd9+CQYD1YREG/6QDF7ltpxIzcJxnANm9Gan39Tf31Vu7MHi?=
+ =?iso-8859-1?Q?O03817NIFpZBrtv5VfrRb0IzDZM8bwFV+5+wsVtitdw7syNTfUSxHDyyeR?=
+ =?iso-8859-1?Q?lrMD06Eg4lzjKVupppvJo6qPQDB3mgmkPgAe5JJ6NfmxFhO/ScX/fJVwJ/?=
+ =?iso-8859-1?Q?ml4JcUDDNWEXdwg60pSfSifoMsL0xtM5V1duZATU0DFnJ4MMyaB9TZW98c?=
+ =?iso-8859-1?Q?DLmNC3v8h9q/qPiDYiErvxLTkqLz0SmL/vyudtN49RtNfiztSZz4hq8bjQ?=
+ =?iso-8859-1?Q?Bfb+f7t29ouCS+1/HKUmZjMAv2q3yX74PhQFtZdmJVnhMbfdx+MTYE+3pC?=
+ =?iso-8859-1?Q?h6Pr6zmGiKA2DKaitXwPv1dqnYfLwLyOM2eut45zp7C65i07T+QuRJl7KF?=
+ =?iso-8859-1?Q?PLAqQ4bZ3v0RC3m1nen1qMsFOYu/4UX92nc6FttrW/+a+cKBqKgqhJ78d0?=
+ =?iso-8859-1?Q?ViVD0HXYgUURQlg+TXhtHfeCcGv32m1UKeqEIh6sW5BWAyhZ2bn24lqHv+?=
+ =?iso-8859-1?Q?VoBzyWkQmAcj1YkN0S/pK6v9WflPiPtloDqE3GRdTLiY1E93abIXv1mCGz?=
+ =?iso-8859-1?Q?Y6BKfnfkes4WjJyP18Uz9txNKIG/NLCwc7WGNWHfrcAtuLhvyl0ErOd/+5?=
+ =?iso-8859-1?Q?hvp51NnGe3kb/LO36d4j0sDYJZ81viXNUXGjIL6VZmahNWwr3R8c5YWJb6?=
+ =?iso-8859-1?Q?Miu1elA5fbHFfovi7uf+ULFOL5hR6ad9c7A9HPT3TBGWZlF8GnPMntwHmN?=
+ =?iso-8859-1?Q?+RoOlVoBWd12dvgpakDz3VMXF5hoyN14PGkHhuJYpX84GJoyDp3o8kICj7?=
+ =?iso-8859-1?Q?S+lunvEYakup4HpRoT0Z6QB5Dont1EyQ5SwsrC+M+vsegtgU2LCZ+Xn+Ry?=
+ =?iso-8859-1?Q?39EiJ6VHGaCsJbmglddUZ986dC1rvre0d2knyE9ZKuO4ulpSHBi69jhJFG?=
+ =?iso-8859-1?Q?LQ8i66Vwyg39ljrN3mUAIDS3wO8PYuFBH+wlhyKwCKke59GBJK7qWafTHN?=
+ =?iso-8859-1?Q?pcbd5suCFRwaUp/ohm6U29plFzXPomvqakN5ojeDGbSYSavvBu6Hatarj3?=
+ =?iso-8859-1?Q?sfL+aXw4JNf1o2cctEryTH?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5990.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?iso-8859-1?Q?1GR+T8bfExk66leRaeooI8fs9sErmtUDchqAfJX8WqUC8TldiD2NnUbWf1?=
+ =?iso-8859-1?Q?AIPPeP2eXbUTFUeOevo13BPhqev8aI5YV0Oe6oyMfUUSCcyTJyxROuetfk?=
+ =?iso-8859-1?Q?diQ55eT2CzO1evg2hF4COq1oadLsHJpa/U2cs4e08szAtRjJVIoWlAbB/o?=
+ =?iso-8859-1?Q?CtHZXHLNGFtso/2owqRLh1zZnta1k6OiSnY4WP5zNZuHfGOngAxWNOPgYN?=
+ =?iso-8859-1?Q?v95Di5IIzvwF+Pe8EJVi51Fj0JwqVfwi9QBeAwVEnPwybcGYPikNNkQ/rT?=
+ =?iso-8859-1?Q?b35Ib/lrOGBrujww1Mn207y3/3mZHrKx/p95+Wxanqag3cYP27svIvxT1o?=
+ =?iso-8859-1?Q?nwXyRECjkAzICDbmoaV6lktHHhOr5ChxKZWHh+8zjk2KM4J8VaHVxprkWw?=
+ =?iso-8859-1?Q?nPdB+4YI0IBze4292JcfeLi+n4HhhBQEn8/j/DmSNpj7lr51/levUGDgj4?=
+ =?iso-8859-1?Q?N53rBK4xBRREkaFuWPKJWJo2BWt+JYRg76+YjgPYNmcn9QncFRa86ii8r6?=
+ =?iso-8859-1?Q?RA84XZZ8hrbYvHqGJKi9OpA7Dwc0V1EIso/3a+cFlgGGZVZhXaOmn7OKeA?=
+ =?iso-8859-1?Q?4IRihbpmErg0jmSKxQKXpZg8wGHos+Mz0O7rfaSgzBGZtkh2viEkSdznFG?=
+ =?iso-8859-1?Q?0o4CUoEL2LqLgsFG6mHEzl06TU3Qoe7oOOqEAHP3yGRk0MrNlQjjWHP2Qt?=
+ =?iso-8859-1?Q?vAIiiuRkhML4ZHeJwBNbULa7nO3Jv0Yzm7hmNmipUm6ZYmizd5gipBT7fD?=
+ =?iso-8859-1?Q?rkkWTVSG1fFKtlF8o+iItM2Ms3GR5Ds95V9+zUFyUIgq1BwzRLhHDesPxv?=
+ =?iso-8859-1?Q?WwIYaPoYx/ZXzEHsX5XFqeOF5TqDnH/BV+uCKeuyZCgo/81We6u5t/MVmc?=
+ =?iso-8859-1?Q?Efn+ybIl/2/YtKYhJ2ePxplSX5aqUOLZqXn21Rv18cHoHXIjHbYhb6WTPz?=
+ =?iso-8859-1?Q?Kkzn/eaH3jeK9HXVgsab4adLuxsDl5ZUZ3WiqUrIw5fIdzMuZezAaC2oCF?=
+ =?iso-8859-1?Q?wPGZ8xZlE0MLrJo5RGghfuGrIhk+soWA2KU49tO/s9nzpwlzZodTvUz5x8?=
+ =?iso-8859-1?Q?bSxQxmpC4NFch83DQnALiNVywffgp9DqmNEER3LZCLR1njHySHmZzpLZH8?=
+ =?iso-8859-1?Q?jlWcUMzQjww110Nl9m8gz4oMMHnShxkTPih82If1pg7gGry0JzOYC85DJB?=
+ =?iso-8859-1?Q?1BPU5CkA871LUIsuj5NS3412AI4I1MbL9HfW7KHGcaP4YziSRfmSctrr7W?=
+ =?iso-8859-1?Q?ZzAAanwxk8B+t+mtz30/+f8whLkqiYYUIZcAveYXuOUpx1CqFjsOOZIzVE?=
+ =?iso-8859-1?Q?DIhRJwK8nCJ+VgA828YUHyt+VOwSaDTUCBXWM91Bh2RqR1xUalL1wpV7zT?=
+ =?iso-8859-1?Q?q7WnjtFetu7dJNKxeGyc//LMzlGhW7H/0GyOXTUJAYvvX8LWDP7OqQuwKt?=
+ =?iso-8859-1?Q?NoteT+BAEaX5EwYTA61NeMlS2e136fzxvBCqH+jnhjLOMp7n0EVKU/RWuF?=
+ =?iso-8859-1?Q?KJ95tlbRHnu8gSjwX4Yq9Nusqcrr0khaL2mlNqBh277FEzrBz8O6fslahR?=
+ =?iso-8859-1?Q?jwxyWwawl738fFk8yZPZfj+Cr/zcU6IG6qxXJbh/vi0pefsziZgjEzF6iO?=
+ =?iso-8859-1?Q?Zt0+gWYt3vT+tLvhxa2q3FU6Uaqu/BtoOq?=
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|BN8PR08MB6241:EE_
-X-MS-Office365-Filtering-Correlation-Id: 813f4e3f-5100-4f91-e216-08dd416764b8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|376014|52116014|1800799024|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?AvK3SbTus70zSKbpykgyxIf/yqyMiUlogAmGwEpq1RNF2OWlT2xP+EEKPRvr?=
- =?us-ascii?Q?uXwVXy+1fH1U6QVGSEJ+sS5tnXbLxmxHocN2ZIDL1wzCkkhOL2aN8dNVRf5O?=
- =?us-ascii?Q?DuBrEtgjb7eW8J0hxJKPNHDk61qHLxrGXxAPF1Z9/hnTUJYOv2KbIObaxOS+?=
- =?us-ascii?Q?wzsKyJ1EHjSKYSY+zRM5uEMgggt+Mb+7m0v4QDNncpEK9bEfXGvR4hLQzGC0?=
- =?us-ascii?Q?NqwRhlzXGrnzTjkzn75tkjAwLc0TTTkW1eT4SL9CpsXubuJWcyXNa+nju+kx?=
- =?us-ascii?Q?w4DSiXWfxkdPbdRb0/xrW+/pxxChLQqs0yjeLr8HStRqaQkJ351zfBa6W2Nl?=
- =?us-ascii?Q?rWRTNNOIsaJTQai2d1TT6gq41VsqQpfi4HT4HGXqcgdvGuSDalHJHFvWdQp9?=
- =?us-ascii?Q?nzbnf4VjVZqAAKlUM8HlSbuwqm6M0OjtLW7cl15dbGGuRkytmpx/Aqe5HHn/?=
- =?us-ascii?Q?2wfKzkYcaQIwRjpTCO4qplYE9jtNDuQmixazMN1cMQT0/qrBODQWfrVl+PnO?=
- =?us-ascii?Q?GEZSbFdZpPrfZAKq7oDM04Hy1aikMCOtpJl/gT6sEJozmq+xZ/Rh2RAVSdJV?=
- =?us-ascii?Q?vvpnNP0ensuxllCIPiKr/kXf3Q7CbK6CNTc0EisAta+a+KDe1WAFwdQfjzNT?=
- =?us-ascii?Q?3WVk5+fx6z4Vg7UmtZ2cCPVHo8bZqdpKK6/Zz3lK/rz4GmjXqwqQHf4BVZYS?=
- =?us-ascii?Q?Md0n9mDdrHN55VUB4HUfUSMowmLkUvT0OjPmzmFn9s5RgOMksMI/OZ2ecMBf?=
- =?us-ascii?Q?y4NdgEMzeDXSu6X9eE1N6OdCvcHL55IEYGTmAuNhUJ4Feo4p892kHKC0iECw?=
- =?us-ascii?Q?VgYh+afksB2uGTnsvB7BGRI/cJWxyBv7qqs6+0HXy/ge5yoMrIoxgIFu98kE?=
- =?us-ascii?Q?ox8hw760PJRdOc+7KR/AocazRPi4iM/lFOnmoLvOA8kwguxaIR4ddltmCiTY?=
- =?us-ascii?Q?C/Q6H5Unj28VZ+AGfj/l7pwWalZp9P0hg/BpSxvu+Mq9VUWpgXzqmG4Qovja?=
- =?us-ascii?Q?We8hb4iUGtlD32fKqquXLUqqJANgDa/DiY79CaHHdC2U1Pf2V6GjG7Cnvi/6?=
- =?us-ascii?Q?ORxa0598NdTqmHtCrdnJrcs2rsXZ24mlY73Zff2zktU7GEYqopBZ4WyUTrAY?=
- =?us-ascii?Q?6+PILD149mUChvT/SHsxJnADTicskauV6BWtDHQa59EdzW0GWdIlDzQugNsC?=
- =?us-ascii?Q?vBGRpJmUUoV9JQnmwZ5yvjlVm2R9aw7u0euUKoHUqyUMga4dHW1PT4Dd+R8I?=
- =?us-ascii?Q?zhFugPugE6L/F1rFqfqie8IF7+yU6WMK3pdXS8/bzFaiOq8t3bBX9CnafEWP?=
- =?us-ascii?Q?PxgtGSD0eTD71sxJe4WS2vS9aRWdr1/a/uIywIoSBZT6FgtC/pvFSY37/R3v?=
- =?us-ascii?Q?18FNkCoYuqWs40imF9RR6E+oOopPbDMuxswH+zbXrKPCeaxPTi/Do41M21cu?=
- =?us-ascii?Q?xVFm8pKT05ZR0zAuniAvmDlLubL6Te0D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?S/krhOhodnR5MUPFZCV7COAdaPold8GsCdj5E7TcDIAy2C9jCE0umnsHxw6J?=
- =?us-ascii?Q?ptG32bo25c6+l4OQOb96ySyZ+g2RdSvb7GZiKbM5MKdPz8HWoeg1yS+zXh2P?=
- =?us-ascii?Q?Ujj0hvr7Ypio6b1d2n0v0UBPsJliR8R/u1eKB1LqCVgzytbazEtoCSwMaXj8?=
- =?us-ascii?Q?x/YQ1HiXUwotbESi4lHAWeoLGmIbwle8aycrQemLnHaiUrKJWJPFIR/fPaEd?=
- =?us-ascii?Q?9EKaCCRBPx89OCS54tjo8tjOP5ZA0yWbJuxSFp7LxLtv+jz5fzCZhAtAbZT/?=
- =?us-ascii?Q?kLnMQTK26uywHkcSV5pjM30q1kFu/iWu/zNRydaOi/JGzJw7wbCMb+UWH1fB?=
- =?us-ascii?Q?LqvqC2cU/WXCr41Alb6FYwPQ6Y/w/aQIr7PDQS6MzRNQuryhZ2qPs3W1EUKj?=
- =?us-ascii?Q?2q6L0Cl6UaCSJNvM8DB03xSex33854bOsTwP2b7pJpQykEEPtCS7AWJvUnr9?=
- =?us-ascii?Q?Bf6moUYVhD/F4S6w82tZA5G200ZNFuMffrlemkNs6iQLmN4jsYLuyJ9aB6pb?=
- =?us-ascii?Q?/u5KqRKlxRuMFM8JsRFOFkSfFiP4c2gymkaNEtAiNYTLPHfu/PWRXD22ZhCZ?=
- =?us-ascii?Q?OekXlmEjDlTXltGccOJpab3GhHaD6l/8DY3AvyKQyR6eYCnx5/plU+Hl3Qbj?=
- =?us-ascii?Q?nuXeNnhwbn275T+Q/XplO0pDxr/4rQV8nLi6jsQY8mFtjL8XdwNnnVJHKM7b?=
- =?us-ascii?Q?ghcf6DricYH6d/rnlPg8t7C7DqFD7moxzTxVYUXqXASW1V8AwaqFCurh6D8U?=
- =?us-ascii?Q?8HlL9Kxisi2tR9GXDWBDAtttxYGsI1q3aUeiJId/oYbXz1iWmLJHEBZ6yFuZ?=
- =?us-ascii?Q?HTggBh5ZLMq2aZi7bS3SXYuGQC7ENLVXuillG9nO3wjDyJrjVMtaAMK/H16g?=
- =?us-ascii?Q?uG8M8TnG7TTyPOoCp9pMtGSjgFDPT/tGsLcSH4uPs7wzH1AzaBB2J9QlFu2G?=
- =?us-ascii?Q?xIcXzMhjs6dm1hRh0lOEhHLjsX3PnvkWas7KTN5xRzvGaEozMgbtpUi0/E8s?=
- =?us-ascii?Q?qq+062ObWQYznNhLkNbrvPGX9zr8xn7GFuIPL2Azr0BOAZ2Zk8E/uQqQ9Qv5?=
- =?us-ascii?Q?BdfKI0QNjZtO+N227ZHnw6gXDwGZxg9I1o+ijkYUtuQrkOFEaSqsn6h5ghgH?=
- =?us-ascii?Q?8/U6OnYfuHTFO8g7ljFSzTbNz3YVX6c1bUxLJDc1T81sNWu4Q98IQLLVbit5?=
- =?us-ascii?Q?rHc07dm24mDgdAdxCRx/UEL8/ADd3nzZX5/o1oIN/EFlhpyeK8tkgH5Iyq6A?=
- =?us-ascii?Q?361WhhpT2mE/vGgMFaYFVmUWfdxvfHlMxHnPgZKstV5D2i9zbX5OAMtOqzSq?=
- =?us-ascii?Q?JZ38R6YIM5+cTnn0pmKq9jE4D+dyJ+zFgZiyknm62TUI5VF82DEX/ek2pu91?=
- =?us-ascii?Q?fLAxq0HYQf7oyaj+dH+DMziiohP2tH5VUQqrWFkN/x1d6UWCGzhqLsUlL9pc?=
- =?us-ascii?Q?prMuAQ7TWM2OjKD/najKV2naJ4gJcL7+K1knC2cPElT9n8NXmcW9Q9rajNvO?=
- =?us-ascii?Q?I59UnDvsJ89FL9rurMbVCKQQM3mKdSQD9pKR7uihJtW6CIz9n8hSzHTaKJK9?=
- =?us-ascii?Q?AN/4lUMyPFTcc6KPI05RmJ6rpU4lEFbkVQNZhXWYY1G82OPdQ7IY1Ctv2TMR?=
- =?us-ascii?Q?iQ=3D=3D?=
-X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 813f4e3f-5100-4f91-e216-08dd416764b8
-X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	ayWnnamgnrJYG1i1zGi384sOnRg0y0mNBX5BF8XkwrnXwVeAXde57bZ6lF+5qKUbqC5nm+8APmFswtfJZYQjjM3MS3bNLpkIHsL5uIAnB7A9t/U/11+Qn367U0ds+x4Vj7POlx+WDfDHvSCrfIPnoA3mb99m8GXJD+MqATAkmO5tHdMYcgtprCnoe0IQ3Mabtgyo5pwm6gmoAvbcsw+4bQPuv2p7rzJnn/GSJTT8oC/9lKvPlX245hrusmgCK00/ogUk4IsW81YtMxh86dzw/x62b97iwVhnViBO4ine1gQe5QhqgGG967tyWRCj59l86Q4PL3cCUlzy3RrZ9fqcXHzJlVo2jLVWRLhH22xw3mikMo265DbocFXjJK3BjJzMOStyU3e/hx9ArdcR2BBhOS/kJxP3DKGDZVSFPuCtAuZAGWRM7YKYX6em/F7xgiz+rdRA58KsDluZEEHHLfSIH/5QTafK2iP++eY6ea81gTglrqMXVM7NCsPM2bA8SnNgHliBAnU07qac3D3m6yBu1P7cj0nsWH4joLzsZZ02P+xwj+ykcQweUzAdhenVQ/rTwkOFpilI8N6z6WpwOlKjEDwBapzJ3GwkJQ0KVJVEPflaNJKdx7gpAaUtr4RQ3cE0FlbkNmo24K6jT4XVURBLzg==
+X-OriginatorOrg: synopsys.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2025 19:50:48.4788
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5990.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e5196b4-4ed2-492e-fd82-08dd4188bdbf
+X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Jan 2025 23:49:31.1090
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: H00H0Q58vMMsixfFPtvpkYH47bComlq2kq50dP7NJJRt+uJQariFlOvrmjvzpMFc8taIEdV6neheXs7mJbaUdDN4LyVeBtNLMWe8WTKIp20=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR08MB6241
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: c33c9f88-1eb7-4099-9700-16013fd9e8aa
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: MRU4hRCqeZzD4/vuoJTZnMUEyAjlIOv+cKvhy6hrcZCi2Ch+aMq6836nqwQGI+ULQyy6C9bGXHwD4RWya9Lhjw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8776
+X-Authority-Analysis: v=2.4 cv=Hq6MG1TS c=1 sm=1 tr=0 ts=679c1012 cx=c_pps a=t4gDRyhI9k+KZ5gXRQysFQ==:117 a=t4gDRyhI9k+KZ5gXRQysFQ==:17 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=8nJEP1OIZ-IA:10
+ a=VdSt8ZQiCzkA:10 a=nEwiWwFL_bsA:10 a=qPHU084jO2kA:10 a=VwQbUJbxAAAA:8 a=jIQo8A4GAAAA:8 a=SVxY-zLO_loFqH_OTfIA:9 a=wPNLvfGTeEIA:10 a=Lf5xNeLK5dgiOs8hzIjU:22
+X-Proofpoint-GUID: uphag2B18sfw3gRgJ_Mzp8KAYQHKCzRp
+X-Proofpoint-ORIG-GUID: uphag2B18sfw3gRgJ_Mzp8KAYQHKCzRp
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-30_10,2025-01-30_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_active_cloned_notspam policy=outbound_active_cloned score=0
+ malwarescore=0 phishscore=0 impostorscore=0 suspectscore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 bulkscore=0 mlxscore=0
+ mlxlogscore=999 adultscore=0 spamscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2501300184
 
-While the MIDI jacks are configured correctly, and the MIDIStreaming
-endpoint descriptors are filled with the correct information,
-bNumEmbMIDIJack and bLength are set incorrectly in these descriptors.
+After phy initialization, some phy operations can only be executed while
+in lower P states. Ensure GUSB3PIPECTL.SUSPENDENABLE and
+GUSB2PHYCFG.SUSPHY are set soon after initialization to avoid blocking
+phy ops.
 
-This does not matter when the numbers of in and out ports are equal, but
-when they differ the host will receive broken descriptors with
-uninitialized stack memory leaking into the descriptor for whichever
-value is smaller.
+Previously the SUSPENDENABLE bits are only set after the controller
+initialization, which may not happen right away if there's no gadget
+driver or xhci driver bound. Revise this to clear SUSPENDENABLE bits
+only when there's mode switching (change in GCTL.PRTCAPDIR).
 
-The precise meaning of "in" and "out" in the port counts is not clearly
-defined and can be confusing.  But elsewhere the driver consistently
-uses this to match the USB meaning of IN and OUT viewed from the host,
-so that "in" ports send data to the host and "out" ports receive data
-from it.
-
+Fixes: 6d735722063a ("usb: dwc3: core: Prevent phy suspend during init")
 Cc: stable@vger.kernel.org
-Fixes: c8933c3f79568 ("USB: gadget: f_midi: allow a dynamic number of input and output ports")
-Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
+Signed-off-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
 ---
-v2:
-- Rewrite commit message to hopefully be clearer about what is going on
-  with the meaning of in/out
+ drivers/usb/dwc3/core.c | 69 +++++++++++++++++++++++++----------------
+ drivers/usb/dwc3/core.h |  2 +-
+ drivers/usb/dwc3/drd.c  |  4 +--
+ 3 files changed, 45 insertions(+), 30 deletions(-)
 
- drivers/usb/gadget/function/f_midi.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-index 837fcdfa3840f..6cc3d86cb4774 100644
---- a/drivers/usb/gadget/function/f_midi.c
-+++ b/drivers/usb/gadget/function/f_midi.c
-@@ -1000,11 +1000,11 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index dfa1b5fe48dc..87b4c04a868c 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -131,11 +131,24 @@ void dwc3_enable_susphy(struct dwc3 *dwc, bool enable=
+)
  	}
- 
- 	/* configure the endpoint descriptors ... */
--	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
--	ms_out_desc.bNumEmbMIDIJack = midi->in_ports;
-+	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
-+	ms_out_desc.bNumEmbMIDIJack = midi->out_ports;
- 
--	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
--	ms_in_desc.bNumEmbMIDIJack = midi->out_ports;
-+	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
-+	ms_in_desc.bNumEmbMIDIJack = midi->in_ports;
- 
- 	/* ... and add them to the list */
- 	endpoint_descriptor_index = i;
--- 
-2.48.1
+ }
+=20
+-void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
++void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy)
+ {
++	unsigned int hw_mode;
+ 	u32 reg;
+=20
+ 	reg =3D dwc3_readl(dwc->regs, DWC3_GCTL);
++
++	 /*
++	  * For DRD controllers, GUSB3PIPECTL.SUSPENDENABLE and
++	  * GUSB2PHYCFG.SUSPHY should be cleared during mode switching,
++	  * and they can be set after core initialization.
++	  */
++	hw_mode =3D DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
++	if (hw_mode =3D=3D DWC3_GHWPARAMS0_MODE_DRD && !ignore_susphy) {
++		if (DWC3_GCTL_PRTCAP(reg) !=3D mode)
++			dwc3_enable_susphy(dwc, false);
++	}
++
+ 	reg &=3D ~(DWC3_GCTL_PRTCAPDIR(DWC3_GCTL_PRTCAP_OTG));
+ 	reg |=3D DWC3_GCTL_PRTCAPDIR(mode);
+ 	dwc3_writel(dwc->regs, DWC3_GCTL, reg);
+@@ -216,7 +229,7 @@ static void __dwc3_set_mode(struct work_struct *work)
+=20
+ 	spin_lock_irqsave(&dwc->lock, flags);
+=20
+-	dwc3_set_prtcap(dwc, desired_dr_role);
++	dwc3_set_prtcap(dwc, desired_dr_role, false);
+=20
+ 	spin_unlock_irqrestore(&dwc->lock, flags);
+=20
+@@ -658,16 +671,7 @@ static int dwc3_ss_phy_setup(struct dwc3 *dwc, int ind=
+ex)
+ 	 */
+ 	reg &=3D ~DWC3_GUSB3PIPECTL_UX_EXIT_PX;
+=20
+-	/*
+-	 * Above DWC_usb3.0 1.94a, it is recommended to set
+-	 * DWC3_GUSB3PIPECTL_SUSPHY to '0' during coreConsultant configuration.
+-	 * So default value will be '0' when the core is reset. Application
+-	 * needs to set it to '1' after the core initialization is completed.
+-	 *
+-	 * Similarly for DRD controllers, GUSB3PIPECTL.SUSPENDENABLE must be
+-	 * cleared after power-on reset, and it can be set after core
+-	 * initialization.
+-	 */
++	/* Ensure the GUSB3PIPECTL.SUSPENDENABLE is cleared prior to phy init. */
+ 	reg &=3D ~DWC3_GUSB3PIPECTL_SUSPHY;
+=20
+ 	if (dwc->u2ss_inp3_quirk)
+@@ -747,15 +751,7 @@ static int dwc3_hs_phy_setup(struct dwc3 *dwc, int ind=
+ex)
+ 		break;
+ 	}
+=20
+-	/*
+-	 * Above DWC_usb3.0 1.94a, it is recommended to set
+-	 * DWC3_GUSB2PHYCFG_SUSPHY to '0' during coreConsultant configuration.
+-	 * So default value will be '0' when the core is reset. Application
+-	 * needs to set it to '1' after the core initialization is completed.
+-	 *
+-	 * Similarly for DRD controllers, GUSB2PHYCFG.SUSPHY must be cleared
+-	 * after power-on reset, and it can be set after core initialization.
+-	 */
++	/* Ensure the GUSB2PHYCFG.SUSPHY is cleared prior to phy init. */
+ 	reg &=3D ~DWC3_GUSB2PHYCFG_SUSPHY;
+=20
+ 	if (dwc->dis_enblslpm_quirk)
+@@ -830,6 +826,25 @@ static int dwc3_phy_init(struct dwc3 *dwc)
+ 			goto err_exit_usb3_phy;
+ 	}
+=20
++	/*
++	 * Above DWC_usb3.0 1.94a, it is recommended to set
++	 * DWC3_GUSB3PIPECTL_SUSPHY and DWC3_GUSB2PHYCFG_SUSPHY to '0' during
++	 * coreConsultant configuration. So default value will be '0' when the
++	 * core is reset. Application needs to set it to '1' after the core
++	 * initialization is completed.
++	 *
++	 * Certain phy requires to be in P0 power state during initialization.
++	 * Make sure GUSB3PIPECTL.SUSPENDENABLE and GUSB2PHYCFG.SUSPHY are clear
++	 * prior to phy init to maintain in the P0 state.
++	 *
++	 * After phy initialization, some phy operations can only be executed
++	 * while in lower P states. Ensure GUSB3PIPECTL.SUSPENDENABLE and
++	 * GUSB2PHYCFG.SUSPHY are set soon after initialization to avoid
++	 * blocking phy ops.
++	 */
++	if (!DWC3_VER_IS_WITHIN(DWC3, ANY, 194A))
++		dwc3_enable_susphy(dwc, true);
++
+ 	return 0;
+=20
+ err_exit_usb3_phy:
+@@ -1588,7 +1603,7 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
+=20
+ 	switch (dwc->dr_mode) {
+ 	case USB_DR_MODE_PERIPHERAL:
+-		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
++		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE, false);
+=20
+ 		if (dwc->usb2_phy)
+ 			otg_set_vbus(dwc->usb2_phy->otg, false);
+@@ -1600,7 +1615,7 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
+ 			return dev_err_probe(dev, ret, "failed to initialize gadget\n");
+ 		break;
+ 	case USB_DR_MODE_HOST:
+-		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
++		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST, false);
+=20
+ 		if (dwc->usb2_phy)
+ 			otg_set_vbus(dwc->usb2_phy->otg, true);
+@@ -1645,7 +1660,7 @@ static void dwc3_core_exit_mode(struct dwc3 *dwc)
+ 	}
+=20
+ 	/* de-assert DRVVBUS for HOST and OTG mode */
+-	dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
++	dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE, true);
+ }
+=20
+ static void dwc3_get_software_properties(struct dwc3 *dwc)
+@@ -2457,7 +2472,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_me=
+ssage_t msg)
+ 		if (ret)
+ 			return ret;
+=20
+-		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE);
++		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_DEVICE, true);
+ 		dwc3_gadget_resume(dwc);
+ 		break;
+ 	case DWC3_GCTL_PRTCAP_HOST:
+@@ -2465,7 +2480,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_me=
+ssage_t msg)
+ 			ret =3D dwc3_core_init_for_resume(dwc);
+ 			if (ret)
+ 				return ret;
+-			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST);
++			dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_HOST, true);
+ 			break;
+ 		}
+ 		/* Restore GUSB2PHYCFG bits that were modified in suspend */
+@@ -2494,7 +2509,7 @@ static int dwc3_resume_common(struct dwc3 *dwc, pm_me=
+ssage_t msg)
+ 		if (ret)
+ 			return ret;
+=20
+-		dwc3_set_prtcap(dwc, dwc->current_dr_role);
++		dwc3_set_prtcap(dwc, dwc->current_dr_role, true);
+=20
+ 		dwc3_otg_init(dwc);
+ 		if (dwc->current_otg_role =3D=3D DWC3_OTG_ROLE_HOST) {
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index ac7c730f81ac..19ad5b6e1ede 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -1557,7 +1557,7 @@ struct dwc3_gadget_ep_cmd_params {
+ #define DWC3_HAS_OTG			BIT(3)
+=20
+ /* prototypes */
+-void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode);
++void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode, bool ignore_susphy);
+ void dwc3_set_mode(struct dwc3 *dwc, u32 mode);
+ u32 dwc3_core_fifo_space(struct dwc3_ep *dep, u8 type);
+=20
+diff --git a/drivers/usb/dwc3/drd.c b/drivers/usb/dwc3/drd.c
+index d76ae676783c..7977860932b1 100644
+--- a/drivers/usb/dwc3/drd.c
++++ b/drivers/usb/dwc3/drd.c
+@@ -173,7 +173,7 @@ void dwc3_otg_init(struct dwc3 *dwc)
+ 	 * block "Initialize GCTL for OTG operation".
+ 	 */
+ 	/* GCTL.PrtCapDir=3D2'b11 */
+-	dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG);
++	dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG, true);
+ 	/* GUSB2PHYCFG0.SusPHY=3D0 */
+ 	reg =3D dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
+ 	reg &=3D ~DWC3_GUSB2PHYCFG_SUSPHY;
+@@ -556,7 +556,7 @@ int dwc3_drd_init(struct dwc3 *dwc)
+=20
+ 		dwc3_drd_update(dwc);
+ 	} else {
+-		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG);
++		dwc3_set_prtcap(dwc, DWC3_GCTL_PRTCAP_OTG, true);
+=20
+ 		/* use OTG block to get ID event */
+ 		irq =3D dwc3_otg_get_irq(dwc);
 
+base-commit: 72deda0abee6e705ae71a93f69f55e33be5bca5c
+--=20
+2.28.0
 
