@@ -1,86 +1,82 @@
-Return-Path: <linux-usb+bounces-19889-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19890-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F07F3A23286
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 18:10:42 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73ED7A234D8
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 20:51:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE73E3A65B4
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 17:10:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EDAC87A241E
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 19:50:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 222351F03C0;
-	Thu, 30 Jan 2025 17:10:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB4781F0E48;
+	Thu, 30 Jan 2025 19:50:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="nxB4Fvfz"
+	dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b="Afii0yMX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2115.outbound.protection.outlook.com [40.107.243.115])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2107.outbound.protection.outlook.com [40.107.223.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E8ED1EF080;
-	Thu, 30 Jan 2025 17:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.243.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C748143888;
+	Thu, 30 Jan 2025 19:50:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.107
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738257014; cv=fail; b=M79zXPO4vaDqEMc5llTZopL/hDmYmcO/IUONTktwL2KT+g5YaDO7tAK5d3kwKivl36a8KnXLagRbZ98HlaGBFFKMI1UonN47rj4XqauC8nSWVQ6Zp3/1fughxK6FI1nGB1JkBwNRMhrOS4yBnSlblBI7/kUofM01ij5+Dr70Nm0=
+	t=1738266653; cv=fail; b=DzrToG7nMv7cgQzl0LdU+DL1C39YVBx/KnI1M0C7/te46nd5tgNTYKroHDbFvECggDrTyrrHP8mC5oGeGp2lNSOH9faAZJ7lydXopyt0BtvwVjhysgz/t2AAtfaZ7sfP6Et3IZcaR3J0iYY4JKB8g79Ikw60Feh+5P0+M/g7lIw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738257014; c=relaxed/simple;
-	bh=6q3adRsaL0jOV51lUlZv/PVWWBmtbs7VatmHLLfk0aw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=eX6hfq214c4Beqqpnt2fhskCgfaceAdZV5m8AmhKOxL8QXzfaTTP+m9GOKd2Y/yVUde2nsU5FDz+pR6cH0PvDnA/8GY0JXgKEJf//eSjcLD4NDb8Q6RsX4YtDHe07aCKvDS91PF1/meWRe8hUfokLCKNxmGz1F2DMqgVn5wuuj0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=nxB4Fvfz; arc=fail smtp.client-ip=40.107.243.115
+	s=arc-20240116; t=1738266653; c=relaxed/simple;
+	bh=Zmu+xtiIwdeGYhT4BoxyfdOji2X1Ro3xI4CrbLJdxBA=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=GyQuTUiW4xnTMwy1/MHbsEfu5aj7esaEkRVNxrciXMCv05k1/kLsODSyEYtiwJ6htdjmcxBJEDdEbEg5c6fwXKTyrNyAY9WkFb++ObkTOscNO913PzH+esQyjLaqF/STt0PUPX8ZUHmKEQ5H5lQbtu9F5g8eZFd1swzGwk0Affc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com; spf=pass smtp.mailfrom=inmusicbrands.com; dkim=pass (1024-bit key) header.d=inmusicbrands.com header.i=@inmusicbrands.com header.b=Afii0yMX; arc=fail smtp.client-ip=40.107.223.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=inmusicbrands.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inmusicbrands.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=X1nZdDko5Js6JfsEdRZFt20FoFrqyVfRFfIxTageiJywZ6QZwTezBHOucrV2a1GTolrHFtwD4LDbvGuhL2ZtqPcTOOmA+PKdwv6ZCeijz8Tg1y5snLeOxdvyE3OVeQ9xxBb1cOBbuqbUlshHDGjftB6YYrko8Tqe2WEFuFQ4E5hikJnG8LAF/1J7xoa0u8xngijqpado9AC8btFOCrwHdYwFE2/kXIts/rm1VHxnq8vssW5tI9InD2V78Xq6Hwrol6FpPphdDHj/OFPbEIXFwpk+UxLHcqpSEcyGSiEqA5ie0JvjH9NFadWG3h4wUfaoul1fSO6X0qSa4anY9WBbDQ==
+ b=xQ+jRW45szhj9Em0Y8Tbv+hHrahLquqRuCWcFbuYHKkha6XrNWfx0OuMin9O9rnxB6jxN7DthoP8BcWBF7NNp0+ptEl635mwr1c0B3IFwtPcQ9wPMc3zd688dFCooPfIDJzTAtcNCrWBhZ6MOw5RDdy8J8P5atAQI31W4ZDrkVb5mrsh7KAdHSPdS9yAmaYGDTI390rG4gVAQ8WMAhYyHghblI9LT7dW9X7PAfGL8DOEJaS+5RWfBnN/lRQRQmm7bzOSwCmYIk6ZwjKKJBPB0wYWh/yIBj61wd3uY4IY7qwfZHW/fDzXx3fSIZ19/pmPKuO3RR7jbUYB41nZw525TA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gwMl3IFjxb2aGei107O+6LNOe8iF/RQyUYsnVaMSUM8=;
- b=hQqiSfVK7ZRoZnuZmgp/bRYCvJSS8wd3N+o2juSRbt3JgmFSmbE5xnPBebesq+a0kXVKhN7MnXROLFduhSRVDSWg5sby034z8B6Ds22ZvDVLjjBBlUTB6F+C0B37LiXxcFAqWl7x0Cqx9PFnT8FYt67Ow5sIe9NG+X/bYSlGCTchwZT2xPiY2TI3Yc8VrpIyCI77tgElxaEcZZScP3HXrQm8/xYO2sJOuFQZV7OT/ZzK8eC7w8nftfgCXIaBsWnK3+m+ATBMF8aFfpCjAlBSuGFLc1+ftuTKndRTzkGx0M2Mhysb+hLN/41mbQhm0g7nLF+YXO9J0yLrrg0u39EkbA==
+ bh=3ySsSMi75DNN8fgwWraqg7gD7WsihI+Mus0Mtz8HvS0=;
+ b=tCbGFmcHSTyeYAv7hwMGpfyGoV3yuF3QMLEdg6c6S83kquH1TFAaVHlEV4nIZFnF6SJXkvv/iZbqIXDMyPMTRwxn7niJaBcJx4kPc9lbgRWfQLQzXNjzNh2LWQlKBtM8ZyeONJ5tXKNhkNFFBOqwk1bsQn/poOy2fA5NcJww/v7oiYV25JsyKYVjmUkCg+ZNkFvgPAQopQGKKczquRbGwSyBJcpBiFL6ccrdIHrNKT0lEQOg/eP6GtK/8iLjv4t50ZBUsxiXsPRqis4y6CuPrNPcwYbI0E84V0oa9ZfSMLG92ukp/P7ueWNVqekJY4pnMFQ5nUqeYqNQapzAUBMR5Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=inmusicbrands.com; dmarc=pass action=none
  header.from=inmusicbrands.com; dkim=pass header.d=inmusicbrands.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=inmusicbrands.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gwMl3IFjxb2aGei107O+6LNOe8iF/RQyUYsnVaMSUM8=;
- b=nxB4FvfzBKSQIJPtfgrr542ePe2YvcM3308+pVCu9pTpnu7VweMHQ6vQqW9Hd8jAvmbUz9V3pom31k7yGjJlAz0FTKpFFLkJFFqsyWJMigBC97FJw25SI+5gUxKtvXoLPwUj2Y1RUE+s1EkIoDwYE0/GQKofeDx1rJ4J2RTOAn0=
+ bh=3ySsSMi75DNN8fgwWraqg7gD7WsihI+Mus0Mtz8HvS0=;
+ b=Afii0yMXRSvD2pNXyE+rXji+RQuZZ3UIcKrSz7ZgaiRjrUjqnsaAwDKWbFOXAKcPZSxPcQmjYwxucF6CaomO474525KS/xpryAktJZUNZ6GRCFCoRGpbd2kcK0aKxfsM22iPp0v1Fv7cHBq7gwNfLtX/fMg0ioS9vePRyxqCC38=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=inmusicbrands.com;
 Received: from MW4PR08MB8282.namprd08.prod.outlook.com (2603:10b6:303:1bd::18)
- by BL3PR08MB7396.namprd08.prod.outlook.com (2603:10b6:208:359::14) with
+ by BN8PR08MB6241.namprd08.prod.outlook.com (2603:10b6:408:7e::18) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.20; Thu, 30 Jan
- 2025 17:10:08 +0000
+ 2025 19:50:48 +0000
 Received: from MW4PR08MB8282.namprd08.prod.outlook.com
  ([fe80::55b3:31f1:11c0:4401]) by MW4PR08MB8282.namprd08.prod.outlook.com
  ([fe80::55b3:31f1:11c0:4401%3]) with mapi id 15.20.8398.017; Thu, 30 Jan 2025
- 17:10:08 +0000
-Date: Thu, 30 Jan 2025 17:10:01 +0000
+ 19:50:48 +0000
 From: John Keeping <jkeeping@inmusicbrands.com>
-To: Takashi Iwai <tiwai@suse.de>
-Cc: linux-usb@vger.kernel.org, stable@vger.kernel.org,
+To: linux-usb@vger.kernel.org
+Cc: Takashi Iwai <tiwai@suse.de>,
+	John Keeping <jkeeping@inmusicbrands.com>,
+	stable@vger.kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kees Cook <kees@kernel.org>, Abdul Rahim <abdul.rahim@myyahoo.com>,
-	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Kees Cook <kees@kernel.org>,
+	Abdul Rahim <abdul.rahim@myyahoo.com>,
 	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Felipe Balbi <balbi@ti.com>, Daniel Mack <zonque@gmail.com>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Daniel Mack <zonque@gmail.com>,
+	Felipe Balbi <balbi@ti.com>,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: gadget: f_midi: fix MIDI Streaming descriptor
- lengths
-Message-ID: <Z5uyacORwkWDbqYm-jkeeping@inmusicbrands.com>
-References: <20250129160520.2485991-1-jkeeping@inmusicbrands.com>
- <871pwl7evv.wl-tiwai@suse.de>
- <Z5pl96d1OCF0RaCe-jkeeping@inmusicbrands.com>
- <87sep060f4.wl-tiwai@suse.de>
- <Z5tbealYSvl7S72l-jkeeping@inmusicbrands.com>
- <87o6zo5wco.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87o6zo5wco.wl-tiwai@suse.de>
-X-ClientProxiedBy: LO2P123CA0005.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:a6::17) To MW4PR08MB8282.namprd08.prod.outlook.com
+Subject: [PATCH v2] usb: gadget: f_midi: fix MIDI Streaming descriptor lengths
+Date: Thu, 30 Jan 2025 19:50:34 +0000
+Message-ID: <20250130195035.3883857-1-jkeeping@inmusicbrands.com>
+X-Mailer: git-send-email 2.48.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: LO4P123CA0563.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:33b::11) To MW4PR08MB8282.namprd08.prod.outlook.com
  (2603:10b6:303:1bd::18)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -89,283 +85,129 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|BL3PR08MB7396:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9da3ead8-48bb-460a-546b-08dd4150f2a6
+X-MS-TrafficTypeDiagnostic: MW4PR08MB8282:EE_|BN8PR08MB6241:EE_
+X-MS-Office365-Filtering-Correlation-Id: 813f4e3f-5100-4f91-e216-08dd416764b8
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|7416014|52116014|376014|1800799024|38350700014;
+	BCL:0;ARA:13230040|366016|7416014|376014|52116014|1800799024|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?FbrFgzfyc390dsVwY+5j9Q/ZBke9hWpvIz8GcV6KR2a+JRvTLfl1jFBLhSsY?=
- =?us-ascii?Q?X9pWthfVc5EMdlPFhb2fvf8JE1Tx2E5asqAf3pTx0oRXx76wbLQYmGcy8jkj?=
- =?us-ascii?Q?+TzyqzRbGFySuARG24XMp8yPiu6AKQC5twULgtyTQEGeHC/gY3y3TItHPQ4e?=
- =?us-ascii?Q?K71DbD68mRglFgYmxViEi+ZDShAkJcT+HpCfmnu4qZ0Bvor1PAkvO0A9lBQM?=
- =?us-ascii?Q?FHwQhY9EuDBQxsrNIFAPsudaXcYfEpVtyEC3H/K87n/zaunPh5AblEGAozH8?=
- =?us-ascii?Q?Vzy0MHdEYhGi2fhCN5hJ7qDptrboZYOAYpRNoqeH3RYyqmK8exOT/SeyxvWS?=
- =?us-ascii?Q?KWkSGifHSkKGbvD1wn5DHbPAjs7HkQXWdHXjUWFTjcZ7pLK+uc+CJm6WXG2M?=
- =?us-ascii?Q?1ScUgJ0IehR8RkZ/b/lGzXD0HzoeeiOZZAn2HJPpb9Qh17uwVOly6sGboe18?=
- =?us-ascii?Q?iji8+Cmtokg4GUIvVL/V5Zp59OJoF+Rf91gHIEyP8Wbm708fipwcCkPsN8UE?=
- =?us-ascii?Q?VTdcMLMFzPwhjDO1zK4DkIIoH29JJRypEKiHFV0ewuesPUOWHBwylCgpzxd5?=
- =?us-ascii?Q?aYKiBztiDsLawDh8ehkrxpMBDU62qwHAK1GBtakdxxmXDDXdI+UzArKx4xY7?=
- =?us-ascii?Q?bfgTe6WG7k5LVDTwWect/Qa2XpgpiXVvrtolScfInnPm9WCan+5OAY1tx3Bs?=
- =?us-ascii?Q?90wva77QzEMb9+4/JTJBsMykLA9Vov4Ms049G7NyORGfAUuwdrBBQPkF1lRE?=
- =?us-ascii?Q?FBVbX2kKqspSnj2KCgHT8u+y4x5G1EDjg2z1IKr9yyy1fOK1xkLN0TahvZt3?=
- =?us-ascii?Q?2k7XWpl4vXxPCqjldHxx6VDeisAa6Y8ipQe15Y+mdYKdHatwd0PjzotLi3xb?=
- =?us-ascii?Q?iR76b0+Tqzvih18+ATCPduzFWrUJF3snX3hg17v6x7XgM9gaitWUJ/wMK9JJ?=
- =?us-ascii?Q?Yca0TcGWpaSxMsPZ6idmQDVYL0jU0aRC0Et6bl+4u3aDdkeHCFRCQYzOl7hx?=
- =?us-ascii?Q?0IyaZ0a6Jj1MmYE3Iqocv6umBWQ8JGDuB0VGfrlOG34YarBYZlYidigrUg1J?=
- =?us-ascii?Q?o89bXz+OYQBWq9O7ok/KjbVgK5hqQJKKJz+dgTMi5Oql1C/4XAwAjHlJj2ME?=
- =?us-ascii?Q?8aP9Zj5YMTqOY6lepHsaEb+Ea9tDvXndqVSL+bJ1tVmUinGLyxzPPIlP7Ixy?=
- =?us-ascii?Q?crOhVTG5S8FXVjsuUpktAKKizO/x5w+opc6Yii/g4/QjsXgPh3qDgb4y1t68?=
- =?us-ascii?Q?yUollgByzE8rJc85AMiO+NZTt9aF4vt1fkWfkUxoVR4pL98BVfjRN+YyeD+n?=
- =?us-ascii?Q?PGFLlKDPenEhYw2UqDewWf73XzJtdiJpQe70Bfry/RggFUna+Ak5S+CWj8Fb?=
- =?us-ascii?Q?Dp/h8dhGZ+kYj0iFR+SLYSNIntSsZ2Jbe7e/ROZ4emzOgQAe3Mb7i1A8jaIy?=
- =?us-ascii?Q?U2eNL3I6Q8a6/j20ummCI5fUUK7y8MdT?=
+	=?us-ascii?Q?AvK3SbTus70zSKbpykgyxIf/yqyMiUlogAmGwEpq1RNF2OWlT2xP+EEKPRvr?=
+ =?us-ascii?Q?uXwVXy+1fH1U6QVGSEJ+sS5tnXbLxmxHocN2ZIDL1wzCkkhOL2aN8dNVRf5O?=
+ =?us-ascii?Q?DuBrEtgjb7eW8J0hxJKPNHDk61qHLxrGXxAPF1Z9/hnTUJYOv2KbIObaxOS+?=
+ =?us-ascii?Q?wzsKyJ1EHjSKYSY+zRM5uEMgggt+Mb+7m0v4QDNncpEK9bEfXGvR4hLQzGC0?=
+ =?us-ascii?Q?NqwRhlzXGrnzTjkzn75tkjAwLc0TTTkW1eT4SL9CpsXubuJWcyXNa+nju+kx?=
+ =?us-ascii?Q?w4DSiXWfxkdPbdRb0/xrW+/pxxChLQqs0yjeLr8HStRqaQkJ351zfBa6W2Nl?=
+ =?us-ascii?Q?rWRTNNOIsaJTQai2d1TT6gq41VsqQpfi4HT4HGXqcgdvGuSDalHJHFvWdQp9?=
+ =?us-ascii?Q?nzbnf4VjVZqAAKlUM8HlSbuwqm6M0OjtLW7cl15dbGGuRkytmpx/Aqe5HHn/?=
+ =?us-ascii?Q?2wfKzkYcaQIwRjpTCO4qplYE9jtNDuQmixazMN1cMQT0/qrBODQWfrVl+PnO?=
+ =?us-ascii?Q?GEZSbFdZpPrfZAKq7oDM04Hy1aikMCOtpJl/gT6sEJozmq+xZ/Rh2RAVSdJV?=
+ =?us-ascii?Q?vvpnNP0ensuxllCIPiKr/kXf3Q7CbK6CNTc0EisAta+a+KDe1WAFwdQfjzNT?=
+ =?us-ascii?Q?3WVk5+fx6z4Vg7UmtZ2cCPVHo8bZqdpKK6/Zz3lK/rz4GmjXqwqQHf4BVZYS?=
+ =?us-ascii?Q?Md0n9mDdrHN55VUB4HUfUSMowmLkUvT0OjPmzmFn9s5RgOMksMI/OZ2ecMBf?=
+ =?us-ascii?Q?y4NdgEMzeDXSu6X9eE1N6OdCvcHL55IEYGTmAuNhUJ4Feo4p892kHKC0iECw?=
+ =?us-ascii?Q?VgYh+afksB2uGTnsvB7BGRI/cJWxyBv7qqs6+0HXy/ge5yoMrIoxgIFu98kE?=
+ =?us-ascii?Q?ox8hw760PJRdOc+7KR/AocazRPi4iM/lFOnmoLvOA8kwguxaIR4ddltmCiTY?=
+ =?us-ascii?Q?C/Q6H5Unj28VZ+AGfj/l7pwWalZp9P0hg/BpSxvu+Mq9VUWpgXzqmG4Qovja?=
+ =?us-ascii?Q?We8hb4iUGtlD32fKqquXLUqqJANgDa/DiY79CaHHdC2U1Pf2V6GjG7Cnvi/6?=
+ =?us-ascii?Q?ORxa0598NdTqmHtCrdnJrcs2rsXZ24mlY73Zff2zktU7GEYqopBZ4WyUTrAY?=
+ =?us-ascii?Q?6+PILD149mUChvT/SHsxJnADTicskauV6BWtDHQa59EdzW0GWdIlDzQugNsC?=
+ =?us-ascii?Q?vBGRpJmUUoV9JQnmwZ5yvjlVm2R9aw7u0euUKoHUqyUMga4dHW1PT4Dd+R8I?=
+ =?us-ascii?Q?zhFugPugE6L/F1rFqfqie8IF7+yU6WMK3pdXS8/bzFaiOq8t3bBX9CnafEWP?=
+ =?us-ascii?Q?PxgtGSD0eTD71sxJe4WS2vS9aRWdr1/a/uIywIoSBZT6FgtC/pvFSY37/R3v?=
+ =?us-ascii?Q?18FNkCoYuqWs40imF9RR6E+oOopPbDMuxswH+zbXrKPCeaxPTi/Do41M21cu?=
+ =?us-ascii?Q?xVFm8pKT05ZR0zAuniAvmDlLubL6Te0D?=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(52116014)(376014)(1800799024)(38350700014);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR08MB8282.namprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(52116014)(1800799024)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?16kw9g9Ah1K03iv+xUiRpP6gCf0Qff80l/c6jcCBAsTesUG2cHdHcXk3S0BT?=
- =?us-ascii?Q?ioLZAW+Lo1DuPYnNOENl20NydFxWYpqeBHcZFlvToL63dq0HMOhtBkCJFXIx?=
- =?us-ascii?Q?JnJ4FQMttf8JcBkJeJS7dI7bgfcOeA4O5lielRADcVu3eZjMjW6e2Ue406OD?=
- =?us-ascii?Q?TMGkRc1jeb6C+2NIxGOUeu9QaujQkPtjhImvdp29LyKP1nkergYlteAuOnX5?=
- =?us-ascii?Q?1d1G7Heo0anmxVd6Y7nv0zG800rTwdaIaivIhBnHbmvAnhUnTmFt5xxkWC46?=
- =?us-ascii?Q?iHJe0YOPc9D966tizJva0ORCYX8F+hpR4jFwMHjt36MyPacK9yP7MUJLS2pF?=
- =?us-ascii?Q?2+OzBrkLZWZ7IV7Yqdo7uuNiXLB1BiNp3ugTWvv9aQQWvggeJn43JYXPwNyv?=
- =?us-ascii?Q?afFHbkPU5MWY2vqI4FNxVXS20DmeOKEpT/ftasB8iWh/9deDb0/0Dk9hEgUJ?=
- =?us-ascii?Q?440YPO8DY763mws5/u9gICNmlsBvhS/KDSyEpaient7Si9Y4VEkkwge2cnC5?=
- =?us-ascii?Q?WZlcG4fU3jzcibo6S6saODi+VkEFyVBxtEJnprmSu9Pau2pu8P7Bq4PB7fpu?=
- =?us-ascii?Q?DZC1G69jd1f5mrbUEvSeiK8ZXYwxiPYRCW92TqipTbkGJWaIoHTzO87plz83?=
- =?us-ascii?Q?8ya6hedKE8YMFx5N11Exgy+yFCKgIozHo0caecwJJxbKDaPqPRAWJ5EqNq8w?=
- =?us-ascii?Q?vNNM5xts79rDkl0wNRmX8WscZoTJfeP4K4W6tDtgJdyiU4ZxzEhzKXcRMzgL?=
- =?us-ascii?Q?wdgzqOfjoYU9e/3gecY4LFSgQ6O/0cNOctT1w/QaXAvmFhnE1nt2WriDZ+H1?=
- =?us-ascii?Q?NvykcQYS0eniSAOX93cm63gh9vZV8RXzr1IfVyUwxIqzOZ1uWMrbtPHd2mal?=
- =?us-ascii?Q?ICy9Tb3PTeR8BP3P54fi+b/HDSW6lq6fUxHhiac3aoQkKgIB1w2DWzoAgKR1?=
- =?us-ascii?Q?eFlhODjCjnuZZqO9kqW6e/25h/aSfDL6fUwp7g0tcAY8BtyW+xjCeF17x1hQ?=
- =?us-ascii?Q?vlKu5SYyn70EnfeKZJvBe/OkLnQoRap7LnFtUaxcJVLikTxupzT5QjYgGZlI?=
- =?us-ascii?Q?jrO09xLTatKYEdf90ET5XFkI4aZ6+ibUDCdWsSl5GbVIjSx/wPEiGqVKz+tT?=
- =?us-ascii?Q?JZjcgBA/BpTNSJHu8L8/6W5CUA8osM6EdWVFZSH1SnBQRSMwTjldetq9LsNQ?=
- =?us-ascii?Q?c4vymcITABav118XIoWZ6dI8BOIZzLXSHDt+XVcN6LJLvGtQacezT6wHry5q?=
- =?us-ascii?Q?L5yX6kFfZURX/sb2DTU+6K50kjzztZncnZN3nA7gzpFqIPgam1Ai9YtTRHAU?=
- =?us-ascii?Q?kHpsWLu9stJRWfO1qqw6/lV91P6EioTs/Z+W70b2hXloWrZ2iLC98vDyx5vQ?=
- =?us-ascii?Q?No+kY3DttZydy7z089eMyqOHHgjbIb6ad7dVt5IilZJd2NRovdQy5VLB2vf8?=
- =?us-ascii?Q?jJJKcwZrmjsighZaofY+xXOKjJ6H/4Ak9bFqrrPeAAz4X9OrLhhi2uDzaKeO?=
- =?us-ascii?Q?wzuj+3gRxoBAcYoU4A+2RPeD5OaM/pPca8UzK/ykWnn3o550zxt0daVOII7R?=
- =?us-ascii?Q?Z+r766UCA1FYOtYGO8w80jUZaS1+36fbpBLpuLYe8VHp1YwrM9nOe8UBwuj1?=
- =?us-ascii?Q?5g=3D=3D?=
+	=?us-ascii?Q?S/krhOhodnR5MUPFZCV7COAdaPold8GsCdj5E7TcDIAy2C9jCE0umnsHxw6J?=
+ =?us-ascii?Q?ptG32bo25c6+l4OQOb96ySyZ+g2RdSvb7GZiKbM5MKdPz8HWoeg1yS+zXh2P?=
+ =?us-ascii?Q?Ujj0hvr7Ypio6b1d2n0v0UBPsJliR8R/u1eKB1LqCVgzytbazEtoCSwMaXj8?=
+ =?us-ascii?Q?x/YQ1HiXUwotbESi4lHAWeoLGmIbwle8aycrQemLnHaiUrKJWJPFIR/fPaEd?=
+ =?us-ascii?Q?9EKaCCRBPx89OCS54tjo8tjOP5ZA0yWbJuxSFp7LxLtv+jz5fzCZhAtAbZT/?=
+ =?us-ascii?Q?kLnMQTK26uywHkcSV5pjM30q1kFu/iWu/zNRydaOi/JGzJw7wbCMb+UWH1fB?=
+ =?us-ascii?Q?LqvqC2cU/WXCr41Alb6FYwPQ6Y/w/aQIr7PDQS6MzRNQuryhZ2qPs3W1EUKj?=
+ =?us-ascii?Q?2q6L0Cl6UaCSJNvM8DB03xSex33854bOsTwP2b7pJpQykEEPtCS7AWJvUnr9?=
+ =?us-ascii?Q?Bf6moUYVhD/F4S6w82tZA5G200ZNFuMffrlemkNs6iQLmN4jsYLuyJ9aB6pb?=
+ =?us-ascii?Q?/u5KqRKlxRuMFM8JsRFOFkSfFiP4c2gymkaNEtAiNYTLPHfu/PWRXD22ZhCZ?=
+ =?us-ascii?Q?OekXlmEjDlTXltGccOJpab3GhHaD6l/8DY3AvyKQyR6eYCnx5/plU+Hl3Qbj?=
+ =?us-ascii?Q?nuXeNnhwbn275T+Q/XplO0pDxr/4rQV8nLi6jsQY8mFtjL8XdwNnnVJHKM7b?=
+ =?us-ascii?Q?ghcf6DricYH6d/rnlPg8t7C7DqFD7moxzTxVYUXqXASW1V8AwaqFCurh6D8U?=
+ =?us-ascii?Q?8HlL9Kxisi2tR9GXDWBDAtttxYGsI1q3aUeiJId/oYbXz1iWmLJHEBZ6yFuZ?=
+ =?us-ascii?Q?HTggBh5ZLMq2aZi7bS3SXYuGQC7ENLVXuillG9nO3wjDyJrjVMtaAMK/H16g?=
+ =?us-ascii?Q?uG8M8TnG7TTyPOoCp9pMtGSjgFDPT/tGsLcSH4uPs7wzH1AzaBB2J9QlFu2G?=
+ =?us-ascii?Q?xIcXzMhjs6dm1hRh0lOEhHLjsX3PnvkWas7KTN5xRzvGaEozMgbtpUi0/E8s?=
+ =?us-ascii?Q?qq+062ObWQYznNhLkNbrvPGX9zr8xn7GFuIPL2Azr0BOAZ2Zk8E/uQqQ9Qv5?=
+ =?us-ascii?Q?BdfKI0QNjZtO+N227ZHnw6gXDwGZxg9I1o+ijkYUtuQrkOFEaSqsn6h5ghgH?=
+ =?us-ascii?Q?8/U6OnYfuHTFO8g7ljFSzTbNz3YVX6c1bUxLJDc1T81sNWu4Q98IQLLVbit5?=
+ =?us-ascii?Q?rHc07dm24mDgdAdxCRx/UEL8/ADd3nzZX5/o1oIN/EFlhpyeK8tkgH5Iyq6A?=
+ =?us-ascii?Q?361WhhpT2mE/vGgMFaYFVmUWfdxvfHlMxHnPgZKstV5D2i9zbX5OAMtOqzSq?=
+ =?us-ascii?Q?JZ38R6YIM5+cTnn0pmKq9jE4D+dyJ+zFgZiyknm62TUI5VF82DEX/ek2pu91?=
+ =?us-ascii?Q?fLAxq0HYQf7oyaj+dH+DMziiohP2tH5VUQqrWFkN/x1d6UWCGzhqLsUlL9pc?=
+ =?us-ascii?Q?prMuAQ7TWM2OjKD/najKV2naJ4gJcL7+K1knC2cPElT9n8NXmcW9Q9rajNvO?=
+ =?us-ascii?Q?I59UnDvsJ89FL9rurMbVCKQQM3mKdSQD9pKR7uihJtW6CIz9n8hSzHTaKJK9?=
+ =?us-ascii?Q?AN/4lUMyPFTcc6KPI05RmJ6rpU4lEFbkVQNZhXWYY1G82OPdQ7IY1Ctv2TMR?=
+ =?us-ascii?Q?iQ=3D=3D?=
 X-OriginatorOrg: inmusicbrands.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9da3ead8-48bb-460a-546b-08dd4150f2a6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 813f4e3f-5100-4f91-e216-08dd416764b8
 X-MS-Exchange-CrossTenant-AuthSource: MW4PR08MB8282.namprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2025 17:10:08.2251
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jan 2025 19:50:48.4788
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 24507e43-fb7c-4b60-ab03-f78fafaf0a65
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: NrPDYhXDedfi8fJsZDGw9e/y4t1t3gEi64o7nRe9ZKVqpdJJOf3M+8r5h/t8DwEbvwdwXKlQEJU9tZSpKzXLMvk+9njACFMdgLjs3/RiItE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR08MB7396
+X-MS-Exchange-CrossTenant-UserPrincipalName: H00H0Q58vMMsixfFPtvpkYH47bComlq2kq50dP7NJJRt+uJQariFlOvrmjvzpMFc8taIEdV6neheXs7mJbaUdDN4LyVeBtNLMWe8WTKIp20=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN8PR08MB6241
 
-On Thu, Jan 30, 2025 at 01:17:59PM +0100, Takashi Iwai wrote:
-> On Thu, 30 Jan 2025 11:59:05 +0100,
-> John Keeping wrote:
-> > 
-> > On Thu, Jan 30, 2025 at 11:50:07AM +0100, Takashi Iwai wrote:
-> > > On Wed, 29 Jan 2025 18:31:35 +0100,
-> > > John Keeping wrote:
-> > > > 
-> > > > On Wed, Jan 29, 2025 at 05:40:04PM +0100, Takashi Iwai wrote:
-> > > > > On Wed, 29 Jan 2025 17:05:19 +0100,
-> > > > > John Keeping wrote:
-> > > > > > 
-> > > > > > In the two loops before setting the MIDIStreaming descriptors,
-> > > > > > ms_in_desc.baAssocJackID[] has entries written for "in_ports" values and
-> > > > > > ms_out_desc.baAssocJackID[] has entries written for "out_ports" values.
-> > > > > > But the counts and lengths are set the other way round in the
-> > > > > > descriptors.
-> > > > > > 
-> > > > > > Fix the descriptors so that the bNumEmbMIDIJack values and the
-> > > > > > descriptor lengths match the number of entries populated in the trailing
-> > > > > > arrays.
-> > > > > 
-> > > > > Are you sure that it's a correct change?
-> > > > > 
-> > > > > IIUC, the in_ports and out_ports parameters are for external IN and
-> > > > > OUT jacks, where an external OUT jack is connected to an embedded IN
-> > > > > jack, and an external IN jack is connected to an embedded OUT jack.
-> > > > 
-> > > > I think it depends how the in_ports and out_ports values in configfs are
-> > > > interpreted.  However, the case where in_ports != out_ports has been
-> > > > broken since these files were added!
-> > > > 
-> > > > Without this change, setting in_ports=4 out_ports=2 we end up with:
-> > > > 
-> > > >       Endpoint Descriptor:
-> > > >         [...]
-> > > >         bEndpointAddress     0x01  EP 1 OUT
-> > > >         [...]
-> > > >         MIDIStreaming Endpoint Descriptor:
-> > > >           bLength                 8
-> > > >           bDescriptorType        37
-> > > >           bDescriptorSubtype      1 (Invalid)
-> > > >           bNumEmbMIDIJack         4
-> > > >           baAssocJackID( 0)       9
-> > > >           baAssocJackID( 1)      11
-> > > >           baAssocJackID( 2)       9
-> > > >           baAssocJackID( 3)       0
-> > > >       Endpoint Descriptor:
-> > > >         [...]
-> > > >         bEndpointAddress     0x81  EP 1 IN
-> > > >         [...]
-> > > >         MIDIStreaming Endpoint Descriptor:
-> > > >           bLength                 6
-> > > >           bDescriptorType        37
-> > > >           bDescriptorSubtype      1 (Invalid)
-> > > >           bNumEmbMIDIJack         2
-> > > >           baAssocJackID( 0)       2
-> > > >           baAssocJackID( 1)       4
-> > > > 
-> > > > Note that baAssocJackID values 2 and 3 on the OUT endpoint are wrong.
-> > > > 
-> > > > From the same config, the jack definitions are:
-> > > > 
-> > > > 	1:  IN  External
-> > > > 	2:  OUT Embedded, source 1
-> > > > 	3:  IN  External
-> > > > 	4:  OUT Embedded, source 3
-> > > > 	5:  IN  External
-> > > > 	6:  OUT Embedded, source 5
-> > > > 	7:  IN  External
-> > > > 	8:  OUT Embedded, source 7
-> > > > 
-> > > > 	9:  IN  Embedded
-> > > > 	10: OUT External, source 9
-> > > > 	11: IN  Embedded
-> > > > 	12: OUT External, source 11
-> > > > 
-> > > > So it seems that the first 2 entries in each endpoint list are correct.
-> > > > For the OUT endpoint, jacks 9 and 11 are embedded IN jacks and for the
-> > > > IN endpoint, jacks 2 and 4 are embedded OUT jacks.
-> > > > 
-> > > > The problem is that the OUT endpoint lists two extra invalid jack IDs
-> > > > and the IN endpoint should list jacks 6 and 8 but does not.
-> > > > 
-> > > > After applying this patch, the endpoint descriptors for the same config
-> > > > are:
-> > > > 
-> > > >       Endpoint Descriptor:
-> > > >         [...]
-> > > >         bEndpointAddress     0x01  EP 1 OUT
-> > > >         [...]
-> > > >         MIDIStreaming Endpoint Descriptor:
-> > > >           bLength                 6
-> > > >           bDescriptorType        37
-> > > >           bDescriptorSubtype      1 (Invalid)
-> > > >           bNumEmbMIDIJack         2
-> > > >           baAssocJackID( 0)       9
-> > > >           baAssocJackID( 1)      11
-> > > >       Endpoint Descriptor:
-> > > >         [...]
-> > > >         bEndpointAddress     0x81  EP 1 IN
-> > > >         [...]
-> > > >         MIDIStreaming Endpoint Descriptor:
-> > > >           bLength                 8
-> > > >           bDescriptorType        37
-> > > >           bDescriptorSubtype      1 (Invalid)
-> > > >           bNumEmbMIDIJack         4
-> > > >           baAssocJackID( 0)       2
-> > > >           baAssocJackID( 1)       4
-> > > >           baAssocJackID( 2)       6
-> > > >           baAssocJackID( 3)       8
-> > > > 
-> > > > Which lists all the jack IDs where they should be.
-> > > 
-> > > Hmm, I don't get your point.  The embedded IN is paired with the
-> > > external OUT.  That's the intended behavior, no?
-> > 
-> > Yes, all the endpoint assignments are correct - when they appear in the
-> > lists!
-> > 
-> > The issue is setting bNumEmbMIDIJack and bLength in the MIDIStreaming
-> > Endpoint Descriptors.  Without this patch these are set the wrong way
-> > round so either some ports do not appear or there are bogus entries
-> > containing uninitialized stack memory.
-> 
-> OK, now point taken.  The main problem here is the definition of
-> in_port and out_ports aren't really clear.  If in_ports really
-> corresponds to external IN jacks, then we may correct rather like:
-> 
-> --- a/drivers/usb/gadget/function/f_midi.c
-> +++ b/drivers/usb/gadget/function/f_midi.c
-> @@ -968,7 +968,7 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
->  		midi_function[i++] = (struct usb_descriptor_header *) out_emb;
->  
->  		/* link it to the endpoint */
-> -		ms_in_desc.baAssocJackID[n] = out_emb->bJackID;
-> +		ms_out_desc.baAssocJackID[n] = out_emb->bJackID;
->  	}
->  
->  	/* configure the external OUT jacks, each linked to an embedded IN jack */
-> @@ -996,7 +996,7 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
->  		midi_function[i++] = (struct usb_descriptor_header *) out_ext;
->  
->  		/* link it to the endpoint */
-> -		ms_out_desc.baAssocJackID[n] = in_emb->bJackID;
-> +		ms_in_desc.baAssocJackID[n] = in_emb->bJackID;
->  	}
->  
->  	/* configure the endpoint descriptors ... */
-> 
-> OTOH, the current code will make the actual appearance other way
-> round, likely more confusing.  So I believe your fix makes sense.
+While the MIDI jacks are configured correctly, and the MIDIStreaming
+endpoint descriptors are filled with the correct information,
+bNumEmbMIDIJack and bLength are set incorrectly in these descriptors.
 
-It always takes me a few minutes to get used to working in device-side
-USB because IN and OUT refer to the host's view.
+This does not matter when the numbers of in and out ports are equal, but
+when they differ the host will receive broken descriptors with
+uninitialized stack memory leaking into the descriptor for whichever
+value is smaller.
 
-But I think "in_ports" and "out_ports" here are consistent with that.
-"in_ports" are the ports that send MIDI into the USB host, and
-"out_ports" are the ports receiving MIDI from the USB host over an OUT
-endpoint.
+The precise meaning of "in" and "out" in the port counts is not clearly
+defined and can be confusing.  But elsewhere the driver consistently
+uses this to match the USB meaning of IN and OUT viewed from the host,
+so that "in" ports send data to the host and "out" ports receive data
+from it.
 
-> But it'd be helpful to extend the description a bit more to clarify
-> this confusion.  I guess this confusion came from the association
-> between the embedded and external jacks, and the patch corrects it.
+Cc: stable@vger.kernel.org
+Fixes: c8933c3f79568 ("USB: gadget: f_midi: allow a dynamic number of input and output ports")
+Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
+---
+v2:
+- Rewrite commit message to hopefully be clearer about what is going on
+  with the meaning of in/out
 
-I'll rewrite the commit message to include some more of this context and
-send a v2 later today or tomorrow.
+ drivers/usb/gadget/function/f_midi.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
+diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+index 837fcdfa3840f..6cc3d86cb4774 100644
+--- a/drivers/usb/gadget/function/f_midi.c
++++ b/drivers/usb/gadget/function/f_midi.c
+@@ -1000,11 +1000,11 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
+ 	}
+ 
+ 	/* configure the endpoint descriptors ... */
+-	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
+-	ms_out_desc.bNumEmbMIDIJack = midi->in_ports;
++	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
++	ms_out_desc.bNumEmbMIDIJack = midi->out_ports;
+ 
+-	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
+-	ms_in_desc.bNumEmbMIDIJack = midi->out_ports;
++	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
++	ms_in_desc.bNumEmbMIDIJack = midi->in_ports;
+ 
+ 	/* ... and add them to the list */
+ 	endpoint_descriptor_index = i;
+-- 
+2.48.1
 
-Regards,
-John
-
-> > > > > > Cc: stable@vger.kernel.org
-> > > > > > Fixes: c8933c3f79568 ("USB: gadget: f_midi: allow a dynamic number of input and output ports")
-> > > > > > Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
-> > > > > > ---
-> > > > > >  drivers/usb/gadget/function/f_midi.c | 8 ++++----
-> > > > > >  1 file changed, 4 insertions(+), 4 deletions(-)
-> > > > > > 
-> > > > > > diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
-> > > > > > index 837fcdfa3840f..6cc3d86cb4774 100644
-> > > > > > --- a/drivers/usb/gadget/function/f_midi.c
-> > > > > > +++ b/drivers/usb/gadget/function/f_midi.c
-> > > > > > @@ -1000,11 +1000,11 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
-> > > > > >  	}
-> > > > > >  
-> > > > > >  	/* configure the endpoint descriptors ... */
-> > > > > > -	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
-> > > > > > -	ms_out_desc.bNumEmbMIDIJack = midi->in_ports;
-> > > > > > +	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
-> > > > > > +	ms_out_desc.bNumEmbMIDIJack = midi->out_ports;
-> > > > > >  
-> > > > > > -	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
-> > > > > > -	ms_in_desc.bNumEmbMIDIJack = midi->out_ports;
-> > > > > > +	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
-> > > > > > +	ms_in_desc.bNumEmbMIDIJack = midi->in_ports;
-> > > > > >  
-> > > > > >  	/* ... and add them to the list */
-> > > > > >  	endpoint_descriptor_index = i;
-> > > > > > -- 
-> > > > > > 2.48.1
-> > > > > > 
-> > > > > > 
 
