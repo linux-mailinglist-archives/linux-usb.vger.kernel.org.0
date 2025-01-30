@@ -1,279 +1,291 @@
-Return-Path: <linux-usb+bounces-19884-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19885-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C66F1A22B13
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 10:59:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5797A22BEF
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 11:50:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7AAAF1888689
-	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 09:59:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DDE7168DA2
+	for <lists+linux-usb@lfdr.de>; Thu, 30 Jan 2025 10:50:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05FC51B87FD;
-	Thu, 30 Jan 2025 09:59:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCD8A1C07DB;
+	Thu, 30 Jan 2025 10:50:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EKPQIAGx"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="hXebBeIl";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hD7VuTgr";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="hXebBeIl";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="hD7VuTgr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02DF119C561;
-	Thu, 30 Jan 2025 09:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 512A51BBBFD;
+	Thu, 30 Jan 2025 10:50:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738231141; cv=none; b=X40aT3cCARc1NrxBQ/rrc1WywST386JylYaCzyQdIVOdrChj+Ta+4PizavEJVy++P9VyE2e2ul4wvoU1cLal0qmsx/syc0hKpsRQo2G/ZH79FnLM0kJHqfPSQ1OrwnyJQw+Sqf/KwL4wKdTwnoZp+YcNOYehb0tAu+HGXtOVDmo=
+	t=1738234220; cv=none; b=J24FgV64a/6761qKeL+LKwvP9iWzaXLSkz1HFS3iPn6FnBzwPpM6BQiGuiKZN6JbSBosVg48ltH17FC0EAnvtv5Igm01cMBH5PQqboVnha8lhreQuvi81Kzmys69NSnpFMx8+9d9Lxcj0RzB38GdEL4XG0NQJhjTQvJicHpWyq8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738231141; c=relaxed/simple;
-	bh=WJ5CPo2cL6txpBAqM10YCNfNMWyNtls9jEKPFLVyd+Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ht2kWxEke6HmlDd01ImtmRb7MpkC2L31c7PZdDrdqz1IPvMBrvgoUqn4jU40ArN4Un1CFJDBaDMvRGVArTYx0n4NDlCCsbx9izZnIaAbIUe27JUBb/KEonTaHx2FSgGUnV5CxJ61ETU0EOd2G0jEIsVX3h6NErFZSQ77uOr+e20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EKPQIAGx; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-216401de828so8935695ad.3;
-        Thu, 30 Jan 2025 01:58:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738231139; x=1738835939; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5G4otVTYC+tig0BY8ynh8SXx+gzdwmf+0n3cW3Fp4Mc=;
-        b=EKPQIAGxnwTBS6T/p2JQxQNZLwWdfDjIlKA5lnocofPX5Dw3RltriZU5tCUSU9DQbk
-         OjdtzAzWzPaVTyQNcyJc8alLFHSkXxnP8qDYaC1Y7ymnqsin8uToG8ZGMAyRZ/DEA3u+
-         BwEDc4KC/eif4gfQoIisGlB4saUBg3gWlQGloxPCNFLIXeeX5ya6SYGAOJb4JhYDK2H2
-         3JzwgXbSQpdtVsAbJYXuZ9H720EvwH+tUJE3FVqCfpTfH7UNdBhNU5bjclZVlJeIdsFq
-         tVO+4T3ccKIljCJKyO1OHgPMbIJfKtFy+EJhANh9Jg+YmErZyn6quUghPNCZNh5R0ydE
-         gftg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738231139; x=1738835939;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5G4otVTYC+tig0BY8ynh8SXx+gzdwmf+0n3cW3Fp4Mc=;
-        b=snq++WGSRIqhBtoRrFunfZuYjA5sOzHH5RT2YK/CiYY4SaGcDjwMKo5eQ7TrVNw8hJ
-         3Fskn/jA1oua6tvVPaLm24a+tocr1PZNf0vK4B4FFOia33UMg8+thAa1U1K0tFjjHKZp
-         wyZhulUDv8R9M0bFMAhpsEUkuNOxino6ngI2dVZfuNpwuPv4BiMgqwldoNiKr1nwPvlB
-         hI1sBWdkOKmpryWKtjm2BtUnLz5EODv5jwFdhnFTo+uHR5uWJaCAHGBTpcQfJAhBbnp8
-         Kw1rrlr8fmEUy1UHiobpZtwXpO30WwVfOndpdJSaK426mDQGGFCg6BuxydFM0392J1Nw
-         FOIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUz3+SD9mUHEHKQEyzN+fQQa9mve0CXh15e2GZmoffA68368KFk9bMid/dioAASll0jM8CCZyIrdxAc@vger.kernel.org, AJvYcCW7rQ3VYnXVeLLUAX3slT80SBpisLVMpmjQsRjofvLwsF37XG62cv2firK6PgXp6BWaHAt1KOF92TnUDwA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjiXeNVwSco3+mUu2YVbTZ3ZMc1zxCJq53ymBGgUjhouRIKw7E
-	VIox3VTikjCq+lr9dx2gregMVjfmVQoc3KgkgyHm4vvdwOyM1f5o
-X-Gm-Gg: ASbGnctJrLHSIsCUAgskne6GtpUaw/kVqfJ2pTd/KrPHanv/S02aB6D81Btbf7/k+Gq
-	Ovq+OnZtUBL0MTwdriPn9frMuYgFrc/H5ATTgZm9t3/3lhUUnnxLApKQbbpGIWt3TnbUpgvWt36
-	CgTuMrFahpi099OTHqsQzDdnTERB9q2KemScd0Jhy1w0mjToDwvn+qPDdK89O4okWnBR5gItCgJ
-	+q9Tb44lvI1nEYRHWk6IYgs+BmWksGJo1sK73Y1HS3lY/CZU9t2Bk/IprmSkD/ex/2fgw4OfTS1
-	UmW9tJKYEZ7dxLDI
-X-Google-Smtp-Source: AGHT+IHoIUDTjjorHNG489vANXesx0FdgqbGTBXMSlyCs6GX5oc2Mcf0DJbhyZRVVvAbBlCfmNBoLA==
-X-Received: by 2002:a17:903:298d:b0:216:3436:b87e with SMTP id d9443c01a7336-21dd7dff854mr121469835ad.44.1738231139177;
-        Thu, 30 Jan 2025 01:58:59 -0800 (PST)
-Received: from ubuntu.. ([175.141.178.229])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21de3303a8fsm10275105ad.197.2025.01.30.01.58.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 30 Jan 2025 01:58:58 -0800 (PST)
-From: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
-To: mika.westerberg@linux.intel.com
-Cc: andreas.noever@gmail.com,
-	michael.jamet@intel.com,
-	YehezkelShB@gmail.com,
+	s=arc-20240116; t=1738234220; c=relaxed/simple;
+	bh=9tnIPb79lowIP2B4WO5y3JY64yOb0cXO4zNmsAdvlvI=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ca5wc1afZT/hrEsBm7SE08b7X8ITNx3zmfnChq0BzJZDF5odyjlXuXsLmLFKU8p1cOm34ouiXmXMaK5jFACJOaDKqpNXjp9ugcV8y2qeQLLI6SNyT9inyOAV1h7jBKSrRIrQF2LFif3enqrk18xFhta7Cx1zd2cnazJQrWmsZk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=hXebBeIl; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hD7VuTgr; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=hXebBeIl; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=hD7VuTgr; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 6BE571F80F;
+	Thu, 30 Jan 2025 10:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1738234216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gHG1Iw+GcqY7foqXFAxe0roPovyvY6qgmMssLYHu2O8=;
+	b=hXebBeIl7+ccSi3XVKW8u6zZVFR1Eq7ZPxCqDB2msFR3r816BRw9YvqajD/pc3bFLSRULT
+	7MhER/TQSN6AMfMbkymILFhwo5aSt5Vz5KWiMAkUdPMYgnNVf08bsId7iamm2sjGzQ57uN
+	5QH9WDMNk4K5fUD1BZB50PxHF1Xlx7o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1738234216;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gHG1Iw+GcqY7foqXFAxe0roPovyvY6qgmMssLYHu2O8=;
+	b=hD7VuTgr45ZEiBWSmw3eKnHPoNqh6HYievTH8r01AXKuNHZQjmq/8An/ujI30FRi9is4XG
+	9aP4TWrsr1mkiKDw==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1738234216; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gHG1Iw+GcqY7foqXFAxe0roPovyvY6qgmMssLYHu2O8=;
+	b=hXebBeIl7+ccSi3XVKW8u6zZVFR1Eq7ZPxCqDB2msFR3r816BRw9YvqajD/pc3bFLSRULT
+	7MhER/TQSN6AMfMbkymILFhwo5aSt5Vz5KWiMAkUdPMYgnNVf08bsId7iamm2sjGzQ57uN
+	5QH9WDMNk4K5fUD1BZB50PxHF1Xlx7o=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1738234216;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gHG1Iw+GcqY7foqXFAxe0roPovyvY6qgmMssLYHu2O8=;
+	b=hD7VuTgr45ZEiBWSmw3eKnHPoNqh6HYievTH8r01AXKuNHZQjmq/8An/ujI30FRi9is4XG
+	9aP4TWrsr1mkiKDw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 42EF91364B;
+	Thu, 30 Jan 2025 10:50:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id ZAW/D2hZm2fCMAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Thu, 30 Jan 2025 10:50:16 +0000
+Date: Thu, 30 Jan 2025 11:50:07 +0100
+Message-ID: <87sep060f4.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: John Keeping <jkeeping@inmusicbrands.com>
+Cc: Takashi Iwai <tiwai@suse.de>,
 	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mohammad Rahimi <rahimi.mhmmd@gmail.com>
-Subject: [PATCH v2] thunderbolt: Disable Gen 4 Recovery on Asymmetric Transitions
-Date: Thu, 30 Jan 2025 09:51:09 +0000
-Message-ID: <20250130095704.10779-4-rahimi.mhmmd@gmail.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250130095704.10779-1-rahimi.mhmmd@gmail.com>
-References: <20250130095704.10779-1-rahimi.mhmmd@gmail.com>
+	stable@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kees Cook <kees@kernel.org>,
+	Abdul Rahim <abdul.rahim@myyahoo.com>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	Jeff Johnson <quic_jjohnson@quicinc.com>,
+	Felipe Balbi <balbi@ti.com>,
+	Daniel Mack <zonque@gmail.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: gadget: f_midi: fix MIDI Streaming descriptor lengths
+In-Reply-To: <Z5pl96d1OCF0RaCe-jkeeping@inmusicbrands.com>
+References: <20250129160520.2485991-1-jkeeping@inmusicbrands.com>
+	<871pwl7evv.wl-tiwai@suse.de>
+	<Z5pl96d1OCF0RaCe-jkeeping@inmusicbrands.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Score: -3.30
+X-Spamd-Result: default: False [-3.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_ALL(0.00)[];
+	ARC_NA(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[suse.de,vger.kernel.org,linuxfoundation.org,kernel.org,myyahoo.com,pengutronix.de,quicinc.com,ti.com,gmail.com];
+	TO_DN_SOME(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo,suse.de:mid]
+X-Spam-Flag: NO
+X-Spam-Level: 
 
-Updates the Connection Manager to disable the Gen 4 Link Recovery
-flow before transitioning from a Symmetric Link to an Asymmetric
-Link, as specified in recent changes to the USB4 v2 specification.
+On Wed, 29 Jan 2025 18:31:35 +0100,
+John Keeping wrote:
+> 
+> On Wed, Jan 29, 2025 at 05:40:04PM +0100, Takashi Iwai wrote:
+> > On Wed, 29 Jan 2025 17:05:19 +0100,
+> > John Keeping wrote:
+> > > 
+> > > In the two loops before setting the MIDIStreaming descriptors,
+> > > ms_in_desc.baAssocJackID[] has entries written for "in_ports" values and
+> > > ms_out_desc.baAssocJackID[] has entries written for "out_ports" values.
+> > > But the counts and lengths are set the other way round in the
+> > > descriptors.
+> > > 
+> > > Fix the descriptors so that the bNumEmbMIDIJack values and the
+> > > descriptor lengths match the number of entries populated in the trailing
+> > > arrays.
+> > 
+> > Are you sure that it's a correct change?
+> > 
+> > IIUC, the in_ports and out_ports parameters are for external IN and
+> > OUT jacks, where an external OUT jack is connected to an embedded IN
+> > jack, and an external IN jack is connected to an embedded OUT jack.
+> 
+> I think it depends how the in_ports and out_ports values in configfs are
+> interpreted.  However, the case where in_ports != out_ports has been
+> broken since these files were added!
+> 
+> Without this change, setting in_ports=4 out_ports=2 we end up with:
+> 
+>       Endpoint Descriptor:
+>         [...]
+>         bEndpointAddress     0x01  EP 1 OUT
+>         [...]
+>         MIDIStreaming Endpoint Descriptor:
+>           bLength                 8
+>           bDescriptorType        37
+>           bDescriptorSubtype      1 (Invalid)
+>           bNumEmbMIDIJack         4
+>           baAssocJackID( 0)       9
+>           baAssocJackID( 1)      11
+>           baAssocJackID( 2)       9
+>           baAssocJackID( 3)       0
+>       Endpoint Descriptor:
+>         [...]
+>         bEndpointAddress     0x81  EP 1 IN
+>         [...]
+>         MIDIStreaming Endpoint Descriptor:
+>           bLength                 6
+>           bDescriptorType        37
+>           bDescriptorSubtype      1 (Invalid)
+>           bNumEmbMIDIJack         2
+>           baAssocJackID( 0)       2
+>           baAssocJackID( 1)       4
+> 
+> Note that baAssocJackID values 2 and 3 on the OUT endpoint are wrong.
+> 
+> From the same config, the jack definitions are:
+> 
+> 	1:  IN  External
+> 	2:  OUT Embedded, source 1
+> 	3:  IN  External
+> 	4:  OUT Embedded, source 3
+> 	5:  IN  External
+> 	6:  OUT Embedded, source 5
+> 	7:  IN  External
+> 	8:  OUT Embedded, source 7
+> 
+> 	9:  IN  Embedded
+> 	10: OUT External, source 9
+> 	11: IN  Embedded
+> 	12: OUT External, source 11
+> 
+> So it seems that the first 2 entries in each endpoint list are correct.
+> For the OUT endpoint, jacks 9 and 11 are embedded IN jacks and for the
+> IN endpoint, jacks 2 and 4 are embedded OUT jacks.
+> 
+> The problem is that the OUT endpoint lists two extra invalid jack IDs
+> and the IN endpoint should list jacks 6 and 8 but does not.
+> 
+> After applying this patch, the endpoint descriptors for the same config
+> are:
+> 
+>       Endpoint Descriptor:
+>         [...]
+>         bEndpointAddress     0x01  EP 1 OUT
+>         [...]
+>         MIDIStreaming Endpoint Descriptor:
+>           bLength                 6
+>           bDescriptorType        37
+>           bDescriptorSubtype      1 (Invalid)
+>           bNumEmbMIDIJack         2
+>           baAssocJackID( 0)       9
+>           baAssocJackID( 1)      11
+>       Endpoint Descriptor:
+>         [...]
+>         bEndpointAddress     0x81  EP 1 IN
+>         [...]
+>         MIDIStreaming Endpoint Descriptor:
+>           bLength                 8
+>           bDescriptorType        37
+>           bDescriptorSubtype      1 (Invalid)
+>           bNumEmbMIDIJack         4
+>           baAssocJackID( 0)       2
+>           baAssocJackID( 1)       4
+>           baAssocJackID( 2)       6
+>           baAssocJackID( 3)       8
+> 
+> Which lists all the jack IDs where they should be.
 
-According to the "USB4 2.0 ENGINEERING CHANGE NOTICE FORM"
-published in September 2024, the rationale for this change is:
+Hmm, I don't get your point.  The embedded IN is paired with the
+external OUT.  That's the intended behavior, no?
 
-  "Since the default value of the Target Asymmetric Link might be
-  different than Symmetric Link and Gen 4 Link Recovery flow checks
-  this field to make sure it matched the actual Negotiated Link Width,
-  we’re removing the condition for a Disconnect in the Gen 4 Link
-  Recovery flow when Target Asymmetric Link doesn’t match the actual
-  Link width and adding a Connection Manager note to Disable Gen 4 Link
-  Recovery flow before doing Asymmetric Transitions."
 
-Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
----
- drivers/thunderbolt/tb.c      | 28 +++++++++++++++++--
- drivers/thunderbolt/tb.h      |  3 ++
- drivers/thunderbolt/tb_regs.h |  1 +
- drivers/thunderbolt/usb4.c    | 52 +++++++++++++++++++++++++++++++++++
- 4 files changed, 81 insertions(+), 3 deletions(-)
+Takashi
 
-diff --git a/drivers/thunderbolt/tb.c b/drivers/thunderbolt/tb.c
-index a7c6919fbf97..31a8269a5156 100644
---- a/drivers/thunderbolt/tb.c
-+++ b/drivers/thunderbolt/tb.c
-@@ -1013,6 +1013,7 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
- 			     struct tb_port *dst_port, int requested_up,
- 			     int requested_down)
- {
-+	bool link_recovery_up = false, link_recovery_down = false;
- 	bool clx = false, clx_disabled = false, downstream;
- 	struct tb_switch *sw;
- 	struct tb_port *up;
-@@ -1075,15 +1076,29 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
- 			continue;
- 
- 		/*
--		 * Disable CL states before doing any transitions. We
--		 * delayed it until now that we know there is a real
--		 * transition taking place.
-+		 * Disable CL states and Link Recovery flow before doing any
-+		 * transitions. We delayed it until now that we know there is
-+		 * a real transition taking place.
- 		 */
- 		if (!clx_disabled) {
- 			clx = tb_disable_clx(sw);
- 			clx_disabled = true;
- 		}
- 
-+		ret = usb4_port_link_recovery_disable(up);
-+		if (ret < 0) {
-+			tb_port_warn(up, "failed to disable the link recovery\n");
-+			break;
-+		}
-+		link_recovery_up = ret > 0;
-+
-+		ret = usb4_port_link_recovery_disable(down);
-+		if (ret < 0) {
-+			tb_port_warn(down, "failed to disable the link recovery\n");
-+			break;
-+		}
-+		link_recovery_down = ret > 0;
-+
- 		tb_sw_dbg(up->sw, "configuring asymmetric link\n");
- 
- 		/*
-@@ -1091,6 +1106,13 @@ static int tb_configure_asym(struct tb *tb, struct tb_port *src_port,
- 		 * transtion the link into asymmetric now.
- 		 */
- 		ret = tb_switch_set_link_width(up->sw, width_up);
-+
-+		/* Re-enable Link Recovery flow if they were previosly enabled */
-+		if (link_recovery_up)
-+			usb4_port_link_recovery_enable(up);
-+		if (link_recovery_down)
-+			usb4_port_link_recovery_enable(down);
-+
- 		if (ret) {
- 			tb_sw_warn(up->sw, "failed to set link width\n");
- 			break;
-diff --git a/drivers/thunderbolt/tb.h b/drivers/thunderbolt/tb.h
-index ddbf0cd78377..d37d778082fc 100644
---- a/drivers/thunderbolt/tb.h
-+++ b/drivers/thunderbolt/tb.h
-@@ -1332,6 +1332,9 @@ int usb4_port_router_online(struct tb_port *port);
- int usb4_port_enumerate_retimers(struct tb_port *port);
- bool usb4_port_clx_supported(struct tb_port *port);
- 
-+int usb4_port_link_recovery_enable(struct tb_port *port);
-+int usb4_port_link_recovery_disable(struct tb_port *port);
-+
- bool usb4_port_asym_supported(struct tb_port *port);
- int usb4_port_asym_set_link_width(struct tb_port *port, enum tb_link_width width);
- int usb4_port_asym_start(struct tb_port *port);
-diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
-index 4e43b47f9f11..085139e1a958 100644
---- a/drivers/thunderbolt/tb_regs.h
-+++ b/drivers/thunderbolt/tb_regs.h
-@@ -398,6 +398,7 @@ struct tb_regs_port_header {
- #define PORT_CS_19_WOD				BIT(17)
- #define PORT_CS_19_WOU4				BIT(18)
- #define PORT_CS_19_START_ASYM			BIT(24)
-+#define PORT_CS_19_ELR				BIT(31)
- 
- /* Display Port adapter registers */
- #define ADP_DP_CS_0				0x00
-diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
-index e51d01671d8e..99fd6aa1704e 100644
---- a/drivers/thunderbolt/usb4.c
-+++ b/drivers/thunderbolt/usb4.c
-@@ -10,6 +10,7 @@
- #include <linux/delay.h>
- #include <linux/ktime.h>
- #include <linux/units.h>
-+#include <linux/string_helpers.h>
- 
- #include "sb_regs.h"
- #include "tb.h"
-@@ -1518,6 +1519,57 @@ bool usb4_port_clx_supported(struct tb_port *port)
- 	return !!(val & PORT_CS_18_CPS);
- }
- 
-+static int __usb4_port_link_recovery_enable(struct tb_port *port, bool enable)
-+{
-+	bool was_enable;
-+	int ret;
-+	u32 val;
-+
-+	ret = tb_port_read(port, &val, TB_CFG_PORT,
-+			   port->cap_usb4 + PORT_CS_19, 1);
-+	if (ret)
-+		return ret;
-+
-+	was_enable = !!(val & PORT_CS_19_ELR);
-+
-+	if (enable)
-+		val |= PORT_CS_19_ELR;
-+	else
-+		val &= ~PORT_CS_19_ELR;
-+
-+	ret = tb_port_write(port, &val, TB_CFG_PORT,
-+			    port->cap_usb4 + PORT_CS_19, 1);
-+	if (ret)
-+		return ret;
-+
-+	tb_port_dbg(port, "link recovery %s\n", str_enabled_disabled(enable));
-+	return was_enable ? 1 : 0;
-+}
-+
-+/**
-+ * usb4_port_link_recovery_enable() - Enable the Link Recovery
-+ * @port: USB4 port
-+ *
-+ * Enables the Link Recovery for @port.
-+ * Returns -ERRNO on failure, otherwise the previous state of the Link Recovery.
-+ */
-+int usb4_port_link_recovery_enable(struct tb_port *port)
-+{
-+	return __usb4_port_link_recovery_enable(port, true);
-+}
-+
-+/**
-+ * usb4_port_link_recovery_disable() - Disable the Link Recovery
-+ * @port: USB4 port
-+ *
-+ * Disables the Link Recovery for @port.
-+ * Returns -ERRNO on failure, otherwise the previous state of the Link Recovery.
-+ */
-+int usb4_port_link_recovery_disable(struct tb_port *port)
-+{
-+	return __usb4_port_link_recovery_enable(port, false);
-+}
-+
- /**
-  * usb4_port_asym_supported() - If the port supports asymmetric link
-  * @port: USB4 port
--- 
-2.45.2
-
+> 
+> 
+> Regards,
+> John
+> 
+> > > Cc: stable@vger.kernel.org
+> > > Fixes: c8933c3f79568 ("USB: gadget: f_midi: allow a dynamic number of input and output ports")
+> > > Signed-off-by: John Keeping <jkeeping@inmusicbrands.com>
+> > > ---
+> > >  drivers/usb/gadget/function/f_midi.c | 8 ++++----
+> > >  1 file changed, 4 insertions(+), 4 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+> > > index 837fcdfa3840f..6cc3d86cb4774 100644
+> > > --- a/drivers/usb/gadget/function/f_midi.c
+> > > +++ b/drivers/usb/gadget/function/f_midi.c
+> > > @@ -1000,11 +1000,11 @@ static int f_midi_bind(struct usb_configuration *c, struct usb_function *f)
+> > >  	}
+> > >  
+> > >  	/* configure the endpoint descriptors ... */
+> > > -	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
+> > > -	ms_out_desc.bNumEmbMIDIJack = midi->in_ports;
+> > > +	ms_out_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
+> > > +	ms_out_desc.bNumEmbMIDIJack = midi->out_ports;
+> > >  
+> > > -	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->out_ports);
+> > > -	ms_in_desc.bNumEmbMIDIJack = midi->out_ports;
+> > > +	ms_in_desc.bLength = USB_DT_MS_ENDPOINT_SIZE(midi->in_ports);
+> > > +	ms_in_desc.bNumEmbMIDIJack = midi->in_ports;
+> > >  
+> > >  	/* ... and add them to the list */
+> > >  	endpoint_descriptor_index = i;
+> > > -- 
+> > > 2.48.1
+> > > 
+> > > 
 
