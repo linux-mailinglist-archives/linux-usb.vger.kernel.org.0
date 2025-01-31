@@ -1,137 +1,224 @@
-Return-Path: <linux-usb+bounces-19904-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19905-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC3BA23F40
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 15:46:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23962A23F82
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 16:16:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C48EA168FC5
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 14:46:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 894501882A8E
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 15:16:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCDBA1DE88E;
-	Fri, 31 Jan 2025 14:46:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bwpm/ieK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EBCE1E5702;
+	Fri, 31 Jan 2025 15:16:20 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 357541B6CE0;
-	Fri, 31 Jan 2025 14:46:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83C511CB9F0;
+	Fri, 31 Jan 2025 15:16:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.54.195.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738334807; cv=none; b=HckLbITvDAHX6Y76tiIE2a8QNWhkdG0OMNny7AK1lnAjPJTFfe3e6ChopHPAuUSVkLzOw3w4n7XKbYmIr5qy24Foqj+FGE4xQAmt7Hf8wDDs4dYFGiUcd0pICCU0F/WXuJgKcqezT+1gk7VFjGHg37dNCFAywPNk74moRVbRjB0=
+	t=1738336580; cv=none; b=WmVs8SRR0igqJPxUThs4C5Ccc5/u843NbxseOPcGKGihMenD+apJWqksxKusrB7BxciFVOLwna+p4JcsFdMy4Nqk1BGZE+brwJiq+xU/mXA0Uk/xbgzLa6Fbry061Yq2+WA2ZKJ6VZRo7mvUHecm1Y94gRP6FPnJx/yOfQPF9wg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738334807; c=relaxed/simple;
-	bh=+C8b+XWdcnnMzbneWIM03ZUgjtV2rOh+jarlxZxFwJM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YN2LSsAH7EJswHB5fr3uyZPv495Z9VE0hIzwrwoFU4cQIF3ODcazUsOmRQ7SWyKBT5i/EWRV5qXpK1N92DP3qomZjSKym/npKcaEqO2CeTnjPoWImRZWRg/T6fzIFkfDLD/VkJ98758QhFD6Wuswt9zOZkytlRU1QedP0Bt8FbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bwpm/ieK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A07FBC4CEE4;
-	Fri, 31 Jan 2025 14:46:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738334805;
-	bh=+C8b+XWdcnnMzbneWIM03ZUgjtV2rOh+jarlxZxFwJM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bwpm/ieKS65IVF2RVvG4tQmoDiv2lfHUuo/5ZFWCOginQInWjyirEjIlLJKUxyvWk
-	 3fn6xkFYcQ77KbxNU3W19F6xB3H0l3WRwlNLDJdoRREHQ9hAqT6vGl08btDTrkugyo
-	 TFDK5lr0BpwkMyE5I1ogJm9FWwHn3nMDsOtdLg7dWOxxKdr3mEBxv8CKOIQJH0yD2z
-	 T84/uCYLaBofhpG9GsdpFaVGjcwD2H2fgGhiQOKhaa6ukmF6p8aBUNJw7kQ0JDYPR7
-	 oGg1lU8BXFgYep/7/VRb+cBT2MOr/7j4TAkxOZix8+oIp0YKJL/8RZ393o0QQuETpQ
-	 68GGGJR68KxXQ==
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5d3d143376dso2568007a12.3;
-        Fri, 31 Jan 2025 06:46:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUUNwRdh2uBvSpAGeFPRPD0fwnQVOgSnc3qRYCMspAhBkQz9ysGHWp+9wwM5xuP4mCrTv1dJCPm1uNc@vger.kernel.org, AJvYcCUmLkOaDGb7wxJMW6Os2o25cFJ6l38YwY0ieUNley8BwLstBxLh6/BfJHoqS7nFsheZ50JS3r3f@vger.kernel.org, AJvYcCWz//NV8thVd+OgR9WXB4DKWczhqqJy1X5yhEzOZdPXYdfkH/5fM0rOkj49zgKlIdFcPQIElgkYwK41Og0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwipCdMQ1sfQP99QfpdhP+QEAR+NUQV0IuJJBDG82m8peVW3Nzl
-	1ZrgyczIea8EzCHVoTeoNxiVSv1VTndEdE5lP9xU1sNHGGAmGO/Eye2u8L/hWQb47WhrCu+oU1n
-	Vv1MdQOuq881YSYJr+uRRMgRJoZQ=
-X-Google-Smtp-Source: AGHT+IHeD+XZIEIcDS6hEieGNSfg8VINqJhcEkeIkEJOgCdQFBtKYL/Ih4R5Ovr6H/BOoh6QqbcHfYYXJ9clDUv7sPk=
-X-Received: by 2002:a05:6402:51c9:b0:5db:e91a:6ba4 with SMTP id
- 4fb4d7f45d1cf-5dc5efc67fdmr11961819a12.19.1738334804211; Fri, 31 Jan 2025
- 06:46:44 -0800 (PST)
+	s=arc-20240116; t=1738336580; c=relaxed/simple;
+	bh=XLMer+s9oHPsR+PkULh9oJsGpfaaW03RrZ34iF/YTqs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JVSgK/JUyFdOrcfl4OHJeXVJc1+boBhXzQome32qdBprSHM4tBhVQO1S+w7Vg/wWe5hYpqNbo7cE9P/Ro2y7TiCGd3nB78MJCAGp9vg/XVSCpVsuE5QUqkKx+HITzNUyr02yCegCiVSYeoLyiJhDwtS20PvO587KlHZujqtvaGI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru; spf=pass smtp.mailfrom=fintech.ru; arc=none smtp.client-ip=195.54.195.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintech.ru
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Fri, 31 Jan
+ 2025 18:16:01 +0300
+Received: from localhost (10.0.253.138) by Ex16-01.fintech.ru (10.0.10.18)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Fri, 31 Jan
+ 2025 18:16:01 +0300
+From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+To: Jiri Kosina <jikos@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+	Kees Cook <kees@kernel.org>
+CC: Nikita Zhandarovich <n.zhandarovich@fintech.ru>, Benjamin Tissoires
+	<bentiss@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Terry Junge
+	<linuxhid@cosmicgizmosystems.com>, <linux-usb@vger.kernel.org>,
+	<linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-hardening@vger.kernel.org>, syzbot
+	<syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com>,
+	<syzkaller-bugs@googlegroups.com>, <lvc-project@linuxtesting.org>
+Subject: [PATCH v2] HID: usbhid: fix recurrent out-of-bounds bug in usbhid_parse()
+Date: Fri, 31 Jan 2025 18:15:58 +0300
+Message-ID: <20250131151600.410242-1-n.zhandarovich@fintech.ru>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250131100630.342995-1-chenhuacai@loongson.cn> <2025013133-saddled-reptilian-63c3@gregkh>
-In-Reply-To: <2025013133-saddled-reptilian-63c3@gregkh>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Fri, 31 Jan 2025 22:46:33 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7PXUd6BaoKqgJ-3g=+m9wLnXqEzya8++c5RM3c6Kafhg@mail.gmail.com>
-X-Gm-Features: AWEUYZnpeBAkX4DkxJerhYwHbZ4fZdPhlfQ5DbZbzFuHGz2k9uj3j3JRqL9a8xQ
-Message-ID: <CAAhV-H7PXUd6BaoKqgJ-3g=+m9wLnXqEzya8++c5RM3c6Kafhg@mail.gmail.com>
-Subject: Re: [PATCH] USB: core: Enable root_hub's remote wakeup for wakeup sources
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>, Alan Stern <stern@rowland.harvard.edu>, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
+ (10.0.10.18)
 
-Hi, Greg,
+Syzbot reports [1] a reemerging out-of-bounds bug regarding hid
+descriptors supposedly having unpredictable bNumDescriptors values in
+usbhid_parse().
 
-On Fri, Jan 31, 2025 at 6:49=E2=80=AFPM Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Fri, Jan 31, 2025 at 06:06:30PM +0800, Huacai Chen wrote:
-> > Now we only enable the remote wakeup function for the USB wakeup source
-> > itself at usb_port_suspend(). But on pre-XHCI controllers this is not
-> > enough to enable the S3 wakeup function for USB keyboards, so we also
-> > enable the root_hub's remote wakeup (and disable it on error). Frankly
-> > this is unnecessary for XHCI, but enable it unconditionally make code
-> > simple and seems harmless.
-> >
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
->
-> What commit id does this fix?
-It seems this problem exist from the first place (at least >=3D4.19).
+The issue stems from the fact that hid_class_descriptor is supposed
+to be a flexible array, however it was sized as desc[1], using only
+one element. Therefore, going beyond 1 element, courtesy of
+bNumDescriptors, may lead to an error.
 
->
-> > ---
-> >  drivers/usb/core/hub.c | 5 ++++-
-> >  1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> > index c3f839637cb5..efd6374ccd1d 100644
-> > --- a/drivers/usb/core/hub.c
-> > +++ b/drivers/usb/core/hub.c
-> > @@ -3480,6 +3480,7 @@ int usb_port_suspend(struct usb_device *udev, pm_=
-message_t msg)
-> >                       if (PMSG_IS_AUTO(msg))
-> >                               goto err_wakeup;
-> >               }
-> > +             usb_enable_remote_wakeup(udev->bus->root_hub);
-> >       }
-> >
-> >       /* disable USB2 hardware LPM */
-> > @@ -3543,8 +3544,10 @@ int usb_port_suspend(struct usb_device *udev, pm=
-_message_t msg)
-> >               /* Try to enable USB2 hardware LPM again */
-> >               usb_enable_usb2_hardware_lpm(udev);
-> >
-> > -             if (udev->do_remote_wakeup)
-> > +             if (udev->do_remote_wakeup) {
-> >                       (void) usb_disable_remote_wakeup(udev);
-> > +                     (void) usb_disable_remote_wakeup(udev->bus->root_=
-hub);
->
-> This feels wrong, what about all of the devices inbetween this device
-> and the root hub?
-Yes, if there are other hubs between the root hub and keyboard, this
-patch still cannot fix the wakeup problem. I have tried to enable
-every hub in the link, but failed. Because I found many hubs lost
-power during suspend. So this patch can only fixes the most usual
-cases.
+Modify struct hid_descriptor by employing __counted_by macro, tying
+together struct hid_class_descriptor desc[] and number of descriptors
+bNumDescriptors. Also, fix places where this change affects work with
+newly updated struct.
 
-Huacai
+[1] Syzbot report:
 
->
-> thanks,
->
-> greg k-h
+UBSAN: array-index-out-of-bounds in drivers/hid/usbhid/hid-core.c:1024:7
+index 1 is out of range for type 'struct hid_class_descriptor[1]'
+...
+Workqueue: usb_hub_wq hub_event
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
+ ubsan_epilogue lib/ubsan.c:231 [inline]
+ __ubsan_handle_out_of_bounds+0x121/0x150 lib/ubsan.c:429
+ usbhid_parse+0x5a7/0xc80 drivers/hid/usbhid/hid-core.c:1024
+ hid_add_device+0x132/0x520 drivers/hid/hid-core.c:2790
+ usbhid_probe+0xb38/0xea0 drivers/hid/usbhid/hid-core.c:1429
+ usb_probe_interface+0x645/0xbb0 drivers/usb/core/driver.c:399
+ really_probe+0x2b8/0xad0 drivers/base/dd.c:656
+ __driver_probe_device+0x1a2/0x390 drivers/base/dd.c:798
+ driver_probe_device+0x50/0x430 drivers/base/dd.c:828
+ __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:956
+ bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:457
+ __device_attach+0x333/0x520 drivers/base/dd.c:1028
+ bus_probe_device+0x189/0x260 drivers/base/bus.c:532
+ device_add+0x8ff/0xca0 drivers/base/core.c:3720
+ usb_set_configuration+0x1976/0x1fb0 drivers/usb/core/message.c:2210
+ usb_generic_driver_probe+0x88/0x140 drivers/usb/core/generic.c:254
+ usb_probe_device+0x1b8/0x380 drivers/usb/core/driver.c:294
+
+Reported-by: syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=c52569baf0c843f35495
+Fixes: f043bfc98c19 ("HID: usbhid: fix out-of-bounds bug")
+Cc: stable@vger.kernel.org
+Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+---
+v1: https://lore.kernel.org/all/20240524120112.28076-1-n.zhandarovich@fintech.ru/
+
+v2: Instead of essentially forcing usbhid_parse() to only check
+the first descriptor, modify hid_descriptor struct to anticipate
+multiple hid_class_descriptor in desc[] by utilizing __counted_by
+macro. This change, in turn, requires several other ones wherever
+that struct is used. Adjust commit description accordingly.
+
+P.S. Since syzbot currently breaks trying to reproduce the issue,
+with or without this patch, I only managed to test it locally with
+syz repros. Would greatly appreciate other people's effort to test
+it as well.
+
+P.P.S. Terry Junge <linuxhid@cosmicgizmosystems.com> suggested a
+different approach to this issue, see:
+Link: https://lore.kernel.org/all/f7963a1d-e069-4ec9-82a1-e17fd324a44f@cosmicgizmosystems.com/
+
+ drivers/hid/usbhid/hid-core.c       |  2 +-
+ drivers/usb/gadget/function/f_fs.c  |  3 ++-
+ drivers/usb/gadget/function/f_hid.c | 22 ++++++++++++++--------
+ include/linux/hid.h                 |  2 +-
+ 4 files changed, 18 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+index a6eb6fe6130d..eb4807785d6d 100644
+--- a/drivers/hid/usbhid/hid-core.c
++++ b/drivers/hid/usbhid/hid-core.c
+@@ -1010,7 +1010,7 @@ static int usbhid_parse(struct hid_device *hid)
+ 		return -ENODEV;
+ 	}
+ 
+-	if (hdesc->bLength < sizeof(struct hid_descriptor)) {
++	if (hdesc->bLength < struct_size(hdesc, desc, hdesc->bNumDescriptors)) {
+ 		dbg_hid("hid descriptor is too short\n");
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+index 2dea9e42a0f8..a4b6d7cbf56d 100644
+--- a/drivers/usb/gadget/function/f_fs.c
++++ b/drivers/usb/gadget/function/f_fs.c
+@@ -2550,7 +2550,8 @@ static int __must_check ffs_do_single_desc(char *data, unsigned len,
+ 	case USB_TYPE_CLASS | 0x01:
+ 		if (*current_class == USB_INTERFACE_CLASS_HID) {
+ 			pr_vdebug("hid descriptor\n");
+-			if (length != sizeof(struct hid_descriptor))
++			if (length < sizeof(struct hid_descriptor) +
++				     sizeof(struct hid_class_descriptor))
+ 				goto inv_length;
+ 			break;
+ 		} else if (*current_class == USB_INTERFACE_CLASS_CCID) {
+diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+index 740311c4fa24..ec8c2e2d6812 100644
+--- a/drivers/usb/gadget/function/f_hid.c
++++ b/drivers/usb/gadget/function/f_hid.c
+@@ -139,13 +139,17 @@ static struct usb_interface_descriptor hidg_interface_desc = {
+ };
+ 
+ static struct hid_descriptor hidg_desc = {
+-	.bLength			= sizeof hidg_desc,
++	.bLength			= struct_size(&hidg_desc, desc, 1),
+ 	.bDescriptorType		= HID_DT_HID,
+ 	.bcdHID				= cpu_to_le16(0x0101),
+ 	.bCountryCode			= 0x00,
+ 	.bNumDescriptors		= 0x1,
+-	/*.desc[0].bDescriptorType	= DYNAMIC */
+-	/*.desc[0].wDescriptorLenght	= DYNAMIC */
++	.desc				= {
++		{
++			.bDescriptorType	= 0, /* DYNAMIC */
++			.wDescriptorLength	= 0, /* DYNAMIC */
++		}
++	}
+ };
+ 
+ /* Super-Speed Support */
+@@ -936,16 +940,18 @@ static int hidg_setup(struct usb_function *f,
+ 		switch (value >> 8) {
+ 		case HID_DT_HID:
+ 		{
+-			struct hid_descriptor hidg_desc_copy = hidg_desc;
++			DEFINE_FLEX(struct hid_descriptor, hidg_desc_copy,
++				desc, bNumDescriptors, 1);
++			*hidg_desc_copy = hidg_desc;
+ 
+ 			VDBG(cdev, "USB_REQ_GET_DESCRIPTOR: HID\n");
+-			hidg_desc_copy.desc[0].bDescriptorType = HID_DT_REPORT;
+-			hidg_desc_copy.desc[0].wDescriptorLength =
++			hidg_desc_copy->desc[0].bDescriptorType = HID_DT_REPORT;
++			hidg_desc_copy->desc[0].wDescriptorLength =
+ 				cpu_to_le16(hidg->report_desc_length);
+ 
+ 			length = min_t(unsigned short, length,
+-						   hidg_desc_copy.bLength);
+-			memcpy(req->buf, &hidg_desc_copy, length);
++						   hidg_desc_copy->bLength);
++			memcpy(req->buf, hidg_desc_copy, length);
+ 			goto respond;
+ 			break;
+ 		}
+diff --git a/include/linux/hid.h b/include/linux/hid.h
+index cdc0dc13c87f..85a58ae2c4a0 100644
+--- a/include/linux/hid.h
++++ b/include/linux/hid.h
+@@ -739,7 +739,7 @@ struct hid_descriptor {
+ 	__u8  bCountryCode;
+ 	__u8  bNumDescriptors;
+ 
+-	struct hid_class_descriptor desc[1];
++	struct hid_class_descriptor desc[] __counted_by(bNumDescriptors);
+ } __attribute__ ((packed));
+ 
+ #define HID_DEVICE(b, g, ven, prod)					\
 
