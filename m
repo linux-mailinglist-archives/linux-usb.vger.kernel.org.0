@@ -1,247 +1,137 @@
-Return-Path: <linux-usb+bounces-19908-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19909-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD0E0A243B4
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 21:13:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C632A243C5
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 21:22:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2AC33A3C66
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 20:12:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 612167A1C54
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 20:21:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C915E1F2C3C;
-	Fri, 31 Jan 2025 20:12:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6777F1F2C35;
+	Fri, 31 Jan 2025 20:22:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aPjvJgg8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KkuhVC5C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38F2E1F2C47;
-	Fri, 31 Jan 2025 20:12:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680E5156F20
+	for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2025 20:22:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738354377; cv=none; b=dz74HG6/JDCBrPrqiuZ4Xdi6aPY6F8wBIXlDHKcttAdhX4kQBB7auaKSkpgaZhufaCMdCtBCwDdQ5uccmmkuh4Y3aT5Hn+7RMzzZhuiZWqzj0YrpIr5a07pvas0hBDj0z+JyRk1+3KQSYYgR9HNCYRIKUsqrMz8ttnRCMBwbEEs=
+	t=1738354944; cv=none; b=g2YOGAvbGbfpQOLxBlNOYxSjKZEhvdci52sceCQi4r6qyZ1AQ1HKgJX+NgORricK7ZfvOLZg5MAZ8RAFu0IqAhyKYUeFAlUrZCj+6ZHW2hsEgT8TRBEeovrrnnkRrV+z4P4hz8UmleHRyln0kxGp8EO8VnKDqzf3YiHgYRacAEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738354377; c=relaxed/simple;
-	bh=vg/+jgyh0IRUSzgzqkliZ3s1/U6jUBUON10aCM43Ny0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ckp/AztJx+ISnGUizbYHdmkEXuTwyc3WDQ2JhpbeSpf0N+OtqsUerkMudVCfPIbmhpdWcipk2lqzQbEaEsnjS5JdZjcue7LrNtKo2izsHUYgUJvQ8fChVhnU4dFsc1Ax6MLzvsaEhs6SHDKCKOCMithgVYIpih6yG4QUOmviWVs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aPjvJgg8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE04DC4CED1;
-	Fri, 31 Jan 2025 20:12:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738354376;
-	bh=vg/+jgyh0IRUSzgzqkliZ3s1/U6jUBUON10aCM43Ny0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=aPjvJgg824gCc0kSN+GlX5Dpiy38UxR3gJgZjjj5ncm8Q++AU2ucBbsVw/s5wux3l
-	 Toq21AkU3/EwcM38tMsJrm7Tba/vCH/4/kAGe0I4Ib6DsnCbpCwi7lCAWMb85G6keN
-	 j32ZMFHCajK5eWy88W4we0y1vqBxLy8EXCRjwOMJw7TGhV97Bh9JoNOgpSlRhswBRr
-	 DFxVEm+Rdc3kbq/0y9LQ9YiR6QmKfJm/YFONVcxGqviDH3q3c62fToIzAFuF5Bhf9M
-	 HQ34yWIslw7TY9n8M80PMjhyZ0URLmmm7RQkpmAcvSbSt5LygBhHBj2QHEpUkCjMtk
-	 q93MrlW6U4tPA==
-Date: Fri, 31 Jan 2025 12:12:53 -0800
-From: Kees Cook <kees@kernel.org>
-To: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-Cc: Jiri Kosina <jikos@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Terry Junge <linuxhid@cosmicgizmosystems.com>,
-	linux-usb@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
-	syzbot <syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com>,
-	syzkaller-bugs@googlegroups.com, lvc-project@linuxtesting.org
-Subject: Re: [PATCH v2] HID: usbhid: fix recurrent out-of-bounds bug in
- usbhid_parse()
-Message-ID: <202501311205.DB75F95@keescook>
-References: <20250131151600.410242-1-n.zhandarovich@fintech.ru>
+	s=arc-20240116; t=1738354944; c=relaxed/simple;
+	bh=NxIYu09MV5sZTvScgMAK3mSJi4wIG1e8jOwfyrjHOdI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tT2o8fzYmXEFhyvwQEWvQam6U9VF7CB+q6zFJon4yCA5Cj3dTrqqGNwOoUGDoGTcOqmat5XM5i/2se1ZRunMhgngkpNLuPxwUiGkYPK27mDKeC8O1upZ/0llU9aLxdmksXBhNPMo5FPNVsJg5A9IkBWXssfLvuZ1B7G6E5/aO6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KkuhVC5C; arc=none smtp.client-ip=209.85.219.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6d8a3e99e32so21831486d6.2
+        for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2025 12:22:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738354941; x=1738959741; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zEWTa2rARz73z6oAOpI1Z1+YlZ1v+PzEj1VSqxBWsxU=;
+        b=KkuhVC5CCdncENZqEkRt66WoIPiGPIlRDCRoJIJJjN8vyBPyKQd8IGrvVxWfKlEKMg
+         QMB9kuvzl9yGAWjtHCm2v7/Z6mxktwY85+AzAdgmZaTDrjT0Fm4ontjyjhq+oMtuYaZd
+         XG/I9CsfbjF4/VDuWSQxILn9xurle1QGSrO0sXRy1deq/0D6LHG9cSQTEqGSkmbGPi+a
+         RKHs7hcjL61zrWg+bgSpJILogGwUqBe1X3UcKmHotitBZA9fyMhu2VaT6a6y873THu0W
+         liZEu/0vab7Z88i06Bz5RIGLaI21dYteDzS/r7doPitSVmv0luCrPyiO/6CGzaO7llyn
+         QsuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738354941; x=1738959741;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zEWTa2rARz73z6oAOpI1Z1+YlZ1v+PzEj1VSqxBWsxU=;
+        b=SiBnDFyHRHKy8tr4/OonRFcXHnCx0KlGJ0owpr2nOREvay8a8iPZDwSfk/byYk4b3K
+         Hin0GnvYoc7M0ninKmsr/K9JHN8buAjcYCp9qa02/tUPv9IgcBBUCxqlEJKI/I4AeUeh
+         2aIm5KyesuiZMhbOafsUM2/hnlVQcD7K4NMudj7ORRD6XowIl/TcBIrrCBG3WOCn2tgx
+         MEtmBBIAICyA2Sf+VtD08WbqkXKJqeGdxy8wk58o2oLuoi1pubXBOdfGgJZocm9EWRpB
+         nGyq7Qa5JIR+An9cPEjde1bZWcsJ6cVz6+XaImilJDSX5/5RwoQs/UWEgkdhB+nSgA+r
+         bzjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX0lbxpV8dmRlYGBIdhetybl2ldc32BOZgYkRrje6KHuEKV1LkaNeNXYXzxH5N5SdUmbNUsvG7ndSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YydPQ+nWm1HQP4HbIIcN19e+22YFb67oGSBuwfkPELUymH0Qn4v
+	57uWLT77O8vQ0+R/+YzbT0F5pUWjHhPB5Sm1akCLAgfTCag1wJlC3Na65uuc3P0Zuk/rG24gqwr
+	Qt629B506oI+fY6y52uB80SInbHCfnjJoWPkc
+X-Gm-Gg: ASbGnctgt7zhTV3Ko1QYi21sU85Kc6j/LtFsLfbfdt4FPiSVLg4BmSBT5DMGVANgHvG
+	iEfQ+CWwNse1juWA7gy/bmPm4ePyfJugiMcGMV4QLqxv9NUSydS7+/vHQVGnc709Y0HFricKzrF
+	BqA3uAIvpdzY27D1oBWJV10qFSBLbTUIo=
+X-Google-Smtp-Source: AGHT+IH0IVs76Zy9+y8ZTxXDsMBZzpwf+3WKYgDJuETdDYbsxeRTaskKa9TmZKVJXJjwPK9WU5khgI12zA+UTI4Y0vY=
+X-Received: by 2002:a05:6214:430a:b0:6d8:aeda:dd93 with SMTP id
+ 6a1803df08f44-6e243c8fe49mr197426366d6.39.1738354940984; Fri, 31 Jan 2025
+ 12:22:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250131151600.410242-1-n.zhandarovich@fintech.ru>
+References: <20250122024452.50289-1-royluo@google.com> <20250128014400.7jx4segwn53vjnb5@synopsys.com>
+In-Reply-To: <20250128014400.7jx4segwn53vjnb5@synopsys.com>
+From: Roy Luo <royluo@google.com>
+Date: Fri, 31 Jan 2025 12:21:44 -0800
+X-Gm-Features: AWEUYZnoCcCDrQPX9ozA0nR6a5vxAjkn_j0SqNIF_aCUeBSY1sdE3ksoVrg15Ss
+Message-ID: <CA+zupgwLfzDvVF+5psdbuUgZb_mCNqXtxS5=b1RtTAjQKq6AuA@mail.gmail.com>
+Subject: Re: [PATCH v1] usb: dwc3: gadget: fix gadget workqueue use-after-free
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"andre.draszik@linaro.org" <andre.draszik@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 31, 2025 at 06:15:58PM +0300, Nikita Zhandarovich wrote:
-> Syzbot reports [1] a reemerging out-of-bounds bug regarding hid
-> descriptors supposedly having unpredictable bNumDescriptors values in
-> usbhid_parse().
-> 
-> The issue stems from the fact that hid_class_descriptor is supposed
-> to be a flexible array, however it was sized as desc[1], using only
-> one element. Therefore, going beyond 1 element, courtesy of
-> bNumDescriptors, may lead to an error.
-> 
-> Modify struct hid_descriptor by employing __counted_by macro, tying
-> together struct hid_class_descriptor desc[] and number of descriptors
-> bNumDescriptors. Also, fix places where this change affects work with
-> newly updated struct.
-> 
-> [1] Syzbot report:
-> 
-> UBSAN: array-index-out-of-bounds in drivers/hid/usbhid/hid-core.c:1024:7
-> index 1 is out of range for type 'struct hid_class_descriptor[1]'
-> ...
-> Workqueue: usb_hub_wq hub_event
-> Call Trace:
->  <TASK>
->  __dump_stack lib/dump_stack.c:88 [inline]
->  dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
->  ubsan_epilogue lib/ubsan.c:231 [inline]
->  __ubsan_handle_out_of_bounds+0x121/0x150 lib/ubsan.c:429
->  usbhid_parse+0x5a7/0xc80 drivers/hid/usbhid/hid-core.c:1024
->  hid_add_device+0x132/0x520 drivers/hid/hid-core.c:2790
->  usbhid_probe+0xb38/0xea0 drivers/hid/usbhid/hid-core.c:1429
->  usb_probe_interface+0x645/0xbb0 drivers/usb/core/driver.c:399
->  really_probe+0x2b8/0xad0 drivers/base/dd.c:656
->  __driver_probe_device+0x1a2/0x390 drivers/base/dd.c:798
->  driver_probe_device+0x50/0x430 drivers/base/dd.c:828
->  __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:956
->  bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:457
->  __device_attach+0x333/0x520 drivers/base/dd.c:1028
->  bus_probe_device+0x189/0x260 drivers/base/bus.c:532
->  device_add+0x8ff/0xca0 drivers/base/core.c:3720
->  usb_set_configuration+0x1976/0x1fb0 drivers/usb/core/message.c:2210
->  usb_generic_driver_probe+0x88/0x140 drivers/usb/core/generic.c:254
->  usb_probe_device+0x1b8/0x380 drivers/usb/core/driver.c:294
-> 
-> Reported-by: syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=c52569baf0c843f35495
-> Fixes: f043bfc98c19 ("HID: usbhid: fix out-of-bounds bug")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
-> ---
-> v1: https://lore.kernel.org/all/20240524120112.28076-1-n.zhandarovich@fintech.ru/
-> 
-> v2: Instead of essentially forcing usbhid_parse() to only check
-> the first descriptor, modify hid_descriptor struct to anticipate
-> multiple hid_class_descriptor in desc[] by utilizing __counted_by
-> macro. This change, in turn, requires several other ones wherever
-> that struct is used. Adjust commit description accordingly.
-> 
-> P.S. Since syzbot currently breaks trying to reproduce the issue,
-> with or without this patch, I only managed to test it locally with
-> syz repros. Would greatly appreciate other people's effort to test
-> it as well.
-> 
-> P.P.S. Terry Junge <linuxhid@cosmicgizmosystems.com> suggested a
-> different approach to this issue, see:
-> Link: https://lore.kernel.org/all/f7963a1d-e069-4ec9-82a1-e17fd324a44f@cosmicgizmosystems.com/
-> 
->  drivers/hid/usbhid/hid-core.c       |  2 +-
->  drivers/usb/gadget/function/f_fs.c  |  3 ++-
->  drivers/usb/gadget/function/f_hid.c | 22 ++++++++++++++--------
->  include/linux/hid.h                 |  2 +-
->  4 files changed, 18 insertions(+), 11 deletions(-)
-> 
-> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
-> index a6eb6fe6130d..eb4807785d6d 100644
-> --- a/drivers/hid/usbhid/hid-core.c
-> +++ b/drivers/hid/usbhid/hid-core.c
-> @@ -1010,7 +1010,7 @@ static int usbhid_parse(struct hid_device *hid)
->  		return -ENODEV;
->  	}
->  
-> -	if (hdesc->bLength < sizeof(struct hid_descriptor)) {
-> +	if (hdesc->bLength < struct_size(hdesc, desc, hdesc->bNumDescriptors)) {
->  		dbg_hid("hid descriptor is too short\n");
->  		return -EINVAL;
->  	}
+On Mon, Jan 27, 2025 at 5:44=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
+.com> wrote:
+>
+> On Wed, Jan 22, 2025, Roy Luo wrote:
+> > `dwc3_gadget_soft_disconnect` function, called as part of
+>
+> The dwc3_gadget_soft_disconnect() isn't directly part of
+> device_del(&gadget->dev). It should be part of disconnect.
+>
+> Can you provide the full sequence of events so I can have more context?
+> The handling of the flushing of gadget->work should not be part of the
+> dwc3.
 
-I don't think you want this hunk in the patch. The existing logic will
-correctly adapt num_descriptors to a size that fits within
-hdesc->bLength. In theory, the above change could break a weird but
-working device that reported too high bNumDescriptors but still worked
-with what num_descriptors walks.
 
-> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-> index 2dea9e42a0f8..a4b6d7cbf56d 100644
-> --- a/drivers/usb/gadget/function/f_fs.c
-> +++ b/drivers/usb/gadget/function/f_fs.c
-> @@ -2550,7 +2550,8 @@ static int __must_check ffs_do_single_desc(char *data, unsigned len,
->  	case USB_TYPE_CLASS | 0x01:
->  		if (*current_class == USB_INTERFACE_CLASS_HID) {
->  			pr_vdebug("hid descriptor\n");
-> -			if (length != sizeof(struct hid_descriptor))
-> +			if (length < sizeof(struct hid_descriptor) +
-> +				     sizeof(struct hid_class_descriptor))
->  				goto inv_length;
->  			break;
->  		} else if (*current_class == USB_INTERFACE_CLASS_CCID) {
+Yes, it's a part of disconnect, and disconnect is a part of gadget unbind.
+Let me try my best to explain. Here's the call stack for usb_del_gadget:
+-> usb_del_gadget
+    -> flush_work(&gadget->work)
+    -> device_del
+        -> bus_remove_device
+        -> device_release_driver
+        -> gadget_unbind_driver
+        -> usb_gadget_disconnect_locked
+        -> dwc3_gadget_pullup
+        -> dwc3_gadget_soft_disconnect
+        -> usb_gadget_set_state
+        -> schedule_work(&gadget->work)
 
-Same here, I think? This isn't needed unless I'm misunderstanding
-something about the fix.
+Then when usb_put_gadget is called, gadget could be freed before
+gadget->work is executed.
+-> usb_put_gadget
+-> put_device
+-> kobject_put
+-> device_release
+-> dwc_gadget_release
+-> kfree(gadget)
 
-> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
-> index 740311c4fa24..ec8c2e2d6812 100644
-> --- a/drivers/usb/gadget/function/f_hid.c
-> +++ b/drivers/usb/gadget/function/f_hid.c
-> @@ -139,13 +139,17 @@ static struct usb_interface_descriptor hidg_interface_desc = {
->  };
->  
->  static struct hid_descriptor hidg_desc = {
-> -	.bLength			= sizeof hidg_desc,
-> +	.bLength			= struct_size(&hidg_desc, desc, 1),
->  	.bDescriptorType		= HID_DT_HID,
->  	.bcdHID				= cpu_to_le16(0x0101),
->  	.bCountryCode			= 0x00,
->  	.bNumDescriptors		= 0x1,
-> -	/*.desc[0].bDescriptorType	= DYNAMIC */
-> -	/*.desc[0].wDescriptorLenght	= DYNAMIC */
-> +	.desc				= {
-> +		{
-> +			.bDescriptorType	= 0, /* DYNAMIC */
-> +			.wDescriptorLength	= 0, /* DYNAMIC */
-> +		}
-> +	}
->  };
->  
->  /* Super-Speed Support */
-> @@ -936,16 +940,18 @@ static int hidg_setup(struct usb_function *f,
->  		switch (value >> 8) {
->  		case HID_DT_HID:
->  		{
-> -			struct hid_descriptor hidg_desc_copy = hidg_desc;
-> +			DEFINE_FLEX(struct hid_descriptor, hidg_desc_copy,
-> +				desc, bNumDescriptors, 1);
-> +			*hidg_desc_copy = hidg_desc;
->  
->  			VDBG(cdev, "USB_REQ_GET_DESCRIPTOR: HID\n");
-> -			hidg_desc_copy.desc[0].bDescriptorType = HID_DT_REPORT;
-> -			hidg_desc_copy.desc[0].wDescriptorLength =
-> +			hidg_desc_copy->desc[0].bDescriptorType = HID_DT_REPORT;
-> +			hidg_desc_copy->desc[0].wDescriptorLength =
->  				cpu_to_le16(hidg->report_desc_length);
->  
->  			length = min_t(unsigned short, length,
-> -						   hidg_desc_copy.bLength);
-> -			memcpy(req->buf, &hidg_desc_copy, length);
-> +						   hidg_desc_copy->bLength);
-> +			memcpy(req->buf, hidg_desc_copy, length);
->  			goto respond;
->  			break;
->  		}
-> diff --git a/include/linux/hid.h b/include/linux/hid.h
-> index cdc0dc13c87f..85a58ae2c4a0 100644
-> --- a/include/linux/hid.h
-> +++ b/include/linux/hid.h
-> @@ -739,7 +739,7 @@ struct hid_descriptor {
->  	__u8  bCountryCode;
->  	__u8  bNumDescriptors;
->  
-> -	struct hid_class_descriptor desc[1];
-> +	struct hid_class_descriptor desc[] __counted_by(bNumDescriptors);
->  } __attribute__ ((packed));
->  
->  #define HID_DEVICE(b, g, ven, prod)					\
+>
+> Since the patch above is now in the mainline, may need to add a stable
+> tag.
 
-Otherwise, this looks correct to me.
+Ack, will cc stable in the next revision.
 
--- 
-Kees Cook
+Regards,
+Roy Luo
 
