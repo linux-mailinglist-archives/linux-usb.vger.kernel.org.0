@@ -1,137 +1,240 @@
-Return-Path: <linux-usb+bounces-19909-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19910-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C632A243C5
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 21:22:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D46B5A24425
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 21:35:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 612167A1C54
-	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 20:21:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCD953A2FA1
+	for <lists+linux-usb@lfdr.de>; Fri, 31 Jan 2025 20:35:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6777F1F2C35;
-	Fri, 31 Jan 2025 20:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="KkuhVC5C"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 494761F3D3B;
+	Fri, 31 Jan 2025 20:35:30 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f41.google.com (mail-qv1-f41.google.com [209.85.219.41])
+Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680E5156F20
-	for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2025 20:22:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47AF7158862
+	for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2025 20:35:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738354944; cv=none; b=g2YOGAvbGbfpQOLxBlNOYxSjKZEhvdci52sceCQi4r6qyZ1AQ1HKgJX+NgORricK7ZfvOLZg5MAZ8RAFu0IqAhyKYUeFAlUrZCj+6ZHW2hsEgT8TRBEeovrrnnkRrV+z4P4hz8UmleHRyln0kxGp8EO8VnKDqzf3YiHgYRacAEM=
+	t=1738355730; cv=none; b=Nw0GTKMemBxRAphb/scCktw1sDvduJQl1n85Xq3F8oJhRwwDmJtTa5LSUtE/hBWmaeYE1YdKMLQayC5pdYxsy1+3//6rurUWyREaqnUpBDuPiEcXpTDmLtyPpqTwmQxX/MlfSO3d+ayyRdpQLHWm6sQRviT6WtidGcveklFgalA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738354944; c=relaxed/simple;
-	bh=NxIYu09MV5sZTvScgMAK3mSJi4wIG1e8jOwfyrjHOdI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tT2o8fzYmXEFhyvwQEWvQam6U9VF7CB+q6zFJon4yCA5Cj3dTrqqGNwOoUGDoGTcOqmat5XM5i/2se1ZRunMhgngkpNLuPxwUiGkYPK27mDKeC8O1upZ/0llU9aLxdmksXBhNPMo5FPNVsJg5A9IkBWXssfLvuZ1B7G6E5/aO6A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=KkuhVC5C; arc=none smtp.client-ip=209.85.219.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-qv1-f41.google.com with SMTP id 6a1803df08f44-6d8a3e99e32so21831486d6.2
-        for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2025 12:22:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738354941; x=1738959741; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zEWTa2rARz73z6oAOpI1Z1+YlZ1v+PzEj1VSqxBWsxU=;
-        b=KkuhVC5CCdncENZqEkRt66WoIPiGPIlRDCRoJIJJjN8vyBPyKQd8IGrvVxWfKlEKMg
-         QMB9kuvzl9yGAWjtHCm2v7/Z6mxktwY85+AzAdgmZaTDrjT0Fm4ontjyjhq+oMtuYaZd
-         XG/I9CsfbjF4/VDuWSQxILn9xurle1QGSrO0sXRy1deq/0D6LHG9cSQTEqGSkmbGPi+a
-         RKHs7hcjL61zrWg+bgSpJILogGwUqBe1X3UcKmHotitBZA9fyMhu2VaT6a6y873THu0W
-         liZEu/0vab7Z88i06Bz5RIGLaI21dYteDzS/r7doPitSVmv0luCrPyiO/6CGzaO7llyn
-         QsuA==
+	s=arc-20240116; t=1738355730; c=relaxed/simple;
+	bh=VBjUnlNOn+EVDiH6fRRvhesvn00/DILaUmcqLDFhfxQ=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=OvvMVPbjPH07eVDgeUjk3lMFgagzwY5Ftgt8J6UY6WGjBmkJ3C6mLN0WuHjExlKnqnMZnPQOsbC8G12QkamS51qvY8r2UxMdh8d2Q3J2fV0s1vNtwpHkhRADcejwMiRjOUGzvt6sdxqzHDOyTcG4GDTL7uNQ/0b0CBKfudt7myw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3cfba354f79so50210285ab.1
+        for <linux-usb@vger.kernel.org>; Fri, 31 Jan 2025 12:35:28 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738354941; x=1738959741;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zEWTa2rARz73z6oAOpI1Z1+YlZ1v+PzEj1VSqxBWsxU=;
-        b=SiBnDFyHRHKy8tr4/OonRFcXHnCx0KlGJ0owpr2nOREvay8a8iPZDwSfk/byYk4b3K
-         Hin0GnvYoc7M0ninKmsr/K9JHN8buAjcYCp9qa02/tUPv9IgcBBUCxqlEJKI/I4AeUeh
-         2aIm5KyesuiZMhbOafsUM2/hnlVQcD7K4NMudj7ORRD6XowIl/TcBIrrCBG3WOCn2tgx
-         MEtmBBIAICyA2Sf+VtD08WbqkXKJqeGdxy8wk58o2oLuoi1pubXBOdfGgJZocm9EWRpB
-         nGyq7Qa5JIR+An9cPEjde1bZWcsJ6cVz6+XaImilJDSX5/5RwoQs/UWEgkdhB+nSgA+r
-         bzjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX0lbxpV8dmRlYGBIdhetybl2ldc32BOZgYkRrje6KHuEKV1LkaNeNXYXzxH5N5SdUmbNUsvG7ndSg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydPQ+nWm1HQP4HbIIcN19e+22YFb67oGSBuwfkPELUymH0Qn4v
-	57uWLT77O8vQ0+R/+YzbT0F5pUWjHhPB5Sm1akCLAgfTCag1wJlC3Na65uuc3P0Zuk/rG24gqwr
-	Qt629B506oI+fY6y52uB80SInbHCfnjJoWPkc
-X-Gm-Gg: ASbGnctgt7zhTV3Ko1QYi21sU85Kc6j/LtFsLfbfdt4FPiSVLg4BmSBT5DMGVANgHvG
-	iEfQ+CWwNse1juWA7gy/bmPm4ePyfJugiMcGMV4QLqxv9NUSydS7+/vHQVGnc709Y0HFricKzrF
-	BqA3uAIvpdzY27D1oBWJV10qFSBLbTUIo=
-X-Google-Smtp-Source: AGHT+IH0IVs76Zy9+y8ZTxXDsMBZzpwf+3WKYgDJuETdDYbsxeRTaskKa9TmZKVJXJjwPK9WU5khgI12zA+UTI4Y0vY=
-X-Received: by 2002:a05:6214:430a:b0:6d8:aeda:dd93 with SMTP id
- 6a1803df08f44-6e243c8fe49mr197426366d6.39.1738354940984; Fri, 31 Jan 2025
- 12:22:20 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738355727; x=1738960527;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BZNVDCmrZGxeCizZsIi9ccPmoiK4QwS5J9i3YpJJ4eo=;
+        b=lw2JfOJLD3J/iFMoBz9Lq3uvWrRzvaPRWio+mvXVw/MlDtDsbVhG+Hi8iExUnjbrOT
+         Xzy6y5s3aXcTVD7ois+EjBfODEX2cEZx3YwoB14kJh+gvkT9DNON9Pss9Ox14fz2+qim
+         SaNt8eds89gQNNxGxE/S653uk3aOfDuwuTUCxxNBm/4dXHFXOJ1m3UkwgG0/cPBxBByD
+         78KxsokqfESZn34SDMKAjx4blzksPoty0R86L4jPonZMfMQFxLq32VO0H9aghsWqaVnS
+         4WtGchZzsaStb3cKJ7HvrCK5TZ0KU/1MyVuhN+arUq2OGt3jle9pYwhtMrfzZFHiqbZ5
+         LvMg==
+X-Forwarded-Encrypted: i=1; AJvYcCVHXrknrQsaefqNO06WK/UkYxl1TxLlwb+42KIyPB47jt0xXuf481Y7nR2HU/69hJFNHEHp3Fb3SVM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN8vM/iyJ6uE4iMLTkZ9Fwl1DGX+cQUgjlD3kIu3yjJA+yNmLu
+	FgNUOjMpZcGHxqyQ74opbzdagYwENoMLCBzD4nI+QS8So6Z+7qIeXJsTwF2qVY4RX52hae91xHa
+	y23nYEfOF1iCMCSZcpUwRLXX/YJ5UK0Hzf8T9V1UM1RqgIhD5+juDciI=
+X-Google-Smtp-Source: AGHT+IEnLQEJLwGfE0k8yKwmacHXPCP7tD6bVQ/dZNFsVw/XyTIj7e3S1Q34fq56I/EN9QNsN3MhWuChyAq0ewt5L9tQY/ga7Nrr
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250122024452.50289-1-royluo@google.com> <20250128014400.7jx4segwn53vjnb5@synopsys.com>
-In-Reply-To: <20250128014400.7jx4segwn53vjnb5@synopsys.com>
-From: Roy Luo <royluo@google.com>
-Date: Fri, 31 Jan 2025 12:21:44 -0800
-X-Gm-Features: AWEUYZnoCcCDrQPX9ozA0nR6a5vxAjkn_j0SqNIF_aCUeBSY1sdE3ksoVrg15Ss
-Message-ID: <CA+zupgwLfzDvVF+5psdbuUgZb_mCNqXtxS5=b1RtTAjQKq6AuA@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: dwc3: gadget: fix gadget workqueue use-after-free
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"andre.draszik@linaro.org" <andre.draszik@linaro.org>
+X-Received: by 2002:a05:6e02:1caa:b0:3cf:f88b:b51a with SMTP id
+ e9e14a558f8ab-3cffe3a6ed0mr126561415ab.2.1738355727398; Fri, 31 Jan 2025
+ 12:35:27 -0800 (PST)
+Date: Fri, 31 Jan 2025 12:35:27 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <679d340f.050a0220.163cdc.000e.GAE@google.com>
+Subject: [syzbot] [usb?] general protection fault in count_matching_names
+From: syzbot <syzbot+1aa04f53a21b8994067f@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	daniel@iogearbox.net, eddyz87@gmail.com, haoluo@google.com, 
+	john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, martin.lau@linux.dev, 
+	sdf@fomichev.me, song@kernel.org, syzkaller-bugs@googlegroups.com, 
+	yonghong.song@linux.dev
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 27, 2025 at 5:44=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
->
-> On Wed, Jan 22, 2025, Roy Luo wrote:
-> > `dwc3_gadget_soft_disconnect` function, called as part of
->
-> The dwc3_gadget_soft_disconnect() isn't directly part of
-> device_del(&gadget->dev). It should be part of disconnect.
->
-> Can you provide the full sequence of events so I can have more context?
-> The handling of the flushing of gadget->work should not be part of the
-> dwc3.
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    69e858e0b8b2 Merge tag 'uml-for-linus-6.14-rc1' of git://g..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1523f6b0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d033b14aeef39158
+dashboard link: https://syzkaller.appspot.com/bug?extid=1aa04f53a21b8994067f
+compiler:       Debian clang version 15.0.6, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1323f6b0580000
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7feb34a89c2a/non_bootable_disk-69e858e0.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/a53b888c1f3f/vmlinux-69e858e0.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6b5e17edafc0/bzImage-69e858e0.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/6e8041af9503/mount_1.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+1aa04f53a21b8994067f@syzkaller.appspotmail.com
+
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000060: 0000 [#1] PREEMPT SMP KASAN NOPTI
+KASAN: null-ptr-deref in range [0x0000000000000300-0x0000000000000307]
+CPU: 0 UID: 0 PID: 6160 Comm: syz.3.224 Not tainted 6.13.0-syzkaller-09760-g69e858e0b8b2 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
+RIP: 0010:strcmp+0x42/0xa0 lib/string.c:277
+Code: 00 fc ff df 31 db 49 8d 3c 1c 48 89 f8 48 c1 e8 03 42 0f b6 04 38 84 c0 75 29 41 0f b6 2c 1c 49 8d 3c 1e 48 89 f8 48 c1 e8 03 <42> 0f b6 04 38 84 c0 75 20 41 3a 2c 1e 75 2a 48 ff c3 40 84 ed 75
+RSP: 0018:ffffc900000077f8 EFLAGS: 00010006
+RAX: 0000000000000060 RBX: 0000000000000000 RCX: dffffc0000000000
+RDX: 0000000000000001 RSI: 0000000000000300 RDI: 0000000000000300
+RBP: 0000000000000026 R08: ffffffff942f696f R09: 1ffffffff285ed2d
+R10: dffffc0000000000 R11: fffffbfff285ed2e R12: ffffffff8c608700
+R13: ffffffff93cd6c88 R14: 0000000000000300 R15: dffffc0000000000
+FS:  00007f97c077e6c0(0000) GS:ffff88801fc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f1e6ddd1000 CR3: 0000000058d3a000 CR4: 0000000000352ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ count_matching_names+0xfa/0x1c0 kernel/locking/lockdep.c:877
+ register_lock_class+0x450/0x980 kernel/locking/lockdep.c:1342
+ __lock_acquire+0xf3/0x2100 kernel/locking/lockdep.c:5103
+ lock_acquire+0x1ed/0x550 kernel/locking/lockdep.c:5851
+ call_timer_fn+0xdd/0x650 kernel/time/timer.c:1786
+ expire_timers kernel/time/timer.c:1835 [inline]
+ __run_timers kernel/time/timer.c:2414 [inline]
+ __run_timer_base+0x695/0x8e0 kernel/time/timer.c:2426
+ run_timer_base kernel/time/timer.c:2435 [inline]
+ run_timer_softirq+0xb7/0x170 kernel/time/timer.c:2445
+ handle_softirqs+0x2d4/0x9b0 kernel/softirq.c:561
+ __do_softirq kernel/softirq.c:595 [inline]
+ invoke_softirq kernel/softirq.c:435 [inline]
+ __irq_exit_rcu+0xf7/0x220 kernel/softirq.c:662
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:678
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1049 [inline]
+ sysvec_apic_timer_interrupt+0xa6/0xc0 arch/x86/kernel/apic/apic.c:1049
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:lock_acquire+0x264/0x550 kernel/locking/lockdep.c:5855
+Code: 2b 00 74 08 4c 89 f7 e8 8a 2b 8b 00 f6 44 24 61 02 0f 85 85 01 00 00 41 f7 c7 00 02 00 00 74 01 fb 48 c7 44 24 40 0e 36 e0 45 <4b> c7 44 25 00 00 00 00 00 43 c7 44 25 09 00 00 00 00 43 c7 44 25
+RSP: 0018:ffffc9000ce9f040 EFLAGS: 00000206
+RAX: 0000000000000001 RBX: 1ffff920019d3e14 RCX: ffff8880347e0ae8
+RDX: dffffc0000000000 RSI: ffffffff8c0ab8e0 RDI: ffffffff8c608060
+RBP: ffffc9000ce9f190 R08: ffffffff942f6847 R09: 1ffffffff285ed08
+R10: dffffc0000000000 R11: fffffbfff285ed09 R12: 1ffff920019d3e10
+R13: dffffc0000000000 R14: ffffc9000ce9f0a0 R15: 0000000000000246
+ rcu_lock_acquire include/linux/rcupdate.h:337 [inline]
+ rcu_read_lock include/linux/rcupdate.h:849 [inline]
+ is_bpf_text_address+0x46/0x2a0 kernel/bpf/core.c:772
+ kernel_text_address+0xa7/0xe0 kernel/extable.c:125
+ __kernel_text_address+0xd/0x40 kernel/extable.c:79
+ unwind_get_return_address+0x4d/0x90 arch/x86/kernel/unwind_orc.c:369
+ arch_stack_walk+0xfd/0x150 arch/x86/kernel/stacktrace.c:26
+ stack_trace_save+0x118/0x1d0 kernel/stacktrace.c:122
+ save_stack+0xfb/0x1f0 mm/page_owner.c:156
+ __reset_page_owner+0x76/0x430 mm/page_owner.c:297
+ reset_page_owner include/linux/page_owner.h:25 [inline]
+ free_pages_prepare mm/page_alloc.c:1127 [inline]
+ free_unref_folios+0xe40/0x18b0 mm/page_alloc.c:2707
+ folios_put_refs+0x76c/0x860 mm/swap.c:994
+ folio_batch_release include/linux/pagevec.h:101 [inline]
+ shmem_undo_range+0x593/0x1820 mm/shmem.c:1112
+ shmem_truncate_range mm/shmem.c:1224 [inline]
+ shmem_evict_inode+0x29b/0xa80 mm/shmem.c:1352
+ evict+0x4e8/0x9a0 fs/inode.c:796
+ __dentry_kill+0x20d/0x630 fs/dcache.c:643
+ dput+0x19f/0x2b0 fs/dcache.c:885
+ __fput+0x60b/0x9f0 fs/file_table.c:458
+ __do_sys_close fs/open.c:1579 [inline]
+ __se_sys_close fs/open.c:1564 [inline]
+ __x64_sys_close+0x7f/0x110 fs/open.c:1564
+ do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+ do_syscall_64+0xf3/0x230 arch/x86/entry/common.c:83
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7f97bf98ba0a
+Code: 48 3d 00 f0 ff ff 77 48 c3 0f 1f 80 00 00 00 00 48 83 ec 18 89 7c 24 0c e8 43 91 02 00 8b 7c 24 0c 89 c2 b8 03 00 00 00 0f 05 <48> 3d 00 f0 ff ff 77 36 89 d7 89 44 24 0c e8 a3 91 02 00 8b 44 24
+RSP: 002b:00007f97c077de00 EFLAGS: 00000293 ORIG_RAX: 0000000000000003
+RAX: ffffffffffffffda RBX: 00000000ffffffff RCX: 00007f97bf98ba0a
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000003
+RBP: 0000000000000002 R08: 0000000000000000 R09: 0000000000005939
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000003
+R13: 00007f97c077def0 R14: 00007f97c077deb0 R15: 00007f97b6600000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:strcmp+0x42/0xa0 lib/string.c:277
+Code: 00 fc ff df 31 db 49 8d 3c 1c 48 89 f8 48 c1 e8 03 42 0f b6 04 38 84 c0 75 29 41 0f b6 2c 1c 49 8d 3c 1e 48 89 f8 48 c1 e8 03 <42> 0f b6 04 38 84 c0 75 20 41 3a 2c 1e 75 2a 48 ff c3 40 84 ed 75
+RSP: 0018:ffffc900000077f8 EFLAGS: 00010006
+RAX: 0000000000000060 RBX: 0000000000000000 RCX: dffffc0000000000
+RDX: 0000000000000001 RSI: 0000000000000300 RDI: 0000000000000300
+RBP: 0000000000000026 R08: ffffffff942f696f R09: 1ffffffff285ed2d
+R10: dffffc0000000000 R11: fffffbfff285ed2e R12: ffffffff8c608700
+R13: ffffffff93cd6c88 R14: 0000000000000300 R15: dffffc0000000000
+FS:  00007f97c077e6c0(0000) GS:ffff88801fc00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f1e6ddd1000 CR3: 0000000058d3a000 CR4: 0000000000352ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 3 bytes skipped:
+   0:	df 31                	fbstp  (%rcx)
+   2:	db 49 8d             	fisttpl -0x73(%rcx)
+   5:	3c 1c                	cmp    $0x1c,%al
+   7:	48 89 f8             	mov    %rdi,%rax
+   a:	48 c1 e8 03          	shr    $0x3,%rax
+   e:	42 0f b6 04 38       	movzbl (%rax,%r15,1),%eax
+  13:	84 c0                	test   %al,%al
+  15:	75 29                	jne    0x40
+  17:	41 0f b6 2c 1c       	movzbl (%r12,%rbx,1),%ebp
+  1c:	49 8d 3c 1e          	lea    (%r14,%rbx,1),%rdi
+  20:	48 89 f8             	mov    %rdi,%rax
+  23:	48 c1 e8 03          	shr    $0x3,%rax
+* 27:	42 0f b6 04 38       	movzbl (%rax,%r15,1),%eax <-- trapping instruction
+  2c:	84 c0                	test   %al,%al
+  2e:	75 20                	jne    0x50
+  30:	41 3a 2c 1e          	cmp    (%r14,%rbx,1),%bpl
+  34:	75 2a                	jne    0x60
+  36:	48 ff c3             	inc    %rbx
+  39:	40 84 ed             	test   %bpl,%bpl
+  3c:	75                   	.byte 0x75
 
 
-Yes, it's a part of disconnect, and disconnect is a part of gadget unbind.
-Let me try my best to explain. Here's the call stack for usb_del_gadget:
--> usb_del_gadget
-    -> flush_work(&gadget->work)
-    -> device_del
-        -> bus_remove_device
-        -> device_release_driver
-        -> gadget_unbind_driver
-        -> usb_gadget_disconnect_locked
-        -> dwc3_gadget_pullup
-        -> dwc3_gadget_soft_disconnect
-        -> usb_gadget_set_state
-        -> schedule_work(&gadget->work)
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Then when usb_put_gadget is called, gadget could be freed before
-gadget->work is executed.
--> usb_put_gadget
--> put_device
--> kobject_put
--> device_release
--> dwc_gadget_release
--> kfree(gadget)
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
->
-> Since the patch above is now in the mainline, may need to add a stable
-> tag.
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Ack, will cc stable in the next revision.
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-Regards,
-Roy Luo
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
