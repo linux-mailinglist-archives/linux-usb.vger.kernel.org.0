@@ -1,199 +1,219 @@
-Return-Path: <linux-usb+bounces-19938-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19939-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25ACBA248BE
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2025 12:40:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88E56A24A7E
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2025 17:40:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 056683A8994
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2025 11:40:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 112401886F6C
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2025 16:40:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8B018FDAB;
-	Sat,  1 Feb 2025 11:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E16E11C5D76;
+	Sat,  1 Feb 2025 16:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vz0jhgay"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="qfajuiKA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846FC13A87C;
-	Sat,  1 Feb 2025 11:39:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26D131C5D66
+	for <linux-usb@vger.kernel.org>; Sat,  1 Feb 2025 16:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738409979; cv=none; b=SjFNUU4fAxL5uiuSRS00w9GMrBjDbdY0fI/9YjLjWLTDiIJpuM9EkTYviTzIGGbuM+/vscMMT5wEsxITyjMcazJV7+1ILBuClMQ1XH31xCE07kdkRuw1Y5cmQrKqymG6QSILCcOuGGHiHOGJNwpwLnYQS3YUbdXTaUzobgDY+F8=
+	t=1738428008; cv=none; b=mQ5PA2s15wxJpn5OmgtqbIyjP5/91lCekJOTNHcBiw8rPf2bR+mvRnGj+w86OXZxyPrG3qQ4kYxeyySGTNAfcNHubjwd+/o5FOa820bxvemzCo9Mqr3Zump/OYycCdPQrnkB0aufq/XjjpurHYJlNYAlDnnupFnO25lCMc4JQK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738409979; c=relaxed/simple;
-	bh=td+0A+DcVY8QOuKUAZNmzTEWuEvPeNx4/j1/UsdcYlE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AcwUqju3Xag9DQfnklklND58ovC43wKC6BjchtAxXtA7d83R12nhnX4x95oAPpljFDxzqRlaN8he26BRGEm85+EcbugYD2jooRyonYl3x+D6y6u02lnVc2YI9dWfeYLGzbUYVYZxLIQIGyMER76ofnzgtbEYa0c3p5+uwWUyxwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vz0jhgay; arc=none smtp.client-ip=209.85.208.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5dc5a32c313so515211a12.3;
-        Sat, 01 Feb 2025 03:39:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738409976; x=1739014776; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XdkJPeGy8cB+I0O1JiaewcgKSq34WPStqqYd7P6r+NY=;
-        b=Vz0jhgayFFKNjdFZ0aiSnditGdrgLzhWAaQnZLYQznFudHTX3Lf5K1TvO4fpNzqOLd
-         YgOfUNw1P1GK4DwxFT5puD8Zvtp0CXL+OVfaQDryP8kpo6tv5gP/BNNqyjhtMtX1B2mf
-         gNKd6oF7IFQUAXLYV/iQwvlbzOA/s2OxtQmPKcJMjBLsHvR+rfO+2TJ+irCT7rgnewlN
-         bcmUfcO9esrbBxspEupgv/FeS4dXo805w2Q2fpxShVthY5nw0MGnDBAcAufkcAuair6U
-         I/IuJCtztl0mTfUbrpxEiqdkywiJ8TYT5IRvh3aykEYy5brj5Wu3EA9FbhsyS1W/Ah7G
-         ZwaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738409976; x=1739014776;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XdkJPeGy8cB+I0O1JiaewcgKSq34WPStqqYd7P6r+NY=;
-        b=YfYSaVjTGANLeVgOSRTHYqZXVeUIJay19mlZ6CWmUZ0X/hVBHZMkQ4DekeOUwMHE1r
-         HlbgOXhNfwOM4TEyAm9A5CvLUX+iYxafHVOcl3f7Blu24nYKuVvDqooIab+NIATQ3X9S
-         OBe4XPoFnQocrr8d0TqisRlX2p7YXRAAbWm36NlR0kWnt62OznSO+H4/5j9wP4hFt6fD
-         PKpTQpEoqAP26pHFQg9p5/dP8fs84/VrDTA9gyjpKgEwz2Dxsywz+m7rQk4FcMlTRKmr
-         weBu1ZW89CMyMy6ipP3hbiJgF1mBX1B3XPmhGaZG9Cw/sLUwb0Gc5/XHrvw0kAi9xVQk
-         JFNw==
-X-Forwarded-Encrypted: i=1; AJvYcCWMpqjsZRECCY7MHZwAiFWyaV+MYmmvmsREQMrzonj+g0/yyWY/zGTe9NdXcjdZZkb00ulyNRrexDi8@vger.kernel.org, AJvYcCXVfFuv+kWwpctoua0YuCGKfGiIxSRaJe2rI3JVK/+sP7pR1lQjuCNmPlte29M6cPFPJ/dpDQdBmn/10g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSdjntZ3WiFIg+14z42J55TgDZgQtLeiUjWLnOGMZ3a63KIy7l
-	xUVTxaMXNxIaRfn48yiG+ruohlL5jsp9VnV3ePLM2orZqXm9ECqY
-X-Gm-Gg: ASbGncsAq9cpCVIZBUSS2vRckJvPo2KEHXB6B3rl+e4P8hNrwxon+J+NlH3/ekXN3rG
-	ZBdfA3PC0KV3SiY+UeLvBd2OR1vsdE+nes/mgZwitIZ/E7Xzu+/zUyL8f7/exUV9BsB6vIAUQ6C
-	4Ed62qG1HwmSLLvIgOfZCgu1KVrYV4NzWr4JFA5tmU9YH1WtM9JHX9Bd4f+qrDDnQatVpn1B9We
-	9+gwXGKHmHyx+hJdv7PjxxGuBNj7vmfhAaGZXKGYBLs3PXrzXGU+QrDDs8mcjTP2NIwTsPPTdXz
-	u+lJboFBu78GEQIhCIPVtdyOXFZiMuqLuVs/3nY3JL6lOU6S5vhOVjlatNQBoA==
-X-Google-Smtp-Source: AGHT+IEPzH/ttXX37QHtUNtg+JoBfcaE1cRc6V2PVMRuE7p08TedRj6MLRtN1jZ4HH/mrSEwFXzDkg==
-X-Received: by 2002:a05:6402:2420:b0:5dc:1294:2dda with SMTP id 4fb4d7f45d1cf-5dc6e450206mr4396439a12.0.1738409975665;
-        Sat, 01 Feb 2025 03:39:35 -0800 (PST)
-Received: from laptok.lan (89-64-31-140.dynamic.chello.pl. [89.64.31.140])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dc723e9fa7sm4304577a12.20.2025.02.01.03.39.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Feb 2025 03:39:35 -0800 (PST)
-From: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
-To: jikos@kernel.org,
-	bentiss@kernel.org
-Cc: anssi.hannula@gmail.com,
-	oleg@makarenk.ooo,
-	linux-input@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH v9 22/22] HID: pidff: Factor out pool report fetch and remove excess declaration
-Date: Sat,  1 Feb 2025 12:39:06 +0100
-Message-ID: <20250201113906.769162-23-tomasz.pakula.oficjalny@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250201113906.769162-1-tomasz.pakula.oficjalny@gmail.com>
-References: <20250201113906.769162-1-tomasz.pakula.oficjalny@gmail.com>
+	s=arc-20240116; t=1738428008; c=relaxed/simple;
+	bh=8rTLcENWnBRsgjeNz/Jux6uBDq7VKxnE2EUiulvJsGU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
+	 References; b=hx6xFibtqQTbKcycIqR6qr+ezjU7/NRoFhBRK+BD6nVFlCYzPSlQMMz3ZO/p2Mkv5s1NVov8GeCG6emg153xFofmGJrZnBIMf03BLDaTP+XHNUhq58CSFRWXIEAHO1P7TOtfbR0D7n6PvYpUEyL2tmh0jGuRRxXgieXcSU7vwwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=qfajuiKA; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p1.samsung.com (unknown [182.195.41.39])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250201163958epoutp014a554a7a9935fa5a11d3fd6484722cbb~gIw27bYdm2073520735epoutp01b
+	for <linux-usb@vger.kernel.org>; Sat,  1 Feb 2025 16:39:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250201163958epoutp014a554a7a9935fa5a11d3fd6484722cbb~gIw27bYdm2073520735epoutp01b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1738427998;
+	bh=k0Y+b6rBneZRI8OvJ2IHjdex6m1O58QdnqJYxHcTUSc=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=qfajuiKA/Yk4KCGKFKzydmowSakR/AChEB1ylYiryzXnimHMist7C8uZkRLWL0DEQ
+	 qHnIArAWTAMPdN/LMWgSzh+nmpBKCLYzhGs8zqUNrLG8lxHHMt5dnMvHaAJHgHUhj2
+	 nPAZe7n7r8tpz06WEKjNimld97K6HK1rie/hLs/M=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+	epcas5p3.samsung.com (KnoxPortal) with ESMTP id
+	20250201163957epcas5p35c838cc9e428b197df7f1f4576b076bd~gIw2CS4Fz1900519005epcas5p3o;
+	Sat,  1 Feb 2025 16:39:57 +0000 (GMT)
+Received: from epsmgec5p1new.samsung.com (unknown [182.195.38.176]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4Yldlb18fjz4x9Pv; Sat,  1 Feb
+	2025 16:39:55 +0000 (GMT)
+Received: from epcas5p4.samsung.com ( [182.195.41.42]) by
+	epsmgec5p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	B4.41.19710.A5E4E976; Sun,  2 Feb 2025 01:39:55 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250201163953epcas5p10cb7ed0c0090558d4f52c5bef63fb2dc~gIwy7EvPW0378803788epcas5p1l;
+	Sat,  1 Feb 2025 16:39:53 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20250201163953epsmtrp15aa8a59f31650f86f4e507f453e947b6~gIwy6UaAz1418614186epsmtrp1V;
+	Sat,  1 Feb 2025 16:39:53 +0000 (GMT)
+X-AuditID: b6c32a44-36bdd70000004cfe-d5-679e4e5a0e35
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	AD.1C.33707.95E4E976; Sun,  2 Feb 2025 01:39:53 +0900 (KST)
+Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
+	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250201163951epsmtip23e2ec84c0b4c818114a4b5a53f4628cc~gIwwfsr5I2329923299epsmtip23;
+	Sat,  1 Feb 2025 16:39:51 +0000 (GMT)
+From: Selvarasu Ganesan <selvarasu.g@samsung.com>
+To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, balbi@ti.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
+	akash.m5@samsung.com, h10.kim@samsung.com, eomji.oh@samsung.com,
+	alim.akhtar@samsung.com, thiagu.r@samsung.com, Selvarasu Ganesan
+	<selvarasu.g@samsung.com>, stable@vger.kernel.org
+Subject: [PATCH v2] usb: dwc3: Fix timeout issue during controller
+ enter/exit from halt state
+Date: Sat,  1 Feb 2025 22:09:02 +0530
+Message-ID: <20250201163903.459-1-selvarasu.g@samsung.com>
+X-Mailer: git-send-email 2.46.0.windows.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprHJsWRmVeSWpSXmKPExsWy7bCmlm6037x0g+e7mCzeXF3FavFg3jY2
+	i4P36y3uLJjGZHFq+UImi+bF69ks/t6+yGpx9+EPFovLu+awWSxa1sps8enof1aLI8s/Mlks
+	2PiI0WJFM1Bs1YID7A78HvvnrmH36NuyitFjy/7PjB7Hb2xn8vi8SS6ANSrbJiM1MSW1SCE1
+	Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8xN9VWycUnQNctMwfoWiWFssScUqBQQGJxsZK+
+	nU1RfmlJqkJGfnGJrVJqQUpOgUmBXnFibnFpXrpeXmqJlaGBgZEpUGFCdsanRw/YCiZJVszb
+	/IulgfG6SBcjJ4eEgInEkb3P2LsYuTiEBHYzSjxZ+AnK+cQo0dVxmBXOeftyMyNMS/uDhUwQ
+	iZ2MEs1fDjKDJIQEvjNKfHqe38XIwcEmYCjx7IQNSI2IQBOjRPu9W2CTmAWamCQWTOtlAmkQ
+	FoiX2HB+KdhUFgFViY33d4EN4hWwkpjxdi0bxDZNibV79zBBxAUlTs58wgJiMwvISzRvnc0M
+	MlRCYCaHxJo3v6AaXCR+/bsOZQtLvDq+hR3ClpJ42d8GZSdL7Jn0BcrOkDi06hAzhG0vsXrB
+	GVaQD5iBFq/fpQ+xi0+i9/cTJpCwhACvREebEES1qsSpxstQm6Ql7i25xgphe0i8u9QODZNY
+	iR0P3zFNYJSbheSDWUg+mIWwbAEj8ypGydSC4tz01GTTAsO81HJ4ZCbn525iBCdULZcdjDfm
+	/9M7xMjEwXiIUYKDWUmEl+PwnHQh3pTEyqrUovz4otKc1OJDjKbAYJ3ILCWanA9M6Xkl8YYm
+	lgYmZmZmJpbGZoZK4rzNO1vShQTSE0tSs1NTC1KLYPqYODilGpgEMjYly0rfPHtvgv4x4Rwn
+	YccJh61cfVt/Vu+35bk74cJ1i5+msguSbYPSexflnlnunLPgZtsjY5kp28QFzr3LflNzwypD
+	9fnCU3YzVrG1Gy/fM8XiYdOnWNeob++c7pawfZppovVZMeZVrOiRlRdXM3OwdlY+EAiVsrku
+	IRZ48Fu7784HnOd+zD6kp/yd1ShY4lV/zJPC869VFqxb9O9JoIm/RfKvqQFPlmsKmq9udTka
+	vHa/Y9jTv9r73IKMXcuiHL6bsR9pPKB/sPFXrod60M49KQxtps5HL3l9+XLb0U5TrVE4+XP+
+	TIPKnwe5S8+lBRraT/9a+E7t47zMUr+16VlnhVaXF99LkHlUfVOJpTgj0VCLuag4EQCxcpgZ
+	MQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrOLMWRmVeSWpSXmKPExsWy7bCSvG6k37x0g+Ov1C3eXF3FavFg3jY2
+	i4P36y3uLJjGZHFq+UImi+bF69ks/t6+yGpx9+EPFovLu+awWSxa1sps8enof1aLI8s/Mlks
+	2PiI0WJFM1Bs1YID7A78HvvnrmH36NuyitFjy/7PjB7Hb2xn8vi8SS6ANYrLJiU1J7MstUjf
+	LoEr49OjB2wFkyQr5m3+xdLAeF2ki5GTQ0LARKL9wUImEFtIYDujxKEXxRBxaYnXs7oYIWxh
+	iZX/nrND1HxllPjYr9LFyMHBJmAo8eyETRcjF4eIQAejxLbemcwgDrNAH5NEy5lDLCANwgKx
+	Eqt6e8EWsAioSmy8v4sZxOYVsJKY8XYtG8QCTYm1e/cwQcQFJU7OfMICsoBZQF1i/TwhkDCz
+	gLxE89bZzBMY+WchqZqFUDULSdUCRuZVjKKpBcW56bnJBYZ6xYm5xaV56XrJ+bmbGMFxoRW0
+	g3HZ+r96hxiZOBgPMUpwMCuJ8HIcnpMuxJuSWFmVWpQfX1Sak1p8iFGag0VJnFc5pzNFSCA9
+	sSQ1OzW1ILUIJsvEwSnVwLR2zt9Pr68ePhGg3/DkAvfbDO+ve+X+PuSe/U0p78+bieKLV3Tu
+	Wia0V2fy0azZ0ZtWa7afS2D9KjFdsCKudn3oqh/z9uZk7oiV1WGcY9dhNX/t3xnHKp0cN0c3
+	buCd5bvk+sOPe6QXd3980l72yupTqtH8lgBu+00nvA8JxGfZF269YesreHG1u0iwk4FZ/dIy
+	1zSTdXLrJhvW79nDvv7kbvmz1baaXp2zrW7Wunu+tuZwvKA3kdPyS1fKwt3vuDXKuLtPLglU
+	mbxv8jSXKRc/Pv3Cce1P0jdRFptdUVPy00MD7t+a3Xda4chN6/RDq7kPFk+ePnPriZ3hsYLz
+	r3pVTbrG1D17PverLQahEbxpSizFGYmGWsxFxYkAWb2wvfoCAAA=
+X-CMS-MailID: 20250201163953epcas5p10cb7ed0c0090558d4f52c5bef63fb2dc
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20250201163953epcas5p10cb7ed0c0090558d4f52c5bef63fb2dc
+References: <CGME20250201163953epcas5p10cb7ed0c0090558d4f52c5bef63fb2dc@epcas5p1.samsung.com>
 
-We only want to refetch the pool report during device init. Reset
-function is now called when uploading effects to an empty device so
-extract pool fetch to separate function and call it from init before
-autocenter check (autocenter check triggered reset during init).
+There is a frequent timeout during controller enter/exit from halt state
+after toggling the run_stop bit by SW. This timeout occurs when
+performing frequent role switches between host and device, causing
+device enumeration issues due to the timeout. This issue was not present
+when USB2 suspend PHY was disabled by passing the SNPS quirks
+(snps,dis_u2_susphy_quirk and snps,dis_enblslpm_quirk) from the DTS.
+However, there is a requirement to enable USB2 suspend PHY by setting of
+GUSB2PHYCFG.ENBLSLPM and GUSB2PHYCFG.SUSPHY bits when controller starts
+in gadget or host mode results in the timeout issue.
 
-Remove a superfluous pointer declaration and assigment as well.
+This commit addresses this timeout issue by ensuring that the bits
+GUSB2PHYCFG.ENBLSLPM and GUSB2PHYCFG.SUSPHY are cleared before starting
+the dwc3_gadget_run_stop sequence and restoring them after the
+dwc3_gadget_run_stop sequence is completed.
 
-Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
-Reviewed-by: Michał Kopeć <michal@nozomi.space>
-Reviewed-by: Paul Dino Jones <paul@spacefreak18.xyz>
-Tested-by: Paul Dino Jones <paul@spacefreak18.xyz>
-Tested-by: Cristóferson Bueno <cbueno81@gmail.com>
-Tested-by: Pablo Cisneros <patchkez@protonmail.com>
+Fixes: 72246da40f37 ("usb: Introduce DesignWare USB3 DRD Driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
 ---
- drivers/hid/usbhid/hid-pidff.c | 45 ++++++++++++++++++----------------
- 1 file changed, 24 insertions(+), 21 deletions(-)
 
-diff --git a/drivers/hid/usbhid/hid-pidff.c b/drivers/hid/usbhid/hid-pidff.c
-index b21e844f5f3a..f23381b6e344 100644
---- a/drivers/hid/usbhid/hid-pidff.c
-+++ b/drivers/hid/usbhid/hid-pidff.c
-@@ -591,12 +591,9 @@ static void pidff_modify_actuators_state(struct pidff_device *pidff, bool enable
- 
- /*
-  * Reset the device, stop all effects, enable actuators
-- * Refetch pool report
-  */
- static void pidff_reset(struct pidff_device *pidff)
+Changes in v2:
+ - Added some comments before the changes.
+ - And removed "unlikely" in the condition check.
+ - Link to v1: https://lore.kernel.org/linux-usb/20250131110832.438-1-selvarasu.g@samsung.com/
+---
+ drivers/usb/dwc3/gadget.c | 34 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 34 insertions(+)
+
+diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
+index d27af65eb08a..ddd6b2ce5710 100644
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@ -2629,10 +2629,38 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on)
  {
--	int i = 0;
--
- 	/* We reset twice as sometimes hid_wait_io isn't waiting long enough */
- 	pidff_send_device_control(pidff, PID_RESET);
- 	pidff_send_device_control(pidff, PID_RESET);
-@@ -604,23 +601,29 @@ static void pidff_reset(struct pidff_device *pidff)
+ 	u32			reg;
+ 	u32			timeout = 2000;
++	u32			saved_config = 0;
  
- 	pidff_send_device_control(pidff, PID_STOP_ALL_EFFECTS);
- 	pidff_modify_actuators_state(pidff, 1);
-+}
+ 	if (pm_runtime_suspended(dwc->dev))
+ 		return 0;
  
--	/* pool report is sometimes messed up, refetch it */
--	hid_hw_request(pidff->hid, pidff->reports[PID_POOL], HID_REQ_GET_REPORT);
--	hid_hw_wait(pidff->hid);
-+/*
-+ * Refetch pool report
-+ */
-+static void pidff_fetch_pool(struct pidff_device *pidff)
-+{
-+	if (!pidff->pool[PID_SIMULTANEOUS_MAX].value)
-+		return;
- 
--	if (pidff->pool[PID_SIMULTANEOUS_MAX].value) {
--		while (pidff->pool[PID_SIMULTANEOUS_MAX].value[0] < 2) {
--			if (i++ > 20) {
--				hid_warn(pidff->hid,
--					 "device reports %d simultaneous effects\n",
--					 pidff->pool[PID_SIMULTANEOUS_MAX].value[0]);
--				break;
--			}
--			hid_dbg(pidff->hid, "pid_pool requested again\n");
--			hid_hw_request(pidff->hid, pidff->reports[PID_POOL],
--					  HID_REQ_GET_REPORT);
--			hid_hw_wait(pidff->hid);
-+	int i = 0;
-+	while (pidff->pool[PID_SIMULTANEOUS_MAX].value[0] < 2) {
-+		hid_dbg(pidff->hid, "pid_pool requested again\n");
-+		hid_hw_request(pidff->hid, pidff->reports[PID_POOL],
-+				HID_REQ_GET_REPORT);
-+		hid_hw_wait(pidff->hid);
++	/*
++	 * When operating in USB 2.0 speeds (HS/FS), ensure that
++	 * GUSB2PHYCFG.ENBLSLPM and GUSB2PHYCFG.SUSPHY are cleared before starting
++	 * or stopping the controller. This resolves timeout issues that occur
++	 * during frequent role switches between host and device modes.
++	 *
++	 * Save and clear these settings, then restore them after completing the
++	 * controller start or stop sequence.
++	 *
++	 * This solution was discovered through experimentation as it is not
++	 * mentioned in the dwc3 programming guide. It has been tested on an
++	 * Exynos platforms.
++	 */
++	reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++	if (reg & DWC3_GUSB2PHYCFG_SUSPHY) {
++		saved_config |= DWC3_GUSB2PHYCFG_SUSPHY;
++		reg &= ~DWC3_GUSB2PHYCFG_SUSPHY;
++	}
 +
-+		/* break after 20 tries with SIMULTANEOUS_MAX < 2 */
-+		if (i++ > 20) {
-+			hid_warn(pidff->hid,
-+				 "device reports %d simultaneous effects\n",
-+				 pidff->pool[PID_SIMULTANEOUS_MAX].value[0]);
-+			break;
- 		}
- 	}
- }
-@@ -916,9 +919,7 @@ static void pidff_autocenter(struct pidff_device *pidff, u16 magnitude)
-  */
- static void pidff_set_autocenter(struct input_dev *dev, u16 magnitude)
- {
--	struct pidff_device *pidff = dev->ff->private;
--
--	pidff_autocenter(pidff, magnitude);
-+	pidff_autocenter(dev->ff->private, magnitude);
- }
++	if (reg & DWC3_GUSB2PHYCFG_ENBLSLPM) {
++		saved_config |= DWC3_GUSB2PHYCFG_ENBLSLPM;
++		reg &= ~DWC3_GUSB2PHYCFG_ENBLSLPM;
++	}
++
++	if (saved_config)
++		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
++
+ 	reg = dwc3_readl(dwc->regs, DWC3_DCTL);
+ 	if (is_on) {
+ 		if (DWC3_VER_IS_WITHIN(DWC3, ANY, 187A)) {
+@@ -2660,6 +2688,12 @@ static int dwc3_gadget_run_stop(struct dwc3 *dwc, int is_on)
+ 		reg &= DWC3_DSTS_DEVCTRLHLT;
+ 	} while (--timeout && !(!is_on ^ !reg));
  
- /*
-@@ -1424,6 +1425,8 @@ int hid_pidff_init_with_quirks(struct hid_device *hid, u32 initial_quirks)
- 	if (error)
- 		goto fail;
++	if (saved_config) {
++		reg = dwc3_readl(dwc->regs, DWC3_GUSB2PHYCFG(0));
++		reg |= saved_config;
++		dwc3_writel(dwc->regs, DWC3_GUSB2PHYCFG(0), reg);
++	}
++
+ 	if (!timeout)
+ 		return -ETIMEDOUT;
  
-+	/* pool report is sometimes messed up, refetch it */
-+	pidff_fetch_pool(pidff);
- 	pidff_set_gain_report(pidff, U16_MAX);
- 	error = pidff_check_autocenter(pidff, dev);
- 	if (error)
 -- 
-2.48.1
+2.17.1
 
 
