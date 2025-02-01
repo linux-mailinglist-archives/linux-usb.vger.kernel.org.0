@@ -1,91 +1,90 @@
-Return-Path: <linux-usb+bounces-19941-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19942-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23C64A24AD1
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2025 17:52:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE8EEA24ADB
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2025 17:55:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91D13165522
-	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2025 16:52:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 527311884AC1
+	for <lists+linux-usb@lfdr.de>; Sat,  1 Feb 2025 16:55:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0371C0DED;
-	Sat,  1 Feb 2025 16:52:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE44C1C6889;
+	Sat,  1 Feb 2025 16:55:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="vXI0a4ON"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="e0C0ZVk3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF0F208A9
-	for <linux-usb@vger.kernel.org>; Sat,  1 Feb 2025 16:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5DCB1C5D7E
+	for <linux-usb@vger.kernel.org>; Sat,  1 Feb 2025 16:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738428746; cv=none; b=BZ3M4+2Tp30XdJCYpDuBY/qgo12y4RaDA7tJlOId+f5w6CF85zbrch4IyyvKzRdm/3jyw6D/zM3m2yKQBasstZ85xvAWEYMFNZAVUaX0HSsdVctGUf0gK7MuTF7Lq5uQejtBjgtW8gHDTLoKBkm0HeyXvmimpgncjBPFVrQHVdQ=
+	t=1738428909; cv=none; b=Nv9A1DLYlSCrjrUDgDAv5DdYTxV/Vlt26XqWn+DSI52GLJJ9MQCtUDCc1jhQwDsmMptBvaBV7VYZwcDXGlNYVy5kjsjBiyd+WLOrGGaAVKVBXxGShmooE4b7j9gSKyDtsWC5wq2Ppbzcm6VTG0Cfe6ByCquHgaz2cYEFraIxsKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738428746; c=relaxed/simple;
-	bh=gCtG/jFGjrcsXe7xZYLZmn1i/3qGDb3fc0Hedn2u03U=;
+	s=arc-20240116; t=1738428909; c=relaxed/simple;
+	bh=DQmCx1UzC+wZmb/DNTjP2+1lGenSItgsdE3BWkM4Ha4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ay77+r2th54At0p6oTMHTjI+wEIcbH1hW5BjgcjUDXbb2O5Gh9vsLwHkgoOrM/nDHZH1EQex9fhlWIAOi/EzzVltw5xzFaU9CPHk4b4wtqXDNPZgaYtN8XGfUe/+RD1NKt2UZQ5BFxBIp4y4erbQBTH0ye+v8pDH3sPjbgSYr9g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=vXI0a4ON; arc=none smtp.client-ip=209.85.219.43
+	 Content-Type:Content-Disposition:In-Reply-To; b=rQFpEHIroZfU4a3Ho+qEu4yW4V5PCK8lk+T25Hb9GJhUamFMhE1bxOLczFCKteh10Up/sLSyE/VTM5e+kslGy78p+xYu1v5g92CyVIAbkmdBKnmS8a0Kcn477E11EIbJpfCqnWtwPH/jNX7rCHbcixPP0cnP8Ce0MaEdQHAB8pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=e0C0ZVk3; arc=none smtp.client-ip=209.85.222.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qv1-f43.google.com with SMTP id 6a1803df08f44-6d88cb85987so24440806d6.1
-        for <linux-usb@vger.kernel.org>; Sat, 01 Feb 2025 08:52:24 -0800 (PST)
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-7b6f53c12adso269407485a.1
+        for <linux-usb@vger.kernel.org>; Sat, 01 Feb 2025 08:55:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1738428744; x=1739033544; darn=vger.kernel.org;
+        d=rowland.harvard.edu; s=google; t=1738428907; x=1739033707; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=PYpQCJZZSmC5M37Y3PqZdR3AwdY9Yn3FSt/ozL9qEEs=;
-        b=vXI0a4ONhbe8vlDK6hr+wWiVKItmVa4Gcbm3nlkrJq91XIsXG7Q2TnkeDrnwLYIeLv
-         1cL32J9QefJ7DoiIFwwLIh7EKdpiPqe533a779PcHZDPZSJ6DtAtz0lGw3xLeDb0S/ka
-         PfE/wuyNlIxk/cqH2BNwkA8yMOL0WG0Q+woV7QKbbOQkL/KJVYkY4RXJYH6c69ZPHgLw
-         mXnS3/JGCHYJRZZpup+GzB7O1VLzioN+T3LSEA655VfO9kxnhWq8cjdD+X4d8Cgusf2m
-         huX/tBDXfm5JcY7Je5FNclfmQ98I+6DrmRulC5AUF5Ht/VTJN2UFyBmQLQkT3t5JdS7T
-         GnkA==
+        bh=4nxUHBFvGj81Oack1s7zBa0JySTAfnkZqGP49lK0Cew=;
+        b=e0C0ZVk3WaxfugOokJjSxV81HRu0dc6wtSrSx48IlitK/9w8/XPJsdWWln2Yz/RaR0
+         N67wsSv8uG3L1MI0r+wEyGZYJatNzOkA0PGJQmHiZq1XaPLwTYD6GGFkiF0hJWDkVAJc
+         ew899cwT7w3/yrMh/N4zQqiiNIF9gcanlxqP3pkOg+X0mSeYWTTifA7hdzOJj44W4MHJ
+         J7c+iCp/WzvUcy3RkGlmlLJlTFNqV8VhC/7myhz8UYxndVfoCki4jM14LHEwIg1rbJk5
+         MQWSezZUFFtfpGiuEAvomARCSTCIrhTMYeJjoBAYBZ0d+IUw6ly3QyPSWs72tW1gb+EJ
+         HfbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738428744; x=1739033544;
+        d=1e100.net; s=20230601; t=1738428907; x=1739033707;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PYpQCJZZSmC5M37Y3PqZdR3AwdY9Yn3FSt/ozL9qEEs=;
-        b=gKwsPFLsC4chZvwOl9phgGBEqcqfoE0WbJsxan9AQBJkGzIUkG1sCyidF7p+zBrVAh
-         9v0QhQFuNeNpTQs0rKEBCWmLJxIZZMNRcKnrpriGuNhe2OjfdbM2mr6E+BBR5EjXdA87
-         nIVhVECxOLVDNyaNWm5yLM3aNXdu59V3yPbYZC8XdkHC2ZXF3VIIkjaECGskX3GNRUt6
-         6+ER2HesPcjfFMON0WGMxSRpSeYkKj4uRItVwbfuEpDp/T/Bq//anfhQGrAxB1uPoQQe
-         gKpuUPBI/jOpTok8NQ8+PEN9/787yztNYc88vYdfQbKDXG0+E6AVJWGxfIZGWtGVHTz/
-         aA/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCX8idUQLpfi3zXM7fs816oyEOjHUUw3+xXuOKHYlctw3EKJJ55QPMfQaLbrd1cocjTHMyXKT6RIS2g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQOh7dZ8M9v2AGx5vkQoqP3Lrc8OPyh9YyaEqZOOAUkjRp0lJs
-	fZi9ClRCFo4DLlPUeBzz78IioCz/6+E1f/eWo2sXVXgMK1sQ0eZA3bEOn+pGiQ==
-X-Gm-Gg: ASbGncuxtJatAWgna6hLEDBDRpUWm8xC1ATpHWeEd8uO9M6EILRuqQSdBXefXuxr6HB
-	xNjd/xZu6IJic6hKLNkZQRMl2/xWN9XZy+747liz9Mv1VaWNeOx5oKe6/B7ZKnE+IaArm1ZaFg2
-	4rxE1X9CEMiBY2/ilwIL6kTMKQ+OItL7dM/3zuIlOHi2784nk+DfNX1qFR5I1YeNTs3BA3dc7OR
-	qc/tl8dXlWNQJNpzba35pBPY2EL8dHYVLBP+5WHRZD+HhtTXay0dCvjfgqvP0pNUd/h+mXkiiAo
-	i7p9LGRRioiE/LsP
-X-Google-Smtp-Source: AGHT+IFFUz1gzgxjmm2jBci03Jh1krPotRpqPAcZQFReDIbnrUfHqEfun0tWgh7gPn+hsXp0/fWqYg==
-X-Received: by 2002:ad4:5aeb:0:b0:6d4:1613:be3e with SMTP id 6a1803df08f44-6e25b0a41dcmr103944546d6.22.1738428744006;
-        Sat, 01 Feb 2025 08:52:24 -0800 (PST)
+        bh=4nxUHBFvGj81Oack1s7zBa0JySTAfnkZqGP49lK0Cew=;
+        b=ZC0L8xFMxqH2C7yAp5l8stUtn8kkud0YGn6XAJ7KA16JLXjA4nuRZH8e7xpLQjx0Jd
+         ZyQNBPRb/HjACHcKbVKQMZ54EKNcQOotZCH+3kmo7l6yC/SCNA2/I3X12CeHhVYNpoDr
+         gIX3cSPw788E4+eFGvzNWnODOG7U9xtOEA3a19vgBTMgnL1l2u58PZD1ev9iPRKEvFM3
+         6Fg5rg90qO4LhRuLZS6C6RndJbrcII63mxGGoBK3kfszmZtaACZ40ToWmdCg73zJJaiE
+         ZdeoWddc1ENkFG7F8pQW90nozveikvRv0mEzIB/gLHSzF/RR4SGUCZ30uGSZyY2kBEoy
+         MiqA==
+X-Forwarded-Encrypted: i=1; AJvYcCUKqO4j60kWba8PkZpSvFEGWRxaOnNjs8wKZgFHEJZglOYrR4fD4x6pq0ALy00y323JLj/cq2DmSSg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnUKGLm47Fh15bIm3WfRjD5nxGiLO6FylwDhgI61xaoKREWMPg
+	xw3w/F1v+i4e2/K6FWowt7RfxZ3J+jChgFm293R2z5k1Rt3N1jaKAOfIORgn0g==
+X-Gm-Gg: ASbGncuoPOtofcaIxyidVtqqeR2E9Z3vAyUWW0qTiaAHZ3+iQxiRvgA2KlsWM7Qa7+W
+	j2B9STnbwYN10o8nHqDOKBRWR6LVR79J4gz4ZyIf0OloWX8g5YRajmUhEC0yDtsRvsaxu1O8nLC
+	R9W+7SwV443M7EqBtSjeii9Wb0hxlDaz/zzoVwRDj6N/GaJv/N0xYC/HbWKMmzPK24VPkM+bUty
+	AsYqR95zTdJXenLUpdo7szPumYNPfAJ2gEm8XnNJpU7POeV821uT9Gz7IrvtfAW62K1figvxI39
+	J2VhLfvSSoQJY7dE
+X-Google-Smtp-Source: AGHT+IEAmw5GFbOYKfZFPQolGMSY0m/awA0DFxPabq5SO2pH/P9s7vEQcjVulqZpIiIC0bo8IQJdDQ==
+X-Received: by 2002:a05:620a:d86:b0:7b6:742d:c01e with SMTP id af79cd13be357-7bffcd06ab7mr2460374285a.25.1738428906791;
+        Sat, 01 Feb 2025 08:55:06 -0800 (PST)
 Received: from rowland.harvard.edu ([2601:19b:681:fd10::2aef])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e254940c8bsm29777996d6.100.2025.02.01.08.52.22
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c00a905597sm313250085a.88.2025.02.01.08.55.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 01 Feb 2025 08:52:23 -0800 (PST)
-Date: Sat, 1 Feb 2025 11:52:20 -0500
+        Sat, 01 Feb 2025 08:55:05 -0800 (PST)
+Date: Sat, 1 Feb 2025 11:55:03 -0500
 From: Alan Stern <stern@rowland.harvard.edu>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Roy Luo <royluo@google.com>,
-	"gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"andre.draszik@linaro.org" <andre.draszik@linaro.org>
-Subject: Re: [PATCH v1] usb: dwc3: gadget: fix gadget workqueue use-after-free
-Message-ID: <db8819b7-05d5-468d-8974-3dfae25bbb2b@rowland.harvard.edu>
-References: <20250122024452.50289-1-royluo@google.com>
- <20250128014400.7jx4segwn53vjnb5@synopsys.com>
- <CA+zupgwLfzDvVF+5psdbuUgZb_mCNqXtxS5=b1RtTAjQKq6AuA@mail.gmail.com>
- <20250131234407.fyv4iu5yadp5xeg2@synopsys.com>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Huacai Chen <chenhuacai@loongson.cn>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH] USB: core: Enable root_hub's remote wakeup for wakeup
+ sources
+Message-ID: <fbe4a6c4-f8ba-4b5b-b20f-9a2598934c42@rowland.harvard.edu>
+References: <20250131100630.342995-1-chenhuacai@loongson.cn>
+ <2f583e59-5322-4cac-aaaf-02163084c32c@rowland.harvard.edu>
+ <CAAhV-H7Dt1bEo8qcwfVfcjTOgXSKW71D19k3+418J6CtV3pVsQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -95,85 +94,61 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250131234407.fyv4iu5yadp5xeg2@synopsys.com>
+In-Reply-To: <CAAhV-H7Dt1bEo8qcwfVfcjTOgXSKW71D19k3+418J6CtV3pVsQ@mail.gmail.com>
 
-On Fri, Jan 31, 2025 at 11:44:17PM +0000, Thinh Nguyen wrote:
-> Cc Alan
+On Sat, Feb 01, 2025 at 02:42:43PM +0800, Huacai Chen wrote:
+> Hi, Alan,
 > 
-> On Fri, Jan 31, 2025, Roy Luo wrote:
-> > On Mon, Jan 27, 2025 at 5:44 PM Thinh Nguyen <Thinh.Nguyen@synopsys.com> wrote:
-> > >
-> > > On Wed, Jan 22, 2025, Roy Luo wrote:
-> > > > `dwc3_gadget_soft_disconnect` function, called as part of
-> > >
-> > > The dwc3_gadget_soft_disconnect() isn't directly part of
-> > > device_del(&gadget->dev). It should be part of disconnect.
-> > >
-> > > Can you provide the full sequence of events so I can have more context?
-> > > The handling of the flushing of gadget->work should not be part of the
-> > > dwc3.
-> > 
-> > 
-> > Yes, it's a part of disconnect, and disconnect is a part of gadget unbind.
-> > Let me try my best to explain. Here's the call stack for usb_del_gadget:
-> > -> usb_del_gadget
-> >     -> flush_work(&gadget->work)
-> >     -> device_del
-> >         -> bus_remove_device
-> >         -> device_release_driver
-> >         -> gadget_unbind_driver
-> >         -> usb_gadget_disconnect_locked
-> >         -> dwc3_gadget_pullup
-> >         -> dwc3_gadget_soft_disconnect
-> >         -> usb_gadget_set_state
-> >         -> schedule_work(&gadget->work)
-> > 
-> > Then when usb_put_gadget is called, gadget could be freed before
-> > gadget->work is executed.
-> > -> usb_put_gadget
-> > -> put_device
-> > -> kobject_put
-> > -> device_release
-> > -> dwc_gadget_release
-> > -> kfree(gadget)
-> > 
+> On Fri, Jan 31, 2025 at 11:17 PM Alan Stern <stern@rowland.harvard.edu> wrote:
+> >
+> > On Fri, Jan 31, 2025 at 06:06:30PM +0800, Huacai Chen wrote:
+> > > Now we only enable the remote wakeup function for the USB wakeup source
+> > > itself at usb_port_suspend(). But on pre-XHCI controllers this is not
+> > > enough to enable the S3 wakeup function for USB keyboards,
+> >
+> > Why do you say this?  It was enough on my system with an EHCI/UHCI
+> > controller when I wrote that code.  What hardware do you have that isn't
+> > working?
+> >
+> > >  so we also
+> > > enable the root_hub's remote wakeup (and disable it on error). Frankly
+> > > this is unnecessary for XHCI, but enable it unconditionally make code
+> > > simple and seems harmless.
+> >
+> > This does not make sense.  For hubs (including root hubs), enabling
+> > remote wakeup means that the hub will generate a wakeup request when
+> > there is a connect, disconnect, or over-current change.  That's not what
+> > you want to do, is it?  And it has nothing to do with how the hub
+> > handles wakeup requests received from downstream devices.
+> >
+> > You need to explain what's going on here in much more detail.  What
+> > exactly is going wrong, and why?  What is the hardware actually doing,
+> > as compared to what we expect it to do?
+> OK, let me tell a long story:
 > 
-> Thanks for the details!
+> At first, someone reported that on Loongson platform we cannot wake up
+> S3 with a USB keyboard, but no problem on x86. At that time we thought
+> this was a platform-specific problem.
 > 
-> The UDC core is initiating and handling the gadget->work, so the
-> flushing of the gadget->work should also be handled there.
+> After that we have done many experiments, then we found that if the
+> keyboard is connected to a XHCI controller, it can wake up, but cannot
+> wake up if it is connected to a non-XHCI controller, no matter on x86
+> or on Loongson. We are not familiar with USB protocol, this is just
+> observed from experiments.
 > 
-> Since the usb_gadget_disconnect_locked() may trigger a state change work
-> on unbind, the flushing of the gadget->work should to be moved to
-> gadget_unbind_driver() instead:
+> You are probably right that enabling remote wakeup on a hub means it
+> can generate wakeup requests rather than forward downstream devices'
+> requests. But from experiments we found that if we enable the "wakeup"
+> knob of the root_hub via sysfs, then a keyboard becomes able to wake
+> up S3 (for non-XHCI controllers). So we guess that the enablement also
+> enables forwarding. So maybe this is an implementation-specific
+> problem (but most implementations have problems)?
 > 
-> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-> index f8c1ef465e45..9e4abd6e40f8 100644
-> --- a/drivers/usb/gadget/udc/core.c
-> +++ b/drivers/usb/gadget/udc/core.c
-> @@ -1568,7 +1568,6 @@ void usb_del_gadget(struct usb_gadget *gadget)
->  
->         kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
->         sysfs_remove_link(&udc->dev.kobj, "gadget");
-> -       flush_work(&gadget->work);
->         device_del(&gadget->dev);
->         ida_free(&gadget_id_numbers, gadget->id_number);
->         cancel_work_sync(&udc->vbus_work);
-> @@ -1694,6 +1693,8 @@ static void gadget_unbind_driver(struct device *dev)
->                 synchronize_irq(gadget->irq);
->         mutex_unlock(&udc->connect_lock);
->  
-> +       flush_work(&gadget->work);
-> +
->         udc->driver->unbind(gadget);
->  
->         mutex_lock(&udc->connect_lock);
+> This patch itself just emulates the enablement of root_hub's remote
+> wakeup automatically (then we needn't operate on sysfs).
 
-What about instead moving the flush_work() call down just one line, 
-after the device_del(&gadget->dev) call rather than before it?
-
-The work queue doesn't need to be flushed every time a driver unbinds 
-from the gadget, only when the gadget is about to be deallocated.
+I'll run some experiments on my system.  Maybe you're right about the 
+problem, but your proposed solution looks wrong.
 
 Alan Stern
 
