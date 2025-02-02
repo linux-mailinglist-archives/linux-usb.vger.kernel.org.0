@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-19962-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19963-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62E50A24FC3
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 20:13:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DC7FA24FDE
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 20:57:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 14CB43A38D7
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 19:13:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A97901635FB
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 19:57:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC7991FECC7;
-	Sun,  2 Feb 2025 19:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A071FF1A2;
+	Sun,  2 Feb 2025 19:57:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pdGcrfwb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZliaSi0N"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F34771FDE29;
-	Sun,  2 Feb 2025 19:13:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EC6BE67;
+	Sun,  2 Feb 2025 19:57:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738523609; cv=none; b=A4e/NwUJd79olXpdqljuyz8Fi+tcsgL6f+ktV6QV2PkIT/RsfUB7hPQ25UTKRwcOzK7/S6vZlzySjVZhJqvsH5PUUJPoXPhJva2BPxdrPh7CmJu4IvCrbPoL073SCPVD5hQcTZtkqaNth3VNrIm3CnvEbVAMS4evwve1egu6OSs=
+	t=1738526267; cv=none; b=F+AVEa2VWdsPUGAlP6xZf+4u95SSI8SyfZSf3psTYtS0vxj8Rr7/7jqh+W/doO/asd8Ag/Cw7O4ZZcLrVBTvzPN4Seam/6Ou1JOC5LsDgaJ0ybPBNsJq/coDjhZRA443YvPeiTHBL5Nfkl7meVyNQaSh9oG6jxis5qvE03CZ3P8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738523609; c=relaxed/simple;
-	bh=qp85f6lVtyFufftLcvm0KtTkfgTx1E2OjGrzMRYdJYQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IdOBlGpYkqWATD3Z1YYBlmOBs+5bW5373cgSMaaNeCyUYn5b7M3bhieFRmQW9VoC+gW/kwkgsQayasVHQwaHdkGhQSlmB2JkOnnGB75Gde1IrRZnK0XeBNRkFh9VWbn98Taz4k4dT3fWcXlitNcsR+acIUy/nBhNSYGT6LQWJuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pdGcrfwb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D208CC4CED1;
-	Sun,  2 Feb 2025 19:13:14 +0000 (UTC)
+	s=arc-20240116; t=1738526267; c=relaxed/simple;
+	bh=fj2gd9lh84yaGtViLS4opTR3wYTKKm5xnBKtcZGGF8Y=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=Og/jWbmZMW43u6UQqrDC5sDqxinyFAEmLjb70IFBsvqywFfESPbnraV9V123UopdFkbR7AuckG9ZqpjAOtJ5kP+fZBvaHQD6GMYlT/IF6twu8LQO8d5kHkLVxh59ic8hzoaz47k4QNvPJqOrYn1motYETL+p0SI0fh9i447HFno=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZliaSi0N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92DAAC4CED1;
+	Sun,  2 Feb 2025 19:57:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738523608;
-	bh=qp85f6lVtyFufftLcvm0KtTkfgTx1E2OjGrzMRYdJYQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=pdGcrfwboB3rD+kxQfruN+ONEzE/H0slRWflqRFQugTFLh6rRmf+SaG8i3l4YEIXh
-	 LinmJZwsi3NK7Y8/6aJCrLZOIAy48FyVey4pVb6vZBNwL2sCRB1YYfzktAg4wTjSNM
-	 2JyA+MGnaZg1kfbeQpq/AKgiXUWIC/pXP1h24HMSZpKmnc6kVHG1NLbFZqAJwDwXEM
-	 CXYBHqQd+BUZDewXD0UVhlPgmWi1lYJSOBn+03/4GYpgKQSjGl4Td8IFyS8zfsKXTZ
-	 SgcUZL4TB70C/GqhP7mZXzcNzI/nK8hX2iXPw8WaOvot5f+3nCC3KOuWXExfoiZUpJ
-	 JAr75MtBwZhyg==
-Message-ID: <54d9a2ef-baaa-4d09-afc8-974bd9bd9daa@kernel.org>
-Date: Sun, 2 Feb 2025 20:13:11 +0100
+	s=k20201202; t=1738526266;
+	bh=fj2gd9lh84yaGtViLS4opTR3wYTKKm5xnBKtcZGGF8Y=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=ZliaSi0NvAFlYF1vi3PEsLeNqGBkm97/l5U7AMHGa4e3nietTq+XWlvqBFa+P3XHv
+	 6AXAepOC+O8aKqnaVdgU9r6HgdKqUntkQTrLgFYc3qb6iV1UvXOLalmlPAtazqlTRj
+	 BOtS6LYgt8JDUSBVU6J+Q1j+S1eRVDT5C5RuebDayYkWLOTSkVEAAdRljFZIU4C748
+	 qj3EVjftQujQZdv1gc4DaJVVtjqp2WL8V7yCX5slCI4aEsqXjKQUNho1T1IfNnUaPi
+	 X+u/Zxkv8vGxsvMcRj3MexJXU8wEWnpqbVFC8T1gol0kn4I4MQV9/Pg2HUdRDr36UF
+	 5YU5kDq+nnmuA==
+Message-ID: <52dd7137-ba7f-4a96-a3e1-c6de2d21b7c1@kernel.org>
+Date: Sun, 2 Feb 2025 20:57:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,38 +50,16 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/33] Add support for the Exynos7870 SoC, along with
- three devices
-To: Kaustabh Chakraborty <kauschluss@disroot.org>,
- Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>,
- Alim Akhtar <alim.akhtar@samsung.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Lee Jones <lee@kernel.org>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>, David Airlie
- <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- Andi Shyti <andi.shyti@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Jaehoon Chung <jh80.chung@samsung.com>,
- Vivek Gautam <gautam.vivek@samsung.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>, Kees Cook <kees@kernel.org>,
- Tony Luck <tony.luck@intel.com>, "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc: Sergey Lisov <sleirsgoevy@gmail.com>, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-usb@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-i2c@vger.kernel.org,
- linux-mmc@vger.kernel.org, linux-hardening@vger.kernel.org
-References: <20250203-exynos7870-v1-0-2b6df476a3f0@disroot.org>
+Subject: Re: [PATCH v1 1/2] dt-bindings: usb: snps,dwc3: Add property for imod
 From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Badhri Jagan Sridharan <badhri@google.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+ felipe.balbi@linux.intel.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, johnyoun@synopsys.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ jameswei@google.com, stable@kernel.org
+References: <20250202035100.31235-1-badhri@google.com>
+ <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -126,84 +104,23 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250203-exynos7870-v1-0-2b6df476a3f0@disroot.org>
+In-Reply-To: <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 02/02/2025 19:36, Kaustabh Chakraborty wrote:
-> Samsung Exynos 7870 (codename: Joshua) is an ARM-v8 system-on-chip that was
-> announced in 2016. The chipset was found in several popular mid-range to
-> low-end Samsung phones, released within 2016 to 2019.
+On 02/02/2025 15:11, Krzysztof Kozlowski wrote:
+> On Sun, Feb 02, 2025 at 03:50:59AM +0000, Badhri Jagan Sridharan wrote:
+>> This change adds `snps,device-mode-intrpt-mod-interval`
 > 
-> This patch series aims to add support for Exynos 7870, starting with the
-> most basic yet essential components such as CPU, GPU, clock controllers,
-> PMIC, pin controllers, etc.
-> 
-> Moreover, the series also adds support for three Exynos 7870 devices via
-> devicetree. The devices are:
->  * Samsung Galaxy J7 Prime     - released 2016, codename on7xelte
->  * Samsung Galaxy J6           - released 2018, codename j6lte
->  * Samsung Galaxy A2 Core      - released 2019, codename a2corelte
-> 
-> Additional features implemented in this series include:
->  * I2C     - touchscreen, IIO sensors, etc.
->  * UART    - bluetooth and serial debugging
->  * MMC     - eMMC, Wi-Fi SDIO, SDCard
->  * USB     - micro-USB 2.0 interface
-> 
-> The series has commits from me and Sergey, who has given me permission
-> to upstream their patches with proper attribution.
-> 
-> Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
-> ---
-> Kaustabh Chakraborty (26):
->       dt-bindings: hwinfo: samsung,exynos-chipid: add exynos7870-chipid compatible
->       dt-bindings: clock: document exynos7870 clock driver CMU bindings
->       dt-bindings: soc: samsung: exynos-pmu: add exynos7870-pmu compatible
->       dt-bindings: pinctrl: samsung: add exynos7870-pinctrl compatible
->       dt-bindings: pinctrl: samsung: add exynos7870-wakeup-eint compatible
->       dt-bindings: serial: samsung: add exynos7870-uart compatible
->       dt-bindings: mfd: samsung,s2mps11: add compatible for s2mpu05-pmic
+> Thank you for your patch. There is something to discuss/improve.
 
-This is not related at all to this patchset.
 
->       regulator: dt-bindings: add documentation for s2mpu05-pmic regulators
+Also one more note:
 
-Neither is this.
+Please do not use "This commit/patch/change", but imperative mood. See
+longer explanation here:
+https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
 
->       dt-bindings: phy: samsung,usb3-drd-phy: add exynos7870-usbdrd-phy compatible
->       dt-bindings: usb: samsung,exynos-dwc3: add exynos7870 support
->       dt-bindings: gpu: arm,mali-midgard: add exynos7870 mali compatible
->       dt-bindings: i2c: samsung,s3c2410: add exynos7870-i2c compatible
->       dt-bindings: i2c: exynos5: add exynos7870-hsi2c compatible
->       dt-bindings: mmc: samsung,exynos-dw-mshc: add exynos7870 support
->       dt-bindings: soc: samsung,boot-mode: add boot mode definitions for exynos7870
->       dt-bindings: arm: samsung: add compatibles for exynos7870 devices
->       soc: samsung: exynos-chipid: add support for exynos7870
->       clk: samsung: add exynos7870 CLKOUT support
->       tty: serial: samsung: add support for exynos7870
-
-This goes to different patchset. Don't mix with SoC changes or pure
-bindings. Your CC list is too big.
-
->       phy: exynos5-usbdrd: fix MPLL_MULTIPLIER and SSC_REFCLKSEL masks in refclk
->       phy: exynos5-usbdrd: use GENMASK and FIELD_PREP for Exynos5 PHY registers
-
-Different patchset.
-
->       usb: dwc3: exynos: add support for exynos7870
-
-As well, with bindings.
-
-Please organize your patchset according to standard SoC upstream
-guidelines - don't mix SoC with non-Soc upstreaming or other subsystems.
-While putting entire SoC in one patchset is tempting, you added here
-totally unrelated changes like PMIC drivers. Result: 33 patches and huge
-cc-list bouncing from mailing lists.
-
-https://lore.kernel.org/linux-samsung-soc/CADrjBPq_0nUYRABKpskRF_dhHu+4K=duPVZX==0pr+cjSL_caQ@mail.gmail.com/T/#m2d9130a1342ab201ab49670fa6c858ee3724c83c
-
-https://lore.kernel.org/all/20231121-topic-sm8650-upstream-dt-v3-0-db9d0507ffd3@linaro.org/
 
 Best regards,
 Krzysztof
