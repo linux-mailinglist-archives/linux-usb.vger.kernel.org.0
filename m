@@ -1,323 +1,269 @@
-Return-Path: <linux-usb+bounces-19950-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19951-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3C45A24C91
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 05:00:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7034FA24D5F
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 10:56:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AE5E163AA0
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 04:00:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC4FD162B45
+	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 09:56:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25BBA41C79;
-	Sun,  2 Feb 2025 04:00:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LUhPMWBN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D875A1D5AB8;
+	Sun,  2 Feb 2025 09:55:58 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from exchange.fintech.ru (exchange.fintech.ru [195.54.195.159])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E21E425632
-	for <linux-usb@vger.kernel.org>; Sun,  2 Feb 2025 04:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6BB8DF58;
+	Sun,  2 Feb 2025 09:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.54.195.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738468823; cv=none; b=YX3ttikWC5J5wcrcGMkBir6g7rNv2zeBw/eebncPK0sVITR2+eZ3Wr7dymC+iWLlUtlSe+Rwmll/SUbnbSl8RZdakfMY5LjVUHCpmXJwvMZ2VxW048mSKaG76uBzHpsuoSAAUt9ispf0/HiQ8CgZvxFFKwStzAKp56FJPWvOLE4=
+	t=1738490158; cv=none; b=hBGjypVCB2ywE05AxFNMy4pGgSPNRJZ35XcdjBcqKNbUhn9OkxRyA26LrDU1y4DIVHqXSaqws0RT2XVf0tgY+W7wmzSuRn0YCy/gvzlqugdXRyR/IIe65P83PZhxHrHq5TS/AJOmJCNxvUKfdrvN3z1gPuN7dNg1S9xSYb7e7Hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738468823; c=relaxed/simple;
-	bh=clKK0H6xdcXQfRlxT+DrACKlQNopTIeCzE95MH+/u6U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iV7qEHXQ/bNVusK9ZJLcb+JnsJILWjPkFJpbPrRYsBYeguO3DRryoYa2MjqgLw8UPZ5aEm+/ZWvqaN8/EfJvGFi3gSMlP3pvBQhM8vP12mUIz/NGZNOR/BLuM5D5tSdz1gYqbBHv64ut2MXEY1fqnkP3sYP+l3Pp5ZUKM9AvQMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LUhPMWBN; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-724f4d99ba0so1583110a34.0
-        for <linux-usb@vger.kernel.org>; Sat, 01 Feb 2025 20:00:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738468821; x=1739073621; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LI3xeUwu8EErcVtMqGX3bpVPyaEli1w3CO9BxFmPwpw=;
-        b=LUhPMWBNvQL7DBColofLHud99HQc9BrQFqyt1L0yC/MM/UfYgz9TkcymnzoTsMdrMR
-         9NbHikpq+vWPT0xE+lQU8cfSO03suFYEApoI8nTz9CsLzHYqyiikfvwyImCaP0qqv7xY
-         v8+XBzZGht4GY1LR6WJXemPvRunOyqYLZash1y6aKJnm1thrvOCcg20Gb7xrKm5Yprpk
-         1EYQhFPrNNCoehpIxTHdcEB59mIz8rYO9wbLZAr6BAVrVDKj3W1XKFJaSMR+h/eLNKEX
-         h0vYE+zzBdlqpZDU5cosc7pSHDZU/sXfMwwxpTusu4h1AIyzRxOcJ071j1hZBsehrD1e
-         qGgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738468821; x=1739073621;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LI3xeUwu8EErcVtMqGX3bpVPyaEli1w3CO9BxFmPwpw=;
-        b=dHZvXb01WSAZH2R/a2bWe3OeqFSN0XuHl6aNrWCrXl8scrUCFRjoscxp0fsPKmLWiH
-         gIEKoa79BbNPFilmbOvHgAgb63ziQDSpd4XBNPHu+HXoTuH3EjQpRnM+rIlxuXMyLHyG
-         6Zu8X5VxZ8wxQ3x9c+dRAk/VVnImLRWZMdlbrXj8V+F4epZLalqL5Ok6XiiMf429YcNA
-         TrGhbgc7DNGFHzhYG6GPJ4tj06cbjL0kr2iYzQxX+gd+5ArVWyMWPdEc46e4Iul6vuId
-         OvgZ8T1q5LRnOffQ2PdAWls1GJ51gJ5ZXf86t+qlnT8WD/YJ6alfZjlYbnWk5t2Ikjah
-         m4EQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXS5SkRpCywg9G3XrakBfTJwSgU4exM/Or4iNm3InJV8WbRZQeYMxq/1hQ2r+O447slMp7KEl7wpkM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgoOE00kDLrxy5ziosoJpxoCGG9ECC+QYQJWtMaH0TiHXAbpxm
-	s6EKFWTQQIMOhetdCvqzwMcqDKBR2c191QtaY7Au6rYHYCU/oAyTi0lbSoVR0FLUKryUPAgeTNi
-	OKEKxRyrpUX/JaUqb5kxYtx6EdSILPh0Puia4
-X-Gm-Gg: ASbGncso0h3fA+Rq+aT/M8tuUOayMP2Ale2goQX7jTdaLnwDqDd0PHl3SCyAL0Ue4UB
-	WvDU+p4lwH+PfH0ZO9NxS34IJp5dSoGPZdwwCgUNutonRRFflQD4bUkto1a2+RcDVbG3Tu+rNZj
-	DyZzmxpne+frHAa21HYui5EOnV4U/HNg==
-X-Google-Smtp-Source: AGHT+IHsjNOFn4gqTs2pplnvwIrczYC0kJUvkdvfX4d+0MN/8x9F9B5MAZ4xvcUgFFaryzccLo1ls+bbZLxsmhlg2lc=
-X-Received: by 2002:a05:6871:3a8a:b0:29e:509c:3711 with SMTP id
- 586e51a60fabf-2b32f14f238mr10039807fac.15.1738468820698; Sat, 01 Feb 2025
- 20:00:20 -0800 (PST)
+	s=arc-20240116; t=1738490158; c=relaxed/simple;
+	bh=1XCb2JMptTgcj17b+YSKVYvQ7breD1kezbibJgXhQRw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=NoaJ4DkGrms30woIucu2ig0CfGzdh8RB+6gqSPKkIPJSG6Fsg3leIWNG0LtTcmV/OiIWtmM1L6KP1VEpDuPRXr0K+Nvjw0RlxdZtGtTV4DAywzCl/qsRdaaO0u+ooWNsKW613ZCXG5ba5jNXGix11ZzN4j2F4i2e48TXgLveKCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru; spf=pass smtp.mailfrom=fintech.ru; arc=none smtp.client-ip=195.54.195.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=fintech.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fintech.ru
+Received: from Ex16-01.fintech.ru (10.0.10.18) by exchange.fintech.ru
+ (195.54.195.159) with Microsoft SMTP Server (TLS) id 14.3.498.0; Sun, 2 Feb
+ 2025 12:55:43 +0300
+Received: from [192.168.211.132] (10.0.253.138) by Ex16-01.fintech.ru
+ (10.0.10.18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2242.4; Sun, 2 Feb 2025
+ 12:55:43 +0300
+Message-ID: <27f8c5a1-6671-4e23-862f-4c5bf888684a@fintech.ru>
+Date: Sun, 2 Feb 2025 12:55:43 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250124075911.811594-1-badhri@google.com> <20250128024416.7i3i2vmw2ioy5huf@synopsys.com>
- <CAPTae5L6Worr3WsuuV-SUNJh6SOVf+RnLWt2d1LNLDYvY6uRuA@mail.gmail.com>
- <20250130014159.bv7gvtskyg73lxmc@synopsys.com> <CAPTae5JYuogc-mHUi-VdfLAJ4E1z6myGofCvqVCfYxt--VetKA@mail.gmail.com>
- <20250201000926.veukjr6wmhrgl6me@synopsys.com>
-In-Reply-To: <20250201000926.veukjr6wmhrgl6me@synopsys.com>
-From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Sat, 1 Feb 2025 19:59:44 -0800
-X-Gm-Features: AWEUYZnxbvWspX02bTb7xvaZoZn6rpvcyFtGB4y0YscQu6nKJg-DiYiewQo0a8g
-Message-ID: <CAPTae5Lw8pB=SuGgkfTyk5BNPWwgCVvYssdLwT7vFKgMepsZig@mail.gmail.com>
-Subject: Re: [PATCH v1] usb: dwc3: gadget: Prevent irq storm when TH re-executes
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "jameswei@google.com" <jameswei@google.com>, 
-	"stable@kernel.org" <stable@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] HID: usbhid: fix recurrent out-of-bounds bug in
+ usbhid_parse()
+To: Kees Cook <kees@kernel.org>
+CC: Jiri Kosina <jikos@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+	Benjamin Tissoires <bentiss@kernel.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Terry Junge <linuxhid@cosmicgizmosystems.com>, <linux-usb@vger.kernel.org>,
+	<linux-input@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-hardening@vger.kernel.org>, syzbot
+	<syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com>,
+	<syzkaller-bugs@googlegroups.com>, <lvc-project@linuxtesting.org>
+References: <20250131151600.410242-1-n.zhandarovich@fintech.ru>
+ <202501311205.DB75F95@keescook>
+From: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+Content-Language: en-US
+In-Reply-To: <202501311205.DB75F95@keescook>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: Ex16-02.fintech.ru (10.0.10.19) To Ex16-01.fintech.ru
+ (10.0.10.18)
 
-On Fri, Jan 31, 2025 at 4:09=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
->
-> On Fri, Jan 31, 2025, Badhri Jagan Sridharan wrote:
-> > On Wed, Jan 29, 2025 at 5:42=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@syno=
-psys.com> wrote:
-> > >
-> > > On Wed, Jan 29, 2025, Badhri Jagan Sridharan wrote:
-> > > > On Mon, Jan 27, 2025 at 6:44=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@=
-synopsys.com> wrote:
-> > > > >
-> > > > > On Fri, Jan 24, 2025, Badhri Jagan Sridharan wrote:
-> > > > > > While commit d325a1de49d6 ("usb: dwc3: gadget: Prevent losing e=
-vents
-> > > > > > in event cache") makes sure that top half(TH) does not end up o=
-verwriting
-> > > > > > the cached events before processing them when the TH gets invok=
-ed more
-> > > > > > than one time, returning IRQ_HANDLED results in occasional irq =
-storm
-> > > > > > where the TH hogs the CPU. The irq storm can be prevented if
-> > > > > > IRQ_WAKE_THREAD is returned.
-> > > > > >
-> > > > > > ftrace event stub during dwc3 irq storm:
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000866: irq_handle=
-r_exit: irq=3D14 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000872: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000874: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000881: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000883: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000889: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000892: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000898: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000901: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000907: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000909: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000915: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000918: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000924: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000927: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000933: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000935: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     ....
-> > > > > >
-> > > > > > Cc: stable@kernel.org
-> > > > > > Fixes: d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events =
-in event cache")
-> > > > >
-> > > > > I don't think this should be Cc to stable, at least not the way i=
-t is
-> > > > > right now.
-> > > > >
-> > > > > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > > > > > ---
-> > > > > >  drivers/usb/dwc3/gadget.c | 2 +-
-> > > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadge=
-t.c
-> > > > > > index d27af65eb08a..376ab75adc4e 100644
-> > > > > > --- a/drivers/usb/dwc3/gadget.c
-> > > > > > +++ b/drivers/usb/dwc3/gadget.c
-> > > > > > @@ -4519,7 +4519,7 @@ static irqreturn_t dwc3_check_event_buf(s=
-truct dwc3_event_buffer *evt)
-> > > > > >        * losing events.
-> > > > > >        */
-> > > > > >       if (evt->flags & DWC3_EVENT_PENDING)
-> > > > > > -             return IRQ_HANDLED;
-> > > > > > +             return IRQ_WAKE_THREAD;
-> > > > >
-> > > > > This looks like a workaround to the issue we have. Have you tried=
- to
-> > > > > enable imod instead? It's the feature to help avoid these kind of=
- issue.
-> > > >
-> > > > Hi Thinh,
-> > > >
-> > > > Thanks for the feedback ! Yes, we have been experimenting with the
-> > > > interrupt moderation interval as well.
-> > > > Have follow up questions though, please bear with me !
-> > > >
-> > > > 1. Given that when DWC3_EVENT_PENDING  is still set,
-> > > > dwc3_check_event_buf() is still waiting for the previous cached eve=
-nts
-> > > > to be processed by the dwc3_thread_interrupt(), what's the reasonin=
-g
-> > > > behind returning IRQ_HANDLED here ? Shouldn't we be returning
-> > > > IRQ_WAKE_THREAD anyways ?
-> > >
-> > > Currently dwc3 is implemented such that it will not process new event=
-s
-> > > until the BH is done with its work. The DWC3_EVENT_PENDING flag
-> > > indicates when the events are processed. With this expectation, we
-> > > should not schedule the BH as the events are still being handled.
-> >
-> >
-> > Hi Thinh,
-> >
-> > Thanks for sharing your thoughts !
-> > Given that the intention of the design is to keep top half
-> > (dwc3_check_event_buf()) and bottom half (dwc3_process_event_buf())
-> > mutually exclusive, Is there a reason why the threaded interrupt
-> > should not be marked with IRQF_ONESHOT ? Marking it IRQF_ONESHOT makes
-> > the threaded irq framework to ensure mutual exclusivity for us. I
-> > was validating this and this seems to be pretty effective. Curious to
-> > know your thoughts !
->
->
-> We shouldn't do that. There are designs with phy driver or connector
-> driver or other devices that share the same interrupt line.
->
-> >
-> > >
-> > >
-> > > In your case, there's a small window where the TH may be scheduled bu=
-t
-> > > the DWC3_EVENT_PENDING flag is not cleared yet. Returning
-> > > IRQ_WAKE_THREAD may workaround your issue because the BH may already =
-be
-> > > running when DWC3_EVENT_PENDING is set. I'm not sure what other side
-> > > effect this may have since we're breaking this expectation.
-> > >
-> > > We may enhance the dwc3 handling of event flow in the future to impro=
-ve
-> > > this. But at the moment, we should not return IRQ_WAKE_THREAD here.
-> > >
-> > > >
-> > > > 2. When interrupt moderation is enabled, does DEVICE_IMODC start to
-> > > > decrement as soon as the interrupt is masked (where I expect that t=
-he
-> > > > interrupt line gets de-asserted by the controller) in
-> > > > dwc3_check_event_buf()  ?
-> > > >
-> > > > /* Mask interrupt */
-> > > > dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
-> > > >    DWC3_GEVNTSIZ_INTMASK | DWC3_GEVNTSIZ_SIZE(evt->length));
-> > > >
-> > >
-> > > The DEVICE_IMODC is loaded with DEVICE_IMODI and starts to decrement =
-as
-> > > soon as the interrupt is de-asserted from the asserted state, which
-> > > includes when the interrupt is masked. You brought up a good question
-> > > here. The IMOD count may already be 0 when we exit the BH. Can you tr=
-y
-> > > this experiment to update the count and let me know if it helps:
-> >
-> >
-> > Gave this a try, unfortunately this does not seem to help ! I see what
-> > you are trying to do though. You are trying to explicitly re-arm the
-> > timer. I was checking the register description as well and it does not =
-seem to
-> > guarantee that directly writing to DEVICE_IMODC restarts the counter
-> > again.
-> >
->
-> Hmm... Can you try this instead:
 
-Thanks, this seems to be working !
-I also sent out the following as there isn't a way to enable interrupt
-moderation through the device tree node:
-https://lore.kernel.org/all/20250202035100.31235-1-badhri@google.com/
-https://lore.kernel.org/all/20250202035100.31235-2-badhri@google.com/
 
->
-> diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-> index 0fe92c0fb520..c1b5a3742ab4 100644
-> --- a/drivers/usb/dwc3/gadget.c
-> +++ b/drivers/usb/dwc3/gadget.c
-> @@ -5737,14 +5737,20 @@ static irqreturn_t dwc3_process_event_buf(struct =
-dwc3_event_buffer *evt)
->         dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
->                     DWC3_GEVNTSIZ_SIZE(evt->length));
->
-> +       /*
-> +        * Keep the clearing of DWC3_EVENT_PENDING after the interrupt un=
-mask
-> +        * but before the clearing of DWC3_GEVNTCOUNT_EHB.
-> +        */
-> +       evt->flags &=3D ~DWC3_EVENT_PENDING;
-> +
-> +       /* Ensure the flag is updated before clearing DWC3_GEVNTCOUNT_EHB=
- */
-> +       wmb();
+On 1/31/25 23:12, Kees Cook wrote:
+> On Fri, Jan 31, 2025 at 06:15:58PM +0300, Nikita Zhandarovich wrote:
+>> Syzbot reports [1] a reemerging out-of-bounds bug regarding hid
+>> descriptors supposedly having unpredictable bNumDescriptors values in
+>> usbhid_parse().
+>>
+>> The issue stems from the fact that hid_class_descriptor is supposed
+>> to be a flexible array, however it was sized as desc[1], using only
+>> one element. Therefore, going beyond 1 element, courtesy of
+>> bNumDescriptors, may lead to an error.
+>>
+>> Modify struct hid_descriptor by employing __counted_by macro, tying
+>> together struct hid_class_descriptor desc[] and number of descriptors
+>> bNumDescriptors. Also, fix places where this change affects work with
+>> newly updated struct.
+>>
+>> [1] Syzbot report:
+>>
+>> UBSAN: array-index-out-of-bounds in drivers/hid/usbhid/hid-core.c:1024:7
+>> index 1 is out of range for type 'struct hid_class_descriptor[1]'
+>> ...
+>> Workqueue: usb_hub_wq hub_event
+>> Call Trace:
+>>  <TASK>
+>>  __dump_stack lib/dump_stack.c:88 [inline]
+>>  dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
+>>  ubsan_epilogue lib/ubsan.c:231 [inline]
+>>  __ubsan_handle_out_of_bounds+0x121/0x150 lib/ubsan.c:429
+>>  usbhid_parse+0x5a7/0xc80 drivers/hid/usbhid/hid-core.c:1024
+>>  hid_add_device+0x132/0x520 drivers/hid/hid-core.c:2790
+>>  usbhid_probe+0xb38/0xea0 drivers/hid/usbhid/hid-core.c:1429
+>>  usb_probe_interface+0x645/0xbb0 drivers/usb/core/driver.c:399
+>>  really_probe+0x2b8/0xad0 drivers/base/dd.c:656
+>>  __driver_probe_device+0x1a2/0x390 drivers/base/dd.c:798
+>>  driver_probe_device+0x50/0x430 drivers/base/dd.c:828
+>>  __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:956
+>>  bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:457
+>>  __device_attach+0x333/0x520 drivers/base/dd.c:1028
+>>  bus_probe_device+0x189/0x260 drivers/base/bus.c:532
+>>  device_add+0x8ff/0xca0 drivers/base/core.c:3720
+>>  usb_set_configuration+0x1976/0x1fb0 drivers/usb/core/message.c:2210
+>>  usb_generic_driver_probe+0x88/0x140 drivers/usb/core/generic.c:254
+>>  usb_probe_device+0x1b8/0x380 drivers/usb/core/driver.c:294
+>>
+>> Reported-by: syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com
+>> Closes: https://syzkaller.appspot.com/bug?extid=c52569baf0c843f35495
+>> Fixes: f043bfc98c19 ("HID: usbhid: fix out-of-bounds bug")
+>> Cc: stable@vger.kernel.org
+>> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+>> ---
+>> v1: https://lore.kernel.org/all/20240524120112.28076-1-n.zhandarovich@fintech.ru/
+>>
+>> v2: Instead of essentially forcing usbhid_parse() to only check
+>> the first descriptor, modify hid_descriptor struct to anticipate
+>> multiple hid_class_descriptor in desc[] by utilizing __counted_by
+>> macro. This change, in turn, requires several other ones wherever
+>> that struct is used. Adjust commit description accordingly.
+>>
+>> P.S. Since syzbot currently breaks trying to reproduce the issue,
+>> with or without this patch, I only managed to test it locally with
+>> syz repros. Would greatly appreciate other people's effort to test
+>> it as well.
+>>
+>> P.P.S. Terry Junge <linuxhid@cosmicgizmosystems.com> suggested a
+>> different approach to this issue, see:
+>> Link: https://lore.kernel.org/all/f7963a1d-e069-4ec9-82a1-e17fd324a44f@cosmicgizmosystems.com/
+>>
+>>  drivers/hid/usbhid/hid-core.c       |  2 +-
+>>  drivers/usb/gadget/function/f_fs.c  |  3 ++-
+>>  drivers/usb/gadget/function/f_hid.c | 22 ++++++++++++++--------
+>>  include/linux/hid.h                 |  2 +-
+>>  4 files changed, 18 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+>> index a6eb6fe6130d..eb4807785d6d 100644
+>> --- a/drivers/hid/usbhid/hid-core.c
+>> +++ b/drivers/hid/usbhid/hid-core.c
+>> @@ -1010,7 +1010,7 @@ static int usbhid_parse(struct hid_device *hid)
+>>  		return -ENODEV;
+>>  	}
+>>  
+>> -	if (hdesc->bLength < sizeof(struct hid_descriptor)) {
+>> +	if (hdesc->bLength < struct_size(hdesc, desc, hdesc->bNumDescriptors)) {
+>>  		dbg_hid("hid descriptor is too short\n");
+>>  		return -EINVAL;
+>>  	}
+> 
+> I don't think you want this hunk in the patch. The existing logic will
+> correctly adapt num_descriptors to a size that fits within
+> hdesc->bLength. In theory, the above change could break a weird but
+> working device that reported too high bNumDescriptors but still worked
+> with what num_descriptors walks.
+> 
 
-I still have one more question though :)
-Wondering why not move this code about the DWC3_GEVNTSIZ write where
-the interrupt is actually unmasked that way this would also work for
-systems which dont have interrupt moderation enabled right ?
+Thank you for mentioning this and you are right about possibly breaking
+a working device.
 
-Thanks,
-Badhri
+However, sizeof(struct hid_descriptor) doesn't count flex array sizes.
+So, leaving this check as is will miss cases when hdesc->bLength >=
+sizeof(struct hid_descriptor) but short enough to have a desc[0]
+element. Maybe doing struct_size(hdesc, desc, 1) is better? Then we
+make sure that at least one mandatory hid_class_desriptor is there.
 
-> +
->         if (dwc->imod_interval) {
->                 dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), DWC3_GEVNTCOUN=
-T_EHB);
->                 dwc3_writel(dwc->regs, DWC3_DEV_IMOD(0), dwc->imod_interv=
-al);
->         }
->
-> -       /* Keep the clearing of DWC3_EVENT_PENDING at the end */
-> -       evt->flags &=3D ~DWC3_EVENT_PENDING;
-> -
->         return ret;
->  }
->
->
-> This should solve the issue for controllers with IMOD enabled.
->
-> Thanks,
-> Thinh
+>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>> index 2dea9e42a0f8..a4b6d7cbf56d 100644
+>> --- a/drivers/usb/gadget/function/f_fs.c
+>> +++ b/drivers/usb/gadget/function/f_fs.c
+>> @@ -2550,7 +2550,8 @@ static int __must_check ffs_do_single_desc(char *data, unsigned len,
+>>  	case USB_TYPE_CLASS | 0x01:
+>>  		if (*current_class == USB_INTERFACE_CLASS_HID) {
+>>  			pr_vdebug("hid descriptor\n");
+>> -			if (length != sizeof(struct hid_descriptor))
+>> +			if (length < sizeof(struct hid_descriptor) +
+>> +				     sizeof(struct hid_class_descriptor))
+>>  				goto inv_length;
+>>  			break;
+>>  		} else if (*current_class == USB_INTERFACE_CLASS_CCID) {
+> 
+> Same here, I think? This isn't needed unless I'm misunderstanding
+> something about the fix.
+
+Once again, sizeof(struct hid_descriptor) will not count struct
+hid_class_descriptor desc[] __counted_by(...) so even correct and
+predictable lengths will fail the check. We need to test length against
+hid_descriptor with at least one element of its flex array.
+
+I would prefer struct_size() here as well but it's not optimal in this
+case.
+> 
+>> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+>> index 740311c4fa24..ec8c2e2d6812 100644
+>> --- a/drivers/usb/gadget/function/f_hid.c
+>> +++ b/drivers/usb/gadget/function/f_hid.c
+>> @@ -139,13 +139,17 @@ static struct usb_interface_descriptor hidg_interface_desc = {
+>>  };
+>>  
+>>  static struct hid_descriptor hidg_desc = {
+>> -	.bLength			= sizeof hidg_desc,
+>> +	.bLength			= struct_size(&hidg_desc, desc, 1),
+>>  	.bDescriptorType		= HID_DT_HID,
+>>  	.bcdHID				= cpu_to_le16(0x0101),
+>>  	.bCountryCode			= 0x00,
+>>  	.bNumDescriptors		= 0x1,
+>> -	/*.desc[0].bDescriptorType	= DYNAMIC */
+>> -	/*.desc[0].wDescriptorLenght	= DYNAMIC */
+>> +	.desc				= {
+>> +		{
+>> +			.bDescriptorType	= 0, /* DYNAMIC */
+>> +			.wDescriptorLength	= 0, /* DYNAMIC */
+>> +		}
+>> +	}
+>>  };
+>>  
+>>  /* Super-Speed Support */
+>> @@ -936,16 +940,18 @@ static int hidg_setup(struct usb_function *f,
+>>  		switch (value >> 8) {
+>>  		case HID_DT_HID:
+>>  		{
+>> -			struct hid_descriptor hidg_desc_copy = hidg_desc;
+>> +			DEFINE_FLEX(struct hid_descriptor, hidg_desc_copy,
+>> +				desc, bNumDescriptors, 1);
+>> +			*hidg_desc_copy = hidg_desc;
+>>  
+>>  			VDBG(cdev, "USB_REQ_GET_DESCRIPTOR: HID\n");
+>> -			hidg_desc_copy.desc[0].bDescriptorType = HID_DT_REPORT;
+>> -			hidg_desc_copy.desc[0].wDescriptorLength =
+>> +			hidg_desc_copy->desc[0].bDescriptorType = HID_DT_REPORT;
+>> +			hidg_desc_copy->desc[0].wDescriptorLength =
+>>  				cpu_to_le16(hidg->report_desc_length);
+>>  
+>>  			length = min_t(unsigned short, length,
+>> -						   hidg_desc_copy.bLength);
+>> -			memcpy(req->buf, &hidg_desc_copy, length);
+>> +						   hidg_desc_copy->bLength);
+>> +			memcpy(req->buf, hidg_desc_copy, length);
+>>  			goto respond;
+>>  			break;
+>>  		}
+>> diff --git a/include/linux/hid.h b/include/linux/hid.h
+>> index cdc0dc13c87f..85a58ae2c4a0 100644
+>> --- a/include/linux/hid.h
+>> +++ b/include/linux/hid.h
+>> @@ -739,7 +739,7 @@ struct hid_descriptor {
+>>  	__u8  bCountryCode;
+>>  	__u8  bNumDescriptors;
+>>  
+>> -	struct hid_class_descriptor desc[1];
+>> +	struct hid_class_descriptor desc[] __counted_by(bNumDescriptors);
+>>  } __attribute__ ((packed));
+>>  
+>>  #define HID_DEVICE(b, g, ven, prod)					\
+> 
+> Otherwise, this looks correct to me.
+> 
+
+Regards,
+Nikita
+
 
