@@ -1,73 +1,76 @@
-Return-Path: <linux-usb+bounces-19980-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19981-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E60B1A2536A
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 08:57:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9604DA254AA
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 09:42:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 940DF3A2D00
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 07:57:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D8573A759F
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 08:42:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76E41FAC4D;
-	Mon,  3 Feb 2025 07:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3F3B1FC0F9;
+	Mon,  3 Feb 2025 08:42:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mH1VjjzF"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KBo2AI0d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33C721E7C34;
-	Mon,  3 Feb 2025 07:57:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99031863E;
+	Mon,  3 Feb 2025 08:42:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738569428; cv=none; b=aA0cZyGdFQLcnuc9/THy2sBkG5tXss6vFJSX6tRgMs6dOKvAC1lGkGuEJUksl3Vy2bp46D+u8hR5PkXnnYrrG3c/f8s6RWO1oIe80AYkTz60QzKLN6Pbm+78dRZuz7nPHulvyiLyPG3ghapaFjPWD7MavoSbE4VRv55vNBJ+YRM=
+	t=1738572151; cv=none; b=h7zbrC2oEBuYP1hIIG3wABX6XXhS7Buyxig01tM9yedesGYNNM5BLVxj7kUrAbZdKA+8E0U33emddoQrgTfEo6hasgqZfTNwfaaMJFEQAuMN14/86TDWZmPS8FD1qoJdqyCMPJA9L3ao/I2MfYy/FyJSoAz5rayrvSljUOzvo+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738569428; c=relaxed/simple;
-	bh=5kJGuiN/HJ5xJyJ8CV/kCat9j7iBCMcYyia9cYykokw=;
+	s=arc-20240116; t=1738572151; c=relaxed/simple;
+	bh=9aJ9BHrjqaB9M3L/phe1w/cBaLzDm/a1APfOO4N4alM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LPE32m7ZMXJepl7iClcl5bjIe7H3mj+BQvRF1jvlDDDwxfsdpeIzyxQAgaOVhBB05NeVjgQSjbF8C1fr6IqGt2v9lvtcaoMlGAe0i9q6MPfsgC98iNGTD0X+eTC/WQN4UJo4kWd2YPZ9E70Tm60aQ2f/nKjBwD2YQNvEUBvisPo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mH1VjjzF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67AE8C4CEE2;
-	Mon,  3 Feb 2025 07:57:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738569427;
-	bh=5kJGuiN/HJ5xJyJ8CV/kCat9j7iBCMcYyia9cYykokw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mH1VjjzFMznyc23SuohffVCndcU3q/YdzYR/SqCthoRVEnF6c5vo/uyAJD4itxzmg
-	 AN8S1mOgDCwqjsS1IblK7xZE+IbZ4isReC2oRPp4S5ECn9tVDV+kuLpbVk+jDHR1q8
-	 PDXYM8hmJ6B9vMirBDkMETCUHP9yIYAeJoOFyX7yKNhKMaZL2zHqa7N0j1SnfP0TUo
-	 Ay1dvF6uilNs/NFgm8T705/fLAp51TEyS4Nay6Jxl6fvxUXl54ekqsNnmhaNbif2PH
-	 /fB60l1Zix7lnVrxmUUwFAJaFNVoMb6/foIbVFBeXGj7VlsV9cx8t4u4MVzmEhPcTk
-	 gV3AAAwX7rxZA==
-Date: Mon, 3 Feb 2025 08:57:04 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Kaustabh Chakraborty <kauschluss@disroot.org>
-Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Kishon Vijay Abraham I <kishon@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Andi Shyti <andi.shyti@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Jaehoon Chung <jh80.chung@samsung.com>, 
-	Vivek Gautam <gautam.vivek@samsung.com>, Thinh Nguyen <Thinh.Nguyen@synopsys.com>, 
-	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>, 
-	"Guilherme G . Piccoli" <gpiccoli@igalia.com>, Sergey Lisov <sleirsgoevy@gmail.com>, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-usb@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-	linux-i2c@vger.kernel.org, linux-mmc@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 03/33] dt-bindings: clock: document exynos7870 clock
- driver CMU bindings
-Message-ID: <20250203-congenial-transparent-horse-cc5d4b@krzk-bin>
-References: <20250203-exynos7870-v1-0-2b6df476a3f0@disroot.org>
- <20250202190924.15036-1-kauschluss@disroot.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=nORQgxpshRXiQb08Wr2l+zhc3tXQB021a1IWpN+gOAKiW++3CV5TGOOT4HXOgZcxDTObR5uH/nLbYVNSwW+FBzEA4n7oLSY4oltjtksyHEmwwOly/T/V6wcO2Eq3GpcvwXHdBO1c0BEYw4BJXuvaqoEDp6zJT5eatXB/KCzDQRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KBo2AI0d; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738572149; x=1770108149;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=9aJ9BHrjqaB9M3L/phe1w/cBaLzDm/a1APfOO4N4alM=;
+  b=KBo2AI0dAsF74ktJf0Ft9GR6Bo20dkGcvooiQ1KfjcdHzl6yjz2dG9nb
+   fOSkf2tnZEY/lGRY0hTt5ROV8Ct/WswqdQ9BfQiTIFMCpmK3oNrBc3LOI
+   EJm3xkUniOdjunyLzpDBFzLxm4bRAXHLGHt22wDBb5DaB3IHRRjwWv8q+
+   cUL06dSbyTPRYmb1YQ5ddjq0pmfaIIbcGY52NAf4UiNBtIIkLTUs9x/hL
+   XEycITQDMIhaQZ35CKQMjquqDRYv89mtakHd0r6fck2abn8eV8YbIMrMg
+   vdZl6gz0tPEwrCY8hvOhePpD/CK0MQm0WGGOFumknkBCfO2e7s2i33vVR
+   w==;
+X-CSE-ConnectionGUID: cnSD0tz+TuyxEZjIh9r5Tw==
+X-CSE-MsgGUID: aGvdMprKQ6KTGgsRLw2SLg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="38261529"
+X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
+   d="scan'208";a="38261529"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:42:27 -0800
+X-CSE-ConnectionGUID: r2cvfThLTbiJWagSZet7QQ==
+X-CSE-MsgGUID: 4JfoicegTxucAaa9yLbL3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="133480373"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa002.fm.intel.com with ESMTP; 03 Feb 2025 00:42:26 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id C36E5214; Mon, 03 Feb 2025 10:42:24 +0200 (EET)
+Date: Mon, 3 Feb 2025 10:42:24 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+Cc: andreas.noever@gmail.com, michael.jamet@intel.com,
+	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] thunderbolt: Disable Gen 4 Recovery on Asymmetric
+ Transitions
+Message-ID: <20250203084224.GE3713119@black.fi.intel.com>
+References: <20250131014406.28645-1-rahimi.mhmmd@gmail.com>
+ <20250131014406.28645-4-rahimi.mhmmd@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,108 +79,132 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250202190924.15036-1-kauschluss@disroot.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250131014406.28645-4-rahimi.mhmmd@gmail.com>
 
-On Mon, Feb 03, 2025 at 12:39:24AM +0530, Kaustabh Chakraborty wrote:
+Hi,
 
-Subject - drop driver. Bindings are about hardware. This applies to all
-your bindings patches
-
-> +        clock-names:
-> +          items:
-> +            - const: oscclk
-> +            - const: gout_mif_cmu_mfcmscl_mfc
-> +            - const: gout_mif_cmu_mfcmscl_mscl
-> +
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: samsung,exynos7870-cmu-peri
-> +
-
-Drop blank line
-
-> +    then:
-> +      properties:
-> +        clocks:
-> +          items:
-> +            - description: External reference clock (26 MHz)
-> +            - description: CMU_PERI bus clock (from CMU_MIF)
-> +            - description: SPI0 clock (from CMU_MIF)
-> +            - description: SPI1 clock (from CMU_MIF)
-> +            - description: SPI2 clock (from CMU_MIF)
-> +            - description: SPI3 clock (from CMU_MIF)
-> +            - description: SPI4 clock (from CMU_MIF)
-> +            - description: UART0 clock (from CMU_MIF)
-> +            - description: UART1 clock (from CMU_MIF)
-> +            - description: UART2 clock (from CMU_MIF)
-> +
-> +        clock-names:
-> +          items:
-> +            - const: oscclk
-> +            - const: gout_mif_cmu_peri_bus
-> +            - const: gout_mif_cmu_peri_spi0
-> +            - const: gout_mif_cmu_peri_spi1
-> +            - const: gout_mif_cmu_peri_spi2
-> +            - const: gout_mif_cmu_peri_spi3
-> +            - const: gout_mif_cmu_peri_spi4
-> +            - const: gout_mif_cmu_peri_uart0
-> +            - const: gout_mif_cmu_peri_uart1
-> +            - const: gout_mif_cmu_peri_uart2
-> +
-> +required:
-> +  - compatible
-> +  - "#clock-cells"
-> +  - clocks
-> +  - clock-names
-> +  - reg
-
-required block is just after properties.
-
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  # Clock controller node for CMU_PERI
-
-Drop
-
-> +  - |
-> +    #include <dt-bindings/clock/exynos7870.h>
-> +
-> +    cmu_peri: clock-controller@101F0000 {
-
-Lowercase hex
-
-> +      compatible = "samsung,exynos7870-cmu-peri";
-> +      reg = <0x101f0000 0x1000>;
-> +      #clock-cells = <1>;
-> +
-> +      clock-names = "oscclk",
-> +                    "gout_mif_cmu_peri_bus",
-> +                    "gout_mif_cmu_peri_spi0",
-> +                    "gout_mif_cmu_peri_spi1",
-> +                    "gout_mif_cmu_peri_spi2",
-> +                    "gout_mif_cmu_peri_spi3",
-> +                    "gout_mif_cmu_peri_spi4",
-> +                    "gout_mif_cmu_peri_uart0",
-> +                    "gout_mif_cmu_peri_uart1",
-> +                    "gout_mif_cmu_peri_uart2";
-> +      clocks = <&oscclk>,
-> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_BUS>,
-> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI0>,
-> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI1>,
-> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI2>,
-> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI3>,
-> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_SPI4>,
-> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_UART0>,
-> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_UART1>,
-> +               <&cmu_mif CLK_GOUT_MIF_CMU_PERI_UART2>;
-> +    };
-> +
-> +...
-> -- 
-> 2.48.1
+On Fri, Jan 31, 2025 at 01:41:27AM +0000, Mohammad Rahimi wrote:
+> Updates the Connection Manager to disable the Gen 4 Link Recovery
+> flow before transitioning from a Symmetric Link to an Asymmetric
+> Link, as specified in recent changes to the USB4 v2 specification.
 > 
+> According to the "USB4 2.0 ENGINEERING CHANGE NOTICE FORM"
+> published in September 2024, the rationale for this change is:
+> 
+>   "Since the default value of the Target Asymmetric Link might be
+>   different than Symmetric Link and Gen 4 Link Recovery flow checks
+>   this field to make sure it matched the actual Negotiated Link Width,
+>   we’re removing the condition for a Disconnect in the Gen 4 Link
+>   Recovery flow when Target Asymmetric Link doesn’t match the actual
+>   Link width and adding a Connection Manager note to Disable Gen 4 Link
+>   Recovery flow before doing Asymmetric Transitions."
+> 
+> Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+
+I did some minor modifications and applied to thunderbolt.git/next. Please
+let me know if I missed something.
+
+I tested on Intel reference hardware as well but on those link recovery is
+already disabled so it pretty much does nothing. Below are the steps that I
+followed:
+
+1. Boot with "thunderbolt.asym_threshold=10000" so that the driver switches
+   links to asymmetric already upon first DP connect.
+
+2. Connect USB4 v2 hub.
+3. Check link and PORT_CS_19:
+
+# tblist -v
+Domain 0 Route 0: 8087:5781 Intel Barlow Host Router
+  Type: Router
+  UUID: c9680000...
+  Generation: USB4
+  NVM version: 56.81
+
+Domain 0 Route 1: 8087:1234 Intel Barlow HUB Router
+  Type: Router
+  Speed (Rx/Tx): 80/80 Gb/s
+  Authorized: No
+  UUID: e9688780...
+  Generation: USB4
+  NVM version: 56.81
+
+# tbdump -r 0 -a 1 -vv -N 1 PORT_CS_19
+0x00d3 0x0004000e 0b00000000 00000100 00000000 00001110 .... PORT_CS_19     
+  [00:00]        0x0 Downstream Port Reset (DPR)
+  [01:01]        0x1 Request RS-FEC Gen 2 (RS2)
+  [02:02]        0x1 Request RS-FEC Gen 3 (RS3)
+  [03:03]        0x1 USB4 Port is Configured (PC)
+  [04:04]        0x0 USB4 Port is Inter-Domain (PID)
+  [16:16]        0x0 Enable Wake on Connect
+  [17:17]        0x0 Enable Wake on Disconnect
+  [18:18]        0x1 Enable Wake on USB4 Wake
+  [19:19]        0x0 Enable Wake on Inter-Domain
+  [24:24]        0x0 StartAsymmetricFlow
+  [30:30]        0x0 Initiate Gen 4 Link Recovery (ILR)
+  [31:31]        0x0 Enable Gen 4 Link Recovery (ELR)
+
+# tbdump -r 1 -a 1 -vv -N 1 PORT_CS_19
+0x00d3 0x0004000e 0b00000000 00000100 00000000 00001110 .... PORT_CS_19     
+  [00:00]        0x0 Downstream Port Reset (DPR)
+  [01:01]        0x1 Request RS-FEC Gen 2 (RS2)
+  [02:02]        0x1 Request RS-FEC Gen 3 (RS3)
+  [03:03]        0x1 USB4 Port is Configured (PC)
+  [04:04]        0x0 USB4 Port is Inter-Domain (PID)
+  [16:16]        0x0 Enable Wake on Connect
+  [17:17]        0x0 Enable Wake on Disconnect
+  [18:18]        0x1 Enable Wake on USB4 Wake
+  [19:19]        0x0 Enable Wake on Inter-Domain
+  [24:24]        0x0 StartAsymmetricFlow
+  [30:30]        0x0 Initiate Gen 4 Link Recovery (ILR)
+  [31:31]        0x0 Enable Gen 4 Link Recovery (ELR)
+
+3. Connect monitor to USB4 v2 hub.
+4. Check link and PORT_CS_19.
+
+# tblist -v
+Domain 0 Route 0: 8087:5781 Intel Barlow Host Router
+  Type: Router
+  UUID: c9680000...
+  Generation: USB4
+  NVM version: 56.81
+
+Domain 0 Route 1: 8087:1234 Intel Barlow HUB Router
+  Type: Router
+  Speed (Rx/Tx): 120/40 Gb/s
+  Authorized: No
+  UUID: e9688780...
+  Generation: USB4
+  NVM version: 56.81
+
+# tbdump -r 0 -a 1 -vv -N 1 PORT_CS_19
+0x00d3 0x0004000e 0b00000000 00000100 00000000 00001110 .... PORT_CS_19
+  [00:00]        0x0 Downstream Port Reset (DPR)
+  [01:01]        0x1 Request RS-FEC Gen 2 (RS2)
+  [02:02]        0x1 Request RS-FEC Gen 3 (RS3)
+  [03:03]        0x1 USB4 Port is Configured (PC)
+  [04:04]        0x0 USB4 Port is Inter-Domain (PID)
+  [16:16]        0x0 Enable Wake on Connect
+  [17:17]        0x0 Enable Wake on Disconnect
+  [18:18]        0x1 Enable Wake on USB4 Wake
+  [19:19]        0x0 Enable Wake on Inter-Domain
+  [24:24]        0x0 StartAsymmetricFlow
+  [30:30]        0x0 Initiate Gen 4 Link Recovery (ILR)
+  [31:31]        0x0 Enable Gen 4 Link Recovery (ELR)
+
+# tbdump -r 1 -a 1 -vv -N 1 PORT_CS_19
+0x00d3 0x0004000e 0b00000000 00000100 00000000 00001110 .... PORT_CS_19
+  [00:00]        0x0 Downstream Port Reset (DPR)
+  [01:01]        0x1 Request RS-FEC Gen 2 (RS2)
+  [02:02]        0x1 Request RS-FEC Gen 3 (RS3)
+  [03:03]        0x1 USB4 Port is Configured (PC)
+  [04:04]        0x0 USB4 Port is Inter-Domain (PID)
+  [16:16]        0x0 Enable Wake on Connect
+  [17:17]        0x0 Enable Wake on Disconnect
+  [18:18]        0x1 Enable Wake on USB4 Wake
+  [19:19]        0x0 Enable Wake on Inter-Domain
+  [24:24]        0x0 StartAsymmetricFlow
+  [30:30]        0x0 Initiate Gen 4 Link Recovery (ILR)
+  [31:31]        0x0 Enable Gen 4 Link Recovery (ELR)
 
