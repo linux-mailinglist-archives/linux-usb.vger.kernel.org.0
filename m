@@ -1,92 +1,144 @@
-Return-Path: <linux-usb+bounces-20034-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20035-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8448A26161
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 18:29:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECCAAA2621C
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 19:22:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69A4916536C
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 17:29:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8CC61884CDD
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 18:22:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E2A620B810;
-	Mon,  3 Feb 2025 17:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFB4D20E307;
+	Mon,  3 Feb 2025 18:22:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+Cj9Z/z"
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="bi2NZCBi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A373204C04
-	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 17:29:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFBFD20A5D6;
+	Mon,  3 Feb 2025 18:21:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738603744; cv=none; b=ix++uAuJtPVSZdBue+eo1ka8S9Tgc/So2QYwiYAPFw4sm+eiQdmpOeHpHe/zUc1K1JCOXEAcc+hGYa4hE/bObblQXEDVFCvcSwAM66fN+T0MCoPuwEJIZwECVrVg9jT3vhkhmaxjRZ02yOPAoHe7bayxDfqI4kJLe9h24kmcRFE=
+	t=1738606923; cv=none; b=jaH6FdSEptOW5AWTBEqtPHy9oOAZfjT73HLNUQB5I7zp5bE9OgLysfePSeq5nNMsrra82qkESw3G1Oo0qhsuXG0UIfw2qixVSpViIgvtIjbAebrknzNYfnv9Grv3oREMJo/LkUOg8WAP46NQv22BZ5dn4R+Py8xHk06AoEfOgAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738603744; c=relaxed/simple;
-	bh=1waQZJeX1PbVHTQxfyu1ERL2y5sWdAoSmjmpTcqfFKU=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pAdmb/GRMeb6+8Krwljeno4j7YThSDqZETOKhkclr9tQj3fKWp/WwArgUK/K1X28iz0PIGUner2hJ15kyDcKFypvJ5cppJC0h+bDTiBR7W91iu95Tf+IGgMTOmSoFqt2ugwSKKlSKmTc98tN0t8oh92YpF5dBlETg80yjoakfmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+Cj9Z/z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7466AC4CEE2
-	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 17:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738603744;
-	bh=1waQZJeX1PbVHTQxfyu1ERL2y5sWdAoSmjmpTcqfFKU=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Z+Cj9Z/zRuY9aIz7FkaVLUyi3nU6w232d2B7FyFE3uJpTk7O55L0flhDTsKc8NtpG
-	 4O0yLXv7r1rx6K4/l33/f7FUJZg5UTVa0n2ByAi7mG5G2JAjwDRNEy0Xc5U+3L0NHf
-	 mOTokdsDm7UeY6fQ7rBXSXCTkMK7JfgSBdD/vE0Vzf510y+Uwt48IKfN1GQI9FTGYY
-	 MwaesnAJ+uKJP1AlHMEr1qudKqxAWpj085G2FYl29kh6kGXNQdnLt4+wbVgCIE4Fu0
-	 yHDhY9AYX6spbGqY2x+WTcS7suG+SuljbZu5AVEuW7xqZV3RRexjFUUcGwGnkbeKLA
-	 AQtrDZfY63eeQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 61A8AC41614; Mon,  3 Feb 2025 17:29:04 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219590] Linux 6.13 ucsi driver error:
- drivers/usb/typec/ucsi/ucsi.c:1374 ucsi_reset_ppm
-Date: Mon, 03 Feb 2025 17:29:04 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: guido.iodice@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219590-208809-aVjdFrBHNY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219590-208809@https.bugzilla.kernel.org/>
-References: <bug-219590-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1738606923; c=relaxed/simple;
+	bh=ff9LOYVWeZGJ4TX27DW8rbUdYIQJ8XkCIwqaBvwjJNQ=;
+	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
+	 Message-ID:Content-Type; b=DCGpIsTldPUBJpbC+15lGIKxYrF8skJyUP5SOZPQIwrcpSuvsZYvp6vAQKZvRnC5r9Mj8cDYoc1qW9M96lOTfJ1bOyIxgvygWSgLYxlV7oe22rRQeNVLsPlkYwkcyS3LfgbfmcZZ6a+Z+CzC3NiiW6kSvQG3kgrF0j0hsQriAIg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=bi2NZCBi; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7F62DA1B01;
+	Mon,  3 Feb 2025 19:21:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1738606912;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=rbah6WO9K8AOSoHgCHY9ffMDZ0t900yYN0eOxbcrQHk=;
+	b=bi2NZCBiSOYPuuGb62GZir7P9MvINm8AvcRtl/yiNZKlzYhECK8YO1bKxibQOdLlErmF2L
+	sCGtiNgmlu8vWXjYEumSoeq9nAijWayi5EZEJFkKxTMDuKmucwY1DAL1hvZZHmGkCod3Ux
+	RqFN7xDhQRS6fFQYMM1QYkWFMjVeksOSo6zT0oQT7voeLCYwfa3/xWEBdO5JNAUCyNtuih
+	+80sWY5aUAGwakDsAFYqEWNg98/dy7HJlwrJ78c+kz863JIz+z+SqBSJ7q4Q+J6+bOsqUw
+	I2LuE+XU1Bfs4Qnj4czkE9Oq4yi6PcjebIe3vIlnVJsgA9vDQtWIaAiuESUHeA==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Mon, 03 Feb 2025 19:21:51 +0100
+From: nb@tipi-net.de
+To: Michal Pecio <michal.pecio@gmail.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: xhci: Restore xhci_pci support for Renesas HCs
+In-Reply-To: <20250128104529.58a79bfc@foxbook>
+References: <20250127151051.1a91bbe6@foxbook>
+ <20250128104529.58a79bfc@foxbook>
+Message-ID: <4bc1580689b3eebc529cc0436b62798b@tipi-net.de>
+X-Sender: nb@tipi-net.de
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219590
+On 28.1.2025 10:45, Michal Pecio wrote:
+> Some Renesas HCs require firmware upload to work, this is handled by 
+> the
+> xhci_pci_renesas driver. Other variants of those chips load firmware 
+> from
+> a SPI flash and are ready to work with xhci_pci alone.
+> 
+> A refactor merged in v6.12 broke the latter configuration so that users
+> are finding their hardware ignored by the normal driver and are forced 
+> to
+> enable the firmware loader which isn't really necessary on their 
+> systems.
+> 
+> Let xhci_pci work with those chips as before when the firmware loader 
+> is
+> disabled by kernel configuration.
+> 
+> Fixes: 25f51b76f90f ("xhci-pci: Make xhci-pci-renesas a proper modular 
+> driver")
+> CC: stable@vger.kernel.org
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219616
+> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219726
+> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 
---- Comment #11 from Guido (guido.iodice@gmail.com) ---
-Sorry for the stupid question, how do I recompile only the module and not t=
-he
-entire kernel after patching?
+Can confirm that this patch restores the old behavior, where xhci-pci 
+supported the Renesas controllers when an external SPI flash is 
+attached. I've tested with a PCIe extension card on arm64 and x86 as 
+well as with a arm64 (Raspberry CM4) based Revolution Pi Connect 4.
 
---=20
-You may reply to this email to add a comment.
+Tested-by: Nicolai Buchwitz <nb@tipi-net.de>
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks!
+
+Nicolai
+
+> ---
+> 
+> new in v2:
+> - changed #ifdef CONFIG_XXX to if (IS_ENABLED(CONFIG_XXX))
+> - renamed the PCI IDs table to clarify code intent
+> - small commit message improvements
+> 
+>  drivers/usb/host/xhci-pci.c | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+> index 5a5f0b2dba4d..54460d11f7ee 100644
+> --- a/drivers/usb/host/xhci-pci.c
+> +++ b/drivers/usb/host/xhci-pci.c
+> @@ -657,8 +657,8 @@ int xhci_pci_common_probe(struct pci_dev *dev, 
+> const struct pci_device_id *id)
+>  }
+>  EXPORT_SYMBOL_NS_GPL(xhci_pci_common_probe, "xhci");
+> 
+> -static const struct pci_device_id pci_ids_reject[] = {
+> -	/* handled by xhci-pci-renesas */
+> +/* handled by xhci-pci-renesas if enabled */
+> +static const struct pci_device_id pci_ids_renesas[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0014) },
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0015) },
+>  	{ /* end: all zeroes */ }
+> @@ -666,7 +666,8 @@ static const struct pci_device_id pci_ids_reject[] 
+> = {
+> 
+>  static int xhci_pci_probe(struct pci_dev *dev, const struct 
+> pci_device_id *id)
+>  {
+> -	if (pci_match_id(pci_ids_reject, dev))
+> +	if (IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS) &&
+> +			pci_match_id(pci_ids_renesas, dev))
+>  		return -ENODEV;
+> 
+>  	return xhci_pci_common_probe(dev, id);
 
