@@ -1,76 +1,74 @@
-Return-Path: <linux-usb+bounces-19981-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19982-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9604DA254AA
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 09:42:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CF93A254BC
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 09:47:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D8573A759F
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 08:42:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3E393A3018
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 08:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3F3B1FC0F9;
-	Mon,  3 Feb 2025 08:42:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EAE01FBEA3;
+	Mon,  3 Feb 2025 08:46:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KBo2AI0d"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hVPfRfBx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A99031863E;
-	Mon,  3 Feb 2025 08:42:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE3B17BD3;
+	Mon,  3 Feb 2025 08:46:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738572151; cv=none; b=h7zbrC2oEBuYP1hIIG3wABX6XXhS7Buyxig01tM9yedesGYNNM5BLVxj7kUrAbZdKA+8E0U33emddoQrgTfEo6hasgqZfTNwfaaMJFEQAuMN14/86TDWZmPS8FD1qoJdqyCMPJA9L3ao/I2MfYy/FyJSoAz5rayrvSljUOzvo+g=
+	t=1738572417; cv=none; b=mqkIrw1NOo+ix7L6f4RddkHzn1n2k5BiOUMhoIbpXESQLOe4rnWAJSEyLSEeG+fodUhSrSq2H8vZe4+Sk+5/zVLn6i+3Sbrp+5MsAM7QztnSJ8siuVDEBRMEYX/7X0q/2pjdB5pKFHvJsiXT64jpM8plj5Tn5+1UZWPDhVHWqCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738572151; c=relaxed/simple;
-	bh=9aJ9BHrjqaB9M3L/phe1w/cBaLzDm/a1APfOO4N4alM=;
+	s=arc-20240116; t=1738572417; c=relaxed/simple;
+	bh=fqj386jbnvAP8Wc097t+fxVqlw/NW6Vd1ziqwevgQek=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nORQgxpshRXiQb08Wr2l+zhc3tXQB021a1IWpN+gOAKiW++3CV5TGOOT4HXOgZcxDTObR5uH/nLbYVNSwW+FBzEA4n7oLSY4oltjtksyHEmwwOly/T/V6wcO2Eq3GpcvwXHdBO1c0BEYw4BJXuvaqoEDp6zJT5eatXB/KCzDQRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KBo2AI0d; arc=none smtp.client-ip=192.198.163.19
+	 Content-Type:Content-Disposition:In-Reply-To; b=bq3fwb9/zz8N8KBM8/tufqMXTLfhwTPfG+53UfKMowqjfipLxxfrnZspkv+5KqXLIDT/52Ew2jOCKHa8VIyPJRQ2Gk5r1ZXYZ3VIwFjZrlWC0yIGgvgw9oZ+X7j5jK/zPJyb7TLy4JORT7B89+vKpaO1LGT3dMj97eRAr1juC3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hVPfRfBx; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738572149; x=1770108149;
+  t=1738572416; x=1770108416;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=9aJ9BHrjqaB9M3L/phe1w/cBaLzDm/a1APfOO4N4alM=;
-  b=KBo2AI0dAsF74ktJf0Ft9GR6Bo20dkGcvooiQ1KfjcdHzl6yjz2dG9nb
-   fOSkf2tnZEY/lGRY0hTt5ROV8Ct/WswqdQ9BfQiTIFMCpmK3oNrBc3LOI
-   EJm3xkUniOdjunyLzpDBFzLxm4bRAXHLGHt22wDBb5DaB3IHRRjwWv8q+
-   cUL06dSbyTPRYmb1YQ5ddjq0pmfaIIbcGY52NAf4UiNBtIIkLTUs9x/hL
-   XEycITQDMIhaQZ35CKQMjquqDRYv89mtakHd0r6fck2abn8eV8YbIMrMg
-   vdZl6gz0tPEwrCY8hvOhePpD/CK0MQm0WGGOFumknkBCfO2e7s2i33vVR
-   w==;
-X-CSE-ConnectionGUID: cnSD0tz+TuyxEZjIh9r5Tw==
-X-CSE-MsgGUID: aGvdMprKQ6KTGgsRLw2SLg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="38261529"
+   mime-version:in-reply-to;
+  bh=fqj386jbnvAP8Wc097t+fxVqlw/NW6Vd1ziqwevgQek=;
+  b=hVPfRfBxgrcxz/1m6jJX6x8yo1FpdCTIRX0IQ9O7HkzrA0gKOHFP5Urv
+   8sbTSO1mVpK3fkU30+Nk5x6o+wqAZM9OYFZrygBM9b/S7b2xJdCJyJ9PI
+   Tpu8qt7xMaVlb+6RrnOMv0Xf45FRYqNaNmvqlpObcDaWSctGSDhDM4gi5
+   WZXWQRw1cDhtLME0dL3OITYsNzAAtXtDwI1h046xHy03eBfwtYcpBGRyK
+   tvz8anTPspHGArzj9jBwDgEQvSvvZ9uLsZqcOxOyNNoa/MVFEVqWGrb33
+   RYt0SmgK+QAuTh1/L2xoZJPC/Dt5h2RQXi8L1EXdFEtgbHTwT7BCOdvSD
+   g==;
+X-CSE-ConnectionGUID: B929w0srRB+FWFGcp/1RpA==
+X-CSE-MsgGUID: eZte649uReeWICfxO70cCw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="61526920"
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="38261529"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:42:27 -0800
-X-CSE-ConnectionGUID: r2cvfThLTbiJWagSZet7QQ==
-X-CSE-MsgGUID: 4JfoicegTxucAaa9yLbL3w==
+   d="scan'208";a="61526920"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:46:55 -0800
+X-CSE-ConnectionGUID: nKpJUq1JQVOv0vQQY7pc9w==
+X-CSE-MsgGUID: 90lPz9VxSNKpfJGWtdDn7A==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="133480373"
+   d="scan'208";a="141094075"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa002.fm.intel.com with ESMTP; 03 Feb 2025 00:42:26 -0800
+  by fmviesa001.fm.intel.com with ESMTP; 03 Feb 2025 00:46:53 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id C36E5214; Mon, 03 Feb 2025 10:42:24 +0200 (EET)
-Date: Mon, 3 Feb 2025 10:42:24 +0200
+	id 12117214; Mon, 03 Feb 2025 10:46:51 +0200 (EET)
+Date: Mon, 3 Feb 2025 10:46:51 +0200
 From: Mika Westerberg <mika.westerberg@linux.intel.com>
 To: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
 Cc: andreas.noever@gmail.com, michael.jamet@intel.com,
 	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] thunderbolt: Disable Gen 4 Recovery on Asymmetric
- Transitions
-Message-ID: <20250203084224.GE3713119@black.fi.intel.com>
-References: <20250131014406.28645-1-rahimi.mhmmd@gmail.com>
- <20250131014406.28645-4-rahimi.mhmmd@gmail.com>
+Subject: Re: [PATCH] thunderbolt: Remove the TBT3 Not Supported bit
+Message-ID: <20250203084651.GF3713119@black.fi.intel.com>
+References: <20250203011842.13305-1-rahimi.mhmmd@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -79,132 +77,19 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250131014406.28645-4-rahimi.mhmmd@gmail.com>
+In-Reply-To: <20250203011842.13305-1-rahimi.mhmmd@gmail.com>
 
 Hi,
 
-On Fri, Jan 31, 2025 at 01:41:27AM +0000, Mohammad Rahimi wrote:
-> Updates the Connection Manager to disable the Gen 4 Link Recovery
-> flow before transitioning from a Symmetric Link to an Asymmetric
-> Link, as specified in recent changes to the USB4 v2 specification.
+On Mon, Feb 03, 2025 at 01:17:47AM +0000, Mohammad Rahimi wrote:
+> Since USB4 v2 specification has removed the mandatory requirement to
+> support TBT3 on a USB4 Dock UFP, the TBT3 Not Supported bit is not
+> usable, as when it needs to be read there is no USB4 Link.
 > 
-> According to the "USB4 2.0 ENGINEERING CHANGE NOTICE FORM"
-> published in September 2024, the rationale for this change is:
-> 
->   "Since the default value of the Target Asymmetric Link might be
->   different than Symmetric Link and Gen 4 Link Recovery flow checks
->   this field to make sure it matched the actual Negotiated Link Width,
->   we’re removing the condition for a Disconnect in the Gen 4 Link
->   Recovery flow when Target Asymmetric Link doesn’t match the actual
->   Link width and adding a Connection Manager note to Disable Gen 4 Link
->   Recovery flow before doing Asymmetric Transitions."
-> 
-> Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+> This change was introduced in a "USB4 2.0 ENGINEERING CHANGE NOTICE
+> FORM" published in September 2024, titled "TBT3 Support on USB4 Dock
+> UFP".
 
-I did some minor modifications and applied to thunderbolt.git/next. Please
-let me know if I missed something.
-
-I tested on Intel reference hardware as well but on those link recovery is
-already disabled so it pretty much does nothing. Below are the steps that I
-followed:
-
-1. Boot with "thunderbolt.asym_threshold=10000" so that the driver switches
-   links to asymmetric already upon first DP connect.
-
-2. Connect USB4 v2 hub.
-3. Check link and PORT_CS_19:
-
-# tblist -v
-Domain 0 Route 0: 8087:5781 Intel Barlow Host Router
-  Type: Router
-  UUID: c9680000...
-  Generation: USB4
-  NVM version: 56.81
-
-Domain 0 Route 1: 8087:1234 Intel Barlow HUB Router
-  Type: Router
-  Speed (Rx/Tx): 80/80 Gb/s
-  Authorized: No
-  UUID: e9688780...
-  Generation: USB4
-  NVM version: 56.81
-
-# tbdump -r 0 -a 1 -vv -N 1 PORT_CS_19
-0x00d3 0x0004000e 0b00000000 00000100 00000000 00001110 .... PORT_CS_19     
-  [00:00]        0x0 Downstream Port Reset (DPR)
-  [01:01]        0x1 Request RS-FEC Gen 2 (RS2)
-  [02:02]        0x1 Request RS-FEC Gen 3 (RS3)
-  [03:03]        0x1 USB4 Port is Configured (PC)
-  [04:04]        0x0 USB4 Port is Inter-Domain (PID)
-  [16:16]        0x0 Enable Wake on Connect
-  [17:17]        0x0 Enable Wake on Disconnect
-  [18:18]        0x1 Enable Wake on USB4 Wake
-  [19:19]        0x0 Enable Wake on Inter-Domain
-  [24:24]        0x0 StartAsymmetricFlow
-  [30:30]        0x0 Initiate Gen 4 Link Recovery (ILR)
-  [31:31]        0x0 Enable Gen 4 Link Recovery (ELR)
-
-# tbdump -r 1 -a 1 -vv -N 1 PORT_CS_19
-0x00d3 0x0004000e 0b00000000 00000100 00000000 00001110 .... PORT_CS_19     
-  [00:00]        0x0 Downstream Port Reset (DPR)
-  [01:01]        0x1 Request RS-FEC Gen 2 (RS2)
-  [02:02]        0x1 Request RS-FEC Gen 3 (RS3)
-  [03:03]        0x1 USB4 Port is Configured (PC)
-  [04:04]        0x0 USB4 Port is Inter-Domain (PID)
-  [16:16]        0x0 Enable Wake on Connect
-  [17:17]        0x0 Enable Wake on Disconnect
-  [18:18]        0x1 Enable Wake on USB4 Wake
-  [19:19]        0x0 Enable Wake on Inter-Domain
-  [24:24]        0x0 StartAsymmetricFlow
-  [30:30]        0x0 Initiate Gen 4 Link Recovery (ILR)
-  [31:31]        0x0 Enable Gen 4 Link Recovery (ELR)
-
-3. Connect monitor to USB4 v2 hub.
-4. Check link and PORT_CS_19.
-
-# tblist -v
-Domain 0 Route 0: 8087:5781 Intel Barlow Host Router
-  Type: Router
-  UUID: c9680000...
-  Generation: USB4
-  NVM version: 56.81
-
-Domain 0 Route 1: 8087:1234 Intel Barlow HUB Router
-  Type: Router
-  Speed (Rx/Tx): 120/40 Gb/s
-  Authorized: No
-  UUID: e9688780...
-  Generation: USB4
-  NVM version: 56.81
-
-# tbdump -r 0 -a 1 -vv -N 1 PORT_CS_19
-0x00d3 0x0004000e 0b00000000 00000100 00000000 00001110 .... PORT_CS_19
-  [00:00]        0x0 Downstream Port Reset (DPR)
-  [01:01]        0x1 Request RS-FEC Gen 2 (RS2)
-  [02:02]        0x1 Request RS-FEC Gen 3 (RS3)
-  [03:03]        0x1 USB4 Port is Configured (PC)
-  [04:04]        0x0 USB4 Port is Inter-Domain (PID)
-  [16:16]        0x0 Enable Wake on Connect
-  [17:17]        0x0 Enable Wake on Disconnect
-  [18:18]        0x1 Enable Wake on USB4 Wake
-  [19:19]        0x0 Enable Wake on Inter-Domain
-  [24:24]        0x0 StartAsymmetricFlow
-  [30:30]        0x0 Initiate Gen 4 Link Recovery (ILR)
-  [31:31]        0x0 Enable Gen 4 Link Recovery (ELR)
-
-# tbdump -r 1 -a 1 -vv -N 1 PORT_CS_19
-0x00d3 0x0004000e 0b00000000 00000100 00000000 00001110 .... PORT_CS_19
-  [00:00]        0x0 Downstream Port Reset (DPR)
-  [01:01]        0x1 Request RS-FEC Gen 2 (RS2)
-  [02:02]        0x1 Request RS-FEC Gen 3 (RS3)
-  [03:03]        0x1 USB4 Port is Configured (PC)
-  [04:04]        0x0 USB4 Port is Inter-Domain (PID)
-  [16:16]        0x0 Enable Wake on Connect
-  [17:17]        0x0 Enable Wake on Disconnect
-  [18:18]        0x1 Enable Wake on USB4 Wake
-  [19:19]        0x0 Enable Wake on Inter-Domain
-  [24:24]        0x0 StartAsymmetricFlow
-  [30:30]        0x0 Initiate Gen 4 Link Recovery (ILR)
-  [31:31]        0x0 Enable Gen 4 Link Recovery (ELR)
+I think the USB4 v1 hardware still has this bit and since it is just
+debugging there is no harm keeping it around.
 
