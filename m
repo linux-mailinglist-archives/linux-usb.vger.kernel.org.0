@@ -1,87 +1,89 @@
-Return-Path: <linux-usb+bounces-20022-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20023-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19B4FA25F74
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 17:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 92413A25F79
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 17:05:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A5F173A7999
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 16:02:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2499C3A5480
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 16:05:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79BAA202C2F;
-	Mon,  3 Feb 2025 16:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E68020A5F0;
+	Mon,  3 Feb 2025 16:05:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="TaioHuJd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="a5Pm5HYe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0E51D63DD
-	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 16:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4166F209F59;
+	Mon,  3 Feb 2025 16:05:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738598563; cv=none; b=U/FKpU96SGJn3ufn4WGDOSesH0lu28R6kAmNARrgGyGAvVlKWm4B2Ey1bnFtY9MMJDzRFxwmb+EFcoCEfp+NLd4a6YC5kC6Wxetedxpm7GF4vql4ZpOgH+JGX7VQO3ErTxQReS8cTa2/VoFiI/6+6T2kjZzCqApM/SOZh9rqfkQ=
+	t=1738598729; cv=none; b=j0QjoupAZ5PZekIeKVOGY7s0k+xGvKxc9w/PCvSII+xp/uYfoOPDjKsvQJQDEfZonqOzvLbaH2nSlRz0zOCuWb4l7TlQS6Cr2AddwCcmyBGwjDroauaPsL8fhoZhKzf1KndQcrDmy1npK0oOjvyhBzcLOHp3g7gjVxoMXFyGW7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738598563; c=relaxed/simple;
-	bh=sDk+aBkk9q+OypnxJbdPIdTa9fK9F+Kj7CyFeHwcuUA=;
+	s=arc-20240116; t=1738598729; c=relaxed/simple;
+	bh=JmslxJA2fjFMi7nttNzaHcbBfd4y4KfrDWTSER4FPXg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XsBmW3DorRA5Z0CghrWcD542+7ro0oOj4nMkjanQGv1kmKKKFmSqTfSSRkRjpwpHc05C6MzNRf1gAseJqAiTzuBBn1m5LOQMMXNbGWohseZh0EgNJKhAiObJEpQFW3zIuMUyfNbbW3DwAzinobRDvXz8ecHKO5jXQxAJEFeTIs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=TaioHuJd; arc=none smtp.client-ip=209.85.160.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-46e28597955so41295991cf.0
-        for <linux-usb@vger.kernel.org>; Mon, 03 Feb 2025 08:02:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1738598560; x=1739203360; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6y7ZNUaq1V6kS4V4CjLbL07j92Sevuw+/xeWgjypQrQ=;
-        b=TaioHuJdQRVwxYmDvIiytqEDmGZK4FdJ2HSdNNI47A4TfHxYrjs7Req92VKYcuNSQn
-         Z9C06f2SRIEAMw8wiHYq/2ohWo6aUn1qGDRBoV3Dal1IZXFmrsRowTE1fiEvauIyw3Ei
-         yyeDp81WgInFIZU3SRvhGzfXQkIy/CpjXEK5JK26vSRSJCb5O+4+CiMhTEGdsUi1uUip
-         Zix3FrP86SpERYkwep4fwm+Z1Clm9+ro5gvaogI3ZbDtV6iJMRh65z1tVXBeXwxDYLpg
-         Omsb+IJlgqA8qGj6kdoY6j3bZcakzfys34UdB+Uog1xpr/TVqm6TrFh1rXyHupZ7hA6J
-         UtVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738598560; x=1739203360;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6y7ZNUaq1V6kS4V4CjLbL07j92Sevuw+/xeWgjypQrQ=;
-        b=WfoI8ylk5TMn1d3VZ9EpLDPdobIdtAq8NyjXQHxWYJp4ibyTnSlR4e5FupPJV3nN9S
-         I+Lo6FA9kf9+LTeKTQJvvxZ6Bhpj5VEsjKcDLTCJcEg+/9Uq9ZRxWaYFKosewAEc8sQr
-         oRjaopPJBQpLylil3nWMZghB+b6u6nx6oc1msebt8cnzcFpGghhxQT+mM1vMnxTNg59f
-         3bNs4nHSHm2pw6PyTYce7/W+5SP7bfipx8MRQfrLepTiT2YlLVttq8wBamcUYkNrZrBQ
-         WpnFoeGkAktm9OEg9j1J8nirBVNr94ZfeGnbmQaGkS9TVjqIk0JfwiOjTlcKcgNr+axI
-         GHiw==
-X-Forwarded-Encrypted: i=1; AJvYcCVVbFi2AaoZjVT4aX2jyFD7I2cYcjIxyshoxWRVkYshsaiHwD6hm6vsILhLFdxiv0tjXdDIYkszf3g=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwTFD2gUkbtaqzzZD6lKppjGNZ4TBuf7RVSu32uZVSDubgL7OQy
-	SXzDAxIRLy6dqYBwwjtH9S8HiidvtKjZOyDXaLI0npg5kCfPpV90w0j1+e03U+6dUeX2END+yE0
-	=
-X-Gm-Gg: ASbGnct/tNCtTkVa/140XdO5szMo6LmjcdHH3e+r0GyNGQF8EafWgzrBK0pmAW2FTfK
-	UD3Kjj1KU38iMYgDIPa3+EfqVRpu1wZxXok4YQO9midZgq5WL9HefsPuHT3ilL7002Bk3KQxVgL
-	jATEJnsnJwxv55tjICuFouySfbH+8gAaCbKj9XEQLf46WMdyAsXA29NbJSYBPqUFPmHhNb+Hxuk
-	84p0LcNBgynvFFsWbD3mthqf6vZdEVY/eloc7/QCQDL9DgYqJV7+zoiAxC5ub2WfbF3Nh+uyM0h
-	W2AAZcW+yZ3qE+AqsC8/I1jaOMVnY8cU6g==
-X-Google-Smtp-Source: AGHT+IFcbbmmge+3vZw0NuSyEFXhPY//WibCANRMTGQbBY4sp5JCdlKvRshBkh9waSTBcHXSETI5Uw==
-X-Received: by 2002:a05:622a:118c:b0:467:4fc5:9d72 with SMTP id d75a77b69052e-46fd0b6b823mr283818731cf.36.1738598559880;
-        Mon, 03 Feb 2025 08:02:39 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46fdf1740bcsm50017611cf.64.2025.02.03.08.02.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 08:02:39 -0800 (PST)
-Date: Mon, 3 Feb 2025 11:02:37 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: gregkh@linuxfoundation.org, francesco.dolcini@toradex.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: core: fix pipe creation for get_bMaxPacketSize0
-Message-ID: <aa0c06f6-f997-4bcf-a5a3-6b17f6355fca@rowland.harvard.edu>
-References: <20250203105840.17539-1-eichest@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=iH4AfSCG+TlxubjF2yiWO+9oJq/WZqoGat6UwWGB76JYMyT5t6kEPIKwak2RAT3UfkqOug6VMVpBbYYzojcDw11+FD8ZQYQxEL6bFKTJnJXauNocFUN/OeRyU9hWGLevLkvrxYDRKcgLCh8np6P0ws+GNQwfUxRNCw5bQK/1EUI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=a5Pm5HYe; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738598728; x=1770134728;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=JmslxJA2fjFMi7nttNzaHcbBfd4y4KfrDWTSER4FPXg=;
+  b=a5Pm5HYekjtW03cC3QvWsUcyLF06twrfVJQOW7ZvHfw89F0b+YnCB4I9
+   4vM5Q683QxtUfENVvmRMJH3L12ps/nXlvJPP3HUEWfRxITCLAh/25L6hL
+   33TnWx9qMQYsUefi6/c1w99XephqRznXRTbFAMRgP8AKv+kTNJYMnH5y+
+   vldb1pPP/rqwuToDS/JBM4gQ5F2IZKaAayx7W5o9fdA1YYlqd30Jf2V3d
+   cmc6khSZPw2CErNhezJ9tUMHwQ8ofPO8XYjkWSAF0CDe1iAHOVYxGjhLU
+   LyoA+ycKhhbNJQ9e1tZhW1ewPUlx9Dhza+pYUJ/cGciVS91JUJPU/ZSBE
+   w==;
+X-CSE-ConnectionGUID: 9Sgtflv2QjOuo9SL61XD0A==
+X-CSE-MsgGUID: hUsABqRnTCaaJw1qX9RZkw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="50088630"
+X-IronPort-AV: E=Sophos;i="6.13,256,1732608000"; 
+   d="scan'208";a="50088630"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 08:05:27 -0800
+X-CSE-ConnectionGUID: pX9Nvzl6R/CKAGMQW6cj7A==
+X-CSE-MsgGUID: idTCIxQ4RTu4LDr6/DOHlQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="111174235"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 08:05:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1teywq-00000007shN-0XUN;
+	Mon, 03 Feb 2025 18:05:20 +0200
+Date: Mon, 3 Feb 2025 18:05:19 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH 1/3] driver core: add a faux bus for use when a simple
+ device/bus is needed
+Message-ID: <Z6DpP3qMNYZoKEP2@smile.fi.intel.com>
+References: <2025020324-thermal-quilt-1bae@gregkh>
+ <2025020326-backer-vendetta-7094@gregkh>
+ <Z6DchyPieQKBJ0SN@smile.fi.intel.com>
+ <2025020300-gown-outmatch-1343@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -90,86 +92,114 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250203105840.17539-1-eichest@gmail.com>
+In-Reply-To: <2025020300-gown-outmatch-1343@gregkh>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Feb 03, 2025 at 11:58:24AM +0100, Stefan Eichenberger wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> 
-> When usb_control_msg is used in the get_bMaxPacketSize0 function, the
-> USB pipe does not include the endpoint device number. This can cause
-> failures when a usb hub port is reinitialized after encountering a bad
-> cable connection. As a result, the system logs the following error
-> messages:
-> usb usb2-port1: cannot reset (err = -32)
-> usb usb2-port1: Cannot enable. Maybe the USB cable is bad?
-> usb usb2-port1: attempt power cycle
-> usb 2-1: new high-speed USB device number 5 using ci_hdrc
-> usb 2-1: device descriptor read/8, error -71
-> 
-> The problem began after commit 85d07c556216 ("USB: core: Unite old
-> scheme and new scheme descriptor reads"). There
-> usb_get_device_descriptor was replaced with get_bMaxPacketSize0. Unlike
-> usb_get_device_descriptor, the get_bMaxPacketSize0 function uses the
-> macro usb_rcvaddr0pipe, which does not include the endpoint device
-> number. usb_get_device_descriptor, on the other hand, used the macro
-> usb_rcvctrlpipe, which includes the endpoint device number.
-> 
-> By modifying the get_bMaxPacketSize0 function to use usb_rcvctrlpipe
-> instead of usb_rcvaddr0pipe, the issue can be resolved. This change will
-> ensure that the endpoint device number is included in the USB pipe,
-> preventing reinitialization failures. If the endpoint has not set the
-> device number yet, it will still work because the device number is 0 in
-> udev.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 85d07c556216 ("USB: core: Unite old scheme and new scheme descriptor reads")
-> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> ---
-> Before commit  85d07c556216 ("USB: core: Unite old scheme and new scheme
-> descriptor reads") usb_rcvaddr0pipe was used in hub_port_init. With this
-> proposed change, usb_rcvctrlpipe will be used which includes devnum for
-> the pipe. I'm not sure if this might have some side effects. However, my
-> understanding is that devnum is set to the right value (might also be 0
-> if not initialised) before get_bMaxPacketSize0 is called. Therefore,
-> this should work but please let me know if I'm wrong on this.
+On Mon, Feb 03, 2025 at 04:35:45PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Feb 03, 2025 at 05:11:03PM +0200, Andy Shevchenko wrote:
+> > On Mon, Feb 03, 2025 at 03:25:17PM +0100, Greg Kroah-Hartman wrote:
 
-I believe you are correct.  This is a pretty glaring mistake; I'm 
-surprised that it hasn't show up before now.  Thanks for fixing it.
+...
 
-Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-
-In fact, it looks like usb_sndaddr0pipe is used in only one place and it 
-can similarly be replaced by usb_sndctrlpipe, if you want to make that 
-change as well (although this usage is not actually a mistake).
-
-Alan Stern
-
-> ---
->  drivers/usb/core/hub.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+> > > +#include <linux/device/faux.h>
+> > 
+> > I would rather think that this goes after generic inclusions...
+> > 
+> > > +#include <linux/err.h>
+> > > +#include <linux/init.h>
+> > > +#include <linux/slab.h>
+> > > +#include <linux/string.h>
+> > 
+> > ...somewhere here.
+> > 
+> > But looking into organisation of device.h and device/*.h,
+> > I would rather think of the linux/faux_device.h.
 > 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index c3f839637cb5..59e38780f76d 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -4698,7 +4698,6 @@ void usb_ep0_reinit(struct usb_device *udev)
->  EXPORT_SYMBOL_GPL(usb_ep0_reinit);
->  
->  #define usb_sndaddr0pipe()	(PIPE_CONTROL << 30)
-> -#define usb_rcvaddr0pipe()	((PIPE_CONTROL << 30) | USB_DIR_IN)
->  
->  static int hub_set_address(struct usb_device *udev, int devnum)
->  {
-> @@ -4804,7 +4803,7 @@ static int get_bMaxPacketSize0(struct usb_device *udev,
->  	for (i = 0; i < GET_MAXPACKET0_TRIES; ++i) {
->  		/* Start with invalid values in case the transfer fails */
->  		buf->bDescriptorType = buf->bMaxPacketSize0 = 0;
-> -		rc = usb_control_msg(udev, usb_rcvaddr0pipe(),
-> +		rc = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
->  				USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
->  				USB_DT_DEVICE << 8, 0,
->  				buf, size,
-> -- 
-> 2.45.2
+> It can go anywhere, there is no need to sort things :)
+
+It's not about sorting, it's about grouping from more generic to less generic.
+
+> > > +#include "base.h"
+> > 
+> > I don't remember by heart what it does include, I would go with IWYU principle
+> > and list above all what we use.
+> > 
+> > container_of.h
+> > device.h
+> > export.h
+> > printk.h
+> > types.h
 > 
+> That's not what the driver core ever did, so no need to worry about it,
+> thanks.
+
+But it doesn't mean that driver code does its best. No big worries, of course.
+
+...
+
+> > > +	return (strcmp(faux_obj->name, drv->name) == 0);
+> > 
+> > Outer parentheses are not needed.
+> 
+> Makes me feel good as it is an assignment test, and that's what
+> platform.c has for the past few decades.
+
+Sure, it also can be written as
+
+	return !strcmp(faux_obj->name, drv->name);
+
+that makes the same without explicit comparing to 0. But it's matter of taste.
+
+...
+
+> > > +/**
+> > > + * __faux_device_create - create and register a faux device and driver
+> > > + * @name: name of the device and driver we are adding
+> > > + * @faux_ops: struct faux_driver_ops that the new device will call back into, can be NULL
+> > > + * @owner: module owner of the device/driver
+> > > + *
+> > > + * Create a new faux device and driver, both with the same name, and register
+> > > + * them in the driver core properly.  The probe() callback of @faux_ops will be
+> > > + * called with the new device that is created for the caller to do something
+> > > + * with.
+> > 
+> > The kernel-doc will complain on missing Return: section.
+> 
+> Is that new?  Does that mean platform.c has lots of complaints in it as
+> well?  What does platform_find_device_by_driver() give you for a
+> documentation issue?
+> 
+> And as I didn't hook this up to the kernel documentation build yet, it
+> shouldn't produce any warnings anywhere :)
+
+I would rather say it's old.
+
+Run
+
+	kernel-doc -Wall -none -v ...your file...
+
+and find the warning. During the kernel builds this is moved to extra warnings.
+
+> > > + */
+
+...
+
+> > > +	faux_obj = kzalloc(sizeof(*faux_obj) + strlen(name) + 1, GFP_KERNEL);
+> > 
+> > Potential overflow. To avoid one may use struct_size() from overflow.h.
+> 
+> Users should not be providing the string here.  Again, this comes from
+> platform.c.
+
+I'm not sure I follow. The name parameter is not limited anyhow, so one may
+provide non-terminated string and strlen() will return an arbitrary number.
+Potentially this can lead to big numbers and become an overflow when gets
+to a parameter for kmalloc(). This most likely never happen in real life,
+but still the overflow is possible.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
