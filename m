@@ -1,68 +1,68 @@
-Return-Path: <linux-usb+bounces-20006-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20007-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA7D9A25E79
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 16:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF959A25E80
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 16:23:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 767FA3AEB9E
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 15:14:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE6CA3AD738
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 15:16:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9654920A5E3;
-	Mon,  3 Feb 2025 15:13:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 525DF209F3F;
+	Mon,  3 Feb 2025 15:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="i6e1UmoH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TYiLM2ff"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E5E20897F;
-	Mon,  3 Feb 2025 15:13:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 641893595E;
+	Mon,  3 Feb 2025 15:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738595597; cv=none; b=Z9qnlosGUrn2floRhno1fYwq8EdzL1eZUxqSHtY9rKQVJRBApsuq5akRxNswsVltSYx1dQ+wawUpWjaJb9BJ4FrCzY/+U5AnPc5J1CA4sqtcIt4eJH766SAUR0Pftzj6ooZqfdbsqbhHjavqDpzjjj9AtHnrj7tzd1yNGw8z29s=
+	t=1738595745; cv=none; b=RBzpdU7T1vFS2TcqJJyMsEhvavXxUUrb/Bq6v4Wv4+mj7+4hyDzmEqSED/RA0ycDwx0j55YMS1+p8qqltDIAPDP5IzgprhbvnFCWKxz59LKcNWhYkGSfxev/Z57NpvP753rUrV9FCxH4lf2bnihxwX4vM2FN5SX5xmXhVDG3NYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738595597; c=relaxed/simple;
-	bh=o4TKeGwyYGWwRMSOizbdGNnVjjPiXdFISziDxmcYmLE=;
+	s=arc-20240116; t=1738595745; c=relaxed/simple;
+	bh=oPafnppo9IWtNoM3iVeYeHYaZvftPEk+eTIVJcCbZyU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Vx1HYXXhHmwDqqEJWIrawPvVFGdWspNGV/vFZNKs/fuueDlbrkTGv0IULaT/IAbZ+jMEXcoLyEBOscv+H+htlUaWkM8RhfYPfeHOMgxIzWOFJExDvgW38PjuHtCla3G2pyyOAPsNdYxQITRwJyGttwTyt/sWT5b0ToFcxvSEzyc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=i6e1UmoH; arc=none smtp.client-ip=192.198.163.7
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z1f0wUWKZuDuFvVdfeq5ylCtoPY1QejNVwPobHO4W89XTrBOAqt668MBbN7iWGQwaGe8PU4njD7dt9T73wCaCe12j84Mo+42zuAcJiKdVHXyl4lFC9kLWyEWcE6FEI2+Dk6LHFMWWpraTSKwUkkoWrpTEN1Fxictq5shVOd5ifQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TYiLM2ff; arc=none smtp.client-ip=192.198.163.8
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738595596; x=1770131596;
+  t=1738595744; x=1770131744;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=o4TKeGwyYGWwRMSOizbdGNnVjjPiXdFISziDxmcYmLE=;
-  b=i6e1UmoHV0omftn9vgINvh+eKYDXkwAOgsaV1n6kqLCJsahAI2HLE4UA
-   C+gQF3AZoP7U7GT7dhCrFQTFSpV9nhZ6RK+dKZ0c/4LBsRrQ0C0SKiCyb
-   wnnORYtnTNT+TviaZRKjYdqEKnMbipBesAG4WrMx8dTcAA9ZtjsUNSLvW
-   CR09qMJ+nzE4/vBMc1D9FJyjlrHum2hQKsK6JovuJogZiYOSSD9DNFSju
-   GR6O5lFggxKCQj9wY3X1dquplXPCRAyXpTeZiJkv1IfgfFEQMp6/BL1CB
-   gWPWnDfkxK3/HEa12Aqjhy3FTUVreOLbNN4ieO6httx2RLxfzScDBR1fR
-   g==;
-X-CSE-ConnectionGUID: P9q9LcrcT7qk3jYk1KT4wQ==
-X-CSE-MsgGUID: zUcOPh0uQhanDcgRP2vXjQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="64447671"
+  bh=oPafnppo9IWtNoM3iVeYeHYaZvftPEk+eTIVJcCbZyU=;
+  b=TYiLM2ffxL2LRSFKhvjjQzsWgnzialxOaB/S7z7994mU/GKmW1uZvl8K
+   nV1aTpPYYNIh/xI+Kpx/UC/mEANUOhE/uVrYQtwqPMNYBGhFhPVbJV+Bm
+   Gep1ibBSXcfPmY+0xqOv2N9LwuylF7F6tKx6JQhYrNWI1lvRq5LK5O1f2
+   UiMMK1prKIurC4HYFW0dD8U6fnPVoFcP2GMDZ/C0dqZ2cpwKv8Ld+ghNV
+   OJ5BiLknZJQfqchaZzwperPUFI3bYcObk+HeREEt0wAxCdATTXmFLE7fp
+   OBIPqPF5rXMwst4W7zKxo8mISMPSDEjp/6wb7tvV6wpPoipcpW7SAJ7Ki
+   w==;
+X-CSE-ConnectionGUID: SYXfLUGHRqiPxlpg+OkSvw==
+X-CSE-MsgGUID: Yk/naKR1TYO+Em/qv+mdvg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="56628521"
 X-IronPort-AV: E=Sophos;i="6.13,256,1732608000"; 
-   d="scan'208";a="64447671"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 07:13:15 -0800
-X-CSE-ConnectionGUID: 8mrLQktiSxafzYzdPn8Dpw==
-X-CSE-MsgGUID: VUllrVkMSva9wJGHo3ql+g==
+   d="scan'208";a="56628521"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 07:15:44 -0800
+X-CSE-ConnectionGUID: 8RA3vAONQQ206RU5RKLVeA==
+X-CSE-MsgGUID: 4YlovjsuTdqRS0pknCf4AA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,256,1732608000"; 
-   d="scan'208";a="110480178"
+   d="scan'208";a="115344511"
 Received: from smile.fi.intel.com ([10.237.72.58])
-  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 07:13:11 -0800
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 07:15:39 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.98)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tey8J-00000007rv9-3DiP;
-	Mon, 03 Feb 2025 17:13:07 +0200
-Date: Mon, 3 Feb 2025 17:13:07 +0200
+	id 1teyAi-00000007rxW-1zJW;
+	Mon, 03 Feb 2025 17:15:36 +0200
+Date: Mon, 3 Feb 2025 17:15:36 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -77,12 +77,11 @@ Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Simona Vetter <simona.vetter@ffwll.ch>,
 	Zijun Hu <quic_zijuhu@quicinc.com>, linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH 1/3] driver core: add a faux bus for use when a simple
- device/bus is needed
-Message-ID: <Z6DdA_2w0QaRgPZo@smile.fi.intel.com>
+Subject: Re: [PATCH 3/3] USB: phy: convert usb_phy_generic logic to use a
+ faux device
+Message-ID: <Z6DdmNiinydtRZFU@smile.fi.intel.com>
 References: <2025020324-thermal-quilt-1bae@gregkh>
- <2025020326-backer-vendetta-7094@gregkh>
- <Z6DchyPieQKBJ0SN@smile.fi.intel.com>
+ <2025020327-economy-craftwork-8799@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -91,26 +90,19 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z6DchyPieQKBJ0SN@smile.fi.intel.com>
+In-Reply-To: <2025020327-economy-craftwork-8799@gregkh>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Feb 03, 2025 at 05:11:03PM +0200, Andy Shevchenko wrote:
-> On Mon, Feb 03, 2025 at 03:25:17PM +0100, Greg Kroah-Hartman wrote:
+On Mon, Feb 03, 2025 at 03:25:19PM +0100, Greg Kroah-Hartman wrote:
+> The usb_phy_generic code was creating a "fake" platform device to pass
+> around in different places.  Instead of doing that, use the faux bus
+> instead as that is what is really wanted here.
 
-...
+> Site note, this fixes a bug in the mpfs driver where the incorrect
+> pointer was being passed to usb_phy_generic_unregister(), odd that no
+> one ever hit this in the past.
 
-> I don't remember by heart what it does include, I would go with IWYU principle
-> and list above all what we use.
-> 
-> container_of.h
-> device.h
-> export.h
-> printk.h
-
-> types.h
-
-Probably types.h is too much and stddef.h would suffice (as it provides NULL
-pointer definition).
+Seems nobody ever removed (unbind'ed) the module at run-time.
 
 -- 
 With Best Regards,
