@@ -1,151 +1,99 @@
-Return-Path: <linux-usb+bounces-19994-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19995-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 770B8A25A46
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 14:01:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80F81A25AB6
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 14:21:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5F613A63F3
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 13:01:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF7E5163C6D
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 13:21:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A763E204C31;
-	Mon,  3 Feb 2025 13:01:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83F72204C3E;
+	Mon,  3 Feb 2025 13:21:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="Pfqhfd+F"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="drkIDBbh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7481F9AAB;
-	Mon,  3 Feb 2025 13:01:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E20E22040B5
+	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 13:21:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738587668; cv=none; b=AgCPz+fPJqBd/CKf4mZ4FqGcz98GUnjPs1YgbRPgqaAQhts7rwQbtWwV1PmJf2+7RyTwS8LFjRIyqH3Yj9In57gyrrHtzVPszNsvHRXPEseriErW2FzYttVspW9Wc1dgkZGttIIrzmV4UUJaWwPt+zIDUFy7TlHB3gY0EYD1hNI=
+	t=1738588884; cv=none; b=CO3NBID3ox2bTMJ8i0m5sxW2dX3a9L0j5VUXl60SU56R75luycdhBQMwAAH8keU8L1zvtUKyhybc0kMZze4KfSeHtsZfju28tkYiPtr1+6W9qS3WEoo015d5zUx7LDXkDnSA+gTlncCJ9OCpufiUN7AsFoHrixZMcX9S8Vk4AeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738587668; c=relaxed/simple;
-	bh=jqWh2EWngA3RWMJaLWB+Q14fWJr8ao4+yiPwbt29/mI=;
-	h=MIME-Version:Date:From:To:Cc:Subject:In-Reply-To:References:
-	 Message-ID:Content-Type; b=VRCUIxQukP5uuiNVCFzuuSAmUtkIZsiUUE3JOm9LniJvbZpI4gndu53JBtQolF8+dbmv1v5nCwRnNnFEVqrAy9Txm07h23VDzApf6wq9X/Mn3D6DkqTS5Np8jW+GNoIIwIgIyK347+9KnHz7Dg2gLOhnR3g8uq6hFReKqcv6/JQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=Pfqhfd+F; arc=none smtp.client-ip=194.13.80.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2C13CA1C21;
-	Mon,  3 Feb 2025 14:00:55 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
-	t=1738587657;
+	s=arc-20240116; t=1738588884; c=relaxed/simple;
+	bh=43aqwoFqEadmaiaEL1evHdDHKrDHYllGJKxj2XFQdv8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=InqcUHJBqrTWZht6hhzmr574md+GtLZBaVv5ymDP8j99Ow1gMFvxnkNzGN2u4f3kPWEHwDBMAhPEf+XHaCx/YReHHkNtG4LAmQRM8PgFKBapsLNBEHMxitZbyyxCUWIT1r32dckP339/GR7G8eLhwvVoG1J9giFZ2jJwyK1Qq4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=drkIDBbh; arc=none smtp.client-ip=95.215.58.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Date: Mon, 3 Feb 2025 14:21:07 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1738588869;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=AJI4ZqNVFm8MO3lNKhEvrmia+9Yie1nZYMnxjuADB6Q=;
-	b=Pfqhfd+Fx2Ou84vbEc65IiPsI9tlVoBDiZRZfOd/3VJroBWmRfky7590/YXV+CC660M1HV
-	wC0iuc3d2oYa6tZDzudpWgFIHUh6LWGjuCeWxFYL5S4cxMHWMHYywyLSRmaZqY7o62iZvG
-	tT6FhRUmXTNurmmjgyy2fTn83GFxIWDyadqee7idhTDbBHSv2JbUZnCfGwqw6YxUFJ2193
-	V0PPZ+67PKEQiGGl8gZ7qdG4XqU0o7zu6dZ7cfucoJnun7EYFXXCJsKcpQOi+qXFrQXEIf
-	n7Tb3pyOqyfCM7usg7ICbQr8leGSCS8m0TglaZ4YsLizqz6KzjkZeu0hfgNU2g==
+	bh=oSl7lrm4KEuJioP7eaV2gboPggwLzfzD3mDrXk5z0bM=;
+	b=drkIDBbhAYcULTSuQt9kmDX+HKaZKBJYl4rCH25JaGU11sjRAjthhDUf4/LdJE9CQdIltj
+	MXJrthEEKYyaJqBhPoiFsJuGP+9HOaRVSG/xR5fs29z8Xi3xH4ghibGxABvDo/JuS+EMwT
+	G9JX4xg56u5s+kEGgBqi6gfkP2kaJss=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Richard Leitner <richard.leitner@linux.dev>
+To: Dominique Martinet <dominique.martinet@atmark-techno.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] usb: usb251xb: silence EPROBE_DEFER error on boot
+Message-ID: <i2qbsl5vhi7ltwxabmnbeiixcb4kmliezuokmv7sknkfgzwgns@g4jhh4ldugcz>
+References: <20250203-defer_usb1-v2-1-eba405ebee2c@atmark-techno.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 03 Feb 2025 14:00:55 +0100
-From: nb@tipi-net.de
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Mathias Nyman <mathias.nyman@intel.com>, Ben Hutchings
- <ben@decadent.org.uk>, n.buchwitz@kunbus.com, l.sanfilippo@kunbus.com,
- stable@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Restore Renesas uPD72020x support in xhci-pci
-In-Reply-To: <2025020307-charity-snowfield-c975@gregkh>
-References: <20250203120026.2010567-1-nb@tipi-net.de>
- <2025020307-charity-snowfield-c975@gregkh>
-Message-ID: <5965e4219781df26f733a2e93bed9f37@tipi-net.de>
-X-Sender: nb@tipi-net.de
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250203-defer_usb1-v2-1-eba405ebee2c@atmark-techno.com>
+X-Migadu-Flow: FLOW_OUT
 
-On 3.2.2025 13:46, Greg Kroah-Hartman wrote:
-> On Mon, Feb 03, 2025 at 01:00:26PM +0100, nb@tipi-net.de wrote:
->> From: Nicolai Buchwitz <nb@tipi-net.de>
->> 
->> Before commit 25f51b76f90f1 ("xhci-pci: Make xhci-pci-renesas a proper
->> modular driver"), the xhci-pci driver handled the Renesas uPD72020x 
->> USB3
->> PHY and only utilized features of xhci-pci-renesas when no external
->> firmware EEPROM was attached. This allowed devices with a valid 
->> firmware
->> stored in EEPROM to function without requiring xhci-pci-renesas.
->> 
->> That commit changed the behavior, making xhci-pci-renesas responsible 
->> for
->> handling these devices entirely, even when firmware was already 
->> present
->> in EEPROM. As a result, unnecessary warnings about missing firmware 
->> files
->> appeared, and more critically, USB functionality broke whens
->> CONFIG_USB_XHCI_PCI_RENESAS was not enabled—despite previously 
->> workings
->> without it.
->> 
->> Fix this by ensuring that devices are only handed over to 
->> xhci-pci-renesas
->> if the config option is enabled. Otherwise, restore the original 
->> behavior
->> and handle them as standard xhci-pci devices.
->> 
->> Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
->> Fixes: 25f51b76f90f ("xhci-pci: Make xhci-pci-renesas a proper modular 
->> driver")
->> ---
->>  drivers/usb/host/xhci-pci.c | 2 ++
->>  1 file changed, 2 insertions(+)
->> 
->> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
->> index 2d1e205c14c60..4ce80d8ac603e 100644
->> --- a/drivers/usb/host/xhci-pci.c
->> +++ b/drivers/usb/host/xhci-pci.c
->> @@ -654,9 +654,11 @@ int xhci_pci_common_probe(struct pci_dev *dev, 
->> const struct pci_device_id *id)
->>  EXPORT_SYMBOL_NS_GPL(xhci_pci_common_probe, "xhci");
->> 
->>  static const struct pci_device_id pci_ids_reject[] = {
->> +#if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
->>  	/* handled by xhci-pci-renesas */
->>  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0014) },
->>  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0015) },
->> +#endif
->>  	{ /* end: all zeroes */ }
->>  };
+On Mon, Feb 03, 2025 at 03:33:49PM +0900, Dominique Martinet wrote:
+> Use dev_err_probe to silence EPROBE_DEFER error on boot:
+> [    0.757677] usb251xb 1-002c: failed to get ofdata: -517
 > 
-> Have you seen:
-> 	https://lore.kernel.org/r/20250128104529.58a79bfc@foxbook
-> ?
-Hi Greg.
-
-Thanks, I must have overlooked Michal's patch when I initially stumbled 
-over the issue.
+> Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
+> ---
+> Changes in v2:
+> - removed redundant error code in message and brace
+> - Link to v1: https://lore.kernel.org/r/20250203-defer_usb1-v1-1-f6bba254215d@atmark-techno.com
+> ---
+>  drivers/usb/misc/usb251xb.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> Which one is correct?
-
-I guess both, as Michal is implementing the same slightly different.
-
-My approach was to to keep the changes less invasive as possible and 
-thus make it possible to use pci_ids_reject[] for further exceptions in 
-the xhci-pci driver. In Michael's patch the list is specifically used 
-for blacklisting the Renesas devices and cannot easily be expanded for 
-other controllers. Either approach is fine with me, so lets move the 
-discussion to the patch which came first.
-
+> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+> index e24cdb667307802b9eee856e20744ebf694395e8..4fb453ca545013f8b89c43d3bb5cc6d1c53b39c9 100644
+> --- a/drivers/usb/misc/usb251xb.c
+> +++ b/drivers/usb/misc/usb251xb.c
+> @@ -636,10 +636,8 @@ static int usb251xb_probe(struct usb251xb *hub)
+>  
+>  	if (np && usb_data) {
+>  		err = usb251xb_get_ofdata(hub, usb_data);
+> -		if (err) {
+> -			dev_err(dev, "failed to get ofdata: %d\n", err);
+> -			return err;
+> -		}
+> +		if (err)
+> +			return dev_err_probe(dev, err, "failed to get ofdata\n");
+>  	}
+>  
+>  	/*
 > 
-> thanks,
-> 
-> greg k-h
+> ---
+> base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+> change-id: 20250203-defer_usb1-254070d18cc9
 
-best,
-Nicolai
+Acked-by: Richard Leitner <richard.leitner@linux.dev>
 
