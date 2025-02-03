@@ -1,179 +1,111 @@
-Return-Path: <linux-usb+bounces-20013-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20014-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9034A25EE8
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 16:36:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBEB7A25EFD
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 16:39:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E8D53A4B9F
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 15:35:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A47C01882E51
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 15:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5585209F5D;
-	Mon,  3 Feb 2025 15:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A5220A5D6;
+	Mon,  3 Feb 2025 15:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lrwX++1A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KGcJB2lS"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C9A5209F46;
-	Mon,  3 Feb 2025 15:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 013B6209F5C;
+	Mon,  3 Feb 2025 15:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738596949; cv=none; b=fLlvudZ9M7SEQPhhF3foeo1kdLR6muxC+IiqhQ2z63KCr7tHonf+zNv/zL7Yfg7dy8xQ6LdNeVSSQlpNVw63DR9a6gkoOrZH41TK1Xf6Xla56nzcY77KO/wsPrzHIKKuGvWUK4raCYk42EE3oZEkK21Z0U21jY2gi/ZBZNtj+TI=
+	t=1738597154; cv=none; b=lejavZX80ay4LPX6YsVN9mhT6kjXcZg3Ftjl66wk8MIItcooB9+kbW5El89O9xhCRm2ZVZV9rE09c4kEqOjynrGrWcUBX3VpewK42/ndsu6SQh+YCLuE3L6CHqh6nFt9de5DxndCMnbLPmx+425qrIIuYKtDazQHhC1DWpP3wzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738596949; c=relaxed/simple;
-	bh=8pM+c7QBDyH2vUswp/7fZ+2pllmIy0tVn+gEwVNo0sg=;
+	s=arc-20240116; t=1738597154; c=relaxed/simple;
+	bh=pgQ/XI31xowbU+3+u9CKK81XMYjgEjIVkb7lnDyVBBc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kPkvqskdBg8mWA0Sp82ACC0b3Fv53hr1dlitXzGv61SQBSKlozypL5wktNvBXHKa8n6qJYDwqJn6iyn7EMusej43rxi9ZIx5CBTUPyDTM0maD8khmi3t0OxqgY7i0s+b+oivJGyIhWQHFMvvpuvCDwD5ctUUWjwalcolHCACNZk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lrwX++1A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05E3EC4CED2;
-	Mon,  3 Feb 2025 15:35:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738596948;
-	bh=8pM+c7QBDyH2vUswp/7fZ+2pllmIy0tVn+gEwVNo0sg=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=M9fa9ZHb7tSwQi+WlE3ar0wvf0NwaQqQ7cuK8+un/lgFf381YCiY4Zz12ZOye0UEnDNbScmLHMAmAbHtqNVUFRD2Bmq3eE/q+Ej4K1XpNyz8VsDtrmuFA+LnjC0mfM0n0VaYw+WioE+ufwMkKCpnJSa1WjXIB3Ob9b6YxniMM0U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KGcJB2lS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C7D7C4CEE0;
+	Mon,  3 Feb 2025 15:39:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738597153;
+	bh=pgQ/XI31xowbU+3+u9CKK81XMYjgEjIVkb7lnDyVBBc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lrwX++1AsvZW/JrlixMh9boM+dU5zTuAfjM9wEog2ejR34cNwgMxRbVuoprGdXPa8
-	 XcwyF+iziBBfpxSedTYQC+Dp7CxgubwO1egdwtgYllgGxB2i2Jlv4U69FrLrQrbyzE
-	 WlKBcN/GToZRHmBwDR3xxOcBj2XyEFyjVWj5IRHM=
-Date: Mon, 3 Feb 2025 16:35:45 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+	b=KGcJB2lS4USat7u61MlEPuvkLeMiiKmgr5f/KHvd5qFV4o4HzGID9aW9SCKlt1aL0
+	 XFK4FyBvBkSetnTlgX5e+DwjskyupsT9unPnixYrvfQ7cr0N0PC6mo0umvdPGXedYE
+	 Pjh7Yz+QW2VpD97KJYE7JpHvjxf48eVA7qhljZLOVFDlFqyH9xCQn/7U/32lDjv2G9
+	 soloPQSduGSZ4i5J0W7pIokBl16PnpMjQKzY4TrHu9sN3vCb5S37roswYy2qctEstd
+	 cPUjExtYTPkrElMazA6NI7pGvbh5076Pb1QRlngwu8EIlS7a0X8al+ojFEJiYgQzx/
+	 HXlPSSiR0NJNg==
+Date: Mon, 3 Feb 2025 15:39:06 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
 	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Bjorn Helgaas <bhelgaas@google.com>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
 	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
 	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
 	Robin Murphy <robin.murphy@arm.com>,
 	Simona Vetter <simona.vetter@ffwll.ch>,
 	Zijun Hu <quic_zijuhu@quicinc.com>, linux-kernel@vger.kernel.org,
 	linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH 1/3] driver core: add a faux bus for use when a simple
- device/bus is needed
-Message-ID: <2025020300-gown-outmatch-1343@gregkh>
+Subject: Re: [PATCH 2/3] regulator: dummy: convert to use the faux bus
+Message-ID: <3238a3af-3296-435a-a326-859d0188d51c@sirena.org.uk>
 References: <2025020324-thermal-quilt-1bae@gregkh>
- <2025020326-backer-vendetta-7094@gregkh>
- <Z6DchyPieQKBJ0SN@smile.fi.intel.com>
+ <2025020326-applicant-unwomanly-13df@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="T/ceAofdHzykrrf3"
+Content-Disposition: inline
+In-Reply-To: <2025020326-applicant-unwomanly-13df@gregkh>
+X-Cookie: May your camel be as swift as the wind.
+
+
+--T/ceAofdHzykrrf3
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z6DchyPieQKBJ0SN@smile.fi.intel.com>
 
-On Mon, Feb 03, 2025 at 05:11:03PM +0200, Andy Shevchenko wrote:
-> On Mon, Feb 03, 2025 at 03:25:17PM +0100, Greg Kroah-Hartman wrote:
-> > Many drivers abuse the platform driver/bus system as it provides a
-> > simple way to create and bind a device to a driver-specific set of
-> > probe/release functions.  Instead of doing that, and wasting all of the
-> > memory associated with a platform device, here is a "faux" bus that
-> > can be used instead.
-> 
-> ...
-> 
-> > +#include <linux/device/faux.h>
-> 
-> I would rather think that this goes after generic inclusions...
-> 
-> > +#include <linux/err.h>
-> > +#include <linux/init.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/string.h>
-> 
-> ...somewhere here.
-> 
-> But looking into organisation of device.h and device/*.h,
-> I would rather think of the linux/faux_device.h.
+On Mon, Feb 03, 2025 at 03:25:18PM +0100, Greg Kroah-Hartman wrote:
+> The dummy regulator driver does not need to create a platform device, it
+> only did so because it was simple to do.  Change it over to use the
+> faux bus instead as this is NOT a real platform device, and it makes
+> the code even smaller than before.
 
-It can go anywhere, there is no need to sort things :)
+No, they did this because you explicitly asked that this be done....
 
-> > +#include "base.h"
-> 
-> I don't remember by heart what it does include, I would go with IWYU principle
-> and list above all what we use.
-> 
-> container_of.h
-> device.h
-> export.h
-> printk.h
-> types.h
+> -static int dummy_regulator_probe(struct platform_device *pdev)
+> +static int dummy_regulator_probe(struct faux_device *vdev)
 
-That's not what the driver core ever did, so no need to worry about it,
-thanks.
+Just dev or fdev - we could just pass a struct device in here, we don't
+actually care that it's a platform device at this point.  Having the
+abbreviation mismatch with the device type is odd.
 
+--T/ceAofdHzykrrf3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> ...
-> 
-> > +static int faux_match(struct device *dev, const struct device_driver *drv)
-> > +{
-> > +	struct faux_object *faux_obj = to_faux_object(dev);
-> > +
-> > +	/* Match is simple, strcmp()! */
-> > +	return (strcmp(faux_obj->name, drv->name) == 0);
-> 
-> Outer parentheses are not needed.
+-----BEGIN PGP SIGNATURE-----
 
-Makes me feel good as it is an assignment test, and that's what
-platform.c has for the past few decades.
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeg4xkACgkQJNaLcl1U
+h9Cwtwf/QHGnq/IfZF89VKM4thKP/if3Gv5NHvycpdSJDkPjyY22feQPTc3NN0Ev
+qNnnbkJmDUf3yqg39t7ZJpd45uVfgzbXJKXpRVrpdUAYec4woH+lkHRPmTFL2anh
+0tpbEV7QRAa2rNJrmdeuxoDIRCSW8yB632ud9saiQ66gLHfyiEyPVx4pdfQUqXBO
+klQQeLoeTlwhPVKEq/APbwGeDSjEPXxkgda4G8sSwcqQU2OFTZXUh3/GPWFLmXPk
+uIsP8S/X5wBjcm9xelyzj1iC4ya50Cq20MHAZ4bAwXAoT/fJhLgjYBT7YDNETP3a
+s5UuEUUoIZoktxFUTs+lxEK5paQk9g==
+=C9qo
+-----END PGP SIGNATURE-----
 
-
-> > +/**
-> > + * __faux_device_create - create and register a faux device and driver
-> > + * @name: name of the device and driver we are adding
-> > + * @faux_ops: struct faux_driver_ops that the new device will call back into, can be NULL
-> > + * @owner: module owner of the device/driver
-> > + *
-> > + * Create a new faux device and driver, both with the same name, and register
-> > + * them in the driver core properly.  The probe() callback of @faux_ops will be
-> > + * called with the new device that is created for the caller to do something
-> > + * with.
-> 
-> The kernel-doc will complain on missing Return: section.
-
-Is that new?  Does that mean platform.c has lots of complaints in it as
-well?  What does platform_find_device_by_driver() give you for a
-documentation issue?
-
-And as I didn't hook this up to the kernel documentation build yet, it
-shouldn't produce any warnings anywhere :)
-
-> > + */
-> > +struct faux_device *__faux_device_create(const char *name,
-> > +					       struct faux_driver_ops *faux_ops,
-> > +					       struct module *owner)
-> > +{
-> > +	struct device_driver *drv;
-> > +	struct device *dev;
-> > +	struct faux_object *faux_obj;
-> > +	struct faux_device *faux_dev;
-> > +	int ret;
-> 
-> > +	faux_obj = kzalloc(sizeof(*faux_obj) + strlen(name) + 1, GFP_KERNEL);
-> 
-> Potential overflow. To avoid one may use struct_size() from overflow.h.
-
-Users should not be providing the string here.  Again, this comes from
-platform.c.
-
-> > +#ifndef _FAUX_DEVICE_H_
-> > +#define _FAUX_DEVICE_H_
-> 
-> > +#include <linux/module.h>
-> 
-> + container_of.h
-
-Not needed to compile this file, only if someone uses the #define in it.
-
-thanks,
-
-greg k-h
+--T/ceAofdHzykrrf3--
 
