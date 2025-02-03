@@ -1,127 +1,148 @@
-Return-Path: <linux-usb+bounces-19963-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19964-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DC7FA24FDE
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 20:57:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B682A2510B
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 02:19:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A97901635FB
-	for <lists+linux-usb@lfdr.de>; Sun,  2 Feb 2025 19:57:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 993521883FD7
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 01:19:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A071FF1A2;
-	Sun,  2 Feb 2025 19:57:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF19EEBA;
+	Mon,  3 Feb 2025 01:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZliaSi0N"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gc1hKcxp"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EC6BE67;
-	Sun,  2 Feb 2025 19:57:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D0E610FD;
+	Mon,  3 Feb 2025 01:19:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738526267; cv=none; b=F+AVEa2VWdsPUGAlP6xZf+4u95SSI8SyfZSf3psTYtS0vxj8Rr7/7jqh+W/doO/asd8Ag/Cw7O4ZZcLrVBTvzPN4Seam/6Ou1JOC5LsDgaJ0ybPBNsJq/coDjhZRA443YvPeiTHBL5Nfkl7meVyNQaSh9oG6jxis5qvE03CZ3P8=
+	t=1738545582; cv=none; b=Ynr9VGuZLmp6g+Uz5r9pwrooXRtN2jL1xb0ivEZ74QBlcK8BWtSV0U+S6A2SD4Vyv2bL207maX5JeawHdZNgCwOGxl4SH1WO//zB5CTzU2HyLwmzUKWhkdG6O5BnRjRJKHWP/LCmJRGkpkBDa2EQDr9TNLE+nB0RGE3FmQcERdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738526267; c=relaxed/simple;
-	bh=fj2gd9lh84yaGtViLS4opTR3wYTKKm5xnBKtcZGGF8Y=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=Og/jWbmZMW43u6UQqrDC5sDqxinyFAEmLjb70IFBsvqywFfESPbnraV9V123UopdFkbR7AuckG9ZqpjAOtJ5kP+fZBvaHQD6GMYlT/IF6twu8LQO8d5kHkLVxh59ic8hzoaz47k4QNvPJqOrYn1motYETL+p0SI0fh9i447HFno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZliaSi0N; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92DAAC4CED1;
-	Sun,  2 Feb 2025 19:57:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738526266;
-	bh=fj2gd9lh84yaGtViLS4opTR3wYTKKm5xnBKtcZGGF8Y=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=ZliaSi0NvAFlYF1vi3PEsLeNqGBkm97/l5U7AMHGa4e3nietTq+XWlvqBFa+P3XHv
-	 6AXAepOC+O8aKqnaVdgU9r6HgdKqUntkQTrLgFYc3qb6iV1UvXOLalmlPAtazqlTRj
-	 BOtS6LYgt8JDUSBVU6J+Q1j+S1eRVDT5C5RuebDayYkWLOTSkVEAAdRljFZIU4C748
-	 qj3EVjftQujQZdv1gc4DaJVVtjqp2WL8V7yCX5slCI4aEsqXjKQUNho1T1IfNnUaPi
-	 X+u/Zxkv8vGxsvMcRj3MexJXU8wEWnpqbVFC8T1gol0kn4I4MQV9/Pg2HUdRDr36UF
-	 5YU5kDq+nnmuA==
-Message-ID: <52dd7137-ba7f-4a96-a3e1-c6de2d21b7c1@kernel.org>
-Date: Sun, 2 Feb 2025 20:57:39 +0100
+	s=arc-20240116; t=1738545582; c=relaxed/simple;
+	bh=bYcoU0mwJ+CXhT4fhT/dxf1ul9bd0TV8O1ada/Gvuhs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tZ1S58rY315YRWcBx1Yr84Md7RS4JG4A2w7+EYCXXa0+nyh5wREk7cy5AeC68O2hwzMmzG8KydXuShYP2hnyIn4sRryeqbQ2c0Bj9Z82lowz0bKMiK6eEhqYRT0K6xpEcK52AbO7PX8nLuJxAKZNjer2ocDRGHK8cDehHmDhFH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gc1hKcxp; arc=none smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2efb17478adso6382390a91.1;
+        Sun, 02 Feb 2025 17:19:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738545579; x=1739150379; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NTy4qS01FLMytEtpMeOug8rr1n5yyzrMe+Tl/rJy/8g=;
+        b=Gc1hKcxpfdOE2yo90+7F+Sm/aLos92U8FrUjHnDIYeuRAo45qTrTBcmHeR8zUQVTFB
+         88dsULLXWK7yiWEtnwV+CdXjtnWq9gO/MKY2h96GjrDML0g4rcTWPz6H9wFJL1OBVqGC
+         HDBUB8TvGbEZFqz9g9N2BkN2DazN21gdAa4d7NCzKMuWtwuAcQthmi86JtHOnvavVGPe
+         CauovCHgleQJUVUhsdyS0nUZpPZY+yU1Dz+JZflkUGDxM+aPiSMuGCmvTaxFEYyojl4O
+         OlP7jsFMVeArMA/NCYTHCZ5PFJOqeFYVt3wWxkiKfJh2wvsibIuC3gU8YHwsD7MHjn0V
+         kcMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738545579; x=1739150379;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NTy4qS01FLMytEtpMeOug8rr1n5yyzrMe+Tl/rJy/8g=;
+        b=flJxxa6zUAgvjjSeN3OdZnMMZcsNyjIK9vFQZGODP/d0OmbsIrOTgNJKWKFMdWASE6
+         psuqnIuprvr4Mo/kq4TxQSbFu+4Z1OwUiPObhgyocoPIuSEf36fj/b0U4RN1zbW9cE5b
+         g9MjSd9HNohFL8CG4WxjZ6hDvqmvl1cDy7uT0cV5EP/61NY/WyhCsj+5g/y21yNUVHIj
+         q8PhpuMO+GTsakERLukHjWw8RYrxuXA0cmumeAgtGjpqr6DbLJUmsapcKv24Tv46zqPI
+         5S/01rcml8/WSSLWdSH2eO2fSepMzd/cannUXLSyxUSCpf2OMSVhaDTpufjEhVKf1Of8
+         zY5g==
+X-Forwarded-Encrypted: i=1; AJvYcCVLBzndNVz4CikWGgNy7suKwS+mO+xIncT6NBIUGcVCnz6MkFLFiAOvu1FOUHGWuCNIIPJUTILUkBfr@vger.kernel.org, AJvYcCVqcjQsH8QjPA1Ar5eqHfu3ykDWlYMw6qG7R9laNrlDFAFF8WyfsTfVvGACtNoPh2TRWY65h3EaeY3ePSc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYnhcnw8LuE/MPqU035TeVfHRIPxRqWNg/l9BRMlrnK8wJqRHJ
+	/wyW4k/EKaQyMTCyPMcY2jbmW9IJHjc/yczG+untAeqg9exi29av
+X-Gm-Gg: ASbGncuYHmeRUB3h8Lrq704OmpYVrtbfxK8ESCEyfpa2QJ477yOa0l200B4KJ5xqXZI
+	OJYKrE76aQv05uQSA9q0538ChEJrnCgiMLx/jdYOSmWMd0FpT4ePNzFoJ3aMjbD6l3yEChhaVml
+	PAaVy57KUbi5IMdeoydK063886J8IUtJbhRea2YVkl3qGGOtY+BxPkESFNAC+lYEtI0nkVkC7Ti
+	UP4iT1UqYdi0SlGlu2VR9rVVeoUiFHTi/HNyeVeX0ZwVbq9bm1NJ1OKVFZhkSYGEhwCsQeFgdXJ
+	tN1tDwSRh1RcTsBc
+X-Google-Smtp-Source: AGHT+IFJrVG/Isbfklx6SiV4JhJSrBkvBKw2E0MI7P8JC3NLIvtNmNc8vFHEIdAi8pEBlrngLxzR2A==
+X-Received: by 2002:a05:6a00:a801:b0:725:d64c:f113 with SMTP id d2e1a72fcca58-72fd0bdae06mr35239126b3a.3.1738545579166;
+        Sun, 02 Feb 2025 17:19:39 -0800 (PST)
+Received: from ubuntu.. ([175.141.178.229])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-acec04794b1sm6758939a12.53.2025.02.02.17.19.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 02 Feb 2025 17:19:37 -0800 (PST)
+From: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+To: mika.westerberg@linux.intel.com
+Cc: andreas.noever@gmail.com,
+	michael.jamet@intel.com,
+	YehezkelShB@gmail.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+Subject: [PATCH] thunderbolt: Remove the TBT3 Not Supported bit
+Date: Mon,  3 Feb 2025 01:17:47 +0000
+Message-ID: <20250203011842.13305-1-rahimi.mhmmd@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] dt-bindings: usb: snps,dwc3: Add property for imod
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
- felipe.balbi@linux.intel.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, johnyoun@synopsys.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- jameswei@google.com, stable@kernel.org
-References: <20250202035100.31235-1-badhri@google.com>
- <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 02/02/2025 15:11, Krzysztof Kozlowski wrote:
-> On Sun, Feb 02, 2025 at 03:50:59AM +0000, Badhri Jagan Sridharan wrote:
->> This change adds `snps,device-mode-intrpt-mod-interval`
-> 
-> Thank you for your patch. There is something to discuss/improve.
+Since USB4 v2 specification has removed the mandatory requirement to
+support TBT3 on a USB4 Dock UFP, the TBT3 Not Supported bit is not
+usable, as when it needs to be read there is no USB4 Link.
 
+This change was introduced in a "USB4 2.0 ENGINEERING CHANGE NOTICE
+FORM" published in September 2024, titled "TBT3 Support on USB4 Dock
+UFP".
 
-Also one more note:
+Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+---
+ drivers/thunderbolt/tb_regs.h | 1 -
+ drivers/thunderbolt/usb4.c    | 7 ++-----
+ 2 files changed, 2 insertions(+), 6 deletions(-)
 
-Please do not use "This commit/patch/change", but imperative mood. See
-longer explanation here:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index 4e43b47f9f11..7c5d27571b66 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -212,7 +212,6 @@ struct tb_regs_switch_header {
+ #define ROUTER_CS_5_CV				BIT(31)
+ #define ROUTER_CS_6				0x06
+ #define ROUTER_CS_6_SLPR			BIT(0)
+-#define ROUTER_CS_6_TNS				BIT(1)
+ #define ROUTER_CS_6_WOPS			BIT(2)
+ #define ROUTER_CS_6_WOUS			BIT(3)
+ #define ROUTER_CS_6_HCI				BIT(18)
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index e51d01671d8e..e25a594649b2 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -241,8 +241,8 @@ int usb4_switch_setup(struct tb_switch *sw)
+ {
+ 	struct tb_switch *parent = tb_switch_parent(sw);
+ 	struct tb_port *down;
+-	bool tbt3, xhci;
+ 	u32 val = 0;
++	bool xhci;
+ 	int ret;
+ 
+ 	if (!tb_route(sw))
+@@ -257,10 +257,7 @@ int usb4_switch_setup(struct tb_switch *sw)
+ 	tb_sw_dbg(sw, "link: %s\n", sw->link_usb4 ? "USB4" : "TBT");
+ 
+ 	xhci = val & ROUTER_CS_6_HCI;
+-	tbt3 = !(val & ROUTER_CS_6_TNS);
+-
+-	tb_sw_dbg(sw, "TBT3 support: %s, xHCI: %s\n",
+-		  tbt3 ? "yes" : "no", xhci ? "yes" : "no");
++	tb_sw_dbg(sw, "xHCI support: %s\n", xhci ? "yes" : "no");
+ 
+ 	ret = tb_sw_read(sw, &val, TB_CFG_SWITCH, ROUTER_CS_5, 1);
+ 	if (ret)
+-- 
+2.45.2
 
-
-Best regards,
-Krzysztof
 
