@@ -1,142 +1,115 @@
-Return-Path: <linux-usb+bounces-19983-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19984-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CBC02A254C1
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 09:48:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDCF1A25673
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 10:56:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 768503A67C6
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 08:48:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D8B1188904E
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 09:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B796C1FC0FF;
-	Mon,  3 Feb 2025 08:48:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D28A920013E;
+	Mon,  3 Feb 2025 09:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C7SwE50u"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RnsijSIC"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B81CC17BD3;
-	Mon,  3 Feb 2025 08:48:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44DE7101E6;
+	Mon,  3 Feb 2025 09:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738572519; cv=none; b=gib+su9awpBsEi+9Cp4fQhivdr328Nz+zN+AowIx8Zeg6aS2mMi7rJHwLmR7vQLtEmOXf1eL1xrw/j0Dyi5goCmWsMuY+K4U7BpftzL0dCGnny5ckUxJCG3MV8itibnQHfqjXSIwuoQ0tkY7XbvHea8Nmx3DY+fMlBJeSqqmirw=
+	t=1738576600; cv=none; b=pGukPK+ywUei6uZ54pFuVvhIYT5QmLE1hsKEC6YFL/eu9K3mQZo8Qk0CA4LTlqq/i5QN1f7oXyyoAnLbuGF4vaTdjtp+cXw6jUsIjhvk0h5Ud8t3B4FLfn1UDpeBVHw5RtFnAIaabxh+yODvVWB8AqUzHdyVGi3yxmyxD0fpb1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738572519; c=relaxed/simple;
-	bh=kudHkmXRsDkWGztqg0iWjZgX6lkgeJyEjsCOY6NMUyE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=lw4klVpAPOTd4WwAJD+py9e2YXf2+bpsaiJ6Z0G4j/9hnWq6Og/8/tlHk1qhUVx/TNg04iPld4jWNr7p6c32l7SpXWa6VCpVZHrMLD9tsPbm3XP7hP5hcrC5+o/bCUtYMD48Ttywn6dOeCa8KwdhX5u56SqaWqcaFfl/fzxch5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C7SwE50u; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738572518; x=1770108518;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kudHkmXRsDkWGztqg0iWjZgX6lkgeJyEjsCOY6NMUyE=;
-  b=C7SwE50u8RpkFarxI4YwksKLm5EcXDrEhqRmQkUSy9JUfnWiaGaLOHHC
-   6NQW8qA7DYisW2MUTz5J+z0mDWxVxtvBackTSabT7cqo0JkxDf+bUmCfk
-   kXfel0kI9V6sDzzv8mUVQPoqoomp7Qxktnbg3S2eIOViUVZoiAU3WH+0f
-   Ce/OHJKRusmJ7F5Z58ueJTg3cOBxg3jbri+PSDto/AiGqcU326lyjjYEk
-   8ddzLCqvtwEM7V2c71ZCV4LTE9oaPnCBiT6FplTIk/xnwVz3EsyreSm8N
-   KCXiaf1PDXG1DZOmQue6ee3BQHv1YyIEjVcixYfu/sqbWe/aenruy8Cdl
-   Q==;
-X-CSE-ConnectionGUID: dCF2maFRS8e0kCTqSnG4Kw==
-X-CSE-MsgGUID: Eb0ZdyRNQ/WkQEq8lZiqnw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="38960733"
-X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="38960733"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:48:37 -0800
-X-CSE-ConnectionGUID: 1UD1+lJTSZOK70nrOqOuog==
-X-CSE-MsgGUID: LcDJRP8AQoCqOO+BwNdhUQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="110675830"
-Received: from apgcp0h572501.png.altera.com ([10.244.73.227])
-  by orviesa007.jf.intel.com with ESMTP; 03 Feb 2025 00:48:34 -0800
-From: Boon Khai Ng <boon.khai.ng@intel.com>
-To: Johan Hovold <johan@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tien Sung Ang <tien.sung.ang@intel.com>
-Cc: Tien Sung Ang <tien.sung.ang@altera.com>,
-	Boon Khai Ng <boon.khai.ng@altera.com>,
-	Boon Khai Ng <boon.khai.ng@intel.com>
-Subject: [PATCH v1] USB: serial: ftdi_sio: add support for Altera USB Blaster 3
-Date: Mon,  3 Feb 2025 16:48:22 +0800
-Message-Id: <20250203084822.18356-1-boon.khai.ng@intel.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1738576600; c=relaxed/simple;
+	bh=zJ8G+yq3JQNXvQWV+vf4WMNnKxrU0sJViRg/T9+Hp7k=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=QodMTKFpgVl3uDJ6vqw0kV9yaX9EHWnvPRPIYjDFJ/hBIleQvlFG1xMijOWczMtz0HmTPRQLkLDR91wExM6J9mg5DDQq2XVoqEUnrGb3FJTNVmDeWvudyqSkp63eYn71XC/TrCO9IzpqtGFnfKevCdWLps9eN7jv5yJYm8lsIl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RnsijSIC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E158C4CED2;
+	Mon,  3 Feb 2025 09:56:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738576600;
+	bh=zJ8G+yq3JQNXvQWV+vf4WMNnKxrU0sJViRg/T9+Hp7k=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=RnsijSIC7HbiR+dnUJbyuafuvPzmeFLaodnYf9OunnTHfzEQwDVDPR3pEqGi3jaep
+	 lhW/1TQvDvjYvme8uUw/aTCkx3OAw004o6vB1NbErJoWopQKqsz0C6QBYEshPugLUo
+	 HaJqXMjJzzBw0AvkFAv+OU7dTJDz6lxj1FA5G6BQo3Y5mC8+rbVFBSuOFfIP03w9wb
+	 13KEfzAbj/eB9H5LgW0wAPzRpdagnEXTOCGvkk6zElFxzIf8NIGItXBF/B9Y+7ThL0
+	 +ITETJeRTmKy79c9Za9s0EiSu1Y6dIz0jWRgoONH0Pmi3pB6/Vt1hvJtjNuyG5MjXW
+	 CLxqDBwJekFdw==
+Date: Mon, 3 Feb 2025 10:56:36 +0100 (CET)
+From: Jiri Kosina <jikos@kernel.org>
+To: Arnd Bergmann <arnd@kernel.org>
+cc: Benjamin Tissoires <bentiss@kernel.org>, 
+    Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
+    Mark Pearson <mpearson-lenovo@squebb.ca>, Arnd Bergmann <arnd@arndb.de>, 
+    Basavaraj Natikar <basavaraj.natikar@amd.com>, Even Xu <even.xu@intel.com>, 
+    Xinpeng Sun <xinpeng.sun@intel.com>, 
+    Maximilian Luz <luzmaximilian@gmail.com>, 
+    Marcel Holtmann <marcel@holtmann.org>, 
+    Johan Hedberg <johan.hedberg@gmail.com>, 
+    Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+    Dmitry Torokhov <dmitry.torokhov@gmail.com>, linux-input@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+    linux-usb@vger.kernel.org, linux-bluetooth@vger.kernel.org
+Subject: Re: [PATCH] hid: intel-thc: fix CONFIG_HID dependency
+In-Reply-To: <20250123134908.805346-1-arnd@kernel.org>
+Message-ID: <49022s2o-36qo-2s30-9136-q34p10p18r87@xreary.bet>
+References: <20250123134908.805346-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-The Altera on board USB Blaster 3 utilizes a FT2232 and FT4232
-chip.
+On Thu, 23 Jan 2025, Arnd Bergmann wrote:
 
-Add VID/PID for the on board USB Blaster 3 so it can be used
-as a serial device via ftdi_sio.
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> In drivers/hid/, most drivers depend on CONFIG_HID, while a couple of the
+> drivers in subdirectories instead depend on CONFIG_HID_SUPPORT and use
+> 'select HID'. With the newly added INTEL_THC_HID, this causes a build
+> warning for a circular dependency:
+> 
+> WARNING: unmet direct dependencies detected for HID
+>   Depends on [m]: HID_SUPPORT [=y] && INPUT [=m]
+>   Selected by [y]:
+>   - INTEL_THC_HID [=y] && HID_SUPPORT [=y] && X86_64 [=y] && PCI [=y] && ACPI [=y]
+> 
+> WARNING: unmet direct dependencies detected for INPUT_FF_MEMLESS
+>   Depends on [m]: INPUT [=m]
+>   Selected by [y]:
+>   - HID_MICROSOFT [=y] && HID_SUPPORT [=y] && HID [=y]
+>   - GREENASIA_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_GREENASIA [=y]
+>   - HID_WIIMOTE [=y] && HID_SUPPORT [=y] && HID [=y] && LEDS_CLASS [=y]
+>   - ZEROPLUS_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_ZEROPLUS [=y]
+>   Selected by [m]:
+>   - HID_ACRUX_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_ACRUX [=m]
+>   - HID_EMS_FF [=m] && HID_SUPPORT [=y] && HID [=y]
+>   - HID_GOOGLE_STADIA_FF [=m] && HID_SUPPORT [=y] && HID [=y]
+>   - PANTHERLORD_FF [=y] && HID_SUPPORT [=y] && HID [=y] && HID_PANTHERLORD [=m]
+> 
+> It's better to be consistent and always use 'depends on HID' for HID
+> drivers. The notable exception here is USB_KBD/USB_MOUSE, which are
+> alternative implementations that do not depend on the HID subsystem.
+> 
+> Do this by extending the "if HID" section below, which means that a few
+> of the duplicate "depends on HID" and "depends on INPUT" statements
+> can be removed in the process.
+> 
+> Fixes: 1b2d05384c29 ("HID: intel-thc-hid: Add basic THC driver skeleton")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Signed-off-by: Boon Khai Ng <boon.khai.ng@intel.com>
----
- drivers/usb/serial/ftdi_sio.c     | 14 ++++++++++++++
- drivers/usb/serial/ftdi_sio_ids.h | 13 +++++++++++++
- 2 files changed, 27 insertions(+)
+Applied to hid.git#for-6.14/upstream-fixes, thanks!
 
-diff --git a/drivers/usb/serial/ftdi_sio.c b/drivers/usb/serial/ftdi_sio.c
-index e07c5e3eb18c..3edce9c62213 100644
---- a/drivers/usb/serial/ftdi_sio.c
-+++ b/drivers/usb/serial/ftdi_sio.c
-@@ -1079,6 +1079,20 @@ static const struct usb_device_id id_table_combined[] = {
- 		.driver_info = (kernel_ulong_t)&ftdi_jtag_quirk },
- 	/* GMC devices */
- 	{ USB_DEVICE(GMC_VID, GMC_Z216C_PID) },
-+	/* Altera USB Blaster 3 */
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6022_PID, 1) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6025_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6026_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6026_PID, 3) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_6029_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602A_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602A_PID, 3) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602C_PID, 1) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602D_PID, 1) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602D_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602E_PID, 1) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602E_PID, 2) },
-+	{ USB_DEVICE_INTERFACE_NUMBER(ALTR_UB3_VID, ALTR_UB3_602E_PID, 3) },
- 	{ }					/* Terminating entry */
- };
- 
-diff --git a/drivers/usb/serial/ftdi_sio_ids.h b/drivers/usb/serial/ftdi_sio_ids.h
-index 5ee60ba2a73c..673e0cf84bdc 100644
---- a/drivers/usb/serial/ftdi_sio_ids.h
-+++ b/drivers/usb/serial/ftdi_sio_ids.h
-@@ -1612,3 +1612,16 @@
-  */
- #define GMC_VID				0x1cd7
- #define GMC_Z216C_PID			0x0217 /* GMC Z216C Adapter IR-USB */
-+
-+/*
-+ *  Altera USB Blaster 3 (http://www.altera.com).
-+ */
-+#define ALTR_UB3_VID			0x09fb
-+#define ALTR_UB3_6022_PID		0x6022
-+#define ALTR_UB3_6025_PID		0x6025
-+#define ALTR_UB3_6026_PID		0x6026
-+#define ALTR_UB3_6029_PID		0x6029
-+#define ALTR_UB3_602A_PID		0x602A
-+#define ALTR_UB3_602C_PID		0x602C
-+#define ALTR_UB3_602D_PID		0x602D
-+#define ALTR_UB3_602E_PID		0x602E
 -- 
-2.25.1
+Jiri Kosina
+SUSE Labs
 
 
