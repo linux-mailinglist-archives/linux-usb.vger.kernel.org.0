@@ -1,122 +1,116 @@
-Return-Path: <linux-usb+bounces-20044-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20045-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4950AA264F5
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 21:42:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2E31A26529
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 21:58:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E3C43A97F7
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 20:42:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6D86F3A4C63
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 20:58:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2C8B211A27;
-	Mon,  3 Feb 2025 20:40:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDC6320E71F;
+	Mon,  3 Feb 2025 20:58:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b="IDdOGTvA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kPsm5mR1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from layka.disroot.org (layka.disroot.org [178.21.23.139])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B530620E6EE;
-	Mon,  3 Feb 2025 20:40:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.21.23.139
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BEDA20E01D
+	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 20:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738615209; cv=none; b=Lz3tIPwe0gVKAye3MSR/Ys+4+PjbZNt9bVtO7FaesJwXlySWt5Xg1swW98nIqWNnWCVZG+n37NIr+NoBL6dl5/cJN/IrrDVKVkHxj3M2yKzStjp4+sjDFKk7CPjmxKos2b8ZUEJqcldFnLi3P1W/+kM27W4em3hXfOOCLyK2a08=
+	t=1738616293; cv=none; b=LEJiwJmkBPb1TTArDC9GxmIBm9wZ9BtQKd/J0uPVNUXjK9YlIRv8WL9ngQAtm6NfsckPp9Gt4zWsDXPPEF8BbWcj2/e2OpcAVIn7/bU/qvaPVT3YWBRNthDr9Sti50EcdaySTYk3rHsaVSgAvUr33SWF5r46QUL5+pgtEORfOU0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738615209; c=relaxed/simple;
-	bh=yRoaCKNEQlD6o0GKHQouyJC7CdOjXR24VD3WPrh3Op8=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Vfjji46BMKYUHrq1zdm8IvfEg0udhQIDKlyxgI/p8TB41Hh21IjOGxaNzLpyDu7XHyCpuvbkuZp2TI8MCX/TDnfhgPbOGmASxQrrpPkrr9FwU2As2eo+t2ctPtEZRiCuNXrbitARHZISRqXvSC3RsK1nBT0KtH9bApGSTI8EzM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org; spf=pass smtp.mailfrom=disroot.org; dkim=pass (2048-bit key) header.d=disroot.org header.i=@disroot.org header.b=IDdOGTvA; arc=none smtp.client-ip=178.21.23.139
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=disroot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=disroot.org
-Received: from mail01.disroot.lan (localhost [127.0.0.1])
-	by disroot.org (Postfix) with ESMTP id 3A2FB25B82;
-	Mon,  3 Feb 2025 21:40:06 +0100 (CET)
-X-Virus-Scanned: SPAM Filter at disroot.org
-Received: from layka.disroot.org ([127.0.0.1])
- by localhost (disroot.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id hNoaU0_hr59U; Mon,  3 Feb 2025 21:40:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=disroot.org; s=mail;
-	t=1738615204; bh=yRoaCKNEQlD6o0GKHQouyJC7CdOjXR24VD3WPrh3Op8=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=IDdOGTvAMvXbAWeRujMvrxtrF989Lr2k9KefDry2wCfNmfSQxsnTyYk/wL3jSLFA1
-	 1ZZG6xaviVLL0PIW1vBmaw5HuworkNAQYn+fMFDOmxz031spFCWdAYZNbpFM0PX7RL
-	 vq/RV7eZTtdDBjaseVgWK19o27qDbhmLjlhQBm1YWxiwHqZrYaqKR7Cw0FSeCAKS7j
-	 NP0xCKjzehJydxCFRocvlagPwTBMZUWVDuKUIqq5v3aIV2tCQj5jKXCF2aecg5BxnI
-	 HCXic/ysjW/moIl2TBPLD9S3EqJLTnZcO3EVBjuf/RlluYbjhql2U4Mn3oyKV1AChX
-	 KfrKmeWEW4joA==
-From: Kaustabh Chakraborty <kauschluss@disroot.org>
-Date: Tue, 04 Feb 2025 02:09:30 +0530
-Subject: [PATCH 2/2] usb: dwc3: exynos: add support for exynos7870
+	s=arc-20240116; t=1738616293; c=relaxed/simple;
+	bh=ELbBu9iQiNO3bamhJO+tBvV9DuBClt159PQ2oyHwuoc=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=AoD1IQEd+Eo03f7bgpqvE0VrDb2g4sitYg+/ainpzjSgP55MeH2+aSL80gfzlwqIrXLayf5LCw/wKLQz3SrAViC0QM3dZbsy8HTfDTBtrKd7rKJry0PQCHbNENwhh3PRqtGtGECJ5Ajk5MhplSqmS5SiLmIXGs2xxzemnxuhYQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kPsm5mR1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BE680C4CEE6
+	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 20:58:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738616292;
+	bh=ELbBu9iQiNO3bamhJO+tBvV9DuBClt159PQ2oyHwuoc=;
+	h=From:To:Subject:Date:From;
+	b=kPsm5mR1Up6zDMORZGqxqskxkgtUdX7klDj1dEd3dFg+3AGja5PPOhHi9w6yPk0YM
+	 6IKh5wfqdx4GUbm0e2gSaVPubmKn4w/OIrV7WNBzloBzOI8kfAPJ8yULIRnE8A27QQ
+	 mY/HABaS6wePtzzKrr2IbtzCcqWI0Q6R9RoHka94Ur6PKWHx4t0oMQ3eyoSxkFc5/f
+	 FSSfzH1DjajQnNPZHf4Y2qgZ40NwMJotpW9KaQFSL1kyMKirw8XRzMsk89wdey0UG+
+	 q7o4fZQSLIAzbWwdzOZrSPwEB/7H/623rUs6gR5TdAT0HbD7gxPJVQk9RVa4ALit7l
+	 YIYtzAxZcOijw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id B048AC41606; Mon,  3 Feb 2025 20:58:12 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219748] New: Pluggable UD-4VPD dock appears to continually
+ reset with AMD AI 365
+Date: Mon, 03 Feb 2025 20:58:12 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: lyz27@yahoo.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter cc
+ cf_regression
+Message-ID: <bug-219748-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250204-exynos7870-usb-v1-2-a7753f8183a4@disroot.org>
-References: <20250204-exynos7870-usb-v1-0-a7753f8183a4@disroot.org>
-In-Reply-To: <20250204-exynos7870-usb-v1-0-a7753f8183a4@disroot.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
- Conor Dooley <conor@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Sergey Lisov <sleirsgoevy@gmail.com>, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Kaustabh Chakraborty <kauschluss@disroot.org>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1738615179; l=1479;
- i=kauschluss@disroot.org; s=20250202; h=from:subject:message-id;
- bh=yRoaCKNEQlD6o0GKHQouyJC7CdOjXR24VD3WPrh3Op8=;
- b=+ktiE4SZjhVNoYoBk+EPGLxPzpZux+LGOV85hHQifZ6XAfc/lFlX9je3XhSmHK9V6qHfn3Wpn
- fxVgysCtnITANmlXT/K7jZ2xlLqCLDmJo5ZyKuHsg19eHP2I+CcoZ4P
-X-Developer-Key: i=kauschluss@disroot.org; a=ed25519;
- pk=h2xeR+V2I1+GrfDPAhZa3M+NWA0Cnbdkkq1bH3ct1hE=
 
-Exynos7870 devices have a DWC3 compatible USB 2.0 controller.
-Add support in the driver by:
- - Adding its own compatible string, "samsung,exynos7870-dwusb2".
- - Adding three USBDRD clocks named "usbdrd20", "usbdrd20_ctrl_clk", and
-   "usbdrd20_ref_clk", to be controlled by the driver.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
 
-Signed-off-by: Kaustabh Chakraborty <kauschluss@disroot.org>
----
- drivers/usb/dwc3/dwc3-exynos.c | 9 +++++++++
- 1 file changed, 9 insertions(+)
+            Bug ID: 219748
+           Summary: Pluggable UD-4VPD dock appears to continually reset
+                    with AMD AI 365
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: lyz27@yahoo.com
+                CC: mario.limonciello@amd.com,
+                    mika.westerberg@linux.intel.com
+        Regression: No
 
-diff --git a/drivers/usb/dwc3/dwc3-exynos.c b/drivers/usb/dwc3/dwc3-exynos.c
-index f5d963fae9e069e1bd145ff5bd1b704da89fb74c..34f2b9e8529303cd2a957baed5819a45cbcf3309 100644
---- a/drivers/usb/dwc3/dwc3-exynos.c
-+++ b/drivers/usb/dwc3/dwc3-exynos.c
-@@ -163,6 +163,12 @@ static const struct dwc3_exynos_driverdata exynos7_drvdata = {
- 	.suspend_clk_idx = 1,
- };
- 
-+static const struct dwc3_exynos_driverdata exynos7870_drvdata = {
-+	.clk_names = { "usbdrd20", "usbdrd20_ctrl_clk", "usbdrd20_ref_clk" },
-+	.num_clks = 3,
-+	.suspend_clk_idx = -1,
-+};
-+
- static const struct dwc3_exynos_driverdata exynos850_drvdata = {
- 	.clk_names = { "bus_early", "ref" },
- 	.num_clks = 2,
-@@ -185,6 +191,9 @@ static const struct of_device_id exynos_dwc3_match[] = {
- 	}, {
- 		.compatible = "samsung,exynos7-dwusb3",
- 		.data = &exynos7_drvdata,
-+	}, {
-+		.compatible = "samsung,exynos7870-dwusb2",
-+		.data = &exynos7870_drvdata,
- 	}, {
- 		.compatible = "samsung,exynos850-dwusb3",
- 		.data = &exynos850_drvdata,
+Not sure if this is related to the linux kernel to fix up the Pluggable UD-=
+4VPD
+dock https://www.spinics.net/lists/linux-usb/msg263475.html.=20=20
 
--- 
-2.48.1
+The kernel running is the latest from here AUR (en) - linux-mainline-um5606
+https://aur.archlinux.org/packages/linux-mainline-um5606. It is based on the
+6.13 kernel. It adds some patches as this laptop has been a bit unstable.=20
+Hence, the additional amdgpu boot parameters.
 
+thunderbolt.dyndbg=3D+p output shows the issue starting at time 27.027128 i=
+n  the
+attached dmesg
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
