@@ -1,53 +1,80 @@
-Return-Path: <linux-usb+bounces-19992-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19993-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F71CA259B2
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 13:46:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59C2CA25A3C
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 13:59:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E89573A716C
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 12:46:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B31307A177F
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 12:58:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5EE0204C01;
-	Mon,  3 Feb 2025 12:46:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AE38204C11;
+	Mon,  3 Feb 2025 12:59:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="W2HP2M5I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RIpsboO9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DE0984A3E;
-	Mon,  3 Feb 2025 12:46:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4BEA204595;
+	Mon,  3 Feb 2025 12:59:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738586806; cv=none; b=iSJO4/AR48X63PdUrvNzmem6QMmaK1T51JyrEdWFwjxh6++I2Z0eXMZ9LfhdC2F2VlkXv92uqvo31JwSAtIDM49xUa104eNQApLp4uauJxx6w4ikRFd0X5gAesLu2IOVqjeaJpoC3uTtBCZxkFWQi/H9Rc4WhXHj9ccBCyLPG94=
+	t=1738587563; cv=none; b=mwQR6O9SlUcNkJlYqMx1ZaTbB48UcEJK4dmi86syLlrKo585ohUg8A00wpP2ujPjE5BrKEFVAazs5m+QqIsZSJFWw/ZMxXAM9hgwmjUGndOFbDq4r+SDnTkZFX4Hj4Qxawib+GVjwFzdXMVIlpIZU8p7uFEz0FTQujgLEzKFrg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738586806; c=relaxed/simple;
-	bh=4/A4rABUwNoaT3T5LF6UGHs9iN2T7Q1WubADJK+Dc28=;
+	s=arc-20240116; t=1738587563; c=relaxed/simple;
+	bh=MhEkliF53H57DR5syUwKIR4P8l84NgWwj5+fCyr7K9A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FJ2iem8dzsEgiuiN9YXKzU/Hb+PCsCkF9Zbs8jq0bYL7fnJAwhPoSxCC/wrX8Ogr0mRAC7PFL49l8HhGGTFsSWcT4QVc1TkqNHetd/CK1vyNRHU6RRJFuidHHg6Da34h+MALKUWck5vZgAMivserfQgUa8X8FD3ZWxzP/4mSt4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=W2HP2M5I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21950C4CED2;
-	Mon,  3 Feb 2025 12:46:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738586804;
-	bh=4/A4rABUwNoaT3T5LF6UGHs9iN2T7Q1WubADJK+Dc28=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W2HP2M5IudtzQTELIPqwbLEBFt/9qjO7GN9IZ9uVej5kxCHtM8Qgw6VUB87Fw7Jro
-	 P6PLuSH4SDI6ihiDOBt57s8wT133OAtUMAdhLwIAETvIGRk/K9wIEL3+IPpTK06Txc
-	 Y9WK+ywresaKCfGrFff/SpEmP1EnwbXehAG9d7Rk=
-Date: Mon, 3 Feb 2025 13:46:41 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: nb@tipi-net.de
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
-	Ben Hutchings <ben@decadent.org.uk>, n.buchwitz@kunbus.com,
-	l.sanfilippo@kunbus.com, stable@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Restore Renesas uPD72020x support in xhci-pci
-Message-ID: <2025020307-charity-snowfield-c975@gregkh>
-References: <20250203120026.2010567-1-nb@tipi-net.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tfYGSOpFkV5JKHMjUf7MPXh7DH4gbNczCwf91j7VfZvOSg9mKUOX5p1hAcOOFBzVCQVdQ5u1Fx5OK1vGaIFEu63ZIaicKHc/Jr7DMsNJ9C/DLO0ZdWwMFhDYIas9OQJJHfANKXzgWTmLo94eZi49FDgAxdacS8Ob+Lq9vS9IKUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RIpsboO9; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738587562; x=1770123562;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=MhEkliF53H57DR5syUwKIR4P8l84NgWwj5+fCyr7K9A=;
+  b=RIpsboO9hKrG7e5UaRY8npXN7/ZFUzum5xLvf44UjdUKo8rJrtLQNZbK
+   B9i9fMK/6ZemkPq5ffSzbMSnvdz2aFvBNiEnYFGI79uep0v69SyOj/Buy
+   dCq4uqNPev+ccM9Ee+KSJyJt3IGtKO5Sn7nDFeFpDdE6WiynDJgRAm3nB
+   Zr7taxj90E9puoPRbquj/ZyrPRe5kjCQ8FioERPaWo93e+dCjjMF0UTNW
+   jgNZwH+Hmtx0r0VdAX7hf1NObjaYSjkHLWfoIGdzm9HfnQrb9JXYQw6kx
+   kf0KfYGMbUPxrIsp1fbxIrB6UCRX020snQkvwLcj5q2P5xJUlt9aVRvQ9
+   A==;
+X-CSE-ConnectionGUID: Yu5Nr7WbTEiFctJBsVhyTw==
+X-CSE-MsgGUID: 7fXQCkl6TMKwRD6zdczaaA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="50465549"
+X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
+   d="scan'208";a="50465549"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 04:59:10 -0800
+X-CSE-ConnectionGUID: a17op1NAQZWFGtfRvkonbA==
+X-CSE-MsgGUID: /NqSXB9dSNa1JJ4zLRUsAw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
+   d="scan'208";a="110041490"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa009.jf.intel.com with ESMTP; 03 Feb 2025 04:59:08 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 2249A23F; Mon, 03 Feb 2025 14:59:07 +0200 (EET)
+Date: Mon, 3 Feb 2025 14:59:06 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+Cc: andreas.noever@gmail.com, michael.jamet@intel.com,
+	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] thunderbolt: Disable Gen 4 Recovery on Asymmetric
+ Transitions
+Message-ID: <20250203125906.GK3713119@black.fi.intel.com>
+References: <20250131014406.28645-1-rahimi.mhmmd@gmail.com>
+ <20250131014406.28645-4-rahimi.mhmmd@gmail.com>
+ <20250203084224.GE3713119@black.fi.intel.com>
+ <wxgsteiuto6qivnfttzuyw6jijs6ypcq4oyepqr6zbjgeez3ac@flvlpzswuyco>
+ <20250203123944.GJ3713119@black.fi.intel.com>
+ <gdojzsdm6kmg6kdoubhg3h6ebedyjswwzofdzxhfcbbdl3gsy2@wqpqcdukpn4h>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,57 +84,53 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250203120026.2010567-1-nb@tipi-net.de>
+In-Reply-To: <gdojzsdm6kmg6kdoubhg3h6ebedyjswwzofdzxhfcbbdl3gsy2@wqpqcdukpn4h>
 
-On Mon, Feb 03, 2025 at 01:00:26PM +0100, nb@tipi-net.de wrote:
-> From: Nicolai Buchwitz <nb@tipi-net.de>
+On Mon, Feb 03, 2025 at 12:43:04PM +0000, Mohammad Rahimi wrote:
+> Hello again.
 > 
-> Before commit 25f51b76f90f1 ("xhci-pci: Make xhci-pci-renesas a proper
-> modular driver"), the xhci-pci driver handled the Renesas uPD72020x USB3
-> PHY and only utilized features of xhci-pci-renesas when no external
-> firmware EEPROM was attached. This allowed devices with a valid firmware
-> stored in EEPROM to function without requiring xhci-pci-renesas.
+> On Mon, Feb 03, 2025 at 02:39:44PM GMT, Mika Westerberg wrote:
+> > Hi,
+> > 
+> > On Mon, Feb 03, 2025 at 12:25:21PM +0000, Mohammad Rahimi wrote:
+> > > Hello.
+> > > 
+> > > On Mon, Feb 03, 2025 at 10:42:24AM GMT, Mika Westerberg wrote:
+> > > > Hi,
+> > > > 
+> > > > On Fri, Jan 31, 2025 at 01:41:27AM +0000, Mohammad Rahimi wrote:
+> > > > > Updates the Connection Manager to disable the Gen 4 Link Recovery
+> > > > > flow before transitioning from a Symmetric Link to an Asymmetric
+> > > > > Link, as specified in recent changes to the USB4 v2 specification.
+> > > > > 
+> > > > > According to the "USB4 2.0 ENGINEERING CHANGE NOTICE FORM"
+> > > > > published in September 2024, the rationale for this change is:
+> > > > > 
+> > > > >   "Since the default value of the Target Asymmetric Link might be
+> > > > >   different than Symmetric Link and Gen 4 Link Recovery flow checks
+> > > > >   this field to make sure it matched the actual Negotiated Link Width,
+> > > > >   we’re removing the condition for a Disconnect in the Gen 4 Link
+> > > > >   Recovery flow when Target Asymmetric Link doesn’t match the actual
+> > > > >   Link width and adding a Connection Manager note to Disable Gen 4 Link
+> > > > >   Recovery flow before doing Asymmetric Transitions."
+> > > > > 
+> > > > > Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+> > > > 
+> > > > I did some minor modifications and applied to thunderbolt.git/next. Please
+> > > > let me know if I missed something.
+> > > > 
+> > > 
+> > > Looks great. Just one question:
+> > > 
+> > > In tb_configure_asym(), if tb_switch_set_link_width() fails, we won’t restore
+> > > the link recovery status. Is that okay?
+> > 
+> > Good question :) Looking at the ECR, does it actually say anywhere that the
+> > CM should needs to re-enable it? I'm thinking that we could just disable it
+> > and be done with it?
 > 
-> That commit changed the behavior, making xhci-pci-renesas responsible for
-> handling these devices entirely, even when firmware was already present
-> in EEPROM. As a result, unnecessary warnings about missing firmware files
-> appeared, and more critically, USB functionality broke whens
-> CONFIG_USB_XHCI_PCI_RENESAS was not enabled—despite previously workings
-> without it.
-> 
-> Fix this by ensuring that devices are only handed over to xhci-pci-renesas
-> if the config option is enabled. Otherwise, restore the original behavior
-> and handle them as standard xhci-pci devices.
-> 
-> Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
-> Fixes: 25f51b76f90f ("xhci-pci: Make xhci-pci-renesas a proper modular driver")
-> ---
->  drivers/usb/host/xhci-pci.c | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> index 2d1e205c14c60..4ce80d8ac603e 100644
-> --- a/drivers/usb/host/xhci-pci.c
-> +++ b/drivers/usb/host/xhci-pci.c
-> @@ -654,9 +654,11 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
->  EXPORT_SYMBOL_NS_GPL(xhci_pci_common_probe, "xhci");
->  
->  static const struct pci_device_id pci_ids_reject[] = {
-> +#if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
->  	/* handled by xhci-pci-renesas */
->  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0014) },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0015) },
-> +#endif
->  	{ /* end: all zeroes */ }
->  };
+> Right. Thanks for clearing that up.
 
-Have you seen:
-	https://lore.kernel.org/r/20250128104529.58a79bfc@foxbook
-?
-
-Which one is correct?
-
-thanks,
-
-greg k-h
+I'll check with the HW/FW folks still if they have any suggestions. I'll
+keep you updated.
 
