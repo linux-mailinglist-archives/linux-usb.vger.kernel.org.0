@@ -1,111 +1,123 @@
-Return-Path: <linux-usb+bounces-19997-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19999-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C35C1A25C28
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 15:21:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AA70A25CA9
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 15:34:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C1EE13A4569
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 14:20:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DF563A45D3
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 14:30:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A539205E3C;
-	Mon,  3 Feb 2025 14:19:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D92420E30A;
+	Mon,  3 Feb 2025 14:25:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vMqOsxB3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="J4U7WTFb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E12F1EEF9;
-	Mon,  3 Feb 2025 14:19:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8B320DD6D;
+	Mon,  3 Feb 2025 14:25:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738592356; cv=none; b=KGrMCYbx1x7MQ1UDpRlJi+ocAEk4qxRqqRqamwG8ttkuwkZWwFxAsvTiGRFE0kjgrIuYrok/9bwloBKGbnZY5Fu9FCyIkpijge5K8eFpfyiGSiHcZQKJFqD2ea/bNOF0uMMFsj5FQrddgbcezXSSn3Iyv5husAhpTDSV1au50hI=
+	t=1738592741; cv=none; b=MlBVns8mrMhBhkNY7iF26ITrQISYesjAu2KPwTFsGbV0Uiitl1VRo0vLyfBlGM/FRaopN9s5P+vSPU+UGgn/WVOI1tQd0bKLkGlY4Nrj9a3xmmjSFWmvk5zPOzXjVvnjpPLYJC0rFsXmqYsgE1yp9vNrUGIO1OIoGktlccamKmc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738592356; c=relaxed/simple;
-	bh=CyuPSaT6EpmILv83KdYCWP0EOLFCfthUST5njZOa9JI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=sc6mltb+ONSTpzCvOSmyWfcT7QA54KZW98z6rzOK1QZAe1vzJKAgC2BsYdMPmseEY0EJnkuAjuFf9v/+l81r7dfviH6y9YiXL7Q8Uej/zB9SWi6SB639Ar9saGP6Zvuq4H3lbtoNq5o0oE+fVtk4w+jtS01/8X8l+XiqlT8a6Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vMqOsxB3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 332F8C4CED2;
-	Mon,  3 Feb 2025 14:19:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738592353;
-	bh=CyuPSaT6EpmILv83KdYCWP0EOLFCfthUST5njZOa9JI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=vMqOsxB39uc62qXM0iziBhor0TwYTtHHBa/0QiUC4lmxFzWZnvgqut5sh+b1lAkfP
-	 xE9WrYzqQY63rhFjdc6rYgplYcc2a416bopc2v17WAXHsFOf9oKaeTiQwyuP5MN4dq
-	 nKUHRhoPETkQwQM26oy/r/+8V6vm3R2acjD7aa787B66gZcnxiTdr+5uwULCRTJ1Jv
-	 dE1x8+w+C1/OxgBdrIHuqb6EJU1nMbzj1pZ4iu9XNXOKhdm/3w/4xbzKZn2t5izyVW
-	 3Tv7rmwjgk8Lr/ch7NO/IZDKOA11H77ERIbZwQnd5SrtLPaxRmfqfVAzEEtgG9EfIp
-	 wvv+OdAbCv57g==
-Date: Mon, 3 Feb 2025 15:19:10 +0100 (CET)
-From: Jiri Kosina <jikos@kernel.org>
-To: =?ISO-8859-2?Q?Tomasz_Paku=B3a?= <tomasz.pakula.oficjalny@gmail.com>
-cc: bentiss@kernel.org, anssi.hannula@gmail.com, oleg@makarenk.ooo, 
-    linux-input@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v9 00/22] HID: Upgrade the generic pidff driver and add
- hid-universal-pidff
-In-Reply-To: <20250201113906.769162-1-tomasz.pakula.oficjalny@gmail.com>
-Message-ID: <55p2r436-4o90-87qr-292o-on72n3pq1q9r@xreary.bet>
-References: <20250201113906.769162-1-tomasz.pakula.oficjalny@gmail.com>
+	s=arc-20240116; t=1738592741; c=relaxed/simple;
+	bh=Tr1imY13QGvRJXDQjC5FyEnXQPsLbVm7/qp4FNod+RM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=S81eyVd6xCyrMrVq9gQ1bZQpaVLNFTaNRtgbQKMuc9TP+VwK7jssoJ8075yf1dQ9xIRoI5Z24Cimcjy7Xmvpfjx/ZJnT2CSEH5cYNkNVCa/X2fBsJ9YC7QfRLc5Vpguiq4jN1L76gqWSKG44JqOsPzSXeYkAULxlHi1lzpkWkGc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=J4U7WTFb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D01CEC4CED2;
+	Mon,  3 Feb 2025 14:25:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1738592740;
+	bh=Tr1imY13QGvRJXDQjC5FyEnXQPsLbVm7/qp4FNod+RM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=J4U7WTFbZBUtD5YFxHLAywPIphL9ZlauOou6GT1gs55+OMB1wBGRyd3cLK4iwar8E
+	 MyFu5SDJBJF2ZZ8D9U0tr4irNXlm/xItmQg3Xu/BNNJszNXWlj/uNGEQkIr5WeqLHk
+	 Temp7do0seWz3hLF90BFTSi0UxgeDXVJJrmbsr1g=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Lyude Paul <lyude@redhat.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH 0/3] Driver core: faux bus
+Date: Mon,  3 Feb 2025 15:25:16 +0100
+Message-ID: <2025020324-thermal-quilt-1bae@gregkh>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Lines: 48
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2254; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=Tr1imY13QGvRJXDQjC5FyEnXQPsLbVm7/qp4FNod+RM=; b=owGbwMvMwCRo6H6F97bub03G02pJDOkLLl7ZP336xA+nQ/9YWk7e1M54Ya/qeU3+gEubJ//+F 6TzfN9i1Y5YFgZBJgZZMUWWL9t4ju6vOKToZWh7GmYOKxPIEAYuTgGYiLETw4IZW6dH8i+9cejR xsIkOc0NKQ+mXj7DsGCRWP7bCZ5zDkurzDmWUu7u8MV48R8A
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 
-On Sat, 1 Feb 2025, Tomasz Paku=C5=82a wrote:
+For years/decades now, I've been complaining when I see people use
+platform devices for things that are obviously NOT platform devices.
+To finally fix this up, here is a "faux bus" that should be used instead
+of a platform device for these tiny and "fake" devices that people
+create all over the place.
 
-> This patch series is focused on improving the compatibility and usability=
- of the
-> hid-pidff force feedback driver. Last patch introduces a new, universal d=
-river
-> for PID devices that need some special handling like report fixups, remap=
-ping the
-> button range, managing new pidff quirks and setting desirable fuzz/flat v=
-alues.
->=20
-> This work has been done in the span of the past months with the help of t=
-he great
-> Linux simracing community, with a little input from sim flight fans from =
-FFBeast.
->=20
-> No changes interfere with compliant and currently working PID devices.
-> "Generic" codepath was tested as well with Moza and Simxperience AccuForc=
-e v2.
->=20
-> I'm not married to the name. It's what we used previously, but if "univer=
-sal" is
-> confusing (pidff is already the generic driver), we can come up with some=
-thing
-> better like "hid-quirky-pidff" :)
->=20
-> With v8 and  tiny finx in v9, all the outstanding issues were resolved,
-> additional pidff issues were fixed and hid-pidff defines moved to a dedic=
-ated
-> header file. This patch series could be considered done bar any comments =
-and
-> requests from input maintainers.
->=20
-> I could save more then a dozen lines of code by changing simple if statem=
-ents
-> to only occupy on line instead of two in there's a need for that.
->=20
-> Signed-off-by: Tomasz Paku=C5=82a <tomasz.pakula.oficjalny@gmail.com>
+The api is even simpler than the normal platform device api, just two
+functions, one to create a device and one to remove it.  When a device
+is created, a driver is also created and automatically bound to it,
+which allows for the probe/release callbacks to work like expected.
+When finished with the device, just destroy it and all should be good.
 
-This is now queued in hid.git#for-6.15/pidff, so please send any further=20
-updates / fixups on top of that branch.
+This simple api should also hopefully provide for a simple rust binding
+to it given the simple rules and lifecycle of the pointer passed back
+from the creation function (i.e. it is alive and valid for as long as
+you have not called destroy on it.)
 
-Thanks!
+I've also converted two different examples of platform device abuse, the
+dummy regulator driver, and the USB phy code, to use this api.  In both
+cases, the logic either was identical, or became simpler, than before, a
+good sign (side note, a bug was fixed in the usb phy code that no one
+ever noticed before).
 
---=20
-Jiri Kosina
-SUSE Labs
+
+Greg Kroah-Hartman (3):
+  driver core: add a faux bus for use when a simple device/bus is needed
+  regulator: dummy: convert to use the faux bus
+  USB: phy: convert usb_phy_generic logic to use a faux device
+
+ drivers/base/Makefile               |   2 +-
+ drivers/base/base.h                 |   1 +
+ drivers/base/faux.c                 | 189 ++++++++++++++++++++++++++++
+ drivers/base/init.c                 |   1 +
+ drivers/regulator/dummy.c           |  37 ++----
+ drivers/usb/chipidea/ci_hdrc_pci.c  |   2 +-
+ drivers/usb/dwc2/pci.c              |   4 +-
+ drivers/usb/musb/mediatek.c         |   4 +-
+ drivers/usb/musb/mpfs.c             |   4 +-
+ drivers/usb/musb/tusb6010.c         |   2 +-
+ drivers/usb/phy/phy-generic.c       |   9 +-
+ include/linux/device/faux.h         |  33 +++++
+ include/linux/usb/usb_phy_generic.h |   9 +-
+ 13 files changed, 251 insertions(+), 46 deletions(-)
+ create mode 100644 drivers/base/faux.c
+ create mode 100644 include/linux/device/faux.h
+
+-- 
+2.48.1
 
 
