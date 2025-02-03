@@ -1,55 +1,55 @@
-Return-Path: <linux-usb+bounces-19969-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19971-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0D62A2524C
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 07:21:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2169CA25270
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 07:25:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8026E162C94
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 06:21:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E1AC18844B8
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 06:25:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B55501D6DBB;
-	Mon,  3 Feb 2025 06:20:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB971E7C2D;
+	Mon,  3 Feb 2025 06:23:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="F1mHMOgw"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="hQhHUkhr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.smtpout.orange.fr (smtp-18.smtpout.orange.fr [80.12.242.18])
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACA535970;
-	Mon,  3 Feb 2025 06:20:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBA51DACB1;
+	Mon,  3 Feb 2025 06:23:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738563656; cv=none; b=UQxi1vbVPoxHrgNPWsjLspgNSKeq1pfLLgO5DpVOeLDj+mHSvuyRr2IWNeKsvv/S3p43Cg7tlwxEU89VD5gEUphaVCDDfbLkroxrILxsT83pDMre2YaLuVZxD70HqeQNfMNN+jzGIpKDT9tzxSWbhUpn2tmycSb7uS1vmsWLs4k=
+	t=1738563829; cv=none; b=GaGv0gAvYqV0IS3Bt4ecY7iLso/RGkc4TUiTmExppcQGj3ibxxs5L+gTIDkfDNsoTcnw81ZxLTdA8+NuSNpd+LeByfTWrGN9wRaWFb+rroBmQrRaqHLQQkxTpLypP3PwsJ2rDud78MOx8ceuJdch2FZ++xOG5EnA/kMCsHY4orQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738563656; c=relaxed/simple;
-	bh=qkYHmKoU81b84qf13rk5eRh/TgqZqsKeDH8E3hZGcYE=;
+	s=arc-20240116; t=1738563829; c=relaxed/simple;
+	bh=VjtBG6ClA73FCQmU6xkx4zbjwLDRbSIzvI+IRDZaUPM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NIsvNX8YZS+Da7knqz+LAJt6m0BSRbsCmbupfQmg3AvwhbLSr2J01rRg1FRJv1UgYLBYH83IrrKvl/uARfzFU5bNqXx4h8r8hYLBqkBYhAq+mkCwifqZiTxJt75qqATE8Fxdw32JjiV7Y4BDAAYyMLdVYOSZ1bzxQWPdSKIwdAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=F1mHMOgw; arc=none smtp.client-ip=80.12.242.18
+	 In-Reply-To:Content-Type; b=AMgGG++hDgjkrq8lZd7xME9MP+ZTi2V2ChkFdYvPKy8eYVDulgWd6vPrAJ0SPvgzX2QHhqlAr2gIpuDHUiipZQkIfQVcpP8q8B18Dx9wh1+W1SeIndH3J212P6kJNP62QXKy34ukSCpPELWF4DWwkGeeTMCQ7lko25i1zUUNb8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=hQhHUkhr; arc=none smtp.client-ip=80.12.242.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [192.168.1.37] ([90.11.132.44])
 	by smtp.orange.fr with ESMTPA
-	id epp8tHsniiSnFeppBt1BnS; Mon, 03 Feb 2025 07:20:50 +0100
+	id epqrtzu4SUbA0epqutuPta; Mon, 03 Feb 2025 07:22:37 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1738563650;
-	bh=2WMsab5oDn/iwfS5/+y8gS3zNOhGLIdC39tlIi+T2LQ=;
+	s=t20230301; t=1738563757;
+	bh=sl39fq1it+zd8XuT1PGqhrbjFQbpNj0qTxM2/DiXRE4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=F1mHMOgwXL0J4DDyYUryCkGAJIrP5eEjce7lRs8B6Jf3XgtkJPzk5Cldb75KKkhkx
-	 M7IRWFPDkAXSNMgtwpvXK6orAMFtRe8WTY25WcMtGnKLw/FKQboAyYD0yE8AIFOaKH
-	 l6eRxGCqrRYRJ22Xwvs5EFtti+9eU0Lbvxo5Qwhbpw0YTaLjCkM8rTXc9lbWIH7FxK
-	 slq/f66tlmQdcFKpmqlAIjaLugGq9RKSh5zU8FK4oMzmMcPn4cYMCciSmUt59AQP4M
-	 JqhGZXWw53e7IORdLxWTRRCyUwe4y0MUbV8U+YEqSONSStGyKgnfvvknmalgKCzcAO
-	 fSIeNhRfXSKeg==
+	b=hQhHUkhrE6k9S97QNKCd0rOzfcnKrqZE/YGBFMVemREiXr7voV0yRo/R1fLOS2sYM
+	 s57FVVNUVRbMWrCMRmhBuPUADjX4CzNbQZnxOTQ0pHsX2+9F7M46/vzoTUx2NzOTYs
+	 QiJle4qP2idzvbiT4589PD1ansh1yQU8/bsIV0I9/sYqvxrM7ih7j4FlUmgMU+uVhL
+	 K4Hvo2oEfIxaufFY3N4Bu9ondQHdzxnYeiZzDOFVVnGgZBrvB3SDzFpTMPwEkoB4BW
+	 qYy/n9hfXJjClnJqrKaxo8+BSlWRHMnIbDTmeSaWZS176lL54GxgSmxvEYghEkQwgk
+	 +W/Ck5Pe3Qz0Q==
 X-ME-Helo: [192.168.1.37]
 X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Mon, 03 Feb 2025 07:20:50 +0100
+X-ME-Date: Mon, 03 Feb 2025 07:22:37 +0100
 X-ME-IP: 90.11.132.44
-Message-ID: <be00d750-ca90-4655-9b0b-e43bb83aeb01@wanadoo.fr>
-Date: Mon, 3 Feb 2025 07:20:45 +0100
+Message-ID: <a2e4d538-5406-437f-a09d-0cb811d7d399@wanadoo.fr>
+Date: Mon, 3 Feb 2025 07:22:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -89,14 +89,12 @@ Le 03/02/2025 à 07:08, Dominique Martinet a écrit :
 > -			dev_err(dev, "failed to get ofdata: %d\n", err);
 > -			return err;
 > +			return dev_err_probe(dev, err, "failed to get ofdata: %d\n", err);
+>   		}
 
-: %d\n", err should be removed now.
-
-The error code will already be added in the message in a human readable way.
+extra { } can also be removed now that there is only 1 line left.
 
 CJ
 
->   		}
 >   	}
 >   
 > 
