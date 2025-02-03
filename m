@@ -1,160 +1,134 @@
-Return-Path: <linux-usb+bounces-19985-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19986-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3BE7A2579E
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 11:59:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89495A25876
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 12:47:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4E8CC7A1EEF
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 10:59:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C75A188419A
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 11:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E565C202F64;
-	Mon,  3 Feb 2025 10:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 657702036FF;
+	Mon,  3 Feb 2025 11:47:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UB4lJjN8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UO/NdV/P"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE5F4202C2E;
-	Mon,  3 Feb 2025 10:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF0B1E8850;
+	Mon,  3 Feb 2025 11:47:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738580332; cv=none; b=ZZk01VeH23mGnADeeO1frUjMfcoErdPnKoKSZijBKNdyTXTXKuP99FKCpMt4eTrozNfrh5PlcNp5AzqANxthRV3NVaGwxrszriD+mOr8c23vWA/78FW5f2dq4wz78qPF7XlzwXbrN1c7NOnLIVcVcqWcCTg6zp2orteT7FhAw9w=
+	t=1738583254; cv=none; b=HfNBvi5M90LSq2UlcNUfNrxywAtBuM8GPqebCADUz2GqmyZ1UxwJX21RM6D5UV1yLarCtpgB45qelWFrHqnAWXfN/xrZH6XI5fEEjefmUH2qlHLBQwCduHbbfR2loeD1RyPRCxgbipuaCGo91/w3oPM0xo3/97/M7jM9msEovtQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738580332; c=relaxed/simple;
-	bh=GSEqv2VM3beR1KFDw1ZyypOdmCRst+DG5m5uYBLuPec=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iO3WQfJ301BzwGTPOVJ8nFPZM+ZY9HPlB0zTuH50mqh+GaomP/fipujDA7mY+2ykMJGh7Mo1bFatWOjiomQUQuaVk3nXwTm7LZ1rP7Gx0lOd6QWxhpU80+TCnzppJwYYHX7saD0HHTsqmOknLsjZ2Js2Ij729gCyQin2OSEGpds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UB4lJjN8; arc=none smtp.client-ip=209.85.221.51
+	s=arc-20240116; t=1738583254; c=relaxed/simple;
+	bh=zPMRDz2INH9jX/lFvueiiS8S8zDP4h7nmhVfFbg5fp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nZ61g4LnDnHPqQ23V0i/kDk4L8JSpUh6CrtIM4er9Uze0jTm7wTPyP3bP7yJk4o7lPyrSRe0rk1jqOEU9XUudMBeCJOMYa770bEbWVtRBx5hQ8hlv4g/8QF4oCBWgn7q7KZxwu822VWQ0S79O1/gykIbFYzlmdlYeUhR36VjeBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UO/NdV/P; arc=none smtp.client-ip=209.85.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-38a25d4b9d4so2131246f8f.0;
-        Mon, 03 Feb 2025 02:58:50 -0800 (PST)
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-436281c8a38so30250445e9.3;
+        Mon, 03 Feb 2025 03:47:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738580329; x=1739185129; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Nt7pBd/IQYh6LuC7dRxy6T+qPjBb3Up7HQ9RyedmO0Q=;
-        b=UB4lJjN8rW8xnG5Ue3LT/BF6LaIe0pNyKZX6kbPOv/Hv570jijt7aHeMO0EqRovStP
-         Ci8Tpyg7AqoLOfTLUOzjom9m6ILRkWPVBv9DPq/VOOaV0zGRilggNpICz5BtJxoAxR9B
-         umBwReW/CJ9WErGmw05dGi1ez9NsTr54yVa1XMI621GQKghMS6AK7igcJsc+K9NAGgqy
-         pH1tLsefYvVinE28w1caWE/KdZtSzadCDgz9Xbur6NXP4GsmYLyUFoWZnaR9zqSV4MEk
-         WWnOuYF91gfjmLDJqB9M9FRYdkHvxg9Z95IDVtgyD1liL+i2XGep7+aa84nz5PZn3wp8
-         G36g==
+        d=gmail.com; s=20230601; t=1738583251; x=1739188051; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+ltBpyiKhWLDMdeR0RFMO0jdmpO/BHsgMHlgteaMxyo=;
+        b=UO/NdV/PK7bH+Yl8Qt5CJ/WShf7w/5HdPTkdXv5+NNSGcsop6c/eKSE9yZx7iQkZQe
+         OLQmFGlrSa5qFURTidhLimP2pkld570yvn8Dpm2eYscHFGRUhphDvTuwL4HodyvuSVg+
+         3bRDvfIBMTVam6B82/ws7zRyxsKZQjlaM+hwcj44topLUBNT6PLFfb/+H8SHQkxAD16j
+         NZrlxj0qnzaI8hB95eplg0JlHXBo+SHj6RzL5l3+0TJSHZPKLqDLJ1hbPMM0Kqa6ZUqm
+         gypQkYr4mgX+5CIO3VmD177b+vD2raQV8W4c2W/gMlI5W1+AGCU/Sgq2Nko9mUc/s+Pe
+         FzdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738580329; x=1739185129;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Nt7pBd/IQYh6LuC7dRxy6T+qPjBb3Up7HQ9RyedmO0Q=;
-        b=gf+CLmsALxpgrS6BF06dpPYgpVbEzcLCKDkYNhHhOC+h/O30ZQlwTlhVuByvPaKQqw
-         t72CSH39oNvHNrK/2MbxthV6Z47+fBx2FMAmuC2oLW+S3rauD0m9TOucCae6UinbMnF4
-         7pkrLw/58w5jItecSNZUSBxllbRzALM3FH5srdRX8j/Hv2E9ao1YK1uRfeSIZWxRxFUl
-         CsNtu76/SLaImv8SKNxVbHXlpwVprfJ1KePtoovDdAEC0KrB9p5tkxwPqemWy2gkOtDD
-         qyWg4noCEnu7sKwiLFyt+3i8QaleD8KDVdQlGWKBm4igQAx5YAWrxFKeIYMtpTusO5+n
-         Eq4A==
-X-Forwarded-Encrypted: i=1; AJvYcCX2G7OrasoXxEvr/x5omyexEGqTGp1sBei5o/khx57KcbLQX6JYxIKOVr/6UEPPlHtbspwmcEoV@vger.kernel.org, AJvYcCXGVpAahJrMposgOJ/v9JjDkMvNiVv6UvbbHhA6QQvY47dgNGzkcGe0vbswe4aI0jzrxMhg9WPYuTwzZ4w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZlr4RU12sg/LsVRQfgKjrUNvPujcRhPcswxjzH9xfpw4LqNHO
-	2QSBxJc93lLNzFGxBlKVaqJcpx20tQYU9aSQxyRu4hDbOhh6wGpt
-X-Gm-Gg: ASbGncsimMWbefwUUtO4MYBX+s1ON9hmWNr0YYQ6o506OnBHXuRUYiPZCLqcpE+oYjQ
-	Av8YgDrRnL6NceoiGXMrs4xr/MBC9qySxmm+ppWoCreM7PfxTOntfIRVlSnWSABK1eQBKDqrOT1
-	UzilM/Ef9cInFTHzhZCnmCm5iN0gev4JCgLRvo7gLVdnjrmzweAXzByaASvL1GeoG1OXkqBQwos
-	oljCk43DBU79clccTzyn9EXvDKWhcYeW1CYFqaNv7gPhIRHvnO8IvvXCMCYK7UR+GjKUnq3Bm5q
-	kBljnBpcS5MvYKFEEg9xh0wzHlSTuw==
-X-Google-Smtp-Source: AGHT+IFk08vrhipS4NZ4Hf3SF8z/wRFOBO+8+J3IjDCgenbINK4dMliqwM7oio3uJEYhAzuT3oYSyA==
-X-Received: by 2002:a5d:6d02:0:b0:385:f092:e1a with SMTP id ffacd0b85a97d-38c5194c3b6mr16966733f8f.11.1738580328746;
-        Mon, 03 Feb 2025 02:58:48 -0800 (PST)
-Received: from eichest-laptop.toradex.int ([2a02:168:af72:0:5eb2:36d4:b5a0:d5a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438e23e6a4dsm149627595e9.21.2025.02.03.02.58.48
+        d=1e100.net; s=20230601; t=1738583251; x=1739188051;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+ltBpyiKhWLDMdeR0RFMO0jdmpO/BHsgMHlgteaMxyo=;
+        b=A85xJEBUEHHJTPMhSoF2JsVs7AFZm9tsG/JiddYqmSxK0mJ5gu3hkQx6ZSoGzME+y4
+         7U02AY4N3Ocb+v8y0jONV915Uq6HmpBjbNXaBqyqfoQa65CovcjAJu/xg2J83zVOk4sc
+         +tjrVtLqly64siKyCKTvczQ5ONh2YvWMKIPXbq45rW+jIsZJwAiAMROV6HpmPT/p9gpz
+         iRYRSAAb09YAhbtlyFrswk3Li7mWyanLqgmeLhm97bsfITES6Yc+vMdKg6lGaQ8/QyIs
+         YYSvwVnITHXXfyY8gbrxG/+RpllB5vwBve4Zs6Dmu6ieqjVQMK8bI42O5GHY1l7pmA4D
+         PSeA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZCPiTlcHtNqFv2jUnnyS8CuwC1noi4UaSbfMiXpEAIG/xD15zQei67T3TgstM6HhBmYnQSnL251gY@vger.kernel.org, AJvYcCXgbBvOVSNo0VY95qOU6WuA/7/+Q4C6A7sTC4ogwylcN+Wpd4qUoKIqHJPM98y3oBVZ0AUGyQD5IkkbI2s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkPHXHrku9/PtIxRjeWWCU5SrDNCqw/PHq6W4NA/X7fMHQV2l6
+	HNX7bc2dANtWosngKokavbRibOdCIkHe8F6tseOo8kLSGxOA95jY
+X-Gm-Gg: ASbGncs/Hq8A8yus2JqKlWITSCJ3LzdBTUogbTDqS1qQExr8VHdG+Q3J7PApTo+aNeQ
+	ETg1gdusirL4m9BH3j6kL1HvR1gnMeve0PeTd905yh4+A/iJhQogdv/0QF7ma9AvsQipXk1CjSy
+	AgaWUB7vQT6rrFjSr/BeGi5T0GT/rCkbFUt2KMdUqQjyTBTXt7h0xTRr80Jd/Xt7DnB0KCsgCKT
+	PE7ROLpcc3RZWC0n3BCAbpTdBif8n2dXFhzjXdvtWNSgUeZ7ZYUukH6QnbeI4F+JfHYKYxYiQKd
+	5kakGf0OKbJ12A==
+X-Google-Smtp-Source: AGHT+IHFFpoCD61c98SInLiy8fa5FLO3AxysYZtaJ6tyqWRUNiOyhLZ30ZMbevB2lazbgV1iDQFZ6Q==
+X-Received: by 2002:a5d:59a6:0:b0:38b:f3f4:57ae with SMTP id ffacd0b85a97d-38c51949b97mr18900069f8f.10.1738583250520;
+        Mon, 03 Feb 2025 03:47:30 -0800 (PST)
+Received: from eichest-laptop ([2a02:168:af72:0:5eb2:36d4:b5a0:d5a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438e245f5a5sm155190465e9.40.2025.02.03.03.47.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 02:58:48 -0800 (PST)
+        Mon, 03 Feb 2025 03:47:30 -0800 (PST)
+Date: Mon, 3 Feb 2025 12:47:28 +0100
 From: Stefan Eichenberger <eichest@gmail.com>
-To: gregkh@linuxfoundation.org,
-	stern@rowland.harvard.edu,
-	francesco.dolcini@toradex.com
-Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v1] usb: core: fix pipe creation for get_bMaxPacketSize0
-Date: Mon,  3 Feb 2025 11:58:24 +0100
-Message-ID: <20250203105840.17539-1-eichest@gmail.com>
-X-Mailer: git-send-email 2.45.2
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Xu Yang <xu.yang_2@nxp.com>, ritesh.kumar@toradex.com,
+	linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: USB EHCI chipidea regression on NXP i.MX7
+Message-ID: <Z6Cs0PeC2O6enO7R@eichest-laptop>
+References: <20250108093101.GA22448@francesco-nb>
+ <20250109073500.45gge4abb4h6mmay@hippo>
+ <Z3-U1DXdMQ0eZaW2@gaggiata.pivistrello.it>
+ <20250110065101.qxajjnu3fek4mmty@hippo>
+ <Z4DXUuHwTsbiir5I@gaggiata.pivistrello.it>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z4DXUuHwTsbiir5I@gaggiata.pivistrello.it>
 
-From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Hi everyone,
 
-When usb_control_msg is used in the get_bMaxPacketSize0 function, the
-USB pipe does not include the endpoint device number. This can cause
-failures when a usb hub port is reinitialized after encountering a bad
-cable connection. As a result, the system logs the following error
-messages:
-usb usb2-port1: cannot reset (err = -32)
-usb usb2-port1: Cannot enable. Maybe the USB cable is bad?
-usb usb2-port1: attempt power cycle
-usb 2-1: new high-speed USB device number 5 using ci_hdrc
-usb 2-1: device descriptor read/8, error -71
+On Fri, Jan 10, 2025 at 09:16:18AM +0100, Francesco Dolcini wrote:
+> Hello,
+> 
+> On Fri, Jan 10, 2025 at 02:51:01PM +0800, Xu Yang wrote:
+> > On Thu, Jan 09, 2025 at 10:20:20AM +0100, Francesco Dolcini wrote:
+> > > On Thu, Jan 09, 2025 at 03:35:00PM +0800, Xu Yang wrote:
+> > > > > If the USB port is connected to a USB HUB, and a device is connected at
+> > > > > boot time to such a hub, the following errors are printed and the USB
+> > > > > port is not functional.
+> > > > 
+> > > > Does this happen 100%?
+> > > > I tried many time on i.MX7ULP-EVK board, but I can't reproduce this issue.
+> > > 
+> > > The issue happens with i.MX7D.
+> > 
+> > Then I think this issue is not related to that commit.
+> > I also tried on i.MX7D, but I still can't reproduce it.
+> >
+> > Please firstly confirm few questions in last mail.
+> 
+> Thanks Xu Yang for trying this out.
+> 
+> Ritesh: can you help here?
 
-The problem began after commit 85d07c556216 ("USB: core: Unite old
-scheme and new scheme descriptor reads"). There
-usb_get_device_descriptor was replaced with get_bMaxPacketSize0. Unlike
-usb_get_device_descriptor, the get_bMaxPacketSize0 function uses the
-macro usb_rcvaddr0pipe, which does not include the endpoint device
-number. usb_get_device_descriptor, on the other hand, used the macro
-usb_rcvctrlpipe, which includes the endpoint device number.
+We did some more tests on our (Toradex) side and the issue is not
+related to the mentioned commit. We sent a first patch which tries to
+address the issue:
+https://lore.kernel.org/all/20250203105840.17539-1-eichest@gmail.com/
 
-By modifying the get_bMaxPacketSize0 function to use usb_rcvctrlpipe
-instead of usb_rcvaddr0pipe, the issue can be resolved. This change will
-ensure that the endpoint device number is included in the USB pipe,
-preventing reinitialization failures. If the endpoint has not set the
-device number yet, it will still work because the device number is 0 in
-udev.
+Sorry for the false alert.
 
-Cc: stable@vger.kernel.org
-Fixes: 85d07c556216 ("USB: core: Unite old scheme and new scheme descriptor reads")
-Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
----
-Before commit  85d07c556216 ("USB: core: Unite old scheme and new scheme
-descriptor reads") usb_rcvaddr0pipe was used in hub_port_init. With this
-proposed change, usb_rcvctrlpipe will be used which includes devnum for
-the pipe. I'm not sure if this might have some side effects. However, my
-understanding is that devnum is set to the right value (might also be 0
-if not initialised) before get_bMaxPacketSize0 is called. Therefore,
-this should work but please let me know if I'm wrong on this.
----
- drivers/usb/core/hub.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
-
-diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-index c3f839637cb5..59e38780f76d 100644
---- a/drivers/usb/core/hub.c
-+++ b/drivers/usb/core/hub.c
-@@ -4698,7 +4698,6 @@ void usb_ep0_reinit(struct usb_device *udev)
- EXPORT_SYMBOL_GPL(usb_ep0_reinit);
- 
- #define usb_sndaddr0pipe()	(PIPE_CONTROL << 30)
--#define usb_rcvaddr0pipe()	((PIPE_CONTROL << 30) | USB_DIR_IN)
- 
- static int hub_set_address(struct usb_device *udev, int devnum)
- {
-@@ -4804,7 +4803,7 @@ static int get_bMaxPacketSize0(struct usb_device *udev,
- 	for (i = 0; i < GET_MAXPACKET0_TRIES; ++i) {
- 		/* Start with invalid values in case the transfer fails */
- 		buf->bDescriptorType = buf->bMaxPacketSize0 = 0;
--		rc = usb_control_msg(udev, usb_rcvaddr0pipe(),
-+		rc = usb_control_msg(udev, usb_rcvctrlpipe(udev, 0),
- 				USB_REQ_GET_DESCRIPTOR, USB_DIR_IN,
- 				USB_DT_DEVICE << 8, 0,
- 				buf, size,
--- 
-2.45.2
-
+Regards,
+Stefan
 
