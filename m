@@ -1,100 +1,100 @@
-Return-Path: <linux-usb+bounces-19973-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19974-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0D33A25277
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 07:32:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFA51A25278
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 07:34:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 586BA3A4086
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 06:32:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 697AF1883C78
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 06:34:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C82A1D88D0;
-	Mon,  3 Feb 2025 06:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03CE11D86E6;
+	Mon,  3 Feb 2025 06:33:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b="VlV9tDY9";
-	dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b="Ok6S9eHJ"
+	dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b="Z7yLRfX5";
+	dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b="HbFTB/e0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from gw2.atmark-techno.com (gw2.atmark-techno.com [35.74.137.57])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 716F23D3B8
-	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 06:32:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294F5111AD
+	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 06:33:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.74.137.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738564341; cv=none; b=d9LYhniwZGv5T1DD1eVoYLwi7cvV3fr69sgch9tjBjOTz6qsVitRv8W0gPAtcl/HlGJSiAapR6qdNBIwr8UNLVXEWAJ2FbhCXMnptXfTNg3pEm63h3K8bVaKgEwSq/miOmrrvyDeI+Iy5iX3Ikv7I0xBfedQDBzlQP1f+mOQymU=
+	t=1738564438; cv=none; b=VssSasXQ2Bpq/FTSzj1j2i5huSTjVw2NaCgoJg4bMHtnfKzFy4M0K959R9svM4QB8lqrNvWpERqfWnk2J3ULtswRWvZC49d9wZDgbHlDahUdLKSiMeo3nVRJoTMGaj6oIg+4KcfCpbJKcme4wuIiJqXU9SPc6/sNHz9FY0xoUYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738564341; c=relaxed/simple;
-	bh=FJMF8I5ajPpN5Y2/kDQ/re4S2W3srhBYMde3V9Wgc1U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=px3ZAEt+RTpQweZE+AVgDF6bg7FnOPiqBp1/LJUSC4bGZgG+UPSHZ28TJa/4ypErBR91eIim9e7naPcP6oh+wLmseGcI4ghSSGh/EzJv4aPHYF1tpSPiosS0vHseZlHe4F6s4FpWwJ9b1nsw0RW9HQaKjeJaRS4Rhm5KLP8cYnA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=atmark-techno.com; spf=pass smtp.mailfrom=atmark-techno.com; dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b=VlV9tDY9; dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b=Ok6S9eHJ; arc=none smtp.client-ip=35.74.137.57
+	s=arc-20240116; t=1738564438; c=relaxed/simple;
+	bh=NyyLlfGGKp2WMyAP4kO6XZqyeNb8IGXzBeCYo4639nY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=iI8qUmZa3+Sj1wwUJDP+rP4IPmgU68xapVvzig6JxElF5KMAh3qumoXlmCincuR1STfNy11DEAiV0Sr1GfWskgcZdQMMWT6WE8R+Bw0uxsnPI0RwQoi/Ca3aOxTS9iIac6fKgGN1qt4g5nB44tEkh+PqhL1HrCSbmU2E0kmQvB0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=atmark-techno.com; spf=pass smtp.mailfrom=atmark-techno.com; dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b=Z7yLRfX5; dkim=pass (2048-bit key) header.d=atmark-techno.com header.i=@atmark-techno.com header.b=HbFTB/e0; arc=none smtp.client-ip=35.74.137.57
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=atmark-techno.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=atmark-techno.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=atmark-techno.com;
-	s=gw2_bookworm; t=1738564338;
-	bh=FJMF8I5ajPpN5Y2/kDQ/re4S2W3srhBYMde3V9Wgc1U=;
+	s=gw2_bookworm; t=1738564436;
+	bh=NyyLlfGGKp2WMyAP4kO6XZqyeNb8IGXzBeCYo4639nY=;
 	h=From:Date:Subject:To:Cc:From;
-	b=VlV9tDY9G7jj5G081F5exjxom4xsU2HTL9jPqWWBTYxPbMpS1Opiy6OJ21NHQaB8i
-	 CTq9QqDT7l6G2ZAiMi8PbyxR/6uBCAhKrIOxo3B1xnpPP5bL7cQD+MlmAIvbS73NZY
-	 0UVOQJgFvecHVnk8rFe+LR+xiO0DsikQlljSZCI19Ls8M/IqKi+gzJJRGWxYtWwJL5
-	 Dehji/xPHfMgD8l2e/PfUm8jsgqQKq6W2mdwRjAfReP4TyJEDazSqyoy6v2Hzc728j
-	 se+S3z0QDKeEQyhcjXX12l0PR7N2obhA9kkvt3X37mIhPb/2ZO/ESxhhtWnbVNsgzp
-	 Y6f0M2CLftr9A==
+	b=Z7yLRfX5q+zcKS6xNaxs4zsWHablGBhBtz97a0mPaHHlx19orBCuNvy/8I9+QBU8N
+	 fOv+TPJ4xwOJSD+L5EXtyTvRRf5hpQ27jWq1FTB3kRWxNQp5WQVFqFBQFK7v8kTjkz
+	 AT5vAII2Hx+8GUa+b+CGSaE0h8WTf6DZiDhpoqe3Fe7ByfHQN/U4iVnvmvhvY5KeFA
+	 SU3GT7b9kFmfGPYGrxorGIypnwHPtPu+ydUpubc9S0w/u3gwgVodQLsexa4tS5WOBZ
+	 LAz+BRIN7OV7S4HpGIJn9PGSLJiqr901wOq+0/bHnzjLsLwmRQavswP4QFVxcjnWuK
+	 G1IDBLHSPJlBQ==
 Received: from gw2.atmark-techno.com (localhost [127.0.0.1])
-	by gw2.atmark-techno.com (Postfix) with ESMTP id 65B1A4CB
-	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 15:32:18 +0900 (JST)
+	by gw2.atmark-techno.com (Postfix) with ESMTP id 20BBA370
+	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 15:33:56 +0900 (JST)
 Authentication-Results: gw2.atmark-techno.com;
-	dkim=pass (2048-bit key; unprotected) header.d=atmark-techno.com header.i=@atmark-techno.com header.a=rsa-sha256 header.s=google header.b=Ok6S9eHJ;
+	dkim=pass (2048-bit key; unprotected) header.d=atmark-techno.com header.i=@atmark-techno.com header.a=rsa-sha256 header.s=google header.b=HbFTB/e0;
 	dkim-atps=neutral
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	by gw2.atmark-techno.com (Postfix) with ESMTPS id 29D8A92E
-	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 15:32:17 +0900 (JST)
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-2eebfd6d065so11668902a91.3
-        for <linux-usb@vger.kernel.org>; Sun, 02 Feb 2025 22:32:17 -0800 (PST)
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
+	by gw2.atmark-techno.com (Postfix) with ESMTPS id 7CE4D370
+	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 15:33:55 +0900 (JST)
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2162f80040aso83872805ad.1
+        for <linux-usb@vger.kernel.org>; Sun, 02 Feb 2025 22:33:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=atmark-techno.com; s=google; t=1738564336; x=1739169136; darn=vger.kernel.org;
+        d=atmark-techno.com; s=google; t=1738564434; x=1739169234; darn=vger.kernel.org;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tIzZOYUpu+a9dZG8GPKM77gyMrEbYFRg9tCIw5HJ87c=;
-        b=Ok6S9eHJBR/6691dLfe5R85TRGcS+n+gdeU1kgpPJyGlSWc0CPalzUMM40lQOYhI1e
-         nD+77AfkKuydq2AOCRfCvvoPAGSEVxSzJEHAg+3nCrEvUQtr5TIIPhaYauzxI3nWi5xk
-         peWgsfTUkEjauxq/ypQBfZcjQUaUF6h1juaBcFiiFeNpNYea77iBqM0qT9lnU6LK9mW5
-         zoeYEm6QlYqSIWvTT7VXyq7eorjKSaPMQEBdYv9CcqBdL3O4pAMLR9vuVIF8pExMNXl+
-         Hx0XnpG0o1tkUS62RDeqhvmoJ1S+9XVjMYTEVxnP4x5nyWJFEIhF5bYNBzvp4udNZT0A
-         Mb/A==
+        bh=x2QS07A4S9jTptdRzayiylbpiM6aCKrztjCii/J98D0=;
+        b=HbFTB/e0FxRYNKnIOoVvqdn62EHV/pSUoo3OBpnteyE3t0z31W+GW5AVNU7Xp6p4Zr
+         5nBdMK71XXLleALodPabHNwIMCseNkq8oerVBJgENhXqqrK4OTYslteSCukbmhGVm0vn
+         BdsLmFvdlIZLxs39TNUENgcmPi+6EJqQNR389rP1Nmtt8TkjCo5VDueNkkAsbOrICbuH
+         GF35KfXsrEImBwOgYHzMw2IRN/2+oyFnz1nt0r7TNanMknNQpN9o8hvudH410ag1hgYX
+         wNlVinYYFQbhUg/7mmLMkun+YzWFXFT3lEUWjV22KXtMrd0xaTrTKW/jHxuJ9M1bxDrH
+         wjKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738564336; x=1739169136;
+        d=1e100.net; s=20230601; t=1738564434; x=1739169234;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tIzZOYUpu+a9dZG8GPKM77gyMrEbYFRg9tCIw5HJ87c=;
-        b=v9gzurj0mMl8X//hZdOLqBb5PQrdbQ128/+ttLaGWjALL9s7aOw1F9u0WddPqLccKO
-         WdiUsqTS2vxXtkHBQpyf3tUwpEnb7Me1uMz+WAvsB+i0Weiqzhs9gj+bsnDSxkKr8O7/
-         +cKqNMoaf8rHqz5ACZ32Zl8ypiACA2TKAhAtM9hBskAsyt7pjhJQMmpvhK3WcG3JT/6J
-         NIH0/MaNEouOJzLfttQgMQ7Fx/D2X5TFJu5ENO17/bIlqvxpcMD4xRl9090QM7K4Bh4X
-         wK9z9nsER7bTacJrWf/ha/VjOyoX2zn7H6TBCeGdGmpFNG1S2nuWlYLqddP+4KgR0D+f
-         jVvg==
-X-Gm-Message-State: AOJu0YySWwsIv++FEkcMdNxeNZENMcqgS9QFHvT4u5ygirL7zegS0n17
-	r0fOyDPyOXW1U/0xuJGWheoZh3BuONyg+xwRZIYGLIOmA157I6ok29b3+4CJEqfpDxnHPp9sGBj
-	Tk/VcXlMs5qFsWZwka9mJgV40Ku1wSSIFNdpO3Nv7fbMetWG8/Tw8VZLz7oo=
-X-Gm-Gg: ASbGncswIOuIQiJEBKja5QH6GpXjwr0uM4I/QBcO6ardHZ5Dfef5Tgnn0niOst51/pX
-	9O3sEtPhQLbOiGAjEtv+SsdOc7+VSZJiMTje9EO7O5ox9SckHV4UJf7KIFZSKE2cz43UupzWbZ/
-	ReBaVV9Gpu0ac86zesC7WRf6hH+Qr+SM2oy6t0lcHIaz0pr72nVbgmYuvMqac2pB+CpupSZPVy5
-	NcEB+uNgKC5joT8yzIZm2OMh+yPsDu0bkcvP8Ch11LTSNTGCQDARNFxYp35OduGvvZytmu+tM8b
-	fBzSLmEJrt5NiAxdoyWAm7zp+i/xVxlbwKKsfx7So9MYRydzba5TGF1edclXD3pr
-X-Received: by 2002:a17:90b:2b86:b0:2ee:f687:6adb with SMTP id 98e67ed59e1d1-2f83abb403dmr28797272a91.3.1738564336190;
-        Sun, 02 Feb 2025 22:32:16 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGarftDjJG90G7YVRs6D/mMSQKNkWuKkn3/GO4LgDIV8/LFojSbEyi2eC4i6UcBS8OPq8mV1Q==
-X-Received: by 2002:a17:90b:2b86:b0:2ee:f687:6adb with SMTP id 98e67ed59e1d1-2f83abb403dmr28797250a91.3.1738564335875;
-        Sun, 02 Feb 2025 22:32:15 -0800 (PST)
+        bh=x2QS07A4S9jTptdRzayiylbpiM6aCKrztjCii/J98D0=;
+        b=BWhxpLUZXDmDUnPCDYN1GNM/SkNm1ncjHP6Tdz1+suairFRIxVhl9MsD44PAx7nY79
+         XJjpc1g5o8ouahHg8vQhJ49DatCsUL06a+sybbjIRb0gjWC2yuF9zNY50xJYD4g0EloL
+         0jxjnmKlzlUr20d0W1T9yMnvs8Map4fiLjokQ7R2AxIa315HrD++r0K6oJMJ5+nVXMSw
+         lhsz6eSeYhFCXZCPS7NSVHtO9/qqgrBQqkhB/9PA650afBKq0rlTWfeG1Y8FWvPDHAwT
+         821QZkXDJ8GmZS4xttH/Op8YNpxBhAIWDANXWextS9TAwqew2ETTy5ztDh/Ev1XpxHgb
+         vGhA==
+X-Gm-Message-State: AOJu0YzyRtvINLkSxZrxFLXgnyT5UKrwfTGbpxtNH8rSaiZCoW4y1Lnc
+	sLTZdGkszRxU02EPx1Zk+YYnzBQz1x3lgfdFKQulHYkRx8cVx3ZNOA9K0mVDoZqbsKJEYosRv9m
+	hc+JhlXeRlPeKfXX8Y1PUAe8/Z/VCREc8Dm5dm9wAqKSs0nwDwiIDF24Qyi5YVqvVGo4=
+X-Gm-Gg: ASbGnctOL/2X96qtK7LI16bvdOMA1ab1DV8yPNeipW8n3QPt7IYeGs6A3wHQsSdJK1A
+	ZgBmX3ZtS4PzNLD8Ei3CY+MuKynXhgJKsjFRi5LUJc9WDCI/gRtkk0lquNfh6+w6VEUxCuL/ktS
+	QBTFC754ke/n9LOhNl/5RVaNIwQkRbsWdpKT/JBj0bN1jv92xZaEXuYd97b24Qv/UYkY2UskeZ+
+	9x38cJZHuPi1R99lxZ9ubcK2Rv2NM2eiyWmetwKBLldtly8pXjS2X1ZNMy9fRqN7Faki1UIO8h8
+	Q+UTMITpn3t8LjkBFjxHHLPmUDULAVr+4au+URqLeP7vR6Lq/Nmg6UGhoQftYURK
+X-Received: by 2002:a17:903:2990:b0:216:527b:5413 with SMTP id d9443c01a7336-21dd7d7bea8mr321391945ad.26.1738564434511;
+        Sun, 02 Feb 2025 22:33:54 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGsaiCMJVKFBD3vmYAtNcDjDoJe6oVNc4pxxqNDmNdxCM1zjrnyp/Lky5JFY5rQBO4RM+YL6A==
+X-Received: by 2002:a17:903:2990:b0:216:527b:5413 with SMTP id d9443c01a7336-21dd7d7bea8mr321391665ad.26.1738564434151;
+        Sun, 02 Feb 2025 22:33:54 -0800 (PST)
 Received: from localhost (162.198.187.35.bc.googleusercontent.com. [35.187.198.162])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f83bc97ca8sm11556441a91.1.2025.02.02.22.32.15
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f83bf9499fsm10365776a91.33.2025.02.02.22.33.53
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 02 Feb 2025 22:32:15 -0800 (PST)
+        Sun, 02 Feb 2025 22:33:53 -0800 (PST)
 From: Dominique Martinet <dominique.martinet@atmark-techno.com>
-Date: Mon, 03 Feb 2025 15:32:05 +0900
-Subject: [PATCH v2] usb: phy: mxs: silence EPROBE_DEFER error on boot
+Date: Mon, 03 Feb 2025 15:33:49 +0900
+Subject: [PATCH v2] usb: usb251xb: silence EPROBE_DEFER error on boot
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -103,74 +103,67 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250203-defer_usb2-v2-1-69b3a941371a@atmark-techno.com>
-X-B4-Tracking: v=1; b=H4sIAORioGcC/23MQQ7CIBCF4as0sxYDU52FK+9hGoMwCDEFA9hoG
- u4udu3yf8n7ViicAxc4DStkXkIJKfbA3QDG63hnEWxvQIlHiXIUlh3n66vcUDAjOSItlbbQD8/
- MLrw37DL19qHUlD+bvajf+pdZlFACRyKHdCBkedZ11vkhKhsf096kGabW2hePdwVVrAAAAA==
-X-Change-ID: 20250203-defer_usb2-ee26f66a01ad
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>
-Cc: linux-usb@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+Message-Id: <20250203-defer_usb1-v2-1-eba405ebee2c@atmark-techno.com>
+X-B4-Tracking: v=1; b=H4sIAExjoGcC/23MSw7CIBSF4a00dywGUHx05D5MY3hchJiCASSah
+ r2LHTv8T3K+BTImjxnGYYGE1WcfQw++GUA7Ge5IvOkNnHJBOd0RgxbT7ZUVI1zs6ZEadtL6DP3
+ wTGj9e8WuU2/nc4nps9qV/da/TGWEEXtQSnaQM2EusswyPUhB7ULc6jjD1Fr7AjGfoTesAAAA
+X-Change-ID: 20250203-defer_usb1-254070d18cc9
+To: Richard Leitner <richard.leitner@linux.dev>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Dominique Martinet <dominique.martinet@atmark-techno.com>
 X-Mailer: b4 0.15-dev-7be4f
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1499;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1216;
  i=dominique.martinet@atmark-techno.com; h=from:subject:message-id;
- bh=FJMF8I5ajPpN5Y2/kDQ/re4S2W3srhBYMde3V9Wgc1U=;
- b=owEBbQKS/ZANAwAKAfKKYH/WjHEHAcsmYgBnoGLt/xToS2Y0fiRAeRpW2bj2YZIueibGgFcFf
- cRM6sb7I9CJAjMEAAEKAB0WIQQoFSiLMD+txr0veJbyimB/1oxxBwUCZ6Bi7QAKCRDyimB/1oxx
- BxtoEACi2GSPB02A7ekZV4EL+vRQ2dOHbU2hEUMmX+7J8QYC3sKcqVuvfrNcujJrgbN6igycZgh
- hbo51gNKd/EkiT3hr6riNqiHGIYI+a/qCN454NI8Lbmq+8KWyvSV7PMUdLUufk+FlYjNirkNAfR
- LFMrmv5tmgX/WWMSIM4vkKoycgRmGQkWDy9hllRe5xxGSwRYPcnANeNP5lABU5D2IhOziKSwYc8
- JDVCxkJpWx6VQYloYokMpVLoKUbXECo6jmgWT9nvCWwQVO526POcXkHC+pzMSZx+/0UqDBjgheU
- ZTE0jw7MXNGAj1H0HEJrq19XB21yw91CXASMwjYGbz1acu0weFz76c+dqPsxQcl9XxFo+CY41sx
- 4CM3xB0VLDqt0CJeqZMMZTX7cJ6b39VGLBBy+P/De5BfBX3fNZpsIRda6Vkg3rczkRiD3+Mqf1g
- Imo11uXVPQoyO2fl/UNrf2nmvTnmvgwOeCqq7G8V/72x55fsG/Yf2i9eWI1PkgHrCwQmqDKynTe
- KNo059v1eqjkG+QzNKSpTP1EoksGtT0UtzpGI4CKbF6xSFikAjG7jquQSAObj8vrKEkl6vv2YOA
- g6tVcepqeQtZmO6d7Vzt1wJ2PL1+hnZS9GUrVBx94HFxn0wb8ZkimC1/o9pHnIJQfaHAwXvhlH6
- BxGtCdrshYkKrAg==
+ bh=NyyLlfGGKp2WMyAP4kO6XZqyeNb8IGXzBeCYo4639nY=;
+ b=owEBbQKS/ZANAwAKAfKKYH/WjHEHAcsmYgBnoGNPldkjLVvesDXhQhcN0CNqSws7SdpJuvAu9
+ rRYO3rSa9eJAjMEAAEKAB0WIQQoFSiLMD+txr0veJbyimB/1oxxBwUCZ6BjTwAKCRDyimB/1oxx
+ B0RlD/0W8AaS50+8/SEB7mUaS4N6RFRnftETBPeAsGkO8IA/CGCln6pzz0DvOdKQsHbDc2FHUjg
+ qAP6KmvTzeu0EC8SdgNebhKHgS6WT4NLA9Xua2mu3eYnQvCNVouYYQlBkNUydL3+Gu2sGRjflau
+ cBLw/e0+ysdXLM2p/SHvlv7Vk1aSI5cIhS+3GE6y1hkpDJfgsz2a4YMAb3XcNK5lT0qDLveFuXR
+ D7wjZ45HyykZmiyrsmfIw2I/9LFzwNSlvkLjevpYs2UD+TRUaPcBV0hS98wA+6f0lDF0gmYLGJV
+ UT568cbzOxJ8bhMqWyBnfkX7xNIRFzSVLfOpIFg1OX7FU9p4sdoU5o+gCYPRyj64UTG3UN+swd9
+ F9d3B9CM6WpcCxvq+wJQgwVV9PRwojYjPXQJd0VQSPSPG+ENMEqJpzyDIttx6a0YKms97F+Tx+F
+ xkAaqQw/DPzOtcqN0SAe25B0jnlMsG4zW6ysxfIyFsDpGNw68Z4r5JGI+k9Q2y2sak2gPvPBsd/
+ VTM8Mr2s2+Cv9tDE3ohznejfyPuR4GkSd8PU+OHS+N1Vq11G6tS4DbIunDaq/E39gSWfsK+SJ6R
+ a1TbCMb4csRYt5keh4p0y6Z2j9GP7eK39lEqAeFmRn0sApAihu/yv1csrUBQCt82YsKuuUhFkDv
+ q8ZKobcKCzsiL3w==
 X-Developer-Key: i=dominique.martinet@atmark-techno.com; a=openpgp;
  fpr=2815288B303FADC6BD2F7896F28A607FD68C7107
 
-Use dev_err_probe to silence EPROBE_DEFER error on boot on i.MX8ULP:
-[    0.127301] mxs_phy 29910000.usb-phy: can't get the clock, err=-517
+Use dev_err_probe to silence EPROBE_DEFER error on boot:
+[    0.757677] usb251xb 1-002c: failed to get ofdata: -517
 
 Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
 ---
 Changes in v2:
-- removed redundant error message and now useless braces, thank you for
-  the quick feedback!
-- adjusted message alignment (that was also bugging me...)
-- Link to v1: https://lore.kernel.org/r/20250203-defer_usb2-v1-1-2366f26462e0@atmark-techno.com
+- removed redundant error code in message and brace
+- Link to v1: https://lore.kernel.org/r/20250203-defer_usb1-v1-1-f6bba254215d@atmark-techno.com
 ---
- drivers/usb/phy/phy-mxs-usb.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/usb/misc/usb251xb.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
-index 7490f1798b461c39c29bb74e1e57e0a4adce2bd7..39b75199d11c6f9ec21174c20d0465cb79c133fb 100644
---- a/drivers/usb/phy/phy-mxs-usb.c
-+++ b/drivers/usb/phy/phy-mxs-usb.c
-@@ -769,11 +769,9 @@ static int mxs_phy_probe(struct platform_device *pdev)
- 		return PTR_ERR(base);
+diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
+index e24cdb667307802b9eee856e20744ebf694395e8..4fb453ca545013f8b89c43d3bb5cc6d1c53b39c9 100644
+--- a/drivers/usb/misc/usb251xb.c
++++ b/drivers/usb/misc/usb251xb.c
+@@ -636,10 +636,8 @@ static int usb251xb_probe(struct usb251xb *hub)
  
- 	clk = devm_clk_get(&pdev->dev, NULL);
--	if (IS_ERR(clk)) {
--		dev_err(&pdev->dev,
--			"can't get the clock, err=%ld", PTR_ERR(clk));
--		return PTR_ERR(clk);
--	}
-+	if (IS_ERR(clk))
-+		return dev_err_probe(&pdev->dev, PTR_ERR(clk),
-+				     "can't get the clock");
+ 	if (np && usb_data) {
+ 		err = usb251xb_get_ofdata(hub, usb_data);
+-		if (err) {
+-			dev_err(dev, "failed to get ofdata: %d\n", err);
+-			return err;
+-		}
++		if (err)
++			return dev_err_probe(dev, err, "failed to get ofdata\n");
+ 	}
  
- 	mxs_phy = devm_kzalloc(&pdev->dev, sizeof(*mxs_phy), GFP_KERNEL);
- 	if (!mxs_phy)
+ 	/*
 
 ---
 base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-change-id: 20250203-defer_usb2-ee26f66a01ad
+change-id: 20250203-defer_usb1-254070d18cc9
 
 Best regards,
 -- 
