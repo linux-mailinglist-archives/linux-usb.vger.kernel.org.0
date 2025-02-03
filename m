@@ -1,55 +1,55 @@
-Return-Path: <linux-usb+bounces-19971-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19972-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2169CA25270
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 07:25:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B6DAA25275
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 07:26:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0E1AC18844B8
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 06:25:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F7033A4D98
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 06:26:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BB971E7C2D;
-	Mon,  3 Feb 2025 06:23:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64CB21DED47;
+	Mon,  3 Feb 2025 06:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="hQhHUkhr"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="dNmYDMfn"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBA51DACB1;
-	Mon,  3 Feb 2025 06:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF2A41D7E42;
+	Mon,  3 Feb 2025 06:24:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738563829; cv=none; b=GaGv0gAvYqV0IS3Bt4ecY7iLso/RGkc4TUiTmExppcQGj3ibxxs5L+gTIDkfDNsoTcnw81ZxLTdA8+NuSNpd+LeByfTWrGN9wRaWFb+rroBmQrRaqHLQQkxTpLypP3PwsJ2rDud78MOx8ceuJdch2FZ++xOG5EnA/kMCsHY4orQ=
+	t=1738563883; cv=none; b=llrO+bKtx1bK3hRHjzQBYdLsOBpx4Yitw3GsZcHD3h4Z5WaD8UQTh6qBCXtcO2BimSSs6dOFhtX5Sx5My1iaHS7tDTDCEnxdaGuoc31IlAFCxCpfKC41EA+G9Gl35VKyBpB4PhoB4oOVyQ7oHiETCJcxzC1MeAI3DkOH1HE9hLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738563829; c=relaxed/simple;
-	bh=VjtBG6ClA73FCQmU6xkx4zbjwLDRbSIzvI+IRDZaUPM=;
+	s=arc-20240116; t=1738563883; c=relaxed/simple;
+	bh=Lkg1l3v4kR9ktLqPTDKuXB6V13rhEjLutqoXDAQk1p4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AMgGG++hDgjkrq8lZd7xME9MP+ZTi2V2ChkFdYvPKy8eYVDulgWd6vPrAJ0SPvgzX2QHhqlAr2gIpuDHUiipZQkIfQVcpP8q8B18Dx9wh1+W1SeIndH3J212P6kJNP62QXKy34ukSCpPELWF4DWwkGeeTMCQ7lko25i1zUUNb8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=hQhHUkhr; arc=none smtp.client-ip=80.12.242.22
+	 In-Reply-To:Content-Type; b=TV020TarJv+BVivjXUtCtNSmHCcZmuYxngb0HTvKpjWpnER+CiMyJ6w4xx5gKOgwyejTHHIO1xhOS3ahtUcA1hj7TAHCBORMN/335+vxUWOTLc7C86hi08g4yLBfMYeSHZcLzWBJiq90YFw+ibDWrxmKn7zrVPGlNePrOi7rFIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=dNmYDMfn; arc=none smtp.client-ip=80.12.242.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
 Received: from [192.168.1.37] ([90.11.132.44])
 	by smtp.orange.fr with ESMTPA
-	id epqrtzu4SUbA0epqutuPta; Mon, 03 Feb 2025 07:22:37 +0100
+	id eprhtUetmeIWleprlt7iQ8; Mon, 03 Feb 2025 07:23:30 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-	s=t20230301; t=1738563757;
-	bh=sl39fq1it+zd8XuT1PGqhrbjFQbpNj0qTxM2/DiXRE4=;
+	s=t20230301; t=1738563810;
+	bh=sOdCzSN2/f05dA92HAVY6g+EQoOjt0cmreIvV2RaoMA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:From;
-	b=hQhHUkhrE6k9S97QNKCd0rOzfcnKrqZE/YGBFMVemREiXr7voV0yRo/R1fLOS2sYM
-	 s57FVVNUVRbMWrCMRmhBuPUADjX4CzNbQZnxOTQ0pHsX2+9F7M46/vzoTUx2NzOTYs
-	 QiJle4qP2idzvbiT4589PD1ansh1yQU8/bsIV0I9/sYqvxrM7ih7j4FlUmgMU+uVhL
-	 K4Hvo2oEfIxaufFY3N4Bu9ondQHdzxnYeiZzDOFVVnGgZBrvB3SDzFpTMPwEkoB4BW
-	 qYy/n9hfXJjClnJqrKaxo8+BSlWRHMnIbDTmeSaWZS176lL54GxgSmxvEYghEkQwgk
-	 +W/Ck5Pe3Qz0Q==
+	b=dNmYDMfnf8tZJagS0X3VZxyCxLgFqi7JvsDqSUFFRQGfW7sQHbwA+PnjRuDb8SZ7W
+	 w6mkCF/i0ofE17RJBh2pnOiHVzL2C2Jsei+LFTiQuff575QWFrzxAgOno0N5oLGHAq
+	 bvL5KckhWEOLVKqLUfYoBHE2IJL6Wce9APdHHzkxNTqcQbBB0+xjj5NhKHBjWeBsbj
+	 rVCumjLL7bn44gH1L4JM6PXvvk3zdpaC+0OZ2gJRuNHrhH7nBsPgONyZ1M4+EVc5hW
+	 BYe3H+RUcWj0tFzeoMM/fnFxvkgLUuLSfuTGWmAMLt766gu6YrudfIUs6l6W6WhwXv
+	 i9E45wqKmlzZA==
 X-ME-Helo: [192.168.1.37]
 X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
-X-ME-Date: Mon, 03 Feb 2025 07:22:37 +0100
+X-ME-Date: Mon, 03 Feb 2025 07:23:30 +0100
 X-ME-IP: 90.11.132.44
-Message-ID: <a2e4d538-5406-437f-a09d-0cb811d7d399@wanadoo.fr>
-Date: Mon, 3 Feb 2025 07:22:33 +0100
+Message-ID: <150812a1-31f7-43b1-8d85-fd097fc26c43@wanadoo.fr>
+Date: Mon, 3 Feb 2025 07:23:25 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -57,50 +57,52 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: usb251xb: silence EPROBE_DEFER error on boot
-To: Dominique Martinet <dominique.martinet@atmark-techno.com>,
- Richard Leitner <richard.leitner@linux.dev>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250203-defer_usb1-v1-1-f6bba254215d@atmark-techno.com>
+Subject: Re: [PATCH] usb: phy: mxs: silence EPROBE_DEFER error on boot
+To: Dominique Martinet <dominique.martinet@atmark-techno.com>
+Cc: festevam@gmail.com, gregkh@linuxfoundation.org, imx@lists.linux.dev,
+ kernel@pengutronix.de, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ s.hauer@pengutronix.de, shawnguo@kernel.org
+References: <20250203-defer_usb2-v1-1-2366f26462e0@atmark-techno.com>
 Content-Language: en-US, fr-FR
 From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20250203-defer_usb1-v1-1-f6bba254215d@atmark-techno.com>
+In-Reply-To: <20250203-defer_usb2-v1-1-2366f26462e0@atmark-techno.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Le 03/02/2025 à 07:08, Dominique Martinet a écrit :
-> Use dev_err_probe to silence EPROBE_DEFER error on boot:
-> [    0.757677] usb251xb 1-002c: failed to get ofdata: -517
+Le 03/02/2025 à 07:09, Dominique Martinet a écrit :
+> Use dev_err_probe to silence EPROBE_DEFER error on boot on i.MX8ULP:
+> [    0.127301] mxs_phy 29910000.usb-phy: can't get the clock, err=-517
 > 
-> Signed-off-by: Dominique Martinet <dominique.martinet@atmark-techno.com>
+> Signed-off-by: Dominique Martinet <dominique.martinet-9u97MdVgWv6RbxiC3EKwHAC/G2K4zDHf@public.gmane.org>
 > ---
->   drivers/usb/misc/usb251xb.c | 3 +--
+>   drivers/usb/phy/phy-mxs-usb.c | 3 +--
 >   1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/misc/usb251xb.c b/drivers/usb/misc/usb251xb.c
-> index e24cdb667307802b9eee856e20744ebf694395e8..ed7c99621fc9af57c988b2298a576248b329ba3d 100644
-> --- a/drivers/usb/misc/usb251xb.c
-> +++ b/drivers/usb/misc/usb251xb.c
-> @@ -637,8 +637,7 @@ static int usb251xb_probe(struct usb251xb *hub)
->   	if (np && usb_data) {
->   		err = usb251xb_get_ofdata(hub, usb_data);
->   		if (err) {
-> -			dev_err(dev, "failed to get ofdata: %d\n", err);
-> -			return err;
-> +			return dev_err_probe(dev, err, "failed to get ofdata: %d\n", err);
->   		}
+> diff --git a/drivers/usb/phy/phy-mxs-usb.c b/drivers/usb/phy/phy-mxs-usb.c
+> index 7490f1798b461c39c29bb74e1e57e0a4adce2bd7..dd2b4a5633934e257e792bbd61d6748304b5e679 100644
+> --- a/drivers/usb/phy/phy-mxs-usb.c
+> +++ b/drivers/usb/phy/phy-mxs-usb.c
+> @@ -770,9 +770,8 @@ static int mxs_phy_probe(struct platform_device *pdev)
+>   
+>   	clk = devm_clk_get(&pdev->dev, NULL);
+>   	if (IS_ERR(clk)) {
+> -		dev_err(&pdev->dev,
+> +		return dev_err_probe(&pdev->dev, PTR_ERR(clk),
+>   			"can't get the clock, err=%ld", PTR_ERR(clk));
+> -		return PTR_ERR(clk);
+>   	}
 
 extra { } can also be removed now that there is only 1 line left.
 
 CJ
 
->   	}
 >   
+>   	mxs_phy = devm_kzalloc(&pdev->dev, sizeof(*mxs_phy), GFP_KERNEL);
 > 
 > ---
 > base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
-> change-id: 20250203-defer_usb1-254070d18cc9
+> change-id: 20250203-defer_usb2-ee26f66a01ad
 > 
 > Best regards,
 
