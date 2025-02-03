@@ -1,134 +1,114 @@
-Return-Path: <linux-usb+bounces-19986-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-19987-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89495A25876
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 12:47:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95CBEA258FA
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 13:07:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C75A188419A
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 11:47:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 866DE3A3442
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 12:06:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 657702036FF;
-	Mon,  3 Feb 2025 11:47:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28FD4204597;
+	Mon,  3 Feb 2025 12:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UO/NdV/P"
+	dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b="LW6Oofeb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.tipi-net.de (mail.tipi-net.de [194.13.80.246])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FF0B1E8850;
-	Mon,  3 Feb 2025 11:47:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C13352040B5;
+	Mon,  3 Feb 2025 12:06:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.13.80.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738583254; cv=none; b=HfNBvi5M90LSq2UlcNUfNrxywAtBuM8GPqebCADUz2GqmyZ1UxwJX21RM6D5UV1yLarCtpgB45qelWFrHqnAWXfN/xrZH6XI5fEEjefmUH2qlHLBQwCduHbbfR2loeD1RyPRCxgbipuaCGo91/w3oPM0xo3/97/M7jM9msEovtQ=
+	t=1738584392; cv=none; b=E63FaMKnClrbI5QzHN03HmAuM+IXmwke3ZAtp3izA8+RHUMnAAgJTARr8f5uC0lvFXVaQxokX1+EidwkKZjBRqsRl2+hBFuknUJND7gO2fYhs2vE6Cmiq9+nhIin2KGNp7A5bLphxxo5epwXHnWHky8Qyf9LXTEiPd2aX9Nn9Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738583254; c=relaxed/simple;
-	bh=zPMRDz2INH9jX/lFvueiiS8S8zDP4h7nmhVfFbg5fp0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nZ61g4LnDnHPqQ23V0i/kDk4L8JSpUh6CrtIM4er9Uze0jTm7wTPyP3bP7yJk4o7lPyrSRe0rk1jqOEU9XUudMBeCJOMYa770bEbWVtRBx5hQ8hlv4g/8QF4oCBWgn7q7KZxwu822VWQ0S79O1/gykIbFYzlmdlYeUhR36VjeBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UO/NdV/P; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-436281c8a38so30250445e9.3;
-        Mon, 03 Feb 2025 03:47:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738583251; x=1739188051; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+ltBpyiKhWLDMdeR0RFMO0jdmpO/BHsgMHlgteaMxyo=;
-        b=UO/NdV/PK7bH+Yl8Qt5CJ/WShf7w/5HdPTkdXv5+NNSGcsop6c/eKSE9yZx7iQkZQe
-         OLQmFGlrSa5qFURTidhLimP2pkld570yvn8Dpm2eYscHFGRUhphDvTuwL4HodyvuSVg+
-         3bRDvfIBMTVam6B82/ws7zRyxsKZQjlaM+hwcj44topLUBNT6PLFfb/+H8SHQkxAD16j
-         NZrlxj0qnzaI8hB95eplg0JlHXBo+SHj6RzL5l3+0TJSHZPKLqDLJ1hbPMM0Kqa6ZUqm
-         gypQkYr4mgX+5CIO3VmD177b+vD2raQV8W4c2W/gMlI5W1+AGCU/Sgq2Nko9mUc/s+Pe
-         FzdQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738583251; x=1739188051;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+ltBpyiKhWLDMdeR0RFMO0jdmpO/BHsgMHlgteaMxyo=;
-        b=A85xJEBUEHHJTPMhSoF2JsVs7AFZm9tsG/JiddYqmSxK0mJ5gu3hkQx6ZSoGzME+y4
-         7U02AY4N3Ocb+v8y0jONV915Uq6HmpBjbNXaBqyqfoQa65CovcjAJu/xg2J83zVOk4sc
-         +tjrVtLqly64siKyCKTvczQ5ONh2YvWMKIPXbq45rW+jIsZJwAiAMROV6HpmPT/p9gpz
-         iRYRSAAb09YAhbtlyFrswk3Li7mWyanLqgmeLhm97bsfITES6Yc+vMdKg6lGaQ8/QyIs
-         YYSvwVnITHXXfyY8gbrxG/+RpllB5vwBve4Zs6Dmu6ieqjVQMK8bI42O5GHY1l7pmA4D
-         PSeA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZCPiTlcHtNqFv2jUnnyS8CuwC1noi4UaSbfMiXpEAIG/xD15zQei67T3TgstM6HhBmYnQSnL251gY@vger.kernel.org, AJvYcCXgbBvOVSNo0VY95qOU6WuA/7/+Q4C6A7sTC4ogwylcN+Wpd4qUoKIqHJPM98y3oBVZ0AUGyQD5IkkbI2s=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkPHXHrku9/PtIxRjeWWCU5SrDNCqw/PHq6W4NA/X7fMHQV2l6
-	HNX7bc2dANtWosngKokavbRibOdCIkHe8F6tseOo8kLSGxOA95jY
-X-Gm-Gg: ASbGncs/Hq8A8yus2JqKlWITSCJ3LzdBTUogbTDqS1qQExr8VHdG+Q3J7PApTo+aNeQ
-	ETg1gdusirL4m9BH3j6kL1HvR1gnMeve0PeTd905yh4+A/iJhQogdv/0QF7ma9AvsQipXk1CjSy
-	AgaWUB7vQT6rrFjSr/BeGi5T0GT/rCkbFUt2KMdUqQjyTBTXt7h0xTRr80Jd/Xt7DnB0KCsgCKT
-	PE7ROLpcc3RZWC0n3BCAbpTdBif8n2dXFhzjXdvtWNSgUeZ7ZYUukH6QnbeI4F+JfHYKYxYiQKd
-	5kakGf0OKbJ12A==
-X-Google-Smtp-Source: AGHT+IHFFpoCD61c98SInLiy8fa5FLO3AxysYZtaJ6tyqWRUNiOyhLZ30ZMbevB2lazbgV1iDQFZ6Q==
-X-Received: by 2002:a5d:59a6:0:b0:38b:f3f4:57ae with SMTP id ffacd0b85a97d-38c51949b97mr18900069f8f.10.1738583250520;
-        Mon, 03 Feb 2025 03:47:30 -0800 (PST)
-Received: from eichest-laptop ([2a02:168:af72:0:5eb2:36d4:b5a0:d5a])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438e245f5a5sm155190465e9.40.2025.02.03.03.47.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 03:47:30 -0800 (PST)
-Date: Mon, 3 Feb 2025 12:47:28 +0100
-From: Stefan Eichenberger <eichest@gmail.com>
-To: Francesco Dolcini <francesco@dolcini.it>
-Cc: Xu Yang <xu.yang_2@nxp.com>, ritesh.kumar@toradex.com,
-	linux-usb@vger.kernel.org, Peter Chen <peter.chen@kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
+	s=arc-20240116; t=1738584392; c=relaxed/simple;
+	bh=zYaLG6IJSpDlxxMTZJxY5ECMfjeDQ32tSMkMD4Z02+Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=bAKlIWcytiDvZs2O62ywfi9qpufvIThS6RhaeLvZI4bGtts2YZOFWTd1GZEJeTbat3pA0mDKAt8FUuX7clX1y+RcKYvBnXtBCQY732K3T+w2ZAlN8jbbZV+MYEgFevVMlYjH5Mw0BU2MG20CivVZ1OPzaX2sobtOIpNgqvgDZpY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de; spf=pass smtp.mailfrom=tipi-net.de; dkim=pass (2048-bit key) header.d=tipi-net.de header.i=@tipi-net.de header.b=LW6Oofeb; arc=none smtp.client-ip=194.13.80.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tipi-net.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tipi-net.de
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 55BFBA0CC1;
+	Mon,  3 Feb 2025 13:00:51 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tipi-net.de; s=dkim;
+	t=1738584054;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=N0MRwPWFmgCZmVobKqV4wnfrvyJ/Wr2AIibpxTZfaYA=;
+	b=LW6OofebfTlfjMJSzvcsU57zOYpgt0o51xBqRgNb8V7lYksc7UMnDLha6EHb5t9AGoyp7O
+	czWtQEDXDDaWr0xDF0ZVnvvCqQwl8QBLqLbOmJlFPYjPlAFIyJexHE46T+YmHjy6f1qbNE
+	P2eyPM38PN/GYGFPXQAfnPnG0krJVXhZ0eVs+kxQ2orr4O18w9WwN+Qxp5IcZ2jJsy9u3F
+	JKU50sPs4qZrpNFN0T7FlZ2M29pssFv7uOgnNmDvW+bq8og/sFlPAmTeCmEuLvJGazRGky
+	I51Vo4HrbS1WyLpqHEz3EKbESqfwj7g6BGQuwLgHdykADW0awbSR7WTJJ6BN+w==
+From: nb@tipi-net.de
+To: Mathias Nyman <mathias.nyman@intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Ben Hutchings <ben@decadent.org.uk>
+Cc: n.buchwitz@kunbus.com,
+	l.sanfilippo@kunbus.com,
+	stable@vger.kernel.org,
+	Nicolai Buchwitz <nb@tipi-net.de>,
+	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: USB EHCI chipidea regression on NXP i.MX7
-Message-ID: <Z6Cs0PeC2O6enO7R@eichest-laptop>
-References: <20250108093101.GA22448@francesco-nb>
- <20250109073500.45gge4abb4h6mmay@hippo>
- <Z3-U1DXdMQ0eZaW2@gaggiata.pivistrello.it>
- <20250110065101.qxajjnu3fek4mmty@hippo>
- <Z4DXUuHwTsbiir5I@gaggiata.pivistrello.it>
+Subject: [PATCH] usb: xhci: Restore Renesas uPD72020x support in xhci-pci
+Date: Mon,  3 Feb 2025 13:00:26 +0100
+Message-Id: <20250203120026.2010567-1-nb@tipi-net.de>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z4DXUuHwTsbiir5I@gaggiata.pivistrello.it>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi everyone,
+From: Nicolai Buchwitz <nb@tipi-net.de>
 
-On Fri, Jan 10, 2025 at 09:16:18AM +0100, Francesco Dolcini wrote:
-> Hello,
-> 
-> On Fri, Jan 10, 2025 at 02:51:01PM +0800, Xu Yang wrote:
-> > On Thu, Jan 09, 2025 at 10:20:20AM +0100, Francesco Dolcini wrote:
-> > > On Thu, Jan 09, 2025 at 03:35:00PM +0800, Xu Yang wrote:
-> > > > > If the USB port is connected to a USB HUB, and a device is connected at
-> > > > > boot time to such a hub, the following errors are printed and the USB
-> > > > > port is not functional.
-> > > > 
-> > > > Does this happen 100%?
-> > > > I tried many time on i.MX7ULP-EVK board, but I can't reproduce this issue.
-> > > 
-> > > The issue happens with i.MX7D.
-> > 
-> > Then I think this issue is not related to that commit.
-> > I also tried on i.MX7D, but I still can't reproduce it.
-> >
-> > Please firstly confirm few questions in last mail.
-> 
-> Thanks Xu Yang for trying this out.
-> 
-> Ritesh: can you help here?
+Before commit 25f51b76f90f1 ("xhci-pci: Make xhci-pci-renesas a proper
+modular driver"), the xhci-pci driver handled the Renesas uPD72020x USB3
+PHY and only utilized features of xhci-pci-renesas when no external
+firmware EEPROM was attached. This allowed devices with a valid firmware
+stored in EEPROM to function without requiring xhci-pci-renesas.
 
-We did some more tests on our (Toradex) side and the issue is not
-related to the mentioned commit. We sent a first patch which tries to
-address the issue:
-https://lore.kernel.org/all/20250203105840.17539-1-eichest@gmail.com/
+That commit changed the behavior, making xhci-pci-renesas responsible for
+handling these devices entirely, even when firmware was already present
+in EEPROM. As a result, unnecessary warnings about missing firmware files
+appeared, and more critically, USB functionality broke whens
+CONFIG_USB_XHCI_PCI_RENESAS was not enabled—despite previously workings
+without it.
 
-Sorry for the false alert.
+Fix this by ensuring that devices are only handed over to xhci-pci-renesas
+if the config option is enabled. Otherwise, restore the original behavior
+and handle them as standard xhci-pci devices.
 
-Regards,
-Stefan
+Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
+Fixes: 25f51b76f90f ("xhci-pci: Make xhci-pci-renesas a proper modular driver")
+---
+ drivers/usb/host/xhci-pci.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
+index 2d1e205c14c60..4ce80d8ac603e 100644
+--- a/drivers/usb/host/xhci-pci.c
++++ b/drivers/usb/host/xhci-pci.c
+@@ -654,9 +654,11 @@ int xhci_pci_common_probe(struct pci_dev *dev, const struct pci_device_id *id)
+ EXPORT_SYMBOL_NS_GPL(xhci_pci_common_probe, "xhci");
+ 
+ static const struct pci_device_id pci_ids_reject[] = {
++#if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
+ 	/* handled by xhci-pci-renesas */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0014) },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0015) },
++#endif
+ 	{ /* end: all zeroes */ }
+ };
+ 
+-- 
+2.39.5
+
 
