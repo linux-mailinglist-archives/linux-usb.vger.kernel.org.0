@@ -1,141 +1,73 @@
-Return-Path: <linux-usb+bounces-20010-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20011-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 116F7A25EA0
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 16:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A6F9A25EBC
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 16:31:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 734871609C1
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 15:26:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99599161169
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 15:31:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BA7B209F2A;
-	Mon,  3 Feb 2025 15:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D298209F3E;
+	Mon,  3 Feb 2025 15:31:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="CvM/Es2i"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="EZfPpPIH"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8C9A204C04;
-	Mon,  3 Feb 2025 15:26:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8DEE2063C4;
+	Mon,  3 Feb 2025 15:31:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738596362; cv=none; b=QQGgqSCFQFxVw7qMeqzC4I2DhghYETExUATEjrtVb3ylsME7bsKZAj7iMz+NuyGb5NLV5dYadotDsT4XfTzfe6Zm9Ubge6cBJw0thoLCBgaGmdGC1AGZZ7cJJzbVWSIREGdneo3fR3Ixpe85FxCJClFRLYrX715IrH+q02IhlUY=
+	t=1738596679; cv=none; b=k1joQomVy+56ObRqJyj4BTE1FG297G+g0BJcHGE37p+ipg5YjzXMcpqWNqdvz+WvWIJY86WlCLilzs0jtFThejR/YpjyMiv8gYJ5N5p+jRqMZdbJr/9Uypu4/l0KQv5hNCr0BNO3zCbJ9+YSX4my1STtAXWJPMF8aG0ZD7dbVFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738596362; c=relaxed/simple;
-	bh=I9J//zaTMkgQl1PQBe/KCkPtbJtu1NQ1QIDIsizyG4g=;
+	s=arc-20240116; t=1738596679; c=relaxed/simple;
+	bh=DheBn+c11wMWYeaHy4BEGjpqWzXZyaq3iwHuxln6l0o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sLRnk6exoMo8gboq693+qTSm+xng+s5vvQSeka9BonhfbqS5XHxyxPKai0JrDSKSL21g0aXjrJCb24iM79Z+sgv9UMQgA6zZNyNSJKV0XYL7xAWPOjdO/neZe1DJIXNYCHxNgx9y40bo4sxTNK9xlEYawe1oRzvvUfOL3inNHZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=CvM/Es2i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0E43C4CED2;
-	Mon,  3 Feb 2025 15:26:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=PrczwMqL0anuaIOGLNIgpubQFjYh6r2NDmp+MrlmnX5xAlA3HQ4Z8KNHRhtnIzkWTYmA5N4ZN0lUWsQAAlS0AUHjVAPCmEySUH2v06wgieWaze2QSbzvxUWj48x9nGwF5amJjJtDEfTuafUwPosHCP49vQ1pVaO1Z2Ridr+ouhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=EZfPpPIH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F07BDC4CED2;
+	Mon,  3 Feb 2025 15:31:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738596362;
-	bh=I9J//zaTMkgQl1PQBe/KCkPtbJtu1NQ1QIDIsizyG4g=;
+	s=korg; t=1738596678;
+	bh=DheBn+c11wMWYeaHy4BEGjpqWzXZyaq3iwHuxln6l0o=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CvM/Es2it1v/17q9LLvh68nzNiPbCVMRmTysEhmn0dX2k7mNK2bYm5NVUU4ci1O+f
-	 W3fLl4KhpBcmgYnVRr7uIXnS4gpaYSc8hmYON1rfJJBU5wMlcxW3H13huTsIWuRbzC
-	 rvrn+kDt0/8Tem/q66caiehlv+VTivDojFw/5xtw=
-Date: Mon, 3 Feb 2025 16:25:58 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: nb@tipi-net.de
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
-	Ben Hutchings <ben@decadent.org.uk>, n.buchwitz@kunbus.com,
-	l.sanfilippo@kunbus.com, stable@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Restore Renesas uPD72020x support in xhci-pci
-Message-ID: <2025020336-filled-hardiness-e9f2@gregkh>
-References: <20250203120026.2010567-1-nb@tipi-net.de>
- <2025020307-charity-snowfield-c975@gregkh>
- <5965e4219781df26f733a2e93bed9f37@tipi-net.de>
+	b=EZfPpPIHwXEm3sWYqaU4CqwKqSRTghWNfigvpGyDenwJ4U6FXsoTSOu7x0fi2Msmx
+	 vCGUjlwm2/nWvDZBrIV5TsC4Xj1OQ95V4UNhFX32xPIRVUBN+kdAI4L+WrjxnUr275
+	 nUTCKHaRCQc+iD9AuK35AJLOxQi/+qYh/dXNU+Tc=
+Date: Mon, 3 Feb 2025 16:31:15 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Benson Leung <bleung@chromium.org>
+Cc: heikki.krogerus@linux.intel.com, abhishekpandit@chromium.org,
+	dan.carpenter@linaro.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, akuchynski@google.com,
+	ukaszb@chromium.org
+Subject: Re: [PATCH 2/2] usb: typec: thunderbolt: Remove IS_ERR check for plug
+Message-ID: <2025020357-chaos-battered-172b@gregkh>
+References: <Z5PstnlA52Z1F2SU@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <5965e4219781df26f733a2e93bed9f37@tipi-net.de>
+In-Reply-To: <Z5PstnlA52Z1F2SU@google.com>
 
-On Mon, Feb 03, 2025 at 02:00:55PM +0100, nb@tipi-net.de wrote:
-> On 3.2.2025 13:46, Greg Kroah-Hartman wrote:
-> > On Mon, Feb 03, 2025 at 01:00:26PM +0100, nb@tipi-net.de wrote:
-> > > From: Nicolai Buchwitz <nb@tipi-net.de>
-> > > 
-> > > Before commit 25f51b76f90f1 ("xhci-pci: Make xhci-pci-renesas a proper
-> > > modular driver"), the xhci-pci driver handled the Renesas uPD72020x
-> > > USB3
-> > > PHY and only utilized features of xhci-pci-renesas when no external
-> > > firmware EEPROM was attached. This allowed devices with a valid
-> > > firmware
-> > > stored in EEPROM to function without requiring xhci-pci-renesas.
-> > > 
-> > > That commit changed the behavior, making xhci-pci-renesas
-> > > responsible for
-> > > handling these devices entirely, even when firmware was already
-> > > present
-> > > in EEPROM. As a result, unnecessary warnings about missing firmware
-> > > files
-> > > appeared, and more critically, USB functionality broke whens
-> > > CONFIG_USB_XHCI_PCI_RENESAS was not enabled—despite previously
-> > > workings
-> > > without it.
-> > > 
-> > > Fix this by ensuring that devices are only handed over to
-> > > xhci-pci-renesas
-> > > if the config option is enabled. Otherwise, restore the original
-> > > behavior
-> > > and handle them as standard xhci-pci devices.
-> > > 
-> > > Signed-off-by: Nicolai Buchwitz <nb@tipi-net.de>
-> > > Fixes: 25f51b76f90f ("xhci-pci: Make xhci-pci-renesas a proper
-> > > modular driver")
-> > > ---
-> > >  drivers/usb/host/xhci-pci.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > > 
-> > > diff --git a/drivers/usb/host/xhci-pci.c b/drivers/usb/host/xhci-pci.c
-> > > index 2d1e205c14c60..4ce80d8ac603e 100644
-> > > --- a/drivers/usb/host/xhci-pci.c
-> > > +++ b/drivers/usb/host/xhci-pci.c
-> > > @@ -654,9 +654,11 @@ int xhci_pci_common_probe(struct pci_dev *dev,
-> > > const struct pci_device_id *id)
-> > >  EXPORT_SYMBOL_NS_GPL(xhci_pci_common_probe, "xhci");
-> > > 
-> > >  static const struct pci_device_id pci_ids_reject[] = {
-> > > +#if IS_ENABLED(CONFIG_USB_XHCI_PCI_RENESAS)
-> > >  	/* handled by xhci-pci-renesas */
-> > >  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0014) },
-> > >  	{ PCI_DEVICE(PCI_VENDOR_ID_RENESAS, 0x0015) },
-> > > +#endif
-> > >  	{ /* end: all zeroes */ }
-> > >  };
-> > 
-> > Have you seen:
-> > 	https://lore.kernel.org/r/20250128104529.58a79bfc@foxbook
-> > ?
-> Hi Greg.
+On Fri, Jan 24, 2025 at 07:40:38PM +0000, Benson Leung wrote:
+> Fixes these Smatch static checker warnings:
+> drivers/usb/typec/altmodes/thunderbolt.c:354 tbt_ready() warn: 'plug' is not an error pointer
 > 
-> Thanks, I must have overlooked Michal's patch when I initially stumbled over
-> the issue.
-> > 
-> > Which one is correct?
+> Fixes: 100e25738659 ("usb: typec: Add driver for Thunderbolt 3 Alternate Mode")
 > 
-> I guess both, as Michal is implementing the same slightly different.
-> 
-> My approach was to to keep the changes less invasive as possible and thus
-> make it possible to use pci_ids_reject[] for further exceptions in the
-> xhci-pci driver. In Michael's patch the list is specifically used for
-> blacklisting the Renesas devices and cannot easily be expanded for other
-> controllers. Either approach is fine with me, so lets move the discussion to
-> the patch which came first.
+> Signed-off-by: Benson Leung <bleung@chromium.org>
 
-Ok, can you test Michael's patch and respond with a tested-by if it
-works for you?
+Please do not put a blank line between "Fixes:" and your signed-off-by
+line.
 
 thanks,
 
