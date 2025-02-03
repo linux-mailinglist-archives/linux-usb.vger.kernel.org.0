@@ -1,64 +1,65 @@
-Return-Path: <linux-usb+bounces-20037-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20038-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20257A2638B
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 20:18:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88EFEA26392
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 20:18:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D9C0B164A00
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 19:18:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B5761882D6B
+	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 19:18:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0978211A0E;
-	Mon,  3 Feb 2025 19:15:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23B43212B31;
+	Mon,  3 Feb 2025 19:15:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OC6NkSa3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LYAHESxf"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA382116E9;
-	Mon,  3 Feb 2025 19:15:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76E2020E03A;
+	Mon,  3 Feb 2025 19:15:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738610132; cv=none; b=o7rKLQCnRucCXucQ5xzR2W8I7bgYYSTZW+D35Qg0QGXdUZCueHssFfVHPD4Ss5HnBodC9RZmh4ysH0D2b6hAosqaeSBkm+Mq4jdHfOONuo3cWTSJB7+3tBOAHlsWTBN2naKsZMSDv8E3IUX3j+xyDZ0HrLEKLekqvn4LG9X+X5Q=
+	t=1738610134; cv=none; b=kKcVnEHCtN2JJDMMvlWfG7D7CxakT3dNp02jBdAWc6SuASnPWDetT7bP6WFzSIM0SrSvoL1YyPYUJrTQG45aaTXNenWwlLdqWqkBl0nRngiEBY53W3f+Ilch5J8mgl3u5fNGbBERx6wCWvHxQyal15LrelWJLxTbBw81MB55RGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738610132; c=relaxed/simple;
-	bh=Bb2O5IEUWqL+nrQg8/ZHef0++5aE2GmOfzA4KTiFtw4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Cyw58IO93SpNcVG+/ZKlRkyJQe+Hday2Ujyvx8XZ8asMXOnINg6zxJU1r8b8JJ+94RJG8fkeskVwa9PX8H6wAomNmrB+b9152hhfm0dK8ejoEZD1CCXsOuFbWbc3j65Px2EqXi7cIm4dB4NNdDpFtdglItQY3/q3y81h5LcaWV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OC6NkSa3; arc=none smtp.client-ip=192.198.163.12
+	s=arc-20240116; t=1738610134; c=relaxed/simple;
+	bh=d+uS1eRC4uv8qsZyfw2IqkLl0y5gISjVkWAiQ1IdAaU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=byS7Z3SfbwmjIVMjZ7/vQyLPH2n8kq39OoUo90fI5k/+bNpaTk1NGwimGOZKCft9EoTtJyQjGy19hEJw7EFf7mkv5AfZzuavDvFnCt3H1IEwyTr4dlYQAP2HBoeiUQLEGzDNJYHTDPgrD142oRGBFawUrNhQYYB23cJKVyNxpyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LYAHESxf; arc=none smtp.client-ip=192.198.163.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738610131; x=1770146131;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Bb2O5IEUWqL+nrQg8/ZHef0++5aE2GmOfzA4KTiFtw4=;
-  b=OC6NkSa3p/uWfwtxnw/rLhUgjTSCSjrjdDcL/886b8FDkV/zpjEEez/E
-   2GH8xxVJbv3oQ5e2FCvHzOK7GbbKvfGCrCh3vsqe8KmllWs/GAieHrAPi
-   4DYl3ofnprSZqtyT6dpmBbsZfzXrGI7ZhDkqREmlzLX8PM98A9efrOlV6
-   9/FyLCD2T3wdPPX4G0q0IEI3SnQsqxHJ3AcPJmVQXh/yj21GAcMCHlFq4
-   rL9aiCXgLGj61Fr+nvCgDpS1YfjYlgQJFgGdxfL0NSwdJxOrq4ec3HPgc
-   JAHDn+ycMc2DTlmnInNcmzuVw0qVre3MiOACftPHVh2KXj154GRRShRWS
+  t=1738610133; x=1770146133;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=d+uS1eRC4uv8qsZyfw2IqkLl0y5gISjVkWAiQ1IdAaU=;
+  b=LYAHESxfaQ2EBQzFFhQXnvSrZSNd/n5N/p7p9nMHhicObyC1P5IXWioo
+   GdlXBW2FkXSQe5rQuz52yGCNG8jJjfRzGRg79avoWG2ThXEVsQw3TFxvT
+   nlIwXfUP0u0ZAmFJq1kiujXm8eqcpaiscy7ilHfMQOdMjrBYChZow/DMV
+   ZYoPu7KLERFeBGo+00jye4AqJw4cjtyOFQGJyvrQeyXxUFErqA9I3qoI6
+   faY4mFCs7yBPWn70X85tfPLFg9jb4JYJDM21xto+JaPx/ovN/TpfifnyF
+   9KuwChj4h8NuEmeBsSIjSw5MxAws34dr0fag8KGWjVfEo/scE3x5x2GYR
    Q==;
-X-CSE-ConnectionGUID: YRswE7PlR92/KPM0Vi0unw==
-X-CSE-MsgGUID: DR6MRFAGTweVIs5Cz3MByg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="43043114"
+X-CSE-ConnectionGUID: JBwQ4cliRHaiEbt0CiFJsg==
+X-CSE-MsgGUID: n3Z292rJTwmlmCWftAoGnQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="43043119"
 X-IronPort-AV: E=Sophos;i="6.13,256,1732608000"; 
-   d="scan'208";a="43043114"
+   d="scan'208";a="43043119"
 Received: from fmviesa007.fm.intel.com ([10.60.135.147])
   by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 11:15:30 -0800
-X-CSE-ConnectionGUID: 8hw76QXeRwSsXhwdmC8xQQ==
-X-CSE-MsgGUID: AjTjn5zCRMizURVqhFUcCw==
+X-CSE-ConnectionGUID: O1XQPjtoSwmwyfT1n0vA2A==
+X-CSE-MsgGUID: 8QqbGjarSZe1lLH1JTmVMA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,256,1732608000"; 
-   d="scan'208";a="110266550"
+   d="scan'208";a="110266548"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmviesa007.fm.intel.com with ESMTP; 03 Feb 2025 11:15:27 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id B7BCC23F; Mon, 03 Feb 2025 21:15:25 +0200 (EET)
+	id C5D47164; Mon, 03 Feb 2025 21:15:25 +0200 (EET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
@@ -71,47 +72,52 @@ Cc: Rob Herring <robh@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	Ferry Toth <fntoth@gmail.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v2 0/3] usb: dwc3: Avoid using reserved EPs
-Date: Mon,  3 Feb 2025 21:10:52 +0200
-Message-ID: <20250203191524.3730346-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2 1/3] dt-bindings: usb: dwc3: Add a property to reserve endpoints
+Date: Mon,  3 Feb 2025 21:10:53 +0200
+Message-ID: <20250203191524.3730346-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
+In-Reply-To: <20250203191524.3730346-1-andriy.shevchenko@linux.intel.com>
+References: <20250203191524.3730346-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Some of the endpoints may be reserved by hardware for different purposes,
+e.g., tracing control and output. This is the case, for instance, on
+Intel Merrifield and Moorefield platforms that reserve a few and USB driver
+may not use them for the regular transfers. Add the respective bindings.
 
-On some platforms (Intel-based and AFAIK ARM-based) the EPs in the gadget
-(USB Device Controller mode) may be reserved for some special means, such as
-tracing. This series extends DT schema and driver to avoid using those.
-Without this the USB gadget mode won't work properly (those devices that
-"luckily" allocated the reserved EPs).
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ .../devicetree/bindings/usb/snps,dwc3-common.yaml     | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-Ferry already tested the previous versions, but I ask him again to
-re-test this version which is significantly rewritten. I have not
-applied given tag just to be sure we got it carefully tested again.
-
-Changelog v2:
-- added minItems to the schema (Rob)
-- revisited code and add NULL check to avoid crashes (Thinh)
-- rewrote helper function to return error to the user if parsing fails
-- elaborated in the commit message why we need this quirk (Thinh)
-- addressed miscellaneous style issues (Thinh)
-
-Andy Shevchenko (3):
-  dt-bindings: usb: dwc3: Add a property to reserve endpoints
-  usb: dwc3: gadget: Add support for snps,reserved-endpoints property
-  usb: dwc3: gadget: Avoid using reserved endpoints on Intel Merrifield
-
- .../bindings/usb/snps,dwc3-common.yaml        | 11 ++++
- drivers/usb/dwc3/dwc3-pci.c                   | 10 ++++
- drivers/usb/dwc3/gadget.c                     | 60 +++++++++++++++++--
- 3 files changed, 76 insertions(+), 5 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
+index c956053fd036..71249b6ba616 100644
+--- a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
++++ b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
+@@ -65,6 +65,17 @@ properties:
+       mode.
+     type: boolean
+ 
++  snps,reserved-endpoints:
++    description:
++      Reserve endpoints for other needs, e.g, for tracing control and output.
++      When set, the driver will avoid using them for the regular USB transfers.
++    $ref: /schemas/types.yaml#/definitions/uint8-array
++    minItems: 1
++    maxItems: 30
++    items:
++      minimum: 2
++      maximum: 31
++
+   snps,dis-start-transfer-quirk:
+     description:
+       When set, disable isoc START TRANSFER command failure SW work-around
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
