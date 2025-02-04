@@ -1,78 +1,128 @@
-Return-Path: <linux-usb+bounces-20071-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20072-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E336A26E9C
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 10:37:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4E34A26EDB
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 10:55:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6B343A575A
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 09:37:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A48B618872A5
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 09:56:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81B02080D2;
-	Tue,  4 Feb 2025 09:37:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 395982080C6;
+	Tue,  4 Feb 2025 09:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PxLdsvrQ"
+	dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b="dQ8p8nQ4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from common.ash.relay.mailchannels.net (common.ash.relay.mailchannels.net [23.83.222.38])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469A2207DE0;
-	Tue,  4 Feb 2025 09:37:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738661827; cv=none; b=frfFUpjMrQezTGYs6UWhqxf/cp0ezV5tr+u5Rjlwu/adGGZro3oXMZwWls+p8fRVSAO+W9OrrOkrdZLTsMTYKl8Ghi3VDd4KSwW66WXAZgrDXrefwKUJUB3lMCPwQO9SQl/0LfHFugt5ILLkleoqZK/EWQGZUfl2cWIeVyIMmug=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738661827; c=relaxed/simple;
-	bh=eyaVZHTYGbJ6ZS9OHR2glMbKAKPAhozNNeeFjrOvYsg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UCagvL9CrwR7FM9SMKe/m4RD4R8LjgGP7I9Nh2851CDt6eDn7XkOwlC89wTumV74N+eLMRAQsTOTBH1X3s5higtmg4p8BqRPp976DLhB6KqXH4Wo8/6uth42pQ58CQK7F2DskHWFfnqRrYPQJhDYjBRWA+H32mg+UA5vE8Po06g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PxLdsvrQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AA9C4CEDF;
-	Tue,  4 Feb 2025 09:37:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738661826;
-	bh=eyaVZHTYGbJ6ZS9OHR2glMbKAKPAhozNNeeFjrOvYsg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PxLdsvrQv79XSMvRC2i1eW8ttVj6HhGKcBoaAt4pP3RakewsYMOuEGj06fI4CW0Ie
-	 1gKx6h9IpgfsXao1H2LP6tOFXb52fojkr2CR6gyTII1C7YEdYn8dxkIc8EngJoOzY5
-	 6GWiZGzx28wq9yeT3/m9KoYNehrnI7jJnWiBf6he10ooDaDHQyNnJBq3IQiC6J3Iox
-	 Es3RBW5JW67lR3WeU2aZFJUz6xEfknFWEuZbrlahxO9lTCCPX6eRwaGazm0sD2l5b2
-	 yeXL4C04PMaRQ1iMAcU4cZeoTThnSiFgQCHsXd2Hu460xeRv0jNtYupxs/5vex16EH
-	 mbjNpJCnZTn2g==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tfFMl-0000000084B-24Kr;
-	Tue, 04 Feb 2025 10:37:11 +0100
-Date: Tue, 4 Feb 2025 10:37:11 +0100
-From: Johan Hovold <johan@kernel.org>
-To: "Chester A. Unal" <chester.a.unal@arinc9.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dwayne Du Preez <dwayne.dupreez@xpedite-tech.com>,
-	Alexander Scholten <alexander.scholten@xpedite-tech.com>,
-	Zenon van Deventer <zenon@xpedite-tech.com>
-Subject: Re: [PATCH v2] USB: serial: option: add MeiG Smart SLM828
-Message-ID: <Z6Hfx4KBeVHCNQVS@hovoldconsulting.com>
-References: <20250124-for-johan-meig-slm828-v2-1-6b4cd3f6344f@arinc9.com>
- <6e2c4db7-1325-473b-9999-2b1ada418119@arinc9.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 479FD13A258;
+	Tue,  4 Feb 2025 09:55:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.222.38
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738662951; cv=pass; b=VNoDfOTukyvhTiYltFg08Sw1Z+aWZdCijuLCm8KkLRWK2Rm0sPXGbBwbyKAZ8Y30z+3V5kRlc0oda5vp3tJbWY+ESQOet78ljpKvF8QSWlE9uz9FfQAU9oSKiPuFYyOyjFBPd+31M5zhRpZLy229mo9tgGNGmi9Lb1XDMOBMBek=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738662951; c=relaxed/simple;
+	bh=leCM//w8m7SIGivS0wwRw7YlTdHUZPVYAQ52is56yZE=;
+	h=Message-ID:MIME-Version:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:Date; b=J1C8HNnscgYcK5eREMMU8eZgq4D+vaNJlar0lH49kNQovAINoWO/g0j21KOb6q0CtGZVhU5jdG3zaoWsar2idN+tT6Z8NNGu2FE8prpHECCHLek/O0sHT4SOTQdsbN/HNX0unZxYPACX2TZKhywF3NcqBSON3m+QIzjb4gK1p98=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com; spf=pass smtp.mailfrom=arinc9.com; dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b=dQ8p8nQ4; arc=pass smtp.client-ip=23.83.222.38
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arinc9.com
+X-Sender-Id: hostingeremail|x-authuser|chester.a.unal@arinc9.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 614E88C3422;
+	Tue,  4 Feb 2025 09:48:31 +0000 (UTC)
+Received: from fr-int-smtpout9.hostinger.io (100-122-225-139.trex-nlb.outbound.svc.cluster.local [100.122.225.139])
+	(Authenticated sender: hostingeremail)
+	by relay.mailchannels.net (Postfix) with ESMTPA id A419B8C19D5;
+	Tue,  4 Feb 2025 09:48:23 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1738662511; a=rsa-sha256;
+	cv=none;
+	b=ko83ZFeJZCLnfCNv8oLWWhlRyLlzi0S5YK41WCDB0nKycAAb4ZGNeCHd2k7Q+gMYT8fQy/
+	E3kYSa9/WC4+Nm2LIg57h6c0lMvAJRMxALuLNvbg9yRrWMOXEWTHJw7b2bl2HgV0Aw18g8
+	qZAyXdOA+PFBqNnF5P7LewBFikSsw1S3v45ubhPtGxyFbhpjp/YJhnCty75x+iNl7nLxsZ
+	YjRCrgNVPyvnvhI00oz78Hv/LOTyRATZ9pPhUb1+NoYlnDdcsZ9v0L0ScdbHxS5sk9vvKv
+	7KMFVKXh/4cvzyTqVB7R9zvzNkvdeEQS7pzJeiSvQoqXCp5GWOSY/0sfTl7nqg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1738662511;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=dmUwV1+lkQOftGoMtu4xLI3tP41KkWphDDQnQXVrr6k=;
+	b=RRBoAm1LDbyKoK8e2rSN/1vAJIDb2XckyysnmkAy1D0rpiwqwtCoj2BfCwMob28GhZOHod
+	mCvK39dX0PVenyzy/TXJRIGbpRqKuLFp6y3rAL3DOf6L9uh3AxieeGl3KVi8CtpdvTEYCo
+	P+Ng1Hkl26s04dgvYRNNZoNQNEbuh0Gr0mZTZ/eRTyq3TEg5GSZcFnQj/fcXmKYxXuS2pE
+	TUwbohgBiQUFrNeYnJqbvXFYwtPSLxbHVPvTxc6H4smuNPhMTLnWzHzdooTInaIPNGgfxl
+	FVnEbmXmPTsZZRTzP02+agUbw0JXgULd6X2v3Y+k3z58LVxdXCkJwvjfP2pxsA==
+ARC-Authentication-Results: i=1;
+	rspamd-854f7f575d-2jbtq;
+	auth=pass smtp.auth=hostingeremail smtp.mailfrom=chester.a.unal@arinc9.com
+X-Sender-Id: hostingeremail|x-authuser|chester.a.unal@arinc9.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: hostingeremail|x-authuser|chester.a.unal@arinc9.com
+X-MailChannels-Auth-Id: hostingeremail
+X-Turn-Hook: 36a03b8123b2479a_1738662511257_1804304046
+X-MC-Loop-Signature: 1738662511257:883016486
+X-MC-Ingress-Time: 1738662511256
+Received: from fr-int-smtpout9.hostinger.io (fr-int-smtpout9.hostinger.io
+ [89.116.146.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.122.225.139 (trex/7.0.2);
+	Tue, 04 Feb 2025 09:48:31 +0000
+Message-ID: <55228e28-9370-4eca-8ea9-cc836a066254@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com;
+	s=hostingermail-a; t=1738662501;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dmUwV1+lkQOftGoMtu4xLI3tP41KkWphDDQnQXVrr6k=;
+	b=dQ8p8nQ4zNtwbeWCLAgFD2mJ4ZKSE5vPtWGmXv3xFEGxRIeowT0pJhoXNZRLifJ0nQbwwO
+	ieFaTGjhr+A9E8n0u7K41hxphVBNZ73HzE+HkFBfqn4OJoUstmhi0+h/ladVfCSbHXzocN
+	z2wSihbR8UNpYABN8bElt2HoVgkn6q/CqeOSZSXJKFgkrgxh8UgTmKnAoEOaVu65IHjUeU
+	YUC22wDx8w5qFIuUBdTOviofFlZo4TYl87uEr1iL+rXOlqAN4i+ilaEYZkzegeMDI3AfXE
+	N5CYE7groeWOKfXYorhxrXb7nXyiPgz3CfPDPbaoot2zdb4Rb3bDJnN66lAyCQ==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6e2c4db7-1325-473b-9999-2b1ada418119@arinc9.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] USB: serial: option: add MeiG Smart SLM828
+To: Johan Hovold <johan@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ dwayne Du Preez <dwayne.dupreez@xpedite-tech.com>,
+ Alexander Scholten <alexander.scholten@xpedite-tech.com>,
+ Zenon van Deventer <zenon@xpedite-tech.com>
+References: <20250124-for-johan-meig-slm828-v2-1-6b4cd3f6344f@arinc9.com>
+ <6e2c4db7-1325-473b-9999-2b1ada418119@arinc9.com>
+ <Z6Hfx4KBeVHCNQVS@hovoldconsulting.com>
+Content-Language: en-US
+From: "Chester A. Unal" <chester.a.unal@arinc9.com>
+In-Reply-To: <Z6Hfx4KBeVHCNQVS@hovoldconsulting.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Tue, 04 Feb 2025 09:48:18 +0000 (UTC)
+X-CM-Envelope: MS4xfK8s6hRN5GvcZHLwc9C1QdII8ajxror0DIA13KNqBwq/xqgth+3+M7vawk5dr3Lv5mgP+l0d2bRQWEN6fT06Hs4onf1jgLYvCb/g7sXtaXJJ0DY/kp1y Xa+aRL+n6BoPSjZbqnixnr1WqRW6GOmCAKlPtp+EvjGfcOJMyy65/uLgmVy9zb+wIUwm+N0F7HjuDn6RGfk6VOiUn1eltSwpbOS0j2+VQYp425KXxg14EZqW TsYYXmkhrhKWLJUTYa0t95uDjYBGO6mcqudzV9Mk266Gv2D94AL+MI/YQIppXqaDkAikY3A3Ryl3f97Rzjm8JnOtrFtirjcy9G905yHSx5+ldwDl+FL5GyjG sQImDIyPwMkjM8swyZjdRUdpVt0izw05Jg0dhZdO6O5DXCmJmQ6RStlXnL36EMML08kbHBCb5aQ6TIX7qMLQfwshMer2LQbQPr6lmGIajEMyZkrNU4U=
+X-CM-Analysis: v=2.4 cv=PMNd+uqC c=1 sm=1 tr=0 ts=67a1e265 a=xK2r8zoKF9vSrBIo2YuqYg==:117 a=xK2r8zoKF9vSrBIo2YuqYg==:17 a=IkcTkHD0fZMA:10 a=A6Sy_z46XarSiW2s0hoA:9 a=QEXdDO2ut3YA:10
+X-AuthUser: chester.a.unal@arinc9.com
 
-On Tue, Feb 04, 2025 at 09:15:02AM +0000, Chester A. Unal wrote:
+On 04/02/2025 09:37, Johan Hovold wrote:
+> On Tue, Feb 04, 2025 at 09:15:02AM +0000, Chester A. Unal wrote:
+> 
+>> A reminder for this patch to be applied.
+> 
+> You submitted the patch during the merge window which ended two days
+> ago. It's still in my queue, don't worry.
 
-> A reminder for this patch to be applied.
+Thanks a lot for keeping an eye on it, Johan. Keep up the good work!
 
-You submitted the patch during the merge window which ended two days
-ago. It's still in my queue, don't worry.
-
-Johan
+Chester A.
 
