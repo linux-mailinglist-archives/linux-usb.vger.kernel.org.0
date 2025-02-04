@@ -1,107 +1,123 @@
-Return-Path: <linux-usb+bounces-20053-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20054-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32632A2681D
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 00:57:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28158A26821
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 01:01:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B91CD16526A
-	for <lists+linux-usb@lfdr.de>; Mon,  3 Feb 2025 23:57:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E28B8188625F
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 00:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E4EE21148B;
-	Mon,  3 Feb 2025 23:57:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BC7B17583;
+	Tue,  4 Feb 2025 00:01:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VMrvn6C6"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nG0wC5pQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f74.google.com (mail-vs1-f74.google.com [209.85.217.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2952433D9
-	for <linux-usb@vger.kernel.org>; Mon,  3 Feb 2025 23:57:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64AED25A634
+	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 00:01:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738627068; cv=none; b=JM2Az9EupYgc0M2fx9rdD3ETCryIcRe0jEpnav/XkQ8gNu/otAMjgkX+VVCPEaYwx8/Q20QHE11dQZ3JFFLPwbUrv53Xo4ENWvrmBV1z9EMP/P8KVMFfh1HxpeDWO7UcZp5qBGEKfGjlBX/ogUk2xoMBHX3WTNOIxpnNdYgPtC4=
+	t=1738627269; cv=none; b=cLKhNd8+4lVItvMOpXZvaGHESUvUpN70XNhdgw/mc4rHI/WqsS77MladBCFHOb+6kAeHPfUpsBjc1Xs/LxlQXqz2WsSjmM6S0JKbvonzvTA66StJgw/VZwFq135eM44/6IL4JZSTuVYV8/PhnNBumyAImjmicEvW3KY3ohzOPp8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738627068; c=relaxed/simple;
-	bh=nBB7oz3ua9loVwHQe8siOT7x+e/IyZvBAZ/PU0h8rdw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LwDJgF50eukK3tYQo5pgyQiqiblx0ZG4gvIflrF4379LYuZ3Kmj1NLfqR+6aQ958JZd/6HKi3IdlDbN3b0FBfUCh8/aTEKNbI2sx6fD9fz4zYUgrZxYBZJYT4t/oWg5tSNBq1/1X/+HB52FRNM0zFt2JlyjGHTPMedWgUH7qSNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VMrvn6C6; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <c8c699f7-bf9b-4e36-910e-c6f1c7092543@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738627063;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UbnqC4ekamBqecRRMpHYSlKhj+7M062OAmXaaMk8fD0=;
-	b=VMrvn6C6SgEHZv6w3pg5hOZO9g9oWMqPSI5wfZ19rOL85UAY/wzkbRone1FkpC9d508YwC
-	qzyneSeCGqx7f2LrWeXPpD7nAFpjTu79J+2qyjY/NbDbyRyA46nKiGbgtQEZ0JLf7ZcYUy
-	hidUg9ViA+WPgckjjBjQbkrSxPvPgzk=
-Date: Mon, 3 Feb 2025 17:57:39 -0600
+	s=arc-20240116; t=1738627269; c=relaxed/simple;
+	bh=ff8sQkJWTl2JSMgbPndRNr5+dCrOQHKJ4z/HtRI/rb8=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Content-Type; b=IQt4Za+jAWQEk50RUTfbaL499o68bxOLIss08wwTx+mGRqgCXtmDLoFKVUej57w77cM1n2cQi73Lj4ld6Mnpzros23TcGcShkKH6NWuvQrYJzUUoNK/3f7j8V+CgQsKeIuqjb90Ent4TBtYdu+Npc8h/udXtwB/HAF/rPy1lrYA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nG0wC5pQ; arc=none smtp.client-ip=209.85.217.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--royluo.bounces.google.com
+Received: by mail-vs1-f74.google.com with SMTP id ada2fe7eead31-4b68cedd094so540289137.1
+        for <linux-usb@vger.kernel.org>; Mon, 03 Feb 2025 16:01:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738627266; x=1739232066; darn=vger.kernel.org;
+        h=to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=em5AizfvgfoSk/7IpVvE0FGzS3dPFqDA9+Q7W+ZArzY=;
+        b=nG0wC5pQQuDvk3SJdeeEg2XdqbqM8bigpFbsvDB+Nd83QfeiNjkhCnTuxYDjkGjtjs
+         i2vW57UlcircRpadYK8sFPMGtw7G7iyIHCjF3rLJ4yGs4mJdarmv8W2zMELsSda0R5Jq
+         QmXx7bL1Ggmfy9DjfU7u5ldn/98M1X0whjRnGm10vPf637K3O8ynwseKxIkGvr+WshUF
+         uuh8bWnuwcrvSdzkqq0b53xvgtl05qqc6PZkpoacRbX86ouoloxmaBlYy1F4Qunh8JRl
+         m/hjhMm1Vncocdb+7eegHzpyD9jAdqJkU9S5uqpqkEK2rUibyemwsqJVOxV99STe6nBN
+         a8AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738627266; x=1739232066;
+        h=to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=em5AizfvgfoSk/7IpVvE0FGzS3dPFqDA9+Q7W+ZArzY=;
+        b=XGYWeLsATM9wVgwF44CutdeeLhUF5XKev9rvVCfmv8pb1ymwTzhw90UBreDwXQPLLL
+         0yvkP9aZaymQ7YWBGa9Dafrd6GrxwSOeDd/vhK9Yv6hIZDZQCxsfRw8VXmxLLgwD46IQ
+         QMGJLBGe4y2gce6V/TzKg2ay9poOs3Nv7iBWaYmG2diALKwGm1rAxH9BxdQmRiTAYwoV
+         5idU2fbi+oAdXg7ihc+wqZhKlR2fw4CiT9dMB14Y+8CEwAKkYh/miLinZB9RcV1GAgcy
+         L2mtH5zbm1bnyUUOG4jqIdRuIdLQ974yQCNcMZe8d8Q6u4PY8Zlu44kRcV93lQ+TfohI
+         umFA==
+X-Forwarded-Encrypted: i=1; AJvYcCXMcoqmdRdxyEsH3Wn2lWxU12Maw6oI7By+2Mq1DGbWKTNeuRZkYE3FRyNqdHPHoEYmT8ruHOraP+U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwUfE1SdjYWS6p1y3S6GGIuZLjiAhu8oVK8SXmpfgpOFu236mqe
+	leLH8eYv0bs1xA3t2z+6r9gM8YdqShMVRQ/iWJDy0nA7EWalw89r5Ri7u7y66PwoPtp9hZ1SWjr
+	EEA==
+X-Google-Smtp-Source: AGHT+IHIOngP72sVGL2qIXaFFJGsq1inwYzgOoTmPQKWYL3v02tNlviZN6iQtCHrbLQVquoZ0I5+7WkKGUA=
+X-Received: from uamz12.prod.google.com ([2002:ab0:22cc:0:b0:866:d46b:310d])
+ (user=royluo job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6102:3596:b0:4b2:bceb:1ac6
+ with SMTP id ada2fe7eead31-4b9a5231b4bmr18260823137.17.1738627266246; Mon, 03
+ Feb 2025 16:01:06 -0800 (PST)
+Date: Tue,  4 Feb 2025 00:01:02 +0000
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH v9 0/5] Support system sleep with offloaded usb transfers
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
- mathias.nyman@intel.com, stern@rowland.harvard.edu, perex@perex.cz,
- tiwai@suse.com, sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com,
- ricardo@marliere.net, lijiayi@kylinos.cn, quic_jjohnson@quicinc.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-sound@vger.kernel.org
-References: <20250117145145.3093352-1-guanyulin@google.com>
- <943a7b09-8e77-4813-810a-18fea0e61482@linux.dev>
- <CAOuDEK3aip9SLCUPOzpVPwx-O4rmF-+sQrF4GJasGPBzV=qJdg@mail.gmail.com>
- <e5b1c3bf-4457-4859-92fc-785f7d6037fa@linux.dev>
- <CAOuDEK2u509kNjyL6qm27QgvtoCscRcsLixW=W8ABz2NF8A-tw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
-In-Reply-To: <CAOuDEK2u509kNjyL6qm27QgvtoCscRcsLixW=W8ABz2NF8A-tw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.48.1.362.g079036d154-goog
+Message-ID: <20250204000102.3989779-1-royluo@google.com>
+Subject: [PATCH v1] usb: gadget: core: flush gadget workqueue after device removal
+From: Roy Luo <royluo@google.com>
+To: royluo@google.com, Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	andre.draszik@linaro.org, elder@kernel.org, stern@rowland.harvard.edu, 
+	crwulff@gmail.com, paul@crapouillou.net, jkeeping@inmusicbrands.com, 
+	yuanlinyu@hihonor.com
+Content-Type: text/plain; charset="UTF-8"
 
-On 2/2/25 20:57, Guan-Yu Lin wrote:
-> On Tue, Jan 28, 2025 at 11:22 PM Pierre-Louis Bossart
-> <pierre-louis.bossart@linux.dev> wrote:
->>
->> I am not following, sorry.
->>
->> Is the desired outcome to
->>
->> a) prevent the system from entering S3 if there is an active USB audio offloaded stream?
->>
->> or b) allow offloaded transactions even when the system is in S3?
->>
->>
->> which is it?
->>
->> a) would be rather interesting, but currently we don't have any such behavior supported. When the system enters S3 all audio stops. The stream will resume when the system goes back to S0. Do we really want the battery to drain in S3?
->>
->> b) seems rather complicated, once the on-going DMA transfers complete then who's going to refill buffers for the USB offloaded streams? Allowing the lowest level to operate even in S3 is only a small part of the puzzle, someone's got to provide data at some point. Unless the data is generated also by a side DSP having access to mass storage or wireless interfaces?
-> 
-> Thanks for the question, the intent of our proposal should be (b), to
-> allow offloaded transactions even when the system is in S3.
-> In our design, the DSP wakes the system before the buffers are fully
-> drained. This patchset enables the USB controller for offloaded
-> transfers during system suspend (S3). To be precise, this patchset
-> focuses solely on enabling the USB controller in S3 and does not
-> include other necessary components for continuous offloaded USB
-> transfers. I'll revise the commit message/cover letter to reflect
-> this.Thanks for highlighting the potential ambiguity.
+usb_del_gadget() can lead to new work being scheduled in gadget->work
+workqueue. This is observed, for example, with the dwc3 driver with the
+following call stack:
+  device_del()
+    gadget_unbind_driver()
+      usb_gadget_disconnect_locked()
+        dwc3_gadget_pullup()
+	  dwc3_gadget_soft_disconnect()
+	    usb_gadget_set_state()
+	      schedule_work(&gadget->work)
 
-Thanks for the precision.
+Move flush_work() after device_del() to ensure the workqueue is cleaned
+up.
 
-It was my understanding that anything above S1 could incur a hardware/software latency of two seconds or more to go back to S0. That would imply a buffering scheme that's significantly larger than usual offloaded solutions. In "typical" offload implementations it's rare to go beyond 100s of ms, since at some point you run into user-experience issues when applying volume changes or when changing tracks. It's usually a no-go if the user has to wait for a perceivable amount of time while the buffers drain.
+Fixes: 1ff24d40b3c3 ("usb: dwc3: gadget: Fix incorrect UDC state after manual deconfiguration")
+Signed-off-by: Roy Luo <royluo@google.com>
+---
+ drivers/usb/gadget/udc/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Not to mention that quite a few platforms no longer support S3, since 'Modern Standby' aka "S0 Low Power Idle" or 's2idle' was introduced in the Windows 10 days S3 became largely a legacy feature gradually dropped since no one really uses it.
+diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+index a6f46364be65..4b3d5075621a 100644
+--- a/drivers/usb/gadget/udc/core.c
++++ b/drivers/usb/gadget/udc/core.c
+@@ -1543,8 +1543,8 @@ void usb_del_gadget(struct usb_gadget *gadget)
+ 
+ 	kobject_uevent(&udc->dev.kobj, KOBJ_REMOVE);
+ 	sysfs_remove_link(&udc->dev.kobj, "gadget");
+-	flush_work(&gadget->work);
+ 	device_del(&gadget->dev);
++	flush_work(&gadget->work);
+ 	ida_free(&gadget_id_numbers, gadget->id_number);
+ 	cancel_work_sync(&udc->vbus_work);
+ 	device_unregister(&udc->dev);
+
+base-commit: f286757b644c226b6b31779da95a4fa7ab245ef5
+-- 
+2.48.1.362.g079036d154-goog
+
 
