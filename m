@@ -1,73 +1,76 @@
-Return-Path: <linux-usb+bounces-20097-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20098-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEEDDA27238
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 13:52:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34F1FA27239
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 13:52:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C5667A14F4
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:51:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DB6E77A20B3
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:51:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED0B211A04;
-	Tue,  4 Feb 2025 12:43:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30F4B211A0D;
+	Tue,  4 Feb 2025 12:43:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bajIi58d"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="U98BwEgx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7099D20FAA9
-	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 12:43:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE5421148B
+	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 12:43:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738672991; cv=none; b=BBAdWJFKO4rOIIevzNYocG2jVbMdb+TPOFnyqVUrgW+cRh3xPyXsTrh0Y4KLPwxN+dFFVC6T4BJWYP6TT+8dhsvzegWpjSu39cE6NFJFQdUsO9Ta6f0Dpy7E3RCIcuuuaF9tuJJt5X0Xd3BxYHa4xH4rey8d9uKwOIJvx5f5uy8=
+	t=1738672992; cv=none; b=qeEzecrdx822hw9fVWx6txoOe1aIRGzDdE1lNdskCHgKE7BI9p95sl9nCdkxnv7h5ub63yLnIfhqCntErCKVrO67rywkmoSQ6h0rf3V78TeSRPUodGmMsVah6JKD2cDkWvroAp8RE/wZQICT2yrVWMn4pnSiR4Imcb716FxCcqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738672991; c=relaxed/simple;
-	bh=dLQYmWmgkr5nfovi012GKK6Jqa9cnZC8n3P4Mqg4NXw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VdAoTHZ5JAS9GsXuORKKfIESfNFVwO3ritAWXNOM62WyqW2VteEBzflFMgF8vgMA3jfdgUmSbsg3rlgYxuU4CX3FmW9irFaEFFP7q1+AL2b1RoZZFqC7VzInIjC/X0drH+vcCcQ/uKFm2QryQXUhChiUCl6S44PEChis4g0NDLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bajIi58d; arc=none smtp.client-ip=192.198.163.8
+	s=arc-20240116; t=1738672992; c=relaxed/simple;
+	bh=CYDaA7d4PwPh098cA/3dKylmEhIZ0wRu7OBUgVG85HA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=OUpQ94EWbRKv/dd2ZTsiWCQtfkg7XarmU7uQp1eJzRSNuCC9+Rv1SRkAfuL457BEp3VlIXDZPz6oDQIPZdwkt/qYSiCpiXbgHhK57Es942lP3RGQI1hA7rj3dlBV+7gxc40DRYJhwwfsLf0UBCTaCkR83HbeB6zrN0upg6CN/SI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=U98BwEgx; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738672990; x=1770208990;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=dLQYmWmgkr5nfovi012GKK6Jqa9cnZC8n3P4Mqg4NXw=;
-  b=bajIi58dcGyVXcOxuz+vUU6Nbk8ge02/eO/sZdoZ43ztnO9KSC0oWiBv
-   31MDCx3RQvTYMBLeh/B8jle3YaRNf7Uj8PIMArvQf04wEipH2jbSn1TAK
-   wwOVWdzlRwlA2/7K3vNvTFYe6ycyBH/VDPO8zr/OIelQ9//4kx8X08b4i
-   GHNZF7k5GAND5wAhyTSBbaLV64WvZUFoauLR7JW7/7+YvQimdgiOHNmPH
-   NqQ4R+WLtRU4ifQUxIbjeS/GZGAkW6n4CderGI0Wm/KUcWq46ALDzsyLo
-   lHCr4JEJAgleOw8Y2juB8YGZF4PQ0CUS3I+ZWBATKbBrZx0BAtVZoMqn+
-   A==;
-X-CSE-ConnectionGUID: aWX4CKrBTKSmIdSVrFGg6g==
-X-CSE-MsgGUID: krTn3qe+SZW7qC5BwaI3RQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="56734068"
+  t=1738672991; x=1770208991;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CYDaA7d4PwPh098cA/3dKylmEhIZ0wRu7OBUgVG85HA=;
+  b=U98BwEgxFKwSiu/Y6vVqrnaIHelXedD+1+5ARLqHPcdwP1iiuQPlNPb9
+   RwtaWQMcKZB7Ic+WLZqZnWERpdJleKs1f23poWvoBmLZcGFsH19/z802h
+   kgin3QUvzbqwWXL/5wQcMYumSwQlmNCwMLHSLl3dRLDBrmBB78Go3kTHy
+   eSB5jf2IcVWNX4suh3a+f0f8JFMr9aC+coIK3hLK0uoBpabbZDVISY4PW
+   8q0j42DIGpWWcq99pyvpyvdP59a8E/tPbyHQYgN7PkPiPcWg5EHWKXq+J
+   zXtrTFw/BJomhVlkiEsO+nJkzszZv4Bxfkso3R128un8mNAdWbD1Czmrd
+   Q==;
+X-CSE-ConnectionGUID: 9tZ99GK2QpWCGN9USt7XQA==
+X-CSE-MsgGUID: pnL6HG3cSrGFxwkAylAB/g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="42945890"
 X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
-   d="scan'208";a="56734068"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 04:43:09 -0800
-X-CSE-ConnectionGUID: dr0LLECSSIiDjNF0pT1F2Q==
-X-CSE-MsgGUID: CUkl09MYQ3yC9tqJAdSkCw==
+   d="scan'208";a="42945890"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 04:43:11 -0800
+X-CSE-ConnectionGUID: vMJMnMtXRnOoru20R9Fblg==
+X-CSE-MsgGUID: Vgh7dINtSz+jZbP9RsttDQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
-   d="scan'208";a="111158488"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="133827113"
 Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa009.fm.intel.com with ESMTP; 04 Feb 2025 04:43:07 -0800
+  by fmviesa002.fm.intel.com with ESMTP; 04 Feb 2025 04:43:09 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1058)
-	id 581E7299; Tue, 04 Feb 2025 14:43:06 +0200 (EET)
+	id A8D23353; Tue, 04 Feb 2025 14:43:07 +0200 (EET)
 From: Niklas Neronin <niklas.neronin@linux.intel.com>
 To: mathias.nyman@linux.intel.com
 Cc: michal.pecio@gmail.com,
 	linux-usb@vger.kernel.org,
 	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH v3 0/2] usb: xhci: page size improvements
-Date: Tue,  4 Feb 2025 14:41:42 +0200
-Message-ID: <20250204124145.3998098-1-niklas.neronin@linux.intel.com>
+Subject: [PATCH v3 1/2] usb: xhci: correct debug message page size calculation
+Date: Tue,  4 Feb 2025 14:41:43 +0200
+Message-ID: <20250204124145.3998098-2-niklas.neronin@linux.intel.com>
 X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250204124145.3998098-1-niklas.neronin@linux.intel.com>
+References: <20250204124145.3998098-1-niklas.neronin@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -76,36 +79,45 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Correct off-by-one page size debug message.
-Set page size to the xHCI-supported size, instead of 4KB.
+The ffs() function returns the index of the first set bit, starting from 1.
+If no bits are set, it returns zero. This behavior causes an off-by-one
+page size in the debug message, as the page size calculation [1]
+is zero-based, while ffs() is one-based.
 
-Clarified the interpretation of the xHCI spec 1.9 regarding page size.
-The correct interpretation is that only one bit is set, indicating the
-only supported page size. This is supported by the following sources:
+Fix this by subtracting one from the result of ffs(). Note that since
+variable 'val' is unsigned, subtracting one from zero will result in the
+maximum unsigned integer value. Consequently, the condition 'if (val < 16)'
+will still function correctly.
 
-Section 6.6.1, PSZ:
-  The PSZ calculation uses the page size bit and would not work with
-  multiple bits set.
+[1], Page size: (2^(n+12)), where 'n' is the set page size bit.
 
-Section 7.7, Implementation Notes:
-  "This version of the xHCI spec only allows an implementation to support
-   a single page size, as reported by the PAGESIZE register."
-
-Version 3 changes:
- * Rebase agains Linux 6.14-rc1.
+Fixes: 81720ec5320c ("usb: host: xhci: use ffs() in xhci_mem_init()")
+Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
+---
+V3:
  * Repalce variable int 'i' with unsigned int 'val'.
- * Rename temp variable 'page_shift' to 'page_size'.
-Version 2 changes:
- * Added handling for invalid page size register values.
 
-Niklas Neronin (2):
-  usb: xhci: correct debug message page size calculation
-  usb: xhci: set page size to the xHCI-supported size
+ drivers/usb/host/xhci-mem.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
- drivers/usb/host/xhci-mem.c | 34 ++++++++++++++++++----------------
- drivers/usb/host/xhci.h     |  8 ++++----
- 2 files changed, 22 insertions(+), 20 deletions(-)
-
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 92703efda1f7..dc5bcd8db4c0 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -2391,10 +2391,10 @@ int (struct xhci_hcd *xhci, gfp_t flags)
+ 	page_size = readl(&xhci->op_regs->page_size);
+ 	xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+ 			"Supported page size register = 0x%x", page_size);
+-	i = ffs(page_size);
+-	if (i < 16)
++	val = ffs(page_size) - 1;
++	if (val < 16)
+ 		xhci_dbg_trace(xhci, trace_xhci_dbg_init,
+-			"Supported page size of %iK", (1 << (i+12)) / 1024);
++			"Supported page size of %iK", (1 << (val + 12)) / 1024);
+ 	else
+ 		xhci_warn(xhci, "WARN: no supported page size\n");
+ 	/* Use 4K pages, since that's common and the minimum the HC supports */
 -- 
 2.47.2
 
