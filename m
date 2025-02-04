@@ -1,104 +1,112 @@
-Return-Path: <linux-usb+bounces-20096-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20097-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8161DA271E9
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 13:40:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEEDDA27238
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 13:52:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 17DEC16266D
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:40:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C5667A14F4
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:51:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED34A20D4FD;
-	Tue,  4 Feb 2025 12:35:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EED0B211A04;
+	Tue,  4 Feb 2025 12:43:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Rt3wswhT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bajIi58d"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670CD2F46;
-	Tue,  4 Feb 2025 12:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7099D20FAA9
+	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 12:43:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738672543; cv=none; b=JAsOrbSkydchE8slI9Atr6yFKahpRqdfb+xjG3G4SZEkjuZaeIObCVR3BZsRmCdPwumpHR9lzvIQbutWQh6v1+39xI2VFB8/b0z6SRrv0lhCVWJcpa0FV7U+lnts8F41BheDydh1/5Zgymn9K6cdrNE+K/123UHOQr6oKK0Qohg=
+	t=1738672991; cv=none; b=BBAdWJFKO4rOIIevzNYocG2jVbMdb+TPOFnyqVUrgW+cRh3xPyXsTrh0Y4KLPwxN+dFFVC6T4BJWYP6TT+8dhsvzegWpjSu39cE6NFJFQdUsO9Ta6f0Dpy7E3RCIcuuuaF9tuJJt5X0Xd3BxYHa4xH4rey8d9uKwOIJvx5f5uy8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738672543; c=relaxed/simple;
-	bh=sDo4ylyREyY0IsEh81UfzsOSyB2hR5vSX7/3Qn4NJwU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=atGmB5jdcpt177HMBNTEgYNIt9FVr+xxiNaqEAwiMSV3bPhbDympcsw+H5kUhoFKKxxUVxqVDpQOZlMHZYA0Ct7+mXQlOC3oEI94O8LD/VmwrZlAQUQchr2xqLQUrNmvq7olGR2pmt+duBA1ZHM5PDuTa1fUqnkpkadbMU2HJ8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Rt3wswhT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3370C4CEDF;
-	Tue,  4 Feb 2025 12:35:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738672542;
-	bh=sDo4ylyREyY0IsEh81UfzsOSyB2hR5vSX7/3Qn4NJwU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Rt3wswhT1QwLgRPokVl+zLmiYEUC3ucnYgpBTy/E7DEexXLIE4VvWzHZSfELVyQft
-	 sOEnteU15hoPwuqHhroEFPK5xMnOZsFCxxo+iTLIqn/TovF+k9h5HRl+bowE3CKQP9
-	 oOx9ItDOC4SIa2Ns3NY2p8A6pfH/qGp61XOUOj1oTl3mFnhU7j/Z+PeSIafSDuBuXD
-	 gbBwsQa6J9Aua/DoxlNJ45wKBg3X+rl+ukp7dzWymexOafqS52Z4hLnnFbC1wYBIOv
-	 XmiKPVma8eFxFtlWTrtd2UgCaWVws/s8+eLhYjduL6o81WLW0Tp+WivVw3A4WDqKgx
-	 00YeTnoMb1iKQ==
-Date: Tue, 4 Feb 2025 12:35:36 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] regulator: dummy: convert to use the faux bus
-Message-ID: <6ada102f-6398-45da-a2b5-ecb5beafc8bf@sirena.org.uk>
-References: <2025020421-poster-moisture-534b@gregkh>
- <2025020424-shuffle-facedown-973f@gregkh>
+	s=arc-20240116; t=1738672991; c=relaxed/simple;
+	bh=dLQYmWmgkr5nfovi012GKK6Jqa9cnZC8n3P4Mqg4NXw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VdAoTHZ5JAS9GsXuORKKfIESfNFVwO3ritAWXNOM62WyqW2VteEBzflFMgF8vgMA3jfdgUmSbsg3rlgYxuU4CX3FmW9irFaEFFP7q1+AL2b1RoZZFqC7VzInIjC/X0drH+vcCcQ/uKFm2QryQXUhChiUCl6S44PEChis4g0NDLI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bajIi58d; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738672990; x=1770208990;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dLQYmWmgkr5nfovi012GKK6Jqa9cnZC8n3P4Mqg4NXw=;
+  b=bajIi58dcGyVXcOxuz+vUU6Nbk8ge02/eO/sZdoZ43ztnO9KSC0oWiBv
+   31MDCx3RQvTYMBLeh/B8jle3YaRNf7Uj8PIMArvQf04wEipH2jbSn1TAK
+   wwOVWdzlRwlA2/7K3vNvTFYe6ycyBH/VDPO8zr/OIelQ9//4kx8X08b4i
+   GHNZF7k5GAND5wAhyTSBbaLV64WvZUFoauLR7JW7/7+YvQimdgiOHNmPH
+   NqQ4R+WLtRU4ifQUxIbjeS/GZGAkW6n4CderGI0Wm/KUcWq46ALDzsyLo
+   lHCr4JEJAgleOw8Y2juB8YGZF4PQ0CUS3I+ZWBATKbBrZx0BAtVZoMqn+
+   A==;
+X-CSE-ConnectionGUID: aWX4CKrBTKSmIdSVrFGg6g==
+X-CSE-MsgGUID: krTn3qe+SZW7qC5BwaI3RQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="56734068"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="56734068"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 04:43:09 -0800
+X-CSE-ConnectionGUID: dr0LLECSSIiDjNF0pT1F2Q==
+X-CSE-MsgGUID: CUkl09MYQ3yC9tqJAdSkCw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="111158488"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa009.fm.intel.com with ESMTP; 04 Feb 2025 04:43:07 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1058)
+	id 581E7299; Tue, 04 Feb 2025 14:43:06 +0200 (EET)
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
+To: mathias.nyman@linux.intel.com
+Cc: michal.pecio@gmail.com,
+	linux-usb@vger.kernel.org,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: [PATCH v3 0/2] usb: xhci: page size improvements
+Date: Tue,  4 Feb 2025 14:41:42 +0200
+Message-ID: <20250204124145.3998098-1-niklas.neronin@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="H5wfRr13WUrFqxB1"
-Content-Disposition: inline
-In-Reply-To: <2025020424-shuffle-facedown-973f@gregkh>
-X-Cookie: Spelling is a lossed art.
+Content-Transfer-Encoding: 8bit
 
+Correct off-by-one page size debug message.
+Set page size to the xHCI-supported size, instead of 4KB.
 
---H5wfRr13WUrFqxB1
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Clarified the interpretation of the xHCI spec 1.9 regarding page size.
+The correct interpretation is that only one bit is set, indicating the
+only supported page size. This is supported by the following sources:
 
-On Tue, Feb 04, 2025 at 12:09:14PM +0100, Greg Kroah-Hartman wrote:
-> The dummy regulator driver does not need to create a platform device, it
-> only did so because it was simple to do.  Change it over to use the
-> faux bus instead as this is NOT a real platform device, and it makes
-> the code even smaller than before.
+Section 6.6.1, PSZ:
+  The PSZ calculation uses the page size bit and would not work with
+  multiple bits set.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+Section 7.7, Implementation Notes:
+  "This version of the xHCI spec only allows an implementation to support
+   a single page size, as reported by the PAGESIZE register."
 
---H5wfRr13WUrFqxB1
-Content-Type: application/pgp-signature; name="signature.asc"
+Version 3 changes:
+ * Rebase agains Linux 6.14-rc1.
+ * Repalce variable int 'i' with unsigned int 'val'.
+ * Rename temp variable 'page_shift' to 'page_size'.
+Version 2 changes:
+ * Added handling for invalid page size register values.
 
------BEGIN PGP SIGNATURE-----
+Niklas Neronin (2):
+  usb: xhci: correct debug message page size calculation
+  usb: xhci: set page size to the xHCI-supported size
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmeiCZgACgkQJNaLcl1U
-h9BW7gf8DtamOUPXC8HwfqntlhbX1mMHH1kTDiF7CkOOuVVmmRQ6/RjWQ7IOrLzd
-mqam12fQHxTy0SmA8dwLM5pE1M+Zn3TcuSEK+aM5QX9jjiloE3Gg6h3gRNHQVBMa
-j+rKV/P7bkD5ng0SGdghxcJ/9ZK9+QTlNu9OBhjys2sGIVMtNhicEqdrw2OBtars
-gbU+ipXI0XxyCTDfa7tIOqE/nGYuaLxF4e0NKv65t57ZutWaqbgb5sSVl8gMZTVd
-KYsVBIKOifT4y8xdMZR3KVihZBcg0VPtqjBewY+bwyxdxBE7+VptBAImbNDzQyU5
-tcOGgXyyUAmyz0bNPOAKF0D/TKwfrQ==
-=KN7Y
------END PGP SIGNATURE-----
+ drivers/usb/host/xhci-mem.c | 34 ++++++++++++++++++----------------
+ drivers/usb/host/xhci.h     |  8 ++++----
+ 2 files changed, 22 insertions(+), 20 deletions(-)
 
---H5wfRr13WUrFqxB1--
+-- 
+2.47.2
+
 
