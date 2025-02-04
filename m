@@ -1,196 +1,191 @@
-Return-Path: <linux-usb+bounces-20125-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20126-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADB08A27793
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 17:51:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 024DAA2796F
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 19:12:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D14D3A6DAF
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 16:51:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F74F1884C4D
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 18:12:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C97E215F45;
-	Tue,  4 Feb 2025 16:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C24B217664;
+	Tue,  4 Feb 2025 18:11:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hw+i5l0x"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oEz92f3f"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99395215776;
-	Tue,  4 Feb 2025 16:51:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EE4216E2C;
+	Tue,  4 Feb 2025 18:11:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738687881; cv=none; b=ReTCTI/WcdXNaz+6sxx2d/PRtOBdnNHAt5nEDncw+T84Jg92ScdZ4Z7xXKAKeTydq2580ry+ar6BtJBu9kv0FuSfu6tXrHrvxz9Rx+aJdCzIVFFe7Spz0nYQciR2d38lelUsLph1QCSC+iMElpCuekCvx9yTPl3rBCZN02pmnb4=
+	t=1738692711; cv=none; b=S49nd/GvwakZ+A14LS9124QKo1sf/7U9ovlKlp2uFR0maDvoXyFY6++NMqNilRAVj0QCRiOmsM3tkidutgVgAqJ2Ex3NiWhif+/sLT1PE2sHAq2JLPjKFtVWMNEbSK9S+t2ZocXsvdnTTgjQFvAgU3ERUZFzCLZTGIYVNZFGwNE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738687881; c=relaxed/simple;
-	bh=72lyvzbkOWCoWrejdv+Om5NJfaD1Lw1U67vX17qNFN0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jYXEVcTd29/gGDsFqovs09lg0JItKAS9pyxcnYi/J2v9w8I3Fjgljh0MhogiewUFzof1UfIEpwTgbESX7p2NUnV/SD/YBas5wzfsTa1AdBPjCukuvTbLl2OaRcDbG0io8OW3oiD6f2Jo7rPM+TnBZ+7TNNV/xDpYvqqHK+P2s1A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hw+i5l0x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F6A1C4CEDF;
-	Tue,  4 Feb 2025 16:51:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738687881;
-	bh=72lyvzbkOWCoWrejdv+Om5NJfaD1Lw1U67vX17qNFN0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hw+i5l0xwGyxokCg+CsjU84EXKNdTN5eRpo6t0USLhWWFK+nMkbrVfEn7e5FrFtWV
-	 RlgAYc8ASrK9JMdRS3L2VwpEECf+J/hcqvrr2we9tq2upNF4LSMB/LLHiOqQ5fsI8S
-	 qX2GMIUolB+ThTOetlnqeOXSuOK9qvbL1Y8PZC0d5Z98TV2xq6CKfq6Z+1bRBIdFIk
-	 tvtpikgG55bYBeLbXXDWXQhLu5BC2YB5XXmrUdUKZNlI0wqkMbFWhyHlOWxCB0nknt
-	 5L4UNvxdWuPQudGwsG4OQyL8GF2l/C6/lu0zssJVo1NOoO8vP5AnoetVodjamxsrIj
-	 2YcBKbRZ8GM1g==
-Date: Tue, 4 Feb 2025 10:51:20 -0600
-From: Rob Herring <robh@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] driver core: add a faux bus for use when a simple
- device/bus is needed
-Message-ID: <20250204165120.GA2994503-robh@kernel.org>
-References: <2025020421-poster-moisture-534b@gregkh>
- <2025020424-retrain-recharger-407c@gregkh>
- <20250204164650.GA2970208-robh@kernel.org>
+	s=arc-20240116; t=1738692711; c=relaxed/simple;
+	bh=lZohJvru0wEAeyjk9++6ixRpPfyvCVVloXV+qroa98o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KWmoSoodnm1KBNaDg0zxo9CDqDOWkaJ80HqpduOT/v0nYvbq/ScCw2yQpsySeZMP7Xu/hGVj54moVfSa/HmSPkiQGVPHiSO9pIzujpjoUcZ5fq4ZdIvdCsRPRBNe5lkjq1nAQMhOobA1mqbjypbc1vxvGKyzDfMq8cx4nQZbf74=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oEz92f3f; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
+	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=I1Z6vtjWwNt9llagECDSFKTWccFi8I5yGC2RHidsKD4=; b=oEz92f3fyA0Ss/NdcE97bUjLj7
+	OAkmAJz6Lm0uLTBPZ6NxPswyu24HgtJT3+lIvNB1KDfju9+OckM+zZ0bvj48Di2E9Qs26rkxXs+P0
+	D1ixidxJdxeV3lz+IEYoxAx246oSyeP7DBLmBywGESvSw2BL2ie+W0nUAqzkojYTVSJAk1Kr8ztjZ
+	nJGbJHJPFDyLijvKrNvcYxuBYz6PwgWMMGKzyK4mCyNotBk+elhrjdmPiXkvl2fb/QU439pBevdGi
+	n/eGJbtd5v6HkYkk/+RYUtcrevhJjHHwJwdjCzFwe9y+k6ICPVCcqAuCpzLCR64y/Dkrg9bxu0MMI
+	ARAa7TXg==;
+Received: from [50.53.2.24] (helo=[192.168.254.17])
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tfNOj-0000000GNKa-0CSH;
+	Tue, 04 Feb 2025 18:11:45 +0000
+Message-ID: <460e7278-440d-47a1-bbf3-7b7fbbe2f20d@infradead.org>
+Date: Tue, 4 Feb 2025 10:11:40 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250204164650.GA2970208-robh@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] docs: Fix spelling and grammatical issues
+To: Purva Yeshi <purvayeshi550@gmail.com>, jikos@kernel.org,
+ bentiss@kernel.org, corbet@lwn.net, jdelvare@suse.com, linux@roeck-us.net
+Cc: skhan@linuxfoundation.org, linux-usb@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
+References: <20250204134806.28218-1-purvayeshi550@gmail.com>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20250204134806.28218-1-purvayeshi550@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 04, 2025 at 10:46:50AM -0600, Rob Herring wrote:
-> On Tue, Feb 04, 2025 at 12:09:13PM +0100, Greg Kroah-Hartman wrote:
-> > Many drivers abuse the platform driver/bus system as it provides a
-> > simple way to create and bind a device to a driver-specific set of
-> > probe/release functions.  Instead of doing that, and wasting all of the
-> > memory associated with a platform device, here is a "faux" bus that
-> > can be used instead.
-> > 
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  v2: - renamed bus and root device to just "faux" thanks to Thomas
-> >      - removed the one-driver-per-device and now just have one driver
-> >        entirely thanks to Danilo
-> >      - kerneldoc fixups and additions and string handling bounds checks
-> >        hanks to Andy
-> >      - coding style fix thanks to Jonathan
-> >      - tested that the destroy path actually works
-> > 
-> >  drivers/base/Makefile       |   2 +-
-> >  drivers/base/base.h         |   1 +
-> >  drivers/base/faux.c         | 196 ++++++++++++++++++++++++++++++++++++
-> >  drivers/base/init.c         |   1 +
-> >  include/linux/device/faux.h |  31 ++++++
-> >  5 files changed, 230 insertions(+), 1 deletion(-)
-> >  create mode 100644 drivers/base/faux.c
-> >  create mode 100644 include/linux/device/faux.h
-> > 
-> > diff --git a/drivers/base/Makefile b/drivers/base/Makefile
-> > index 7fb21768ca36..8074a10183dc 100644
-> > --- a/drivers/base/Makefile
-> > +++ b/drivers/base/Makefile
-> > @@ -6,7 +6,7 @@ obj-y			:= component.o core.o bus.o dd.o syscore.o \
-> >  			   cpu.o firmware.o init.o map.o devres.o \
-> >  			   attribute_container.o transport_class.o \
-> >  			   topology.o container.o property.o cacheinfo.o \
-> > -			   swnode.o
-> > +			   swnode.o faux.o
-> >  obj-$(CONFIG_AUXILIARY_BUS) += auxiliary.o
-> >  obj-$(CONFIG_DEVTMPFS)	+= devtmpfs.o
-> >  obj-y			+= power/
-> > diff --git a/drivers/base/base.h b/drivers/base/base.h
-> > index 8cf04a557bdb..0042e4774b0c 100644
-> > --- a/drivers/base/base.h
-> > +++ b/drivers/base/base.h
-> > @@ -137,6 +137,7 @@ int hypervisor_init(void);
-> >  static inline int hypervisor_init(void) { return 0; }
-> >  #endif
-> >  int platform_bus_init(void);
-> > +int faux_bus_init(void);
-> >  void cpu_dev_init(void);
-> >  void container_dev_init(void);
-> >  #ifdef CONFIG_AUXILIARY_BUS
-> > diff --git a/drivers/base/faux.c b/drivers/base/faux.c
-> > new file mode 100644
-> > index 000000000000..9b28643afc45
-> > --- /dev/null
-> > +++ b/drivers/base/faux.c
-> > @@ -0,0 +1,196 @@
-> > +// SPDX-License-Identifier: GPL-2.0-only
-> > +/*
-> > + * Copyright (c) 2025 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > + * Copyright (c) 2025 The Linux Foundation
-> > + *
-> > + * A "simple" faux bus that allows devices to be created and added
-> > + * automatically to it.  This is to be used whenever you need to create a
-> > + * device that is not associated with any "real" system resources, and do
-> > + * not want to have to deal with a bus/driver binding logic.  It is
-> > + * intended to be very simple, with only a create and a destroy function
-> > + * available.
-> > + */
-> > +#include <linux/err.h>
-> > +#include <linux/init.h>
-> > +#include <linux/slab.h>
-> > +#include <linux/string.h>
-> > +#include <linux/container_of.h>
-> > +#include <linux/device/faux.h>
-> > +#include "base.h"
-> > +
-> > +#define MAX_NAME_SIZE	256	/* Max size of a faux_device name */
-> > +
-> > +/*
-> > + * Internal wrapper structure so we can hold the memory
-> > + * for the driver and the name string of the faux device.
-> > + */
-> > +struct faux_object {
-> > +	struct faux_device faux_dev;
-> > +	const struct faux_driver_ops *faux_ops;
-> > +	char name[];
-> > +};
-> > +#define to_faux_object(dev) container_of_const(dev, struct faux_object, faux_dev.dev)
-> > +
-> > +static struct device faux_bus_root = {
-> > +	.init_name	= "faux",
-> > +};
-> > +
-> > +static int faux_match(struct device *dev, const struct device_driver *drv)
-> > +{
-> > +	/* Match always succeeds, we only have one driver */
-> > +	return 1;
-> > +}
-> > +
-> > +static int faux_probe(struct device *dev)
-> > +{
-> > +	struct faux_object *faux_obj = to_faux_object(dev);
-> > +	struct faux_device *faux_dev = &faux_obj->faux_dev;
-> > +	const struct faux_driver_ops *faux_ops = faux_obj->faux_ops;
-> > +	int ret = 0;
-> > +
-> > +	if (faux_ops && faux_ops->probe)
+
+
+On 2/4/25 5:48 AM, Purva Yeshi wrote:
+> Fix several spelling and grammatical errors across multiple
+> documentation files.
 > 
-> Is there any use for faux_ops being NULL (or probe being NULL for that 
-> matter)? I can't think of one. So faux_device_create should check that 
-> and fail instead of checking here.
+> Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
+> ---
+>  Documentation/hid/hiddev.rst                | 4 ++--
+>  Documentation/hid/intel-ish-hid.rst         | 2 +-
+>  Documentation/hid/uhid.rst                  | 2 +-
+>  Documentation/hwmon/abituguru-datasheet.rst | 8 ++++----
+>  Documentation/hwmon/abituguru.rst           | 2 +-
+>  5 files changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/Documentation/hid/hiddev.rst b/Documentation/hid/hiddev.rst
+> index 9b82c7f896aa..073485f84793 100644
+> --- a/Documentation/hid/hiddev.rst
+> +++ b/Documentation/hid/hiddev.rst
+> @@ -15,10 +15,10 @@ To support these disparate requirements, the Linux USB system provides
+>  HID events to two separate interfaces:
+>  * the input subsystem, which converts HID events into normal input
+>  device interfaces (such as keyboard, mouse and joystick) and a
+> -normalised event interface - see Documentation/input/input.rst
+> +normalized event interface - see Documentation/input/input.rst
+>  * the hiddev interface, which provides fairly raw HID events
+>  
+> -The data flow for a HID event produced by a device is something like
+> +The data flow for an HID event produced by a device is something like
 
-NM, I see your converted cases do just that. Weird.
+Not needed IMO, since I think ("say") the word "hid" when I see HID.
 
-I suppose you could still say if faux_ops is not NULL, then probe must 
-not be NULL.
+>  the following::
+>  
+>   usb.c ---> hid-core.c  ----> hid-input.c ----> [keyboard/mouse/joystick/event]
+> diff --git a/Documentation/hid/intel-ish-hid.rst b/Documentation/hid/intel-ish-hid.rst
+> index 2adc174fb576..fdabf6ec60db 100644
+> --- a/Documentation/hid/intel-ish-hid.rst
+> +++ b/Documentation/hid/intel-ish-hid.rst
+> @@ -21,7 +21,7 @@ mainly use HID over I2C or USB. But ISH doesn't use either I2C or USB.
+>  Overview
+>  ========
+>  
+> -Using a analogy with a usbhid implementation, the ISH follows a similar model
+> +Using an analogy with a usbhid implementation, the ISH follows a similar model
+>  for a very high speed communication::
+>  
+>  	-----------------		----------------------
+> diff --git a/Documentation/hid/uhid.rst b/Documentation/hid/uhid.rst
+> index 2243a6b75914..2681038cd526 100644
+> --- a/Documentation/hid/uhid.rst
+> +++ b/Documentation/hid/uhid.rst
+> @@ -106,7 +106,7 @@ UHID_INPUT2:
+>  
+>  UHID_GET_REPORT_REPLY:
+>    If you receive a UHID_GET_REPORT request you must answer with this request.
+> -  You  must copy the "id" field from the request into the answer. Set the "err"
+> +  You must copy the "id" field from the request into the answer. Set the "err"
 
-Rob
+That part of the patch is OK but just not worth the effort IMHO.
+
+>    field to 0 if no error occurred or to EIO if an I/O error occurred.
+>    If "err" is 0 then you should fill the buffer of the answer with the results
+>    of the GET_REPORT request and set "size" correspondingly.
+> diff --git a/Documentation/hwmon/abituguru-datasheet.rst b/Documentation/hwmon/abituguru-datasheet.rst
+> index 0cd61471d2a2..8c55874061d4 100644
+> --- a/Documentation/hwmon/abituguru-datasheet.rst
+> +++ b/Documentation/hwmon/abituguru-datasheet.rst
+> @@ -6,9 +6,9 @@ First of all, what I know about uGuru is no fact based on any help, hints or
+>  datasheet from Abit. The data I have got on uGuru have I assembled through
+>  my weak knowledge in "backwards engineering".
+>  And just for the record, you may have noticed uGuru isn't a chip developed by
+> -Abit, as they claim it to be. It's really just an microprocessor (uC) created by
+> +Abit, as they claim it to be. It's really just a microprocessor (uC) created by
+>  Winbond (W83L950D). And no, reading the manual for this specific uC or
+> -mailing  Windbond for help won't give any useful data about uGuru, as it is
+> +mailing  Winbond for help won't give any useful data about uGuru, as it is
+
+          ^^ 2 spaces there also.
+
+>  the program inside the uC that is responding to calls.
+>  
+>  Olle Sandberg <ollebull@gmail.com>, 2005-05-25
+> @@ -35,7 +35,7 @@ As far as known the uGuru is always placed at and using the (ISA) I/O-ports
+>  ports are holding for detection. We will refer to 0xE0 as CMD (command-port)
+>  and 0xE4 as DATA because Abit refers to them with these names.
+>  
+> -If DATA holds 0x00 or 0x08 and CMD holds 0x00 or 0xAC an uGuru could be
+> +If DATA holds 0x00 or 0x08 and CMD holds 0x00 or 0xAC a uGuru could be
+>  present. We have to check for two different values at data-port, because
+>  after a reboot uGuru will hold 0x00 here, but if the driver is removed and
+>  later on attached again data-port will hold 0x08, more about this later.
+> @@ -46,7 +46,7 @@ have to test CMD for two different values. On these uGuru's DATA will initially
+>  hold 0x09 and will only hold 0x08 after reading CMD first, so CMD must be read
+>  first!
+>  
+> -To be really sure an uGuru is present a test read of one or more register
+> +To be really sure a uGuru is present a test read of one or more register
+>  sets should be done.
+>  
+>  
+> diff --git a/Documentation/hwmon/abituguru.rst b/Documentation/hwmon/abituguru.rst
+> index cfda60b757ce..4a5ee16b1048 100644
+> --- a/Documentation/hwmon/abituguru.rst
+> +++ b/Documentation/hwmon/abituguru.rst
+> @@ -40,7 +40,7 @@ Supported chips:
+>  
+>  .. [2]  There is a separate abituguru3 driver for these motherboards,
+>  	the abituguru (without the 3 !) driver will not work on these
+> -	motherboards (and visa versa)!
+> +	motherboards (and vice versa)!
+
+Ack.
+
+>  
+>  Authors:
+>  	- Hans de Goede <j.w.r.degoede@hhs.nl>,
+
+-- 
+~Randy
+
 
