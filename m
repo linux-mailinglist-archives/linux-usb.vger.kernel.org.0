@@ -1,70 +1,70 @@
-Return-Path: <linux-usb+bounces-20061-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20062-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEC2BA26A38
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 03:46:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C878EA26A39
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 03:46:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8BCA01887455
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 02:46:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9697618874E9
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 02:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E01414658C;
-	Tue,  4 Feb 2025 02:46:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 789FC1482F5;
+	Tue,  4 Feb 2025 02:46:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="uE6HkHMm"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W9Gg+67h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A246F145B16
-	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 02:46:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E77F145B16
+	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 02:46:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738637170; cv=none; b=FoTGdHqbQPAbLjLBDfPpdvvaXTDc7q1OPGqci/5ERI9VrKQdisUSq6mqYFlN0QjqZPMWH4e1+8T9Lm7qAfeFSn8zRupr0IpYM1WuAKA42Nf4uKHDa9xyuquL+5puzYRLxAF+TuiQaWEB8zY1q9UuNU1ONV0LpDCcVU2JtJfDAYg=
+	t=1738637173; cv=none; b=PyT3BKlIB0pRiNXS/icjVeBaO0oQSmL+VU9js7WGsXzFS4DtyZGqj4HfZGGS5x6H+l7CPA0WIvLQr3R2Fa0n0aqsosxoVR7bEzhwbfGxa0jiH5NE9F8BTRj2shy8QgyMFmldP83IusgQeVcrrK4rm+eyipmz9id19eSU4D1iGQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738637170; c=relaxed/simple;
-	bh=zQmuZ//7F3rYkYCDgTClMK208117wQ10a1mu3b/qRdg=;
+	s=arc-20240116; t=1738637173; c=relaxed/simple;
+	bh=FhlvvrwLx13f9HUXfcFDQ70gZZkNz8MovH5kLuSeCkM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=YvMtY+EHngbSLDz/Xtv3OIL2PVKwScL1lyf36VgLxveky836qHwZ95yTav1r/xe7QPfh9hPsoiB+q0nsyxDjF1bh6BLrDUCvrEczez8JAwJHxvYH+ocBK8vl27ddPeFyfhFzKXOtbKuVVuuaEUdFDCyyQP99ufizsObAeLdEWEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=uE6HkHMm; arc=none smtp.client-ip=209.85.214.202
+	 To:Cc:Content-Type; b=Ct43xV8MYO6MNUDMw3SBAOmCdzCAPY0ZX2rpdH/yMds6J93jIw+qSoB98eAUgI7gDv2Rknbw6rxLiwtn8iiReomCXkifd2wRoLhHrCb1N6yg7HvtLeZzZTysqhGytVBl3q+AUZYVYdlxVouKWwgnj7TcQFOroF0IfUj+9tVTe1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W9Gg+67h; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jthies.bounces.google.com
-Received: by mail-pl1-f202.google.com with SMTP id d9443c01a7336-21638389f63so86578685ad.1
-        for <linux-usb@vger.kernel.org>; Mon, 03 Feb 2025 18:46:08 -0800 (PST)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2f5538a2356so9323595a91.2
+        for <linux-usb@vger.kernel.org>; Mon, 03 Feb 2025 18:46:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738637168; x=1739241968; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1738637171; x=1739241971; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8PR6gBOJPyvjOyN9XG3Z34pMOOrgiWkRykhimhvg7tU=;
-        b=uE6HkHMmcY8uz4H9rhF2di5Up83jXWDwcddlVj2F2Za/7X3NKM3pbOfDF/FUt4doMq
-         3hZsLtgL9bYMikrJ6Fh3COCa1d4Dm+ItjqPaGmx2bHaaney2nhoUnGGtJ1gp3SetCx/X
-         mmQU4rFVO3uemliK9iQ4sAO5SSFCxyb8zaMRUt4arNgY0xBJblVrtP5z8DqMMUkT1dmM
-         Md2N/SU1p8v5EXJPbrAoBeeUEPn3pl+xuUn2Zu6MYqitjpIZppfbQL27JhzzOwx0lIhx
-         0LEfkX4hwkqsyZX13ZBSLEdKmFyntVuCvoyMMOmPFyRIQDAqBtpNUtHVBt5wJUU1yX/f
-         pyNA==
+        bh=Yj6PYh7a5V+2YmsXleNKK2uqpxAMcmSNOValgCGwzic=;
+        b=W9Gg+67hHL+1kBm9NiM6SO2PED2/7+SUp5J9IoJ08VcMwM/NP7yRSzExPe9n3ej4nS
+         hS8Qh6J3PwyJsUaXHe8WECkGgfO1Lw83afbcezn1FS3vbCwuh03Buw020rBYrx+OXanQ
+         5rWXbohjuOy7hPBlq3oNE6m83SVb0jP6cIeuwCCCxeYFupi/bOACv9TsUUbZGkCvUgv/
+         zmqPL2F/o7WUcoKPqpPFeKdJMFl92uWCKRFOLqi+xb4KY8GCF6uSYNMQWSry7sg+Qhkw
+         eGbQjNemBE5rkuNSmpjmdEy8yMOZtWSRm29PDVDJ+q0KfLCV5C1G+bKYfRTkyFtF5cOG
+         +p9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738637168; x=1739241968;
+        d=1e100.net; s=20230601; t=1738637171; x=1739241971;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8PR6gBOJPyvjOyN9XG3Z34pMOOrgiWkRykhimhvg7tU=;
-        b=Q9WYgG2jqA853kzUDtyD4pQrURxOUViEDZ3fng2IxEbY7g50yoqU6TwVmUTS12QltE
-         Xs1O+zqRxWI+fRtuIvEujSANqYyi/rKj23+EXdxhTQfgrk91e843eC3s7jVSrgGVHVbo
-         OAvHHNovkGR+SZTMDNzPqjMkaPKwFhNj5FlRv4C/lHzNA6qeadEh5XWGNOYRDc93SZVi
-         lQN4inZjnoA0x6vzCajhERTgV7DUgyPT75Euz7DSwa7FS/CAzkdAt3pk8Zfpc3tPrjzY
-         xSRpJi2CRPbUKQL8FKL4F4FwAWJ4Apmsba3Y2kYt7D6GiKTsM0o5Odup+vwtRocGW9QS
-         3/JA==
-X-Forwarded-Encrypted: i=1; AJvYcCUOSCzpnvSN/39JUkCfQF7yXXyYe87k19nFIs1kjuWGKL/MYrxdPB8wPxM4NOrOesO9XGbq4MQAQdE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzvwy+8pQvEBlddadIjlVwIfH3Q4MR1wkWN7IQgMVefq+JD7gne
-	HC57TAbemSzItX+ZIOJ52V3IIA9j2CDGbbanTzBZr9sDPNI1pGBTNiTkN/QkvWBYjijIWg77gTk
-	vzQ==
-X-Google-Smtp-Source: AGHT+IF8jm9iEQgFx5P2DbKyMxCk6tB3nRShajtAH3tS0JvuQtjgmZljPqCAsCZPOXPaj8YAHSe13Rn0TcI=
-X-Received: from pgbbx2.prod.google.com ([2002:a05:6a02:502:b0:7fd:56a7:26a8])
- (user=jthies job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:fc4e:b0:216:6c88:efd9
- with SMTP id d9443c01a7336-21dd7c6290cmr420570785ad.15.1738637167912; Mon, 03
- Feb 2025 18:46:07 -0800 (PST)
-Date: Tue,  4 Feb 2025 02:45:58 +0000
+        bh=Yj6PYh7a5V+2YmsXleNKK2uqpxAMcmSNOValgCGwzic=;
+        b=uztGsgzLkrkjASJkC2VVitSAaj2qAKfCp2/3rMo9CZtO0jQh2Mp3NSErNxZ0uFeqJf
+         duZeM44RBBagKhkVIHX1Uca7e02aUE3KZHhet/GHlyWu22bgDijvGbGjOim70FaT8Agn
+         EEdWfQDfM0FValspauHr5jkseZW3PL8WExxpNFqazNvuBGsmVs8Uk6XlBmxMM62Yabqx
+         pGIxUKuvJ31YuRx8senBWR56AsjofNoKF5I5pRo5/C+mRmEZYHeLy6ZUuRSfkbNcYz9P
+         2+55ZKNJxJ6puvzGB+9ZGP5v5+dgXxy/SQpDP1AZcGd+jiibllDMx+7mdJY3GiH5zNZF
+         kNEg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8ZoLO+2KNJBR/GkUHPBAxUgKUusXfCU3JlSoxubL0xlJYJU5gOcx5phpeFb2ubu7Mhk2XzSX41XQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyxnG+hrhOKGe1biATrmXd4nPel1BEMxC/k3Ci5TksuYDKXraXe
+	GaddbVkcZY3oU+f/sgJ8C9eUjKGcL1X4ZaCFHJgDFVwiumil8dyHAd787QjjNf58qfHowhbLWgU
+	hcQ==
+X-Google-Smtp-Source: AGHT+IEn7QjqULPLggNcfCVd5kG+YjRhCMLFnv6RORNu9jV0K0dUDdgMxSFqNkRCyU2XpgiPsBSpbdeAIlU=
+X-Received: from pfnj23.prod.google.com ([2002:aa7:83d7:0:b0:725:d8bc:33e1])
+ (user=jthies job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:d04e:b0:1d9:c64a:9f72
+ with SMTP id adf61e73a8af0-1ed7a5b68cemr45332792637.2.1738637170795; Mon, 03
+ Feb 2025 18:46:10 -0800 (PST)
+Date: Tue,  4 Feb 2025 02:45:59 +0000
 In-Reply-To: <20250204024600.4138776-1-jthies@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20250204024600.4138776-1-jthies@google.com>
 X-Mailer: git-send-email 2.48.1.362.g079036d154-goog
-Message-ID: <20250204024600.4138776-2-jthies@google.com>
-Subject: [PATCH v1 1/2] platform/chrome: add PD_EVENT_INIT bit definition
+Message-ID: <20250204024600.4138776-3-jthies@google.com>
+Subject: [PATCH v1 2/2] usb: typec: ucsi: resume work after EC init
 From: Jameson Thies <jthies@google.com>
 To: ukaszb@chromium.org, tzungbi@kernel.org, linux-usb@vger.kernel.org, 
 	chrome-platform@lists.linux.dev
@@ -85,27 +85,45 @@ Cc: bleung@chromium.org, heikki.krogerus@linux.intel.com,
 	Jameson Thies <jthies@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Update cros_ec_commands.h to include a definition for PD_EVENT_INIT.
-On platforms supporting UCSI, this host event type is sent when the PPM
-initializes.
+A manual EC sysjump will restart the PPM and break communication with
+the UCSI driver by disabling notifications in the initial PPM state.
+Update cros_ec_ucsi to listen for PPM init events and treat them as a
+system resume to re-establish communication with the PPM (ChromeOS EC).
 
 Signed-off-by: Jameson Thies <jthies@google.com>
 ---
- include/linux/platform_data/cros_ec_commands.h | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/usb/typec/ucsi/cros_ec_ucsi.c | 17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
-diff --git a/include/linux/platform_data/cros_ec_commands.h b/include/linux/platform_data/cros_ec_commands.h
-index ecf290a0c98f..1f4e4f2b89bb 100644
---- a/include/linux/platform_data/cros_ec_commands.h
-+++ b/include/linux/platform_data/cros_ec_commands.h
-@@ -5046,6 +5046,7 @@ struct ec_response_pd_status {
- #define PD_EVENT_DATA_SWAP         BIT(3)
- #define PD_EVENT_TYPEC             BIT(4)
- #define PD_EVENT_PPM               BIT(5)
-+#define PD_EVENT_INIT              BIT(6)
+diff --git a/drivers/usb/typec/ucsi/cros_ec_ucsi.c b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+index c605c8616726..5f17fcbda059 100644
+--- a/drivers/usb/typec/ucsi/cros_ec_ucsi.c
++++ b/drivers/usb/typec/ucsi/cros_ec_ucsi.c
+@@ -205,12 +205,19 @@ static int cros_ucsi_event(struct notifier_block *nb,
+ {
+ 	struct cros_ucsi_data *udata = container_of(nb, struct cros_ucsi_data, nb);
  
- struct ec_response_host_event_status {
- 	uint32_t status; /* PD MCU host event status */
+-	if (!(host_event & PD_EVENT_PPM))
+-		return NOTIFY_OK;
++	if (host_event & PD_EVENT_INIT) {
++		/* Late init event received from ChromeOS EC. Treat this as a
++		 * system resume to re-enable communication with the PPM.
++		 */
++		dev_dbg(udata->dev, "Late PD init received\n");
++		ucsi_resume(udata->ucsi);
++	}
+ 
+-	dev_dbg(udata->dev, "UCSI notification received\n");
+-	flush_work(&udata->work);
+-	schedule_work(&udata->work);
++	if (host_event & PD_EVENT_PPM) {
++		dev_dbg(udata->dev, "UCSI notification received\n");
++		flush_work(&udata->work);
++		schedule_work(&udata->work);
++	}
+ 
+ 	return NOTIFY_OK;
+ }
 -- 
 2.48.1.362.g079036d154-goog
 
