@@ -1,45 +1,45 @@
-Return-Path: <linux-usb+bounces-20100-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20101-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8FDAA27246
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 13:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BB0EA27258
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 14:01:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E4BB1882558
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:54:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5A3B18815CC
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 13:01:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 692EA20E32F;
-	Tue,  4 Feb 2025 12:46:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91107212D9E;
+	Tue,  4 Feb 2025 12:47:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
 Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DA61BC3C;
-	Tue,  4 Feb 2025 12:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3BC20CCC3;
+	Tue,  4 Feb 2025 12:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738673196; cv=none; b=leQrBk82ijhB34hpRuSkQzwhvVkblLaQOtsk81VdKX9Vco/134WiFEQM+6fwnn+XFGHTNAvhsyYM992nWVb8EzT1hsnJgZVx5olQOIwna1rBCljkfAEWvBQBQDxnBAHRz5T0aLlEuipmlb160kAp1sRul/Yd+QEsQhEjp/5HH6o=
+	t=1738673275; cv=none; b=gcHzfSvrDZid7SV9aCqq4sakQBoMKt1tWusI7uHpDoTvP+CcrtwuXJQbrEt2IF9IOZE0X6t5gplBmTJPA7PxNRcusVIAEalbu1YnRQL74MbueWmxGoMl5ZdVyW06uqBipGXv0CdVFR+r2Pf3aonn8/CX46leWStUyjOAoqilPvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738673196; c=relaxed/simple;
-	bh=/3Uzy1AzirjLbtYgEkg1X4r7wCucyyirKFO9AWSLxJE=;
+	s=arc-20240116; t=1738673275; c=relaxed/simple;
+	bh=+QuDPT6W5XirZNeR7SQ8jLXs2KGMTqlByEnYqxNXRuU=;
 	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DNJebiIwHe3tXBOBU68SUE8MoEbcU2NT9v3LnHSgprvIyyaA5wp4OMo1kjbjfCdzQ1g0pkQ6yX7Est/wVX3VkKaTWrFbdHogAyoCcdC+dr813Sol8520tfCXGScBkKmTvdDoPtPmc5KKQ31H7SwKpfeL3up8+Ml74UlTU4QxjgE=
+	 MIME-Version:Content-Type; b=G5dk/pydmJkOMqbAwO/6nqN0k+gUak2u17L6joPJrTQcLlHuwnPLdoVW2ML+AVEW22Owsit8+wUHYCSxiX9PAeKGWmxEQLFWiOOVt9KmVTuGDTLfDeBnbV4i4fFDBxaBHkBCzqZUBj/EMSwewCW/Lpgi9to3rZ43GwZV/X/uTcQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YnNNJ4148z6D9d1;
-	Tue,  4 Feb 2025 20:44:16 +0800 (CST)
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YnNPR28nFz6L4xl;
+	Tue,  4 Feb 2025 20:45:15 +0800 (CST)
 Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id BE316140B3C;
-	Tue,  4 Feb 2025 20:46:30 +0800 (CST)
+	by mail.maildlp.com (Postfix) with ESMTPS id 658BC140A71;
+	Tue,  4 Feb 2025 20:47:50 +0800 (CST)
 Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
  (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 4 Feb
- 2025 13:46:30 +0100
-Date: Tue, 4 Feb 2025 12:46:28 +0000
+ 2025 13:47:49 +0100
+Date: Tue, 4 Feb 2025 12:47:48 +0000
 From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 CC: <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
@@ -51,12 +51,11 @@ CC: <linux-kernel@vger.kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
 	<mairacanal@riseup.net>, Robin Murphy <robin.murphy@arm.com>, Simona Vetter
 	<simona.vetter@ffwll.ch>, Zijun Hu <quic_zijuhu@quicinc.com>,
 	<linux-usb@vger.kernel.org>, <rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH v2 1/5] driver core: add a faux bus for use when a
- simple device/bus is needed
-Message-ID: <20250204124628.000027a5@huawei.com>
-In-Reply-To: <2025020424-retrain-recharger-407c@gregkh>
+Subject: Re: [PATCH v2 2/5] regulator: dummy: convert to use the faux bus
+Message-ID: <20250204124748.000072b6@huawei.com>
+In-Reply-To: <2025020424-shuffle-facedown-973f@gregkh>
 References: <2025020421-poster-moisture-534b@gregkh>
-	<2025020424-retrain-recharger-407c@gregkh>
+	<2025020424-shuffle-facedown-973f@gregkh>
 X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -69,19 +68,15 @@ Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: lhrpeml100004.china.huawei.com (7.191.162.219) To
  frapeml500008.china.huawei.com (7.182.85.71)
 
-On Tue,  4 Feb 2025 12:09:13 +0100
+On Tue,  4 Feb 2025 12:09:14 +0100
 Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-> Many drivers abuse the platform driver/bus system as it provides a
-> simple way to create and bind a device to a driver-specific set of
-> probe/release functions.  Instead of doing that, and wasting all of the
-> memory associated with a platform device, here is a "faux" bus that
-> can be used instead.
+> The dummy regulator driver does not need to create a platform device, it
+> only did so because it was simple to do.  Change it over to use the
+> faux bus instead as this is NOT a real platform device, and it makes
+> the code even smaller than before.
 > 
 > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-FWIW LGTM
+Looks good.
 Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-
-
-
 
