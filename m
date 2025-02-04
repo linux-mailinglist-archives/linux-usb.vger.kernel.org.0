@@ -1,151 +1,136 @@
-Return-Path: <linux-usb+bounces-20088-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20089-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D63D1A27085
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:40:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3282A2708F
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:44:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF9CC1881AC7
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 11:40:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42B933A4181
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 11:44:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B12DC20C479;
-	Tue,  4 Feb 2025 11:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0623F20D4E5;
+	Tue,  4 Feb 2025 11:44:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RC4XUxnp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HfVRpfMa"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A2C314A4F0;
-	Tue,  4 Feb 2025 11:39:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCAB20C03F;
+	Tue,  4 Feb 2025 11:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738669202; cv=none; b=VU2wuQsi2sHyYHfiBVeYa+Th9OcADn/m/j7cb8nZTuWGt0D+ftmmvchnT4zMBYuZXfDltNvK9dSQmuwOYQrailHD5/RgMaIZ0E7awkSsMFt1zXZ08lubtlSbRVxafupb08zenkedOUQXDdvZTbobr2HokKRUt7w6v54qKSbPMvk=
+	t=1738669451; cv=none; b=Ded9dibzENmXgEOaXUkKYfygQ1fnnxbnvUx7swrgtGv8tbtm3Ft5QmnacGdDh4N8fqPCGt2LwJ+htp4RbCL92t34Xgf0LNdXFTsCY2O/obX3YJZZ/KROVJ8FaKD4AdB3H9PwZuji2xJSqrxjcYp4q9HZB6Qd9umrS3J9cRB9WGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738669202; c=relaxed/simple;
-	bh=QS3I+mws3v4EkgFOsw0nFQtBcwHYt9nQ8egqqH1ZXUc=;
+	s=arc-20240116; t=1738669451; c=relaxed/simple;
+	bh=kTMWF/Xp+90I5H3IjG9C6Iq7d2NrlOUbq/42cU8DPVU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZWThGUXe+fNGWkMoFl4fTbTbZSDJqXApGmkf5UBxqX9997p/vrvWymRInjGOhLDbHoUf6RcahhFaNfXVrWIYQhzKaULb+ZX2VROq5wUOQYrgh/8ojEYaJmDSbh0FzZKXiyHF5pTjWmoBg2aIoQweCtH/lMQER0OmdYYgKMMC09c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RC4XUxnp; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738669200; x=1770205200;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=QS3I+mws3v4EkgFOsw0nFQtBcwHYt9nQ8egqqH1ZXUc=;
-  b=RC4XUxnprLpVhDk8oJIA842PFfDlyzjTlX3xnHDYf4hWL0O/d/qVTmLK
-   KAQqDkJB1Y2dxqokwtRdyF34Kcp7/ImysLH2spso+rCHIuNcWy6T0QiWe
-   8AWfmx4tiWxiXMeB8+q4Z1Tv4llkwEU0evOjw54SnxadXv+jn8nAs5HuT
-   nT0mFO6Nf1a7302GiXdrbvML5gyJcykt33wsiaiySSkzdRsh+2dFW4tIr
-   V1boj3+GjMC4BcnONeFkQ+oOfP2PLAjhxT2a6XWPwSoyaXy+a4VSMiBfX
-   qbappndNg7V7CJeGgN/yL8GFKFMt3+4AlNBKpiq/VYbnEgRlPbmycIoko
-   A==;
-X-CSE-ConnectionGUID: sVu/VZN+QWelzBu8AuNifQ==
-X-CSE-MsgGUID: J/9jnOVnQSW/JXO8qTkPrw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="43113413"
-X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
-   d="scan'208";a="43113413"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 03:39:59 -0800
-X-CSE-ConnectionGUID: neDC89gLR/iKuIcDbWiaWQ==
-X-CSE-MsgGUID: AGlcaeQ5SN2FofYEq7rg7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="115757342"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 04 Feb 2025 03:39:57 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id EFFF0299; Tue, 04 Feb 2025 13:39:55 +0200 (EET)
-Date: Tue, 4 Feb 2025 13:39:55 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
-Cc: andreas.noever@gmail.com, michael.jamet@intel.com,
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] thunderbolt: Disable Gen 4 Recovery on Asymmetric
- Transitions
-Message-ID: <20250204113955.GN3713119@black.fi.intel.com>
-References: <20250131014406.28645-1-rahimi.mhmmd@gmail.com>
- <20250131014406.28645-4-rahimi.mhmmd@gmail.com>
- <20250203084224.GE3713119@black.fi.intel.com>
- <wxgsteiuto6qivnfttzuyw6jijs6ypcq4oyepqr6zbjgeez3ac@flvlpzswuyco>
- <20250203123944.GJ3713119@black.fi.intel.com>
- <gdojzsdm6kmg6kdoubhg3h6ebedyjswwzofdzxhfcbbdl3gsy2@wqpqcdukpn4h>
- <20250203125906.GK3713119@black.fi.intel.com>
- <20250204111624.GM3713119@black.fi.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=MPhLndcNuIW96FVmOULe+4FaUM+9IsrNMZcYKLporNWlTSXKRHsG7cOayekHCcamvH7fcYLU2DYMBSW3s4rNsobhFqp7Y4uTo0+swmicVMpc2X1Jm3EkcdCY7eHUBFRcgk14cilPvz9MA+uxJ/rnB+HZEoyIs+pj0zvCMi3TRkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HfVRpfMa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F4DDC4CEE4;
+	Tue,  4 Feb 2025 11:44:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738669449;
+	bh=kTMWF/Xp+90I5H3IjG9C6Iq7d2NrlOUbq/42cU8DPVU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HfVRpfMaCoXYV0e69AnomkGq4QouPB+MK1wbs6KApP4Huh30F5AIvlDo+WHxlmUD2
+	 2J616gMhxkgB04j1dFkD+iNYOafngAD2WSnw9B20IVEGNdahVGOF8l+Xt78QWjZN8v
+	 KmST6gZvm8BJStEeZVVHxAlGgsm+9TJ+VQkx4Ce4wNNPkFyerfoe9qUj9T1FlaFYBK
+	 5SUhoxUZE22qbco5grQFfAnGJMXyqIQn0dwbBCoiSvWFLJYHUSqHeOM0ECnEKNIhfX
+	 V2yotMemyK3S+hpNFlMRHbSDPJMyBucg++pgTrz1iuCX3PpczlC1ahUOCxx9UJ8ni/
+	 pzLUzLdCGGXSw==
+Date: Tue, 4 Feb 2025 12:44:03 +0100
+From: Danilo Krummrich <dakr@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Lyude Paul <lyude@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] driver core: add a faux bus for use when a simple
+ device/bus is needed
+Message-ID: <Z6H9g_bvvMf5pPyc@cassiopeiae>
+References: <2025020421-poster-moisture-534b@gregkh>
+ <2025020424-retrain-recharger-407c@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250204111624.GM3713119@black.fi.intel.com>
+In-Reply-To: <2025020424-retrain-recharger-407c@gregkh>
 
-Hi Again,
-
-On Tue, Feb 04, 2025 at 01:16:25PM +0200, Mika Westerberg wrote:
-> On Mon, Feb 03, 2025 at 02:59:07PM +0200, Mika Westerberg wrote:
-> > On Mon, Feb 03, 2025 at 12:43:04PM +0000, Mohammad Rahimi wrote:
-> > > Hello again.
-> > > 
-> > > On Mon, Feb 03, 2025 at 02:39:44PM GMT, Mika Westerberg wrote:
-> > > > Hi,
-> > > > 
-> > > > On Mon, Feb 03, 2025 at 12:25:21PM +0000, Mohammad Rahimi wrote:
-> > > > > Hello.
-> > > > > 
-> > > > > On Mon, Feb 03, 2025 at 10:42:24AM GMT, Mika Westerberg wrote:
-> > > > > > Hi,
-> > > > > > 
-> > > > > > On Fri, Jan 31, 2025 at 01:41:27AM +0000, Mohammad Rahimi wrote:
-> > > > > > > Updates the Connection Manager to disable the Gen 4 Link Recovery
-> > > > > > > flow before transitioning from a Symmetric Link to an Asymmetric
-> > > > > > > Link, as specified in recent changes to the USB4 v2 specification.
-> > > > > > > 
-> > > > > > > According to the "USB4 2.0 ENGINEERING CHANGE NOTICE FORM"
-> > > > > > > published in September 2024, the rationale for this change is:
-> > > > > > > 
-> > > > > > >   "Since the default value of the Target Asymmetric Link might be
-> > > > > > >   different than Symmetric Link and Gen 4 Link Recovery flow checks
-> > > > > > >   this field to make sure it matched the actual Negotiated Link Width,
-> > > > > > >   we’re removing the condition for a Disconnect in the Gen 4 Link
-> > > > > > >   Recovery flow when Target Asymmetric Link doesn’t match the actual
-> > > > > > >   Link width and adding a Connection Manager note to Disable Gen 4 Link
-> > > > > > >   Recovery flow before doing Asymmetric Transitions."
-> > > > > > > 
-> > > > > > > Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
-> > > > > > 
-> > > > > > I did some minor modifications and applied to thunderbolt.git/next. Please
-> > > > > > let me know if I missed something.
-> > > > > > 
-> > > > > 
-> > > > > Looks great. Just one question:
-> > > > > 
-> > > > > In tb_configure_asym(), if tb_switch_set_link_width() fails, we won’t restore
-> > > > > the link recovery status. Is that okay?
-> > > > 
-> > > > Good question :) Looking at the ECR, does it actually say anywhere that the
-> > > > CM should needs to re-enable it? I'm thinking that we could just disable it
-> > > > and be done with it?
-> > > 
-> > > Right. Thanks for clearing that up.
-> > 
-> > I'll check with the HW/FW folks still if they have any suggestions. I'll
-> > keep you updated.
+On Tue, Feb 04, 2025 at 12:09:13PM +0100, Greg Kroah-Hartman wrote:
+> Many drivers abuse the platform driver/bus system as it provides a
+> simple way to create and bind a device to a driver-specific set of
+> probe/release functions.  Instead of doing that, and wasting all of the
+> memory associated with a platform device, here is a "faux" bus that
+> can be used instead.
 > 
-> Did not hear anything from them yet but I adjusted the patch slightly to
-> restore ELR if tb_switch_set_link_width() and also added back the check > 0
-> which I missed. Let me know if you find issues with this one. Thanks!
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  v2: - renamed bus and root device to just "faux" thanks to Thomas
+>      - removed the one-driver-per-device and now just have one driver
+>        entirely thanks to Danilo
+>      - kerneldoc fixups and additions and string handling bounds checks
+>        hanks to Andy
+>      - coding style fix thanks to Jonathan
+>      - tested that the destroy path actually works
+> 
+>  drivers/base/Makefile       |   2 +-
+>  drivers/base/base.h         |   1 +
+>  drivers/base/faux.c         | 196 ++++++++++++++++++++++++++++++++++++
+>  drivers/base/init.c         |   1 +
+>  include/linux/device/faux.h |  31 ++++++
+>  5 files changed, 230 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/base/faux.c
+>  create mode 100644 include/linux/device/faux.h
 
-Okay got response now. It turns out this feature is something CM needs to
-enable if needed (e.g it is not automatically enabled by any router) and we
-don't do that which means this patch is not necessary, sorry. I'm going to
-drop it for now. Let me know if you think otherwise. Thanks!
+I really like it, it's as simply as it can be.
+
+Please find one nit below, otherwise
+
+Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+
+> 
+> +/**
+> + * faux_device_destroy - destroy a faux device
+> + * @faux_dev: faux device to destroy
+> + *
+> + * Unregister and free all memory associated with a faux device that was
+> + * previously created with a call to faux_device_create().
+
+Can we really claim that this frees all memory? Someone can still have a
+reference to the underlying struct device, right?
+
+> + */
+> +void faux_device_destroy(struct faux_device *faux_dev)
+> +{
+> +	struct device *dev = &faux_dev->dev;
+> +
+> +	if (IS_ERR_OR_NULL(faux_dev))
+> +		return;
+> +
+> +	device_del(dev);
+> +
+> +	/* The final put_device() will clean up the driver we created for this device. */
+> +	put_device(dev);
+
+Same here, how do we know it's the final one? I also think the "clean up the
+driver we created for this device" part isn't true any longer.
+
+> +}
+> +EXPORT_SYMBOL_GPL(faux_device_destroy);
 
