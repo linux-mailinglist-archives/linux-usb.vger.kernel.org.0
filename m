@@ -1,114 +1,78 @@
-Return-Path: <linux-usb+bounces-20070-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20071-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E63DA26E3E
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 10:25:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E336A26E9C
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 10:37:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 368221887226
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 09:26:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E6B343A575A
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 09:37:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 845D0207A32;
-	Tue,  4 Feb 2025 09:25:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C81B02080D2;
+	Tue,  4 Feb 2025 09:37:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PxLdsvrQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792A7205502;
-	Tue,  4 Feb 2025 09:25:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 469A2207DE0;
+	Tue,  4 Feb 2025 09:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738661148; cv=none; b=leGZshF8XxKPqYvnfHhkaB6Dqt8Sd8SVtQruWhpiEpAo2o9hC/mg8nG0lpniwaxe1jMqWA1Q9ocGIDg44UpQlEzbAg1FcPkD45KrH68Iy1OrLjIwjhwURCB3vtgLgWMd8/FNBprBRWb386Zt50/i83OaRqaGMtxIOz2SlbkzXDs=
+	t=1738661827; cv=none; b=frfFUpjMrQezTGYs6UWhqxf/cp0ezV5tr+u5Rjlwu/adGGZro3oXMZwWls+p8fRVSAO+W9OrrOkrdZLTsMTYKl8Ghi3VDd4KSwW66WXAZgrDXrefwKUJUB3lMCPwQO9SQl/0LfHFugt5ILLkleoqZK/EWQGZUfl2cWIeVyIMmug=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738661148; c=relaxed/simple;
-	bh=e7BXgZvYNO2Yfm1uDqi9dZspKT2AusgjGFCVrIZ/Y7g=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=usGYPX4Y3FHHAS0Y8pcXBAEyyVhh1JQvSTNJXnqH+N9M9Mf7tGx6PkNN3G30cCMVpNIgWEunkbPVaTfZN28Zqittk2y2WSlE5vebIkSUmza0QAjrK0cL0BymBqF+6cITXlUiG81TlJe02pnHdQGmbmYsyrzKvD+EPJIZ9dRYajY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YnHwS3R9mz6D9b5;
-	Tue,  4 Feb 2025 17:23:20 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7744C140B3C;
-	Tue,  4 Feb 2025 17:25:34 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 4 Feb
- 2025 10:25:33 +0100
-Date: Tue, 4 Feb 2025 09:25:32 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich
-	<dakr@kernel.org>, Lyude Paul <lyude@redhat.com>, Alexander Lobakin
-	<aleksander.lobakin@intel.com>, Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>, Bjorn Helgaas <bhelgaas@google.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>, "Mark
- Brown" <broonie@kernel.org>, =?ISO-8859-1?Q?Ma=EDra?= Canal
-	<mairacanal@riseup.net>, Robin Murphy <robin.murphy@arm.com>, Simona Vetter
-	<simona.vetter@ffwll.ch>, Zijun Hu <quic_zijuhu@quicinc.com>,
-	<linux-kernel@vger.kernel.org>, <linux-usb@vger.kernel.org>,
-	<rust-for-linux@vger.kernel.org>
-Subject: Re: [PATCH 1/3] driver core: add a faux bus for use when a simple
- device/bus is needed
-Message-ID: <20250204092532.000001ca@huawei.com>
-In-Reply-To: <2025020326-backer-vendetta-7094@gregkh>
-References: <2025020324-thermal-quilt-1bae@gregkh>
-	<2025020326-backer-vendetta-7094@gregkh>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1738661827; c=relaxed/simple;
+	bh=eyaVZHTYGbJ6ZS9OHR2glMbKAKPAhozNNeeFjrOvYsg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UCagvL9CrwR7FM9SMKe/m4RD4R8LjgGP7I9Nh2851CDt6eDn7XkOwlC89wTumV74N+eLMRAQsTOTBH1X3s5higtmg4p8BqRPp976DLhB6KqXH4Wo8/6uth42pQ58CQK7F2DskHWFfnqRrYPQJhDYjBRWA+H32mg+UA5vE8Po06g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PxLdsvrQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6AA9C4CEDF;
+	Tue,  4 Feb 2025 09:37:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738661826;
+	bh=eyaVZHTYGbJ6ZS9OHR2glMbKAKPAhozNNeeFjrOvYsg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PxLdsvrQv79XSMvRC2i1eW8ttVj6HhGKcBoaAt4pP3RakewsYMOuEGj06fI4CW0Ie
+	 1gKx6h9IpgfsXao1H2LP6tOFXb52fojkr2CR6gyTII1C7YEdYn8dxkIc8EngJoOzY5
+	 6GWiZGzx28wq9yeT3/m9KoYNehrnI7jJnWiBf6he10ooDaDHQyNnJBq3IQiC6J3Iox
+	 Es3RBW5JW67lR3WeU2aZFJUz6xEfknFWEuZbrlahxO9lTCCPX6eRwaGazm0sD2l5b2
+	 yeXL4C04PMaRQ1iMAcU4cZeoTThnSiFgQCHsXd2Hu460xeRv0jNtYupxs/5vex16EH
+	 mbjNpJCnZTn2g==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tfFMl-0000000084B-24Kr;
+	Tue, 04 Feb 2025 10:37:11 +0100
+Date: Tue, 4 Feb 2025 10:37:11 +0100
+From: Johan Hovold <johan@kernel.org>
+To: "Chester A. Unal" <chester.a.unal@arinc9.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	dwayne Du Preez <dwayne.dupreez@xpedite-tech.com>,
+	Alexander Scholten <alexander.scholten@xpedite-tech.com>,
+	Zenon van Deventer <zenon@xpedite-tech.com>
+Subject: Re: [PATCH v2] USB: serial: option: add MeiG Smart SLM828
+Message-ID: <Z6Hfx4KBeVHCNQVS@hovoldconsulting.com>
+References: <20250124-for-johan-meig-slm828-v2-1-6b4cd3f6344f@arinc9.com>
+ <6e2c4db7-1325-473b-9999-2b1ada418119@arinc9.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500001.china.huawei.com (7.191.163.213) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6e2c4db7-1325-473b-9999-2b1ada418119@arinc9.com>
 
-On Mon,  3 Feb 2025 15:25:17 +0100
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+On Tue, Feb 04, 2025 at 09:15:02AM +0000, Chester A. Unal wrote:
 
-> Many drivers abuse the platform driver/bus system as it provides a
-> simple way to create and bind a device to a driver-specific set of
-> probe/release functions.  Instead of doing that, and wasting all of the
-> memory associated with a platform device, here is a "faux" bus that
-> can be used instead.
-> 
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> A reminder for this patch to be applied.
 
-Nice. One trivial thing inline.
+You submitted the patch during the merge window which ended two days
+ago. It's still in my queue, don't worry.
 
-
-> diff --git a/drivers/base/faux.c b/drivers/base/faux.c
-> new file mode 100644
-> index 000000000000..0eba89a5cd57
-> --- /dev/null
-> +++ b/drivers/base/faux.c
-> @@ -0,0 +1,189 @@
-
-
-> +int __init faux_bus_init(void)
-> +{
-> +	int error;
-> +
-> +	error = device_register(&faux_bus_root);
-> +	if (error) {
-> +		put_device(&faux_bus_root);
-> +		return error;
-> +	}
-> +
-> +	error =  bus_register(&faux_bus_type);
-
-Odd bonus space after = 
-
-> +	if (error)
-> +		device_unregister(&faux_bus_root);
-> +
-> +	return error;
-> +}
+Johan
 
