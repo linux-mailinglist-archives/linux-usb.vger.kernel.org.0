@@ -1,153 +1,171 @@
-Return-Path: <linux-usb+bounces-20079-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20080-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 195A7A26F91
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 11:51:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F29D4A26FB1
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 11:59:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD1F21884FE8
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 10:51:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 723297A1B62
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 10:58:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8089520B1E8;
-	Tue,  4 Feb 2025 10:51:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADCD620C005;
+	Tue,  4 Feb 2025 10:59:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mtrnBmPh"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oliS+NTu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5026520A5F1;
-	Tue,  4 Feb 2025 10:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11A15209F5B
+	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 10:59:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738666275; cv=none; b=VIyOVo1GTSVX8trNYH0teusjzTZlGpNABW/gBbBdA/qvjcB31Md7coZT19mh3rMK9sLuRhWw9Cgj5ybx/ohCvhy4SCIlP75w5Jy2MgiE441lIGHWfvyNZlMWKYeTB+lsjTip1fV1OU2ufFZTILUnOC/mGs3xetNtvN185dvQHvI=
+	t=1738666766; cv=none; b=MaIGywNBTL3Nj4mIavLGpzyO0F336lzh75Pc7QfqGmrKB/yMSCPk7mKrTGVKOrY4tT0lk1ZLpOsG5XGgc9uZW1Wd5auZP+JaFeGuhhbfa8jbosLJNBDTm2oWFxI14oYyjAVBm7Lrl76Lx7lU/1c8bu0cSCeldLfqzrktz6jBUDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738666275; c=relaxed/simple;
-	bh=V4oM7rM5pSrLSpmMMyf2Pvg1lDo9G8RlsSCvl2A4b7A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NOGloH9HTiNNPTN1USRA8SiTU2VMxTwqIzfzuVu8QEcDh6AbhmRxccpszPxdUzTrkoCeQQE5HJdPEUu7Fp5aekVz9FZk01XAUgqZxjqVboRaiXrDN41BnS/MFGcU7Qt8CiABnj30qoPb2DfpL+9P995v2chC6hvGqXfyGbjVrqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mtrnBmPh; arc=none smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ab6f636d821so827167066b.1;
-        Tue, 04 Feb 2025 02:51:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738666271; x=1739271071; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fif907mKSJfSWbZ3mwowrZwwnt2cHeEenumwlaPa7NQ=;
-        b=mtrnBmPhMGrReCvaMP2wF9qw0Dwm8D8Du/HEn9rsntqKt7Syub21hcI41yZHzVZuoz
-         IjgBEtmvokJhQDwclCsit9U3A1tHAncJ5cFolW+Aj6OYBQiiPjHIy3vMHj/3Y15eP02H
-         ORr0AkLE/SO+XaKRh1YQ4O/3qF6gZ/1klg8tGtRbB47Nj+bt5Rk1hKGEhmLk+fGVzEMH
-         Z9stp7KaWC+RrPS3hIr6iliF+XVhkkY8CtYGiOJq2N4f2UCh75My1DgdJtZV/HJbNAV8
-         cmC/gSnTFBwwx2cUARa6/JxpTAdG9bq93EbXt1M6daoLn9hbbsudeHJu9X+5JWgyaGwc
-         am6Q==
+	s=arc-20240116; t=1738666766; c=relaxed/simple;
+	bh=KDUpqFH60In99EOYxcvh8+1IiNmgCdzqDbEQmebOkZo=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=n91XpxpvY+CL1pO0PFoV8gFdGXq2384CvbKdO+GVICqbNgFdtxIRMgCdcSRULwBu9sppIaOwdc6hbh9bKlmNd+FoCXoFFsgX4EiNX+WzMbeyCXLGOtXh2EvHRbjoAphWZ6Tdr1mcH1ILDA6lB5QWpsQQ6NZGwvv5n+kPZQbHw9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oliS+NTu; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5149sgdS005808
+	for <linux-usb@vger.kernel.org>; Tue, 4 Feb 2025 10:59:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=Bbk6v/28CZWZB/e8V3KywwDq5m0DSq4iiyz
+	z/FZspds=; b=oliS+NTuxK6FfwG3/cxiqqd9Xm8pp5WBNBIMm6b3tuDEqRMyMPW
+	D9ygEJtnm+3iG9X2uovhNKbRwdP28AmJgnBMxoNZQrnN4x2vek9syfJB8EjaWa4Q
+	8v0NWTP+ycV737y57sNRq+TGw9Dnbu0eH0U1ZE69mpysPkX15K8QhX1Dp2EvgMwT
+	t9MdEV/nMzelUkdFhGGgMMTksW0a7RVMSG628DYMgx9CQx+3wI7DXowPJevJ9NEi
+	Lr1zA3rYZrKSpuPCdxRX7yOMkwB5CpgxT5tTwCrZ60VY00aw23YEtY1BqHRPJLLK
+	DZxFPEVLpQ4un+r3C/9QKWLmy+xVnnvI0wg==
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44kgp7050m-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Tue, 04 Feb 2025 10:59:21 +0000 (GMT)
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-2ef91d5c863so10571857a91.2
+        for <linux-usb@vger.kernel.org>; Tue, 04 Feb 2025 02:59:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738666271; x=1739271071;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fif907mKSJfSWbZ3mwowrZwwnt2cHeEenumwlaPa7NQ=;
-        b=wN/QNsW0mHgBUYGB32QD7wbNC7XHxoPxZO9l45bGyL7unr73sZV9NmecxMl9zZW0T0
-         iMGtYnsOoeJJxHvvs25kyx7UixmIGZlu9FgcCwLZCt8WH5sYdgdodWtBigNTF2EPmMfF
-         SPfk5OHoKgudpSR8Z3QNcI+UBwA5fVbZ9XKY9SUKIpEnFyFbJAiI7ZEw6uXVAEemy8Co
-         orgG9BHsGHzzQfSx7r1U0Vg+OKy17I40GfLANFbfUB2L837K/uPdnYbYCuyDJnjbGVGo
-         MaPYqlxK16LB3cch1GpBflwj6D0ZYelQ44tcOQ1W9hleS9VB/bGvNN+XUqJ/7y/WZ782
-         oAzg==
-X-Forwarded-Encrypted: i=1; AJvYcCUsB97zJrMlv4c2npaxjizVfFI5zkvvyfCjs8tqHXuIIVdccSH81RSvtMqSyUbtMyNKWFImesBIkw3U@vger.kernel.org, AJvYcCV/VkMJhDZvUh1EszQmWcQVDx6xKxqRDqWVh7wo4ziboUJSboB9YwGSl9KqsFlnc3NTv/QlL1Cg@vger.kernel.org, AJvYcCWo1e9vBaRXVI8Ya5/HxfXAsU0282LaQHk5jrUBTWnMqIlId85v1aUtvNgsst3jTfX+dsFxQyd5yuVfqaQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSZVBMjYTjJ+/Wx1kDMtNRbMGkpNOde3BXQHc5AHy5AK21Cd63
-	wQL6+/7CJ7HF+uBNSNc8xv743AYvc/jVd0XsJ1+yh1G2tPmEhhzh
-X-Gm-Gg: ASbGnctNdyPTMbOlyzVugAhKtPxQ6oJIJqafCYf29HkmxFDR+GJTsJu3BDnTz3F+GO/
-	hqKVU2GEXOVw2wP/aCOw8HHQjd8g6/xGouzEmnUwbSPWvBIDP3OM+DwzjMtEaKjDVavxt86Wrx+
-	zVG6SiB4SGh6D/7lZZvOchUULauEH/MFJshRS/ueBuWMMJGAlOXUVLQjKilB0bHxaolhTPWajM7
-	WCbToYO0xwTT/p57VY/78OaRyTB+Ge1Tl2Qc2oakShd+qxiaL9vbCnPsrFI0cyGUo+ZT57eSYwD
-	n1tpI4La1BFDQmY=
-X-Google-Smtp-Source: AGHT+IHTqB6ElySIjtk/hHW6LOBX5Ks/YEIaP3vKsiXi+J8odxw44+b4UPQFzGLNPNlgn+Jl71IKBA==
-X-Received: by 2002:a17:907:7ea4:b0:aae:869f:c4ad with SMTP id a640c23a62f3a-ab6cfc87b2bmr3024719066b.7.1738666271266;
-        Tue, 04 Feb 2025 02:51:11 -0800 (PST)
-Received: from eichest-laptop ([77.109.188.34])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6e47a8012sm891359566b.22.2025.02.04.02.51.10
+        d=1e100.net; s=20230601; t=1738666760; x=1739271560;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bbk6v/28CZWZB/e8V3KywwDq5m0DSq4iiyzz/FZspds=;
+        b=YA2qOFmGm/LSo8LzeNdPbIi8ojHBB1e3hjPeS17KMptqvHLzaRHselyccAUe8HB8xc
+         x6+X7o81cn9eEZoXVFfKTMg3QNMFAyiUXBxOlBRaUh87DwmwlZMHxHvCTJ1J7jikPyjb
+         MqOWR7HTOwGWcJKa58Pg/zGlp3HOX6JnXFeyaGwKj3bA2PNgaz7hNNlC088cHWpsv4Ye
+         OAIO34m/F4m8reAjBxNs9HfG4kmPtIXrObuAB+5VWWyf465nAyswkT0OGvmk1dzE9qX9
+         rjxIakA90nfShHUnrPcmScO1/2rUh3qvq7Hy6s1IJhrJNBLUTm0Irw2P3PvSQhSyBRb3
+         mvvA==
+X-Gm-Message-State: AOJu0YynGQI6o4cOczTGOGmiuIKDC9wGsiLCKXjUm5w1P7IxXJ5BGUun
+	uRET9hsjJaT/KLJQAAHujioP32kpJWu0IBbPNftDHepyq7leQlLqCqHVKx/XsOCJ5gnuumeSmD9
+	fzftE2+4QlVaia+4ovE1gWbZRGq9LXmqsV3pA3HTquhNvozkzd1ZoeWn057I=
+X-Gm-Gg: ASbGncv3IALXSU57nYclnA/N7Kq7tBqpU4kGqPaUkGMspMB8ZERpbbpoeAWO2CeccMF
+	Dv+0wOWuKzDVomjNOJ67m5AILdGldGhP/qtszV0NWH/uOmqW89naQv1WD1iGAnotEzk52rXtS+O
+	5px66KC4PK7TYbpkLi+zeen2A3wsRAk6h658pZKLIcRJHEy6s55ktlob+NUjnDxI0BNTMDyituK
+	cYeD4TNzOYB7vQBkyoCkr6qNeMDuE1qNJZgcYE1yvLd/viyrKj6u5KWKZLEC4cIgCx4f3ZWnoXP
+	2r3nzEQ4dpt0sRH7BMlRWMeBYxmPJCrp2w==
+X-Received: by 2002:a17:90b:2f44:b0:2ee:c91a:ad05 with SMTP id 98e67ed59e1d1-2f83abc3987mr34859257a91.3.1738666760461;
+        Tue, 04 Feb 2025 02:59:20 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFDFBGFgvL9ZTIMVPksGB4FYma4HsKeELqR3L2h5d2h1EDl6nl6eH11BUBbOegxde5u3k9NJQ==
+X-Received: by 2002:a17:90b:2f44:b0:2ee:c91a:ad05 with SMTP id 98e67ed59e1d1-2f83abc3987mr34859233a91.3.1738666760104;
+        Tue, 04 Feb 2025 02:59:20 -0800 (PST)
+Received: from hu-prashk-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f8489d65a2sm11930665a91.29.2025.02.04.02.59.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 02:51:10 -0800 (PST)
-Date: Tue, 4 Feb 2025 11:51:09 +0100
-From: Stefan Eichenberger <eichest@gmail.com>
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: gregkh@linuxfoundation.org, francesco.dolcini@toradex.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH v1] usb: core: fix pipe creation for get_bMaxPacketSize0
-Message-ID: <Z6HxHXrmeEuTzE-c@eichest-laptop>
-References: <20250203105840.17539-1-eichest@gmail.com>
- <aa0c06f6-f997-4bcf-a5a3-6b17f6355fca@rowland.harvard.edu>
+        Tue, 04 Feb 2025 02:59:19 -0800 (PST)
+From: Prashanth K <prashanth.k@oss.qualcomm.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Peter Korsgaard <peter@korsgaard.com>,
+        Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Prashanth K <prashanth.k@oss.qualcomm.com>, stable@vger.kernel.org
+Subject: [PATCH RFC] usb: gadget: Set self-powered based on MaxPower and bmAttributes
+Date: Tue,  4 Feb 2025 16:29:08 +0530
+Message-Id: <20250204105908.2255686-1-prashanth.k@oss.qualcomm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aa0c06f6-f997-4bcf-a5a3-6b17f6355fca@rowland.harvard.edu>
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: HK_bXp7_roEM2jiMivteTARrlMx3ZyXm
+X-Proofpoint-GUID: HK_bXp7_roEM2jiMivteTARrlMx3ZyXm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-04_05,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
+ phishscore=0 priorityscore=1501 spamscore=0 clxscore=1015 adultscore=0
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=386 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502040087
 
-On Mon, Feb 03, 2025 at 11:02:37AM -0500, Alan Stern wrote:
-> On Mon, Feb 03, 2025 at 11:58:24AM +0100, Stefan Eichenberger wrote:
-> > From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> > 
-> > When usb_control_msg is used in the get_bMaxPacketSize0 function, the
-> > USB pipe does not include the endpoint device number. This can cause
-> > failures when a usb hub port is reinitialized after encountering a bad
-> > cable connection. As a result, the system logs the following error
-> > messages:
-> > usb usb2-port1: cannot reset (err = -32)
-> > usb usb2-port1: Cannot enable. Maybe the USB cable is bad?
-> > usb usb2-port1: attempt power cycle
-> > usb 2-1: new high-speed USB device number 5 using ci_hdrc
-> > usb 2-1: device descriptor read/8, error -71
-> > 
-> > The problem began after commit 85d07c556216 ("USB: core: Unite old
-> > scheme and new scheme descriptor reads"). There
-> > usb_get_device_descriptor was replaced with get_bMaxPacketSize0. Unlike
-> > usb_get_device_descriptor, the get_bMaxPacketSize0 function uses the
-> > macro usb_rcvaddr0pipe, which does not include the endpoint device
-> > number. usb_get_device_descriptor, on the other hand, used the macro
-> > usb_rcvctrlpipe, which includes the endpoint device number.
-> > 
-> > By modifying the get_bMaxPacketSize0 function to use usb_rcvctrlpipe
-> > instead of usb_rcvaddr0pipe, the issue can be resolved. This change will
-> > ensure that the endpoint device number is included in the USB pipe,
-> > preventing reinitialization failures. If the endpoint has not set the
-> > device number yet, it will still work because the device number is 0 in
-> > udev.
-> > 
-> > Cc: stable@vger.kernel.org
-> > Fixes: 85d07c556216 ("USB: core: Unite old scheme and new scheme descriptor reads")
-> > Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> > ---
-> > Before commit  85d07c556216 ("USB: core: Unite old scheme and new scheme
-> > descriptor reads") usb_rcvaddr0pipe was used in hub_port_init. With this
-> > proposed change, usb_rcvctrlpipe will be used which includes devnum for
-> > the pipe. I'm not sure if this might have some side effects. However, my
-> > understanding is that devnum is set to the right value (might also be 0
-> > if not initialised) before get_bMaxPacketSize0 is called. Therefore,
-> > this should work but please let me know if I'm wrong on this.
-> 
-> I believe you are correct.  This is a pretty glaring mistake; I'm 
-> surprised that it hasn't show up before now.  Thanks for fixing it.
-> 
-> Reviewed-by: Alan Stern <stern@rowland.harvard.edu>
-> 
-> In fact, it looks like usb_sndaddr0pipe is used in only one place and it 
-> can similarly be replaced by usb_sndctrlpipe, if you want to make that 
-> change as well (although this usage is not actually a mistake).
+Currently the USB gadget will be set as bus-powered based solely
+on whether its bMaxPower is greater than 100mA, but this may miss
+devices that may legitimately draw less than 100mA but still want
+to report as bus-powered. Similarly during suspend & resume, USB
+gadget is incorrectly marked as bus/self powered without checking
+the bmAttributes field. Fix these by configuring the USB gadget
+as self or bus powered based on bmAttributes, and explicitly set
+it as bus-powered if it draws more than 100mA.
 
-Thanks a lot for the feedback. I was also thinking, if this macro is
-required. I will wait a few more days to see if no one else has any
-objection and if not I will send an additional patch to also replace
-usb_sndaddr0pipe with usb_sndctrlpipe.
+Cc: stable@vger.kernel.org
+Fixes: 5e5caf4fa8d3 ("usb: gadget: composite: Inform controller driver of self-powered")
+Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
+---
+ drivers/usb/gadget/composite.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-Regards,
-Stefan
+diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+index bdda8c74602d..1fb28bbf6c45 100644
+--- a/drivers/usb/gadget/composite.c
++++ b/drivers/usb/gadget/composite.c
+@@ -1050,10 +1050,11 @@ static int set_config(struct usb_composite_dev *cdev,
+ 	else
+ 		usb_gadget_set_remote_wakeup(gadget, 0);
+ done:
+-	if (power <= USB_SELF_POWER_VBUS_MAX_DRAW)
+-		usb_gadget_set_selfpowered(gadget);
+-	else
++	if (power > USB_SELF_POWER_VBUS_MAX_DRAW ||
++	    !(c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
+ 		usb_gadget_clear_selfpowered(gadget);
++	else
++		usb_gadget_set_selfpowered(gadget);
+ 
+ 	usb_gadget_vbus_draw(gadget, power);
+ 	if (result >= 0 && cdev->delayed_status)
+@@ -2615,7 +2616,9 @@ void composite_suspend(struct usb_gadget *gadget)
+ 
+ 	cdev->suspended = 1;
+ 
+-	usb_gadget_set_selfpowered(gadget);
++	if (cdev->config->bmAttributes & USB_CONFIG_ATT_SELFPOWER)
++		usb_gadget_set_selfpowered(gadget);
++
+ 	usb_gadget_vbus_draw(gadget, 2);
+ }
+ 
+@@ -2649,8 +2652,11 @@ void composite_resume(struct usb_gadget *gadget)
+ 		else
+ 			maxpower = min(maxpower, 900U);
+ 
+-		if (maxpower > USB_SELF_POWER_VBUS_MAX_DRAW)
++		if (maxpower > USB_SELF_POWER_VBUS_MAX_DRAW ||
++		    !(cdev->config->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
+ 			usb_gadget_clear_selfpowered(gadget);
++		else
++			usb_gadget_set_selfpowered(gadget);
+ 
+ 		usb_gadget_vbus_draw(gadget, maxpower);
+ 	} else {
+-- 
+2.25.1
+
 
