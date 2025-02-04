@@ -1,113 +1,155 @@
-Return-Path: <linux-usb+bounces-20102-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20103-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0EA57A27270
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 14:08:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E131A27292
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 14:18:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 983AB165F84
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 13:08:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 974421656D3
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 13:18:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E167920DD4B;
-	Tue,  4 Feb 2025 12:50:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 394C3215163;
+	Tue,  4 Feb 2025 12:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TsTWDEcu"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="no85a8d3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB93720DD40
-	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 12:50:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E5C20CCE1;
+	Tue,  4 Feb 2025 12:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738673404; cv=none; b=qOTWh4K5Er1apJltHb0Ji06nHprGRuy1iOt9yZSC5iLnxtKSWtY7/1qBNl6Qy8YikSDGKkpcg86eOrQHWdLdi8dtymdXDxxncU3GyWmYlclf3XMlY4PRLNOEeZ3jpSJMJxt/9XGSu6ylGlIDyTTw8CWDkQ79iUMlItQWLjZMUtw=
+	t=1738673758; cv=none; b=OvVpfYiDQV+9M0oCW4V6ILLq8KbcL/1wH/x214EtHFIceo+9VV512n70+d5qZKIfesSRz7SXcgj7uaWpPEDZVoJq9LSkWQOCrf+U05WB3wnMIEzIibkYov+Pf3nuFReIEREkEJg7K9GQrD8RCjs3TQTIYJsEBnflV3Xuaj5kJOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738673404; c=relaxed/simple;
-	bh=8Uw4VQ5nb+lhco+konoBSQOXpzhjxG95Tz2ejbMJp1Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ifpPdks+Ms7DHUw0oNpZZpGr8FdUjOH1oCZU6Y/a4SeO5lZ+3N5ry+TBNdFC0lDd4paF+PCac9SO+yaYJbSkfB/8mGrbU9U/sMpY6Fk3Tb8CvkQ8nX5yNZT7DYvGYojfOb44ijTtedKkXi4xEKmU1ncCQPB+QLaM+aR9/iZL8xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TsTWDEcu; arc=none smtp.client-ip=198.175.65.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738673403; x=1770209403;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=8Uw4VQ5nb+lhco+konoBSQOXpzhjxG95Tz2ejbMJp1Y=;
-  b=TsTWDEcum9ed3Gar2C7Tl5g2vMJbTorLrxqqs92ao51qzGF4OWqrBpGb
-   GBjCcssZwbc2ejFC9sVAuQJs1nnfD90UOfGNDCyUsQz9+nyRp1jvq1Sya
-   Qn0RvrV67CQs5+Secdz+Hj5vKL8yE78zKr+bSrnkSa7vpNcQRuosbcDZF
-   MNvP9Mq0seK5qSW+8cqE8P9orF8Db9NKp9bs5+9ruIKppR0jDHXDxQlv5
-   kqZc3lQG4gxk/q4wVY1AoYX/XTXXHDDhQrzbwnfQPKeM593t/uPbic0zH
-   6hC0/zQ4YTNrmkOsK2f7nQOg9t3jjVWEU2J8R7YfuFGEQ2csiAa2VEeRj
-   w==;
-X-CSE-ConnectionGUID: dxst2cErTUykQDmDjOiLCA==
-X-CSE-MsgGUID: CgT//arATUegj2MvN5ChWw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39335177"
-X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
-   d="scan'208";a="39335177"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 04:50:02 -0800
-X-CSE-ConnectionGUID: t5O6e1mFTiGEhvw54WYB9Q==
-X-CSE-MsgGUID: 2jD8GKRuRsG6SyU/Ie0AOw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="141438687"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa001.fm.intel.com with ESMTP; 04 Feb 2025 04:50:01 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id 49E3E299; Tue, 04 Feb 2025 14:49:59 +0200 (EET)
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Cc: linux-usb@vger.kernel.org,
-	Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: [PATCH] MAINTAINERS: Use my kernel.org address for USB4/Thunderbolt work
-Date: Tue,  4 Feb 2025 14:49:59 +0200
-Message-ID: <20250204124959.3998521-1-mika.westerberg@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1738673758; c=relaxed/simple;
+	bh=79+RV3wfyZJvCYZPLtCDhJ7ch5O4tDc5RyLCB6Sl5uE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pdSIUTyHZLUcNL8giEhHVT7C2QGvZGgGDny7BgrECWoAeXAOpXNifEnuO5FOstS+aGkXNMmE8G7R71tKbK++u3ujCs/YvtIXpyfXowpbo5jZrgimJ86jC4ZBeZ/pfAf4vBMnij0KwGtEnGVvzhX9cZhq4A9IJdLIh/brKgr10NM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=no85a8d3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3AAEBC4CEDF;
+	Tue,  4 Feb 2025 12:55:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1738673757;
+	bh=79+RV3wfyZJvCYZPLtCDhJ7ch5O4tDc5RyLCB6Sl5uE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=no85a8d3ZgHd1rJTADs/tMTTpMjKlhzUTcqCMjSjx0Uj4KnYiSCvt9UkEVAsO6qt1
+	 ope9AG6O0xeLeYU7BaLeMtnpC9BUaoCq3vqeHUZcknNjhJ6aquoP0YaaDfq/WEnSBd
+	 oWa50VnC6LRQapalaMR9qEpPwjoDj9iNEUW+Smfs=
+Date: Tue, 4 Feb 2025 13:55:54 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Lyude Paul <lyude@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] driver core: add a faux bus for use when a simple
+ device/bus is needed
+Message-ID: <2025020458-overpass-pebbly-f4b9@gregkh>
+References: <2025020421-poster-moisture-534b@gregkh>
+ <2025020424-retrain-recharger-407c@gregkh>
+ <Z6H9g_bvvMf5pPyc@cassiopeiae>
+ <2025020435-earwig-zesty-87ea@gregkh>
+ <Z6ICPc3A5Cy1dgw_@cassiopeiae>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z6ICPc3A5Cy1dgw_@cassiopeiae>
 
-Switch to use my kernel.org address for USB4/Thunderbolt work.
+On Tue, Feb 04, 2025 at 01:04:13PM +0100, Danilo Krummrich wrote:
+> On Tue, Feb 04, 2025 at 12:52:34PM +0100, Greg Kroah-Hartman wrote:
+> > On Tue, Feb 04, 2025 at 12:44:03PM +0100, Danilo Krummrich wrote:
+> > > On Tue, Feb 04, 2025 at 12:09:13PM +0100, Greg Kroah-Hartman wrote:
+> > > > Many drivers abuse the platform driver/bus system as it provides a
+> > > > simple way to create and bind a device to a driver-specific set of
+> > > > probe/release functions.  Instead of doing that, and wasting all of the
+> > > > memory associated with a platform device, here is a "faux" bus that
+> > > > can be used instead.
+> > > > 
+> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > > > ---
+> > > >  v2: - renamed bus and root device to just "faux" thanks to Thomas
+> > > >      - removed the one-driver-per-device and now just have one driver
+> > > >        entirely thanks to Danilo
+> > > >      - kerneldoc fixups and additions and string handling bounds checks
+> > > >        hanks to Andy
+> > > >      - coding style fix thanks to Jonathan
+> > > >      - tested that the destroy path actually works
+> > > > 
+> > > >  drivers/base/Makefile       |   2 +-
+> > > >  drivers/base/base.h         |   1 +
+> > > >  drivers/base/faux.c         | 196 ++++++++++++++++++++++++++++++++++++
+> > > >  drivers/base/init.c         |   1 +
+> > > >  include/linux/device/faux.h |  31 ++++++
+> > > >  5 files changed, 230 insertions(+), 1 deletion(-)
+> > > >  create mode 100644 drivers/base/faux.c
+> > > >  create mode 100644 include/linux/device/faux.h
+> > > 
+> > > I really like it, it's as simply as it can be.
+> > > 
+> > > Please find one nit below, otherwise
+> > > 
+> > > Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+> > > 
+> > > > 
+> > > > +/**
+> > > > + * faux_device_destroy - destroy a faux device
+> > > > + * @faux_dev: faux device to destroy
+> > > > + *
+> > > > + * Unregister and free all memory associated with a faux device that was
+> > > > + * previously created with a call to faux_device_create().
+> > > 
+> > > Can we really claim that this frees all memory? Someone can still have a
+> > > reference to the underlying struct device, right?
+> > 
+> > That "someone" is the person that had the original device pointer passed
+> > to it, so if that person then calls faux_device_destroy(), yes, that
+> > should all be properly cleaned up.
+> > 
+> > But even if it isn't, the device is destroyed and gone from sysfs, and
+> > whenever that final final put_device() is called, the memory will then
+> > be freed by the driver core itself.
+> 
+> Oh indeed, the code here is perfectly fine. I just wanted to say that calling
+> faux_device_destroy() is not a guarantee that "all memory associated with a
+> faux device" is actually freed, as the kernel-doc comment above says (or at
+> least implies).
+> 
+> So, the concern only was that the comment could be confusing, as in "How can
+> faux_device_destroy() free the memory, if I still have a separate reference to
+> this thing?" (which it clearly would not).
 
-Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- MAINTAINERS | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Documentation is hard :)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 896a307fa065..0c98d6c71372 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -23571,7 +23571,7 @@ F:	drivers/thunderbolt/dma_test.c
- THUNDERBOLT DRIVER
- M:	Andreas Noever <andreas.noever@gmail.com>
- M:	Michael Jamet <michael.jamet@intel.com>
--M:	Mika Westerberg <mika.westerberg@linux.intel.com>
-+M:	Mika Westerberg <westeri@kernel.org>
- M:	Yehezkel Bernat <YehezkelShB@gmail.com>
- L:	linux-usb@vger.kernel.org
- S:	Maintained
-@@ -23582,7 +23582,7 @@ F:	include/linux/thunderbolt.h
- 
- THUNDERBOLT NETWORK DRIVER
- M:	Michael Jamet <michael.jamet@intel.com>
--M:	Mika Westerberg <mika.westerberg@linux.intel.com>
-+M:	Mika Westerberg <westeri@kernel.org>
- M:	Yehezkel Bernat <YehezkelShB@gmail.com>
- L:	netdev@vger.kernel.org
- S:	Maintained
--- 
-2.47.2
+Can you think of some wording here that would explain this better?
+Something like "after you call this, you can't touch the pointer you
+passed into here" is what I'm going for.
 
+I guess the documentation for device_destroy() would work here as well,
+which says:
+
+	 * This call unregisters and cleans up a device that was created with a
+	 * call to device_create().
+
+Would that be better?
+
+thanks,
+
+greg k-h
 
