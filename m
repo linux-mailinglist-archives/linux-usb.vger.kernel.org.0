@@ -1,191 +1,163 @@
-Return-Path: <linux-usb+bounces-20126-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20127-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 024DAA2796F
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 19:12:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD66AA27B6E
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 20:39:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F74F1884C4D
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 18:12:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 363633A2409
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 19:39:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C24B217664;
-	Tue,  4 Feb 2025 18:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6502204F82;
+	Tue,  4 Feb 2025 19:39:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="oEz92f3f"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lyBnaYD4"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74EE4216E2C;
-	Tue,  4 Feb 2025 18:11:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBFF204F6C
+	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 19:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738692711; cv=none; b=S49nd/GvwakZ+A14LS9124QKo1sf/7U9ovlKlp2uFR0maDvoXyFY6++NMqNilRAVj0QCRiOmsM3tkidutgVgAqJ2Ex3NiWhif+/sLT1PE2sHAq2JLPjKFtVWMNEbSK9S+t2ZocXsvdnTTgjQFvAgU3ERUZFzCLZTGIYVNZFGwNE=
+	t=1738697989; cv=none; b=OPXNuIyBxCKw/3qbHZF0R/vnvDXXrYtbFm5Gn7s2NPy2+JwQohIqRJh6Ie3Rzbrt/bBqGvv4bMxiawCl4b8PZMdsjLOxDGChikc4iSoz8cVB28TB8D9Gom2KWW+MG15gJ2eHV4G6mZMisb9GyUMImkE02a3dXA7R5iBh3jR3asg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738692711; c=relaxed/simple;
-	bh=lZohJvru0wEAeyjk9++6ixRpPfyvCVVloXV+qroa98o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KWmoSoodnm1KBNaDg0zxo9CDqDOWkaJ80HqpduOT/v0nYvbq/ScCw2yQpsySeZMP7Xu/hGVj54moVfSa/HmSPkiQGVPHiSO9pIzujpjoUcZ5fq4ZdIvdCsRPRBNe5lkjq1nAQMhOobA1mqbjypbc1vxvGKyzDfMq8cx4nQZbf74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=oEz92f3f; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=Content-Transfer-Encoding:Content-Type
-	:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=I1Z6vtjWwNt9llagECDSFKTWccFi8I5yGC2RHidsKD4=; b=oEz92f3fyA0Ss/NdcE97bUjLj7
-	OAkmAJz6Lm0uLTBPZ6NxPswyu24HgtJT3+lIvNB1KDfju9+OckM+zZ0bvj48Di2E9Qs26rkxXs+P0
-	D1ixidxJdxeV3lz+IEYoxAx246oSyeP7DBLmBywGESvSw2BL2ie+W0nUAqzkojYTVSJAk1Kr8ztjZ
-	nJGbJHJPFDyLijvKrNvcYxuBYz6PwgWMMGKzyK4mCyNotBk+elhrjdmPiXkvl2fb/QU439pBevdGi
-	n/eGJbtd5v6HkYkk/+RYUtcrevhJjHHwJwdjCzFwe9y+k6ICPVCcqAuCpzLCR64y/Dkrg9bxu0MMI
-	ARAa7TXg==;
-Received: from [50.53.2.24] (helo=[192.168.254.17])
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tfNOj-0000000GNKa-0CSH;
-	Tue, 04 Feb 2025 18:11:45 +0000
-Message-ID: <460e7278-440d-47a1-bbf3-7b7fbbe2f20d@infradead.org>
-Date: Tue, 4 Feb 2025 10:11:40 -0800
+	s=arc-20240116; t=1738697989; c=relaxed/simple;
+	bh=ZJiDN+nOQE6F2sddgObQCdlw5v60QylJn/xoU10lzpg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DrKDS16k1EXCjzmn+37zwuvDiL5Ihze4gvOSqsWT1o93N3A6iCDRUECGVFZaLMHJtbnvKgSXpa7ppktXvHYVn2FERswM1jcCzZ7KLowc9bt6Zmp7ojtDXsHO3r7O9cQHT9vYRCFaNg2zGV6ln6Vt1fxt3eh5guVC1xNsrux0l5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lyBnaYD4; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4361dc6322fso41931675e9.3
+        for <linux-usb@vger.kernel.org>; Tue, 04 Feb 2025 11:39:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1738697985; x=1739302785; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NvA9+93eZBZ2k96uE5RBukuAK+CxojboLUTlBCqCsGA=;
+        b=lyBnaYD4c+ftYkRAqQwESwfILdzTTIOT/NYJyzCEeG2mAHZLRRed5j5AN5sSGh+i2c
+         vNkjQwvnKTXyMK8oTnl2Zgbbl1g4/eupCwsJCT5727mFF1rWcKj6O63K0vOxZbUf/GEL
+         QkQPw6SJABJhjNiL9KoACmjNJB7uEfFI2RBCMJVN0vWbHxe+qdHFw5s6DxtDJHTsAegn
+         ixP4ESib++A+GT5LVJauEFEefCr4V/HaQ6bGM9HL5X9cci+9xURYUReybVdBp+BpKseV
+         QzmuPoYSxajLs2pfgep3RLNyEd8mWZSsC2Qmlze2eZ7Zlp/O43QAOV4OCWk2AWRDEyK3
+         +8Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738697985; x=1739302785;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NvA9+93eZBZ2k96uE5RBukuAK+CxojboLUTlBCqCsGA=;
+        b=Lo0/sN9Zn1v/o/YCETDS13AdzZRV0HdLNhY6z0IdXVPizzv0T3bvY/1fCFYko1aYoK
+         06n9fBbaYDmFL0BXVgFYMMmDZvHifxxPYweo60KHuGVVqq2KzyB/ptJVUitZrYmsACA0
+         Kijeg4AIFbve2ZwCZO+IyCZNSMB4GxOKozHki/rpwfwLXHIgEIQ1HGNjG76HSOYsyA+A
+         eV8uCGnB4P8znrhsirT1K9E1LZyMxaUzGi4k27mfrqk1bwptWYZhyPqR7l9y6XWuVwhh
+         la1zH1cu+KsCdSdT4pce0Ta6XuuVYpQOkYNfRSauBV3yN2kF3fIeXXjfs8sTiiz5W8CH
+         jLUQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWl5ws9oGJS2bWBoMQi2MlIStHyG97YipqPv4ErvhBzjGljotY69YGMUWEiT44tH9eEAvCfyiBXVrU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYgDRubnam4KsL50XMJDkcQusBAEVnR3n1zkQMCYkaVP1pSj/h
+	gQbSmh2o9m5VRDfJzEf+s7aIH2tEA30keqdLx5N+fu4rOq9vO/yOU8wTFG+/ZEc=
+X-Gm-Gg: ASbGnctg7J3OzLLNcHIKRhMgCWqPGQ5hXB5Y0iVDrKwvgxiS7Yl7RScPFH0MOsHr5V7
+	TbcwwkBCYE9W/aj/yXitUsnVA9ta9oERkZOhPVTrNaAxerVSoR9hnJ6yPYZacywcbkT1A++kQmv
+	/FseGeRymusOIFg60CTMXxOzaId1igYPVpI4V1k2q1cbJrtfOQSgKQfE0n8aRxVmodgsIlMFZ2O
+	MxIzEs23VGWkWR0eb9MdNbpOYR+FoeVaXkP/1O9NsoEmiaB+wZmg98mb/bQcS+IW+Oc/dbRtiwK
+	ckikiAqAw0dB6lMmrgVN
+X-Google-Smtp-Source: AGHT+IFNWvD6NvvDhpB82LWN1FYRnfaMgfQURPzQMaeDvstK6yqFp+sb4byiALVIy8hf+6SrDlX8ow==
+X-Received: by 2002:a05:600c:2313:b0:434:fbcd:1382 with SMTP id 5b1f17b1804b1-438dc3be21fmr302287695e9.11.1738697985504;
+        Tue, 04 Feb 2025 11:39:45 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-438dcc2f17dsm234958395e9.23.2025.02.04.11.39.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Feb 2025 11:39:45 -0800 (PST)
+Date: Tue, 4 Feb 2025 22:39:41 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>
+Subject: [usb:usb-next 5/12] drivers/usb/typec/ucsi/ucsi.c:88
+ ucsi_sync_control_common() error: we previously assumed 'cci' could be null
+ (see line 84)
+Message-ID: <0052316a-72c2-4e36-9cb2-ba88e9c918b3@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] docs: Fix spelling and grammatical issues
-To: Purva Yeshi <purvayeshi550@gmail.com>, jikos@kernel.org,
- bentiss@kernel.org, corbet@lwn.net, jdelvare@suse.com, linux@roeck-us.net
-Cc: skhan@linuxfoundation.org, linux-usb@vger.kernel.org,
- linux-input@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org
-References: <20250204134806.28218-1-purvayeshi550@gmail.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20250204134806.28218-1-purvayeshi550@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-next
+head:   9682c35ff6ecd76d9462d4749b8b413d3e8e605e
+commit: 667ecac55861281c1f5e107c8550ae893b3984f6 [5/12] usb: typec: ucsi: return CCI and message from sync_control callback
+config: csky-randconfig-r072-20250204 (https://download.01.org/0day-ci/archive/20250205/202502050227.tDYOqQsX-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 14.2.0
 
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202502050227.tDYOqQsX-lkp@intel.com/
 
-On 2/4/25 5:48 AM, Purva Yeshi wrote:
-> Fix several spelling and grammatical errors across multiple
-> documentation files.
-> 
-> Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
-> ---
->  Documentation/hid/hiddev.rst                | 4 ++--
->  Documentation/hid/intel-ish-hid.rst         | 2 +-
->  Documentation/hid/uhid.rst                  | 2 +-
->  Documentation/hwmon/abituguru-datasheet.rst | 8 ++++----
->  Documentation/hwmon/abituguru.rst           | 2 +-
->  5 files changed, 9 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/hid/hiddev.rst b/Documentation/hid/hiddev.rst
-> index 9b82c7f896aa..073485f84793 100644
-> --- a/Documentation/hid/hiddev.rst
-> +++ b/Documentation/hid/hiddev.rst
-> @@ -15,10 +15,10 @@ To support these disparate requirements, the Linux USB system provides
->  HID events to two separate interfaces:
->  * the input subsystem, which converts HID events into normal input
->  device interfaces (such as keyboard, mouse and joystick) and a
-> -normalised event interface - see Documentation/input/input.rst
-> +normalized event interface - see Documentation/input/input.rst
->  * the hiddev interface, which provides fairly raw HID events
->  
-> -The data flow for a HID event produced by a device is something like
-> +The data flow for an HID event produced by a device is something like
+New smatch warnings:
+drivers/usb/typec/ucsi/ucsi.c:88 ucsi_sync_control_common() error: we previously assumed 'cci' could be null (see line 84)
 
-Not needed IMO, since I think ("say") the word "hid" when I see HID.
+Old smatch warnings:
+drivers/usb/typec/ucsi/ucsi.c:746 ucsi_get_pd_caps() warn: passing zero to 'ERR_PTR'
+drivers/usb/typec/ucsi/ucsi.c:1456 ucsi_dr_swap() warn: missing error code 'ret'
 
->  the following::
->  
->   usb.c ---> hid-core.c  ----> hid-input.c ----> [keyboard/mouse/joystick/event]
-> diff --git a/Documentation/hid/intel-ish-hid.rst b/Documentation/hid/intel-ish-hid.rst
-> index 2adc174fb576..fdabf6ec60db 100644
-> --- a/Documentation/hid/intel-ish-hid.rst
-> +++ b/Documentation/hid/intel-ish-hid.rst
-> @@ -21,7 +21,7 @@ mainly use HID over I2C or USB. But ISH doesn't use either I2C or USB.
->  Overview
->  ========
->  
-> -Using a analogy with a usbhid implementation, the ISH follows a similar model
-> +Using an analogy with a usbhid implementation, the ISH follows a similar model
->  for a very high speed communication::
->  
->  	-----------------		----------------------
-> diff --git a/Documentation/hid/uhid.rst b/Documentation/hid/uhid.rst
-> index 2243a6b75914..2681038cd526 100644
-> --- a/Documentation/hid/uhid.rst
-> +++ b/Documentation/hid/uhid.rst
-> @@ -106,7 +106,7 @@ UHID_INPUT2:
->  
->  UHID_GET_REPORT_REPLY:
->    If you receive a UHID_GET_REPORT request you must answer with this request.
-> -  You  must copy the "id" field from the request into the answer. Set the "err"
-> +  You must copy the "id" field from the request into the answer. Set the "err"
+vim +/cci +88 drivers/usb/typec/ucsi/ucsi.c
 
-That part of the patch is OK but just not worth the effort IMHO.
+667ecac55861281 Dmitry Baryshkov 2025-01-20  58  int ucsi_sync_control_common(struct ucsi *ucsi, u64 command, u32 *cci,
+667ecac55861281 Dmitry Baryshkov 2025-01-20  59  			     void *data, size_t size)
+584e8df58942338 Dmitry Baryshkov 2024-06-27  60  {
+584e8df58942338 Dmitry Baryshkov 2024-06-27  61  	bool ack = UCSI_COMMAND(command) == UCSI_ACK_CC_CI;
+584e8df58942338 Dmitry Baryshkov 2024-06-27  62  	int ret;
+584e8df58942338 Dmitry Baryshkov 2024-06-27  63  
+584e8df58942338 Dmitry Baryshkov 2024-06-27  64  	if (ack)
+584e8df58942338 Dmitry Baryshkov 2024-06-27  65  		set_bit(ACK_PENDING, &ucsi->flags);
+584e8df58942338 Dmitry Baryshkov 2024-06-27  66  	else
+584e8df58942338 Dmitry Baryshkov 2024-06-27  67  		set_bit(COMMAND_PENDING, &ucsi->flags);
+584e8df58942338 Dmitry Baryshkov 2024-06-27  68  
+e37b383df91ba9b Łukasz Bartosik  2024-12-03  69  	reinit_completion(&ucsi->complete);
+e37b383df91ba9b Łukasz Bartosik  2024-12-03  70  
+584e8df58942338 Dmitry Baryshkov 2024-06-27  71  	ret = ucsi->ops->async_control(ucsi, command);
+584e8df58942338 Dmitry Baryshkov 2024-06-27  72  	if (ret)
+584e8df58942338 Dmitry Baryshkov 2024-06-27  73  		goto out_clear_bit;
+584e8df58942338 Dmitry Baryshkov 2024-06-27  74  
+584e8df58942338 Dmitry Baryshkov 2024-06-27  75  	if (!wait_for_completion_timeout(&ucsi->complete, 5 * HZ))
+584e8df58942338 Dmitry Baryshkov 2024-06-27  76  		ret = -ETIMEDOUT;
+584e8df58942338 Dmitry Baryshkov 2024-06-27  77  
+584e8df58942338 Dmitry Baryshkov 2024-06-27  78  out_clear_bit:
+584e8df58942338 Dmitry Baryshkov 2024-06-27  79  	if (ack)
+584e8df58942338 Dmitry Baryshkov 2024-06-27  80  		clear_bit(ACK_PENDING, &ucsi->flags);
+584e8df58942338 Dmitry Baryshkov 2024-06-27  81  	else
+584e8df58942338 Dmitry Baryshkov 2024-06-27  82  		clear_bit(COMMAND_PENDING, &ucsi->flags);
+584e8df58942338 Dmitry Baryshkov 2024-06-27  83  
+667ecac55861281 Dmitry Baryshkov 2025-01-20 @84  	if (!ret && cci)
+                                                                    ^^^
+This code assumes cci can be NULL
 
->    field to 0 if no error occurred or to EIO if an I/O error occurred.
->    If "err" is 0 then you should fill the buffer of the answer with the results
->    of the GET_REPORT request and set "size" correspondingly.
-> diff --git a/Documentation/hwmon/abituguru-datasheet.rst b/Documentation/hwmon/abituguru-datasheet.rst
-> index 0cd61471d2a2..8c55874061d4 100644
-> --- a/Documentation/hwmon/abituguru-datasheet.rst
-> +++ b/Documentation/hwmon/abituguru-datasheet.rst
-> @@ -6,9 +6,9 @@ First of all, what I know about uGuru is no fact based on any help, hints or
->  datasheet from Abit. The data I have got on uGuru have I assembled through
->  my weak knowledge in "backwards engineering".
->  And just for the record, you may have noticed uGuru isn't a chip developed by
-> -Abit, as they claim it to be. It's really just an microprocessor (uC) created by
-> +Abit, as they claim it to be. It's really just a microprocessor (uC) created by
->  Winbond (W83L950D). And no, reading the manual for this specific uC or
-> -mailing  Windbond for help won't give any useful data about uGuru, as it is
-> +mailing  Winbond for help won't give any useful data about uGuru, as it is
+667ecac55861281 Dmitry Baryshkov 2025-01-20  85  		ret = ucsi->ops->read_cci(ucsi, cci);
+667ecac55861281 Dmitry Baryshkov 2025-01-20  86  
+667ecac55861281 Dmitry Baryshkov 2025-01-20  87  	if (!ret && data &&
+667ecac55861281 Dmitry Baryshkov 2025-01-20 @88  	    (*cci & UCSI_CCI_COMMAND_COMPLETE))
+                                                             ^^^^
+But here it's dereferenced without checking
 
-          ^^ 2 spaces there also.
-
->  the program inside the uC that is responding to calls.
->  
->  Olle Sandberg <ollebull@gmail.com>, 2005-05-25
-> @@ -35,7 +35,7 @@ As far as known the uGuru is always placed at and using the (ISA) I/O-ports
->  ports are holding for detection. We will refer to 0xE0 as CMD (command-port)
->  and 0xE4 as DATA because Abit refers to them with these names.
->  
-> -If DATA holds 0x00 or 0x08 and CMD holds 0x00 or 0xAC an uGuru could be
-> +If DATA holds 0x00 or 0x08 and CMD holds 0x00 or 0xAC a uGuru could be
->  present. We have to check for two different values at data-port, because
->  after a reboot uGuru will hold 0x00 here, but if the driver is removed and
->  later on attached again data-port will hold 0x08, more about this later.
-> @@ -46,7 +46,7 @@ have to test CMD for two different values. On these uGuru's DATA will initially
->  hold 0x09 and will only hold 0x08 after reading CMD first, so CMD must be read
->  first!
->  
-> -To be really sure an uGuru is present a test read of one or more register
-> +To be really sure a uGuru is present a test read of one or more register
->  sets should be done.
->  
->  
-> diff --git a/Documentation/hwmon/abituguru.rst b/Documentation/hwmon/abituguru.rst
-> index cfda60b757ce..4a5ee16b1048 100644
-> --- a/Documentation/hwmon/abituguru.rst
-> +++ b/Documentation/hwmon/abituguru.rst
-> @@ -40,7 +40,7 @@ Supported chips:
->  
->  .. [2]  There is a separate abituguru3 driver for these motherboards,
->  	the abituguru (without the 3 !) driver will not work on these
-> -	motherboards (and visa versa)!
-> +	motherboards (and vice versa)!
-
-Ack.
-
->  
->  Authors:
->  	- Hans de Goede <j.w.r.degoede@hhs.nl>,
+667ecac55861281 Dmitry Baryshkov 2025-01-20  89  		ret = ucsi->ops->read_message_in(ucsi, data, size);
+667ecac55861281 Dmitry Baryshkov 2025-01-20  90  
+584e8df58942338 Dmitry Baryshkov 2024-06-27  91  	return ret;
+584e8df58942338 Dmitry Baryshkov 2024-06-27  92  }
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
