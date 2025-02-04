@@ -1,128 +1,131 @@
-Return-Path: <linux-usb+bounces-20122-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20123-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 66509A275E1
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 16:31:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AD55A276CC
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 17:06:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E90C1886E73
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 15:32:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3F4016539C
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 16:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6669214236;
-	Tue,  4 Feb 2025 15:31:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6C621518B;
+	Tue,  4 Feb 2025 16:06:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="M4G6UFHW"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hx60w7Gi"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0C1B25A659
-	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 15:31:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97052147F7
+	for <linux-usb@vger.kernel.org>; Tue,  4 Feb 2025 16:06:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738683112; cv=none; b=YS81vJ4OTiE+JI+iP7tZSX64E4jBXcztuT8M/Hck8Eo9VUYe/5MNRcN3KDHyubFeuX07YW6Awj16okO+o3ZtNX93NPk3OLBeqq7WlxOjc4pBXzwmNzXnBFqzH123rFstaTU24c60DaKH0kbgPGw5SmXrOeXW7YrGFCBNCkmO7DA=
+	t=1738685169; cv=none; b=i18KhUYIdIW8BUEe+lt9/w35Ja109DhzT78qX5cIi9UCUMXkWR4g4SVWkNAFZHDUTo6LYsL9DwTNNJqtfCm0VT1AMZJHsQausBDJiHW3KvzPQI5jVTwHWs2IFEncWCI95/ITOqLsylHH++23reL87obHc2BqGDlGZeyyewO2jV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738683112; c=relaxed/simple;
-	bh=y/HggLJSN+3EivXP89QktPNjxkoD2eOJwHrHJpo+/Rs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nrd9LjXABhmPdxa42JTu6h7GVHkI3NJF2+HCYBewen1SN+JR6TjhukdGniscLAXhjk2IHINJsBqNZAhXP2B/dy/LJ6QJ98jnaIaZXBk6jQIq8bc6+4SFN6pkFUPYwrypDJhwEOw2ehjN1DMc/bBT9netTsWdZj9ylMiXs5HwshM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=M4G6UFHW; arc=none smtp.client-ip=209.85.222.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7b6e9db19c8so511570785a.3
-        for <linux-usb@vger.kernel.org>; Tue, 04 Feb 2025 07:31:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1738683109; x=1739287909; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+6vDogQZmhVzdQ5E+BOKChoBdDnjqfZw9znSsTvbUcs=;
-        b=M4G6UFHWpy8gYFRXRRqfV1BKhkaycVWu2i+QczXlSxVjfIaexsh5y/IK9Bm7m3vz1e
-         8L6EYrDNgYQd+CIJDXJbf9ahEVltQ77J7T0BKua1EImZI/eXHHnofhN1FdQ2bUuW8re6
-         6tvGePcdgLcG2EM2yQ1OVNJ88Vgl4fD2pB6YYUZzexgAQwVvQMv/7/a+lqt8qEV7+glS
-         sgXPaVNAUswg6kdjn5nj2LOSncFmGFa7QCAVfYyTWjKh0NkOvUDqr5Ap3kXk6QbKwW1Z
-         hK1TpY4ZqaeF1R425YPx/t1+Jp0vijJtG+fTHnon9/UMttMtH+GXj+Xfbl0MxdtB9mgX
-         eM9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738683109; x=1739287909;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+6vDogQZmhVzdQ5E+BOKChoBdDnjqfZw9znSsTvbUcs=;
-        b=bl5zLXgDqSWqAbwoj0e105LFk4l/TR2jkwgaIzj5TRvQnY1a8l9/JDE9SMRJKikYir
-         za3GFN+Kz/EhZTd1qCsne6hye3RLRDTkpIslv7PLMlBmNpotbJTRuX+XVyB9H2CPNXgW
-         asmCP30H2SIZCYBfPY8xHLTfVkcN4hb58XBtzKka70AELNWOOam2Z2bfpwQb0lhC6goX
-         lMovqI/BolIgczy88JWsC96XOzXecXtN2fvEB2S8TpY6FGjZ/oPnXDmDxjT6lvCWRhWE
-         64QUxZp6v9zkv/w0G0Jciyth4nRv/eYiiX+tTb6ay4CpINhPifD990Eak+y627WxtNWj
-         3FDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVLLOnftPht96GijTKD963gACL+GK0+eDdIHVRK7C2jIN67QfCnU1fGKNStBEbRS6BOebIBFKitRj4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnqZ6FO1/Q+IZ390lKiDNCop6F+GDZHW8KqbM0+vBEUrgqGkoh
-	k7HOxh0j5XuKTckn5W++li4/4bblY3cZSWOQmifmC3F3nJhOj9OIOs+V/PsUjg==
-X-Gm-Gg: ASbGnctWTITH4Afteda0t7qR1DzuiG/UCx/q24sgxo7lU7N9XrDjI6nqlKZ2aIwP0b/
-	jQhAVu/+sVDwfPVRwQwAaIpLZ8/2o/UeU8L6KUQMTPSz0C2rF6AiS6It0Qvswlth3Dy+8mzgJGP
-	qpPgrLchwL8Rbo/a43Q2GzSZ45W2PfRgbIOZI46lpjFjc2Kbw3WSN6eO+x8MP7gqQEKAU2qheEe
-	ukfnpbv7U8Q98mZSpXllk5aIigaGNlF5TdSa/qJhqIu78uImdxu/r6xvRyw/KQL+f0bdNSDQ/BQ
-	8thg9ka47ZM73zOe903L82q58HGr7QXCvw==
-X-Google-Smtp-Source: AGHT+IGr16xztzaU5RVdUQ4EEpqABDmb/hiK2v/XZRwrNmn6sD1FtahgAqVWBvE/dHbzuTOuI+PQKA==
-X-Received: by 2002:a05:6214:19e7:b0:6d8:a610:21cc with SMTP id 6a1803df08f44-6e243b8f713mr344012086d6.1.1738683109138;
-        Tue, 04 Feb 2025 07:31:49 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e4168d91f4sm30300316d6.58.2025.02.04.07.31.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 07:31:48 -0800 (PST)
-Date: Tue, 4 Feb 2025 10:31:46 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] driver core: add a faux bus for use when a simple
- device/bus is needed
-Message-ID: <28e9ed5a-9437-4a53-a099-a8df27ca8a91@rowland.harvard.edu>
-References: <2025020421-poster-moisture-534b@gregkh>
- <2025020424-retrain-recharger-407c@gregkh>
+	s=arc-20240116; t=1738685169; c=relaxed/simple;
+	bh=qQegIozjkH9TBP91F4jmFBgGUqOVqHPMNdVJCBtfoJQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RTFJ10cx4aMKXQ82fNrpu7yHLXSFojyBKqELdw4v8R8xR2AH66ES+XlcZZvCzLRekS42dr4uej9SPxQeERUmWwrTFpbHkdhHuTm5vYZ0IYnCW7hD5ShjONFx4e5HjgzY6HK5knTyxvIPB4+26866a1fxflNflr9rE/qNKpUKeHY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hx60w7Gi; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738685168; x=1770221168;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qQegIozjkH9TBP91F4jmFBgGUqOVqHPMNdVJCBtfoJQ=;
+  b=Hx60w7Gi7jrxFoz7IFP5Tdsmxf8H5uE0/dQL3Oa9ZdD4LHv62xhpVW7z
+   auGbweUZs4MvrQJYiXUExYD8A/eV8VOJVc1yT6oHTqjpB4vCljagCiJx0
+   dFGlHnH5PHJK5CYmeKnulS8DXVPbljJ+4LIQLiUZFQSxqQEtB6y/ECREH
+   IyogXzPoaY5fnmkQENdIosLdNOhh0UW1XZEP6Hg2u988AXZcsQtLpsJEp
+   O5+aY5jHYbN1CIyLdD8w9l0TFLxnvsDaKBjhujD1A7yizXoIX7wqLnFDv
+   KADpL7vJzOHRBH5Am7vjaAYt1E+fYSiatirBiTYV7ALXyx/8kO1/HuEiU
+   Q==;
+X-CSE-ConnectionGUID: /9LuTr3WRyG7A07kQLA2sA==
+X-CSE-MsgGUID: 6catucB0QBCaXz7yDKrmCA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39373476"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="39373476"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 08:05:39 -0800
+X-CSE-ConnectionGUID: OLj7Q36xTZym8MKxJNEdIA==
+X-CSE-MsgGUID: tEOFmbr4S9GRoL+uNsQ50A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="141507140"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa002.jf.intel.com with ESMTP; 04 Feb 2025 08:05:37 -0800
+Message-ID: <3d52ea9a-7923-4f0f-9da8-507a554639fd@linux.intel.com>
+Date: Tue, 4 Feb 2025 18:06:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025020424-retrain-recharger-407c@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] usb: xhci: set page size to the xHCI-supported
+ size
+To: Niklas Neronin <niklas.neronin@linux.intel.com>
+Cc: michal.pecio@gmail.com, linux-usb@vger.kernel.org
+References: <20250204124145.3998098-1-niklas.neronin@linux.intel.com>
+ <20250204124145.3998098-3-niklas.neronin@linux.intel.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250204124145.3998098-3-niklas.neronin@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 04, 2025 at 12:09:13PM +0100, Greg Kroah-Hartman wrote:
-> Many drivers abuse the platform driver/bus system as it provides a
-> simple way to create and bind a device to a driver-specific set of
-> probe/release functions.  Instead of doing that, and wasting all of the
-> memory associated with a platform device, here is a "faux" bus that
-> can be used instead.
+On 4.2.2025 14.41, Niklas Neronin wrote:
+> The current xHCI driver does not validate whether a page size of 4096
+> bytes is supported. Address the issue by setting the page size to the
+> value supported by the xHCI controller, as read from the Page Size
+> register. In the event of an unexpected value; default to a 4K page size.
 > 
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Additionally, this commit removes unnecessary debug messages and instead
+> prints the supported and used page size once.
+> 
+> The xHCI controller supports page sizes of (2^{(n+12)}) bytes, where 'n'
+> is the Page Size Bit. Only one page size is supported, with a maximum
+> page size of 128 KB.
+> 
+> Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
 > ---
+> V3:
+>   * Rename local variable 'page_shift' to 'page_size'.
+> 
+>   drivers/usb/host/xhci-mem.c | 34 ++++++++++++++++++----------------
+>   drivers/usb/host/xhci.h     |  8 ++++----
+>   2 files changed, 22 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+> index dc5bcd8db4c0..c2ee0d32f5cd 100644
+> --- a/drivers/usb/host/xhci-mem.c
+> +++ b/drivers/usb/host/xhci-mem.c
+> @@ -1953,7 +1953,6 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
+>   	xhci->interrupters = NULL;
+>   
+>   	xhci->page_size = 0;
+> -	xhci->page_shift = 0;
+>   	xhci->usb2_rhub.bus_state.bus_suspended = 0;
+>   	xhci->usb3_rhub.bus_state.bus_suspended = 0;
+>   }
+> @@ -2372,6 +2371,22 @@ xhci_create_secondary_interrupter(struct usb_hcd *hcd, unsigned int segs,
+>   }
+>   EXPORT_SYMBOL_GPL(xhci_create_secondary_interrupter);
+>   
+> +static void xhci_hcd_page_size(struct xhci_hcd *xhci)
+> +{
+> +	u32 page_size;
+> +
+> +	page_size = readl(&xhci->op_regs->page_size) & XHCI_PAGE_SIZE_MASK;
+> +	if (!page_size || page_size & (page_size - 1)) {
 
+is_power_of_2(page_size) does the same, and is easier to understand
 
-> +/**
-> + * faux_device_create - create and register a faux device and driver
-> + * @name: name of the device and driver we are adding
-> + * @faux_ops: struct faux_driver_ops that the new device will call back into, can be NULL
-> + *
-> + * Create a new faux device and driver, both with the same name, and
-> + * register them in the driver core properly.
+-Mathias
 
-Along the same lines as Danilo's comment, this routine does not create a 
-new driver any more.
-
-Alan Stern
 
