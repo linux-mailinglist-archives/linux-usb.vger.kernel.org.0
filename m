@@ -1,170 +1,141 @@
-Return-Path: <linux-usb+bounces-20095-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20082-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD515A271BC
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 13:22:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA480A26FF2
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:10:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 440023A41AA
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:22:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A0AA3A60BD
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 11:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26AE820CCF3;
-	Tue,  4 Feb 2025 12:21:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D519620C47C;
+	Tue,  4 Feb 2025 11:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RnF5lvg3"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jwW2Kgya"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94B618DF81;
-	Tue,  4 Feb 2025 12:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5018820C464;
+	Tue,  4 Feb 2025 11:09:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738671711; cv=none; b=vEDISP5XJqqhjX1BC76xbpqaoyDvzUL2TbgXtXnwS2+YZf1OCLL8kVIG0jyeJjQE/MB+MoVlQ9MUWc8zDDaS+0nZH0jcd9M9ogqv8zpbt7NVZpx5cSca7oXbGdxSddU99rSSvOHXotdZfF1d/Vn6FUGYWwneoy4qTgY86wzdPzU=
+	t=1738667381; cv=none; b=V2GHGhF9iitWuldQBO9F1macuvu/uF30wBXQ5rxF9xf04kfmMys9pDgMvdBIYMnJDvGKYjCOMFqHT2ABDth9GBGAZw+zaE/txHE7mRVp4m208T/REOtwyhcty6eT66PjAUWsatyp36k+1SpFCoMI9iMCzhHPXC6Urum8zbQYCEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738671711; c=relaxed/simple;
-	bh=LLEZc+6K/sq3diCJw519PYCk0GDn0vH2KYZFpfTiGXw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j5WZArZ8h+fp2kRn+zU6RSWDxaTAu+Kbbv7X8yDxS9y9lNF3x05d/86EDCLJkq5nhs372fycXzRuHv+kSoO6RCJ2/Gtk3BLQ9vg9BK8HgIfd6nONFV5P9y8neboRo1w9g8NFMQtHnX2LvIc/wQL6PYYBdqhF/Anr4VXmKrUzZiM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RnF5lvg3; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21ddb406f32so7857155ad.2;
-        Tue, 04 Feb 2025 04:21:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738671709; x=1739276509; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=7cS4dggVWYZWq13ZdNTbAJXOACF9t3BShg1ZFEn8QOY=;
-        b=RnF5lvg32wf/HVfn9teTtKKEDeSfUNhQOubVZ9qNULsrYfH7W+Bb04bShrf7uQYcXK
-         EmX/yVV8x81LONPVx+mVDRwGNDMBKFYTVEszXldVkWZsRcFwKGPAhPBu2HRq8izP+bQq
-         IDQcybaxiI+Mp/I9xQZQwgVp0Tq/ca0/Wx3e6jRdAm7wAAbKDsxlyU/+PxuiC1taLmHG
-         h5ASKLZAN2cNeZ84sa2/tnW+vmuPq6XqbCI5UvvbmfkgwtYJbVFDXE7HWpirEbKuTT14
-         i1mhFubsxnfHQZdOSHvQK/yNL+ZpYbx1COzGRyx9ipIQNI90kTcONeTsPMwpXw4RevGZ
-         BhVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738671709; x=1739276509;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7cS4dggVWYZWq13ZdNTbAJXOACF9t3BShg1ZFEn8QOY=;
-        b=OomlLLhjIIbqbCLn24L3vlGPAVANNd20wzQ4NJ4nb6twoKh7lHT98dRqHmjIbtP0fF
-         H8lDSH3qOQxvxy8oHF+TZHvUqc5NlR+Xl8v3R+X5+aaxKJKxrlBux7WIEcfygm/wbNg5
-         J3wa+nMLaIsSC6CNq8oIkGLTW0vE+38Qsdzk7GPHa1a58cXGjho/2IZ2ak1HqkSO8Vja
-         1cx29NrwddjnSp0JLLPlL0eu7qP4SXiOwxqusxsJ5udzXXWyZYT+BOEM8Vl4siE8PFQO
-         se1JvOdtWTe6b7l8yE3BqysvXjLq7SW2xCCKoQ3kPfgorphBqXo7RLZWDZ32c0hBCN9V
-         YsGg==
-X-Forwarded-Encrypted: i=1; AJvYcCUqL3xP0+CuD7XTUkl58RKIW4R7pQBwUDmfqPTbXNJtgH1YXQDPSeLAkmTOt5zKNtKQ96U12Z3TfZ7p@vger.kernel.org, AJvYcCXdtS/gK/wJWN/JvnPs0tG83QHtnSWlojuq/dqQADBWh0zq/z9ABNmX9+P09PaVa+5uXia/68NvkYvI4SM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyUgSjscoMtJ5hZunyLcz1OIBxSCQVNDiWp9A0p8S+7U3F1FP6e
-	uCJIFqNu9oC5w3ecQ2bquMu6qCgvRwc4omT93ITgHFJ9KUyIggP+
-X-Gm-Gg: ASbGncvQsG0oxjqB1aTEd5Q+zv1JfubYMRk0s3EFMiTv3at6LoaJC8IkL4Mycd+AfX0
-	WOTv/t76TRvu1CMFi6+hgq1Hr316N/nJYUJnkqkZYZvzEqpdSYEzVNaC+6CscK9qVbsoEb0uwWi
-	lhoWFE6/jJ9j2B0Fio8re0gaMnlKludepziZwaTKX+lWm/TUHfQKl62PZES1Odi9gA6RoashEF9
-	+aj80YgyE+6t1oURvA+VAMPFnmza3lqWXuZnwy2skcoZ6Lv83X6kY50rL3v0aONspQ+F7AOMYtb
-	NEpBwGAMgqnSfw==
-X-Google-Smtp-Source: AGHT+IESVrrcVC4PHjZiBnNC/YCcnmdYkIHIcQ75jCuobi+3FsaoRJDY4toRo70naepl2w0KpDGptw==
-X-Received: by 2002:a17:902:d503:b0:212:63db:bb15 with SMTP id d9443c01a7336-21dd7def2f8mr434437245ad.38.1738671709030;
-        Tue, 04 Feb 2025 04:21:49 -0800 (PST)
-Received: from ubuntu ([175.141.178.229])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f088fe8a3sm9771795ad.256.2025.02.04.04.21.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 04:21:48 -0800 (PST)
-Date: Tue, 4 Feb 2025 02:35:16 +0000
-From: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
-To: Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc: andreas.noever@gmail.com, michael.jamet@intel.com, 
-	YehezkelShB@gmail.com, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] thunderbolt: Disable Gen 4 Recovery on Asymmetric
- Transitions
-Message-ID: <va65iv2kmvqtg4ikoakdtdpproz7nlxx3hdy6biqkfci445f75@btgh44vhvuc5>
-References: <20250131014406.28645-1-rahimi.mhmmd@gmail.com>
- <20250131014406.28645-4-rahimi.mhmmd@gmail.com>
- <20250203084224.GE3713119@black.fi.intel.com>
- <wxgsteiuto6qivnfttzuyw6jijs6ypcq4oyepqr6zbjgeez3ac@flvlpzswuyco>
- <20250203123944.GJ3713119@black.fi.intel.com>
- <gdojzsdm6kmg6kdoubhg3h6ebedyjswwzofdzxhfcbbdl3gsy2@wqpqcdukpn4h>
- <20250203125906.GK3713119@black.fi.intel.com>
- <20250204111624.GM3713119@black.fi.intel.com>
- <20250204113955.GN3713119@black.fi.intel.com>
+	s=arc-20240116; t=1738667381; c=relaxed/simple;
+	bh=bRb+2eug7oevSNN6g3guYnjdbVmCxro27070/JAYKzY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Trf8V7igpV8BP/pZxowJVIF5Af+/RB/KaLpRe5uMIqyEe5CGDh/zcquFI1YJe8zXuo2X2bdPoD7wPE4D3birvwy80m9kDf/fKTzP1uyIuXE2wnZ4YOGmEZqSTwA54nyKjmI3eBx3uiMPO8LjsA+uCQPoL91OpDEi5KVAITSt6GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jwW2Kgya; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F3EAC4CEDF;
+	Tue,  4 Feb 2025 11:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1738667379;
+	bh=bRb+2eug7oevSNN6g3guYnjdbVmCxro27070/JAYKzY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=jwW2KgyaUOGaHAmTFddQ8oFv+vgNpF4hhdlI2M6P5E6P1+zQsGJ1708KTQJmNqQXn
+	 3/NXuFxrNvFpvB1b9j5MZGluPFtrysO7mY6S3FWB7aya2YMVWrFwvFlsnrfxKyDYOn
+	 LpQ89qnlVB+cGDxb0/yKh5E7L90EKqfw2bRXyCP4=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Lyude Paul <lyude@redhat.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>,
+	linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH v2 0/5] Driver core: Add faux bus devices
+Date: Tue,  4 Feb 2025 12:09:12 +0100
+Message-ID: <2025020421-poster-moisture-534b@gregkh>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Lines: 66
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3184; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=kpAC8peIo+RjVDieHvnlhVPcC2SBiZSEpCbrCkyUYHE=; b=owGbwMvMwCRo6H6F97bub03G02pJDOkLvyYu969Xz7bblJ67+mrdgh/PLxx6E7qEaWnih0WvK 0S8VzbodMSyMAgyMciKKbJ82cZzdH/FIUUvQ9vTMHNYmUCGMHBxCsBEFvcxzJVV9i/9v+fxzQWb g6e3z+nMyPvrpcUwT22D316WWTqJi1muGN7dOXev6lWTNgA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250204113955.GN3713119@black.fi.intel.com>
 
-Hello dear Mika.
 
-On Tue, Feb 04, 2025 at 01:39:55PM GMT, Mika Westerberg wrote:
-> Hi Again,
-> 
-> On Tue, Feb 04, 2025 at 01:16:25PM +0200, Mika Westerberg wrote:
-> > On Mon, Feb 03, 2025 at 02:59:07PM +0200, Mika Westerberg wrote:
-> > > On Mon, Feb 03, 2025 at 12:43:04PM +0000, Mohammad Rahimi wrote:
-> > > > Hello again.
-> > > > 
-> > > > On Mon, Feb 03, 2025 at 02:39:44PM GMT, Mika Westerberg wrote:
-> > > > > Hi,
-> > > > > 
-> > > > > On Mon, Feb 03, 2025 at 12:25:21PM +0000, Mohammad Rahimi wrote:
-> > > > > > Hello.
-> > > > > > 
-> > > > > > On Mon, Feb 03, 2025 at 10:42:24AM GMT, Mika Westerberg wrote:
-> > > > > > > Hi,
-> > > > > > > 
-> > > > > > > On Fri, Jan 31, 2025 at 01:41:27AM +0000, Mohammad Rahimi wrote:
-> > > > > > > > Updates the Connection Manager to disable the Gen 4 Link Recovery
-> > > > > > > > flow before transitioning from a Symmetric Link to an Asymmetric
-> > > > > > > > Link, as specified in recent changes to the USB4 v2 specification.
-> > > > > > > > 
-> > > > > > > > According to the "USB4 2.0 ENGINEERING CHANGE NOTICE FORM"
-> > > > > > > > published in September 2024, the rationale for this change is:
-> > > > > > > > 
-> > > > > > > >   "Since the default value of the Target Asymmetric Link might be
-> > > > > > > >   different than Symmetric Link and Gen 4 Link Recovery flow checks
-> > > > > > > >   this field to make sure it matched the actual Negotiated Link Width,
-> > > > > > > >   we’re removing the condition for a Disconnect in the Gen 4 Link
-> > > > > > > >   Recovery flow when Target Asymmetric Link doesn’t match the actual
-> > > > > > > >   Link width and adding a Connection Manager note to Disable Gen 4 Link
-> > > > > > > >   Recovery flow before doing Asymmetric Transitions."
-> > > > > > > > 
-> > > > > > > > Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
-> > > > > > > 
-> > > > > > > I did some minor modifications and applied to thunderbolt.git/next. Please
-> > > > > > > let me know if I missed something.
-> > > > > > > 
-> > > > > > 
-> > > > > > Looks great. Just one question:
-> > > > > > 
-> > > > > > In tb_configure_asym(), if tb_switch_set_link_width() fails, we won’t restore
-> > > > > > the link recovery status. Is that okay?
-> > > > > 
-> > > > > Good question :) Looking at the ECR, does it actually say anywhere that the
-> > > > > CM should needs to re-enable it? I'm thinking that we could just disable it
-> > > > > and be done with it?
-> > > > 
-> > > > Right. Thanks for clearing that up.
-> > > 
-> > > I'll check with the HW/FW folks still if they have any suggestions. I'll
-> > > keep you updated.
-> > 
-> > Did not hear anything from them yet but I adjusted the patch slightly to
-> > restore ELR if tb_switch_set_link_width() and also added back the check > 0
-> > which I missed. Let me know if you find issues with this one. Thanks!
-> 
-> Okay got response now. It turns out this feature is something CM needs to
-> enable if needed (e.g it is not automatically enabled by any router) and we
-> don't do that which means this patch is not necessary, sorry. I'm going to
-> drop it for now. Let me know if you think otherwise. Thanks!
+For years/decades now, I've been complaining when I see people use
+platform devices for things that are obviously NOT platform devices.
+To finally fix this up, here is a "faux bus" that should be used instead
+of a platform device for these tiny and "fake" devices that people
+create all over the place.
 
-Oh, I also overlooked that CM has full discretion to enable or disable it.
-Anyway, thank you for keeping me in the loop and for all your help with this patch.
+The api is even simpler than the normal platform device api, just two
+functions, one to create a device and one to remove it.  When a device
+is created, if a probe/release callback is offered, they will be called
+at the proper time in the device's lifecycle.  When finished with the
+device, just destroy it and all should be good.
+
+This simple api should also hopefully provide for a simple rust binding
+to it given the simple rules and lifecycle of the pointer passed back
+from the creation function (i.e. it is alive and valid for as long as
+you have not called destroy on it.)
+
+I've also converted four different examples of platform device abuse, the
+dummy regulator driver, the USB phy code, the x86 microcode dvice, and
+the "regulator" device that wifi uses to load the firmware tables, to
+use this api.  In all cases, the logic either was identical, or became
+simpler, than before, a good sign (side note, a bug was fixed in the usb
+phy code that no one ever noticed before).
+
+Note, unless there are major objections, I'm leaning toward getting
+patch 1 of this series merged during this -rc cycle so that all of the
+individual driver subsystem cleanups can go through those subsystems as
+needed, as well as allowing the rust developers to create a binding and
+get that merged easier.  Having patch 1 merged on its own isn't going to
+cause any changes if no one uses it, so that should be fine.
+
+Changes from v2:
+  - lots of cleanups to faux.c based on reviews, see patch 1 for details
+  - actually tested the destroy device path, it worked first try!
+  - added 3 more example drivers
+
+
+Greg Kroah-Hartman (5):
+  driver core: add a faux bus for use when a simple device/bus is needed
+  regulator: dummy: convert to use the faux bus
+  USB: phy: convert usb_phy_generic logic to use a faux device
+  x86/microcode: move away from using a fake platform device
+  wifi: cfg80211: move away from using a fake platform device
+
+ arch/x86/kernel/cpu/microcode/core.c |  14 +-
+ drivers/base/Makefile                |   2 +-
+ drivers/base/base.h                  |   1 +
+ drivers/base/faux.c                  | 196 +++++++++++++++++++++++++++
+ drivers/base/init.c                  |   1 +
+ drivers/regulator/dummy.c            |  37 ++---
+ drivers/usb/chipidea/ci_hdrc_pci.c   |   2 +-
+ drivers/usb/dwc2/pci.c               |   4 +-
+ drivers/usb/musb/mediatek.c          |   4 +-
+ drivers/usb/musb/mpfs.c              |   4 +-
+ drivers/usb/musb/tusb6010.c          |   2 +-
+ drivers/usb/phy/phy-generic.c        |   9 +-
+ include/linux/device/faux.h          |  31 +++++
+ include/linux/usb/usb_phy_generic.h  |   9 +-
+ net/wireless/reg.c                   |  28 ++--
+ 15 files changed, 277 insertions(+), 67 deletions(-)
+ create mode 100644 drivers/base/faux.c
+ create mode 100644 include/linux/device/faux.h
+
+-- 
+2.48.1
 
 
