@@ -1,199 +1,142 @@
-Return-Path: <linux-usb+bounces-20086-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20087-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1BF2AA26FFC
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0AC4A27010
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 12:16:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E5A6B18823B5
-	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 11:11:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 741191885628
+	for <lists+linux-usb@lfdr.de>; Tue,  4 Feb 2025 11:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8578320E004;
-	Tue,  4 Feb 2025 11:09:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8FA320C010;
+	Tue,  4 Feb 2025 11:16:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="m5OpiXnJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FIdf5JzF"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41D620DD64;
-	Tue,  4 Feb 2025 11:09:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F95202C34;
+	Tue,  4 Feb 2025 11:16:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738667396; cv=none; b=c36goRrvyGXOFxls13KCf5mODA0f91J0V0YK15UtgKwLkg5wyMF4ZV+JI1mp+/M1GI+9Aj71O/CqYiBPJQniyOrTiKYFhBBDlj+iyCgE6YuwmgK8IIMdJnvJvpiOW0llOxjZS9DCdTLiHHLHLvEO9+HtsIgqcyAiuHD+zLKghEM=
+	t=1738667790; cv=none; b=oKmhioLT+r+WmjOkx1zUMKPbSyuK5A5I9KqX7qJnj3Au21T2zutVY8u90YMjTC+RAoO8BFS0tSAEL6LR0Sx1ErQ8pg1MP89rIQO4mC+aswbwum5gSl1/3QNqG11DkIe6lHohgKYPwFs2TiWVQS26VL4Le6Jj2v7SOmNSLSBp3Qk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738667396; c=relaxed/simple;
-	bh=ntgkV69b2fyGJypAfUMTQ4pQJEyhemVKS7tW1bGczT0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gR7Dekz/uT4/ahfu9TOCzaXPKK3lZjBlcR7QRXxMUPFqHoUbCBpmmDqOMwWvFphXcdaCAvSHN8fBuRdv6Vfj/XU/zsjgftJ4oagcao8vxEPGdQn9EvSGy+YnDabq32kNaX6+y//lfT+O8psbH1wplvqa33HGw2lZD7Nngesea0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=m5OpiXnJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6BD0C4CEE4;
-	Tue,  4 Feb 2025 11:09:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738667395;
-	bh=ntgkV69b2fyGJypAfUMTQ4pQJEyhemVKS7tW1bGczT0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=m5OpiXnJL/VJ7CuaMpqzR1NQBzX6td9VU/aPCBR7oSkz6XW9uknmvfpyLyTsMTdRz
-	 6qYahXaiBgKY0NDtUPaw5KAX5Ec5l+HzNy1n7a2EkEAKIFsk5eTA+HdNRhgeJ3+VVB
-	 OYqQ5CpQQrmCMsVgy/571Gmx0gHW4y+hhEzY2Zew=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Lyude Paul <lyude@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>,
-	linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: [PATCH v2 5/5] wifi: cfg80211: move away from using a fake platform device
-Date: Tue,  4 Feb 2025 12:09:17 +0100
-Message-ID: <2025020425-esquire-tucking-7521@gregkh>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <2025020421-poster-moisture-534b@gregkh>
-References: <2025020421-poster-moisture-534b@gregkh>
+	s=arc-20240116; t=1738667790; c=relaxed/simple;
+	bh=aO1TjNkwittiXIEvBSZzQuoL2JWhEZXpWMLS7+xv7TU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qNVSn6jMm02HrHWrITuvsn2umk/7Z/yt5gD8CU4GMzDHwckUHscFnT0iV5sM5FGCNfwmJw0Xy7VWPWuyhQ4SGyvSKBBJpTqFxHQgfQ9qVRxzJwrG8FUGU/0m4hXXsw9eThsk8YPZ1P1Aq2s4swXzMjFz0F+tY+QyBTUjHBx+61M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FIdf5JzF; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738667789; x=1770203789;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=aO1TjNkwittiXIEvBSZzQuoL2JWhEZXpWMLS7+xv7TU=;
+  b=FIdf5JzFN3otCXhjv+uJepo8qr6SQmzgs0AALccPZxdn03SlkPe68Wwe
+   Cthh6KQ3wDgiYuzqyIFX+iZp3/x1K5yymFr3ZCqwolJy8BxXwBwaXQtpc
+   9ILcJqxuIQ6gysEz2MePuermJfUKLbxPr9X/uiGg1qE8rYeczeR08VZXY
+   sFHoIcKbWFdN1mbOn4m8UDSvd9SYetHmOmsm3bN0HK8FGOslZqtVtojx7
+   Mxf2H+yXq3usOlbiRk/eKwMFux66go6enfibVLo6VkNmWY9UYAoLzkve+
+   EMtIOLZoMCta97TcowqqbpsH+Mzc/szg+OclO3K3pHCK1FOeLLmg3RIiv
+   g==;
+X-CSE-ConnectionGUID: WDSmYwoITQKdLYn+VA6P6Q==
+X-CSE-MsgGUID: u4nR5ZB3R5mHDqlGUglF+g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11335"; a="38891732"
+X-IronPort-AV: E=Sophos;i="6.13,258,1732608000"; 
+   d="scan'208";a="38891732"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Feb 2025 03:16:28 -0800
+X-CSE-ConnectionGUID: 6DnH6d90R52aUF3QtORZFw==
+X-CSE-MsgGUID: KxTBnXAjTi+oIQI1Y00Y6g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="115561812"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa003.jf.intel.com with ESMTP; 04 Feb 2025 03:16:27 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 0EA3425B; Tue, 04 Feb 2025 13:16:24 +0200 (EET)
+Date: Tue, 4 Feb 2025 13:16:24 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+Cc: andreas.noever@gmail.com, michael.jamet@intel.com,
+	YehezkelShB@gmail.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] thunderbolt: Disable Gen 4 Recovery on Asymmetric
+ Transitions
+Message-ID: <20250204111624.GM3713119@black.fi.intel.com>
+References: <20250131014406.28645-1-rahimi.mhmmd@gmail.com>
+ <20250131014406.28645-4-rahimi.mhmmd@gmail.com>
+ <20250203084224.GE3713119@black.fi.intel.com>
+ <wxgsteiuto6qivnfttzuyw6jijs6ypcq4oyepqr6zbjgeez3ac@flvlpzswuyco>
+ <20250203123944.GJ3713119@black.fi.intel.com>
+ <gdojzsdm6kmg6kdoubhg3h6ebedyjswwzofdzxhfcbbdl3gsy2@wqpqcdukpn4h>
+ <20250203125906.GK3713119@black.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Lines: 121
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4009; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=ntgkV69b2fyGJypAfUMTQ4pQJEyhemVKS7tW1bGczT0=; b=owGbwMvMwCRo6H6F97bub03G02pJDOkLv6buK9h3oSJQduHZKc+Yck6ZbHR/xC1Y/u5H+PZ3/ z45+rxT7ohlYRBkYpAVU2T5so3n6P6KQ4pehranYeawMoEMYeDiFICJbPBgmMNxcvnN43x/N+2e K+fqFxBwYuPX06wMc6Usl2yeHdLgK7642eT1U32fZAn+aQA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250203125906.GK3713119@black.fi.intel.com>
 
-Downloading firmware needs a device to hang off of, and so a platform
-device seemed like the simplest way to do this.  Now that we have a faux
-device interface, use that instead as this "regulatory device" is not
-anything resembling a platform device at all.
+On Mon, Feb 03, 2025 at 02:59:07PM +0200, Mika Westerberg wrote:
+> On Mon, Feb 03, 2025 at 12:43:04PM +0000, Mohammad Rahimi wrote:
+> > Hello again.
+> > 
+> > On Mon, Feb 03, 2025 at 02:39:44PM GMT, Mika Westerberg wrote:
+> > > Hi,
+> > > 
+> > > On Mon, Feb 03, 2025 at 12:25:21PM +0000, Mohammad Rahimi wrote:
+> > > > Hello.
+> > > > 
+> > > > On Mon, Feb 03, 2025 at 10:42:24AM GMT, Mika Westerberg wrote:
+> > > > > Hi,
+> > > > > 
+> > > > > On Fri, Jan 31, 2025 at 01:41:27AM +0000, Mohammad Rahimi wrote:
+> > > > > > Updates the Connection Manager to disable the Gen 4 Link Recovery
+> > > > > > flow before transitioning from a Symmetric Link to an Asymmetric
+> > > > > > Link, as specified in recent changes to the USB4 v2 specification.
+> > > > > > 
+> > > > > > According to the "USB4 2.0 ENGINEERING CHANGE NOTICE FORM"
+> > > > > > published in September 2024, the rationale for this change is:
+> > > > > > 
+> > > > > >   "Since the default value of the Target Asymmetric Link might be
+> > > > > >   different than Symmetric Link and Gen 4 Link Recovery flow checks
+> > > > > >   this field to make sure it matched the actual Negotiated Link Width,
+> > > > > >   we’re removing the condition for a Disconnect in the Gen 4 Link
+> > > > > >   Recovery flow when Target Asymmetric Link doesn’t match the actual
+> > > > > >   Link width and adding a Connection Manager note to Disable Gen 4 Link
+> > > > > >   Recovery flow before doing Asymmetric Transitions."
+> > > > > > 
+> > > > > > Signed-off-by: Mohammad Rahimi <rahimi.mhmmd@gmail.com>
+> > > > > 
+> > > > > I did some minor modifications and applied to thunderbolt.git/next. Please
+> > > > > let me know if I missed something.
+> > > > > 
+> > > > 
+> > > > Looks great. Just one question:
+> > > > 
+> > > > In tb_configure_asym(), if tb_switch_set_link_width() fails, we won’t restore
+> > > > the link recovery status. Is that okay?
+> > > 
+> > > Good question :) Looking at the ECR, does it actually say anywhere that the
+> > > CM should needs to re-enable it? I'm thinking that we could just disable it
+> > > and be done with it?
+> > 
+> > Right. Thanks for clearing that up.
+> 
+> I'll check with the HW/FW folks still if they have any suggestions. I'll
+> keep you updated.
 
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- v2: new example patch in this series
-
- net/wireless/reg.c | 28 ++++++++++++++--------------
- 1 file changed, 14 insertions(+), 14 deletions(-)
-
-diff --git a/net/wireless/reg.c b/net/wireless/reg.c
-index 2dd0533e7660..e7a7179eb14d 100644
---- a/net/wireless/reg.c
-+++ b/net/wireless/reg.c
-@@ -53,7 +53,7 @@
- #include <linux/list.h>
- #include <linux/ctype.h>
- #include <linux/nl80211.h>
--#include <linux/platform_device.h>
-+#include <linux/device/faux.h>
- #include <linux/verification.h>
- #include <linux/moduleparam.h>
- #include <linux/firmware.h>
-@@ -105,7 +105,7 @@ static struct regulatory_request __rcu *last_request =
- 	(void __force __rcu *)&core_request_world;
- 
- /* To trigger userspace events and load firmware */
--static struct platform_device *reg_pdev;
-+static struct faux_device *reg_fdev;
- 
- /*
-  * Central wireless core regulatory domains, we only need two,
-@@ -582,7 +582,7 @@ static int call_crda(const char *alpha2)
- 	else
- 		pr_debug("Calling CRDA to update world regulatory domain\n");
- 
--	ret = kobject_uevent_env(&reg_pdev->dev.kobj, KOBJ_CHANGE, env);
-+	ret = kobject_uevent_env(&reg_fdev->dev.kobj, KOBJ_CHANGE, env);
- 	if (ret)
- 		return ret;
- 
-@@ -778,7 +778,7 @@ static bool regdb_has_valid_signature(const u8 *data, unsigned int size)
- 	const struct firmware *sig;
- 	bool result;
- 
--	if (request_firmware(&sig, "regulatory.db.p7s", &reg_pdev->dev))
-+	if (request_firmware(&sig, "regulatory.db.p7s", &reg_fdev->dev))
- 		return false;
- 
- 	result = verify_pkcs7_signature(data, size, sig->data, sig->size,
-@@ -1060,7 +1060,7 @@ static int query_regdb_file(const char *alpha2)
- 		return -ENOMEM;
- 
- 	err = request_firmware_nowait(THIS_MODULE, true, "regulatory.db",
--				      &reg_pdev->dev, GFP_KERNEL,
-+				      &reg_fdev->dev, GFP_KERNEL,
- 				      (void *)alpha2, regdb_fw_cb);
- 	if (err)
- 		kfree(alpha2);
-@@ -1076,7 +1076,7 @@ int reg_reload_regdb(void)
- 	const struct ieee80211_regdomain *current_regdomain;
- 	struct regulatory_request *request;
- 
--	err = request_firmware(&fw, "regulatory.db", &reg_pdev->dev);
-+	err = request_firmware(&fw, "regulatory.db", &reg_fdev->dev);
- 	if (err)
- 		return err;
- 
-@@ -4297,12 +4297,12 @@ static int __init regulatory_init_db(void)
- 	 * in that case, don't try to do any further work here as
- 	 * it's doomed to lead to crashes.
- 	 */
--	if (IS_ERR_OR_NULL(reg_pdev))
-+	if (!reg_fdev)
- 		return -EINVAL;
- 
- 	err = load_builtin_regdb_keys();
- 	if (err) {
--		platform_device_unregister(reg_pdev);
-+		faux_device_destroy(reg_fdev);
- 		return err;
- 	}
- 
-@@ -4310,7 +4310,7 @@ static int __init regulatory_init_db(void)
- 	err = regulatory_hint_core(cfg80211_world_regdom->alpha2);
- 	if (err) {
- 		if (err == -ENOMEM) {
--			platform_device_unregister(reg_pdev);
-+			faux_device_destroy(reg_fdev);
- 			return err;
- 		}
- 		/*
-@@ -4339,9 +4339,9 @@ late_initcall(regulatory_init_db);
- 
- int __init regulatory_init(void)
- {
--	reg_pdev = platform_device_register_simple("regulatory", 0, NULL, 0);
--	if (IS_ERR(reg_pdev))
--		return PTR_ERR(reg_pdev);
-+	reg_fdev = faux_device_create("regulatory", NULL);
-+	if (!reg_fdev)
-+		return -ENODEV;
- 
- 	rcu_assign_pointer(cfg80211_regdomain, cfg80211_world_regdom);
- 
-@@ -4369,9 +4369,9 @@ void regulatory_exit(void)
- 	reset_regdomains(true, NULL);
- 	rtnl_unlock();
- 
--	dev_set_uevent_suppress(&reg_pdev->dev, true);
-+	dev_set_uevent_suppress(&reg_fdev->dev, true);
- 
--	platform_device_unregister(reg_pdev);
-+	faux_device_destroy(reg_fdev);
- 
- 	list_for_each_entry_safe(reg_beacon, btmp, &reg_pending_beacons, list) {
- 		list_del(&reg_beacon->list);
--- 
-2.48.1
-
+Did not hear anything from them yet but I adjusted the patch slightly to
+restore ELR if tb_switch_set_link_width() and also added back the check > 0
+which I missed. Let me know if you find issues with this one. Thanks!
 
