@@ -1,53 +1,54 @@
-Return-Path: <linux-usb+bounces-20177-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20179-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCE57A297AA
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 18:43:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5480A297B4
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 18:43:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8B961885A59
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 17:43:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A923F162EEA
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 17:43:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 327DD214A94;
-	Wed,  5 Feb 2025 17:37:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D5A21C17E;
+	Wed,  5 Feb 2025 17:37:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RqgGAIyQ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="YgViBfqb"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 649181FDA86;
-	Wed,  5 Feb 2025 17:36:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 884EF1FF7D1;
+	Wed,  5 Feb 2025 17:37:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738777022; cv=none; b=OuyqOW/nimin9K75MHHz6r/dVLnawjeb9hpbr04BWGwxSSMy5oLeQl3VPrJ1y4ceIHigzBQCZa0fZNkbSj6mvOZ48MvRGQdLfLPLLn2GhvSJeiWk/R+CdjLyv4k/iWxfgJMBNsyUwTdplTOKETH0wlFBmFLZwHIvCedyLAt6+fE=
+	t=1738777023; cv=none; b=W1J8qm2M6V2F4pi7P0NjD0fy4ferZEgZjq+8gb0AladdwNDojiKmXlCPBrb+rdsHyCj7ZxBVO2jBw8enOPzvajgaJqGCS4AayW9CGdyNK3RxWoY9/gqBoKzNdYUEnn0XuGJi34e2IHIuYK5AlkE9NDHumiu18a+2swPx4sdlgcA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738777022; c=relaxed/simple;
-	bh=HrEKbLmzvRNHBh9MzvIBNZ1CGpWtfMw0QOj+KsjPUOI=;
+	s=arc-20240116; t=1738777023; c=relaxed/simple;
+	bh=L2OOvE6BY2C8q/UOVS0u3eaSeXUfCNr7iVJvpIxD3uo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=l4PLXW0xMYQ2hDNt0wZmzwbL27/K8B+fYxSXsLqp3gDJzSM3xsfVLLRK/R+EIkSTbiFW4Yz4c4br/eICPO4jdu67pZR6+OwSY4oH9XTrZteCeU88oSHKuOKq9NrVBN2Xtzd2YeIslM83e8byEzPoPmDPrfRLxQMhiGTGa4zbzA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RqgGAIyQ; arc=none smtp.client-ip=217.70.183.201
+	 In-Reply-To:To:Cc; b=U1YDCMVFaQZq78sZm7iNkab48tvGpadaojqfTRGyAf/n5x6J3yOMwv2gmIyg7PUlAuECW9oTKg+TJFdlXLwrg0Wy7/W+uKVcRnii72nlayXe8YA+Nj2ydWOx9tdT5hV+ATSG414vZ60RbnzXEbkALFVPALBo4+Dq0fGuC7/FSsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=YgViBfqb; arc=none smtp.client-ip=217.70.183.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B8954443F8;
-	Wed,  5 Feb 2025 17:36:52 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 49E564440E;
+	Wed,  5 Feb 2025 17:36:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
 	t=1738777013;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=EmDK4DByW4Ebav/5C7x8nIQDar5bPNyT7udAmfynGZM=;
-	b=RqgGAIyQ0mzrMD7VUt+4rZgmsPrkCVLnH8M70iRWzJh1MFK+ev+Vs9vSCoBhW1maeKTYMs
-	WZGJcGA0RZMzbD0swre240ld2+VwI0t2QNaqik6Nrgvya/D4By6XTHN6oQv+PnOAzrKqSQ
-	HWMTBnFBLJ1qnW7V+ZPsA0lokVB4AbkNaqg+54bDwkQRvITtT6mkATYuBt2lZ+W/J3BDCb
-	AUm9mfNyNbyaz1ZJyFkDEPBnaqf5omWnMlNbo/8U+IIqCvQHak84XEs4uW3FQQg/cHX8gM
-	bqQFZQcqNtm+U+iL9hDOfg9phlZpj8ruxcG+TRfEr0ldkgIBQL+ezUJTn9Jwaw==
+	bh=+oJvFMur1D0C6SRuaDJZ3OKAt1xBnFwt/JFvOFy/3/o=;
+	b=YgViBfqbhAHN1Xja6xBTd+Wsq/KyuqVdXisvJdjebSPquX1mar0yS4RLomsuy8j1gDRHzn
+	+JFw21Yf/caVRH92LqVhpSaC+UTA44ag0dSG1dD8SuVoS/nc60tbyPGThD00rm3W6gEEK/
+	+8HdsVUW/LSDQLuGPehmK7CHZlEGvGbkSlBY5g0ISDeTlS3i9XBbIdjtZ9JjPk9eQ6h5xu
+	kHvIx29FOtksMLGYrVum0OkSVtuOG5b31q8iP7/S+CbqJfzoLz0czIVwNVe4eif5XOk6tF
+	VZKVi0ONHArw5qAtZRq8O48BJ1lamiEdukhpt2KHcqpG9qnMYQpTycCBsAj5cw==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Wed, 05 Feb 2025 18:36:50 +0100
-Subject: [PATCH v7 5/9] usb: cdns3-ti: move reg writes to separate function
+Date: Wed, 05 Feb 2025 18:36:51 +0100
+Subject: [PATCH v7 6/9] usb: cdns3-ti: run HW init at resume() if HW was
+ reset
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -56,7 +57,7 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250205-s2r-cdns-v7-5-13658a271c3c@bootlin.com>
+Message-Id: <20250205-s2r-cdns-v7-6-13658a271c3c@bootlin.com>
 References: <20250205-s2r-cdns-v7-0-13658a271c3c@bootlin.com>
 In-Reply-To: <20250205-s2r-cdns-v7-0-13658a271c3c@bootlin.com>
 To: Peter Chen <peter.chen@kernel.org>, Pawel Laszczak <pawell@cadence.com>, 
@@ -76,137 +77,68 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvgedtkecutefuodetggdotef
  hdrohhrghdprhgtphhtthhopehprgifvghllhestggruggvnhgtvgdrtghomhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidquhhssgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehpvghtvghrrdgthhgvnheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhoghgvrhhqsehkvghrnhgvlhdrohhrgh
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-The device probe function mixes management code and hardware
-initialisation code. Extract the latter into an explicitly named
-cdns_ti_reset_and_init_hw() function to clarify intent. It also will
-allow easier transition to using runtime PM for triggering HW init.
+At runtime_resume(), read the W1 (Wrapper Register 1) register to detect
+if an hardware reset occurred. If it did, run the hardware init sequence.
 
-Reviewed-by: Roger Quadros <rogerq@kernel.org>
+This callback will be called at system-wide resume. Previously, if a
+reset occurred during suspend, we would crash. The wrapper config had
+not been written, leading to invalid register accesses inside cdns3.
+
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/usb/cdns3/cdns3-ti.c | 82 ++++++++++++++++++++++++--------------------
- 1 file changed, 44 insertions(+), 38 deletions(-)
+ drivers/usb/cdns3/cdns3-ti.c | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
 
 diff --git a/drivers/usb/cdns3/cdns3-ti.c b/drivers/usb/cdns3/cdns3-ti.c
-index 040bb91e9c017d8298a7e251fd0e192a336e8a52..d573a259f1ae5c4efd59a496a43b23b75e859dd8 100644
+index d573a259f1ae5c4efd59a496a43b23b75e859dd8..302ebf6d8e5367c25046d8364c0b2e5b30fab4f7 100644
 --- a/drivers/usb/cdns3/cdns3-ti.c
 +++ b/drivers/usb/cdns3/cdns3-ti.c
-@@ -58,6 +58,7 @@ struct cdns_ti {
- 	unsigned vbus_divider:1;
- 	struct clk *usb2_refclk;
- 	struct clk *lpm_clk;
-+	int usb2_refclk_rate_code;
- };
+@@ -186,6 +186,12 @@ static int cdns_ti_probe(struct platform_device *pdev)
+ 	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
+ 	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
  
- static const int cdns_ti_rate_table[] = {	/* in KHZ */
-@@ -98,15 +99,50 @@ static const struct of_dev_auxdata cdns_ti_auxdata[] = {
- 	{},
- };
- 
-+static void cdns_ti_reset_and_init_hw(struct cdns_ti *data)
-+{
-+	u32 reg;
-+
-+	/* assert RESET */
-+	reg = cdns_ti_readl(data, USBSS_W1);
-+	reg &= ~USBSS_W1_PWRUP_RST;
-+	cdns_ti_writel(data, USBSS_W1, reg);
-+
-+	/* set static config */
-+	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
-+	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
-+	reg |= data->usb2_refclk_rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
-+
-+	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
-+	if (data->vbus_divider)
-+		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
-+
-+	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
-+	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
-+
-+	/* set USB2_ONLY mode if requested */
-+	reg = cdns_ti_readl(data, USBSS_W1);
-+	if (data->usb2_only)
-+		reg |= USBSS_W1_USB2_ONLY;
-+
-+	/* set default modestrap */
-+	reg |= USBSS_W1_MODESTRAP_SEL;
-+	reg &= ~USBSS_W1_MODESTRAP_MASK;
-+	reg |= USBSS_MODESTRAP_MODE_NONE << USBSS_W1_MODESTRAP_SHIFT;
-+	cdns_ti_writel(data, USBSS_W1, reg);
-+
-+	/* de-assert RESET */
-+	reg |= USBSS_W1_PWRUP_RST;
-+	cdns_ti_writel(data, USBSS_W1, reg);
-+}
-+
- static int cdns_ti_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct device_node *node = pdev->dev.of_node;
- 	struct cdns_ti *data;
--	int error;
--	u32 reg;
--	int rate_code, i;
- 	unsigned long rate;
-+	int error, i;
- 
- 	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
- 	if (!data)
-@@ -146,7 +182,11 @@ static int cdns_ti_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	rate_code = i;
-+	data->usb2_refclk_rate_code = i;
-+	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
-+	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
-+
-+	cdns_ti_reset_and_init_hw(data);
++	/*
++	 * The call below to pm_runtime_get_sync() MIGHT reset hardware, if it
++	 * detects it as uninitialised. We want to enforce a reset at probe,
++	 * and so do it manually here. This means the first runtime_resume()
++	 * will be a no-op.
++	 */
+ 	cdns_ti_reset_and_init_hw(data);
  
  	pm_runtime_enable(dev);
- 	error = pm_runtime_get_sync(dev);
-@@ -155,40 +195,6 @@ static int cdns_ti_probe(struct platform_device *pdev)
- 		goto err;
- 	}
+@@ -230,6 +236,24 @@ static void cdns_ti_remove(struct platform_device *pdev)
+ 	platform_set_drvdata(pdev, NULL);
+ }
  
--	/* assert RESET */
--	reg = cdns_ti_readl(data, USBSS_W1);
--	reg &= ~USBSS_W1_PWRUP_RST;
--	cdns_ti_writel(data, USBSS_W1, reg);
--
--	/* set static config */
--	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
--	reg &= ~USBSS1_STATIC_PLL_REF_SEL_MASK;
--	reg |= rate_code << USBSS1_STATIC_PLL_REF_SEL_SHIFT;
--
--	reg &= ~USBSS1_STATIC_VBUS_SEL_MASK;
--	data->vbus_divider = device_property_read_bool(dev, "ti,vbus-divider");
--	if (data->vbus_divider)
--		reg |= 1 << USBSS1_STATIC_VBUS_SEL_SHIFT;
--
--	cdns_ti_writel(data, USBSS_STATIC_CONFIG, reg);
--	reg = cdns_ti_readl(data, USBSS_STATIC_CONFIG);
--
--	/* set USB2_ONLY mode if requested */
--	reg = cdns_ti_readl(data, USBSS_W1);
--	data->usb2_only = device_property_read_bool(dev, "ti,usb2-only");
--	if (data->usb2_only)
--		reg |= USBSS_W1_USB2_ONLY;
--
--	/* set default modestrap */
--	reg |= USBSS_W1_MODESTRAP_SEL;
--	reg &= ~USBSS_W1_MODESTRAP_MASK;
--	reg |= USBSS_MODESTRAP_MODE_NONE << USBSS_W1_MODESTRAP_SHIFT;
--	cdns_ti_writel(data, USBSS_W1, reg);
--
--	/* de-assert RESET */
--	reg |= USBSS_W1_PWRUP_RST;
--	cdns_ti_writel(data, USBSS_W1, reg);
--
- 	error = of_platform_populate(node, NULL, cdns_ti_auxdata, dev);
- 	if (error) {
- 		dev_err(dev, "failed to create children: %d\n", error);
++static int cdns_ti_runtime_resume(struct device *dev)
++{
++	const u32 mask = USBSS_W1_PWRUP_RST | USBSS_W1_MODESTRAP_SEL;
++	struct cdns_ti *data = dev_get_drvdata(dev);
++	u32 w1;
++
++	w1 = cdns_ti_readl(data, USBSS_W1);
++	if ((w1 & mask) != mask)
++		cdns_ti_reset_and_init_hw(data);
++
++	return 0;
++}
++
++static const struct dev_pm_ops cdns_ti_pm_ops = {
++	RUNTIME_PM_OPS(NULL, cdns_ti_runtime_resume, NULL)
++	SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
++};
++
+ static const struct of_device_id cdns_ti_of_match[] = {
+ 	{ .compatible = "ti,j721e-usb", },
+ 	{ .compatible = "ti,am64-usb", },
+@@ -243,6 +267,7 @@ static struct platform_driver cdns_ti_driver = {
+ 	.driver		= {
+ 		.name	= "cdns3-ti",
+ 		.of_match_table	= cdns_ti_of_match,
++		.pm     = pm_ptr(&cdns_ti_pm_ops),
+ 	},
+ };
+ 
 
 -- 
 2.48.1
