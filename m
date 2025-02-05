@@ -1,161 +1,115 @@
-Return-Path: <linux-usb+bounces-20186-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20188-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BC47A29A31
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 20:35:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F6D6A29B2C
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 21:28:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A06433A4A0C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 19:35:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC2163A365A
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 20:27:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4BC205AA1;
-	Wed,  5 Feb 2025 19:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5AE212FA0;
+	Wed,  5 Feb 2025 20:28:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kkAVgl1X"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A6OqNIqI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 780491FF5F4;
-	Wed,  5 Feb 2025 19:35:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 489CF1519AD;
+	Wed,  5 Feb 2025 20:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738784115; cv=none; b=sru7cxYGiu1mKI13untadRXGtUGWv0iQQGEG9QxbHOJqFWavS73tQrdPXCNpKgav1FUmuErKAybffGL6gcN+LX4MZcbNgH9SwJCEQd/tdgFhADvtknYfdBxBF9+kCCo0BszQCHWfBYOZZOpiL5ORl2S9wLyVV4EJ1U67WR1MaIw=
+	t=1738787280; cv=none; b=tBrXgfDZ3Yv3Vu693aywb21JtpeH32kOkD9rhmUbcNLQPfe7rX7kvyxdhiGXSUhnzmkwj0Zb9kBuEXUrbZOEwP8Z96rJk5M0RL0Vu9HwPbcIzQ+tQdlIk5oPSvqi3qPRD79439CTGvKyG1TfWNfyLPU1922/erRNsQYNYdNeC1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738784115; c=relaxed/simple;
-	bh=ShcZHGBdifSRfT1a3wdja/S42QVCg8pR07DE0bj9C2A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=E7BK/HNBnPQ1Ww7GelOP/gd5srXdCPUMu6k39l+S95WN4fUrBICeO1eFcAQKcTM8pm1+sG/lvr1y5mrnhLxrCaXqvn1EdC22nbVm6RFY4WPjUYeKmujWtYiQY2DR6tpShmu05XtUyWJKYIJ/i82Fw3pk4v6MF8NpcsKQuQH3iVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kkAVgl1X; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B83FC4CED1;
-	Wed,  5 Feb 2025 19:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738784114;
-	bh=ShcZHGBdifSRfT1a3wdja/S42QVCg8pR07DE0bj9C2A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kkAVgl1Xjzt1q8t/CAipXH+qrumDPqWOhCqysT2XJzi3Q4mjx7rhEr5vXrre6CZwu
-	 UYBobVOwJGrYY9J0ZnXTjbgFC8CEzK141Cb6yitgYkWG61mAwSPZ5M39xC0ZcAm3Du
-	 n97+odZ/wJpzq+jCACoBPJM2OueummlRWdb5KPKLNW3hQ0rmqbCPzoht2HTFKlCpza
-	 AoxJOn1lPHCf5xHScmmz2J1Vo5x8WknrjEUVj/BPpDvyd9j9E2f//UPP1VYzPUyAjS
-	 S6KkzuwSOPqt30Q5H7BVKna7OkfGcqMo2l5qGMQq7Xp1IDt0GBdM9OGjo/0nV0PryN
-	 mlMk1g1q1BHKg==
-Message-ID: <73d4153e-cc03-45ba-ae2e-3b9f4baf7346@kernel.org>
-Date: Wed, 5 Feb 2025 20:35:09 +0100
+	s=arc-20240116; t=1738787280; c=relaxed/simple;
+	bh=15CBMjnHfLDzOcxHcj4i9dwQs3godR6phNv1yOHD2CQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=atc2YLB3/EWNtUc5eXo3ZG/c67DoTrr8a+9KLKMc0Dqv2TX9BfEPwDyxdui2oTmjRnwZ5KoT+FjsiOI3gdO9zIw/fUFl15UpdMLz8OFIgycCJ5YjJul6Hxzfkw121WQKyOy4sTmMWvGdLEszu+cZ7wEEKbyRpWuPjG0REVuoS6k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A6OqNIqI; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21634338cfdso5229375ad.2;
+        Wed, 05 Feb 2025 12:27:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738787278; x=1739392078; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o0WtarwkqI4WjE0Soy4DrMD/J0v99JZNNib7d5tgyxk=;
+        b=A6OqNIqIaxzG7a7FOY0x/zOqP8uPsvSYnvxMWWiCvjUOLf/SFDBM5qVsviY+eEHSJm
+         Qp+EACmF9z/qC73e2C/vLKSlSnLxKEzMVC/oq+D+PK/ha7GLgrsiHAJQocMScfvhnFSJ
+         3GFmDkOd+v7oo8ZbMEgFz1ztYkf9ozsy38Ypf8H0jIY5y9nuU/rhG3OreWICXP7agbiu
+         NO8qdKU+OXQWve17WFi3xmskkq62TeXnTUGf79grM/iz8BbsMt0zKTd9CDKruGsRQbKk
+         9lBRLS/s+xBsQa48rLhj/Yfi7dl3/5sHIRGkQCyB7bfRxh0PwwF+SGNuTQr8KyVRSXLi
+         QCxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738787278; x=1739392078;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o0WtarwkqI4WjE0Soy4DrMD/J0v99JZNNib7d5tgyxk=;
+        b=cf0KG4IJduNrvpquK2+r6R/8RkOYCJfh1r+2Rh4msMywe8LxEU2L4Etb1HrTUUbcCG
+         ojnh/Y2SM8rJ6XC+J6wuBW3KA16hQJUEpm/fVNe/Vjo6DOUR4YW4nrrwjCKi/gnv1v5r
+         8PUWG7CaRuYEOx1AF70WopRHP8p5gfWIdAlz0IZcY0/vXXqi2mGULt8fLn6HwcBiWEFw
+         b15ZBL3Lh92t6MkKR143TF4dNliqdkYQGVxy3BGLZcfNnLR5DmUXQDWzGGu7zD9hS1Xr
+         ax1Jr3mKKag2saSuQHGzXmCFVjo9iOf/A+5h1bz/jv/JegO6vOreFjVBlfVmOqG8y/Za
+         qu4g==
+X-Forwarded-Encrypted: i=1; AJvYcCUQ/ONg01ifPFqnBzQxyfecfJwouxKkM0Wl+swXK04SnAy5OwG1kqXj+CnHV0OKx1yo8+ih7f3xwOU3X8Y=@vger.kernel.org, AJvYcCXKsKmh967xN4GTd+bb0ChlRUkLxOiiqGPov3BLJkI2/ZXoArNDFquujZPPydlZGnUq6EJ2yMYj1UP6@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHAbYseDopCKowZGKg7pKI8LoLMRfFWt7RB04tKBZcpMVXYqeF
+	3wKxKsV8TF/a/9vRUpNwZyWAZh7SFRjsi5m4ZfbuV0O0p6yzPTPtoL5USO2uQ18=
+X-Gm-Gg: ASbGncsAxXiPJvE6KWnq/Km7SlR4prmtDVTDa5BDn4wukbR2a/xzVSIK1ZkGlR6uXzo
+	5vGeJS5ORas6qdrC1rlhaubl94SItvLk1r+3AvQ+OFDg8F5TEhmI6gK/E2LCRrY4UGyra31kLTW
+	Z6OY4J3cr7QhavC5GBhbFFFyVjJukPEqSxm8alQpeBA+T1hCZc/Ap8LR+6g6KM94Zy1LsiyHSJ8
+	k2AVLtwk7LkOUobmayBJPqt/N4WHwKXLtPVJolCnIINN/6SC/jL7GynuhLmCvCsj0RTlmWxCfo2
+	cflepY3SpUIL2y4ZqyT/7y4mYIZDL33qE0C5D4Fi87DCvVrJ
+X-Google-Smtp-Source: AGHT+IGeF/Ls5GxBWhFKZUx5uThbSUUXzfvOJ+MSpx5kUENmcIeAuhJOFMrnrQLuzWWkeZVV8OY3eg==
+X-Received: by 2002:a17:902:da83:b0:216:401f:acd with SMTP id d9443c01a7336-21f17e4e961mr78863465ad.21.1738787278402;
+        Wed, 05 Feb 2025 12:27:58 -0800 (PST)
+Received: from purva-IdeaPad-Gaming-3-15IHU6.. ([2409:40c0:101d:c4fc:84d7:253:f453:251e])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f16ab3c85sm19323755ad.37.2025.02.05.12.27.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Feb 2025 12:27:57 -0800 (PST)
+From: Purva Yeshi <purvayeshi550@gmail.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: skhan@linuxfoundation.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Purva Yeshi <purvayeshi550@gmail.com>
+Subject: [PATCH] usb: dwc3: Document nostream_work member in dwc3_ep struct
+Date: Thu,  6 Feb 2025 01:57:33 +0530
+Message-Id: <20250205202733.18611-1-purvayeshi550@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] dt-bindings: usb: snps,dwc3: Add property for imod
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
- felipe.balbi@linux.intel.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, johnyoun@synopsys.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- jameswei@google.com, stable@kernel.org
-References: <20250202035100.31235-1-badhri@google.com>
- <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
- <CAPTae5+j9N=RBpfHVE-As+dz7HzrxXAH1enWrmSdFzu6DuaTBA@mail.gmail.com>
- <80172550-a3d7-4d56-927c-ff63debc79f8@kernel.org>
- <CAPTae5+xF0B64AhT5fjMU9tcW8cT9smO5eUD=Wpsiw2CKAhDAQ@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CAPTae5+xF0B64AhT5fjMU9tcW8cT9smO5eUD=Wpsiw2CKAhDAQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 05/02/2025 19:19, Badhri Jagan Sridharan wrote:
->>>>
->>>>> +      during device mode operation. A value of 0 disables the interrupt
->>>>> +      throttling logic and interrupts are generated immediately if event
->>>>> +      count becomes non-zero. Otherwise, the interrupt is signaled when
->>>>> +      all of the following conditons are met which are, EVNT_HANDLER_BUSY
->>>>> +      is 0, event count is non-zero and at least 250ns increments of this
->>>>> +      value has elapsed since the last time interrupt was de-asserted.
->>>>
->>>> Why is this property of a board? Why different boards would wait
->>>> different amount of time?
->>>
->>> Interrupt moderation allows batch processing of events reported by the
->>> controller.
->>> A very low value of snps,device-mode-intrpt-mod-interval-ns implies
->>> that the controller will interrupt more often to make the host
->>> processor process a smaller set of events Vs a larger value will wake
->>> up the host processor at longer intervals to process events (likely
->>> more). So depending what the board is designed for this can be tuned
->>> to achieve the needed outcome.
->>
->> I do not see dependency on the board. Host has the same CPU always, so
->> it processes with the same speed.
-> 
->  By "host processor", I am referring to the CPU which is scheduling
-> the TRBs and responding to the events reported by the Synopsys DWC3
-> controller. In a nutshell, the CPU which is driving the  Synopsys DWC3
-> controller. The Synopsys DWC3 controller could be paired with any CPU
-> configuration and therefore is "Host has the same CPU always" a fair
-> assumption to be made ?
+Added description for the 'nostream_work' member in struct dwc3_ep to 
+resolve the kerneldoc warning when running 'make htmldocs'.
 
-Not really, this is part of a SoC, so DWC3 controller is always here
-fixed per given setup with given CPU. You claim that this is independent
-of SoC, but so far arguments do not support that statement. This is
-related to given SoC, so no need for this property and you can deduce
-everything from SoC.
+Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
+---
+ drivers/usb/dwc3/core.h | 1 +
+ 1 file changed, 1 insertion(+)
 
-You push this as a property because you (or vendor) do not want to
-upstream your SoC. That's common pattern, seen here many times. BTW,
-good counter argument would be to show me patches for upstream DTS users
-of this. Actually that would be very easy way to finish discussion...
-but there are no patches, right? Why? Because it is not upstream and it
-is done for downstream solution. Sorry, no. Develop code how upstream
-develops, not downstream.
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index ac7c730f8..9095878d7 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -717,6 +717,7 @@ struct dwc3_event_buffer {
+ /**
+  * struct dwc3_ep - device side endpoint representation
+  * @endpoint: usb endpoint
++ * @nostream_work: delayed work structure for handling no-stream events
+  * @cancelled_list: list of cancelled requests for this endpoint
+  * @pending_list: list of pending requests for this endpoint
+  * @started_list: list of started requests on this endpoint
+-- 
+2.34.1
 
-Best regards,
-Krzysztof
 
