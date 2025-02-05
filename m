@@ -1,203 +1,117 @@
-Return-Path: <linux-usb+bounces-20158-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20159-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A57BFA289A6
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 12:45:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1B53A28A40
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 13:27:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 334F616159D
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 11:45:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF3EE1888E1C
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 12:27:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F138B22B8C1;
-	Wed,  5 Feb 2025 11:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A65A22CBFC;
+	Wed,  5 Feb 2025 12:27:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I7O0dLY/"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wLB2Lsgu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9397721C9E9
-	for <linux-usb@vger.kernel.org>; Wed,  5 Feb 2025 11:45:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 164C015198A;
+	Wed,  5 Feb 2025 12:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738755912; cv=none; b=MEmeMn7o+c9yZniZE8MeqlAMehxNXMybZZz+jhUjW9ijrPWGdabsMoVcqU4J9656wRXhbahfcs0Y5uYesELKC3lvvF4mVUFnUkQi35W4UsCXCRbT/Q4/oZ1GGhVgtBtSmH6or1D7vabZePIIUivzSEDC2Vmg/aZjKeCX2nCSFsM=
+	t=1738758454; cv=none; b=AyxA6WvHypZowqYWv3gik3E2HccB7HKtcaO9+Y8Jxf2ARwzkJJETN6UGekVJ6i+VJZO12+H6pyE+asUZLz6luaom1ZmE1IFUmDjbrsjpkrUpSYLYdrvy+6FLUhBfDnU9LMASvoVPb9kA+E8Rbw5SgHOik3AEW6tAcHU6dEJncmk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738755912; c=relaxed/simple;
-	bh=oZAxtVET1wE2jhM9j8X99IZJQPcTavMHE2/2pQ3Gvdg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tqOUdKQK9eFbFQyxO+EUBBePXRYqShWK3UmWTjDiBaO4XwKYd7H09MS04hWFzxm2bB3U5rdcDE7kuMJoa7jEXpyZcaMdqud3HvZkF2ExuftdX+RAHxYfNnS+PWlxfvgXFrtSPZNc+S6cTRkXLIffeCMW9mDEHXYEKL51jAFWfoE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I7O0dLY/; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-38db909acc9so54466f8f.0
-        for <linux-usb@vger.kernel.org>; Wed, 05 Feb 2025 03:45:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738755909; x=1739360709; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=krjyMR76l7n+8MIJbB1GUtKwk+G5MPaqLtVtT5uYKhc=;
-        b=I7O0dLY/oiibeO4CB2TEdbN/OwOmOQEtbqQabo+PTzROnA2Y+dn+uZaFyoOvPWXLN+
-         m+secgEJIVUwfSEk/SyMX12oEUeELeMtmWnyU2x0EF0Nou0ZgCrBqYQH3gSNuD+Woxut
-         s3YIAGcJKsneq181rpczGw8YxokU7445jzLrR5FLoaV0q5i5tjl88j/TScuGYArWx3bo
-         EBMVyaiiaonZhjCZPd/2ol+DDp0xbOk3yPwCUQ/hix2AjSPb5HJeU4Q9NAl/DOnEt9ls
-         MUo/StOCbyAu/k1DZHC+zf5hsDtSGG0dSkTK4B8Zzc/76d4W7+L6MN/Y/FrLnuUeeuWX
-         GbkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738755909; x=1739360709;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=krjyMR76l7n+8MIJbB1GUtKwk+G5MPaqLtVtT5uYKhc=;
-        b=GVocl05c4QuJvw75Gx5IHZSWtyqALYaLipcv0ataXOXiaI090uwYPOR8mSxEm1PaK2
-         Tsj34VC0LZoRnaGm9QdaWFZwrr0i0SiBJfRFD6bX4waWp432tPW4ofE51SCk71EE0z5m
-         8mMacs6IwLjoPsGwz8+X4kZKIfhnI9YZJjUUmnFaZ4KybWPSzMYci+OK6xOPC+DBFbRN
-         XTVgBLEqGvVee0CS5Id7IwHUs/HNhQGTnV7m+0ku1r0c0s8/Wq9o3D2HaufamCkhX31B
-         7YP07SjZRQt1S89EW6jNkGlkuVROdS306gm9XOTBZ2hpcqz7Hf0CrQ2DVelgiXF24BOd
-         CJ8g==
-X-Forwarded-Encrypted: i=1; AJvYcCVtaaoQ4txJt+hrPi0BhZPdIo3opOx/canhLhYdHGlglTHvtrq9Vo2sX+djo8mz6Y8zhifhuwDRHNw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLU+cIDh4fHgt7VRvHLsXnWLnIOKuRRrj2K8zaU6kfZXmFP6ye
-	PLQ+uKPq5YVXpL4gYEeuFd1MPigaPbrZSSK+W/9zp9MF6Dr7pJspcATqgUCKRqk=
-X-Gm-Gg: ASbGncvIvFy4LPa3v7VYm5IswQ+2J6sBPlCjIKUllCqgjM4Tdx/+NOnm4ATjVTISQN9
-	k4cfQFivbCA11k5w7RTxBlZUni6lM9Z9af/vz+h6Ct4kdWNxFa/pBCvbN9pRA3xh211zOh/vGv5
-	cGA+tWeiqCEjbZ/0Dhswm1HXPHkYPtxmdXCxgD9Z8ALAwTclMlGoaG1UJjqoKUB+dSeoNceWYhX
-	G6ZX0i81boHyNTppM/Zfm+CR0kVh6FFnKNZmSTQc6l3218FHWUpNLNeQIK4s4KqSafhpiTH8OoF
-	lb3qvi1PhXGJ/Ls=
-X-Google-Smtp-Source: AGHT+IH5pA9nFsDUrM2gX20oCMgcw6Ettml2LCsg79WrwVjRsFnTcF1E4WteE/R+Se3LQcwvW0qvVg==
-X-Received: by 2002:a05:6000:1ac7:b0:385:ecdf:a30a with SMTP id ffacd0b85a97d-38db48e49e7mr1816903f8f.33.1738755908958;
-        Wed, 05 Feb 2025 03:45:08 -0800 (PST)
-Received: from [127.0.1.1] ([86.123.96.125])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38db15f7712sm3004674f8f.49.2025.02.05.03.45.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2025 03:45:08 -0800 (PST)
-From: Abel Vesa <abel.vesa@linaro.org>
-Date: Wed, 05 Feb 2025 13:45:05 +0200
-Subject: [PATCH RFC] usb: typec: ucsi: Schedule connector worker on
- freezable workqueue
+	s=arc-20240116; t=1738758454; c=relaxed/simple;
+	bh=Hv+9xYQ9CAGfmXnWvUtaY/aBiYCQlbRi5+XZwb6tiGA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qeajkpC1E5UbGBPdfibkiYFndtB/pq3bZPKheJK8NU3IWUETFqzgGvEk4rMNb08sbJgdB1+MTa+G7XPY1n8AzPZdwAhoX8aP2bNxoQIUgFyJpI461Tqd+Q5t26Z85xk7YYnOvF6kRu76twvMF8SwSdHldKGC+hFeJbdnZbPHAIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wLB2Lsgu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1340C4CEE2;
+	Wed,  5 Feb 2025 12:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1738758453;
+	bh=Hv+9xYQ9CAGfmXnWvUtaY/aBiYCQlbRi5+XZwb6tiGA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=wLB2LsguuDjrJK4Diz4d/2AQQANLOS821Tq9RcqF8B43gfkWg3C1w+jlaEBMRd7n9
+	 Y9g2YOzeiIKW/BE5zgGF87bJ95uTkcuTto0Va4MG8v9dukxSd4mgmlKCsPEpbnHj9c
+	 Mcs78Xu2aFHFVM65F2sb4tEebAQTsKqs7pqvWp84=
+Date: Wed, 5 Feb 2025 13:27:30 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Peter Chen <peter.chen@kernel.org>
+Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] USB: phy: convert usb_phy_generic logic to use a
+ faux device
+Message-ID: <2025020505-harsh-divisibly-51cc@gregkh>
+References: <2025020421-poster-moisture-534b@gregkh>
+ <2025020424-overstock-scheming-6a30@gregkh>
+ <20250205101916.GA4083@nchen-desktop>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250205-ucsi-schedule-conn-worker-on-freezable-wq-v1-1-107d1356b77b@linaro.org>
-X-B4-Tracking: v=1; b=H4sIAEBPo2cC/x2NQQrCMBAAv1L27MIaKIReBR/gVTwk6cYuSqK71
- Iqlfzf0OAzMrGCswgZDt4LyR0xqaXA8dJCmUO6MMjYGR64nRz3OyQQtTTzOT8ZUS8Gl6oMVa8G
- szL8Qm1jemHKm4D1F8hFa76Wc5bu/rnA5n+C2bX8PVqPpgAAAAA==
-X-Change-ID: 20250205-ucsi-schedule-conn-worker-on-freezable-wq-cff0a880b08b
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Konrad Dybcio <konradybcio@kernel.org>
-Cc: Caleb Connolly <caleb.connolly@linaro.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Johan Hovold <johan@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
- linux-arm-msm@vger.kernel.org, linux-usb@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Abel Vesa <abel.vesa@linaro.org>
-X-Mailer: b4 0.15-dev-dedf8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4279; i=abel.vesa@linaro.org;
- h=from:subject:message-id; bh=oZAxtVET1wE2jhM9j8X99IZJQPcTavMHE2/2pQ3Gvdg=;
- b=owEBbQKS/ZANAwAKARtfRMkAlRVWAcsmYgBno09CCRtR5Dy9bc/rIkazVE1mNit6USh9YXNtJ
- oD6jfCXcyeJAjMEAAEKAB0WIQRO8+4RTnqPKsqn0bgbX0TJAJUVVgUCZ6NPQgAKCRAbX0TJAJUV
- Vt9nD/4w+He57MgwTdvrkVp36C2xPg/O4NazTm2AL5sAmMCHWow1b4tpoo19+zWgA4hQoOc97IS
- DBES7a1QBSotYb7F/gHjBW+Sz2WI18IcnauMBCW4YjklGiakJgf36h8NE9s85tRM/3cE1x0WHF/
- wrfDTUL5AMdj0hrSyS1GHWyjDRezBYId8BUSkiY489/waRLCq8Ma112k3iQTw8/K2/iceQX5dt2
- N2CuzwtAPcgGF99AdrqN1Yliicy77EjlWXO/S+GFnJDUhttBo1W8zbg/yRwayQtfFN8rx7butSD
- SHOTFZMCeZUz6+h4Y9aneXKNebLRDpjzvpVK9zzRHdAoqSEyEZ/6lgU0zM1RUeIrj4udlT4/1JQ
- pD3G8JhoPwAyKVOqRc8UByzWp142HN9jJ4DvBB63797pGj5gP2Upr16zc6p0OXIg5DqWlBCe4ES
- jM1o/ArCWlILzhWBFoSC2Q+1a0JCCbYrsFtcvUjohKp+DOnWUXv6moP8A40h1GWyTBW3GeHEaWE
- sixdYNLhe6CQRARMBy7fKS8lyttXcv2ExTpuYm+h4iq+Qm8369w6GsV7JHH8Jd+ZvouX0iSepyh
- PvPikb8YR6kE/6susty9FTGnmk7WicPHnYyclyZI/Bp65ryhoCxux1jJ9C2baidZFsTtGtTztv+
- dW8ct+AQGpsnPlw==
-X-Developer-Key: i=abel.vesa@linaro.org; a=openpgp;
- fpr=6AFF162D57F4223A8770EF5AF7BF214136F41FAE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250205101916.GA4083@nchen-desktop>
 
-Currently, the UCSI connector worker is scheduled on the non-freezable
-system workqueue. During system suspend, on a plug/unplug event, the
-worker can run before the devices have actually resumed. The UCSI
-instances can implement operations that might need to do some HW accesses
-while the devices are still suspended.
+On Wed, Feb 05, 2025 at 06:19:16PM +0800, Peter Chen wrote:
+> On 25-02-04 12:09:15, Greg Kroah-Hartman wrote:
+> > The usb_phy_generic code was creating a "fake" platform device to pass
+> > around in different places.  Instead of doing that, use the faux bus
+> > instead as that is what is really wanted here.
+> 
+> Hi Greg,
+> 
+> As far as I know, there are some platforms use the device-tree to get
+> the system resource (eg, clock, reset, regular) for this driver.
+> We may not use fake bus for this driver.
 
-Scheduling the USCI connector worker on the freezable system workqueue
-instead will ensure the devices are resumed by the time the worker is
-scheduled to run.
+But there is no system resources assigned to this device/driver at all,
+so how is it getting anything here?
 
-Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
----
-Sending this as an RFC since I'm not really sure if this should be done
-in the ucsi generic implementation or in the pmic glink UCSI instance.
+> $grep -rn "usb-nop-xceiv" arch/arm64/boot/dts/*
+> 
+> arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi:649:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/freescale/imx8mm.dtsi:275:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/freescale/imx8mm.dtsi:285:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/freescale/imx93.dtsi:238:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/freescale/imx93.dtsi:245:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/freescale/imx8mn.dtsi:1321:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/intel/socfpga_agilex.dtsi:149:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi:133:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/cn9132-db.dtsi:30:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/cn9132-db.dtsi:44:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/cn9131-db.dtsi:33:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/armada-3720-db.dts:43:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/cn9130-crb.dtsi:49:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/cn9130-crb.dtsi:53:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/cn9130-db.dtsi:52:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/cn9130-db.dtsi:66:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/armada-8040-db.dts:53:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/armada-8040-db.dts:67:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/ac5-98dx35xx-rd.dts:36:		compatible = "usb-nop-xceiv";
+> arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts:39:		compatible = "usb-nop-xceiv";
 
-For context, on some Qualcomm Snapdragon X Elite laptops, there are some
-i2c interfaced USB Type-C retimers (ParadeTech PS8830) that need to be
-configured on each plug/unplug event. Since the i2c controller is
-suspended when the UCSI connector worker gets scheduled, it results in
-the following:
+Does this actually work at all?  There is no real resouces here that I
+can see, so what am I missing?
 
-[   70.036669] i2c i2c-4: Transfer while suspended
-[   70.036802] WARNING: CPU: 0 PID: 819 at drivers/i2c/i2c-core.h:56 __i2c_transfer+0xb4/0x57c [i2c_core]
-[   70.036945] CPU: 0 UID: 0 PID: 819 Comm: kworker/0:4 Tainted: G        W          6.13.0+ #84
-[   70.036949] Tainted: [W]=WARN
-[   70.036950] Hardware name: LENOVO 21N10007UK/21N10007UK, BIOS N42ET85W (2.15 ) 11/22/2024
-[   70.036952] Workqueue: events ucsi_handle_connector_change [typec_ucsi]
-[   70.036959] pstate: 61400005 (nZCv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
-[   70.036961] pc : __i2c_transfer+0xb4/0x57c [i2c_core]
-[   70.036963] lr : __i2c_transfer+0xb0/0x57c [i2c_core]
-[   70.036964] sp : ffff800082ffba90
-[   70.036966] x29: ffff800082ffba90 x28: 0000000000000000 x27: ffff1cc400dba0a0
-[   70.036969] x26: 0000000000000000 x25: ffff1cc4034bd500 x24: ffff1cc400010005
-[   70.036970] x23: 0000000000000000 x22: ffff1cc400dba0a1 x21: 0000000000000001
-[   70.036972] x20: ffff1cc4011ab0f0 x19: ffff1cc4011ab160 x18: 000000000009eb8a
-[   70.036974] x17: 00000005bf44b304 x16: 00000000000000cc x15: 0000000000000004
-[   70.036976] x14: ffffde65ecd46798 x13: 0000000000000fff x12: 0000000000000003
-[   70.036978] x11: ffff3e658f1f7000 x10: 00000000ffffffff x9 : 340eced73efb4000
-[   70.036980] x8 : 340eced73efb4000 x7 : 656c696877207265 x6 : 66736e617254203a
-[   70.036982] x5 : ffffde65ece89084 x4 : ffffde65c9120093 x3 : 0000000000000000
-[   70.036984] x2 : ffff800082ffb854 x1 : 00000000000000c0 x0 : 00000000ffffff94
-[   70.036987] Call trace:
-[   70.036989]  __i2c_transfer+0xb4/0x57c [i2c_core] (P)
-[   70.036994]  i2c_transfer+0x98/0xf0 [i2c_core]
-[   70.036995]  i2c_transfer_buffer_flags+0x54/0x88 [i2c_core]
-[   70.036997]  regmap_i2c_write+0x20/0x48 [regmap_i2c]
-[   70.037001]  _regmap_raw_write_impl+0x780/0x944
-[   70.037012]  _regmap_bus_raw_write+0x60/0x7c
-[   70.037014]  _regmap_write+0x134/0x184
-[   70.037016]  regmap_write+0x54/0x78
-[   70.037018]  ps883x_set+0x58/0xec [ps883x]
-[   70.037021]  ps883x_sw_set+0x60/0x84 [ps883x]
-[   70.037022]  typec_switch_set+0x48/0x74 [typec]
-[   70.037026]  typec_set_orientation+0x24/0x6c [typec]
-[   70.037027]  pmic_glink_ucsi_connector_status+0x30/0x7c [ucsi_glink]
-[   70.037032]  ucsi_handle_connector_change+0x98/0x614 [typec_ucsi]
-[   70.037034]  process_scheduled_works+0x1a0/0x2d0
-[   70.037045]  worker_thread+0x2a8/0x3c8
-[   70.037046]  kthread+0xfc/0x184
-[   70.037048]  ret_from_fork+0x10/0x20
----
- drivers/usb/typec/ucsi/ucsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thanks,
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index fcf499cc9458c0d12015a7e36e5f1ac448c3a431..8c6081e0cd6155a59ca733070cd93e6b79398b3e 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -1307,7 +1307,7 @@ void ucsi_connector_change(struct ucsi *ucsi, u8 num)
- 	}
- 
- 	if (!test_and_set_bit(EVENT_PENDING, &ucsi->flags))
--		schedule_work(&con->work);
-+		queue_work(system_freezable_wq, &con->work);
- }
- EXPORT_SYMBOL_GPL(ucsi_connector_change);
- 
-
----
-base-commit: 00f3246adeeacbda0bd0b303604e46eb59c32e6e
-change-id: 20250205-ucsi-schedule-conn-worker-on-freezable-wq-cff0a880b08b
-
-Best regards,
--- 
-Abel Vesa <abel.vesa@linaro.org>
-
+greg k-h
 
