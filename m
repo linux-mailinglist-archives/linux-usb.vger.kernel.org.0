@@ -1,65 +1,79 @@
-Return-Path: <linux-usb+bounces-20162-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20163-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6566FA28EBB
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 15:16:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4914A28EE0
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 15:18:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3CB437A182F
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 14:15:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4AFBC18898E1
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 14:18:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D554214D2A2;
-	Wed,  5 Feb 2025 14:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C82E1537AC;
+	Wed,  5 Feb 2025 14:17:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bfxywMgP"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kUOZDYAA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625471519BE;
-	Wed,  5 Feb 2025 14:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6A0C1519A4;
+	Wed,  5 Feb 2025 14:17:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738764997; cv=none; b=WGqH4/lc66etkCORGpa3zrCe6MkX12dzkCJ8OowKcTwFBKivqEeLxfR0KfKSWngNcH87kjuytZ9vykjtVWrJwbqQc3b6BXeOBAWjaXnl0p1EYxEYsINdNTxsmLCKXus/FAuMShv9FhstCZCprwylMemBS/FqW2dwnCNM4I7NKIY=
+	t=1738765079; cv=none; b=j7KY3PoGOhZvNR9Qw5IXsqXi9AnXV79aGXeC4pJfQuTFNtU7hoIpLh5RiDfQnXcKozbdaRuCW8udaSTY9EkFbGIx/X7RQaV/AD1AT0wDZLnklh7vGGAfmpMHHxD8DFsGzHLWoyYFx65YIHUoYoOx5Lb3Y1YL0ML4qCTlflLuAKI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738764997; c=relaxed/simple;
-	bh=ytnuGd7Q2qXoBsvqoNaaIzEvhm8uBCFG9Rm4tRWce10=;
+	s=arc-20240116; t=1738765079; c=relaxed/simple;
+	bh=kCfUchpAvQdouRUqOtAYr68h+koq2v7nnCCAuvbXfks=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cQ1uM5JD0xYiSC77brUyYo+r4zrnvJ5WpDheOJlxRG5K8R5r6CSzNFQyDkUeGa/UAha3niOGsPhVisw2eRtbq51dH1OR08a/QMfeaseRLbcKrPye+S2hiUeaqNWdiQf2TUDejiuVgBKBajyCHRdSzfgAklXxnzdN7oAoqPccx28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bfxywMgP; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738764996; x=1770300996;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=ytnuGd7Q2qXoBsvqoNaaIzEvhm8uBCFG9Rm4tRWce10=;
-  b=bfxywMgPA00vIOlwuakc4lmGXz9JN843nTt1zyL2Jx43Wzo0X17qj7qN
-   diUUSKN91mcFib92cgjtbNH29Vwc4jlURB2+HrcPnNGo4dxUFHFmAdc3v
-   cns9fUTJEB037vofLEjjer+pxFuOE30/HQjFScVu9O3XIx9dXdBxqMVyn
-   oFtIsABBXo6ZTLQVLPFlcakOueirExBSO0d50TZecHNKoryc+a27PgfKK
-   yiaQu4jUHjY6ryGV94lLCnqNYUsKoQfOwcZaMo4Uq9S5lHXQvvfrN49Rr
-   eR+rzdkI2RBAFuWaSHQnY0DvMH/T9kDthPum8kp/yKeAwPeaa6HiDiRUU
-   g==;
-X-CSE-ConnectionGUID: 1bhRCv8OTVycUix+3GxRYQ==
-X-CSE-MsgGUID: +nGrMYbbTK6FZTUJCWjCwQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="26935325"
-X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
-   d="scan'208";a="26935325"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 06:16:35 -0800
-X-CSE-ConnectionGUID: 143MMiNlRHaIXhEvZWb7Zw==
-X-CSE-MsgGUID: GiGYv/mAQ1yJxLRtX0HmkA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116114484"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa005.jf.intel.com with ESMTP; 05 Feb 2025 06:16:33 -0800
-Message-ID: <c746c10a-d504-48bc-bc8d-ba65230d13f6@linux.intel.com>
-Date: Wed, 5 Feb 2025 16:17:35 +0200
+	 In-Reply-To:Content-Type; b=i61pn72molvLXixxAjzJFbkpJC4RwuCXGT3ejksABHJ6oeuhMXVuJh3QlyLk5y8e9VJ536kqYB80wu3mVMYn5zUrWuGxxG7DPnqmwHsT1Z2reId71BkSDUG12Kk/hk8jlk0FSEpI72CUZLtyzBBAoIZHcFgMFP0tDla5vcNKZYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kUOZDYAA; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-21f01fe1ce8so28182205ad.2;
+        Wed, 05 Feb 2025 06:17:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738765077; x=1739369877; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VcuHV//CqWEAEPHklwA8JRpMX3hskDBhsy+HhwiU6j4=;
+        b=kUOZDYAArTOCoNm5Rwh8bK61/WccMDxcMF7DMitTmN3uctc9/c8EaOLFpdzGB0a3BR
+         TOIZgIEZFxQEtL7phozUIvxSZLi6nCp3JOu5kyfvPPB4MLd6xNNzxG2R2i9mrKQUYucn
+         iGPT90JgWFtkGyW8zkhXVvZjQeG5Zqrf3IE5tW8qJQ0KfSQIHLPVZWZE+B5uyP4XrvNc
+         9ohcUnv7MDUPwsB65lTackusleC54u0NUb+aBHe+OtG4eYJZeCbBd2saIR4wUnpv7hhE
+         q9BPHWISthoSSmGhQH8eQUFjZCXxsgfAVFJyHfInwNkHHDU1nB2Vu+raIdscsoxGH8el
+         sxUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738765077; x=1739369877;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VcuHV//CqWEAEPHklwA8JRpMX3hskDBhsy+HhwiU6j4=;
+        b=bJOO+A77SmLy1S4hRnz9d75344U1OGIWKQ8AsQydM2ge4qOjmAqFBU8OJTDxNOfU4E
+         7uDA8XmSK/4XuqMn7OAlcJpMO3QGeMHxeU5AnIteHaaDyycu6URWVRw5njGHBKLcY91s
+         h6HDyms10/qhmnuY9F8OSm675s5160y5uCH4ctxeed9AogvFx7toIAhfaBG3IoEpJgX4
+         H6OGmRwWDWlQFD7PAURy22xlFN7UURUAbZV9mv3TFIiiwBgeqNI6GkzP2oE9eYdYVb2t
+         0L7srAE9j4fTDDyrZzJVlhObsi64ImTziuoDbpqCOrF9FTBMsCMBcQ5Ls02lLcaB4Ej2
+         pnyA==
+X-Forwarded-Encrypted: i=1; AJvYcCWAJxWYQMS5wMn8tOSetNnMMFh/jeKYT7mqadN9efnDIlu+i7C/bOovQS0U1jPhN5QWlVrP+51Kn7y6@vger.kernel.org, AJvYcCXmStnSADe722fMxta2SZunJDLHdiS0NunujmWMCwyQMQkWJ54C+2/kJZ4HInSRwHCVrafeY4O8eso2LPE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMrVMHLb5QpuXG/D+j1WZ33/XlO6L6Jbuu38ni5yIqldqL0Yqh
+	75UE3gODogYyYE/ET26maxTnn1HP0gVsESPJ+P9eCnhAeBAuBtyB71qkokxCn7U=
+X-Gm-Gg: ASbGncskvoVkMWlUY8AK28cCtrsg3AbhuujOfKuzVVUOihsOuSzzdLp2zFFka+4xRaD
+	EeMid2UoxrUX4qH29DcetYKMDvmpapuZm8pgviBT50Kd+iA2u8u8LFgQRVmb+NKAtIprm/HlRE4
+	E5e/LG1Q3yBZ1P/1Mby9HPONmwIUyfCbREj8lw0VXDVyefNm3VYpUMYmetjnIEq81Id9mhaGo9h
+	w7PhcI5hkCJdXprc8U/lpqEtC8IiZ2KjJZwpnOTUjT0E6YWZrPr9xXdPuwKUvNbi3kvxf9Yay/j
+	S+tsozPOg3LrhmU1R9E7CG1Akdzt59n3IdrxvZ5ylmmO8VkrAqkUMn6MP9DhFxYgBDJ13g==
+X-Google-Smtp-Source: AGHT+IHm/dN8qGlut67b7C3DuIdKOJbfPC8+1zoE7gEw/+7gw8TQQJP1s+o8VkWrlNQTK5/GY+/QgQ==
+X-Received: by 2002:a17:902:ced2:b0:21c:15b3:e3a8 with SMTP id d9443c01a7336-21f17f031bamr42642835ad.37.1738765076795;
+        Wed, 05 Feb 2025 06:17:56 -0800 (PST)
+Received: from ?IPV6:2409:40c0:101d:c4fc:7d0c:2c80:3117:848c? ([2409:40c0:101d:c4fc:7d0c:2c80:3117:848c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f234f3cedsm7034455ad.81.2025.02.05.06.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Feb 2025 06:17:56 -0800 (PST)
+Message-ID: <752c6c87-567f-4569-8eda-2ca4d67211b3@gmail.com>
+Date: Wed, 5 Feb 2025 19:47:51 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,58 +81,67 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/1] xhci: Correctly handle last TRB of isoc TD on
- Etron xHCI host
-To: Kuangyi Chiang <ki.chiang65@gmail.com>, mathias.nyman@intel.com,
- gregkh@linuxfoundation.org
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20250205053750.28251-1-ki.chiang65@gmail.com>
- <20250205053750.28251-2-ki.chiang65@gmail.com>
+Subject: Re: [PATCH] usb: dwc3: Fix kernel-doc warning for sg member in
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Thinh.Nguyen@synopsys.com, skhan@linuxfoundation.org,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250204134423.28051-1-purvayeshi550@gmail.com>
+ <2025020439-bulgur-ludicrous-5071@gregkh>
+ <cc1694bc-88fd-4557-b957-aabf1f444eaf@gmail.com>
+ <2025020552-sandstorm-thaw-132e@gregkh>
 Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250205053750.28251-2-ki.chiang65@gmail.com>
+From: Purva Yeshi <purvayeshi550@gmail.com>
+In-Reply-To: <2025020552-sandstorm-thaw-132e@gregkh>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 5.2.2025 7.37, Kuangyi Chiang wrote:
-> Unplugging a USB3.0 webcam while streaming results in errors like this:
+On 05/02/25 10:57, Greg KH wrote:
+> On Wed, Feb 05, 2025 at 02:15:08AM +0530, Purva Yeshi wrote:
+>> On 04/02/25 19:15, Greg KH wrote:
+>>> On Tue, Feb 04, 2025 at 07:14:23PM +0530, Purva Yeshi wrote:
+>>>> Added description for the 'sg' member in struct dwc3_request to
+>>>> resolve the kerneldoc warning when running 'make htmldocs'.
+>>>>
+>>>> Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
+>>>> ---
+>>>>    drivers/usb/dwc3/core.h | 1 +
+>>>>    1 file changed, 1 insertion(+)
+>>>>
+>>>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>>>> index f11570c8ffd0..5e4daec322b7 100644
+>>>> --- a/drivers/usb/dwc3/core.h
+>>>> +++ b/drivers/usb/dwc3/core.h
+>>>> @@ -942,6 +942,7 @@ struct dwc3_hwparams {
+>>>>     * @request: struct usb_request to be transferred
+>>>>     * @list: a list_head used for request queueing
+>>>>     * @dep: struct dwc3_ep owning this request
+>>>> + * @sg: pointer to the scatter-gather list
+>>>>     * @start_sg: pointer to the sg which should be queued next
+>>>>     * @num_pending_sgs: counter to pending sgs
+>>>>     * @remaining: amount of data remaining
+>>>> -- 
+>>>> 2.34.1
+>>>>
+>>>
+>>> What kernel version/tree did you make this change against?
+>>>
+>>> thanks,
+>>>
+>>> greg k-h
+>>
+>> The change was made against kernel version 6.13.0-rc7+.
 > 
-> [ 132.646387] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 18 comp_code 13
-> [ 132.646446] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8630 trb-start 000000002fdf8640 trb-end 000000002fdf8650 seg-start 000000002fdf8000 seg-end 000000002fdf8ff0
-> [ 132.646560] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 18 comp_code 13
-> [ 132.646568] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8660 trb-start 000000002fdf8670 trb-end 000000002fdf8670 seg-start 000000002fdf8000 seg-end 000000002fdf8ff0
+> Please always work against the latest development tree for the subsystem
+> you are working on, OR against linux-next, so that you don't end up
+> duplicating work that others have already done, like was done here.
 > 
-> If an error is detected while processing the last TRB of an isoc TD,
-> the Etron xHC generates two transfer events for the TRB where the
-> error was detected. The first event can be any sort of error (like
-> USB Transaction or Babble Detected, etc), and the final event is
-> Success.
+> thanks,
 > 
-> The xHCI driver will handle the TD after the first event and remove it
-> from its internal list, and then print an "Transfer event TRB DMA ptr
-> not part of current TD" error message after the final event.
-> 
-> Commit 5372c65e1311 ("xhci: process isoc TD properly when there was a
-> transaction error mid TD.") is designed to address isoc transaction
-> errors, but unfortunately it doesn't account for this scenario.
-> 
-> To work around this by reusing the logic that handles isoc transaction
-> errors, but continuing to wait for the final event when this condition
-> occurs. Sometimes we see the Stopped event after an error mid TD, this
-> is a normal event for a pending TD and we can think of it as the final
-> event we are waiting for.
+> greg k-h
 
-Not giving back the TD when we get an event for the last TRB in the
-TD sounds risky. With this change we assume all old and future ETRON hosts
-will trigger this additional spurious success event.
+Thanks for the feedback. I’ll use the latest development tree and make 
+sure to work against the right one next time.
 
-I think we could handle this more like the XHCI_SPURIOUS_SUCCESS case seen
-with short transfers, and just silence the error message.
-
-Are there any other issues besides the error message seen?
-
-Thanks
-Mathias
-
+Best regards,
+Purva Yeshi
 
