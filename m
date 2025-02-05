@@ -1,120 +1,225 @@
-Return-Path: <linux-usb+bounces-20160-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20161-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A015BA28C2C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 14:45:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93CCEA28C7A
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 14:50:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5E327A5627
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 13:41:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B9183A32F8
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 13:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2076B14A088;
-	Wed,  5 Feb 2025 13:41:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C4F13AD22;
+	Wed,  5 Feb 2025 13:50:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ipc43YHY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lp3vPZ90"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89AD9126C18;
-	Wed,  5 Feb 2025 13:41:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D8E126C18;
+	Wed,  5 Feb 2025 13:50:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738762895; cv=none; b=Y9ucAf4vcqe2+v0FZDnYFlT6JofKOhGt15a0rLeb3gdqoZUQ3VbTWZKpg4lyvB6qUSs+nl8f0dLwsSCggOo+/tHGuaImvwpCojrQmhbnDIqqf+b/TAztb/RKdE4P8w0lJCPxVhGPycC2WYd435Z5mU6dbiCIyuPJN+o/VtNMa4U=
+	t=1738763414; cv=none; b=mEVSAGBTVtWOk6SIbcQt8tJfnDbVyZhQ4eknqyZci8kt08X+L9wPlUgc0TD4kZyVAz3I3406zrZBr2OVSF2iN8CPLGm+4UcH+7np8jBaBGwnQSiwRhjyTpnlKPxII/qQv7pC9/H4zqD0KPlANgQo3sNF7Sq6g9gcePHM35+fSfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738762895; c=relaxed/simple;
-	bh=U7Js62AsEd21eUFkVDcJZEIJ38W1+b5iygkxCIM0T/E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FNP2JekQsz9AHvSfUcHIDlTc6rcFa88tebETkKmhm2SQklQyTDuXcIBmW6CL5hBv6naxzLZYeo0BMQMxJ2l1MQ6DxuzdI7yEYESkTsKHX6bJHr4Bd7d1G1iz5ipUVbxtMl8RcU6F+H6qDEcp0fzj2yZzrYgJmsPFNV6LMqGstrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ipc43YHY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 546CBC4CED1;
-	Wed,  5 Feb 2025 13:41:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738762894;
-	bh=U7Js62AsEd21eUFkVDcJZEIJ38W1+b5iygkxCIM0T/E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ipc43YHYKI5ichfkTqCIKfXGjwrQzPBdiEP/txhS0RBTd7ClzPjqn5LEWh4GL8ysx
-	 D6XQLB8os7Xgd6DB1B6CCAjNGHs2tbPYwI6k6B3aH8xLtf4JD0/T8DJE/DGKPMZvvD
-	 9Ba03/ZHI1jvrexIUnYsr+j/O0iph6v9O0biyuL4=
-Date: Wed, 5 Feb 2025 14:41:31 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Peter Chen <peter.chen@kernel.org>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] USB: phy: convert usb_phy_generic logic to use a
- faux device
-Message-ID: <2025020509-imperial-maroon-1bc9@gregkh>
-References: <2025020421-poster-moisture-534b@gregkh>
- <2025020424-overstock-scheming-6a30@gregkh>
- <20250205101916.GA4083@nchen-desktop>
- <2025020505-harsh-divisibly-51cc@gregkh>
+	s=arc-20240116; t=1738763414; c=relaxed/simple;
+	bh=Yx7W7Nj2ghR3jhoBtXGIJ/dIFfjmGUS03cAA1Mv+MWs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kg/AWKNSpH7TjcOEdIXdwa00BuXfPtMzP2A3hxqAz7smBqYwnoE9n7hg+021NVrzXP+K+1c9yYKOQYUsgFdMkiZ62wlnzXJub1WLekpNS/xt7AqQdwRyKqjjbN5N/XlveTWays7O1dJcjRDjtu773Mx9/LXwn9gkYZVFyQwELMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lp3vPZ90; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63F73C4CED1;
+	Wed,  5 Feb 2025 13:50:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738763414;
+	bh=Yx7W7Nj2ghR3jhoBtXGIJ/dIFfjmGUS03cAA1Mv+MWs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Lp3vPZ90WbL4QimNhtgMHX7xNdrMy1Bg+dKn0oA76ZH2XOUwU0RjRob1pf6INE6GD
+	 T+nLpaVDeKbdDpFaNp6xkP1Xb8/5AsZQUYrlDggwVp1P9uNAHlJcudU66I1qYbMPYE
+	 n9C6Pe06dE+IPfB8E8HBM/zEznaPEgyEoodT7sILNamWn+Mc+w7qcpWC3PTPldTfsc
+	 jQjg79TTWf8Qzz9OuRB7zbHftLQRaETxy8MEGOn8ATf8awgKkSrw7VkRny3KQSwsIE
+	 e0ZRn/6qe079bJFKBxnzp8VZmm23J233yFmgmP9kQ7+RjUdEzjkJCA4l76YzOt+lUR
+	 4MzSVOxM48bYw==
+Message-ID: <80172550-a3d7-4d56-927c-ff63debc79f8@kernel.org>
+Date: Wed, 5 Feb 2025 14:50:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025020505-harsh-divisibly-51cc@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/2] dt-bindings: usb: snps,dwc3: Add property for imod
+To: Badhri Jagan Sridharan <badhri@google.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
+ felipe.balbi@linux.intel.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, johnyoun@synopsys.com, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+ jameswei@google.com, stable@kernel.org
+References: <20250202035100.31235-1-badhri@google.com>
+ <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
+ <CAPTae5+j9N=RBpfHVE-As+dz7HzrxXAH1enWrmSdFzu6DuaTBA@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <CAPTae5+j9N=RBpfHVE-As+dz7HzrxXAH1enWrmSdFzu6DuaTBA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 05, 2025 at 01:27:30PM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Feb 05, 2025 at 06:19:16PM +0800, Peter Chen wrote:
-> > On 25-02-04 12:09:15, Greg Kroah-Hartman wrote:
-> > > The usb_phy_generic code was creating a "fake" platform device to pass
-> > > around in different places.  Instead of doing that, use the faux bus
-> > > instead as that is what is really wanted here.
-> > 
-> > Hi Greg,
-> > 
-> > As far as I know, there are some platforms use the device-tree to get
-> > the system resource (eg, clock, reset, regular) for this driver.
-> > We may not use fake bus for this driver.
+On 05/02/2025 10:07, Badhri Jagan Sridharan wrote:
+> .
 > 
-> But there is no system resources assigned to this device/driver at all,
-> so how is it getting anything here?
+> On Sun, Feb 2, 2025 at 6:11 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>
+>> On Sun, Feb 02, 2025 at 03:50:59AM +0000, Badhri Jagan Sridharan wrote:
+>>> This change adds `snps,device-mode-intrpt-mod-interval`
+>>
+>> Thank you for your patch. There is something to discuss/improve.
 > 
-> > $grep -rn "usb-nop-xceiv" arch/arm64/boot/dts/*
-> > 
-> > arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi:649:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/freescale/imx8mm.dtsi:275:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/freescale/imx8mm.dtsi:285:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/freescale/imx93.dtsi:238:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/freescale/imx93.dtsi:245:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/freescale/imx8mn.dtsi:1321:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/intel/socfpga_agilex.dtsi:149:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi:133:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/cn9132-db.dtsi:30:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/cn9132-db.dtsi:44:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/cn9131-db.dtsi:33:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/armada-3720-db.dts:43:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/cn9130-crb.dtsi:49:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/cn9130-crb.dtsi:53:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/cn9130-db.dtsi:52:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/cn9130-db.dtsi:66:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/armada-8040-db.dts:53:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/armada-8040-db.dts:67:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/ac5-98dx35xx-rd.dts:36:		compatible = "usb-nop-xceiv";
-> > arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts:39:		compatible = "usb-nop-xceiv";
+> Hi Krzysztof,
 > 
-> Does this actually work at all?  There is no real resouces here that I
-> can see, so what am I missing?
+> Thanks for taking the time to review ! Happy to address them.
+> 
+>>
+>>> which allows enabling interrupt moderation through
+>>> snps,dwc3 node.
+>>>
+>>> `snps,device-mode-intrpt-mod-interval`specifies the
+>>> minimum inter-interrupt interval in 250ns increments
+>>> during device mode operation. A value of 0 disables
+>>> the interrupt throttling logic and interrupts are
+>>> generated immediately if event count becomes non-zero.
+>>> Otherwise, the interrupt is signaled when all of the
+>>> following conditons are met which are, EVNT_HANDLER_BUSY
+>>> is 0, event count is non-zero and at least 250ns increments
+>>> of this value has elapsed since the last time interrupt
+>>> was de-asserted.
+>>
+>> Please wrap commit message according to Linux coding style / submission
+>> process (neither too early nor over the limit):
+>> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+> 
+> Ack! will do in V2 of this patch.
+> 
+>>
+>>>
+>>> Cc: stable@kernel.org
+>>> Fixes: cf40b86b6ef6 ("usb: dwc3: Implement interrupt moderation")
+>>
+>> I don't understand what are you fixing here.  Above commit does not
+>> introduce that property.
+> 
+> Although the above commit does not add this property, it has
+> implemented the entire feature except for the property so thought
+> sending this with "Fixes:" while CCing  stable@ will allow the
+> backport.  I am interested in having this patch in older kernel
 
-Hm, maybe I got this one wrong, I'm getting build errors now from
-kbuild, let me go look into this some more...
+Not implementing DT bindings is not a bug. Otherwise provide any sort of
+proof that this was not intentional.
 
-greg k-h
+I can easily provide you proof why this was intentional: negative review
+maintainers.
+
+
+> versions as well where imod support has been added. Wondering what
+> would be the right way to achieve this. Eager to know your thoughts !
+
+So again, downstream and forks... NAK, you cannot push things to stable
+just because you want them backported by Greg.
+
+This is not acceptable.
+
+> 
+>>
+>>
+>>> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+>>> ---
+>>>  .../devicetree/bindings/usb/snps,dwc3-common.yaml   | 13 +++++++++++++
+>>>  1 file changed, 13 insertions(+)
+>>>
+>>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
+>>> index c956053fd036..3957f1dac3c4 100644
+>>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
+>>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
+>>> @@ -375,6 +375,19 @@ properties:
+>>>      items:
+>>>        enum: [1, 4, 8, 16, 32, 64, 128, 256]
+>>>
+>>> +  snps,device-mode-intrpt-mod-interval:
+>>> +    description:
+>>> +      Specifies the minimum inter-interrupt interval in 250ns increments
+>>
+>> Then use proper property unit suffix.
+> 
+> Ack ! changing to snps,device-mode-intrpt-mod-interval-ns in V2.
+> 
+>>
+>>> +      during device mode operation. A value of 0 disables the interrupt
+>>> +      throttling logic and interrupts are generated immediately if event
+>>> +      count becomes non-zero. Otherwise, the interrupt is signaled when
+>>> +      all of the following conditons are met which are, EVNT_HANDLER_BUSY
+>>> +      is 0, event count is non-zero and at least 250ns increments of this
+>>> +      value has elapsed since the last time interrupt was de-asserted.
+>>
+>> Why is this property of a board? Why different boards would wait
+>> different amount of time?
+> 
+> Interrupt moderation allows batch processing of events reported by the
+> controller.
+> A very low value of snps,device-mode-intrpt-mod-interval-ns implies
+> that the controller will interrupt more often to make the host
+> processor process a smaller set of events Vs a larger value will wake
+> up the host processor at longer intervals to process events (likely
+> more). So depending what the board is designed for this can be tuned
+> to achieve the needed outcome.
+
+I do not see dependency on the board. Host has the same CPU always, so
+it processes with the same speed.
+
+
+Best regards,
+Krzysztof
 
