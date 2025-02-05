@@ -1,103 +1,125 @@
-Return-Path: <linux-usb+bounces-20141-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20142-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECD69A283A3
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 06:27:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC050A283BA
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 06:38:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3A8D1886B7D
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 05:27:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6431F7A1BBD
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 05:37:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4701221D5A7;
-	Wed,  5 Feb 2025 05:27:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 649F421D58E;
+	Wed,  5 Feb 2025 05:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ai30CFmL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F7kLR30a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A507521D598;
-	Wed,  5 Feb 2025 05:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D1E22144DC;
+	Wed,  5 Feb 2025 05:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738733262; cv=none; b=G2eNKDnCGmsByCHAjw8x2ojHuwnIyqYXWXiLTV2dORK/NfFXQFzDckaB9PkIQl6N6f82MV9HOXUu+8rsS0tTgSBGKBXh4C5hBiOAwJbqk0cRvxZKAWrzd/7KcpKZV8zG+nN+Zrh/7wLMqnTlaDzhpsLfbB8LSxpV6uZcmOAqnUc=
+	t=1738733919; cv=none; b=Cs6gnAr3GG9h3SzJqodBOLcqn2aB9c7lv/SgOP44Z92NSMDinakVlzqtdV6Q14aaCrKs/lih+tkcKf8QoKjFllZBMdS8TRJdtXta178MswRpjDccxifb0XmXzDD3GjcVQkCQdKbtNq8qj11yxGSgYuDzMwpzvOoZhA4fh0sp87w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738733262; c=relaxed/simple;
-	bh=uFlIQiXs2x7XIDiqACOzZJ5pxuFZzNVLGY2VrrW5gKA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kyScspBAB9sdzJBKHHvmZ6gvIDw4gVQ7BXHHvfvVY3/HMobMHpVtf2QFvjjW1aYI0OED+3+1b/7C3bBzgJs3sMJCxFIJtIex8ggQnKs50/csg8sOg4W+fAUNwGG4wLEos+L4AZi4pd4Y7+Bxj65UhdWV4z1pQnNlCPNUMFvV+kQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ai30CFmL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C90E3C4CED1;
-	Wed,  5 Feb 2025 05:27:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738733261;
-	bh=uFlIQiXs2x7XIDiqACOzZJ5pxuFZzNVLGY2VrrW5gKA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ai30CFmLox8XR+bbLL+XpV/6Ib8/k5tfn4bCBU0L8jcxQVMaGF+tq5RHI2FjmptKy
-	 IWQP9Ogqck1SjS2ST/FGTquIT6HpdXBWwkXyz3tv24jDR8vKfihQrW/TXS9s47/EXz
-	 HvzfLlivs86USOIsglcvHgFakyQjLE+YMrkhcEIo=
-Date: Wed, 5 Feb 2025 06:27:38 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Purva Yeshi <purvayeshi550@gmail.com>
-Cc: Thinh.Nguyen@synopsys.com, skhan@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] usb: dwc3: Fix kernel-doc warning for sg member in
-Message-ID: <2025020552-sandstorm-thaw-132e@gregkh>
-References: <20250204134423.28051-1-purvayeshi550@gmail.com>
- <2025020439-bulgur-ludicrous-5071@gregkh>
- <cc1694bc-88fd-4557-b957-aabf1f444eaf@gmail.com>
+	s=arc-20240116; t=1738733919; c=relaxed/simple;
+	bh=jvH7d9MTceKjTF/lJ+866RtotYpzvuoPwxsYuoHoxr0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ioUcF9V1PfXQhWaA+VnFH+IPaeCRnVMESA7l09Ov7BoK4wGefSPSfTtnVfJTuUGs0rf6IRCsmdgMUthIdVb8nEK1znup5aAuvw9eizK/KFdASkul72R34FmZ2jrb5cPZ3cnNaM8GbxxyJ8p8KoCH65v4NybdXcLUr8sgz4UFTiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F7kLR30a; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-2f9c3ec68c7so2181799a91.2;
+        Tue, 04 Feb 2025 21:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738733918; x=1739338718; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bbnQy5wxchta6Hzohq1KAiRBnXj1eekjRksOwuYD/4s=;
+        b=F7kLR30aluPpyqosRuroKR4LlsvxLwzIeunqxvtuFJka7enX4HW+uEggRruy2a2UR/
+         SkZfXLkXutnnIJLCVQPTS44v6YITtd3oFU5Ld/fOsfWjkVPj4c9kIFsOs3ZByj0ctFxp
+         TnI6ikJt1qLYL/iyiVNXiAOOUyOkDdDq8YUZ53pw21YWcoCdtyR2ofQF0hpt1FzryrxV
+         GRr7ACmPJmxssGR4tphuRi4YtBOvlM3cyVm1W6i5Vw+eBxvXd5iW8jpecHeld6h9PQ+0
+         fpGLAaiaUQy8ZhXmRg0eRHwEsVOX0jT0bbMw7GCK78MkR+vr8iHCDx2RzqphyQsxivfJ
+         tlug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738733918; x=1739338718;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bbnQy5wxchta6Hzohq1KAiRBnXj1eekjRksOwuYD/4s=;
+        b=F93S8O1QqhYDVuOXA/3q7gjLRWpCQU/UvvwKAYn7hag4PXx6bs1Qf6vuKcGd7RBOF6
+         C3cwGg6COVvj3ZLfe9BOaHqec0ppBLR0fkl9JrQeMHdCDfDj2Wf1phRFau6ReZHJTUrR
+         XdGTrDcdngk0Bz2ycAwuv69nOO3RCtDB7aUI88IQlzg4VPbfXh+TEJltj/Ue1nXzfeup
+         nY5deyasBVM8m9xC12AwxFXgGljNB94MUOTtFQ9IO/4XGe9KXE7zzk37evkz7hGmtb1j
+         L4mZ6BEa3g3LkNcVJ3YBM0SbahMYSC1WdWdex/q9vKRjVYvml/p4eUGzLtFoLOD7OrXB
+         dFWw==
+X-Forwarded-Encrypted: i=1; AJvYcCUA1iq5mPw+ZK7H0NSVCq/v4W0Jvpnn4mbYVE6nlNMZt3Ums9JWl59bFapPox8+eLGgBLwtbelVnGQaB9g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwxXmKx4JWz98vZUIOV7mgbby5Ccm5zq7BLFmgvR4XRD4dueWC6
+	I8N/RucpyJlKxkRlqn417Pc4x3GkwMoCs2oaymqrxRZj+O39qbZW
+X-Gm-Gg: ASbGnct0PeHem2HeXPjXXRbJpMXypqo6yB/utJrJxmr/1dnTHIbnO+ZuGr9+61crjCg
+	izqnLUzNCZrU7u53D6znMBe+cqSYxTjKzvrOEf8CxEGJqjl+yzqSu3Fn8Oo4rWvP8XQHP2Qzh0l
+	7yXzcYq2dvlNMXh3TYdaJAsllEO9fWH30wirb8liJWyEYGS+2zHxsfiGe6yTUG0P+wyTQKzQ9mB
+	wFbcWFnvJ2/52TX9NGqC9OA7AUTIl7rUQ6dNUDtSswQOnXI/bI4UQHBSpkyZTyAMl4sTIiJiTnG
+	i7HZGScfXWzSkJ17o/ntQDu5LrllqIjeTMEhkiXx7Nz4HLZ53o6UI9fig87LO5H5vJ8fzjB+zUz
+	M3oR6fq3uwDM=
+X-Google-Smtp-Source: AGHT+IHY+DLkhIYJoATIkwPpqayFiV6JiUDNwAsSJY+JmpjOl0cyp9AjbTvp8qblHfgHVw9HZNU2uA==
+X-Received: by 2002:a05:6a00:a82:b0:72f:f764:6269 with SMTP id d2e1a72fcca58-73035125686mr2578266b3a.12.1738733917481;
+        Tue, 04 Feb 2025 21:38:37 -0800 (PST)
+Received: from kic-machine.localdomain (122-117-151-175.hinet-ip.hinet.net. [122.117.151.175])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe6424f8csm11608434b3a.44.2025.02.04.21.38.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Feb 2025 21:38:37 -0800 (PST)
+From: Kuangyi Chiang <ki.chiang65@gmail.com>
+To: mathias.nyman@intel.com,
+	gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	ki.chiang65@gmail.com
+Subject: [PATCH v4 0/1] xhci: Some improvement for Etron xHCI host
+Date: Wed,  5 Feb 2025 13:37:49 +0800
+Message-Id: <20250205053750.28251-1-ki.chiang65@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cc1694bc-88fd-4557-b957-aabf1f444eaf@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 05, 2025 at 02:15:08AM +0530, Purva Yeshi wrote:
-> On 04/02/25 19:15, Greg KH wrote:
-> > On Tue, Feb 04, 2025 at 07:14:23PM +0530, Purva Yeshi wrote:
-> > > Added description for the 'sg' member in struct dwc3_request to
-> > > resolve the kerneldoc warning when running 'make htmldocs'.
-> > > 
-> > > Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
-> > > ---
-> > >   drivers/usb/dwc3/core.h | 1 +
-> > >   1 file changed, 1 insertion(+)
-> > > 
-> > > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-> > > index f11570c8ffd0..5e4daec322b7 100644
-> > > --- a/drivers/usb/dwc3/core.h
-> > > +++ b/drivers/usb/dwc3/core.h
-> > > @@ -942,6 +942,7 @@ struct dwc3_hwparams {
-> > >    * @request: struct usb_request to be transferred
-> > >    * @list: a list_head used for request queueing
-> > >    * @dep: struct dwc3_ep owning this request
-> > > + * @sg: pointer to the scatter-gather list
-> > >    * @start_sg: pointer to the sg which should be queued next
-> > >    * @num_pending_sgs: counter to pending sgs
-> > >    * @remaining: amount of data remaining
-> > > -- 
-> > > 2.34.1
-> > > 
-> > 
-> > What kernel version/tree did you make this change against?
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> 
-> The change was made against kernel version 6.13.0-rc7+.
+To prevent the xHCI driver from printing a "Transfer event TRB DMA
+ptr not part of current TD" error message when an error is detected
+while processing the last TRB of an isoc TD:
+  xhci: Correctly handle last TRB of isoc TD on Etron xHCI host
 
-Please always work against the latest development tree for the subsystem
-you are working on, OR against linux-next, so that you don't end up
-duplicating work that others have already done, like was done here.
+---
+Changes in v4:
+- Rebase against Linux 6.14-rc1
+- Link to v3: https://lore.kernel.org/all/20241202050135.13504-1-ki.chiang65@gmail.com
 
-thanks,
+Changes in v3:
+- Update subject and commit message
+- Use error_mid_td instead of last_td_was_short to solve the problem, as suggested by Michal
+- Link to v2: https://lore.kernel.org/all/20241028025337.6372-1-ki.chiang65@gmail.com
 
-greg k-h
+Changes in v2:
+- Modify commit message
+- Remove XHCI_NO_RESET_DEVICE/XHCI_NO_BREAK_CTRL_TD quirk flag
+- Add XHCI_ETRON_HOST quirk flag, thanks for the suggestion by Michal
+- Check device speed before invoking the workaround
+- Add (xhci: Combine two if statements for Etron xHCI host)
+- Add (xhci: Correct handling of one-TRB isoc TD on Etron xHCI host)
+- Link to v1: https://lore.kernel.org/all/20240911051716.6572-4-ki.chiang65@gmail.com
+
+Kuangyi Chiang (1):
+  xhci: Correctly handle last TRB of isoc TD on Etron xHCI host
+
+ drivers/usb/host/xhci-ring.c | 29 +++++++++++++++++++++--------
+ 1 file changed, 21 insertions(+), 8 deletions(-)
+
+-- 
+2.25.1
+
 
