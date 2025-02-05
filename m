@@ -1,214 +1,278 @@
-Return-Path: <linux-usb+bounces-20155-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20156-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71D89A2862B
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 10:08:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DD59A287C7
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 11:19:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 633A216184C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 09:08:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 50A8F3A1437
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 10:19:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA83522A4F4;
-	Wed,  5 Feb 2025 09:08:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750FF22AE4E;
+	Wed,  5 Feb 2025 10:19:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pnshSceJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pWGA1PNt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C63922A4D8
-	for <linux-usb@vger.kernel.org>; Wed,  5 Feb 2025 09:08:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D503C215778;
+	Wed,  5 Feb 2025 10:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738746514; cv=none; b=mZDoJ9G8RjxFcE6IlzPYzs6K9PaCKXpyqjwEHfCw8KUQtVtbTDWizLNtsk6z7OZTO4td9OspVMYo46HYho0pvSMecEbv8PJslpLEDG26Pz1oG/jj5gq/z529fChQog5viPumfWZmtvSxiOYM460Py9l5z3AZFib6xtA1bro5k44=
+	t=1738750766; cv=none; b=FACWPcuvrenZXIjqu5NrazmZm0zk1u/0smRVmiv5lsfye4JybVGQ7XZrI/1WOweKpptXJJmIYeW0MZxjQfiC2oHTeXRfhwgpZjgN3nomtmwN+7lmFrSokqO5ltYQNa8xZ9Vkxml1ltRv8fkGdPJ8esiXU784iSQqi3A/2RLGSrk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738746514; c=relaxed/simple;
-	bh=usR0FQgaPun7zX47de4ViGzhV1Dnd1psEq3MrpZDip4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p+r5NWk7xrbb1PN/fly6DxYb/JtdUfp1Af2Luzb/7L3clmInLUViVX53PJJwBnzPRLl/zmrDyotNCaYuMoVExlVjJBJj0i+fGCpQKPymT8XgqONFJpyHrrSoU1to9Dra+fy9990vRWJ5l0WusAD7MCaowuJQ0tIEFiOegYmqgzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pnshSceJ; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3ebc678b5c9so3576515b6e.3
-        for <linux-usb@vger.kernel.org>; Wed, 05 Feb 2025 01:08:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738746510; x=1739351310; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p1Zgcdqg6IL3nBRvW2f+NbDge7cbx+gJvQXWunXhYqw=;
-        b=pnshSceJy0AQKWdaToO00t1zmpxhxYMmbs2R6cJz5xghp7fOlwFK3JbWYxbSJQJhAE
-         rdP+zA/StgfK12p/cxlDF9YUR2mlxETAXme8fd/TS632itcp6WnNLponRYSfZLMu1+8U
-         NI9qAv+Z0zxfpuzJoAp0LQhRfHAU341/AYbuDG1sOlpUwLFj7k76VBFw6QQEvoStQUAG
-         peluCi2D8PflvISPr0QSZizzbqM+bsinpV8UIhaMR0o7afqowdYA+2omzGUecKOchvSJ
-         fS9kaOo73GKFSxMN+NWuW6P2zxj53LoGDOWZYZRjf82fvHNB6i0oXW7WD9+uUlrPvDd9
-         /SkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738746510; x=1739351310;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p1Zgcdqg6IL3nBRvW2f+NbDge7cbx+gJvQXWunXhYqw=;
-        b=oGY3+/rE/6XzOW+SQWclDDur2Mno2dk2twJYQ4JnureBqHCE2sWyfnE2WcpGKjf1Si
-         BNT7ZW2pQ3Zfpn8ZVG1GVVVdW3gfhchYAUEosEd740z54NVY5yQ2cTVaLqpwCVsoDl2Q
-         cOtnDOX6ifvFbqHeaEMCCy832aXLc41vpGr/r3nXuziav7nT2ZVK+TQMS+QrPIJY+69t
-         3kaOGiPHN+Sb9mGGaO/cav3MM4Y9pP+PL+azNz0oiCVsrvjGPGd5TcS5N5YGBtF4xNYv
-         PfSEY26S+sfWM8RqL/oF2lucz9shnDYtgWMGRzvAaVxp7GauFm+Q1SZNGgQPvoo72lUe
-         kIdA==
-X-Forwarded-Encrypted: i=1; AJvYcCXB6l2XZt/vMUD1In6TokGtTz7PNiOBOaHf+QVoQC1RIzVsuV0Yx+gm76jWQTj3xHPP8Lt+/7EXYHk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHF1HsCqDir8N+vDMN+IaD9U56jxmHQL0UYN/aJy0KgBpDhdTc
-	9+K1nJ3ZuZRL7u9BwJs1wQYJJ1UeS1e7TeYaumNLcti1c9mfbS31OVNTz7DVWA/yTjOJuajbR6u
-	ZwO6HaDramhC81FX/zhDE0bLKjXxJncCNsd+1
-X-Gm-Gg: ASbGncsnS2UmGQsiQ//QujLy5PthNwms+UKc2OBXbs3VAbd63tUQgsPX7BpilOfmEWq
-	uZLxYPBiWIB1cDYybgOkyo980ixeoraM9m5n1+Gt1sRiUFpMsKJtXuBapQJn3E4SR1okFVv309w
-	4gbUNLndNauloNxKNFdXpmD5y5ABGb
-X-Google-Smtp-Source: AGHT+IFQCqAxhs4WZyxuuQhaM0diAycGJMiaMQ6rNLAfPcZp1rv47WnGGRv7bsWrRbFQIUM9hREHyKVADC24UDpGX08=
-X-Received: by 2002:a05:6808:2393:b0:3ea:3db5:ffe6 with SMTP id
- 5614622812f47-3f37c17dab9mr1285991b6e.31.1738746510227; Wed, 05 Feb 2025
- 01:08:30 -0800 (PST)
+	s=arc-20240116; t=1738750766; c=relaxed/simple;
+	bh=lKVpCO4wwejQG6MIxb23h7PL2zSZCNmtg+toBoBMo40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BApJkyq8cjHSLHwdd9EU6R6fWsTqzVzeACQkRQ1FMxqTLHbbyKAeF/rK7rzIQtfj6gXqesVmz9dMVls/z47rxda2T/6ck2zd/wRjdmmk20zr/bAb5mNrR01SJgZEUrgDbl8onAp+MWI3yyx8Dfc05GGUNqZt3D356fz+ebxKTSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pWGA1PNt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9113CC4CEE3;
+	Wed,  5 Feb 2025 10:19:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738750766;
+	bh=lKVpCO4wwejQG6MIxb23h7PL2zSZCNmtg+toBoBMo40=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=pWGA1PNtqJsHh3h1qtzD+ilYvqlURDOeDqhlHkLspZOCWJ7hO4SFU/JpErh00YXpU
+	 20M7QmOZBQKyTUNsN564rJso+gDn+Pp346kjKPP65CbSe+AIysQWRi724b6WM/kuGU
+	 ctRFKukgfC6nUY2WIvDipYF/IPVEoqQRt++7tlQfs9f1s56mpT0iRu3kc7dqE0IEpQ
+	 eMs3vB5x6//EDvmXzGtelDvqFex7ap+/hJL/06OVomxeUcPkkSiTpdHZAtUe56/obm
+	 Z7Vre5Bghq1kmYXMhzWIB1xgMnx7pDymDxgN9A1ynPBazRwKCO2oiwWfJRab3o2C2a
+	 5F+9/URhbekHQ==
+Date: Wed, 5 Feb 2025 18:19:16 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] USB: phy: convert usb_phy_generic logic to use a
+ faux device
+Message-ID: <20250205101916.GA4083@nchen-desktop>
+References: <2025020421-poster-moisture-534b@gregkh>
+ <2025020424-overstock-scheming-6a30@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250202035100.31235-1-badhri@google.com> <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
-In-Reply-To: <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
-From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Wed, 5 Feb 2025 01:07:53 -0800
-X-Gm-Features: AWEUYZlsLaPl0RCseB3hpPwL1zwP-Zbd_3h4jFyoYWHMscU1N-HH781WD_ssOyI
-Message-ID: <CAPTae5+j9N=RBpfHVE-As+dz7HzrxXAH1enWrmSdFzu6DuaTBA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: usb: snps,dwc3: Add property for imod
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
-	felipe.balbi@linux.intel.com, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, johnyoun@synopsys.com, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, jameswei@google.com, 
-	stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2025020424-overstock-scheming-6a30@gregkh>
 
-.
+On 25-02-04 12:09:15, Greg Kroah-Hartman wrote:
+> The usb_phy_generic code was creating a "fake" platform device to pass
+> around in different places.  Instead of doing that, use the faux bus
+> instead as that is what is really wanted here.
 
-On Sun, Feb 2, 2025 at 6:11=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.org=
-> wrote:
->
-> On Sun, Feb 02, 2025 at 03:50:59AM +0000, Badhri Jagan Sridharan wrote:
-> > This change adds `snps,device-mode-intrpt-mod-interval`
->
-> Thank you for your patch. There is something to discuss/improve.
+Hi Greg,
 
-Hi Krzysztof,
+As far as I know, there are some platforms use the device-tree to get
+the system resource (eg, clock, reset, regular) for this driver.
+We may not use fake bus for this driver.
 
-Thanks for taking the time to review ! Happy to address them.
+$grep -rn "usb-nop-xceiv" arch/arm64/boot/dts/*
 
->
-> > which allows enabling interrupt moderation through
-> > snps,dwc3 node.
-> >
-> > `snps,device-mode-intrpt-mod-interval`specifies the
-> > minimum inter-interrupt interval in 250ns increments
-> > during device mode operation. A value of 0 disables
-> > the interrupt throttling logic and interrupts are
-> > generated immediately if event count becomes non-zero.
-> > Otherwise, the interrupt is signaled when all of the
-> > following conditons are met which are, EVNT_HANDLER_BUSY
-> > is 0, event count is non-zero and at least 250ns increments
-> > of this value has elapsed since the last time interrupt
-> > was de-asserted.
->
-> Please wrap commit message according to Linux coding style / submission
-> process (neither too early nor over the limit):
-> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/su=
-bmitting-patches.rst#L597
+arch/arm64/boot/dts/altera/socfpga_stratix10.dtsi:649:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/freescale/imx8mm.dtsi:275:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/freescale/imx8mm.dtsi:285:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/freescale/imx93.dtsi:238:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/freescale/imx93.dtsi:245:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/freescale/imx8mn.dtsi:1321:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/intel/socfpga_agilex.dtsi:149:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/intel/socfpga_agilex5.dtsi:133:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/cn9132-db.dtsi:30:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/cn9132-db.dtsi:44:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/cn9131-db.dtsi:33:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/armada-3720-db.dts:43:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/cn9130-crb.dtsi:49:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/cn9130-crb.dtsi:53:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/cn9130-db.dtsi:52:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/cn9130-db.dtsi:66:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/armada-8040-db.dts:53:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/armada-8040-db.dts:67:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/ac5-98dx35xx-rd.dts:36:		compatible = "usb-nop-xceiv";
+arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts:39:		compatible = "usb-nop-xceiv";
 
-Ack! will do in V2 of this patch.
+Peter
 
->
-> >
-> > Cc: stable@kernel.org
-> > Fixes: cf40b86b6ef6 ("usb: dwc3: Implement interrupt moderation")
->
-> I don't understand what are you fixing here.  Above commit does not
-> introduce that property.
-
-Although the above commit does not add this property, it has
-implemented the entire feature except for the property so thought
-sending this with "Fixes:" while CCing  stable@ will allow the
-backport.  I am interested in having this patch in older kernel
-versions as well where imod support has been added. Wondering what
-would be the right way to achieve this. Eager to know your thoughts !
-
->
->
-> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > ---
-> >  .../devicetree/bindings/usb/snps,dwc3-common.yaml   | 13 +++++++++++++
-> >  1 file changed, 13 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yam=
-l b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
-> > index c956053fd036..3957f1dac3c4 100644
-> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
-> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
-> > @@ -375,6 +375,19 @@ properties:
-> >      items:
-> >        enum: [1, 4, 8, 16, 32, 64, 128, 256]
-> >
-> > +  snps,device-mode-intrpt-mod-interval:
-> > +    description:
-> > +      Specifies the minimum inter-interrupt interval in 250ns incremen=
-ts
->
-> Then use proper property unit suffix.
-
-Ack ! changing to snps,device-mode-intrpt-mod-interval-ns in V2.
-
->
-> > +      during device mode operation. A value of 0 disables the interrup=
-t
-> > +      throttling logic and interrupts are generated immediately if eve=
-nt
-> > +      count becomes non-zero. Otherwise, the interrupt is signaled whe=
-n
-> > +      all of the following conditons are met which are, EVNT_HANDLER_B=
-USY
-> > +      is 0, event count is non-zero and at least 250ns increments of t=
-his
-> > +      value has elapsed since the last time interrupt was de-asserted.
->
-> Why is this property of a board? Why different boards would wait
-> different amount of time?
-
-Interrupt moderation allows batch processing of events reported by the
-controller.
-A very low value of snps,device-mode-intrpt-mod-interval-ns implies
-that the controller will interrupt more often to make the host
-processor process a smaller set of events Vs a larger value will wake
-up the host processor at longer intervals to process events (likely
-more). So depending what the board is designed for this can be tuned
-to achieve the needed outcome.
-
-This is very similar to the "imod-interval-ns" in
-https://elixir.bootlin.com/linux/v6.13.1/source/Documentation/devicetree/bi=
-ndings/usb/usb-xhci.yaml
-except that in this case the Synopsys DWC3 controller supports this
-for the device mode operation as well.
-
->
-> > +    $ref: /schemas/types.yaml#/definitions/uint16
->
-> Drop, use proper name suffix.
-
-Ack, will drop in V2.
-
-Thanks,
-Badhri
-
->
-> Best regards,
-> Krzysztof
->
+> 
+> Site note, this fixes a bug in the mpfs driver where the incorrect
+> pointer was being passed to usb_phy_generic_unregister(), odd that no
+> one ever hit this in the past.
+> 
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+>  v2: no change
+> 
+>  drivers/usb/chipidea/ci_hdrc_pci.c  | 2 +-
+>  drivers/usb/dwc2/pci.c              | 4 ++--
+>  drivers/usb/musb/mediatek.c         | 4 ++--
+>  drivers/usb/musb/mpfs.c             | 4 ++--
+>  drivers/usb/musb/tusb6010.c         | 2 +-
+>  drivers/usb/phy/phy-generic.c       | 9 ++++-----
+>  include/linux/usb/usb_phy_generic.h | 9 +++++----
+>  7 files changed, 17 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/usb/chipidea/ci_hdrc_pci.c b/drivers/usb/chipidea/ci_hdrc_pci.c
+> index d63479e1ad10..63511ea30d6e 100644
+> --- a/drivers/usb/chipidea/ci_hdrc_pci.c
+> +++ b/drivers/usb/chipidea/ci_hdrc_pci.c
+> @@ -20,7 +20,7 @@
+>  
+>  struct ci_hdrc_pci {
+>  	struct platform_device	*ci;
+> -	struct platform_device	*phy;
+> +	struct faux_device	*phy;
+>  };
+>  
+>  /******************************************************************************
+> diff --git a/drivers/usb/dwc2/pci.c b/drivers/usb/dwc2/pci.c
+> index f3a1e4232a31..8cb50620aa55 100644
+> --- a/drivers/usb/dwc2/pci.c
+> +++ b/drivers/usb/dwc2/pci.c
+> @@ -30,7 +30,7 @@ static const char dwc2_driver_name[] = "dwc2-pci";
+>  
+>  struct dwc2_pci_glue {
+>  	struct platform_device *dwc2;
+> -	struct platform_device *phy;
+> +	struct faux_device *phy;
+>  };
+>  
+>  /**
+> @@ -53,7 +53,7 @@ static int dwc2_pci_probe(struct pci_dev *pci,
+>  {
+>  	struct resource		res[2];
+>  	struct platform_device	*dwc2;
+> -	struct platform_device	*phy;
+> +	struct faux_device	*phy;
+>  	int			ret;
+>  	struct device		*dev = &pci->dev;
+>  	struct dwc2_pci_glue	*glue;
+> diff --git a/drivers/usb/musb/mediatek.c b/drivers/usb/musb/mediatek.c
+> index aa988d74b58d..995bab88506a 100644
+> --- a/drivers/usb/musb/mediatek.c
+> +++ b/drivers/usb/musb/mediatek.c
+> @@ -43,7 +43,7 @@ struct mtk_glue {
+>  	struct device *dev;
+>  	struct musb *musb;
+>  	struct platform_device *musb_pdev;
+> -	struct platform_device *usb_phy;
+> +	struct faux_device *usb_phy;
+>  	struct phy *phy;
+>  	struct usb_phy *xceiv;
+>  	enum phy_mode phy_mode;
+> @@ -507,7 +507,7 @@ static int mtk_musb_probe(struct platform_device *pdev)
+>  static void mtk_musb_remove(struct platform_device *pdev)
+>  {
+>  	struct mtk_glue *glue = platform_get_drvdata(pdev);
+> -	struct platform_device *usb_phy = glue->usb_phy;
+> +	struct faux_device *usb_phy = glue->usb_phy;
+>  
+>  	platform_device_unregister(glue->musb_pdev);
+>  	usb_phy_generic_unregister(usb_phy);
+> diff --git a/drivers/usb/musb/mpfs.c b/drivers/usb/musb/mpfs.c
+> index 7edc8429b274..ef20794aee12 100644
+> --- a/drivers/usb/musb/mpfs.c
+> +++ b/drivers/usb/musb/mpfs.c
+> @@ -25,7 +25,7 @@
+>  struct mpfs_glue {
+>  	struct device *dev;
+>  	struct platform_device *musb;
+> -	struct platform_device *phy;
+> +	struct faux_device *phy;
+>  	struct clk *clk;
+>  };
+>  
+> @@ -356,7 +356,7 @@ static void mpfs_remove(struct platform_device *pdev)
+>  
+>  	clk_disable_unprepare(glue->clk);
+>  	platform_device_unregister(glue->musb);
+> -	usb_phy_generic_unregister(pdev);
+> +	usb_phy_generic_unregister(glue->phy);
+>  }
+>  
+>  #ifdef CONFIG_OF
+> diff --git a/drivers/usb/musb/tusb6010.c b/drivers/usb/musb/tusb6010.c
+> index 90b760a95e4e..92609f9d20ff 100644
+> --- a/drivers/usb/musb/tusb6010.c
+> +++ b/drivers/usb/musb/tusb6010.c
+> @@ -32,7 +32,7 @@
+>  struct tusb6010_glue {
+>  	struct device		*dev;
+>  	struct platform_device	*musb;
+> -	struct platform_device	*phy;
+> +	struct faux_device	*phy;
+>  	struct gpio_desc	*enable;
+>  	struct gpio_desc	*intpin;
+>  };
+> diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.c
+> index 6c3ececf9137..a6cece75d0f8 100644
+> --- a/drivers/usb/phy/phy-generic.c
+> +++ b/drivers/usb/phy/phy-generic.c
+> @@ -30,16 +30,15 @@
+>  	(IRQF_SHARED | IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING | \
+>  		IRQF_ONESHOT)
+>  
+> -struct platform_device *usb_phy_generic_register(void)
+> +struct faux_device *usb_phy_generic_register(void)
+>  {
+> -	return platform_device_register_simple("usb_phy_generic",
+> -			PLATFORM_DEVID_AUTO, NULL, 0);
+> +	return faux_device_create("usb_phy_generic", NULL);
+>  }
+>  EXPORT_SYMBOL_GPL(usb_phy_generic_register);
+>  
+> -void usb_phy_generic_unregister(struct platform_device *pdev)
+> +void usb_phy_generic_unregister(struct faux_device *fdev)
+>  {
+> -	platform_device_unregister(pdev);
+> +	faux_device_destroy(fdev);
+>  }
+>  EXPORT_SYMBOL_GPL(usb_phy_generic_unregister);
+>  
+> diff --git a/include/linux/usb/usb_phy_generic.h b/include/linux/usb/usb_phy_generic.h
+> index cd9e70a552a0..856db2bacc07 100644
+> --- a/include/linux/usb/usb_phy_generic.h
+> +++ b/include/linux/usb/usb_phy_generic.h
+> @@ -3,18 +3,19 @@
+>  #define __LINUX_USB_NOP_XCEIV_H
+>  
+>  #include <linux/usb/otg.h>
+> +#include <linux/device/faux.h>
+>  
+>  #if IS_ENABLED(CONFIG_NOP_USB_XCEIV)
+>  /* sometimes transceivers are accessed only through e.g. ULPI */
+> -extern struct platform_device *usb_phy_generic_register(void);
+> -extern void usb_phy_generic_unregister(struct platform_device *);
+> +struct faux_device *usb_phy_generic_register(void);
+> +void usb_phy_generic_unregister(struct faux_device *);
+>  #else
+> -static inline struct platform_device *usb_phy_generic_register(void)
+> +static inline struct faux_device *usb_phy_generic_register(void)
+>  {
+>  	return NULL;
+>  }
+>  
+> -static inline void usb_phy_generic_unregister(struct platform_device *pdev)
+> +static inline void usb_phy_generic_unregister(struct faux_device *fdev)
+>  {
+>  }
+>  #endif
+> -- 
+> 2.48.1
+> 
+> 
 
