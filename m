@@ -1,58 +1,53 @@
-Return-Path: <linux-usb+bounces-20140-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20141-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E158DA2835C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 05:27:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ECD69A283A3
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 06:27:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57AF43A652A
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 04:27:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E3A8D1886B7D
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 05:27:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C79421518D;
-	Wed,  5 Feb 2025 04:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4701221D5A7;
+	Wed,  5 Feb 2025 05:27:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hz4Sglot"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ai30CFmL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB0DD2AF0E;
-	Wed,  5 Feb 2025 04:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A507521D598;
+	Wed,  5 Feb 2025 05:27:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738729655; cv=none; b=GYvtPJfMR9KTCRrEB9EppyL1EGktpN5xwKzxWVdv2fJ7vzjl99rbXMfBMDEavyRGmGpX4LxizrbnTZJIXfNM6/0r7EIBIk1vFDp4wAEhvVQEbVtgTS5mRmURL9zw0FEBMQa1loesuMTH6gc9MRLxjRMfUe6oIhRr/sQxq96ARsI=
+	t=1738733262; cv=none; b=G2eNKDnCGmsByCHAjw8x2ojHuwnIyqYXWXiLTV2dORK/NfFXQFzDckaB9PkIQl6N6f82MV9HOXUu+8rsS0tTgSBGKBXh4C5hBiOAwJbqk0cRvxZKAWrzd/7KcpKZV8zG+nN+Zrh/7wLMqnTlaDzhpsLfbB8LSxpV6uZcmOAqnUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738729655; c=relaxed/simple;
-	bh=s7foDQoVI2naSB264vrCozpwinSzQ1kbWowc5+BbdzY=;
+	s=arc-20240116; t=1738733262; c=relaxed/simple;
+	bh=uFlIQiXs2x7XIDiqACOzZJ5pxuFZzNVLGY2VrrW5gKA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X6+s8ZuSOS82SipoPdJfWPbEmEe/82x7PLNljXFeH/tr4UR5nbNuA4RLVnzq8uAyIkaH8BC7OAuCV2V3ob+Gga9AQOufrhY0tjAjdtBy8RX74DN7ekPNanzm2q5JDBwK17z/mogVNADmWjf7X+udotBO88HIMxSpi420FUSJ2dU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hz4Sglot; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39796C4CEE2;
-	Wed,  5 Feb 2025 04:27:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738729655;
-	bh=s7foDQoVI2naSB264vrCozpwinSzQ1kbWowc5+BbdzY=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=kyScspBAB9sdzJBKHHvmZ6gvIDw4gVQ7BXHHvfvVY3/HMobMHpVtf2QFvjjW1aYI0OED+3+1b/7C3bBzgJs3sMJCxFIJtIex8ggQnKs50/csg8sOg4W+fAUNwGG4wLEos+L4AZi4pd4Y7+Bxj65UhdWV4z1pQnNlCPNUMFvV+kQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ai30CFmL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C90E3C4CED1;
+	Wed,  5 Feb 2025 05:27:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1738733261;
+	bh=uFlIQiXs2x7XIDiqACOzZJ5pxuFZzNVLGY2VrrW5gKA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hz4SglotsyCYt/m5Rl8fa3qn7QbJHu140CCVzBf5TSiY37jko5Z2kzJY/gStK4I26
-	 cRVQShcPi0X6RIh5Keho8K5s6ITdreMyUF0icCDsQO76QgzualNPiMuaRwhfmPUwv3
-	 iwThasOPIQ/e+DdtZEV8Xs61er1lVr6OLP3solTxhwWKSTjKgoAIO5wdvQLdyCW2EQ
-	 GkUoL1oi7PONj6gKlqCeW8cG2Nx67txTFfw2b9lryyLWBmZdUxPrO3wHPVEFGcP9jz
-	 pwENje9yblJX4xePqRO0Q+ie5O9pLyI3vAMA+4h2eLP/nqYAk7CosN54n3tfMBjfFB
-	 GQ6zPIfw872OA==
-Date: Wed, 5 Feb 2025 04:27:31 +0000
-From: Tzung-Bi Shih <tzungbi@kernel.org>
-To: Jameson Thies <jthies@google.com>
-Cc: ukaszb@chromium.org, linux-usb@vger.kernel.org,
-	chrome-platform@lists.linux.dev, bleung@chromium.org,
-	heikki.krogerus@linux.intel.com, gregkh@linuxfoundation.org,
-	dmitry.baryshkov@linaro.org, abhishekpandit@chromium.org,
-	akuchynski@chromium.org
-Subject: Re: [PATCH v1 1/2] platform/chrome: add PD_EVENT_INIT bit definition
-Message-ID: <Z6Los9yZs1st7OTO@google.com>
-References: <20250204024600.4138776-1-jthies@google.com>
- <20250204024600.4138776-2-jthies@google.com>
+	b=ai30CFmLox8XR+bbLL+XpV/6Ib8/k5tfn4bCBU0L8jcxQVMaGF+tq5RHI2FjmptKy
+	 IWQP9Ogqck1SjS2ST/FGTquIT6HpdXBWwkXyz3tv24jDR8vKfihQrW/TXS9s47/EXz
+	 HvzfLlivs86USOIsglcvHgFakyQjLE+YMrkhcEIo=
+Date: Wed, 5 Feb 2025 06:27:38 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Purva Yeshi <purvayeshi550@gmail.com>
+Cc: Thinh.Nguyen@synopsys.com, skhan@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] usb: dwc3: Fix kernel-doc warning for sg member in
+Message-ID: <2025020552-sandstorm-thaw-132e@gregkh>
+References: <20250204134423.28051-1-purvayeshi550@gmail.com>
+ <2025020439-bulgur-ludicrous-5071@gregkh>
+ <cc1694bc-88fd-4557-b957-aabf1f444eaf@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -61,14 +56,48 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250204024600.4138776-2-jthies@google.com>
+In-Reply-To: <cc1694bc-88fd-4557-b957-aabf1f444eaf@gmail.com>
 
-On Tue, Feb 04, 2025 at 02:45:58AM +0000, Jameson Thies wrote:
-> Update cros_ec_commands.h to include a definition for PD_EVENT_INIT.
-> On platforms supporting UCSI, this host event type is sent when the PPM
-> initializes.
+On Wed, Feb 05, 2025 at 02:15:08AM +0530, Purva Yeshi wrote:
+> On 04/02/25 19:15, Greg KH wrote:
+> > On Tue, Feb 04, 2025 at 07:14:23PM +0530, Purva Yeshi wrote:
+> > > Added description for the 'sg' member in struct dwc3_request to
+> > > resolve the kerneldoc warning when running 'make htmldocs'.
+> > > 
+> > > Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
+> > > ---
+> > >   drivers/usb/dwc3/core.h | 1 +
+> > >   1 file changed, 1 insertion(+)
+> > > 
+> > > diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+> > > index f11570c8ffd0..5e4daec322b7 100644
+> > > --- a/drivers/usb/dwc3/core.h
+> > > +++ b/drivers/usb/dwc3/core.h
+> > > @@ -942,6 +942,7 @@ struct dwc3_hwparams {
+> > >    * @request: struct usb_request to be transferred
+> > >    * @list: a list_head used for request queueing
+> > >    * @dep: struct dwc3_ep owning this request
+> > > + * @sg: pointer to the scatter-gather list
+> > >    * @start_sg: pointer to the sg which should be queued next
+> > >    * @num_pending_sgs: counter to pending sgs
+> > >    * @remaining: amount of data remaining
+> > > -- 
+> > > 2.34.1
+> > > 
+> > 
+> > What kernel version/tree did you make this change against?
+> > 
+> > thanks,
+> > 
+> > greg k-h
 > 
-> Signed-off-by: Jameson Thies <jthies@google.com>
+> The change was made against kernel version 6.13.0-rc7+.
 
-Acked-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Please always work against the latest development tree for the subsystem
+you are working on, OR against linux-next, so that you don't end up
+duplicating work that others have already done, like was done here.
+
+thanks,
+
+greg k-h
 
