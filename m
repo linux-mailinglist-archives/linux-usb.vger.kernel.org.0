@@ -1,48 +1,65 @@
-Return-Path: <linux-usb+bounces-20161-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20162-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93CCEA28C7A
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 14:50:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6566FA28EBB
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 15:16:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B9183A32F8
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 13:50:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3CB437A182F
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 14:15:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55C4F13AD22;
-	Wed,  5 Feb 2025 13:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D554214D2A2;
+	Wed,  5 Feb 2025 14:16:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lp3vPZ90"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bfxywMgP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6D8E126C18;
-	Wed,  5 Feb 2025 13:50:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 625471519BE;
+	Wed,  5 Feb 2025 14:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738763414; cv=none; b=mEVSAGBTVtWOk6SIbcQt8tJfnDbVyZhQ4eknqyZci8kt08X+L9wPlUgc0TD4kZyVAz3I3406zrZBr2OVSF2iN8CPLGm+4UcH+7np8jBaBGwnQSiwRhjyTpnlKPxII/qQv7pC9/H4zqD0KPlANgQo3sNF7Sq6g9gcePHM35+fSfY=
+	t=1738764997; cv=none; b=WGqH4/lc66etkCORGpa3zrCe6MkX12dzkCJ8OowKcTwFBKivqEeLxfR0KfKSWngNcH87kjuytZ9vykjtVWrJwbqQc3b6BXeOBAWjaXnl0p1EYxEYsINdNTxsmLCKXus/FAuMShv9FhstCZCprwylMemBS/FqW2dwnCNM4I7NKIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738763414; c=relaxed/simple;
-	bh=Yx7W7Nj2ghR3jhoBtXGIJ/dIFfjmGUS03cAA1Mv+MWs=;
+	s=arc-20240116; t=1738764997; c=relaxed/simple;
+	bh=ytnuGd7Q2qXoBsvqoNaaIzEvhm8uBCFG9Rm4tRWce10=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kg/AWKNSpH7TjcOEdIXdwa00BuXfPtMzP2A3hxqAz7smBqYwnoE9n7hg+021NVrzXP+K+1c9yYKOQYUsgFdMkiZ62wlnzXJub1WLekpNS/xt7AqQdwRyKqjjbN5N/XlveTWays7O1dJcjRDjtu773Mx9/LXwn9gkYZVFyQwELMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lp3vPZ90; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63F73C4CED1;
-	Wed,  5 Feb 2025 13:50:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738763414;
-	bh=Yx7W7Nj2ghR3jhoBtXGIJ/dIFfjmGUS03cAA1Mv+MWs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Lp3vPZ90WbL4QimNhtgMHX7xNdrMy1Bg+dKn0oA76ZH2XOUwU0RjRob1pf6INE6GD
-	 T+nLpaVDeKbdDpFaNp6xkP1Xb8/5AsZQUYrlDggwVp1P9uNAHlJcudU66I1qYbMPYE
-	 n9C6Pe06dE+IPfB8E8HBM/zEznaPEgyEoodT7sILNamWn+Mc+w7qcpWC3PTPldTfsc
-	 jQjg79TTWf8Qzz9OuRB7zbHftLQRaETxy8MEGOn8ATf8awgKkSrw7VkRny3KQSwsIE
-	 e0ZRn/6qe079bJFKBxnzp8VZmm23J233yFmgmP9kQ7+RjUdEzjkJCA4l76YzOt+lUR
-	 4MzSVOxM48bYw==
-Message-ID: <80172550-a3d7-4d56-927c-ff63debc79f8@kernel.org>
-Date: Wed, 5 Feb 2025 14:50:09 +0100
+	 In-Reply-To:Content-Type; b=cQ1uM5JD0xYiSC77brUyYo+r4zrnvJ5WpDheOJlxRG5K8R5r6CSzNFQyDkUeGa/UAha3niOGsPhVisw2eRtbq51dH1OR08a/QMfeaseRLbcKrPye+S2hiUeaqNWdiQf2TUDejiuVgBKBajyCHRdSzfgAklXxnzdN7oAoqPccx28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bfxywMgP; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738764996; x=1770300996;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ytnuGd7Q2qXoBsvqoNaaIzEvhm8uBCFG9Rm4tRWce10=;
+  b=bfxywMgPA00vIOlwuakc4lmGXz9JN843nTt1zyL2Jx43Wzo0X17qj7qN
+   diUUSKN91mcFib92cgjtbNH29Vwc4jlURB2+HrcPnNGo4dxUFHFmAdc3v
+   cns9fUTJEB037vofLEjjer+pxFuOE30/HQjFScVu9O3XIx9dXdBxqMVyn
+   oFtIsABBXo6ZTLQVLPFlcakOueirExBSO0d50TZecHNKoryc+a27PgfKK
+   yiaQu4jUHjY6ryGV94lLCnqNYUsKoQfOwcZaMo4Uq9S5lHXQvvfrN49Rr
+   eR+rzdkI2RBAFuWaSHQnY0DvMH/T9kDthPum8kp/yKeAwPeaa6HiDiRUU
+   g==;
+X-CSE-ConnectionGUID: 1bhRCv8OTVycUix+3GxRYQ==
+X-CSE-MsgGUID: +nGrMYbbTK6FZTUJCWjCwQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="26935325"
+X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
+   d="scan'208";a="26935325"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 06:16:35 -0800
+X-CSE-ConnectionGUID: 143MMiNlRHaIXhEvZWb7Zw==
+X-CSE-MsgGUID: GiGYv/mAQ1yJxLRtX0HmkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="116114484"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa005.jf.intel.com with ESMTP; 05 Feb 2025 06:16:33 -0800
+Message-ID: <c746c10a-d504-48bc-bc8d-ba65230d13f6@linux.intel.com>
+Date: Wed, 5 Feb 2025 16:17:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,176 +67,58 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/2] dt-bindings: usb: snps,dwc3: Add property for imod
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org,
- felipe.balbi@linux.intel.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, johnyoun@synopsys.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- jameswei@google.com, stable@kernel.org
-References: <20250202035100.31235-1-badhri@google.com>
- <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
- <CAPTae5+j9N=RBpfHVE-As+dz7HzrxXAH1enWrmSdFzu6DuaTBA@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v4 1/1] xhci: Correctly handle last TRB of isoc TD on
+ Etron xHCI host
+To: Kuangyi Chiang <ki.chiang65@gmail.com>, mathias.nyman@intel.com,
+ gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20250205053750.28251-1-ki.chiang65@gmail.com>
+ <20250205053750.28251-2-ki.chiang65@gmail.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CAPTae5+j9N=RBpfHVE-As+dz7HzrxXAH1enWrmSdFzu6DuaTBA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250205053750.28251-2-ki.chiang65@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 05/02/2025 10:07, Badhri Jagan Sridharan wrote:
-> .
+On 5.2.2025 7.37, Kuangyi Chiang wrote:
+> Unplugging a USB3.0 webcam while streaming results in errors like this:
 > 
-> On Sun, Feb 2, 2025 at 6:11 AM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On Sun, Feb 02, 2025 at 03:50:59AM +0000, Badhri Jagan Sridharan wrote:
->>> This change adds `snps,device-mode-intrpt-mod-interval`
->>
->> Thank you for your patch. There is something to discuss/improve.
+> [ 132.646387] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 18 comp_code 13
+> [ 132.646446] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8630 trb-start 000000002fdf8640 trb-end 000000002fdf8650 seg-start 000000002fdf8000 seg-end 000000002fdf8ff0
+> [ 132.646560] xhci_hcd 0000:03:00.0: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 18 comp_code 13
+> [ 132.646568] xhci_hcd 0000:03:00.0: Looking for event-dma 000000002fdf8660 trb-start 000000002fdf8670 trb-end 000000002fdf8670 seg-start 000000002fdf8000 seg-end 000000002fdf8ff0
 > 
-> Hi Krzysztof,
+> If an error is detected while processing the last TRB of an isoc TD,
+> the Etron xHC generates two transfer events for the TRB where the
+> error was detected. The first event can be any sort of error (like
+> USB Transaction or Babble Detected, etc), and the final event is
+> Success.
 > 
-> Thanks for taking the time to review ! Happy to address them.
+> The xHCI driver will handle the TD after the first event and remove it
+> from its internal list, and then print an "Transfer event TRB DMA ptr
+> not part of current TD" error message after the final event.
 > 
->>
->>> which allows enabling interrupt moderation through
->>> snps,dwc3 node.
->>>
->>> `snps,device-mode-intrpt-mod-interval`specifies the
->>> minimum inter-interrupt interval in 250ns increments
->>> during device mode operation. A value of 0 disables
->>> the interrupt throttling logic and interrupts are
->>> generated immediately if event count becomes non-zero.
->>> Otherwise, the interrupt is signaled when all of the
->>> following conditons are met which are, EVNT_HANDLER_BUSY
->>> is 0, event count is non-zero and at least 250ns increments
->>> of this value has elapsed since the last time interrupt
->>> was de-asserted.
->>
->> Please wrap commit message according to Linux coding style / submission
->> process (neither too early nor over the limit):
->> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
+> Commit 5372c65e1311 ("xhci: process isoc TD properly when there was a
+> transaction error mid TD.") is designed to address isoc transaction
+> errors, but unfortunately it doesn't account for this scenario.
 > 
-> Ack! will do in V2 of this patch.
-> 
->>
->>>
->>> Cc: stable@kernel.org
->>> Fixes: cf40b86b6ef6 ("usb: dwc3: Implement interrupt moderation")
->>
->> I don't understand what are you fixing here.  Above commit does not
->> introduce that property.
-> 
-> Although the above commit does not add this property, it has
-> implemented the entire feature except for the property so thought
-> sending this with "Fixes:" while CCing  stable@ will allow the
-> backport.  I am interested in having this patch in older kernel
+> To work around this by reusing the logic that handles isoc transaction
+> errors, but continuing to wait for the final event when this condition
+> occurs. Sometimes we see the Stopped event after an error mid TD, this
+> is a normal event for a pending TD and we can think of it as the final
+> event we are waiting for.
 
-Not implementing DT bindings is not a bug. Otherwise provide any sort of
-proof that this was not intentional.
+Not giving back the TD when we get an event for the last TRB in the
+TD sounds risky. With this change we assume all old and future ETRON hosts
+will trigger this additional spurious success event.
 
-I can easily provide you proof why this was intentional: negative review
-maintainers.
+I think we could handle this more like the XHCI_SPURIOUS_SUCCESS case seen
+with short transfers, and just silence the error message.
 
+Are there any other issues besides the error message seen?
 
-> versions as well where imod support has been added. Wondering what
-> would be the right way to achieve this. Eager to know your thoughts !
+Thanks
+Mathias
 
-So again, downstream and forks... NAK, you cannot push things to stable
-just because you want them backported by Greg.
-
-This is not acceptable.
-
-> 
->>
->>
->>> Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
->>> ---
->>>  .../devicetree/bindings/usb/snps,dwc3-common.yaml   | 13 +++++++++++++
->>>  1 file changed, 13 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
->>> index c956053fd036..3957f1dac3c4 100644
->>> --- a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
->>> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
->>> @@ -375,6 +375,19 @@ properties:
->>>      items:
->>>        enum: [1, 4, 8, 16, 32, 64, 128, 256]
->>>
->>> +  snps,device-mode-intrpt-mod-interval:
->>> +    description:
->>> +      Specifies the minimum inter-interrupt interval in 250ns increments
->>
->> Then use proper property unit suffix.
-> 
-> Ack ! changing to snps,device-mode-intrpt-mod-interval-ns in V2.
-> 
->>
->>> +      during device mode operation. A value of 0 disables the interrupt
->>> +      throttling logic and interrupts are generated immediately if event
->>> +      count becomes non-zero. Otherwise, the interrupt is signaled when
->>> +      all of the following conditons are met which are, EVNT_HANDLER_BUSY
->>> +      is 0, event count is non-zero and at least 250ns increments of this
->>> +      value has elapsed since the last time interrupt was de-asserted.
->>
->> Why is this property of a board? Why different boards would wait
->> different amount of time?
-> 
-> Interrupt moderation allows batch processing of events reported by the
-> controller.
-> A very low value of snps,device-mode-intrpt-mod-interval-ns implies
-> that the controller will interrupt more often to make the host
-> processor process a smaller set of events Vs a larger value will wake
-> up the host processor at longer intervals to process events (likely
-> more). So depending what the board is designed for this can be tuned
-> to achieve the needed outcome.
-
-I do not see dependency on the board. Host has the same CPU always, so
-it processes with the same speed.
-
-
-Best regards,
-Krzysztof
 
