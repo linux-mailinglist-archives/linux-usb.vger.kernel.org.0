@@ -1,105 +1,214 @@
-Return-Path: <linux-usb+bounces-20154-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20155-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 254E6A28607
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 09:58:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71D89A2862B
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 10:08:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39CC2188400F
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 08:58:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 633A216184C
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 09:08:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66A3F22A4D0;
-	Wed,  5 Feb 2025 08:58:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA83522A4F4;
+	Wed,  5 Feb 2025 09:08:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MF+JRaed"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pnshSceJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE869131E2D;
-	Wed,  5 Feb 2025 08:58:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C63922A4D8
+	for <linux-usb@vger.kernel.org>; Wed,  5 Feb 2025 09:08:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738745907; cv=none; b=gcouDjuKhCIRXLDH6YZuj/zl2W9ptHnXe225Cu9697DMpDy4Qsl7rqWLH9CluR6nN2k6lxJhG44EBezApoLVixPbV5u1r58EwjNvjI3UNprRmbo9Ms4NTK9l3m0idVjwYuZ9x7QUAWG+ObXfqSEqGiKy3i7RLrrw+STWiAfrlaU=
+	t=1738746514; cv=none; b=mZDoJ9G8RjxFcE6IlzPYzs6K9PaCKXpyqjwEHfCw8KUQtVtbTDWizLNtsk6z7OZTO4td9OspVMYo46HYho0pvSMecEbv8PJslpLEDG26Pz1oG/jj5gq/z529fChQog5viPumfWZmtvSxiOYM460Py9l5z3AZFib6xtA1bro5k44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738745907; c=relaxed/simple;
-	bh=kM+s4n5cpTUxbpdFjbbygnhho55AYGXNqAnpq2otDrc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kR9bckvrxLblWNX8s1JgvzuNRqlhuhvDkQPt9dxuZ8fyl/oNosVzxJ0J8LsGFwxJQg3OdnWzwFf+0wa5hz49eBCFv4iMHH4NHUHW65V59UP4i9Yp/9bvaM/ZeqgWUS/P5l6blTLt8NFFr70+LFogI/B/SgvUt84rekCeAExpa60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MF+JRaed; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98C34C4CEE3;
-	Wed,  5 Feb 2025 08:58:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738745905;
-	bh=kM+s4n5cpTUxbpdFjbbygnhho55AYGXNqAnpq2otDrc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MF+JRaedzFhC02VvWAnRJsrSKgURKLoUr4td1lMNV9SvTbmWosd4VhpLEGX2Px9in
-	 cgXkIRER1tvfjR1AHvUV4o/FBypC0CIZ0aDhl0ci3BwgKu5oC5e01elbDrqFATTeQC
-	 F8xyoSGl6mpFuFKJu5DbfIcATVA7+A/1BrHVH3Rg=
-Date: Wed, 5 Feb 2025 09:58:21 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Lyude Paul <lyude@redhat.com>, linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] driver core: add a faux bus for use when a simple
- device/bus is needed
-Message-ID: <2025020548-fringe-humbly-3ceb@gregkh>
-References: <2025020421-poster-moisture-534b@gregkh>
- <2025020424-retrain-recharger-407c@gregkh>
- <fd6250102ea9d869448e7a40a60a02f8b167d4ac.camel@redhat.com>
- <2025020518-outcome-harbor-6281@gregkh>
- <Z6MZ7JdP6tynvYRr@smile.fi.intel.com>
+	s=arc-20240116; t=1738746514; c=relaxed/simple;
+	bh=usR0FQgaPun7zX47de4ViGzhV1Dnd1psEq3MrpZDip4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p+r5NWk7xrbb1PN/fly6DxYb/JtdUfp1Af2Luzb/7L3clmInLUViVX53PJJwBnzPRLl/zmrDyotNCaYuMoVExlVjJBJj0i+fGCpQKPymT8XgqONFJpyHrrSoU1to9Dra+fy9990vRWJ5l0WusAD7MCaowuJQ0tIEFiOegYmqgzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pnshSceJ; arc=none smtp.client-ip=209.85.167.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3ebc678b5c9so3576515b6e.3
+        for <linux-usb@vger.kernel.org>; Wed, 05 Feb 2025 01:08:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738746510; x=1739351310; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=p1Zgcdqg6IL3nBRvW2f+NbDge7cbx+gJvQXWunXhYqw=;
+        b=pnshSceJy0AQKWdaToO00t1zmpxhxYMmbs2R6cJz5xghp7fOlwFK3JbWYxbSJQJhAE
+         rdP+zA/StgfK12p/cxlDF9YUR2mlxETAXme8fd/TS632itcp6WnNLponRYSfZLMu1+8U
+         NI9qAv+Z0zxfpuzJoAp0LQhRfHAU341/AYbuDG1sOlpUwLFj7k76VBFw6QQEvoStQUAG
+         peluCi2D8PflvISPr0QSZizzbqM+bsinpV8UIhaMR0o7afqowdYA+2omzGUecKOchvSJ
+         fS9kaOo73GKFSxMN+NWuW6P2zxj53LoGDOWZYZRjf82fvHNB6i0oXW7WD9+uUlrPvDd9
+         /SkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738746510; x=1739351310;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=p1Zgcdqg6IL3nBRvW2f+NbDge7cbx+gJvQXWunXhYqw=;
+        b=oGY3+/rE/6XzOW+SQWclDDur2Mno2dk2twJYQ4JnureBqHCE2sWyfnE2WcpGKjf1Si
+         BNT7ZW2pQ3Zfpn8ZVG1GVVVdW3gfhchYAUEosEd740z54NVY5yQ2cTVaLqpwCVsoDl2Q
+         cOtnDOX6ifvFbqHeaEMCCy832aXLc41vpGr/r3nXuziav7nT2ZVK+TQMS+QrPIJY+69t
+         3kaOGiPHN+Sb9mGGaO/cav3MM4Y9pP+PL+azNz0oiCVsrvjGPGd5TcS5N5YGBtF4xNYv
+         PfSEY26S+sfWM8RqL/oF2lucz9shnDYtgWMGRzvAaVxp7GauFm+Q1SZNGgQPvoo72lUe
+         kIdA==
+X-Forwarded-Encrypted: i=1; AJvYcCXB6l2XZt/vMUD1In6TokGtTz7PNiOBOaHf+QVoQC1RIzVsuV0Yx+gm76jWQTj3xHPP8Lt+/7EXYHk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHF1HsCqDir8N+vDMN+IaD9U56jxmHQL0UYN/aJy0KgBpDhdTc
+	9+K1nJ3ZuZRL7u9BwJs1wQYJJ1UeS1e7TeYaumNLcti1c9mfbS31OVNTz7DVWA/yTjOJuajbR6u
+	ZwO6HaDramhC81FX/zhDE0bLKjXxJncCNsd+1
+X-Gm-Gg: ASbGncsnS2UmGQsiQ//QujLy5PthNwms+UKc2OBXbs3VAbd63tUQgsPX7BpilOfmEWq
+	uZLxYPBiWIB1cDYybgOkyo980ixeoraM9m5n1+Gt1sRiUFpMsKJtXuBapQJn3E4SR1okFVv309w
+	4gbUNLndNauloNxKNFdXpmD5y5ABGb
+X-Google-Smtp-Source: AGHT+IFQCqAxhs4WZyxuuQhaM0diAycGJMiaMQ6rNLAfPcZp1rv47WnGGRv7bsWrRbFQIUM9hREHyKVADC24UDpGX08=
+X-Received: by 2002:a05:6808:2393:b0:3ea:3db5:ffe6 with SMTP id
+ 5614622812f47-3f37c17dab9mr1285991b6e.31.1738746510227; Wed, 05 Feb 2025
+ 01:08:30 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z6MZ7JdP6tynvYRr@smile.fi.intel.com>
+References: <20250202035100.31235-1-badhri@google.com> <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
+In-Reply-To: <20250202-purring-ambitious-axolotl-4c6ff4@krzk-bin>
+From: Badhri Jagan Sridharan <badhri@google.com>
+Date: Wed, 5 Feb 2025 01:07:53 -0800
+X-Gm-Features: AWEUYZlsLaPl0RCseB3hpPwL1zwP-Zbd_3h4jFyoYWHMscU1N-HH781WD_ssOyI
+Message-ID: <CAPTae5+j9N=RBpfHVE-As+dz7HzrxXAH1enWrmSdFzu6DuaTBA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] dt-bindings: usb: snps,dwc3: Add property for imod
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
+	felipe.balbi@linux.intel.com, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, johnyoun@synopsys.com, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, jameswei@google.com, 
+	stable@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 05, 2025 at 09:57:32AM +0200, Andy Shevchenko wrote:
-> On Wed, Feb 05, 2025 at 06:53:09AM +0100, Greg Kroah-Hartman wrote:
-> > On Tue, Feb 04, 2025 at 06:10:36PM -0500, Lyude Paul wrote:
-> > > On Tue, 2025-02-04 at 12:09 +0100, Greg Kroah-Hartman wrote:
-> 
-> ...
-> 
-> > > Should we add faux_get_drvdata()/faux_set_drvdata() since we've got a
-> > > probe/remove function? Doesn't really look like the platform driver equivalent
-> > > does mcuh, but I assume just having an inline function for this would make
-> > > things a little less confusing for users.
-> > 
-> > You already have a reference counted object returned to you, why do you
-> > need to increment/decrement it again?  All of the users I've found in
-> > the kernel so far didn't need that, do you have a specific example where
-> > it would be useful?
-> 
-> It's about getter and setter for the .driver_data field, I don't see how
-> reference counting can help with this.
+.
 
-{sigh}
+On Sun, Feb 2, 2025 at 6:11=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.org=
+> wrote:
+>
+> On Sun, Feb 02, 2025 at 03:50:59AM +0000, Badhri Jagan Sridharan wrote:
+> > This change adds `snps,device-mode-intrpt-mod-interval`
+>
+> Thank you for your patch. There is something to discuss/improve.
 
-I saw get and thought get_device() as my coffee hadn't kicked in, my
-fault.
+Hi Krzysztof,
 
-You both are right, I'll go add these wrappers.
+Thanks for taking the time to review ! Happy to address them.
 
-thanks,
+>
+> > which allows enabling interrupt moderation through
+> > snps,dwc3 node.
+> >
+> > `snps,device-mode-intrpt-mod-interval`specifies the
+> > minimum inter-interrupt interval in 250ns increments
+> > during device mode operation. A value of 0 disables
+> > the interrupt throttling logic and interrupts are
+> > generated immediately if event count becomes non-zero.
+> > Otherwise, the interrupt is signaled when all of the
+> > following conditons are met which are, EVNT_HANDLER_BUSY
+> > is 0, event count is non-zero and at least 250ns increments
+> > of this value has elapsed since the last time interrupt
+> > was de-asserted.
+>
+> Please wrap commit message according to Linux coding style / submission
+> process (neither too early nor over the limit):
+> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/su=
+bmitting-patches.rst#L597
 
-greg k-h
+Ack! will do in V2 of this patch.
+
+>
+> >
+> > Cc: stable@kernel.org
+> > Fixes: cf40b86b6ef6 ("usb: dwc3: Implement interrupt moderation")
+>
+> I don't understand what are you fixing here.  Above commit does not
+> introduce that property.
+
+Although the above commit does not add this property, it has
+implemented the entire feature except for the property so thought
+sending this with "Fixes:" while CCing  stable@ will allow the
+backport.  I am interested in having this patch in older kernel
+versions as well where imod support has been added. Wondering what
+would be the right way to achieve this. Eager to know your thoughts !
+
+>
+>
+> > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
+> > ---
+> >  .../devicetree/bindings/usb/snps,dwc3-common.yaml   | 13 +++++++++++++
+> >  1 file changed, 13 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yam=
+l b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
+> > index c956053fd036..3957f1dac3c4 100644
+> > --- a/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
+> > +++ b/Documentation/devicetree/bindings/usb/snps,dwc3-common.yaml
+> > @@ -375,6 +375,19 @@ properties:
+> >      items:
+> >        enum: [1, 4, 8, 16, 32, 64, 128, 256]
+> >
+> > +  snps,device-mode-intrpt-mod-interval:
+> > +    description:
+> > +      Specifies the minimum inter-interrupt interval in 250ns incremen=
+ts
+>
+> Then use proper property unit suffix.
+
+Ack ! changing to snps,device-mode-intrpt-mod-interval-ns in V2.
+
+>
+> > +      during device mode operation. A value of 0 disables the interrup=
+t
+> > +      throttling logic and interrupts are generated immediately if eve=
+nt
+> > +      count becomes non-zero. Otherwise, the interrupt is signaled whe=
+n
+> > +      all of the following conditons are met which are, EVNT_HANDLER_B=
+USY
+> > +      is 0, event count is non-zero and at least 250ns increments of t=
+his
+> > +      value has elapsed since the last time interrupt was de-asserted.
+>
+> Why is this property of a board? Why different boards would wait
+> different amount of time?
+
+Interrupt moderation allows batch processing of events reported by the
+controller.
+A very low value of snps,device-mode-intrpt-mod-interval-ns implies
+that the controller will interrupt more often to make the host
+processor process a smaller set of events Vs a larger value will wake
+up the host processor at longer intervals to process events (likely
+more). So depending what the board is designed for this can be tuned
+to achieve the needed outcome.
+
+This is very similar to the "imod-interval-ns" in
+https://elixir.bootlin.com/linux/v6.13.1/source/Documentation/devicetree/bi=
+ndings/usb/usb-xhci.yaml
+except that in this case the Synopsys DWC3 controller supports this
+for the device mode operation as well.
+
+>
+> > +    $ref: /schemas/types.yaml#/definitions/uint16
+>
+> Drop, use proper name suffix.
+
+Ack, will drop in V2.
+
+Thanks,
+Badhri
+
+>
+> Best regards,
+> Krzysztof
+>
 
