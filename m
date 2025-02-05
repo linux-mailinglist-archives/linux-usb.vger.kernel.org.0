@@ -1,115 +1,127 @@
-Return-Path: <linux-usb+bounces-20188-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20189-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F6D6A29B2C
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 21:28:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D503A29C0E
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 22:45:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC2163A365A
-	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 20:27:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7556F1886A10
+	for <lists+linux-usb@lfdr.de>; Wed,  5 Feb 2025 21:45:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5AE212FA0;
-	Wed,  5 Feb 2025 20:28:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F6FA215067;
+	Wed,  5 Feb 2025 21:45:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A6OqNIqI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MUOMPBFy"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 489CF1519AD;
-	Wed,  5 Feb 2025 20:27:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 923171DE4D3;
+	Wed,  5 Feb 2025 21:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738787280; cv=none; b=tBrXgfDZ3Yv3Vu693aywb21JtpeH32kOkD9rhmUbcNLQPfe7rX7kvyxdhiGXSUhnzmkwj0Zb9kBuEXUrbZOEwP8Z96rJk5M0RL0Vu9HwPbcIzQ+tQdlIk5oPSvqi3qPRD79439CTGvKyG1TfWNfyLPU1922/erRNsQYNYdNeC1s=
+	t=1738791922; cv=none; b=N6G+yb4UpJ44ulz1m5VBUTcxHI+/zb7QVXGHyvU9JcgELfGYTRqvwrw6sYh+d/Tcy68Zc4xjAXqWEIukMES0pGrFyC2ER0ZjoWIA4rsLvir8Krqdvc7l/EmeVOiUHlo/VGHduQDU7vOHecrVmZuQMbtYmVzBX6snxo9BGIKgOXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738787280; c=relaxed/simple;
-	bh=15CBMjnHfLDzOcxHcj4i9dwQs3godR6phNv1yOHD2CQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=atc2YLB3/EWNtUc5eXo3ZG/c67DoTrr8a+9KLKMc0Dqv2TX9BfEPwDyxdui2oTmjRnwZ5KoT+FjsiOI3gdO9zIw/fUFl15UpdMLz8OFIgycCJ5YjJul6Hxzfkw121WQKyOy4sTmMWvGdLEszu+cZ7wEEKbyRpWuPjG0REVuoS6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A6OqNIqI; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1738791922; c=relaxed/simple;
+	bh=HrrpasWyuwG+NC15Cx/xnTL7cEj/zBNpmMcgmzhxV0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=Y8+sNwW4d17Y4FC9w6EcFrRgqh4WmrNsY5+yd9PG107ohFHO5iQ6junV/aSoHO9MC1YDyWq0HDJ137IMZcBV9Chfj5aLBJMQPYGB/0NV9lhRrfLLhYM7JsWSjlWX1bBRVMeaRV5IfVJWGzIyMzw2J9Zm2httJqaYpZ0N3AOwym0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MUOMPBFy; arc=none smtp.client-ip=209.85.218.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21634338cfdso5229375ad.2;
-        Wed, 05 Feb 2025 12:27:58 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ab69bba49e2so40217666b.2;
+        Wed, 05 Feb 2025 13:45:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738787278; x=1739392078; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=o0WtarwkqI4WjE0Soy4DrMD/J0v99JZNNib7d5tgyxk=;
-        b=A6OqNIqIaxzG7a7FOY0x/zOqP8uPsvSYnvxMWWiCvjUOLf/SFDBM5qVsviY+eEHSJm
-         Qp+EACmF9z/qC73e2C/vLKSlSnLxKEzMVC/oq+D+PK/ha7GLgrsiHAJQocMScfvhnFSJ
-         3GFmDkOd+v7oo8ZbMEgFz1ztYkf9ozsy38Ypf8H0jIY5y9nuU/rhG3OreWICXP7agbiu
-         NO8qdKU+OXQWve17WFi3xmskkq62TeXnTUGf79grM/iz8BbsMt0zKTd9CDKruGsRQbKk
-         9lBRLS/s+xBsQa48rLhj/Yfi7dl3/5sHIRGkQCyB7bfRxh0PwwF+SGNuTQr8KyVRSXLi
-         QCxw==
+        d=gmail.com; s=20230601; t=1738791919; x=1739396719; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=83ozoj5c/jHHLPQR0gxR8lx/Hi0ZcnYkDPH3CyJmhHM=;
+        b=MUOMPBFyH9XUe86TTuYdo9/9mgomOSa3/lDK903fYb81QOncYbibZiQ9DmLLgVsAXJ
+         kXu2+YJRJI6vdyzfP43wXqWh4qq0HfVjp1UIUehycO0YWURCECHVXEIaY7Q2wmINyRu1
+         rNb5dW0XWZ442nRyiixVU86K6lAJrNYrqDgLsucQNuBHXkjRpnIlybr7kqHKsrAfdafm
+         Q5AoIob21WUMbw6S6JRoM64r6lr6FKWwRRHNEIdWtztMAJG5YELO4DqYbVLyi2h7AcE5
+         KU60M5hFb8PNUYy3FSbJg6ye308Beg/rBaOqhYUfpgxLfFDJDoDKIxGBhLRcchrYxkxQ
+         Brzg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738787278; x=1739392078;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o0WtarwkqI4WjE0Soy4DrMD/J0v99JZNNib7d5tgyxk=;
-        b=cf0KG4IJduNrvpquK2+r6R/8RkOYCJfh1r+2Rh4msMywe8LxEU2L4Etb1HrTUUbcCG
-         ojnh/Y2SM8rJ6XC+J6wuBW3KA16hQJUEpm/fVNe/Vjo6DOUR4YW4nrrwjCKi/gnv1v5r
-         8PUWG7CaRuYEOx1AF70WopRHP8p5gfWIdAlz0IZcY0/vXXqi2mGULt8fLn6HwcBiWEFw
-         b15ZBL3Lh92t6MkKR143TF4dNliqdkYQGVxy3BGLZcfNnLR5DmUXQDWzGGu7zD9hS1Xr
-         ax1Jr3mKKag2saSuQHGzXmCFVjo9iOf/A+5h1bz/jv/JegO6vOreFjVBlfVmOqG8y/Za
-         qu4g==
-X-Forwarded-Encrypted: i=1; AJvYcCUQ/ONg01ifPFqnBzQxyfecfJwouxKkM0Wl+swXK04SnAy5OwG1kqXj+CnHV0OKx1yo8+ih7f3xwOU3X8Y=@vger.kernel.org, AJvYcCXKsKmh967xN4GTd+bb0ChlRUkLxOiiqGPov3BLJkI2/ZXoArNDFquujZPPydlZGnUq6EJ2yMYj1UP6@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHAbYseDopCKowZGKg7pKI8LoLMRfFWt7RB04tKBZcpMVXYqeF
-	3wKxKsV8TF/a/9vRUpNwZyWAZh7SFRjsi5m4ZfbuV0O0p6yzPTPtoL5USO2uQ18=
-X-Gm-Gg: ASbGncsAxXiPJvE6KWnq/Km7SlR4prmtDVTDa5BDn4wukbR2a/xzVSIK1ZkGlR6uXzo
-	5vGeJS5ORas6qdrC1rlhaubl94SItvLk1r+3AvQ+OFDg8F5TEhmI6gK/E2LCRrY4UGyra31kLTW
-	Z6OY4J3cr7QhavC5GBhbFFFyVjJukPEqSxm8alQpeBA+T1hCZc/Ap8LR+6g6KM94Zy1LsiyHSJ8
-	k2AVLtwk7LkOUobmayBJPqt/N4WHwKXLtPVJolCnIINN/6SC/jL7GynuhLmCvCsj0RTlmWxCfo2
-	cflepY3SpUIL2y4ZqyT/7y4mYIZDL33qE0C5D4Fi87DCvVrJ
-X-Google-Smtp-Source: AGHT+IGeF/Ls5GxBWhFKZUx5uThbSUUXzfvOJ+MSpx5kUENmcIeAuhJOFMrnrQLuzWWkeZVV8OY3eg==
-X-Received: by 2002:a17:902:da83:b0:216:401f:acd with SMTP id d9443c01a7336-21f17e4e961mr78863465ad.21.1738787278402;
-        Wed, 05 Feb 2025 12:27:58 -0800 (PST)
-Received: from purva-IdeaPad-Gaming-3-15IHU6.. ([2409:40c0:101d:c4fc:84d7:253:f453:251e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f16ab3c85sm19323755ad.37.2025.02.05.12.27.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2025 12:27:57 -0800 (PST)
-From: Purva Yeshi <purvayeshi550@gmail.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: skhan@linuxfoundation.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Purva Yeshi <purvayeshi550@gmail.com>
-Subject: [PATCH] usb: dwc3: Document nostream_work member in dwc3_ep struct
-Date: Thu,  6 Feb 2025 01:57:33 +0530
-Message-Id: <20250205202733.18611-1-purvayeshi550@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        d=1e100.net; s=20230601; t=1738791919; x=1739396719;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=83ozoj5c/jHHLPQR0gxR8lx/Hi0ZcnYkDPH3CyJmhHM=;
+        b=VMiP5DCy22DRZ3VqXGT4wcVJcc0YCOfQMMXQ13XPD8xcXRyHuFns46i4vExTEp/fBH
+         ZLzbdsLdEBDeWKQYUsHzjT7kOU0caMkjPTlKvbo+rlzt8v7ezLaFOI7CeHs3h93REJEH
+         RhJqSkxweQ60ADVyq1i9L3xwnLJFwkIt5x+OWwCBgF+9VJ76LZbU5+U3yQwI79TuuXvP
+         AE3ptnetuMsvgsNLN2a8iIUt2yXZ6+WAGL3/i6tK1AZXVRjw/TDQHUaclxOQbeY+N6dn
+         PP7nCfL+X6ITEw0at2IshY3ia3WWe8q/tAR3qBlCM+yP3YU6Pdi0gEuw/bOyhpSNYB6j
+         DDlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUBjq4EgDdyHPVHQXgwy9/QrR4Yx1w7lQpnogXCDr4wkcZ6u9VPnQjh1j6PvleNZkkSuackWfzr@vger.kernel.org, AJvYcCWpo+H/RbdrxoiTdjl8XywHqHDc0CYhoc3+kvYm6Tfnapmv+q7MYjHUGoTVweTFAkL+fhr3ijHOTj1v@vger.kernel.org, AJvYcCX/bQiHQCn3sEERsJWhHgs1/bpiPDWm4fbonmOKIFrnQnFfzHQGwnegj8OcTpEzL2bL9W8EtwNAwELMAqk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6+P0bD9s0i+9H+uAP3I9YS98hcv1NMXMD2HM9j4i61d5zpmP/
+	atj6bgO6BNSLsSWfREf4p0ypO6N1esqnsvogh3rhh7M2Ly7ul8Dw
+X-Gm-Gg: ASbGncutqk1bkTxL4SA/nCCeNM/u8bP1d0m4ajVIwH7zsRUcfob/wJqUxtOdgd83xlK
+	qFRzP5e+cKykMxH1DcKRcg7ZwvoI7RiAW0wylRtPpyFhjiB6I6MSVK7NCcxvuYWlhU0KAzIfTUe
+	+kU6WjYNct1iU6o9CtQ42+x+Iw/H20iXfjCfZf6yE2QY+CE5nnhSl6XLrhZndpdOHO5e6ed4GJ4
+	RVagEaK7MKlFG9onsc1fR1YOS/jFj5dpfJnGOpZj53eXJSV9GFd3ur5z7kL9ZxQruXPkAssvL4R
+	4tjynyeJIKCbT/Fb3/qT6YftB2gYQH0b
+X-Google-Smtp-Source: AGHT+IEPoIk30WWfA4BXz8wbNZOuVKWR++S/AotVQ2B18Pc/DY7ndJq6yoG435vz61ChOqXemub6rQ==
+X-Received: by 2002:a05:6402:13c8:b0:5dc:80ba:dda1 with SMTP id 4fb4d7f45d1cf-5dcdb711b67mr9092208a12.9.1738791918514;
+        Wed, 05 Feb 2025 13:45:18 -0800 (PST)
+Received: from foxbook (adtt137.neoplus.adsl.tpnet.pl. [79.185.231.137])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dce49b0661sm875416a12.25.2025.02.05.13.45.15
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Wed, 05 Feb 2025 13:45:17 -0800 (PST)
+Date: Wed, 5 Feb 2025 22:45:11 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: ki.chiang65@gmail.com
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, mathias.nyman@intel.com, stable@vger.kernel.org
+Subject: Re: [PATCH v4 1/1] xhci: Correctly handle last TRB of isoc TD on
+ Etron xHCI host
+Message-ID: <20250205224511.00e52a44@foxbook>
+In-Reply-To: <20250205053750.28251-2-ki.chiang65@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Added description for the 'nostream_work' member in struct dwc3_ep to 
-resolve the kerneldoc warning when running 'make htmldocs'.
+>  	case COMP_STOPPED:
+> +		/* Think of it as the final event if TD had an error */
+> +		if (td->error_mid_td)
+> +			td->error_mid_td = false;
+>  		sum_trbs_for_length = true;
+>  		break;
 
-Signed-off-by: Purva Yeshi <purvayeshi550@gmail.com>
----
- drivers/usb/dwc3/core.h | 1 +
- 1 file changed, 1 insertion(+)
+What was the reason for this part?
 
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index ac7c730f8..9095878d7 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -717,6 +717,7 @@ struct dwc3_event_buffer {
- /**
-  * struct dwc3_ep - device side endpoint representation
-  * @endpoint: usb endpoint
-+ * @nostream_work: delayed work structure for handling no-stream events
-  * @cancelled_list: list of cancelled requests for this endpoint
-  * @pending_list: list of pending requests for this endpoint
-  * @started_list: list of started requests on this endpoint
--- 
-2.34.1
+As written it is going to cause problems, the driver will forget about
+earlier errors if the endpoint is stopped and resumed on the same TD.
 
+
+I think that the whole patch could be much simpler, like:
+
+case X_ERROR:
+	frame->status = X;
+	td->error_mid_td = true;
+	break;
+case Y_ERROR:
+	frame->status = Y;
+	td->error_mid_td = true;
+	break;
+
+and then
+
+if (error_mid_td && (ep_trb != td->end_trb || ETRON && SUPERSPEED)) {
+	// error mid TD, wait for final event
+}
+
+finish_td()
+
+
+Regards,
+Michal
 
