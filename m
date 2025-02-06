@@ -1,102 +1,154 @@
-Return-Path: <linux-usb+bounces-20263-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20264-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31FD9A2AD09
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 16:51:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0919AA2AD86
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 17:20:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C335A16997D
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 15:51:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 491C03A2B4F
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 16:20:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64B534C8E;
-	Thu,  6 Feb 2025 15:51:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A343236A84;
+	Thu,  6 Feb 2025 16:19:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxolEfQq"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="blntiDpe"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC431F4165
-	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 15:51:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1012D232360;
+	Thu,  6 Feb 2025 16:19:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738857081; cv=none; b=iPRHIYLjWgEoNf5H+ALCMukz//vaBo55MNKVYXTbHGQDe38jPqgetv9r+mFAZGKMNTPUtfJFKdGW5rsprOKtKbtQgHSWJJw8ZDlIP69KmVYYcV7pdqVI354G685pFZxS3LQkwiOQmb76zINSw/dDIYamXqtFr7mvZ+kSbHdQwz8=
+	t=1738858792; cv=none; b=chtvOqKxpaA9afA5wwgao5mx2GKCrS3yJKk8f8ZxCcbbozbTUs0tocTNxO3/Hbk7UyOWAsmgi1J07AnPBgjncuahMGGE6UW3ihcjXvyosWWG0WvReeLm6QYrUaIvpe8ZrqTrK/WbKOBf7KMwBZDPItUgdIctmgkh0CC4oebephk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738857081; c=relaxed/simple;
-	bh=o1JxjoiLIvceqnInnZxWj/ohtFjxnjQOKv/Xdts8FYc=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bVp3ROGpLMUF7BZ1K9LJSKY/k5yEUJLTik1b1Y+LrMiR/wvcNox6/adYcgJp7OXWrLYgdiZ2f2tP9MyZETU+r1BAwBOD/4Q03EO4lhObGlnsZfwu4EQmynlfsgZiOIsxmEG8DDX/AKk+SAgIm9w3LZDwKlarcRgJ4SUyqSebM3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxolEfQq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BD874C4CEDD
-	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 15:51:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738857080;
-	bh=o1JxjoiLIvceqnInnZxWj/ohtFjxnjQOKv/Xdts8FYc=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=qxolEfQq6HBY0HRCfZHoDPDtF5p9d1PDWkgyYKY/m8nR/fHo6Zq1j1UQX9m73zeDO
-	 SNmBb6XjwoKPY15LfHCvIq+MLLZt8+fRLACsl2v2KEjFPmgw3syYC4g5qPa2T2GbWe
-	 cv5Y9IBRpt/cUkb3ChbU0gGIePKmjCH5ByyWXuR15yX8kbqzvmQP1MkD7JRbTGtqaR
-	 rJWWpNOEv0oDMU5cynqLF8chM4nodxjG2LBPtMAjUlHrJrSL1j8VAaADUIUOtURfTQ
-	 lBm0eF6sLT1mLORylBXj7BSwkkv7bdEz9Zpt/oaw4U/EBJrnAebJ+G8YDfoqtCc9wN
-	 9SVHd5MuEWh6Q==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id B3E57C41614; Thu,  6 Feb 2025 15:51:20 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
- with AMD AI 365
-Date: Thu, 06 Feb 2025 15:51:20 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219748-208809-xtAwLuIxE8@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
-References: <bug-219748-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1738858792; c=relaxed/simple;
+	bh=9Tuj/qQPgOS89JdE2AcvbLcqLOTT3lWxn6XNGzkVYzg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lPhLiqIhBZQZITOyzmv1bRmWV2imsvXYGndCCNvZyMBPBMVbzWk4pg8IrLBUb4vau0yKSBbYShWS9jr58WktgTrs4JwnriuilT7AF2+7R1WQVahBycoW4ys0puJOA5d1EVxo3BPqi5OKzI5VOORjExdD1EIuqASHB2AtAoHVTXU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=blntiDpe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C174FC4CEDF;
+	Thu,  6 Feb 2025 16:19:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1738858791;
+	bh=9Tuj/qQPgOS89JdE2AcvbLcqLOTT3lWxn6XNGzkVYzg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=blntiDpeIdL6vHWdpk5SJRRlX/lQ8xNjPx3efQVHG9nVLdpLE6TOotXK4PNBa9DXS
+	 uBIf0GxeEoGpZNORg/Qt+KmuEiA9NQA04p6V+dwXyl9qezu9c73ishRsH0wYVolVjm
+	 hvnWkEVNQdWL4RuYxLUEfx403EoYwhFryHzTMXC4=
+Date: Thu, 6 Feb 2025 17:19:48 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Zijun Hu <quic_zijuhu@quicinc.com>
+Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>, linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] driver core: add a faux bus for use when a simple
+ device/bus is needed
+Message-ID: <2025020638-refresh-pager-cdc0@gregkh>
+References: <2025020421-poster-moisture-534b@gregkh>
+ <2025020424-retrain-recharger-407c@gregkh>
+ <f575978b-7103-48b9-8125-a38fb6425f5c@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f575978b-7103-48b9-8125-a38fb6425f5c@quicinc.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
+On Thu, Feb 06, 2025 at 11:34:27PM +0800, Zijun Hu wrote:
+> On 2/4/2025 7:09 PM, Greg Kroah-Hartman wrote:
+> > +#define MAX_NAME_SIZE	256	/* Max size of a faux_device name */
+> > +
+> > +/*
+> > + * Internal wrapper structure so we can hold the memory
+> > + * for the driver and the name string of the faux device.
+> > + */
+> > +struct faux_object {
+> > +	struct faux_device faux_dev;
+> > +	const struct faux_driver_ops *faux_ops;
+> > +	char name[];
+> 
+> Remove name since it is not used actually ?
 
---- Comment #6 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Created attachment 307579
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307579&action=3Dedit
-Try to shorten SB access timeout
+Hm, we do copy it:
+	/* Save off the name of the object into local memory */
+	memcpy(faux_obj->name, name, name_size);
 
-Thanks for the logs! From the trace it looks like similar what already was =
-seen
-with Pluggable hub connected to Intel hardware. The sideband accesses take =
-some
-time and the hub interprets this as "issue" and triggers disconnect (or thi=
-s is
-what it looks like). The attached patch shortens the timeouts to half. Can =
-you
-try with it and see if that makes any difference?
+Ah, but then we do a dev_set_name() so we don't care anymore!  When the
+code was a two-step process we did care.  Nice catch, let me go change
+that and test it to be sure.
 
---=20
-You may reply to this email to add a comment.
+> > +};+ */
+> > +void faux_device_destroy(struct faux_device *faux_dev)
+> > +{
+> > +	struct device *dev = &faux_dev->dev;
+> > +
+> > +	if (IS_ERR_OR_NULL(faux_dev))
+> > +		return;
+> > +
+> 
+> struct device *dev;
+> 
+> //faux_device_create() does not return ERR_PTR().
+> if (!faux_dev)
+> 	return;
+> 
+> // avoid NULL pointer dereference in case of above error
+> dev = &faux_dev->dev;
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Nope, that wouldn't have been a dereference error, you can set a pointer
+to point to NULL just fine as long as you don't try to dereference it to
+something else.  Isn't C fun!  :)
+
+> > +	device_del(dev);
+> > +
+> > +	/* The final put_device() will clean up the driver we created for this device. */
+> > +	put_device(dev);
+> 
+> use device_unregister() instead of above 2 statements?
+
+Could be, both are the same.
+
+> > +}
+> > +EXPORT_SYMBOL_GPL(faux_device_destroy);
+> > +
+> > +int __init faux_bus_init(void)
+> > +{
+> > +	int ret;
+> > +
+> > +	ret = device_register(&faux_bus_root);
+> > +	if (ret) {
+> > +		put_device(&faux_bus_root);
+> 
+> put_device() for static device may trigger below warning:
+> 
+> drivers/base/core.c:device_release():
+> WARN(1, KERN_ERR "Device '%s' does not have a release() function, it is
+> broken and must be fixed. See Documentation/core-api/kobject.rst.\n",
+> 			dev_name(dev));
+
+Yes, but that will never trigger when you run the code as the final put
+device never happens.  So you will not ever see that.
+
+And yes, I HATE static struct devices in the kernel a lot, but in the
+driver core we use them for a few things like this, so either I fix all
+of them, or just live with the few that we have.
+
+thanks for the review!
+
+greg k-h
 
