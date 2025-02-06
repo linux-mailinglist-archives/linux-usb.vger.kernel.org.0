@@ -1,62 +1,89 @@
-Return-Path: <linux-usb+bounces-20257-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20258-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EC46A2ABE2
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 15:52:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C38A9A2ABF7
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 15:58:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 368D9188B0C4
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 14:52:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A45D91889939
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 14:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A19C1E5B85;
-	Thu,  6 Feb 2025 14:51:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 075371E5B75;
+	Thu,  6 Feb 2025 14:58:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="R/bNzBO7"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="MHE8iJNf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F49D13BADF;
-	Thu,  6 Feb 2025 14:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF58D23642A
+	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 14:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738853511; cv=none; b=g07Oid0xFmEIRvc24KHU17itS1mkNMAwtm6uPvxwdXt93qYXx1tXgZZq5EUluYXTmiVS+RaU4n2VKF2PLxGV4mh3n7oeTsMXX0C4s74Wjh30L+778YkFHLs3yfN6P2tATSp4U5DSMJMKbttroKcM84QjnjTp9gvgBRmDGmCdOSQ=
+	t=1738853904; cv=none; b=qMKFBu0AuE1DOWtoWAKlj3lFs9mTdhyPkSd+Zu5F7M6Knh2gCcgmUasF1E6DtKLG6NE3olF2zsf9svx9oWd9/01JS8Lv9ITak7nEVwzQRncdpZezo0/ClvsFVV2BBgOUVaMxg5nuHbGMAUOb2JpiNE3MV4WkzGL8HhaCzZ4xzxo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738853511; c=relaxed/simple;
-	bh=fMj8Mk7m+/sOohY6VfoATzz94KYI2Kpefe1/ceI/S8Q=;
+	s=arc-20240116; t=1738853904; c=relaxed/simple;
+	bh=oKAaYPv6jRnGeRLrJfZOqe5rRymQLsDP2aoUx2/x/88=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rXY94ONjih3uVVaYMRQLhYe1xiHyXBhUDnmRKMNTXEYLD7yC8B70SEj3rOSQsm94kJ0cc1vtp6zxWZY+LGi5CnMrxGhGIz//222PIImPt+zUeArmbVFM++QCv4/d8+LVHM7spDAg8iYZfmSXthoWeUT6YYDT8u75dI+8P8Zsy6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=R/bNzBO7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EB63C4CEDD;
-	Thu,  6 Feb 2025 14:51:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738853511;
-	bh=fMj8Mk7m+/sOohY6VfoATzz94KYI2Kpefe1/ceI/S8Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=R/bNzBO7JxuqvpLv0EHCr1ZG+kFk8HBOobm7zslzz6r343f2ZFFmAeBH3I85ZxS30
-	 +yrRCowGSTA9GR764E0ct3SslVvjmY8sICsKNbC72ca0h//veqWVCpjCkmM1fN1QyJ
-	 o84onU6JrleqTyISxP4mVLxLoFhQd0fj4Jn/BDI4=
-Date: Thu, 6 Feb 2025 15:51:48 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-Cc: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Pavan Holla <pholla@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Jameson Thies <jthies@google.com>,
-	"Katiyar, Pooja" <pooja.katiyar@intel.com>,
-	"Pathak, Asutosh" <asutosh.pathak@intel.com>,
-	"Jayaraman, Venkat" <venkat.jayaraman@intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] usb: typec: ucsi: Command mailbox interface for
- the userspace
-Message-ID: <2025020643-federal-uneatable-5da4@gregkh>
-References: <20250206141936.1117222-1-heikki.krogerus@linux.intel.com>
- <20250206141936.1117222-2-heikki.krogerus@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ktvz61q0lA5XSLGuZaNZrdT3QMzmiN0MG+AhQuGGVZ0toQ6QVoXMicByd4Zk9TGR3+6cqd4l9Z2+v6KUo9QNtpd7Qh0TqD89pZW9xWXBT+D7ObY95y94/SxAkzR7LO3UbsBRc3dEpBsaw4kj3asqKIlsn7r5YIA1Wh8vocG1sh0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=MHE8iJNf; arc=none smtp.client-ip=209.85.219.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-6e4277e4791so5375956d6.0
+        for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2025 06:58:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1738853902; x=1739458702; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XNiQI88qQ2M3rNYJ8bg9PlmEeiuvyHgd/qrJv6wRMYU=;
+        b=MHE8iJNf+rYGtcW4nnAF0T2VJaagB3vuWYgAsAbaUlDXHoChkzJYlXbnEULiz1DzIC
+         /1hjY2g1GStAK6CObMTRTCSgQv3F6c4lGYpNCGJA+AFw2sKsAx53C+5l2TAJCmiyImU1
+         zvgGBwtX+eRluGEr00qwsHxrfo7GEmJa234DnPmkxfSGJIBH1KuNx1mhWp0GBk2T8Am8
+         5M7oRF2XBst+/9xtlm2Is2TO32jMBiV71mK7llFjnh6ailkMQGiQNNBvRXgNLL1lMcXP
+         l1+Fgl5RJap1ZGE6t/l0cpceZz+YgEctnpoaovQReHBV6zxK7k7voNb1SJCJKdB0Q1NO
+         vslw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738853902; x=1739458702;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XNiQI88qQ2M3rNYJ8bg9PlmEeiuvyHgd/qrJv6wRMYU=;
+        b=ZZ43vUNCoP2tdfR8e5f+UR6jPBgWGKrdwhSUZFvYAtOQXjokU9fm57UzGzk7wW1sp+
+         nngi1UL5Yp1W7Idvr6d9N/He/9SyXDydOLU/50Wsw7h8OKOwphkljgdZFto51fgYKgS+
+         EFxy51F51i2I0LQBk9DUMn5SbRLqGtUwa6JeZfRjXDrcm6epFEFH65MQsQxvVg3mBAmO
+         m9kMSvNMJe0ihSHvuJNbvYgAu2LL8F8TuWiZ+D+F3aamCjEvh36hGN0er3Oi3nRty+S+
+         cTdQo2GFDSc0wmJdo7dO3370Fbrv3GrvuHxCUlhOmjjLFb4FMp0Vztjqi48sUfpDmHJP
+         O5Ow==
+X-Forwarded-Encrypted: i=1; AJvYcCVzhaR92NOeNkPIwTrkCLtw9dtLYtoAJvYpSbrTNtF8ZHFYDgpkA/Bf3dM+kpcb89HNbgcWH9MfHOE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz/ZztqVcc6W/086/GxwTMTpPRGESW5C4V7nybzESgtMJYvpSwJ
+	J8n9p5skOXLtQrCXT+nitcjJrFLtn0QUHM6RjQxxXdPbtymPFp2BitX3iPO+SA==
+X-Gm-Gg: ASbGncvRu9rjxsfRJN5mjzJZUgEvMWMFuaKMlGTiEGZ1Xva0KnPKDeDVfbhC1Lk12Hg
+	2Gecs7QjNm98zGA9ZvpfYaMpJbQCbJy0Qyr+99PO//8kDQXYvwIDc3YoA2ylZp50Erhi/NwLuOv
+	oKixabUXHe+Od4lRzcO9HvmTv4KI3u6nBZ95Bk/9JcML2cclW8MCuP7q+sw0t0XyCxFCug6dLGZ
+	W+7+P0ji1rmqttdnCdz6JUhStAf9XkVw4ViPS7bScQ7WpKjrKqLWvfhu5GWDAcuEh/xcaovAX7y
+	SzohqB/kkkzsGatd
+X-Google-Smtp-Source: AGHT+IGwTVmRqwtXcBDvN8EgzQ6uI23+vsJwHbkBFH2sBMryDYiMUMDsVVEPOsURI+KP7I6QNQcsBA==
+X-Received: by 2002:a05:6214:2029:b0:6e4:41b3:4972 with SMTP id 6a1803df08f44-6e441b34e15mr10049126d6.43.1738853901763;
+        Thu, 06 Feb 2025 06:58:21 -0800 (PST)
+Received: from rowland.harvard.edu ([2601:19b:681:fd10::9345])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47153bc75aesm5953631cf.64.2025.02.06.06.58.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2025 06:58:21 -0800 (PST)
+Date: Thu, 6 Feb 2025 09:58:18 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: WangYuli <wangyuli@uniontech.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	usb-storage@lists.one-eyed-alien.net, linux-kernel@vger.kernel.org,
+	zhanjun@uniontech.com, guanwentao@uniontech.com,
+	chenlinxuan@uniontech.com, Xinwei Zhou <zhouxinwei@uniontech.com>,
+	Xu Rao <raoxu@uniontech.com>,
+	Yujing Ming <mingyujing@uniontech.com>
+Subject: Re: [PATCH] usb-storage: Bypass certain SCSI commands on disks with
+ "use_192_bytes_for_3f" attribute
+Message-ID: <80ef917b-3680-4f85-93ba-c92d2b69ebaa@rowland.harvard.edu>
+References: <AC1BB7F0327EFB9C+20250206054107.9085-1-wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -65,106 +92,44 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250206141936.1117222-2-heikki.krogerus@linux.intel.com>
+In-Reply-To: <AC1BB7F0327EFB9C+20250206054107.9085-1-wangyuli@uniontech.com>
 
-On Thu, Feb 06, 2025 at 04:19:31PM +0200, Heikki Krogerus wrote:
-> Some of the UCSI commands can be used to configure the
-> entire Platform Policy Manager (PPM) instead of just
-> individual connectors. To allow the user space communicate
-> those commands with the PPM, adding a mailbox interface. The
-> interface is a single attribute file that represents the
-> main "OPM to PPM" UCSI data structure.
+On Thu, Feb 06, 2025 at 01:41:07PM +0800, WangYuli wrote:
+> On some external USB hard drives, mounting can fail if "lshw" is
+> executed during the process.
 > 
-> The mailbox allows any UCSI command to be sent to the PPM so
-> it should be also useful for validation, testing and
-> debugging purposes.
+> This occurs because data sent to the device's output endpoint in
+> certain abnormal scenarios does not receive a response, leading to
+> a mount timeout.
+> 
+> [ Description of "use_192_bytes_for_3f" in the kernel code: ]
+>   /*
+>    * Many disks only accept MODE SENSE transfer lengths of
+>    * 192 bytes (that's what Windows uses).
+>    */
+>    sdev->use_192_bytes_for_3f = 1;
+> 
+> The kernel's SCSI driver, when handling devices with this attribute,
+> sends commands with a length of 192 bytes like this:
+>   if (sdp->use_192_bytes_for_3f)
+>   	res = sd_do_mode_sense(sdp, 0, 0x3F, buffer, 192, &data, NULL);
+> 
+> However, "lshw" disregards the "use_192_bytes_for_3f" attribute and
+> transmits data with a length of 0xff bytes via ioctl, which can cause
+> some hard drives to hang and become unusable.
+> 
+> To resolve this issue, prevent commands with a length of 0xff bytes
+> from being queued via ioctl when it detects the "use_192_bytes_for_3f"
+> attribute on the device.
 
-As it's for this type of thing, why not put it in debugfs instead?
+Is usb-storage really the right place to put this test?  Wouldn't it
+be better to put it in the SCSI layer where the ioctl is converted to
+a SCSI command?  That way it would affect all SCSI devices with the
+use_192_bytes_for_3f flag, not just USB devices.
 
-> +static ssize_t ucsi_write(struct file *filp, struct kobject *kobj,
-> +			  const struct bin_attribute *attr,
-> +			  char *buf, loff_t off, size_t count)
-> +{
-> +	struct ucsi_sysfs *sysfs = attr->private;
-> +	struct ucsi *ucsi = sysfs->ucsi;
-> +	int ret;
-> +
-> +	u64 *control = (u64 *)&sysfs->mailbox[UCSI_CONTROL];
-> +	u32 *cci = (u32 *)&sysfs->mailbox[UCSI_CCI];
-> +	void *data = &sysfs->mailbox[UCSI_MESSAGE_IN];
-> +
-> +	/* TODO: MESSAGE_OUT. */
-> +	if (off != UCSI_CONTROL || count != sizeof(*control))
-> +		return -EFAULT;
-> +
-> +	mutex_lock(&sysfs->lock);
-> +
-> +	memset(data, 0, UCSI_MAX_DATA_LENGTH(ucsi));
-> +
-> +	/* PPM_RESET has to be handled separately. */
-> +	*control = get_unaligned_le64(buf);
-> +	if (UCSI_COMMAND(*control) == UCSI_PPM_RESET) {
-> +		ret = ucsi_reset_ppm(ucsi, cci);
-> +		goto out_unlock_sysfs;
-> +	}
-> +
-> +	mutex_lock(&ucsi->ppm_lock);
-> +
-> +	ret = ucsi->ops->sync_control(ucsi, *control, cci, NULL, 0);
-> +	if (ret)
-> +		goto out_unlock_ppm;
-> +
-> +	if (UCSI_CCI_LENGTH(*cci) && ucsi->ops->read_message_in(ucsi, data, UCSI_CCI_LENGTH(*cci)))
-> +		dev_err(ucsi->dev, "failed to read MESSAGE_IN\n");
-> +
-> +	ret = ucsi->ops->sync_control(ucsi, UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE,
-> +				      NULL, NULL, 0);
-> +out_unlock_ppm:
-> +	mutex_unlock(&ucsi->ppm_lock);
-> +out_unlock_sysfs:
-> +	mutex_unlock(&sysfs->lock);
-> +
-> +	return ret ?: count;
-> +}
+Also, instead of making the command fail completely, wouldn't it be
+better to change the transfer length to 192 if the original value was
+larger?
 
-This worries me, any userspace tool can now do this?  What other "bad"
-things can it to the connection?
-
-> +
-> +int ucsi_sysfs_register(struct ucsi *ucsi)
-> +{
-> +	struct ucsi_sysfs *sysfs;
-> +	int ret;
-> +
-> +	sysfs = kzalloc(struct_size(sysfs, mailbox, UCSI_MAILBOX_SIZE(ucsi)), GFP_KERNEL);
-> +	if (!sysfs)
-> +		return -ENOMEM;
-> +
-> +	sysfs->ucsi = ucsi;
-> +	mutex_init(&sysfs->lock);
-> +	memcpy(sysfs->mailbox, &ucsi->version, sizeof(ucsi->version));
-> +
-> +	sysfs_bin_attr_init(&sysfs->bin_attr);
-> +
-> +	sysfs->bin_attr.attr.name = "ucsi";
-> +	sysfs->bin_attr.attr.mode = 0644;
-> +
-> +	sysfs->bin_attr.size = UCSI_MAILBOX_SIZE(ucsi);
-> +	sysfs->bin_attr.private = sysfs;
-> +	sysfs->bin_attr.read_new = ucsi_read;
-> +	sysfs->bin_attr.write_new = ucsi_write;
-> +
-> +	ret = sysfs_create_bin_file(&ucsi->dev->kobj, &sysfs->bin_attr);
-
-You raced with userspace and lost, right?  Why are you dynamically
-creating this attribute, can't you just use a static one?
-
-But again, why not debugfs?  I'd feel a lot more comfortable with that
-instead of sysfs.
-
-thanks,
-
-greg k-h
-
-
+Alan Stern
 
