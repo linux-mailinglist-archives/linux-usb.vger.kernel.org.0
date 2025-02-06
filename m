@@ -1,181 +1,285 @@
-Return-Path: <linux-usb+bounces-20198-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20199-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4EF3A29F0B
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 03:59:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71777A29F41
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 04:12:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6B277A2CF3
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 02:58:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E859B166AC9
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 03:12:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7CE146D57;
-	Thu,  6 Feb 2025 02:58:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="LCQasQWX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00309152196;
+	Thu,  6 Feb 2025 03:12:00 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from cosmicgizmosystems.com (cosmicgizmosystems.com [63.249.102.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A7413AD18;
-	Thu,  6 Feb 2025 02:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B19A6148FF5;
+	Thu,  6 Feb 2025 03:11:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=63.249.102.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738810737; cv=none; b=A/bGRifmqPOET1h58wYvY8hF9ZdeypJ3r7AdRftQ8L9xsI88gkMUnsBAlrVkchayYFARiI9RJ1NReadEhPv4JQCDxHQ9rZsNIBOpFsFFl2MLDBB51fZtzXiCvBDCKFh2lUhJt3696AZGM1jTlm2Tv30dJ8LCzzDqe863F/pUq7E=
+	t=1738811519; cv=none; b=rig7Yf2qIDw58tjeVqvVQpo64WJlvgl9a5jEzl/SZazL4ud5IWhRpEcgMcd2gzsdEVjfBzjCS3+RNmeuhvzNcRtS/wt9x2hES164NeMApalii0ZU9GeEAQwOhCLDcyWu5jHXPzujEdf2ZEetn5fuHhkgoRIIlbmB81Cr1/uQhaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738810737; c=relaxed/simple;
-	bh=3lGujLEmqlUQjlKf2gi/U8xopfYpsbu4CWP6k61asTU=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=lPSoyQn5J41VW553nJ/opaq40Y31VuJOdh1YafAznAlbVQxq/hRi6pmCa7ZCyJ+dN4n9P0fUIgcWvDcmq0JEA88FeFy33OtwItrApODyFe6SMy/4eMWjkc8WveSVhWz2FHTJjkmaug5Td84gBdJesH1NDWUqaa4io/mmMfDwEBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=LCQasQWX; arc=none smtp.client-ip=162.62.57.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
-	t=1738810722; bh=W985aGojcuWiDeCnrhJs+9mBdeGzwhVtK3zQEyVa7sw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=LCQasQWXCG5oju5nromNGpgsuRjdbTvZo32vob+Y27CYPBGyP/RL+9+QYxi8v0stB
-	 mEu2IuKB+49ol23e6As91EVO4XTe71VzkQff0JYcrw9NkqofGO07UyWZ5p6ZZ1Mrzh
-	 FD/epYQ7DicdqszTbkta20K0/RNrAUEh+JxRqATc=
-Received: from pek-lxu-l1.wrs.com ([114.244.57.157])
-	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
-	id D221B053; Thu, 06 Feb 2025 10:52:34 +0800
-X-QQ-mid: xmsmtpt1738810354t73r6gd7l
-Message-ID: <tencent_65865F89A52EED6ECB8C8D67E1C6FAD2FC06@qq.com>
-X-QQ-XMAILINFO: NIraPvLG0lH0CoSCUhMIVbU8V4XhVp+jmGf+3VjoHEpredbLtpUMxYzsi3X7FO
-	 z718x+wrjQILM/6CH/1ZAQpFQYJKKqGJ304iHqd4vpV+KTB5Fkf6JaSmqQQ92X6zhnH9YmA5xjEO
-	 UsTzVv72iDPqdVy3RbJSrAZJQa7J10RPiLsYUFLIeLq4shnBlISU0dfQjwrIvahH5jKg8j9654qR
-	 JaTgmpZ2t4+FkALQfsgNhrGvcfC2HEqIGqSSm97LCfjDpkhWMBLqF0BIdB4y4pRBvFf6VIds/nuI
-	 1tC4M4mfAC6wCuFpZzpMWPFB19pN5ZSYgIKRm1R74dxMS4QVsxvjQJIrAkoBtmJN9z+Kok/iChiF
-	 6IN+2BzH2uhl7i344M5FJ23w3VHsJq14ddEjhMMylXL00l89t1V/jg8jj3j9W9CEbx4p2T7CjGHt
-	 4gjQxuMvRjNFh7muFlgFsj6kNNh/BgM3f28oDpwEPzCVmztVuZ2tABYFwDqkW8qZO+iIwHhPsfqx
-	 RI0okVYceR5rR7d0CahTSv6k6AwiPhpkG6TEUeu54ivLVOy2lDBw4clD3jWTIyJR6qvsG73uQW7w
-	 CCeihqalLxjeSpf2vLv5GiB61dHOjIfMt8+1H3n0Ir2X5hJ7DRBAuQukV3jsrFBb3hJuQhOkangw
-	 4VE+6NeiWdtlXU1t0hb3e6vkkYLJnZ3sGlMt466IBX48ZV3vPvFmaofCfMdNFwdjqbTSBLxYDz37
-	 mEa2OHHVsMKgUkLmHybIdwaqOFQ1z5M63XIAm0xD6t32Hk7w444mymke0rP+76/qsJPGJERuReCw
-	 fJJtKHUA1lwbAACoMEOS4Rfvjh6qMF0Q0cnZSxpuBXha/0F+Xk1fCXFBz7gXv3+ku6YpwVB56thM
-	 9+ZTUpkP6sshsKHX82MQJIvW7RXtmjTE4fc+4ctiGV5uDEgEqPT+8=
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
-From: Edward Adam Davis <eadavis@qq.com>
-To: syzbot+90ac8355c8ac84b1b464@syzkaller.appspotmail.com
-Cc: gregkh@linuxfoundation.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	syzkaller-bugs@googlegroups.com
-Subject: [PATCH] HID: corsair-void: add missing cancel delaywork
-Date: Thu,  6 Feb 2025 10:52:35 +0800
-X-OQ-MSGID: <20250206025234.107442-2-eadavis@qq.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <67a3a3b0.050a0220.19061f.05e8.GAE@google.com>
-References: <67a3a3b0.050a0220.19061f.05e8.GAE@google.com>
+	s=arc-20240116; t=1738811519; c=relaxed/simple;
+	bh=ruwprGVpgf2x/B1GvPWylp94rMFLTqQMKzlbnkdvPRc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KQ42uGKVORsHo4CoOxlFcF/9sgtQaxb6CM5UUwbYvt18nXjkl/j6qqd3HvXI5raZn1vrAr8OdhAxOh5+5wHi+6mQonvUjCM9spl0MsUA0/82BD5hw4UciXqb+gfnr/QJv322n23Y6gbF/ZOMYl9x5CNri9fpfGr/Gjl1UF+T5bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com; spf=pass smtp.mailfrom=cosmicgizmosystems.com; arc=none smtp.client-ip=63.249.102.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cosmicgizmosystems.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cosmicgizmosystems.com
+Received: from [192.168.12.108] (unknown [172.56.152.117])
+	by host11.cruzio.com (Postfix) with ESMTPSA id 2BD2026F8C75;
+	Wed,  5 Feb 2025 19:02:37 -0800 (PST)
+Message-ID: <dd0d2992-ed72-4f9f-b0f6-8b8ff1d9b377@cosmicgizmosystems.com>
+Date: Wed, 5 Feb 2025 19:02:34 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] HID: usbhid: fix recurrent out-of-bounds bug in
+ usbhid_parse()
+To: Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
+ Kees Cook <kees@kernel.org>
+Cc: Jiri Kosina <jikos@kernel.org>, Alan Stern <stern@rowland.harvard.edu>,
+ Benjamin Tissoires <bentiss@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Gustavo A. R. Silva" <gustavoars@kernel.org>, linux-usb@vger.kernel.org,
+ linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-hardening@vger.kernel.org,
+ syzbot <syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com>,
+ syzkaller-bugs@googlegroups.com, lvc-project@linuxtesting.org
+References: <20250131151600.410242-1-n.zhandarovich@fintech.ru>
+ <202501311205.DB75F95@keescook>
+ <27f8c5a1-6671-4e23-862f-4c5bf888684a@fintech.ru>
+Content-Language: en-US
+From: Terry Junge <linuxhid@cosmicgizmosystems.com>
+In-Reply-To: <27f8c5a1-6671-4e23-862f-4c5bf888684a@fintech.ru>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-syzbot report a slab-use-after-free Read in usbhid_raw_request. [1]
+On 2/2/25 1:55 AM, Nikita Zhandarovich wrote:
+> 
+> 
+> On 1/31/25 23:12, Kees Cook wrote:
+>> On Fri, Jan 31, 2025 at 06:15:58PM +0300, Nikita Zhandarovich wrote:
+>>> Syzbot reports [1] a reemerging out-of-bounds bug regarding hid
+>>> descriptors supposedly having unpredictable bNumDescriptors values in
+>>> usbhid_parse().
+>>>
+>>> The issue stems from the fact that hid_class_descriptor is supposed
+>>> to be a flexible array, however it was sized as desc[1], using only
+>>> one element. Therefore, going beyond 1 element, courtesy of
+>>> bNumDescriptors, may lead to an error.
+>>>
+>>> Modify struct hid_descriptor by employing __counted_by macro, tying
+>>> together struct hid_class_descriptor desc[] and number of descriptors
+>>> bNumDescriptors. Also, fix places where this change affects work with
+>>> newly updated struct.
+>>>
+>>> [1] Syzbot report:
+>>>
+>>> UBSAN: array-index-out-of-bounds in drivers/hid/usbhid/hid-core.c:1024:7
+>>> index 1 is out of range for type 'struct hid_class_descriptor[1]'
+>>> ...
+>>> Workqueue: usb_hub_wq hub_event
+>>> Call Trace:
+>>>  <TASK>
+>>>  __dump_stack lib/dump_stack.c:88 [inline]
+>>>  dump_stack_lvl+0x241/0x360 lib/dump_stack.c:114
+>>>  ubsan_epilogue lib/ubsan.c:231 [inline]
+>>>  __ubsan_handle_out_of_bounds+0x121/0x150 lib/ubsan.c:429
+>>>  usbhid_parse+0x5a7/0xc80 drivers/hid/usbhid/hid-core.c:1024
+>>>  hid_add_device+0x132/0x520 drivers/hid/hid-core.c:2790
+>>>  usbhid_probe+0xb38/0xea0 drivers/hid/usbhid/hid-core.c:1429
+>>>  usb_probe_interface+0x645/0xbb0 drivers/usb/core/driver.c:399
+>>>  really_probe+0x2b8/0xad0 drivers/base/dd.c:656
+>>>  __driver_probe_device+0x1a2/0x390 drivers/base/dd.c:798
+>>>  driver_probe_device+0x50/0x430 drivers/base/dd.c:828
+>>>  __device_attach_driver+0x2d6/0x530 drivers/base/dd.c:956
+>>>  bus_for_each_drv+0x24e/0x2e0 drivers/base/bus.c:457
+>>>  __device_attach+0x333/0x520 drivers/base/dd.c:1028
+>>>  bus_probe_device+0x189/0x260 drivers/base/bus.c:532
+>>>  device_add+0x8ff/0xca0 drivers/base/core.c:3720
+>>>  usb_set_configuration+0x1976/0x1fb0 drivers/usb/core/message.c:2210
+>>>  usb_generic_driver_probe+0x88/0x140 drivers/usb/core/generic.c:254
+>>>  usb_probe_device+0x1b8/0x380 drivers/usb/core/driver.c:294
+>>>
+>>> Reported-by: syzbot+c52569baf0c843f35495@syzkaller.appspotmail.com
+>>> Closes: https://syzkaller.appspot.com/bug?extid=c52569baf0c843f35495
+>>> Fixes: f043bfc98c19 ("HID: usbhid: fix out-of-bounds bug")
+>>> Cc: stable@vger.kernel.org
+>>> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+>>> ---
+>>> v1: https://lore.kernel.org/all/20240524120112.28076-1-n.zhandarovich@fintech.ru/
+>>>
+>>> v2: Instead of essentially forcing usbhid_parse() to only check
+>>> the first descriptor, modify hid_descriptor struct to anticipate
+>>> multiple hid_class_descriptor in desc[] by utilizing __counted_by
+>>> macro. This change, in turn, requires several other ones wherever
+>>> that struct is used. Adjust commit description accordingly.
+>>>
+>>> P.S. Since syzbot currently breaks trying to reproduce the issue,
+>>> with or without this patch, I only managed to test it locally with
+>>> syz repros. Would greatly appreciate other people's effort to test
+>>> it as well.
+>>>
+>>> P.P.S. Terry Junge <linuxhid@cosmicgizmosystems.com> suggested a
+>>> different approach to this issue, see:
+>>> Link: https://lore.kernel.org/all/f7963a1d-e069-4ec9-82a1-e17fd324a44f@cosmicgizmosystems.com/
+>>>
+>>>  drivers/hid/usbhid/hid-core.c       |  2 +-
+>>>  drivers/usb/gadget/function/f_fs.c  |  3 ++-
+>>>  drivers/usb/gadget/function/f_hid.c | 22 ++++++++++++++--------
+>>>  include/linux/hid.h                 |  2 +-
+>>>  4 files changed, 18 insertions(+), 11 deletions(-)
+>>>
+>>> diff --git a/drivers/hid/usbhid/hid-core.c b/drivers/hid/usbhid/hid-core.c
+>>> index a6eb6fe6130d..eb4807785d6d 100644
+>>> --- a/drivers/hid/usbhid/hid-core.c
+>>> +++ b/drivers/hid/usbhid/hid-core.c
+>>> @@ -1010,7 +1010,7 @@ static int usbhid_parse(struct hid_device *hid)
+>>>  		return -ENODEV;
+>>>  	}
+>>>  
+>>> -	if (hdesc->bLength < sizeof(struct hid_descriptor)) {
+>>> +	if (hdesc->bLength < struct_size(hdesc, desc, hdesc->bNumDescriptors)) {
+>>>  		dbg_hid("hid descriptor is too short\n");
+>>>  		return -EINVAL;
+>>>  	}
+>>
+>> I don't think you want this hunk in the patch. The existing logic will
+>> correctly adapt num_descriptors to a size that fits within
+>> hdesc->bLength. In theory, the above change could break a weird but
+>> working device that reported too high bNumDescriptors but still worked
+>> with what num_descriptors walks.
+>>
+> 
+> Thank you for mentioning this and you are right about possibly breaking
+> a working device.
+> 
+> However, sizeof(struct hid_descriptor) doesn't count flex array sizes.
+> So, leaving this check as is will miss cases when hdesc->bLength >=
+> sizeof(struct hid_descriptor) but short enough to have a desc[0]
+> element. Maybe doing struct_size(hdesc, desc, 1) is better? Then we
+> make sure that at least one mandatory hid_class_desriptor is there.
+> 
+>>> diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
+>>> index 2dea9e42a0f8..a4b6d7cbf56d 100644
+>>> --- a/drivers/usb/gadget/function/f_fs.c
+>>> +++ b/drivers/usb/gadget/function/f_fs.c
+>>> @@ -2550,7 +2550,8 @@ static int __must_check ffs_do_single_desc(char *data, unsigned len,
+>>>  	case USB_TYPE_CLASS | 0x01:
+>>>  		if (*current_class == USB_INTERFACE_CLASS_HID) {
+>>>  			pr_vdebug("hid descriptor\n");
+>>> -			if (length != sizeof(struct hid_descriptor))
+>>> +			if (length < sizeof(struct hid_descriptor) +
+>>> +				     sizeof(struct hid_class_descriptor))
 
-The delayed_status_work still runs after usb device is removed.
+Don't change the logic of the if statement in this function, leave it as !=
+if it failed before this change it should still fail with this change.
 
-[1]
-BUG: KASAN: slab-use-after-free in usb_control_msg+0x434/0x4b0 drivers/usb/core/message.c:157
-Read of size 4 at addr ffff88812223c67c by task kworker/0:3/2954
+>>>  				goto inv_length;
+>>>  			break;
+>>>  		} else if (*current_class == USB_INTERFACE_CLASS_CCID) {
+>>
+>> Same here, I think? This isn't needed unless I'm misunderstanding
+>> something about the fix.
+> 
+> Once again, sizeof(struct hid_descriptor) will not count struct
+> hid_class_descriptor desc[] __counted_by(...) so even correct and
+> predictable lengths will fail the check. We need to test length against
+> hid_descriptor with at least one element of its flex array.
+> 
+> I would prefer struct_size() here as well but it's not optimal in this
+> case.
+>>
+>>> diff --git a/drivers/usb/gadget/function/f_hid.c b/drivers/usb/gadget/function/f_hid.c
+>>> index 740311c4fa24..ec8c2e2d6812 100644
+>>> --- a/drivers/usb/gadget/function/f_hid.c
+>>> +++ b/drivers/usb/gadget/function/f_hid.c
+>>> @@ -139,13 +139,17 @@ static struct usb_interface_descriptor hidg_interface_desc = {
+>>>  };
+>>>  
+>>>  static struct hid_descriptor hidg_desc = {
+>>> -	.bLength			= sizeof hidg_desc,
+>>> +	.bLength			= struct_size(&hidg_desc, desc, 1),
+>>>  	.bDescriptorType		= HID_DT_HID,
+>>>  	.bcdHID				= cpu_to_le16(0x0101),
+>>>  	.bCountryCode			= 0x00,
+>>>  	.bNumDescriptors		= 0x1,
+>>> -	/*.desc[0].bDescriptorType	= DYNAMIC */
+>>> -	/*.desc[0].wDescriptorLenght	= DYNAMIC */
+>>> +	.desc				= {
+>>> +		{
+>>> +			.bDescriptorType	= 0, /* DYNAMIC */
+>>> +			.wDescriptorLength	= 0, /* DYNAMIC */
+>>> +		}
+>>> +	}
+>>>  };
+>>>  
+>>>  /* Super-Speed Support */
+>>> @@ -936,16 +940,18 @@ static int hidg_setup(struct usb_function *f,
+>>>  		switch (value >> 8) {
+>>>  		case HID_DT_HID:
+>>>  		{
+>>> -			struct hid_descriptor hidg_desc_copy = hidg_desc;
+>>> +			DEFINE_FLEX(struct hid_descriptor, hidg_desc_copy,
+>>> +				desc, bNumDescriptors, 1);
+>>> +			*hidg_desc_copy = hidg_desc;
+>>>  
+>>>  			VDBG(cdev, "USB_REQ_GET_DESCRIPTOR: HID\n");
+>>> -			hidg_desc_copy.desc[0].bDescriptorType = HID_DT_REPORT;
+>>> -			hidg_desc_copy.desc[0].wDescriptorLength =
+>>> +			hidg_desc_copy->desc[0].bDescriptorType = HID_DT_REPORT;
+>>> +			hidg_desc_copy->desc[0].wDescriptorLength =
+>>>  				cpu_to_le16(hidg->report_desc_length);
+>>>  
+>>>  			length = min_t(unsigned short, length,
+>>> -						   hidg_desc_copy.bLength);
+>>> -			memcpy(req->buf, &hidg_desc_copy, length);
+>>> +						   hidg_desc_copy->bLength);
+>>> +			memcpy(req->buf, hidg_desc_copy, length);
+>>>  			goto respond;
+>>>  			break;
+>>>  		}
+>>> diff --git a/include/linux/hid.h b/include/linux/hid.h
+>>> index cdc0dc13c87f..85a58ae2c4a0 100644
+>>> --- a/include/linux/hid.h
+>>> +++ b/include/linux/hid.h
+>>> @@ -739,7 +739,7 @@ struct hid_descriptor {
+>>>  	__u8  bCountryCode;
+>>>  	__u8  bNumDescriptors;
+>>>  
+>>> -	struct hid_class_descriptor desc[1];
+>>> +	struct hid_class_descriptor desc[] __counted_by(bNumDescriptors);
+>>>  } __attribute__ ((packed));
+>>>  
+>>>  #define HID_DEVICE(b, g, ven, prod)					\
+>>
+>> Otherwise, this looks correct to me.
+>>
+> 
+> Regards,
+> Nikita
+> 
 
-CPU: 0 UID: 0 PID: 2954 Comm: kworker/0:3 Not tainted 6.13.0-syzkaller-09485-g72deda0abee6 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
-Workqueue: events corsair_void_status_work_handler
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:378 [inline]
- print_report+0xc3/0x620 mm/kasan/report.c:489
- kasan_report+0xd9/0x110 mm/kasan/report.c:602
- usb_control_msg+0x434/0x4b0 drivers/usb/core/message.c:157
- usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:927 [inline]
- usbhid_raw_request+0x233/0x700 drivers/hid/usbhid/hid-core.c:1295
- __hid_hw_raw_request drivers/hid/hid-core.c:2457 [inline]
- hid_hw_raw_request+0x10a/0x150 drivers/hid/hid-core.c:2479
- corsair_void_request_status+0xc3/0x130 drivers/hid/hid-corsair-void.c:493
- corsair_void_status_work_handler+0x3f/0xb0 drivers/hid/hid-corsair-void.c:512
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
- process_scheduled_works kernel/workqueue.c:3317 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
- kthread+0x3af/0x750 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
+In drivers/hid/hid-hyperv.c there are additional struct hid_descriptor references
 
-Allocated by task 2954:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
- __kasan_kmalloc+0x8f/0xa0 mm/kasan/common.c:394
- kmalloc_noprof include/linux/slab.h:901 [inline]
- kzalloc_noprof include/linux/slab.h:1037 [inline]
- usb_alloc_dev+0x55/0xdc0 drivers/usb/core/usb.c:650
- hub_port_connect drivers/usb/core/hub.c:5426 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
- port_event drivers/usb/core/hub.c:5823 [inline]
- hub_event+0x28f9/0x4f40 drivers/usb/core/hub.c:5905
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
- process_scheduled_works kernel/workqueue.c:3317 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
- kthread+0x3af/0x750 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+struct synthhid_device_info {
+	struct synthhid_msg_hdr header;
+	struct hv_input_dev_info hid_dev_info;
+	struct hid_descriptor hid_descriptor;
+};
 
-Freed by task 2968:
- kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
- kasan_save_track+0x14/0x30 mm/kasan/common.c:68
- kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:576
- poison_slab_object mm/kasan/common.c:247 [inline]
- __kasan_slab_free+0x37/0x50 mm/kasan/common.c:264
- kasan_slab_free include/linux/kasan.h:233 [inline]
- slab_free_hook mm/slub.c:2353 [inline]
- slab_free mm/slub.c:4609 [inline]
- kfree+0x294/0x480 mm/slub.c:4757
- device_release+0xa1/0x240 drivers/base/core.c:2567
- kobject_cleanup lib/kobject.c:689 [inline]
- kobject_release lib/kobject.c:720 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1e4/0x5a0 lib/kobject.c:737
- put_device+0x1f/0x30 drivers/base/core.c:3773
- hub_port_connect drivers/usb/core/hub.c:5363 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
- port_event drivers/usb/core/hub.c:5823 [inline]
- hub_event+0x1bed/0x4f40 drivers/usb/core/hub.c:5905
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
- process_scheduled_works kernel/workqueue.c:3317 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
- kthread+0x3af/0x750 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+Have you checked that there are no changes necessary in that file due to the
+size change of struct hid_descriptor?
 
-Fixes: 6ea2a6fd3872 ("HID: corsair-void: Add Corsair Void headset family driver")
-Reported-by: syzbot+90ac8355c8ac84b1b464@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=90ac8355c8ac84b1b464
-Signed-off-by: Edward Adam Davis <eadavis@qq.com>
----
- drivers/hid/hid-corsair-void.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/hid/hid-corsair-void.c b/drivers/hid/hid-corsair-void.c
-index 6ece56b850fc..83d65fa29a5a 100644
---- a/drivers/hid/hid-corsair-void.c
-+++ b/drivers/hid/hid-corsair-void.c
-@@ -727,6 +727,7 @@ static void corsair_void_remove(struct hid_device *hid_dev)
- 		power_supply_unregister(drvdata->battery);
- 
- 	cancel_delayed_work_sync(&drvdata->delayed_firmware_work);
-+	cancel_delayed_work_sync(&drvdata->delayed_status_work);
- 	sysfs_remove_group(&hid_dev->dev.kobj, &corsair_void_attr_group);
- }
- 
--- 
-2.43.0
+Regards,
+Terry
 
 
