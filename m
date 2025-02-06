@@ -1,127 +1,149 @@
-Return-Path: <linux-usb+bounces-20259-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20260-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D6AAA2AC49
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 16:18:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F06EA2AC53
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 16:20:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33F02188B89A
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 15:18:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFCF63A06F0
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 15:20:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A006B1EDA02;
-	Thu,  6 Feb 2025 15:17:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iL4oXU/u"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79511EDA13;
+	Thu,  6 Feb 2025 15:20:28 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f207.google.com (mail-il1-f207.google.com [209.85.166.207])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 899F51A5B8D;
-	Thu,  6 Feb 2025 15:17:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006754F5E0
+	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 15:20:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738855073; cv=none; b=aEFydRF/OxTjsiPSTIm8plO4vjA0XqwQb7uUhh0aMEwsZM7x3Ir/sxITXBMmZvbdYMeWO+JlpPxnU5R9y9mVi3S9/Mhv2xao+iyeAs7AWw278Emdsb/J+sVCFkWb7mStZDhmsdlkUCc9zU7KG18kNt/pvvWV0yHGx9ynPlQb6FA=
+	t=1738855228; cv=none; b=E8al7OBPkqidaAGwZsKU5qOPcNchM3ZO/1OIw6vD7rIeoFzWPJUwf5WxrqGfCOSovF35IWp7l+C3ta+xtvwo05Zb42sj+TQs+9vmOtypSk31/LrYdAXnCDUaikXYPFGVYt2pNqfJBqKccV8kAatx6aMbZ6SMLWURIIb7SJRJAzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738855073; c=relaxed/simple;
-	bh=kpx4/AxJfjx+HhpAz2rE6HkSsZKKEWVgbbTrvnkZWA0=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=J/yq5nG5qn191krNbEhi6z3qBP58y+yudjlCui04Ni019OUQ2SSCAgsbObGIibrICbzkTV3iO2I7Xd9ifhxgEk5xgQ3LP3Y/lMJeXZoBv2XZsajnD7x49gaAbHOy7bYPjQItTdOkhxXaSV0EjVM7MQTY5u17WAqZGpOWVBmlyw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iL4oXU/u; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738855071; x=1770391071;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=kpx4/AxJfjx+HhpAz2rE6HkSsZKKEWVgbbTrvnkZWA0=;
-  b=iL4oXU/umhDPykZZ50EQQWD2XbTg0bzaUsKkIuLps6Q8KUzngKlv2L0k
-   AGVPrwbTBD2wLwXir3kSBIf4V9qbL9O5n1fi++aogQntbFhRjNr90Adyx
-   NOXSvNHTIox/NNFGdFERFhpwn/M8Zn0bdSOTa7+LdABJxheb0BzBxcwnr
-   8hJtoAC+c1DqVLIkrYFIzlD4OpN8cBggtiRIzEsDPUJ89IwY6IUbuusOM
-   axGMnyUFOEWyoWZHAUMo8s/+cSCU0HK4Bnj1eX7d+oWm095IY40L96lDE
-   qJHVtL764nA+tzYO0D+Pn66xgRYfUqgEflQfGURlYo8DjwdE1mn3O1Mo8
-   A==;
-X-CSE-ConnectionGUID: cyLSPjszR6ip9hAHoKDd1w==
-X-CSE-MsgGUID: M19vedbFRLyaMl89LpxK1A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50099232"
-X-IronPort-AV: E=Sophos;i="6.13,264,1732608000"; 
-   d="scan'208";a="50099232"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 07:17:51 -0800
-X-CSE-ConnectionGUID: IXTZMq+NSyWNi8uKD2rwIA==
-X-CSE-MsgGUID: M7joH1gpRgqfEtzC4PBi7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,264,1732608000"; 
-   d="scan'208";a="142117852"
-Received: from unknown (HELO mattu-haswell.fi.intel.com) ([10.237.72.199])
-  by orviesa002.jf.intel.com with ESMTP; 06 Feb 2025 07:17:48 -0800
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-To: <gregkh@linuxfoundation.org>
-Cc: <linux-usb@vger.kernel.org>,
-	Mathias Nyman <mathias.nyman@linux.intel.com>,
-	stable@vger.kernel.org,
-	Forest <forestix@nom.one>
-Subject: [PATCH] USB: Add USB_QUIRK_NO_LPM quirk for sony xperia xz1 smartphone
-Date: Thu,  6 Feb 2025 17:18:36 +0200
-Message-Id: <20250206151836.51742-1-mathias.nyman@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1738855228; c=relaxed/simple;
+	bh=eDOqP7+BXpHVhicCo7wyvj5oRo7WDsDZLNCNVn5vrec=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=tz2Z1q5UDEmvbl/TNouX4rpQ79gk1OE7Ne1Y0w7UdCb4ObPwIFzzD18Gb+43+X1wdDydK/1FCP3GVrYT6JDJW3J2n1VlE88bsctmxSSJqCZGFbFSqBi+6T3QRTL8jZlAeg7pR+yyMr+KfzJQP4f9OkHlHPN1ZamOZOiNro9IwxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f207.google.com with SMTP id e9e14a558f8ab-3ce843b51c3so21818245ab.0
+        for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2025 07:20:26 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738855226; x=1739460026;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oFl5kinqp9gWgJ6tj81uzJp2ykUIOW0B39E6YsNbxHk=;
+        b=MqM4M3B5Ee6UjuWm9Nxqx7xCXOqXKP65VhqcqNSNe8cJCzgOmFoQ+zuut7b7/yuHI4
+         wmiDTDCJBCCmYWj4y9YLgkYCCgXl2MQ+PulmJclFLxEAqbyPmFvw5stqbdtUjc2fUZNd
+         iJXUtQhgKaoyK4UXQmVjG7yQolgphbf8hdm/r9m5YLXaGuqHpr10Do/A8lrtoVg1wvPL
+         e1fmvmMOkaJzmEnL6/XaHNWj+NDCQxSpgFbwyNsbICB83PJnXRC2HTPiOaM+0iwxC/V6
+         oK+aWo2ixeSan7WPH30kJn3czfj5uhV88ghJhDQNbXoXe3Yjw2ZUE+txHUkHlrtCqoIL
+         p0NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWW9EQge7N1x2bou/kE2hwMfY/nfR6oRjsbMRcL2dL8GZJUfhVrjIIDql/MQbv3qT6d1MQVxEkhcFA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFWaM4uGFva/8ciJ2oLH3M9WXhmFWVQL0juPWGQjos5UTG26kK
+	3cK9N/rp0+ww6yxbXKcdYx80OAGRm2Kpd11yDF+YnMUvfZRw5lLzsR2Q0Q9thi91NLyhrG1M6Rh
+	TLHCRs37jO5FKNRvTmOMJsej+mDyKKrwxHqJPMr78EKaH7IHlxBu0aT4=
+X-Google-Smtp-Source: AGHT+IG1TBbxPcDH0VtNoKmuHiOCibLk8WhoSRtt5DH6Mk+ghMjbBCAoPEk9GNVTz8/IEEyMT7PZRg5b+JXlMEO3Ym1EcZx5C0JJ
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-Received: by 2002:a05:6e02:471b:b0:3d1:98e:4916 with SMTP id
+ e9e14a558f8ab-3d1098e4c9dmr2346685ab.9.1738855226087; Thu, 06 Feb 2025
+ 07:20:26 -0800 (PST)
+Date: Thu, 06 Feb 2025 07:20:26 -0800
+In-Reply-To: <671906e2.050a0220.1e4b4d.008d.GAE@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67a4d33a.050a0220.6230e.0002.GAE@google.com>
+Subject: Re: [syzbot] [wireless?] WARNING: ODEBUG bug in ieee80211_led_exit (2)
+From: syzbot <syzbot+e84ecca6d1fa09a9b3d9@syzkaller.appspotmail.com>
+To: johannes@sipsolutions.net, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, linux-wireless@vger.kernel.org, 
+	netdev@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-The fastboot tool for communicating with Android bootloaders does not
-work reliably with this device if USB 2 Link Power Management (LPM)
-is enabled.
+syzbot has found a reproducer for the following issue on:
 
-Various fastboot commands are affected, including the
-following, which usually reproduces the problem within two tries:
+HEAD commit:    9682c35ff6ec usb: typec: thunderbolt: Remove IS_ERR check ..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+console output: https://syzkaller.appspot.com/x/log.txt?x=130e6df8580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=ed7570f7f6046a71
+dashboard link: https://syzkaller.appspot.com/bug?extid=e84ecca6d1fa09a9b3d9
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=170e6df8580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=155c5318580000
 
-  fastboot getvar kernel
-  getvar:kernel  FAILED (remote: 'GetVar Variable Not found')
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/3c194e311f90/disk-9682c35f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/daad45c8e7c8/vmlinux-9682c35f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/8a4e74467d7e/bzImage-9682c35f.xz
 
-This issue was hidden on many systems up until commit 63a1f8454962
-("xhci: stored cached port capability values in one place") as the xhci
-driver failed to detect USB 2 LPM support if USB 3 ports were listed
-before USB 2 ports in the "supported protocol capabilities".
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e84ecca6d1fa09a9b3d9@syzkaller.appspotmail.com
 
-Adding the quirk resolves the issue. No drawbacks are expected since
-the device uses different USB product IDs outside of fastboot mode, and
-since fastboot commands worked before, until LPM was enabled on the
-tested system by the aforementioned commit.
+------------[ cut here ]------------
+ODEBUG: free active (active state 0) object: ffff888114d18330 object type: timer_list hint: tpt_trig_timer+0x0/0x300 net/mac80211/led.c:145
+WARNING: CPU: 0 PID: 705 at lib/debugobjects.c:612 debug_print_object+0x1a2/0x2b0 lib/debugobjects.c:612
+Modules linked in:
 
-Based on a patch from Forest <forestix@nom.one> from which most of the
-code and commit message is taken.
+CPU: 0 UID: 0 PID: 705 Comm: kworker/0:2 Not tainted 6.14.0-rc1-syzkaller-g9682c35ff6ec #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
+Workqueue: usb_hub_wq hub_event
+RIP: 0010:debug_print_object+0x1a2/0x2b0 lib/debugobjects.c:612
+Code: fc ff df 48 89 fa 48 c1 ea 03 80 3c 02 00 75 54 48 8b 14 dd 40 d0 47 87 41 56 4c 89 e6 48 c7 c7 c0 c4 47 87 e8 af f6 c0 fe 90 <0f> 0b 90 90 58 83 05 96 71 d8 07 01 48 83 c4 18 5b 5d 41 5c 41 5d
+RSP: 0018:ffffc9000198f488 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: ffffffff813f4d09
+RDX: ffff88810b3d8000 RSI: ffffffff813f4d16 RDI: 0000000000000001
+RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000001 R11: 0000000000000008 R12: ffffffff8747cb60
+R13: ffffffff872acb00 R14: ffffffff86f6b4e0 R15: ffffc9000198f598
+FS:  0000000000000000(0000) GS:ffff8881f5800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffebc06edcc CR3: 0000000008ca2000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ __debug_check_no_obj_freed lib/debugobjects.c:1099 [inline]
+ debug_check_no_obj_freed+0x4b7/0x600 lib/debugobjects.c:1129
+ slab_free_hook mm/slub.c:2284 [inline]
+ slab_free mm/slub.c:4609 [inline]
+ kfree+0x2e1/0x480 mm/slub.c:4757
+ ieee80211_led_exit+0x162/0x1c0 net/mac80211/led.c:210
+ ieee80211_unregister_hw+0x27e/0x3a0 net/mac80211/main.c:1706
+ rt2x00lib_remove_hw drivers/net/wireless/ralink/rt2x00/rt2x00dev.c:1085 [inline]
+ rt2x00lib_remove_dev+0x528/0x640 drivers/net/wireless/ralink/rt2x00/rt2x00dev.c:1550
+ rt2x00usb_disconnect+0x71/0x240 drivers/net/wireless/ralink/rt2x00/rt2x00usb.c:872
+ usb_unbind_interface+0x1e2/0x960 drivers/usb/core/driver.c:458
+ device_remove drivers/base/dd.c:569 [inline]
+ device_remove+0x122/0x170 drivers/base/dd.c:561
+ __device_release_driver drivers/base/dd.c:1273 [inline]
+ device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1296
+ bus_remove_device+0x22f/0x420 drivers/base/bus.c:579
+ device_del+0x396/0x9f0 drivers/base/core.c:3854
+ usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1418
+ usb_disconnect+0x2e1/0x920 drivers/usb/core/hub.c:2305
+ hub_port_connect drivers/usb/core/hub.c:5363 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
+ port_event drivers/usb/core/hub.c:5823 [inline]
+ hub_event+0x1bed/0x4f40 drivers/usb/core/hub.c:5905
+ process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
+ process_scheduled_works kernel/workqueue.c:3317 [inline]
+ worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
+ kthread+0x3af/0x750 kernel/kthread.c:464
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
 
-Cc: stable@vger.kernel.org
-Reported-by: Forest <forestix@nom.one>
-Closes: https://lore.kernel.org/hk8umj9lv4l4qguftdq1luqtdrpa1gks5l@sonic.net
-Tested-by: Forest <forestix@nom.one>
-Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+
 ---
- drivers/usb/core/quirks.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
-index 67732c791c93..59ed9768dae1 100644
---- a/drivers/usb/core/quirks.c
-+++ b/drivers/usb/core/quirks.c
-@@ -435,6 +435,9 @@ static const struct usb_device_id usb_quirk_list[] = {
- 	{ USB_DEVICE(0x0c45, 0x7056), .driver_info =
- 			USB_QUIRK_IGNORE_REMOTE_WAKEUP },
- 
-+	/* Sony Xperia XZ1 Compact (lilac) smartphone in fastboot mode */
-+	{ USB_DEVICE(0x0fce, 0x0dde), .driver_info = USB_QUIRK_NO_LPM },
-+
- 	/* Action Semiconductor flash disk */
- 	{ USB_DEVICE(0x10d6, 0x2200), .driver_info =
- 			USB_QUIRK_STRING_FETCH_255 },
--- 
-2.25.1
-
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
