@@ -1,181 +1,159 @@
-Return-Path: <linux-usb+bounces-20218-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20220-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76721A2A5DF
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 11:34:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A248A2A6C3
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 12:06:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E54C23A8286
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 10:34:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D68618892D4
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 11:06:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68EB122540E;
-	Thu,  6 Feb 2025 10:34:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 251892288D7;
+	Thu,  6 Feb 2025 11:05:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PP+iz9W5"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="qNLgkufj"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-18.smtpout.orange.fr [193.252.22.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF2B18B03
-	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 10:34:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 021D222654E;
+	Thu,  6 Feb 2025 11:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738838083; cv=none; b=DmqUyYBX2pZCbxz0v6Blm/8XO+qQQwcd13gdwHh36zfBYG/BMrOSsPKcdnRirUxUw0ZFksMscqj2+pyrb+hCbUB5Bh1++0s9z8DslDb+n7UZ6Db8o5ISB44UjQ6mxq+y7MrnVrQWuQuPxbSmMGm5cxET17T6n2D4DDJTm5MZmcw=
+	t=1738839958; cv=none; b=e0vUqUWQszlwy6vZdH21B1htS+EQO7k8oiSVZSmOmyqSmnkP2OQoIlqVfxQ9GeOK5RluOd6aP8u+alXjp7OcbVSH0t4YxS1GZxgFkw3++l8mGMP9TO15OEdLWIVebnXfvrqazUNM2i1bmHZN7Wd37+JX04oBIwgR6/ayHKAF0fQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738838083; c=relaxed/simple;
-	bh=2JiUcOM4qqRQm9DmI9zM1bg0+0tO17pH1C/43gMwfCo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rSPnc8b4bU0FQyJI8F4qWxNZNVipZQRqsstwNFEjkCregLMqQ/bO0K0EmoMljbKxKzACxleODyuv2J8fYAKpdB4Aqxgxe7WgTiqvzExiQmBkeebBGmO1zicez24+zjaG6BFe8otHbmOFDTQ8tFn749dsESdAM59LFbhR4CGrcNU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PP+iz9W5; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738838082; x=1770374082;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=2JiUcOM4qqRQm9DmI9zM1bg0+0tO17pH1C/43gMwfCo=;
-  b=PP+iz9W5ZcawRmMfHMRxwpKwCxA/EtLJVIW6fegvYHkVMn/I+p+IHBfS
-   lYfCqyJWYDLVdK/4W4c9PrfIKK8ETe5geR3OllUnieJnpuQMAL/WsFke+
-   3PoW8MQ6iX+PQe6/6R7EnW3XVgq+EEDC/J2q9fuNcoobtqESJ0IKISISX
-   J+sKKCuWWMsuajqZqJXD6b6fbsYXt6geO6O5U/xjnRWFk0UW5gSBZfWNA
-   RXeI72dd8b3kFqJ3+Ul1d3BXRnbACO+qOkJE2dz4/dLrEyL6rHCacvqBI
-   yG019OWVaweT3K+u7X8PAONuTUPqZZ64/rfZBwv4wpFNEgPflswSP1fAB
-   Q==;
-X-CSE-ConnectionGUID: 2K1IUtEtRT6fTuNk5XFAjg==
-X-CSE-MsgGUID: wa1D6dZZTiqGK0BwBgHHng==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="43189420"
-X-IronPort-AV: E=Sophos;i="6.13,264,1732608000"; 
-   d="scan'208";a="43189420"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 02:34:41 -0800
-X-CSE-ConnectionGUID: veHBgPZlRZSXIUXBBc5XjA==
-X-CSE-MsgGUID: lOXdCIz8T9qJ55txsDytTw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116364501"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa005.jf.intel.com with ESMTP; 06 Feb 2025 02:34:39 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1058)
-	id DF53EEE; Thu, 06 Feb 2025 12:34:38 +0200 (EET)
-From: Niklas Neronin <niklas.neronin@linux.intel.com>
-To: mathias.nyman@linux.intel.com
-Cc: linux-usb@vger.kernel.org,
-	Niklas Neronin <niklas.neronin@linux.intel.com>
-Subject: [PATCH 4/4] usb: xhci: modify trb_in_td() to be more modular
-Date: Thu,  6 Feb 2025 12:34:28 +0200
-Message-ID: <20250206103428.1034784-5-niklas.neronin@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250206103428.1034784-1-niklas.neronin@linux.intel.com>
-References: <20250206103428.1034784-1-niklas.neronin@linux.intel.com>
+	s=arc-20240116; t=1738839958; c=relaxed/simple;
+	bh=NZsOj5Fcsv03IXvzItAxk4Olrw8rpbCtglB2caFfCIY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JZyhX5m6wNdpgsmcY4OYdNzJaI/fF/UBOMYeasdPHIfIpRIoeO/GYgUiBCP5S2/0ptGQ3OZFhY7vpGJniLnCDqY7c5jl79knp9a+Xm/WWhEBuy1bZuLmBDrzfYgChdNoF0ZYNedRg8epz0xk47nGemIJjU84uPimYF5KVA/2xlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=qNLgkufj; arc=none smtp.client-ip=193.252.22.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id fzhHthr0k30iWfzhMtk9fv; Thu, 06 Feb 2025 12:05:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1738839947;
+	bh=Yeb+V8hfoEsFwMLqNg9Wg1OhP0aaKTe+CyROomT+Lmk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=qNLgkufjqmHggIua4wEQscAknB0Bb5SfXuOm7Bs/vYLRNWR8yO/VNUWP3SPRmM6gq
+	 4wrfKATaLE8LMHmq3nq2TuHuMeWnMHXZ+t8JNx/SJJN+zm8uxJGCVYUpupgg7yAO5U
+	 F9vjBSpEfYK3B1jhEaUU2zBfFb13kT35rwh+8/dGfu1/INunadRiiKSdqdd2C56h0w
+	 PgIwBC7R9sDlKzXlzp3NF7JMxFrk388p7VUyy5uNhg/ggzHHu2RsQR5M+GxXngebNG
+	 9DwlMWPW8EX826d75Nob3mFdfW8mC4u7atqjOB5+Y64DzxzxKc/iwNT0kIw82ZnrP/
+	 h46fbam00CLhw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Thu, 06 Feb 2025 12:05:47 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <c255fe16-da67-42ff-86f3-89c1ac683c60@wanadoo.fr>
+Date: Thu, 6 Feb 2025 20:05:26 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Ming Yu <a0282524688@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org, tmyu0@nuvoton.com, lee@kernel.org,
+ linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org,
+ mkl@pengutronix.de, andrew+netdev@lunn.ch, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com,
+ alexandre.belloni@bootlin.com
+References: <20250123091115.2079802-1-a0282524688@gmail.com>
+ <20250123091115.2079802-5-a0282524688@gmail.com>
+ <fc927b75-5862-4ead-a355-a40c27d8307b@wanadoo.fr>
+ <CAOoeyxWivAZmZPe92+_LrL-HvMn7Lqs7M4B__JULKqHeJMTioA@mail.gmail.com>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <CAOoeyxWivAZmZPe92+_LrL-HvMn7Lqs7M4B__JULKqHeJMTioA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Lay the ground work for future handle_tx_event() rework, which will
-require a function which checks if a DMA address is in queueu.
+On 04/02/2025 at 12:24, Ming Yu wrote:
+> Dear Vincent,
+> 
+> Thank you for reviewing,
+> I will address the issues you mentioned in the next patch.
+> 
+> Vincent Mailhol <mailhol.vincent@wanadoo.fr> 於 2025年1月26日 週日 下午4:47寫道：
+>>
+> ...
+>>> +static int nct6694_can_get_clock(struct nct6694_can_priv *priv)
+>>> +{
+>>> +     struct nct6694_can_information *info;
+>>> +     struct nct6694_cmd_header cmd_hd = {
+>>
+>> If the variable only has constant initializer, make it static const:
+>>
+>>         static const struct nct6694_cmd_header cmd_hd = {
+>>
+>> Apply this at other locations in your different modules.
+>>
+>>> +             .mod = NCT6694_CAN_MOD,
+>>> +             .cmd = NCT6694_CAN_INFORMATION,
+>>> +             .sel = NCT6694_CAN_INFORMATION_SEL,
+>>> +             .len = cpu_to_le16(sizeof(*info))
+>>> +     };
+>>> +     int ret, can_clk;
+>>> +
+>>> +     info = kzalloc(sizeof(*info), GFP_KERNEL);
+>>> +     if (!info)
+>>> +             return -ENOMEM;
+>>> +
+> 
+> Excuse me, I would like to confirm, if the variable is constant
+> initializer, should the declaration be written as:
+> static const struct nct6694_cmd_header cmd_hd = {
+>     .mod = NCT6694_CAN_MOD,
+>     .cmd = NCT6694_CAN_INFORMATION,
+>     .sel = NCT6694_CAN_INFORMATION_SEL,
+>     .len = cpu_to_le16(sizeof(struct nct6694_can_information))
+> };
+> instead of:
+> static const struct nct6694_cmd_header cmd_hd = {
+>     .mod = NCT6694_CAN_MOD,
+>     .cmd = NCT6694_CAN_INFORMATION,
+>     .sel = NCT6694_CAN_INFORMATION_SEL,
+>     .len = cpu_to_le16(sizeof(*info))
+> };
+> , correct?
 
-To its core, trb_in_td() checks if a TRB falls within the specified start
-and end TRB/segment range, a common requirement. For instance, a ring has
-pointers to the queues first and last TRB/segment, which means that with
-slight modifications and renaming trb_in_td() could work for other
-structures not only TDs.
+The sizeof() keyword returns a integer constant expression even if
+applied on to a variable (unless that variable is a variable length
+array, but these are banned in the kernel anyway). This is because only
+the type of the variable matters, and that is known at compile time.
 
-Modify trb_in_td() to accept pointer to start and end TRB/segment, and
-introduce a new function that takes a 'xhci_td' struct pointer, forwarding
-its elements to dma_in_range(), previously trb_in_td().
+So, cpu_to_le16(sizeof(*info)) should work fine. Or are you getting any
+error?
 
-Signed-off-by: Niklas Neronin <niklas.neronin@linux.intel.com>
----
- drivers/usb/host/xhci-ring.c | 41 ++++++++++++++++++++++--------------
- 1 file changed, 25 insertions(+), 16 deletions(-)
+> In addition, does this mean that the parameter in nct6694_read_msg()
+> and nct6694_write_msg() should be changed to const struct
+> nct6694_cmd_header *cmd_hd?
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 23337c9d34c1..34699038b7f2 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -278,24 +278,28 @@ static void inc_enq(struct xhci_hcd *xhci, struct xhci_ring *ring,
- }
- 
- /*
-- * If the suspect DMA address is a TRB in this TD, this function returns that
-- * TRB's segment. Otherwise it returns 0.
-+ * Check if the DMA address of a TRB falls within the specified range.
-+ * The range is defined by 'start_trb' in 'start_seg' and 'end_trb' in 'end_seg'.
-+ * If the TRB's DMA address is within this range, return the segment containing the TRB.
-+ * Otherwise, return 'NULL'.
-  */
--static struct xhci_segment *trb_in_td(struct xhci_td *td, dma_addr_t dma)
-+static struct xhci_segment *dma_in_range(struct xhci_segment *start_seg, union xhci_trb *start_trb,
-+					 struct xhci_segment *end_seg, union xhci_trb *end_trb,
-+					 dma_addr_t dma)
- {
--	struct xhci_segment *seg = td->start_seg;
-+	struct xhci_segment *seg = start_seg;
- 
--	if (td->start_seg == td->end_seg) {
--		if (td->start_trb <= td->end_trb) {
--			if (xhci_trb_virt_to_dma(td->start_seg, td->start_trb) <= dma &&
--			    dma <= xhci_trb_virt_to_dma(td->end_seg, td->end_trb))
-+	if (start_seg == end_seg) {
-+		if (start_trb <= end_trb) {
-+			if (xhci_trb_virt_to_dma(start_seg, start_trb) <= dma &&
-+			    dma <= xhci_trb_virt_to_dma(end_seg, end_trb))
- 				return seg;
- 			return NULL;
- 		}
- 
- 		/* Edge case, the TD wrapped around to the start segment. */
--		if (xhci_trb_virt_to_dma(td->end_seg, td->end_trb) < dma &&
--		    dma < xhci_trb_virt_to_dma(td->start_seg, td->start_trb))
-+		if (xhci_trb_virt_to_dma(end_seg, end_trb) < dma &&
-+		    dma < xhci_trb_virt_to_dma(start_seg, start_trb))
- 			return NULL;
- 		if (seg->dma <= dma && dma <= (seg->dma + TRB_SEGMENT_SIZE))
- 			return seg;
-@@ -304,24 +308,29 @@ static struct xhci_segment *trb_in_td(struct xhci_td *td, dma_addr_t dma)
- 
- 	/* Loop through segment which don't contain the DMA address. */
- 	while (dma < seg->dma || (seg->dma + TRB_SEGMENT_SIZE) <= dma) {
--		if (seg == td->end_seg)
-+		if (seg == end_seg)
- 			return NULL;
- 
- 		seg = seg->next;
--		if (seg == td->start_seg)
-+		if (seg == start_seg)
- 			return NULL;
- 	}
- 
--	if (seg == td->start_seg) {
--		if (dma < xhci_trb_virt_to_dma(td->start_seg, td->start_trb))
-+	if (seg == start_seg) {
-+		if (dma < xhci_trb_virt_to_dma(start_seg, start_trb))
- 			return NULL;
--	} else if (seg == td->end_seg) {
--		if (xhci_trb_virt_to_dma(td->end_seg, td->end_trb) < dma)
-+	} else if (seg == end_seg) {
-+		if (xhci_trb_virt_to_dma(end_seg, end_trb) < dma)
- 			return NULL;
- 	}
- 	return seg;
- }
- 
-+static struct xhci_segment *trb_in_td(struct xhci_td *td, dma_addr_t dma)
-+{
-+	return dma_in_range(td->start_seg, td->start_trb, td->end_seg, td->end_trb, dma);
-+}
-+
- /*
-  * Return number of free normal TRBs from enqueue to dequeue pointer on ring.
-  * Not counting an assumed link TRB at end of each TRBS_PER_SEGMENT sized segment.
--- 
-2.47.2
+Yes!
+
+
+Yours sincerely,
+Vincent Mailhol
 
 
