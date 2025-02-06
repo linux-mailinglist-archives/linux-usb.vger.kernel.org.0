@@ -1,90 +1,90 @@
-Return-Path: <linux-usb+bounces-20255-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20244-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB537A2AB5A
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 15:31:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23B9DA2A9B6
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 14:23:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E606E163381
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 14:30:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C549188A7E5
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 13:23:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E9D22FDEF;
-	Thu,  6 Feb 2025 14:28:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 030C11624D3;
+	Thu,  6 Feb 2025 13:22:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Q9lhrPGF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VmGZ5c4A"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A6D225A44;
-	Thu,  6 Feb 2025 14:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 791ED1624C3
+	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 13:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738852130; cv=none; b=ERloUtfCFSldi+VbQpf0QMC39LB1fyI2ILpvGzDoK2CzQAX72LQzUqzvHX6FXZ7CWS3766KoRjRXPyt9CC4MJ/5uzg1EASqQJQxEmqgMZqZGfbBWLnd0w/LI8C3YexfcKyuEDUu16r89XZ74Oyd0/52nGVo3zIwR/RmrqnGOnIk=
+	t=1738848137; cv=none; b=RAwVNKE7GBpSuvMBSzXOjdcQf/O5pIY3P/U6CVuWJhPtDz4N/H8DPh0fFjP0YSrPOunZsjuw6Avpp2V0WZlFNejdB4FjHlz8pOEUNyyNlXHS6CDvAqL6e6MvBfWLmlLlu4Hj7+QRKunD6lU6xw+I62eqcoWoawk8xFN0W5pFnIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738852130; c=relaxed/simple;
-	bh=46H9thu0K6mtrKrurhKzzWN7+y7vOz7lvMl4P4bmcV4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DY7Rmy8010hP4JwgMCfP8i1U6U3Z6RO7mLewofaZp0Xn8wgKUpb5/urToczGUupFe7GzDDIOfF3ctyINajCQwZB/Tm228ID4kfQbshuJ8hj1UeYEZDXGF2Tqu7vwj4ZTrFCbtDvjJHiELGWmdpQwXzhaL9ymFYfpCC+1gsIjRqU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Q9lhrPGF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA835C4CEDD;
-	Thu,  6 Feb 2025 14:28:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738852129;
-	bh=46H9thu0K6mtrKrurhKzzWN7+y7vOz7lvMl4P4bmcV4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Q9lhrPGFdGD8l4tpxijE3TJGWrlVzp+yU6dYSJ/FOxy0kQWV5+YvOE2m2wdAcGxbN
-	 nIbYS1Mb5wOrizzuNVUw5REFsM0jKUJXknlGGCJz8OAzqcFTe5KiOPHwysxwG7l7om
-	 E1j3o3wraQTDyenoCGv/oTeDgCwPBdVi2jTSe1R0=
-Date: Thu, 6 Feb 2025 11:50:57 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Lyude Paul <lyude@redhat.com>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] driver core: add a faux bus for use when a simple
- device/bus is needed
-Message-ID: <2025020608-gutter-spoof-be8a@gregkh>
-References: <2025020421-poster-moisture-534b@gregkh>
- <2025020424-retrain-recharger-407c@gregkh>
- <3cf0cf1501613babf443b23da179bc59efd0fc70.camel@redhat.com>
+	s=arc-20240116; t=1738848137; c=relaxed/simple;
+	bh=uEhMVkwAJOWwOXx1ffdM+NlxfWfjTYjMB2Gj0M2Py0A=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sby3uGLWKpllISS4v6V7XnSJ6Re2OaBFi0chAlVee9vgQjAs/xVovWI/E4yDjo7ViwsTZB39SGC1AtQWaAIVonDl6wEGQU4DoHUMyZWMvKYOv1sbW0QRN8to2W0zKNpz8nlYljWAStbvYDatiUkditrcJnswv5LZnUE1rc5Y0Xs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VmGZ5c4A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D6F6BC4CEDD
+	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 13:22:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738848135;
+	bh=uEhMVkwAJOWwOXx1ffdM+NlxfWfjTYjMB2Gj0M2Py0A=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=VmGZ5c4AN6ijihBl3GAFJAVKU7AAk//9EAM8/CAoSY/5KfBc3rKGs9DXjgi4aFhwd
+	 pXTW4+x7oRNV7aFUJyMlibfIIAiz2niSsQakuraV8sCNZD8b2GBekBVxbF3zkkP+oL
+	 Pd/gGYVEHrdAcFQal+bY4Pp724KcWSy8ldyiqKJxGAmhBb31xqt6r+vfdt2ALwxxci
+	 8fwoYzzxvN8ZQvmtxmBztxglU1Ig2EOIdS639r8HT+WcVK2iUrzSASYd0+MxnUMKRJ
+	 ZV8N6ybPcAjqGEhzPh7gh+CQQZcyc49iGLbSmB2mHORG5XYfToG7w50yqm6kon1bTx
+	 qeCnfOw9boP2A==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id C1934C3279F; Thu,  6 Feb 2025 13:22:15 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219590] Linux 6.13 ucsi driver error:
+ drivers/usb/typec/ucsi/ucsi.c:1374 ucsi_reset_ppm
+Date: Thu, 06 Feb 2025 13:22:15 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: pchelkin@ispras.ru
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219590-208809-HiGh3bxVOf@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219590-208809@https.bugzilla.kernel.org/>
+References: <bug-219590-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3cf0cf1501613babf443b23da179bc59efd0fc70.camel@redhat.com>
 
-On Tue, Feb 04, 2025 at 05:18:12PM -0500, Lyude Paul wrote:
-> I am currently writing up bindings for this in rust now (shouldn't take very
-> long), but after reading through this patch:
-> 
-> Reviewed-by: Lyude Paul <lyude@redhat.com>
-> 
-> Once I send out bindings for this I can also write up some conversion patches
-> for vkms and vgem, thank you a ton for the help so far greg!
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219590
 
-I've done a conversion for these two drivers now, so no need for that,
-but thanks for pointing out some examples for me to verify will work
-properly with this new api.  I'll send that out as part of the v3 of
-this series later today.
+--- Comment #13 from Fedor Pchelkin (pchelkin@ispras.ru) ---
+Any success with that ..?
 
-thanks,
+--=20
+You may reply to this email to add a comment.
 
-greg k-h
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
