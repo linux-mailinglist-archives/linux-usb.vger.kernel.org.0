@@ -1,146 +1,117 @@
-Return-Path: <linux-usb+bounces-20279-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20280-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6026EA2B180
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 19:44:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2F28A2B22A
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 20:23:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6A60818854AF
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 18:44:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 77485168E7A
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 19:23:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 264E519EEBD;
-	Thu,  6 Feb 2025 18:44:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB3C71A5B89;
+	Thu,  6 Feb 2025 19:23:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JIETVlC3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NSfFJSpM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECD1323957D;
-	Thu,  6 Feb 2025 18:44:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F76A1990C1;
+	Thu,  6 Feb 2025 19:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738867443; cv=none; b=fbj4+5L6gGS6YnGOKZ3hBRU+6mWrVT634MQdwWrWR1WTOiv3j0rUIpXMTMX1gzPFmp9S2Ys5scHjJzF63RYKDWP67Vs+CQ3nZ0gB4uwVZ9Pm6r2epVQw78aBkt0KNc/ODwNxQ5oIFK6V2Jxd8BzGk4guHT/SGjIhwxKuvFlV2BA=
+	t=1738869806; cv=none; b=VWoRgdXIPpepC0lTo//57p2kapdCIzoCHvKLYESw9d3dloBeTIZBt5wBF2sSmtdyvK8tKcVE4DCsJk5SuLpQ1d/ULBav+Q4mqvK2AOviMSpoPpsVjymg5yMGfa/9IlU1e8MoUeRgo1boflxjJQqcAy8rkUASGNS19b88YjAywz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738867443; c=relaxed/simple;
-	bh=xz1tEtY86+TooAY9vMCckEfm9RGbvbb8rBoa923Tt94=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Dmbp+aDJdnUoOrHm7VF8NrTBesrQpJdvadswDDTHg5d3s6L6CleXdY91Viwz97GW9AZGbQE86KqAWL7391WeIIWmHJrJ1/MGeYej+pvXDE5RlnXKCyXVMbRDtrXoyE0d6aR3ubxZaO/rDvglaFIJvspcGwaaOHTtjSe/iL5et80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JIETVlC3; arc=none smtp.client-ip=209.85.167.51
+	s=arc-20240116; t=1738869806; c=relaxed/simple;
+	bh=7FQ91HxxZUZFwIqS9OHExe5Wo6tbMXSmIZFvEnHpG4Q=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=H50N0wMi/iG1EsBHWW2ZMayQdPrZvDDIsZ8fg7XIqEfbTLQNg9rT9wRnV+/M1lshLMAPJvOzzvShycys6poPxKf+Q0dNMZjW2OVBSsZpQRxV796M3OqfIzN4/+oH2PI9BkYbb4NzNJNKaIPrXOFw0LzTNuex6jj00rGQMlJdGY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NSfFJSpM; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-53e3a37ae07so1423608e87.3;
-        Thu, 06 Feb 2025 10:44:01 -0800 (PST)
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2f9bac7699aso1872395a91.1;
+        Thu, 06 Feb 2025 11:23:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738867440; x=1739472240; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ubNgv5xJx77x0BfBwAeUhTxXDIQLYEY0jUlTQLiDf7g=;
-        b=JIETVlC3MSU9QAnJ57ajkYFf7tVzdXmOdkOC0aerojdU2ySqmPfoN/T3eZYIk+15+D
-         NsztDpKX92mfgVQn7EE2wGfU9cVUjXrO7367XYt9ohbtDjqH2PZ6p8twc6Vybr+IhorE
-         oUXA7nJqELfHggLdJM2mWNzTeUyhgx3Dl1YLd4CFkdQHGLJsp1W4YNGBW7el2464RKrE
-         CO6IjKjggSg4TSLptij0AJ+8BZAPIfIHVi3NHB7jdGjuiv0jkQPlAaNpH5NhzRWg6D+J
-         QBvhWBGlJ6zob0d9vxsCynpywgb1z6BkG6iWLCqKPR1GDoGWteBGIwfuFBedY+nLHGoj
-         gpGg==
+        d=gmail.com; s=20230601; t=1738869804; x=1739474604; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vHNnmawOI8BEs8dzEepShX+Y+oBMZO48g0tiwba/q2I=;
+        b=NSfFJSpM872QUVWXdGsO0zOWYA62yb27v+4aeZMKFJdkU4A5d//SaT8S+Fus65wJvU
+         kTOOxHpvv2b/28DC/FSFvRyqZvay2lEQLulIlvGN3171heKUvSGjm6D4Ce64xXYul4yS
+         LjK4vQL5W9gicDgi3SHFa7FUPseWuQv2rcaa1zR3dVq9Esz6TJy5AJvynbf2NSIQpBnF
+         uCOCbkkauqSdDCNQoNzWHP1NWSVUmyRvEESr41VgQTx5iGorGRknTUINYpEO36dPXvQL
+         bd3cW5qHCrH8f9lQo2Om8NIk6Ch6S+TwnGI7pa03LfakSB6XefRRz0eBiqtZbrn3/14G
+         9L3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738867440; x=1739472240;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ubNgv5xJx77x0BfBwAeUhTxXDIQLYEY0jUlTQLiDf7g=;
-        b=k4zCGlrzvi9Zka4bjet1JV62EbpCUzQEPPhFUsBlsl/9yZYxDLXwriBtuvpZNKd/+S
-         mKl5Q1vcvz2FQOAXl13MaQ+d6SGElhb34dh04mRJAyRCKOWpgDAjml/tYFrtxHW1QeMX
-         Q2kF5KfQwNbFCA9CvqLzyy9Wm2qaMV8kq4R/L+qyLmBTdP0CrwYjySKZC8MDKZjW790O
-         tE0wscuFSxL8X4HYU0YQeDSlscymTF/JuwoDf2ChHtCznzk44/eF86dhQKxvTGU27g5d
-         Vv4Qgwh/+QlRjsahjAb4ZOoKseK4CBwZPrZEeSOvfJBiGZ843xMaBKqc8PnzPK62HxlV
-         rZ1g==
-X-Forwarded-Encrypted: i=1; AJvYcCUXjd86T7Ivm06s8ziBbC0b3gmWTQz5/BtfXvfe28BCcut6LfpAI4MHGVZwEp2cMmB0ZoYv1uUYLd3mT2g=@vger.kernel.org, AJvYcCV2wRoKHjBq7Blq4E9kPB/oegtjOE6QUcx6KGZXerJ0KcOtyWM8pt80f9YOXjiiNG1T8wZ8ItRY@vger.kernel.org, AJvYcCXmRHk9N3ek0PwMiW55MG6wdR9uIoX85mmJRiSnUAGIfEyXZ7FEpL350WYC9etUmYpKPDZNUSV6Xzcv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxT6fPjiLOi+Zi5GRkqLChtK0Gp3v+XJ1rdUdxcE43QjuFmxZ2p
-	fQeJT8i9FRdF8omDw1/G+qrn2DH6uHj1SypiuF3++F4wyRFjCOX7
-X-Gm-Gg: ASbGncv/UZw0bnxnm26mMKocFeGityNLgq0zZMHp7hdem/EHxC91ZaS7/xbjks6xuMA
-	dPFAxghtjQ8+ef5QgiG5HE1WVx+74bzL+RnQfPyST+uQuvvO6DDjG7J59GFjtRHu0F9FHArB9vY
-	ewTQfpMDsGtDolPUzuP7fgqyAKDG1jnTJFp8XeRCPRXvZHhWeKKCzV5KKM0iny8OcfPt1OF3Emn
-	Mw7kPirpf9i4ptNWNZWF9qBsdC0Uzw6gDFMlG+sDsjknSzOZbgrsl7qs2LVVSJmQTEP5RLoJr2r
-	vNp2+7E65jsBJsDvqceeP5Ds40rNCmNlretMWIiH0VzY1FGhVUusVQ==
-X-Google-Smtp-Source: AGHT+IES3r/As76MP/jAg5BKRkKqnMOlqh1cUV5rjIxya8ZzRLZmaPNz3gzcvknoZd6s5LdCgdPZkQ==
-X-Received: by 2002:a05:6512:36c7:b0:542:297f:4f68 with SMTP id 2adb3069b0e04-54414a3d97amr6781e87.0.1738867439763;
-        Thu, 06 Feb 2025 10:43:59 -0800 (PST)
-Received: from fedora.. (broadband-5-228-116-177.ip.moscow.rt.ru. [5.228.116.177])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-544105f31b8sm198394e87.204.2025.02.06.10.43.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2025 10:43:59 -0800 (PST)
-From: Fedor Pchelkin <boddah8794@gmail.com>
-To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>
-Cc: Fedor Pchelkin <boddah8794@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Saranya Gopal <saranya.gopal@intel.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mark Pearson <mpearson@squebb.ca>,
-	stable@vger.kernel.org
-Subject: [PATCH RFC 2/2] usb: typec: ucsi: increase timeout for PPM reset operations
-Date: Thu,  6 Feb 2025 21:43:15 +0300
-Message-ID: <20250206184327.16308-3-boddah8794@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250206184327.16308-1-boddah8794@gmail.com>
-References: <20250206184327.16308-1-boddah8794@gmail.com>
+        d=1e100.net; s=20230601; t=1738869804; x=1739474604;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vHNnmawOI8BEs8dzEepShX+Y+oBMZO48g0tiwba/q2I=;
+        b=gn8bwxv7z9y2WsbBxcikBPyjLf+wjW4KymtdnqPSPKOitLj+vLc2N/hS8yz8NVPN1k
+         2MPIB++6/CQcN38+yZGpb959QQXGI1GDaXYOTWc+5w41f3tQQS1LR5mGxJy7ks9dKurS
+         prCsehgR4WS4ArDtcWM17zabv1kPOpht1MwcN4NNsHE4KsnoNllCZvyFLuf4ol1fJ862
+         kGuONoXk3ilVJeS829trWNruzdXo15yZcyZQ9TXljeDyXxEe4NpDTb82ob5sr3SHasQj
+         vHjgZ6kKfabttyl1bGH56KUdeNW5BbfQfevnbhM68pHg4FU/NaUmnRUVN2nUq+pa2uLN
+         eUdg==
+X-Forwarded-Encrypted: i=1; AJvYcCUxbVer843rv7/SdD5TaJQsLIgDbDmrcMtqTfPj1f/YusB8rXlYfIJm0/ODauaQ+qn5GvjUpA518/hHqTk=@vger.kernel.org, AJvYcCVlKhFXMMInePahpNlOIfmN3tThHIpYPZFqIHm+tmkAP6LTN4xUI9rOVoHonWgWcyu+JS+aU2Ahtz8m@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQCPwNFgSlPlbZY1eOmYW6yYtygEFNgCfpdV2yb6DQaiCJ1OEP
+	J01SGekI6v0PmSkFimRu+M0f+oZvNft08pNEhtDdQcko1IsoPPHqAoLPIxz9v8kaYibPEVOx0Xd
+	JOsCvsKYQGH7PIU0RZjAriG1o7ak=
+X-Gm-Gg: ASbGnctUwKpGS247N0efH0bW8Rsoq/cVrbLhx+KaYuSWdcgJaSUjVs52qpzbQQ+ZB80
+	W0yGAbB8fdNtnCDBtq39fg6oARTNiyY3siUmEJ44RlXiUmmmecF6O68KAxtLC5vQPVejbZlHQ
+X-Google-Smtp-Source: AGHT+IEanAKmRjGNZgbz5ESpSc8aIJ/ZpZ2uRJfyuK20Fvml0mR7X3Ju8RNx1Ka83OTcEBbV4M7I2rmTNjIajipzwHg=
+X-Received: by 2002:a17:90b:3903:b0:2fa:13e9:8cb0 with SMTP id
+ 98e67ed59e1d1-2fa2450d280mr288944a91.31.1738869804254; Thu, 06 Feb 2025
+ 11:23:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: Jillian Donahue <jilliandonahue58@gmail.com>
+Date: Thu, 6 Feb 2025 12:23:13 -0700
+X-Gm-Features: AWEUYZmcY_HNrVVA1y_4WRrfNiT6j17LJzENL7TzDayJjqvZOwq7yKn3nySl4hE
+Message-ID: <CAArt=Lh0S6UPX0OAhudTWxE7g7xbukQqHmuDAwCDwjBUbuJUnw@mail.gmail.com>
+Subject: [PATCH] f_midi_complete to call tasklet_hi_schedule
+To: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-It is observed that on some systems an initial PPM reset during the boot
-phase can trigger a timeout:
+From 9cb2628740d9f55f6f3faa5cce2de5eb8590f434 Mon Sep 17 00:00:00 2001
+From: Jill Donahue <jilliandonahue58@gmail.com>
+Date: Thu, 6 Feb 2025 10:18:05 -0700
+Subject: [PATCH] f_midi_complete to call tasklet_hi_schedule
 
-[    6.482546] ucsi_acpi USBC000:00: failed to reset PPM!
-[    6.482551] ucsi_acpi USBC000:00: error -ETIMEDOUT: PPM init failed
+When using USB MIDI, a lock is attempted to be acquired twice through a
+re-entrant call to f_midi_transmit, causing a deadlock.
 
-Still, increasing the timeout value, albeit being the most straightforward
-solution, eliminates the problem: the initial PPM reset may take up to
-~8000-10000ms on some Lenovo laptops. When it is reset after the above
-period of time (or even if ucsi_reset_ppm() is not called overall), UCSI
-works as expected.
+Fix it by using tasklet_hi_schedule() to schedule the inner
+f_midi_transmit() via a tasklet from the completion handler.
 
-Moreover, if the ucsi_acpi module is loaded/unloaded manually after the
-system has booted, reading the CCI values and resetting the PPM works
-perfectly, without any timeout. Thus it's only a boot-time issue.
+Link: https://lore.kernel.org/all/CAArt=LjxU0fUZOj06X+5tkeGT+6RbXzpWg1h4t4Fwa_KGVAX6g@mail.gmail>
 
-The reason for this behavior is not clear but it may be the consequence
-of some tricks that the firmware performs or be an actual firmware bug.
-As a workaround, increase the timeout to avoid failing the UCSI
-initialization prematurely.
-
-Fixes: b1b59e16075f ("usb: typec: ucsi: Increase command completion timeout value")
-Cc: stable@vger.kernel.org
-Signed-off-by: Fedor Pchelkin <boddah8794@gmail.com>
+Fixes: d5daf49b58661 ("USB: gadget: midi: add midi function driver")
+Signed-off-by: Jill Donahue <jilliandonahue58@gmail.com>
 ---
- drivers/usb/typec/ucsi/ucsi.c | 2 +-
+ drivers/usb/gadget/function/f_midi.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 0fe1476f4c29..7a56d3f840d7 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -25,7 +25,7 @@
-  * difficult to estimate the time it takes for the system to process the command
-  * before it is actually passed to the PPM.
-  */
--#define UCSI_TIMEOUT_MS		5000
-+#define UCSI_TIMEOUT_MS		10000
- 
- /*
-  * UCSI_SWAP_TIMEOUT_MS - Timeout for role swap requests
+diff --git a/drivers/usb/gadget/function/f_midi.c
+b/drivers/usb/gadget/function/f_midi.c
+index 837fcdfa3..37d438e5d 100644
+--- a/drivers/usb/gadget/function/f_midi.c
++++ b/drivers/usb/gadget/function/f_midi.c
+@@ -283,7 +283,7 @@ f_midi_complete(struct usb_ep *ep, struct usb_request *req)
+                        /* Our transmit completed. See if there's more to go.
+                         * f_midi_transmit eats req, don't queue it again. */
+                        req->length = 0;
+-                       f_midi_transmit(midi);
++                       tasklet_hi_schedule(&midi->tasklet);
+                        return;
+                }
+                break;
 -- 
-2.48.1
-
+2.25.1
 
