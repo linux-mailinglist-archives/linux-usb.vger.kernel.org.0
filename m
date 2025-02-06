@@ -1,215 +1,189 @@
-Return-Path: <linux-usb+bounces-20273-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20274-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88251A2AF26
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 18:41:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA205A2AF55
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 18:49:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B0EF3A5F14
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 17:41:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBA5318893DD
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 17:49:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 105351A0BC5;
-	Thu,  6 Feb 2025 17:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ED8918FC7B;
+	Thu,  6 Feb 2025 17:49:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JDerHCeJ"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="mVWsbPV2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B2318D634;
-	Thu,  6 Feb 2025 17:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A2418DF8D
+	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 17:49:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738863544; cv=none; b=KYyld8utXmhtMQ/Yu2zbBm/pQ7sT/MgHuLEKTWYkiWV4DFcNJBxKX+OFCNmmLPBriZUa/cuQSNEATEPDtXz4mtq/HJLIvqI28cP0TVgh5YUyzQcLr2xKUGUtN5JuSq+E9QQvcSX6fKlizoTLODaF38hq24JHLeOO8mCsYAeaTHM=
+	t=1738864162; cv=none; b=BzBGMB7HfUxHuD5suehcasg8kjmcnCnaMKIEA6XCFpQpIXktrEW9BleQXLt7xT86VAhEwmM8Z9dLiAjkwKSPvZeb7tciXhgLg88UT1ODTfHpXv7oPlXrujR4cliYlieEv8hHbDUzW9Y+PJSyN+dODTDzQqKbnk+ez2/1j1owUS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738863544; c=relaxed/simple;
-	bh=7OpNXCXkwCfC6x41rTgeEBlnwcyHWRj1BM3KYMm7Mww=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eILkcB6jejJ6vEbKtbZoFhgDXXyNqM+sA3pzq8VgFXDdLYloeqLIJyROt7pg6PEY/N/VWHuHLqknKNehDutvydXIOvjpprFHYjA2OeUwBLA8Ia05VB0s+cwiYX7djMPP5A3tLlgK8cT//F/B9oRJniKH5GhxQZPjVVWDkG9J9lk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JDerHCeJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1A2BC4CEDD;
-	Thu,  6 Feb 2025 17:39:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738863544;
-	bh=7OpNXCXkwCfC6x41rTgeEBlnwcyHWRj1BM3KYMm7Mww=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JDerHCeJ4W03keHRez6h+GjSIGY4GFdkGQSWSfJbXc1zLSdsvlWwIrbN5ERjW1Wcz
-	 kqfeOeTLRF9qyd93qBLPcvlUgRKacjTxXgmUucP6JYg1fqrePA/m6vo7K2zGnuc+Dc
-	 NjBq4sePSC9dzHv7iyzOVb9vCYwhvkt7i3vcr5Rs=
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Lyude Paul <lyude@redhat.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>,
-	linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Louis Chauvet <louis.chauvet@bootlin.com>,
-	Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	dri-devel@lists.freedesktop.org
-Subject: [PATCH v3 8/8] drm/vkms: convert to use faux_device
-Date: Thu,  6 Feb 2025 18:38:22 +0100
-Message-ID: <2025020625-unlaced-vagueness-ae34@gregkh>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <2025020620-skedaddle-olympics-1735@gregkh>
-References: <2025020620-skedaddle-olympics-1735@gregkh>
+	s=arc-20240116; t=1738864162; c=relaxed/simple;
+	bh=TnSlwLd9zv7yWxZOIiCgJu1jIh3lzoIbU82IlFG4G7U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=frbFX+h7LI5H3uhEdLMXY92dZ0IOD3HvTIxohZNejwsENPz0pYHi1LSvT/rOhVRmJ8RXkcrPN846E3M9KPo/hacFEykBz6eykBDT2fObaY5voxLqJ8MrovTaoDtvwLWZvOttREVaclYeSYHVB7ITLSnzIoMZhUjd6CTKGRreaws=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=mVWsbPV2; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5169dwTC023088
+	for <linux-usb@vger.kernel.org>; Thu, 6 Feb 2025 17:49:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	XEShK7QmONl4wom7y3IXWD4phv5eFUloOdL0xIQxHUY=; b=mVWsbPV2C1oKpdkj
+	aYnNe/bMpospjWSp6jNLBcc4h99B8MMDQ1cathh4f9+EfLW8hZGG8GDKSe8DCGCA
+	O2ivZqx/N/nXA4CBOVCV2JFyB+vf4sbi1m8/DOS6bie82pmdf6LxuVGi+gZt/lzv
+	JgzWfWFusiaVF3fm6/PSkuPsmb6CvCS9B57SG7jEokaWVpzJF15WtTbbw6ausEvL
+	DU1H86IbxSLqyV56VzrTMDTVx2KCliOaAb0YwSobKi22y8LX6GsHQe4KfSJ6UK0D
+	gsChi7BXmOLyyZDVC+2gsetolDeC7cd1IONxdk9/YXctzggQMnMqPTKYa8rWS567
+	fUdmTg==
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com [209.85.160.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44mtn7h6j9-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2025 17:49:18 +0000 (GMT)
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-469059f07e2so1246061cf.3
+        for <linux-usb@vger.kernel.org>; Thu, 06 Feb 2025 09:49:18 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738864158; x=1739468958;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XEShK7QmONl4wom7y3IXWD4phv5eFUloOdL0xIQxHUY=;
+        b=cILRUXSBm8W2oxHY8eHy5JhCg/tsQbGksannG9nsYxXOcCR/InnmUiLAT/3jdArMhL
+         XA/b5ga1QvHpZps2F0GiBSMHPbKbxOsMljtJGbKuuSkgh0p0x6HNNOTzErrg7Fwufyw2
+         rMbzVcxBvxWftdAhzlrZHK8dQgn7EkB38zjXuT9ufJigcc9ivp0nUbbD/3LZ9QD5vapx
+         gpDGxMXlo/chBQzx/dhUCiKLSLWKitR/E1N/zdpwLR/LELVnbHxVVhNR/TCTK9JGLeQw
+         KZ3qtLiWbh+qC/U9q/ouutJfoKz1DaQtYRFuTN5Dbr+XhqhB2bCOw1pK0HGLv8peMbHZ
+         CsUw==
+X-Forwarded-Encrypted: i=1; AJvYcCXg9o7Qf63s7PY5/0VqRQy2DMKsFWG1AKiCJPgum4zZGZ9Ovvacu3Ys6xrbyGw6p3EsoakqGHH5gkc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbPyVFeKHDzH+nvxtekUSs71tY+uzKrGz+mwOZBfK/ZArg+SFj
+	oDXprOowTcgL5DoTWE3qWYwaQm8/lc1fvhLuwKS9W3Ppx44KDWbIpA709vidAzzhCXNuz4H/DRD
+	oxSkaUtI+Ih4SkZclRcNiCXud1fvyHT9AVECL1TQ1iudi0zz45K4bavY+Vjg=
+X-Gm-Gg: ASbGncuQW/osI+VR+BZqBuAvuKPrcFWPXuqvDroSG/0Vx6qzngAcCMWJlORpuXgrS4H
+	3jOtkOiWemHdgKXIew+KoQTlOPOS/4B4QKniCJLsxtUtvqjaTl0eGvQ4Eb4HaBkvEHSYEup3iNa
+	wwv+V5053fimz+bxtDGbceuflf4t3ZhTfaJv6YjO7cnqoczlYpOwYOsIs+F9zO6m9odPJD6K0io
+	lFNmMpuyD5HAd7ySqSNg5PEtKdJauQ12/DXCs4NT4xhza240ZD9VpCCH9iMRX/YMmg70Rm7uFIE
+	K3m7t+4YHF/NXZwLpINd9s67Hg1ee/nNdDa3bZziWU4RnaVHR1jXMpnV6q0=
+X-Received: by 2002:a05:622a:149:b0:462:fb51:7801 with SMTP id d75a77b69052e-47167a27b02mr954701cf.8.1738864158029;
+        Thu, 06 Feb 2025 09:49:18 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFuJQ26PfCn6TWOYNKdpVCmuBfRLXs1MT5XO1ZO3huajwUMemKFLWySchNBBV8m3a6QVtoPmg==
+X-Received: by 2002:a05:622a:149:b0:462:fb51:7801 with SMTP id d75a77b69052e-47167a27b02mr954461cf.8.1738864157598;
+        Thu, 06 Feb 2025 09:49:17 -0800 (PST)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab773339e6bsm131278766b.152.2025.02.06.09.49.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Feb 2025 09:49:17 -0800 (PST)
+Message-ID: <d0b86591-7bac-42a0-aeac-1f7f6b75b75e@oss.qualcomm.com>
+Date: Thu, 6 Feb 2025 18:49:14 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Lines: 128
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4188; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=7OpNXCXkwCfC6x41rTgeEBlnwcyHWRj1BM3KYMm7Mww=; b=owGbwMvMwCRo6H6F97bub03G02pJDOlLPk86ZX7leq6P+Z6s3rAzi0rVHWbv6LM3iPa1u7Cu9 fZBr/95HbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjAR3TcM82NMFEIi9n44OfWv /RvTxqmefRvWPWSYZyOxdtputdAzU2fWfDljLSHUnFWSCQA=
-X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 01/18] usb: dwc3: Reserve Higher Bandwidth for HS Periodic
+ EPs
+To: Akash Kumar <quic_akakum@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jack Pham <quic_jackp@quicinc.com>, kernel@oss.qualcomm.com,
+        Wesley Cheng <quic_wcheng@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250206111543.17392-1-quic_akakum@quicinc.com>
+ <20250206111543.17392-2-quic_akakum@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250206111543.17392-2-quic_akakum@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: o-CSbhdMuoGO92pU16UBjiP-wMwNaraH
+X-Proofpoint-ORIG-GUID: o-CSbhdMuoGO92pU16UBjiP-wMwNaraH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-06_05,2025-02-05_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
+ malwarescore=0 clxscore=1015 priorityscore=1501 mlxlogscore=999
+ impostorscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0
+ adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502060143
 
-The vkms driver does not need to create a platform device, as there is
-no real platform resources associated it,  it only did so because it was
-simple to do that in order to get a device to use for resource
-management of drm resources.  Change the driver to use the faux device
-instead as this is NOT a real platform device.
+On 6.02.2025 12:15 PM, Akash Kumar wrote:
+> On targets using synopsys usb dwc3 controller, it is observed while testing
+> multiple audio devices, a glitch is observed during testing.
+> As per dwc datasheet,By default, HC reserves 80% of the bandwidth
+> for periodic EPs which can be increased with GUCTL Bit 16.
 
-Cc: Louis Chauvet <louis.chauvet@bootlin.com>
-Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
-Cc: Simona Vetter <simona@ffwll.ch>
-Cc: Melissa Wen <melissa.srw@gmail.com>
-Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc: Maxime Ripard <mripard@kernel.org>
-Cc: Thomas Zimmermann <tzimmermann@suse.de>
-Cc: David Airlie <airlied@gmail.com>
-Cc: dri-devel@lists.freedesktop.org
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- v3: new patch in the series.  For an example of the api working, does
-     not have to be merged at this time, but I can take it if the
-     maintainers give an ack.
- drivers/gpu/drm/vkms/vkms_drv.c | 28 ++++++++++++++--------------
- drivers/gpu/drm/vkms/vkms_drv.h |  4 ++--
- 2 files changed, 16 insertions(+), 16 deletions(-)
+It is observed a glitch is observed.. please massage this paragraph
+a bit.
 
-diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
-index e0409aba9349..b1269f984886 100644
---- a/drivers/gpu/drm/vkms/vkms_drv.c
-+++ b/drivers/gpu/drm/vkms/vkms_drv.c
-@@ -10,7 +10,7 @@
-  */
- 
- #include <linux/module.h>
--#include <linux/platform_device.h>
-+#include <linux/device/faux.h>
- #include <linux/dma-mapping.h>
- 
- #include <drm/clients/drm_client_setup.h>
-@@ -177,25 +177,25 @@ static int vkms_modeset_init(struct vkms_device *vkmsdev)
- static int vkms_create(struct vkms_config *config)
- {
- 	int ret;
--	struct platform_device *pdev;
-+	struct faux_device *fdev;
- 	struct vkms_device *vkms_device;
- 
--	pdev = platform_device_register_simple(DRIVER_NAME, -1, NULL, 0);
--	if (IS_ERR(pdev))
--		return PTR_ERR(pdev);
-+	fdev = faux_device_create(DRIVER_NAME, NULL);
-+	if (!fdev)
-+		return -ENODEV;
- 
--	if (!devres_open_group(&pdev->dev, NULL, GFP_KERNEL)) {
-+	if (!devres_open_group(&fdev->dev, NULL, GFP_KERNEL)) {
- 		ret = -ENOMEM;
- 		goto out_unregister;
- 	}
- 
--	vkms_device = devm_drm_dev_alloc(&pdev->dev, &vkms_driver,
-+	vkms_device = devm_drm_dev_alloc(&fdev->dev, &vkms_driver,
- 					 struct vkms_device, drm);
- 	if (IS_ERR(vkms_device)) {
- 		ret = PTR_ERR(vkms_device);
- 		goto out_devres;
- 	}
--	vkms_device->platform = pdev;
-+	vkms_device->faux_dev = fdev;
- 	vkms_device->config = config;
- 	config->dev = vkms_device;
- 
-@@ -229,9 +229,9 @@ static int vkms_create(struct vkms_config *config)
- 	return 0;
- 
- out_devres:
--	devres_release_group(&pdev->dev, NULL);
-+	devres_release_group(&fdev->dev, NULL);
- out_unregister:
--	platform_device_unregister(pdev);
-+	faux_device_destroy(fdev);
- 	return ret;
- }
- 
-@@ -259,19 +259,19 @@ static int __init vkms_init(void)
- 
- static void vkms_destroy(struct vkms_config *config)
- {
--	struct platform_device *pdev;
-+	struct faux_device *fdev;
- 
- 	if (!config->dev) {
- 		DRM_INFO("vkms_device is NULL.\n");
- 		return;
- 	}
- 
--	pdev = config->dev->platform;
-+	fdev = config->dev->faux_dev;
- 
- 	drm_dev_unregister(&config->dev->drm);
- 	drm_atomic_helper_shutdown(&config->dev->drm);
--	devres_release_group(&pdev->dev, NULL);
--	platform_device_unregister(pdev);
-+	devres_release_group(&fdev->dev, NULL);
-+	faux_device_destroy(fdev);
- 
- 	config->dev = NULL;
- }
-diff --git a/drivers/gpu/drm/vkms/vkms_drv.h b/drivers/gpu/drm/vkms/vkms_drv.h
-index 00541eff3d1b..4668b0e29a84 100644
---- a/drivers/gpu/drm/vkms/vkms_drv.h
-+++ b/drivers/gpu/drm/vkms/vkms_drv.h
-@@ -209,13 +209,13 @@ struct vkms_config {
-  * struct vkms_device - Description of a VKMS device
-  *
-  * @drm - Base device in DRM
-- * @platform - Associated platform device
-+ * @faux_dev- Associated faux device
-  * @output - Configuration and sub-components of the VKMS device
-  * @config: Configuration used in this VKMS device
-  */
- struct vkms_device {
- 	struct drm_device drm;
--	struct platform_device *platform;
-+	struct faux_device *faux_dev;
- 	struct vkms_output output;
- 	const struct vkms_config *config;
- };
--- 
-2.48.1
+> 
+> Add quirk to set GUCTL register BIT 16 to accommodate higher
+> bandwidth for 2 isoc eps.
+> 
+> If this bit is set, the bandwidth is relaxed to 85% to
+> accommodate two high speed, high bandwidth ISOC EPs.
+> USB 2.0 required 80% bandwidth allocated for ISOC traffic. If
+> two High-bandwidth ISOC devices (HD Webcams) are
+> connected, and if each requires 1024-bytes X 3 packets per
+> Micro-Frame, then the bandwidth required is around 82%. If
+> this bit is set, then it is possible to connect two Webcams of
+> 1024bytes X 3 paylod per Micro-Frame each. Alternatively, you
+> might need to lower the resolution of the webcams.
+> This bit is valid in Host and DRD configuration and is used in
+> host mode operation only.
+> Set this bit for host mode uvc uac usecases where two isoc eps
+> are used and flicker is seen.
 
+Re-format your commit text to wrap at ~72 characters
+> 
+> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+> ---
+>  drivers/usb/dwc3/core.c | 11 +++++++++++
+>  drivers/usb/dwc3/core.h |  4 ++++
+>  2 files changed, 15 insertions(+)
+> 
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index dfa1b5fe48dc..7e55c234e4e5 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -1461,6 +1461,14 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>  		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
+>  	}
+>  
+> +	if (dwc->revision >= DWC3_REVISION_250A) {
+> +		if (dwc->dwc3_guctl_resbwhseps_quirk) {
+> +			reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
+> +			reg |= DWC3_GUCTL_RESBWHSEPS;
+> +			dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
+> +		}
+> +	}
+> +
+>  	dwc3_config_threshold(dwc);
+>  
+>  	/*
+> @@ -1818,6 +1826,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>  	dwc->dis_split_quirk = device_property_read_bool(dev,
+>  				"snps,dis-split-quirk");
+>  
+> +	dwc->dwc3_guctl_resbwhseps_quirk = device_property_read_bool(dev,
+> +				"snps,dwc3_guctl_resbwhseps_quirk");
+
+This needs a dt-bindings entry. Also, underscores are forbidden in property
+names, use hyphens instead.
+
+Konrad
 
