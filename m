@@ -1,154 +1,152 @@
-Return-Path: <linux-usb+bounces-20264-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20267-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0919AA2AD86
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 17:20:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D7E8A2AF19
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 18:40:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 491C03A2B4F
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 16:20:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D68B7162979
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 17:40:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A343236A84;
-	Thu,  6 Feb 2025 16:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B990D19C554;
+	Thu,  6 Feb 2025 17:38:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="blntiDpe"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="a3J6DA2E"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1012D232360;
-	Thu,  6 Feb 2025 16:19:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F5318A93C;
+	Thu,  6 Feb 2025 17:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738858792; cv=none; b=chtvOqKxpaA9afA5wwgao5mx2GKCrS3yJKk8f8ZxCcbbozbTUs0tocTNxO3/Hbk7UyOWAsmgi1J07AnPBgjncuahMGGE6UW3ihcjXvyosWWG0WvReeLm6QYrUaIvpe8ZrqTrK/WbKOBf7KMwBZDPItUgdIctmgkh0CC4oebephk=
+	t=1738863521; cv=none; b=X001mD994/M/EeI4ipnpBL2zCmARwkRVmF+/n3/CT4peZxQjPlzjUU/YMlmh28ZvH8h+UhDJhXgEYvvPkACcEacrne4p6UDFiF3VqyDYOAP9jUSagRjSonvETmGh5LwgH4+w1PXWZEShTG2puS74vNBraydCUaCncAOJB9p1LqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738858792; c=relaxed/simple;
-	bh=9Tuj/qQPgOS89JdE2AcvbLcqLOTT3lWxn6XNGzkVYzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lPhLiqIhBZQZITOyzmv1bRmWV2imsvXYGndCCNvZyMBPBMVbzWk4pg8IrLBUb4vau0yKSBbYShWS9jr58WktgTrs4JwnriuilT7AF2+7R1WQVahBycoW4ys0puJOA5d1EVxo3BPqi5OKzI5VOORjExdD1EIuqASHB2AtAoHVTXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=blntiDpe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C174FC4CEDF;
-	Thu,  6 Feb 2025 16:19:50 +0000 (UTC)
+	s=arc-20240116; t=1738863521; c=relaxed/simple;
+	bh=pkYFJ4LaLF+Xd6E3ZdhXgUAOXThcaHR6MGn9iSLxnlM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=m5NE9EF9E43d38Nh9Xltp7wVAM53eKgZr7oPHW22GE/HtPr8wCDeuD3fKLPj4umBnCaTvkrxjWS4s/V1tMnP1G+93HlZjLhGJ7fJqSQI9/EO3yLfbdfjPbkyJcGyIfgBYh/2kut7V1TWv/VDYdx0JZW/Mx+yZzfectM4eYezwX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=a3J6DA2E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F117C4CEE3;
+	Thu,  6 Feb 2025 17:38:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738858791;
-	bh=9Tuj/qQPgOS89JdE2AcvbLcqLOTT3lWxn6XNGzkVYzg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=blntiDpeIdL6vHWdpk5SJRRlX/lQ8xNjPx3efQVHG9nVLdpLE6TOotXK4PNBa9DXS
-	 uBIf0GxeEoGpZNORg/Qt+KmuEiA9NQA04p6V+dwXyl9qezu9c73ishRsH0wYVolVjm
-	 hvnWkEVNQdWL4RuYxLUEfx403EoYwhFryHzTMXC4=
-Date: Thu, 6 Feb 2025 17:19:48 +0100
+	s=korg; t=1738863519;
+	bh=pkYFJ4LaLF+Xd6E3ZdhXgUAOXThcaHR6MGn9iSLxnlM=;
+	h=From:To:Cc:Subject:Date:From;
+	b=a3J6DA2EH1CsQ1hv/NHX2h/KPgrX2vQScmeJnLEtED6juMlR0jqqkG2Og42Vn9Bmf
+	 uPnhKCJ/S4katL2WWR6sTFiYaZBmBLpkFBTwtaSj+yT+AbdPUr0AodR8/b8sOjII8Y
+	 7AaOGoXNi+DXyGDySXjAAgZAC4QgLryW47qow2g0=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Zijun Hu <quic_zijuhu@quicinc.com>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
+To: linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Lyude Paul <lyude@redhat.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Alexander Lobakin <aleksander.lobakin@intel.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Bjorn Helgaas <bhelgaas@google.com>,
 	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
 	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
 	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>, linux-usb@vger.kernel.org,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>,
+	linux-usb@vger.kernel.org,
 	rust-for-linux@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] driver core: add a faux bus for use when a simple
- device/bus is needed
-Message-ID: <2025020638-refresh-pager-cdc0@gregkh>
-References: <2025020421-poster-moisture-534b@gregkh>
- <2025020424-retrain-recharger-407c@gregkh>
- <f575978b-7103-48b9-8125-a38fb6425f5c@quicinc.com>
+Subject: [PATCH v3 0/8] Driver core: Add faux bus devices
+Date: Thu,  6 Feb 2025 18:38:14 +0100
+Message-ID: <2025020620-skedaddle-olympics-1735@gregkh>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f575978b-7103-48b9-8125-a38fb6425f5c@quicinc.com>
+Lines: 77
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3780; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=pkYFJ4LaLF+Xd6E3ZdhXgUAOXThcaHR6MGn9iSLxnlM=; b=owGbwMvMwCRo6H6F97bub03G02pJDOlLPvdqT821vXN4kauuOMOSqLtS+h5dOXYHy/a0c03hO s9cU/yzI5aFQZCJQVZMkeXLNp6j+ysOKXoZ2p6GmcPKBDKEgYtTACay5z7DgnlPxbSjI907j971 2brnqWRJ91qRUoa5IpNZHnqUi9ybcOzthLUr34Tvr/j+GgA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 06, 2025 at 11:34:27PM +0800, Zijun Hu wrote:
-> On 2/4/2025 7:09 PM, Greg Kroah-Hartman wrote:
-> > +#define MAX_NAME_SIZE	256	/* Max size of a faux_device name */
-> > +
-> > +/*
-> > + * Internal wrapper structure so we can hold the memory
-> > + * for the driver and the name string of the faux device.
-> > + */
-> > +struct faux_object {
-> > +	struct faux_device faux_dev;
-> > +	const struct faux_driver_ops *faux_ops;
-> > +	char name[];
-> 
-> Remove name since it is not used actually ?
+For years/decades now, I've been complaining when I see people use
+platform devices for things that are obviously NOT platform devices.
+To finally fix this up, here is a "faux bus" that should be used instead
+of a platform device for these tiny and "fake" devices that people
+create all over the place.
 
-Hm, we do copy it:
-	/* Save off the name of the object into local memory */
-	memcpy(faux_obj->name, name, name_size);
+The api is even simpler than the normal platform device api, just two
+functions, one to create a device and one to remove it.  When a device
+is created, if a probe/release callback is offered, they will be called
+at the proper time in the device's lifecycle.  When finished with the
+device, just destroy it and all should be good.
 
-Ah, but then we do a dev_set_name() so we don't care anymore!  When the
-code was a two-step process we did care.  Nice catch, let me go change
-that and test it to be sure.
+This simple api should also hopefully provide for a simple rust binding
+to it given the simple rules and lifecycle of the pointer passed back
+from the creation function (i.e. it is alive and valid for as long as
+you have not called destroy on it.)
 
-> > +};+ */
-> > +void faux_device_destroy(struct faux_device *faux_dev)
-> > +{
-> > +	struct device *dev = &faux_dev->dev;
-> > +
-> > +	if (IS_ERR_OR_NULL(faux_dev))
-> > +		return;
-> > +
-> 
-> struct device *dev;
-> 
-> //faux_device_create() does not return ERR_PTR().
-> if (!faux_dev)
-> 	return;
-> 
-> // avoid NULL pointer dereference in case of above error
-> dev = &faux_dev->dev;
+I've also converted four different examples of platform device abuse, the
+dummy regulator driver, the USB phy code, the x86 microcode dvice, and
+the "regulator" device that wifi uses to load the firmware tables, to
+use this api.  In all cases, the logic either was identical, or became
+simpler, than before, a good sign (side note, a bug was fixed in the usb
+phy code that no one ever noticed before).
 
-Nope, that wouldn't have been a dereference error, you can set a pointer
-to point to NULL just fine as long as you don't try to dereference it to
-something else.  Isn't C fun!  :)
+Note, unless there are major objections, I'm leaning toward getting
+patch 1 of this series merged during this -rc cycle so that all of the
+individual driver subsystem cleanups can go through those subsystems as
+needed, as well as allowing the rust developers to create a binding and
+get that merged easier.  Having patch 1 merged on its own isn't going to
+cause any changes if no one uses it, so that should be fine.
 
-> > +	device_del(dev);
-> > +
-> > +	/* The final put_device() will clean up the driver we created for this device. */
-> > +	put_device(dev);
-> 
-> use device_unregister() instead of above 2 statements?
+Changes from v3:
+  - Dropped the USB phy porting, turned out to be incorrect, it really
+    did need a platform device
+  - converted more drivers to the faux_device api (tlclk, lis3lv02d,
+    vgem, and vkms)
+  - collected some reviewed-by
+  - lots of minor tweaks of the faux.c api, and documentation based on
+    review, see the changelog in patch 1 for details.
 
-Could be, both are the same.
+Changes from v2:
+  - lots of cleanups to faux.c based on reviews, see patch 1 for details
+  - actually tested the destroy device path, it worked first try!
+  - added 3 more example drivers
 
-> > +}
-> > +EXPORT_SYMBOL_GPL(faux_device_destroy);
-> > +
-> > +int __init faux_bus_init(void)
-> > +{
-> > +	int ret;
-> > +
-> > +	ret = device_register(&faux_bus_root);
-> > +	if (ret) {
-> > +		put_device(&faux_bus_root);
-> 
-> put_device() for static device may trigger below warning:
-> 
-> drivers/base/core.c:device_release():
-> WARN(1, KERN_ERR "Device '%s' does not have a release() function, it is
-> broken and must be fixed. See Documentation/core-api/kobject.rst.\n",
-> 			dev_name(dev));
 
-Yes, but that will never trigger when you run the code as the final put
-device never happens.  So you will not ever see that.
+Greg Kroah-Hartman (8):
+  driver core: add a faux bus for use when a simple device/bus is needed
+  regulator: dummy: convert to use the faux device interface
+  x86/microcode: move away from using a fake platform device
+  wifi: cfg80211: move away from using a fake platform device
+  tlclk: convert to use faux_device
+  misc: lis3lv02d: convert to use faux_device
+  drm/vgem/vgem_drv convert to use faux_device
+  drm/vkms: convert to use faux_device
 
-And yes, I HATE static struct devices in the kernel a lot, but in the
-driver core we use them for a few things like this, so either I fix all
-of them, or just live with the few that we have.
+ Documentation/driver-api/infrastructure.rst |   6 +
+ arch/x86/kernel/cpu/microcode/core.c        |  14 +-
+ drivers/base/Makefile                       |   2 +-
+ drivers/base/base.h                         |   1 +
+ drivers/base/faux.c                         | 228 ++++++++++++++++++++
+ drivers/base/init.c                         |   1 +
+ drivers/char/tlclk.c                        |  32 +--
+ drivers/gpu/drm/vgem/vgem_drv.c             |  30 +--
+ drivers/gpu/drm/vkms/vkms_drv.c             |  28 +--
+ drivers/gpu/drm/vkms/vkms_drv.h             |   4 +-
+ drivers/misc/lis3lv02d/lis3lv02d.c          |  26 +--
+ drivers/misc/lis3lv02d/lis3lv02d.h          |   4 +-
+ drivers/regulator/dummy.c                   |  37 +---
+ include/linux/device/faux.h                 |  65 ++++++
+ net/wireless/reg.c                          |  28 +--
+ 15 files changed, 383 insertions(+), 123 deletions(-)
+ create mode 100644 drivers/base/faux.c
+ create mode 100644 include/linux/device/faux.h
 
-thanks for the review!
+-- 
+2.48.1
 
-greg k-h
 
