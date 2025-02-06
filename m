@@ -1,102 +1,95 @@
-Return-Path: <linux-usb+bounces-20210-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20211-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06D2AA2A25E
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 08:36:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47508A2A29C
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 08:47:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EAEA8163FA9
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 07:36:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91B203A401A
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 07:47:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 887F82144A8;
-	Thu,  6 Feb 2025 07:36:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06EBD2253E3;
+	Thu,  6 Feb 2025 07:47:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="ITRI5F8B"
+	dkim=pass (2048-bit key) header.d=windestam.se header.i=@windestam.se header.b="0vfrmw7+"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from box.windestam.se (box.windestam.se [85.90.246.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D350A13AD18;
-	Thu,  6 Feb 2025 07:36:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 187291FCFCB;
+	Thu,  6 Feb 2025 07:47:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=85.90.246.140
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738827370; cv=none; b=V+CV8XGjnQHmGo034rsY8X47FegRQh5oLX+DbMRT0/bYIMQY8DlFg6Y3JDv80h9GOF5BaN62VS/hgUvH1F7yzb4Q5q8DNuPCU6mVqbghBDP2GRIrX7DJdoBoLaUzkbD7HkWuzoJBB4us2p7wmt/e29vfIAYfWkx1lAdnXYgq1ns=
+	t=1738828058; cv=none; b=TAxUhua1r8JkcJXICX/U3uoYrSEhyueaVlEubyJJFKwprkCPWp/ztoUtZs3+lkmqXlAc7WJ9jtMR9T3YqEOsOZHiDhPhI2Mk6Ah9ezvEAl0ULxLa6sAIDBW6fJBu1OIB6nLbfW/tnhNaNz3vIxjThebiNtn3hEavOY+zYYE8VIs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738827370; c=relaxed/simple;
-	bh=Do1P0nmcgeEUbDy/fq8KJysN/ob71k6jea/wl2KyyuY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ojtschEYcdAw/Egg+akMij6J5Ff5vj51fM5KZ8uLI+84lzawDxDKf8gKI+CNuSx6KU7WfO6G2iN7reaLzxWpqmflqfTDhqQo648mY6+cyOt1IIEm/0q5eZq2k670J8+D8Z21EQjDg1W2Eqq6QzWHef5fmtRrxm6BWJuQcFljhQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=ITRI5F8B; arc=none smtp.client-ip=203.29.241.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=codeconstruct.com.au; s=2022a; t=1738827365;
-	bh=DoC2wDlKbXoOESvrEevknBBxtIZYb6+xglXUh+TGauc=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=ITRI5F8B1RHvsorqu/JFPjXvcgbQ31ZTGSuPJat0P5BhtlA6UaXYyJs7sVfNGIYNI
-	 LICvo47zQNmICyv5vqbMZHrhOG2+KDgz+ObegxLtCT2TgRxEkerDXj2i/GALZXwtXh
-	 TaLg8fNIYIfzTRb/AQq2wHcvzuJjGMWY+KXDEMa7ah+gHdlFQsVnfwshYKp6O0dZel
-	 oT8Pvd8OPApmCMvB6il7wJ+kxBOtHz/U9b5sNsZTm4ZRvswpbkYxXz9+aXVxpADwcI
-	 FmaeOjY7yZ6ewXeW0yt4lqomdEe5DJ2FRq3sCEmm5zJ79Oot8P0+//0881hafpsNRk
-	 zTy9YPuHJNYKg==
-Received: from [192.168.72.171] (210-10-213-150.per.static-ipl.aapt.com.au [210.10.213.150])
-	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 5A5197392E;
-	Thu,  6 Feb 2025 15:36:05 +0800 (AWST)
-Message-ID: <829b7f7688e701fd246fdac717fd3fd7efc81d65.camel@codeconstruct.com.au>
-Subject: Re: [PATCH net-next 1/2] usb: Add base USB MCTP definitions
-From: Jeremy Kerr <jk@codeconstruct.com.au>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Matt Johnston <matt@codeconstruct.com.au>, Andrew Lunn
- <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
- linux-usb@vger.kernel.org,  Santosh Puranik <spuranik@nvidia.com>
-Date: Thu, 06 Feb 2025 15:36:05 +0800
-In-Reply-To: <2025020634-statute-ribbon-90a8@gregkh>
-References: <20250206-dev-mctp-usb-v1-0-81453fe26a61@codeconstruct.com.au>
-	 <20250206-dev-mctp-usb-v1-1-81453fe26a61@codeconstruct.com.au>
-	 <2025020633-antiquity-cavity-76e8@gregkh>
-	 <a927fbb40ce2f89c57b427d4dabe5f730a523d80.camel@codeconstruct.com.au>
-	 <2025020634-statute-ribbon-90a8@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1738828058; c=relaxed/simple;
+	bh=8d+2aMdp4wHrWfwojuD6UdqQVMO3zQEkJkTwtgBJEMQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n1VgTDgNpZDiDujXL1eJd77IUXZOJ+HJ/tOjKfX4usJLdoWL4RunqI983ABh6+obHwqQDksVglhjTL6LDV4SLeKh59I8SweLGQzpePAxJ+pt1cNXTZeLs9S3AocZDL97w34TOBU5Kbux/GCORf0s6F5hW9Tm6q8dhLS46DrubFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=windestam.se; spf=pass smtp.mailfrom=windestam.se; dkim=pass (2048-bit key) header.d=windestam.se header.i=@windestam.se header.b=0vfrmw7+; arc=none smtp.client-ip=85.90.246.140
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=windestam.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windestam.se
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=windestam.se; s=mail;
+	t=1738828051; bh=8d+2aMdp4wHrWfwojuD6UdqQVMO3zQEkJkTwtgBJEMQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=0vfrmw7+FWsTJt6cBXIGLZZ0wEIiIb7JesxCFm05z39TCTd9iniJkR7sWwQG83HdW
+	 5FIQ6Qf3jYOcp3bY5OsuWRAfwPr4Wh6/87XEppbwfEdm86d9/0V1Y86LVb9lBaVy62
+	 7TR/8EGLY+DtoQZC3C7eib+g0PLu1IOREnPTaPb1npHqkm1cqX5ben7WQTqtwpj/oC
+	 A/WXurW9n5hrviV52RPzTLYfjyb3wlN31HK7yXPc0hfzc0hMgPwzw3jaV5eP9qBuQ6
+	 RY/rCW4b04NuTPut+hLOoc7wAYxGyIx+SU1kFk/gzdwEyaxCuo3HGFZOeYSLsG/OwR
+	 L3RBE5BBQ95lA==
+Received: from authenticated-user (box.windestam.se [85.90.246.140])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by box.windestam.se (Postfix) with ESMTPSA id 112484118F;
+	Thu,  6 Feb 2025 08:47:31 +0100 (CET)
+Message-ID: <4735da72-63b7-4168-974c-ac4681d69a1e@windestam.se>
+Date: Thu, 6 Feb 2025 08:47:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Subject: =?UTF-8?B?UmU6IOetlOWkjTogW1BBVENIIHYzXSB1c2I6IGdhZGdldDogdV9zZXJp?=
+ =?UTF-8?Q?al=3A_Disable_ep_before_setting_port_to_null_to_fix_the_crash_cau?=
+ =?UTF-8?Q?sed_by_port_being_null?=
+To: Prashanth K <prashanth.k@oss.qualcomm.com>, =?UTF-8?B?6IOh6L+e5Yuk?=
+ <hulianqin@vivo.com>, "gregkh@linuxfoundation.org"
+ <gregkh@linuxfoundation.org>, Dan Carpenter <dan.carpenter@linaro.org>,
+ Jon Hunter <jonathanh@nvidia.com>
+Cc: "mwalle@kernel.org" <mwalle@kernel.org>,
+ "quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
+ David Brownell <dbrownell@users.sourceforge.net>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "opensource.kernel" <opensource.kernel@vivo.com>,
+ "linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>,
+ Brad Griffis <bgriffis@nvidia.com>,
+ Harshit Mogalapalli <harshit.m.mogalapalli@gmail.com>
+References: <TYUPR06MB621733B5AC690DBDF80A0DCCD2042@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <1037c1ad-9230-4181-b9c3-167dbaa47644@nvidia.com>
+ <2025011633-cavity-earthworm-2b5e@gregkh>
+ <3d9db530-a0b7-4f18-9ad4-233356dfe68c@nvidia.com>
+ <e3a457d6-092b-4b7a-9032-50daddab6f1f@nvidia.com>
+ <0fa6c6db-fd75-4a09-b4fa-d6a98bb8afac@stanley.mountain>
+ <TYUPR06MB621712E6A082791B397088BFD2F72@TYUPR06MB6217.apcprd06.prod.outlook.com>
+ <f264888e-6100-4812-9661-ffad174f45af@windestam.se>
+ <33a19657-a890-4d59-b7ea-5798cf8f7d9b@oss.qualcomm.com>
+Content-Language: en-US
+From: Pelle Windestam <pelle@windestam.se>
+In-Reply-To: <33a19657-a890-4d59-b7ea-5798cf8f7d9b@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
->=20
-Hi Greg,
+> Are you also using tegra-xudc ? ep_disable routine may be called in an
+> atomic (interrupt) context.
 
-> > Can do. I have one in the actual driver, but can replicate that
-> > here if it's helpful.
->=20
-> Isn't this a usb.org spec and not a vendor-specific one?
+Nope, I have a board based on a NXP iMX7D CPU, I'm not 100% sure what 
+the tegra-xudc equivalent would be for that.
 
-Nope, all defined by the DMTF - so not really a vendor, but external to
-the USB-IF at least. The only mention of this under USB-IF is the class
-code allocation, along with the note:
-
-   [0x14] This base class is defined for devices that conform to the
-   =E2=80=9CMCTP over USB=E2=80=9D found at the DMTF website as DSP0283. Th=
-is
-   specification defines the usable set of SubClass and Protocol
-   values. Values outside of this defined spec are reserved. These
-   class codes can only be used in Interface Descriptors.
-
-> As per copyright norms, list the real dates, so that would be:
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0Copyright (C) 2024-2025 .=
-..
-
-ack, will do.
-
-Cheers,
-
-
-Jeremy
+//Pelle
 
