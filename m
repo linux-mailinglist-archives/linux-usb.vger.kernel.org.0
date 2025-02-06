@@ -1,160 +1,163 @@
-Return-Path: <linux-usb+bounces-20242-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20243-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B92A9A2A74C
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 12:21:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70ACFA2A8ED
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 14:00:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6738D1889C16
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 11:21:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B339A3A643D
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 13:00:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA76231A54;
-	Thu,  6 Feb 2025 11:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE5C22E402;
+	Thu,  6 Feb 2025 13:00:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="K8RnFg9n"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="XrTLxR5w"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76617231A4C;
-	Thu,  6 Feb 2025 11:17:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2755013D897;
+	Thu,  6 Feb 2025 12:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738840649; cv=none; b=IveHhfvTJzVthVqjNfesg+7yJ1AOpsZ+VzKXMOoUvcuLkfQOPSHDlBOO4iYs2fCsUOW0JhifIcLf6XAKU9p57MYuCOEn2D+dezQJqB+I91TNAFRs8IyV8xbLwT7HHzywFTc6HF+akHcvZDbCJyu0U7eXb1WWc6R7J+FOLJ9Ev+M=
+	t=1738846802; cv=none; b=gzaYN8NjKK4sZuUHvXbak34ynpz+qGq9u5zeBN6wiKUUY9OTe2TfooE11x9eAYta+MOYtGz0uvpi2OCxjZegHn6gWVOSKAbucP0g/GP+Kz86J/2eTSB6UZm3S9c7b2Oj7zyKJfpPGSguLdKKwlovn9CkuCG7Pou6ztDdPJcdask=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738840649; c=relaxed/simple;
-	bh=9L8v/jl6HSIO/6Dv+m2eRFhdPWznBdGxxI8lE91xy+E=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Lbon55AzvpGWufdMV8qDQLcKhb2UIL0FPfRjICnNgTYHaaRdd4GysQVvaesqdDlmIglFYe1WH6efdog6FAy/ExIlnMiTmbMB9CgEnj6KoJ/eJ2XzXI6plvXtIZObzcjNLeBzbLnKGC5zpf486wrGWP9xT8jfn09of4qY2UZIGqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=K8RnFg9n; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5169dqvs022537;
-	Thu, 6 Feb 2025 11:17:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=GZWmSmi1VtT9mCKl6G3K8hDw
-	bOPO1HBGZzHKdkg+pxo=; b=K8RnFg9nWnZNGFIw8+dMvGttjPOuUw+24LPlwQKh
-	MU/aDZEIX17Oi9vouOI4mXag6GT+MmN/5PCoE7/tmjNb8h09mXLLSxmXHYHMR++X
-	N/+HE0Zte5EGqiBotDe1rR8VSv+ktuYxIthKlRUTw9PM4Oj+fxwVjy9BwXv7PJxM
-	R5pl+n1PjbDRN16UFPPeQVM00F3kyUpTWj9G3ckuFj/juv2FppkkH6+1VV/xjlLW
-	4w3pBJfnL8QNR7TurIaB9J6cpVvI3MtVsPX7CUUuWtGeHWuy98T6+zpIYeCBmsqq
-	A8y0ntslEZmg0XnVreGM9qsUPsj2gGAJP8qtLtPmDRjqTg==
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44mtn7g7kt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 06 Feb 2025 11:17:24 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 516BHNKw014514
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 6 Feb 2025 11:17:23 GMT
-Received: from hu-akakum-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 6 Feb 2025 03:17:19 -0800
-From: Akash Kumar <quic_akakum@quicinc.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Jack Pham <quic_jackp@quicinc.com>, <kernel@oss.qualcomm.com>,
-        Wesley Cheng <quic_wcheng@quicinc.com>
-CC: Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Vijayavardhan
- Vennapusa" <quic_vvreddy@quicinc.com>,
-        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Akash Kumar <quic_akakum@quicinc.com>
-Subject: [PATCH 18/18] arm64: dts: qcom: sc8180x: Enable high bandwidth for hs isoc eps
-Date: Thu, 6 Feb 2025 16:45:43 +0530
-Message-ID: <20250206111543.17392-19-quic_akakum@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250206111543.17392-1-quic_akakum@quicinc.com>
-References: <20250206111543.17392-1-quic_akakum@quicinc.com>
+	s=arc-20240116; t=1738846802; c=relaxed/simple;
+	bh=xxbDZdqWo3K/8PCwFPnRCr7uf9tUfjynoOu26v/FlfU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZuhzFgN+1EUMMdGTKzY9wohWqLqLsr5yR6lTRXBtrVCFjXeni1e0io5iEI01QGXvZjJav2D9jX0/AYH1dm5VH3jvPV66XEZZ6ipgMoAI6Gumqy+8YTxiYsnkFdbiI8vV2E2EeHHx8N+G9kiKW/ItYmHJTzQjGJ7m7AjBsdJS0+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=XrTLxR5w; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 516Cxmmr3553666
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 6 Feb 2025 06:59:48 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1738846788;
+	bh=Mv0wdh7SmM7WMLkdwxSV1wkm7zvheEOu8m9g8tZ+KPI=;
+	h=From:To:CC:Subject:Date;
+	b=XrTLxR5wO8p6ersm33yDywbwUdJb5nIdCWOIuRR2+l8AnSWrgBBsCi40/sqGEZ9qq
+	 TRNHphQJO7WGmGZn2oiSJ8YrYp3kDbFjuilteo542lDVMKNSRma3Y/b+XGTqjm8M7X
+	 qW7ubqUEzu+OWEbVngTMOgwR7fLGI7RIeChkMwuo=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 516Cxm5T012943
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Thu, 6 Feb 2025 06:59:48 -0600
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 6
+ Feb 2025 06:59:48 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE101.ent.ti.com
+ (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Thu, 6 Feb 2025 06:59:48 -0600
+Received: from uda0492258.dhcp.ti.com (uda0492258.dhcp.ti.com [10.24.72.104])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 516CxhVf101205;
+	Thu, 6 Feb 2025 06:59:44 -0600
+From: Siddharth Vadapalli <s-vadapalli@ti.com>
+To: <peter.chen@kernel.org>, <pawell@cadence.com>, <rogerq@kernel.org>,
+        <gregkh@linuxfoundation.org>, <balbi@kernel.org>, <jun.li@nxp.com>
+CC: <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <stable@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        <srk@ti.com>, <s-vadapalli@ti.com>
+Subject: [PATCH] usb: cdns3: exit cdns3_gadget_udc_start if FAST_REG_ACCESS cannot be set
+Date: Thu, 6 Feb 2025 18:29:36 +0530
+Message-ID: <20250206125943.786949-1-s-vadapalli@ti.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Fiapd-lVlyX6-irdFofSnmoPr1q9Tttw
-X-Proofpoint-ORIG-GUID: Fiapd-lVlyX6-irdFofSnmoPr1q9Tttw
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-06_03,2025-02-05_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 bulkscore=0
- malwarescore=0 clxscore=1015 priorityscore=1501 mlxlogscore=989
- impostorscore=0 lowpriorityscore=0 phishscore=0 suspectscore=0
- adultscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502060092
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-It is observed while testing multiple audio devices,
-a glitch is observed during testing.
-As per dwc datasheet,By default, HC reserves 80% of the bandwidth for
-periodic EPs.
+When the device is in a low power state, access to the following
+registers takes a long time:
+- EP_CFG
+- EP_TRADDR
+- EP_CMD
+- EP_SEL
+- EP_STS
+- USB_CONF
 
-Add quirk to set GUCTL BIT 16 to accommodate higher bandwidth for
-2 isoc eps.
+To address this, the fast register access feature can be enabled by
+setting PUSB_PWR_FST_REG_ACCESS bit of the USB_PWR register, which
+allows quick access by software. Software is expected to poll on
+PUSB_PWR_FST_REG_ACCESS_STAT to ensure that fast register access has
+been enabled by the controller. Attempting to access any of the
+aforementioned registers after setting PUSB_PWR_FST_REG_ACCESS but
+before PUSB_PWR_FST_REG_ACCESS_STAT has been set will result in
+undefined behavior and potentially result in system hang.
 
-If this bit is set, the bandwidth is relaxed to 85% to
-accommodate two high speed, high bandwidth ISOC EPs.
-USB 2.0 required 80% bandwidth allocated for ISOC traffic. If
-two High-bandwidth ISOC devices (HD Webcams) are
-connected, and if each requires 1024-bytes X 3 packets per
-Micro-Frame, then the bandwidth required is around 82%. If
-this bit is set, then it is possible to connect two Webcams of
-1024bytes X 3 paylod per Micro-Frame each. Otherwise, you
-may have to reduce the resolution of the Webcams.
-This bit is valid in Host and DRD configuration and is used in
-host mode operation only.
-USe this quirk to set bit for host mode uvc uac usecases where two
-isoc eps are used and flicker is seen.
+Hence, poll on PUSB_PWR_FST_REG_ACCESS_STAT before proceeding with
+gadget configuration, and exit if it cannot be enabled.
 
-Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+Fixes: b5148d946f45 ("usb: cdns3: gadget: set fast access bit")
+Cc: <stable@vger.kernel.org>
+Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 ---
- arch/arm64/boot/dts/qcom/sc8180x.dtsi | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/qcom/sc8180x.dtsi b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-index 28693a3bfc7f..fafc907efa84 100644
---- a/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sc8180x.dtsi
-@@ -2764,6 +2764,7 @@
- 				snps,dis_enblslpm_quirk;
- 				snps,dis-u1-entry-quirk;
- 				snps,dis-u2-entry-quirk;
-+				snps,dwc3_guctl_resbwhseps_quirk;
- 				phys = <&usb_mp_hsphy0>,
- 				       <&usb_mp_qmpphy0>,
- 				       <&usb_mp_hsphy1>,
-@@ -2829,6 +2830,7 @@
- 				snps,dis_enblslpm_quirk;
- 				snps,dis-u1-entry-quirk;
- 				snps,dis-u2-entry-quirk;
-+				snps,dwc3_guctl_resbwhseps_quirk;
- 				phys = <&usb_prim_hsphy>, <&usb_prim_qmpphy QMP_USB43DP_USB3_PHY>;
- 				phy-names = "usb2-phy", "usb3-phy";
+Hello,
+
+This patch is based on commit
+92514ef226f5 Merge tag 'for-6.14-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
+of Mainline Linux.
+
+Regards,
+Siddharth.
+
+ drivers/usb/cdns3/cdns3-gadget.c | 18 ++++++++++++++++--
+ 1 file changed, 16 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+index fd1beb10bba7..b62691944272 100644
+--- a/drivers/usb/cdns3/cdns3-gadget.c
++++ b/drivers/usb/cdns3/cdns3-gadget.c
+@@ -2971,8 +2971,6 @@ static void cdns3_gadget_config(struct cdns3_device *priv_dev)
+ 	/* enable generic interrupt*/
+ 	writel(USB_IEN_INIT, &regs->usb_ien);
+ 	writel(USB_CONF_CLK2OFFDS | USB_CONF_L1DS, &regs->usb_conf);
+-	/*  keep Fast Access bit */
+-	writel(PUSB_PWR_FST_REG_ACCESS, &priv_dev->regs->usb_pwr);
  
-@@ -2908,6 +2910,7 @@
- 				snps,dis_enblslpm_quirk;
- 				snps,dis-u1-entry-quirk;
- 				snps,dis-u2-entry-quirk;
-+				snps,dwc3_guctl_resbwhseps_quirk;
- 				phys = <&usb_sec_hsphy>, <&usb_sec_qmpphy QMP_USB43DP_USB3_PHY>;
- 				phy-names = "usb2-phy", "usb3-phy";
+ 	cdns3_configure_dmult(priv_dev, NULL);
+ }
+@@ -2990,6 +2988,8 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
+ 	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
+ 	unsigned long flags;
+ 	enum usb_device_speed max_speed = driver->max_speed;
++	int ret;
++	u32 reg;
  
+ 	spin_lock_irqsave(&priv_dev->lock, flags);
+ 	priv_dev->gadget_driver = driver;
+@@ -2997,6 +2997,20 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
+ 	/* limit speed if necessary */
+ 	max_speed = min(driver->max_speed, gadget->max_speed);
+ 
++	/*  keep Fast Access bit */
++	writel(PUSB_PWR_FST_REG_ACCESS, &priv_dev->regs->usb_pwr);
++	reg = readl(&priv_dev->regs->usb_pwr);
++	if (!(reg & PUSB_PWR_FST_REG_ACCESS_STAT)) {
++		ret = readl_poll_timeout_atomic(&priv_dev->regs->usb_pwr, reg,
++						(reg & PUSB_PWR_FST_REG_ACCESS_STAT),
++						10, 1000);
++		if (ret) {
++			dev_err(priv_dev->dev, "Failed to enable fast access\n");
++			spin_unlock_irqrestore(&priv_dev->lock, flags);
++			return ret;
++		}
++	}
++
+ 	switch (max_speed) {
+ 	case USB_SPEED_FULL:
+ 		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
 -- 
-2.17.1
+2.43.0
 
 
