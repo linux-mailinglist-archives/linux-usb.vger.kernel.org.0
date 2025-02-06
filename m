@@ -1,90 +1,102 @@
-Return-Path: <linux-usb+bounces-20262-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20263-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1ECFA2ACF3
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 16:47:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31FD9A2AD09
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 16:51:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6E8CD161CF6
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 15:47:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C335A16997D
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 15:51:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D76201E5B89;
-	Thu,  6 Feb 2025 15:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64B534C8E;
+	Thu,  6 Feb 2025 15:51:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bb1R6odE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxolEfQq"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE944C8E
-	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 15:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEC431F4165
+	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 15:51:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738856828; cv=none; b=tTWgxybkwU/pOhcyYCeBccAe47g9Dy26IoxFDsivKKmpdpcSB3fQ6fInRoXsjqMZk5Wt06kxIAuUlKl2gkgp2ziINuf1bSd/24lBzvJlb39hHu/aPer/fWLk3DOVqy/oJiYWPjiaqGZmGWYqPZDCWOlTQXX6Ai2dUotWT6E7814=
+	t=1738857081; cv=none; b=iPRHIYLjWgEoNf5H+ALCMukz//vaBo55MNKVYXTbHGQDe38jPqgetv9r+mFAZGKMNTPUtfJFKdGW5rsprOKtKbtQgHSWJJw8ZDlIP69KmVYYcV7pdqVI354G685pFZxS3LQkwiOQmb76zINSw/dDIYamXqtFr7mvZ+kSbHdQwz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738856828; c=relaxed/simple;
-	bh=s6W5ZK6enKgHd4IT5MX1XxkZkON5DN5CDBMyBOtFzz4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Acy16/bAvJKL94oyy/K9M0Qzfgiv5hAdupHPoa8k0oY77qbcn0VUSGlTWWwyVvTroaz1tLceQTVmMNCqHNbtjTxsFWNofym6J+pBDwK1oDMFULRwgfeNSd6/zWFYTZww+6x9mZcOHKKkz8CYB/cAw+BuVEjUYLYM3qKeM3IviV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bb1R6odE; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738856826; x=1770392826;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=s6W5ZK6enKgHd4IT5MX1XxkZkON5DN5CDBMyBOtFzz4=;
-  b=Bb1R6odEr4D81lXm39FIpR+skm7xlzYJxoGmt77hImk91h5Twp+W/9nD
-   rYqkWLdmu81ictUVBPQDiLxTf9lmm0eIevYIZniNQrYR+ATP1ErQsFJz8
-   6fHJTCKYYTQQqKZQuhdmMx2EFkQkRYywULZMc7PsELq/Alv4NqB3DAhVO
-   oDLjUUOVTuEnb7PaXwdEdyW7dHp1ZjNxYI7abIt94/yuFPNGPxBKZU2sX
-   kJO3xOunqGASBzRbp9Oz/cIbvjQ1ODEsO7AZ5dQRqaExUGOf4WQCGBg+X
-   2tdwSp9n6pteHphxyz5+rYXooX5xqIkCPEnFOSsVzV4V/TqY1l/IZTP2k
-   Q==;
-X-CSE-ConnectionGUID: o1GwICTnQeaMGbmGx4bLeg==
-X-CSE-MsgGUID: Ulv15secS9KGU+6Xtr41ig==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="38696845"
-X-IronPort-AV: E=Sophos;i="6.13,264,1732608000"; 
-   d="scan'208";a="38696845"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Feb 2025 07:47:06 -0800
-X-CSE-ConnectionGUID: BqtFf478QZ6fKxQqiPwjmA==
-X-CSE-MsgGUID: 8JvSdhhIQn6SIeBQowWj6g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,264,1732608000"; 
-   d="scan'208";a="116233724"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa004.jf.intel.com with ESMTP; 06 Feb 2025 07:47:04 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1001)
-	id AE1A6EE; Thu, 06 Feb 2025 17:47:02 +0200 (EET)
-Date: Thu, 6 Feb 2025 17:47:02 +0200
-From: Mika Westerberg <mika.westerberg@linux.intel.com>
-To: Yehezkel Bernat <YehezkelShB@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Lukas Wunner <lukas@wunner.de>,
-	Andreas Noever <andreas.noever@gmail.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH] MAINTAINERS: Use my kernel.org address for
- USB4/Thunderbolt work
-Message-ID: <20250206154702.GS3713119@black.fi.intel.com>
-References: <20250204124959.3998521-1-mika.westerberg@linux.intel.com>
+	s=arc-20240116; t=1738857081; c=relaxed/simple;
+	bh=o1JxjoiLIvceqnInnZxWj/ohtFjxnjQOKv/Xdts8FYc=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=bVp3ROGpLMUF7BZ1K9LJSKY/k5yEUJLTik1b1Y+LrMiR/wvcNox6/adYcgJp7OXWrLYgdiZ2f2tP9MyZETU+r1BAwBOD/4Q03EO4lhObGlnsZfwu4EQmynlfsgZiOIsxmEG8DDX/AKk+SAgIm9w3LZDwKlarcRgJ4SUyqSebM3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxolEfQq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BD874C4CEDD
+	for <linux-usb@vger.kernel.org>; Thu,  6 Feb 2025 15:51:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738857080;
+	bh=o1JxjoiLIvceqnInnZxWj/ohtFjxnjQOKv/Xdts8FYc=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=qxolEfQq6HBY0HRCfZHoDPDtF5p9d1PDWkgyYKY/m8nR/fHo6Zq1j1UQX9m73zeDO
+	 SNmBb6XjwoKPY15LfHCvIq+MLLZt8+fRLACsl2v2KEjFPmgw3syYC4g5qPa2T2GbWe
+	 cv5Y9IBRpt/cUkb3ChbU0gGIePKmjCH5ByyWXuR15yX8kbqzvmQP1MkD7JRbTGtqaR
+	 rJWWpNOEv0oDMU5cynqLF8chM4nodxjG2LBPtMAjUlHrJrSL1j8VAaADUIUOtURfTQ
+	 lBm0eF6sLT1mLORylBXj7BSwkkv7bdEz9Zpt/oaw4U/EBJrnAebJ+G8YDfoqtCc9wN
+	 9SVHd5MuEWh6Q==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id B3E57C41614; Thu,  6 Feb 2025 15:51:20 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
+ with AMD AI 365
+Date: Thu, 06 Feb 2025 15:51:20 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mika.westerberg@linux.intel.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-219748-208809-xtAwLuIxE8@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
+References: <bug-219748-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250204124959.3998521-1-mika.westerberg@linux.intel.com>
 
-On Tue, Feb 04, 2025 at 02:49:59PM +0200, Mika Westerberg wrote:
-> Switch to use my kernel.org address for USB4/Thunderbolt work.
-> 
-> Signed-off-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
 
-Applied to thunderbolt.git/next.
+--- Comment #6 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
+Created attachment 307579
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307579&action=3Dedit
+Try to shorten SB access timeout
+
+Thanks for the logs! From the trace it looks like similar what already was =
+seen
+with Pluggable hub connected to Intel hardware. The sideband accesses take =
+some
+time and the hub interprets this as "issue" and triggers disconnect (or thi=
+s is
+what it looks like). The attached patch shortens the timeouts to half. Can =
+you
+try with it and see if that makes any difference?
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
