@@ -1,225 +1,181 @@
-Return-Path: <linux-usb+bounces-20197-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20198-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1DBDA29ED9
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 03:36:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4EF3A29F0B
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 03:59:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3753B3A8017
-	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 02:36:38 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6B277A2CF3
+	for <lists+linux-usb@lfdr.de>; Thu,  6 Feb 2025 02:58:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F5FF13AA2E;
-	Thu,  6 Feb 2025 02:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E7CE146D57;
+	Thu,  6 Feb 2025 02:58:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="N2eZTUU4"
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="LCQasQWX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2042.outbound.protection.outlook.com [40.107.255.42])
+Received: from out162-62-57-210.mail.qq.com (out162-62-57-210.mail.qq.com [162.62.57.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB1E22AC17;
-	Thu,  6 Feb 2025 02:36:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.255.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738809398; cv=fail; b=NqE0YM/0jLCBbEqUaGk8uVsvhOoQsmBMtySfVDrowt3dSvA4O74SnDKmv5L20mtW9p3TQad3tU8yqn2pbO+gI0qFVsA1zgo50UlU9gm0HU7njbkuIC9zeCSwRt5D89dCpYT2474djLJ8g0sL4WJt0dFJ/dH2GOUNk+C4auG9zQg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738809398; c=relaxed/simple;
-	bh=+5QA07VIDZOBlQ3Q1RIi6f2T82gCJ5GeqH8tty12Ge4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=gs3pwzh1luMB+InAj3BIz5mHBuIAWlZgLSfauOcRengSz22n/vE/RytCS5uejp0GD6ZNKoUp/7RQBy7wxa1/JeoHQ9ayEUbORZOaLvlUbVtqmEAMKYTiDOohn83Hia6sBE8cSz8LCTZVcod6UgUfbOWmsBuX4tBOVVm1lQlrSh4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=N2eZTUU4; arc=fail smtp.client-ip=40.107.255.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zDhE+iOJtkPVriYewgoA176s99KnHZsz/i0mpGKj1YadmBe+Pm8w71TZa52oVc1/bV9m2GEbrZmW6hpMcu++QeOBMIxB9WLvmFGWT+OmWLt2k5XBY3wms7IJf5HmTcOypK15jSj02fNftUOxAqN8kyAYc/gI9x0EWuBEWLjNDHOlp/GPHWrT9TU64+MT8DSHlgrD2FCO1N2aSVF7zpX+rr1lSX2VYyGWm9uPpeOqpgOVt+8HJF9o/n8NCY8DfbQBPYeKrV8BlX2X0nJPVvI488xd178f5ABQgNwFPuqVkexxxgUfVqqN2qXQAa+1SiR8h+btgcMLePNaMdeJDG+XWg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+5QA07VIDZOBlQ3Q1RIi6f2T82gCJ5GeqH8tty12Ge4=;
- b=oYOfBKyT+Yk5pXhfeIrSMRy1eYxG4aouO+pAZ6DdMN5UzQR2SFrG0uso1u6uK/FFgq4px1R49wvYAf72qkhbuWtyDOA2HRs9SoRXFy9VAQkrAB5xO/etDR8QpSsYveEI0vAl8SI40XUwPToFtfjvtf9WeBha1fvv0GTzxo6s8Zc6eQ6QZDt6NDhTKJaJigy3zKfI1sPb7HLU7iroL+8vi0abCjmQQ0ohmLu4P7RuWE2YvwC6mw4eE3zYPienkCOFI4msJhE3nm97NjFvjmcqXqXIun/Gt+223UrJvEC26wBng2+N6P70s/kcFo1R37T1qEjPdujVnwjn6hKcDxvI4w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+5QA07VIDZOBlQ3Q1RIi6f2T82gCJ5GeqH8tty12Ge4=;
- b=N2eZTUU4h/4M29CHWSZGVwHwZUkyQfabUX5vZTsuwNngvd5asvlZLhYdK/6Txn3Mms6ME7B7dbATmbzG7D0R/z4U6xhXq/gdzSxiy3pbpk/cG/rCVSYWL2weS621A/kddA5dU2vky+BdYsV6RwS6npQFu/vhJZY2EepNHDMS+tVEw+y7x1u8G/YgMGgqSS01qsm1LdonjXL4+sAF/PkiyPNu7NxT2yrnOP045zopoiNiR7AUJylD/cLYIdhh9FqgA5zi10WxKV7NeUwNvxm1OyF1/wDlYEh1yjb59TRl7tMCsz6kojBHu/uh59Q8IzslM0F/OFcQcaivWjHlfH6Prw==
-Received: from TYUPR06MB6217.apcprd06.prod.outlook.com (2603:1096:400:358::7)
- by OSQPR06MB7129.apcprd06.prod.outlook.com (2603:1096:604:29d::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.6; Thu, 6 Feb
- 2025 02:36:31 +0000
-Received: from TYUPR06MB6217.apcprd06.prod.outlook.com
- ([fe80::c18d:f7c6:7590:64fe]) by TYUPR06MB6217.apcprd06.prod.outlook.com
- ([fe80::c18d:f7c6:7590:64fe%6]) with mapi id 15.20.8422.005; Thu, 6 Feb 2025
- 02:36:31 +0000
-From: =?gb2312?B?uvrBrMfa?= <hulianqin@vivo.com>
-To: Pelle Windestam <pelle@windestam.se>, "gregkh@linuxfoundation.org"
-	<gregkh@linuxfoundation.org>, Dan Carpenter <dan.carpenter@linaro.org>, Jon
- Hunter <jonathanh@nvidia.com>
-CC: Prashanth K <quic_prashk@quicinc.com>, "mwalle@kernel.org"
-	<mwalle@kernel.org>, "quic_jjohnson@quicinc.com" <quic_jjohnson@quicinc.com>,
-	David Brownell <dbrownell@users.sourceforge.net>, "linux-usb@vger.kernel.org"
-	<linux-usb@vger.kernel.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, opensource.kernel
-	<opensource.kernel@vivo.com>, "linux-tegra@vger.kernel.org"
-	<linux-tegra@vger.kernel.org>, Brad Griffis <bgriffis@nvidia.com>, Harshit
- Mogalapalli <harshit.m.mogalapalli@gmail.com>
-Subject:
- =?gb2312?B?tPC4tDogtPC4tDogW1BBVENIIHYzXSB1c2I6IGdhZGdldDogdV9zZXJpYWw6?=
- =?gb2312?B?IERpc2FibGUgZXAgYmVmb3JlIHNldHRpbmcgcG9ydCB0byBudWxsIHRvIGZp?=
- =?gb2312?Q?x_the_crash_caused_by_port_being_null?=
-Thread-Topic:
- =?gb2312?B?tPC4tDogW1BBVENIIHYzXSB1c2I6IGdhZGdldDogdV9zZXJpYWw6IERpc2Fi?=
- =?gb2312?B?bGUgZXAgYmVmb3JlIHNldHRpbmcgcG9ydCB0byBudWxsIHRvIGZpeCB0aGUg?=
- =?gb2312?Q?crash_caused_by_port_being_null?=
-Thread-Index:
- AdtQVu3p636G49OMSa2yDMmE+bdUDgXwT3UAAACXZQAAA0EggAD1y7uAAGoR8AACe8P7MAAbi/4AAA6lbPA=
-Date: Thu, 6 Feb 2025 02:36:31 +0000
-Message-ID:
- <TYUPR06MB6217BC31BF97CC1E276BF26AD2F62@TYUPR06MB6217.apcprd06.prod.outlook.com>
-References:
- <TYUPR06MB621733B5AC690DBDF80A0DCCD2042@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <1037c1ad-9230-4181-b9c3-167dbaa47644@nvidia.com>
- <2025011633-cavity-earthworm-2b5e@gregkh>
- <3d9db530-a0b7-4f18-9ad4-233356dfe68c@nvidia.com>
- <e3a457d6-092b-4b7a-9032-50daddab6f1f@nvidia.com>
- <0fa6c6db-fd75-4a09-b4fa-d6a98bb8afac@stanley.mountain>
- <TYUPR06MB621712E6A082791B397088BFD2F72@TYUPR06MB6217.apcprd06.prod.outlook.com>
- <f264888e-6100-4812-9661-ffad174f45af@windestam.se>
-In-Reply-To: <f264888e-6100-4812-9661-ffad174f45af@windestam.se>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYUPR06MB6217:EE_|OSQPR06MB7129:EE_
-x-ms-office365-filtering-correlation-id: 614857e5-096d-42f8-200a-08dd465710b5
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|376014|7416014|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?gb2312?B?QURCclpPb0NxMVZ3cHRKcDMzZ1hmUmZLbE9COTRTdmdyT21hUzc2Q0FBRHp2?=
- =?gb2312?B?YkpKelFtdWJHaDRPNi9BaFdPSWl6WGxkVmpna1N4TkRneFVaSWc3cmttQ2ha?=
- =?gb2312?B?WDFacG9icVY0SU10REhUbFNuU2Y4SFUreDdweFRhc2pKa1FiMTY4a0c0K1Ro?=
- =?gb2312?B?a2RKNjJHb2VvdC9sdVRyclR4WVl3dUc0R2pWbXI1UmF3ckVyUHU5cmZWZStS?=
- =?gb2312?B?VjY1TytXYThSbko4TGJjUEJSUEJTQmlXbU1vL3ViZkdOLzY1bmg0cnpWd2RT?=
- =?gb2312?B?MkdlYUVxeUovM3pmWkprdklEdFRDd3pmOFBXVUtvbGp5Uis0QkhhTmZKSzBJ?=
- =?gb2312?B?RFBxUlJreXBnZGU4S0FtNzF6WklTTnJBdGtieUlSVmdYZjJ2dHNoQlBrd1N3?=
- =?gb2312?B?NnRmU0EvWU96N0FWNXhDNzVMWC8vWDhOZS8xUTRnN2VMbExtZWY0aVdtajJY?=
- =?gb2312?B?ajhlU1dqQW9uUjQycURzYWxQSVNWeWxrdVlTRGh0OGtwM09BdWdhZjNObXJp?=
- =?gb2312?B?M1pBb0Z2MDF0SWkxNmJHTUR1SzBGM3FISGV0dE4yaGM0K2c2VlVFN0RZbmlP?=
- =?gb2312?B?NXFVTjZTeGljQzl1ZmJ1V3FhUVFsL1NZazBCeDd5dTA4aGhGZ2Ryd21SdHQ4?=
- =?gb2312?B?YUNDNU9sWnpKR3VWZ3I2QXlKYkFndGRwWHdWSW5abUJzandyUU1IbEVtMVho?=
- =?gb2312?B?U0t2TGI2eE9tQ2RKMDZLbnpZUW5RYVYrSU9pQnhyekZmcGhwOStnaFFUTk4r?=
- =?gb2312?B?aGwzTmgwVHl5a0d5clBvcW5jNEl1Z0QxakJQZnZ2dGF2cXNWYldzSm8wdEk5?=
- =?gb2312?B?YWtLOEpUK0MvaC9XdHZWYVpIU1dScUlQODUwUU9YM2g4UHgrblBWeC9paE1K?=
- =?gb2312?B?RlRnRmQ0c2xSWHVqVHZrcTlab2QwL1VIMFJ1L3FCcUdQMWltRXk0czFvd1RX?=
- =?gb2312?B?bGlId01vRHRhOENGSGVwanRNOTY3bnZNM040S0NWeUpJNUdNRC9OYnpXZFli?=
- =?gb2312?B?WlRKQURab2V4T2tvSUdLMlQ1QWVPcSs3dHcrT1hDRmEwMlJxRHFjMUZvV2g1?=
- =?gb2312?B?cTVYWVQyc05JTjE2b1dNb2VBQzVORUVuNjZsQm1jdktoYjY1Z3NtR1lQZWtw?=
- =?gb2312?B?dGdOUjhmb0huVnJld2dweVZESVRFRThaUzhkWlpDRFVaamVJb2svaDl0MzV4?=
- =?gb2312?B?cnI1TXdlNlJSRWYwU1lHTGJKd1FJaFFHMVFzOHpET2xMUXpxQWdhWHIya2pX?=
- =?gb2312?B?cVRJOUNGMy9lb1hTZjM1Um5FbytObWRZQ29WcEtSU1A0a1drZytrV09Xa0VK?=
- =?gb2312?B?eHM2WUdXdmVzbTVNT09jcmZ5MU51MHk5WDZsM0NMWEhlY3c1Zi9sWWVTNVVT?=
- =?gb2312?B?WVlvRUZMV2owcG12K2xWK28xemowbVorMGQydWVVckZreFZrN2ZzczlDMkxK?=
- =?gb2312?B?VTlNc0R4UElZbmpUMVlFbzg4dXVrdGRVaTRCak13VTZZQnZaQU15M2dNL1hZ?=
- =?gb2312?B?STAxQ3c0Qlgwam95OTV1RHBwQ1ExWnFHMlVCcjN5M0tIQkFSYVEyNmZWVUlh?=
- =?gb2312?B?SStZelp6K0RaYWxLSGxITEFSMnM4UkJZcUtRTTArOUpia2N6R0ZIalQzanJZ?=
- =?gb2312?B?NWYrcHhzUDZMTzRMbGl5Sk43QzZhUWZXdFlkK0xDUFZqZVVNRnN2cXlOa0xz?=
- =?gb2312?B?NEtPc3RCOWJpWmU0WGhGajNlODlrU1NhQkN4ZmorK3FPTlpwVWNTeHFFRk5x?=
- =?gb2312?B?V0o4YUp6TmFvMENYMHZLRmFtNzFVYVRHVFlNMEhHTzNMNURDSWNJemRjSDVN?=
- =?gb2312?B?U2VTWkZVL1h1SUdTV2lDSk1hVURPbTFEc013SVRRUTdPWGZpZDA1TjRkNFhC?=
- =?gb2312?B?Y1FyNEI3aC9hTXVTaE9sQ2tsK3FMYUtJNWplNitGaG1adWIzSEo3VThucUNG?=
- =?gb2312?Q?Q5Wj8WXjjTXwCNSwqmW7AHeM/Hyz3uH+?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:zh-cn;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYUPR06MB6217.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?gb2312?B?cFNMT29sZ0s3Qld1SFc2YWpubkQ4ejNlSDkyNTdpQTVQdmNROHV4YkxoeHF6?=
- =?gb2312?B?WTRuMlovc3JYUURVM1lXT3J6RWlVb0E1Vkx6SFp2QkhqcTJySHI4eS9iTisw?=
- =?gb2312?B?c1pPaitKa1hMcUFiWjNZNmZ3Qm4vQWZ3anhDTGYzak1IcWRNTnFHdWhuQkdw?=
- =?gb2312?B?dEdmL3dGbzVPSjlXUFdyWGRXZkE0am54Vm1vVUo4Nks3MG1SWmw0c2VybFQr?=
- =?gb2312?B?elZNU2pKZC9VU3NZSjV4QnNlYmFhYnVOYWFqcWc1VHFMZDQ2TVUranJ5Z3Vp?=
- =?gb2312?B?TDVJQW15M0p3TTNNbDFraVQvdFV0Vlg4LzgwQVhGMXFISStxYkxqWHBjbUg5?=
- =?gb2312?B?L0lodXd4ME9LSUlVWGxKcGFDWnJjeFBKNWNyVS9aNXkzditkVHNoRWJ3bnRr?=
- =?gb2312?B?MmRVbkt3eTJ5VFNqOEkwRndvQURJbVUxWkhtNFhMS29UYnhTOWgvME1DU20v?=
- =?gb2312?B?MUtPWkxWelJaUWZhdlpTRUd5UnkwcmlBY2IvK3pJRTlzL0JJRWxMek9jZUlG?=
- =?gb2312?B?OUM3YzRaV3hrMlZVZWh3STBIYmJSYkg3ZEhUVkdtVkJackFoQWR0RkIzQmtJ?=
- =?gb2312?B?NW1vOGc0ZU5iTUJ1dW9WZFZLRWYwUFdna0JWc0htQllRTXR0MFBNbm9CZmJI?=
- =?gb2312?B?cXFqZk96eStrYnVBQ21tcGl4UEdmNlVia04vY2dnWFo5bXNBM1UrdnZwMU0y?=
- =?gb2312?B?RkxodGF5NWQvR2RleklBeGVDK2ppZTFoc0tQaDQ3N2UrZE1RdjgvUU9zWFpx?=
- =?gb2312?B?NlZzbFUvdjlRejE0eEtNbHNYdi9TVmtqN3RLSE02aFFVMFU3OW83WnlZOFk4?=
- =?gb2312?B?UTFwU1AwTmN3c3EvMzFXNnFLUkR5VjhtekFNMm83UUhqUElvY2U3SlJxWnVH?=
- =?gb2312?B?MmxPSmNhektDcjJIOWZaMlA2KzE3eTN0YWZMYnA5YnlhWlB5aGRiV3F6WnNw?=
- =?gb2312?B?dVVsTGRObnVoanp3U1pTdUN5Nnk2SlM0akwwbUVDOFQ3dWRleWJJejZWNTds?=
- =?gb2312?B?SGF4ejR6dEoxWG5qY3FueXBwdG1jbmZLVVFYZHZOOHV6U3hNYUptUVV3Nkwx?=
- =?gb2312?B?dEdUMjh5ZTY1YUJSRUFteGVaUUF0U1hwa0MyMTZVS29XUTJOYTlReXFodGZO?=
- =?gb2312?B?c1V6NFhBSWpzRGdLZ2ZsdGdJZFFtVWxkVm12UFRNRlVHQ09WbnZObnJITlFq?=
- =?gb2312?B?RHcwV29YUHdTa2tvZWdEQWhhY2ZFeVFLOHZBK0EwcUFyTy9oMitoaVRjeFVJ?=
- =?gb2312?B?Vml4WU05Qld4MytwcXJ3Z3hmMXUzbWU3MytFSlUyNzg4SzF4aURCT2hUYTR6?=
- =?gb2312?B?TC9oZWpvOS9lSmFDam1zVFY1UXZLa0VkQlRJNGVveFB3djdqeUt0a3oxWVN1?=
- =?gb2312?B?WnA3L2FhKzFla2dDTG9TaVZCcHNnOWtmd05Ydk1ZZjMzZUxDWWtCdkJZbHJ3?=
- =?gb2312?B?cnRpVW9sZmRxQm9RSVc5bXEwcVVrMWpXdEM2OU1meCsrSW1KaThmV1Zxd2l1?=
- =?gb2312?B?bXF3bGJtelFJbDZteUIvM1NLc1J6M2tqYzRqRVNEb2NNZVdlZndLb1d6YkN2?=
- =?gb2312?B?V09iN2pvakJia3FSYUU4aGVZWkYzYmFxVmhDZ0JYVjdXUkZYOG5SS2taZFJh?=
- =?gb2312?B?U29nT1VIQmZMVnVpZ2JhZzFvcEFXT2hXdXBwS3NFc3VJbW1ha1JjWGZoemNE?=
- =?gb2312?B?Um1TbFowVXQ1WlhPd1M0Q3loejl2NGFOcGtzOGVoWE1PWVNVOUN1ZUZSMUY5?=
- =?gb2312?B?VTdKaW1XL1JqZ1ZMcVZBNFlySU5Ld1kyMjIvL0JJMjRpM21YdmVnYUgweVdj?=
- =?gb2312?B?OXIyOEErcHZSTU1seEhoV1VxRzlwMHVYUjcxRVl5and6cnYxc2Q5bFJVaSs4?=
- =?gb2312?B?N29jTFF4WC92SEU0M0ZHRjhEUjFaNlpvNFg1VmJiNWZGRzQ1d0tHUUZLb2Vn?=
- =?gb2312?B?OGFzWHdsUWVMbHRsSUEzOU5KS1JPYThRMXpmeU5hZGJLdzd3aUZ4eDRQS2Q2?=
- =?gb2312?B?WUVhQXVjOStkZnQ1OSt5dHJBMFR5RGNBa0MydC8wcTNUS3gzVzRmY3Vmak56?=
- =?gb2312?B?ODNrWEh6S0s3Mk5RRHUxNlo3eHdmZmFnMGVrcG4zYTRuNXZsbUNoZS9qaHFi?=
- =?gb2312?Q?8zM8=3D?=
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96A7413AD18;
+	Thu,  6 Feb 2025 02:58:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.62.57.210
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738810737; cv=none; b=A/bGRifmqPOET1h58wYvY8hF9ZdeypJ3r7AdRftQ8L9xsI88gkMUnsBAlrVkchayYFARiI9RJ1NReadEhPv4JQCDxHQ9rZsNIBOpFsFFl2MLDBB51fZtzXiCvBDCKFh2lUhJt3696AZGM1jTlm2Tv30dJ8LCzzDqe863F/pUq7E=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738810737; c=relaxed/simple;
+	bh=3lGujLEmqlUQjlKf2gi/U8xopfYpsbu4CWP6k61asTU=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=lPSoyQn5J41VW553nJ/opaq40Y31VuJOdh1YafAznAlbVQxq/hRi6pmCa7ZCyJ+dN4n9P0fUIgcWvDcmq0JEA88FeFy33OtwItrApODyFe6SMy/4eMWjkc8WveSVhWz2FHTJjkmaug5Td84gBdJesH1NDWUqaa4io/mmMfDwEBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=LCQasQWX; arc=none smtp.client-ip=162.62.57.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1738810722; bh=W985aGojcuWiDeCnrhJs+9mBdeGzwhVtK3zQEyVa7sw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=LCQasQWXCG5oju5nromNGpgsuRjdbTvZo32vob+Y27CYPBGyP/RL+9+QYxi8v0stB
+	 mEu2IuKB+49ol23e6As91EVO4XTe71VzkQff0JYcrw9NkqofGO07UyWZ5p6ZZ1Mrzh
+	 FD/epYQ7DicdqszTbkta20K0/RNrAUEh+JxRqATc=
+Received: from pek-lxu-l1.wrs.com ([114.244.57.157])
+	by newxmesmtplogicsvrszb16-1.qq.com (NewEsmtp) with SMTP
+	id D221B053; Thu, 06 Feb 2025 10:52:34 +0800
+X-QQ-mid: xmsmtpt1738810354t73r6gd7l
+Message-ID: <tencent_65865F89A52EED6ECB8C8D67E1C6FAD2FC06@qq.com>
+X-QQ-XMAILINFO: NIraPvLG0lH0CoSCUhMIVbU8V4XhVp+jmGf+3VjoHEpredbLtpUMxYzsi3X7FO
+	 z718x+wrjQILM/6CH/1ZAQpFQYJKKqGJ304iHqd4vpV+KTB5Fkf6JaSmqQQ92X6zhnH9YmA5xjEO
+	 UsTzVv72iDPqdVy3RbJSrAZJQa7J10RPiLsYUFLIeLq4shnBlISU0dfQjwrIvahH5jKg8j9654qR
+	 JaTgmpZ2t4+FkALQfsgNhrGvcfC2HEqIGqSSm97LCfjDpkhWMBLqF0BIdB4y4pRBvFf6VIds/nuI
+	 1tC4M4mfAC6wCuFpZzpMWPFB19pN5ZSYgIKRm1R74dxMS4QVsxvjQJIrAkoBtmJN9z+Kok/iChiF
+	 6IN+2BzH2uhl7i344M5FJ23w3VHsJq14ddEjhMMylXL00l89t1V/jg8jj3j9W9CEbx4p2T7CjGHt
+	 4gjQxuMvRjNFh7muFlgFsj6kNNh/BgM3f28oDpwEPzCVmztVuZ2tABYFwDqkW8qZO+iIwHhPsfqx
+	 RI0okVYceR5rR7d0CahTSv6k6AwiPhpkG6TEUeu54ivLVOy2lDBw4clD3jWTIyJR6qvsG73uQW7w
+	 CCeihqalLxjeSpf2vLv5GiB61dHOjIfMt8+1H3n0Ir2X5hJ7DRBAuQukV3jsrFBb3hJuQhOkangw
+	 4VE+6NeiWdtlXU1t0hb3e6vkkYLJnZ3sGlMt466IBX48ZV3vPvFmaofCfMdNFwdjqbTSBLxYDz37
+	 mEa2OHHVsMKgUkLmHybIdwaqOFQ1z5M63XIAm0xD6t32Hk7w444mymke0rP+76/qsJPGJERuReCw
+	 fJJtKHUA1lwbAACoMEOS4Rfvjh6qMF0Q0cnZSxpuBXha/0F+Xk1fCXFBz7gXv3+ku6YpwVB56thM
+	 9+ZTUpkP6sshsKHX82MQJIvW7RXtmjTE4fc+4ctiGV5uDEgEqPT+8=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+From: Edward Adam Davis <eadavis@qq.com>
+To: syzbot+90ac8355c8ac84b1b464@syzkaller.appspotmail.com
+Cc: gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzkaller-bugs@googlegroups.com
+Subject: [PATCH] HID: corsair-void: add missing cancel delaywork
+Date: Thu,  6 Feb 2025 10:52:35 +0800
+X-OQ-MSGID: <20250206025234.107442-2-eadavis@qq.com>
+X-Mailer: git-send-email 2.47.0
+In-Reply-To: <67a3a3b0.050a0220.19061f.05e8.GAE@google.com>
+References: <67a3a3b0.050a0220.19061f.05e8.GAE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYUPR06MB6217.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 614857e5-096d-42f8-200a-08dd465710b5
-X-MS-Exchange-CrossTenant-originalarrivaltime: 06 Feb 2025 02:36:31.2256
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: XJnFiyOCaWsPeCZaE88PDUsKPFkUkWydbgR5NkhL6JmZIkkdCwh+YjQ5u3CQaNC4vzRj1rejpnb0j65BiLn36Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSQPR06MB7129
+Content-Transfer-Encoding: 8bit
 
-SGkgIFBlbGxlIFdpbmRlc3RhbToNCiANCj4gPj4+Pj4gT2RkLCB5b3UgaGF2ZSBhIHVzYi1zZXJp
-YWwgZ2FkZ2V0IGRldmljZSBpbiB0aGlzIHN5c3RlbSB0aGF0IGlzDQo+ID4+Pj4+IGRpc2Nvbm5l
-Y3Rpbmcgc29tZWhvdz8gIFRoYXQgb29wcyBkb2Vzbid0IHBvaW50IHRvIGFueXRoaW5nIGluIHRo
-ZQ0KPiA+Pj4+PiB1c2IgZ2FkZ2V0IGNvZGViYXNlLCAiYWxsIiB3ZSBoYXZlIGRvbmUgaXMgbW92
-ZSB0aGUgY2FsbCB0bw0KPiA+Pj4+PiBzaHV0ZG93biB0aGUgZW5kcG9pbnRzIHRvIGVhcmxpZXIg
-aW4gdGhlIGRpc2Nvbm5lY3QgZnVuY3Rpb24uDQo+ID4+Pj4NCj4gPj4+PiBZZXMgdGhlIGJvYXJk
-IHN0YXJ0cyB1c2Itc2VyaWFsIGFuZCB1c2ItZXRoZXJuZXQgZ2FkZ2V0IGFuZCBvbg0KPiA+Pj4+
-IHJlYm9vdCB3aGVuIHRlYXJpbmcgaXQgZG93biBJIGFtIHNlZWluZyB0aGUgYWJvdmUuIEFzIHNv
-b24gYXMgaXQNCj4gPj4+PiBkaXNhYmxlcyB0aGUgdGVncmEteHVkYyBlbmRwb2ludHMgKGFzIHNl
-ZW4gYWJvdmUpIHRoZSBib2FyZCBhcHBlYXJzDQo+ID4+Pj4gdG8NCj4gPj4gc3RhbGwuDQo+ID4+
-Pj4NCj4gPj4+Pj4gSSdtIGdsYWQgdG8gcmV2ZXJ0IHRoaXMsIGJ1dCBpdCBmZWVscyByZWFsbHkg
-b2RkIHRoYXQgdGhpcyBpcw0KPiA+Pj4+PiBjYXVzaW5nIHlvdSBhbiByY3Ugc3RhbGwgaXNzdWUu
-DQo+ID4+Pj4NCj4gPj4+PiBUaGFua3MuIEkgY2FuJ3Qgc2F5IEkgdW5kZXJzdGFuZCBpdCBlaXRo
-ZXIsIGJ1dCBJIGFtIGNlcnRhaW4gaXQgaXMNCj4gPj4+PiBjYXVzZWQgYnkgdGhpcyBjaGFuZ2Uu
-DQo+ID4+Pj4NCj4gDQo+IEkgZG8gbm90IGhhdmUgbXVjaCB0byBhZGQgaW4gdGVybXMgb2Ygc29s
-dXRpb25zIGJ1dCB3YW50IHRvIGNoaW1lIGluIHRoYXQgdGhlDQo+IHNhbWUgaXNzdWUgaGFwcGVu
-ZWQgdG8gbWUgdGhlIG90aGVyIGRheSB3aGVuIEkgdXBncmFkZWQgbXkga2VybmVsLiBJdA0KPiBt
-YW5pZmVzdHMgaXRzZWxmIHdpdGggdGhlIHJjdSBzdGFsbCB3aGVuZXZlciBJIHRyeSB0byByZWJv
-b3QgbXkgZGV2aWNlIHdpdGggdGhlDQo+IFVTQi1jYWJsZSBjb25uZWN0ZWQgKGl0IGlzIGEgdXNi
-LXNlcmlhbCBnYWRnZXQgZGV2aWNlKS4gTW92aW5nIHRoZQ0KPiB1c2JfZXBfZGlzYWJsZSgpIGNh
-bGxzIHRvIG91dHNpZGUgdGhlIGxvY2sgKHdoZXJlIHRoZXkgd2VyZSBiZWZvcmUgdGhlDQo+IHBh
-dGNoKSBzb2x2ZXMgaXQuDQoNCkkgYXBvbG9naXplIGFnYWluLiBJIGRpZG4ndCBjb25zaWRlciBp
-dCBjb21wcmVoZW5zaXZlbHkuIFRoZSBtb2RpZmljYXRpb24gcGxhbiBoYXMgaW50cm9kdWNlZCBz
-ZXJpb3VzIG5lZ2F0aXZlIHByb2JsZW1zIGZvciB5b3UuDQpUaGUgbWFpbiBsaW5lIG9mIHRoZSBw
-YXRjaCBoYXMgYmVlbiByb2xsZWQgYmFjay4NCg0KaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvYWxs
-LzIwMjUwMTE3MTEteWlwcGVlLWZldmVyLWE3MzdAZ3JlZ2toLw0KDQpUaGFua3MNCg==
+syzbot report a slab-use-after-free Read in usbhid_raw_request. [1]
+
+The delayed_status_work still runs after usb device is removed.
+
+[1]
+BUG: KASAN: slab-use-after-free in usb_control_msg+0x434/0x4b0 drivers/usb/core/message.c:157
+Read of size 4 at addr ffff88812223c67c by task kworker/0:3/2954
+
+CPU: 0 UID: 0 PID: 2954 Comm: kworker/0:3 Not tainted 6.13.0-syzkaller-09485-g72deda0abee6 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
+Workqueue: events corsair_void_status_work_handler
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:94 [inline]
+ dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
+ print_address_description mm/kasan/report.c:378 [inline]
+ print_report+0xc3/0x620 mm/kasan/report.c:489
+ kasan_report+0xd9/0x110 mm/kasan/report.c:602
+ usb_control_msg+0x434/0x4b0 drivers/usb/core/message.c:157
+ usbhid_set_raw_report drivers/hid/usbhid/hid-core.c:927 [inline]
+ usbhid_raw_request+0x233/0x700 drivers/hid/usbhid/hid-core.c:1295
+ __hid_hw_raw_request drivers/hid/hid-core.c:2457 [inline]
+ hid_hw_raw_request+0x10a/0x150 drivers/hid/hid-core.c:2479
+ corsair_void_request_status+0xc3/0x130 drivers/hid/hid-corsair-void.c:493
+ corsair_void_status_work_handler+0x3f/0xb0 drivers/hid/hid-corsair-void.c:512
+ process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
+ process_scheduled_works kernel/workqueue.c:3317 [inline]
+ worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
+ kthread+0x3af/0x750 kernel/kthread.c:464
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+
+Allocated by task 2954:
+ kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
+ kasan_save_track+0x14/0x30 mm/kasan/common.c:68
+ poison_kmalloc_redzone mm/kasan/common.c:377 [inline]
+ __kasan_kmalloc+0x8f/0xa0 mm/kasan/common.c:394
+ kmalloc_noprof include/linux/slab.h:901 [inline]
+ kzalloc_noprof include/linux/slab.h:1037 [inline]
+ usb_alloc_dev+0x55/0xdc0 drivers/usb/core/usb.c:650
+ hub_port_connect drivers/usb/core/hub.c:5426 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
+ port_event drivers/usb/core/hub.c:5823 [inline]
+ hub_event+0x28f9/0x4f40 drivers/usb/core/hub.c:5905
+ process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
+ process_scheduled_works kernel/workqueue.c:3317 [inline]
+ worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
+ kthread+0x3af/0x750 kernel/kthread.c:464
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+Freed by task 2968:
+ kasan_save_stack+0x33/0x60 mm/kasan/common.c:47
+ kasan_save_track+0x14/0x30 mm/kasan/common.c:68
+ kasan_save_free_info+0x3b/0x60 mm/kasan/generic.c:576
+ poison_slab_object mm/kasan/common.c:247 [inline]
+ __kasan_slab_free+0x37/0x50 mm/kasan/common.c:264
+ kasan_slab_free include/linux/kasan.h:233 [inline]
+ slab_free_hook mm/slub.c:2353 [inline]
+ slab_free mm/slub.c:4609 [inline]
+ kfree+0x294/0x480 mm/slub.c:4757
+ device_release+0xa1/0x240 drivers/base/core.c:2567
+ kobject_cleanup lib/kobject.c:689 [inline]
+ kobject_release lib/kobject.c:720 [inline]
+ kref_put include/linux/kref.h:65 [inline]
+ kobject_put+0x1e4/0x5a0 lib/kobject.c:737
+ put_device+0x1f/0x30 drivers/base/core.c:3773
+ hub_port_connect drivers/usb/core/hub.c:5363 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
+ port_event drivers/usb/core/hub.c:5823 [inline]
+ hub_event+0x1bed/0x4f40 drivers/usb/core/hub.c:5905
+ process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
+ process_scheduled_works kernel/workqueue.c:3317 [inline]
+ worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
+ kthread+0x3af/0x750 kernel/kthread.c:464
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+Fixes: 6ea2a6fd3872 ("HID: corsair-void: Add Corsair Void headset family driver")
+Reported-by: syzbot+90ac8355c8ac84b1b464@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=90ac8355c8ac84b1b464
+Signed-off-by: Edward Adam Davis <eadavis@qq.com>
+---
+ drivers/hid/hid-corsair-void.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/drivers/hid/hid-corsair-void.c b/drivers/hid/hid-corsair-void.c
+index 6ece56b850fc..83d65fa29a5a 100644
+--- a/drivers/hid/hid-corsair-void.c
++++ b/drivers/hid/hid-corsair-void.c
+@@ -727,6 +727,7 @@ static void corsair_void_remove(struct hid_device *hid_dev)
+ 		power_supply_unregister(drvdata->battery);
+ 
+ 	cancel_delayed_work_sync(&drvdata->delayed_firmware_work);
++	cancel_delayed_work_sync(&drvdata->delayed_status_work);
+ 	sysfs_remove_group(&hid_dev->dev.kobj, &corsair_void_attr_group);
+ }
+ 
+-- 
+2.43.0
+
 
