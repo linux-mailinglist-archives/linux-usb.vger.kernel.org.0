@@ -1,128 +1,94 @@
-Return-Path: <linux-usb+bounces-20334-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20333-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A33A6A2CA34
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 18:31:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD385A2CA2A
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 18:30:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3B4216C9CE
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 17:31:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86CC816B6BC
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 17:30:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E8919C54C;
-	Fri,  7 Feb 2025 17:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31AC3194AD1;
+	Fri,  7 Feb 2025 17:30:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Vqp8+wTl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EgbSNuZg"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from out-176.mta0.migadu.com (out-176.mta0.migadu.com [91.218.175.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C1C19AD8C
-	for <linux-usb@vger.kernel.org>; Fri,  7 Feb 2025 17:31:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACB9B15E5B8
+	for <linux-usb@vger.kernel.org>; Fri,  7 Feb 2025 17:30:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738949484; cv=none; b=iVRIhF8N/A02uBDolYb96u2bgC1m3ICqDiQo4N6igXK4ZHS9WV7hp9Pr9YGWyqZrplAO7XvHbn2rr6EFWqxQxd2RhV+1IMsydmxjPhgm5Xy875CR+v3go1mlisoLDI8a5O9G4SDR8i8en3nUSVcaAiZEk8sNl+5Bu0XNC8nnOgc=
+	t=1738949420; cv=none; b=oYKlK6lBMWiXj5wGm2+tkhNbn1zf/FFox2plR6634R5659EYP9K+JI4Q0UOlhWeoVoXFLEVuFAOWuCnf1q9y+ht48DvX41hFgyY9RQ0ZJBJgJzllkLqs4fMmVwPKX6wuCMZIlunFAxR+tXfLWH6KQECDqhpXC+5PSWwQ5ul3y1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738949484; c=relaxed/simple;
-	bh=DMoehDVrexS+KO0jDz168m0nPSMZhAKy9NA3o9zTPqw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dedCHwVzvy1PcMyRWcASyjKxfKjE2U82EAZkIntvgqsmzJDdJhD8i+cpR4iyHm1E7JWKQicWYW/aF4VR7YxEBL2uYTVsMzaPLfsJ24zBkYLggSlKPsf0Af4eO/PZL8gng0HJih/C6JdLFoKk6bDjvw1dMX+2QYqWwlkB2U9kpzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Vqp8+wTl; arc=none smtp.client-ip=91.218.175.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <a7b185bc-ff77-4701-a4dd-b93d5613643a@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1738949480;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9g4ND8PPP28x50vbU7Fogg2mjWlyGpBFIHQIKFRKzBE=;
-	b=Vqp8+wTlTVL6bE0bo52wGbA8p9PswYl0fctqjGXZ4u02noCxob1wbd/rlpymbUAE+ISL3l
-	nJPnxRV55knkF4BZi/5OH+fbBPhF2dLH5XnyPu2uZMAvAqQpUXpwRsDAKXEjYbtkV4Y04Q
-	Dcb9kLXImFzgFZ8NhgCEiOJhx8qzZP4=
-Date: Fri, 7 Feb 2025 11:28:12 -0600
+	s=arc-20240116; t=1738949420; c=relaxed/simple;
+	bh=0P5Ew39hn0u4NXkuMgxAFneaEAyk+7dEOL4Ma2Hfyyg=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=JtF+Q3HAOBLLxjCuLH+zuYFm1Te1Pr3H/U6KP14iyabIrWRBUyFWe6hTCJWEVMvRMDJIIs5dI0B4yXn3lbGofE3xJio3xJ9WVZc5X9ItNqTE1iFuxlv0rmQWAlWMJHFJ98s+I0zzQErckG+09rAlzEHqSVwp/xGng1DHPkIXbtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EgbSNuZg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 178E8C4CEDF
+	for <linux-usb@vger.kernel.org>; Fri,  7 Feb 2025 17:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738949420;
+	bh=0P5Ew39hn0u4NXkuMgxAFneaEAyk+7dEOL4Ma2Hfyyg=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=EgbSNuZgzs7Dm4AESo1bPK/+uL/SDSem3FZ1b2ceOLbpiKWirulMUKdJU0F08NzU8
+	 n4c037F4Zd+jflGmlNQMXCh/BQv9sK4stBhKLS93q3zarejRky+EsOOdNZoOY3Qyla
+	 1luLC+x+wGQmF/1ccv1g2+J0nisIM/GSxX78z1LHydnVAJD9aOHvwn7Lp4n8F2vbm8
+	 2B94scDMHFZcwoFKOGKEGkrryIjcOqN69DXECgmX6cc9+e+Ign381Cih36XK7jBa4a
+	 BQu/HKiCfnkCN+WpKvD9K9vgyzQ3LhtI7uKGJSe0w0tB0t2/8v5XWAZjUzvaMc5pkO
+	 u1Y2R4gxxvSTQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 04F0BC3279E; Fri,  7 Feb 2025 17:30:18 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219562] [BISECTED] UCSI patch breaks lunar lake boot on
+ 6.13-rc1
+Date: Fri, 07 Feb 2025 17:30:18 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: todd.e.brandt@intel.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: CODE_FIX
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-219562-208809-NzoQKLlFJ2@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219562-208809@https.bugzilla.kernel.org/>
+References: <bug-219562-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v9 0/5] Support system sleep with offloaded usb transfers
-To: Guan-Yu Lin <guanyulin@google.com>
-Cc: gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com,
- mathias.nyman@intel.com, stern@rowland.harvard.edu, perex@perex.cz,
- tiwai@suse.com, sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com,
- ricardo@marliere.net, lijiayi@kylinos.cn, quic_jjohnson@quicinc.com,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-sound@vger.kernel.org
-References: <20250117145145.3093352-1-guanyulin@google.com>
- <943a7b09-8e77-4813-810a-18fea0e61482@linux.dev>
- <CAOuDEK3aip9SLCUPOzpVPwx-O4rmF-+sQrF4GJasGPBzV=qJdg@mail.gmail.com>
- <e5b1c3bf-4457-4859-92fc-785f7d6037fa@linux.dev>
- <CAOuDEK2u509kNjyL6qm27QgvtoCscRcsLixW=W8ABz2NF8A-tw@mail.gmail.com>
- <c8c699f7-bf9b-4e36-910e-c6f1c7092543@linux.dev>
- <CAOuDEK1w9Xbik-VbXwSd1ZYUWx9EQ_TnvEdV3WX2L-8Wtuj5bw@mail.gmail.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
-In-Reply-To: <CAOuDEK1w9Xbik-VbXwSd1ZYUWx9EQ_TnvEdV3WX2L-8Wtuj5bw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-On 2/7/25 04:54, Guan-Yu Lin wrote:
-> On Tue, Feb 4, 2025 at 7:57 AM Pierre-Louis Bossart
-> <pierre-louis.bossart@linux.dev> wrote:
->>
->> On 2/2/25 20:57, Guan-Yu Lin wrote:
->>> On Tue, Jan 28, 2025 at 11:22 PM Pierre-Louis Bossart
->>> <pierre-louis.bossart@linux.dev> wrote:
->>>>
->>>> I am not following, sorry.
->>>>
->>>> Is the desired outcome to
->>>>
->>>> a) prevent the system from entering S3 if there is an active USB audio offloaded stream?
->>>>
->>>> or b) allow offloaded transactions even when the system is in S3?
->>>>
->>>>
->>>> which is it?
->>>>
->>>> a) would be rather interesting, but currently we don't have any such behavior supported. When the system enters S3 all audio stops. The stream will resume when the system goes back to S0. Do we really want the battery to drain in S3?
->>>>
->>>> b) seems rather complicated, once the on-going DMA transfers complete then who's going to refill buffers for the USB offloaded streams? Allowing the lowest level to operate even in S3 is only a small part of the puzzle, someone's got to provide data at some point. Unless the data is generated also by a side DSP having access to mass storage or wireless interfaces?
->>>
->>> Thanks for the question, the intent of our proposal should be (b), to
->>> allow offloaded transactions even when the system is in S3.
->>> In our design, the DSP wakes the system before the buffers are fully
->>> drained. This patchset enables the USB controller for offloaded
->>> transfers during system suspend (S3). To be precise, this patchset
->>> focuses solely on enabling the USB controller in S3 and does not
->>> include other necessary components for continuous offloaded USB
->>> transfers. I'll revise the commit message/cover letter to reflect
->>> this.Thanks for highlighting the potential ambiguity.
->>
->> Thanks for the precision.
->>
->> It was my understanding that anything above S1 could incur a hardware/software latency of two seconds or more to go back to S0. That would imply a buffering scheme that's significantly larger than usual offloaded solutions. In "typical" offload implementations it's rare to go beyond 100s of ms, since at some point you run into user-experience issues when applying volume changes or when changing tracks. It's usually a no-go if the user has to wait for a perceivable amount of time while the buffers drain.
->>
->> Not to mention that quite a few platforms no longer support S3, since 'Modern Standby' aka "S0 Low Power Idle" or 's2idle' was introduced in the Windows 10 days S3 became largely a legacy feature gradually dropped since no one really uses it.
-> 
-> I think for mobile devices, the S3 state is still used since the
-> hardware/software latency wouldn't be as big as you described, so
-> mobile devices could still use S3 for power saving. How about using a
-> "knob" to isolate the feature to specific devices? "Knob" could be
-> dynamically switched by some functions, or we could statically
-> determine it as a dts attribute or build config. Will a "knob" address
-> your concern for this feature? Do you have a preference on the "knob"
-> design?
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219562
 
-My recollection of mobile devices is that they only relied on S0 platform substates, e.g. S0i1, S0i2, so that the device was always 'active' from a pm_runtime perspective. I have never seen a case where the device was 'active' in S3, I don't think this can work with the current system/pm_runtime power management, can it?
-In other words, audio streaming was supported in S0/D0, S0ix/D0ix but S3/D0ix was not a supported configuration.
+Todd Brandt (todd.e.brandt@intel.com) changed:
 
-That said, if you managed to make this work, at the very least this should be a device-specific property, not an unconditional blanket enablement of a capability that raises quite a few questions.
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |CODE_FIX
 
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
