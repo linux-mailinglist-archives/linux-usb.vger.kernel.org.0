@@ -1,110 +1,129 @@
-Return-Path: <linux-usb+bounces-20315-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20316-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB37DA2BF78
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 10:36:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAF20A2BFC9
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 10:46:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E87DE3A9B9B
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 09:36:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DD305188C67A
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 09:46:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D42B236A69;
-	Fri,  7 Feb 2025 09:35:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 477551DE4D9;
+	Fri,  7 Feb 2025 09:45:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NME9/MnE"
+	dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b="JZcB592A"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from codeconstruct.com.au (pi.codeconstruct.com.au [203.29.241.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A29E236451;
-	Fri,  7 Feb 2025 09:35:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326D51A2381;
+	Fri,  7 Feb 2025 09:45:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.241.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738920920; cv=none; b=WrHWmZl+4pCq4+mQW1tcA3Uk6+koXs15bKq92jHgEDgByShuqS2iOn4fqb5l05rbm/oTR3DYwZbe7Kx4ltS4nP5b35MykUUACdERWXTL3VldhZyKnil5rTfUGbVqqgko/V5qwVXNusCWOw8sE1Mmq+mCkR4z5aULYmtFuvCxw50=
+	t=1738921537; cv=none; b=YEuaugoTddQc+KfNXFKfZjLwcEoph56KYOImLiK10KYxXipFhxzK3aslX+KcPKpUBr8yiElrMT4JvFHnDukm9pHGykW7HCNfbgZBAmom9mqaU76rUg1l4xanP6qwv45/snIdtJeGTPsYR67SalV9f2/3VjtZlofYF0PEJQg6ihg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738920920; c=relaxed/simple;
-	bh=BQ6G7rgyFz/R8XkAhMbxsguKvT3vIKNZNcMTlSTb8AY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dnn5MAGEydDekQAegtg4kCBZ7Ue2K9jqTzlJKk8tPcIofiTiKVtJyzTQ3ns3aLvqljKE5GOCpkD0MzAEyBckoaPhyy00kn6BNgjxa+ymCUjEIZS5R5WroaF9YSBNb/fwIfotWMzKkX8pknB83NG1SfPbap0BONIsTDCPVSCbm5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NME9/MnE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DD2C4CEE4;
-	Fri,  7 Feb 2025 09:35:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738920919;
-	bh=BQ6G7rgyFz/R8XkAhMbxsguKvT3vIKNZNcMTlSTb8AY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NME9/MnETm0FjT0XwSS1TNU9xgUJmlkdQhA6Rht+p/8zPbA14eEVsFClb4a2/rYoQ
-	 dUMn8vDgckAIZmS5BJMNrDjQfQHZrqiaQr7cUZlAnBNYgV6+uKoc06No62rhuh6HxP
-	 Xhi0feJUq7fmJmoGxZOFr24ys+m4Lm9OgqR2PRrM=
-Date: Fri, 7 Feb 2025 10:35:16 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jillian Donahue <jilliandonahue58@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH] f_midi_complete to call tasklet_hi_schedule
-Message-ID: <2025020708-manned-antidote-7d57@gregkh>
-References: <CAArt=Lib_PiR1z07hb1E3tqq-PG=KVKU9CZP3cPsQE5ciokLVw@mail.gmail.com>
+	s=arc-20240116; t=1738921537; c=relaxed/simple;
+	bh=CTwk6nntsSZIH6A8kRAxGiAdM03yqBNLI0Py6Ec3eRA=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=IOaC6A1jdW07ialGdVqufj7COuwlCi3DPFyhag0MrbOsFqbM9kXYOV37qe00eupM+NaNnBn/A+ujNzt9qtXllArC5aLx9UUrVnuiroqpTciSzqMP0xVyZreG2Bybf4TNM0W3BRJ+bksJKhJN4GV6yP2qh/CwxZDI1reBFQuY68s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au; spf=pass smtp.mailfrom=codeconstruct.com.au; dkim=pass (2048-bit key) header.d=codeconstruct.com.au header.i=@codeconstruct.com.au header.b=JZcB592A; arc=none smtp.client-ip=203.29.241.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=codeconstruct.com.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeconstruct.com.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=codeconstruct.com.au; s=2022a; t=1738921533;
+	bh=CTwk6nntsSZIH6A8kRAxGiAdM03yqBNLI0Py6Ec3eRA=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=JZcB592AowtHybokzGIu07IS/6avCuYTHcI9vUAR7dQ9ozaTdkxV1E80XckSiWHct
+	 Js1oqq9MlH7QrrM5svHcBH8G0qKC1bQs9liXdnFHwDGcmo6mdH7PukuyKc9XdkEeLe
+	 VtIkWL+U7y3l6v2BnVyLK+y8I2lkae5hB5/xYxcAZCUUpphs2o0xmO7eeAtFUko37f
+	 fraMxHIfdDunKS7dZKlfFhqPEhkT6wcI79S+6OoMk7WfRGKt0ccmfokSF1PEBsWJbB
+	 xoVCi0ai8fOua5EQJbieqVj9wo+AhVnGEbPfNGLE3aW4toTm6/rVt+9TZ9EjTxj4Wa
+	 pzu6FmruKfhYA==
+Received: from pecola.lan (unknown [159.196.93.152])
+	by mail.codeconstruct.com.au (Postfix) with ESMTPSA id 545B573446;
+	Fri,  7 Feb 2025 17:45:33 +0800 (AWST)
+Message-ID: <f670c97228b7ae8ac1efd426f83438825e800625.camel@codeconstruct.com.au>
+Subject: Re: [PATCH net-next 2/2] net: mctp: Add MCTP USB transport driver
+From: Jeremy Kerr <jk@codeconstruct.com.au>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Matt Johnston <matt@codeconstruct.com.au>, Andrew Lunn
+ <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+ linux-usb@vger.kernel.org,  Santosh Puranik <spuranik@nvidia.com>
+Date: Fri, 07 Feb 2025 17:45:33 +0800
+In-Reply-To: <2025020716-dandruff-slacked-f6b1@gregkh>
+References: <20250206-dev-mctp-usb-v1-0-81453fe26a61@codeconstruct.com.au>
+	 <20250206-dev-mctp-usb-v1-2-81453fe26a61@codeconstruct.com.au>
+	 <2025020657-unsubtly-imbecile-faf4@gregkh>
+	 <912d59eb611448ed9da16ef82b79f77d6fa0c654.camel@codeconstruct.com.au>
+	 <2025020716-dandruff-slacked-f6b1@gregkh>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAArt=Lib_PiR1z07hb1E3tqq-PG=KVKU9CZP3cPsQE5ciokLVw@mail.gmail.com>
 
-On Thu, Feb 06, 2025 at 12:32:14PM -0700, Jillian Donahue wrote:
-> >From 9cb2628740d9f55f6f3faa5cce2de5eb8590f434 Mon Sep 17 00:00:00 2001
-> From: Jill Donahue <jilliandonahue58@gmail.com>
-> Date: Thu, 6 Feb 2025 10:18:05 -0700
-> Subject: [PATCH] f_midi_complete to call tasklet_hi_schedule
+Hi Greg,
 
-This all shouldn't be in the body of the email, please do not use web
-email clients.  The kernel documentation should show you how to use git
-send-email or other tools.
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0dev_err(&mctp_usb->usbdev->dev, "%s: urb status: %d=
+\n",
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0__f=
+unc__, status);
+> > >=20
+> > > This could flood the logs, are you sure you need it at dev_err()
+> > > level?
+> > >=20
+> > > And __func__ is redundant, it's present in dev_*() calls already.
+> >=20
+> > am I missing something then?
+> >=20
+> > =C2=A0=C2=A0 [=C2=A0 146.130170] usb 2-1: short packet (hdr) 6
+> >=20
+> > emitted from:
+> >=20
+> > =C2=A0=C2=A0=C2=A0 dev_dbg(&mctp_usb->usbdev->dev,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 "sho=
+rt packet (hdr) %d\n",
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 hdr-=
+>len);
+> >=20
+> > Seems like we get the driver name, but not the function.
+> >=20
+> > I'm happy to remove the __func__ output either way, but I will also
+> > make the logs a little more descriptive for context, if we don't have
+> > func data.
+>=20
+> Please read Documentation/admin-guide/dynamic-debug-howto.rst, it shows
+> how to get the function information from the dev_dbg() lines at runtime.
+>=20
+> In short:
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$ alias ddcmd=3D'echo $* =
+> /proc/dynamic_debug/control'
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0# add function to all ena=
+bled messages
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0$ ddcmd '+f'
 
-> 
-> When using USB MIDI, a lock is attempted to be acquired twice through a
-> re-entrant call to f_midi_transmit, causing a deadlock.
-> 
-> Fix it by using tasklet_hi_schedule() to schedule the inner
-> f_midi_transmit() via a tasklet from the completion handler.
-> 
-> Link: https://lore.kernel.org/all/CAArt=LjxU0fUZOj06X+5tkeGT+6RbXzpWg1h4t4Fwa_KGVAX6g@mail.gmail.com/
-> 
-> Fixes: d5daf49b58661 ("USB: gadget: midi: add midi function driver")
+Your original comment was on the dev_err() call though (sorry, I've
+complicated the discussion by using a dev_dbg() example).
 
-No Cc: stable?
+Looks like only dev_dbg (and not _err/_warn/etc) has provision for
+__func__, is that right?
 
-No blank line between Link: and Fixes: please
+I've since removed the __func__ references anyway, and replaced with
+better context on the messages, but keen to make sure I have the correct
+understanding in general.
 
-> Signed-off-by: Jill Donahue <jilliandonahue58@gmail.com>
-> ---
->  drivers/usb/gadget/function/f_midi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+Cheers,
 
-And this is a v2 patch, right?
 
-> 
-> diff --git a/drivers/usb/gadget/function/f_midi.c
-> b/drivers/usb/gadget/function/f_midi.c
-> index 837fcdfa3..37d438e5d 100644
-> --- a/drivers/usb/gadget/function/f_midi.c
-> +++ b/drivers/usb/gadget/function/f_midi.c
-> @@ -283,7 +283,7 @@ f_midi_complete(struct usb_ep *ep, struct usb_request *req)
->                         /* Our transmit completed. See if there's more to go.
->                          * f_midi_transmit eats req, don't queue it again. */
->                         req->length = 0;
-> -                       f_midi_transmit(midi);
-> +                       tasklet_hi_schedule(&midi->tasklet);
->                         return;
->                 }
-
-Your whitespace is all damaged and this can't be applied :(
-
-thanks,
-
-greg k-h
+Jeremy
 
