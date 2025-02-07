@@ -1,202 +1,146 @@
-Return-Path: <linux-usb+bounces-20326-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20327-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71631A2C6FE
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 16:27:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24565A2C7EA
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 16:53:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CF16316C228
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 15:26:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C178B16D023
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 15:52:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765301EB1AE;
-	Fri,  7 Feb 2025 15:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CwqRvmfq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D770023C8CE;
+	Fri,  7 Feb 2025 15:51:55 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD46CA6B;
-	Fri,  7 Feb 2025 15:26:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25D523C8C8
+	for <linux-usb@vger.kernel.org>; Fri,  7 Feb 2025 15:51:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738942004; cv=none; b=No/hTbd2wEDsP07qRifqL8W/ssCKL8a/wmaEzZtQtR/Vu1OMHXMgPDAeTPKjELZJstLlhOpRz0Fn8C0IaJuUxKl7wbj68FN0oQHCvap9aLQEbNqInIkQ3kEn69RT1jnuvGN93EPGZzzZ5/dcMWpponkxazvori3OBJhxliQ2uvI=
+	t=1738943515; cv=none; b=FyOpp0dmlMunu81Geo4VMQbgZcv1YaZBh9cMND5XgpRjUK78iDkr7rB4mYa2XPA4nc6xsO1kFYJtJijZERtiP7yePptZl4UFaL1Cz9j2dkfkkVLzl5kcVd0mJ6acc1mGkvY7vqXpV+1nOw6orIHAV5Fb07dRd18YF8Dud1w5A/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738942004; c=relaxed/simple;
-	bh=flaTnYwyC44wXsEHNFNLtBOFU+9/hz9ABJTDV9HpMsY=;
+	s=arc-20240116; t=1738943515; c=relaxed/simple;
+	bh=FYBzQWrbc5BZbG36FmSxvb/yRkK3m4dSs/j7WyRK1LM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CdIgkwm/98pj+KUZTZwGJfUh/MpnpmDI6I5AJhZhNmLlhMQIEeT+ZeIVMzUXkBj61j0B0mxkBx5AhklQdpZs1Plxs9GAmrN/IRVp+sCtcZSRba6pz5rViIM9GwvLDVeZYwwDRJb83OljjZgWmsR189jlDUgjyR2vXaK830VrUo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CwqRvmfq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2CE14C4CEDF;
-	Fri,  7 Feb 2025 15:26:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738942003;
-	bh=flaTnYwyC44wXsEHNFNLtBOFU+9/hz9ABJTDV9HpMsY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CwqRvmfqucMrTXmmA/vvtCTgRVPlQvChsM4grllZTt2Bm+xfLlM14ISiXMwnvxJs9
-	 UZdSllLMDjI8kUgtklXzGrEtdst/7FK1Luj04EeZ6V42Cp4/C9ZuE3MoXqkRcp5wUD
-	 rtVP/OLnxzuA/zfhlPTB4+COPJZK+LkNXMkbZpDHaITT6NeJYhdaYAxj94JVzgh3bq
-	 gW/HZvHd6HxjTfVDwZg5bDrOSAwM//ni0Bj+M1P+MsZgpMqVeKuobcof2HNWlvdGDw
-	 jtAi5rkwOON/t8s5achVqBhg8LhGvGA1tn/QUDShIYjRWtHbKIBOjAQzX8L4IkXxN8
-	 NmL2GMG18YnxA==
-Date: Fri, 7 Feb 2025 15:26:39 +0000
-From: Simon Horman <horms@kernel.org>
-To: Jeremy Kerr <jk@codeconstruct.com.au>
-Cc: Matt Johnston <matt@codeconstruct.com.au>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-	Santosh Puranik <spuranik@nvidia.com>
-Subject: Re: [PATCH net-next 2/2] net: mctp: Add MCTP USB transport driver
-Message-ID: <20250207152639.GZ554665@kernel.org>
-References: <20250206-dev-mctp-usb-v1-0-81453fe26a61@codeconstruct.com.au>
- <20250206-dev-mctp-usb-v1-2-81453fe26a61@codeconstruct.com.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=WpJL3qqL0iamzM712FyLZLabEryMbOIEBMktXBSjvAWqgegvpE3w/B4VdsZAEq0STM6WYcTpwKFf/2LxYtVtu0/MeMESilVbcfOeHyFPDI6232+PstgPQKcA6HT0BBoMqfyd9qpXUclDWFbQuEAr631/VFAU5RrwmdDQLy20o4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tgQdX-00035S-1R; Fri, 07 Feb 2025 16:51:23 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tgQdU-003zzi-0y;
+	Fri, 07 Feb 2025 16:51:20 +0100
+Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id DAB1B3BC4F8;
+	Fri, 07 Feb 2025 15:51:19 +0000 (UTC)
+Date: Fri, 7 Feb 2025 16:51:19 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Cc: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org, 
+	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch, 
+	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
+	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250207-fair-active-robin-30025a-mkl@pengutronix.de>
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com>
+ <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+ <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="76ydemzthxfsfgeu"
 Content-Disposition: inline
-In-Reply-To: <20250206-dev-mctp-usb-v1-2-81453fe26a61@codeconstruct.com.au>
+In-Reply-To: <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Thu, Feb 06, 2025 at 02:48:24PM +0800, Jeremy Kerr wrote:
-> Add an implementation for DMTF DSP0283, which defines a MCTP-over-USB
-> transport. As per that spec, we're restricted to full speed mode,
-> requiring 512-byte transfers.
-> 
-> Each MCTP-over-USB interface is a peer-to-peer link to a single MCTP
-> endpoint, so no physical addressing is required (of course, that MCTP
-> endpoint may then bridge to further MCTP endpoints). Consequently,
-> interfaces will report with no lladdr data:
-> 
->     # mctp link
->     dev lo index 1 address 00:00:00:00:00:00 net 1 mtu 65536 up
->     dev mctpusb0 index 6 address none net 1 mtu 68 up
-> 
-> This is a simple initial implementation, with single rx & tx urbs, and
-> no multi-packet tx transfers - although we do accept multi-packet rx
-> from the device.
-> 
-> Includes suggested fixes from Santosh Puranik <spuranik@nvidia.com>.
-> 
-> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-> Cc: Santosh Puranik <spuranik@nvidia.com>
 
-...
+--76ydemzthxfsfgeu
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-> diff --git a/drivers/net/mctp/mctp-usb.c b/drivers/net/mctp/mctp-usb.c
+On 08.02.2025 00:00:43, Vincent Mailhol wrote:
+> On 07/02/2025 at 21:15, Marc Kleine-Budde wrote:
+> > On 07.02.2025 15:44:59, Ming Yu wrote:
+>=20
+> (...)
+>=20
+> >> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
+> >> +					  struct net_device *ndev)
+> >> +{
+> >> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> >> +
+> >> +	if (can_dev_dropped_skb(ndev, skb))
+> >> +		return NETDEV_TX_OK;
+> >> +
+> >> +	netif_stop_queue(ndev);
+> >> +	can_put_echo_skb(skb, ndev, 0, 0);
+> >> +	queue_work(priv->wq, &priv->tx_work);
+>=20
+> What is the reason to use a work queue here? xmit() is not a hard IRQ.
+> Also, the other USB CAN devices just directly send the USB message in
+> their xmit() without the need to rely on such worker.
+>=20
+> Sorry if this was discussed in the past, I can not remember if this
+> question has already been raised.
 
-...
+AFAICS xmit uses nct6694_write_msg(), which uses several usb_bulk_msg(),
+that can only be used from task context.
 
-> +static void mctp_usb_in_complete(struct urb *urb)
-> +{
-> +	struct sk_buff *skb = urb->context;
-> +	struct net_device *netdev = skb->dev;
-> +	struct pcpu_dstats *dstats = this_cpu_ptr(netdev->dstats);
-> +	struct mctp_usb *mctp_usb = netdev_priv(netdev);
-> +	struct mctp_skb_cb *cb;
-> +	unsigned int len;
-> +	int status;
-> +
-> +	status = urb->status;
-> +
-> +	switch (status) {
-> +	case -ENOENT:
-> +	case -ECONNRESET:
-> +	case -ESHUTDOWN:
-> +	case -EPROTO:
-> +		kfree_skb(skb);
-> +		return;
-> +	case 0:
-> +		break;
-> +	default:
-> +		dev_err(&mctp_usb->usbdev->dev, "%s: urb status: %d\n",
-> +			__func__, status);
-> +		kfree_skb(skb);
-> +		return;
-> +	}
-> +
-> +	len = urb->actual_length;
-> +	__skb_put(skb, len);
-> +
-> +	while (skb) {
-> +		struct sk_buff *skb2 = NULL;
-> +		struct mctp_usb_hdr *hdr;
-> +		u8 pkt_len; /* length of MCTP packet, no USB header */
-> +
-> +		hdr = skb_pull_data(skb, sizeof(*hdr));
-> +		if (!hdr)
-> +			break;
-> +
-> +		if (be16_to_cpu(hdr->id) != MCTP_USB_DMTF_ID) {
-> +			dev_dbg(&mctp_usb->usbdev->dev, "%s: invalid id %04x\n",
-> +				__func__, be16_to_cpu(hdr->id));
-> +			break;
-> +		}
-> +
-> +		if (hdr->len <
-> +		    sizeof(struct mctp_hdr) + sizeof(struct mctp_usb_hdr)) {
-> +			dev_dbg(&mctp_usb->usbdev->dev,
-> +				"%s: short packet (hdr) %d\n",
-> +				__func__, hdr->len);
-> +			break;
-> +		}
-> +
-> +		/* we know we have at least sizeof(struct mctp_usb_hdr) here */
-> +		pkt_len = hdr->len - sizeof(struct mctp_usb_hdr);
-> +		if (pkt_len > skb->len) {
-> +			dev_dbg(&mctp_usb->usbdev->dev,
-> +				"%s: short packet (xfer) %d, actual %d\n",
-> +				__func__, hdr->len, skb->len);
-> +			break;
-> +		}
-> +
-> +		if (pkt_len < skb->len) {
-> +			/* more packets may follow - clone to a new
-> +			 * skb to use on the next iteration
-> +			 */
-> +			skb2 = skb_clone(skb, GFP_ATOMIC);
-> +			if (skb2) {
-> +				if (!skb_pull(skb2, pkt_len)) {
-> +					kfree_skb(skb2);
-> +					skb2 = NULL;
-> +				}
-> +			}
-> +			skb_trim(skb, pkt_len);
-> +		}
-> +
-> +		skb->protocol = htons(ETH_P_MCTP);
-> +		skb_reset_network_header(skb);
-> +		cb = __mctp_cb(skb);
-> +		cb->halen = 0;
-> +		netif_rx(skb);
+You can build a chain of usb_fill_bulk_urb(), usb_submit_urb(),
+callbacks instead, but that's hard to read compared to blocking
+usb_bulk_msg()s.
 
-Hi Jeremy,
+Marc
 
-skb is dereferenced a few lines further down,
-but I don't think it is is safe to do so after calling netif_rx().
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-> +
-> +		u64_stats_update_begin(&dstats->syncp);
-> +		u64_stats_inc(&dstats->rx_packets);
-> +		u64_stats_add(&dstats->rx_bytes, skb->len);
-> +		u64_stats_update_end(&dstats->syncp);
-> +
-> +		skb = skb2;
-> +	}
-> +
-> +	if (skb)
-> +		kfree_skb(skb);
-> +
-> +	mctp_usb_rx_queue(mctp_usb);
-> +}
+--76ydemzthxfsfgeu
+Content-Type: application/pgp-signature; name="signature.asc"
 
-...
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmemK/QACgkQDHRl3/mQ
+kZwmeQf+K8g+Oy8vCIUI/Kice58VwDSu6EFa30wRLM0oqjCgE4LqXapNiSB1F8iJ
+sDm2IyQER6qNYSLqzeZWG/bMyJwfHNpKjfXN3RImtyTXuN4nlvraaQabsV1bEY3y
+rNGHojpZqxDXCb3Q9B5GLjNhdZldM4T+Xrs8gG+7Zv4jBxjNxn8J7Xz+1BpX3UqZ
+ql8gENFEAe9nb6O5ODNVcGTnU+SzGWvy1VsEz23VcvXWEKbyyObvG+e0yUoYEi4y
+s2MbMh1xxkTliIXn7GvqIdMj6/RSPo7xLoShAalHzurN1mey2u5PZfQapk718BEx
+Wj/o/s1vTiX+qqRfcgpDz3UvoRZEtQ==
+=0uK9
+-----END PGP SIGNATURE-----
+
+--76ydemzthxfsfgeu--
 
