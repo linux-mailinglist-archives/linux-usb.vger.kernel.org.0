@@ -1,162 +1,135 @@
-Return-Path: <linux-usb+bounces-20318-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20319-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id D6B2DA2C101
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 11:54:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B3199A2C122
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 12:01:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B230D7A2791
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 10:53:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2E0B188D024
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 11:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 713EB1DE89A;
-	Fri,  7 Feb 2025 10:54:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812321A76AE;
+	Fri,  7 Feb 2025 11:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kzvMGjJS"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="fTB31bCB"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 280811DE4CD
-	for <linux-usb@vger.kernel.org>; Fri,  7 Feb 2025 10:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFF718FDD5
+	for <linux-usb@vger.kernel.org>; Fri,  7 Feb 2025 11:00:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738925660; cv=none; b=pU7naQVfkbYxtiznXbBten3FK5GMr4C3qXzCxmMq3Y6KTsXj1cP6X4/M7RXt0ahyF2wdBx4fNb/R0F+54CSqxF7mGGV4c7aPhnpPwsQfuwVntYunIEQbrOmKCngIyRQpIDFaOcz1LOxTiCAt5U02rvXRk1w5TNglg8WvdYmaxRc=
+	t=1738926050; cv=none; b=duOAR1bqvDn2SlOrtsZZiJtzZyAR2DaW6jRKD4e5LZyTfAjwrGDEfTVDYSQnsomUn6j7deqM640X4vssFdMGd7lFkcSE2EYBHVswRqxqwa740ao3hj+Mv4n3Tn3WxjIyiRx/+rEYTRRO13Gsve05pAkPPuEdJGPut4GhIWNh3H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738925660; c=relaxed/simple;
-	bh=dSflpRyFbrTCZVi6NediRQrPo4kuZnPLOGm2z/uaHaI=;
+	s=arc-20240116; t=1738926050; c=relaxed/simple;
+	bh=ElkCd0VSmZ1y7aJo1xSkdXaYuOZ//Q71DJVBY+TzsMI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NDq6DD9wYvko5gdA5M+U9nLfGJkDiCCaR6tkZCl3N7BoI/guERAnf+8QGc1ZYptsJ15tORwldhE6NYGjFzEIWhoffovaZwTjx0hwimiZ1QNbIvfd6dsH+W9RvGbkgyTsPVMFK45Pw6XCmooW0DIlAUC9DRqFAVvYdGvstFU3hU0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kzvMGjJS; arc=none smtp.client-ip=209.85.208.54
+	 To:Cc:Content-Type; b=dyrckIyoHZyn8ihElC/Fod0gSKBPxHPOTsY1EWp/lPjxvwAGaCsU7tFr+Zsbb5m0ppaUPDp6t97ibwj4/RSFjD35iInNlJjdSrCefqRF1EfErH8sTP0BSEtRYvXprR2jWzPwqCiuiT34V1SDu1fIxBiU9qBnuAls06NBSSRDkoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=fTB31bCB; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5dcd33d9d9dso8303a12.0
-        for <linux-usb@vger.kernel.org>; Fri, 07 Feb 2025 02:54:17 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5dcd33d9d9dso8359a12.0
+        for <linux-usb@vger.kernel.org>; Fri, 07 Feb 2025 03:00:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738925656; x=1739530456; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1738926047; x=1739530847; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=dSflpRyFbrTCZVi6NediRQrPo4kuZnPLOGm2z/uaHaI=;
-        b=kzvMGjJSnUIqR/UCh2PbiPgU97eZO2gcUYO5oJBNJVWF30FVs9FComzsK6KVeGPJyP
-         d7Lzl9da709MS1Qe3EDdkrxZY5zkGk/i/MsOnAbeNDt7wJ2cCnmE195pDf+5e15zWsUh
-         dw7BwnaSZS9aYqvzPrlgm1KrI3loSAgKFU1u3xheTLIDpp2+upRkzKvEuDF39PVIpi85
-         N2NEszzPAzGi1JfQya5TkVB5E/nHDpI78pOEpoYxJ2GCR9flUdLGkF6awAVIjI1Eeib+
-         T/P2u4hfxHc6YjDzQasIZ0sllYqzQBF2Aas6l4S5bpZ2Juz+/Gs16amkKfRQZGO1xsbf
-         7Ykw==
+        bh=PPNEh3d8SXd4UyVBzDYe+DWkKrqBsXALhs4HDck1znw=;
+        b=fTB31bCB6ffITFXBEVurhxs52loAUV9Zj237mXjdgHx7EOZQ1o3TFS1l5pIhwwymZC
+         HeHhLp72V1M48e+MJkL4qrZKoC3F/FK9pwW8y9/q6yp7MJgwEoKo2ejQjyH7T+6vfTsG
+         ltqCsT4vofRnwPEmxehKex/2/hMibuJfSWXD8IVpg5YtBrvzInQPZT+qX+K5pU4Yqe6c
+         +z1dAzClMLSzans7A/9AW3QWH93g2BdFju10bRXXJA2JujIi1L3REkZYrEYJYOoCwGX1
+         /Z7HJS0Ll+3cV8O6SyKPJ0lm8t6Hry2ksD5dJV0fqiMriy9LrKRVPRY/h+o0o8atFKYh
+         P3gA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738925656; x=1739530456;
+        d=1e100.net; s=20230601; t=1738926047; x=1739530847;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=dSflpRyFbrTCZVi6NediRQrPo4kuZnPLOGm2z/uaHaI=;
-        b=k8E5iGUX40LKbSCqK3ycEOiAZFmFISzDWwkP2QbYzuI/HZeoQmmxtHCoUGL14wSFCV
-         KsXloz26++Hjmi3iattyKvS3hsIo0fLi/SJkua4TzFWY0SLMwSEpAkPrh3jtIfgHf2Mq
-         ZFwkqNTDj0m1k/vPFWyiGji+25oCqTeOGA64HPJbVoA0QbCQ8WoP8B2NDE6kFwJPA3LB
-         E+9lVX+/R2Wi7QPfw2y8uV7zHz9SLpfS7X43eT0WBxU9DhVzcHjkO8m3MQgaDyvHLEOM
-         wAJw7aL46BJM1FszrDIkq3VjIi2j+4lsJBXMbEioG657zdDQTCqiDCEeArew1jPenPuf
-         8Bqw==
-X-Forwarded-Encrypted: i=1; AJvYcCViSItah+2fEhwEMbIOF27brHhI4PEj+vie3QZDIEQedyAgfT5pvJds42jT1JXa5AJSpS5xGJz/m0s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy4lEiaauqD10XKHc0OvkqTJIkIz0t3yI/mMox/y3IuZ1gYd/p6
-	R8OeeOZxX8A8A0ieyIFpYW0jF+C8JKC/YhWkyaP4SOEZrynfVD9Gp6L8E7HaWaCCEdWt7J9f3rR
-	yRDiBKQSngnAosOqD+SoYAYO8xivA2F8M/Oug
-X-Gm-Gg: ASbGncs6aGRnqOrCLfNB30URc7yllGMp+DiLwWVq7KFX56QnZ9dWnfuzuDEjEaVrw0M
-	R1oJ/Bk2nxNmx6jPjF/2Z+O5vUKEdkyxzvWRZNDS41Ol80Kzmp9E7dDDxelq8X7V6d18SEb/dFN
-	HjYjRI/F+2ZltO2gk0PzOhoOFe
-X-Google-Smtp-Source: AGHT+IHtlyXXzkvXmLUKCILij4rf4Kf6Xt30bOPrPbaEDL98V2QDPJq4D2CF12ijDlbmudrFmDB1UoNvTH8Vc+Diqvo=
-X-Received: by 2002:a50:ee16:0:b0:5dc:ccb4:cb11 with SMTP id
- 4fb4d7f45d1cf-5de46901c8dmr88336a12.4.1738925656242; Fri, 07 Feb 2025
- 02:54:16 -0800 (PST)
+        bh=PPNEh3d8SXd4UyVBzDYe+DWkKrqBsXALhs4HDck1znw=;
+        b=o/mKjsPK5n5SPFSkBB/f6iWdPoY9f5PNE9/N7VZ4wn4k5O/+MAaT1xKYyqIKoAp6Mj
+         KgVoD20oqGaSu5xJOqNqjbfbM4Dqc0LT6qQpoVWfaw9loaJmmsC+NWbPYyByWZ3KeyI1
+         GW1N/uDZfPw0cCKHQY/Kv6ZcnDlL7Yd+W0lUqHTJ333xHDRsCh4qj1LIVOv9Nob9QwqU
+         QmceyxGH//CPLPQxf09CzRDRqz7bdtM5RxhZVOJwgpK0VGq8f7IfpQNV/rHvns29q9Fi
+         H0v5AzsR6g5JCU1rbVWELXu/GoxaGCyda8hqmXW+4KdBwELXfp9bQlT87GXwHtWjoE56
+         Hr3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUipxowMXweeDjauoagkRFjX/oipVmQKjndDhOIRp/7TT58f970V1tb8uncgRJsivYrsUoVHWzt5eI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLX3OdUHC1ONQau1souBqzbe69rCdzrHabbHNoLHkQ7g+VV10x
+	nGK75QeX+JUS8b+4JPWr1FilVoc9G7HqqCv2sH68uZk4tEysjc3xmxvH1q8gaYQgB7xGTZrcKq4
+	tVVs9Re3/qoe+OjIDFeVZTa780CP2a/5Cm4FA
+X-Gm-Gg: ASbGncuS7dIT7iusjtCCDIc2C7lFKmg+KPOc9AaVT4ARGvagQQ/jsegsMm4woDlbBpK
+	D/o3IgHpGAHYWSu9ksTdgVlfjQqDo/ebJn21uucCLCkMZvT0QL7VYC86TgSG7XMSF8myRocirq9
+	BIfYLpvJST9cCHtJSkLePO9SO6
+X-Google-Smtp-Source: AGHT+IGKGJth5652Acd+gw45CCa0RFZ/zp8RtL4d3FGKWPR2wRFDG4a+498kMReRGmDCy02tEid8QT1Lvxxfgod8Vaw=
+X-Received: by 2002:a05:6402:299:b0:5dc:59ca:8f3b with SMTP id
+ 4fb4d7f45d1cf-5de47d9504fmr74611a12.3.1738926046475; Fri, 07 Feb 2025
+ 03:00:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250117145145.3093352-1-guanyulin@google.com>
- <943a7b09-8e77-4813-810a-18fea0e61482@linux.dev> <CAOuDEK3aip9SLCUPOzpVPwx-O4rmF-+sQrF4GJasGPBzV=qJdg@mail.gmail.com>
- <e5b1c3bf-4457-4859-92fc-785f7d6037fa@linux.dev> <CAOuDEK2u509kNjyL6qm27QgvtoCscRcsLixW=W8ABz2NF8A-tw@mail.gmail.com>
- <c8c699f7-bf9b-4e36-910e-c6f1c7092543@linux.dev>
-In-Reply-To: <c8c699f7-bf9b-4e36-910e-c6f1c7092543@linux.dev>
+References: <20250117145145.3093352-6-guanyulin@google.com> <20250206011324.4729b548@foxbook>
+In-Reply-To: <20250206011324.4729b548@foxbook>
 From: Guan-Yu Lin <guanyulin@google.com>
-Date: Fri, 7 Feb 2025 18:54:00 +0800
-X-Gm-Features: AWEUYZl-ygjTK0GFUqDaE7UIIfIr1rSe0TLqJUl1pqqByXhtdHXZ0WZRgydueGo
-Message-ID: <CAOuDEK1w9Xbik-VbXwSd1ZYUWx9EQ_TnvEdV3WX2L-8Wtuj5bw@mail.gmail.com>
-Subject: Re: [PATCH v9 0/5] Support system sleep with offloaded usb transfers
-To: Pierre-Louis Bossart <pierre-louis.bossart@linux.dev>
-Cc: gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com, 
-	mathias.nyman@intel.com, stern@rowland.harvard.edu, perex@perex.cz, 
-	tiwai@suse.com, sumit.garg@linaro.org, kekrby@gmail.com, oneukum@suse.com, 
-	ricardo@marliere.net, lijiayi@kylinos.cn, quic_jjohnson@quicinc.com, 
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-sound@vger.kernel.org
+Date: Fri, 7 Feb 2025 19:00:00 +0800
+X-Gm-Features: AWEUYZnVEvD7t_Dz9KkFhfaKqY6-yN5VtxdJYuumvbaB5-jEOXHVpXFPVyLQTDM
+Message-ID: <CAOuDEK2c-F8dEyR894c5=OVYTJiLX6y1e1vd1RKoxusNa5PFig@mail.gmail.com>
+Subject: Re: [PATCH v9 5/5] usb: host: enable USB offload during system sleep
+To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
+Cc: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, kekrby@gmail.com, 
+	lijiayi@kylinos.cn, linux-kernel@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-usb@vger.kernel.org, mathias.nyman@intel.com, oneukum@suse.com, 
+	perex@perex.cz, quic_jjohnson@quicinc.com, ricardo@marliere.net, 
+	stern@rowland.harvard.edu, sumit.garg@linaro.org, tiwai@suse.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 4, 2025 at 7:57=E2=80=AFAM Pierre-Louis Bossart
-<pierre-louis.bossart@linux.dev> wrote:
+On Thu, Feb 6, 2025 at 8:13=E2=80=AFAM Micha=C5=82 Pecio <michal.pecio@gmai=
+l.com> wrote:
 >
-> On 2/2/25 20:57, Guan-Yu Lin wrote:
-> > On Tue, Jan 28, 2025 at 11:22=E2=80=AFPM Pierre-Louis Bossart
-> > <pierre-louis.bossart@linux.dev> wrote:
-> >>
-> >> I am not following, sorry.
-> >>
-> >> Is the desired outcome to
-> >>
-> >> a) prevent the system from entering S3 if there is an active USB audio=
- offloaded stream?
-> >>
-> >> or b) allow offloaded transactions even when the system is in S3?
-> >>
-> >>
-> >> which is it?
-> >>
-> >> a) would be rather interesting, but currently we don't have any such b=
-ehavior supported. When the system enters S3 all audio stops. The stream wi=
-ll resume when the system goes back to S0. Do we really want the battery to=
- drain in S3?
-> >>
-> >> b) seems rather complicated, once the on-going DMA transfers complete =
-then who's going to refill buffers for the USB offloaded streams? Allowing =
-the lowest level to operate even in S3 is only a small part of the puzzle, =
-someone's got to provide data at some point. Unless the data is generated a=
-lso by a side DSP having access to mass storage or wireless interfaces?
-> >
-> > Thanks for the question, the intent of our proposal should be (b), to
-> > allow offloaded transactions even when the system is in S3.
-> > In our design, the DSP wakes the system before the buffers are fully
-> > drained. This patchset enables the USB controller for offloaded
-> > transfers during system suspend (S3). To be precise, this patchset
-> > focuses solely on enabling the USB controller in S3 and does not
-> > include other necessary components for continuous offloaded USB
-> > transfers. I'll revise the commit message/cover letter to reflect
-> > this.Thanks for highlighting the potential ambiguity.
+> Hi,
 >
-> Thanks for the precision.
+> > - not flushing the endpoints of actively offloaded USB devices. Given
+> >   that the USB devices is used by another entity, unilaterally flush
+> >   the endpoint might lead to unexpected behavior on another entity.
 >
-> It was my understanding that anything above S1 could incur a hardware/sof=
-tware latency of two seconds or more to go back to S0. That would imply a b=
-uffering scheme that's significantly larger than usual offloaded solutions.=
- In "typical" offload implementations it's rare to go beyond 100s of ms, si=
-nce at some point you run into user-experience issues when applying volume =
-changes or when changing tracks. It's usually a no-go if the user has to wa=
-it for a perceivable amount of time while the buffers drain.
+> This doesn't seem right, because flushing applies to URBs managed by
+> the kernel, so it should have no effect on offloaded endpoints.
 >
-> Not to mention that quite a few platforms no longer support S3, since 'Mo=
-dern Standby' aka "S0 Low Power Idle" or 's2idle' was introduced in the Win=
-dows 10 days S3 became largely a legacy feature gradually dropped since no =
-one really uses it.
+> As far as I understand from your earlier discussion with Alan Stern,
+> the real reason is that it disrupted operation of class drivers, in
+> particular causing kernel-managed interrupt endpoints not to be polled
+> during suspend and some events were being lost.
+>
+> Or maybe the real problem was that if the INT IN endpoint isn't being
+> polled, device events don't trigger xHCI IRQs that wake up the CPU?
+>
 
-I think for mobile devices, the S3 state is still used since the
-hardware/software latency wouldn't be as big as you described, so
-mobile devices could still use S3 for power saving. How about using a
-"knob" to isolate the feature to specific devices? "Knob" could be
-dynamically switched by some functions, or we could statically
-determine it as a dts attribute or build config. Will a "knob" address
-your concern for this feature? Do you have a preference on the "knob"
-design?
+The main reason is as you described above. Without polling the INT IN
+endpoint, some functions (e.g. hid, hub) failed during system suspend.
+
+>
+> And by the way, usb_hcd_flush_endpoint() doc states that no new URBs
+> may be submitted during this call. I wonder if this can be guaranteed
+> if the interface has not been suspended first? Perhaps this alone is
+> good reason not to flush.
+>
+> Regards,
+> Michal
+
+To my understanding if the interface creates another URB, then the
+interface might be able to submit it. Is there a reason to not
+flushing all endpoints on a USB device when we have offloaded transfer
+happening during system suspend? If there is, we'll identify what kinds
+of endpoints are influenced and not flush them independently.
+Otherwise, not flushing all of them might maintain a simpler code
+logic.
 
 Regards,
 Guan-Yu
