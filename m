@@ -1,72 +1,50 @@
-Return-Path: <linux-usb+bounces-20314-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20315-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2F80A2BF07
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 10:17:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB37DA2BF78
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 10:36:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E364316A7B0
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 09:17:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E87DE3A9B9B
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 09:36:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AC9A1DC99E;
-	Fri,  7 Feb 2025 09:16:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D42B236A69;
+	Fri,  7 Feb 2025 09:35:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="G06kY1ap"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NME9/MnE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85C8E1DC197;
-	Fri,  7 Feb 2025 09:16:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A29E236451;
+	Fri,  7 Feb 2025 09:35:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738919792; cv=none; b=SRFHlSqnsTrO7COfzq0s5iXfXzrmFq5XPcBrchq1PmvqfDuJBlfg9qxI0K7LI5UsjaeBB44n59M+bDbnfp4Tx9jymkn4U0aWJD6eqz8YDkAlQolcI+XeiYSx3QenWqlb/k+snER4xflttEb4sZrs2aq/gK7kT6CRXLDuDy0eqbU=
+	t=1738920920; cv=none; b=WrHWmZl+4pCq4+mQW1tcA3Uk6+koXs15bKq92jHgEDgByShuqS2iOn4fqb5l05rbm/oTR3DYwZbe7Kx4ltS4nP5b35MykUUACdERWXTL3VldhZyKnil5rTfUGbVqqgko/V5qwVXNusCWOw8sE1Mmq+mCkR4z5aULYmtFuvCxw50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738919792; c=relaxed/simple;
-	bh=O2y8q4c8A3OyDmP9Ta+QDXoJmcctrhH3Se0qUIZkcAA=;
+	s=arc-20240116; t=1738920920; c=relaxed/simple;
+	bh=BQ6G7rgyFz/R8XkAhMbxsguKvT3vIKNZNcMTlSTb8AY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hgMvItfHTIDBYW0jT8KUJ0J6PxwZHEudfDHVBFscnc6FOvk9QwHSUqYgE6+9HvG9yy+BeO3BNNj+vjUxJkdm4MtVS8cA7wR3T0RuIvYld5oUQQTrECSUTrmHWQ4NgAJBJx3XG4Aq0Q87mqNinYK2dYOa1bc8760IZBbYBXmHVEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=G06kY1ap; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C7DEC4CED1;
-	Fri,  7 Feb 2025 09:16:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dnn5MAGEydDekQAegtg4kCBZ7Ue2K9jqTzlJKk8tPcIofiTiKVtJyzTQ3ns3aLvqljKE5GOCpkD0MzAEyBckoaPhyy00kn6BNgjxa+ymCUjEIZS5R5WroaF9YSBNb/fwIfotWMzKkX8pknB83NG1SfPbap0BONIsTDCPVSCbm5M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NME9/MnE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14DD2C4CEE4;
+	Fri,  7 Feb 2025 09:35:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738919792;
-	bh=O2y8q4c8A3OyDmP9Ta+QDXoJmcctrhH3Se0qUIZkcAA=;
+	s=korg; t=1738920919;
+	bh=BQ6G7rgyFz/R8XkAhMbxsguKvT3vIKNZNcMTlSTb8AY=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G06kY1apGdLtO+MZA2A+LzA3C0VISup043MPcq89dtmhd9n/efKKvSCApfCtX8Yuj
-	 8JDN13xG12mViXME+G51ORJrZ649U6MnEl+o2wmwIIWqrIgD2Xy6JmnMe/b8zhhAx6
-	 PH8WG3ZHOUEc6zQL7CuBUXV2S4NbjtqSuJEQ8nus=
-Date: Fri, 7 Feb 2025 10:16:29 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Lyude Paul <lyude@redhat.com>
-Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Louis Chauvet <louis.chauvet@bootlin.com>,
-	Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 8/8] drm/vkms: convert to use faux_device
-Message-ID: <2025020716-research-renounce-85f6@gregkh>
-References: <2025020620-skedaddle-olympics-1735@gregkh>
- <2025020625-unlaced-vagueness-ae34@gregkh>
- <900399945f614a3ebc885f2d9628f773e65c97c2.camel@redhat.com>
+	b=NME9/MnETm0FjT0XwSS1TNU9xgUJmlkdQhA6Rht+p/8zPbA14eEVsFClb4a2/rYoQ
+	 dUMn8vDgckAIZmS5BJMNrDjQfQHZrqiaQr7cUZlAnBNYgV6+uKoc06No62rhuh6HxP
+	 Xhi0feJUq7fmJmoGxZOFr24ys+m4Lm9OgqR2PRrM=
+Date: Fri, 7 Feb 2025 10:35:16 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jillian Donahue <jilliandonahue58@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH] f_midi_complete to call tasklet_hi_schedule
+Message-ID: <2025020708-manned-antidote-7d57@gregkh>
+References: <CAArt=Lib_PiR1z07hb1E3tqq-PG=KVKU9CZP3cPsQE5ciokLVw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,139 +53,58 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <900399945f614a3ebc885f2d9628f773e65c97c2.camel@redhat.com>
+In-Reply-To: <CAArt=Lib_PiR1z07hb1E3tqq-PG=KVKU9CZP3cPsQE5ciokLVw@mail.gmail.com>
 
-On Thu, Feb 06, 2025 at 03:03:41PM -0500, Lyude Paul wrote:
-> Lol, I wrote up a patch for this last night but it looks like you got here
-> first :P
+On Thu, Feb 06, 2025 at 12:32:14PM -0700, Jillian Donahue wrote:
+> >From 9cb2628740d9f55f6f3faa5cce2de5eb8590f434 Mon Sep 17 00:00:00 2001
+> From: Jill Donahue <jilliandonahue58@gmail.com>
+> Date: Thu, 6 Feb 2025 10:18:05 -0700
+> Subject: [PATCH] f_midi_complete to call tasklet_hi_schedule
+
+This all shouldn't be in the body of the email, please do not use web
+email clients.  The kernel documentation should show you how to use git
+send-email or other tools.
+
 > 
-> On Thu, 2025-02-06 at 18:38 +0100, Greg Kroah-Hartman wrote:
-> > The vkms driver does not need to create a platform device, as there is
-> > no real platform resources associated it,  it only did so because it was
-> > simple to do that in order to get a device to use for resource
-> > management of drm resources.  Change the driver to use the faux device
-> > instead as this is NOT a real platform device.
-> > 
-> > Cc: Louis Chauvet <louis.chauvet@bootlin.com>
-> > Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
-> > Cc: Simona Vetter <simona@ffwll.ch>
-> > Cc: Melissa Wen <melissa.srw@gmail.com>
-> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> > Cc: Maxime Ripard <mripard@kernel.org>
-> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > Cc: David Airlie <airlied@gmail.com>
-> > Cc: dri-devel@lists.freedesktop.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  v3: new patch in the series.  For an example of the api working, does
-> >      not have to be merged at this time, but I can take it if the
-> >      maintainers give an ack.
-> >  drivers/gpu/drm/vkms/vkms_drv.c | 28 ++++++++++++++--------------
-> >  drivers/gpu/drm/vkms/vkms_drv.h |  4 ++--
-> >  2 files changed, 16 insertions(+), 16 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/vkms/vkms_drv.c b/drivers/gpu/drm/vkms/vkms_drv.c
-> > index e0409aba9349..b1269f984886 100644
-> > --- a/drivers/gpu/drm/vkms/vkms_drv.c
-> > +++ b/drivers/gpu/drm/vkms/vkms_drv.c
-> > @@ -10,7 +10,7 @@
-> >   */
-> >  
-> >  #include <linux/module.h>
-> > -#include <linux/platform_device.h>
-> > +#include <linux/device/faux.h>
-> >  #include <linux/dma-mapping.h>
-> >  
-> >  #include <drm/clients/drm_client_setup.h>
-> > @@ -177,25 +177,25 @@ static int vkms_modeset_init(struct vkms_device *vkmsdev)
-> >  static int vkms_create(struct vkms_config *config)
-> >  {
-> >  	int ret;
-> > -	struct platform_device *pdev;
-> > +	struct faux_device *fdev;
-> >  	struct vkms_device *vkms_device;
-> >  
-> > -	pdev = platform_device_register_simple(DRIVER_NAME, -1, NULL, 0);
-> > -	if (IS_ERR(pdev))
-> > -		return PTR_ERR(pdev);
-> > +	fdev = faux_device_create(DRIVER_NAME, NULL);
-> > +	if (!fdev)
-> > +		return -ENODEV;
-> >  
-> > -	if (!devres_open_group(&pdev->dev, NULL, GFP_KERNEL)) {
-> > +	if (!devres_open_group(&fdev->dev, NULL, GFP_KERNEL)) {
-> >  		ret = -ENOMEM;
-> >  		goto out_unregister;
-> >  	}
-> >  
-> > -	vkms_device = devm_drm_dev_alloc(&pdev->dev, &vkms_driver,
-> > +	vkms_device = devm_drm_dev_alloc(&fdev->dev, &vkms_driver,
-> >  					 struct vkms_device, drm);
-> >  	if (IS_ERR(vkms_device)) {
-> >  		ret = PTR_ERR(vkms_device);
-> >  		goto out_devres;
-> >  	}
-> > -	vkms_device->platform = pdev;
-> > +	vkms_device->faux_dev = fdev;
-> >  	vkms_device->config = config;
-> >  	config->dev = vkms_device;
-> >  
-> > @@ -229,9 +229,9 @@ static int vkms_create(struct vkms_config *config)
-> >  	return 0;
-> >  
-> >  out_devres:
-> > -	devres_release_group(&pdev->dev, NULL);
-> > +	devres_release_group(&fdev->dev, NULL);
-> >  out_unregister:
-> > -	platform_device_unregister(pdev);
-> > +	faux_device_destroy(fdev);
-> >  	return ret;
-> >  }
-> >  
-> > @@ -259,19 +259,19 @@ static int __init vkms_init(void)
-> >  
-> >  static void vkms_destroy(struct vkms_config *config)
-> >  {
-> > -	struct platform_device *pdev;
-> > +	struct faux_device *fdev;
-> >  
-> >  	if (!config->dev) {
-> >  		DRM_INFO("vkms_device is NULL.\n");
-> >  		return;
-> >  	}
-> >  
-> > -	pdev = config->dev->platform;
-> > +	fdev = config->dev->faux_dev;
-> >  
-> >  	drm_dev_unregister(&config->dev->drm);
-> >  	drm_atomic_helper_shutdown(&config->dev->drm);
-> > -	devres_release_group(&pdev->dev, NULL);
-> > -	platform_device_unregister(pdev);
-> > +	devres_release_group(&fdev->dev, NULL);
-> > +	faux_device_destroy(fdev);
-> >  
-> >  	config->dev = NULL;
-> >  }
-> > diff --git a/drivers/gpu/drm/vkms/vkms_drv.h b/drivers/gpu/drm/vkms/vkms_drv.h
-> > index 00541eff3d1b..4668b0e29a84 100644
-> > --- a/drivers/gpu/drm/vkms/vkms_drv.h
-> > +++ b/drivers/gpu/drm/vkms/vkms_drv.h
-> > @@ -209,13 +209,13 @@ struct vkms_config {
-> >   * struct vkms_device - Description of a VKMS device
-> >   *
-> >   * @drm - Base device in DRM
-> > - * @platform - Associated platform device
-> > + * @faux_dev- Associated faux device
+> When using USB MIDI, a lock is attempted to be acquired twice through a
+> re-entrant call to f_midi_transmit, causing a deadlock.
 > 
-> Small nitpick - you dropped the space on the - here by mistake
-
-Ick, good catch.
-
-> With that fixed:
+> Fix it by using tasklet_hi_schedule() to schedule the inner
+> f_midi_transmit() via a tasklet from the completion handler.
 > 
-> Reviewed-by: Lyude Paul <lyude@redhat.com>
+> Link: https://lore.kernel.org/all/CAArt=LjxU0fUZOj06X+5tkeGT+6RbXzpWg1h4t4Fwa_KGVAX6g@mail.gmail.com/
+> 
+> Fixes: d5daf49b58661 ("USB: gadget: midi: add midi function driver")
 
-Thanks for the review!
+No Cc: stable?
+
+No blank line between Link: and Fixes: please
+
+> Signed-off-by: Jill Donahue <jilliandonahue58@gmail.com>
+> ---
+>  drivers/usb/gadget/function/f_midi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+
+And this is a v2 patch, right?
+
+> 
+> diff --git a/drivers/usb/gadget/function/f_midi.c
+> b/drivers/usb/gadget/function/f_midi.c
+> index 837fcdfa3..37d438e5d 100644
+> --- a/drivers/usb/gadget/function/f_midi.c
+> +++ b/drivers/usb/gadget/function/f_midi.c
+> @@ -283,7 +283,7 @@ f_midi_complete(struct usb_ep *ep, struct usb_request *req)
+>                         /* Our transmit completed. See if there's more to go.
+>                          * f_midi_transmit eats req, don't queue it again. */
+>                         req->length = 0;
+> -                       f_midi_transmit(midi);
+> +                       tasklet_hi_schedule(&midi->tasklet);
+>                         return;
+>                 }
+
+Your whitespace is all damaged and this can't be applied :(
+
+thanks,
 
 greg k-h
 
