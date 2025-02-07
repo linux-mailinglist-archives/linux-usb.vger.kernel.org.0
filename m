@@ -1,154 +1,207 @@
-Return-Path: <linux-usb+bounces-20292-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20293-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 37884A2B90F
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 03:25:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1714BA2B956
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 03:55:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C598E1616B1
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 02:25:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CB327A28C4
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 02:54:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 245FF155C8C;
-	Fri,  7 Feb 2025 02:25:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71AE6155345;
+	Fri,  7 Feb 2025 02:55:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mg81V0AF"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IhJMo2+0"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95E152940B;
-	Fri,  7 Feb 2025 02:25:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60C146AA7;
+	Fri,  7 Feb 2025 02:55:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738895133; cv=none; b=SMBotkaoiN8beUmxJ9j2VCP0jKWRqp/uRqLb9d9ULCN5h5WouGA7MGi2hA6+h90Pt+YQ8mHREOkHX/VPcSQbrR49AR2IpEoqjsL5uJwpTscM/ivpi8juGQtVR4/j/Kt3oYJDpxv01vvKT+gr/Zx+oC3WXTf3inFO0PbE5moCCys=
+	t=1738896916; cv=none; b=jKErdaS5d94+K7PYsK4N0aNI3ofUmc8ap3kVXtecax2WDoIJ46DpvjiaXtRQ6cUSAV+V+aTbJIckIuyL9fr9vrgk8lvxYXhDDz7O7AHOWAWBvRd8YiPCSBSDJCNitOHt0OQgiV/GFaXz2xAuFd6PJ8gvTkFW4zoBOTnO/0rqXjM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738895133; c=relaxed/simple;
-	bh=O19jyvsGHqWSGaKQKD2496HsMxSWIhf1biOH4whG3x0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q7VBuQ+3Ke+YY1POyo/bREjAjELbajQwRtxENOOFTaLEu+hdtr0KMM816a9mcnuhzByyBJJEWCvu8tOneY4NHOEP2kq6Fr0HcGHpJeDtO5M5CIV3sTsldqGIBw4dmSUjgAPKyyl4Ptp5+v1O7WVZV3eSQ/UGItPN9SGSbEdTnj8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mg81V0AF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 56F8BC4CEDD;
-	Fri,  7 Feb 2025 02:25:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738895133;
-	bh=O19jyvsGHqWSGaKQKD2496HsMxSWIhf1biOH4whG3x0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Mg81V0AFzNqlLXufz6dZLoe/3L46leDO3mLZO8/31BU39J0EjYvtJ8S5c4716uDTY
-	 d9ndYowId6BWt/WubqUhpYnQ7cTx8hLic47al6XjRHmJQNvF+Jcfgf+vRmvh5v4xZH
-	 9jYR0/pFYucasHTWIZw9JjMub7QIhDMyL6ZWxeKnkgjU/poBd+/7dH0ZmJlOu+4NIG
-	 F6MyqeYX1R9s48C9SEdNJ7gRz9U23lq14c3zsyTXf/OPe0QOoFGVTnpO63TZBWsOIq
-	 6GBvj8FcJleDnKC9V3BIwtdhpJcSBWhe0Rrl3KhDNr+rgA9LouS6qZ6Zq6CwK9yBX3
-	 gf1yyH1n7rX+g==
-Date: Fri, 7 Feb 2025 10:25:23 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc: pawell@cadence.com, rogerq@kernel.org, gregkh@linuxfoundation.org,
-	balbi@kernel.org, jun.li@nxp.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, srk@ti.com
-Subject: Re: [PATCH] usb: cdns3: exit cdns3_gadget_udc_start if
- FAST_REG_ACCESS cannot be set
-Message-ID: <20250207022523.GA22848@nchen-desktop>
-References: <20250206125943.786949-1-s-vadapalli@ti.com>
+	s=arc-20240116; t=1738896916; c=relaxed/simple;
+	bh=jTYxBKOjdaWKZhzMUu31ksejdQODNYTAtLBcDx+4/tU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=sAczn9NthkVj8tu4FnRLrzqMGjBQ2SasS3AqSwgD8eRhqSnFuLVb+fsuOifKteqXDUTE5b21O5aE9avd7J8q4vNFvgVh2HXwcL6xDiT73T5m+okrwP4THF/2C5XSclH6xKZ21NNpwlMq1XYg+dqlh/f6PQCQwUwmag2oNB7jypg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IhJMo2+0; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5171PU5m009392;
+	Fri, 7 Feb 2025 02:54:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	DT6q24hDlUwkGSH97IqJdPWETMBtLEuGKqkfKsbpEDU=; b=IhJMo2+0m1sxrgSa
+	ayjeknUiaHqsAWF4wJW2WyMjDkjwdwXfo30G5IDh8IopFj178oaRUiZCjwfgjIc2
+	+K24QirKrFu+JXN2w9ZjJpAekYamjEfIx/4o35g6bMHBi3elfXHxWFiQsWtc5ARI
+	IqAM6oyCxV9eh3FbhkmK1gaS7sadC6LWkKSUA8QxJ5mPUgrQQnSvCBx4sab+2llc
+	/DVOZZZON4esH8dwJ0XZRsBfCBSiTcw+Kel8lLxFF7fCFNjnSukwBJGnzLMoNyFs
+	Pvd8C+c360z4QWEL1XhHfqorMX+P0WGtXYKqh+/ZznU0MOixNZ2YQ5jOk1BMTtyM
+	oT5hjA==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44n1vs126a-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Feb 2025 02:54:45 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5172siaJ020788
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 7 Feb 2025 02:54:44 GMT
+Received: from [10.133.33.5] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 6 Feb 2025
+ 18:54:40 -0800
+Message-ID: <e9c3f622-0126-4cea-984c-29e77209ae30@quicinc.com>
+Date: Fri, 7 Feb 2025 10:54:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250206125943.786949-1-s-vadapalli@ti.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/8] driver core: add a faux bus for use when a simple
+ device/bus is needed
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>
+CC: Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Andy Shevchenko
+	<andriy.shevchenko@linux.intel.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Liam Girdwood
+	<lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+        Mark Brown
+	<broonie@kernel.org>,
+        =?UTF-8?Q?Ma=C3=ADra_Canal?= <mairacanal@riseup.net>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Simona Vetter <simona.vetter@ffwll.ch>, <linux-usb@vger.kernel.org>,
+        <rust-for-linux@vger.kernel.org>
+References: <2025020620-skedaddle-olympics-1735@gregkh>
+ <2025020623-chemo-amends-102a@gregkh>
+Content-Language: en-US
+From: Zijun Hu <quic_zijuhu@quicinc.com>
+In-Reply-To: <2025020623-chemo-amends-102a@gregkh>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 6UecibHba5myjDbItQxb_pf9gOoDQuh7
+X-Proofpoint-GUID: 6UecibHba5myjDbItQxb_pf9gOoDQuh7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-07_01,2025-02-05_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ spamscore=0 mlxlogscore=999 priorityscore=1501 mlxscore=0 suspectscore=0
+ malwarescore=0 impostorscore=0 phishscore=0 lowpriorityscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502070021
 
-On 25-02-06 18:29:36, Siddharth Vadapalli wrote:
-> When the device is in a low power state, access to the following
-> registers takes a long time:
-> - EP_CFG
-> - EP_TRADDR
-> - EP_CMD
-> - EP_SEL
-> - EP_STS
-> - USB_CONF
-> 
-> To address this, the fast register access feature can be enabled by
-> setting PUSB_PWR_FST_REG_ACCESS bit of the USB_PWR register, which
-> allows quick access by software. Software is expected to poll on
-> PUSB_PWR_FST_REG_ACCESS_STAT to ensure that fast register access has
-> been enabled by the controller. Attempting to access any of the
-> aforementioned registers after setting PUSB_PWR_FST_REG_ACCESS but
-> before PUSB_PWR_FST_REG_ACCESS_STAT has been set will result in
-> undefined behavior and potentially result in system hang.
-> 
-> Hence, poll on PUSB_PWR_FST_REG_ACCESS_STAT before proceeding with
-> gadget configuration, and exit if it cannot be enabled.
-> 
-> Fixes: b5148d946f45 ("usb: cdns3: gadget: set fast access bit")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> ---
-> 
-> Hello,
-> 
-> This patch is based on commit
-> 92514ef226f5 Merge tag 'for-6.14-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
-> of Mainline Linux.
-> 
-> Regards,
-> Siddharth.
-> 
->  drivers/usb/cdns3/cdns3-gadget.c | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> index fd1beb10bba7..b62691944272 100644
-> --- a/drivers/usb/cdns3/cdns3-gadget.c
-> +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> @@ -2971,8 +2971,6 @@ static void cdns3_gadget_config(struct cdns3_device *priv_dev)
->  	/* enable generic interrupt*/
->  	writel(USB_IEN_INIT, &regs->usb_ien);
->  	writel(USB_CONF_CLK2OFFDS | USB_CONF_L1DS, &regs->usb_conf);
-> -	/*  keep Fast Access bit */
-> -	writel(PUSB_PWR_FST_REG_ACCESS, &priv_dev->regs->usb_pwr);
->  
->  	cdns3_configure_dmult(priv_dev, NULL);
->  }
-> @@ -2990,6 +2988,8 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
->  	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
->  	unsigned long flags;
->  	enum usb_device_speed max_speed = driver->max_speed;
+On 2/7/2025 1:38 AM, Greg Kroah-Hartman wrote:
+> +#include "base.h"
+> +
+> +#define MAX_FAUX_NAME_SIZE	256	/* Max size of a faux_device name */
+
+Remove this macro?
+
+> ++ */
+
+<snip>
+
+> +struct faux_device *faux_device_create_with_groups(const char *name,
+> +						   const struct faux_device_ops *faux_ops,
+> +						   const struct attribute_group **groups)
+> +{
+> +	struct device *dev;
+> +	struct faux_object *faux_obj;
+> +	struct faux_device *faux_dev;
+> +	int name_size;
+
+Remove @name_size?
+
 > +	int ret;
-> +	u32 reg;
->  
->  	spin_lock_irqsave(&priv_dev->lock, flags);
->  	priv_dev->gadget_driver = driver;
-> @@ -2997,6 +2997,20 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
->  	/* limit speed if necessary */
->  	max_speed = min(driver->max_speed, gadget->max_speed);
->  
-> +	/*  keep Fast Access bit */
-> +	writel(PUSB_PWR_FST_REG_ACCESS, &priv_dev->regs->usb_pwr);
-> +	reg = readl(&priv_dev->regs->usb_pwr);
-> +	if (!(reg & PUSB_PWR_FST_REG_ACCESS_STAT)) {
-> +		ret = readl_poll_timeout_atomic(&priv_dev->regs->usb_pwr, reg,
-> +						(reg & PUSB_PWR_FST_REG_ACCESS_STAT),
-> +						10, 1000);
-> +		if (ret) {
-> +			dev_err(priv_dev->dev, "Failed to enable fast access\n");
-> +			spin_unlock_irqrestore(&priv_dev->lock, flags);
-> +			return ret;
-> +		}
+> +
+> +	name_size = strlen(name);
+> +	if (name_size > MAX_FAUX_NAME_SIZE)
+> +		return NULL;
+> +
+
+Remove above block related to @name_size
+
+> +	faux_obj = kzalloc(sizeof(*faux_obj) + name_size + 1, GFP_KERNEL);
+
+faux_obj = kzalloc(sizeof(*faux_obj), GFP_KERNEL);
+
+> +	if (!faux_obj)
+> +		return NULL;
+> +
+> +	/* Save off the callbacks so we can use them in the future */
+> +	faux_obj->faux_ops = faux_ops;
+> +
+> +	/* Initialize the device portion and register it with the driver core */
+> +	faux_dev = &faux_obj->faux_dev;
+> +	dev = &faux_dev->dev;
+> +
+> +	device_initialize(dev);
+> +	dev->release = faux_device_release;
+> +	dev->parent = &faux_bus_root;
+> +	dev->bus = &faux_bus_type;
+> +	dev->groups = groups;
+> +	dev_set_name(dev, "%s", name);
+> +
+> +	ret = device_add(dev);
+> +	if (ret) {
+> +		pr_err("%s: device_add for faux device '%s' failed with %d\n",
+> +		       __func__, name, ret);
+> +		put_device(dev);
+> +		return NULL;
 > +	}
 > +
->  	switch (max_speed) {
->  	case USB_SPEED_FULL:
->  		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
+> +	return faux_dev;
+> +}
+> +EXPORT_SYMBOL_GPL(faux_device_create_with_groups);
 
-Hi Siddharth,
+<snip>
 
-Would you please keep this change at cdns3_gadget_config in case the
-controller is power lost during the system suspend?
+> ++int __init faux_bus_init(void)
+> +{
+> +	int ret;
+> +
+> +	ret = device_register(&faux_bus_root);
+> +	if (ret) {
+> +		put_device(&faux_bus_root);
+> +		return ret;
+> +	}
+> +
+> +	ret = bus_register(&faux_bus_type);
+> +	if (ret)
+> +		goto error_bus;
+> +
+> +	ret = driver_register(&faux_driver);
+> +	if (ret)
+> +		goto error_driver;
+> +
+> +	return ret;
 
-Peter
+return 0;
+
+> +
+> +error_driver:
+> +	bus_unregister(&faux_bus_type);
+> +
+> +error_bus:
+> +	device_unregister(&faux_bus_root);
+> +	return ret;
+> +}
+
+<snip>
 
