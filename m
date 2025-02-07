@@ -1,212 +1,123 @@
-Return-Path: <linux-usb+bounces-20323-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20324-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA364A2C333
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 14:04:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E1BA2C665
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 16:01:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A50FE3A9995
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 13:04:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B53253AB870
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 15:01:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE16B1E32D5;
-	Fri,  7 Feb 2025 13:04:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BBFF1EB191;
+	Fri,  7 Feb 2025 15:01:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ISuM3qIS"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="ltR/Bra9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from out.smtpout.orange.fr (out-15.smtpout.orange.fr [193.252.22.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19BB2417C9;
-	Fri,  7 Feb 2025 13:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15356238D52;
+	Fri,  7 Feb 2025 15:01:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.252.22.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738933482; cv=none; b=GUQzApVFregWRGlXMRzOEg9qO+gob6MLXQxTKlO5aTicvscY0l5BhIEjRl3N+ofYBA3Sk/I0wjIVnW1DFg8O1AWDoBmeFxfUb9Y14Rj2/2Wv4z/YS6uicPLLXgAQ0q583jJRZWYdrzvvv31QtwtC8quDGfkkg7tV30IJXP3aAMs=
+	t=1738940471; cv=none; b=PohG2zyZKZrzCfNcR1k99ffARgQJ7VD2Ne6nn7TsxkQMLScdRSVZn2E6ITATZxO9rsL7p5ju1w/ixah7r/qz59ktPmP/DgYB7tr5Jk/O6rPSL7MqqNROLIf8P08uvwUE5gu3I2xZWItPDg9iQ7vGGLMnPCVjrrERMZw1fCPOafE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738933482; c=relaxed/simple;
-	bh=nq7QO3U2zkXhkXMN/kYLNDAMQ+ro0niPd6+D9FDb9L0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S5hYa3YcxPkGWMvHktqp3vy30682eFH0w1uun5vXAcxRWfUYa75dh/6jojlGoevWAXgchFeMf8mynDSCBR/xsOHrb9tX6lSvi3yiFCtusv6cNeMonTrCBh+xcq//Qffv3wVzaYWoXIAERtYnWH4tHIHKFYfu41XSIliIV9XHZcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ISuM3qIS; arc=none smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738933482; x=1770469482;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=nq7QO3U2zkXhkXMN/kYLNDAMQ+ro0niPd6+D9FDb9L0=;
-  b=ISuM3qIStomkOz7bPkaQcIobS3tTpZsvyXwTEayY96cP8obL7iz4iIux
-   +3WXQlgkJit9bv6qR8Fc0JTddV54krC2/cW35X4BQl/AqBrPWKHNTZEjn
-   WV0VHJ8k+kY/o0UeTwACRi2TzbNj1pLgWfjqw6i+Tiawn76zQYMNUuFvZ
-   kv+uLCZfwOIn0Jz86d1rRHTu2Irby8n6xhqg57/gXU7rP13Uup5++5b1k
-   FFguT7NwyBtAgwdw8BwleZjUbDOvWmFPqIJ/TFbF4+W3RSDRlE/6K9yyE
-   bGnHIf6DQ0VTp3rxxG3PpctZS4kRC2c2h6/XOgMAZOBXyB8i9K85TB6q7
-   g==;
-X-CSE-ConnectionGUID: zRa+Qv3eRkKZJkkpBdkgnQ==
-X-CSE-MsgGUID: 9ynbfwkRSbOCAqbZ5CRhPA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="39598986"
-X-IronPort-AV: E=Sophos;i="6.13,267,1732608000"; 
-   d="scan'208";a="39598986"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 05:04:41 -0800
-X-CSE-ConnectionGUID: LblW5Yh9S+akKf7roBjTtg==
-X-CSE-MsgGUID: FDW6ZjwxQd6Nw7+GRaTIgw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="111371283"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa010.jf.intel.com with SMTP; 07 Feb 2025 05:04:35 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Fri, 07 Feb 2025 15:04:34 +0200
-Date: Fri, 7 Feb 2025 15:04:34 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: =?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
-	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
-	Benson Leung <bleung@chromium.org>,
-	Pavan Holla <pholla@chromium.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Jameson Thies <jthies@google.com>,
-	"Katiyar, Pooja" <pooja.katiyar@intel.com>,
-	"Pathak, Asutosh" <asutosh.pathak@intel.com>,
-	"Jayaraman, Venkat" <venkat.jayaraman@intel.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] usb: typec: ucsi: Command mailbox interface for
- the userspace
-Message-ID: <Z6YE4mJHx1zHNW8d@kuha.fi.intel.com>
-References: <20250206141936.1117222-1-heikki.krogerus@linux.intel.com>
- <20250206141936.1117222-2-heikki.krogerus@linux.intel.com>
- <2025020643-federal-uneatable-5da4@gregkh>
+	s=arc-20240116; t=1738940471; c=relaxed/simple;
+	bh=Ismxwm1c+xEaqBjLFJVdqK9TSoif2Fk0K+yMxRkINVg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JYR9ybp/2M5pr5QzBHTMbiKESRtx582ocPyncHDLb1HU4p8DYS/hzclOcoTOkIXl22gDVKtV5f4iFuWAd/fjIp/j9K/sa2sIYdTeMpKQNZZSnk5xXZKIUHT/Ex5Ol+ORlgC57GoD4Z7DkOp/8TQAg47quKT8v2Uqd4h/ghW6dAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=ltR/Bra9; arc=none smtp.client-ip=193.252.22.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [172.16.82.72] ([124.33.176.97])
+	by smtp.orange.fr with ESMTPA
+	id gPqWtL8WXFt3IgPqatESry; Fri, 07 Feb 2025 16:01:01 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1738940461;
+	bh=Pyha5odVGsX/CKqH1ZkXIQ53HwwjGzZ3ipFrj9lnhz4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=ltR/Bra9iY/vwRcNq/YBqz4kt3s9oCNpzfGigntH9sfQiTTrkWuSMYZeRdTVHAm9q
+	 ELN6QjvKXUDDagncZdtHNzfc4Dph6J9ZbNAMnJ2T8uTjBMkcQOy0w1CmQsZPJ0LpWT
+	 dOCxl+huYkYk1+Wj2h6oeNsysoenQmB6u8IMRd2y9Xmr3zkUCeN66z+Hha7pFLRs/W
+	 89ZI+zgAKMoUKsVRYls4qKSqE9WdR4rHvgwufNzfv2EPxKESy+aJXcg95jlM25oO+E
+	 8PurBrxhE+/r4TKOfBZKrvfxeXyUB4hsDku2l6X/asT6VfDK7fDLpwcmkDwpo0QgCf
+	 a+3PA3c1yBBLw==
+X-ME-Helo: [172.16.82.72]
+X-ME-Auth: bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI=
+X-ME-Date: Fri, 07 Feb 2025 16:01:01 +0100
+X-ME-IP: 124.33.176.97
+Message-ID: <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
+Date: Sat, 8 Feb 2025 00:00:43 +0900
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025020643-federal-uneatable-5da4@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+To: Marc Kleine-Budde <mkl@pengutronix.de>, Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org,
+ brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+ pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net,
+ jdelvare@suse.com, alexandre.belloni@bootlin.com,
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-i2c@vger.kernel.org, linux-can@vger.kernel.org,
+ netdev@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com>
+ <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+Content-Language: en-US
+From: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
+Autocrypt: addr=mailhol.vincent@wanadoo.fr; keydata=
+ xjMEZluomRYJKwYBBAHaRw8BAQdAf+/PnQvy9LCWNSJLbhc+AOUsR2cNVonvxhDk/KcW7FvN
+ LFZpbmNlbnQgTWFpbGhvbCA8bWFpbGhvbC52aW5jZW50QHdhbmFkb28uZnI+wrIEExYKAFoC
+ GwMFCQp/CJcFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AWIQTtj3AFdOZ/IOV06OKrX+uI
+ bbuZwgUCZx41XhgYaGtwczovL2tleXMub3BlbnBncC5vcmcACgkQq1/riG27mcIYiwEAkgKK
+ BJ+ANKwhTAAvL1XeApQ+2NNNEwFWzipVAGvTRigA+wUeyB3UQwZrwb7jsQuBXxhk3lL45HF5
+ 8+y4bQCUCqYGzjgEZx4y8xIKKwYBBAGXVQEFAQEHQJrbYZzu0JG5w8gxE6EtQe6LmxKMqP6E
+ yR33sA+BR9pLAwEIB8J+BBgWCgAmFiEE7Y9wBXTmfyDldOjiq1/riG27mcIFAmceMvMCGwwF
+ CQPCZwAACgkQq1/riG27mcJU7QEA+LmpFhfQ1aij/L8VzsZwr/S44HCzcz5+jkxnVVQ5LZ4B
+ ANOCpYEY+CYrld5XZvM8h2EntNnzxHHuhjfDOQ3MAkEK
+In-Reply-To: <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Feb 06, 2025 at 03:51:48PM +0100, Greg Kroah-Hartman wrote:
-> On Thu, Feb 06, 2025 at 04:19:31PM +0200, Heikki Krogerus wrote:
-> > Some of the UCSI commands can be used to configure the
-> > entire Platform Policy Manager (PPM) instead of just
-> > individual connectors. To allow the user space communicate
-> > those commands with the PPM, adding a mailbox interface. The
-> > interface is a single attribute file that represents the
-> > main "OPM to PPM" UCSI data structure.
-> > 
-> > The mailbox allows any UCSI command to be sent to the PPM so
-> > it should be also useful for validation, testing and
-> > debugging purposes.
-> 
-> As it's for this type of thing, why not put it in debugfs instead?
-> 
-> > +static ssize_t ucsi_write(struct file *filp, struct kobject *kobj,
-> > +			  const struct bin_attribute *attr,
-> > +			  char *buf, loff_t off, size_t count)
-> > +{
-> > +	struct ucsi_sysfs *sysfs = attr->private;
-> > +	struct ucsi *ucsi = sysfs->ucsi;
-> > +	int ret;
-> > +
-> > +	u64 *control = (u64 *)&sysfs->mailbox[UCSI_CONTROL];
-> > +	u32 *cci = (u32 *)&sysfs->mailbox[UCSI_CCI];
-> > +	void *data = &sysfs->mailbox[UCSI_MESSAGE_IN];
-> > +
-> > +	/* TODO: MESSAGE_OUT. */
-> > +	if (off != UCSI_CONTROL || count != sizeof(*control))
-> > +		return -EFAULT;
-> > +
-> > +	mutex_lock(&sysfs->lock);
-> > +
-> > +	memset(data, 0, UCSI_MAX_DATA_LENGTH(ucsi));
-> > +
-> > +	/* PPM_RESET has to be handled separately. */
-> > +	*control = get_unaligned_le64(buf);
-> > +	if (UCSI_COMMAND(*control) == UCSI_PPM_RESET) {
-> > +		ret = ucsi_reset_ppm(ucsi, cci);
-> > +		goto out_unlock_sysfs;
-> > +	}
-> > +
-> > +	mutex_lock(&ucsi->ppm_lock);
-> > +
-> > +	ret = ucsi->ops->sync_control(ucsi, *control, cci, NULL, 0);
-> > +	if (ret)
-> > +		goto out_unlock_ppm;
-> > +
-> > +	if (UCSI_CCI_LENGTH(*cci) && ucsi->ops->read_message_in(ucsi, data, UCSI_CCI_LENGTH(*cci)))
-> > +		dev_err(ucsi->dev, "failed to read MESSAGE_IN\n");
-> > +
-> > +	ret = ucsi->ops->sync_control(ucsi, UCSI_ACK_CC_CI | UCSI_ACK_COMMAND_COMPLETE,
-> > +				      NULL, NULL, 0);
-> > +out_unlock_ppm:
-> > +	mutex_unlock(&ucsi->ppm_lock);
-> > +out_unlock_sysfs:
-> > +	mutex_unlock(&sysfs->lock);
-> > +
-> > +	return ret ?: count;
-> > +}
-> 
-> This worries me, any userspace tool can now do this?  What other "bad"
-> things can it to the connection?
+On 07/02/2025 at 21:15, Marc Kleine-Budde wrote:
+> On 07.02.2025 15:44:59, Ming Yu wrote:
 
-Although, there is actually only a limited number of things that you
-can do to the connection using UCSI, that is definitely a concern.
+(...)
 
-The PPM (which is the EC firmware in most cases) is expected to prevent
-any harmful or "unauthorized" UCSI commands from being executed, but
-I'm not sure there is any guarantees for that at the moment.
+>> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
+>> +					  struct net_device *ndev)
+>> +{
+>> +	struct nct6694_can_priv *priv = netdev_priv(ndev);
+>> +
+>> +	if (can_dev_dropped_skb(ndev, skb))
+>> +		return NETDEV_TX_OK;
+>> +
+>> +	netif_stop_queue(ndev);
+>> +	can_put_echo_skb(skb, ndev, 0, 0);
+>> +	queue_work(priv->wq, &priv->tx_work);
 
-> > +int ucsi_sysfs_register(struct ucsi *ucsi)
-> > +{
-> > +	struct ucsi_sysfs *sysfs;
-> > +	int ret;
-> > +
-> > +	sysfs = kzalloc(struct_size(sysfs, mailbox, UCSI_MAILBOX_SIZE(ucsi)), GFP_KERNEL);
-> > +	if (!sysfs)
-> > +		return -ENOMEM;
-> > +
-> > +	sysfs->ucsi = ucsi;
-> > +	mutex_init(&sysfs->lock);
-> > +	memcpy(sysfs->mailbox, &ucsi->version, sizeof(ucsi->version));
-> > +
-> > +	sysfs_bin_attr_init(&sysfs->bin_attr);
-> > +
-> > +	sysfs->bin_attr.attr.name = "ucsi";
-> > +	sysfs->bin_attr.attr.mode = 0644;
-> > +
-> > +	sysfs->bin_attr.size = UCSI_MAILBOX_SIZE(ucsi);
-> > +	sysfs->bin_attr.private = sysfs;
-> > +	sysfs->bin_attr.read_new = ucsi_read;
-> > +	sysfs->bin_attr.write_new = ucsi_write;
-> > +
-> > +	ret = sysfs_create_bin_file(&ucsi->dev->kobj, &sysfs->bin_attr);
-> 
-> You raced with userspace and lost, right?  Why are you dynamically
-> creating this attribute, can't you just use a static one?
+What is the reason to use a work queue here? xmit() is not a hard IRQ.
+Also, the other USB CAN devices just directly send the USB message in
+their xmit() without the need to rely on such worker.
 
-The size of the attribute depends on the UCSI version.
+Sorry if this was discussed in the past, I can not remember if this
+question has already been raised.
 
-> But again, why not debugfs?  I'd feel a lot more comfortable with that
-> instead of sysfs.
+>> +	return NETDEV_TX_OK;
+>> +}
 
-I would actually prefer debugfs for this, but this is in any case
-not primarily for debugging and validation.
+(...)
 
-The initial goal was to supply the user space some way to control the
-EC's power related policies using UCSI commands such as
-SET_POWER_LEVEL and GET_POWER_LEVEL (guys, please correct me if I got
-that wrong).
+Yours sincerely,
+Vincent Mailhol
 
-But I'm now again wondering could those power policy tasks be handled
-using the UCSI power supplies after all? Venkat, did you look into
-that?
-
-thanks,
-
--- 
-heikki
 
