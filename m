@@ -1,146 +1,108 @@
-Return-Path: <linux-usb+bounces-20327-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20328-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24565A2C7EA
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 16:53:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F914A2C852
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 17:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C178B16D023
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 15:52:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 98FD71883896
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 16:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D770023C8CE;
-	Fri,  7 Feb 2025 15:51:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30CEB1EB186;
+	Fri,  7 Feb 2025 16:11:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mbdhjp9a"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E25D523C8C8
-	for <linux-usb@vger.kernel.org>; Fri,  7 Feb 2025 15:51:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 635DF23C8AE;
+	Fri,  7 Feb 2025 16:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738943515; cv=none; b=FyOpp0dmlMunu81Geo4VMQbgZcv1YaZBh9cMND5XgpRjUK78iDkr7rB4mYa2XPA4nc6xsO1kFYJtJijZERtiP7yePptZl4UFaL1Cz9j2dkfkkVLzl5kcVd0mJ6acc1mGkvY7vqXpV+1nOw6orIHAV5Fb07dRd18YF8Dud1w5A/s=
+	t=1738944663; cv=none; b=bk5HtcLK5ShHyowH+vKAeIj3GblraumuLLtHBdHbTOGge8N/RUycTJ7gguKypbzp5Zt24o92olVUMxAN4FtpbQ4NYkmYu/pKnXfahHysuTK8SeI3pdxA+k6X5JkaTX3DCyPGZa42VLLmFI2kp0eJaTcHK4u7LwZq41PoVsQuVII=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738943515; c=relaxed/simple;
-	bh=FYBzQWrbc5BZbG36FmSxvb/yRkK3m4dSs/j7WyRK1LM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WpJL3qqL0iamzM712FyLZLabEryMbOIEBMktXBSjvAWqgegvpE3w/B4VdsZAEq0STM6WYcTpwKFf/2LxYtVtu0/MeMESilVbcfOeHyFPDI6232+PstgPQKcA6HT0BBoMqfyd9qpXUclDWFbQuEAr631/VFAU5RrwmdDQLy20o4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tgQdX-00035S-1R; Fri, 07 Feb 2025 16:51:23 +0100
-Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mkl@pengutronix.de>)
-	id 1tgQdU-003zzi-0y;
-	Fri, 07 Feb 2025 16:51:20 +0100
-Received: from pengutronix.de (pd9e59fec.dip0.t-ipconnect.de [217.229.159.236])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	(Authenticated sender: mkl-all@blackshift.org)
-	by smtp.blackshift.org (Postfix) with ESMTPSA id DAB1B3BC4F8;
-	Fri, 07 Feb 2025 15:51:19 +0000 (UTC)
-Date: Fri, 7 Feb 2025 16:51:19 +0100
-From: Marc Kleine-Budde <mkl@pengutronix.de>
-To: Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Cc: Ming Yu <a0282524688@gmail.com>, tmyu0@nuvoton.com, lee@kernel.org, 
-	linus.walleij@linaro.org, brgl@bgdev.pl, andi.shyti@kernel.org, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
-Message-ID: <20250207-fair-active-robin-30025a-mkl@pengutronix.de>
-References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-5-a0282524688@gmail.com>
- <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
- <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
+	s=arc-20240116; t=1738944663; c=relaxed/simple;
+	bh=hM4KkTFOQIorcGH17ZqQK7WrzrOS5j1bcy6TtjLxCQY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gdBYO9bOvsPE/GpNcoCEiwgvwLQjS3Hmt2VZh7poGSu6Gaq5YoE0WaPLQuMSUbZrAGn9CI4hWeba6Cdq7g3AImSaLZccC7RigYFAXbTy06+GW++b4q3TqKc8joGS03JWw0GqIevZ7JIOz6qiMlOZ56kW0gVwY/SQ3zMP/4GJj50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mbdhjp9a; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2166651f752so51360945ad.3;
+        Fri, 07 Feb 2025 08:11:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738944661; x=1739549461; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4EaFFtVuKl1zD656GxgpPJx2+MmyA3YykfF2P3BlKGk=;
+        b=mbdhjp9almB5x7qAIQ6AfWRcnvWLXFB6L0oHFAEH2U4yDrQDXjWPPMb1Uj0DMJQuwh
+         P6j5x3FEGAMlrK6W10Doz38ns8XBoCBHS3GhtsBkqMxNoN/l7enPg4MkS4ltC6HEQQaV
+         sukjNJ2WGNUU7TnzogdahxQh0vgMhFo0eM6695glvmTDGQTSDEtJMyoOwmAdevqjRp0P
+         0qWrYwAsMQGOG8hY/TL9Hk1D2E+uJV/yUZ0UXZJOdAXyz8iFe7LdzSqadc9MJmhUVIJB
+         MgunyaTgAZXKzgPaWl7d1V+3x4Ovhb6tHOQXCh14iYVrDrFHKwDjQvePR0/uZtqCGEMi
+         uZyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738944661; x=1739549461;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4EaFFtVuKl1zD656GxgpPJx2+MmyA3YykfF2P3BlKGk=;
+        b=bLNsmLYLtOlzBwt//aDjj7XhcV3bpzAOhJWmUA7ypKvIeQL70JInB3zkgUopb7yh1f
+         vZudlI+uyP7jI9Gle15kh2fM1QY1N53ix0LtsuLicVMVKfufg0Vv/m56sX29wNiOUdIM
+         QqBXVyDG83PlO8d9GY6++P7KzU3NyP1NDlhcCEaUOhxmYMbEgiyKH0sA/FAVtfq5pH4d
+         LYOkmDztJRMwUGMKyaXEyr8x8houbIzCmAubHJMr7NaAj5eIdEm4l7RCOts8A/O30MFO
+         x3wsgdlpqmytD4EeoDkyl7iIEjotjvktzvJcoeItZRsOgJoLQR5OetFjWsZgnBmpf8pH
+         zE3w==
+X-Forwarded-Encrypted: i=1; AJvYcCVutJJJdja0aVnBeE/tF5OdgSMVh4TH8JSG7jbQf9f1GWqavR5N2TJ34Na+71PFjEng6IbsyCeOgbs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVjfVMeeNzxTzsaQJsmi3yQZlPPnmXjG4W+9f5FpK7EOT9mHNt
+	09OW4WZPw4qzT0PJaopI3IjVeOCIwYE1eg6Y/8fbIvJGuAe+Iki//gJcpajqDwYZBEOiuZSO+HT
+	RPKayxtuMQN09ZBM+drUTjfhFcTjZ8obwvyY=
+X-Gm-Gg: ASbGnctgXPXUSD4+2x7OuS6RZLOoS6Da/gxF4MK9r1gdpqO5fiRfYsol0QXwuYqwPxw
+	iq8mGyD4lszno+U4dMzYhkPvAU5/daBlsYYGMPDa1JvYvQR/ZX+gKQRXPHzahFGBk+/eKq0hI
+X-Google-Smtp-Source: AGHT+IHCFrfoSu9Oe4fnnns85nXA2llvIaHH7tznuzyRHLOr2ndXK+R3YrgPe/6au3JGoFLCw+HW2VTWBVzvWziasX0=
+X-Received: by 2002:a17:902:ef51:b0:215:b45a:6a5e with SMTP id
+ d9443c01a7336-21f4e6bf56fmr49501455ad.18.1738944661536; Fri, 07 Feb 2025
+ 08:11:01 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="76ydemzthxfsfgeu"
-Content-Disposition: inline
-In-Reply-To: <9a3f1242-794e-41f1-80a5-bc6d18ff6641@wanadoo.fr>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-usb@vger.kernel.org
-
-
---76ydemzthxfsfgeu
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
+References: <CAArt=Lib_PiR1z07hb1E3tqq-PG=KVKU9CZP3cPsQE5ciokLVw@mail.gmail.com>
+ <2025020708-manned-antidote-7d57@gregkh>
+In-Reply-To: <2025020708-manned-antidote-7d57@gregkh>
+From: Jillian Donahue <jilliandonahue58@gmail.com>
+Date: Fri, 7 Feb 2025 09:10:50 -0700
+X-Gm-Features: AWEUYZlMan-_7BObFV56xl5hJlzxWBQF46MSW7cWjm21G2VIf0m_Cfe7bqLJHJk
+Message-ID: <CAArt=Lg25QafefcOAGcvj2ZHuQ4Keip70NFSF1K3mau=2Y12XQ@mail.gmail.com>
+Subject: Re: [PATCH] f_midi_complete to call tasklet_hi_schedule
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
-MIME-Version: 1.0
 
-On 08.02.2025 00:00:43, Vincent Mailhol wrote:
-> On 07/02/2025 at 21:15, Marc Kleine-Budde wrote:
-> > On 07.02.2025 15:44:59, Ming Yu wrote:
->=20
-> (...)
->=20
-> >> +static netdev_tx_t nct6694_can_start_xmit(struct sk_buff *skb,
-> >> +					  struct net_device *ndev)
-> >> +{
-> >> +	struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> >> +
-> >> +	if (can_dev_dropped_skb(ndev, skb))
-> >> +		return NETDEV_TX_OK;
-> >> +
-> >> +	netif_stop_queue(ndev);
-> >> +	can_put_echo_skb(skb, ndev, 0, 0);
-> >> +	queue_work(priv->wq, &priv->tx_work);
->=20
-> What is the reason to use a work queue here? xmit() is not a hard IRQ.
-> Also, the other USB CAN devices just directly send the USB message in
-> their xmit() without the need to rely on such worker.
->=20
-> Sorry if this was discussed in the past, I can not remember if this
-> question has already been raised.
+On Fri, Feb 7, 2025 at 2:35=E2=80=AFAM Greg KH <gregkh@linuxfoundation.org>=
+ wrote:
+>   The kernel documentation should show you how to use git
+> send-email or other tools.
 
-AFAICS xmit uses nct6694_write_msg(), which uses several usb_bulk_msg(),
-that can only be used from task context.
+ok, I will use this when I resubmit.
 
-You can build a chain of usb_fill_bulk_urb(), usb_submit_urb(),
-callbacks instead, but that's hard to read compared to blocking
-usb_bulk_msg()s.
+> No Cc: stable?
 
-Marc
+Cc: stable@vger.kernel.org
+Like so? I just emailed the 3 from the maintainer script.
 
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde          |
-Embedded Linux                   | https://www.pengutronix.de |
-Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
+> And this is a v2 patch, right?
 
---76ydemzthxfsfgeu
-Content-Type: application/pgp-signature; name="signature.asc"
+I have sent a few out because I cannot seem to get it right. I can add
+v2 to the next one, if that helps.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAmemK/QACgkQDHRl3/mQ
-kZwmeQf+K8g+Oy8vCIUI/Kice58VwDSu6EFa30wRLM0oqjCgE4LqXapNiSB1F8iJ
-sDm2IyQER6qNYSLqzeZWG/bMyJwfHNpKjfXN3RImtyTXuN4nlvraaQabsV1bEY3y
-rNGHojpZqxDXCb3Q9B5GLjNhdZldM4T+Xrs8gG+7Zv4jBxjNxn8J7Xz+1BpX3UqZ
-ql8gENFEAe9nb6O5ODNVcGTnU+SzGWvy1VsEz23VcvXWEKbyyObvG+e0yUoYEi4y
-s2MbMh1xxkTliIXn7GvqIdMj6/RSPo7xLoShAalHzurN1mey2u5PZfQapk718BEx
-Wj/o/s1vTiX+qqRfcgpDz3UvoRZEtQ==
-=0uK9
------END PGP SIGNATURE-----
-
---76ydemzthxfsfgeu--
+> greg k-h
+Jill
 
