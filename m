@@ -1,191 +1,111 @@
-Return-Path: <linux-usb+bounces-20296-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20297-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E962EA2BAC0
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 06:43:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BADDA2BBE6
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 07:59:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9D9618884F5
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 05:43:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42E133A7D05
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 06:59:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A38F23315D;
-	Fri,  7 Feb 2025 05:43:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="hqgmSoZy"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5ABA19D8A4;
+	Fri,  7 Feb 2025 06:59:13 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37DCC13CFA6;
-	Fri,  7 Feb 2025 05:43:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
+Received: from cae.in-ulm.de (cae.in-ulm.de [217.10.14.231])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD58E199238;
+	Fri,  7 Feb 2025 06:59:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.10.14.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738906987; cv=none; b=BtDGGCuYpS5XRCwWnD/EklYlUjwMakiT8yzLNKtlc9BNTdi7BLeBtVmBk8PpnepKGqyCuVScQSnwOmAqIMIztynpoaa15pE3UbMqfhUrtyIefcT8ZPOylZ2tJLb3pV0IFbfpbXnx5deHYv7xcMuuVFuYI0z3hRlgMLVwFZUGnPM=
+	t=1738911553; cv=none; b=f2WB7ArS2r/wgz2UU/lGevy0GA/WEpx9+xFXUjO9m+AQdG4rk/LkO19JdkZJo03QKTvizBgIifrER5r7Jt23iABvWjOUjH+dMFFQhtQO+EiM11y4+MTJ85A640LYeclqI9maN9oiv9cgaYbNfGaI3d59QIC6y7ND9YuS4ONpJkg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738906987; c=relaxed/simple;
-	bh=11k0J7SJXQWZRFuWCglBUF7/hV4fhUXshZRVhbYDlL0=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ElQSZtgIDeYQkBl6UDOcSDJvdwgwUyNn8PdcLgHSBRt1NSsAiVPKyWM1D+gX61DD2Md91eOL8Un4Tg/KaqMKYB1njqQ+WzVpxWaON5TP6mxC9eQS0Q8FCH1VUPQTmPHDdGr3BZIkjQjEPnjI0rxv8Lvjntt+Ibe/6KIfUNe0GGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=hqgmSoZy; arc=none smtp.client-ip=198.47.19.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 5175gq222868858
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 6 Feb 2025 23:42:52 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1738906972;
-	bh=H37U1nr2lOv9jYFyNln2CSztqFrKuMmT/UtblK3qmKo=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=hqgmSoZywUlBqmrCAcuuV6QlsFMrfFxXuVFw/rn3+23Kya2iHIDU5WD7xE2tcctho
-	 /lsrOdmumIvgbOa6OpkczXC/ODrOGEopDwh1kX15CGxmLaiLvFZ75eKiZBoWMgr2Zu
-	 AkJEnnvQqRQUC3Qntag//YDudh07urACNQCdPZBc=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 5175gqS0016443
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 6 Feb 2025 23:42:52 -0600
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 6
- Feb 2025 23:42:52 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 6 Feb 2025 23:42:52 -0600
-Received: from localhost (uda0492258.dhcp.ti.com [10.24.72.104])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 5175gptM115695;
-	Thu, 6 Feb 2025 23:42:51 -0600
-Date: Fri, 7 Feb 2025 11:12:50 +0530
-From: Siddharth Vadapalli <s-vadapalli@ti.com>
-To: Peter Chen <peter.chen@kernel.org>
-CC: Siddharth Vadapalli <s-vadapalli@ti.com>, <pawell@cadence.com>,
-        <rogerq@kernel.org>, <gregkh@linuxfoundation.org>, <balbi@kernel.org>,
-        <jun.li@nxp.com>, <linux-usb@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>
-Subject: Re: [PATCH] usb: cdns3: exit cdns3_gadget_udc_start if
- FAST_REG_ACCESS cannot be set
-Message-ID: <tf7qwkoybolexehzagzel67kdxdfsve2f3qdueomedld72v7pp@bquo47wpsxul>
-References: <20250206125943.786949-1-s-vadapalli@ti.com>
- <20250207022523.GA22848@nchen-desktop>
+	s=arc-20240116; t=1738911553; c=relaxed/simple;
+	bh=sQPauGVYFUvdUbBLw5jDAST028vG91moT9s41QDprpE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jc8Z7Qh+iuDBGq9X/H1C27gsOoMi+G+mzFbmtsSq9tGwXa5tJvrJkfGj22mmNtvWXcMQlCk1zicTuYu03WjOsUOQaJx+XAKcgdVFz7iRv6I00Rlyjx5ywkxsQpzk+wplPws9J6pMIFw/C3CO0GKah9jMv3/4tfj1U4j/VyB6CRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de; spf=pass smtp.mailfrom=c--e.de; arc=none smtp.client-ip=217.10.14.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=c--e.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=c--e.de
+Received: by cae.in-ulm.de (Postfix, from userid 1000)
+	id 05D5514033D; Fri,  7 Feb 2025 07:51:46 +0100 (CET)
+Date: Fri, 7 Feb 2025 07:51:46 +0100
+From: "Christian A. Ehrhardt" <lk@c--e.de>
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Fedor Pchelkin <boddah8794@gmail.com>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Benson Leung <bleung@chromium.org>,
+	Jameson Thies <jthies@google.com>,
+	Saranya Gopal <saranya.gopal@intel.com>, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Mark Pearson <mpearson@squebb.ca>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH RFC 1/2] acpi: typec: ucsi: Introduce a ->poll_cci method
+Message-ID: <Z6WtgqH5CaKTfaDX@cae.in-ulm.de>
+References: <20250206184327.16308-1-boddah8794@gmail.com>
+ <20250206184327.16308-2-boddah8794@gmail.com>
+ <CAA8EJpr=SBQ29m8_iCigUKMHzrdbTFRSpTHv4Aapo55hMVOcaw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250207022523.GA22848@nchen-desktop>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+In-Reply-To: <CAA8EJpr=SBQ29m8_iCigUKMHzrdbTFRSpTHv4Aapo55hMVOcaw@mail.gmail.com>
 
-On Fri, Feb 07, 2025 at 10:25:23AM +0800, Peter Chen wrote:
 
-Hello Peter,
+Hi,
 
-> On 25-02-06 18:29:36, Siddharth Vadapalli wrote:
-> > When the device is in a low power state, access to the following
-> > registers takes a long time:
-> > - EP_CFG
-> > - EP_TRADDR
-> > - EP_CMD
-> > - EP_SEL
-> > - EP_STS
-> > - USB_CONF
-> > 
-> > To address this, the fast register access feature can be enabled by
-> > setting PUSB_PWR_FST_REG_ACCESS bit of the USB_PWR register, which
-> > allows quick access by software. Software is expected to poll on
-> > PUSB_PWR_FST_REG_ACCESS_STAT to ensure that fast register access has
-> > been enabled by the controller. Attempting to access any of the
-> > aforementioned registers after setting PUSB_PWR_FST_REG_ACCESS but
-> > before PUSB_PWR_FST_REG_ACCESS_STAT has been set will result in
-> > undefined behavior and potentially result in system hang.
-> > 
-> > Hence, poll on PUSB_PWR_FST_REG_ACCESS_STAT before proceeding with
-> > gadget configuration, and exit if it cannot be enabled.
-> > 
-> > Fixes: b5148d946f45 ("usb: cdns3: gadget: set fast access bit")
-> > Cc: <stable@vger.kernel.org>
-> > Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-> > ---
-> > 
-> > Hello,
-> > 
-> > This patch is based on commit
-> > 92514ef226f5 Merge tag 'for-6.14-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
-> > of Mainline Linux.
-> > 
-> > Regards,
-> > Siddharth.
-> > 
-> >  drivers/usb/cdns3/cdns3-gadget.c | 18 ++++++++++++++++--
-> >  1 file changed, 16 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
-> > index fd1beb10bba7..b62691944272 100644
-> > --- a/drivers/usb/cdns3/cdns3-gadget.c
-> > +++ b/drivers/usb/cdns3/cdns3-gadget.c
-> > @@ -2971,8 +2971,6 @@ static void cdns3_gadget_config(struct cdns3_device *priv_dev)
-> >  	/* enable generic interrupt*/
-> >  	writel(USB_IEN_INIT, &regs->usb_ien);
-> >  	writel(USB_CONF_CLK2OFFDS | USB_CONF_L1DS, &regs->usb_conf);
-> > -	/*  keep Fast Access bit */
-> > -	writel(PUSB_PWR_FST_REG_ACCESS, &priv_dev->regs->usb_pwr);
-> >  
-> >  	cdns3_configure_dmult(priv_dev, NULL);
-> >  }
-> > @@ -2990,6 +2988,8 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
-> >  	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
-> >  	unsigned long flags;
-> >  	enum usb_device_speed max_speed = driver->max_speed;
-> > +	int ret;
-> > +	u32 reg;
-> >  
-> >  	spin_lock_irqsave(&priv_dev->lock, flags);
-> >  	priv_dev->gadget_driver = driver;
-> > @@ -2997,6 +2997,20 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
-> >  	/* limit speed if necessary */
-> >  	max_speed = min(driver->max_speed, gadget->max_speed);
-> >  
-> > +	/*  keep Fast Access bit */
-> > +	writel(PUSB_PWR_FST_REG_ACCESS, &priv_dev->regs->usb_pwr);
-> > +	reg = readl(&priv_dev->regs->usb_pwr);
-> > +	if (!(reg & PUSB_PWR_FST_REG_ACCESS_STAT)) {
-> > +		ret = readl_poll_timeout_atomic(&priv_dev->regs->usb_pwr, reg,
-> > +						(reg & PUSB_PWR_FST_REG_ACCESS_STAT),
-> > +						10, 1000);
-> > +		if (ret) {
-> > +			dev_err(priv_dev->dev, "Failed to enable fast access\n");
-> > +			spin_unlock_irqrestore(&priv_dev->lock, flags);
-> > +			return ret;
-> > +		}
-> > +	}
-> > +
-> >  	switch (max_speed) {
-> >  	case USB_SPEED_FULL:
-> >  		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
+On Fri, Feb 07, 2025 at 02:38:03AM +0200, Dmitry Baryshkov wrote:
+> On Thu, 6 Feb 2025 at 20:43, Fedor Pchelkin <boddah8794@gmail.com> wrote:
+> >
+> > From: "Christian A. Ehrhardt" <lk@c--e.de>
+> >
+> > For the ACPI backend of UCSI the UCSI "registers" are just a memory copy
+> > of the register values in an opregion. The ACPI implementation in the
+> > BIOS ensures that the opregion contents are synced to the embedded
+> > controller and it ensures that the registers (in particular CCI) are
+> > synced back to the opregion on notifications. While there is an ACPI call
+> > that syncs the actual registers to the opregion there is rarely a need to
+> > do this and on some ACPI implementations it actually breaks in various
+> > interesting ways.
+> >
+> > The only reason to force a sync from the embedded controller is to poll
+> > CCI while notifications are disabled. Only the ucsi core knows if this
+> > is the case and guessing based on the current command is suboptimal, i.e.
+> > leading to the following spurious assertion splat:
+> >
+> > WARNING: CPU: 3 PID: 76 at drivers/usb/typec/ucsi/ucsi.c:1388 ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi]
+> > CPU: 3 UID: 0 PID: 76 Comm: kworker/3:0 Not tainted 6.12.11-200.fc41.x86_64 #1
+> > Hardware name: LENOVO 21D0/LNVNB161216, BIOS J6CN45WW 03/17/2023
+> > Workqueue: events_long ucsi_init_work [typec_ucsi]
+> > RIP: 0010:ucsi_reset_ppm+0x1b4/0x1c0 [typec_ucsi]
+> > Call Trace:
+> >  <TASK>
+> >  ucsi_init_work+0x3c/0xac0 [typec_ucsi]
+> >  process_one_work+0x179/0x330
+> >  worker_thread+0x252/0x390
+> >  kthread+0xd2/0x100
+> >  ret_from_fork+0x34/0x50
+> >  ret_from_fork_asm+0x1a/0x30
+> >  </TASK>
+> >
+> > Thus introduce a ->poll_cci() method that works like ->read_cci() with an
+> > additional forced sync and document that this should be used when polling
+> > with notifications disabled. For all other backends that presumably don't
+> > have this issue use the same implementation for both methods.
 > 
-> Hi Siddharth,
-> 
-> Would you please keep this change at cdns3_gadget_config in case the
-> controller is power lost during the system suspend?
+> Should the ucsi_init() also use ->poll_cci instead of ->read_cci?
+> Although it's executed with notifications enabled, it looks as if it
+> might need the additional resync.
 
-I did think of that initially, but the problem with doing so is that we
-are already accessing USB_CONF above in the "switch(max_speed)" section.
-The PUSB_PWR_FST_REG_ACCESS bit needs to be set before accessing any of:
-- EP_CFG
-- EP_TRADDR
-- EP_CMD
-- EP_SEL
-- EP_STS
-- USB_CONF
+I don't think it should be neccessary. The command completion event
+for the ucsi_send_command just above should have synced already and
+anything that happens after that ought to generate an event.
 
-Please let me know if you have an alternate suggestion to address the
-above.
+Best regards,
+Christian
 
-Regards,
-Siddharth.
 
