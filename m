@@ -1,49 +1,63 @@
-Return-Path: <linux-usb+bounces-20329-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20330-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82D6FA2C8EA
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 17:32:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B46D5A2C8FB
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 17:36:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2621A16B2A4
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 16:32:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC31A188DFAD
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 16:37:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B48D3189BAC;
-	Fri,  7 Feb 2025 16:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 837A418DB01;
+	Fri,  7 Feb 2025 16:36:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="qfKJAe0S"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ORuSbD5F";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EffqKlyu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E6AE23C8DE;
-	Fri,  7 Feb 2025 16:32:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F9EB23C8DE;
+	Fri,  7 Feb 2025 16:36:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738945938; cv=none; b=PvSZTbiAp4lXfj85V9KRcZ840Q3pfPSw7/gonKVO0UpbJpZJiZ4qz96MYxqwjCSkiWsvaAIzyR4Zgnd6zqHZNs2lOdYzgTcjVhwRwtmJEs8ZZw1AOzQ+j9EgJeBsXvOBPJ5bxj++kvqE28Di5VzcnCUYMYhYZNfYki1jUng57mY=
+	t=1738946212; cv=none; b=Zj+rR4GknDTzMs5lI7S0touzGmJ776SYSpL8xAh79b8bS8KHPEN8VUaGz/aYcjIQusg5/Slz4RDHelkNzY/9EACoRbHohXANR+p5XZEqpH/ixXpMxAQWNJxgh/y6scJqFoVYmFNi6rDaCy/JV6KAYCcGR4MUgBA2cmKqFOn6DKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738945938; c=relaxed/simple;
-	bh=SWMAtsZl+6/OnFXjwi8FBccywuIUqyfNqF4ljMcrhtk=;
+	s=arc-20240116; t=1738946212; c=relaxed/simple;
+	bh=4wcDetISmzj/V1tnv3RY0ha2PT7y3r4HNbD8S1w3aLY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l39NGbMzobziSgPBZkFySF/vi9w6UhkXzoKFjVPRk/Rnve7d+sHmcD1EoP4yF1283IFdHualt1Op64EB31kxFa50KUjTsZBcRuY1SnxBIMo2g0KJSh9dmjFnk7ouTH72SHW/S1nTc+NFr4yTdWPWo/1O0c043mOWi6a9Uju1tt4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=qfKJAe0S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EF3BC4CED1;
-	Fri,  7 Feb 2025 16:32:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738945937;
-	bh=SWMAtsZl+6/OnFXjwi8FBccywuIUqyfNqF4ljMcrhtk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qfKJAe0SImk6yzc/QUsgDUhlmToZBrTalW/O15nq7508s5F5gGtY71ag1/47Sbozr
-	 U25N4b3CN94u3L8Y+N0i/rhptzRmHMWa1lFBsUi6yTxgep+7JXx8FSiNlHNMxH9m9k
-	 gVFMY2c52jV/+QZlGkHN4OwOL4PXRfOWASkXvzKk=
-Date: Fri, 7 Feb 2025 17:32:14 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=cthUVFyqwWXLYNw12KxCDatRnDN87OpNbUeHBQBe9H/MCNTAB92UV3x95K3ETMRCHyLgt37jAGHz+5QSPQR3j/OnJ+B+VBjH0+0V0xoO6hVcNUsloyTGeiez+zlo+8pCBeELOpUPBQZ+AMzmDNxHquY/HjfBFGviTy0lvqhixZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ORuSbD5F; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EffqKlyu; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Fri, 7 Feb 2025 17:36:46 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1738946208;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pf3AU/CopcQpYFGvzFyRsyVTetnXSUWJM4AhY2SfU1w=;
+	b=ORuSbD5FLVodd9/gvh2Wldn0pg7iU+hl5EIxKeoW65OIqqZa+iv7TyZxxcfYgu0c1MJ3Tn
+	azE69wjofUv70O5YphvQKTcSBlNrngtHynRQUwBtGkhTkfKy2mykPw5mDe0JpzYQCLoDAe
+	JpKKehfEPQyvYhESxH2r2FtDlraD5r5cADYp/25/VbqhseK4vSYZ2SE9Fqa/nKxDpmLwVh
+	oIydUJmb3Qy8hjen+xO1Hf526ZBCoHYHolznSqeftU3asYyQddoUAcNbRClQE5xVHed7/7
+	uU0Dtutj3ltIuYS3G9IkvA3WoDtZqiFHRu/cz4iJltZ9ubeD5R/rUIw5XhiFIw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1738946208;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pf3AU/CopcQpYFGvzFyRsyVTetnXSUWJM4AhY2SfU1w=;
+	b=EffqKlyu48ogWHxYZR5ty7plTx0+625OTA5aub7GDL6rDyePCqQBe/wE2aTnc7DdoTSKvK
+	0HFRoYHod4XUvRCw==
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 To: Jillian Donahue <jilliandonahue58@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Cc: Greg KH <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
 Subject: Re: [PATCH] f_midi_complete to call tasklet_hi_schedule
-Message-ID: <2025020741-ladder-startling-b1c0@gregkh>
+Message-ID: <20250207163646.cuiDH46x@linutronix.de>
 References: <CAArt=Lib_PiR1z07hb1E3tqq-PG=KVKU9CZP3cPsQE5ciokLVw@mail.gmail.com>
  <2025020708-manned-antidote-7d57@gregkh>
  <CAArt=Lg25QafefcOAGcvj2ZHuQ4Keip70NFSF1K3mau=2Y12XQ@mail.gmail.com>
@@ -55,33 +69,25 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <CAArt=Lg25QafefcOAGcvj2ZHuQ4Keip70NFSF1K3mau=2Y12XQ@mail.gmail.com>
 
-On Fri, Feb 07, 2025 at 09:10:50AM -0700, Jillian Donahue wrote:
-> On Fri, Feb 7, 2025 at 2:35 AM Greg KH <gregkh@linuxfoundation.org> wrote:
-> >   The kernel documentation should show you how to use git
-> > send-email or other tools.
-> 
-> ok, I will use this when I resubmit.
-> 
+On 2025-02-07 09:10:50 [-0700], Jillian Donahue wrote:
 > > No Cc: stable?
 > 
 > Cc: stable@vger.kernel.org
 > Like so? I just emailed the 3 from the maintainer script.
 
-Yes.  See:
-    https://www.kernel.org/doc/html/latest/process/stable-kernel-rules.html
-for what that means.
+Yes, in the body before the sign-off and so on.
 
 > > And this is a v2 patch, right?
 > 
 > I have sent a few out because I cannot seem to get it right. I can add
 > v2 to the next one, if that helps.
 
-You have to, the Documentation says to :)
+This was v2. The next one will be v3.
 
-thanks,
+> > greg k-h
+> Jill
 
-greg k-h
+Sebastian
 
