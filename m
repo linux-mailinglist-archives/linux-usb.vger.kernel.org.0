@@ -1,50 +1,48 @@
-Return-Path: <linux-usb+bounces-20310-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20311-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96B91A2BEE6
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 10:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81E30A2BEF3
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 10:15:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9548F16A4FE
-	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 09:13:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DB3A16A8E8
+	for <lists+linux-usb@lfdr.de>; Fri,  7 Feb 2025 09:15:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BA92343B6;
-	Fri,  7 Feb 2025 09:13:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 696111DDC0B;
+	Fri,  7 Feb 2025 09:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iuQCqS0x"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2mkBBXud"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29EA71D6DB5;
-	Fri,  7 Feb 2025 09:13:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7561192D77;
+	Fri,  7 Feb 2025 09:15:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738919624; cv=none; b=jJzSa4SQHWyDSERBriNCUrGZMK3BiDOZjK1qS6hyBac4sR9dg7iICtZVLdJn9hOhUbFXa/x1GdPhqsENFmEEUFJUyEbnOgxsDz6um5V9LWt9ozAP0R+j+/9NM/1gaqLhqbcU23U2uZvaWTnqXUZ2ldYwVqwR7zeMJF1qaviMFwY=
+	t=1738919710; cv=none; b=HdMBFpWA9wN3C0M5/lPP5MONUssyZqTQD9C7My/zL50DkNuDke+65Q1ARkryFvnpsalQah5E+TpSGgGmeWDun1lVhCf7DPmKszjwel3ckhBRi40vFwnpPaoG1flzb0f47RV85FCEsIOqE/NRDRlnHZMLozdN+G1SuUA7GIwrsFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738919624; c=relaxed/simple;
-	bh=9PvSG4zdzbcGhJAC7UkL/ZDLIQi3DrjcxfU8idWQ4js=;
+	s=arc-20240116; t=1738919710; c=relaxed/simple;
+	bh=9AqNrbdvIP8oserBpCnBqRLo4RX/LKTDbq+VMX0h7GI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o5ZWVvIfwkb7NBiMCQPd3EqQiIfsSPLbxIxh4vbMEXCQRznwo0bVOUrPpq8+Uw3jFlaX60zCQfmQCjA0fQKC7Z2DxfCimq83PlXZliA2aAH7cjCal455kaEO/sPxMcXfp403qT/GCdVd/Ek9C/PN8ml3/TNOsOkWMhWRyKn6U/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iuQCqS0x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFDC7C4CED1;
-	Fri,  7 Feb 2025 09:13:42 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=oShdIFUo9a1FqX/Dh7Z0JGVANldMIvi91FTEqNH8vGWb/jgHGe/WjPozq0colaT3c4dzdCqeGLQpQal9yASSWPdL5CRwl2wEuZn61pho/XwjVZdyaxf+/+f3UcNuwa5D9mAghijWnRvPdUkegV2fDRZZdTfl2Av5jqthIuEf7KY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2mkBBXud; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92DA8C4CED1;
+	Fri,  7 Feb 2025 09:15:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738919623;
-	bh=9PvSG4zdzbcGhJAC7UkL/ZDLIQi3DrjcxfU8idWQ4js=;
+	s=korg; t=1738919709;
+	bh=9AqNrbdvIP8oserBpCnBqRLo4RX/LKTDbq+VMX0h7GI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iuQCqS0xKAXw/friBRMWhGTIQOy7X0g4pYAYNlJAFXmuMtPKn+FcjSHf/dLkq9hHH
-	 8N4lfp2+KbCMOWiGPHdgL3X1t+Kqt4MIMGwzxqRyAnCpJRSKt+b2LeWwHRITEcH4YE
-	 gDdWS0r9nHZW+gubSRFIg/ZgEXCjByawnXmb02w8=
-Date: Fri, 7 Feb 2025 10:13:40 +0100
+	b=2mkBBXudH+DzeMvbZMg1Ayl0THZVRIA7Xbqw7k/3P49FYhgN58Vrebem8tT4/achQ
+	 YOmQVIuK2MrwX8cbQPb+wFVv1X1aY/Lx0fZhxNaEvlLfUAyat7p6/kx4P/1y2ZO2yE
+	 gMj2adknK20ZqgLvKxcwH9Fz/+25ASFbcuMYO0fA=
+Date: Fri, 7 Feb 2025 10:15:05 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Lyude Paul <lyude@redhat.com>
-Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
 	Alexander Lobakin <aleksander.lobakin@intel.com>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Bjorn Helgaas <bhelgaas@google.com>,
@@ -58,11 +56,10 @@ Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
 	rust-for-linux@vger.kernel.org
 Subject: Re: [PATCH v3 1/8] driver core: add a faux bus for use when a simple
  device/bus is needed
-Message-ID: <2025020748-savings-porthole-9e27@gregkh>
+Message-ID: <2025020742-overprice-december-f68e@gregkh>
 References: <2025020620-skedaddle-olympics-1735@gregkh>
  <2025020623-chemo-amends-102a@gregkh>
  <20250206185314-a69d5f40-abd9-4dce-863a-b85e0b4c6c82@linutronix.de>
- <53d57b821c484c3e229686b4643fbf9486e1e150.camel@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -72,27 +69,83 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <53d57b821c484c3e229686b4643fbf9486e1e150.camel@redhat.com>
+In-Reply-To: <20250206185314-a69d5f40-abd9-4dce-863a-b85e0b4c6c82@linutronix.de>
 
-On Thu, Feb 06, 2025 at 03:07:59PM -0500, Lyude Paul wrote:
-> On Thu, 2025-02-06 at 19:08 +0100, Thomas Weiﬂschuh wrote:
-> > > +
-> > > +	device_initialize(dev);
-> > > +	dev->release = faux_device_release;
-> > > +	dev->parent = &faux_bus_root;
+On Thu, Feb 06, 2025 at 07:08:18PM +0100, Thomas Weiﬂschuh wrote:
+> On Thu, Feb 06, 2025 at 06:38:15PM +0100, Greg Kroah-Hartman wrote:
+> > Many drivers abuse the platform driver/bus system as it provides a
+> > simple way to create and bind a device to a driver-specific set of
+> > probe/release functions.  Instead of doing that, and wasting all of the
+> > memory associated with a platform device, here is a "faux" bus that
+> > can be used instead.
 > > 
-> > I guess nobody will want to hang these off a different parent.
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+> > Reviewed-by: Lyude Paul <lyude@redhat.com>
 > 
-> Oh - this is a good point that slipped my mind, how would we want to handle
-> this case? The reason I ask is since we have things like
-> drivers/gpu/drm/display/drm_dp_aux_dev.c which currently use the virtual
-> device API but iirc do actually assign the DRM device owning the aux device as
-> the parent.
+> Some tiny nitpicks below, but still:
+> 
+> Reviewed-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 
-Having a parent is fine, I just hadn't found any users of that yet.
-I'll go add that option for v4.
+Thanks!
 
-thanks,
+> > +#include <linux/err.h>
+> > +#include <linux/init.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/string.h>
+> > +#include <linux/container_of.h>
+> > +#include <linux/device/faux.h>
+> > +#include "base.h"
+> 
+> Weird order.
+
+I don't believe in any specific header file ordering, that's done by
+maintainers for other reasons to see if people are paying attention in
+reviews :)
+
+> > +	struct device *dev;
+> > +	struct faux_object *faux_obj;
+> > +	struct faux_device *faux_dev;
+> > +	int name_size;
+> > +	int ret;
+> > +
+> > +	name_size = strlen(name);
+> > +	if (name_size > MAX_FAUX_NAME_SIZE)
+> > +		return NULL;
+> > +
+> > +	faux_obj = kzalloc(sizeof(*faux_obj) + name_size + 1, GFP_KERNEL);
+> 
+> The name is not actually stored in the object anymore.
+
+Ick, you are right, I'll go clean that up.
+
+> > diff --git a/include/linux/device/faux.h b/include/linux/device/faux.h
+> > new file mode 100644
+> > index 000000000000..2c8ae5bd7ae8
+> > --- /dev/null
+> > +++ b/include/linux/device/faux.h
+> > @@ -0,0 +1,31 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +/*
+> > + * Copyright (c) 2025 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > + * Copyright (c) 2025 The Linux Foundation
+> > + *
+> > + * A "simple" faux bus that allows devices to be created and added
+> > + * automatically to it.  This is to be used whenever you need to create a
+> > + * device that is not associated with any "real" system resources, and do
+> > + * not want to have to deal with a bus/driver binding logic.  It is
+> > + * intended to be very simple, with only a create and a destroy function
+> > + * available.
+> > + */
+> > +#ifndef _FAUX_DEVICE_H_
+> > +#define _FAUX_DEVICE_H_
+> > +
+> 
+> #include <linux/container_of.h>
+
+This is the second time it's come up, I'll fix it up :)
+
+thanks again for the review,
 
 greg k-h
 
