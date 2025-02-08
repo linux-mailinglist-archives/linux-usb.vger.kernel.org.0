@@ -1,75 +1,75 @@
-Return-Path: <linux-usb+bounces-20349-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20350-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A1F6A2D601
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 13:11:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BE7FA2D61A
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 13:43:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B3193A89EC
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 12:10:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 385723A9CFA
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 12:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57AB2246343;
-	Sat,  8 Feb 2025 12:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977F12475C1;
+	Sat,  8 Feb 2025 12:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OBjqx9Lz"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wx6g7TiM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF17A2451E6;
-	Sat,  8 Feb 2025 12:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23429246325;
+	Sat,  8 Feb 2025 12:42:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739016654; cv=none; b=TQLlmkOnluHApQSqaX5BPmKrqzIXj9hUoX1zG+QN4rfIpy56iT28JGA7hp148l3xuCQSmXKB0pylkjzYut0yp397OMjlzww/ZDWOAi8NEuydcnjxUYs9lJ/ZZDzDLK4H8PBmHwv57zi7RPDFqP1lKdZyeYDxqQddpbH9rYH78Qc=
+	t=1739018578; cv=none; b=k/qj05PncQ1Up7saJOFEoMRXIVyLFq0+pYEpVl4TUHhUigxhOyqe52IfnSnjlnBsRAxEvUG+NCMkpcx/sJVZy5Qnpttk1qyMjoYxLY8fp4NTO9LHc4UlOOCTR6msL1WgM7EPDmYDo2MlQd+Y/J5V+DfxUp4B1kM7lGk36lGyWNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739016654; c=relaxed/simple;
-	bh=Y4cah178pVm/TyCjnR2BxWLPSd7RUgpqPRJ2KklwCB0=;
+	s=arc-20240116; t=1739018578; c=relaxed/simple;
+	bh=YVy+IfFJ5cAi8fhZw1+Db4yy3YSBlt1NusOQ50IFpc0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Dlz+mqOfHt0MAna1oWePfGznsIvKz5pVxkn6cGsm5HZrwwo8wxdch372+b2COTyJs3bUjbIEByQm3VlEsYq26C58lD6V4NqIJ7YvRNH+DMHbeYZ5xhZJ7JQqTbbm7xOHLGTRpvqBZ3bQd2G32JpymziObJwYIyoc3Z6hfpjnU+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OBjqx9Lz; arc=none smtp.client-ip=198.175.65.10
+	 Content-Type:Content-Disposition:In-Reply-To; b=KRmRtIe2fIvzO0kUy5fjydJG2w6Z/dxWZDul09E8azrP4kkXc7/rfkqXCZRCbTHyR3iTX/Ka5IhUxhuh+hudBALeWSTIaME2GrCihkC3/9u/jOGIVaajAmZiRXyaILndDPcqXhk5G9iSzNvlj4I8XGJTzBX5X32KCRIPrLoRloA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wx6g7TiM; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739016652; x=1770552652;
+  t=1739018576; x=1770554576;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=Y4cah178pVm/TyCjnR2BxWLPSd7RUgpqPRJ2KklwCB0=;
-  b=OBjqx9Lz7WtO1nhtHw4Eox+ibossr1MrffEcFG/605cWlVqv2nm5v52/
-   9H3cw1Lm3ale8+3agfp3kuUhlMVLe7cEoeCAlr3BSkp7SI/tlGlJnfrJj
-   X4H0bEgDYd9sBE39egVIX00oYfuR9i/vrtAW4QbLCtg2OMw53z0ak9o23
-   8wgOoMGPEjUtUwy0stv3dnxi+in7dMfqP/p07Zy+AsKaz38aFAeQaNPsH
-   BtO7WxybGQc+OfySPXRRYe3gKOuYajLrkLobHnHAMUd1lC+lhqnOQ9V0C
-   QB+Su5KDIpmj0nxhFiEchVNb8IAUnDlp+KhdU+xOonhPf9BJsFxuuYbsR
-   A==;
-X-CSE-ConnectionGUID: RPPS7triR1yzYKxNo245iw==
-X-CSE-MsgGUID: YbNh1tkzRl+GtVF4Gp2r7g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="57070806"
-X-IronPort-AV: E=Sophos;i="6.13,269,1732608000"; 
-   d="scan'208";a="57070806"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 04:10:52 -0800
-X-CSE-ConnectionGUID: UKX7WyT1R12FPhdDM3c1XQ==
-X-CSE-MsgGUID: YDExt5IHSWi50POe66I1Xw==
+  bh=YVy+IfFJ5cAi8fhZw1+Db4yy3YSBlt1NusOQ50IFpc0=;
+  b=Wx6g7TiMCLDjAolzpEyFMq+nOOf8MBUcT4KHPdKwei9HIipMZsRvzeiH
+   pavcWzewmfLz487BHo3qHUzUVcHMAyJMVoIarSEcv45/oPDbPHm9TiKHT
+   Io7Exbk6/aolyrgwo8s6zQp8pRr5Ag9SQtUkS3/VLYlO/4MA5D4jEpTgx
+   5ZrwMdb6MAxlf1FVG4Evg+M9IuKnb0R1cfisuUKSyHzr+yGQ/rF7HRpDH
+   bK3hMduzM7itxIUvS1TQUEjqnSev8emkFRWybpNbkw6cNb5veOQ1zw/O9
+   rEfGZGSoI/0SEK+FrwIAwo8MAdKGs8uGKEAytlp9wolG7kfDknjnLbD0d
+   g==;
+X-CSE-ConnectionGUID: lrF/Xo5RSWyziqgUYNr8VQ==
+X-CSE-MsgGUID: Orty2yEJR82z6uZprcAJQA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="62128327"
+X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
+   d="scan'208";a="62128327"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 04:42:55 -0800
+X-CSE-ConnectionGUID: l3YTQ+M0RiSMtzD13TC+sQ==
+X-CSE-MsgGUID: OZ9hKCmnSWOjjnRpgIVSZA==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,269,1732608000"; 
-   d="scan'208";a="116770919"
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="116368381"
 Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa004.jf.intel.com with ESMTP; 08 Feb 2025 04:10:50 -0800
+  by fmviesa005.fm.intel.com with ESMTP; 08 Feb 2025 04:42:53 -0800
 Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tgjfa-000zw7-35;
-	Sat, 08 Feb 2025 12:10:46 +0000
-Date: Sat, 8 Feb 2025 20:10:02 +0800
+	id 1tgkAd-000zyN-0y;
+	Sat, 08 Feb 2025 12:42:51 +0000
+Date: Sat, 8 Feb 2025 20:42:17 +0800
 From: kernel test robot <lkp@intel.com>
 To: Jill Donahue <jilliandonahue58@gmail.com>, gregkh@linuxfoundation.org,
 	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
 	Jill Donahue <jilliandonahue58@gmail.com>, stable@vger.kernel.org
 Subject: Re: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
-Message-ID: <202502081928.T2cRhulq-lkp@intel.com>
+Message-ID: <202502082022.ILQXjseT-lkp@intel.com>
 References: <20250207203441.945196-1-jilliandonahue58@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
@@ -95,21 +95,21 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Jill-Donahue/f_midi_compl
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
 patch link:    https://lore.kernel.org/r/20250207203441.945196-1-jilliandonahue58%40gmail.com
 patch subject: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
-config: i386-buildonly-randconfig-003-20250208 (https://download.01.org/0day-ci/archive/20250208/202502081928.T2cRhulq-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502081928.T2cRhulq-lkp@intel.com/reproduce)
+config: arm-randconfig-002-20250208 (https://download.01.org/0day-ci/archive/20250208/202502082022.ILQXjseT-lkp@intel.com/config)
+compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502082022.ILQXjseT-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502081928.T2cRhulq-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502082022.ILQXjseT-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
-   drivers/usb/gadget/function/f_midi.c: In function 'f_midi_complete':
->> drivers/usb/gadget/function/f_midi.c:286:50: error: 'struct f_midi' has no member named 'tasklet'
+>> drivers/usb/gadget/function/f_midi.c:286:31: error: no member named 'tasklet' in 'struct f_midi'
      286 |                         tasklet_hi_schedule(&midi->tasklet);
-         |                                                  ^~
+         |                                              ~~~~  ^
+   1 error generated.
 
 
 vim +286 drivers/usb/gadget/function/f_midi.c
