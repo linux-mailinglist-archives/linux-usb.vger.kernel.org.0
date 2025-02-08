@@ -1,70 +1,51 @@
-Return-Path: <linux-usb+bounces-20344-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20346-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF391A2D46A
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 08:12:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A73D9A2D473
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 08:15:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F0594188C1C5
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 07:12:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AE157A3FD1
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 07:14:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CFDF1A9B5D;
-	Sat,  8 Feb 2025 07:12:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F93F1A8F9A;
+	Sat,  8 Feb 2025 07:15:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ZXOYrzh+"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="S94L/SWL"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95F5A2C6A3;
-	Sat,  8 Feb 2025 07:12:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC5571A83FF;
+	Sat,  8 Feb 2025 07:15:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738998761; cv=none; b=twGMWwkuozY/GqnD83k7wrEsdudDN1SB1i+oaiDoX1cKmY/cJ8q/2CqFHTGYXgLGTJH57Gf5eFH7AjvuhlfEfDrMkSuOHy/apsNkKa1OYpKTaq4+jwTh+b71H9E5sGNEnDXcrid+zxswdlfhgxdZsGGMyf7HoORkOTbfPHlObEQ=
+	t=1738998904; cv=none; b=GMXg/MD9GiOpbk5BmHZomKj8VJZ1+o6Zbu87FQIK1q3i3xrIIpv1Dd5oql9fsQjplxXvneXqaENClHcLTdweg9WfmPzUR8OtQqScGGp8i5dt5pV2k0/OFplQXMFvhAsVgjDTdoLj9leZ41mX0PZtsZ6esunYJfkvmrOcwZQGfK0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738998761; c=relaxed/simple;
-	bh=Pyt2xpK/5RJwXZi+SVmuRDAyARjDEhYR26aol2nWBS8=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bq3q/HTGzy/8DBf273/P8ts73dcXiiQ9L8/7GMAyLcsHFmcR8EvcmRCxhmvSULsE+FwcZRxf51B/JlTUcHmAF7nxVuMt0UrXXuJwtSkYMvfl45gOX5iq3XdtJMzAGUDprhTSfrgkatt4787OQ2ueKtTIpldhl5Ei+K26tLYLwLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ZXOYrzh+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9678C4CED6;
-	Sat,  8 Feb 2025 07:12:39 +0000 (UTC)
+	s=arc-20240116; t=1738998904; c=relaxed/simple;
+	bh=Iq3jiQK/RAsDjgRbxGyZobesn7rZGV66mz8pWo6XRLM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hmKYOtQ/IjEZUT/zoDTlMRWiSz5M11V+L3BdxxDJsn1ufLysyiXX0AUKC/mzMrizyAr8uJGwh8bx5ediz4UWxT01fUXkNsPEwaz3ZUUFkBaU2nxLI7ta9pg1n57uODVDpwUvz+NjlomjOMHKR6jaxdfPQa+wmhGE62I5yn1QCFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=S94L/SWL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDF32C4CED6;
+	Sat,  8 Feb 2025 07:15:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1738998760;
-	bh=Pyt2xpK/5RJwXZi+SVmuRDAyARjDEhYR26aol2nWBS8=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=ZXOYrzh+VNM1tRwpXkLWvaYfcOJh9g+a7jdHgOpCUA5K1oTcx+EZa5Hv8s0FLOa1q
-	 Q/I1NpnNl4Of85rja+7mGxZmpsaI80P7nKO9Vfo0XrRg88oO2W1Jxrpj2dH9MgxuVp
-	 83v4VMcPVa+h4mpNq0thW/gPM2Q1Pvhm+spjszZM=
-Date: Sat, 8 Feb 2025 08:12:37 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 8/8] drm/vkms: convert to use faux_device
-Message-ID: <2025020855-ventricle-slang-b705@gregkh>
-References: <2025020620-skedaddle-olympics-1735@gregkh>
- <2025020625-unlaced-vagueness-ae34@gregkh>
- <Z6Y72LK1UW86x8av@louis-chauvet-laptop>
+	s=korg; t=1738998903;
+	bh=Iq3jiQK/RAsDjgRbxGyZobesn7rZGV66mz8pWo6XRLM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=S94L/SWLk8PB6NeA77WgvCCQk9OzrR7Q2Mq8MY2fkv/lkbdy+lS7slkRS417jf4nZ
+	 IgB/ZgngvBoKYwksYi67w4jRKUaAm666Z4HgLxWJnYDcXvOOAEEOxQHNLVSwq6BCFV
+	 gRdrF0LEWIhv37mLwRClO59amhkIFPl7mDnE4cLc=
+Date: Sat, 8 Feb 2025 08:14:55 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Jill Donahue <jilliandonahue58@gmail.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
+Message-ID: <2025020836-refining-gutless-0d5f@gregkh>
+References: <20250207203441.945196-1-jilliandonahue58@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,101 +54,67 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z6Y72LK1UW86x8av@louis-chauvet-laptop>
+In-Reply-To: <20250207203441.945196-1-jilliandonahue58@gmail.com>
 
-On Fri, Feb 07, 2025 at 05:59:04PM +0100, Louis Chauvet wrote:
-> On 06/02/25 - 18:38, Greg Kroah-Hartman wrote:
-> > The vkms driver does not need to create a platform device, as there is
-> > no real platform resources associated it,  it only did so because it was
-> > simple to do that in order to get a device to use for resource
-> > management of drm resources.  Change the driver to use the faux device
-> > instead as this is NOT a real platform device.
-> > 
-> > Cc: Louis Chauvet <louis.chauvet@bootlin.com>
-> > Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
-> > Cc: Simona Vetter <simona@ffwll.ch>
-> > Cc: Melissa Wen <melissa.srw@gmail.com>
-> > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> > Cc: Maxime Ripard <mripard@kernel.org>
-> > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > Cc: David Airlie <airlied@gmail.com>
-> > Cc: dri-devel@lists.freedesktop.org
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> >  v3: new patch in the series.  For an example of the api working, does
-> >      not have to be merged at this time, but I can take it if the
-> >      maintainers give an ack.
+On Fri, Feb 07, 2025 at 01:34:41PM -0700, Jill Donahue wrote:
+> When using USB MIDI, a lock is attempted to be acquired twice through a
+> re-entrant call to f_midi_transmit, causing a deadlock.
 > 
-> Hi,
+> Fix it by using tasklet_hi_schedule() to schedule the inner
+> f_midi_transmit() via a tasklet from the completion handler.
 > 
-> This patch cannot be merged into drm-misc-next because we modified the 
-> vkms_device structure in commit 49a167c393b0 ("drm/vkms: Switch to dynamic 
-> allocation for CRTC"), which is present in linux-next.
+> Link: https://lore.kernel.org/all/CAArt=LjxU0fUZOj06X+5tkeGT+6RbXzpWg1h4t4Fwa_KGVAX6g@mail.gmail.com/
+> Fixes: d5daf49b58661 ("USB: gadget: midi: add midi function driver")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jill Donahue <jilliandonahue58@gmail.com>
+> ---
+>  drivers/usb/gadget/function/f_midi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Once this conflict is resolved, I agree with changing from platform_device 
-> to faux_device.
+> diff --git a/drivers/usb/gadget/function/f_midi.c b/drivers/usb/gadget/function/f_midi.c
+> index 837fcdfa3840..37d438e5d451 100644
+> --- a/drivers/usb/gadget/function/f_midi.c
+> +++ b/drivers/usb/gadget/function/f_midi.c
+> @@ -283,7 +283,7 @@ f_midi_complete(struct usb_ep *ep, struct usb_request *req)
+>  			/* Our transmit completed. See if there's more to go.
+>  			 * f_midi_transmit eats req, don't queue it again. */
+>  			req->length = 0;
+> -			f_midi_transmit(midi);
+> +			tasklet_hi_schedule(&midi->tasklet);
+>  			return;
+>  		}
+>  		break;
+> -- 
+> 2.25.1
 > 
-> Apart from this minor conflict, I believe your patch has revealed an issue 
-> in VKMS:
 > 
-> Without your patch:
-> 
-> 	bash-5.2# modprobe vkms
-> 	[drm] Initialized vkms 1.0.0 for vkms on minor 0
-> 	bash-5.2#
-> 
-> With your patch:
-> 
-> 	bash-5.2# modprobe vkms
-> 	faux vkms: Resources present before probing
-> 	[drm] Initialized vkms 1.0.0 for vkms on minor 0
-> 	bash-5.2#
-> 
-> After some investigation, I found that the issue is not caused by your 
-> patch but by VKMS itself:
-> 
-> During faux_device_create, the device core postpones the device probe to 
-> run it later [0]. This probe checks if the devres list is empty [1] and 
-> fails if it is not.
-> 
-> [0]:https://elixir.bootlin.com/linux/v6.13.1/source/drivers/base/bus.c#L534
-> [1]:https://elixir.bootlin.com/linux/v6.13.1/source/drivers/base/dd.c#L626
-> 
-> With a platform driver, the order of execution was:
-> 
-> 	platform_device_register_simple();
-> 		device_add();
-> 	*async* device_probe(); /* no issue, the devres is untouched */
-> 	devres_open_group();
-> 
-> But with faux-device, the order is:
-> 
-> 	faux_device_create();
-> 		device_add();
-> 	devres_open_group();
-> 	*async* device_probe(); /* issue here, because of the previous 
-> 				   devres_open_group */
 
-Wait, what?  It shouuld be the exact same codepath, as faux_device() is
-not doing anything different from platform here.  You might just be
-hitting a race condition as the async probing is the same here.
+Hi,
 
-> How do you think this should be solved? I would like to keep a simple 
-> solution, given that:
-> - we want to have multiple vkms devices (configfs [2])
-> - we need to ensure that device_probe is called before devres_open_group 
->   and devm_drm_dev_alloc to avoid this error
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-How about we take out the async probe?  You are getting lucky that it's
-not hit on the platform device code today.  Faux really doesn't need
-async, I was just trying to make the system work the same way that
-platform devices did.
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-And as for the merge issue, not a problem, I just did this conversion
-for people to see how this works and ideally test it, as you did, to
-find issues!
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
+
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
 
