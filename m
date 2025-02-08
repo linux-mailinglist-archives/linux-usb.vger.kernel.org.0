@@ -1,177 +1,120 @@
-Return-Path: <linux-usb+bounces-20350-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20351-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BE7FA2D61A
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 13:43:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97EB1A2D7C2
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 18:36:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 385723A9CFA
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 12:42:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C78881888A3B
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 17:36:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977F12475C1;
-	Sat,  8 Feb 2025 12:42:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 964D11F30A0;
+	Sat,  8 Feb 2025 17:36:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wx6g7TiM"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="W+F7W0u6"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23429246325;
-	Sat,  8 Feb 2025 12:42:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81F21241CBE;
+	Sat,  8 Feb 2025 17:36:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739018578; cv=none; b=k/qj05PncQ1Up7saJOFEoMRXIVyLFq0+pYEpVl4TUHhUigxhOyqe52IfnSnjlnBsRAxEvUG+NCMkpcx/sJVZy5Qnpttk1qyMjoYxLY8fp4NTO9LHc4UlOOCTR6msL1WgM7EPDmYDo2MlQd+Y/J5V+DfxUp4B1kM7lGk36lGyWNs=
+	t=1739036195; cv=none; b=ab88M7v7Dg0toRugExZMEFyZC0QJd6WCHFElFVuf+ZZEa38jYdIeMkwblKX0xAkGGKE9Udd/5jR04NfyoyAXjlPORM8va0TinqEUEc7lhFFD6y4KZhyyKnPXfDSa3CRxO4W+GzerodGvcOA6bJJ6HlY1XwFMvEqjmBOabz2omv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739018578; c=relaxed/simple;
-	bh=YVy+IfFJ5cAi8fhZw1+Db4yy3YSBlt1NusOQ50IFpc0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KRmRtIe2fIvzO0kUy5fjydJG2w6Z/dxWZDul09E8azrP4kkXc7/rfkqXCZRCbTHyR3iTX/Ka5IhUxhuh+hudBALeWSTIaME2GrCihkC3/9u/jOGIVaajAmZiRXyaILndDPcqXhk5G9iSzNvlj4I8XGJTzBX5X32KCRIPrLoRloA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wx6g7TiM; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739018576; x=1770554576;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YVy+IfFJ5cAi8fhZw1+Db4yy3YSBlt1NusOQ50IFpc0=;
-  b=Wx6g7TiMCLDjAolzpEyFMq+nOOf8MBUcT4KHPdKwei9HIipMZsRvzeiH
-   pavcWzewmfLz487BHo3qHUzUVcHMAyJMVoIarSEcv45/oPDbPHm9TiKHT
-   Io7Exbk6/aolyrgwo8s6zQp8pRr5Ag9SQtUkS3/VLYlO/4MA5D4jEpTgx
-   5ZrwMdb6MAxlf1FVG4Evg+M9IuKnb0R1cfisuUKSyHzr+yGQ/rF7HRpDH
-   bK3hMduzM7itxIUvS1TQUEjqnSev8emkFRWybpNbkw6cNb5veOQ1zw/O9
-   rEfGZGSoI/0SEK+FrwIAwo8MAdKGs8uGKEAytlp9wolG7kfDknjnLbD0d
-   g==;
-X-CSE-ConnectionGUID: lrF/Xo5RSWyziqgUYNr8VQ==
-X-CSE-MsgGUID: Orty2yEJR82z6uZprcAJQA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="62128327"
-X-IronPort-AV: E=Sophos;i="6.13,270,1732608000"; 
-   d="scan'208";a="62128327"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 04:42:55 -0800
-X-CSE-ConnectionGUID: l3YTQ+M0RiSMtzD13TC+sQ==
-X-CSE-MsgGUID: OZ9hKCmnSWOjjnRpgIVSZA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116368381"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 08 Feb 2025 04:42:53 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tgkAd-000zyN-0y;
-	Sat, 08 Feb 2025 12:42:51 +0000
-Date: Sat, 8 Feb 2025 20:42:17 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jill Donahue <jilliandonahue58@gmail.com>, gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	Jill Donahue <jilliandonahue58@gmail.com>, stable@vger.kernel.org
-Subject: Re: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
-Message-ID: <202502082022.ILQXjseT-lkp@intel.com>
-References: <20250207203441.945196-1-jilliandonahue58@gmail.com>
+	s=arc-20240116; t=1739036195; c=relaxed/simple;
+	bh=pV2Dv17dL2PulioC5/LJvildJ3ccDsAFlLGNRJm1g9I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=lD0lpxQbIv6DxrsrnIyuAXl03YXW6Q2SRfzsfG6TFe0rD+5pJpijQG/dTydTgBmsxBD6OZH7+NFGsPi17NuE+PlpDutGcUzIikPTB03JblAZ0W6vHk21nVndmlTsN3TSdFun+hHhay7cx8eMqIRxdvH3gVJ8YMdoCWRPKOQot3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=W+F7W0u6; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-544107119b5so387459e87.0;
+        Sat, 08 Feb 2025 09:36:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739036191; x=1739640991; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xxA+6AQA1H+MMB2+UVcywcdFT3ibON4Gb+pRswWaHsE=;
+        b=W+F7W0u6s3LPjtQ01NEtk0HZGPC1uOGxnUHYSyIPtPV+Z/A5tg8FNIZCK7Jryz6Mah
+         GUNQ5U69yfd7sWn1qm9STM/4BLaJsF1BEPF6PKlYWZC94Akkv86sKL+V5sT1K8+TS9oQ
+         BHa9OO3el0wnioPYFcit2aqpkAWHlnGDW8xKIwjQ17a7dPkaAlvvtyLaTkq4tVCVEx5Y
+         aLYoASKp7DlKMpI5Sa0jpHSJjb1PufCb/4HEDBBnECTjHNDxR4lUDF/JOS0JkVM47dM3
+         exQEYZkW4KxxOD1or8OaNlCrbFcs5qA04JlnqRO+GrE/evX6mJ8paKPzb+Oen8BV23eK
+         zcJw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739036191; x=1739640991;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xxA+6AQA1H+MMB2+UVcywcdFT3ibON4Gb+pRswWaHsE=;
+        b=kaRzsT/i0gr3MBx8w4I9im07uLuuB5K5SQM9kd6+8if9gM+Em8euWmk4gGTwqG1riN
+         WwTFM9enKlCgDOBFBPOJMrr/jlhNGkOjErFmCJgnbAUlNRdk6ONg4hzHyJGdvNnNvKw3
+         SxHS3un30aAlGDflpJ/3V8La+r1dR8YmLmORNzSU8K9B4gQGo0funO5EZUMl2eoc4NBq
+         bkrUxXKKOL3j9bvRVY3blG0IcXtaQoJCXat3aV5SgeOcpjOKjPFmPYzxJsJ4/Gt6Cizq
+         tDGpGSmDyfz70tYgH/iFPPJ/qYHV0q5RvwzNCbLfu9uj1vsauzsYNf4cZClpcbd9d19G
+         HHkw==
+X-Forwarded-Encrypted: i=1; AJvYcCUzXzGRUGu0UwBIwqi6sGPcfFBvKXtIi9ZrCHIjELxtg06hAoD3b7b1VVh8qH2pc4hfZnj8QDCtscXysQ==@vger.kernel.org, AJvYcCWS8og1BJLj5zpvfsKH75cOq32QeSeECYQv01T9UVs4yv38S8IU6zYyhjyEuSE09aMT+Qb4UQc9tM4s@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXVr3HHaLTgYYyH4YaiZZLrfYfWYwhg3LUcnbF01qQeH2F3ZjZ
+	Yc4ZBsSkzrIpd4/6YQowaKVDV1Pu6ei3SxHS19vP79/FP1cF9ohZ
+X-Gm-Gg: ASbGncv5oCe52Endz4WUBLlZJezgS0Cg5fvt8aMKwFk4VsyYxW6XBnYYz+wb9D9Z2Dt
+	R9kXYbIGFZ/aDSDBBjSLvm5GEal9b4R0EakDMy7cdvrkYypiu20SsIBOQc4oO2PZRmJixB7bqWP
+	TrOBrugpU26Ff0rPW3y5fWVrLewPg10CP/8mEecJX7j+YTo/W+eFNXr72koZYNRsZakT49O2eNN
+	Srp/G166NnjDrDTeaAjgWu75ps/bSllAVZ9GFnJ0zFwKOHmFTKE6B5g8y2XLBMNQEuZep7XYRya
+	fvoyckwx7USZdbJdsohUm/27za44yv4nSQeBml4wlgkuaKpVoDutSsucD+HQHw==
+X-Google-Smtp-Source: AGHT+IECKdiH0LhvStH5qEsDhVUgiP6gvZaqSMi2hnje3BeN0OMP8j/1bIBi+B5c4s/j++lL1mNf+A==
+X-Received: by 2002:a05:6512:2805:b0:542:1137:612e with SMTP id 2adb3069b0e04-54414ab771bmr948004e87.6.1739036191222;
+        Sat, 08 Feb 2025 09:36:31 -0800 (PST)
+Received: from laptok.lan (89-64-31-140.dynamic.chello.pl. [89.64.31.140])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5441053ed99sm774808e87.3.2025.02.08.09.36.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 08 Feb 2025 09:36:30 -0800 (PST)
+From: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
+To: jikos@kernel.org,
+	bentiss@kernel.org
+Cc: anssi.hannula@gmail.com,
+	oleg@makarenk.ooo,
+	linux-input@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH 0/3] HID: pidff: Compatibility update and new devices
+Date: Sat,  8 Feb 2025 18:36:25 +0100
+Message-ID: <20250208173628.5734-1-tomasz.pakula.oficjalny@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250207203441.945196-1-jilliandonahue58@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Hi Jill,
+This is a small series based on top of hid.git#for-6.15/pidff.
+Add Oleg Makarenko as hid-universal-pidff co-maintainer as he fixed
+his email server and will be able to respond to LKML inquiries.
 
-kernel test robot noticed the following build errors:
+Small compatibility patch for situations, where POOL report haven't
+been properly initiated and adding Asetek vendor and 4 of their
+wheelbases.
 
-[auto build test ERROR on usb/usb-testing]
-[also build test ERROR on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.14-rc1 next-20250207]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Jill-Donahue/f_midi_complete-to-call-tasklet_hi_schedule/20250208-043845
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/20250207203441.945196-1-jilliandonahue58%40gmail.com
-patch subject: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
-config: arm-randconfig-002-20250208 (https://download.01.org/0day-ci/archive/20250208/202502082022.ILQXjseT-lkp@intel.com/config)
-compiler: clang version 17.0.6 (https://github.com/llvm/llvm-project 6009708b4367171ccdbf4b5905cb6a803753fe18)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502082022.ILQXjseT-lkp@intel.com/reproduce)
+---
+Tomasz Pakuła (3):
+  MAINTAINERS: Update hid-universal-pidff entry
+  HID: pidff: Make sure to fetch pool before checking SIMULTANEOUS_MAX
+  HID: hid-universal-pidff: Add Asetek wheelbases support
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502082022.ILQXjseT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/usb/gadget/function/f_midi.c:286:31: error: no member named 'tasklet' in 'struct f_midi'
-     286 |                         tasklet_hi_schedule(&midi->tasklet);
-         |                                              ~~~~  ^
-   1 error generated.
+ MAINTAINERS                       |  3 ++-
+ drivers/hid/hid-ids.h             |  6 ++++++
+ drivers/hid/hid-universal-pidff.c |  4 ++++
+ drivers/hid/usbhid/hid-pidff.c    | 34 +++++++++++++++----------------
+ 4 files changed, 28 insertions(+), 19 deletions(-)
 
 
-vim +286 drivers/usb/gadget/function/f_midi.c
-
-   269	
-   270	static void
-   271	f_midi_complete(struct usb_ep *ep, struct usb_request *req)
-   272	{
-   273		struct f_midi *midi = ep->driver_data;
-   274		struct usb_composite_dev *cdev = midi->func.config->cdev;
-   275		int status = req->status;
-   276	
-   277		switch (status) {
-   278		case 0:			 /* normal completion */
-   279			if (ep == midi->out_ep) {
-   280				/* We received stuff. req is queued again, below */
-   281				f_midi_handle_out_data(ep, req);
-   282			} else if (ep == midi->in_ep) {
-   283				/* Our transmit completed. See if there's more to go.
-   284				 * f_midi_transmit eats req, don't queue it again. */
-   285				req->length = 0;
- > 286				tasklet_hi_schedule(&midi->tasklet);
-   287				return;
-   288			}
-   289			break;
-   290	
-   291		/* this endpoint is normally active while we're configured */
-   292		case -ECONNABORTED:	/* hardware forced ep reset */
-   293		case -ECONNRESET:	/* request dequeued */
-   294		case -ESHUTDOWN:	/* disconnect from host */
-   295			VDBG(cdev, "%s gone (%d), %d/%d\n", ep->name, status,
-   296					req->actual, req->length);
-   297			if (ep == midi->out_ep) {
-   298				f_midi_handle_out_data(ep, req);
-   299				/* We don't need to free IN requests because it's handled
-   300				 * by the midi->in_req_fifo. */
-   301				free_ep_req(ep, req);
-   302			}
-   303			return;
-   304	
-   305		case -EOVERFLOW:	/* buffer overrun on read means that
-   306					 * we didn't provide a big enough buffer.
-   307					 */
-   308		default:
-   309			DBG(cdev, "%s complete --> %d, %d/%d\n", ep->name,
-   310					status, req->actual, req->length);
-   311			break;
-   312		case -EREMOTEIO:	/* short read */
-   313			break;
-   314		}
-   315	
-   316		status = usb_ep_queue(ep, req, GFP_ATOMIC);
-   317		if (status) {
-   318			ERROR(cdev, "kill %s:  resubmit %d bytes --> %d\n",
-   319					ep->name, req->length, status);
-   320			usb_ep_set_halt(ep);
-   321			/* FIXME recover later ... somehow */
-   322		}
-   323	}
-   324	
-
+base-commit: 5d98079b2d0186e1f586301a9c00144a669416a8
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.48.1
+
 
