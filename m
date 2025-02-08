@@ -1,163 +1,179 @@
-Return-Path: <linux-usb+bounces-20342-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20343-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA9BDA2D37F
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 04:31:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53BBEA2D41E
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 06:40:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC0D1188DF43
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 03:31:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED2C016B20C
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 05:40:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39AF1157E6B;
-	Sat,  8 Feb 2025 03:31:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4947A19DF8D;
+	Sat,  8 Feb 2025 05:39:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="LJFz7KrD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S7IS+KGI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B39C611E
-	for <linux-usb@vger.kernel.org>; Sat,  8 Feb 2025 03:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AADD017BA6;
+	Sat,  8 Feb 2025 05:39:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738985494; cv=none; b=JXwRa0GbM3Le5pBTK+EXeGGJ0V8SD9Q/+6VDhvIwhOdtWdgR/sIN8tBgT+bqqlebtXxk6g3bUhRGdMkeroLR5ncTFqub279A1QnoAzC3UI04CgtDlcd4uZwRGpeAZnL/7k1a1pCU/Ty4S5qw4AqSBnS+qQxHLfqBP3oCYTkEvMQ=
+	t=1738993195; cv=none; b=EKdQVm9opc30OH2n5t9+nZjOdXPNRlH/gqmZ5E1EIRO8zYWDmANqPGDPatk+eMYwjmzQ6A9ExWQKgYDpQZ52kJCHarU77Uu1iT+bR+FpIRBBZCxNMMDHLPqruBwdRYLM/5NxUQ34EKFIdrCCbmGIgSAWBjQdyeaRuqxTGtGWhTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738985494; c=relaxed/simple;
-	bh=+sardm/LolQw6ziPvWfFf1wd1dVDkIErwNJaVuBhKCI=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=FPBb3jHieIv12nXuQ9uJIrQm9MVppJPTb4x8t7/+570i43LXMvxJEu07YHvRto41KUmTeL2EOkdg2PPssFfTccY2BY9BE6SUJZ+3fjCfU9WKaHAmT//9kuRMZg0Nv1tTHutp/uzh9NxIgZyOro9Qm4hapg63wA7bB315KxGNwfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=LJFz7KrD; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--badhri.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2fa44233a04so724612a91.1
-        for <linux-usb@vger.kernel.org>; Fri, 07 Feb 2025 19:31:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738985492; x=1739590292; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=p0gZ2q9HM3rX07kpmvYyR39VyXsdRnL4CUz3gU+Woqc=;
-        b=LJFz7KrDHsIKgE1KF5CTCVOYMs+coq4m0/ipl0e6pW7LQ5n6CX5+40/KgcCubxkXm3
-         o94Q9oPCMQYLHH3a9NPJ1hTK6ZxI1wQIyavXF3Fv8LQxJGlwLwaBV9p7bgxfYS9kTeI9
-         s14fgdWz8kX9U6R7cYZenisjEB/wRDRODQ5CCgeJUPGxpCqtuPirEo4n51djQcK8UEtb
-         IFiT4Zk3vbUW39kEGzWFR9pov6wBVCNcqMqesMC1VRNo2VQV6ixvvUpOH0929BVuFMR6
-         52os5NztoupKNjWx3tpVkD1xezoWWz3zou9zgCdxl4cT1AhCPHvJgmBnlamDUrpNwR8S
-         kvMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738985492; x=1739590292;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=p0gZ2q9HM3rX07kpmvYyR39VyXsdRnL4CUz3gU+Woqc=;
-        b=c4rkLaOvO69Hxf/nMJ74JGdXFRMaLIKB+cKP1rAymAqp3z/gj919CmSFdBsalGgZBb
-         9mPj4jUgMpSUGLMt+LXW2g+u9fR7QNqjH8uV2hyyDvBveD0KDQhvuXdlnj4fIgYIhPDS
-         WKgpolxRis4Ck0a+rg9h+hG4vLCXMOWrqlBL0GBsb5IQqBH0o5jEIJ5yIqXhJqddrsN7
-         68kjUKJhfoDEQM3q6jjcEvMKs8GSSIfPiP3g7uz8YpfH8/MriBJy8LTwecrXod3V++Q4
-         uw8tZUZFPvnPjEX3tEzBB7D4w1sofrGc2Ipmd6XqLRQXXKnqy9zQ/sqU2vLMB2iRnQ2u
-         kpFA==
-X-Gm-Message-State: AOJu0YzEzzZDXEFZNfzGX3tc6DQJM/urJk3iTOBV7PKQLBOAzXmFZdj0
-	VvSg6NkDYFePoXguAHKlrqsUK/zhsmYW4JtlguDyOmbdbbPD5CQyUulVsoxccY82SW2MelsLiM7
-	ePg==
-X-Google-Smtp-Source: AGHT+IHF6JQH1xgZnqdPNtMVklKecXq5Aajik4oseZpvmg90/Ega/bv/OBxCXP5JoMVF9e7hXVZw8+bCgNQ=
-X-Received: from pjbsp15.prod.google.com ([2002:a17:90b:52cf:b0:2ee:53fe:d0fc])
- (user=badhri job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2d8c:b0:2f9:9ddd:689b
- with SMTP id 98e67ed59e1d1-2fa242e75eamr7097462a91.22.1738985492599; Fri, 07
- Feb 2025 19:31:32 -0800 (PST)
-Date: Sat,  8 Feb 2025 03:31:29 +0000
+	s=arc-20240116; t=1738993195; c=relaxed/simple;
+	bh=EIO2RApIMTaoQHu0AYGuzLxcnzfiMUbPkQ+Ttz9uEII=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bezvMdVPi36fGf/NACaf7GAR/fnOWukpvgaCBdmM/uzREP7m951Eqa3VGg+lQD5skLg1YFN4isN60Iclq94A7+Y5pGgImaKYhH9X4XCrv4wRWil8hX6zndKvXMwo5Gp+a2McAgSjbJSS4GLdOwXM06ep+YajPjHxyR20Vd1vgVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S7IS+KGI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A947C4CED6;
+	Sat,  8 Feb 2025 05:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738993194;
+	bh=EIO2RApIMTaoQHu0AYGuzLxcnzfiMUbPkQ+Ttz9uEII=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=S7IS+KGI3Cu01/xSeKZlmjbimenl4l3+vdhqWbdTyYouNNAUtuuQyWwiHKVab3XdB
+	 IB8DBjZoyV7v0hhgNXxbff/mQ4HWs+m6zW94oGZB5LRvd4hYLwvkeeoIn3ilJEvi6r
+	 d5sR38oZnjxCT2bzT+5w4IMqQAl2yyowhLtQ14Cx4wgFbu/70jSYWyPIo+/4ANPurY
+	 K2Vsydclww71WiA2sgAFS235YE0a/UI72AZy008IOfcGiw/Mo7tN8/zXACsW96UHkI
+	 R6JA0YGDChkYHuY3eC0/8hCSicNYgXRy9TDwA71pP8+0ttdS7ftm/K4BaU25IZCoPJ
+	 n/1jziYmSveFg==
+Date: Sat, 8 Feb 2025 13:39:44 +0800
+From: Peter Chen <peter.chen@kernel.org>
+To: Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc: pawell@cadence.com, rogerq@kernel.org, gregkh@linuxfoundation.org,
+	balbi@kernel.org, jun.li@nxp.com, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, srk@ti.com
+Subject: Re: [PATCH] usb: cdns3: exit cdns3_gadget_udc_start if
+ FAST_REG_ACCESS cannot be set
+Message-ID: <20250208053944.GA28062@nchen-desktop>
+References: <20250206125943.786949-1-s-vadapalli@ti.com>
+ <20250207022523.GA22848@nchen-desktop>
+ <tf7qwkoybolexehzagzel67kdxdfsve2f3qdueomedld72v7pp@bquo47wpsxul>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.48.1.502.g6dc24dfdaf-goog
-Message-ID: <20250208033129.3524423-1-badhri@google.com>
-Subject: [PATCH v2] usb: dwc3: gadget: Prevent irq storm when TH re-executes
-From: Badhri Jagan Sridharan <badhri@google.com>
-To: Thinh.Nguyen@synopsys.com, gregkh@linuxfoundation.org, 
-	felipe.balbi@linux.intel.com
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	jameswei@google.com, Badhri Jagan Sridharan <badhri@google.com>, stable@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <tf7qwkoybolexehzagzel67kdxdfsve2f3qdueomedld72v7pp@bquo47wpsxul>
 
-While commit d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events in
-event cache") makes sure that top half(TH) does not end up overwriting the
-cached events before processing them when the TH gets invoked more than one
-time, returning IRQ_HANDLED results in occasional irq storm where the TH
-hogs the CPU. The irq storm can be prevented by clearing the flag before
-event handler busy is cleared. Default enable interrupt moderation in all
-versions which support them.
+On 25-02-07 11:12:50, Siddharth Vadapalli wrote:
+> On Fri, Feb 07, 2025 at 10:25:23AM +0800, Peter Chen wrote:
+> 
+> Hello Peter,
+> 
+> > On 25-02-06 18:29:36, Siddharth Vadapalli wrote:
+> > > When the device is in a low power state, access to the following
+> > > registers takes a long time:
+> > > - EP_CFG
+> > > - EP_TRADDR
+> > > - EP_CMD
+> > > - EP_SEL
+> > > - EP_STS
+> > > - USB_CONF
+> > > 
+> > > To address this, the fast register access feature can be enabled by
+> > > setting PUSB_PWR_FST_REG_ACCESS bit of the USB_PWR register, which
+> > > allows quick access by software. Software is expected to poll on
+> > > PUSB_PWR_FST_REG_ACCESS_STAT to ensure that fast register access has
+> > > been enabled by the controller. Attempting to access any of the
+> > > aforementioned registers after setting PUSB_PWR_FST_REG_ACCESS but
+> > > before PUSB_PWR_FST_REG_ACCESS_STAT has been set will result in
+> > > undefined behavior and potentially result in system hang.
+> > > 
+> > > Hence, poll on PUSB_PWR_FST_REG_ACCESS_STAT before proceeding with
+> > > gadget configuration, and exit if it cannot be enabled.
+> > > 
+> > > Fixes: b5148d946f45 ("usb: cdns3: gadget: set fast access bit")
+> > > Cc: <stable@vger.kernel.org>
+> > > Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> > > ---
+> > > 
+> > > Hello,
+> > > 
+> > > This patch is based on commit
+> > > 92514ef226f5 Merge tag 'for-6.14-rc1-tag' of git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux
+> > > of Mainline Linux.
+> > > 
+> > > Regards,
+> > > Siddharth.
+> > > 
+> > >  drivers/usb/cdns3/cdns3-gadget.c | 18 ++++++++++++++++--
+> > >  1 file changed, 16 insertions(+), 2 deletions(-)
+> > > 
+> > > diff --git a/drivers/usb/cdns3/cdns3-gadget.c b/drivers/usb/cdns3/cdns3-gadget.c
+> > > index fd1beb10bba7..b62691944272 100644
+> > > --- a/drivers/usb/cdns3/cdns3-gadget.c
+> > > +++ b/drivers/usb/cdns3/cdns3-gadget.c
+> > > @@ -2971,8 +2971,6 @@ static void cdns3_gadget_config(struct cdns3_device *priv_dev)
+> > >  	/* enable generic interrupt*/
+> > >  	writel(USB_IEN_INIT, &regs->usb_ien);
+> > >  	writel(USB_CONF_CLK2OFFDS | USB_CONF_L1DS, &regs->usb_conf);
+> > > -	/*  keep Fast Access bit */
+> > > -	writel(PUSB_PWR_FST_REG_ACCESS, &priv_dev->regs->usb_pwr);
+> > >  
+> > >  	cdns3_configure_dmult(priv_dev, NULL);
+> > >  }
+> > > @@ -2990,6 +2988,8 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
+> > >  	struct cdns3_device *priv_dev = gadget_to_cdns3_device(gadget);
+> > >  	unsigned long flags;
+> > >  	enum usb_device_speed max_speed = driver->max_speed;
+> > > +	int ret;
+> > > +	u32 reg;
+> > >  
+> > >  	spin_lock_irqsave(&priv_dev->lock, flags);
+> > >  	priv_dev->gadget_driver = driver;
+> > > @@ -2997,6 +2997,20 @@ static int cdns3_gadget_udc_start(struct usb_gadget *gadget,
+> > >  	/* limit speed if necessary */
+> > >  	max_speed = min(driver->max_speed, gadget->max_speed);
+> > >  
+> > > +	/*  keep Fast Access bit */
+> > > +	writel(PUSB_PWR_FST_REG_ACCESS, &priv_dev->regs->usb_pwr);
+> > > +	reg = readl(&priv_dev->regs->usb_pwr);
+> > > +	if (!(reg & PUSB_PWR_FST_REG_ACCESS_STAT)) {
+> > > +		ret = readl_poll_timeout_atomic(&priv_dev->regs->usb_pwr, reg,
+> > > +						(reg & PUSB_PWR_FST_REG_ACCESS_STAT),
+> > > +						10, 1000);
+> > > +		if (ret) {
+> > > +			dev_err(priv_dev->dev, "Failed to enable fast access\n");
+> > > +			spin_unlock_irqrestore(&priv_dev->lock, flags);
+> > > +			return ret;
+> > > +		}
+> > > +	}
+> > > +
+> > >  	switch (max_speed) {
+> > >  	case USB_SPEED_FULL:
+> > >  		writel(USB_CONF_SFORCE_FS, &priv_dev->regs->usb_conf);
+> > 
+> > Hi Siddharth,
+> > 
+> > Would you please keep this change at cdns3_gadget_config in case the
+> > controller is power lost during the system suspend?
+> 
+> I did think of that initially, but the problem with doing so is that we
+> are already accessing USB_CONF above in the "switch(max_speed)" section.
+> The PUSB_PWR_FST_REG_ACCESS bit needs to be set before accessing any of:
+> - EP_CFG
+> - EP_TRADDR
+> - EP_CMD
+> - EP_SEL
+> - EP_STS
+> - USB_CONF
+> 
+> Please let me know if you have an alternate suggestion to address the
+> above.
+> 
 
-ftrace event stub during dwc3 irq storm:
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000866: irq_handler_exit: irq=14 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000872: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000874: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000881: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000883: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000889: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000892: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000898: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000901: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000907: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000909: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000915: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000918: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000924: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000927: irq_handler_exit: irq=504 ret=handled
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000933: irq_handler_entry: irq=504 name=dwc3
-    irq/504_dwc3-1111  ( 1111) [000] .... 70.000935: irq_handler_exit: irq=504 ret=handled
-    ....
+How about move cdns3_gadget_config at the beginning of function
+cdns3_gadget_udc_start, and add your changes at cdns3_gadget_config?
 
-Cc: stable@kernel.org
-Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Fixes: d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events in event cache")
-Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
----
- drivers/usb/dwc3/core.c   |  2 +-
- drivers/usb/dwc3/gadget.c | 10 +++++++---
- 2 files changed, 8 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index dfa1b5fe48dc..6df971ef7285 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -1835,7 +1835,7 @@ static void dwc3_get_properties(struct dwc3 *dwc)
- 	dwc->tx_thr_num_pkt_prd = tx_thr_num_pkt_prd;
- 	dwc->tx_max_burst_prd = tx_max_burst_prd;
- 
--	dwc->imod_interval = 0;
-+	dwc->imod_interval = 1;
- 
- 	dwc->tx_fifo_resize_max_num = tx_fifo_resize_max_num;
- }
-diff --git a/drivers/usb/dwc3/gadget.c b/drivers/usb/dwc3/gadget.c
-index d27af65eb08a..fad115113d28 100644
---- a/drivers/usb/dwc3/gadget.c
-+++ b/drivers/usb/dwc3/gadget.c
-@@ -4467,14 +4467,18 @@ static irqreturn_t dwc3_process_event_buf(struct dwc3_event_buffer *evt)
- 	dwc3_writel(dwc->regs, DWC3_GEVNTSIZ(0),
- 		    DWC3_GEVNTSIZ_SIZE(evt->length));
- 
-+	evt->flags &= ~DWC3_EVENT_PENDING;
-+	/*
-+	 * Add an explicit write memory barrier to make sure that the update of
-+	 * clearing DWC3_EVENT_PENDING is observed in dwc3_check_event_buf()
-+	 */
-+	wmb();
-+
- 	if (dwc->imod_interval) {
- 		dwc3_writel(dwc->regs, DWC3_GEVNTCOUNT(0), DWC3_GEVNTCOUNT_EHB);
- 		dwc3_writel(dwc->regs, DWC3_DEV_IMOD(0), dwc->imod_interval);
- 	}
- 
--	/* Keep the clearing of DWC3_EVENT_PENDING at the end */
--	evt->flags &= ~DWC3_EVENT_PENDING;
--
- 	return ret;
- }
- 
-
-base-commit: 9682c35ff6ecd76d9462d4749b8b413d3e8e605e
--- 
-2.48.1.502.g6dc24dfdaf-goog
-
+Regards,
+Peter
 
