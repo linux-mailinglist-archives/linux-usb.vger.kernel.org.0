@@ -1,72 +1,76 @@
-Return-Path: <linux-usb+bounces-20348-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20349-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B7FAA2D4EE
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 09:50:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A1F6A2D601
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 13:11:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53F803AB1AA
-	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 08:49:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B3193A89EC
+	for <lists+linux-usb@lfdr.de>; Sat,  8 Feb 2025 12:10:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 470FD1A315E;
-	Sat,  8 Feb 2025 08:49:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57AB2246343;
+	Sat,  8 Feb 2025 12:10:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="wxRunt+U"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OBjqx9Lz"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA198522F;
-	Sat,  8 Feb 2025 08:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF17A2451E6;
+	Sat,  8 Feb 2025 12:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739004594; cv=none; b=TYX6vJi4S9JnGCd5KkgeBahLQ68wLxy5llxVe1i4zD8nle+IzVD+SzUp/rS3vh6GjG4Wn6BR/j2eBnHKxb5xDNng+j4D4USK4TPLRBYnj+i6O66rSKQc1HtR7jfFnt0xUIxfskgHj24zXSwirlWM4q183aKJpvYkPnnJ5PPHLdM=
+	t=1739016654; cv=none; b=TQLlmkOnluHApQSqaX5BPmKrqzIXj9hUoX1zG+QN4rfIpy56iT28JGA7hp148l3xuCQSmXKB0pylkjzYut0yp397OMjlzww/ZDWOAi8NEuydcnjxUYs9lJ/ZZDzDLK4H8PBmHwv57zi7RPDFqP1lKdZyeYDxqQddpbH9rYH78Qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739004594; c=relaxed/simple;
-	bh=AuUeYp1A5NdnSP3v1LtC4B9Kji6WVYBlvjIfzZCR5iw=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j9UJy/TLfbpjdghu88QsgA62uhDTxjJKlWyjMmo5Pdzuw/PNc7p6HguyUcEUS/WOjW1qN1sAja8RgFlOeHvisTI78WmA3xZklsLzo0jQMz6d7u8m//+E0EKG7tzc9rXL+zPPC1B9GA/A1KOVQnrun6EvsyiHQNQ4ou+Xki9+UnE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=wxRunt+U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 753D6C4CED6;
-	Sat,  8 Feb 2025 08:49:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739004594;
-	bh=AuUeYp1A5NdnSP3v1LtC4B9Kji6WVYBlvjIfzZCR5iw=;
-	h=Date:From:To:Subject:References:In-Reply-To:From;
-	b=wxRunt+U5RX1eax8W4IFVBCSXiEA1I0HsWHo+x8nnn0NU41bmSOhLQx0VeeSqzeo0
-	 ffRwzJEUzkxjPix90WwSrjZkk5XFRc5D03XbW3QDTWzqqDDFRXhxsEcZtWxaBRFd6W
-	 sRzEalRHg8BbO6Zcxn/7BTTMSmSOOApxyiyCBXXQ=
-Date: Sat, 8 Feb 2025 09:49:50 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, Lyude Paul <lyude@redhat.com>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Haneen Mohammed <hamohammed.sa@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Melissa Wen <melissa.srw@gmail.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH v3 8/8] drm/vkms: convert to use faux_device
-Message-ID: <2025020844-stank-catlike-2661@gregkh>
-References: <2025020620-skedaddle-olympics-1735@gregkh>
- <2025020625-unlaced-vagueness-ae34@gregkh>
- <Z6Y72LK1UW86x8av@louis-chauvet-laptop>
- <2025020855-ventricle-slang-b705@gregkh>
- <Z6cX5MG3yM4XL9jR@Host-003>
+	s=arc-20240116; t=1739016654; c=relaxed/simple;
+	bh=Y4cah178pVm/TyCjnR2BxWLPSd7RUgpqPRJ2KklwCB0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Dlz+mqOfHt0MAna1oWePfGznsIvKz5pVxkn6cGsm5HZrwwo8wxdch372+b2COTyJs3bUjbIEByQm3VlEsYq26C58lD6V4NqIJ7YvRNH+DMHbeYZ5xhZJ7JQqTbbm7xOHLGTRpvqBZ3bQd2G32JpymziObJwYIyoc3Z6hfpjnU+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OBjqx9Lz; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739016652; x=1770552652;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Y4cah178pVm/TyCjnR2BxWLPSd7RUgpqPRJ2KklwCB0=;
+  b=OBjqx9Lz7WtO1nhtHw4Eox+ibossr1MrffEcFG/605cWlVqv2nm5v52/
+   9H3cw1Lm3ale8+3agfp3kuUhlMVLe7cEoeCAlr3BSkp7SI/tlGlJnfrJj
+   X4H0bEgDYd9sBE39egVIX00oYfuR9i/vrtAW4QbLCtg2OMw53z0ak9o23
+   8wgOoMGPEjUtUwy0stv3dnxi+in7dMfqP/p07Zy+AsKaz38aFAeQaNPsH
+   BtO7WxybGQc+OfySPXRRYe3gKOuYajLrkLobHnHAMUd1lC+lhqnOQ9V0C
+   QB+Su5KDIpmj0nxhFiEchVNb8IAUnDlp+KhdU+xOonhPf9BJsFxuuYbsR
+   A==;
+X-CSE-ConnectionGUID: RPPS7triR1yzYKxNo245iw==
+X-CSE-MsgGUID: YbNh1tkzRl+GtVF4Gp2r7g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11339"; a="57070806"
+X-IronPort-AV: E=Sophos;i="6.13,269,1732608000"; 
+   d="scan'208";a="57070806"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Feb 2025 04:10:52 -0800
+X-CSE-ConnectionGUID: UKX7WyT1R12FPhdDM3c1XQ==
+X-CSE-MsgGUID: YDExt5IHSWi50POe66I1Xw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,269,1732608000"; 
+   d="scan'208";a="116770919"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 08 Feb 2025 04:10:50 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tgjfa-000zw7-35;
+	Sat, 08 Feb 2025 12:10:46 +0000
+Date: Sat, 8 Feb 2025 20:10:02 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jill Donahue <jilliandonahue58@gmail.com>, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev,
+	Jill Donahue <jilliandonahue58@gmail.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
+Message-ID: <202502081928.T2cRhulq-lkp@intel.com>
+References: <20250207203441.945196-1-jilliandonahue58@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -75,120 +79,99 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z6cX5MG3yM4XL9jR@Host-003>
+In-Reply-To: <20250207203441.945196-1-jilliandonahue58@gmail.com>
 
-On Sat, Feb 08, 2025 at 09:37:56AM +0100, Louis Chauvet wrote:
-> On 08/02/25 - 08:12, Greg Kroah-Hartman wrote:
-> > On Fri, Feb 07, 2025 at 05:59:04PM +0100, Louis Chauvet wrote:
-> > > On 06/02/25 - 18:38, Greg Kroah-Hartman wrote:
-> > > > The vkms driver does not need to create a platform device, as there is
-> > > > no real platform resources associated it,  it only did so because it was
-> > > > simple to do that in order to get a device to use for resource
-> > > > management of drm resources.  Change the driver to use the faux device
-> > > > instead as this is NOT a real platform device.
-> > > > 
-> > > > Cc: Louis Chauvet <louis.chauvet@bootlin.com>
-> > > > Cc: Haneen Mohammed <hamohammed.sa@gmail.com>
-> > > > Cc: Simona Vetter <simona@ffwll.ch>
-> > > > Cc: Melissa Wen <melissa.srw@gmail.com>
-> > > > Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-> > > > Cc: Maxime Ripard <mripard@kernel.org>
-> > > > Cc: Thomas Zimmermann <tzimmermann@suse.de>
-> > > > Cc: David Airlie <airlied@gmail.com>
-> > > > Cc: dri-devel@lists.freedesktop.org
-> > > > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > > ---
-> > > >  v3: new patch in the series.  For an example of the api working, does
-> > > >      not have to be merged at this time, but I can take it if the
-> > > >      maintainers give an ack.
-> > > 
-> > > Hi,
-> > > 
-> > > This patch cannot be merged into drm-misc-next because we modified the 
-> > > vkms_device structure in commit 49a167c393b0 ("drm/vkms: Switch to dynamic 
-> > > allocation for CRTC"), which is present in linux-next.
-> > > 
-> > > Once this conflict is resolved, I agree with changing from platform_device 
-> > > to faux_device.
-> > > 
-> > > Apart from this minor conflict, I believe your patch has revealed an issue 
-> > > in VKMS:
-> > > 
-> > > Without your patch:
-> > > 
-> > > 	bash-5.2# modprobe vkms
-> > > 	[drm] Initialized vkms 1.0.0 for vkms on minor 0
-> > > 	bash-5.2#
-> > > 
-> > > With your patch:
-> > > 
-> > > 	bash-5.2# modprobe vkms
-> > > 	faux vkms: Resources present before probing
-> > > 	[drm] Initialized vkms 1.0.0 for vkms on minor 0
-> > > 	bash-5.2#
-> > > 
-> > > After some investigation, I found that the issue is not caused by your 
-> > > patch but by VKMS itself:
-> > > 
-> > > During faux_device_create, the device core postpones the device probe to 
-> > > run it later [0]. This probe checks if the devres list is empty [1] and 
-> > > fails if it is not.
-> > > 
-> > > [0]:https://elixir.bootlin.com/linux/v6.13.1/source/drivers/base/bus.c#L534
-> > > [1]:https://elixir.bootlin.com/linux/v6.13.1/source/drivers/base/dd.c#L626
-> > > 
-> > > With a platform driver, the order of execution was:
-> > > 
-> > > 	platform_device_register_simple();
-> > > 		device_add();
-> > > 	*async* device_probe(); /* no issue, the devres is untouched */
-> > > 	devres_open_group();
-> > > 
-> > > But with faux-device, the order is:
-> > > 
-> > > 	faux_device_create();
-> > > 		device_add();
-> > > 	devres_open_group();
-> > > 	*async* device_probe(); /* issue here, because of the previous 
-> > > 				   devres_open_group */
-> > 
-> > Wait, what?  It shouuld be the exact same codepath, as faux_device() is
-> > not doing anything different from platform here.  You might just be
-> > hitting a race condition as the async probing is the same here.
-> 
-> Yes, this is the same codepath, and this is a race condition. VKMS was 
-> just lucky it never happend before. 
-> 
-> > > How do you think this should be solved? I would like to keep a simple 
-> > > solution, given that:
-> > > - we want to have multiple vkms devices (configfs [2])
-> > > - we need to ensure that device_probe is called before devres_open_group 
-> > >   and devm_drm_dev_alloc to avoid this error
-> > 
-> > How about we take out the async probe?  You are getting lucky that it's
-> > not hit on the platform device code today.  Faux really doesn't need
-> > async, I was just trying to make the system work the same way that
-> > platform devices did.
-> 
-> I think this should be sufficient, and allows for a very simple interface: 
-> once faux_device_create returns, you can use the device "as-is", no 
-> need to wait for the probe.
-> 
-> What change can I do to disable async probe and test?
+Hi Jill,
 
-Try this patch:
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/base/faux.c b/drivers/base/faux.c
-index 27879ae78f53..0b9d17cd41f2 100644
---- a/drivers/base/faux.c
-+++ b/drivers/base/faux.c
-@@ -73,7 +73,7 @@ static const struct bus_type faux_bus_type = {
- static struct device_driver faux_driver = {
- 	.name		= "faux_driver",
- 	.bus		= &faux_bus_type,
--	.probe_type	= PROBE_PREFER_ASYNCHRONOUS,
-+	.probe_type	= PROBE_FORCE_SYNCHRONOUS,
- };
- 
- static void faux_device_release(struct device *dev)
+[auto build test ERROR on usb/usb-testing]
+[also build test ERROR on usb/usb-next usb/usb-linus westeri-thunderbolt/next linus/master v6.14-rc1 next-20250207]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Jill-Donahue/f_midi_complete-to-call-tasklet_hi_schedule/20250208-043845
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/20250207203441.945196-1-jilliandonahue58%40gmail.com
+patch subject: [PATCH v3] f_midi_complete to call tasklet_hi_schedule
+config: i386-buildonly-randconfig-003-20250208 (https://download.01.org/0day-ci/archive/20250208/202502081928.T2cRhulq-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250208/202502081928.T2cRhulq-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502081928.T2cRhulq-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   drivers/usb/gadget/function/f_midi.c: In function 'f_midi_complete':
+>> drivers/usb/gadget/function/f_midi.c:286:50: error: 'struct f_midi' has no member named 'tasklet'
+     286 |                         tasklet_hi_schedule(&midi->tasklet);
+         |                                                  ^~
+
+
+vim +286 drivers/usb/gadget/function/f_midi.c
+
+   269	
+   270	static void
+   271	f_midi_complete(struct usb_ep *ep, struct usb_request *req)
+   272	{
+   273		struct f_midi *midi = ep->driver_data;
+   274		struct usb_composite_dev *cdev = midi->func.config->cdev;
+   275		int status = req->status;
+   276	
+   277		switch (status) {
+   278		case 0:			 /* normal completion */
+   279			if (ep == midi->out_ep) {
+   280				/* We received stuff. req is queued again, below */
+   281				f_midi_handle_out_data(ep, req);
+   282			} else if (ep == midi->in_ep) {
+   283				/* Our transmit completed. See if there's more to go.
+   284				 * f_midi_transmit eats req, don't queue it again. */
+   285				req->length = 0;
+ > 286				tasklet_hi_schedule(&midi->tasklet);
+   287				return;
+   288			}
+   289			break;
+   290	
+   291		/* this endpoint is normally active while we're configured */
+   292		case -ECONNABORTED:	/* hardware forced ep reset */
+   293		case -ECONNRESET:	/* request dequeued */
+   294		case -ESHUTDOWN:	/* disconnect from host */
+   295			VDBG(cdev, "%s gone (%d), %d/%d\n", ep->name, status,
+   296					req->actual, req->length);
+   297			if (ep == midi->out_ep) {
+   298				f_midi_handle_out_data(ep, req);
+   299				/* We don't need to free IN requests because it's handled
+   300				 * by the midi->in_req_fifo. */
+   301				free_ep_req(ep, req);
+   302			}
+   303			return;
+   304	
+   305		case -EOVERFLOW:	/* buffer overrun on read means that
+   306					 * we didn't provide a big enough buffer.
+   307					 */
+   308		default:
+   309			DBG(cdev, "%s complete --> %d, %d/%d\n", ep->name,
+   310					status, req->actual, req->length);
+   311			break;
+   312		case -EREMOTEIO:	/* short read */
+   313			break;
+   314		}
+   315	
+   316		status = usb_ep_queue(ep, req, GFP_ATOMIC);
+   317		if (status) {
+   318			ERROR(cdev, "kill %s:  resubmit %d bytes --> %d\n",
+   319					ep->name, req->length, status);
+   320			usb_ep_set_halt(ep);
+   321			/* FIXME recover later ... somehow */
+   322		}
+   323	}
+   324	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
