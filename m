@@ -1,116 +1,117 @@
-Return-Path: <linux-usb+bounces-20387-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20388-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E29D9A2E981
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 11:33:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F8E3A2EB9C
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 12:46:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B09F816666D
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 10:33:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EDD7F3A224E
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 11:45:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A53DB189902;
-	Mon, 10 Feb 2025 10:33:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13C071F3BBA;
+	Mon, 10 Feb 2025 11:46:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g/wpT3h5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646D515624D;
-	Mon, 10 Feb 2025 10:33:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E441922D4;
+	Mon, 10 Feb 2025 11:45:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739183594; cv=none; b=G/TgK17u80K3AhSJkK8T80P19tL8OwHN//Ml4uB99/Ia18/Q2ZUFJ44iFQ4mE4SsOUz7x0A/elPbhQLHzPCQe3H2R1MIDLy7QIOIuZp4s34yqgv+GHrZuxwGKfVwawmmVB10JidBvdOVIf1keeE8w2xB5sM7IvaByk77lUYuVCU=
+	t=1739187959; cv=none; b=XIcG/Ofpq21+jANzBe/yBU4GVHTXt+gjgyLA5lZlF90QD80Nfza07pXji/jeXraAk1eu+bOgQHQsprZ6RBn9FPnHE+WRZukMfGqsQSg8xVFFGAcNuMcv+KL7rhmTaAykU2yDpKzQYYlTJhmoo5lVC9A7nYERBgeRHNAynRfXuXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739183594; c=relaxed/simple;
-	bh=PRIjYgukVL9xgLkbU+1wVGhjbrbQ2a1ytqYVNW0rzA0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s5r4Yh0oZTuMOBysMM7Q4wkANWGH4BU/ES/VqIHfk+i3t6dO6+LPB8ZoOq8gOmh2tCcGLXoUPNz2K/FQaYNdEv7dotk5z3U+O0+EUJ7ewOSQ2ycQqwwij9pjLIIA3KGrOJoKCvBbWbpMCM1XcvmKhbKH+QBxNr5hHtof2ZdRWx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+	s=arc-20240116; t=1739187959; c=relaxed/simple;
+	bh=lWXx8prA/NBjWzBuLLgugDFSdc5mn/jQ/gQCvAQkjhg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type; b=peN2VRvui0lcxeagGBh41u8W9cgZrWBX0gONN2eudyPKVibf700sr6P0J5Y8mMrVt0qSNS7kt6Sih9J/PpE/D0pGZl9p9wfN/qOIsqT7+wKRtwdYVyrkPt20hhKvYbrCUprEuwSToub50jBVr2UsIgeaNhsds5EBVGCffWp/9yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g/wpT3h5; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-4ba86dee27bso915237137.3;
-        Mon, 10 Feb 2025 02:33:12 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5de63846e56so3171144a12.1;
+        Mon, 10 Feb 2025 03:45:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739187956; x=1739792756; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ywUgTGj4yyfTwJSjQ0U3k2pPW/hpZaWUQlC1r5MKcBQ=;
+        b=g/wpT3h5fXc4BytulqRdy3mk6o5pg+u6i/RHnKKgy6qUfuVYLnvR7CBoF/VUZj/qQI
+         e0qSpvVVZjMrfjEzNMLLg8EWSO+USsGS6ZOWkLCLEdUaOohM/OolVNmTBdUnEyjZGF6D
+         Pmn/GvuunwjiDGmRtC3I2VQseNZqeNooCgDljpFlIAjb93ywml89tRvHFivs/y7gjMgQ
+         2fp0nGoLIgZyI1pQYgOlQOKkA7Owe/28dZQwCu5CKnZ0vQoEIxrDynLG+i0Fgymb4AK4
+         rmJTcFU74FMwlAnGukxPlr4hTMYKsfpdm8LQmAAGHhy5UqLw+NcJ/KUBUEqFzVSa1oTy
+         cWyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739183590; x=1739788390;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aUtEWKWBGl+RUz1Aa17blZ/xFUbDXxxGPDURQS+ed2U=;
-        b=cbgo5X2mrmAsj+Qd08NCsCP4Q4x2e9ys7oWKOvpbeY1IXOEAp983/NHKKwuBgbx1rr
-         gYB+v8J0nNDtq6Cnh1aXwoHCK6nu+9ZUA202q4TSWoaSGW1rOCMkEXBz2e5b33eu0Dhc
-         B95QqQayesTPFPNF5nq/BJ+E9hdvBd9BVQ/u8FTmz4V2tage733ZJvDR3xVcn7W91ZiA
-         8xErwet9Dmo7t/hONcQSK0HeACRABdlKxXf2gu/nUUajl1SGqu5ZzxY+AhXl4fYaa35w
-         2KKS1J/WoyIQIKUBnT3tmmalHGQ0bmoL7olYtpj7JPOe3GrnHBb+v3zhtMrCauuQ8HYt
-         oRuw==
-X-Forwarded-Encrypted: i=1; AJvYcCVOXL6oN9ZG0UNl1zkkaROQDEOmUeo03ptsUM8KqwmqJOQdoYse5f2OqYYDu+ytckUl5CiCfWNbRwfmBt7c89S9/A==@vger.kernel.org, AJvYcCX+nDf4595rEscMR6rwRKV7H4AjYLZ1hwzgmN3jBQAKcuO1ROjyjvdKMLzyXUnUqguTx2wpYHZY@vger.kernel.org
-X-Gm-Message-State: AOJu0YzFdwd99RaQNSbULYjZVesYiMH4terrqQJuY/BX7xgWw+iTxxOf
-	3zNJw4Rfbb4IzIx9DygL9EUEKfFiFK4rWqqWp4V2p7R/0nIFoRFWUmj1kVOf
-X-Gm-Gg: ASbGncv2evASU0VkeTGArt9RBXRTV37GHr8uWWb4qKQSsgaNyp1/nztllgPtzF4gatl
-	kVjubUk1hY7J7pmrAs2E7jLzYm5L5s6uEUkZ5gKrycjIl4eiLQKkpMnuUYXq3L7B0ZyLqCojawH
-	8jcpyf1gT906EBR9fzRdo7K2nGs4oSUKMzwqzrqVQBQjw01oS5YZ0WG/WV3DVhnlLwCPOcPZnA0
-	GHwF7Wv3abUp0NczndNvVVMp0HO5MMDU1t+18Sc874p0BDkWDh2FoNhDOzn9d4UWpMmwgM9/2EE
-	4Ps4TR2wKciBXzdbVvCiDcPxNnIX1tXAO+kmbxNkJvrSavjlkDCDzQ==
-X-Google-Smtp-Source: AGHT+IGr1wI/ui11E/7W4s+nrw9dlq/BMYZbSD+t+rtOTgS2KEyBzyXBxmMw9XgsKhHMKKkLMHE8vw==
-X-Received: by 2002:a05:6102:441f:b0:4b4:7cb0:ac99 with SMTP id ada2fe7eead31-4ba85da2bf5mr7484459137.2.1739183590079;
-        Mon, 10 Feb 2025 02:33:10 -0800 (PST)
-Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bbcf5660c0sm258639137.18.2025.02.10.02.33.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 10 Feb 2025 02:33:09 -0800 (PST)
-Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-864e4f5b253so1114230241.1;
-        Mon, 10 Feb 2025 02:33:09 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU3G0SoTFix7+61Kx4/iHQTsZtJOyoIRjLhiackMvxTXNJjfrhUNJuHC1jCxXwf9XXWmBx9EaVciPoj/H98ni2elQ==@vger.kernel.org, AJvYcCWRCqVDd2wsg2wUbNiYEPoZxySGQTYDpKC1EEyk5uXjDo4gfuqZAQF7+P2owClc5iB1A7h2yNmm@vger.kernel.org
-X-Received: by 2002:a05:6102:3046:b0:4b2:48cc:5c5a with SMTP id
- ada2fe7eead31-4ba85e8d160mr8493000137.15.1739183589499; Mon, 10 Feb 2025
- 02:33:09 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739187956; x=1739792756;
+        h=content-transfer-encoding:mime-version:in-reply-to:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ywUgTGj4yyfTwJSjQ0U3k2pPW/hpZaWUQlC1r5MKcBQ=;
+        b=P5pR0INm3ONV1UaGQTK8iBVg/BCQ+N/FvOgx7FsIsqTjMbHSiKS+3NG4LfnXeOsSJq
+         T51f1EqgMu5i29mIVKYVRcnCajwfzlb/wsKF0Lo9VxzyDrA92YKuUNJfWHCW6iCNckS3
+         gdQkf/FheCsMFfHnx5Ze7rsvsmd+d6Cma6PDm6AITRDY6jOQty13uN448djoFH5F+Im6
+         KcyVC8tw0W8KsehFG9qisjKygUAR1WP47fIL+aycsdbUXBTD8KOwEsQ6JOLZDqRjUD/t
+         QMWUi+EXqjqrQIGzsLrctmU4/tOTxaVqvVddWTghBaU/CNhFzTU8axfQacETmdIhTMNw
+         zUTA==
+X-Forwarded-Encrypted: i=1; AJvYcCX5x6NFmjXSrk5QyxTstA1ZqReWknVcxvJ3Z+peQCLkOknUbHssYUJa0y9Vf1SmJ5WSCr4lWk+VFpdOFDHSnzTWD7FN@vger.kernel.org, AJvYcCXduMK8G11rp4IrKz6ByUPA5wkk9DH23oTbk35mxiJq/6JyabFv0Y0c9c05fQpeqbECnoV5pygPJJfH@vger.kernel.org, AJvYcCXshsUhbpW6Kq7nb5aAPMcZdn1cueEjPE2kW8wS4hJIRXIRlz8jdg10BTUklIl2sTlau/4/xNpT9EdJmdA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyXxgYG3ildFkPoutG+VZv2icqkeuIgj4NgJEDdOqa7gMj1mVun
+	DVbyau2EpV0SqaUFGDzhAkKxKEWANkuH/dnOXR5pg2v/TmlS1rKF
+X-Gm-Gg: ASbGncsQFK5hhO7hl7ZApsUWhCbsbpXnf8ZEC3bobkIW1a3in/yzx0cj0dyU6SLz8Va
+	QHvaR1PDHCGLZs/fk3FLnLHqlOBeMI7lbF6xHagOgXiYKk7INk8hAqVILNDriQYoINVuDxHMJTk
+	t8T01qX/babYfozVU+HM2ogg6kcorkoppnogm6IgjHEuJEEDjlSMdHv2xHc8ueW/ZwN5ZrEqIwZ
+	J1QwIawzZ69AjXJSDUQFYHVARwT1f/Bc8pltMs1Phadj8BnQZEuddfXVffO7xwG+Iz37HmSSLJZ
+	vdTeKIS2BvPBVs2e93dH4PSSXpZNxgHR
+X-Google-Smtp-Source: AGHT+IHLY08dXDofAVx8vtXsHvoOSVRQhx+tufolp2+U+l6VQVn9pbl/alQrUPQYxtq0MeD47nWpvw==
+X-Received: by 2002:a05:6402:2802:b0:5d0:b51c:8479 with SMTP id 4fb4d7f45d1cf-5de4500490fmr12517398a12.10.1739187955955;
+        Mon, 10 Feb 2025 03:45:55 -0800 (PST)
+Received: from foxbook (adtq181.neoplus.adsl.tpnet.pl. [79.185.228.181])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dcf1b7ade9sm7744166a12.25.2025.02.10.03.45.54
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Mon, 10 Feb 2025 03:45:55 -0800 (PST)
+Date: Mon, 10 Feb 2025 12:45:51 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: pmenzel@molgen.mpg.de
+Cc: anna-maria@linutronix.de, frederic@kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org, mingo@kernel.org, tglx@linutronix.de
+Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
+ #08!!! on Dell XPS 13 9360
+Message-ID: <20250210124551.3687ae51@foxbook>
+In-Reply-To: <9d056e62-4e58-40d5-9401-40d3c20c2389@molgen.mpg.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250209145708.106914-1-marek.vasut+renesas@mailbox.org>
-In-Reply-To: <20250209145708.106914-1-marek.vasut+renesas@mailbox.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 10 Feb 2025 11:32:57 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX9krvWfZma-A_X6O18q0J8+jizEDL0C8rkoEXpk2KiAw@mail.gmail.com>
-X-Gm-Features: AWEUYZkwJD0lEVOPrylUzlQHEumsgN92-kbxnCCiZTEdO_bmGEawanoxd2ni2JQ
-Message-ID: <CAMuHMdX9krvWfZma-A_X6O18q0J8+jizEDL0C8rkoEXpk2KiAw@mail.gmail.com>
-Subject: Re: [PATCH] USB: cdc-acm: Fill in Renesas R-Car D3 USB Download mode quirk
-To: Marek Vasut <marek.vasut+renesas@mailbox.org>
-Cc: linux-usb@vger.kernel.org, Chris Brandt <chris.brandt@renesas.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Oliver Neukum <oneukum@suse.com>, linux-renesas-soc@vger.kernel.org, 
-	stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Marek,
+Hi,
 
-On Sun, 9 Feb 2025 at 15:57, Marek Vasut
-<marek.vasut+renesas@mailbox.org> wrote:
-> Add Renesas R-Car D3 USB Download mode quirk and update comments
-> on all the other Renesas R-Car USB Download mode quirks to discern
-> them from each other. This follows R-Car Series, 3rd Generation
-> reference manual Rev.2.00 chapter 19.2.8 USB download mode .
->
-> Fixes: 6d853c9e4104 ("usb: cdc-acm: Add DISABLE_ECHO for Renesas USB Download mode")
-> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
+>>>>>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux
+>>>>>>> 6.9-rc2+ 
 
-Thanks for your patch!
+> Just for the record, I am still seeing this with 6.14.0-rc1
 
-Still true in Rev.2.40 of the documentation ;-)
+Is this a regression? If so, which versions were not affected?
+How hard to reproduce? Wasn't it during resume from hibernation?
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+IRQ isuses may be a red herring, this code here is a busy wait under
+spinlock. There are a few of those, they cause various problems.
 
-Gr{oetje,eeting}s,
+                if (xhci_handshake(&xhci->op_regs->status,
+                              STS_RESTORE, 0, 100 * 1000)) {
+                        xhci_warn(xhci, "WARN: xHC restore state timeout\n");
+			spin_unlock_irq(&xhci->lock);
+                        return -ETIMEDOUT;
+                }
 
-                        Geert
+This thing timing out may be close to the root cause of everything.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Michal
 
