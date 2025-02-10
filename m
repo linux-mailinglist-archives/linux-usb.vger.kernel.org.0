@@ -1,43 +1,63 @@
-Return-Path: <linux-usb+bounces-20380-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20381-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1858A2E5D8
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 08:55:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DEAFA2E62B
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 09:18:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2871C1882994
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 07:56:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F40E73A9884
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 08:17:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E65421B85D6;
-	Mon, 10 Feb 2025 07:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 258071C2304;
+	Mon, 10 Feb 2025 08:17:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="EaQFOgg8"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 665732F2A;
-	Mon, 10 Feb 2025 07:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B75841C175C;
+	Mon, 10 Feb 2025 08:17:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739174151; cv=none; b=r/0Up28ejqXqrw9jeHWmazOsh+683Dk2DhCpT+vlggtLidHn962dvRJpqDJ59aM2qGxpwWwYowQEK9vJKIlcqcRuDo4vPA2mEiwUzbyKP/hARV7qzAPij6ZxIhGRSyHvebC6L1I/nwivmRjkgur4s7FZoI8RfF5+n3/oyVL3UwE=
+	t=1739175439; cv=none; b=oVroC4D/RaN8ifIZOsCjksVB/R+obrhbBaPR9/O3qYjdGhZNgo9wjolAMeB/O3ttDKEUe9as//nxxb0FM4cA4f0+WMSN95L61PalD+l9Qpb1LOAsWgTLDugPYkOzvmYsB/wS7C8Ls9MEUTZT+APp9EXZuz9rjlQS/05hi42xSME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739174151; c=relaxed/simple;
-	bh=dLifF2bTaaX2VVSLrgjXHMuMu/WbQ5g7c0KnzmB7Zqg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=geIkr0eid7UknKd4ryNKgbBraGzFaFpdQNzEMYxFbqVZvjebf7l1rfsCYO2xicf99YgI+mT9mlUVBomix9bGYGZZNXVCTa9md4/Yl47aMM3aHTxB3tOFCxLNEKXLgaYE6wXpyY389WJa9ez6a9ksbAFsOHR243YjaGzCuawD8CU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.2] (ip5f5af68c.dynamic.kabel-deutschland.de [95.90.246.140])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 931F761E6477D;
-	Mon, 10 Feb 2025 08:55:15 +0100 (CET)
-Message-ID: <9d056e62-4e58-40d5-9401-40d3c20c2389@molgen.mpg.de>
-Date: Mon, 10 Feb 2025 08:55:14 +0100
+	s=arc-20240116; t=1739175439; c=relaxed/simple;
+	bh=HDNAe01n8/xRMwR7TmlJGHtdDncn/boWt591Flp/U1o=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YV+WaKiJcw7vtq2sIchgdEDkIRkSTY9RwMdBCjeyucIkHjISMdICmBo1lMgs9RyfUTNDCNPIuXHTuna+gyDe2eUDZv6Ba6o8avLqxeiNvcVu8Ii6+rIf1ByJO4xhMUBx6adYMGEi7+BDJuvbc9dADurQiunr1I7Owxch8R69iJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=EaQFOgg8; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51A0r1Yd023509;
+	Mon, 10 Feb 2025 08:17:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	+BxRYzZd72S5FIXwHCWE+QdIdBOQdqHdZK19tfebQVQ=; b=EaQFOgg8RzzN7DCQ
+	lyZw5RfYLZKY3nBP1A7ZxaC9nLWLgmDNoq2bT/tj519iY5g1ub26vp9tbwlzL1nf
+	oBco4EkwyHZGWsN9uYUKBwYn0a6IV/teXeglPFmf7IGf5g9oBZ+Sh4Z65IGvZ3JS
+	iIj/BceJJl97liQF97phIOcVKrQ6g1h4xJqr+jCn6Blme7iBsjHMWoPHwCMlNaET
+	QRvS2v68zGN6E0GPNEpfZK6L+7L5rhExDeiNf9cYP49xLo0wB48Fkghz8KsFqcSA
+	w7LnfaV4E8HwlygN43IjoWcUfRVRtJZKWb177CYqSkrV2WtpBCEuK0BO5+YTC6o7
+	jrnnTg==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44p0dykgj0-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 10 Feb 2025 08:17:10 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51A8H9Eu011615
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 10 Feb 2025 08:17:09 GMT
+Received: from [10.217.219.148] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 10 Feb
+ 2025 00:17:05 -0800
+Message-ID: <58de97ff-2f16-40d4-a95c-d751fe26659c@quicinc.com>
+Date: Mon, 10 Feb 2025 13:46:06 +0530
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -45,145 +65,115 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
- #08!!! on Dell XPS 13 9360
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-To: Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc: Frederic Weisbecker <frederic@kernel.org>, Ingo Molnar
- <mingo@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- LKML <linux-kernel@vger.kernel.org>, linux-usb@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-References: <354a2690-9bbf-4ccb-8769-fa94707a9340@molgen.mpg.de>
- <87o7ak411y.fsf@somnus> <256fdb2e-9b83-4837-bd31-0c34e4267c31@molgen.mpg.de>
- <87sezv7ytw.fsf@somnus> <1cf78f6f-af21-48bc-a9d8-755dd7bf8503@molgen.mpg.de>
- <9de8ebd1-53fc-48d7-af11-b5c1ed828b3d@molgen.mpg.de>
- <598d4118-3f63-44dd-b0da-e19efbb73933@molgen.mpg.de>
+Subject: Re: [PATCH 01/18] usb: dwc3: Reserve Higher Bandwidth for HS Periodic
+ EPs
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Thinh Nguyen
+	<Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jack Pham <quic_jackp@quicinc.com>, <kernel@oss.qualcomm.com>,
+        Wesley Cheng
+	<quic_wcheng@quicinc.com>
+CC: Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        "Vijayavardhan
+ Vennapusa" <quic_vvreddy@quicinc.com>,
+        <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20250206111543.17392-1-quic_akakum@quicinc.com>
+ <20250206111543.17392-2-quic_akakum@quicinc.com>
+ <d0b86591-7bac-42a0-aeac-1f7f6b75b75e@oss.qualcomm.com>
 Content-Language: en-US
-In-Reply-To: <598d4118-3f63-44dd-b0da-e19efbb73933@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: AKASH KUMAR <quic_akakum@quicinc.com>
+In-Reply-To: <d0b86591-7bac-42a0-aeac-1f7f6b75b75e@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: VBaUlDPw62Umh3Y5jbrvQ_uGA0Rearm9
+X-Proofpoint-GUID: VBaUlDPw62Umh3Y5jbrvQ_uGA0Rearm9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-10_04,2025-02-10_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 bulkscore=0
+ clxscore=1015 lowpriorityscore=0 impostorscore=0 mlxlogscore=999
+ mlxscore=0 priorityscore=1501 spamscore=0 adultscore=0 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502100068
 
-Dear Anna-Maria,
+Hi,
 
-
-Am 24.10.24 um 14:48 schrieb Paul Menzel:
-
-> Am 21.08.24 um 23:01 schrieb Paul Menzel:
->> [Added URLs for files.]
+On 2/6/2025 11:19 PM, Konrad Dybcio wrote:
+> On 6.02.2025 12:15 PM, Akash Kumar wrote:
+>> On targets using synopsys usb dwc3 controller, it is observed while testing
+>> multiple audio devices, a glitch is observed during testing.
+>> As per dwc datasheet,By default, HC reserves 80% of the bandwidth
+>> for periodic EPs which can be increased with GUCTL Bit 16.
+> It is observed a glitch is observed.. please massage this paragraph
+> a bit.
+Sure.
+>
+>> Add quirk to set GUCTL register BIT 16 to accommodate higher
+>> bandwidth for 2 isoc eps.
 >>
->> Am 21.08.24 um 10:20 schrieb Paul Menzel:
-
->>> Thank you very much for the support. I was finally able to collect 
->>> the data you asked for.
->>>
->>> Am 09.04.24 um 09:57 schrieb Anna-Maria Behnsen:
->>>> Paul Menzel writes:
->>>
->>> […]
->>>
->>>>> Am 08.04.24 um 12:10 schrieb Anna-Maria Behnsen:
->>>>>
->>>>>> Paul Menzel writes:
->>>>>
->>>>>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 6.9- rc2+
->>>>>>> built from commit b1e6ec0a0fd0 (Merge tag 'docs-6.9-fixes' of
->>>>>>> git://git.lwn.net/linux) the external USB-C adapter Dell DA300 stopped
->>>>>>> working (only the Ethernet port was used). Linux logged:
->>>>>>
->>>>>> thanks for the report. Can you please provide a trace beside the dmesg
->>>>>> output? The following trace events should be enabled (via kernel 
->>>>>> command line):
->>>>>>
->>>>>> trace_event=timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit
->>>>> Unfortunately I haven’t been able to reproduce it until now. Should it
->>>>> happen again, I am going to try your suggestion.
->>>>
->>>> Thanks for letting me know.
->>>
->>> I wanted to configure that in the running system, but wasn’t able to 
->>> set all of these at once with `set_event`:
->>>
->>>      echo 'timer:*,timer_migration:*,sched:sched_switch,sched:sched_wakeup,sched:sched_process_hang,irq:softirq_entry,irq:softirq_raise,irq:softirq_exit' | sudo tee /sys/kernel/tracing/set_event
->>>
->>> For some reason setting them individually also did *not* work:
->>>
->>>      for e in timer:* timer_migration:* sched:sched_switch sched:sched_wakeup sched:sched_process_hang irq:softirq_entry irq:softirq_raise irq:softirq_exit'; do echo "$e" | sudo tee -a /sys/kernel/tracing/set_event; done
->>>
->>> I then used
->>>
->>>      echo 1 | sudo tee /sys/kernel/tracing/events/timer/enable
->>>      echo 1 | sudo tee /sys/kernel/tracing/events/timer_migration/enable
->>>      echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_switch/enable
->>>      echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_wakeup/enable
->>>      echo 1 | sudo tee /sys/kernel/tracing/events/sched/sched_process_hang/enable
->>>      echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_entry/enable
->>>      echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_raise/enable
->>>      echo 1 | sudo tee /sys/kernel/tracing/events/irq/softirq_exit/enable
->>>
->>> and also had to increase the buffer to bridge the gap between the 
->>> event and me noticing it:
->>>
->>>      echo 96000 | sudo tee /sys/kernel/tracing/buffer_size_kb
->>>
->>> Then, with Linux v6.11-rc4-11-g521b1e7f4cf0b, I was able to get the 
->>> trace for the event below:
->>>
->>>      [ 7542.706299] NOHZ tick-stop error: local softirq work is pending, handler #08!!!
->>>
->>> $ sudo cat /sys/kernel/tracing/trace
->>> […]
->>>   MediaPD~der #28-14000   [000] d..1.  7542.703768: hrtimer_cancel: hrtimer=000000008d2c9f3f
->>>   MediaPD~der #28-14000   [000] .....  7542.703810: hrtimer_init: hrtimer=00000000c6f259e7 clockid=CLOCK_MONOTONIC mode=ABS
->>>   MediaPD~der #28-14000   [000] d..1.  7542.703812: hrtimer_start:hrtimer=00000000c6f259e7 function=hrtimer_wakeup expires=7602581538204 softexpires=7602581488204 mode=ABS
->>>   MediaPD~der #28-14000   [000] d..2.  7542.703821: sched_switch: prev_comm=MediaPD~der #28 prev_pid=14000 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>>            <idle>-0       [000] dN.2.  7542.703931: sched_wakeup: comm=ImageBridgeChld pid=6041 prio=120 target_cpu=000
->>>            <idle>-0       [000] d..2.  7542.703937: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=ImageBridgeChld next_pid=6041 next_prio=120
->>>   ImageBridgeChld-6041    [000] d..2.  7542.704041: sched_switch: prev_comm=ImageBridgeChld prev_pid=6041 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>>            <idle>-0       [000] dN.2.  7542.704174: sched_wakeup: comm=Renderer pid=4113 prio=120 target_cpu=000
->>>            <idle>-0       [000] d..2.  7542.704179: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=Renderer next_pid=4113 next_prio=120
->>>          Renderer-4113    [000] d..2.  7542.704245: sched_switch: prev_comm=Renderer prev_pid=4113 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>>            <idle>-0       [000] dNh2.  7542.704260: sched_wakeup: comm=IPC I/O Child pid=6029 prio=120 target_cpu=000
->>>            <idle>-0       [000] d..2.  7542.704267: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==>  next_comm=IPC I/O Child next_pid=6029 next_prio=120
->>>     IPC I/O Child-6029    [000] d..2.  7542.704340: sched_switch: prev_comm=IPC I/O Child prev_pid=6029 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>>            <idle>-0       [000] dN.2.  7542.704786: sched_wakeup: comm=Compositor pid=4123 prio=120 target_cpu=000
->>>            <idle>-0       [000] d..2.  7542.704791: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=Compositor next_pid=4123 next_prio=120
->>>        Compositor-4123    [000] d..2.  7542.704944: sched_switch: prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>>            <idle>-0       [000] dN.2.  7542.705943: sched_wakeup: comm=Compositor pid=4123 prio=120 target_cpu=000
->>>            <idle>-0       [000] d..2.  7542.705950: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=Compositor next_pid=4123 next_prio=120
->>>        Compositor-4123    [000] d..2.  7542.706105: sched_switch: prev_comm=Compositor prev_pid=4123 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>>            <idle>-0       [000] d.h2.  7542.706328: hrtimer_cancel: hrtimer=000000009bbda66a
->>>            <idle>-0       [000] d.h1.  7542.706329: hrtimer_expire_entry: hrtimer=000000009bbda66a 
->>> function=tick_nohz_handler now=7542584007490
->>>            <idle>-0       [000] d.h1.  7542.706333: softirq_raise: vec=9 [action=RCU]
->>>            <idle>-0       [000] d.h1.  7542.706338: softirq_raise: vec=7 [action=SCHED]
->>>            <idle>-0       [000] d.h1.  7542.706339: hrtimer_expire_exit: hrtimer=000000009bbda66a
->>>            <idle>-0       [000] d.h2.  7542.706340: hrtimer_start: hrtimer=000000009bbda66a function=tick_nohz_handler expires=7542588000000 softexpires=7542588000000 mode=ABS
->>>            <idle>-0       [000] ..s1.  7542.706345: softirq_entry: vec=7 [action=SCHED]
->>>            <idle>-0       [000] ..s1.  7542.706359: softirq_exit: vec=7 [action=SCHED]
->>>            <idle>-0       [000] ..s1.  7542.706360: softirq_entry: vec=9 [action=RCU]
->>>            <idle>-0       [000] ..s1.  7542.706362: softirq_exit: vec=9 [action=RCU]
->>>            <idle>-0       [000] dNh4.  7542.707672: sched_wakeup: comm=irq/51-DLL075B: pid=194 prio=49 target_cpu=000
->>>            <idle>-0       [000] d..2.  7542.707685: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=irq/51-DLL075B: next_pid=194 next_prio=49
->>>   irq/51-DLL075B:-194     [000] .....  7542.707708: timer_init: timer=00000000630ae178
->>>   irq/51-DLL075B:-194     [000] d..1.  7542.707710: timer_start: timer=00000000630ae178 function=process_timeout expires=4296778179 [timeout=250] bucket_expiry=4296778184 cpu=0 idx=121 flags=
->>>   irq/51-DLL075B:-194     [000] d..2.  7542.707718: sched_switch: prev_comm=irq/51-DLL075B: prev_pid=194 prev_prio=49 prev_state=D ==> next_comm=swapper/0 next_pid=0 next_prio=120
->>>            <idle>-0       [000] dN.2.  7542.709072: sched_wakeup: comm=AudioIP~ent RPC pid=6671 prio=120 target_cpu=000
->>> […]
->>>
->>> The trace file is 320 MB big. If you need the full trace and log, 
->>> please tell me, and I’ll upload it somewhere.
+>> If this bit is set, the bandwidth is relaxed to 85% to
+>> accommodate two high speed, high bandwidth ISOC EPs.
+>> USB 2.0 required 80% bandwidth allocated for ISOC traffic. If
+>> two High-bandwidth ISOC devices (HD Webcams) are
+>> connected, and if each requires 1024-bytes X 3 packets per
+>> Micro-Frame, then the bandwidth required is around 82%. If
+>> this bit is set, then it is possible to connect two Webcams of
+>> 1024bytes X 3 paylod per Micro-Frame each. Alternatively, you
+>> might need to lower the resolution of the webcams.
+>> This bit is valid in Host and DRD configuration and is used in
+>> host mode operation only.
+>> Set this bit for host mode uvc uac usecases where two isoc eps
+>> are used and flicker is seen.
+> Re-format your commit text to wrap at ~72 characters
+Ok.
+>> Signed-off-by: Akash Kumar <quic_akakum@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c | 11 +++++++++++
+>>   drivers/usb/dwc3/core.h |  4 ++++
+>>   2 files changed, 15 insertions(+)
 >>
->> https://owww.molgen.mpg.de/~pmenzel/20240821--linux-6.10-rc4+.txt
->> https://owww.molgen.mpg.de/~pmenzel/20240821--soft-irq--trace.7z
-> 
-> Just for the record, I am still seeing this with 6.12.0-rc4-00047- 
-> gc2ee9f594da8 (KVM: selftests: Fix build on on non-x86 architectures).
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index dfa1b5fe48dc..7e55c234e4e5 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -1461,6 +1461,14 @@ static int dwc3_core_init(struct dwc3 *dwc)
+>>   		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
+>>   	}
+>>   
+>> +	if (dwc->revision >= DWC3_REVISION_250A) {
+>> +		if (dwc->dwc3_guctl_resbwhseps_quirk) {
+>> +			reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
+>> +			reg |= DWC3_GUCTL_RESBWHSEPS;
+>> +			dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
+>> +		}
+>> +	}
+>> +
+>>   	dwc3_config_threshold(dwc);
+>>   
+>>   	/*
+>> @@ -1818,6 +1826,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
+>>   	dwc->dis_split_quirk = device_property_read_bool(dev,
+>>   				"snps,dis-split-quirk");
+>>   
+>> +	dwc->dwc3_guctl_resbwhseps_quirk = device_property_read_bool(dev,
+>> +				"snps,dwc3_guctl_resbwhseps_quirk");
+> This needs a dt-bindings entry. Also, underscores are forbidden in property
+> names, use hyphens instead.
 
-Just for the record, I am still seeing this with 
-6.14.0-rc1-00187-g8f6629c004b1 (kbuild: Move -Wenum-enum-conversion to W=2).
+Will update in V2.
 
+Thanks
 
-Kind regards,
+Akash
 
-Paul
 
