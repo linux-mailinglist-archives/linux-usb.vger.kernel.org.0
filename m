@@ -1,48 +1,48 @@
-Return-Path: <linux-usb+bounces-20382-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20383-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33968A2E637
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 09:20:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0C6DA2E654
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 09:23:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FAA23A9046
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 08:19:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9F0A18842A7
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 08:23:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EDAE1BD4E4;
-	Mon, 10 Feb 2025 08:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13B8C1C07E2;
+	Mon, 10 Feb 2025 08:22:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c3M80hjp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="di9pyYUd"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F14488F49;
-	Mon, 10 Feb 2025 08:20:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86AF31BE23E;
+	Mon, 10 Feb 2025 08:22:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739175602; cv=none; b=J9w6QSObgDk9dELRDdwpRNI/WmVek/JzDrtEDXE0qaQGU5QvSsNKIge1jBwJ+YRb5gnwQw/kyAqpE6lgJ9r2K/oKxqvwpTUPVzDTF4j6nHXBLxzVl7CJBc9iAPo4+bZi4b4zzs/6c8VZ7uetJNojoiqOzSvp7lNYpx45cUYevjE=
+	t=1739175751; cv=none; b=aMjWqwpR4/XHYKAkCp2gmd1XAFoDWuSKTjVrSVmKz/9corzlZBjfAnJ7l6OcPoRXJ3EtDszeb04mrMuF8TMtSyEa/QFvEFG1hO9ZqsA1aV5cXpHxfPcHysDYqrsXMuj2t12qjnFZIJTdrUQpfVQNrLFA83SQIaKWm+RVq9lUgjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739175602; c=relaxed/simple;
-	bh=J2FvJ+2ITSWYZmRqqbtuYfWVhyHXZfbdr4n/i74f+iA=;
+	s=arc-20240116; t=1739175751; c=relaxed/simple;
+	bh=HX8GeAv04Z6XWS47Dp8Xdjby7F5tEZNckau2fi/hP/8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ffxE5aNXQCiBcIhaXYtpJwecqq5IgPVuvVlOpQ4LzBXXAunOlVPqkJwsxRzKovEnLk0IdqRCMqSblvujfTbcnHiYKXdS9zOXeqYfFOc73HUxJrVEfoSfYNCwclvjfjgRlweeGFQPX3UIksPOrD9D8DrSxlppOWsj10rr7rpfZC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c3M80hjp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBD16C4CED1;
-	Mon, 10 Feb 2025 08:19:55 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=NZzX6q6wmMugn11vk7FjqpLjWWL/UK/WwBSLQ0M1A2TNRF19InWq9cZu3NPdBdVHRrvdIvc+7+4fUiKfxf5Ry3BFsev2v+vJ3irDMKtJqFd/B2TEgoFnAFUurMgILScnxdUJAgqO6RV5ufZE1qnp3ZNkm6rERpzgFCKuBwMrbl8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=di9pyYUd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17542C4CED1;
+	Mon, 10 Feb 2025 08:22:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739175601;
-	bh=J2FvJ+2ITSWYZmRqqbtuYfWVhyHXZfbdr4n/i74f+iA=;
+	s=k20201202; t=1739175751;
+	bh=HX8GeAv04Z6XWS47Dp8Xdjby7F5tEZNckau2fi/hP/8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=c3M80hjpEmiFkJtbXo2AdwAQN4kNz1gHZUpyouIDWc7onH06KVyy7e+CHoRb3x4Wu
-	 JH6QYvV0U/4U1cl/AsubxUDhbExErhb9S+2X7J5ZwlrlaHEgfm5pFwD7TCrOebBO4B
-	 /sgfm9wADvvfIk0O0wwvt2/CXgIj13hn/gDBtQiXGyxcw00WvWcR/iQbCru+eJl1jg
-	 4epVQVLc3fe/ks35YZmc2mIwuQS7pK0mCkX3nHl/I5Hr4SPJ6acrDHYHET5Pf950Fy
-	 NSLwiaypqj8wiRQpeP0tpZ4ghbpyduWuWSDy1XNq0XrTIbwfK/Z62Xc/lP3W1QwNij
-	 TmPzRtMTucmnQ==
-Message-ID: <e8eeb6ea-b472-4f0a-a63d-5faa8f152de2@kernel.org>
-Date: Mon, 10 Feb 2025 09:19:53 +0100
+	b=di9pyYUdUj4RtOkKb7+HqkBj213SO/fXYMIc5snPjFl+C+IWjlrf8PyJJxQsWXqsv
+	 9w6UCPL792nQJxb2cgm4kCTlks5Am4qhGu9p+AJwhegokmG/HcIQy06bmFX5m8CH0V
+	 fesz0+yjC3RvpAa4FdkKlmKvklG0bQPc60n0MnRfi6hxWReeYMSh+IYS+3FwvEuer2
+	 YZ4cYpBS01vEjHWq1bnzHm5YRnSjkPNLjucsKLu5XSsOZVVMYrFQv1OXWOhnAjD8ax
+	 XH3yWzOlVDIw/tu2tRXkVkxPLPD+Lcyse9Lar9jgjjmL/sYuejno/fdaKoZd2vAiRy
+	 wPteyPvJvcbvA==
+Message-ID: <4646aec4-0270-435e-8097-344a1df0e4bc@kernel.org>
+Date: Mon, 10 Feb 2025 09:22:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -50,8 +50,7 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/18] usb: dwc3: Reserve Higher Bandwidth for HS Periodic
- EPs
+Subject: Re: [PATCH 00/18] Reserve high bandwidth for HS isoc eps
 To: Akash Kumar <quic_akakum@quicinc.com>,
  Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -63,7 +62,6 @@ Cc: Bjorn Andersson <andersson@kernel.org>,
  <conor+dt@kernel.org>, Vijayavardhan Vennapusa <quic_vvreddy@quicinc.com>,
  linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20250206111543.17392-1-quic_akakum@quicinc.com>
- <20250206111543.17392-2-quic_akakum@quicinc.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -109,39 +107,56 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250206111543.17392-2-quic_akakum@quicinc.com>
+In-Reply-To: <20250206111543.17392-1-quic_akakum@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 06/02/2025 12:15, Akash Kumar wrote:
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index dfa1b5fe48dc..7e55c234e4e5 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -1461,6 +1461,14 @@ static int dwc3_core_init(struct dwc3 *dwc)
->  		dwc3_writel(dwc->regs, DWC3_GUCTL1, reg);
->  	}
->  
-> +	if (dwc->revision >= DWC3_REVISION_250A) {
-> +		if (dwc->dwc3_guctl_resbwhseps_quirk) {
-> +			reg = dwc3_readl(dwc->regs, DWC3_GUCTL);
-> +			reg |= DWC3_GUCTL_RESBWHSEPS;
-> +			dwc3_writel(dwc->regs, DWC3_GUCTL, reg);
-> +		}
-> +	}
-> +
->  	dwc3_config_threshold(dwc);
->  
->  	/*
-> @@ -1818,6 +1826,9 @@ static void dwc3_get_properties(struct dwc3 *dwc)
->  	dwc->dis_split_quirk = device_property_read_bool(dev,
->  				"snps,dis-split-quirk");
->  
-> +	dwc->dwc3_guctl_resbwhseps_quirk = device_property_read_bool(dev,
-> +				"snps,dwc3_guctl_resbwhseps_quirk");
+> It is observed while testing multiple audio devices over usb, a glitch is
+> observed during testing. As per dwc datasheet,By default, HC reserves 80%
+> of the bandwidth for periodic EPs which can be increased if needed.
+> 
+> Add quirk to set GUCTL register BIT 16 to accommodate higher bandwidth for
+> 2 isoc eps.
+> 
+> If this bit is set, the bandwidth is relaxed to 85% to accommodate two high
+> speed, high bandwidth ISOC EPs. USB 2.0 required 80% bandwidth allocated
+> for ISOC traffic. If two High-bandwidth ISOC devices (HD Webcams) are
+> connected, and if each requires 1024-bytes X 3 packets per Micro-Frame,
+> then the bandwidth required is around 82%. If this bit is set, then it is
+> possible to connect two Webcams of 1024bytes X 3 paylod per Micro-Frame
+> each. Alternatively, you might need to lower the resolution of the
+> webcams. This bit is valid in Host and DRD configuration and is used in
+> host mode operation only.
+> 
+> Set this bit for host mode uvc uac usecases where two isoc eps are used
+> and uvc flickers or audio glitch is observed.
+> 
+> Akash Kumar (18):
+>   usb: dwc3: Reserve Higher Bandwidth for HS Periodic EPs
+>   arm64: dts: qcom: sa8775p: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sm8350: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sm8450: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sm8150: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sm6125: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sm8250: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sm6350: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sc7280: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sdm630: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sdm845: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sdx75: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: qcs404: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sc7180: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: x1e80100: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sc8280xp: Enable high bandwidth for hs isoc eps
+>   arm64: dts: qcom: sc8180x: Enable high bandwidth for hs isoc eps
 
-NAK, undocumented ABI, not even bothering to follow standard DTS coding
-style.
+1. Do not combine USB and DTS in one patchset.
+2. This was not ever tested (see bug reports already published by bot),
+so obviously disappointing no-go.
+3. This looks like SoC specific, so deduce the setting from the compatible.
+
 
 Best regards,
 Krzysztof
