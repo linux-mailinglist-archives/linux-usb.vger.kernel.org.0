@@ -1,91 +1,365 @@
-Return-Path: <linux-usb+bounces-20405-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20406-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17651A2EF70
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 15:13:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AADDA2EFC8
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 15:30:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 908F93A3669
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 14:12:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B24C41885B40
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 14:30:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25127235366;
-	Mon, 10 Feb 2025 14:12:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A048D252901;
+	Mon, 10 Feb 2025 14:29:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="dptNVVGe"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YTgy3ipM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A450234965
-	for <linux-usb@vger.kernel.org>; Mon, 10 Feb 2025 14:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6235E2528E0;
+	Mon, 10 Feb 2025 14:29:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739196753; cv=none; b=bYozndpEGpb9d/q9EJ06zNyKPZO4IiNObhs/vwJLSpNaWgQtbbBjc2sbBZ3rxK+uZ/hjepeISUO18U8rCXlr77A6pVJjXfo6kfBklK92RtWs7R1rWF3FOjmpXeo+pOgfSDkQ73cFT9uonsDA2R9hXYF+q2TBRAbF+WDiCRo/6/k=
+	t=1739197798; cv=none; b=P1uzOL3WoF4Rb5nSAv1gtPrYyogUh05gLd197xot0iSpxtnIRDruoX1iStdGGvrMRWnt313k9C3ynUCUQnTLt/tfSnOrXOTApFZSkuNRKWMS1NY0EisXKWjKGIirqx6a/4vK/SB/CxqVIxrZ/fijhbEPMFF0FHeLROJa8ulY8Fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739196753; c=relaxed/simple;
-	bh=WwnHxGIk7tt1Ik9UMqyFdUvOH7DDYBEJEmPMqYhM1Wo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uz/cT0XE89yHnpD/JvjitLtPyYzZiKbGyiuk7Di9waBA6Iie/92xxBD1GE3QWrQ0B43j7sRCOoIaNKS6ILyzCnR9CYsBxe0XiwlX4GrHoWlVImN2RBqOdMwfp7e7wN1Q11X2xaAiTKoG8N71zkeWRN0XfRHuhdxQ7u8+zHxUJq0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=dptNVVGe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3C4C4CEDF;
-	Mon, 10 Feb 2025 14:12:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739196753;
-	bh=WwnHxGIk7tt1Ik9UMqyFdUvOH7DDYBEJEmPMqYhM1Wo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=dptNVVGesY0d0QNetqWeKgWd9SD8UnYc80oVMqWsVeGJjbLHgTlkyEiiwJDIF+675
-	 y7vwUrbAT90trXun9hTRE/RB71O4HxTa8735q0FDbi2a8q3ZK1u+Z9KlJHput0TNRI
-	 1wHoNxhzLJBd5X5oGsLGxphJ/WICV8s+1CzfEjMg=
-Date: Mon, 10 Feb 2025 15:07:02 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Matt Lee <matt@oscium.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: [PATCH 2/2] USB: max3421: Fix scheduling while atomic in
- max3421_remove()
-Message-ID: <2025021044-conjuror-captivity-619b@gregkh>
-References: <CABrMTje0ijdtcO31HmuSufxXFQO2Ay2Rh0_0Qc4FFC3zgqe-pA@mail.gmail.com>
+	s=arc-20240116; t=1739197798; c=relaxed/simple;
+	bh=IHFKTpAQajWK30g+CZhx8D8bqGKBD6PSab/qKJbHafE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=NQ6YRja2lB9WwrUwARYeZu5d0SMrsNnkWx/scqsa/MaABuAX4r0MiJhFWeWz7aKAIh91VJCVBNZnLq65dMm4UCoyNaGAP7FRkLnMlAlq3zdfHi5ur8IEBPVpjxjuW2a1QkPWgbmnUxCjFMX4eVGQofLlPWPI4spMnx2iuHe8g44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YTgy3ipM; arc=none smtp.client-ip=209.85.128.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-6f9625c0fccso40371207b3.1;
+        Mon, 10 Feb 2025 06:29:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739197795; x=1739802595; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9SzPGh7l/G2We1xnSnZ4MaLizlv3tkYAdcM4zI4+4a4=;
+        b=YTgy3ipMQCLdN4dsAAsKMWCJ1t6u8XeqABclqce5UXG55hEFTzNSN1948JrwF0sy7C
+         8a3R8zGejepcg9u2IIbRTogyNItsf41E3pqDKJsIOVuGyWsS5Th3hdjJIkCcEq34o7Os
+         D2qzcoIRK5tx7Qk2l8OhCorUx/SlhObLDPO2fTD1y78ABiSrbKUJ+9oY1G1aehybZZG5
+         R4kFqMqaNFDeQjwRXCe7ys4ft7NTr4ITkEsUjKAybQDpsIXsYJ9vHihJLVMG3KvnZcC7
+         w5jgzbc/QxwNhgFV0zI88/8PfuEGQ9On0ObZHhzeov2ua17GlRDM8uuib3qAyJSixKN7
+         zsJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739197795; x=1739802595;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=9SzPGh7l/G2We1xnSnZ4MaLizlv3tkYAdcM4zI4+4a4=;
+        b=r6EzW9ulYG8NAX7Fap0fJ+mR1of8El8hlSa7HXeD1GlAqCYPjqRC668DClvEI/CnCe
+         Lc8NLAeE/7muqaF48ygU9pSTc45dvWawDYlspnXAsnwBvjdoRoda/UnjK2H3HnR6aLzg
+         JrI2GCS+/B53RUBI5ORqCtQjPKfptLk1FCPULglUe+5CEIf3++KV7XfgPmjMOnc2O40I
+         OghJiSWx/aXzpHMNotej5Snb9U4v9fMfiFuGsT7nmbf4aQSa24wbglqsN7EDa57E8m00
+         ZWxLOqCPqQjuWSzgz+iiKH7rHpY3jEX/eGlYuXIIhEkfGNV5TpQOt2Y1XbGaaCe7U8Aa
+         jogw==
+X-Forwarded-Encrypted: i=1; AJvYcCU7JEJz9nkE8MXOMo1XqIvAqIoCmxDov812nDYEeN9LZcKn08IjlXC89+CDV87lfNkulo/FHk5ExV9j/Yw=@vger.kernel.org, AJvYcCUrKYdRSjxpzLKMlmkNMVGRJ2NbDBP+bPBxQi33GS7FhfZg9cM2qShHcEvYl4d/SrksM2ZyAhPwe+Yth1dXr+g=@vger.kernel.org, AJvYcCXFS+E+zZhjpMMnLja7xirTnwLU5PKik2gwQ49miftbmudBofahKZDaM82P1WVjgp8M37umzytglPwz@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQzhg+3uDfpuJ/f5gX59FA02NtZGXn34t08qYESb69Nj+e5L8l
+	l6aN9O3+CKVpLrLScwjqJBaM7RA0DobjPsZSCDU4zuUOuztYR2LN
+X-Gm-Gg: ASbGncu6b19ml64BrTLo7GHi1vUOHyyb8seS6nVr6Ilqz04JfJNKIDyjaujqelGEXio
+	/i5bo2Q/v+VlvGiwx6O2y4bGFnFtWGno9EdGreISC+i7easBTOmcZpoXea3h46Q8pB4S/opfPL+
+	2YvXvBJ82hud1yKP8lHPKisjLBnJeUa9ogX45GT6fAJ2xj4efBrLfpfLEYnQjF2MvWLZ7R105bU
+	X+9wcHHZ4l7q3gzOEFukqR66ahJAhp36WdUdNTEqcmYIY8gmcYqsAPtv7DOF34NIgeQO4rjJHgN
+	LO+r8Ys=
+X-Google-Smtp-Source: AGHT+IGhgAhhDENGX22swk5cI3mpEnv0oMmHYiiEA+XAPaK4VwVP9nCjF376w1lFwDYc0YUOW/JsbA==
+X-Received: by 2002:a05:690c:6d09:b0:6f9:7ce7:b107 with SMTP id 00721157ae682-6f9b29e4ea4mr128533937b3.29.1739197795274;
+        Mon, 10 Feb 2025 06:29:55 -0800 (PST)
+Received: from localhost ([2800:bf0:82:3d2:4207:a956:ebad:2a64])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6f99fd1fa90sm16644907b3.45.2025.02.10.06.29.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Feb 2025 06:29:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABrMTje0ijdtcO31HmuSufxXFQO2Ay2Rh0_0Qc4FFC3zgqe-pA@mail.gmail.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 10 Feb 2025 09:29:52 -0500
+Message-Id: <D7OU5VOXCS8M.39YEYRWFL1MPW@gmail.com>
+Cc: "Alexander Lobakin" <aleksander.lobakin@intel.com>, "Andy Shevchenko"
+ <andriy.shevchenko@linux.intel.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
+ "Jonathan Cameron" <Jonathan.Cameron@huawei.com>, "Liam Girdwood"
+ <lgirdwood@gmail.com>, "Lukas Wunner" <lukas@wunner.de>, "Mark Brown"
+ <broonie@kernel.org>, =?utf-8?q?Ma=C3=ADra_Canal?= <mairacanal@riseup.net>,
+ "Robin Murphy" <robin.murphy@arm.com>, "Simona Vetter"
+ <simona.vetter@ffwll.ch>, "Zijun Hu" <quic_zijuhu@quicinc.com>,
+ <linux-usb@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [PATCH v4 1/9] driver core: add a faux bus for use when a
+ simple device/bus is needed
+From: "Kurt Borja" <kuurtb@gmail.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ <linux-kernel@vger.kernel.org>, "Lyude Paul" <lyude@redhat.com>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, "Danilo Krummrich" <dakr@kernel.org>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <2025021023-sandstorm-precise-9f5d@gregkh>
+ <2025021026-atlantic-gibberish-3f0c@gregkh>
+In-Reply-To: <2025021026-atlantic-gibberish-3f0c@gregkh>
 
-On Mon, Feb 10, 2025 at 07:48:29AM -0600, Matt Lee wrote:
-> A bug in `max3421_remove()` caused a "scheduling while atomic" crash when
-> `kthread_stop()` was called while holding a spinlock.
-> 
-> This patch ensures that `kthread_stop()` is called outside the spinlock,
-> fixing the crash and improving system stability when unloading the driver.
-> 
-> Signed-off-by: Matt Lee <matt@oscium.com>
+Hi Greg,
+
+On Mon Feb 10, 2025 at 7:30 AM -05, Greg Kroah-Hartman wrote:
+> Many drivers abuse the platform driver/bus system as it provides a
+> simple way to create and bind a device to a driver-specific set of
+> probe/release functions.  Instead of doing that, and wasting all of the
+> memory associated with a platform device, here is a "faux" bus that
+> can be used instead.
+>
+> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+> Reviewed-by: Lyude Paul <lyude@redhat.com>
+> Reviewed-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 > ---
->  drivers/usb/host/max3421-hcd.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/drivers/usb/host/max3421-hcd.c b/drivers/usb/host/max3421-hcd.c
-> index abcdef0..1234567 100644
-> --- a/drivers/usb/host/max3421-hcd.c
-> +++ b/drivers/usb/host/max3421-hcd.c
-> @@ -1936,11 +1945,10 @@ max3421_remove(struct spi_device *spi)
->         usb_remove_hcd(hcd);
-> 
->         spin_lock_irqsave(&max3421_hcd->lock, flags);
-> +       spin_unlock_irqrestore(&max3421_hcd->lock, flags);
-> 
->         kthread_stop(max3421_hcd->spi_thread);
-> 
-> -       spin_unlock_irqrestore(&max3421_hcd->lock, flags);
-> -
+> v4: - really removed the name logic
+>     - added #include <linux/container_of.h> to faux.h
+>     - added parent pointer to api call
+>     - minor documentation updates
+>     - made probe synchronous
+> v3: - loads of documentation updates and rewrites
+>     - added to the documentation build
+>     - removed name[] array as it's no longer needed
+>     - added faux_device_create_with_groups()
+>     - added functions to get/set devdata
+>     - renamed faux_driver_ops -> faux_device_ops
+>     - made faux_device_ops a const *
+>     - minor cleanups
+>     - tested it, again.
+>
+> v2: - renamed bus and root device to just "faux" thanks to Thomas
+>     - removed the one-driver-per-device and now just have one driver
+>       entirely thanks to Danilo
+>     - kerneldoc fixups and additions and string handling bounds checks
+>       thanks to Andy
+>     - coding style fix thanks to Jonathan
+>     - tested that the destroy path actually works
+>  Documentation/driver-api/infrastructure.rst |   6 +
+>  drivers/base/Makefile                       |   2 +-
+>  drivers/base/base.h                         |   1 +
+>  drivers/base/faux.c                         | 232 ++++++++++++++++++++
+>  drivers/base/init.c                         |   1 +
+>  include/linux/device/faux.h                 |  69 ++++++
+>  6 files changed, 310 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/base/faux.c
+>  create mode 100644 include/linux/device/faux.h
+>
+> diff --git a/Documentation/driver-api/infrastructure.rst b/Documentation/=
+driver-api/infrastructure.rst
+> index 3d52dfdfa9fd..35e36fee4238 100644
+> --- a/Documentation/driver-api/infrastructure.rst
+> +++ b/Documentation/driver-api/infrastructure.rst
+> @@ -41,6 +41,12 @@ Device Drivers Base
+>  .. kernel-doc:: drivers/base/class.c
+>     :export:
+> =20
+> +.. kernel-doc:: include/linux/device/faux.h
+> +   :internal:
+> +
+> +.. kernel-doc:: drivers/base/faux.c
+> +   :export:
+> +
+>  .. kernel-doc:: drivers/base/node.c
+>     :internal:
+> =20
+> diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+> index 7fb21768ca36..8074a10183dc 100644
+> --- a/drivers/base/Makefile
+> +++ b/drivers/base/Makefile
+> @@ -6,7 +6,7 @@ obj-y			:=3D component.o core.o bus.o dd.o syscore.o \
+>  			   cpu.o firmware.o init.o map.o devres.o \
+>  			   attribute_container.o transport_class.o \
+>  			   topology.o container.o property.o cacheinfo.o \
+> -			   swnode.o
+> +			   swnode.o faux.o
+>  obj-$(CONFIG_AUXILIARY_BUS) +=3D auxiliary.o
+>  obj-$(CONFIG_DEVTMPFS)	+=3D devtmpfs.o
+>  obj-y			+=3D power/
+> diff --git a/drivers/base/base.h b/drivers/base/base.h
+> index 8cf04a557bdb..0042e4774b0c 100644
+> --- a/drivers/base/base.h
+> +++ b/drivers/base/base.h
+> @@ -137,6 +137,7 @@ int hypervisor_init(void);
+>  static inline int hypervisor_init(void) { return 0; }
+>  #endif
+>  int platform_bus_init(void);
+> +int faux_bus_init(void);
+>  void cpu_dev_init(void);
+>  void container_dev_init(void);
+>  #ifdef CONFIG_AUXILIARY_BUS
+> diff --git a/drivers/base/faux.c b/drivers/base/faux.c
+> new file mode 100644
+> index 000000000000..531e9d789ee0
+> --- /dev/null
+> +++ b/drivers/base/faux.c
+> @@ -0,0 +1,232 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2025 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> + * Copyright (c) 2025 The Linux Foundation
+> + *
+> + * A "simple" faux bus that allows devices to be created and added
+> + * automatically to it.  This is to be used whenever you need to create =
+a
+> + * device that is not associated with any "real" system resources, and d=
+o
+> + * not want to have to deal with a bus/driver binding logic.  It is
+> + * intended to be very simple, with only a create and a destroy function
+> + * available.
+> + */
+> +#include <linux/err.h>
+> +#include <linux/init.h>
+> +#include <linux/slab.h>
+> +#include <linux/string.h>
+> +#include <linux/container_of.h>
+> +#include <linux/device/faux.h>
+> +#include "base.h"
+> +
+> +/*
+> + * Internal wrapper structure so we can hold a pointer to the
+> + * faux_device_ops for this device.
+> + */
+> +struct faux_object {
+> +	struct faux_device faux_dev;
+> +	const struct faux_device_ops *faux_ops;
+> +};
+> +#define to_faux_object(dev) container_of_const(dev, struct faux_object, =
+faux_dev.dev)
+> +
+> +static struct device faux_bus_root =3D {
+> +	.init_name	=3D "faux",
+> +};
+> +
+> +static int faux_match(struct device *dev, const struct device_driver *dr=
+v)
+> +{
+> +	/* Match always succeeds, we only have one driver */
+> +	return 1;
+> +}
+> +
+> +static int faux_probe(struct device *dev)
+> +{
+> +	struct faux_object *faux_obj =3D to_faux_object(dev);
+> +	struct faux_device *faux_dev =3D &faux_obj->faux_dev;
+> +	const struct faux_device_ops *faux_ops =3D faux_obj->faux_ops;
+> +	int ret =3D 0;
+> +
+> +	if (faux_ops && faux_ops->probe)
+> +		ret =3D faux_ops->probe(faux_dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static void faux_remove(struct device *dev)
+> +{
+> +	struct faux_object *faux_obj =3D to_faux_object(dev);
+> +	struct faux_device *faux_dev =3D &faux_obj->faux_dev;
+> +	const struct faux_device_ops *faux_ops =3D faux_obj->faux_ops;
+> +
+> +	if (faux_ops && faux_ops->remove)
+> +		faux_ops->remove(faux_dev);
+> +}
+> +
+> +static const struct bus_type faux_bus_type =3D {
+> +	.name		=3D "faux",
+> +	.match		=3D faux_match,
+> +	.probe		=3D faux_probe,
+> +	.remove		=3D faux_remove,
+> +};
+> +
+> +static struct device_driver faux_driver =3D {
+> +	.name		=3D "faux_driver",
+> +	.bus		=3D &faux_bus_type,
+> +	.probe_type	=3D PROBE_FORCE_SYNCHRONOUS,
+> +};
+> +
+> +static void faux_device_release(struct device *dev)
+> +{
+> +	struct faux_object *faux_obj =3D to_faux_object(dev);
+> +
+> +	kfree(faux_obj);
+> +}
+> +
+> +/**
+> + * faux_device_create_with_groups - Create and register with the driver
+> + *		core a faux device and populate the device with an initial
+> + *		set of sysfs attributes.
+> + * @name:	The name of the device we are adding, must be unique for
+> + *		all faux devices.
+> + * @parent:	Pointer to a potential parent struct device.  If set to
+> + *		NULL, the device will be created in the "root" of the faux
+> + *		device tree in sysfs.
+> + * @faux_ops:	struct faux_device_ops that the new device will call back
+> + *		into, can be NULL.
+> + * @groups:	The set of sysfs attributes that will be created for this
+> + *		device when it is registered with the driver core.
+> + *
+> + * Create a new faux device and register it in the driver core properly.
+> + * If present, callbacks in @faux_ops will be called with the device tha=
+t
+> + * for the caller to do something with at the proper time given the
+> + * device's lifecycle.
+> + *
+> + * Note, when this function is called, the functions specified in struct
+> + * faux_ops can be called before the function returns, so be prepared fo=
+r
+> + * everything to be properly initialized before that point in time.
+> + *
+> + * Return:
+> + * * NULL if an error happened with creating the device
+> + * * pointer to a valid struct faux_device that is registered with sysfs
+> + */
+> +struct faux_device *faux_device_create_with_groups(const char *name,
+> +						   struct device *parent,
+> +						   const struct faux_device_ops *faux_ops,
+> +						   const struct attribute_group **groups)
+> +{
+> +	struct faux_object *faux_obj;
+> +	struct faux_device *faux_dev;
+> +	struct device *dev;
+> +	int ret;
+> +
+> +	faux_obj =3D kzalloc(sizeof(*faux_obj), GFP_KERNEL);
+> +	if (!faux_obj)
+> +		return NULL;
+> +
+> +	/* Save off the callbacks so we can use them in the future */
+> +	faux_obj->faux_ops =3D faux_ops;
+> +
+> +	/* Initialize the device portion and register it with the driver core *=
+/
+> +	faux_dev =3D &faux_obj->faux_dev;
+> +	dev =3D &faux_dev->dev;
+> +
+> +	device_initialize(dev);
+> +	dev->release =3D faux_device_release;
+> +	if (parent)
+> +		dev->parent =3D parent;
+> +	else
+> +		dev->parent =3D &faux_bus_root;
+> +	dev->bus =3D &faux_bus_type;
+> +	dev->groups =3D groups;
+> +	dev_set_name(dev, "%s", name);
+> +
+> +	ret =3D device_add(dev);
+> +	if (ret) {
+> +		pr_err("%s: device_add for faux device '%s' failed with %d\n",
+> +		       __func__, name, ret);
+> +		put_device(dev);
+> +		return NULL;
+> +	}
 
-So now the lock does nothing?  Are you sure this change is correct?
+Now that the probe is synchronous, what do you think about returning
+-ENODEV if the device failed to bind to the driver?
 
-thanks,
+This would be useful for modules that may want to unload if the probe
+fails.
 
-greg k-h
+--=20
+ ~ Kurt
 
