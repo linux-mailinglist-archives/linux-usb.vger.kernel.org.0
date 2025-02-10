@@ -1,189 +1,181 @@
-Return-Path: <linux-usb+bounces-20389-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20391-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EA2CA2EC1A
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 13:00:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E731A2EC7A
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 13:31:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13F843A836B
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 11:59:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2BC81666BD
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 12:31:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC87F1F7547;
-	Mon, 10 Feb 2025 11:59:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31C0224899;
+	Mon, 10 Feb 2025 12:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="y2UjeeHu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002C01F55FB;
-	Mon, 10 Feb 2025 11:59:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BF2E2236F7;
+	Mon, 10 Feb 2025 12:30:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739188795; cv=none; b=mVuia7U5dbXTnirWtUDijBL0NwA8BVG6+3DOthxZX6JhpbVXmiRfnKvUq1Ke71F4hzHn6DDdiIaux4r+oEqbPEI3ZIWumyapvctKB/x6JbXdnS8bKRJUtQ1W190sRSMfhrVSFeIHOpRFICQAMgqA9beRP5k755+1wkx81sdIGdc=
+	t=1739190637; cv=none; b=LZvw10RF3C8FY4iRT+7eDd8idY6P9rH4OyKxGiwTUC0crzroQAmYc3X/6zrD++rdEKgS/H60+lhnGa4dhivJt1wMJjTRauMLQq9PO1tRIg4izJ/uyZFK5gtkfZPGR4TYxo2/3acOF+0AP2plyDc/XKAYYo1dNtVi3WffSoJWg+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739188795; c=relaxed/simple;
-	bh=+DJ/KTweca29Jg43dF3lxezvj2t6u/7gKmo1A/LMvvk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j5k+eI2bzpCuHZpWB3d7WylUQmWPFd8ipTpPrcwELw7byYGdcabeiQ1uRBlvFmd6F9gg3Y3DE2lOgLdKrX4cEyDkpowhYm/UM2P87FrMKpdIK6QE1L48yIoHS1+7giIorNvHHjGN5+myHI+a7Bo945hYwz7eMXzNiCKL0TDWyyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id C7EF661E647BD;
-	Mon, 10 Feb 2025 12:59:42 +0100 (CET)
-Message-ID: <b0d55f4c-a078-42a0-a0fe-5823700f2837@molgen.mpg.de>
-Date: Mon, 10 Feb 2025 12:59:42 +0100
+	s=arc-20240116; t=1739190637; c=relaxed/simple;
+	bh=c9D3oOBKU8VLrTVavyW7pHwp3Ch/dcHbstq2a7GWBE4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=eCh1r/ck2PTopvZEOyBo1BYIdiAmENEbBIH72ASLR/dtsbLIscAiHJxrd5oOYD/8d2BtWSOKND5FVAzYdoOv5asQcZ1S3b22qgVbpB04PUZWthPlqCeQBErlqLfjsRTv/Y0VK2JDgg+5ETWo8fVjLLl82bZYDTUpD/Lf5uRHIZA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=y2UjeeHu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4051DC4CED1;
+	Mon, 10 Feb 2025 12:30:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1739190636;
+	bh=c9D3oOBKU8VLrTVavyW7pHwp3Ch/dcHbstq2a7GWBE4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=y2UjeeHuzARc0PFFUpxZeOMDjEyBWVcQJEnM9Zn3O8rZ5dz3kb308IJEPjbBtJxLM
+	 3g+ug/4mbzEdxYzY14OvVLHEhIAvWbCZcdO5GUT7W9+vTrT0b3HYsjHBm2fgRkMNHF
+	 sP8nh/XEOuu3JCKQZfPzvqFdvuAKOxt20y0tNoQo=
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: linux-kernel@vger.kernel.org,
+	Lyude Paul <lyude@redhat.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?UTF-8?q?Ma=C3=ADra=20Canal?= <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>,
+	linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org
+Subject: [PATCH v4 0/9] Driver core: Add faux bus devices
+Date: Mon, 10 Feb 2025 13:30:24 +0100
+Message-ID: <2025021023-sandstorm-precise-9f5d@gregkh>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
- #08!!! on Dell XPS 13 9360
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: anna-maria@linutronix.de, frederic@kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, mingo@kernel.org, tglx@linutronix.de
-References: <20250210124551.3687ae51@foxbook>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20250210124551.3687ae51@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
+Lines: 105
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5008; i=gregkh@linuxfoundation.org; h=from:subject:message-id; bh=c9D3oOBKU8VLrTVavyW7pHwp3Ch/dcHbstq2a7GWBE4=; b=owGbwMvMwCRo6H6F97bub03G02pJDOkrPya4eP2c5COm6bgq0P+v9MGvFZ0/l8jNiu41t/22N z6rcnlPRywLgyATg6yYIsuXbTxH91ccUvQytD0NM4eVCWQIAxenAEzkPjvDPFPfCzbMemuP71z9 7XDZ4oxplSs2BTIsWCqwPPVN1TK9UsauV//Yqxge7711FwA=
+X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 
-Dear Michał,
+For years/decades now, I've been complaining when I see people use
+platform devices for things that are obviously NOT platform devices.
+To finally fix this up, here is a "faux bus" that should be used instead
+of a platform device for these tiny and "fake" devices that people
+create all over the place.
+
+The api is even simpler than the normal platform device api, just two
+functions, one to create a device and one to remove it.  When a device
+is created, if a probe/release callback is offered, they will be called
+at the proper time in the device's lifecycle.  When finished with the
+device, just destroy it and all should be good.
+
+This simple api should also hopefully provide for a simple rust binding
+to it given the simple rules and lifecycle of the pointer passed back
+from the creation function (i.e. it is alive and valid for as long as
+you have not called destroy on it.)
+
+I've also converted four different examples of platform device abuse, the
+dummy regulator driver, the USB phy code, the x86 microcode dvice, and
+the "regulator" device that wifi uses to load the firmware tables, to
+use this api.  In all cases, the logic either was identical, or became
+simpler, than before, a good sign (side note, a bug was fixed in the usb
+phy code that no one ever noticed before).
+
+Note, unless there are major objections, I'm leaning toward getting
+patch 1 and 2 of this series merged during this -rc cycle so that all of
+the individual driver subsystem cleanups can go through those subsystems
+as needed, as well as allowing the rust developers to create a binding
+and get that merged easier.  Having patch 1 merged on its own isn't
+going to cause any changes if no one uses it, so that should be fine.
+
+Changes from v4:
+  - really dropped the internal name structure, remanants were left over
+    from the last patch series
+  - added the rust binding patch from Lyude (is this one of the first
+    patch series that adds a new kernel api AND the rust binding at the
+    same time?)
+  - added a parent pointer to the api so the devices can be in the tree
+    if the caller wants them
+  - made probe synchronous to prevent race when using the api (when the
+    create call returns the device is fully ready to go.)  Thanks to
+    testing of the drm driver change to find this issue.
+  - documentation tweaks
+  - #include <linux/container_of.h> finally added to faux.h
 
 
-Thank you for your reply.
+Changes from v3:
+  - Dropped the USB phy porting, turned out to be incorrect, it really
+    did need a platform device
+  - converted more drivers to the faux_device api (tlclk, lis3lv02d,
+    vgem, and vkms)
+  - collected some reviewed-by
+  - lots of minor tweaks of the faux.c api, and documentation based on
+    review, see the changelog in patch 1 for details.
 
-Am 10.02.25 um 12:45 schrieb Michał Pecio:
-
->>>>>>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux
->>>>>>>> 6.9-rc2+
-> 
->> Just for the record, I am still seeing this with 6.14.0-rc1
-> 
-> Is this a regression? If so, which versions were not affected?
-
-Unfortunately, I do not know. Right now, my logs go back until September 
-2024.
-
-     Sep 22 13:08:04 abreu kernel: Linux version 
-6.11.0-07273-g1e7530883cd2 (build@bohemianrhapsody.molgen.mpg.de) (gcc 
-(Debian 14.2.0-5) 14.2.0, GNU ld (GNU Binutils for Debian) 2.43.1) #12 
-SMP PREEMPT_DYNAMIC Sun Sep 22 09:57:36 CEST 2024
-
-> How hard to reproduce? Wasn't it during resume from hibernation?
-
-It’s not easy to reproduce, and I believe it’s not related with resuming 
-from hibernation (which I do not use) or ACPI S3 suspend. I think, I can 
-force it more, when having the USB-C adapter with only the network cable 
-plugged into it, and then running `sudo powertop --auto-tune`. But 
-sometimes it seems unrelated.
-
-> IRQ isuses may be a red herring, this code here is a busy wait under
-> spinlock. There are a few of those, they cause various problems.
-> 
->                  if (xhci_handshake(&xhci->op_regs->status,
->                                STS_RESTORE, 0, 100 * 1000)) {
->                          xhci_warn(xhci, "WARN: xHC restore state timeout\n");
-> 			spin_unlock_irq(&xhci->lock);
->                          return -ETIMEDOUT;
->                  }
-> 
-> This thing timing out may be close to the root cause of everything.
-
-Interesting. Hopefully the USB folks have an idea.
+Changes from v2:
+  - lots of cleanups to faux.c based on reviews, see patch 1 for details
+  - actually tested the destroy device path, it worked first try!
+  - added 3 more example drivers
 
 
-Kind regards,
 
-Paul
+Greg Kroah-Hartman (8):
+  driver core: add a faux bus for use when a simple device/bus is needed
+  regulator: dummy: convert to use the faux device interface
+  x86/microcode: move away from using a fake platform device
+  wifi: cfg80211: move away from using a fake platform device
+  tlclk: convert to use faux_device
+  misc: lis3lv02d: convert to use faux_device
+  drm/vgem/vgem_drv convert to use faux_device
+  drm/vkms: convert to use faux_device
 
+Lyude Paul (1):
+  rust/kernel: Add faux device bindings
 
-```
-$ journalctl -b
-[…]
-Feb 10 00:23:26 abreu PackageKit[144568]: daemon quit
-Feb 10 00:23:26 abreu systemd[1]: packagekit.service: Deactivated 
-successfully.
-Feb 10 00:25:01 abreu CRON[149822]: pam_unix(cron:session): session 
-opened for user root(uid=0) by root(uid=0)
-Feb 10 00:25:01 abreu CRON[149824]: (root) CMD (command -v debian-sa1 > 
-/dev/null && debian-sa1 1 1)
-Feb 10 00:25:01 abreu CRON[149822]: pam_unix(cron:session): session 
-closed for user root
-Feb 10 00:25:22 abreu gnome-shell[1541]: libinput error: event12 - 
-DLL075B:01 06CB:76AF Touchpad: client bug: event processing lagging 
-behind by 23ms, your system is too slow
-Feb 10 00:25:52 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:25:52 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:25:57 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:25:57 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:26:10 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:26:10 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:26:17 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:26:17 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:26:18 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:26:18 abreu rtkit-daemon[831]: Supervising 9 threads of 6 
-processes of 1 users.
-Feb 10 00:26:18 abreu rtkit-daemon[831]: Successfully made thread 151021 
-of process 137400 owned by '5272' RT at priority 10.
-Feb 10 00:26:18 abreu rtkit-daemon[831]: Supervising 10 threads of 7 
-processes of 1 users.
-Feb 10 00:26:31 abreu kernel: NOHZ tick-stop error: local softirq work 
-is pending, handler #08!!!
-Feb 10 00:33:04 abreu rtkit-daemon[831]: Supervising 10 threads of 7 
-processes of 1 users.
-[…]
-Feb 10 01:12:37 abreu kernel: PM: suspend entry (deep)
-Feb 10 01:12:37 abreu kernel: Filesystems sync: 0.043 seconds
-Feb 10 08:06:42 abreu kernel: Freezing user space processes
-Feb 10 08:06:42 abreu kernel: Freezing user space processes completed 
-(elapsed 0.002 seconds)
-[…]
-Feb 10 08:11:03 abreu sudo[188932]:  pmenzel : TTY=pts/9 ; 
-PWD=/home/pmenzel ; USER=root ; COMMAND=/usr/sbin/powertop --auto-tune
-Feb 10 08:11:03 abreu sudo[188932]: pam_unix(sudo:session): session 
-opened for user root(uid=0) by pmenzel(uid=5272)
-Feb 10 08:11:06 abreu systemd[1355]: Started run-p188949-i188950.scope - 
-[systemd-run] /usr/bin/bash.
-Feb 10 08:11:09 abreu sudo[188932]: pam_unix(sudo:session): session 
-closed for user root
-Feb 10 08:12:01 abreu systemd[1355]: run-p188949-i188950.scope: Consumed 
-2.080s CPU time, 84.4M memory peak.
-Feb 10 08:12:02 abreu systemd[1355]: run-p188220-i188221.scope: Consumed 
-44.374s CPU time, 1G memory peak.
-Feb 10 08:13:00 abreu kernel: NOHZ tick-stop error: local softirq work 
-is pending, handler #08!!!
-Feb 10 08:15:01 abreu CRON[189093]: pam_unix(cron:session): session 
-opened for user root(uid=0) by root(uid=0)
-Feb 10 08:15:01 abreu CRON[189095]: (root) CMD (command -v debian-sa1 > 
-/dev/null && debian-sa1 1 1)
-Feb 10 08:15:01 abreu CRON[189093]: pam_unix(cron:session): session 
-closed for user root
-Feb 10 08:15:55 abreu PackageKit[186868]: daemon quit
-Feb 10 08:15:55 abreu systemd[1]: packagekit.service: Deactivated 
-successfully.
-Feb 10 08:15:55 abreu systemd[1]: packagekit.service: Consumed 20.685s 
-CPU time, 126.2M memory peak.
-Feb 10 08:16:00 abreu kernel: NOHZ tick-stop error: local softirq work 
-is pending, handler #08!!!
-```
+ Documentation/driver-api/infrastructure.rst |   6 +
+ MAINTAINERS                                 |   2 +
+ arch/x86/kernel/cpu/microcode/core.c        |  14 +-
+ drivers/base/Makefile                       |   2 +-
+ drivers/base/base.h                         |   1 +
+ drivers/base/faux.c                         | 232 ++++++++++++++++++++
+ drivers/base/init.c                         |   1 +
+ drivers/char/tlclk.c                        |  32 +--
+ drivers/gpu/drm/vgem/vgem_drv.c             |  30 +--
+ drivers/gpu/drm/vkms/vkms_drv.c             |  28 +--
+ drivers/gpu/drm/vkms/vkms_drv.h             |   4 +-
+ drivers/misc/lis3lv02d/lis3lv02d.c          |  26 +--
+ drivers/misc/lis3lv02d/lis3lv02d.h          |   4 +-
+ drivers/regulator/dummy.c                   |  37 +---
+ include/linux/device/faux.h                 |  69 ++++++
+ net/wireless/reg.c                          |  28 +--
+ rust/bindings/bindings_helper.h             |   1 +
+ rust/kernel/faux.rs                         |  67 ++++++
+ rust/kernel/lib.rs                          |   1 +
+ samples/rust/Kconfig                        |  10 +
+ samples/rust/Makefile                       |   1 +
+ samples/rust/rust_driver_faux.rs            |  29 +++
+ 22 files changed, 502 insertions(+), 123 deletions(-)
+ create mode 100644 drivers/base/faux.c
+ create mode 100644 include/linux/device/faux.h
+ create mode 100644 rust/kernel/faux.rs
+ create mode 100644 samples/rust/rust_driver_faux.rs
+
+-- 
+2.48.1
+
 
