@@ -1,139 +1,115 @@
-Return-Path: <linux-usb+bounces-20385-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20386-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8900A2E715
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 09:57:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90236A2E862
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 10:57:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6789716506B
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 08:57:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3924C167628
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 09:57:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C12EA1C1F2F;
-	Mon, 10 Feb 2025 08:57:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9451C5D4F;
+	Mon, 10 Feb 2025 09:57:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XE59dC24"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SK7SV3vO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD8643151;
-	Mon, 10 Feb 2025 08:57:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DA92E628;
+	Mon, 10 Feb 2025 09:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739177867; cv=none; b=dVafx01Qmt4DFEdRHrtPEEZYJHz13E3jX9s7GfZxOEhl8+2ZfwrCkQIyDAhSFsjqlDuyy5E+bKQZxnGmKLg9NSdB0FnMP9Nk+y8eWxE61OBqF9pFqsrR0YaHgXdryKjXRzmA5GkFFHl05UjEIBQ3Nfmt7P0lFhvIUmqtbGUe+88=
+	t=1739181450; cv=none; b=NaXVIjRGarwXHeUcU06NaK+t3u6QChA+99ginoZOVqMwhE8j7Pjth0UuHeBTB1diBu3RMmX1L7D4l4UhwpCwdYq5csEBi5PZp/WWTn1O+iQZe14ds1uRzTmRy2gWp74SEATkKAxkz6NVTUXLQ5y41Pv61GU85f4PEqMlNnG+qvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739177867; c=relaxed/simple;
-	bh=M0sH78tZwMI80Y0F1mZRq2/tKtoaQo1cIuD3CYUKUiQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OiTWzfADtrTWIHGdFfFNquaBkzoLa5E91DP6VdbMLnUBW3E7TK8pVqK6tQka4pGUMZrPN+xsrIJgx4XPRkxOWaQW0fVcQ6wn9jggi+r/ha5cEWClpQWieoRLaIaoIZ2V3TC+VGdVLM9FMBTGu2knMQCtjKqX2S1Aamw9yB6R/Xg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XE59dC24; arc=none smtp.client-ip=209.85.218.51
+	s=arc-20240116; t=1739181450; c=relaxed/simple;
+	bh=ai5rpfVE3YWo/segFVBNNIo2GaJLfZnlgVB9MtJv96A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OfwFENP7StstkTkC9TO4F8PiLZFPe3jTMxFTfjO3WVBq682j6Np0zTj2pf5LZHrLblIYMGa7zV8o2E8FWu7n2k9AgdvnoBNju3Yp8E89aOwEd1tX4lmMHYNuWgzUT+YdqzTQ0Kxmwsl+zlSgD0kH8QvUvw5/WbZZpa7oLGFqqeM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SK7SV3vO; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aaee2c5ee6eso663318766b.1;
-        Mon, 10 Feb 2025 00:57:43 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5dbf5fb2c39so1007769a12.2;
+        Mon, 10 Feb 2025 01:57:28 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739177862; x=1739782662; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1739181447; x=1739786247; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=M0sH78tZwMI80Y0F1mZRq2/tKtoaQo1cIuD3CYUKUiQ=;
-        b=XE59dC24JNH7KPCCivlNp3OQCvylEWcvsC0vXWkSyIjMVxwpQfht2Hh+07R+ZlfPQe
-         HUPR38YpuKxJyVGySHgpLlBeI2d3OT7G6EvPV6jSzbTugqjTFkxOwqvHxlNaSwF/Q1Wo
-         Lk2/aNh2Sr9PVrWIiGFNpjrvR1CGHmneiqU1FsZZpKQ7CMNahQx5LWqjylThvuIe+8wA
-         RTmzbyAb/NYAifPq+4WfYb1xVyQkymjTVQ6aStDD5JHI9aV1yTdrhlR6kI6+k/A4Zfji
-         DRXeyU6ypbPJioT4bogZPCSS9E/XA8qZuxgT4q58EssuSKR5UcieLVOAsmQF6LVWWW9g
-         13Lw==
+        bh=VgD+CMxFE/KwSI3UguVnz7zPQRFZKYX6OX7SdjOprpI=;
+        b=SK7SV3vOuCEP9wAZBkMHQehigK6f/8lb5P5jTnt1UZ3NiAUYzSpvBRzul0GOMv1pcG
+         emcM0reQrL4tOpU9xFo9FtEnpsrQXzgxAapUfxopg7D/mCxg7tHqX0mDjMif6cuXHbaI
+         eihpNOZMBBZPaZuaYrY1E0AfoKBlB7Ewll+VzuV4xSQBE3a8XaqO7L90qlk13P0G/6ET
+         3Kfog0kcf5JFs+b3p4SXhRNGE6VYc/kAtqO2fYUHzvoRSf7AwHQkfmyiPfziCfh56idd
+         W2F3X8JhrZ11bPRoS7poHof5LbfNmAhQO4Eef2JGgkDLp5XbdVAmLtMUZ7bQb132EZUG
+         u70A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739177862; x=1739782662;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1739181447; x=1739786247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=M0sH78tZwMI80Y0F1mZRq2/tKtoaQo1cIuD3CYUKUiQ=;
-        b=rGPbozI6q9Y+vT3F+n3uRsLsIu22bAwj4VE09UwUNNLU6lfKtpf1rfV2xFOccRhDNX
-         W7m1Q2hQoR0b5z3m78rxuWAjcpxx5izVIhzErXGM2wzkCza3ihJ2XDshw9QPbwb1xnXh
-         6wd7QUfv04ZrC9iAIIyofsdSr4N7zEmOLMg67WadOILaXe9fp20ucDvZVjexwIK/E91b
-         3sJXWzH74cBVd+PBqEC7ScuRXf1lz9+In0wA1qVIm1tyIK5P+Lk/eJNpd//K5wvoMN2Q
-         MsQKlMYRZLHWDVg3IpXiNnhY/y5fKMRC81NmI7LBemzl1FMFOy6+2v0Ktw7DbDZGltNp
-         /SCg==
-X-Forwarded-Encrypted: i=1; AJvYcCUN8b3XdB18tOT/4Mol/mxMn120H4H1rjsp4oI0rpr9zJLSUBo/6AMA6DSfmfwKta+GbI0pDb+EtD9S@vger.kernel.org, AJvYcCUZ6nVc9hiHKINS9Hqaiqd7D5BxVervLtetc1QF6uPlDQ2tbKS3EzQPzn+8FhDUi1HJFcmvyR7/LHNYX/E=@vger.kernel.org, AJvYcCVHKA/BdKgGgMRyR7PgLxZ+ijVpn56svM2CxjmQBPPANScbAPWIv4V4LBKz2/kcRrHqp7u7CltR@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz01VbTS6GNWKp06akjlK8o/yGdXK2z/RtS4OhEKasyKUjkdrX8
-	7yttm8+CM4MBhEM+IAkwWRmQsd0axkZqBU1Kd6bGXB9KdsWT5XR4
-X-Gm-Gg: ASbGncuUvf2e9sHsQtrTMfls/HygooeBgoADRREKVF0j+uETXlLelAQWXXP61IfG6o1
-	c2N/eZWf3u4YOEF/nIMEU5PG7wIY4XpYPWtiXJYjQprXRPtwYud7dp0KgdOMJRX7x4fkH1XcaOP
-	rKfkiA6Px7H15w5ftzn/nQqJ1H0ARGQ63diCZWE/P4+34sOYHYG68XLa0rC4HNk8tJ2XdCgGQCS
-	sII3l/Qa0rIy5A08wKWEAjVAo/wWomQ4Xjp0frXqyzkEyD5kOMdVngvDl29/LKACRV68QAdDiNP
-	EEMRc4VDvUTOOJ41DpqTINykzvUft0ty
-X-Google-Smtp-Source: AGHT+IHWy2HCAxr64K+YU8mksNKshPp5ilP6jGfEAyGv9Owc1pqgtN5klIXTjKwViM4z7rE2O0gVJQ==
-X-Received: by 2002:a17:907:2d27:b0:aa6:89b9:e9c6 with SMTP id a640c23a62f3a-ab789ac0dcdmr1193362666b.21.1739177861549;
-        Mon, 10 Feb 2025 00:57:41 -0800 (PST)
-Received: from foxbook (adtq181.neoplus.adsl.tpnet.pl. [79.185.228.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7860da0e7sm710625566b.110.2025.02.10.00.57.40
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Mon, 10 Feb 2025 00:57:41 -0800 (PST)
-Date: Mon, 10 Feb 2025 09:57:36 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, ki.chiang65@gmail.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- mathias.nyman@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH v4 1/1] xhci: Correctly handle last TRB of isoc TD on
- Etron xHCI host
-Message-ID: <20250210095736.6607f098@foxbook>
-In-Reply-To: <b19218ab-5248-47ba-8111-157818415247@linux.intel.com>
-References: <20250205234205.73ca4ff8@foxbook>
-	<b19218ab-5248-47ba-8111-157818415247@linux.intel.com>
+        bh=VgD+CMxFE/KwSI3UguVnz7zPQRFZKYX6OX7SdjOprpI=;
+        b=P03tLOfLkdNidLqo5Rmx6otjiiQTaHCNuzoxlNS9IUcxveSxwWzryOp1ItEqpOEjmd
+         JV04GI6s2cu8bmwYKvs1nT1d5BleHEyRzUJkvkCAzQTS6rHTNI59zPLvdrfbk2c8bVHk
+         bKITZGXJSQHcp5pz4NNR9xnHWOgNw/hAJhx26sv3NdcoTL6caNPFoOiN5OAXXn57+d5d
+         Zt997zXHVPLQGAuvu1WadWfLUD9B1/R6rUHhOHw4oDAuchPuFNJTx9ny7dKghqdd0dJG
+         0LRpcL/2Og5Q6PceRObIZY1rN2jW6/VthGV5QQ6diB4F3SqzlvnrLMGW/00WMQWTenwx
+         OtTg==
+X-Forwarded-Encrypted: i=1; AJvYcCU3TUCnvXMScYuInekX4aQH7avKFGyNqsFPVUcMyftEPd5ly37PvVaauSgs2Vls63zVuDYY6iBAnCfU@vger.kernel.org, AJvYcCUsVirjgdpOJEv+dskSY1CRMii+A8FX994ws1OVrTe87whbSHPY+tfDbuqr44YB0JKTIjdqrarcTGty4A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+mFkv/t9A91211NDfy/l13Oj6+MOzYloAOeiluUY1fryI7yIP
+	oThgSlNmFbVDi/fc7cHfLRkr3gObkoxidTR29pTduzigM/BR1D3zu7PgfEvEdkC4s4ruY0VYK0k
+	3GJxe7nUKJIz3LkLUjJ0KpkAeEK8iZQ==
+X-Gm-Gg: ASbGnctHn4jnzY0e9yQZrvc6nSzwaNnmqyJzgiwHiu2vqihyvp98Tx7iM1f2UJvSuDA
+	lj8GsCZF39t02DbTPqOQeME1mrVk7aA+x5OzFOOQ/g34IE1vMlIxlcRSXA/+3vjVVIXEQSJY=
+X-Google-Smtp-Source: AGHT+IGfiXmbZwvbymMxM+V5CAxJ1cvcTzPfdew0QCJAP+LYUrYLqXs6wSSgzcYFbfhCy7TmVhTibtMAX0rNC6UllZ8=
+X-Received: by 2002:a05:6402:210e:b0:5dc:8845:6a00 with SMTP id
+ 4fb4d7f45d1cf-5de450d7065mr5709074a12.8.1739181446727; Mon, 10 Feb 2025
+ 01:57:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+References: <20250208173628.5734-1-tomasz.pakula.oficjalny@gmail.com>
+ <20250208173628.5734-3-tomasz.pakula.oficjalny@gmail.com> <773ns28r-189s-9s5o-71q3-3286s376866r@xreary.bet>
+In-Reply-To: <773ns28r-189s-9s5o-71q3-3286s376866r@xreary.bet>
+From: =?UTF-8?Q?Tomasz_Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
+Date: Mon, 10 Feb 2025 10:57:13 +0100
+X-Gm-Features: AWEUYZlQlMwJvcAddYMDGWiI6-CZ754CpQRIKMpRMKB05r3csVFUO2SlzZjcneA
+Message-ID: <CAFqprmwgTRC7OOaRbcHNKL-AcReeSVPnjP=g=2XQwSmU+7Jd=Q@mail.gmail.com>
+Subject: Re: [PATCH 2/3] HID: pidff: Make sure to fetch pool before checking SIMULTANEOUS_MAX
+To: Jiri Kosina <jikos@kernel.org>
+Cc: bentiss@kernel.org, anssi.hannula@gmail.com, oleg@makarenk.ooo, 
+	linux-input@vger.kernel.org, linux-usb@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, 7 Feb 2025 14:06:54 +0200, Mathias Nyman wrote:
-> On 6.2.2025 0.42, Micha=C5=82 Pecio wrote:
-> > error_mid_td can cope with hosts which don't produce the extra
-> > success event, it was done this way to deal with buggy NECs. The
-> > cost is one more ESIT of latency on TDs with error. =20
->=20
-> It makes giving back the TD depend on a future event we can't
-> guarantee.
+On Mon, 10 Feb 2025 at 09:52, Jiri Kosina <jikos@kernel.org> wrote:
+> On Sat, 8 Feb 2025, Tomasz Paku=C5=82a wrote:
+> > +     /* Try 20 times if PID_SIMULTANEOUS_MAX < 2.
+> > +        We must make sure this isn't just an error */
+>
+> Sorry for annoying nit: this is not really consistent with Kernel / HID
+> comment style :)
+>
+> --
+> Jiri Kosina
+> SUSE Labs
 
-For the record, this is not the same disaster as failing to give back
-an unlinked URB. Situation here is no different from usual 'error mid
-TD' case on buggy HCs (known so far: NEC uPD720200 and most if not all
-of ASMedia, including at least 1st gen AMD Promontory).
+No problem! I must say I did think this might seem janky as simple two-line
+comment didn't feel right when it took up 4 lines, but on the other hand, t=
+his
+looks just a bit out of place as well.
 
-We are owed an event in the next ESIT, worst case it will be something
-weird like Missed Service or Ring Underrun. I've sent you some patches
-for that, they also apply to the existing NEC/ASMedia problem.
+I'll send out an improved v2 today.
 
-> I still think it better fits the spurious success case.
-> It's not an error mid TD, it's a spurious success event sent by host
-> after a completion (error) event for the last TRB in the TD.
+Thanks, Tomasz
 
-Legally you are right of course, but materially we know what happens:
-the damn thing still holds an internal reference to the last TRB for
-some unknown reason. We would need to know that it doesn't actually
-use it for anything and will not mind the TRB being overwritten.
-
-This may well be true, but I guess I prefer known evils over unknown
-ones so I immediately suggested using 'erorr mid TD' instead.
-=20
-> Making this change to error_mid_td code also makes that code more
-> confusing and harder to follow.
-
-I will see if I can come up with something clean.
-
-I will also try the patch you sent, it looks like it would work.
-
-One thing I don't like is that it fails to distinguish the known
-spurious events from other invalid events due to hardware or kernel
-bugs. In the past last_td_was_short caused me similar problems.
-
-Regards,
-Michal
+P.S.
+Thank you for merging this. I worried we'd have to wait for Anssi to leave
+his comments/reviews as he told me recently he's quite busy and doesn't
+have much time to go over all this PID work but he appreciates the CCs.
 
