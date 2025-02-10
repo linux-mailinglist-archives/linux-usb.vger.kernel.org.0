@@ -1,115 +1,116 @@
-Return-Path: <linux-usb+bounces-20386-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20387-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90236A2E862
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 10:57:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E29D9A2E981
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 11:33:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3924C167628
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 09:57:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B09F816666D
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 10:33:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9451C5D4F;
-	Mon, 10 Feb 2025 09:57:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SK7SV3vO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A53DB189902;
+	Mon, 10 Feb 2025 10:33:14 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5DA92E628;
-	Mon, 10 Feb 2025 09:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646D515624D;
+	Mon, 10 Feb 2025 10:33:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739181450; cv=none; b=NaXVIjRGarwXHeUcU06NaK+t3u6QChA+99ginoZOVqMwhE8j7Pjth0UuHeBTB1diBu3RMmX1L7D4l4UhwpCwdYq5csEBi5PZp/WWTn1O+iQZe14ds1uRzTmRy2gWp74SEATkKAxkz6NVTUXLQ5y41Pv61GU85f4PEqMlNnG+qvA=
+	t=1739183594; cv=none; b=G/TgK17u80K3AhSJkK8T80P19tL8OwHN//Ml4uB99/Ia18/Q2ZUFJ44iFQ4mE4SsOUz7x0A/elPbhQLHzPCQe3H2R1MIDLy7QIOIuZp4s34yqgv+GHrZuxwGKfVwawmmVB10JidBvdOVIf1keeE8w2xB5sM7IvaByk77lUYuVCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739181450; c=relaxed/simple;
-	bh=ai5rpfVE3YWo/segFVBNNIo2GaJLfZnlgVB9MtJv96A=;
+	s=arc-20240116; t=1739183594; c=relaxed/simple;
+	bh=PRIjYgukVL9xgLkbU+1wVGhjbrbQ2a1ytqYVNW0rzA0=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OfwFENP7StstkTkC9TO4F8PiLZFPe3jTMxFTfjO3WVBq682j6Np0zTj2pf5LZHrLblIYMGa7zV8o2E8FWu7n2k9AgdvnoBNju3Yp8E89aOwEd1tX4lmMHYNuWgzUT+YdqzTQ0Kxmwsl+zlSgD0kH8QvUvw5/WbZZpa7oLGFqqeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SK7SV3vO; arc=none smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 To:Cc:Content-Type; b=s5r4Yh0oZTuMOBysMM7Q4wkANWGH4BU/ES/VqIHfk+i3t6dO6+LPB8ZoOq8gOmh2tCcGLXoUPNz2K/FQaYNdEv7dotk5z3U+O0+EUJ7ewOSQ2ycQqwwij9pjLIIA3KGrOJoKCvBbWbpMCM1XcvmKhbKH+QBxNr5hHtof2ZdRWx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5dbf5fb2c39so1007769a12.2;
-        Mon, 10 Feb 2025 01:57:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739181447; x=1739786247; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VgD+CMxFE/KwSI3UguVnz7zPQRFZKYX6OX7SdjOprpI=;
-        b=SK7SV3vOuCEP9wAZBkMHQehigK6f/8lb5P5jTnt1UZ3NiAUYzSpvBRzul0GOMv1pcG
-         emcM0reQrL4tOpU9xFo9FtEnpsrQXzgxAapUfxopg7D/mCxg7tHqX0mDjMif6cuXHbaI
-         eihpNOZMBBZPaZuaYrY1E0AfoKBlB7Ewll+VzuV4xSQBE3a8XaqO7L90qlk13P0G/6ET
-         3Kfog0kcf5JFs+b3p4SXhRNGE6VYc/kAtqO2fYUHzvoRSf7AwHQkfmyiPfziCfh56idd
-         W2F3X8JhrZ11bPRoS7poHof5LbfNmAhQO4Eef2JGgkDLp5XbdVAmLtMUZ7bQb132EZUG
-         u70A==
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-4ba86dee27bso915237137.3;
+        Mon, 10 Feb 2025 02:33:12 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739181447; x=1739786247;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VgD+CMxFE/KwSI3UguVnz7zPQRFZKYX6OX7SdjOprpI=;
-        b=P03tLOfLkdNidLqo5Rmx6otjiiQTaHCNuzoxlNS9IUcxveSxwWzryOp1ItEqpOEjmd
-         JV04GI6s2cu8bmwYKvs1nT1d5BleHEyRzUJkvkCAzQTS6rHTNI59zPLvdrfbk2c8bVHk
-         bKITZGXJSQHcp5pz4NNR9xnHWOgNw/hAJhx26sv3NdcoTL6caNPFoOiN5OAXXn57+d5d
-         Zt997zXHVPLQGAuvu1WadWfLUD9B1/R6rUHhOHw4oDAuchPuFNJTx9ny7dKghqdd0dJG
-         0LRpcL/2Og5Q6PceRObIZY1rN2jW6/VthGV5QQ6diB4F3SqzlvnrLMGW/00WMQWTenwx
-         OtTg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3TUCnvXMScYuInekX4aQH7avKFGyNqsFPVUcMyftEPd5ly37PvVaauSgs2Vls63zVuDYY6iBAnCfU@vger.kernel.org, AJvYcCUsVirjgdpOJEv+dskSY1CRMii+A8FX994ws1OVrTe87whbSHPY+tfDbuqr44YB0JKTIjdqrarcTGty4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+mFkv/t9A91211NDfy/l13Oj6+MOzYloAOeiluUY1fryI7yIP
-	oThgSlNmFbVDi/fc7cHfLRkr3gObkoxidTR29pTduzigM/BR1D3zu7PgfEvEdkC4s4ruY0VYK0k
-	3GJxe7nUKJIz3LkLUjJ0KpkAeEK8iZQ==
-X-Gm-Gg: ASbGnctHn4jnzY0e9yQZrvc6nSzwaNnmqyJzgiwHiu2vqihyvp98Tx7iM1f2UJvSuDA
-	lj8GsCZF39t02DbTPqOQeME1mrVk7aA+x5OzFOOQ/g34IE1vMlIxlcRSXA/+3vjVVIXEQSJY=
-X-Google-Smtp-Source: AGHT+IGfiXmbZwvbymMxM+V5CAxJ1cvcTzPfdew0QCJAP+LYUrYLqXs6wSSgzcYFbfhCy7TmVhTibtMAX0rNC6UllZ8=
-X-Received: by 2002:a05:6402:210e:b0:5dc:8845:6a00 with SMTP id
- 4fb4d7f45d1cf-5de450d7065mr5709074a12.8.1739181446727; Mon, 10 Feb 2025
- 01:57:26 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739183590; x=1739788390;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aUtEWKWBGl+RUz1Aa17blZ/xFUbDXxxGPDURQS+ed2U=;
+        b=cbgo5X2mrmAsj+Qd08NCsCP4Q4x2e9ys7oWKOvpbeY1IXOEAp983/NHKKwuBgbx1rr
+         gYB+v8J0nNDtq6Cnh1aXwoHCK6nu+9ZUA202q4TSWoaSGW1rOCMkEXBz2e5b33eu0Dhc
+         B95QqQayesTPFPNF5nq/BJ+E9hdvBd9BVQ/u8FTmz4V2tage733ZJvDR3xVcn7W91ZiA
+         8xErwet9Dmo7t/hONcQSK0HeACRABdlKxXf2gu/nUUajl1SGqu5ZzxY+AhXl4fYaa35w
+         2KKS1J/WoyIQIKUBnT3tmmalHGQ0bmoL7olYtpj7JPOe3GrnHBb+v3zhtMrCauuQ8HYt
+         oRuw==
+X-Forwarded-Encrypted: i=1; AJvYcCVOXL6oN9ZG0UNl1zkkaROQDEOmUeo03ptsUM8KqwmqJOQdoYse5f2OqYYDu+ytckUl5CiCfWNbRwfmBt7c89S9/A==@vger.kernel.org, AJvYcCX+nDf4595rEscMR6rwRKV7H4AjYLZ1hwzgmN3jBQAKcuO1ROjyjvdKMLzyXUnUqguTx2wpYHZY@vger.kernel.org
+X-Gm-Message-State: AOJu0YzFdwd99RaQNSbULYjZVesYiMH4terrqQJuY/BX7xgWw+iTxxOf
+	3zNJw4Rfbb4IzIx9DygL9EUEKfFiFK4rWqqWp4V2p7R/0nIFoRFWUmj1kVOf
+X-Gm-Gg: ASbGncv2evASU0VkeTGArt9RBXRTV37GHr8uWWb4qKQSsgaNyp1/nztllgPtzF4gatl
+	kVjubUk1hY7J7pmrAs2E7jLzYm5L5s6uEUkZ5gKrycjIl4eiLQKkpMnuUYXq3L7B0ZyLqCojawH
+	8jcpyf1gT906EBR9fzRdo7K2nGs4oSUKMzwqzrqVQBQjw01oS5YZ0WG/WV3DVhnlLwCPOcPZnA0
+	GHwF7Wv3abUp0NczndNvVVMp0HO5MMDU1t+18Sc874p0BDkWDh2FoNhDOzn9d4UWpMmwgM9/2EE
+	4Ps4TR2wKciBXzdbVvCiDcPxNnIX1tXAO+kmbxNkJvrSavjlkDCDzQ==
+X-Google-Smtp-Source: AGHT+IGr1wI/ui11E/7W4s+nrw9dlq/BMYZbSD+t+rtOTgS2KEyBzyXBxmMw9XgsKhHMKKkLMHE8vw==
+X-Received: by 2002:a05:6102:441f:b0:4b4:7cb0:ac99 with SMTP id ada2fe7eead31-4ba85da2bf5mr7484459137.2.1739183590079;
+        Mon, 10 Feb 2025 02:33:10 -0800 (PST)
+Received: from mail-ua1-f54.google.com (mail-ua1-f54.google.com. [209.85.222.54])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4bbcf5660c0sm258639137.18.2025.02.10.02.33.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 10 Feb 2025 02:33:09 -0800 (PST)
+Received: by mail-ua1-f54.google.com with SMTP id a1e0cc1a2514c-864e4f5b253so1114230241.1;
+        Mon, 10 Feb 2025 02:33:09 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU3G0SoTFix7+61Kx4/iHQTsZtJOyoIRjLhiackMvxTXNJjfrhUNJuHC1jCxXwf9XXWmBx9EaVciPoj/H98ni2elQ==@vger.kernel.org, AJvYcCWRCqVDd2wsg2wUbNiYEPoZxySGQTYDpKC1EEyk5uXjDo4gfuqZAQF7+P2owClc5iB1A7h2yNmm@vger.kernel.org
+X-Received: by 2002:a05:6102:3046:b0:4b2:48cc:5c5a with SMTP id
+ ada2fe7eead31-4ba85e8d160mr8493000137.15.1739183589499; Mon, 10 Feb 2025
+ 02:33:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250208173628.5734-1-tomasz.pakula.oficjalny@gmail.com>
- <20250208173628.5734-3-tomasz.pakula.oficjalny@gmail.com> <773ns28r-189s-9s5o-71q3-3286s376866r@xreary.bet>
-In-Reply-To: <773ns28r-189s-9s5o-71q3-3286s376866r@xreary.bet>
-From: =?UTF-8?Q?Tomasz_Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
-Date: Mon, 10 Feb 2025 10:57:13 +0100
-X-Gm-Features: AWEUYZlQlMwJvcAddYMDGWiI6-CZ754CpQRIKMpRMKB05r3csVFUO2SlzZjcneA
-Message-ID: <CAFqprmwgTRC7OOaRbcHNKL-AcReeSVPnjP=g=2XQwSmU+7Jd=Q@mail.gmail.com>
-Subject: Re: [PATCH 2/3] HID: pidff: Make sure to fetch pool before checking SIMULTANEOUS_MAX
-To: Jiri Kosina <jikos@kernel.org>
-Cc: bentiss@kernel.org, anssi.hannula@gmail.com, oleg@makarenk.ooo, 
-	linux-input@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250209145708.106914-1-marek.vasut+renesas@mailbox.org>
+In-Reply-To: <20250209145708.106914-1-marek.vasut+renesas@mailbox.org>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Mon, 10 Feb 2025 11:32:57 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdX9krvWfZma-A_X6O18q0J8+jizEDL0C8rkoEXpk2KiAw@mail.gmail.com>
+X-Gm-Features: AWEUYZkwJD0lEVOPrylUzlQHEumsgN92-kbxnCCiZTEdO_bmGEawanoxd2ni2JQ
+Message-ID: <CAMuHMdX9krvWfZma-A_X6O18q0J8+jizEDL0C8rkoEXpk2KiAw@mail.gmail.com>
+Subject: Re: [PATCH] USB: cdc-acm: Fill in Renesas R-Car D3 USB Download mode quirk
+To: Marek Vasut <marek.vasut+renesas@mailbox.org>
+Cc: linux-usb@vger.kernel.org, Chris Brandt <chris.brandt@renesas.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Oliver Neukum <oneukum@suse.com>, linux-renesas-soc@vger.kernel.org, 
+	stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, 10 Feb 2025 at 09:52, Jiri Kosina <jikos@kernel.org> wrote:
-> On Sat, 8 Feb 2025, Tomasz Paku=C5=82a wrote:
-> > +     /* Try 20 times if PID_SIMULTANEOUS_MAX < 2.
-> > +        We must make sure this isn't just an error */
+Hi Marek,
+
+On Sun, 9 Feb 2025 at 15:57, Marek Vasut
+<marek.vasut+renesas@mailbox.org> wrote:
+> Add Renesas R-Car D3 USB Download mode quirk and update comments
+> on all the other Renesas R-Car USB Download mode quirks to discern
+> them from each other. This follows R-Car Series, 3rd Generation
+> reference manual Rev.2.00 chapter 19.2.8 USB download mode .
 >
-> Sorry for annoying nit: this is not really consistent with Kernel / HID
-> comment style :)
->
-> --
-> Jiri Kosina
-> SUSE Labs
+> Fixes: 6d853c9e4104 ("usb: cdc-acm: Add DISABLE_ECHO for Renesas USB Download mode")
+> Signed-off-by: Marek Vasut <marek.vasut+renesas@mailbox.org>
 
-No problem! I must say I did think this might seem janky as simple two-line
-comment didn't feel right when it took up 4 lines, but on the other hand, t=
-his
-looks just a bit out of place as well.
+Thanks for your patch!
 
-I'll send out an improved v2 today.
+Still true in Rev.2.40 of the documentation ;-)
 
-Thanks, Tomasz
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-P.S.
-Thank you for merging this. I worried we'd have to wait for Anssi to leave
-his comments/reviews as he told me recently he's quite busy and doesn't
-have much time to go over all this PID work but he appreciates the CCs.
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
