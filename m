@@ -1,99 +1,121 @@
-Return-Path: <linux-usb+bounces-20373-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20374-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7E8DA2E573
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 08:31:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F96FA2E581
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 08:37:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F788162892
-	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 07:31:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCB731644BF
+	for <lists+linux-usb@lfdr.de>; Mon, 10 Feb 2025 07:37:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83F691B87E4;
-	Mon, 10 Feb 2025 07:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAC051B0F33;
+	Mon, 10 Feb 2025 07:37:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YNi3A6KY"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Tk9NAND5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 062C81B86E9
-	for <linux-usb@vger.kernel.org>; Mon, 10 Feb 2025 07:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7BC31A8F98;
+	Mon, 10 Feb 2025 07:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739172647; cv=none; b=HxHkxc9rsWe3Hd6N8MMkS3rF2gQh3BjocP6G4YZBq8zLKMejtyxnQ1cabYkK3ObsSLm71WbVgv3Ftf9XjPqEHLYKP9f80AJL075hm9C30JqH8NL9vS6iBqO8vbxxeQ1fWH5wn2QfP3srg2+u2UL6beL5jw23rZ5Velp9gTTii/Q=
+	t=1739173046; cv=none; b=e6AMrBNgRPGIk00GpnEZaS6iUASbyQKEQCrOwDFDMGQbJEuFe//CykUVCmC85Ddxbl7KXEloGU+gfS3aRsY2/nCMatAbgWCTF9lzUOcxvwAHvvly028I+X3onIGdk7nTu+jQzsSWWS09l21TMD6S6DyhEiYMPwByy8Jxami4y+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739172647; c=relaxed/simple;
-	bh=GQC18gx9NthHO6SI7/RSBYfzE2hm6cVCmEBSq4AkrJw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=XVfXOWNzVDKV9OYf4i+qKP8nOFVPESZbSY2Rv2qaars+VYVNK7bwdubkt9HX7jUXoUKrNRkKpEzcR+SoTmNXfmitGb7fVdRvSLVIMyUnJcFVU2kcrBZdzYkxSGnPPB8xZ0bVsqBqPUImR+NtaV6iSxKnRcoNkjkWJe08j0QJcys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YNi3A6KY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 68CE8C4CEE5
-	for <linux-usb@vger.kernel.org>; Mon, 10 Feb 2025 07:30:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739172646;
-	bh=GQC18gx9NthHO6SI7/RSBYfzE2hm6cVCmEBSq4AkrJw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=YNi3A6KYZJsNcJE8S579iCIIRGYTE0lGTmjdgSgkge8nAkWvyHQ9sDN9r26chB4fB
-	 Qv4p1kX+GrfKFFTIKl9XAvuNgCFgsnMGbNKLc8Kg5zyi3GntcVjVnLqXbg/uzSGN0b
-	 8oIZWQ1Jj00QRGLBj8AajSJo8Havad5IsA+Y5GVKxS+7goJvbykOcOkdIG3vnJPLD4
-	 GefzEcv8rAPgUeiqvRgJ0bm08sEkCRT3jUnPszdZ96ALufYnBtbWimT9FLDVZWHrW9
-	 RxKpWxUk/Tphuz6PwSKCXGk8cJaUURiZjjfOLLpkC294oDb4X8YZqVHDuO5YLQ686K
-	 vqkvfhTp9ngTA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 5C259C41606; Mon, 10 Feb 2025 07:30:46 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
- with AMD AI 365
-Date: Mon, 10 Feb 2025 07:30:46 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: mika.westerberg@linux.intel.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219748-208809-kaqxDbEdyD@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
-References: <bug-219748-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1739173046; c=relaxed/simple;
+	bh=Qr3KvRXfVXUC4fGBTquS8pULvemMSqJ84dZFqKS8P9o=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type; b=flRxAkIWQv6aBiH8PVGpQjug5c8rAnGBfcpbBwn4cyOjNcQsU+XE3tBKNpqceX/LM+Xq7VByx6XzMpKrzWm0WGDP7s64kyQlsnw3LaeLWCEM7AbOmW0jYVMgVUa7aWLMXgBLeHGy8NZoODvxrE6BdZ50DS3G2d8tkNKq3VyKYn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Tk9NAND5; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ab78d9c5542so469673766b.1;
+        Sun, 09 Feb 2025 23:37:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739173043; x=1739777843; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oo2heipiceaHB2Nmnf1kB/5KT83cunXSvv+kUMMr8rY=;
+        b=Tk9NAND5t1apZHMzIbrWkx6XIWEu7Xz6Ub+KL1S4g1bd2RNGh4kqK7osyybycCE2+m
+         JluqyMop5+DcEHRnwOG/qn1i9FAEJHw50snVdY7qDbuyeA2MRLF3Q1UUj4XKb/zLXvZJ
+         8onOAAdIBFBe1SFypXCRP26PuWCmcCSN7yCNCNOmRrJ7Qgjh7ZJLLRGUmwYV3k8ohc/a
+         trzvjmLFJpPJfHd0AMIXxsZmrTBVVzDZ6cIoqkhrB+D1mB9xoombf7UODc3e0LPE04ie
+         kgUc9kXTtnPN2jVa9cl46f+OvZGdtcL+O0UqmMN9lY9Pm/h7Vi8LO/fybEjCMbjGKcvP
+         guuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739173043; x=1739777843;
+        h=content-transfer-encoding:mime-version:message-id:subject:cc:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Oo2heipiceaHB2Nmnf1kB/5KT83cunXSvv+kUMMr8rY=;
+        b=Jt32ralIU5bh4+I2ocVJ4wVvNcUsdyMwxjPQa96dJwGtkWn/ufFekoT5tYtdjqg9lu
+         GZkoSUUhnkKGOsTPyzWpgYA2mxhFg5FTxEEKdYMwMPEFx6b74HRSsC+7SMQDL5OuSBeu
+         ZGmFsEjNn5GpwdwrMoE2uWYYLcVdjWojM7qanahTyUdS3IKTCErzT0BnFypzQbebov6s
+         gFmkU1RhRJ8ZWjHQeWD8M5kOZyDyZ5gXxsLJOjFBEdK+cIDff9ioVyMVKE9c2xjwdi62
+         JLJFVQOJ96ENI7POZmc6GFA4JEVmm4uNyLbLtQLE0XhqwcxViZ4jl+3l5mvfcXpQpPca
+         m7YQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU/dQeVFpdHiAB9phY0+1x5mInUAHomHO+RRij7j60VClFC6GPck/CbwXThC1vMUOQFntXFYpZpvsB8@vger.kernel.org, AJvYcCVHWiIscSJW1Q+b70Pr5Wy5DRYrghmMLTBkyH1fjnytfT8a7sMMCsn29bW54yy6yk86b+FtwyD+NzuHnWc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQU2KeDmBvrIt4mVDDVQLNCJQsdIQ3llLSWsIA/6VOyC777s1+
+	5KXnpSgHZrWCyY5V+J+9izEB/2CMW7Eskyzx+3j4LBywAwfPxWis3mAVxw==
+X-Gm-Gg: ASbGncvIQeuF1CKyB0MkUubb7hz3aAaEIDWW9HFPuvT6aGepwMFT5wdKpWadJTKZHpv
+	f2j4lrLWHOHmyBRePjOIg6PkaX9Vm1C4SOC1MvnsvF/Zy+tklADnQwoVNcdrNkXzRM4ve8bGGLU
+	LUQFb7/hPQkhaLGKvQ6fET84vT04pz7qTsO13P3ZgMr6kMrFv6L0qUbamcmLYXbaDQefVDgKgXu
+	X9pkkvxKmSKZ5iXUnHoNzuwZ1D0VL5ghi5VZUtdRVso8po+QrK33cZ2Zv470n99TadRIlNDXVTF
+	YN54WMmx2jTIlo4PwkvUWao4Eonz80Om
+X-Google-Smtp-Source: AGHT+IF/h+50eAHMfXTyeEFFijBf8Gbgoj8WCG7YLesrDpdJbYKzdIijeRJQzYRUeicUPbznOdV1Uw==
+X-Received: by 2002:a17:907:1b28:b0:aac:619:e914 with SMTP id a640c23a62f3a-ab789aad2d1mr1573769366b.16.1739173042667;
+        Sun, 09 Feb 2025 23:37:22 -0800 (PST)
+Received: from foxbook (adtq181.neoplus.adsl.tpnet.pl. [79.185.228.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7c0907e77sm172815466b.98.2025.02.09.23.37.21
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Sun, 09 Feb 2025 23:37:22 -0800 (PST)
+Date: Mon, 10 Feb 2025 08:37:18 +0100
+From: Michal Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman 
+ <gregkh@linuxfoundation.org>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] xHCI: Isochronous error handling fixes and improvements
+Message-ID: <20250210083718.2dd337c3@foxbook>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
+These patches reduce latency of error reporting in some cases related
+to 'error mid TD' and Missed Service events and sometimes fix a failure
+to give back such TDs altogether until they are cancelled.
 
---- Comment #8 from Mika Westerberg (mika.westerberg@linux.intel.com) ---
-Created attachment 307605
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307605&action=3Dedit
-Skip retimer scanning
+Also included are fixes for potential packet loss or memory corruption
+due to an obscure race. Whether it causes problems IRL is not known and
+the worst case would be hard to reproduce, but exactly for this reason
+if the worst case actually happens, it could be hard to debug too.
 
-Can you try this one instead of the previous one? This completely disables
-sideband accesses done by the driver. If this makes difference then we need=
- to
-look into the access patterns whether there is something we need to change =
-in
-order to make the Pluggable device happy.
+2/5 is a cleanup which makes 3/5 implementation shorter and simpler.
 
---=20
-You may reply to this email to add a comment.
+The first three should be safe. The fourth should also be safe, but it
+relies on HC functionality Linux never relied on before, so I placed it
+towards the end in case it would need some tweaks. I tested it on all
+hardware I have and it worked just fine.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+The last one is perhaps the most controversial, though it should be
+OK with typical "complete -> resubmit" drivers. It's the only one here
+which increases latency in some severe error cases. The intent is to
+avoid potentially giving back URBs not yet executed by hardware.
+
+Michal Pecio (5):
+  usb: xhci: Complete 'error mid TD' transfers when handling Missed
+    Service
+  usb: xhci: Clean up the TD skipping loop
+  usb: xhci: Fix isochronous Ring Underrun/Overrun event handling
+  usb: xhci: Expedite skipping missed isoch TDs on modern HCs
+  usb: xhci: Skip only one TD on Ring Underrun/Overrun
+
+ drivers/usb/host/xhci-ring.c | 110 +++++++++++++++++++++--------------
+ 1 file changed, 67 insertions(+), 43 deletions(-)
 
