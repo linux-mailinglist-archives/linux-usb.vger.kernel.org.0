@@ -1,132 +1,152 @@
-Return-Path: <linux-usb+bounces-20496-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20498-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E93CA30FF9
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:40:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EC55A31027
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:49:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30A63167063
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:40:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 355B93A6277
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:49:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E445253B4F;
-	Tue, 11 Feb 2025 15:40:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B971253B71;
+	Tue, 11 Feb 2025 15:49:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jhwwqmc3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H8i9rHMb"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3934125332A;
-	Tue, 11 Feb 2025 15:40:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69241253B4F;
+	Tue, 11 Feb 2025 15:49:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739288446; cv=none; b=SUKvRvUG4Kq7y05Bm/e0CQS5KCEBswf9hnFwBCY6YC6HuZN5TITkjlAPd73trlAqgB/jPw6duDKUU9B0G9nOALCT5/c7x2jpB9zQCOmMAqS3yYPmJJ0FU83iwibg/f8ASJVNDMRdbWJCs9T6VekHI56GQwGIjHyGb0xSiuTOwpc=
+	t=1739288980; cv=none; b=PUDf+sGo68bZOFNrH2MjnLqcrxlfGdbYXPwG5GjvaPXd2gb7koBSzl2KFA+DwDXjm1my67gNvpL5LPzN+0zYdbKeX8Bwi+tpuK6LxoRDivBv7gd/Hc9WqSnn+hufo05KvemweXruu+Zbzpo4a0wDtJDmBI02zKCn0Xf7kJZX5Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739288446; c=relaxed/simple;
-	bh=IRqvT2gFAGKgf/HJpQvxM4rKmMf2ytFeZ3wxmbUMJnk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EVclyc/Swg7bZ+wMqxyQhritgDbzpm/k9t7XqENDw+L4YhK4/m1pAu84vZDnGHBwO4aJB/45RGEY8Ld9pscxP7MuXl5O4EJtQ/QWualBYfu4X5Ijdp8c2hHI2G0HFGLd1JblYhduJtJHGMk4zYRi4TX3ER/RNXVZ/xXImntk9ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jhwwqmc3; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739288445; x=1770824445;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=IRqvT2gFAGKgf/HJpQvxM4rKmMf2ytFeZ3wxmbUMJnk=;
-  b=Jhwwqmc3NIHoBAPhyE4OGIktOqgyFUJv/dhY6zxFCjMF/ZpdOe7eW/9l
-   SD/xXu+wk+5q3YQZmBXFlLRXGkb3fFF1wZzSSl7Asdz0+Y+EYLf7VLl6N
-   vRpL6ZvNuMAFkv4TMX2Vu8UwlXnKt8oY1i4zBY4kaOgX2aT1e4GkA9+73
-   9NRXxkZTxbgD8iObE62BElu3xMY3/fbBHE0pjEimMNOWBj2x7hrFc2lmU
-   1mbTJ+7MoEg4kuRniWjuoI79Nayj1Q3Kmc03RojVggQZdUA6bp9sK1BP3
-   RoyA13M6P9U6JQuEg+TypD4Y66TQzar6mB3bTnJkQ00mXdv5Am0+8gNq3
-   g==;
-X-CSE-ConnectionGUID: BhT/ROXlTBiDXMKDhhcOtg==
-X-CSE-MsgGUID: cjA5z0ufQnejZcj+RthTeQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="51307177"
-X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
-   d="scan'208";a="51307177"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 07:40:43 -0800
-X-CSE-ConnectionGUID: pWAKKPsrRrKX/y3Ug34QtQ==
-X-CSE-MsgGUID: s7huuwbJRX+TrPVK3UY41Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="149730920"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa001.jf.intel.com with ESMTP; 11 Feb 2025 07:40:41 -0800
-Message-ID: <7bb25848-c80e-4ba8-8790-8628951806b3@linux.intel.com>
-Date: Tue, 11 Feb 2025 17:41:39 +0200
+	s=arc-20240116; t=1739288980; c=relaxed/simple;
+	bh=fKZzaQtQDsSPkGQu8snJR7R9Ds50kdAkBeuKe+iO0yY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
+	 References:In-Reply-To; b=OOQvTLCHMBIPU2M8NdHn0e1xqH2odh4RYH/jd6d0BQCXtsp7VAG1Fwf+j+FkVlYUHUjkbc0mgBdWVkTAQH2ATqlJTKZBqmKD1gfmYEnjQYi7X09XefrXwNJykrZGMKV5CEpY1IOdrcZhjh3gK8pgXgJCYEa0qJ1C15LhXbfzzUM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H8i9rHMb; arc=none smtp.client-ip=209.85.128.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6f678a27787so51127827b3.1;
+        Tue, 11 Feb 2025 07:49:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739288978; x=1739893778; darn=vger.kernel.org;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l8qoAqHN6d2bwLyFPQrQGBkCWYEGHRrvnRKCr+AAeR8=;
+        b=H8i9rHMb7vdYs7AQ+eF6mDSpLPpgqI5wScqu6IxUzzdmli36AYPvQ9RhYonzJ34sp1
+         N02S5hel9S/4c0yE8QZXGEnaGCvA27BtYNEnmzY/r3kdtm0rnv3CpZY1PwgWHQht+AzS
+         S7Fe12FZGzT+DNOO5bGin7LEACr8cOLK593KXIPHfnIIxn1tkP+GnofVxQtSSK+psDk1
+         4ZHDRaF9HOhdMYsOVnbAUmssylDhFxzrHm4It/Ru/Gompbog4Xij60oobH7IlYmeNVuz
+         XD95DHxW8D/MAA3cptJDbjY4M+hncl2QW2aWTBVrCquVEt9NynT4E8CogXcExj8TfBbY
+         xu7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739288978; x=1739893778;
+        h=in-reply-to:references:from:subject:cc:to:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=l8qoAqHN6d2bwLyFPQrQGBkCWYEGHRrvnRKCr+AAeR8=;
+        b=nD+v8bIkC+UZtQ/+/aRTgcp35S5LMpOS1VrW1ecuUIx/e5yMN5z0ccfGbgauLJYGri
+         ExhQlEuAbPVrIwmuOAXicuHnsl9/M4AlkKnWNHTpIuDSwXAzfaQU+msvaoNCAz+ug70z
+         HNFLr6EjCi1U31UncLTQcub693YS/5oIk78NWZ+2b5O56d1dQoju28AytR0mfZmUMZWv
+         tre7yYNNXat99bEg9PVPbAjUv7m6d2qlZUgjhB0QQI3km92q3uioRapsu//lBBWq3TUX
+         Rwomr2XvalpLrVhg2AHYMFXEdkqQpiGhmUeIHnFo7WwdXJKS0cN+mj/JIqrjR0TZOx4G
+         8dug==
+X-Forwarded-Encrypted: i=1; AJvYcCUXer51uTg9nKcsIWsbdO0bdgLDSlQjPPniUI1/Nuq8Iu1/HRBS0TohSKJn52uOZ9zQoh/cOBnslBA7XJ4=@vger.kernel.org, AJvYcCV6OyHkr7ZgaEs2OvCIUI4wcuyg7yBL2sDl7Fui3MWAV2NLWYzvTp2pkZ4z97xBsRpNYoC88qiDOPvWJz0ICak=@vger.kernel.org, AJvYcCWH9key25FY8iLg8XE8B2A+M+VCAA/Zz+0yAIjklc+rJYB10BL0Uhlgk8lbD4v/p6CePAEfDXYWORXy@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz4AEoM3h/lxOZ4w9NzbVLp9E+NpOTiZbuhv2ZrlzWRPuUe3EHj
+	/hRTXA24fR7fEsaPcdCCiwjCmZfDtZ8Pc6z5pXxkepmwD+45dWI1
+X-Gm-Gg: ASbGncvhp4nKXG+MMRsPBJknal1KxWeme3GUVTN9yKF5ZtI8JR3E04Y9wcdBiFbPXeR
+	Az99ofyFMY6S8T0Z8POFV1RSmbFGskoRL+dl89pdc3gn1lCCRvr6c3/6zZqxXnJZ3Sc8ovcsFc/
+	/braJtsjGvvyIU0k3PnVsb4BH6iYe/ImnEMKAH5Oml+46JWPKZm1zEBFwIHXuY/bSfzq6kJEHls
+	UIM45C/8N+c3UBOH//pZlPKwtpfsa7ZvH7mKuKvkM2FmULZBuWPkF0W6lvCQp5s2rRKxo2jv2nA
+	VgAz04o=
+X-Google-Smtp-Source: AGHT+IEtgw91cXuJ0BG7VzTeHTqgV/DQam0mEB1K/IkRHtjW8w0U61fsFS5cFTVxxB609FpmSGYQ4A==
+X-Received: by 2002:a05:690c:7010:b0:6ef:5688:f966 with SMTP id 00721157ae682-6f9b2a2167fmr166314937b3.37.1739288978239;
+        Tue, 11 Feb 2025 07:49:38 -0800 (PST)
+Received: from localhost ([2800:bf0:82:3d2:4207:a956:ebad:2a64])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6f99ff6a8c2sm21652137b3.77.2025.02.11.07.49.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Feb 2025 07:49:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] usb: xhci: Skip only one TD on Ring Underrun/Overrun
-To: Michal Pecio <michal.pecio@gmail.com>,
- Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250210083718.2dd337c3@foxbook>
- <20250210084220.3e5414e9@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250210084220.3e5414e9@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 11 Feb 2025 10:49:34 -0500
+Message-Id: <D7PQHGGX4WPC.26F52356ISZU8@gmail.com>
+To: "Zijun Hu" <zijun_hu@icloud.com>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>, "Lyude Paul"
+ <lyude@redhat.com>, "Rafael J. Wysocki" <rafael@kernel.org>, "Danilo
+ Krummrich" <dakr@kernel.org>
+Cc: "Alexander Lobakin" <aleksander.lobakin@intel.com>, "Andy Shevchenko"
+ <andriy.shevchenko@linux.intel.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
+ "Jonathan Cameron" <Jonathan.Cameron@huawei.com>, "Liam Girdwood"
+ <lgirdwood@gmail.com>, "Lukas Wunner" <lukas@wunner.de>, "Mark Brown"
+ <broonie@kernel.org>, =?utf-8?q?Ma=C3=ADra_Canal?= <mairacanal@riseup.net>,
+ "Robin Murphy" <robin.murphy@arm.com>, "Simona Vetter"
+ <simona.vetter@ffwll.ch>, "Zijun Hu" <quic_zijuhu@quicinc.com>,
+ <linux-usb@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [PATCH v4 1/9] driver core: add a faux bus for use when a
+ simple device/bus is needed
+From: "Kurt Borja" <kuurtb@gmail.com>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <2025021023-sandstorm-precise-9f5d@gregkh>
+ <2025021026-atlantic-gibberish-3f0c@gregkh>
+ <D7OU5VOXCS8M.39YEYRWFL1MPW@gmail.com>
+ <116e9983-6c5f-45f3-a933-dcded223f6d7@icloud.com>
+In-Reply-To: <116e9983-6c5f-45f3-a933-dcded223f6d7@icloud.com>
 
-On 10.2.2025 9.42, Michal Pecio wrote:
-> If skipping is deferred to events other than Missed Service Error itsef,
-> it means we are running on an xHCI 1.0 host and don't know how many TDs
-> were missed until we reach some ordinary transfer completion event.
-> 
-> And in case of ring xrun, we can't know where the xrun happened either.
-> 
-> If we skip all pending TDs, we may prematurely give back TDs added after
-> the xrun had occurred, risking data loss or buffer UAF by the xHC.
-> 
-> If we skip none, a driver may become confused and stop working when all
-> its URBs are missed and appear to be "in flight" forever.
-> 
-> Skip exactly one TD on each xrun event - the first one that was missed,
-> as we can now be sure that the HC has finished processing it. Provided
-> that one more TD is queued before any subsequent doorbell ring, it will
-> become safe to skip another TD by the time we get an xrun again.
-> 
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-> ---
->   drivers/usb/host/xhci-ring.c | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
-> 
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 878abf5b745d..049206a1db76 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -2875,6 +2875,18 @@ static int handle_tx_event(struct xhci_hcd *xhci,
->   
->   			if (!ep_seg && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
->   				skip_isoc_td(xhci, td, ep, status);
-> +
-> +				if (ring_xrun_event) {
-> +					/*
-> +					 * If we are here, we are on xHCI 1.0 host with no idea how
-> +					 * many TDs were missed and where the xrun occurred. Don't
-> +					 * skip more TDs, they may have been queued after the xrun.
-> +					 */
-> +					xhci_dbg(xhci, "Skipped one TD for slot %u ep %u",
-> +							slot_id, ep_index);
-> +					break;
+On Tue Feb 11, 2025 at 10:29 AM -05, Zijun Hu wrote:
+> On 2025/2/10 22:29, Kurt Borja wrote:
+>>> +
+>>> +	ret =3D device_add(dev);
+>>> +	if (ret) {
+>>> +		pr_err("%s: device_add for faux device '%s' failed with %d\n",
+>>> +		       __func__, name, ret);
+>>> +		put_device(dev);
+>>> +		return NULL;
+>>> +	}
+>> Now that the probe is synchronous, what do you think about returning
+>> -ENODEV if the device failed to bind to the driver?
+>>=20
+>
+> Result of device registering @ret is not, should not be, effected by
+> "device binding driver (probe result)"
+>
+> if device binging driver failed, you may return -ENODEV in
+> faux_ops->probe(). not here.
 
-This would be the same as return 0; right?
+After thinking about this discussion, I understand why this might be the
+expected behavior. I'm thinking about very simple modules that would
+remain loaded even if the probe fails. But of course this may cause
+problems to other modules.
 
-Whole series looks good, I'll add it
+In the end, this is just my opinion so it would be up to Greg to decide.
+However, there is still an issue with the groups added to the device,
+which a user might expect they are tied to an "attached" device
+lifetime and this currently not the case.
 
--Mathias
+>
+>> This would be useful for modules that may want to unload if the probe
+>> fails.
+>
+> may need to root cause if probe failure happens.
+>
+> how to unload module automatically if probe() failure ?
+
+If we check for !dev->driver, a module might propagate an error to the
+module_init, thus making it fail to load.
+
+--=20
+ ~ Kurt
 
 
