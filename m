@@ -1,193 +1,135 @@
-Return-Path: <linux-usb+bounces-20475-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20476-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAF9CA30D4C
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 14:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3754DA30D95
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:03:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D159188307D
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 13:50:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43579188A6FB
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 14:03:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9398724BD0A;
-	Tue, 11 Feb 2025 13:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D2124C686;
+	Tue, 11 Feb 2025 14:03:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hbNBjw8C"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A8fxZlaP"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9590F26BD9A;
-	Tue, 11 Feb 2025 13:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E258D1F891F;
+	Tue, 11 Feb 2025 14:03:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739281823; cv=none; b=kQcO4HqsPoH+XX2FhDgG2a4aGxu8QDJlJQfKpHH392lLmnAhBAJ2TsH61B0xykkonISXmAf0EkM60mixbA28CnBJfwTdQbMAD5S3gjgqr91iU+Laz2YKoln0kozdbVZKaKMjsM/DO/8GrPqG3OdnAPnf6QneH/D2bogd53GSuA8=
+	t=1739282582; cv=none; b=T/4RxXf5G6XzEx73UoleYxl0M49zX5NcwmsxamqUGb6fVdfldn/O18iFJBjLaOjBYx55Ht/bolWIbWFQsgIVv913Ztard6e6dcSVu9WZuuMOhWeK4KsIPOtJdgQ1MU0F3LyjdRlueEGXdYTQqiqmIwE7v75AanDm6VJMaNsN5+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739281823; c=relaxed/simple;
-	bh=pKkt4VSoLZl2sGaYzr79kkI7zvh+CB5ECNtiwL9okKk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qNfi6sphP8vWcHgY1eCiVdB3S3L7xZco/aDOhgsYImaDGa1I5xZ2B/e1TvTNth3BVpD/+h+CBek13NhCHS1ow9aiB1FbW3AAc4peUJgVnnMiZYYJSNEI8qCfsgk0Svpu1/0Ks1rsQ/i17wi/WVCOsWlyDQpkL0FcoCPxzU9t9QA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hbNBjw8C; arc=none smtp.client-ip=209.85.160.50
+	s=arc-20240116; t=1739282582; c=relaxed/simple;
+	bh=i37bDM/NP23sG4VVLtINRdWq9LHfOqmlTcCOF0TXxMk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=G9xIGN+iA8ORSzG5C7CN+t/Kfn5ub/kujeNiclvDHLsZy0D/ablnc/yOdPVxzvKGT3arCjiYwbMgxLvRUfLmUZdwKkWQF2HBIh/7zS949T3L2hYX234p/eEd4/WKzqEHCR33VUzD8kgYHVSGrvo3PscANw9/W4MY4+F0AEtMZxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A8fxZlaP; arc=none smtp.client-ip=209.85.167.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2addd5053c0so3191624fac.1;
-        Tue, 11 Feb 2025 05:50:20 -0800 (PST)
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5450e08f300so283300e87.0;
+        Tue, 11 Feb 2025 06:03:00 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739281820; x=1739886620; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M3JAPeXHn1qsDNW866P/qiGLMSZ4lYzkFddERH0fa2A=;
-        b=hbNBjw8CPSV3yF+e8R+ru0cB3XGOy40MX9TvdwAGel+WnMewuY+5o0r/hiGbRhFdjL
-         k67hB+laA1D/HQK7NZas4JfLj8wR7D6U9wgWxRVXCIxISDo5WXJbi0+mledm61UxYxq2
-         KoUcpueS0Z2DjikxaehUtIEsj6oF/gxpAQlJvpsMbOtCS+zVc8agK6987uhB2GgDiMhq
-         EvIDmZQEzPmmJxUwBWwmaV12nvq/N1iYaVfrDwBs3Fc54VgWSrBL8I//4ZoVO+GJ1CnR
-         NUFW/0HPevXF/uq6ljKSYyUb5krA21FD2Ddf4DofpKV0uFbtgL1tHGYiN0M3ZuV1uGEr
-         o9uw==
+        d=gmail.com; s=20230601; t=1739282579; x=1739887379; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OVCrMiBqPPejeHJ4wtIOJH7A67ULW6+KotaTwKpouuM=;
+        b=A8fxZlaP3sO0SoHskh/8JOmC4DP/PuFwu+pscweYbQl06sQE7VlhekW90vKTAIF+V/
+         VvxZh/DPHyH45CfljAUucz+kzXIzH4fsYTEzLrAqNGOn+j5PM6UqDjVk1Pvn/z4LiZE2
+         Qm6jnpSn3z+4F4Wr/XcCYaT5xikks3HwpMBagXwohdnnLyXmGlqn7KAOoRle0F7bA044
+         6go581+hXVHBjQkzHyo/gdSFqMfTWIIRPNOu7dBxw6jM0/uOj9/lrjjJtwkENOZ7B6+T
+         DE8z09tfBUNrhMBZcbaJVQLhMyW5HkIGk2jceU0HNqWjQhrQnf0dbsLTqcqkUfdrcIE7
+         HubA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739281820; x=1739886620;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M3JAPeXHn1qsDNW866P/qiGLMSZ4lYzkFddERH0fa2A=;
-        b=AM8JhAwAFjOldh4ArADteFJzxmfpsn0WsUSr74+MMZ3o5vxjRVONMMSN4HEmFeKSX6
-         urHhWSgTkiOGpV7mihYWNdkBTH2nUsZezTs1exxlBnvS6jgfUCuykeeU2xaIEyYf58/P
-         JkiODLA+mHNu3Pnh7sVLrAuaX4tWY1eQV45zgY5wWgxiegwrPZ9jlykh9dJVtmJxjFs+
-         /Rau+mcJo8zx3BY09bb38XPS2OmGae4W74W6k++NZ6FwD3q30zFcXkm/ux8npAYSECZf
-         8jKgKCDCcH9efsX1tKBKqx5myvrKmAsVW+p7R04u6gs3BCACvKfyRsoYGwtk0yasicnK
-         R9ug==
-X-Forwarded-Encrypted: i=1; AJvYcCU1dcn0jFlfdrznBYOGSrkb4eIBy7p1zXpw/y+Qda1N/VtXkp/4LZ2CnIkrv5NxNRsI6o5JaX4/ZpqS@vger.kernel.org, AJvYcCV925+/YuOdJzupTyHECzdy5KphYzytghlqVVFjMOSKrQEKkRKztR+RIco3966YpiMvtEVmXc3T@vger.kernel.org, AJvYcCVlEpHUZRSfUEKWaFIMo5Ah/A1VY7dOsJOLD/YSa3Whsi5u9yrkUT+Xtt6/WlX5h6u3xefcla5TOaq7jG8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yynl2PWFzEbEUmup8BawIbRf+xiNMx0f2opIs6dfo3bLJBl71wf
-	72bSTIVdxLbjkSAnkBNKNa6y4eyYWoVXRaEmq6Fwa8Q1u9gES9NdD65x33r7cW4EEDSfEg97KEf
-	CyZuGHBMmqmdzus82lHiNaStPk3c=
-X-Gm-Gg: ASbGncv6DLkAoswLPZKQkwM6J2l3QjAOVK/1TBitbzO2IGVsszLJkaZmjrlXvpMKrRW
-	k2HtFfSf6yxg22WtY9cIQ1oAXbpbM7uCmKhC+yExf+UQeX6/YbPIG/VxObYH2zD3epE42vUf9
-X-Google-Smtp-Source: AGHT+IFbEj4xWuZDz0dziKnxzJesY6Ax7CfGY3vRgXsgo08AmUlxMqbQTwRk7p9bqtEs1i5O9AuAKm4mN/H/W957aNk=
-X-Received: by 2002:a05:6870:9106:b0:29e:3eff:dea with SMTP id
- 586e51a60fabf-2b8b570c2dbmr2200377fac.8.1739281820000; Tue, 11 Feb 2025
- 05:50:20 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739282579; x=1739887379;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OVCrMiBqPPejeHJ4wtIOJH7A67ULW6+KotaTwKpouuM=;
+        b=jpzyePUbeY4RN3ZP2GZczYRdZZll+0rHtG67dbMvONQvR6bg0S3GzLqSKqPlcQCH0I
+         4aCx/W30SOciHsPF2Y7W3EQQFCe5mPBBjbgR+eZn8dta1c4B5vQyq4cwJADKox1ZvrzN
+         ObxjVRmjv1a/G6DsUgb/2VbMK5ued1elt9od/hzT2iVgMjLsBLNHQaMgA42yYgVEd7SC
+         CmnYLVo/p07C39nvXZG7kZ3TNAD2dW8kMnCVWNljtzOwrJBVdXlJ8oSKdY25WwuTmSd8
+         wQ+8P9vwUy/+l0dss6joBhXe3DDDvfUS6VxThFx3S4d7Ie9A1Hz7RVxW16RXUUZK4Wjb
+         BZ5A==
+X-Forwarded-Encrypted: i=1; AJvYcCVqd2mGBiH5f9dxuRJOiPD9ES7KVp0OU/YPKEhRE5JeBojh/DG4GOdVznw87fNeWXsLxJPsZxD15MAM@vger.kernel.org, AJvYcCWxE4uurRqOfbdFhE2hREpNYMGBcvGSfhgSy29e5Oy6a+rhyJruhOO9b7KhvXBbD+9vewQgKxQ9OKUFpQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw1qQYgVAmJ4Z4Cc6KeDQ892cVremI4jEJYpxK8huDi+JZuof+y
+	yy6i1VqBsRP2MSyceXlQ+t2TI13DYBc23rmX12maJjldAqlTSUDh
+X-Gm-Gg: ASbGncskP3t7TS472J3QCHhICzRUFD6osyRc4FuJ7XygfdlUt+vSA2gB/eLMumkss/U
+	sJ48WKX6lL75uopa+N1/nNI4l7rrD9l4Rrl5LGuYVHj5n653iRVMeEuVOOlAnzIFxwIhO8c+Y5Q
+	hPirr/SGOK5HSa6gEFYaCA5/5vHUaTTiWodf1EJusmeopqnW/M6cFMGFvmVDBGzaLtppboLfuYz
+	73VnrVem7Xr8Qb+FI0wKsv40DqcQAbI+5vZobpm6uefj77w2z9r4OS7SSwDqfYuyV3J1n4KWfsw
+	BBeGYz8hJjHEUC4jd8KsUSyHnwEouGcO+mcdPLCFfNlzVI/s50rIxuWCfRFEtg==
+X-Google-Smtp-Source: AGHT+IFO2vvvp47S79o9qf9Kuf+uPfqbEfx8aevn/+wDSdL/Qf4ndxh/ExMGiCXFTMJvZ4NHyJ8RGg==
+X-Received: by 2002:a05:6512:230a:b0:542:1b63:141a with SMTP id 2adb3069b0e04-54414aa2239mr2024517e87.6.1739282578539;
+        Tue, 11 Feb 2025 06:02:58 -0800 (PST)
+Received: from laptok.lan (89-64-31-140.dynamic.chello.pl. [89.64.31.140])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-545014af0d0sm1118721e87.184.2025.02.11.06.02.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Feb 2025 06:02:57 -0800 (PST)
+From: =?UTF-8?q?Tomasz=20Paku=C5=82a?= <tomasz.pakula.oficjalny@gmail.com>
+To: jikos@kernel.org,
+	bentiss@kernel.org
+Cc: anssi.hannula@gmail.com,
+	oleg@makarenk.ooo,
+	linux-input@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: [PATCH v3 0/6] HID: pidff: Compatibility update and new devices
+Date: Tue, 11 Feb 2025 15:02:46 +0100
+Message-ID: <20250211140252.702104-1-tomasz.pakula.oficjalny@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250209071752.69530-1-joswang1221@gmail.com> <5d504702-270f-4227-afd6-a41814c905e3@google.com>
- <CAPTae5+Z3UcDcdFcn=Ref5aQSUEEyz-yVbRqoPJ1LogP4MzJdg@mail.gmail.com>
-In-Reply-To: <CAPTae5+Z3UcDcdFcn=Ref5aQSUEEyz-yVbRqoPJ1LogP4MzJdg@mail.gmail.com>
-From: Jos Wang <joswang1221@gmail.com>
-Date: Tue, 11 Feb 2025 21:50:09 +0800
-X-Gm-Features: AWEUYZkZT10sA2YI3GJlef0qf7-Q5jW60r6XuARrBv_ir_XPwSKMTdiVWOOQGQc
-Message-ID: <CAMtoTm0bchocN6XrQBRdYuye7=4CoFbU-6wMpRAXR4OU77XkwQ@mail.gmail.com>
-Subject: Re: [PATCH 1/1] usb: typec: tcpm: PSSourceOffTimer timeout in PR_Swap
- enters ERROR_RECOVERY
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: Amit Sunil Dhamne <amitsd@google.com>, heikki.krogerus@linux.intel.com, 
-	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 11, 2025 at 7:51=E2=80=AFAM Badhri Jagan Sridharan
-<badhri@google.com> wrote:
->
-> On Mon, Feb 10, 2025 at 3:02=E2=80=AFPM Amit Sunil Dhamne <amitsd@google.=
-com> wrote:
-> >
-> >
-> > On 2/8/25 11:17 PM, joswang wrote:
-> > > From: Jos Wang <joswang@lenovo.com>
-> nit: From https://elixir.bootlin.com/linux/v6.13.1/source/Documentation/p=
-rocess/submitting-patches.rst#L619
->
->   - A ``from`` line specifying the patch author, followed by an empty
->     line (only needed if the person sending the patch is not the author).
->
-> Given that you are the author, wondering why do you have an explicit "Fro=
-m:" ?
->
-Hello, thank you for your help in reviewing the code.
-My company email address is joswang@lenovo.com, and my personal gmail
-email address is joswang1221@gmail.com, which is used to send patches.
-Do you suggest deleting the "From:" line?
-I am considering deleting the "From:" line, whether the author and
-Signed-off-by in the patch need to be changed to
-"joswang1221@gmail.com".
-> > >
-> > > As PD2.0 spec ("6.5.6.2 PSSourceOffTimer")=EF=BC=8Cthe PSSourceOffTim=
-er is
->
-> nit: https://elixir.bootlin.com/linux/v6.13.1/source/Documentation/proces=
-s/submitting-patches.rst#L619
->
->  - The body of the explanation, line wrapped at 75 columns, which will
->     be copied to the permanent changelog to describe this patch.
->
-"As PD2.0 spec ("6.5.6.2 PSSourceOffTimer")=EF=BC=8Cthe PSSourceOffTimer is=
-"
-This sentence doesn=E2=80=99t exceed 75 chars, right?
->
-> > > used by the Policy Engine in Dual-Role Power device that is currently
-> > > acting as a Sink to timeout on a PS_RDY Message during a Power Role
-> > > Swap sequence. This condition leads to a Hard Reset for USB Type-A an=
-d
-> > > Type-B Plugs and Error Recovery for Type-C plugs and return to USB
-> > > Default Operation.
-> > >
-> > > Therefore, after PSSourceOffTimer timeout, the tcpm state machine sho=
-uld
-> > > switch from PR_SWAP_SNK_SRC_SINK_OFF to ERROR_RECOVERY. This can also=
- solve
-> > > the test items in the USB power delivery compliance test:
-> > > TEST.PD.PROT.SNK.12 PR_Swap =E2=80=93 PSSourceOffTimer Timeout
->
-> Thanks for fixing this !
->
-> > >
-> > > [1] https://usb.org/document-library/usb-power-delivery-compliance-te=
-st-specification-0/USB_PD3_CTS_Q4_2025_OR.zip
-> > >
-> > > Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)"=
-)
-> > > Cc: stable@vger.kernel.org
-> > >
-> nit: Empty line not needed here.
->
-Modifications for the next version
+This is a small series based on top of hid.git#for-6.15/pidff.
+Add Oleg Makarenko as hid-universal-pidff co-maintainer as he fixed
+his email server and will be able to respond to LKML inquiries.
 
-> > > Signed-off-by: Jos Wang <joswang@lenovo.com>
-> >
-> > Tested-by: Amit Sunil Dhamne <amitsd@google.com>
->
->
-> >
-> >
-> > Regards,
-> >
-> > Amit
-> >
-> > > ---
-> > >   drivers/usb/typec/tcpm/tcpm.c | 3 +--
-> > >   1 file changed, 1 insertion(+), 2 deletions(-)
-> > >
-> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/t=
-cpm.c
-> > > index 47be450d2be3..6bf1a22c785a 100644
-> > > --- a/drivers/usb/typec/tcpm/tcpm.c
-> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
-> > > @@ -5591,8 +5591,7 @@ static void run_state_machine(struct tcpm_port =
-*port)
-> > >               tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_=
-MODE_USB,
-> > >                                                      port->pps_data.a=
-ctive, 0);
-> > >               tcpm_set_charge(port, false);
-> > > -             tcpm_set_state(port, hard_reset_state(port),
-> > > -                            port->timings.ps_src_off_time);
-> > > +             tcpm_set_state(port, ERROR_RECOVERY, port->timings.ps_s=
-rc_off_time);
-> > >               break;
-> > >       case PR_SWAP_SNK_SRC_SOURCE_ON:
-> > >               tcpm_enable_auto_vbus_discharge(port, true);
+Small compatibility patch for situations, where POOL report haven't
+been properly initiated and adding Asetek vendor and 4 of their
+wheelbases.
+
+Oleg requested me to change his name order to be in line with
+western style.
+
+Signed-off-by: Tomasz Pakuła <tomasz.pakula.oficjalny@gmail.com>
+
+---
+Changes in v3:
+- Change Oleg's name order on request
+
+Changes in v2:
+- Updated comments and code to conform with Linux style guide
+- Define 0 duration as FF_INFINITE (PID_INFINITE analog)
+- Support device error response from PID_BLOCK_LOAD
+- Remove redundant call to pidff_find_special_keys
+
+Tomasz Pakuła (6):
+  MAINTAINERS: Update hid-universal-pidff entry
+  HID: pidff: Make sure to fetch pool before checking SIMULTANEOUS_MAX
+  HID: hid-universal-pidff: Add Asetek wheelbases support
+  HID: pidff: Comment and code style update
+  HID: pidff: Support device error response from PID_BLOCK_LOAD
+  HID: pidff: Remove redundant call to pidff_find_special_keys
+
+ MAINTAINERS                       |  3 +-
+ drivers/hid/hid-ids.h             |  6 ++
+ drivers/hid/hid-universal-pidff.c | 10 +++-
+ drivers/hid/usbhid/hid-pidff.c    | 98 ++++++++++++++-----------------
+ 4 files changed, 60 insertions(+), 57 deletions(-)
+
+
+base-commit: 5d98079b2d0186e1f586301a9c00144a669416a8
+-- 
+2.48.1
+
 
