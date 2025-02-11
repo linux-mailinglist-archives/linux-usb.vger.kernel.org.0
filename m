@@ -1,152 +1,185 @@
-Return-Path: <linux-usb+bounces-20498-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20499-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EC55A31027
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:49:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4495DA3109B
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 17:04:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 355B93A6277
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:49:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3FD4166994
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:04:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B971253B71;
-	Tue, 11 Feb 2025 15:49:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72AB3253B7D;
+	Tue, 11 Feb 2025 16:04:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H8i9rHMb"
+	dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b="Drzx0dHm"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from toucan.tulip.relay.mailchannels.net (toucan.tulip.relay.mailchannels.net [23.83.218.254])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69241253B4F;
-	Tue, 11 Feb 2025 15:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739288980; cv=none; b=PUDf+sGo68bZOFNrH2MjnLqcrxlfGdbYXPwG5GjvaPXd2gb7koBSzl2KFA+DwDXjm1my67gNvpL5LPzN+0zYdbKeX8Bwi+tpuK6LxoRDivBv7gd/Hc9WqSnn+hufo05KvemweXruu+Zbzpo4a0wDtJDmBI02zKCn0Xf7kJZX5Vk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739288980; c=relaxed/simple;
-	bh=fKZzaQtQDsSPkGQu8snJR7R9Ds50kdAkBeuKe+iO0yY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Cc:Subject:From:
-	 References:In-Reply-To; b=OOQvTLCHMBIPU2M8NdHn0e1xqH2odh4RYH/jd6d0BQCXtsp7VAG1Fwf+j+FkVlYUHUjkbc0mgBdWVkTAQH2ATqlJTKZBqmKD1gfmYEnjQYi7X09XefrXwNJykrZGMKV5CEpY1IOdrcZhjh3gK8pgXgJCYEa0qJ1C15LhXbfzzUM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H8i9rHMb; arc=none smtp.client-ip=209.85.128.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6f678a27787so51127827b3.1;
-        Tue, 11 Feb 2025 07:49:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739288978; x=1739893778; darn=vger.kernel.org;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l8qoAqHN6d2bwLyFPQrQGBkCWYEGHRrvnRKCr+AAeR8=;
-        b=H8i9rHMb7vdYs7AQ+eF6mDSpLPpgqI5wScqu6IxUzzdmli36AYPvQ9RhYonzJ34sp1
-         N02S5hel9S/4c0yE8QZXGEnaGCvA27BtYNEnmzY/r3kdtm0rnv3CpZY1PwgWHQht+AzS
-         S7Fe12FZGzT+DNOO5bGin7LEACr8cOLK593KXIPHfnIIxn1tkP+GnofVxQtSSK+psDk1
-         4ZHDRaF9HOhdMYsOVnbAUmssylDhFxzrHm4It/Ru/Gompbog4Xij60oobH7IlYmeNVuz
-         XD95DHxW8D/MAA3cptJDbjY4M+hncl2QW2aWTBVrCquVEt9NynT4E8CogXcExj8TfBbY
-         xu7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739288978; x=1739893778;
-        h=in-reply-to:references:from:subject:cc:to:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=l8qoAqHN6d2bwLyFPQrQGBkCWYEGHRrvnRKCr+AAeR8=;
-        b=nD+v8bIkC+UZtQ/+/aRTgcp35S5LMpOS1VrW1ecuUIx/e5yMN5z0ccfGbgauLJYGri
-         ExhQlEuAbPVrIwmuOAXicuHnsl9/M4AlkKnWNHTpIuDSwXAzfaQU+msvaoNCAz+ug70z
-         HNFLr6EjCi1U31UncLTQcub693YS/5oIk78NWZ+2b5O56d1dQoju28AytR0mfZmUMZWv
-         tre7yYNNXat99bEg9PVPbAjUv7m6d2qlZUgjhB0QQI3km92q3uioRapsu//lBBWq3TUX
-         Rwomr2XvalpLrVhg2AHYMFXEdkqQpiGhmUeIHnFo7WwdXJKS0cN+mj/JIqrjR0TZOx4G
-         8dug==
-X-Forwarded-Encrypted: i=1; AJvYcCUXer51uTg9nKcsIWsbdO0bdgLDSlQjPPniUI1/Nuq8Iu1/HRBS0TohSKJn52uOZ9zQoh/cOBnslBA7XJ4=@vger.kernel.org, AJvYcCV6OyHkr7ZgaEs2OvCIUI4wcuyg7yBL2sDl7Fui3MWAV2NLWYzvTp2pkZ4z97xBsRpNYoC88qiDOPvWJz0ICak=@vger.kernel.org, AJvYcCWH9key25FY8iLg8XE8B2A+M+VCAA/Zz+0yAIjklc+rJYB10BL0Uhlgk8lbD4v/p6CePAEfDXYWORXy@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz4AEoM3h/lxOZ4w9NzbVLp9E+NpOTiZbuhv2ZrlzWRPuUe3EHj
-	/hRTXA24fR7fEsaPcdCCiwjCmZfDtZ8Pc6z5pXxkepmwD+45dWI1
-X-Gm-Gg: ASbGncvhp4nKXG+MMRsPBJknal1KxWeme3GUVTN9yKF5ZtI8JR3E04Y9wcdBiFbPXeR
-	Az99ofyFMY6S8T0Z8POFV1RSmbFGskoRL+dl89pdc3gn1lCCRvr6c3/6zZqxXnJZ3Sc8ovcsFc/
-	/braJtsjGvvyIU0k3PnVsb4BH6iYe/ImnEMKAH5Oml+46JWPKZm1zEBFwIHXuY/bSfzq6kJEHls
-	UIM45C/8N+c3UBOH//pZlPKwtpfsa7ZvH7mKuKvkM2FmULZBuWPkF0W6lvCQp5s2rRKxo2jv2nA
-	VgAz04o=
-X-Google-Smtp-Source: AGHT+IEtgw91cXuJ0BG7VzTeHTqgV/DQam0mEB1K/IkRHtjW8w0U61fsFS5cFTVxxB609FpmSGYQ4A==
-X-Received: by 2002:a05:690c:7010:b0:6ef:5688:f966 with SMTP id 00721157ae682-6f9b2a2167fmr166314937b3.37.1739288978239;
-        Tue, 11 Feb 2025 07:49:38 -0800 (PST)
-Received: from localhost ([2800:bf0:82:3d2:4207:a956:ebad:2a64])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-6f99ff6a8c2sm21652137b3.77.2025.02.11.07.49.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Feb 2025 07:49:37 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DFD1EC006;
+	Tue, 11 Feb 2025 16:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=23.83.218.254
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739289865; cv=pass; b=IiqDhs8Ddtsk2K2m0baNpghD5KOpxx/KjvkYF9QITmW2BEqpeN25MXrfzjSar6FR86tPslskLW8DfYkihMnK4z4pSqy/Z7t0pYVvvvfXV4LXGrTLi/AYCAcIWYplLXogQY1Ph/aLP4ftNK7us1poNPNJ+XiPIHuY063hiqEuZ80=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739289865; c=relaxed/simple;
+	bh=45NgEGR9xVWRGZYDQUczRCjAkPb1nJoRAiQu3v41Pgs=;
+	h=Message-ID:MIME-Version:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:Date; b=KfQxPWyJQmLBrc9meg6iGq9W0pfSHEgfxBaKY+WKbGb3Co1zmVV72BvDG+ZpQGgBCfGAYuaDdqMPbIz5qW5zxkI1D0DbFmoMyReayiTG7rGdvoR3/GEfyNuar1f1le3htOATxEjcT5gvaKHSRQ1YPXvHWIOO4UUFQCCx9APprwQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com; spf=pass smtp.mailfrom=arinc9.com; dkim=pass (2048-bit key) header.d=arinc9.com header.i=@arinc9.com header.b=Drzx0dHm; arc=pass smtp.client-ip=23.83.218.254
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arinc9.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arinc9.com
+X-Sender-Id: hostingeremail|x-authuser|chester.a.unal@arinc9.com
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+	by relay.mailchannels.net (Postfix) with ESMTP id 7446E2C22D3;
+	Tue, 11 Feb 2025 15:58:42 +0000 (UTC)
+Received: from uk-fast-smtpout1.hostinger.io (trex-2.trex.outbound.svc.cluster.local [100.97.28.83])
+	(Authenticated sender: hostingeremail)
+	by relay.mailchannels.net (Postfix) with ESMTPA id 40A062C3EAC;
+	Tue, 11 Feb 2025 15:58:41 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1739289522; a=rsa-sha256;
+	cv=none;
+	b=iEsWLmfuOVyQY8gZ86qjVDUWVsoWQXaCYToGCxV6SQc8bc2eW1xE2XyHXyqELTGmTiv1t6
+	RgSYuTWuX1aqFoCxEf7zucErUNTEwZj9Tss6z2HgXvdLcNC+iop6OASkZ8LImPJgjtk8Q6
+	b2Y64+BeMp7L9Ftc1dmvriNp0KHA1aRlK7mg8vQAs3foY41Uovj5xCj/q6Sv0P76pdASkn
+	FpLR34iEyQJVFz99w2xeAMNdq3BH5ZMYipkifa4F6cDefrN2J1wBuyBrwVBWRX+bK2Oi0Y
+	4js3UnaIS9CCcjqJTwlqu2WGPBe8HPYwj73OseClTgjnMa+QItDdy5YTv2DD9Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+	s=arc-2022; t=1739289522;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:dkim-signature;
+	bh=dmNS9CAOB7kYkRhMFY6pna4SlgHCcaggJmkRXUL8i1o=;
+	b=E2EO8/P4q5Ue8hjMtxmqK/b5jyhJzoKpJoYoobL4QyqE3g3qIb8NDxQop+z4TPlXGV4TUx
+	czFLVLu1hoqcSRAS+BKXZxRGU8srFah7EEfmicrObklSm8P4BvcJ7sSPpd9PbRWG35MUbi
+	pmfRXpm35CAa/luJa6Ci196MNkfnYc1IA7c/sRpBYIxAzSbnqneqA3fWtjuyiVgntMwxiV
+	TEN7i8LhK7/UZAWcs1REkKPz6ucZ42tWlrHLaTxIWjyfl9J1fOG0DycgRsr0QYyHpBC4O0
+	LTugkMKlXqOIzs4aPJwX6eY7g54xoXXrZrR4XtKGyLgxhpBOOULc+5xaTVMsnQ==
+ARC-Authentication-Results: i=1;
+	rspamd-68c88d6cff-gjpcx;
+	auth=pass smtp.auth=hostingeremail smtp.mailfrom=chester.a.unal@arinc9.com
+X-Sender-Id: hostingeremail|x-authuser|chester.a.unal@arinc9.com
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: hostingeremail|x-authuser|chester.a.unal@arinc9.com
+X-MailChannels-Auth-Id: hostingeremail
+X-Hook-Unite: 76d5b96a6e666518_1739289522197_3869686461
+X-MC-Loop-Signature: 1739289522197:3951695925
+X-MC-Ingress-Time: 1739289522197
+Received: from uk-fast-smtpout1.hostinger.io (uk-fast-smtpout1.hostinger.io
+ [31.220.23.35])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+	by 100.97.28.83 (trex/7.0.2);
+	Tue, 11 Feb 2025 15:58:42 +0000
+Message-ID: <4a7f0b18-af29-4a49-863c-5a079d11c11c@arinc9.com>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arinc9.com;
+	s=hostingermail-a; t=1739289519;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dmNS9CAOB7kYkRhMFY6pna4SlgHCcaggJmkRXUL8i1o=;
+	b=Drzx0dHmMiSw1d/wwpkx62bKcUGlVPc0vctiF8Hkyjx/+DWtE5Ba7UcUe1TXCLJIP2ZJ/4
+	4txruVyxSvwLlrVoTFiK8m0QnP45QIAiDRM0Ezbgwaugw/pzsn5Tf31nX+07lVSOz4PjEB
+	OJV+qH8EiQbRo3B9pMhEy+P0q0Q52YK1yVhtZqdnKWFfJVNVJV+IefEqZ7HhRgfxgrguAD
+	CZAiNkN7+UXXnA/xpEeSG31nkWWCfjYHKU0uvkge4YKW8ULzpOpUOAsMiAbvZykF6OS2Kd
+	gBywdEcr7ttVL/kauGYs+rr9CVv8hDHoYFH1bbDqkKYtrU8jWvd4qLGa7NDFTQ==
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 11 Feb 2025 10:49:34 -0500
-Message-Id: <D7PQHGGX4WPC.26F52356ISZU8@gmail.com>
-To: "Zijun Hu" <zijun_hu@icloud.com>, "Greg Kroah-Hartman"
- <gregkh@linuxfoundation.org>, <linux-kernel@vger.kernel.org>, "Lyude Paul"
- <lyude@redhat.com>, "Rafael J. Wysocki" <rafael@kernel.org>, "Danilo
- Krummrich" <dakr@kernel.org>
-Cc: "Alexander Lobakin" <aleksander.lobakin@intel.com>, "Andy Shevchenko"
- <andriy.shevchenko@linux.intel.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
- "Jonathan Cameron" <Jonathan.Cameron@huawei.com>, "Liam Girdwood"
- <lgirdwood@gmail.com>, "Lukas Wunner" <lukas@wunner.de>, "Mark Brown"
- <broonie@kernel.org>, =?utf-8?q?Ma=C3=ADra_Canal?= <mairacanal@riseup.net>,
- "Robin Murphy" <robin.murphy@arm.com>, "Simona Vetter"
- <simona.vetter@ffwll.ch>, "Zijun Hu" <quic_zijuhu@quicinc.com>,
- <linux-usb@vger.kernel.org>, <rust-for-linux@vger.kernel.org>,
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Subject: Re: [PATCH v4 1/9] driver core: add a faux bus for use when a
- simple device/bus is needed
-From: "Kurt Borja" <kuurtb@gmail.com>
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <2025021023-sandstorm-precise-9f5d@gregkh>
- <2025021026-atlantic-gibberish-3f0c@gregkh>
- <D7OU5VOXCS8M.39YEYRWFL1MPW@gmail.com>
- <116e9983-6c5f-45f3-a933-dcded223f6d7@icloud.com>
-In-Reply-To: <116e9983-6c5f-45f3-a933-dcded223f6d7@icloud.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: serial: option: drop MeiG Smart defines
+To: Johan Hovold <johan@kernel.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
+References: <20250211145547.32517-1-johan@kernel.org>
+Content-Language: en-US
+From: "Chester A. Unal" <chester.a.unal@arinc9.com>
+In-Reply-To: <20250211145547.32517-1-johan@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Date: Tue, 11 Feb 2025 15:58:37 +0000 (UTC)
+X-CM-Analysis: v=2.4 cv=FuFX/Hrq c=1 sm=1 tr=0 ts=67ab73af a=xK2r8zoKF9vSrBIo2YuqYg==:117 a=xK2r8zoKF9vSrBIo2YuqYg==:17 a=IkcTkHD0fZMA:10 a=GvHEsTVZAAAA:8 a=VwQbUJbxAAAA:8 a=wvxYl3FCeEmcF220GPsA:9 a=QEXdDO2ut3YA:10 a=aajZ2D0djhd3YR65f-bR:22
+X-CM-Envelope: MS4xfOcm6ZRhG5bD1p2vu4vvBI9ghtHy1aUXBhRItoYE0FVCkfgPwrDyVwTqaFMvmHwlOBYc+DvBsaNPQ16/Vaeg1ZUzNTCWOq4tekq8LtecCRRkrv+O4Q/x 1PZZU8jV/Wx3HbMthR7PtRQp4BM4Zgji3ztOcjVCNjOeBJhYU72LHylV+0QoPK3e7wa7hoBvsXq3WuJ/LCJohUegbzsleqRHMqUoS4oKU4WhnSKSJMNUC9Vd tb5Mv6QIO6Pee/bimwWLn9k6cJZpJL9dXr/INy2QfvkYUlBmZLc11cSVqWbIwDjpcQn0wk9KG0krCt3CPTlypA==
+X-AuthUser: chester.a.unal@arinc9.com
 
-On Tue Feb 11, 2025 at 10:29 AM -05, Zijun Hu wrote:
-> On 2025/2/10 22:29, Kurt Borja wrote:
->>> +
->>> +	ret =3D device_add(dev);
->>> +	if (ret) {
->>> +		pr_err("%s: device_add for faux device '%s' failed with %d\n",
->>> +		       __func__, name, ret);
->>> +		put_device(dev);
->>> +		return NULL;
->>> +	}
->> Now that the probe is synchronous, what do you think about returning
->> -ENODEV if the device failed to bind to the driver?
->>=20
->
-> Result of device registering @ret is not, should not be, effected by
-> "device binding driver (probe result)"
->
-> if device binging driver failed, you may return -ENODEV in
-> faux_ops->probe(). not here.
+Looks good to me. Thanks Johan.
 
-After thinking about this discussion, I understand why this might be the
-expected behavior. I'm thinking about very simple modules that would
-remain loaded even if the probe fails. But of course this may cause
-problems to other modules.
+Acked-by: Chester A. Unal <chester.a.unal@arinc9.com>
 
-In the end, this is just my opinion so it would be up to Greg to decide.
-However, there is still an issue with the groups added to the device,
-which a user might expect they are tied to an "attached" device
-lifetime and this currently not the case.
+Chester A.
 
->
->> This would be useful for modules that may want to unload if the probe
->> fails.
->
-> may need to root cause if probe failure happens.
->
-> how to unload module automatically if probe() failure ?
-
-If we check for !dev->driver, a module might propagate an error to the
-module_init, thus making it fail to load.
-
---=20
- ~ Kurt
+On 11/02/2025 14:55, Johan Hovold wrote:
+> Several MeiG Smart modems apparently use the same product id, making the
+> defines even less useful.
+> 
+> Drop them in favour of using comments consistently to make the id table
+> slightly less unwieldy.
+> 
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Johan Hovold <johan@kernel.org>
+> ---
+>   drivers/usb/serial/option.c | 28 ++++++++--------------------
+>   1 file changed, 8 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c
+> index 887a1c687b52..ba8c0a4047de 100644
+> --- a/drivers/usb/serial/option.c
+> +++ b/drivers/usb/serial/option.c
+> @@ -619,18 +619,6 @@ static void option_instat_callback(struct urb *urb);
+>   /* Luat Air72*U series based on UNISOC UIS8910 uses UNISOC's vendor ID */
+>   #define LUAT_PRODUCT_AIR720U			0x4e00
+>   
+> -/* MeiG Smart Technology products */
+> -#define MEIGSMART_VENDOR_ID			0x2dee
+> -/*
+> - * MeiG Smart SLM828, SRM815, and SRM825L use the same product ID. SLM828 is
+> - * based on Qualcomm SDX12. SRM815 and SRM825L are based on Qualcomm 315.
+> - */
+> -#define MEIGSMART_PRODUCT_SRM825L		0x4d22
+> -/* MeiG Smart SLM320 based on UNISOC UIS8910 */
+> -#define MEIGSMART_PRODUCT_SLM320		0x4d41
+> -/* MeiG Smart SLM770A based on ASR1803 */
+> -#define MEIGSMART_PRODUCT_SLM770A		0x4d57
+> -
+>   /* Device flags */
+>   
+>   /* Highest interface number which can be used with NCTRL() and RSVD() */
+> @@ -2350,6 +2338,14 @@ static const struct usb_device_id option_ids[] = {
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0a05, 0xff) },			/* Fibocom FM650-CN (NCM mode) */
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0a06, 0xff) },			/* Fibocom FM650-CN (RNDIS mode) */
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x2cb7, 0x0a07, 0xff) },			/* Fibocom FM650-CN (MBIM mode) */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d41, 0xff, 0, 0) },		/* MeiG Smart SLM320 */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d57, 0xff, 0, 0) },		/* MeiG Smart SLM770A */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0, 0) },		/* MeiG Smart SRM815 */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0x10, 0x02) },	/* MeiG Smart SLM828 */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0x10, 0x03) },	/* MeiG Smart SLM828 */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x30) },	/* MeiG Smart SRM815 and SRM825L */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x40) },	/* MeiG Smart SRM825L */
+> +	{ USB_DEVICE_AND_INTERFACE_INFO(0x2dee, 0x4d22, 0xff, 0xff, 0x60) },	/* MeiG Smart SRM825L */
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x2df3, 0x9d03, 0xff) },			/* LongSung M5710 */
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1404, 0xff) },			/* GosunCn GM500 RNDIS */
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x305a, 0x1405, 0xff) },			/* GosunCn GM500 MBIM */
+> @@ -2406,14 +2402,6 @@ static const struct usb_device_id option_ids[] = {
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(SIERRA_VENDOR_ID, SIERRA_PRODUCT_EM9191, 0xff, 0, 0) },
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, TOZED_PRODUCT_LT70C, 0xff, 0, 0) },
+>   	{ USB_DEVICE_AND_INTERFACE_INFO(UNISOC_VENDOR_ID, LUAT_PRODUCT_AIR720U, 0xff, 0, 0) },
+> -	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SLM320, 0xff, 0, 0) },
+> -	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SLM770A, 0xff, 0, 0) },
+> -	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0, 0) },	/* MeiG Smart SRM815 */
+> -	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0x10, 0x02) },	/* MeiG Smart SLM828 */
+> -	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0x10, 0x03) },	/* MeiG Smart SLM828 */
+> -	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x30) },	/* MeiG Smart SRM815 and SRM825L */
+> -	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x40) },	/* MeiG Smart SRM825L */
+> -	{ USB_DEVICE_AND_INTERFACE_INFO(MEIGSMART_VENDOR_ID, MEIGSMART_PRODUCT_SRM825L, 0xff, 0xff, 0x60) },	/* MeiG Smart SRM825L */
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0530, 0xff),			/* TCL IK512 MBIM */
+>   	  .driver_info = NCTRL(1) },
+>   	{ USB_DEVICE_INTERFACE_CLASS(0x1bbb, 0x0640, 0xff),			/* TCL IK512 ECM */
 
 
