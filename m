@@ -1,74 +1,115 @@
-Return-Path: <linux-usb+bounces-20455-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20456-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1040A30629
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 09:45:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1926EA306B2
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 10:15:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F5D13A2156
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 08:45:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 81A07164D6A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 09:15:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5A31F0E34;
-	Tue, 11 Feb 2025 08:45:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE1481F12FD;
+	Tue, 11 Feb 2025 09:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dB4L0ipo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rw7+3uKo"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E551F03EF;
-	Tue, 11 Feb 2025 08:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B2A61F12EB;
+	Tue, 11 Feb 2025 09:15:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739263504; cv=none; b=E/vGltERL+4Ch//UozRRH6ZDeUIcQ5ynUPNwXEVsvcu8pEV/3LMCrEdcuI3ZpH/rQ7rTr54Y/Qs061E3nAEfqyv0M/AFv4JH9MySk/AemhS35ZphP/GVsprQ/wm2YRNeiEmjWrlsCSXGSAWw1oTk9it29V4q9qL98XY47cMhwxM=
+	t=1739265306; cv=none; b=J0xYfAkuoRhS774egGWEw58P95Uxy8C7TRvX1oP6uRozUo2NA2trByAUC/iC/ISib7FxBfPEUSzyxd71GEmQuMU3MwJsbjy5jF/kmjPWqE1c1JncZP7BfgJshMYMJBN74HSpkkuDYAT3rYdVBMkLR9dPqUjQo0wWky93fYvRmxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739263504; c=relaxed/simple;
-	bh=EXA8sizW3gJ7M/BWsGL05XH6M09E/OUKwgElzm+35ZU=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=pLt0liG6+0Er+HXdp310xNlQKaCgvb0Wm7BooUK/AddEVC3F6/53hQCutiUz0NsmuX1oU6Naf06FiN30LfVJ5TlWWI0CAMHqDFocle/ls/cuQXyjbd7B2wRAeUZlyZKfVrN/JI0XIIrPmpEvs9w4s2YmRWkB0hER568bkmUPF1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dB4L0ipo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24450C4CEE6;
-	Tue, 11 Feb 2025 08:45:02 +0000 (UTC)
+	s=arc-20240116; t=1739265306; c=relaxed/simple;
+	bh=An89c79r31a50DrgLf1D/6uI8WBtaUJL0XPWqEiJctM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jWZ/NC5OreXjtPns8WO2CUA86bs40/zi3f26VAUOKiEu/UAJKcnJqlKAKv2w+Vqh/eOF/V1pnepmS16a4Oh55Glxr1/iwSE0bRSEccXGfHNSl6MntPGQXC3Airx0xJAoCfsbAkujlyVlQ7iVDBGg9zey9DgDyQQkFA5LzcmImyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rw7+3uKo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6DE2C4CEDD;
+	Tue, 11 Feb 2025 09:15:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739263503;
-	bh=EXA8sizW3gJ7M/BWsGL05XH6M09E/OUKwgElzm+35ZU=;
-	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-	b=dB4L0ipoMWi/9P9gdH+sRGHzloYhHpWzZYnzLZrmVS2SLXogjaDorxWuQrPOpY4AK
-	 +Z64dIuMpbTCkO8Xh4p5a2KL4jAfnrgvCdumMsVhIadCIH6h8BEN6l1LHKvxZhkq00
-	 wi53JxQ4IfoTmX/t9OkaR63FXCMkbZO0qB4u0/8zGeylGMkRSRlRsvhUeJn7K4L3xZ
-	 YZ+SmnobJ4uiS8n/wIHTLBxBIFzx8s9MoTJo6y25LKEAtcdTOISEJJnJqKOM2yWEa2
-	 TfCBBM/QGEDddadKXTilMKUayEpNgYmr2wWSlxgvwsZxEnrL2PKGDU7tI9aJ315EhQ
-	 gTdFAwQ65DiNQ==
-Date: Tue, 11 Feb 2025 09:45:00 +0100 (CET)
-From: Jiri Kosina <jikos@kernel.org>
-To: =?ISO-8859-2?Q?Tomasz_Paku=B3a?= <tomasz.pakula.oficjalny@gmail.com>
-cc: bentiss@kernel.org, anssi.hannula@gmail.com, oleg@makarenk.ooo, 
-    linux-input@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v2 1/6] MAINTAINERS: Update hid-universal-pidff entry
-In-Reply-To: <20250210151754.368530-2-tomasz.pakula.oficjalny@gmail.com>
-Message-ID: <022nps4o-spso-424p-o5nr-4rn89rnnr852@xreary.bet>
-References: <20250210151754.368530-1-tomasz.pakula.oficjalny@gmail.com> <20250210151754.368530-2-tomasz.pakula.oficjalny@gmail.com>
+	s=k20201202; t=1739265305;
+	bh=An89c79r31a50DrgLf1D/6uI8WBtaUJL0XPWqEiJctM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=rw7+3uKoBRaccGC7H8ldVdpW3GrQ7N81TKdVc72sbWLgebuKXx/X+kpkV8Jcv93DS
+	 v1G0/s9mChGLx9OYmhtiJYOnC1S69PcdpcXDiW7hEoKHhbAF+EbMnhTA+1Ntn2NUFx
+	 Kj7hB6JkIvYT/CSTKnUikFFYC4NJ81dFYV2FWHwBR2/jTpTegQRyYGlEV2aEMsk7S2
+	 Fcj/fIfW64WsreKlxMKx6rm0s6cVV5tyoO8QBe71IQJazJ1WLj0bwvJe53zppCFTHw
+	 WVbXkAG1ESZRt45rrqPBc6vjqVQ06FE3ZrFPlwCSR1nvWaqZIb8rOjktg4vpISl9wx
+	 +PJeC9yutFqCA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1thmMK-0000000070T-3cq6;
+	Tue, 11 Feb 2025 10:15:12 +0100
+Date: Tue, 11 Feb 2025 10:15:12 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Tony Chung <tony467913@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v2 0/6] usb: serial: mos7840: Fix coding style warnings
+Message-ID: <Z6sVIIzaRP_PhzpL@hovoldconsulting.com>
+References: <202410250141.AEkzzW60-lkp@intel.com>
+ <20241025061711.198933-1-tony467913@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241025061711.198933-1-tony467913@gmail.com>
 
-On Mon, 10 Feb 2025, Tomasz Paku=C5=82a wrote:
+Hi Tony,
 
-> Add Makarenko Oleg as co-maintainer
->=20
-> Signed-off-by: Tomasz Paku=C5=82a <tomasz.pakula.oficjalny@gmail.com>
+and sorry about the late feedback on this one and your other series for
+this driver.
 
-Oleg, could you please provide your Acked-by: for this one? Thanks,
+On Fri, Oct 25, 2024 at 02:17:06PM +0800, Tony Chung wrote:
+> This patch series fix all the coding style warnings shown by checkpatch.pl
 
---=20
-Jiri Kosina
-SUSE Labs
+Checkpatch should generally not be run on code that is already in the
+tree. It's meant as a tool to be run on patches before submitting them
+and you always have to use your own judgement whether its output makes
+sense or not.
 
+That said, since you are actually doing real work on this driver and
+there certainly are some real style issues with this driver, I'll review
+these.
+
+> I have tested Patch v2 and it has no driver build warnings.
+> Please have a look and let me know if something is wrong. Thanks.
+> 
+> Tony Chung (6):
+>   driver: usb: serial: mos7840: fix warnings "no space before tabs"
+>   drivers: usb: serial: mos7840: Fix Block comments coding style
+>     warnings
+>   drivers: usb: serial: mos7840: fix coding style warnings
+>   drivers: usb: serial: mos7840: using '__func__' to replace function
+>     name in dbg message
+>   drivers: usb: serial: mos7840: replace 'unsigned' w/ 'unsigned int'
+>   drivers: usb: serial: mos7840: fix the quoted string split across
+>     lines
+
+First, please try to use the established patch prefix for the drivers
+you are changing (e.g. as can often be determined by running git log
+--oneline on the files in question). In this case
+
+	USB: serial: mos7840: ...
+
+Second, please rephrase the patch summaries and commit messages so that
+they don't give the impression that you're doing this just to make
+checkpatch happy. Instead say, for example:
+
+	Add newlines after declarations to improve readability.
+
+as that is a valid motivation for doing clean ups like this as part of
+other work on the driver (and try to rephrase as "clean up" instead of
+"fix" as I think the latter should be reserved for bug fixes).
+
+Johan
 
