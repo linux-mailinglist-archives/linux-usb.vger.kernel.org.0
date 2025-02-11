@@ -1,323 +1,193 @@
-Return-Path: <linux-usb+bounces-20474-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20475-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEE47A30C7A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 14:08:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAF9CA30D4C
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 14:50:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D749164483
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 13:08:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D159188307D
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 13:50:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62DF5215793;
-	Tue, 11 Feb 2025 13:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9398724BD0A;
+	Tue, 11 Feb 2025 13:50:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MkYLkKb9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hbNBjw8C"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB426206F02;
-	Tue, 11 Feb 2025 13:08:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9590F26BD9A;
+	Tue, 11 Feb 2025 13:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739279284; cv=none; b=D4zHX5oEE0zUluuJ6XvYXu327Zq8lZAGaJ7DzoobfBvPHRch91Zzxe2H3Po9N/Q6P5Zwuq4Iaf+9pLyj/har9YABI3AhMKpkYnISdc1rRdc1P7F11RkTXrMlo2Bjb5c6m+DptFmaOJVFncV5Z1qVxP5TwwdUULCqZEDewWSvp1Y=
+	t=1739281823; cv=none; b=kQcO4HqsPoH+XX2FhDgG2a4aGxu8QDJlJQfKpHH392lLmnAhBAJ2TsH61B0xykkonISXmAf0EkM60mixbA28CnBJfwTdQbMAD5S3gjgqr91iU+Laz2YKoln0kozdbVZKaKMjsM/DO/8GrPqG3OdnAPnf6QneH/D2bogd53GSuA8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739279284; c=relaxed/simple;
-	bh=KPYi1A3O/sh8s8numOmFmpRAC1Ro6cWCm+dP4Ba7dvA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Zv5XphQ7BJDECjsKMaVs56bKEmkGPXJ24Aj3+1Jzpd6L7Sq02RrDsa0fiD7qvpsimLk9WrJV16geY7VkaeHP4UYAIVx4lCd9MFkxgDG0/7fJtVnROUi2ijDUXZ3FPjx1bUeNYiDCza2kcJ5N1a3kYcN6veMvTATeSSRGyx/mvP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MkYLkKb9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 327B7C4CEDD;
-	Tue, 11 Feb 2025 13:08:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739279283;
-	bh=KPYi1A3O/sh8s8numOmFmpRAC1Ro6cWCm+dP4Ba7dvA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MkYLkKb9BZZyO58GPRBkBIpVW0ejN2pewkAe1+uEtw/P/+EY0zVXKxyHCLeMdGgU+
-	 VxyKqGlphdSDmfkmMDO424aNvPz+7oLe3lbfw1D7wO/EzEFPg3nieywXdcQkdO9WiU
-	 ira2IcVN61+g8PeNMc1T0D9QlH6xDcb9N9E//6q+X79Lj1XZg1FLSDil+sV0c/6hOC
-	 VqDlHUI4Cy2wCSQWSFQ5MllQiAe6MoaD6uW5+1DLluWkuRSXtttVh9PqthVccDwpYk
-	 YzSYpMuUnuXkq+V5Za4ZXjeawpW3f1FkmjApe9++SSE0JR5190yDne0TWkdIL1VWDk
-	 Pom+JlQ/MyvBg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1thpzm-000000006n6-0Qvz;
-	Tue, 11 Feb 2025 14:08:10 +0100
-Date: Tue, 11 Feb 2025 14:08:10 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Tony Chung <tony467913@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/3] driver: usb: serial: mos7840: add more baudrate
- options
-Message-ID: <Z6tLuiw7eK5s4Agq@hovoldconsulting.com>
-References: <20241024100901.69883-1-tony467913@gmail.com>
- <20241024100901.69883-4-tony467913@gmail.com>
+	s=arc-20240116; t=1739281823; c=relaxed/simple;
+	bh=pKkt4VSoLZl2sGaYzr79kkI7zvh+CB5ECNtiwL9okKk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qNfi6sphP8vWcHgY1eCiVdB3S3L7xZco/aDOhgsYImaDGa1I5xZ2B/e1TvTNth3BVpD/+h+CBek13NhCHS1ow9aiB1FbW3AAc4peUJgVnnMiZYYJSNEI8qCfsgk0Svpu1/0Ks1rsQ/i17wi/WVCOsWlyDQpkL0FcoCPxzU9t9QA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hbNBjw8C; arc=none smtp.client-ip=209.85.160.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-2addd5053c0so3191624fac.1;
+        Tue, 11 Feb 2025 05:50:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739281820; x=1739886620; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M3JAPeXHn1qsDNW866P/qiGLMSZ4lYzkFddERH0fa2A=;
+        b=hbNBjw8CPSV3yF+e8R+ru0cB3XGOy40MX9TvdwAGel+WnMewuY+5o0r/hiGbRhFdjL
+         k67hB+laA1D/HQK7NZas4JfLj8wR7D6U9wgWxRVXCIxISDo5WXJbi0+mledm61UxYxq2
+         KoUcpueS0Z2DjikxaehUtIEsj6oF/gxpAQlJvpsMbOtCS+zVc8agK6987uhB2GgDiMhq
+         EvIDmZQEzPmmJxUwBWwmaV12nvq/N1iYaVfrDwBs3Fc54VgWSrBL8I//4ZoVO+GJ1CnR
+         NUFW/0HPevXF/uq6ljKSYyUb5krA21FD2Ddf4DofpKV0uFbtgL1tHGYiN0M3ZuV1uGEr
+         o9uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739281820; x=1739886620;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M3JAPeXHn1qsDNW866P/qiGLMSZ4lYzkFddERH0fa2A=;
+        b=AM8JhAwAFjOldh4ArADteFJzxmfpsn0WsUSr74+MMZ3o5vxjRVONMMSN4HEmFeKSX6
+         urHhWSgTkiOGpV7mihYWNdkBTH2nUsZezTs1exxlBnvS6jgfUCuykeeU2xaIEyYf58/P
+         JkiODLA+mHNu3Pnh7sVLrAuaX4tWY1eQV45zgY5wWgxiegwrPZ9jlykh9dJVtmJxjFs+
+         /Rau+mcJo8zx3BY09bb38XPS2OmGae4W74W6k++NZ6FwD3q30zFcXkm/ux8npAYSECZf
+         8jKgKCDCcH9efsX1tKBKqx5myvrKmAsVW+p7R04u6gs3BCACvKfyRsoYGwtk0yasicnK
+         R9ug==
+X-Forwarded-Encrypted: i=1; AJvYcCU1dcn0jFlfdrznBYOGSrkb4eIBy7p1zXpw/y+Qda1N/VtXkp/4LZ2CnIkrv5NxNRsI6o5JaX4/ZpqS@vger.kernel.org, AJvYcCV925+/YuOdJzupTyHECzdy5KphYzytghlqVVFjMOSKrQEKkRKztR+RIco3966YpiMvtEVmXc3T@vger.kernel.org, AJvYcCVlEpHUZRSfUEKWaFIMo5Ah/A1VY7dOsJOLD/YSa3Whsi5u9yrkUT+Xtt6/WlX5h6u3xefcla5TOaq7jG8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yynl2PWFzEbEUmup8BawIbRf+xiNMx0f2opIs6dfo3bLJBl71wf
+	72bSTIVdxLbjkSAnkBNKNa6y4eyYWoVXRaEmq6Fwa8Q1u9gES9NdD65x33r7cW4EEDSfEg97KEf
+	CyZuGHBMmqmdzus82lHiNaStPk3c=
+X-Gm-Gg: ASbGncv6DLkAoswLPZKQkwM6J2l3QjAOVK/1TBitbzO2IGVsszLJkaZmjrlXvpMKrRW
+	k2HtFfSf6yxg22WtY9cIQ1oAXbpbM7uCmKhC+yExf+UQeX6/YbPIG/VxObYH2zD3epE42vUf9
+X-Google-Smtp-Source: AGHT+IFbEj4xWuZDz0dziKnxzJesY6Ax7CfGY3vRgXsgo08AmUlxMqbQTwRk7p9bqtEs1i5O9AuAKm4mN/H/W957aNk=
+X-Received: by 2002:a05:6870:9106:b0:29e:3eff:dea with SMTP id
+ 586e51a60fabf-2b8b570c2dbmr2200377fac.8.1739281820000; Tue, 11 Feb 2025
+ 05:50:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241024100901.69883-4-tony467913@gmail.com>
+References: <20250209071752.69530-1-joswang1221@gmail.com> <5d504702-270f-4227-afd6-a41814c905e3@google.com>
+ <CAPTae5+Z3UcDcdFcn=Ref5aQSUEEyz-yVbRqoPJ1LogP4MzJdg@mail.gmail.com>
+In-Reply-To: <CAPTae5+Z3UcDcdFcn=Ref5aQSUEEyz-yVbRqoPJ1LogP4MzJdg@mail.gmail.com>
+From: Jos Wang <joswang1221@gmail.com>
+Date: Tue, 11 Feb 2025 21:50:09 +0800
+X-Gm-Features: AWEUYZkZT10sA2YI3GJlef0qf7-Q5jW60r6XuARrBv_ir_XPwSKMTdiVWOOQGQc
+Message-ID: <CAMtoTm0bchocN6XrQBRdYuye7=4CoFbU-6wMpRAXR4OU77XkwQ@mail.gmail.com>
+Subject: Re: [PATCH 1/1] usb: typec: tcpm: PSSourceOffTimer timeout in PR_Swap
+ enters ERROR_RECOVERY
+To: Badhri Jagan Sridharan <badhri@google.com>
+Cc: Amit Sunil Dhamne <amitsd@google.com>, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Oct 24, 2024 at 06:09:05PM +0800, Tony Chung wrote:
-> Adds more baud rate options using 96M/30M/External clock sources.
-> To use these clock sources,
-> set through Clk_Select_Reg1 and Clk_Select_Reg2.
-> 
-> Signed-off-by: Tony Chung <tony467913@gmail.com>
-> ---
->  drivers/usb/serial/mos7840.c | 156 ++++++++++++++++++++++++++++++++++-
->  1 file changed, 155 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
-> index acc16737b..70ee4a638 100644
-> --- a/drivers/usb/serial/mos7840.c
-> +++ b/drivers/usb/serial/mos7840.c
-> @@ -1169,6 +1169,37 @@ static int mos7840_calc_baud_rate_divisor(struct usb_serial_port *port,
->  		*divisor = 0x01;		// DLM=0, DLL=0x01
->  		*clk_sel_val = 0x60;	// clock source=24M
->  
-> +	/* below are using 96M or 30M clock source
-> +	 * will determine the clock source later
-> +	 * in function mos7840_send_cmd_write_baud_rate
-> +	 */
+On Tue, Feb 11, 2025 at 7:51=E2=80=AFAM Badhri Jagan Sridharan
+<badhri@google.com> wrote:
+>
+> On Mon, Feb 10, 2025 at 3:02=E2=80=AFPM Amit Sunil Dhamne <amitsd@google.=
+com> wrote:
+> >
+> >
+> > On 2/8/25 11:17 PM, joswang wrote:
+> > > From: Jos Wang <joswang@lenovo.com>
+> nit: From https://elixir.bootlin.com/linux/v6.13.1/source/Documentation/p=
+rocess/submitting-patches.rst#L619
+>
+>   - A ``from`` line specifying the patch author, followed by an empty
+>     line (only needed if the person sending the patch is not the author).
+>
+> Given that you are the author, wondering why do you have an explicit "Fro=
+m:" ?
+>
+Hello, thank you for your help in reviewing the code.
+My company email address is joswang@lenovo.com, and my personal gmail
+email address is joswang1221@gmail.com, which is used to send patches.
+Do you suggest deleting the "From:" line?
+I am considering deleting the "From:" line, whether the author and
+Signed-off-by in the patch need to be changed to
+"joswang1221@gmail.com".
+> > >
+> > > As PD2.0 spec ("6.5.6.2 PSSourceOffTimer")=EF=BC=8Cthe PSSourceOffTim=
+er is
+>
+> nit: https://elixir.bootlin.com/linux/v6.13.1/source/Documentation/proces=
+s/submitting-patches.rst#L619
+>
+>  - The body of the explanation, line wrapped at 75 columns, which will
+>     be copied to the permanent changelog to describe this patch.
+>
+"As PD2.0 spec ("6.5.6.2 PSSourceOffTimer")=EF=BC=8Cthe PSSourceOffTimer is=
+"
+This sentence doesn=E2=80=99t exceed 75 chars, right?
+>
+> > > used by the Policy Engine in Dual-Role Power device that is currently
+> > > acting as a Sink to timeout on a PS_RDY Message during a Power Role
+> > > Swap sequence. This condition leads to a Hard Reset for USB Type-A an=
+d
+> > > Type-B Plugs and Error Recovery for Type-C plugs and return to USB
+> > > Default Operation.
+> > >
+> > > Therefore, after PSSourceOffTimer timeout, the tcpm state machine sho=
+uld
+> > > switch from PR_SWAP_SNK_SRC_SINK_OFF to ERROR_RECOVERY. This can also=
+ solve
+> > > the test items in the USB power delivery compliance test:
+> > > TEST.PD.PROT.SNK.12 PR_Swap =E2=80=93 PSSourceOffTimer Timeout
+>
+> Thanks for fixing this !
+>
+> > >
+> > > [1] https://usb.org/document-library/usb-power-delivery-compliance-te=
+st-specification-0/USB_PD3_CTS_Q4_2025_OR.zip
+> > >
+> > > Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)"=
+)
+> > > Cc: stable@vger.kernel.org
+> > >
+> nit: Empty line not needed here.
+>
+Modifications for the next version
 
-Block comment style, also try to follow style of driver and capitalise
-"Below".
-
-That said, this one should not be needed after you add proper
-abstractions for this. For example, instead of returning a raw
-clk_sel_val you return an enum which you handle in the caller.
-
-> +	} else if (baudRate == 6000000) {
-> +		*divisor = 0x01;		// DLM=0, DLL=0x01
-> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-> +	} else if (baudRate == 2000000) {
-> +		*divisor = 0x03;		// DLM=0, DLL=0x03
-> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-
-The above looks useful.
-
-> +	} else if (baudRate == 403200) {
-> +		*divisor = 0x0f;		// DLM=0, DLL=0x0f
-> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-> +	} else if (baudRate == 225000) {
-> +		*divisor = 0x1b;		// DLM=0, DLL=0x1b
-> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-> +	} else if (baudRate == 153600) {
-> +		*divisor = 0x27;		// DLM=0, DLL=0x27
-> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
-
-But why would anyone use these?
-
-> +	} else if (baudRate == 10000) {
-> +		*divisor = 0xbb;		// DLM=0, DLL=0xbb
-> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 30M
-> +	} else if (baudRate == 125000) {
-> +		*divisor = 0x0f;		// DLM=0, DLL=0x0f
-> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 30M
-> +	} else if (baudRate == 625000) {
-> +		*divisor = 0x03;		// DLM=0, DLL=0x03
-> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 30M
-
-Or these?
-
-In any case, these would probably also need to go in a lookup table.
-
-> +
-> +
->  	} else if (baudRate <= 115200) {
->  		*divisor = 115200 / baudRate;
->  		*clk_sel_val = 0x0;
-> @@ -1246,11 +1277,134 @@ static int mos7840_send_cmd_write_baud_rate(struct moschip_port *mos7840_port,
->  
->  	}
->  
-> -	if (1) {		/* baudRate <= 115200) */
-> +	if (1) {
-
-Probably a good time to get rid of this in a preparatory patch to reduce
-the indentation.
-
->  		clk_sel_val = 0x0;
->  		Data = 0x0;
->  		status = mos7840_calc_baud_rate_divisor(port, baudRate, &divisor,
->  						   &clk_sel_val);
-> +		if (status < 0) {
-> +			dev_dbg(&port->dev, "%s failed in set_serial_baud\n", __func__);
-> +			return -1;
-> +		}
-
-Ok, here you add the error handling. But as I mentioned it's better to
-fix the caller so that it does not pass in a speed that too high for the
-driver. Just keep the old rate and update the termios to reflect that
-that requested rate was rejected.
-
-> +
-> +		/* Write clk_sel_val to SP_Reg or Clk_Select_Reg*/
-
-Space before */
-
-> +		// check clk_sel_val before setting the clk_sel_val
-
-No c99 comments, please.
-
-> +		if (clk_sel_val == 0x80) {
-> +		// clk_sel_val is DUMMY value -> Write the corresponding value to Clk_Select_Reg
-
-Odd indentation.
-
-> +			// 0x01:30M, 0x02:96M, 0x05:External Clock
-
-Ok, so here's the comment I asked for earlier. That should probably go
-above the clock register defines, and/or with defines for these
-constants added as well.
-
-> +			if (baudRate == 125000 || baudRate == 625000 || baudRate == 10000) {
-> +				clk_sel_val = 0x01;
-> +			} else if (baudRate == 153600 || baudRate == 225000 || baudRate == 403200 ||
-> +					baudRate == 2000000 || baudRate == 6000000) {
-> +				clk_sel_val = 0x02;
-> +			} else {
-> +				clk_sel_val = 0x05; // externel clk for custom case.
-> +			}
-
-This needs to be cleaned up using a lookup table and a clk_sel enum.
-
-If there are product that would benefit from using the external clock
-input, this would need to be handled on a per-device basis so that we
-know its frequency.
-
-> +			// needs to set clock source through
-> +			// Clk_Select_Reg1(offset 0x13) & Clk_Select_Reg2(offset 0x14)
-> +			// Clk_Select_Reg1 for port1,2		Clk_Select_Reg2 for port3,4
-> +			if (mos7840_port->port_num <= 2) {
-> +				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG1, &Data);
-> +				if (status < 0) {
-> +					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
-
-Looks like the driver is currently using dev_dbg() for errors, but this
-should most likely be dev_err() throughout. No need to say in which
-function it fails, just 
-	
-	failed to read clock select register: %d\n
-
-or similar should do.
-
-> +					return -1;
-> +				}
-> +				if (mos7840_port->port_num == 1) {
-> +					Data = (Data & 0xf8) | clk_sel_val;
-> +					status =
-> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
-> +				} else if (mos7840_port->port_num == 2) {
-> +					Data = (Data & 0xc7) | (clk_sel_val<<3);
-
-Spaces around binary operator throughout.
-
-> +					status =
-> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
-> +				}
-> +				if (status < 0) {
-> +					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
-> +					return -1;
-> +				}
-> +			} else if (mos7840_port->port_num <= 4) {
-> +				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG2, &Data);
-> +				if (status < 0) {
-> +					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
-> +					return -1;
-> +				}
-> +				if (mos7840_port->port_num == 3) {
-> +					Data = (Data & 0xf8) | clk_sel_val;
-> +					status =
-> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
-> +				} else if (mos7840_port->port_num == 4) {
-> +					Data = (Data & 0xc7) | (clk_sel_val<<3);
-> +					status =
-> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
-> +				}
-> +				if (status < 0) {
-> +					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
-> +					return -1;
-> +				}
-> +			}
-
-The above needs to be cleaned up and abstracted better too. It's hardly
-readable currently and the patterns looks too similar to be repeated
-like this (i.e. a helper function may be the right choice).
-
-> +		} else {
-> +		// clk_sel_val is not DUMMY value -> Write the corresponding value to SP_Reg
-> +
-> +			/* First, needs to write default value to
-> +			 * Clk_Select_Reg1(offset 0x13) & Clk_Select_Reg2(offset 0x14)
-> +			 * Clk_Select_Reg1 for port1,2		Clk_Select_Reg2 for port3,4
-> +			 */
-> +			if (mos7840_port->port_num <= 2) {
-> +				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG1, &Data);
-> +				if (status < 0) {
-> +					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
-> +					return -1;
-> +				}
-> +				if (mos7840_port->port_num == 1) {
-> +					Data = (Data & 0xf8) | 0x00;
-> +					status =
-> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
-> +				} else if (mos7840_port->port_num == 2) {
-> +					Data = (Data & 0xc7) | (0x00<<3);
-> +					status =
-> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
-> +				}
-> +				if (status < 0) {
-> +					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
-> +					return -1;
-> +				}
-> +			} else if (mos7840_port->port_num <= 4) {
-> +				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG2, &Data);
-> +				if (status < 0) {
-> +					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
-> +					return -1;
-> +				}
-> +				if (mos7840_port->port_num == 3) {
-> +					Data = (Data & 0xf8) | 0x00;
-> +					status =
-> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
-> +				} else if (mos7840_port->port_num == 4) {
-> +					Data = (Data & 0xc7) | (0x00<<3);
-> +					status =
-> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
-> +				}
-> +				if (status < 0) {
-> +					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
-> +					return -1;
-> +				}
-> +			}
-
-This is the same code as above, just writing the default value. This
-obviously needs to be refactored.
-
-> +			// select clock source by writing clk_sel_val to SPx_Reg
-> +			status = mos7840_get_reg_sync(port, mos7840_port->SpRegOffset,
-> +									 &Data);
-> +			if (status < 0) {
-> +				dev_dbg(&port->dev, "reading spreg failed in set_serial_baud\n");
-> +				return -1;
-> +			}
-> +			Data = (Data & 0x8f) | clk_sel_val;
-> +			status = mos7840_set_reg_sync(port, mos7840_port->SpRegOffset,
-> +									Data);
-> +			if (status < 0) {
-> +				dev_dbg(&port->dev, "Writing spreg failed in set_serial_baud\n");
-> +				return -1;
-> +			}
-> +		}
-
-Johan
+> > > Signed-off-by: Jos Wang <joswang@lenovo.com>
+> >
+> > Tested-by: Amit Sunil Dhamne <amitsd@google.com>
+>
+>
+> >
+> >
+> > Regards,
+> >
+> > Amit
+> >
+> > > ---
+> > >   drivers/usb/typec/tcpm/tcpm.c | 3 +--
+> > >   1 file changed, 1 insertion(+), 2 deletions(-)
+> > >
+> > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/t=
+cpm.c
+> > > index 47be450d2be3..6bf1a22c785a 100644
+> > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > @@ -5591,8 +5591,7 @@ static void run_state_machine(struct tcpm_port =
+*port)
+> > >               tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_=
+MODE_USB,
+> > >                                                      port->pps_data.a=
+ctive, 0);
+> > >               tcpm_set_charge(port, false);
+> > > -             tcpm_set_state(port, hard_reset_state(port),
+> > > -                            port->timings.ps_src_off_time);
+> > > +             tcpm_set_state(port, ERROR_RECOVERY, port->timings.ps_s=
+rc_off_time);
+> > >               break;
+> > >       case PR_SWAP_SNK_SRC_SOURCE_ON:
+> > >               tcpm_enable_auto_vbus_discharge(port, true);
 
