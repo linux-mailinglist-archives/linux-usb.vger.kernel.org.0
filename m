@@ -1,70 +1,70 @@
-Return-Path: <linux-usb+bounces-20511-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20514-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA490A31B07
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 02:10:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 14736A31B14
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 02:13:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 812AD3A8D63
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 01:10:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E06AE166134
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 01:13:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83A1838384;
-	Wed, 12 Feb 2025 01:10:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D08B53D3B8;
+	Wed, 12 Feb 2025 01:13:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="A+u//1L9"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="RTiG0Mb5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DAC0282ED
-	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 01:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90217FBF6
+	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 01:13:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739322609; cv=none; b=BRw/A4Q64nVQWHUmdr7WbijiWsL1ONy9U+MvQaweA7Vw/FqEXoXVTKGzT32QlY7hQrNxWlW9aSajInNEs//SumwTVHev9Y6xqSumyzzEFtBRFlRNoGmCqlMtCCdRhl7MS71ulYv85EXbe4NjGWoz6RXnHVtexnD9SUcbjsXHsC4=
+	t=1739322788; cv=none; b=LiYu4fDOrYQB7EZ9k+BwGovNXbhl2r+0dBLc277plDCAvntAFEiqlybT+kYYkkL38Sxug7Si11Mw0lefPOKAiwIOtYymnbHBr7R1whUEOtz4w/NeXns4V+EFKv3Cd0AkQ1GagFu2ny3wxkWx8jInJV/EKc8H7pN3KmdDrMFI0b0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739322609; c=relaxed/simple;
-	bh=0NC9eQg1/ezpsGypnlF/+A5luIQO0j9naVw0aEb0Lrc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type:
-	 References; b=IucjTyJXZLcFIHWl+6NRomw66N4s/WWFNwULgti9d/vrLJ9vYKGnWKCRKRu8q8LLpwzOSapcNkDkLXdmBHPRarnVJbdCtFlndAgRvIFjo2pu5uQJ4WTwrIGAL6Xav+Ajjspo1O1qXeqeqWL4D8862GzPXIeHSoYtIzR4rXzm7B0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=A+u//1L9; arc=none smtp.client-ip=203.254.224.34
+	s=arc-20240116; t=1739322788; c=relaxed/simple;
+	bh=dficntmdLBv88Uvc4N5XgHBbu1lCoeFFI/9KziADYdk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:MIME-Version:
+	 Content-Type:References; b=dl7hkkQRfA5isl5TXATuP8Gya5Ts6rMKtZdhVnUXsXyrQ2E8u0NqOh+krVnnpTw0jXUTil/i93LsXWb6IhAsc7kHIlofDD5q//M9USU7QGggpNxD+ZwtLqA3Hrxq+OhwtQ1mp/uzbhtk3powW1umFlkOmsmiU/O/INTRe9bcQ70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=RTiG0Mb5; arc=none smtp.client-ip=203.254.224.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from epcas5p3.samsung.com (unknown [182.195.41.41])
-	by mailout4.samsung.com (KnoxPortal) with ESMTP id 20250212011003epoutp0482af540c6a13f17af775fe8f064b5686~jULE3qjRs1678816788epoutp04l
-	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 01:10:03 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20250212011003epoutp0482af540c6a13f17af775fe8f064b5686~jULE3qjRs1678816788epoutp04l
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20250212011303epoutp0129cdbb371fbaf2a66ddc1c5c84d2fbeb~jUNs4yeGn0333803338epoutp01Q
+	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 01:13:03 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20250212011303epoutp0129cdbb371fbaf2a66ddc1c5c84d2fbeb~jUNs4yeGn0333803338epoutp01Q
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1739322603;
-	bh=i/T3MssO3zuJsAFBm0D9MFgbnCcZlsizNue9wNsfWjc=;
-	h=From:To:Cc:Subject:Date:References:From;
-	b=A+u//1L9BxjNUjMX8tzI4+62T6U5cIpfJm3DNBNLH2vX07J4MSbfMHiMKHLdicTwB
-	 uknE8HEjHv7FZ37NScCsrExLIU8r7LoaOUAUsWjgSC/g1Ie7BWf25zqiRJV6SRjJkt
-	 9IHsUJzfkvyMixIe+9P9DIRxqVrE4zkfzys6Sb9Y=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+	s=mail20170921; t=1739322783;
+	bh=3HLbLMPJmzSucOlsqmhUhAS8S4GVvP2o0xrz+vP8sis=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=RTiG0Mb5p2MtZr1TdjddPxTC2KxaBgkE1rOnXtf8UcANI8/Q2AEfRi6/oxPoyN7bd
+	 6aevd8iAeObxqRdCWzV2mBZxcQyQlMpSypfl/soy+OrQZry9oKwoIt7hr0yrNZBk46
+	 4qBlomJI4C2SzKxtzNJfbjDjkUHgdk7o8OCzlCeE=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
 	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
-	20250212011002epcas5p223e650e314b88574d9ec7082861b82d5~jULEe5ERB0927509275epcas5p2a;
-	Wed, 12 Feb 2025 01:10:02 +0000 (GMT)
-Received: from epcpadp1new (unknown [182.195.40.141]) by
-	epsnrtp3.localdomain (Postfix) with ESMTP id 4Yt0bZ530lz4x9Q8; Wed, 12 Feb
-	2025 01:10:02 +0000 (GMT)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	20250212011302epcas5p28020604cdb00c19235513d3ef565a4ea~jUNsRLknA0371103711epcas5p2_;
+	Wed, 12 Feb 2025 01:13:02 +0000 (GMT)
+Received: from epcpadp2new (unknown [182.195.40.142]) by
+	epsnrtp4.localdomain (Postfix) with ESMTP id 4Yt0g26By2z4x9Q5; Wed, 12 Feb
+	2025 01:13:02 +0000 (GMT)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
 	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
-	20250211115704epcas5p4140a490572fb9c4ac71a82abcb61f291~jJWuFl15F0222102221epcas5p4N;
-	Tue, 11 Feb 2025 11:57:04 +0000 (GMT)
-Received: from epsmgms1p2new.samsung.com (unknown [182.195.42.42]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250211115704epsmtrp1f8ab2434ccdb302167d3c97f242767ad~jJWuEpWQm1464114641epsmtrp12;
-	Tue, 11 Feb 2025 11:57:04 +0000 (GMT)
-X-AuditID: b6c32a2a-bca3124000004a05-88-67ab3b106bad
+	20250211115711epcas5p46b72b2670571d636c229d80378284ed9~jJW0YLaLe0222102221epcas5p4T;
+	Tue, 11 Feb 2025 11:57:11 +0000 (GMT)
+Received: from epsmgmcp1.samsung.com (unknown [182.195.42.82]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20250211115711epsmtrp258739bba45f10fb2728bb34917757df9~jJW0XQ6h60217602176epsmtrp2j;
+	Tue, 11 Feb 2025 11:57:11 +0000 (GMT)
+X-AuditID: b6c32a52-1f7ff700000083ab-40-67ab3b17898d
 Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-	epsmgms1p2new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	6B.96.18949.01B3BA76; Tue, 11 Feb 2025 20:57:04 +0900 (KST)
+	epsmgmcp1.samsung.com (Symantec Messaging Gateway) with SMTP id
+	58.85.33707.71B3BA76; Tue, 11 Feb 2025 20:57:11 +0900 (KST)
 Received: from INBRO002811.samsungds.net (unknown [107.122.5.126]) by
 	epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250211115701epsmtip12d20d2ba4e1a9d9722615664c9c3f98c~jJWrFIDCe2052820528epsmtip1i;
-	Tue, 11 Feb 2025 11:57:01 +0000 (GMT)
+	20250211115708epsmtip1711c2c42544aa172628f5a287620cdbc~jJWxnQNma1948519485epsmtip1U;
+	Tue, 11 Feb 2025 11:57:08 +0000 (GMT)
 From: Selvarasu Ganesan <selvarasu.g@samsung.com>
 To: mathias.nyman@intel.com, gregkh@linuxfoundation.org,
 	WeitaoWang-oc@zhaoxin.com, Thinh.Nguyen@synopsys.com,
@@ -73,11 +73,13 @@ Cc: jh0801.jung@samsung.com, dh10.jung@samsung.com, naushad@samsung.com,
 	akash.m5@samsung.com, h10.kim@samsung.com, eomji.oh@samsung.com,
 	alim.akhtar@samsung.com, thiagu.r@samsung.com, muhammed.ali@samsung.com,
 	pritam.sutar@samsung.com, cpgs@samsung.com, Selvarasu Ganesan
-	<selvarasu.g@samsung.com>
-Subject: [PATCH 0/2] Fix unassigned variables in xhci driver
-Date: Tue, 11 Feb 2025 17:26:28 +0530
-Message-ID: <1296674576.21739322602698.JavaMail.epsvc@epcpadp1new>
+	<selvarasu.g@samsung.com>, stable@vger.kernel.org
+Subject: [PATCH 1/2] usb: xhci: Fix unassigned variable 'tmp_minor_revision'
+ in xhci_add_in_port()
+Date: Tue, 11 Feb 2025 17:26:29 +0530
+Message-ID: <1296674576.21739322782868.JavaMail.epsvc@epcpadp2new>
 X-Mailer: git-send-email 2.46.0.windows.1
+In-Reply-To: <20250211115635.757-1-selvarasu.g@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -85,46 +87,54 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJLMWRmVeSWpSXmKPExsWy7bCSnK6A9ep0gz0rNS3eXF3FavFg3jY2
-	i5eHNC3uLJjGZHFq+UImi+bF69ks/t6+yGpx9+EPFovLu+awWSxa1sps0bxpCqvF+RddrBaf
-	jv5ntXh2bwWbxZHlH5ksVjQDZVctOMBu8ejnXCYHIY/Fe14yeeyfu4bdo2/LKkaPLfs/M3p8
-	3iTn8evWLZYAtigum5TUnMyy1CJ9uwSujBnts9gK3rNUTD7xha2BsYOli5GTQ0LAROLMnsWM
-	ILaQwG5GiZU73CHi0hKvZ3UxQtjCEiv/PWfvYuQCqvnKKDFzZSOQw8HBJmAo8eyEDUhcRGAD
-	o8TVM7NZQRqYBQ4wScy/og5iCwvYSExYso0NxGYRUJXY9HQZWA2vgJXE45M/oRZoSqzdu4cJ
-	Ii4ocXLmExaIOfISzVtnM09g5JuFJDULSWoBI9MqRsnUguLc9NxiwwKjvNRyveLE3OLSvHS9
-	5PzcTYzg2NDS2sG4Z9UHvUOMTByMhxglOJiVRHhNFq5IF+JNSaysSi3Kjy8qzUktPsQozcGi
-	JM777XVvipBAemJJanZqakFqEUyWiYNTqoFp3l4n2Qd7DOYsaYxp3ZuUJ7OiefEDzhqj6pzU
-	gyd9Axbwt1U+nPH6AYuBcu6mmojJ7nbTt1apNW3ZL9tl/f+06d/5/mXpSWvY2+s2Kz3ss9sm
-	Gyt9hK3baued/useedmbs1WmfDvyylBN3+HLvhzzkGWsFveS6jyrnCy1d1+68OXj8yPBmwUz
-	jtVNnpNV9+PkOefdwfkXPy+9Ee3lq/D+8cQbxz51mM9pc5rEVRiVahu1Xi3m1O2zyw51mb53
-	WBldWDf94h2hub9LtthWhu2z3DLzSJPcky7WG62vNFvqdsbuW/34Ud6GMG2JouDPCqxXT/8s
-	PaeQkZJ2/tb99sOlpicl5fpfirSKFVZ+dH6txFKckWioxVxUnAgAgqe++fwCAAA=
-X-CMS-MailID: 20250211115704epcas5p4140a490572fb9c4ac71a82abcb61f291
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmphkeLIzCtJLcpLzFFi42LZdlhJTlfcenW6wdnNchZvrq5itXgwbxub
+	xctDmhZ3Fkxjsji1fCGTRfPi9WwWf29fZLW4+/AHi8XlXXPYLBYta2W2aN40hdXi/IsuVotP
+	R/+zWjy7t4LN4sjyj0wWCzY+YrRY0QxUsmrBAXaLRz/nMjkIeyze85LJY//cNewefVtWMXps
+	2f+Z0ePzJjmPX7dusQSwRXHZpKTmZJalFunbJXBl3P9zlK3gAnvF/mtHWBsYj7N1MXJySAiY
+	SPzc9p6li5GLQ0hgO6PE5SM72SES0hKvZ3UxQtjCEiv/PWeHKPrKKLF88nfWLkYODjYBQ4ln
+	J2xA4iICGxglrp6ZzQriMAvcYpI4+PcDM0i3sECSxKyfK8AmsQioSizf8IsJxOYVsJKY/uY8
+	E8QGTYm1e/eA2ZwC1hIvT74HqxcCqpl8cis7RL2gxMmZT1hAbGYBeYnmrbOZJzAKzEKSmoUk
+	tYCRaRWjaGpBcW56bnKBoV5xYm5xaV66XnJ+7iZGcERpBe1gXLb+r94hRiYOxkOMEhzMSiK8
+	JgtXpAvxpiRWVqUW5ccXleakFh9ilOZgURLnVc7pTBESSE8sSc1OTS1ILYLJMnFwSjUwucvk
+	9WWlfsjX/zJh5jMux+vr+cvabSbm7i65degzG1/UvGPGezbpTniWUqdTezdMqETpyKUtmU9j
+	wu/tWdZrdtiOU0OilLmzerpV/5P8y4nSd34I751y13IGL7ORdcJPVuZoT91k3xNTg2/q5PQf
+	zk9d2Cp0ebLzlV+PJ0bt+uUUt99v0S2J9hfzS0OrfPcUMoo5+e7K3cId6brpXeGPexxSLyuD
+	PO0W1Z7/5BvKX68bcKXmcE5plZF47T/DVds/6/64Z+pV+ivqDlf+Frc5Ps0rz1n+403ffevT
+	vVUvs+PvxQMT6oa5awN0Ck/qmilorjjc5710kvFBbu+12ecjI2PK+ZpsvAr1Zy9Y9leJpTgj
+	0VCLuag4EQBhLhm7FwMAAA==
+X-CMS-MailID: 20250211115711epcas5p46b72b2670571d636c229d80378284ed9
 X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
 CMS-TYPE: 105P
 X-CPGSPASS: Y
 X-Hop-Count: 3
-X-CMS-RootMailID: 20250211115704epcas5p4140a490572fb9c4ac71a82abcb61f291
-References: <CGME20250211115704epcas5p4140a490572fb9c4ac71a82abcb61f291@epcas5p4.samsung.com>
+X-CMS-RootMailID: 20250211115711epcas5p46b72b2670571d636c229d80378284ed9
+References: <20250211115635.757-1-selvarasu.g@samsung.com>
+	<CGME20250211115711epcas5p46b72b2670571d636c229d80378284ed9@epcas5p4.samsung.com>
 
-This series of patches to fix the following smatch errors from
-xhci driver:
-
+Fix the following smatch error:
 drivers/usb/host/xhci-mem.c:2060 xhci_add_in_port() error: unassigned variable 'tmp_minor_revision'
-drivers/usb/host/xhci-hub.c:71 xhci_create_usb3x_bos_desc() error: unassigned variable 'bcdUSB'
 
+Fixes: d9b0328d0b8b ("xhci: Show ZHAOXIN xHCI root hub speed correctly")
+Cc: stable@vger.kernel.org
+Signed-off-by: Selvarasu Ganesan <selvarasu.g@samsung.com>
 ---
-Selvarasu Ganesan (2):
-  usb: xhci: Fix unassigned variable 'tmp_minor_revision' in
-    xhci_add_in_port()
-  usb: xhci: Fix unassigned variable 'bcdUSB' in
-    xhci_create_usb3x_bos_desc()
-
- drivers/usb/host/xhci-hub.c | 2 +-
  drivers/usb/host/xhci-mem.c | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/drivers/usb/host/xhci-mem.c b/drivers/usb/host/xhci-mem.c
+index 92703efda1f7..8665893df894 100644
+--- a/drivers/usb/host/xhci-mem.c
++++ b/drivers/usb/host/xhci-mem.c
+@@ -1980,7 +1980,7 @@ static void xhci_add_in_port(struct xhci_hcd *xhci, unsigned int num_ports,
+ {
+ 	u32 temp, port_offset, port_count;
+ 	int i;
+-	u8 major_revision, minor_revision, tmp_minor_revision;
++	u8 major_revision, minor_revision, tmp_minor_revision = 0;
+ 	struct xhci_hub *rhub;
+ 	struct device *dev = xhci_to_hcd(xhci)->self.sysdev;
+ 	struct xhci_port_cap *port_cap;
 -- 
 2.17.1
 
