@@ -1,97 +1,132 @@
-Return-Path: <linux-usb+bounces-20497-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20496-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73982A31003
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:44:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E93CA30FF9
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:40:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCA2B1888B59
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:44:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30A63167063
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 607FB25334C;
-	Tue, 11 Feb 2025 15:44:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E445253B4F;
+	Tue, 11 Feb 2025 15:40:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=makarenk.ooo header.i=@makarenk.ooo header.b="gPWAnzGD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jhwwqmc3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from hognose1.porkbun.com (hognose1.porkbun.com [35.82.102.206])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17B99253328;
-	Tue, 11 Feb 2025 15:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.82.102.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3934125332A;
+	Tue, 11 Feb 2025 15:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739288664; cv=none; b=POYSwAailPt9SDl1UW7oQKloQa9+3iuxUOCyLLZ2n8v2NPe0XYbHdWDJgf9R1OHdL1EMkIGiWzCVqTxRUwD0RvmWf2+jv37AXeZgMvDNDQzMOQePbePYHp2rZeIJUY942cj8D5rukWDDILzcdyz77t9xpFxMCiVtX33j+vrrPaM=
+	t=1739288446; cv=none; b=SUKvRvUG4Kq7y05Bm/e0CQS5KCEBswf9hnFwBCY6YC6HuZN5TITkjlAPd73trlAqgB/jPw6duDKUU9B0G9nOALCT5/c7x2jpB9zQCOmMAqS3yYPmJJ0FU83iwibg/f8ASJVNDMRdbWJCs9T6VekHI56GQwGIjHyGb0xSiuTOwpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739288664; c=relaxed/simple;
-	bh=27iXuZtORkCl42/3wADpSiLqbPXFd7mA/k0npPstID0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RVNHde60gk4QicHf6QVuWVx9Y58YWbXKKJ1txfklpTy1phpEV7fAHmnqMnPDXOck6DJKjKpd/4IiCr022YH0ptAmSwhYXuyF0HnJIteeOIiNrIOnfRM/OHdKmdvuYP3m7Rk4mLYHlZWdcvWN9W/0tevFSR0FMtgXtYEMGOltkTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=makarenk.ooo; spf=pass smtp.mailfrom=makarenk.ooo; dkim=fail (1024-bit key) header.d=makarenk.ooo header.i=@makarenk.ooo header.b=gPWAnzGD reason="signature verification failed"; arc=none smtp.client-ip=35.82.102.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=makarenk.ooo
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makarenk.ooo
-Received: from home-pc.localnet (93-184-53.internethome.cytanet.com.cy [93.109.184.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(Client did not present a certificate)
-	(Authenticated sender: oleg@makarenk.ooo)
-	by hognose1.porkbun.com (Postfix) with ESMTPSA id 0FC1444F9E;
-	Tue, 11 Feb 2025 15:34:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=makarenk.ooo;
-	s=default; t=1739288099;
-	bh=E8GAFPTzEfQUWsQcibL5ztB8N/mq7U8ysPxlk4vTHOQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=gPWAnzGD9FrMIEy965tLDaHNVN6bMyTY9UvpevTpsuG7tr/td4zjzlBZZmBjlj52m
-	 3SnbfFT6GRGnHeHJuYDVjRdwhIzhCn+VGcMujm4scWxT/Z/1vTdaVd/vTv7Aj927Rh
-	 Tclu1ps1YozUg6Fn7NbVjAoTMclTFRLIYmDeT91M=
-From: Oleg Makarenko <oleg@makarenk.ooo>
-To: jikos@kernel.org, bentiss@kernel.org,
- Tomasz =?UTF-8?B?UGFrdcWCYQ==?= <tomasz.pakula.oficjalny@gmail.com>
-Cc: linux-input@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH v4 1/6] MAINTAINERS: Update hid-universal-pidff entry
-Date: Tue, 11 Feb 2025 17:34:53 +0200
-Message-ID: <8948455.lOV4Wx5bFT@home-pc>
-In-Reply-To: <20250211143512.720818-2-tomasz.pakula.oficjalny@gmail.com>
-References:
- <20250211143512.720818-1-tomasz.pakula.oficjalny@gmail.com>
- <20250211143512.720818-2-tomasz.pakula.oficjalny@gmail.com>
+	s=arc-20240116; t=1739288446; c=relaxed/simple;
+	bh=IRqvT2gFAGKgf/HJpQvxM4rKmMf2ytFeZ3wxmbUMJnk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EVclyc/Swg7bZ+wMqxyQhritgDbzpm/k9t7XqENDw+L4YhK4/m1pAu84vZDnGHBwO4aJB/45RGEY8Ld9pscxP7MuXl5O4EJtQ/QWualBYfu4X5Ijdp8c2hHI2G0HFGLd1JblYhduJtJHGMk4zYRi4TX3ER/RNXVZ/xXImntk9ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jhwwqmc3; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739288445; x=1770824445;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=IRqvT2gFAGKgf/HJpQvxM4rKmMf2ytFeZ3wxmbUMJnk=;
+  b=Jhwwqmc3NIHoBAPhyE4OGIktOqgyFUJv/dhY6zxFCjMF/ZpdOe7eW/9l
+   SD/xXu+wk+5q3YQZmBXFlLRXGkb3fFF1wZzSSl7Asdz0+Y+EYLf7VLl6N
+   vRpL6ZvNuMAFkv4TMX2Vu8UwlXnKt8oY1i4zBY4kaOgX2aT1e4GkA9+73
+   9NRXxkZTxbgD8iObE62BElu3xMY3/fbBHE0pjEimMNOWBj2x7hrFc2lmU
+   1mbTJ+7MoEg4kuRniWjuoI79Nayj1Q3Kmc03RojVggQZdUA6bp9sK1BP3
+   RoyA13M6P9U6JQuEg+TypD4Y66TQzar6mB3bTnJkQ00mXdv5Am0+8gNq3
+   g==;
+X-CSE-ConnectionGUID: BhT/ROXlTBiDXMKDhhcOtg==
+X-CSE-MsgGUID: cjA5z0ufQnejZcj+RthTeQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="51307177"
+X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
+   d="scan'208";a="51307177"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 07:40:43 -0800
+X-CSE-ConnectionGUID: pWAKKPsrRrKX/y3Ug34QtQ==
+X-CSE-MsgGUID: s7huuwbJRX+TrPVK3UY41Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="149730920"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by orviesa001.jf.intel.com with ESMTP; 11 Feb 2025 07:40:41 -0800
+Message-ID: <7bb25848-c80e-4ba8-8790-8628951806b3@linux.intel.com>
+Date: Tue, 11 Feb 2025 17:41:39 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/5] usb: xhci: Skip only one TD on Ring Underrun/Overrun
+To: Michal Pecio <michal.pecio@gmail.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Niklas Neronin <niklas.neronin@linux.intel.com>,
+ linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250210083718.2dd337c3@foxbook>
+ <20250210084220.3e5414e9@foxbook>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250210084220.3e5414e9@foxbook>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tuesday, February 11, 2025 4:35:07=E2=80=AFPM GMT+2, Tomasz Paku=C5=82a =
-wrote:
-> Add Oleg Makarenko as co-maintainer
->=20
-> Signed-off-by: Tomasz Paku=C5=82a <tomasz.pakula.oficjalny@gmail.com>
+On 10.2.2025 9.42, Michal Pecio wrote:
+> If skipping is deferred to events other than Missed Service Error itsef,
+> it means we are running on an xHCI 1.0 host and don't know how many TDs
+> were missed until we reach some ordinary transfer completion event.
+> 
+> And in case of ring xrun, we can't know where the xrun happened either.
+> 
+> If we skip all pending TDs, we may prematurely give back TDs added after
+> the xrun had occurred, risking data loss or buffer UAF by the xHC.
+> 
+> If we skip none, a driver may become confused and stop working when all
+> its URBs are missed and appear to be "in flight" forever.
+> 
+> Skip exactly one TD on each xrun event - the first one that was missed,
+> as we can now be sure that the HC has finished processing it. Provided
+> that one more TD is queued before any subsequent doorbell ring, it will
+> become safe to skip another TD by the time we get an xrun again.
+> 
+> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 > ---
->  MAINTAINERS | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index a7c37bb8f083..aa87d5d56ee7 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -10258,9 +10258,10 @@ F:	include/linux/hid-sensor-*
->=20
->  HID UNIVERSAL PIDFF DRIVER
->  M:	Tomasz Paku=C5=82a <tomasz.pakula.oficjalny@gmail.com>
-> +M:	Oleg Makarenko <oleg@makarenk.ooo>
->  L:	linux-input@vger.kernel.org
->  S:	Maintained
-> -B:	https://github.com/Lawstorant/hid-universal-pidff/issues
-> +B:	https://github.com/JacKeTUs/universal-pidff/issues
->  F:	drivers/hid/hid-universal-pidff.c
->=20
->  HID VRC-2 CAR CONTROLLER DRIVER
+>   drivers/usb/host/xhci-ring.c | 12 ++++++++++++
+>   1 file changed, 12 insertions(+)
+> 
+> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
+> index 878abf5b745d..049206a1db76 100644
+> --- a/drivers/usb/host/xhci-ring.c
+> +++ b/drivers/usb/host/xhci-ring.c
+> @@ -2875,6 +2875,18 @@ static int handle_tx_event(struct xhci_hcd *xhci,
+>   
+>   			if (!ep_seg && usb_endpoint_xfer_isoc(&td->urb->ep->desc)) {
+>   				skip_isoc_td(xhci, td, ep, status);
+> +
+> +				if (ring_xrun_event) {
+> +					/*
+> +					 * If we are here, we are on xHCI 1.0 host with no idea how
+> +					 * many TDs were missed and where the xrun occurred. Don't
+> +					 * skip more TDs, they may have been queued after the xrun.
+> +					 */
+> +					xhci_dbg(xhci, "Skipped one TD for slot %u ep %u",
+> +							slot_id, ep_index);
+> +					break;
 
-Acked-by: Oleg Makarenko <oleg@makarenk.ooo>
+This would be the same as return 0; right?
 
+Whole series looks good, I'll add it
 
+-Mathias
 
 
