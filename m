@@ -1,99 +1,396 @@
-Return-Path: <linux-usb+bounces-20448-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20450-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01CB0A30379
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 07:23:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F05E1A30472
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 08:27:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BBD423A417A
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 06:23:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BB11188A976
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 07:27:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD551EB181;
-	Tue, 11 Feb 2025 06:23:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EADC1EBFE1;
+	Tue, 11 Feb 2025 07:27:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G5RNmNSo"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="gLpgENQy"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1E701E3DFD;
-	Tue, 11 Feb 2025 06:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBAA21D63F7;
+	Tue, 11 Feb 2025 07:27:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739254995; cv=none; b=janRaDjTzJ6sSMMn1OqUnaiQH9eNl9U3yVJQV1dksnCKNbOzVLZCvM6Clg3eq0Kb8rXVatY+FR75XLi2+VGsbxNWvpvKNL9tbul9p8i/Z0+acoO3vwZS2ipowHLaRG0njvdjjV4AkKVsoQ5PNaO5kI2hs564V004HcJYwBQbkOY=
+	t=1739258851; cv=none; b=PjmwuAjrPEk/to61DdmpdmDfZxjuH/wPCymKR/+6/bZ3qoMMuNbqi0Wd59/BWGi8+wEz6y9W1UkqyWMhafPia1HCc07mqTZCvLBxCTC8RWw2fs7VUVOidaKE19aUm5IBKKchfArWuJoUeq1/+BwF2QmheT5TajjJTvGHxcmFKNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739254995; c=relaxed/simple;
-	bh=rbk4BpPM7ONpaeiUWNXID/PprX5q2RG5Ax9J83M5MFM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KRcbHhdAohzXq8ReGenDvMNF4PzZ95WSrhu4LUDRR7M6kO581nlZEFB2JSpqxIpM194toK2ClxbaMgVhfGhMoEsYenI1Kw2WiwHq990foDCoqzAgRYH6rOQ7DIOUYBOgs+xFKJXqRQsQxUdAEGt9HpLEXi1ZcZCqPOH8PDDGGGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G5RNmNSo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9017AC4CEE5;
-	Tue, 11 Feb 2025 06:23:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739254994;
-	bh=rbk4BpPM7ONpaeiUWNXID/PprX5q2RG5Ax9J83M5MFM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=G5RNmNSoMc+SaaL2V2pZNmm3UdE6xYr4BD4fUnKW9b0Hzkh0t00EVzF7wbkrN/vlg
-	 mM4J8/ioHnIHkI7P9ZI+T9f9vKiFCgcmqJtlOXuhj0GdfEaRirRXIMD64Uwx5YuGce
-	 EwSCWuyu0sy8+8gIa77CTR5LhVfgS3hiog7YAJX8Qo0XQGiAaxBjqpJ1ljrtFDyySW
-	 3Hd/MjSarGn7VIIdpbkX+aKXoseawV5n7f+N8mlhx/4Ih/t+RYvgg9c2qJn7BPYqeZ
-	 zKU/A6TPjzDlSVC3qZa/zCaWl65XO1HBT31Kl8yDrCd+NZUfsft723s7FfwODvz84p
-	 gQ7PoVEKRX83w==
-Received: from mchehab by mail.kernel.org with local (Exim 4.98)
-	(envelope-from <mchehab+huawei@kernel.org>)
-	id 1thjfs-00000008YBP-3J0Z;
-	Tue, 11 Feb 2025 07:23:12 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Linux Doc Mailing List <linux-doc@vger.kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-	"Mauro Carvalho Chehab" <mchehab+huawei@kernel.org>,
-	Andreas Noever <andreas.noever@gmail.com>,
-	Michael Jamet <michael.jamet@intel.com>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Yehezkel Bernat <YehezkelShB@gmail.com>,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org
-Subject: [PATCH 3/9] docs: thunderbolt: Allow creating cross-references for ABI
-Date: Tue, 11 Feb 2025 07:22:57 +0100
-Message-ID: <a655e770e1446f91088f579b79ae890a19771119.1739254867.git.mchehab+huawei@kernel.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <cover.1739254867.git.mchehab+huawei@kernel.org>
-References: <cover.1739254867.git.mchehab+huawei@kernel.org>
+	s=arc-20240116; t=1739258851; c=relaxed/simple;
+	bh=rXqLEIQdjG+1hUyu4wbaNDCYjGFe2VrktaWcvWbvdUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZBOdKoFBT/Ut/1mqkHcADUFmIp/iJ2bVjqTWxf+yVwQ8XM+e203bCoFEvzZbJY0IV8OzMtJyEADrzwuf21iIwb+NzZytkan8ybtbHwdGN5YkFGf4sWziOzeLyrRAslH6JqJQx4GArsQFvn3MPh+yjw7qZ7e3tSq7Tx4eVrdlAUY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=gLpgENQy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C35CC4CEDD;
+	Tue, 11 Feb 2025 07:27:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1739258850;
+	bh=rXqLEIQdjG+1hUyu4wbaNDCYjGFe2VrktaWcvWbvdUU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gLpgENQyaWvxnT8R3BAVVAEygOp/doipjo1do1nrahghKPcpIqJ5r/enxhznFyAHA
+	 Ul+P06K7z8SO3PcCAIpsZ8Orh7PryQoK2oBxhl3o0NJhcK3RmraSi9akbqlEVQ3O3Y
+	 8ttHkRPZlOjgRIvxt3u2q5ITfTkn7YdrDDsO7Qnc=
+Date: Tue, 11 Feb 2025 08:27:26 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Kurt Borja <kuurtb@gmail.com>
+Cc: linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Alexander Lobakin <aleksander.lobakin@intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+	Mark Brown <broonie@kernel.org>,
+	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Simona Vetter <simona.vetter@ffwll.ch>,
+	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Subject: Re: [PATCH v4 1/9] driver core: add a faux bus for use when a simple
+ device/bus is needed
+Message-ID: <2025021111-landowner-gleaming-5971@gregkh>
+References: <2025021023-sandstorm-precise-9f5d@gregkh>
+ <2025021026-atlantic-gibberish-3f0c@gregkh>
+ <D7OYKAYV14AZ.2D8Q4XP557FSR@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Sender: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+In-Reply-To: <D7OYKAYV14AZ.2D8Q4XP557FSR@gmail.com>
 
-Now that Documentation/ABI is processed by automarkup, let it
-generate cross-references for the corresponding ABI file.
+On Mon, Feb 10, 2025 at 12:56:46PM -0500, Kurt Borja wrote:
+> On Mon Feb 10, 2025 at 7:30 AM -05, Greg Kroah-Hartman wrote:
+> > Many drivers abuse the platform driver/bus system as it provides a
+> > simple way to create and bind a device to a driver-specific set of
+> > probe/release functions.  Instead of doing that, and wasting all of the
+> > memory associated with a platform device, here is a "faux" bus that
+> > can be used instead.
+> >
+> > Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+> > Reviewed-by: Danilo Krummrich <dakr@kernel.org>
+> > Reviewed-by: Lyude Paul <lyude@redhat.com>
+> > Reviewed-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > ---
+> > v4: - really removed the name logic
+> >     - added #include <linux/container_of.h> to faux.h
+> >     - added parent pointer to api call
+> >     - minor documentation updates
+> >     - made probe synchronous
+> > v3: - loads of documentation updates and rewrites
+> >     - added to the documentation build
+> >     - removed name[] array as it's no longer needed
+> >     - added faux_device_create_with_groups()
+> >     - added functions to get/set devdata
+> >     - renamed faux_driver_ops -> faux_device_ops
+> >     - made faux_device_ops a const *
+> >     - minor cleanups
+> >     - tested it, again.
+> >
+> > v2: - renamed bus and root device to just "faux" thanks to Thomas
+> >     - removed the one-driver-per-device and now just have one driver
+> >       entirely thanks to Danilo
+> >     - kerneldoc fixups and additions and string handling bounds checks
+> >       thanks to Andy
+> >     - coding style fix thanks to Jonathan
+> >     - tested that the destroy path actually works
+> >  Documentation/driver-api/infrastructure.rst |   6 +
+> >  drivers/base/Makefile                       |   2 +-
+> >  drivers/base/base.h                         |   1 +
+> >  drivers/base/faux.c                         | 232 ++++++++++++++++++++
+> >  drivers/base/init.c                         |   1 +
+> >  include/linux/device/faux.h                 |  69 ++++++
+> >  6 files changed, 310 insertions(+), 1 deletion(-)
+> >  create mode 100644 drivers/base/faux.c
+> >  create mode 100644 include/linux/device/faux.h
+> >
+> > diff --git a/Documentation/driver-api/infrastructure.rst b/Documentation/driver-api/infrastructure.rst
+> > index 3d52dfdfa9fd..35e36fee4238 100644
+> > --- a/Documentation/driver-api/infrastructure.rst
+> > +++ b/Documentation/driver-api/infrastructure.rst
+> > @@ -41,6 +41,12 @@ Device Drivers Base
+> >  .. kernel-doc:: drivers/base/class.c
+> >     :export:
+> >  
+> > +.. kernel-doc:: include/linux/device/faux.h
+> > +   :internal:
+> > +
+> > +.. kernel-doc:: drivers/base/faux.c
+> > +   :export:
+> > +
+> >  .. kernel-doc:: drivers/base/node.c
+> >     :internal:
+> >  
+> > diff --git a/drivers/base/Makefile b/drivers/base/Makefile
+> > index 7fb21768ca36..8074a10183dc 100644
+> > --- a/drivers/base/Makefile
+> > +++ b/drivers/base/Makefile
+> > @@ -6,7 +6,7 @@ obj-y			:= component.o core.o bus.o dd.o syscore.o \
+> >  			   cpu.o firmware.o init.o map.o devres.o \
+> >  			   attribute_container.o transport_class.o \
+> >  			   topology.o container.o property.o cacheinfo.o \
+> > -			   swnode.o
+> > +			   swnode.o faux.o
+> >  obj-$(CONFIG_AUXILIARY_BUS) += auxiliary.o
+> >  obj-$(CONFIG_DEVTMPFS)	+= devtmpfs.o
+> >  obj-y			+= power/
+> > diff --git a/drivers/base/base.h b/drivers/base/base.h
+> > index 8cf04a557bdb..0042e4774b0c 100644
+> > --- a/drivers/base/base.h
+> > +++ b/drivers/base/base.h
+> > @@ -137,6 +137,7 @@ int hypervisor_init(void);
+> >  static inline int hypervisor_init(void) { return 0; }
+> >  #endif
+> >  int platform_bus_init(void);
+> > +int faux_bus_init(void);
+> >  void cpu_dev_init(void);
+> >  void container_dev_init(void);
+> >  #ifdef CONFIG_AUXILIARY_BUS
+> > diff --git a/drivers/base/faux.c b/drivers/base/faux.c
+> > new file mode 100644
+> > index 000000000000..531e9d789ee0
+> > --- /dev/null
+> > +++ b/drivers/base/faux.c
+> > @@ -0,0 +1,232 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Copyright (c) 2025 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > + * Copyright (c) 2025 The Linux Foundation
+> > + *
+> > + * A "simple" faux bus that allows devices to be created and added
+> > + * automatically to it.  This is to be used whenever you need to create a
+> > + * device that is not associated with any "real" system resources, and do
+> > + * not want to have to deal with a bus/driver binding logic.  It is
+> > + * intended to be very simple, with only a create and a destroy function
+> > + * available.
+> > + */
+> > +#include <linux/err.h>
+> > +#include <linux/init.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/string.h>
+> > +#include <linux/container_of.h>
+> > +#include <linux/device/faux.h>
+> > +#include "base.h"
+> > +
+> > +/*
+> > + * Internal wrapper structure so we can hold a pointer to the
+> > + * faux_device_ops for this device.
+> > + */
+> > +struct faux_object {
+> > +	struct faux_device faux_dev;
+> > +	const struct faux_device_ops *faux_ops;
+> > +};
+> > +#define to_faux_object(dev) container_of_const(dev, struct faux_object, faux_dev.dev)
+> > +
+> > +static struct device faux_bus_root = {
+> > +	.init_name	= "faux",
+> > +};
+> > +
+> > +static int faux_match(struct device *dev, const struct device_driver *drv)
+> > +{
+> > +	/* Match always succeeds, we only have one driver */
+> > +	return 1;
+> > +}
+> > +
+> > +static int faux_probe(struct device *dev)
+> > +{
+> > +	struct faux_object *faux_obj = to_faux_object(dev);
+> > +	struct faux_device *faux_dev = &faux_obj->faux_dev;
+> > +	const struct faux_device_ops *faux_ops = faux_obj->faux_ops;
+> > +	int ret = 0;
+> > +
+> > +	if (faux_ops && faux_ops->probe)
+> > +		ret = faux_ops->probe(faux_dev);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static void faux_remove(struct device *dev)
+> > +{
+> > +	struct faux_object *faux_obj = to_faux_object(dev);
+> > +	struct faux_device *faux_dev = &faux_obj->faux_dev;
+> > +	const struct faux_device_ops *faux_ops = faux_obj->faux_ops;
+> > +
+> > +	if (faux_ops && faux_ops->remove)
+> > +		faux_ops->remove(faux_dev);
+> > +}
+> > +
+> > +static const struct bus_type faux_bus_type = {
+> > +	.name		= "faux",
+> > +	.match		= faux_match,
+> > +	.probe		= faux_probe,
+> > +	.remove		= faux_remove,
+> > +};
+> > +
+> > +static struct device_driver faux_driver = {
+> > +	.name		= "faux_driver",
+> > +	.bus		= &faux_bus_type,
+> > +	.probe_type	= PROBE_FORCE_SYNCHRONOUS,
+> > +};
+> > +
+> > +static void faux_device_release(struct device *dev)
+> > +{
+> > +	struct faux_object *faux_obj = to_faux_object(dev);
+> > +
+> > +	kfree(faux_obj);
+> > +}
+> > +
+> > +/**
+> > + * faux_device_create_with_groups - Create and register with the driver
+> > + *		core a faux device and populate the device with an initial
+> > + *		set of sysfs attributes.
+> > + * @name:	The name of the device we are adding, must be unique for
+> > + *		all faux devices.
+> > + * @parent:	Pointer to a potential parent struct device.  If set to
+> > + *		NULL, the device will be created in the "root" of the faux
+> > + *		device tree in sysfs.
+> > + * @faux_ops:	struct faux_device_ops that the new device will call back
+> > + *		into, can be NULL.
+> > + * @groups:	The set of sysfs attributes that will be created for this
+> > + *		device when it is registered with the driver core.
+> > + *
+> > + * Create a new faux device and register it in the driver core properly.
+> > + * If present, callbacks in @faux_ops will be called with the device that
+> > + * for the caller to do something with at the proper time given the
+> > + * device's lifecycle.
+> > + *
+> > + * Note, when this function is called, the functions specified in struct
+> > + * faux_ops can be called before the function returns, so be prepared for
+> > + * everything to be properly initialized before that point in time.
+> > + *
+> > + * Return:
+> > + * * NULL if an error happened with creating the device
+> > + * * pointer to a valid struct faux_device that is registered with sysfs
+> > + */
+> > +struct faux_device *faux_device_create_with_groups(const char *name,
+> > +						   struct device *parent,
+> > +						   const struct faux_device_ops *faux_ops,
+> > +						   const struct attribute_group **groups)
+> > +{
+> > +	struct faux_object *faux_obj;
+> > +	struct faux_device *faux_dev;
+> > +	struct device *dev;
+> > +	int ret;
+> > +
+> > +	faux_obj = kzalloc(sizeof(*faux_obj), GFP_KERNEL);
+> > +	if (!faux_obj)
+> > +		return NULL;
+> > +
+> > +	/* Save off the callbacks so we can use them in the future */
+> > +	faux_obj->faux_ops = faux_ops;
+> > +
+> > +	/* Initialize the device portion and register it with the driver core */
+> > +	faux_dev = &faux_obj->faux_dev;
+> > +	dev = &faux_dev->dev;
+> > +
+> > +	device_initialize(dev);
+> > +	dev->release = faux_device_release;
+> > +	if (parent)
+> > +		dev->parent = parent;
+> > +	else
+> > +		dev->parent = &faux_bus_root;
+> > +	dev->bus = &faux_bus_type;
+> > +	dev->groups = groups;
+> 
+> Just as I feared, adding groups this way is bug prone if we don't check
+> if the device attached to the driver successfully. Consider the
+> following example module:
+> 
+> static attr1_show(...)
+> {
+> 	struct priv *priv = dev_get_drvdata(dev);
+> 	...
+> }
+> DEVICE_ATTR_RO(attr1)
+> 
+> ...
+> 
+> static const struct attribute_group faux_groups[] = {
+> 	...
+> }
+> 
+> /* It would be nice to have the probe in __init */
+> static int __init faux_probe(struct faux_device *fdev)
+> {
+> 	...
+> 	/* Probe may fail */
+> 	if (con)
+> 		return -EINVAL;
+> 	...
+> 	faux_device_set_drvdata(fdev, priv);
+> 	...
+> }
+> 
+> static struct faux_device_ops faux_ops = {
+> 	...
+> }
+> 
+> static int __init module_init()
+> {
+> 	...
+> 	fdev = faux_device_create_with_groups("foo", NULL, &faux_ops,
+> 					      &faux_groups);
+> 	if (!fdev)
+> 		return -ENODEV;
+> }
+> 
+> In this example we have no way of knowing if the probe failed, so the
+> module as well as the device will remain loaded. Furthermore, the sysfs
+> groups WILL be added anyway, which is dangerous because we have no
+> gurantee about drvdata's lifetime nor if it was even initialized
+> correctly, which sysfs show/store methods may assume is the case.
+> 
+> So we have two problems here. First, this module only cares about the
+> probe succeeding so keeping the device alive after it fails wastes
+> resources. Second, we don't have any gurantee about drvdata validity.
+> 
+> > +	dev_set_name(dev, "%s", name);
+> > +
+> > +	ret = device_add(dev);
+> > +	if (ret) {
+> > +		pr_err("%s: device_add for faux device '%s' failed with %d\n",
+> > +		       __func__, name, ret);
+> > +		put_device(dev);
+> > +		return NULL;
+> > +	}
+> 
+> To solve this, I suggest we do this here:
+> 
+> 	/* Check if the device attached correctly */
+> 	if (dev->driver != &faux_driver)
+> 		return ERR_PTR(-ENODEV); /* or NULL */
+> 
+> 	/* 
+> 	 * Add groups after the driver is attached, to avoid lifetime
+> 	 * issues 
+> 	 */
+> 	device_add_groups(dev, groups);
 
-Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-Acked-by: Mika Westerberg <mika.westerberg@linux.intel.com>
----
- Documentation/admin-guide/thunderbolt.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Nope, sorry, let the driver core handle the group creation/removal at
+the proper time.
 
-diff --git a/Documentation/admin-guide/thunderbolt.rst b/Documentation/admin-guide/thunderbolt.rst
-index 2ed79f41a411..d0502691dfa1 100644
---- a/Documentation/admin-guide/thunderbolt.rst
-+++ b/Documentation/admin-guide/thunderbolt.rst
-@@ -28,7 +28,7 @@ should be a userspace tool that handles all the low-level details, keeps
- a database of the authorized devices and prompts users for new connections.
- 
- More details about the sysfs interface for Thunderbolt devices can be
--found in ``Documentation/ABI/testing/sysfs-bus-thunderbolt``.
-+found in Documentation/ABI/testing/sysfs-bus-thunderbolt.
- 
- Those users who just want to connect any device without any sort of
- manual work can add following line to
--- 
-2.48.1
+I'll work on adding "if probe failed, don't let the device be created"
+logic as it's a simple change, BUT it is a functionally different change
+from what the current api that this code is replacing is doing (i.e. the
+current platform device creation code does this today and no one has
+ever hit this in their use of it in the past few decades.)
 
+thanks,
+
+greg k-h
 
