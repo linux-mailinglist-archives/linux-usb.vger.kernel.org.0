@@ -1,135 +1,140 @@
-Return-Path: <linux-usb+bounces-20483-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20484-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55BFFA30E04
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:17:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF3D1A30E2A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:25:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0C23F1633AF
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 14:17:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D899161D32
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 14:25:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11C3C24E4AB;
-	Tue, 11 Feb 2025 14:17:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB34D24E4C3;
+	Tue, 11 Feb 2025 14:25:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UXpgDgvU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EHvKgC8z"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88B2B1F942D;
-	Tue, 11 Feb 2025 14:17:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 403BC26BDA1;
+	Tue, 11 Feb 2025 14:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739283432; cv=none; b=NqETVmpXrtky5QmWLVwwFPqO+yjC50e9MoNt191yzOmRrIw07nJW5rBKs0GsdzN2spGFwe7GWyNZShENpmAhPsgzwOFbzkPsEHwzDnZV4pwxJU2JHi0hM8l5mFEwXXEPPbmnzG/N71vcVGsDfpyY7RTJ4miiN6cuf6W7iEQales=
+	t=1739283915; cv=none; b=TZkNElZWxTb8t0tyGVSbmrzvV/fHVOXmOZAMonbegNRqS7DD8VUtBdh6ywBJkmnN+UrsTcLlG0GTktO3efu8q2Fjqawl5e1GUcrYdVw0JCGWCVz9lVjtNYUFZPjKuw4KIOuKwaeGVheuSNYP77nddtVWUJ1VoigW4HgltVAv7Z8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739283432; c=relaxed/simple;
-	bh=6Hy6BH8y0RHlOoaA0+wIPMx7hUagCP6QeLxk+ZJ5qHs=;
+	s=arc-20240116; t=1739283915; c=relaxed/simple;
+	bh=joOhHQs7N3k2V7iD1a05eNhSfWZS61s1us9jgWnob3U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YIjCKCQPeUv1GNMf0Iy09ED+2dxPYr37obXTfbACFoO1YZAPbhwylwn4qh1WAjnnaYxgbqhNq4wjZqBrcXkmrF+jM+NOTPpiVG2Yz1ovuNU+ddaLb4XCP3XJRGD882WVZ+GLv6o7HlO+aMloR4FM1KrCLU9R6hYwRZDjpb0kXXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UXpgDgvU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE184C4CEDD;
-	Tue, 11 Feb 2025 14:17:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=R4u62T7i/cj79/CGJ2xJP6uSX/xQQENy5Z5Q/DU3pm4owHuY1Ial1VB+/0SJSAVFKd5X1QFRkYcaCQQNuEee5Nd0Uicrn/aIWlwkBgnNYD7gfuvH0rHILw2fIA2DOBlqeKW6Ju5LBbMOymEpcksLMJZgW4ulElq/B1PNbhbRpIw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EHvKgC8z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0AACC4CEDD;
+	Tue, 11 Feb 2025 14:25:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739283432;
-	bh=6Hy6BH8y0RHlOoaA0+wIPMx7hUagCP6QeLxk+ZJ5qHs=;
+	s=k20201202; t=1739283914;
+	bh=joOhHQs7N3k2V7iD1a05eNhSfWZS61s1us9jgWnob3U=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UXpgDgvUAfn4C5eikO1uR4hk9tNAo1B3FsOLiPacbg50590NKsrpSSEhQKFFPLAGH
-	 1JMK/y1StcQ6GD0jLbWJPFRa6OfRQLEsZlGpAf2RJYoO3ExW9piglzTHFN5VRbIh4+
-	 ffCPbLbSbskYSo29LweN9UcI6huJZ8F3qXGurRSqXjczKDbJHCBTGvtN1eI9KH2bCE
-	 UJj1jAamlejRQSCJxmL4+8B2W+JsaWc8YKC9rUlaERpe1mRV+VlwE27g2BuMwF1Ba1
-	 Bvuy8a1wHZ3p0WiGDAkcY5Dy7UB0mnVgdNhfaizNUlzkiyciBQvuvB9+na5XkfJK7G
-	 cjqDqQJnO0d2A==
+	b=EHvKgC8zXDfnrIHYpY+hs/TYfaMJjXhE8bkB05fftOoZd3yejl8he4KQUF46vcT7r
+	 OgOEWngZnmpAwoGodY5uAEPp0OJ69OZ2m0AAbNR6u40Pjqmak4OxVBQzfzYMWXryVy
+	 so9a2XOQz4+FLF7l1x3uXiMTdJ9KTLOnpLlGOjqSjjCLmYU2U4y3yYoSls36xt29Ow
+	 33vhuH0F4ncPiJlRgYEsGiWi1UoYDCmswgahcb7e+WWzbgrBdmGWzpIwjQe6cNkA4S
+	 aiPFF0QVA/ojWQlm6vfNQQNcBLT/LFINDAIq0l1T2ajIfNarRO7y4dH8UYuEWQ/7y2
+	 c6qHtt8tl29mA==
 Received: from johan by xi.lan with local (Exim 4.97.1)
 	(envelope-from <johan@kernel.org>)
-	id 1thr4g-000000008Fv-4Bry;
-	Tue, 11 Feb 2025 15:17:19 +0100
-Date: Tue, 11 Feb 2025 15:17:18 +0100
+	id 1thrCT-000000008OV-3Fjr;
+	Tue, 11 Feb 2025 15:25:22 +0100
+Date: Tue, 11 Feb 2025 15:25:21 +0100
 From: Johan Hovold <johan@kernel.org>
-To: chester.a.unal@arinc9.com
+To: Ulv Michel <ulv@on2.de>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	dwayne Du Preez <dwayne.dupreez@xpedite-tech.com>,
-	Alexander Scholten <alexander.scholten@xpedite-tech.com>,
-	Zenon van Deventer <zenon@xpedite-tech.com>
-Subject: Re: [PATCH v2] USB: serial: option: add MeiG Smart SLM828
-Message-ID: <Z6tb7us7t7CmK-zV@hovoldconsulting.com>
-References: <20250124-for-johan-meig-slm828-v2-1-6b4cd3f6344f@arinc9.com>
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: AW: [PATCH 2/2] USB: serial: option: add Wistron NeWeb M18QW
+ support
+Message-ID: <Z6td0Tqp4RTZebe3@hovoldconsulting.com>
+References: <20250125094005.1132785-1-ulv@on2.de>
+ <2025020308-anemic-sasquatch-efbe@gregkh>
+ <AS2PR10MB75024C662CA4E5EE7DBF06A689F52@AS2PR10MB7502.EURPRD10.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250124-for-johan-meig-slm828-v2-1-6b4cd3f6344f@arinc9.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <AS2PR10MB75024C662CA4E5EE7DBF06A689F52@AS2PR10MB7502.EURPRD10.PROD.OUTLOOK.COM>
 
-On Fri, Jan 24, 2025 at 10:28:00AM +0000, Chester A. Unal via B4 Relay wrote:
-> From: "Chester A. Unal" <chester.a.unal@arinc9.com>
+On Mon, Feb 03, 2025 at 03:51:52PM +0000, Ulv Michel wrote:
+> Hello Greg,
 > 
-> MeiG Smart SLM828 is an LTE-A CAT6 modem with the mPCIe form factor. The
-> "Cls=ff(vend.) Sub=10 Prot=02" and "Cls=ff(vend.) Sub=10 Prot=03"
-> interfaces respond to AT commands. Add these interfaces.
+> > We need a full name, sorry.
+> the full name is Ulv Michel.
 > 
-> The product ID the modem uses is shared across multiple modems. Therefore,
-> add comments to describe which interface is used for which modem.
+> > And where is patch 1/2 of this series?
+
+> Part 1 is this: https://lore.kernel.org/linux-usb/2025012501-pediatric-abide-b802@gregkh/T/#t
+
+Looks like something went wrong with the threading when you submitted
+this series.
+
+You can resend the patches individually if you prefer since they go
+through different trees anyway, but you should get your mail setup fixed
+for future contributions anyway.
+
+Try sending it to yourself first.
+
+> > >  	  .driver_info = RSVD(1) | RSVD(4) },
+> > > +	{ USB_DEVICE_AND_INTERFACE_INFO(0x1435, 0x3185, 0xff, 0x00, 0x00) },   /* Wistron Neweb M18QW */
 > 
-> T:  Bus=01 Lev=01 Prnt=05 Port=01 Cnt=01 Dev#=  6 Spd=480  MxCh= 0
-> D:  Ver= 2.10 Cls=00(>ifc ) Sub=00 Prot=00 MxPS=64 #Cfgs=  1
-> P:  Vendor=2dee ProdID=4d22 Rev=05.04
-> S:  Manufacturer=MEIG
-> S:  Product=LTE-A Module
-> S:  SerialNumber=4da7ec42
-> C:  #Ifs= 6 Cfg#= 1 Atr=80 MxPwr=500mA
-> I:  If#= 0 Alt= 0 #EPs= 2 Cls=ff(vend.) Sub=10 Prot=01 Driver=(none)
-> E:  Ad=01(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=81(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> I:  If#= 1 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=02 Driver=(none)
-> E:  Ad=02(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=82(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=83(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> I:  If#= 2 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=03 Driver=(none)
-> E:  Ad=03(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=84(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=85(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> I:  If#= 3 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=04 Driver=(none)
-> E:  Ad=04(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=86(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=87(I) Atr=03(Int.) MxPS=  10 Ivl=32ms
-> I:  If#= 4 Alt= 0 #EPs= 1 Cls=ff(vend.) Sub=ff Prot=ff Driver=(none)
-> E:  Ad=88(I) Atr=03(Int.) MxPS=  64 Ivl=32ms
-> I:  If#= 5 Alt= 0 #EPs= 3 Cls=ff(vend.) Sub=10 Prot=05 Driver=qmi_wwan
-> E:  Ad=0f(O) Atr=02(Bulk) MxPS= 512 Ivl=0ms
-> E:  Ad=89(I) Atr=03(Int.) MxPS=   8 Ivl=32ms
-> E:  Ad=8e(I) Atr=02(Bulk) MxPS= 512 Ivl=0ms
+> > You forgot a tab before the comment :(
+
+> :( I removed the tab because the checkpatch.pl complained the length of the line being more than 100 columns...
+> What would be you suggestion? Resubmit? Or keep it?
+
+It's ok with lines longer than 100 columns here in these tables.
+
+Please submit a v2 with your full name in From and in the SoB tags as
+well.
+
+One more comment below.
+
+> -----Ursprüngliche Nachricht-----
+> Von: Greg Kroah-Hartman <gregkh@linuxfoundation.org> 
+> Gesendet: Montag, 3. Februar 2025 16:17
+> An: Ulv Michel <ulv@on2.de>
+> Cc: Johan Hovold <johan@kernel.org>; linux-usb@vger.kernel.org; linux-kernel@vger.kernel.org
+> Betreff: Re: [PATCH 2/2] USB: serial: option: add Wistron NeWeb M18QW support
 > 
-> Signed-off-by: Chester A. Unal <chester.a.unal@arinc9.com>
+> On Sat, Jan 25, 2025 at 10:40:05AM +0100, U Michel wrote:
+> > From: U M <ulv@on2.de>
+> 
+> We need a full name, sorry.
+> 
+> And where is patch 1/2 of this series?
 
-> Changes in v2:
-> - Add to the relevant comment that SLM828 is based on Qualcomm SDX12.
-> - Add to the comment for certain interface specification that SRM815
->   uses that interface specificiation as well.
-> - Link to v1: https://lore.kernel.org/r/20250123-for-johan-meig-slm828-v1-1-6456996e94a5@arinc9.com
- 
->  /* MeiG Smart Technology products */
->  #define MEIGSMART_VENDOR_ID			0x2dee
-> -/* MeiG Smart SRM815/SRM825L based on Qualcomm 315 */
-> +/* MeiG Smart SLM828, SRM815, and SRM825L use the same product ID. SLM828 is
-> + * based on Qualcomm SDX12. SRM815 and SRM825L are based on Qualcomm 315.
-> + */
+> > Signed-off-by: U M <ulv@on2.de>
+> > ---
+> >  drivers/usb/serial/option.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> > 
+> > diff --git a/drivers/usb/serial/option.c b/drivers/usb/serial/option.c 
+> > index 1e2ae0c6c41c..b166f1607b0e 100644
+> > --- a/drivers/usb/serial/option.c
+> > +++ b/drivers/usb/serial/option.c
+> > @@ -2285,6 +2285,7 @@ static const struct usb_device_id option_ids[] = {
+> >  	{ USB_DEVICE_AND_INTERFACE_INFO(0x07d1, 0x7e11, 0xff, 0xff, 0xff) },	/* D-Link DWM-156/A3 */
+> >  	{ USB_DEVICE_INTERFACE_CLASS(0x1435, 0xd191, 0xff),			/* Wistron Neweb D19Q1 */
+> >  	  .driver_info = RSVD(1) | RSVD(4) },
+> > +	{ USB_DEVICE_AND_INTERFACE_INFO(0x1435, 0x3185, 0xff, 0x00, 0x00) },   /* Wistron Neweb M18QW */
 
-Thanks for the patch and for documenting how these entries are related
-(here and below).
+And try to keep the entries sorted by VID/PID when possible (e.g. within
+this Wistron subsection).
 
-I fixed up the multi-line comment above to follow the usual style:
-
-	/*
-	 * ...
-	 */
-
-when applying.
+> You forgot a tab before the comment :(
 
 Johan
 
