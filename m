@@ -1,214 +1,323 @@
-Return-Path: <linux-usb+bounces-20473-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20474-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB09AA30BCE
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 13:36:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEE47A30C7A
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 14:08:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E6823A9F50
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 12:36:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D749164483
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 13:08:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 247521FF7B7;
-	Tue, 11 Feb 2025 12:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62DF5215793;
+	Tue, 11 Feb 2025 13:08:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Kvji4oGh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MkYLkKb9"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB206FB9;
-	Tue, 11 Feb 2025 12:36:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB426206F02;
+	Tue, 11 Feb 2025 13:08:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739277383; cv=none; b=YkQOLMO9/fOuBOpdwwUUvkdVsWTRQVM1jZhgKrcIe4uJvqs1QVwnPRlTimSPnZMhAV/ss2kYatSog7WJ/8QBvsGt9vyLpvCp4iivh9k3BnDX/z301yUuLDUjPpELVbLLfnu6J11JczEN3HT7KFVDjpR532d4gznKy6+VaBzThNs=
+	t=1739279284; cv=none; b=D4zHX5oEE0zUluuJ6XvYXu327Zq8lZAGaJ7DzoobfBvPHRch91Zzxe2H3Po9N/Q6P5Zwuq4Iaf+9pLyj/har9YABI3AhMKpkYnISdc1rRdc1P7F11RkTXrMlo2Bjb5c6m+DptFmaOJVFncV5Z1qVxP5TwwdUULCqZEDewWSvp1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739277383; c=relaxed/simple;
-	bh=sZG1112UKEcmLgh4KS5IXeQ2vd73nCQ0xdUMTVgWqJU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=f58T2mF+y+QP9j3efZ6Bk2IJF0opWm+f59zd5MfKuw1R2v6bUzNZsI3UKcW7NLsBxfH6sNfc9HUVO+ftrkiIjwOZsoW13ulcwPu3aoPdo9XvkWXIO0bK6APQbgFzx7BRX8r97DAJwrYF3pcVtQrhI+FdPiiaAld78c0tinzl2Mw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Kvji4oGh; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ab7ca64da5dso310178266b.0;
-        Tue, 11 Feb 2025 04:36:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739277380; x=1739882180; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bP5m1MKlTrOTM+BW8w3Lgsy0b/m3aaXuVq/Pw4K70rk=;
-        b=Kvji4oGhY17Z/QKNyOGH7TGlTvQVHHV+22FCuc3dpVfsFktxrzuNYVvLBSuY5ox5t+
-         EPgniFD/2lGTcQMRyNnJSLtqS/InpD6D8v8fXFpV0SchmKXBL1lGJV5XPzxaT8yltABe
-         o8eDYtqgDizWP8UfqABpO4MwZ4Bsq1MHB/jtWl2s3D8kcdam8chJN9LliXefkZaRUd4c
-         9dk2T9IT6owxph2UHNp4Lia/gd4oBlYBreDF3U20DmfnzwMANHGxFQlIufqEE6p7FFOu
-         3xq0OWQ+E7kqnngXnRa9PzsT+h5hPjsqXRjspnydlBN4WfdeDRcbn/oYKRDiJEfHrFok
-         QjIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739277380; x=1739882180;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bP5m1MKlTrOTM+BW8w3Lgsy0b/m3aaXuVq/Pw4K70rk=;
-        b=r2ddIevwnHojHDm56iiV+AiJ7y9FNdmrlyqczsrPdJ+uJBkZTr4sesLpBXa9Kpz+B4
-         uZaPSH5ZifpnvQxud1sbDDwgkJqnEcG2jRvIj0kwhUdBrZbv060v7fYl9gsh51W033uD
-         H/dYXk+PcPz1Z+WyG7+WKK6LVgP4wFpnIAZWoQGMY7Og774Nc1hRivEIf8rY4qHB8mzz
-         hssUA14q2HH45xinkVcKiBwhE1FUaYImQt0BjEDMDABDsDZEGKU7QyqaNp0IzzkLNUQV
-         OEWA0p/ohzoNqTydwvlSShns9rFeLi2a97HFyZVnr2VGnAKZ/QqzGvjHZqgEEi1bTfgB
-         OQdg==
-X-Forwarded-Encrypted: i=1; AJvYcCVP8R+u/9wTq5i7Lfr086xpOnzAaKlFFEKoPaqFhR9MTEFGsTLgUkDdLtImjR0rcOpMAnoCUpxwy6sO/uQ=@vger.kernel.org, AJvYcCVaSBdu/XM44uUpF775IqWZLMfF14lUA7Rg/SMP0exBXWhm1DeW1WSeFzV15fb13jysO8p0p8vT@vger.kernel.org, AJvYcCWmHGFhRtbtF9Q24X5VXEhFFPBaEln7qkaNkToXXEXVmGmC5exmxZK8p/3IVUopEHwKud5AI/mOdxzX@vger.kernel.org
-X-Gm-Message-State: AOJu0YylfHmc3QnLDdCekLJnG/nU7pZ3ZfuiA+7FC8WRiHfWU7zufmNW
-	Eq435nGpb2YGLN0D69jZW2F5bZLyS54QGclFlbr14kyYxGx4/IEx
-X-Gm-Gg: ASbGnct+SFoF+Yom4aJnS4cmETuLhjr0wgF0i659hW8IGAO6UeBbwfQA8Z6K3Tc0AYU
-	YBDjxABwLchEh99WSMvYel/XZwa7ykSU0Vfmyv/6985tNl3IyRDP1maq3ocGJfFI8Fo3dcZMXXE
-	sTYS432XdM3MJTFT4YGVMZNQdsE++EqUrAsHd1zgSTdVvumPUSn+O4SqiFHKEXyunoQLrslaIhn
-	TxOTaODAnAivI+5x6MxDltnhEiFqKiO4ghTGdLiUoQEOGx8jgvHtJjw6El2MNgNMx0v+Eknw6s9
-	vhs5idATFhT3/vz5ZhLoNb2J5QT90KJj
-X-Google-Smtp-Source: AGHT+IGTQCQjV5wM3AQyayoBB6ZBZZQoah7NqJFP8fRvEp4YFg+UYl4JLydhWL7qT31mKO1xEQp6Aw==
-X-Received: by 2002:a17:907:a78a:b0:ab7:843c:2cbb with SMTP id a640c23a62f3a-ab7daf31171mr259405066b.11.1739277379803;
-        Tue, 11 Feb 2025 04:36:19 -0800 (PST)
-Received: from foxbook (adtq181.neoplus.adsl.tpnet.pl. [79.185.228.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab79d28723esm747793166b.64.2025.02.11.04.36.18
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Tue, 11 Feb 2025 04:36:19 -0800 (PST)
-Date: Tue, 11 Feb 2025 13:36:14 +0100
-From: Michal Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, ki.chiang65@gmail.com,
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- mathias.nyman@intel.com, stable@vger.kernel.org
-Subject: [PATCH] usb: xhci: Handle quirky SuperSpeed isoc error reporting by
- Etron HCs
-Message-ID: <20250211133614.5d64301f@foxbook>
-In-Reply-To: <20250210095736.6607f098@foxbook>
-References: <20250205234205.73ca4ff8@foxbook>
-	<b19218ab-5248-47ba-8111-157818415247@linux.intel.com>
-	<20250210095736.6607f098@foxbook>
+	s=arc-20240116; t=1739279284; c=relaxed/simple;
+	bh=KPYi1A3O/sh8s8numOmFmpRAC1Ro6cWCm+dP4Ba7dvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Zv5XphQ7BJDECjsKMaVs56bKEmkGPXJ24Aj3+1Jzpd6L7Sq02RrDsa0fiD7qvpsimLk9WrJV16geY7VkaeHP4UYAIVx4lCd9MFkxgDG0/7fJtVnROUi2ijDUXZ3FPjx1bUeNYiDCza2kcJ5N1a3kYcN6veMvTATeSSRGyx/mvP8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MkYLkKb9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 327B7C4CEDD;
+	Tue, 11 Feb 2025 13:08:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739279283;
+	bh=KPYi1A3O/sh8s8numOmFmpRAC1Ro6cWCm+dP4Ba7dvA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MkYLkKb9BZZyO58GPRBkBIpVW0ejN2pewkAe1+uEtw/P/+EY0zVXKxyHCLeMdGgU+
+	 VxyKqGlphdSDmfkmMDO424aNvPz+7oLe3lbfw1D7wO/EzEFPg3nieywXdcQkdO9WiU
+	 ira2IcVN61+g8PeNMc1T0D9QlH6xDcb9N9E//6q+X79Lj1XZg1FLSDil+sV0c/6hOC
+	 VqDlHUI4Cy2wCSQWSFQ5MllQiAe6MoaD6uW5+1DLluWkuRSXtttVh9PqthVccDwpYk
+	 YzSYpMuUnuXkq+V5Za4ZXjeawpW3f1FkmjApe9++SSE0JR5190yDne0TWkdIL1VWDk
+	 Pom+JlQ/MyvBg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1thpzm-000000006n6-0Qvz;
+	Tue, 11 Feb 2025 14:08:10 +0100
+Date: Tue, 11 Feb 2025 14:08:10 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Tony Chung <tony467913@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/3] driver: usb: serial: mos7840: add more baudrate
+ options
+Message-ID: <Z6tLuiw7eK5s4Agq@hovoldconsulting.com>
+References: <20241024100901.69883-1-tony467913@gmail.com>
+ <20241024100901.69883-4-tony467913@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024100901.69883-4-tony467913@gmail.com>
 
-xHCI 4.9.1 requires HCs to obey the IOC flag we set on the last TRB even
-after an error has been reported on an earlier TRB. This typically means
-that an error mid TD is followed by a success event for the last TRB.
+On Thu, Oct 24, 2024 at 06:09:05PM +0800, Tony Chung wrote:
+> Adds more baud rate options using 96M/30M/External clock sources.
+> To use these clock sources,
+> set through Clk_Select_Reg1 and Clk_Select_Reg2.
+> 
+> Signed-off-by: Tony Chung <tony467913@gmail.com>
+> ---
+>  drivers/usb/serial/mos7840.c | 156 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 155 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/serial/mos7840.c b/drivers/usb/serial/mos7840.c
+> index acc16737b..70ee4a638 100644
+> --- a/drivers/usb/serial/mos7840.c
+> +++ b/drivers/usb/serial/mos7840.c
+> @@ -1169,6 +1169,37 @@ static int mos7840_calc_baud_rate_divisor(struct usb_serial_port *port,
+>  		*divisor = 0x01;		// DLM=0, DLL=0x01
+>  		*clk_sel_val = 0x60;	// clock source=24M
+>  
+> +	/* below are using 96M or 30M clock source
+> +	 * will determine the clock source later
+> +	 * in function mos7840_send_cmd_write_baud_rate
+> +	 */
 
-On SuperSpeed (and only SS) isochronous endpoints Etron hosts were found
-to emit a success event also after an error on the last TRB of a TD.
+Block comment style, also try to follow style of driver and capitalise
+"Below".
 
-Reuse the machinery for handling errors mid TD to handle these otherwise
-unexpected events. Avoid printing "TRB not part of current TD" errors,
-ensure proper tracking of HC's internal dequeue pointer and distinguish
-this known quirk from other bogus events caused by ordinary bugs.
+That said, this one should not be needed after you add proper
+abstractions for this. For example, instead of returning a raw
+clk_sel_val you return an enum which you handle in the caller.
 
-This patch was found to eliminate all related warnings and errors while
-running for 30 minutes with a UVC camera on a flaky cable which produces
-transaction errors about every second. An altsetting was chosen which
-causes some TDs to be multi-TRB, dynamic debug was used to confirm that
-errors both mid TD and on the last TRB are handled as expected:
+> +	} else if (baudRate == 6000000) {
+> +		*divisor = 0x01;		// DLM=0, DLL=0x01
+> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
+> +	} else if (baudRate == 2000000) {
+> +		*divisor = 0x03;		// DLM=0, DLL=0x03
+> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
 
-[ 6028.439776] xhci_hcd 0000:06:00.0: Transfer error for slot 1 ep 2 on endpoint
-[ 6028.439784] xhci_hcd 0000:06:00.0: Error 4 mid isoc TD, wait for final completion event, is_last_trb=1
-[ 6028.440268] xhci_hcd 0000:06:00.0: Successful completion on short TX for slot 1 ep 2 with last td short 0
-[ 6028.440270] xhci_hcd 0000:06:00.0: Got event 1 after mid TD error
-[ 6029.123683] xhci_hcd 0000:06:00.0: Transfer error for slot 1 ep 2 on endpoint
-[ 6029.123694] xhci_hcd 0000:06:00.0: Error 4 mid isoc TD, wait for final completion event, is_last_trb=0
-[ 6029.123697] xhci_hcd 0000:06:00.0: Successful completion on short TX for slot 1 ep 2 with last td short 0
-[ 6029.123700] xhci_hcd 0000:06:00.0: Got event 1 after mid TD error
+The above looks useful.
 
-Handling of Stopped events is unaffected: finish_td() is called but it
-does nothing and the TD waits until it's unlinked:
+> +	} else if (baudRate == 403200) {
+> +		*divisor = 0x0f;		// DLM=0, DLL=0x0f
+> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
+> +	} else if (baudRate == 225000) {
+> +		*divisor = 0x1b;		// DLM=0, DLL=0x1b
+> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
+> +	} else if (baudRate == 153600) {
+> +		*divisor = 0x27;		// DLM=0, DLL=0x27
+> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 96M
 
-[ 7081.705544] xhci_hcd 0000:06:00.0: Transfer error for slot 1 ep 2 on endpoint
-[ 7081.705546] xhci_hcd 0000:06:00.0: Error 4 mid isoc TD, wait for final completion event, is_last_trb=1
-[ 7081.705630] xhci_hcd 0000:06:00.0: Stopped on Transfer TRB for slot 1 ep 2
-[ 7081.705633] xhci_hcd 0000:06:00.0: Got event 26 after mid TD error
-[ 7081.705678] xhci_hcd 0000:06:00.0: Stopped on Transfer TRB for slot 1 ep 2
-[ 7081.705680] xhci_hcd 0000:06:00.0: Got event 26 after mid TD error
-[ 7081.705759] xhci_hcd 0000:06:00.0: Stopped on No-op or Link TRB for slot 1 ep 2
-[ 7081.705799] xhci_hcd 0000:06:00.0: Stopped on No-op or Link TRB for slot 1 ep 2
+But why would anyone use these?
 
-Reported-by: Kuangyi Chiang <ki.chiang65@gmail.com>
-Closes: https://lore.kernel.org/linux-usb/20250205053750.28251-1-ki.chiang65@gmail.com/T/
-Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
----
+> +	} else if (baudRate == 10000) {
+> +		*divisor = 0xbb;		// DLM=0, DLL=0xbb
+> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 30M
+> +	} else if (baudRate == 125000) {
+> +		*divisor = 0x0f;		// DLM=0, DLL=0x0f
+> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 30M
+> +	} else if (baudRate == 625000) {
+> +		*divisor = 0x03;		// DLM=0, DLL=0x03
+> +		*clk_sel_val = 0x80;	// DUMMY val, clock source = 30M
 
+Or these?
 
+In any case, these would probably also need to go in a lookup table.
 
-Hi Mathias,
+> +
+> +
+>  	} else if (baudRate <= 115200) {
+>  		*divisor = 115200 / baudRate;
+>  		*clk_sel_val = 0x0;
+> @@ -1246,11 +1277,134 @@ static int mos7840_send_cmd_write_baud_rate(struct moschip_port *mos7840_port,
+>  
+>  	}
+>  
+> -	if (1) {		/* baudRate <= 115200) */
+> +	if (1) {
 
-This is the best I was able to do. It does add a few lines, but I don't
-think it's too scary and IMO the switch looks even better this way. It
-accurately predicts those events while not breaking anything else that
-I can see or think of, save for the risk of firmware bugfix adding one
-ESIT of latency on errors.
+Probably a good time to get rid of this in a preparatory patch to reduce
+the indentation.
 
-I tried to also test your Etron patch but it has whitespace damage all
-over the place and would be hard to apply.
+>  		clk_sel_val = 0x0;
+>  		Data = 0x0;
+>  		status = mos7840_calc_baud_rate_divisor(port, baudRate, &divisor,
+>  						   &clk_sel_val);
+> +		if (status < 0) {
+> +			dev_dbg(&port->dev, "%s failed in set_serial_baud\n", __func__);
+> +			return -1;
+> +		}
 
-Regards,
-Michal
+Ok, here you add the error handling. But as I mentioned it's better to
+fix the caller so that it does not pass in a speed that too high for the
+driver. Just keep the old rate and update the termios to reflect that
+that requested rate was rejected.
 
+> +
+> +		/* Write clk_sel_val to SP_Reg or Clk_Select_Reg*/
 
- drivers/usb/host/xhci-ring.c | 18 +++++++++++++-----
- 1 file changed, 13 insertions(+), 5 deletions(-)
+Space before */
 
-diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 965bffce301e..7ff5075e5890 100644
---- a/drivers/usb/host/xhci-ring.c
-+++ b/drivers/usb/host/xhci-ring.c
-@@ -2437,6 +2437,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 	bool sum_trbs_for_length = false;
- 	u32 remaining, requested, ep_trb_len;
- 	int short_framestatus;
-+	bool error_event = false, etron_quirk = false;
- 
- 	trb_comp_code = GET_COMP_CODE(le32_to_cpu(event->transfer_len));
- 	urb_priv = td->urb->hcpriv;
-@@ -2473,8 +2474,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 		fallthrough;
- 	case COMP_ISOCH_BUFFER_OVERRUN:
- 		frame->status = -EOVERFLOW;
--		if (ep_trb != td->end_trb)
--			td->error_mid_td = true;
-+		error_event = true;
- 		break;
- 	case COMP_INCOMPATIBLE_DEVICE_ERROR:
- 	case COMP_STALL_ERROR:
-@@ -2483,8 +2483,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 	case COMP_USB_TRANSACTION_ERROR:
- 		frame->status = -EPROTO;
- 		sum_trbs_for_length = true;
--		if (ep_trb != td->end_trb)
--			td->error_mid_td = true;
-+		error_event = true;
- 		break;
- 	case COMP_STOPPED:
- 		sum_trbs_for_length = true;
-@@ -2518,8 +2517,17 @@ static void process_isoc_td(struct xhci_hcd *xhci, struct xhci_virt_ep *ep,
- 	td->urb->actual_length += frame->actual_length;
- 
- finish_td:
-+	/* An error event mid TD will be followed by more events, xHCI 4.9.1 */
-+	td->error_mid_td |= error_event && (ep_trb != td->end_trb);
-+
-+	/* Etron treats *all* SuperSpeed isoc errors like errors mid TD */
-+	if (xhci->quirks & XHCI_ETRON_HOST && td->urb->dev->speed == USB_SPEED_SUPER) {
-+		td->error_mid_td |= error_event;
-+		etron_quirk |= error_event;
-+	}
-+
- 	/* Don't give back TD yet if we encountered an error mid TD */
--	if (td->error_mid_td && ep_trb != td->end_trb) {
-+	if (td->error_mid_td && (ep_trb != td->end_trb || etron_quirk)) {
- 		xhci_dbg(xhci, "Error mid isoc TD, wait for final completion event\n");
- 		td->urb_length_set = true;
- 		return;
--- 
-2.48.1
+> +		// check clk_sel_val before setting the clk_sel_val
+
+No c99 comments, please.
+
+> +		if (clk_sel_val == 0x80) {
+> +		// clk_sel_val is DUMMY value -> Write the corresponding value to Clk_Select_Reg
+
+Odd indentation.
+
+> +			// 0x01:30M, 0x02:96M, 0x05:External Clock
+
+Ok, so here's the comment I asked for earlier. That should probably go
+above the clock register defines, and/or with defines for these
+constants added as well.
+
+> +			if (baudRate == 125000 || baudRate == 625000 || baudRate == 10000) {
+> +				clk_sel_val = 0x01;
+> +			} else if (baudRate == 153600 || baudRate == 225000 || baudRate == 403200 ||
+> +					baudRate == 2000000 || baudRate == 6000000) {
+> +				clk_sel_val = 0x02;
+> +			} else {
+> +				clk_sel_val = 0x05; // externel clk for custom case.
+> +			}
+
+This needs to be cleaned up using a lookup table and a clk_sel enum.
+
+If there are product that would benefit from using the external clock
+input, this would need to be handled on a per-device basis so that we
+know its frequency.
+
+> +			// needs to set clock source through
+> +			// Clk_Select_Reg1(offset 0x13) & Clk_Select_Reg2(offset 0x14)
+> +			// Clk_Select_Reg1 for port1,2		Clk_Select_Reg2 for port3,4
+> +			if (mos7840_port->port_num <= 2) {
+> +				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG1, &Data);
+> +				if (status < 0) {
+> +					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
+
+Looks like the driver is currently using dev_dbg() for errors, but this
+should most likely be dev_err() throughout. No need to say in which
+function it fails, just 
+	
+	failed to read clock select register: %d\n
+
+or similar should do.
+
+> +					return -1;
+> +				}
+> +				if (mos7840_port->port_num == 1) {
+> +					Data = (Data & 0xf8) | clk_sel_val;
+> +					status =
+> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
+> +				} else if (mos7840_port->port_num == 2) {
+> +					Data = (Data & 0xc7) | (clk_sel_val<<3);
+
+Spaces around binary operator throughout.
+
+> +					status =
+> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
+> +				}
+> +				if (status < 0) {
+> +					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
+> +					return -1;
+> +				}
+> +			} else if (mos7840_port->port_num <= 4) {
+> +				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG2, &Data);
+> +				if (status < 0) {
+> +					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
+> +					return -1;
+> +				}
+> +				if (mos7840_port->port_num == 3) {
+> +					Data = (Data & 0xf8) | clk_sel_val;
+> +					status =
+> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
+> +				} else if (mos7840_port->port_num == 4) {
+> +					Data = (Data & 0xc7) | (clk_sel_val<<3);
+> +					status =
+> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
+> +				}
+> +				if (status < 0) {
+> +					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
+> +					return -1;
+> +				}
+> +			}
+
+The above needs to be cleaned up and abstracted better too. It's hardly
+readable currently and the patterns looks too similar to be repeated
+like this (i.e. a helper function may be the right choice).
+
+> +		} else {
+> +		// clk_sel_val is not DUMMY value -> Write the corresponding value to SP_Reg
+> +
+> +			/* First, needs to write default value to
+> +			 * Clk_Select_Reg1(offset 0x13) & Clk_Select_Reg2(offset 0x14)
+> +			 * Clk_Select_Reg1 for port1,2		Clk_Select_Reg2 for port3,4
+> +			 */
+> +			if (mos7840_port->port_num <= 2) {
+> +				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG1, &Data);
+> +				if (status < 0) {
+> +					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
+> +					return -1;
+> +				}
+> +				if (mos7840_port->port_num == 1) {
+> +					Data = (Data & 0xf8) | 0x00;
+> +					status =
+> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
+> +				} else if (mos7840_port->port_num == 2) {
+> +					Data = (Data & 0xc7) | (0x00<<3);
+> +					status =
+> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG1, Data);
+> +				}
+> +				if (status < 0) {
+> +					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
+> +					return -1;
+> +				}
+> +			} else if (mos7840_port->port_num <= 4) {
+> +				status = mos7840_get_reg_sync(port, CLOCK_SELECT_REG2, &Data);
+> +				if (status < 0) {
+> +					dev_dbg(&port->dev, "reading Clk_Select_Reg failed in set_serial_baud\n");
+> +					return -1;
+> +				}
+> +				if (mos7840_port->port_num == 3) {
+> +					Data = (Data & 0xf8) | 0x00;
+> +					status =
+> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
+> +				} else if (mos7840_port->port_num == 4) {
+> +					Data = (Data & 0xc7) | (0x00<<3);
+> +					status =
+> +						mos7840_set_reg_sync(port, CLOCK_SELECT_REG2, Data);
+> +				}
+> +				if (status < 0) {
+> +					dev_dbg(&port->dev, "setting Clk_Select_Reg failed\n");
+> +					return -1;
+> +				}
+> +			}
+
+This is the same code as above, just writing the default value. This
+obviously needs to be refactored.
+
+> +			// select clock source by writing clk_sel_val to SPx_Reg
+> +			status = mos7840_get_reg_sync(port, mos7840_port->SpRegOffset,
+> +									 &Data);
+> +			if (status < 0) {
+> +				dev_dbg(&port->dev, "reading spreg failed in set_serial_baud\n");
+> +				return -1;
+> +			}
+> +			Data = (Data & 0x8f) | clk_sel_val;
+> +			status = mos7840_set_reg_sync(port, mos7840_port->SpRegOffset,
+> +									Data);
+> +			if (status < 0) {
+> +				dev_dbg(&port->dev, "Writing spreg failed in set_serial_baud\n");
+> +				return -1;
+> +			}
+> +		}
+
+Johan
 
