@@ -1,53 +1,54 @@
-Return-Path: <linux-usb+bounces-20507-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20508-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2069AA31845
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 22:51:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B273FA31848
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 22:52:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C5965166706
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 21:51:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBABF7A1A78
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 21:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E3172676D0;
-	Tue, 11 Feb 2025 21:51:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51C642676E7;
+	Tue, 11 Feb 2025 21:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GrtsaAbB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lZOUSs6/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 915EF267B08
-	for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2025 21:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA6B9267715
+	for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2025 21:52:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739310660; cv=none; b=cR8oJ6nR4PP74UZc1GgG5z3/OJUJ5fxhuCrirt7g9Jd07u1zG8B2YCd8P7Whi6N/lAqN05CLEGn+B2qQqHZFmQP3Td666sfaZzURv5cHrVWDLfm2QWWeVfOuT/XECiufwd6qCGYa2R0ZSxwt7z7WgyIjm9TV46ivCsIUSu362RE=
+	t=1739310731; cv=none; b=GcHNsQQqyrldlLKbvSHXjem4hiImQXeBtWRnd3hfMRMrS5Zsdd3C3w7p4dBdTcXJrJZwcH+g6zj7737VrvUbouj7q2oABb53S1dk6Z+lvfD0K1+cAnfsr43cJjSHt/MIIo7QztsiazchfNZe8uQ/lamyXNnobBZARlzpQBHEJT8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739310660; c=relaxed/simple;
-	bh=92vOCtS1AyZLZcIZHcP0No7dAGMjE2LDMaFLO9UamQA=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=ITtCdk4kXZ1dVCAwyACk9h9YzdBP6uOEuwJfZ6H8FRUgz+scDgu+8txjsLxnDLgIWOFuu607xKy2oaqeZRC7MU2bC+Xk3CpkrVhPwh2V6Y40M2O+x1X1NplhYH428vCrGQHGE+28ocKZ+VGa4kGhjLtARkn61HVT3ndWRici1hA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GrtsaAbB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 656D8C4CEDD
-	for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2025 21:51:00 +0000 (UTC)
+	s=arc-20240116; t=1739310731; c=relaxed/simple;
+	bh=GFF1ZxzFdKWoBCOUE3zY0FIPJlfbraeWb7re9+9QqMA=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AJPyiPz/yEd+TE7yaCuluCwASjRNvS4X0z7sFASSKrephCs2rkY36qYZOzp5iWrt5N8b/L3JFy7QuOGK+zt+JAb7JFb7SH9nAXRHmjpiwhJM6xReCNHD6AnAta71wooaa/gJ0E3W9PkzclyjPFyFfVgtwIbO9PD8nPFG8BojYQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lZOUSs6/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 48AAAC4CEDD
+	for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2025 21:52:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739310660;
-	bh=92vOCtS1AyZLZcIZHcP0No7dAGMjE2LDMaFLO9UamQA=;
-	h=From:To:Subject:Date:From;
-	b=GrtsaAbB66psVM4oz4kO+dStAKZCZ2uMWD4Nfub38KTkPduWZEUVzazeBoJeOXfmZ
-	 iswiaHimxtg0DDbCL2cSPjZ2NtbTbpJawNtLs7M6SUv2pD23w3kSJecvLbP3nfU7X6
-	 4LOGEYAZkPuS6HiDrAzlwdelFTVF6PGK8qnX1EI/G7miOPwBoJkVGg8TacXsuk3m+r
-	 U+8iDO22+XpjT9QvhZRFSejzd9ZqbMfV6rKxJCEuntEcQ8wp0ZMFXll765inIlyPf0
-	 +cr2JYiNo5MF/3TKvVTSo7dk+4GmGg6p3Ku7YRipohqnl6wOlFz8e8XSd6jnEunQF6
-	 4fRV43pwoTFNA==
+	s=k20201202; t=1739310731;
+	bh=GFF1ZxzFdKWoBCOUE3zY0FIPJlfbraeWb7re9+9QqMA=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=lZOUSs6/S3PXg4dFic6g+dBys2eML6uCwCwmVhFpCHZU3skKGnQjdF8j4V0QKesUP
+	 g0ucy0shtvf6nDr4f4p4SMYbpNUTfoOq/SifJs29jMnZ2QJ8hioI430oaVEWM8qjvK
+	 kFCqFKrTDT5avahKAh7jSdyIQuAQ/cRyv9lCD73iufncjRnTlGK2paqiwRB8Biny/t
+	 htyIgZH4C47tVEegIdbzAshclAZB4+udCl+pN31EdKxVVsRtwGB7VdKgB2sj9As/gh
+	 m496Z419oskHC7dm+B+U0rZJ3NjCWWMrdtJw7HI8ngttyYEHcaeCfJ//XyI92UdWHk
+	 jSro5IjPwHzEA==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 56A4AC3279E; Tue, 11 Feb 2025 21:51:00 +0000 (UTC)
+	id 3DE3FC3279E; Tue, 11 Feb 2025 21:52:11 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
-Subject: [Bug 219773] New: External USB disk drive and SSD corruption
-Date: Tue, 11 Feb 2025 21:51:00 +0000
+Subject: [Bug 219773] External USB disk drive and SSD corruption
+Date: Tue, 11 Feb 2025 21:52:11 +0000
 X-Bugzilla-Reason: None
-X-Bugzilla-Type: new
+X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Product: Drivers
 X-Bugzilla-Component: USB
@@ -60,10 +61,10 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
- op_sys bug_status bug_severity priority component assigned_to reporter
- cf_regression attachments.created
-Message-ID: <bug-219773-208809@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-219773-208809-QCLDsfJyrM@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219773-208809@https.bugzilla.kernel.org/>
+References: <bug-219773-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Bugzilla-URL: https://bugzilla.kernel.org/
@@ -77,40 +78,10 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219773
 
-            Bug ID: 219773
-           Summary: External USB disk drive and SSD corruption
-           Product: Drivers
-           Version: 2.5
-          Hardware: All
-                OS: Linux
-            Status: NEW
-          Severity: normal
-          Priority: P3
-         Component: USB
-          Assignee: drivers_usb@kernel-bugs.kernel.org
-          Reporter: fredbezies@gmail.com
-        Regression: No
-
-Created attachment 307616
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307616&action=3Dedit
-dmesg log with errors
-
-Hello.
-
-I noticed recently that on my motherboard - MSI A520M Pro - I got on the lo=
-ng
-run partition table corruption. When I connect an external SSD drive, My dm=
-esg
-log is plagued with lines like:
-
-
-[  114.674453] usb 6-2: reset SuperSpeed Plus Gen 2x1 USB device number 2 u=
-sing
-xhci_hcd
-
-I see it on both 6.12.13 and 6.13.1 kernel on my archlinux.
-
-Adding both full dmesg log and dmidecode log.
+--- Comment #1 from Frederic Bezies (fredbezies@gmail.com) ---
+Created attachment 307617
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307617&action=3Dedit
+dmidecode log
 
 --=20
 You may reply to this email to add a comment.
