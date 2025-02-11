@@ -1,58 +1,57 @@
-Return-Path: <linux-usb+bounces-20501-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20502-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90178A311F6
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 17:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD6A1A31202
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 17:48:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7B501885A5B
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:44:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59B70188433E
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:45:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E95F25A333;
-	Tue, 11 Feb 2025 16:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71E0B25EF81;
+	Tue, 11 Feb 2025 16:45:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rIXwq7p9"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="h/F2DKIB"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E13F01C5D40;
-	Tue, 11 Feb 2025 16:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E018825D55B;
+	Tue, 11 Feb 2025 16:45:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739292276; cv=none; b=K+EO9qtPySRevDF8imKtapcOG6oFFIHJuschu4PqxC960TAaGY8XicvVLqtOKsWAtYgcf8TpfYgawJxEnFnusf70W0aQrsqLDEz+IbNEHVLh4tRZUVjn8gUVsZn3PhbVvbm3Z11mAfJQ8Tzd9FSvaQNGS2LWJlWCfuD5AB3rCRQ=
+	t=1739292343; cv=none; b=go9Hmw86zO+EgfhmGpppW6S4QpneUdRh/VYytPp0y/n1DNhs+/r54Meuw6/EpGff+sun9zGampl76h7SmiBaemrEeZjqQfrU6BB7AHWguysKcScVYZ+DL3vbec1QA+rjK9i4NLrypuSbIx0nn9HbC3zr2IQo+pFrrzlOPW2vm9I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739292276; c=relaxed/simple;
-	bh=MWC2sqCzdtOxyOSZrayDgn1fSQvC8+RdPBb7kzpW+JQ=;
+	s=arc-20240116; t=1739292343; c=relaxed/simple;
+	bh=k0W3jG2Wwaoli89U/w1YDC1rG47h91jxtzee0WnBEOE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=id0rSwWbnEJVVsRiila9bgNFjlzwVMf9fMIjTDHW0fohSGXOTSjCIUTuxQv8xFqJA5O+X0RSISLTAsUEYiR+4FLVhQVmnQ10PBnA0mBTJKSE5oYTKS7e1wtNEjtEJo94ML2rZPL9IPKNiCYvwHrS7c1HPea3CacEjyoCaqA4hRw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rIXwq7p9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30B85C4CEDD;
-	Tue, 11 Feb 2025 16:44:33 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=JridyQF4uYnR3ItqzNAR1mDkpHxBcw8Fm20MFgxGPIv5KWaDcQQrbb29enyczc542+Gk2uCKYFhjKOjcvUlNo6cF+l9bYWXzTE/dqNOMrZgsFzg1ZZ+EZ3OzfjXyBkKR1nPBBYYGFA6W5QMFFC7M4DcD3VluuAPE/GL2nX4bUGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=h/F2DKIB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B629C4CEDD;
+	Tue, 11 Feb 2025 16:45:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739292275;
-	bh=MWC2sqCzdtOxyOSZrayDgn1fSQvC8+RdPBb7kzpW+JQ=;
+	s=k20201202; t=1739292342;
+	bh=k0W3jG2Wwaoli89U/w1YDC1rG47h91jxtzee0WnBEOE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rIXwq7p9I+WhQd0YnPUQ1PT1vUHYsXPL0yr/c2Cq2nfpAO3XoGY6T8O6LxSlCdwXQ
-	 cUudJ6weSiJth705z8Vr5zdpOMzOoMX65hc/0LdoylvOZW1wnOu7KJFJCd7oThu7GR
-	 /aQD4/OuLADLp+NXLIGDA667sY7mndanXg5A+DlsP5RB7WDG95wtG7r7yM7YHCc/k2
-	 c1Yz4uE9uC9np9v4IEtN4ohF+vnUm2v4CY/ymFOvuixIJTOi2kENOuKFyZUrezE1Kv
-	 KUjA7e6HoumHUIAq/S+Ompb0TNRu1aBWyac8IDWjH9anIbxRJKx5YkFseQcrGjFnok
-	 clXBWHPmuRd5g==
-Date: Tue, 11 Feb 2025 16:44:30 +0000
+	b=h/F2DKIBRHT8IcGPzZ5xWm2GH94+3/17kMPyfBqfQSom1ZuZQ7ZRuV5/m52nL1w7R
+	 7sTPkpQDw+9RB6qbCJNpyDNjC2IbFf4jQ5Gxlay0/BqcxmS5P8mfSXnWoWzvT86kRb
+	 gV1Cr2yzf2aKnIy6vUh6LaBJuNLRuHOZuQH6jjp82hDR8pH9chqiltlqpJ6ZkpMPxO
+	 Ud3mYQ9mvQ/nblbGOUJZNy+WI7BQ/vbhIgdSlGRvE/NR2T71jizyWYpGlNa1dj7o1k
+	 edh/l3Q3MRjwBeazCIVHk+ARsV26PiM7LYoqZGvANW+PlR6bwYDjRUi41GXwo8S6Ga
+	 ZmsdqEfwX+aKw==
+Date: Tue, 11 Feb 2025 16:45:38 +0000
 From: Conor Dooley <conor@kernel.org>
 To: Catalin Popescu <catalin.popescu@leica-geosystems.com>
 Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
 	conor+dt@kernel.org, festevam@gmail.com, linux-usb@vger.kernel.org,
 	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 	m.felsch@pengutronix.de, bsp-development.geo@leica-geosystems.com
-Subject: Re: [PATCH next 2/3] dt-bindings: usb: microchip,usb2514: add
- support for USB2512/USB2513
-Message-ID: <20250211-endorphin-harmony-f8d7c8ac9953@spud>
+Subject: Re: [PATCH next 1/3] dt-bindings: usb: microchip,usb2514: add
+ support for vdda
+Message-ID: <20250211-walnut-march-2e24b2f10045@spud>
 References: <20250211105839.3328105-1-catalin.popescu@leica-geosystems.com>
- <20250211105839.3328105-2-catalin.popescu@leica-geosystems.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,72 +59,83 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="55pKOAfZbqfGyc/T"
+	protocol="application/pgp-signature"; boundary="XAPwhO+arktM53PA"
 Content-Disposition: inline
-In-Reply-To: <20250211105839.3328105-2-catalin.popescu@leica-geosystems.com>
+In-Reply-To: <20250211105839.3328105-1-catalin.popescu@leica-geosystems.com>
 
 
---55pKOAfZbqfGyc/T
+--XAPwhO+arktM53PA
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 11, 2025 at 11:58:38AM +0100, Catalin Popescu wrote:
-> Extend support to Microchip hubs USB2512 & USB2513 which are identical
-> to USB2514 but offer less downstream ports (i.e. respectively 2 and 3
-> ports).
+On Tue, Feb 11, 2025 at 11:58:37AM +0100, Catalin Popescu wrote:
+> Microchip hub USB2514 has one 3V3 digital power supply and one 3V3
+> analog power supply. Add support for analog power supply vdda.
 >=20
 > Signed-off-by: Catalin Popescu <catalin.popescu@leica-geosystems.com>
 > ---
->  .../bindings/usb/microchip,usb2514.yaml         | 17 ++++++++++++-----
->  1 file changed, 12 insertions(+), 5 deletions(-)
+>  .../bindings/usb/microchip,usb2514.yaml           | 15 +++++++++++++++
+>  1 file changed, 15 insertions(+)
 >=20
 > diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml=
  b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> index 743f7a22f13d..d159cde04c84 100644
+> index b14e6f37b298..743f7a22f13d 100644
 > --- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
 > +++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> @@ -14,11 +14,18 @@ allOf:
+> @@ -28,6 +28,9 @@ properties:
+>    vdd-supply:
+>      description: 3.3V power supply.
 > =20
->  properties:
->    compatible:
-> -    enum:
-> -      - usb424,2412
-> -      - usb424,2417
-> -      - usb424,2514
-> -      - usb424,2517
-> +    oneOf:
-> +      - items:
+> +  vdda-supply:
+> +    description: 3.3V analog power supply.
+> +
+>    clocks:
+>      description: External 24MHz clock connected to the CLKIN pin.
+>      maxItems: 1
+> @@ -36,6 +39,18 @@ required:
+>    - compatible
+>    - reg
+> =20
+> +if:
 
-This items isn't doing anything, as it only has one entry (the enum).
+This should be merged with the existing allOf, which should be moved
+down to after the patternProperties section.
 
-> +          - enum:
-> +              - usb424,2412
-> +              - usb424,2417
-> +              - usb424,2514
-> +              - usb424,2517
-> +      - items:
-> +          - enum:
-> +              - usb424,2512
-> +              - usb424,2513
-> +          - const: usb424,2514
-> =20
->    reg: true
-> =20
+Cheers,
+Conor.
+
+> +  properties:
+> +    compatible:
+> +      contains:
+> +        const: usb424,2514
+> +then:
+> +  properties:
+> +    vdda-supply: true
+> +else:
+> +  properties:
+> +    vdda-supply: false
+> +
+>  patternProperties:
+>    "^.*@[0-9a-f]{1,2}$":
+>      description: The hard wired USB devices
+>=20
+> base-commit: df5d6180169ae06a2eac57e33b077ad6f6252440
+> prerequisite-patch-id: 0000000000000000000000000000000000000000
 > --=20
 > 2.34.1
 >=20
 
---55pKOAfZbqfGyc/T
+--XAPwhO+arktM53PA
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6t+bgAKCRB4tDGHoIJi
-0rIAAP9SdgwVVZTK+9CSJsn/PWCjaAHa5skZ1+j9nPTmH5R/6AD9HIadPJKgY9HB
-p154AOsgXp8OW2nxak/WVM4i/VQHaQE=
-=ERMl
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6t+sgAKCRB4tDGHoIJi
+0jMWAP0Y6AsOlEvIryGkyO7NuxNAWFOOTsKUQ6ug5sLzWdM89AD/QuBmYwXES4ot
+9dNaWpU697aCxPujYjRHOsbq/TfB/Ag=
+=lHnO
 -----END PGP SIGNATURE-----
 
---55pKOAfZbqfGyc/T--
+--XAPwhO+arktM53PA--
 
