@@ -1,237 +1,119 @@
-Return-Path: <linux-usb+bounces-20494-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20495-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A974A30F0B
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:02:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 59D8CA30FCC
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 16:29:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9C1D8164BA2
-	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:02:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93DEC161D4D
+	for <lists+linux-usb@lfdr.de>; Tue, 11 Feb 2025 15:29:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EB0F250C03;
-	Tue, 11 Feb 2025 15:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98801253F23;
+	Tue, 11 Feb 2025 15:29:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PtMCALep"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="1C6I5seU"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pv50p00im-ztdg10021801.me.com (pv50p00im-ztdg10021801.me.com [17.58.6.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 092DA17C91;
-	Tue, 11 Feb 2025 15:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E67AC252909
+	for <linux-usb@vger.kernel.org>; Tue, 11 Feb 2025 15:29:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739286129; cv=none; b=TAdPnoM6pWxMk3NnH7xXckr/7wJUylg0mDHb7Zc9gKuXsL0tDkvvm6oH+bIaprWdNUZSKvPDuofpch3nilDcVjJqQzlDoaGejlH845XvN2VrjBiDfukzf/dnLiAGmFoLldz3tt18/t9SVZbXAU7NC5enjm8HG01HBRpDr0h6asM=
+	t=1739287758; cv=none; b=dYcvBr6ipP4AduO5RQ2FbFFkshv2VqO+6PVnxcPSbO9N4cS6FFKG29AtUSpdmQ5CMt81oXRuvBdtgcwxArua5cub/Mx1sJGjPCNmUlwb+pZ/QkRGaA5cLM5mRTaT4hOJIr36L5l9Y0ZZ6voNyjt/8Xmt3n89rcATCKxzXV6vbtE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739286129; c=relaxed/simple;
-	bh=NJrnNissa9VtChrtfIQicfGI0gqVDx4S851Ho4mvxao=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CIIn04Bc44MIZgBRu4bShVdI4s5tOL/aHmVVXWpSYMOaFFbX7+XzbzpE+qcMzn7kEdKhx6YtHHSFCQqpUHrqqDn/hi6Vf+v5q8oOIj3+BiwrnK8oiP/n0qlME+pM4fuMD6RZn6IA0ezUZlUHtX05b9QPSuioPwYK2W0gHHTUwk4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PtMCALep; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCECDC4CEE7;
-	Tue, 11 Feb 2025 15:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739286128;
-	bh=NJrnNissa9VtChrtfIQicfGI0gqVDx4S851Ho4mvxao=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PtMCALepGKOl5gqAXES2uJ8GTWxB9LvAebovV4W8TkyeSZDr/2c6LGfjo7t/drubi
-	 gFJAoypbz8Uegh+vvUKY1meiwkSMUOHzxmf1C87GdM7IDCDooUILviqJMq7PyBeRWN
-	 i1ubLMrrY5ghFPM0VCmnGy1Ffe8XyEad/1u4gaY/A1v+uKIykRp7YnrNs9T9BLPoNg
-	 5qbAYkod9qTldl2T6X8Z5uEWnl0Knhq6bVNfQfI0FJXyv6DCd+vUvC1Y4uwf2Ik6zy
-	 lelJ27tr1xQuQ00pordUKZduYMqGxWWLjknMF+eorhEySDM2eXl3eeQMUvFJYuW3rQ
-	 b2qLTIbJamAEA==
-Date: Tue, 11 Feb 2025 16:02:05 +0100
-From: Frederic Weisbecker <frederic@kernel.org>
-To: Paul Menzel <pmenzel@molgen.mpg.de>
-Cc: =?utf-8?Q?Micha=C5=82?= Pecio <michal.pecio@gmail.com>,
-	anna-maria@linutronix.de, linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	mingo@kernel.org, tglx@linutronix.de,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Hayes Wang <hayeswang@realtek.com>, Simon Horman <horms@kernel.org>,
-	netdev@vger.kernel.org
-Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
- #08!!! on Dell XPS 13 9360
-Message-ID: <Z6tmbdl646D_UjrY@localhost.localdomain>
-References: <20250210124551.3687ae51@foxbook>
- <b0d55f4c-a078-42a0-a0fe-5823700f2837@molgen.mpg.de>
- <Z6n-dWDSxNCjROYV@localhost.localdomain>
- <10de7289-653f-43b1-ad46-2e8a0cd42724@molgen.mpg.de>
+	s=arc-20240116; t=1739287758; c=relaxed/simple;
+	bh=Lpebr7E4O1qXgM+GwTmjvL9d6fJEckCRITlepkyDUZ0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uAQvl6+NEC71QUUjJw813LHAttT8+NldjEExcVchr3S8WdykwlFROWz/Tm0ZDUHARVZo2IGGxqlEheRz0i/EZNaHAtdAaNgnc3bBVgDB3TsP6N+VeORD4WohhH1bXnks2uF/KKHn3fxz/Qf4Z/9az7YjKUB3EcRsDVOhBGiAwNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=1C6I5seU; arc=none smtp.client-ip=17.58.6.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; bh=QOsegHChMEdENsDFl50iHjj6Urk+naCjXjh88gC9Lb0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme;
+	b=1C6I5seUBBrmEAmp5wop6SYdNnY3c3kQGSe+xH4zowedPM97ukA7LfAHcv3c744yB
+	 J/FYckarWRNq2v4YIdkNPqkKJ3zHFu6lQT9Wy6z9OkW/MILpJTjOyPaid4MjE2jfoD
+	 GpgIHYtRZqd+PfY5t6Nu5Hc3SBQcHFJ75bWYuZPXAV5XN/86bdVLS24kIWPnjgM8Wj
+	 biLON07NOGTxmax9VVN+W2DSrTaBbWorfOhCSNEIuxIdl/n98jgxzDvudhqO2V+QJc
+	 1wmGiNzKErWWFmFMKtv2F692OSZBScDJ8S7SHa1s9a7xMYzGjI33Kaktxm6hFT7ebP
+	 mreZsoXB/3GVg==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10021801.me.com (Postfix) with ESMTPSA id D090A20104E0;
+	Tue, 11 Feb 2025 15:29:06 +0000 (UTC)
+Message-ID: <116e9983-6c5f-45f3-a933-dcded223f6d7@icloud.com>
+Date: Tue, 11 Feb 2025 23:29:02 +0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <10de7289-653f-43b1-ad46-2e8a0cd42724@molgen.mpg.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 1/9] driver core: add a faux bus for use when a simple
+ device/bus is needed
+To: Kurt Borja <kuurtb@gmail.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, Lyude Paul <lyude@redhat.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>
+Cc: Alexander Lobakin <aleksander.lobakin@intel.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Bjorn Helgaas <bhelgaas@google.com>,
+ Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
+ Mark Brown <broonie@kernel.org>, =?UTF-8?Q?Ma=C3=ADra_Canal?=
+ <mairacanal@riseup.net>, Robin Murphy <robin.murphy@arm.com>,
+ Simona Vetter <simona.vetter@ffwll.ch>, Zijun Hu <quic_zijuhu@quicinc.com>,
+ linux-usb@vger.kernel.org, rust-for-linux@vger.kernel.org,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+References: <2025021023-sandstorm-precise-9f5d@gregkh>
+ <2025021026-atlantic-gibberish-3f0c@gregkh>
+ <D7OU5VOXCS8M.39YEYRWFL1MPW@gmail.com>
+Content-Language: en-US
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <D7OU5VOXCS8M.39YEYRWFL1MPW@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: HC7Nsj_fZNeMs72_TJJMMOiDclYVS2ZC
+X-Proofpoint-ORIG-GUID: HC7Nsj_fZNeMs72_TJJMMOiDclYVS2ZC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-11_06,2025-02-11_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 mlxscore=0 phishscore=0
+ suspectscore=0 clxscore=1011 mlxlogscore=999 malwarescore=0 bulkscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2502110103
 
-Le Tue, Feb 11, 2025 at 12:57:33PM +0100, Paul Menzel a écrit :
-> Dear Frederic,
+On 2025/2/10 22:29, Kurt Borja wrote:
+>> +
+>> +	ret = device_add(dev);
+>> +	if (ret) {
+>> +		pr_err("%s: device_add for faux device '%s' failed with %d\n",
+>> +		       __func__, name, ret);
+>> +		put_device(dev);
+>> +		return NULL;
+>> +	}
+> Now that the probe is synchronous, what do you think about returning
+> -ENODEV if the device failed to bind to the driver?
 > 
-> 
-> Thank you for your reply.
-> 
-> 
-> Am 10.02.25 um 14:26 schrieb Frederic Weisbecker:
-> > Le Mon, Feb 10, 2025 at 12:59:42PM +0100, Paul Menzel a écrit :
-> 
-> > > Am 10.02.25 um 12:45 schrieb Michał Pecio:
-> > > 
-> > > > > > > > > > > On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux
-> > > > > > > > > > > 6.9-rc2+
-> > > > 
-> > > > > Just for the record, I am still seeing this with 6.14.0-rc1
-> > > > 
-> > > > Is this a regression? If so, which versions were not affected?
-> > > 
-> > > Unfortunately, I do not know. Right now, my logs go back until September
-> > > 2024.
-> > > 
-> > >      Sep 22 13:08:04 abreu kernel: Linux version 6.11.0-07273-g1e7530883cd2 (build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 14.2.0-5) 14.2.0, GNU ld (GNU Binutils for Debian) 2.43.1) #12 SMP PREEMPT_DYNAMIC Sun Sep 22 09:57:36 CEST 2024
-> > > 
-> > > > How hard to reproduce? Wasn't it during resume from hibernation?
-> > > 
-> > > It’s not easy to reproduce, and I believe it’s not related with resuming
-> > > from hibernation (which I do not use) or ACPI S3 suspend. I think, I can
-> > > force it more, when having the USB-C adapter with only the network cable
-> > > plugged into it, and then running `sudo powertop --auto-tune`. But sometimes
-> > > it seems unrelated.
-> > > 
-> > > > IRQ isuses may be a red herring, this code here is a busy wait under
-> > > > spinlock. There are a few of those, they cause various problems.
-> > > > 
-> > > >                   if (xhci_handshake(&xhci->op_regs->status,
-> > > >                                 STS_RESTORE, 0, 100 * 1000)) {
-> > > >                           xhci_warn(xhci, "WARN: xHC restore state timeout\n");
-> > > > 			spin_unlock_irq(&xhci->lock);
-> > > >                           return -ETIMEDOUT;
-> > > >                   }
-> > > > 
-> > > > This thing timing out may be close to the root cause of everything.
-> > > 
-> > > Interesting. Hopefully the USB folks have an idea.
-> > 
-> > Handler #08 is NET_RX. So something raised the NET_RX on some non-appropriate
-> > place, perhaps...
-> > 
-> > Can I ask you one more trace dump?
-> > 
-> > I need:
-> > 
-> > echo 1 > /sys/kernel/tracing/events/irq/softirq_raise/enable
-> > echo 1 > /sys/kernel/tracing/options/stacktrace
-> > 
-> > Unfortunately this will also involve a small patch:
-> > 
-> > diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
-> > index fa058510af9c..accd2eb8c927 100644
-> > --- a/kernel/time/tick-sched.c
-> > +++ b/kernel/time/tick-sched.c
-> > @@ -1159,6 +1159,9 @@ static bool report_idle_softirq(void)
-> >   	if (local_bh_blocked())
-> >   		return false;
-> > +	trace_printk("STOP\n");
-> > +	trace_dump_stack(0);
-> > +	tracing_off();
-> >   	pr_warn("NOHZ tick-stop error: local softirq work is pending, handler #%02x!!!\n",
-> >   		pending);
-> >   	ratelimit++;
-> 
-> Thank you for your help. I applied the patch on top of 6.14-rc2, and was
-> able to reproduce the issue. Please find the Linux messages attached, and
-> the trace can be downloaded [1].
 
-So here is the offender:
+Result of device registering @ret is not, should not be, effected by
+"device binding driver (probe result)"
 
- => __raise_softirq_irqoff
- => __napi_schedule
- => rtl8152_runtime_resume.isra.0
- => rtl8152_resume
- => usb_resume_interface.isra.0
- => usb_resume_both
- => __rpm_callback
- => rpm_callback
- => rpm_resume
- => __pm_runtime_resume
- => usb_autoresume_device
- => usb_remote_wakeup
- => hub_event
- => process_one_work
- => worker_thread
- => kthread
- => ret_from_fork
- => ret_from_fork_asm
+if device binging driver failed, you may return -ENODEV in
+faux_ops->probe(). not here.
 
-It is calling napi_schedule() from a non-interrupt. And since
-____napi_schedule() assumes to be called from an interrupt, it
-raises the softirq accordingly without waking up ksoftirqd.
+> This would be useful for modules that may want to unload if the probe
+> fails.
 
-Can you try the following fix (untested, sorry...) ?
+may need to root cause if probe failure happens.
 
-diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-index 468c73974046..8f6ea4e7685c 100644
---- a/drivers/net/usb/r8152.c
-+++ b/drivers/net/usb/r8152.c
-@@ -8537,8 +8537,11 @@ static int rtl8152_runtime_resume(struct r8152 *tp)
- 		clear_bit(SELECTIVE_SUSPEND, &tp->flags);
- 		smp_mb__after_atomic();
- 
--		if (!list_empty(&tp->rx_done))
-+		if (!list_empty(&tp->rx_done)) {
-+			local_bh_disable();
- 			napi_schedule(&tp->napi);
-+			local_bh_enable();
-+		}
- 
- 		usb_submit_urb(tp->intr_urb, GFP_NOIO);
- 	} else {
-diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-index 67964dc4db95..1bd730b881f0 100644
---- a/include/linux/lockdep.h
-+++ b/include/linux/lockdep.h
-@@ -619,6 +619,17 @@ do {									\
- 		     (!in_softirq() || in_irq() || in_nmi()));		\
- } while (0)
- 
-+/*
-+ * Assert to be either in hardirq or in serving softirq or with
-+ * softirqs disabled. Verifies a safe context to queue a softirq
-+ * with __raise_softirq_irqoff().
-+ */
-+#define lockdep_assert_in_interrupt()				\
-+do {								\
-+	WARN_ON_ONCE(__lockdep_enabled && !in_interrupt());	\
-+} while (0)
-+
-+
- extern void lockdep_assert_in_softirq_func(void);
- 
- #else
-@@ -634,6 +645,7 @@ extern void lockdep_assert_in_softirq_func(void);
- # define lockdep_assert_preemption_enabled() do { } while (0)
- # define lockdep_assert_preemption_disabled() do { } while (0)
- # define lockdep_assert_in_softirq() do { } while (0)
-+# define lockdep_assert_in_interrupt() do { } while (0)
- # define lockdep_assert_in_softirq_func() do { } while (0)
- #endif
- 
-diff --git a/net/core/dev.c b/net/core/dev.c
-index c0021cbd28fc..80e415ccf2c8 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -4666,6 +4666,7 @@ static inline void ____napi_schedule(struct softnet_data *sd,
- 	struct task_struct *thread;
- 
- 	lockdep_assert_irqs_disabled();
-+	lockdep_assert_in_interrupt();
- 
- 	if (test_bit(NAPI_STATE_THREADED, &napi->state)) {
- 		/* Paired with smp_mb__before_atomic() in
+how to unload module automatically if probe() failure ?
+
+
+
+
+
 
