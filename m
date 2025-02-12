@@ -1,143 +1,228 @@
-Return-Path: <linux-usb+bounces-20534-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20535-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 506AFA32341
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 11:09:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E9C1A3238A
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 11:36:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03B7516158B
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 10:09:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAD8418893C8
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 10:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D7B8207E1C;
-	Wed, 12 Feb 2025 10:08:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2C0D208960;
+	Wed, 12 Feb 2025 10:36:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="oMm7YIZo"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WhrjfjhQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45FB51F0E5F
-	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 10:08:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF761F9A83;
+	Wed, 12 Feb 2025 10:36:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739354932; cv=none; b=d2P5hU9GFOmuJeQK6cw+xJNUBD+OsNlSPNJAwt+JQnPssDcg3FeDFdFyLhelYhjopiFL/Bt8i/V+TPzgqYFbW6kLKXFjr1dcCurKVGU4/ct831wWUob7zlt4MvsfVmv9xeb/YsVXeWq8zFe6J0ROht8qhqggUsC0PNa+0WiR3s4=
+	t=1739356572; cv=none; b=EOcGjwmhCxMNSal61Ze8hUe9nqXiMjQ9GIe9C1aZNbe7Y1BPAtfLX2waTgokPy1oKJPdhAiOQTrl4fKv4tdm2DlyHOJRzIAr7Htf38bmbJsjZAnp4mfL/Ds3C02AjwriFCB0YrOtEjCYTt2GZYWdN/tWxIXGBKWXH87aqg83DDc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739354932; c=relaxed/simple;
-	bh=TCwfIE/pUasluVSwZTdHWUH2y9kGY+p5IU5lrrQ0aXU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Hd0fhGcFqNn8oitgeeoAWQreV3sRsjWtGlSaoIjIZmQqTEW9Td2doAXycL68iiAxm/niYqHSSh58WUBxQ5seLcKTwaCjWZL1WYi82cejxZHSq0VGc1ZC05PhjCFe+f3lfm5rsVhWk/ii/tDVXxlS/tAlLvFC6t746h46Sl5L6pA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=oMm7YIZo; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51C95PQb026413
-	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 10:08:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=B21EnyUYOIhZzIf5xVM2mRo1SahizWAydB+
-	PPvQassE=; b=oMm7YIZobwLDYtUoNSqzPIWZNhkDJkCirtGEzxbCSz8WKm4YUUU
-	rzYtbqDN9Zs+O6DnQCx8tK/28YOGM7xA4m2o72pbddvppru7lX/eYRFTxZ/JYfqo
-	Tv04T9FJutBmZeNFZtRZgcQm29ZxBzd92e8HNqKgZITmT/5bY9DdM/qGZTRh5oU3
-	ZX/T5eLDVZ+Z5sanm8QXPVTr41dp1tdLpcB9T2Y2RSAlNz/DoxdAWnHTGVGW1F7g
-	ScD0tVnUeiKctd+lHdmid3tP/M5C5jRZJ89W2fKzpy/MryMsd6Wt9PDqIoFB6iLI
-	g/fm5q1BKZNd7uao4ITlGuR0IC9uJnGpynw==
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44r5j5bbpx-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 10:08:48 +0000 (GMT)
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-21f7671a821so80989685ad.1
-        for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 02:08:48 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739354927; x=1739959727;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=B21EnyUYOIhZzIf5xVM2mRo1SahizWAydB+PPvQassE=;
-        b=NNZbM4KXUHYSAQVDIJAgtCOWwNlqWO0n+M/XYSE2c4RBvrrIYFo7XFuVNJqt+CPA/x
-         G+6Sj3xrh0BAP+QHtbc17etekCms2hTC6CUIzibGmLn971+YXXaNFOByFHK7gnAUUhVb
-         inqeV5+adNSOXCvnViDwx7h5o3kFI3H6hPCwiZMhKdHxiBEzPDcxgHckZ73TYVq8F8h9
-         eZekSAaFA0NNa9eLXVmFaDXJCRzXVnOEZw6mtfvYqkX/5gW42bjBluAnuUNakidJdxDc
-         nZa4lMnxRbz04bMQQzvhVPQ7wIs1Gic0gfyxgBrS/vL/WKpkgSADUT+msZRwb/8VSkfQ
-         A5ig==
-X-Gm-Message-State: AOJu0YzZg/FkH+2w/3GQSdEmoiRkM7gr+ju5Dkm8J5/seard3v4nQodH
-	OybMx8GgNaLar5HfIgf2Pi8q8GMeMS3JBMYTkv1wM+XUenh1K7vZvfEoek9+OBqyl1+G8LliFQx
-	IkT3MS9cCH2Gq7dmnFNWGW+bGUQSISMixF5M1njV3f4ZLuLpiuAzaujMu8bQ=
-X-Gm-Gg: ASbGnctL26Vr33Wh3Yggmdh5j425uiHZ1J6GZ2W+lzZLFVx6TMSnmM6zB0Tw6M7PVJK
-	vkkp4NNAnjvVJAaO48zcrNEs3kAG/yPb7QEhXXhaAIQWAdqJZPiEQWzrFUS2kQU+Zu/yCNaQsYk
-	UK+GxKBbj/HmYOKQC9Ny5EuAX6HozohFZn14i822Wi31WBJ7/pcj7ERjUpBfS38s1KGz1iHKxXF
-	RS/WxrUR26KF4VPyuHVemIlLtxtleKGJPB9w2pexmQfQ+n/377CGKdKe6A7E04hwos2+qgfki2G
-	A/04VC4enwSR1XVJR7hFjPX32OiY6IYthA==
-X-Received: by 2002:a17:903:32c8:b0:21f:5638:2d8 with SMTP id d9443c01a7336-220bbdd906dmr49597985ad.53.1739354927475;
-        Wed, 12 Feb 2025 02:08:47 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE5QcjisXpRuziURHZeTlGA14PANI0hISRmK+4kzlfLZqi/cdkjxjyPK2eRmbaTegnFEn+qyw==
-X-Received: by 2002:a17:903:32c8:b0:21f:5638:2d8 with SMTP id d9443c01a7336-220bbdd906dmr49597525ad.53.1739354927105;
-        Wed, 12 Feb 2025 02:08:47 -0800 (PST)
-Received: from hu-prashk-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f365517desm109635795ad.86.2025.02.12.02.08.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2025 02:08:46 -0800 (PST)
-From: Prashanth K <prashanth.k@oss.qualcomm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Ferry Toth <ftoth@exalondelft.nl>,
-        Ricardo B Marliere <ricardo@marliere.net>, Kees Cook <kees@kernel.org>
-Cc: linux-usb@vger.kernel.org, Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        linux-kernel@vger.kernel.org,
-        Prashanth K <prashanth.k@oss.qualcomm.com>, stable@vger.kernel.org
-Subject: [PATCH] usb: gadget: u_ether: Set is_suspend flag if remote wakeup fails
-Date: Wed, 12 Feb 2025 15:38:40 +0530
-Message-Id: <20250212100840.3812153-1-prashanth.k@oss.qualcomm.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1739356572; c=relaxed/simple;
+	bh=U+c+IUesQkxYjvnR8zFinWB/EQGDYXNhX1r/1VZq/90=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=thR57lRMNpjknVGTRJGddLaSzWivDLU3t7Ux5TrqQEPLYAxnlvviV+GSYl+VKJzYl0NOcNURL9QTu2bOPAbHmyFaTYJhydXBUs/5WjUZt/2dJKDZ8AK/qNOKCEG2nfhJqW3fBENw1yoaQLTtJoNmoNOEd7vMgcPEwAD7KLz4ofM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WhrjfjhQ; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739356570; x=1770892570;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=U+c+IUesQkxYjvnR8zFinWB/EQGDYXNhX1r/1VZq/90=;
+  b=WhrjfjhQWWn2q6/76i5lNqeK9xKOothc5klws1igxbASpgpl+ta0rNRw
+   61uf1K58BFrpgaR/MGG5wwJel9XHXSCbZdQeL01I63ogXHDFgkFJUji/1
+   qtMULAma4H74NWDm5dqsJXxDbQlrbKdvgE2hrklxl6jL+7Pnjvx/TaGFG
+   CehT3Y+RZtZ6Trm//bym9r0IexrZ3VAxJtFmaxFs4VyJYb7MyLzO3AVEN
+   WIOzekmGHdDzMZxSV6Ruu0XIpB8Zesb0/SraigTgN+lVe2riD5wQTd8x0
+   DmoqgqYeX8odE/gJwooDjjmbmJM86BsmDoBnHGx+9b6Ohn2GqDIfk1VnL
+   g==;
+X-CSE-ConnectionGUID: jo3EgtJ9RiKlFsHKbvxvyQ==
+X-CSE-MsgGUID: t91MvRu0RymvMZEb7Ex+KA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="50229048"
+X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
+   d="scan'208";a="50229048"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 02:36:10 -0800
+X-CSE-ConnectionGUID: b9QEK0mWTSSiC354VRZ84w==
+X-CSE-MsgGUID: yuaYBeT9RWSiK4YYAVlyRA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
+   d="scan'208";a="117799074"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 02:36:07 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tiA68-0000000Anyl-3KQh;
+	Wed, 12 Feb 2025 12:36:04 +0200
+Date: Wed, 12 Feb 2025 12:36:04 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Felipe Balbi <balbi@kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH v2 2/3] usb: dwc3: gadget: Add support for
+ snps,reserved-endpoints property
+Message-ID: <Z6x5lB4hGpz-9IzS@smile.fi.intel.com>
+References: <20250203191524.3730346-1-andriy.shevchenko@linux.intel.com>
+ <20250203191524.3730346-3-andriy.shevchenko@linux.intel.com>
+ <20250212011013.xumqgguhluxdslpz@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: _j0w8RdSID_3nvqPEs-0M9hN2NXw0mBM
-X-Proofpoint-GUID: _j0w8RdSID_3nvqPEs-0M9hN2NXw0mBM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-12_03,2025-02-11_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 mlxscore=0 bulkscore=0 suspectscore=0 malwarescore=0
- phishscore=0 adultscore=0 spamscore=0 clxscore=1015 impostorscore=0
- mlxlogscore=720 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502120077
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250212011013.xumqgguhluxdslpz@synopsys.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-Currently while UDC suspends, u_ether attempts to remote wakeup
-the host if there are any pending transfers. However, if remote
-wakeup fails, the UDC remains suspended but the is_suspend flag
-is not set. And since is_suspend flag isn't set, the subsequent
-eth_start_xmit() would queue USB requests to suspended UDC.
+On Wed, Feb 12, 2025 at 01:10:17AM +0000, Thinh Nguyen wrote:
+> On Mon, Feb 03, 2025, Andy Shevchenko wrote:
+> > The snps,reserved-endpoints property lists the reserved endpoints
+> > that shouldn't be used for normal transfers. Add support for that
+> > to the driver.
 
-To fix this, bail out from gether_suspend() only if remote wakeup
-operation is successful.
+> > While at it, make sure we don't crash by a sudden access to those
+> > endpoints in the gadget driver.
 
-Cc: stable@vger.kernel.org
-Fixes: 0a1af6dfa077 ("usb: gadget: f_ecm: Add suspend/resume and remote wakeup support")
-Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
----
- drivers/usb/gadget/function/u_ether.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+^^^ (1)
 
-diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
-index 09e2838917e2..f58590bf5e02 100644
---- a/drivers/usb/gadget/function/u_ether.c
-+++ b/drivers/usb/gadget/function/u_ether.c
-@@ -1052,8 +1052,8 @@ void gether_suspend(struct gether *link)
- 		 * There is a transfer in progress. So we trigger a remote
- 		 * wakeup to inform the host.
- 		 */
--		ether_wakeup_host(dev->port_usb);
--		return;
-+		if (!ether_wakeup_host(dev->port_usb))
-+			return;
- 	}
- 	spin_lock_irqsave(&dev->lock, flags);
- 	link->is_suspend = true;
+...
+
+> >  	/* Reset resource allocation flags */
+> > -	for (i = resource_index; i < dwc->num_eps && dwc->eps[i]; i++)
+> > -		dwc->eps[i]->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
+> > +	for (i = resource_index; i < dwc->num_eps; i++) {
+> > +		dep = dwc->eps[i];
+> > +		if (!dep)
+> > +			continue;
+> > +
+> > +		dep->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
+> > +	}
+> 
+> Please keep code refactoring as a separate patch.
+
+It's induced by the change you asked for, it's not a simple refactoring.
+
+Or do you want me to have the patch to check eps against NULL to be separated
+from this one (see (1) above)?
+
+> >  
+> >  	return 0;
+
+...
+
+> > +static int dwc3_gadget_parse_reserved_endpoints(struct dwc3 *dwc, const char *propname,
+> > +						u8 *eps, u8 num)
+> > +{
+> > +	u8 count;
+> > +	int ret;
+> > +
+> > +	if (!device_property_present(dwc->dev, propname))
+> > +		return 0;
+> > +
+> > +	ret = device_property_count_u8(dwc->dev, propname);
+> > +	if (ret < 0)
+> > +		return ret;
+> > +	count = ret;
+> > +
+> > +	ret = device_property_read_u8_array(dwc->dev, propname, eps, min(num, count));
+> 
+> Why do min(num, count)? Can we just put the size of the eps array as
+> specified by the function doc.
+
+No, we can't ask more than there is. The call will fail in such a case.
+In case you wonder, the similar OF call also behaves in the same way.
+
+> > +	if (ret)
+> > +		return ret;
+> > +
+> > +	return count;
+> > +}
+
+...
+
+> >  static int dwc3_gadget_init_endpoints(struct dwc3 *dwc, u8 total)
+> >  {
+> > +	const char			*propname = "snps,reserved-endpoints";
+> >  	u8				epnum;
+> > +	u8				eps[DWC3_ENDPOINTS_NUM];
+> 
+> Can we rename eps to reserved_eps.
+
+Sure.
+
+> > +	u8				count;
+> > +	u8				num;
+> > +	int				ret;
+> >  
+> >  	INIT_LIST_HEAD(&dwc->gadget->ep_list);
+> >  
+> > +	ret = dwc3_gadget_parse_reserved_endpoints(dwc, propname, eps, ARRAY_SIZE(eps));
+> 
+> Base on the name of this function, I would expect the return value
+> to be a status and not a count. Since we are not really parsing but
+> getting the property array. Can we rename this to
+> dwc3_gadget_get_reserved_endpoints()?
+
+Sure.
+
+> > +	if (ret < 0) {
+> > +		dev_err(dwc->dev, "failed to read %s\n", propname);
+> > +		return ret;
+> > +	}
+> > +	count = ret;
+
+...
+
+> > static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
+
+> >  		for (i = 0; i < DWC3_ENDPOINTS_NUM; i++) {
+> >  			dep = dwc->eps[i];
+> > +			if (!dep)
+> > +				continue;
+> 
+> It should be fine to ignore this check here. Something must be really
+> wrong if there's an interrupt pointing to an endpoint that we shouldn't
+> be touching. If we do add a check, we should print a warn or something
+> here. But that should be a patch separate from this.
+
+Theoretically everything is possible as it may be HW integration bug,
+for example. But are you asking about separate patch even from the rest
+of the checks? Please, elaborate what do you want to see.
+
+...
+
+> > static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
+
+> >  	dep = dwc->eps[epnum];
+> > +	if (!dep)
+> > +		return;
+> 
+> Same here.
+> 
+> Looks like the only NULL check needed is in
+> dwc3_gadget_clear_tx_fifos().
+
+Seems more, see above.
+
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
 
