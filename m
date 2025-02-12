@@ -1,129 +1,110 @@
-Return-Path: <linux-usb+bounces-20531-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20532-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0948FA320AD
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 09:13:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D69A6A321DE
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 10:16:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82D071888B83
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 08:13:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 872B5162943
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 09:16:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 869AF204F6F;
-	Wed, 12 Feb 2025 08:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8375205E02;
+	Wed, 12 Feb 2025 09:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LYRDhC/l"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Lc/11+AA"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792F22046BD;
-	Wed, 12 Feb 2025 08:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042CE1EF0BC;
+	Wed, 12 Feb 2025 09:16:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739347982; cv=none; b=iOf8na8aTXb0HmD9o406v9SAoAUQahxZmlqIbZqoni6nhEGYp6LHSoW0jRi6eBwWzW8tarzumSiWd0neLLO/JuS2w+oySdbj5xg81mCswu3YYw5R7IBDDk3FX2x8M/7B1bORHlaH4phJb2D7ls6P4xR/MTsG3vghLmbENKLwlHw=
+	t=1739351766; cv=none; b=ZKMWvFQPVznA4OdUHrVBFYljfo9fnxQRpj1SAlmW64tkJ1VKEIRwwQ2TvgN9G4M8VimPRb7R5oLYQAm1uq1nIRdTAEJJ68ll9LwSt5AMChmDtcze/Yhwpz3QoJ2/31Rvd30Mjt/3B2Xb+txDWCa6kvYmV3JNxmwN/yD7zbKleoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739347982; c=relaxed/simple;
-	bh=K6xZtvcBX7VHLllZ0U21xVUVPmHeVbAT8lLiQebLSdY=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NlW+7gv5FRXIZyA+JwbTiSrPLnArN7/wL7X2lqiw4wj/SLe868ut/NniaWSm0O89NnjYXwVtapQZ9GflB02q3+AyEJQVI8RetMvOabRdHa+sx+SaXwQIYb2ilgu8ErSijoZIzaOOfrw+lA+SfV2WYFi+MLPJg4P5xF69+JQma5w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LYRDhC/l; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ab7c07e8b9bso524879466b.1;
-        Wed, 12 Feb 2025 00:13:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739347979; x=1739952779; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AGGKJfp191wArHnRVFLB5wmtEKHrnNDmIP220p0KWvw=;
-        b=LYRDhC/lh7LcIbTXPES0U8FcXjSJDT2hvfYTRjgc471gq28PoaRYPpjD5Peo8Cgvdm
-         RYJ1Kq26yrqHEKeMtbTxSIIVvqLa3jSaYOsndFVd5D9SReakLPU8w53ykWqtAKmnr/id
-         Ir3VlRROElKfZax5DIEOg+vahg0ATmtBZBD4aR929jUnE5A9tACDw/xAJ28fLVaQu8Ei
-         38fELF9Uph4wqDSvwQVv62h8avY4gV4ZXbz+GSSvhNDZwSJ+pu9YoBZN8Hjtp40yQJ2y
-         crkyKk3ZUociGt69QW5QK4Dabq1FmL2p44LYD0c1Y7tc3PGO3c84C9BqaTL3gxRji7bL
-         gRZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739347979; x=1739952779;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AGGKJfp191wArHnRVFLB5wmtEKHrnNDmIP220p0KWvw=;
-        b=d8zscsdIEOFNk0TVTHwdflDU+5WaLZzF599f7Yvpc6nbt1YUbl4Avw5JXIBSdE5wf0
-         eAiq/cWtB631+v7O8dSluIfozB0uazXvqxd+FFek7DpLahGKMoLIf7qGdmpu2VYkYdQs
-         hf3W4cojLhPVbetXFLLBGIoqHOdgx43fwWGwdbi6yasNP9SRzSz6jR6DZ2GP7IN2TcBr
-         dBX5JJKDfWo4HmX3kqQ/EoWS3w8tLx636DyzTHhCQViS3uqi12k2JmZlFvkazyCHX7L7
-         N6MpMntKYot/EFp9kJumLE/FjFkBbdmD/kpMS237u8KJsLn3xJgu/Qhcu/ToFCQTDhgB
-         hjxQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVwwCVOY/3MMY/Z4wWDCm38Ii89HIvpUqwCxuBcTbV4V9gLDV+Ywv/+2rRbs9FYZS7Eoa4f1vJ01kzkfQw=@vger.kernel.org, AJvYcCW9JpYyaO8nsiZtNNtpCxxjDk2kGbLLMYDMaMAFuFqnXeiS14jmyNCNv10/zY5I/0+I5OB1e79J@vger.kernel.org, AJvYcCXWHnbE9fQwnGRb8cZ2o8JQ0a4cGVYM7ysQM3JKKa3BskKLcc0xj9DS4vTUQUxfHj3GFNyD2cjsqCSO@vger.kernel.org
-X-Gm-Message-State: AOJu0YzY1ovS7SjLZ5NSyg0Bpg0s+ycRvqMzf/XnO6bKZ5dWQ0wBeqEM
-	kGRKZxnLIFBCLZATOAb/n2qir0k9xK2mGdI5p6A8fNjei2atlk1v
-X-Gm-Gg: ASbGncszC8XHVNI5iOT97pQXoEQif46Ek52ZlO+t5RYkelfEEomlupQobkEIZwhrL/s
-	tkVioMOrP5oU+fO714gpRR+gvSis5J3RlVSzs3Gm9Tr+Hmdwcu4ANMrsZ++fEia+EXu7d4Cj2Jo
-	gpXgsfB5zrEToAD/UMID0MCNKDpBDuaH8Q8M6o5mWQhspA1UJTTJNnpFaBScNJ5zMVo3Lsgls9d
-	Wup7/FgZUKOkRhI7t1ewjzOCg6x6NxOzk5NeQxVtmfcqIp72kbWdM42++QWRUDzMQgdSM28PO5k
-	Wn3yafuAUOddcJVKqRQhjuOxFFreKbtb
-X-Google-Smtp-Source: AGHT+IELRgBORrlG4zy3zq7i6yGArccsPGRJu5FNsBQxgON585YtybG9n6qwQB5N+eUMjCgZIU2rHw==
-X-Received: by 2002:a17:906:7807:b0:ab7:6369:83fc with SMTP id a640c23a62f3a-ab7f34af3d5mr163581466b.38.1739347978353;
-        Wed, 12 Feb 2025 00:12:58 -0800 (PST)
-Received: from foxbook (adth118.neoplus.adsl.tpnet.pl. [79.185.219.118])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7b8f73d51sm647210166b.100.2025.02.12.00.12.57
-        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Wed, 12 Feb 2025 00:12:58 -0800 (PST)
-Date: Wed, 12 Feb 2025 09:12:54 +0100
-From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Kuangyi Chiang <ki.chiang65@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>,
- gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org, mathias.nyman@intel.com, stable@vger.kernel.org
-Subject: Re: [PATCH] usb: xhci: Handle quirky SuperSpeed isoc error
- reporting by Etron HCs
-Message-ID: <20250212091254.50653eee@foxbook>
-In-Reply-To: <CAHN5xi05h+4Fz2SwD=4xjU=Yq7=QuQfnnS01C=Ur3SqwTGxy9A@mail.gmail.com>
-References: <20250205234205.73ca4ff8@foxbook>
-	<b19218ab-5248-47ba-8111-157818415247@linux.intel.com>
-	<20250210095736.6607f098@foxbook>
-	<20250211133614.5d64301f@foxbook>
-	<CAHN5xi05h+4Fz2SwD=4xjU=Yq7=QuQfnnS01C=Ur3SqwTGxy9A@mail.gmail.com>
+	s=arc-20240116; t=1739351766; c=relaxed/simple;
+	bh=586BzYlk+Ygs9JfrWVlD0JG3qFFy+8RrRzgbZRazOq4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kn5ZXmP5ExhY5vc3vD/JRUQhPBQloYa4nnodvJVHLJ9rFaesm/Li7cvr95i6Ug1e1fjChv8umfm9mrp/iiVMrZvWPBLeWHTdQEGXYgbzMFWw4Hb4saYxEvxfvRMGpzSDScmGGLvjbL0KbWZkJb5qncjM0AOXecumPEGMo3utEmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Lc/11+AA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC868C4CEDF;
+	Wed, 12 Feb 2025 09:16:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1739351765;
+	bh=586BzYlk+Ygs9JfrWVlD0JG3qFFy+8RrRzgbZRazOq4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Lc/11+AAksnYQFMkVCEPipEVinpyH3Q1FStBJ42OJJqKzVTDCgZoy22d9/C+tl+zW
+	 fOIGghIU9nYrZxnh4+qn7L0PKNhcUtk9J4apl1ZwXrDg0DtnvJAp4pib+qoG8uYhpE
+	 rbc+5nF9laDV4czP2FF1c2rNf/dKRPcQuKhpO2HQ=
+Date: Wed, 12 Feb 2025 10:15:01 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jeremy Kerr <jk@codeconstruct.com.au>
+Cc: Matt Johnston <matt@codeconstruct.com.au>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+	Santosh Puranik <spuranik@nvidia.com>
+Subject: Re: [PATCH net-next v2 1/2] usb: Add base USB MCTP definitions
+Message-ID: <2025021240-perplexed-hurt-2adb@gregkh>
+References: <20250212-dev-mctp-usb-v2-0-76e67025d764@codeconstruct.com.au>
+ <20250212-dev-mctp-usb-v2-1-76e67025d764@codeconstruct.com.au>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250212-dev-mctp-usb-v2-1-76e67025d764@codeconstruct.com.au>
 
-On Wed, 12 Feb 2025 13:59:49 +0800, Kuangyi Chiang wrote:
-> > +       if (xhci->quirks & XHCI_ETRON_HOST && td->urb->dev->speed == USB_SPEED_SUPER) {
-> > +               td->error_mid_td |= error_event;
-> > +               etron_quirk |= error_event;  
+On Wed, Feb 12, 2025 at 10:46:50AM +0800, Jeremy Kerr wrote:
+> Upcoming changes will add a USB host (and later gadget) driver for the
+> MCTP-over-USB protocol. Add a header that provides common definitions
+> for protocol support: the packet header format and a few framing
+> definitions. Add a define for the MCTP class code, as per
+> https://usb.org/defined-class-codes.
 > 
-> This would be the same as etron_quirk = error_event; right?
+> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
+> 
+> ---
+> v2:
+>  - add reference & URL to DSP0283
+>  - update copyright year
+> ---
+>  MAINTAINERS                  |  1 +
+>  include/linux/usb/mctp-usb.h | 30 ++++++++++++++++++++++++++++++
+>  include/uapi/linux/usb/ch9.h |  1 +
+>  3 files changed, 32 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 67665d9dd536873e94afffc00393c2fe2e8c2797..e7b326dba9a9e6f50c3beeb172d93641841f6242 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13903,6 +13903,7 @@ L:	netdev@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/networking/mctp.rst
+>  F:	drivers/net/mctp/
+> +F:	include/linux/usb/mctp-usb.h
+>  F:	include/net/mctp.h
+>  F:	include/net/mctpdevice.h
+>  F:	include/net/netns/mctp.h
+> diff --git a/include/linux/usb/mctp-usb.h b/include/linux/usb/mctp-usb.h
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..b19392aa29310eda504f65bd098c849bd02dc0a1
+> --- /dev/null
+> +++ b/include/linux/usb/mctp-usb.h
+> @@ -0,0 +1,30 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ */
 
-Yeah, same thing I guess.
+I missed this the last time, sorry, but I have to ask, do you really
+mean v2 or later?  If so, that's fine, just want to make sure.
 
-> I tested this with Etron EJ168 and EJ188 under Linux-6.13.1. It works.
+Whichever you pick is fine with me, so:
 
-Well, I found one case where it doesn't work optimally. There is a
-separate patch to skip "Missed Service Error" TDs immediately when the
-error is reported and also to treat MSE as another 'error mid TD', so
-with this Etron patch we would end up expecting spurious success after
-an MSE on the last TRB.
-
-Well, AFAIS, no such event is generated by Etron in this case so we are
-back to waiting till next event and then giving back the missed TD.
-
-
-Maybe I will seriously look into decoupling giveback and dequeue ptr
-tracking, not only for those spurious Etron events but everywhere.
-
-Mathias is right that HW has no sensible reason to touch DMA buffers
-after an error, I will look if the spec is very explicit about it.
-If so, we could give back TDs after the first event and merely keep
-enough information to recognize and silently ignore further events.
-
-Michal
+Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
