@@ -1,70 +1,67 @@
-Return-Path: <linux-usb+bounces-20529-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20530-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B55F9A32014
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 08:40:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45E2CA32038
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 08:46:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 340B6188939D
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 07:40:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE799160E50
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 07:46:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93D282046A2;
-	Wed, 12 Feb 2025 07:40:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6253204595;
+	Wed, 12 Feb 2025 07:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="czuCKK9M"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="trSw1SIe"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C573D1DACB1;
-	Wed, 12 Feb 2025 07:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F1E11D86F2;
+	Wed, 12 Feb 2025 07:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739346017; cv=none; b=pUTMNR1hVltnDNd00bBYH4Fnbsv4/pt5nuvN332FquKYBsPBNe6Oo4wYCtew4TQduvfrT1fdd1Lg5FkTjZy8qOsq1xCD5U0Af17nyA2omnTZYKXR1BXNBbZdIe6KCMCTg35Vocgb1FP8MrwRXoPaaw0z8qgLUr6lfiwrmFHqnwE=
+	t=1739346357; cv=none; b=lUCoKBFjEqxMUZPG5OdY6ODnOXUL8JUMfxYmLy41uIMpRAKirVCJ1bXgPt0NveBxYQzB67PEOpxJLmvwANJw2kKYmrahrWNvmkMJimJpQeFaCC7627QDajoqhEJDV0l3YFv1AsxcBTkGTpw906YowMzO8zonpi/8wo2KbhkJNR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739346017; c=relaxed/simple;
-	bh=JTl7E5auMjAWSwtkSkJOr08cyWlGJ4CniI1B/9Pp0D0=;
+	s=arc-20240116; t=1739346357; c=relaxed/simple;
+	bh=OmoTvEevAQxDxCl0q0yvSSDwzwButvvzNbkWvaAHaFw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gYDwcbwDMAoJ3X0EfvGtwiYmExIs2iygJmHti34TPpnwx3LGhfe7t8w1p0LT2r5DrqVdKe6t+Gu7Lmwxau0NFysMPcBH6vrbhY4V1vsd5em/edDfSvOuv3WOCygIGOXQbxpGbJTbqEzgyRAKGjGpyda/BbO8I3LcMDGJTtA05zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=czuCKK9M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF738C4CEE5;
-	Wed, 12 Feb 2025 07:40:15 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=WWs7CSxppoGvVzFTGq1vvSuJfVou1plDQWOMY0R2XRpl3j+EF9rGV5rzulwgjpe+UngZJehNl0MfJLiGRWanT1lGKvcsF+z3RMooNTvQtgGf0xuVYiYIhnD05qtPhtVGgLnvnoj9G5xj3PyYBtkA6z9Txcuz/Aeup8/G+3bhL44=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=trSw1SIe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18CADC4CEDF;
+	Wed, 12 Feb 2025 07:45:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739346016;
-	bh=JTl7E5auMjAWSwtkSkJOr08cyWlGJ4CniI1B/9Pp0D0=;
+	s=korg; t=1739346356;
+	bh=OmoTvEevAQxDxCl0q0yvSSDwzwButvvzNbkWvaAHaFw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=czuCKK9MIeKkqWcEuk0XXFX7fJRj4gL/oh6h1kIllbYWYJOhO2EpLVVDKNfmfAWQZ
-	 cne9HkIu6bPoBMPBtH7f8wFnB7X7qfg89z9jl5yo5jOz/ZWYs13piMApQfLUQFfrD5
-	 P40yv4UULUoCq28dfsNQZE5jUPRZlybWTMTMLT00=
-Date: Wed, 12 Feb 2025 08:39:12 +0100
+	b=trSw1SIeK3vmV2kEJ6tqfLvLLIvSnPuuVQwT+X9SOv+YiUBYPZsKoO47ZA7HymFjX
+	 sJDFOCcD+Q+5jWjtAh6zdqwWrw+Os5D3i9r8Gsd0Z5b6czE0+YNpkDM2RMRh5WUAru
+	 mcNgFOm51cK2YRNB3b8vFxiUfebQkE+aSc8FK1Sw=
+Date: Wed, 12 Feb 2025 08:44:44 +0100
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Kurt Borja <kuurtb@gmail.com>
-Cc: Zijun Hu <zijun_hu@icloud.com>, linux-kernel@vger.kernel.org,
-	Lyude Paul <lyude@redhat.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Alexander Lobakin <aleksander.lobakin@intel.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Liam Girdwood <lgirdwood@gmail.com>, Lukas Wunner <lukas@wunner.de>,
-	Mark Brown <broonie@kernel.org>,
-	=?iso-8859-1?Q?Ma=EDra?= Canal <mairacanal@riseup.net>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Simona Vetter <simona.vetter@ffwll.ch>,
-	Zijun Hu <quic_zijuhu@quicinc.com>, linux-usb@vger.kernel.org,
-	rust-for-linux@vger.kernel.org,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Subject: Re: [PATCH v4 1/9] driver core: add a faux bus for use when a simple
- device/bus is needed
-Message-ID: <2025021209-ultimate-dazzler-0e81@gregkh>
-References: <2025021023-sandstorm-precise-9f5d@gregkh>
- <2025021026-atlantic-gibberish-3f0c@gregkh>
- <D7OU5VOXCS8M.39YEYRWFL1MPW@gmail.com>
- <116e9983-6c5f-45f3-a933-dcded223f6d7@icloud.com>
- <D7PQHGGX4WPC.26F52356ISZU8@gmail.com>
+To: "Pathak, Asutosh" <asutosh.pathak@intel.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	=?utf-8?Q?=C5=81ukasz?= Bartosik <ukaszb@chromium.org>,
+	Abhishek Pandit-Subedi <abhishekpandit@chromium.org>,
+	Benson Leung <bleung@chromium.org>,
+	Pavan Holla <pholla@chromium.org>,
+	"Christian A. Ehrhardt" <lk@c--e.de>,
+	Jameson Thies <jthies@google.com>,
+	"Katiyar, Pooja" <pooja.katiyar@intel.com>,
+	"Jayaraman, Venkat" <venkat.jayaraman@intel.com>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 1/2] usb: typec: ucsi: Command mailbox interface for
+ the userspace
+Message-ID: <2025021227-married-stunned-759c@gregkh>
+References: <20250206141936.1117222-1-heikki.krogerus@linux.intel.com>
+ <20250206141936.1117222-2-heikki.krogerus@linux.intel.com>
+ <2025020643-federal-uneatable-5da4@gregkh>
+ <Z6YE4mJHx1zHNW8d@kuha.fi.intel.com>
+ <mpe6hgyqmw5eohrwulzy7ujdrlgccgqxwdjdjq7zmsdhsemzcd@b6q2hu5ezvqv>
+ <MN0PR11MB59852E3FEC3E729C9BED8AFA81FD2@MN0PR11MB5985.namprd11.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -73,58 +70,134 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <D7PQHGGX4WPC.26F52356ISZU8@gmail.com>
+In-Reply-To: <MN0PR11MB59852E3FEC3E729C9BED8AFA81FD2@MN0PR11MB5985.namprd11.prod.outlook.com>
 
-On Tue, Feb 11, 2025 at 10:49:34AM -0500, Kurt Borja wrote:
-> On Tue Feb 11, 2025 at 10:29 AM -05, Zijun Hu wrote:
-> > On 2025/2/10 22:29, Kurt Borja wrote:
-> >>> +
-> >>> +	ret = device_add(dev);
-> >>> +	if (ret) {
-> >>> +		pr_err("%s: device_add for faux device '%s' failed with %d\n",
-> >>> +		       __func__, name, ret);
-> >>> +		put_device(dev);
-> >>> +		return NULL;
-> >>> +	}
-> >> Now that the probe is synchronous, what do you think about returning
-> >> -ENODEV if the device failed to bind to the driver?
-> >> 
-> >
-> > Result of device registering @ret is not, should not be, effected by
-> > "device binding driver (probe result)"
-> >
-> > if device binging driver failed, you may return -ENODEV in
-> > faux_ops->probe(). not here.
+On Tue, Feb 11, 2025 at 09:21:28PM +0000, Pathak, Asutosh wrote:
+> On Tue, Feb 11, 2025 at 01:21:28PM -0700, Pathak Asutosh wrote: 
+> > On Fri, Feb 07, 2025 at 03:04:34PM +0200, Heikki Krogerus wrote:
+> > > On Thu, Feb 06, 2025 at 03:51:48PM +0100, Greg Kroah-Hartman wrote:
+> > > > On Thu, Feb 06, 2025 at 04:19:31PM +0200, Heikki Krogerus wrote:
+> > > > > Some of the UCSI commands can be used to configure the
+> > > > > entire Platform Policy Manager (PPM) instead of just
+> > > > > individual connectors. To allow the user space communicate
+> > > > > those commands with the PPM, adding a mailbox interface. The
+> > > > > interface is a single attribute file that represents the
+> > > > > main "OPM to PPM" UCSI data structure.
+> > > > >
+> > > > > The mailbox allows any UCSI command to be sent to the PPM so
+> > > > > it should be also useful for validation, testing and
+> > > > > debugging purposes.
+> > > >
+> > > > As it's for this type of thing, why not put it in debugfs instead?
 > 
-> After thinking about this discussion, I understand why this might be the
-> expected behavior. I'm thinking about very simple modules that would
-> remain loaded even if the probe fails. But of course this may cause
-> problems to other modules.
-> 
-> In the end, this is just my opinion so it would be up to Greg to decide.
-> However, there is still an issue with the groups added to the device,
-> which a user might expect they are tied to an "attached" device
-> lifetime and this currently not the case.
+> The intend of this sysfs is not limited to validation, testing and
+> debugging purposes but rather providing interface for major user space
+> application developments.
 
-I agree with you here, this could be confusing and cause problems, and
-we should be creating apis that "work properly and simply".  Having a
-probe callback is good to add device data like you mention, so that you
-can properly add the information before the sysfs files are accessed,
-removing that race condition.
+But that's not what you are saying above.  sysfs is for attributes of a
+device, NOT for full device control.  Use a proper api for that that can
+be correctly mediated if needed.
 
-> >> This would be useful for modules that may want to unload if the probe
-> >> fails.
-> >
-> > may need to root cause if probe failure happens.
-> >
-> > how to unload module automatically if probe() failure ?
-> 
-> If we check for !dev->driver, a module might propagate an error to the
-> module_init, thus making it fail to load.
+> At present we are working on an application/ user space service which 
+> will be calling UCSI read/write power level commands. But in future
+> there would be more such applications which may require additional
+> UCSI commands to use. We wanted to have a common and 
+> generic solution - and hence thought of going with sysfs interface.
 
-Agreed.  Thanks so much for your review comments, they are greatly
-appreciated.  When I get time next week I'll make these changes and send
-out some patches.
+We can't take new user/kernel apis without a real user, so please hold
+off on this series until you have a real user.  Otherwise it is
+guaranteed that you will have to change that api based on actually using
+it.
+
+> Issue with debugfs is, it is default disabled in release kernels. User has 
+> to rebuild the kernel if the application is based on the debugfs interface.
+> This will become a bottleneck for wider use of such appliances.
+
+It is up to the distro to enable/disable debugfs, that's not our issue.
+debugfs is NOT for normal system operation, so if you want to make this
+a proper api for normal users, than no, don't use debugfs, make it a
+real api.  Which is probably NOT going to be sysfs.
+
+> > > > > +static ssize_t ucsi_write(struct file *filp, struct kobject *kobj,
+> > > > > +			  const struct bin_attribute *attr,
+> > > > > +			  char *buf, loff_t off, size_t count)
+> > > > > +{
+> > > > > +	struct ucsi_sysfs *sysfs = attr->private;
+> > > > > +	struct ucsi *ucsi = sysfs->ucsi;
+> > > > > +	int ret;
+> > > > > +
+> > > > > +	u64 *control = (u64 *)&sysfs->mailbox[UCSI_CONTROL];
+> > > > > +	u32 *cci = (u32 *)&sysfs->mailbox[UCSI_CCI];
+> > > > > +	void *data = &sysfs->mailbox[UCSI_MESSAGE_IN];
+> > > > > +
+> > > > > +	/* TODO: MESSAGE_OUT. */
+> > > > > +	if (off != UCSI_CONTROL || count != sizeof(*control))
+> > > > > +		return -EFAULT;
+> > > > > +
+> > > > > +	mutex_lock(&sysfs->lock);
+> > > > > +
+> > > > > +	memset(data, 0, UCSI_MAX_DATA_LENGTH(ucsi));
+> > > > > +
+> > > > > +	/* PPM_RESET has to be handled separately. */
+> > > > > +	*control = get_unaligned_le64(buf);
+> > > > > +	if (UCSI_COMMAND(*control) == UCSI_PPM_RESET) {
+> > > > > +		ret = ucsi_reset_ppm(ucsi, cci);
+> > > > > +		goto out_unlock_sysfs;
+> > > > > +	}
+> > > > > +
+> > > > > +	mutex_lock(&ucsi->ppm_lock);
+> > > > > +
+> > > > > +	ret = ucsi->ops->sync_control(ucsi, *control, cci, NULL, 0);
+> > > > > +	if (ret)
+> > > > > +		goto out_unlock_ppm;
+> > > > > +
+> > > > > +	if (UCSI_CCI_LENGTH(*cci) && ucsi->ops->read_message_in(ucsi, data,
+> > UCSI_CCI_LENGTH(*cci)))
+> > > > > +		dev_err(ucsi->dev, "failed to read MESSAGE_IN\n");
+> > > > > +
+> > > > > +	ret = ucsi->ops->sync_control(ucsi, UCSI_ACK_CC_CI |
+> > UCSI_ACK_COMMAND_COMPLETE,
+> > > > > +				      NULL, NULL, 0);
+> > > > > +out_unlock_ppm:
+> > > > > +	mutex_unlock(&ucsi->ppm_lock);
+> > > > > +out_unlock_sysfs:
+> > > > > +	mutex_unlock(&sysfs->lock);
+> > > > > +
+> > > > > +	return ret ?: count;
+> > > > > +}
+> > > >
+> > > > This worries me, any userspace tool can now do this?  What other "bad"
+> > > > things can it to the connection?
+> > >
+> > > Although, there is actually only a limited number of things that you
+> > > can do to the connection using UCSI, that is definitely a concern.
+> > >
+> > > The PPM (which is the EC firmware in most cases) is expected to prevent
+> > > any harmful or "unauthorized" UCSI commands from being executed, but
+> > > I'm not sure there is any guarantees for that at the moment.
+> > >
+> Critical power setting related features and options are tightly controlled 
+> by PPM/LPM. In such cases, those UCSI command request by user space 
+> will be blocked by PPM/LPM and will eventually end of into DoS.
+
+What is "PPM/LPM"?  I don't see that here.
+
+> Moreover, to further mitigate the risk of any malicious attack our 
+> understanding is this sysfs interface will be accessible only with root or 
+> super user privilege. 
+
+Is it?  You really want normal users being forced to be root in order to
+talk to this device?
+
+Make this a real api please, don't try to just do "provide raw access to
+the hardware and we will hope any userspace program can get it right",
+that way lies madness :)
+
+> Can we still think of going ahead with sysfs interface and double make 
+> sure to make this accessible only with root/su privilege to minimize 
+> any potential risk of bad uses?
+
+Nope!  Get it right please, once you add it, you can't remove it.
 
 thanks,
 
