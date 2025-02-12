@@ -1,228 +1,120 @@
-Return-Path: <linux-usb+bounces-20535-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20536-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E9C1A3238A
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 11:36:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E310A3239F
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 11:41:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AAD8418893C8
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 10:36:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 49966163B92
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 10:41:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2C0D208960;
-	Wed, 12 Feb 2025 10:36:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 953942080FE;
+	Wed, 12 Feb 2025 10:40:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WhrjfjhQ"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="oKpzx+ua"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EF761F9A83;
-	Wed, 12 Feb 2025 10:36:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C94B1EE7B9;
+	Wed, 12 Feb 2025 10:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739356572; cv=none; b=EOcGjwmhCxMNSal61Ze8hUe9nqXiMjQ9GIe9C1aZNbe7Y1BPAtfLX2waTgokPy1oKJPdhAiOQTrl4fKv4tdm2DlyHOJRzIAr7Htf38bmbJsjZAnp4mfL/Ds3C02AjwriFCB0YrOtEjCYTt2GZYWdN/tWxIXGBKWXH87aqg83DDc=
+	t=1739356856; cv=none; b=rNYRumSnGAZbwuPvCWsTGCP6QFChHFp8QPvrpeqgzab1ONmEeWtGKliNgHhxvhpo+JeCbq78g5lRjVkqWIHLWNDYgfTJW/tptYbZtdMS6n3bHzpIEnCqQRyqFJs+Vvw/4C9hWdd9L+xDCIyVpiLNfRPPezfVsgFHO3XwnpK1eyE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739356572; c=relaxed/simple;
-	bh=U+c+IUesQkxYjvnR8zFinWB/EQGDYXNhX1r/1VZq/90=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=thR57lRMNpjknVGTRJGddLaSzWivDLU3t7Ux5TrqQEPLYAxnlvviV+GSYl+VKJzYl0NOcNURL9QTu2bOPAbHmyFaTYJhydXBUs/5WjUZt/2dJKDZ8AK/qNOKCEG2nfhJqW3fBENw1yoaQLTtJoNmoNOEd7vMgcPEwAD7KLz4ofM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WhrjfjhQ; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739356570; x=1770892570;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=U+c+IUesQkxYjvnR8zFinWB/EQGDYXNhX1r/1VZq/90=;
-  b=WhrjfjhQWWn2q6/76i5lNqeK9xKOothc5klws1igxbASpgpl+ta0rNRw
-   61uf1K58BFrpgaR/MGG5wwJel9XHXSCbZdQeL01I63ogXHDFgkFJUji/1
-   qtMULAma4H74NWDm5dqsJXxDbQlrbKdvgE2hrklxl6jL+7Pnjvx/TaGFG
-   CehT3Y+RZtZ6Trm//bym9r0IexrZ3VAxJtFmaxFs4VyJYb7MyLzO3AVEN
-   WIOzekmGHdDzMZxSV6Ruu0XIpB8Zesb0/SraigTgN+lVe2riD5wQTd8x0
-   DmoqgqYeX8odE/gJwooDjjmbmJM86BsmDoBnHGx+9b6Ohn2GqDIfk1VnL
-   g==;
-X-CSE-ConnectionGUID: jo3EgtJ9RiKlFsHKbvxvyQ==
-X-CSE-MsgGUID: t91MvRu0RymvMZEb7Ex+KA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="50229048"
-X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
-   d="scan'208";a="50229048"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 02:36:10 -0800
-X-CSE-ConnectionGUID: b9QEK0mWTSSiC354VRZ84w==
-X-CSE-MsgGUID: yuaYBeT9RWSiK4YYAVlyRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
-   d="scan'208";a="117799074"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 02:36:07 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tiA68-0000000Anyl-3KQh;
-	Wed, 12 Feb 2025 12:36:04 +0200
-Date: Wed, 12 Feb 2025 12:36:04 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Ferry Toth <fntoth@gmail.com>
-Subject: Re: [PATCH v2 2/3] usb: dwc3: gadget: Add support for
- snps,reserved-endpoints property
-Message-ID: <Z6x5lB4hGpz-9IzS@smile.fi.intel.com>
-References: <20250203191524.3730346-1-andriy.shevchenko@linux.intel.com>
- <20250203191524.3730346-3-andriy.shevchenko@linux.intel.com>
- <20250212011013.xumqgguhluxdslpz@synopsys.com>
+	s=arc-20240116; t=1739356856; c=relaxed/simple;
+	bh=OnLNwlAhOzZBDtombGvT1kO0+N5VxyWb4bM79tyfeAU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hIzweoMYbx3FHn4lvGgF8KvrJTal9xIAUAhRXGfgRm2pKO3mpEi4A0nRC1P3X31HAjKXWClAMWs7+joY/Dt/NUal9QUSiTcH6Wj79mB3wZTF/IIMQInpAcegV5JCDDoL83z0/gWzKId1bTybg5BcNMVUcE3l+90DVeF5eIWgxs8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=oKpzx+ua; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1739356852;
+	bh=OnLNwlAhOzZBDtombGvT1kO0+N5VxyWb4bM79tyfeAU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=oKpzx+uauilxWz4qkbCZu5puD+Kog7MdyGiBCX09ni8mKVlblWfmcXXbcHAsvHkNF
+	 BYPS+ZZBpavAg62F5cr8U5kFeVZ06dEcQv+m4C6tzvmrd2hpND3A4RSfM/xjAYiz49
+	 pTi3W0o87h7IFJPPwrIafBXAX3Ft4WF3zHZgyYuGXKZkoDnZxb4aEWfmUH0LZYVolq
+	 /BXhTZuLQtgjZD8odUmPuIZA6uO4wQ4OFOjNibBckZ+UgfF5uS3vPdkRF//CFr2OKO
+	 xiqQYlt1lYtcldjoPdpwA8vn1LCfbYevPJDEGSsgmc1KKY4zihQZ2eeDk7sTfD4ObC
+	 u8VDSPn/rpwBg==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id A3EC917E0ECF;
+	Wed, 12 Feb 2025 11:40:51 +0100 (CET)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: heikki.krogerus@linux.intel.com
+Cc: gregkh@linuxfoundation.org,
+	andre.draszik@linaro.org,
+	angelogioacchino.delregno@collabora.com,
+	linux@roeck-us.net,
+	shufan_lee@richtek.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel@collabora.com,
+	pablo.sun@mediatek.com
+Subject: [PATCH] usb: typec: tcpci_rt1711h: Unmask alert interrupts to fix functionality
+Date: Wed, 12 Feb 2025 11:40:40 +0100
+Message-ID: <20250212104040.38723-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250212011013.xumqgguhluxdslpz@synopsys.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 12, 2025 at 01:10:17AM +0000, Thinh Nguyen wrote:
-> On Mon, Feb 03, 2025, Andy Shevchenko wrote:
-> > The snps,reserved-endpoints property lists the reserved endpoints
-> > that shouldn't be used for normal transfers. Add support for that
-> > to the driver.
+During probe, the TCPC alert interrupts are getting masked to
+avoid unwanted interrupts during chip setup: this is ok to do
+but there is no unmasking happening at any later time, which
+means that the chip will not raise any interrupt, essentially
+making it not functional as, while internally it does perform
+all of the intended functions, it won't signal anything to the
+outside.
 
-> > While at it, make sure we don't crash by a sudden access to those
-> > endpoints in the gadget driver.
+Unmask the alert interrupts to fix functionality.
 
-^^^ (1)
+Fixes: ce08eaeb6388 ("staging: typec: rt1711h typec chip driver")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-...
-
-> >  	/* Reset resource allocation flags */
-> > -	for (i = resource_index; i < dwc->num_eps && dwc->eps[i]; i++)
-> > -		dwc->eps[i]->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
-> > +	for (i = resource_index; i < dwc->num_eps; i++) {
-> > +		dep = dwc->eps[i];
-> > +		if (!dep)
-> > +			continue;
-> > +
-> > +		dep->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
-> > +	}
-> 
-> Please keep code refactoring as a separate patch.
-
-It's induced by the change you asked for, it's not a simple refactoring.
-
-Or do you want me to have the patch to check eps against NULL to be separated
-from this one (see (1) above)?
-
-> >  
-> >  	return 0;
-
-...
-
-> > +static int dwc3_gadget_parse_reserved_endpoints(struct dwc3 *dwc, const char *propname,
-> > +						u8 *eps, u8 num)
-> > +{
-> > +	u8 count;
-> > +	int ret;
-> > +
-> > +	if (!device_property_present(dwc->dev, propname))
-> > +		return 0;
-> > +
-> > +	ret = device_property_count_u8(dwc->dev, propname);
-> > +	if (ret < 0)
-> > +		return ret;
-> > +	count = ret;
-> > +
-> > +	ret = device_property_read_u8_array(dwc->dev, propname, eps, min(num, count));
-> 
-> Why do min(num, count)? Can we just put the size of the eps array as
-> specified by the function doc.
-
-No, we can't ask more than there is. The call will fail in such a case.
-In case you wonder, the similar OF call also behaves in the same way.
-
-> > +	if (ret)
-> > +		return ret;
-> > +
-> > +	return count;
-> > +}
-
-...
-
-> >  static int dwc3_gadget_init_endpoints(struct dwc3 *dwc, u8 total)
-> >  {
-> > +	const char			*propname = "snps,reserved-endpoints";
-> >  	u8				epnum;
-> > +	u8				eps[DWC3_ENDPOINTS_NUM];
-> 
-> Can we rename eps to reserved_eps.
-
-Sure.
-
-> > +	u8				count;
-> > +	u8				num;
-> > +	int				ret;
-> >  
-> >  	INIT_LIST_HEAD(&dwc->gadget->ep_list);
-> >  
-> > +	ret = dwc3_gadget_parse_reserved_endpoints(dwc, propname, eps, ARRAY_SIZE(eps));
-> 
-> Base on the name of this function, I would expect the return value
-> to be a status and not a count. Since we are not really parsing but
-> getting the property array. Can we rename this to
-> dwc3_gadget_get_reserved_endpoints()?
-
-Sure.
-
-> > +	if (ret < 0) {
-> > +		dev_err(dwc->dev, "failed to read %s\n", propname);
-> > +		return ret;
-> > +	}
-> > +	count = ret;
-
-...
-
-> > static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
-
-> >  		for (i = 0; i < DWC3_ENDPOINTS_NUM; i++) {
-> >  			dep = dwc->eps[i];
-> > +			if (!dep)
-> > +				continue;
-> 
-> It should be fine to ignore this check here. Something must be really
-> wrong if there's an interrupt pointing to an endpoint that we shouldn't
-> be touching. If we do add a check, we should print a warn or something
-> here. But that should be a patch separate from this.
-
-Theoretically everything is possible as it may be HW integration bug,
-for example. But are you asking about separate patch even from the rest
-of the checks? Please, elaborate what do you want to see.
-
-...
-
-> > static void dwc3_endpoint_interrupt(struct dwc3 *dwc,
-
-> >  	dep = dwc->eps[epnum];
-> > +	if (!dep)
-> > +		return;
-> 
-> Same here.
-> 
-> Looks like the only NULL check needed is in
-> dwc3_gadget_clear_tx_fifos().
-
-Seems more, see above.
-
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index 64f6dd0dc660..c71b213b2441 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -334,6 +334,11 @@ static int rt1711h_probe(struct i2c_client *client)
+ {
+ 	int ret;
+ 	struct rt1711h_chip *chip;
++	const u16 alert_mask = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_DISCARDED |
++			       TCPC_ALERT_TX_FAILED | TCPC_ALERT_RX_HARD_RST |
++			       TCPC_ALERT_RX_STATUS | TCPC_ALERT_POWER_STATUS |
++			       TCPC_ALERT_CC_STATUS | TCPC_ALERT_RX_BUF_OVF |
++			       TCPC_ALERT_FAULT;
+ 
+ 	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+ 	if (!chip)
+@@ -384,6 +389,11 @@ static int rt1711h_probe(struct i2c_client *client)
+ 		return ret;
+ 	enable_irq_wake(client->irq);
+ 
++	/* Enable alert interrupts */
++	ret = rt1711h_write16(chip, TCPC_ALERT_MASK, alert_mask);
++	if (ret < 0)
++		return ret;
++
+ 	return 0;
+ }
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.48.1
 
 
