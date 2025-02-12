@@ -1,209 +1,94 @@
-Return-Path: <linux-usb+bounces-20547-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20548-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45907A32C24
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 17:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E2747A32DBB
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 18:44:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A9AB168C0A
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 16:43:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 01C59167C00
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 17:43:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37017221D8B;
-	Wed, 12 Feb 2025 16:43:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69CE325D538;
+	Wed, 12 Feb 2025 17:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dq+Hgnow"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f206.google.com (mail-il1-f206.google.com [209.85.166.206])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 124A224CEE7
-	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 16:43:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.206
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFA4B25D521;
+	Wed, 12 Feb 2025 17:43:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739378617; cv=none; b=teE0IjVWxYzr7Jk/YxZCENtrU+DJzk63hv0ZO+cIzd/INH/4AstYF19aVgQkHVhMe/UTmN0fqZ69D5sEPv4gLLWZffM+LCyK9DwU6CPFPiT+Z+eOSEQq6vLOf2OBvSBAefXUz5Pual17Ky1ebqDBol7xbj95HOfDXMFZ/8XS7Z4=
+	t=1739382217; cv=none; b=a2WjSugjJz5H+c4U7u4zdHH8kD2i4IaMLLjCBgN4TSDbiTcRAZos3QsmUrJt/WhimsR0jrxm1H5DblJcmiTbUOuKEfrT94C5S1/qzhfXJoigpmkLb4ys+x5jBFGBMMSjjsN/dpvrYslXlBFuyMuSmNo02E9RZwwNz0j3MRb7WAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739378617; c=relaxed/simple;
-	bh=iE+iOxjLhV2pk21APmjgVc/QJ6QMFwk4PE+738WNzrE=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=keUoEXmAVgVm86Y1faGLwuPAyrl41yPUiPGgdEYsrXIJtRqSBX88PHj1+sH3fYNGnSyj+FvOWuxWoauwvU756yF6B6wxwxlZqWs2+nhBi3RpiQvoJ+Uqx6NSDh/hIWG7WeanJaBuyqYfsTFuSfPUhVIsO6usCMB6s2E7oENNLeo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.206
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f206.google.com with SMTP id e9e14a558f8ab-3d18700311dso3635425ab.0
-        for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 08:43:35 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739378615; x=1739983415;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bl2J2cvKspLOnGtm3C+QjRbWkxNhfdbc7MB/4019BTg=;
-        b=NdN4m7gV/rvoToMSsUw/jVbKYvQZhmeoGgTM2fzyHfT8EeA/GYhHW/hZcVQsOH0qtN
-         l+hcFc4wIA0WKQm/TKDTjduP6v98q9DzuKgop5GzkY5FbQ6jlGpxMnBiKKLu4EQt3bFq
-         gwyiSWqMpPi/HEcr09cPHOfL3rCb6hVrknEGQn9UJX17qqxoh8tNbLCE5gM4NBdxsmkq
-         5wquBCkTtFSmHZGZEzK+dl5L1zmgL9tD7OAzRLKqgXq6e8Y3vMUSGErTzQJVCew1XLR3
-         0xn7hTKkg5dPcYwSHd9bqJCnkT7/bdbJpR1odrS3GP/2rEijLpauAngsgASjKKSiUyUd
-         QgHw==
-X-Forwarded-Encrypted: i=1; AJvYcCWmd05LBDXwoxw3IdhdiacjvvIieMVEBtzplnTFLMNz0ADK/hW4304e/Ynl/N1TvgojlGcAfyRIJHw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAXyt4OkEgmCFoZbqMD8+JLrtClVmZoFJoNf44DXpUAu3vRyDL
-	4Vy4YJWOHl42MeEinVLpvYZQ5032FVtpYrDAsZXh+9oU4QWI4jO/ktnGDztj9+BVi/idV7R0sF6
-	Pt+B3l7BKQRtZd02RUZaJKtSdxFse4/Zx+5/H0IFxIX4WA62SZAQKW5M=
-X-Google-Smtp-Source: AGHT+IH7QkDafZjNH1cestLwT88alJw61E0xitWsyLWLL9tjeH8ysPzci/EoZKtPrSeDCTSxVs2zTva/b6K36HCEN8JG1UtDeoSd
+	s=arc-20240116; t=1739382217; c=relaxed/simple;
+	bh=wjUh0aGtZGC658fQISI3gzZ3TUnM9+r45/0wT2A9N9E=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ik8m4dFapDaH4asDhFAE3ryabZ/bkbWpEdYgRsQAJV13Ph6Yut2fH/Hpaf5F8mkTJgAVTM3KTaq2zzJp+0YdzlDGEjnBNKDGNMRN7/Mx1yGcivkFVLLz7OqCR1uBr/xcZb/wmKRu718bZZyZfeLsbsowYav95KpzK/18PQjWt80=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dq+Hgnow; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA5E5C4CEDF;
+	Wed, 12 Feb 2025 17:43:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739382217;
+	bh=wjUh0aGtZGC658fQISI3gzZ3TUnM9+r45/0wT2A9N9E=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Dq+HgnowmmIsMIS5JXJ1nZg5gJpqMExrlM9FA44v0pWSWi17Zi5XT7maw4NypLwSk
+	 hrbq9f4LtAMC4Ie6Thg4BF38SEP8Vc4I62hEZJayL8daRMI3G2dNCQOY2oPatVXjlp
+	 5EirleKComNs29R7vKb42sXCQZCQIDQO4II+cLD37Zxinb2fZjvsc/4ipFYzKReFAC
+	 oJPoZaRbfUu47L4+lEPvUmV7Mlo5XlXc8Qy0j3n5WCeMnCD3CPCRdz9DFp6VZ81+wL
+	 hdy2p2hO6OwAYb3f5N1WakXKYzdx2OB7OGck8VVPsnE+mQU/4AVaUiiOJcLrYIjGqx
+	 P6HSF6YM8KcKg==
+From: Frederic Weisbecker <frederic@kernel.org>
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Waiman Long <longman@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Hayes Wang <hayeswang@realtek.com>,
+	linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH 0/2] net: Fix/prevent napi_schedule() call from bare task context
+Date: Wed, 12 Feb 2025 18:43:27 +0100
+Message-ID: <20250212174329.53793-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:2168:b0:3cf:fa94:c7d with SMTP id
- e9e14a558f8ab-3d17bf29b13mr30844905ab.9.1739378615156; Wed, 12 Feb 2025
- 08:43:35 -0800 (PST)
-Date: Wed, 12 Feb 2025 08:43:35 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67accfb7.050a0220.110943.0051.GAE@google.com>
-Subject: [syzbot] [input?] [usb?] KASAN: use-after-free Read in hid_hw_raw_request
-From: syzbot <syzbot+8dc0131372a3ab5bde94@syzkaller.appspotmail.com>
-To: bentiss@kernel.org, jikos@kernel.org, linux-input@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Hi,
 
-syzbot found the following issue on:
+Here is a fix to a bad context calling napi_schedule() and a lockdep
+assertion to prevent from that in the future. I've tried to produce
+a relevant Fixes tag but I'm not confident enough with this codebase.
+This call is there for many years and yet the issue got reported only
+recently, so I may be missing something in the history of this driver
+or in net/usb infrastructure...
 
-HEAD commit:    9682c35ff6ec usb: typec: thunderbolt: Remove IS_ERR check ..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-console output: https://syzkaller.appspot.com/x/log.txt?x=149b89b0580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ed7570f7f6046a71
-dashboard link: https://syzkaller.appspot.com/bug?extid=8dc0131372a3ab5bde94
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+Thanks.
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Frederic Weisbecker (2):
+  net: Assert proper context while calling napi_schedule()
+  r8152: Call napi_schedule() from proper context
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/3c194e311f90/disk-9682c35f.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/daad45c8e7c8/vmlinux-9682c35f.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/8a4e74467d7e/bzImage-9682c35f.xz
+ drivers/net/usb/r8152.c |  5 ++++-
+ include/linux/lockdep.h | 12 ++++++++++++
+ net/core/dev.c          |  1 +
+ 3 files changed, 17 insertions(+), 1 deletion(-)
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8dc0131372a3ab5bde94@syzkaller.appspotmail.com
+-- 
+2.46.0
 
-hid-corsair-void 0003:1B1C:1B25.032E: failed to request firmware (reason: -19)
-==================================================================
-BUG: KASAN: use-after-free in __hid_hw_raw_request drivers/hid/hid-core.c:2446 [inline]
-BUG: KASAN: use-after-free in hid_hw_raw_request+0x13f/0x150 drivers/hid/hid-core.c:2479
-Read of size 8 at addr ffff88811b3a9da8 by task kworker/1:1/23455
-
-CPU: 1 UID: 0 PID: 23455 Comm: kworker/1:1 Not tainted 6.14.0-rc1-syzkaller-g9682c35ff6ec #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 12/27/2024
-Workqueue: events corsair_void_status_work_handler
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:94 [inline]
- dump_stack_lvl+0x116/0x1f0 lib/dump_stack.c:120
- print_address_description mm/kasan/report.c:378 [inline]
- print_report+0xc3/0x620 mm/kasan/report.c:489
- kasan_report+0xd9/0x110 mm/kasan/report.c:602
- __hid_hw_raw_request drivers/hid/hid-core.c:2446 [inline]
- hid_hw_raw_request+0x13f/0x150 drivers/hid/hid-core.c:2479
- corsair_void_request_status+0xc3/0x130 drivers/hid/hid-corsair-void.c:493
- corsair_void_status_work_handler+0x3f/0xb0 drivers/hid/hid-corsair-void.c:512
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
- process_scheduled_works kernel/workqueue.c:3317 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
- kthread+0x3af/0x750 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-
-The buggy address belongs to the physical page:
-page: refcount:0 mapcount:0 mapping:0000000000000000 index:0x4 pfn:0x11b3a9
-flags: 0x200000000000000(node=0|zone=2)
-raw: 0200000000000000 0000000000000000 ffffffffffffffff 0000000000000000
-raw: 0000000000000004 0000000000000000 00000000ffffffff 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as freed
-page last allocated via order 2, migratetype Unmovable, gfp_mask 0x40dc0(GFP_KERNEL|__GFP_COMP|__GFP_ZERO), pid 13954, tgid 13954 (kworker/1:5), ts 2728575621149, free_ts 2729304616876
- set_page_owner include/linux/page_owner.h:32 [inline]
- post_alloc_hook+0x181/0x1b0 mm/page_alloc.c:1551
- prep_new_page mm/page_alloc.c:1559 [inline]
- get_page_from_freelist+0xe76/0x2b90 mm/page_alloc.c:3477
- __alloc_frozen_pages_noprof+0x21c/0x2290 mm/page_alloc.c:4739
- __alloc_pages_noprof+0xb/0x1b0 mm/page_alloc.c:4773
- __alloc_pages_node_noprof include/linux/gfp.h:265 [inline]
- alloc_pages_node_noprof include/linux/gfp.h:292 [inline]
- ___kmalloc_large_node+0x84/0x1b0 mm/slub.c:4239
- __kmalloc_large_noprof+0x1c/0x70 mm/slub.c:4256
- kmalloc_noprof include/linux/slab.h:898 [inline]
- kzalloc_noprof include/linux/slab.h:1037 [inline]
- hid_allocate_device+0x1c/0x4b0 drivers/hid/hid-core.c:2920
- usbhid_probe+0x203/0x1400 drivers/hid/usbhid/hid-core.c:1364
- usb_probe_interface+0x300/0x9c0 drivers/usb/core/driver.c:396
- call_driver_probe drivers/base/dd.c:579 [inline]
- really_probe+0x23e/0xa90 drivers/base/dd.c:658
- __driver_probe_device+0x1de/0x440 drivers/base/dd.c:800
- driver_probe_device+0x4c/0x1b0 drivers/base/dd.c:830
- __device_attach_driver+0x1df/0x310 drivers/base/dd.c:958
- bus_for_each_drv+0x157/0x1e0 drivers/base/bus.c:462
- __device_attach+0x1e8/0x4b0 drivers/base/dd.c:1030
- bus_probe_device+0x17f/0x1c0 drivers/base/bus.c:537
-page last free pid 13954 tgid 13954 stack trace:
- reset_page_owner include/linux/page_owner.h:25 [inline]
- free_pages_prepare mm/page_alloc.c:1127 [inline]
- free_frozen_pages+0x653/0xde0 mm/page_alloc.c:2660
- __folio_put+0x1e8/0x2d0 mm/swap.c:112
- hiddev_free drivers/hid/hid-core.c:755 [inline]
- kref_put include/linux/kref.h:65 [inline]
- hid_device_release+0x133/0x190 drivers/hid/hid-core.c:762
- device_release+0xa1/0x240 drivers/base/core.c:2567
- kobject_cleanup lib/kobject.c:689 [inline]
- kobject_release lib/kobject.c:720 [inline]
- kref_put include/linux/kref.h:65 [inline]
- kobject_put+0x1e4/0x5a0 lib/kobject.c:737
- put_device+0x1f/0x30 drivers/base/core.c:3773
- usbhid_disconnect+0xa0/0xe0 drivers/hid/usbhid/hid-core.c:1458
- usb_unbind_interface+0x1e2/0x960 drivers/usb/core/driver.c:458
- device_remove drivers/base/dd.c:569 [inline]
- device_remove+0x122/0x170 drivers/base/dd.c:561
- __device_release_driver drivers/base/dd.c:1273 [inline]
- device_release_driver_internal+0x44a/0x610 drivers/base/dd.c:1296
- bus_remove_device+0x22f/0x420 drivers/base/bus.c:579
- device_del+0x396/0x9f0 drivers/base/core.c:3854
- usb_disable_device+0x36c/0x7f0 drivers/usb/core/message.c:1418
- usb_disconnect+0x2e1/0x920 drivers/usb/core/hub.c:2305
- hub_port_connect drivers/usb/core/hub.c:5363 [inline]
- hub_port_connect_change drivers/usb/core/hub.c:5663 [inline]
- port_event drivers/usb/core/hub.c:5823 [inline]
- hub_event+0x1bed/0x4f40 drivers/usb/core/hub.c:5905
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
-
-Memory state around the buggy address:
- ffff88811b3a9c80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88811b3a9d00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->ffff88811b3a9d80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-                                  ^
- ffff88811b3a9e00: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
- ffff88811b3a9e80: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
-==================================================================
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
 
