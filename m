@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-20551-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20552-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B02EBA32EAA
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 19:27:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8C8FA32EAB
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 19:28:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3BC6D1885EEB
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 18:28:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AD2F1649EE
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 18:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36C48260A33;
-	Wed, 12 Feb 2025 18:27:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F0F125E45C;
+	Wed, 12 Feb 2025 18:28:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6GYOIOb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lpSossIe"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B267025EFA6
-	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 18:27:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24B8F20E02A
+	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 18:28:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739384865; cv=none; b=dQRX+DK0cG/08ADEt+3kOT4NxS51Kx5qV82bp0aA+e1qz1eMqyjwO9lu9KnYpAVWot0ODsP+jJpOqnFQI3+zVJvtNJRRsn+dBo1HwyyoEImQBZys9gBh+nqLAuEPmmLHmqGKp9igHwXvJQzfjl/9kly1jIcWg/qcNH9r30FPOqg=
+	t=1739384887; cv=none; b=OqDdHY9FLAqXa2S0A1u1MoEWNGCkst35XL2DQ+EdvsDYGVh25nK9WyzG+65jqxHeApw6LMktr89C6htgtteWKkEVpE6+W4DLhRS1iOiJbfnaVjT2SBX3yvnIjUyrrb195P/Up7kgTbmjxjm3aZkfRdCKpKPdlHdNwjbr7kvFzkM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739384865; c=relaxed/simple;
-	bh=dQ7RdQBxjNt2uOa+Uo1+Lyy4fhFcmfB5seaX2tY/t0A=;
+	s=arc-20240116; t=1739384887; c=relaxed/simple;
+	bh=yZoGzR5OjVHDrz+LmemxcMmvjUOdeRAmgpd2vUz1JQ0=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=NPdDiP3JBztblsPfMGYVArkO6pPCCY3A2M+bBHiY2vu9eyXgII2WZbmyYN5JTa246LC0yuAgDFGKl/otXIpYqWS/W3ScmLmWuJteblsAeuwMFH9KbtVoCK8yRvW2T2MZCWhiKwlj7ZIVeWu5uWkNk+GizB0PRLDKHtr/6biI18c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6GYOIOb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 309E8C4CEE5
-	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 18:27:45 +0000 (UTC)
+	 Content-Type:MIME-Version; b=icfBcSj9NPRD9smYZ9u3hodvKTlyl0JVvA0SxB7Q6fAQeUHnbzwEU6HGGDksYch9XIN8sNzU9ApThqDek3Th6rNCqDznV3VAmUkGJrskDSsyC4t813fZ/47H/aBZ/KhpttKSLi1w0xQBsa1SG39D3Jvd4kdPk2kN2lzLde+E2uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lpSossIe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 93903C4CEDF
+	for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 18:28:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739384865;
-	bh=dQ7RdQBxjNt2uOa+Uo1+Lyy4fhFcmfB5seaX2tY/t0A=;
+	s=k20201202; t=1739384885;
+	bh=yZoGzR5OjVHDrz+LmemxcMmvjUOdeRAmgpd2vUz1JQ0=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=U6GYOIObCYJKKedWOj+FzcPrI9w+QReyMFnGsCti5FRYWo+yiVVGwEvg1LP8/yeLw
-	 vAM58FwEIDxj7RPpTcdkPoyFXyglwpKM/GIe7h7IqnuxAXmlwJJNVY0Juj+JXYlYpn
-	 nkeX4vw63Zab3miLuNOkXtgPLENNaM417QkWOhSwXs/5UfcNWzvvJwmQG5gJhi06Dx
-	 Z1Z1Rr0+TP+U+P+a4KP8w5/MUhc6zABBMlBriGlFxxly6Jtkz3swFY3fMRYH4bOkeP
-	 b4/xm8AEvHUBdzfgc2wM8sQQIjcF1PNlk0vPR+xPRINzlRf35pktW3vp21arY4eIia
-	 oheobvRmNAavQ==
+	b=lpSossIeYj+Ckfwuh1pwLbePjkK60PPR8AdHRUQvQqZo2esN8kx7HjnN5uBtkCm9j
+	 um5mj46VD8DlI0vHva04KhtTAMMdhNOMwegZC8qH5JpH4X06xf1HfMHkcsGKEF1yMk
+	 B+9bQz4UWoxSG0B5J1iyvf3xGUQHqKOkiYxrMSt/SDMPuISxFVP1TUPh5pFtWGO8cE
+	 uqf6FkHsHCzhvDyeTimqm7DNfBKroEt0DnbjjqpBmsaBrj50mUMkggT3mvZTVIqhQw
+	 o1iamLOEDnZebSGJRWLH8KrlVISN/EoVXXWxP0ZMYNRfuDi4CLx0Ox7RfVMKaVHSSV
+	 chXcUn6CHZM2g==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 15944C3279F; Wed, 12 Feb 2025 18:27:45 +0000 (UTC)
+	id 8B427C3279F; Wed, 12 Feb 2025 18:28:05 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 219773] External USB disk drive and SSD corruption while
  connected to USB 3 ports.
-Date: Wed, 12 Feb 2025 18:27:44 +0000
+Date: Wed, 12 Feb 2025 18:28:05 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -62,8 +62,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219773-208809-iyjP1XqgGj@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-219773-208809-MVSrU0swqP@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219773-208809@https.bugzilla.kernel.org/>
 References: <bug-219773-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,27 +79,10 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219773
 
---- Comment #2 from Frederic Bezies (fredbezies@gmail.com) ---
-I also launch both:
-
-sudo fdisk -l /dev/sdb
-sudo smartctl -x /dev/sdb
-
-First command:
-
-sudo fdisk -l /dev/sdb
-Disk /dev/sdb: 465,76 GiB, 500107862016 bytes, 976773168 sectors
-Disk model: MobileDataStar=20=20
-Units: sectors of 1 * 512 =3D 512 bytes
-Sector size (logical/physical): 512 bytes / 512 bytes
-I/O size (minimum/optimal): 512 bytes / 512 bytes
-Disklabel type: gpt
-Disk identifier: 0D820E40-5858-9090-8081-828310111213
-
-Device     Start       End   Sectors   Size Type
-/dev/sdb1   2048 976773119 976771072 465,8G Microsoft basic data
-
-Second command? See attached file.
+--- Comment #3 from Frederic Bezies (fredbezies@gmail.com) ---
+Created attachment 307639
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307639&action=3Dedit
+smartctl infos
 
 --=20
 You may reply to this email to add a comment.
