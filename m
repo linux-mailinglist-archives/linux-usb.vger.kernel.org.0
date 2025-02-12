@@ -1,110 +1,89 @@
-Return-Path: <linux-usb+bounces-20532-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20533-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D69A6A321DE
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 10:16:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD23EA32295
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 10:40:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 872B5162943
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 09:16:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 89C2F7A49D7
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 09:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8375205E02;
-	Wed, 12 Feb 2025 09:16:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C3E52066F1;
+	Wed, 12 Feb 2025 09:38:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Lc/11+AA"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="F7MT0PNo"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042CE1EF0BC;
-	Wed, 12 Feb 2025 09:16:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A8B12066D9;
+	Wed, 12 Feb 2025 09:38:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739351766; cv=none; b=ZKMWvFQPVznA4OdUHrVBFYljfo9fnxQRpj1SAlmW64tkJ1VKEIRwwQ2TvgN9G4M8VimPRb7R5oLYQAm1uq1nIRdTAEJJ68ll9LwSt5AMChmDtcze/Yhwpz3QoJ2/31Rvd30Mjt/3B2Xb+txDWCa6kvYmV3JNxmwN/yD7zbKleoM=
+	t=1739353126; cv=none; b=Ry1cBuyUjzHYCIW5UipgPR3qokL7Xib/4qe1OPK55BbrUGBafQ9Ak0U1MKOmONnIIj3Ox9cMaX22L2ELfZInqvM+AbwqZm+FE9IdCEE5fHSiiaM1uu5YsXscxmjbNlGXR8WmgMobp/iEkiFo1GqVU6McNXAt0822DUD3NlublZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739351766; c=relaxed/simple;
-	bh=586BzYlk+Ygs9JfrWVlD0JG3qFFy+8RrRzgbZRazOq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Kn5ZXmP5ExhY5vc3vD/JRUQhPBQloYa4nnodvJVHLJ9rFaesm/Li7cvr95i6Ug1e1fjChv8umfm9mrp/iiVMrZvWPBLeWHTdQEGXYgbzMFWw4Hb4saYxEvxfvRMGpzSDScmGGLvjbL0KbWZkJb5qncjM0AOXecumPEGMo3utEmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Lc/11+AA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC868C4CEDF;
-	Wed, 12 Feb 2025 09:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739351765;
-	bh=586BzYlk+Ygs9JfrWVlD0JG3qFFy+8RrRzgbZRazOq4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Lc/11+AAksnYQFMkVCEPipEVinpyH3Q1FStBJ42OJJqKzVTDCgZoy22d9/C+tl+zW
-	 fOIGghIU9nYrZxnh4+qn7L0PKNhcUtk9J4apl1ZwXrDg0DtnvJAp4pib+qoG8uYhpE
-	 rbc+5nF9laDV4czP2FF1c2rNf/dKRPcQuKhpO2HQ=
-Date: Wed, 12 Feb 2025 10:15:01 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Jeremy Kerr <jk@codeconstruct.com.au>
-Cc: Matt Johnston <matt@codeconstruct.com.au>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-	Santosh Puranik <spuranik@nvidia.com>
-Subject: Re: [PATCH net-next v2 1/2] usb: Add base USB MCTP definitions
-Message-ID: <2025021240-perplexed-hurt-2adb@gregkh>
-References: <20250212-dev-mctp-usb-v2-0-76e67025d764@codeconstruct.com.au>
- <20250212-dev-mctp-usb-v2-1-76e67025d764@codeconstruct.com.au>
+	s=arc-20240116; t=1739353126; c=relaxed/simple;
+	bh=S8VIXdospXRdBtwzRyNgOFZRIjOgZsm43lgGBJuQjDo=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=DowLwiTWgnnfX57K+sPEowHpckRI5/Cb+P8wUNN4X6Vg+oKt2NiwChwamVNXFGE8y+wAn8MbQ1/dPI3hcRw7x5/Yh/MgRh5qZ24FPNLA2WmO9A6Nk7veekcF3vATYxrd7sPkeZcJA2NkOHmQbeVlLaTOgSmZQrdqm/bDWrzE2dg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=F7MT0PNo; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:Subject:Date:Message-Id; bh=rXcHEM/xIJvw6XceLy
+	U/deizny3qc2YfoZNHPyVdXpM=; b=F7MT0PNosun/RmQSZiUH2TIpqZuFZkPI+s
+	jOCgwSc3n3ExHFLbkE4JRkV6P+3UhOnFgn64wy/eGfE7DLyWqSIST66aPAKMtrOA
+	EAXAjDEYSN1Z2N3uQ3hObp17SihrEBwY4zzzx50XYAXZuoBysIMEhHPAPM4DOsXe
+	srFN940YQ=
+Received: from localhost.localdomain (unknown [116.128.244.169])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgAXo+MWbKxnCVe2Ng--.21306S2;
+	Wed, 12 Feb 2025 17:38:31 +0800 (CST)
+From: Lei Huang <huanglei814@163.com>
+To: gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Lei Huang <huanglei@kylinos.cn>
+Subject: [PATCH] USB: quirks: add USB_QUIRK_NO_LPM quirk for Teclast dist
+Date: Wed, 12 Feb 2025 17:38:29 +0800
+Message-Id: <20250212093829.7379-1-huanglei814@163.com>
+X-Mailer: git-send-email 2.17.1
+X-CM-TRANSID:QCgvCgAXo+MWbKxnCVe2Ng--.21306S2
+X-Coremail-Antispam: 1Uf129KBjvdXoW7JrW5Zr4rJr15XFW5KFWxWFg_yoWfZFb_Cr
+	1xWaySg3W8GF93tr42va1fZrWFk3W29F1v9ayktF13Ja17Cw1rAFW7ur90vr17GFZ7JFs8
+	KF1xAr1rZr4vgjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUjvD7PUUUUU==
+X-CM-SenderInfo: xkxd0wxohlmiqu6rljoofrz/1tbi7gHx9mesZk1NAAABsE
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250212-dev-mctp-usb-v2-1-76e67025d764@codeconstruct.com.au>
 
-On Wed, Feb 12, 2025 at 10:46:50AM +0800, Jeremy Kerr wrote:
-> Upcoming changes will add a USB host (and later gadget) driver for the
-> MCTP-over-USB protocol. Add a header that provides common definitions
-> for protocol support: the packet header format and a few framing
-> definitions. Add a define for the MCTP class code, as per
-> https://usb.org/defined-class-codes.
-> 
-> Signed-off-by: Jeremy Kerr <jk@codeconstruct.com.au>
-> 
-> ---
-> v2:
->  - add reference & URL to DSP0283
->  - update copyright year
-> ---
->  MAINTAINERS                  |  1 +
->  include/linux/usb/mctp-usb.h | 30 ++++++++++++++++++++++++++++++
->  include/uapi/linux/usb/ch9.h |  1 +
->  3 files changed, 32 insertions(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 67665d9dd536873e94afffc00393c2fe2e8c2797..e7b326dba9a9e6f50c3beeb172d93641841f6242 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13903,6 +13903,7 @@ L:	netdev@vger.kernel.org
->  S:	Maintained
->  F:	Documentation/networking/mctp.rst
->  F:	drivers/net/mctp/
-> +F:	include/linux/usb/mctp-usb.h
->  F:	include/net/mctp.h
->  F:	include/net/mctpdevice.h
->  F:	include/net/netns/mctp.h
-> diff --git a/include/linux/usb/mctp-usb.h b/include/linux/usb/mctp-usb.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..b19392aa29310eda504f65bd098c849bd02dc0a1
-> --- /dev/null
-> +++ b/include/linux/usb/mctp-usb.h
-> @@ -0,0 +1,30 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
+From: Lei Huang <huanglei@kylinos.cn>
 
-I missed this the last time, sorry, but I have to ask, do you really
-mean v2 or later?  If so, that's fine, just want to make sure.
+Teclast disk used on Huawei hisi platforms doesn't work well,
+losing connectivity intermittently if LPM is enabled.
+Add quirk disable LPM to resolve the issue.
 
-Whichever you pick is fine with me, so:
+Signed-off-by: Lei Huang <huanglei@kylinos.cn>
+---
+ drivers/usb/core/quirks.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+diff --git a/drivers/usb/core/quirks.c b/drivers/usb/core/quirks.c
+index 67732c791c93..3927c7d66dac 100644
+--- a/drivers/usb/core/quirks.c
++++ b/drivers/usb/core/quirks.c
+@@ -525,6 +525,9 @@ static const struct usb_device_id usb_quirk_list[] = {
+ 	/* Blackmagic Design UltraStudio SDI */
+ 	{ USB_DEVICE(0x1edb, 0xbd4f), .driver_info = USB_QUIRK_NO_LPM },
+ 
++	/* Teclast disk */
++	{ USB_DEVICE(0x1f75, 0x0917), .driver_info = USB_QUIRK_NO_LPM },
++
+ 	/* Hauppauge HVR-950q */
+ 	{ USB_DEVICE(0x2040, 0x7200), .driver_info =
+ 			USB_QUIRK_CONFIG_INTF_STRINGS },
+-- 
+2.17.1
+
 
