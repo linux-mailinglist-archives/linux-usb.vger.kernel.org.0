@@ -1,141 +1,166 @@
-Return-Path: <linux-usb+bounces-20537-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20538-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04953A323D5
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 11:48:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B593A324EB
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 12:29:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1449F3A7C31
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 10:48:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8AF781885A03
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 11:30:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9413F209F4E;
-	Wed, 12 Feb 2025 10:48:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA6DE20B7E7;
+	Wed, 12 Feb 2025 11:25:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="TMR5XmCv"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IUtBTPbt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C72209677;
-	Wed, 12 Feb 2025 10:48:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B884A1F2365;
+	Wed, 12 Feb 2025 11:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739357308; cv=none; b=tGpOfvS8EThon7pzV+kTONUDAdwA2FZp9T2JjvrK1Jz8O73OTXRx7uD/SOiyrIFtv26QgI3eiyhIHN9leRZ5ooR70cTJ6UJlAgei/tL+55s86ppiT/b1/6Io9hFmWF9NVcZ6Cizgc7kEP0r5kzE+yM1fqhIPP+xuqee6rm4/vvs=
+	t=1739359521; cv=none; b=UIafIX2VXu7PXx69kZhAG56zm1mmMOi5qAEV+j+c/n8B6tDbfEOWB8Csc71DjfbB3sHYMT4rqu7f0IM/7bb7uEDPmXTyhH9OAq8bI1pBn9YjyRGMg2gjTEjtPai6i46dEf35bqo/tcjYybmerclx+SltnPdnXdEFi3cmZBNUIqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739357308; c=relaxed/simple;
-	bh=MDzi94+7DXP8gki44yU/WMmcUnnz896qVa5iXKJmYdY=;
+	s=arc-20240116; t=1739359521; c=relaxed/simple;
+	bh=TgoLBoSdsmfmuqpXM5gofGXTPEUeyBBSV93lb6OMC7Y=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Itplnomg+e+69AdlxZRdgUa8B/G8f7/3eb3O7b86Z0HEs9Ghg2f8vLAczA2uPT2xU07PfuM/iEVSzIr4z838du7ZbgVKFWrI6L+DLOCsrmK5DQwHGFQ8cq6uMhTluRgKiPZLIk1DeX+b0Bi+ASZxAi8Wn8Ef1SK3SW6fsRL8iW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=TMR5XmCv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24B85C4CEDF;
-	Wed, 12 Feb 2025 10:48:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739357307;
-	bh=MDzi94+7DXP8gki44yU/WMmcUnnz896qVa5iXKJmYdY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TMR5XmCv03tfHX7I53UpQYNvbhR6rOKNvq589jk8YUun8HdFzzdq/KL3Ah5GHyImH
-	 XL06WiLcWYnr2QVip5Fc+bFM0rDwJARBf8hGikiCPSRjoVFxqZDwuRMD24I+ywQXOr
-	 PJHdZipeEf3CzAjLCPztGHcG5YN0Vrg1ZB68njx0=
-Date: Wed, 12 Feb 2025 11:47:23 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: heikki.krogerus@linux.intel.com, andre.draszik@linaro.org,
-	linux@roeck-us.net, shufan_lee@richtek.com,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	kernel@collabora.com, pablo.sun@mediatek.com
-Subject: Re: [PATCH] usb: typec: tcpci_rt1711h: Unmask alert interrupts to
- fix functionality
-Message-ID: <2025021214-snowshoe-shortly-602d@gregkh>
-References: <20250212104040.38723-1-angelogioacchino.delregno@collabora.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=AgusiZFa3QWIWOPbfFsmlV8vcAER7VtDXup7q+9pgaBMYt3a8KaGhC+Q3licMv+JXaetopFJkj3HDdhCz+SfRzdcBuKHR+WgnoHX5Gad1c4ZiD8OXAJcxlpy0dD39ELlWpPZuAfP6Ts5A6r0O4/WVojBxpOQaxiitZw9eQzdUcI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IUtBTPbt; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21f62cc4088so81832025ad.3;
+        Wed, 12 Feb 2025 03:25:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739359519; x=1739964319; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TgoLBoSdsmfmuqpXM5gofGXTPEUeyBBSV93lb6OMC7Y=;
+        b=IUtBTPbtTp4ZNtJqA4BWixkMQ5MFlLMWUcYSFL7e31EDCCLw+0PXNgecSsNYF572kE
+         vSlQH9uWL/NL32ajvOo9IYeOstxZT4pn655W38HhCZgd9Gq5UGthqUqeos36pgfAYjNT
+         NZ8T4lzpQloN/lf6OJmlK4whpB0vw21vF8IE8c253qR82EO4BIcEczsnmRbbfijCNjw8
+         Z+MhwW6TNd3qCiKt2zuemY3sgulyJZOaEFlP+Ehy8c6vJlO/CVPsN1RFgthfaf7bokDT
+         I/CAVI4JYoCuocisBF0CM4LZgN93IGLGrvugb+hZRjVMtCr3HjdszGY91a7g6nSJ1d9U
+         NIrw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739359519; x=1739964319;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TgoLBoSdsmfmuqpXM5gofGXTPEUeyBBSV93lb6OMC7Y=;
+        b=DpiTK9XVBcT6I/LDyjlDBR3CMAeiaQL4xSZrXpww3kxnMmZGSbnCae4S9rWEp4L8TH
+         rZIhsmA3qm0xpxVG9dB6Heg3jfxJ0HGJt08PqrRNsmtGp0YnINq4vxGym+SkRUqbiTbE
+         k9nH6wbI+WLHtAtA4jC2BB+OF+YC8FEotTtKaOwqdZFDRL2pfiDnQuEBbNrUaVAtMedc
+         MP1xCjGixCDKcZ6TGfs1exLy860IKLM2KXsGqRPzG2iWANK6a6mUGsQcqYruI1+9GqSP
+         /bOkKDlr+1zOh5b1g/hwGtW+y0RDJgVulfgwq2o82XcR170VygIwoo2qLdW6iJNRqbi+
+         T6Ug==
+X-Forwarded-Encrypted: i=1; AJvYcCUfHznFPBNsLyhDRpH88qpVKrRxwCICc/ftZHKmEQ1a852YhCkBnyplKTW5W3y62rY+buMP2QBNj2xD@vger.kernel.org, AJvYcCVRXPKKNlC1FA6ZjA8mRpBx0gxGU4JyFvDIMBzcwI4wItXZvNUeB2V+8sYukXHmSb7PU6B1Pm3U@vger.kernel.org, AJvYcCVVU/wgTJ1V+acRbfHijP40zRxC4Te4SPDDmiURuh7LnVvc+cnEo+XS2l8UMn1f0RkthB5JscfRDSd6@vger.kernel.org, AJvYcCVqRZ9WTgJFR1Jy/VTSDjGwGTHHArUKmIW2TveBNUic/7wuJy9CVM8Ytay2wFrYdDpEnbHB0h12JhkToxs=@vger.kernel.org, AJvYcCWvqQd4MJyqcaoRmFECnTkrCrqmkPEUTTjLBFJCIq/u5NwTU466mPEOVTMVUQhrRvxo3AqWyXamTwOB@vger.kernel.org, AJvYcCXCEDxWS0F5hHhaBbrOtxFCiYiyFdOqS8yfmmjZsLCCKhC9G9JsjA853++6GclQhBN3+1A4GVjlV30=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuLGGHWC1TDKgkMaNX4whlxuutlXKzN0YaaYxiiNHFgpQYB2/W
+	ZYTxiZaPBQCsZRuxM5M3iRBmKR8L+VW0yEjwfDxiU+wudLeE2CKh
+X-Gm-Gg: ASbGncucLx+5hqYlOeo4wkC4x81MHMVdGKJlXZ0ER3AY++J/LQ6+5vlE3+HsDZ+TW8G
+	Ox2mD6MM8QZuavsktlCoCZ/2GnuAfU0zFAS+JtCU+vIAB24CpwXRL5F0zgWW9NBrzCa4LCMy6mq
+	+xuGH+couv6dsi/iBlIUTPpwaCG4/hr+Kg12yTg/r2YWv+kayAVj2bTnZRHaBjqA0pZPZD/6J41
+	+tyEu5SQJMif5bnKd675CYDil+QYr5qsuU2aVKOjs5CHmKJx0dqj8XRXZHSyFTh74qEJqA+pv4D
+	it9gAIW32ZGHFXs=
+X-Google-Smtp-Source: AGHT+IGSXAu22CD7MFAjaX8B91j1oDJlyn+2ztCU9HVQMzNMzKgxATJmndOJK7sQ6+CxJ94W1Ao6xg==
+X-Received: by 2002:a05:6a21:3987:b0:1d9:6c9c:75ea with SMTP id adf61e73a8af0-1ee5c732ce4mr4676523637.5.1739359518743;
+        Wed, 12 Feb 2025 03:25:18 -0800 (PST)
+Received: from archie.me ([103.124.138.155])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7308cef0957sm5468012b3a.5.2025.02.12.03.25.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2025 03:25:17 -0800 (PST)
+Received: by archie.me (Postfix, from userid 1000)
+	id EF2E541F5559; Wed, 12 Feb 2025 18:25:15 +0700 (WIB)
+Date: Wed, 12 Feb 2025 18:25:15 +0700
+From: Bagas Sanjaya <bagasdotme@gmail.com>
+To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+	Linux Doc Mailing List <linux-doc@vger.kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>
+Cc: linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Avadhut Naik <avadhut.naik@amd.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Eric Dumazet <edumazet@google.com>,
+	Hu Haowen <2023002089@link.tyut.edu.cn>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Paolo Abeni <pabeni@redhat.com>, Sean Young <sean@mess.org>,
+	Yanteng Si <si.yanteng@linux.dev>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Shrikanth Hegde <sshegde@linux.ibm.com>,
+	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+	James Morse <james.morse@arm.com>,
+	"Nysal Jan K.A" <nysal@linux.ibm.com>,
+	Tom Lendacky <thomas.lendacky@amd.com>,
+	Sourabh Jain <sourabhjain@linux.ibm.com>,
+	Stephen Rothwell <sfr@canb.auug.org.au>,
+	Frederic Barrat <fbarrat@linux.ibm.com>,
+	Andrew Donnellan <ajd@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	linux-arm-kernel@lists.infradead.org, linux-iio@vger.kernel.org,
+	linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+	netdev@vger.kernel.org, workflows@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 0/9] Extend automarkup support for ABI symbols
+Message-ID: <Z6yFG_NntQfkwYli@archie.me>
+References: <cover.1739254867.git.mchehab+huawei@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="/8yu6IEGS0ve/RxO"
 Content-Disposition: inline
-In-Reply-To: <20250212104040.38723-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <cover.1739254867.git.mchehab+huawei@kernel.org>
 
-On Wed, Feb 12, 2025 at 11:40:40AM +0100, AngeloGioacchino Del Regno wrote:
-> During probe, the TCPC alert interrupts are getting masked to
-> avoid unwanted interrupts during chip setup: this is ok to do
-> but there is no unmasking happening at any later time, which
-> means that the chip will not raise any interrupt, essentially
-> making it not functional as, while internally it does perform
-> all of the intended functions, it won't signal anything to the
-> outside.
-> 
-> Unmask the alert interrupts to fix functionality.
-> 
-> Fixes: ce08eaeb6388 ("staging: typec: rt1711h typec chip driver")
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 10 ++++++++++
->  1 file changed, 10 insertions(+)
-> 
-> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> index 64f6dd0dc660..c71b213b2441 100644
-> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
-> @@ -334,6 +334,11 @@ static int rt1711h_probe(struct i2c_client *client)
->  {
->  	int ret;
->  	struct rt1711h_chip *chip;
-> +	const u16 alert_mask = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_DISCARDED |
-> +			       TCPC_ALERT_TX_FAILED | TCPC_ALERT_RX_HARD_RST |
-> +			       TCPC_ALERT_RX_STATUS | TCPC_ALERT_POWER_STATUS |
-> +			       TCPC_ALERT_CC_STATUS | TCPC_ALERT_RX_BUF_OVF |
-> +			       TCPC_ALERT_FAULT;
->  
->  	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
->  	if (!chip)
-> @@ -384,6 +389,11 @@ static int rt1711h_probe(struct i2c_client *client)
->  		return ret;
->  	enable_irq_wake(client->irq);
->  
-> +	/* Enable alert interrupts */
-> +	ret = rt1711h_write16(chip, TCPC_ALERT_MASK, alert_mask);
-> +	if (ret < 0)
-> +		return ret;
-> +
->  	return 0;
->  }
->  
-> -- 
-> 2.48.1
-> 
-> 
 
-Hi,
+--/8yu6IEGS0ve/RxO
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
+On Tue, Feb 11, 2025 at 07:22:54AM +0100, Mauro Carvalho Chehab wrote:
+> Now that ABI creates a python dictionary, use automarkup to create cross
+> references for ABI symbols as well.=20
 
-You are receiving this message because of the following common error(s)
-as indicated below:
+I get three new warnings:
 
-- You have marked a patch with a "Fixes:" tag for a commit that is in an
-  older released kernel, yet you do not have a cc: stable line in the
-  signed-off-by area at all, which means that the patch will not be
-  applied to any older kernel releases.  To properly fix this, please
-  follow the documented rules in the
-  Documentation/process/stable-kernel-rules.rst file for how to resolve
-  this.
+WARNING: /sys/devices/system/cpu/cpuX/topology/physical_package_id is defin=
+ed 2 times: /home/bagas/repo/linux-kernel/Documentation/ABI/stable/sysfs-de=
+vices-system-cpu:27; /home/bagas/repo/linux-kernel/Documentation/ABI/testin=
+g/sysfs-devices-system-cpu:70
+WARNING: /sys/devices/system/cpu/cpuX/topology/ppin is defined 2 times: /ho=
+me/bagas/repo/linux-kernel/Documentation/ABI/stable/sysfs-devices-system-cp=
+u:89; /home/bagas/repo/linux-kernel/Documentation/ABI/testing/sysfs-devices=
+-system-cpu:70
+WARNING: Documentation/ABI/testing/sysfs-class-cxl not found
 
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
+Thanks.
 
-thanks,
+--=20
+An old man doll... just what I always wanted! - Clara
 
-greg k-h's patch email bot
+--/8yu6IEGS0ve/RxO
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZ6yFGwAKCRD2uYlJVVFO
+o8lhAQCQ4fRHrhmP52Ie1GWpvmnThVAVajYhveINLTbggfy+8AEAmFJjGR9fv2Ph
+AlybXGGYbN21qaIJUDcQ8kIXnvwi2Q0=
+=z6el
+-----END PGP SIGNATURE-----
+
+--/8yu6IEGS0ve/RxO--
 
