@@ -1,247 +1,119 @@
-Return-Path: <linux-usb+bounces-20527-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20528-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93CA3A31E67
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 07:00:08 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F253EA31FFB
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 08:30:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33B973A7343
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 05:59:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E611188BBB2
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 07:30:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FB521FBC93;
-	Wed, 12 Feb 2025 06:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EEE120468E;
+	Wed, 12 Feb 2025 07:30:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V1Y/Fr0O"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hhE+aJQ2"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f43.google.com (mail-oo1-f43.google.com [209.85.161.43])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F89B2B9BC;
-	Wed, 12 Feb 2025 05:59:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 704D15CB8;
+	Wed, 12 Feb 2025 07:30:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739340000; cv=none; b=JIeY2uBiIQdRHUV4TgDhMKHuuUTnWLupkxTdatSOrFyY2Km2SRycZcJ2BRUvuwZ+7yOY81WcCDQJDMhsVzoa26e2QUSi4/71JHTNm+8UoTfZgMjGvjZHyo1rr3sC1GQPklMnos4jIjyviWUz3lhVxzPb3eCVzwYKlzNh0JLMaiI=
+	t=1739345417; cv=none; b=CJFn5ODtezDY1uyuZ+Zkk01GRKrynX5D6y9fYx0Cn9WIE1//h/Bgp9vsr5rZ9XHeiuckvw/o6RwVKKUoD4Jt5miPC1NM6iTrNt0b2svnhi962K1cTv4Eb22dj3hSxo451h95Tep9yTeWQsE7enQuOJEiYa0WGHlvdUVs5hT8zZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739340000; c=relaxed/simple;
-	bh=a2ba5B9m7MkVzUv6GtWCZepykHbmaU3/BHDUn1sGLuc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MFy0zze/GEajvumenxglsdWo3WS4JOfjVD6MawlY1Pjzs3Igobgj0MkOyxoKBDMuHnteTDIfP5WKq83c8PVKV2v3dSjv22+ycYWKCJ0O3uECC8qR64heABbkPMxWml/gHIQ9FVcQE0QwlfS2IKQBfjKeZ+i73n1mafXUqXnh6Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V1Y/Fr0O; arc=none smtp.client-ip=209.85.161.43
+	s=arc-20240116; t=1739345417; c=relaxed/simple;
+	bh=wS5s9hksR0MLT3HaP0K5gvrOuEBXey9Zmp+b1T/R7+0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cyJkYbDRF9mNEd7KXE7UErDo19ZkxA+f/My6BBTxbUJ2E31wOiataaZm6//JJWK0VyiR6/ISjlB3VaNVOPBSQ2LBYfZGhp2XmhjCC2uKRWu2LfqEgPYLzP0XPAiOCl1VuBNcnDW4FOUZdvj6FqpjlaHeml30M6YJWNqgby13aGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hhE+aJQ2; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f43.google.com with SMTP id 006d021491bc7-5fc8f74d397so1275573eaf.3;
-        Tue, 11 Feb 2025 21:59:58 -0800 (PST)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ab7d58aa674so325431466b.0;
+        Tue, 11 Feb 2025 23:30:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739339997; x=1739944797; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1739345413; x=1739950213; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=WI/hjOkcJ3P1pXU852POm+uc+CfDlCv2Czyl9Opbgnk=;
-        b=V1Y/Fr0OJhc6E0X0H7n6PNq1BHrlNXlbgIPc4XaWWdiHzwuMc8qtp1ZYmABhX6JzxP
-         ge+C1VGGoMJ6vnwhQWXrA08GkVRmMNCxzRKR5z9nglBuda4soLq9lGoizyefRQD0/G2j
-         W2DIkbfkHx6dlkiLmgbv14BJtIGcrJlYX+xd5J66MRgkungKYC8fnz+ZRTheTo/oJa46
-         UU9Y01y0Ddr2rSHoLC/VmQgUwmILO3hpPrlYGQUOWHAuZvalMKbuZoJhrKwHhTOZn/Ge
-         f1QhLJUeCFEExrKlHvuApW1IWtyCa1oMxOx1ZPVjW7JthzHMgWeRG6a2gS59Ss6/tDCD
-         swbQ==
+        bh=vc1QFWT/cgthoMhaz+tPsi61Vk+kKCWwtNLYtiSq6hA=;
+        b=hhE+aJQ2llofqBAjEmSldYskFWihg1AXLcOmuEsRaYmEwYslxxyGinNxTuV33T0wro
+         M8pptHb1WLBllcyQlViq16jh/jVdURWppiiEA5akKFVm8x72hmNw63nXxygKTIQsIUCd
+         CYrz7cO7hWLX9Du2ESvhU65RTdpWgveBmuJx/wrCzLINUlq2emuPCtNDGLrM/BXnM6in
+         c3hvc/NTFys9DcXGbJbIXFrRyvteKxcIoO6Hq6yzqB1FFnAZt6YFpcs50OtMOUKcnp9z
+         flCWhLtXbaO8qs7O/4ZKQy1m1GxqRHX7I23fM9qSMTjCQxBJ5o3Rl6tYZcWlg71nWku8
+         njgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739339997; x=1739944797;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1739345413; x=1739950213;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=WI/hjOkcJ3P1pXU852POm+uc+CfDlCv2Czyl9Opbgnk=;
-        b=ggmiILfHA08cvze5h/sDzEr8dm4dT9fsOcIi0l9RM5PCwkV8oPt0enZRaKbZPYtzns
-         9gCrUyi8HAhb46noe8e94aq7rdZ0bYxw5kSdRxwMbAp3m7XOEA+BpDuvsXZkehyNhxx1
-         qFmJBf6A3i8Jj1s81osAt1oUdsVEoM8b5amMFxYa1sCFO2EeZ/VqUfsNgpi/KsNUMG4B
-         4uzfECf+6y4SRjP3SH5yZwrzQ0ryc7EMVLDJTbReh8EYSWFlbznxye9zD0sPrrFMgKpt
-         QxOlqlgkndlygyjF7OX7NNh0slSuezIxxDmDWsNnxgYIprU7qYlWMeF2+dlwa9qNHWGh
-         X7oA==
-X-Forwarded-Encrypted: i=1; AJvYcCWlnpEGa1c0XgmBUktx2iec2To6d4eVmbEbjMYzorsbvdiAEjL+1Ky5TSZ77i2gsypbdL5BHeT192wq@vger.kernel.org, AJvYcCXTZz09U0q6zbtOu7wgj7WEKEeLyWNUc5X6qCiKLURgf196J1wwnVRbTqj1CqrHxzBMXjq+rv/R@vger.kernel.org, AJvYcCXxYpnoCD9VThgCfhaOFCxmVJsWVaAN7ccvh+5Dr2oxeT+MznsfaB/TqtAkynY8iimEci83g7CqKfhSjkQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwG1oOra1xUWNF4Chd9DDVddajoA2WGbRI1n/mZ+nRdKBR1Vwah
-	1rNxvldw2/QvXeKPtnKTO9tTyL+HbudJ+BGjl4dC/byprIgGJvLdKK1D32prvilSexndBkeRsZW
-	RKx9Xgdn5j9bX0cjGppIyN0Adlds=
-X-Gm-Gg: ASbGnctYGAv6APiMTXCOmdHW5wll0w6CALS0rLyZMrDcmk6vC/VIRTpsqxXHL+D/2aG
-	csm8znotNgPiPyH/XD/hW4T3lHXWKpP/+AF0Vh5j+RYoAL6ySuGTncqwMkgFlxZIhr/wJLl1keX
-	k=
-X-Google-Smtp-Source: AGHT+IHJEMlkMdkkIP0tGh0S1tp/wHKoqMMQq5akQOLAdes7eQ3B6XtswIqezsyyUk/mA5PYyrlrVful8wr/picmr+I=
-X-Received: by 2002:a05:6871:4081:b0:289:2126:6826 with SMTP id
- 586e51a60fabf-2b8d68a1b80mr1550888fac.30.1739339997227; Tue, 11 Feb 2025
- 21:59:57 -0800 (PST)
+        bh=vc1QFWT/cgthoMhaz+tPsi61Vk+kKCWwtNLYtiSq6hA=;
+        b=vmZcFOyXn9ICQC+61mrGyilF7EY7oxuA01iQtjKZeKM4hsEQ0NP96f47VZcKnDycRE
+         6slqwKDClVJvzBiilbdrpI4p9VFwVUspARKB2hEH4PEll54pH+MK+OdK2ie5X4yC/ERN
+         lJch88Q7pXHiLHtKPBD1hpNssrt/4HfEPpBhtmbJgyOAmrUD+zoWZjnFg9d0DHcQhFp/
+         hwltGShSxhiV3hBr+bUxDDcXagABixuqBzD6HYxapEar3qVzC9W5S8vc2FL2wSwULBYm
+         BMT3WMCpzrhMd5us+5I3TRjiVkDETD14FEP7CVvPMqVjmKiir3htyVc7yMdyQEgSDGX1
+         8R4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV8wfHrCyDqlK581TXeC9SZGdImcG8cCKxbG84QVsGV8gFK54ZWiYDhhKrtQkzGCsl+tbQUe0lUHYn0@vger.kernel.org, AJvYcCWAVhgz4kWJ/BZFmPYaBwd8VGY/sskIb0/+awCg8Thgd58a0vpajdyPKTTOY7IfFKAIUYC8bQNhq4AeCO0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMcNWslH/P0qYXjJrNhD0ZsQqPLil/VViHhi2Wtgt5QWJkZhNZ
+	ibzZI6LqDFbDZFaHebMedOa997dSsHKKTMm0Py0Qecim8j+LYr+rTQ+9Hw==
+X-Gm-Gg: ASbGncuZ0wJH5dmvmYNShDZGTYYU2r+Y5Ktq+CQOCSuc02IQBBBRf2VZUbDR8lqsj0M
+	6fEvuj1T4xqoNUw7zsHiuL70Mf22B38ajCD7A90eYTKw++cV6Ur0tHzZRPrbTTTuklW01xmeOcK
+	rRuY3oCraPCaL7ihHdiIo9LV3Ra4qR/U0Hhn4eaQedk4CExbt99gXj3zCe1xnWNM/Vbn6lLguQz
+	Jdwtj6Wm9+lvnfZXUMJg1mUUYA2z46WdjZcpgBxWknR85Fk37t7A/TaHpvIq0MDOb3yOOCQOwR4
+	essM6F/UtTSPpRcF9bY88WglhFUg7P1D
+X-Google-Smtp-Source: AGHT+IHvARJZuyGyIzVt3aHpJBrrqcq+pOl4+qQKuEruKJk2J6TnlkfNeG+CVynG1Qyic0MjEwnMAQ==
+X-Received: by 2002:a17:907:da9:b0:ab7:c1d5:14f9 with SMTP id a640c23a62f3a-ab7f337505dmr176444466b.10.1739345412419;
+        Tue, 11 Feb 2025 23:30:12 -0800 (PST)
+Received: from foxbook (adth118.neoplus.adsl.tpnet.pl. [79.185.219.118])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab78aab804csm1053924766b.3.2025.02.11.23.30.11
+        (version=TLS1_2 cipher=AES128-SHA bits=128/128);
+        Tue, 11 Feb 2025 23:30:12 -0800 (PST)
+Date: Wed, 12 Feb 2025 08:30:07 +0100
+From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
+To: Mathias Nyman <mathias.nyman@linux.intel.com>
+Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Niklas Neronin
+ <niklas.neronin@linux.intel.com>, linux-usb@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/5] usb: xhci: Skip only one TD on Ring
+ Underrun/Overrun
+Message-ID: <20250212083007.04383b5d@foxbook>
+In-Reply-To: <7bb25848-c80e-4ba8-8790-8628951806b3@linux.intel.com>
+References: <20250210083718.2dd337c3@foxbook>
+	<20250210084220.3e5414e9@foxbook>
+	<7bb25848-c80e-4ba8-8790-8628951806b3@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250205234205.73ca4ff8@foxbook> <b19218ab-5248-47ba-8111-157818415247@linux.intel.com>
- <20250210095736.6607f098@foxbook> <20250211133614.5d64301f@foxbook>
-In-Reply-To: <20250211133614.5d64301f@foxbook>
-From: Kuangyi Chiang <ki.chiang65@gmail.com>
-Date: Wed, 12 Feb 2025 13:59:49 +0800
-X-Gm-Features: AWEUYZkbSksPIxhIaoXjz_XdtyIIoYP38S4kAxq9aFiscapfHQv17JViEIAqTyw
-Message-ID: <CAHN5xi05h+4Fz2SwD=4xjU=Yq7=QuQfnnS01C=Ur3SqwTGxy9A@mail.gmail.com>
-Subject: Re: [PATCH] usb: xhci: Handle quirky SuperSpeed isoc error reporting
- by Etron HCs
-To: Michal Pecio <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@linux.intel.com>, gregkh@linuxfoundation.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	mathias.nyman@intel.com, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi,
+On Tue, 11 Feb 2025 17:41:39 +0200, Mathias Nyman wrote:
+> > +				if (ring_xrun_event) {
+> > +					/*
+> > +					 * If we are here, we are on xHCI 1.0 host with no idea how
+> > +					 * many TDs were missed and where the xrun occurred. Don't
+> > +					 * skip more TDs, they may have been queued after the xrun.
+> > +					 */
+> > +					xhci_dbg(xhci, "Skipped one TD for slot %u ep %u",
+> > +							slot_id, ep_index);
+> > +					break;  
+> 
+> This would be the same as return 0; right?
 
-Michal Pecio <michal.pecio@gmail.com> =E6=96=BC 2025=E5=B9=B42=E6=9C=8811=
-=E6=97=A5 =E9=80=B1=E4=BA=8C =E4=B8=8B=E5=8D=888:36=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> xHCI 4.9.1 requires HCs to obey the IOC flag we set on the last TRB even
-> after an error has been reported on an earlier TRB. This typically means
-> that an error mid TD is followed by a success event for the last TRB.
->
-> On SuperSpeed (and only SS) isochronous endpoints Etron hosts were found
-> to emit a success event also after an error on the last TRB of a TD.
->
-> Reuse the machinery for handling errors mid TD to handle these otherwise
-> unexpected events. Avoid printing "TRB not part of current TD" errors,
-> ensure proper tracking of HC's internal dequeue pointer and distinguish
-> this known quirk from other bogus events caused by ordinary bugs.
->
-> This patch was found to eliminate all related warnings and errors while
-> running for 30 minutes with a UVC camera on a flaky cable which produces
-> transaction errors about every second. An altsetting was chosen which
-> causes some TDs to be multi-TRB, dynamic debug was used to confirm that
-> errors both mid TD and on the last TRB are handled as expected:
->
-> [ 6028.439776] xhci_hcd 0000:06:00.0: Transfer error for slot 1 ep 2 on e=
-ndpoint
-> [ 6028.439784] xhci_hcd 0000:06:00.0: Error 4 mid isoc TD, wait for final=
- completion event, is_last_trb=3D1
-> [ 6028.440268] xhci_hcd 0000:06:00.0: Successful completion on short TX f=
-or slot 1 ep 2 with last td short 0
-> [ 6028.440270] xhci_hcd 0000:06:00.0: Got event 1 after mid TD error
-> [ 6029.123683] xhci_hcd 0000:06:00.0: Transfer error for slot 1 ep 2 on e=
-ndpoint
-> [ 6029.123694] xhci_hcd 0000:06:00.0: Error 4 mid isoc TD, wait for final=
- completion event, is_last_trb=3D0
-> [ 6029.123697] xhci_hcd 0000:06:00.0: Successful completion on short TX f=
-or slot 1 ep 2 with last td short 0
-> [ 6029.123700] xhci_hcd 0000:06:00.0: Got event 1 after mid TD error
->
-> Handling of Stopped events is unaffected: finish_td() is called but it
-> does nothing and the TD waits until it's unlinked:
->
-> [ 7081.705544] xhci_hcd 0000:06:00.0: Transfer error for slot 1 ep 2 on e=
-ndpoint
-> [ 7081.705546] xhci_hcd 0000:06:00.0: Error 4 mid isoc TD, wait for final=
- completion event, is_last_trb=3D1
-> [ 7081.705630] xhci_hcd 0000:06:00.0: Stopped on Transfer TRB for slot 1 =
-ep 2
-> [ 7081.705633] xhci_hcd 0000:06:00.0: Got event 26 after mid TD error
-> [ 7081.705678] xhci_hcd 0000:06:00.0: Stopped on Transfer TRB for slot 1 =
-ep 2
-> [ 7081.705680] xhci_hcd 0000:06:00.0: Got event 26 after mid TD error
-> [ 7081.705759] xhci_hcd 0000:06:00.0: Stopped on No-op or Link TRB for sl=
-ot 1 ep 2
-> [ 7081.705799] xhci_hcd 0000:06:00.0: Stopped on No-op or Link TRB for sl=
-ot 1 ep 2
->
-> Reported-by: Kuangyi Chiang <ki.chiang65@gmail.com>
-> Closes: https://lore.kernel.org/linux-usb/20250205053750.28251-1-ki.chian=
-g65@gmail.com/T/
-> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
-> ---
->
->
->
-> Hi Mathias,
->
-> This is the best I was able to do. It does add a few lines, but I don't
-> think it's too scary and IMO the switch looks even better this way. It
-> accurately predicts those events while not breaking anything else that
-> I can see or think of, save for the risk of firmware bugfix adding one
-> ESIT of latency on errors.
->
-> I tried to also test your Etron patch but it has whitespace damage all
-> over the place and would be hard to apply.
->
-> Regards,
-> Michal
->
->
->  drivers/usb/host/xhci-ring.c | 18 +++++++++++++-----
->  1 file changed, 13 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-> index 965bffce301e..7ff5075e5890 100644
-> --- a/drivers/usb/host/xhci-ring.c
-> +++ b/drivers/usb/host/xhci-ring.c
-> @@ -2437,6 +2437,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, =
-struct xhci_virt_ep *ep,
->         bool sum_trbs_for_length =3D false;
->         u32 remaining, requested, ep_trb_len;
->         int short_framestatus;
-> +       bool error_event =3D false, etron_quirk =3D false;
->
->         trb_comp_code =3D GET_COMP_CODE(le32_to_cpu(event->transfer_len))=
-;
->         urb_priv =3D td->urb->hcpriv;
-> @@ -2473,8 +2474,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, =
-struct xhci_virt_ep *ep,
->                 fallthrough;
->         case COMP_ISOCH_BUFFER_OVERRUN:
->                 frame->status =3D -EOVERFLOW;
-> -               if (ep_trb !=3D td->end_trb)
-> -                       td->error_mid_td =3D true;
-> +               error_event =3D true;
->                 break;
->         case COMP_INCOMPATIBLE_DEVICE_ERROR:
->         case COMP_STALL_ERROR:
-> @@ -2483,8 +2483,7 @@ static void process_isoc_td(struct xhci_hcd *xhci, =
-struct xhci_virt_ep *ep,
->         case COMP_USB_TRANSACTION_ERROR:
->                 frame->status =3D -EPROTO;
->                 sum_trbs_for_length =3D true;
-> -               if (ep_trb !=3D td->end_trb)
-> -                       td->error_mid_td =3D true;
-> +               error_event =3D true;
->                 break;
->         case COMP_STOPPED:
->                 sum_trbs_for_length =3D true;
-> @@ -2518,8 +2517,17 @@ static void process_isoc_td(struct xhci_hcd *xhci,=
- struct xhci_virt_ep *ep,
->         td->urb->actual_length +=3D frame->actual_length;
->
->  finish_td:
-> +       /* An error event mid TD will be followed by more events, xHCI 4.=
-9.1 */
-> +       td->error_mid_td |=3D error_event && (ep_trb !=3D td->end_trb);
-> +
-> +       /* Etron treats *all* SuperSpeed isoc errors like errors mid TD *=
-/
-> +       if (xhci->quirks & XHCI_ETRON_HOST && td->urb->dev->speed =3D=3D =
-USB_SPEED_SUPER) {
-> +               td->error_mid_td |=3D error_event;
-> +               etron_quirk |=3D error_event;
+Currently, yes. I know it looks silly, but I thought it would be more
+future proof than hardcoding 'return 0' into the loop. The point it to
+simply stop iteration, what happens next is none of the loop's business.
 
-This would be the same as etron_quirk =3D error_event; right?
+I hope gcc is clever enough to do the right thing here.
 
-> +       }
-> +
->         /* Don't give back TD yet if we encountered an error mid TD */
-> -       if (td->error_mid_td && ep_trb !=3D td->end_trb) {
-> +       if (td->error_mid_td && (ep_trb !=3D td->end_trb || etron_quirk))=
- {
->                 xhci_dbg(xhci, "Error mid isoc TD, wait for final complet=
-ion event\n");
->                 td->urb_length_set =3D true;
->                 return;
-> --
-> 2.48.1
-
-I tested this with Etron EJ168 and EJ188 under Linux-6.13.1. It works.
-
-Thanks,
-Kuangyi Chiang
+Regards,
+Michal
 
