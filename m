@@ -1,143 +1,119 @@
-Return-Path: <linux-usb+bounces-20555-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20556-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EB23A32F61
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 20:14:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 716F2A32FB5
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 20:31:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B88031887052
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 19:14:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 021F13A81BC
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 19:31:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5EB22627FC;
-	Wed, 12 Feb 2025 19:14:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9631FF7BE;
+	Wed, 12 Feb 2025 19:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nc3EGtFJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IjGzuLHY"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26AC82505B3;
-	Wed, 12 Feb 2025 19:14:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C50D1271813;
+	Wed, 12 Feb 2025 19:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739387676; cv=none; b=QBc16hEfAYXtNFf84OxFAemnX/r0kqU9rjtL/hrUtci38oOEZ1/CCgK+WflQD7jf6s367MVq6fUipw51oy/9CU4Jl3jnog6J2X9YsMFu0F5gBi/h0ptli28d5mopZ4CspU+1GL/jHnVH9LZVUVW+BPgYKnXBtsRVLkgVUB8wq4Q=
+	t=1739388685; cv=none; b=X00wPuXJch/RElv9kGptGtnz7s0oc1BbV/wOczdZMfhNQHlNf7bFbjr0iUIRbcgwTmOeEysiv5v6ujMMRK+JNX35LX2+0htaIVDmIxFLVOWHGFuzXvwUTt3606DM7B+eTnGF+aipAFbF+pRHmke4VTSyoHLtZIT7+7iO5vFFhrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739387676; c=relaxed/simple;
-	bh=mmXa4CSLqs9OFL2IL4tC3NZkiKo2CpyEZ1OGJE22XGU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uShZ+ivzXKLUyTp28rI9OIrNJ7W7eDYVh8z+amu0mxwGjh6FnIE4haPMN9Wf1lkcs7BkaKHCZuZTbQI/w2jvTCK2sNZdlaXvUZQ8BNQoyHu2P/WrwGdsb8o0WzsKqDBGVZ07ZOQgJ6AlGu673NjdDZRN7n9RXHGY+083KC1zUgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nc3EGtFJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7077FC4CEDF;
-	Wed, 12 Feb 2025 19:14:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739387674;
-	bh=mmXa4CSLqs9OFL2IL4tC3NZkiKo2CpyEZ1OGJE22XGU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=nc3EGtFJkIVzlt6VS0rDMB7lrWbePGEGz6bNMMQjVVDdEOltHQNeLRM6T1xxYCl6g
-	 KWC6MtbBFtLzxL506xs0kTCYOpnZlBjV9pwwXIGtqI7YHBWjUoZa8J8nVWc0dQPlVj
-	 y1wi3zx3p7kaX6ryv1QbfSBkkWlTDaky2V1vuhJcYA7vw+jrfnJzRd5AT3zQcd+hua
-	 6eTuR4O6GwGnByKuQgzIiSmW5mIaA2mjBhLllphMq1REc1moGo0bmDqSACFKoNl1q9
-	 Td1/Yygdsc5toBSImNqV0HTl5izJAa+LxOZzLfLZUL4DVGlA7Whjg+fA9yivSKJAZJ
-	 5Yci1aN5p0YEw==
-Date: Wed, 12 Feb 2025 19:14:30 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Catalin Popescu <catalin.popescu@leica-geosystems.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, festevam@gmail.com, linux-usb@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	m.felsch@pengutronix.de, bsp-development.geo@leica-geosystems.com
-Subject: Re: [PATCH next v2 1/3] dt-bindings: usb: microchip,usb2514: add
- support for vdda
-Message-ID: <20250212-dullness-wreath-8d934b09576f@spud>
-References: <20250212135649.3431570-1-catalin.popescu@leica-geosystems.com>
+	s=arc-20240116; t=1739388685; c=relaxed/simple;
+	bh=ogjElKZkP71ejQJYT0hwP3uHhRqvyb4B8WNqvdEWaog=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=PgL0HqDP1enqVJgNvsy0Cv6h3UWSfWlqz1NtzNsALN2iFps+yGTRFQvSxit4ru6ioOSIP71qvId6R2nyjwYOQDXceVJZzVceAMzZsK/KpmQhySvlGF/6B42cKG1I/Ni3WdlvRv00Ow1Ffd7j7ngui/uD1YfjUQgSZ2+rk9aWriU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IjGzuLHY; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739388684; x=1770924684;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ogjElKZkP71ejQJYT0hwP3uHhRqvyb4B8WNqvdEWaog=;
+  b=IjGzuLHYasEgLq+YzohumRpuKshVWSErsJphSYvR7S2aFleeoTxJja3f
+   N67iTveLVqdtHuyV+fgSFhh/WdX0R2rNSU6CkY3xJ/vE1RHMcXZ6VMNHJ
+   wBkbtCpcNu1sbCoT7GHITSkkr7QdHJNeXd7Wd7nrpwvOP9MuNudydKi/x
+   KLs5CPsyusE+YiXZK+sLrl3ptvGr0ghUSHWVVUimaG2tvNsJUAQXfpmnO
+   esXOJiGWRrqo51ODfpv1SgcdIQslndcVm+PV8XMBmiWN18B9j3PXZ/0CJ
+   gXN9CnP1+ovEDhNc05dC6DiQbzBkQqyAcrG5z2YjGarNp6kd8eE7fjGEB
+   Q==;
+X-CSE-ConnectionGUID: dbuSkH5STyCes+FDll1E0g==
+X-CSE-MsgGUID: eWUY/nRAQH+Lk1TIymQfng==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="40183655"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="40183655"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 11:31:23 -0800
+X-CSE-ConnectionGUID: tC83V0vbQ9mAzWQWQQ43FQ==
+X-CSE-MsgGUID: c1U2mCFeTuuJzZZwviugoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="117542533"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa005.fm.intel.com with ESMTP; 12 Feb 2025 11:31:20 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 4623011E; Wed, 12 Feb 2025 21:31:19 +0200 (EET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+	Felipe Balbi <balbi@kernel.org>,
+	linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v3 0/4] usb: dwc3: Avoid using reserved EPs
+Date: Wed, 12 Feb 2025 21:28:00 +0200
+Message-ID: <20250212193116.2487289-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.45.1.3035.g276e886db78b
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="iw1sCEGjCNgsc9hl"
-Content-Disposition: inline
-In-Reply-To: <20250212135649.3431570-1-catalin.popescu@leica-geosystems.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On some platforms (Intel-based and AFAIK ARM-based) the EPs in the gadget
+(USB Device Controller mode) may be reserved for some special means, such as
+tracing. This series extends DT schema and driver to avoid using those.
+Without this the USB gadget mode won't work properly (those devices that
+"luckily" allocated the reserved EPs).
 
---iw1sCEGjCNgsc9hl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changelog v3:
+- split refactoring as preparatory change (Thinh)
+- renamed variable and function (Thinh)
+- added a warning in one place (Thinh)
+- gathered tags (Ferry, Rob, Thinh)
 
-On Wed, Feb 12, 2025 at 02:56:47PM +0100, Catalin Popescu wrote:
-> Microchip hub USB2514 has one 3V3 digital power supply and one 3V3
-> analog power supply. Add support for analog power supply vdda.
->=20
-> Signed-off-by: Catalin Popescu <catalin.popescu@leica-geosystems.com>
-> ---
-> v2:
-> - merge "if" with "allOf" and move the whole after patternProperties
->   section
-> ---
->  .../bindings/usb/microchip,usb2514.yaml       | 21 ++++++++++++++++---
->  1 file changed, 18 insertions(+), 3 deletions(-)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml=
- b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> index b14e6f37b298..aeffdf0362c2 100644
-> --- a/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> +++ b/Documentation/devicetree/bindings/usb/microchip,usb2514.yaml
-> @@ -9,9 +9,6 @@ title: Microchip USB2514 Hub Controller
->  maintainers:
->    - Fabio Estevam <festevam@gmail.com>
-> =20
-> -allOf:
-> -  - $ref: usb-device.yaml#
-> -
->  properties:
->    compatible:
->      enum:
-> @@ -28,6 +25,9 @@ properties:
->    vdd-supply:
->      description: 3.3V power supply.
-> =20
-> +  vdda-supply:
-> +    description: 3.3V analog power supply.
-> +
->    clocks:
->      description: External 24MHz clock connected to the CLKIN pin.
->      maxItems: 1
-> @@ -43,6 +43,20 @@ patternProperties:
->      $ref: /schemas/usb/usb-device.yaml
->      additionalProperties: true
-> =20
-> +allOf:
-> +  - $ref: usb-device.yaml#
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: usb424,2514
-> +    then:
-> +      properties:
-> +        vdda-supply: true
-> +    else:
-> +      properties:
-> +        vdda-supply: false
+Changelog v2:
+- added minItems to the schema (Rob)
+- revisited code and add NULL check to avoid crashes (Thinh)
+- rewrote helper function to return error to the user if parsing fails
+- elaborated in the commit message why we need this quirk (Thinh)
+- addressed miscellaneous style issues (Thinh)
 
-Hmm, the then: here isn't needed, you can just invert the original if
-with a "not:". Sorry for not noticing that last time.
+Andy Shevchenko (4):
+  dt-bindings: usb: dwc3: Add a property to reserve endpoints
+  usb: dwc3: gadget: Refactor loop to avoid NULL endpoints
+  usb: dwc3: gadget: Add support for snps,reserved-endpoints property
+  usb: dwc3: gadget: Avoid using reserved endpoints on Intel Merrifield
 
---iw1sCEGjCNgsc9hl
-Content-Type: application/pgp-signature; name="signature.asc"
+ .../bindings/usb/snps,dwc3-common.yaml        | 11 ++++
+ drivers/usb/dwc3/dwc3-pci.c                   | 10 +++
+ drivers/usb/dwc3/gadget.c                     | 63 +++++++++++++++++--
+ 3 files changed, 79 insertions(+), 5 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.45.1.3035.g276e886db78b
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6zzFgAKCRB4tDGHoIJi
-0tx3AQCYwlidnU+dpYKm2CS9UgBGpqPUz+cfsEHZNbYm62SWmgEArgcsb+i0xZ9l
-14Bhc9qVma3uZu7iEZUxiH1+xAczpwU=
-=utub
------END PGP SIGNATURE-----
-
---iw1sCEGjCNgsc9hl--
 
