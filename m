@@ -1,114 +1,114 @@
-Return-Path: <linux-usb+bounces-20539-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20540-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36B19A32667
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 13:58:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2714EA327B7
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 14:56:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E1EC164734
-	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 12:58:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FBF93A2960
+	for <lists+linux-usb@lfdr.de>; Wed, 12 Feb 2025 13:55:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E50BA20E024;
-	Wed, 12 Feb 2025 12:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2762D20E32D;
+	Wed, 12 Feb 2025 13:55:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aYoHh9I8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DVVX4QLX"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43C3120CCF5;
-	Wed, 12 Feb 2025 12:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE0F205ABC;
+	Wed, 12 Feb 2025 13:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739365100; cv=none; b=At1IHgq7R16M8Jm4y7dHwYS6ZWxWRc3My/jtmhG5N8kDlTmrPR4GQ+n6QkTOnWjat3NtP/6W6WkzVeI8VxtWpIYI5eydGpp1yqnRZhWniBW4IMk1J1Kq/HwJqsbTMsYLX6vULPP0g2pqZpS1Wymgr+rf3AFwTmJL/nSPUU0Mokk=
+	t=1739368522; cv=none; b=ZiH0lsBEyCp+VXj0a1pyfIF08jKkISGkPFCSq7/ACgLAfax7aZjDRyikp+tKPegQVmazuMMSWbh744lG/+2tcV3/5E/7FGKHGS4rDg1RxgwH4+4HeuTDjkUAbGij0Ugwnmf6E4k+0a0y+XV1O1Tm92hsuMGTt6LU7qIf5+iZqPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739365100; c=relaxed/simple;
-	bh=+rUyy8CCsAX49LoyMo4QlyZTIfngKhPrGjoTwwC4T/4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IwiesL5Qg9yxLF/KybMQcb7AMBL76/rOW+jnC2+dwYMrLrSw55v189nkfspgUZYA5JLxc2g19y0b9VihFE/05/75r8H5wJI1o/XHeXMxkZjSr2jm5I5UyikYKxQMDBgzajQGj5R9XUHLHDTtSHksGgM+WWpQtGI8qXMALLi10xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aYoHh9I8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC30EC4CEDF;
-	Wed, 12 Feb 2025 12:58:11 +0000 (UTC)
+	s=arc-20240116; t=1739368522; c=relaxed/simple;
+	bh=N9KGl82SHrD1eJ3yuqzt82ebzKwjoV7zqnKZCS1pvQw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EVl/M/n8/QVNxBTUfEClUJyaybGpetjWyFgP5PaeyB84p0l2POXdDr31xwA2iApPhyW4PFkBvntgkVrS40dj9K7aJLMMwriJVu5YruBPtu4Vbc2PWmWDHJIlieImGe5rV4y0T80rfirwRSgTBpLCTWciqDkmFrtCMt6HWp7sBwE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DVVX4QLX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB6B9C4CEDF;
+	Wed, 12 Feb 2025 13:55:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739365099;
-	bh=+rUyy8CCsAX49LoyMo4QlyZTIfngKhPrGjoTwwC4T/4=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=aYoHh9I8hOFC/rd6q6DuWBa0ELk6Z7OMZH+d1Po86Hca4RmKPfp6Iy748FXUdyIlI
-	 tgH/3yl0mOAPAoIko670EqeX9y9i+3JZ/uI7ZsPHzcVNNFWCQ27UkVj53+bdt/O6h1
-	 tp2zNyvG6uiP3W6uc1ax8M6WidyQaPTSueZo4zk6WWNhXIYT0nyl+heT4KgnulLxOT
-	 VgWKUUVaGzBd9JgaNBnvjddPhhnrvtOVueKPNh9Ht9jYirxxZuEV9VqTmcHVbKcyW5
-	 ewHSt4dDIHHeiLGHQBiKMVEehzQ+s32Auf+U/HtB+/DzK1kpDbUrePlehroB/oTObM
-	 X96pQV4d2Rp4A==
-Date: Wed, 12 Feb 2025 13:58:08 +0100
-From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
-To: Bagas Sanjaya <bagasdotme@gmail.com>
-Cc: Linux Doc Mailing List <linux-doc@vger.kernel.org>, Jonathan Corbet
- <corbet@lwn.net>, linux-kernel@vger.kernel.org, "David S. Miller"
- <davem@davemloft.net>, Andreas Noever <andreas.noever@gmail.com>, Avadhut
- Naik <avadhut.naik@amd.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Eric Dumazet <edumazet@google.com>, Hu Haowen
- <2023002089@link.tyut.edu.cn>, Lars-Peter Clausen <lars@metafoo.de>,
- Michael Jamet <michael.jamet@intel.com>, Mika Westerberg
- <mika.westerberg@linux.intel.com>, Paolo Abeni <pabeni@redhat.com>, Sean
- Young <sean@mess.org>, Yanteng Si <si.yanteng@linux.dev>, Yehezkel Bernat
- <YehezkelShB@gmail.com>, Thomas Gleixner <tglx@linutronix.de>, Michael
- Ellerman <mpe@ellerman.id.au>, Shrikanth Hegde <sshegde@linux.ibm.com>,
- "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, Pawan Gupta
- <pawan.kumar.gupta@linux.intel.com>, James Morse <james.morse@arm.com>,
- "Nysal Jan K.A" <nysal@linux.ibm.com>, Tom Lendacky
- <thomas.lendacky@amd.com>, Sourabh Jain <sourabhjain@linux.ibm.com>,
- Stephen Rothwell <sfr@canb.auug.org.au>, Frederic Barrat
- <fbarrat@linux.ibm.com>, Andrew Donnellan <ajd@linux.ibm.com>, Madhavan
- Srinivasan <maddy@linux.ibm.com>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao
- <naveen@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org,
- workflows@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 0/9] Extend automarkup support for ABI symbols
-Message-ID: <20250212135808.58d2f032@foz.lan>
-In-Reply-To: <Z6yFG_NntQfkwYli@archie.me>
-References: <cover.1739254867.git.mchehab+huawei@kernel.org>
-	<Z6yFG_NntQfkwYli@archie.me>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=k20201202; t=1739368522;
+	bh=N9KGl82SHrD1eJ3yuqzt82ebzKwjoV7zqnKZCS1pvQw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=DVVX4QLXVs/264Af+gaXNtb8Ispfymh/uhQwKNMNHJqG/Q8PQswx7VkXVnNNOtVG+
+	 pTtauklqWjbRx5UQ/CNynj3h2DVmk9Yl424BV7pmONGujLgERCHmezHftjJ6Ain4wc
+	 H15YbD66D4QeMPzdiergVf70scSty7NTL3Yaol3OGlX3YrIn9Rq/kC0RfEiRQverCi
+	 0upJQXRgSd00zDXiQi0YFCNX3xdQ+bRmTToFYRVxUZssVnvZkmD5DQQxeBbCT6dmgI
+	 NLdmCJwFZKVGL83hbkgwgIxfWeGs5iU174kxHozFvh2T0/avk0+VoG/KFRmzjGtdNa
+	 IBXTV5OpBLnvg==
+From: Frederic Weisbecker <frederic@kernel.org>
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+	kernel test robot <oliver.sang@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Michael Grzeschik <m.grzeschik@pengutronix.de>,
+	linux-usb@vger.kernel.org
+Subject: [PATCH] usb: gadget: uvc: Fix unstarted kthread worker
+Date: Wed, 12 Feb 2025 14:55:14 +0100
+Message-ID: <20250212135514.30539-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Em Wed, 12 Feb 2025 18:25:15 +0700
-Bagas Sanjaya <bagasdotme@gmail.com> escreveu:
+The behaviour of kthread_create_worker() was recently changed to align
+with the one of kthread_create(). The kthread worker is created but not
+awaken by default. This is to allow the use of kthread_affine_preferred()
+and kthread_bind[_mask]() with kthread workers. In order to keep the
+old behaviour and wake the kthread up, kthread_run_worker() must be
+used. All the pre-existing users have been converted, except for UVC
+that was introduced in the same merge window as the API change.
 
-> On Tue, Feb 11, 2025 at 07:22:54AM +0100, Mauro Carvalho Chehab wrote:
-> > Now that ABI creates a python dictionary, use automarkup to create cross
-> > references for ABI symbols as well.   
-> 
-> I get three new warnings:
-> 
-> WARNING: /sys/devices/system/cpu/cpuX/topology/physical_package_id is defined 2 times: /home/bagas/repo/linux-kernel/Documentation/ABI/stable/sysfs-devices-system-cpu:27; /home/bagas/repo/linux-kernel/Documentation/ABI/testing/sysfs-devices-system-cpu:70
-> WARNING: /sys/devices/system/cpu/cpuX/topology/ppin is defined 2 times: /home/bagas/repo/linux-kernel/Documentation/ABI/stable/sysfs-devices-system-cpu:89; /home/bagas/repo/linux-kernel/Documentation/ABI/testing/sysfs-devices-system-cpu:70
+This results in hangs:
 
-Those two are new reports that get_abi.py detects after the recent changes.
-In the past, symbol duplication were detected only within the same group
-(testing, stable, ...). The new version can detect symbols that are
-duplicated on different parts of the ABI. In this specific case, the same
-symbols exist on both stable and testing.
+	INFO: task UVCG:82 blocked for more than 491 seconds.
+	Tainted: G                T  6.13.0-rc2-00014-gb04e317b5226 #1
+	task:UVCG            state:D stack:0     pid:82
+	 Call Trace:
+	 __schedule
+	 schedule
+	 schedule_preempt_disabled
+	 kthread
+	 ? kthread_flush_work
+	 ret_from_fork
+	 ret_from_fork_asm
+	 entry_INT80_32
 
-There is a fix for them already at:
+Fix this with converting UVCG kworker to the new API.
 
-https://lore.kernel.org/linux-doc/673e9543783349b0fcf625018e38e4e93fe98f52.1738020236.git.mchehab+huawei@kernel.org/
+Reported-by: kernel test robot <oliver.sang@intel.com>
+Closes: https://lore.kernel.org/oe-lkp/202502121025.55bfa801-lkp@intel.com
+Fixes: f0bbfbd16b3b ("usb: gadget: uvc: rework to enqueue in pump worker from encoded queue")
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Michael Grzeschik <m.grzeschik@pengutronix.de>
+Cc: linux-usb@vger.kernel.org
+Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
+---
+ drivers/usb/gadget/function/uvc_video.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> WARNING: Documentation/ABI/testing/sysfs-class-cxl not found
+diff --git a/drivers/usb/gadget/function/uvc_video.c b/drivers/usb/gadget/function/uvc_video.c
+index 79e223713d8b..fb77b0b21790 100644
+--- a/drivers/usb/gadget/function/uvc_video.c
++++ b/drivers/usb/gadget/function/uvc_video.c
+@@ -818,7 +818,7 @@ int uvcg_video_init(struct uvc_video *video, struct uvc_device *uvc)
+ 		return -EINVAL;
+ 
+ 	/* Allocate a kthread for asynchronous hw submit handler. */
+-	video->kworker = kthread_create_worker(0, "UVCG");
++	video->kworker = kthread_run_worker(0, "UVCG");
+ 	if (IS_ERR(video->kworker)) {
+ 		uvcg_err(&video->uvc->func, "failed to create UVCG kworker\n");
+ 		return PTR_ERR(video->kworker);
+-- 
+2.46.0
 
-I need to double-check verify this one, as it didn't appear on
-my tests. Are you getting it against docs-next or linux-next?
-
-Thanks,
-Mauro
 
