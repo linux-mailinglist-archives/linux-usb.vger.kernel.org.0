@@ -1,58 +1,51 @@
-Return-Path: <linux-usb+bounces-20590-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20591-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65021A33B87
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 10:47:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77D4CA33B9B
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 10:49:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3A4857A3B8D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 09:46:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F9A17A398B
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 09:48:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AA3520E6F3;
-	Thu, 13 Feb 2025 09:47:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DE4320F09C;
+	Thu, 13 Feb 2025 09:49:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="QHhuORDr"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="cldpDhZ5"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B93A4202C31;
-	Thu, 13 Feb 2025 09:47:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C7220E6E4;
+	Thu, 13 Feb 2025 09:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739440039; cv=none; b=aF5nw/0BUClrAfkqq6++DNKFhMCV/y+zfGqYgseSQDHvzSvCHzYEhrQD5N5GdxVeHJ35r+hWnNcz8kpQA7HlEbZF0FyIY7rpDBOCM0OjYx0XqwaSSGcgh1lmMTvJNPGWNjtc9Dqy27vWxN9tpV1U9QfQ0KdIJnEH2SDA6CxKt48=
+	t=1739440172; cv=none; b=M3aHpS5n8wB0DXcFFIL+HcnBhPm+7V1PXfTyS+IE1CDvb8r3kez/rTdMbKwDVTJ4bD8FMdz/tT+0WedW8hfGHdOZx7NKu+jI7f5ohwXXZNzrOlfXbt/IOl4wYLVOWwkUGwuwgx6cCCJiRJWdytf8w6Jnbgu8Mz9w5CqQDRvlyrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739440039; c=relaxed/simple;
-	bh=ZxDr6AwnXUdrFTM7NUHu4gVEND5MJ7HwI8ht+KxlXR8=;
+	s=arc-20240116; t=1739440172; c=relaxed/simple;
+	bh=ZUUe17h+1ph0NJ36IGXSutFrUjXudo4tr3NI+HFzifQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aRkIN5pgVGFmwpAJy1v74RLLE24mmfP2PsC/MT9mjWY0gTMuk7++e1kQD5j+SeebezNAvuYhxPte+kfVgixZcsJQELR0EFU8VaP+mk5TKtAJAwiDcbuTndP5JYYU5d1W90vFLX0QgexRg8MZcbHaLKJ69RdMcMROfmgEZW+Qz7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=QHhuORDr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C063DC4CED1;
-	Thu, 13 Feb 2025 09:47:16 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=GxMhKeaDkEgEJVTcV1K010c4+3/uacjAEM92/nsCzs6Wx02MLhOB4Hqjgs0HwK1p0LQwLZr/KxQ1lA/u0XqVOH/7ev60M3R/9NohncaGM2zIKLidxYqEJ6eSCJRZe2X2uZzyORq9pdIJ2fXiuQq1aqIjBrA10fn//lUW60Z9EmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=cldpDhZ5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA7A0C4CED1;
+	Thu, 13 Feb 2025 09:49:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739440037;
-	bh=ZxDr6AwnXUdrFTM7NUHu4gVEND5MJ7HwI8ht+KxlXR8=;
+	s=korg; t=1739440171;
+	bh=ZUUe17h+1ph0NJ36IGXSutFrUjXudo4tr3NI+HFzifQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=QHhuORDrzKwj5nBcVvdvE5Y948j1UgMJfjFp8pw/e97yQK/EVb8EgOuHGtLW+/Sm0
-	 VSpcvBWnl1O9uwpg/75Ztx0bcfcaNXjfr5rPM2mOG/Y5QLBX9ASpAVfNssreu592VR
-	 x0B1SbLlHxlMZ5cFeevkHgHIgNXX4NPCsOnCxarE=
-Date: Thu, 13 Feb 2025 10:47:14 +0100
+	b=cldpDhZ5r0jc3XyH45YleFT5nTMC/P4i3yqPxsskCZMVbExWdbuv/obqB9gpHVBCv
+	 BGFqMRVyNBhGb9D8Tmy2sLvEgrkyf0/t+M2XcPD+vLmNkPAkcRy0tAKtGXvGBHWJkw
+	 2INWmmxThzS1LaodE8lk+UZz6BrsMohORbmrFmoI=
+Date: Thu, 13 Feb 2025 10:49:27 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Badhri Jagan Sridharan <badhri@google.com>
-Cc: Jos Wang <joswang1221@gmail.com>, Amit Sunil Dhamne <amitsd@google.com>,
-	heikki.krogerus@linux.intel.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>,
-	stable@vger.kernel.org
-Subject: Re: [PATCH 1/1] usb: typec: tcpm: PSSourceOffTimer timeout in
- PR_Swap enters ERROR_RECOVERY
-Message-ID: <2025021323-surviving-straddle-1f68@gregkh>
-References: <20250209071752.69530-1-joswang1221@gmail.com>
- <5d504702-270f-4227-afd6-a41814c905e3@google.com>
- <CAPTae5+Z3UcDcdFcn=Ref5aQSUEEyz-yVbRqoPJ1LogP4MzJdg@mail.gmail.com>
- <CAMtoTm0bchocN6XrQBRdYuye7=4CoFbU-6wMpRAXR4OU77XkwQ@mail.gmail.com>
- <CAPTae5J5WCD6JmEE2tsgfJDzW9FRusiTXreTdY79MBs4AL6ZHg@mail.gmail.com>
+To: 412574090@163.com
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	weiyufeng <weiyufeng@kylinos.cn>
+Subject: Re: [PATCH] usb: fix error while OF and ACPI all config Y
+Message-ID: <2025021343-diner-online-45c1@gregkh>
+References: <20250213091553.198050-1-412574090@163.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,42 +55,44 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPTae5J5WCD6JmEE2tsgfJDzW9FRusiTXreTdY79MBs4AL6ZHg@mail.gmail.com>
+In-Reply-To: <20250213091553.198050-1-412574090@163.com>
 
-On Wed, Feb 12, 2025 at 11:16:35PM -0800, Badhri Jagan Sridharan wrote:
-> On Tue, Feb 11, 2025 at 5:50 AM Jos Wang <joswang1221@gmail.com> wrote:
-> >
-> > On Tue, Feb 11, 2025 at 7:51 AM Badhri Jagan Sridharan
-> > <badhri@google.com> wrote:
-> > >
-> > > On Mon, Feb 10, 2025 at 3:02 PM Amit Sunil Dhamne <amitsd@google.com> wrote:
-> > > >
-> > > >
-> > > > On 2/8/25 11:17 PM, joswang wrote:
-> > > > > From: Jos Wang <joswang@lenovo.com>
-> > > nit: From https://elixir.bootlin.com/linux/v6.13.1/source/Documentation/process/submitting-patches.rst#L619
-> > >
-> > >   - A ``from`` line specifying the patch author, followed by an empty
-> > >     line (only needed if the person sending the patch is not the author).
-> > >
-> > > Given that you are the author, wondering why do you have an explicit "From:" ?
-> > >
-> > Hello, thank you for your help in reviewing the code.
-> > My company email address is joswang@lenovo.com, and my personal gmail
-> > email address is joswang1221@gmail.com, which is used to send patches.
-> > Do you suggest deleting the "From:" line?
-> > I am considering deleting the "From:" line, whether the author and
-> > Signed-off-by in the patch need to be changed to
-> > "joswang1221@gmail.com".
+On Thu, Feb 13, 2025 at 05:15:53PM +0800, 412574090@163.com wrote:
+> From: weiyufeng <weiyufeng@kylinos.cn>
 > 
-> Yes, changing signed-off to joswang1221@gmail.com will remove the need
-> for "From:".
-> Go ahead with it if it makes sense on your side.
+> When both OF and ACPI are configured as Y simultaneously，this may
+> cause error while install os with usb disk，while reading data from
+> the usb disk, the onboard_ hub driver will reinitialize the
+> hub, causing system installation exceptions.
+> 
+> Signed-off-by: weiyufeng <weiyufeng@kylinos.cn>
+> ---
+>  drivers/usb/misc/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> index 6497c4e81e95..94e75e7adcc1 100644
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -318,7 +318,7 @@ config BRCM_USB_PINMAP
+>  
+>  config USB_ONBOARD_DEV
+>  	tristate "Onboard USB device support"
+> -	depends on OF
+> +	depends on OF && !ACPI
+>  	help
+>  	  Say Y here if you want to support discrete onboard USB devices
+>  	  that don't require an additional control bus for initialization,
+> -- 
+> 2.25.1
+> 
 
-No, what was done here originally is correct, please do not ask people
-to not actually follow the correct procedure.
+What commit id does this fix?
 
-Jos, thank you, there is nothing wrong with the way you sent this.
+And why did this just show up now?  Also, this feels very odd, why not
+fix the driver to work properly here instead of attempting to just not
+build it at all?  Building code with OF and ACPI enabled should be
+allowed.
 
 thanks,
 
