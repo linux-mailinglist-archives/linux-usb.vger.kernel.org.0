@@ -1,60 +1,73 @@
-Return-Path: <linux-usb+bounces-20599-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20600-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F3C1A33DC8
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 12:22:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DC04A33DF7
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 12:27:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC107167B2B
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 11:22:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 40EBF7A45C9
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 11:24:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8608D22173E;
-	Thu, 13 Feb 2025 11:20:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AA4A227E9B;
+	Thu, 13 Feb 2025 11:25:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="jmXXXcrr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rc5YUrNt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF1A4221708;
-	Thu, 13 Feb 2025 11:20:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8109A227E8B;
+	Thu, 13 Feb 2025 11:25:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739445624; cv=none; b=DIiq2VZaYBWReAouwrXi2qSh3SPVxhk24G197qpvKNNWHPbXaO2AtfYIjYISu1aBPfhRPSPBThLqeXCFBl1M5IxfKvEDFM33kP7TrAkaKhW9o6e5U5x7V69oJH/cmS4evgapZbjUSYnh8damiynM4NtCUL9G9TMBCT3Dr8PvAhw=
+	t=1739445944; cv=none; b=HZnIhc1EZgKhSfkVRlT6dyEvEiug+oBPXJ628G/nEAEUcXWfDTPeiE+G6fPelzfcWf4aYcHsEZlyTpaV65FwX1m0rLnu7ZszChH5gb8nNNMvJDlPM+RDUxEiL5OPeqKYeASzoa2rV2D5CnkX0YnnahiD0I9hw9Sz3DciJZcmV80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739445624; c=relaxed/simple;
-	bh=NCCx4YVnsVLzOQ8d17oCuZGX9ttdU8tyQhskq7ys0r4=;
+	s=arc-20240116; t=1739445944; c=relaxed/simple;
+	bh=EVAUuBDBMmfoOHTQ3D16fxtASQyPWClWKsW6lBNhEzg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bO4F3a35SrCLkVECyMZCMCAbzK8xR8ROxSeyq8SKzwIgvASCOPIv6O0u1vRgrZelyZBSnTYVudj+P/5g0eDP+zw7oYDFrrI0uVwSbcGAB3O9msxYgu8RLCAPF59JgCeseMKZW37nYIQnDyqjUuGpCNxufRRsu4PCjPnYNKL3SeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=jmXXXcrr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED83EC4CED1;
-	Thu, 13 Feb 2025 11:20:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739445623;
-	bh=NCCx4YVnsVLzOQ8d17oCuZGX9ttdU8tyQhskq7ys0r4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=jmXXXcrr3Sre5r3HfVbwsqe/7kHlTR6c5WtciC/SIpqapPx17FA04P35+wSesiYqB
-	 zcAy27txYtVPWgDM4SQjvMILvzP/LSWDssJYtjYA5r4GoMfHK7gdUgj07qLqtRobn9
-	 azwI2ePINYy2tixGRt4mALwv9DyqZooFpgT45odk=
-Date: Thu, 13 Feb 2025 12:20:19 +0100
-From: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>,
-	"krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-	"christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-	"javier.carrasco@wolfvision.net" <javier.carrasco@wolfvision.net>,
-	"make_ruc2021@163.com" <make_ruc2021@163.com>,
-	"peter.chen@nxp.com" <peter.chen@nxp.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Pawel Eichler <peichler@cadence.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: FW: [PATCH] usb: xhci: lack of clearing xHC resources
-Message-ID: <2025021306-rally-making-d5f0@gregkh>
-References: <20250213101158.8153-1-pawell@cadence.com>
- <PH7PR07MB9538F08AF8B1D7FF5070DA76DDFF2@PH7PR07MB9538.namprd07.prod.outlook.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=b/qCESuG1ZM8kQCVIgjesPwRNF20LWxao5ph4RSkmujTJG5mai0eHk1QsDTewmOopUVfeHnwirl0BzWx5CP7UkiO6mbTkmL/qg31YlC5OK5kNp63MEBRoK8oJA/RF3nF9Hms1+2/Pkv058p7J+SVrZuclHVj0JCoCCCjyF0EA0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rc5YUrNt; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739445943; x=1770981943;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EVAUuBDBMmfoOHTQ3D16fxtASQyPWClWKsW6lBNhEzg=;
+  b=Rc5YUrNtSUxrPBtbJB2wQdLrnQpyYWvzOqxx1I9Za4CZpiTKdfdLywTE
+   OHU8pSGumQhBq3fERmj1NBBkb3QqBE3cmV8lUmu5tm85owNJ/Ip/r8+06
+   4dd2q9ZazkHbRzj5Tpgog6Lj8h//DGxJB9Hq6ZQo7+x6ALn5gD7wZ4nig
+   fu5bzlgUdgScH2L3Bw37uiEHPfR8xYPQNxR02RvU3ZCDqghWR3xQUN/FQ
+   Q6AN/er2gJ7J3lZ7kTWT9KpBuuOUeEt6kzj4x5tRqR/BezMLFSLN9bGKd
+   gew0A/KAZAVtVs36fs3s4hBMycfEVZ6WpXw3iwzCI4cZVv/KzE95soDcx
+   A==;
+X-CSE-ConnectionGUID: f7hjgxBeRjCiItQq7oYKqQ==
+X-CSE-MsgGUID: zU49gNWfTeWfOB+tmEI/fQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="43911389"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="43911389"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 03:25:42 -0800
+X-CSE-ConnectionGUID: eASTbBQoRtKW+uWVNLxbOA==
+X-CSE-MsgGUID: e7u4gQZ2Rn6BPVjTgQ5C7Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="112951902"
+Received: from kuha.fi.intel.com ([10.237.72.152])
+  by orviesa010.jf.intel.com with SMTP; 13 Feb 2025 03:25:39 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 13 Feb 2025 13:25:38 +0200
+Date: Thu, 13 Feb 2025 13:25:38 +0200
+From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+To: Elson Roy Serrao <quic_eserrao@quicinc.com>
+Cc: gregkh@linuxfoundation.org, xu.yang_2@nxp.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] usb: roles: set switch registered flag early on
+Message-ID: <Z63Wsng27QfhyjLd@kuha.fi.intel.com>
+References: <20250206193950.22421-1-quic_eserrao@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -63,86 +76,77 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <PH7PR07MB9538F08AF8B1D7FF5070DA76DDFF2@PH7PR07MB9538.namprd07.prod.outlook.com>
+In-Reply-To: <20250206193950.22421-1-quic_eserrao@quicinc.com>
 
-On Thu, Feb 13, 2025 at 10:46:06AM +0000, Pawel Laszczak wrote:
-> The xHC resources allocated for USB devices are not released in correct
-> order after resuming in case when while suspend device was reconnected.
+On Thu, Feb 06, 2025 at 11:39:50AM -0800, Elson Roy Serrao wrote:
+> The role switch registration and set_role() can happen in parallel as they
+> are invoked independent of each other. There is a possibility that a driver
+> might spend significant amount of time in usb_role_switch_register() API
+> due to the presence of time intensive operations like component_add()
+> which operate under common mutex. This leads to a time window after
+> allocating the switch and before setting the registered flag where the set
+> role notifications are dropped. Below timeline summarizes this behavior
 > 
-> This issue has been detected during the fallowing scenario:
-> - connect hub HS to root port
-> - connect LS/FS device to hub port
-> - wait for enumeration to finish
-> - force DUT to suspend
-> - reconnect hub attached to root port
-> - wake DUT
+> Thread1				|	Thread2
+> usb_role_switch_register()	|
+> 	|			|
+> 	---> allocate switch	|
+> 	|			|
+> 	---> component_add()	|	usb_role_switch_set_role()
+> 	|			|	|
+> 	|			|	--> Drop role notifications
+> 	|			|	    since sw->registered
+> 	|			|	    flag is not set.
+> 	|			|
+> 	--->Set registered flag.|
 > 
-> For this scenario during enumeration of USB LS/FS device the Cadence xHC
-> reports completion error code for xHCi commands because the devices was not
-> property disconnected and in result the xHC resources has not been
-> correct freed.
-> XHCI specification doesn't mention that device can be reset in any order
-> so, we should not treat this issue as Cadence xHC controller bug.
-> Similar as during disconnecting in this case the device should be cleared
-> starting form the last usb device in tree toward the root hub.
-> To fix this issue usbcore driver should disconnect all USB
-> devices connected to hub which was reconnected while suspending.
+> To avoid this, set the registered flag early on in the switch register
+> API.
 > 
-> Fixes: 3d82904559f4 ("usb: cdnsp: cdns3 Add main part of Cadence USBSSP DRD Driver")
-> cc: <stable@vger.kernel.org>
-> Signed-off-by: Pawel Laszczak <pawell@cadence.com>
+> Fixes: b787a3e78175 ("usb: roles: don't get/set_role() when usb_role_switch is unregistered")
+> cc: stable@vger.kernel.org
+> Signed-off-by: Elson Roy Serrao <quic_eserrao@quicinc.com>
+
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+
 > ---
->  drivers/usb/core/hub.c | 6 ++++--
->  1 file changed, 4 insertions(+), 2 deletions(-)
+> Changes in v2:
+>  - Set the switch registered flag from the get-go as suggested by
+>    Heikki.
+>  - Modified subject line and commit next as per the new logic.
+>  - Link to v1: https://lore.kernel.org/all/20250127230715.6142-1-quic_eserrao@quicinc.com/
 > 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 0cd44f1fd56d..2473cbf317a8 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -3627,10 +3627,12 @@ static int finish_port_resume(struct usb_device *udev)
->  		 * the device will be rediscovered.
->  		 */
->   retry_reset_resume:
-> -		if (udev->quirks & USB_QUIRK_RESET)
-> +		if (udev->quirks & USB_QUIRK_RESET) {
->  			status = -ENODEV;
-> -		else
-> +		} else {
-> +			hub_disconnect_children(udev);
->  			status = usb_reset_and_verify_device(udev);
-> +		}
+>  drivers/usb/roles/class.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/usb/roles/class.c b/drivers/usb/roles/class.c
+> index c58a12c147f4..30482d4cf826 100644
+> --- a/drivers/usb/roles/class.c
+> +++ b/drivers/usb/roles/class.c
+> @@ -387,8 +387,11 @@ usb_role_switch_register(struct device *parent,
+>  	dev_set_name(&sw->dev, "%s-role-switch",
+>  		     desc->name ? desc->name : dev_name(parent));
+>  
+> +	sw->registered = true;
+> +
+>  	ret = device_register(&sw->dev);
+>  	if (ret) {
+> +		sw->registered = false;
+>  		put_device(&sw->dev);
+>  		return ERR_PTR(ret);
+>  	}
+> @@ -399,8 +402,6 @@ usb_role_switch_register(struct device *parent,
+>  			dev_warn(&sw->dev, "failed to add component\n");
 >  	}
 >  
->  	/* 10.5.4.5 says be sure devices in the tree are still there.
+> -	sw->registered = true;
+> -
+>  	/* TODO: Symlinks for the host port and the device controller. */
+>  
+>  	return sw;
 > -- 
-> 2.43.0
-> 
+> 2.17.1
 
-Hi,
-
-This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
-a patch that has triggered this response.  He used to manually respond
-to these common problems, but in order to save his sanity (he kept
-writing the same thing over and over, yet to different people), I was
-created.  Hopefully you will not take offence and will fix the problem
-in your patch and resubmit it so that it can be accepted into the Linux
-kernel tree.
-
-You are receiving this message because of the following common error(s)
-as indicated below:
-
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
-
-If you wish to discuss this problem further, or you have questions about
-how to resolve this issue, please feel free to respond to this email and
-Greg will reply once he has dug out from the pending patches received
-from other developers.
-
-thanks,
-
-greg k-h's patch email bot
+-- 
+heikki
 
