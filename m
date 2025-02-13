@@ -1,139 +1,126 @@
-Return-Path: <linux-usb+bounces-20580-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20581-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D08E9A339A5
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 09:08:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 26875A33A53
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 09:56:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E8D88168B93
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 08:07:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3A28188B709
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 08:56:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E230620B7EB;
-	Thu, 13 Feb 2025 08:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 853D520B20E;
+	Thu, 13 Feb 2025 08:55:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gx27qmYB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NgFwiH1/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC7B20B1ED;
-	Thu, 13 Feb 2025 08:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000E920C49E;
+	Thu, 13 Feb 2025 08:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739434052; cv=none; b=tdlRlytyy+YAmAtI9V5+hO5eTf5Jod3Umg3TnywbkAHhSzZqOR5HP8REKbHwaFVigKebna68iXCtLAQXAAgGZL9A17wxtk4Nbu3E5TYSdg7fc79wSnLrDNVnBPBRb+G1P/5/Pc0gxXfKoSMKPDhH/rFLfdS5MRb4e3GSOB/f6k0=
+	t=1739436952; cv=none; b=NnUGNX8qgNOgJdm6k/vpOKan2H4XEpM91W1d3fVzI70jYPeWLm2Jdn6xobYduXr23TzA4Ocwgvu8FBDOVkriDuSAsQRaRHS1JOYOTMDDxrm/jzUvMk9QBmg1+qNymkM6S+OiTs64AMP5cSxpV1p4Dgoh+wU3RrCQVpXXPDJYb8U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739434052; c=relaxed/simple;
-	bh=usa/ZD9eo6oR2HXcMxracFfe5+vucFm+dr5h2mXZtcE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pgYnw3KSSk10YtkSr0F+DdjsBfeyawlUBxju7OLMoKbdLRjqzRvZ5j0lXGHEuCzHbrDboxCl6k+lYCJwGubo/LsxMn2vINniHUC8OUarQ6LGPzZUYh6MdcfwZQUJ82XnkMoky3VHKTSLfkSSciZPRAeNQidMnvvpZRbcxkkawC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gx27qmYB; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739434051; x=1770970051;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=usa/ZD9eo6oR2HXcMxracFfe5+vucFm+dr5h2mXZtcE=;
-  b=Gx27qmYBe1G1vovqJyNXMPK9DcTKIqbcw08ty2mxWEp94cb5pTD2gIEj
-   bguGLwVzM5e/D74KcbeE2xP9JlXhIDHmPaIZQFsdJPZeGP+6ImkhkLFYW
-   bHOvJ81ZQ0MTNZedZSsayUHfd3eAacFiqXqfH/jnUsq391W3XSfnaD5nh
-   3eRrgcUqBUQ+YvBHW0z2b7bsJ3nXv8cFxz28nGHTjns84rx6rIeVLQRgn
-   kDseOa+XQNW3B/SrsLqDMhx+p5guvwzyqaRD8ntJeM3w0TmdzbIW7vJCw
-   k9Y40YA/7APWi+Bv7y+ePXh1qhtRN8I47usiQ9O2/GFLVcrnI3tsu2hMw
-   w==;
-X-CSE-ConnectionGUID: 9p+e3iB1Swen+4vBMC1j1Q==
-X-CSE-MsgGUID: ev/5A+/2TAS8HCExeqRU7w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="51517529"
-X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="51517529"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 00:07:12 -0800
-X-CSE-ConnectionGUID: DE0Db2kJTBuQiCzTf1puqg==
-X-CSE-MsgGUID: ZzeN7gI5RB+dIqKDLQxnLA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="118258626"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 00:07:10 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tiUFX-0000000B6EX-1V9w;
-	Thu, 13 Feb 2025 10:07:07 +0200
-Date: Thu, 13 Feb 2025 10:07:07 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Felipe Balbi <balbi@kernel.org>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Ferry Toth <fntoth@gmail.com>
-Subject: Re: [PATCH v2 2/3] usb: dwc3: gadget: Add support for
- snps,reserved-endpoints property
-Message-ID: <Z62oKwwhBC9ufH5c@smile.fi.intel.com>
-References: <20250203191524.3730346-1-andriy.shevchenko@linux.intel.com>
- <20250203191524.3730346-3-andriy.shevchenko@linux.intel.com>
- <20250212011013.xumqgguhluxdslpz@synopsys.com>
- <Z6x5lB4hGpz-9IzS@smile.fi.intel.com>
- <Z6zvcF1oe4TklTlK@smile.fi.intel.com>
- <20250213011736.orc23wbgvjoybrbq@synopsys.com>
+	s=arc-20240116; t=1739436952; c=relaxed/simple;
+	bh=b9Piwl1nQzB7vJzY0MVy96I/7TITjuMOl/dFawyQO+Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FAC1nqsGiw8Q3b0lO2CpL2Ppqtefj+rkKEJznLWdL5R1dcV9V9h7R+rdwsMsGXAKUaYxA4iJytUi+LEY0HQkL+BLrUJUEGzIAccFSRoOVScFyYtF1NGYSJmxKzJ/gOhW8dPTDKCWKwb9oDHdpre86AZqpP7ldTT6mMuNf4X5lUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NgFwiH1/; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-307bc125e2eso6948241fa.3;
+        Thu, 13 Feb 2025 00:55:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739436948; x=1740041748; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ISvOoc8ZLh2lLWyF+k1j00TNjsRMMcy7FI/7Z6/03RE=;
+        b=NgFwiH1/f8kLzy9k7IRglRyuXKRV6jWAWxI5bZlgMQ8bnXhnhHn2d1sDU+Og0jE9FM
+         oXrNE7RmvHnToZAVzerp79w7giPNpy300Ph74U69H5fso+bGBhqiDMOX4x37IPgiFhe7
+         UkzblpJW6WItOvx65yomcupr7IwJulko79/BOL2dBOAblJHRZKdiv7+HqRyHUW/DxKBP
+         ZaxJK/yzylh5lPZcaCAisy9ybiWPZ+df5ZrigBQbX43GsYhEz8ebYOO39GlvA9A5X13/
+         HZWNwhrntZEPS6m+5aEJ+iJ8eZ+w4NdbM2QuH/lw+MWyZEnx7pnYhPJg173KKorvnPSL
+         NEgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739436948; x=1740041748;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ISvOoc8ZLh2lLWyF+k1j00TNjsRMMcy7FI/7Z6/03RE=;
+        b=DyUrSvGkoHpJYVp+IrGjuUSE/Q/nzGSBRgSdAft+WvFi1PRtefnLIRTJ+c3fDBySop
+         Xr9nWAe9Wtlgl6M6j7TKdb5Rh3A/4pHJsKAMYRe5JcbYF8hmnco33XZJ6/2T2QPU+SjI
+         yTn7pVBnPsHeD/oMi/8SSdhe8thrRvEK4032T+uP0hCfxmmmit8anIj9rBqD5ZxokSfw
+         W2O6TxgelJZCugvYwh+3azVRqQGYP56+tRAUDZITkIN/juJQxbgfkbAOlVYNgm6jE6XE
+         3QPITqf/hz2dxR4qdZa3dw31BacWtSzPuBoxF+rvNiynx4tPclEsI2b5ZUtxtcwYM1+5
+         085g==
+X-Forwarded-Encrypted: i=1; AJvYcCW+rtbmzZugtO1WzUtqk48TRgHUb1Br5md10ylNiieUqrplIw0GHkv35CfduFhig+YlXneT8488FiDUo5k=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzf02yGFuvs8+ZeXTlsenBxDuVeD6YFrrUvl6M7zUzntqco3BJM
+	YGYN5WwtBNGc19fHWks0+41PEmxniYDTgKyTOTWFXMmAKtK7KJ9QWqpxEQ==
+X-Gm-Gg: ASbGncuaMCdybX+WaONKVhk27RJCJkb4G5trmtONTe6qwiowNT+iACR38B+R2ft0flz
+	BHPyRedljXUqsFboIokKSg9lgm+V7Jk5mPdZCHtaz/sN0GThER2OperoMQCB2Lcz2758jGxVlDg
+	WOvyKXIlu84JJrQ87U9GUoLym33lGEH7HjEoU7D9mN2CNarmWJubVpTpTaUXvh0PnlerGJ3IAmR
+	F1l3rR48ZCqhprgAQsVQKVom9IIJlBr3/s5yoy5CItWwrYJkSMb0YnOKaezF7W238cum4dpjH+Q
+	zJSd3GaDYrxlGE6UczRCHXYGw+/VAzLaHkYX8FCAIKLvs+PlRR//8f1sPwBbZBBfjLmMOD7W
+X-Google-Smtp-Source: AGHT+IGW8hG4ZSdW4/ynvfOmGmfyG4J7bnB6/czfWfePjml4V4zcl/kwzU92567pa0MdZPlL5FAAdw==
+X-Received: by 2002:a05:651c:2106:b0:305:d86a:4f01 with SMTP id 38308e7fff4ca-3090ddc6cf8mr7698091fa.31.1739436947507;
+        Thu, 13 Feb 2025 00:55:47 -0800 (PST)
+Received: from ?IPV6:2a00:1fa0:48f0:1acb:121e:9475:d238:84ad? ([2a00:1fa0:48f0:1acb:121e:9475:d238:84ad])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3091011ed97sm1375651fa.48.2025.02.13.00.55.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Feb 2025 00:55:46 -0800 (PST)
+Message-ID: <309b356f-a7b8-4f1f-92b7-ed5b144bd039@gmail.com>
+Date: Thu, 13 Feb 2025 11:55:43 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250213011736.orc23wbgvjoybrbq@synopsys.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: fix error while OF and ACPI all config Y
+To: 412574090@163.com, gregkh@linuxfoundation.org
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ weiyufeng <weiyufeng@kylinos.cn>
+References: <20250213060804.114558-1-412574090@163.com>
+Content-Language: en-US
+From: Sergey Shtylyov <sergei.shtylyov@gmail.com>
+In-Reply-To: <20250213060804.114558-1-412574090@163.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 13, 2025 at 01:17:41AM +0000, Thinh Nguyen wrote:
-> On Wed, Feb 12, 2025, Andy Shevchenko wrote:
-> > On Wed, Feb 12, 2025 at 12:36:04PM +0200, Andy Shevchenko wrote:
-> > > On Wed, Feb 12, 2025 at 01:10:17AM +0000, Thinh Nguyen wrote:
-> > > > On Mon, Feb 03, 2025, Andy Shevchenko wrote:
+On 2/13/25 9:08 AM, 412574090@163.com wrote:
 
-...
-
-> > > > > static bool dwc3_gadget_endpoint_trbs_complete(struct dwc3_ep *dep,
-> > > 
-> > > > >  		for (i = 0; i < DWC3_ENDPOINTS_NUM; i++) {
-> > > > >  			dep = dwc->eps[i];
-> > > > > +			if (!dep)
-> > > > > +				continue;
-> > > > 
-> > > > It should be fine to ignore this check here. Something must be really
-> > > > wrong if there's an interrupt pointing to an endpoint that we shouldn't
-> > > > be touching. If we do add a check, we should print a warn or something
-> > > > here. But that should be a patch separate from this.
-> > > 
-> > > Theoretically everything is possible as it may be HW integration bug,
-> > > for example. But are you asking about separate patch even from the rest
-> > > of the checks? Please, elaborate what do you want to see.
-> > 
-> > Re-reading the code again, I don't understand. If we get to this loop
-> > ever (theoretically it might be an old IP with the reserved endpoints),
-> > we crash the kernel on the first gap in the array. And since the function
-> > is called on an endpoint, it doesn't mean that all endpoints are allocated,
-> > so I do not see the justification to issue a warning here.
-> > Or do you imply that DWC3_VER_IS_PRIOR(DWC3, 183A) may not have an HW
-> > integration similar to what we have on Intel Merrifield?
-> > 
-> > For now I'm going to leave this check as is.
+> From: weiyufeng <weiyufeng@kylinos.cn>
 > 
-> Oops, you are correct. I read this as the same logic as below.
+> When both OF and ACPI are configured as Y simultaneously，this may
+> cause error while install os with usb disk，while reading data from
+> the usb disk, the onboard_ hub driver will reinitialize the
+> hub, causing system installation exceptions.
+> 
+> Signed-off-by: weiyufeng <weiyufeng@kylinos.cn>
+> ---
+>  drivers/usb/misc/Kconfig | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
+> index 6497c4e81e95..9ffb51191621 100644
+> --- a/drivers/usb/misc/Kconfig
+> +++ b/drivers/usb/misc/Kconfig
+> @@ -318,7 +318,7 @@ config BRCM_USB_PINMAP
+>  
+>  config USB_ONBOARD_DEV
+>  	tristate "Onboard USB device support"
+> -	depends on OF
+> +	depends on (OF && !ACPI)
 
-NP. Thank you for the review, and thanks for acking the next version!
+   I don't think () are needed here.
 
--- 
-With Best Regards,
-Andy Shevchenko
+[...]
 
+MBR, Sergey
 
 
