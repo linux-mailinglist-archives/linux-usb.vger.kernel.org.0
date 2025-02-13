@@ -1,129 +1,242 @@
-Return-Path: <linux-usb+bounces-20619-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20621-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80BE7A34811
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 16:43:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38215A34B8E
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 18:19:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F3F83AC9D3
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 15:30:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8306D1888B73
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 17:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D99AD13C816;
-	Thu, 13 Feb 2025 15:30:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="PJwAxXxh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E1F20409A;
+	Thu, 13 Feb 2025 17:15:37 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE93418858A
-	for <linux-usb@vger.kernel.org>; Thu, 13 Feb 2025 15:30:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4DD15689A;
+	Thu, 13 Feb 2025 17:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739460614; cv=none; b=VYtjpYLnajhC7jccY+bUsYLW7kP/I79RvnBjiIYxTGbmBpSUTCog328SnoelSRZukhUq2AjEJHjjbl0bJvBT9IF0ZiAJTQoCt1ujHt23l9Hy5cyoWQN5QQNwcnCqw8KYrL85FOh7n85wGE1QUzWh6Cu6JwGhrBK7gDh5NBOH3wI=
+	t=1739466937; cv=none; b=hNxmDAUhvM4SaE592sO2OuOvSCnLfFn9YtWHtvi9F1Z36rFcIuIrdw4NmWxxDEJLLGz2VNbsbNrOZ2hjy6BeMVN2jE0M2vTNjc0g9i8q5tsyussTgW/BpwfudDHiSrdPuHRckOkgO832FgTNhjlk5SLzIffOMWbmdP1Hm8Au9Ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739460614; c=relaxed/simple;
-	bh=CIC6QG19MUkOFnBkVOTHWWc79rnkVCbOB9b7kdnsa6U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ex6UmCRwEt9Ryy7z++QF6RcvNRJBykRIkNGc/SelkJNIMbxQa/t0WnPM7SMPc2ZvLDN9OvbIpQU3Kmzot36iJxj9aJ0Z82S/SXpH4vSJMf5VJgO3Bf2MXcH5g1cwSjX2DD+jCwvhA5dEPkaQ5gFXU7BtT0xxINaz5VVFs8REiNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=PJwAxXxh; arc=none smtp.client-ip=209.85.222.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7c0818add57so10508385a.3
-        for <linux-usb@vger.kernel.org>; Thu, 13 Feb 2025 07:30:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1739460611; x=1740065411; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyIrs9HvFfKVmUwHZOR1GwKDKzsItdw/GMVirRewx9o=;
-        b=PJwAxXxh4usPSlREw4QudQf5pFPmqnObjxOjpxl/KBVmxss1vyDixPqOdSIsftlBTn
-         ye/0RV4tYBwPKz8/cXw7pLokhRtBDSMpviZUfUaGecKJUurah4BcWxo7GIalUaPQs6s/
-         368uzE35qHQ1bcD6MFynK3LYiIrv9Fhc3orAhELMNd+5hyEtd4f6REiiulJXZaZpGL1X
-         qPI8Duqa8MXpthjmjr2+nzyOD1MqNNxGhKKE5BjuwJqgxHdbQs0iKhFAy0Im2rAfyoE0
-         KWZ5u1wnIdSxLlLUTyNu80LrY0Zol2Ze4yAA5r0jW8UJHl6RVQYVI++g4LgM4exBfVMv
-         v2gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739460611; x=1740065411;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OyIrs9HvFfKVmUwHZOR1GwKDKzsItdw/GMVirRewx9o=;
-        b=U2XwmSMhuOBgElo+meLZb76lMY+QqqoaU/8Lm8atoL26E6soqB0Qp4oFqEIUmXR7Jx
-         3bWLcp95JUnbCfs3K4boepbeyWW3cMwflVyvCy9hY80NfkaCC98HVEmbhtaAfxLx1z2Y
-         a83yn1SljM1DGYl0XkVsIlCVNQXk+Bytut+nYCxsgtX3vT8NSssfmFnLzGAJrPi5NKLH
-         aW7gCLBv13Sqb1oXcalMwyWPpnd4GU9k0rrJIqpX47Vavqlk5D8kZiLvhvexviDZow9g
-         CcfBtfXlIe/l83mJeZqyYsct7MTpztErwY5cSMWIDeLYtuFRhnzgzmbGYt+KpcoLGUM2
-         +FQA==
-X-Forwarded-Encrypted: i=1; AJvYcCUUsFg0oEucaDAeIV/dkSsUL1ijGIB+aU3bxjDHmVdRDvCP5GDV4Q5M5zDHxxalVc/2nF2S8uUzSpo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJ/J+X8l1Kl78mtOOofaxWgWp+5iRNy6k0KAVvzs0Lyjyhy/gf
-	ZcboH6CKWPnH9XJXD8gTj5BgBkhveHxDNyTNi924YMi5cZ5E/IRwVgRYyXghMA==
-X-Gm-Gg: ASbGncsi6b4ym8iVLByx1guqrhU4R7LcSvnImPjpGJDhQIy2x631i7LS/Vm8ghZGmZz
-	E+U7ZfcJvp5ldnk7IrF+9ViBnB3hoak9hyejPuCIUoJmP0AWOR1lX9O/sotL5BeBOhqhJaiWNqf
-	wg5B2rW2Qu2+rJTsktFe2ChD9Yp27dI9YFrNhX34U5Cxskb+5jYK8V3RQ8f2zZvsWYpFzQSdVde
-	iga0RBQpT9oC0C/LyurfbUbuw2w+ikuShSUVlsKFFNZhuRlvRWd0zWn1VpaSExJXq1Oz2Q+20K6
-	AvhmeZisrvS/92Ja
-X-Google-Smtp-Source: AGHT+IHGzwP5ohgrW42L4Vps5APegav+rOlNPMCt8pEeXEljcFQRbBfg7Tzw7Nsn5o5w3hwG3O27Fw==
-X-Received: by 2002:a05:6214:2262:b0:6e4:3cf1:5624 with SMTP id 6a1803df08f44-6e46edb4aa4mr120418166d6.39.1739460611592;
-        Thu, 13 Feb 2025 07:30:11 -0800 (PST)
-Received: from rowland.harvard.edu ([2601:19b:681:fd10::9345])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65d9f36f5sm10395756d6.75.2025.02.13.07.30.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 07:30:11 -0800 (PST)
-Date: Thu, 13 Feb 2025 10:30:07 -0500
-From: "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
-To: Pawel Laszczak <pawell@cadence.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-	"christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
-	"javier.carrasco@wolfvision.net" <javier.carrasco@wolfvision.net>,
-	"make_ruc2021@163.com" <make_ruc2021@163.com>,
-	"peter.chen@nxp.com" <peter.chen@nxp.com>,
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	Pawel Eichler <peichler@cadence.com>,
-	"stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: [PATCH] usb: xhci: lack of clearing xHC resources
-Message-ID: <b39d468e-beb9-4a44-8fe6-83754ffbd367@rowland.harvard.edu>
-References: <20250213101158.8153-1-pawell@cadence.com>
- <PH7PR07MB95384002E4FBBC7FE971862FDDFF2@PH7PR07MB9538.namprd07.prod.outlook.com>
+	s=arc-20240116; t=1739466937; c=relaxed/simple;
+	bh=sKAH8pxmoLFHVCRS/HFwKo3JD4z1kJnrcgM44SAA0J8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uSuggjntZQcUbPRq5ca+1lrtIUnWPZfWr+Y8zb1NFKM6EXCT2aVws1QxuYnEDCMzIS4WB1ifVV3+KcFMIbDGsnBhtVEH0anOTuXP7wq6MygXS5xm7I/6AcsEY8J6jsI7RE7QS2jMv7zbyCkN/7lDu0adLivuynsfMdff+2KwjRg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [192.168.0.2] (ip5f5af065.dynamic.kabel-deutschland.de [95.90.240.101])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D3C0261CCD7D2;
+	Thu, 13 Feb 2025 18:07:34 +0100 (CET)
+Message-ID: <1430649f-75e2-4edd-afee-87bf4ac7a961@molgen.mpg.de>
+Date: Thu, 13 Feb 2025 18:07:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH7PR07MB95384002E4FBBC7FE971862FDDFF2@PH7PR07MB9538.namprd07.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
+ #08!!! on Dell XPS 13 9360
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
+ anna-maria@linutronix.de, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+ mingo@kernel.org, tglx@linutronix.de, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Hayes Wang <hayeswang@realtek.com>, Simon Horman <horms@kernel.org>,
+ netdev@vger.kernel.org
+References: <20250210124551.3687ae51@foxbook>
+ <b0d55f4c-a078-42a0-a0fe-5823700f2837@molgen.mpg.de>
+ <Z6n-dWDSxNCjROYV@localhost.localdomain>
+ <10de7289-653f-43b1-ad46-2e8a0cd42724@molgen.mpg.de>
+ <Z6tmbdl646D_UjrY@localhost.localdomain>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <Z6tmbdl646D_UjrY@localhost.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 13, 2025 at 10:27:00AM +0000, Pawel Laszczak wrote:
-> The xHC resources allocated for USB devices are not released in correct order after resuming in case when while suspend device was reconnected.
+Dear Frederic,
+
+
+Thank you very much for your help.
+
+Am 11.02.25 um 16:02 schrieb Frederic Weisbecker:
+> Le Tue, Feb 11, 2025 at 12:57:33PM +0100, Paul Menzel a écrit :
+
+>> Am 10.02.25 um 14:26 schrieb Frederic Weisbecker:
+>>> Le Mon, Feb 10, 2025 at 12:59:42PM +0100, Paul Menzel a écrit :
+>>
+>>>> Am 10.02.25 um 12:45 schrieb Michał Pecio:
+>>>>
+>>>>>>>>>>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 6.9-rc2+
+>>>>>
+>>>>>> Just for the record, I am still seeing this with 6.14.0-rc1
+>>>>>
+>>>>> Is this a regression? If so, which versions were not affected?
+>>>>
+>>>> Unfortunately, I do not know. Right now, my logs go back until September
+>>>> 2024.
+>>>>
+>>>>       Sep 22 13:08:04 abreu kernel: Linux version 6.11.0-07273-g1e7530883cd2 (build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 14.2.0-5) 14.2.0, GNU ld (GNU Binutils for Debian) 2.43.1) #12 SMP PREEMPT_DYNAMIC Sun Sep 22 09:57:36 CEST 2024
+>>>>
+>>>>> How hard to reproduce? Wasn't it during resume from hibernation?
+>>>>
+>>>> It’s not easy to reproduce, and I believe it’s not related with resuming
+>>>> from hibernation (which I do not use) or ACPI S3 suspend. I think, I can
+>>>> force it more, when having the USB-C adapter with only the network cable
+>>>> plugged into it, and then running `sudo powertop --auto-tune`. But sometimes
+>>>> it seems unrelated.
+>>>>
+>>>>> IRQ isuses may be a red herring, this code here is a busy wait under
+>>>>> spinlock. There are a few of those, they cause various problems.
+>>>>>
+>>>>>                   if (xhci_handshake(&xhci->op_regs->status,
+>>>>>                                  STS_RESTORE, 0, 100 * 1000)) {
+>>>>>                            xhci_warn(xhci, "WARN: xHC restore state timeout\n");
+>>>>> 			spin_unlock_irq(&xhci->lock);
+>>>>>                            return -ETIMEDOUT;
+>>>>>                   }
+>>>>>
+>>>>> This thing timing out may be close to the root cause of everything.
+>>>>
+>>>> Interesting. Hopefully the USB folks have an idea.
+>>>
+>>> Handler #08 is NET_RX. So something raised the NET_RX on some non-appropriate
+>>> place, perhaps...
+>>>
+>>> Can I ask you one more trace dump?
+>>>
+>>> I need:
+>>>
+>>> echo 1 > /sys/kernel/tracing/events/irq/softirq_raise/enable
+>>> echo 1 > /sys/kernel/tracing/options/stacktrace
+>>>
+>>> Unfortunately this will also involve a small patch:
+>>>
+>>> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
+>>> index fa058510af9c..accd2eb8c927 100644
+>>> --- a/kernel/time/tick-sched.c
+>>> +++ b/kernel/time/tick-sched.c
+>>> @@ -1159,6 +1159,9 @@ static bool report_idle_softirq(void)
+>>>    	if (local_bh_blocked())
+>>>    		return false;
+>>> +	trace_printk("STOP\n");
+>>> +	trace_dump_stack(0);
+>>> +	tracing_off();
+>>>    	pr_warn("NOHZ tick-stop error: local softirq work is pending, handler #%02x!!!\n",
+>>>    		pending);
+>>>    	ratelimit++;
+>>
+>> Thank you for your help. I applied the patch on top of 6.14-rc2, and was
+>> able to reproduce the issue. Please find the Linux messages attached, and
+>> the trace can be downloaded [1].
 > 
-> This issue has been detected during the fallowing scenario:
-> - connect hub HS to root port
-> - connect LS/FS device to hub port
-> - wait for enumeration to finish
-> - force DUT to suspend
-> - reconnect hub attached to root port
-> - wake DUT
+> So here is the offender:
+> 
+>   => __raise_softirq_irqoff
+>   => __napi_schedule
+>   => rtl8152_runtime_resume.isra.0
+>   => rtl8152_resume
+>   => usb_resume_interface.isra.0
+>   => usb_resume_both
+>   => __rpm_callback
+>   => rpm_callback
+>   => rpm_resume
+>   => __pm_runtime_resume
+>   => usb_autoresume_device
+>   => usb_remote_wakeup
+>   => hub_event
+>   => process_one_work
+>   => worker_thread
+>   => kthread
+>   => ret_from_fork
+>   => ret_from_fork_asm
+> 
+> It is calling napi_schedule() from a non-interrupt. And since
+> ____napi_schedule() assumes to be called from an interrupt, it
+> raises the softirq accordingly without waking up ksoftirqd.
+> 
+> Can you try the following fix (untested, sorry...) ?
+> 
+> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
+> index 468c73974046..8f6ea4e7685c 100644
+> --- a/drivers/net/usb/r8152.c
+> +++ b/drivers/net/usb/r8152.c
+> @@ -8537,8 +8537,11 @@ static int rtl8152_runtime_resume(struct r8152 *tp)
+>   		clear_bit(SELECTIVE_SUSPEND, &tp->flags);
+>   		smp_mb__after_atomic();
+>   
+> -		if (!list_empty(&tp->rx_done))
+> +		if (!list_empty(&tp->rx_done)) {
+> +			local_bh_disable();
+>   			napi_schedule(&tp->napi);
+> +			local_bh_enable();
+> +		}
+>   
+>   		usb_submit_urb(tp->intr_urb, GFP_NOIO);
+>   	} else {
+> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
+> index 67964dc4db95..1bd730b881f0 100644
+> --- a/include/linux/lockdep.h
+> +++ b/include/linux/lockdep.h
+> @@ -619,6 +619,17 @@ do {									\
+>   		     (!in_softirq() || in_irq() || in_nmi()));		\
+>   } while (0)
+>   
+> +/*
+> + * Assert to be either in hardirq or in serving softirq or with
+> + * softirqs disabled. Verifies a safe context to queue a softirq
+> + * with __raise_softirq_irqoff().
+> + */
+> +#define lockdep_assert_in_interrupt()				\
+> +do {								\
+> +	WARN_ON_ONCE(__lockdep_enabled && !in_interrupt());	\
+> +} while (0)
+> +
+> +
+>   extern void lockdep_assert_in_softirq_func(void);
+>   
+>   #else
+> @@ -634,6 +645,7 @@ extern void lockdep_assert_in_softirq_func(void);
+>   # define lockdep_assert_preemption_enabled() do { } while (0)
+>   # define lockdep_assert_preemption_disabled() do { } while (0)
+>   # define lockdep_assert_in_softirq() do { } while (0)
+> +# define lockdep_assert_in_interrupt() do { } while (0)
+>   # define lockdep_assert_in_softirq_func() do { } while (0)
+>   #endif
+>   
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index c0021cbd28fc..80e415ccf2c8 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -4666,6 +4666,7 @@ static inline void ____napi_schedule(struct softnet_data *sd,
+>   	struct task_struct *thread;
+>   
+>   	lockdep_assert_irqs_disabled();
+> +	lockdep_assert_in_interrupt();
+>   
+>   	if (test_bit(NAPI_STATE_THREADED, &napi->state)) {
+>   		/* Paired with smp_mb__before_atomic() in
 
-DUT refers to the host, not the LS/FS device plugged into the hub, is 
-that right?
+With this diff applied, I wasn’t able to reproduce the issue. Looks 
+promising. Thank you very much.
 
-> For this scenario during enumeration of USB LS/FS device the Cadence xHC reports completion error code for xHCi commands because the devices was not property disconnected and in result the xHC resources has not been correct freed.
-> XHCI specification doesn't mention that device can be reset in any order so, we should not treat this issue as Cadence xHC controller bug.
-> Similar as during disconnecting in this case the device should be cleared starting form the last usb device in tree toward the root hub.
-> To fix this issue usbcore driver should disconnect all USB devices connected to hub which was reconnected while suspending.
+Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
-No, that's not right at all.  We do not want to disconnect these devices 
-if there's any way to avoid it.
 
-There must be another way to tell the host controller to release the 
-devices' resources.  Doesn't the usb_reset_and_verify_device() call do 
-something like that anyway?  After all, the situation should be very 
-similar to what happens when a device is simply reset.
+Kind regards,
 
-Alan Stern
+Paul
 
