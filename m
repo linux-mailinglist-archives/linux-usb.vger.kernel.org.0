@@ -1,73 +1,74 @@
-Return-Path: <linux-usb+bounces-20611-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20612-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3099EA340C7
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 14:52:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82E85A340D0
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 14:53:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CAB85188E3FC
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 13:52:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EBD10188EA97
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 13:53:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33A9ACA5A;
-	Thu, 13 Feb 2025 13:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 493CA38389;
+	Thu, 13 Feb 2025 13:53:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IJM6KeSM"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GE4T7+8b"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 443518BEE;
-	Thu, 13 Feb 2025 13:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10667CA5A;
+	Thu, 13 Feb 2025 13:53:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739454729; cv=none; b=TbAutr5YOR+eZAKBWUcsSnD9W+8ZWx0MfSOd2Yfi/xRMKkEy2VVSQ5zFXI9eWpZ+TD0hirZN62NkeHL81XxMtA9Noigyu5m0eNMEyspPF99k26KeYdr4BCLNnW0+B7F2zl8Qz3DNyUHqW31AVdbLrFp99HW5vA6AgQ1FIaa/Izg=
+	t=1739454803; cv=none; b=r+4Uf0qrWR1r0Q0/JRHV/+m3hN7rdQqX0RkcWIG8EYGiNy+t+FPbYuuPuI31hXLmigwu07I/x05UmvYZKtzPnAxZ99bYn5nOCEGaxW/XSSfMtD1AAIy7Y44k3agLh7NMMLuvJpH0qPxT2VS/SnzjKERZkqqhGvF03T47X5HnyYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739454729; c=relaxed/simple;
-	bh=lsntWK4tqPye8Ew5DO4nfMb1ImyVK+qFVpL64GvAbWA=;
+	s=arc-20240116; t=1739454803; c=relaxed/simple;
+	bh=Wx2iSgdXWa7f/pHQJPfTiVAEMbG4KSxAtLrbFZPOZok=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IVoxYhTSZLNiYU6UMyuzrLzOyx5SKSxP7HBgMblccH+7FIcus3QNUqz7pU6n5cUpk/FvxA1r0b4f9hvtNfUUTM3eZtam+mckH1LAe0Xe3DR7Gqd9E93X9FVHqzjrVk9sTHEQ0dNPk/KeXcA08/w+rIqGYX991X0EvzNkK6qJa5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IJM6KeSM; arc=none smtp.client-ip=198.175.65.21
+	 Content-Type:Content-Disposition:In-Reply-To; b=n26hUAp2IpnBcy9hHaL+m2+dp1SYkyJRBkqmnQYc4zB8LdcirbDDAXFigKigLdkVbXLkP2kNmrKQl8VbJ0M/MahJ+qX6avMQaHssQJ67we3KohxGzZlD1g55AWt13phUyHYMR+ceQmn3n2Aq2FR3oa7ixm0mFUUcS6YwXZSRSjA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GE4T7+8b; arc=none smtp.client-ip=198.175.65.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739454729; x=1770990729;
+  t=1739454802; x=1770990802;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=lsntWK4tqPye8Ew5DO4nfMb1ImyVK+qFVpL64GvAbWA=;
-  b=IJM6KeSMbZxFG/E19xTdREC4d/MKdEzC22NMMM/KUsFwLvoHxyBESAWx
-   bG97AvdEhRaLGbpqkBBalJ/usGHwI78rtlUN5FIGpSlij2BWdKfd432dN
-   M7a8QPDRFeviRc4fuqBZr5FkJglcyJK9us7v2SnhJKG8bYP7WFN9Gs07b
-   MMHbPp46Xb1Eqw2IcqyD2IbZx01dzjrVoWweACpFWjkeGB1ystVSZ+jl5
-   JYIZb1OrxMDUJAle1GF0nCSb98qBEIjpKl8CChMf/kQSUXqZNxzaLUYnl
-   SvVNZ81av8g37BGdk/mS/6L787LQABx6Dek/WAwQgR2J513Q2xInsc8tW
+  bh=Wx2iSgdXWa7f/pHQJPfTiVAEMbG4KSxAtLrbFZPOZok=;
+  b=GE4T7+8bDgi7Xvdfx/AC1dRMIKygcpjdDdNqvSLa8T9yzrBHIEdoUK5x
+   KYMpeQJnvrcZm04nCV/3Q9ZuiCPVLqRXn4xiF5PQAD72isTwROUBwaOHr
+   3PINC+Uxi9217T3nviNovw5qUL8Z91T07DeppSOXA/YrxZ+AHqOaM6ETj
+   PrAw5dc4PKcZ31zPtfvk9oqUpIGu+pLDUfJ2Cs0EpAHxaG58eq5t4JVWH
+   BuM++liIgP1II0xNx3RQasFI/BpDKMj3bVmvCM2OMp7Pl7yobnrxn6SNS
+   7NbPK+675aIIV9ohqj/sM8ypGz3apwjV0xG7+7kmPCpTE5Rq/AyVwrNBf
    A==;
-X-CSE-ConnectionGUID: f7JemYz+QFe2Ogu1P46o3Q==
-X-CSE-MsgGUID: ObNJZ5aDRqyh/mhnvlsyAg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="40075699"
+X-CSE-ConnectionGUID: qRaJ8t1vRC6IhIdVdpL7ag==
+X-CSE-MsgGUID: hg8YE1yYTYqMiMzps9z4mw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="51554017"
 X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="40075699"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 05:52:08 -0800
-X-CSE-ConnectionGUID: EPpLeFCrSKuuRSwhzCOUpA==
-X-CSE-MsgGUID: hNvfYQtoTO2XUd1Ve4v6Kg==
+   d="scan'208";a="51554017"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 05:53:21 -0800
+X-CSE-ConnectionGUID: b/VAzAmPRv24AK6EEqdgMw==
+X-CSE-MsgGUID: sW8wqA1PS6qBkBbIokTCdQ==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="113645273"
+   d="scan'208";a="118337964"
 Received: from kuha.fi.intel.com ([10.237.72.152])
-  by orviesa007.jf.intel.com with SMTP; 13 Feb 2025 05:52:05 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 13 Feb 2025 15:52:04 +0200
-Date: Thu, 13 Feb 2025 15:52:04 +0200
+  by orviesa005.jf.intel.com with SMTP; 13 Feb 2025 05:53:18 -0800
+Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 13 Feb 2025 15:53:17 +0200
+Date: Thu, 13 Feb 2025 15:53:17 +0200
 From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: joswang <joswang1221@gmail.com>, Benson Leung <bleung@chromium.org>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>
-Subject: Re: [PATCH 1/1] usb: typec: displayport: Receive DP Status Update
- NAK request exit dp altmode
-Message-ID: <Z635BJNnFAiIFXxM@kuha.fi.intel.com>
-References: <20250209071926.69625-1-joswang1221@gmail.com>
+To: joswang <joswang1221@gmail.com>
+Cc: badhri@google.com, gregkh@linuxfoundation.org,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2, 1/1] usb: typec: tcpm: PSSourceOffTimer timeout in
+ PR_Swap enters ERROR_RECOVERY
+Message-ID: <Z635TXLXwOaToDAd@kuha.fi.intel.com>
+References: <20250213134921.3798-1-joswang1221@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -77,50 +78,50 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250209071926.69625-1-joswang1221@gmail.com>
+In-Reply-To: <20250213134921.3798-1-joswang1221@gmail.com>
 
-On Sun, Feb 09, 2025 at 03:19:26PM +0800, joswang wrote:
+On Thu, Feb 13, 2025 at 09:49:21PM +0800, joswang wrote:
 > From: Jos Wang <joswang@lenovo.com>
 > 
-> Although some Type-C DRD devices that do not support the DP Sink
-> function (such as Huawei Mate 40Pro), the Source Port initiates
-> Enter Mode CMD, but the device responds to Enter Mode ACK, the
-> Source port then initiates DP Status Update CMD, and the device
-> responds to DP Status Update NAK.
+> As PD2.0 spec ("6.5.6.2 PSSourceOffTimer")，the PSSourceOffTimer is
+> used by the Policy Engine in Dual-Role Power device that is currently
+> acting as a Sink to timeout on a PS_RDY Message during a Power Role
+> Swap sequence. This condition leads to a Hard Reset for USB Type-A and
+> Type-B Plugs and Error Recovery for Type-C plugs and return to USB
+> Default Operation.
 > 
-> As PD2.0 spec ("6.4.4.3.4 Enter Mode Command")，A DR_Swap Message
-> Shall Not be sent during Modal Operation between the Port Partners.
-> At this time, the source port initiates DR_Swap message through the
-> "echo device > /sys/class/typec/port0/data_role" command to switch
-> the data role from host to device. The device will initiate a Hard
-> Reset for recovery, resulting in the failure of data role swap.
+> Therefore, after PSSourceOffTimer timeout, the tcpm state machine should
+> switch from PR_SWAP_SNK_SRC_SINK_OFF to ERROR_RECOVERY. This can also
+> solve the test items in the USB power delivery compliance test:
+> TEST.PD.PROT.SNK.12 PR_Swap – PSSourceOffTimer Timeout
 > 
-> Therefore, when DP Status Update NAK is received, Exit Mode CMD is
-> initiated to exit the currently entered DP altmode.
+> [1] https://usb.org/document-library/usb-power-delivery-compliance-test-specification-0/USB_PD3_CTS_Q4_2025_OR.zip
 > 
+> Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm)")
+> Cc: stable@vger.kernel.org
 > Signed-off-by: Jos Wang <joswang@lenovo.com>
 
-This looks okay to me, but Benson, can you take a look at this?
+Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
 
 > ---
->  drivers/usb/typec/altmodes/displayport.c | 4 ++++
->  1 file changed, 4 insertions(+)
+> v2: Modify the commit message, remove unnecessary blank lines.
+>  drivers/usb/typec/tcpm/tcpm.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
 > 
-> diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
-> index ac84a6d64c2f..b09b58d7311d 100644
-> --- a/drivers/usb/typec/altmodes/displayport.c
-> +++ b/drivers/usb/typec/altmodes/displayport.c
-> @@ -393,6 +393,10 @@ static int dp_altmode_vdm(struct typec_altmode *alt,
+> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
+> index 47be450d2be3..6bf1a22c785a 100644
+> --- a/drivers/usb/typec/tcpm/tcpm.c
+> +++ b/drivers/usb/typec/tcpm/tcpm.c
+> @@ -5591,8 +5591,7 @@ static void run_state_machine(struct tcpm_port *port)
+>  		tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PWR_MODE_USB,
+>  						       port->pps_data.active, 0);
+>  		tcpm_set_charge(port, false);
+> -		tcpm_set_state(port, hard_reset_state(port),
+> -			       port->timings.ps_src_off_time);
+> +		tcpm_set_state(port, ERROR_RECOVERY, port->timings.ps_src_off_time);
 >  		break;
->  	case CMDT_RSP_NAK:
->  		switch (cmd) {
-> +		case DP_CMD_STATUS_UPDATE:
-> +			if (typec_altmode_exit(alt))
-> +				dev_err(&dp->alt->dev, "Exit Mode Failed!\n");
-> +			break;
->  		case DP_CMD_CONFIGURE:
->  			dp->data.conf = 0;
->  			ret = dp_altmode_configured(dp);
+>  	case PR_SWAP_SNK_SRC_SOURCE_ON:
+>  		tcpm_enable_auto_vbus_discharge(port, true);
 > -- 
 > 2.17.1
 
