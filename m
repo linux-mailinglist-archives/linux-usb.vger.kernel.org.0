@@ -1,240 +1,213 @@
-Return-Path: <linux-usb+bounces-20576-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20577-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C3A1A33819
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 07:43:03 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E16B3A338A5
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 08:17:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B453F188A6D7
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 06:43:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E63D188C394
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 07:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB9622080D2;
-	Thu, 13 Feb 2025 06:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52726208990;
+	Thu, 13 Feb 2025 07:17:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BVo+psVl"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pKUCldKf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f47.google.com (mail-oa1-f47.google.com [209.85.160.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D831207E07;
-	Thu, 13 Feb 2025 06:42:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451AC1FAC42
+	for <linux-usb@vger.kernel.org>; Thu, 13 Feb 2025 07:17:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739428958; cv=none; b=u8r1k8zsi+erM/7w2jYUIKa/lnTCY2iwmDrP43No15bMLbbhVWPALKLlaSFP0i7LqkpwrRec+QIbtxEogve9mUfSCDW8MvAUvJsnO2+rGu1mNxK8sc1CtkUAoKp/oIsmOw7sfVoODt19QO0EYPaCnYVo191HoBzy8ihcGtPAA90=
+	t=1739431035; cv=none; b=Prs6VAazFUAiL6ywUMRwdL40+Pb2WZHgzZxlMIIUvPnwLKulrZ1bS9DcR1GkcbQAFsL/8pWdqCgZy8tyxvh30mnoOdB9/WFOgzD/M111QipgJTbONintPWIS5V/9j1U3UIbnjhvc+IBXSNp6FjkzLZ0d5oyXxaUWU77fNFxm1ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739428958; c=relaxed/simple;
-	bh=wSfzicfqZaGMaX/zy9i0qtnv9BY7+9lOnhH4GUr4yd0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=COYL+hCFPZfAiGlan3dur8s41FAh5aqAfzBYPNhidiHF0jtZPcJ9fvdeqzDNUUhncUhyjpX9aZI68daGzLfaZ4iS9OPo+8cGWf9Pb39OlG68h+4Ix+z36BVMFNSZITlK0C/+Gkrkl2fzN11CCk0y/Jk3AuLGG3yOKgKRpxChyBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BVo+psVl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25C83C4CED1;
-	Thu, 13 Feb 2025 06:42:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739428957;
-	bh=wSfzicfqZaGMaX/zy9i0qtnv9BY7+9lOnhH4GUr4yd0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BVo+psVlvUiOKBdW+Xk5NAoqefLAKu66zX8SaYpPRQh3zYFySTDP7EZ2VClOWYjC/
-	 l1HURmC/RB4sV2xe5GNZ7blayI+eV61hKG3RVR1LbxOqL9xNZwCG7UinYY00V+fGdt
-	 Qf37RwM651Va+5kdCOHt3SjFLyWYYSDLL8b1nWkaMkf6tnn/0vUo27iCiyJYg5XuU4
-	 gg86fy7Oay9QR2RHT14pMoJYq7bESMGtvWeVQTPkI+Xt55FiB/WcztsOfRMnRi1WCv
-	 X9fX0J8NKvCO6SfKuLxV2X8WKxUNcrrOBlcHr2KyEs9RCUHAZDUnI7aK+OEnvm/zDX
-	 ClJQYN1dp396A==
-Date: Thu, 13 Feb 2025 14:42:28 +0800
-From: Peter Chen <peter.chen@kernel.org>
-To: Hector Martin <marcan@marcan.st>
-Cc: devicetree@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-	linux-usb@vger.kernel.org, linux-embedded@vger.kernel.org,
-	Asahi Linux <asahi@lists.linux.dev>,
-	linux-arm-kernel@lists.infradead.org,
-	dri-devel@lists.freedesktop.org
-Subject: Re: Unified Type C PHYs and top-level port management
-Message-ID: <20250213064228.GA181829@nchen-desktop>
-References: <fda8b831-1ffc-4087-8e7b-d97779b3ecc5@marcan.st>
+	s=arc-20240116; t=1739431035; c=relaxed/simple;
+	bh=XwVMXNQ761j3J7Ptn4ee+kWiWQc+4AgbYEzScpJOJFE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=forVkyUHjMIqc0W/BkK7LCQuRSg3YX2MzhZOFtGqAsm+RxPS7v33zzpSS3b4w8MymIMosSvKNoC+F4SFT5gYYk0diQo+9JEf2k8toOGyGKTm/89Z2AkLXKNn6+pkEr90z4PAR7btWBWZ0RP0LFFnuFmq6qCQlxrBkTC4vATxweY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pKUCldKf; arc=none smtp.client-ip=209.85.160.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-2b86794e3abso315841fac.0
+        for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 23:17:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739431032; x=1740035832; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WAPzHDLMa8F4I+uGf+X/tuBXjfEKEnfqltbhxTQMiCY=;
+        b=pKUCldKfzYzCQNftwC8WE7i8y3OusWFZkjrH86JyEJyFMzMnP7mnx5FHb2VSrqdvo4
+         lpYAyDOBZgkH+mSnZYvulxenYcJ5noxEmLAzCW9niPIVB9LJRVixTHWauRYTf2krubus
+         3ZNmZwOyUNN/tINzIpd7h2Kk8zZUrOh7I8hUy11ArGs0SEF3ABkyDigMHEXknmwL/O1i
+         O9S9Ilwsmu8lC69XPZ0AJJk0svk7kakJdV0At5bc1z1JmvHgs+9NfvVvoZ8JlzJs7Mhe
+         h/JaKgFzLIsOzibxA2yvYr59MTdEQ0Q+Ylx/KFJzTdD1AlIR2D/N8EYcYhl1ZMUTPDuN
+         mAAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739431032; x=1740035832;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WAPzHDLMa8F4I+uGf+X/tuBXjfEKEnfqltbhxTQMiCY=;
+        b=FDUTED1bNwJw1/E7l8z493sT02tbeuzS0DB1K4NrVxJdPxDv9jw5uS5+8HFFpPOREI
+         iNo6k4vYVZpCHmHvwI1aDmwZjzf5tXbTJLTcTGHxCy2P3b7Brr/oT6FlNDJsJL4SXjH4
+         y6YlQCUhvbN9bCG7PO9eaMKz5dw4yNctPKiPlPjo4Wt/Ok2mehLGaLfzIIO19l4OCthz
+         CZwZX/8tTl08rjZzirhjblgxjLCj8RNyTq3PJFFMpcMV4JfGbXPagcHm6ODL80Xhbf5z
+         2q+3JGurpbZcfHKEOaZ/hlvSR2u8xyjWmjJA+WHCIKcuK681p4+IA/7mXVXmNIl8n6Sl
+         mI8w==
+X-Forwarded-Encrypted: i=1; AJvYcCVCDjiBl9Ea9W5PQSS5KuC88oi4A6uPLkVVBAqJOOKnwYt6kzx61f8SA5balt1vsG7Xx7ScPIUGNlc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyyaObQq6MOz6rcOdIOaYzMLKaJcCBIxozg8DSAm0ZMEmgiG96
+	NfguddF3qeEYHwdaGAMw2JE5JSMLPrLrQBbE09N0ychgSFqs0o1qJnH0l7sBthBh9RMF9s5bDhb
+	NbqrWg4OC5Xoi0sGaPGizE882UHLM6IKwZmGM
+X-Gm-Gg: ASbGncvFw0hXwkCNoWnsVWvTHjcJ15lYr0BxwXmYA8p0p3Ge+6CgaG1wPsxCD8hfo/V
+	XJHpf6Cjfgrq1eGHoAVvqN3L6XRocVTNCZkGfZMflPdd1bctqTJZUJh0gS5e5gQERl0F1nhCwSN
+	HvuHhaIcGoJ9/KQvwN5MS1SQalPAIBfw==
+X-Google-Smtp-Source: AGHT+IEfsRGc6DLQY4CQesdImaEpBlwTV0xIah205sPo/thcjlRBTIl4u2FV25/hHf9zrYLZB0A6O/UXUSdB+3lpew8=
+X-Received: by 2002:a05:6870:7ecb:b0:296:fff8:817 with SMTP id
+ 586e51a60fabf-2b8d682f1e6mr3912622fac.35.1739431032122; Wed, 12 Feb 2025
+ 23:17:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <fda8b831-1ffc-4087-8e7b-d97779b3ecc5@marcan.st>
+References: <20250209071752.69530-1-joswang1221@gmail.com> <5d504702-270f-4227-afd6-a41814c905e3@google.com>
+ <CAPTae5+Z3UcDcdFcn=Ref5aQSUEEyz-yVbRqoPJ1LogP4MzJdg@mail.gmail.com> <CAMtoTm0bchocN6XrQBRdYuye7=4CoFbU-6wMpRAXR4OU77XkwQ@mail.gmail.com>
+In-Reply-To: <CAMtoTm0bchocN6XrQBRdYuye7=4CoFbU-6wMpRAXR4OU77XkwQ@mail.gmail.com>
+From: Badhri Jagan Sridharan <badhri@google.com>
+Date: Wed, 12 Feb 2025 23:16:35 -0800
+X-Gm-Features: AWEUYZmRfdK_T6BH_zrmkDkJWGSMnlIR49ILGN6X5bdP8CDQPfCyq0ocxuORgqU
+Message-ID: <CAPTae5J5WCD6JmEE2tsgfJDzW9FRusiTXreTdY79MBs4AL6ZHg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] usb: typec: tcpm: PSSourceOffTimer timeout in PR_Swap
+ enters ERROR_RECOVERY
+To: Jos Wang <joswang1221@gmail.com>
+Cc: Amit Sunil Dhamne <amitsd@google.com>, heikki.krogerus@linux.intel.com, 
+	gregkh@linuxfoundation.org, linux-usb@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Jos Wang <joswang@lenovo.com>, stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25-01-14 21:32:11, Hector Martin wrote:
-> Hi all,
-> 
-> We're implementing Type C port support for Apple systems and we're
-> running into impedance mismatches with the existing Linux subsystems. I
-> want to throw a quick overview of the problem here and see if we can
-> come up with solutions.
-> 
-> The short version is that Linux has a pile of (sub)subsystems that deal
-> with multiple aspects of coordinating Type C port behavior:
-> 
-> - USB role switch
-> - USB host
-> - USB gadget
-> - Type C mux
-> - Type C PD
-> - DRM/etc for DisplayPort
-> - USB4/Thunderbolt (not even going there yet)
-> - Individual PHYs for everything
-> 
-> This evolved from, and is largely designed for, systems built from
-> discrete components (separate USB3 controller, DP controller, external
-> mux, PD stuff, etc.)
-> 
-> What we actually on Apple systems is:
-> 
-> - An external I2C USB-PD controller that handles the entire PD protocol
-> and negotiation autonomously. We don't even get to pick the altmode, it
-> does all the policy on its own and there is no override (we looked).
-> - USB3/4/DP retimer and eUSB2 level shifter chips (not muxes) that are
-> managed by the external USB-PD controller over I2C, invisible to Linux.
-> - A single, unified, shared PHY (atcphy) that handles *everything*:
-> USB2, USB3, DP, USB4/TBT, depending on configuration. It presents
-> discrete interfaces to the DP, TBT, and USB controllers behind it.
-> - A dwc3 controller per unified PHY, with host and device modes. Its
-> USB3 PIPE interface can be switched (via registers in the PHY side, not
-> the dwc3 side) between a dummy PHY, the USB3 PHY, or a virtual PHY that
-> does USB4 tunneling.
-> - A set of display controllers that are separate from the ports/PHYs
-> - A DisplayPort router that can pair a display controller with a given
-> unified PHY's physical DisplayPort interface, or one of two tunnels over
-> TBT/USB4. The display controllers are n:m matched to the ports, they are
-> not 1:1 (there may be fewer display controllers than ports).
-> - The whole TBT/USB4 PCIe stuff which winds up in a PCIe root port
-> controller per port/PHY (not going to consider this for now, leaving
-> that for later).
-> 
-> The current approach we have is a mess. The tipd driver (which manages
-> the PD controller) directly does the role switching and mux calls. The
-> role switching triggers dwc3 to asynchronously switch modes. Meanwhile
-> the mux calls end up at our PHY driver which tries to reconfigure
-> everything for the given lane mode. But since PHY configuration also has
-> to negotiate with dwc3, it also acts as a PHY for that (two, actually,
-> USB2 and USB3). However, the callbacks from dwc3 are all over the place,
-> and we end up having to do things like handle USB3 configuration from
-> the USB2 PHY callbacks because that happens to be the correct timing to
-> make it work. Meanwhile DRM/DisplayPort is its own thing that is mostly
-> asynchronous to everything else, only reacting to HPD, and we haven't
-> even gotten to the dynamic assignment of display controllers to ports
-> yet (that's a story for another day).
-> 
-> To give an example of one of the quirks: Thanks to the USB-IF's
-> amazingly braindead stateful and non-self-synchronizing eUSB2 protocol,
-> we need to fully reset the dwc3 controller every time there is a hotplug
-> event on the port from the PD controller. Otherwise USB2 breaks, since
-> the PD controller will reset the eUSB2 level shifter on unplug and dwc3
-> and the paired eUSB2 PHY can't recover from that without a full reset.
-> 
-> A further complication is we do not have documentation for any of this.
-> The PHY setup is all reverse engineered. That means all we can do is
-> replicate the same register operations that macOS does, and then we have
-> to *guess* how to fit it into Linux, and what can be moved around or
-> reordered or not. There is no way to know if any given Linux
-> implementation is correct and reliably configures the PHY, other than
-> trial and error, unless we can exactly replicate what macOS does (which
-> is infeasible in Linux today because the cross-driver sync points aren't
-> in the same places, e.g. dwc3 and its phy callbacks do not match the
-> interleaving of PHY register writes and dwc3 register writes in macOS).
-> 
-> This is never going to be reliable, robust, or maintainable with the
-> current approach. Even just getting it to work at all is a frustrating
-> mess, where fixing one thing breaks another (e.g. if the dwc3 role
-> switch happens first, that runs in a workqueue, and ends up racing with
-> phy reconfig. We found out our current code was working by accident due
-> to some msleep() calls in dwc3. And of course, hotplug is all kinds of
-> racy and broken.). The sequencing requirements make this whole approach
-> using different subsystems for different things without central
-> coordination a nightmare, especially with hotplug involved and devices
-> that like to switch their altmode negotiation rapidly on connect cycles.
-> It all ends up depending of subtle implementation details of each part,
-> and if anything changes, everything breaks.
-> 
-> What we really want is a top-level, vendor-specific coordinator that
-> *synchronously* (in a single logical thread) handles all
-> hotplug/modeswitch operations for a single port, driving state
-> transitions for all the other drivers. I.e. something that can:
-> 
-> - Receive a data role/status change from tipd (this includes *all* port
-> mode including data role, altmode config, etc.). This can be
-> asynchronous/queued relative to tipd, but all config changes must be
-> processed in sequence as a single queue.
+On Tue, Feb 11, 2025 at 5:50=E2=80=AFAM Jos Wang <joswang1221@gmail.com> wr=
+ote:
+>
+> On Tue, Feb 11, 2025 at 7:51=E2=80=AFAM Badhri Jagan Sridharan
+> <badhri@google.com> wrote:
+> >
+> > On Mon, Feb 10, 2025 at 3:02=E2=80=AFPM Amit Sunil Dhamne <amitsd@googl=
+e.com> wrote:
+> > >
+> > >
+> > > On 2/8/25 11:17 PM, joswang wrote:
+> > > > From: Jos Wang <joswang@lenovo.com>
+> > nit: From https://elixir.bootlin.com/linux/v6.13.1/source/Documentation=
+/process/submitting-patches.rst#L619
+> >
+> >   - A ``from`` line specifying the patch author, followed by an empty
+> >     line (only needed if the person sending the patch is not the author=
+).
+> >
+> > Given that you are the author, wondering why do you have an explicit "F=
+rom:" ?
+> >
+> Hello, thank you for your help in reviewing the code.
+> My company email address is joswang@lenovo.com, and my personal gmail
+> email address is joswang1221@gmail.com, which is used to send patches.
+> Do you suggest deleting the "From:" line?
+> I am considering deleting the "From:" line, whether the author and
+> Signed-off-by in the patch need to be changed to
+> "joswang1221@gmail.com".
 
-Just some ideas and see if it could improve things for you.
+Yes, changing signed-off to joswang1221@gmail.com will remove the need
+for "From:".
+Go ahead with it if it makes sense on your side.
 
-If your PD driver reports some intermediate states, try not to handle
-them all, it could avoid de-init some operations which has done at the
-previous states. And for all PD events, queued them at ordered work
-queue with some delay.
 
-> - Deconfigure the previous mode for consumers, e.g. shutting
-> down/resetting dwc3 if required, unsetting HPD for the DisplayPort side
-> so it knows to shut that side down, etc.
-> - Change the unified PHY configuration for the new mode (this may
-> require knowledge of everything about the port state including data
-> role, not just altmode/mux state)
-> - Start up the consumers again
-> - React to PHY callbacks from the consumers to further drive PHY state
-> changes (some things need to happen in a specific sequence or at request
-> from dwc3 or the display controller firmware, and we may have to add
-> extra callbacks for some points somehow, which doesn't fit well with the
-> current PHY subsystem which is more rigid about operations...)
-> 
-> Right now, I don't see any way this would fit into the existing
-> subsystems well. The closest thing I can come up with, and what I will
-> do to get by at least for the time being, is to:
-> 
-> - Get rid of the asynchronous dwc3 role switching, making it synchronous
-> (optionally if needed to not break other users)
 
-It is a good try, it could let the PHY lane switch later than controller role
-switch, besides, you need to let your DP HPD handling after PHY switch
-to DP mode.
+> > > >
+> > > > As PD2.0 spec ("6.5.6.2 PSSourceOffTimer")=EF=BC=8Cthe PSSourceOffT=
+imer is
+> >
+> > nit: https://elixir.bootlin.com/linux/v6.13.1/source/Documentation/proc=
+ess/submitting-patches.rst#L619
+> >
+> >  - The body of the explanation, line wrapped at 75 columns, which will
+> >     be copied to the permanent changelog to describe this patch.
+> >
+> "As PD2.0 spec ("6.5.6.2 PSSourceOffTimer")=EF=BC=8Cthe PSSourceOffTimer =
+is"
+> This sentence doesn=E2=80=99t exceed 75 chars, right?
 
-Peter
+Apparently, It actually needs to be wrapped around 75 columns, not too
+early either.
 
-> - Add a queue to tipd so it can handle state changes asynchronously from
-> the actual PD protocol (and without blocking i2c bus interrupt handling
-> so other ports can operate in parallel), but all state changes are
-> handled sequentially without any overlap, and the ordering is carefully
-> controlled (Connect: mux call first, then USB role switch, then
-> DisplayPort HPD. Disconnect: DisplayPort HPD, then USB role switch, then
-> mux call. There may be other complex cases for mode changes while
-> already connected, this won't be fun.).
-> - Put most of the PHY policy in the atcphy driver (which is all of a
-> reset driver for dwc3, mux driver, and all the phys). This includes ugly
-> things like deferring state changes while dwc3 is active in some cases.
-> - On the DP/display side, we haven't implemented this yet, but in the
-> future the single "apple,display-subsystem" driver (which actually
-> provides the top-level DRM device for all the underlying discrete
-> display controllers, and is already its own virtual device in the DT)
-> will present virtual ports for the different PHYs, and handle the
-> muxing/assignment between them and the display controllers on its side
-> (there is potentially complex policy here too, since not all display
-> controllers are equal and there may be a need to reassign a display for
-> a lower-spec screen to a lower-spec display controller to free up a
-> higher-spec controller for a higher-spec screen, but we need a
-> controller assigned to a port to even read EDID to figure that out, so
-> it's going to be messy).
-> 
-> But I'm not happy at all with the weird, load-bearing intermingling of
-> tipd/atcphy/dwc3 there. There's bound to be places where the
-> abstractions leak and we end up with more and more horrible workarounds,
-> or layering violations.
-> 
-> A further question is how all this should be represented in the device
-> tree. That might drive the software architecture to a point, or vice versa.
-> 
-> Any ideas?
-> 
-> Some further reading here:
-> https://social.treehouse.systems/@marcan/113821266231103150
-> 
-> - Hector
-> 
-> 
+Thanks,
+Badhri
+
+> >
+> > > > used by the Policy Engine in Dual-Role Power device that is current=
+ly
+> > > > acting as a Sink to timeout on a PS_RDY Message during a Power Role
+> > > > Swap sequence. This condition leads to a Hard Reset for USB Type-A =
+and
+> > > > Type-B Plugs and Error Recovery for Type-C plugs and return to USB
+> > > > Default Operation.
+> > > >
+> > > > Therefore, after PSSourceOffTimer timeout, the tcpm state machine s=
+hould
+> > > > switch from PR_SWAP_SNK_SRC_SINK_OFF to ERROR_RECOVERY. This can al=
+so solve
+> > > > the test items in the USB power delivery compliance test:
+> > > > TEST.PD.PROT.SNK.12 PR_Swap =E2=80=93 PSSourceOffTimer Timeout
+> >
+> > Thanks for fixing this !
+> >
+> > > >
+> > > > [1] https://usb.org/document-library/usb-power-delivery-compliance-=
+test-specification-0/USB_PD3_CTS_Q4_2025_OR.zip
+> > > >
+> > > > Fixes: f0690a25a140 ("staging: typec: USB Type-C Port Manager (tcpm=
+)")
+> > > > Cc: stable@vger.kernel.org
+> > > >
+> > nit: Empty line not needed here.
+> >
+> Modifications for the next version
+>
+> > > > Signed-off-by: Jos Wang <joswang@lenovo.com>
+> > >
+> > > Tested-by: Amit Sunil Dhamne <amitsd@google.com>
+> >
+> >
+> > >
+> > >
+> > > Regards,
+> > >
+> > > Amit
+> > >
+> > > > ---
+> > > >   drivers/usb/typec/tcpm/tcpm.c | 3 +--
+> > > >   1 file changed, 1 insertion(+), 2 deletions(-)
+> > > >
+> > > > diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm=
+/tcpm.c
+> > > > index 47be450d2be3..6bf1a22c785a 100644
+> > > > --- a/drivers/usb/typec/tcpm/tcpm.c
+> > > > +++ b/drivers/usb/typec/tcpm/tcpm.c
+> > > > @@ -5591,8 +5591,7 @@ static void run_state_machine(struct tcpm_por=
+t *port)
+> > > >               tcpm_set_auto_vbus_discharge_threshold(port, TYPEC_PW=
+R_MODE_USB,
+> > > >                                                      port->pps_data=
+.active, 0);
+> > > >               tcpm_set_charge(port, false);
+> > > > -             tcpm_set_state(port, hard_reset_state(port),
+> > > > -                            port->timings.ps_src_off_time);
+> > > > +             tcpm_set_state(port, ERROR_RECOVERY, port->timings.ps=
+_src_off_time);
+> > > >               break;
+> > > >       case PR_SWAP_SNK_SRC_SOURCE_ON:
+> > > >               tcpm_enable_auto_vbus_discharge(port, true);
 
