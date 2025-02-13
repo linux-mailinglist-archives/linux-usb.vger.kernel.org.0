@@ -1,130 +1,102 @@
-Return-Path: <linux-usb+bounces-20626-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20627-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8387A34F4F
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 21:24:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BAF77A34F84
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 21:38:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 940A17A35EE
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 20:23:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A6E11890114
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 20:38:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A60266185;
-	Thu, 13 Feb 2025 20:24:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B0FA2661B1;
+	Thu, 13 Feb 2025 20:38:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Fk4xsaPI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EViDjZsQ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA94E24BBFC;
-	Thu, 13 Feb 2025 20:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5CA245B08;
+	Thu, 13 Feb 2025 20:38:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739478268; cv=none; b=srTlp6sqgBFgmPUEihXKjunpmT5lKAO0vXTBmKbC4QXxQ1lt/RlH5uB6RK0QUW4OwKF8BR2wwbITzK4Is0Dwx5hqyWJ08yYj8s3Txu+jeR3433/H6Ic4jxcOxbmDkc+xSPHVkWKFG6wk8VPi+PF6rvsh1oVvELxuCfYwyZPRW1E=
+	t=1739479095; cv=none; b=gdt3HvFFInubGR84CETZLyynua0QGL2Eyv0J9fXvVn1VD3tdage8qpBScgPksg32xmMOdvjA6wJ7oQSpDi7SLYVwtb4q01dyyuoJspkMl+fqtNDV4YpyAbkt6raQzWHIj+FdL6glz7Y08FRvlbaT7dteapXJ+v7OM9IP0i5Xh9M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739478268; c=relaxed/simple;
-	bh=lRoN299yI/fhws0lmPKx7+Fl34Rlx/oBOztj9Ak103A=;
+	s=arc-20240116; t=1739479095; c=relaxed/simple;
+	bh=vRx3aCxKD64lcDldByrYSeK3x46VtWp7TM7XgTNx4Ik=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gKStWoMr0wwgo33/TypvfkJ7VYft+mrnhan97GrPMh45/764j1TMPQxsIsBiuZqLZSM9E0YOC1XWTXvgMI3SnqLeKICv+Pwm2RXms/KjxryQN5TTX6z0jvMaX3Ykbm1NbkLCR8+2/UVa1ymCwH2z6a9tGtL53jfZI8PanUC2IME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Fk4xsaPI; arc=none smtp.client-ip=209.85.128.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-439585a067eso13786275e9.3;
-        Thu, 13 Feb 2025 12:24:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739478265; x=1740083065; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=N1p2D48k2Z+ZfCl15svcbQqI9e1in0l2JmLLcSGv3Uw=;
-        b=Fk4xsaPIi/8hjqcd4ZAbtk3S7XlcqjUd+gM+9f6VU1dIsAFvf6SSETm5U/k4sRGrB3
-         2Mo9lIC/WUHGntbZHEW+SOnWaZKwBFCJAbDpZL7bcu6NvyzCI53qxY+DMfv2C0eczwPe
-         dFpPPpQbX0WKqjt/+ZqWpCj39kxXPPWsvQQOTvsN3zc2jb/VC5z0UFxPxukimK1IiLL8
-         exMWFPeSmu25HHcQ0cto3AcG9Pa/VfvkT4VFk3NISKMCQYqWbNiw0lrWUC2hkrDK9t8R
-         Am/pZk4Ks19nruZQF6IvNqZzZbvxak4reEsZlSiWQ60n6yna0p5W4J/GF+5GuqTtfqFZ
-         XauA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739478265; x=1740083065;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N1p2D48k2Z+ZfCl15svcbQqI9e1in0l2JmLLcSGv3Uw=;
-        b=FEIfYMS2MRUFIqgr+Qgd20KtlnaKk9M/Mv8so6Kb1OTXgQgtwNgkEd049zUBEfqQUc
-         GcpjWgsmYlwtBQLRQBCWfAsu0DODTiymCCFT/iM1eQTi8VS7+Et+3+hZZd9IX/kbT/0T
-         x0Ppqm6Yg9w6J9sTrqCc7siIRNsNJKuIQIL1keOU2g9kL2By8nJhCz9w3gYQyjFpJOj/
-         Uloeh4iMsoOK0y6wql94OYAb8Q/Wous2kuVaYghGlVPSyY+M8INAWXMNK/lWMVCrb5fi
-         Exy98c1+3NTn+hSEzYEjiyAjALcQneH1k9RKX1lD8yWxxG24R3rdhu6W0Y7WG/k3RB4k
-         Jzkw==
-X-Forwarded-Encrypted: i=1; AJvYcCW+h1u28uxpTUVX5EgUpZeOB+OITWsBZou/ukwEqTeowR0jW/iC+jxnUGOSJcU7CqOSd2oxqaAE@vger.kernel.org, AJvYcCWyUE30pACj8SjCixRg/IDG5LtVwhlh8O0oNsJkIignHMCmG7tVKEVxQTowQuvzAgaYdGJP0alfwoI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyHstS6vaQBkVGmLl6e18AJK8NM3Qn8UcD0G8bCROCfeQtZi3aL
-	dOSgQQg27thVoIvqpSlmuI+rH4RougoSyeATj5IxA3kRvO75o+GZ
-X-Gm-Gg: ASbGnctzzfLWCiYDmzBpHrs6I28oAew32FzuUp+Alwv0KVkDNOMuvd4AXhEJ3/VXbEO
-	Thfapsp2jpbnCBcHX2WRcoRGL3ODyur5eewsIVA4hQ6bv6zWr/7iOvYY25xNSsvI5/y+RVPeBaX
-	h/DPzHw6GONgLALbpf/ngnUawijUoYYOzJ+XjIh7nN9LX/EkiAbQu4Jho0potNpaeEnFLy69SHv
-	Y40McPFkg8YYCeBV0JU5yiGyogjTasYhbFLHpB8xxZ00nxoTZR7hLrpxkecitYNXZai6/EFSCZZ
-	rpQwBF8u+aZ5wi+GXU6VVdUftOc5yzX1Svp+nHHHi7VvGJCa
-X-Google-Smtp-Source: AGHT+IFqzGgXpVIXDzJc4C6VHeZK7VT63QgiIWVuvvjrGLY3MMZmxxatDJO1KlqdLNV06ScaVx7+YQ==
-X-Received: by 2002:a5d:5885:0:b0:38f:23ed:2c7 with SMTP id ffacd0b85a97d-38f23ed03d1mr6353757f8f.14.1739478265010;
-        Thu, 13 Feb 2025 12:24:25 -0800 (PST)
-Received: from eldamar.lan (c-82-192-244-13.customer.ggaweb.ch. [82.192.244.13])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f25913eb6sm2778994f8f.51.2025.02.13.12.24.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 12:24:24 -0800 (PST)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-	id 8AC40BE2EE7; Thu, 13 Feb 2025 21:24:22 +0100 (CET)
-Date: Thu, 13 Feb 2025 21:24:22 +0100
-From: Salvatore Bonaccorso <carnil@debian.org>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
-Cc: Forest <forestix@nom.one>, linux-usb@vger.kernel.org,
-	regressions@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [REGRESSION] usb: xhci port capability storage change broke
- fastboot android bootloader utility
-Message-ID: <Z65U9rZrZUjofo02@eldamar.lan>
-References: <hk8umj9lv4l4qguftdq1luqtdrpa1gks5l@sonic.net>
- <2c35ff52-78aa-4fa1-a61c-f53d1af4284d@linux.intel.com>
- <0l5mnj5hcmh2ev7818b3m0m7pokk73jfur@sonic.net>
- <3bd0e058-1aeb-4fc9-8b76-f0475eebbfe4@linux.intel.com>
- <4kb3ojp4t59rm79ui8kj3t8irsp6shlinq@sonic.net>
- <8a5bef2e-7cf9-4f5c-8281-c8043a090feb@linux.intel.com>
- <2tq7pj5g33d76j2uddbv5k8iiuakchso16@sonic.net>
- <ee229b33-2082-4e03-8f2b-df5b4a86a77d@linux.intel.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=X20Tj+N7a7PuhpuqpDLO2G9Tf8N3cmANrpaOrgnWyZ5amn7suvQ4llIFOijnuxx6vN5J4YaZUZfKWuIHaOQp6L7yAR4Orn4A/33yIjyzlTVKbubke8MuwdxxnVHhMObuspmnFed2X+g8SEi+KxK6R1tc8KuVUQeVhKuUxPosL6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EViDjZsQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9EBF5C4CEE4;
+	Thu, 13 Feb 2025 20:38:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739479095;
+	bh=vRx3aCxKD64lcDldByrYSeK3x46VtWp7TM7XgTNx4Ik=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=EViDjZsQAtsBOdNMgWGCJ4XuI3GPwNvCUFM5TU7oaJAgR2UKLFcap62XsOTY9KOzo
+	 w6CyCch3eMERUT9YSBCp0P8IUrSzZvt14s0t4EYKPtg01fwzxsgdBwiVFRzrHEiBjD
+	 B+Qv7+3TBBJ2HIVxDg82zKqbY8H+1oO98Q9ExH4vVPb6c0wh6AwlDO+Bb7gypy98Q4
+	 TmmFN+w3h+wDWbLYi5P04BJxWVzKL+4m34pBEyQWEFyKHxzFuSjzYJuVfc7dHjmaSi
+	 douA1RxXNCWBJYgAxXICXwTWO/PFO8LCof93zOg61lgGg8MwFwJiAhFsspRDvYwB2x
+	 QwcF/ImUbtcaw==
+Date: Thu, 13 Feb 2025 21:38:12 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>, LKML <linux-kernel@vger.kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Hayes Wang <hayeswang@realtek.com>,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/2] net: Assert proper context while calling
+ napi_schedule()
+Message-ID: <Z65YNFGxh-ORF7hm@pavilion.home>
+References: <20250212174329.53793-1-frederic@kernel.org>
+ <20250212174329.53793-2-frederic@kernel.org>
+ <20250212194820.059dac6f@kernel.org>
+ <20250213-translucent-nightingale-of-upgrade-b41f2e@leitao>
+ <20250213071426.01490615@kernel.org>
+ <20250213-camouflaged-shellfish-of-refinement-79e3df@leitao>
+ <20250213110452.5684bc39@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <ee229b33-2082-4e03-8f2b-df5b4a86a77d@linux.intel.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250213110452.5684bc39@kernel.org>
 
-Hi Mathias,
-
-On Wed, Jan 29, 2025 at 01:01:58PM +0200, Mathias Nyman wrote:
-> On 24.1.2025 21.44, Forest wrote:
-> > On Mon, 13 Jan 2025 17:05:09 +0200, Mathias Nyman wrote:
+Le Thu, Feb 13, 2025 at 11:04:52AM -0800, Jakub Kicinski a écrit :
+> On Thu, 13 Feb 2025 10:14:02 -0800 Breno Leitao wrote:
+> > > The problem is a bit nasty, on a closer look. We don't know if netcons
+> > > is called in IRQ context or not. How about we add an hrtimer to netdevsim,
+> > > schedule it to fire 5usec in the future instead of scheduling NAPI
+> > > immediately? We can call napi_schedule() from a timer safely.
+> > > 
+> > > Unless there's another driver which schedules NAPI from xmit.
+> > > Then we'd need to try harder to fix this in netpoll.
+> > > veth does use NAPI on xmit but it sets IFF_DISABLE_NETPOLL already.  
 > > 
-> > > I'd recommend a patch that permanently adds USB_QUIRK_NO_LPM for this device.
-> > > Let me know if you want to submit it yourself, otherwise I can do it.
-> > 
-> > It looks like I can't contribute a patch after all, due to an issue with my
-> > Signed-off-by signature.
-> > 
-> > So, can you take care of the quirk patch for this device?
-> > 
-> > Thank you.
+> > Just to make sure I follow the netpoll issue. What would you like to fix
+> > in netpoll exactly?
 > 
-> Sure, I'll send it after rc1 is out next week
+> Nothing in netpoll, the problem is that netdevsim calls napi_schedule
+> from the xmit path. That's incompatible with netpoll. We should fix
+> netdevsim instead (unless more real drivers need napi-from-xmit to
+> work).
 
-Not something superurgent, but wanted to ask is that still on your
-radaar? I stumpled over it while looking at the current open bugs
-reported in Debian, reminding me of https://bugs.debian.org/1091517
+Let me clarify, because I don't know much this area. If the problem is that xmit
+can't call napi_schedule() by design, then I defer to you. But if the problem is that
+napi_schedule() may or may not be called from an interrupt, please note that
+local_bh_enable() won't run softirqs from a hardirq and will instead defer to
+IRQ tail. So it's fine to do an unconditional pair of local_bh_disable() / local_bh_enable().
 
-Thanks for your work!
-
-Regards,
-Salvatore
+Thanks.
 
