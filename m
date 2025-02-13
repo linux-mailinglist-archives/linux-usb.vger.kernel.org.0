@@ -1,242 +1,125 @@
-Return-Path: <linux-usb+bounces-20621-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20622-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38215A34B8E
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 18:19:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40AE2A34D44
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 19:15:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8306D1888B73
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 17:15:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0BADA16C651
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 18:14:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E1F20409A;
-	Thu, 13 Feb 2025 17:15:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C215824290E;
+	Thu, 13 Feb 2025 18:14:10 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA4DD15689A;
-	Thu, 13 Feb 2025 17:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F6CE24167D;
+	Thu, 13 Feb 2025 18:14:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739466937; cv=none; b=hNxmDAUhvM4SaE592sO2OuOvSCnLfFn9YtWHtvi9F1Z36rFcIuIrdw4NmWxxDEJLLGz2VNbsbNrOZ2hjy6BeMVN2jE0M2vTNjc0g9i8q5tsyussTgW/BpwfudDHiSrdPuHRckOkgO832FgTNhjlk5SLzIffOMWbmdP1Hm8Au9Ic=
+	t=1739470450; cv=none; b=dNPYwkrJvTwGErz3PnpXcQPY5EVBpF/73OLNXX9afWAY3jHE1pX6eMCYgNrGh01oRuLc/zyWYnpTRt6HTejooan3AE6kKc6c1baCOrslcZ4BtH61LDuJBYvgwCaNJSXAfXkR2SwXn9r3SOqDOTrw9k3Dx6ZhRHyN6Ef7v6hEzzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739466937; c=relaxed/simple;
-	bh=sKAH8pxmoLFHVCRS/HFwKo3JD4z1kJnrcgM44SAA0J8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uSuggjntZQcUbPRq5ca+1lrtIUnWPZfWr+Y8zb1NFKM6EXCT2aVws1QxuYnEDCMzIS4WB1ifVV3+KcFMIbDGsnBhtVEH0anOTuXP7wq6MygXS5xm7I/6AcsEY8J6jsI7RE7QS2jMv7zbyCkN/7lDu0adLivuynsfMdff+2KwjRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.2] (ip5f5af065.dynamic.kabel-deutschland.de [95.90.240.101])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D3C0261CCD7D2;
-	Thu, 13 Feb 2025 18:07:34 +0100 (CET)
-Message-ID: <1430649f-75e2-4edd-afee-87bf4ac7a961@molgen.mpg.de>
-Date: Thu, 13 Feb 2025 18:07:33 +0100
+	s=arc-20240116; t=1739470450; c=relaxed/simple;
+	bh=Jt7S6MGjAZ7Za+Gaqb6iJTq7tHpUSIgR+BeyvqBL0Jk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N98msQuoBDlS9IwWqZBhTzTGvR6diqHUjVnytTKZY9hRBu9Czq5kPrz7OLXRg1/zI1wbNFJTZE+aryBsrKHgsO8v0WUyVECiqJnwkgTk+eReZBMkpw2deltTee8AFFLZuocyqS192l3TkwKVqtnD9ME1eLGR/4U1yPRUL9gNs1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ab7c14b880dso258421966b.1;
+        Thu, 13 Feb 2025 10:14:08 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739470447; x=1740075247;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V1vsGOWJdttwhEgzm+cLPJc4SNcZ4v2S44Lb53K2njg=;
+        b=ezfBSE1o59qk4NBHkjMfvCmOjknhF05NNCGagmfZH07KvGQB4wZX8e92Z1MkIDTth+
+         nZj78M2yPFGMEEmZ7GhpkhywMf6coxcXpieTOhBeIkN6C5uuiv/llhZ7jC2NYYqkHbQe
+         Jx8TytiSrDkUzinIWfjpt1zYP41F4Hiw/fx+a5OV3ZWAPFtmKPyWgqtdyCNXwdiTLIal
+         o2Lrtowo/0NA/mVKFoSy2wNK9ecJyO5rBWhu2DiViIxBKzlp2HSFsBBgxnYZrQICfnED
+         VG9LYRp8L9cPg7h9Eo8jiOAx2dw5i0cNDQVy/03+oFT8/Sm33Y2HSo9+6/oGnYhAY5/Y
+         HHBA==
+X-Forwarded-Encrypted: i=1; AJvYcCVSui9WthKEkOgJrPDqy1PM1RDs1KwLEyQt5Yd1+PBSkacAKawdimxbZfyRqlCy7ySFdSScvRXO@vger.kernel.org, AJvYcCVWA0wAqB3RxOtFBw7pJFUBb0GxCxDhMmXagNRNEDU6JLWrPReCNmlCaa8KxA7PhKAi8EiCmb9cliwW@vger.kernel.org, AJvYcCWjhcv/PgpyuiSde73+DTj9ybMSeBU/ThNGUi5xaIkikfzzSLvYpiXSVHNb5TnyWpU43BHQQBUBAfIibSY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSaNAQ/mifFHjEDz3Ii3MblL6iQyMD9I9THhDuF1n0fAfl3HAX
+	ukIlNOFLUKPPIJl9CD5UXu2Yp2paagY4kFqtzVrcxwh5+1xhaN4r
+X-Gm-Gg: ASbGncsbcK9lMGkbXLrA0SgFopueGZLMNXr0347msQtopK6PbgZQAAbPOYXWO41dEa/
+	Q11aNWE4ZbWf1A+osDvLdYohmTzcpjL0M1Ueo0TINmM4uYl4VfvtUuxGGcyW2sn5ilpTCA+vjOG
+	GrKeG7Agyh5Tzrkf1mXuGOq7mV2ky3nBZSeDdc1R+wNDaRM3MSCsfsKdy+Wn+4gau6My9A0tQx+
+	YgLaP+iLQdG1X3PNXNCmERaYPuzvAOe1DVPN9Ob9BH/LgF9wtVGGGS7ZPJQy98fzFtTyVEsBVJa
+	oL/ZCw==
+X-Google-Smtp-Source: AGHT+IHRMfC8d2zMDpBDVeM9qS3ZR89TcB/t7rDOFosvDV+9y0bC55JTHxfVgnIsHG4ZY2r0xZnlcw==
+X-Received: by 2002:a17:907:35c4:b0:ab7:fbb2:b47c with SMTP id a640c23a62f3a-ab7fbb2b6c7mr529013866b.35.1739470446371;
+        Thu, 13 Feb 2025 10:14:06 -0800 (PST)
+Received: from gmail.com ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece271223sm1582535a12.59.2025.02.13.10.14.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2025 10:14:05 -0800 (PST)
+Date: Thu, 13 Feb 2025 10:14:02 -0800
+From: Breno Leitao <leitao@debian.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Hayes Wang <hayeswang@realtek.com>,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/2] net: Assert proper context while calling
+ napi_schedule()
+Message-ID: <20250213-camouflaged-shellfish-of-refinement-79e3df@leitao>
+References: <20250212174329.53793-1-frederic@kernel.org>
+ <20250212174329.53793-2-frederic@kernel.org>
+ <20250212194820.059dac6f@kernel.org>
+ <20250213-translucent-nightingale-of-upgrade-b41f2e@leitao>
+ <20250213071426.01490615@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: NOHZ tick-stop error: local softirq work is pending, handler
- #08!!! on Dell XPS 13 9360
-To: Frederic Weisbecker <frederic@kernel.org>
-Cc: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
- anna-maria@linutronix.de, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
- mingo@kernel.org, tglx@linutronix.de, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Hayes Wang <hayeswang@realtek.com>, Simon Horman <horms@kernel.org>,
- netdev@vger.kernel.org
-References: <20250210124551.3687ae51@foxbook>
- <b0d55f4c-a078-42a0-a0fe-5823700f2837@molgen.mpg.de>
- <Z6n-dWDSxNCjROYV@localhost.localdomain>
- <10de7289-653f-43b1-ad46-2e8a0cd42724@molgen.mpg.de>
- <Z6tmbdl646D_UjrY@localhost.localdomain>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <Z6tmbdl646D_UjrY@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250213071426.01490615@kernel.org>
 
-Dear Frederic,
+Hello Jakub,
 
-
-Thank you very much for your help.
-
-Am 11.02.25 um 16:02 schrieb Frederic Weisbecker:
-> Le Tue, Feb 11, 2025 at 12:57:33PM +0100, Paul Menzel a écrit :
-
->> Am 10.02.25 um 14:26 schrieb Frederic Weisbecker:
->>> Le Mon, Feb 10, 2025 at 12:59:42PM +0100, Paul Menzel a écrit :
->>
->>>> Am 10.02.25 um 12:45 schrieb Michał Pecio:
->>>>
->>>>>>>>>>>> On Dell XPS 13 9360/0596KF, BIOS 2.21.0 06/02/2022, with Linux 6.9-rc2+
->>>>>
->>>>>> Just for the record, I am still seeing this with 6.14.0-rc1
->>>>>
->>>>> Is this a regression? If so, which versions were not affected?
->>>>
->>>> Unfortunately, I do not know. Right now, my logs go back until September
->>>> 2024.
->>>>
->>>>       Sep 22 13:08:04 abreu kernel: Linux version 6.11.0-07273-g1e7530883cd2 (build@bohemianrhapsody.molgen.mpg.de) (gcc (Debian 14.2.0-5) 14.2.0, GNU ld (GNU Binutils for Debian) 2.43.1) #12 SMP PREEMPT_DYNAMIC Sun Sep 22 09:57:36 CEST 2024
->>>>
->>>>> How hard to reproduce? Wasn't it during resume from hibernation?
->>>>
->>>> It’s not easy to reproduce, and I believe it’s not related with resuming
->>>> from hibernation (which I do not use) or ACPI S3 suspend. I think, I can
->>>> force it more, when having the USB-C adapter with only the network cable
->>>> plugged into it, and then running `sudo powertop --auto-tune`. But sometimes
->>>> it seems unrelated.
->>>>
->>>>> IRQ isuses may be a red herring, this code here is a busy wait under
->>>>> spinlock. There are a few of those, they cause various problems.
->>>>>
->>>>>                   if (xhci_handshake(&xhci->op_regs->status,
->>>>>                                  STS_RESTORE, 0, 100 * 1000)) {
->>>>>                            xhci_warn(xhci, "WARN: xHC restore state timeout\n");
->>>>> 			spin_unlock_irq(&xhci->lock);
->>>>>                            return -ETIMEDOUT;
->>>>>                   }
->>>>>
->>>>> This thing timing out may be close to the root cause of everything.
->>>>
->>>> Interesting. Hopefully the USB folks have an idea.
->>>
->>> Handler #08 is NET_RX. So something raised the NET_RX on some non-appropriate
->>> place, perhaps...
->>>
->>> Can I ask you one more trace dump?
->>>
->>> I need:
->>>
->>> echo 1 > /sys/kernel/tracing/events/irq/softirq_raise/enable
->>> echo 1 > /sys/kernel/tracing/options/stacktrace
->>>
->>> Unfortunately this will also involve a small patch:
->>>
->>> diff --git a/kernel/time/tick-sched.c b/kernel/time/tick-sched.c
->>> index fa058510af9c..accd2eb8c927 100644
->>> --- a/kernel/time/tick-sched.c
->>> +++ b/kernel/time/tick-sched.c
->>> @@ -1159,6 +1159,9 @@ static bool report_idle_softirq(void)
->>>    	if (local_bh_blocked())
->>>    		return false;
->>> +	trace_printk("STOP\n");
->>> +	trace_dump_stack(0);
->>> +	tracing_off();
->>>    	pr_warn("NOHZ tick-stop error: local softirq work is pending, handler #%02x!!!\n",
->>>    		pending);
->>>    	ratelimit++;
->>
->> Thank you for your help. I applied the patch on top of 6.14-rc2, and was
->> able to reproduce the issue. Please find the Linux messages attached, and
->> the trace can be downloaded [1].
+On Thu, Feb 13, 2025 at 07:14:26AM -0800, Jakub Kicinski wrote:
+> On Thu, 13 Feb 2025 01:58:17 -0800 Breno Leitao wrote:
+> > > Looks like netcons is hitting this warning in netdevsim:
+> > > 
+> > > [   16.063196][  T219]  nsim_start_xmit+0x4e0/0x6f0 [netdevsim]
+> > > [   16.063219][  T219]  ? netif_skb_features+0x23e/0xa80
+> > > [   16.063237][  T219]  netpoll_start_xmit+0x3c3/0x670
+> > > [   16.063258][  T219]  __netpoll_send_skb+0x3e9/0x800
+> > > [   16.063287][  T219]  netpoll_send_skb+0x2a/0xa0
+> > > [   16.063298][  T219]  send_ext_msg_udp+0x286/0x350 [netconsole]
+> > > [   16.063325][  T219]  write_ext_msg+0x1c6/0x230 [netconsole]
+> > > [   16.063346][  T219]  console_emit_next_record+0x20d/0x430
+> > > 
+> > > https://netdev-3.bots.linux.dev/vmksft-net-drv-dbg/results/990261/7-netcons-basic-sh/stderr
+> > > 
+> > > We gotta fix that first.  
+> > 
+> > Thanks Jakub,
+> > 
+> > I understand that it will be fixed by this patchset, right?
 > 
-> So here is the offender:
+> The problem is a bit nasty, on a closer look. We don't know if netcons
+> is called in IRQ context or not. How about we add an hrtimer to netdevsim,
+> schedule it to fire 5usec in the future instead of scheduling NAPI
+> immediately? We can call napi_schedule() from a timer safely.
 > 
->   => __raise_softirq_irqoff
->   => __napi_schedule
->   => rtl8152_runtime_resume.isra.0
->   => rtl8152_resume
->   => usb_resume_interface.isra.0
->   => usb_resume_both
->   => __rpm_callback
->   => rpm_callback
->   => rpm_resume
->   => __pm_runtime_resume
->   => usb_autoresume_device
->   => usb_remote_wakeup
->   => hub_event
->   => process_one_work
->   => worker_thread
->   => kthread
->   => ret_from_fork
->   => ret_from_fork_asm
-> 
-> It is calling napi_schedule() from a non-interrupt. And since
-> ____napi_schedule() assumes to be called from an interrupt, it
-> raises the softirq accordingly without waking up ksoftirqd.
-> 
-> Can you try the following fix (untested, sorry...) ?
-> 
-> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
-> index 468c73974046..8f6ea4e7685c 100644
-> --- a/drivers/net/usb/r8152.c
-> +++ b/drivers/net/usb/r8152.c
-> @@ -8537,8 +8537,11 @@ static int rtl8152_runtime_resume(struct r8152 *tp)
->   		clear_bit(SELECTIVE_SUSPEND, &tp->flags);
->   		smp_mb__after_atomic();
->   
-> -		if (!list_empty(&tp->rx_done))
-> +		if (!list_empty(&tp->rx_done)) {
-> +			local_bh_disable();
->   			napi_schedule(&tp->napi);
-> +			local_bh_enable();
-> +		}
->   
->   		usb_submit_urb(tp->intr_urb, GFP_NOIO);
->   	} else {
-> diff --git a/include/linux/lockdep.h b/include/linux/lockdep.h
-> index 67964dc4db95..1bd730b881f0 100644
-> --- a/include/linux/lockdep.h
-> +++ b/include/linux/lockdep.h
-> @@ -619,6 +619,17 @@ do {									\
->   		     (!in_softirq() || in_irq() || in_nmi()));		\
->   } while (0)
->   
-> +/*
-> + * Assert to be either in hardirq or in serving softirq or with
-> + * softirqs disabled. Verifies a safe context to queue a softirq
-> + * with __raise_softirq_irqoff().
-> + */
-> +#define lockdep_assert_in_interrupt()				\
-> +do {								\
-> +	WARN_ON_ONCE(__lockdep_enabled && !in_interrupt());	\
-> +} while (0)
-> +
-> +
->   extern void lockdep_assert_in_softirq_func(void);
->   
->   #else
-> @@ -634,6 +645,7 @@ extern void lockdep_assert_in_softirq_func(void);
->   # define lockdep_assert_preemption_enabled() do { } while (0)
->   # define lockdep_assert_preemption_disabled() do { } while (0)
->   # define lockdep_assert_in_softirq() do { } while (0)
-> +# define lockdep_assert_in_interrupt() do { } while (0)
->   # define lockdep_assert_in_softirq_func() do { } while (0)
->   #endif
->   
-> diff --git a/net/core/dev.c b/net/core/dev.c
-> index c0021cbd28fc..80e415ccf2c8 100644
-> --- a/net/core/dev.c
-> +++ b/net/core/dev.c
-> @@ -4666,6 +4666,7 @@ static inline void ____napi_schedule(struct softnet_data *sd,
->   	struct task_struct *thread;
->   
->   	lockdep_assert_irqs_disabled();
-> +	lockdep_assert_in_interrupt();
->   
->   	if (test_bit(NAPI_STATE_THREADED, &napi->state)) {
->   		/* Paired with smp_mb__before_atomic() in
+> Unless there's another driver which schedules NAPI from xmit.
+> Then we'd need to try harder to fix this in netpoll.
+> veth does use NAPI on xmit but it sets IFF_DISABLE_NETPOLL already.
 
-With this diff applied, I wasn’t able to reproduce the issue. Looks 
-promising. Thank you very much.
-
-Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
-
-
-Kind regards,
-
-Paul
+Just to make sure I follow the netpoll issue. What would you like to fix
+in netpoll exactly?
 
