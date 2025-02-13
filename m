@@ -1,229 +1,133 @@
-Return-Path: <linux-usb+bounces-20578-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20579-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91F01A33908
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 08:40:14 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E5E9A33995
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 09:05:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F3BAA188706D
-	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 07:40:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 766397A4F4F
+	for <lists+linux-usb@lfdr.de>; Thu, 13 Feb 2025 08:02:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0F5120AF87;
-	Thu, 13 Feb 2025 07:40:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2749520A5E2;
+	Thu, 13 Feb 2025 08:03:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DCqA4QEy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fCqQtozR"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE22420AF7A
-	for <linux-usb@vger.kernel.org>; Thu, 13 Feb 2025 07:40:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE6A1FCFE2;
+	Thu, 13 Feb 2025 08:03:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739432403; cv=none; b=KHksI231XpRVHSjx6MaxFC/rVkkfSzBCMFXHYvwClOpMu8/Lu3BYRuXIMM1LJHuLvfhHZoL39kiZoL2s2ljSO1aCliklfw+5SLHGDuA2cIpY7xjM4myRP/NzLHFOoRs3j5X9q/uqwu4ovVvZjTyTflcF33EON39tar6kLwvkV2Q=
+	t=1739433783; cv=none; b=F5YyAcBVY8Hk/Deq9QdhE/DRK7wRz7ad22OUT8g0Pz2QiKrQnv+BVa3K6/HWm4UeIKBOJmcYnOT35veqNWoEGvkPbR7T9pIj8GJX9AphcXD1ZRk8mi5bZ3LSAUK3joSwGdAn8XcLEtlM8zoV6IGblFFnFCJVeH8wHbYZXUTPqGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739432403; c=relaxed/simple;
-	bh=2T30BevOB9XiIxAoHVVgmvnHj9B+QRiUyFtk7KSMJE8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ukDXyacoZ2aDd+mTIuVsk8/SCwkg2DBbs7sDbgpXt+kf9OK6h/RBHr4aBqja1JlQX74700jiF6Zj07d0hIo0HEazhbVlia6e3g7yByNtUNM9/ya300KKxNerRtlMHQc9ZFqaAfm4vLuiMO1LFmJTCrVjMqXkiqVC/eguXMfgOoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DCqA4QEy; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5fc69795ecbso284900eaf.1
-        for <linux-usb@vger.kernel.org>; Wed, 12 Feb 2025 23:40:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739432400; x=1740037200; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Nn3iWZ9Vvx98SyYpyhfzHaWOOngUmcQwzZmkfNNZfS8=;
-        b=DCqA4QEyU1gPMGh2pDHzuRIZk2Z/7fUD6S8/D7/YFC5GSoOqm+mbzA5BoGOW+nLpGh
-         KbmWY2oN8qZB5LKrkjE4m2gbHkXiub6Lr/Yi61TQHV8ziwwSULPM/imMYNmWcL2LQSKB
-         HTzEggFXxN/ovRk/fkqICEDJmZAkvgYqoj+MTwmw8EUFGpT0RRpbfQpbOhyi8F4PdDtV
-         J6EdvfSVWox2Gmd3R9D7OKoOslakbA9KX6x02EMHqN2EQh7zW1kxApanqpYBFlTBFk31
-         Ct4eZMM9Q3ZuIZOvw2KcZGa8PfT25C0f2cOcYrx7R3FQAqvl17CV2/kT6lOAf6odsRxH
-         TqVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739432400; x=1740037200;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Nn3iWZ9Vvx98SyYpyhfzHaWOOngUmcQwzZmkfNNZfS8=;
-        b=uTIdrU14auSHxgPWuojxdVY2AdkOMRXuRJe9RSB8skW8kiNyDZ1Z3fpTEVLM/A0EAa
-         BK+JwB9B0PoECWTKl8ZOtyB6EmrpyzvtrY3EVGouEZzlqAW8Yjb4kECGbs17v9K2smzB
-         KPkrJYUpzCoFLjEkZZEYP29vVA06No265SEclDWT8K8J+O3wp0wZBrBl2GwhpJw34FPJ
-         ZhdfwKmW5ZL8Zle/dnaiX6tk6VozfFIgim+PFNYC3yMsaJSR9P+zwSpMzUUP+EH53RI3
-         kzNU57q0McqMDN5k9CnrVrhmKJukGfaK97V+Hc2Mv1Q04vOT+fTxSArczeQLF4zEq/Co
-         7JDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV9NMBsfnU0TtYSdOfmH89pktRN7KUrNOTond8MeM2SFy+7mtn6GvfBpsKJxdLMY424/uHygjoDRHU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEgwwg9z8HEm3yGb0bFrFK3TDWy2c0hWWpLd5nn8mcqm6d19vI
-	bkmP57aE9DuBPTSVVyWPXz8Au1j7QKFzpqVS/9ex73wxgD6BnVRZ+ImotEYtC7xVsEU6wBRhbke
-	L/1nRxAuGLLSzkvkjrS+YIlZZ4Z6oep1E0KDU
-X-Gm-Gg: ASbGnctjEcv1HZf1AnmRPwa/e7OM7EwLnSF7qN/R2568HDCNZrPX25ZsPk7psK3Jclu
-	Jg9GWQhvnnN4QLpPSJrLY5fuJxOzbmcBAb1YBOSLwaOrcMkFh6MKw0OXNAHY/JjDTZKVGmmynU5
-	zZjXS6J4NRUWTgOlFU0RSaDMVs4bptvA==
-X-Google-Smtp-Source: AGHT+IEmWRZMThO2wEWSszSDzWm2q2TnncSjr48IcwK+B9Ld8r0dbyztwtW5YcyGOGFQFHmYF4WhC8//RaVtCQyIZYI=
-X-Received: by 2002:a05:6871:551:b0:28c:8476:dd76 with SMTP id
- 586e51a60fabf-2b8d67bc79fmr4365708fac.29.1739432400498; Wed, 12 Feb 2025
- 23:40:00 -0800 (PST)
+	s=arc-20240116; t=1739433783; c=relaxed/simple;
+	bh=pfT5sc7hzajU5onSqToJLvsnBMeoQjI5q0FLEyT7wkk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=J8nM0qhWoYmUVPToVwKNJSYbWyJX9pfSW6B+hT33nEtbwY2vABGtskywjvx7YqLaXbSiMolabRIrY2yGSDzsxk5vIDeJ6bMI1Hd52O132YqF71fSs6sJ+wb6RYdbZgaCOmb9A9y2ax+18zi6ySrGsPVxq8zCS+AysIDhdlb5VOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fCqQtozR; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739433782; x=1770969782;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=pfT5sc7hzajU5onSqToJLvsnBMeoQjI5q0FLEyT7wkk=;
+  b=fCqQtozR2iusV9bGs3EHobVvYYMMJ+4vm4TYCnJy7MBql8JbG7AOx8y9
+   b3EGn8ObNjaql3YNW3Azvgx9axSkv2ej9XHo+Z/t3BpmKQ2kWIjpmQjc5
+   qAJLB4ejY15KSx+tWCg+MPNwWxd6+MhnsFhz3eEimdE8emvpy57DEkH6J
+   +UGn43Pak9uQBqLpW+aBnjpppi1THjS0z7gSRVzgvWSXkUKhtR3ULMbyw
+   kFcH6BwE1SthxqKMpZHH1soRKEIvq136wN4gExPoD57Qsrr2YEggz8bzX
+   52mLlgQ3qUzdlwSRdK7T5abOmWeYYqXh4r6PjAaQBtpWuA0dyDvPSzKn4
+   g==;
+X-CSE-ConnectionGUID: UbvZ8aKzTrm3HTG1KP5h1g==
+X-CSE-MsgGUID: 1Iol/4BnSmadv8EV9CsbvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="51516696"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="51516696"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 00:03:01 -0800
+X-CSE-ConnectionGUID: ArrV/TiYTpa5i+1/kH3lCA==
+X-CSE-MsgGUID: +SZ3HFKERlGPAbVLzdZ7Eg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118257002"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 00:02:56 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tiUBR-0000000B6BT-25ED;
+	Thu, 13 Feb 2025 10:02:53 +0200
+Date: Thu, 13 Feb 2025 10:02:53 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Felipe Balbi <balbi@kernel.org>,
+	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Ferry Toth <fntoth@gmail.com>
+Subject: Re: [PATCH v2 2/3] usb: dwc3: gadget: Add support for
+ snps,reserved-endpoints property
+Message-ID: <Z62nLY_m_FG1Phc7@smile.fi.intel.com>
+References: <20250203191524.3730346-1-andriy.shevchenko@linux.intel.com>
+ <20250203191524.3730346-3-andriy.shevchenko@linux.intel.com>
+ <20250212011013.xumqgguhluxdslpz@synopsys.com>
+ <Z6x5lB4hGpz-9IzS@smile.fi.intel.com>
+ <20250213011610.ov3q2rq6bfzdzqlk@synopsys.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250208033129.3524423-1-badhri@google.com> <20250211002155.62lyfqjlygod7cdp@synopsys.com>
- <CAPTae5LisYMjx63Jz_xmZ9zA5PtaxRA49gh2FA-fONsJ12sXeg@mail.gmail.com> <20250211005508.qeselc6eakgnys74@synopsys.com>
-In-Reply-To: <20250211005508.qeselc6eakgnys74@synopsys.com>
-From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Wed, 12 Feb 2025 23:39:24 -0800
-X-Gm-Features: AWEUYZnIe5TMgsUPDmshm_Nttj-h2KlK1DcEzbN4aiPOxceFmMNfSjaqjTDAWOo
-Message-ID: <CAPTae5+RENJkgSLJAfzh-LryHvkU+i12ELjYqo_b22CT5HXm7w@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Prevent irq storm when TH re-executes
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "jameswei@google.com" <jameswei@google.com>, 
-	"stable@kernel.org" <stable@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250213011610.ov3q2rq6bfzdzqlk@synopsys.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Feb 10, 2025 at 4:55=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
->
-> On Mon, Feb 10, 2025, Badhri Jagan Sridharan wrote:
-> > .
-> >
-> > On Mon, Feb 10, 2025 at 4:22=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@syno=
-psys.com> wrote:
-> > >
-> > > On Sat, Feb 08, 2025, Badhri Jagan Sridharan wrote:
-> > > > While commit d325a1de49d6 ("usb: dwc3: gadget: Prevent losing event=
-s in
-> > > > event cache") makes sure that top half(TH) does not end up overwrit=
-ing the
-> > > > cached events before processing them when the TH gets invoked more =
-than one
-> > > > time, returning IRQ_HANDLED results in occasional irq storm where t=
-he TH
-> > > > hogs the CPU. The irq storm can be prevented by clearing the flag b=
-efore
-> > > > event handler busy is cleared. Default enable interrupt moderation =
-in all
-> > > > versions which support them.
-> > > >
-> > > > ftrace event stub during dwc3 irq storm:
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000866: irq_handler_ex=
-it: irq=3D14 ret=3Dhandled
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000872: irq_handler_en=
-try: irq=3D504 name=3Ddwc3
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000874: irq_handler_ex=
-it: irq=3D504 ret=3Dhandled
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000881: irq_handler_en=
-try: irq=3D504 name=3Ddwc3
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000883: irq_handler_ex=
-it: irq=3D504 ret=3Dhandled
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000889: irq_handler_en=
-try: irq=3D504 name=3Ddwc3
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000892: irq_handler_ex=
-it: irq=3D504 ret=3Dhandled
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000898: irq_handler_en=
-try: irq=3D504 name=3Ddwc3
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000901: irq_handler_ex=
-it: irq=3D504 ret=3Dhandled
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000907: irq_handler_en=
-try: irq=3D504 name=3Ddwc3
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000909: irq_handler_ex=
-it: irq=3D504 ret=3Dhandled
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000915: irq_handler_en=
-try: irq=3D504 name=3Ddwc3
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000918: irq_handler_ex=
-it: irq=3D504 ret=3Dhandled
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000924: irq_handler_en=
-try: irq=3D504 name=3Ddwc3
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000927: irq_handler_ex=
-it: irq=3D504 ret=3Dhandled
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000933: irq_handler_en=
-try: irq=3D504 name=3Ddwc3
-> > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000935: irq_handler_ex=
-it: irq=3D504 ret=3Dhandled
-> > > >     ....
-> > > >
-> > > > Cc: stable@kernel.org
-> > > > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > > > Fixes: d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events in e=
-vent cache")
-> > > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > > > ---
-> > > >  drivers/usb/dwc3/core.c   |  2 +-
-> > > >  drivers/usb/dwc3/gadget.c | 10 +++++++---
-> > > >  2 files changed, 8 insertions(+), 4 deletions(-)
-> > > >
-> > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > > index dfa1b5fe48dc..6df971ef7285 100644
-> > > > --- a/drivers/usb/dwc3/core.c
-> > > > +++ b/drivers/usb/dwc3/core.c
-> > > > @@ -1835,7 +1835,7 @@ static void dwc3_get_properties(struct dwc3 *=
-dwc)
-> > > >       dwc->tx_thr_num_pkt_prd =3D tx_thr_num_pkt_prd;
-> > > >       dwc->tx_max_burst_prd =3D tx_max_burst_prd;
-> > > >
-> > > > -     dwc->imod_interval =3D 0;
-> > > > +     dwc->imod_interval =3D 1;
-> > >
-> > > Use dwc3_has_imod() to determine whether to set this. Otherwise we ge=
-t
-> > > a warning on setups that don't support imod.
-> >
-> > Hi Thinh,
-> >
-> > dwc3_check_params() which gets invoked after dwc3_get_properties() at
-> > https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v6.14-rc1/=
-source/drivers/usb/dwc3/core.c*L1851__;Iw!!A4F2R9G_pg!Zar83WUe4sM-EF4c2wR2-=
-vWBJHgYOCWEc1ijhOsWQHiXtzCF0d_t2gckS0YJUv4lAZgGZl2C-oSp1QMIx28$
-> > seems to already call dwc3_has_imod(). Do you prefer me to add an
-> > explicit check here as well ?
-> >
->
-> Yes. I don't want to see dev_warn print when there shouldn't be any for
-> setup that don't support imod.
+On Thu, Feb 13, 2025 at 01:16:15AM +0000, Thinh Nguyen wrote:
+> On Wed, Feb 12, 2025, Andy Shevchenko wrote:
+> > On Wed, Feb 12, 2025 at 01:10:17AM +0000, Thinh Nguyen wrote:
+> > > On Mon, Feb 03, 2025, Andy Shevchenko wrote:
 
-Hi Thinh,
+...
 
-Looks like adding dwc3_has_imod() in dwc3_get_properties() would not
-be possible as the dwc->revision gets filled in much later at
-dwc3_core_is_valid():
-https://elixir.bootlin.com/linux/v6.14-rc2/source/drivers/usb/dwc3/core.c#L=
-2218,
-also, the core is still not brought out of reset yet. Would it be
-reasonable to initialize dwc->imod_interval to 1 in
-dwc3_check_params() like below ?
+> > > >  	/* Reset resource allocation flags */
+> > > > -	for (i = resource_index; i < dwc->num_eps && dwc->eps[i]; i++)
+> > > > -		dwc->eps[i]->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
+> > > > +	for (i = resource_index; i < dwc->num_eps; i++) {
+> > > > +		dep = dwc->eps[i];
+> > > > +		if (!dep)
+> > > > +			continue;
+> > > > +
+> > > > +		dep->flags &= ~DWC3_EP_RESOURCE_ALLOCATED;
+> > > > +	}
+> > > 
+> > > Please keep code refactoring as a separate patch.
+> > 
+> > It's induced by the change you asked for, it's not a simple refactoring.
+> > 
+> > Or do you want me to have the patch to check eps against NULL to be separated
+> > from this one (see (1) above)?
+> 
+> The condition "i < dwc->num && dwc->eps[i]" already does the NULL check.
+> The change here only move things around.
 
-+++ b/drivers/usb/dwc3/core.c
-@@ -1835,8 +1835,6 @@ static void dwc3_get_properties(struct dwc3 *dwc)
-        dwc->tx_thr_num_pkt_prd =3D tx_thr_num_pkt_prd;
-        dwc->tx_max_burst_prd =3D tx_max_burst_prd;
+Yes, but the problem is that the loop will stop on the first gap, but we would
+like to continue.
 
--       dwc->imod_interval =3D 1;
--
-        dwc->tx_fifo_resize_max_num =3D tx_fifo_resize_max_num;
- }
+> > > >  	return 0;
 
-@@ -1858,6 +1856,8 @@ static void dwc3_check_params(struct dwc3 *dwc)
-        if (dwc->imod_interval && !dwc3_has_imod(dwc)) {
-                dev_warn(dwc->dev, "Interrupt moderation not supported\n");
-                dwc->imod_interval =3D 0;
-+       } else if (!dwc->imod_interval && dwc3_has_imod(dwc)) {
-+               dwc->imod_interval =3D 1;
-        }
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks,
-Badhri
 
->
-> BR,
-> Thinh
 
