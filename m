@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-20658-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20659-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50B59A3666D
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 20:47:13 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17E25A36677
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 20:50:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 095D8189220A
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 19:47:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC5D01894AE9
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 19:50:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12D2519F121;
-	Fri, 14 Feb 2025 19:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11F5C1C84B7;
+	Fri, 14 Feb 2025 19:50:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qnRP4Nol"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WwbztW/p"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72CFA18FDA5
-	for <linux-usb@vger.kernel.org>; Fri, 14 Feb 2025 19:47:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD731ADC7C
+	for <linux-usb@vger.kernel.org>; Fri, 14 Feb 2025 19:50:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739562427; cv=none; b=HjwOEmpUTaEYqTmrBEL9bakPESmM/aXIn7u5Yi4ySAiCrdH/RPzWYBWzlzv8Ke8WR1HRIs67+Sdpf4sg9KRh5oeWff6BZJfNMDGRXDafCh2uICuvR1w9FeQEN83bSfd+WgrR2SbXkY2wRMl81mwSdjBasOuWOJIVctc/sdIi2Hk=
+	t=1739562601; cv=none; b=OjFimBTrvOewGa6elTRkmYeYvoEdMmZfq9faJbr8fWuk2dFIR9Rx7qdQY7+k98BplLYsOR9RWXWZxtAvihEyBv6Vhfb3okYEvEVUJ/6ugGCL86EBbqSz7C6qIKOmL0ZeqwTDnwWHiiIx+9SXVm4E2IieHymBKnYtZloR67wsUNQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739562427; c=relaxed/simple;
-	bh=VBGLuPub73Zgm8kD4gfHEn8ZgVaV8NVr5BZzrsMAiRU=;
+	s=arc-20240116; t=1739562601; c=relaxed/simple;
+	bh=bUgUsrhKXiC3h3Bib3b4i7MOs2a+MVwKVw0f4HxTW34=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HozvMc39Yf4PIiIIvuulOTVQFjTw0Y24xyNOsZTMOnnthrr60jq5Wv2TJYBa4+aGw+DGT7cfmjD9jHUFwFM5wtgSTWbyN1mV/4tZjkK0C4cWLuRes4Dg4v2Y0GYMekueWuEizukDYw2/CqoV/UecjW+egrGy/AEAzaCow7+BWWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qnRP4Nol; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E422AC4CEDD
-	for <linux-usb@vger.kernel.org>; Fri, 14 Feb 2025 19:47:05 +0000 (UTC)
+	 Content-Type:MIME-Version; b=AbPR1+IeJgaTfJhP7MmZnF1KzaZO7igAkamkq9btksZKbq6fptFyq6cjGw1EzWxbGtF2S+gR41K74lRXWnqnhHDq5nYV7YENlTdgGuKvGycx/5Bxj+FwRxWHvMXoDlZ5ywU6D/WpyfmoAnZUDgZBZnR1l1D9bfv/6OmL4b7Aesw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WwbztW/p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 0AB51C4CEE2
+	for <linux-usb@vger.kernel.org>; Fri, 14 Feb 2025 19:50:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739562425;
-	bh=VBGLuPub73Zgm8kD4gfHEn8ZgVaV8NVr5BZzrsMAiRU=;
+	s=k20201202; t=1739562601;
+	bh=bUgUsrhKXiC3h3Bib3b4i7MOs2a+MVwKVw0f4HxTW34=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=qnRP4NolKvf74cwPBkUT4hioMtX2DkHcIfVazm36k4LXVYy+mbKoARji3g1p0zRNV
-	 q1sokcrD5IP4Z03aA7r2wkY903oUPhoapdLNeDXsGfBgsGAf9WuRfrr1iElGM7LFaa
-	 WwEY35QuFtLRsW5VmuSqbE1tPSuPmRNYEMHCcD4k7PNrA9+nnkPLozj0nqIZU0MtQv
-	 heISe0kexUGWYDmR5xpOFHcLzUUS2zW9UeONRt1n7pBoRrMhStnKbfrKqFlf74BYTI
-	 E/FuY+OZDb9JDGfzEQ3jWrwov+UB06UjnI+UpqwX3JzPbHkJ0ADY0OUcujWNeU/szx
-	 6ZhmMPQc9Fzag==
+	b=WwbztW/p4f+JYGAAeUpsIknt7UjAjuPKn8qD66gLCEq4+aRBcORGd1J9zB7kddLXg
+	 G2d43eHSfzdsZI32Yq92KkUSNw18GiM28jj1Wm/MeFZqcsUa0SeqSorb8xItrpZ24n
+	 sEZfhVer+prN9W3BlzCbYLJI8KP5glTI/xDOqBYt2SX1n/CRj1VtGfCR1o+rwtqMBS
+	 nH/c8gsZ9cv2qb1iGJc+zSLiC6ke6DKf96EX5gPqRziVTA5T/zVFjmeSKi4CyQL6r1
+	 8kn7MbjPoUO2WYUMqo7qeajFl3D4tuvjyeI+waGtEpBvkGscHF2Xc663cbzY2wkraE
+	 og5zqb0y1kEfQ==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id DA6CCC41614; Fri, 14 Feb 2025 19:47:05 +0000 (UTC)
+	id F3261C41614; Fri, 14 Feb 2025 19:50:00 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 219748] Pluggable UD-4VPD dock appears to continually reset
  with AMD AI 365
-Date: Fri, 14 Feb 2025 19:47:05 +0000
+Date: Fri, 14 Feb 2025 19:50:00 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -62,8 +62,8 @@ X-Bugzilla-Resolution:
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-219748-208809-ScYD11X1y5@https.bugzilla.kernel.org/>
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-219748-208809-7d1RZk0ueh@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219748-208809@https.bugzilla.kernel.org/>
 References: <bug-219748-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,10 +79,13 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219748
 
---- Comment #10 from Thomas (lyz27@yahoo.com) ---
-Created attachment 307660
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307660&action=3Dedit
-dmesg with skip retimer patch
+--- Comment #11 from Thomas (lyz27@yahoo.com) ---
+The dock works with the skip retimer patch.=20
+Plugging in the dock makes the device connection sound twice from there:
+1. plugged in ethernet=20
+2. plugged in usb
+3. bumped the cable and unplugged the dock briefly -- sorry
+4. plugged in an HDMI monitor
 
 --=20
 You may reply to this email to add a comment.
