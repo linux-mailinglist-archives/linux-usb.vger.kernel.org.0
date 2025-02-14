@@ -1,59 +1,54 @@
-Return-Path: <linux-usb+bounces-20632-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20633-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F30FCA3586B
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 09:05:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EAE5A35889
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 09:10:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B5400161D97
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 08:05:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C446E188EC1F
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 08:11:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C649E221D8E;
-	Fri, 14 Feb 2025 08:05:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAB5C221D99;
+	Fri, 14 Feb 2025 08:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GtpCyaVH"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="BKpybcMJ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433541632C8;
-	Fri, 14 Feb 2025 08:05:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AAA484037;
+	Fri, 14 Feb 2025 08:10:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739520321; cv=none; b=WFc+XXBwiseFTGsZfUX8KbKXCC8AQsNp8gvtc7Tsd9WlBb2t8uxwSh569fbruQMgg3jisUmVtWM84rnlkuoka8jv0Ka5/9/lof1/mY3bxm1yt/mUzPF50UeEJKTYyHEwKLF9A3R/a8VbAG6nhuDYmFFxu4xC/uzw432/Fbr2L98=
+	t=1739520649; cv=none; b=pbu4lDsqhVja/0qohclAP9zyk/PbCXKYoTbQOvGMgz/Zg2P2IsPO7imqC1artssaXbdnwFKWlqgG//64pa+2aDbAYk3Jedp3YBpcHJLBfYd77tIpURMPA/IgV5I5O3hEw4r7jP0zcx1Opq3t/KY6U7PGIsBTeNUYJ8yLHO9Odxg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739520321; c=relaxed/simple;
-	bh=nwjaTMq570ei9hLgL50S/G+k7/RPwCxJ1+sRDDarSek=;
+	s=arc-20240116; t=1739520649; c=relaxed/simple;
+	bh=L1tWijiBafi2wIa+FkUtmkhwmnQFgOwBS4iKLKfor+8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p05eIrTvp/nySO8BCV5UeanZdkB5wR9LgR+SiY9Emgv8urD7fWDDSYpqsJ9BoShPMac958cTRJSvH7h/v61OMJ0SV7S5a0Ho3dUwMmlAhWIZvbo90UFLycgbC3bXliS65Oo/mYxjLBbt8FhGqXUZkuhbq7fuBI5N7kDldUE+y14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GtpCyaVH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1867BC4CED1;
-	Fri, 14 Feb 2025 08:05:20 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=jbXSbbuITfQ65HoowftGqR6780MhPklSjBsJ/La5kjsC2twJ6YfMDU7axHgrMaWAm0cfTgvdqOKCcq4zsqJInZ7EQiWQu1j6O7C9nyvxmbACGdw5oKsG4sP19+U+Df5PTdvW1l9gRCQZjzQCUYP2Zvh3K5VK2sq9fHVDldQwz+g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=BKpybcMJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66330C4CED1;
+	Fri, 14 Feb 2025 08:10:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739520320;
-	bh=nwjaTMq570ei9hLgL50S/G+k7/RPwCxJ1+sRDDarSek=;
+	s=korg; t=1739520648;
+	bh=L1tWijiBafi2wIa+FkUtmkhwmnQFgOwBS4iKLKfor+8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GtpCyaVHdSPzoOvmYxxy/Tf7wswYglPZOZxES/zomcUpwSg3K78W/l1VKMpjFzYq+
-	 Dsk3/bY4HxL3eMI9r14N0TtBT0bavyCMKwV21mfAYX8LGsHrYaQSoz0CozbjI40qfY
-	 cqwUuVehO7XDmScepR/+Z/Zdc2jOuWFGxJHlx6IU=
-Date: Fri, 14 Feb 2025 09:05:17 +0100
+	b=BKpybcMJ4Q6Ld5g5K1Ez4lk5/EulPqk8UPXtgP68Xytej8KeWDb0Xue75M55kUliB
+	 hmWu8uklNFDnsDyZq/oE1QbmkVlqzhYuOt4M5+jViyasX6ZDC43x/uzScGNCHwpaqy
+	 T1TJg3UHA4cmSbSq+NtjmVBpVitJLJ4OjsTzHdVs=
+Date: Fri, 14 Feb 2025 09:10:45 +0100
 From: Greg KH <gregkh@linuxfoundation.org>
-To: Selvarasu Ganesan <selvarasu.g@samsung.com>
-Cc: mathias.nyman@intel.com, WeitaoWang-oc@zhaoxin.com,
-	Thinh.Nguyen@synopsys.com, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, jh0801.jung@samsung.com,
-	dh10.jung@samsung.com, naushad@samsung.com, akash.m5@samsung.com,
-	h10.kim@samsung.com, eomji.oh@samsung.com, alim.akhtar@samsung.com,
-	thiagu.r@samsung.com, muhammed.ali@samsung.com,
-	pritam.sutar@samsung.com, cpgs@samsung.com, stable@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] usb: xhci: Fix unassigned variable 'bcdUSB' in
- xhci_create_usb3x_bos_desc()
-Message-ID: <2025021402-cruelty-dumpster-57cc@gregkh>
-References: <20250213042130.858-1-selvarasu.g@samsung.com>
- <CGME20250213042240epcas5p3c1ac4f97ebf36054abdccc962329273d@epcas5p3.samsung.com>
- <158453976.61739422383216.JavaMail.epsvc@epcpadp2new>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: heikki.krogerus@linux.intel.com, andre.draszik@linaro.org,
+	linux@roeck-us.net, shufan_lee@richtek.com,
+	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	kernel@collabora.com, pablo.sun@mediatek.com
+Subject: Re: [PATCH] usb: typec: tcpci_rt1711h: Unmask alert interrupts to
+ fix functionality
+Message-ID: <2025021424-uncurious-slicer-b35f@gregkh>
+References: <20250212104040.38723-1-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -62,23 +57,52 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <158453976.61739422383216.JavaMail.epsvc@epcpadp2new>
+In-Reply-To: <20250212104040.38723-1-angelogioacchino.delregno@collabora.com>
 
-On Thu, Feb 13, 2025 at 09:51:26AM +0530, Selvarasu Ganesan wrote:
-> Fix the following smatch error:
-> drivers/usb/host/xhci-hub.c:71 xhci_create_usb3x_bos_desc() error: unassigned variable 'bcdUSB'
+On Wed, Feb 12, 2025 at 11:40:40AM +0100, AngeloGioacchino Del Regno wrote:
+> During probe, the TCPC alert interrupts are getting masked to
+> avoid unwanted interrupts during chip setup: this is ok to do
+> but there is no unmasking happening at any later time, which
+> means that the chip will not raise any interrupt, essentially
+> making it not functional as, while internally it does perform
+> all of the intended functions, it won't signal anything to the
+> outside.
+> 
+> Unmask the alert interrupts to fix functionality.
+> 
+> Fixes: ce08eaeb6388 ("staging: typec: rt1711h typec chip driver")
+> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> ---
+>  drivers/usb/typec/tcpm/tcpci_rt1711h.c | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
+> 
+> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> index 64f6dd0dc660..c71b213b2441 100644
+> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+> @@ -334,6 +334,11 @@ static int rt1711h_probe(struct i2c_client *client)
+>  {
+>  	int ret;
+>  	struct rt1711h_chip *chip;
+> +	const u16 alert_mask = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_DISCARDED |
+> +			       TCPC_ALERT_TX_FAILED | TCPC_ALERT_RX_HARD_RST |
+> +			       TCPC_ALERT_RX_STATUS | TCPC_ALERT_POWER_STATUS |
+> +			       TCPC_ALERT_CC_STATUS | TCPC_ALERT_RX_BUF_OVF |
+> +			       TCPC_ALERT_FAULT;
+>  
+>  	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+>  	if (!chip)
+> @@ -384,6 +389,11 @@ static int rt1711h_probe(struct i2c_client *client)
+>  		return ret;
+>  	enable_irq_wake(client->irq);
+>  
+> +	/* Enable alert interrupts */
+> +	ret = rt1711h_write16(chip, TCPC_ALERT_MASK, alert_mask);
+> +	if (ret < 0)
+> +		return ret;
 
-That really doesn't say what is happening here at all.  Please provide a
-lot more information as the response from a tool could, or could not, be
-a real issue, how are we supposed to know?
-
-And "unassigned" really isn't the bug that is being fixed here, please
-describe it better.
-
-Same for patch 2 of the series.
-
-Also, your 0/2 email was not threaded with these patches, something odd
-happened in your email setup, you might want to look into that.
+If this fails, don't you then need to disable the wake irq you just
+enabled?  If not, why not?
 
 thanks,
 
