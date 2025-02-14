@@ -1,84 +1,132 @@
-Return-Path: <linux-usb+bounces-20636-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20637-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA941A358FD
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 09:34:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF3E7A35955
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 09:50:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95E327A38B2
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 08:33:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35FE218913B3
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 08:50:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6284C227BA2;
-	Fri, 14 Feb 2025 08:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22BDD227BB1;
+	Fri, 14 Feb 2025 08:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FNu+xLOR"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="AKsbYQM3"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6D501F8908;
-	Fri, 14 Feb 2025 08:34:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04379275401;
+	Fri, 14 Feb 2025 08:50:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739522040; cv=none; b=Hw4CYF4Yi3WTI7JPCoOdr2GJ0E57f1+9htbX+DZoUPCfykpP7PLWch1FvmmcnxpuEwTe8G4aB6l2e/T/V8OOpFOnm3wgJFCI1tXkgLTBxevIH8KhlRxQF6VAkwu9/iVObMRvIdjRf3QYjqV9usaH6LRcpwqc4IM82ttV2iO+j7o=
+	t=1739523010; cv=none; b=dmeyWP8N7RwvigG8JgUDeHAxwyM8j/alGZjqFw/sqPfESWVctj6FOD29Z4Ru6AdfG51IFKjKDmal6Rvru/qnWTqQaAAu6Ybm/+/SgVNJaYILk0N88MfJyXzejJZ8Ub5JoDhSMx3ZEgOODEx3dBilaIA59GkmsAB+yiO4W4LEano=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739522040; c=relaxed/simple;
-	bh=nmFhArK4AnTrdKpCbsSm7ZRbrnkx1riW9CxzZjbQ13c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=geGJ2Z6n9ErvzZp+AwPIM7AeQfLUrjw+WQ4iyekq2pfWpknEpLH8W+43bdL4YLCH9cQ0/YZLWsiBGMAUoL5nvE6YohVKkQ3jn8AhHW2nWDCm5/Wni4aWyQJ1tpIPIOxc90ZMNlZaJmrsTXNBmP5w1TY5KBM+CYmLfEEwBIfDAT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FNu+xLOR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E1CFC4CED1;
-	Fri, 14 Feb 2025 08:33:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739522040;
-	bh=nmFhArK4AnTrdKpCbsSm7ZRbrnkx1riW9CxzZjbQ13c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FNu+xLORwYR2hpmCMVT+Fa2ZI7TmUVcx9/ewk/dKUWZvhue46gFLY/h6OnLMjhAXQ
-	 dATpap4eb99CGMFgyqHAzM7wOFTc+1t7Ra4obRg9GI+zPf+jDa/GJEp3NB+RFw1nnB
-	 +w5KwVYciGgH9iIQQtZjFcUgXwMf4GG5YZ+Wk/ow=
-Date: Fri, 14 Feb 2025 09:33:18 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: srinivas.kandagatla@linaro.org, mathias.nyman@intel.com, perex@perex.cz,
-	conor+dt@kernel.org, dmitry.torokhov@gmail.com, corbet@lwn.net,
-	broonie@kernel.org, lgirdwood@gmail.com, tiwai@suse.com,
-	krzk+dt@kernel.org, pierre-louis.bossart@linux.intel.com,
-	Thinh.Nguyen@synopsys.com, robh@kernel.org,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-sound@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v34 00/31] Introduce QC USB SND audio offloading support
-Message-ID: <2025021413-favorable-manatee-6859@gregkh>
-References: <20250121210518.2436771-1-quic_wcheng@quicinc.com>
- <3b9447e2-4be8-479b-a418-5fd45369fb55@quicinc.com>
+	s=arc-20240116; t=1739523010; c=relaxed/simple;
+	bh=eHsbsd/eFKbVVaYr4omsL/Cx88B0Q51hlfhaRwPY0RA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WXo9o4MXBkVyE7juKHi/FQxwgCcKEnEj1cB0pid75TXuq5eUpxYBjv/QLzPnHPJ/Kd5Vb3505OYucxe+S0lqD9fkQbieGKzuH7KuQHKxWfR8hxX08Vz0P3Sqr2/Gm0rvbX7FMd5IQMH6+T0BBjc6LOEx2HIxsUGxDWmA93cxQFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=AKsbYQM3; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: ae86e8d2eab011efb8f9918b5fc74e19-20250214
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=SZTKFrboegu1pyLSyq2HcY2eKZBWe3hXG4JUqZ8ZU0c=;
+	b=AKsbYQM3lxBAVEii1KIMqewju/FjqyPgdG/pUaVAs7cOTyqevlueh+KQSCI65TLtIhivjCOOuuzUYdB5d+5fHVu5MrdzQY51KAsAfzY7rg+H8OEMPZ3FVdQaFKBqB4WJBRLHBpz4doIJZ9XpXOu4jh5I2K5mizdJqbIUPbMtixQ=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.46,REQID:46e23ee0-5498-40be-8e8a-c3aa7291560b,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:60aa074,CLOUDID:fcecbf24-96bd-4ac5-8f2e-15aa1ef9defa,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: ae86e8d2eab011efb8f9918b5fc74e19-20250214
+Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw01.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 94671838; Fri, 14 Feb 2025 16:50:03 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Fri, 14 Feb 2025 16:50:02 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.28 via Frontend Transport; Fri, 14 Feb 2025 16:50:02 +0800
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+To: Sen Chu <sen.chu@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, Alexandre Mergnat
+	<amergnat@baylibre.com>
+CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+	Macpaul Lin <macpaul@gmail.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<linux-usb@vger.kernel.org>, <stable@vger.kernel.org>, Chris-qj chen
+	<chris-qj.chen@mediatek.com>
+Subject: [PATCH v3] arm64: dts: mediatek: mt6359: fix dtbs_check error for RTC and regulators
+Date: Fri, 14 Feb 2025 16:49:54 +0800
+Message-ID: <20250214084954.1181435-1-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3b9447e2-4be8-479b-a418-5fd45369fb55@quicinc.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-On Tue, Feb 11, 2025 at 12:35:23PM -0800, Wesley Cheng wrote:
-> Hi,
-> 
-> On 1/21/2025 1:04 PM, Wesley Cheng wrote:
-> > Requesting to see if we can get some Acked-By tags, and merge on usb-next.
-> > 
-> 
-> Just seeing if we have any further feedback on this series? Thanks.
+This patch fixes the following dtbs_check errors:
+1. 'mt6359rtc' do not match any of the regexes: 'pinctrl-[0-9]+'
+ - Update 'mt6359rtc' in 'mt6359.dtsi' with a generic device name 'rtc'
+2. 'pmic: regulators: 'compatible' is a required property'
+ - Add 'mediatek,mt6359-regulator' to compatible property.
 
-Given the lack of responses, and the huge number of iterations of this,
-I've applied it now to my usb-testing branch to give 0-day some better
-runs at it.  If it passes that in a few days, I'll move it to my
-usb-next branch for inclusion into linux-next and hopefully 6.15-rc1.
+Fixes: 3b7d143be4b7 ("arm64: dts: mt6359: add PMIC MT6359 related nodes")
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
+ arch/arm64/boot/dts/mediatek/mt6359.dtsi | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-thanks for sticking with this!
+Changes for v2:
+ - No change.
 
-greg k-h
+Changes for v3:
+ - Add "Reviewed-by:" tag, Thanks!
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
+index 150ad84d5d2b..3d97ca4e2098 100644
+--- a/arch/arm64/boot/dts/mediatek/mt6359.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
+@@ -19,6 +19,8 @@ mt6359codec: mt6359codec {
+ 		};
+ 
+ 		regulators {
++			compatible = "mediatek,mt6359-regulator";
++
+ 			mt6359_vs1_buck_reg: buck_vs1 {
+ 				regulator-name = "vs1";
+ 				regulator-min-microvolt = <800000>;
+@@ -297,7 +299,7 @@ mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub {
+ 			};
+ 		};
+ 
+-		mt6359rtc: mt6359rtc {
++		mt6359_rtc: rtc {
+ 			compatible = "mediatek,mt6358-rtc";
+ 		};
+ 	};
+-- 
+2.45.2
+
 
