@@ -1,120 +1,115 @@
-Return-Path: <linux-usb+bounces-20648-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20649-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E90B6A362F6
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 17:22:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 285DEA3631D
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 17:31:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 185701895FC6
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 16:21:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBC1D16E06D
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 16:31:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D076026770F;
-	Fri, 14 Feb 2025 16:20:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6DF6267F59;
+	Fri, 14 Feb 2025 16:29:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FIUezjSJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PjCwvRAu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6F726772E
-	for <linux-usb@vger.kernel.org>; Fri, 14 Feb 2025 16:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BED002753FD;
+	Fri, 14 Feb 2025 16:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739550044; cv=none; b=WQc5xzj86+w8Mz6YWPc63F2Jqol9k8y1qON+fiOT4BwjNg6V+F7fJmarnzsA0QzPOGMD0ExneiCwNwbbjZbNxdWZVpVXZy5AZOx1OCi2k2X8AVQLwz21a6pL4db0i6TgZhp702rGbcopIN6nJ4aPlCzDfJKI+9U7ubt2+ngBiKk=
+	t=1739550595; cv=none; b=Z2TXDZU63zMlE0QmXkQl0WrFPftwKooRr3fcc/xCxATgi7lFfC1BL2Q09SR5IODscWfTOL1YpPUOEzdXow8+IBUeYkB+v9Z7PxmFAYdLR9WemZTnkMrXALZIXaA+ojNZqtHq8+E/yZ5s5hEiwwcC2AX8JTkBAeGmZPVqL0k2J7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739550044; c=relaxed/simple;
-	bh=kNGUNc1MKVoBIXrh+HaIaylzin+VDhGEHfwFXojLAWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=pljgJrX+5RJz7FxWVtQtFp4mUUF1jG5luoGHUwcwLuOLpsfRExQ5yB5frImrj+rlRTZfF0PdBFEVY2qqzvklUeC0DZjjFDRp/houxQJqamvEEhRfBNgqci4JRMyHUhPnsJOWT/1we+b0QbOj5WeI8XC8Zz2SDpOu2YwZ2Fwvjj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FIUezjSJ; arc=none smtp.client-ip=192.198.163.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739550595; c=relaxed/simple;
+	bh=4wnU/qWMOp5jEapFPdVzMSzoA3DPqJt1dDDol0w3OY8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tDrtd2a30TrVdGMnLrfBon8qckgSqQEC7iVjkMdzcv7hXGQT7xjgbnuFbTWfKhkL/BJCJx3JS6QuCUJbSgKEIu5fA79OTP7cQPTfr2lTYeElgV15tuAWT06TtGXmz3y6JJVZB/PNfaSWmDcKhcIshh+VXZATSEcqH8jnRzErMeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PjCwvRAu; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739550043; x=1771086043;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kNGUNc1MKVoBIXrh+HaIaylzin+VDhGEHfwFXojLAWw=;
-  b=FIUezjSJsMs4VBTb95TZngU0UyaMAH2M32nFlU5MnlutMS1AutC0g1dp
-   QGxMXf7MvwI98ImP5oAgG1V/3FUBWOj3BJKG7z/AVL6QuM6hYEvMzg4Ud
-   o5/zjl5Midfv5t+WIflEETf9ACw2D8dIzNToQbrVJTPLsMB6oZK74SvbB
-   e2JKvlke8gWs84Q6FTEWGnsT0TaOMRMyYEGf2HF86gEd+yjqB5e8cGMjt
-   1F4pBTYIKQSDKXbGu1yhgSXXAznORbdPXYgpZjlXgj8RqLvmYVylpoqnx
-   WrHkkJocmKq+QYiv0m4oqyp5UwE8kzV1h+p/jTFWQxPLmxGZgY5qN2Da2
-   w==;
-X-CSE-ConnectionGUID: 9ZVQaHBRQnCiyHDXKV1D6g==
-X-CSE-MsgGUID: TJL5dR+IQa66GhuCQ0eR7A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="40571722"
+  t=1739550594; x=1771086594;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4wnU/qWMOp5jEapFPdVzMSzoA3DPqJt1dDDol0w3OY8=;
+  b=PjCwvRAuvcvKT8OJr1DKhrE19z5FM6ZTb55AucceBHEOdFsx1oqMXWhn
+   9ZpelKVnAQqbn/R2hThrD35Q7fBqdsu8Ns6BdW3KIoq9YPLP7PxM9gJpK
+   PD3+/m5GYlcofZwRbDB4Jv9CnDTbTnNYqQHdTviOcJUKvAj/+EAAq3S+I
+   gLrhA9Z+atqzm1QqfqxC7n//jgOtifX+70of/bOhsCTQsZz98LSMAST1F
+   I7Kmv24IhgVspetQaAF2alED5B/yfzZZ5WraPTthjpLXd4zHgNuLxCOKQ
+   cj5tEWnmCkHDm7patM2Ad8/3aYkS334k8LWLNzu/UkUXSvXkvuaq7IA65
+   g==;
+X-CSE-ConnectionGUID: SO2qqjG5Q4GA2Pj8s3sRsg==
+X-CSE-MsgGUID: P8p/XNJ3TD65pLxejUISiw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="40447380"
 X-IronPort-AV: E=Sophos;i="6.13,286,1732608000"; 
-   d="scan'208";a="40571722"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 08:20:42 -0800
-X-CSE-ConnectionGUID: M0Hgq+EeRoeLpgtHXUzViA==
-X-CSE-MsgGUID: 9TGy4J4cRPyNCpXx/CFJ6A==
+   d="scan'208";a="40447380"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 08:29:53 -0800
+X-CSE-ConnectionGUID: T584mMUeTmqd6JV8/2Embw==
+X-CSE-MsgGUID: VrKmQHZmRUyj2M0vTnSRsg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,286,1732608000"; 
-   d="scan'208";a="118608573"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa004.fm.intel.com with ESMTP; 14 Feb 2025 08:20:40 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tiyQf-0019r5-1k;
-	Fri, 14 Feb 2025 16:20:37 +0000
-Date: Sat, 15 Feb 2025 00:19:41 +0800
-From: kernel test robot <lkp@intel.com>
-To: Wesley Cheng <quic_wcheng@quicinc.com>
-Cc: oe-kbuild-all@lists.linux.dev, linux-usb@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Subject: [usb:usb-testing 35/52] sound/soc/soc-usb.c:105: warning: bad line:
-Message-ID: <202502150046.UFOZ4CQw-lkp@intel.com>
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="118697344"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa005.jf.intel.com with ESMTP; 14 Feb 2025 08:29:50 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1001)
+	id 63020123; Fri, 14 Feb 2025 18:29:48 +0200 (EET)
+Date: Fri, 14 Feb 2025 18:29:48 +0200
+From: Mika Westerberg <mika.westerberg@linux.intel.com>
+To: Kenneth Crudup <kenny@panix.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jian-Hong Pan <jhp@endlessos.org>, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	=?utf-8?B?TmlrbMSBdnMgS2/EvGVzxYZpa292cw==?= <pinkflames.linux@gmail.com>,
+	Andreas Noever <andreas.noever@gmail.com>,
+	Michael Jamet <michael.jamet@intel.com>,
+	Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
+ Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
+Message-ID: <20250214162948.GJ3713119@black.fi.intel.com>
+References: <20250210210502.GA15655@bhelgaas>
+ <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
+ <20250211055722.GW3713119@black.fi.intel.com>
+ <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
+ <20250213135911.GG3713119@black.fi.intel.com>
+ <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
+In-Reply-To: <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-head:   c26f6731b8da887f1fb92d4654da57a19a266466
-commit: 2ba03621a1f54cdd67274ee6e79f4b8b7559ee61 [35/52] ASoC: Add SoC USB APIs for adding an USB backend
-config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20250215/202502150046.UFOZ4CQw-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250215/202502150046.UFOZ4CQw-lkp@intel.com/reproduce)
+Hi,
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502150046.UFOZ4CQw-lkp@intel.com/
+On Thu, Feb 13, 2025 at 11:19:35AM -0800, Kenneth Crudup wrote:
+> 
+> On 2/13/25 05:59, Mika Westerberg wrote:
+> 
+> > Hi,
+> 
+> As Murphy's would have it, now my crashes are display-driver related (this
+> is Xe, but I've also seen it with i915).
+> 
+> Attached here just for the heck of it, but I'll be better testing the NVMe
+> enclosure-related failures this weekend. Stay tuned!
 
-All warnings (new ones prefixed by >>):
+Okay, I checked quickly and no TB related crash there but I was actually
+able to reproduce hang when I unplug the device chain during suspend. I did
+not yet have time to look into it deeper. I'm sure this has been working
+fine in the past as we tested all kinds of topologies including similar to
+this.
 
->> sound/soc/soc-usb.c:105: warning: bad line: 
-
-
-vim +105 sound/soc/soc-usb.c
-
-   101	
-   102	/**
-   103	 * snd_soc_usb_free_port() - free a SoC USB port used for offloading support
-   104	 * @usb: allocated SoC USB port
- > 105	
-   106	 * Free and remove the SoC USB port from the available list of ports.  This will
-   107	 * ensure that the communication between USB SND and ASoC is halted.
-   108	 *
-   109	 */
-   110	void snd_soc_usb_free_port(struct snd_soc_usb *usb)
-   111	{
-   112		snd_soc_usb_remove_port(usb);
-   113		kfree(usb);
-   114	}
-   115	EXPORT_SYMBOL_GPL(snd_soc_usb_free_port);
-   116	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+I will be out next week for vacation but will continue after that if the
+problem is not alraedy solved ;-)
 
