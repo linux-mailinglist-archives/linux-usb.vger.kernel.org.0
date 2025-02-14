@@ -1,132 +1,300 @@
-Return-Path: <linux-usb+bounces-20637-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20638-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF3E7A35955
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 09:50:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2A8EA35962
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 09:52:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35FE218913B3
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 08:50:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6692B3ABC63
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 08:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22BDD227BB1;
-	Fri, 14 Feb 2025 08:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD0CD227BB5;
+	Fri, 14 Feb 2025 08:52:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="AKsbYQM3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nULD+FBX"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04379275401;
-	Fri, 14 Feb 2025 08:50:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23989275401;
+	Fri, 14 Feb 2025 08:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739523010; cv=none; b=dmeyWP8N7RwvigG8JgUDeHAxwyM8j/alGZjqFw/sqPfESWVctj6FOD29Z4Ru6AdfG51IFKjKDmal6Rvru/qnWTqQaAAu6Ybm/+/SgVNJaYILk0N88MfJyXzejJZ8Ub5JoDhSMx3ZEgOODEx3dBilaIA59GkmsAB+yiO4W4LEano=
+	t=1739523145; cv=none; b=pT/q7nQ3PhyBAsULDdIY5C2+eFE6bQp2avzmofQnLYCErQcb8jrfjwWRMpPl96Q7wBHBlBmpgfnZ5T5yWAY0OCkn8cPYMXSMKjzKyVDyt022TAebb2nCvPrz8okB/6Zb0pzS1j2mvYXGpAZmq/E3RR10KqcFirI2IlOUUFmd8lU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739523010; c=relaxed/simple;
-	bh=eHsbsd/eFKbVVaYr4omsL/Cx88B0Q51hlfhaRwPY0RA=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=WXo9o4MXBkVyE7juKHi/FQxwgCcKEnEj1cB0pid75TXuq5eUpxYBjv/QLzPnHPJ/Kd5Vb3505OYucxe+S0lqD9fkQbieGKzuH7KuQHKxWfR8hxX08Vz0P3Sqr2/Gm0rvbX7FMd5IQMH6+T0BBjc6LOEx2HIxsUGxDWmA93cxQFM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=AKsbYQM3; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: ae86e8d2eab011efb8f9918b5fc74e19-20250214
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=SZTKFrboegu1pyLSyq2HcY2eKZBWe3hXG4JUqZ8ZU0c=;
-	b=AKsbYQM3lxBAVEii1KIMqewju/FjqyPgdG/pUaVAs7cOTyqevlueh+KQSCI65TLtIhivjCOOuuzUYdB5d+5fHVu5MrdzQY51KAsAfzY7rg+H8OEMPZ3FVdQaFKBqB4WJBRLHBpz4doIJZ9XpXOu4jh5I2K5mizdJqbIUPbMtixQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.46,REQID:46e23ee0-5498-40be-8e8a-c3aa7291560b,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:60aa074,CLOUDID:fcecbf24-96bd-4ac5-8f2e-15aa1ef9defa,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:ni
-	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: ae86e8d2eab011efb8f9918b5fc74e19-20250214
-Received: from mtkmbs09n2.mediatek.inc [(172.21.101.94)] by mailgw01.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 94671838; Fri, 14 Feb 2025 16:50:03 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Fri, 14 Feb 2025 16:50:02 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.28 via Frontend Transport; Fri, 14 Feb 2025 16:50:02 +0800
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-To: Sen Chu <sen.chu@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, Alexandre Mergnat
-	<amergnat@baylibre.com>
-CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
-	Macpaul Lin <macpaul@gmail.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<linux-usb@vger.kernel.org>, <stable@vger.kernel.org>, Chris-qj chen
-	<chris-qj.chen@mediatek.com>
-Subject: [PATCH v3] arm64: dts: mediatek: mt6359: fix dtbs_check error for RTC and regulators
-Date: Fri, 14 Feb 2025 16:49:54 +0800
-Message-ID: <20250214084954.1181435-1-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1739523145; c=relaxed/simple;
+	bh=GZu6aMzoNVpjWfc+Cmd+0SQtCa8Q39Ci/9y7ROkb0/U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KjiONtl22A8SfJVUUWQlxotGs9R598+5CVBQJc+Iu68N7CQWM7QsMdKVzo9px4NfbGREIBSOt+uUpNRjoq47OwysCdvk1BusC0eAUzn38GEY7Lyr+VrINusFRx3hWbP+HIWBUCc/l3upW0eT3rQCZBu5uksHOgvwagUAFgAGat4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nULD+FBX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91D51C4CED1;
+	Fri, 14 Feb 2025 08:52:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739523144;
+	bh=GZu6aMzoNVpjWfc+Cmd+0SQtCa8Q39Ci/9y7ROkb0/U=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=nULD+FBXO7Nyg0V+vAR3lGslXs5hgaONCMXA0GAfGIiJqpoFF3lcdZPJElyxQ5Ser
+	 IVvEOGnmBdednlfW/hsWWreHo4TRvyrvqd84L1b6c4EcKBdwM3JkUpjpm4VO78Ihjz
+	 uSESuyvuIDJaHG/b+DHfCEk0jm8V1Jr0yS2QAVa3JZ1rLBxk4g4CS1vpH1yRBTgz+w
+	 azyiKEiI8bjJrezXMu9+cMe69AbdJZr3BTYlKsDK6RxzHCK/eO9qoQ1rFEnmADI6En
+	 7fNGyXh/0moF5egq7bQfYdb28If5NmQV18E25+HMsA7IXzwh5uEePn9Fp/Xv7QpuQs
+	 9oYSyePi1CirA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tirR3-00000000658-2iw9;
+	Fri, 14 Feb 2025 09:52:33 +0100
+Date: Fri, 14 Feb 2025 09:52:33 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Abel Vesa <abel.vesa@linaro.org>
+Cc: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Trilok Soni <quic_tsoni@quicinc.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] usb: typec: Add support for Parade PS8830 Type-C
+ Retimer
+Message-ID: <Z68EUTlHcm6TxjlY@hovoldconsulting.com>
+References: <20250206-x1e80100-ps8830-v6-0-60b1e49cfa8d@linaro.org>
+ <20250206-x1e80100-ps8830-v6-2-60b1e49cfa8d@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250206-x1e80100-ps8830-v6-2-60b1e49cfa8d@linaro.org>
 
-This patch fixes the following dtbs_check errors:
-1. 'mt6359rtc' do not match any of the regexes: 'pinctrl-[0-9]+'
- - Update 'mt6359rtc' in 'mt6359.dtsi' with a generic device name 'rtc'
-2. 'pmic: regulators: 'compatible' is a required property'
- - Add 'mediatek,mt6359-regulator' to compatible property.
+On Thu, Feb 06, 2025 at 11:28:28AM +0200, Abel Vesa wrote:
+> The Parade PS8830 is a USB4, DisplayPort and Thunderbolt 4 retimer,
+> controlled over I2C. It usually sits between a USB/DisplayPort PHY
+> and the Type-C connector, and provides orientation and altmode handling.
 
-Fixes: 3b7d143be4b7 ("arm64: dts: mt6359: add PMIC MT6359 related nodes")
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- arch/arm64/boot/dts/mediatek/mt6359.dtsi | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> +// SPDX-License-Identifier: GPL-2.0+
+> +/*
+> + * Parade ps883x usb retimer driver
 
-Changes for v2:
- - No change.
+Nit: USB
 
-Changes for v3:
- - Add "Reviewed-by:" tag, Thanks!
+> + *
+> + * Copyright (C) 2024 Linaro Ltd.
+> + */
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-index 150ad84d5d2b..3d97ca4e2098 100644
---- a/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
-@@ -19,6 +19,8 @@ mt6359codec: mt6359codec {
- 		};
- 
- 		regulators {
-+			compatible = "mediatek,mt6359-regulator";
-+
- 			mt6359_vs1_buck_reg: buck_vs1 {
- 				regulator-name = "vs1";
- 				regulator-min-microvolt = <800000>;
-@@ -297,7 +299,7 @@ mt6359_vsram_others_sshub_ldo: ldo_vsram_others_sshub {
- 			};
- 		};
- 
--		mt6359rtc: mt6359rtc {
-+		mt6359_rtc: rtc {
- 			compatible = "mediatek,mt6358-rtc";
- 		};
- 	};
--- 
-2.45.2
+> +static int ps883x_set(struct ps883x_retimer *retimer)
+> +{
+> +	int cfg0 = CONN_STATUS_0_CONNECTION_PRESENT;
+> +	int cfg1 = 0x00;
+> +	int cfg2 = 0x00;
+> +
+> +	if (retimer->orientation == TYPEC_ORIENTATION_NONE ||
+> +	    retimer->mode == TYPEC_STATE_SAFE) {
+> +		ps883x_configure(retimer, cfg0, cfg1, cfg2);
+> +		return 0;
+> +	}
+> +
+> +	if (retimer->mode != TYPEC_STATE_USB && retimer->svid != USB_TYPEC_DP_SID)
+> +		return -EINVAL;
+> +
+> +	if (retimer->orientation == TYPEC_ORIENTATION_REVERSE)
+> +		cfg0 |= CONN_STATUS_0_ORIENTATION_REVERSED;
+> +
+> +	switch (retimer->mode) {
+> +	case TYPEC_STATE_USB:
+> +		cfg0 |= CONN_STATUS_0_USB_3_1_CONNECTED;
+> +		break;
+> +
 
+I'd drop these newlines before case statements, but your choice.
+
+> +	case TYPEC_DP_STATE_C:
+> +		cfg1 = CONN_STATUS_1_DP_CONNECTED |
+> +		       CONN_STATUS_1_DP_SINK_REQUESTED |
+> +		       CONN_STATUS_1_DP_PIN_ASSIGNMENT_C_D |
+> +		       CONN_STATUS_1_DP_HPD_LEVEL;
+> +		break;
+> +
+> +	case TYPEC_DP_STATE_D:
+> +		cfg0 |= CONN_STATUS_0_USB_3_1_CONNECTED;
+> +		cfg1 = CONN_STATUS_1_DP_CONNECTED |
+> +		       CONN_STATUS_1_DP_SINK_REQUESTED |
+> +		       CONN_STATUS_1_DP_PIN_ASSIGNMENT_C_D |
+> +		       CONN_STATUS_1_DP_HPD_LEVEL;
+> +		break;
+> +
+> +	case TYPEC_DP_STATE_E:
+> +		cfg1 = CONN_STATUS_1_DP_CONNECTED |
+> +		       CONN_STATUS_1_DP_HPD_LEVEL;
+> +		break;
+> +
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+
+> +static int ps883x_retimer_probe(struct i2c_client *client)
+> +{
+> +	struct device *dev = &client->dev;
+> +	struct typec_switch_desc sw_desc = { };
+> +	struct typec_retimer_desc rtmr_desc = { };
+> +	struct ps883x_retimer *retimer;
+> +	int ret;
+> +
+> +	retimer = devm_kzalloc(dev, sizeof(*retimer), GFP_KERNEL);
+> +	if (!retimer)
+> +		return -ENOMEM;
+> +
+> +	retimer->client = client;
+> +
+> +	mutex_init(&retimer->lock);
+> +
+> +	retimer->regmap = devm_regmap_init_i2c(client, &ps883x_retimer_regmap);
+> +	if (IS_ERR(retimer->regmap))
+> +		return dev_err_probe(dev, PTR_ERR(retimer->regmap),
+> +				     "failed to allocate register map\n");
+> +
+> +	ret = ps883x_get_vregs(retimer);
+> +	if (ret)
+> +		return ret;
+> +
+> +	retimer->xo_clk = devm_clk_get(dev, NULL);
+> +	if (IS_ERR(retimer->xo_clk))
+> +		return dev_err_probe(dev, PTR_ERR(retimer->xo_clk),
+> +				     "failed to get xo clock\n");
+> +
+> +	retimer->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_ASIS);
+
+What if the reset pin has not been configured by the boot firmware? Then
+this input the to device will be floating when you power it on,
+something which you'd typically try to avoid by asserting reset before
+enabling power.
+
+> +	if (IS_ERR(retimer->reset_gpio))
+> +		return dev_err_probe(dev, PTR_ERR(retimer->reset_gpio),
+> +				     "failed to get reset gpio\n");
+> +
+> +	retimer->typec_switch = typec_switch_get(dev);
+> +	if (IS_ERR(retimer->typec_switch))
+> +		return dev_err_probe(dev, PTR_ERR(retimer->typec_switch),
+> +				     "failed to acquire orientation-switch\n");
+> +
+> +	retimer->typec_mux = typec_mux_get(dev);
+> +	if (IS_ERR(retimer->typec_mux)) {
+> +		ret = dev_err_probe(dev, PTR_ERR(retimer->typec_mux),
+> +				    "failed to acquire mode-mux\n");
+> +		goto err_switch_put;
+> +	}
+> +
+> +	ret = drm_aux_bridge_register(dev);
+> +	if (ret)
+> +		goto err_mux_put;
+> +
+> +	ret = ps883x_enable_vregs(retimer);
+> +	if (ret)
+> +		goto err_mux_put;
+> +
+> +	ret = clk_prepare_enable(retimer->xo_clk);
+> +	if (ret) {
+> +		dev_err(dev, "failed to enable XO: %d\n", ret);
+> +		goto err_vregs_disable;
+> +	}
+> +
+> +	sw_desc.drvdata = retimer;
+> +	sw_desc.fwnode = dev_fwnode(dev);
+> +	sw_desc.set = ps883x_sw_set;
+> +
+> +	retimer->sw = typec_switch_register(dev, &sw_desc);
+> +	if (IS_ERR(retimer->sw)) {
+> +		ret = PTR_ERR(retimer->sw);
+> +		dev_err(dev, "failed to register typec switch: %d\n", ret);
+> +		goto err_clk_disable;
+> +	}
+> +
+> +	rtmr_desc.drvdata = retimer;
+> +	rtmr_desc.fwnode = dev_fwnode(dev);
+> +	rtmr_desc.set = ps883x_retimer_set;
+> +
+> +	retimer->retimer = typec_retimer_register(dev, &rtmr_desc);
+> +	if (IS_ERR(retimer->retimer)) {
+> +		ret = PTR_ERR(retimer->retimer);
+> +		dev_err(dev, "failed to register typec retimer: %d\n", ret);
+> +		goto err_switch_unregister;
+> +	}
+> +
+> +	/* skip resetting if already configured */
+> +	if (regmap_test_bits(retimer->regmap, REG_USB_PORT_CONN_STATUS_0,
+> +			     CONN_STATUS_0_CONNECTION_PRESENT) == 1)
+> +		return gpiod_direction_output(retimer->reset_gpio, 0);
+
+I'm still a little concerned about this. Won't you end up with i2c
+timeout errors in the logs if the device is held in reset before probe?
+
+Have you tried unbinding the device and rebinding to test this?
+
+And what about the CONN_STATUS_0_CONNECTION_PRESENT bit; it sounds like
+it just reflects the connected status. Are you sure it will not be set
+for a device that has not yet been configured?
+
+> +
+> +	gpiod_direction_output(retimer->reset_gpio, 1);
+> +
+> +	/* VDD IO supply enable to reset release delay */
+> +	usleep_range(4000, 14000);
+> +
+> +	gpiod_set_value(retimer->reset_gpio, 0);
+> +
+> +	/* firmware initialization delay */
+> +	msleep(60);
+> +
+> +	return 0;
+> +
+> +err_switch_unregister:
+> +	typec_switch_unregister(retimer->sw);
+> +err_vregs_disable:
+> +	ps883x_disable_vregs(retimer);
+> +err_clk_disable:
+> +	clk_disable_unprepare(retimer->xo_clk);
+
+This one should go above err_vregs_disable or can end up with an
+unbalanced clock disable or regulators left on after probe failure.
+
+And you should assert reset before disabling clocks as well to avoid
+driving the pin after disabling power.
+
+> +err_mux_put:
+> +	typec_mux_put(retimer->typec_mux);
+> +err_switch_put:
+> +	typec_switch_put(retimer->typec_switch);
+> +
+> +	return ret;
+> +}
+> +
+> +static void ps883x_retimer_remove(struct i2c_client *client)
+> +{
+> +	struct ps883x_retimer *retimer = i2c_get_clientdata(client);
+> +
+> +	typec_retimer_unregister(retimer->retimer);
+> +	typec_switch_unregister(retimer->sw);
+> +
+> +	gpiod_set_value(retimer->reset_gpio, 1);
+> +
+> +	clk_disable_unprepare(retimer->xo_clk);
+> +
+> +	ps883x_disable_vregs(retimer);
+> +
+> +	typec_mux_put(retimer->typec_mux);
+> +	typec_switch_put(retimer->typec_switch);
+> +}
+
+Johan
 
