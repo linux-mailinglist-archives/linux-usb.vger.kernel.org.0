@@ -1,120 +1,119 @@
-Return-Path: <linux-usb+bounces-20653-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20654-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B349FA364B8
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 18:37:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 830ACA364CD
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 18:40:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CCC28188FF8D
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 17:37:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 831381895A5A
+	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 17:39:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52D5B26869A;
-	Fri, 14 Feb 2025 17:37:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAA202686B4;
+	Fri, 14 Feb 2025 17:39:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="xnODtEQP"
+	dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b="CKZcgP7k"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
+Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523E4267B0D
-	for <linux-usb@vger.kernel.org>; Fri, 14 Feb 2025 17:37:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF152673B3;
+	Fri, 14 Feb 2025 17:39:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.84.1.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739554641; cv=none; b=DKvV8giBIbu327E4dkw1zR5VaUHRjigpGgZEDVo/LQrOOU5UCx3o70IXrzlqZdYIs1S+Er2aY9rCpqtktJ8OOZXo/SNeSiB8dtoinfsumVRIcH90ucxgOJl36r7Pzh3Ka2AgAfQjlhv5wEDSnHqbUYz74XDVmgUwz03RPc8Snuk=
+	t=1739554779; cv=none; b=A3DV9aBQzhAaiV1e/g9ueJFKrvZjNsiCaStDS5CPs0jKcfREFj0VS36dxAogQXPR+2UIb3pFoGB0UCjo9iYvCywOumk1B1V+9QTR6/OXXlMInGVGadppO3BqHl9FslRWpDU/NR/67qnxZx9zZLApaa12Zy55O7/EsQUbORIad0A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739554641; c=relaxed/simple;
-	bh=OFAPAVOqVuoi9a1p+QX8ZWSN2oGBayyv39emGYuW7Sk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=nVy7UD28/i54s9giU4mcnmXA4NrCTfTLHAGGMmeTpSBprWe/gu7AYw9lpkU7ozznQ5i3FEIm32/9Upgcn7aaEP5ikd3NWOi66PywP1cKjiIDpi1uE7Dd1VA1AQ3EJMgw81IBbrA9ecqnQLugN8RAkXF+cCmov+53WS0L/WwRpkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org; spf=pass smtp.mailfrom=mentallysanemainliners.org; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=xnODtEQP; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mentallysanemainliners.org
-Authentication-Results: purelymail.com; auth=pass
-DKIM-Signature: a=rsa-sha256; b=xnODtEQPIh/VEXOsU16HCVaa9NNEu1CsH4Jd3yTVsHaqS+hIB2UOU8xwUUTTaRLh18Hy/WeY+RyuGFSnI0RHV5GUPnFGL6daf6b4sWhF0jj0CEj6D8uEIJr+wllqG48MVilsxa/glMI9jLVKSCh3Cz7+bnCQSB3SAua59e61b2E0qAeo75pRO6d1Qq8rnD22VE0wkbYf/BGZxTCKlmLyV2TbP/YIyYFbPrBVAm+bgVgH8n8kn9ZcshBQ8hFBwrWYZgGYQJcjypjV4O458HIEko73UUmWc6OeyEZtYGmQYrejnfmdotHdwowqfS1gdElBuMVqsp+d+1McLRLIXBu8Jg==; s=purelymail3; d=purelymail.com; v=1; bh=OFAPAVOqVuoi9a1p+QX8ZWSN2oGBayyv39emGYuW7Sk=; h=Feedback-ID:Received:From:Date:Subject:To;
-Feedback-ID: 68247:10037:null:purelymail
-X-Pm-Original-To: linux-usb@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 893203092;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Fri, 14 Feb 2025 17:36:56 +0000 (UTC)
-From: Igor Belwon <igor.belwon@mentallysanemainliners.org>
-Date: Fri, 14 Feb 2025 18:36:49 +0100
-Subject: [PATCH] dt-bindings: usb: samsung,exynos-dwc3 Add exynos990
- compatible
+	s=arc-20240116; t=1739554779; c=relaxed/simple;
+	bh=qp94OVv6/Nsnsl6NGKU5X5aiarGvKaV4051eZnig458=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bIwPO+vCtjY71OU0kU8R+RIRblKt0mCNsI/Y2ZVlC8rHywCoeyxV/6PkH4GZN1ElvAB/hF0BdtzxGlntcJ7b/Z+8k9Ly/XV9y3OHpGg73SQc/DXtRm4H1mCXIYXklD829g3F/lm0NJ65/Q507V7O2cObcy7hEY2rURdy2/Jnv8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com; spf=pass smtp.mailfrom=panix.com; dkim=pass (1024-bit key) header.d=panix.com header.i=@panix.com header.b=CKZcgP7k; arc=none smtp.client-ip=166.84.1.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=panix.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=panix.com
+Received: from [192.168.55.17] (ip174-65-98-148.sd.sd.cox.net [174.65.98.148])
+	by mailbackend.panix.com (Postfix) with ESMTPSA id 4YvfSQ5mWNz11Jm;
+	Fri, 14 Feb 2025 12:39:34 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
+	t=1739554776; bh=qp94OVv6/Nsnsl6NGKU5X5aiarGvKaV4051eZnig458=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=CKZcgP7kP/VctYA/EjcbYsD62yTwXN7rRobwXIMJ3/jyMj5PepnDBNZMNEgRhjYmW
+	 clhDull1OZBq6gkfh2XzZcb6iV5rB0mxtfcJUoEf/2waThIN+dbXCnMhZGc/W8CsSk
+	 S0/8sn8ir0SJPDIw43qS5ifuJ+bCTJkSSP9zdAzU=
+Message-ID: <661459dd-67d0-4e1c-bb28-9adf1417f660@panix.com>
+Date: Fri, 14 Feb 2025 09:39:33 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: diagnosing resume failures after disconnected USB4 drives (Was:
+ Re: PCI/ASPM: Fix L1SS saving (linus/master commit 7507eb3e7bfac))
+To: Mika Westerberg <mika.westerberg@linux.intel.com>, Me <kenny@panix.com>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, ilpo.jarvinen@linux.intel.com,
+ Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>,
+ linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+ =?UTF-8?B?TmlrbMSBdnMgS2/EvGVzxYZpa292cw==?= <pinkflames.linux@gmail.com>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>, linux-usb@vger.kernel.org
+References: <20250210210502.GA15655@bhelgaas>
+ <21b72adf-aac6-49fa-af40-6db596c87432@panix.com>
+ <20250211055722.GW3713119@black.fi.intel.com>
+ <83d9302a-f743-43e4-9de2-2dd66d91ab5b@panix.com>
+ <20250213135911.GG3713119@black.fi.intel.com>
+ <a8d6ca75-8f50-4c46-8c67-fcf20d870dcc@panix.com>
+ <20250214162948.GJ3713119@black.fi.intel.com>
+Content-Language: en-US
+From: Kenneth Crudup <kenny@panix.com>
+In-Reply-To: <20250214162948.GJ3713119@black.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250214-exynos990-bindings-usb3-v1-1-3e5d2721c98c@mentallysanemainliners.org>
-X-B4-Tracking: v=1; b=H4sIADB/r2cC/x3MPQ6DMAxA4asgz7WUH1pIr4IYSONQLwbFAoEQd
- 2/U8Rveu0CpMCm8mwsK7ay8SIV9NPD5TjITcqoGZ9zTONsiHacsGoLByJJYZsVNo8dX7k3ubGi
- t76DWa6HMx/88jPf9A7LqK+RpAAAA
-X-Change-ID: 20250214-exynos990-bindings-usb3-6f80f7194137
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Igor Belwon <igor.belwon@mentallysanemainliners.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739554614; l=1615;
- i=igor.belwon@mentallysanemainliners.org; s=20241206;
- h=from:subject:message-id; bh=OFAPAVOqVuoi9a1p+QX8ZWSN2oGBayyv39emGYuW7Sk=;
- b=uTaLuSG+epbVxDmg8aBZu28KGGGb2BkzA1eUtYOg78i++a0yLgSiKU1KhRpWn5Xx7FQI4+tZY
- D9YY22xxBWcBIOPqsdbbsJRS79i5ifu17aOBbWCNqJbd7wfh3IhOykU
-X-Developer-Key: i=igor.belwon@mentallysanemainliners.org; a=ed25519;
- pk=qKAuSTWKTaGQM0vwBxV0p6hPKMN4vh0CwZ+bozrG5lY=
 
-Add a compatible for the exynos990-dwusb3 node. It's compatible with the
-exynos850 variant when using the highspeed mode.
 
-Signed-off-by: Igor Belwon <igor.belwon@mentallysanemainliners.org>
----
-The Exynos990 SoC embeds a DWC3 USB3 DRD controller.
+This is excellent news that you were able to reproduce it- I'd figured 
+this regression would have been caught already (as I do remember this 
+working before) and was worried it may have been specific to a 
+particular piece of hardware (or software setup) on my system.
 
-The controller's design is compatible with the Exynos850 design
-for high-speed mode.
+I'll see what I can dig up on my end, but as I'm not expert in these 
+subsystems I may not be able to diagnose anything until your return.
 
-This patchset adds in the new exynos990-dwusb3 compatible.
----
- Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
+I also saw some DRM/connected fixes posted to Linus' master so maybe one 
+of them corrects this new display-crash issue (I'm not home on my big 
+monitor to be able to test yet).
 
-diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-index 2b3430cebe99106f3b6201ab31d4d9e3fcc55627..136b14eecfe951dbc20377bffba1039fb1429f16 100644
---- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-@@ -17,6 +17,7 @@ properties:
-       - samsung,exynos5433-dwusb3
-       - samsung,exynos7-dwusb3
-       - samsung,exynos850-dwusb3
-+      - samsung,exynos990-dwusb3
- 
-   '#address-cells':
-     const: 1
-@@ -124,7 +125,9 @@ allOf:
-       properties:
-         compatible:
-           contains:
--            const: samsung,exynos850-dwusb3
-+            enum:
-+              - samsung,exynos850-dwusb3
-+              - samsung,exynos990-dwusb3
-     then:
-       properties:
-         clocks:
+-Kenny
 
----
-base-commit: 5cbcf2652f4cd84eac21f5e88fe2a0baecc601fb
-change-id: 20250214-exynos990-bindings-usb3-6f80f7194137
+On 2/14/25 08:29, Mika Westerberg wrote:
+> Hi,
+> 
+> On Thu, Feb 13, 2025 at 11:19:35AM -0800, Kenneth Crudup wrote:
+>>
+>> On 2/13/25 05:59, Mika Westerberg wrote:
+>>
+>>> Hi,
+>>
+>> As Murphy's would have it, now my crashes are display-driver related (this
+>> is Xe, but I've also seen it with i915).
+>>
+>> Attached here just for the heck of it, but I'll be better testing the NVMe
+>> enclosure-related failures this weekend. Stay tuned!
+> 
+> Okay, I checked quickly and no TB related crash there but I was actually
+> able to reproduce hang when I unplug the device chain during suspend. I did
+> not yet have time to look into it deeper. I'm sure this has been working
+> fine in the past as we tested all kinds of topologies including similar to
+> this.
+> 
+> I will be out next week for vacation but will continue after that if the
+> problem is not alraedy solved ;-)
+> 
 
-Best regards,
 -- 
-Igor Belwon <igor.belwon@mentallysanemainliners.org>
+Kenneth R. Crudup / Sr. SW Engineer, Scott County Consulting, Orange 
+County CA
 
 
