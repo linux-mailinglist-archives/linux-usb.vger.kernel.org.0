@@ -1,114 +1,126 @@
-Return-Path: <linux-usb+bounces-20664-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20665-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3B26A3680E
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 23:10:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0DFDA36B91
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 04:07:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D9AD1893331
-	for <lists+linux-usb@lfdr.de>; Fri, 14 Feb 2025 22:10:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 997AF170265
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 03:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFAE51FC0EF;
-	Fri, 14 Feb 2025 22:10:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78C991624CB;
+	Sat, 15 Feb 2025 03:07:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I8zDjj9H"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SWra07Jl"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 496221DC198;
-	Fri, 14 Feb 2025 22:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF3C1426C;
+	Sat, 15 Feb 2025 03:07:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739571013; cv=none; b=T6HL97DEZFLJs5Vr17T9BwAHZGVwq8TnkbUqOum+lmQl1dZbdAs3zkcAFoYQrG9mJ28512THUrZI18Jp4GNG7HoPorJFlAP1+PXPJi6fnwBNFTdbQi21JVS8yQKtcEfFxg0H40cnjewtEbbDxfQbjDScjhx/GVTfK6jItCl5ly8=
+	t=1739588861; cv=none; b=GXrA4ipBpQXD8NAWB8OdvEB24Cuk2IxCyHtQtfvwMwrkUxA8QfkWhaG3rxx+uMw888a/0RrUw1rDBaAxNiMCLI2J0j4xY8dCstISnwnuhgjupmigaJauLrnGpxdf1ssD38PPa/YqImR+Hxax3at5nhH1A4uJIo/ZoOgx9sFruV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739571013; c=relaxed/simple;
-	bh=2lmBOZ1d2qXbAloPFesGofjAzJUey6sxCfusp2YdXcE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=sP8gc/3s6qiNga4ziANtBd7bO1cqH4MP1Wgn3JH2e5rmDQpKfZcrE7DcNELLo4dlgS45JU4VZVJuiFNnF3DicAfwA6sQAmV78Y/IDL0N2rYX7usHnxm+xrsKWvyxjwgddySXAxxcrlnwloxZOqo3kU8kvx/5dw99aOuFAKQ4n3Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I8zDjj9H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 493B1C4CED1;
-	Fri, 14 Feb 2025 22:10:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739571012;
-	bh=2lmBOZ1d2qXbAloPFesGofjAzJUey6sxCfusp2YdXcE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=I8zDjj9HEl+11XI7gXGB+sy5GOfjPqXp07BJcks1KDgiZCZJb7MJom6/X62XW/+ds
-	 9iEl6LBaklQ0o2lj9xun0kwZt8EvTKkm9UUa7iqQvIUMEiP2bnRlfzwCPJqJzlqtNB
-	 QtV4AU124DyhwWWnjoHhfvIezYjfzXb5cWftQbaoTOim1MpYvDDqODsDzsgNjwm69T
-	 xlW58zmLkZAmNPqwS+i+1a/umI9CFolg1z68vX8Izv0NZS1RvF09HP1S/7qezwLh6q
-	 Y5TUNutR7QS4bqJjouzje8IDIoQzXkV1NcYCLjIz5SdNKHGPkEYXI6kLhpuB8bbBnx
-	 8UKg2BAPTPHlg==
-Date: Fri, 14 Feb 2025 14:10:11 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Breno Leitao <leitao@debian.org>
-Cc: Frederic Weisbecker <frederic@kernel.org>, LKML
- <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo
- Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng
- <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Hayes Wang
- <hayeswang@realtek.com>, linux-usb@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH 1/2] net: Assert proper context while calling
- napi_schedule()
-Message-ID: <20250214141011.501910f3@kernel.org>
-In-Reply-To: <20250214-grinning-upbeat-chowchow-5c0e2f@leitao>
-References: <20250212174329.53793-1-frederic@kernel.org>
-	<20250212174329.53793-2-frederic@kernel.org>
-	<20250212194820.059dac6f@kernel.org>
-	<20250213-translucent-nightingale-of-upgrade-b41f2e@leitao>
-	<20250213071426.01490615@kernel.org>
-	<20250214-grinning-upbeat-chowchow-5c0e2f@leitao>
+	s=arc-20240116; t=1739588861; c=relaxed/simple;
+	bh=BsEFd0nMBYcKbEwAaxPfqO35YA616+80GQv4XEcbPug=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=l1iZd7mfxc85sSV5cXwlvrCFZ0AwFCvd65az76SDj4/tdVtZZQzebp3++EDFlMYrxFiWS4XIBG9nQUFV5biTKta1v8EjpwMuuQb61AiqOIBtHGMRYrN/56LL+4S4QJWPH8Hwr4/eV95JVgusSKhoUikrikT2ghokvX388PxPr2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SWra07Jl; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51F0gJ0s015429;
+	Sat, 15 Feb 2025 03:07:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	3T2QF3jiYcbzXCw0nOvWdlOOTQQmzMO7KkVzoHdBAUY=; b=SWra07JlwWsjG3XG
+	oK9YTASBwwKX9ysFequ8oYqL4Vz58P0r21/YkeaFX/yF9aDPo+WjeQx5VcOaJ8QE
+	eBGUU84QoPxJxI/uD3VQrq4HIisjv4NLNaXEEKR/bHqC1x1eYB6kzdVfw1AQUx/M
+	SroeA/zdv5Um5alcy00Yr5hQt2vCUz+CoO3g3H6Jojx8osfg9coNaCVp47/2J8Qy
+	3zWx1uoEIrg3SY8GhkifZafBJ6fItakXkyvYEgcuefTxJCleWC5JCgeCanLLWqPy
+	vjS3iied/ilz1lOtSAP5P5OHWYOAbts6gKX5qdveSv8ThBMHFRyPzZLgGcEdh0jZ
+	eGcQKA==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44sebndfdr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 15 Feb 2025 03:07:22 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51F37LXk012049
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sat, 15 Feb 2025 03:07:21 GMT
+Received: from [10.71.115.190] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 14 Feb
+ 2025 19:07:20 -0800
+Message-ID: <f5dfc875-d5bd-49d7-b998-6d25f59e849a@quicinc.com>
+Date: Fri, 14 Feb 2025 19:07:15 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v34 00/31] Introduce QC USB SND audio offloading support
+To: Greg KH <gregkh@linuxfoundation.org>
+CC: <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <conor+dt@kernel.org>, <dmitry.torokhov@gmail.com>,
+        <corbet@lwn.net>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <tiwai@suse.com>, <krzk+dt@kernel.org>,
+        <pierre-louis.bossart@linux.intel.com>, <Thinh.Nguyen@synopsys.com>,
+        <robh@kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-doc@vger.kernel.org>
+References: <20250121210518.2436771-1-quic_wcheng@quicinc.com>
+ <3b9447e2-4be8-479b-a418-5fd45369fb55@quicinc.com>
+ <2025021413-favorable-manatee-6859@gregkh>
+Content-Language: en-US
+From: Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <2025021413-favorable-manatee-6859@gregkh>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: G6IZ9o_1LHf3EbIqbqHfBBzEU7Uo4fx8
+X-Proofpoint-ORIG-GUID: G6IZ9o_1LHf3EbIqbqHfBBzEU7Uo4fx8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-15_01,2025-02-13_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 clxscore=1015 mlxlogscore=779 phishscore=0
+ suspectscore=0 malwarescore=0 priorityscore=1501 adultscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502150025
 
-On Fri, 14 Feb 2025 08:43:28 -0800 Breno Leitao wrote:
-> diff --git a/drivers/net/netdevsim/netdev.c b/drivers/net/netdevsim/netdev.c
-> index 42f247cbdceec..cd56904a39049 100644
-> --- a/drivers/net/netdevsim/netdev.c
-> +++ b/drivers/net/netdevsim/netdev.c
-> @@ -87,7 +87,7 @@ static netdev_tx_t nsim_start_xmit(struct sk_buff *skb, struct net_device *dev)
->  	if (unlikely(nsim_forward_skb(peer_dev, skb, rq) == NET_RX_DROP))
->  		goto out_drop_cnt;
->  
-> -	napi_schedule(&rq->napi);
-> +	hrtimer_start(&rq->napi_timer, ns_to_ktime(5), HRTIMER_MODE_REL);
+Hi Greg,
 
-ns -> us
+On 2/14/2025 12:33 AM, Greg KH wrote:
+> On Tue, Feb 11, 2025 at 12:35:23PM -0800, Wesley Cheng wrote:
+>> Hi,
+>>
+>> On 1/21/2025 1:04 PM, Wesley Cheng wrote:
+>>> Requesting to see if we can get some Acked-By tags, and merge on usb-next.
+>>>
+>>
+>> Just seeing if we have any further feedback on this series? Thanks.
+> 
+> Given the lack of responses, and the huge number of iterations of this,
+> I've applied it now to my usb-testing branch to give 0-day some better
+> runs at it.  If it passes that in a few days, I'll move it to my
+> usb-next branch for inclusion into linux-next and hopefully 6.15-rc1.
+> 
+> thanks for sticking with this!
+> 
 
-We want to leave the timer be in case it's already scheduled.
-Otherwise we'll keep postponing forever under load.
-Double check that hrtime_start() does not reset the time if already
-pending. Maybe hrtimer_start_range_ns(..., 0, us_to_ktime(5), ...)
-would work?
+I saw that kernel test bot reported some sparse errors.  I had some issue with my config and looks like sparse wasn't actually scanning the files I added.  Will fix that and resubmit another rev that addresses any errors.  Apologies for not catching this beforehand.
 
->  	rcu_read_unlock();
->  	u64_stats_update_begin(&ns->syncp);
-> @@ -426,6 +426,25 @@ static int nsim_init_napi(struct netdevsim *ns)
->  	return err;
->  }
->  
-> +static enum hrtimer_restart nsim_napi_schedule(struct hrtimer *timer)
-> +{
-> +	struct nsim_rq *rq;
-> +
-> +	rq = container_of(timer, struct nsim_rq, napi_timer);
-> +	napi_schedule(&rq->napi);
-> +	/* TODO: Should HRTIMER_RESTART be returned if napi_schedule returns
-> +	 * false?
-> +	 */
-
-I think not, ignore the return value
-
-> +	return HRTIMER_NORESTART;
-> +}
-
+Thanks
+Wesley Cheng
 
