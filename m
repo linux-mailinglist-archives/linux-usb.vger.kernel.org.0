@@ -1,110 +1,122 @@
-Return-Path: <linux-usb+bounces-20686-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20687-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3911A37095
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 21:25:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5F99A370DC
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 22:17:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B4103B0C53
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 20:25:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BB6387A2AAB
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 21:16:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D53811EA7DA;
-	Sat, 15 Feb 2025 20:25:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E0971FC7C1;
+	Sat, 15 Feb 2025 21:16:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uomoSzJa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y/WVQI4/"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E2B13DDAE
-	for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2025 20:25:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBC55158851;
+	Sat, 15 Feb 2025 21:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739651133; cv=none; b=eJyz9j+mqSEBq31TV+xJd9SFxmKqO0s7Bt7ELYHGfTn5XQmAzLAKpStMZIPPkfOmMeKWpuFFnHvgp/90psSSyJ9bJlR41JgW+9X0uxFd5tc9Z5E3BNSr2NZbJ6/mvCY5dazxHPTxg1+VPW9EEmeeL6mk8jjQGFDhsvHqOvC1P3I=
+	t=1739654214; cv=none; b=Tlvzoc8ijYD1EzqDd+dmxFvOHgIBkfHcWi2zhGpa58/8T4GwTmkd1zUinaTyeIerEmbtYt5OLFWUksa3/8SE43NEfMBo4g7tw0Uq2axdq9WOaRh+h7nLw97Z01sGwo0De9DP0ibDGwFU/cw5ECbE2dFsPPSFmwOd0IQx1xrRMQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739651133; c=relaxed/simple;
-	bh=mQJnpFkvanRNBiYzYJCmIUlAz02ifNQ3caQthb2zNLg=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=nHOYG6nFe4okZVemYkdtwGZC6UB23VLJ8LuYnVia/LF9DRcjxIxyfQKJmlF6kaf5fnjPdMQeK660vfYwwt29nCrCAA038xv+KypcpzMo/2Z0sZZQiCqo43xz+tHH5UOeErGyV+5MHXMNjnabFgHT+EMplpOFZLQw1KDsNmcd0Hg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uomoSzJa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id B934EC4CEE4
-	for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2025 20:25:32 +0000 (UTC)
+	s=arc-20240116; t=1739654214; c=relaxed/simple;
+	bh=ner3TNyOFY2Dhnybh/9oA+yR/WkVoDzvAfBFKBlqDck=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cnYiI9jRqh68TfRZDgxssG2KGEpuyImMvpVz/8srz2VaWtyyTz+GQldUKdvI/0tpGI23V1r6R/cC81a9NB1o/WSFTij4f/yyiNxqGrRT1ztVX4z7rrX6LJWpXAfJ/I54a/oRd8ZB/QatGPKHan8Hafy8RzEBtS+viPmsfxPjMI4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y/WVQI4/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF13DC4CEDF;
+	Sat, 15 Feb 2025 21:16:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739651132;
-	bh=mQJnpFkvanRNBiYzYJCmIUlAz02ifNQ3caQthb2zNLg=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=uomoSzJaMIJo6AW+maCXpCB0Lp5VMDNzbPFysj3w/lFpsp2G6HHMTsXe2nvE6NpDx
-	 Sy7RRQdJF1lppYO3VEK3X9qBRCYkM0qik9LjDs8uBLeNqzpSWR06B0KrXPz7GFLztk
-	 sEGzIM0LQZkKVVhaxlxqO34Tpn4xlvUu5sLGKI/A9t7DR1KHWaiC9gm+cPxSmHj7PZ
-	 HGkqZ/Sv5N7ZlEa8n50C4BQ+Y//Oxi9FlXFPnRGXH93fUNrTTjOue9+j88RO6CFAJ5
-	 vzV+ewYf6MQUKdLsC1+RTw7XQ3Doh/W/8+DYfT5gsgnN8CphrX+TXGhbAN86mhqbya
-	 mCJvjecjGE6KA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 9E4EFC41606; Sat, 15 Feb 2025 20:25:32 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219773] External USB disk drive and SSD corruption while
- connected to USB 3 ports.
-Date: Sat, 15 Feb 2025 20:25:32 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: fredbezies@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219773-208809-1o0dwYlAcu@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219773-208809@https.bugzilla.kernel.org/>
-References: <bug-219773-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1739654212;
+	bh=ner3TNyOFY2Dhnybh/9oA+yR/WkVoDzvAfBFKBlqDck=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Y/WVQI4/8AaDcJlQY+cNBnnq+j7Q3ICBzWFbsyRehFIdnHncDrFWHmbJH5IE37Li3
+	 MhD8I0ktOu4fYmNr7wiHQP+ZDgt4PbnQMBv57i0ylJQHlYojqDIyr6GIWOReZcyHos
+	 Ut93ikC6aJEMUxHmLxmgY+Zi8VvWsklDmu0Rz+459OlfR4JO9lpHZRM5s/vldp7TD1
+	 JCofrR1ECyKFEfj8tsAVFdX6RRFcRhrWYsF4r6sbDRa7QUvNrHk7VdunjGh2mlim6k
+	 bkEq5j7EgBuJ64GS7x4Dsymn+Fn1GALNi3M419xTlTF/trjC0immZVi5y0wFIkVn1a
+	 X5rykiKSqFjgw==
+Date: Sat, 15 Feb 2025 22:16:49 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: Breno Leitao <leitao@debian.org>, LKML <linux-kernel@vger.kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+	Boqun Feng <boqun.feng@gmail.com>, Waiman Long <longman@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Hayes Wang <hayeswang@realtek.com>,
+	linux-usb@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH 1/2] net: Assert proper context while calling
+ napi_schedule()
+Message-ID: <Z7EEQalDIm1n_XRc@pavilion.home>
+References: <20250212174329.53793-1-frederic@kernel.org>
+ <20250212174329.53793-2-frederic@kernel.org>
+ <20250212194820.059dac6f@kernel.org>
+ <20250213-translucent-nightingale-of-upgrade-b41f2e@leitao>
+ <20250213071426.01490615@kernel.org>
+ <20250213-camouflaged-shellfish-of-refinement-79e3df@leitao>
+ <20250213110452.5684bc39@kernel.org>
+ <Z65YNFGxh-ORF7hm@pavilion.home>
+ <20250214140045.547f1396@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250214140045.547f1396@kernel.org>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219773
+Le Fri, Feb 14, 2025 at 02:00:45PM -0800, Jakub Kicinski a écrit :
+> On Thu, 13 Feb 2025 21:38:12 +0100 Frederic Weisbecker wrote:
+> > > > Just to make sure I follow the netpoll issue. What would you like to fix
+> > > > in netpoll exactly?  
+> > > 
+> > > Nothing in netpoll, the problem is that netdevsim calls napi_schedule
+> > > from the xmit path. That's incompatible with netpoll. We should fix
+> > > netdevsim instead (unless more real drivers need napi-from-xmit to
+> > > work).  
+> > 
+> > Let me clarify, because I don't know much this area. If the problem is that xmit
+> > can't call napi_schedule() by design, then I defer to you. But if the problem is that
+> > napi_schedule() may or may not be called from an interrupt, please note that
+> > local_bh_enable() won't run softirqs from a hardirq and will instead defer to
+> > IRQ tail. So it's fine to do an unconditional pair of local_bh_disable() / local_bh_enable().
+> 
+> I don't know where this is in the code TBH, but my understanding is
+> that HW IRQs - yes, as you say it'd be safe; the problem is that 
+> we have local_irq_save() all over the place. And that is neither
+> protected from local_bh_enable(), not does irq_restore execute softirqs.
 
---- Comment #13 from Frederic Bezies (fredbezies@gmail.com) ---
-(In reply to Alan Stern from comment #12)
-[...]
->=20
-> When you say the SSD was powered by the motherboard, do you mean there wa=
-s a
-> separate connection to the motherboard (not part of the USB cable) provid=
-ing
-> power for the drive?  Or do you mean that the drive received its power ov=
-er
-> the USB cable, which was plugged into the motherboard?
+Yeah actually checking local_bh_enable() again, it's not safe to call within
+a hardirq. Ok I've been thinking some more and how about this instead?
 
-No separate connection. The power was received through the USB cable.
+diff --git a/net/core/dev.c b/net/core/dev.c
+index c0021cbd28fc..2419cc558a64 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -4692,7 +4692,7 @@ static inline void ____napi_schedule(struct softnet_data *sd,
+ 	 * we have to raise NET_RX_SOFTIRQ.
+ 	 */
+ 	if (!sd->in_net_rx_action)
+-		__raise_softirq_irqoff(NET_RX_SOFTIRQ);
++		raise_softirq_irqoff(NET_RX_SOFTIRQ);
+ }
+ 
+ #ifdef CONFIG_RPS
 
-[...]
->=20
-> I admit there's a good chance that this is not the explanation for your
-> problems.  But it might be.  It would explain why the drive works with ot=
-her
-> computers but not with yours.
 
-It could be an answer to my problem, even if I doubt it.
+This will simply wake up ksoftirqd if called from a non-IRQ. I expect such
+callers to be rare enough to not impact performances and it has the advantage
+to work for everyone.
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thanks.
 
