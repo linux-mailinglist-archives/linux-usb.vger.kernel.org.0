@@ -1,53 +1,53 @@
-Return-Path: <linux-usb+bounces-20681-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20682-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6855A36F8D
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 17:51:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A157A3702D
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 19:41:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C7107A199A
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 16:50:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59FA37A4137
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 18:40:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 570F71DE4D3;
-	Sat, 15 Feb 2025 16:51:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317C91EA7DE;
+	Sat, 15 Feb 2025 18:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fD4Rd/uX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qxK8l7qN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A951991B8
-	for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2025 16:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9694E1DFD9C
+	for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2025 18:41:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739638264; cv=none; b=qm+T6uLFVouLwLcQ4/BlcmqIjLzKSXNc0d0kAo21CzVKAyICHE6WAr6hm691B54JdnwvkjzdvMEAGJM7yAs5ngFBkVvE7DdziQ4gHq2lraYWvIQk/9oIDvj1lgV1a5fnT8kswd6s9L8JcgrpYtK2EklYXsa2oxXEatU4AdiBOhM=
+	t=1739644866; cv=none; b=VrtM+aQuZwPEFyxTp2+OljvT3eRbBPX6BtD0NXp4JCOggaVYaxDTZyG58vx1Hvj2IigZbOQjyufR5VGjairzcumxE2OZWCwbKx6GM9TBQ6JQ5dzj5LcaRpD7xK6MxpNrLmZPyQPGjTK5Uh9bs5NfcJs43iTyTplJLeop1kYHljw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739638264; c=relaxed/simple;
-	bh=o+WgrgRTD9SVfBBdKdVR5oSGmJL6K0neSlewxyG08og=;
+	s=arc-20240116; t=1739644866; c=relaxed/simple;
+	bh=WmQGneu34hAnK0FqZyRPQId0w+RBM5G0QRLPL9fobrk=;
 	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=JYq8og1J/YNrYU49iMd2w37UnfLW4kmgQv6uzSaM50SyvC3p71wH3xqSLdfjzmtD+64d9utfnpiW04GGB6NYW4ohSZkvTkr9zStB/0/wXI924mKTrkDjumVz/q50vUoxQmMvKOW8zUHzj7y9XD15Kmtb5Wz4fIxF6XxZxqKFCi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fD4Rd/uX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3823AC4CEE4
-	for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2025 16:51:04 +0000 (UTC)
+	 Content-Type:MIME-Version; b=Z5mG1QfiKS3KPtGqt/K+6+GAnp4OnfA3p3aNZD+e1SuPswEOkyJbLekh7EGu2UvPniQU+mMXyqPiHx8vtKarWAn7kB0GGL3fI8/jtZTYNfkLZ/1qbkmGZZ80JN9a0CFa99ZG1RkcQfrprt0gWQesZ6zgSR5gmtthgZQgL8WmTCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qxK8l7qN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 07399C4CEE6
+	for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2025 18:41:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739638264;
-	bh=o+WgrgRTD9SVfBBdKdVR5oSGmJL6K0neSlewxyG08og=;
+	s=k20201202; t=1739644866;
+	bh=WmQGneu34hAnK0FqZyRPQId0w+RBM5G0QRLPL9fobrk=;
 	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=fD4Rd/uXTUzdM/+eAbV2Yk0oN5v91F3NpipCM+hdvnRcUaD4G/oVPy3nrp3B1BhGd
-	 Q5EdKNIO0dK5Jicgy4xQGnjoaxlPME7ypbQ5bhxnxVkwnu/r9mAcuDijrva2+j9/J9
-	 PhYSl1CGAZPkQJrjVo+AgmGQiw3Slxv+PZfMpQTgaA9/IoOxgM2vb6swLHnOK+ztxP
-	 sSHrtAHRHYdXZME31w7vZ+VQKS7FvlQet8Qh45iEKsdK38pyDCNaG99d+hw4cjvlah
-	 ShBVzLPdpadeen7B2lgo0rdMaIwlzc6pR2TKL71GNUIH3VGdFRnXL0/u5TmTiJTkhJ
-	 42oYQgav3vG8w==
+	b=qxK8l7qNP2qYsj71rho2q3c6nwO9FTFcCyTbbAGKRR2m5XhaAYhrnXDq+GxJ1px3f
+	 SX5W6S0gX2t1sPvQENjfzOUOniXFaqvlu+YeaUZyB0c3jxpghT0XSDceNq8il6jkfj
+	 LjmqvAQe/KpP9kfQ/LnrnnqeVxBv8xg3UP7W/bYCHQ0olt1NBSIRGrCJV7/gwiknkO
+	 ZkuE6q7AFeDctFNMT+VIVxfM5kaR1y6ISYmF3YT91Rnq8h1bJhSuXPlax14KzbdOAw
+	 l0/LhU0nYLPRMSqmTZ00GYvQ0lKqMwTYGvhWxErP3d9M79mSJ0USz4OT7YOU0tZTMd
+	 kG21Fnx0w4G5Q==
 Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 28E5EC41612; Sat, 15 Feb 2025 16:51:04 +0000 (UTC)
+	id E8AEAC41614; Sat, 15 Feb 2025 18:41:05 +0000 (UTC)
 From: bugzilla-daemon@kernel.org
 To: linux-usb@vger.kernel.org
 Subject: [Bug 219773] External USB disk drive and SSD corruption while
  connected to USB 3 ports.
-Date: Sat, 15 Feb 2025 16:51:03 +0000
+Date: Sat, 15 Feb 2025 18:41:05 +0000
 X-Bugzilla-Reason: None
 X-Bugzilla-Type: changed
 X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
@@ -56,14 +56,14 @@ X-Bugzilla-Component: USB
 X-Bugzilla-Version: 2.5
 X-Bugzilla-Keywords: 
 X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: fredbezies@gmail.com
+X-Bugzilla-Who: stern@rowland.harvard.edu
 X-Bugzilla-Status: NEW
 X-Bugzilla-Resolution: 
 X-Bugzilla-Priority: P3
 X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
 X-Bugzilla-Flags: 
 X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219773-208809-onsRXaprGw@https.bugzilla.kernel.org/>
+Message-ID: <bug-219773-208809-uIZySFw78L@https.bugzilla.kernel.org/>
 In-Reply-To: <bug-219773-208809@https.bugzilla.kernel.org/>
 References: <bug-219773-208809@https.bugzilla.kernel.org/>
 Content-Type: text/plain; charset="UTF-8"
@@ -79,32 +79,13 @@ MIME-Version: 1.0
 
 https://bugzilla.kernel.org/show_bug.cgi?id=3D219773
 
---- Comment #9 from Frederic Bezies (fredbezies@gmail.com) ---
-Modification done. I tried with my external USB HDD copying big files. I do=
- not
-have access of the previous USB peripheral .
+--- Comment #10 from Alan Stern (stern@rowland.harvard.edu) ---
+Sometimes intermittent errors are caused by a marginal or insufficient power
+supply.  Maybe the USB-3 ports on your computer don't provide quite enough
+power for the drive to work properly.
 
-Here is the output while copying 2 big tar.xz archives (6 Go each).
-
-
-[11012.004194] sd 6:0:0:0: [sdb] 976773164 512-byte logical blocks: (500 GB=
-/466
-GiB)
-[11012.004519] sd 6:0:0:0: [sdb] Write Protect is off
-[11012.004523] sd 6:0:0:0: [sdb] Mode Sense: 23 00 00 00
-[11012.004846] sd 6:0:0:0: [sdb] Write cache: enabled, read cache: enabled,
-doesn't support DPO or FUA
-[11012.070815]  sdb: sdb1
-[11012.070970] sd 6:0:0:0: [sdb] Attached SCSI disk
-[11012.324232] xhci_hcd 0000:30:00.3: Stalled endpoint for slot 1 ep 2
-[11355.077282] usb 4-1: USB disconnect, device number 2
-[11355.166387] sd 6:0:0:0: [sdb] Synchronizing SCSI cache
-[11355.166436] sd 6:0:0:0: [sdb] Synchronize Cache(10) failed: Result:
-hostbyte=3DDID_NO_CONNECT driverbyte=3DDRIVER_OK
-
-
-Weird there is no other output. I'll try another external USB SSD as soon as
-possible.
+Does the SSD drive have its own power supply?  If it doesn't, have you tried
+putting a powered USB hub between the computer and the drive?
 
 --=20
 You may reply to this email to add a comment.
