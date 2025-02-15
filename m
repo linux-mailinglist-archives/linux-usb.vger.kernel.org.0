@@ -1,79 +1,91 @@
-Return-Path: <linux-usb+bounces-20673-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20674-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D265EA36D3A
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 11:07:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11F7FA36E24
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 13:35:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0849C3B2E74
-	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 10:07:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9ECEE16F84C
+	for <lists+linux-usb@lfdr.de>; Sat, 15 Feb 2025 12:35:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B749B1A83F8;
-	Sat, 15 Feb 2025 10:06:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F74C1C6FF5;
+	Sat, 15 Feb 2025 12:35:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="FvgmFSCm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j4u5hKr5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA86B1AAA05;
-	Sat, 15 Feb 2025 10:06:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 746B11A8401;
+	Sat, 15 Feb 2025 12:34:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739613992; cv=none; b=tszjzefaVAdq2bLimyZ5W48bhzCkbFNSqwGgVKJ4+n2av/N44ZSflaa0fCdPpqUe70IX4oKZfYilWxD8CjpylbRv4ovfBtHzjzO2YzOLMmm/K5Tz7EMf7shm4c1yoSvtOMjyKkL0UwQLbJ9mQfGIv1fWZBD3JYDTtwmJAuwegZg=
+	t=1739622900; cv=none; b=tPB+VnNJaaAkQ2tsboMP3vPOpwUgHMXYhtDhxN6EamaNBeiPwPmBuvnKISNm3160hMYLYVp+YxIidvYJctiETJtj0+raoY1/KfANesFezzbFs0xxJ/Ux1DtUVntyF5Sv2fC4/pt4ND9EF4h0O54kBIsloDyXecstOTxvbzCou+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739613992; c=relaxed/simple;
-	bh=tyf8NPa9Geq25877OuagqByF51whw5lMdn/1j5HXaSY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qQpfTqew10upRGqPyDe4nhAHE7Fj8KmRID4hf3pImWVhN367FJ5CM1ORt1W8moz/ZGoz9kHmvOjoBvgctrqoaX70uU5WqQzQtJ9JVV9ulXWnJ6o+lhjG0FT/pQN5w9Vqz6kwoLf/T9DtwPu1c+moxolYaPo5Jq5dx0UF0FICxco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=FvgmFSCm; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 81038968eb8411efbd192953cf12861f-20250215
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=wwUQ1gG+zU9mZ9mhGyEm41TVXi67wZbR+prnRoQw8Sc=;
-	b=FvgmFSCmihpHrvGxlg1ecI2CEIh8HaUBLtROxfrH1EnmDsMY7vPLXTKpWFgUtxnQ5G4op24PqfVPLbtMTfgqwq64qMbwKvOtJH1LjcZj8xAsPLVZMagH57FXwC56PiZ/auiWgxxWrMEWqyzFNa0hYxQiAX3WNpzYN1s95QCbcrs=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.46,REQID:558e8a44-f558-4ccf-8264-4157f827a67c,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:60aa074,CLOUDID:d32864fc-7800-43c5-b97b-ddbe32561a5b,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 81038968eb8411efbd192953cf12861f-20250215
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-	(envelope-from <chunfeng.yun@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 2064509836; Sat, 15 Feb 2025 18:06:20 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Sat, 15 Feb 2025 18:06:19 +0800
-Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.28 via Frontend Transport; Sat, 15 Feb 2025 18:06:18 +0800
-From: Chunfeng Yun <chunfeng.yun@mediatek.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Rob Herring
-	<robh@kernel.org>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: Chunfeng Yun <chunfeng.yun@mediatek.com>, Krzysztof Kozlowski
-	<krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, Mathias Nyman <mathias.nyman@intel.com>,
-	<linux-usb@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 4/4] usb: mtu3: add support remote wakeup of mt8196
-Date: Sat, 15 Feb 2025 18:06:14 +0800
-Message-ID: <20250215100615.808-4-chunfeng.yun@mediatek.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <20250215100615.808-1-chunfeng.yun@mediatek.com>
-References: <20250215100615.808-1-chunfeng.yun@mediatek.com>
+	s=arc-20240116; t=1739622900; c=relaxed/simple;
+	bh=f0+fTG9za/9bbevKQFo+26uPRWzCeT9Jd5N2XbxKmfc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=j7OWhQ8wtUN9ftjH0RhiVURIkc6WjVgCFqnJo0qgAp431J7eUaID8j1vODLdiy56A48UmHm9ZdICkyJ74jZXZdr3WdpBekwlgWCR9/4ZfMTFsrRAvtd+tI648+wUvWd2PdmR1LJQMvyWrUvAzdmOfOcmUlO5Km3nryCSWaHgrvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j4u5hKr5; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43978ae8d4fso782255e9.3;
+        Sat, 15 Feb 2025 04:34:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739622897; x=1740227697; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=CKe4QYdGATEkp08y+n3JYFYApI5cWyhfV2vUJ+ZTwQQ=;
+        b=j4u5hKr5FRDuBack6HM36oZ6JXg3ghr3h8em8mEjeNUMgwVloIePDeNXkfCKU7qGpt
+         qnLeojO3LUAVp7ETLq3A2HpAObMz8rg/PMvbMwKqLZlo1gdN71dWJPflMfE6Fy0UciTu
+         bAW8KQxAoU4prHN2Zw22cAicqpMfM1KAEtQQaY1aVFkMIOtDaNZVmhiXumvbqP1uJcVc
+         XUMLlAT38PFNTQh/FcGmsV++5jVGtmtFV7IH6Yle4aIgjOvfq+N/2rOZwFlk9sIUbPN7
+         f9tYdGSyX+PbWbvHOebOWl96GIajmV1ctyZLtm0AKGWwNiylApJ1SquocFM+aTlWFZ/r
+         tizg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739622897; x=1740227697;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CKe4QYdGATEkp08y+n3JYFYApI5cWyhfV2vUJ+ZTwQQ=;
+        b=ToiVHBsIvzjA0aCKRB1vG3bO6WENez2n0ob5oZFcyVE591cGCCu3WyiQF9alaMSikG
+         ONso41CulldE0GBU8qnj/AZak8Ji49drhgZZ+BjjutV8kgPrEt2zH1zX53jLwfPRcDRh
+         zS57m6CuKQ0giIJOKuEXQAj/jBibOnBIu+O5I1rxYDM8fNVHUHsPhDdR+2TcLQjESOl9
+         wtg4EkCqHunx2ttiX41VNQgto4r1B73ASE51MABXszXDBGZ44769r8cRRE6DSM5X6zmS
+         +KpsS7g5GnLhCQqozLKZOctlla/3TtmnVgOc8DnnBvy9Ri5zVCIpKXAdC2HVFC3MEUBe
+         rJIw==
+X-Forwarded-Encrypted: i=1; AJvYcCU71d4fVyqW1NQ3znjfNpwKKSOi3hAJ1jDOPz/IgSmJwRpIggYST4rSrHdcqodTbgltp05o+wSmHFeG0Mlbv7kZDAQ=@vger.kernel.org, AJvYcCUjZrgUzx6aJep4GM5X35bWY7HNE/WI187DtT+O/F9sX9RXYO5jn1CxgA4kjpisMUy5qABqn+PSAB27@vger.kernel.org, AJvYcCX9QsRvYXcWARTYz9RNeKIOxzFAoCIAFOgSPWuO2HHN6+uwghXpZgbIBtY//LcxAH7tzht80Koa6KU68LZ1@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywv+DHtf4gSGg0ZhHl2iqmR5MPi4Lzlz4vId+ZjJsM3OmDspjHe
+	PKJp0SVziqlrakYQvvx7d+DQN+htzWkHjiwk20F33hj8sfX/jWiu
+X-Gm-Gg: ASbGncuvVxJKP/04N6cv8ZTs1O0uTY+ey+/42YkV9lG25Jgcv94e4w6BWU8Vgxv5vt4
+	Y3W7spX86u178piqtF3aVlO+9p4lfpIvtvi37tBBm2J7ZQ7EaIDMCOcpnZaPxkfq7AO+CNPDFGl
+	WRT2STOw8B05+GBZUWz90a4QRPKfyzUHnXAUtYXg1mG/2KoWxckl0oIJknEzUmqzECyYuo7UYDv
+	EHtpwBuhWloGbIcLZObM19XkgCRwrH6ppP6c4mwas4EwBxEopUOeUGlAym0dNt53OuQBiN1xASW
+	y2RlTdQl2yq++Kl2VMyiouFluSGVMPaceAov2r02hZg/MEGVJA6a7kP+uFYSaph768I=
+X-Google-Smtp-Source: AGHT+IFUBWZsXU82RxSy96RoGb0/0g4JAb4YfWMt6GwiDByMiJh3slbtaSZj/gS6aBzPWbV508Vxgg==
+X-Received: by 2002:a05:600c:1c94:b0:439:685e:d4c8 with SMTP id 5b1f17b1804b1-4396e6fa130mr38307765e9.15.1739622896632;
+        Sat, 15 Feb 2025 04:34:56 -0800 (PST)
+Received: from ivaylo-T580.. (91-139-201-119.stz.ddns.bulsat.com. [91.139.201.119])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-439615e543asm70846685e9.0.2025.02.15.04.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Feb 2025 04:34:56 -0800 (PST)
+From: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-usb@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] usb: dwc3: exynos: add support for Exynos2200 variant
+Date: Sat, 15 Feb 2025 14:34:51 +0200
+Message-ID: <20250215123453.163434-1-ivo.ivanov.ivanov1@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -81,72 +93,25 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
 
-There are three USB controllers on mt8196, each controller's wakeup
-control is different, add some specific versions for them.
+Hey folks,
 
-Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
----
-v3: add the ommitted third dual-role controller suggested by Angelo
-v2: add wakeup for dual-role controllers
----
- drivers/usb/mtu3/mtu3_host.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+This patchset adds support for the Exynos 2200 to the exynos-dwc3 glue
+code. It takes one clock - the link_aclk, and the dwc3 refclk is passed
+to the dwc3 subnode, as with gs101.
 
-diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
-index 7c657ea2dabd..8138b3f3096a 100644
---- a/drivers/usb/mtu3/mtu3_host.c
-+++ b/drivers/usb/mtu3/mtu3_host.c
-@@ -46,6 +46,14 @@
- #define WC1_IS_P_95		BIT(12)
- #define WC1_IS_EN_P0_95		BIT(6)
- 
-+/* mt8196 */
-+#define PERI_WK_CTRL0_8196	0x08
-+#define WC0_IS_EN_P0_96		BIT(0)
-+#define WC0_IS_EN_P1_96		BIT(7)
-+
-+#define PERI_WK_CTRL1_8196	0x10
-+#define WC1_IS_EN_P2_96		BIT(0)
-+
- /* mt2712 etc */
- #define PERI_SSUSB_SPM_CTRL	0x0
- #define SSC_IP_SLEEP_EN	BIT(4)
-@@ -59,6 +67,9 @@ enum ssusb_uwk_vers {
- 	SSUSB_UWK_V1_3,		/* mt8195 IP0 */
- 	SSUSB_UWK_V1_5 = 105,	/* mt8195 IP2 */
- 	SSUSB_UWK_V1_6,		/* mt8195 IP3 */
-+	SSUSB_UWK_V1_7, 	/* mt8196 IP0 */
-+	SSUSB_UWK_V1_8, 	/* mt8196 IP1 */
-+	SSUSB_UWK_V1_9, 	/* mt8196 IP2 */
- };
- 
- /*
-@@ -100,6 +111,21 @@ static void ssusb_wakeup_ip_sleep_set(struct ssusb_mtk *ssusb, bool enable)
- 		msk = WC0_IS_EN_P3_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
- 		val = enable ? (WC0_IS_EN_P3_95 | WC0_IS_C_95(0x1)) : 0;
- 		break;
-+	case SSUSB_UWK_V1_7:
-+		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8196;
-+		msk = WC0_IS_EN_P0_96;
-+		val = enable ? msk : 0;
-+		break;
-+	case SSUSB_UWK_V1_8:
-+		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8196;
-+		msk = WC0_IS_EN_P1_96;
-+		val = enable ? msk : 0;
-+		break;
-+	case SSUSB_UWK_V1_9:
-+		reg = ssusb->uwk_reg_base + PERI_WK_CTRL1_8196;
-+		msk = WC1_IS_EN_P2_96;
-+		val = enable ? msk : 0;
-+		break;
- 	case SSUSB_UWK_V2:
- 		reg = ssusb->uwk_reg_base + PERI_SSUSB_SPM_CTRL;
- 		msk = SSC_IP_SLEEP_EN | SSC_SPM_INT_EN;
+Best regards,
+Ivaylo
+
+Ivaylo Ivanov (2):
+  dt-bindings: usb: samsung,exynos-dwc3: add exynos2200 compatible
+  usb: dwc3: exynos: add support for Exynos2200 variant
+
+ .../bindings/usb/samsung,exynos-dwc3.yaml         | 15 +++++++++++++++
+ drivers/usb/dwc3/dwc3-exynos.c                    |  9 +++++++++
+ 2 files changed, 24 insertions(+)
+
 -- 
-2.46.0
+2.43.0
 
 
