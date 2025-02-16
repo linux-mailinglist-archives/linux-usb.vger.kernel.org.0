@@ -1,86 +1,86 @@
-Return-Path: <linux-usb+bounces-20689-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20690-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D8C3A37181
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 01:16:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED548A37182
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 01:16:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB02416BA7B
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 00:16:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B745B16D44B
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 00:16:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 890F323A9;
-	Sun, 16 Feb 2025 00:16:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D5C21C27;
+	Sun, 16 Feb 2025 00:16:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RTWOkzBW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FgpvsNTV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5471FDD
-	for <linux-usb@vger.kernel.org>; Sun, 16 Feb 2025 00:16:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB2FB33FD
+	for <linux-usb@vger.kernel.org>; Sun, 16 Feb 2025 00:16:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739664979; cv=none; b=RYiBsTXhd5WMaZHFLGK7998cKa+uvus5Bay9tuXLdlhFBgSUvTroKDGAh1btrnEGLndlmudfEqqw/KDN4gATc0gtPLVtoSJ15aLlTH6eGy9Jmj9VZJAqoqay6Zk0efn0XhfvT8evhP401q0x9J/o/MArZbS+zj3bkDe5ixjPvx8=
+	t=1739664982; cv=none; b=MZHf4SvzyO1b9Vw+/TIrO5h+AK6nmFxfVkygoZBoYvjk7aE2sB8QFSJeXXa2k1ODkrdSqo1zDowoKzVd8sl7hd7ntcoN3xF53eMBXvyQMkJrR4ajBDxH5pOQRro5QaV4tmCWzhyAwMOY9bxEWCBmolQusXeL0bzbaH1JhYhL3oM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739664979; c=relaxed/simple;
-	bh=J2Ijsb+HD9ILre/twDctrrk2xivaEVKQsJ1LLyLy2gM=;
+	s=arc-20240116; t=1739664982; c=relaxed/simple;
+	bh=NEYCkONqT7Zvwjvde1wCYNW6B7PAhQKcAUb7V1rXGKQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UX4Jb4xrGbvjO/pACQeGPRG9Qiaxzo5rmXFJysb3eiV1Aw1CMg+gPaA3c4w14ixaO7hyqBOxpynaRpVAifKjYQlSNSn2ust8SenyPqSJhYm6WdWDTAz4g7/7RlRpLbBCNgQTl53Poksla+yRUXtdBLM3SzHlO/PrbAt08zVH+ws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RTWOkzBW; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version; b=Jx+rOLcD+8NGA69ZIRQKk30pyaz3n3Nf53ye+ktQ7p31Z7Heix9NND0b7DRpBmLA8Aknh7FKatyGv3JN2YQwQkd6cuMbuwlpYl6J/9FqgaQJirk9pVzdXgL5dJk/dTjICR07zT6T6qUTMfIa/Og1erG7oWQPMd80p6ETFD1PNzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FgpvsNTV; arc=none smtp.client-ip=209.85.214.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-2fc20e0f0ceso3858493a91.3
-        for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2025 16:16:17 -0800 (PST)
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-220d601886fso42209105ad.1
+        for <linux-usb@vger.kernel.org>; Sat, 15 Feb 2025 16:16:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739664977; x=1740269777; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739664980; x=1740269780; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uZLmRNArgA80J6VvBUYgRP6X+hYuozIBGig62C2XSMA=;
-        b=RTWOkzBWFHS7Q0F3bkmIKyQKN44sQ5WftbZErw+0h1yoQs9NUudmRQ4/cdQLXY03za
-         Ax94/4/LhwwDWw5tWkoqnyqn5hby98xrZDMgLgx0OMzYgCoUqpFpn2U9E4l66PjBLpGT
-         +MP10Jc1ycXxEdY8IN0b30uDXHxA+8wyYMEjMP1p0hS8CDURoAGZqDtfogihTMBAzoYG
-         DYa1Dq/Id34LynQifumfYLK99A9wZrqQB1qc8+Z6bgTP3CSMjkj5ZDPm4CRAForFJRZ2
-         GrBNDAYJORCNk1Z+meepWGfY4Cvce2S1LwjPPANmQRu6GYyPg4lO1DLGXK+HCAZj4KBW
-         ZEaw==
+        bh=u0eVhK+STOowT9LYqWR7qJEZC6eW8Ae7KOk2j7sGt0I=;
+        b=FgpvsNTVJYzlsIjVJW7oLl4VHl0AnthhYlrVBi3UO9eMaWRFG/8Upx8IVRiHho62kL
+         ExBWzfvx6WkhaXJNFhhPzQqnF4XdgBIM6Aptghs+0bj0YdM9HjnxOeTmh8EkDWkkAwNU
+         /krp8t5QRr2rRdIjzTWH5szIHP7RCYN/HnPZCpXoXPKR+kDg2CfMwExz7M2R+q1KQ23N
+         laZ66ewQB+8LIPGL+3y1kk1BJoNIMXZ7lFPDedKAHYGqTsKLfBv+MyZkP3ulgmVmiKQy
+         0sSyCAi4u8WkyqkbBkCkGxS3MlzqqAbns3dH1KPhnMa7jVldJDl/NOIm0ymMMznxKYW8
+         BDIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739664977; x=1740269777;
+        d=1e100.net; s=20230601; t=1739664980; x=1740269780;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uZLmRNArgA80J6VvBUYgRP6X+hYuozIBGig62C2XSMA=;
-        b=l/TSLNU7EQqMHkoE2Y+nTjHjeNfl82KL1sem+sLtNaT5qzk+RcIUGS/jndo5pJFVsx
-         YkyGgf/ZuvIWmB+3YmsLD07dK7+r/QiWhkaJTuDYX//TZWEukmF9RQQIKZI3UXwHQZXg
-         xEXdP2WeGBYzHb4xOcvLnJEdi2raa2oJPMUMRjAfXc5a96z9XRNU2XL1KFVLKraf2jX7
-         dowe99Q37u1NyR6LWw4KuN4CyShI/1d+dRn3feCNOR0hdhqx0U7+ZG0qDmUIppa3o1EC
-         O52R3s1qOGkCTx0H8kP1TqvUizNybWsDy0LvPo4pqyQXd5YtdvxSJ2aaSUM66/wzzDmW
-         T/4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVeDbvu7OXVPZk0a8IORF9taxCftJJZNHAxOXdirhlPqHMEpZgKupHNixuo9WHgAG/94lRcGr1kF2c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrgEIuNnkmiKZBO9tNU2Wr1MzL6U9Z54OSvmYkdFLj2jn5CgtM
-	bSrvQgEAKF+Uq3J/bePEDUXlGb+5RzDmT6PRlYNaFDjA+AYd73GBW8x4fmxWQ7PSrw==
-X-Gm-Gg: ASbGnctDfoLbXAiE0e3fR/8J1BWmZljh2TxFPbw4OG9sp3yFXYOPW9uuZeZwcln+6ET
-	bHGa7WZIOYYzdo+SDZ2PV+lZ4NCOTpZPddbjEd2jhN7I086s776bV5QeV7A0PuGyhSg8zYbtau+
-	F1tQOLhpV5+QPsgF6kedfnIMM/cdt86eOudgf30O4mlOeAy5MykDO5zVdl6TaGudRw0JzgQtuBU
-	w1BCtY4YKEkFCGGOEP11UvImqS7JeA4TiqjhW+HowLX9rhUZrPPyIaZ01IMTa8O8wjtcN5J/KJh
-	ZrJvgk83h8mjECE3r/we1z2QVaxPFfvvQoFE8m0Ze2PaeYkQ/3hX3WDf1SqBTdVhEvJNLxYA+4z
-	PKW22WFn9
-X-Google-Smtp-Source: AGHT+IGsrxgUApR1GV9NU94ubocRUU0Re/THB9/zXh/RhvVbI8ljStSc+pg8LMrGJyFOSqXowAXjEg==
-X-Received: by 2002:a05:6a00:4fd6:b0:730:7d3f:8c71 with SMTP id d2e1a72fcca58-732618c8d26mr7643481b3a.19.1739664976905;
-        Sat, 15 Feb 2025 16:16:16 -0800 (PST)
+        bh=u0eVhK+STOowT9LYqWR7qJEZC6eW8Ae7KOk2j7sGt0I=;
+        b=ba0jdOf8Tk0bGNaYmWFCd5ELg267vqZtWLoAXVaC99Ym7/mH6gJqALMHtAMssjyCgi
+         e9uqDmLv5d+kADd+A0PTpVp6KT0WR4yfURa50R1U37yJIk25dRy2RJWZZ/v7YCrUQfea
+         L5ZkwtMXyWzBlbDXi1in1oW0zchDZ1eJ/1k/BgCamzK7jMlw2QDPIAn9fr37cP7Ujz/3
+         SLV6MeJ6pLK35/AEnWKoSuYf/59JGeGxx/2yFtHr6ttvoy8S6fdFelND835V5hgpcB0l
+         DnrpbrZLoeLaGsZJnlgYAb8RSte+EDYqK1wxhLZRTh4Jpvmf2kxNiGjGgtchIqB353VX
+         StQg==
+X-Forwarded-Encrypted: i=1; AJvYcCVdjPdwcWBGwg25heDC5iF/bep8bwmiDfI1iLvaM+BcLHubJBDnSUg1lSHZxMIgRV+j3qm+e3Xjptc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwVJnWv5zelbE9aO8qHthXISBQ1e4gVHDliykZX37w3TZDmbHJN
+	Y4jxVJtuTGxhNSDiDXp3loZKPaB70ULg/EkQjVjBVNT01E3hOZlL
+X-Gm-Gg: ASbGncsfjprID+59DEkcMhuMscHtweh1rwN+3NuwbuJacF5tJlaw3MddaiMs0LSS/mb
+	O6j0bDIEziQ/CuHe0E/XDbEjVc4TA1MS0dtQ5NdSIiH9ZZWj6xkm8oQv2tYtbgBnuRyGdhR0YYR
+	99O57MNI118XW8+GQj/PjvRZpnq76gb3wWmrmcHhUC87wga2aVxHYWkeA8WarWenePDvDRuIRwb
+	xHOpaA0BnEaJ6vswMAefFm3ZWsNl3RKi8QVGK0GjLh4hHi/DZt8ptt7IROgHPocr8+FzufgA9nF
+	Bs8dx2eY63hAyhrDDJzrZjXTCHna0i20PCb0+BdnOYyw1pHOsnIpPchmwG659OeWUsLjVjPnVug
+	8U+tF0zsZ
+X-Google-Smtp-Source: AGHT+IGPyqhVKp1K14xieN5deZOF8fpJmossyThXxe6EyqW4qlQZ7+gTjuIBJgoBQHlhjGDOJEK2VQ==
+X-Received: by 2002:a05:6a20:1586:b0:1e1:aa24:2e58 with SMTP id adf61e73a8af0-1ee8cb1f646mr8549912637.7.1739664979867;
+        Sat, 15 Feb 2025 16:16:19 -0800 (PST)
 Received: from test-suraj.qjz2hk5f2gku1a3adsvczrat5c.xx.internal.cloudapp.net ([20.9.134.79])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-732746caf3fsm133820b3a.169.2025.02.15.16.16.16
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-732746caf3fsm133820b3a.169.2025.02.15.16.16.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Feb 2025 16:16:16 -0800 (PST)
+        Sat, 15 Feb 2025 16:16:19 -0800 (PST)
 From: Suraj Patil <surajpatil522@gmail.com>
 To: heikki.krogerus@linux.intel.com
 Cc: gregkh@linuxfoundation.org,
 	linux-usb@vger.kernel.org,
 	Suraj Patil <surajpatil522@gmail.com>
-Subject: [PATCH] docs: Fix typo in usb/CREDITS
-Date: Sun, 16 Feb 2025 00:16:08 +0000
-Message-ID: <20250216001609.106616-2-surajpatil522@gmail.com>
+Subject: [PATCH] usb: typec: displayport: Update outdated FIXME comment
+Date: Sun, 16 Feb 2025 00:16:09 +0000
+Message-ID: <20250216001609.106616-3-surajpatil522@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250216001609.106616-1-surajpatil522@gmail.com>
 References: <20250216001609.106616-1-surajpatil522@gmail.com>
@@ -92,26 +92,26 @@ List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Correct 'Implementors' to 'Implementers'.
+The port mode is intentionally fixed to DFP_U; remove the FIXME tag.
 
 Signed-off-by: Suraj Patil <surajpatil522@gmail.com>
 ---
- Documentation/usb/CREDITS | 2 +-
+ drivers/usb/typec/altmodes/displayport.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/Documentation/usb/CREDITS b/Documentation/usb/CREDITS
-index 81ea3eb29e96..ce6450a6ed7c 100644
---- a/Documentation/usb/CREDITS
-+++ b/Documentation/usb/CREDITS
-@@ -161,7 +161,7 @@ THANKS file in Inaky's driver):
-         - The people at the linux-usb mailing list, for reading so
-           many messages :) Ok, no more kidding; for all your advises!
+diff --git a/drivers/usb/typec/altmodes/displayport.c b/drivers/usb/typec/altmodes/displayport.c
+index ac84a6d64c2f..732ee9399921 100644
+--- a/drivers/usb/typec/altmodes/displayport.c
++++ b/drivers/usb/typec/altmodes/displayport.c
+@@ -727,7 +727,7 @@ int dp_altmode_probe(struct typec_altmode *alt)
+ 	struct fwnode_handle *fwnode;
+ 	struct dp_altmode *dp;
  
--        - All the people at the USB Implementors Forum for their
-+        - All the people at the USB Implementers Forum for their
-           help and assistance.
+-	/* FIXME: Port can only be DFP_U. */
++	/* Port mode is fixed to DFP_U. */
  
-         - Nathan Myers <ncm@cantrip.org>, for his advice! (hope you
+ 	/* Make sure we have compatible pin configurations */
+ 	if (!(DP_CAP_PIN_ASSIGN_DFP_D(port->vdo) &
 -- 
 2.43.0
 
