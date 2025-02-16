@@ -1,79 +1,162 @@
-Return-Path: <linux-usb+bounces-20696-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20697-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6475EA3779C
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 22:02:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CF4EA377C2
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 22:20:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6970D3B03BF
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 21:02:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 66FA2188AB6F
+	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 21:20:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1008E1A0BE1;
-	Sun, 16 Feb 2025 21:02:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4C31A3178;
+	Sun, 16 Feb 2025 21:19:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UrzK1s2b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TIk0btAx"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B6DB81E;
-	Sun, 16 Feb 2025 21:02:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220BF1A23B5
+	for <linux-usb@vger.kernel.org>; Sun, 16 Feb 2025 21:19:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739739723; cv=none; b=tBF3Ij4a+I/pp7MIOgo7pxA50+nQwPD8kskUldGHr2symtWq3vYS6qqU18gNH55jlhlZlN3m7UA9KYQX293Z6g2skq9nwGfVRldfayIt3GAKSO9BvF/8NDklTmMBdZh3oPm/ik4oEyBB43Xd9t7J82EQyztM43KRhDrLFzv7w5s=
+	t=1739740796; cv=none; b=WGjIxyoF8JoJ9UZudpIR10BeaQL+ChjUy5wuyoO6SMzzDFa8VKVa8hndBpCRwZ4BqlZRM3R/0v91EV9chBQ51Mws7N/Oa0qSG9jt9B/JI31uN3qbN9+37tI/koENMtrVneYGt4Hs3Oh3U6a1ZRZySfTMqfudXoqnjJwSnOSSRZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739739723; c=relaxed/simple;
-	bh=7DkzFB0zxDFxDpoGTooHWm0F5p8XaYGWCzSxFFap+74=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=RBYi6/49vGJPOkoULrArlBPylzqFJ0j+x56kvvjpdZ6QiFFLiBK60Ygk1484ogN5HZAT/Cxzz4yRttVH+1vKmNACuRlUWsSGtxW6qi7xPxU8E42bDdoQBKdvUcbe5sKM+QuVQfwj+CNzEAA3qIcNMTf4Yfx66hDST0K7wCXCNBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UrzK1s2b; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C060C4CEDD;
-	Sun, 16 Feb 2025 21:02:03 +0000 (UTC)
+	s=arc-20240116; t=1739740796; c=relaxed/simple;
+	bh=KinCTNLjjb1HKX1crvn8NU5UI6iy1DJCfVKyi+5agos=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=Da5NwcPQ0a/1sLq5UPKMbZdGhXF+QUSlVfIn4RAfkLMK6vFu5cGSOoxt2hHl7TNNaLM5YQborTHS38WjpU55gA6vP9TqiWhlmZsWDtCx/uAhcnRw+ZiuPp4GcOHkBkHNxS/SF0fbxHUH5E7nnSlFoWXCcVy9czvRLgG/K0Ko5/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TIk0btAx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9B0B1C4CEDD
+	for <linux-usb@vger.kernel.org>; Sun, 16 Feb 2025 21:19:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739739723;
-	bh=7DkzFB0zxDFxDpoGTooHWm0F5p8XaYGWCzSxFFap+74=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=UrzK1s2bASATQCVsyej7IsgirYfLQV66vIsRlS/IvhHuhJvLwgRH5X7c8jhmuOMrS
-	 SbE/0J3ANNu86jS9avnTiZanz0WOTP/qc0s1ThwspxLbNrBmtUXSeEA8mEnNybNBRg
-	 XVq9ctM2iKr8Ng5UUGmwtOZPHdPN8ROXzfw3bjLsdeCtKgdl6SR3055vFms7npFkiT
-	 0grQ/WJrWyBXn5QwkHilGnHyTXjaKXQqFry3eVnlmgbTz0qf82LbQ6aZE23n38wQRc
-	 pb3XS6uzzq0tBVfW9tZhezbGqxZcbuEqLXKiGY78T9EThrG6lhkeUNwP5yaaSqALgW
-	 B3sZWYJV2+pXQ==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34028380AA7F;
-	Sun, 16 Feb 2025 21:02:34 +0000 (UTC)
-Subject: Re: [GIT PULL] USB driver fixes for 6.14-rc3
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <Z7IAH0twfNXO-j_m@kroah.com>
-References: <Z7IAH0twfNXO-j_m@kroah.com>
-X-PR-Tracked-List-Id: <linux-usb.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Z7IAH0twfNXO-j_m@kroah.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.14-rc3
-X-PR-Tracked-Commit-Id: 659f5d55feb75782bd46cf130da3c1f240afe9ba
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 6bfcc5fb2fcee1e914708ce55b70e707d03d8097
-Message-Id: <173973975270.2568330.7734608061308816747.pr-tracker-bot@kernel.org>
-Date: Sun, 16 Feb 2025 21:02:32 +0000
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+	s=k20201202; t=1739740795;
+	bh=KinCTNLjjb1HKX1crvn8NU5UI6iy1DJCfVKyi+5agos=;
+	h=From:To:Subject:Date:From;
+	b=TIk0btAx0QCnY5x1qKz8ZNhTrG4zyY7bZDs5OkRi7eCtlFRzEw7MeT4ltiX28sNcw
+	 1oU5O9FGcOmVtuOz/IkPsSR/+E1bC3kyQWgtWGzoWu8+GDM7ASsCwsL3AXF1sPzmIA
+	 QvrRJ5tvwFoGNsTSKTkvHMR5kU3ZaAXHVi7KuIGPR3he2bRpJDuSZoSqfY5+l4A95g
+	 gdj0/6J/bg4QL3cXlEUfYB8Csi0UlHYL5vAtV/CnEFQOskNP3zdYGD6XyUKJH+ynZw
+	 rT0FqD/DGrYQsRgEXxaj1uJhnZMPRhAUpOEGYS9UKF12mNuciBfHO3YzgQqV2mOsSs
+	 kirykIMCJ8HRg==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 8A8FAC3279F; Sun, 16 Feb 2025 21:19:55 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219789] New: [regression] Moving Logitech mouse causes WINE to
+ lag
+Date: Sun, 16 Feb 2025 21:19:55 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: esteve.varela@gmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-219789-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-The pull request you sent on Sun, 16 Feb 2025 16:11:27 +0100:
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219789
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git tags/usb-6.14-rc3
+            Bug ID: 219789
+           Summary: [regression] Moving Logitech mouse causes WINE to lag
+           Product: Drivers
+           Version: 2.5
+          Hardware: All
+                OS: Linux
+            Status: NEW
+          Severity: normal
+          Priority: P3
+         Component: USB
+          Assignee: drivers_usb@kernel-bugs.kernel.org
+          Reporter: esteve.varela@gmail.com
+        Regression: No
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/6bfcc5fb2fcee1e914708ce55b70e707d03d8097
+I have a Logitech G502 Lightspeed mouse, set to 1000Hz polling rate. When
+moving the mouse, wine lags. This didn't use to happen, which feels like a
+regression.
 
-Thank you!
+This issue started happening when upgrading from 6.6.67 to 6.12.7. Downgrad=
+ing
+causes it to work again, and for good measure I've tested an unpatched vers=
+ion
+of 6.13.2 with an exact copy of the 6.6.67 config (make olddefconfig && mak=
+e).
+All the results for 6.12.7 mentioned below have been re-verified with 6.13.=
+2.
 
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Since upgrading, moving the mouse around in any WINE application, including
+games and other applications, will cause the application to become sluggish.
+This happens exclusively with this mouse, as the laptop's touchpad and
+trackpoint both function properly, as well as an old HP mouse that I had la=
+ying
+around. I haven't tested any other input devices beyond those listed here, =
+all
+the devices tested had a sub-300Hz refresh rate.
+
+To rule out a WINE regression, I've tested different versions of WINE:
+wine-staging-9.22, wine-staging-9.0 and wine-vanilla-9.0. Only when I boot =
+the
+6.6.67 kernel is it resolved.
+
+I've read that high polling rates can cause WINE applications to lag[1][2].=
+ As
+such, I wondered if the mouse's polling rate had changed across kernel
+versions. To verify this, I used the evhz tool[3] on both working and
+non-working kernel versions. Both 6.6.67 and 6.12.7 reported around 1000Hz =
+for
+this mouse. Using libratbag/piper to configure the mouse for a lower polling
+rate did make a difference, but I had to lower it to 250Hz, as 500Hz caused
+(more minor, but still apparent) stutters. This seems unreasonably low, giv=
+en
+the reports on the issue are always about rates higher than 1000Hz.
+
+How to reproduce:
+- Connect LG G502 mouse to computer using either the wireless dongle or USB
+cable
+- Download BGB (https://bgb.bircd.org/bgbw64.zip)
+- Run the demo game in WINE (wine bgb64.exe bgbtest.gb)
+- Move the mouse around, notice how the animation starts stuttering
+
+As an anecdote, when testing a directx input latency meter for windows link=
+ed
+on the arch wiki[4], I only occasionally get some 700-800Hz out of kernel
+6.12.7, whereas with kernel 6.6.67, I easily get the 1000Hz. I assume this =
+is
+related to the stuttering as well.
+
+[1]: https://bugs.winehq.org/show_bug.cgi?id=3D46976
+[2]:
+https://wiki.archlinux.org/title/Mouse_polling_rate#Polling_rate_resulting_=
+in_lag_with_wine
+[3]: https://git.sr.ht/~iank/evhz
+[4]:
+https://web.archive.org/web/20160327105037/http://razerblueprints.net/index=
+.php/Download-document/18-DirectX-mouserate-checker.html
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
