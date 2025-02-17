@@ -1,101 +1,109 @@
-Return-Path: <linux-usb+bounces-20725-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20726-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F2E7A386B6
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 15:38:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0570CA386FB
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 15:52:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5A0A27A4A23
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 14:36:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DF74F188ABEC
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 14:51:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B68C22541E;
-	Mon, 17 Feb 2025 14:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FBCE2236F6;
+	Mon, 17 Feb 2025 14:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ljl3NVN9"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LdMNlwDC";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="S2jI3v4/"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBE9225414
-	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 14:36:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A86F21CA0E;
+	Mon, 17 Feb 2025 14:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739802984; cv=none; b=PeOkavAuGD9LO1cNKy4d6Xm5t2ir8nMIsQtBQRWUgoVkFFTZ0JBTUdrk5hoQwj6udSbPUjPDHBBTdRleGUjHUDM6hw/avScozPhN4HyVhoBGSMNVjI0WdPfgRmJl5VmWzJ5YoNxGKibIIjc4hYIKQDqDiFqzKtkhV/s7W1QKTeg=
+	t=1739803861; cv=none; b=jlZjUOqo7a1qUOtkhEI5Vm6vFJ67WkiHeM4kVDIj2F8TqRbLp8S2WceSleKOzSmn6EnA449/ns9DYegMrVMDtbvIVwDmBXPeYyy9JGcppveuBFOlHMFJjk/Fnyk/0MzoZo3Rh9Ts5Fkl3ILWzPP+tnVkasqheysXY1vEudkCW/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739802984; c=relaxed/simple;
-	bh=qOwUTnnEpH0Sk1L2s05zXhfwl+kxXwCvYhInjYjKeaw=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RRpuXuZPMKg/uFgojshGwb+mX/cSdsit5o7CNXvb3xY9E9T5YY2Lpm4xnKkTEX6H6npzLtGxtoWmSHVbUFx9C9sXkk5Ya5tMXZx0bJ5VVHBax0uSFtTyabAgR31EY4D7XcZBM0N1jGIgL29j08GUON7KR9Aqc0w/GG7fx/Zwtlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ljl3NVN9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 7B6F9C4CEE9
-	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 14:36:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739802983;
-	bh=qOwUTnnEpH0Sk1L2s05zXhfwl+kxXwCvYhInjYjKeaw=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=Ljl3NVN935kFCRINw0e23RTSTwkqyw5y97xDuPqKp8od4QT//twZACcnZ5JHYLRF1
-	 8AiZrm17o8sIBZr+16mHKljjpo75fgJ/b/2TYFhfGTR8to3BiUI/Xtcy7G5huNpI6g
-	 oLV/7tBAIwDAFkmkJpKeZwxxRVoT+YES1QWOVOMBRnwqd7H49sAtyVC2PETBAkswXy
-	 ZS/HkkYXzkVOOVKnWE4bTwtZyKDT0rfriOALMJhcf+XswbaJqFFNjpEUEIl2kq233/
-	 pgiYSoDKwSJ5UFjq/6fM/s/fDI20Y1uHhO+uNX85mddDT+HBhOBlGZKQMxLXhMof3C
-	 zevj/HnbGdLvw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 6CABCC41614; Mon, 17 Feb 2025 14:36:23 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-usb@vger.kernel.org
-Subject: [Bug 219773] External USB disk drive and SSD corruption while
- connected to USB 3 ports.
-Date: Mon, 17 Feb 2025 14:36:23 +0000
-X-Bugzilla-Reason: None
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Product: Drivers
-X-Bugzilla-Component: USB
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: blocking
-X-Bugzilla-Who: stern@rowland.harvard.edu
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219773-208809-WOKLG6uxB6@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219773-208809@https.bugzilla.kernel.org/>
-References: <bug-219773-208809@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1739803861; c=relaxed/simple;
+	bh=WjK0AaiOGZPzD6WPGTZNB2MYaDX79CF3ES9/OHZUn+U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ijKNSXaXyw3Kgs7f9qzs+8KhWXmguWvgWF8/nMubE60GQI3DP5CrO78CE/A32hIVlloB8WvfXRDcLep2MuKxM7UGWHh/G9tQutS0x8CLDdFsMSlDAQVlOQHmJGZStN7BtoxgbTcDsKfSrQQKk1kAx3jEUCSRcyrFNjN3usCGtJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LdMNlwDC; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=S2jI3v4/; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Mon, 17 Feb 2025 15:50:54 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739803857;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=A2sPfQZeay/1JXMe5RGbQaAOhB59g6LOSfQU+7lUlqI=;
+	b=LdMNlwDC5lDIT/Jpq8cLWTPbvimW/JscZDQRx4CxlRBjyO/RfxVBHBovmcfvwei48Zi1n4
+	Cki8D6+FtvFxa/l2hwUfJIeiW9Fh2wh2RP4Ah3o6l7kopWo0ckWjdk6SVWIxIUJ6HCoWec
+	s5l693cp41fYWV4fI/PLXR6TB+h4qOtcNHBke+frCLq1zfwihx3sUbECsKI6AGfMQ30o2V
+	V+lccjqrKjEX3cdPDFWlRv2Wi4eJNIbfJrKDUmls/OiSqt58ETNVf68E8trM88QMtzn250
+	PRaw0wJCra+Ud+xcquDBmLSyBnbCqWIZKQJKZ4pz0l0yEADzlphijA+ZCJAv5g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739803857;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=A2sPfQZeay/1JXMe5RGbQaAOhB59g6LOSfQU+7lUlqI=;
+	b=S2jI3v4/Olq9v83ieKDobcjhEdUL3f81KbO/RhkmrGvI44BHA4HRqSEHES+BQP4DOv0T87
+	AKFQxN+/p89+35Bg==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Patrice Chotard <patrice.chotard@foss.st.com>, 
+	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] usb: core: Don't use %pK through printk
+Message-ID: <20250217153444-4e1fd8ec-7f0e-4f40-8fc1-e323e4622284@linutronix.de>
+References: <20250217-restricted-pointers-usb-v1-0-78da55158832@linutronix.de>
+ <20250217-restricted-pointers-usb-v1-1-78da55158832@linutronix.de>
+ <2025021733-strudel-curator-bfaf@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <2025021733-strudel-curator-bfaf@gregkh>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219773
+On Mon, Feb 17, 2025 at 02:52:05PM +0100, Greg Kroah-Hartman wrote:
+> On Mon, Feb 17, 2025 at 02:20:51PM +0100, Thomas Weiﬂschuh wrote:
+> > Restricted pointers ("%pK") are not meant to be used through printk().
+> > It can unintentionally expose security sensitive, raw pointer values.
+> > 
+> > Use regular pointer formatting instead.
+> > 
+> > Link: https://lore.kernel.org/lkml/20250113171731-dc10e3c1-da64-4af0-b767-7c7070468023@linutronix.de/
+> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> 
+> So really this is just a revert of 2f964780c03b ("USB: core: replace %p
+> with %pK"), right?
 
---- Comment #15 from Alan Stern (stern@rowland.harvard.edu) ---
-One possibility is that the SSD doesn't like LPM.  You can disable LPM by
-writing
+In this case, yes.
 
-   0dd8:0562:k
+> Why not express it that way, and explain _why_ it's somehow now ok to
+> use %p when previously it wasn't?
 
-to /sys/module/usbcore/parameters/quirks before plugging in the drive.
+The full background is in the email linked from the commit message.
+%p is more secure than %pK since
+commit ad67b74d2469 ("printk: hash addresses printed with %p").
+%pK was never intended to be used through printk() in the first place.
 
-If that doesn't make any difference, you can try collecting a usbmon trace =
-that
-shows the error occurring.  Warning: The usbmon output file is likely to be
-enormous, and the interesting part will be only the stuff that gets written
-when the error happens.
+I'm doing the these changes for various subsystems using a common
+commit message. The changes are not reverts for all of them and
+digging out the specific history for each single line is a bunch
+of extra work.
+If you want more historical context, I'll resend the series, though.
 
---=20
-You may reply to this email to add a comment.
 
-You are receiving this mail because:
-You are watching the assignee of the bug.=
+Thomas
 
