@@ -1,96 +1,76 @@
-Return-Path: <linux-usb+bounces-20705-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20706-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC6D1A37DBA
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 10:02:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED6E7A37FAD
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 11:17:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A5947A1DCF
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 09:01:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8D7C03A2C38
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 10:16:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6FC81A314A;
-	Mon, 17 Feb 2025 09:02:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BC1C216E20;
+	Mon, 17 Feb 2025 10:16:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="oZeuqWps"
+	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="S8LWbg0K"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54AA2155316;
-	Mon, 17 Feb 2025 09:02:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail-m16.yeah.net (mail-m16.yeah.net [220.197.32.17])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CECED1A2380;
+	Mon, 17 Feb 2025 10:16:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739782966; cv=none; b=fZ9ZMMKu7bVCLNMkAu/x3NtREtqorvqBEJO2qF6C9ccIW1i3lPBacCEJYAXX8dxjv4jxpp68ZLm3/ydFOCR6n71AZ2Qr82aSlyJ8CbmQYqN2qr+DIyfibJ5/887Bvtv5/o1KkpxyKtcqS898Mq9IQe00Q7W1DxvD+g6vviQj2tU=
+	t=1739787405; cv=none; b=DowSWxyZNBn1hqxOoRszCb9JeIPhjmG3a5x3TZn3Rtod7slC2N3VXl01fo/zfIZSsX3b7CGZmwHU2k6H6eqkGB4K/WwmzNQ5M0G9qLMu98MEXAlaTmeQJjqzHM+/RxdyZ2bB6cTH7H32iG1EtaLlKjwDWSjFVNs/lCDf/3NspQA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739782966; c=relaxed/simple;
-	bh=E7ozwNZOZtMRGn9GNFnShpqaxPkGZgbRvZoEXEH03yQ=;
+	s=arc-20240116; t=1739787405; c=relaxed/simple;
+	bh=2b0ssJvspuRRNhPxDbjfaOIMkY8T4KS4iFr9njlmkNc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lif6dJmB94Nkp4lHjHj+VQyWTDBA/Tp1C+kD+E1LO1izXsRwvr8moL4row2n3K0zmQhCegMR1WfX79Kv9t6huHbvZX69muZ+WPWYGSfvm6qUtSVAWjgP7K3SCyNcxTpSOf09R1BnPOqAGa+pJr2OjXx/h2QpmuLq+HvzJv3Nt2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=oZeuqWps; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E490C4CEE2;
-	Mon, 17 Feb 2025 09:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739782965;
-	bh=E7ozwNZOZtMRGn9GNFnShpqaxPkGZgbRvZoEXEH03yQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oZeuqWps5jaDWDnY5qzTeNMWGBgBZ3CRTNBz3Tn5LCFvfzV37kY6bFFWm9EqRin3H
-	 x22LHEywRCwOZdcH/nO+O61Etb3/GB0ZJAY3jJOnoNth9zP8rZnD3BvRyxxiB/5Jg4
-	 KCaiw55N1D1sLUDXyJ83se+LjCH8hXSELwhBrKYo=
-Date: Mon, 17 Feb 2025 10:02:41 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Jeremy Kerr <jk@codeconstruct.com.au>
-Cc: Matt Johnston <matt@codeconstruct.com.au>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	netdev@vger.kernel.org, linux-usb@vger.kernel.org,
-	Santosh Puranik <spuranik@nvidia.com>
-Subject: Re: [PATCH net-next v2 1/2] usb: Add base USB MCTP definitions
-Message-ID: <2025021758-negate-entwine-5d40@gregkh>
-References: <20250212-dev-mctp-usb-v2-0-76e67025d764@codeconstruct.com.au>
- <20250212-dev-mctp-usb-v2-1-76e67025d764@codeconstruct.com.au>
- <2025021240-perplexed-hurt-2adb@gregkh>
- <20d5843de6629036ce67420be9d2d2b5907c3261.camel@codeconstruct.com.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=e/B1MX65UOB+6Dil2lRj5YFh2I1wd0qSD2pIZ3E98A8s2vbEdmG556eUDFN8x9LV+vJCR29SDy+25u0pQjw1318nZ+Ps+w1Mt2G6th3R6Ha/osllfx1RiZBrJyH0oRiblnCbzXGMH9yIL+oduYa9+yziQimzvT3v7ZsGI7jImI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=S8LWbg0K; arc=none smtp.client-ip=220.197.32.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
+	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
+	Content-Type; bh=yQZncXsJ08w6dn/CQGrI9m/CtWBS9ZgdPyo1uxiw8q0=;
+	b=S8LWbg0KmjlKxqeavmtEOa0jvDw8mdjl6dxM6NqrBFnjaVjyyZne20ehuDXVcc
+	FaE33ud6RKBqUTurRhCoD8l8w/xTQFEg1SyiXSPVJau2uyNGSV3EH7T9vMpIPLtm
+	Qsgi+qMtM10EVC1iFDh10iSuCbEYnh+l9HU7DVFz5m9hY=
+Received: from dragon (unknown [])
+	by gzsmtp3 (Coremail) with SMTP id M88vCgD3SshDDLNnYyAUCQ--.17238S3;
+	Mon, 17 Feb 2025 18:15:33 +0800 (CST)
+Date: Mon, 17 Feb 2025 18:15:31 +0800
+From: Shawn Guo <shawnguo2@yeah.net>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: vkoul@kernel.org, kishon@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	gregkh@linuxfoundation.org, jun.li@nxp.com,
+	alexander.stein@ew.tq-group.com, linux-phy@lists.infradead.org,
+	devicetree@vger.kernel.org, imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH v11 2/3] arm64: dts: imx95: add usb3 related nodes
+Message-ID: <Z7MMQ3bqIJ9nFqpl@dragon>
+References: <20241204050907.1081781-1-xu.yang_2@nxp.com>
+ <20241204050907.1081781-2-xu.yang_2@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20d5843de6629036ce67420be9d2d2b5907c3261.camel@codeconstruct.com.au>
+In-Reply-To: <20241204050907.1081781-2-xu.yang_2@nxp.com>
+X-CM-TRANSID:M88vCgD3SshDDLNnYyAUCQ--.17238S3
+X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+	VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvjxUVMmhUUUUU
+X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiCQ32ZWey5vCopgAAsa
 
-On Mon, Feb 17, 2025 at 04:55:59PM +0800, Jeremy Kerr wrote:
-> Hi Greg,
+On Wed, Dec 04, 2024 at 01:09:06PM +0800, Xu Yang wrote:
+> Add usb3 phy and controller nodes for imx95.
 > 
-> > > --- /dev/null
-> > > +++ b/include/linux/usb/mctp-usb.h
-> > > @@ -0,0 +1,30 @@
-> > > +/* SPDX-License-Identifier: GPL-2.0+ */
-> > 
-> > I missed this the last time, sorry, but I have to ask, do you really
-> > mean v2 or later?  If so, that's fine, just want to make sure.
-> 
-> I'm fine with 2.0+, but I figure the preference is consistency here. So,
-> since I'm doing a v3, I will send that out with GPL-2.0.
-> 
-> > Whichever you pick is fine with me, so:
-> > 
-> > Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> 
-> Thanks! v3 will have the __u8s changed to u8, as Jakub has requested.
-> Would you like me to keep the Ack on that?
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
 
-Yes, that's fine.  But to be fair, "__u8" is correct here as that's what
-the endpoint variable is as well (it is coming directly from hardware),
-but I'm not going to complain about that as it really doesn't matter :)
+Applied 2/3 and 3/3, thanks!
 
-thanks,
-
-greg k-h
 
