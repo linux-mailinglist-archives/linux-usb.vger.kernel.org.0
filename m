@@ -1,279 +1,335 @@
-Return-Path: <linux-usb+bounces-20699-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20700-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2B9BA37810
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 23:32:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 221C2A37B55
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 07:26:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C4CB16C0AF
-	for <lists+linux-usb@lfdr.de>; Sun, 16 Feb 2025 22:32:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D308C16BBC2
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 06:26:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67EF61A23B5;
-	Sun, 16 Feb 2025 22:32:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E9E318DB33;
+	Mon, 17 Feb 2025 06:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="1q9/ySNc"
+	dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b="e/mSDMEx";
+	dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b="YYBDyiPu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-oi1-f171.google.com (mail-oi1-f171.google.com [209.85.167.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0014ca01.pphosted.com (mx0b-0014ca01.pphosted.com [208.86.201.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E10117B421
-	for <linux-usb@vger.kernel.org>; Sun, 16 Feb 2025 22:32:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739745148; cv=none; b=ogyIZ1lK+aQSD6sIC52LeN0BMsZsSdF5c893A5xBB+mH4KyQbnXyAzTf8V4IhejptmKOk0wyRPJa/BbC/r+jkGHbs7vRODs6djQk87M+FLmJXWAyngl14NS+dmJoDWpv7LUjhxxHRiI2U3yWRcCfeEE7rjJK0aLBDkFFkmtf9jE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739745148; c=relaxed/simple;
-	bh=tdI+oIN/tO9TuxIoZAOrI65UU5MhsPdm2dzbxucnf08=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=h5sj/EObhrPa6Zf++xZncgOhkAcboNEl5u9mY5wZoSN2a/tzB94XimaJ5pvjt0hm924aNotkrBbP/BAFD7H4lRHtcjkIJKq+P6at1DD4+XGGogVf5OZJ525wNJT4ZLG48PpPyPEpnbdxdr59APBrmEmJdiNggQGZFAgQGsrPJg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=1q9/ySNc; arc=none smtp.client-ip=209.85.167.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3f3e8e959d5so1033704b6e.0
-        for <linux-usb@vger.kernel.org>; Sun, 16 Feb 2025 14:32:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739745145; x=1740349945; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K/rUh+CVB78Vypb0kxzr8Cgzng5gMOmCsEYl8kNCe+o=;
-        b=1q9/ySNc1umN3IYybaXt1E7TBJzk/3tptp9xk7E0PFvy3sDmfbpNuARBKoICUFvvdJ
-         TUscyeQC9mq8xxDCReKk484Ht/w1A54TU3CrUjz3uGhbcrOkFnvrBT4iyTnDe0kfpyS6
-         HxJFv87Emh68Up15s2Er8b1+kDYzNVEnipKwp/Id6k0KGobZZVDSewePBalMfh88UIGD
-         Z8NHqrECABDL7UzHOVy4AtM9Xbdk2OaORFKcXLyJMBp0N4jfvd4wgsOeX8J5EVPj3hlf
-         Oi6hJdxmXXouA52pDshULX46iWs9tEVpLtnZvY24rXH9Et5FGIZimbpGFH/KrJEGufC4
-         etDw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739745145; x=1740349945;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K/rUh+CVB78Vypb0kxzr8Cgzng5gMOmCsEYl8kNCe+o=;
-        b=QqQiOioN54A4IMxdbnfEhtRK0RgQGkybr7h4YVObtL1rj8cs8Sy9xhY19KjdsOJ4rR
-         xF7WN/15aXrCTy8PbjWh9pgTzjoWTugx3OWxoS7e26un37MvSAR9YLkO2xx6AIWpdX7l
-         /pqlzwv8VCJvkL3Vyt6weJLwvbA8EWWzfThbMegCXlGqXlMcJhy3VFsorKBUhlvHg78B
-         ISDsIWNkwo5nmWV+zAuEn86hOXalu0PUExoxDi5fE/0iMn/XkTV27MXy8cMffZHVSbG9
-         0DI0RSL+F3e9Cv3zpvGTBP07W5YRvha4KOX2x4VK6zlee17lPTW4a7KCMfadZdYe7gwt
-         8dIg==
-X-Forwarded-Encrypted: i=1; AJvYcCW679FVG7Ps7BIfDf4WDKel1mjNbMV0hzdfWkA3kuY/0vLL50ENQCtXO7Tjq/Sw4JQQwAOj7KchWjQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6hSD/lFrwc92ORINxS2iBpoG8WgSnS0CBPsuA3Y/7OYA8F3mR
-	R22keH3cK5QDVEeOaaBZluVbLu4RFFd0knTfj7P3EPv5ZuhG0PApt+RNyQI8iWATchyAapasDTI
-	jCzAO0hM83Gb/EQtilzRumnGrj553OaFuZN7izsVFTV/to2Fj0w1F
-X-Gm-Gg: ASbGnctwe5a/pE4kYK1cO05bZH7oa80dFuZvKJPhgvaJfMxBWgW/CRgT5sd+yNLCY0m
-	zoEuiftHcsZ1oVSg6+9kDZYETw3nXqh2Y2gy5HuRQBC56ColoCKTAJBFvL9cQpjcWcu/xS206Bj
-	l4ZplyRPXKP9MennO5gpKzQVFiFJ0=
-X-Google-Smtp-Source: AGHT+IFbi7s1NIZvofF0AhrEdWXltDvRZei3qZG3g4jM5ZlkUT7bIV9G/wo6MQGk38JgDazQH3mQqvFARhsBlIaAp3Y=
-X-Received: by 2002:a05:6808:384d:b0:3f3:ba6b:8174 with SMTP id
- 5614622812f47-3f3d90d9ad6mr10333175b6e.8.1739745145024; Sun, 16 Feb 2025
- 14:32:25 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE050372;
+	Mon, 17 Feb 2025 06:26:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=208.86.201.193
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739773581; cv=fail; b=nv5lZ0JtNdyuz+x3ntDa/E9XSCJxknksTFnS50g0oGglI0GfCAhaMDsU/gtHRnkYJaElOGQOt0IqNvKvpfOe3RGM0oSKH79vXiJNCMpv0gG6fYnRMevNIqE/9Xpz6QIbXksGwHnrrj1tajD6nVKenILjQpOMRayyWvgIM+W7rKw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739773581; c=relaxed/simple;
+	bh=arWwXPkE1K4RhSzgMyf4YXA3SYNV+rM9eojYeLkDACs=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=ryZFEwP25iawztf8kLYwAY2zGkrOVLs4FqpuYkLQHKfnNJzuU+CtUgIuAZTTIcAVL0Bs4Gm4gA0IM3ebDRV5V2qqYeW5zbCBDqHR9FML4OhIkxD8SnHyZlypacTjOgMvEOcCmGHjwTW1xKxjxeVU0kcAntBqqsj98g5nFG6TLBA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cadence.com; spf=pass smtp.mailfrom=cadence.com; dkim=pass (2048-bit key) header.d=cadence.com header.i=@cadence.com header.b=e/mSDMEx; dkim=pass (1024-bit key) header.d=cadence.com header.i=@cadence.com header.b=YYBDyiPu; arc=fail smtp.client-ip=208.86.201.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cadence.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cadence.com
+Received: from pps.filterd (m0042333.ppops.net [127.0.0.1])
+	by mx0b-0014ca01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51GLl27k024700;
+	Sun, 16 Feb 2025 22:25:42 -0800
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=proofpoint;
+	 bh=jiYW4m2o9wZq0clkB9guH8mPZxMFLRMTSLYHJrYW32M=; b=e/mSDMExKWHF
+	MkuJ8W+WeLiMcmYrOzClMs/caF0oOtHrRDH9yQ99O4CKBgeM8hEaZxf4mqh6GNmU
+	XRxS9Vh46AHL/y07u3mdAm+vGClQ2KeKthky2Cw0ZKUc/7UDLsHczbHu/osutRGc
+	IrwRemFsqkZlK8xs882uvfbsa53BziMDTgCeFY/tdiUEDWL6LTfC/EtqKR4XbWp7
+	8Q65Fnn2DYD6GI4/F42KKWg75MPTCeJP7/Qzu54krAELrPjzRna+ygYpWukGd3dk
+	mDWbV9RCtc48NbkBAvU/Gtz+AgjyWE+jwBekdZs7TpAeKPw1W2Tu/uw3xfo05k2k
+	2VgCXFfLjQ==
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2043.outbound.protection.outlook.com [104.47.51.43])
+	by mx0b-0014ca01.pphosted.com (PPS) with ESMTPS id 44tqd1475k-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Sun, 16 Feb 2025 22:25:38 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=k2SLwxjFed+yl43kr8jIEnnG2Zk3RLdcKVRpiQKQ00C1V7B6vbZw1NjGpdkBMmdPyQeEAKOtk0B4bw9esr7p7fx50j0S+rsqWNbOfyv79VJJdFIKvaw3rFPcI52l0ogfD7QS4pz4TDXDk0R4ZiIy1fFj0ehF5qL+0tVGdDJQpkUOXvomXK2EP2O/geT0hCRt5f7KTjljD7K4Bttx+fH5yUjj9VgrUpuqDkpMuC2ZbQud5REcNEoIfj9epex7xs1jqbfHEK+O8wJf127AMgvMdOdzEbR/EB9VMlbu7RStEfcTxYZfayruHU/AfspiiiqtAlVbHKkKOr0guFuYRcdFeQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=jiYW4m2o9wZq0clkB9guH8mPZxMFLRMTSLYHJrYW32M=;
+ b=XlZcQ1hNNb+JZA3zolB9VDoUHQLfvdl1M0ezwTKpplSqZW1wCvGWAU4yxnqrn6002YvN3K1zD91JRuI3P7YXpszokzQ6UksQ5NY2bqOsMdOk9UOYs3rTzf68aE6yj8Cm9KkvDcpp+YLzGo0Kq7MOBTOPwfmepYss4bhgdvuflFv2YaiGI94UgBlCRDz4rxXv9uMvhAe9RXjz3lqoYne3bHMXfdsI8Sm4ipZ91jYn1v20F/kQ7qu9uRX1FEJP/fibqTCXKZBqLKIItW8aaK007byz9XiRCrlnG9kX8th2kwCq3T+U616yZ748+maQIXAsU5fw4q76hvfzxwrnIvZKPg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=cadence.com; dmarc=pass action=none header.from=cadence.com;
+ dkim=pass header.d=cadence.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cadence.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=jiYW4m2o9wZq0clkB9guH8mPZxMFLRMTSLYHJrYW32M=;
+ b=YYBDyiPuDxBa6OpPM9qIn7PKplUqVt+MuSiSM9TMdsa+G/FHsRwl0e9hjLTUP5ieotfBy4SB28PW1NsrRsPtkqbgAsHHIPIcFanOpCJKeXSZD9jP8oXdc4N88Rd2k9yDdPGL7YDFbd6/t23ZQOz7QavkGkJMnIntFc/AjQnwAlM=
+Received: from PH7PR07MB9538.namprd07.prod.outlook.com (2603:10b6:510:203::19)
+ by CH0PR07MB8906.namprd07.prod.outlook.com (2603:10b6:610:107::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Mon, 17 Feb
+ 2025 06:25:35 +0000
+Received: from PH7PR07MB9538.namprd07.prod.outlook.com
+ ([fe80::5dbd:49e3:4dc:ccc7]) by PH7PR07MB9538.namprd07.prod.outlook.com
+ ([fe80::5dbd:49e3:4dc:ccc7%7]) with mapi id 15.20.8445.017; Mon, 17 Feb 2025
+ 06:25:35 +0000
+From: Pawel Laszczak <pawell@cadence.com>
+To: "stern@rowland.harvard.edu" <stern@rowland.harvard.edu>
+CC: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
+        "christophe.jaillet@wanadoo.fr" <christophe.jaillet@wanadoo.fr>,
+        "javier.carrasco@wolfvision.net" <javier.carrasco@wolfvision.net>,
+        "make_ruc2021@163.com" <make_ruc2021@163.com>,
+        "peter.chen@nxp.com"
+	<peter.chen@nxp.com>,
+        "linux-usb@vger.kernel.org"
+	<linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        Pawel Eichler <peichler@cadence.com>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: RE: [PATCH] usb: xhci: lack of clearing xHC resources
+Thread-Topic: [PATCH] usb: xhci: lack of clearing xHC resources
+Thread-Index: AQHbff/PyNY2z2E4uEeZXCoyn0/C0LNFA7/AgABYk4CABa79sA==
+Date: Mon, 17 Feb 2025 06:25:35 +0000
+Message-ID:
+ <PH7PR07MB95383C03E64507BED1D64222DDFB2@PH7PR07MB9538.namprd07.prod.outlook.com>
+References: <20250213101158.8153-1-pawell@cadence.com>
+ <PH7PR07MB95384002E4FBBC7FE971862FDDFF2@PH7PR07MB9538.namprd07.prod.outlook.com>
+ <b39d468e-beb9-4a44-8fe6-83754ffbd367@rowland.harvard.edu>
+In-Reply-To: <b39d468e-beb9-4a44-8fe6-83754ffbd367@rowland.harvard.edu>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-dg-ref:
+ =?us-ascii?Q?PG1ldGE+PGF0IGFpPSIwIiBubT0iYm9keS50eHQiIHA9ImM6XHVzZXJzXHBh?=
+ =?us-ascii?Q?d2VsbFxhcHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUt?=
+ =?us-ascii?Q?NmI4NGJhMjllMzViXG1zZ3NcbXNnLWZkNTEyODJlLWVjZjctMTFlZi1hOGNh?=
+ =?us-ascii?Q?LTAwYmU0MzE0MTUxZVxhbWUtdGVzdFxmZDUxMjgzMC1lY2Y3LTExZWYtYThj?=
+ =?us-ascii?Q?YS0wMGJlNDMxNDE1MWVib2R5LnR4dCIgc3o9IjQxNTgiIHQ9IjEzMzg0MjQ3?=
+ =?us-ascii?Q?MTMzMjk2MTg4OCIgaD0iMUJmdGhiR2VySGl5ZHJTSXpJUWNnRk0zRnZjPSIg?=
+ =?us-ascii?Q?aWQ9IiIgYmw9IjAiIGJvPSIxIiBjaT0iY0FBQUFFUkhVMVJTUlVGTkNnVUFB?=
+ =?us-ascii?Q?R0FJQUFCZ1hxbS9CSUhiQVR0QjNGdFZGOTMvTzBIY1cxVVgzZjhLQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUhBQUFBQXNCZ0FBbkFZQUFNUUJBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUVBQVFBQkFBQUFoRlY4eVFBQUFBQUFBQUFBQUFBQUFKNEFBQUJq?=
+ =?us-ascii?Q?QUdFQVpBQmxBRzRBWXdCbEFGOEFZd0J2QUc0QVpnQnBBR1FBWlFCdUFIUUFh?=
+ =?us-ascii?Q?UUJoQUd3QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHTUFaQUJ1QUY4QWRnQm9B?=
+ =?us-ascii?Q?R1FBYkFCZkFHc0FaUUI1QUhjQWJ3QnlBR1FBY3dBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFB?=
+ =?us-ascii?Q?QUFDQUFBQUFBQ2VBQUFBWXdCdkFHNEFkQUJsQUc0QWRBQmZBRzBBWVFCMEFH?=
+ =?us-ascii?Q?TUFhQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFBSUFBQUFBQUo0QUFB?=
+ =?us-ascii?Q?QnpBRzhBZFFCeUFHTUFaUUJqQUc4QVpBQmxBRjhBWVFCekFHMEFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+x-dg-rorf: true
+x-dg-refone:
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFu?=
+ =?us-ascii?Q?Z0FBQUhNQWJ3QjFBSElBWXdCbEFHTUFid0JrQUdVQVh3QmpBSEFBY0FBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFjd0J2QUhVQWNn?=
+ =?us-ascii?Q?QmpBR1VBWXdCdkFHUUFaUUJmQUdNQWN3QUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQkFB?=
+ =?us-ascii?Q?QUFBQUFBQUFJQUFBQUFBSjRBQUFCekFHOEFkUUJ5QUdNQVpRQmpBRzhBWkFC?=
+ =?us-ascii?Q?bEFGOEFaZ0J2QUhJQWRBQnlBR0VBYmdBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUVBQUFBQUFBQUFBZ0FBQUFB?=
+ =?us-ascii?Q?QW5nQUFBSE1BYndCMUFISUFZd0JsQUdNQWJ3QmtBR1VBWHdCcUFHRUFkZ0Jo?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FBQUFBQUNlQUFBQWN3QnZBSFVB?=
+ =?us-ascii?Q?Y2dCakFHVUFZd0J2QUdRQVpRQmZBSEFBZVFCMEFHZ0Fid0J1QUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+x-dg-reftwo:
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJ6QUc4?=
+ =?us-ascii?Q?QWRRQnlBR01BWlFCakFHOEFaQUJsQUY4QWNnQjFBR0lBZVFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBRUFBQUFBQUFBQUFnQUFBQUFBeEFFQUFBQUFBQUFJQUFBQUFBQUFBQWdB?=
+ =?us-ascii?Q?QUFBQUFBQUFDQUFBQUFBQUFBQ2tBUUFBQ2dBQUFESUFBQUFBQUFBQVl3QmhB?=
+ =?us-ascii?Q?R1FBWlFCdUFHTUFaUUJmQUdNQWJ3QnVBR1lBYVFCa0FHVUFiZ0IwQUdrQVlR?=
+ =?us-ascii?Q?QnNBQUFBTEFBQUFBQUFBQUJqQUdRQWJnQmZBSFlBYUFCa0FHd0FYd0JyQUdV?=
+ =?us-ascii?Q?QWVRQjNBRzhBY2dCa0FITUFBQUFrQUFBQUFBQUFBR01BYndCdUFIUUFaUUJ1?=
+ =?us-ascii?Q?QUhRQVh3QnRBR0VBZEFCakFHZ0FBQUFtQUFBQUFBQUFBSE1BYndCMUFISUFZ?=
+ =?us-ascii?Q?d0JsQUdNQWJ3QmtBR1VBWHdCaEFITUFiUUFBQUNZQUFBQUFBQUFBY3dCdkFI?=
+ =?us-ascii?Q?VUFjZ0JqQUdVQVl3QnZBR1FBWlFCZkFHTUFjQUJ3QUFBQUpBQUFBQUFBQUFC?=
+ =?us-ascii?Q?ekFHOEFkUUJ5QUdNQVpRQmpBRzhBWkFCbEFGOEFZd0J6QUFBQUxnQUFBQUFB?=
+ =?us-ascii?Q?QUFCekFHOEFkUUJ5QUdNQVpRQmpBRzhBWkFCbEFGOEFaZ0J2QUhJQWRBQnlB?=
+ =?us-ascii?Q?R0VBYmdBQUFDZ0FBQUFBQUFBQWN3QnZBSFVBY2dCakFHVUFZd0J2QUdRQVpR?=
+ =?us-ascii?Q?QmZBR29BWVFCMkFHRUFBQUFzQUFBQUFBQUFBSE1BYndCMUFISUFZd0JsQUdN?=
+ =?us-ascii?Q?QWJ3QmtBR1VBWHdCd0FIa0FkQUJvQUc4QWJnQUFBQ2dBQUFBQUFBQUFjd0J2?=
+ =?us-ascii?Q?QUhVQWNnQmpBR1VBWXdCdkFHUUFaUUJmQUhJQWRRQmlBSGtBQUFBPSIvPjwv?=
+ =?us-ascii?Q?bWV0YT4=3D?=
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR07MB9538:EE_|CH0PR07MB8906:EE_
+x-ms-office365-filtering-correlation-id: d5f0745f-4212-4d53-0e7f-08dd4f1be351
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700018;
+x-microsoft-antispam-message-info:
+ =?us-ascii?Q?BUsa6wCBjhidwsX55kDxVmMlQ7wk34w2z4T6kdhM21oSsYc0uHJHMBc8oGrU?=
+ =?us-ascii?Q?o2ywPIBw9xwuSxrmzILIbkEeP5mfM/g3iWUtsRqUFyXkFMsHu+sPQ3M1Lrgo?=
+ =?us-ascii?Q?121x4hbOukk37oFxYhrq2MMFCzfoqqq8Z104jxsKPdfwPm/fDgJYIWy+72Oy?=
+ =?us-ascii?Q?yUURyoU34wdB+ENQlE9KGQy3hVeMQfCKvP+mmF0ggntF8h7HL5KlBmjdETcn?=
+ =?us-ascii?Q?x9d8C6txeyRL04JLG6DmMPLvstOyzLkX9CDT3r2E4XCIoQde3y/B/dUYRUWN?=
+ =?us-ascii?Q?U/5qZdGfkPxEflY8Ik7SCsv+hy+VNcYHHQsPCrVvg1Ue6CpmPSZ/rW9X1d9P?=
+ =?us-ascii?Q?FTwa4usQ04Gd0LFs45VawjaL6jY7CdPSE6ODiRN4RZ+pPgnBxLU3Kr1MPg9H?=
+ =?us-ascii?Q?IayUoPoxGbk1dJi+QGoxqPsMIQbeiVxh1JNjJ53DW7dYs7wicUJFVrORhH8k?=
+ =?us-ascii?Q?xB+GH0JpFm67w2I82v4ARjU6Shm6PJN1OOgh4QNfzuB2H96b9TbVT4o0qkLa?=
+ =?us-ascii?Q?FQKrdPVpaQNUZtkz3VEyTy/tG/jTMQ96nKFa8+KZZBWiiD/F2VD+tliEhVA2?=
+ =?us-ascii?Q?AjiAZyf0YWl1jDa4U0mnGM19Uo8B5VZoJQbk0TDISpvWEqWC/Fv7jYCadLb5?=
+ =?us-ascii?Q?ewGiiOxA2LdF2fnm6EN1bj9/sDZqQNIXzPX5iH4Kf2LYHlCAH89Hdc6zm7Nn?=
+ =?us-ascii?Q?dvL2YOA4NwD7OWdq4eDPjwu8iM5UXgbrVWybxB/FMGebZtIGA6u2dml2bLSY?=
+ =?us-ascii?Q?5Ic/cdGRr4cgqg847l5qV2cjd6cpBI8CcQbAQWhA0cBuvBciRMk4q+eItZ2p?=
+ =?us-ascii?Q?wNeKmqASYnb7UBQM695x/I7ImuRqWO3dsqvc8258r/zYlHa4w94vX2uJNQml?=
+ =?us-ascii?Q?SrJnhaS08pAOQ+LZ4r0fWUj9R7s20Y8DPfNjjajqvmxbD2qqUpSkACP5UgAo?=
+ =?us-ascii?Q?gL0obnjpgWe6d44l/SykPDXAVJNY0+QVvpUPaUHHH95VzpMEgg75mp+LdXyZ?=
+ =?us-ascii?Q?SNP33h5Bz5gbRO1ROBrJ3aY8w0LDKCAtYRGXYQwZP2/eNxIgB3AiaYW1A2Op?=
+ =?us-ascii?Q?5P+QaQDdW3tmiJrn/xXKa3mLPxyfkQDmdM0LW/pQTbuyhlr0XgKl8r1KmWzX?=
+ =?us-ascii?Q?Wn2WJrNA+S1qKlJsxqQUBu15/shMiVCG6+6uCRSkHo96g2uRRAZh6x264q22?=
+ =?us-ascii?Q?/27tvoSKTHfXuY/moFWt9nvaWCxW8v3RcD71eOW3OPKlN+YhdcQeHxUDR10h?=
+ =?us-ascii?Q?jC1q2BcyN+3sbmp6kfeCrNfFin7X5SMauRTgPy/RM1t6M+BNREAsvOdeaD4b?=
+ =?us-ascii?Q?QWl6epKbjQf/iN/v2FAp11Dd6tX9hl5a6AFYRSflaLGjYTCZoPK7rHZLfALg?=
+ =?us-ascii?Q?Dck0JYOFLyFPAVfiyZDVrSWjaAyq6ZJcMAsjREYaACla2hKQERvk7szUPhmo?=
+ =?us-ascii?Q?qcOnjouLAnmbsrkhP4NGkuB7C2H0zZfq?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR07MB9538.namprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700018);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?tEuJ1gVjSDnEH3yDcF0GgOwbkbZ5X5HOsCVcWLyFQwWasZuS3zOLkg0YhtRu?=
+ =?us-ascii?Q?9lrIAmhfwZzHjdl9ZOy8hZanuiaC0jPNFGFeOnf2og8pOYPv2KvwjkC9Z7HE?=
+ =?us-ascii?Q?h6/aUAiW5INY1OHq0J4Uf6hPxD/ZWnyqe9LGgvFy+SffqjOpQaD9e94PyBB8?=
+ =?us-ascii?Q?Djhh2JHFPsk/zXhFfakDYfMiVopfrJoiBVDGnCq0c0SIgRauRhOCNPcD1WH7?=
+ =?us-ascii?Q?M6nqlDjMQcrBqfgJu6U/cyWoOYT/YLB0aR6Fe2CjrJl05TTQHg5nX4FoV/xE?=
+ =?us-ascii?Q?TB9Y9M9et9QCE6Fpv9k9TkxUWpei/gtRbwhY7xatxFCWwvCoxqXEqIaN5tXL?=
+ =?us-ascii?Q?C35mEeTJtimFBA8ItVDvRT8lxqcewsS0UOZxA4qDpJ1ZoH7YEKPqKFLfiqeO?=
+ =?us-ascii?Q?MevGd0rY/xjg0ERABqnT9PWM3OlpG5xmhjbdXneIuD+ujgH9t1sIa5r3dn2A?=
+ =?us-ascii?Q?dDJouF3DMNSyM8YfCoCTCKKM++1LmxKP+6TvXswxscX3nLdEmBK9al6OWAaP?=
+ =?us-ascii?Q?glVSDunjzYo4tkYLi7nsG18WnYX+ZTONsv74Vj7bQM8mqMmEgseeFv3cGkDN?=
+ =?us-ascii?Q?BQQRbblZqYlwUZ+XPXJzj1Mh0MNRE27nRxckVzi9o246cEZBBpnsNpSq9aUl?=
+ =?us-ascii?Q?z7NQ7VGKegx4QSwR1dJqnmnnZMi5dKzOX1w8lXv2adxHa1xEAXtoVgHipHeh?=
+ =?us-ascii?Q?k9nb3PjgCryg+jyUrDHoSp3SFnQ+q1v2ZlbTA9pDtzhNb0XBrfJJF9bIC3wm?=
+ =?us-ascii?Q?hHqg3sv0DQSKOqHAhsgNWZAbEOMcHQtP85HVQXhi1d3hPxdAdGv2zOEs/sPn?=
+ =?us-ascii?Q?pt2ebqCgfSzLDyZ/X37l9QUU+QQPSmZaG4UvWMatUSPbn+NDMAox+RjB6sNn?=
+ =?us-ascii?Q?qnDfILf/DwLM6MUy9J9/8XOPj5Fp+jd3VSzOzy54SWjHexQPcxMITcUgaIii?=
+ =?us-ascii?Q?yPpZrmnTvB9+B5FjvazEWynVfgIaDV/IIVSyrkKKJmtqTSbZQEoYNIX8/U66?=
+ =?us-ascii?Q?n8zLD09S+BbqRbEgm70hznFpnQBWCdhmsZOQ6gREPx1GPap1uDJ2jHFvIT1q?=
+ =?us-ascii?Q?9UWjLTFFYxhot4+GeIOXNlmOz1cbvWjm6jSMZV0KEW4DelqmH7kZtpcBnAf8?=
+ =?us-ascii?Q?zIk07jSCD+aAkqRUq8NnEqxtaDtoIn9oEIsjBTiBjkShARKohzp8zxyTp86J?=
+ =?us-ascii?Q?RnGL14iU5+nmMbv5miacMbxUYR4T7w7O4u1W5xpAYaZiW/9uHEI8n5Nc3FLz?=
+ =?us-ascii?Q?p6L7B6PBg7hNxu8mklxr3tg/iGBNE7BHoUfVFG/H+Df7zhKgPk5MAeDg7q6j?=
+ =?us-ascii?Q?RPjkxcxQdydVLXz01HIVPfaPHWme1DyqDxsEbwbL5awxGz6i25KXAZAw84Gh?=
+ =?us-ascii?Q?rOyXHXEKXRe10dFxCKIuQmh/25X0B3EZqMyui1dGZW88PWoCkLjlfqjASXFQ?=
+ =?us-ascii?Q?DU65XUJJW25vx60Ekpo7GQacNDI4VFx4C+nRu0MKofNVZU4bEF7rFuKMu2Gp?=
+ =?us-ascii?Q?806FxCLYCKVsgaq9OP3PiqBuibxUP4Rc1WOqXGp1Ef8kSCpk+9RBOGM1uLVZ?=
+ =?us-ascii?Q?nQLHziVDletggnF1rSAytlDOjchOZu973J+74seC?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250208033129.3524423-1-badhri@google.com> <20250211002155.62lyfqjlygod7cdp@synopsys.com>
- <CAPTae5LisYMjx63Jz_xmZ9zA5PtaxRA49gh2FA-fONsJ12sXeg@mail.gmail.com>
- <20250211005508.qeselc6eakgnys74@synopsys.com> <CAPTae5+RENJkgSLJAfzh-LryHvkU+i12ELjYqo_b22CT5HXm7w@mail.gmail.com>
- <20250213222858.3l54lmgfq55o7yc5@synopsys.com>
-In-Reply-To: <20250213222858.3l54lmgfq55o7yc5@synopsys.com>
-From: Badhri Jagan Sridharan <badhri@google.com>
-Date: Sun, 16 Feb 2025 14:31:48 -0800
-X-Gm-Features: AWEUYZmkRrQrQdokNUgGybniLGe4W3P_6erF9zgnNPRfR9oMjd1lIsIHVIkfe4w
-Message-ID: <CAPTae5KEc+E7FyY-k11v3NJFzOwwPO29v8+zqqapAdO5STjh_w@mail.gmail.com>
-Subject: Re: [PATCH v2] usb: dwc3: gadget: Prevent irq storm when TH re-executes
-To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>, 
-	"felipe.balbi@linux.intel.com" <felipe.balbi@linux.intel.com>, 
-	"linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "jameswei@google.com" <jameswei@google.com>, 
-	"stable@kernel.org" <stable@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-OriginatorOrg: cadence.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR07MB9538.namprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d5f0745f-4212-4d53-0e7f-08dd4f1be351
+X-MS-Exchange-CrossTenant-originalarrivaltime: 17 Feb 2025 06:25:35.2708
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: d36035c5-6ce6-4662-a3dc-e762e61ae4c9
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: cES1fVtoBK6UbJzE7vT++SNRbBYI5zvqaY5gpH11Yi0wpGPXnvyJXrjbtIYNKdWSUFqAi0JkeKViKjQqW1lGrgHe4Q8jWI8vDKLQ/TDp0xs=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR07MB8906
+X-Proofpoint-GUID: IBwx0UudUs-x3ep8ViGM4eAveWNU861F
+X-Proofpoint-ORIG-GUID: IBwx0UudUs-x3ep8ViGM4eAveWNU861F
+X-Authority-Analysis: v=2.4 cv=K4LYHzWI c=1 sm=1 tr=0 ts=67b2d662 cx=c_pps a=BUR/PSeFfUFfX8a0VQYRdg==:117 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=T2h4t0Lz3GQA:10 a=aBq_wrnhfgAA:10
+ a=Zpq2whiEiuAA:10 a=daS0RHY31lWXCLOSzBoA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-17_03,2025-02-13_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_check_notspam policy=outbound_check score=0
+ priorityscore=1501 impostorscore=0 mlxlogscore=878 adultscore=0
+ suspectscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
+ mlxscore=0 bulkscore=0 clxscore=1015 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502170054
 
-On Thu, Feb 13, 2025 at 2:29=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@synopsys=
-.com> wrote:
 >
-> On Wed, Feb 12, 2025, Badhri Jagan Sridharan wrote:
-> > On Mon, Feb 10, 2025 at 4:55=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@syno=
-psys.com> wrote:
-> > >
-> > > On Mon, Feb 10, 2025, Badhri Jagan Sridharan wrote:
-> > > > .
-> > > >
-> > > > On Mon, Feb 10, 2025 at 4:22=E2=80=AFPM Thinh Nguyen <Thinh.Nguyen@=
-synopsys.com> wrote:
-> > > > >
-> > > > > On Sat, Feb 08, 2025, Badhri Jagan Sridharan wrote:
-> > > > > > While commit d325a1de49d6 ("usb: dwc3: gadget: Prevent losing e=
-vents in
-> > > > > > event cache") makes sure that top half(TH) does not end up over=
-writing the
-> > > > > > cached events before processing them when the TH gets invoked m=
-ore than one
-> > > > > > time, returning IRQ_HANDLED results in occasional irq storm whe=
-re the TH
-> > > > > > hogs the CPU. The irq storm can be prevented by clearing the fl=
-ag before
-> > > > > > event handler busy is cleared. Default enable interrupt moderat=
-ion in all
-> > > > > > versions which support them.
-> > > > > >
-> > > > > > ftrace event stub during dwc3 irq storm:
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000866: irq_handle=
-r_exit: irq=3D14 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000872: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000874: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000881: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000883: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000889: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000892: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000898: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000901: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000907: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000909: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000915: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000918: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000924: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000927: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000933: irq_handle=
-r_entry: irq=3D504 name=3Ddwc3
-> > > > > >     irq/504_dwc3-1111  ( 1111) [000] .... 70.000935: irq_handle=
-r_exit: irq=3D504 ret=3Dhandled
-> > > > > >     ....
-> > > > > >
-> > > > > > Cc: stable@kernel.org
-> > > > > > Suggested-by: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-> > > > > > Fixes: d325a1de49d6 ("usb: dwc3: gadget: Prevent losing events =
-in event cache")
-> > > > > > Signed-off-by: Badhri Jagan Sridharan <badhri@google.com>
-> > > > > > ---
-> > > > > >  drivers/usb/dwc3/core.c   |  2 +-
-> > > > > >  drivers/usb/dwc3/gadget.c | 10 +++++++---
-> > > > > >  2 files changed, 8 insertions(+), 4 deletions(-)
-> > > > > >
-> > > > > > diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> > > > > > index dfa1b5fe48dc..6df971ef7285 100644
-> > > > > > --- a/drivers/usb/dwc3/core.c
-> > > > > > +++ b/drivers/usb/dwc3/core.c
-> > > > > > @@ -1835,7 +1835,7 @@ static void dwc3_get_properties(struct dw=
-c3 *dwc)
-> > > > > >       dwc->tx_thr_num_pkt_prd =3D tx_thr_num_pkt_prd;
-> > > > > >       dwc->tx_max_burst_prd =3D tx_max_burst_prd;
-> > > > > >
-> > > > > > -     dwc->imod_interval =3D 0;
-> > > > > > +     dwc->imod_interval =3D 1;
-> > > > >
-> > > > > Use dwc3_has_imod() to determine whether to set this. Otherwise w=
-e get
-> > > > > a warning on setups that don't support imod.
-> > > >
-> > > > Hi Thinh,
-> > > >
-> > > > dwc3_check_params() which gets invoked after dwc3_get_properties() =
-at
-> > > > https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v6.14-=
-rc1/source/drivers/usb/dwc3/core.c*L1851__;Iw!!A4F2R9G_pg!Zar83WUe4sM-EF4c2=
-wR2-vWBJHgYOCWEc1ijhOsWQHiXtzCF0d_t2gckS0YJUv4lAZgGZl2C-oSp1QMIx28$
-> > > > seems to already call dwc3_has_imod(). Do you prefer me to add an
-> > > > explicit check here as well ?
-> > > >
-> > >
-> > > Yes. I don't want to see dev_warn print when there shouldn't be any f=
-or
-> > > setup that don't support imod.
-> >
-> > Hi Thinh,
-> >
-> > Looks like adding dwc3_has_imod() in dwc3_get_properties() would not
-> > be possible as the dwc->revision gets filled in much later at
-> > dwc3_core_is_valid():
-> > https://urldefense.com/v3/__https://elixir.bootlin.com/linux/v6.14-rc2/=
-source/drivers/usb/dwc3/core.c*L2218__;Iw!!A4F2R9G_pg!d67RghVyoDYTtMqlnAcNg=
-HywoW0ZfJnYX1NSjokyqaBnPrdiF4w0FlFgTGDEVcSZeUHfpBGIgQtx_UAa1t0$ ,
-> > also, the core is still not brought out of reset yet. Would it be
-> > reasonable to initialize dwc->imod_interval to 1 in
-> > dwc3_check_params() like below ?
-> >
-> > +++ b/drivers/usb/dwc3/core.c
-> > @@ -1835,8 +1835,6 @@ static void dwc3_get_properties(struct dwc3 *dwc)
-> >         dwc->tx_thr_num_pkt_prd =3D tx_thr_num_pkt_prd;
-> >         dwc->tx_max_burst_prd =3D tx_max_burst_prd;
-> >
-> > -       dwc->imod_interval =3D 1;
-> > -
-> >         dwc->tx_fifo_resize_max_num =3D tx_fifo_resize_max_num;
-> >  }
-> >
-> > @@ -1858,6 +1856,8 @@ static void dwc3_check_params(struct dwc3 *dwc)
-> >         if (dwc->imod_interval && !dwc3_has_imod(dwc)) {
-> >                 dev_warn(dwc->dev, "Interrupt moderation not supported\=
-n");
-> >                 dwc->imod_interval =3D 0;
-> > +       } else if (!dwc->imod_interval && dwc3_has_imod(dwc)) {
-> > +               dwc->imod_interval =3D 1;
-> >         }
-> >
 >
-> Can you consolidate all the settings of IMOD to the below:
+>On Thu, Feb 13, 2025 at 10:27:00AM +0000, Pawel Laszczak wrote:
+>> The xHC resources allocated for USB devices are not released in correct
+>order after resuming in case when while suspend device was reconnected.
+>>
+>> This issue has been detected during the fallowing scenario:
+>> - connect hub HS to root port
+>> - connect LS/FS device to hub port
+>> - wait for enumeration to finish
+>> - force DUT to suspend
+>> - reconnect hub attached to root port
+>> - wake DUT
+>
+>DUT refers to the host, not the LS/FS device plugged into the hub, is that
+>right?
 
-Done Thinh !
-Sent out V3 version of the patch:
-https://lore.kernel.org/all/20250216223003.3568039-1-badhri@google.com/
+Yes DUT refers to the HOST.
+
+>
+>> For this scenario during enumeration of USB LS/FS device the Cadence xHC
+>reports completion error code for xHCi commands because the devices was
+>not property disconnected and in result the xHC resources has not been
+>correct freed.
+>> XHCI specification doesn't mention that device can be reset in any order=
+ so,
+>we should not treat this issue as Cadence xHC controller bug.
+>> Similar as during disconnecting in this case the device should be cleare=
+d
+>starting form the last usb device in tree toward the root hub.
+>> To fix this issue usbcore driver should disconnect all USB devices conne=
+cted
+>to hub which was reconnected while suspending.
+>
+>No, that's not right at all.  We do not want to disconnect these devices i=
+f
+>there's any way to avoid it.
+>
+>There must be another way to tell the host controller to release the devic=
+es'
+>resources.  Doesn't the usb_reset_and_verify_device() call do something li=
+ke
+>that anyway?  After all, the situation should be very similar to what happ=
+ens
+>when a device is simply reset.
+>
+>Alan Stern
+
+
+Yes, I had such idea too, but the current solution is simpler.
+I don't understand why in this case we can't do disconnect
+The hub connected to host was physically disconnected during suspend, so=20
+It seems quite logic to make disconnection.=20
+Can you comment why we should not make disconnection?
 
 Thanks,
-Badhri
-
->
-> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-> index 423866b2ffaa..a485fef82301 100644
-> --- a/drivers/usb/dwc3/core.c
-> +++ b/drivers/usb/dwc3/core.c
-> @@ -2021,21 +2021,19 @@ static void dwc3_check_params(struct dwc3 *dwc)
->         unsigned int hwparam_gen =3D
->                 DWC3_GHWPARAMS3_SSPHY_IFC(dwc->hwparams.hwparams3);
->
-> -       /* Check for proper value of imod_interval */
-> -       if (dwc->imod_interval && !dwc3_has_imod(dwc)) {
-> -               dev_warn(dwc->dev, "Interrupt moderation not supported\n"=
-);
-> -               dwc->imod_interval =3D 0;
-> -       }
-> -
->         /*
-> +        * Enable IMOD for all supporting controllers.
-> +        *
-> +        * Particularly, DWC_usb3 v3.00a must enable this feature for
-> +        * the following reason:
-> +        *
->          * Workaround for STAR 9000961433 which affects only version
->          * 3.00a of the DWC_usb3 core. This prevents the controller
->          * interrupt from being masked while handling events. IMOD
->          * allows us to work around this issue. Enable it for the
->          * affected version.
->          */
-> -       if (!dwc->imod_interval &&
-> -           DWC3_VER_IS(DWC3, 300A))
-> +       if (dwc3_has_imod((dwc)))
->                 dwc->imod_interval =3D 1;
->
->
-> Thanks,
-> Thinh
+Pawel
 
