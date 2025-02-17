@@ -1,96 +1,79 @@
-Return-Path: <linux-usb+bounces-20712-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20713-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A223A380F6
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 11:59:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 32ABCA381FA
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 12:40:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A9DF13B62A9
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 10:57:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 25FDF3B47A9
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 11:37:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B650C218AD8;
-	Mon, 17 Feb 2025 10:56:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 100AD218E91;
+	Mon, 17 Feb 2025 11:38:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZkMMbn59"
+	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="FVnEflPk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-lj1-f173.google.com (mail-lj1-f173.google.com [209.85.208.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4011721859A;
-	Mon, 17 Feb 2025 10:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4D76194C8B;
+	Mon, 17 Feb 2025 11:37:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739789789; cv=none; b=dC1Axv9GZWKd3O4e2EYutfE+6Vg90x+/385a6mxd2BG0e3aSJFC0MZLNEShTOqg2Perq2nvcJhXiviMjUzVCbBLqyRdTj4i1sPoudtcTBshzA5kLSzdHm6ctf1WSnpjgSAQqEfYy6PTSW1MoiCEjPas6oks0QFQuW9PRmRnmbVI=
+	t=1739792280; cv=none; b=fAqwRPQKY42nIwu/mOAJA9g9sY6ngM07ahOegCgm2+Tj0tLsn529XMbudC2wmTqSujcKExkLKqzzMn5ru83p+Qo8IYvNSm37xgtSKY2XwUVqRX9K7+tHvki/VLixvF8pTkP1fHQShLtoh2zdefUPWOJF+We807Zs5v1jf1TEPpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739789789; c=relaxed/simple;
-	bh=dRiBU8bLHN+PKEp+BzJxh4xI8Uvh7i6S8PS8NsvM9so=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eXI0FiKz9dL83m4c4fe8lvXGA/Pr03olS4p3nEMIN2wBtY6jA2zILTVoXAuq7p69XPHRhKC68jUjN05sNCu7scro61l71WfnBzMhKWx9tnlDKAywbdpyZxJXNi5AjuRw1Fuwq46CsQqRfIjR/rSrnOJu2ie571h3Av99JsHqnFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZkMMbn59; arc=none smtp.client-ip=209.85.208.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f173.google.com with SMTP id 38308e7fff4ca-30737db1ab1so38405821fa.1;
-        Mon, 17 Feb 2025 02:56:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739789785; x=1740394585; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wPmQbo/PCv0pK4oZriNkiOu24KqYFPM+bg/Ekpuf9vA=;
-        b=ZkMMbn59wc5qMdK1X0wOv8UQASb0cP4R1XEmf0o6jNvuVh7ypGZQTf0kg65MbRO10Q
-         Q5vfPTR1PiR2+Q2lhREXFy9FDHJk0Yf5atk/Y6KYcCLQ4uZ906KtqZQuoGTW66Z2LvPY
-         mosXON17PwFQXW4w8XaHBud4hMJykpFPR5ZSuQ+uHtUGZfPGtWYj1rAK5q6gFW42Oy8a
-         jynVHWRwP+bY7zWur8gD+2ue1m/4nL/YRlFYbnAAkT7jLuuVuhUzT8lysvFF819nhZpD
-         sc1r6sw5sZPnZq4ZnA+GzOksGtw3WpxuHIlK+cSF0DRyrvditPAdDgpLwH0F5jRcwJKc
-         lq/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739789785; x=1740394585;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wPmQbo/PCv0pK4oZriNkiOu24KqYFPM+bg/Ekpuf9vA=;
-        b=hHHOIsy9vqKf+ba9foRFpdLpnnHqgWZ764DO+HvUMP7rl3qteaPytAbjFsf65pCVnD
-         nZZoW24VIN6E6urqnThTRSEB0QUw25PqX+0R5/yrbBLLZxckEj5TAs/v9qYUpJqTuaNt
-         Bzgn3jyLSJm8gryVu20+LhlmX58TkGAlO3j3ZLBYyLRikptiDID0BqO8hIki5yyeG9ai
-         7v2Bxks7JzbMwvq6YnNqW31EQ43LGQxkqq2TVjyOPDdWl2aOsaozgvGvgCDeABSLueP0
-         Y7VbKU2qL2ED2u9cs9bub2NumD0LnCkeljhzuZq15Co4hCOfQ6u2TICtgQrJMzJ13/Vb
-         2E2A==
-X-Forwarded-Encrypted: i=1; AJvYcCUdjAloeTsWx/qfsYAG6cGIaw+SSnBDluQehazOP09Yqurrn5jhnCZFC108jnkqKKHgvFWtOvxjklLM@vger.kernel.org, AJvYcCWGnlub0oDG+1PxWlbaZ6YZkn38am6yPhaqhng3t6Brs+XBez8wZfVTIxFbWUaeJyheMuZVoK0EwS8PurU=@vger.kernel.org, AJvYcCXuME5JR9cakGTSE8Ap7matBhxXc0Sc4r6vMhVLLkuM+sCECSkjx3fJ2e+amH9v+x7czit1Ldyq@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7tKUjUh5WVat1EofoWjVpyun8WsdjbQFKS9oPIYpWpk43Farl
-	7Nq6OeqUocPC4/Zz3QvT+TV75dyajOVd1vQHRG40rRVmR5H0CZvY
-X-Gm-Gg: ASbGncveLHkxTZovEOyLZowz7YMXGRc9M17NVvIMrpNAsorbR3gB33As5HwT82r5BNF
-	xZBvBjDWE/jCfe1+l+wWh2NIs+2kQl/wm7ctOPF7ulPNXzl0/AQbot5VCXPbstYcTGHfEgteK+9
-	DQTMee5t3PoA6HMfVHY/vozSmN2YbRif/NEYW3l8Jerl6o08u97h6pPm1rPrcoxLV9h+KZ7vLMz
-	3AtCnRP14yBpUupmd1sLaG1dCmwXMRKfLh0EAypoSZ5qKptickSpsNNjU/5JQZnsW6/pzckkXrH
-	beYFnQmMzcEjmYh/mre8YA5e7VGp7btDfn+DU6XmpA==
-X-Google-Smtp-Source: AGHT+IGCLD07lgk2Kg1aAIH+wi2GPpBO2RQDWyZh6vRvrBRHJbeM9LlJ/S5M4qlz79h4I9QIIJOKrQ==
-X-Received: by 2002:a05:6512:ea1:b0:545:ae6:d73d with SMTP id 2adb3069b0e04-5452fe767f3mr2775645e87.45.1739789785193;
-        Mon, 17 Feb 2025 02:56:25 -0800 (PST)
-Received: from fedora.intra.ispras.ru (morra.ispras.ru. [83.149.199.253])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5452b496aafsm1157086e87.29.2025.02.17.02.56.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2025 02:56:24 -0800 (PST)
-From: Fedor Pchelkin <boddah8794@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Fedor Pchelkin <boddah8794@gmail.com>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	"Christian A. Ehrhardt" <lk@c--e.de>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Benson Leung <bleung@chromium.org>,
-	Jameson Thies <jthies@google.com>,
-	Saranya Gopal <saranya.gopal@intel.com>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Mark Pearson <mpearson@squebb.ca>,
-	stable@vger.kernel.org
-Subject: [PATCH 2/2] usb: typec: ucsi: increase timeout for PPM reset operations
-Date: Mon, 17 Feb 2025 13:54:40 +0300
-Message-ID: <20250217105442.113486-3-boddah8794@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250217105442.113486-1-boddah8794@gmail.com>
-References: <20250217105442.113486-1-boddah8794@gmail.com>
+	s=arc-20240116; t=1739792280; c=relaxed/simple;
+	bh=/ACTGZEmOGEMJW+VSLUpRkaXoC8ByG57LGhsF7zKvIk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=V+eq2URgXKVxZsFH7ecZg4Bk1YdcGufAEyJFoGoJ+UGAv7qYfleoixGAEHJa2KOdtfGvQ3MEIG1xBOflJOhfQhm40VYQ6L52GO5TzU01RiQDW6miqglNBlTcwt6NNzt7sqXLZ6nIIYVKLPXYGFXrnsr2/ZfgtxohFqhz3JrVNoI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=FVnEflPk; arc=none smtp.client-ip=60.244.123.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
+X-UUID: 9de83a4ced2311efaae1fd9735fae912-20250217
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=DbjxxvFUSINuD+GS4bDK4+YmMPoBQQThSlhkpsMhcDg=;
+	b=FVnEflPk2PsDj3/N4oTcnyRQvjt03qjd/n959qEcD7g4Gah8BsrzVdYsyUSk3mO9WIFFrV/km6GaAL9pxcyuoFWPIg6OYS3SocNCed0Fx448rQODp0sAFfNVh412/x9tv5pWQMT1KTLD2tMW+ItstL4BT6YCe9FiMJSockubjmA=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.46,REQID:93bd6619-0b0a-41c0-8175-b2a69cd78ad1,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:60aa074,CLOUDID:c2c37f88-f9ab-4ac1-951b-e3a689bed90c,B
+	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 0
+X-CID-BAS: 0,_,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-UUID: 9de83a4ced2311efaae1fd9735fae912-20250217
+Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
+	(envelope-from <macpaul.lin@mediatek.com>)
+	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+	with ESMTP id 856791141; Mon, 17 Feb 2025 19:37:50 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.28; Mon, 17 Feb 2025 19:37:48 +0800
+Received: from mtksitap99.mediatek.inc (10.233.130.16) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1258.28 via Frontend Transport; Mon, 17 Feb 2025 19:37:48 +0800
+From: Macpaul Lin <macpaul.lin@mediatek.com>
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-mediatek@lists.infradead.org>, Alexandre Mergnat
+	<amergnat@baylibre.com>
+CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
+	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
+	<linux-usb@vger.kernel.org>, Sen Chu <sen.chu@mediatek.com>, Chris-qj chen
+	<chris-qj.chen@mediatek.com>
+Subject: [PATCH v3] arm64: dts: mediatek: mt6359: fix dtbs_check error for audio-codec
+Date: Mon, 17 Feb 2025 19:37:36 +0800
+Message-ID: <20250217113736.1867808-1-macpaul.lin@mediatek.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -98,52 +81,44 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK: N
 
-It is observed that on some systems an initial PPM reset during the boot
-phase can trigger a timeout:
+This change fixes these dtbs_check errors for audio-codec:
+1. pmic: 'mt6359codec' does not match any of the regexes: 'pinctrl-[0-9]+'
+ - Replace device node name to generic 'audio-codec'
+2. pmic: regulators: 'compatible' is a required property
+ - Add 'mediatek,mt6359-codec' to compatible.
 
-[    6.482546] ucsi_acpi USBC000:00: failed to reset PPM!
-[    6.482551] ucsi_acpi USBC000:00: error -ETIMEDOUT: PPM init failed
-
-Still, increasing the timeout value, albeit being the most straightforward
-solution, eliminates the problem: the initial PPM reset may take up to
-~8000-10000ms on some Lenovo laptops. When it is reset after the above
-period of time (or even if ucsi_reset_ppm() is not called overall), UCSI
-works as expected.
-
-Moreover, if the ucsi_acpi module is loaded/unloaded manually after the
-system has booted, reading the CCI values and resetting the PPM works
-perfectly, without any timeout. Thus it's only a boot-time issue.
-
-The reason for this behavior is not clear but it may be the consequence
-of some tricks that the firmware performs or be an actual firmware bug.
-As a workaround, increase the timeout to avoid failing the UCSI
-initialization prematurely.
-
-Fixes: b1b59e16075f ("usb: typec: ucsi: Increase command completion timeout value")
-Cc: stable@vger.kernel.org
-Signed-off-by: Fedor Pchelkin <boddah8794@gmail.com>
-Reviewed-by: Heikki Krogerus <heikki.krogerus@linux.intel.com>
+Fixes: 3b7d143be4b7 ("arm64: dts: mt6359: add PMIC MT6359 related nodes")
+Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 ---
-Add Heikki's Reviewed-by tag.
+ arch/arm64/boot/dts/mediatek/mt6359.dtsi | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
- drivers/usb/typec/ucsi/ucsi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes for v2:
+ - No change. Because the 2/3 patch has been dropped from the v1 patch.
+   Hence the new patch set v2 needs to be updated.
 
-diff --git a/drivers/usb/typec/ucsi/ucsi.c b/drivers/usb/typec/ucsi/ucsi.c
-index 0fe1476f4c29..7a56d3f840d7 100644
---- a/drivers/usb/typec/ucsi/ucsi.c
-+++ b/drivers/usb/typec/ucsi/ucsi.c
-@@ -25,7 +25,7 @@
-  * difficult to estimate the time it takes for the system to process the command
-  * before it is actually passed to the PPM.
-  */
--#define UCSI_TIMEOUT_MS		5000
-+#define UCSI_TIMEOUT_MS		10000
+Changes for v3:
+ - Add "Reviewed-by:" tag. Thanks!.
+
+diff --git a/arch/arm64/boot/dts/mediatek/mt6359.dtsi b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
+index 8e1b8c85c6ed..98a4aaac7911 100644
+--- a/arch/arm64/boot/dts/mediatek/mt6359.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt6359.dtsi
+@@ -14,7 +14,8 @@ pmic_adc: adc {
+ 			#io-channel-cells = <1>;
+ 		};
  
- /*
-  * UCSI_SWAP_TIMEOUT_MS - Timeout for role swap requests
+-		mt6359codec: mt6359codec {
++		mt6359codec: audio-codec {
++			compatible = "mediatek,mt6359-codec";
+ 		};
+ 
+ 		regulators {
 -- 
-2.48.1
+2.45.2
 
 
