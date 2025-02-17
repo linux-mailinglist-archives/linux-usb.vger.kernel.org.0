@@ -1,113 +1,109 @@
-Return-Path: <linux-usb+bounces-20716-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20717-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B92CA38340
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 13:43:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9EFCA3848E
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 14:26:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E70AB1885445
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 12:43:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 71B8D3A502A
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 13:20:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB7221B183;
-	Mon, 17 Feb 2025 12:43:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84EAB21C9EC;
+	Mon, 17 Feb 2025 13:20:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="nrU3+vgA";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ojBYFnzM"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171F721A44E
-	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 12:43:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F332185A3;
+	Mon, 17 Feb 2025 13:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739796202; cv=none; b=hOTg7aoI879J0TOUNTkE9ZFB9lnzF2vokJcL7qGkr3/xmCimw+UBb603wjED4wgtfRZUXYlYnsqkJyK+1Xu4Yd1N9nmpk9OPdF7at1ENXk1w6skVwEDTitoa9xvjyujYO7QHpU/kHFA84YMNecMLI5zeP3D58M0zDpUz9MesFEU=
+	t=1739798458; cv=none; b=ntb0nJfuEvR7Rel97WhY36LwbMep1TpY/A35D+gGEbEqFEpH3OLwWXoTCNh6ZhGuz9jdcaAc/l2RGFkVwaxZ8hKMHnamSvdocgFJJ80EkCPtULy92+KpG0PQ1AVczfiILGvl/cTsbRjvLivBvvCMZrCNhb5LkMkbaMMBkDQQfBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739796202; c=relaxed/simple;
-	bh=gfy8olzSmquqHJJhjiA1LH5pxILJjxhoGkIG0l69GGA=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=kdUTlVxoLmOHbGRNX0alLr/f70qVCmJsA7GIwF7JFW3rKgo0WyqfrI9yMWO01uCQzQxiDOT6GcAkWId+fMh93kbJ/c/L+pAOXGayZ30UREg5p7adtb7+FT9hQa+/t69X7R93JaUsY59i5FSfQw1xPecc+VlYxlQYjTi74WRNC78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3d18700311dso29931205ab.0
-        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 04:43:20 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739796200; x=1740401000;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wDw9iyxevBv/9S71sfUWyLvvFNlJ388y/KtiZ8XH0Kg=;
-        b=R3fpKZ2SdYtXjzjl7+7QTRJhhB5tBgyOyot/Lp6xbLv6YIAFzjsonqy9p7v+0mOnPT
-         K5zqA4+0E7kyTDnxIuQ4GuQtEVafTPu49pMsLnDOtv+pjSsDXEOSTv79fV+ZCtFapRt3
-         qFdxaO2LUQO3iXTStGeUyRCUzFBeD3gTR+QGYI3IGF07M05xDIAlYiiIViDbTdO1074/
-         bTDiLfiCBnCIr2aFKvNry2jSgsKnxcOmZ/t38HAr/C+eMHBFYcvdpzp184Qxk4mC0P58
-         uqjJdFmWHLARiDZePzu6Ff8H+dyRktV5qrZmFsRwi4EaI8JqFOZivvc56RwilkDjtVPa
-         Dc6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXK5Kbd0r7aZbg9ltBxJmh1Q7CRDuIibtzQS0mWjg2ukSUHdn+Y8zqW6yc9Q1R5Z4Urp1W9AQPckb8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxN+Sqgfb4iVmgwzPb4rECu1gfATy4evxrFxEBp3ooxs1+y+chW
-	EgjgstHMdVG0Yt2dnlDDHWdto2Q0wFO8EEb7hHLXZ9t/ZZTRbFzOwYLNLcuoLWU4H8GAXUvHwHd
-	MvcsyVyl4u7mqptJ/+nTFHQ9Fo3LSoDl27fQbwUx6LdEYjWYvTeTd20U=
-X-Google-Smtp-Source: AGHT+IGlpccUW1QD7Ow2Bzpb7mg9p5jU8MXnxS/kPm4Ne5LGMjmoUncNp1qWi0lWqRvQ/h1VP4nl5vTvyJUEWG7OCM5cY6qnp9Rx
+	s=arc-20240116; t=1739798458; c=relaxed/simple;
+	bh=S6D6f6XcQVacKxAWbsLG8Xh73igMUnfYjfS04GYSDGo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=AYBolF/s5/k0vJi8rWOApmjUCdrz/P9UUsPIUvZRRpmw6lPYzL5w67W+RkxpGrAu0fIZYBcNhvnb8fMgWh9NhOYgbBAhWfaNptNjWnpepGn8acvGvxx5f0n6tzqtxXxgDrp2rxlPbpIc/W5awQn9HHyewO0xNDfb5Jb9oPfMRvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=nrU3+vgA; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ojBYFnzM; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739798454;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OwwKmFkAp2J0qb4yxIUg5I9TkgocSV5eAHa3wY7fqCY=;
+	b=nrU3+vgAuO3eYcJhJ/xLeK7GhWTQOhJHC9lXbEUSX7onqiOBfV7nL+a0CBAOKMshioU5IU
+	5unxTGhiRxTpuNwEq47+hmJt/clDHAHKo3pWBKO2Gfe4SZay9j7zdaiuO8FzN9tpm9i5Xq
+	L7pNld+RbdCMstx/GlVwO5lXU/JJs32BRapLX58quEvuOVBUV7GmaX3vjZtD6Y8gtqkt0q
+	KvbMY6Ixs6elHMYNdf4dBBhfw27ACGCHH6Q1OGJ8P76n6SGF6/AIscxTb3VS1e+diZLcVH
+	7n7NKVD7Drz7yj6qEEp+/c7Xu2uFBp6RqFdlornt3mrKY7L7xqM2ci3j675SsQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739798454;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=OwwKmFkAp2J0qb4yxIUg5I9TkgocSV5eAHa3wY7fqCY=;
+	b=ojBYFnzMHGCI3ljD/hUOKv+fsbupD3JuAZnMzv/FTeInIKOlFOsIiJNfVy90dg3YjG+Pup
+	LE5FStmyQeZAkuBw==
+Subject: [PATCH 0/2] usb: Don't use %pK through printk
+Date: Mon, 17 Feb 2025 14:20:50 +0100
+Message-Id: <20250217-restricted-pointers-usb-v1-0-78da55158832@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:184d:b0:3cf:bb11:a3a7 with SMTP id
- e9e14a558f8ab-3d280947db4mr74719115ab.17.1739796200205; Mon, 17 Feb 2025
- 04:43:20 -0800 (PST)
-Date: Mon, 17 Feb 2025 04:43:20 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67b32ee8.050a0220.173698.0031.GAE@google.com>
-Subject: [syzbot] Monthly usb report (Feb 2025)
-From: syzbot <syzbot+list1f6a7b0dda28c940b98f@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALI3s2cC/x3MywqDMBBG4VeRWTtgQq2XV5EuYvzbzibKTJSC+
+ O4NLr/FOScZVGA0VicpDjFZU4GrK4rfkD5gWYrJN75tvOtYYVklZiy8rZIy1Hi3mfvYOTcHPIf
+ hQaXeFG/53efpdV1/Xn99c2kAAAA=
+X-Change-ID: 20250217-restricted-pointers-usb-8c711bae6994
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Patrice Chotard <patrice.chotard@foss.st.com>, 
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1739798454; l=880;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=S6D6f6XcQVacKxAWbsLG8Xh73igMUnfYjfS04GYSDGo=;
+ b=wCRSdLbNARTGHY8b//DgQCLemBjgMNKOCCZ5RUk0+cvehKIs7PhfDCYDCHGN3CmzpmEjESL0A
+ F5zRUzWoYm6BWq/GnyJjxzF1KECT658QQoHC/j3zaQUgwgKdZaCm4dV
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-Hello usb maintainers/developers,
+Restricted pointers ("%pK") are not meant to be used through printk().
+It can unintentionally expose security sensitive, raw pointer values.
 
-This is a 31-day syzbot report for the usb subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/usb
+Use regular pointer formatting instead.
 
-During the period, 7 new issues were detected and 2 were fixed.
-In total, 90 issues are still open and 372 have already been fixed.
+Link: https://lore.kernel.org/lkml/20250113171731-dc10e3c1-da64-4af0-b767-7c7070468023@linutronix.de/
 
-Some of the still happening issues:
-
-Ref  Crashes Repro Title
-<1>  12045   Yes   KASAN: slab-use-after-free Read in hdm_disconnect
-                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
-<2>  2637    Yes   KASAN: use-after-free Read in v4l2_fh_init
-                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
-<3>  1919    Yes   INFO: task hung in jbd2_journal_commit_transaction (5)
-                   https://syzkaller.appspot.com/bug?extid=3071bdd0a9953bc0d177
-<4>  1370    Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
-                   https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
-<5>  1068    Yes   INFO: task hung in usbdev_open (2)
-                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
-<6>  924     Yes   KASAN: use-after-free Read in v4l2_fh_open
-                   https://syzkaller.appspot.com/bug?extid=b2391895514ed9ef4a8e
-<7>  700     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
-                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
-<8>  668     Yes   INFO: task hung in hub_port_init (3)
-                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
-<9>  665     Yes   WARNING: ODEBUG bug in release_nodes
-                   https://syzkaller.appspot.com/bug?extid=624d9e79ec456915d85d
-<10> 579     Yes   WARNING in enable_work
-                   https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
-
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+Thomas Weißschuh (2):
+      usb: core: Don't use %pK through printk
+      usb: dwc3: Don't use %pK through printk
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
+ drivers/usb/core/hcd.c     | 4 ++--
+ drivers/usb/core/urb.c     | 2 +-
+ drivers/usb/dwc3/dwc3-st.c | 2 +-
+ drivers/usb/dwc3/gadget.c  | 6 +++---
+ 4 files changed, 7 insertions(+), 7 deletions(-)
+---
+base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
+change-id: 20250217-restricted-pointers-usb-8c711bae6994
 
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
-You may send multiple commands in a single email message.
 
