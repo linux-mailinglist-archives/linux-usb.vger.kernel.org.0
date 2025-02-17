@@ -1,175 +1,113 @@
-Return-Path: <linux-usb+bounces-20715-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20716-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49258A38290
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 13:04:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B92CA38340
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 13:43:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76EDC3A7A45
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 12:03:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E70AB1885445
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 12:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7A2B21A43D;
-	Mon, 17 Feb 2025 12:03:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="Iyatpmj6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEB7221B183;
+	Mon, 17 Feb 2025 12:43:22 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B702185AB
-	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 12:03:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 171F721A44E
+	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 12:43:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739793822; cv=none; b=MqSrHhUW7N//bEbUgKadaOy7Sfa3rhYzwXSj9UcfajCJI0iEhHV7przw/Q+Lejrhr5m6jBYS6TnNhAMPHq+VS+rIkbdPVGUM6Yu3tQjQ+RMV2mBXiWsdNaYqyhAQQkfeWeXz4Aa0ncGr/4xJ9aP1m5XoTkQPNNIRKddruiLQ6mA=
+	t=1739796202; cv=none; b=hOTg7aoI879J0TOUNTkE9ZFB9lnzF2vokJcL7qGkr3/xmCimw+UBb603wjED4wgtfRZUXYlYnsqkJyK+1Xu4Yd1N9nmpk9OPdF7at1ENXk1w6skVwEDTitoa9xvjyujYO7QHpU/kHFA84YMNecMLI5zeP3D58M0zDpUz9MesFEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739793822; c=relaxed/simple;
-	bh=6K1s7WtvEcHra4PUkbNmsvAn+WXVWxS0gjiaUNd/DaA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MObG471gDhMx5CCSuZgHHp3mHMvwlzZ8Q8tulM2nYJxZGCc+eYfTFNK14NrivuMn4vuZhVgjuBxCZjWVqGHUTC5zj3Y9z1Y1mniDOWURfzOZY2bmdbUobJq8aD47nKKT+fYfcmg4r81pZ9bkblu2/cbd2XUBJk7XFnSN4/B9Tks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=Iyatpmj6; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51HAh3l4032065
-	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 12:03:39 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=aSw/G6T2sY+Uwj1Mjfh8/x3LyRxDhXoGM64
-	LGGBqwdk=; b=Iyatpmj6Qzd5lrwLSDcnbKhY1PEhWovR98kJt+HTgzONzVpjnxd
-	qvwigJNGNbGBdudzSRNEebmi4C8k8cS9noiRfFc9tDaZlu5zhk6cwsnCIHqNnRig
-	iV0IbXFg7aN8vP/hKz3UlTG4toOC/BkQxVT+mU/qTJSXpo54344ctAWsRc4IwpC6
-	sYvfDENc6v6Er1/ibdl+0daKOzMks6dsNlZKiaWJ+u+qDGfu5g+ehant1MF40igV
-	g29opPcICn/NJuQ6vd8aZmhKFSKig18p9bO3FbC5kJzEoYY4sQCzEVrdr1lczSqH
-	a6jPjKVyC0QmnFQbe0jtDX3VfpTeAjnwqgA==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44ut7wsqa8-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 12:03:38 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-22104619939so63821625ad.1
-        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 04:03:38 -0800 (PST)
+	s=arc-20240116; t=1739796202; c=relaxed/simple;
+	bh=gfy8olzSmquqHJJhjiA1LH5pxILJjxhoGkIG0l69GGA=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=kdUTlVxoLmOHbGRNX0alLr/f70qVCmJsA7GIwF7JFW3rKgo0WyqfrI9yMWO01uCQzQxiDOT6GcAkWId+fMh93kbJ/c/L+pAOXGayZ30UREg5p7adtb7+FT9hQa+/t69X7R93JaUsY59i5FSfQw1xPecc+VlYxlQYjTi74WRNC78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-3d18700311dso29931205ab.0
+        for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 04:43:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739793816; x=1740398616;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aSw/G6T2sY+Uwj1Mjfh8/x3LyRxDhXoGM64LGGBqwdk=;
-        b=lI4697OJ2KQ8wsOiyf/AiNOO8h8JPyqn9rV1R/v7NxHyt1ps5W9mjxQ8EXfrGDVb8L
-         DIb8BCRgQpiQo/V0QhbCBZQfsc2Zs8DegxOinw8KwtjbGSdrXygGK33uIaWQIT//752s
-         vqGBfQ6gfU5gniPnAx1FsQMuKnkk+52rd+4EHud4IAra5D1LW07V9DMQnjPBeCmUHrJD
-         Gt8nvndhr1WhjTPx05CIh0+Ks5dQTf8pMlGlH7ZFbpFbkdCrwmG7MtG83iGcqRMpitKp
-         8PbUbOixQmAK/pNc9uL0fUb9fzKq9moVkEzwndYFUl1WNN9L+RTm1RM4QEYsaRMRkdGi
-         tUjw==
-X-Gm-Message-State: AOJu0Yy08AED9SpdsYa0o9scRYFipH5bQIbkGZNaQ94oI6nqcE1kO4qQ
-	5T7HNxCd1b5CjRWVfWgb8rGJ1rShhThzg2oSlfoJ8NiRrLjzqs3fakNdbsQjeIhgLS/gpzbdAPP
-	Lt0iI2IssS1FcHtgN2qpvU2m2Jg8mnd2QKgea9s358Is+XH7MYAuxTbb3Umw=
-X-Gm-Gg: ASbGncv36pc9QGAi2IjLk8u5D1UPTyDtw5SxHqQJD2fG8XSfAUflR7xnhkbS2NYH1JK
-	Rnrs6azVak8Jfi9+WWjiWefa6gPOO0FaOF2+Rb59U5Vde8HYZNostJwINtIF7CaXZHjI4DN3LQR
-	DN1STi1p59P/ZLBluCIPqHxAdqHPFfQ+WmX5OKCNrcKasNSkTIQELOUHWjI0IrXEJGi7o8ofUSZ
-	uwBWwkqFdCEGRjWbnIX6IBfckBIDFgPrQLUsTT/BA8X8BbHDkhLVVpaN2kxLi0kSbQ1Q8PXYgv6
-	FBuiymdWWwr/hq6GAA/zfJpUS+ssc01Pvg==
-X-Received: by 2002:a17:902:d50d:b0:216:3633:36e7 with SMTP id d9443c01a7336-22104062006mr155026835ad.26.1739793816579;
-        Mon, 17 Feb 2025 04:03:36 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGCA6q1jXs0gOYPnNc5rfyp37vbwb5yTD5SJhEK5QU1yvw7CTG3Llt6jrhbbwMiFjX0ult0Sw==
-X-Received: by 2002:a17:902:d50d:b0:216:3633:36e7 with SMTP id d9443c01a7336-22104062006mr155026335ad.26.1739793816079;
-        Mon, 17 Feb 2025 04:03:36 -0800 (PST)
-Received: from hu-prashk-hyd.qualcomm.com ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d5348f34sm70632925ad.10.2025.02.17.04.03.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2025 04:03:35 -0800 (PST)
-From: Prashanth K <prashanth.k@oss.qualcomm.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Peter Korsgaard <peter@korsgaard.com>,
-        Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Prashanth K <prashanth.k@oss.qualcomm.com>, stable@vger.kernel.org
-Subject: [PATCH v2] usb: gadget: Set self-powered based on MaxPower and bmAttributes
-Date: Mon, 17 Feb 2025 17:33:28 +0530
-Message-Id: <20250217120328.2446639-1-prashanth.k@oss.qualcomm.com>
-X-Mailer: git-send-email 2.25.1
+        d=1e100.net; s=20230601; t=1739796200; x=1740401000;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wDw9iyxevBv/9S71sfUWyLvvFNlJ388y/KtiZ8XH0Kg=;
+        b=R3fpKZ2SdYtXjzjl7+7QTRJhhB5tBgyOyot/Lp6xbLv6YIAFzjsonqy9p7v+0mOnPT
+         K5zqA4+0E7kyTDnxIuQ4GuQtEVafTPu49pMsLnDOtv+pjSsDXEOSTv79fV+ZCtFapRt3
+         qFdxaO2LUQO3iXTStGeUyRCUzFBeD3gTR+QGYI3IGF07M05xDIAlYiiIViDbTdO1074/
+         bTDiLfiCBnCIr2aFKvNry2jSgsKnxcOmZ/t38HAr/C+eMHBFYcvdpzp184Qxk4mC0P58
+         uqjJdFmWHLARiDZePzu6Ff8H+dyRktV5qrZmFsRwi4EaI8JqFOZivvc56RwilkDjtVPa
+         Dc6Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXK5Kbd0r7aZbg9ltBxJmh1Q7CRDuIibtzQS0mWjg2ukSUHdn+Y8zqW6yc9Q1R5Z4Urp1W9AQPckb8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN+Sqgfb4iVmgwzPb4rECu1gfATy4evxrFxEBp3ooxs1+y+chW
+	EgjgstHMdVG0Yt2dnlDDHWdto2Q0wFO8EEb7hHLXZ9t/ZZTRbFzOwYLNLcuoLWU4H8GAXUvHwHd
+	MvcsyVyl4u7mqptJ/+nTFHQ9Fo3LSoDl27fQbwUx6LdEYjWYvTeTd20U=
+X-Google-Smtp-Source: AGHT+IGlpccUW1QD7Ow2Bzpb7mg9p5jU8MXnxS/kPm4Ne5LGMjmoUncNp1qWi0lWqRvQ/h1VP4nl5vTvyJUEWG7OCM5cY6qnp9Rx
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: aLOgrJwBDtKkCfFWBCmCGr_A891R9V8C
-X-Proofpoint-ORIG-GUID: aLOgrJwBDtKkCfFWBCmCGr_A891R9V8C
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-17_05,2025-02-13_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- lowpriorityscore=0 priorityscore=1501 clxscore=1015 malwarescore=0
- bulkscore=0 mlxlogscore=462 spamscore=0 adultscore=0 mlxscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502170106
+X-Received: by 2002:a05:6e02:184d:b0:3cf:bb11:a3a7 with SMTP id
+ e9e14a558f8ab-3d280947db4mr74719115ab.17.1739796200205; Mon, 17 Feb 2025
+ 04:43:20 -0800 (PST)
+Date: Mon, 17 Feb 2025 04:43:20 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67b32ee8.050a0220.173698.0031.GAE@google.com>
+Subject: [syzbot] Monthly usb report (Feb 2025)
+From: syzbot <syzbot+list1f6a7b0dda28c940b98f@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-Currently the USB gadget will be set as bus-powered based solely
-on whether its bMaxPower is greater than 100mA, but this may miss
-devices that may legitimately draw less than 100mA but still want
-to report as bus-powered. Similarly during suspend & resume, USB
-gadget is incorrectly marked as bus/self powered without checking
-the bmAttributes field. Fix these by configuring the USB gadget
-as self or bus powered based on bmAttributes, and explicitly set
-it as bus-powered if it draws more than 100mA.
+Hello usb maintainers/developers,
 
-Cc: stable@vger.kernel.org
-Fixes: 5e5caf4fa8d3 ("usb: gadget: composite: Inform controller driver of self-powered")
-Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
+This is a 31-day syzbot report for the usb subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/usb
+
+During the period, 7 new issues were detected and 2 were fixed.
+In total, 90 issues are still open and 372 have already been fixed.
+
+Some of the still happening issues:
+
+Ref  Crashes Repro Title
+<1>  12045   Yes   KASAN: slab-use-after-free Read in hdm_disconnect
+                   https://syzkaller.appspot.com/bug?extid=916742d5d24f6c254761
+<2>  2637    Yes   KASAN: use-after-free Read in v4l2_fh_init
+                   https://syzkaller.appspot.com/bug?extid=c025d34b8eaa54c571b8
+<3>  1919    Yes   INFO: task hung in jbd2_journal_commit_transaction (5)
+                   https://syzkaller.appspot.com/bug?extid=3071bdd0a9953bc0d177
+<4>  1370    Yes   KASAN: use-after-free Read in em28xx_init_extension (2)
+                   https://syzkaller.appspot.com/bug?extid=99d6c66dbbc484f50e1c
+<5>  1068    Yes   INFO: task hung in usbdev_open (2)
+                   https://syzkaller.appspot.com/bug?extid=b73659f5bb96fac34820
+<6>  924     Yes   KASAN: use-after-free Read in v4l2_fh_open
+                   https://syzkaller.appspot.com/bug?extid=b2391895514ed9ef4a8e
+<7>  700     Yes   INFO: rcu detected stall in syscall_exit_to_user_mode (2)
+                   https://syzkaller.appspot.com/bug?extid=a68ef3b1f46bc3aced5c
+<8>  668     Yes   INFO: task hung in hub_port_init (3)
+                   https://syzkaller.appspot.com/bug?extid=b6f11035e572f08bc20f
+<9>  665     Yes   WARNING: ODEBUG bug in release_nodes
+                   https://syzkaller.appspot.com/bug?extid=624d9e79ec456915d85d
+<10> 579     Yes   WARNING in enable_work
+                   https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
+
 ---
-Changes in v2:
-- Didn't change anything from RFC.
-- Link to RFC: https://lore.kernel.org/all/20250204105908.2255686-1-prashanth.k@oss.qualcomm.com/
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
- drivers/usb/gadget/composite.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
 
-diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-index bdda8c74602d..1fb28bbf6c45 100644
---- a/drivers/usb/gadget/composite.c
-+++ b/drivers/usb/gadget/composite.c
-@@ -1050,10 +1050,11 @@ static int set_config(struct usb_composite_dev *cdev,
- 	else
- 		usb_gadget_set_remote_wakeup(gadget, 0);
- done:
--	if (power <= USB_SELF_POWER_VBUS_MAX_DRAW)
--		usb_gadget_set_selfpowered(gadget);
--	else
-+	if (power > USB_SELF_POWER_VBUS_MAX_DRAW ||
-+	    !(c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
- 		usb_gadget_clear_selfpowered(gadget);
-+	else
-+		usb_gadget_set_selfpowered(gadget);
- 
- 	usb_gadget_vbus_draw(gadget, power);
- 	if (result >= 0 && cdev->delayed_status)
-@@ -2615,7 +2616,9 @@ void composite_suspend(struct usb_gadget *gadget)
- 
- 	cdev->suspended = 1;
- 
--	usb_gadget_set_selfpowered(gadget);
-+	if (cdev->config->bmAttributes & USB_CONFIG_ATT_SELFPOWER)
-+		usb_gadget_set_selfpowered(gadget);
-+
- 	usb_gadget_vbus_draw(gadget, 2);
- }
- 
-@@ -2649,8 +2652,11 @@ void composite_resume(struct usb_gadget *gadget)
- 		else
- 			maxpower = min(maxpower, 900U);
- 
--		if (maxpower > USB_SELF_POWER_VBUS_MAX_DRAW)
-+		if (maxpower > USB_SELF_POWER_VBUS_MAX_DRAW ||
-+		    !(cdev->config->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
- 			usb_gadget_clear_selfpowered(gadget);
-+		else
-+			usb_gadget_set_selfpowered(gadget);
- 
- 		usb_gadget_vbus_draw(gadget, maxpower);
- 	} else {
--- 
-2.25.1
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
 
+You may send multiple commands in a single email message.
 
