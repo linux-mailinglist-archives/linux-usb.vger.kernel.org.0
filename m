@@ -1,51 +1,52 @@
-Return-Path: <linux-usb+bounces-20721-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20722-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C48FA384E7
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 14:42:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20BD1A384F4
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 14:42:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3791116C8C0
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 13:42:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D09D188D9BF
+	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 13:42:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFA1F21CC6F;
-	Mon, 17 Feb 2025 13:42:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E965821CC76;
+	Mon, 17 Feb 2025 13:42:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="sKJKpTWF"
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="p8DQtCas"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09FD721CA0F
-	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 13:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45B3021CC60
+	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 13:42:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739799724; cv=none; b=Gl8tVWn5g11RmWEnXmY3JtBTV0JEBfL6qi8FUECeAn8W/OylqxbOrjezmy62nzFuApw6Er6y1J4qCCD8wWjf6/7PQOgZ3P90Zkn9rOZeEfCSkcbtUBT6FHsYPKseS4UD26yhjM+LBsxa9a/6t8lgOlsx308sPl9dSIukiaehRRw=
+	t=1739799725; cv=none; b=nsrrr8QIKgY8WuBhO1HK9uVy9HL/fmt1PsMWiKemf7ucm/Db0EQsHSIX8qq8M2RzP89+6y2iaI7O36tKwffPQhrpi0+XGiHOEExBVjuYSgyOtfqil/Ewr7SMzypOZ5nXE7I4hqbhpC0hLFoWcIJNjaqIeORN2rxg0r+LQyXS7mk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739799724; c=relaxed/simple;
-	bh=IvMTw8Bm0UQaioDvRA7NEQqJ7IGmXoVL6JYNK0fT5k8=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=S5xot3FSpe+avcpWNyi3HPe2qMl/9AGX1h5FTfCn1L+CrBhifOj1e1TDMameysKG0/y9PAw1oBgeKid7Zbee5d+nY2oop0WlsmivuXJ8GVSucfLZ7uMkEwK0/VbNHF8GJAkjntyJnVgiYIVScf8m4gARUpyvTamZgVCxrELKfDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=sKJKpTWF; arc=none smtp.client-ip=212.227.17.21
+	s=arc-20240116; t=1739799725; c=relaxed/simple;
+	bh=NLJhKND256gSjgqz5+jXNVwCkHAy7Lhhbara7R1G0Sk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=qSV+K6l8jycFsAJfxtz+7Vg57zCoGiTTiwkUZa1D57QptgIb37OFOfoVpYMwxytGXM4nyhzPCT18iKWdlUI+C9koyuiW7JpfN4SmDhJkZqO5X3tK0Zsy60UIqfHthqtxT47n7wh71GSVtDaWiHDe0aLckQcS1noTUyH4YksFE6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=p8DQtCas; arc=none smtp.client-ip=212.227.17.22
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
 	s=s31663417; t=1739799715; x=1740404515; i=wahrenst@gmx.net;
-	bh=ksXilSpfUt3B+VZR+agmmrI764/uolVU4VhWitsUDBI=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
+	bh=JRrp6JLKk7ZewfhLxhmIMUVWuQ9FaYJ7taL+ewhOlow=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=sKJKpTWFNFQn6ukHhIXrrs8KUtTtZp3kxnljaXqhwFg9NhimHkbRT2fbb2JFyFb1
-	 CYetnBNtaA3TS2+bRPUK7cRlQj4A4L0yUfkycxGTLOsa76KIk955JstZeTwfv+xnt
-	 RDuYN3lS0ytAHfrldaxNRHMcVNZpNpJEVOjxB5VsLqzGU/tmq81M6IlEfgi9ou/Bl
-	 UQvdEds8ivtIVTXlD6GVpiZbZFC33Tjf448OmgQrEGt0LpuM6rV6odaUyhJ14dYSg
-	 YJ558BYZwZFcby+WtFUaLQvT2ZHxxGU2s7ZGLBsy2Whf4QBDTFpamUn1Lk2VEVu/N
-	 C4+pnUKi8oya5rUkKw==
+	b=p8DQtCasxpbiAkqDMqwWSv2jP7pVNr0lVG8MFKy61mdF1wZVEwJugPGc1YlW0m2+
+	 Jp4KAQPwQ0lVPnOU8KEI3Lw1MefDg8LXwfvSE3ODl4yR9Hjcok02ICqL88wsSgGfs
+	 co4gNlX5+z2ffUJdYNSmE39GkPAMmSlcuMVO5IWQx5vCxm/3EwcgQZ7ERjAZKxNLK
+	 cL/6YTRnOe9V+FTZA+G2/E1IA4GDVO0M1Mga7AteUy+qQvbM0S8wUiVv05I7OX+cu
+	 bXFQxofzVpT1mldPVbv/jkUTe47FJC4d/Sd6bJv87RVUacDWXee/Yuxt3KSmCf+Wi
+	 tTJVwrmQWuKTapxxXw==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from stefanw-SCHENKER ([37.4.251.153]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MqJmF-1swt7I0l87-00a3KX; Mon, 17
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MnJlc-1t3Dq32XXo-00ei26; Mon, 17
  Feb 2025 14:41:55 +0100
 From: Stefan Wahren <wahrenst@gmx.net>
 To: Minas Harutyunyan <hminas@synopsys.com>,
@@ -57,10 +58,12 @@ Cc: Lukas Wunner <lukas@wunner.de>,
 	linux-usb@vger.kernel.org,
 	kernel-list@raspberrypi.com,
 	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH V6 0/3] usb: dwc2: Implement S2Idle for BCM2835
-Date: Mon, 17 Feb 2025 14:41:29 +0100
-Message-Id: <20250217134132.36786-1-wahrenst@gmx.net>
+Subject: [PATCH V6 1/3] usb: dwc2: gadget: Introduce register restore flags
+Date: Mon, 17 Feb 2025 14:41:30 +0100
+Message-Id: <20250217134132.36786-2-wahrenst@gmx.net>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250217134132.36786-1-wahrenst@gmx.net>
+References: <20250217134132.36786-1-wahrenst@gmx.net>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -68,96 +71,152 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:PqpM4+389j8Ta9VZ+CZodDAYgqf8lGVAgJw9AqdwgscoVePzyMa
- iBRvvC+r17QO7IdSfllx/vf+2ZLT7w006bZAeaNBpP6UYXbcawaJ+fsu0ey+K3JqfW4+4FT
- PXz6JCigqQ4qSCa2aTxJZs+t4GF5Rdb+LQpG71dyrWx8dT69gkwdbCzsrDC9Vs3KewvmpDA
- xd8c4uHYDQqxO83/LWXeA==
+X-Provags-ID: V03:K1:DAtspM6ApsVscXD8RxKAvYGuRjPdiNmHX0lerypzGMsPzepb3Ur
+ AUXc9M4pKIvIq0XZ26XoTPsMOqKyEZzvZBcaBQabwIMD8Rh6Ls9fLqAyJqnjSos2C/86ZZV
+ TjB8jW3Hg4v33P/EqqgEfwpRKK5P7i66fO0jKC15Mz/Mx50YAo9nJ6QGGRakVVkJxP+5qDN
+ 01OnBMAWoWsTPPAF1xpog==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:b7HBKn6JhGU=;Sg7av3lo/ThreqSEE1x0ioSS1oN
- COsrLDC2ToOXUSwfWHrLO1I/lLDklLLbPtoEsQfxxXR+Nvg9uIV0AY0F/FEg5YEfe/V3IZ9lh
- p1GRVD6X5+tsjelG57wsFPMsnimJWxsoaYZCe1sDdHKWVONfyt10vJWhM/X5yRzGP5q42c5gM
- VZz/Bo2+G2kAwOQwlG7IkDWKL+XG3kEq3HpQI1OTtJdxeXdYxvp6hY8XRj+fqVJDEV02Gpo7K
- oIDcylndjA+lrgaSso4fir0or4sOR4yeqlWatrw1pO//OIV3TLT6mfuXcs9E4alH5yKlQftJY
- jdYd5HSVnfRf6+/iZcthvruOq3ERW9F/KFs2uEPTwxalzqzNozNCecgnFKH94eljDm2Gx9sM+
- 9XjLpiaRVZf8mZ0XUIISmdifiYvZrrExExBTV4iacK+tHeqs+/pH/vbhf1GjOA2K24LER0/ZK
- R3BoedwSDedniAnvmjIzShhDIklWIwgBikA0oTbuR2ZD6hVrTOZ1ym9kdncYIXmtwTotjrPX/
- +3WOyAfihiBZGWUBY/J8lIjsIeA6+n6Ct/tSuF02/5s3GGoW1WS/JGrDLQYbVJ0cnGiytnj+8
- JvIyE8f2kWafysgISXOqTVj7zbx8ayUDful5BwYO3VKtxIkEuGlTk9Uqp1QdEul0yxkWsWsYb
- /27GmLx/Pg+FoRAfT12fFwER7QAHz9x30LOm94iY9bWA+KXarxYvM06t5ETO6tL6mV1P5DBO7
- mD8Ml0/d8ckz4YdOW+1PoygJx0nx16npkgOwMeFBvhk0Ap6aNIdulhbn6p+33D2yocovVlyUB
- iCww4gmuaPTLdxC6pAqO7LEIJDBzuZWM1Q+w17mag8eq4yUBY7BFUe/sgiX7sdK3xYtSvYyyv
- 1KxXcsVWd+zHkTl5w6VpYqDAnnCrmfrHjIewXIpaebD/4tPMaBO8hiBHP4b6Xla+4n+gLVTOD
- 68OXzDS3zYyHsFh1DWABimSdo8j/rKAIKFIUGMA//U/iBfX4hYYV/7SrsYWrdLruqSgRtAC/v
- TtuWYQDL9An14G7m/M1BdIZmV2qjRrYdUfXEGk/PmUXXuIy9b5BTMdZd0e9MMA/8789qZgDtw
- qD2MUAyXTHv97neoHN4tT4A78sFB652tpGwIWJ6f526rpFPcsteQMAPa2izKGHPsrrU4OSiyT
- 4vWZD7V+wZFeyWFlMPTqs8Oii25dhtgwDN+yandpm/iwH80sFSQMDR0tR0kSBUNKgag+A8g8X
- OEZdFuns54cYRtwBoz86I5D84roRkQDH/VobDejMQFc8BrFZ89VLeqNsIwMErZWhlOjPLWH2s
- 4twksDcsERSIlVttORApnFEj8PXvVcRlpw6v/G+fqMQN+jkC2wjmmGTsF6+KtIqyThKm2V/uU
- LqfM5ZyPDf54kVJ7LO1B6o1YG0c1fVlSzWcs+2DgkQlFHhju91WMJJcRMa
+UI-OutboundReport: notjunk:1;M01:P0:HFRa0NycnTw=;YRRDXTYZjJo8aC6mDxURqiWbctT
+ kxUeI8nWeU9X9JC7AVuCb3fubMDykz6weQgqp0yZ+wpz/5ff25t/kmoLVBPIZh2kPnGzBR7hr
+ S9AHdu4A9DWPcS/SBupBeoCcViSoYQpsUlfU7E7ZN3H6ZJabVMHIk74WUrSbuezu9MAmc6gl8
+ Tgy0FoSrSEqQ/0CJ5VamE9nI76vcY4EB+gcMPoe366AtEnrl7xRYPf/CEtAM2JLUJmk6NzxqB
+ aTntQ080OUIO+ZT9KtoKjFTvNZUEs5IEEG4uTecOasKNUOTNTgakudYcUloo9yAJmB50ybJiM
+ OtKpgCsE7QyB4AP9X4F0ghL2tFGGKKW0knh9J+l9YygU4WwypJ9Q1K+RyyBYDp6L5zIozcmYg
+ aPu9g6wvTJwCfLT9b5Dcwahb7vbWYW2+19GGeSdae13NlWbX+xYyXw2M+7tXRGYCBK7D05ta9
+ cWDXIvUBgYwlHjsgworru2S/UIpm0dxPYeaAadUSelIhQrjK14JF3sfa8U/s0qrEIDaue5uWH
+ LCAqWNBPGQLupV0bcuPyylNWWaURHqLUoOO7gakn/JBdzsDuCliwxE/+BnlFGo55ATAM6VWRK
+ 4mGg9YcWoNTEwxMmdKC6lbrhZz70EJdTCb/m5rp6jeR4XMEOVmxR7Zs+v11YICkBmDJ8Ma8mG
+ oRfmItr4KBL+HzLC92FKXsf8h551ccwuVkl1sZIw6HBI/tLfr1C7XtlzGUoefEVZWzRctYQdF
+ UCnt+n06c77RD2bY+KZbDWGp04Lbzr3miWc2KgZ7CkzPOdPmZjMvzfUnhU6+E2tjvHSFuueK5
+ d/ojFxlm4C5uppyE6aAkPW64w2Mmy3nghauHaeZp71meouxiqiT6CKvktMRhuc6YDoiXshD5+
+ y0lLcT81UfPLeun9WSP8m50SYKN/g3NsY7gfa7n3mpQA/Slrya2C3gax2dJ3Izf5bDdkhZtnE
+ INcA/NorEKwDrfWlSOtR1avJ0xsgm3RO1ByIsYOqIyLkHBH/3tMzJsEikOFf+pKH3JUSIl8F7
+ Kebqfk0rrtvKol71EYDYEaGPsrrbqveb2zBjf9qCq+juiGUO/R/vDxBqjrOUYWPFHqI20bTes
+ hZlMBQ57mB0TsUxBJLnid5Ru2OFjslnF8sMgVCLpjAe8l6aVP48jS1NNeUMq7C9v01BcvO1es
+ X7saFKWZYkc1Z+6VdDngEKp+jMH/uQOAwFcFagOSSLIihpUGCkioevSCREdgf53QbjSMVURl5
+ ZmlgQhudHoC1TCKK0Y0P6cK8tPDbtbRa8jnbfvC518ncpKUWUDYepnLDvIW3MY3grUa6ApSf+
+ inMMmWH+rJ6EUpFze46CAUk8yymw+Kf9+Nd50YtnS//RJuNTLJELAheP45T6fhF5oF1m++S5O
+ 9diavOVC9ttqpzzGnc1DR/tNXLjfKv8qts+eai2zfrbb8tv6kd9tsWLa6D
 
-This series implement S2Idle support for the BCM2835, which is mostly
-used on the Raspberry Pi boards.
+dwc2_restore_device_registers() use a single boolean
+to decide about the register restoring behavior.
+So replace this with a flags parameter, which can
+be extended later.
 
-Test steps:
-- configure debug console (pl011 or mini UART) as wakeup source
-- send system to idle state
+No functional change intended.
 
-   echo freeze > /sys/power/state
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+=2D--
+ drivers/usb/dwc2/core.h   |  6 ++++--
+ drivers/usb/dwc2/gadget.c | 12 +++++++-----
+ 2 files changed, 11 insertions(+), 7 deletions(-)
 
-- wakeup system by console traffic
+diff --git a/drivers/usb/dwc2/core.h b/drivers/usb/dwc2/core.h
+index 2bd74f3033ed..48f4b639ca2f 100644
+=2D-- a/drivers/usb/dwc2/core.h
++++ b/drivers/usb/dwc2/core.h
+@@ -1127,6 +1127,8 @@ struct dwc2_hsotg {
+ #define DWC2_FS_IOT_ID		0x55310000
+ #define DWC2_HS_IOT_ID		0x55320000
 
-The series based on an idea of Doug Anderson. The USB domain is now
-powered down and the USB devices are still usable after resume.
++#define DWC2_RESTORE_DCTL BIT(0)
++
+ #if IS_ENABLED(CONFIG_USB_DWC2_HOST) || IS_ENABLED(CONFIG_USB_DWC2_DUAL_R=
+OLE)
+ 	union dwc2_hcd_internal_flags {
+ 		u32 d32;
+@@ -1420,7 +1422,7 @@ int dwc2_hsotg_set_test_mode(struct dwc2_hsotg *hsot=
+g, int testmode);
+ #define dwc2_is_device_connected(hsotg) (hsotg->connected)
+ #define dwc2_is_device_enabled(hsotg) (hsotg->enabled)
+ int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg);
+-int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wa=
+keup);
++int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, unsigned int =
+flags);
+ int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg);
+ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *hsotg,
+ 				 int rem_wakeup, int reset);
+@@ -1459,7 +1461,7 @@ static inline int dwc2_hsotg_set_test_mode(struct dw=
+c2_hsotg *hsotg,
+ static inline int dwc2_backup_device_registers(struct dwc2_hsotg *hsotg)
+ { return 0; }
+ static inline int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg,
+-						int remote_wakeup)
++						unsigned int flags)
+ { return 0; }
+ static inline int dwc2_gadget_enter_hibernation(struct dwc2_hsotg *hsotg)
+ { return 0; }
+diff --git a/drivers/usb/dwc2/gadget.c b/drivers/usb/dwc2/gadget.c
+index e7bf9cc635be..96d703f4c509 100644
+=2D-- a/drivers/usb/dwc2/gadget.c
++++ b/drivers/usb/dwc2/gadget.c
+@@ -5203,11 +5203,11 @@ int dwc2_backup_device_registers(struct dwc2_hsotg=
+ *hsotg)
+  * if controller power were disabled.
+  *
+  * @hsotg: Programming view of the DWC_otg controller
+- * @remote_wakeup: Indicates whether resume is initiated by Device or Hos=
+t.
++ * @flags: Defines which registers should be restored.
+  *
+  * Return: 0 if successful, negative error code otherwise
+  */
+-int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, int remote_wa=
+keup)
++int dwc2_restore_device_registers(struct dwc2_hsotg *hsotg, unsigned int =
+flags)
+ {
+ 	struct dwc2_dregs_backup *dr;
+ 	int i;
+@@ -5223,7 +5223,7 @@ int dwc2_restore_device_registers(struct dwc2_hsotg =
+*hsotg, int remote_wakeup)
+ 	}
+ 	dr->valid =3D false;
 
-Here are some figures for the Raspberry Pi 1 (without any
-devices connected except of a debug UART):
+-	if (!remote_wakeup)
++	if (flags & DWC2_RESTORE_DCTL)
+ 		dwc2_writel(hsotg, dr->dctl, DCTL);
 
-running but CPU idle =3D 1.67 W
-S2Idle               =3D 1.33 W
+ 	dwc2_writel(hsotg, dr->daintmsk, DAINTMSK);
+@@ -5414,6 +5414,7 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *=
+hsotg,
+ 	u32 gpwrdn;
+ 	u32 dctl;
+ 	int ret =3D 0;
++	unsigned int flags =3D 0;
+ 	struct dwc2_gregs_backup *gr;
+ 	struct dwc2_dregs_backup *dr;
 
-In comparison with HDMI & USB keyboard connected (but neither active
-nor wakeup source):
+@@ -5476,6 +5477,7 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *=
+hsotg,
+ 		dctl =3D dwc2_readl(hsotg, DCTL);
+ 		dctl |=3D DCTL_PWRONPRGDONE;
+ 		dwc2_writel(hsotg, dctl, DCTL);
++		flags |=3D DWC2_RESTORE_DCTL;
+ 	}
+ 	/* Wait for interrupts which must be cleared */
+ 	mdelay(2);
+@@ -5491,7 +5493,7 @@ int dwc2_gadget_exit_hibernation(struct dwc2_hsotg *=
+hsotg,
+ 	}
 
-running but CPU idle =3D 1.82 W
-S2Idle               =3D 1.33 W
+ 	/* Restore device registers */
+-	ret =3D dwc2_restore_device_registers(hsotg, rem_wakeup);
++	ret =3D dwc2_restore_device_registers(hsotg, flags);
+ 	if (ret) {
+ 		dev_err(hsotg->dev, "%s: failed to restore device registers\n",
+ 			__func__);
+@@ -5619,7 +5621,7 @@ int dwc2_gadget_exit_partial_power_down(struct dwc2_=
+hsotg *hsotg,
+ 		/* Restore DCFG */
+ 		dwc2_writel(hsotg, dr->dcfg, DCFG);
 
-The series has been successfully tested on the following platforms:
-Raspberry Pi 1 B
-Raspberry Pi 3 B+
-
-Changes in V6:
-- adapt cover letter to focus on DWC2 (was ARM: bcm2835: Implement initial
-  S2Idle for Raspberry Pi)
-- drop already applied patches and bcm2835_defconfig changes
-- rebase on Linux 6.14-rc1
-
-Changes in V5:
-- add missing version
-
-Changes in V4:
-- added Reviewed-by from Doug
-- fix DWC2 register backup
-- add revert because of Raspberry Pi 3B+ regression
-
-Changes in V3:
-- replace old USB recovery patch with canary approach [3], which should
-  work with other platforms
-
-V5: https://lore.kernel.org/linux-usb/20241025103621.4780-1-wahrenst@gmx.n=
-et/
-
-Stefan Wahren (3):
-  usb: dwc2: gadget: Introduce register restore flags
-  usb: dwc2: Refactor backup/restore of registers
-  usb: dwc2: Implement recovery after PM domain off
-
- drivers/usb/dwc2/core.c     |   1 +
- drivers/usb/dwc2/core.h     |  23 ++++++-
- drivers/usb/dwc2/gadget.c   | 116 +++++++++++++++++++-----------------
- drivers/usb/dwc2/hcd.c      |  99 +++++++++++++++---------------
- drivers/usb/dwc2/platform.c |  38 ++++++++++++
- 5 files changed, 171 insertions(+), 106 deletions(-)
-
+-		ret =3D dwc2_restore_device_registers(hsotg, 0);
++		ret =3D dwc2_restore_device_registers(hsotg, DWC2_RESTORE_DCTL);
+ 		if (ret) {
+ 			dev_err(hsotg->dev, "%s: failed to restore device registers\n",
+ 				__func__);
 =2D-
 2.34.1
 
