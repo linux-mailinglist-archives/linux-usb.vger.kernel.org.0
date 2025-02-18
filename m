@@ -1,129 +1,177 @@
-Return-Path: <linux-usb+bounces-20733-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20734-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78846A38CA0
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 20:44:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02E6FA38FE5
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 01:25:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40B90188D9D9
-	for <lists+linux-usb@lfdr.de>; Mon, 17 Feb 2025 19:44:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC7A37A3A98
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 00:24:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D298237194;
-	Mon, 17 Feb 2025 19:44:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5B6CBA4B;
+	Tue, 18 Feb 2025 00:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b="ocExaFjs"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ny6faVZL"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from sendmail.purelymail.com (sendmail.purelymail.com [34.202.193.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39DA3236433
-	for <linux-usb@vger.kernel.org>; Mon, 17 Feb 2025 19:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=34.202.193.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C976E545;
+	Tue, 18 Feb 2025 00:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739821464; cv=none; b=jiu3AYNb5CC6YHwE2oItdT7v2W3I8eiLq1U2VpReDSEiF0JTzGd5+tGQHaD0Ce74dZZMBnhjpqVm0PJJsoQjeR04H1L/5t4yHwaqx6Sr0UbflRZrc6WXHPo5pQtpkux1SoNj1iqLvGa9KcA+9ZRR+z6XZKssHrTddOhuJksj/XQ=
+	t=1739838327; cv=none; b=HpXPe/MmxmVfYPdGKRDIvVVWG9TnivhnHJRioc9HSGpm6Uf45cHVG/YKKZpQkTVB34K1Pq/KmGNdGEjrJ0tI8JLNBiYxKpDKjXdrCX8klF/kK7OoL1nwFsPNSSlQDktkh7jnZNKxLyFIb+EPxkVCeEXQuax3RSO9iMWzEpe+IlU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739821464; c=relaxed/simple;
-	bh=IgmrKZQ+U6jM19WQ1y4s62f1uaoWol9FnsSA1ZFXU+4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=g9MY4XzpkUqjoEli1ybgFj0AAtJbx47PPZCyMX7ghnb3WOcJps6QkQZzFRrZbWCFGbSg06KuKuHU/61cD5+TMiu4T31EEzct3qa8gv05Psald6OJwHf1d8vX5LqfNZx38dXXdhzSaaOIB0oDdiphWMSsHJP+s8goq1uMzwQcCB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org; spf=pass smtp.mailfrom=mentallysanemainliners.org; dkim=pass (2048-bit key) header.d=purelymail.com header.i=@purelymail.com header.b=ocExaFjs; arc=none smtp.client-ip=34.202.193.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mentallysanemainliners.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mentallysanemainliners.org
-Authentication-Results: purelymail.com; auth=pass
-DKIM-Signature: a=rsa-sha256; b=ocExaFjsgLFVQzh8ijKBYhiO9N1lKDnf3zFjEDFvKJwAYlJT8gGMCucPkiD/jb2oyZYBV9oLWOAwWuO8+mhv//oT1tq/MYqYNYjs6eov+EY5lGc6I7zuKbUKg4zXyyss3Y9ro4VsAoZ+ppbnUC5Cm33AydgVOI4kVMyHBIi1kn4P+YMQfJkH+j9NEWmdTBwedT+IqOfVEiG/Mib81I6Be3fdrzb1qvFGXXnwu0Zvur6Y5fePvzn6dsY78JtM/OEvNUokWGpV9w+Z/S9gMPwjeuSn6QhX+XZng5NwvyLyTh2ct0QegEl8giXyINQHwvBQqqQqaUmKV6qM2MkB17DAPw==; s=purelymail3; d=purelymail.com; v=1; bh=IgmrKZQ+U6jM19WQ1y4s62f1uaoWol9FnsSA1ZFXU+4=; h=Feedback-ID:Received:From:Date:Subject:To;
-Feedback-ID: 68247:10037:null:purelymail
-X-Pm-Original-To: linux-usb@vger.kernel.org
-Received: by smtp.purelymail.com (Purelymail SMTP) with ESMTPSA id 1112335277;
-          (version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384);
-          Mon, 17 Feb 2025 19:44:15 +0000 (UTC)
-From: Igor Belwon <igor.belwon@mentallysanemainliners.org>
-Date: Mon, 17 Feb 2025 20:44:04 +0100
-Subject: [PATCH v2] dt-bindings: usb: samsung,exynos-dwc3 Add exynos990
- compatible
+	s=arc-20240116; t=1739838327; c=relaxed/simple;
+	bh=EFJw1G6AdYPAxqc3eJvXKne5aFMBnMqVqo01SdhVK8s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=n2lN1PmEN2SgS6mBuM6Oo2h7wCjSpCRlp+CMQeXlyLmMeNa+lm1ch7VdXJ1gRaIBleKsbT2OwXSJ6x/jCoobyam+/lqTclc6/GjkFceZsS2Wy9pndItcGEps0xL7kPymQDycUHz2PD6HuTxQ8qWIlrXZIOGtFtHVJwZI/j0hmvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ny6faVZL; arc=none smtp.client-ip=209.85.128.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-438a3216fc2so51026305e9.1;
+        Mon, 17 Feb 2025 16:25:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739838324; x=1740443124; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=8m1uQh6w5iYJ3orp8b5EeRdmeUvkTNV6vuD529TfFW8=;
+        b=Ny6faVZLYssWlwOdj2XF1xCuezvAWM+r9xKXLicftU+sTUGu96MAa4rx0Mi4bHhhyO
+         PzDrcyY7Jx988b/vdwCkozW5IUSi9es5iWgkaA+tEv4/x70nNIdTc9qPK4qQned9Tser
+         hvREAeTYsxI+ZBBDGdODwIXLVtBhVR5+ayqpfUVic7dLjdrTixjF7AV1dYBEq88qBPAC
+         YmR29vPie9vhmOEe3IxwKRx4ENqBRA2ZkeA5qqs4Z45U8oaT5m7DdbfJs3cWCE/ulBQ5
+         NkVDdRZOyZk2/yiTsODj6VbHm7wbOTCfKuvBEA9jJAQlUz5Fzc+YDVOnF7NNd2eZrUAx
+         ObVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739838324; x=1740443124;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8m1uQh6w5iYJ3orp8b5EeRdmeUvkTNV6vuD529TfFW8=;
+        b=hVP0kFvOlXy2HzZDez3eL0OI8ykwdQMz/ClJrQP4YFFTyAMAmYydiVs3ourazYBrvO
+         nUtkvrH9bxPvvCC4zLhprUxzADEwq3GO1lLe/NdgW2TOl/h3SznBRLxrgDq2HGzrVlLL
+         h099/CiRTJJQ3YG3qgZRTfyzEj0+obzXN/LSHpo7JuZ5vwsiCEAv8pg+x3nXmayxAnJU
+         bR2cZTQvK9RGfIztHCn5KYdHWQ6xqZsZJdgV9RyTeDCdjbIEoGWN1aC010m+emVK5wGp
+         jtIpcGuq+x/Lop+NRlpwQLfDAxEBC38JC8pGDLuC1EQj0CI281RnPyfLUxWMDWaeDakv
+         rrCA==
+X-Forwarded-Encrypted: i=1; AJvYcCUQhzQ7d+ZBZlwLxxqnXgMoJyxTEW8zgMidAVAX4KivWlX3FTN2yTd5sFJZayYR4HxpMgLamNGCTOv9@vger.kernel.org, AJvYcCVLxeDuZG+PAec04eWS/md+URjcnUIird3uk/wufWvyrs0pnw2kihpfGMZIGxEBURjRTc1jJnAKbJuIqqI=@vger.kernel.org, AJvYcCWcPe5nmirJjFkYlLiIdEvOvcV+w6mxrxpJVoJ8n9q+EZluBQrojEgBv+oKDbpXb19XzC7wJgim@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqe6um5SFMrpHYFeR7F7m+4uSIoW94XRMJB3rpCWceFJm6a5KB
+	NLdmrajFDyIZgx8aRnRINivRbQJx7+f37RT7Mq2Meu5tk+EvSHxhWwVSqGRV
+X-Gm-Gg: ASbGnctH3ZtAgxrP18z11aBPAu8zVfkwuIJhQ2vQK8v3Myhqr4+hYe+mbw9oDIrFXyB
+	n/XSdxIulHnHV4/U+mGrDwlKyPkYGCYog8KqXA+S6n0ncyqcEY5corucvq7zBw5WwcSvjCRycBz
+	8B4F0iPaK8mpEeRgdv6eZ8i6ZorYDwRHuSiMv2+URPjr5SxqdNh4YhUSxskmvu+HunlsNq7K3KL
+	uadInXd9fJ++//OXQ/ctL32yqQuV+DtcWvG5U6FKLhSE44j3tnZdvzAy961G8YupXlxQR/eWu2e
+	Dp3LmViaSAFkpVl/
+X-Google-Smtp-Source: AGHT+IFEwVOQfWAk3usB+gCbjckJ1M+hXwhwG3/4LSm+JCb/QOyIiORIX6KA7JP7mO6j+vJj81w/qw==
+X-Received: by 2002:a05:600c:4f94:b0:439:4706:ae04 with SMTP id 5b1f17b1804b1-4396e7171b4mr123085705e9.16.1739838323483;
+        Mon, 17 Feb 2025 16:25:23 -0800 (PST)
+Received: from qasdev.Home ([2a02:c7c:6696:8300:1981:9861:b731:66d5])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4395a1b84bcsm171982195e9.40.2025.02.17.16.25.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Feb 2025 16:25:23 -0800 (PST)
+From: Qasim Ijaz <qasdev00@gmail.com>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com
+Cc: netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH] net: fix uninitialised access in mii_nway_restart()
+Date: Tue, 18 Feb 2025 00:24:43 +0000
+Message-Id: <20250218002443.11731-1-qasdev00@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250217-exynos990-bindings-usb3-v2-1-3b3f0809f4fb@mentallysanemainliners.org>
-X-B4-Tracking: v=1; b=H4sIAIORs2cC/4WNQQqDMBBFryJZNyWJWk1XvUdxEXXUAZ1Ixooi3
- r2pF+jyPfjvH4IhILB4JocIsCKjpwjmlohmcNSDxDayMMrkyuhMwraTZ2uVrJFapJ7lh+tUPrp
- SdYW2mU4LEddzgA63q/yuIg/Iiw/7dbTqn/3fXLXUMoW8NYXRjS2b1wS0uHHc2RFMDmlEgsB3H
- 3pRnef5BbmVk/LPAAAA
-X-Change-ID: 20250214-exynos990-bindings-usb3-6f80f7194137
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, linux-usb@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Igor Belwon <igor.belwon@mentallysanemainliners.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739821453; l=1933;
- i=igor.belwon@mentallysanemainliners.org; s=20241206;
- h=from:subject:message-id; bh=IgmrKZQ+U6jM19WQ1y4s62f1uaoWol9FnsSA1ZFXU+4=;
- b=B6t7KTHxA+iuFtJA+yAANoa5OJat58KmWVxgOUSKRZvxMNtbaoOTTAlv4dPWmlT5LWwh2Pu8k
- q6eEIZ+JUKrDuBKPF+X1xlb64anSsoZh8AOFx9Q0WEbW2fD/l12oaJy
-X-Developer-Key: i=igor.belwon@mentallysanemainliners.org; a=ed25519;
- pk=qKAuSTWKTaGQM0vwBxV0p6hPKMN4vh0CwZ+bozrG5lY=
+Content-Transfer-Encoding: 8bit
 
-Add a compatible for the exynos990-dwusb3 node. It's compatible with the
-exynos850 variant when using the highspeed mode.
+In mii_nway_restart() during the line:
 
-Signed-off-by: Igor Belwon <igor.belwon@mentallysanemainliners.org>
+	bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
+
+The code attempts to call mii->mdio_read which is ch9200_mdio_read().
+
+ch9200_mdio_read() utilises a local buffer, which is initialised 
+with control_read():
+
+	unsigned char buff[2];
+	
+However buff is conditionally initialised inside control_read():
+
+	if (err == size) {
+		memcpy(data, buf, size);
+	}
+
+If the condition of "err == size" is not met, then buff remains 
+uninitialised. Once this happens the uninitialised buff is accessed 
+and returned during ch9200_mdio_read():
+
+	return (buff[0] | buff[1] << 8);
+	
+The problem stems from the fact that ch9200_mdio_read() ignores the
+return value of control_read(), leading to uinit-access of buff.
+
+To fix this we should check the return value of control_read()
+and return early on error.
+
+Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
+Reported-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
+Tested-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
+Closes: https://syzkaller.appspot.com/bug?extid=3361c2d6f78a3e0892f9
+Fixes: 4a476bd6d1d9 ("usbnet: New driver for QinHeng CH9200 devices")
+Cc: stable@vger.kernel.org
 ---
-The Exynos990 SoC embeds a DWC3 USB3 DRD controller.
+ drivers/net/mii.c        | 2 ++
+ drivers/net/usb/ch9200.c | 7 +++++--
+ 2 files changed, 7 insertions(+), 2 deletions(-)
 
-The controller's design is compatible with the Exynos850 design
-for high-speed mode.
-
-This patchset adds in the new exynos990-dwusb3 compatible.
----
-Changes in v2:
-- bindings: re-check, fix picking the dwusb3 compatible
-- Link to v1: https://lore.kernel.org/r/20250214-exynos990-bindings-usb3-v1-1-3e5d2721c98c@mentallysanemainliners.org
----
- .../devicetree/bindings/usb/samsung,exynos-dwc3.yaml     | 16 ++++++++++------
- 1 file changed, 10 insertions(+), 6 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-index 2b3430cebe99106f3b6201ab31d4d9e3fcc55627..f11e767a8abe1d2fb7faa6d6b5be09970c5c9b37 100644
---- a/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-+++ b/Documentation/devicetree/bindings/usb/samsung,exynos-dwc3.yaml
-@@ -11,12 +11,16 @@ maintainers:
+diff --git a/drivers/net/mii.c b/drivers/net/mii.c
+index 37bc3131d31a..e305bf0f1d04 100644
+--- a/drivers/net/mii.c
++++ b/drivers/net/mii.c
+@@ -464,6 +464,8 @@ int mii_nway_restart (struct mii_if_info *mii)
  
- properties:
-   compatible:
--    enum:
--      - google,gs101-dwusb3
--      - samsung,exynos5250-dwusb3
--      - samsung,exynos5433-dwusb3
--      - samsung,exynos7-dwusb3
--      - samsung,exynos850-dwusb3
-+    oneOf:
-+      - enum:
-+          - google,gs101-dwusb3
-+          - samsung,exynos5250-dwusb3
-+          - samsung,exynos5433-dwusb3
-+          - samsung,exynos7-dwusb3
-+          - samsung,exynos850-dwusb3
-+      - items:
-+          - const: samsung,exynos990-dwusb3
-+          - const: samsung,exynos850-dwusb3
+ 	/* if autoneg is off, it's an error */
+ 	bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
++	if (bmcr < 0)
++		return bmcr;
  
-   '#address-cells':
-     const: 1
-
----
-base-commit: 5cbcf2652f4cd84eac21f5e88fe2a0baecc601fb
-change-id: 20250214-exynos990-bindings-usb3-6f80f7194137
-
-Best regards,
+ 	if (bmcr & BMCR_ANENABLE) {
+ 		bmcr |= BMCR_ANRESTART;
+diff --git a/drivers/net/usb/ch9200.c b/drivers/net/usb/ch9200.c
+index f69d9b902da0..e32d3c282dc1 100644
+--- a/drivers/net/usb/ch9200.c
++++ b/drivers/net/usb/ch9200.c
+@@ -178,6 +178,7 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ {
+ 	struct usbnet *dev = netdev_priv(netdev);
+ 	unsigned char buff[2];
++	int ret;
+ 
+ 	netdev_dbg(netdev, "%s phy_id:%02x loc:%02x\n",
+ 		   __func__, phy_id, loc);
+@@ -185,8 +186,10 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
+ 	if (phy_id != 0)
+ 		return -ENODEV;
+ 
+-	control_read(dev, REQUEST_READ, 0, loc * 2, buff, 0x02,
+-		     CONTROL_TIMEOUT_MS);
++	ret = control_read(dev, REQUEST_READ, 0, loc * 2, buff, 0x02,
++			   CONTROL_TIMEOUT_MS);
++	if (ret != 2)
++		return ret < 0 ? ret : -EINVAL;
+ 
+ 	return (buff[0] | buff[1] << 8);
+ }
 -- 
-Igor Belwon <igor.belwon@mentallysanemainliners.org>
+2.39.5
 
 
