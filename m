@@ -1,146 +1,113 @@
-Return-Path: <linux-usb+bounces-20747-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20749-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8EF5A39671
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 10:06:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5293FA3972C
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 10:33:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 154033A8154
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 08:57:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B07953AA69A
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 09:26:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5511F22FACA;
-	Tue, 18 Feb 2025 08:57:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9224C22FF22;
+	Tue, 18 Feb 2025 09:26:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="WTYsTaJL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gKAgDl3F"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B1622F144;
-	Tue, 18 Feb 2025 08:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D64C22FDEE
+	for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2025 09:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739869037; cv=none; b=Z1Hx6H5V4ibTjOCUbWI5+Do8+4d1fKYctNzA00QfWoHUgk5tKLDd5WxDubktrFT4ooSW0TFoTUYbTvfPjQ56WxvBMCh0HfCopd9kzrDbQCEEKmuPM9tj0ZVuRJNZJmB66WJNLcTOMAUSG/zxR9GHPks0eW1XBdgVDj12JjwRnng=
+	t=1739870782; cv=none; b=rG5n7rGjP7o+J+OHBNHi8Hw8PozCUOQURUDjSSMYU720THU393F0xYBKfw9y+g9XG+vTF+/Tw+VnMECku0kJWE3BvHQdTh6wyiec6jnsAg/N7hlsur3r4O7Zvpz46z6ll8vrBK4ylWqcF5Msp4HjHF01wGfj/mqV2XaUV0TiSbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739869037; c=relaxed/simple;
-	bh=SquZsIzoLNV/ScddoBqqYtNvHls6hV/j6HdDoLuHReA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RynYZnrU+zPy8GxAeMtjVME4xmfeRqCxBvBB0QQ5BwyCgStYsnMai0t40c5gHrE7XnjHvA9Lj24c/v0DHmGGfNp0InxYiJiv/1iAFOepVRHLe9U906vby7mqJ8AZGNWn3HBVORD2FdjuxcGfnctdOlFwjAxUx7Mps3z8HzAHyRU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=WTYsTaJL; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1739869032;
-	bh=SquZsIzoLNV/ScddoBqqYtNvHls6hV/j6HdDoLuHReA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=WTYsTaJLxwvClHM0Xq6WIHtoyBSL4dL6tezkvyILCOs1tgmLcLlY4r/j9KnkN/GfU
-	 wAZbYFsYZl3SjAqw7eRPmNjPD3WTu581lgBWZPqr65DpRKadXDpYfJffKo27Dw+VbA
-	 /SY/EmUjFZzmIjAr68nXCFld45VGRO9aWZnhEpamVGGuna+O5OVXs7yv+v0grFiAna
-	 yHUOakkZCarmgwOSwrbQLJugGJ9VOLuViJ9iUM2F1sH8IG6Blbxc80wnIS0KqAuEqT
-	 ZBVWtYmIkek5ttyiLDW/06u8OmyAkrifsoCjXRu09bmYoDgFvHNY2X5yVRktYPAnbj
-	 TSb3zfHDyOx9g==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id B63B517E0E8E;
-	Tue, 18 Feb 2025 09:57:11 +0100 (CET)
-Message-ID: <dac4879c-4354-40bb-91f3-3e7e4eb98c44@collabora.com>
-Date: Tue, 18 Feb 2025 09:57:11 +0100
+	s=arc-20240116; t=1739870782; c=relaxed/simple;
+	bh=38PUrXdJtMQzYZcGUWbpjddiW9lO3rZ2KVEC4pclOi4=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=D+NcGWtJ6LXP7CSuPvB/SUb6rmNEssa6OaExgBKdUnjCEdiBp46GN1aCeyIJ5fsz+Qn4HH461klLXuWHT2x16Eg7Scdo/WEMapXyNP6pXaQn1gBgSXn1O33P61Y2fvWiWPlLve0NSkz1uc30fyjXUrwZJ4G04qnGmYruBTftHWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gKAgDl3F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 88A9DC4CEE4
+	for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2025 09:26:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739870781;
+	bh=38PUrXdJtMQzYZcGUWbpjddiW9lO3rZ2KVEC4pclOi4=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=gKAgDl3FiATkMPCKpWfj4NHYHNBShpcPNHwV1mceJStJlwxoQwbSsTrza3kIG1BAL
+	 eaQPeylUzPRgwhlJeV2fZasHjkYfw8wXpOH+DDKE/XiklJFd/UF0Vl3wE+1TNYKe8w
+	 9KB3qnRxY0s1WzAnic2qenrAY/cFJGKkNgytoy/xh7sETTURc5PK2z28TS7h9Xj//I
+	 sZTuEmV8gkA7skfi1YAQofYAdyo4g25TDk9WdbiqyQO5PvPBGh//F9tocgAIVl/juM
+	 czwwfUq7wW0K7yYuc29I3My7pThmCqfiIS1ZeWFtvYxbeyvYiTHJIhFntnKntG1SCs
+	 5feL1zSWPFGVA==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 744BCC3279F; Tue, 18 Feb 2025 09:26:21 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219789] [regression] Moving Logitech mouse causes WINE to lag
+Date: Tue, 18 Feb 2025 09:26:21 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: esteve.varela@gmail.com
+X-Bugzilla-Status: RESOLVED
+X-Bugzilla-Resolution: INVALID
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status resolution
+Message-ID: <bug-219789-208809-DBgUiAPGr6@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219789-208809@https.bugzilla.kernel.org/>
+References: <bug-219789-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 4/4] usb: mtu3: add support remote wakeup of mt8196
-To: Chunfeng Yun <chunfeng.yun@mediatek.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, Mathias Nyman <mathias.nyman@intel.com>,
- linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250215100615.808-1-chunfeng.yun@mediatek.com>
- <20250215100615.808-4-chunfeng.yun@mediatek.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250215100615.808-4-chunfeng.yun@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-Il 15/02/25 11:06, Chunfeng Yun ha scritto:
-> There are three USB controllers on mt8196, each controller's wakeup
-> control is different, add some specific versions for them.
-> 
-> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219789
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Esteve Varela Colominas (esteve.varela@gmail.com) changed:
 
-> ---
-> v3: add the ommitted third dual-role controller suggested by Angelo
-> v2: add wakeup for dual-role controllers
-> ---
->   drivers/usb/mtu3/mtu3_host.c | 26 ++++++++++++++++++++++++++
->   1 file changed, 26 insertions(+)
-> 
-> diff --git a/drivers/usb/mtu3/mtu3_host.c b/drivers/usb/mtu3/mtu3_host.c
-> index 7c657ea2dabd..8138b3f3096a 100644
-> --- a/drivers/usb/mtu3/mtu3_host.c
-> +++ b/drivers/usb/mtu3/mtu3_host.c
-> @@ -46,6 +46,14 @@
->   #define WC1_IS_P_95		BIT(12)
->   #define WC1_IS_EN_P0_95		BIT(6)
->   
-> +/* mt8196 */
-> +#define PERI_WK_CTRL0_8196	0x08
-> +#define WC0_IS_EN_P0_96		BIT(0)
-> +#define WC0_IS_EN_P1_96		BIT(7)
-> +
-> +#define PERI_WK_CTRL1_8196	0x10
-> +#define WC1_IS_EN_P2_96		BIT(0)
-> +
->   /* mt2712 etc */
->   #define PERI_SSUSB_SPM_CTRL	0x0
->   #define SSC_IP_SLEEP_EN	BIT(4)
-> @@ -59,6 +67,9 @@ enum ssusb_uwk_vers {
->   	SSUSB_UWK_V1_3,		/* mt8195 IP0 */
->   	SSUSB_UWK_V1_5 = 105,	/* mt8195 IP2 */
->   	SSUSB_UWK_V1_6,		/* mt8195 IP3 */
-> +	SSUSB_UWK_V1_7, 	/* mt8196 IP0 */
-> +	SSUSB_UWK_V1_8, 	/* mt8196 IP1 */
-> +	SSUSB_UWK_V1_9, 	/* mt8196 IP2 */
->   };
->   
->   /*
-> @@ -100,6 +111,21 @@ static void ssusb_wakeup_ip_sleep_set(struct ssusb_mtk *ssusb, bool enable)
->   		msk = WC0_IS_EN_P3_95 | WC0_IS_C_95(0x7) | WC0_IS_P_95;
->   		val = enable ? (WC0_IS_EN_P3_95 | WC0_IS_C_95(0x1)) : 0;
->   		break;
-> +	case SSUSB_UWK_V1_7:
-> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8196;
-> +		msk = WC0_IS_EN_P0_96;
-> +		val = enable ? msk : 0;
-> +		break;
-> +	case SSUSB_UWK_V1_8:
-> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL0_8196;
-> +		msk = WC0_IS_EN_P1_96;
-> +		val = enable ? msk : 0;
-> +		break;
-> +	case SSUSB_UWK_V1_9:
-> +		reg = ssusb->uwk_reg_base + PERI_WK_CTRL1_8196;
-> +		msk = WC1_IS_EN_P2_96;
-> +		val = enable ? msk : 0;
-> +		break;
->   	case SSUSB_UWK_V2:
->   		reg = ssusb->uwk_reg_base + PERI_SSUSB_SPM_CTRL;
->   		msk = SSC_IP_SLEEP_EN | SSC_SPM_INT_EN;
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |RESOLVED
+         Resolution|---                         |INVALID
 
+--- Comment #1 from Esteve Varela Colominas (esteve.varela@gmail.com) ---
+I've tried bisecting the issue, but was getting bogus results. On some rebo=
+ots,
+it would lag, but after rebooting again, it wouldn't lag at all.
+After rebooting 6.6.67 a few times, this issue was reproducible there as we=
+ll.
+I'm under the impression that since 6.12, this issue has gotten worse, but I
+cannot prove this appropriately. I've tried everything: downgrading microco=
+de,
+every in-between kernel version, disabling TLP, etc etc, and nothing seems =
+to
+make a difference.
 
+The annoying bit is that I *know* it's a regression, but now I can't tell
+what's causing it anymore. I don't play WINE games frequently enough to nar=
+row
+down when this happened.
+
+Thanks, anyway.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
