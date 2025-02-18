@@ -1,177 +1,103 @@
-Return-Path: <linux-usb+bounces-20734-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20735-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02E6FA38FE5
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 01:25:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0023A3902F
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 02:10:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CC7A37A3A98
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 00:24:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 68A0816C172
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 01:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5B6CBA4B;
-	Tue, 18 Feb 2025 00:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD8DD481B1;
+	Tue, 18 Feb 2025 01:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ny6faVZL"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="lj3ovUrV"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C976E545;
-	Tue, 18 Feb 2025 00:25:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94C8484D34;
+	Tue, 18 Feb 2025 01:10:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739838327; cv=none; b=HpXPe/MmxmVfYPdGKRDIvVVWG9TnivhnHJRioc9HSGpm6Uf45cHVG/YKKZpQkTVB34K1Pq/KmGNdGEjrJ0tI8JLNBiYxKpDKjXdrCX8klF/kK7OoL1nwFsPNSSlQDktkh7jnZNKxLyFIb+EPxkVCeEXQuax3RSO9iMWzEpe+IlU=
+	t=1739841028; cv=none; b=HP54uh/5pSfn9yfYxz5JcQRGMa50yy8OaqLVZlX0L9XCFQd4TQ7XxVCgHPNPJmJv+6/WOL0szHcNJRxO0C3WxMidh9ZJDJkzt1VitOCXnN2PMFBxTtFgQfMj9cGxJCI4//Jj9g5k30OWZ94Bsn/+LQl+EDMAy1fLs511L0zsphQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739838327; c=relaxed/simple;
-	bh=EFJw1G6AdYPAxqc3eJvXKne5aFMBnMqVqo01SdhVK8s=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=n2lN1PmEN2SgS6mBuM6Oo2h7wCjSpCRlp+CMQeXlyLmMeNa+lm1ch7VdXJ1gRaIBleKsbT2OwXSJ6x/jCoobyam+/lqTclc6/GjkFceZsS2Wy9pndItcGEps0xL7kPymQDycUHz2PD6HuTxQ8qWIlrXZIOGtFtHVJwZI/j0hmvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ny6faVZL; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-438a3216fc2so51026305e9.1;
-        Mon, 17 Feb 2025 16:25:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739838324; x=1740443124; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=8m1uQh6w5iYJ3orp8b5EeRdmeUvkTNV6vuD529TfFW8=;
-        b=Ny6faVZLYssWlwOdj2XF1xCuezvAWM+r9xKXLicftU+sTUGu96MAa4rx0Mi4bHhhyO
-         PzDrcyY7Jx988b/vdwCkozW5IUSi9es5iWgkaA+tEv4/x70nNIdTc9qPK4qQned9Tser
-         hvREAeTYsxI+ZBBDGdODwIXLVtBhVR5+ayqpfUVic7dLjdrTixjF7AV1dYBEq88qBPAC
-         YmR29vPie9vhmOEe3IxwKRx4ENqBRA2ZkeA5qqs4Z45U8oaT5m7DdbfJs3cWCE/ulBQ5
-         NkVDdRZOyZk2/yiTsODj6VbHm7wbOTCfKuvBEA9jJAQlUz5Fzc+YDVOnF7NNd2eZrUAx
-         ObVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739838324; x=1740443124;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8m1uQh6w5iYJ3orp8b5EeRdmeUvkTNV6vuD529TfFW8=;
-        b=hVP0kFvOlXy2HzZDez3eL0OI8ykwdQMz/ClJrQP4YFFTyAMAmYydiVs3ourazYBrvO
-         nUtkvrH9bxPvvCC4zLhprUxzADEwq3GO1lLe/NdgW2TOl/h3SznBRLxrgDq2HGzrVlLL
-         h099/CiRTJJQ3YG3qgZRTfyzEj0+obzXN/LSHpo7JuZ5vwsiCEAv8pg+x3nXmayxAnJU
-         bR2cZTQvK9RGfIztHCn5KYdHWQ6xqZsZJdgV9RyTeDCdjbIEoGWN1aC010m+emVK5wGp
-         jtIpcGuq+x/Lop+NRlpwQLfDAxEBC38JC8pGDLuC1EQj0CI281RnPyfLUxWMDWaeDakv
-         rrCA==
-X-Forwarded-Encrypted: i=1; AJvYcCUQhzQ7d+ZBZlwLxxqnXgMoJyxTEW8zgMidAVAX4KivWlX3FTN2yTd5sFJZayYR4HxpMgLamNGCTOv9@vger.kernel.org, AJvYcCVLxeDuZG+PAec04eWS/md+URjcnUIird3uk/wufWvyrs0pnw2kihpfGMZIGxEBURjRTc1jJnAKbJuIqqI=@vger.kernel.org, AJvYcCWcPe5nmirJjFkYlLiIdEvOvcV+w6mxrxpJVoJ8n9q+EZluBQrojEgBv+oKDbpXb19XzC7wJgim@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyqe6um5SFMrpHYFeR7F7m+4uSIoW94XRMJB3rpCWceFJm6a5KB
-	NLdmrajFDyIZgx8aRnRINivRbQJx7+f37RT7Mq2Meu5tk+EvSHxhWwVSqGRV
-X-Gm-Gg: ASbGnctH3ZtAgxrP18z11aBPAu8zVfkwuIJhQ2vQK8v3Myhqr4+hYe+mbw9oDIrFXyB
-	n/XSdxIulHnHV4/U+mGrDwlKyPkYGCYog8KqXA+S6n0ncyqcEY5corucvq7zBw5WwcSvjCRycBz
-	8B4F0iPaK8mpEeRgdv6eZ8i6ZorYDwRHuSiMv2+URPjr5SxqdNh4YhUSxskmvu+HunlsNq7K3KL
-	uadInXd9fJ++//OXQ/ctL32yqQuV+DtcWvG5U6FKLhSE44j3tnZdvzAy961G8YupXlxQR/eWu2e
-	Dp3LmViaSAFkpVl/
-X-Google-Smtp-Source: AGHT+IFEwVOQfWAk3usB+gCbjckJ1M+hXwhwG3/4LSm+JCb/QOyIiORIX6KA7JP7mO6j+vJj81w/qw==
-X-Received: by 2002:a05:600c:4f94:b0:439:4706:ae04 with SMTP id 5b1f17b1804b1-4396e7171b4mr123085705e9.16.1739838323483;
-        Mon, 17 Feb 2025 16:25:23 -0800 (PST)
-Received: from qasdev.Home ([2a02:c7c:6696:8300:1981:9861:b731:66d5])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4395a1b84bcsm171982195e9.40.2025.02.17.16.25.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2025 16:25:23 -0800 (PST)
-From: Qasim Ijaz <qasdev00@gmail.com>
-To: andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com
-Cc: netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-usb@vger.kernel.org,
+	s=arc-20240116; t=1739841028; c=relaxed/simple;
+	bh=mp41Y2E+0Yi5ho4XyG2Vk8jU5I+itfdLIQ/z4tHFpHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LzC2FUgNmzCyC5fdMzRIZCLqxhZ/3lpoLqs17vsny22ZvZi3T2bQZ8CMd54SH1qGk69kyKVTOnt4EGQvD/csVAB9i65Fd1AngWrxLFjmDILEHNNRn2upO1fvKSZy9Jkh8lIq6uu+FoGj+KGF1fiPzpswz1lh1DK0Vb5T4c1YKVU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=lj3ovUrV; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=hQf6BQmTrhmN5xM7XWiDSR55b1HKStYnTUiapIt/KYM=; b=lj3ovUrVNBrgmFnmw6mSqZ6L/1
+	hyFv5scaXARlvfmV69IzrWj3xM31BmASongb3cFpc43edLuIsBw0X8FNeHNlZMn1OCWyyMU9GAyOe
+	qluzF6PRSDAkKtNGdKjjTElXbsnH+imoUtLL5X44MyiNXaxII8SCdMJ7GkRK1zrCBphY=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tkC7k-00F8VR-PI; Tue, 18 Feb 2025 02:10:08 +0100
+Date: Tue, 18 Feb 2025 02:10:08 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Qasim Ijaz <qasdev00@gmail.com>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+	kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
 	syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>,
 	stable@vger.kernel.org
-Subject: [PATCH] net: fix uninitialised access in mii_nway_restart()
-Date: Tue, 18 Feb 2025 00:24:43 +0000
-Message-Id: <20250218002443.11731-1-qasdev00@gmail.com>
-X-Mailer: git-send-email 2.39.5
+Subject: Re: [PATCH] net: fix uninitialised access in mii_nway_restart()
+Message-ID: <cf0d2929-d854-48ce-97eb-69747f0833f2@lunn.ch>
+References: <20250218002443.11731-1-qasdev00@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250218002443.11731-1-qasdev00@gmail.com>
 
-In mii_nway_restart() during the line:
+On Tue, Feb 18, 2025 at 12:24:43AM +0000, Qasim Ijaz wrote:
+> In mii_nway_restart() during the line:
+> 
+> 	bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
+> 
+> The code attempts to call mii->mdio_read which is ch9200_mdio_read().
+> 
+> ch9200_mdio_read() utilises a local buffer, which is initialised 
+> with control_read():
+> 
+> 	unsigned char buff[2];
+> 	
+> However buff is conditionally initialised inside control_read():
+> 
+> 	if (err == size) {
+> 		memcpy(data, buf, size);
+> 	}
+> 
+> If the condition of "err == size" is not met, then buff remains 
+> uninitialised. Once this happens the uninitialised buff is accessed 
+> and returned during ch9200_mdio_read():
+> 
+> 	return (buff[0] | buff[1] << 8);
+> 	
+> The problem stems from the fact that ch9200_mdio_read() ignores the
+> return value of control_read(), leading to uinit-access of buff.
+> 
+> To fix this we should check the return value of control_read()
+> and return early on error.
 
-	bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
+What about get_mac_address()?
 
-The code attempts to call mii->mdio_read which is ch9200_mdio_read().
+If you find a bug, it is a good idea to look around and see if there
+are any more instances of the same bug. I could be wrong, but it seems
+like get_mac_address() suffers from the same problem?
 
-ch9200_mdio_read() utilises a local buffer, which is initialised 
-with control_read():
-
-	unsigned char buff[2];
-	
-However buff is conditionally initialised inside control_read():
-
-	if (err == size) {
-		memcpy(data, buf, size);
-	}
-
-If the condition of "err == size" is not met, then buff remains 
-uninitialised. Once this happens the uninitialised buff is accessed 
-and returned during ch9200_mdio_read():
-
-	return (buff[0] | buff[1] << 8);
-	
-The problem stems from the fact that ch9200_mdio_read() ignores the
-return value of control_read(), leading to uinit-access of buff.
-
-To fix this we should check the return value of control_read()
-and return early on error.
-
-Signed-off-by: Qasim Ijaz <qasdev00@gmail.com>
-Reported-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
-Tested-by: syzbot <syzbot+3361c2d6f78a3e0892f9@syzkaller.appspotmail.com>
-Closes: https://syzkaller.appspot.com/bug?extid=3361c2d6f78a3e0892f9
-Fixes: 4a476bd6d1d9 ("usbnet: New driver for QinHeng CH9200 devices")
-Cc: stable@vger.kernel.org
----
- drivers/net/mii.c        | 2 ++
- drivers/net/usb/ch9200.c | 7 +++++--
- 2 files changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/net/mii.c b/drivers/net/mii.c
-index 37bc3131d31a..e305bf0f1d04 100644
---- a/drivers/net/mii.c
-+++ b/drivers/net/mii.c
-@@ -464,6 +464,8 @@ int mii_nway_restart (struct mii_if_info *mii)
- 
- 	/* if autoneg is off, it's an error */
- 	bmcr = mii->mdio_read(mii->dev, mii->phy_id, MII_BMCR);
-+	if (bmcr < 0)
-+		return bmcr;
- 
- 	if (bmcr & BMCR_ANENABLE) {
- 		bmcr |= BMCR_ANRESTART;
-diff --git a/drivers/net/usb/ch9200.c b/drivers/net/usb/ch9200.c
-index f69d9b902da0..e32d3c282dc1 100644
---- a/drivers/net/usb/ch9200.c
-+++ b/drivers/net/usb/ch9200.c
-@@ -178,6 +178,7 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
- {
- 	struct usbnet *dev = netdev_priv(netdev);
- 	unsigned char buff[2];
-+	int ret;
- 
- 	netdev_dbg(netdev, "%s phy_id:%02x loc:%02x\n",
- 		   __func__, phy_id, loc);
-@@ -185,8 +186,10 @@ static int ch9200_mdio_read(struct net_device *netdev, int phy_id, int loc)
- 	if (phy_id != 0)
- 		return -ENODEV;
- 
--	control_read(dev, REQUEST_READ, 0, loc * 2, buff, 0x02,
--		     CONTROL_TIMEOUT_MS);
-+	ret = control_read(dev, REQUEST_READ, 0, loc * 2, buff, 0x02,
-+			   CONTROL_TIMEOUT_MS);
-+	if (ret != 2)
-+		return ret < 0 ? ret : -EINVAL;
- 
- 	return (buff[0] | buff[1] << 8);
- }
--- 
-2.39.5
-
+	Andrew
 
