@@ -1,99 +1,87 @@
-Return-Path: <linux-usb+bounces-20744-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20745-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DF47A3962C
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 09:55:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D74BA39635
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 09:57:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B081B7A10C6
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 08:53:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25D2218865B6
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 08:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D990A22D7AC;
-	Tue, 18 Feb 2025 08:54:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E20C22DF83;
+	Tue, 18 Feb 2025 08:57:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ezqVAXZv"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HTLwXxO+"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87B061DD886;
-	Tue, 18 Feb 2025 08:54:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D95014A614;
+	Tue, 18 Feb 2025 08:57:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739868880; cv=none; b=JJtbo+/oXw+8FyRz6MLDVtuDe7oyVFXg7zuPENiN5TlL/af8RNG5fGhZWLSqG6b8s7ll9WtNxZt4MZ8YtCHsqqXRjTLQEkwmYbLtl353M5Lr5AUdMnCPeL+qEYof1QctWivH/3IN11uUpKHCofzKGFzDsAVpPmyVhgAVFX4ODmo=
+	t=1739869034; cv=none; b=ZOwVq6pn1llofnaJishSzH8p8fKye32ep1qrpocbssPpeKQYHC5OQKClRbOvWO3CUk7XX9qU1eoCifJe/oq/VHIqh8E0aDSyp/njB8CvZrpxxmEf+MgD31tOUo1oYaq7bYJGBcPBLZSUsw7Cksx7L8ui8SVrYz6IEqwQG6mL0SI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739868880; c=relaxed/simple;
-	bh=nBEJjisUo0PMocvrJPXI1lmZXGGqamSU/fT9KlpRkcM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=TVSRJbwURYVtlNgSgET7sQtmB5A3luu1UBQjLn0W1kdzVslN1X5wJ56GDatwLVkGxLX+u6vN6cOEHMqV2QFSCS7/5c8Ko60Kw5C3yOx03tMlnaQQ1d9YCfkYQgtCCmQCeYiDJukcnUKABzdNvoUTNoVKHMVrsh0jynZhAQKDbrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ezqVAXZv; arc=none smtp.client-ip=148.251.105.195
+	s=arc-20240116; t=1739869034; c=relaxed/simple;
+	bh=2vE8L5fJp+dtJyWdQbSVt0omOCEQO0xF00KJ3QonoKI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=qKShPg/mfNy7ZFoCjVh2l/+xuGS2M+f4N/rxZVbuEZzlG0kuYSJQsB22JCxVoZzxSHBgsDuzIqRH09Mx4f/IGMEgGdeB5FJHYENuVVwA9dBXiLvBrUrjIHWLEm0fQ0YYeyBEiMGXK6PTE4wUYdiFpx+7PgkirP6n5rS+8yIEz10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HTLwXxO+; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1739868876;
-	bh=nBEJjisUo0PMocvrJPXI1lmZXGGqamSU/fT9KlpRkcM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=ezqVAXZvjzTrkZ+XNZyqbkY0wB0yXd0VEZgExQ2jPKxIbIrjHfiHb8dmlHi2tsGHY
-	 yQT5wPxPOB7pyeW4Ez36SYw28gAAvpoLYNRWJo09tOLmbLKIqJXQvKw2t1PzZOzorl
-	 kQ6Vt0QMP/xZ3xj0vxfWZqnB+CAfxFnpFPra9P6EQ7xgDzTWxBSCI87Lris0Jn1Cq0
-	 6fCTjpvVlgXEghV2sVL9pzBP9zpjyLLm0AuTTjOCkt9VxLGCWF3rBUzPxrX0R+WWQy
-	 TCJTOWgL2VgucTV1bJPRdgscecS0ZjD3xN28vkPFNpKz/ELxRH2CqusiPJMr03GFJZ
-	 TwL1nKlTmegtw==
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	s=mail; t=1739869030;
+	bh=2vE8L5fJp+dtJyWdQbSVt0omOCEQO0xF00KJ3QonoKI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=HTLwXxO+GyF1AD8FucYG29B1fK/lOd5HKGq+eU7n3INbr/PXWBliw6JzFvF7421MN
+	 hVl6i6IzO7bTIAGbQBFDLUT7fwRd+wMWhA/ik1ULEcoU3kUkh93PXjephjguDhySuM
+	 CmC+GdxgZnokHX8UesfiDF5xgtbjPcm7Dj2nL+pPVXXNToAMwvbGnC/mHMXLUMjw8u
+	 sVlYbD3RVIg1eNGMndq6XgRtwqk6xqPJRO1XiSfd4/M1Msj0oMhtB8QKotY/eBsEOs
+	 cgA1/9SBpKX7ROGTANvw32SiSHRG3t7JX+9w7gTTqKUzm1M2HpOYcQxaYqZlbcmcX9
+	 qN67gFS9gcYog==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id C0F8817E0657;
-	Tue, 18 Feb 2025 09:54:35 +0100 (CET)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, 
- Alexandre Mergnat <amergnat@baylibre.com>, 
- Macpaul Lin <macpaul.lin@mediatek.com>
-Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>, 
- Macpaul Lin <macpaul@gmail.com>, 
- Project_Global_Chrome_Upstream_Group@mediatek.com, 
- linux-usb@vger.kernel.org, Sen Chu <sen.chu@mediatek.com>, 
- Chris-qj chen <chris-qj.chen@mediatek.com>
-In-Reply-To: <20250217113736.1867808-1-macpaul.lin@mediatek.com>
-References: <20250217113736.1867808-1-macpaul.lin@mediatek.com>
-Subject: Re: [PATCH v3] arm64: dts: mediatek: mt6359: fix dtbs_check error
- for audio-codec
-Message-Id: <173986887570.18173.5945528132983122010.b4-ty@collabora.com>
-Date: Tue, 18 Feb 2025 09:54:35 +0100
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id E178217E0657;
+	Tue, 18 Feb 2025 09:57:09 +0100 (CET)
+Message-ID: <b26294cf-c751-4507-ae01-4f510cb4834a@collabora.com>
+Date: Tue, 18 Feb 2025 09:57:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/4] dt-bindings: usb: mtk-xhci: add support mt8196
+To: Chunfeng Yun <chunfeng.yun@mediatek.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, Mathias Nyman <mathias.nyman@intel.com>,
+ linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>
+References: <20250215100615.808-1-chunfeng.yun@mediatek.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250215100615.808-1-chunfeng.yun@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
 
-On Mon, 17 Feb 2025 19:37:36 +0800, Macpaul Lin wrote:
-> This change fixes these dtbs_check errors for audio-codec:
-> 1. pmic: 'mt6359codec' does not match any of the regexes: 'pinctrl-[0-9]+'
->  - Replace device node name to generic 'audio-codec'
-> 2. pmic: regulators: 'compatible' is a required property
->  - Add 'mediatek,mt6359-codec' to compatible.
+Il 15/02/25 11:06, Chunfeng Yun ha scritto:
+> There are three USB controllers on mt8196, each controller's wakeup
+> control is different, add some specific versions for them, and add
+> a new compatilbe for mt8196.
 > 
-> 
-> [...]
+> Acked-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
 
-Applied to v6.14-next/dts64, thanks!
-
-[1/1] arm64: dts: mediatek: mt6359: fix dtbs_check error for audio-codec
-      commit: 76b35f59bbe66d3eda8a98021bc01f9200131f09
-
-Cheers,
-Angelo
-
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
 
