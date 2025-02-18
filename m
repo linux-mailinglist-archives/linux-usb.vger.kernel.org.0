@@ -1,111 +1,100 @@
-Return-Path: <linux-usb+bounces-20742-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20743-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9214CA39512
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 09:22:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE46DA3955C
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 09:29:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73C827A2715
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 08:21:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6ED1177908
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 08:25:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B148822F3BC;
-	Tue, 18 Feb 2025 08:17:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3649D22B5AB;
+	Tue, 18 Feb 2025 08:23:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W8/27QDN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ue2WDAeQ"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A3BC22B8AA;
-	Tue, 18 Feb 2025 08:17:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB7CE1FF1B4;
+	Tue, 18 Feb 2025 08:23:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739866627; cv=none; b=j2kc/HZgStDjPy/wlcuWENQOeGDQo4InqA/bEJaIRlxR+Py0B/rLi3v1HpBYnIi+8kxZ88NJ4FHkg1KyOXajVTnhDybQrkamutBj+D1bQgyHBvqNPmzfj0A6A/3k/5YuwPZUPGfvUNKqN49U82ZpqzHWcUDusc2DrXI4ThJ2dDk=
+	t=1739866993; cv=none; b=rdfRZe3LsqXms83M8iRTs8rlNlQ9ShPz2AVz0rVTklx24oJGGn3nQNXr6yL+54A9ln0LegJFEBWOGMWqhZ86QvEnQtRyETz+0tLOi/63EutvtrK1EMRK7fp/g9BEXEeLFgWgAo5RhZVMLEYmNIBCN5uYX4QzOHxtCDOD2OB+M5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739866627; c=relaxed/simple;
-	bh=unAtoMZ/6LB+ku15iDriUMC7ier19fz8oDz6eJJnpjw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F8wS1WHb3meBewYeI7ufU0pjVwM5Z8FU251HuWgsQheBbAp75ixSB++7KHjI9OtPWkXb37puWqpC4op9qG+uF22CxYzjs5TIjLFIViYyDvu0tPzNMQGRPsagHoPD7M5t04UePkSWQWIpaE3UWmFyLfrMlCLKyBKFhYVdHD4JyYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W8/27QDN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97349C4CEE2;
-	Tue, 18 Feb 2025 08:17:06 +0000 (UTC)
+	s=arc-20240116; t=1739866993; c=relaxed/simple;
+	bh=p6YzcyfZTI2awbpmNRLFZOrM9ZUlgJUmwUZ83JNsVM4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PYE4WeO4cmHzyUJL/T/v6uOKn9EYo0Oj7gb2tAQ8RwQPfbuAgk4bjlzLwYdwj7LoazIPCzIMhTGshWkFbOuf6WU/5acNCQjgqm3ngME7IZD0E/t9M7SfRZPY/pOrbLV+uTp5P7L2yxIMHx911Cl7qBvafgC7Mn5hU3jq95s7BnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ue2WDAeQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13D9DC4CEE2;
+	Tue, 18 Feb 2025 08:23:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739866626;
-	bh=unAtoMZ/6LB+ku15iDriUMC7ier19fz8oDz6eJJnpjw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=W8/27QDN9jps1nyShhUPWS3f5RCyhj0k3K7aVVPA4GxyepEwMBiyAwv/VBChpTdhA
-	 /wE5ZLeiJpqRVyoMvLLdG0IT1IJitAcKhTjPght7fqvhd2w9Zdbu1zIqSz6ui40/xM
-	 RHpJHSr4qGf5xRsxmYJHahQoeiKXQ0hgHzZS2wCRcX28q1xt1CTQizsn7jU3tFnr0B
-	 wXg5KMM7PAwuT8aJ6PZwzcQ6ty1RUQX2RSvW0tCip2d3axeAeypUufgF0XyAo7T1qf
-	 HWPi47RJIcozlOD4W/Lv3zqNF3I2zI0/0tWwxecdXQnRmMPcg3xx4xrv3Ua3b0XySp
-	 VT8QUDvfqaByg==
+	s=k20201202; t=1739866993;
+	bh=p6YzcyfZTI2awbpmNRLFZOrM9ZUlgJUmwUZ83JNsVM4=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ue2WDAeQ9ahdmETC2736iv7XZV4xUcU2vmA9SJsbv39kC/+uSJrTx9Jv3hkehZknO
+	 Pjj4Z9zGrtxM1sLiqEZTjWKNa0qf2yJo4RKHoxGaR4RQVyw9BcAuaD24E//cf0etiz
+	 rFxRDEPFm4+/F7XesRiczpjJAlq/dVpvbjqniySiPbZ4tLtPoFVtfDvvwBo50HUlQK
+	 T02yJykk9jK8yLxs8TehvZi+3C3TnyMSc9M44vLEBSwNoty7pBdqNAUdGEW+wzZSr6
+	 D0QVuyNWesS+vh+gfHpb2AHUHINS+9ZoSufjO5t4SpuPjwAQ3x5BnOgpUzPZYCB+Uu
+	 WpAB6w7EzgftA==
 Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tkIn2-000000001v6-4ALR;
-	Tue, 18 Feb 2025 09:17:13 +0100
-Date: Tue, 18 Feb 2025 09:17:12 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Abel Vesa <abel.vesa@linaro.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rajendra Nayak <quic_rjendra@quicinc.com>,
-	Sibi Sankar <quic_sibis@quicinc.com>,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Trilok Soni <quic_tsoni@quicinc.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v6 2/2] usb: typec: Add support for Parade PS8830 Type-C
- Retimer
-Message-ID: <Z7RCCF58RTsyr-eN@hovoldconsulting.com>
-References: <20250206-x1e80100-ps8830-v6-0-60b1e49cfa8d@linaro.org>
- <20250206-x1e80100-ps8830-v6-2-60b1e49cfa8d@linaro.org>
- <Z68EUTlHcm6TxjlY@hovoldconsulting.com>
- <Z7Q8xwcfeE3tcBLL@hovoldconsulting.com>
- <2025021807-equipment-ignition-017f@gregkh>
+	(envelope-from <johan+linaro@kernel.org>)
+	id 1tkIsx-000000002R5-2j2W;
+	Tue, 18 Feb 2025 09:23:20 +0100
+From: Johan Hovold <johan+linaro@kernel.org>
+To: Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>,
+	Abel Vesa <abel.vesa@linaro.org>
+Subject: [PATCH] usb: typec: ps883x: fix probe error handling
+Date: Tue, 18 Feb 2025 09:22:43 +0100
+Message-ID: <20250218082243.9318-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.45.3
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025021807-equipment-ignition-017f@gregkh>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Feb 18, 2025 at 09:00:27AM +0100, Greg Kroah-Hartman wrote:
-> On Tue, Feb 18, 2025 at 08:54:47AM +0100, Johan Hovold wrote:
-> > On Fri, Feb 14, 2025 at 09:52:33AM +0100, Johan Hovold wrote:
-> > > On Thu, Feb 06, 2025 at 11:28:28AM +0200, Abel Vesa wrote:
-> > > > The Parade PS8830 is a USB4, DisplayPort and Thunderbolt 4 retimer,
-> > > > controlled over I2C. It usually sits between a USB/DisplayPort PHY
-> > > > and the Type-C connector, and provides orientation and altmode handling.
-> > 
-> > Turns out Greg had picked this one up 20 minutes before I sent my
-> > comments. I did see Heikki's ack the day before and realised time was
-> > short but was not able to drop everything and review the last revision
-> > due to meetings that afternoon.
-> > 
-> > Well, well, I guess you can say I only have myself to blame for not
-> > reviewing within a week of the last revision being posted.
-> 
-> I can revert it if you want me to, or an incremental fix, your call.
+Fix the probe error handling to avoid unbalanced clock disable or
+leaving regulators on after probe failure.
 
-Thanks, but I think Abel should be able to test the
-not-enabled-by-boot-firmware case and if needed amend the binding these
-next few weeks.
+Note that the active-low reset pin should also be asserted to avoid
+leaking current after disabling the regulators.
 
-I'll just send an incremental fix for the error handling for now.
+Fixes: 257a087c8b52 ("usb: typec: Add support for Parade PS8830 Type-C Retimer")
+Cc: Abel Vesa <abel.vesa@linaro.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+---
+ drivers/usb/typec/mux/ps883x.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-And sorry about the rant, just needed to vent some frustration with the
-never ending stream of interruptions and unscheduled work...
+diff --git a/drivers/usb/typec/mux/ps883x.c b/drivers/usb/typec/mux/ps883x.c
+index 10e407ab6b7f..ef086989231f 100644
+--- a/drivers/usb/typec/mux/ps883x.c
++++ b/drivers/usb/typec/mux/ps883x.c
+@@ -387,10 +387,11 @@ static int ps883x_retimer_probe(struct i2c_client *client)
+ 
+ err_switch_unregister:
+ 	typec_switch_unregister(retimer->sw);
+-err_vregs_disable:
+-	ps883x_disable_vregs(retimer);
+ err_clk_disable:
+ 	clk_disable_unprepare(retimer->xo_clk);
++err_vregs_disable:
++	gpiod_set_value(retimer->reset_gpio, 1);
++	ps883x_disable_vregs(retimer);
+ err_mux_put:
+ 	typec_mux_put(retimer->typec_mux);
+ err_switch_put:
+-- 
+2.45.3
 
-Johan
 
