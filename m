@@ -1,116 +1,111 @@
-Return-Path: <linux-usb+bounces-20741-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20742-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB4DFA3948E
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 09:11:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9214CA39512
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 09:22:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC6183AED14
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 08:10:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 73C827A2715
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 08:21:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A5A22AE6D;
-	Tue, 18 Feb 2025 08:10:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B148822F3BC;
+	Tue, 18 Feb 2025 08:17:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="lCxShyY2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W8/27QDN"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09FD31DE4C2;
-	Tue, 18 Feb 2025 08:10:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A3BC22B8AA;
+	Tue, 18 Feb 2025 08:17:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739866253; cv=none; b=cKa4kwbNAM8T5FVWia1N7IV7gK6OvNQuLRZSTysvsoNC0PY61YlygexZ7EijndksNiZCKyvPmGjhGZCSUTQ/+nN56OuY8Ev41W0U2VTfGLWfwNYN8Vkbcq3cNzyoJ/Qk1o3D/caitXMVAaSq/tX4fBhzbIBQ1QS7qf7SO3BE+f0=
+	t=1739866627; cv=none; b=j2kc/HZgStDjPy/wlcuWENQOeGDQo4InqA/bEJaIRlxR+Py0B/rLi3v1HpBYnIi+8kxZ88NJ4FHkg1KyOXajVTnhDybQrkamutBj+D1bQgyHBvqNPmzfj0A6A/3k/5YuwPZUPGfvUNKqN49U82ZpqzHWcUDusc2DrXI4ThJ2dDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739866253; c=relaxed/simple;
-	bh=Xn8Eug54BTNvbhwm4r4GgmUNpr3mOGqeFSI54sBSM1E=;
+	s=arc-20240116; t=1739866627; c=relaxed/simple;
+	bh=unAtoMZ/6LB+ku15iDriUMC7ier19fz8oDz6eJJnpjw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bwFGq3mCV/4Fwtx0P0z/iDuyNYEEbbpeUQQIzuezRKFbgVOpyUv2iT+mFCjRgL6FSZQahh5EIAem2fepx+eOJCiBfOZ1Yr75k3aB+w05fVLTtT+dmv9SjPUuVlPERLnrwBmyFScIDcjRPOysbm2oJyosDoVwGaJj+/E8dQ/UnQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=lCxShyY2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DEF1C4CEE6;
-	Tue, 18 Feb 2025 08:10:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1739866252;
-	bh=Xn8Eug54BTNvbhwm4r4GgmUNpr3mOGqeFSI54sBSM1E=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=F8wS1WHb3meBewYeI7ufU0pjVwM5Z8FU251HuWgsQheBbAp75ixSB++7KHjI9OtPWkXb37puWqpC4op9qG+uF22CxYzjs5TIjLFIViYyDvu0tPzNMQGRPsagHoPD7M5t04UePkSWQWIpaE3UWmFyLfrMlCLKyBKFhYVdHD4JyYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W8/27QDN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 97349C4CEE2;
+	Tue, 18 Feb 2025 08:17:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739866626;
+	bh=unAtoMZ/6LB+ku15iDriUMC7ier19fz8oDz6eJJnpjw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lCxShyY2pLEegHlZumDdUNGHJ53Wd9tracfk+YVj7jwbYw/+1YfexHq3y1Q+2oIZw
-	 gJkKy85+K/IWvWhud0dItMxD+nTJPqLMn84F73dMqfKCcZZ+OwNwRj0izL1CK7kFNA
-	 DfjdtE66b3QYtnmB8bdKQclSRD53/RNX9UeF8RWU=
-Date: Tue, 18 Feb 2025 09:10:49 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Patrice Chotard <patrice.chotard@foss.st.com>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>, linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/2] usb: core: Don't use %pK through printk
-Message-ID: <2025021822-plausible-poem-eb90@gregkh>
-References: <20250217-restricted-pointers-usb-v1-0-78da55158832@linutronix.de>
- <20250217-restricted-pointers-usb-v1-1-78da55158832@linutronix.de>
- <2025021733-strudel-curator-bfaf@gregkh>
- <20250217153444-4e1fd8ec-7f0e-4f40-8fc1-e323e4622284@linutronix.de>
+	b=W8/27QDN9jps1nyShhUPWS3f5RCyhj0k3K7aVVPA4GxyepEwMBiyAwv/VBChpTdhA
+	 /wE5ZLeiJpqRVyoMvLLdG0IT1IJitAcKhTjPght7fqvhd2w9Zdbu1zIqSz6ui40/xM
+	 RHpJHSr4qGf5xRsxmYJHahQoeiKXQ0hgHzZS2wCRcX28q1xt1CTQizsn7jU3tFnr0B
+	 wXg5KMM7PAwuT8aJ6PZwzcQ6ty1RUQX2RSvW0tCip2d3axeAeypUufgF0XyAo7T1qf
+	 HWPi47RJIcozlOD4W/Lv3zqNF3I2zI0/0tWwxecdXQnRmMPcg3xx4xrv3Ua3b0XySp
+	 VT8QUDvfqaByg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tkIn2-000000001v6-4ALR;
+	Tue, 18 Feb 2025 09:17:13 +0100
+Date: Tue, 18 Feb 2025 09:17:12 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Abel Vesa <abel.vesa@linaro.org>,
+	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Rajendra Nayak <quic_rjendra@quicinc.com>,
+	Sibi Sankar <quic_sibis@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Trilok Soni <quic_tsoni@quicinc.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 2/2] usb: typec: Add support for Parade PS8830 Type-C
+ Retimer
+Message-ID: <Z7RCCF58RTsyr-eN@hovoldconsulting.com>
+References: <20250206-x1e80100-ps8830-v6-0-60b1e49cfa8d@linaro.org>
+ <20250206-x1e80100-ps8830-v6-2-60b1e49cfa8d@linaro.org>
+ <Z68EUTlHcm6TxjlY@hovoldconsulting.com>
+ <Z7Q8xwcfeE3tcBLL@hovoldconsulting.com>
+ <2025021807-equipment-ignition-017f@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250217153444-4e1fd8ec-7f0e-4f40-8fc1-e323e4622284@linutronix.de>
+In-Reply-To: <2025021807-equipment-ignition-017f@gregkh>
 
-On Mon, Feb 17, 2025 at 03:50:54PM +0100, Thomas Weiﬂschuh wrote:
-> On Mon, Feb 17, 2025 at 02:52:05PM +0100, Greg Kroah-Hartman wrote:
-> > On Mon, Feb 17, 2025 at 02:20:51PM +0100, Thomas Weiﬂschuh wrote:
-> > > Restricted pointers ("%pK") are not meant to be used through printk().
-> > > It can unintentionally expose security sensitive, raw pointer values.
-> > > 
-> > > Use regular pointer formatting instead.
-> > > 
-> > > Link: https://lore.kernel.org/lkml/20250113171731-dc10e3c1-da64-4af0-b767-7c7070468023@linutronix.de/
-> > > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+On Tue, Feb 18, 2025 at 09:00:27AM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Feb 18, 2025 at 08:54:47AM +0100, Johan Hovold wrote:
+> > On Fri, Feb 14, 2025 at 09:52:33AM +0100, Johan Hovold wrote:
+> > > On Thu, Feb 06, 2025 at 11:28:28AM +0200, Abel Vesa wrote:
+> > > > The Parade PS8830 is a USB4, DisplayPort and Thunderbolt 4 retimer,
+> > > > controlled over I2C. It usually sits between a USB/DisplayPort PHY
+> > > > and the Type-C connector, and provides orientation and altmode handling.
 > > 
-> > So really this is just a revert of 2f964780c03b ("USB: core: replace %p
-> > with %pK"), right?
+> > Turns out Greg had picked this one up 20 minutes before I sent my
+> > comments. I did see Heikki's ack the day before and realised time was
+> > short but was not able to drop everything and review the last revision
+> > due to meetings that afternoon.
+> > 
+> > Well, well, I guess you can say I only have myself to blame for not
+> > reviewing within a week of the last revision being posted.
 > 
-> In this case, yes.
+> I can revert it if you want me to, or an incremental fix, your call.
 
-Great!  Mark it as such then please :)
+Thanks, but I think Abel should be able to test the
+not-enabled-by-boot-firmware case and if needed amend the binding these
+next few weeks.
 
-> > Why not express it that way, and explain _why_ it's somehow now ok to
-> > use %p when previously it wasn't?
-> 
-> The full background is in the email linked from the commit message.
+I'll just send an incremental fix for the error handling for now.
 
-That's not obvious at all when reviewing patches.  Please provide enough
-information in the text itself to understand what is going on.  We
-don't always have access to external links so we can't require them for
-context.
+And sorry about the rant, just needed to vent some frustration with the
+never ending stream of interruptions and unscheduled work...
 
-> %p is more secure than %pK since
-> commit ad67b74d2469 ("printk: hash addresses printed with %p").
-> %pK was never intended to be used through printk() in the first place.
-
-Great, say that then please.
-
-> I'm doing the these changes for various subsystems using a common
-> commit message. The changes are not reverts for all of them and
-> digging out the specific history for each single line is a bunch
-> of extra work.
-
-Writing a good changelog is hard.  Trying to automate it like this is
-going to be harder.  Just take the time to either do a revert (and
-explain why), or do the change (and explain why).  Either way you have
-to explain it properly, no shortcuts there.
-
-> If you want more historical context, I'll resend the series, though.
-
-As you are reverting a commit that was stated to be "for security", yes,
-it better be redone, otherwise this is going to seem like a regression.
-
-thanks,
-
-greg k-h
+Johan
 
