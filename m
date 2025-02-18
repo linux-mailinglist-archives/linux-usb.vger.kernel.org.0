@@ -1,176 +1,171 @@
-Return-Path: <linux-usb+bounces-20759-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20760-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A213A3A373
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 18:01:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD3F8A3A5F6
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 19:44:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54A841756E1
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 16:58:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8AA163A9168
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 18:44:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E3026FA48;
-	Tue, 18 Feb 2025 16:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6929D1EB5CD;
+	Tue, 18 Feb 2025 18:44:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b="OIkztm9I";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="lW8oanri"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a7EJ/W9h"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCDEB26F46A;
-	Tue, 18 Feb 2025 16:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC92A1EB5CB
+	for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2025 18:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739897901; cv=none; b=HfimXFa8sBEyNdxYFYxKVMhjOK2oaGra25YXbWarXT3cpViMGEVHn65QnAQ5kLluNubZ9XEcd7lEQJrWr2TcluCJ9cCs1XFBcbiVdA6lv9t3/8XnYO/iTTNGXiSnmD15reYunZ7QxFvXVnmYywoGcgtbdDqL/AGYqFF/gQ+q7Hc=
+	t=1739904246; cv=none; b=s8pBsjXhRAI4SN5+4ajEhV3A64aqwj5YZxaeT8bcsI7qGOGoKMLcLyuSWGQ/Z6C45qh+obQ7MsI8XkJJTdX/fwz23HzxhLwuMkL19010uXlhifvevXB5v3Q6644/L/D/u+AXv9/nto1zFzK0awvK/I0q5+h2EvImfUlXveoa8b4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739897901; c=relaxed/simple;
-	bh=CGmdvdDU/PynLCC51mKFw/25ge/gsTJ3wantBbxOtPA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Mby2cF2dGnYkK/1SdK3wGdK8Fy4Govy+dwlDex2qcTPeN/i2cBtk83Xzu3cNXHwLKjn0/9Ab4uL9lT4em9jm4sEnahJwoII6Xu8zfzh7uO3M2hVMaR6h/NM6ALWdCM7xa6Pg40P4vJI0PKTW/1tBA+3OyyeCRbzZI4H61RfKI8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca; spf=pass smtp.mailfrom=squebb.ca; dkim=pass (2048-bit key) header.d=squebb.ca header.i=@squebb.ca header.b=OIkztm9I; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=lW8oanri; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=squebb.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=squebb.ca
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfout.phl.internal (Postfix) with ESMTP id CDCF413808BC;
-	Tue, 18 Feb 2025 11:58:16 -0500 (EST)
-Received: from phl-imap-10 ([10.202.2.85])
-  by phl-compute-04.internal (MEProxy); Tue, 18 Feb 2025 11:58:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=squebb.ca; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1739897896;
-	 x=1739984296; bh=aNAlA8hxRpyCp2MQ3TxnR2uvSEYOdSCvL4wn3IpX5pI=; b=
-	OIkztm9IINN51EQQpkqZjo+t1/Hu5t+iIAZJRPTxBdjwHrX/Nl+4IarLUdcuhrmG
-	VH72YWC/ZJL0M2cV9ZpvVE2achxvR2nowtGujzYCfCOBmUau2yW7TSVYT/peeiMw
-	9JUXhHlW/2MkxsSllk6dqR8A9GPHEW/B7VMqwmaJdH8CQr5DTfmFMx7qaXQqa+3I
-	099jRNWIXQu/Lw2Hn24IWeD95C0NkMy+z59v3FvnaC3MlxtSIuSDZhmxrG25WqL0
-	KC63urPDqb11zN8NJnFoFoq/e2J8hlB1RhJDp8wZr5fuYfHNY8S2xJP4MOUavhzH
-	EzVXXy3aZtomSlQBbi1jxA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1739897896; x=
-	1739984296; bh=aNAlA8hxRpyCp2MQ3TxnR2uvSEYOdSCvL4wn3IpX5pI=; b=l
-	W8oanriWgtsuobHLGPS2P2UseU45uRT5mKqNdYrPq7Pi2XjhpQLKw2tl7E13TKhP
-	o4FHb0+00mr1EprMJfOs9kYJ/bIDCpImVbciWMz3ttpXsA61MQqDvNNG4hH0OCMN
-	PpiyEC7cPuBTTmZ8r1C54VBD6q9XZWbdXew5BPC1IpEVLo8EyViZ7gDzyOyt7xPC
-	dY/EUly9EWC4HE/stByuOEuR2Vql8k7U8utHKsd6cLXqS8gR3EGSMLTBSSDql30i
-	SNvafbPJbilXRcRfwvqDyUPr9WS662lOOL8xcWeC2mEVcc+6G/stT3npite5Sz7q
-	NRazv9OK0lmDbGAdk/p4g==
-X-ME-Sender: <xms:KLy0ZyywSJdNf-UFpG4wDImNB8Fd46hYu5kGcHPU851eqbQHpzQoNg>
-    <xme:KLy0Z-SmwJCw8mePwjAqJyp-Tb7SbJ5yz7tjcdQEwMVirbEKFlhEfBlj_CaXrYnH8
-    DunanqS2NXOsZTI-CU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeiudekhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdforghrkhcurfgvrghrshhonhdfuceomhhpvggrrhhsohhnqdhlvg
-    hnohhvohesshhquhgvsggsrdgtrgeqnecuggftrfgrthhtvghrnhephfeuvdehteeghedt
-    hedtveehuddvjeejgffgieejvdegkefhfeelheekhedvffehnecuvehluhhsthgvrhfuih
-    iivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmhhpvggrrhhsohhnqdhlvghnohhv
-    ohesshhquhgvsggsrdgtrgdpnhgspghrtghpthhtohepuddupdhmohguvgepshhmthhpoh
-    huthdprhgtphhtthhopehlkhestgdqqdgvrdguvgdprhgtphhtthhopegslhgvuhhnghes
-    tghhrhhomhhiuhhmrdhorhhgpdhrtghpthhtohepsghouggurghhkeejleegsehgmhgrih
-    hlrdgtohhmpdhrtghpthhtohepjhhthhhivghssehgohhoghhlvgdrtghomhdprhgtphht
-    thhopehsrghrrghnhigrrdhgohhprghlsehinhhtvghlrdgtohhmpdhrtghpthhtohepug
-    hmihhtrhihrdgsrghrhihshhhkohhvsehlihhnrghrohdrohhrghdprhgtphhtthhopehh
-    vghikhhkihdrkhhrohhgvghruhhssehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpth
-    htohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthht
-    oheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:KLy0Z0U_iEENkeePDPy9VGPg0xnWzlZQN3uWL9yLN0d8CjYLCL_04A>
-    <xmx:KLy0Z4haWr5l3EfZrp56aqFTrfiZLZ4vxk0O4CNo_DkRy9k4dNcPVA>
-    <xmx:KLy0Z0CActtgex7uX4rDqBg7wLBhZueRFQHL0n5ANF7_pboNJS2uGA>
-    <xmx:KLy0Z5K34IqwNwssrKiMbeauqUMP8q3gCwQYUYDaeDHesg_rbCpiww>
-    <xmx:KLy0Z46ieUoqvemKyVBHYKX7EvblXx1hxkUTWFp-9Zg6auIHdEaxwJ2d>
-Feedback-ID: ibe194615:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id F101B3C0066; Tue, 18 Feb 2025 11:58:15 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1739904246; c=relaxed/simple;
+	bh=eJ4HWJD4W0KSmzglq8QCCWGQkiRicb2i+/ZU/ogRU90=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=H4EPMzBTgP/+VTsNZxjpHLupVR1/eilRhU3Ryp/2zfngtuhnYt0IuTT/QWjnST/SP0qOZO4QVejvCmvEI8dFfLgAmACMimmvymmowvjsmvfAmUUXVWOCquCJd0treNZ7ZcnJKpd55oMn2l5jb+44xHZT/sriboEZcUOM34NkOb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a7EJ/W9h; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 4860FC4CEE9
+	for <linux-usb@vger.kernel.org>; Tue, 18 Feb 2025 18:44:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739904246;
+	bh=eJ4HWJD4W0KSmzglq8QCCWGQkiRicb2i+/ZU/ogRU90=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=a7EJ/W9h6dIYMm7v76zcdooDaLBm1ldV4tpwYHqNP3McEJhg2BkbJcGkkHHGH94QX
+	 YaOtNiY7ltRjs8C89o6qghym+5HfBmicqocuynHUCgdVcqWL4987o12aPbq6OK5bnq
+	 9ZrLtaOgLRrfxdGdqMCH44o2rc1bI8kLDcDrZQxTHNvrN8dHMz96m2rax+L4sjP0Vy
+	 IKTkoQgQVYsWQjNiKa3BiXLz5PB62q5y2brMHIsUoWOQdvepLG7PG06MwlIUKNW/Dk
+	 Tj0CCfhnxWrV+aWqyWmja+Dv168I3QJ6uLY1nmOxZ01S2/6YcbaRPnv05hSmlduFRt
+	 mlZKrdS4WJCAQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 3609AC41614; Tue, 18 Feb 2025 18:44:06 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-usb@vger.kernel.org
+Subject: [Bug 219590] Linux 6.13 ucsi driver error:
+ drivers/usb/typec/ucsi/ucsi.c:1374 ucsi_reset_ppm
+Date: Tue, 18 Feb 2025 18:44:05 +0000
+X-Bugzilla-Reason: None
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: AssignedTo drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Product: Drivers
+X-Bugzilla-Component: USB
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: tr.ml@gmx.de
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: drivers_usb@kernel-bugs.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: cc
+Message-ID: <bug-219590-208809-YfBA5YhZNc@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219590-208809@https.bugzilla.kernel.org/>
+References: <bug-219590-208809@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 18 Feb 2025 11:57:55 -0500
-From: "Mark Pearson" <mpearson-lenovo@squebb.ca>
-To: "Fedor Pchelkin" <boddah8794@gmail.com>,
- "Heikki Krogerus" <heikki.krogerus@linux.intel.com>,
- "Christian A. Ehrhardt" <lk@c--e.de>
-Cc: "Greg KH" <gregkh@linuxfoundation.org>,
- "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
- "Benson Leung" <bleung@chromium.org>, "Jameson Thies" <jthies@google.com>,
- "Saranya Gopal" <saranya.gopal@intel.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Message-Id: <c48d6d73-73d6-4df6-8e9c-c8f2ecdd654a@app.fastmail.com>
-In-Reply-To: <20250206184327.16308-3-boddah8794@gmail.com>
-References: <20250206184327.16308-1-boddah8794@gmail.com>
- <20250206184327.16308-3-boddah8794@gmail.com>
-Subject: Re: [PATCH RFC 2/2] usb: typec: ucsi: increase timeout for PPM reset
- operations
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
 
-Hi  Fedor,
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219590
 
-On Thu, Feb 6, 2025, at 1:43 PM, Fedor Pchelkin wrote:
-> It is observed that on some systems an initial PPM reset during the boot
-> phase can trigger a timeout:
->
-> [    6.482546] ucsi_acpi USBC000:00: failed to reset PPM!
-> [    6.482551] ucsi_acpi USBC000:00: error -ETIMEDOUT: PPM init failed
->
-> Still, increasing the timeout value, albeit being the most straightforward
-> solution, eliminates the problem: the initial PPM reset may take up to
-> ~8000-10000ms on some Lenovo laptops. When it is reset after the above
-> period of time (or even if ucsi_reset_ppm() is not called overall), UCSI
-> works as expected.
->
-> Moreover, if the ucsi_acpi module is loaded/unloaded manually after the
-> system has booted, reading the CCI values and resetting the PPM works
-> perfectly, without any timeout. Thus it's only a boot-time issue.
->
-> The reason for this behavior is not clear but it may be the consequence
-> of some tricks that the firmware performs or be an actual firmware bug.
-> As a workaround, increase the timeout to avoid failing the UCSI
-> initialization prematurely.
->
+RockT (tr.ml@gmx.de) changed:
 
-Could you let me know which Lenovo platform(s) you see the issue on?
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+                 CC|                            |tr.ml@gmx.de
 
-I don't have any concerns with the patch below, but if the platform is in the Linux program I can reach out to the FW team and try to determine if there's an expected time needed (and how close we are to it).
+--- Comment #15 from RockT (tr.ml@gmx.de) ---
+I see it in 6.14rc3:
 
-Thanks
+[   11.560861] WARNING: CPU: 4 PID: 81 at drivers/usb/typec/ucsi/ucsi.c:1377
+ucsi_reset_ppm+0x1ad/0x1c0 [typec_ucsi]
+[   11.560897] Modules linked in: dm_crypt raid10 raid456 async_raid6_recov
+async_memcpy async_pq async_xor async_tx xor raid6_pq raid1 raid0 linear
+dm_mirror dm_region_hash dm_log hid_logitech_hidpp hid_logitech_dj hid_gene=
+ric
+usbhid hid polyval_clmulni rtsx_pci_sdmmc polyval_generic ghash_clmulni_int=
+el
+nvme thinkpad_acpi ucsi_acpi sha256_ssse3 sha1_ssse3 e1000e psmouse nvram
+nvme_core rtsx_pci intel_lpss_pci typec_ucsi nvme_auth intel_lpss snd typec
+idma64 soundcore sparse_keymap video platform_profile wmi pinctrl_cannonlake
+aesni_intel crypto_simd cryptd
+[   11.561052] CPU: 4 UID: 0 PID: 81 Comm: kworker/4:1 Not tainted
+6.14.0-061400rc3-generic #202502181422
+[   11.561064] Hardware name: LENOVO 20Q5CTO1WW/20Q5CTO1WW, BIOS R0ZET58W (=
+1.36
+) 02/22/2024
+[   11.561072] Workqueue: events_long ucsi_init_work [typec_ucsi]
+[   11.561096] RIP: 0010:ucsi_reset_ppm+0x1ad/0x1c0 [typec_ucsi]
+[   11.561115] Code: ff 8b 55 bc 81 e2 00 00 00 08 0f 85 33 ff ff ff 4c 89 =
+75
+c8 48 8b 05 52 9d 10 dc 49 39 c5 79 94 b8 92 ff ff ff e9 19 ff ff ff <0f> 0=
+b e9
+57 ff ff ff e8 e7 28 01 db 0f 1f 80 00 00 00 00 90 90 90
+[   11.561123] RSP: 0018:ffffad1600363d70 EFLAGS: 00010206
+[   11.561134] RAX: 0000000008000000 RBX: ffff9e340ec78000 RCX:
+0000000000000000
+[   11.561141] RDX: 00000000fffb97aa RSI: 0000000000000000 RDI:
+0000000000000000
+[   11.561146] RBP: ffffad1600363dc0 R08: 0000000000000000 R09:
+0000000000000000
+[   11.561152] R10: 0000000000000000 R11: 0000000000000000 R12:
+ffffad1600363d7c
+[   11.561157] R13: 00000000fffb9797 R14: ffff9e340ec78020 R15:
+ffff9e340ec780c0
+[   11.561164] FS:  0000000000000000(0000) GS:ffff9e3b5e600000(0000)
+knlGS:0000000000000000
+[   11.561172] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[   11.561178] CR2: 00005bd21fb4c028 CR3: 0000000170240004 CR4:
+00000000003706f0
+[   11.561186] DR0: 0000000000000000 DR1: 0000000000000000 DR2:
+0000000000000000
+[   11.561190] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7:
+0000000000000400
+[   11.561196] Call Trace:
+[   11.561202]  <TASK>
+[   11.561209]  ? show_trace_log_lvl+0x1be/0x310
+[   11.561224]  ? show_trace_log_lvl+0x1be/0x310
+[   11.561237]  ? ucsi_init+0x2bc/0x310 [typec_ucsi]
+[   11.561257]  ? show_regs.part.0+0x22/0x30
+[   11.561267]  ? show_regs.cold+0x8/0x10
+[   11.561277]  ? ucsi_reset_ppm+0x1ad/0x1c0 [typec_ucsi]
+[   11.561293]  ? __warn.cold+0xac/0x10c
+[   11.561304]  ? ucsi_reset_ppm+0x1ad/0x1c0 [typec_ucsi]
+[   11.561320]  ? report_bug+0x114/0x160
+[   11.561332]  ? handle_bug+0x6e/0xb0
+[   11.561343]  ? exc_invalid_op+0x18/0x80
+[   11.561354]  ? asm_exc_invalid_op+0x1b/0x20
+[   11.561369]  ? ucsi_reset_ppm+0x1ad/0x1c0 [typec_ucsi]
+[   11.561386]  ? ucsi_send_command_common+0xa4/0x120 [typec_ucsi]
+[   11.561404]  ucsi_init+0x2bc/0x310 [typec_ucsi]
+[   11.561422]  ucsi_init_work+0x18/0x90 [typec_ucsi]
+[   11.561439]  process_one_work+0x174/0x350
+[   11.561456]  worker_thread+0x34a/0x480
+[   11.561464]  ? _raw_spin_lock_irqsave+0xe/0x20
+[   11.561478]  ? __pfx_worker_thread+0x10/0x10
+[   11.561486]  kthread+0xf9/0x230
+[   11.561497]  ? __pfx_kthread+0x10/0x10
+[   11.561508]  ret_from_fork+0x44/0x70
+[   11.561518]  ? __pfx_kthread+0x10/0x10
+[   11.561527]  ret_from_fork_asm+0x1a/0x30
+[   11.561545]  </TASK>
+[   11.561549] ---[ end trace 0000000000000000 ]---
+[   11.601285] ucsi_acpi USBC000:00: error -ETIMEDOUT: PPM init failed
 
-Mark
+--=20
+You may reply to this email to add a comment.
 
-> Fixes: b1b59e16075f ("usb: typec: ucsi: Increase command completion 
-> timeout value")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Fedor Pchelkin <boddah8794@gmail.com>
-> ---
->  drivers/usb/typec/ucsi/ucsi.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/usb/typec/ucsi/ucsi.c 
-> b/drivers/usb/typec/ucsi/ucsi.c
-> index 0fe1476f4c29..7a56d3f840d7 100644
-> --- a/drivers/usb/typec/ucsi/ucsi.c
-> +++ b/drivers/usb/typec/ucsi/ucsi.c
-> @@ -25,7 +25,7 @@
->   * difficult to estimate the time it takes for the system to process 
-> the command
->   * before it is actually passed to the PPM.
->   */
-> -#define UCSI_TIMEOUT_MS		5000
-> +#define UCSI_TIMEOUT_MS		10000
-> 
->  /*
->   * UCSI_SWAP_TIMEOUT_MS - Timeout for role swap requests
-> -- 
-> 2.48.1
+You are receiving this mail because:
+You are watching the assignee of the bug.=
 
