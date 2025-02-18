@@ -1,109 +1,104 @@
-Return-Path: <linux-usb+bounces-20765-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20766-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7AD7A3A879
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 21:13:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5021EA3A8CB
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 21:26:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D1FD6188C9E8
-	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 20:13:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A442174D9F
+	for <lists+linux-usb@lfdr.de>; Tue, 18 Feb 2025 20:26:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8971B1BEF7D;
-	Tue, 18 Feb 2025 20:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814DD1DA109;
+	Tue, 18 Feb 2025 20:25:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gcBecBo5"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FDEA17A304;
-	Tue, 18 Feb 2025 20:13:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFC681D9595;
+	Tue, 18 Feb 2025 20:25:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739909606; cv=none; b=OMZMRBixXnsSIfLkfgM9O0hiBoOcmcmHH3GQciqzBMFcRi/tNYUvBbw/SVvM7aJR9mvvUF5csgKhoIEVvYBLbv+peVyht0gH3WUjPtzStYG6kNufEg+D0Sfa6/9NP7Gwbr0HR1I7n3z+NFj6x92ihK8BgLV+HfK3gZpsU8segR4=
+	t=1739910313; cv=none; b=pFIjfbbB9HXTEM+ZFxu+/d2gdk02BpTX0Ah+OAy0scAGHSSWd7ZWBR/n7ZSj5+oJ1gtBqg4Mld6crR4Cv3dq/Bgu2M/7Ekk+txBYpR/HL/LK49Ls+3kcjHum/Iq0FNmwmvgN4/fvuaXSQE+ENx8QOM4R1U1JlFwFJXWwtZIbA10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739909606; c=relaxed/simple;
-	bh=9aoTnZaAQdDDUsyfrBJSBKe6SCyuLiBTL06Pr2f2E3o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GtiExT8S+8qkmiR8hFrriwmbsuEfOhyVk29X4EfJUSoMONak2EbMiM1vwmf8reLpvexY0h3VZjFtDixvse7S/+h/ghUSJpghJK0gBOuvtkbHWP2HRX8z85r6K+62MNSF4/hGrRJZkQ6AW0UJLVmilU0nCrmfvf1qPwOt/MCmNq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [192.168.0.2] (ip5f5af2b0.dynamic.kabel-deutschland.de [95.90.242.176])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id 7537261E64797;
-	Tue, 18 Feb 2025 21:12:39 +0100 (CET)
-Message-ID: <8db2e1cd-553e-4082-a018-ec269592b69f@molgen.mpg.de>
-Date: Tue, 18 Feb 2025 21:12:38 +0100
+	s=arc-20240116; t=1739910313; c=relaxed/simple;
+	bh=O+rOsUS/AbIzIf3D+OiY+wUyjmIouyu6awIC7asUZ3I=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=qxbmMDAypGaNmzxrpI/DjlIlvgGCOgVcMZfH61/ksImTBUdQzvP68Ud22ltbLKjmYnzHZj5Pfwk70eV/k3oEio2/ZKBUShL2YOOe3l99sF7hyJz8vPKT0yuJAZ8pk9co+34L0+maFAJG/MRbc8PrWpvO0VYmqEb96u8eaP7CyfA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gcBecBo5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F416C4CEE4;
+	Tue, 18 Feb 2025 20:25:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739910312;
+	bh=O+rOsUS/AbIzIf3D+OiY+wUyjmIouyu6awIC7asUZ3I=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gcBecBo54lfQTuQmVF/9OjilflEGmAano0K6nAj0po04Ug2y6ZEVU05Bygg0Oq5y4
+	 cQYFZ5EyPNUvtWsOsY63wKManzKG91L5eVT+I8QLDged//Zl23ay5ZQkost3f+4oH1
+	 jet2oo+kYaC8WX8d3GEqLMamR5iJYemLMXt/o7RMs/sf8dUafashHxM341buFAGCL9
+	 nWleJ+pvrh4hwMYG/fNACy6Sr62vAQRRMY6yn8gE3nTHcGqgcogUUokbnMKVTZBG8a
+	 P2Vz5RMqf8Pdioz7D2cAZ7hIpMdSnxL4zPU71HWLrddVeE8jTud5dnC3NxSWVqkALV
+	 n0odcjmZimHDA==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Sasha Levin <sashal@kernel.org>,
+	u.kleine-koenig@baylibre.com,
+	sean.anderson@seco.com,
+	m.grzeschik@pengutronix.de,
+	linux-usb@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.13 06/31] usb: phy: generic: Use proper helper for property detection
+Date: Tue, 18 Feb 2025 15:24:26 -0500
+Message-Id: <20250218202455.3592096-6-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250218202455.3592096-1-sashal@kernel.org>
+References: <20250218202455.3592096-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] r8152: Call napi_schedule() from proper context
-To: Frederic Weisbecker <frederic@kernel.org>,
- Francois Romieu <romieu@fr.zoreil.com>
-Cc: LKML <linux-kernel@vger.kernel.org>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Hayes Wang <hayeswang@realtek.com>,
- linux-usb@vger.kernel.org, netdev@vger.kernel.org
-References: <20250212174329.53793-1-frederic@kernel.org>
- <20250212174329.53793-3-frederic@kernel.org>
- <20250212204929.GA2685909@electric-eye.fr.zoreil.com>
- <Z60LYAml7kq_7XOb@pavilion.home>
-Content-Language: en-US
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <Z60LYAml7kq_7XOb@pavilion.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.13.3
 Content-Transfer-Encoding: 8bit
 
-Dear Frederic, dear Francois,
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
 
+[ Upstream commit 309005e448c1f3e4b81e4416406991b7c3339c1d ]
 
-Thank you for the patch and review.
+Since commit c141ecc3cecd7 ("of: Warn when of_property_read_bool() is
+used on non-boolean properties") a warning is raised if this function
+is used for property detection. of_property_present() is the correct
+helper for this.
 
+Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+Link: https://lore.kernel.org/r/20250120144251.580981-1-alexander.stein@ew.tq-group.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/usb/phy/phy-generic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Am 12.02.25 um 21:58 schrieb Frederic Weisbecker:
-> Le Wed, Feb 12, 2025 at 09:49:29PM +0100, Francois Romieu a écrit :
->> Frederic Weisbecker <frederic@kernel.org> :
->> [...]
->>> r8152 may call napi_schedule() on device resume time from a bare task
->>> context without disabling softirqs as the following trace shows:
->> [...]
->>> diff --git a/drivers/net/usb/r8152.c b/drivers/net/usb/r8152.c
->>> index 468c73974046..1325460ae457 100644
->>> --- a/drivers/net/usb/r8152.c
->>> +++ b/drivers/net/usb/r8152.c
->>> @@ -8537,8 +8537,11 @@ static int rtl8152_runtime_resume(struct r8152 *tp)
->>>   		clear_bit(SELECTIVE_SUSPEND, &tp->flags);
->>>   		smp_mb__after_atomic();
->>>   
->>> -		if (!list_empty(&tp->rx_done))
->>> +		if (!list_empty(&tp->rx_done)) {
->>> +			local_bh_disable();
->>>   			napi_schedule(&tp->napi);
->>> +			local_bh_enable();
->>> +		}
->>
->> AFAIU drivers/net/usb/r8152.c::rtl_work_func_t exhibits the same
->> problem.
-> 
-> It's a workqueue function and softirqs don't seem to be disabled.
-> Looks like a goot catch!
+diff --git a/drivers/usb/phy/phy-generic.c b/drivers/usb/phy/phy-generic.c
+index 6c3ececf91375..8423be59ec0ff 100644
+--- a/drivers/usb/phy/phy-generic.c
++++ b/drivers/usb/phy/phy-generic.c
+@@ -212,7 +212,7 @@ int usb_phy_gen_create_phy(struct device *dev, struct usb_phy_generic *nop)
+ 		if (of_property_read_u32(node, "clock-frequency", &clk_rate))
+ 			clk_rate = 0;
+ 
+-		needs_clk = of_property_read_bool(node, "clocks");
++		needs_clk = of_property_present(node, "clocks");
+ 	}
+ 	nop->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
+ 						   GPIOD_ASIS);
+-- 
+2.39.5
 
-Tested-by: Paul Menzel <pmenzel@molgen.mpg.de>
-
-Are you going to send a v2, so it might get into Linux 6.14, or is it 
-too late anyway?
-
-
-Kind regards,
-
-Paul
 
