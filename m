@@ -1,230 +1,188 @@
-Return-Path: <linux-usb+bounces-20835-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20836-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88567A3C6F1
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 19:03:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADAFDA3C72E
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 19:16:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1864D1896769
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 18:01:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2F92F16C55D
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 18:16:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 647B62147F2;
-	Wed, 19 Feb 2025 18:01:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD26213E9E;
+	Wed, 19 Feb 2025 18:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="B7jpXTFv"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="YjX+GVIu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2081.outbound.protection.outlook.com [40.107.104.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f176.google.com (mail-qt1-f176.google.com [209.85.160.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1849F1B6CF1;
-	Wed, 19 Feb 2025 18:01:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739988103; cv=fail; b=Ik4F6ginO7drGliSjKG3hxOHLdgo4pI3FK/KQoUWSJyZsgYqogfUi6296f1jzyO96hrKq6n/+K3Kpd6iVzrPa1bwqP7d6W546XRdXf3b/4XRhjJRlE9XCciyjZPK7S3jXJhdsMxcFj6wuod53BKpk8/hN4hPwrFBQ892zt8dBFk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739988103; c=relaxed/simple;
-	bh=ZaU8ZY+KLx8MCx5qG4Rm+U4jLfPgeolcgH7UL4Zhtg4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EEy5nNh/u1UyuavKXEyGSSoF+J8sw5Qbm6SIO/si1QOv/p4VYe6xj3+q9/SsnPc5L/D7RBpWjMCVQTwU4T3oMoC8YXSUpY8zHN1xXFXG2dA8guRteTOmiyJ9zhXc5UUjAkbRWlU5UZgZ9o1EkeKO+lrVqfifzHp/jHpAE7BeyXY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=B7jpXTFv; arc=fail smtp.client-ip=40.107.104.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=O+lh4QvenMbTa3eckOZJOqDA6CH4W4FPCmqq5d20K0UPwG44NHDTPRUA5gwHz6EpQcZyDFy7cxQnpn3S3dnq+U2oEiyBefnqFRryQnT2iNXMqbjSqwUrIG/Cbj6QhFXvYeuH6kq+yHFzrSDh/yX9Ss7nneK5VNXqANRSuOSdD/93zG0hX7rljDpnGtKpIwinp+cyLC9aNqsmxm5I6ohRa+V/8/rj48UN0Wn0mTO0Dk54Esyf1T4pWAGDbiJ2gwEUdSKOZAC9XEWu7EprUL1sDuoWgIOjg15RIBljqbIZZJq3/F8FpcUwpSSvK5NE2asmT51p5YOs7qLttJEmPVVTOQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=A6kpF4Po8qPX6bKqsJBha6X68UOfoIpZHBpf1rNA4Yc=;
- b=wivYYBN5mzs00M7DPi2ZzgVmhuVHJ6LzpyEjsKmU9x5EZlonQQKIHkWY6s1Tb6+OlXFoH6lRuVquabmD501W0ooqsH9pXwrWB1x9NfY69/GliELI1ox/PTYKwLDwJ+I9QwwydRnh9ZNDaBMjilGCypm7Uz4GtjjTXYnPg1/0ASZbtjGynUsPTJFi7Ip/wqcK0U06lAQaTC3FTV5SduvvAWgK5hLXLoXzmOus3Lj+vHM0Wah46pIPbDLrl8fn9heXZWo68qxe+Wxkur7omzj0+MI2gVulNdg3VC8C22NwOWynVFdsW3gnpBLT5okhYHc/laUf/NCrBrhBtAirp8r9yA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=A6kpF4Po8qPX6bKqsJBha6X68UOfoIpZHBpf1rNA4Yc=;
- b=B7jpXTFvyMxjQ7kIQcMLrtLsUuLVfaOyylgCaq45R9HReFmIrHgHGPzmYzlAD/EiN8/thWMCwtJ5jkaaiyKdQYc1FLhBiXQXwzTKkpgU6RI3rgbaP/G6JT6ohikwh1Apcx1RC0bxubwXokujJ+eSrUCNpJJ8PR+BBvK+L12Ln5Z9RWe4FjTGWMTudBM4KiBmd1ZMtTrosGJSn2HI08Be/MFOu3ve4fPTTGE9/8RCr429lW4y+b6rqqSmM1YfL9JUrTvivPQneD+J3M+8fDg7AhYeWCvj6ApR5Y4F/fSp+fQ1mLCIbj148t8DkljPhsoF896CBEsW/MQy/2ckfGe95g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
- by VI0PR04MB10662.eurprd04.prod.outlook.com (2603:10a6:800:26c::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.14; Wed, 19 Feb
- 2025 18:01:38 +0000
-Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
- ([fe80::9126:a61e:341d:4b06%5]) with mapi id 15.20.8445.017; Wed, 19 Feb 2025
- 18:01:38 +0000
-Date: Wed, 19 Feb 2025 13:01:30 -0500
-From: Frank Li <Frank.li@nxp.com>
-To: Xu Yang <xu.yang_2@nxp.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-	kernel@pengutronix.de, festevam@gmail.com, peter.chen@kernel.org,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
-	imx@lists.linux.dev, jun.li@nxp.com
-Subject: Re: [PATCH 2/6] dt-bindings: usb: usbmisc-imx: add compatible for
- i.MX95 platform
-Message-ID: <Z7Ycev436gWc/4Bn@lizhi-Precision-Tower-5810>
-References: <20250219093104.2589449-1-xu.yang_2@nxp.com>
- <20250219093104.2589449-3-xu.yang_2@nxp.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250219093104.2589449-3-xu.yang_2@nxp.com>
-X-ClientProxiedBy: BYAPR03CA0007.namprd03.prod.outlook.com
- (2603:10b6:a02:a8::20) To PAXPR04MB9642.eurprd04.prod.outlook.com
- (2603:10a6:102:240::14)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1861FDE27
+	for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 18:16:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.176
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739988995; cv=none; b=COgT2uuqdBBPg+5cIpaX8hdhpFe3WLUnyO9C3Diagon14MewD/BX4jisaaOLKEpoFlAN0OU+8Cxr2cf4VSPHGfz5WEvLxpwPbIAnP+ppUcEoknhsrK7ws6GBluYFpAeyCAHGNzl/1T+yP9RMxVgFmG6zC8nrB38dXShdrXTZIGo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739988995; c=relaxed/simple;
+	bh=bH0LnxAkANrFnbgQGbgWcMkIQPF2gj+UHBqxzcqtXjU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Z251XjZnreTiesS0/COpwhG5/S6giSGjXGo2Txzo77nX5/xytlSe0PW1nBqOrmWlcu2q0fqF5Owb7uBBQL19xm9vC2c3YkLxSnOc2cSxbK6YTyBPXmlgDUFOQX8iMiI6DqftHPpHmStHJGUOxzLzNdZDvV1OwrXOgZIIOb88hvI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=YjX+GVIu; arc=none smtp.client-ip=209.85.160.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-qt1-f176.google.com with SMTP id d75a77b69052e-472049c72afso530901cf.2
+        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 10:16:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739988991; x=1740593791; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xlbf30x0uNFungZc8BjzdSdt4uJVOLJQoZrvNr982Z4=;
+        b=YjX+GVIu8H3ZHUx5U1mAXq80QA6+bRwLoeZqzcHG+bpo/HNBlRxRSm6eH2AQZyoymh
+         ZI0hFOgbFvGLqtSaARKJvSAq34HXT9MOlbYHo1LJR+XDTPaA4hmEOq/X8W+rz4nTfvPx
+         2PcLTwpnD6QLYf2L2ha1Lb1ZkXb/c2BbZ6ldRtkrcbjgKvsoJ7cjO+F55TtiBS5RzHHf
+         78LmJbx2Yo7vA20LD4Df9Bgtm9xgatDzgz7sGEvd+TtXi+o+Z9ng8L7pFs+ipJhEvgRx
+         f5bs/AawkUiol6uMN7VullZJfxLm8iAkORZDydHbYR0WDHFx6Gxp+BNmU/7SA0TJK9se
+         Nt6g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739988991; x=1740593791;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xlbf30x0uNFungZc8BjzdSdt4uJVOLJQoZrvNr982Z4=;
+        b=k+smVRF51NXj5LHpzLyL06YXGfr97roNJN0TM2LUlIuYW8c4cdLcOH+EIa53S9hZHi
+         KWTXRsZw6oy4p/rP26R5CVR5+yV765J2TGuRUucpwHS39VXbsx6Xc9ZKj6pGjj8ykDLf
+         0W5TDr2xHElfdB+4A4M6gsXySLoque9qQTtwcG2A56kqhMhOmSp5juBeucwuJi0RrNX5
+         h+BJ7X7Nrs94KBb5d6h2vY/10kqEwk7vYcUnrh7EPQ2UX7+RWd3sYYkYf02SiXZ+6zeG
+         ahG+XXDFDA7NPFJb3eE2Fsz7XUAxwCNkzxHHO1VmTWDkho9Lx0sKIUdPEEXvUKWUapLD
+         6SsA==
+X-Forwarded-Encrypted: i=1; AJvYcCUdOeKlktRKHEdtB85LEw2V2bhB1luBN8fNI4ZQJWiQ/TQ16VupDBrBmVG664S+mxYVjr0gOi6k96w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgFErt6wBEdiaNR+t1CJrSvshhMNw2gTEAGXNXZVqKQGAA7aWl
+	mptWD07ob19QAsxzm1Nna1+t9EcF619rZVy2SAfmC05+vt4PTCFm0XfrmHTk8YM=
+X-Gm-Gg: ASbGncvlmETxfjsXH6KA+z5mAJNxAocfEpnfSwXdDtSCwWgr4y1Ujf6KAln/uaHQad3
+	SA8/fDvQW6kZEDa+9ep1y1CmghtEIOIztx+JaKpv2owtqqbgQwb1m6UqdMcNvdBFei+7szEEc4G
+	8x9Tpst7kBnHHueOIzwj1I1jqPCouJY8+5ADAluI6+idyC3RgOi1Fg/Zd3tylH9DiwRP8Fmht7A
+	sCzgZw1IFvsuwNZyKLTYIaPwJJqczJd2+Eox70fdwNSm0C13soAnnpJ6hG6mDcr+5+yOXkYbeOM
+	PusN9QK+arsLyQs=
+X-Google-Smtp-Source: AGHT+IGRbWWvXf5h1lYoK4mfqaPbGMmhAWcsiQxS9BI2ulaH26wMHaL1bNQlGCgZmcBATXiOR7+yzQ==
+X-Received: by 2002:a05:6214:2586:b0:6e6:6c10:76fb with SMTP id 6a1803df08f44-6e69750c134mr70728246d6.25.1739988991095;
+        Wed, 19 Feb 2025 10:16:31 -0800 (PST)
+Received: from maple.. ([174.89.15.101])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65d9f38absm77357466d6.88.2025.02.19.10.16.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2025 10:16:26 -0800 (PST)
+From: Ralph Siemsen <ralph.siemsen@linaro.org>
+To: linux-rt-devel@lists.linux.dev,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Pawel Laszczak <pawell@cadence.com>,
+	Frank Li <Frank.Li@nxp.com>,
+	Ferry Toth <ftoth@exalondelft.nl>
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ralph Siemsen <ralph.siemsen@linaro.org>
+Subject: [RFC PATCH] usb: gadget: u_ether: prevent deadlock under RT
+Date: Wed, 19 Feb 2025 13:15:52 -0500
+Message-ID: <20250219181556.1020029-1-ralph.siemsen@linaro.org>
+X-Mailer: git-send-email 2.45.2.121.gc2b3f2b3cd
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|VI0PR04MB10662:EE_
-X-MS-Office365-Filtering-Correlation-Id: a9fb5385-09e1-48b4-5154-08dd510f74cf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|7416014|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?yU8MuUdx+SPay7Z5aU8pC3vtDgIeleI07utQbx9UIRlzKfS4Vgx0YXQS2Vp5?=
- =?us-ascii?Q?XGhL+ncYSq5HZH1B7SsB/wgH9y7tCwdQomc1SMDbmlyKL/z4pXrJHrWoAcTV?=
- =?us-ascii?Q?j21iea4ZxlMUlQqimuVouz7gAxzkgi70SYVd2U5lRhkZ97wVnedSZwIINO4l?=
- =?us-ascii?Q?HIKSx3jAOMcFWgR8OxQioANSMOE6pB66kmNlR0o475h9nEN9q+pf/ZNr0jsP?=
- =?us-ascii?Q?B6J6wFnfjdcNHsffjKxVHmz2PxZxBYzKx3mxJZCkydQMBHfBlea5aXT3e9mK?=
- =?us-ascii?Q?EJ2CDBhjY4xv2OLhRUmQmdupNqFSxphSSMCcGu1cG4vL3gQ0K2gRxT8YQiqw?=
- =?us-ascii?Q?ZEvgHOr9SsrD5feBTCBSWCtTkEL76DSqfayecJB/45swMtU2/b7oJ78yaT++?=
- =?us-ascii?Q?oLjyDMN4T2eFFXJpkYDkzfZb9CPqIBysdF83yCpU5nhdULd7+mduDN36AP5U?=
- =?us-ascii?Q?LOV3/3K3w+Pa502QFMDUo1JUMrRTzqLcOFGSCVE6RPUu8Qhs7s5gouXPr1Xa?=
- =?us-ascii?Q?vZiNIcbXDEqYvMjQoEXl5UHXVpOFNQS7SyiRN8QQoniS/iIWGluF674habwz?=
- =?us-ascii?Q?OtVH7SOnwQBv23JYgfSR6br+875unJmSbsE9h80CfUq8P0cVmxsRhAmbZ3Tp?=
- =?us-ascii?Q?fja2bjT4rYfA9xnSsHeXEaPhkyE8o/LR0T3cSvlosxqthEWVki/wsAwGeaml?=
- =?us-ascii?Q?UK2bWXIl8gvjPLhZQt2civsios2sfG0XeA8mPjHmORZYzUJpc4vhhTg419rb?=
- =?us-ascii?Q?zJAOlYMywiAGcee7BG/UodYwgif0t9RMSUQu7wYEEsiX93UQ5HW8FUtNmtVh?=
- =?us-ascii?Q?kz5R/zGJiV4Am9SEqwb5kqGn0MXXQS3XiMwsLeZSuMQkeBTY6mLxa2oMik5+?=
- =?us-ascii?Q?hGn2W1QnENjZ9oDiegebffQp2L6Uhwtpc6PyTyMEZkKcGywVr5tr4EHXC1gi?=
- =?us-ascii?Q?4mVqr/sJey7RL45oy8XEExepOJ+2qp/cVTMk0MYDAmFcjUckqG/UYYjCmsCI?=
- =?us-ascii?Q?s+gFMrNncmdV+uVz8vzmakfIqf/CRS6UlXUqgsI2IGN2g+4lxWtxbBSY9KjP?=
- =?us-ascii?Q?ekuLDIGcmadsWCeC4lCdnOId1AF8BSSQmdIP3Im3SdyNDNjTTehRqbIzvzgH?=
- =?us-ascii?Q?3AS4eAwl7+dSc1JkE5XBLWH1AKKY1PHnicbvhSme35LKpW5JNMQoM/oaf0A/?=
- =?us-ascii?Q?V3Kqr55tmqhLE+RnsgSpjjuaUFWdRVx8G7VUcCn46Yun9NKF/b/mboFt9DDU?=
- =?us-ascii?Q?mu1o6qjHHE3sgd28NYFWRNtL+erqUuhjY/OK8Jzz4Z/D13WdyvGbJgaJ2U5H?=
- =?us-ascii?Q?6KO7Y7joi7dHeTxa0Y0vDuhHFyo5Buv6Sk/qkYIoD2QV4YSXrZGBy9yvhJjI?=
- =?us-ascii?Q?tCLHYt0UAYTGi1YVJSIBoe+x7QrI/DoubZMOkJmZ2UEF2GjZOwtCQ7r/wCH1?=
- =?us-ascii?Q?aJHk4FgvRKJHbX1dOBHMDO1jZfgEshjl?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(7416014)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?awd0M5AG6AsQ2vkEJH7nqs/UV4sHoK/LQNsHltEp3qj2TKEwq/I7wKg94uHz?=
- =?us-ascii?Q?gH77DxmqCIsM56oJVyX/Br6IZT/WE7YGPEODrv5NCk184JZLAa1BDv++PIiy?=
- =?us-ascii?Q?QK2twhcFuc9LzVIjEHMIoFCx9zHxvQW45bl2qT0YsIW7Cymm1oPOOLLNhGIC?=
- =?us-ascii?Q?EAeTdXEMQgDKMHunEZzj9ZBm33hQ1zJdL1i0UJT+8CSvcJNDBbcQl05yhVT+?=
- =?us-ascii?Q?wa4gd3R2KUF8GGDMkA3S0nirMv2D4Q3tHM5dW4WyWWidhtr2AVuQzqMpJm5O?=
- =?us-ascii?Q?72qQjuZsVVoFSO27Ex7g3M6/xFr9Ntg0nQdtGvZR1yBTUwp9Nzm1OAJjYiY5?=
- =?us-ascii?Q?6uJiLTtpFNGY8cFcTRxtEu1PP8LpMcWrrbiiFPdJ4T9XmnNgR5eGsBHRh12J?=
- =?us-ascii?Q?cSwTkrKYf5yHpR3WyRfTeZq+Mr0MSr7cg+oXFlK+s7cGLTicahrw5m4OlXwz?=
- =?us-ascii?Q?jfJ5oWgcTEi9pzUqstgslXxU1jtB5rMQp8Bib+hSTnhGOxzQ1aClyjeasI2j?=
- =?us-ascii?Q?eOiM2nqLAyb438fXy8ZUMoabZhy9JqeydqwBWNZyVfeR4H3F+muGOCt6WVVY?=
- =?us-ascii?Q?bGNJCBEoAFd8HP7aIP6KgG+VKg5F/svDJl6ULcDtqVfg8Yi89hNI19w6Ixmj?=
- =?us-ascii?Q?4KSwPR2TizuDkiFxG0YivRmkNK60c1EHy8ixGU32QowUOg8wupiWU8cr7fSf?=
- =?us-ascii?Q?7/1WbQESm8+TS+oiBRjvcvkecwU4kXPbv+bb+gfKSmB3XUjfZWz3w/vMYyU9?=
- =?us-ascii?Q?LRHw8oIQCWbsw1vB1BY+hWaDXjxKHnMyegrQoks7UavMXpbgntM7bAm9ETE1?=
- =?us-ascii?Q?BMX3xAX4bJvRTc8tPqVPI13pAh/tsM250ynW5f7CI9pUusG5/BIixfmomMCw?=
- =?us-ascii?Q?VSZFN656bphiN2bIOVeZQr12HYzBUww/6mSCjSgngsTRR6Rpkr8WYSqZWfnA?=
- =?us-ascii?Q?Exkat8rsIw2SP9j52t87amG0nV7PY5eQcRNruOEgzMhl+ffEaQQoEBYJNHiv?=
- =?us-ascii?Q?fcmr8BSzI0E3Hogrse+MxiWL/0kqgux0+ThH62q1IvfdvLn30zmPreNbgwC8?=
- =?us-ascii?Q?iM4UuK3uIr0h9EowbvzhTkDW22soyhNtz6acOa4p+Gfbd/oQeU19ad+ZwHk/?=
- =?us-ascii?Q?kKiUoURn9oLIHXkdprFXWmFN0qE35eYi1AiJPxbHCMz7dzgbMKFr8yVhZGlK?=
- =?us-ascii?Q?wkB3UddJk4pEX0RvVSNLTgme31IFEIbEJQ5tgv2d15pumxaEwRtJmcb71KnP?=
- =?us-ascii?Q?8GMm5EdxWobXjWinx7B0WsJyXxTZdmJB7LBlNBSGIJHqgTbJ5+cm0XVZ6DPm?=
- =?us-ascii?Q?yLTCiT/PClQhSjs6RFBriU/tMT0bpepQ9vBBUjEejnMRLXpjD7d24os1FCwQ?=
- =?us-ascii?Q?/IrWBFDl/wQUqk/mVmAVM0GfRHSAkmg33vnOdQiX8WBYITJHeABitSvpyfOM?=
- =?us-ascii?Q?kWe6q53v7DwetBQDCOWYZ5/0MPt2Ht6ay80dusiYTHvttfo13rgQgDe2kJpg?=
- =?us-ascii?Q?Jx8oH7lmWeBfSXOfqBwGd524oJymj42l6pgxB2P68XWF8Af2ewHVho2FpHVN?=
- =?us-ascii?Q?AsRw4vls4hkdS09A9KuYrrlSojVTe+aCKcq8MBUF?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a9fb5385-09e1-48b4-5154-08dd510f74cf
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2025 18:01:38.3914
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2wwp5WR8ZbZlxPz6HP/STV9tS75PRC9g/E8D+WEnnUeK01sa2Jbqv3muyyREJbKFKgEl/yiZ/MVqJRwPNFhSzA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10662
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 19, 2025 at 05:31:00PM +0800, Xu Yang wrote:
-> The i.MX95 USB2.0 controller is basically compatible with i.MX7D,
-> except it needs use hsio block control for wakeup setting. This will
-> add compatible for i.MX95 platform and restriciton on reg property.
+A deadlock can be readily triggered when using NCM gadget with the
+Cadence cdns3 USB driver, under heavy traffic from "iperf3 --bidir".
+It has been observed under 6.1, 6.6 and 6.12 kernel versions, but
+only on PREEMPT_RT. Once deadlocked, even magicsysrq has no effect.
+However, there is periodic output from the rcu stall detector:
 
-Nit: Simple said
-Add compatible ...
+[   71.105941] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[   71.105966] rcu:     Tasks blocked on level-0 rcu_node (CPUs 0-1): P125/4:b..l
+[   71.105992] rcu:     (detected by 1, t=5252 jiffies, g=-515, q=7 ncpus=2)
+[   71.106003] task:irq/507-s-f4000 state:D stack:0     pid:125   tgid:125   ppid:2      flags:0x00000008
+[   71.106018] Call trace:
+[   71.106022]  __switch_to+0xf4/0x158
+[   71.106046]  __schedule+0x2b4/0x920
+[   71.106055]  schedule_rtlock+0x24/0x50
+[   71.106064]  rtlock_slowlock_locked+0x348/0xcb8
+[   71.106077]  rt_spin_lock+0x88/0xb8
+[   71.106086]  eth_start_xmit+0x30/0x1490 [u_ether]        /*****/
+[   71.106112]  ncm_tx_timeout+0x2c/0x50 [usb_f_ncm]
+[   71.106131]  __hrtimer_run_queues+0x180/0x378
+[   71.106143]  hrtimer_run_softirq+0x90/0x100
+[   71.106151]  handle_softirqs.isra.0+0x14c/0x360
+[   71.106165]  __local_bh_enable_ip+0x104/0x118
+[   71.106177]  __netdev_alloc_skb+0x1e0/0x210
+[   71.106192]  ncm_unwrap_ntb+0x1ec/0x528 [usb_f_ncm]
+[   71.106206]  rx_complete+0x120/0x288 [u_ether]           /*****/
+[   71.106221]  usb_gadget_giveback_request+0x34/0xf8
+[   71.106236]  cdns3_gadget_giveback+0xe4/0x2d0 [cdns3]
+[   71.106286]  cdns3_transfer_completed+0x3b0/0x630 [cdns3]
+[   71.106320]  cdns3_device_thread_irq_handler+0x8b8/0xd18 [cdns3]
+[   71.106353]  irq_thread_fn+0x34/0xb8
+[   71.106364]  irq_thread+0x180/0x2f0
+[   71.106374]  kthread+0x104/0x118
+[   71.106384]  ret_from_fork+0x10/0x20
 
-Better mention "fsl,imx95-usbmisc" at subject.
-add compatible string "fsl,imx95-usbmisc" for ...
+The deadlock occurs because eth_start_xmit() and rx_complete() both
+acquire the same spinlock in the same instance of struct eth_dev.
+The nested call occurs because rx_complete() calls __netdev_alloc_skb()
+which performs a brief local_bh_disable/enable() sequence.
 
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
+Prevent the deadlock by disabling softirq in rx_complete(), with the
+same scope as the spinlock. With this fix, no deadlocks are observed
+over many hours of continuous testing at USB 2.0 speed (480 Mbit/s).
 
->
-> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
-> ---
->  .../devicetree/bindings/usb/fsl,usbmisc.yaml  | 23 ++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
->
-> diff --git a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
-> index 0a6e7ac1b37e..019435540df0 100644
-> --- a/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
-> +++ b/Documentation/devicetree/bindings/usb/fsl,usbmisc.yaml
-> @@ -34,6 +34,7 @@ properties:
->                - fsl,imx8mm-usbmisc
->                - fsl,imx8mn-usbmisc
->                - fsl,imx8ulp-usbmisc
-> +              - fsl,imx95-usbmisc
->            - const: fsl,imx7d-usbmisc
->            - const: fsl,imx6q-usbmisc
->        - items:
-> @@ -45,7 +46,10 @@ properties:
->      maxItems: 1
->
->    reg:
-> -    maxItems: 1
-> +    minItems: 1
-> +    items:
-> +      - description: Base and length of the Wrapper module register
-> +      - description: Base and length of the HSIO Block Control register
->
->    '#index-cells':
->      const: 1
-> @@ -56,6 +60,23 @@ required:
->    - compatible
->    - reg
->
-> +allOf:
-> +  # imx95 soc needs use HSIO Block Control
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - fsl,imx95-usbmisc
-> +    then:
-> +      properties:
-> +        reg:
-> +          minItems: 2
-> +    else:
-> +      properties:
-> +        reg:
-> +          maxItems: 1
-> +
->  additionalProperties: false
->
->  examples:
-> --
-> 2.34.1
->
+Signed-off-by: Ralph Siemsen <ralph.siemsen@linaro.org>
+---
+Discussion items:
+
+0) This is somewhat similar to the recent discussion
+https://lore.kernel.org/linux-rt-devel/20250212123302.0f620f23@gandalf.local.home/
+and my solution is to "sprinkle local_bh_disable() around",
+which is clearly not optimal. Hence the RFC on this patch.
+
+1) There are several more places using the same spinlock, for example
+the gether_suspend() and gether_resume() functions. I'm not using power
+management, but I wonder if there might be more deadlocks lurking?
+
+2) By keeping softirq disabled for a longer duration, this patch could
+potentially increase the RT latency. I tried to quantify this using
+cyclictest, but I cannot get a baseline for comparison, since it
+deadlocks almost immediately when the USB is active. Other suggestions?
+
+3) The fix is in generic u_ether.c code, to match the scope of the
+spinlock. Alternatively, it could be done in cdns3 specific code,
+such as in cdns3_device_thread_irq_handler(). I'm not sure if the
+same problem exists in other USB drivers?
+---
+ drivers/usb/gadget/function/u_ether.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/usb/gadget/function/u_ether.c b/drivers/usb/gadget/function/u_ether.c
+index 09e2838917e2..dc511c01b741 100644
+--- a/drivers/usb/gadget/function/u_ether.c
++++ b/drivers/usb/gadget/function/u_ether.c
+@@ -233,6 +233,7 @@ static void rx_complete(struct usb_ep *ep, struct usb_request *req)
+ 		if (dev->unwrap) {
+ 			unsigned long	flags;
+ 
++			local_bh_disable();
+ 			spin_lock_irqsave(&dev->lock, flags);
+ 			if (dev->port_usb) {
+ 				status = dev->unwrap(dev->port_usb,
+@@ -243,6 +244,7 @@ static void rx_complete(struct usb_ep *ep, struct usb_request *req)
+ 				status = -ENOTCONN;
+ 			}
+ 			spin_unlock_irqrestore(&dev->lock, flags);
++			local_bh_enable();
+ 		} else {
+ 			skb_queue_tail(&dev->rx_frames, skb);
+ 		}
+-- 
+2.45.2.121.gc2b3f2b3cd
+
 
