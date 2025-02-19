@@ -1,306 +1,139 @@
-Return-Path: <linux-usb+bounces-20823-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20824-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EDC0CA3BDEB
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 13:22:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 28AD0A3C01F
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 14:38:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D4272188D59D
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 12:22:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2EA6B188B038
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 13:38:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B49321E0DE2;
-	Wed, 19 Feb 2025 12:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47DDD1E98FC;
+	Wed, 19 Feb 2025 13:38:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Yk2wDoVx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nGkh5SJt"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5089F1DE8BE;
-	Wed, 19 Feb 2025 12:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C01FF15B971;
+	Wed, 19 Feb 2025 13:38:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739967735; cv=none; b=JtTiTvgAItUyOzrCzZ9XMV2AsnIJMqSnt88G9mhcV20t4pKE7ee2SWLYllCyTq6xiiwLoKh/SJhnVb0ZRaRal7ZO5yFYCjsx/+pv55O/1v5kAtXapxcVhEf0fWp6pkXODtQgstp+GKSgvt8HRSLYGcaFUeqnBeMVn0r00lFfnYk=
+	t=1739972282; cv=none; b=e6Lc9VKXI5oEO0PErtqpQn14pozyYBbUaVnPbcO2Bnom58F1WvDsKO7jbdvcktpY1FMwSo8hJCeT4yXzHWC1U4dAJVajoX6gkb8Gmi5C4lWZrI5ibK5XujoZB5x28WFN0grSiT6q7g+IKJDtfGpmNfslchHC+PAM9sQQuQtgx1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739967735; c=relaxed/simple;
-	bh=B7yMogAYJNxLn7fYb3PggxlyL8doB57WH2k5L7pR6qY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=otBzyEwP4B2o1/5+ojQkVnNaHgrvkthYgITxszODk88vSUo72NOWwO8IEHhQMzPoyYzBnMExkI4zQTSvN29xoYrD82UHeb62J/tHMmqMJ8w+uJkuJuv1HiQJ6+y/IzcjPtrhSKVUlneFoGFcU0FcGSPapJ/9QbMC5ZzQEYLXwEA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Yk2wDoVx; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1739967731;
-	bh=B7yMogAYJNxLn7fYb3PggxlyL8doB57WH2k5L7pR6qY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Yk2wDoVxGDit/enUVx/kChc6yIHjf3EnUhy5QU1OJUi5u0cUkmQBcvOt+QTpkYs+h
-	 6XIj0BVMuC85EuWa/MZfNUAkjqn5DjNHEC/a87M+fFHu8Si6Tag0v4lma7dqwp7bEa
-	 VGYQRieRGq1JeFtxZygjDqViwbv2Dt53lOO1nBOX5LnwEH4HhogqtT3SwBd6F2h866
-	 OY2iqamC+sfOiqKpkZ7IIudZV2uE9q2oS8D3KQg2GfVe2wqVS0LlkR52/P/OA0X5PC
-	 Y6OY1Pv3pvZVFOR9BHNhWZXO/omNAqm+Bq7G1mMzGWgynzebJ/7sRvt+nEd5GQXx9j
-	 ZKvv3gm1W/H8w==
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 0574717E1566;
-	Wed, 19 Feb 2025 13:22:10 +0100 (CET)
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-To: heikki.krogerus@linux.intel.com
-Cc: gregkh@linuxfoundation.org,
-	andre.draszik@linaro.org,
-	angelogioacchino.delregno@collabora.com,
-	linux@roeck-us.net,
-	shufan_lee@richtek.com,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel@collabora.com,
-	pablo.sun@mediatek.com
-Subject: [PATCH v2 2/2] arm64: dts: mediatek: mt8390-genio: Add USB, TypeC Controller, MUX
-Date: Wed, 19 Feb 2025 13:22:06 +0100
-Message-ID: <20250219122206.46695-3-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250219122206.46695-1-angelogioacchino.delregno@collabora.com>
-References: <20250219122206.46695-1-angelogioacchino.delregno@collabora.com>
+	s=arc-20240116; t=1739972282; c=relaxed/simple;
+	bh=UZOTZjAmK9GpEVopumc45bM7a93tdAVwiLa2wCKSe/k=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=cbxo1ViQX/FyPwTVNHpeyslieoAVjaAQKczJyWTTNhlbSacD7HoVwVEEFWZqA++4LX6gdTXTm7ZWKL33GowFl6CfFYx8QKc0ws2/skxzlXum/F0do8BuQoUDsUayyCw8WAISQbdjjWTHpOA9g1S03GyjYfEj4p5Q21tkSnmmzbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nGkh5SJt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D059C4CED1;
+	Wed, 19 Feb 2025 13:38:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739972282;
+	bh=UZOTZjAmK9GpEVopumc45bM7a93tdAVwiLa2wCKSe/k=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=nGkh5SJt2AfbLooasJ7aDYiL5IwRv0RrdZ6C6llXWNg1TMwY6t3WsWftaW6OeAk/m
+	 Vp246xypjQIJxyiIz3g2mkP7MGS6NPw1h9aKeVusjSHn4t48IN06VMjjtqjHfIpc4d
+	 0QtDT9WY/EdnlCnEz2g76nGL3m4F8OA0zPOubQ3HBTS6sRNLyjsxTcbmePZf5eyYVk
+	 uBzVgicyYQdX9i/j+LcfRO+Q87fpUx3ftjrL7r65GB49Wu+uUid2JOrRwufZbWGMBa
+	 Ud530pmz7LlHXpvLUn5uQ9Co2lxPTq7OpXZZh04FtNqDbeKdgInQOmFnv4sHLhFBus
+	 qRIfEEQ59l8MQ==
+Date: Wed, 19 Feb 2025 07:38:00 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: shufan_lee@richtek.com, heikki.krogerus@linux.intel.com, 
+ andre.draszik@linaro.org, kernel@collabora.com, linux@roeck-us.net, 
+ linux-kernel@vger.kernel.org, pablo.sun@mediatek.com, 
+ linux-usb@vger.kernel.org, gregkh@linuxfoundation.org
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20250219122206.46695-1-angelogioacchino.delregno@collabora.com>
+References: <20250219122206.46695-1-angelogioacchino.delregno@collabora.com>
+Message-Id: <173997222717.2335452.4745248344825352712.robh@kernel.org>
+Subject: Re: [PATCH v2 0/2] MediaTek MT8188 MTU3 USB and Genio 510/700
+ TypeC
 
-This board features multiple USB connectors:
- * One Type-C connector with Power Delivery and Alt. Modes;
- * One MicroUSB connector, also used for bootloader SW download;
- * One USB through the RaspberryPi-compatible pins header.
 
-Add configuration for the MTU3 controllers providing OTG support
-with role switching both on the MicroUSB port, RPi pins header,
-and the Type-C port found on this board.
+On Wed, 19 Feb 2025 13:22:04 +0100, AngeloGioacchino Del Regno wrote:
+> This series adds MTU3 nodes to the MT8188 base devicetree, fixes the
+> Geralt Chromebooks to use it, and adds support for all of the USB
+> ports, including TypeC Power Delivery, Alternate Modes, etc, found
+> on the MediaTek Genio 510 and Genio 700 Evaluation Kits.
+> 
+> 
+> AngeloGioacchino Del Regno (2):
+>   arm64: dts: mediatek: mt8188: Add MTU3 nodes and correctly describe
+>     USB
+>   arm64: dts: mediatek: mt8390-genio: Add USB, TypeC Controller, MUX
+> 
+>  .../boot/dts/mediatek/mt8188-geralt.dtsi      |  18 ++
+>  arch/arm64/boot/dts/mediatek/mt8188.dtsi      | 121 +++++++++-----
+>  .../dts/mediatek/mt8390-genio-common.dtsi     | 155 +++++++++++++++++-
+>  3 files changed, 251 insertions(+), 43 deletions(-)
+> 
+> --
+> 2.48.1
+> 
+> 
+> 
 
-Moreover, add the Richtek RT1715 Type-C Power Delivery Controller
-which manages current source/sink, linked to the iTE IT5205 Type-C
-Alternate Mode Passive Mux, handling both mode switching between
-USB (up to 3.1 Gen2 10Gbps) and DisplayPort (four lanes, DP1.4,
-op to 8.1Gbps) and plug orientation switching.
 
-All USB ports reside on different controller instances, and all of
-them support host or gadget and can be configured as desired at
-runtime.
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../dts/mediatek/mt8390-genio-common.dtsi     | 141 +++++++++++++++++-
- 1 file changed, 133 insertions(+), 8 deletions(-)
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi b/arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi
-index fd977daa4185..a6c8abf371aa 100644
---- a/arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8390-genio-common.dtsi
-@@ -260,6 +260,22 @@ &i2c1 {
- 	pinctrl-0 = <&i2c1_pins>;
- 	clock-frequency = <400000>;
- 	status = "okay";
-+
-+	typec-mux@48 {
-+		compatible = "ite,it5205";
-+		reg = <0x48>;
-+
-+		mode-switch;
-+		orientation-switch;
-+
-+		vcc-supply = <&mt6359_vcn33_1_bt_ldo_reg>;
-+
-+		port {
-+			it5205_sbu_mux: endpoint {
-+				remote-endpoint = <&typec_sbu_out>;
-+			};
-+		};
-+	};
- };
- 
- &i2c2 {
-@@ -281,6 +297,66 @@ &i2c4 {
- 	pinctrl-0 = <&i2c4_pins>;
- 	clock-frequency = <1000000>;
- 	status = "okay";
-+
-+	rt1715@4e {
-+		compatible = "richtek,rt1715";
-+		reg = <0x4e>;
-+		interrupts-extended = <&pio 12 IRQ_TYPE_LEVEL_LOW>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&tcpci_int_pins>;
-+		vbus-supply = <&usb_p1_vbus>;
-+
-+		connector {
-+			compatible = "usb-c-connector";
-+			label = "USB-C";
-+			data-role = "dual";
-+			op-sink-microwatt = <10000000>;
-+			power-role = "dual";
-+			try-power-role  = "sink";
-+			pd-revision = /bits/ 8 <0x03 0x00 0x01 0x08>;
-+
-+			sink-pdos = <PDO_FIXED(5000, 2000,
-+					       PDO_FIXED_DUAL_ROLE |
-+					       PDO_FIXED_DATA_SWAP)>;
-+			source-pdos = <PDO_FIXED(5000, 2000,
-+						 PDO_FIXED_DUAL_ROLE |
-+						 PDO_FIXED_DATA_SWAP)>;
-+
-+			altmodes {
-+				displayport {
-+					svid = /bits/ 16 <0xff01>;
-+					vdo = <0x001c1c47>;
-+				};
-+			};
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					typec_con_hs: endpoint {
-+						remote-endpoint = <&mtu3_hs1_role_sw>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+					typec_con_ss: endpoint {
-+						remote-endpoint = <&xhci_ss_ep>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+					typec_sbu_out: endpoint {
-+						remote-endpoint = <&it5205_sbu_mux>;
-+					};
-+
-+				};
-+			};
-+		};
-+	};
- };
- 
- &i2c5 {
-@@ -849,6 +925,14 @@ pins-reset {
- 		};
- 	};
- 
-+	tcpci_int_pins: tcpci-int-pins {
-+		pins-int-n {
-+			pinmux = <PINMUX_GPIO12__FUNC_B_GPIO12>;
-+			bias-pull-up;
-+			input-enable;
-+		};
-+	};
-+
- 	uart0_pins: uart0-pins {
- 		pins {
- 			pinmux = <PINMUX_GPIO31__FUNC_O_UTXD0>,
-@@ -904,6 +988,14 @@ pins-usb-hub-3v3-en {
- 		};
- 	};
- 
-+	usb2_default_pins: usb2-default-pins {
-+		pins-iddig {
-+			pinmux = <PINMUX_GPIO89__FUNC_B_GPIO89>;
-+			input-enable;
-+			bias-pull-up;
-+		};
-+	};
-+
- 	wifi_pwrseq_pins: wifi-pwrseq-pins {
- 		pins-wifi-enable {
- 			pinmux = <PINMUX_GPIO127__FUNC_B_GPIO127>;
-@@ -1012,9 +1104,21 @@ &u3phy2 {
- };
- 
- &ssusb0 {
--	dr_mode = "host";
-+	dr_mode = "otg";
-+	maximum-speed = "high-speed";
-+	usb-role-switch;
-+	wakeup-source;
- 	vusb33-supply = <&mt6359_vusb_ldo_reg>;
-+	pinctrl-0 = <&usb_default_pins>;
-+	pinctrl-names = "default";
- 	status = "okay";
-+
-+	connector {
-+		compatible = "gpio-usb-b-connector", "usb-b-connector";
-+		type = "micro";
-+		id-gpios = <&pio 83 GPIO_ACTIVE_HIGH>;
-+		vbus-supply = <&usb_p0_vbus>;
-+	};
- };
- 
- &xhci0 {
-@@ -1022,9 +1126,19 @@ &xhci0 {
- };
- 
- &ssusb1 {
--	dr_mode = "host";
-+	dr_mode = "otg";
-+	usb-role-switch;
-+	wakeup-source;
- 	vusb33-supply = <&mt6359_vusb_ldo_reg>;
-+	pinctrl-0 = <&usb1_default_pins>;
-+	pinctrl-names = "default";
- 	status = "okay";
-+
-+	port {
-+		mtu3_hs1_role_sw: endpoint {
-+			remote-endpoint = <&typec_con_hs>;
-+		};
-+	};
- };
- 
- &xhci1 {
-@@ -1058,17 +1172,28 @@ xhci_ss_ep: endpoint {
- };
- 
- &ssusb2 {
--	interrupts-extended = <&gic GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0>,
--			      <&pio 220 IRQ_TYPE_LEVEL_HIGH>;
--	interrupt-names = "host", "wakeup";
--
--	dr_mode = "host";
-+	dr_mode = "otg";
-+	maximum-speed = "high-speed";
-+	usb-role-switch;
- 	vusb33-supply = <&mt6359_vusb_ldo_reg>;
-+	wakeup-source;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&usb2_default_pins>;
- 	status = "okay";
-+
-+	connector {
-+		compatible = "gpio-usb-b-connector", "usb-b-connector";
-+		type = "micro";
-+		id-gpios = <&pio 89 GPIO_ACTIVE_HIGH>;
-+		vbus-supply = <&usb_p2_vbus>;
-+	};
- };
- 
- &xhci2 {
--	status = "okay";
-+	interrupts-extended = <&gic GIC_SPI 536 IRQ_TYPE_LEVEL_HIGH 0>,
-+			      <&pio 220 IRQ_TYPE_LEVEL_HIGH>;
-+	interrupt-names = "host", "wakeup";
- 	vusb33-supply = <&mt6359_vusb_ldo_reg>;
- 	vbus-supply = <&sdio_fixed_3v3>; /* wifi_3v3 */
-+	status = "okay";
- };
--- 
-2.48.1
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/mediatek/' for 20250219122206.46695-1-angelogioacchino.delregno@collabora.com:
+
+arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dtb: usb@11201000: usb@0: 'port', 'vdd-supply' do not match any of the regexes: '@[0-9a-f]{1}$', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtu3.yaml#
+arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dtb: usb@0: 'port', 'vdd-supply' do not match any of the regexes: '@[0-9a-f]{1}$', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtk-xhci.yaml#
+arch/arm64/boot/dts/mediatek/mt8370-genio-510-evk.dtb: usb@11201000: usb@0: 'port', 'vdd-supply' do not match any of the regexes: '@[0-9a-f]{1}$', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtu3.yaml#
+arch/arm64/boot/dts/mediatek/mt8370-genio-510-evk.dtb: usb@0: 'port', 'vdd-supply' do not match any of the regexes: '@[0-9a-f]{1}$', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtk-xhci.yaml#
+arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dtb: usb@112a1000: usb@0: {'compatible': ['mediatek,mt8188-xhci', 'mediatek,mtk-xhci'], 'reg': [[0, 0, 0, 4096]], 'reg-names': ['mac'], 'interrupts': [[0, 536, 4, 0]], 'assigned-clocks': [[38, 46]], 'assigned-clock-parents': [[38, 118]], 'clocks': [[54, 8]], 'clock-names': ['sys_ck'], 'status': ['okay'], 'interrupts-extended': [[1, 0, 536, 4, 0], [35, 220, 4]], 'interrupt-names': ['host', 'wakeup'], 'vusb33-supply': [[74]], 'vbus-supply': [[104]]} is valid under each of {'required': ['interrupts-extended']}, {'required': ['interrupts']}
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtu3.yaml#
+arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dtb: usb@0: {'compatible': ['mediatek,mt8188-xhci', 'mediatek,mtk-xhci'], 'reg': [[0, 0, 0, 4096]], 'reg-names': ['mac'], 'interrupts': [[0, 536, 4, 0]], 'assigned-clocks': [[38, 46]], 'assigned-clock-parents': [[38, 118]], 'clocks': [[54, 8]], 'clock-names': ['sys_ck'], 'status': ['okay'], 'interrupts-extended': [[1, 0, 536, 4, 0], [35, 220, 4]], 'interrupt-names': ['host', 'wakeup'], 'vusb33-supply': [[74]], 'vbus-supply': [[104]], '$nodename': ['usb@0']} is valid under each of {'required': ['interrupts-extended']}, {'required': ['interrupts']}
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtk-xhci.yaml#
+arch/arm64/boot/dts/mediatek/mt8370-genio-510-evk.dtb: usb@112a1000: usb@0: {'compatible': ['mediatek,mt8188-xhci', 'mediatek,mtk-xhci'], 'reg': [[0, 0, 0, 4096]], 'reg-names': ['mac'], 'interrupts': [[0, 536, 4, 0]], 'assigned-clocks': [[36, 46]], 'assigned-clock-parents': [[36, 118]], 'clocks': [[52, 8]], 'clock-names': ['sys_ck'], 'status': ['okay'], 'interrupts-extended': [[1, 0, 536, 4, 0], [33, 220, 4]], 'interrupt-names': ['host', 'wakeup'], 'vusb33-supply': [[72]], 'vbus-supply': [[102]]} is valid under each of {'required': ['interrupts-extended']}, {'required': ['interrupts']}
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtu3.yaml#
+arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dtb: usb@0: {'compatible': ['mediatek,mt8188-xhci', 'mediatek,mtk-xhci'], 'reg': [[0, 0, 0, 4096]], 'reg-names': ['mac'], 'interrupts': [[0, 536, 4, 0]], 'assigned-clocks': [[38, 46]], 'assigned-clock-parents': [[38, 118]], 'clocks': [[54, 8]], 'clock-names': ['sys_ck'], 'status': ['okay'], 'interrupts-extended': [[1, 0, 536, 4, 0], [35, 220, 4]], 'interrupt-names': ['host', 'wakeup'], 'vusb33-supply': [[74]], 'vbus-supply': [[104]], '$nodename': ['usb@0']} is valid under each of {'required': ['interrupts-extended']}, {'required': ['interrupts']}
+	from schema $id: http://devicetree.org/schemas/interrupts.yaml#
+arch/arm64/boot/dts/mediatek/mt8370-genio-510-evk.dtb: usb@0: {'compatible': ['mediatek,mt8188-xhci', 'mediatek,mtk-xhci'], 'reg': [[0, 0, 0, 4096]], 'reg-names': ['mac'], 'interrupts': [[0, 536, 4, 0]], 'assigned-clocks': [[36, 46]], 'assigned-clock-parents': [[36, 118]], 'clocks': [[52, 8]], 'clock-names': ['sys_ck'], 'status': ['okay'], 'interrupts-extended': [[1, 0, 536, 4, 0], [33, 220, 4]], 'interrupt-names': ['host', 'wakeup'], 'vusb33-supply': [[72]], 'vbus-supply': [[102]], '$nodename': ['usb@0']} is valid under each of {'required': ['interrupts-extended']}, {'required': ['interrupts']}
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtk-xhci.yaml#
+arch/arm64/boot/dts/mediatek/mt8370-genio-510-evk.dtb: usb@0: {'compatible': ['mediatek,mt8188-xhci', 'mediatek,mtk-xhci'], 'reg': [[0, 0, 0, 4096]], 'reg-names': ['mac'], 'interrupts': [[0, 536, 4, 0]], 'assigned-clocks': [[36, 46]], 'assigned-clock-parents': [[36, 118]], 'clocks': [[52, 8]], 'clock-names': ['sys_ck'], 'status': ['okay'], 'interrupts-extended': [[1, 0, 536, 4, 0], [33, 220, 4]], 'interrupt-names': ['host', 'wakeup'], 'vusb33-supply': [[72]], 'vbus-supply': [[102]], '$nodename': ['usb@0']} is valid under each of {'required': ['interrupts-extended']}, {'required': ['interrupts']}
+	from schema $id: http://devicetree.org/schemas/interrupts.yaml#
+arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dtb: rt1715@4e: 'vbus-supply' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/usb/richtek,rt1711h.yaml#
+arch/arm64/boot/dts/mediatek/mt8370-genio-510-evk.dtb: rt1715@4e: 'vbus-supply' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/usb/richtek,rt1711h.yaml#
+arch/arm64/boot/dts/mediatek/mt8390-genio-700-evk.dtb: jpeg-decoder@1a040000: iommus: [[139, 685], [139, 686], [139, 690], [139, 691], [139, 692], [139, 693]] is too long
+	from schema $id: http://devicetree.org/schemas/media/mediatek-jpeg-decoder.yaml#
+arch/arm64/boot/dts/mediatek/mt8370-genio-510-evk.dtb: jpeg-decoder@1a040000: iommus: [[137, 685], [137, 686], [137, 690], [137, 691], [137, 692], [137, 693]] is too long
+	from schema $id: http://devicetree.org/schemas/media/mediatek-jpeg-decoder.yaml#
+
+
+
+
 
 
