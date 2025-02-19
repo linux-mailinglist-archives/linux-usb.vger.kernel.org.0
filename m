@@ -1,128 +1,136 @@
-Return-Path: <linux-usb+bounces-20807-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20808-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5004AA3B454
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 09:40:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC226A3B49A
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 09:44:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 458983AFFFC
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 08:38:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21D107A6788
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 08:42:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FDB11EB1B8;
-	Wed, 19 Feb 2025 08:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9C651EFFB7;
+	Wed, 19 Feb 2025 08:37:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jrbFtN9j"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Bbf+Sdyw"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B891E1EA7ED;
-	Wed, 19 Feb 2025 08:33:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 908B01EA7CE;
+	Wed, 19 Feb 2025 08:37:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739953983; cv=none; b=dX3o0OBbkL5yVvnylgmQIGv7hfY11rVa8pMRvHHPlBhrMDhslC+SxGx6RyCxDdZKYAg215RZIWyl9EfXfuOEGsKF1R5bCDhub6jig7JgrZir/sg+57VX/e98X+MHwAmRxZ6E8DG9VWKOnJqQdFswzut48i73bIcYIRm7punE5k4=
+	t=1739954277; cv=none; b=cccRghZ9IPhBWzN2gJWrZwbE5ck6oIuruhMWs5dR0N9bOQ3A/vlJmXD3STWVpEQ3EspfUTD6LpaDM/Qb+2LbgzCzyN7QB6W55jmdOOoiOrRerqG3p3+UAuGAAYZWTOTybTRqbHooQkWBQEfqrrsWxwFz6Po6aCj8awuDC08dCVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739953983; c=relaxed/simple;
-	bh=492UxWHba5+PdraY25snSVuyYciW7Iz27+/Vla1ltTo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kjt6DKJShy+M2OOlCRJuwtAI/xBl3nIDFywsLTBM8IRK+KyucZDufhJb0Bbt8zV+O+HnZ0Ge+686pT9veDPK/VqB4I8z8p+B2Nh7/7kEKvt/ttP6nB+sh3jJ18TEdYR3TyWg1k+dT+bab1u9lNEDPcEc1YlnZaPph5Fb5rPWE+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jrbFtN9j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD416C4CEE9;
-	Wed, 19 Feb 2025 08:32:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739953983;
-	bh=492UxWHba5+PdraY25snSVuyYciW7Iz27+/Vla1ltTo=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=jrbFtN9jcjqpz1JAips0rZy8nLJ1Mw3cqwhGfn3uyojPxfdYxfEL9B8T60DLf7Bga
-	 aXMq286XivXZbnyzXjB7J9xEeB3P04uz9R0CaOeEeo249Y0lPvnOXeePGzrOAWx2XT
-	 28/3b8Y9MccgDjMTg8seRDOA6gRc5o1wnwfawVzkRig7JHQDmeYzGqsoIPPwt4rNdr
-	 rcCxl5KSdP1Th3pmoKdubWX34ckFJdnUSAscjdEm6dUvFfOctgKeOokXnBgdMH00Cp
-	 3br0tS5hZvL6AI2fRCRnXT9OmYY5gM/gayqdKzoho4pEu4pfGBRMrn831U9WOZkSKV
-	 ulCpe8k7IOSQQ==
-Message-ID: <0dd1d68a-37e5-4c90-ad2a-74805d94296f@kernel.org>
-Date: Wed, 19 Feb 2025 09:32:57 +0100
+	s=arc-20240116; t=1739954277; c=relaxed/simple;
+	bh=/XLK+daHIrD0JUs6qF5Tb18zmYYnPeTNEGxJ9lAE7MU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ALcrvaGCPLVnkynGMdA/rh61Pwg8RJFPdgsAnOXCOIdCDlIzpXqTqZuthCTrmGqOH9gBZvccf4DahNB8d+E5XXfNuGgg2Rp1LQxf/3pNsvuEx7zKANBaLVaC6uJs7dIFq8pJDJeEigMdn4uztHm3kHeF1eQeJq789K1ItGnjMAc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Bbf+Sdyw; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-abbb12bea54so399944066b.0;
+        Wed, 19 Feb 2025 00:37:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739954274; x=1740559074; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=aEMQm4psPyovFJMOlQxIsVIRwEzwiIeGeanslSFpEok=;
+        b=Bbf+SdywspqMpK4KjsHvvn6RQQniQ9FrOQkaAMh+dDKGKkb2HZpxHNhRbWp1uvQj8p
+         FpsCTrUfWoCea3W6Gi/Ec/OfYQ6hT7LFpjIhwHA164dDE0q1wbFEQnxTA4SiaXsq2yLb
+         gHnn94yWPglIuaFLSnTE7UaW6xcPEW4C5e/t7ZYiHsThMSkzxmfhskGZnfj5NfcVRdN1
+         r6r4Dan0vniSkdCks9iul0M9AqD6EFn+AnfsaK/aojrGim9g1/a7GXxZPcZroZWhi1yv
+         ervgjoxhNFbH7GROxnwW2HePtqes306SSYVVaKuAlYVUWu/ChBVC04uB/aI+0OAYncvM
+         1xBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739954274; x=1740559074;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aEMQm4psPyovFJMOlQxIsVIRwEzwiIeGeanslSFpEok=;
+        b=l9aT6Y5exMfzQpspjMNhtXP0kM8YYmHqlRJ7JUZdJ384nrlPo6mvO1EbdCD6Uu2MJ5
+         3tIjzipQZmgIn/pb4wT9qyM/WRMaI063dKXjxjqYrPzKMhH82WHk6xZbPCJ6iGyQwduP
+         ypz2SM4Z+9ORDK5XTYkN9DXha5tzi/FfHt3zN5X5YialKOoyz1N8LhxUGNo8TiTrPBck
+         BkTq1JmcLrEy+ZuMN5+siesQDiQXKomfn4D3isIIiEUcLvV8gS2JxtS1oRRJvW2KzWFR
+         +aF5rJZdocjhBabH6sd/YfyB3OhC6vWbZi/LoJcoYuHjklmQM+/GhMsJiupXvn9PKap9
+         ylPw==
+X-Forwarded-Encrypted: i=1; AJvYcCXG7sE9vM+U125PhggEcuLJVhLLNe6uJjx2A1E8gOuJ56I7Y7Rv87IDZVsnuGO4gCOxb4LIbMTEUPSMoUo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzx+qJuNP3zqizXsC+wO27czd+MnC80WJyxVtWPSLPyFAxol7Ef
+	dRchLKV0HEz4nh60X2xLplxeNrzGlUWE4lVyah4WEu0oDNMnBhJA
+X-Gm-Gg: ASbGncupDQ54zukoI+2sxMWgIVbtC6RRM8PAset5yYuNN8QBha0vMB7tbo2mWUN2+Ob
+	SYcZwuRtB1hBH3WSv2Dzrn0TY2FXMDOg/e/a4Q+BELlWGUj14XQhFPsUH0pMN0vh+Z2eSNpHFWR
+	p8PBzxlhIV+8DLljeeAuF44FvZLhiODAF4O9534E3yi2Pm9WOb+Ls3SbVk3FZZeAGG02JCecKwh
+	JKT6OkHkw8SoTlHSSmzoRNHhpJZewTOtKrndD0gaYM4hefzpzdLrB1mSWEzj74P4WO7W6oBu/vI
+	uzb1vb+V5rjxLA+tSpnMDN4iIdfiDdq7IpE1OxVuL9eWuYhXJMBur0pAOOdCiAvX6Q==
+X-Google-Smtp-Source: AGHT+IFIfgmIsE9od5jUiVuNIYBBGDleFzsDrKi//m+gjFVpl/fUNq/U0YkPAcRxvV7z/FjZnsJYRA==
+X-Received: by 2002:a17:907:7706:b0:abb:2334:af2f with SMTP id a640c23a62f3a-abb70b18461mr1371333066b.13.1739954273806;
+        Wed, 19 Feb 2025 00:37:53 -0800 (PST)
+Received: from eichest-laptop.corp.toradex.com (31-10-206-125.static.upc.ch. [31.10.206.125])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba532322b9sm1224319066b.37.2025.02.19.00.37.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2025 00:37:53 -0800 (PST)
+From: Stefan Eichenberger <eichest@gmail.com>
+To: gregkh@linuxfoundation.org,
+	stern@rowland.harvard.edu
+Cc: linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Subject: [PATCH v1] usb: core: replace usb_sndaddr0pipe macro with usb_sndctrlpipe
+Date: Wed, 19 Feb 2025 09:36:44 +0100
+Message-ID: <20250219083745.10406-1-eichest@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] usb: dwc3: exynos: add support for Exynos2200
- variant
-To: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-Cc: linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250215123453.163434-1-ivo.ivanov.ivanov1@gmail.com>
- <20250215123453.163434-3-ivo.ivanov.ivanov1@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250215123453.163434-3-ivo.ivanov.ivanov1@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 15/02/2025 13:34, Ivaylo Ivanov wrote:
-> Add Exynos2200 compatible string and associated driver data. This SoC
-> requires a Link interface AXI clock.
-> 
-> Signed-off-by: Ivaylo Ivanov <ivo.ivanov.ivanov1@gmail.com>
-> ---
->  drivers/usb/dwc3/dwc3-exynos.c | 9 +++++++++
->  1 file changed, 9 insertions(+)
+From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 
+The usb_sndaddr0pipe macro is only used in the hub_set_address function.
+Replace it with usb_sndctrlpipe which provides the same functionality
+but would also consider the endpoint device number.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+If the device has not been initialised, it is safe to use
+usb_sndctrlpipe in this context because udev->devnum is set to 0.
+Therefore, this change does not affect behaviour, but reduces code
+complexity by reusing the existing macro.
 
-Best regards,
-Krzysztof
+Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+---
+Even though this patch does not fix a bug it is related to the following
+discussion and addresses the change proposed by Alan:
+https://lore.kernel.org/all/aa0c06f6-f997-4bcf-a5a3-6b17f6355fca@rowland.harvard.edu/
+---
+ drivers/usb/core/hub.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+index 59e38780f76d0..66dfdf0bab90b 100644
+--- a/drivers/usb/core/hub.c
++++ b/drivers/usb/core/hub.c
+@@ -4697,8 +4697,6 @@ void usb_ep0_reinit(struct usb_device *udev)
+ }
+ EXPORT_SYMBOL_GPL(usb_ep0_reinit);
+ 
+-#define usb_sndaddr0pipe()	(PIPE_CONTROL << 30)
+-
+ static int hub_set_address(struct usb_device *udev, int devnum)
+ {
+ 	int retval;
+@@ -4722,7 +4720,7 @@ static int hub_set_address(struct usb_device *udev, int devnum)
+ 	if (hcd->driver->address_device)
+ 		retval = hcd->driver->address_device(hcd, udev, timeout_ms);
+ 	else
+-		retval = usb_control_msg(udev, usb_sndaddr0pipe(),
++		retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+ 				USB_REQ_SET_ADDRESS, 0, devnum, 0,
+ 				NULL, 0, timeout_ms);
+ 	if (retval == 0) {
+-- 
+2.45.2
+
 
