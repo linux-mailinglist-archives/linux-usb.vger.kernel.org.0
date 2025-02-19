@@ -1,143 +1,145 @@
-Return-Path: <linux-usb+bounces-20827-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20828-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AE2AA3C372
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 16:20:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93D93A3C49B
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 17:14:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57CF23BB492
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 15:17:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8765D189CEFC
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 16:13:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD581F417E;
-	Wed, 19 Feb 2025 15:17:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 166BB1FDA97;
+	Wed, 19 Feb 2025 16:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="vHQOQRek"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="klMiooKr"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF1E1F37CE
-	for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 15:17:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB57A1FDA85
+	for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 16:12:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739978231; cv=none; b=famRge7rNpfqRBrECxs4e5/b/DZ4cOUizyf1KoHnBhGHx+93keRTIcxHC7lwHJSCxgK/APD0EtqRpe5NI6ouHPAhnxUxNXmos7HKxMaFgMKDnwHnBKwh9zGmS7MmzjKMZxSe3bnoDoWXxW0G63dkskjN6XlXhZaJgwYsixolqig=
+	t=1739981567; cv=none; b=mQFezT72VvVrAfN3UDou+36rB1pz/6tHSUPLk7NXtZ3sT5UAaSja/f8FVCK50vVtoO2gzdscIHgb81bjvknD6wQzxbrM+E/Nhe1rhMKLtPZoU5O7XH1Xga9pD01vAoCoPNX/HwHJduo27wghmPcv0rqQPND+G9zF+CoMgJcFu1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739978231; c=relaxed/simple;
-	bh=w7fP5VJsqdJFhYmueyYdah4nlb2jc1Wn/053sE2nQdU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gDrNQf2mkKeM5bweg6/8lkiKqGgK5tLWO+GvHL29ILXpu8PeqtnJ89jh2MhexIh4JmLBJN8C/Q6PGQ8QyEJXWUKE8/9oqwbo3ynxf0l0xDbak8wufRKKckupeq4lkxhRhSoO/4jvg0lw0/+IbRWSlWJNz+B5tdsqdCbgTlJbO9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=vHQOQRek; arc=none smtp.client-ip=209.85.222.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
-Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7c0970e2e79so599152085a.3
-        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 07:17:08 -0800 (PST)
+	s=arc-20240116; t=1739981567; c=relaxed/simple;
+	bh=u9re8REjXvzfjxXgY3YZOGCROFhktmSNqqLvuZr/BdQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=O0UtFTkQ3wIwlbZ9dgKdXL8Ofu0fdmTD2Bt/IkzH5f8hCziSCyn4Q/CFp8lzqlCXXmxf9eJYU1p378OTA3l7zUUT6reKhD6U6lcwlle/4svztnJFdkaEls1ZI75iau1a2I0vwZNqxVDwSwCj3Fh/apJDpYln6dT0tV/8HwXMOpo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=klMiooKr; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5e04861e7a6so7146975a12.1
+        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 08:12:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rowland.harvard.edu; s=google; t=1739978228; x=1740583028; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZLngn1c7OgszDhQYwrs3tuXmUNGW9guC8b5guhMRolg=;
-        b=vHQOQRek3SAuGGm5hZzY+o0gjg1WMNFjb6vlzofW6dsTijWzWQ4n4MXFp2SMqbdwWb
-         ZqOJQqIu/+0Gq4f8cHOJocdeyMLvAabxxNqI3AORcwEFdLOu+dCCrQNulEzZEIB2L/61
-         Ia6cqOAbxwPtHQLilAJm07+tJ1yOFgLJh/xYkZ2+jdRzP48y2nJjf045ilRbJllEnKQ5
-         BXj0vGJMn6YnU0G29HEmZ/cxlwn4MqNOD32knoRy9GDdEb8bZdSMRGxwkUQkgYXn9uhG
-         N8vJrQOV3HAwKY3w67pLt4WCMKLofdByGJfJBz1fPlYJTQn3D0/IOuZf0wb7Q/2R9DvX
-         oJbw==
+        d=tuxon.dev; s=google; t=1739981563; x=1740586363; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=EjtQMF6TRiPlbfacQTAhkXNaJjpdhJbKUPVWmlaNaqw=;
+        b=klMiooKrmcSRc7RSB90dBHDHBOzadk/MKMnP/lIa/O+w6CCa5GinDAoWpGwokHEVLi
+         FAS32poSWqe1a9u/WJOgFwVGWiHlwiDecpIs0fHxRAExsYDNtSiWrs/Uoz7poWyMLAvs
+         5ksvdGq0tybUbUVSAKKEYPDfA+8malYm4Tirn/DQfxp43u7PW0k7Ax1/AhOVzFnytohr
+         0bcFoGjbb/iqCN12JZnLddfGAODfC6zTKUPhOsX+1Z/KFEryuMxq2N06W913kBjbXCr/
+         Z0oeILIDDzBvEXpBJzD6gSU08dCVkC8OKSaH+z0kHMegiJiBjh4xw+CrpaEJIrIOZlHC
+         42wA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739978228; x=1740583028;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZLngn1c7OgszDhQYwrs3tuXmUNGW9guC8b5guhMRolg=;
-        b=Xredvp9+Y/w4GZHoAJ/ehTXUrHB8LsTPqkz8ekDDB/zbsz4oLMC5IGWlxBv7s4z6Ed
-         hWuLN9n3X8FxlbFr0h3Av7sfjNxyR4hLah/cNjUouR8CwkaclB1Xz5IF7T3PvBhMSXVF
-         z4vFz7PWgLFBiMJyeC0PBdMbBnWHba7Ud97fAhdA44MZVC4DjHSIpdgJAeCh2Kw1a4N2
-         NRbyQNDAiGAgSPo9gEKs61TtHFF1y0S+zmq86fWeowJ4Jt/d0BG6KbBUkSZyJeftVJxH
-         9fE5z7f8D6M3Vlgra/CzkcCRKVqKKE/bKmsmOyAAspCAPQluI4d98wC/EdGRL5RKOEhO
-         7HUA==
-X-Forwarded-Encrypted: i=1; AJvYcCUqPYz7be5f7/bFxAEBCeihZrsuZRU9pJG/uTxBjFS/ecPvFKBefIbtrX4jQk+S+URS6PTGozhg4J8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrINnJ7EHsNS8XO3WsEkwG0/HlQBgctrBhqYyxSDufBjFAdOgM
-	HsE5QVZdKmRezaPhxUmJhlMUx95weH4jIemDB9sLGnS7n3ISmpGDZfENPfaePA==
-X-Gm-Gg: ASbGnctVNk+4PyfC9zSaZZwzkBjfbhaVcFypEHsRCeljbsfQFCLYop/3D5g6XNshOMc
-	J+UO5X09Ry3QLf47754Xlv2DFykzZrkQ8kqLbGwuZLosLsnnOxTJl5awyA+Koa6TiAYdPWAHhAn
-	31hgloeAxoxFk2b4NYX4zS+XOs6+NRjJ1Oj5NtKbDQIlMmtaHcflwep5KyFLhpFODQVZqNAJ+jL
-	ftQhx1+/S9K1wUXF5n2+rVyuTcxeCwLc/cmgXXmpvnNC/rPTtXiiiWsHy1umWW6Qi+Az1UoMOCS
-	uEahPTi8tVURbrtlVAQZNW6gbqEUfw/23g==
-X-Google-Smtp-Source: AGHT+IFU4MYbB6zopLM4Vw6VY01SbuBIlw1aYMolPw19EYJwiK6vA3t38BJTotpTUC2Ignn7JMiZCg==
-X-Received: by 2002:a05:620a:4550:b0:7c0:c0d7:580e with SMTP id af79cd13be357-7c0c0d75998mr89190785a.45.1739978227894;
-        Wed, 19 Feb 2025 07:17:07 -0800 (PST)
-Received: from rowland.harvard.edu ([140.247.181.15])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65d9f36f5sm75044706d6.75.2025.02.19.07.17.07
+        d=1e100.net; s=20230601; t=1739981563; x=1740586363;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EjtQMF6TRiPlbfacQTAhkXNaJjpdhJbKUPVWmlaNaqw=;
+        b=SZqz3QdUBLn6mVxupRyjSUHdStXsszQ1BRE8ZYB5s7Jv/uryhElh/12LrCiZiunlp4
+         EfzMfrEm4ncaUQFiovkEmKbrIRIHxCj3I3TD62oU1KClkOXFF4gdXHfIfL3lyBXYJEl6
+         rMgv07g/kxJtJk8mvwXpyJ+sbN2tIan93s27M43nwOvmBqfmDPRVb0ha1HahbdjGOB6S
+         4K5Zyfn2DJiQ+XQO0HOp6Dp/b8OPoDfFRrajDTHieGB3P+4ORtX6id2JMeWu6g6XotZv
+         GNyQb3zZ4LEcKb1ntIXX2RLdvFfpbl3ByB6opc58IvdhOAqnSPEJ0uX/WH42eDyuibdw
+         I2qg==
+X-Forwarded-Encrypted: i=1; AJvYcCU8Jqpch1cxuxFKVp5Zho6JXJW5zefZDf48oYFCYguzgoRHbGk3iEAADYuRcjhYYFNZ/2asea4dJAc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3KDsPrMDEkiUsmKx0YzzUtQfAIbQPte9Dbi1TE+LOaLOd3qNN
+	F/RfL7Xld0vYoZ8j9AXG2Fta9U+ANEzCH5rRbUB/W7p8ZyRCGerJArBKB9MpIfsA28d/+xfj7u+
+	x
+X-Gm-Gg: ASbGncvvkbwuhMVcTv1pZ9ExUgHJngyFcLByzEbO8bRx74QPHV3RUS1aZn7GpYalwrO
+	vx4s9ny9QFWiBxdsrWStq5qWdSyh+JAchUZ+h/20PtOdJpKWB9wSv2bvyrIFSurBNtwAjOzad8d
+	ZOvVKSZMEyOf9xIrzd30bdSIluq3PtF6YYaO7exU9ZREYcZZPlRPirz7IOuqRdVFSots71fovbf
+	OXpB/bNDJCpNGe96i3Yx1YbSFnRyKTey2ipvjpdclYFyeb/mvZfyuqxWkSE9vtu5osv0jzrHVr8
+	tLJnBdv3KoxW31FW7xiMKVhnCElsDJUFO0SChRErTnNH
+X-Google-Smtp-Source: AGHT+IFDZiBTqJrldYlbzqbLeUrNI2Old0Cil6RTu/LjqVXeUEAxzu3ZkZ9acNlt3bU6vH0XYRdRTQ==
+X-Received: by 2002:a05:6402:1ece:b0:5de:aa54:dc30 with SMTP id 4fb4d7f45d1cf-5e0360441bbmr18248109a12.5.1739981563113;
+        Wed, 19 Feb 2025 08:12:43 -0800 (PST)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.25])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e07f390626sm2548881a12.30.2025.02.19.08.12.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2025 07:17:07 -0800 (PST)
-Date: Wed, 19 Feb 2025 10:17:05 -0500
-From: Alan Stern <stern@rowland.harvard.edu>
-To: Stefan Eichenberger <eichest@gmail.com>
-Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+        Wed, 19 Feb 2025 08:12:42 -0800 (PST)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: gregkh@linuxfoundation.org,
+	biju.das.jz@bp.renesas.com,
+	geert+renesas@glider.be,
+	yoshihiro.shimoda.uh@renesas.com,
+	laurent.pinchart@ideasonboard.com,
+	phil.edworthy@renesas.com,
+	balbi@ti.com,
+	kuninori.morimoto.gx@renesas.com
+Cc: claudiu.beznea@tuxon.dev,
+	linux-usb@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Stefan Eichenberger <stefan.eichenberger@toradex.com>
-Subject: Re: [PATCH v1] usb: core: replace usb_sndaddr0pipe macro with
- usb_sndctrlpipe
-Message-ID: <8fba35c4-fe72-4dc3-85cf-270efb0c7765@rowland.harvard.edu>
-References: <20250219083745.10406-1-eichest@gmail.com>
+	linux-renesas-soc@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH RFT 0/3] usb: renesas_usbhs: Fixes for renesas_usbhs
+Date: Wed, 19 Feb 2025 18:12:36 +0200
+Message-ID: <20250219161239.1751756-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250219083745.10406-1-eichest@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 19, 2025 at 09:36:44AM +0100, Stefan Eichenberger wrote:
-> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> 
-> The usb_sndaddr0pipe macro is only used in the hub_set_address function.
-> Replace it with usb_sndctrlpipe which provides the same functionality
-> but would also consider the endpoint device number.
-> 
-> If the device has not been initialised, it is safe to use
-> usb_sndctrlpipe in this context because udev->devnum is set to 0.
-> Therefore, this change does not affect behaviour, but reduces code
-> complexity by reusing the existing macro.
-> 
-> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
-> ---
-> Even though this patch does not fix a bug it is related to the following
-> discussion and addresses the change proposed by Alan:
-> https://lore.kernel.org/all/aa0c06f6-f997-4bcf-a5a3-6b17f6355fca@rowland.harvard.edu/
-> ---
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
+Hi,
 
->  drivers/usb/core/hub.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
-> index 59e38780f76d0..66dfdf0bab90b 100644
-> --- a/drivers/usb/core/hub.c
-> +++ b/drivers/usb/core/hub.c
-> @@ -4697,8 +4697,6 @@ void usb_ep0_reinit(struct usb_device *udev)
->  }
->  EXPORT_SYMBOL_GPL(usb_ep0_reinit);
->  
-> -#define usb_sndaddr0pipe()	(PIPE_CONTROL << 30)
-> -
->  static int hub_set_address(struct usb_device *udev, int devnum)
->  {
->  	int retval;
-> @@ -4722,7 +4720,7 @@ static int hub_set_address(struct usb_device *udev, int devnum)
->  	if (hcd->driver->address_device)
->  		retval = hcd->driver->address_device(hcd, udev, timeout_ms);
->  	else
-> -		retval = usb_control_msg(udev, usb_sndaddr0pipe(),
-> +		retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
->  				USB_REQ_SET_ADDRESS, 0, devnum, 0,
->  				NULL, 0, timeout_ms);
->  	if (retval == 0) {
-> -- 
-> 2.45.2
-> 
+Series add fixes for the Renesas USBHS driver identified while
+working on the Renesas USB PHY driver (series at [1]).
+
+Series (with [1] on top) was tested on Renesas RZ/G3S with consecutive
+unbind/bind and data transfer tests before/after the unbind/bind.
+
+The unbind/bind was also tested on the devices with the following
+device trees but w/o checking the data transfer (as I only had
+remote access w/o USB devices connected):
+- r8a7742-iwg21d-q7.dts
+- r8a7743-iwg20d-q7.dts
+- r8a7744-iwg20d-q7.dts
+- r8a7745-iwg22d-sodimm.dts
+- r8a77470-iwg23s-sbc.dts
+- r8a774a1-hihope-rzg2m-ex.dts
+- r8a774b1-hihope-rzg2n-ex.dts
+- r8a774e1-hihope-rzg2h-ex.dts
+- r9a07g043u11-smarc.dts
+- r9a07g044c2-smarc.dts
+- r9a07g044l2-smarc.dts
+- r9a07g054l2-smarc.dts
+- r9a07g043f01-smarc.dts
+
+Please give it a try also on your devices with [1] on top as well.
+
+Thank you,
+Claudiu Beznea
+
+Claudiu Beznea (3):
+  usb: renesas_usbhs: Call clk_put()
+  usb: renesas_usbhs: Use devm_usb_get_phy()
+  usb: renesas_usbhs: Flush the notify_hotplug_work
+
+ drivers/usb/renesas_usbhs/common.c     | 6 +++++-
+ drivers/usb/renesas_usbhs/mod_gadget.c | 2 +-
+ 2 files changed, 6 insertions(+), 2 deletions(-)
+
+-- 
+2.43.0
+
 
