@@ -1,162 +1,143 @@
-Return-Path: <linux-usb+bounces-20826-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20827-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E9EEA3C20F
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 15:25:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3AE2AA3C372
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 16:20:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC060188166F
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 14:24:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57CF23BB492
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 15:17:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40D3F1DFE32;
-	Wed, 19 Feb 2025 14:24:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD581F417E;
+	Wed, 19 Feb 2025 15:17:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WN84pfbQ"
+	dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b="vHQOQRek"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f177.google.com (mail-qk1-f177.google.com [209.85.222.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF3D1EA7F0
-	for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 14:24:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CF1E1F37CE
+	for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 15:17:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739975075; cv=none; b=Luq9tc2wA+YcY/KsnEVqm+9gRXhilZ6or5ibyNMykX9CfsJzC4t4GWpFC4Av1n81NBuqkkl7ItCsGlEbAZNzWUFCQLynKMvDHVzV7BCkE4qxtERcgqdNr4RDepIP9PNBVB6oFLxmbyISIWZQy7x3oMWrq0Vrd7zKh7OwM7TSoxo=
+	t=1739978231; cv=none; b=famRge7rNpfqRBrECxs4e5/b/DZ4cOUizyf1KoHnBhGHx+93keRTIcxHC7lwHJSCxgK/APD0EtqRpe5NI6ouHPAhnxUxNXmos7HKxMaFgMKDnwHnBKwh9zGmS7MmzjKMZxSe3bnoDoWXxW0G63dkskjN6XlXhZaJgwYsixolqig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739975075; c=relaxed/simple;
-	bh=Enj+AVS7bQnBgblHL6lvEo5F+/rw4RF3qY3AwbRnljQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hMB0hVwfH2aydSTJ6sS/1FWBXpqwlI1odwC7nnBdJufKlSDHUfay5B8iM8eoXeZ9x7aeuwUFrUcUp9/w+holsRjjCHfUMxaPhIfqCvrv4xxjGUoiUAfhfHFFlPFt+hUosm6/lHdtIfziMBw/Zk9n/yHfGL+bKJP99R4jo01uudM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WN84pfbQ; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739975074; x=1771511074;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Enj+AVS7bQnBgblHL6lvEo5F+/rw4RF3qY3AwbRnljQ=;
-  b=WN84pfbQVM5mmv8pOI927SbJPL0DxZrvlp5Vj8DldmjqCiWF+GxGpz6v
-   R8adCzmChyLIcJx/G6fr6M7H1hPYSeV0u7IxMrX5qUW2y3zjDTYh7+j4i
-   76X06cbAta/olIHOHQk57vz59uWK8nADc/YMgfphzH81DSdpRyUcpabMF
-   Kv+Ov++1woD4yX+9j/yPKTz884cQPexDxMAzK3n4YYYMLLuPmmqZH6e4L
-   d5QaineRqB60NLy0oEl3aHnIHdqf0biSQbAThDFg/eU6ic9eJUHVRmxgD
-   jblqwpR1JSC/80/fwhf7/zveSTiBYa4XwHQ4YHSl+s6LkO5dhVNp9l1l6
-   w==;
-X-CSE-ConnectionGUID: IQjxa8DYRqilYAsVZtIonw==
-X-CSE-MsgGUID: 329/09FBSfalCppcsiPgIw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="28309107"
-X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
-   d="scan'208";a="28309107"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 06:24:33 -0800
-X-CSE-ConnectionGUID: /KF4vOHtQq+PJXerIfU5Fw==
-X-CSE-MsgGUID: vnoYerpoSNSyVSiPDACBwQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
-   d="scan'208";a="114652648"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa006.jf.intel.com with ESMTP; 19 Feb 2025 06:24:32 -0800
-Message-ID: <fc3be972-6e28-4942-b37d-4f2e39bb866b@linux.intel.com>
-Date: Wed, 19 Feb 2025 16:25:31 +0200
+	s=arc-20240116; t=1739978231; c=relaxed/simple;
+	bh=w7fP5VJsqdJFhYmueyYdah4nlb2jc1Wn/053sE2nQdU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gDrNQf2mkKeM5bweg6/8lkiKqGgK5tLWO+GvHL29ILXpu8PeqtnJ89jh2MhexIh4JmLBJN8C/Q6PGQ8QyEJXWUKE8/9oqwbo3ynxf0l0xDbak8wufRKKckupeq4lkxhRhSoO/4jvg0lw0/+IbRWSlWJNz+B5tdsqdCbgTlJbO9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu; spf=fail smtp.mailfrom=g.harvard.edu; dkim=pass (2048-bit key) header.d=rowland.harvard.edu header.i=@rowland.harvard.edu header.b=vHQOQRek; arc=none smtp.client-ip=209.85.222.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rowland.harvard.edu
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=g.harvard.edu
+Received: by mail-qk1-f177.google.com with SMTP id af79cd13be357-7c0970e2e79so599152085a.3
+        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 07:17:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rowland.harvard.edu; s=google; t=1739978228; x=1740583028; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZLngn1c7OgszDhQYwrs3tuXmUNGW9guC8b5guhMRolg=;
+        b=vHQOQRek3SAuGGm5hZzY+o0gjg1WMNFjb6vlzofW6dsTijWzWQ4n4MXFp2SMqbdwWb
+         ZqOJQqIu/+0Gq4f8cHOJocdeyMLvAabxxNqI3AORcwEFdLOu+dCCrQNulEzZEIB2L/61
+         Ia6cqOAbxwPtHQLilAJm07+tJ1yOFgLJh/xYkZ2+jdRzP48y2nJjf045ilRbJllEnKQ5
+         BXj0vGJMn6YnU0G29HEmZ/cxlwn4MqNOD32knoRy9GDdEb8bZdSMRGxwkUQkgYXn9uhG
+         N8vJrQOV3HAwKY3w67pLt4WCMKLofdByGJfJBz1fPlYJTQn3D0/IOuZf0wb7Q/2R9DvX
+         oJbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739978228; x=1740583028;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZLngn1c7OgszDhQYwrs3tuXmUNGW9guC8b5guhMRolg=;
+        b=Xredvp9+Y/w4GZHoAJ/ehTXUrHB8LsTPqkz8ekDDB/zbsz4oLMC5IGWlxBv7s4z6Ed
+         hWuLN9n3X8FxlbFr0h3Av7sfjNxyR4hLah/cNjUouR8CwkaclB1Xz5IF7T3PvBhMSXVF
+         z4vFz7PWgLFBiMJyeC0PBdMbBnWHba7Ud97fAhdA44MZVC4DjHSIpdgJAeCh2Kw1a4N2
+         NRbyQNDAiGAgSPo9gEKs61TtHFF1y0S+zmq86fWeowJ4Jt/d0BG6KbBUkSZyJeftVJxH
+         9fE5z7f8D6M3Vlgra/CzkcCRKVqKKE/bKmsmOyAAspCAPQluI4d98wC/EdGRL5RKOEhO
+         7HUA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqPYz7be5f7/bFxAEBCeihZrsuZRU9pJG/uTxBjFS/ecPvFKBefIbtrX4jQk+S+URS6PTGozhg4J8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyrINnJ7EHsNS8XO3WsEkwG0/HlQBgctrBhqYyxSDufBjFAdOgM
+	HsE5QVZdKmRezaPhxUmJhlMUx95weH4jIemDB9sLGnS7n3ISmpGDZfENPfaePA==
+X-Gm-Gg: ASbGnctVNk+4PyfC9zSaZZwzkBjfbhaVcFypEHsRCeljbsfQFCLYop/3D5g6XNshOMc
+	J+UO5X09Ry3QLf47754Xlv2DFykzZrkQ8kqLbGwuZLosLsnnOxTJl5awyA+Koa6TiAYdPWAHhAn
+	31hgloeAxoxFk2b4NYX4zS+XOs6+NRjJ1Oj5NtKbDQIlMmtaHcflwep5KyFLhpFODQVZqNAJ+jL
+	ftQhx1+/S9K1wUXF5n2+rVyuTcxeCwLc/cmgXXmpvnNC/rPTtXiiiWsHy1umWW6Qi+Az1UoMOCS
+	uEahPTi8tVURbrtlVAQZNW6gbqEUfw/23g==
+X-Google-Smtp-Source: AGHT+IFU4MYbB6zopLM4Vw6VY01SbuBIlw1aYMolPw19EYJwiK6vA3t38BJTotpTUC2Ignn7JMiZCg==
+X-Received: by 2002:a05:620a:4550:b0:7c0:c0d7:580e with SMTP id af79cd13be357-7c0c0d75998mr89190785a.45.1739978227894;
+        Wed, 19 Feb 2025 07:17:07 -0800 (PST)
+Received: from rowland.harvard.edu ([140.247.181.15])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e65d9f36f5sm75044706d6.75.2025.02.19.07.17.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2025 07:17:07 -0800 (PST)
+Date: Wed, 19 Feb 2025 10:17:05 -0500
+From: Alan Stern <stern@rowland.harvard.edu>
+To: Stefan Eichenberger <eichest@gmail.com>
+Cc: gregkh@linuxfoundation.org, linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Stefan Eichenberger <stefan.eichenberger@toradex.com>
+Subject: Re: [PATCH v1] usb: core: replace usb_sndaddr0pipe macro with
+ usb_sndctrlpipe
+Message-ID: <8fba35c4-fe72-4dc3-85cf-270efb0c7765@rowland.harvard.edu>
+References: <20250219083745.10406-1-eichest@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/4] usb: xhci: rework and simplify trb_in_td()
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>,
- niklas.neronin@linux.intel.com
-Cc: linux-usb@vger.kernel.org
-References: <20250219095637.5bd6e9e4@foxbook>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250219095637.5bd6e9e4@foxbook>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250219083745.10406-1-eichest@gmail.com>
 
-On 19.2.2025 10.56, Michał Pecio wrote:
-> Hi,
+On Wed, Feb 19, 2025 at 09:36:44AM +0100, Stefan Eichenberger wrote:
+> From: Stefan Eichenberger <stefan.eichenberger@toradex.com>
 > 
->> +		/* Edge case, the TD wrapped around to the start segment. */
->> +		if (xhci_trb_virt_to_dma(td->end_seg, td->end_trb) < dma &&
->> +		    dma < xhci_trb_virt_to_dma(td->start_seg, td->start_trb))
->> +			return NULL;
->> +		if (seg->dma <= dma && dma <= (seg->dma + TRB_SEGMENT_SIZE))
+> The usb_sndaddr0pipe macro is only used in the hub_set_address function.
+> Replace it with usb_sndctrlpipe which provides the same functionality
+> but would also consider the endpoint device number.
 > 
-> It should be strict inequality for the upper bound here.
+> If the device has not been initialised, it is safe to use
+> usb_sndctrlpipe in this context because udev->devnum is set to 0.
+> Therefore, this change does not affect behaviour, but reduces code
+> complexity by reusing the existing macro.
 > 
-> Note that this wraparound case souldn't be happening (the driver avoids
-> moving enqueue into deq_seg to simplify ring expansion) so no amount of
-> testing will catch problems here, until maybe something changes one day.
-> 
->> +			return seg;
->> +		seg = seg->next;
->> +	}
-> 
-> The situation is tricky now, because we are either in start_seg and
-> end_seg is elsewhere or in start_seg->next and wraparound. But it looks
-> like the loop below will work OK for either case.
-> 
->> +	/* Loop through segment which don't contain the DMA address. */
->> +	while (dma < seg->dma || (seg->dma + TRB_SEGMENT_SIZE) <= dma) {
-> 
-> This condition looks like it could use the in_range() macro.
-> 
->> +		if (seg == td->end_seg)
->> +			return NULL;
->> +
->> +		seg = seg->next;
->> +		if (seg == td->start_seg)
->> +			return NULL;
-> 
-> I suppose this only happens if end_seg is not on the ring, fair enough.
-> 
->> +	}
-> 
-> Maybe a comment here? Something like:
+> Signed-off-by: Stefan Eichenberger <stefan.eichenberger@toradex.com>
+> ---
+> Even though this patch does not fix a bug it is related to the following
+> discussion and addresses the change proposed by Alan:
+> https://lore.kernel.org/all/aa0c06f6-f997-4bcf-a5a3-6b17f6355fca@rowland.harvard.edu/
+> ---
 
+Acked-by: Alan Stern <stern@rowland.harvard.edu>
+
+>  drivers/usb/core/hub.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
 > 
-> * At this point seg contains the dma and either:
-> * a. start_seg != end_seg and seg can be anywhere
-> * b. start_seg == end_seg in wraparound case and seg != start_seg
-
-Agreed, a comment here would help.
-
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index 59e38780f76d0..66dfdf0bab90b 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -4697,8 +4697,6 @@ void usb_ep0_reinit(struct usb_device *udev)
+>  }
+>  EXPORT_SYMBOL_GPL(usb_ep0_reinit);
+>  
+> -#define usb_sndaddr0pipe()	(PIPE_CONTROL << 30)
+> -
+>  static int hub_set_address(struct usb_device *udev, int devnum)
+>  {
+>  	int retval;
+> @@ -4722,7 +4720,7 @@ static int hub_set_address(struct usb_device *udev, int devnum)
+>  	if (hcd->driver->address_device)
+>  		retval = hcd->driver->address_device(hcd, udev, timeout_ms);
+>  	else
+> -		retval = usb_control_msg(udev, usb_sndaddr0pipe(),
+> +		retval = usb_control_msg(udev, usb_sndctrlpipe(udev, 0),
+>  				USB_REQ_SET_ADDRESS, 0, devnum, 0,
+>  				NULL, 0, timeout_ms);
+>  	if (retval == 0) {
+> -- 
+> 2.45.2
 > 
->> +	if (seg == td->start_seg) {
->> +		if (dma < xhci_trb_virt_to_dma(td->start_seg, td->start_trb))
->> +			return NULL;
->> +	} else if (seg == td->end_seg) {
->> +		if (xhci_trb_virt_to_dma(td->end_seg, td->end_trb) < dma)
->> +			return NULL;
->> +	}
->> +	return seg;
-> 
-> This should be corrent, but it's not something immediately obvious.
-> 
-> Not sure if this new implementation is really simpler than the old one.
-> I wonder if it wouldn't make sense to reorder this after the API change
-> (patch 4/4) to allow emergency revert if something unexpected shows up.
-
-Had to draw several cases on paper to go through this new version.
-But I might just be used to the old one
-
-> 
-> As for efficiency, those virt_to_dma translations aren't exactly free
-> and there are two. Maybe it could be faster to translate dma to virt
-> once and then compare. Sometimes also sizeof(*) < sizeof(dma_addr_t).
-
-Agreed
-
-dma_addr_t start_dma = xhci_trb_virt_to_dma(td->start_seg, td->start_trb);
-dma_addr_t end_dma = xhci_trb_virt_to_dma(td->end_seg, td->end_trb);
-
-comparisons will then be a lot easier to read with start_dma and end_dma
-
--Mathias
-
 
