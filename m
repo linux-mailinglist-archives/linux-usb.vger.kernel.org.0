@@ -1,359 +1,189 @@
-Return-Path: <linux-usb+bounces-20810-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20811-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3987EA3B9F7
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 10:38:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5C1BA3BA44
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 10:41:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29EC017B25F
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 09:29:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 337933A91BD
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 09:34:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6071DE894;
-	Wed, 19 Feb 2025 09:26:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A4771E0B70;
+	Wed, 19 Feb 2025 09:30:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="aFjB9evW"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="GRZQBECx"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D1E61B415A;
-	Wed, 19 Feb 2025 09:26:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739957208; cv=none; b=Qt+lCDbbqypR93TmLNJK0++Myq53gFZdD/kaS60CGky9+uWeSpUEgnyTtg1SGPJrbPvoAE8/SZa+fHJeK5HPNmpTJAsIYGH5mYlusQT3C+8xgiAWhIdVOXICZfscE9tLNAWXxrQiSVPewCjjt1wOHuMY4wAXWj8TTSHLY1TjrZQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739957208; c=relaxed/simple;
-	bh=4UGM1FekRgOfsruEiTlnKjc9jZUaZSyzM5lT1beBgJk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Eoz2++q8LaO3Kk9PN9ZdRLu9UqYhy3W681dbI1CDryVAoAXTrqhKRE/O4iMMusIY2+XawniRSK1BkWUkr+zQ7+k82fv6sexUC9WXH3Fsd4xe4VTOa1bZAiLc89+XcyO0vKYcfOJ+ly0qUjP9GC2xXTp5C9O2mYozy4XfD40Gazc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=aFjB9evW; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Dg3dh
-	jMTMTxLS6YB64TD8j0OjFqGRh6x7mAaExjXwYs=; b=aFjB9evWC16kNEhBY7lGX
-	CG2k7F+J3IJQIMRl8ECp262OdxNJu0koKVSYp6AspGjm7xXkYTHfja50ZT8/pn0D
-	AuFAnHwD00I8wdAMd4pHQEGeniB5NZ82wSoOsb+rDSDQQ5xj4U3/47417NDQOhNC
-	og21rkyryCAx0f3QJDMW+E=
-Received: from thinkpadx13gen2i.. (unknown [])
-	by gzsmtp2 (Coremail) with SMTP id PSgvCgD3k+Klo7VnI2XxIA--.27790S2;
-	Wed, 19 Feb 2025 17:25:58 +0800 (CST)
-From: Zongmin Zhou <min_halo@163.com>
-To: valentina.manea.m@gmail.com,
-	shuah@kernel.org,
-	i@zenithal.me,
-	gregkh@linuxfoundation.org
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011032.outbound.protection.outlook.com [52.101.70.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D5C01DF26F;
+	Wed, 19 Feb 2025 09:30:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739957437; cv=fail; b=tnNT4mZWnLgJZrQjkAro8U9z70+CH52+uOQHnbXMETcq46HYuDWBe2dqRIbfxr1DlQhRwQqw7joTNjpS1r+C9R1L/PE+pXa2HWrNOlDdWlpSEkaYvSf3KrU9zzQMtnIebciruS0wbRP3B8ka7BcRvm9T+/a0Vce5cji2HoVe7C8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739957437; c=relaxed/simple;
+	bh=YBV30EqvNFBxn7ZeALdASbxvarguCEJ5iz0sPUSD9Us=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=Z6p33IPzcORwWQ+K0P3GLPCU/wsJbFsOwHfl0Iv8Ic0+ChbE7bw77BpjhgLGkma2wc6J8jVC/BTU9Wq8vMqWCmiZxVbgOdV1d42lypetnX3pu7EKYUn1WDK1CtC2x7M9DmoxmYrH89I7ndRaBthOHjvlQRhEfzXDt3h1vRDn/TQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=GRZQBECx; arc=fail smtp.client-ip=52.101.70.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=MAIEUFEXNWQsKakBpG70df7z7LMWPdjzjNr3XpOCJboS0m+PX9uyNHX9vGIOHE8Yu2mCm1FkDTEmbadO1UtFgX4JRJlVmekJc9b+Z63p9azaQgJJT8iWAR0i3qVH/6A6tZEtRdOwCMQ97DRHI5Uo1rqKaPJU6YBqmZAgXjxvSpx/wm09c4rj2z1Tjx3G3fOXVS2y2+LtR1bhzzCs0ZaZcDFrNTV9sL2VqK67ai8BJJVcVBQzyVjGpszuiCXX6LmIQyl1MdF14coTQ4FAiPqAVZiHcFJhS3kLGZbr9f27sLv27kWcauo3RgaGt6VqAbxOfcvcYRIB5YJETke+GLA0ug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=pLmEffZdP+Tsz+XAOJ2iHMRpS2Hod37kbSDx+LVpmuM=;
+ b=TiyzpMfpvJ/lEPHppmImAG/XM1w3i+FcLP1ow4/c2giz45bMYedARxANEfG3TlRdAVmtO6i6GUJXbZJE4tuKx4WJTXwNJgaDvIXAYuDUVMbVFrnlim5cJNRxu/Z6fHH8h2pD3BDvxRM4SNETaJ0WhGvbX31HaP7YK1lOaGFdsOH3fUtvBeSF2JYHy14v2EUMM0Y7oruydnE3OeNP3yn08HCGzdavjqdJokjiERTEMvHIabJb7DFBVQJbYd+zNdup4rJ/XtIz/jt0EkgHc9m4UNvFDu9e6TaYXgp06Zanyv3d7EIu8Gs3f2MwuOVqttNnFWuIfQTt5EMZjvbaMMhPkw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=pLmEffZdP+Tsz+XAOJ2iHMRpS2Hod37kbSDx+LVpmuM=;
+ b=GRZQBECxxRLUm5FbIQ8TcQxCdXgIu0r0+RGfhL4kd1eBc3plBOmdMhlXRO7P5H7wdy3mKAr14qe5QYWgaE0GJcBCvdjarc29PHWi3i9mgVspUqkydCug67Q9gIpmpVluAH5RM9iEEP25Z23xJQ3PxTLWeDT6BBXnibbpdioC5A1HxB3KaRqlFGo4anuzSKbvr6SUGudcV3yRlRgJnJrqsSoWODUXNAhZK1lclzkLpF8/tIcFAkWkhPx/ARMHzQMkgiDsdlfDDpKENtZeaPAxl9er1IlaUpJNklKgajHeDA2f9SGyYIlYPrZg5a36EDc6ZLy5Bq3ZFVYuQx7+JHMA9Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com (2603:10a6:102:20c::17)
+ by VI0PR04MB10370.eurprd04.prod.outlook.com (2603:10a6:800:214::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.15; Wed, 19 Feb
+ 2025 09:30:31 +0000
+Received: from PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::cdc5:713a:9592:f7ad]) by PAXPR04MB8829.eurprd04.prod.outlook.com
+ ([fe80::cdc5:713a:9592:f7ad%7]) with mapi id 15.20.8445.016; Wed, 19 Feb 2025
+ 09:30:30 +0000
+From: Xu Yang <xu.yang_2@nxp.com>
+To: gregkh@linuxfoundation.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	shawnguo@kernel.org,
+	s.hauer@pengutronix.de,
+	kernel@pengutronix.de,
+	festevam@gmail.com,
+	peter.chen@kernel.org
 Cc: linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zongmin Zhou <zhouzongmin@kylinos.cn>
-Subject: [PATCH] usbip: Fix the error limitation on max_hw_sectors for usbip device
-Date: Wed, 19 Feb 2025 17:25:55 +0800
-Message-Id: <20250219092555.112631-1-min_halo@163.com>
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	jun.li@nxp.com
+Subject: [PATCH 0/6] add USB2.0 support for i.MX95-19x19 EVK board
+Date: Wed, 19 Feb 2025 17:30:58 +0800
+Message-Id: <20250219093104.2589449-1-xu.yang_2@nxp.com>
 X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR04CA0009.apcprd04.prod.outlook.com
+ (2603:1096:4:197::8) To PAXPR04MB8829.eurprd04.prod.outlook.com
+ (2603:10a6:102:20c::17)
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:PSgvCgD3k+Klo7VnI2XxIA--.27790S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW3KF47JrWUZr45XF13XF48Crg_yoWkGr1xpa
-	4rXFyrtrW8GF43Xw45AF4UJa4Yvwsxt3yrGryxGw1DCFsFy343Wr97CrZYkw47GrWUZ342
-	yF4DXF98GFW8WaUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07joiifUUUUU=
-X-CM-SenderInfo: pplqsxxdorqiywtou0bp/1tbi7hX4q2e1ohMiPwAAsW
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8829:EE_|VI0PR04MB10370:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4cfa346a-3b47-494a-694d-08dd50c80af8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|7416014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?62M4Lj7W5qnGQjpJRdUVxf0v7q13eIsvSjoAFKSh5iMjv3sv+eYrzqfQquvk?=
+ =?us-ascii?Q?c5kbv+SQcL6rHgSYXaJA/ZPVatnIpQiitqDoOnqtJLp6fHa3qbDJ42P1/b+O?=
+ =?us-ascii?Q?Wipi278jBz/nOhf01NLeU9fGGumdVZSbPt2fNcvT4edlkl/WpVUrYENlqfFg?=
+ =?us-ascii?Q?2cvGhDJyEybv0PXi3qEAAyveI8RB+ufhnlvAcJnqfeUqXC8nEie2bzJkiGHa?=
+ =?us-ascii?Q?DGvEiqrqSyjGpgpHdYESYkBvvsCjkWF/MXMAkyTiKzTry+mrTLOIwEKJaeS4?=
+ =?us-ascii?Q?Bmjqu+R2282Xa/hqUZBvrs8dzjRDog72+rpdw5vsoX9mjykHYwgM/kZn+/fR?=
+ =?us-ascii?Q?l+7FV7ZLwUgJ83F8+/rH4RWTusvYsmPFvqzNXsmuJlOnu/66WZwxe9SZQ0xV?=
+ =?us-ascii?Q?dTCwkzIs8xtaY2d8kYNU8FOWdrg5x8E2KK6n+S/7wkKkN2Kqws/KH5NELBqU?=
+ =?us-ascii?Q?Mql7lIBAsOIIkezqmzRt5pwwr7XmEn2dSYRvBMDsP6mn2Z4aGzNI5cXXMPUw?=
+ =?us-ascii?Q?kAxohD9HPw7xHp4QRdM0ERTVBfpCOaoNqdalq4S4xRypVgiM78n5H/mdfwEb?=
+ =?us-ascii?Q?8i0IVftWOwOmQEMa41bhQEwvFp5aNu2DLoZYkwkpk7JoAEUvFJWVgCVD79iF?=
+ =?us-ascii?Q?qpmpqw0ZP39p3PpK8jpFeV2cujtV3WUoQgC9LUjhjbCCIvFN/7iGth8EJlKR?=
+ =?us-ascii?Q?+qlJ3z9xe6ANapHiOmFpz2uDJXsxtzROBo1qa8A0TEQh2cbUf+5YR2lcU9eH?=
+ =?us-ascii?Q?yZ8ETrIakM/e5Fzr9RrvQAvnA+USXhX6/fdmcsp6mNAasalZcba9Qkacl+Bo?=
+ =?us-ascii?Q?GM3t+uRoU9jPPs1EMs7C+yf9DNGMo8QBDgPN0eQRpEaq+XfCj3dJ8SLSmXdD?=
+ =?us-ascii?Q?mi/jnwGn+jpn2acQoDNQEauOLUbT2y8/Bes2h9+QMe2/9bUuRonur2hdi0jE?=
+ =?us-ascii?Q?k/zJpjCiYf3QSHINxwrsuPPclROR8v31I7CRN40DvkT7xLDZiscCNwRBpTvM?=
+ =?us-ascii?Q?P3W3wo5PLaStEUJe46fCjHp5uJ5GTRMMPgLmU5tBRvc00JfsKgpgH5MNzX5g?=
+ =?us-ascii?Q?RmoP4Nqg9WdwzHSWpe+5ecKlAGFCuc/6MHCRnaTRMOJ4yFrMFkf9xCM/NjP5?=
+ =?us-ascii?Q?4k90yQ2GD+oI1h/3cjGPO/lsc8CPOJtpBnkh6wjGjsK/7qBjlDO7biePg8wB?=
+ =?us-ascii?Q?YTDcXepwPi5Kb1oHPc0HejFlZ3AzQyQVyDhLgn1mJ0P2wCfdI0lqclHR/q4i?=
+ =?us-ascii?Q?1d/JCTPQ6cZQo+xtwsS9On1+aqQdxl2rlCkeu2NdCa7kmLy4C/dvRhq/lWow?=
+ =?us-ascii?Q?VcHlzJYbWnOx+Q3bkb8UIXe0YrjjTyQJl5KEGcSP5WNx65IqARRdveeTQTl9?=
+ =?us-ascii?Q?xJEwE+wpadfVgNacQeMfbaThr6V8ErSDagRyav7QB7MP88A9Zdl0MB++PDzs?=
+ =?us-ascii?Q?ZeCzpcDWzu8A241i2RHKizcPFdeEBOvu?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8829.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(7416014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?1CKtBDTiD1+K8WHexMtNfAQ/sstkEyjZL2TYauoRwVlr2ahrKTMzzxwKVsq0?=
+ =?us-ascii?Q?GQrs3Dv8fOAWCWAwCwsqGRXs8pTJ0UyfJVliK5h62mjK7DQMOha8Wg73OgOe?=
+ =?us-ascii?Q?wZV11KVnHyiU1Gdnjt4bP5ZxiGhF9PoxuewRyNqvvjg7HwyKTTlZwI/0p7Vk?=
+ =?us-ascii?Q?Edl23pliX5xf4T93jszmd+KvIZNCd+D3vvrlHVm50eOA9vhrxFgo8aCHTHGl?=
+ =?us-ascii?Q?pRnefL2/+Yz3WSMX3SrVUdAEUEYfG6tTuLuQfhwlEgkDQmmcnPuBh5Y8dWXV?=
+ =?us-ascii?Q?D4/OebONweRBPCzggXV0Jra5N1sV5XUAz0FlSwgYfvVI6Epa5cqaJJEP7TiI?=
+ =?us-ascii?Q?hwyIK9nrPpRBUeAMWZVVZjdS57JctzKrAZXMFaXDXritn5KJM4pUpi7/ipFr?=
+ =?us-ascii?Q?WIJgnfB/H5ETVm61obhfZUBobNdlcQ6S8E7gckDUMd5UrJVefGQ8TfvzJkdN?=
+ =?us-ascii?Q?BthNmo2HrTOAhQ30cVm63sh3jwNu7WKyiWhljNFt2aSU0V0dquazMHjBJFCx?=
+ =?us-ascii?Q?YjgHU3wzHOFpsULj+Fwnt3inT0QuMqEao1frx7dO+rc7CWXjdKIeaQwkOioY?=
+ =?us-ascii?Q?BE9XzFj9tvL+rYEJLSHu9MjHqVfcC940EQ5zO5Ub62TSKJ7JKZ3CX1LXEXuH?=
+ =?us-ascii?Q?G9epLkpxyjKTrfPJJQw2+NKivw9QwYtMbeC4JhWAsLIx0Wi4oGLdZCigV3Db?=
+ =?us-ascii?Q?PWLLFZh6mhBq5ms63rVd9laQbrihK4VtQgtXx7QeVoP4LZbgl1OGoDCkvYoK?=
+ =?us-ascii?Q?NDRjDH6QeUrKiK10G5mKXdUKCVhjCnA0UXNqYHL3WNpjW31ebduAR9V55QDC?=
+ =?us-ascii?Q?h5JpGXhwdfG2gcncNln5xr22Lq3DUdaS2QXAVKiG8B2OexEdZoODO3ddPZmE?=
+ =?us-ascii?Q?R2GRwBrIrh0RV94tI4bSb3umaTU69hQZR7jfiy3kXojuANMiC/zxNILpNB4s?=
+ =?us-ascii?Q?S+tbJjcurGJ9ttVckbXNk8JqXHO1Vjy7pkakYMbtxWFZUeVeI57h82LADRsY?=
+ =?us-ascii?Q?OOt30s9CqCs4lGCHTwnzqo96Q88Spl8wP4yRCKeYU3H/NL96RWqrX7CmHG/g?=
+ =?us-ascii?Q?TipT3ulKKKfprO7qVt/h+Kbt9/eDrtNXnC6l4+z44NMHlnzNT/tnhJ24cukU?=
+ =?us-ascii?Q?wFXsS2kRKdfbgQnXCPnZMKvB/XnPgHWB2xp0mU3E3FvYIl+N/hrPBiAoSEW+?=
+ =?us-ascii?Q?DunxGFsZb6uTZ5rrR8btR+rceu+Al/GGybHVLE+fhgmtu7UhwdGVx+Atw86m?=
+ =?us-ascii?Q?k6dETYFryUJehhQ+dUjG+9LyfDRHdTGx+Vgtv/3HEM1zSIkGD/ELfaxi8/R2?=
+ =?us-ascii?Q?SmPxIcbkHT7/ANl7LsncNnF0dENopBgFhZRLReW/XmiungJ16i4MKM6NtiPZ?=
+ =?us-ascii?Q?p+SWx/KU88Z9cLrst2GvKzwfcxqIt6spcGyDNxBgvedp96lQI4uaBeS18Ms2?=
+ =?us-ascii?Q?fdQIb2MF9GhHpU4tK76/EIm+zkibCMkzlhIu1xRzIxs67KheBfThpvHvXnOP?=
+ =?us-ascii?Q?IwG9FarPXzhyx1PKBgwnHO42cCj335Sn07LqfyGE5B7DtC2FFTGD3A24INmC?=
+ =?us-ascii?Q?6Fg75ZzN+SsnUUIXDOsAz4lQCl8FPWBSwjPIYaXs?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cfa346a-3b47-494a-694d-08dd50c80af8
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8829.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Feb 2025 09:30:30.7798
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lRXHPEgXCMnOTFVon2io6dwtlA+V8bp+j0A1XiePCqYUNw18w3ic3SwCHK9VQCFenNXdl123F1zJEAwRSFXugQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10370
 
-From: Zongmin Zhou <zhouzongmin@kylinos.cn>
+The i.MX95-19x19 EVK board features a USB 2.0 Type-A port, with this
+series primarily introducing USB 2.0 support. In the i.MX95 architecture,
+the USB wake-up handling mechanism is integrated within the HSIO block
+control module, utilizing a dedicated wake-up interrupt. Therefore, we
+also implemented corresponding wake-up logic code to properly manage this
+functionality.
 
-This patch fixes an issue that usb device through usbip protocol,
-the max_hw_sectors will be limited to 512,and then
-read/write rate of high speed USB devices will be limited.
+Xu Yang (6):
+  dt-bindings: usb: chipidea: add compatible for i.MX95 platform
+  dt-bindings: usb: usbmisc-imx: add compatible for i.MX95 platform
+  usb: chipidea: imx: add wakeup interrupt handling
+  usb: chipidea: imx: add HSIO Block Control wakup setting
+  arm64: dts: imx95: add USB2.0 nodes
+  arm64: dts: imx95-19x19-evk: enable USB2.0 node
 
-After the commit d74ffae8b8dd ("usb-storage: Add a limitation
-for blk_queue_max_hw_sectors()") is applied,
-This issue happened on the swiotlb enabled environment.
-This commit will checks the maximum size of a mapping for the device,
-and adjusts the max_hw_sectors.On vhci-hcd driver,
-the dma mask setting follows the platform device default setting(32-bit).
-So dma_addressing_limited() will be true,then the maximum mapping size
-use the swiotlb max mapping size(512).The max_hw_sectors reset to 512.
+ .../bindings/usb/chipidea,usb2-common.yaml    |   3 +
+ .../bindings/usb/chipidea,usb2-imx.yaml       |  26 ++++-
+ .../devicetree/bindings/usb/fsl,usbmisc.yaml  |  23 +++-
+ .../boot/dts/freescale/imx95-19x19-evk.dts    |  16 +++
+ arch/arm64/boot/dts/freescale/imx95.dtsi      |  30 +++++
+ drivers/usb/chipidea/ci_hdrc_imx.c            |  42 +++++++
+ drivers/usb/chipidea/usbmisc_imx.c            | 107 ++++++++++++++++++
+ 7 files changed, 245 insertions(+), 2 deletions(-)
 
-To fix this issue,have to get the dma mask bit that
-the real USB controllers support,and set this value on vhci-hcd driver,
-usbip device will get the correct max_hw_sectors.
-
-Signed-off-by: Zongmin Zhou <zhouzongmin@kylinos.cn>
----
- drivers/usb/usbip/stub_dev.c               | 42 ++++++++++++++++++++++
- drivers/usb/usbip/vhci_sysfs.c             | 11 +++---
- tools/usb/usbip/libsrc/usbip_common.h      |  1 +
- tools/usb/usbip/libsrc/usbip_host_common.c | 34 ++++++++++++++++++
- tools/usb/usbip/libsrc/vhci_driver.c       | 10 +++---
- tools/usb/usbip/libsrc/vhci_driver.h       |  4 +--
- tools/usb/usbip/src/usbip_attach.c         |  2 +-
- tools/usb/usbip/src/usbip_network.c        |  1 +
- 8 files changed, 93 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/usb/usbip/stub_dev.c b/drivers/usb/usbip/stub_dev.c
-index ce625b1ce9a5..095de5a8a307 100644
---- a/drivers/usb/usbip/stub_dev.c
-+++ b/drivers/usb/usbip/stub_dev.c
-@@ -7,6 +7,7 @@
- #include <linux/file.h>
- #include <linux/kthread.h>
- #include <linux/module.h>
-+#include <linux/dma-mapping.h>
- 
- #include "usbip_common.h"
- #include "stub.h"
-@@ -34,6 +35,46 @@ static ssize_t usbip_status_show(struct device *dev,
- }
- static DEVICE_ATTR_RO(usbip_status);
- 
-+/*
-+ * The real USB controllers may support larger than 32-bit address memory pointers actually.
-+ * But vhci-hcd driver use the default platform device dma mask set(32-bit),
-+ * and usbip device's max_sectors will be limited by dma max mapping size.
-+ * usbip_dma_bits shows the real dma mask bit of the real usb controller
-+ * which usbip device is bound to.
-+ */
-+static unsigned int mask_convert_to_bits(u64 dma_mask)
-+{
-+	unsigned int bits = 0;
-+
-+	while (dma_mask & 0x1) {
-+		dma_mask >>= 1;
-+		bits++;
-+	}
-+	return bits;
-+}
-+
-+static ssize_t usbip_dma_bits_show(struct device *dev,
-+				 struct device_attribute *attr, char *buf)
-+{
-+	struct stub_device *sdev = dev_get_drvdata(dev);
-+	struct device *sys_dev = sdev->udev->bus->sysdev;
-+	u64 dma_mask = 0;
-+	unsigned int dma_bits = 0;
-+
-+	if (!sdev || !sys_dev) {
-+		dev_err(dev, "sdev or sys_dev is null\n");
-+		return -ENODEV;
-+	}
-+
-+	spin_lock_irq(&sdev->ud.lock);
-+	dma_mask = dma_get_mask(sys_dev);
-+	dma_bits = mask_convert_to_bits(dma_mask);
-+	spin_unlock_irq(&sdev->ud.lock);
-+
-+	return sysfs_emit(buf, "%d\n", dma_bits);
-+}
-+static DEVICE_ATTR_RO(usbip_dma_bits);
-+
- /*
-  * usbip_sockfd gets a socket descriptor of an established TCP connection that
-  * is used to transfer usbip requests by kernel threads. -1 is a magic number
-@@ -144,6 +185,7 @@ static DEVICE_ATTR_WO(usbip_sockfd);
- 
- static struct attribute *usbip_attrs[] = {
- 	&dev_attr_usbip_status.attr,
-+	&dev_attr_usbip_dma_bits.attr,
- 	&dev_attr_usbip_sockfd.attr,
- 	&dev_attr_usbip_debug.attr,
- 	NULL,
-diff --git a/drivers/usb/usbip/vhci_sysfs.c b/drivers/usb/usbip/vhci_sysfs.c
-index d5865460e82d..972beac653f6 100644
---- a/drivers/usb/usbip/vhci_sysfs.c
-+++ b/drivers/usb/usbip/vhci_sysfs.c
-@@ -12,6 +12,7 @@
- 
- /* Hardening for Spectre-v1 */
- #include <linux/nospec.h>
-+#include <linux/dma-mapping.h>
- 
- #include "usbip_common.h"
- #include "vhci.h"
-@@ -311,7 +312,7 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- {
- 	struct socket *socket;
- 	int sockfd = 0;
--	__u32 port = 0, pdev_nr = 0, rhport = 0, devid = 0, speed = 0;
-+	__u32 port = 0, pdev_nr = 0, rhport = 0, devid = 0, speed = 0, dma_bits = 0;
- 	struct usb_hcd *hcd;
- 	struct vhci_hcd *vhci_hcd;
- 	struct vhci_device *vdev;
-@@ -327,15 +328,15 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- 	 * @devid: unique device identifier in a remote host
- 	 * @speed: usb device speed in a remote host
- 	 */
--	if (sscanf(buf, "%u %u %u %u", &port, &sockfd, &devid, &speed) != 4)
-+	if (sscanf(buf, "%u %u %u %u %u", &port, &sockfd, &devid, &speed, &dma_bits) != 5)
- 		return -EINVAL;
- 	pdev_nr = port_to_pdev_nr(port);
- 	rhport = port_to_rhport(port);
- 
- 	usbip_dbg_vhci_sysfs("port(%u) pdev(%d) rhport(%u)\n",
- 			     port, pdev_nr, rhport);
--	usbip_dbg_vhci_sysfs("sockfd(%u) devid(%u) speed(%u)\n",
--			     sockfd, devid, speed);
-+	usbip_dbg_vhci_sysfs("sockfd(%u) devid(%u) speed(%u) dma_bits(%u)\n",
-+			     sockfd, devid, speed, dma_bits);
- 
- 	/* check received parameters */
- 	if (!valid_args(&pdev_nr, &rhport, speed))
-@@ -346,6 +347,8 @@ static ssize_t attach_store(struct device *dev, struct device_attribute *attr,
- 		dev_err(dev, "port %d is not ready\n", port);
- 		return -EAGAIN;
- 	}
-+	/* Set the real USB controller's dma mask to vhci-hcd driver. */
-+	dma_set_mask(dev, DMA_BIT_MASK(dma_bits));
- 
- 	vhci_hcd = hcd_to_vhci_hcd(hcd);
- 	vhci = vhci_hcd->vhci;
-diff --git a/tools/usb/usbip/libsrc/usbip_common.h b/tools/usb/usbip/libsrc/usbip_common.h
-index 73a367a7fa10..c87d74917c2a 100644
---- a/tools/usb/usbip/libsrc/usbip_common.h
-+++ b/tools/usb/usbip/libsrc/usbip_common.h
-@@ -115,6 +115,7 @@ struct usbip_usb_device {
- 	uint32_t busnum;
- 	uint32_t devnum;
- 	uint32_t speed;
-+	uint32_t dma_bits;
- 
- 	uint16_t idVendor;
- 	uint16_t idProduct;
-diff --git a/tools/usb/usbip/libsrc/usbip_host_common.c b/tools/usb/usbip/libsrc/usbip_host_common.c
-index ca78aa368476..7f5cc44236c9 100644
---- a/tools/usb/usbip/libsrc/usbip_host_common.c
-+++ b/tools/usb/usbip/libsrc/usbip_host_common.c
-@@ -61,6 +61,38 @@ static int32_t read_attr_usbip_status(struct usbip_usb_device *udev)
- 	return value;
- }
- 
-+static int32_t read_attr_usbip_dma_bits(struct usbip_usb_device *udev)
-+{
-+	char dma_bits_attr_path[SYSFS_PATH_MAX];
-+	int size;
-+	int fd;
-+	int length;
-+	char dma_bits[3] = { 0 };
-+
-+	size = snprintf(dma_bits_attr_path, sizeof(dma_bits_attr_path),
-+			"%s/usbip_dma_bits", udev->path);
-+	if (size < 0 || (unsigned int)size >= sizeof(dma_bits_attr_path)) {
-+		err("usbip_dma_bits path length %i >= %lu or < 0", size,
-+		    (unsigned long)sizeof(dma_bits_attr_path));
-+		return -1;
-+	}
-+
-+	fd = open(dma_bits_attr_path, O_RDONLY);
-+	if (fd < 0) {
-+		err("error opening attribute %s", dma_bits_attr_path);
-+		return -1;
-+	}
-+	length = read(fd, dma_bits, 2);
-+	if (length < 0) {
-+		err("error reading attribute %s", dma_bits_attr_path);
-+		close(fd);
-+		return -1;
-+	}
-+	udev->dma_bits = atoi(dma_bits);
-+	close(fd);
-+	return 0;
-+}
-+
- static
- struct usbip_exported_device *usbip_exported_device_new(
- 		struct usbip_host_driver *hdriver, const char *sdevpath)
-@@ -82,6 +114,8 @@ struct usbip_exported_device *usbip_exported_device_new(
- 	if (hdriver->ops.read_device(edev->sudev, &edev->udev) < 0)
- 		goto err;
- 
-+	read_attr_usbip_dma_bits(&edev->udev);
-+
- 	edev->status = read_attr_usbip_status(&edev->udev);
- 	if (edev->status < 0)
- 		goto err;
-diff --git a/tools/usb/usbip/libsrc/vhci_driver.c b/tools/usb/usbip/libsrc/vhci_driver.c
-index 8159fd98680b..e5fc4a048a5f 100644
---- a/tools/usb/usbip/libsrc/vhci_driver.c
-+++ b/tools/usb/usbip/libsrc/vhci_driver.c
-@@ -355,15 +355,15 @@ int usbip_vhci_get_free_port(uint32_t speed)
- }
- 
- int usbip_vhci_attach_device2(uint8_t port, int sockfd, uint32_t devid,
--		uint32_t speed) {
-+		uint32_t speed, uint32_t dma_bits) {
- 	char buff[200]; /* what size should be ? */
- 	char attach_attr_path[SYSFS_PATH_MAX];
- 	char attr_attach[] = "attach";
- 	const char *path;
- 	int ret;
- 
--	snprintf(buff, sizeof(buff), "%u %d %u %u",
--			port, sockfd, devid, speed);
-+	snprintf(buff, sizeof(buff), "%u %d %u %u %u",
-+			port, sockfd, devid, speed, dma_bits);
- 	dbg("writing: %s", buff);
- 
- 	path = udev_device_get_syspath(vhci_driver->hc_device);
-@@ -389,11 +389,11 @@ static unsigned long get_devid(uint8_t busnum, uint8_t devnum)
- 
- /* will be removed */
- int usbip_vhci_attach_device(uint8_t port, int sockfd, uint8_t busnum,
--		uint8_t devnum, uint32_t speed)
-+		uint8_t devnum, uint32_t speed, uint32_t dma_bits)
- {
- 	int devid = get_devid(busnum, devnum);
- 
--	return usbip_vhci_attach_device2(port, sockfd, devid, speed);
-+	return usbip_vhci_attach_device2(port, sockfd, devid, speed, dma_bits);
- }
- 
- int usbip_vhci_detach_device(uint8_t port)
-diff --git a/tools/usb/usbip/libsrc/vhci_driver.h b/tools/usb/usbip/libsrc/vhci_driver.h
-index 6c9aca216705..bf40aa23b6f3 100644
---- a/tools/usb/usbip/libsrc/vhci_driver.h
-+++ b/tools/usb/usbip/libsrc/vhci_driver.h
-@@ -54,11 +54,11 @@ int  usbip_vhci_refresh_device_list(void);
- 
- int usbip_vhci_get_free_port(uint32_t speed);
- int usbip_vhci_attach_device2(uint8_t port, int sockfd, uint32_t devid,
--		uint32_t speed);
-+		uint32_t speed, uint32_t dma_bits);
- 
- /* will be removed */
- int usbip_vhci_attach_device(uint8_t port, int sockfd, uint8_t busnum,
--		uint8_t devnum, uint32_t speed);
-+		uint8_t devnum, uint32_t speed, uint32_t dma_bits);
- 
- int usbip_vhci_detach_device(uint8_t port);
- 
-diff --git a/tools/usb/usbip/src/usbip_attach.c b/tools/usb/usbip/src/usbip_attach.c
-index 531a415538f9..453987782eec 100644
---- a/tools/usb/usbip/src/usbip_attach.c
-+++ b/tools/usb/usbip/src/usbip_attach.c
-@@ -100,7 +100,7 @@ static int import_device(int sockfd, struct usbip_usb_device *udev)
- 		dbg("got free port %d", port);
- 
- 		rc = usbip_vhci_attach_device(port, sockfd, udev->busnum,
--					      udev->devnum, udev->speed);
-+					      udev->devnum, udev->speed, udev->dma_bits);
- 		if (rc < 0 && errno != EBUSY) {
- 			err("import device");
- 			goto err_driver_close;
-diff --git a/tools/usb/usbip/src/usbip_network.c b/tools/usb/usbip/src/usbip_network.c
-index ed4dc8c14269..2c97db9ea567 100644
---- a/tools/usb/usbip/src/usbip_network.c
-+++ b/tools/usb/usbip/src/usbip_network.c
-@@ -79,6 +79,7 @@ void usbip_net_pack_usb_device(int pack, struct usbip_usb_device *udev)
- 	udev->busnum = usbip_net_pack_uint32_t(pack, udev->busnum);
- 	udev->devnum = usbip_net_pack_uint32_t(pack, udev->devnum);
- 	udev->speed = usbip_net_pack_uint32_t(pack, udev->speed);
-+	udev->dma_bits = usbip_net_pack_uint32_t(pack, udev->dma_bits);
- 
- 	udev->idVendor = usbip_net_pack_uint16_t(pack, udev->idVendor);
- 	udev->idProduct = usbip_net_pack_uint16_t(pack, udev->idProduct);
 -- 
 2.34.1
 
