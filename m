@@ -1,133 +1,75 @@
-Return-Path: <linux-usb+bounces-20804-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20805-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 224DCA3B298
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 08:38:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80545A3B2B2
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 08:42:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B25C3B250F
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 07:37:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17C2F1898495
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 07:42:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD1701C1F3B;
-	Wed, 19 Feb 2025 07:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C3E81C5D72;
+	Wed, 19 Feb 2025 07:41:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eaBGHvZW"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IxokOxz0"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 290D2DF42;
-	Wed, 19 Feb 2025 07:37:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C051C4A10
+	for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 07:41:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739950632; cv=none; b=P0BWJUek5IfnIHmbBwSQbwHkse0NBn/+OpHAGLzPQ01xionq6wzsIaopvA3pS2hntmHhBI6Yw5MYnREfz+K+Xm94qg8k98PAJrmgphn0tHY0/3NxjBhxm9BDw4K0vdsgkezJcZr+rr1BV1nyw2uZFaaeCh3lNouRxHzlpIsAFwc=
+	t=1739950918; cv=none; b=JPPQL3WcXSbOveRst7O7lX1A3J+0aV4pmYKcpDZEdClYjU+kWxKiTVDu+aaad0LeVWkfBpULpDFcotwLPqUUWxUzQDBKtgCBYZ0t11nEGglKUneoLfrpd0Xtc0A2rp5X7tDGCCjdwDAU9R+5pfehn82vPXHQFV1VP4u7jC5XqCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739950632; c=relaxed/simple;
-	bh=x9/qovFKSIHMvPM21K/JGZ95Y1kS3BPfX8MyNhsSuWM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dHJPQYXmTS2sYpVyLgowfoPXkI56C0xXvu4pyehFwNB56q8RsybZ0U9rLq+x1iRJo9OD8x4Ckxbgv7ZOwjjzW7tFCyJ1xCsxB4ktN6sxMnxxd/PB7sn0ahuEOUEI54XIpSsW+UyX5C1VKVCmX8pASvZoI6xDnAznPtkIUe0QQp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eaBGHvZW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9092BC4CED1;
-	Wed, 19 Feb 2025 07:37:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739950631;
-	bh=x9/qovFKSIHMvPM21K/JGZ95Y1kS3BPfX8MyNhsSuWM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=eaBGHvZWcbVaK2tdrBBMoiwEBY+jRiyOq24JjNsqoHMXFefIuG3fTOgInwvzKrAyg
-	 b+UUyI7RocKXxRDPHyQynVlUEGwcmfXa/qn0vv3gh78Qo6MqYliyGIMECRutQ/GDvo
-	 TgC5Zsv8XF83qiZcFjkfTm9NUsB3G/KvkCSD64iP8FWibLigNgrRI7ia0i4BBgT/5P
-	 iKl+y7cetfNTOrDcfA/T4sC69JM93CDh/t9nFBnAZOrA9Tk9kUZfwT84Kk5JbAwfsQ
-	 jxBLFh96+yRMPI5OG/AaJVM/0R3ACyo21Ml/XNVf76i9/mOeyHvLb5+9xW+mou2R5i
-	 wTHF9mqnmE+qg==
-Message-ID: <b0e0db3c-2a06-4c14-939f-fa60d7433434@kernel.org>
-Date: Wed, 19 Feb 2025 08:37:04 +0100
+	s=arc-20240116; t=1739950918; c=relaxed/simple;
+	bh=lxKL/9XNaxy0drZJ0D8wSkuGhfTfmUG26oVlmhxr7Is=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AHA6Lz952rpQbqO2dRkc9qrmC/9Do4It4KtHEg7jssN7yg3zI12WaySuLE+BiIRnsnkwGKNJ2RfXzk8D9FjflP1Dul79nBj2mNoqYiSAti2szEcOnj6HGzp0D5fiBuO84UNSVe2WUg6rNhMpPhtYDqL1+aWZjvoHV/waEn7KuZc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IxokOxz0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA05C4CED1;
+	Wed, 19 Feb 2025 07:41:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1739950917;
+	bh=lxKL/9XNaxy0drZJ0D8wSkuGhfTfmUG26oVlmhxr7Is=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IxokOxz0SaIhltRcBporSl1mhVnPh4npTdn3WxO2BM8xMAd6vkbiMwYDvG74YBBr4
+	 jS1T6WB/X0qCILHHzlJt5RvLM0hJq5gXspz7yo0nRXIsqjXTxDToSyd8WJmznPnZK5
+	 9+ZR47PwGiwgw31K1i3UESUU/u6KVgSXI1kyiVQk=
+Date: Wed, 19 Feb 2025 08:41:55 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Philipp Leskovitz <philipp.leskovitz@secunet.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: use-after-free with Lenovo Ultra Docking Station
+Message-ID: <2025021908-aware-babbling-ec8a@gregkh>
+References: <76af1506-3425-4d6a-b388-3304823fdd82@secunet.com>
+ <2025021853-stained-scared-9e60@gregkh>
+ <e48ff1fe-4e44-41b8-861d-cff2b9b509bd@secunet.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] dt-bindings: usb: samsung,exynos-dwc3 Add exynos990
- compatible
-To: Igor Belwon <igor.belwon@mentallysanemainliners.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250217-exynos990-bindings-usb3-v2-1-3b3f0809f4fb@mentallysanemainliners.org>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250217-exynos990-bindings-usb3-v2-1-3b3f0809f4fb@mentallysanemainliners.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e48ff1fe-4e44-41b8-861d-cff2b9b509bd@secunet.com>
 
-On 17/02/2025 20:44, Igor Belwon wrote:
-> Add a compatible for the exynos990-dwusb3 node. It's compatible with the
-> exynos850 variant when using the highspeed mode.
+On Wed, Feb 19, 2025 at 08:35:37AM +0100, Philipp Leskovitz wrote:
+> Hello Greg,
 > 
-> Signed-off-by: Igor Belwon <igor.belwon@mentallysanemainliners.org>
-> ---
-> The Exynos990 SoC embeds a DWC3 USB3 DRD controller.
+> Thank you for your message. With kernel 6.13.0 I get a different error message when I click the notebook Lenovo T490 into or out of the docking station (ThinkPad Ultra Docking Station, Type 40AJ).
 > 
-> The controller's design is compatible with the Exynos850 design
-> for high-speed mode.
-> 
-> This patchset adds in the new exynos990-dwusb3 compatible.
-> ---
-> Changes in v2:
-> - bindings: re-check, fix picking the dwusb3 compatible
-> - Link to v1: https://lore.kernel.org/r/20250214-exynos990-bindings-usb3-v1-1-3e5d2721c98c@mentallysanemainliners.org
+> <4>[    0.568971] ------------[ cut here ]------------
+> <2>[    0.568973] kernel BUG at drivers/pci/setup-bus.c:2156!
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Great!  Please send this information to the developers on the linux-pci
+mailing list and they should be able to help you out.  Something is
+going wrong when the pci bus lists are being allocated for this system.
 
-Best regards,
-Krzysztof
+thanks,
+
+greg k-h
 
