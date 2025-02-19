@@ -1,134 +1,128 @@
-Return-Path: <linux-usb+bounces-20819-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20820-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5405A3BD21
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 12:40:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAE94A3BD65
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 12:49:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B1977A4BEE
-	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 11:39:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00A593B71FD
+	for <lists+linux-usb@lfdr.de>; Wed, 19 Feb 2025 11:47:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E18A21DF251;
-	Wed, 19 Feb 2025 11:40:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 670201DED43;
+	Wed, 19 Feb 2025 11:47:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="aUOG/zxj"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="fM/JeB2i"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 962151B0F14;
-	Wed, 19 Feb 2025 11:40:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBACD2862AB;
+	Wed, 19 Feb 2025 11:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739965240; cv=none; b=njl9oPflxaJweS1DytLtRBG17o2CYiQxvywv/eT70SolLEaKv59pwkNS5WSZmwLXQ6haOhtLxLlwD5msCgoP2dv1R//O/SbuZLEV6t4muSVTMIyMZOFWl77q6MxWDN1pWU9KqvamZVJawa7Y/UfNlH4x2lS2tccotVBbpudl/zs=
+	t=1739965632; cv=none; b=Dd3XURPVe8wgrpKoeBmTrJHvoJCn83TjDjq/Q6usbixa57Qr3GDjWPpMem/dwvdKGHHEfivyndXdltJCA8XpZsdeDc8fH4nPjFt170jS1V+ZiT0smQxB7iTFZIa4tBkXdWdD4zh0DUyzo4bzXjPc4BoBVi+NtcOx1j9MAsqufLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739965240; c=relaxed/simple;
-	bh=cblgXayDPJf1znaW+MZ1SDfZhZg9tXdjFRdA1h7wjwg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mGvRLRIkjxiWXf3Rx4Tfe1orVc5BliH4E2D+gzmuEn/TRxw8B9wE0xJamVF0SJMvpb6uHIG2QoL84EvhyvdsX4dKl/AypmdraZ3X3tRzkGu0ZGvvNY5l8mWzLoe0S7gx6DdTDJVWS0xZvYyj/tM+34DM7eH/kniOZCFmOcNZ1hw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=aUOG/zxj; arc=none smtp.client-ip=148.251.105.195
+	s=arc-20240116; t=1739965632; c=relaxed/simple;
+	bh=rg6JGBnwoyXj86f8SpVJXTpW47+6OxJFViPXzvv9jmI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Lp3gVgflR00HVvc4MKoe13IjyvzLuY9/14oEVUcHyfmVUwTHa/riDhL7F5IwCzdobTF6HLysVMONjBMHnygAIQEwUGZutIz/uLO+WAQi/T072sYUAo3/jXJDxDOMeBJ5H+8qsHd7ABxDYuGv0TOvwRzyEN1pylFHKPWe4lF0oCI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=fM/JeB2i; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1739965236;
-	bh=cblgXayDPJf1znaW+MZ1SDfZhZg9tXdjFRdA1h7wjwg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=aUOG/zxj1hxxuGfzU3RK2Vx93gPkwVvd6dalDA3uo0eOs6f20IjhaB4ubfBblSLCg
-	 he+iT4rlo85pq4rPT/rZYlmiEQl++uBe36ZW+pwyw6Q0kLGxocUKc+ezm7QbKjD6j/
-	 k75JXv6WaYkXFKjzsZrG1Cupm8v6qXyPiwP/PvmKMzv0hZGtWDxekD0HWTv+c0790M
-	 jxsCpCdoG6gRS2QauWv706yqZcjg7W33kMa/ohJQWAwin4bpYrjNDjjpbx+vlyFVZ9
-	 yEj1Bk6JUJG1zp5LtomaFBIYcTUN1a0EPKTcj1UgBZSGPR+T5e/dR7A20QF3PvktWR
-	 HINQC8s5jjLPQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	s=mail; t=1739965628;
+	bh=rg6JGBnwoyXj86f8SpVJXTpW47+6OxJFViPXzvv9jmI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fM/JeB2iogD97w6JKDoOUBC8fWHgQxvym/3+yMS8tVYNmzRxXgf3ew69yFp61Pi02
+	 X4P+kFAV42toqtgLXBDW5tHHe9eJx/lpQVkkSasjoByjafe14qT2xeg+RGpu/amhGk
+	 dPxnHAA0aNQe7MFV/YqiuCipmCeP5pxTzn05fKDbj0Woa58DayOR64JbZoFdiYb1gm
+	 7GobKKkYXcAnNabim9Tf17vLgev3qcyfToNMRO/rT5GbUa1dKmVz3ZslgnrBCwen8H
+	 AelxJDR7Chti9r+sRRdVUcQbC0HqJAdwTSv9ahhFA4oWWiXN2EcZhY9LewKzDpSA/B
+	 sqy9KsGUl0GYw==
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 4157717E00F0;
-	Wed, 19 Feb 2025 12:40:36 +0100 (CET)
-Message-ID: <2e49e0ca-3542-4b6f-b92f-cd5631b14f97@collabora.com>
-Date: Wed, 19 Feb 2025 12:40:35 +0100
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 5A58617E0E92;
+	Wed, 19 Feb 2025 12:47:07 +0100 (CET)
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+To: heikki.krogerus@linux.intel.com
+Cc: gregkh@linuxfoundation.org,
+	andre.draszik@linaro.org,
+	angelogioacchino.delregno@collabora.com,
+	linux@roeck-us.net,
+	shufan_lee@richtek.com,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kernel@collabora.com,
+	pablo.sun@mediatek.com
+Subject: [PATCH v2] usb: typec: tcpci_rt1711h: Unmask alert interrupts to fix functionality
+Date: Wed, 19 Feb 2025 12:47:00 +0100
+Message-ID: <20250219114700.41700-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: typec: tcpci_rt1711h: Unmask alert interrupts to fix
- functionality
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: heikki.krogerus@linux.intel.com, andre.draszik@linaro.org,
- linux@roeck-us.net, shufan_lee@richtek.com, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org, kernel@collabora.com, pablo.sun@mediatek.com
-References: <20250212104040.38723-1-angelogioacchino.delregno@collabora.com>
- <2025021424-uncurious-slicer-b35f@gregkh>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <2025021424-uncurious-slicer-b35f@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Il 14/02/25 09:10, Greg KH ha scritto:
-> On Wed, Feb 12, 2025 at 11:40:40AM +0100, AngeloGioacchino Del Regno wrote:
->> During probe, the TCPC alert interrupts are getting masked to
->> avoid unwanted interrupts during chip setup: this is ok to do
->> but there is no unmasking happening at any later time, which
->> means that the chip will not raise any interrupt, essentially
->> making it not functional as, while internally it does perform
->> all of the intended functions, it won't signal anything to the
->> outside.
->>
->> Unmask the alert interrupts to fix functionality.
->>
->> Fixes: ce08eaeb6388 ("staging: typec: rt1711h typec chip driver")
->> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->> ---
->>   drivers/usb/typec/tcpm/tcpci_rt1711h.c | 10 ++++++++++
->>   1 file changed, 10 insertions(+)
->>
->> diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
->> index 64f6dd0dc660..c71b213b2441 100644
->> --- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
->> +++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
->> @@ -334,6 +334,11 @@ static int rt1711h_probe(struct i2c_client *client)
->>   {
->>   	int ret;
->>   	struct rt1711h_chip *chip;
->> +	const u16 alert_mask = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_DISCARDED |
->> +			       TCPC_ALERT_TX_FAILED | TCPC_ALERT_RX_HARD_RST |
->> +			       TCPC_ALERT_RX_STATUS | TCPC_ALERT_POWER_STATUS |
->> +			       TCPC_ALERT_CC_STATUS | TCPC_ALERT_RX_BUF_OVF |
->> +			       TCPC_ALERT_FAULT;
->>   
->>   	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
->>   	if (!chip)
->> @@ -384,6 +389,11 @@ static int rt1711h_probe(struct i2c_client *client)
->>   		return ret;
->>   	enable_irq_wake(client->irq);
->>   
->> +	/* Enable alert interrupts */
->> +	ret = rt1711h_write16(chip, TCPC_ALERT_MASK, alert_mask);
->> +	if (ret < 0)
->> +		return ret;
-> 
-> If this fails, don't you then need to disable the wake irq you just
-> enabled?  If not, why not?
-> 
+During probe, the TCPC alert interrupts are getting masked to
+avoid unwanted interrupts during chip setup: this is ok to do
+but there is no unmasking happening at any later time, which
+means that the chip will not raise any interrupt, essentially
+making it not functional as, while internally it does perform
+all of the intended functions, it won't signal anything to the
+outside.
 
-Right, that was naive on my side, I was relying on devm_request_threaded_irq
-but then the wakeup interrupt stays there, so that needs to be addressed.
+Unmask the alert interrupts to fix functionality.
 
-Expect a v2 today.
+Fixes: ce08eaeb6388 ("staging: typec: rt1711h typec chip driver")
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
 
-Cheers,
-Angelo
+Changes in v2:
+ - Moved interrupts enablement call to before enabling irq wakeup as
+   enable_irq_wake() cannot fail, and if anything goes wrong, since the
+   interrupt was previously requested with devm, no further action is
+   needed. Thanks Greg!
 
-> thanks,
-> 
-> greg k-h
+ drivers/usb/typec/tcpm/tcpci_rt1711h.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
+diff --git a/drivers/usb/typec/tcpm/tcpci_rt1711h.c b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+index 64f6dd0dc660..88c50b984e8a 100644
+--- a/drivers/usb/typec/tcpm/tcpci_rt1711h.c
++++ b/drivers/usb/typec/tcpm/tcpci_rt1711h.c
+@@ -334,6 +334,11 @@ static int rt1711h_probe(struct i2c_client *client)
+ {
+ 	int ret;
+ 	struct rt1711h_chip *chip;
++	const u16 alert_mask = TCPC_ALERT_TX_SUCCESS | TCPC_ALERT_TX_DISCARDED |
++			       TCPC_ALERT_TX_FAILED | TCPC_ALERT_RX_HARD_RST |
++			       TCPC_ALERT_RX_STATUS | TCPC_ALERT_POWER_STATUS |
++			       TCPC_ALERT_CC_STATUS | TCPC_ALERT_RX_BUF_OVF |
++			       TCPC_ALERT_FAULT;
+ 
+ 	chip = devm_kzalloc(&client->dev, sizeof(*chip), GFP_KERNEL);
+ 	if (!chip)
+@@ -382,6 +387,12 @@ static int rt1711h_probe(struct i2c_client *client)
+ 					dev_name(chip->dev), chip);
+ 	if (ret < 0)
+ 		return ret;
++
++	/* Enable alert interrupts */
++	ret = rt1711h_write16(chip, TCPC_ALERT_MASK, alert_mask);
++	if (ret < 0)
++		return ret;
++
+ 	enable_irq_wake(client->irq);
+ 
+ 	return 0;
+-- 
+2.48.1
 
 
