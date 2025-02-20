@@ -1,82 +1,72 @@
-Return-Path: <linux-usb+bounces-20874-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20875-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB9D1A3DD05
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 15:37:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83FD0A3DD3F
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 15:48:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 615DD4219F3
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 14:35:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C65F73BAA1D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 14:41:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57A8C1FBCB6;
-	Thu, 20 Feb 2025 14:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 603E51FCF45;
+	Thu, 20 Feb 2025 14:41:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="pOPGWVnn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XvVa1DoJ"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF42D1D5AD4;
-	Thu, 20 Feb 2025 14:34:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C3F1FBEB7
+	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 14:41:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740062094; cv=none; b=V/PgfJ7GXoRnRsg3efwJSJQwqys5btERKDGHYrvm7P6xCgsQS5FT1CmOWLFXd2YNQhtA5GCgmdKmjZtt1sfzjQWPur9BuGrt33idXKq5bHN83BinM49uSb5Ki2P2I0FeS5u5Ucu3t02H8X3JDSbp22pQR8SorjgfGDt7UjvnnD8=
+	t=1740062512; cv=none; b=nrcIdfwq/5krY8ruhmrYb52Xgc4Ryq8F1fT2QEBA4bxJXinF8Ns78UieT30OidGy0u3xeZm1bojPilzp/9+lsxo8X0vthISjEPnpMQswic4migeX6TJ8dXdqxuhvWvqfYhkwEho7HTZRLmaTwnR0/oLe4PRVLgqIbm+B2EpkBSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740062094; c=relaxed/simple;
-	bh=lE5AXf9alDZl07YL5bLXxY1kDbZritBNauw65SCYKY4=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ZnfkwXzjQpHDbVN+x6q8fcvKilk/q3k7At3n36fTgCAjYnt7E3VK9AfEcthNCH2gwF+R3OShXxMGUWH8qE6Cs1OO9iOZ6w3vSGKi4+DehjT0Ta3Usz9ycrJ42bqEsYwl+ulUJO3T7DK3Kk1tQolS3anFAkcgQiz+Ey2R4axRsLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=pOPGWVnn; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: d59e5932ef9711efaae1fd9735fae912-20250220
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=PSrQTSCqMjbqIbURLRKTd4NKXbT6AEa8/dleY0GQJaQ=;
-	b=pOPGWVnnNq48hkYu4FY898PCNbCrVpZpKkJIgVMO+nkEmfRYrDDh7V/FHSVQIW2iN+I1Faiu7/9iRzNe6nPUSRSTVClE78miqt2BhK8l+VZLbAxNs0FYbfNPdfNriJUkJJxIFR4mjlOlEUS9LFlLiSO3Vg66uMEDo2dijLxWXvE=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.46,REQID:c927acf8-5a3b-4064-8c00-fea434e67a8a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:60aa074,CLOUDID:b09921dc-d480-4873-806f-0f365159227b,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: d59e5932ef9711efaae1fd9735fae912-20250220
-Received: from mtkmbs13n2.mediatek.inc [(172.21.101.108)] by mailgw01.mediatek.com
-	(envelope-from <macpaul.lin@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 2005052567; Thu, 20 Feb 2025 22:34:47 +0800
-Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Thu, 20 Feb 2025 22:34:46 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.28 via Frontend Transport; Thu, 20 Feb 2025 22:34:46 +0800
-From: Macpaul Lin <macpaul.lin@mediatek.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
-	<matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>, Alexandre Mergnat
-	<amergnat@baylibre.com>
-CC: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
-	Macpaul Lin <macpaul.lin@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<linux-usb@vger.kernel.org>, Chris-qj chen <chris-qj.chen@mediatek.com>,
-	Fabien Parent <fparent@baylibre.com>, Simon Sun <simon.sun@yunjingtech.com>
-Subject: [PATCH v4 2/2] arm64: dts: mediatek: mt8395-genio-1200-evk: add support for MUX IT5205
-Date: Thu, 20 Feb 2025 22:33:54 +0800
-Message-ID: <20250220143354.2532448-2-macpaul.lin@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250220143354.2532448-1-macpaul.lin@mediatek.com>
-References: <20250220143354.2532448-1-macpaul.lin@mediatek.com>
+	s=arc-20240116; t=1740062512; c=relaxed/simple;
+	bh=9xhPN2Dq1xefu0LKZ1+Thk5SLlgmDgwjMvIOwgM3Dcw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L2+EQKFp/m9Yn+5q4Xi3hsH7LCGZc0zuiT9Y8yFA0KCe6IKytDo35T2nwdjCrl/Usdgin4UtgjcFBVH25HEmuefWWCCnaUGfcYeiRIpWW7yvTIYJHAgnFiP0EPCzSu4jLqY8nI4qRKuInUnUGZ2FkwUhfb7KHhsXIl8vYPlJz+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XvVa1DoJ; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740062511; x=1771598511;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=9xhPN2Dq1xefu0LKZ1+Thk5SLlgmDgwjMvIOwgM3Dcw=;
+  b=XvVa1DoJrazMo0Dz9ghpjt0LMWOgH6N9JekD0aOOLrbzeYJUz3L/h+b2
+   vu3cHfVbIC+LmVmGzHlOxkFsr5ip/YwjBHqWW2dtEbdYGfQnKYJu++qKn
+   QaT/B0eAhlJu2ZoB29GXreVGpvrLxZBRiN0qhiTpnQsEbmg+6iUGxnH6k
+   svWurN+FmqhF65N935L/GlgwLNOZKQIjpPOAE2/QDYZafGNonyc2LZ9Zz
+   xoJKshpnWauwmawn+xX9fis5ce2dg+WbeEaB6FTTXEMleFroq5UU5xW/g
+   0YqWb6GsNI4lJiUGqoobiX5pwaCWuxcHy5QPFEdjQMam02VdtC3no4FCS
+   g==;
+X-CSE-ConnectionGUID: W5YPdW0aTwKwzR2wgyC6Ng==
+X-CSE-MsgGUID: g/zSsF89Rn2os9gR0S3c4w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41049645"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="41049645"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 06:41:51 -0800
+X-CSE-ConnectionGUID: HT1FkqRsS6SznFj7PVVYbQ==
+X-CSE-MsgGUID: 9L4Fa6J4RcifR5ZQVA1Yiw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,301,1732608000"; 
+   d="scan'208";a="138260504"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa002.fm.intel.com with ESMTP; 20 Feb 2025 06:41:49 -0800
+Received: by black.fi.intel.com (Postfix, from userid 1058)
+	id 307B3123; Thu, 20 Feb 2025 16:41:48 +0200 (EET)
+From: Niklas Neronin <niklas.neronin@linux.intel.com>
+To: mathias.nyman@linux.intel.com
+Cc: linux-usb@vger.kernel.org,
+	Niklas Neronin <niklas.neronin@linux.intel.com>
+Subject: [PATCH v4 0/2] usb: xhci: page size improvements
+Date: Thu, 20 Feb 2025 16:40:35 +0200
+Message-ID: <20250220144037.2723533-1-niklas.neronin@linux.intel.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -84,73 +74,40 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
 
-Add ITE IT5205 (TYPEC MUX) under I2C2 bus and configure its properties;
-also add references to it5205fn from MT6360 TYPE-C connector for TYPEC
-configuration.
+Correct off-by-one page size debug message.
+Set page size to the xHCI-supported size, instead of 4KB.
 
-Signed-off-by: Fabien Parent <fparent@baylibre.com>
-Signed-off-by: Simon Sun <simon.sun@yunjingtech.com>
-Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
----
- .../dts/mediatek/mt8395-genio-1200-evk.dts    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Clarified the interpretation of the xHCI spec 1.9 regarding page size.
+The correct interpretation is that only one bit is set, indicating the
+only supported page size. This is supported by the following sources:
 
-Changes for v2:
- - This is a new patch in the v2 patch.
+Section 6.6.1, PSZ:
+  The PSZ calculation uses the page size bit and would not work with
+  multiple bits set.
 
-Changes for v3:
- - No change.
+Section 7.7, Implementation Notes:
+  "This version of the xHCI spec only allows an implementation to support
+   a single page size, as reported by the PAGESIZE register."
 
-Changes fo4 v4:
- - Drop it5205fn phandle for node typec-mux@48.
- - Reorder properties of typec-mux@48
- - Add "Reviewed-by:" tag. Thanks!
+Version 4 changes:
+ * Replace manual power of 2 check with is_power_of_2()
+Version 3 changes:
+ * Rebase agains Linux 6.14-rc1.
+ * Repalce variable int 'i' with unsigned int 'val'.
+ * Rename temp variable 'page_shift' to 'page_size'.
+Version 2 changes:
+ * Added handling for invalid page size register values.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts b/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
-index ca039c8e4c71..8ec5c4cf59f3 100644
---- a/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dts
-@@ -224,6 +224,21 @@ &i2c2 {
- 	pinctrl-0 = <&i2c2_pins>;
- 	pinctrl-names = "default";
- 	status = "okay";
-+
-+	typec-mux@48 {
-+		compatible = "ite,it5205";
-+		reg = <0x48>;
-+		vcc-supply = <&mt6359_vibr_ldo_reg>;
-+		mode-switch;
-+		orientation-switch;
-+		status = "okay";
-+
-+		port {
-+			it5205_sbu_ep: endpoint {
-+				remote-endpoint = <&mt6360_ssusb_sbu_ep>;
-+			};
-+		};
-+	};
- };
- 
- &i2c6 {
-@@ -368,6 +383,13 @@ typec_con_ss: endpoint {
- 							remote-endpoint = <&mtu3_ss0_role_sw>;
- 						};
- 					};
-+
-+					port@2 {
-+						reg = <2>;
-+						mt6360_ssusb_sbu_ep: endpoint {
-+							remote-endpoint = <&it5205_sbu_ep>;
-+						};
-+					};
- 				};
- 			};
- 		};
+Niklas Neronin (2):
+  usb: xhci: correct debug message page size calculation
+  usb: xhci: set page size to the xHCI-supported size
+
+ drivers/usb/host/xhci-mem.c | 34 ++++++++++++++++++----------------
+ drivers/usb/host/xhci.h     |  8 ++++----
+ 2 files changed, 22 insertions(+), 20 deletions(-)
+
 -- 
-2.45.2
+2.47.2
 
 
