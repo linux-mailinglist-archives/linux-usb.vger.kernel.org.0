@@ -1,182 +1,234 @@
-Return-Path: <linux-usb+bounces-20846-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20847-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D41EA3D059
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 05:18:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 164C2A3D0F7
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 06:44:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B30B189D75B
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 04:18:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63CAD3BF2B3
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 05:40:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABF691DF25D;
-	Thu, 20 Feb 2025 04:18:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TZf73HGj"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2395C1E570E;
+	Thu, 20 Feb 2025 05:36:27 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B89E2AE74
-	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 04:18:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73631F130B
+	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 05:36:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740025088; cv=none; b=bEvZgnwuLB9he2VMpkBOj+5rmCARCSjEMfBxHuPMq5d1TJU5Y3VfSNSd5sf/T4X/axq8TJFggA3tzpF42RhBB1JUJXWDA6pOjAmvG4DuiBzezX29KAUSdGgeUOV5jFv1wfGcNxKzV3SnjZ+Pbbk3jaIHDFtn+923kp1r6A7NF+c=
+	t=1740029786; cv=none; b=VevvPJ6/j7fCUh2u8qN12YsSlESqamrAhoHws1ePOErB1pknVYCVp3Z9SjTQ0S8gdp6npxDm7a0G1HLSkkVHduryD4HYo6ZIN/XiGBz0oLI1rgfxZZXXlujmCxsM2/IwI40430Zpl/J4PFXLigq3urYH4jdY2y9aE0Yz0fc67HA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740025088; c=relaxed/simple;
-	bh=YSEjraTqXDeRQBh8CNH5p+277cVhLpkvPPYGjeg65IQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kaq4D1xkAbzSL2ZZ8Qa8v1KWIQoxZe7aSLzgh+vXEPVmSs+upIJtn73SmSJ5YDwHkw6dSUeadfV0zmUuQYHqZqm52wl4IInACW7eLYSD84yP5E7xiYL6yNHqDC6zwhty/vuaxqAkOLP/z/oeJvJlaWgcFK2dIV1xIDN96t4pbSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TZf73HGj; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51JH4LJQ012222
-	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 04:18:05 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	xrKJIPHCFT6rlsmSWrKg/q/1/2FaZ14FL8GOa1MNCoo=; b=TZf73HGjsb+qg3wZ
-	+1d5Jtj0BNMnP7S3YZjDbFqkVR3rzPRg5/zyILZptIL4TiogMLZr1yTDB/tNzoR2
-	+3PfgBFJ0eRqh4Ry6TrykpnfEnXX7NpCifKuqehVz94/siVo/1EjwqCX1S3YKA0L
-	cmI7oH8nxHf71SJxL9T20hjogxgljjs0oNJ/+NBGc/+e5lZcT5TmbWvj3TT2QTlk
-	Ohq3KeE0bVAFH8IRShzWim0mJ5uCQTnBbGHKdD8/a5iVsl0ciEysTbpBr00XXmrz
-	DLmwUDNL3kytO3yJeHevnu0V6Op0iH8LC5oZvYnJvbpvRi2MnfYsm6Go5hlB6Jsy
-	1391vw==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44vyy1mu9q-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 04:18:04 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-220d9d98ea6so15610195ad.3
-        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 20:18:04 -0800 (PST)
+	s=arc-20240116; t=1740029786; c=relaxed/simple;
+	bh=86RSQWT0uVYy4scXIZ9dM43r6v/ZNArLrqQm7EBIK1U=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=p5m5XoWR//Xwg6kpxQkZkqW1omuIcKoMuCI2psW/MOk6e5kMmaBnRzQNqX0I/tqc0D4qGQQxmYJQYmA/J0afvF8iTxLH3obYMcpqhDeD3l4+2638GK5B1kX0lUkfXRyibC/2LtscO0br2igbWO2GZoKZ5jkx+YJw3irR5m68MdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-8521d7980beso45774039f.0
+        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 21:36:24 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740025084; x=1740629884;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xrKJIPHCFT6rlsmSWrKg/q/1/2FaZ14FL8GOa1MNCoo=;
-        b=FPpwA9s6SOIT2fiI/w0YBrvzpP3hRmskIsJem2u5ImnTAqYn0kmidR8xZmt3uAhVTD
-         QKV1E6XyCXaZTHqHuE99FP5/ehjMIMhlqNLMupE3HT4QrhxtpbmIw8ZyQx4UWDLL4YDR
-         m3qNXKHT3/SgC0d/rTnpogCsTSpg1T68QXqTA/SQAmUyIxM6hF2GdnSF/OdZXgY8+6Ek
-         iKzwhh96yXCA+o7YoDD6GPcV6apXAoT3AlnpU8JQYJcRiwmpJtZ2Au8OutNygw82tNQR
-         N5tjhaX+GtLius/CCtmGMjPSVahz3PGkfYE4XaFtL6I+I5sJ/VzsRBIeVh/xh/r8Qqcs
-         +AtQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWxU3ZuRuKe56KbYcRpPHL1DLvhRovfnzEPyUs/+b1Sr57tl9cpY/XVToMG5mEmaZ2V3BWBnhSuY1o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyqV1TTLpUToemF5ERQjNc2252n0KyW2Euz6CDzAzlTnd6C6Lhz
-	QiPCKzqCTiqsb170n8hszAun/0FDG2pTPjJ7OF8eDT2wcImz19sTAvjWca1GfLfj7cKKFcLRShd
-	lelG2/t4MEFLdlKaURpg7rBzZEv+/PvnSj4T9J+vOSLzNfknca765Yalx5bI=
-X-Gm-Gg: ASbGncv/pPwaBmOZ6GxhEGnKRKi/76Peksd4IvyWEA+kB255akxUA+EkT4fl8ok3vfA
-	i06EIZDuT2EAH4kgqOWml0u7sDOD3Iim0E46jnwZ5k/Shp7jY8fimaJVm424Cea4yrSlsKfNTnA
-	TZ0IFU+uNRd7KDxcBmxENFQK3JqfEwHDwGWKj7z4PsEDUkzGz9XN9bZus3Y9TRRPg5VGetL3jVb
-	X3R2DAmR3BRhy9ker00eOl33WkJrMeZhnZ9GmA76xySA/GnZpmhmNwqZyYXS79UCvg9TgRcPWIv
-	TYBekmFCyag9OL2iglmQEaYHi4E8Ag==
-X-Received: by 2002:a17:902:e841:b0:21f:564:80a4 with SMTP id d9443c01a7336-221040a9a0emr339499405ad.33.1740025083663;
-        Wed, 19 Feb 2025 20:18:03 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IF0vXRoyxvwqbbblzXnK13q+MpjTSXUGq/NUysKQUCJgl+Rkbw2yURC2qoquAwYe7kkwpg46w==
-X-Received: by 2002:a17:902:e841:b0:21f:564:80a4 with SMTP id d9443c01a7336-221040a9a0emr339499095ad.33.1740025083308;
-        Wed, 19 Feb 2025 20:18:03 -0800 (PST)
-Received: from [10.218.35.239] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-adb5a92b959sm11605161a12.63.2025.02.19.20.18.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 19 Feb 2025 20:18:02 -0800 (PST)
-Message-ID: <158c9087-8252-432d-92a7-dad69add1133@oss.qualcomm.com>
-Date: Thu, 20 Feb 2025 09:47:58 +0530
+        d=1e100.net; s=20230601; t=1740029784; x=1740634584;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fYhZ/2V7h65SbZlesbaNdyANplft1cKNDYa6w4+fdR8=;
+        b=iveQaHQuUYlmYNBhU9XeSznMR2l1cz00yZYJszLC2Y/0u2ee55+Q9J42qBtLvEjj8g
+         k1xl4qyW0HFjIte8LUEtNMe5U8CcaIUA1oMk5/qgDTl6wWmGBL0Eyf9VQZ3l8uXPsMSp
+         Qxv7OAci3TW6Jw7xEyP2+KOozsAyJC8LF7CdO90RlZduSDr9z0c1aBtnZqXu0TcGgTxW
+         Vj6Skl1yjCK9DvMbPUAlVGVpgtSvZOP7G5II6ENWJ4rzHI8KvnUL62mY8nKC+K7fSDkP
+         rDaZbmk6An7ApT+EJkc4k3sLeUcATblwUWtE4IlGYwWi3LT2M+4NnBD+nQe9wPACgY/w
+         5uUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWgWCduaMvLqhI5T2n9w5REFqHiSgP/N5v+EKaMU2VCHne1u+vive7Y1iZGf0gMvtLGtJu6wHLI6do=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxV8j5QiBJkL4/kgOIZ/0OpMiL5Z74Zn4pkYgpCxmcBKzkyQ863
+	2glliGbgfgShEsr+LZFQsT693eSCSmyc4p8Ae/O1dTfBoTuR9vqchtrPCNirrIUO2rqluBS4D7M
+	YfaGDRiM6g3Gxhq9M7bHKwBU/2nTZXt0wWZWxdAYeEly2vIk3mxgElVw=
+X-Google-Smtp-Source: AGHT+IF4SSsRXK5FDcjsQWUM747QTtBlCp47gNgaJCN2Yefw0KribdmuVD8q4lBmQ5pjuT3IFtzI3ScPnrrZpwKJa5/M6oPVpgKC
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: gadget: Increase the limit of USB_GADGET_VBUS_DRAW
- to 900mA
-To: Alan Stern <stern@rowland.harvard.edu>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Simona Vetter <simona.vetter@ffwll.ch>, Takashi Iwai <tiwai@suse.de>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250120111702.3738161-1-prashanth.k@oss.qualcomm.com>
- <894f42a7-50a5-401e-a705-a06eafd6161d@rowland.harvard.edu>
- <1b1587e8-5c38-4138-a27a-1de71ff07ce3@oss.qualcomm.com>
- <e36303c0-9d1f-4c66-bc40-891958507275@rowland.harvard.edu>
- <d308300f-2559-4d13-8d15-5a2416ac00c9@oss.qualcomm.com>
- <e823a961-a0a1-46c3-84a9-7da3cd718f4c@rowland.harvard.edu>
-Content-Language: en-US
-From: Prashanth K <prashanth.k@oss.qualcomm.com>
-In-Reply-To: <e823a961-a0a1-46c3-84a9-7da3cd718f4c@rowland.harvard.edu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: BqNDiVLtSb48z0yvMEMTkYega_ueNplC
-X-Proofpoint-ORIG-GUID: BqNDiVLtSb48z0yvMEMTkYega_ueNplC
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-19_11,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=14 clxscore=1015
- adultscore=0 malwarescore=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=14 mlxlogscore=257 suspectscore=0 phishscore=0
- spamscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2502100000 definitions=main-2502200026
+X-Received: by 2002:a05:6e02:1aaf:b0:3d2:bac3:b45f with SMTP id
+ e9e14a558f8ab-3d2bac3b647mr39160245ab.4.1740029783936; Wed, 19 Feb 2025
+ 21:36:23 -0800 (PST)
+Date: Wed, 19 Feb 2025 21:36:23 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67b6bf57.050a0220.14d86d.015b.GAE@google.com>
+Subject: [syzbot] [usb?] BUG: corrupted list in usb_hcd_link_urb_to_ep (4)
+From: syzbot <syzbot+a2e67807a84a561c08fb@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
+	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+
+Hello,
+
+syzbot found the following issue on:
+
+HEAD commit:    87a132e73910 Merge tag 'mm-hotfixes-stable-2025-02-19-17-4..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=169c2ba4580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=f4f6914bcba459be
+dashboard link: https://syzkaller.appspot.com/bug?extid=a2e67807a84a561c08fb
+compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17c59498580000
+
+Downloadable assets:
+disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7feb34a89c2a/non_bootable_disk-87a132e7.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/b5894cc33e97/vmlinux-87a132e7.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/1830194f2698/bzImage-87a132e7.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+a2e67807a84a561c08fb@syzkaller.appspotmail.com
+
+list_add double add: new=ffff8880333c4718, prev=ffff8880333c4718, next=ffff88804b2fe070.
+------------[ cut here ]------------
+kernel BUG at lib/list_debug.c:35!
+Oops: invalid opcode: 0000 [#1] PREEMPT SMP KASAN NOPTI
+CPU: 2 UID: 0 PID: 68 Comm: kworker/u32:3 Not tainted 6.14.0-rc3-syzkaller-00079-g87a132e73910 #0
+Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
+Workqueue: netns cleanup_net
+RIP: 0010:__list_add_valid_or_report+0x143/0x190 lib/list_debug.c:35
+Code: 89 f1 48 c7 c7 80 56 d3 8b 48 89 ee e8 66 8a cf fc 90 0f 0b 48 89 f2 48 89 e9 4c 89 e6 48 c7 c7 00 57 d3 8b e8 4e 8a cf fc 90 <0f> 0b 48 89 f7 48 89 34 24 e8 ef 51 53 fd 48 8b 34 24 e9 07 ff ff
+RSP: 0018:ffffc90000658910 EFLAGS: 00010086
+RAX: 0000000000000058 RBX: ffff8880333c4700 RCX: ffffffff819943d9
+RDX: 0000000000000000 RSI: ffffffff8199a74e RDI: 0000000000000005
+RBP: ffff88804b2fe070 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000104 R11: ffffffff96261ff8 R12: ffff8880333c4718
+R13: ffff88804b2fe078 R14: ffff8880333c4718 R15: ffff88804b2fe078
+FS:  0000000000000000(0000) GS:ffff88806a800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055c8f0f403d8 CR3: 000000002c20a000 CR4: 0000000000352ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <IRQ>
+ __list_add_valid include/linux/list.h:88 [inline]
+ __list_add include/linux/list.h:150 [inline]
+ list_add_tail include/linux/list.h:183 [inline]
+ usb_hcd_link_urb_to_ep+0x21d/0x390 drivers/usb/core/hcd.c:1158
+ dummy_urb_enqueue+0x291/0x8e0 drivers/usb/gadget/udc/dummy_hcd.c:1288
+ usb_hcd_submit_urb+0x258/0x1c60 drivers/usb/core/hcd.c:1533
+ usb_submit_urb+0x87c/0x1730 drivers/usb/core/urb.c:581
+ cm109_submit_buzz_toggle+0xd8/0x180 drivers/input/misc/cm109.c:351
+ cm109_toggle_buzzer_async+0x90/0xa0 drivers/input/misc/cm109.c:484
+ cm109_input_ev+0x171/0x1b0 drivers/input/misc/cm109.c:615
+ input_event_dispose drivers/input/input.c:321 [inline]
+ input_handle_event+0x14e/0x14d0 drivers/input/input.c:369
+ input_inject_event+0x1c8/0x380 drivers/input/input.c:423
+ kd_sound_helper+0x17a/0x280 drivers/tty/vt/keyboard.c:256
+ input_handler_for_each_handle+0xd4/0x250 drivers/input/input.c:2554
+ call_timer_fn+0x1a0/0x610 kernel/time/timer.c:1789
+ expire_timers kernel/time/timer.c:1840 [inline]
+ __run_timers+0x6e8/0x930 kernel/time/timer.c:2414
+ __run_timer_base kernel/time/timer.c:2426 [inline]
+ __run_timer_base kernel/time/timer.c:2418 [inline]
+ run_timer_base+0x114/0x190 kernel/time/timer.c:2435
+ run_timer_softirq+0x1a/0x40 kernel/time/timer.c:2445
+ handle_softirqs+0x213/0x8f0 kernel/softirq.c:561
+ __do_softirq kernel/softirq.c:595 [inline]
+ invoke_softirq kernel/softirq.c:435 [inline]
+ __irq_exit_rcu+0x109/0x170 kernel/softirq.c:662
+ irq_exit_rcu+0x9/0x30 kernel/softirq.c:678
+ instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1049 [inline]
+ sysvec_apic_timer_interrupt+0xa4/0xc0 arch/x86/kernel/apic/apic.c:1049
+ </IRQ>
+ <TASK>
+ asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
+RIP: 0010:lockdep_unregister_key+0x1b2/0x2b0 kernel/locking/lockdep.c:6595
+Code: 54 fd ff ff 48 89 df e8 9c c3 ff ff 89 c3 e8 05 d9 ff ff 9c 58 f6 c4 02 0f 85 92 00 00 00 41 f7 c5 00 02 00 00 74 01 fb 84 db <75> 4f 5b 5d 41 5c 41 5d 41 5e 41 5f e9 cd 99 0a 00 48 c7 c0 34 82
+RSP: 0018:ffffc90000d5f7c0 EFLAGS: 00000246
+RAX: 0000000000000046 RBX: 0000000000000000 RCX: 0000000000000001
+RDX: dffffc0000000000 RSI: ffffffff8b6cef60 RDI: ffffffff8bd35480
+RBP: ffff888030eb7a98 R08: ffffffff9386d86e R09: 000000000001d777
+R10: ffffffff96e83eaf R11: 0000000000002ba2 R12: 0000000000000000
+R13: 0000000000000246 R14: ffffffff97056128 R15: ffff888030eb7aa0
+ __qdisc_destroy+0x11a/0x4b0 net/sched/sch_generic.c:1080
+ qdisc_put+0xab/0xe0 net/sched/sch_generic.c:1106
+ shutdown_scheduler_queue+0xa5/0x160 net/sched/sch_generic.c:1159
+ netdev_for_each_tx_queue include/linux/netdevice.h:2590 [inline]
+ dev_shutdown+0xad/0x430 net/sched/sch_generic.c:1491
+ unregister_netdevice_many_notify+0x9fb/0x1f30 net/core/dev.c:11791
+ unregister_netdevice_many net/core/dev.c:11866 [inline]
+ default_device_exit_batch+0x867/0xae0 net/core/dev.c:12351
+ ops_exit_list+0x128/0x180 net/core/net_namespace.c:177
+ cleanup_net+0x5c6/0xbf0 net/core/net_namespace.c:652
+ process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
+ process_scheduled_works kernel/workqueue.c:3317 [inline]
+ worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
+ kthread+0x3af/0x750 kernel/kthread.c:464
+ ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
+ ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__list_add_valid_or_report+0x143/0x190 lib/list_debug.c:35
+Code: 89 f1 48 c7 c7 80 56 d3 8b 48 89 ee e8 66 8a cf fc 90 0f 0b 48 89 f2 48 89 e9 4c 89 e6 48 c7 c7 00 57 d3 8b e8 4e 8a cf fc 90 <0f> 0b 48 89 f7 48 89 34 24 e8 ef 51 53 fd 48 8b 34 24 e9 07 ff ff
+RSP: 0018:ffffc90000658910 EFLAGS: 00010086
+RAX: 0000000000000058 RBX: ffff8880333c4700 RCX: ffffffff819943d9
+RDX: 0000000000000000 RSI: ffffffff8199a74e RDI: 0000000000000005
+RBP: ffff88804b2fe070 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000000000104 R11: ffffffff96261ff8 R12: ffff8880333c4718
+R13: ffff88804b2fe078 R14: ffff8880333c4718 R15: ffff88804b2fe078
+FS:  0000000000000000(0000) GS:ffff88806a800000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000055c8f0f403d8 CR3: 000000002c20a000 CR4: 0000000000352ef0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+----------------
+Code disassembly (best guess), 4 bytes skipped:
+   0:	48 89 df             	mov    %rbx,%rdi
+   3:	e8 9c c3 ff ff       	call   0xffffc3a4
+   8:	89 c3                	mov    %eax,%ebx
+   a:	e8 05 d9 ff ff       	call   0xffffd914
+   f:	9c                   	pushf
+  10:	58                   	pop    %rax
+  11:	f6 c4 02             	test   $0x2,%ah
+  14:	0f 85 92 00 00 00    	jne    0xac
+  1a:	41 f7 c5 00 02 00 00 	test   $0x200,%r13d
+  21:	74 01                	je     0x24
+  23:	fb                   	sti
+  24:	84 db                	test   %bl,%bl
+* 26:	75 4f                	jne    0x77 <-- trapping instruction
+  28:	5b                   	pop    %rbx
+  29:	5d                   	pop    %rbp
+  2a:	41 5c                	pop    %r12
+  2c:	41 5d                	pop    %r13
+  2e:	41 5e                	pop    %r14
+  30:	41 5f                	pop    %r15
+  32:	e9 cd 99 0a 00       	jmp    0xa9a04
+  37:	48                   	rex.W
+  38:	c7                   	.byte 0xc7
+  39:	c0                   	.byte 0xc0
+  3a:	34 82                	xor    $0x82,%al
 
 
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-On 22-01-25 12:56 am, Alan Stern wrote:
-> On Tue, Jan 21, 2025 at 10:19:08PM +0530, Prashanth K wrote:
->>
->>
->> On 21-01-25 08:36 pm, Alan Stern wrote:
->>> On Tue, Jan 21, 2025 at 09:50:08AM +0530, Prashanth K wrote:
->>>>
->>>>
->>>> On 20-01-25 08:17 pm, Alan Stern wrote:
->>>>> On Mon, Jan 20, 2025 at 04:47:02PM +0530, Prashanth K wrote:
->>>>>> Currently CONFIG_USB_GADGET_VBUS_DRAW limits the maximum current
->>>>>> drawn from Vbus to be up to 500mA. However USB gadget operating
->>>>>> in SuperSpeed or higher can draw up to 900mA. Also, MaxPower in
->>>>>> ConfigFS takes its default value from this config. Hence increase
->>>>>> the allowed range of CONFIG_USB_GADGET_VBUS_DRAW to 900mA.
->>>>>
->>>>> Is this the sort of thing that really needs to be a Kconfig option?  Why 
->>>>> not make the decision at runtime, based on the needs of the gadget or 
->>>>> function drivers and the connection speed?
->>>>>
->>>>> Alan Stern
->>>>>
->>>>
->>>> Right, set_config() in composite.c does this in runtime based on the
->>>> values of MaxPower (from configFS), VBUS_DRAW defconfig and speed.
->>>> If we don't set MaxPower from configFS, this config helps to set it
->>>> during compile time. In fact MaxPower in configFS takes its default
->>>> value from CONFIG_USB_GADGET_VBUS_DRAW . Sent this patch because Kconfig
->>>> has this limitation where it's only allowing values upto 500mA.
->>>
->>> Why does MaxPower need to be set at compile time?  Why not set it at 
->>> runtime instead?
->>>
->>> If MaxPower gets set at runtime then it can take its default value to be 
->>> 500 mA or 900 mA depending on the connection speed.  There will be no 
->>> need for CONFIG_USB_GAGDGET_VBUS_DRAW.
->>>
->>
->> Yes, agreed. Can we mark CONFIG_USB_GAGDGET_VBUS_DRAW as legacy and
->> maybe also avoid configfs/composite from using it?
-> 
-> Indeed, the whole idea is to avoid using CONFIG_USB_GADGET_VBUS_DRAW in 
-> configfs and composite.
-> 
-> If nothing will still be using it, just remove it entirely.  No need to 
-> mark it as legacy.
-> 
-> Alan Stern
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
-Hi Alan, small doubt, I see that gadget/legacy/webcam.c is a super-speed
-gadget which uses CONFIG_USB_GADGET_VBUS_DRAW. I'm quite not really sure
-if anyone uses it now, but if someone uses it, then wouldn't my patch be
-applicable there?
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
 
-Noticed this while preparing a patch to remove dependency of VBUS_DRAW
-config from configfs/composite layer. Its ready, will send that after
-some testing.
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
 
-Regards,
-Prashanth K
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
