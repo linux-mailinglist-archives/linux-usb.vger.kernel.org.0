@@ -1,213 +1,133 @@
-Return-Path: <linux-usb+bounces-20886-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20887-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFB97A3E36E
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 19:10:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF564A3E387
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 19:14:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31550178DAC
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 18:09:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4025716949D
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 18:14:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5892F21480A;
-	Thu, 20 Feb 2025 18:09:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAE4F214218;
+	Thu, 20 Feb 2025 18:14:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="n4VMO2tE"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="AzI7oogk"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BCD8214235
-	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 18:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E361FAC30
+	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 18:14:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740074985; cv=none; b=hOhQ1I2avLdeQQcI6zarkgEANhLZWTqxYr4TCyrf9sew23xre+ProhKhYtYGYsf8stawZju8lbe+2WgWs62/J2yeNfWhPuGzRZ+d5wxpeRoYyYlssuIU0QHD4TVZaXNCPOMNvBlOFjUp4gWMSvolMaFHleOtM9/XhRUO1i8E3aw=
+	t=1740075244; cv=none; b=qkvalvIBAId4TFPWe9lVktf3zBCCQS77LnsgUzevX8rGZC1jWpI7JgD+uZ4eJka49JV1GyCMrSFvUvbvPrHixjZm8EG+i/wkOkZGOlVDw8V6igx6i+QCr5+gmXo2FSGVTiLaJV5C36VwiVoXFeoGLvf0gq+oJfpeSLLR04qvtUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740074985; c=relaxed/simple;
-	bh=aOsd90qPoQgE7IOydh8+Nrn+s+R9GK0bjIAwoTkEA0U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JHL+uFTYkgPRcmLYB4+uWSIxzB7sAjFkTPRBT4nKOeJlqD2XbjxlB6wiX+ZqxPWNVQm4KT69RCDs1kRMW6AA5MEJkQk6zl9Jt3xsHZ3K+/tnufU7TWHwIHdiIwWx9mF63bUatSae8+xqk3QH5FAvUPueL4YwIMfCNnapEoGJBA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=n4VMO2tE; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-22113560c57so24754275ad.2
-        for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 10:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740074983; x=1740679783; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UehZxvbwuBQb9qKRTrVZFnoSFSok+4Q0ALSzooCxF+w=;
-        b=n4VMO2tE10twSBCGJURv8WoGI2Q9jbulLNOwYbbAUp7MHthI2xpv+P7N9WCUlERJ6A
-         Vhm3O45j4+IKlYOcl4iGucytfN+FDTLKzG3lXyzYNdBJPJX+Q6Q3DpaVWi/FOagezqLo
-         JeJDxpC7g2bGWHsv+niDR4ZYHHM3gjbzxriqAksbSCyq/9qPIgqRJOMKO9Vgp3y8Pw9e
-         zn3ZuE0qTxnR6PoFZjIThI72InjGk4yARE1hr6oXnfo9aBkesMalXodu2Z2+vjITmKLV
-         wkcxmKmTz+muJibt2Q8PzUE3Lgo/xbb2Y8o0oF/mApHMIpb7eHO04Z/wbsIK9KpXJ8FO
-         zEYQ==
+	s=arc-20240116; t=1740075244; c=relaxed/simple;
+	bh=WaDDRF9fQy2zzLjZ3DEW2L29d2f/2qyHcaGgmIbHD3g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aF6YfWqZLljyTo9kkNgV50od3KpAopa51v47IEzbAhCKY3O96rdg0CggrxhdtKTMcwHa5chHVhR+u2YpaUsU83iBWS6od9MvosvNpY8DYG/IAHxD7eRV8PygqmCdFwlallzy3Kbjk+AFcj9DpXBdaAdzAsqGkATzVtu3zx8JwLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=AzI7oogk; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51KFaIYk031904
+	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 18:14:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	8CnfDkA/lCu9jF96qqSRckSj3r+BJxpocyhFxojdSa4=; b=AzI7oogkwz1xxOZO
+	LWodueP6IjeP6VBDiJaqt3t1EwZmr0BjGr7LG1xQS+IUqKstXhcBV+IBSPnUpFAM
+	Qvi4wi2RVtuI2eeh6Npes8Oz++v/F/OvQq+VSF/bVfpbxf6bG5wRh8VFJe18xhzM
+	covJdtH9KBg5RsBSGTiZEUaMf0EtH+dTezs8OnOj/iadTHj3xXAEvvFPTc3WhQge
+	13ryyV+rjlAxSsWkQujacfPnguMNNl9tvTFD2ofw/LHl3pY7pR6OD8IAMfWkn7Sq
+	GvAe0FNddwhlfsEm85szirN86tDiRP3EecgxfPgfldWqxyNSWQ/dDSJZy1gpxliG
+	JNJ4UA==
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44vyy5f0xf-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 18:14:01 +0000 (GMT)
+Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-2fc1cb0c2cbso3970568a91.1
+        for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 10:14:01 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740074983; x=1740679783;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UehZxvbwuBQb9qKRTrVZFnoSFSok+4Q0ALSzooCxF+w=;
-        b=ii8hx1+ewfxls5p/+EGdC/KGBNz8I5zED25Wc8kLEB337Ng77fcppb9708GeoRKSln
-         2lUUyWSyBfOU5JEMC75GPweGBkQhGPpOHs/Dp2ajz8bjzBPzDYVgZ0IyhAqF+vRL6QDw
-         Hllixu6yqRnAxXP/fdacWT+G+NvJrpF0jWss37MEILUCLdGEnTVZHtLhwmmCVT3vefE3
-         ZbYRHXmY8aIYcWlKi0k/dEztZRX4Qt+pDKPD6L5vuggnhNQ0fUxc8EUMNMOazfAkJTGq
-         15tbM5BhjyURcI1kKKNVCzmaoi9pXIAWP1fXuaVtJJ8yaPjimZ3dWOzlinQJ1DZ1BieX
-         BvHA==
-X-Forwarded-Encrypted: i=1; AJvYcCWA1nlNBxsIZHTOwKz+ROkV6MhBnVvQ0WDy+tXK0JQu62mNXgOmyriKakbgeOhrPod+NGJ24supowM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeIhNYeobw5sss8E1YDHaq1uPGndZwx920ZG9rg2FuxtV4Bc6O
-	jRpkLMt3R+11AS7QcweJVVcQhPWR9Z13uKbxDAFhS9oN7FMNtfdeVjzUfYCssA==
-X-Gm-Gg: ASbGncvgmSIYk4jICJIEIufIBuqD4hB0WUczixnthXpLxQNTnzC29h0FQBGq3XfxPyD
-	sgMCkjY2zSQvf926mvotr33ZBr/ljP2nIW3BLVcmzGL8fXx3OS9Qsu1KN7o8Il5ZxZKW/wTQCva
-	FvppcUIakIkNaUMiE54nZ+QTPO5rjPjMu9dnGJkXrhYbuMXrC3MA1MqI00hhpH3ZfAGXSg0HePI
-	IwtIYf1md39aY7r2u90gdfA9y9w5Z2h6pDbfh2nGIic+xHzDKVl3OSitiHNNLuKBf9yWaQ6/2wk
-	yc5dFCJ5pyHBPfaKA+3QOeOxy7p29izy6P8WqMKJ5WwQ3J1sQ/plOcA8
-X-Google-Smtp-Source: AGHT+IETDgl9Fde4f2iPllIyaLiXQFK4fhca7MgqL5XHTXjG6CRlGUfnstElUz1XbRBlXTpxKXIS9Q==
-X-Received: by 2002:a05:6a00:198c:b0:730:8a0a:9ef9 with SMTP id d2e1a72fcca58-7326190d9edmr35296420b3a.22.1740074983388;
-        Thu, 20 Feb 2025 10:09:43 -0800 (PST)
-Received: from google.com (139.11.82.34.bc.googleusercontent.com. [34.82.11.139])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-adb5a52aee0sm12880779a12.47.2025.02.20.10.09.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Feb 2025 10:09:42 -0800 (PST)
-Date: Thu, 20 Feb 2025 10:09:38 -0800
-From: William McVicker <willmcvicker@google.com>
-To: Prashanth K <prashanth.k@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-	Peter Korsgaard <peter@korsgaard.com>,
-	Sabyrzhan Tasbolatov <snovitoll@gmail.com>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, andre.draszik@linaro.org,
-	kernel-team@android.com
-Subject: Re: [PATCH v2] usb: gadget: Set self-powered based on MaxPower and
- bmAttributes
-Message-ID: <Z7dv4rEILkC9yRwX@google.com>
-References: <20250217120328.2446639-1-prashanth.k@oss.qualcomm.com>
+        d=1e100.net; s=20230601; t=1740075240; x=1740680040;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8CnfDkA/lCu9jF96qqSRckSj3r+BJxpocyhFxojdSa4=;
+        b=rHsBoBHa5FEP6g9Y1cgowT+jUh1OrF84ocVSyS5qzTg5fxLl7A1qWoIblgDJjhtIiU
+         f612jnkq0y+yVMGvEMhsIdYklNLnblTw8XWyxZzFK79/a14p0eUyvJSp5Uhb9Tv26dYT
+         JEV9vD3yswezjCKwCNKhc6LUn7EzjN+FxkjzvSfp2aKxsy3CF+WcdxOPDy5Gb5Dee0/a
+         eBi9c9wQAXAdeBPz8m4Gvyw8pc3Iz60u3l9zjAYTwS5GehPlLV3x5U/zko4B9IZO0zL/
+         PRRcled45AN5Qh60nXtKJcIEqvwsKgMndKAety9Zx5rS8DbGOE/XDRtA2SsbYJCqg13v
+         7Qkw==
+X-Forwarded-Encrypted: i=1; AJvYcCXKGxYP5flnRDBFU6LYmshyUAlqfAWGqCws81QmLqmAw+E0RpI8xNcsi2VguA7nP+J+u3YSRacR2Dg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzw3DMfXhGLU2g/AgJvWj7dOJyDIvOnthW29eCjmt/CcgoV7mZ4
+	8xYMlUIJt9f1Wjw1NybgNaxGrTcmbavEpACe6aji2I14QIEY9PDee5mALbfH44C2WoHjdI83qbs
+	VmBdeNkEpRkxdgo/X4cG5QeMplukOwyPWvMqxw2ehYw6YwvQC+/xSL5xnGZ8=
+X-Gm-Gg: ASbGncsjCFNrR74mheInKry8HUGONAPKulVsiVYYXvldeIIeQkITjZfiT03Fg5frTN0
+	t3XfxLlBf1tFiH+UyScl+GntJQndPV6FhKzKtlprQFU7X2dKxCRVb1SfMfMFYnzU0g3H6LHRUi1
+	TfAg8LeZSQnDSougn8nVWnQhWol529D7XmPdbp8e8moD0CM5HA1yO4QeHRY2aJ+szycjG1W2Wuh
+	MjKspYuSJUwPp9CL52julQQAtxrSly9L7LClMs09Loc719xxNpiQ+H0f/j11Szp7wB13bfHuHs1
+	/v9ilDRzUekNEL3KGYpySfzONb07Xeg2/stf40uOlg==
+X-Received: by 2002:a17:90b:3ec3:b0:2ee:9e06:7db0 with SMTP id 98e67ed59e1d1-2fce78a503cmr221354a91.11.1740075240203;
+        Thu, 20 Feb 2025 10:14:00 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHv9ogDRSvPqN8972+OppvPfeC5b0EiodIB7DDO8PhtO6qM8mshIf64Jk/c7SROl+eWt/1uwQ==
+X-Received: by 2002:a17:90b:3ec3:b0:2ee:9e06:7db0 with SMTP id 98e67ed59e1d1-2fce78a503cmr221317a91.11.1740075239836;
+        Thu, 20 Feb 2025 10:13:59 -0800 (PST)
+Received: from [10.81.24.74] (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fc13ac0a06sm14230039a91.15.2025.02.20.10.13.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 20 Feb 2025 10:13:59 -0800 (PST)
+Message-ID: <637284c7-84e9-40da-9b0d-94fc7488e6c9@oss.qualcomm.com>
+Date: Thu, 20 Feb 2025 10:13:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250217120328.2446639-1-prashanth.k@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 2/2] net: mctp: Add MCTP USB transport driver
+To: Jeremy Kerr <jk@codeconstruct.com.au>,
+        Matt Johnston <matt@codeconstruct.com.au>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Lunn <andrew+netdev@lunn.ch>,
+        "David S. Miller"
+ <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc: netdev@vger.kernel.org, linux-usb@vger.kernel.org,
+        Santosh Puranik <spuranik@nvidia.com>
+References: <20250206-dev-mctp-usb-v1-0-81453fe26a61@codeconstruct.com.au>
+ <20250206-dev-mctp-usb-v1-2-81453fe26a61@codeconstruct.com.au>
+From: Jeff Johnson <jeff.johnson@oss.qualcomm.com>
+Content-Language: en-US
+In-Reply-To: <20250206-dev-mctp-usb-v1-2-81453fe26a61@codeconstruct.com.au>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: geVgI8sOvpEEvdSVXqrPB0TBSIvEyBaB
+X-Proofpoint-GUID: geVgI8sOvpEEvdSVXqrPB0TBSIvEyBaB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-20_07,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ mlxlogscore=798 spamscore=0 bulkscore=0 clxscore=1011 suspectscore=0
+ adultscore=0 malwarescore=0 mlxscore=0 lowpriorityscore=0 impostorscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502200127
 
-Hi Prashanth,
-
-On 02/17/2025, Prashanth K wrote:
-> Currently the USB gadget will be set as bus-powered based solely
-> on whether its bMaxPower is greater than 100mA, but this may miss
-> devices that may legitimately draw less than 100mA but still want
-> to report as bus-powered. Similarly during suspend & resume, USB
-> gadget is incorrectly marked as bus/self powered without checking
-> the bmAttributes field. Fix these by configuring the USB gadget
-> as self or bus powered based on bmAttributes, and explicitly set
-> it as bus-powered if it draws more than 100mA.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 5e5caf4fa8d3 ("usb: gadget: composite: Inform controller driver of self-powered")
-> Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
-> ---
-> Changes in v2:
-> - Didn't change anything from RFC.
-> - Link to RFC: https://lore.kernel.org/all/20250204105908.2255686-1-prashanth.k@oss.qualcomm.com/
-> 
->  drivers/usb/gadget/composite.c | 16 +++++++++++-----
->  1 file changed, 11 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index bdda8c74602d..1fb28bbf6c45 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -1050,10 +1050,11 @@ static int set_config(struct usb_composite_dev *cdev,
->  	else
->  		usb_gadget_set_remote_wakeup(gadget, 0);
->  done:
-> -	if (power <= USB_SELF_POWER_VBUS_MAX_DRAW)
-> -		usb_gadget_set_selfpowered(gadget);
-> -	else
-> +	if (power > USB_SELF_POWER_VBUS_MAX_DRAW ||
-> +	    !(c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
->  		usb_gadget_clear_selfpowered(gadget);
-> +	else
-> +		usb_gadget_set_selfpowered(gadget);
->  
->  	usb_gadget_vbus_draw(gadget, power);
->  	if (result >= 0 && cdev->delayed_status)
-> @@ -2615,7 +2616,9 @@ void composite_suspend(struct usb_gadget *gadget)
->  
->  	cdev->suspended = 1;
->  
-> -	usb_gadget_set_selfpowered(gadget);
-> +	if (cdev->config->bmAttributes & USB_CONFIG_ATT_SELFPOWER)
-> +		usb_gadget_set_selfpowered(gadget);
-
-I'm hitting a null pointer derefence here on my Pixel 6 device on suspend.  I
-haven't dug deep into it how we get here, but in my case `cdev->config` is
-NULL. This happens immediate after booting my device. I verified that just
-adding a NULL check fixes the issue and dwc3 gadget can successfully suspend.
-
-Here is the crash stack:
-
-  Unable to handle kernel NULL pointer dereference at virtual address 000000000000002a
-  <snip>
-  Modules linked in: tcpci_maxim(E) at24(E) phy_exynos_ufs(E)
-    phy_exynos5_usbdrd(E) dwc3_exynos(E) ufs_exynos(E) i2c_exynos5(E)
-    s3c2410_wdt(E) arm_dsu_pmu(E) simplefb(E)
-  CPU: 0 UID: 0 PID: 885 Comm: irq/118-dwc3 Tainted: G            E
-    6.14.0-rc3-next-20250220-4k-g50a0c754714a-dirty #1
-    02ae1fc192b79fc15e3493a7f5cb2e58e2817b0a
-  Tainted: [E]=UNSIGNED_MODULE
-  Hardware name: Raven (DT)
-  pstate: a04000c5 (NzCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-  pc : composite_suspend+0x8c/0xe8
-  lr : configfs_composite_suspend+0x70/0x80
-  <snip>
-  Call trace:
-   composite_suspend+0x8c/0xe8 (P)
-   configfs_composite_suspend+0x70/0x80
-   dwc3_suspend_gadget+0x48/0x64
-   dwc3_thread_interrupt+0x568/0xbe8
-   irq_thread_fn+0x30/0xb0
-   irq_thread+0x174/0x284
-   kthread+0x130/0x21c
-   ret_from_fork+0x10/0x20
-
-And that decoded at base commit 50a0c754714a (from linux-next):
-
-  composite_suspend (drivers/usb/gadget/composite.c:2619) (P)
-  configfs_composite_suspend (drivers/usb/gadget/configfs.c:1939)
-  dwc3_suspend_gadget (include/linux/spinlock.h:351 drivers/usb/dwc3/gadget.c:3962 drivers/usb/dwc3/gadget.c:3957)
-  dwc3_thread_interrupt (drivers/usb/dwc3/gadget.c:4466 drivers/usb/dwc3/gadget.c:4494 drivers/usb/dwc3/gadget.c:4514 drivers/usb/dwc3/gadget.c:4535 drivers/usb/dwc3/gadget.c:4577)
-  irq_thread_fn (kernel/irq/manage.c:1191)
-  irq_thread (kernel/irq/manage.c:1318)
-  kthread (kernel/kthread.c:464)
-  ret_from_fork (arch/arm64/kernel/entry.S:863)
-
-Thanks,
-Will
-
+On 2/5/25 22:48, Jeremy Kerr wrote:
+...
+> +module_usb_driver(mctp_usb_driver)
 > +
->  	usb_gadget_vbus_draw(gadget, 2);
->  }
->  
-> @@ -2649,8 +2652,11 @@ void composite_resume(struct usb_gadget *gadget)
->  		else
->  			maxpower = min(maxpower, 900U);
->  
-> -		if (maxpower > USB_SELF_POWER_VBUS_MAX_DRAW)
-> +		if (maxpower > USB_SELF_POWER_VBUS_MAX_DRAW ||
-> +		    !(cdev->config->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
->  			usb_gadget_clear_selfpowered(gadget);
-> +		else
-> +			usb_gadget_set_selfpowered(gadget);
->  
->  		usb_gadget_vbus_draw(gadget, maxpower);
->  	} else {
-> -- 
-> 2.25.1
+> +MODULE_LICENSE("GPL");
 > 
+
+Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
+description is missing"), a module without a MODULE_DESCRIPTION() will
+result in a warning with make W=1. Please add a MODULE_DESCRIPTION()
+to avoid this warning.
+
 
