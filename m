@@ -1,234 +1,141 @@
-Return-Path: <linux-usb+bounces-20847-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20848-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 164C2A3D0F7
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 06:44:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E312DA3D333
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 09:30:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63CAD3BF2B3
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 05:40:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0EAC41895C08
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 08:30:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2395C1E570E;
-	Thu, 20 Feb 2025 05:36:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 258C31EC013;
+	Thu, 20 Feb 2025 08:30:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m2iNwu1S"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73631F130B
-	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 05:36:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.80
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0401EBA0B;
+	Thu, 20 Feb 2025 08:30:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740029786; cv=none; b=VevvPJ6/j7fCUh2u8qN12YsSlESqamrAhoHws1ePOErB1pknVYCVp3Z9SjTQ0S8gdp6npxDm7a0G1HLSkkVHduryD4HYo6ZIN/XiGBz0oLI1rgfxZZXXlujmCxsM2/IwI40430Zpl/J4PFXLigq3urYH4jdY2y9aE0Yz0fc67HA=
+	t=1740040201; cv=none; b=B8AI9NwoelnJbDXR8Lh1wO+LVOlbAlU5MsYJrp2fEg2hKmbaLELZAuLBK8cwqZB9IWHOKNpmDx81fNFnOYHQwgEpMFMrJ1s+aqDHgo5KWL8egNVWHXpTOC0OaXJC6ARpsgSUR1eDw4FOi144iSotAK8ftzKQWtfQddTmqQ+N5zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740029786; c=relaxed/simple;
-	bh=86RSQWT0uVYy4scXIZ9dM43r6v/ZNArLrqQm7EBIK1U=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=p5m5XoWR//Xwg6kpxQkZkqW1omuIcKoMuCI2psW/MOk6e5kMmaBnRzQNqX0I/tqc0D4qGQQxmYJQYmA/J0afvF8iTxLH3obYMcpqhDeD3l4+2638GK5B1kX0lUkfXRyibC/2LtscO0br2igbWO2GZoKZ5jkx+YJw3irR5m68MdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.80
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-io1-f80.google.com with SMTP id ca18e2360f4ac-8521d7980beso45774039f.0
-        for <linux-usb@vger.kernel.org>; Wed, 19 Feb 2025 21:36:24 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740029784; x=1740634584;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fYhZ/2V7h65SbZlesbaNdyANplft1cKNDYa6w4+fdR8=;
-        b=iveQaHQuUYlmYNBhU9XeSznMR2l1cz00yZYJszLC2Y/0u2ee55+Q9J42qBtLvEjj8g
-         k1xl4qyW0HFjIte8LUEtNMe5U8CcaIUA1oMk5/qgDTl6wWmGBL0Eyf9VQZ3l8uXPsMSp
-         Qxv7OAci3TW6Jw7xEyP2+KOozsAyJC8LF7CdO90RlZduSDr9z0c1aBtnZqXu0TcGgTxW
-         Vj6Skl1yjCK9DvMbPUAlVGVpgtSvZOP7G5II6ENWJ4rzHI8KvnUL62mY8nKC+K7fSDkP
-         rDaZbmk6An7ApT+EJkc4k3sLeUcATblwUWtE4IlGYwWi3LT2M+4NnBD+nQe9wPACgY/w
-         5uUA==
-X-Forwarded-Encrypted: i=1; AJvYcCWgWCduaMvLqhI5T2n9w5REFqHiSgP/N5v+EKaMU2VCHne1u+vive7Y1iZGf0gMvtLGtJu6wHLI6do=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxV8j5QiBJkL4/kgOIZ/0OpMiL5Z74Zn4pkYgpCxmcBKzkyQ863
-	2glliGbgfgShEsr+LZFQsT693eSCSmyc4p8Ae/O1dTfBoTuR9vqchtrPCNirrIUO2rqluBS4D7M
-	YfaGDRiM6g3Gxhq9M7bHKwBU/2nTZXt0wWZWxdAYeEly2vIk3mxgElVw=
-X-Google-Smtp-Source: AGHT+IF4SSsRXK5FDcjsQWUM747QTtBlCp47gNgaJCN2Yefw0KribdmuVD8q4lBmQ5pjuT3IFtzI3ScPnrrZpwKJa5/M6oPVpgKC
+	s=arc-20240116; t=1740040201; c=relaxed/simple;
+	bh=1vibqR3G+O71ULLP8sf+4kfTQYZY3krLEakrtCV5AKE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iufPwEJHgQJ7VOXkeaOWdJaYObD0yYCie5X/hQZjUA6+yWCWyg8ln+G/8zKBHFfnWviqmryGc6Geh4slFDsa2gfoRnQB8Y+DbJ5Dp+QvCsWkXVBKkpK+UIIDIXd8aSticI1FUyPR4nnVdm35A+7wmONTIHfSvBsIzzp3/Ix68D4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m2iNwu1S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C52D3C4CEDD;
+	Thu, 20 Feb 2025 08:29:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740040201;
+	bh=1vibqR3G+O71ULLP8sf+4kfTQYZY3krLEakrtCV5AKE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=m2iNwu1SAzIX9cinXD2NyjbLtWzwprhwSSXFAXQrAeHuFQ/WBJBMjdnwxwb1oV9Pi
+	 xIDgDQIoONeBk14NolSe2mLG3Thj66aYZG6CMDiby71psdQHDaImCXqOPVpvnheAoE
+	 W8SsyoPWxa6SXMw7FKCkIZs+6iWyhEnhAjvsb4GDJ9tBsCR93slLIsdEPqTQSXmNmg
+	 EuoCKhHdArkwfP+Vd+IGngVYsd57xibAfH3/B/d3TALBQiAoc90MhcflGPbuMY/zVm
+	 Ou/DTeX9cY5k4bBHoapJl/+XdKnfyNjCPl0VVt8JVSUsGRGMUlFYbLguSDUfP7C1lM
+	 loFu3DylTB3AQ==
+Message-ID: <d7e788c5-0bec-4761-ad4a-1c4f642fe3e5@kernel.org>
+Date: Thu, 20 Feb 2025 09:29:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1aaf:b0:3d2:bac3:b45f with SMTP id
- e9e14a558f8ab-3d2bac3b647mr39160245ab.4.1740029783936; Wed, 19 Feb 2025
- 21:36:23 -0800 (PST)
-Date: Wed, 19 Feb 2025 21:36:23 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67b6bf57.050a0220.14d86d.015b.GAE@google.com>
-Subject: [syzbot] [usb?] BUG: corrupted list in usb_hcd_link_urb_to_ep (4)
-From: syzbot <syzbot+a2e67807a84a561c08fb@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: usb: samsung,exynos-dwc3: add
+ exynos7870 support
+To: Kaustabh Chakraborty <kauschluss@disroot.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250219-exynos7870-usb-v2-0-1de41a89c9d4@disroot.org>
+ <20250219-exynos7870-usb-v2-1-1de41a89c9d4@disroot.org>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <20250219-exynos7870-usb-v2-1-1de41a89c9d4@disroot.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hello,
+On 18/02/2025 19:54, Kaustabh Chakraborty wrote:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: samsung,exynos7870-dwusb3
+> +    then:
+> +      properties:
+> +        clocks:
+> +          minItems: 3
+> +          maxItems: 3
+> +        clock-names:
+> +          items:
+> +            - const: bus_early
+> +            - const: ctrl
+> +            - const: ref
 
-syzbot found the following issue on:
+Other device has order bus_early + ref, so use the same here, thus
+bus_early + ref + ctrl.
 
-HEAD commit:    87a132e73910 Merge tag 'mm-hotfixes-stable-2025-02-19-17-4..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=169c2ba4580000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=f4f6914bcba459be
-dashboard link: https://syzkaller.appspot.com/bug?extid=a2e67807a84a561c08fb
-compiler:       gcc (Debian 12.2.0-14) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17c59498580000
+Rest looks fine.
 
-Downloadable assets:
-disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/7feb34a89c2a/non_bootable_disk-87a132e7.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/b5894cc33e97/vmlinux-87a132e7.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/1830194f2698/bzImage-87a132e7.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a2e67807a84a561c08fb@syzkaller.appspotmail.com
-
-list_add double add: new=ffff8880333c4718, prev=ffff8880333c4718, next=ffff88804b2fe070.
-------------[ cut here ]------------
-kernel BUG at lib/list_debug.c:35!
-Oops: invalid opcode: 0000 [#1] PREEMPT SMP KASAN NOPTI
-CPU: 2 UID: 0 PID: 68 Comm: kworker/u32:3 Not tainted 6.14.0-rc3-syzkaller-00079-g87a132e73910 #0
-Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-debian-1.16.3-2~bpo12+1 04/01/2014
-Workqueue: netns cleanup_net
-RIP: 0010:__list_add_valid_or_report+0x143/0x190 lib/list_debug.c:35
-Code: 89 f1 48 c7 c7 80 56 d3 8b 48 89 ee e8 66 8a cf fc 90 0f 0b 48 89 f2 48 89 e9 4c 89 e6 48 c7 c7 00 57 d3 8b e8 4e 8a cf fc 90 <0f> 0b 48 89 f7 48 89 34 24 e8 ef 51 53 fd 48 8b 34 24 e9 07 ff ff
-RSP: 0018:ffffc90000658910 EFLAGS: 00010086
-RAX: 0000000000000058 RBX: ffff8880333c4700 RCX: ffffffff819943d9
-RDX: 0000000000000000 RSI: ffffffff8199a74e RDI: 0000000000000005
-RBP: ffff88804b2fe070 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000104 R11: ffffffff96261ff8 R12: ffff8880333c4718
-R13: ffff88804b2fe078 R14: ffff8880333c4718 R15: ffff88804b2fe078
-FS:  0000000000000000(0000) GS:ffff88806a800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055c8f0f403d8 CR3: 000000002c20a000 CR4: 0000000000352ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <IRQ>
- __list_add_valid include/linux/list.h:88 [inline]
- __list_add include/linux/list.h:150 [inline]
- list_add_tail include/linux/list.h:183 [inline]
- usb_hcd_link_urb_to_ep+0x21d/0x390 drivers/usb/core/hcd.c:1158
- dummy_urb_enqueue+0x291/0x8e0 drivers/usb/gadget/udc/dummy_hcd.c:1288
- usb_hcd_submit_urb+0x258/0x1c60 drivers/usb/core/hcd.c:1533
- usb_submit_urb+0x87c/0x1730 drivers/usb/core/urb.c:581
- cm109_submit_buzz_toggle+0xd8/0x180 drivers/input/misc/cm109.c:351
- cm109_toggle_buzzer_async+0x90/0xa0 drivers/input/misc/cm109.c:484
- cm109_input_ev+0x171/0x1b0 drivers/input/misc/cm109.c:615
- input_event_dispose drivers/input/input.c:321 [inline]
- input_handle_event+0x14e/0x14d0 drivers/input/input.c:369
- input_inject_event+0x1c8/0x380 drivers/input/input.c:423
- kd_sound_helper+0x17a/0x280 drivers/tty/vt/keyboard.c:256
- input_handler_for_each_handle+0xd4/0x250 drivers/input/input.c:2554
- call_timer_fn+0x1a0/0x610 kernel/time/timer.c:1789
- expire_timers kernel/time/timer.c:1840 [inline]
- __run_timers+0x6e8/0x930 kernel/time/timer.c:2414
- __run_timer_base kernel/time/timer.c:2426 [inline]
- __run_timer_base kernel/time/timer.c:2418 [inline]
- run_timer_base+0x114/0x190 kernel/time/timer.c:2435
- run_timer_softirq+0x1a/0x40 kernel/time/timer.c:2445
- handle_softirqs+0x213/0x8f0 kernel/softirq.c:561
- __do_softirq kernel/softirq.c:595 [inline]
- invoke_softirq kernel/softirq.c:435 [inline]
- __irq_exit_rcu+0x109/0x170 kernel/softirq.c:662
- irq_exit_rcu+0x9/0x30 kernel/softirq.c:678
- instr_sysvec_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1049 [inline]
- sysvec_apic_timer_interrupt+0xa4/0xc0 arch/x86/kernel/apic/apic.c:1049
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:702
-RIP: 0010:lockdep_unregister_key+0x1b2/0x2b0 kernel/locking/lockdep.c:6595
-Code: 54 fd ff ff 48 89 df e8 9c c3 ff ff 89 c3 e8 05 d9 ff ff 9c 58 f6 c4 02 0f 85 92 00 00 00 41 f7 c5 00 02 00 00 74 01 fb 84 db <75> 4f 5b 5d 41 5c 41 5d 41 5e 41 5f e9 cd 99 0a 00 48 c7 c0 34 82
-RSP: 0018:ffffc90000d5f7c0 EFLAGS: 00000246
-RAX: 0000000000000046 RBX: 0000000000000000 RCX: 0000000000000001
-RDX: dffffc0000000000 RSI: ffffffff8b6cef60 RDI: ffffffff8bd35480
-RBP: ffff888030eb7a98 R08: ffffffff9386d86e R09: 000000000001d777
-R10: ffffffff96e83eaf R11: 0000000000002ba2 R12: 0000000000000000
-R13: 0000000000000246 R14: ffffffff97056128 R15: ffff888030eb7aa0
- __qdisc_destroy+0x11a/0x4b0 net/sched/sch_generic.c:1080
- qdisc_put+0xab/0xe0 net/sched/sch_generic.c:1106
- shutdown_scheduler_queue+0xa5/0x160 net/sched/sch_generic.c:1159
- netdev_for_each_tx_queue include/linux/netdevice.h:2590 [inline]
- dev_shutdown+0xad/0x430 net/sched/sch_generic.c:1491
- unregister_netdevice_many_notify+0x9fb/0x1f30 net/core/dev.c:11791
- unregister_netdevice_many net/core/dev.c:11866 [inline]
- default_device_exit_batch+0x867/0xae0 net/core/dev.c:12351
- ops_exit_list+0x128/0x180 net/core/net_namespace.c:177
- cleanup_net+0x5c6/0xbf0 net/core/net_namespace.c:652
- process_one_work+0x9c5/0x1ba0 kernel/workqueue.c:3236
- process_scheduled_works kernel/workqueue.c:3317 [inline]
- worker_thread+0x6c8/0xf00 kernel/workqueue.c:3398
- kthread+0x3af/0x750 kernel/kthread.c:464
- ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
- ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__list_add_valid_or_report+0x143/0x190 lib/list_debug.c:35
-Code: 89 f1 48 c7 c7 80 56 d3 8b 48 89 ee e8 66 8a cf fc 90 0f 0b 48 89 f2 48 89 e9 4c 89 e6 48 c7 c7 00 57 d3 8b e8 4e 8a cf fc 90 <0f> 0b 48 89 f7 48 89 34 24 e8 ef 51 53 fd 48 8b 34 24 e9 07 ff ff
-RSP: 0018:ffffc90000658910 EFLAGS: 00010086
-RAX: 0000000000000058 RBX: ffff8880333c4700 RCX: ffffffff819943d9
-RDX: 0000000000000000 RSI: ffffffff8199a74e RDI: 0000000000000005
-RBP: ffff88804b2fe070 R08: 0000000000000005 R09: 0000000000000000
-R10: 0000000000000104 R11: ffffffff96261ff8 R12: ffff8880333c4718
-R13: ffff88804b2fe078 R14: ffff8880333c4718 R15: ffff88804b2fe078
-FS:  0000000000000000(0000) GS:ffff88806a800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000055c8f0f403d8 CR3: 000000002c20a000 CR4: 0000000000352ef0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess), 4 bytes skipped:
-   0:	48 89 df             	mov    %rbx,%rdi
-   3:	e8 9c c3 ff ff       	call   0xffffc3a4
-   8:	89 c3                	mov    %eax,%ebx
-   a:	e8 05 d9 ff ff       	call   0xffffd914
-   f:	9c                   	pushf
-  10:	58                   	pop    %rax
-  11:	f6 c4 02             	test   $0x2,%ah
-  14:	0f 85 92 00 00 00    	jne    0xac
-  1a:	41 f7 c5 00 02 00 00 	test   $0x200,%r13d
-  21:	74 01                	je     0x24
-  23:	fb                   	sti
-  24:	84 db                	test   %bl,%bl
-* 26:	75 4f                	jne    0x77 <-- trapping instruction
-  28:	5b                   	pop    %rbx
-  29:	5d                   	pop    %rbp
-  2a:	41 5c                	pop    %r12
-  2c:	41 5d                	pop    %r13
-  2e:	41 5e                	pop    %r14
-  30:	41 5f                	pop    %r15
-  32:	e9 cd 99 0a 00       	jmp    0xa9a04
-  37:	48                   	rex.W
-  38:	c7                   	.byte 0xc7
-  39:	c0                   	.byte 0xc0
-  3a:	34 82                	xor    $0x82,%al
+> 
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the report is already addressed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to overwrite report's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the report is a duplicate of another one, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Best regards,
+Krzysztof
 
