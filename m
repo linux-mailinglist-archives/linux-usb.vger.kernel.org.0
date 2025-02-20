@@ -1,85 +1,85 @@
-Return-Path: <linux-usb+bounces-20895-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20896-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A103AA3E7B7
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 23:45:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE792A3E7BA
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 23:46:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A0423AD76A
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 22:45:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C8E33ADB02
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 22:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2B5F264FA5;
-	Thu, 20 Feb 2025 22:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8EAF1EEA59;
+	Thu, 20 Feb 2025 22:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bFyz9Vm8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CEqhqW1n"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B834B264F8A;
-	Thu, 20 Feb 2025 22:45:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 853E4286280;
+	Thu, 20 Feb 2025 22:46:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740091505; cv=none; b=Q3gHGO6ef+LS8PyA+5MJI9S3t6Oo5jn6zDRbAVBChz2iQFLFOruELo7L/CUeZsiifxO8VTEqtRP2iUT2hPtTlSonQkAOvT/scil/rSsVymPF8SWqNhC5A9rfIevxQvzw1yFbcBYvbv+O+AU7ehGzf7e2xYvTP5stL9f/ITE1ir0=
+	t=1740091575; cv=none; b=ttMR9D0uuRumNPaWZMmsuGfSRlWGx3/nQ3NkIh9kptv+QzfX5xF4YhUrJGlVTcyM32Uhnt59fR3EHuk6Yxr5nPalFW3l071S8TDFc+laGSll26yg2x4M1GLedKTUCBAhNWtH8R088rW7gUYoOHh3f++bnvcZ0aAx+CjRq3UBB9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740091505; c=relaxed/simple;
-	bh=GEqCOQtv+n0Zy2Xw5qOEdrTlH2FbjxKSiXWw31DnuKs=;
+	s=arc-20240116; t=1740091575; c=relaxed/simple;
+	bh=VjcdSM7jkBfOBRLluqGyxoH0x0ZruLmFMN88j3QleGs=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qSI1JYl6HGQRcNuiXE07nR3t/F5IY4zPxoTQ/nNL6jxAumqeRRvuHgxeREKCDNJk+2gMk57CVnT9G7da0qlaPD1LrcWAIj1hAowRwOFwFVzQy+Fn6v2BR/uXu9EPXQB93CAWGDof1tC5TgJfjxGDDfhxInAsZinguZxCuyi6XZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bFyz9Vm8; arc=none smtp.client-ip=209.85.208.43
+	 MIME-Version:Content-Type; b=mMCIi7OSmy5XB8lLS/FgB9h592lIJJf16vru4anUaDnJJJ4WYugt8rZbjIyFGHYaWHwZejqUrHkkeveNMGxpg7K9v/g0KQ7LoN3WtYyyofpJtKZkYA7MjONwqg+vGjaid7BX4tbFcHRPBUxoxdqkj2ESgHXAob0MN1QpRARfPaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CEqhqW1n; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5ded46f323fso2069110a12.1;
-        Thu, 20 Feb 2025 14:45:03 -0800 (PST)
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-abb7f539c35so300116866b.1;
+        Thu, 20 Feb 2025 14:46:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740091502; x=1740696302; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740091572; x=1740696372; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Q5wnXrTG8IMccKKXxpr7vLhowLZyE76xRdUTl7hiSiQ=;
-        b=bFyz9Vm8xng5E66EtjSpe0yKchK8ONgPUhZJvTnII3pLyvmdpDFYkkqfmHV0pLi3HE
-         mZgBpyLKPQGCaikYBWVcw2Vs7COm7SHBC6LBT7ZIJp2NRTS/YU7Z8MNKArVCDzWrYdJQ
-         ifIQoLIQJvOvQRBxmetio/sFZ84Guh3J1b70Ywu7otok7tiXeeaVFnzPAqP372osdr7X
-         g+YWAwEpibazigoKGSCy0L7y/HJHG1GGRlQLtlG+sXKYHybSS2LNfl0FtKMrvbx6lrsQ
-         szYNLo69G7rcHcrfkBT0KIVNXSXHw6pnl4SPdw6+Uq8qsYDOwCCKfG76fwcd3+xgJZnc
-         9Dkw==
+        bh=dqud8wKtVhcF+nQlewcEqgt8gw382UeB7n3VyIg4LE4=;
+        b=CEqhqW1nNaJq6yy4eCJoHOpF3F7GTy+ynCQ3uebbLxiZc20yH7QnIa3tZP4qKrDrCl
+         k1/K4USRKCnxfK1PXwJIBUr5IAtVu1NfhN8zBgnpJh1uxhcJ+et+eVO1ZPDwRdP4XQW6
+         RgdzTWfmzQy6M0v31cWvFNqisZJftVPAPiv6eNOn7u/e94lIsUsoaHITOhjCWVyIJgbW
+         E3vqkmelT1HDyvp5VJftFifBNYe+rydcbyUjK31sHXCvwfb6K/PaJ+d7cBoBfzOllm9+
+         nQJAzxpHJHbXTiFD4E1nKy8TgUpI0B4TKJynnia3HUEmJppgfdGTgAv31HX69ux2PUw7
+         wbng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740091502; x=1740696302;
+        d=1e100.net; s=20230601; t=1740091572; x=1740696372;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Q5wnXrTG8IMccKKXxpr7vLhowLZyE76xRdUTl7hiSiQ=;
-        b=Kz3+HPya0UrRIHedSMPOWdZL5ZrsMq2RR1Th7WJdnFb0jl9WFlA+lp2Bma2llL0OWo
-         uS8edub9lH+0GxJTONjmFKHJrNYZCx7R2U2i0PaguDwHeSwnmSPA/0h6Wi++5Z9J7VSX
-         sIHkF8FynPsY8ZVBbcgWs+ktyB6FJ2nJRdKh46EhW7IVnlIFBtwE8FeM9I0W2gerVqv1
-         ifE0iTrzaFxCGv8kq6g7Semaw9zjUU0eL5B9TadNUbMHsqMZy1RwAG9e4hLDOO6WKGWm
-         qNpVlqINCuTipKdSEm2Un+o5lYHlsKg4ZW/3kQz82w3SYdcRahkIYcTBXNrVkoHrJ9iV
-         76ew==
-X-Forwarded-Encrypted: i=1; AJvYcCW8BSgNLXdqug4h6r76Or4AerpSLl/Oi+WTUmgyHrnF9eXqj8WKFAeW58DhB7/oLMUv30oYJbSZmwIW/TY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw39TUQBPa85b331wR3LfkV+LhsPrsVyDBJt36BaIzGRmS7hTlZ
-	4d6hlD+16w7zYYFNTh0sXLkUMISVMKVXRRjIpBcsGyMPBuAbdjOmAYC59g==
-X-Gm-Gg: ASbGncvpzS384vJ9MZSHss6ePClz7gHZ0OgvcpmGNPj6sO4LK2kuxPzDKT6vUoBclSa
-	5o1NJHykkFS+IpBQAES8zTxzu/TwsO3sqnjZzUpR9/jYloPfNz7nR53jvPGVON5tqg9/1soyh2Y
-	PPCzTTUsCO1q6YKyssNz+Fl0Hl5MFlT4wt8lvWSZYRtIQwPLFvBKxv26l6F7iTq6Bs7wg7OidMk
-	ID/rbnee7QgMunR9TdGW7kwg6c3fF5t2MmKbdO7Fk8bo6KBWDVLfDS8a8kVGLNVk1p8ENE2FDKm
-	/fSgtUJ8KHco3Ycsnd9Vqwbl/TMYwhmp
-X-Google-Smtp-Source: AGHT+IHtH05KKRtBRlXhCTM9Mu4Jq9sP4r2pocbQ5TNZ843XGbkVKlavbAKVels6cDt1AeBK1nrNhA==
-X-Received: by 2002:a17:907:94c8:b0:abb:6722:f98c with SMTP id a640c23a62f3a-abc09aefd0fmr112247166b.34.1740091501834;
-        Thu, 20 Feb 2025 14:45:01 -0800 (PST)
+        bh=dqud8wKtVhcF+nQlewcEqgt8gw382UeB7n3VyIg4LE4=;
+        b=KoOYRU5ZHNbC2KymfCnevRsgZDTwl+VZB6hOis0eSCW1q8Uls9hDDh3a3OQfLoCbmO
+         K5gu9X3W9wCodkTAKp9sHZSuWwcmUtzmEYUKq9sWabuRIT3SBT6yl1XITLcnJ8xlrVnD
+         m8GzW5/+NKxKP+O2xXuX1OruZ4NcOsiAkHqqH+6Y3X9+iTZ33qkpzRxbXKO5b1S87tM1
+         YpBEQPnQY5OKnP0Yi1muj6KFKZLwpl2hddaKxKKpDl3WmBWvtA0B47gwHCgoB9Q/kGy6
+         aIJU7JrC2k3gi1zIBjIBu1ekZHsxpiXgK79TuaZQXUx643O+ZjPXxmbHqfpRqx23Umav
+         F4Kw==
+X-Forwarded-Encrypted: i=1; AJvYcCXWsMXtSSWHZUAZOEic73Cg6JD4WpVpSVCjSUVvZnaV8X82kv/kgjNuCf63sA8HA8F0DYvwCUhp8yWktis=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQlODRiwycOcqMfSL4Bk7jst/1ODzTWbTpoLUU2MTSVZqvhLVq
+	dhexhtapxwcTZ/f6251Zr2NXHGorzQpdyCDFhCSRsRP9Ho9y01Gv
+X-Gm-Gg: ASbGncu1jQZdI1rd8W0Gi5wLQZQe6LVPRxQQxd/VKYSwdyoIzeIlzJj3eluDODSGJSF
+	T9zOcV0a2mjjX6cg/oZi7a/ss0iiCKCBhyxhTJQUkaGMfIfPtUPy68WR23to+P3rRW0BxHc66nb
+	UBbGGQ1brTW6ea8Enm1R0X/XxyjPkd4uvksikgA+QFs5ByQQhfWQ080F/PXmpJP10uVUBMpvo7A
+	p5PGW5i485ADZZurSUr5Fo1iKNLhHFJ1nrmHCPbyoVjIrvHHIj6ye/9foFoOiY02fD8xvYYG6l/
+	gC98VQMblXM6r3xzDHbCgofB3k4omWM8
+X-Google-Smtp-Source: AGHT+IEOIFyFYQBT1qwuKjOfGx8is1L8KWgVUZIaR0zB3p1JTKkDtjLVxbEMPsGSB2c/cLktR3DABw==
+X-Received: by 2002:a17:907:7e91:b0:aa6:9503:aa73 with SMTP id a640c23a62f3a-abc09d2d323mr113893766b.51.1740091571712;
+        Thu, 20 Feb 2025 14:46:11 -0800 (PST)
 Received: from foxbook (adtt173.neoplus.adsl.tpnet.pl. [79.185.231.173])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb9faab9f1sm802588366b.49.2025.02.20.14.45.01
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba53231fcasm1529786866b.25.2025.02.20.14.46.10
         (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Thu, 20 Feb 2025 14:45:01 -0800 (PST)
-Date: Thu, 20 Feb 2025 23:44:58 +0100
+        Thu, 20 Feb 2025 14:46:11 -0800 (PST)
+Date: Thu, 20 Feb 2025 23:46:08 +0100
 From: Michal Pecio <michal.pecio@gmail.com>
 To: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman  
  <gregkh@linuxfoundation.org>
 Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] usb: xhci: Simplify
- update_ring_for_set_deq_completion()
-Message-ID: <20250220234458.4bf8dcba@foxbook>
+Subject: [PATCH 2/3] usb: xhci: Simplify moving HW Dequeue Pointer past
+ cancelled TDs
+Message-ID: <20250220234608.6c237c3c@foxbook>
 In-Reply-To: <20250220234355.2386cb6d@foxbook>
 References: <20250220234355.2386cb6d@foxbook>
 Precedence: bulk
@@ -91,91 +91,125 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-This function checks if the queued Set Deq pointer really belongs to the
-ring it was queued on and updates the ring's dequeue state. It also used
-to count free TRBs, but that part has been removed.
+xhci_move_dequeue_past_td() uses a relatively complex and inefficient
+procedure to find new dequeue position after the cancelled TD.
 
-The code is needlessly complex and inefficent, walking TRBs one by one.
-And it could "jump off the segment into la-la-land" if a segment doesn't
-end with a link TRB or if the link points to another link.
+Replace it with a simpler function which moves dequeue immediately to
+the first pending TD, or to enqueue if the ring is empty.
 
-Make if faster, simpler and more robust. Upgrade xhci_dbg() to xhci_err()
-because this situation is a bug and shouldn't happen.
+The outcome should be basically equivalent, because we only clear xHC
+cache if it stopped or halted on some cancelled TD and moving past the
+TD effectively means moving to the first remaining TD, if any.
+
+If the cancelled TD is followed by more cancelled TDs turned into No-
+Ops, we will now jump over them and save the xHC some work.
 
 Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 ---
- drivers/usb/host/xhci-ring.c | 43 ++++++++++++++----------------------
- 1 file changed, 16 insertions(+), 27 deletions(-)
+ drivers/usb/host/xhci-ring.c | 64 ++++++++++--------------------------
+ 1 file changed, 18 insertions(+), 46 deletions(-)
 
 diff --git a/drivers/usb/host/xhci-ring.c b/drivers/usb/host/xhci-ring.c
-index 965bffce301e..c983d22842dc 100644
+index c983d22842dc..46ca98066856 100644
 --- a/drivers/usb/host/xhci-ring.c
 +++ b/drivers/usb/host/xhci-ring.c
-@@ -92,6 +92,11 @@ static bool trb_is_link(union xhci_trb *trb)
- 	return TRB_TYPE_LINK_LE32(trb->link.control);
+@@ -635,9 +635,9 @@ static u64 xhci_get_hw_deq(struct xhci_hcd *xhci, struct xhci_virt_device *vdev,
+ 	return le64_to_cpu(ep_ctx->deq);
  }
  
-+static bool trb_on_seg(struct xhci_segment *seg, union xhci_trb *trb)
-+{
-+	return seg->trbs <= trb && trb < seg->trbs + TRBS_PER_SEGMENT;
-+}
+-static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
+-				unsigned int slot_id, unsigned int ep_index,
+-				unsigned int stream_id, struct xhci_td *td)
++/* Move HW dequeue to the first pending TD or to our enqueue if there are no TDs */
++static int set_ring_dequeue(struct xhci_hcd *xhci, unsigned int slot_id,
++				unsigned int ep_index, unsigned int stream_id)
+ {
+ 	struct xhci_virt_device *dev = xhci->devs[slot_id];
+ 	struct xhci_virt_ep *ep = &dev->eps[ep_index];
+@@ -645,58 +645,31 @@ static int xhci_move_dequeue_past_td(struct xhci_hcd *xhci,
+ 	struct xhci_command *cmd;
+ 	struct xhci_segment *new_seg;
+ 	union xhci_trb *new_deq;
++	struct xhci_td *td;
+ 	int new_cycle;
+ 	dma_addr_t addr;
+-	u64 hw_dequeue;
+-	bool cycle_found = false;
+-	bool td_last_trb_found = false;
+ 	u32 trb_sct = 0;
+ 	int ret;
+ 
+-	ep_ring = xhci_triad_to_transfer_ring(xhci, slot_id,
+-			ep_index, stream_id);
++	ep_ring = xhci_triad_to_transfer_ring(xhci, slot_id, ep_index, stream_id);
 +
- static bool last_trb_on_seg(struct xhci_segment *seg, union xhci_trb *trb)
- {
- 	return trb == &seg->trbs[TRBS_PER_SEGMENT - 1];
-@@ -1332,41 +1337,25 @@ void xhci_hc_died(struct xhci_hcd *xhci)
- 		usb_hc_died(xhci_to_hcd(xhci));
- }
- 
-+/* Check if queued pointer is on the ring and update dequeue state */
- static void update_ring_for_set_deq_completion(struct xhci_hcd *xhci,
- 		struct xhci_virt_device *dev,
- 		struct xhci_ring *ep_ring,
- 		unsigned int ep_index)
- {
--	union xhci_trb *dequeue_temp;
-+	union xhci_trb *deq = dev->eps[ep_index].queued_deq_ptr;
-+	struct xhci_segment *seg;
- 
--	dequeue_temp = ep_ring->dequeue;
--
--	/* If we get two back-to-back stalls, and the first stalled transfer
--	 * ends just before a link TRB, the dequeue pointer will be left on
--	 * the link TRB by the code in the while loop.  So we have to update
--	 * the dequeue pointer one segment further, or we'll jump off
--	 * the segment into la-la-land.
--	 */
--	if (trb_is_link(ep_ring->dequeue)) {
--		ep_ring->deq_seg = ep_ring->deq_seg->next;
--		ep_ring->dequeue = ep_ring->deq_seg->trbs;
--	}
--
--	while (ep_ring->dequeue != dev->eps[ep_index].queued_deq_ptr) {
--		/* We have more usable TRBs */
--		ep_ring->dequeue++;
--		if (trb_is_link(ep_ring->dequeue)) {
--			if (ep_ring->dequeue ==
--					dev->eps[ep_index].queued_deq_ptr)
--				break;
--			ep_ring->deq_seg = ep_ring->deq_seg->next;
--			ep_ring->dequeue = ep_ring->deq_seg->trbs;
--		}
--		if (ep_ring->dequeue == dequeue_temp) {
--			xhci_dbg(xhci, "Unable to find new dequeue pointer\n");
--			break;
-+	/* Search starting from the last known position */
-+	xhci_for_each_ring_seg(ep_ring->deq_seg, seg) {
-+		if (seg == dev->eps[ep_index].queued_deq_seg && trb_on_seg(seg, deq)) {
-+			ep_ring->deq_seg = seg;
-+			ep_ring->dequeue = deq;
-+			return;
- 		}
+ 	if (!ep_ring) {
+ 		xhci_warn(xhci, "WARN can't find new dequeue, invalid stream ID %u\n",
+ 			  stream_id);
+ 		return -ENODEV;
  	}
-+
-+	xhci_err(xhci, "Set Deq pointer not on ring\n");
- }
  
- /*
+-	hw_dequeue = xhci_get_hw_deq(xhci, dev, ep_index, stream_id);
+-	new_seg = ep_ring->deq_seg;
+-	new_deq = ep_ring->dequeue;
+-	new_cycle = hw_dequeue & 0x1;
++	if (!list_empty(&ep_ring->td_list)) {
++		td = list_first_entry(&ep_ring->td_list, struct xhci_td, td_list);
++		new_seg = td->start_seg;
++		new_deq = td->start_trb;
++		new_cycle = le32_to_cpu(new_deq->generic.field[3]) & TRB_CYCLE;
++	} else {
++		new_seg = ep_ring->enq_seg;
++		new_deq = ep_ring->enqueue;
++		new_cycle = ep_ring->cycle_state;
++	}
+ 
+-	/*
+-	 * We want to find the pointer, segment and cycle state of the new trb
+-	 * (the one after current TD's end_trb). We know the cycle state at
+-	 * hw_dequeue, so walk the ring until both hw_dequeue and end_trb are
+-	 * found.
+-	 */
+-	do {
+-		if (!cycle_found && xhci_trb_virt_to_dma(new_seg, new_deq)
+-		    == (dma_addr_t)(hw_dequeue & ~0xf)) {
+-			cycle_found = true;
+-			if (td_last_trb_found)
+-				break;
+-		}
+-		if (new_deq == td->end_trb)
+-			td_last_trb_found = true;
+-
+-		if (cycle_found && trb_is_link(new_deq) &&
+-		    link_trb_toggles_cycle(new_deq))
+-			new_cycle ^= 0x1;
+-
+-		next_trb(&new_seg, &new_deq);
+-
+-		/* Search wrapped around, bail out */
+-		if (new_deq == ep->ring->dequeue) {
+-			xhci_err(xhci, "Error: Failed finding new dequeue state\n");
+-			return -EINVAL;
+-		}
+-
+-	} while (!cycle_found || !td_last_trb_found);
+-
+-	/* Don't update the ring cycle state for the producer (us). */
+ 	addr = xhci_trb_virt_to_dma(new_seg, new_deq);
+ 	if (addr == 0) {
+ 		xhci_warn(xhci, "Can't find dma of new dequeue ptr\n");
+@@ -1060,9 +1033,8 @@ static int xhci_invalidate_cancelled_tds(struct xhci_virt_ep *ep)
+ 	if (!cached_td)
+ 		return 0;
+ 
+-	err = xhci_move_dequeue_past_td(xhci, slot_id, ep->ep_index,
+-					cached_td->urb->stream_id,
+-					cached_td);
++	err = set_ring_dequeue(xhci, slot_id, ep->ep_index, cached_td->urb->stream_id);
++
+ 	if (err) {
+ 		/* Failed to move past cached td, just set cached TDs to no-op */
+ 		list_for_each_entry_safe(td, tmp_td, &ep->cancelled_td_list, cancelled_td_list) {
 -- 
 2.48.1
 
