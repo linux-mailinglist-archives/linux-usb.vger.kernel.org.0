@@ -1,80 +1,36 @@
-Return-Path: <linux-usb+bounces-20855-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20857-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26554A3D669
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 11:22:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CFE0A3D6CA
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 11:33:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 918383B55FF
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 10:22:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C35FD16D2EE
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 10:32:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C21CD1F12E9;
-	Thu, 20 Feb 2025 10:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="AN6xyaBQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97F7D1F1536;
+	Thu, 20 Feb 2025 10:31:59 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71CCA1F0E31
-	for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 10:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4AD71EE7C6;
+	Thu, 20 Feb 2025 10:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740046970; cv=none; b=pFZdvOVEC2Gt0n+g8i9MFTQrnt/P2WjrkbiXTxdQF/r4xTpwWsYMezIuHARt8Z4oGXL7ryX6tAI3AwU7ybL8POgNwz/LAjkzlKFQyUv6P+SJeR/4QUu49PhHYRbFLHkQTn/VzqmHcZtMWy8bSip2hjMgmUe5JgocQl/A4SW0iQg=
+	t=1740047519; cv=none; b=P71DJb4zuuc6akjegZk53SqnX8mzZbHthJMFh6XmeUtsxvjb3GkP4H3KFeGdf64gW/ODhNs3LmiH+IAhkPFgVovTs1dCqxcPR5aMnVDxZ4+l83oY2O0QLDVNLkNW5Quma+D1iyz5ywMxwyEXjfupp9YFPcIg5D3GIvpSvkn8BO8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740046970; c=relaxed/simple;
-	bh=dwV5C1T08uCJyhf61xNHGbLrnXfynaFJ/L/Ujo0Xy28=;
+	s=arc-20240116; t=1740047519; c=relaxed/simple;
+	bh=EoE8bMHv7xu0prvb8E0epB/K/6l0shvsMw5QSn1M2s4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g5nVKWT+cMtUFfT2kOEGc+uMHLuwbbA5WJMjf/C5D6+IXQk0lsbHvhWoZO/8Ci7/Qbab4i22uVq2129OLGZP9jBsIpS2GJuG+KA1Ji3/s2T0BP2VsuAnQaxgM9CLn+JtdgkyvaP87tSK5iZg2yyGZHqpHYu6gqe7QTbzBkXxmXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=AN6xyaBQ; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43996e95114so4479605e9.3
-        for <linux-usb@vger.kernel.org>; Thu, 20 Feb 2025 02:22:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1740046967; x=1740651767; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mdJ1tjXDGbz7fnnLGr6p9xq7nJI8m1bb43amubJ0qpU=;
-        b=AN6xyaBQmi9zBQcVep+o0zVfgKluhdmta3a2sU90KfgCm5Kfjp1sT/3Jbmh4tlaAxw
-         NgWxJUcR4LdAIxqSrMUYRoxyWh3G1pUYQds0foLS+dJPQybkMKgq/la0xZvOJRDrBokl
-         bQo17+XbHm6MJ0gycY1BkfKhSdnkHmPqfemN2nQph9V3jqEPPlyop6JXKK4+iQFbtf/J
-         GtiyN8gDwRSZpY2Usno9vkxZFtxUNyJwNLgzAzopxMCJ/aJM+DRNdsgFjhheXATGlmTd
-         YOs8Nw+nmrOZIEMQ824ZwlxNA/LP3x+Bj96sR0yaWH10wLb/Rh+p5ky3ZLaHGeEcTcWQ
-         3zDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740046967; x=1740651767;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mdJ1tjXDGbz7fnnLGr6p9xq7nJI8m1bb43amubJ0qpU=;
-        b=QkwAvsfXFkrHBruI/yqYmTpX6iiWNRZjPnX7LO5VTYQUJ/03rfNoyEDJucLBaZEBx9
-         kzSv28bG+lcgL3zkVtGaxgd5DjHawftq5aEna4/hf37/o5PCgC9Cu8GZUGfVC/24sGIF
-         cE9QlFm4j5Q4WN/UFx7iyxjiYOlNy9DxCYB5HxgGub3pFHx8yNTRtydfvm7G20Yi4yCw
-         gSt1cTypy83eCwL+DkjNkE07x5mVOATAfZ+pQ2KuWG+5VBMEyjhOMFE7W6ZLVoy9Its5
-         T3wa8ka625WxyF2H3kV1RfOc4CZELGpA7/0HS3v+Xch0XfkkNgb6sn1YxoBocJjXK2iJ
-         0peQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWQBDDNJzAOSjrlKup/jneZSBSz7hXMsrRuVPNHY+ynXVbphO4OLimYtbj0aMobdMoJK9xTA9zlE4c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzbwRrmS7sm2YqjPa07J3upW+QhiBhf9J9Ivyw0tSCXJ0kk275G
-	B3BZ4NXh4qmsBrijjnTlQdgkYTWX2J9QY75GG2F6gEQzLKgI/FXExqvGleg5EN0pbPseYskCzIb
-	L
-X-Gm-Gg: ASbGncvg7/FzFzr/Bvj5/oRx7Y9gngjzIFQpPW51NuVMYQ9aRLLr1+/EHysaU8Pfmyd
-	9RHNoHBhGSPa1LdDiuPVcI7PL66XcWpHZLSCa+/Ib9az/I30E9GNUtYrc74yJjw6uXCSHkT/EQj
-	ShF8nSbJcXhSUPnuU7+/Us0FtG3j2eQexy2KU9gr4GwpwxMd4yi13eOHgl5dmSgJ2VtZ38c1amv
-	vlIaGQcdcfTLlQBpdQJrsHv9eX+maCs/Uo8MIofokXkMpTLLSVZRPfSf0O+N8ZymjPnSpmfbrjw
-	uSAM/mt544w0auljfyzXTnkVh0egO9xk2WjJ0ivPuFE1Oce+3wHe7fk5bg==
-X-Google-Smtp-Source: AGHT+IFNBKicqin94xs9R9bvB+x/bbDZRuNAbanJhmggJELPLRHyKJNVbt685+Z4xzMPELU/nUfw9w==
-X-Received: by 2002:a05:6000:1fa5:b0:38f:4fa5:58ce with SMTP id ffacd0b85a97d-38f4fa55a25mr10752304f8f.6.1740046966694;
-        Thu, 20 Feb 2025 02:22:46 -0800 (PST)
-Received: from ?IPV6:2001:a61:136c:cf01:505d:b6ac:9103:aec6? ([2001:a61:136c:cf01:505d:b6ac:9103:aec6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f259d65bcsm20344688f8f.65.2025.02.20.02.22.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Feb 2025 02:22:46 -0800 (PST)
-Message-ID: <6d14b473-6d26-4b9e-88df-2532b0c88565@suse.com>
-Date: Thu, 20 Feb 2025 11:22:44 +0100
+	 In-Reply-To:Content-Type; b=D8BPmiZJO3S1rOon0zYt1JRfAsvkONRUbeIJN9QyyLOyh4wFT+5q7DSDUNPB/wr5MyG2Iu6vn4WoYOyRJXOq1OhqdjvyO/PHEOd2SsEFC0s2fFgBhpgNYNqqGA9dmRDuj0bPfdDS7k+61YXc8rQ8/szdWHXAaXIQAydq/3aLF3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 66793C4CED1;
+	Thu, 20 Feb 2025 10:31:52 +0000 (UTC)
+Message-ID: <6dc1e10e-9c40-4da3-b0e0-72bdc9daa827@xs4all.nl>
+Date: Thu, 20 Feb 2025 11:31:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -82,35 +38,140 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] usb: core: Add error handling in usb_reset_device for
- autoresume failure
-To: Wentao Liang <vulab@iscas.ac.cn>, gregkh@linuxfoundation.org
-Cc: stern@rowland.harvard.edu, christophe.jaillet@wanadoo.fr,
- mka@chromium.org, make_ruc2021@163.com, javier.carrasco@wolfvision.net,
- linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org
-References: <20250220095218.970-1-vulab@iscas.ac.cn>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <20250220095218.970-1-vulab@iscas.ac.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v5 04/12] driver core: Constify API device_find_child()
+ and adapt for various usages
+To: Zijun Hu <zijun_hu@icloud.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
+ <ukleinek@kernel.org>,
+ James Bottomley <James.Bottomley@HansenPartnership.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas@t-8ch.de>,
+ linux-kernel@vger.kernel.org, nvdimm@lists.linux.dev,
+ linux-sound@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-cxl@vger.kernel.org,
+ linux1394-devel@lists.sourceforge.net, arm-scmi@vger.kernel.org,
+ linux-efi@vger.kernel.org, linux-gpio@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-hwmon@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pwm@vger.kernel.org, linux-remoteproc@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-serial@vger.kernel.org, netdev@vger.kernel.org,
+ Zijun Hu <quic_zijuhu@quicinc.com>,
+ Alison Schofield <alison.schofield@intel.com>,
+ Takashi Sakamoto <o-takashi@sakamocchi.jp>
+References: <20241224-const_dfc_done-v5-0-6623037414d4@quicinc.com>
+ <20241224-const_dfc_done-v5-4-6623037414d4@quicinc.com>
+Content-Language: en-US, nl
+From: Hans Verkuil <hverkuil@xs4all.nl>
+Autocrypt: addr=hverkuil@xs4all.nl; keydata=
+ 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
+In-Reply-To: <20241224-const_dfc_done-v5-4-6623037414d4@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 20.02.25 10:52, Wentao Liang wrote:
-> In usb_reset_device(),  the function continues execution and
-> calls usb_autosuspend_device() after usb_autosuspend_device fails.
+On 24/12/2024 14:05, Zijun Hu wrote:
+> From: Zijun Hu <quic_zijuhu@quicinc.com>
+> 
+> Constify the following API:
+> struct device *device_find_child(struct device *dev, void *data,
+> 		int (*match)(struct device *dev, void *data));
+> To :
+> struct device *device_find_child(struct device *dev, const void *data,
+>                                  device_match_t match);
+> typedef int (*device_match_t)(struct device *dev, const void *data);
+> with the following reasons:
+> 
+> - Protect caller's match data @*data which is for comparison and lookup
+>   and the API does not actually need to modify @*data.
+> 
+> - Make the API's parameters (@match)() and @data have the same type as
+>   all of other device finding APIs (bus|class|driver)_find_device().
+> 
+> - All kinds of existing device match functions can be directly taken
+>   as the API's argument, they were exported by driver core.
+> 
+> Constify the API and adapt for various existing usages.
+> 
+> BTW, various subsystem changes are squashed into this commit to meet
+> 'git bisect' requirement, and this commit has the minimal and simplest
+> changes to complement squashing shortcoming, and that may bring extra
+> code improvement.
+> 
+> Reviewed-by: Alison Schofield <alison.schofield@intel.com>
+> Reviewed-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
+> Acked-by: Uwe Kleine-König <ukleinek@kernel.org> # for drivers/pwm
+> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
 
-This can only fail if the device needs to be physically
-resumed. In that case you called usb_reset_device() while
-you weren't supposed to. The purpose of the call is to keep
-the counter elevated in order to disable runtime power management
-temporarily.
+<snip>
 
-The code is older than helpers to elevate the count. The correct
-fix would be to use them rather than handle an error that cannot
-happen.
+> diff --git a/drivers/media/pci/mgb4/mgb4_core.c b/drivers/media/pci/mgb4/mgb4_core.c
+> index bc63dc81bcae0d20924174be74b93a2139d5879f..697d50bedfe285d74c702efde61e510df87c1229 100644
+> --- a/drivers/media/pci/mgb4/mgb4_core.c
+> +++ b/drivers/media/pci/mgb4/mgb4_core.c
+> @@ -123,7 +123,7 @@ static const struct hwmon_chip_info temp_chip_info = {
+>  };
+>  #endif
+>  
+> -static int match_i2c_adap(struct device *dev, void *data)
+> +static int match_i2c_adap(struct device *dev, const void *data)
+>  {
+>  	return i2c_verify_adapter(dev) ? 1 : 0;
+>  }
+> @@ -139,7 +139,7 @@ static struct i2c_adapter *get_i2c_adap(struct platform_device *pdev)
+>  	return dev ? to_i2c_adapter(dev) : NULL;
+>  }
+>  
+> -static int match_spi_adap(struct device *dev, void *data)
+> +static int match_spi_adap(struct device *dev, const void *data)
+>  {
+>  	return to_spi_device(dev) ? 1 : 0;
+>  }
 
-	Regards
-		Oliver
+Reviewed-by: Hans Verkuil <hverkuil@xs4all.nl>
 
+Regards,
+
+	Hans
 
