@@ -1,58 +1,60 @@
-Return-Path: <linux-usb+bounces-20884-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20885-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2323DA3E19A
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 17:58:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9497EA3E24C
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 18:24:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 598753A6010
-	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 16:51:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8800D704BC0
+	for <lists+linux-usb@lfdr.de>; Thu, 20 Feb 2025 17:18:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12274212B1F;
-	Thu, 20 Feb 2025 16:50:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F75D213248;
+	Thu, 20 Feb 2025 17:18:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pSBaeyZF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dcmOzMvW"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8233A1DFD85;
-	Thu, 20 Feb 2025 16:50:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E499C204875;
+	Thu, 20 Feb 2025 17:18:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740070211; cv=none; b=UrJYqJDnb1Ap4FCJgovigbJdR+Nb1FRq3Up0gBKHb75XAaEEnPaCjnywN0x3+Y+uXQ8lkTvgwWoI/bfoe6L6h7uX/3EOMUBZFsYp0oBnA/PS9I6kU1EQqpnKH0XXAA29WUz/Vzoz1frQSg6VmvGjo35l1O9rHjAeaAvLfNyZkW8=
+	t=1740071888; cv=none; b=nhBPryCukQCE+Sxm6C5css82NM756AalXoF/93Cl+r+OXDsmyJhK6C7JlOjLzeQNVRQSOSbuiK1NbA/uA7/HYIpWKF3+cs+EBUR7py0Mf/q5LzeYwxZrjF1rKoH/Hf1bSWqG3FBt5IHLtT29MZq2tl3o/b/YXSsXLUlBAcVI/JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740070211; c=relaxed/simple;
-	bh=r7vEij098XePCNx1q/9h8YAgRgZb+uXXU16yRDQpoSU=;
+	s=arc-20240116; t=1740071888; c=relaxed/simple;
+	bh=Z2dgO0/WumT0UHpa9g/06CqR8KBq3+iPEhbdAQlISMM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tHh00R64DT9MYl7+yOzZ0UvV3JwG42EPev5NpYJnXF3GWJfh/K2FTANSfuWUFYZ34DKmsZUnkZH1B4nqzghWWjnZ7lIVJMBkpVx4n/A8RETQbHcOrwu2m1czOScXRZZnqpoVTk+RPsAKOELAIy7g6M9FA3/CyFM3RLks8jdTz4s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pSBaeyZF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7AC6C4CED1;
-	Thu, 20 Feb 2025 16:50:08 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=KaO042bwNv6BZTngBdLtDpc+cqsWHsfD8Vg4tTWl7jcrbg+PoXFPjn3lOQvooP3CZ/92qmA317v0rAH78gCGlQXTS8G6MgYAdQAyXlvwvsmjDBEW5CYLe52qnAXTMixD0k21yRk8TDN6qxa+82ii38Va/t33dWt1RGxmzMiNCbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dcmOzMvW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B913DC4CEE2;
+	Thu, 20 Feb 2025 17:18:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740070211;
-	bh=r7vEij098XePCNx1q/9h8YAgRgZb+uXXU16yRDQpoSU=;
+	s=k20201202; t=1740071887;
+	bh=Z2dgO0/WumT0UHpa9g/06CqR8KBq3+iPEhbdAQlISMM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pSBaeyZFC671w2GzIv2T8buca6YJuGw6jDMXRB6BOhxoQ3xgitvpNvp4j9zQEwLXk
-	 4I0v2sjtCAegGCBAcA8bGA27eJ4sb4olPi6VCs1Rn082i3KV/oKN0OpbLr0b9vM1XW
-	 7Y7qUOAB+SHHW78oydrBrpxM1GmnwSTwP+JzSxitTY5SMOF3Ebbn642fm+HhfkkWYg
-	 phJn2pj+PbFbFunMb2W0hhzNOAVlKHZ6F2xSgTk/BXus9jjoWOfvKwdtONqY8neO/y
-	 pbqPBPU+NpYg6LLXixZmFCBNr4/tA9Z6Ml1okmG4OAcQWZ/3nYJl3G9JLDk697yt9I
-	 dMYJSAF+T562Q==
-Date: Thu, 20 Feb 2025 16:50:06 +0000
+	b=dcmOzMvW4JIwJparBiYVKIryFuiTlW2Pqv3d/5vZ9aqOGbSzX2myip7poZdKwQxF/
+	 kco7+x0wcGepCahG6fG0kJ+OX+2q6DDFFYRksccaPpTzcUSASKXlGr+6DGjPx3ti0L
+	 47IhkEtO1nGrTNLup+6HGfXnihDHyi+0n72UbxHTcyrDs6sg1PTdp2IzIzDZkG3Dur
+	 MUbJx9n0ZcRIGxSKiCheGaeoXS5Z+cSQhdrWXy2+XHij3t67Xc12I50Od96cKnkh1S
+	 wbXDmzuOmXXcv0PQiFkWqau/auRrUmJClFqqUkE3ogOx6lKLKIx46SiljExgCDS1aa
+	 NAZTXhuW/V3Vw==
+Date: Thu, 20 Feb 2025 17:18:02 +0000
 From: Conor Dooley <conor@kernel.org>
 To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: gregkh@linuxfoundation.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, gene_chen@richtek.com,
-	linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+Cc: chunfeng.yun@mediatek.com, gregkh@linuxfoundation.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, matthias.bgg@gmail.com,
+	linux-usb@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org, kernel@collabora.com,
 	pablo.sun@mediatek.com
-Subject: Re: [PATCH] dt-bindings: usb: richtek,rt1711h: Add missing vbus
- power supply
-Message-ID: <20250220-countable-passenger-59144620d57b@spud>
-References: <20250219140143.104037-1-angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH v3 1/3] dt-bindings: usb: mediatek,mtk-xhci: Add port for
+ SuperSpeed EP
+Message-ID: <20250220-travel-undercoat-339822407907@spud>
+References: <20250220105514.43107-1-angelogioacchino.delregno@collabora.com>
+ <20250220105514.43107-2-angelogioacchino.delregno@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -60,59 +62,40 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="J037/kZKzyo6CE9E"
+	protocol="application/pgp-signature"; boundary="ZISaQ+/FlBvHadWX"
 Content-Disposition: inline
-In-Reply-To: <20250219140143.104037-1-angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20250220105514.43107-2-angelogioacchino.delregno@collabora.com>
 
 
---J037/kZKzyo6CE9E
+--ZISaQ+/FlBvHadWX
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 19, 2025 at 03:01:43PM +0100, AngeloGioacchino Del Regno wrote:
-> The RichTek RT1711H and RT1719 chips do have a vbus pin that is
-> used for attach/detach detection (respectively, pin A1 and 11):
-> allow a vbus-supply phandle for that.
+On Thu, Feb 20, 2025 at 11:55:12AM +0100, AngeloGioacchino Del Regno wrote:
+> Add a port used to connect the SuperSpeed output endpoint to a
+> Type-C connector.
+>=20
+> Note that the MediaTek XHCI controllers are always in front of a
+> different controller handling the USB HS (usually, MTU3), so the
+> only port that this controller provides is SuperSpeed, while the
+> HighSpeed one comes from elsewhere.
 >=20
 > Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
 abora.com>
 
 Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-> ---
->  Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml | 3 +++
->  1 file changed, 3 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml b=
-/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-> index 8da4d2ad1a91..ae611f7e57ca 100644
-> --- a/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-> +++ b/Documentation/devicetree/bindings/usb/richtek,rt1711h.yaml
-> @@ -30,6 +30,9 @@ properties:
->    interrupts:
->      maxItems: 1
-> =20
-> +  vbus-supply:
-> +    description: VBUS power supply
-> +
->    wakeup-source:
->      type: boolean
-> =20
-> --=20
-> 2.48.1
->=20
-
---J037/kZKzyo6CE9E
+--ZISaQ+/FlBvHadWX
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ7ddPgAKCRB4tDGHoIJi
-0jEsAP96MVC5KD9LhVk6tQKvH1Nc8949THj7womtWHiVIM3b4AEAyvTFu74qcapO
-hWWa3LjqDspE991pZ/RDvXnh2bYxxg0=
-=5wv4
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ7djygAKCRB4tDGHoIJi
+0pwNAP9LSza0fN2VrkokGvJROiNTsBtv8u28z6YZ0tVasE/wSQD9GZqsn3abIJ14
+wNsSo8xwfhXVj8RsgcZpEbcLFtCN+Ag=
+=OB/N
 -----END PGP SIGNATURE-----
 
---J037/kZKzyo6CE9E--
+--ZISaQ+/FlBvHadWX--
 
