@@ -1,146 +1,133 @@
-Return-Path: <linux-usb+bounces-20919-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20918-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83364A3EF20
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 09:53:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ECF3A3EF22
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 09:53:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E0CA189D816
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 08:53:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF6747A556E
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 08:51:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07A2202C23;
-	Fri, 21 Feb 2025 08:53:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3C520124E;
+	Fri, 21 Feb 2025 08:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BcZy8D0z"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mQNjrOE1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A20D633EA;
-	Fri, 21 Feb 2025 08:53:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8033220103F
+	for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2025 08:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740127992; cv=none; b=GUKpvNrUHfnUhsvvPS1hSNjjn3UFyue+6mAphZSAmvYTHTDMav+rKP6zD2of3fk9UsJbOvUOUlCqwk+3+8LWW+8gPeEamS+gNbZIWERVNJ2oTALd3AyjecXJBsvyc4hNtBxJHAbqU9//U/RU837bHS0n/hukf7bSIW+zE/ffP+w=
+	t=1740127932; cv=none; b=Ma9ka7vMOCyqUcqsZUj8gZdVo0TJFzWvdU41qBD5qRFr7Xs2AEIRiE00jzGyPStGQ6kWkOVvph5Y2Eh27qe2IQvE8pz4POncQTXJruqOGjyUR4x1xWfh4HFUBIvGyQU/LNqrxU88N9NgG7xfd43zfvk+B9cahFS5lkiTHPGQsyg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740127992; c=relaxed/simple;
-	bh=AvdfNC/0fw6razFiLTY/gc9KZ7drgzB6pWKOjhOrLtc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D5WtD3qdRA22DNJoXD+ru+V9A+bepUJJG//is+yzlLlmi1VnUWS5kignSryzXr3tnPynqCi6lPrC5hbpm39lkPRnF9IiJ1y2mGnBBey1QuLb7QSrRvr5zdIqVAaobkKRc9YL1qf5H0TBOVA4eFv9HFC52tvSUvfqf6yAZQ+CTqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BcZy8D0z; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6f7031ea11cso16164097b3.2;
-        Fri, 21 Feb 2025 00:53:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740127989; x=1740732789; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+jR358HQpp23LJWIOUBf9DeNyqJuGtgcMhAeCjLmW/U=;
-        b=BcZy8D0zto9bjrGUALgdbZvc/nZroEIhS+3OzzreZRG1XCfkn0YF4qhIHHK+Q5e8ss
-         xpUUiFx5evDgFkzF7l/J9VCLs0ldWZW4VZgb+v85U51vsbBmSTDraa8A8bceAdyG+0op
-         9l6JhmrVQPTtN9eQmMD+V6nCj/Agt9uFezCu/lBqhT388n834In7S2Cjf0qmmdK1WxW+
-         KVnRTTGDIJfEZ4inqnv8Ndm3MsSGsArgo8q6opvKAWSllktM1+CHF9+wVZ99EcLZMIX1
-         qngGiMpvKREXrxJq+ravfW3qkU8y+yITohanqx14OhPZH9VQNFFKmkeUqjEX/ZqkpRjt
-         aoVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740127989; x=1740732789;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+jR358HQpp23LJWIOUBf9DeNyqJuGtgcMhAeCjLmW/U=;
-        b=pw1KJiewqGZO3Ul9nb8hHiNzAVD11V9i1+Jl/4RMcL6dHn8ZY2kK4fTIcun4buoTyR
-         1Wv+DDLwxf8PXSCyyY/aP4koG0i0Wcty4GbHFLxLjTxFesvrxugmdAWL1maUzSUofgaP
-         83GBfxdaNYffycF8jugevhy/DTeRLAYbOuQPo9ha2ieCBmAhTgI0wPw9w0lrRUcFpUf1
-         vmvKMZ5HF72yykvhgSKS83gYbbd6gaoE4X3GVpHFQoBKA4Vdhohvr/jpiNLFV22G//MB
-         zuQi3ELw0Or33aHOBb3Y/mjJhrTyGsM2zWYl+3HP9llZBvGjnWT4UnRARsfUanRxFhIw
-         BQ0w==
-X-Forwarded-Encrypted: i=1; AJvYcCU5mJSkHEHcZB9YiY89VxGl/C0YHD3jckCLQhsecmaZAHyWhzV5s4/JCRvTDehV//N9qobuO38c0E8d@vger.kernel.org, AJvYcCUQZywXUxSOFy8zYuyqYGUDww2mrqurpkBs3FFB+yVCwiVsSGyLqz4Q2Onk5PBxdazI9vZrc8XwO6YXIkE=@vger.kernel.org, AJvYcCV39mu1d6k0eholjyEd+3JQR9ynfMX15am0fqvQlReoZ2hWMBrZ5KHEkgK77naQ7GCHb8W3UCMBVUx3@vger.kernel.org, AJvYcCVyp2XVrou/0GVWi45WLX96f4CWtdRiSaeHnLWGMQbxQAFbYO4leZnu1/RcR42kklW8r7DZNaw+yVozjTQJ@vger.kernel.org, AJvYcCW0JhW8LWooe3xt+9zXjSuOt4532MYJGFruWC9LyDsa6LfVeG9BXQs9FwuJf3qS/bwfBBDCfrn4F0c=@vger.kernel.org, AJvYcCW9LyWJKwZ3EL8Vbca7I5pfs69dfv233WjskQqwBs+M/EbeR6R0iC8t0YS0nX3O38CwIF6HvlUpWJZDCh734OQ=@vger.kernel.org, AJvYcCWRVG0Mts+744JG/7ZKH2aCfXi0Fe3re02d5m82mnDp6ie66LFlbWlUwyOnTqpM+G+rEEoU8xBnn3mpQQ==@vger.kernel.org, AJvYcCWsLr7OIjJiAEAYKzCGeMsWLxYiC2LskkBF2tf0L+bQh69YcU6/6sknu0vz8Agd6aaN0012JGDyt7Lq@vger.kernel.org, AJvYcCXkA87qHcCLpd67LPxH5FwH9v5v7pP2y+6jU7YCV6e5q605S7mE97+YTrAxH8xGbaPxSqt2F0j8@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfD4zQQMt5vn+FYW7Dj3JFe+lmrTe6Fo6WCx2B/WMMmMNETNyC
-	VAByooZInZeknR7VEJUJiOoxLdlr4nn+8LOW778KnNny8xfbRLwUWPuYUhOA2fgkOdKltsWVZtH
-	44CfuiUJklvc05xyuMmw5Uno4OJ8=
-X-Gm-Gg: ASbGncuTtMSpJjKNNJKVNMmu3n09ys+BHDXvKGdFVYQ3Xwy7BH+3mxVOjrcD2fmMSKs
-	0amYW/mMMO13TE/Dxq2REksD088qPhGSfbAerx/7R4lyFvkJN5NX1w3wsvDTHkwfv5pUgeDwzbG
-	K+DEFOQcNdNOW0mbK7tDUz4+og6CXuqUnn55RTV36ntw==
-X-Google-Smtp-Source: AGHT+IFFTv7mQS14e9HKcqRG3/KsgEtYDi7b0s/xnrbTYOGNNlU/jBMS8OnkWwa2w46rPzinCnYjeg60XgLeZT96Nxo=
-X-Received: by 2002:a05:690c:6404:b0:6f9:a33a:4c09 with SMTP id
- 00721157ae682-6fbcc25ef84mr21019997b3.18.1740127989379; Fri, 21 Feb 2025
- 00:53:09 -0800 (PST)
+	s=arc-20240116; t=1740127932; c=relaxed/simple;
+	bh=6bvVGaGnta9Tej9ZF83+g21NjrRB16+DjPTG5hUNtnE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=klZkMgwDNxbjaBkbPwcVpj4FvnfCQFtyEOVBd/pELfhUvIu7ETimMdKeiDsJIl5gzXf6vF9UrZRSQlVtqPnnJwnjNDtEabKMNdxnoqNTYvp9e2o4SGIDa99NyWLoOeLPMGVG6vf15zwjSTBt7deqV4spDIC6bboK533UtdlG3xI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mQNjrOE1; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740127930; x=1771663930;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=6bvVGaGnta9Tej9ZF83+g21NjrRB16+DjPTG5hUNtnE=;
+  b=mQNjrOE1Z7zJGVrSZF/4EpH+/34SqM8W9zkoYLahuFccU4wBgYZJW2bI
+   EEdLWbO20bpdH44bln7K/JuuplvWKtMfkLHCiDIkCQ9dkRrafMptuneB8
+   bTo8Q9Mzu6JtlK+qWtonKveq+b0KkZJ25GWRkj25ghBkE4ay9AOZxVUcK
+   A4NOUnQ2txocVO/9i1XmWWe9pHunXlMkKIPz8GiLa4WQd2A8EUHNhsn3y
+   0H4igRB+1lmDQl3di3cDWJXHtG1+a4Q/rYk0qucDHoIgaIJQXW5bHgRg1
+   by/CEG/tYDYVqZRsEyOiLsjIAwhz3XwM6gEsaUJdN4cViOU3R3RaBwSfN
+   A==;
+X-CSE-ConnectionGUID: 43wEPHGaRPWa1CULZEtn2w==
+X-CSE-MsgGUID: Oo4hRxj+SbSbANGwLmsfgw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41145863"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="41145863"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 00:52:10 -0800
+X-CSE-ConnectionGUID: bMHSOsHDTjGS0I1LxnaFlg==
+X-CSE-MsgGUID: y2dVYvcIT3GzQqTJByr74g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,304,1732608000"; 
+   d="scan'208";a="119932414"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa005.fm.intel.com with ESMTP; 21 Feb 2025 00:52:08 -0800
+Message-ID: <01300a1a-a2f1-4816-9341-933ef236e887@linux.intel.com>
+Date: Fri, 21 Feb 2025 10:53:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-5-a0282524688@gmail.com> <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
- <CAOoeyxX4guHzUap1ieQ_L3PrvpBAYbMiQKrb6ko=MGsF5RcXLg@mail.gmail.com> <20250221-light-neat-doberman-1166a5-mkl@pengutronix.de>
-In-Reply-To: <20250221-light-neat-doberman-1166a5-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 21 Feb 2025 16:52:58 +0800
-X-Gm-Features: AWEUYZk6by-3vXQ6oDlfBy8kG3O6ZrNx-AUodUyxeYU9X_L9LPdI1eCwguWgvdM
-Message-ID: <CAOoeyxXaCdFS+BLh_2ESyHF3Sf50iVM2A7ys5R+sRFx4gK_U0Q@mail.gmail.com>
-Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] USB: core: Add eUSB2 descriptor and parsing in USB core
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, Kannappan R <r.kannappan@intel.com>,
+ Amardeep Rai <amardeep.rai@intel.com>
+References: <20250220141339.1939448-1-mathias.nyman@linux.intel.com>
+ <2025022056-confess-unlovely-da5a@gregkh>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <2025022056-confess-unlovely-da5a@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B42=E6=9C=8821=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=884:08=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> On 21.02.2025 16:01:07, Ming Yu wrote:
-> > Hi Marc,
-> >
-> > Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B42=E6=9C=
-=887=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:15=E5=AF=AB=E9=81=93=
-=EF=BC=9A
-> > >
-> > > > +static irqreturn_t nct6694_can_irq(int irq, void *data)
-> > > > +{
-> > > > +     struct net_device *ndev =3D data;
-> > > > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > > > +     struct nct6694_can_event *evt =3D priv->event;
-> > > > +     struct nct6694_cmd_header cmd_hd =3D {
-> > > > +             .mod =3D NCT6694_CAN_MOD,
-> > > > +             .cmd =3D NCT6694_CAN_EVENT,
-> > > > +             .sel =3D NCT6694_CAN_EVENT_SEL(priv->can_idx, NCT6694=
-_CAN_EVENT_MASK),
-> > > > +             .len =3D cpu_to_le16(sizeof(priv->event))
-> > > > +     };
-> > > > +     irqreturn_t handled =3D IRQ_NONE;
-> > > > +     int can_idx =3D priv->can_idx;
-> > > > +     int ret;
-> > >
-> > > it would make sense to have a event pointer here instead of the can_i=
-dx?
-> > >
-> > >         const struct nct6694_can_event *event =3D &priv->event[priv->=
-can_idx];
-> > >
-> > The CAN Event command always returns 16bytes: the first 8 bytes
-> > correspond to the CAN0 event, and the last 8 bytes correspond to the
-> > CAN1 event. Therefore, the event pointer here refers to both event
-> > buffers.
->
-> Yes, but in the following code uses "priv->event[can_idx]" several
-> times, this is why I proposed to have a dedicated "struct
-> nct6694_can_event *event" variable.
->
-Okay, I'll update the code.
+On 20.2.2025 18.35, Greg KH wrote:
+> On Thu, Feb 20, 2025 at 04:13:39PM +0200, Mathias Nyman wrote:
+>> From: Kannappan R <r.kannappan@intel.com>
+>> --->> @@ -64,9 +65,10 @@ struct ep_device;
+>>    * descriptor within an active interface in a given USB configuration.
+>>    */
+>>   struct usb_host_endpoint {
+>> -	struct usb_endpoint_descriptor		desc;
+>> -	struct usb_ss_ep_comp_descriptor	ss_ep_comp;
+>> -	struct usb_ssp_isoc_ep_comp_descriptor	ssp_isoc_ep_comp;
+>> +	struct usb_endpoint_descriptor			desc;
+>> +	struct usb_ss_ep_comp_descriptor		ss_ep_comp;
+>> +	struct usb_ssp_isoc_ep_comp_descriptor		ssp_isoc_ep_comp;
+>> +	struct usb_eusb2_isoc_ep_comp_descriptor	eusb2_isoc_ep_comp;
+> 
+> No real need to indent any of these, but oh well :)
 
+It looked odd when adding one new variable off by a space compared to all the
+other neatly tab-aligned variables. So I shifted them all right.
 
-Thanks,
-Ming
+>> +/* USB_DT_EUSB2_ISOC_ENDPOINT_COMP: eUSB2 Isoch Endpoint Companion descriptor */
+>> +struct usb_eusb2_isoc_ep_comp_descriptor {
+>> +	__u8	bLength;
+>> +	__u8	bDescriptorType;
+>> +	__le16	wMaxPacketSize;
+>> +	__le32	dwBytesPerInterval;
+>> +} __attribute__ ((packed));
+>> +
+>> +#define USB_DT_EUSB2_ISOC_EP_COMP_SIZE	8
+> 
+> Can't we use a sizeof() for this as well?  I guess we don't do it for
+> other structures, so maybe not.
+> 
+> Anyway, this looks fine, if you want to just send an update for the
+> 0x0220 later on if you think it's needed, please do.
+
+Thanks for looking at this.
+
+We did consider defining 0x0220, but checked that usb core uses magic numbers
+for bcdUSB in other places:
+
+hcd.c:  if (le16_to_cpu(usb_dev->descriptor.bcdUSB) >= 0x0201) {
+hub.c:                  (le16_to_cpu(udev->descriptor.bcdUSB) < 0x0300)) {
+hub.c:  if (le16_to_cpu(udev->descriptor.bcdUSB) >= 0x0201) {
+hub.c:          if (le16_to_cpu(udev->descriptor.bcdUSB) >= 0x0200
+hub.h:          le16_to_cpu(hdev->descriptor.bcdUSB) >= 0x0310 &&
+
+Makes sense to add a separate patch later on that define all these.
+
+Thanks
+Mathias
 
