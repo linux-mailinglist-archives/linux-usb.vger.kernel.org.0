@@ -1,55 +1,54 @@
-Return-Path: <linux-usb+bounces-20910-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20911-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0A5BA3EC44
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 06:43:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC22CA3EC43
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 06:42:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 751743AE217
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 05:41:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E899719C52FD
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 05:42:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341971FBE9B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EF531FBEAC;
 	Fri, 21 Feb 2025 05:41:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YMlxYCfu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IS2SL16V"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD01B1FBCA9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 271671FBE9A
 	for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2025 05:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740116511; cv=none; b=qedGwSHG1tobSEz1ORpp0Q52DEnt7o6aSVJXfuVwmrYN0YuXsWj/yYaHy0UjV+3QVkqGdgPbRUWTWOJ/FtISzMaBMG6CN4oqW7ZNU+WBPIim68YIksQR1TUL2XsCDCAOpTxhBChtJPaELnoIFB+eTNLzXJuIfuSmsH43hqNbjUQ=
+	t=1740116512; cv=none; b=cKOr7ARTfTQjKq5ySlms6vo4Nb5OFdoU0PVU2eWxnzN8PQVIBHFcMOHaYlV6SbDg6DTh/s+hFN4g3Ul0bNoCWXKZ/TwiWHyCJNfOHCjw6AickdYOXzB+3OPbxy3hQWwNizLVLBZVxVvHfpb+3Fonw4ksgarcGb+BChbwt5dA8q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740116511; c=relaxed/simple;
-	bh=2HVlOU4ErC2cL+ymoS6aaUZpLcNaTbzgkzKA3fytRaU=;
+	s=arc-20240116; t=1740116512; c=relaxed/simple;
+	bh=ilISTW/eath5opKTF7wIRlnjtIim9vl5TMNYB2xO0os=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=b7QGrMnAbg312vSDwrzup20IG58JhTk4ovL0lNQHPg3Bx3skL+sqgIdIqlVhhx/2wGWnNLEiDNbtdXOuO9hcsn/NPBatKs2s0nZPmk6VIeHmr7tGg8T1lCXeFGbECUVlHtUSsYwtAjNBisJsAd+MXTQ6SJUB6DCtNDwifwP7VdI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YMlxYCfu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E623C4CEE6;
-	Fri, 21 Feb 2025 05:41:50 +0000 (UTC)
+	 MIME-Version; b=cxMchGRG7y91Sr8ZFWCM/R7rOXssLPMaOL9cjfiYGZy/LOw7AqrxRg23Q50zdvg4178fGAJ4wAu4pLyGEBkuq/k+QVLKKRwLPgt2Sh5q+f+fQYIP+mKzCQOfgxva2Ft/NTxWSczOm9Q63g90Tm59FtPYne6rn8gD30RzRUtvlpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IS2SL16V; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CB33C4CEE2;
+	Fri, 21 Feb 2025 05:41:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1740116511;
-	bh=2HVlOU4ErC2cL+ymoS6aaUZpLcNaTbzgkzKA3fytRaU=;
+	bh=ilISTW/eath5opKTF7wIRlnjtIim9vl5TMNYB2xO0os=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=YMlxYCfuB+qlDsPl8geEckzenyFQZB+S/469JwRk/CetpDliS65Gk1LdmHe8TiOiR
-	 xkErIxko6HE/I0GxEL8831gMihEdBAsWG+0WJ96WOlQOsIO0rMeuz1VaIz9Qb/E5Zt
-	 EE9iVNtEFy/ByMT+Fw5l7QurMqz3Fw8oJkC31i5FGukBzOZZ2LQfovt3KaULRXDsZz
-	 GDkBpB16ZsnBG6DJL0NW3gJ70J+mY6ZyovPjTnGAY3LpJxygQLOmV8uJb6Bfa+rfau
-	 0LOTUcoH+XMZTGCXmUefpFpwH8A6YU655m6E2XVNsgJE3eRUdvSIK6FIagFdP5AMR/
-	 wV00aTLCePgJg==
+	b=IS2SL16VhkU2dZLLoGNcT3vkXfJvH9vZl7DVX6ka4qKOP0Un+nI32H2PoaLxmu6oM
+	 M1Be1UTxSYb700ehbJw1ERk1oQXHYfbLusl0aBooPMKB5P85uL34QdEQXH0dnQuHfm
+	 SP7zSyeWUZX/J8D+ORzD3fzBU/n9AnynkWQBHDNP7xAyPJZ7BcboqdA4GlwWgTjCJW
+	 i2ehrVKRhuLxlk6CLhp9bWR+ZYgR7WsJJhmeh7SPSJqEDPxLdZFkGbv1HiFnfcX9nq
+	 SpWUxiH9x/6LFBCu09V5OBSNjifrOlUDkc/P9KwRtktpdrDc/jbBQEbLL+Qa7ATSiu
+	 Z02piYJ41YNmg==
 From: Mario Limonciello <superm1@kernel.org>
 To: mario.limonciello@amd.com,
 	heikki.krogerus@linux.intel.com,
-	gregkh@linuxfoundation.org,
-	ajayg@nvidia.com
+	gregkh@linuxfoundation.org
 Cc: linux-usb@vger.kernel.org
-Subject: [PATCH 1/2] ucsi_ccg: Don't show failed to get FW build information error
-Date: Thu, 20 Feb 2025 23:40:03 -0600
-Message-ID: <20250221054137.1631765-2-superm1@kernel.org>
+Subject: [PATCH 2/2] ucsi_ccg: Don't show non-functional attributes
+Date: Thu, 20 Feb 2025 23:40:04 -0600
+Message-ID: <20250221054137.1631765-3-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250221054137.1631765-1-superm1@kernel.org>
 References: <20250221054137.1631765-1-superm1@kernel.org>
@@ -63,37 +62,63 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-The error `failed to get FW build information` is added for what looks
-to be for misdetection of the device property firmware-name.
+If no fw_build is recognized for the controller there is no point to
+exposing the `do_flash` attribute.
 
-If the property is missing (such as on non-nvidia HW) this error shows up.
-Move the error into the scope of the property parser for "firmware-name"
-to avoid showing errors on systems without the firmware-name property.
+Add an is_visible callback to the attribute group and check for that
+fw_build member to hide when not applicable.
 
-Fixes: 5c9ae5a87573d ("usb: typec: ucsi: ccg: add firmware flashing support")
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/usb/typec/ucsi/ucsi_ccg.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ drivers/usb/typec/ucsi/ucsi_ccg.c | 25 +++++++++++++++++++------
+ 1 file changed, 19 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/usb/typec/ucsi/ucsi_ccg.c b/drivers/usb/typec/ucsi/ucsi_ccg.c
-index 740171f24ef9f..663aca9421410 100644
+index 663aca9421410..801a66efa9820 100644
 --- a/drivers/usb/typec/ucsi/ucsi_ccg.c
 +++ b/drivers/usb/typec/ucsi/ucsi_ccg.c
-@@ -1432,11 +1432,10 @@ static int ucsi_ccg_probe(struct i2c_client *client)
- 			uc->fw_build = CCG_FW_BUILD_NVIDIA_TEGRA;
- 		else if (!strcmp(fw_name, "nvidia,gpu"))
- 			uc->fw_build = CCG_FW_BUILD_NVIDIA;
-+		if (!uc->fw_build)
-+			dev_err(uc->dev, "failed to get FW build information\n");
- 	}
+@@ -1390,22 +1390,35 @@ static ssize_t do_flash_store(struct device *dev,
+ 	if (!flash)
+ 		return n;
  
--	if (!uc->fw_build)
--		dev_err(uc->dev, "failed to get FW build information\n");
+-	if (uc->fw_build == 0x0) {
+-		dev_err(dev, "fail to flash FW due to missing FW build info\n");
+-		return -EINVAL;
+-	}
 -
- 	/* reset ccg device and initialize ucsi */
- 	status = ucsi_ccg_init(uc);
- 	if (status < 0) {
+ 	schedule_work(&uc->work);
+ 	return n;
+ }
+ 
++static umode_t ucsi_ccg_attrs_is_visible(struct kobject *kobj, struct attribute *attr, int idx)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct ucsi_ccg *uc = i2c_get_clientdata(to_i2c_client(dev));
++
++	if (!uc->fw_build)
++		return 0;
++
++	return attr->mode;
++}
++
+ static DEVICE_ATTR_WO(do_flash);
+ 
+ static struct attribute *ucsi_ccg_attrs[] = {
+ 	&dev_attr_do_flash.attr,
+ 	NULL,
+ };
+-ATTRIBUTE_GROUPS(ucsi_ccg);
++static struct attribute_group ucsi_ccg_attr_group = {
++	.attrs = ucsi_ccg_attrs,
++	.is_visible = ucsi_ccg_attrs_is_visible,
++};
++static const struct attribute_group *ucsi_ccg_groups[] = {
++	&ucsi_ccg_attr_group,
++	NULL,
++};
+ 
+ static int ucsi_ccg_probe(struct i2c_client *client)
+ {
 -- 
 2.43.0
 
