@@ -1,118 +1,86 @@
-Return-Path: <linux-usb+bounces-20934-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20935-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83B8DA3FFB4
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 20:27:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53D9CA40247
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 22:50:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41C3F705BD6
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 19:27:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55B6C17DA5C
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 21:49:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECBAC25291E;
-	Fri, 21 Feb 2025 19:27:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DD61254B0A;
+	Fri, 21 Feb 2025 21:49:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=ijzerbout.nl header.i=@ijzerbout.nl header.b="Vn8IODOe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NBaRt0Hf"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from bout3.ijzerbout.nl (bout3.ijzerbout.nl [136.144.140.114])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EBFE5223;
-	Fri, 21 Feb 2025 19:26:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.144.140.114
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14A717CA17;
+	Fri, 21 Feb 2025 21:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740166025; cv=none; b=AaPqYiRbaHK64uohH9NJYdC/TwXDofnkv6br5MpPkINAEzc/gXRnzjsE5L4tzrvMdig3uNoFr9fwgY0ftj3lu4tWHQfZzRsG/UW/iYk5xAm63FkWvv8azaGt7zwjybrMItWf6a3QuJCIEb472vKaG1XjwFrwEcwrj2EicybKbxc=
+	t=1740174544; cv=none; b=krk2iW6I8ewfuDk16703KGG4vSGR9RXBaNVjvxHXqS/0t/h9xbDd9vyAJbwccjMssWWlHVt1nEBXhI5q+cUgnzanCqPCTgn8ZoZNQVlvrPtAa3pFIW4EOd+M+A906WsCS6Zu3azDv742FOHB4JnZjLKHlfNeZrcE2IQS1dJSqso=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740166025; c=relaxed/simple;
-	bh=ILuXRvq5uVQ5UBKoNazzH/vYwsdIKolCtj6DVuv2DsU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=M9uLN7Gr/qUTR4qptdmYguswKe+KcCc9sxSqpT9NKsmWAUquXq61o1dqcAZVgAoHZNAkYvv0cq8yxk49ulIYJk4eayRoOsa7IiNAW97k76jdLq725pgOazdt7r278mUpTB2iSJgUpWGeq07gVTMmPIXL9+m5n0Vz653X1VZuQNM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ijzerbout.nl; spf=pass smtp.mailfrom=ijzerbout.nl; dkim=pass (4096-bit key) header.d=ijzerbout.nl header.i=@ijzerbout.nl header.b=Vn8IODOe; arc=none smtp.client-ip=136.144.140.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ijzerbout.nl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ijzerbout.nl
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ijzerbout.nl; s=key;
-	t=1740166012; bh=ILuXRvq5uVQ5UBKoNazzH/vYwsdIKolCtj6DVuv2DsU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Vn8IODOeRzPVuDRBHqP7FOIdRt2Q1U4x+ZdgNDP/Uri1oFGqztfuykzMXPc8bqons
-	 2mHysco6hPF6y87701zaWbmxer4WhRBexO4RUxG3X1ftdEfslMsE0cz9XwGY8yOz16
-	 m92V/ZstUP9qzWGiLIobKfzR9/AKJTL/H34ZkgVqWC9tvWALOS7wQNVMnB1WuJovCV
-	 iZgpj0Pcq1pi/6ix47PBe4sw/jAi6yMyC9vTYLheDrNt5iTwO6z8jUlgZ4KTz92pJg
-	 H13+uCqFwEVXV39nzpqpZd29O6hHbKY3YdR5E8w45pKwh/IY8/FidA8W0eZP/wjGW6
-	 E2hVySaZcKHahbEDqSot/uopfJy9GkhZ3urqcHnoBNHTiWzGnYcn3mSnFYx6qfRmOG
-	 cgm9rWdd/1qyxYq1QndSR9giuXufXXl7KnhA6JL+T41q6w9QFbgtrk9S/Gwk+hsTTu
-	 4uptWD5jaWWS/l/ytmQx29kvxVnU0VtFqs/ux+OKlCQangpHtbUVfWkS22oJzBrXmi
-	 LK2IFRaHMOrWPbxcRYcxXsDoJuOsboj9ve0MK1y/awb9rOlBuZnCiwsm4ffZuXNL0/
-	 nRXSqg1L/8IYJ/Oo8i5jY9/z8C47iaUqMJNQnyBjoRr88wJgfSu8JaqlbOOAkKMLK6
-	 12S2A+KEbgRThFF5PiLHjoUo=
-Received: from [IPV6:2a10:3781:99:1:1ac0:4dff:fea7:ec3a] (racer.ijzerbout.nl [IPv6:2a10:3781:99:1:1ac0:4dff:fea7:ec3a])
-	by bout3.ijzerbout.nl (Postfix) with ESMTPSA id 2EEBB1601E1;
-	Fri, 21 Feb 2025 20:26:52 +0100 (CET)
-Message-ID: <a882365c-148c-410a-ac67-b7a17dafc501@ijzerbout.nl>
-Date: Fri, 21 Feb 2025 20:26:49 +0100
+	s=arc-20240116; t=1740174544; c=relaxed/simple;
+	bh=Zft0IVGvnv37d+3JlMQstIhyAg9GYo0BMaAAqeF4wf8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RL9MAVleivNYkpSbj6+vFTl+iUlHdxIV2QWf/3OPb+BHti5e3HlGNsGV7/X9uNlPujKmnv+7dTc/80JYQE/zSXaL/BdP5+tyqPUmHDZ0f/FHm50Zq1wRKAbUAVcuU8/UoYKOTEPNspAbfNlhWLnhDwY7DeJ0RUZCzrVKDPoQShI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NBaRt0Hf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05DE2C4CED6;
+	Fri, 21 Feb 2025 21:49:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740174544;
+	bh=Zft0IVGvnv37d+3JlMQstIhyAg9GYo0BMaAAqeF4wf8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=NBaRt0HfVe2Rz/djSl56xM9l7uI8+P7ANkuGV8K41Jkb3z9t0B/EBtQZrqddkH3JD
+	 NL1qeE8dcsBGBWGm0K2lhjdGjbM9mFp/o+xCAtxfAePka8uBA6zMJLC9Ks7AoldJgv
+	 6S/8FJQel0Mw4XzeGx2lDYElAZKMr2lDBvuZNRhoBWseAl/TDEl79jOIU6vRoLADmU
+	 qTQIf03jL9Z5R5YVuEw/MJ+4OcBQZAnP5JmhCIDX1XIPPo7VwVq4P+kLONeeknbp2N
+	 OwFzRAs8yKY/cV6ZBhG4CV9I7Ku825fC0Z7e+JzftAMrFwuCLKi2jtHCwn6YsymeqW
+	 TQHoVg4UBZjfg==
+Date: Fri, 21 Feb 2025 15:49:02 -0600
+From: Rob Herring <robh@kernel.org>
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: Frank Li <Frank.li@nxp.com>, gregkh@linuxfoundation.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, shawnguo@kernel.org,
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+	peter.chen@kernel.org, linux-usb@vger.kernel.org,
+	devicetree@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Subject: Re: [PATCH 2/6] dt-bindings: usb: usbmisc-imx: add compatible for
+ i.MX95 platform
+Message-ID: <20250221214902.GA128391-robh@kernel.org>
+References: <20250219093104.2589449-1-xu.yang_2@nxp.com>
+ <20250219093104.2589449-3-xu.yang_2@nxp.com>
+ <Z7Ycev436gWc/4Bn@lizhi-Precision-Tower-5810>
+ <20250220103209.zm4bvkkjtgewd53y@hippo>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] usb: gadget: Set self-powered based on MaxPower and
- bmAttributes
-To: Prashanth K <prashanth.k@oss.qualcomm.com>
-Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
- stable@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
- Peter Korsgaard <peter@korsgaard.com>,
- Sabyrzhan Tasbolatov <snovitoll@gmail.com>
-References: <20250217120328.2446639-1-prashanth.k@oss.qualcomm.com>
-Content-Language: en-US
-From: Kees Bakker <kees@ijzerbout.nl>
-In-Reply-To: <20250217120328.2446639-1-prashanth.k@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250220103209.zm4bvkkjtgewd53y@hippo>
 
-Op 17-02-2025 om 13:03 schreef Prashanth K:
-> Currently the USB gadget will be set as bus-powered based solely
-> on whether its bMaxPower is greater than 100mA, but this may miss
-> devices that may legitimately draw less than 100mA but still want
-> to report as bus-powered. Similarly during suspend & resume, USB
-> gadget is incorrectly marked as bus/self powered without checking
-> the bmAttributes field. Fix these by configuring the USB gadget
-> as self or bus powered based on bmAttributes, and explicitly set
-> it as bus-powered if it draws more than 100mA.
->
-> Cc: stable@vger.kernel.org
-> Fixes: 5e5caf4fa8d3 ("usb: gadget: composite: Inform controller driver of self-powered")
-> Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
-> ---
-> Changes in v2:
-> - Didn't change anything from RFC.
-> - Link to RFC: https://lore.kernel.org/all/20250204105908.2255686-1-prashanth.k@oss.qualcomm.com/
->
->   drivers/usb/gadget/composite.c | 16 +++++++++++-----
->   1 file changed, 11 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
-> index bdda8c74602d..1fb28bbf6c45 100644
-> --- a/drivers/usb/gadget/composite.c
-> +++ b/drivers/usb/gadget/composite.c
-> @@ -1050,10 +1050,11 @@ static int set_config(struct usb_composite_dev *cdev,
->   	else
->   		usb_gadget_set_remote_wakeup(gadget, 0);
->   done:
-> -	if (power <= USB_SELF_POWER_VBUS_MAX_DRAW)
-> -		usb_gadget_set_selfpowered(gadget);
-> -	else
-> +	if (power > USB_SELF_POWER_VBUS_MAX_DRAW ||
-> +	    !(c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
-Please check this change again. From line 983-884 there is a `goto done`.
-in case `c` is NULL. So, there will be a potential NULL pointer dereference
-with your change.
->   		usb_gadget_clear_selfpowered(gadget);
-> +	else
-> +		usb_gadget_set_selfpowered(gadget);
->   
->   	usb_gadget_vbus_draw(gadget, power);
->   	if (result >= 0 && cdev->delayed_status)
-> [...]
+On Thu, Feb 20, 2025 at 06:32:09PM +0800, Xu Yang wrote:
+> On Wed, Feb 19, 2025 at 01:01:30PM -0500, Frank Li wrote:
+> > On Wed, Feb 19, 2025 at 05:31:00PM +0800, Xu Yang wrote:
+> > > The i.MX95 USB2.0 controller is basically compatible with i.MX7D,
+> > > except it needs use hsio block control for wakeup setting. This will
+> > > add compatible for i.MX95 platform and restriciton on reg property.
+> > 
+> > Nit: Simple said
+> > Add compatible ...
+> > 
+> > Better mention "fsl,imx95-usbmisc" at subject.
+> > add compatible string "fsl,imx95-usbmisc" for ...
 
+The patch does a bit more than just add a compatible. 'Add i.MX95 
+support' is really enough. The diff is clear it is adding a compatible.
+
+Rob
 
