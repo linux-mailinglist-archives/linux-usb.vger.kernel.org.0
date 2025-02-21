@@ -1,152 +1,118 @@
-Return-Path: <linux-usb+bounces-20933-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20934-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6060BA3FE6A
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 19:12:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 83B8DA3FFB4
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 20:27:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41A27188A3B6
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 18:11:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41C3F705BD6
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 19:27:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AE32512E3;
-	Fri, 21 Feb 2025 18:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECBAC25291E;
+	Fri, 21 Feb 2025 19:27:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CUO5XUpE"
+	dkim=pass (4096-bit key) header.d=ijzerbout.nl header.i=@ijzerbout.nl header.b="Vn8IODOe"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798B624CEEE;
-	Fri, 21 Feb 2025 18:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from bout3.ijzerbout.nl (bout3.ijzerbout.nl [136.144.140.114])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EBFE5223;
+	Fri, 21 Feb 2025 19:26:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.144.140.114
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740161466; cv=none; b=fk5Dmn751wV+w6TgizeUg9rcY/oLBIohXsoLgJ6UnjdX+bfJrFM+zEquyDn9NtPjz09PXjy0wuPNIQ0LKsqoo0OfjWcypv6Mfs6jj3QwN8XPWJDYC47m+UFjU/+SMhwxH03V3AbG3ab06G/oQpuulN2Mae7PKfXdZPmatWwwOy4=
+	t=1740166025; cv=none; b=AaPqYiRbaHK64uohH9NJYdC/TwXDofnkv6br5MpPkINAEzc/gXRnzjsE5L4tzrvMdig3uNoFr9fwgY0ftj3lu4tWHQfZzRsG/UW/iYk5xAm63FkWvv8azaGt7zwjybrMItWf6a3QuJCIEb472vKaG1XjwFrwEcwrj2EicybKbxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740161466; c=relaxed/simple;
-	bh=mb3+FQLiAdF0GxPdTxxNZ1nsfmB1mwgJcruotyetN9Y=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=FfKwKMhJKgFzN6AljS0xTh6i4UD+xHj5fvLvNh8jI+gF3uoGS0tSRcG2UI78iUEQrOzzDSzlPlxe5VtIYfQ6htdloGkZqEO8AyqW6PRsWwH4uNpOu8yNiPl7fveTxfYsSIeLjJciSTLRS03xIpdc6LeNX8FSllwnTex7QDi0+FE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CUO5XUpE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 217A1C4CED6;
-	Fri, 21 Feb 2025 18:11:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740161466;
-	bh=mb3+FQLiAdF0GxPdTxxNZ1nsfmB1mwgJcruotyetN9Y=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=CUO5XUpE5/sksVVDBuF3JnxmN+bHo+c1O9ILuMJqjeQdO+1d4uH9jXDth3xbNBetl
-	 b9lCeEagUllp9vXDf12sYZJscUOgiOjcu57Es5G3iiVC8zOpU7vLE/MyHdotn1oJEA
-	 VPiOP12WJaT2QMAXEL/G9HIN+dllsF+42fpaZZTSuTdqBkXE/i8l7lFuLgpCXjTPYA
-	 u2/TtfZuka8QjTNTQqME60gh7MZErwn2Gbis8sy2tusEo2rDNqEMHSrlYZycoxpgLM
-	 qBjp06wjA6Jk/WF5wqsV/5fntE6+n/eM/SsyiFpdu13hL8xYkpSueAGhdYn3Kt5w0W
-	 pwOjHKW9HN2XQ==
-Date: Fri, 21 Feb 2025 12:11:04 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1740166025; c=relaxed/simple;
+	bh=ILuXRvq5uVQ5UBKoNazzH/vYwsdIKolCtj6DVuv2DsU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=M9uLN7Gr/qUTR4qptdmYguswKe+KcCc9sxSqpT9NKsmWAUquXq61o1dqcAZVgAoHZNAkYvv0cq8yxk49ulIYJk4eayRoOsa7IiNAW97k76jdLq725pgOazdt7r278mUpTB2iSJgUpWGeq07gVTMmPIXL9+m5n0Vz653X1VZuQNM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ijzerbout.nl; spf=pass smtp.mailfrom=ijzerbout.nl; dkim=pass (4096-bit key) header.d=ijzerbout.nl header.i=@ijzerbout.nl header.b=Vn8IODOe; arc=none smtp.client-ip=136.144.140.114
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ijzerbout.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ijzerbout.nl
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ijzerbout.nl; s=key;
+	t=1740166012; bh=ILuXRvq5uVQ5UBKoNazzH/vYwsdIKolCtj6DVuv2DsU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Vn8IODOeRzPVuDRBHqP7FOIdRt2Q1U4x+ZdgNDP/Uri1oFGqztfuykzMXPc8bqons
+	 2mHysco6hPF6y87701zaWbmxer4WhRBexO4RUxG3X1ftdEfslMsE0cz9XwGY8yOz16
+	 m92V/ZstUP9qzWGiLIobKfzR9/AKJTL/H34ZkgVqWC9tvWALOS7wQNVMnB1WuJovCV
+	 iZgpj0Pcq1pi/6ix47PBe4sw/jAi6yMyC9vTYLheDrNt5iTwO6z8jUlgZ4KTz92pJg
+	 H13+uCqFwEVXV39nzpqpZd29O6hHbKY3YdR5E8w45pKwh/IY8/FidA8W0eZP/wjGW6
+	 E2hVySaZcKHahbEDqSot/uopfJy9GkhZ3urqcHnoBNHTiWzGnYcn3mSnFYx6qfRmOG
+	 cgm9rWdd/1qyxYq1QndSR9giuXufXXl7KnhA6JL+T41q6w9QFbgtrk9S/Gwk+hsTTu
+	 4uptWD5jaWWS/l/ytmQx29kvxVnU0VtFqs/ux+OKlCQangpHtbUVfWkS22oJzBrXmi
+	 LK2IFRaHMOrWPbxcRYcxXsDoJuOsboj9ve0MK1y/awb9rOlBuZnCiwsm4ffZuXNL0/
+	 nRXSqg1L/8IYJ/Oo8i5jY9/z8C47iaUqMJNQnyBjoRr88wJgfSu8JaqlbOOAkKMLK6
+	 12S2A+KEbgRThFF5PiLHjoUo=
+Received: from [IPV6:2a10:3781:99:1:1ac0:4dff:fea7:ec3a] (racer.ijzerbout.nl [IPv6:2a10:3781:99:1:1ac0:4dff:fea7:ec3a])
+	by bout3.ijzerbout.nl (Postfix) with ESMTPSA id 2EEBB1601E1;
+	Fri, 21 Feb 2025 20:26:52 +0100 (CET)
+Message-ID: <a882365c-148c-410a-ac67-b7a17dafc501@ijzerbout.nl>
+Date: Fri, 21 Feb 2025 20:26:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Simon Sun <simon.sun@yunjingtech.com>, linux-kernel@vger.kernel.org, 
- linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
- Project_Global_Chrome_Upstream_Group@mediatek.com, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Alexandre Mergnat <amergnat@baylibre.com>, Macpaul Lin <macpaul@gmail.com>, 
- Conor Dooley <conor+dt@kernel.org>, Bear Wang <bear.wang@mediatek.com>, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- Yow-Shin Liou <yow-shin.liou@mediatek.com>, 
- Fabien Parent <fparent@baylibre.com>, 
- Chris-qj chen <chris-qj.chen@mediatek.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- Pablo Sun <pablo.sun@mediatek.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>
-To: Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <20250221144941.2844333-1-macpaul.lin@mediatek.com>
-References: <20250221144941.2844333-1-macpaul.lin@mediatek.com>
-Message-Id: <174015998416.3469778.7696460950092748736.robh@kernel.org>
-Subject: Re: [PATCH v5] arm64: dts: mediatek: mt8395-genio-1200-evk: add
- support for TCPC port
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] usb: gadget: Set self-powered based on MaxPower and
+ bmAttributes
+To: Prashanth K <prashanth.k@oss.qualcomm.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+ Peter Korsgaard <peter@korsgaard.com>,
+ Sabyrzhan Tasbolatov <snovitoll@gmail.com>
+References: <20250217120328.2446639-1-prashanth.k@oss.qualcomm.com>
+Content-Language: en-US
+From: Kees Bakker <kees@ijzerbout.nl>
+In-Reply-To: <20250217120328.2446639-1-prashanth.k@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On Fri, 21 Feb 2025 22:49:41 +0800, Macpaul Lin wrote:
-> From: Fabien Parent <fparent@baylibre.com>
-> 
-> Enable USB Type-C support on MediaTek MT8395 Genio 1200 EVK by adding
-> configuration for TCPC Port, USB-C connector, MUX IT5205 and related
-> settings.
-> 
-> Configure dual role switch capability, set up PD (Power Delivery) profiles,
-> and establish endpoints for SS (SuperSpeed) and HS (HighSpeed) USB.
-> 
-> Update pinctrl configurations for U3 P0 VBus default pins and set dr_mode
-> to "otg" for OTG (On-The-Go) mode operation.
-> 
-> Add ITE IT5205 (TYPEC MUX) under I2C2 bus and configure its properties;
-> also add references and configurations to 'typec-mux' node.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Yow-Shin Liou <yow-shin.liou@mediatek.com>
-> Signed-off-by: Simon Sun <simon.sun@yunjingtech.com>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+Op 17-02-2025 om 13:03 schreef Prashanth K:
+> Currently the USB gadget will be set as bus-powered based solely
+> on whether its bMaxPower is greater than 100mA, but this may miss
+> devices that may legitimately draw less than 100mA but still want
+> to report as bus-powered. Similarly during suspend & resume, USB
+> gadget is incorrectly marked as bus/self powered without checking
+> the bmAttributes field. Fix these by configuring the USB gadget
+> as self or bus powered based on bmAttributes, and explicitly set
+> it as bus-powered if it draws more than 100mA.
+>
+> Cc: stable@vger.kernel.org
+> Fixes: 5e5caf4fa8d3 ("usb: gadget: composite: Inform controller driver of self-powered")
+> Signed-off-by: Prashanth K <prashanth.k@oss.qualcomm.com>
 > ---
->  .../dts/mediatek/mt8395-genio-1200-evk.dts    | 100 ++++++++++++++++++
->  1 file changed, 100 insertions(+)
-> 
-> Changes for v2:
->  - Drop the no need '1/2' DT Schema update patch in the 1st version.
->  - Fix indent for 'ports' node, it should under the 'connector' node.
->  - Correct the index for 'port@0' and 'port@1' node.
-> 
-> Changes for v3:
->  - Correct the order between new added nodes.
-> 
-> Changes for v4:
->  - Reorder for property 'op-sink-microwatt'.
->  - Fix indentation for 'source-pdos' and 'sink-pdos' nodes.
->  - Correct node 'pin-cmd-dat' with 'pins-vbus'.
->  - Add both Highspeed and Superspeed ports to ssusb0 port.
->  - Set 'role-switch-default-mode' = "peripheral" for ssusb0 port.
->  - Rename endpoint of USB data port to 'mtu3_hs0_role_sw' and
->    'mtu3_ss0_role_sw'.
->  - Drop it5205fn phandle for node typec-mux@48.
->  - Reorder properties of typec-mux@48
->  - Add "Reviewed-by:" tag. Thanks!
-> 
-> Changes for v5:
->  - Squash two patches into one patch and refine commit messages:
->    suggested by reviewer.
->  - Drop 'role-switch-default-mode'
->  - Add altmodes settings
->  - Drop 'Reviewed-by:' tag since the two sub patches has been combined
->    into a new patch.
-> 
-
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/mediatek/' for 20250221144941.2844333-1-macpaul.lin@mediatek.com:
-
-arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dtb: usb@11201000: 'ports' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtu3.yaml#
-
-
-
-
+> Changes in v2:
+> - Didn't change anything from RFC.
+> - Link to RFC: https://lore.kernel.org/all/20250204105908.2255686-1-prashanth.k@oss.qualcomm.com/
+>
+>   drivers/usb/gadget/composite.c | 16 +++++++++++-----
+>   1 file changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/usb/gadget/composite.c b/drivers/usb/gadget/composite.c
+> index bdda8c74602d..1fb28bbf6c45 100644
+> --- a/drivers/usb/gadget/composite.c
+> +++ b/drivers/usb/gadget/composite.c
+> @@ -1050,10 +1050,11 @@ static int set_config(struct usb_composite_dev *cdev,
+>   	else
+>   		usb_gadget_set_remote_wakeup(gadget, 0);
+>   done:
+> -	if (power <= USB_SELF_POWER_VBUS_MAX_DRAW)
+> -		usb_gadget_set_selfpowered(gadget);
+> -	else
+> +	if (power > USB_SELF_POWER_VBUS_MAX_DRAW ||
+> +	    !(c->bmAttributes & USB_CONFIG_ATT_SELFPOWER))
+Please check this change again. From line 983-884 there is a `goto done`.
+in case `c` is NULL. So, there will be a potential NULL pointer dereference
+with your change.
+>   		usb_gadget_clear_selfpowered(gadget);
+> +	else
+> +		usb_gadget_set_selfpowered(gadget);
+>   
+>   	usb_gadget_vbus_draw(gadget, power);
+>   	if (result >= 0 && cdev->delayed_status)
+> [...]
 
 
