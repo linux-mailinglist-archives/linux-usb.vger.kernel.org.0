@@ -1,133 +1,150 @@
-Return-Path: <linux-usb+bounces-20918-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20920-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ECF3A3EF22
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 09:53:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 888D0A3F28B
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 11:53:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CF6747A556E
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 08:51:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A274171316
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 10:53:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E3C520124E;
-	Fri, 21 Feb 2025 08:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F18682080EB;
+	Fri, 21 Feb 2025 10:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mQNjrOE1"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vU5DB26Q"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8033220103F
-	for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2025 08:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADD8207E1A;
+	Fri, 21 Feb 2025 10:53:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740127932; cv=none; b=Ma9ka7vMOCyqUcqsZUj8gZdVo0TJFzWvdU41qBD5qRFr7Xs2AEIRiE00jzGyPStGQ6kWkOVvph5Y2Eh27qe2IQvE8pz4POncQTXJruqOGjyUR4x1xWfh4HFUBIvGyQU/LNqrxU88N9NgG7xfd43zfvk+B9cahFS5lkiTHPGQsyg=
+	t=1740135185; cv=none; b=bM4sAQ6K41OJfnF8BUhl47RNN4FuUU/Wxg85d5YDqo4Kc9TJdFm/wmAjvk70bvIQo3OeRjBB32GTbN/cc1oJ3asuBgy8YSRoAEpYeknfz4waNqQs4iGi41BxWHttmO2GIGxeX1BVaYk2n4tqGJigv0DGQycjX+7phjOEkw9C1H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740127932; c=relaxed/simple;
-	bh=6bvVGaGnta9Tej9ZF83+g21NjrRB16+DjPTG5hUNtnE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=klZkMgwDNxbjaBkbPwcVpj4FvnfCQFtyEOVBd/pELfhUvIu7ETimMdKeiDsJIl5gzXf6vF9UrZRSQlVtqPnnJwnjNDtEabKMNdxnoqNTYvp9e2o4SGIDa99NyWLoOeLPMGVG6vf15zwjSTBt7deqV4spDIC6bboK533UtdlG3xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mQNjrOE1; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740127930; x=1771663930;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=6bvVGaGnta9Tej9ZF83+g21NjrRB16+DjPTG5hUNtnE=;
-  b=mQNjrOE1Z7zJGVrSZF/4EpH+/34SqM8W9zkoYLahuFccU4wBgYZJW2bI
-   EEdLWbO20bpdH44bln7K/JuuplvWKtMfkLHCiDIkCQ9dkRrafMptuneB8
-   bTo8Q9Mzu6JtlK+qWtonKveq+b0KkZJ25GWRkj25ghBkE4ay9AOZxVUcK
-   A4NOUnQ2txocVO/9i1XmWWe9pHunXlMkKIPz8GiLa4WQd2A8EUHNhsn3y
-   0H4igRB+1lmDQl3di3cDWJXHtG1+a4Q/rYk0qucDHoIgaIJQXW5bHgRg1
-   by/CEG/tYDYVqZRsEyOiLsjIAwhz3XwM6gEsaUJdN4cViOU3R3RaBwSfN
-   A==;
-X-CSE-ConnectionGUID: 43wEPHGaRPWa1CULZEtn2w==
-X-CSE-MsgGUID: Oo4hRxj+SbSbANGwLmsfgw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41145863"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="41145863"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 00:52:10 -0800
-X-CSE-ConnectionGUID: bMHSOsHDTjGS0I1LxnaFlg==
-X-CSE-MsgGUID: y2dVYvcIT3GzQqTJByr74g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,304,1732608000"; 
-   d="scan'208";a="119932414"
-Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by fmviesa005.fm.intel.com with ESMTP; 21 Feb 2025 00:52:08 -0800
-Message-ID: <01300a1a-a2f1-4816-9341-933ef236e887@linux.intel.com>
-Date: Fri, 21 Feb 2025 10:53:08 +0200
+	s=arc-20240116; t=1740135185; c=relaxed/simple;
+	bh=ufpR1Z4H9TVwVTNUILXf2+amecfAuuE+k/9g3eWjpg0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eN5QdnKLmb7zTSLFO/TG3TpA2QKrhMTV19y2hO+ULLSeIIgt8Q5hbKo+G23rCunenqcrDlZXSxfBxcRu2CEQG+mpDsNVFlf0j/MPWUjY2jDkWBdHCpP69LP0CKx894WzT35Ov5t0ua0urMZQGJ/N02K4VPtdxdAtZfLHoEylbg8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vU5DB26Q; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D5A7C4CED6;
+	Fri, 21 Feb 2025 10:53:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1740135184;
+	bh=ufpR1Z4H9TVwVTNUILXf2+amecfAuuE+k/9g3eWjpg0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vU5DB26QL8qs89mxe6DjMiVhcwTw+2MtCEgW81lDtX9imv6ay8jhnH4XmXvmTAYaA
+	 4LYqNgX9b8CExx0jwJW4k8933LRYigZspUvRVH5JuJHKl0xfHgsR+Gb7g5qQaOnTwt
+	 HwIUzZ1YUJksMidSgfJ52DTTu4ed5RFWVKqKehAY=
+Date: Fri, 21 Feb 2025 11:53:01 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Akshay Gujar <Akshay.Gujar@harman.com>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+	naveen.v@harman.com, sankarkumar.krishnasamy@harman.com
+Subject: Re: [PATCH] usb: core: notify unrecognized usb device
+Message-ID: <2025022131-silo-impeach-3f24@gregkh>
+References: <20250221102949.1135849-1-Akshay.Gujar@harman.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] USB: core: Add eUSB2 descriptor and parsing in USB core
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: linux-usb@vger.kernel.org, Kannappan R <r.kannappan@intel.com>,
- Amardeep Rai <amardeep.rai@intel.com>
-References: <20250220141339.1939448-1-mathias.nyman@linux.intel.com>
- <2025022056-confess-unlovely-da5a@gregkh>
-Content-Language: en-US
-From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <2025022056-confess-unlovely-da5a@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250221102949.1135849-1-Akshay.Gujar@harman.com>
 
-On 20.2.2025 18.35, Greg KH wrote:
-> On Thu, Feb 20, 2025 at 04:13:39PM +0200, Mathias Nyman wrote:
->> From: Kannappan R <r.kannappan@intel.com>
->> --->> @@ -64,9 +65,10 @@ struct ep_device;
->>    * descriptor within an active interface in a given USB configuration.
->>    */
->>   struct usb_host_endpoint {
->> -	struct usb_endpoint_descriptor		desc;
->> -	struct usb_ss_ep_comp_descriptor	ss_ep_comp;
->> -	struct usb_ssp_isoc_ep_comp_descriptor	ssp_isoc_ep_comp;
->> +	struct usb_endpoint_descriptor			desc;
->> +	struct usb_ss_ep_comp_descriptor		ss_ep_comp;
->> +	struct usb_ssp_isoc_ep_comp_descriptor		ssp_isoc_ep_comp;
->> +	struct usb_eusb2_isoc_ep_comp_descriptor	eusb2_isoc_ep_comp;
+On Fri, Feb 21, 2025 at 10:29:49AM +0000, Akshay Gujar wrote:
+> Description: To send uevent for unrecognized device connected on system.
+
+Odd format here, have you read the documentation of the kernel process
+in how to write a changelog?  I recommend a quick glance at the section
+"The canonical patch format" in the kernel file,
+Documentation/process/submitting-patches.rst for details.
+
+> As per the usb compliance, USB-IF enforces a "no silent failure" rule.
+> This means that an implementation of USB must not appear broken to the
+> consumer. In configurations where the consumer's expectations are not
+> met, either the peripheral or host must provide appropriate and useful
+> feedback to the consumer regarding the problem.
 > 
-> No real need to indent any of these, but oh well :)
+> Link: https://compliance.usb.org/index.asp?UpdateFile=Embedded%20Host&Format=Standard#10
 
-It looked odd when adding one new variable off by a space compared to all the
-other neatly tab-aligned variables. So I shifted them all right.
+Odd, many Linux devices have passed usb-if testing since 2005 when this
+was made a "rule", how did that happen?  What recently changed to
+suddenly require this be a kernel issue?
 
->> +/* USB_DT_EUSB2_ISOC_ENDPOINT_COMP: eUSB2 Isoch Endpoint Companion descriptor */
->> +struct usb_eusb2_isoc_ep_comp_descriptor {
->> +	__u8	bLength;
->> +	__u8	bDescriptorType;
->> +	__le16	wMaxPacketSize;
->> +	__le32	dwBytesPerInterval;
->> +} __attribute__ ((packed));
->> +
->> +#define USB_DT_EUSB2_ISOC_EP_COMP_SIZE	8
+And does usb-if even matter these days?  You do know what they think
+about Linux overall, right (hint, they kicked us out from
+participating...) so why should we follow their "requirements" when they
+do not allow us to even participate or provide feedback when they create
+them?
+
+> Signed-off-by: Akshay Gujar <Akshay.Gujar@harman.com>
+> ---
+>  drivers/usb/core/hub.c | 24 +++++++++++++++++++++++-
+>  1 file changed, 23 insertions(+), 1 deletion(-)
 > 
-> Can't we use a sizeof() for this as well?  I guess we don't do it for
-> other structures, so maybe not.
-> 
-> Anyway, this looks fine, if you want to just send an update for the
-> 0x0220 later on if you think it's needed, please do.
+> diff --git a/drivers/usb/core/hub.c b/drivers/usb/core/hub.c
+> index c3f839637..d00129b59 100644
+> --- a/drivers/usb/core/hub.c
+> +++ b/drivers/usb/core/hub.c
+> @@ -5343,6 +5343,26 @@ static int descriptors_changed(struct usb_device *udev,
+>  	return changed;
+>  }
+>  
+> +static void unrecognized_usb_device_notify(struct usb_port *port_dev)
+> +{
+> +	char *envp[2] = { NULL, NULL };
+> +	struct device *hub_dev;
+> +
+> +	hub_dev = port_dev->dev.parent;
+> +
+> +	if (!hub_dev)
+> +		return;
 
-Thanks for looking at this.
+How can this be true?
 
-We did consider defining 0x0220, but checked that usb core uses magic numbers
-for bcdUSB in other places:
+> +
+> +	envp[0] = kasprintf(GFP_KERNEL, "UNRECOGNIZED_USB_DEVICE_ON_PORT=%s",
+> +				kobject_name(&port_dev->dev.kobj));
 
-hcd.c:  if (le16_to_cpu(usb_dev->descriptor.bcdUSB) >= 0x0201) {
-hub.c:                  (le16_to_cpu(udev->descriptor.bcdUSB) < 0x0300)) {
-hub.c:  if (le16_to_cpu(udev->descriptor.bcdUSB) >= 0x0201) {
-hub.c:          if (le16_to_cpu(udev->descriptor.bcdUSB) >= 0x0200
-hub.h:          le16_to_cpu(hdev->descriptor.bcdUSB) >= 0x0310 &&
+Hint, if a driver ever starts calling into kobject or sysfs functions,
+usually something is wrong.  This should just use dev_name(), right?
 
-Makes sense to add a separate patch later on that define all these.
+> +	if (!envp[0])
+> +		return;
+> +
+> +	kobject_uevent_env(&hub_dev->kobj, KOBJ_CHANGE, envp);
 
-Thanks
-Mathias
+Where is this new uevent documented?  What userspace tool will see this
+and do something about it?  How was this tested?
+
+> +
+> +	kfree(envp[0]);
+> +}
+> +
+>  static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>  		u16 portchange)
+>  {
+> @@ -5569,9 +5589,11 @@ static void hub_port_connect(struct usb_hub *hub, int port1, u16 portstatus,
+>  	if (hub->hdev->parent ||
+>  			!hcd->driver->port_handed_over ||
+>  			!(hcd->driver->port_handed_over)(hcd, port1)) {
+> -		if (status != -ENOTCONN && status != -ENODEV)
+> +		if (status != -ENOTCONN && status != -ENODEV) {
+>  			dev_err(&port_dev->dev,
+>  					"unable to enumerate USB device\n");
+> +			unrecognized_usb_device_notify(port_dev);
+
+This is only if a hub acts up with talking to a device, it does not mean
+the device was not supported at all.  So this isn't going to meet the
+standard that you describe above.  Userspace is really the only thing
+that can know if a device is "supported" or not, not the kernel.
+
+thanks,
+
+greg k-h
 
