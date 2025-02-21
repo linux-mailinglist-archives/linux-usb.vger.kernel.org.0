@@ -1,65 +1,65 @@
-Return-Path: <linux-usb+bounces-20924-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20926-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12872A3F5C5
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 14:22:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CC60A3F5C0
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 14:22:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD80D42813E
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 13:16:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93DFD7A1879
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 13:21:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED0A820D4E4;
-	Fri, 21 Feb 2025 13:16:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD0F6205E34;
+	Fri, 21 Feb 2025 13:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RwvpD8k7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nV/iDQiI"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2C3020ADD5;
-	Fri, 21 Feb 2025 13:16:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91E118651;
+	Fri, 21 Feb 2025 13:22:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740143783; cv=none; b=Etd7z7UfU3BEJzcDyorlFBmP3uAFIeRqGUhnTYS2N9/LfbaBD707Bj/H0puRI0q+Id796v0Bz0W7pySgzlJKAYwXrjK7Mkthz6P0PfBVj+Luk20MpTJPj8EkDmsXKyZz+Rv4A+vQV70xvPIU1zom5glpLHGyOj/tRYsLm/0xFKk=
+	t=1740144135; cv=none; b=jZhlcTPrxYbToDwRBLM08ksQIvfECH8QdmAH3PqyEtFvDyx4AJX6wkcwq/AdE7Nsjy/Xad63sL8M23yaDvVTN+i7zmHacuobCiW9cYYUdj//FMjfCYGNT2a1dZW/tOwzr3vqW3fOWP9k8Nmu6wm8Ms7xFit6Q2WOYXv/UOIJCWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740143783; c=relaxed/simple;
-	bh=hEfxolmO06K0UStHo90/Om11/E8igLCbiEfZngCLRSU=;
+	s=arc-20240116; t=1740144135; c=relaxed/simple;
+	bh=5nofOT4jU2NHxmhSPVYytlfPpDoj8bGuh9b4nzJ/Spo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=S2JG7mBhPgs/hdAKlGgxNVr3K8HI9Wpkw5h2WXHPwgC8yjTpaCqG2o0EFfS5zgVgg7H9RBAnMzaYjL8LVGHalb+RzuO/pQQo9L3lUmp4prw16xAjJ7VvfTaUOoRpKyqkM3zQVcsbVGqrrcKJaqFKgDgtJ4IHEZqkAKuahbpM6VA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RwvpD8k7; arc=none smtp.client-ip=198.175.65.16
+	 In-Reply-To:Content-Type; b=njQ4O3PZJjGOX1ltOrwmQ5OgC9LoYpo7xT+kcOYbQgpZqxXAOIrqjKN5XHzDxoNMgeNflOAVrtitmtPqZwhKI0X8z6198iZkgVJOt0r5bPolE5r4aPArw3tbUZU/BAjBv4TEXFAXP3GCN/UN+BN2mO+istTpf9MKFUJK4PSndvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nV/iDQiI; arc=none smtp.client-ip=198.175.65.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740143781; x=1771679781;
+  t=1740144134; x=1771680134;
   h=message-id:date:mime-version:subject:to:cc:references:
    from:in-reply-to:content-transfer-encoding;
-  bh=hEfxolmO06K0UStHo90/Om11/E8igLCbiEfZngCLRSU=;
-  b=RwvpD8k7jqT8Y+BG0/45viudiJKhC4Ih9TCFQqL6nxHtdSTy0q8pWWgR
-   1qdAMyYlUZSqjHDCyO7DGZ0n7vsaQ6gUwNCWk320qX+66yTzh3dBCcjPo
-   Uk0b4EHUHqZ0gU8FOoOSN1KOxtx2K9NvHLRaGTava1ehDgw3elkKpsRO/
-   ZP7+6g96tLLw3zKQh0sHMNyylLWTHIygKbItdoSp5JYFmHtmjZOw+vvoL
-   jnKD9ta1Tdl3Ss53wQpR/4y7sJ4n4n8vBjFZMsJLB4JPqp2snP70U/DMq
-   1P8pNqAdL1EGbCmSNf9gkR/tO42ZEPj/2iPXshciSEWKSwhsEI2p9GJjT
-   g==;
-X-CSE-ConnectionGUID: HoXzTk5aSL6FNYMG2QvShw==
-X-CSE-MsgGUID: QgwfFuyWSd6IJZQkGsxdwQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="41085662"
+  bh=5nofOT4jU2NHxmhSPVYytlfPpDoj8bGuh9b4nzJ/Spo=;
+  b=nV/iDQiI6YYr9VKF+RAbvoHe9h67UAwbs2Wsi7Zto27aM/VEgATJthT8
+   ve5NsxhLxfSQm9T4BbZMnISYo5BqpGjYpwi/c2nYSm5fHiDR2JVIRWXOB
+   iM0x67Wi3pZB/VY1ZXDH8J66nUkmemnOHpSWXp6N8drcV39V9OT31go7S
+   YGvV6t/mhHFuZjzdW/5BOyWoz+vAGwhf+1qpALFZV3ur4uSRM0LY+SNjC
+   XryaUuA9hwmMKwaP62prNgnAr2C7jv+RpGUMkCR+zsNMTHhVw6lNXXoB+
+   +oebbznYi6soSLoVXnPPyPasEvL4n8r6QNaF0r96OvjSmx2QL6vjWF5ks
+   A==;
+X-CSE-ConnectionGUID: 3VK5NHADR5+urXOx51wvgg==
+X-CSE-MsgGUID: BsnSBz0JSii4HV9bkzINWw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="40977145"
 X-IronPort-AV: E=Sophos;i="6.13,304,1732608000"; 
-   d="scan'208";a="41085662"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 05:16:21 -0800
-X-CSE-ConnectionGUID: wa5aUpxnRLmpKI5R8IrZtg==
-X-CSE-MsgGUID: y6zMRK2LSIOnzghgfLl3lg==
+   d="scan'208";a="40977145"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 05:22:13 -0800
+X-CSE-ConnectionGUID: I/OOPYLiQXyn5zwOJmiMqg==
+X-CSE-MsgGUID: ScytPYCnQ9OSkZAJ6yzYaw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="120613445"
+X-IronPort-AV: E=Sophos;i="6.13,304,1732608000"; 
+   d="scan'208";a="138590447"
 Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
-  by orviesa005.jf.intel.com with ESMTP; 21 Feb 2025 05:16:19 -0800
-Message-ID: <e72b2f2b-d327-49f6-bf16-d846e9283e00@linux.intel.com>
-Date: Fri, 21 Feb 2025 15:17:19 +0200
+  by fmviesa002.fm.intel.com with ESMTP; 21 Feb 2025 05:22:12 -0800
+Message-ID: <e3ca349d-c77d-4643-9865-f9991b34540f@linux.intel.com>
+Date: Fri, 21 Feb 2025 15:23:11 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -67,65 +67,42 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 5/5] usb: xhci: Skip only one TD on Ring Underrun/Overrun
-To: =?UTF-8?Q?Micha=C5=82_Pecio?= <michal.pecio@gmail.com>
-Cc: Mathias Nyman <mathias.nyman@intel.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Niklas Neronin <niklas.neronin@linux.intel.com>, linux-usb@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250210083718.2dd337c3@foxbook>
- <20250210084220.3e5414e9@foxbook>
- <7bb25848-c80e-4ba8-8790-8628951806b3@linux.intel.com>
- <20250221021712.48c07fe0@foxbook>
+Subject: Re: [PATCH 1/3] usb: xhci: Simplify
+ update_ring_for_set_deq_completion()
+To: Michal Pecio <michal.pecio@gmail.com>,
+ Mathias Nyman <mathias.nyman@intel.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Niklas Neronin <niklas.neronin@linux.intel.com>
+References: <20250220234355.2386cb6d@foxbook>
+ <20250220234458.4bf8dcba@foxbook>
 Content-Language: en-US
 From: Mathias Nyman <mathias.nyman@linux.intel.com>
-In-Reply-To: <20250221021712.48c07fe0@foxbook>
+In-Reply-To: <20250220234458.4bf8dcba@foxbook>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 21.2.2025 3.17, Michał Pecio wrote:
-> On Tue, 11 Feb 2025 17:41:39 +0200, Mathias Nyman wrote:
->> On 10.2.2025 9.42, Michal Pecio wrote:
->>> +				if (ring_xrun_event) {
->>> +					/*
->>> +					 * If we are here, we are on xHCI 1.0 host with no idea how
->>> +					 * many TDs were missed and where the xrun occurred. Don't
->>> +					 * skip more TDs, they may have been queued after the xrun.
->>> +					 */
->>> +					xhci_dbg(xhci, "Skipped one TD for slot %u ep %u",
->>> +							slot_id, ep_index);
->>> +					break;
->>
->> This would be the same as return 0; right?
->>
->> Whole series looks good, I'll add it
+On 21.2.2025 0.44, Michal Pecio wrote:
+> This function checks if the queued Set Deq pointer really belongs to the
+> ring it was queued on and updates the ring's dequeue state. It also used
+> to count free TRBs, but that part has been removed.
 > 
-> I hope you haven't sent it out yet because I found two minor issues.
+> The code is needlessly complex and inefficent, walking TRBs one by one.
+> And it could "jump off the segment into la-la-land" if a segment doesn't
+> end with a link TRB or if the link points to another link.
 > 
+> Make if faster, simpler and more robust. Upgrade xhci_dbg() to xhci_err()
+> because this situation is a bug and shouldn't happen.
 > 
-> Firstly,
-> [PATCH 3/5] usb: xhci: Fix isochronous Ring Underrun/Overrun event handling
-> 
-> increases the number of xrun events that we handle but doesn't suppress
-> the "Event TRB for slot %u ep %u with no TDs queued\n" warning, so the
-> warning started to show up sometimes for no good reason. The fix is to
-> add ring_xrun_event to the list of exception for this warning.
-> 
-> 
-> Secondly,
-> [PATCH 5/5] usb: xhci: Skip only one TD on Ring Underrun/Overrun
-> 
-> can be improved to clear the skip flag if skipped TD was the only one.
-> This eliminates any confusion and risk of skipping bugs in the future.
-> The change is a matter of moving that code to a different branch.
-> 
-> I also changed 'break' to 'return 0' because it gets hard to follow at
-> this level of indentation.
-> 
-> 
-> I'll send a v2 of those two patches. Sorry for any inconvenience.
+> Signed-off-by: Michal Pecio <michal.pecio@gmail.com>
 
-Patches updated, they are now in my for-usb-next branch
+
+update_ring_for_set_deq_completion() isn't needed anymore.
+Niklas already wrote a patch to remove it.
+
+It's sitting in my for-usb-next branch
+
+https://git.kernel.org/pub/scm/linux/kernel/git/mnyman/xhci.git/commit/?h=for-usb-next&id=ee7dab196a7dfc48a1608274329323cb10b4340d
 
 Thanks
 Mathias
