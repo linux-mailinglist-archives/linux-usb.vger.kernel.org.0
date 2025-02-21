@@ -1,114 +1,152 @@
-Return-Path: <linux-usb+bounces-20916-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20917-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBA29A3EDE8
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 09:08:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1327BA3EDF9
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 09:09:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9784171167
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 08:08:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53C0D188BD54
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 08:09:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69DF81FAC4D;
-	Fri, 21 Feb 2025 08:08:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="moMrCCBu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 389AF1FBC9B;
+	Fri, 21 Feb 2025 08:09:32 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68AE45009
-	for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2025 08:08:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCFB21FAC57
+	for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2025 08:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740125326; cv=none; b=a1hOt9eXVZcmK2LRfYbLr/CPn5kNun5g/WTIs7rnNaaBPDX6z33zbnzsR0SPro+5Kprne+qL75YnzOWZrXTz+rlifZatokH9K3gk3zEzB7JCMghlBQYH0rp+MOi9j9erlqgDxshiB+csWTgnUcCORY5ozGOJT7Kuc5BlYyO0A30=
+	t=1740125371; cv=none; b=k2r35NBGBbOG7pGnsJheMDPQm8Bmeb1UnKVqidi4EHyexg79zC345Ido+L55YY7xoN0SQ7/3wJCg584GmCqrSe1af15dITZuBPP1IMvctqsIPXU/XIM+LLEklMMGIOssXEnpLEqZwn2zS3BkMhc+jXhF9XQYT7lVNlhV6EHRTxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740125326; c=relaxed/simple;
-	bh=JPY5ktmNlV76ZykCU+vEAr2TlW77ndMIAhpqGi9o4hE=;
+	s=arc-20240116; t=1740125371; c=relaxed/simple;
+	bh=W2+lqFB3yvUvKTgq6OrbULXW2hoBiT0kzSTRg8T/j5c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ECSccUs/MX5r5m6L4wmnwjEca+A3Xi68XGaTdA7dM9bFSarL9oQ8wEavoptCxbMpK6/Q2B4SgkDw81nd/RbWCjSWFp1E5LobiNFmWC3sfnDKbL7O1IYHDQmPm/IBAy/7UjrTNqzvIvD+wBZ6sTiA2+2t0ItXJE3cGDwMXvdUAxE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=moMrCCBu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F05B1C4CED6;
-	Fri, 21 Feb 2025 08:08:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1740125326;
-	bh=JPY5ktmNlV76ZykCU+vEAr2TlW77ndMIAhpqGi9o4hE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=moMrCCBuYXKssr3ePAMGZttpl5/NBTRMhfVIUVC0dA2DtHa0EtvH89qZwgTNtWdhX
-	 zrz3ZPLttyzY1T06HrRhOUqba/vFa++zp1wFMGA1EAmD9OGJe3QZiBsIpLKZcGGR4f
-	 Fgy13bngMLXcxjIKE6l0ZKWk9makutaGO2KjhFpM=
-Date: Fri, 21 Feb 2025 09:08:43 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Philipp Leskovitz <philipp.leskovitz@secunet.com>
-Cc: linux-usb@vger.kernel.org
-Subject: Re: use-after-free with Lenovo Ultra Docking Station
-Message-ID: <2025022122-corrode-tactless-7789@gregkh>
-References: <76af1506-3425-4d6a-b388-3304823fdd82@secunet.com>
- <2025021853-stained-scared-9e60@gregkh>
- <e17329a8-eb65-4dbe-ae8f-3b68efcf11f5@secunet.com>
- <2025022009-hurricane-amiable-2195@gregkh>
- <4dc90eac-584b-4266-8666-d34b96124722@secunet.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=EPr+0Amwm/ArizEl66/DWZW8XJUhOSYUQOs74NmRtjCBanaun5tsUFqOu5VOpGSU3CvUBiHgGPV19nmmNdoe4GSbp8BEXak92Ec5qG74wlgMEH1Qc17VvbgKwl+W+RHDAk9am7kTIrf6DynZex1H2PKk6ROnHDpwMgBdCyWIXhE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tlO5e-0007gh-LR; Fri, 21 Feb 2025 09:08:54 +0100
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <mkl@pengutronix.de>)
+	id 1tlO5b-0024OL-2S;
+	Fri, 21 Feb 2025 09:08:51 +0100
+Received: from pengutronix.de (p5b164285.dip0.t-ipconnect.de [91.22.66.133])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	(Authenticated sender: mkl-all@blackshift.org)
+	by smtp.blackshift.org (Postfix) with ESMTPSA id 585363C8315;
+	Fri, 21 Feb 2025 08:08:51 +0000 (UTC)
+Date: Fri, 21 Feb 2025 09:08:51 +0100
+From: Marc Kleine-Budde <mkl@pengutronix.de>
+To: Ming Yu <a0282524688@gmail.com>
+Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, 
+	brgl@bgdev.pl, andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, 
+	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, kuba@kernel.org, 
+	pabeni@redhat.com, wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+	linux-i2c@vger.kernel.org, linux-can@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-usb@vger.kernel.org
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+Message-ID: <20250221-light-neat-doberman-1166a5-mkl@pengutronix.de>
+References: <20250207074502.1055111-1-a0282524688@gmail.com>
+ <20250207074502.1055111-5-a0282524688@gmail.com>
+ <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
+ <CAOoeyxX4guHzUap1ieQ_L3PrvpBAYbMiQKrb6ko=MGsF5RcXLg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="tjblaazmatqfq76v"
 Content-Disposition: inline
-In-Reply-To: <4dc90eac-584b-4266-8666-d34b96124722@secunet.com>
+In-Reply-To: <CAOoeyxX4guHzUap1ieQ_L3PrvpBAYbMiQKrb6ko=MGsF5RcXLg@mail.gmail.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-usb@vger.kernel.org
 
-On Fri, Feb 21, 2025 at 08:48:52AM +0100, Philipp Leskovitz wrote:
-> Hello Greg,
-> 
-> I can also reproduce it without the proprietary modules. The latest BIOS
-> version N2IETA5W is installed. Attached is the log file. Only dm_mod,
-> intel_lpss_pci, intel_lpss, pinctrl_cannonlake and pinctrl_intel were still
-> loaded. I had also activated kasan.
-> 
-> Kernel version 6.1 seems to be one of the last versions with which the docking station works well.
-> 
-> The error doesn't always occur. I stress the device a little bit by
-> connecting the notebook to the docking station and disconnecting it again.
-> Sometimes I also plug in an external power supply. This combination
-> generates the error in less than 10 minutes. I also had the case that the
-> device was idle for about 30 minutes. Then it was connected to the docking
-> station once and the error occurred.
 
-Your kernel log shows that this is probably a bios bug:
+--tjblaazmatqfq76v
+Content-Type: text/plain; protected-headers=v1; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
+MIME-Version: 1.0
 
-> [  520.107312] pcieport 0000:03:02.0: bridge window [mem 0x00100000-0x000fffff 64bit pref] to [bus 3a] add_size 200000 add_align 100000
-> [  520.107323] pcieport 0000:03:02.0: bridge window [mem 0xa0000000-0xa01fffff 64bit pref]: assigned
-> [  520.107601] pci_bus 0000:3a: busn_res: [bus 3a] is released
-> [  520.109588] pci_bus 0000:03: busn_res: [bus 03-3a] is released
-> [  522.973010] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
-> [  522.973048] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q26 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
-> [  529.409351] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
-> [  529.409395] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q27 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
-> [  543.303502] usb 1-5: new high-speed USB device number 12 using xhci_hcd
-> [  543.340048] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
-> [  543.340092] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q26 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
+On 21.02.2025 16:01:07, Ming Yu wrote:
+> Hi Marc,
+>=20
+> Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B42=E6=9C=887=
+=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:15=E5=AF=AB=E9=81=93=EF=BC=
+=9A
+> >
+> > > +static irqreturn_t nct6694_can_irq(int irq, void *data)
+> > > +{
+> > > +     struct net_device *ndev =3D data;
+> > > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
+> > > +     struct nct6694_can_event *evt =3D priv->event;
+> > > +     struct nct6694_cmd_header cmd_hd =3D {
+> > > +             .mod =3D NCT6694_CAN_MOD,
+> > > +             .cmd =3D NCT6694_CAN_EVENT,
+> > > +             .sel =3D NCT6694_CAN_EVENT_SEL(priv->can_idx, NCT6694_C=
+AN_EVENT_MASK),
+> > > +             .len =3D cpu_to_le16(sizeof(priv->event))
+> > > +     };
+> > > +     irqreturn_t handled =3D IRQ_NONE;
+> > > +     int can_idx =3D priv->can_idx;
+> > > +     int ret;
+> >
+> > it would make sense to have a event pointer here instead of the can_idx?
+> >
+> >         const struct nct6694_can_event *event =3D &priv->event[priv->ca=
+n_idx];
+> >
+> The CAN Event command always returns 16bytes: the first 8 bytes
+> correspond to the CAN0 event, and the last 8 bytes correspond to the
+> CAN1 event. Therefore, the event pointer here refers to both event
+> buffers.
 
-And then later:
+Yes, but in the following code uses "priv->event[can_idx]" several
+times, this is why I proposed to have a dedicated "struct
+nct6694_can_event *event" variable.
 
-> [  647.629519] hub 1-5:1.0: USB hub found
-> [  647.630656] hub 1-5:1.0: 5 ports detected
-> [  647.656103] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
-> [  647.656140] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q26 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
-> [  647.738644] ==================================================================
-> [  647.738648] BUG: KASAN: slab-use-after-free in sysfs_create_link+0x8a/0xc0
+regards,
+Marc
 
-Boom.
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde          |
+Embedded Linux                   | https://www.pengutronix.de |
+Vertretung N=C3=BCrnberg              | Phone: +49-5121-206917-129 |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-9   |
 
-Now what is odd is that sysfs_create_link is showing a use-after-free,
-which it shouldn't, but as your bios is spitting out invalid device
-symbols, who knows what confusion the kernel got into with regards to
-creating a symlink that was already present.
+--tjblaazmatqfq76v
+Content-Type: application/pgp-signature; name="signature.asc"
 
-So maybe go poke the bios vendor to resolve this?
+-----BEGIN PGP SIGNATURE-----
 
-thanks,
+iQEzBAABCgAdFiEEn/sM2K9nqF/8FWzzDHRl3/mQkZwFAme4NJAACgkQDHRl3/mQ
+kZwgawgAqcasz/q2z0wDldtBADvSGWJpZYReThQnX06QjplHpEQwiaalyPWXJBK0
+IRkuBRHEj0mNahTZgsl731lg+Y+kz3DxS7QBVJIIKvuq4MebGerv+g96FJHQ/HPE
+6m7vE/Y46rSC5PJQpZgxL3K0V/L8NmFxDCMQjYOFaXvHvwG+4bgPi4vCmCElJYRn
+iOMtP7NhVwmP9c1YcFlraOBQ2exHFPrOnHA2J9myAewvFnXqLZRJDNQrEohPm7ZJ
+jlHgOB7cJYCzL8wed06r9RxSq6ZPHF3tPxCL6n5nVKgmxwTOdW2S8Mk1Z4LANrjY
+bjwfdAqvpMPU/EQQkTxSxIadWDQSWQ==
+=aqP2
+-----END PGP SIGNATURE-----
 
-greg k-h
+--tjblaazmatqfq76v--
 
