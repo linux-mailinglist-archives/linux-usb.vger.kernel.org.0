@@ -1,132 +1,114 @@
-Return-Path: <linux-usb+bounces-20915-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20916-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A71EA3EDD1
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 09:01:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBA29A3EDE8
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 09:08:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D7E3189D2AA
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 08:01:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9784171167
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 08:08:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A5CB1FFC77;
-	Fri, 21 Feb 2025 08:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69DF81FAC4D;
+	Fri, 21 Feb 2025 08:08:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LV5vmAIt"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="moMrCCBu"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8220B1F9F51;
-	Fri, 21 Feb 2025 08:01:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68AE45009
+	for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2025 08:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740124881; cv=none; b=PFgWTSvrtQnPDCKF3Je13Txxucgb/D40U6ounlbiDmOsHxkavM509gpIMeJpW3ddxs3aBbnOkzxtyfx44ZrvEUuaXacCH9yUe5bzscrKHKpav8610+GdfEn65hcfqrWz01uQsqRx3YehEdZ6fQr4jB+yBiCltMVUT2cxe2v/eXw=
+	t=1740125326; cv=none; b=a1hOt9eXVZcmK2LRfYbLr/CPn5kNun5g/WTIs7rnNaaBPDX6z33zbnzsR0SPro+5Kprne+qL75YnzOWZrXTz+rlifZatokH9K3gk3zEzB7JCMghlBQYH0rp+MOi9j9erlqgDxshiB+csWTgnUcCORY5ozGOJT7Kuc5BlYyO0A30=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740124881; c=relaxed/simple;
-	bh=Cv63BOL0oXO2PSjObiOHehq4Wn7S94yEUznizEi8GVA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AwAyfRInw7H2CKO9tUlWgwQHZj0et8b+MgDzjTFdx099SU39qn5WDn6jGVJBWd6l/2/GHY9Wcu+ndYYGmCt7uinJ0l6gGnIuY55hJy/LLSe/zb+K8M8e0Ta6RMwlsjXIhHU9VVSWNQHTmyUIxUsLD1TJ38PiRD7TXaMvhmvHNVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LV5vmAIt; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6fbaa0582a6so20234287b3.1;
-        Fri, 21 Feb 2025 00:01:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740124878; x=1740729678; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Lnr4Q3hoke2m4tnAyS/TN9K+Km6DFm15j9BEpxBS0+k=;
-        b=LV5vmAItmxOYlCn8SVPG7QTr32biEfRDkmitXwY+Wx+bWqRTi+t4/IF4cOS4q93c6R
-         HZqRuLtjHkHVUuVnWP8AvgQXtC/MHiRBc0MAXhZEYlTvHts1rZA9j/XWzL9E/IOtJADj
-         LROTiuCmwbVnvlFUsmWabwXy8Hl1HJFFD60t3q3JnRg7Rst+8jeuv1n4Dm8INbPldiEs
-         wC5TTkOBOVJ3ST7pgSXpf4kYByfE9cabGAu6EvO5mzyQEAabEkoIpmypH9ep66W2S6QH
-         yeAH5yPSd3IS4z4goBJpXUSRDignJDOr0jaXyXnw3VG6yBa2kJj0SfvtaumgQ16XV/ZW
-         Edbw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740124878; x=1740729678;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Lnr4Q3hoke2m4tnAyS/TN9K+Km6DFm15j9BEpxBS0+k=;
-        b=bmmyLU2TMEJsSyaXM+mgPqa104z8GiWbXshWE1tQg7uRohUa6+scwNWBhNhKRY+XwL
-         8JvrKylOaliry+rjA832LSY3w+qv3fndgMtx3Uv0YOkIkxircU4nnBV1Zae+Yz1evhh0
-         6vsp80lwIyDlh4kgzbIkN4sZFFCsTVyjwxe/ry0Qec3n8MvpkVxuONJitDlb7kXqWIqS
-         X/V2WE8FPie7SZJ65Qi1CBzpd/R00d+W+pO+H9Z7ke33AYl/TiMcRZ3ClV/+x75iZpdG
-         RXOZTAevqKUG5nWNGd0YmHrg8tnBh1RGMk3H37IICbiwT1cs7QA8pmYkDctF2AO5s3ZG
-         PLlA==
-X-Forwarded-Encrypted: i=1; AJvYcCU/xG9L1RouU7eXDxJAbOSduimktN8t0gQiuyzQRYJtWt5y9M8sXMj3E81CyzbLkw95AffL88eL3qQ=@vger.kernel.org, AJvYcCUW0L2/3EsQxmKGmeXERmiXqKxqugxM3mJcPtfGgGzgiEi5aixi5RbVHdndtcUtWJXFMcVKdXPP+kI0dmne@vger.kernel.org, AJvYcCUsCDOH+zDVzB/NkZ7Y69bMz0dee3sbYHmLZtTviW37ntMh3oaxzLt6T2Hv1BwFkcA7J6owWVo3tSzC@vger.kernel.org, AJvYcCVBypgIMU4Mxp/QHC3HMI28XoIEeP32AftPL7mj8wUJB3N/6QwNTFENuB1yaKn1tJmBU9nZZMNI7prXjM78DOE=@vger.kernel.org, AJvYcCVHk6mn1uWmaM7W/PxxXccpyk2hsSyAtoFcKQjNMyXjQs+lLwTgAsZ43vRcN8w9NJSPxEG4J76z1l4a@vger.kernel.org, AJvYcCVsVFJ0ZMBuTFZT9mnRUBaTaeqk3Qh1yx6BtxTLnyNu93husohRLr4sXazkjCAU5prJbYQGoR4/LFq8yQ0=@vger.kernel.org, AJvYcCWlddh3zpKRqP2anELRQFFqbWS6LzuJlydZQOs/VRcxj9NKOt8uE/mVXI4g2TJhbO8DsT5NnETis+bn@vger.kernel.org, AJvYcCXCTKzcvZIniRv10JA0bXn/wWzsFumSGnW7pzMG9wiOj+uK5j0q2nuNDyeZotvxqFE3GLad6g41@vger.kernel.org, AJvYcCXFgXDEhox5VjJHINXw1zajj4FZSeUF06EjLumeCDzfj7NNI9U5SXMePd6saW/D9qabSWLiR78jIMSRew==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/Pkw04teTnejET5fVKAF0vR6ywBLo/BSAZwU3NjUH4VFgvB3I
-	trmw45tQFSfDN2+ZIMIuujGZeYoFiOxl1ktU4JgS/lydAL51QCaDnWCpPXbJ1PC9EjtWlvxkdwy
-	o05KNvT+OLu3F0NVxHgK4nw73eAg=
-X-Gm-Gg: ASbGncvSCLbCx/pXbli4eLGQXw2sr+VOj+MQiiirqsOSAVyFiLJESlx24Ul8I/bIiqc
-	FpLOfeoTNzTBcgcJiuSIwDIXfmXQqv8dWUmlGdAWYT4QIE2GNX4xz4F/Ei9LwNebsxNO4doPwul
-	Tm1ezXTpVqiS9lJqRbbvxRnQQFpK3yOtTa0l6QaqrPeA==
-X-Google-Smtp-Source: AGHT+IGjrdbl08X5Oz0gLPvhnZB5+e3gwUES5DRUa5Evh0AA8SRQbyVbsNbVNB80eiomx273zv7MffadhbF1WlGd9C0=
-X-Received: by 2002:a05:690c:290a:b0:6f9:e4e1:a86 with SMTP id
- 00721157ae682-6fbb79d3ddcmr48861797b3.16.1740124878197; Fri, 21 Feb 2025
- 00:01:18 -0800 (PST)
+	s=arc-20240116; t=1740125326; c=relaxed/simple;
+	bh=JPY5ktmNlV76ZykCU+vEAr2TlW77ndMIAhpqGi9o4hE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ECSccUs/MX5r5m6L4wmnwjEca+A3Xi68XGaTdA7dM9bFSarL9oQ8wEavoptCxbMpK6/Q2B4SgkDw81nd/RbWCjSWFp1E5LobiNFmWC3sfnDKbL7O1IYHDQmPm/IBAy/7UjrTNqzvIvD+wBZ6sTiA2+2t0ItXJE3cGDwMXvdUAxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=moMrCCBu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F05B1C4CED6;
+	Fri, 21 Feb 2025 08:08:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1740125326;
+	bh=JPY5ktmNlV76ZykCU+vEAr2TlW77ndMIAhpqGi9o4hE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=moMrCCBuYXKssr3ePAMGZttpl5/NBTRMhfVIUVC0dA2DtHa0EtvH89qZwgTNtWdhX
+	 zrz3ZPLttyzY1T06HrRhOUqba/vFa++zp1wFMGA1EAmD9OGJe3QZiBsIpLKZcGGR4f
+	 Fgy13bngMLXcxjIKE6l0ZKWk9makutaGO2KjhFpM=
+Date: Fri, 21 Feb 2025 09:08:43 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Philipp Leskovitz <philipp.leskovitz@secunet.com>
+Cc: linux-usb@vger.kernel.org
+Subject: Re: use-after-free with Lenovo Ultra Docking Station
+Message-ID: <2025022122-corrode-tactless-7789@gregkh>
+References: <76af1506-3425-4d6a-b388-3304823fdd82@secunet.com>
+ <2025021853-stained-scared-9e60@gregkh>
+ <e17329a8-eb65-4dbe-ae8f-3b68efcf11f5@secunet.com>
+ <2025022009-hurricane-amiable-2195@gregkh>
+ <4dc90eac-584b-4266-8666-d34b96124722@secunet.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250207074502.1055111-1-a0282524688@gmail.com>
- <20250207074502.1055111-5-a0282524688@gmail.com> <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
-In-Reply-To: <20250207-savvy-beaver-of-culture-45698d-mkl@pengutronix.de>
-From: Ming Yu <a0282524688@gmail.com>
-Date: Fri, 21 Feb 2025 16:01:07 +0800
-X-Gm-Features: AWEUYZnurECAKh5ePECj3FH2D5NBztBMPIKD6SuOIyQk1k2iVir6-g3FRFc4M3o
-Message-ID: <CAOoeyxX4guHzUap1ieQ_L3PrvpBAYbMiQKrb6ko=MGsF5RcXLg@mail.gmail.com>
-Subject: Re: [PATCH v7 4/7] can: Add Nuvoton NCT6694 CANFD support
-To: Marc Kleine-Budde <mkl@pengutronix.de>
-Cc: tmyu0@nuvoton.com, lee@kernel.org, linus.walleij@linaro.org, brgl@bgdev.pl, 
-	andi.shyti@kernel.org, mailhol.vincent@wanadoo.fr, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	wim@linux-watchdog.org, linux@roeck-us.net, jdelvare@suse.com, 
-	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
-	linux-can@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-watchdog@vger.kernel.org, linux-hwmon@vger.kernel.org, 
-	linux-rtc@vger.kernel.org, linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4dc90eac-584b-4266-8666-d34b96124722@secunet.com>
 
-Hi Marc,
+On Fri, Feb 21, 2025 at 08:48:52AM +0100, Philipp Leskovitz wrote:
+> Hello Greg,
+> 
+> I can also reproduce it without the proprietary modules. The latest BIOS
+> version N2IETA5W is installed. Attached is the log file. Only dm_mod,
+> intel_lpss_pci, intel_lpss, pinctrl_cannonlake and pinctrl_intel were still
+> loaded. I had also activated kasan.
+> 
+> Kernel version 6.1 seems to be one of the last versions with which the docking station works well.
+> 
+> The error doesn't always occur. I stress the device a little bit by
+> connecting the notebook to the docking station and disconnecting it again.
+> Sometimes I also plug in an external power supply. This combination
+> generates the error in less than 10 minutes. I also had the case that the
+> device was idle for about 30 minutes. Then it was connected to the docking
+> station once and the error occurred.
 
-Marc Kleine-Budde <mkl@pengutronix.de> =E6=96=BC 2025=E5=B9=B42=E6=9C=887=
-=E6=97=A5 =E9=80=B1=E4=BA=94 =E4=B8=8B=E5=8D=888:15=E5=AF=AB=E9=81=93=EF=BC=
-=9A
->
-> > +static irqreturn_t nct6694_can_irq(int irq, void *data)
-> > +{
-> > +     struct net_device *ndev =3D data;
-> > +     struct nct6694_can_priv *priv =3D netdev_priv(ndev);
-> > +     struct nct6694_can_event *evt =3D priv->event;
-> > +     struct nct6694_cmd_header cmd_hd =3D {
-> > +             .mod =3D NCT6694_CAN_MOD,
-> > +             .cmd =3D NCT6694_CAN_EVENT,
-> > +             .sel =3D NCT6694_CAN_EVENT_SEL(priv->can_idx, NCT6694_CAN=
-_EVENT_MASK),
-> > +             .len =3D cpu_to_le16(sizeof(priv->event))
-> > +     };
-> > +     irqreturn_t handled =3D IRQ_NONE;
-> > +     int can_idx =3D priv->can_idx;
-> > +     int ret;
->
-> it would make sense to have a event pointer here instead of the can_idx?
->
->         const struct nct6694_can_event *event =3D &priv->event[priv->can_=
-idx];
->
-The CAN Event command always returns 16bytes: the first 8 bytes
-correspond to the CAN0 event, and the last 8 bytes correspond to the
-CAN1 event. Therefore, the event pointer here refers to both event
-buffers.
+Your kernel log shows that this is probably a bios bug:
 
-Thanks,
-Ming
+> [  520.107312] pcieport 0000:03:02.0: bridge window [mem 0x00100000-0x000fffff 64bit pref] to [bus 3a] add_size 200000 add_align 100000
+> [  520.107323] pcieport 0000:03:02.0: bridge window [mem 0xa0000000-0xa01fffff 64bit pref]: assigned
+> [  520.107601] pci_bus 0000:3a: busn_res: [bus 3a] is released
+> [  520.109588] pci_bus 0000:03: busn_res: [bus 03-3a] is released
+> [  522.973010] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
+> [  522.973048] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q26 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
+> [  529.409351] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
+> [  529.409395] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q27 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
+> [  543.303502] usb 1-5: new high-speed USB device number 12 using xhci_hcd
+> [  543.340048] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
+> [  543.340092] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q26 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
+
+And then later:
+
+> [  647.629519] hub 1-5:1.0: USB hub found
+> [  647.630656] hub 1-5:1.0: 5 ports detected
+> [  647.656103] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
+> [  647.656140] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q26 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
+> [  647.738644] ==================================================================
+> [  647.738648] BUG: KASAN: slab-use-after-free in sysfs_create_link+0x8a/0xc0
+
+Boom.
+
+Now what is odd is that sysfs_create_link is showing a use-after-free,
+which it shouldn't, but as your bios is spitting out invalid device
+symbols, who knows what confusion the kernel got into with regards to
+creating a symlink that was already present.
+
+So maybe go poke the bios vendor to resolve this?
+
+thanks,
+
+greg k-h
 
