@@ -1,69 +1,65 @@
-Return-Path: <linux-usb+bounces-20922-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20923-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 030E7A3F384
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 12:55:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E429DA3F40C
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 13:19:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7B127A88BA
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 11:54:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9330819C1AA4
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 12:19:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46355209F27;
-	Fri, 21 Feb 2025 11:55:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087D320A5EC;
+	Fri, 21 Feb 2025 12:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="Wh5p1Ft8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WxPqTESO"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D1F20968E
-	for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2025 11:55:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47A26207A15
+	for <linux-usb@vger.kernel.org>; Fri, 21 Feb 2025 12:19:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740138908; cv=none; b=NVeo45OR4+ZoAikwUEdub7kV7q1OhI3sj6n9IxNPWBEz/cXAhiC9DuUa63WaKJ7EjVx+1Zxrf33M0h1/FSHmLFCZpUPXr9ykX7gSL5fipscVbrXI7PUuSqfbxAaF8FeFiNvnFhaj8L2CXQcajPPNjBtBXeT8EWq+wPZpTKjbvmU=
+	t=1740140343; cv=none; b=sJy40BEFd0Rv1duZRiU0ex/87/FLqbYwiDN7gC8otKGBVp6GzGf9jJvBat4FbQbLGKnz3PMGFqQAujLMB0tPg85pYMlq3XbL3YK1ewH29nbf1uXuGvETavGvFgwP+MtFSecjnnbFENsdIZ9Y3WzeaHs0buYILnGJEq4IwBRsEck=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740138908; c=relaxed/simple;
-	bh=5Gpsr5d3bKpKT9JVsiTL0XIOMqGinIvPO6xxi0a+/kM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Xfgd3pNbOcwataTIQ35rj7zsQHYoGggpRyuFjVn6ZigyTcnKAUadGHJjVXnJixH30QidRq8f8Uj6ceRQN2YlSV+Xd7zZoa2Xsq6c1maynSEOsbfpHaCmnQX1Lxi3PK8KWVP1YBlo6BZjoGmKJ+aGBytlxLtuscwM0wnWfm7R10o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=Wh5p1Ft8; arc=none smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
-Received: from localhost (localhost [127.0.0.1])
-	by mx1.secunet.com (Postfix) with ESMTP id A4DD52087B;
-	Fri, 21 Feb 2025 12:54:57 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from mx1.secunet.com ([127.0.0.1])
- by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id fR_R-oXTlT3i; Fri, 21 Feb 2025 12:54:57 +0100 (CET)
-Received: from cas-essen-01.secunet.de (rl1.secunet.de [10.53.40.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by mx1.secunet.com (Postfix) with ESMTPS id 07F842076B;
-	Fri, 21 Feb 2025 12:54:57 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com 07F842076B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
-	s=202301; t=1740138897;
-	bh=sw15fREbC4owO0RksylCBOifpqissdp/ucrvs0BONr8=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To:From;
-	b=Wh5p1Ft807h6DU2wbaJWx1UjzxH6snqAKK/4Sv6uHLneK77tSMFrmpzL9QeQxplBn
-	 ivB1iBmyCg3xcAuUMQHXJLmHHiz462HWd6q/+pnrWonLjQchtv13vRGx5IUuzKZ7yr
-	 l2c6vRkHYfIWADF6glNTcAaxP1FzNPg5v0wFhaODdor56sLIzHvbjrm8AEHEndYuPm
-	 1/N2IbeGE8woVuYmVjhL7lCmUjc0p2SeSx09hFmEX/EYCpB5VfqCNlVFHg66CyDwFS
-	 xTWB4uwquhiYsM1ARA1Ayy5V3sY/4bgdcJjFJkDuoGS/89DqfDZhzLL5MQXHi8QThl
-	 eOTDstQ7ihnjQ==
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Fri, 21 Feb 2025 12:54:56 +0100
-Received: from [172.18.158.233] (172.18.158.233) by mbx-essen-01.secunet.de
- (10.53.40.197) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 21 Feb
- 2025 12:54:56 +0100
-Message-ID: <025286ce-a5ea-478e-9131-56c95478d9ab@secunet.com>
-Date: Fri, 21 Feb 2025 12:54:53 +0100
+	s=arc-20240116; t=1740140343; c=relaxed/simple;
+	bh=qXGEnRBBAAimeVTiS+X/HtQ8laA7HMoPbC+z37ugD2Q=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aZcOkg2yxnY/hr1Gdks4mkLN9w3mx6/Fzw08t0DnE+v9QiOphwiMP/5bGN204rKACQQ1PBkzr5ENZg9ZIy94hsg970Ew/GJYN+cpLofbczRMV/ARXwSEZnynOoszEhWjt23UQFfeugkus7p/HcoBmN8cN+5GGCqsCseh6/8+pY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WxPqTESO; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740140342; x=1771676342;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=qXGEnRBBAAimeVTiS+X/HtQ8laA7HMoPbC+z37ugD2Q=;
+  b=WxPqTESOwXypzcykCqAVTFO8oPXoC5e/F4qz26FFU6dd5BsGXbYBnZza
+   2d50vvi7H8TplDw3vxgxuFRR7fVz0TZ7Jj2fQbP1OVEkOaWvyS5o4Y/Xv
+   fRuJncMUDWXkqk8hdVRxmGQgS4aaAyFsL659Ey3E0w/ZrdGzkhCihMjF3
+   wHsNmR1+Dat+LjdWqDzCHyFZ8AvVRnf2CiKugl6xn3mznbzLeh+wtvn2g
+   oooldCZgobDKSFI7LRQZIQjBv2Fkt0Jni0NiyueyqzTn1gg/ijDrZKSE2
+   CcK+ahZ+oWoHQen9gS7ytBXzW/vbmV9N/xhqb3ef/cqzuFd7kHv7M8fgy
+   A==;
+X-CSE-ConnectionGUID: 8eXZRxcaS1mzNHSLM1P3fA==
+X-CSE-MsgGUID: oJ2iKopKQjWD06RdwuSCug==
+X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="40810124"
+X-IronPort-AV: E=Sophos;i="6.13,304,1732608000"; 
+   d="scan'208";a="40810124"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 04:19:01 -0800
+X-CSE-ConnectionGUID: SdFanI6EQ/uTICuBr2blNA==
+X-CSE-MsgGUID: x6zdQgy3Qz2Lb4NXaI5h3w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="119484780"
+Received: from unknown (HELO [10.237.72.199]) ([10.237.72.199])
+  by fmviesa003.fm.intel.com with ESMTP; 21 Feb 2025 04:18:59 -0800
+Message-ID: <5ec64d8d-7511-4ec3-98b6-10f4cdf313f3@linux.intel.com>
+Date: Fri, 21 Feb 2025 14:19:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -71,107 +67,252 @@ List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: use-after-free with Lenovo Ultra Docking Station
-To: Greg KH <gregkh@linuxfoundation.org>
-CC: <linux-usb@vger.kernel.org>
-References: <76af1506-3425-4d6a-b388-3304823fdd82@secunet.com>
- <2025021853-stained-scared-9e60@gregkh>
- <e17329a8-eb65-4dbe-ae8f-3b68efcf11f5@secunet.com>
- <2025022009-hurricane-amiable-2195@gregkh>
- <4dc90eac-584b-4266-8666-d34b96124722@secunet.com>
- <2025022122-corrode-tactless-7789@gregkh>
-Content-Language: de-DE, en-GB
-From: Philipp Leskovitz <philipp.leskovitz@secunet.com>
-Autocrypt: addr=philipp.leskovitz@secunet.com; keydata=
- xsBNBF5iYs4BCADVa19dos096dZvjNTi1DrH+YZo+Vwustn41j5t9/Le2NyXjxKDpAsN626F
- Qi4RyyQeYZGYgjds4+elyDuCZNQSb5Crpd4QBVZ2gsXlde5m0DOFWZWfWOiJO26k5RvT6tLx
- ewVH6dZMy245NgFxo8UjCFSLda677+0Qoi8hbwLHJpsGd61330IKk3rV6zUQPyja49FRNFEY
- l2qd4zGIUlPISp6U/5M/WEf1N6xLksHKeZfV21lPA/2IlPHheM5AFI8KCHIDBi8w00KHK8DY
- NKGFpoffzH8NMME4vomSMha0hDs6RXn5QPuZm3Z0cQlrAAoH8KOrT1H8eoJ/orLm6BTRABEB
- AAHNMVBoaWxpcHAgTGVza292aXR6IDxwaGlsaXBwLmxlc2tvdml0ekBzZWN1bmV0LmNvbT7C
- wI4EEwEKADgWIQQzH6UOXReGDEJd1AodG122n41owAUCXmJizgIbAwULCQgHAgYVCgkICwIE
- FgIDAQIeAQIXgAAKCRAdG122n41owAn5B/90leDIy21zFpVhtbTpKHkJKqKLPpkVkxNMjPYK
- sEHNJB/jOfXWH3xghiwRIyVUYPOVlL61eiZjFbiVSzKgnrZ/H7w/6H/709p/hcWhLEyANPPi
- SALSEzdgN8VlgQH9DIsBntaz6rM7lYmJma4Q9OlaAbOCwzUeWG+pw6Vy2QgQBHdTepYfoagI
- Epl9DAGmsDrrk0fTVNRvlVlYNoK2zYr6bfvOHOPGsJ+E+KEWioO4qLWUv7ZNYofk0q5bLVt1
- K/VGrN7elHJNz7olc3BeBq+nohUjWpH8OGrYSztO96MN2pHl98y42cTLhHEE8Um9I59GRx5B
- 20lpH0/p/hPciHdOzsBNBF5iYs4BCADEscrecAFWq2qGkk9NtOgVdw4dQvc2UiigAfEVtXMs
- tr+SkJtTtCMEPUQfv81fFZj+Gg9u3fLmzi5awIkddUpURYy4IAPboM/dAhJSvTuimvLIB6dI
- d3vw15w6SPOikwZr5dhJqX696futcq48l7zFvcVpPU9u3VBA2P2hm44mTP9YvVE3wmNgUSbe
- yNuRqlw7O3YxT4P+0PF9yncKU8uVgwYeaZsTagAygouPSvpTlfALt5u0VvAsI9i2al5obIiN
- bpC3jV09+UXHWeEXnKUX25EcbKsfBSHVwFleSdYSfs381SZkMLt17kApcis8YQB+MwuEwY0b
- x2So69GcCycrABEBAAHCwHYEGAEKACAWIQQzH6UOXReGDEJd1AodG122n41owAUCXmJizgIb
- DAAKCRAdG122n41owLAbCADM7anqHQJWGfAMS+4ovHE4yYG1bWF81IDChT1gmsC+HQ5LPNV0
- dVtuGAnDIYgN1M8fWvkgMNSC/noEEMe3wftwkvgv0mJg7R8HGrLYgZbhMGz5P5gQwBdYVpVW
- 5iddBI9MOKb50HzqCJ2XTUYo6oBbkZWe+nbOQN8ZwdZtMIjj3PEO1Y6qWnAAmkiZWMNuZ387
- Y0Sm7hnSjrVtEQfGrUGY/tWQYKibfYgwz9Ig4is/Q4ZrJRyKx0sgnuYL4tI6ENF6nJONI6gD
- inQdHmZ4+IfobzCHx0MCzKvc+KMXLnO+w4pi04okJ/zBrRFS2w9XOnJzYkLeQc1ZzP0k8FHF XZb2
-In-Reply-To: <2025022122-corrode-tactless-7789@gregkh>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Subject: Re: [PATCH] USB: core: Add eUSB2 descriptor and parsing in USB core
+To: Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+Cc: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+ "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+ Kannappan R <r.kannappan@intel.com>, Amardeep Rai <amardeep.rai@intel.com>
+References: <20250220141339.1939448-1-mathias.nyman@linux.intel.com>
+ <20250220215632.iv2oym57nujqktwr@synopsys.com>
+Content-Language: en-US
+From: Mathias Nyman <mathias.nyman@linux.intel.com>
+In-Reply-To: <20250220215632.iv2oym57nujqktwr@synopsys.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: cas-essen-01.secunet.de (10.53.40.201) To
- mbx-essen-01.secunet.de (10.53.40.197)
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 
-Hey Greg,
-
-The "Thunderbolt BIOS Assist Mode" option in the BIOS settings may have an effect on this. I have to test this intensively first.
-
-Thank you.
-Philipp
-
-
-> On Fri, Feb 21, 2025 at 08:48:52AM +0100, Philipp Leskovitz wrote:
->> Hello Greg,
+On 20.2.2025 23.56, Thinh Nguyen wrote:
+> Hi,
+> 
+> On Thu, Feb 20, 2025, Mathias Nyman wrote:
+>> From: Kannappan R <r.kannappan@intel.com>
 >>
->> I can also reproduce it without the proprietary modules. The latest BIOS
->> version N2IETA5W is installed. Attached is the log file. Only dm_mod,
->> intel_lpss_pci, intel_lpss, pinctrl_cannonlake and pinctrl_intel were still
->> loaded. I had also activated kasan.
+>> Add support for the 'eUSB2 Isochronous Endpoint Companion Descriptor'
+>> introduced in the recent USB 2.0 specification 'USB 2.0 Double Isochronous
+>> IN Bandwidth' ECN.
 >>
->> Kernel version 6.1 seems to be one of the last versions with which the docking station works well.
+>> It allows embedded USB2 (eUSB2) devices to report and use higher bandwidths
+>> for isochronous IN transfers in order to support higher camera resolutions
+>> on the lid of laptops and tablets with minimal change to the USB2 protocol.
 >>
->> The error doesn't always occur. I stress the device a little bit by
->> connecting the notebook to the docking station and disconnecting it again.
->> Sometimes I also plug in an external power supply. This combination
->> generates the error in less than 10 minutes. I also had the case that the
->> device was idle for about 30 minutes. Then it was connected to the docking
->> station once and the error occurred.
+>> The motivation for expanding USB 2.0 is further clarified in an additional
+>> Embedded USB2 version 2.0 (eUSB2v2) supplement to the USB 2.0
+>> specification. It points out this is optimized for performance, power and
+>> cost by using the USB 2.0 low-voltage, power efficient PHY and half-duplex
+>> link for the asymmetric camera bandwidth needs, avoiding the costly and
+>> complex full-duplex USB 3.x symmetric link and gigabit receivers.
+>>
+>> eUSB2 devices that support the higher isochronous IN bandwidth and the new
+>> descriptor can be identified by their device descriptor bcdUSB value of
+>> 0x0220
 > 
-> Your kernel log shows that this is probably a bios bug:
-> 
->> [  520.107312] pcieport 0000:03:02.0: bridge window [mem 0x00100000-0x000fffff 64bit pref] to [bus 3a] add_size 200000 add_align 100000
->> [  520.107323] pcieport 0000:03:02.0: bridge window [mem 0xa0000000-0xa01fffff 64bit pref]: assigned
->> [  520.107601] pci_bus 0000:3a: busn_res: [bus 3a] is released
->> [  520.109588] pci_bus 0000:03: busn_res: [bus 03-3a] is released
->> [  522.973010] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
->> [  522.973048] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q26 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
->> [  529.409351] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
->> [  529.409395] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q27 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
->> [  543.303502] usb 1-5: new high-speed USB device number 12 using xhci_hcd
->> [  543.340048] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
->> [  543.340092] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q26 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
-> 
-> And then later:
-> 
->> [  647.629519] hub 1-5:1.0: USB hub found
->> [  647.630656] hub 1-5:1.0: 5 ports detected
->> [  647.656103] ACPI BIOS Error (bug): Could not resolve symbol [\_SB.PCI0.RP09.PEGP.NVDN], AE_NOT_FOUND (20240827/psargs-332)
->> [  647.656140] ACPI Error: Aborting method \_SB.PCI0.LPCB.EC._Q26 due to previous error (AE_NOT_FOUND) (20240827/psparse-529)
->> [  647.738644] ==================================================================
->> [  647.738648] BUG: KASAN: slab-use-after-free in sysfs_create_link+0x8a/0xc0
-> 
-> Boom.
-> 
-> Now what is odd is that sysfs_create_link is showing a use-after-free,
-> which it shouldn't, but as your bios is spitting out invalid device
-> symbols, who knows what confusion the kernel got into with regards to
-> creating a symlink that was already present.
-> 
-> So maybe go poke the bios vendor to resolve this?
-> 
-> thanks,
-> 
-> greg k-h
+> Isn't eUSB2v2 has bcdUSB value of 0x0230?
 
+My understanding is that this descriptor is introduced for bcdUSB 0x0220
+eUSB2 devices that support Double Isochronous IN Bandwidth, 3072 to
+6144 bytes per microframe. See "USB 2.0 Double Isochronous IN Bandwidth"
+engineering change notice (USB 2.0 Double Isochronous IN ECN.pdf)
+
+eUSB2v2 devices with bcdUSB 0x0230 use the same descriptor, but have additional
+features such as assymmectric speed and bitrate up to 4.8Gbps.
+These types of devices are defined in the
+"Embedded USB2 Version 2.0 Supplement to the USB 2.0 Specification" document
+
+This patch focuses on initial support for 0x0220 devices
+
+> 
+>>
+>> Co-developed-by: Amardeep Rai <amardeep.rai@intel.com>
+>> Signed-off-by: Amardeep Rai <amardeep.rai@intel.com>
+>> Signed-off-by: Kannappan R <r.kannappan@intel.com>
+>> Co-developed-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> Signed-off-by: Mathias Nyman <mathias.nyman@linux.intel.com>
+>> ---
+>>   drivers/usb/core/config.c    | 51 ++++++++++++++++++++++++++++++++----
+>>   include/linux/usb.h          |  8 +++---
+>>   include/uapi/linux/usb/ch9.h | 15 +++++++++++
+>>   3 files changed, 66 insertions(+), 8 deletions(-)
+>>
+>> diff --git a/drivers/usb/core/config.c b/drivers/usb/core/config.c
+>> index f7bf8d1de3ad..13bd4ec4ea5f 100644
+>> --- a/drivers/usb/core/config.c
+>> +++ b/drivers/usb/core/config.c
+>> @@ -64,6 +64,37 @@ static void usb_parse_ssp_isoc_endpoint_companion(struct device *ddev,
+>>   	memcpy(&ep->ssp_isoc_ep_comp, desc, USB_DT_SSP_ISOC_EP_COMP_SIZE);
+>>   }
+>>   
+>> +static void usb_parse_eusb2_isoc_endpoint_companion(struct device *ddev,
+>> +		int cfgno, int inum, int asnum, struct usb_host_endpoint *ep,
+>> +		unsigned char *buffer, int size)
+>> +{
+>> +	struct usb_eusb2_isoc_ep_comp_descriptor *desc;
+>> +	struct usb_descriptor_header *h;
+>> +
+>> +	/*
+>> +	 * eUSB2 isochronous endpoint companion descriptor for this endpoint
+>> +	 * shall be declared before the next endpoint or interface descriptor
+>> +	 */
+>> +	while (size >= USB_DT_EUSB2_ISOC_EP_COMP_SIZE) {
+>> +		h = (struct usb_descriptor_header *)buffer;
+>> +
+>> +		if (h->bDescriptorType == USB_DT_EUSB2_ISOC_ENDPOINT_COMP) {
+>> +			desc = (struct usb_eusb2_isoc_ep_comp_descriptor *)buffer;
+>> +			ep->eusb2_isoc_ep_comp = *desc;
+>> +			return;
+>> +		}
+>> +		if (h->bDescriptorType == USB_DT_ENDPOINT ||
+>> +		    h->bDescriptorType == USB_DT_INTERFACE)
+>> +			break;
+>> +
+>> +		buffer += h->bLength;
+>> +		size -= h->bLength;
+>> +	}
+>> +
+>> +	dev_notice(ddev, "No eUSB2 isoc ep %d companion for config %d interface %d altsetting %d\n",
+>> +		   ep->desc.bEndpointAddress, cfgno, inum, asnum);
+> 
+> Since eUSB2v2 devices should also include at least an alternate
+> interface with isoc endpoint descriptors using legacy settings, does the
+> spec require those legacy alternate interfaces to also have this isoc
+> companion descriptor?
+
+I think those alternate interfaces with 'legacy' settings will have normal nonzero
+wMaxPacketSize, and no eusb2 isoc companion descriptor.
+
+we only look for this descriptor if wMaxpacketSize == 0
+
+This is based on the text the ECN adds to USB2 section 9.6.6 "Endpoint"
+
+"For high bandwidth eUSB2 Isochronous IN Endpoint that require bandwidths above
+3KB/microframe, the standard Endpoint descriptor shall declare a zero bandwidth setting,
+i.e., the wMaxPacketSize field shall be set to 0, and the actual maximum packet size and
+bandwidth requirements shall be defined in the eUSB2 Iso Endpoint Companion descriptor
+wMaxPacketSize and dwBytesPerInterval fields, respectively. Note that Devices shall also
+implement one or more non-zero bandwidth alternate settings with a non-zero wMaxPacketSize
+(up to 3KB/microframe) in the standard Endpoint descriptor."
+
+> 
+>> +}>> +
+>>   static void usb_parse_ss_endpoint_companion(struct device *ddev, int cfgno,
+>>   		int inum, int asnum, struct usb_host_endpoint *ep,
+>>   		unsigned char *buffer, int size)
+>> @@ -258,8 +289,10 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+>>   	int n, i, j, retval;
+>>   	unsigned int maxp;
+>>   	const unsigned short *maxpacket_maxes;
+>> +	u16 bcdUSB;
+>>   
+>>   	d = (struct usb_endpoint_descriptor *) buffer;
+>> +	bcdUSB = le16_to_cpu(udev->descriptor.bcdUSB);
+>>   	buffer += d->bLength;
+>>   	size -= d->bLength;
+>>   
+>> @@ -409,15 +442,17 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+>>   
+>>   	/*
+>>   	 * Validate the wMaxPacketSize field.
+>> -	 * Some devices have isochronous endpoints in altsetting 0;
+>> -	 * the USB-2 spec requires such endpoints to have wMaxPacketSize = 0
+>> -	 * (see the end of section 5.6.3), so don't warn about them.
+>> +	 * eUSB2 devices (see USB 2.0 Double Isochronous IN ECN 9.6.6 Endpoint)
+>> +	 * and devices with isochronous endpoints in altsetting 0 (see USB 2.0
+>> +	 * end of section 5.6.3) have wMaxPacketSize = 0.
+>> +	 * So don't warn about those.
+>>   	 */
+>>   	maxp = le16_to_cpu(endpoint->desc.wMaxPacketSize);
+>> -	if (maxp == 0 && !(usb_endpoint_xfer_isoc(d) && asnum == 0)) {
+>> +
+>> +	if (maxp == 0 && bcdUSB != 0x0220 &&
+>> +	    !(usb_endpoint_xfer_isoc(d) && asnum == 0))
+>>   		dev_notice(ddev, "config %d interface %d altsetting %d endpoint 0x%X has invalid wMaxPacketSize 0\n",
+>>   		    cfgno, inum, asnum, d->bEndpointAddress);
+>> -	}
+>>   
+>>   	/* Find the highest legal maxpacket size for this endpoint */
+>>   	i = 0;		/* additional transactions per microframe */
+>> @@ -465,6 +500,12 @@ static int usb_parse_endpoint(struct device *ddev, int cfgno,
+>>   				maxp);
+>>   	}
+>>   
+>> +	/* Parse a possible eUSB2 periodic endpoint companion descriptor */
+>> +	if (bcdUSB == 0x0220 && d->wMaxPacketSize == 0 &&
+>> +	    (usb_endpoint_xfer_isoc(d) || usb_endpoint_xfer_int(d)))
+> 
+> Why are we checking for interrupt endpoint to parse for isoc?
+> 
+
+Good point, can't recall why it ended up here. I'll fix that
+
+>> +		usb_parse_eusb2_isoc_endpoint_companion(ddev, cfgno, inum, asnum,
+>> +							endpoint, buffer, size);
+>> +
+>>   	/* Parse a possible SuperSpeed endpoint companion descriptor */
+>>   	if (udev->speed >= USB_SPEED_SUPER)
+>>   		usb_parse_ss_endpoint_companion(ddev, cfgno,
+>> diff --git a/include/linux/usb.h b/include/linux/usb.h
+>> index cfa8005e24f9..b46738701f8d 100644
+>> --- a/include/linux/usb.h
+>> +++ b/include/linux/usb.h
+>> @@ -51,6 +51,7 @@ struct ep_device;
+>>    * @desc: descriptor for this endpoint, wMaxPacketSize in native byteorder
+>>    * @ss_ep_comp: SuperSpeed companion descriptor for this endpoint
+>>    * @ssp_isoc_ep_comp: SuperSpeedPlus isoc companion descriptor for this endpoint
+>> + * @eusb2_isoc_ep_comp: eUSB2 isoc companion descriptor for this endpoint
+>>    * @urb_list: urbs queued to this endpoint; maintained by usbcore
+>>    * @hcpriv: for use by HCD; typically holds hardware dma queue head (QH)
+>>    *	with one or more transfer descriptors (TDs) per urb
+>> @@ -64,9 +65,10 @@ struct ep_device;
+>>    * descriptor within an active interface in a given USB configuration.
+>>    */
+>>   struct usb_host_endpoint {
+>> -	struct usb_endpoint_descriptor		desc;
+>> -	struct usb_ss_ep_comp_descriptor	ss_ep_comp;
+>> -	struct usb_ssp_isoc_ep_comp_descriptor	ssp_isoc_ep_comp;
+>> +	struct usb_endpoint_descriptor			desc;
+>> +	struct usb_ss_ep_comp_descriptor		ss_ep_comp;
+>> +	struct usb_ssp_isoc_ep_comp_descriptor		ssp_isoc_ep_comp;
+>> +	struct usb_eusb2_isoc_ep_comp_descriptor	eusb2_isoc_ep_comp;
+>>   	struct list_head		urb_list;
+>>   	void				*hcpriv;
+>>   	struct ep_device		*ep_dev;	/* For sysfs info */
+>> diff --git a/include/uapi/linux/usb/ch9.h b/include/uapi/linux/usb/ch9.h
+>> index 91f0f7e214a5..475af9358173 100644
+>> --- a/include/uapi/linux/usb/ch9.h
+>> +++ b/include/uapi/linux/usb/ch9.h
+>> @@ -253,6 +253,9 @@ struct usb_ctrlrequest {
+>>   #define USB_DT_BOS			0x0f
+>>   #define USB_DT_DEVICE_CAPABILITY	0x10
+>>   #define USB_DT_WIRELESS_ENDPOINT_COMP	0x11
+>> +/* From the eUSB2 spec */
+>> +#define USB_DT_EUSB2_ISOC_ENDPOINT_COMP	0x12
+>> +/* From Wireless USB spec */
+>>   #define USB_DT_WIRE_ADAPTER		0x21
+>>   /* From USB Device Firmware Upgrade Specification, Revision 1.1 */
+>>   #define USB_DT_DFU_FUNCTIONAL		0x21
+>> @@ -675,6 +678,18 @@ static inline int usb_endpoint_interrupt_type(
+>>   
+>>   /*-------------------------------------------------------------------------*/
+>>   
+>> +/* USB_DT_EUSB2_ISOC_ENDPOINT_COMP: eUSB2 Isoch Endpoint Companion descriptor */
+> 
+> Should we name this usb_hsx_isoc_ep_comp_descriptor for consistency?
+> 
+> Just bringing up the discussion here as I don't have a hard stance on
+> this. The naming of speeds and usb versions are getting more
+> inconsistent, and naming of these are getting more challenging. Not sure
+> if there will be something new in the future.
+
+USB 2.0 Double Isochronous IN Bandwidth ECN documentation uses the names:
+"eUSB2 Isochronous Endpoint Companion Descriptor"
+"eUSB2 Iso Endpoint Companion Descriptor" and
+EUSB2_ISO_ENDPOINT_COMPANION as "desriptor type"
+
+hsx is not mentioned in this ECN, it seems to be introduced in the
+eUSB2v2 Supplement.
+
+But I don't have a strong opinion regarding this, but have grown used
+to eusb2
+
+Thanks for looking at this
+
+-Mathias
 
