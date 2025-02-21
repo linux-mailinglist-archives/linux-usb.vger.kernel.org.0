@@ -1,113 +1,152 @@
-Return-Path: <linux-usb+bounces-20932-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20933-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D2BFA3FDC3
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 18:47:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6060BA3FE6A
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 19:12:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0E904265BC
-	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 17:47:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41A27188A3B6
+	for <lists+linux-usb@lfdr.de>; Fri, 21 Feb 2025 18:11:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D3C2505DD;
-	Fri, 21 Feb 2025 17:46:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AE32512E3;
+	Fri, 21 Feb 2025 18:11:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T2M1eUcu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CUO5XUpE"
 X-Original-To: linux-usb@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3AF536AF5;
-	Fri, 21 Feb 2025 17:46:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 798B624CEEE;
+	Fri, 21 Feb 2025 18:11:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740160016; cv=none; b=Tg4pGKoum8Dq/rolhSj0WILqRsOwysmYEZ5HQ2nUN02kHunRxSphOLzgnhtOOF/w3jjUrPyiK2zPQijZHL1HOVRUGXTDElvzW9aMg6DCzD+S+A/KOlv0BTnoqTAEWsQrI7wD4+mE05WAMVRhrbMymVmSuHK2M3v9UFybTJ9WNW0=
+	t=1740161466; cv=none; b=fk5Dmn751wV+w6TgizeUg9rcY/oLBIohXsoLgJ6UnjdX+bfJrFM+zEquyDn9NtPjz09PXjy0wuPNIQ0LKsqoo0OfjWcypv6Mfs6jj3QwN8XPWJDYC47m+UFjU/+SMhwxH03V3AbG3ab06G/oQpuulN2Mae7PKfXdZPmatWwwOy4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740160016; c=relaxed/simple;
-	bh=pkMm6RkLxj0MLvOjXO6Zq/qKdEhQUSinbouhRvXjrME=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZCyNPQjdxPMMPvEc28YjX3zrrUHKqbj7EWfn1y7ljuKvIRexuO2VumjPYfg+5JMDGnFqHnfYiuGSdrASqBJH37xAaog3v+JrE/Dt6Ml198FmoEOW47XSBvKbEAnmg3/P9FUKc60MVBxN7tdMJiL5v5QutuWpzDxWnfpD0Vtm6ZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T2M1eUcu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF7AC4CED6;
-	Fri, 21 Feb 2025 17:46:51 +0000 (UTC)
+	s=arc-20240116; t=1740161466; c=relaxed/simple;
+	bh=mb3+FQLiAdF0GxPdTxxNZ1nsfmB1mwgJcruotyetN9Y=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=FfKwKMhJKgFzN6AljS0xTh6i4UD+xHj5fvLvNh8jI+gF3uoGS0tSRcG2UI78iUEQrOzzDSzlPlxe5VtIYfQ6htdloGkZqEO8AyqW6PRsWwH4uNpOu8yNiPl7fveTxfYsSIeLjJciSTLRS03xIpdc6LeNX8FSllwnTex7QDi0+FE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CUO5XUpE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 217A1C4CED6;
+	Fri, 21 Feb 2025 18:11:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740160015;
-	bh=pkMm6RkLxj0MLvOjXO6Zq/qKdEhQUSinbouhRvXjrME=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=T2M1eUcu8YEAN59gO+QTHvsz8Moc4Z/JlLwFqm+v/GWd1vBBTNc2rH24rR6ZVcXwL
-	 dzZJm7j3LZoRHOURuEfI/MDagEjV+GlTv+Eb67Am2ydeTZq7BxXc7lchUWMQjDohVW
-	 22UXQr6iX7OYOL84YR3P8NFyPiDcF9DjhJTTSWNPptqAUH3B9Fuj8Ef87jObOvwgnh
-	 Zy4Z/MtHsvC7wWf3SN4pl5hMfn4f2iQpsIjLRHzf0zVb+UZoHHMq7YF6QOIXSbvOYa
-	 HOOH324RwhLUXaRVOoqfs1oEYc/BvNbwy0ziBrR9Sa3NJwlm/V91QWfbALwNK7oSkp
-	 hwnMT3PYOfYaQ==
-Date: Fri, 21 Feb 2025 17:46:49 +0000
-From: Conor Dooley <conor@kernel.org>
-To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: Macpaul Lin <macpaul.lin@mediatek.com>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	Chunfeng Yun <chunfeng.yun@mediatek.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-usb@vger.kernel.org,
-	Alexandre Mergnat <amergnat@baylibre.com>,
-	Bear Wang <bear.wang@mediatek.com>,
-	Pablo Sun <pablo.sun@mediatek.com>, Macpaul Lin <macpaul@gmail.com>,
-	Project_Global_Chrome_Upstream_Group@mediatek.com,
-	Chris-qj chen <chris-qj.chen@mediatek.com>
-Subject: Re: [PATCH] dt-bindings: usb: mtu3: Add ports property
-Message-ID: <20250221-reenter-sassy-5b27b03f8b06@spud>
-References: <20250220142230.2530583-1-macpaul.lin@mediatek.com>
- <ae34efcd-4fe1-4e45-a1e1-0744138a84b9@collabora.com>
+	s=k20201202; t=1740161466;
+	bh=mb3+FQLiAdF0GxPdTxxNZ1nsfmB1mwgJcruotyetN9Y=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=CUO5XUpE5/sksVVDBuF3JnxmN+bHo+c1O9ILuMJqjeQdO+1d4uH9jXDth3xbNBetl
+	 b9lCeEagUllp9vXDf12sYZJscUOgiOjcu57Es5G3iiVC8zOpU7vLE/MyHdotn1oJEA
+	 VPiOP12WJaT2QMAXEL/G9HIN+dllsF+42fpaZZTSuTdqBkXE/i8l7lFuLgpCXjTPYA
+	 u2/TtfZuka8QjTNTQqME60gh7MZErwn2Gbis8sy2tusEo2rDNqEMHSrlYZycoxpgLM
+	 qBjp06wjA6Jk/WF5wqsV/5fntE6+n/eM/SsyiFpdu13hL8xYkpSueAGhdYn3Kt5w0W
+	 pwOjHKW9HN2XQ==
+Date: Fri, 21 Feb 2025 12:11:04 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="szY3iyQERCl/suc/"
-Content-Disposition: inline
-In-Reply-To: <ae34efcd-4fe1-4e45-a1e1-0744138a84b9@collabora.com>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Simon Sun <simon.sun@yunjingtech.com>, linux-kernel@vger.kernel.org, 
+ linux-usb@vger.kernel.org, devicetree@vger.kernel.org, 
+ Project_Global_Chrome_Upstream_Group@mediatek.com, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Alexandre Mergnat <amergnat@baylibre.com>, Macpaul Lin <macpaul@gmail.com>, 
+ Conor Dooley <conor+dt@kernel.org>, Bear Wang <bear.wang@mediatek.com>, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ Yow-Shin Liou <yow-shin.liou@mediatek.com>, 
+ Fabien Parent <fparent@baylibre.com>, 
+ Chris-qj chen <chris-qj.chen@mediatek.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ Pablo Sun <pablo.sun@mediatek.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+To: Macpaul Lin <macpaul.lin@mediatek.com>
+In-Reply-To: <20250221144941.2844333-1-macpaul.lin@mediatek.com>
+References: <20250221144941.2844333-1-macpaul.lin@mediatek.com>
+Message-Id: <174015998416.3469778.7696460950092748736.robh@kernel.org>
+Subject: Re: [PATCH v5] arm64: dts: mediatek: mt8395-genio-1200-evk: add
+ support for TCPC port
 
 
---szY3iyQERCl/suc/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Fri, 21 Feb 2025 22:49:41 +0800, Macpaul Lin wrote:
+> From: Fabien Parent <fparent@baylibre.com>
+> 
+> Enable USB Type-C support on MediaTek MT8395 Genio 1200 EVK by adding
+> configuration for TCPC Port, USB-C connector, MUX IT5205 and related
+> settings.
+> 
+> Configure dual role switch capability, set up PD (Power Delivery) profiles,
+> and establish endpoints for SS (SuperSpeed) and HS (HighSpeed) USB.
+> 
+> Update pinctrl configurations for U3 P0 VBus default pins and set dr_mode
+> to "otg" for OTG (On-The-Go) mode operation.
+> 
+> Add ITE IT5205 (TYPEC MUX) under I2C2 bus and configure its properties;
+> also add references and configurations to 'typec-mux' node.
+> 
+> Signed-off-by: Fabien Parent <fparent@baylibre.com>
+> Signed-off-by: Yow-Shin Liou <yow-shin.liou@mediatek.com>
+> Signed-off-by: Simon Sun <simon.sun@yunjingtech.com>
+> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
+> ---
+>  .../dts/mediatek/mt8395-genio-1200-evk.dts    | 100 ++++++++++++++++++
+>  1 file changed, 100 insertions(+)
+> 
+> Changes for v2:
+>  - Drop the no need '1/2' DT Schema update patch in the 1st version.
+>  - Fix indent for 'ports' node, it should under the 'connector' node.
+>  - Correct the index for 'port@0' and 'port@1' node.
+> 
+> Changes for v3:
+>  - Correct the order between new added nodes.
+> 
+> Changes for v4:
+>  - Reorder for property 'op-sink-microwatt'.
+>  - Fix indentation for 'source-pdos' and 'sink-pdos' nodes.
+>  - Correct node 'pin-cmd-dat' with 'pins-vbus'.
+>  - Add both Highspeed and Superspeed ports to ssusb0 port.
+>  - Set 'role-switch-default-mode' = "peripheral" for ssusb0 port.
+>  - Rename endpoint of USB data port to 'mtu3_hs0_role_sw' and
+>    'mtu3_ss0_role_sw'.
+>  - Drop it5205fn phandle for node typec-mux@48.
+>  - Reorder properties of typec-mux@48
+>  - Add "Reviewed-by:" tag. Thanks!
+> 
+> Changes for v5:
+>  - Squash two patches into one patch and refine commit messages:
+>    suggested by reviewer.
+>  - Drop 'role-switch-default-mode'
+>  - Add altmodes settings
+>  - Drop 'Reviewed-by:' tag since the two sub patches has been combined
+>    into a new patch.
+> 
 
-On Thu, Feb 20, 2025 at 04:56:00PM +0100, AngeloGioacchino Del Regno wrote:
-> Il 20/02/25 15:22, Macpaul Lin ha scritto:
-> > Define the ports property in the mediatek,mtu3 device tree binding sche=
-ma.
-> > Include definitions for port@0 and port@1, specifying their roles as
-> > High Speed (HS) and Super Speed (SS) data buses, respectively.
-> >=20
-> > Suggested-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@col=
-labora.com>
-> > Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
->=20
-> Some SoCs do have SuperSpeed peripheral mode, so for this commit
->=20
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
-ora.com>
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
---szY3iyQERCl/suc/
-Content-Type: application/pgp-signature; name="signature.asc"
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
 
------BEGIN PGP SIGNATURE-----
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ7i8CQAKCRB4tDGHoIJi
-0nPqAP0fP5poDJRA3Z3q8SHg6Q/EHMEj/DnqgJGRMdIOzsP9RAD7Bc10OD+TWsBu
-8fXcBQQfSDrvW31wIXdCY/T7A+BXmwE=
-=4Nd+
------END PGP SIGNATURE-----
+  pip3 install dtschema --upgrade
 
---szY3iyQERCl/suc/--
+
+New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/mediatek/' for 20250221144941.2844333-1-macpaul.lin@mediatek.com:
+
+arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dtb: usb@11201000: 'ports' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtu3.yaml#
+
+
+
+
+
 
