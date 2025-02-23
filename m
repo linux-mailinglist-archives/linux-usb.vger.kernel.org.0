@@ -1,139 +1,117 @@
-Return-Path: <linux-usb+bounces-20952-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20953-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC3A2A40FA5
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2025 17:06:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71C56A410C5
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2025 19:21:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C90C3B7260
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2025 16:06:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E42F7A9A8B
+	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2025 18:20:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5925770825;
-	Sun, 23 Feb 2025 16:06:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="RxLrC+au"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3076C15CD46;
+	Sun, 23 Feb 2025 18:21:19 +0000 (UTC)
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59511757F3;
-	Sun, 23 Feb 2025 16:06:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EBE35D8F0;
+	Sun, 23 Feb 2025 18:21:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.154.21.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740326777; cv=none; b=ljDxNadzZ6UnkPG1bMetOnmfbeXjjv3ZwOWr74Z22TO3mlOoTq0YAl6Sau3OIOz9I67rDaIgnZ/ngXNI4wu1Rtxmhz71wQ/UyBdcVgKoGIcsKVo463ojmGTMSWGkTiZbzg1E5FWkbiLZHRFIAZmLVxPX7MsjfLqKIO2Qys054Dk=
+	t=1740334878; cv=none; b=mLXGdYs81B8TcmCm1mM/EJ8r3bGtuZwfhJaEqvYpXPb4Q01WqXYFOjCw4K/+wBPj0ZGcgz5AlnX2EK8wmdJeBHMsCA0WtsDm9Cst78ul+VE0KoXAOha2Zz2Qvd5K1LPTZ+ZQuebcLKbx4ce7VupoqABF5L+J3qMtCYKDYGOakWI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740326777; c=relaxed/simple;
-	bh=0+Nvn8cX6GI4R1DniyFi3unyhSBXeHvaoQlWCJNx56g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q9zKgyk/T+i2Kvp9M3jTkquQucu08w7kWD0JlFr5BKaYCDJUWxamvi/TZdPfH61TidUQzACfF6TKTOySulvDWxpimH5F9gXAfk1WBuA4LUBhCMnzdgE5ZQmdgVAHclX8/S9li72VkzePKLIsAr8SCPke6zQ0gnwFZzO0Ru70xXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=RxLrC+au; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=1znzIw5Ur+KNtuAQFIn0e9fm114BbhJeBjBikMs86rQ=; b=RxLrC+aui/e9VrGv
-	naL6Girhfd7EA9uioNfjOuZ4X5PenPiEvlOpM66l99rmdnRPNmOhUsq6vO4cESC+9fEOmDxlwBqRF
-	eVOZiGnM/8+Mq7B4Dkz5znqTYMPXXOXcVTMLZHfsYNBIULQnCDK22rbBn5QlS+Ys/EsSz2HSRpKHb
-	+UIFclrUm4Rt7mUO9lTU1VnHKm+HN6ItEbp4fZGv0ZOoc38Fm2zZTEbuk1GjXtFNbYGbe0QKRidiO
-	Zw77MBXbTfTJSQqTjg0KcyRX8bp8/G3uTtv095li8HuAbqSUmyX4OaFug6MDRoL6sDDmUPJQ1+vWV
-	dHTorL7tuq6IUTm5RQ==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1tmEUU-000C2n-24;
-	Sun, 23 Feb 2025 16:06:02 +0000
-From: linux@treblig.org
-To: gregkh@linuxfoundation.org,
-	linux-usb@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH] usb: olpi: Remove unused otg_ulpi_create
-Date: Sun, 23 Feb 2025 16:06:02 +0000
-Message-ID: <20250223160602.91916-1-linux@treblig.org>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1740334878; c=relaxed/simple;
+	bh=naByVkUiz/GQlhP55+XLPPUFw52CHqfSQjnK+2OSx2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=HF0boOTZlfCuvC+mTWu+Kz7uTTsaBG9AN2RFZo+AFXHUBVOO0LJmut243ZgWDgpnctqmfAiVOiOZXpZ9vlz6HjWvewQXBF1e5FInsFvLFACmDppySQMMP18GWAfJpMjAaHhru5kONL7Iv4jokzHZHoax3sQ195PMZfBy6lwoi/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru; spf=pass smtp.mailfrom=omp.ru; arc=none smtp.client-ip=90.154.21.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=omp.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=omp.ru
+Received: from [192.168.2.102] (213.87.151.162) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.1258.12; Sun, 23 Feb
+ 2025 21:05:49 +0300
+Message-ID: <3315dad1-52a8-4ae7-be65-6b9ccf3dfbfe@omp.ru>
+Date: Sun, 23 Feb 2025 21:05:47 +0300
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] usb: olpi: Remove unused otg_ulpi_create
+To: <linux@treblig.org>, <gregkh@linuxfoundation.org>,
+	<linux-usb@vger.kernel.org>
+CC: <linux-kernel@vger.kernel.org>
+References: <20250223160602.91916-1-linux@treblig.org>
+Content-Language: en-US
+From: Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+In-Reply-To: <20250223160602.91916-1-linux@treblig.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 6.1.1, Database issued on: 02/23/2025 17:49:06
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 19
+X-KSE-AntiSpam-Info: Lua profiles 191206 [Feb 23 2025]
+X-KSE-AntiSpam-Info: Version: 6.1.1.11
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 51 0.3.51
+ 68896fb0083a027476849bf400a331a2d5d94398
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 213.87.151.162 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info:
+	127.0.0.199:7.1.2;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
+X-KSE-AntiSpam-Info: {Tracking_ip_hunter}
+X-KSE-AntiSpam-Info: FromAlignment: s
+X-KSE-AntiSpam-Info: ApMailHostAddress: 213.87.151.162
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 19
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 02/23/2025 17:52:00
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 2/23/2025 2:52:00 PM
+X-KSE-Attachment-Filter-Triggered-Rules: Clean
+X-KSE-Attachment-Filter-Triggered-Filters: Clean
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
+On 2/23/25 7:06 PM, linux@treblig.org wrote:
 
-otg_ulpi_create() has been unused since 2022's
-commit 8ca79aaad8be ("ARM: pxa: remove unused pxa3xx-ulpi")
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> 
+> otg_ulpi_create() has been unused since 2022's
+> commit 8ca79aaad8be ("ARM: pxa: remove unused pxa3xx-ulpi")
+> 
+> Remove it.
+> 
+> The devm_ variant is still used.
+> 
+> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+> ---
+>  drivers/usb/phy/phy-ulpi.c | 23 -----------------------
 
-Remove it.
+   Probably s/olpi/ulpi/ in the subject then?
 
-The devm_ variant is still used.
-
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
----
- drivers/usb/phy/phy-ulpi.c | 23 -----------------------
- include/linux/usb/ulpi.h   |  9 ---------
- 2 files changed, 32 deletions(-)
-
-diff --git a/drivers/usb/phy/phy-ulpi.c b/drivers/usb/phy/phy-ulpi.c
-index e683a37e3a7a..4df63e67bb37 100644
---- a/drivers/usb/phy/phy-ulpi.c
-+++ b/drivers/usb/phy/phy-ulpi.c
-@@ -255,29 +255,6 @@ static void otg_ulpi_init(struct usb_phy *phy, struct usb_otg *otg,
- 	otg->set_vbus	= ulpi_set_vbus;
- }
- 
--struct usb_phy *
--otg_ulpi_create(struct usb_phy_io_ops *ops,
--		unsigned int flags)
--{
--	struct usb_phy *phy;
--	struct usb_otg *otg;
--
--	phy = kzalloc(sizeof(*phy), GFP_KERNEL);
--	if (!phy)
--		return NULL;
--
--	otg = kzalloc(sizeof(*otg), GFP_KERNEL);
--	if (!otg) {
--		kfree(phy);
--		return NULL;
--	}
--
--	otg_ulpi_init(phy, otg, ops, flags);
--
--	return phy;
--}
--EXPORT_SYMBOL_GPL(otg_ulpi_create);
--
- struct usb_phy *
- devm_otg_ulpi_create(struct device *dev,
- 		     struct usb_phy_io_ops *ops,
-diff --git a/include/linux/usb/ulpi.h b/include/linux/usb/ulpi.h
-index 5050f502c1ed..4b651065738a 100644
---- a/include/linux/usb/ulpi.h
-+++ b/include/linux/usb/ulpi.h
-@@ -49,19 +49,10 @@
- /*-------------------------------------------------------------------------*/
- 
- #if IS_ENABLED(CONFIG_USB_ULPI)
--struct usb_phy *otg_ulpi_create(struct usb_phy_io_ops *ops,
--					unsigned int flags);
--
- struct usb_phy *devm_otg_ulpi_create(struct device *dev,
- 				     struct usb_phy_io_ops *ops,
- 				     unsigned int flags);
- #else
--static inline struct usb_phy *otg_ulpi_create(struct usb_phy_io_ops *ops,
--					      unsigned int flags)
--{
--	return NULL;
--}
--
- static inline struct usb_phy *devm_otg_ulpi_create(struct device *dev,
- 						   struct usb_phy_io_ops *ops,
- 						   unsigned int flags)
--- 
-2.48.1
+>  include/linux/usb/ulpi.h   |  9 ---------
+>  2 files changed, 32 deletions(-)
+> [...]
+MBR, Sergey
 
 
