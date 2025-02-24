@@ -1,89 +1,89 @@
-Return-Path: <linux-usb+bounces-20955-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20956-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D184A4124D
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 00:45:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D227CA4126B
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 01:03:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 822EC3AE880
-	for <lists+linux-usb@lfdr.de>; Sun, 23 Feb 2025 23:45:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4672A18948E5
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 00:03:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90E951FCFE6;
-	Sun, 23 Feb 2025 23:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EE314A06;
+	Mon, 24 Feb 2025 00:02:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K/AP4ldu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OqgJGbZh"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8592410E4;
-	Sun, 23 Feb 2025 23:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61BB6802;
+	Mon, 24 Feb 2025 00:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740354351; cv=none; b=FeleJf1IJ2o8wOpuD3k5YJWX4Y3Xn6zgpeBF3JX2/OnEBLGGmlSujVjFYSaJ2Nv4XXnap49xH/t9wJbUnccYQn+CnfG3vEjDQL/zeA1yZL0MDSGw52AxLsIs2oHyYttzSX2hF8KdtL77ogeGkaO/DyY01HJ+IykbLcw5NNxw/O8=
+	t=1740355374; cv=none; b=XQpXduGN6v/SE4t1w775emr7lTOraZq/UUxcdOKLCLIPqgVOZzJjodsQopJmvCy/OQajlW/pNj+YET6N+8mTu/HiQx2eRr35b+G0nyes5VrK7/O3fhHEsfginVI0z0J+C0m1rIkUOUsW7phiII5S8Ml0Yo6oueB7VYjEn8FEtc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740354351; c=relaxed/simple;
-	bh=wY1xWMM/k5JTNZ/FzkmzKc7FAYv1gWfhj4nswE3dxFM=;
+	s=arc-20240116; t=1740355374; c=relaxed/simple;
+	bh=n4VRozAU49BBd38yFZYM8j/lF67NbQ43AdFqChoMvHQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=g4T4lh1BqQejX8NAAU0CR8mlzw1De3W7sF+HoQQnoZkvLkOCiOpn0dwTpSc0ZZc3R2qlpyUe/VgJG8clH9+9EntugSbGCGrcF5NqSKbAZaOUgC1yVDs725vM8pd5rddO8Mza6J/o7GMfRdf2+cSrpPKSKPRRUSa47dxlFmUgCcE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K/AP4ldu; arc=none smtp.client-ip=209.85.208.50
+	 MIME-Version:Content-Type; b=n9V+6zheZgYQY/QK0yE2bC9Ri204KwmI4iPFVHB0Cx7PS3lP/1U7qp7Ob+82WPqTQvWqn3Msn71wN6AwvfyEXBQW7pY0wfmGpw+J5K4O5bi452jMPON6WWfCVL8g0BqXvYMqX+3td9nB5Jf8IbhKL+Q7MAxLmccrt7fG6cKNyCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OqgJGbZh; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5e05717755bso5841568a12.0;
-        Sun, 23 Feb 2025 15:45:49 -0800 (PST)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-abbdf897503so839539166b.0;
+        Sun, 23 Feb 2025 16:02:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740354348; x=1740959148; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1740355370; x=1740960170; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sCP1rbXh4MlA1hNlKO2PRwztVgKcVUG68KyRAFF7PGU=;
-        b=K/AP4lduUdvGm7okk/tuuB0fRszGs3vOmXFEaAkQaN+Isczo4TZHW5BCzlxCzo3/AE
-         4KBOYZfxoafW9H3Gdn8vO6ExuwRfeCBpFRZLeZ3G8IZg52EFXk+1ZmGyKGJVIwtr1SQS
-         98SEgfA2aWOfs2dq4KmFORVYwQQYnB2oa3GZZrJaTNnQHr07RcJrWQBdQWbieB5PvIHb
-         6pqfWz7qyK3RjEjWIZNvK4d69+iRYrimvsjifWOvLbcspi74bmt49AiAPnNoel4Nkqjt
-         lkroIMesrymypH2LgK7VJhscxQ07sPCrvwwN97ix9ZU6ftNrgpa/D5C30AaMw2V9F4iv
-         k37w==
+        bh=ku/meeX1O+81D6vyphMnaxR005xNcolriu4IkuswsD4=;
+        b=OqgJGbZhBDjc8xjBJ5ETElETCtHXPoACIUAvC8oD/itdBib+Y+0+SR6qpAob3ac5gq
+         O9OMUa9BVJ32RUb0+C5VAZTBabYMak2VUVWazuco4ywIZRi9z9MGuCl5EG/dcPYDZsf1
+         m07aj2cj1GAbH7RB4wG8f6qtCjOqFHhD81fmnKTwe17t8y3nXjSTq4by9qt9B/38ysYZ
+         EtQXxZYfDmQk0DJASx1k/BPHTy0shBOspFkej5hJzLdNEk3WI6rsgSQyZ1mMDZBfaOl7
+         HSjW7r46NFK3ZIoEtR6RIZjK49RmxoubAzBBuDG/fH0AaZOISxkX/8NPSP/ivjV/ZY06
+         xS/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740354348; x=1740959148;
+        d=1e100.net; s=20230601; t=1740355370; x=1740960170;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sCP1rbXh4MlA1hNlKO2PRwztVgKcVUG68KyRAFF7PGU=;
-        b=b74ww3qYhWh6cqz9VBAusH+ZD5lt/bxIuWP2IQe0qvrvn8rJJM81ODpK7e2XLwi4wb
-         yzQ1obVZqzOXybwN/907HNd5JLMorEDAedQlH8pRPiv5ZIC/phdnJniRW9mFHSakLTVW
-         8TmU12pFm21R0uiqUHkiitFZjts1S+6SVIjv2+L62tYTStzfDGtFOmG0wr5gUW5eTV3f
-         +b539GEVYXmebuuLq9aUSn3tHTQQkoS9bCmikPkKjnEvJ+yW67k2zCpLaxBmAnzlpMS7
-         Y5tzdmnZaRBawxCGi5NhvS1IjiFfsl6cfyz459CoDXbdYAabWq9diWOpBU0CeFTdW1Sj
-         Ve9w==
-X-Forwarded-Encrypted: i=1; AJvYcCWwrk4qRXJB5db+y8O5j+ctgSS3G8SiKJsbVhkNlXQkiXTKy5p8mjpuJDHeJkRi3ulHSxMi7KTKElX9ss0=@vger.kernel.org, AJvYcCXW4caBOuXIXjgoznAZnzCDX03kA0dclzDy2Uu7fCrsLWlsZyw+H6cgEdllKIiZyZMs2lItJuSnwDui@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR2cCDZ+qLH+uKPv02DQHz7/6aQZul/qozt/apD/jtHbWBKOrN
-	2PpwOekCYFyn5LC6XMHmmkZtjvrGviTLC7FSiqJA/JUfClvzZIlp
-X-Gm-Gg: ASbGnctnd0TMUstY+2rGE7DAkF4SNetK1C+tdCebSm8xoBn2XCzCeJ9baYLcOSgn3BQ
-	+uvcH9ButKuwFldcdvvpU6yNhoilG/RBZPDUbcKOn35Ybi3hy2CwxadKCduoVsUgsorCivqTU+o
-	X9m3OWZmRHbxgyynMUGibRFKTnTk8jYkCacGb4RqZu59boa2m/S56/tCeoyyelMwxwx9q/ASJzU
-	xavozqHYKAsziixoKyLqeW4CG467uHeln+QBsRFW4xyZ3e3viJetMe9lZ3aEoFz0VKqxs0F1zZL
-	pivcvGVTuOSbaFjaVwqO51h2JSmGgTruAGe97N6qLos=
-X-Google-Smtp-Source: AGHT+IH5JTIGwwSbS6Io23GNPvRRsNaxcEO37VuXDdJwJd+0n+ZiS9fQzLm+6Ov5yiWBfEV2hyojwA==
-X-Received: by 2002:a17:907:6d07:b0:abb:c394:63ee with SMTP id a640c23a62f3a-abc09e2c50amr1043158766b.55.1740354347437;
-        Sun, 23 Feb 2025 15:45:47 -0800 (PST)
+        bh=ku/meeX1O+81D6vyphMnaxR005xNcolriu4IkuswsD4=;
+        b=bbAsDws67uchrXc4u8f6KkPNj6ktwFcVY5dodx07GFMBH++zKD0FCNUgAp0QRpfGxh
+         dE2GrFirDmodCSMSfhPbRiB9DoN79UDzcW3Y9LvdQOZFy2VCK3LV3D48JjMqX48c05uy
+         oyIzlbEow2ye6kJXTPavcK+L3ZcGB+EBiEDm1CTJYePYRsAaV03zLlmFz67ttOgKdvYF
+         hZfSGkcWy9lAE08ZWAvbzru2jU2BC0e4+RiC7dUF8IiE34hzDZCnDOk+SpnyUDtEagWn
+         7m0DwS7+FvQNWM/NOTn1GppgZdaiL6X/oXXwTiINrL0DHZaddtMT9UaX4VUneSNcQq7D
+         UJ/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVFsLpNLkgn88jyPeBFN3DYeySOzNYvNW1Wk5oKd3Pr3xxdujPNkUTaKyQsAtrbk7Ei8pv2j+Jp1RqW@vger.kernel.org, AJvYcCX4yxSRDtRI5mcm43zI/+TkcquV1Xkti/diBzLSsmMky/KfRLt3IPRAKrB5Vh8m3Up7BkWv9g/X6fJ9Fsk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzPpYnzq1vbfosDIAM9zKlRezAQjxjiMThvB6XV50euPDSC20Rs
+	6OwUHfzZfN3smJxuJLffJ8d6/ErjAFoz7j7qcLzXU8IEof11nmc9
+X-Gm-Gg: ASbGnctNxImSjIvoSeTApsu1beLDblbObfSloh6vk49Zm2NUupx3tLfXRWaNUsotplV
+	2R71UUHun2pOeTQ8LTr4cXpIQ7csUyx9WBuZNcxM3w6aAscgP1TKAO6PbVp97BltVX4ry3Y0Ltp
+	of+tGgqC0WsLDpfht/0nrruGBdFs8E14/LigGJLR996PtdQVW4ytx+2ccYhXhumNSRjn4qNQQBy
+	lez9q/BQWz66BPJsi4FFt8XWxSHMwPlGwwyUswMqsHjaMuuq+K7jUvX2MXv+wuWcyqNZJb/k2jD
+	AQGX1kYQQDeK7iZR0ReIIcekO2e0FSrWzSCRWwxcdeA=
+X-Google-Smtp-Source: AGHT+IEezF00syEetyw2uOFvXfJIUVrM6aVdCH+YKN/RJ7ZbZW8Kq5R8IfOagPhvDM35M21nT8zv/g==
+X-Received: by 2002:a17:907:8a92:b0:abb:d047:960a with SMTP id a640c23a62f3a-abbeded95d8mr1320737166b.22.1740355370410;
+        Sun, 23 Feb 2025 16:02:50 -0800 (PST)
 Received: from foxbook (adqm166.neoplus.adsl.tpnet.pl. [79.185.146.166])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb72b519c5sm1736839066b.173.2025.02.23.15.45.46
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abbaf6ec730sm1244665566b.163.2025.02.23.16.02.48
         (version=TLS1_2 cipher=AES128-SHA bits=128/128);
-        Sun, 23 Feb 2025 15:45:47 -0800 (PST)
-Date: Mon, 24 Feb 2025 00:45:42 +0100
+        Sun, 23 Feb 2025 16:02:50 -0800 (PST)
+Date: Mon, 24 Feb 2025 01:02:45 +0100
 From: =?UTF-8?B?TWljaGHFgg==?= Pecio <michal.pecio@gmail.com>
-To: Mathias Nyman <mathias.nyman@linux.intel.com>
+To: "Neronin, Niklas" <niklas.neronin@linux.intel.com>
 Cc: Mathias Nyman <mathias.nyman@intel.com>, Greg Kroah-Hartman
  <gregkh@linuxfoundation.org>, linux-usb@vger.kernel.org,
  linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/3] usb: xhci: Unify duplicate inc_enq() code
-Message-ID: <20250224004542.5861d4dc@foxbook>
-In-Reply-To: <d59a6694-e0e7-46b7-874e-0c6acd8c9126@linux.intel.com>
-References: <20250220234355.2386cb6d@foxbook>
-	<20250220234719.5dc47877@foxbook>
-	<d59a6694-e0e7-46b7-874e-0c6acd8c9126@linux.intel.com>
+Subject: Re: [PATCH 2/5] usb: xhci: Clean up the TD skipping loop
+Message-ID: <20250224010245.75ba1d2f@foxbook>
+In-Reply-To: <be026374-91d2-4b1d-9eb7-568b376f6e72@linux.intel.com>
+References: <20250210083718.2dd337c3@foxbook>
+	<20250210083940.626c02d9@foxbook>
+	<be026374-91d2-4b1d-9eb7-568b376f6e72@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
@@ -93,41 +93,30 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Fri, 21 Feb 2025 16:54:11 +0200, Mathias Nyman wrote:
-> On 21.2.2025 0.47, Michal Pecio wrote:
-> > Remove a block of code copied from inc_enq(). As often happens, the
-> > two copies have diverged somewhat - in this case, inc_enq() has a
-> > bug where it may leave the chain bit of a link TRB unset on a
-> > quirky HC. Fix this. Remove the pointless 'next' variable which
-> > only aliases ring->enqueue.  
+On Sat, 22 Feb 2025 14:37:58 +0200, Neronin, Niklas wrote:
+> This debug message is now misleading, the TD way or may not be found
+> on non-isochronous.
 > 
-> The linnk TRB chain bit should be set when the ring is created, and
-> never cleared on those quirky hosts.
+> Before:
+> 	if (ep_seg && ep->skip)
+> 		xhci_dbg(xhci, "Found td. ...
+> After:
+> 	if (ep->skip && (ep_seg || !isoc))
+> 		xhci_dbg(xhci, "Found td. ...
 
-OK, I see, there is stuff in xhci-mem.c. I'll remove the above text
-and any code which touches the bit on quirky HCs.
+Hmm, you're right, the whole block will now execute in this
+pathological edge case and we will clear the flag too.
 
-Speaking of which, I have some evidence that NEC uPD720200 has the
-exact same bug as AMD, namely after a Missed Service Error near the
-end of a segment it fetches TRBs out of bounds and trips the IOMMU
-or stops with Ring Underrun. Link chain quirk seems to fix it.
+It can be fixed quite easily, but I think I may actually drop this
+patch altogether. It will make the next patch slightly more verbose
+(that's why I included this one), but it will also make it possible
+to backport any of those patches to 6.12-lts if a need arises.
 
-> maybe
-> 
-> if (trb_is_link(ring->enqueue) && (chain || more_trbs_coming))
-> 	inc_eng_past_link(xhci, ring, chain);
-> 
-> Avoids calling inc_enq_past_link() every time we increase enqueue,
-> and explains why we call it.
+I also realized that one more skipping pathology is a recent (6.11)
+regression and perhaps it too could be fixed without major rework,
+basically by going back to something similar to pre-6.11 behavior.
 
-I can do that too. By the way, do we actually want this while loop in
-inc_enq_past_link() at all? Currently links only exist at the end of a
-segment and always point to the beginning of the next segment.
-
-I noticed that per xHCI 4.11.7, "Software shall not define consecutive
-Link TRBs within a TD". I suppose "consecutive" means "one pointing to
-another". And if it's prohibited inside a TD, it will likely always be
-easier to avoid doing it at all than try to manage special cases.
+I should have v3 ready in a day or a few.
 
 Regards,
 Michal
