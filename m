@@ -1,80 +1,114 @@
-Return-Path: <linux-usb+bounces-20977-lists+linux-usb=lfdr.de@vger.kernel.org>
+Return-Path: <linux-usb+bounces-20978-lists+linux-usb=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-usb@lfdr.de
 Delivered-To: lists+linux-usb@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94423A4225B
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 15:05:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5AF6A42346
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 15:38:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B3CA3A4BA9
-	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 13:57:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4C9F16CED1
+	for <lists+linux-usb@lfdr.de>; Mon, 24 Feb 2025 14:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D37E24E4B7;
-	Mon, 24 Feb 2025 13:57:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67BA424887A;
+	Mon, 24 Feb 2025 14:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IBekRFC0"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="NIDdInz1"
 X-Original-To: linux-usb@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08892136327;
-	Mon, 24 Feb 2025 13:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B52EB17C21C
+	for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2025 14:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740405424; cv=none; b=BWNneHT6sRaAKiAzf7iwaioqjK+T9LEny/8Y8viJNK1UUJjRLAlMDkELfCLAMBBr602ZYA+76ggb3swtavPpD3LeXx0jKCHLPD2DipTXNj5vTJZyIwOgpthgp8zQVNBgh/uSolBDI/PYJy5hNuGRXk0YbSvbf3qBwF9S6OlBAzA=
+	t=1740407322; cv=none; b=TkRSvuJzJuStjSjiole6qG+UOQY8/0GzbZ+M4tHhpXGoCB2SKDC0QG2VMwQpJynr1b6lacdcVlOp9nm3CX/f233C26Jp070K+WEWdP2pHFbkAw2tV88rL2Wyq3ZEb5vB1U89vMlrGLjgTC2QgYd1Q79Fjg1Y8SLmlSUZPEmLZ3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740405424; c=relaxed/simple;
-	bh=OQ7YbuLAqtoQmHB21uw+7T4OIQyqMIGl/9dHS8SMf3I=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=N7AU7AoYiosiceNS8eicOntOf59K8vx4RE5pHPL1CkpMaonjOU9kDxvfTn2Huz9/0BxVv+DY6P5yEeO4DYRV7pxQ8sJmOyF5lYXJqlFfsCpu+73taydVEXd0yfN7QwnKU8PojfGPENKSbzlhyQuswITEd9h5Dl+xDpNbHHR9SGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IBekRFC0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34C8DC4CEE6;
-	Mon, 24 Feb 2025 13:57:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740405423;
-	bh=OQ7YbuLAqtoQmHB21uw+7T4OIQyqMIGl/9dHS8SMf3I=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=IBekRFC0f6gWwCSFDsRNzMkpGSB2uuxZWf8eLw1JIuQCbgnybT8Nr9dWdAq6C7sis
-	 +UhxPIog8lJhYq50ZvxT4ZQ8NTT1ltpdZcoKdSf1iVYg7itMrVXxF4evLvHMo0f8F4
-	 20aj9DfOAFix0I2zhLERV2oEPOyuYXlhPMgr92riUWrfPD54dcZZEYTlGHtao8N75W
-	 6T/XtUBmY64ed3q7yWX6vVFP4g7XwXNBRrVgAuHcNk42BwG91wLRJc+KqvDgknPm/a
-	 /8BBroJCopj4QsMIfGtEgKfLq+RmA+Q3EugyZ4Mv4AaSY03IBqYxn/pwkIYSBvjJ0O
-	 V+SGYdotM9nvQ==
-Date: Mon, 24 Feb 2025 07:57:01 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1740407322; c=relaxed/simple;
+	bh=fi/ou784DQNSO56UkdVWMsq5LgKy3w3Myno9NribxME=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PI3baF9gi2sm0Yk8haGqMAQqYgaJeH4pfis0vyl2ojEIdpnFi5X9wpLPb5Wf5taH7VxZtgMiIQPez2+tMwIqkNlaYUCw2YxW5+VAaqmf69cwvUA3mypUqGPV1HqSEXgD/CQZzOQKmERsAF4oHNoARwlApRESK4YCMBsuEPa5hAk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=NIDdInz1; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-38f488f3161so2426812f8f.3
+        for <linux-usb@vger.kernel.org>; Mon, 24 Feb 2025 06:28:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1740407318; x=1741012118; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+7myiS5YDjg48/Ag8fwVJzAPYwjPP2oihtGPggfyt3U=;
+        b=NIDdInz1gySZ1Peryoh6lvdI8W996Kezrv9/7HCTbwKmSstoUQr68X4wrRHBJJpJcs
+         plB36mCAiTPd1Alt3WP0piTZ3J8JX10Fx7o6t13HyAfWrBBpZdTyMzy6C5ruHljTI/1U
+         vo69mLrkkPbfexYJQ1BQd0CwkdpFZbj0Ds30e5AeBQwoZLjRg7uf5YWPi+TutGPjTR6D
+         dt3PKthzCl4CLiC5UovTZjmJ8SYmFD7z/rIwu3dEf0f8heMmCC2H0uoONOMvzvECD6yk
+         J2aJWTUXbK7Ysa9sCh0HyagbBuIjIcuQ+GBGKfaSdxmwEyZFMt1pw/3quFS7lvX+jXTM
+         rPhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740407318; x=1741012118;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+7myiS5YDjg48/Ag8fwVJzAPYwjPP2oihtGPggfyt3U=;
+        b=uJdUyORaiQcEozxZzhFd5KQSZoKlg5Tuj17Iw1D3keaza2D68DkUItTlfxdhTTjPoj
+         GCHSIKeky/ZBAckr1pPcrxcCfij2SmUFeKhj9C55sk1Nsa/5JF/+PtlySC+9rg+mC1A+
+         X8LymJhGolKnf//B/uatvIZ/tu529bCtXzSUiZK6OFGkRVE/mVglP4JpvPLdmM76hwWO
+         aAthPNoML4qfB6AQdhttRdRZDainp6G/IjikwtcPCHeRCPNsY8IVj3DPACuYN/nGNTkr
+         tBNs46gqhLNZ0V+FLbUNacxz2N7OgetbMPiUayEaCICgZD/q66DfmHwlPqM2A1qoMdqX
+         a3yA==
+X-Forwarded-Encrypted: i=1; AJvYcCXGSvcv2iy1ObmM9EapL07sMksbjdzf6+3ZR7KZbgvtMpJa5Oo9JeukXxtYhCnhWf1Dwz6fQs671XI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUPWuYQTyZfVnwoANu90jt8WC9n5zyVJfxSZNy2tdESceIB0Hd
+	FXiJr8Pwuvnc7JoG6o7yfCt9V6f0P/CBL1yNFIrZkmlutDPLNjuvrFanZolD8Xs=
+X-Gm-Gg: ASbGncvwPa5OmBMApMtNb/U10W63Jmdh8E2QJhQahN4rZzhQd2mCt7DMiR9svX/nJzo
+	NGJCKtrqja2gvJnmGu4klTVBppXrI0s66ay+nF/vgcjfhui2zpYx5LCjLQ72/RXwyscSKjDCrCJ
+	ijphAMigYoSdELOmt/h5PhN2jV8moY3UUphzSbtWELZNPHonvDsbY4OvP8i52kI6yQ6xWt81U4K
+	CcIzELChp3NPnYcdbjzduC20KmSMkdngKaGBSDaxfUpB9DLsvjJyWPyJllGcbtrlc8UpH87REwf
+	MHH7ohXF2OGU72QIWJaoEfpn8IIxZ0ID0u3I79HY2bdD4YD/kR7tQukCimVuuxOBmbor4TOcrw=
+	=
+X-Google-Smtp-Source: AGHT+IFgTjY0B9Q+EBdWo53fKYf0MGWnVrcQoJfE4mJdhQbgBfmM6+4xRs286ajDlhlvB8MLPAk/3g==
+X-Received: by 2002:a05:6000:4014:b0:38f:28a1:501e with SMTP id ffacd0b85a97d-38f70772b46mr10667747f8f.8.1740407317886;
+        Mon, 24 Feb 2025 06:28:37 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:5ee:79d0:ce53:5813:dc8a:b123? ([2a01:e0a:5ee:79d0:ce53:5813:dc8a:b123])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f259d9be9sm32217076f8f.79.2025.02.24.06.28.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 24 Feb 2025 06:28:37 -0800 (PST)
+Message-ID: <43d23c40-09bd-46ca-840f-4724a42946a6@baylibre.com>
+Date: Mon, 24 Feb 2025 15:28:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-usb@vger.kernel.org
 List-Id: <linux-usb.vger.kernel.org>
 List-Subscribe: <mailto:linux-usb+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-usb+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: linux-mediatek@lists.infradead.org, 
- Yow-Shin Liou <yow-shin.liou@mediatek.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Chris-qj chen <chris-qj.chen@mediatek.com>, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
- Alexandre Mergnat <amergnat@baylibre.com>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Simon Sun <simon.sun@yunjingtech.com>, linux-usb@vger.kernel.org, 
- Conor Dooley <conor+dt@kernel.org>, Macpaul Lin <macpaul@gmail.com>, 
- Fabien Parent <fparent@baylibre.com>, ChiYuan Huang <cy_huang@richtek.com>, 
- Bear Wang <bear.wang@mediatek.com>, 
- Project_Global_Chrome_Upstream_Group@mediatek.com, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- Pablo Sun <pablo.sun@mediatek.com>
-To: Macpaul Lin <macpaul.lin@mediatek.com>
-In-Reply-To: <20250224114934.3583191-1-macpaul.lin@mediatek.com>
-References: <20250224114934.3583191-1-macpaul.lin@mediatek.com>
-Message-Id: <174040535775.2710776.691558658609135796.robh@kernel.org>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v6] arm64: dts: mediatek: mt8395-genio-1200-evk: add
  support for TCPC port
+To: Macpaul Lin <macpaul.lin@mediatek.com>,
+ ChiYuan Huang <cy_huang@richtek.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+Cc: Bear Wang <bear.wang@mediatek.com>, Pablo Sun <pablo.sun@mediatek.com>,
+ Macpaul Lin <macpaul@gmail.com>,
+ Project_Global_Chrome_Upstream_Group@mediatek.com,
+ linux-usb@vger.kernel.org, Chris-qj chen <chris-qj.chen@mediatek.com>,
+ Fabien Parent <fparent@baylibre.com>,
+ Yow-Shin Liou <yow-shin.liou@mediatek.com>,
+ Simon Sun <simon.sun@yunjingtech.com>
+References: <20250224114934.3583191-1-macpaul.lin@mediatek.com>
+Content-Language: en-US
+From: Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20250224114934.3583191-1-macpaul.lin@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-On Mon, 24 Feb 2025 19:49:34 +0800, Macpaul Lin wrote:
-> From: Fabien Parent <fparent@baylibre.com>
+On 24/02/2025 12:49, Macpaul Lin wrote:
+> From: Fabien Parent<fparent@baylibre.com>
 > 
 > Enable USB Type-C support on MediaTek MT8395 Genio 1200 EVK by adding
 > configuration for TCPC Port, USB-C connector, MUX IT5205 and related
@@ -88,71 +122,8 @@ On Mon, 24 Feb 2025 19:49:34 +0800, Macpaul Lin wrote:
 > 
 > Add ITE IT5205 (TYPEC MUX) under I2C2 bus and configure its properties;
 > also add references and configurations to 'typec-mux' node.
-> 
-> Signed-off-by: Fabien Parent <fparent@baylibre.com>
-> Signed-off-by: Yow-Shin Liou <yow-shin.liou@mediatek.com>
-> Signed-off-by: Simon Sun <simon.sun@yunjingtech.com>
-> Signed-off-by: Macpaul Lin <macpaul.lin@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> ---
->  .../dts/mediatek/mt8395-genio-1200-evk.dts    | 102 ++++++++++++++++++
->  1 file changed, 102 insertions(+)
-> 
-> Changes for v2:
->  - Drop the no need '1/2' DT Schema update patch in the 1st version.
->  - Fix indent for 'ports' node, it should under the 'connector' node.
->  - Correct the index for 'port@0' and 'port@1' node.
-> 
-> Changes for v3:
->  - Correct the order between new added nodes.
-> 
-> Changes for v4:
->  - Reorder for property 'op-sink-microwatt'.
->  - Fix indentation for 'source-pdos' and 'sink-pdos' nodes.
->  - Correct node 'pin-cmd-dat' with 'pins-vbus'.
->  - Add both Highspeed and Superspeed ports to ssusb0 port.
->  - Set 'role-switch-default-mode' = "peripheral" for ssusb0 port.
->  - Rename endpoint of USB data port to 'mtu3_hs0_role_sw' and
->    'mtu3_ss0_role_sw'.
->  - Drop it5205fn phandle for node typec-mux@48.
->  - Reorder properties of typec-mux@48
->  - Add "Reviewed-by:" tag. Thanks!
-> 
-> Changes for v5:
->  - Squash two patches into one patch and refine commit messages:
->    suggested by reviewer.
->  - Drop 'role-switch-default-mode'
->  - Add altmodes settings
->  - Drop 'Reviewed-by:' tag since the two sub patches has been combined
->    into a new patch.
-> 
-> Changes for v6:
->  - Add 'pd-revision' property to 'connector', thanks ChiYuan Huang's help!.
->  - Add 'Reviewed-by' tag. Thanks!
-> 
 
-
-My bot found new DTB warnings on the .dts files added or changed in this
-series.
-
-Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
-are fixed by another series. Ultimately, it is up to the platform
-maintainer whether these warnings are acceptable or not. No need to reply
-unless the platform maintainer has comments.
-
-If you already ran DT checks and didn't see these error(s), then
-make sure dt-schema is up to date:
-
-  pip3 install dtschema --upgrade
-
-
-New warnings running 'make CHECK_DTBS=y for arch/arm64/boot/dts/mediatek/' for 20250224114934.3583191-1-macpaul.lin@mediatek.com:
-
-arch/arm64/boot/dts/mediatek/mt8395-genio-1200-evk.dtb: usb@11201000: 'ports' does not match any of the regexes: '^usb@[0-9a-f]+$', 'pinctrl-[0-9]+'
-	from schema $id: http://devicetree.org/schemas/usb/mediatek,mtu3.yaml#
-
-
-
-
-
+-- 
+Regards,
+Alexandre
 
